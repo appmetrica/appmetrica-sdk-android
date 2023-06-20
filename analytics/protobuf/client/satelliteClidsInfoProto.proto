@@ -1,0 +1,15 @@
+syntax = "proto2";
+
+message SatelliteClidsInfo {
+
+    message NullableMap {
+        message Pair {
+            required string key = 1;
+            optional string value = 2;
+        }
+        repeated Pair pairs = 1;
+    }
+
+    optional NullableMap clids = 1;
+    optional bool checked = 2 [default = false];
+}

@@ -1,0 +1,117 @@
+syntax = "proto2";
+
+//С версии Android 3.6.0
+
+enum OptionalBool {
+   OPTIONAL_BOOL_UNDEFINED = -1;
+   OPTIONAL_BOOL_FALSE = 0;
+   OPTIONAL_BOOL_TRUE = 1;
+}
+
+message BytesPair {
+    optional bytes key = 1;
+    optional bytes value = 2;
+}
+
+message StackTraceElement {
+    optional string class_name = 1;
+    optional string file_name = 2;
+    optional sint32 line_number = 3 [default = -1];
+    optional string method_name = 4;
+    optional bool is_native = 5;
+    optional sint32 column_number = 6 [default = -1];
+}
+
+message Thread {
+   required string name = 1;
+   required sint32 priority = 2;
+   required sint64 tid = 3;
+   optional string group = 4;
+   optional uint32 state = 5;
+   repeated StackTraceElement stacktrace = 6;
+}
+
+message AllThreads {
+   optional Thread affected_thread = 1; // у упавшего потока будет пустой stacktrace
+   repeated Thread threads = 2;
+   optional string process_name = 3; // с версии 3.14.0
+}
+
+message Throwable {
+   required string exception_class = 1;
+   optional string message = 2;
+   repeated StackTraceElement backtrace = 3;
+   optional Throwable cause = 4;
+   repeated Throwable suppressed = 5;
+}
+
+// EVENT_TYPE = 25 (EVENT_PROTOBUF_ANR)
+message Anr {
+   required AllThreads threads = 1;
+   optional string buildId = 2;
+   optional OptionalBool isOffline = 3;
+}
+
+enum NativeCrashSource {
+    UNKNOWN = 0;
+    USER = 1;
+    // BREAKPAD = 2; // https://nda.ya.ru/t/YjWVfNeG6Njj6B
+    CRASHPAD = 3;
+}
+
+message NativeCrashHandler {
+    optional NativeCrashSource source = 1 [default = UNKNOWN];
+    optional string version = 2 [default = ""];
+}
+
+// EVENT_TYPE = 26 (EVENT_PROTOBUF_CRASH)
+message Crash {
+    enum CrashType {
+        VIRTUAL_MACHINE = 0;
+        NATIVE = 1;
+    }
+    message NativeCrash {
+        optional bytes nativeCrashPayload = 1;
+        optional NativeCrashHandler handler = 2;
+    }
+    // VIRTUAL_MACHINE
+    optional Throwable throwable = 1;
+    optional AllThreads threads = 2;
+    optional string buildId = 3;
+    optional OptionalBool isOffline = 4;
+    repeated StackTraceElement methodCallStacktrace = 5; // unused, deprecated
+
+    optional CrashType type = 6 [default = VIRTUAL_MACHINE];
+    // NATIVE
+    optional NativeCrash native = 7;
+    optional bytes virtual_machine = 8 [default = "JVM"]; //Тип (наименование) виртуальной машины, на которой случился креш, например, "JVM", "Flutter". Передается строковое значение, соответствующее одной из констант. Любое значение, отлиающееся от допустимых, должно трактовваться как "Unknown".
+    optional bytes virtual_machine_version = 9; //Версия виртальной машины, определяемая из плагина. Например, версия Unity, Java и т.д.
+    repeated BytesPair plugin_environment = 10; //Произвольный набор пар, заполняемый конкретным плагином.
+}
+
+// EVENT_TYPE = 27 (EVENT_PROTOBUF_ERROR)
+message Error {
+    enum ErrorType {
+        DEFAULT = 0; // error group is defined by throwable, or by methodCallStacktrace if throwable was not provided
+        CUSTOM = 1; // error group is defined by user-defined identifier
+    }
+    message Custom {
+        required string identifier = 1; // user-defined id for error grouping (i.e. error group name)
+    }
+    // Common for DEFAULT and CUSTOM types
+    optional Throwable throwable = 1;
+    optional AllThreads threads = 2;
+    optional string buildId = 3;
+    optional OptionalBool isOffline = 4;
+    // Since 3.9.0, not empty when and only when type == DEFAULT AND throwable == null. Stacktrace of point where reportError was called
+    repeated StackTraceElement methodCallStacktrace = 5;
+    // Since 3.14.0, duplicates event name field from metrica.proto (EventName column in ClickHouse)
+    optional string message = 6;
+    optional ErrorType type = 7 [default = DEFAULT];
+
+    // ErrorType == CUSTOM
+    optional Custom custom = 8;
+    optional bytes virtual_machine = 9 [default = "JVM"]; //Аналогично virtual_machine для крешей
+    optional bytes virtual_machine_version = 10; //Версия виртальной машины, определяемая из плагина. Например, версия Unity, Java и т.д.
+    repeated BytesPair plugin_environment = 11; //Произвольный набор пар, заполняемый конкретным плагином.
+}

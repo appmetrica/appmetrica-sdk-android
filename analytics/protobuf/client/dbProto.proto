@@ -1,0 +1,49 @@
+syntax = "proto2";
+
+message Utils {
+  enum OptionalBool {
+    OPTIONAL_BOOL_UNDEFINED = -1;
+    OPTIONAL_BOOL_FALSE = 0;
+    OPTIONAL_BOOL_TRUE = 1;
+  }
+}
+
+message Location {
+  optional Utils.OptionalBool enabled = 1 [default = OPTIONAL_BOOL_UNDEFINED];
+  optional double longitude = 2 [default = -1];
+  optional double latitude = 3 [default = -1];
+  optional int32 altitude = 4 [default = -1];
+  optional int32 direction = 5 [default = -1];
+  optional int32 precision = 6 [default = -1];
+  optional int32 speed = 7 [default = -1];
+  optional int64 timestamp = 8 [default = -1];
+  optional string provider = 9 [default = ""];
+  optional string originalProvider = 10 [default = ""];
+}
+
+message SessionDescription {
+  optional int64 start_time = 1 [default = -1];
+  optional int64 server_time_offset = 2 [default = -1];
+  optional Utils.OptionalBool obtained_before_first_synchronization = 3 [default = OPTIONAL_BOOL_UNDEFINED];
+}
+
+message EventDescription {
+  optional int32 custom_type = 1 [default = -1];
+  optional string name = 2 [default = ""];
+  optional string value = 3 [default = ""];
+  optional int64 number_of_type = 4 [default = -1];
+  optional Location location_info = 5;
+  optional string error_environment = 6 [default = ""];
+  optional string app_environment = 7 [default = ""];
+  optional int64 app_environment_revision = 8 [default = -1];
+  optional int32 truncated = 9 [default = -1];
+  optional int32 connection_type = 10 [default = -1];
+  optional string cellular_connection_type = 11 [default = ""];
+  optional int32 encrypting_mode = 12 [default = -1];
+  optional string profile_id = 13 [default = ""];
+  optional int32 first_occurrence_status = 14 [default = -1];
+  optional int32 source = 15 [default = -1];
+  optional Utils.OptionalBool attribution_id_changed = 16 [default = OPTIONAL_BOOL_UNDEFINED];
+  optional int32 open_id = 17 [default = -1];
+  optional bytes extras = 18 [default = ""];
+}

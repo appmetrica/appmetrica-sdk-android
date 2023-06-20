@@ -1,0 +1,62 @@
+public final class io.appmetrica.analytics.network.BuildConfig {
+    public static final String BUILD_TYPE
+    public static final boolean DEBUG
+    public static final String LIBRARY_PACKAGE_NAME
+
+    public <init>()
+}
+
+public interface io.appmetrica.analytics.network.internal.Call {
+    public abstract [NonNull] io.appmetrica.analytics.network.internal.Response execute()
+}
+
+public class io.appmetrica.analytics.network.internal.NetworkClient {
+    public [Nullable] Integer getConnectTimeout()
+    public [Nullable] Boolean getInstanceFollowRedirects()
+    public int getMaxResponseSize()
+    public [Nullable] Integer getReadTimeout()
+    public [Nullable] javax.net.ssl.SSLSocketFactory getSslSocketFactory()
+    public [Nullable] Boolean getUseCaches()
+    public [NonNull] io.appmetrica.analytics.network.internal.Call newCall([NonNull] io.appmetrica.analytics.network.internal.Request)
+    public String toString()
+}
+
+public static class io.appmetrica.analytics.network.internal.NetworkClient$Builder {
+    public <init>()
+    public [NonNull] io.appmetrica.analytics.network.internal.NetworkClient build()
+    public [NonNull] io.appmetrica.analytics.network.internal.NetworkClient$Builder withConnectTimeout(int)
+    public [NonNull] io.appmetrica.analytics.network.internal.NetworkClient$Builder withInstanceFollowRedirects(boolean)
+    public [NonNull] io.appmetrica.analytics.network.internal.NetworkClient$Builder withMaxResponseSize(int)
+    public [NonNull] io.appmetrica.analytics.network.internal.NetworkClient$Builder withReadTimeout(int)
+    public [NonNull] io.appmetrica.analytics.network.internal.NetworkClient$Builder withSslSocketFactory([Nullable] javax.net.ssl.SSLSocketFactory)
+    public [NonNull] io.appmetrica.analytics.network.internal.NetworkClient$Builder withUseCaches(boolean)
+}
+
+public class io.appmetrica.analytics.network.internal.Request {
+    public [NonNull] byte[] getBody()
+    public [NonNull] java.util.Map<String, String> getHeaders()
+    public [NonNull] String getMethod()
+    public [NonNull] String getUrl()
+    public String toString()
+}
+
+public static class io.appmetrica.analytics.network.internal.Request$Builder {
+    public <init>([NonNull] String)
+    public [NonNull] io.appmetrica.analytics.network.internal.Request$Builder addHeader([NonNull] String, [Nullable] String)
+    public io.appmetrica.analytics.network.internal.Request build()
+    public [NonNull] io.appmetrica.analytics.network.internal.Request$Builder post([NonNull] byte[])
+    public [NonNull] io.appmetrica.analytics.network.internal.Request$Builder withMethod([NonNull] String)
+}
+
+public class io.appmetrica.analytics.network.internal.Response {
+    public <init>(boolean, int, [NonNull] byte[], [NonNull] byte[], [Nullable] java.util.Map<String, java.util.List<String>>, [Nullable] Throwable)
+    public <init>([Nullable] Throwable)
+    public int getCode()
+    public [NonNull] byte[] getErrorData()
+    public [Nullable] Throwable getException()
+    public [NonNull] java.util.Map<String, java.util.List<String>> getHeaders()
+    public [NonNull] byte[] getResponseData()
+    public boolean isCompleted()
+    public String toString()
+}
+

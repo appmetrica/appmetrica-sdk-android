@@ -1,0 +1,10 @@
+syntax = "proto2";
+
+message EventHashes {
+
+    required bool treatUnknownEventAsNew = 1;
+    required uint32 lastVersionCode = 2;
+    required uint32 hashesCountFromPreviousVersion = 3;
+    repeated int32 eventNameHashes = 4;
+
+}

@@ -1,0 +1,11 @@
+syntax = "proto2";
+
+message EventExtras {
+
+  message ExtrasEntry {
+    optional string key = 1;
+    optional bytes value = 2;
+  }
+
+  repeated ExtrasEntry extras = 1;
+}

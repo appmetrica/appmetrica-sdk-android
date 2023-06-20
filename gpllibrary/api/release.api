@@ -1,0 +1,40 @@
+public final class io.appmetrica.analytics.gpllibrary.BuildConfig {
+    public static final String BUILD_TYPE
+    public static final boolean DEBUG
+    public static final String LIBRARY_PACKAGE_NAME
+
+    public <init>()
+}
+
+public class io.appmetrica.analytics.gpllibrary.internal.GplLibraryWrapper implementation io.appmetrica.analytics.gpllibrary.internal.IGplLibraryWrapper {
+    public static final String FUSED_PROVIDER
+
+    public <init>([NonNull] android.content.Context, [NonNull] android.location.LocationListener, [NonNull] android.os.Looper, [NonNull] java.util.concurrent.Executor, long)
+    public void startLocationUpdates([NonNull] io.appmetrica.analytics.gpllibrary.internal.GplLibraryWrapper$Priority)
+    public void stopLocationUpdates()
+    public void updateLastKnownLocation()
+}
+
+package static class io.appmetrica.analytics.gpllibrary.internal.GplLibraryWrapper$ClientProvider
+
+public enum io.appmetrica.analytics.gpllibrary.internal.GplLibraryWrapper$Priority {
+    PRIORITY_BALANCED_POWER_ACCURACY, PRIORITY_HIGH_ACCURACY, PRIORITY_LOW_POWER, PRIORITY_NO_POWER
+
+    public static io.appmetrica.analytics.gpllibrary.internal.GplLibraryWrapper$Priority valueOf(String)
+    public static io.appmetrica.analytics.gpllibrary.internal.GplLibraryWrapper$Priority[] values()
+}
+
+package class io.appmetrica.analytics.gpllibrary.internal.GplLocationCallback extends com.google.android.gms.location.LocationCallback {
+    public void onLocationResult(com.google.android.gms.location.LocationResult)
+}
+
+package class io.appmetrica.analytics.gpllibrary.internal.GplOnSuccessListener implementation com.google.android.gms.tasks.OnSuccessListener<android.location.Location> {
+    public void onSuccess(android.location.Location)
+}
+
+public interface io.appmetrica.analytics.gpllibrary.internal.IGplLibraryWrapper {
+    public abstract void startLocationUpdates([NonNull] io.appmetrica.analytics.gpllibrary.internal.GplLibraryWrapper$Priority)
+    public abstract void stopLocationUpdates()
+    public abstract void updateLastKnownLocation()
+}
+

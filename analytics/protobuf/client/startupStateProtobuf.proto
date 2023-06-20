@@ -1,0 +1,116 @@
+syntax = "proto2";
+
+message StartupState {
+
+    enum OptionalBool {
+        OPTIONAL_BOOL_UNDEFINED = -1;
+        OPTIONAL_BOOL_FALSE = 0;
+        OPTIONAL_BOOL_TRUE = 1;
+    }
+
+    //region Identifiers
+    optional string uuid = 1;
+    //endregion
+
+    required int64 obtainTime = 2;
+
+    //region Urls
+    repeated string reportUrls = 3;
+    optional string getAdUrl = 4;
+    optional string reportAdUrl = 5;
+    repeated string hostUrlsFromStartup = 6;
+    repeated string hostUrlsFromClient = 7;
+
+    message CustomSdkHostsPair {
+        optional string key = 1;
+        repeated string hosts = 2;
+    }
+    repeated CustomSdkHostsPair customSdkHosts = 8;
+    //endregion
+
+    message Flags {
+        required bool permissionsCollectingEnabled = 1 [ default = false ];
+        required bool featuresCollectingEnabled = 2 [ default = false ];
+        required bool googleAid = 3 [ default = false ];
+        required bool simInfo = 4 [ default = false ];
+        optional bool huaweiOaid = 5 [ default = false ];
+        optional OptionalBool sslPinning = 6 [default = OPTIONAL_BOOL_UNDEFINED];
+    }
+
+    required Flags flags = 9;
+
+    message PermissionsCollectingConfig {
+
+        required int64 checkIntervalSeconds = 1 [default = 86400];
+        required int64 forceSendIntervalSeconds = 2 [default = 432000];
+    }
+
+    optional string encodedClidsFromResponse = 10;
+    optional string lastClientClidsForStartupRequest = 11;
+    optional string lastChosenForRequestClids = 12;
+    required bool startupDidNotOverrideClids = 13;
+
+    optional string countryInit = 14;
+
+    repeated string diagnosticUrls = 15;
+
+    message StatSending {
+        required int64 disabledReportingInterval = 1 [ default = 18000000];
+    }
+
+    required StatSending statSending = 16;
+    optional bool hadFirstStartup = 17 [default = false];
+
+    optional string deviceID = 18 [deprecated = true]; // Moved to undeletable storage: appmetrica_vital.dat
+    optional string deviceIDHash = 19 [deprecated = true]; // Moved to undeletable storage: appmetrica_vital.dat
+
+    optional string certificateUrl = 20;
+
+    required int64 obtainServerTime = 21;
+    required int64 firstStartupServerTime = 22;
+
+    optional bool outdated = 23 [default = false];
+
+    optional PermissionsCollectingConfig permissionsCollectingConfig = 24;
+
+    // region retry policy config
+    required int32 maxRetryIntervalSeconds = 25 [default = 600];
+    required int32 retryExponentialMultiplier = 26 [default = 1];
+    // endregion
+
+    message CacheControl {
+        optional int64 lastKnownLocationTtl = 1 [default = 10000];
+    }
+
+    optional CacheControl cacheControl = 27;
+
+    // region autoInappCollectingConfig
+    message AutoInappCollectingConfig {
+        optional int32 sendFrequencySeconds = 1 [default = 86400];
+        optional int32 firstCollectingInappMaxAgeSeconds = 2 [default = 86400];
+    }
+    optional AutoInappCollectingConfig autoInappCollectingConfig = 28;
+    // endregion
+
+    message Attribution {
+
+        message Filter {
+            optional string value = 1;
+        }
+
+        message StringPair {
+            optional string key = 1;
+            optional Filter filter = 2;
+        }
+
+        repeated StringPair deeplinkConditions = 1;
+    }
+    optional Attribution attribution = 29;
+
+    message StartupUpdateConfig {
+        optional uint32 interval = 1 [default = 86400]; // 1 day
+    }
+    optional StartupUpdateConfig startupUpdateConfig = 30;
+    map<string, bytes> modulesRemoteConfigs = 31;
+}
+

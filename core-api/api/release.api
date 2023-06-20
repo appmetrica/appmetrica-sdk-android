@@ -1,0 +1,368 @@
+public final class io.appmetrica.analytics.coreapi.BuildConfig {
+    public static final String BUILD_TYPE
+    public static final boolean DEBUG
+    public static final String LIBRARY_PACKAGE_NAME
+
+    public <init>()
+}
+
+public @interface io.appmetrica.analytics.coreapi.internal.annotations.DoNotInline
+
+public @interface io.appmetrica.analytics.coreapi.internal.annotations.GeoThread
+
+public interface io.appmetrica.analytics.coreapi.internal.backport.BiConsumer<T1, T2> {
+    public abstract void consume(T1, T2)
+}
+
+public interface io.appmetrica.analytics.coreapi.internal.backport.BiFunction<T1, T2, R> {
+    public abstract R apply(T1, T2)
+}
+
+public interface io.appmetrica.analytics.coreapi.internal.backport.Consumer<T> {
+    public abstract void consume(T)
+}
+
+public interface io.appmetrica.analytics.coreapi.internal.backport.ConsumerWithThrowable<T> {
+    public abstract void consume([NonNull] T)
+}
+
+public interface io.appmetrica.analytics.coreapi.internal.backport.Function<T, R> {
+    public abstract R apply(T)
+}
+
+public interface io.appmetrica.analytics.coreapi.internal.backport.FunctionWithThrowable<T, R> {
+    public abstract R apply([NonNull] T)
+}
+
+public interface io.appmetrica.analytics.coreapi.internal.backport.Provider<T> {
+    public abstract T get()
+}
+
+public interface io.appmetrica.analytics.coreapi.internal.cache.CacheUpdateScheduler {
+    public abstract void onStateUpdated()
+    public abstract void scheduleUpdateIfNeededNow()
+}
+
+public interface io.appmetrica.analytics.coreapi.internal.cache.UpdateConditionsChecker {
+    public abstract boolean shouldUpdate()
+}
+
+public interface io.appmetrica.analytics.coreapi.internal.clientcomponents.ClientComponentsInitializer {
+    public abstract void onCreate()
+}
+
+public final class io.appmetrica.analytics.coreapi.internal.constants.DeviceTypeValues {
+    public static final [NonNull] String CAR
+    public static final [NonNull] io.appmetrica.analytics.coreapi.internal.constants.DeviceTypeValues$Companion Companion
+    public static final [NonNull] String PHONE
+    public static final [NonNull] String TABLET
+    public static final [NonNull] String TV
+
+    public <init>()
+}
+
+public static final class io.appmetrica.analytics.coreapi.internal.constants.DeviceTypeValues$Companion
+
+public interface io.appmetrica.analytics.coreapi.internal.control.StatisticsRestrictionController {
+    public abstract boolean isRestrictedForBackgroundDataCollection()
+    public abstract boolean isRestrictedForReporter()
+    public abstract boolean isRestrictedForSdk()
+}
+
+public interface io.appmetrica.analytics.coreapi.internal.control.Toggle {
+    public abstract boolean getActualState()
+    public abstract void registerObserver([NonNull] io.appmetrica.analytics.coreapi.internal.control.ToggleObserver, boolean)
+    public abstract void removeObserver([NonNull] io.appmetrica.analytics.coreapi.internal.control.ToggleObserver)
+}
+
+public interface io.appmetrica.analytics.coreapi.internal.control.ToggleObserver {
+    public abstract void onStateChanged(boolean)
+}
+
+public interface io.appmetrica.analytics.coreapi.internal.data.Converter<S, P> {
+    public abstract P fromModel(S)
+    public abstract S toModel(P)
+}
+
+public interface io.appmetrica.analytics.coreapi.internal.data.JsonParser<T> extends io.appmetrica.analytics.coreapi.internal.data.Parser<org.json.JSONObject, T>
+
+public static final class io.appmetrica.analytics.coreapi.internal.data.JsonParser$DefaultImpls {
+    public static <T> [Nullable] T parseOrNull([NonNull] io.appmetrica.analytics.coreapi.internal.data.JsonParser<? extends T>, [NonNull] org.json.JSONObject)
+}
+
+public interface io.appmetrica.analytics.coreapi.internal.data.ListConverter<S, P extends io.appmetrica.analytics.protobuf.nano.MessageNano> extends io.appmetrica.analytics.coreapi.internal.data.Converter<java.util.List<S>, P[]>
+
+public interface io.appmetrica.analytics.coreapi.internal.data.Parser<IN, OUT> {
+    public abstract [NonNull] OUT parse(IN)
+    public abstract [Nullable] OUT parseOrNull(IN)
+}
+
+public static final class io.appmetrica.analytics.coreapi.internal.data.Parser$DefaultImpls {
+    public static <IN, OUT> [Nullable] OUT parseOrNull([NonNull] io.appmetrica.analytics.coreapi.internal.data.Parser<? super IN, ? extends OUT>, IN)
+}
+
+public interface io.appmetrica.analytics.coreapi.internal.data.ProtobufConverter<S, P extends io.appmetrica.analytics.protobuf.nano.MessageNano> extends io.appmetrica.analytics.coreapi.internal.data.Converter<S, P>
+
+public interface io.appmetrica.analytics.coreapi.internal.data.ProtobufStateSerializer<T extends io.appmetrica.analytics.protobuf.nano.MessageNano> extends io.appmetrica.analytics.coreapi.internal.data.StateSerializer<T>
+
+public interface io.appmetrica.analytics.coreapi.internal.data.ProtobufStateStorage<T> {
+    public abstract void delete()
+    public abstract [NonNull] T read()
+    public abstract void save([NonNull] T)
+}
+
+public interface io.appmetrica.analytics.coreapi.internal.data.StateSerializer<T> {
+    public abstract [NonNull] T defaultValue()
+    public abstract [NonNull] byte[] toByteArray([NonNull] T)
+    public abstract [NonNull] T toState([NonNull] byte[])
+}
+
+public abstract class io.appmetrica.analytics.coreapi.internal.db.DatabaseScript {
+    public <init>()
+    public abstract void runScript([NonNull] android.database.sqlite.SQLiteDatabase)
+}
+
+public final class io.appmetrica.analytics.coreapi.internal.device.ScreenInfo {
+    public <init>(int, int, int, float, [NonNull] String)
+    public final int component1()
+    public final int component2()
+    public final int component3()
+    public final float component4()
+    public final [NonNull] String component5()
+    public final [NonNull] io.appmetrica.analytics.coreapi.internal.device.ScreenInfo copy(int, int, int, float, [NonNull] String)
+    public boolean equals([Nullable] Object)
+    public final [NonNull] String getDeviceType()
+    public final int getDpi()
+    public final int getHeight()
+    public final float getScaleFactor()
+    public final int getWidth()
+    public int hashCode()
+    public [NonNull] String toString()
+}
+
+public interface io.appmetrica.analytics.coreapi.internal.event.CounterReportApi {
+    public abstract int getBytesTruncated()
+    public abstract int getCustomType()
+    public abstract [NonNull] java.util.Map<String, byte[]> getExtras()
+    public abstract [Nullable] String getName()
+    public abstract int getType()
+    public abstract [Nullable] String getValue()
+    public abstract [Nullable] byte[] getValueBytes()
+    public abstract void setBytesTruncated(int)
+    public abstract void setCustomType(int)
+    public abstract void setExtras([NonNull] java.util.Map<String, byte[]>)
+    public abstract void setName([Nullable] String)
+    public abstract void setType(int)
+    public abstract void setValue([Nullable] String)
+    public abstract void setValueBytes([Nullable] byte[])
+}
+
+public interface io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor extends io.appmetrica.analytics.coreapi.internal.executors.IInterruptionSafeThread, java.util.concurrent.Executor {
+    public abstract void execute([NonNull] Runnable)
+    public abstract void executeDelayed([NonNull] Runnable, long)
+    public abstract void executeDelayed([NonNull] Runnable, long, [NonNull] java.util.concurrent.TimeUnit)
+    public abstract void remove([NonNull] Runnable)
+    public abstract void removeAll()
+    public abstract <T> java.util.concurrent.Future<T> submit(java.util.concurrent.Callable<T>)
+}
+
+public interface io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor extends io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor {
+    public abstract [NonNull] android.os.Handler getHandler()
+    public abstract [NonNull] android.os.Looper getLooper()
+}
+
+public interface io.appmetrica.analytics.coreapi.internal.executors.IInterruptionSafeThread {
+    public abstract boolean isRunning()
+    public abstract void stopRunning()
+}
+
+public class io.appmetrica.analytics.coreapi.internal.executors.InterruptionSafeThread extends Thread implementation io.appmetrica.analytics.coreapi.internal.executors.IInterruptionSafeThread {
+    public <init>()
+    public <init>([NonNull] Runnable)
+    public <init>([NonNull] Runnable, [NonNull] String)
+    public <init>([NonNull] String)
+    public boolean isRunning()
+    public void stopRunning()
+}
+
+public class io.appmetrica.analytics.coreapi.internal.identifiers.AdTrackingInfo {
+    public final [Nullable] String advId
+    public final [Nullable] Boolean limitedAdTracking
+    public final [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.AdTrackingInfo$Provider provider
+
+    public <init>([NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.AdTrackingInfo$Provider, [Nullable] String, [Nullable] Boolean)
+    public String toString()
+}
+
+public enum io.appmetrica.analytics.coreapi.internal.identifiers.AdTrackingInfo$Provider {
+    GOOGLE, HMS, YANDEX
+
+    public static io.appmetrica.analytics.coreapi.internal.identifiers.AdTrackingInfo$Provider valueOf(String)
+    public static io.appmetrica.analytics.coreapi.internal.identifiers.AdTrackingInfo$Provider[] values()
+}
+
+public class io.appmetrica.analytics.coreapi.internal.identifiers.AdTrackingInfoResult {
+    public final [Nullable] io.appmetrica.analytics.coreapi.internal.identifiers.AdTrackingInfo mAdTrackingInfo
+    public final [Nullable] String mErrorExplanation
+    public final [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus mStatus
+
+    public <init>()
+    public <init>([Nullable] io.appmetrica.analytics.coreapi.internal.identifiers.AdTrackingInfo, [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus, [Nullable] String)
+    public static [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.AdTrackingInfoResult getProviderUnavailableResult([NonNull] String)
+    public boolean isValid()
+    public String toString()
+}
+
+public class io.appmetrica.analytics.coreapi.internal.identifiers.AdvertisingIdsHolder {
+    public <init>()
+    public <init>([NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.AdTrackingInfoResult, [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.AdTrackingInfoResult, [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.AdTrackingInfoResult)
+    public [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.AdTrackingInfoResult getGoogle()
+    public [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.AdTrackingInfoResult getHuawei()
+    public [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.AdTrackingInfoResult getYandex()
+    public String toString()
+}
+
+public final class io.appmetrica.analytics.coreapi.internal.identifiers.AppSetId {
+    public <init>([Nullable] String, [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.AppSetIdScope)
+    public final [Nullable] String component1()
+    public final [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.AppSetIdScope component2()
+    public final [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.AppSetId copy([Nullable] String, [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.AppSetIdScope)
+    public boolean equals([Nullable] Object)
+    public final [Nullable] String getId()
+    public final [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.AppSetIdScope getScope()
+    public int hashCode()
+    public [NonNull] String toString()
+}
+
+public interface io.appmetrica.analytics.coreapi.internal.identifiers.AppSetIdProvider {
+    public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.AppSetId getAppSetId()
+}
+
+public enum io.appmetrica.analytics.coreapi.internal.identifiers.AppSetIdScope {
+    APP, DEVELOPER, UNKNOWN
+
+    public final [NonNull] String getValue()
+    public static io.appmetrica.analytics.coreapi.internal.identifiers.AppSetIdScope valueOf(String)
+    public static io.appmetrica.analytics.coreapi.internal.identifiers.AppSetIdScope[] values()
+}
+
+public enum io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus {
+    FEATURE_DISABLED, IDENTIFIER_PROVIDER_UNAVAILABLE, INVALID_ADV_ID, NO_STARTUP, OK, UNKNOWN
+
+    public static final [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus$Companion Companion
+
+    public static final [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus from([Nullable] String)
+    public final [NonNull] String getValue()
+    public static io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus valueOf(String)
+    public static io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus[] values()
+}
+
+public static final class io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus$Companion {
+    public final [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus from([Nullable] String)
+}
+
+public final class io.appmetrica.analytics.coreapi.internal.identifiers.Identifiers {
+    public <init>([Nullable] String, [Nullable] String, [Nullable] String)
+    public final [Nullable] String component1()
+    public final [Nullable] String component2()
+    public final [Nullable] String component3()
+    public final [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.Identifiers copy([Nullable] String, [Nullable] String, [Nullable] String)
+    public boolean equals([Nullable] Object)
+    public final [Nullable] String getDeviceId()
+    public final [Nullable] String getDeviceIdHash()
+    public final [Nullable] String getUuid()
+    public int hashCode()
+    public [NonNull] String toString()
+}
+
+public interface io.appmetrica.analytics.coreapi.internal.identifiers.SimpleAdvertisingIdGetter {
+    public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.AdvertisingIdsHolder getIdentifiers([NonNull] android.content.Context)
+}
+
+public interface io.appmetrica.analytics.coreapi.internal.io.Compressor {
+    public abstract [Nullable] byte[] compress([NonNull] byte[])
+    public abstract [Nullable] byte[] uncompress([NonNull] byte[])
+}
+
+public interface io.appmetrica.analytics.coreapi.internal.io.IExecutionPolicy {
+    public abstract boolean canBeExecuted()
+}
+
+public interface io.appmetrica.analytics.coreapi.internal.io.SslSocketFactoryProvider {
+    public abstract [Nullable] javax.net.ssl.SSLSocketFactory getSslSocketFactory()
+}
+
+public interface io.appmetrica.analytics.coreapi.internal.permission.PermissionResolutionStrategy {
+    public abstract boolean hasNecessaryPermissions([NonNull] android.content.Context)
+}
+
+public class io.appmetrica.analytics.coreapi.internal.permission.PermissionState {
+    public final boolean granted
+    public final [NonNull] String name
+
+    public <init>([NonNull] String, boolean)
+    public boolean equals(Object)
+    public int hashCode()
+    public String toString()
+}
+
+public interface io.appmetrica.analytics.coreapi.internal.permission.PermissionStrategy {
+    public abstract boolean forbidUsePermission([NonNull] String)
+}
+
+public interface io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceComponentsInitializer {
+    public abstract void onCreate([NonNull] android.content.Context)
+}
+
+public enum io.appmetrica.analytics.coreapi.internal.servicecomponents.applicationstate.ApplicationState {
+    BACKGROUND, UNKNOWN, VISIBLE
+
+    public static [NonNull] io.appmetrica.analytics.coreapi.internal.servicecomponents.applicationstate.ApplicationState fromString([Nullable] String)
+    public [NonNull] String getStringValue()
+    public static io.appmetrica.analytics.coreapi.internal.servicecomponents.applicationstate.ApplicationState valueOf(String)
+    public static io.appmetrica.analytics.coreapi.internal.servicecomponents.applicationstate.ApplicationState[] values()
+}
+
+public interface io.appmetrica.analytics.coreapi.internal.servicecomponents.applicationstate.ApplicationStateObserver {
+    public abstract void onApplicationStateChanged([NonNull] io.appmetrica.analytics.coreapi.internal.servicecomponents.applicationstate.ApplicationState)
+}
+
+public interface io.appmetrica.analytics.coreapi.internal.servicecomponents.applicationstate.ApplicationStateProvider {
+    public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.servicecomponents.applicationstate.ApplicationState getCurrentState()
+    public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.servicecomponents.applicationstate.ApplicationState registerStickyObserver([NonNull] io.appmetrica.analytics.coreapi.internal.servicecomponents.applicationstate.ApplicationStateObserver)
+}
+
+public class io.appmetrica.analytics.coreapi.internal.servicecomponents.batteryinfo.BatteryInfo {
+    public final [Nullable] Integer batteryLevel
+    public final [NonNull] io.appmetrica.analytics.coreapi.internal.servicecomponents.batteryinfo.ChargeType chargeType
+
+    public <init>([Nullable] Integer, [NonNull] io.appmetrica.analytics.coreapi.internal.servicecomponents.batteryinfo.ChargeType)
+}
+
+public enum io.appmetrica.analytics.coreapi.internal.servicecomponents.batteryinfo.ChargeType {
+    AC, NONE, UNKNOWN, USB, WIRELESS
+
+    public static io.appmetrica.analytics.coreapi.internal.servicecomponents.batteryinfo.ChargeType fromId(Integer)
+    public int getId()
+    public static io.appmetrica.analytics.coreapi.internal.servicecomponents.batteryinfo.ChargeType valueOf(String)
+    public static io.appmetrica.analytics.coreapi.internal.servicecomponents.batteryinfo.ChargeType[] values()
+}
+
+public interface io.appmetrica.analytics.coreapi.internal.servicecomponents.batteryinfo.ChargeTypeChangeListener {
+    public abstract void onChargeTypeChanged([NonNull] io.appmetrica.analytics.coreapi.internal.servicecomponents.batteryinfo.ChargeType)
+}
+
+public interface io.appmetrica.analytics.coreapi.internal.servicecomponents.batteryinfo.ChargeTypeProvider {
+    public abstract [Nullable] Integer getBatteryLevel()
+    public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.servicecomponents.batteryinfo.ChargeType getChargeType()
+    public abstract void registerChargeTypeListener([NonNull] io.appmetrica.analytics.coreapi.internal.servicecomponents.batteryinfo.ChargeTypeChangeListener)
+}
+
+public interface io.appmetrica.analytics.coreapi.internal.system.LocaleProvider {
+    public abstract [NonNull] java.util.List<String> getLocales()
+}
+
+public interface io.appmetrica.analytics.coreapi.internal.system.PermissionExtractor {
+    public abstract boolean hasPermission([NonNull] android.content.Context, [NonNull] String)
+}
+

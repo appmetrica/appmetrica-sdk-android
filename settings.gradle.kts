@@ -1,0 +1,37 @@
+if (file("internal.settings.gradle.kts").exists()) {
+    apply(from = "internal.settings.gradle.kts")
+} else {
+    apply(from = "public.settings.gradle.kts")
+}
+
+rootProject.name = "appmetrica-sdk"
+
+// build scripts
+includeBuild("build-logic") {
+    name = "appmetrica-sdk-build-logic"
+}
+
+// modules
+include("analytics")
+include("appsetid")
+include("billing-interface")
+include("billing-v3")
+include("billing-v4")
+include("core-api")
+include("core-utils")
+include("gpllibrary")
+include("identifiers")
+include("location")
+include("location-api")
+include("modules-api")
+include("network")
+include("network-tasks")
+include("proto")
+include("remote-permissions")
+
+// native crashes
+include("ndkcrashes")
+
+// tests modules
+includeBuild("common_assertions")
+include("test-utils")

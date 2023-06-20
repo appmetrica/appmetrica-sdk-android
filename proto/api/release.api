@@ -1,0 +1,331 @@
+public final class io.appmetrica.analytics.protobuf.nano.BuildConfig {
+    public static final String BUILD_TYPE
+    public static final boolean DEBUG
+    public static final String LIBRARY_PACKAGE_NAME
+
+    public <init>()
+}
+
+public final class io.appmetrica.analytics.protobuf.nano.CodedInputByteBufferNano {
+    public void checkLastTagWas(int)
+    public static int decodeZigZag32(int)
+    public static long decodeZigZag64(long)
+    public int getBytesUntilLimit()
+    public byte[] getData(int, int)
+    public int getPosition()
+    public boolean isAtEnd()
+    public static io.appmetrica.analytics.protobuf.nano.CodedInputByteBufferNano newInstance(byte[])
+    public static io.appmetrica.analytics.protobuf.nano.CodedInputByteBufferNano newInstance(byte[], int, int)
+    public void popLimit(int)
+    public int pushLimit(int)
+    public boolean readBool()
+    public byte[] readBytes()
+    public double readDouble()
+    public int readEnum()
+    public int readFixed32()
+    public long readFixed64()
+    public float readFloat()
+    public void readGroup(io.appmetrica.analytics.protobuf.nano.MessageNano, int)
+    public int readInt32()
+    public long readInt64()
+    public void readMessage(io.appmetrica.analytics.protobuf.nano.MessageNano)
+    public byte readRawByte()
+    public byte[] readRawBytes(int)
+    public int readRawLittleEndian32()
+    public long readRawLittleEndian64()
+    public int readRawVarint32()
+    public long readRawVarint64()
+    public int readSFixed32()
+    public long readSFixed64()
+    public int readSInt32()
+    public long readSInt64()
+    public String readString()
+    public int readTag()
+    public int readUInt32()
+    public long readUInt64()
+    public void resetSizeCounter()
+    public void rewindToPosition(int)
+    public int setRecursionLimit(int)
+    public int setSizeLimit(int)
+    public boolean skipField(int)
+    public void skipMessage()
+    public void skipRawBytes(int)
+}
+
+public final class io.appmetrica.analytics.protobuf.nano.CodedOutputByteBufferNano {
+    public static final int LITTLE_ENDIAN_32_SIZE
+    public static final int LITTLE_ENDIAN_64_SIZE
+
+    public void checkNoSpaceLeft()
+    public static int computeBoolSize(int, boolean)
+    public static int computeBoolSizeNoTag(boolean)
+    public static int computeBytesSize(int, byte[])
+    public static int computeBytesSizeNoTag(byte[])
+    public static int computeDoubleSize(int, double)
+    public static int computeDoubleSizeNoTag(double)
+    public static int computeEnumSize(int, int)
+    public static int computeEnumSizeNoTag(int)
+    public static int computeFixed32Size(int, int)
+    public static int computeFixed32SizeNoTag(int)
+    public static int computeFixed64Size(int, long)
+    public static int computeFixed64SizeNoTag(long)
+    public static int computeFloatSize(int, float)
+    public static int computeFloatSizeNoTag(float)
+    public static int computeGroupSize(int, io.appmetrica.analytics.protobuf.nano.MessageNano)
+    public static int computeGroupSizeNoTag(io.appmetrica.analytics.protobuf.nano.MessageNano)
+    public static int computeInt32Size(int, int)
+    public static int computeInt32SizeNoTag(int)
+    public static int computeInt64Size(int, long)
+    public static int computeInt64SizeNoTag(long)
+    public static int computeMessageSize(int, io.appmetrica.analytics.protobuf.nano.MessageNano)
+    public static int computeMessageSizeNoTag(io.appmetrica.analytics.protobuf.nano.MessageNano)
+    public static int computeRawVarint32Size(int)
+    public static int computeRawVarint64Size(long)
+    public static int computeSFixed32Size(int, int)
+    public static int computeSFixed32SizeNoTag(int)
+    public static int computeSFixed64Size(int, long)
+    public static int computeSFixed64SizeNoTag(long)
+    public static int computeSInt32Size(int, int)
+    public static int computeSInt32SizeNoTag(int)
+    public static int computeSInt64Size(int, long)
+    public static int computeSInt64SizeNoTag(long)
+    public static int computeStringSize(int, String)
+    public static int computeStringSizeNoTag(String)
+    public static int computeTagSize(int)
+    public static int computeUInt32Size(int, int)
+    public static int computeUInt32SizeNoTag(int)
+    public static int computeUInt64Size(int, long)
+    public static int computeUInt64SizeNoTag(long)
+    public static int encodeZigZag32(int)
+    public static long encodeZigZag64(long)
+    public static io.appmetrica.analytics.protobuf.nano.CodedOutputByteBufferNano newInstance(byte[])
+    public static io.appmetrica.analytics.protobuf.nano.CodedOutputByteBufferNano newInstance(byte[], int, int)
+    public int position()
+    public void reset()
+    public int spaceLeft()
+    public void writeBool(int, boolean)
+    public void writeBoolNoTag(boolean)
+    public void writeBytes(int, byte[])
+    public void writeBytesNoTag(byte[])
+    public void writeDouble(int, double)
+    public void writeDoubleNoTag(double)
+    public void writeEnum(int, int)
+    public void writeEnumNoTag(int)
+    public void writeFixed32(int, int)
+    public void writeFixed32NoTag(int)
+    public void writeFixed64(int, long)
+    public void writeFixed64NoTag(long)
+    public void writeFloat(int, float)
+    public void writeFloatNoTag(float)
+    public void writeGroup(int, io.appmetrica.analytics.protobuf.nano.MessageNano)
+    public void writeGroupNoTag(io.appmetrica.analytics.protobuf.nano.MessageNano)
+    public void writeInt32(int, int)
+    public void writeInt32NoTag(int)
+    public void writeInt64(int, long)
+    public void writeInt64NoTag(long)
+    public void writeMessage(int, io.appmetrica.analytics.protobuf.nano.MessageNano)
+    public void writeMessageNoTag(io.appmetrica.analytics.protobuf.nano.MessageNano)
+    public void writeRawByte(byte)
+    public void writeRawByte(int)
+    public void writeRawBytes(byte[])
+    public void writeRawBytes(byte[], int, int)
+    public void writeRawLittleEndian32(int)
+    public void writeRawLittleEndian64(long)
+    public void writeRawVarint32(int)
+    public void writeRawVarint64(long)
+    public void writeSFixed32(int, int)
+    public void writeSFixed32NoTag(int)
+    public void writeSFixed64(int, long)
+    public void writeSFixed64NoTag(long)
+    public void writeSInt32(int, int)
+    public void writeSInt32NoTag(int)
+    public void writeSInt64(int, long)
+    public void writeSInt64NoTag(long)
+    public void writeString(int, String)
+    public void writeStringNoTag(String)
+    public void writeTag(int, int)
+    public void writeUInt32(int, int)
+    public void writeUInt32NoTag(int)
+    public void writeUInt64(int, long)
+    public void writeUInt64NoTag(long)
+}
+
+public static class io.appmetrica.analytics.protobuf.nano.CodedOutputByteBufferNano$OutOfSpaceException extends java.io.IOException
+
+public abstract class io.appmetrica.analytics.protobuf.nano.ExtendableMessageNano<M extends io.appmetrica.analytics.protobuf.nano.ExtendableMessageNano<M>> extends io.appmetrica.analytics.protobuf.nano.MessageNano {
+    protected io.appmetrica.analytics.protobuf.nano.FieldArray unknownFieldData
+
+    public <init>()
+    public M clone()
+    protected int computeSerializedSize()
+    public final <T> T getExtension(io.appmetrica.analytics.protobuf.nano.Extension<M, T>)
+    public final boolean hasExtension(io.appmetrica.analytics.protobuf.nano.Extension<M, ?>)
+    public final <T> M setExtension(io.appmetrica.analytics.protobuf.nano.Extension<M, T>, T)
+    protected final boolean storeUnknownField(io.appmetrica.analytics.protobuf.nano.CodedInputByteBufferNano, int)
+    public void writeTo(io.appmetrica.analytics.protobuf.nano.CodedOutputByteBufferNano)
+}
+
+public class io.appmetrica.analytics.protobuf.nano.Extension<M extends io.appmetrica.analytics.protobuf.nano.ExtendableMessageNano<M>, T> {
+    public static final int TYPE_BOOL
+    public static final int TYPE_BYTES
+    public static final int TYPE_DOUBLE
+    public static final int TYPE_ENUM
+    public static final int TYPE_FIXED32
+    public static final int TYPE_FIXED64
+    public static final int TYPE_FLOAT
+    public static final int TYPE_GROUP
+    public static final int TYPE_INT32
+    public static final int TYPE_INT64
+    public static final int TYPE_MESSAGE
+    public static final int TYPE_SFIXED32
+    public static final int TYPE_SFIXED64
+    public static final int TYPE_SINT32
+    public static final int TYPE_SINT64
+    public static final int TYPE_STRING
+    public static final int TYPE_UINT32
+    public static final int TYPE_UINT64
+    protected final Class<T> clazz
+    protected final boolean repeated
+    public final int tag
+    protected final int type
+
+    protected int computeRepeatedSerializedSize(Object)
+    protected int computeSingularSerializedSize(Object)
+    public static <M extends io.appmetrica.analytics.protobuf.nano.ExtendableMessageNano<M>, T extends io.appmetrica.analytics.protobuf.nano.MessageNano> io.appmetrica.analytics.protobuf.nano.Extension<M, T> createMessageTyped(int, Class<T>, int)
+    public static <M extends io.appmetrica.analytics.protobuf.nano.ExtendableMessageNano<M>, T extends io.appmetrica.analytics.protobuf.nano.MessageNano> io.appmetrica.analytics.protobuf.nano.Extension<M, T> createMessageTyped(int, Class<T>, long)
+    public static <M extends io.appmetrica.analytics.protobuf.nano.ExtendableMessageNano<M>, T> io.appmetrica.analytics.protobuf.nano.Extension<M, T> createPrimitiveTyped(int, Class<T>, long)
+    public static <M extends io.appmetrica.analytics.protobuf.nano.ExtendableMessageNano<M>, T extends io.appmetrica.analytics.protobuf.nano.MessageNano> io.appmetrica.analytics.protobuf.nano.Extension<M, T[]> createRepeatedMessageTyped(int, Class<T[]>, long)
+    public static <M extends io.appmetrica.analytics.protobuf.nano.ExtendableMessageNano<M>, T> io.appmetrica.analytics.protobuf.nano.Extension<M, T> createRepeatedPrimitiveTyped(int, Class<T>, long, long, long)
+    protected Object readData(io.appmetrica.analytics.protobuf.nano.CodedInputByteBufferNano)
+    protected void readDataInto(io.appmetrica.analytics.protobuf.nano.UnknownFieldData, java.util.List<Object>)
+    protected void writeRepeatedData(Object, io.appmetrica.analytics.protobuf.nano.CodedOutputByteBufferNano)
+    protected void writeSingularData(Object, io.appmetrica.analytics.protobuf.nano.CodedOutputByteBufferNano)
+}
+
+private static class io.appmetrica.analytics.protobuf.nano.Extension$PrimitiveExtension<M extends io.appmetrica.analytics.protobuf.nano.ExtendableMessageNano<M>, T> extends io.appmetrica.analytics.protobuf.nano.Extension<M, T> {
+    public <init>(int, Class<T>, int, boolean, int, int)
+    protected int computeRepeatedSerializedSize(Object)
+    protected final int computeSingularSerializedSize(Object)
+    protected Object readData(io.appmetrica.analytics.protobuf.nano.CodedInputByteBufferNano)
+    protected void readDataInto(io.appmetrica.analytics.protobuf.nano.UnknownFieldData, java.util.List<Object>)
+    protected void writeRepeatedData(Object, io.appmetrica.analytics.protobuf.nano.CodedOutputByteBufferNano)
+    protected final void writeSingularData(Object, io.appmetrica.analytics.protobuf.nano.CodedOutputByteBufferNano)
+}
+
+public final class io.appmetrica.analytics.protobuf.nano.FieldArray implementation Cloneable {
+    public final io.appmetrica.analytics.protobuf.nano.FieldArray clone()
+    public boolean equals(Object)
+    public int hashCode()
+    public boolean isEmpty()
+}
+
+package class io.appmetrica.analytics.protobuf.nano.FieldData implementation Cloneable {
+    public final io.appmetrica.analytics.protobuf.nano.FieldData clone()
+    public boolean equals(Object)
+    public int hashCode()
+}
+
+public final class io.appmetrica.analytics.protobuf.nano.InternalNano {
+    public static final Object LAZY_INIT_LOCK
+    public static final int TYPE_BOOL
+    public static final int TYPE_BYTES
+    public static final int TYPE_DOUBLE
+    public static final int TYPE_ENUM
+    public static final int TYPE_FIXED32
+    public static final int TYPE_FIXED64
+    public static final int TYPE_FLOAT
+    public static final int TYPE_GROUP
+    public static final int TYPE_INT32
+    public static final int TYPE_INT64
+    public static final int TYPE_MESSAGE
+    public static final int TYPE_SFIXED32
+    public static final int TYPE_SFIXED64
+    public static final int TYPE_SINT32
+    public static final int TYPE_SINT64
+    public static final int TYPE_STRING
+    public static final int TYPE_UINT32
+    public static final int TYPE_UINT64
+
+    public static byte[] bytesDefaultValue(String)
+    public static void cloneUnknownFieldData(io.appmetrica.analytics.protobuf.nano.ExtendableMessageNano, io.appmetrica.analytics.protobuf.nano.ExtendableMessageNano)
+    public static <K, V> int computeMapFieldSize(java.util.Map<K, V>, int, int, int)
+    public static byte[] copyFromUtf8(String)
+    public static boolean equals(boolean[], boolean[])
+    public static boolean equals(byte[][], byte[][])
+    public static boolean equals(double[], double[])
+    public static boolean equals(float[], float[])
+    public static boolean equals(int[], int[])
+    public static boolean equals(Object[], Object[])
+    public static <K, V> boolean equals(java.util.Map<K, V>, java.util.Map<K, V>)
+    public static boolean equals(long[], long[])
+    public static int hashCode(boolean[])
+    public static int hashCode(byte[][])
+    public static int hashCode(double[])
+    public static int hashCode(float[])
+    public static int hashCode(int[])
+    public static int hashCode(Object[])
+    public static <K, V> int hashCode(java.util.Map<K, V>)
+    public static int hashCode(long[])
+    public static final <K, V> java.util.Map<K, V> mergeMapEntry(io.appmetrica.analytics.protobuf.nano.CodedInputByteBufferNano, java.util.Map<K, V>, io.appmetrica.analytics.protobuf.nano.MapFactories$MapFactory, int, int, V, int, int)
+    public static <K, V> void serializeMapField(io.appmetrica.analytics.protobuf.nano.CodedOutputByteBufferNano, java.util.Map<K, V>, int, int, int)
+    public static String stringDefaultValue(String)
+}
+
+public class io.appmetrica.analytics.protobuf.nano.InvalidProtocolBufferNanoException extends java.io.IOException {
+    public <init>(String)
+}
+
+public final class io.appmetrica.analytics.protobuf.nano.MapFactories {
+    public static io.appmetrica.analytics.protobuf.nano.MapFactories$MapFactory getMapFactory()
+}
+
+private static class io.appmetrica.analytics.protobuf.nano.MapFactories$DefaultMapFactory implementation io.appmetrica.analytics.protobuf.nano.MapFactories$MapFactory {
+    public <K, V> java.util.Map<K, V> forMap(java.util.Map<K, V>)
+}
+
+public interface io.appmetrica.analytics.protobuf.nano.MapFactories$MapFactory {
+    public abstract <K, V> java.util.Map<K, V> forMap(java.util.Map<K, V>)
+}
+
+public abstract class io.appmetrica.analytics.protobuf.nano.MessageNano {
+    protected int cachedSize
+
+    public <init>()
+    public io.appmetrica.analytics.protobuf.nano.MessageNano clone()
+    protected int computeSerializedSize()
+    public int getCachedSize()
+    public int getSerializedSize()
+    public static final <T extends io.appmetrica.analytics.protobuf.nano.MessageNano> T mergeFrom(T, byte[])
+    public static final <T extends io.appmetrica.analytics.protobuf.nano.MessageNano> T mergeFrom(T, byte[], int, int)
+    public abstract io.appmetrica.analytics.protobuf.nano.MessageNano mergeFrom(io.appmetrica.analytics.protobuf.nano.CodedInputByteBufferNano)
+    public static final boolean messageNanoEquals(io.appmetrica.analytics.protobuf.nano.MessageNano, io.appmetrica.analytics.protobuf.nano.MessageNano)
+    public static final byte[] toByteArray(io.appmetrica.analytics.protobuf.nano.MessageNano)
+    public static final void toByteArray(io.appmetrica.analytics.protobuf.nano.MessageNano, byte[], int, int)
+    public String toString()
+    public void writeTo(io.appmetrica.analytics.protobuf.nano.CodedOutputByteBufferNano)
+}
+
+public final class io.appmetrica.analytics.protobuf.nano.MessageNanoPrinter {
+    public static <T extends io.appmetrica.analytics.protobuf.nano.MessageNano> String print(T)
+}
+
+package final class io.appmetrica.analytics.protobuf.nano.UnknownFieldData {
+    public boolean equals(Object)
+    public int hashCode()
+}
+
+public final class io.appmetrica.analytics.protobuf.nano.WireFormatNano {
+    public static final boolean[] EMPTY_BOOLEAN_ARRAY
+    public static final byte[] EMPTY_BYTES
+    public static final byte[][] EMPTY_BYTES_ARRAY
+    public static final double[] EMPTY_DOUBLE_ARRAY
+    public static final float[] EMPTY_FLOAT_ARRAY
+    public static final int[] EMPTY_INT_ARRAY
+    public static final long[] EMPTY_LONG_ARRAY
+    public static final String[] EMPTY_STRING_ARRAY
+
+    public static final int getRepeatedFieldArrayLength(io.appmetrica.analytics.protobuf.nano.CodedInputByteBufferNano, int)
+    public static int getTagFieldNumber(int)
+    public static boolean parseUnknownField(io.appmetrica.analytics.protobuf.nano.CodedInputByteBufferNano, int)
+}
+

@@ -1,0 +1,22 @@
+syntax = "proto2";
+
+message AutoInappCollectingInfo {
+
+    enum InAppType {
+        UNKNOWN = 1;
+        PURCHASE = 2;
+        SUBSCRIPTION = 3;
+    }
+
+    message BillingInfo {
+        required InAppType type = 1;
+        required string sku = 2;
+        required string purchaseToken = 3;
+        required uint64 purchaseTime = 4;
+        required uint64 sendTime = 5;
+    }
+
+    repeated BillingInfo entries = 1;
+    required bool firstInappCheckOccurred = 2;
+
+}

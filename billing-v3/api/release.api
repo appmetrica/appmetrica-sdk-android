@@ -1,0 +1,20 @@
+public final class io.appmetrica.analytics.billingv3.BuildConfig {
+    public static final String BUILD_TYPE
+    public static final boolean DEBUG
+    public static final String LIBRARY_PACKAGE_NAME
+
+    public <init>()
+}
+
+public class io.appmetrica.analytics.billingv3.internal.BillingLibraryMonitor implementation io.appmetrica.analytics.billinginterface.internal.monitor.BillingMonitor, io.appmetrica.analytics.billinginterface.internal.library.UtilsProvider {
+    public <init>([NonNull] android.content.Context, [NonNull] java.util.concurrent.Executor, [NonNull] java.util.concurrent.Executor, [NonNull] io.appmetrica.analytics.billinginterface.internal.storage.BillingInfoManager, [NonNull] io.appmetrica.analytics.billinginterface.internal.update.UpdatePolicy, [NonNull] io.appmetrica.analytics.billinginterface.internal.storage.BillingInfoSender)
+    public <init>([NonNull] android.content.Context, [NonNull] java.util.concurrent.Executor, [NonNull] java.util.concurrent.Executor, [NonNull] io.appmetrica.analytics.billinginterface.internal.storage.BillingInfoStorage, [NonNull] io.appmetrica.analytics.billinginterface.internal.storage.BillingInfoSender)
+    public [NonNull] io.appmetrica.analytics.billinginterface.internal.storage.BillingInfoManager getBillingInfoManager()
+    public [NonNull] io.appmetrica.analytics.billinginterface.internal.storage.BillingInfoSender getBillingInfoSender()
+    public [NonNull] java.util.concurrent.Executor getUiExecutor()
+    public [NonNull] io.appmetrica.analytics.billinginterface.internal.update.UpdatePolicy getUpdatePolicy()
+    public [NonNull] java.util.concurrent.Executor getWorkerExecutor()
+    public void onBillingConfigChanged([Nullable] io.appmetrica.analytics.billinginterface.internal.config.BillingConfig)
+    public void onSessionResumed()
+}
+

@@ -1,0 +1,5 @@
+syntax = "proto2";
+
+message Value {
+    optional bytes buildId = 1;
+}

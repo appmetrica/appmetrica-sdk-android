@@ -1,0 +1,33 @@
+# We should at least keep the Exceptions, InnerClasses,
+# and Signature attributes when processing a library.
+-keepattributes Exceptions,InnerClasses,Signature,*Annotation*
+
+# We should also keep the SourceFile and LineNumberTable attributes
+# for producing useful obfuscated stack traces.
+-keepattributes SourceFile,LineNumberTable
+-renamesourcefileattribute SourceFile
+
+# Some code may make further use of introspection
+# to figure out the enclosing methods of anonymous inner classes
+-keepattributes EnclosingMethod
+
+# To keep the "Deprecated" attribute.
+-keepattributes Deprecated
+
+-keepclassmembers enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}
+
+-keepclassmembers class * implements android.os.Parcelable {
+    public static final ** CREATOR;
+}
+
+-assumenosideeffects class kotlin.jvm.internal.Intrinsics {
+    public static void checkExpressionValueIsNotNull(...);
+    public static void checkNotNullExpressionValue(...);
+    public static void checkReturnedValueIsNotNull(...);
+    public static void checkFieldIsNotNull(...);
+    public static void checkParameterIsNotNull(...);
+    public static void checkNotNullParameter(...);
+}

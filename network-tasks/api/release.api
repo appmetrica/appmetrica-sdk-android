@@ -1,0 +1,409 @@
+public final class io.appmetrica.analytics.networktasks.BuildConfig {
+    public static final String BUILD_NUMBER
+    public static final String BUILD_TYPE
+    public static final boolean DEBUG
+    public static final String LIBRARY_PACKAGE_NAME
+    public static final String VERSION_NAME
+
+    public <init>()
+}
+
+public class io.appmetrica.analytics.networktasks.internal.AESRSARequestBodyEncrypter implementation io.appmetrica.analytics.networktasks.internal.RequestBodyEncrypter {
+    public <init>()
+    public [Nullable] byte[] encrypt([Nullable] byte[])
+    public [NonNull] io.appmetrica.analytics.networktasks.internal.RequestBodyEncryptionMode getEncryptionMode()
+}
+
+public class io.appmetrica.analytics.networktasks.internal.AdvIdWithLimitedAppender implementation io.appmetrica.analytics.networktasks.internal.IParamsAppender<io.appmetrica.analytics.coreapi.internal.identifiers.AdvertisingIdsHolder> {
+    public <init>()
+    public void appendParams([NonNull] android.net.Uri$Builder, [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.AdvertisingIdsHolder)
+}
+
+public final class io.appmetrica.analytics.networktasks.internal.AllHostsExponentialBackoffPolicy implementation io.appmetrica.analytics.networktasks.internal.ExponentialBackoffPolicy {
+    public <init>([NonNull] io.appmetrica.analytics.networktasks.internal.ExponentialBackoffDataHolder)
+    public boolean canBeExecuted([Nullable] io.appmetrica.analytics.networktasks.internal.RetryPolicyConfig)
+    public void onAllHostsAttemptsFinished(boolean)
+    public void onHostAttemptFinished(boolean)
+}
+
+public final class io.appmetrica.analytics.networktasks.internal.AllHostsExponentialBackoffPolicyKt
+
+public interface io.appmetrica.analytics.networktasks.internal.AppInfo {
+    public abstract [NonNull] String getAppFramework()
+}
+
+public interface io.appmetrica.analytics.networktasks.internal.ArgumentsMerger<I, O> {
+    public abstract boolean compareWithOtherArguments([NonNull] I)
+    public abstract [NonNull] O mergeFrom([NonNull] I)
+}
+
+public class io.appmetrica.analytics.networktasks.internal.BaseRequestConfig {
+    protected <init>()
+    public [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.AdvertisingIdsHolder getAdvertisingIdsHolder()
+    public String getAnalyticsSdkVersionName()
+    public String getAppBuildNumber()
+    public int getAppBuildNumberInt()
+    public [NonNull] String getAppFramework()
+    public String getAppPlatform()
+    public [NonNull] String getAppSetId()
+    public [NonNull] String getAppSetIdScope()
+    public String getAppVersion()
+    public [NonNull] String getDeviceIDHash()
+    public [NonNull] String getDeviceId()
+    public [NonNull] String getDeviceRootStatus()
+    public [NonNull] String getDeviceType()
+    public String getKitBuildNumber()
+    public [NonNull] String getKitBuildType()
+    public [NonNull] String getLocale()
+    public [NonNull] String getManufacturer()
+    public [NonNull] String getModel()
+    public int getOsApiLevel()
+    public [NonNull] String getOsVersion()
+    public String getPackageName()
+    public String getProtocolVersion()
+    public io.appmetrica.analytics.networktasks.internal.RetryPolicyConfig getRetryPolicyConfig()
+    public float getScaleFactor()
+    public int getScreenDpi()
+    public int getScreenHeight()
+    public int getScreenWidth()
+    public [NonNull] String getUuid()
+    public boolean isIdentifiersValid()
+    protected void setAdvertisingIdsHolder([NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.AdvertisingIdsHolder)
+    protected void setAppBuildNumber([Nullable] String)
+    public void setAppSetId([NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.AppSetId)
+    protected void setAppVersion([Nullable] String)
+    protected void setConstantDeviceInfo(io.appmetrica.analytics.coreutils.internal.system.ConstantDeviceInfo)
+    protected void setDeviceType([Nullable] String)
+    protected void setIdentifiers([Nullable] io.appmetrica.analytics.coreapi.internal.identifiers.Identifiers)
+    protected final void setLocale(String)
+    protected void setPackageName(String)
+    protected void setRetryPolicyConfig(io.appmetrica.analytics.networktasks.internal.RetryPolicyConfig)
+    protected void setScreenInfo([NonNull] io.appmetrica.analytics.coreapi.internal.device.ScreenInfo)
+    public String toString()
+}
+
+public abstract static class io.appmetrica.analytics.networktasks.internal.BaseRequestConfig$BaseRequestArguments<I, O> implementation io.appmetrica.analytics.networktasks.internal.ArgumentsMerger<I, O> {
+    public final [Nullable] String appBuildNumber
+    public final [Nullable] String appVersion
+    public final [Nullable] String deviceType
+
+    public <init>([Nullable] String, [Nullable] String, [Nullable] String)
+}
+
+public abstract static class io.appmetrica.analytics.networktasks.internal.BaseRequestConfig$ComponentLoader<T extends io.appmetrica.analytics.networktasks.internal.BaseRequestConfig, A extends io.appmetrica.analytics.networktasks.internal.BaseRequestConfig$BaseRequestArguments, D extends io.appmetrica.analytics.networktasks.internal.BaseRequestConfig$DataSource<A>> implementation io.appmetrica.analytics.networktasks.internal.BaseRequestConfig$RequestConfigLoader<T, D> {
+    protected <init>([NonNull] android.content.Context, [NonNull] String)
+    protected abstract [NonNull] T createBlankConfig()
+    public [NonNull] android.content.Context getContext()
+    public [NonNull] String getPackageName()
+    public [NonNull] T load([NonNull] D)
+}
+
+public static class io.appmetrica.analytics.networktasks.internal.BaseRequestConfig$DataSource<A> {
+    public final [NonNull] A componentArguments
+    public final [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.Identifiers identifiers
+
+    public <init>([NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.Identifiers, A)
+}
+
+public interface io.appmetrica.analytics.networktasks.internal.BaseRequestConfig$RequestConfigLoader<T extends io.appmetrica.analytics.networktasks.internal.BaseRequestConfig, D> {
+    public abstract [NonNull] T load(D)
+}
+
+public class io.appmetrica.analytics.networktasks.internal.CacheControlHttpsConnectionPerformer {
+    public <init>([Nullable] javax.net.ssl.SSLSocketFactory)
+    public void performConnection([NonNull] String, [NonNull] io.appmetrica.analytics.networktasks.internal.CacheControlHttpsConnectionPerformer$Client)
+}
+
+public interface io.appmetrica.analytics.networktasks.internal.CacheControlHttpsConnectionPerformer$Client {
+    public abstract [Nullable] String getOldETag()
+    public abstract void onError()
+    public abstract void onNotModified()
+    public abstract void onResponse([NonNull] String, [NonNull] byte[])
+}
+
+public class io.appmetrica.analytics.networktasks.internal.CommonUrlParts {
+    public static final String ADV_ID
+    public static final String ANALYTICS_SDK_BUILD_NUMBER
+    public static final String ANALYTICS_SDK_BUILD_TYPE
+    public static final String ANALYTICS_SDK_VERSION_NAME
+    public static final String APP_FRAMEWORK
+    public static final String APP_ID
+    public static final String APP_PLATFORM
+    public static final String APP_SET_ID
+    public static final String APP_SET_ID_SCOPE
+    public static final String APP_VERSION
+    public static final String APP_VERSION_CODE
+    public static final String DEVICE_ID
+    public static final String DEVICE_TYPE
+    public static final String ENCRYPTED_REQUEST
+    public static final String HUAWEI_OAID
+    public static final String HUAWEI_OAID_LIMIT_TRACKING
+    public static final String LIMIT_AD_TRACKING
+    public static final String LOCALE
+    public static final String MANUFACTURER
+    public static final String MODEL
+    public static final String OS_API_LEVEL
+    public static final String OS_VERSION
+    public static final String PROTOCOL_VERSION
+    public static final String REQUEST_ID
+    public static final String ROOT_STATUS
+    public static final String SCALE_FACTOR
+    public static final String SCREEN_DPI
+    public static final String SCREEN_HEIGHT
+    public static final String SCREEN_WIDTH
+    public static final String UUID
+    public static final String YANDEX_ADV_ID
+    public static final String YANDEX_ADV_ID_LIMIT_TRACKING
+
+    public <init>()
+}
+
+public static final class io.appmetrica.analytics.networktasks.internal.CommonUrlParts$EncryptedRequestValues {
+    public static final String AES_RSA
+
+    public <init>()
+}
+
+public static final class io.appmetrica.analytics.networktasks.internal.CommonUrlParts$Values {
+    public static final String FALSE_INTEGER
+    public static final String TRUE_INTEGER
+
+    public <init>()
+}
+
+public interface io.appmetrica.analytics.networktasks.internal.ConfigProvider<T> {
+    public abstract [NonNull] T getConfig()
+}
+
+public class io.appmetrica.analytics.networktasks.internal.DefaultNetworkResponseHandler implementation io.appmetrica.analytics.networktasks.internal.NetworkResponseHandler<io.appmetrica.analytics.networktasks.internal.DefaultResponseParser$Response> {
+    public <init>()
+    public [Nullable] io.appmetrica.analytics.networktasks.internal.DefaultResponseParser$Response handle([NonNull] io.appmetrica.analytics.networktasks.internal.ResponseDataHolder)
+}
+
+public class io.appmetrica.analytics.networktasks.internal.DefaultResponseParser {
+    public <init>()
+    public [Nullable] io.appmetrica.analytics.networktasks.internal.DefaultResponseParser$Response parse([Nullable] byte[])
+}
+
+public static class io.appmetrica.analytics.networktasks.internal.DefaultResponseParser$Response {
+    public final [NonNull] String mStatus
+
+    public <init>([NonNull] String)
+    public String toString()
+}
+
+public final class io.appmetrica.analytics.networktasks.internal.DefaultResponseValidityChecker implementation io.appmetrica.analytics.networktasks.internal.ResponseValidityChecker {
+    public <init>()
+    public boolean isResponseValid(int)
+}
+
+public final class io.appmetrica.analytics.networktasks.internal.DefaultResponseValidityCheckerKt
+
+public class io.appmetrica.analytics.networktasks.internal.ExponentialBackoffDataHolder {
+    public <init>([NonNull] io.appmetrica.analytics.networktasks.internal.HostRetryInfoProvider)
+    public void reset()
+    public void updateLastAttemptInfo()
+    public boolean wasLastAttemptLongAgoEnough([Nullable] io.appmetrica.analytics.networktasks.internal.RetryPolicyConfig)
+}
+
+public interface io.appmetrica.analytics.networktasks.internal.ExponentialBackoffPolicy {
+    public abstract boolean canBeExecuted([Nullable] io.appmetrica.analytics.networktasks.internal.RetryPolicyConfig)
+    public abstract void onAllHostsAttemptsFinished(boolean)
+    public abstract void onHostAttemptFinished(boolean)
+}
+
+public final class io.appmetrica.analytics.networktasks.internal.FinalConfigProvider<T> implementation io.appmetrica.analytics.networktasks.internal.ConfigProvider<T> {
+    public <init>([NonNull] T)
+    public [NonNull] T getConfig()
+}
+
+public class io.appmetrica.analytics.networktasks.internal.FullUrlFormer<T> {
+    public <init>([NonNull] io.appmetrica.analytics.networktasks.internal.IParamsAppender<T>, [NonNull] io.appmetrica.analytics.networktasks.internal.ConfigProvider<T>)
+    public void buildAndSetFullHostUrl()
+    public [Nullable] java.util.List<String> getAllHosts()
+    public [Nullable] String getUrl()
+    public boolean hasMoreHosts()
+    public void incrementAttemptNumber()
+    public void setHosts([Nullable] java.util.List<String>)
+}
+
+public interface io.appmetrica.analytics.networktasks.internal.HostRetryInfoProvider {
+    public abstract long getLastAttemptTimeSeconds()
+    public abstract int getNextSendAttemptNumber()
+    public abstract void saveLastAttemptTimeSeconds(long)
+    public abstract void saveNextSendAttemptNumber(int)
+}
+
+public interface io.appmetrica.analytics.networktasks.internal.IParamsAppender<T> {
+    public abstract void appendParams([NonNull] android.net.Uri$Builder, [NonNull] T)
+}
+
+public interface io.appmetrica.analytics.networktasks.internal.NetworkAppContext {
+    public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.SimpleAdvertisingIdGetter getAdvertisingIdGetter()
+    public abstract [NonNull] io.appmetrica.analytics.networktasks.internal.AppInfo getAppInfo()
+    public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.AppSetIdProvider getAppSetIdProvider()
+    public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.system.LocaleProvider getLocaleProvider()
+    public abstract [NonNull] io.appmetrica.analytics.networktasks.internal.ScreenInfoProvider getScreenInfoProvider()
+    public abstract [NonNull] io.appmetrica.analytics.networktasks.internal.SdkInfo getSdkInfo()
+}
+
+public class io.appmetrica.analytics.networktasks.internal.NetworkCore extends io.appmetrica.analytics.coreapi.internal.executors.InterruptionSafeThread {
+    public <init>()
+    public void onDestroy()
+    public void run()
+    public void startTask(io.appmetrica.analytics.networktasks.internal.NetworkTask)
+}
+
+public interface io.appmetrica.analytics.networktasks.internal.NetworkResponseHandler<T> {
+    public abstract [Nullable] T handle([NonNull] io.appmetrica.analytics.networktasks.internal.ResponseDataHolder)
+}
+
+public interface io.appmetrica.analytics.networktasks.internal.NetworkServiceLifecycleObserver {
+    public abstract void onCreate()
+    public abstract void onDestroy()
+}
+
+public final class io.appmetrica.analytics.networktasks.internal.NetworkServiceLocator implementation io.appmetrica.analytics.networktasks.internal.NetworkServiceLifecycleObserver {
+    public static void destroy()
+    public static [NonNull] io.appmetrica.analytics.networktasks.internal.NetworkServiceLocator getInstance()
+    public [NonNull] io.appmetrica.analytics.networktasks.internal.NetworkAppContext getNetworkAppContext()
+    public [NonNull] io.appmetrica.analytics.networktasks.internal.NetworkCore getNetworkCore()
+    public static void init()
+    public void initAsync([NonNull] io.appmetrica.analytics.networktasks.internal.NetworkAppContext)
+    public void onCreate()
+    public void onDestroy()
+}
+
+public class io.appmetrica.analytics.networktasks.internal.NetworkTask {
+    public <init>([NonNull] java.util.concurrent.Executor, [NonNull] io.appmetrica.analytics.coreapi.internal.io.IExecutionPolicy, [NonNull] io.appmetrica.analytics.networktasks.internal.ExponentialBackoffPolicy, [NonNull] io.appmetrica.analytics.networktasks.internal.UnderlyingNetworkTask, [NonNull] java.util.List<io.appmetrica.analytics.networktasks.internal.NetworkTask$ShouldTryNextHostCondition>, [NonNull] String)
+    public [NonNull] String description()
+    public [NonNull] io.appmetrica.analytics.coreapi.internal.io.IExecutionPolicy getConnectionExecutionPolicy()
+    public [NonNull] java.util.concurrent.Executor getExecutor()
+    public [NonNull] io.appmetrica.analytics.networktasks.internal.ExponentialBackoffPolicy getExponentialBackoffPolicy()
+    public [NonNull] io.appmetrica.analytics.networktasks.internal.RequestDataHolder getRequestDataHolder()
+    public [NonNull] io.appmetrica.analytics.networktasks.internal.ResponseDataHolder getResponseDataHolder()
+    public [Nullable] io.appmetrica.analytics.networktasks.internal.RetryPolicyConfig getRetryPolicyConfig()
+    public [Nullable] javax.net.ssl.SSLSocketFactory getSslSocketFactory()
+    public [NonNull] io.appmetrica.analytics.networktasks.internal.UnderlyingNetworkTask getUnderlyingTask()
+    public [Nullable] String getUrl()
+    public [NonNull] String getUserAgent()
+    public boolean onCreateNetworkTask()
+    public boolean onPerformRequest()
+    public boolean onRequestComplete()
+    public void onRequestError([Nullable] Throwable)
+    public void onShouldNotExecute()
+    public boolean onTaskAdded()
+    public void onTaskFinished()
+    public void onTaskRemoved()
+    public boolean shouldTryNextHost()
+}
+
+public enum io.appmetrica.analytics.networktasks.internal.NetworkTask$Method {
+    GET, POST
+
+    public static io.appmetrica.analytics.networktasks.internal.NetworkTask$Method valueOf(String)
+    public static io.appmetrica.analytics.networktasks.internal.NetworkTask$Method[] values()
+}
+
+public interface io.appmetrica.analytics.networktasks.internal.NetworkTask$ShouldTryNextHostCondition {
+    public abstract boolean shouldTryNextHost(int)
+}
+
+public class io.appmetrica.analytics.networktasks.internal.NetworkTaskForSendingDataParamsAppender {
+    public <init>([NonNull] io.appmetrica.analytics.networktasks.internal.RequestBodyEncrypter)
+    public void appendEncryptedData([NonNull] android.net.Uri$Builder)
+}
+
+public interface io.appmetrica.analytics.networktasks.internal.RequestBodyEncrypter {
+    public abstract [Nullable] byte[] encrypt(byte[])
+    public abstract [NonNull] io.appmetrica.analytics.networktasks.internal.RequestBodyEncryptionMode getEncryptionMode()
+}
+
+public enum io.appmetrica.analytics.networktasks.internal.RequestBodyEncryptionMode {
+    AES_RSA, NONE
+
+    public static io.appmetrica.analytics.networktasks.internal.RequestBodyEncryptionMode valueOf(String)
+    public static io.appmetrica.analytics.networktasks.internal.RequestBodyEncryptionMode[] values()
+}
+
+public class io.appmetrica.analytics.networktasks.internal.RequestDataHolder {
+    public <init>()
+    public void applySendTime(long)
+    public [NonNull] java.util.Map<String, java.util.List<String>> getHeaders()
+    public [NonNull] io.appmetrica.analytics.networktasks.internal.NetworkTask$Method getMethod()
+    public [Nullable] byte[] getPostData()
+    public [Nullable] Long getSendTimestamp()
+    public [Nullable] Integer getSendTimezoneSec()
+    public void setHeader([NonNull] String, [NonNull] String...)
+    public void setPostData([Nullable] byte[])
+}
+
+public class io.appmetrica.analytics.networktasks.internal.ResponseDataHolder {
+    public <init>([NonNull] io.appmetrica.analytics.networktasks.internal.ResponseValidityChecker)
+    public int getResponseCode()
+    public [Nullable] byte[] getResponseData()
+    public [Nullable] java.util.Map<String, java.util.List<String>> getResponseHeaders()
+    public boolean isValidResponse()
+    public void setResponseCode(int)
+    public void setResponseData([Nullable] byte[])
+    public void setResponseHeaders([Nullable] java.util.Map<String, java.util.List<String>>)
+}
+
+public interface io.appmetrica.analytics.networktasks.internal.ResponseValidityChecker {
+    public abstract boolean isResponseValid(int)
+}
+
+public class io.appmetrica.analytics.networktasks.internal.RetryPolicyConfig {
+    public final int exponentialMultiplier
+    public final int maxIntervalSeconds
+
+    public <init>(int, int)
+    public boolean equals(Object)
+    public int hashCode()
+    public String toString()
+}
+
+public interface io.appmetrica.analytics.networktasks.internal.ScreenInfoProvider {
+    public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.device.ScreenInfo getScreenInfo()
+}
+
+public interface io.appmetrica.analytics.networktasks.internal.SdkInfo {
+    public abstract [NonNull] String getSdkBuildNumber()
+    public abstract [NonNull] String getSdkBuildType()
+    public abstract [NonNull] String getSdkVersionName()
+}
+
+public class io.appmetrica.analytics.networktasks.internal.SendingDataTaskHelper {
+    public <init>([NonNull] io.appmetrica.analytics.networktasks.internal.RequestBodyEncrypter, [NonNull] io.appmetrica.analytics.coreapi.internal.io.Compressor, [NonNull] io.appmetrica.analytics.coreutils.internal.time.TimeProvider, [NonNull] io.appmetrica.analytics.networktasks.internal.RequestDataHolder, [NonNull] io.appmetrica.analytics.networktasks.internal.ResponseDataHolder, [NonNull] io.appmetrica.analytics.networktasks.internal.NetworkResponseHandler<io.appmetrica.analytics.networktasks.internal.DefaultResponseParser$Response>)
+    public <init>([NonNull] io.appmetrica.analytics.networktasks.internal.RequestBodyEncrypter, [NonNull] io.appmetrica.analytics.coreapi.internal.io.Compressor, [NonNull] io.appmetrica.analytics.networktasks.internal.RequestDataHolder, [NonNull] io.appmetrica.analytics.networktasks.internal.ResponseDataHolder, [NonNull] io.appmetrica.analytics.networktasks.internal.NetworkResponseHandler<io.appmetrica.analytics.networktasks.internal.DefaultResponseParser$Response>)
+    public boolean isResponseValid()
+    public void onPerformRequest()
+    public boolean prepareAndSetPostData([NonNull] byte[])
+}
+
+public interface io.appmetrica.analytics.networktasks.internal.UnderlyingNetworkTask {
+    public abstract [NonNull] String description()
+    public abstract [NonNull] io.appmetrica.analytics.networktasks.internal.FullUrlFormer<?> getFullUrlFormer()
+    public abstract [NonNull] io.appmetrica.analytics.networktasks.internal.RequestDataHolder getRequestDataHolder()
+    public abstract [NonNull] io.appmetrica.analytics.networktasks.internal.ResponseDataHolder getResponseDataHolder()
+    public abstract [Nullable] io.appmetrica.analytics.networktasks.internal.RetryPolicyConfig getRetryPolicyConfig()
+    public abstract [Nullable] javax.net.ssl.SSLSocketFactory getSslSocketFactory()
+    public abstract boolean onCreateTask()
+    public abstract void onPerformRequest()
+    public abstract void onPostRequestComplete(boolean)
+    public abstract boolean onRequestComplete()
+    public abstract void onRequestError([Nullable] Throwable)
+    public abstract void onShouldNotExecute()
+    public abstract void onSuccessfulTaskFinished()
+    public abstract void onTaskAdded()
+    public abstract void onTaskFinished()
+    public abstract void onTaskRemoved()
+    public abstract void onUnsuccessfulTaskFinished()
+}
+
+public final class io.appmetrica.analytics.networktasks.internal.utils.Utils {
+    public static final [NonNull] io.appmetrica.analytics.networktasks.internal.utils.Utils INSTANCE
+
+    public static final boolean isBadRequest(int)
+}
+

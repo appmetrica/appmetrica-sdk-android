@@ -1,0 +1,224 @@
+public final class io.appmetrica.analytics.modulesapi.BuildConfig {
+    public static final String BUILD_TYPE
+    public static final boolean DEBUG
+    public static final String LIBRARY_PACKAGE_NAME
+
+    public <init>()
+}
+
+public interface io.appmetrica.analytics.modulesapi.internal.AskForPermissionStrategyModuleProvider {
+    public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.permission.PermissionStrategy getAskForPermissionStrategy()
+}
+
+public interface io.appmetrica.analytics.modulesapi.internal.ExecutorProvider {
+    public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor getDefaultExecutor()
+    public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.executors.InterruptionSafeThread getInterruptionThread([NonNull] String, [NonNull] String, [NonNull] Runnable)
+    public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor getModuleExecutor()
+    public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor getSupportIOExecutor()
+    public abstract [NonNull] java.util.concurrent.Executor getUiExecutor()
+}
+
+public interface io.appmetrica.analytics.modulesapi.internal.LegacyModulePreferences {
+    public abstract boolean getLegacyBoolean([NonNull] String, boolean)
+    public abstract long getLegacyLong([NonNull] String, long)
+    public abstract [Nullable] String getLegacyString([NonNull] String, [Nullable] String)
+    public abstract void putLegacyBoolean([NonNull] String, boolean)
+    public abstract void putLegacyLong([NonNull] String, long)
+    public abstract void putLegacyString([NonNull] String, [Nullable] String)
+}
+
+public static final class io.appmetrica.analytics.modulesapi.internal.LegacyModulePreferences$DefaultImpls
+
+public interface io.appmetrica.analytics.modulesapi.internal.LocationExtension {
+    public abstract [Nullable] io.appmetrica.analytics.coreapi.internal.backport.Consumer<android.location.Location> getLocationConsumer()
+    public abstract [Nullable] io.appmetrica.analytics.coreapi.internal.control.Toggle getLocationControllerAppStateToggle()
+    public abstract [Nullable] io.appmetrica.analytics.modulesapi.internal.ModuleLocationSourcesController getLocationSourcesController()
+}
+
+public interface io.appmetrica.analytics.modulesapi.internal.LocationServiceApi {
+    public abstract [NonNull] io.appmetrica.analytics.locationapi.internal.LastKnownLocationExtractorProviderFactory getLastKnownExtractorProviderFactory()
+    public abstract [Nullable] android.location.Location getLocation()
+    public abstract [NonNull] io.appmetrica.analytics.locationapi.internal.LocationReceiverProviderFactory getLocationReceiverProviderFactory()
+    public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.system.PermissionExtractor getPermissionExtractor()
+    public abstract void registerControllerObserver([NonNull] io.appmetrica.analytics.locationapi.internal.LocationControllerObserver)
+    public abstract void registerSource([NonNull] io.appmetrica.analytics.locationapi.internal.LastKnownLocationExtractorProvider)
+    public abstract void registerSource([NonNull] io.appmetrica.analytics.locationapi.internal.LocationReceiverProvider)
+    public abstract void unregisterSource([NonNull] io.appmetrica.analytics.locationapi.internal.LastKnownLocationExtractorProvider)
+    public abstract void unregisterSource([NonNull] io.appmetrica.analytics.locationapi.internal.LocationReceiverProvider)
+    public abstract void updateLocationFilter([NonNull] io.appmetrica.analytics.locationapi.internal.LocationFilter)
+}
+
+public interface io.appmetrica.analytics.modulesapi.internal.ModuleEntryPoint<T> {
+    public abstract [NonNull] String getIdentifier()
+    public abstract [Nullable] io.appmetrica.analytics.modulesapi.internal.LocationExtension getLocationExtension()
+    public abstract [Nullable] io.appmetrica.analytics.modulesapi.internal.event.ModuleEventHandlerFactory getModuleEventHandlerFactory()
+    public abstract [Nullable] io.appmetrica.analytics.modulesapi.internal.ModuleServicesDatabase getModuleServicesDatabase()
+    public abstract [Nullable] io.appmetrica.analytics.modulesapi.internal.RemoteConfigExtensionConfiguration<T> getRemoteConfigExtensionConfiguration()
+    public abstract void initServiceSide([NonNull] io.appmetrica.analytics.modulesapi.internal.ServiceContext, [NonNull] io.appmetrica.analytics.modulesapi.internal.ModuleRemoteConfig<T>)
+}
+
+public interface io.appmetrica.analytics.modulesapi.internal.ModuleLifecycleController {
+    public abstract void registerObserver([NonNull] io.appmetrica.analytics.modulesapi.internal.ModuleLifecycleObserver)
+}
+
+public interface io.appmetrica.analytics.modulesapi.internal.ModuleLifecycleObserver {
+    public abstract void onAllClientsDisconnected()
+    public abstract void onFirstClientConnected()
+}
+
+public interface io.appmetrica.analytics.modulesapi.internal.ModuleLocationSourcesController {
+    public abstract void init()
+}
+
+public interface io.appmetrica.analytics.modulesapi.internal.ModulePreferences {
+    public abstract boolean getBoolean([NonNull] String, boolean)
+    public abstract int getInt([NonNull] String, int)
+    public abstract long getLong([NonNull] String, long)
+    public abstract [Nullable] String getString([NonNull] String, [Nullable] String)
+    public abstract void putBoolean([NonNull] String, boolean)
+    public abstract void putInt([NonNull] String, int)
+    public abstract void putLong([NonNull] String, long)
+    public abstract void putString([NonNull] String, [Nullable] String)
+}
+
+public static final class io.appmetrica.analytics.modulesapi.internal.ModulePreferences$DefaultImpls
+
+public final class io.appmetrica.analytics.modulesapi.internal.ModuleRemoteConfig<T> {
+    public <init>([NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.Identifiers, [NonNull] io.appmetrica.analytics.modulesapi.internal.RemoteConfigMetaInfo, T)
+    public final [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.Identifiers component1()
+    public final [NonNull] io.appmetrica.analytics.modulesapi.internal.RemoteConfigMetaInfo component2()
+    public final T component3()
+    public final [NonNull] io.appmetrica.analytics.modulesapi.internal.ModuleRemoteConfig<T> copy([NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.Identifiers, [NonNull] io.appmetrica.analytics.modulesapi.internal.RemoteConfigMetaInfo, T)
+    public boolean equals([Nullable] Object)
+    public final T getFeaturesConfig()
+    public final [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.Identifiers getIdentifiers()
+    public final [NonNull] io.appmetrica.analytics.modulesapi.internal.RemoteConfigMetaInfo getRemoteConfigMetaInfo()
+    public int hashCode()
+    public [NonNull] String toString()
+}
+
+public interface io.appmetrica.analytics.modulesapi.internal.ModuleSelfReporter {
+    public abstract void reportError([NonNull] String, [Nullable] String)
+    public abstract void reportError([NonNull] String, [Nullable] Throwable)
+    public abstract void reportEvent(int, [NonNull] String, [Nullable] String)
+    public abstract void reportEvent([NonNull] String)
+    public abstract void reportEvent([NonNull] String, [Nullable] String)
+    public abstract void reportEvent([NonNull] String, [Nullable] java.util.Map<String, ? extends Object>)
+}
+
+public static final class io.appmetrica.analytics.modulesapi.internal.ModuleSelfReporter$DefaultImpls
+
+public interface io.appmetrica.analytics.modulesapi.internal.ModuleServicesDatabase {
+    public abstract [NonNull] java.util.List<io.appmetrica.analytics.modulesapi.internal.TableDescription> getTables()
+}
+
+public interface io.appmetrica.analytics.modulesapi.internal.NetworkContext {
+    public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.io.IExecutionPolicy getExecutionPolicy()
+    public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.io.SslSocketFactoryProvider getSslSocketFactoryProvider()
+    public abstract [NonNull] String getUserAgent()
+}
+
+public interface io.appmetrica.analytics.modulesapi.internal.RemoteConfigExtensionConfiguration<S> {
+    public abstract [NonNull] java.util.Map<String, Integer> getBlocks()
+    public abstract [NonNull] java.util.List<String> getFeatures()
+    public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.data.JsonParser<S> getJsonParser()
+    public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.data.Converter<S, byte[]> getProtobufConverter()
+    public abstract [NonNull] io.appmetrica.analytics.modulesapi.internal.RemoteConfigUpdateListener<S> getRemoteConfigUpdateListener()
+}
+
+public final class io.appmetrica.analytics.modulesapi.internal.RemoteConfigMetaInfo {
+    public <init>(long, long)
+    public final long component1()
+    public final long component2()
+    public final [NonNull] io.appmetrica.analytics.modulesapi.internal.RemoteConfigMetaInfo copy(long, long)
+    public boolean equals([Nullable] Object)
+    public final long getFirstSendTime()
+    public final long getLastUpdateTime()
+    public int hashCode()
+    public [NonNull] String toString()
+}
+
+public interface io.appmetrica.analytics.modulesapi.internal.RemoteConfigUpdateListener<T> {
+    public abstract void onRemoteConfigUpdated([NonNull] io.appmetrica.analytics.modulesapi.internal.ModuleRemoteConfig<T>)
+}
+
+public interface io.appmetrica.analytics.modulesapi.internal.ServiceContext {
+    public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.SimpleAdvertisingIdGetter getAdvertisingIdGetter()
+    public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.servicecomponents.applicationstate.ApplicationStateProvider getApplicationStateProvider()
+    public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.servicecomponents.batteryinfo.ChargeTypeProvider getChargeTypeProvider()
+    public abstract [NonNull] android.content.Context getContext()
+    public abstract [NonNull] io.appmetrica.analytics.modulesapi.internal.ExecutorProvider getExecutorProvider()
+    public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.system.LocaleProvider getLocaleProvider()
+    public abstract [NonNull] io.appmetrica.analytics.modulesapi.internal.LocationServiceApi getLocationServiceApi()
+    public abstract [NonNull] io.appmetrica.analytics.modulesapi.internal.ModuleLifecycleController getModuleLifecycleController()
+    public abstract [NonNull] io.appmetrica.analytics.modulesapi.internal.NetworkContext getNetworkContext()
+    public abstract [NonNull] io.appmetrica.analytics.modulesapi.internal.ModuleSelfReporter getSelfReporter()
+    public abstract [NonNull] io.appmetrica.analytics.modulesapi.internal.ServiceWakeLock getServiceWakeLock()
+    public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.control.StatisticsRestrictionController getStatisticsRestrictionController()
+    public abstract [NonNull] io.appmetrica.analytics.modulesapi.internal.StorageProvider getStorageProvider()
+}
+
+public interface io.appmetrica.analytics.modulesapi.internal.ServiceWakeLock {
+    public abstract boolean acquireWakeLock([NonNull] String)
+    public abstract void releaseWakeLock([NonNull] String)
+}
+
+public interface io.appmetrica.analytics.modulesapi.internal.StorageProvider {
+    public abstract [NonNull] android.database.sqlite.SQLiteOpenHelper getDbStorage()
+    public abstract [NonNull] io.appmetrica.analytics.modulesapi.internal.ModulePreferences legacyModulePreferences()
+    public abstract [NonNull] io.appmetrica.analytics.modulesapi.internal.ModulePreferences modulePreferences([NonNull] String)
+}
+
+public interface io.appmetrica.analytics.modulesapi.internal.TableDescription {
+    public abstract [NonNull] java.util.List<String> getColumnNames()
+    public abstract [NonNull] String getCreateTableScript()
+    public abstract [NonNull] java.util.Map<Integer, io.appmetrica.analytics.coreapi.internal.db.DatabaseScript> getDatabaseProviderUpgradeScript()
+    public abstract [NonNull] String getDropTableScript()
+    public abstract [NonNull] String getTableName()
+}
+
+public final class io.appmetrica.analytics.modulesapi.internal.TableDescriptionModel implementation io.appmetrica.analytics.modulesapi.internal.TableDescription {
+    public <init>([NonNull] String, [NonNull] String, [NonNull] String, [NonNull] java.util.List<String>, [NonNull] java.util.Map<Integer, ? extends io.appmetrica.analytics.coreapi.internal.db.DatabaseScript>)
+    public [NonNull] java.util.List<String> getColumnNames()
+    public [NonNull] String getCreateTableScript()
+    public [NonNull] java.util.Map<Integer, io.appmetrica.analytics.coreapi.internal.db.DatabaseScript> getDatabaseProviderUpgradeScript()
+    public [NonNull] String getDropTableScript()
+    public [NonNull] String getTableName()
+}
+
+public final class io.appmetrica.analytics.modulesapi.internal.event.ModuleCounterReport implementation io.appmetrica.analytics.coreapi.internal.event.CounterReportApi {
+    public <init>(int, int, [Nullable] String, [Nullable] String, [Nullable] byte[], int, [NonNull] java.util.Map<String, byte[]>)
+    public int getBytesTruncated()
+    public int getCustomType()
+    public [NonNull] java.util.Map<String, byte[]> getExtras()
+    public [Nullable] String getName()
+    public int getType()
+    public [Nullable] String getValue()
+    public [Nullable] byte[] getValueBytes()
+    public void setBytesTruncated(int)
+    public void setCustomType(int)
+    public void setExtras([NonNull] java.util.Map<String, byte[]>)
+    public void setName([Nullable] String)
+    public void setType(int)
+    public void setValue([Nullable] String)
+    public void setValueBytes([Nullable] byte[])
+}
+
+public interface io.appmetrica.analytics.modulesapi.internal.event.ModuleEventHandler {
+    public abstract boolean handle([NonNull] io.appmetrica.analytics.modulesapi.internal.event.ModuleEventHandlerContext, [NonNull] io.appmetrica.analytics.coreapi.internal.event.CounterReportApi)
+}
+
+public interface io.appmetrica.analytics.modulesapi.internal.event.ModuleEventHandlerContext {
+    public abstract [NonNull] io.appmetrica.analytics.modulesapi.internal.event.ModuleEventHandlerReporter getEventReporter()
+    public abstract [NonNull] io.appmetrica.analytics.modulesapi.internal.ModulePreferences getLegacyModulePreferences()
+    public abstract [NonNull] io.appmetrica.analytics.modulesapi.internal.ModulePreferences getModulePreferences()
+}
+
+public interface io.appmetrica.analytics.modulesapi.internal.event.ModuleEventHandlerFactory {
+    public abstract [NonNull] io.appmetrica.analytics.modulesapi.internal.event.ModuleEventHandler createEventHandler([NonNull] String)
+}
+
+public interface io.appmetrica.analytics.modulesapi.internal.event.ModuleEventHandlerReporter {
+    public abstract void report([NonNull] io.appmetrica.analytics.coreapi.internal.event.CounterReportApi)
+}
+

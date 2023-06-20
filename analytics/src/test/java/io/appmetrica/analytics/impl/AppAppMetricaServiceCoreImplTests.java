@@ -1,0 +1,428 @@
+package io.appmetrica.analytics.impl;
+
+import android.content.ContentValues;
+import android.content.Context;
+import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.ResultReceiver;
+import io.appmetrica.analytics.coreapi.internal.backport.Consumer;
+import io.appmetrica.analytics.coreapi.internal.device.ScreenInfo;
+import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
+import io.appmetrica.analytics.impl.client.ProcessConfiguration;
+import io.appmetrica.analytics.impl.component.clients.ClientRepository;
+import io.appmetrica.analytics.impl.core.MetricaCoreImplFirstCreateTaskLauncher;
+import io.appmetrica.analytics.impl.core.MetricaCoreImplFirstCreateTaskLauncherProvider;
+import io.appmetrica.analytics.impl.crash.CrashpadListenerImpl;
+import io.appmetrica.analytics.impl.crash.jvm.CrashDirectoryWatcher;
+import io.appmetrica.analytics.impl.crash.ndk.crashpad.CrashpadCrashReader;
+import io.appmetrica.analytics.impl.crash.ndk.crashpad.CrashpadLoader;
+import io.appmetrica.analytics.impl.db.VitalCommonDataProvider;
+import io.appmetrica.analytics.impl.modules.ServiceContextFacade;
+import io.appmetrica.analytics.impl.service.MetricaServiceCallback;
+import io.appmetrica.analytics.impl.startup.CollectingFlags;
+import io.appmetrica.analytics.impl.startup.StartupState;
+import io.appmetrica.analytics.impl.utils.JsonHelper;
+import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
+import io.appmetrica.analytics.testutils.MockedConstructionRule;
+import io.appmetrica.analytics.testutils.MockedStaticRule;
+import io.appmetrica.analytics.testutils.TestUtils;
+import java.io.File;
+import java.util.UUID;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.Mock;
+import org.mockito.MockedConstruction;
+import org.mockito.MockitoAnnotations;
+import org.robolectric.RobolectricTestRunner;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.same;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.when;
+
+@RunWith(RobolectricTestRunner.class)
+public class AppAppMetricaServiceCoreImplTests extends CommonTest {
+
+    private Context mContext;
+    @Mock
+    private MetricaServiceCallback mCallback;
+    @Mock
+    private ClientRepository mClientRepository;
+    @Mock
+    private AppMetricaServiceLifecycle mAppMetricaServiceLifecycle;
+    @Mock
+    private CollectingFlags mCollectingFlags;
+    @Mock
+    private FileProvider mFileProvider;
+    @Mock
+    private ReportConsumer mReportConsumer;
+    @Mock
+    private ApplicationStateProviderImpl mApplicationStateProvider;
+    @Mock
+    private ResultReceiver mResultReceiver;
+    @Mock
+    private FirstServiceEntryPointManager firstServiceEntryPointManager;
+    @Mock
+    private AppMetricaServiceCoreImplFieldsFactory fieldsFactory;
+    @Mock
+    private CrashDirectoryWatcher crashDirectoryWatcher;
+    @Mock
+    private CrashpadListenerImpl crashpadListener;
+    @Mock
+    private CrashpadLoader crashpadLoader;
+    @Mock
+    private ICommonExecutor reportExecutor;
+    @Mock
+    private ICommonExecutor defaultExecutor;
+    @Mock
+    private ReportConsumer reportConsumer;
+    @Mock
+    private CrashpadCrashReader crashpadCrashReader;
+    @Mock
+    private ScreenInfoHolder screenInfoHolder;
+    @Mock
+    private Resources resources;
+    @Mock
+    private Configuration configuration;
+    @Mock
+    private Configuration newConfiguration;
+    @Mock
+    private LocaleHolder localeHolder;
+    private Intent intent;
+
+    private StartupState mStartupState;
+    private AppAppMetricaServiceCoreImpl mMetricaCore;
+
+    @Captor
+    private ArgumentCaptor<AppMetricaServiceLifecycle.LifecycleObserver> mLifecycleObserverCaptor;
+
+    @Rule
+    public GlobalServiceLocatorRule globalServiceLocatorRule = new GlobalServiceLocatorRule();
+    @Rule
+    public MockedStaticRule<JsonHelper> mockedStaticRule = new MockedStaticRule<>(JsonHelper.class);
+    @Rule
+    public MockedStaticRule<LocaleHolder> localeHolderMockedStaticRule = new MockedStaticRule<>(LocaleHolder.class);
+    @Rule
+    public MockedConstructionRule<ReportProxy> reportProxyMockedConstructionRule = new MockedConstructionRule<>(ReportProxy.class);
+    @Rule
+    public MockedConstructionRule<MetricaCoreImplFirstCreateTaskLauncherProvider> firstCreateTaskLauncherProviderRule =
+        new MockedConstructionRule<>(
+            MetricaCoreImplFirstCreateTaskLauncherProvider.class,
+            new MockedConstruction.MockInitializer<MetricaCoreImplFirstCreateTaskLauncherProvider>() {
+                @Override
+                public void prepare(MetricaCoreImplFirstCreateTaskLauncherProvider mock,
+                                    MockedConstruction.Context context) throws Throwable {
+                    when(mock.getLauncher()).thenReturn(mock(MetricaCoreImplFirstCreateTaskLauncher.class));
+                }
+            }
+        );
+    @Rule
+    public MockedConstructionRule<ServiceContextFacade> serviceContextFacadeMockedConstructionRule =
+        new MockedConstructionRule<>(ServiceContextFacade.class);
+
+    @Before
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+        when(GlobalServiceLocator.getInstance().getVitalDataProviderStorage().getCommonDataProvider())
+                .thenReturn(mock(VitalCommonDataProvider.class));
+        intent = new Intent();
+        mContext = TestUtils.createMockedContext();
+
+        when(mFileProvider.getCrashesDirectory(mContext)).thenReturn(mock(File.class));
+        doReturn(crashDirectoryWatcher).when(fieldsFactory).createCrashDirectoryWatcher(
+                any(File.class),
+                any(Consumer.class)
+        );
+        doReturn(reportConsumer).when(fieldsFactory).createReportConsumer(same(mContext), any(ClientRepository.class));
+        doReturn(crashpadCrashReader).when(fieldsFactory).createCrashpadCrashReader(reportConsumer);
+
+        when(mContext.getResources()).thenReturn(resources);
+        when(resources.getConfiguration()).thenReturn(configuration);
+
+        when(LocaleHolder.getInstance(mContext)).thenReturn(localeHolder);
+
+        mMetricaCore = new AppAppMetricaServiceCoreImpl(
+            mContext,
+            mCallback,
+            mClientRepository,
+            mAppMetricaServiceLifecycle,
+            mFileProvider,
+            firstServiceEntryPointManager,
+            mApplicationStateProvider,
+            crashpadListener,
+            crashpadLoader,
+            reportExecutor,
+            defaultExecutor,
+            fieldsFactory,
+            screenInfoHolder
+        );
+
+        mStartupState = new StartupState.Builder(mCollectingFlags).build();
+        GlobalServiceLocator.getInstance().getStartupStateHolder().onStartupStateChanged(mStartupState);
+        mMetricaCore.onCreate();
+        mMetricaCore.setReportConsumer(mReportConsumer);
+    }
+
+    @Test
+    public void construction() {
+        assertThat(reportProxyMockedConstructionRule.getConstructionMock().constructed()).hasSize(1);
+    }
+
+    @Test
+    public void onCreateDoesNotUpdateLocaleForFistTime() {
+        verify(localeHolder, never()).updateLocales(configuration);
+    }
+
+    @Test
+    public void onCreateUpdatesLocaleForNonFirstTime() {
+        mMetricaCore.onCreate();
+        verify(localeHolder).updateLocales(configuration);
+    }
+
+    @Test
+    public void onConfigurationChanged() {
+        mMetricaCore.onConfigurationChanged(newConfiguration);
+        verify(localeHolder).updateLocales(newConfiguration);
+    }
+
+    @Test
+    public void testRemoveByPid() {
+        ClientRepository repository = mock(ClientRepository.class);
+        String packageName = UUID.randomUUID().toString();
+        int pid = 100500;
+        String psid = UUID.randomUUID().toString();
+        Uri uri = new Uri.Builder().authority(packageName).
+                path("client").
+                appendQueryParameter("pid", String.valueOf(pid)).
+                appendQueryParameter("psid", psid).build();
+
+        mMetricaCore.setClientRepository(repository);
+        mMetricaCore.removeClients(uri, packageName);
+        verify(repository).remove(packageName, pid, psid);
+    }
+
+    @Test
+    public void testNewClientConnectObserveDoesNotUpdateScreenSizeIfNoExtras() {
+        touchNewClientConnectedObserver();
+        verify(screenInfoHolder).maybeUpdateInfo(null);
+    }
+
+    @Test
+    public void testNewClientConnectObserveUpdatesScreenSizeToNull() {
+        intent.putExtra(ServiceUtils.EXTRA_SCREEN_SIZE, new Bundle());
+        touchNewClientConnectedObserver();
+        verify(screenInfoHolder).maybeUpdateInfo(null);
+    }
+
+    @Test
+    public void newClientConnectObserveUpdatesScreenSize() {
+        ScreenInfo screenInfo = mock(ScreenInfo.class);
+        String screenInfoString = "Screen info json string";
+        intent.putExtra(ServiceUtils.EXTRA_SCREEN_SIZE, screenInfoString);
+        when(JsonHelper.screenInfoFromJsonString(screenInfoString)).thenReturn(screenInfo);
+        touchNewClientConnectedObserver();
+        verify(screenInfoHolder).maybeUpdateInfo(screenInfo);
+    }
+
+    @Test
+    public void testResumeUserSessionForEmptyBundle() {
+        testResumeUserSessionForInvalidBundle(new Bundle());
+    }
+
+    @Test
+    public void testResumeUserSessionForBundleWithoutProcessConfiguration() {
+        Bundle bundle = new Bundle();
+        bundle.putString("Some bundle string key", "Some bundle string value");
+        testResumeUserSessionForInvalidBundle(bundle);
+    }
+
+    @Test
+    public void testResumeUserSessionForProcessConfigurationWithoutProcessId() {
+        ProcessConfiguration processConfiguration = new ProcessConfiguration(new ContentValues(), mResultReceiver);
+        Bundle bundle = new Bundle();
+        processConfiguration.toBundle(bundle);
+        testResumeUserSessionForInvalidBundle(bundle);
+    }
+
+    private void testResumeUserSessionForInvalidBundle(Bundle bundle) {
+        mMetricaCore.resumeUserSession(bundle);
+
+        verifyZeroInteractions(mApplicationStateProvider);
+    }
+
+    @Test
+    public void testResumeUserSession() {
+        ProcessConfiguration processConfiguration = new ProcessConfiguration(mContext, mResultReceiver);
+        Bundle bundle = new Bundle();
+        processConfiguration.toBundle(bundle);
+        mMetricaCore.resumeUserSession(bundle);
+
+        verify(mApplicationStateProvider).resumeUserSessionForPid(processConfiguration.getProcessID());
+    }
+
+    @Test
+    public void testPauseUserSession() {
+        ProcessConfiguration processConfiguration = new ProcessConfiguration(mContext, mResultReceiver);
+        Bundle bundle = new Bundle();
+        processConfiguration.toBundle(bundle);
+        mMetricaCore.pauseUserSession(bundle);
+
+        verify(mApplicationStateProvider).pauseUserSessionForPid(processConfiguration.getProcessID());
+    }
+
+    @Test
+    public void testPauseUserSessionForEmptyBundle() {
+        testPauseUserSessionForInvalidBundle(new Bundle());
+    }
+
+    @Test
+    public void testPauseUserSessionForBundleWithoutProcessConfiguration() {
+        Bundle bundle = new Bundle();
+        bundle.putString("Some bundle key", "Some bundle value");
+        testPauseUserSessionForInvalidBundle(bundle);
+    }
+
+    @Test
+    public void testPauseUserSessionForProcessConfigurationWithoutProcessId() {
+        ProcessConfiguration processConfiguration = new ProcessConfiguration(new ContentValues(), mResultReceiver);
+        Bundle bundle = new Bundle();
+        processConfiguration.toBundle(bundle);
+        testPauseUserSessionForInvalidBundle(bundle);
+    }
+
+    private void testPauseUserSessionForInvalidBundle(Bundle bundle) {
+        mMetricaCore.pauseUserSession(bundle);
+
+        verifyZeroInteractions(mApplicationStateProvider);
+    }
+
+    @Test
+    public void onUnbindNotifyApplicationStateProvider() {
+        int pid = 3242;
+        Intent intent = prepareMetricaIntent("io.appmetrica.analytics.IAppMetricaService", "client", pid, UUID.randomUUID().toString());
+        mMetricaCore.onUnbind(intent);
+        verify(mApplicationStateProvider).notifyProcessDisconnected(pid);
+    }
+
+    @Test
+    public void testOnUnbindDoNotNotifyApplicationStateProviderForMissingAction() {
+        testOnUnbindDoNotNotifyApplicationStateProvider(null, "client", 1123, UUID.randomUUID().toString());
+    }
+
+    @Test
+    public void testOnUnbindDoNotNotifyApplicationStateProviderForEmptyAction() {
+        testOnUnbindDoNotNotifyApplicationStateProvider("", "client", 1123, UUID.randomUUID().toString());
+    }
+
+    @Test
+    public void testOnUnbindDoNotNotifyApplicationStateProviderForWrongAction() {
+        testOnUnbindDoNotNotifyApplicationStateProvider("wrong_action", "client", 1123, UUID.randomUUID().toString());
+    }
+
+    @Test
+    public void testOnUnbindDoNotNotifyApplicationStateProviderForMissingPath() {
+        testOnUnbindDoNotNotifyApplicationStateProvider(
+                "io.appmetrica.analytics.IAppMetricaService",
+                null,
+                1123,
+                UUID.randomUUID().toString()
+        );
+    }
+
+    @Test
+    public void testOnUnbindDoNotNotifyApplicationStateProviderForEmptyPath() {
+        testOnUnbindDoNotNotifyApplicationStateProvider(
+                "io.appmetrica.analytics.IAppMetricaService",
+                "",
+                1123,
+                UUID.randomUUID().toString()
+        );
+    }
+
+    @Test
+    public void testOnUnbindDoNotNotifyApplicationStateProviderForInvalidPath() {
+        testOnUnbindDoNotNotifyApplicationStateProvider(
+                "io.appmetrica.analytics.IAppMetricaService",
+                "invalid_path",
+                1123,
+                UUID.randomUUID().toString()
+        );
+    }
+
+    @Test(expected = NumberFormatException.class)
+    public void testOnUnbindDoNotNotifyApplicationStateProviderForMissingPid() {
+        testOnUnbindDoNotNotifyApplicationStateProvider(
+                "io.appmetrica.analytics.IAppMetricaService",
+                "client",
+                null,
+                UUID.randomUUID().toString()
+        );
+    }
+
+    @Test
+    public void onDestroy() {
+        ArgumentCaptor<Consumer<String>> nativeCrashConsumer = ArgumentCaptor.forClass(Consumer.class);
+        verify(crashpadListener).addListener(nativeCrashConsumer.capture());
+        mMetricaCore.onDestroy();
+        verify(crashpadListener).removeListener(nativeCrashConsumer.getValue());
+    }
+
+    @Test
+    public void reportData() {
+        final int type = 2213;
+        final Bundle data = mock(Bundle.class);
+        mMetricaCore.reportData(type, data);
+        verify(reportProxyMockedConstructionRule.getConstructionMock().constructed().get(0))
+                .proxyReport(type, data);
+    }
+
+    private void testOnUnbindDoNotNotifyApplicationStateProvider(String action, String path, Integer pid, String psid) {
+        Intent intent = prepareMetricaIntent(action, path, pid, psid);
+        mMetricaCore.onUnbind(intent);
+        verifyZeroInteractions(mApplicationStateProvider);
+    }
+
+    private Intent prepareMetricaIntent(String action, String path, Integer pid, String psid) {
+        Uri.Builder builder = new Uri.Builder();
+        if (path != null) {
+            builder.appendPath(path);
+        }
+        if (pid != null) {
+            builder.appendQueryParameter("pid", String.valueOf(pid));
+        }
+        if (psid != null) {
+            builder.appendQueryParameter("psid", psid);
+        }
+        Intent intent = new Intent();
+        if (action != null) {
+            intent.setAction(action);
+        }
+        intent.setData(builder.build());
+        return intent;
+    }
+
+    private void touchNewClientConnectedObserver() {
+        verify(mAppMetricaServiceLifecycle).addNewClientConnectObserver(mLifecycleObserverCaptor.capture());
+        mLifecycleObserverCaptor.getValue().onEvent(intent);
+    }
+
+    private void touchFirstClientConnectObserver() {
+        verify(mAppMetricaServiceLifecycle, times(1))
+            .addFirstClientConnectObserver(mLifecycleObserverCaptor.capture());
+        mLifecycleObserverCaptor.getValue().onEvent(intent);
+    }
+}

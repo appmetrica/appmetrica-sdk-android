@@ -1,0 +1,35 @@
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Open network sockets -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <application tools:ignore="GoogleAppIndexingWarning">
+        <!-- AppMetrica Analytics: common service -->
+        <service
+            android:name="io.appmetrica.analytics.AppMetricaService"
+            android:enabled="true"
+            android:exported="false"
+            android:process=":AppMetrica">
+
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <action android:name="io.appmetrica.analytics.IAppMetricaService"/>
+                <data android:scheme="appmetrica"/>
+            </intent-filter>
+        </service>
+
+        <!-- To track preinstallations -->
+        <provider
+            android:name="io.appmetrica.analytics.PreloadInfoContentProvider"
+            android:authorities="${applicationId}.appmetrica.preloadinfo.retail"
+            android:enabled="true"
+            android:exported="true"
+            android:process=":AppMetrica"
+            tools:ignore="ExportedContentProvider" />
+
+    </application>
+
+</manifest>

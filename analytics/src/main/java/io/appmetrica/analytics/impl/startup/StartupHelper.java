@@ -1,0 +1,389 @@
+package io.appmetrica.analytics.impl.startup;
+
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.os.Bundle;
+import android.os.Handler;
+import android.text.TextUtils;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
+import io.appmetrica.analytics.AdsIdentifiersResult;
+import io.appmetrica.analytics.IdentifiersResult;
+import io.appmetrica.analytics.StartupParamsCallback;
+import io.appmetrica.analytics.coreutils.internal.collection.CollectionUtils;
+import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
+import io.appmetrica.analytics.impl.DataResultReceiver;
+import io.appmetrica.analytics.impl.FeaturesResult;
+import io.appmetrica.analytics.impl.IServerTimeOffsetProvider;
+import io.appmetrica.analytics.impl.ReportsHandler;
+import io.appmetrica.analytics.impl.Utils;
+import io.appmetrica.analytics.impl.db.preferences.PreferencesClientDbStorage;
+import io.appmetrica.analytics.impl.utils.JsonHelper;
+import io.appmetrica.analytics.impl.utils.PublicLogger;
+import io.appmetrica.analytics.impl.utils.StartupUtils;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.WeakHashMap;
+
+public class StartupHelper implements StartupIdentifiersProvider, IServerTimeOffsetProvider {
+
+    private static final String TAG = "[StartupHelper]";
+
+    static final Map<StartupError, StartupParamsCallback.Reason> STARTUP_ERROR_TO_REASON_MAP =
+            Collections.unmodifiableMap(new HashMap<StartupError, StartupParamsCallback.Reason>() {
+                {
+                    put(StartupError.UNKNOWN, StartupParamsCallback.Reason.UNKNOWN);
+                    put(StartupError.NETWORK, StartupParamsCallback.Reason.NETWORK);
+                    put(StartupError.PARSE, StartupParamsCallback.Reason.INVALID_RESPONSE);
+                }
+            });
+
+    private final List<String> mAllIdentifiers = Arrays.asList(
+            Constants.StartupParamsCallbackKeys.UUID,
+            Constants.StartupParamsCallbackKeys.DEVICE_ID,
+            Constants.StartupParamsCallbackKeys.DEVICE_ID_HASH,
+            Constants.StartupParamsCallbackKeys.GET_AD_URL,
+            Constants.StartupParamsCallbackKeys.REPORT_AD_URL,
+            Constants.StartupParamsCallbackKeys.CLIDS
+    );
+
+    private final ReportsHandler mReportsHandler;
+
+    private final StartupParams mStartupParams;
+
+    @NonNull
+    private final Handler mHandler;
+    @Nullable
+    private PublicLogger mPublicLogger;
+
+    private final DataResultReceiver.Receiver mStubReceiver;
+
+    private final Object mStartupParamsLock = new Object();
+    private final Map<StartupParamsCallback, List<String>> mStartupParamsCallbacks = new WeakHashMap<>();
+
+    private Map<String, String> mClientClids;
+
+    public StartupHelper(@NonNull Context context,
+                         final ReportsHandler reportsHandler,
+                         PreferencesClientDbStorage preferences,
+                         @NonNull Handler handler) {
+        this(
+                reportsHandler,
+                new StartupParams(context, preferences),
+                handler
+        );
+    }
+
+    @VisibleForTesting
+    StartupHelper(final ReportsHandler reportsHandler,
+                  @NonNull StartupParams startupParams,
+                  @NonNull Handler handler) {
+        mReportsHandler = reportsHandler;
+        mStartupParams = startupParams;
+        mHandler = handler;
+        mStubReceiver = new DataResultReceiver.Receiver() {
+            @Override
+            public void onReceiveResult(int resultCode, @NonNull Bundle resultData) {
+                //stub
+            }
+        };
+    }
+
+    @Override
+    public String getUuid() {
+        return mStartupParams.getUuid();
+    }
+
+    @Override
+    public String getDeviceId() {
+        return mStartupParams.getDeviceId();
+    }
+
+    @Override
+    public long getServerTimeOffsetSeconds() {
+        return mStartupParams.getServerTimeOffsetSeconds();
+    }
+
+    public void requestStartupParams(
+        @NonNull final StartupParamsCallback callback,
+        @NonNull final List<String> identifiers,
+        @Nullable Map<String, String> freshClientClids
+    ) {
+        synchronized (mStartupParamsLock) {
+            mStartupParams.setClientClids(freshClientClids);
+            registerIdentifiersCallback(callback, identifiers);
+            if (mStartupParams.shouldSendStartup(identifiers)) {
+                DataResultReceiver.Receiver receiver = new DataResultReceiver.Receiver() {
+                    @Override
+                    public void onReceiveResult(int resultCode, Bundle resultData) {
+                        YLogger.debug(TAG, "Received result %s with code %d for callback: %s",
+                                resultData, resultCode, callback);
+                        processResultFromResultReceiver(resultData, callback);
+                    }
+                };
+                sendStartupEvent(identifiers, receiver, freshClientClids);
+            } else {
+                notifyCallbackWithLocalDataIfNotYet(callback);
+            }
+        }
+    }
+
+    public void processResultFromResultReceiver(@NonNull Bundle resultData) {
+        processResultFromResultReceiver(resultData, null);
+    }
+
+    public void processResultFromResultReceiver(@NonNull Bundle resultData,
+                                                @Nullable StartupParamsCallback callback) {
+        synchronized (mStartupParamsLock) {
+            updateAllParamsByReceiver(resultData);
+            notifyCallbacksIfValid();
+            if (callback != null) {
+                notifyCallbackIfNotYet(callback, resultData);
+            }
+        }
+    }
+
+    public void setPublicLogger(@NonNull PublicLogger publicLogger) {
+        mPublicLogger= publicLogger;
+    }
+
+    private void sendStartupEvent(@Nullable Map<String, String> clids) {
+        sendStartupEvent(mAllIdentifiers, clids);
+    }
+
+    private void sendStartupEvent(@NonNull List<String> identifiers, @Nullable Map<String, String> freshClientClids) {
+        sendStartupEvent(identifiers, mStubReceiver, freshClientClids);
+    }
+
+    private void sendStartupEvent(@NonNull List<String> identifiers,
+                                  @NonNull DataResultReceiver.Receiver receiver,
+                                  @Nullable Map<String, String> freshClientClids) {
+        DataResultReceiver resultReceiver = new DataResultReceiver(mHandler, receiver);
+        mReportsHandler.reportStartupEvent(identifiers, resultReceiver, freshClientClids);
+    }
+
+    @SuppressLint("VisibleForTests") //fixme https://nda.ya.ru/t/lvWXFf0t6Njj6X
+    private void updateAllParamsByReceiver(@NonNull Bundle resultData) {
+        YLogger.d("%sUpdateAllParamsByReceiver: %s", TAG, resultData);
+        mStartupParams.updateAllParamsByReceiver(resultData);
+        notifyCallbacksIfValid();
+    }
+
+    public void sendStartupIfNeeded() {
+        synchronized (mStartupParamsLock) {
+            if (mStartupParams.shouldSendStartup()) {
+                YLogger.d("%sSend startup event", TAG);
+                sendStartupEvent(mClientClids);
+            }
+        }
+    }
+
+    public void setCustomHosts(final List<String> customHosts) {
+        synchronized (mStartupParamsLock) {
+            List<String> oldCustomHosts = mStartupParams.getCustomHosts();
+
+            if (Utils.isNullOrEmpty(customHosts)) {
+                if (Utils.isNullOrEmpty(oldCustomHosts) == false) {
+                    mStartupParams.setCustomHosts(null);
+                    mReportsHandler.setCustomHosts(null);
+                }
+            } else if (Utils.areEqual(customHosts, oldCustomHosts) == false) {
+                mStartupParams.setCustomHosts(customHosts);
+                mReportsHandler.setCustomHosts(customHosts);
+            } else {
+                mReportsHandler.setCustomHosts(oldCustomHosts);
+            }
+        }
+    }
+
+    public void setClids(final Map<String, String> clids) {
+        if (Utils.isNullOrEmpty(clids) == false) {
+            synchronized (mStartupParamsLock) {
+                Map<String, String> validClids = StartupUtils.validateClids(clids);
+                mClientClids = validClids;
+                mReportsHandler.setClids(validClids);
+                mStartupParams.setClientClids(validClids);
+            }
+        }
+    }
+
+    public void setDistributionReferrer(String distributionReferrer) {
+        synchronized (mStartupParamsLock) {
+            mReportsHandler.setDistributionReferrer(distributionReferrer);
+        }
+    }
+
+    public void setInstallReferrerSource(@Nullable String source) {
+        synchronized (mStartupParamsLock) {
+            mReportsHandler.setInstallReferrerSource(source);
+        }
+    }
+
+    public Map<String, String> getClids() {
+        Map<String, String> result;
+        String startupClids = mStartupParams.getClids();
+        if (!TextUtils.isEmpty(startupClids)) {
+            result = JsonHelper.clidsFromString(startupClids);
+        } else {
+            result = mClientClids;
+        }
+        YLogger.d(
+                "%sGet clids return %s (startupClids = %s; mClientClids = %s)",
+                TAG, result, startupClids, mClientClids
+        );
+        return result;
+    }
+
+    private void notifyCallbackWithLocalDataIfNotYet(@NonNull StartupParamsCallback callback) {
+        notifyCallbackIfNotYet(callback, new Bundle());
+    }
+
+    private void notifyCallbackIfNotYet(@NonNull StartupParamsCallback callback,
+                                        @NonNull Bundle bundle) {
+        YLogger.d("%s notifyCallbackIfNotYet. Callback: %s, bundle: %s", TAG, callback, bundle);
+        if (mStartupParamsCallbacks.containsKey(callback)) {
+            List<String> identifiers = mStartupParamsCallbacks.get(callback);
+            if (mStartupParams.containsIdentifiers(identifiers)) {
+                notifyCallbackOnReceive(callback, identifiers);
+            } else {
+                YLogger.d("%s notify callback with error. Callback: %s, bundle: %s", TAG, callback, bundle);
+                StartupError error = StartupError.fromBundle(bundle);
+                StartupParamsCallback.Reason reason = null;
+                if (error == null) {
+                    if (mStartupParams.areResponseClidsConsistent() == false) {
+                        if (mPublicLogger != null) {
+                            mPublicLogger.fw("Clids error. Passed clids: %s, and clids from server are empty.",
+                                    mClientClids);
+                        }
+                        reason = new StartupParamsCallback.Reason("INCONSISTENT_CLIDS");
+                    } else {
+                        error = StartupError.UNKNOWN;
+                    }
+                }
+                if (reason == null) {
+                    reason = CollectionUtils.getOrDefault(
+                        STARTUP_ERROR_TO_REASON_MAP,
+                        error,
+                        StartupParamsCallback.Reason.UNKNOWN
+                    );
+                }
+                notifyCallbackOnError(callback, identifiers, reason);
+            }
+            unregisterIdentifiersCallback(callback);
+        }
+    }
+
+    private void notifyCallbackOnReceive(@NonNull StartupParamsCallback callback,
+                                         @NonNull List<String> identifiers) {
+        YLogger.d("%s notifyCallbackOnReceive with identifiers: %s", TAG, identifiers);
+        callback.onReceive(createMapWithRequestedIdentifiersOnly(identifiers));
+    }
+
+    private void notifyCallbackOnError(@NonNull StartupParamsCallback callback,
+                                       @NonNull List<String> identifiers,
+                                       @NonNull StartupParamsCallback.Reason reason) {
+        YLogger.d("%s notifyCallbackOnError, reason :%s, identifiers: %s", TAG, reason, identifiers);
+        callback.onRequestError(reason, createMapWithRequestedIdentifiersOnly(identifiers));
+    }
+
+    private void notifyCallbacksIfValid() {
+        YLogger.d("%sNotifyCallbacksIfValid", TAG);
+
+        final Map<StartupParamsCallback, List<String>> callbacksToNotify = new WeakHashMap<>();
+
+        YLogger.d("%sTry to notify %d identifiers callbacks", TAG, mStartupParamsCallbacks.size());
+        for (final Map.Entry<StartupParamsCallback, List<String>> entry : mStartupParamsCallbacks.entrySet()) {
+            List<String> requestedIdentifiers = entry.getValue();
+            YLogger.d("%s callback requested identifiers: %s", TAG, requestedIdentifiers);
+            if (mStartupParams.containsIdentifiers(requestedIdentifiers)) {
+                callbacksToNotify.put(entry.getKey(), requestedIdentifiers);
+                YLogger.d("%s add callback to notify", TAG);
+            }
+        }
+        for (final Map.Entry<StartupParamsCallback, List<String>> entry : callbacksToNotify.entrySet()) {
+            StartupParamsCallback callbackWrapper = entry.getKey();
+            if (callbackWrapper != null) {
+                notifyCallbackWithLocalDataIfNotYet(callbackWrapper);
+            }
+        }
+        if (YLogger.DEBUG) {
+            final int nCallbacks = callbacksToNotify.size();
+            YLogger.i(
+                    "%sRemove listeners for startup params, their identifiers are valid. Number of notices: %d",
+                    TAG, nCallbacks
+            );
+        }
+
+        callbacksToNotify.clear();
+    }
+
+    @Nullable
+    private StartupParamsCallback.Result createMapWithRequestedIdentifiersOnly(
+            @Nullable List<String> identifiers
+    ) {
+        if (identifiers == null) {
+            return null;
+        }
+        Map<String, IdentifiersResult> result = new HashMap<String, IdentifiersResult>();
+        mStartupParams.putToMap(identifiers, result);
+        return new StartupParamsCallback.Result(result);
+    }
+
+    private void registerIdentifiersCallback(final StartupParamsCallback callback, List<String> identifiers) {
+        if (mStartupParamsCallbacks.isEmpty()) {
+            mReportsHandler.onStartupRequestStarted();
+            YLogger.d("%sNotify startup request started.", TAG);
+        }
+        mStartupParamsCallbacks.put(callback, identifiers);
+
+        YLogger.d(
+                "%sRegister callback. Total callbacks count = %d. Callback details: %s with identifiers mask %s",
+                TAG,
+                mStartupParamsCallbacks.size(),
+                callback,
+                identifiers
+        );
+    }
+
+    private void unregisterIdentifiersCallback(final StartupParamsCallback callback) {
+        mStartupParamsCallbacks.remove(callback);
+
+        YLogger.d(
+                "%s Unregister callback. Total callbacks count = %d. Callback details: %s.",
+                TAG,
+                mStartupParamsCallbacks.size(),
+                callback
+        );
+
+        if (mStartupParamsCallbacks.isEmpty()) {
+            mReportsHandler.onStartupRequestFinished();
+            YLogger.d("%sNotify all startup requests finished.", TAG);
+        }
+    }
+
+    @VisibleForTesting
+    @NonNull
+    Map<StartupParamsCallback, List<String>> getStartupAllParamsCallbacks() {
+        return mStartupParamsCallbacks;
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    @NonNull
+    public DataResultReceiver.Receiver getStubReceiver() {
+        return mStubReceiver;
+    }
+
+    @NonNull
+    public AdsIdentifiersResult getCachedAdsIdentifiers() {
+        return mStartupParams.getCachedAdsIdentifiers();
+    }
+
+    @NonNull
+    public FeaturesResult getFeatures() {
+        return mStartupParams.getFeatures();
+    }
+}

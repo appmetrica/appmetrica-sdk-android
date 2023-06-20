@@ -1,0 +1,6 @@
+syntax = "proto2";
+
+message RemotePermissions {
+
+  repeated bytes permissions = 1;
+}

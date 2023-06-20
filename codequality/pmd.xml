@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<ruleset xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd"
+         name="metrica-pmd-ruleset">
+
+    <description>My very own special PMD ruleset.</description>
+
+    <exclude-pattern>.*/R.java</exclude-pattern>
+    <exclude-pattern>.*/gen/.*</exclude-pattern>
+
+    <rule ref="rulesets/java/basic.xml" >
+        <!-- Allows nested conditions (if statements) -->
+        <exclude name="CollapsibleIfStatements" />
+    </rule>
+
+    <rule ref="rulesets/java/typeresolution.xml" />
+
+    <rule ref="rulesets/java/braces.xml" />
+
+    <rule ref="rulesets/java/design.xml">
+        <exclude name="TooFewBranchesForASwitchStatement" />
+        <exclude name="ConfusingTernary" />
+        <exclude name="UseUtilityClass" />
+        <!-- Allows then method level synchronization. -->
+        <exclude name="AvoidSynchronizedAtMethodLevel" />
+        <!-- Allows nested conditions (if statements) -->
+        <exclude name="AvoidDeeplyNestedIfStmts" />
+        <!-- Allows empty methods in abstract classes -->
+        <exclude name="EmptyMethodInAbstractClassShouldBeAbstract" />
+        <!-- Allows non static block initializer -->
+        <exclude name="NonStaticInitializer" />
+        <exclude name="UseUtilityClass" />
+        <exclude name="ReturnEmptyArrayRatherThanNull"/>
+    </rule>
+
+    <rule ref="rulesets/java/strictexception.xml" >
+        <!-- Allows catching generic exceptions in try-catch block. -->
+        <exclude name="AvoidCatchingGenericException" />
+        <!-- Allows catching throwable errors. -->
+        <exclude name="AvoidCatchingThrowable" />
+        <!-- Allows throwing raw exception types -->
+        <exclude name="AvoidThrowingRawExceptionTypes" />
+    </rule>
+
+    <rule ref="rulesets/java/unusedcode.xml/UnusedPrivateField">
+        <priority>2</priority>
+    </rule>
+
+    <rule ref="rulesets/java/unusedcode.xml/UnusedLocalVariable">
+        <priority>2</priority>
+    </rule>
+
+    <rule ref="rulesets/java/unusedcode.xml/UnusedFormalParameter">
+        <priority>2</priority>
+    </rule>
+
+    <rule ref="rulesets/java/logging-java.xml" >
+        <exclude name="GuardLogStatementJavaUtil" />
+    </rule>
+
+    <rule ref="rulesets/java/strings.xml" >
+        <!-- Allows String.indexOf("?") (pmd recommendations String.indexOf('?')) -->
+        <exclude name="UseIndexOfChar" />
+    </rule>
+
+    <rule ref="rulesets/java/migrating.xml" />
+
+    <rule ref="rulesets/java/optimizations.xml">
+        <exclude name="LocalVariableCouldBeFinal" />
+        <exclude name="MethodArgumentCouldBeFinal" />
+        <!-- Allows instantiating new objects inside loops. -->
+        <exclude name="AvoidInstantiatingObjectsInLoops" />
+        <!-- Allows adding empty strings -->
+        <exclude name="AddEmptyString" />
+    </rule>
+
+    <rule ref="rulesets/java/sunsecure.xml" >
+        <!-- Allows to constructors and methods receiving arrays and don't clone objects. -->
+        <exclude name="ArrayIsStoredDirectly" />
+        <!-- Allows to return internal objects without copy. -->
+        <exclude name="MethodReturnsInternalArray" />
+    </rule>
+
+    <rule ref="rulesets/java/coupling.xml">
+        <exclude name="ExcessiveImports" />
+    </rule>
+
+    <rule ref="rulesets/java/imports.xml" >
+        <!-- Allows too many static imports -->
+        <exclude name="TooManyStaticImports" />
+    </rule>
+
+    <rule ref="rulesets/java/junit.xml" />
+
+    <rule ref="rulesets/java/controversial.xml">
+        <exclude name="OnlyOneReturn" />
+        <exclude name="DataflowAnomalyAnalysis" />
+        <exclude name="DefaultPackage" />
+        <exclude name="AvoidLiteralsInIfCondition" />
+        <!-- Assigning a "null" to a variable (outside of its declaration). -->
+        <exclude name="NullAssignment" />
+        <!-- A statement may have some unnecessary parentheses. -->
+        <exclude name="UnnecessaryParentheses" />
+        <!-- Allows assignments in operands. -->
+        <exclude name="AssignmentInOperand" />
+        <!-- Allows to have a class without constructors. -->
+        <exclude name="AtLeastOneConstructor" />
+        <!-- Allows using native code -->
+        <exclude name="AvoidUsingNativeCode" />
+        <!-- Allows to use volatile keyword -->
+        <exclude name="AvoidUsingVolatile" />
+        <!-- Allows to ignore calling of super -->
+        <exclude name="CallSuperInConstructor" />
+        <!-- Allows the developer to decide what he wants to use (ConcurrentHashMap or Map) -->
+        <exclude name="UseConcurrentHashMap" />
+    </rule>
+
+    <rule ref="rulesets/java/naming.xml">
+        <exclude name="LongVariable" />
+        <exclude name="ShortVariable" />
+        <exclude name="VariableNamingConventions" />
+        <!-- Allows naming abstract classes as we want. -->
+        <exclude name="AbstractNaming" />
+    </rule>
+
+    <rule ref="rulesets/java/finalizers.xml" />
+
+    <rule ref="rulesets/java/logging-jakarta-commons.xml" >
+        <exclude name="GuardLogStatement" />
+    </rule>
+
+    <rule ref="rulesets/java/clone.xml" />
+
+    <rule ref="rulesets/java/android.xml">
+        <!-- Allows calling super first -->
+        <exclude name="CallSuperFirst" />
+        <!-- Allows calling super last -->
+        <exclude name="CallSuperLast" />
+    </rule>
+
+    <!-- SUPPRESSIONS -->
+    <rule ref="rulesets/java/naming.xml/ClassNamingConventions">
+        <properties>
+            <property name="violationSuppressXPath" value="//ClassOrInterfaceDeclaration[@Image='p' or @Image='h']"/>
+        </properties>
+    </rule>
+
+    <rule ref="rulesets/java/design.xml/ClassWithOnlyPrivateConstructorsShouldBeFinal">
+        <properties>
+            <property name="violationSuppressXPath" value="//ClassOrInterfaceDeclaration[@Image='MetricaConfigurationServer']"/>
+        </properties>
+    </rule>
+
+    <rule ref="rulesets/java/unusedcode.xml/UnusedPrivateMethod">
+        <priority>2</priority>
+        <properties>
+            <property name="violationSuppressXPath" value="//ClassOrInterfaceDeclaration[@Image='GoogleAdvertisingIdGetter']
+            //MethodDeclarator[@Image='fetchAdvertisingId' or @Image='fetchAdvertisingIdFallback']"/>
+        </properties>
+    </rule>
+
+</ruleset>

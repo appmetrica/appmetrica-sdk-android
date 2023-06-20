@@ -1,0 +1,34 @@
+syntax = "proto2";
+
+message AppPermissionsState {
+
+    message PermissionState {
+        required string name = 1;
+        required bool enabled = 2;
+    }
+
+    message BackgroundRestrictionsState {
+
+        enum AppStandByBucket {
+            UNDEFINED = 0;
+            ACTIVE = 1;
+            WORKING_SET = 2;
+            FREQUENT = 3;
+            RARE = 4;
+            RESTRICTED = 5;
+        }
+
+        enum OptionalBool {
+            OPTIONAL_BOOL_UNDEFINED = -1;
+            OPTIONAL_BOOL_FALSE = 0;
+            OPTIONAL_BOOL_TRUE = 1;
+        }
+
+        required AppStandByBucket app_standby_bucket = 2 [default = UNDEFINED];
+        required OptionalBool background_restricted = 3 [default = OPTIONAL_BOOL_UNDEFINED];
+    }
+
+    repeated PermissionState permissions = 1;
+    optional BackgroundRestrictionsState background_restrictions_state = 2;
+    repeated string available_providers = 3;
+}

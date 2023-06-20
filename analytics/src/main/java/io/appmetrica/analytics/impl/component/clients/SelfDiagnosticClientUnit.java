@@ -1,0 +1,35 @@
+package io.appmetrica.analytics.impl.component.clients;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
+import io.appmetrica.analytics.impl.CounterReport;
+import io.appmetrica.analytics.impl.component.CommonArguments;
+import io.appmetrica.analytics.impl.component.RegularDispatcherComponent;
+
+public class SelfDiagnosticClientUnit implements ClientUnit {
+
+    private static final String TAG = "[SelfDiagnosticClientUnit]";
+
+    @Nullable
+    private final RegularDispatcherComponent mComponentUnit;
+
+    public SelfDiagnosticClientUnit(@Nullable RegularDispatcherComponent componentUnit) {
+        mComponentUnit = componentUnit;
+    }
+
+    @Override
+    public void handle(@NonNull CounterReport report, @NonNull CommonArguments sdkConfig) {
+        if (mComponentUnit != null) {
+            YLogger.d("%s handle report %s with sdkConfig %s", TAG, report, sdkConfig);
+            mComponentUnit.handleReport(report, sdkConfig);
+        } else {
+            YLogger.d("%s ComponentUnit is null. Will not handle report %s with sdkConfig", TAG, report, sdkConfig);
+        }
+    }
+
+    @Override
+    public void onDisconnect() {
+        // do nothing
+    }
+}

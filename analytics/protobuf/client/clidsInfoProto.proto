@@ -1,0 +1,27 @@
+syntax = "proto2";
+
+message ClidsInfo {
+
+    enum Source {
+        UNDEFINED = 0;
+        API = 1;
+        SATELLITE = 2;
+        RETAIL = 3;
+    }
+
+    message NullableMap {
+        message Pair {
+            optional string key = 1;
+            optional string value = 2;
+        }
+        repeated Pair pairs = 1;
+    }
+
+    message ClidsCandidate {
+        optional NullableMap clids = 1;
+        optional Source source = 2 [default = UNDEFINED];
+    }
+
+    optional ClidsCandidate chosenClids = 1;
+    repeated ClidsCandidate candidates = 2;
+}

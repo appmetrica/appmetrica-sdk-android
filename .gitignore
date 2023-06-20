@@ -1,0 +1,15 @@
+build
+.DS_Store
+*.swp
+.profile
+.project
+.classpath
+_*
+*.iml
+.idea/*
+!.idea/copyright
+.gradle
+.svn
+.deps
+
+local.properties

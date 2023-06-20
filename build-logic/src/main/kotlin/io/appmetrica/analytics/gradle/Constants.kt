@@ -1,0 +1,46 @@
+package io.appmetrica.analytics.gradle
+
+import org.gradle.api.Project
+
+private const val DEFAULT_BUILD_NUMBER = 65535
+private val BUILD_NUMBER = System.getenv("BUILD_NUMBER") ?: DEFAULT_BUILD_NUMBER.toString()
+
+object Constants {
+    const val robolectricSdk = 33 // after change run task `updateRobolectricSdk`
+
+    object Android {
+        const val buildToolsVersion = "30.0.3"
+        const val sdkVersion = 34
+        const val minSdkVersion = 14
+        const val minSdkVersionNative = 21
+    }
+
+    object Library {
+        const val versionName = "6.0.0"
+        val versionCode = BUILD_NUMBER.toInt()
+        val buildNumber = BUILD_NUMBER
+        //Also need to update api level at https://nda.ya.ru/t/rFFwGoT66NsxJm and https://nda.ya.ru/t/4_qxHC-N6NsxL4
+        const val libraryApiLevel = 112
+        const val group = "io.appmetrica.analytics"
+    }
+
+    object NdkCrashes {
+        const val versionName = "2.1.0"
+        const val versionCode = 4
+        const val group = "io.appmetrica.analytics"
+    }
+}
+
+object Deps {
+    const val androidX = "1.0.0"
+    const val appSetIdVersion = "16.0.2"
+    const val gmsLocationVersion = "19.0.1"
+    const val referrerVersion = "2.2"
+}
+
+object Hosts {
+    const val defaultStartupHost = "https://startup.mobile.yandex.net/"
+}
+
+val Project.isCIBuild: Boolean
+    get() = project.hasProperty("sandbox")

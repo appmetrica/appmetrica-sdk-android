@@ -1,0 +1,30 @@
+syntax = "proto2";
+
+message PreloadInfoData {
+
+    enum Source {
+        UNDEFINED = 0;
+        APP = 1;
+        RETAIL = 2;
+        SATELLITE = 3;
+    }
+
+    message PreloadInfoCandidate {
+        optional string trackingId = 1;
+        optional string additionalParameters = 2 [default = ""];
+        required Source source = 3 [default = UNDEFINED];
+    }
+
+    message PreloadInfo {
+
+        optional string trackingId = 1;
+        optional string additionalParameters = 2 [default = ""];
+        optional bool wasSet = 3 [default = false];
+        optional bool preloadInfoAutoTracking = 4 [default = false];
+        required Source source = 5 [default = UNDEFINED];
+    }
+
+    optional PreloadInfo chosenPreloadInfo = 1;
+    repeated PreloadInfoCandidate candidates = 2;
+
+}

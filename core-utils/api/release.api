@@ -1,0 +1,568 @@
+public final class io.appmetrica.analytics.coreutils.BuildConfig {
+    public static final String BUILD_TYPE
+    public static final boolean DEBUG
+    public static final String LIBRARY_PACKAGE_NAME
+
+    public <init>()
+}
+
+public final class io.appmetrica.analytics.coreutils.DebugProvider {
+    public static final boolean DEBUG
+    public static final [NonNull] io.appmetrica.analytics.coreutils.DebugProvider INSTANCE
+}
+
+public final class io.appmetrica.analytics.coreutils.internal.AndroidUtils {
+    public static final [NonNull] io.appmetrica.analytics.coreutils.internal.AndroidUtils INSTANCE
+
+    public static final boolean isApiAchieved(int)
+}
+
+public final class io.appmetrica.analytics.coreutils.internal.LocationUtils {
+    public static final [NonNull] io.appmetrica.analytics.coreutils.internal.LocationUtils INSTANCE
+
+    public static final [Nullable] android.location.Location bytesToLocation([Nullable] byte[])
+    public static final [Nullable] byte[] locationToBytes([Nullable] android.location.Location)
+}
+
+public final class io.appmetrica.analytics.coreutils.internal.StringUtils {
+    public static final String COMMA
+    public static final String EMPTY
+    public static final String PROCESS_POSTFIX_DELIMITER
+
+    public static String capitalize(String)
+    public static int compare([Nullable] String, [Nullable] String)
+    public static [NonNull] String contentValuesToString([Nullable] android.content.ContentValues)
+    public static String emptyIfNull(String)
+    public static boolean equalsNullSafety([Nullable] String, [Nullable] String)
+    public static String formatSha1([NonNull] byte[])
+    public static byte[] getUTF8Bytes([Nullable] String)
+    public static byte[][] getUTF8Bytes([Nullable] java.util.List<String>)
+    public static int getUtf8BytesLength([Nullable] String)
+    public static byte[] hexToBytes([NonNull] String)
+    public static String ifIsEmptyToDef(String, String)
+    public static String ifIsNullToDef(String, String)
+    public static [NonNull] byte[] stringToBytesForProtobuf([Nullable] String)
+    public static String toHexString([NonNull] byte[])
+    public static final String wrapFeatures(String...)
+}
+
+public class io.appmetrica.analytics.coreutils.internal.WrapUtils {
+    public <init>()
+    public static long getMillisOrDefault([Nullable] Long, [NonNull] java.util.concurrent.TimeUnit, long)
+    public static <T> [NonNull] T getOrDefault([Nullable] T, [NonNull] T)
+    public static [NonNull] String getOrDefaultIfEmpty([Nullable] String, [NonNull] String)
+    public static <T> [Nullable] T getOrDefaultNullable([Nullable] T, [Nullable] T)
+    public static [Nullable] String getOrDefaultNullableIfEmpty([Nullable] String, [Nullable] String)
+    public static <T> [NonNull] String wrapToTag([Nullable] T)
+}
+
+public final class io.appmetrica.analytics.coreutils.internal.asserts.DebugAssert {
+    public static final [NonNull] io.appmetrica.analytics.coreutils.internal.asserts.DebugAssert INSTANCE
+
+    public static final void assertNotNull([Nullable] Object, [NonNull] String)
+}
+
+public interface io.appmetrica.analytics.coreutils.internal.cache.CachedDataProvider
+
+public static class io.appmetrica.analytics.coreutils.internal.cache.CachedDataProvider$CachedData<T> {
+    public <init>(long, long, [NonNull] String)
+    public [Nullable] T getData()
+    public long getExpiryTime()
+    public long getRefreshTime()
+    public final boolean isEmpty()
+    public void setData([Nullable] T)
+    public void setExpirationPolicy(long, long)
+    public final boolean shouldClearData()
+    public final boolean shouldUpdateData()
+    public [NonNull] String toString()
+}
+
+public abstract class io.appmetrica.analytics.coreutils.internal.cache.DataCache<T> implementation io.appmetrica.analytics.coreapi.internal.cache.UpdateConditionsChecker {
+    protected final [NonNull] io.appmetrica.analytics.coreutils.internal.cache.CachedDataProvider$CachedData<T> mCachedData
+
+    public <init>(long, long, [NonNull] String)
+    public [NonNull] io.appmetrica.analytics.coreutils.internal.cache.CachedDataProvider$CachedData<T> getCachedData()
+    public [Nullable] T getData()
+    public void setUpdateScheduler([NonNull] io.appmetrica.analytics.coreapi.internal.cache.CacheUpdateScheduler)
+    public boolean shouldUpdate()
+    protected abstract boolean shouldUpdate([NonNull] T)
+    public void updateCacheControl(long, long)
+    public void updateData([NonNull] T)
+}
+
+public class io.appmetrica.analytics.coreutils.internal.cache.LocationDataCacheUpdateScheduler implementation io.appmetrica.analytics.coreapi.internal.cache.CacheUpdateScheduler {
+    public <init>([NonNull] io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor, [NonNull] io.appmetrica.analytics.locationapi.internal.ILastKnownUpdater, [NonNull] io.appmetrica.analytics.coreapi.internal.cache.UpdateConditionsChecker, [NonNull] String)
+    public void onStateUpdated()
+    public void scheduleUpdateIfNeededNow()
+    public void startUpdates()
+    public void stopUpdates()
+}
+
+public abstract class io.appmetrica.analytics.coreutils.internal.cache.SynchronizedDataCache<T> extends io.appmetrica.analytics.coreutils.internal.cache.DataCache<T> {
+    public <init>(long, long, [NonNull] String)
+    public [Nullable] T getData()
+    public boolean shouldUpdate()
+    public void updateData([NonNull] T)
+}
+
+public final class io.appmetrica.analytics.coreutils.internal.collection.CollectionUtils {
+    public static final [NonNull] io.appmetrica.analytics.coreutils.internal.collection.CollectionUtils INSTANCE
+
+    public static final boolean areCollectionsEqual([Nullable] java.util.Collection<? extends Object>, [Nullable] java.util.Collection<? extends Object>)
+    public static final <T> [Nullable] java.util.List<T> arrayListCopyOfNullableCollection([Nullable] java.util.Collection<? extends T>)
+    public static final [NonNull] java.util.Map<String, byte[]> bundleToMap([Nullable] android.os.Bundle)
+    public static final <T> [NonNull] java.util.Map<String, T> convertMapKeysToLowerCase([NonNull] java.util.Map<String, ? extends T>)
+    public static final <K, V> [Nullable] java.util.Map<K, V> copyOf([Nullable] java.util.Map<K, V>)
+    public static final [NonNull] java.util.List<String> createSortedListWithoutRepetitions([NonNull] String...)
+    public static final <T> [Nullable] T getFirstOrNull([Nullable] java.util.List<? extends T>)
+    public static final <T> [Nullable] T getFromMapIgnoreCase([NonNull] java.util.Map<String, ? extends T>, [NonNull] String)
+    public static final <K, V> [Nullable] java.util.List<java.util.Map$Entry<K, V>> getListFromMap([Nullable] java.util.Map<K, ? extends V>)
+    public static final <K, V> [NonNull] java.util.Map<K, V> getMapFromList([Nullable] java.util.List<? extends java.util.Map$Entry<? extends K, ? extends V>>)
+    public static final <K, V> V getOrDefault([NonNull] java.util.Map<K, ? extends V>, K, V)
+    public static final [NonNull] java.util.Set<Integer> hashSetFromIntArray([NonNull] int[])
+    public static final boolean isNullOrEmpty([Nullable] java.util.Collection<?>)
+    public static final <K, V> [Nullable] java.util.Map<K, V> mapCopyOfNullableMap([Nullable] java.util.Map<K, ? extends V>)
+    public static final [NonNull] android.os.Bundle mapToBundle([NonNull] java.util.Map<String, byte[]>)
+    public static final <T> [Nullable] java.util.List<T> nullIfEmptyList([Nullable] java.util.List<? extends T>)
+    public static final <K, V> void putOpt([NonNull] java.util.Map<K, V>, [Nullable] K, [Nullable] V)
+    public static final [NonNull] java.util.List<Integer> toIntList([NonNull] int[])
+    public static final <T> [NonNull] java.util.List<T> unmodifiableListCopy([NonNull] java.util.Collection<? extends T>)
+    public static final <K, V> [NonNull] java.util.Map<K, V> unmodifiableMapCopy([NonNull] java.util.Map<K, ? extends V>)
+    public static final <K, V> [NonNull] java.util.Map<K, V> unmodifiableSameOrderMapCopy([NonNull] java.util.Map<K, ? extends V>)
+    public static final <T> [NonNull] java.util.Set<T> unmodifiableSetOf([NonNull] T...)
+}
+
+public class io.appmetrica.analytics.coreutils.internal.db.DBUtils {
+    public <init>()
+    public static void cursorRowToContentValues(android.database.Cursor, android.content.ContentValues)
+    public static void enhancedCursorRowToContentValues(android.database.Cursor, android.content.ContentValues)
+    public static long queryRowsCount(android.database.sqlite.SQLiteDatabase, String)
+}
+
+public class io.appmetrica.analytics.coreutils.internal.encryption.AESEncrypter {
+    public static final String DEFAULT_ALGORITHM
+    public static final int DEFAULT_KEY_LENGTH
+
+    public <init>(String, byte[], byte[])
+    public byte[] decrypt(byte[])
+    public byte[] decrypt(byte[], int, int)
+    public byte[] encrypt(byte[])
+    public String getAlgorithm()
+    public byte[] getIV()
+    public byte[] getPassword()
+}
+
+public class io.appmetrica.analytics.coreutils.internal.encryption.AESRSAEncrypter {
+    public <init>()
+    public byte[] encrypt(byte[])
+}
+
+public class io.appmetrica.analytics.coreutils.internal.executors.BlockingExecutor implementation java.util.concurrent.Executor {
+    public <init>()
+    public void execute(Runnable)
+}
+
+public abstract class io.appmetrica.analytics.coreutils.internal.executors.SafeRunnable implementation Runnable {
+    public <init>()
+    public void run()
+    public abstract void runSafety()
+}
+
+public class io.appmetrica.analytics.coreutils.internal.executors.SynchronizedBlockingExecutor extends io.appmetrica.analytics.coreutils.internal.executors.BlockingExecutor {
+    public <init>()
+    public void execute(Runnable)
+}
+
+public final class io.appmetrica.analytics.coreutils.internal.io.AppDataDirProviderForN {
+    public static final [NonNull] io.appmetrica.analytics.coreutils.internal.io.AppDataDirProviderForN INSTANCE
+
+    public final [Nullable] java.io.File dataDir([NonNull] android.content.Context)
+}
+
+public final class io.appmetrica.analytics.coreutils.internal.io.AppStorageDirectoryProviderForLollipop {
+    public static final [NonNull] io.appmetrica.analytics.coreutils.internal.io.AppStorageDirectoryProviderForLollipop INSTANCE
+
+    public final [Nullable] java.io.File getAppStorageDirectory([NonNull] android.content.Context)
+}
+
+public final class io.appmetrica.analytics.coreutils.internal.io.Base64Utils {
+    public static final [NonNull] io.appmetrica.analytics.coreutils.internal.io.Base64Utils INSTANCE
+    public static final int IO_BUFFER_SIZE
+
+    public static final [Nullable] String compressBase64([Nullable] byte[])
+    public static final [Nullable] String compressBase64String([Nullable] String)
+    public static final [NonNull] byte[] decompressBase64GzipAsBytes([Nullable] String)
+    public static final [Nullable] String decompressBase64GzipAsString([Nullable] String)
+}
+
+public final class io.appmetrica.analytics.coreutils.internal.io.CloseableUtilsKt {
+    public static final void closeSafely([Nullable] android.database.Cursor)
+    public static final void closeSafely([Nullable] java.io.Closeable)
+}
+
+public final class io.appmetrica.analytics.coreutils.internal.io.FileUtils {
+    public static final [NonNull] io.appmetrica.analytics.coreutils.internal.io.FileUtils INSTANCE
+    public static final [NonNull] String SDK_FILES_PREFIX
+    public static final [NonNull] String SDK_STORAGE_RELATIVE_PATH
+
+    public static final [Nullable] java.io.File getAppDataDir([NonNull] android.content.Context)
+    public static final [Nullable] java.io.File getAppStorageDirectory([NonNull] android.content.Context)
+    public static final [Nullable] java.io.File getFileFromAppStorage([NonNull] android.content.Context, [NonNull] String)
+    public static final [NonNull] java.io.File getFileFromPath([NonNull] String)
+    public static final [Nullable] java.io.File getFileFromSdkStorage([NonNull] android.content.Context, [NonNull] String)
+    public static final boolean move([Nullable] java.io.File, [Nullable] java.io.File)
+    public final boolean moveByCopy([Nullable] java.io.File, [Nullable] java.io.File)
+    public final boolean moveByRename([Nullable] java.io.File, [Nullable] java.io.File)
+    public static final boolean needToUseNoBackup()
+    public static final void resetSdkStorage()
+    public static final [Nullable] java.io.File sdkStorage([NonNull] android.content.Context)
+}
+
+public class io.appmetrica.analytics.coreutils.internal.io.GZIPCompressor implementation io.appmetrica.analytics.coreapi.internal.io.Compressor {
+    public <init>()
+    public [Nullable] byte[] compress([Nullable] byte[])
+    public [Nullable] byte[] uncompress([Nullable] byte[])
+}
+
+public final class io.appmetrica.analytics.coreutils.internal.io.GZIPUtils {
+    public static final [NonNull] io.appmetrica.analytics.coreutils.internal.io.GZIPUtils INSTANCE
+
+    public static final [Nullable] byte[] gzipBytes([Nullable] byte[])
+    public static final [Nullable] byte[] unGzipBytes([Nullable] byte[])
+}
+
+public abstract class io.appmetrica.analytics.coreutils.internal.logger.BaseLogger {
+    public <init>(boolean)
+    public void d(String)
+    public void e(String)
+    public void e(Throwable, String)
+    public void fd(String, Object...)
+    public void fe(String, Object...)
+    public void fe(Throwable, String, Object...)
+    public void fi(String, Object...)
+    public void forceE(Throwable, String, Object...)
+    public void forceI(String, Object...)
+    public void forceW(String, Object...)
+    protected abstract String formatMessage(String, Object[])
+    public void fw(String, Object...)
+    protected abstract String getPrefix()
+    protected abstract String getTag()
+    public void i(String)
+    public boolean isEnabled()
+    public void setDisabled()
+    public void setEnabled()
+    protected boolean shouldLog()
+    public void w(String)
+}
+
+public final class io.appmetrica.analytics.coreutils.internal.logger.YLogger {
+    public static final boolean DEBUG
+
+    public static void d([NonNull] String, Object...)
+    public static void debug([NonNull] String, [NonNull] String, Object...)
+    public static void dumpJson([NonNull] String, [NonNull] org.json.JSONObject)
+    public static void e([NonNull] String, Object...)
+    public static void e([NonNull] Throwable, [Nullable] String, Object...)
+    public static void error([NonNull] String, [NonNull] String, Object...)
+    public static void error([NonNull] String, [Nullable] Throwable)
+    public static void error([NonNull] String, [Nullable] Throwable, [Nullable] String, Object...)
+    public static void i([NonNull] String, Object...)
+    public static void info([NonNull] String, [NonNull] String, Object...)
+    public static void setImpl([NonNull] OBFUSCATED[io.appmetrica.analytics.coreutils.internal.logger.YLoggerImpl])
+    public static void w([NonNull] String, Object...)
+    public static void warning([NonNull] String, [NonNull] String, Object...)
+}
+
+public final class io.appmetrica.analytics.coreutils.internal.network.UserAgent {
+    public static final [NonNull] io.appmetrica.analytics.coreutils.internal.network.UserAgent INSTANCE
+
+    public static final [NonNull] String getFor([NonNull] String, [NonNull] String, [NonNull] String)
+}
+
+public final class io.appmetrica.analytics.coreutils.internal.parsing.JsonUtils {
+    public static final boolean optBooleanOrDefault([Nullable] org.json.JSONObject, [NonNull] String, boolean)
+    public static final [Nullable] Boolean optBooleanOrNull([Nullable] org.json.JSONObject, [NonNull] String)
+    public static final [Nullable] Boolean optBooleanOrNullable([Nullable] org.json.JSONObject, [NonNull] String, [Nullable] Boolean)
+    public static final float optFloatOrDefault([Nullable] org.json.JSONObject, [NonNull] String, float)
+    public static final [Nullable] Float optFloatOrNull([Nullable] org.json.JSONObject, [NonNull] String)
+    public static final [NonNull] org.json.JSONObject optJsonObjectOrDefault([Nullable] org.json.JSONObject, [NonNull] String, [NonNull] org.json.JSONObject)
+    public static final [Nullable] org.json.JSONObject optJsonObjectOrNull([Nullable] org.json.JSONObject, [NonNull] String)
+    public static final [Nullable] org.json.JSONObject optJsonObjectOrNullable([Nullable] org.json.JSONObject, [NonNull] String, [Nullable] org.json.JSONObject)
+    public static final [Nullable] Long optLongOrDefault([Nullable] org.json.JSONObject, [NonNull] String, [Nullable] Long)
+    public static final [Nullable] Long optLongOrNull([Nullable] org.json.JSONObject, [NonNull] String)
+    public static final [Nullable] String optStringOrNull([Nullable] org.json.JSONObject, [NonNull] String)
+    public static final [Nullable] String optStringOrNullable([Nullable] org.json.JSONObject, [NonNull] String, [Nullable] String)
+}
+
+public class io.appmetrica.analytics.coreutils.internal.parsing.ParseUtils {
+    public static final int NEGATIVE_INT
+    public static final int ZERO
+
+    public <init>()
+    public static [Nullable] Integer intValueOf([Nullable] String)
+    public static [Nullable] Float parseFloat(String)
+    public static [Nullable] Integer parseInt(String)
+    public static int parseInt(String, int)
+    public static int parseIntOrNegative(String)
+    public static int parseIntOrZero(String)
+    public static [Nullable] Long parseLong(String)
+    public static long parseLong(String, long)
+}
+
+public final class io.appmetrica.analytics.coreutils.internal.parsing.RemoteConfigJsonUtils {
+    public static final [NonNull] io.appmetrica.analytics.coreutils.internal.parsing.RemoteConfigJsonUtils INSTANCE
+
+    public static final boolean extractFeature([NonNull] org.json.JSONObject, [NonNull] String, boolean)
+    public static final [NonNull] byte[][] extractHosts([NonNull] org.json.JSONObject, [NonNull] String)
+    public static final long extractMillisFromSecondsOrDefault([NonNull] org.json.JSONObject, [NonNull] String, long)
+    public static final long extractMillisOrDefault([NonNull] org.json.JSONObject, [NonNull] String, [NonNull] java.util.concurrent.TimeUnit, long)
+    public static final [Nullable] String extractQuery([NonNull] org.json.JSONObject, [NonNull] String)
+}
+
+public final class io.appmetrica.analytics.coreutils.internal.parsing.RemoteConfigJsonUtilsKt
+
+public final class io.appmetrica.analytics.coreutils.internal.permission.AllOfPermissionStrategy extends io.appmetrica.analytics.coreutils.internal.permission.MultiplePermissionBaseStrategy {
+    public <init>([NonNull] io.appmetrica.analytics.coreapi.internal.system.PermissionExtractor, [NonNull] String...)
+    public boolean hasNecessaryPermissions([NonNull] android.content.Context, [NonNull] io.appmetrica.analytics.coreapi.internal.system.PermissionExtractor, [NonNull] java.util.List<String>)
+}
+
+public final class io.appmetrica.analytics.coreutils.internal.permission.AlwaysAllowPermissionStrategy implementation io.appmetrica.analytics.coreapi.internal.permission.PermissionResolutionStrategy {
+    public <init>()
+    public boolean hasNecessaryPermissions([NonNull] android.content.Context)
+}
+
+public final class io.appmetrica.analytics.coreutils.internal.permission.AnyOfPermissionStrategy extends io.appmetrica.analytics.coreutils.internal.permission.MultiplePermissionBaseStrategy {
+    public <init>([NonNull] io.appmetrica.analytics.coreapi.internal.system.PermissionExtractor, [NonNull] String...)
+    public boolean hasNecessaryPermissions([NonNull] android.content.Context, [NonNull] io.appmetrica.analytics.coreapi.internal.system.PermissionExtractor, [NonNull] java.util.List<String>)
+}
+
+public abstract class io.appmetrica.analytics.coreutils.internal.permission.MultiplePermissionBaseStrategy implementation io.appmetrica.analytics.coreapi.internal.permission.PermissionResolutionStrategy {
+    public <init>([NonNull] io.appmetrica.analytics.coreapi.internal.system.PermissionExtractor, [NonNull] java.util.List<String>)
+    public boolean hasNecessaryPermissions([NonNull] android.content.Context)
+    public abstract boolean hasNecessaryPermissions([NonNull] android.content.Context, [NonNull] io.appmetrica.analytics.coreapi.internal.system.PermissionExtractor, [NonNull] java.util.List<String>)
+}
+
+public final class io.appmetrica.analytics.coreutils.internal.permission.SinglePermissionStrategy implementation io.appmetrica.analytics.coreapi.internal.permission.PermissionResolutionStrategy {
+    public <init>([NonNull] io.appmetrica.analytics.coreapi.internal.system.PermissionExtractor, [NonNull] String)
+    public boolean hasNecessaryPermissions([NonNull] android.content.Context)
+}
+
+public final class io.appmetrica.analytics.coreutils.internal.reflection.ReflectionUtils {
+    public static final [NonNull] io.appmetrica.analytics.coreutils.internal.reflection.ReflectionUtils INSTANCE
+
+    public static final boolean detectClassExists([NonNull] String)
+    public static final [Nullable] Class<?> findClass([NonNull] String)
+    public static final <T> [Nullable] T loadAndInstantiateClassWithDefaultConstructor([NonNull] String, [NonNull] Class<T>)
+    public static final <T> [Nullable] Class<T> loadClass([NonNull] String, [NonNull] Class<T>)
+}
+
+public final class io.appmetrica.analytics.coreutils.internal.reflection.ReflectionUtilsKt
+
+public class io.appmetrica.analytics.coreutils.internal.services.ActivationBarrier {
+    public <init>()
+    public void activate()
+    public void subscribe(long, [NonNull] io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor, [NonNull] io.appmetrica.analytics.coreutils.internal.services.ActivationBarrier$IActivationBarrierCallback)
+}
+
+public static class io.appmetrica.analytics.coreutils.internal.services.ActivationBarrier$ActivationBarrierHelper {
+    public <init>([NonNull] Runnable)
+    public void subscribeIfNeeded(long, [NonNull] io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor)
+}
+
+public interface io.appmetrica.analytics.coreutils.internal.services.ActivationBarrier$IActivationBarrierCallback {
+    public abstract void onWaitFinished()
+}
+
+public class io.appmetrica.analytics.coreutils.internal.services.FirstExecutionConditionService {
+    public <init>()
+    public io.appmetrica.analytics.coreutils.internal.services.FirstExecutionConditionService$FirstExecutionHandler createFirstExecutionHandler([NonNull] Runnable, [NonNull] io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor, [NonNull] String)
+    public void updateConfig([NonNull] io.appmetrica.analytics.coreutils.internal.services.UtilityServiceConfiguration)
+}
+
+public static class io.appmetrica.analytics.coreutils.internal.services.FirstExecutionConditionService$FirstExecutionConditionChecker {
+    public final String tag
+
+    public <init>([Nullable] io.appmetrica.analytics.coreutils.internal.services.UtilityServiceConfiguration, [NonNull] io.appmetrica.analytics.coreutils.internal.services.FirstExecutionConditionService$FirstExecutionDelayChecker, [NonNull] String)
+}
+
+public static class io.appmetrica.analytics.coreutils.internal.services.FirstExecutionConditionService$FirstExecutionDelayChecker {
+    public <init>()
+    public boolean delaySinceFirstStartupWasPassed(long, long, long)
+}
+
+public static class io.appmetrica.analytics.coreutils.internal.services.FirstExecutionConditionService$FirstExecutionHandler {
+    public boolean canExecute()
+    public void setDelaySeconds(long)
+    public boolean tryExecute(int)
+    public void updateConfig([NonNull] io.appmetrica.analytics.coreutils.internal.services.UtilityServiceConfiguration)
+}
+
+public class io.appmetrica.analytics.coreutils.internal.services.FrameworkDetector {
+    public <init>()
+    public [NonNull] String detectFramework()
+    public static [NonNull] String framework()
+}
+
+public final class io.appmetrica.analytics.coreutils.internal.services.PackageManagerUtils {
+    public static final [NonNull] io.appmetrica.analytics.coreutils.internal.services.PackageManagerUtils$Companion Companion
+
+    public <init>()
+    public static final int getAppVersionCodeInt([NonNull] android.content.Context)
+    public static final [NonNull] String getAppVersionCodeString([NonNull] android.content.Context)
+    public static final [NonNull] String getAppVersionName([NonNull] android.content.Context)
+    public static final [Nullable] android.content.pm.PackageInfo getPackageInfo([NonNull] android.content.Context)
+}
+
+public static final class io.appmetrica.analytics.coreutils.internal.services.PackageManagerUtils$Companion {
+    public final int getAppVersionCodeInt([NonNull] android.content.Context)
+    public final [NonNull] String getAppVersionCodeString([NonNull] android.content.Context)
+    public final [NonNull] String getAppVersionName([NonNull] android.content.Context)
+    public final [Nullable] android.content.pm.PackageInfo getPackageInfo([NonNull] android.content.Context)
+}
+
+public class io.appmetrica.analytics.coreutils.internal.services.SafePackageManager {
+    public <init>()
+    public [Nullable] android.content.pm.ActivityInfo getActivityInfo([NonNull] android.content.Context, [NonNull] android.content.ComponentName, int)
+    public [Nullable] android.content.pm.ApplicationInfo getApplicationInfo([NonNull] android.content.Context, String, int)
+    public [Nullable] String getInstallerPackageName([NonNull] android.content.Context, [NonNull] String)
+    public [Nullable] android.content.pm.PackageInfo getPackageInfo(android.content.Context, String)
+    public [Nullable] android.content.pm.PackageInfo getPackageInfo(android.content.Context, String, int)
+    public [Nullable] android.content.pm.ServiceInfo getServiceInfo([NonNull] android.content.Context, android.content.ComponentName, int)
+    public boolean hasSystemFeature([NonNull] android.content.Context, [NonNull] String)
+    public [Nullable] android.content.pm.ResolveInfo resolveActivity([NonNull] android.content.Context, [NonNull] android.content.Intent, int)
+    public [Nullable] android.content.pm.ResolveInfo resolveService([NonNull] android.content.Context, android.content.Intent, int)
+    public void setComponentEnabledSetting([NonNull] android.content.Context, android.content.ComponentName, int, int)
+}
+
+public final class io.appmetrica.analytics.coreutils.internal.services.SafePackageManagerHelperForR {
+    public static final [NonNull] io.appmetrica.analytics.coreutils.internal.services.SafePackageManagerHelperForR INSTANCE
+
+    public static final [Nullable] String extractPackageInstaller([NonNull] android.content.pm.PackageManager, [NonNull] String)
+}
+
+public final class io.appmetrica.analytics.coreutils.internal.services.UtilityServiceConfiguration {
+    public <init>()
+    public <init>(long, long)
+    public final long component1()
+    public final long component2()
+    public final [NonNull] io.appmetrica.analytics.coreutils.internal.services.UtilityServiceConfiguration copy(long, long)
+    public boolean equals([Nullable] Object)
+    public final long getInitialConfigTime()
+    public final long getLastUpdateConfigTime()
+    public int hashCode()
+    public [NonNull] String toString()
+}
+
+public final class io.appmetrica.analytics.coreutils.internal.services.UtilityServiceLocator {
+    public static final [NonNull] io.appmetrica.analytics.coreutils.internal.services.UtilityServiceLocator$Companion Companion
+
+    public <init>()
+    public final [NonNull] io.appmetrica.analytics.coreutils.internal.services.ActivationBarrier getActivationBarrier()
+    public final [NonNull] io.appmetrica.analytics.coreutils.internal.services.FirstExecutionConditionService getFirstExecutionService()
+    public static final [NonNull] io.appmetrica.analytics.coreutils.internal.services.UtilityServiceLocator getInstance()
+    public final void initAsync()
+    public final void updateConfiguration([NonNull] io.appmetrica.analytics.coreutils.internal.services.UtilityServiceConfiguration)
+}
+
+public static final class io.appmetrica.analytics.coreutils.internal.services.UtilityServiceLocator$Companion {
+    public final [NonNull] io.appmetrica.analytics.coreutils.internal.services.UtilityServiceLocator getInstance()
+    public final void setInstance([NonNull] io.appmetrica.analytics.coreutils.internal.services.UtilityServiceLocator)
+}
+
+public class io.appmetrica.analytics.coreutils.internal.system.ConstantDeviceInfo {
+    public static final [NonNull] String APP_PLATFORM
+    public final [NonNull] String appPlatform
+    public final [NonNull] String deviceRootStatus
+    public final [NonNull] java.util.List<String> deviceRootStatusMarkers
+    public final String manufacturer
+    public final String model
+    public final int osApiLevel
+    public final String osVersion
+
+    public <init>()
+    public static io.appmetrica.analytics.coreutils.internal.system.ConstantDeviceInfo getInstance()
+}
+
+public final class io.appmetrica.analytics.coreutils.internal.system.RootChecker {
+    public <init>()
+    public static int isRootedPhone()
+    public static boolean isSuperuserApkExists()
+    public static boolean isSuperuserNativeLibExists()
+}
+
+public static final class io.appmetrica.analytics.coreutils.internal.system.RootChecker$RootStatus {
+    public static final int NOT_ROOT
+    public static final int ROOT
+
+    public <init>()
+}
+
+public final class io.appmetrica.analytics.coreutils.internal.system.SystemPropertiesHelper {
+    public static final [NonNull] io.appmetrica.analytics.coreutils.internal.system.SystemPropertiesHelper INSTANCE
+
+    public static final [NonNull] String readSystemProperty([NonNull] String)
+}
+
+public final class io.appmetrica.analytics.coreutils.internal.system.SystemServiceUtils {
+    public static final [NonNull] io.appmetrica.analytics.coreutils.internal.system.SystemServiceUtils INSTANCE
+
+    public static final <T, S> [Nullable] S accessSystemServiceByNameSafely([NonNull] android.content.Context, [NonNull] String, [NonNull] String, [NonNull] String, [NonNull] io.appmetrica.analytics.coreapi.internal.backport.FunctionWithThrowable<T, S>)
+    public static final <T, S> S accessSystemServiceByNameSafelyOrDefault([NonNull] android.content.Context, [NonNull] String, [NonNull] String, [NonNull] String, S, [NonNull] io.appmetrica.analytics.coreapi.internal.backport.FunctionWithThrowable<T, S>)
+    public static final <T, S> [Nullable] S accessSystemServiceSafely([Nullable] T, [NonNull] String, [NonNull] String, [NonNull] io.appmetrica.analytics.coreapi.internal.backport.FunctionWithThrowable<T, S>)
+    public static final <T, S> S accessSystemServiceSafelyOrDefault([Nullable] T, [NonNull] String, [NonNull] String, S, [NonNull] io.appmetrica.analytics.coreapi.internal.backport.FunctionWithThrowable<T, S>)
+}
+
+public final class io.appmetrica.analytics.coreutils.internal.time.SystemTimeOffsetProvider {
+    public <init>()
+    public <init>([NonNull] io.appmetrica.analytics.coreutils.internal.time.SystemTimeProvider)
+    public final long elapsedRealtimeOffset(long, [NonNull] java.util.concurrent.TimeUnit)
+    public final long elapsedRealtimeOffsetInSeconds(long, [NonNull] java.util.concurrent.TimeUnit)
+    public final long offsetInSecondsIfNotZero(long, [NonNull] java.util.concurrent.TimeUnit)
+    public final long systemNanoTimeOffsetInNanos(long, [NonNull] java.util.concurrent.TimeUnit)
+    public final long systemNanoTimeOffsetInSeconds(long, [NonNull] java.util.concurrent.TimeUnit)
+}
+
+public final class io.appmetrica.analytics.coreutils.internal.time.SystemTimeProvider implementation io.appmetrica.analytics.coreutils.internal.time.TimeProvider {
+    public <init>()
+    public long currentTimeMillis()
+    public long currentTimeSeconds()
+    public long elapsedRealtime()
+    public long systemNanoTime()
+}
+
+public final class io.appmetrica.analytics.coreutils.internal.time.TimePassedChecker {
+    public <init>()
+    public <init>([NonNull] io.appmetrica.analytics.coreutils.internal.time.TimeProvider)
+    public final boolean didTimePassMillis(long, long, [NonNull] String)
+    public final boolean didTimePassSeconds(long, long, [NonNull] String)
+}
+
+public interface io.appmetrica.analytics.coreutils.internal.time.TimeProvider {
+    public abstract long currentTimeMillis()
+    public abstract long currentTimeSeconds()
+    public abstract long elapsedRealtime()
+    public abstract long systemNanoTime()
+}
+
+public final class io.appmetrica.analytics.coreutils.internal.toggle.ConjunctiveCompositeThreadSafeToggle implementation io.appmetrica.analytics.coreapi.internal.control.Toggle {
+    public <init>([NonNull] java.util.List<? extends io.appmetrica.analytics.coreapi.internal.control.Toggle>, [NonNull] String)
+    public static final void access$acquireLock(io.appmetrica.analytics.coreutils.internal.toggle.ConjunctiveCompositeThreadSafeToggle)
+    public static final void access$releaseLock(io.appmetrica.analytics.coreutils.internal.toggle.ConjunctiveCompositeThreadSafeToggle)
+    public static final void access$updateState(io.appmetrica.analytics.coreutils.internal.toggle.ConjunctiveCompositeThreadSafeToggle, io.appmetrica.analytics.coreapi.internal.control.ToggleObserver, boolean, String)
+    public static final void access$withLock(io.appmetrica.analytics.coreutils.internal.toggle.ConjunctiveCompositeThreadSafeToggle, kotlin.jvm.functions.Function0)
+    public boolean getActualState()
+    public void registerObserver([NonNull] io.appmetrica.analytics.coreapi.internal.control.ToggleObserver, boolean)
+    public void removeObserver([NonNull] io.appmetrica.analytics.coreapi.internal.control.ToggleObserver)
+    public void setActualState(boolean)
+    public [NonNull] String toString()
+}
+
+public abstract class io.appmetrica.analytics.coreutils.internal.toggle.SimpleThreadSafeToggle implementation io.appmetrica.analytics.coreapi.internal.control.Toggle {
+    public <init>(boolean, [NonNull] String)
+    public boolean getActualState()
+    protected final [NonNull] String getTag()
+    public void registerObserver([NonNull] io.appmetrica.analytics.coreapi.internal.control.ToggleObserver, boolean)
+    public void removeObserver([NonNull] io.appmetrica.analytics.coreapi.internal.control.ToggleObserver)
+    protected final void updateState(boolean)
+}
+

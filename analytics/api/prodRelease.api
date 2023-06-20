@@ -1,0 +1,820 @@
+public class io.appmetrica.analytics.AdRevenue {
+    public final [Nullable] String adNetwork
+    public final [Nullable] String adPlacementId
+    public final [Nullable] String adPlacementName
+    public final [NonNull] java.math.BigDecimal adRevenue
+    public final [Nullable] io.appmetrica.analytics.AdType adType
+    public final [Nullable] String adUnitId
+    public final [Nullable] String adUnitName
+    public final [NonNull] java.util.Currency currency
+    public final [Nullable] java.util.Map<String, String> payload
+    public final [Nullable] String precision
+
+    public static io.appmetrica.analytics.AdRevenue$Builder newBuilder(double, [NonNull] java.util.Currency)
+    public static io.appmetrica.analytics.AdRevenue$Builder newBuilder([NonNull] java.math.BigDecimal, [NonNull] java.util.Currency)
+    public static io.appmetrica.analytics.AdRevenue$Builder newBuilder(long, [NonNull] java.util.Currency)
+}
+
+public static class io.appmetrica.analytics.AdRevenue$Builder {
+    public io.appmetrica.analytics.AdRevenue build()
+    public io.appmetrica.analytics.AdRevenue$Builder withAdNetwork([Nullable] String)
+    public io.appmetrica.analytics.AdRevenue$Builder withAdPlacementId([Nullable] String)
+    public io.appmetrica.analytics.AdRevenue$Builder withAdPlacementName([Nullable] String)
+    public io.appmetrica.analytics.AdRevenue$Builder withAdType([Nullable] io.appmetrica.analytics.AdType)
+    public io.appmetrica.analytics.AdRevenue$Builder withAdUnitId([Nullable] String)
+    public io.appmetrica.analytics.AdRevenue$Builder withAdUnitName([Nullable] String)
+    public io.appmetrica.analytics.AdRevenue$Builder withPayload([Nullable] java.util.Map<String, String>)
+    public io.appmetrica.analytics.AdRevenue$Builder withPrecision([Nullable] String)
+}
+
+public enum io.appmetrica.analytics.AdType {
+    BANNER, INTERSTITIAL, MREC, NATIVE, OTHER, REWARDED
+
+    public static io.appmetrica.analytics.AdType valueOf(String)
+    public static io.appmetrica.analytics.AdType[] values()
+}
+
+public class io.appmetrica.analytics.AdsIdentifiersResult {
+    public final [NonNull] io.appmetrica.analytics.AdsIdentifiersResult$AdvId googleAdvId
+    public final [NonNull] io.appmetrica.analytics.AdsIdentifiersResult$AdvId huaweiAdvId
+    public final [NonNull] io.appmetrica.analytics.AdsIdentifiersResult$AdvId yandexAdvId
+
+    public <init>([NonNull] io.appmetrica.analytics.AdsIdentifiersResult$AdvId, [NonNull] io.appmetrica.analytics.AdsIdentifiersResult$AdvId, [NonNull] io.appmetrica.analytics.AdsIdentifiersResult$AdvId)
+}
+
+public static class io.appmetrica.analytics.AdsIdentifiersResult$AdvId {
+    public final [Nullable] String advId
+    public final [NonNull] io.appmetrica.analytics.AdsIdentifiersResult$Details details
+    public final [Nullable] String errorExplanation
+
+    public <init>([Nullable] String, [NonNull] io.appmetrica.analytics.AdsIdentifiersResult$Details, [Nullable] String)
+}
+
+public enum io.appmetrica.analytics.AdsIdentifiersResult$Details {
+    FEATURE_DISABLED, IDENTIFIER_PROVIDER_UNAVAILABLE, INTERNAL_ERROR, INVALID_ADV_ID, NO_STARTUP, OK
+
+    public static io.appmetrica.analytics.AdsIdentifiersResult$Details valueOf(String)
+    public static io.appmetrica.analytics.AdsIdentifiersResult$Details[] values()
+}
+
+public final class io.appmetrica.analytics.AppMetrica {
+    public static void activate([NonNull] android.content.Context, [NonNull] io.appmetrica.analytics.AppMetricaConfig)
+    public static void activateReporter([NonNull] android.content.Context, [NonNull] io.appmetrica.analytics.ReporterConfig)
+    public static void clearAppEnvironment()
+    public static void enableActivityAutoTracking([NonNull] android.app.Application)
+    public static [Nullable] String getDeviceId([NonNull] android.content.Context)
+    public static int getLibraryApiLevel()
+    public static [NonNull] String getLibraryVersion()
+    public static [NonNull] io.appmetrica.analytics.plugins.AppMetricaPlugins getPluginExtension()
+    public static [NonNull] io.appmetrica.analytics.IReporter getReporter([NonNull] android.content.Context, [NonNull] String)
+    public static [Nullable] String getUuid([NonNull] android.content.Context)
+    public static void initWebViewReporting([NonNull] android.webkit.WebView)
+    public static void pauseSession([Nullable] android.app.Activity)
+    public static void putAppEnvironmentValue([NonNull] String, [Nullable] String)
+    public static void putErrorEnvironmentValue([NonNull] String, [Nullable] String)
+    public static void reportAdRevenue([NonNull] io.appmetrica.analytics.AdRevenue)
+    public static void reportAppOpen([NonNull] android.app.Activity)
+    public static void reportAppOpen([NonNull] android.content.Intent)
+    public static void reportAppOpen([NonNull] String)
+    public static void reportECommerce([NonNull] io.appmetrica.analytics.ecommerce.ECommerceEvent)
+    public static void reportError([NonNull] String, [Nullable] String)
+    public static void reportError([NonNull] String, [Nullable] String, [Nullable] Throwable)
+    public static void reportError([NonNull] String, [Nullable] Throwable)
+    public static void reportEvent([NonNull] String)
+    public static void reportEvent([NonNull] String, [Nullable] String)
+    public static void reportEvent([NonNull] String, [Nullable] java.util.Map<String, Object>)
+    public static void reportReferralUrl([NonNull] String)
+    public static void reportRevenue([NonNull] io.appmetrica.analytics.Revenue)
+    public static void reportUnhandledException([NonNull] Throwable)
+    public static void reportUserProfile([NonNull] io.appmetrica.analytics.profile.UserProfile)
+    public static void requestDeferredDeeplink([NonNull] io.appmetrica.analytics.DeferredDeeplinkListener)
+    public static void requestDeferredDeeplinkParameters([NonNull] io.appmetrica.analytics.DeferredDeeplinkParametersListener)
+    public static void requestStartupParams([NonNull] android.content.Context, [NonNull] io.appmetrica.analytics.StartupParamsCallback, [NonNull] java.util.List<String>)
+    public static void resumeSession([Nullable] android.app.Activity)
+    public static void sendEventsBuffer()
+    public static void setLocation([Nullable] android.location.Location)
+    public static void setLocationTracking([NonNull] android.content.Context, boolean)
+    public static void setLocationTracking(boolean)
+    public static void setStatisticsSending([NonNull] android.content.Context, boolean)
+    public static void setUserProfileID([Nullable] String)
+}
+
+public class io.appmetrica.analytics.AppMetricaConfig {
+    public final [NonNull] java.util.Map<String, Object> additionalConfig
+    public final [Nullable] Boolean anrMonitoring
+    public final [Nullable] Integer anrMonitoringTimeout
+    public final [NonNull] String apiKey
+    public final [Nullable] Integer appBuildNumber
+    public final [Nullable] java.util.Map<String, String> appEnvironment
+    public final [Nullable] Boolean appOpenTrackingEnabled
+    public final [Nullable] String appVersion
+    public final [Nullable] Boolean crashReporting
+    public final [Nullable] io.appmetrica.analytics.ICrashTransformer crashTransformer
+    public final [Nullable] java.util.List<String> customHosts
+    public final [Nullable] String deviceType
+    public final [Nullable] Integer dispatchPeriodSeconds
+    public final [Nullable] java.util.Map<String, String> errorEnvironment
+    public final [Nullable] Boolean firstActivationAsUpdate
+    public final [Nullable] android.location.Location location
+    public final [Nullable] Boolean locationTracking
+    public final [Nullable] Boolean logs
+    public final [Nullable] Integer maxReportsCount
+    public final [Nullable] Integer maxReportsInDatabaseCount
+    public final [Nullable] Boolean nativeCrashReporting
+    public final [Nullable] io.appmetrica.analytics.PreloadInfo preloadInfo
+    public final [Nullable] Boolean revenueAutoTrackingEnabled
+    public final [Nullable] Integer sessionTimeout
+    public final [Nullable] Boolean sessionsAutoTrackingEnabled
+    public final [Nullable] Boolean statisticsSending
+    public final [Nullable] String userProfileID
+
+    protected <init>([NonNull] io.appmetrica.analytics.AppMetricaConfig$Builder)
+    protected <init>([NonNull] io.appmetrica.analytics.AppMetricaConfig)
+    public static io.appmetrica.analytics.AppMetricaConfig fromJson(String)
+    public static [NonNull] io.appmetrica.analytics.AppMetricaConfig$Builder newConfigBuilder([NonNull] String)
+    public String toJson()
+}
+
+public static class io.appmetrica.analytics.AppMetricaConfig$Builder {
+    protected <init>([NonNull] String)
+    public [NonNull] io.appmetrica.analytics.AppMetricaConfig build()
+    public [NonNull] io.appmetrica.analytics.AppMetricaConfig$Builder handleFirstActivationAsUpdate(boolean)
+    public [NonNull] io.appmetrica.analytics.AppMetricaConfig$Builder withAdditionalConfig([NonNull] String, [Nullable] Object)
+    public [NonNull] io.appmetrica.analytics.AppMetricaConfig$Builder withAnrMonitoring(boolean)
+    public [NonNull] io.appmetrica.analytics.AppMetricaConfig$Builder withAnrMonitoringTimeout(int)
+    public [NonNull] io.appmetrica.analytics.AppMetricaConfig$Builder withAppBuildNumber(int)
+    public [NonNull] io.appmetrica.analytics.AppMetricaConfig$Builder withAppEnvironmentValue([NonNull] String, [Nullable] String)
+    public [NonNull] io.appmetrica.analytics.AppMetricaConfig$Builder withAppOpenTrackingEnabled(boolean)
+    public [NonNull] io.appmetrica.analytics.AppMetricaConfig$Builder withAppVersion([Nullable] String)
+    public [NonNull] io.appmetrica.analytics.AppMetricaConfig$Builder withCrashReporting(boolean)
+    public [NonNull] io.appmetrica.analytics.AppMetricaConfig$Builder withCrashTransformer([Nullable] io.appmetrica.analytics.ICrashTransformer)
+    public [NonNull] io.appmetrica.analytics.AppMetricaConfig$Builder withCustomHosts([NonNull] java.util.List<String>)
+    public [NonNull] io.appmetrica.analytics.AppMetricaConfig$Builder withDeviceType([Nullable] String)
+    public [NonNull] io.appmetrica.analytics.AppMetricaConfig$Builder withDispatchPeriodSeconds(int)
+    public [NonNull] io.appmetrica.analytics.AppMetricaConfig$Builder withErrorEnvironmentValue([NonNull] String, [Nullable] String)
+    public [NonNull] io.appmetrica.analytics.AppMetricaConfig$Builder withLocation([Nullable] android.location.Location)
+    public [NonNull] io.appmetrica.analytics.AppMetricaConfig$Builder withLocationTracking(boolean)
+    public [NonNull] io.appmetrica.analytics.AppMetricaConfig$Builder withLogs()
+    public [NonNull] io.appmetrica.analytics.AppMetricaConfig$Builder withMaxReportCount(int)
+    public [NonNull] io.appmetrica.analytics.AppMetricaConfig$Builder withMaxReportsInDatabaseCount(int)
+    public [NonNull] io.appmetrica.analytics.AppMetricaConfig$Builder withNativeCrashReporting(boolean)
+    public [NonNull] io.appmetrica.analytics.AppMetricaConfig$Builder withPreloadInfo([Nullable] io.appmetrica.analytics.PreloadInfo)
+    public [NonNull] io.appmetrica.analytics.AppMetricaConfig$Builder withRevenueAutoTrackingEnabled(boolean)
+    public [NonNull] io.appmetrica.analytics.AppMetricaConfig$Builder withSessionTimeout(int)
+    public [NonNull] io.appmetrica.analytics.AppMetricaConfig$Builder withSessionsAutoTrackingEnabled(boolean)
+    public [NonNull] io.appmetrica.analytics.AppMetricaConfig$Builder withStatisticsSending(boolean)
+    public [NonNull] io.appmetrica.analytics.AppMetricaConfig$Builder withUserProfileID([Nullable] String)
+}
+
+public class io.appmetrica.analytics.AppMetricaDefaultValues {
+    public static final int DEFAULT_ANR_TICKS_COUNT
+    public static final boolean DEFAULT_APP_OPEN_TRACKING_ENABLED
+    public static final int DEFAULT_DISPATCH_PERIOD_SECONDS
+    public static final int DEFAULT_MAX_REPORTS_COUNT
+    public static final int DEFAULT_MAX_REPORTS_COUNT_LOWER_BOUND
+    public static final int DEFAULT_MAX_REPORTS_COUNT_UPPER_BOUND
+    public static final int DEFAULT_MAX_REPORTS_IN_DATABASE_COUNT
+    public static final boolean DEFAULT_REPORTER_STATISTICS_SENDING
+    public static final boolean DEFAULT_REPORTS_CRASHES_ENABLED
+    public static final boolean DEFAULT_REPORTS_NATIVE_CRASHES_ENABLED
+    public static final boolean DEFAULT_REPORT_LOCATION_ENABLED
+    public static final boolean DEFAULT_REVENUE_AUTO_TRACKING_ENABLED
+    public static final boolean DEFAULT_SESSIONS_AUTO_TRACKING_ENABLED
+    public static final int DEFAULT_SESSION_TIMEOUT_SECONDS
+
+    public <init>()
+}
+
+public class io.appmetrica.analytics.AppMetricaInitializerJsInterface {
+    public <init>([NonNull] OBFUSCATED[io.appmetrica.analytics.impl.proxy.AppMetricaProxy])
+    public void init(String)
+}
+
+public class io.appmetrica.analytics.AppMetricaJsInterface {
+    public <init>([NonNull] OBFUSCATED[io.appmetrica.analytics.impl.proxy.AppMetricaProxy])
+    public void reportEvent(String, String)
+}
+
+public class io.appmetrica.analytics.AppMetricaService extends android.app.Service {
+    public <init>()
+    public android.os.IBinder onBind(android.content.Intent)
+    public void onConfigurationChanged([NonNull] android.content.res.Configuration)
+    public void onCreate()
+    public void onDestroy()
+    public void onRebind(android.content.Intent)
+    public void onStart(android.content.Intent, int)
+    public int onStartCommand(android.content.Intent, int, int)
+    public boolean onUnbind(android.content.Intent)
+}
+
+public final class io.appmetrica.analytics.BuildConfig {
+    public static final int API_LEVEL
+    public static final String BUILD_DATE
+    public static final String BUILD_NUMBER
+    public static final String BUILD_TYPE
+    public static final String CLIENT_COMPONENTS_INITIALIZER_CLASS_NAME
+    public static final boolean DEBUG
+    public static final String[] DEFAULT_HOSTS
+    public static final boolean DEFAULT_LOCATION_COLLECTING
+    public static final String FLAVOR
+    public static final String LIBRARY_PACKAGE_NAME
+    public static final boolean METRICA_DEBUG
+    public static final String SDK_BUILD_FLAVOR
+    public static final String SDK_BUILD_TYPE
+    public static final String SDK_DEPENDENCY
+    public static final String SERVICE_COMPONENTS_INITIALIZER_CLASS_NAME
+    public static final String VERSION_NAME
+
+    public <init>()
+}
+
+public class io.appmetrica.analytics.CounterConfiguration implementation android.os.Parcelable {
+    public static final android.os.Parcelable$Creator<io.appmetrica.analytics.CounterConfiguration> CREATOR
+    public static final String ORIGINAL_CLASS_PATH
+
+    public <init>()
+    public <init>(io.appmetrica.analytics.AppMetricaConfig, [NonNull] OBFUSCATED[io.appmetrica.analytics.impl.CounterConfigurationReporterType])
+    public <init>([NonNull] io.appmetrica.analytics.CounterConfiguration)
+    public <init>([NonNull] io.appmetrica.analytics.ReporterConfig)
+    public <init>([NonNull] String)
+    public int describeContents()
+    public static io.appmetrica.analytics.CounterConfiguration fromBundle(android.os.Bundle)
+    public String getApiKey()
+    public String getAppBuildNumber()
+    public String getAppVersion()
+    public [Nullable] String getDeviceType()
+    public [Nullable] Integer getDispatchPeriod()
+    public android.location.Location getManualLocation()
+    public [Nullable] Integer getMaxReportsCount()
+    public [Nullable] Integer getMaxReportsInDbCount()
+    public [Nullable] Boolean getReportNativeCrashesEnabled()
+    public [NonNull] OBFUSCATED[io.appmetrica.analytics.impl.CounterConfigurationReporterType] getReporterType()
+    public [Nullable] Integer getSessionTimeout()
+    public Boolean getStatisticsSending()
+    public String getUuid()
+    public [Nullable] Boolean isFirstActivationAsUpdate()
+    public [Nullable] Boolean isLocationTrackingEnabled()
+    public [Nullable] Boolean isLogEnabled()
+    public [Nullable] Boolean isRevenueAutoTrackingEnabled()
+    public void overlapByBundle(android.os.Bundle)
+    public void setApiKey(String)
+    public void setAppBuildNumber(int)
+    public final void setCustomAppVersion(String)
+    public final void setDeviceType([Nullable] String)
+    public void setDispatchPeriod(int)
+    public final void setFirstActivationAsUpdate(boolean)
+    public void setLocationTracking(boolean)
+    public void setLogEnabled(boolean)
+    public final void setManualLocation([Nullable] android.location.Location)
+    public void setMaxReportsCount(int)
+    public void setMaxReportsInDbCount(int)
+    public void setReporterType([NonNull] OBFUSCATED[io.appmetrica.analytics.impl.CounterConfigurationReporterType])
+    public void setRevenueAutoTrackingEnabled(boolean)
+    public void setSessionTimeout(int)
+    public final void setStatisticsSending(boolean)
+    public void setUuid(String)
+    public void toBundle(android.os.Bundle)
+    public String toString()
+    public void writeToParcel(android.os.Parcel, int)
+}
+
+public interface io.appmetrica.analytics.DeferredDeeplinkListener {
+    public abstract void onDeeplinkLoaded([NonNull] String)
+    public abstract void onError([NonNull] io.appmetrica.analytics.DeferredDeeplinkListener$Error, [Nullable] String)
+}
+
+public enum io.appmetrica.analytics.DeferredDeeplinkListener$Error {
+    NOT_A_FIRST_LAUNCH, NO_REFERRER, PARSE_ERROR, UNKNOWN
+
+    public String getDescription()
+    public static io.appmetrica.analytics.DeferredDeeplinkListener$Error valueOf(String)
+    public static io.appmetrica.analytics.DeferredDeeplinkListener$Error[] values()
+}
+
+public interface io.appmetrica.analytics.DeferredDeeplinkParametersListener {
+    public abstract void onError([NonNull] io.appmetrica.analytics.DeferredDeeplinkParametersListener$Error, [NonNull] String)
+    public abstract void onParametersLoaded([NonNull] java.util.Map<String, String>)
+}
+
+public enum io.appmetrica.analytics.DeferredDeeplinkParametersListener$Error {
+    NOT_A_FIRST_LAUNCH, NO_REFERRER, PARSE_ERROR, UNKNOWN
+
+    public String getDescription()
+    public static io.appmetrica.analytics.DeferredDeeplinkParametersListener$Error valueOf(String)
+    public static io.appmetrica.analytics.DeferredDeeplinkParametersListener$Error[] values()
+}
+
+public enum io.appmetrica.analytics.DeviceType {
+    PHONE, TABLET, TV
+
+    public String getType()
+    public static io.appmetrica.analytics.DeviceType of(String)
+    public static io.appmetrica.analytics.DeviceType valueOf(String)
+    public static io.appmetrica.analytics.DeviceType[] values()
+}
+
+public interface io.appmetrica.analytics.IAppMetricaService extends android.os.IInterface {
+    public abstract void pauseUserSession(android.os.Bundle)
+    public abstract void reportData(int, android.os.Bundle)
+    public abstract void resumeUserSession(android.os.Bundle)
+}
+
+public static class io.appmetrica.analytics.IAppMetricaService$Default implementation io.appmetrica.analytics.IAppMetricaService {
+    public <init>()
+    public android.os.IBinder asBinder()
+    public void pauseUserSession(android.os.Bundle)
+    public void reportData(int, android.os.Bundle)
+    public void resumeUserSession(android.os.Bundle)
+}
+
+public abstract static class io.appmetrica.analytics.IAppMetricaService$Stub extends android.os.Binder implementation io.appmetrica.analytics.IAppMetricaService {
+    public <init>()
+    public android.os.IBinder asBinder()
+    public static io.appmetrica.analytics.IAppMetricaService asInterface(android.os.IBinder)
+    public static io.appmetrica.analytics.IAppMetricaService getDefaultImpl()
+    public boolean onTransact(int, android.os.Parcel, android.os.Parcel, int)
+    public static boolean setDefaultImpl(io.appmetrica.analytics.IAppMetricaService)
+}
+
+public interface io.appmetrica.analytics.ICrashTransformer {
+    public abstract [Nullable] Throwable process([NonNull] Throwable)
+}
+
+public interface io.appmetrica.analytics.IModuleReporter {
+    public abstract void reportEvent([NonNull] io.appmetrica.analytics.ModuleEvent)
+    public abstract void setSessionExtra([NonNull] String, [Nullable] byte[])
+}
+
+public interface io.appmetrica.analytics.IReporter {
+    public abstract void clearAppEnvironment()
+    public abstract [NonNull] io.appmetrica.analytics.plugins.IPluginReporter getPluginExtension()
+    public abstract void pauseSession()
+    public abstract void putAppEnvironmentValue([NonNull] String, [Nullable] String)
+    public abstract void reportAdRevenue([NonNull] io.appmetrica.analytics.AdRevenue)
+    public abstract void reportECommerce([NonNull] io.appmetrica.analytics.ecommerce.ECommerceEvent)
+    public abstract void reportError([NonNull] String, [Nullable] String)
+    public abstract void reportError([NonNull] String, [Nullable] String, [Nullable] Throwable)
+    public abstract void reportError([NonNull] String, [Nullable] Throwable)
+    public abstract void reportEvent([NonNull] String)
+    public abstract void reportEvent([NonNull] String, [Nullable] String)
+    public abstract void reportEvent([NonNull] String, [Nullable] java.util.Map<String, Object>)
+    public abstract void reportRevenue([NonNull] io.appmetrica.analytics.Revenue)
+    public abstract void reportUnhandledException([NonNull] Throwable)
+    public abstract void reportUserProfile([NonNull] io.appmetrica.analytics.profile.UserProfile)
+    public abstract void resumeSession()
+    public abstract void sendEventsBuffer()
+    public abstract void setStatisticsSending(boolean)
+    public abstract void setUserProfileID([Nullable] String)
+}
+
+public class io.appmetrica.analytics.IdentifiersResult implementation android.os.Parcelable {
+    public static final android.os.Parcelable$Creator<io.appmetrica.analytics.IdentifiersResult> CREATOR
+    public final [Nullable] String errorExplanation
+    public final [Nullable] String id
+    public final [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus status
+
+    public <init>([Nullable] String, [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus, [Nullable] String)
+    public int describeContents()
+    public boolean equals(Object)
+    public int hashCode()
+    public String toString()
+    public void writeToParcel(android.os.Parcel, int)
+}
+
+public final class io.appmetrica.analytics.ModuleEvent {
+    public static final [NonNull] io.appmetrica.analytics.ModuleEvent$Companion Companion
+
+    public <init>(int, [Nullable] String, [Nullable] String, int, [Nullable] java.util.Map<String, ? extends Object>, [Nullable] java.util.Map<String, byte[]>, [Nullable] java.util.Map<String, ? extends Object>)
+    public final [Nullable] java.util.Map<String, Object> getAttributes()
+    public final [Nullable] java.util.Map<String, Object> getEnvironment()
+    public final [Nullable] java.util.Map<String, byte[]> getExtras()
+    public final int getMetricaServiceDataReporterType()
+    public final [Nullable] String getName()
+    public final int getType()
+    public final [Nullable] String getValue()
+    public static final [NonNull] io.appmetrica.analytics.ModuleEvent$Builder newBuilder(int)
+    public [NonNull] String toString()
+}
+
+public static final class io.appmetrica.analytics.ModuleEvent$Builder {
+    public <init>(int)
+    public final [NonNull] io.appmetrica.analytics.ModuleEvent build()
+    public final [NonNull] io.appmetrica.analytics.ModuleEvent$Builder withAttributes([Nullable] java.util.Map<String, ? extends Object>)
+    public final [NonNull] io.appmetrica.analytics.ModuleEvent$Builder withEnvironment([Nullable] java.util.Map<String, ? extends Object>)
+    public final [NonNull] io.appmetrica.analytics.ModuleEvent$Builder withExtras([Nullable] java.util.Map<String, byte[]>)
+    public final [NonNull] io.appmetrica.analytics.ModuleEvent$Builder withMetricaServiceDataReporterType(int)
+    public final [NonNull] io.appmetrica.analytics.ModuleEvent$Builder withName([Nullable] String)
+    public final [NonNull] io.appmetrica.analytics.ModuleEvent$Builder withValue([Nullable] String)
+}
+
+public static final class io.appmetrica.analytics.ModuleEvent$Companion {
+    public final [NonNull] io.appmetrica.analytics.ModuleEvent$Builder newBuilder(int)
+}
+
+public final class io.appmetrica.analytics.ModulesFacade {
+    public static final [NonNull] io.appmetrica.analytics.ModulesFacade INSTANCE
+
+    public static final [NonNull] io.appmetrica.analytics.IModuleReporter getModuleReporter([NonNull] android.content.Context, [NonNull] String)
+    public static final boolean isActivatedForApp()
+    public static final void reportEvent([NonNull] io.appmetrica.analytics.ModuleEvent)
+    public static final void sendEventsBuffer()
+    public final void setProxy([NonNull] OBFUSCATED[io.appmetrica.analytics.impl.proxy.ModulesProxy])
+    public static final void setSessionExtra([NonNull] String, [Nullable] byte[])
+}
+
+public final class io.appmetrica.analytics.PredefinedDeviceTypes {
+    public static final [NonNull] String CAR
+    public static final [NonNull] io.appmetrica.analytics.PredefinedDeviceTypes INSTANCE
+    public static final [NonNull] String PHONE
+    public static final [NonNull] String TABLET
+    public static final [NonNull] String TV
+}
+
+public class io.appmetrica.analytics.PreloadInfo {
+    public java.util.Map<String, String> getAdditionalParams()
+    public String getTrackingId()
+    public static io.appmetrica.analytics.PreloadInfo$Builder newBuilder(String)
+}
+
+public static class io.appmetrica.analytics.PreloadInfo$Builder {
+    public io.appmetrica.analytics.PreloadInfo build()
+    public io.appmetrica.analytics.PreloadInfo$Builder setAdditionalParams(String, String)
+}
+
+public class io.appmetrica.analytics.PreloadInfoContentProvider extends android.content.ContentProvider {
+    public <init>()
+    public int delete([NonNull] android.net.Uri, [Nullable] String, [Nullable] String[])
+    public void disable()
+    public [Nullable] String getType([NonNull] android.net.Uri)
+    public [Nullable] android.net.Uri insert([NonNull] android.net.Uri, [Nullable] android.content.ContentValues)
+    public boolean onCreate()
+    public [Nullable] android.database.Cursor query([NonNull] android.net.Uri, [Nullable] String[], [Nullable] String, [Nullable] String[], [Nullable] String)
+    public int update([NonNull] android.net.Uri, [Nullable] android.content.ContentValues, [Nullable] String, [Nullable] String[])
+}
+
+public class io.appmetrica.analytics.ReporterConfig {
+    public final [NonNull] java.util.Map<String, Object> additionalConfig
+    public final [NonNull] String apiKey
+    public final java.util.Map<String, String> appEnvironment
+    public final [Nullable] Integer dispatchPeriodSeconds
+    public final [Nullable] Boolean logs
+    public final [Nullable] Integer maxReportsCount
+    public final [Nullable] Integer maxReportsInDatabaseCount
+    public final [Nullable] Integer sessionTimeout
+    public final [Nullable] Boolean statisticsSending
+    public final [Nullable] String userProfileID
+
+    public static [NonNull] io.appmetrica.analytics.ReporterConfig$Builder newConfigBuilder([NonNull] String)
+}
+
+public static class io.appmetrica.analytics.ReporterConfig$Builder {
+    public [NonNull] io.appmetrica.analytics.ReporterConfig build()
+    public [NonNull] io.appmetrica.analytics.ReporterConfig$Builder withAdditionalConfig([NonNull] String, [Nullable] Object)
+    public [NonNull] io.appmetrica.analytics.ReporterConfig$Builder withAppEnvironmentValue(String, String)
+    public [NonNull] io.appmetrica.analytics.ReporterConfig$Builder withDispatchPeriodSeconds(int)
+    public [NonNull] io.appmetrica.analytics.ReporterConfig$Builder withLogs()
+    public [NonNull] io.appmetrica.analytics.ReporterConfig$Builder withMaxReportsCount(int)
+    public [NonNull] io.appmetrica.analytics.ReporterConfig$Builder withMaxReportsInDatabaseCount(int)
+    public [NonNull] io.appmetrica.analytics.ReporterConfig$Builder withSessionTimeout(int)
+    public [NonNull] io.appmetrica.analytics.ReporterConfig$Builder withStatisticsSending(boolean)
+    public [NonNull] io.appmetrica.analytics.ReporterConfig$Builder withUserProfileID([Nullable] String)
+}
+
+public class io.appmetrica.analytics.Revenue {
+    public final [NonNull] java.util.Currency currency
+    public final [Nullable] String payload
+    public final [Nullable] Double price
+    public final [Nullable] Long priceMicros
+    public final [Nullable] String productID
+    public final [Nullable] Integer quantity
+    public final [Nullable] io.appmetrica.analytics.Revenue$Receipt receipt
+
+    public static [NonNull] io.appmetrica.analytics.Revenue$Builder newBuilder(double, [NonNull] java.util.Currency)
+    public static [NonNull] io.appmetrica.analytics.Revenue$Builder newBuilderWithMicros(long, [NonNull] java.util.Currency)
+}
+
+public static class io.appmetrica.analytics.Revenue$Builder {
+    public [NonNull] io.appmetrica.analytics.Revenue build()
+    public [NonNull] io.appmetrica.analytics.Revenue$Builder withPayload([Nullable] String)
+    public [NonNull] io.appmetrica.analytics.Revenue$Builder withProductID([Nullable] String)
+    public [NonNull] io.appmetrica.analytics.Revenue$Builder withQuantity([Nullable] Integer)
+    public [NonNull] io.appmetrica.analytics.Revenue$Builder withReceipt([Nullable] io.appmetrica.analytics.Revenue$Receipt)
+}
+
+public static class io.appmetrica.analytics.Revenue$Receipt {
+    public final [Nullable] String data
+    public final [Nullable] String signature
+
+    public static [NonNull] io.appmetrica.analytics.Revenue$Receipt$Builder newBuilder()
+}
+
+public static class io.appmetrica.analytics.Revenue$Receipt$Builder {
+    public [NonNull] io.appmetrica.analytics.Revenue$Receipt build()
+    public [NonNull] io.appmetrica.analytics.Revenue$Receipt$Builder withData([Nullable] String)
+    public [NonNull] io.appmetrica.analytics.Revenue$Receipt$Builder withSignature([Nullable] String)
+}
+
+public interface io.appmetrica.analytics.StartupParamsCallback {
+    public static final String APP_METRICA_DEVICE_ID_HASH
+    public static final String YANDEX_MOBILE_METRICA_DEVICE_ID
+    public static final String YANDEX_MOBILE_METRICA_UUID
+
+    public abstract void onReceive([Nullable] io.appmetrica.analytics.StartupParamsCallback$Result)
+    public abstract void onRequestError([NonNull] io.appmetrica.analytics.StartupParamsCallback$Reason, [Nullable] io.appmetrica.analytics.StartupParamsCallback$Result)
+}
+
+public static final class io.appmetrica.analytics.StartupParamsCallback$Reason {
+    public static io.appmetrica.analytics.StartupParamsCallback$Reason INVALID_RESPONSE
+    public static io.appmetrica.analytics.StartupParamsCallback$Reason NETWORK
+    public static io.appmetrica.analytics.StartupParamsCallback$Reason UNKNOWN
+    public final [NonNull] String value
+
+    public <init>([NonNull] String)
+    public boolean equals(Object)
+    public int hashCode()
+    public String toString()
+}
+
+public static final class io.appmetrica.analytics.StartupParamsCallback$Result {
+    public final [Nullable] String deviceId
+    public final [Nullable] String deviceIdHash
+    public final [NonNull] java.util.Map<String, io.appmetrica.analytics.IdentifiersResult> parameters
+    public final [Nullable] String uuid
+
+    public <init>([NonNull] java.util.Map<String, io.appmetrica.analytics.IdentifiersResult>)
+    public [Nullable] String parameterForKey([NonNull] String)
+}
+
+public class io.appmetrica.analytics.ValidationException extends IllegalArgumentException {
+    public <init>([NonNull] String)
+}
+
+public class io.appmetrica.analytics.ecommerce.ECommerceAmount {
+    public <init>(double, [NonNull] String)
+    public <init>([NonNull] java.math.BigDecimal, [NonNull] String)
+    public <init>(long, [NonNull] String)
+    public [NonNull] java.math.BigDecimal getAmount()
+    public [NonNull] String getUnit()
+    public [NonNull] String toString()
+}
+
+public class io.appmetrica.analytics.ecommerce.ECommerceCartItem {
+    public <init>([NonNull] io.appmetrica.analytics.ecommerce.ECommerceProduct, [NonNull] io.appmetrica.analytics.ecommerce.ECommercePrice, double)
+    public <init>([NonNull] io.appmetrica.analytics.ecommerce.ECommerceProduct, [NonNull] io.appmetrica.analytics.ecommerce.ECommercePrice, [NonNull] java.math.BigDecimal)
+    public <init>([NonNull] io.appmetrica.analytics.ecommerce.ECommerceProduct, [NonNull] io.appmetrica.analytics.ecommerce.ECommercePrice, long)
+    public [NonNull] io.appmetrica.analytics.ecommerce.ECommerceProduct getProduct()
+    public [NonNull] java.math.BigDecimal getQuantity()
+    public [Nullable] io.appmetrica.analytics.ecommerce.ECommerceReferrer getReferrer()
+    public [NonNull] io.appmetrica.analytics.ecommerce.ECommercePrice getRevenue()
+    public [NonNull] io.appmetrica.analytics.ecommerce.ECommerceCartItem setReferrer([Nullable] io.appmetrica.analytics.ecommerce.ECommerceReferrer)
+    public String toString()
+}
+
+public abstract class io.appmetrica.analytics.ecommerce.ECommerceEvent implementation OBFUSCATED[io.appmetrica.analytics.impl.ecommerce.client.model.ProtoSerializable] {
+    public <init>()
+    public static [NonNull] io.appmetrica.analytics.ecommerce.ECommerceEvent addCartItemEvent([NonNull] io.appmetrica.analytics.ecommerce.ECommerceCartItem)
+    public static [NonNull] io.appmetrica.analytics.ecommerce.ECommerceEvent beginCheckoutEvent([NonNull] io.appmetrica.analytics.ecommerce.ECommerceOrder)
+    public [NonNull] String getPublicDescription()
+    public static [NonNull] io.appmetrica.analytics.ecommerce.ECommerceEvent purchaseEvent([NonNull] io.appmetrica.analytics.ecommerce.ECommerceOrder)
+    public static [NonNull] io.appmetrica.analytics.ecommerce.ECommerceEvent removeCartItemEvent([NonNull] io.appmetrica.analytics.ecommerce.ECommerceCartItem)
+    public static [NonNull] io.appmetrica.analytics.ecommerce.ECommerceEvent showProductCardEvent([NonNull] io.appmetrica.analytics.ecommerce.ECommerceProduct, [NonNull] io.appmetrica.analytics.ecommerce.ECommerceScreen)
+    public static [NonNull] io.appmetrica.analytics.ecommerce.ECommerceEvent showProductDetailsEvent([NonNull] io.appmetrica.analytics.ecommerce.ECommerceProduct, [Nullable] io.appmetrica.analytics.ecommerce.ECommerceReferrer)
+    public static [NonNull] io.appmetrica.analytics.ecommerce.ECommerceEvent showScreenEvent([NonNull] io.appmetrica.analytics.ecommerce.ECommerceScreen)
+}
+
+public class io.appmetrica.analytics.ecommerce.ECommerceEventProvider {
+    public <init>()
+    public [NonNull] io.appmetrica.analytics.ecommerce.ECommerceEvent addCartItemEvent([NonNull] io.appmetrica.analytics.ecommerce.ECommerceCartItem)
+    public [NonNull] io.appmetrica.analytics.ecommerce.ECommerceEvent beginCheckoutEvent([NonNull] io.appmetrica.analytics.ecommerce.ECommerceOrder)
+    public [NonNull] io.appmetrica.analytics.ecommerce.ECommerceEvent purchaseEvent([NonNull] io.appmetrica.analytics.ecommerce.ECommerceOrder)
+    public [NonNull] io.appmetrica.analytics.ecommerce.ECommerceEvent removeCartItemEvent([NonNull] io.appmetrica.analytics.ecommerce.ECommerceCartItem)
+    public [NonNull] io.appmetrica.analytics.ecommerce.ECommerceEvent showProductCardEvent([NonNull] io.appmetrica.analytics.ecommerce.ECommerceProduct, [NonNull] io.appmetrica.analytics.ecommerce.ECommerceScreen)
+    public [NonNull] io.appmetrica.analytics.ecommerce.ECommerceEvent showProductDetailsEvent([NonNull] io.appmetrica.analytics.ecommerce.ECommerceProduct, [Nullable] io.appmetrica.analytics.ecommerce.ECommerceReferrer)
+    public [NonNull] io.appmetrica.analytics.ecommerce.ECommerceEvent showScreenEvent([NonNull] io.appmetrica.analytics.ecommerce.ECommerceScreen)
+}
+
+public class io.appmetrica.analytics.ecommerce.ECommerceOrder {
+    public <init>([NonNull] String, [NonNull] java.util.List<io.appmetrica.analytics.ecommerce.ECommerceCartItem>)
+    public [NonNull] java.util.List<io.appmetrica.analytics.ecommerce.ECommerceCartItem> getCartItems()
+    public [NonNull] String getIdentifier()
+    public [Nullable] java.util.Map<String, String> getPayload()
+    public io.appmetrica.analytics.ecommerce.ECommerceOrder setPayload([Nullable] java.util.Map<String, String>)
+    public String toString()
+}
+
+public class io.appmetrica.analytics.ecommerce.ECommercePrice {
+    public <init>([NonNull] io.appmetrica.analytics.ecommerce.ECommerceAmount)
+    public [NonNull] io.appmetrica.analytics.ecommerce.ECommerceAmount getFiat()
+    public [Nullable] java.util.List<io.appmetrica.analytics.ecommerce.ECommerceAmount> getInternalComponents()
+    public io.appmetrica.analytics.ecommerce.ECommercePrice setInternalComponents([Nullable] java.util.List<io.appmetrica.analytics.ecommerce.ECommerceAmount>)
+    public String toString()
+}
+
+public class io.appmetrica.analytics.ecommerce.ECommerceProduct {
+    public <init>([NonNull] String)
+    public [Nullable] io.appmetrica.analytics.ecommerce.ECommercePrice getActualPrice()
+    public [Nullable] java.util.List<String> getCategoriesPath()
+    public [Nullable] String getName()
+    public [Nullable] io.appmetrica.analytics.ecommerce.ECommercePrice getOriginalPrice()
+    public [Nullable] java.util.Map<String, String> getPayload()
+    public [Nullable] java.util.List<String> getPromocodes()
+    public [NonNull] String getSku()
+    public [NonNull] io.appmetrica.analytics.ecommerce.ECommerceProduct setActualPrice([Nullable] io.appmetrica.analytics.ecommerce.ECommercePrice)
+    public [NonNull] io.appmetrica.analytics.ecommerce.ECommerceProduct setCategoriesPath([Nullable] java.util.List<String>)
+    public [NonNull] io.appmetrica.analytics.ecommerce.ECommerceProduct setName([Nullable] String)
+    public [NonNull] io.appmetrica.analytics.ecommerce.ECommerceProduct setOriginalPrice([Nullable] io.appmetrica.analytics.ecommerce.ECommercePrice)
+    public [NonNull] io.appmetrica.analytics.ecommerce.ECommerceProduct setPayload([Nullable] java.util.Map<String, String>)
+    public [NonNull] io.appmetrica.analytics.ecommerce.ECommerceProduct setPromocodes([Nullable] java.util.List<String>)
+    public String toString()
+}
+
+public class io.appmetrica.analytics.ecommerce.ECommerceReferrer {
+    public <init>()
+    public [Nullable] String getIdentifier()
+    public [Nullable] io.appmetrica.analytics.ecommerce.ECommerceScreen getScreen()
+    public [Nullable] String getType()
+    public [NonNull] io.appmetrica.analytics.ecommerce.ECommerceReferrer setIdentifier([Nullable] String)
+    public [NonNull] io.appmetrica.analytics.ecommerce.ECommerceReferrer setScreen([Nullable] io.appmetrica.analytics.ecommerce.ECommerceScreen)
+    public [NonNull] io.appmetrica.analytics.ecommerce.ECommerceReferrer setType([Nullable] String)
+    public String toString()
+}
+
+public class io.appmetrica.analytics.ecommerce.ECommerceScreen {
+    public <init>()
+    public [Nullable] java.util.List<String> getCategoriesPath()
+    public [Nullable] String getName()
+    public [Nullable] java.util.Map<String, String> getPayload()
+    public [Nullable] String getSearchQuery()
+    public io.appmetrica.analytics.ecommerce.ECommerceScreen setCategoriesPath([Nullable] java.util.List<String>)
+    public io.appmetrica.analytics.ecommerce.ECommerceScreen setName([Nullable] String)
+    public io.appmetrica.analytics.ecommerce.ECommerceScreen setPayload([Nullable] java.util.Map<String, String>)
+    public io.appmetrica.analytics.ecommerce.ECommerceScreen setSearchQuery([Nullable] String)
+    public String toString()
+}
+
+public class io.appmetrica.analytics.impl.ac.CrashpadHelper {
+    public <init>()
+    public static void cancelSetUpNativeUncaughtExceptionHandler()
+    public static [Nullable] String getLibDirInsideApk()
+    public static String getLibraryVersion()
+    public static void logsEnabled(boolean)
+    public static void setUpNativeUncaughtExceptionHandler([NonNull] android.os.Bundle)
+    public static void updateRuntimeConfig([NonNull] String)
+}
+
+public class io.appmetrica.analytics.impl.ac.CrashpadServiceHelper {
+    public <init>()
+    public static void cancelSetUpServiceHelper()
+    public static boolean deleteCompletedReports()
+    public static boolean markCrashCompletedAndDeleteAllCompleted(String)
+    public static android.os.Bundle readCrash(String)
+    public static java.util.List<android.os.Bundle> readOldCrashes()
+    public static void setUpServiceHelper(String)
+}
+
+public class io.appmetrica.analytics.impl.ac.HandlerRunner {
+    public <init>()
+    public static void main(String[])
+}
+
+public interface io.appmetrica.analytics.plugins.AppMetricaPlugins {
+    public abstract void reportError([NonNull] io.appmetrica.analytics.plugins.PluginErrorDetails, [Nullable] String)
+    public abstract void reportError([NonNull] String, [Nullable] String, [Nullable] io.appmetrica.analytics.plugins.PluginErrorDetails)
+    public abstract void reportUnhandledException([NonNull] io.appmetrica.analytics.plugins.PluginErrorDetails)
+}
+
+public interface io.appmetrica.analytics.plugins.IPluginReporter {
+    public abstract void reportError([NonNull] io.appmetrica.analytics.plugins.PluginErrorDetails, [Nullable] String)
+    public abstract void reportError([NonNull] String, [Nullable] String, [Nullable] io.appmetrica.analytics.plugins.PluginErrorDetails)
+    public abstract void reportUnhandledException([NonNull] io.appmetrica.analytics.plugins.PluginErrorDetails)
+}
+
+public class io.appmetrica.analytics.plugins.PluginErrorDetails {
+    public [Nullable] String getExceptionClass()
+    public [Nullable] String getMessage()
+    public [Nullable] String getPlatform()
+    public [NonNull] java.util.Map<String, String> getPluginEnvironment()
+    public [NonNull] java.util.List<io.appmetrica.analytics.plugins.StackTraceItem> getStacktrace()
+    public [Nullable] String getVirtualMachineVersion()
+}
+
+public static class io.appmetrica.analytics.plugins.PluginErrorDetails$Builder {
+    public <init>()
+    public [NonNull] io.appmetrica.analytics.plugins.PluginErrorDetails build()
+    public [NonNull] io.appmetrica.analytics.plugins.PluginErrorDetails$Builder withExceptionClass([Nullable] String)
+    public [NonNull] io.appmetrica.analytics.plugins.PluginErrorDetails$Builder withMessage([Nullable] String)
+    public [NonNull] io.appmetrica.analytics.plugins.PluginErrorDetails$Builder withPlatform([Nullable] String)
+    public [NonNull] io.appmetrica.analytics.plugins.PluginErrorDetails$Builder withPluginEnvironment([Nullable] java.util.Map<String, String>)
+    public [NonNull] io.appmetrica.analytics.plugins.PluginErrorDetails$Builder withStacktrace([Nullable] java.util.List<io.appmetrica.analytics.plugins.StackTraceItem>)
+    public [NonNull] io.appmetrica.analytics.plugins.PluginErrorDetails$Builder withVirtualMachineVersion([Nullable] String)
+}
+
+public static final class io.appmetrica.analytics.plugins.PluginErrorDetails$Platform {
+    public static final String CORDOVA
+    public static final String FLUTTER
+    public static final String NATIVE
+    public static final String REACT_NATIVE
+    public static final String UNITY
+    public static final String XAMARIN
+
+    public <init>()
+}
+
+public class io.appmetrica.analytics.plugins.StackTraceItem {
+    public [Nullable] String getClassName()
+    public [Nullable] Integer getColumn()
+    public [Nullable] String getFileName()
+    public [Nullable] Integer getLine()
+    public [Nullable] String getMethodName()
+}
+
+public static class io.appmetrica.analytics.plugins.StackTraceItem$Builder {
+    public <init>()
+    public [NonNull] io.appmetrica.analytics.plugins.StackTraceItem build()
+    public [NonNull] io.appmetrica.analytics.plugins.StackTraceItem$Builder withClassName([Nullable] String)
+    public [NonNull] io.appmetrica.analytics.plugins.StackTraceItem$Builder withColumn([Nullable] Integer)
+    public [NonNull] io.appmetrica.analytics.plugins.StackTraceItem$Builder withFileName([Nullable] String)
+    public [NonNull] io.appmetrica.analytics.plugins.StackTraceItem$Builder withLine([Nullable] Integer)
+    public [NonNull] io.appmetrica.analytics.plugins.StackTraceItem$Builder withMethodName([Nullable] String)
+}
+
+public class io.appmetrica.analytics.profile.Attribute {
+    public <init>()
+    public static [NonNull] io.appmetrica.analytics.profile.BirthDateAttribute birthDate()
+    public static [NonNull] io.appmetrica.analytics.profile.BooleanAttribute customBoolean([NonNull] String)
+    public static [NonNull] io.appmetrica.analytics.profile.CounterAttribute customCounter([NonNull] String)
+    public static [NonNull] io.appmetrica.analytics.profile.NumberAttribute customNumber([NonNull] String)
+    public static [NonNull] io.appmetrica.analytics.profile.StringAttribute customString([NonNull] String)
+    public static [NonNull] io.appmetrica.analytics.profile.GenderAttribute gender()
+    public static [NonNull] io.appmetrica.analytics.profile.NameAttribute name()
+    public static [NonNull] io.appmetrica.analytics.profile.NotificationsEnabledAttribute notificationsEnabled()
+}
+
+public class io.appmetrica.analytics.profile.BirthDateAttribute {
+    public io.appmetrica.analytics.profile.UserProfileUpdate<? extends OBFUSCATED[io.appmetrica.analytics.impl.profile.UserProfileUpdatePatcher]> withAge(int)
+    public io.appmetrica.analytics.profile.UserProfileUpdate<? extends OBFUSCATED[io.appmetrica.analytics.impl.profile.UserProfileUpdatePatcher]> withAgeIfUndefined(int)
+    public io.appmetrica.analytics.profile.UserProfileUpdate<? extends OBFUSCATED[io.appmetrica.analytics.impl.profile.UserProfileUpdatePatcher]> withBirthDate(int)
+    public io.appmetrica.analytics.profile.UserProfileUpdate<? extends OBFUSCATED[io.appmetrica.analytics.impl.profile.UserProfileUpdatePatcher]> withBirthDate(int, int)
+    public io.appmetrica.analytics.profile.UserProfileUpdate<? extends OBFUSCATED[io.appmetrica.analytics.impl.profile.UserProfileUpdatePatcher]> withBirthDate(int, int, int)
+    public io.appmetrica.analytics.profile.UserProfileUpdate<? extends OBFUSCATED[io.appmetrica.analytics.impl.profile.UserProfileUpdatePatcher]> withBirthDate([NonNull] java.util.Calendar)
+    public io.appmetrica.analytics.profile.UserProfileUpdate<? extends OBFUSCATED[io.appmetrica.analytics.impl.profile.UserProfileUpdatePatcher]> withBirthDateIfUndefined(int)
+    public io.appmetrica.analytics.profile.UserProfileUpdate<? extends OBFUSCATED[io.appmetrica.analytics.impl.profile.UserProfileUpdatePatcher]> withBirthDateIfUndefined(int, int)
+    public io.appmetrica.analytics.profile.UserProfileUpdate<? extends OBFUSCATED[io.appmetrica.analytics.impl.profile.UserProfileUpdatePatcher]> withBirthDateIfUndefined(int, int, int)
+    public io.appmetrica.analytics.profile.UserProfileUpdate<? extends OBFUSCATED[io.appmetrica.analytics.impl.profile.UserProfileUpdatePatcher]> withBirthDateIfUndefined([NonNull] java.util.Calendar)
+    public io.appmetrica.analytics.profile.UserProfileUpdate<? extends OBFUSCATED[io.appmetrica.analytics.impl.profile.UserProfileUpdatePatcher]> withValueReset()
+}
+
+public class io.appmetrica.analytics.profile.BooleanAttribute {
+    public [NonNull] io.appmetrica.analytics.profile.UserProfileUpdate<? extends OBFUSCATED[io.appmetrica.analytics.impl.profile.UserProfileUpdatePatcher]> withValue(boolean)
+    public [NonNull] io.appmetrica.analytics.profile.UserProfileUpdate<? extends OBFUSCATED[io.appmetrica.analytics.impl.profile.UserProfileUpdatePatcher]> withValueIfUndefined(boolean)
+    public [NonNull] io.appmetrica.analytics.profile.UserProfileUpdate<? extends OBFUSCATED[io.appmetrica.analytics.impl.profile.UserProfileUpdatePatcher]> withValueReset()
+}
+
+public final class io.appmetrica.analytics.profile.CounterAttribute {
+    public [NonNull] io.appmetrica.analytics.profile.UserProfileUpdate<? extends OBFUSCATED[io.appmetrica.analytics.impl.profile.UserProfileUpdatePatcher]> withDelta(double)
+}
+
+public class io.appmetrica.analytics.profile.GenderAttribute {
+    public [NonNull] io.appmetrica.analytics.profile.UserProfileUpdate<? extends OBFUSCATED[io.appmetrica.analytics.impl.profile.UserProfileUpdatePatcher]> withValue([NonNull] io.appmetrica.analytics.profile.GenderAttribute$Gender)
+    public [NonNull] io.appmetrica.analytics.profile.UserProfileUpdate<? extends OBFUSCATED[io.appmetrica.analytics.impl.profile.UserProfileUpdatePatcher]> withValueIfUndefined([NonNull] io.appmetrica.analytics.profile.GenderAttribute$Gender)
+    public [NonNull] io.appmetrica.analytics.profile.UserProfileUpdate<? extends OBFUSCATED[io.appmetrica.analytics.impl.profile.UserProfileUpdatePatcher]> withValueReset()
+}
+
+public enum io.appmetrica.analytics.profile.GenderAttribute$Gender {
+    FEMALE, MALE, OTHER
+
+    public String getStringValue()
+    public static io.appmetrica.analytics.profile.GenderAttribute$Gender valueOf(String)
+    public static io.appmetrica.analytics.profile.GenderAttribute$Gender[] values()
+}
+
+public class io.appmetrica.analytics.profile.NameAttribute extends io.appmetrica.analytics.profile.StringAttribute
+
+public class io.appmetrica.analytics.profile.NotificationsEnabledAttribute extends io.appmetrica.analytics.profile.BooleanAttribute
+
+public final class io.appmetrica.analytics.profile.NumberAttribute {
+    public [NonNull] io.appmetrica.analytics.profile.UserProfileUpdate<? extends OBFUSCATED[io.appmetrica.analytics.impl.profile.UserProfileUpdatePatcher]> withValue(double)
+    public [NonNull] io.appmetrica.analytics.profile.UserProfileUpdate<? extends OBFUSCATED[io.appmetrica.analytics.impl.profile.UserProfileUpdatePatcher]> withValueIfUndefined(double)
+    public [NonNull] io.appmetrica.analytics.profile.UserProfileUpdate<? extends OBFUSCATED[io.appmetrica.analytics.impl.profile.UserProfileUpdatePatcher]> withValueReset()
+}
+
+public class io.appmetrica.analytics.profile.StringAttribute {
+    public [NonNull] io.appmetrica.analytics.profile.UserProfileUpdate<? extends OBFUSCATED[io.appmetrica.analytics.impl.profile.UserProfileUpdatePatcher]> withValue([NonNull] String)
+    public [NonNull] io.appmetrica.analytics.profile.UserProfileUpdate<? extends OBFUSCATED[io.appmetrica.analytics.impl.profile.UserProfileUpdatePatcher]> withValueIfUndefined([NonNull] String)
+    public [NonNull] io.appmetrica.analytics.profile.UserProfileUpdate<? extends OBFUSCATED[io.appmetrica.analytics.impl.profile.UserProfileUpdatePatcher]> withValueReset()
+}
+
+public class io.appmetrica.analytics.profile.UserProfile {
+    public [NonNull] java.util.List<io.appmetrica.analytics.profile.UserProfileUpdate<? extends OBFUSCATED[io.appmetrica.analytics.impl.profile.UserProfileUpdatePatcher]>> getUserProfileUpdates()
+    public static [NonNull] io.appmetrica.analytics.profile.UserProfile$Builder newBuilder()
+}
+
+public static class io.appmetrica.analytics.profile.UserProfile$Builder {
+    public io.appmetrica.analytics.profile.UserProfile$Builder apply([NonNull] io.appmetrica.analytics.profile.UserProfileUpdate<? extends OBFUSCATED[io.appmetrica.analytics.impl.profile.UserProfileUpdatePatcher]>)
+    public [NonNull] io.appmetrica.analytics.profile.UserProfile build()
+}
+
+public class io.appmetrica.analytics.profile.UserProfileUpdate<T extends OBFUSCATED[io.appmetrica.analytics.impl.profile.UserProfileUpdatePatcher]> {
+    public [NonNull] T getUserProfileUpdatePatcher()
+}
+

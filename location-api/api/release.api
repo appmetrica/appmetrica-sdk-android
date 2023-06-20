@@ -1,0 +1,82 @@
+public final class io.appmetrica.analytics.locationapi.BuildConfig {
+    public static final String BUILD_TYPE
+    public static final boolean DEBUG
+    public static final String LIBRARY_PACKAGE_NAME
+
+    public <init>()
+}
+
+public final class io.appmetrica.analytics.locationapi.internal.CacheArguments {
+    public <init>()
+    public <init>(long, long)
+    public boolean equals([Nullable] Object)
+    public final long getOutdatedTimeInterval()
+    public final long getRefreshPeriod()
+    public int hashCode()
+    public [NonNull] String toString()
+}
+
+public interface io.appmetrica.analytics.locationapi.internal.ILastKnownUpdater {
+    public abstract void updateLastKnown()
+}
+
+public interface io.appmetrica.analytics.locationapi.internal.Identifiable {
+    public abstract [NonNull] String getIdentifier()
+}
+
+public interface io.appmetrica.analytics.locationapi.internal.LastKnownLocationExtractor {
+    public abstract void updateLastKnownLocation()
+}
+
+public interface io.appmetrica.analytics.locationapi.internal.LastKnownLocationExtractorProvider extends io.appmetrica.analytics.locationapi.internal.Identifiable {
+    public abstract [NonNull] io.appmetrica.analytics.locationapi.internal.LastKnownLocationExtractor getExtractor([NonNull] android.content.Context, [NonNull] io.appmetrica.analytics.coreapi.internal.system.PermissionExtractor, [NonNull] io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor, [NonNull] android.location.LocationListener)
+}
+
+public interface io.appmetrica.analytics.locationapi.internal.LastKnownLocationExtractorProviderFactory {
+    public abstract [NonNull] io.appmetrica.analytics.locationapi.internal.LastKnownLocationExtractorProvider getGplLastKnownLocationExtractorProvider()
+    public abstract [NonNull] io.appmetrica.analytics.locationapi.internal.LastKnownLocationExtractorProvider getGpsLastKnownLocationExtractorProvider()
+    public abstract [NonNull] io.appmetrica.analytics.locationapi.internal.LastKnownLocationExtractorProvider getNetworkLastKnownLocationExtractorProvider()
+    public abstract [NonNull] io.appmetrica.analytics.locationapi.internal.LastKnownLocationExtractorProvider getPassiveLastKnownLocationExtractorProvider()
+}
+
+public interface io.appmetrica.analytics.locationapi.internal.LocationClient extends io.appmetrica.analytics.locationapi.internal.LocationControllerObserver {
+    public abstract [NonNull] io.appmetrica.analytics.locationapi.internal.LastKnownLocationExtractorProviderFactory getLastKnownExtractorProviderFactory()
+    public abstract [Nullable] android.location.Location getLocation()
+    public abstract [NonNull] io.appmetrica.analytics.locationapi.internal.LocationReceiverProviderFactory getLocationReceiverProviderFactory()
+    public abstract void init([NonNull] android.content.Context, [NonNull] io.appmetrica.analytics.coreapi.internal.system.PermissionExtractor, [NonNull] io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor, [NonNull] java.util.List<? extends io.appmetrica.analytics.coreapi.internal.backport.Consumer<android.location.Location>>)
+    public abstract void registerLocationSource([NonNull] io.appmetrica.analytics.locationapi.internal.LastKnownLocationExtractorProvider)
+    public abstract void registerLocationSource([NonNull] io.appmetrica.analytics.locationapi.internal.LocationReceiverProvider)
+    public abstract void unregisterLocationSource([NonNull] io.appmetrica.analytics.locationapi.internal.LastKnownLocationExtractorProvider)
+    public abstract void unregisterLocationSource([NonNull] io.appmetrica.analytics.locationapi.internal.LocationReceiverProvider)
+    public abstract void updateCacheArguments([NonNull] io.appmetrica.analytics.locationapi.internal.CacheArguments)
+    public abstract void updateLocationFilter([NonNull] io.appmetrica.analytics.locationapi.internal.LocationFilter)
+}
+
+public interface io.appmetrica.analytics.locationapi.internal.LocationControllerObserver {
+    public abstract void startLocationTracking()
+    public abstract void stopLocationTracking()
+}
+
+public final class io.appmetrica.analytics.locationapi.internal.LocationFilter {
+    public <init>()
+    public <init>(long, float)
+    public boolean equals([Nullable] Object)
+    public final float getUpdateDistanceInterval()
+    public final long getUpdateTimeInterval()
+    public int hashCode()
+    public [NonNull] String toString()
+}
+
+public interface io.appmetrica.analytics.locationapi.internal.LocationReceiver {
+    public abstract void startLocationUpdates()
+    public abstract void stopLocationUpdates()
+}
+
+public interface io.appmetrica.analytics.locationapi.internal.LocationReceiverProvider extends io.appmetrica.analytics.locationapi.internal.Identifiable {
+    public abstract [NonNull] io.appmetrica.analytics.locationapi.internal.LocationReceiver getLocationReceiver([NonNull] android.content.Context, [NonNull] io.appmetrica.analytics.coreapi.internal.system.PermissionExtractor, [NonNull] io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor, [NonNull] android.location.LocationListener)
+}
+
+public interface io.appmetrica.analytics.locationapi.internal.LocationReceiverProviderFactory {
+    public abstract [NonNull] io.appmetrica.analytics.locationapi.internal.LocationReceiverProvider getPassiveLocationReceiverProvider()
+}
+

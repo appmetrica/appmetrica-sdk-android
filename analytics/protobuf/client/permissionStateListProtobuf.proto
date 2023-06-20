@@ -1,0 +1,11 @@
+syntax = "proto2";
+
+// deprecated. need for migration https://nda.ya.ru/t/-vEeXbnF5ZKMox
+message PermissionStateList {
+    message PermissionState {
+      required string name = 1;
+      required bool enabled = 2;
+    }
+
+    repeated PermissionState list = 1;
+}

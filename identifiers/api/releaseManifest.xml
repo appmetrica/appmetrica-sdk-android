@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="io.appmetrica.analytics.identifiers" >
+
+    <uses-sdk
+        android:minSdkVersion="14"
+        android:targetSdkVersion="34" />
+
+    <!-- To obtain Google Advertising Identifier on Android 12 and higher -->
+    <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
+
+</manifest>

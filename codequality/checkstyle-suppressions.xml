@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE suppressions PUBLIC
+    "-//Puppy Crawl//DTD Suppressions 1.1//EN"
+    "http://checkstyle.sourceforge.net/dtds/suppressions_1_1.dtd">
+
+<suppressions>
+
+    <suppress checks=".*" files="\/protobuf\/"/> <!-- protobuf generated file -->
+    <suppress checks=".*" files="generated/.*" />
+    <suppress checks=".*" files="OpenDeviceIdentifierService.java" /> <!-- AIDL generated file -->
+
+    <suppress checks="ImportControl" files="ANRMonitor.java" />
+
+    <suppress checks="FileLength" files="AppMetricaConfig\.java" />
+    <suppress checks="FileLength" files="AppMetricaProxy\.java" />
+    <suppress checks="FileLength" files="AppMetricaYandexConfig\.java" />
+    <suppress checks="FileLength" files="AppMetricaYandex\.java" />
+    <suppress checks="FileLength" files="AppMetrica\.java" />
+    <suppress checks="FileLength" files="BaseReporter\.java" />
+    <suppress checks="FileLength" files="CounterReport\.java" />
+    <suppress checks="FileLength" files="DatabaseHelper\.java" />
+    <suppress checks="FileLength" files="JsonHelper\.java"/>
+    <suppress checks="FileLength" files="ReportRequestConfig\.java" />
+    <suppress checks="FileLength" files="ReportTask\.java" />
+
+    <!-- Tests -->
+    <suppress checks="FileLength" files="test.*\/.*\.java" />
+    <suppress checks="LineLength" files="test.*\/.*\.java" />
+    <suppress checks="MethodLength" files="test.*\/.*\.java" />
+    <suppress checks="Regexp" id="rawFileCreation" files="test.*\/.*\.java" />
+    <suppress checks="Regexp" id="rawPermissionsCheck" files="test.*\/.*\.java" />
+
+</suppressions>

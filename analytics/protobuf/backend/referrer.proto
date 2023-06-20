@@ -1,0 +1,16 @@
+syntax = "proto2";
+
+option java_multiple_files = true;
+
+message Referrer
+{
+    enum Source {
+        UNKNOWN = 0;
+        GP = 1;
+        HMS = 2;
+    }
+    required bytes referrer = 1; //The referrer url of the installed package
+    optional uint64 install_begin_timestamp = 2; //The timestamp in seconds when installation begins.
+    optional uint64 click_timestamp = 3; //The timestamp in seconds when referrer click happens.
+    optional Source source = 4 [default = UNKNOWN]; //Referrer source.
+}

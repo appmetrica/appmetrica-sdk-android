@@ -1,0 +1,23 @@
+public final class io.appmetrica.analytics.appsetid.BuildConfig {
+    public static final String BUILD_TYPE
+    public static final boolean DEBUG
+    public static final String LIBRARY_PACKAGE_NAME
+
+    public <init>()
+}
+
+public interface io.appmetrica.analytics.appsetid.internal.AppSetIdListener {
+    public abstract void onAppSetIdRetrieved([Nullable] String, [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.AppSetIdScope)
+    public abstract void onFailure([Nullable] Throwable)
+}
+
+public final class io.appmetrica.analytics.appsetid.internal.AppSetIdRetriever implementation io.appmetrica.analytics.appsetid.internal.IAppSetIdRetriever {
+    public <init>()
+    public static final io.appmetrica.analytics.coreapi.internal.identifiers.AppSetIdScope access$convertScope(io.appmetrica.analytics.appsetid.internal.AppSetIdRetriever, int)
+    public void retrieveAppSetId([NonNull] android.content.Context, [NonNull] io.appmetrica.analytics.appsetid.internal.AppSetIdListener)
+}
+
+public interface io.appmetrica.analytics.appsetid.internal.IAppSetIdRetriever {
+    public abstract void retrieveAppSetId([NonNull] android.content.Context, [NonNull] io.appmetrica.analytics.appsetid.internal.AppSetIdListener)
+}
+

@@ -1,0 +1,13 @@
+public final class io.appmetrica.analytics.identifiers.BuildConfig {
+    public static final String BUILD_TYPE
+    public static final boolean DEBUG
+    public static final String LIBRARY_PACKAGE_NAME
+
+    public <init>()
+}
+
+public class io.appmetrica.analytics.identifiers.internal.AdsIdentifiersProvider {
+    public <init>()
+    public static android.os.Bundle requestIdentifiers([NonNull] android.content.Context, [NonNull] android.os.Bundle)
+}
+

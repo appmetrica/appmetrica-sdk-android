@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE import-control PUBLIC
+    "-//Checkstyle//DTD ImportControl Configuration 1.4//EN"
+    "https://checkstyle.org/dtds/import_control_1_4.dtd">
+
+<import-control pkg="io.appmetrica.analytics" strategyOnMismatch="allowed">
+    <disallow class="android.os.Debug"/>
+    <disallow class="android.os.Debug.*" regex="true" />
+    <disallow class="android.content.pm.PackageManager.PERMISSION_GRANTED" />
+    <disallow class="android.content.pm.PackageManager.PERMISSION_DENIED" />
+    <subpackage name="impl.permissions">
+        <allow class="android.content.pm.PackageManager.PERMISSION_GRANTED" />
+        <allow class="android.content.pm.PackageManager.PERMISSION_DENIED" />
+    </subpackage>
+</import-control>

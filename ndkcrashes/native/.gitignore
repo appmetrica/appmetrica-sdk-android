@@ -1,0 +1,6 @@
+!crashpad/**
+.cipd
+.git
+.github
+.versions
+.vscode

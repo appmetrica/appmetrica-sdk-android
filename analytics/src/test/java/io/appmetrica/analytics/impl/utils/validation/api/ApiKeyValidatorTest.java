@@ -1,0 +1,26 @@
+package io.appmetrica.analytics.impl.utils.validation.api;
+
+import io.appmetrica.analytics.testutils.CommonTest;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+@RunWith(RobolectricTestRunner.class)
+public class ApiKeyValidatorTest extends CommonTest {
+
+    private final ApiKeyValidator mValidator = new ApiKeyValidator();
+
+    @Test
+    public void testMessageContainsUrlForEmptyApiKey() {
+        String description = mValidator.validate("").getDescription();
+        assertThat(description).contains("https://yandex.com/dev/appmetrica/doc/mobile-sdk-dg/concepts/android-initialize.html");
+    }
+
+    @Test
+    public void testMessageContainsUrl() {
+        String description = mValidator.validate("1").getDescription();
+        assertThat(description).contains("https://yandex.com/dev/appmetrica/doc/mobile-sdk-dg/concepts/android-initialize.html");
+    }
+}

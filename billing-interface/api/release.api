@@ -1,0 +1,120 @@
+public final class io.appmetrica.analytics.billinginterface.BuildConfig {
+    public static final String BUILD_TYPE
+    public static final boolean DEBUG
+    public static final String LIBRARY_PACKAGE_NAME
+
+    public <init>()
+}
+
+public class io.appmetrica.analytics.billinginterface.internal.BillingInfo {
+    public final long purchaseTime
+    public final [NonNull] String purchaseToken
+    public long sendTime
+    public final [NonNull] String sku
+    public final [NonNull] io.appmetrica.analytics.billinginterface.internal.ProductType type
+
+    public <init>([NonNull] io.appmetrica.analytics.billinginterface.internal.ProductType, [NonNull] String, [NonNull] String, long, long)
+    public [NonNull] String toString()
+}
+
+public enum io.appmetrica.analytics.billinginterface.internal.BillingType {
+    LIBRARY_V3, LIBRARY_V4, NONE
+
+    public static io.appmetrica.analytics.billinginterface.internal.BillingType valueOf(String)
+    public static io.appmetrica.analytics.billinginterface.internal.BillingType[] values()
+}
+
+public class io.appmetrica.analytics.billinginterface.internal.Period {
+    public final int number
+    public final [NonNull] io.appmetrica.analytics.billinginterface.internal.Period$TimeUnit timeUnit
+
+    public <init>(int, [NonNull] io.appmetrica.analytics.billinginterface.internal.Period$TimeUnit)
+    public boolean equals(Object)
+    public int hashCode()
+    public static [Nullable] io.appmetrica.analytics.billinginterface.internal.Period parse([NonNull] String)
+    public [NonNull] String toString()
+}
+
+public enum io.appmetrica.analytics.billinginterface.internal.Period$TimeUnit {
+    DAY, MONTH, TIME_UNIT_UNKNOWN, WEEK, YEAR
+
+    public static io.appmetrica.analytics.billinginterface.internal.Period$TimeUnit valueOf(String)
+    public static io.appmetrica.analytics.billinginterface.internal.Period$TimeUnit[] values()
+}
+
+public class io.appmetrica.analytics.billinginterface.internal.ProductInfo {
+    public final boolean autoRenewing
+    public final int introductoryPriceCycles
+    public final long introductoryPriceMicros
+    public final [Nullable] io.appmetrica.analytics.billinginterface.internal.Period introductoryPricePeriod
+    public final [NonNull] String priceCurrency
+    public final long priceMicros
+    public final [NonNull] String purchaseOriginalJson
+    public final long purchaseTime
+    public final [NonNull] String purchaseToken
+    public final int quantity
+    public final [NonNull] String signature
+    public final [NonNull] String sku
+    public final [Nullable] io.appmetrica.analytics.billinginterface.internal.Period subscriptionPeriod
+    public final [NonNull] io.appmetrica.analytics.billinginterface.internal.ProductType type
+
+    public <init>([NonNull] io.appmetrica.analytics.billinginterface.internal.ProductType, [NonNull] String, int, long, [NonNull] String, long, [Nullable] io.appmetrica.analytics.billinginterface.internal.Period, int, [Nullable] io.appmetrica.analytics.billinginterface.internal.Period, [NonNull] String, [NonNull] String, long, boolean, [NonNull] String)
+    public boolean equals(Object)
+    public int hashCode()
+    public [NonNull] String toString()
+}
+
+public enum io.appmetrica.analytics.billinginterface.internal.ProductType {
+    INAPP, SUBS, UNKNOWN
+
+    public static io.appmetrica.analytics.billinginterface.internal.ProductType valueOf(String)
+    public static io.appmetrica.analytics.billinginterface.internal.ProductType[] values()
+}
+
+public class io.appmetrica.analytics.billinginterface.internal.config.BillingConfig {
+    public final int firstCollectingInappMaxAgeSeconds
+    public final int sendFrequencySeconds
+
+    public <init>(int, int)
+    public boolean equals(Object)
+    public int hashCode()
+    public [NonNull] String toString()
+}
+
+public interface io.appmetrica.analytics.billinginterface.internal.config.BillingConfigChangedListener {
+    public abstract void onBillingConfigChanged([Nullable] io.appmetrica.analytics.billinginterface.internal.config.BillingConfig)
+}
+
+public interface io.appmetrica.analytics.billinginterface.internal.library.UtilsProvider {
+    public abstract [NonNull] io.appmetrica.analytics.billinginterface.internal.storage.BillingInfoManager getBillingInfoManager()
+    public abstract [NonNull] io.appmetrica.analytics.billinginterface.internal.storage.BillingInfoSender getBillingInfoSender()
+    public abstract [NonNull] java.util.concurrent.Executor getUiExecutor()
+    public abstract [NonNull] io.appmetrica.analytics.billinginterface.internal.update.UpdatePolicy getUpdatePolicy()
+    public abstract [NonNull] java.util.concurrent.Executor getWorkerExecutor()
+}
+
+public interface io.appmetrica.analytics.billinginterface.internal.monitor.BillingMonitor extends io.appmetrica.analytics.billinginterface.internal.config.BillingConfigChangedListener {
+    public abstract void onSessionResumed()
+}
+
+public interface io.appmetrica.analytics.billinginterface.internal.storage.BillingInfoManager {
+    public abstract [Nullable] io.appmetrica.analytics.billinginterface.internal.BillingInfo get([NonNull] String)
+    public abstract boolean isFirstInappCheckOccurred()
+    public abstract void markFirstInappCheckOccurred()
+    public abstract void update([NonNull] java.util.Map<String, io.appmetrica.analytics.billinginterface.internal.BillingInfo>)
+}
+
+public interface io.appmetrica.analytics.billinginterface.internal.storage.BillingInfoSender {
+    public abstract void sendInfo([NonNull] java.util.List<io.appmetrica.analytics.billinginterface.internal.ProductInfo>)
+}
+
+public interface io.appmetrica.analytics.billinginterface.internal.storage.BillingInfoStorage {
+    public abstract [NonNull] java.util.List<io.appmetrica.analytics.billinginterface.internal.BillingInfo> getBillingInfo()
+    public abstract boolean isFirstInappCheckOccurred()
+    public abstract void saveInfo([NonNull] java.util.List<io.appmetrica.analytics.billinginterface.internal.BillingInfo>, boolean)
+}
+
+public interface io.appmetrica.analytics.billinginterface.internal.update.UpdatePolicy {
+    public abstract [NonNull] java.util.Map<String, io.appmetrica.analytics.billinginterface.internal.BillingInfo> getBillingInfoToUpdate([NonNull] io.appmetrica.analytics.billinginterface.internal.config.BillingConfig, [NonNull] java.util.Map<String, io.appmetrica.analytics.billinginterface.internal.BillingInfo>, [NonNull] io.appmetrica.analytics.billinginterface.internal.storage.BillingInfoManager)
+}
+

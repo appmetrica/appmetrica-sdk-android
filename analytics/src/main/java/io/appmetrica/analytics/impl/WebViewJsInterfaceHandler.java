@@ -1,0 +1,102 @@
+package io.appmetrica.analytics.impl;
+
+import android.annotation.SuppressLint;
+import android.os.Build;
+import android.webkit.WebView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import io.appmetrica.analytics.AppMetricaInitializerJsInterface;
+import io.appmetrica.analytics.AppMetricaJsInterface;
+import io.appmetrica.analytics.coreapi.internal.backport.Consumer;
+import io.appmetrica.analytics.coreutils.internal.AndroidUtils;
+import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
+import io.appmetrica.analytics.impl.proxy.AppMetricaProxy;
+import io.appmetrica.analytics.impl.utils.PublicLogger;
+import java.util.ArrayList;
+import java.util.List;
+
+public class WebViewJsInterfaceHandler {
+
+    private static final String TAG = "[WebViewJsInterfaceHandler]";
+    private static final String APPMETRICA_INTERFACE_NAME = "AppMetrica";
+    private static final String APPMETRICA_INITIALIZER_INTERFACE_NAME = "AppMetricaInitializer";
+
+    @NonNull
+    private final List<Consumer<PublicLogger>> queuedLogMessages = new ArrayList<Consumer<PublicLogger>>();
+    @Nullable
+    private PublicLogger publicLogger;
+
+    @SuppressLint("AddJavascriptInterface")
+    public void initWebViewReporting(@NonNull WebView webView, @NonNull AppMetricaProxy proxy) {
+        if (AndroidUtils.isApiAchieved(Build.VERSION_CODES.JELLY_BEAN_MR1)) {
+            try {
+                if (webView.getSettings().getJavaScriptEnabled()) {
+                    webView.addJavascriptInterface(new AppMetricaJsInterface(proxy), APPMETRICA_INTERFACE_NAME);
+                    webView.addJavascriptInterface(
+                            new AppMetricaInitializerJsInterface(proxy),
+                            APPMETRICA_INITIALIZER_INTERFACE_NAME
+                    );
+                    logIOrQueue("WebView interface setup is successful.");
+                } else {
+                    logWOrQueue("WebView interface setup failed because javascript is disabled for the WebView.");
+                }
+            } catch (Throwable ex) {
+                YLogger.error(TAG, ex);
+                logEOrQueue("WebView interface setup failed because of an exception.", ex);
+            }
+        } else {
+            logWOrQueue("WebView interface is not available on Android < 17.");
+        }
+    }
+
+    public void setLogger(@NonNull PublicLogger logger) {
+        synchronized (this) {
+            publicLogger = logger;
+        }
+        for (Consumer<PublicLogger> queuedMessage : queuedLogMessages) {
+            queuedMessage.consume(logger);
+        }
+        queuedLogMessages.clear();
+    }
+
+    private void logIOrQueue(@NonNull final String message) {
+        logOrQueue(new Consumer<PublicLogger>() {
+            @Override
+            public void consume(PublicLogger input) {
+                if (input.isEnabled()) {
+                    input.i(message);
+                }
+            }
+        });
+    }
+
+    private void logWOrQueue(@NonNull final String message) {
+        logOrQueue(new Consumer<PublicLogger>() {
+            @Override
+            public void consume(PublicLogger input) {
+                if (input.isEnabled()) {
+                    input.w(message);
+                }
+            }
+        });
+    }
+
+    private void logEOrQueue(@NonNull final String message, @NonNull final Throwable ex) {
+        logOrQueue(new Consumer<PublicLogger>() {
+            @Override
+            public void consume(PublicLogger input) {
+                if (input.isEnabled()) {
+                    input.e(ex, message);
+                }
+            }
+        });
+    }
+
+    private synchronized void logOrQueue(@NonNull Consumer<PublicLogger> message) {
+        if (publicLogger == null) {
+            queuedLogMessages.add(message);
+        } else {
+            message.consume(publicLogger);
+        }
+    }
+}
