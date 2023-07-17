@@ -13,20 +13,17 @@ public interface StartupParamsCallback {
     /**
      * The key for uuid at [List] in [AppMetrica.requestStartupParams]
      */
-    String YANDEX_MOBILE_METRICA_UUID =
-            Constants.StartupParamsCallbackKeys.UUID;
+    String APPMETRICA_UUID = Constants.StartupParamsCallbackKeys.UUID;
 
     /**
      * The key for device id at [List] in [AppMetrica.requestStartupParams]
      */
-    String YANDEX_MOBILE_METRICA_DEVICE_ID =
-            Constants.StartupParamsCallbackKeys.DEVICE_ID;
+    String APPMETRICA_DEVICE_ID = Constants.StartupParamsCallbackKeys.DEVICE_ID;
 
     /**
      * The key for device id hash at [List] in [AppMetrica.requestStartupParams]
      */
-     String APP_METRICA_DEVICE_ID_HASH =
-            Constants.StartupParamsCallbackKeys.DEVICE_ID_HASH;
+     String APPMETRICA_DEVICE_ID_HASH = Constants.StartupParamsCallbackKeys.DEVICE_ID_HASH;
 
     /**
      * Objects of this class contain information about retrieved startup parameters.
@@ -44,9 +41,9 @@ public interface StartupParamsCallback {
 
         public Result(@NonNull final Map<String, IdentifiersResult> parameters) {
             this.parameters = parameters;
-            this.uuid = parameterForKey(YANDEX_MOBILE_METRICA_UUID);
-            this.deviceId = parameterForKey(YANDEX_MOBILE_METRICA_DEVICE_ID);
-            this.deviceIdHash = parameterForKey(APP_METRICA_DEVICE_ID_HASH);
+            this.uuid = parameterForKey(APPMETRICA_UUID);
+            this.deviceId = parameterForKey(APPMETRICA_DEVICE_ID);
+            this.deviceIdHash = parameterForKey(APPMETRICA_DEVICE_ID_HASH);
 
         }
 

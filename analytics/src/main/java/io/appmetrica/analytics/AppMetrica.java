@@ -303,8 +303,7 @@ public final class AppMetrica {
 
     /**
      * Sets whether AppMetrica should include location information within its reports.<p>
-     * <b>NOTE:</b> Default value is
-     * {@value AppMetricaDefaultValues#DEFAULT_REPORT_LOCATION_ENABLED}
+     * <b>NOTE:</b> Default value is {@code false}.
      *
      * @param enabled {@code true} to allow AppMetrica to record location information in reports,
      *                otherwise {@code false}.
@@ -317,8 +316,7 @@ public final class AppMetrica {
 
     /**
      * Sets whether AppMetrica should include location information within its reports.<p>
-     * <b>NOTE:</b> Default value is
-     * {@value AppMetricaDefaultValues#DEFAULT_REPORT_LOCATION_ENABLED}
+     * <b>NOTE:</b> Default value is {@code false}.
      *
      * @param context Context object
      * @param enabled {@code true} to allow AppMetrica to record location information in reports,
@@ -595,9 +593,9 @@ public final class AppMetrica {
      * @param context Context object
      * @param callback An object that implements {@link StartupParamsCallback} interface.
      * @param params List of params to be requested.
-     *               If params is empty list of {@link StartupParamsCallback#YANDEX_MOBILE_METRICA_UUID},
-     *               {@link StartupParamsCallback#YANDEX_MOBILE_METRICA_DEVICE_ID},
-     *               {@link StartupParamsCallback#APP_METRICA_DEVICE_ID_HASH} will be requested.
+     *               If params is empty list of {@link StartupParamsCallback#APPMETRICA_UUID},
+     *               {@link StartupParamsCallback#APPMETRICA_DEVICE_ID},
+     *               {@link StartupParamsCallback#APPMETRICA_DEVICE_ID_HASH} will be requested.
      */
     public static void requestStartupParams(
             @NonNull final Context context,
@@ -609,9 +607,9 @@ public final class AppMetrica {
             callback,
             params.isEmpty() ?
                 Arrays.asList(
-                    StartupParamsCallback.YANDEX_MOBILE_METRICA_UUID,
-                    StartupParamsCallback.YANDEX_MOBILE_METRICA_DEVICE_ID,
-                    StartupParamsCallback.APP_METRICA_DEVICE_ID_HASH
+                    StartupParamsCallback.APPMETRICA_UUID,
+                    StartupParamsCallback.APPMETRICA_DEVICE_ID,
+                    StartupParamsCallback.APPMETRICA_DEVICE_ID_HASH
                 ) : params
         );
     }

@@ -515,9 +515,9 @@ public static class io.appmetrica.analytics.Revenue$Receipt$Builder {
 }
 
 public interface io.appmetrica.analytics.StartupParamsCallback {
-    public static final String APP_METRICA_DEVICE_ID_HASH
-    public static final String YANDEX_MOBILE_METRICA_DEVICE_ID
-    public static final String YANDEX_MOBILE_METRICA_UUID
+    public static final String APPMETRICA_DEVICE_ID
+    public static final String APPMETRICA_DEVICE_ID_HASH
+    public static final String APPMETRICA_UUID
 
     public abstract void onReceive([Nullable] io.appmetrica.analytics.StartupParamsCallback$Result)
     public abstract void onRequestError([NonNull] io.appmetrica.analytics.StartupParamsCallback$Reason, [Nullable] io.appmetrica.analytics.StartupParamsCallback$Result)
