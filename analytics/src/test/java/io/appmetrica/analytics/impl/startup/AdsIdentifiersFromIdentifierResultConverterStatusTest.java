@@ -14,7 +14,7 @@ import org.robolectric.ParameterizedRobolectricTestRunner;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(ParameterizedRobolectricTestRunner.class)
-public class AdsIdentifiersConverterStatusTest extends CommonTest {
+public class AdsIdentifiersFromIdentifierResultConverterStatusTest extends CommonTest {
 
     @ParameterizedRobolectricTestRunner.Parameters(name = "For {0} is {1}")
     public static Collection<Object[]> data() {
@@ -31,7 +31,7 @@ public class AdsIdentifiersConverterStatusTest extends CommonTest {
         return data;
     }
 
-    public AdsIdentifiersConverterStatusTest(IdentifierStatus internalStatus, AdsIdentifiersResult.Details expected) {
+    public AdsIdentifiersFromIdentifierResultConverterStatusTest(IdentifierStatus internalStatus, AdsIdentifiersResult.Details expected) {
         mInternalStatus = internalStatus;
         mExpected = expected;
     }
@@ -41,7 +41,7 @@ public class AdsIdentifiersConverterStatusTest extends CommonTest {
 
     @Test
     public void testConvertStatus() {
-        assertThat(new AdsIdentifiersConverter()
+        assertThat(new AdsIdentifiersFromIdentifierResultConverter()
                 .convert(null, new IdentifiersResult(null, mInternalStatus, null), null)
                 .huaweiAdvId.details
         ).isEqualTo(mExpected);

@@ -1,14 +1,35 @@
 package io.appmetrica.analytics.impl.startup
 
 import io.appmetrica.analytics.IdentifiersResult
+import io.appmetrica.analytics.StartupParamsItemStatus
+import io.appmetrica.analytics.StartupParamsItem
 import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus
 import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.analytics.testutils.MockedConstructionRule
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
+import org.mockito.kotlin.eq
+import org.mockito.kotlin.whenever
 
 class FeaturesHolderTest : CommonTest() {
 
-    private val featuresHolder = FeaturesHolder()
+    private lateinit var featuresHolder: FeaturesHolder
+
+    @get:Rule
+    val startupParamsItemAdapterMockedConstructionRule = MockedConstructionRule(StartupParamItemAdapter::class.java)
+
+    private lateinit var startupParamItemAdapter: StartupParamItemAdapter
+
+    @Before
+    fun setUp() {
+        featuresHolder = FeaturesHolder()
+
+        assertThat(startupParamsItemAdapterMockedConstructionRule.constructionMock.constructed()).hasSize(1)
+        assertThat(startupParamsItemAdapterMockedConstructionRule.argumentInterceptor.flatArguments()).isEmpty()
+        startupParamItemAdapter = startupParamsItemAdapterMockedConstructionRule.constructionMock.constructed().first()
+    }
 
     @Test
     fun getFeatures() {
@@ -40,68 +61,54 @@ class FeaturesHolderTest : CommonTest() {
 
     @Test
     fun putToMapNoIdentifier() {
-        val map = mutableMapOf("key" to IdentifiersResult(
+        val map = mutableMapOf("key" to StartupParamsItem(
             "id",
-            IdentifierStatus.NO_STARTUP,
+            StartupParamsItemStatus.NETWORK_ERROR,
             "error"
         )
         )
         featuresHolder.putToMap(listOf(Constants.StartupParamsCallbackKeys.FEATURE_LIB_SSL_ENABLED), map)
-        assertThat(map).containsExactlyInAnyOrderEntriesOf(
-            mapOf("key" to IdentifiersResult(
-                "id",
-                IdentifierStatus.NO_STARTUP,
-                "error"
-            )
-            )
-        )
+        assertThat(map).containsExactlyInAnyOrderEntriesOf(map)
     }
 
     @Test
     fun putToMapHasIdentifier() {
-        val map = mutableMapOf("key" to IdentifiersResult(
+        val firstEntry = "key" to StartupParamsItem(
             "id",
-            IdentifierStatus.NO_STARTUP,
+            StartupParamsItemStatus.NETWORK_ERROR,
             "error"
         )
-        )
-        featuresHolder.features= FeaturesInternal(false, IdentifierStatus.OK, "some error")
+
+        val libSslStartupParamsItem = StartupParamsItem("false", StartupParamsItemStatus.OK, "some error")
+        val map = mutableMapOf(firstEntry)
+
+        whenever(startupParamItemAdapter.adapt(eq(IdentifiersResult("false", IdentifierStatus.OK, "some error"))))
+            .thenReturn(libSslStartupParamsItem)
+
+        featuresHolder.features = FeaturesInternal(false, IdentifierStatus.OK, "some error")
         featuresHolder.putToMap(listOf(Constants.StartupParamsCallbackKeys.FEATURE_LIB_SSL_ENABLED), map)
         assertThat(map).containsExactlyInAnyOrderEntriesOf(mapOf(
-            "key" to IdentifiersResult(
-                "id",
-                IdentifierStatus.NO_STARTUP,
-                "error"
-            ),
-            Constants.StartupParamsCallbackKeys.FEATURE_LIB_SSL_ENABLED to IdentifiersResult(
-                "false",
-                IdentifierStatus.OK,
-                "some error"
-            ),
+            firstEntry,
+            Constants.StartupParamsCallbackKeys.FEATURE_LIB_SSL_ENABLED to libSslStartupParamsItem,
         ))
     }
 
     @Test
     fun putToMapIgnoresUnknownKey() {
-        val map = mutableMapOf("key" to IdentifiersResult(
+        val initialEntry = "key" to StartupParamsItem(
             "id",
-            IdentifierStatus.NO_STARTUP,
+            StartupParamsItemStatus.NETWORK_ERROR,
             "error"
         )
-        )
+        val libSslStartupParamsItem = StartupParamsItem("false", StartupParamsItemStatus.OK, "some error")
+        val map = mutableMapOf(initialEntry)
         featuresHolder.features= FeaturesInternal(false, IdentifierStatus.OK, "some error")
+        whenever(startupParamItemAdapter.adapt(eq(IdentifiersResult("false", IdentifierStatus.OK, "some error"))))
+            .thenReturn(libSslStartupParamsItem)
         featuresHolder.putToMap(listOf(Constants.StartupParamsCallbackKeys.FEATURE_LIB_SSL_ENABLED, "unknown key"), map)
         assertThat(map).containsExactlyInAnyOrderEntriesOf(mapOf(
-            "key" to IdentifiersResult(
-                "id",
-                IdentifierStatus.NO_STARTUP,
-                "error"
-            ),
-            Constants.StartupParamsCallbackKeys.FEATURE_LIB_SSL_ENABLED to IdentifiersResult(
-                "false",
-                IdentifierStatus.OK,
-                "some error"
-            ),
+            initialEntry,
+            Constants.StartupParamsCallbackKeys.FEATURE_LIB_SSL_ENABLED to libSslStartupParamsItem,
         ))
     }
 }

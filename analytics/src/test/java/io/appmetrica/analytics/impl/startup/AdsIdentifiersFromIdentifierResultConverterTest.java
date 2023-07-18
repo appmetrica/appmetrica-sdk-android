@@ -11,9 +11,9 @@ import org.robolectric.RobolectricTestRunner;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(RobolectricTestRunner.class)
-public class AdsIdentifiersConverterTest extends CommonTest {
+public class AdsIdentifiersFromIdentifierResultConverterTest extends CommonTest {
 
-    private AdsIdentifiersConverter mAdsIdentifiersConverter = new AdsIdentifiersConverter();
+    private AdsIdentifiersFromIdentifierResultConverter mAdsIdentifiersConverter = new AdsIdentifiersFromIdentifierResultConverter();
 
     @Test
     public void testConvertNulls() {

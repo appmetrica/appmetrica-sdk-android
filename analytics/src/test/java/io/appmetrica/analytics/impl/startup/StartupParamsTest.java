@@ -5,6 +5,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import io.appmetrica.analytics.AdsIdentifiersResult;
 import io.appmetrica.analytics.IdentifiersResult;
+import io.appmetrica.analytics.StartupParamsItemStatus;
+import io.appmetrica.analytics.StartupParamsItem;
 import io.appmetrica.analytics.TestData;
 import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus;
 import io.appmetrica.analytics.impl.ClientIdentifiersHolder;
@@ -67,7 +69,7 @@ public class StartupParamsTest extends CommonTest {
     @Mock
     private Bundle mBundle;
     @Mock
-    private AdsIdentifiersConverter mAdsIdentifiersConverter;
+    private AdsIdentifiersFromIdentifierResultConverter mAdsIdentifiersConverter;
     @Mock
     private ClidsStateChecker clidsStateChecker;
     @Mock
@@ -99,24 +101,38 @@ public class StartupParamsTest extends CommonTest {
     private Map<String, String> clientClids = StartupParamsTestUtils.CLIDS_MAP_3;
     private final long mServerTimeOffset = 39787657;
     private final IdentifiersResult mUuidResult = new IdentifiersResult(mUuid, IdentifierStatus.OK, null);
+    private final StartupParamsItem uuidStartupParam = new StartupParamsItem(mUuid, StartupParamsItemStatus.OK, null);
     private final IdentifiersResult mDeviceIdResult = new IdentifiersResult(mDeviceId, IdentifierStatus.OK, null);
-    private final IdentifiersResult mDeviceIdHashResult = new IdentifiersResult(mDeviceIdHash, IdentifierStatus.OK, null);
-    private final IdentifiersResult mAdUrlGetResult = new IdentifiersResult(mAdUrlGet, IdentifierStatus.OK, null);
+    private final StartupParamsItem deviceIdStartupParam = new StartupParamsItem(mDeviceId, StartupParamsItemStatus.OK, null);
+    private final IdentifiersResult deviceIdHashResult = new IdentifiersResult(mDeviceIdHash, IdentifierStatus.OK, null);
+    private final StartupParamsItem deviceIdHashStartupParam = new StartupParamsItem(mDeviceIdHash, StartupParamsItemStatus.OK, null);
+    private final IdentifiersResult adUrlIdentifierResult = new IdentifiersResult(mAdUrlGet, IdentifierStatus.OK, null);
+    private final StartupParamsItem adUrlGetStartupParamsItem = new StartupParamsItem(mAdUrlGet, StartupParamsItemStatus.OK, null);
     private final IdentifiersResult mAdUrlReportResult = new IdentifiersResult(mAdUrlReport, IdentifierStatus.OK, null);
+    private final StartupParamsItem adUrlReportStartupParamsItem = new StartupParamsItem(mAdUrlReport, StartupParamsItemStatus.OK, null);
     private final IdentifiersResult mGaidResult = new IdentifiersResult(mGaid, IdentifierStatus.OK, null);
+    private final StartupParamsItem gaidStartupParamsItem = new StartupParamsItem(mGaid, StartupParamsItemStatus.OK, null);
     private final IdentifiersResult mHoaidResult = new IdentifiersResult(mHoaid, IdentifierStatus.OK, null);
+    private final StartupParamsItem hoaidStartupParamsItem = new StartupParamsItem(mHoaid, StartupParamsItemStatus.OK, null);
     private final IdentifiersResult yandexResult = new IdentifiersResult(yandex, IdentifierStatus.OK, null);
+    private final StartupParamsItem yandexStartupParamsItem = new StartupParamsItem(yandex, StartupParamsItemStatus.OK, null);
     private final IdentifiersResult customSdkHostsResult1 = new IdentifiersResult(JsonHelper.listToJsonString(Arrays.asList("host1", "host2")), IdentifierStatus.OK, null);
+    private final StartupParamsItem customSdkHostsResult1StartupParamsItem = new StartupParamsItem(JsonHelper.listToJsonString(Arrays.asList("host1", "host2")), StartupParamsItemStatus.OK, null);
     private final IdentifiersResult customSdkHostsResult2 = new IdentifiersResult(JsonHelper.listToJsonString(Arrays.asList("host3")), IdentifierStatus.OK, null);
+    private final StartupParamsItem customSdkHostsResult2StartupParamsItem = new StartupParamsItem(JsonHelper.listToJsonString(Arrays.asList("host3")), StartupParamsItemStatus.OK, null);
     private final IdentifiersResult customSdkHostsResult = new IdentifiersResult(JsonHelper.customSdkHostsToString(customSdkHosts), IdentifierStatus.OK, null);
     private final IdentifiersResult mClidsFromPrefsResult = new IdentifiersResult(mClidsFromPrefs, IdentifierStatus.OK, null);
+    private final StartupParamsItem clidsFromPrefsStartupParamItems = new StartupParamsItem(mClidsFromPrefs, StartupParamsItemStatus.OK, null);
     private final IdentifiersResult sslFeatureResult = new IdentifiersResult("true", IdentifierStatus.OK, null);
+    private final StartupParamsItem sslFeatureStartupParam = new StartupParamsItem("true", StartupParamsItemStatus.OK, null);
     private IdentifiersResult mRequestClidsResult;
     private IdentifiersResult mResponseClidsResult;
     private final IdentifiersResult mEmptyIdentifierResult = new IdentifiersResult("", IdentifierStatus.OK, null);
     private final IdentifiersResult mNullIdentifierResult = new IdentifiersResult(null, IdentifierStatus.OK, null);
     private final FeaturesInternal featuresInternal = new FeaturesInternal(true, IdentifierStatus.OK, null);
     private final long nextStartupTime = 327846276;
+    private final IdentifiersResult initialCustomSdkHost = new IdentifiersResult(null, IdentifierStatus.OK, null);
+    private final StartupParamsItem initialCustomSdkHostStartupParam = new StartupParamsItem(null, StartupParamsItemStatus.OK, null);
 
     private MockedConstruction.MockInitializer<ClientIdentifiersHolder> additionalInitializer;
 
@@ -144,7 +160,7 @@ public class StartupParamsTest extends CommonTest {
         context = TestUtils.createMockedContext();
 
         when(uuidProvider.readUuid()).thenReturn(mUuidResult);
-        when(mPreferences.getCustomSdkHosts()).thenReturn(new IdentifiersResult(null, IdentifierStatus.OK, null));
+        when(mPreferences.getCustomSdkHosts()).thenReturn(initialCustomSdkHost);
         when(mPreferences.getFeatures()).thenReturn(new FeaturesInternal());
         when(featuresHolder.getFeatures()).thenReturn(new FeaturesInternal());
 
@@ -370,18 +386,13 @@ public class StartupParamsTest extends CommonTest {
                 Constants.StartupParamsCallbackKeys.UUID,
                 Constants.StartupParamsCallbackKeys.GET_AD_URL
         );
-        Map<String, IdentifiersResult> actual = new HashMap<String, IdentifiersResult>();
+        Map<String, StartupParamsItem> actual = new HashMap<String, StartupParamsItem>();
         startupParams.putToMap(params, actual);
-        assertThat(actual).containsOnly(
-                new AbstractMap.SimpleEntry<String, IdentifiersResult>(
-                        Constants.StartupParamsCallbackKeys.UUID,
-                        new IdentifiersResult(uuid, IdentifierStatus.OK, null)
-                ),
-                new AbstractMap.SimpleEntry<String, IdentifiersResult>(
-                        Constants.StartupParamsCallbackKeys.GET_AD_URL,
-                        new IdentifiersResult(getAdUrl, IdentifierStatus.OK, null)
-                )
-        );
+        assertThat(actual).hasSize(2);
+        assertThat(actual.get(Constants.StartupParamsCallbackKeys.UUID))
+            .isEqualToComparingFieldByField(new StartupParamsItem(uuid, StartupParamsItemStatus.OK, null));
+        assertThat(actual.get(Constants.StartupParamsCallbackKeys.GET_AD_URL))
+            .isEqualToComparingFieldByField(new StartupParamsItem(getAdUrl, StartupParamsItemStatus.OK, null));
     }
 
     @Test
@@ -394,12 +405,12 @@ public class StartupParamsTest extends CommonTest {
                 Constants.StartupParamsCallbackKeys.UUID,
                 "invalid param"
         );
-        Map<String, IdentifiersResult> actual = new HashMap<String, IdentifiersResult>();
+        Map<String, StartupParamsItem> actual = new HashMap<String, StartupParamsItem>();
         startupParams.putToMap(params, actual);
         assertThat(actual).containsOnly(
-                new AbstractMap.SimpleEntry<String, IdentifiersResult>(
+                new AbstractMap.SimpleEntry<String, StartupParamsItem>(
                         Constants.StartupParamsCallbackKeys.UUID,
-                        new IdentifiersResult(uuid, IdentifierStatus.OK, null)
+                        new StartupParamsItem(uuid, StartupParamsItemStatus.OK, null)
                 )
         );
     }
@@ -423,13 +434,13 @@ public class StartupParamsTest extends CommonTest {
         );
         mockPreferencesWithValidValues();
         StartupParams startupParams = createStartupParams();
-        Map<String, IdentifiersResult> actual = new HashMap<String, IdentifiersResult>();
-        final IdentifiersResult customResult1 = mock(IdentifiersResult.class);
-        final IdentifiersResult customResult2 = mock(IdentifiersResult.class);
+        Map<String, StartupParamsItem> actual = new HashMap<String, StartupParamsItem>();
+        final StartupParamsItem customResult1 = mock(StartupParamsItem.class);
+        final StartupParamsItem customResult2 = mock(StartupParamsItem.class);
         doAnswer(new Answer() {
             @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {
-                Map<String, IdentifiersResult> map = ((Map<String, IdentifiersResult>) invocation.getArgument(1));
+                Map<String, StartupParamsItem> map = ((Map<String, StartupParamsItem>) invocation.getArgument(1));
                 map.put(customIdentifier1, customResult1);
                 map.put(customIdentifier2, customResult2);
                 return null;
@@ -438,54 +449,54 @@ public class StartupParamsTest extends CommonTest {
         doAnswer(new Answer() {
             @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {
-                Map<String, IdentifiersResult> map = ((Map<String, IdentifiersResult>) invocation.getArgument(1));
-                map.put(Constants.StartupParamsCallbackKeys.FEATURE_LIB_SSL_ENABLED, sslFeatureResult);
+                Map<String, StartupParamsItem> map = ((Map<String, StartupParamsItem>) invocation.getArgument(1));
+                map.put(Constants.StartupParamsCallbackKeys.FEATURE_LIB_SSL_ENABLED, sslFeatureStartupParam);
                 return null;
             }
         }).when(featuresHolder).putToMap(identifierKeys, actual);
         startupParams.putToMap(identifierKeys, actual);
         assertThat(actual).containsOnly(
-                new AbstractMap.SimpleEntry<String, IdentifiersResult>(
+                new AbstractMap.SimpleEntry<String, StartupParamsItem>(
                         Constants.StartupParamsCallbackKeys.UUID,
-                        mUuidResult
+                        uuidStartupParam
                 ),
-                new AbstractMap.SimpleEntry<String, IdentifiersResult>(
+                new AbstractMap.SimpleEntry<String, StartupParamsItem>(
                         Constants.StartupParamsCallbackKeys.DEVICE_ID,
-                        mDeviceIdResult
+                        deviceIdStartupParam
                 ),
-                new AbstractMap.SimpleEntry<String, IdentifiersResult>(
+                new AbstractMap.SimpleEntry<String, StartupParamsItem>(
                         Constants.StartupParamsCallbackKeys.DEVICE_ID_HASH,
-                        mDeviceIdHashResult
+                        deviceIdHashStartupParam
                 ),
-                new AbstractMap.SimpleEntry<String, IdentifiersResult>(
+                new AbstractMap.SimpleEntry<String, StartupParamsItem>(
                         Constants.StartupParamsCallbackKeys.REPORT_AD_URL,
-                        mAdUrlReportResult
+                        adUrlReportStartupParamsItem
                 ),
-                new AbstractMap.SimpleEntry<String, IdentifiersResult>(
+                new AbstractMap.SimpleEntry<String, StartupParamsItem>(
                         Constants.StartupParamsCallbackKeys.GET_AD_URL,
-                        mAdUrlGetResult
+                    adUrlGetStartupParamsItem
                 ),
-                new AbstractMap.SimpleEntry<String, IdentifiersResult>(
+                new AbstractMap.SimpleEntry<String, StartupParamsItem>(
                         Constants.StartupParamsCallbackKeys.CLIDS,
-                        mClidsFromPrefsResult
+                        clidsFromPrefsStartupParamItems
                 ),
-                new AbstractMap.SimpleEntry<String, IdentifiersResult>(
+                new AbstractMap.SimpleEntry<String, StartupParamsItem>(
                         Constants.StartupParamsCallbackKeys.GOOGLE_ADV_ID,
-                        mGaidResult
+                        gaidStartupParamsItem
                 ),
-                new AbstractMap.SimpleEntry<String, IdentifiersResult>(
+                new AbstractMap.SimpleEntry<String, StartupParamsItem>(
                         Constants.StartupParamsCallbackKeys.HUAWEI_ADV_ID,
-                        mHoaidResult
+                        hoaidStartupParamsItem
                 ),
-                new AbstractMap.SimpleEntry<String, IdentifiersResult>(
+                new AbstractMap.SimpleEntry<String, StartupParamsItem>(
                         Constants.StartupParamsCallbackKeys.YANDEX_ADV_ID,
-                        yandexResult
+                        yandexStartupParamsItem
                 ),
                 new AbstractMap.SimpleEntry<>(customIdentifier1, customResult1),
                 new AbstractMap.SimpleEntry<>(customIdentifier2, customResult2),
                 new AbstractMap.SimpleEntry<>(
                         Constants.StartupParamsCallbackKeys.FEATURE_LIB_SSL_ENABLED,
-                        sslFeatureResult
+                        sslFeatureStartupParam
                 )
         );
     }
@@ -753,15 +764,15 @@ public class StartupParamsTest extends CommonTest {
         doAnswer(new Answer() {
             @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {
-                Map<String, IdentifiersResult> map = ((Map<String, IdentifiersResult>) invocation.getArgument(1));
-                map.put(customKey1, customSdkHostsResult1);
-                map.put(customKey2, customSdkHostsResult2);
+                Map<String, StartupParamsItem> map = ((Map<String, StartupParamsItem>) invocation.getArgument(1));
+                map.put(customKey1, customSdkHostsResult1StartupParamsItem);
+                map.put(customKey2, customSdkHostsResult2StartupParamsItem);
                 return null;
             }
         }).when(customSdkHostsHolder).putToMap(eq(identifierKeys), any(Map.class));
         clearInvocations(customSdkHostsHolder, featuresHolder);
         mStartupParams.updateAllParamsByReceiver(mBundle);
-        Map<String, IdentifiersResult> identifiers = new HashMap<String, IdentifiersResult>();
+        Map<String, StartupParamsItem> identifiers = new HashMap<String, StartupParamsItem>();
         mStartupParams.putToMap(identifierKeys, identifiers);
         verify(customSdkHostsHolder).update(customSdkHostsResult);
         verify(featuresHolder).setFeatures(featuresInternal);
@@ -772,17 +783,19 @@ public class StartupParamsTest extends CommonTest {
         softly.assertThat(mStartupParams.getClids()).isEqualTo(JsonHelper.clidsToString(mResponseClids));
         softly.assertThat(mStartupParams.getServerTimeOffsetSeconds()).isEqualTo(mServerTimeOffset);
         softly.assertThat(identifiers.get(Constants.StartupParamsCallbackKeys.GET_AD_URL))
-                .isEqualToComparingFieldByField(new IdentifiersResult(mAdUrlGet, IdentifierStatus.OK, null));
+                .isEqualToComparingFieldByField(adUrlGetStartupParamsItem);
         softly.assertThat(identifiers.get(Constants.StartupParamsCallbackKeys.REPORT_AD_URL))
-                .isEqualToComparingFieldByField(new IdentifiersResult(mAdUrlReport, IdentifierStatus.OK, null));
+                .isEqualToComparingFieldByField(adUrlReportStartupParamsItem);
         softly.assertThat(identifiers.get(Constants.StartupParamsCallbackKeys.GOOGLE_ADV_ID))
-                .isEqualToComparingFieldByField(mGaidResult);
+                .isEqualToComparingFieldByField(gaidStartupParamsItem);
         softly.assertThat(identifiers.get(Constants.StartupParamsCallbackKeys.HUAWEI_ADV_ID))
-                .isEqualToComparingFieldByField(mHoaidResult);
+                .isEqualToComparingFieldByField(hoaidStartupParamsItem);
         softly.assertThat(identifiers.get(Constants.StartupParamsCallbackKeys.YANDEX_ADV_ID))
-                .isEqualToComparingFieldByField(yandexResult);
-        softly.assertThat(identifiers.get(customKey1)).isEqualToComparingFieldByField(customSdkHostsResult1);
-        softly.assertThat(identifiers.get(customKey2)).isEqualToComparingFieldByField(customSdkHostsResult2);
+                .isEqualToComparingFieldByField(yandexStartupParamsItem);
+        softly.assertThat(identifiers.get(customKey1))
+            .isEqualToComparingFieldByField(customSdkHostsResult1StartupParamsItem);
+        softly.assertThat(identifiers.get(customKey2))
+            .isEqualToComparingFieldByField(customSdkHostsResult2StartupParamsItem);
         softly.assertAll();
     }
 
@@ -1022,9 +1035,9 @@ public class StartupParamsTest extends CommonTest {
         when(mPreferences.getServerTimeOffset(0)).thenReturn(mServerTimeOffset);
         when(mPreferences.getCustomHosts()).thenReturn(mValidCustomHosts);
         when(mPreferences.getDeviceIdResult()).thenReturn(mDeviceIdResult);
-        when(mPreferences.getDeviceIdHashResult()).thenReturn(mDeviceIdHashResult);
+        when(mPreferences.getDeviceIdHashResult()).thenReturn(deviceIdHashResult);
         when(mPreferences.getUuidResult()).thenReturn(mUuidResult);
-        when(mPreferences.getAdUrlGetResult()).thenReturn(mAdUrlGetResult);
+        when(mPreferences.getAdUrlGetResult()).thenReturn(adUrlIdentifierResult);
         when(mPreferences.getAdUrlReportResult()).thenReturn(mAdUrlReportResult);
         when(mPreferences.getGaid()).thenReturn(mGaidResult);
         when(mPreferences.getHoaid()).thenReturn(mHoaidResult);
@@ -1040,9 +1053,9 @@ public class StartupParamsTest extends CommonTest {
     private void mockClientIdentifiersHolder(ClientIdentifiersHolder mock) {
         when(mock.getUuid()).thenReturn(mUuidResult);
         when(mock.getDeviceId()).thenReturn(mDeviceIdResult);
-        when(mock.getDeviceIdHash()).thenReturn(mDeviceIdHashResult);
+        when(mock.getDeviceIdHash()).thenReturn(deviceIdHashResult);
         when(mock.getReportAdUrl()).thenReturn(mAdUrlReportResult);
-        when(mock.getGetAdUrl()).thenReturn(mAdUrlGetResult);
+        when(mock.getGetAdUrl()).thenReturn(adUrlIdentifierResult);
         when(mock.getResponseClids()).thenReturn(mResponseClidsResult);
         when(mock.getClientClidsForRequest()).thenReturn(mRequestClidsResult);
         when(mock.getServerTimeOffset()).thenReturn(mServerTimeOffset);
@@ -1063,12 +1076,12 @@ public class StartupParamsTest extends CommonTest {
         createStartupParams();
         verify(mPreferences).putUuidResult(mUuidResult);
         verify(mPreferences).putDeviceIdResult(mDeviceIdResult);
-        verify(mPreferences).putDeviceIdHashResult(mDeviceIdHashResult);
+        verify(mPreferences).putDeviceIdHashResult(deviceIdHashResult);
         verify(mPreferences).putGaid(mGaidResult);
         verify(mPreferences).putHoaid(mHoaidResult);
         verify(mPreferences).putYandexAdvId(yandexResult);
         verify(mPreferences).putAdUrlReportResult(mAdUrlReportResult);
-        verify(mPreferences).putAdUrlGetResult(mAdUrlGetResult);
+        verify(mPreferences).putAdUrlGetResult(adUrlIdentifierResult);
         verify(mPreferences).putServerTimeOffset(mServerTimeOffset);
         verify(mPreferences).putResponseClidsResult(mClidsFromPrefsResult);
         verify(mPreferences).putClientClids(mClientClidsFromPrefs);
@@ -1088,12 +1101,12 @@ public class StartupParamsTest extends CommonTest {
         mStartupParams.updateAllParamsByReceiver(mBundle);
         verify(mPreferences).putUuidResult(mUuidResult);
         verify(mPreferences).putDeviceIdResult(mDeviceIdResult);
-        verify(mPreferences).putDeviceIdHashResult(mDeviceIdHashResult);
+        verify(mPreferences).putDeviceIdHashResult(deviceIdHashResult);
         verify(mPreferences).putGaid(mGaidResult);
         verify(mPreferences).putHoaid(mHoaidResult);
         verify(mPreferences).putYandexAdvId(yandexResult);
         verify(mPreferences).putAdUrlReportResult(mAdUrlReportResult);
-        verify(mPreferences).putAdUrlGetResult(mAdUrlGetResult);
+        verify(mPreferences).putAdUrlGetResult(adUrlIdentifierResult);
         verify(mPreferences).putServerTimeOffset(mServerTimeOffset);
         verify(mPreferences).putResponseClidsResult(mResponseClidsResult);
         verify(mPreferences).putClientClids(StartupUtils.encodeClids(clientClids));
@@ -1115,12 +1128,12 @@ public class StartupParamsTest extends CommonTest {
         mStartupParams.setClientClids(newClids);
         verify(mPreferences).putUuidResult(mUuidResult);
         verify(mPreferences).putDeviceIdResult(mDeviceIdResult);
-        verify(mPreferences).putDeviceIdHashResult(mDeviceIdHashResult);
+        verify(mPreferences).putDeviceIdHashResult(deviceIdHashResult);
         verify(mPreferences).putGaid(mGaidResult);
         verify(mPreferences).putHoaid(mHoaidResult);
         verify(mPreferences).putYandexAdvId(yandexResult);
         verify(mPreferences).putAdUrlReportResult(mAdUrlReportResult);
-        verify(mPreferences).putAdUrlGetResult(mAdUrlGetResult);
+        verify(mPreferences).putAdUrlGetResult(adUrlIdentifierResult);
         verify(mPreferences).putServerTimeOffset(mServerTimeOffset);
         verify(mPreferences).putResponseClidsResult(mClidsFromPrefsResult);
         verify(mPreferences).putClientClids(StartupUtils.encodeClids(newClids));

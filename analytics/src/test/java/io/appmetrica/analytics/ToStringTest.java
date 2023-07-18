@@ -532,6 +532,18 @@ public class ToStringTest extends CommonTest {
                             new ScreenInfo(0, 0, 0, 0f, DeviceTypeValues.PHONE),
                             0,
                             "empty value"
+                    },
+                    {
+                            StartupParamsItem.class,
+                            new StartupParamsItem("id", StartupParamsItemStatus.OK, "error details"),
+                            0,
+                            "filled value"
+                    },
+                    {
+                            StartupParamsItem.class,
+                            new StartupParamsItem(null, StartupParamsItemStatus.FEATURE_DISABLED, null),
+                            0,
+                            "value with nulls"
                     }
             });
         }

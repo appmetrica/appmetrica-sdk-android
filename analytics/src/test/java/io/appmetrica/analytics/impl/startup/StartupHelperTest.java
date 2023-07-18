@@ -6,7 +6,9 @@ import android.os.Handler;
 import android.os.ResultReceiver;
 import io.appmetrica.analytics.AdsIdentifiersResult;
 import io.appmetrica.analytics.IdentifiersResult;
+import io.appmetrica.analytics.StartupParamsItemStatus;
 import io.appmetrica.analytics.StartupParamsCallback;
+import io.appmetrica.analytics.StartupParamsItem;
 import io.appmetrica.analytics.TestData;
 import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus;
 import io.appmetrica.analytics.impl.ClientIdentifiersHolder;
@@ -330,11 +332,17 @@ public class StartupHelperTest extends CommonTest {
                 ArgumentCaptor.forClass(StartupParamsCallback.Result.class);
         verify(mCallback).onReceive(parameters.capture());
         assertThat(parameters.getValue().parameters).containsOnly(
-                new AbstractMap.SimpleEntry(Constants.StartupParamsCallbackKeys.DEVICE_ID, TEST_DEVICE_ID),
-                new AbstractMap.SimpleEntry(Constants.StartupParamsCallbackKeys.DEVICE_ID_HASH, TEST_DEVICE_ID_HASH),
+                new AbstractMap.SimpleEntry(
+                    Constants.StartupParamsCallbackKeys.DEVICE_ID,
+                    new StartupParamsItem(TEST_DEVICE_ID.id, StartupParamsItemStatus.OK, null
+                    )),
+                new AbstractMap.SimpleEntry(
+                    Constants.StartupParamsCallbackKeys.DEVICE_ID_HASH,
+                    new StartupParamsItem(TEST_DEVICE_ID_HASH.id, StartupParamsItemStatus.OK, null)
+                    ),
                 new AbstractMap.SimpleEntry(
                         Constants.StartupParamsCallbackKeys.CUSTOM_SDK_HOSTS,
-                        new IdentifiersResult("{}", IdentifierStatus.UNKNOWN, "no identifier in preferences")
+                        new StartupParamsItem("{}", StartupParamsItemStatus.UNKNOWN_ERROR, "no identifier in preferences")
                 )
         );
     }
@@ -527,11 +535,11 @@ public class StartupHelperTest extends CommonTest {
         doAnswer(new Answer() {
             @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {
-                Map<String, IdentifiersResult> targetMap = invocation.getArgument(1);
-                targetMap.put(Constants.StartupParamsCallbackKeys.DEVICE_ID_HASH, new IdentifiersResult(deviceIdHash, IdentifierStatus.OK, null));
+                Map<String, StartupParamsItem> targetMap = invocation.getArgument(1);
+                targetMap.put(Constants.StartupParamsCallbackKeys.DEVICE_ID_HASH, new StartupParamsItem(deviceIdHash, StartupParamsItemStatus.OK, null));
                 return targetMap;
             }
-        }).when(mStartupParams).putToMap(ArgumentMatchers.<String>anyList(), ArgumentMatchers.<String, IdentifiersResult>anyMap());
+        }).when(mStartupParams).putToMap(ArgumentMatchers.<String>anyList(), ArgumentMatchers.<String, StartupParamsItem>anyMap());
         when(mBundle.containsKey("startup_error_key_code")).thenReturn(true);
         when(mBundle.getInt("startup_error_key_code")).thenReturn(1); // stub network error code
         when(mStartupParams.areResponseClidsConsistent()).thenReturn(true);
@@ -603,11 +611,11 @@ public class StartupHelperTest extends CommonTest {
         doAnswer(new Answer() {
             @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {
-                Map<String, IdentifiersResult> targetMap = invocation.getArgument(1);
-                targetMap.put(Constants.StartupParamsCallbackKeys.DEVICE_ID_HASH, new IdentifiersResult(deviceIdHash, IdentifierStatus.OK, null));
+                Map<String, StartupParamsItem> targetMap = invocation.getArgument(1);
+                targetMap.put(Constants.StartupParamsCallbackKeys.DEVICE_ID_HASH, new StartupParamsItem(deviceIdHash, StartupParamsItemStatus.OK, null));
                 return targetMap;
             }
-        }).when(mStartupParams).putToMap(ArgumentMatchers.<String>anyList(), ArgumentMatchers.<String, IdentifiersResult>anyMap());
+        }).when(mStartupParams).putToMap(ArgumentMatchers.<String>anyList(), ArgumentMatchers.<String, StartupParamsItem>anyMap());
         when(mBundle.containsKey("startup_error_key_code")).thenReturn(true);
         when(mBundle.getInt("startup_error_key_code")).thenReturn(1); // stub network error code
         when(mStartupParams.areResponseClidsConsistent()).thenReturn(true);

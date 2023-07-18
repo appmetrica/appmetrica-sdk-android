@@ -31,7 +31,7 @@ public interface StartupParamsCallback {
     final class Result {
 
         @NonNull
-        public final Map<String, IdentifiersResult> parameters;
+        public final Map<String, StartupParamsItem> parameters;
         @Nullable
         public final String uuid;
         @Nullable
@@ -39,7 +39,7 @@ public interface StartupParamsCallback {
         @Nullable
         public final String deviceIdHash;
 
-        public Result(@NonNull final Map<String, IdentifiersResult> parameters) {
+        public Result(@NonNull final Map<String, StartupParamsItem> parameters) {
             this.parameters = parameters;
             this.uuid = parameterForKey(APPMETRICA_UUID);
             this.deviceId = parameterForKey(APPMETRICA_DEVICE_ID);
@@ -55,9 +55,9 @@ public interface StartupParamsCallback {
          */
         @Nullable
         public String parameterForKey(@NonNull final String key) {
-            final IdentifiersResult result = parameters.get(key);
+            final StartupParamsItem result = parameters.get(key);
             if (result != null) {
-                return result.id;
+                return result.getId();
             } else {
                 return null;
             }

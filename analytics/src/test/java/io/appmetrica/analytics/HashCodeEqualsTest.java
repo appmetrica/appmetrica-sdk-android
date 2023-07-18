@@ -46,7 +46,8 @@ public class HashCodeEqualsTest extends CommonTest {
                     {BillingConfig.class},
                     {Period.class},
                     {ProductInfo.class},
-                    {ScreenInfo.class}
+                    {ScreenInfo.class},
+                    {StartupParamsItem.class}
             });
         }
 

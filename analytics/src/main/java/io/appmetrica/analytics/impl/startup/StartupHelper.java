@@ -9,8 +9,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.AdsIdentifiersResult;
-import io.appmetrica.analytics.IdentifiersResult;
 import io.appmetrica.analytics.StartupParamsCallback;
+import io.appmetrica.analytics.StartupParamsItem;
 import io.appmetrica.analytics.coreutils.internal.collection.CollectionUtils;
 import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.DataResultReceiver;
@@ -328,7 +328,7 @@ public class StartupHelper implements StartupIdentifiersProvider, IServerTimeOff
         if (identifiers == null) {
             return null;
         }
-        Map<String, IdentifiersResult> result = new HashMap<String, IdentifiersResult>();
+        Map<String, StartupParamsItem> result = new HashMap<String, StartupParamsItem>();
         mStartupParams.putToMap(identifiers, result);
         return new StartupParamsCallback.Result(result);
     }

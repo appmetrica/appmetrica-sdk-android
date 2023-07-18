@@ -1123,7 +1123,7 @@ public class StartupParamsContainsIdentifiersForResultReceiverTest extends Commo
     @Mock
     private MultiProcessSafeUuidProvider multiProcessSafeUuidProvider;
     @Mock
-    private AdsIdentifiersConverter adsIdentifiersConverter;
+    private AdsIdentifiersFromIdentifierResultConverter adsIdentifiersConverter;
     @Mock
     private ClidsStateChecker clidsStateChecker;
     @Rule

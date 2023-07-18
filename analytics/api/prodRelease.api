@@ -538,11 +538,28 @@ public static final class io.appmetrica.analytics.StartupParamsCallback$Reason {
 public static final class io.appmetrica.analytics.StartupParamsCallback$Result {
     public final [Nullable] String deviceId
     public final [Nullable] String deviceIdHash
-    public final [NonNull] java.util.Map<String, io.appmetrica.analytics.IdentifiersResult> parameters
+    public final [NonNull] java.util.Map<String, io.appmetrica.analytics.StartupParamsItem> parameters
     public final [Nullable] String uuid
 
-    public <init>([NonNull] java.util.Map<String, io.appmetrica.analytics.IdentifiersResult>)
+    public <init>([NonNull] java.util.Map<String, io.appmetrica.analytics.StartupParamsItem>)
     public [Nullable] String parameterForKey([NonNull] String)
+}
+
+public final class io.appmetrica.analytics.StartupParamsItem {
+    public <init>([Nullable] String, [NonNull] io.appmetrica.analytics.StartupParamsItemStatus, [Nullable] String)
+    public boolean equals([Nullable] Object)
+    public final [Nullable] String getErrorDetails()
+    public final [Nullable] String getId()
+    public final [NonNull] io.appmetrica.analytics.StartupParamsItemStatus getStatus()
+    public int hashCode()
+    public [NonNull] String toString()
+}
+
+public enum io.appmetrica.analytics.StartupParamsItemStatus {
+    FEATURE_DISABLED, INVALID_VALUE_FROM_PROVIDER, NETWORK_ERROR, OK, PROVIDER_UNAVAILABLE, UNKNOWN_ERROR
+
+    public static io.appmetrica.analytics.StartupParamsItemStatus valueOf(String)
+    public static io.appmetrica.analytics.StartupParamsItemStatus[] values()
 }
 
 public class io.appmetrica.analytics.ValidationException extends IllegalArgumentException {

@@ -936,7 +936,7 @@ public class StartupParamsContainsIdentifiersForPreferencesTest extends CommonTe
     @Mock
     private MultiProcessSafeUuidProvider multiProcessSafeUuidProvider;
     @Mock
-    private AdsIdentifiersConverter adsIdentifiersConverter;
+    private AdsIdentifiersFromIdentifierResultConverter adsIdentifiersConverter;
     @Mock
     private ClidsStateChecker clidsStateChecker;
     @Mock

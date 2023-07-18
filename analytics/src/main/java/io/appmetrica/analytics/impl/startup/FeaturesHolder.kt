@@ -1,16 +1,19 @@
 package io.appmetrica.analytics.impl.startup
 
 import io.appmetrica.analytics.IdentifiersResult
+import io.appmetrica.analytics.StartupParamsItem
 import io.appmetrica.analytics.impl.startup.FeatureUtils.featureToIdentifierResultInternal
 
 internal class FeaturesHolder {
+
+    private val startupParamItemAdapter = StartupParamItemAdapter()
 
     var features: FeaturesInternal = FeaturesInternal()
         @Synchronized get
         @Synchronized set
 
     @Synchronized
-    fun putToMap(identifiers: List<String>, map: MutableMap<String, IdentifiersResult>) {
+    fun putToMap(identifiers: List<String>, map: MutableMap<String, StartupParamsItem>) {
         identifiers.forEach { identifier ->
             when (identifier) {
                 Constants.StartupParamsCallbackKeys.FEATURE_LIB_SSL_ENABLED ->
@@ -18,7 +21,8 @@ internal class FeaturesHolder {
                         features.status,
                         features.errorExplanation
                     )?.let {
-                        map[Constants.StartupParamsCallbackKeys.FEATURE_LIB_SSL_ENABLED] = it
+                        map[Constants.StartupParamsCallbackKeys.FEATURE_LIB_SSL_ENABLED] =
+                            startupParamItemAdapter.adapt(it)
                     }
             }
         }

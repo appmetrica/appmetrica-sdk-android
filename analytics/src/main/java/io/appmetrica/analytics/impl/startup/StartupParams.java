@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.AdsIdentifiersResult;
 import io.appmetrica.analytics.IdentifiersResult;
+import io.appmetrica.analytics.StartupParamsItem;
 import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.ClientIdentifiersHolder;
 import io.appmetrica.analytics.impl.ClientServiceLocator;
@@ -44,6 +45,7 @@ public class StartupParams {
     private final Set<String> mAdsIdentifiersKeys = new HashSet<String>();
     private final Map<String, IdentifiersResult> mIdentifiers =
             new HashMap<String, IdentifiersResult>();
+    private final StartupParamItemAdapter startupParamItemAdapter = new StartupParamItemAdapter();
     private List<String> mCustomHosts;
     private Map<String, String> mClientClids;
     private long mServerTimeOffsetSeconds;
@@ -52,7 +54,7 @@ public class StartupParams {
 
     private final PreferencesClientDbStorage mPreferences;
     @NonNull
-    private final AdsIdentifiersConverter mAdsIdentifiersConverter;
+    private final AdsIdentifiersFromIdentifierResultConverter mAdsIdentifiersConverter;
     @NonNull
     private final ClidsStateChecker clidsStateChecker;
     @NonNull
@@ -65,7 +67,7 @@ public class StartupParams {
     public StartupParams(@NonNull Context context, @NonNull PreferencesClientDbStorage preferencesClientDbStorage) {
         this(
             preferencesClientDbStorage,
-            new AdsIdentifiersConverter(),
+            new AdsIdentifiersFromIdentifierResultConverter(),
             new ClidsStateChecker(),
             ClientServiceLocator.getInstance().getMultiProcessSafeUuidProvider(context),
             new CustomSdkHostsHolder(),
@@ -76,7 +78,7 @@ public class StartupParams {
 
     @VisibleForTesting
     StartupParams(@NonNull final PreferencesClientDbStorage preferences,
-                  @NonNull AdsIdentifiersConverter adsIdentifiersConverter,
+                  @NonNull AdsIdentifiersFromIdentifierResultConverter adsIdentifiersConverter,
                   @NonNull ClidsStateChecker clidsStateChecker,
                   @NonNull MultiProcessSafeUuidProvider multiProcessSafeUuidProvider,
                   @NonNull CustomSdkHostsHolder customSdkHostsHolder,
@@ -167,11 +169,11 @@ public class StartupParams {
         return identifier == null || TextUtils.isEmpty(identifier.id);
     }
 
-    synchronized void putToMap(@NonNull List<String> params, final Map<String, IdentifiersResult> mapToPut) {
+    synchronized void putToMap(@NonNull List<String> params, final Map<String, StartupParamsItem> mapToPut) {
         for (String param : params) {
             IdentifiersResult identifier = mIdentifiers.get(param);
             if (identifier != null) {
-                mapToPut.put(param, identifier);
+                mapToPut.put(param, startupParamItemAdapter.adapt(identifier));
             }
         }
         customSdkHostsHolder.putToMap(params, mapToPut);

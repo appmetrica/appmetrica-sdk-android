@@ -5,7 +5,7 @@ import androidx.annotation.Nullable;
 import io.appmetrica.analytics.AdsIdentifiersResult;
 import io.appmetrica.analytics.IdentifiersResult;
 
-public class AdsIdentifiersConverter {
+public class AdsIdentifiersFromIdentifierResultConverter {
 
     @NonNull
     public AdsIdentifiersResult convert(@Nullable IdentifiersResult internalGoogle,
