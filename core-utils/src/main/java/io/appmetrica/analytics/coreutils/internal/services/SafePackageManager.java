@@ -16,6 +16,7 @@ import io.appmetrica.analytics.coreutils.internal.AndroidUtils;
 import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 
 public class SafePackageManager {
+    private static final String TAG = "[SafePackageManager]";
 
     @Nullable
     public PackageInfo getPackageInfo(Context context, String packageName) {
@@ -133,6 +134,7 @@ public class SafePackageManager {
         } catch (Throwable e) {
             YLogger.e(e, e.getMessage());
         }
+        YLogger.info(TAG, "AppInstaller = %s", result);
         return result;
     }
 }

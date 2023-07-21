@@ -68,6 +68,7 @@ public class ReportSaveInitHandler extends ReportComponentHandler {
                     ),
                     StringUtils.EMPTY
             );
+            YLogger.info(TAG, "PackageInstaller = %s", packageInstaller);
             try {
                 eventValue.put(JsonKeys.APP_INSTALLER, packageInstaller);
                 eventValue.put(
@@ -81,6 +82,8 @@ public class ReportSaveInitHandler extends ReportComponentHandler {
             reportToSave.setValue(eventValue.toString());
             component.getEventSaver().identifyAndSaveReport(reportToSave);
             vitalComponentDataProvider.setInitEventDone(true);
+        } else {
+            YLogger.info(TAG, "Event init has already been sent");
         }
         return false;
     }
