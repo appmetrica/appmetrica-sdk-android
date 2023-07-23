@@ -56,10 +56,8 @@ constexpr base::FilePath::CharType kCrashReportExtension[] =
 constexpr base::FilePath::CharType kMetadataExtension[] =
     FILE_PATH_LITERAL(".meta");
 //region change for AppMetrica
-constexpr base::FilePath::CharType kAppMetricaExtension[] =
+constexpr base::FilePath::CharType kAppMetricaMetadataExtension[] =
     FILE_PATH_LITERAL(".appmetrica");
-constexpr base::FilePath::CharType kAppMetricaRuntimeExtension[] =
-    FILE_PATH_LITERAL(".appmetrruntime");
 //endregion change for AppMetrica
 constexpr base::FilePath::CharType kLockExtension[] =
     FILE_PATH_LITERAL(".lock");
@@ -261,19 +259,15 @@ class CrashReportDatabaseGeneric : public CrashReportDatabase {
   //region change for AppMetrica
   void CleanFiles(const base::FilePath& path, Report* report);
 
-  bool ReadAppmetricaData(const base::FilePath& path, Report* report);
-  bool CleaningReadAppmetricaData(const base::FilePath& path, Report* report);
-
-  bool ReadAppmetricaRuntimeData(const base::FilePath& path, Report* report);
+  bool ReadAppMetricaMetadata(const base::FilePath& path, Report* report);
+  bool CleaningReadAppMetricaMetadata(const base::FilePath& path, Report* report);
   //endregion change for AppMetrica
 
   // Writes metadata for a new report to the filesystem at path.
   static bool WriteNewMetadata(const base::FilePath& path);
 
   //region change for AppMetrica
-  static bool WriteAppmetricaData(const base::FilePath& path, std::unique_ptr<NewReport>& report);
-
-  static bool WriteAppmetricaRuntimeData(const base::FilePath& path, std::unique_ptr<NewReport>& report);
+  static bool WriteAppMetricaMetadata(const base::FilePath& path, std::unique_ptr<NewReport>& report);
   //endregion change for AppMetrica
 
   // Writes the metadata for report to the filesystem at path.
@@ -376,11 +370,7 @@ OperationStatus CrashReportDatabaseGeneric::FinishedWritingCrashReport(
   }
 
   //region change for AppMetrica
-  if (!WriteAppmetricaData(ReplaceFinalExtension(path, kAppMetricaExtension), report)) {
-    return kDatabaseError;
-  }
-
-  if (!WriteAppmetricaRuntimeData(ReplaceFinalExtension(path, kAppMetricaRuntimeExtension), report)) {
+  if (!WriteAppMetricaMetadata(ReplaceFinalExtension(path, kAppMetricaMetadataExtension), report)) {
     return kDatabaseError;
   }
   //endregion change for AppMetrica
@@ -491,11 +481,7 @@ OperationStatus CrashReportDatabaseGeneric::SkipReportUpload(
   }
 
   //region change for AppMetrica
-  if (!LoggingRemoveFile(ReplaceFinalExtension(path, kAppMetricaExtension))) {
-    return kDatabaseError;
-  }
-
-  if (!LoggingRemoveFile(ReplaceFinalExtension(path, kAppMetricaRuntimeExtension))) {
+  if (!LoggingRemoveFile(ReplaceFinalExtension(path, kAppMetricaMetadataExtension))) {
     return kDatabaseError;
   }
   //endregion change for AppMetrica
@@ -523,11 +509,7 @@ OperationStatus CrashReportDatabaseGeneric::DeleteReport(const UUID& uuid) {
   }
 
   //region change for AppMetrica
-  if (!LoggingRemoveFile(ReplaceFinalExtension(path, kAppMetricaExtension))) {
-    return kDatabaseError;
-  }
-
-  if (!LoggingRemoveFile(ReplaceFinalExtension(path, kAppMetricaRuntimeExtension))) {
+  if (!LoggingRemoveFile(ReplaceFinalExtension(path, kAppMetricaMetadataExtension))) {
     return kDatabaseError;
   }
   //endregion change for AppMetrica
@@ -648,8 +630,7 @@ OperationStatus CrashReportDatabaseGeneric::RecordUploadAttempt(
 
     LoggingRemoveFile(ReplaceFinalExtension(report_path, kMetadataExtension));
     //region change for AppMetrica
-    LoggingRemoveFile(ReplaceFinalExtension(report_path, kAppMetricaExtension));
-    LoggingRemoveFile(ReplaceFinalExtension(report_path, kAppMetricaRuntimeExtension));
+    LoggingRemoveFile(ReplaceFinalExtension(report_path, kAppMetricaMetadataExtension));
     //endregion change for AppMetrica
     report_path = completed_report_path;
   }
@@ -732,12 +713,8 @@ OperationStatus CrashReportDatabaseGeneric::CheckoutReport(
   }
 
   //region change for AppMetrica
-  if (!CleaningReadAppmetricaData(local_path, report)) {
+  if (!CleaningReadAppMetricaMetadata(local_path, report)) {
     return kDatabaseError;
-  }
-
-  if (!ReadAppmetricaRuntimeData(local_path, report)) {
-    report->runtimeConfig = "";
   }
   //endregion change for AppMetrica
 
@@ -944,14 +921,13 @@ bool CrashReportDatabaseGeneric::ReadMetadata(const base::FilePath& path,
 void CrashReportDatabaseGeneric::CleanFiles(const base::FilePath& path, Report* report) {
   LoggingRemoveFile(path);
   LoggingRemoveFile(ReplaceFinalExtension(path, kMetadataExtension));
-  LoggingRemoveFile(ReplaceFinalExtension(path, kAppMetricaExtension));
-  LoggingRemoveFile(ReplaceFinalExtension(path, kAppMetricaRuntimeExtension));
+  LoggingRemoveFile(ReplaceFinalExtension(path, kAppMetricaMetadataExtension));
   RemoveAttachmentsByUUID(report->uuid);
 }
 
-bool CrashReportDatabaseGeneric::CleaningReadAppmetricaData(const base::FilePath& path,
-                                              Report* report) {
-  if (ReadAppmetricaData(path, report)) {
+bool CrashReportDatabaseGeneric::CleaningReadAppMetricaMetadata(const base::FilePath& path,
+                                                                Report* report) {
+  if (ReadAppMetricaMetadata(path, report)) {
     return true;
   }
 
@@ -960,31 +936,15 @@ bool CrashReportDatabaseGeneric::CleaningReadAppmetricaData(const base::FilePath
   return false;
 }
 
-bool CrashReportDatabaseGeneric::ReadAppmetricaData(const base::FilePath& path,
-                                              Report* report) {
-  const base::FilePath metadata_path(
-      ReplaceFinalExtension(path, kAppMetricaExtension));
+bool CrashReportDatabaseGeneric::ReadAppMetricaMetadata(const base::FilePath& path,
+                                                        Report* report) {
+  const base::FilePath metadata_path(ReplaceFinalExtension(path, kAppMetricaMetadataExtension));
 
   ScopedFileHandle handle(LoggingOpenFileForRead(metadata_path));
   if (!handle.is_valid()) {
     return false;
   }
-  if (!LoggingReadToEOF(handle.get(), &report->clientDescription)) {
-    return false;
-  }
-  return true;
-}
-
-bool CrashReportDatabaseGeneric::ReadAppmetricaRuntimeData(const base::FilePath& path,
-                                              Report* report) {
-  const base::FilePath metadata_path(
-      ReplaceFinalExtension(path, kAppMetricaRuntimeExtension));
-
-  ScopedFileHandle handle(LoggingOpenFileForRead(metadata_path));
-  if (!handle.is_valid()) {
-    return false;
-  }
-  if (!LoggingReadToEOF(handle.get(), &report->runtimeConfig)) {
+  if (!LoggingReadToEOF(handle.get(), &report->appMetricaMetadata)) {
     return false;
   }
   return true;
@@ -1005,9 +965,9 @@ bool CrashReportDatabaseGeneric::CleaningReadMetadata(
 }
 
 //region change for AppMetrica
-bool CrashReportDatabaseGeneric::WriteAppmetricaData(const base::FilePath& path,
-                                    std::unique_ptr<NewReport>& report) {
-  const base::FilePath appmetrica_path(ReplaceFinalExtension(path, kAppMetricaExtension));
+bool CrashReportDatabaseGeneric::WriteAppMetricaMetadata(const base::FilePath& path,
+                                                         std::unique_ptr<NewReport>& report) {
+  const base::FilePath appmetrica_path(ReplaceFinalExtension(path, kAppMetricaMetadataExtension));
 
   ScopedFileHandle handle(LoggingOpenFileForWrite(appmetrica_path,
                                                   FileWriteMode::kCreateOrFail,
@@ -1016,21 +976,7 @@ bool CrashReportDatabaseGeneric::WriteAppmetricaData(const base::FilePath& path,
     return false;
   }
 
-  return LoggingWriteFile(handle.get(), report->clientDescription.c_str(), report->clientDescription.size());
-}
-
-bool CrashReportDatabaseGeneric::WriteAppmetricaRuntimeData(const base::FilePath& path,
-                                    std::unique_ptr<NewReport>& report) {
-  const base::FilePath appmetrica_path(ReplaceFinalExtension(path, kAppMetricaRuntimeExtension));
-
-  ScopedFileHandle handle(LoggingOpenFileForWrite(appmetrica_path,
-                                                  FileWriteMode::kCreateOrFail,
-                                                  FilePermissions::kOwnerOnly));
-  if (!handle.is_valid()) {
-    return false;
-  }
-
-  return LoggingWriteFile(handle.get(), report->runtimeConfig.c_str(), report->runtimeConfig.size());
+  return LoggingWriteFile(handle.get(), report->appMetricaMetadata.c_str(), report->appMetricaMetadata.size());
 }
 //endregion change for AppMetrica
 

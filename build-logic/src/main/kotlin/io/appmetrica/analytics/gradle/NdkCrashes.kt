@@ -1,13 +1,18 @@
 package io.appmetrica.analytics.gradle
 
+import com.android.build.api.dsl.BuildType
 import com.android.build.gradle.LibraryExtension
 import org.gradle.api.Project
 import org.gradle.api.file.Directory
 import org.gradle.api.tasks.Copy
 import org.gradle.api.tasks.Exec
 import org.gradle.kotlin.dsl.configure
+import org.gradle.kotlin.dsl.extra
 import org.gradle.kotlin.dsl.register
 import org.gradle.kotlin.dsl.the
+import java.io.File
+import java.math.BigInteger
+import java.security.MessageDigest
 import java.util.Locale
 
 private val nativeBuildTypes = mapOf(
@@ -26,6 +31,12 @@ private val Project.crashpadSourceDir: Directory
     get() = project.layout.projectDirectory.dir("native/crashpad/crashpad")
 private val Project.crashpadRootBuildDir: Directory
     get() = project.layout.buildDirectory.dir("crashpad").get()
+
+var BuildType.enableLogs: Boolean
+    get() = extra["appmetrica.enable.logs"] as? Boolean ?: false
+    set(value) {
+        extra["appmetrica.enable.logs"] = value
+    }
 
 fun Project.configureNdkCrashes() {
     configureNative()
@@ -51,7 +62,7 @@ private fun Project.configureNative() {
 
         buildTypes.configureEach {
             val nativeBuildType = nativeBuildTypes[name]
-            requireNotNull(nativeBuildType) { "Unknow native build type for $name" }
+            requireNotNull(nativeBuildType) { "Unknown native build type for $name" }
 
             sourceSets.named(name) {
                 jniLibs.srcDir(crashpadOutDir(nativeBuildType))
@@ -60,7 +71,9 @@ private fun Project.configureNative() {
                 cmake {
                     arguments("-DCRASHPAD_SOURCE_DIR:STRING=${crashpadSourceDir}")
                     arguments("-DCRASHPAD_BUILD_DIR:STRING=${crashpadNinjaDir(nativeBuildType)}")
-                    arguments("-DLIBRARY_VERSION_NAME:STRING=${Constants.NdkCrashes.versionName}")
+                    if (enableLogs) {
+                        cppFlags("-DAPPMETRICA_DEBUG")
+                    }
                 }
             }
         }
@@ -129,11 +142,11 @@ private fun Project.configureCrashpad() {
     the<LibraryExtension>().libraryVariants.configureEach {
         val variant = this
         val nativeBuildType = nativeBuildTypes[variant.buildType.name]
-        requireNotNull(nativeBuildType) { "Unknow native build type for ${buildType.name}" }
+        requireNotNull(nativeBuildType) { "Unknown native build type for ${buildType.name}" }
         val taskName = "buildCMake${if (nativeBuildType == "debug") "Debug" else "RelWithDebInfo"}"
-        crashpadArchs.forEach { ndkArch, crashpadArch ->
+        crashpadArchs.forEach { (ndkArch, crashpadArch) ->
             tasks.configureEach {
-                if (name == "${taskName}[${ndkArch}]") {
+                if (name.matches("${taskName}\\[${ndkArch}].*".toRegex())) {
                     dependsOn(tasks.named(
                         "build${nativeBuildType.capitalize(Locale.ROOT)}${crashpadArch.capitalize(Locale.ROOT)}Crashpad"
                     ))

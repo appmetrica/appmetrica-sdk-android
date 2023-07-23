@@ -18,6 +18,7 @@ fun GradlePluginDevelopmentExtension.plugin(name: String, impl: String) {
 
 gradlePlugin {
     plugin("appmetrica-codequality", "io.appmetrica.analytics.gradle.codequality.CodeQualityPlugin")
+    plugin("appmetrica-common-module", "io.appmetrica.analytics.gradle.AppMetricaCommonModulePlugin")
     plugin("appmetrica-jacoco", "io.appmetrica.analytics.gradle.jacoco.JacocoPlugin")
     plugin("appmetrica-module", "io.appmetrica.analytics.gradle.AppMetricaModulePlugin")
     plugin("appmetrica-proto", "io.appmetrica.analytics.gradle.protobuf.ProtobufPlugin")

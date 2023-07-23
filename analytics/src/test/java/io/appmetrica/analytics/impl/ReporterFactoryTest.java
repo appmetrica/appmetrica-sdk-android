@@ -2,11 +2,15 @@ package io.appmetrica.analytics.impl;
 
 import io.appmetrica.analytics.AppMetricaConfig;
 import io.appmetrica.analytics.ReporterConfig;
+import io.appmetrica.analytics.impl.client.ProcessConfiguration;
+import io.appmetrica.analytics.impl.crash.ndk.NativeCrashClient;
 import io.appmetrica.analytics.impl.startup.StartupHelper;
 import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.analytics.testutils.MockedConstructionRule;
 import java.util.UUID;
 import org.json.JSONObject;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -32,6 +36,10 @@ public class ReporterFactoryTest extends CommonTest {
     private ReportsHandler mReportsHandler;
     private final AppMetricaConfig mAppConfig = AppMetricaConfig.newConfigBuilder(TestsData.UUID_API_KEY).build();
 
+    @Rule
+    public MockedConstructionRule<NativeCrashClient> nativeCrashClientMockedConstructionRule =
+        new MockedConstructionRule<>(NativeCrashClient.class);
+
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
@@ -42,7 +50,7 @@ public class ReporterFactoryTest extends CommonTest {
         when(instance.getClientTimeTracker()).thenReturn(mock(ClientTimeTracker.class));
         mReporterFactory = new ReporterFactory(
                 RuntimeEnvironment.getApplication(),
-                null,
+                mock(ProcessConfiguration.class),
                 mReportsHandler,
                 null,
                 mStartupHelper

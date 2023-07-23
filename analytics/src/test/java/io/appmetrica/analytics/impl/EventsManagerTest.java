@@ -2,7 +2,6 @@ package io.appmetrica.analytics.impl;
 
 import android.util.Base64;
 import io.appmetrica.analytics.PreloadInfo;
-import io.appmetrica.analytics.impl.crash.ndk.crashpad.CrashpadCrashReport;
 import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoWrapper;
 import io.appmetrica.analytics.impl.utils.PublicLogger;
 import io.appmetrica.analytics.testutils.CommonTest;
@@ -34,6 +33,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(RobolectricTestRunner.class)
 public class EventsManagerTest extends CommonTest {
+
+    public static final String PAYLOAD_CRASH_ID = "payload_crash_id";
 
     @Mock
     private PublicLogger mPublicLogger;
@@ -169,24 +170,24 @@ public class EventsManagerTest extends CommonTest {
     @Test
     public void testCurrentSessionCrashpadCrashEntry() {
         String value = new String(Base64.encode("native crash".getBytes(), Base64.DEFAULT));
-        CounterReport report = EventsManager.currentSessionCrashpadCrashEntry(value, "uuid", mPublicLogger);
+        CounterReport report = EventsManager.currentSessionNativeCrashEntry(value, "uuid", mPublicLogger);
         SoftAssertions assertions = new SoftAssertions();
-        assertions.assertThat(report.getType()).isEqualTo(InternalEvents.EVENT_TYPE_CURRENT_SESSION_CRASHPAD_CRASH_PROTOBUF.getTypeId());
+        assertions.assertThat(report.getType()).isEqualTo(InternalEvents.EVENT_TYPE_CURRENT_SESSION_NATIVE_CRASH_PROTOBUF.getTypeId());
         assertions.assertThat(report.getValue()).isEqualTo(value);
         assertions.assertThat(report.getName()).isEmpty();
-        assertions.assertThat(report.getPayload().getString(CrashpadCrashReport.PAYLOAD_CRASH_ID)).isEqualTo("uuid");
+        assertions.assertThat(report.getPayload().getString(PAYLOAD_CRASH_ID)).isEqualTo("uuid");
         assertions.assertAll();
     }
 
     @Test
     public void testPrevSessionCrashpadCrashEntry() {
         String value = new String(Base64.encode("native crash".getBytes(), Base64.DEFAULT));
-        CounterReport report = EventsManager.prevSessionCrashpadCrashEntry(value, "uuid", mPublicLogger);
+        CounterReport report = EventsManager.prevSessionNativeCrashEntry(value, "uuid", mPublicLogger);
         SoftAssertions assertions = new SoftAssertions();
-        assertions.assertThat(report.getType()).isEqualTo(InternalEvents.EVENT_TYPE_PREV_SESSION_CRASHPAD_CRASH_PROTOBUF.getTypeId());
+        assertions.assertThat(report.getType()).isEqualTo(InternalEvents.EVENT_TYPE_PREV_SESSION_NATIVE_CRASH_PROTOBUF.getTypeId());
         assertions.assertThat(report.getValue()).isEqualTo(value);
         assertions.assertThat(report.getName()).isEmpty();
-        assertions.assertThat(report.getPayload().getString(CrashpadCrashReport.PAYLOAD_CRASH_ID)).isEqualTo("uuid");
+        assertions.assertThat(report.getPayload().getString(PAYLOAD_CRASH_ID)).isEqualTo("uuid");
         assertions.assertAll();
     }
 
@@ -299,7 +300,7 @@ public class EventsManagerTest extends CommonTest {
             InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_PROTOBUF,
             InternalEvents.EVENT_TYPE_EXCEPTION_USER_PROTOBUF,
             InternalEvents.EVENT_TYPE_EXCEPTION_USER_CUSTOM_PROTOBUF,
-            InternalEvents.EVENT_TYPE_CURRENT_SESSION_CRASHPAD_CRASH_PROTOBUF,
+            InternalEvents.EVENT_TYPE_CURRENT_SESSION_NATIVE_CRASH_PROTOBUF,
             InternalEvents.EVENT_TYPE_ANR,
             InternalEvents.EVENT_TYPE_ACTIVATION,
             InternalEvents.EVENT_TYPE_FIRST_ACTIVATION,
@@ -321,7 +322,7 @@ public class EventsManagerTest extends CommonTest {
                 return !EventsManager.shouldGenerateGlobalNumber(internalEvents.getTypeId());
             }
         }).containsOnly(
-            InternalEvents.EVENT_TYPE_PREV_SESSION_CRASHPAD_CRASH_PROTOBUF
+            InternalEvents.EVENT_TYPE_PREV_SESSION_NATIVE_CRASH_PROTOBUF
         );
     }
 
@@ -338,8 +339,8 @@ public class EventsManagerTest extends CommonTest {
             InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_PROTOBUF,
             InternalEvents.EVENT_TYPE_EXCEPTION_USER_PROTOBUF,
             InternalEvents.EVENT_TYPE_EXCEPTION_USER_CUSTOM_PROTOBUF,
-            InternalEvents.EVENT_TYPE_PREV_SESSION_CRASHPAD_CRASH_PROTOBUF,
-            InternalEvents.EVENT_TYPE_CURRENT_SESSION_CRASHPAD_CRASH_PROTOBUF,
+            InternalEvents.EVENT_TYPE_PREV_SESSION_NATIVE_CRASH_PROTOBUF,
+            InternalEvents.EVENT_TYPE_CURRENT_SESSION_NATIVE_CRASH_PROTOBUF,
             InternalEvents.EVENT_TYPE_REGULAR
         );
 
@@ -400,7 +401,7 @@ public class EventsManagerTest extends CommonTest {
             InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_PROTOBUF,
             InternalEvents.EVENT_TYPE_EXCEPTION_USER_PROTOBUF,
             InternalEvents.EVENT_TYPE_EXCEPTION_USER_CUSTOM_PROTOBUF,
-            InternalEvents.EVENT_TYPE_CURRENT_SESSION_CRASHPAD_CRASH_PROTOBUF,
+            InternalEvents.EVENT_TYPE_CURRENT_SESSION_NATIVE_CRASH_PROTOBUF,
             InternalEvents.EVENT_TYPE_ANR,
             InternalEvents.EVENT_TYPE_FIRST_ACTIVATION,
             InternalEvents.EVENT_TYPE_START,
@@ -430,7 +431,7 @@ public class EventsManagerTest extends CommonTest {
             InternalEvents.EVENT_TYPE_APP_ENVIRONMENT_UPDATED,
             InternalEvents.EVENT_TYPE_APP_ENVIRONMENT_CLEARED,
             InternalEvents.EVENT_TYPE_ACTIVATION,
-            InternalEvents.EVENT_TYPE_PREV_SESSION_CRASHPAD_CRASH_PROTOBUF,
+            InternalEvents.EVENT_TYPE_PREV_SESSION_NATIVE_CRASH_PROTOBUF,
             InternalEvents.EVENT_TYPE_SET_SESSION_EXTRA
         );
     }
@@ -455,7 +456,7 @@ public class EventsManagerTest extends CommonTest {
     public static class ShouldGenerateGlobalNumberTest {
 
         private static final List<Integer> EVENT_TYPES_WITHOUT_GLOBAL_NUMBER = Arrays.asList(
-            InternalEvents.EVENT_TYPE_PREV_SESSION_CRASHPAD_CRASH_PROTOBUF.getTypeId()
+            InternalEvents.EVENT_TYPE_PREV_SESSION_NATIVE_CRASH_PROTOBUF.getTypeId()
         );
 
         @ParameterizedRobolectricTestRunner.Parameters(name = "For arguments {0} expected value is {1}")

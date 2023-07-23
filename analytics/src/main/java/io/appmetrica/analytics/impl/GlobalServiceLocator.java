@@ -15,6 +15,7 @@ import io.appmetrica.analytics.impl.clids.ClidsInfo;
 import io.appmetrica.analytics.impl.clids.ClidsPriorityProvider;
 import io.appmetrica.analytics.impl.clids.ClidsSatelliteCheckedProvider;
 import io.appmetrica.analytics.impl.clids.ClidsStateProvider;
+import io.appmetrica.analytics.impl.crash.ndk.NativeCrashService;
 import io.appmetrica.analytics.impl.db.VitalDataProviderStorage;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesServiceDbStorage;
 import io.appmetrica.analytics.impl.db.state.factory.StorageFactory;
@@ -125,6 +126,8 @@ public final class GlobalServiceLocator {
     private volatile PermissionExtractor generalPermissionExtractor;
     @Nullable
     private volatile MultiProcessSafeUuidProvider multiProcessSafeUuidProvider;
+    @NonNull
+    private final NativeCrashService nativeCrashService = new NativeCrashService();
 
     private GlobalServiceLocator(@NonNull Context applicationContext) {
         mContext = applicationContext;
@@ -440,6 +443,11 @@ public final class GlobalServiceLocator {
             }
         }
         return localCopy;
+    }
+
+    @NonNull
+    public NativeCrashService getNativeCrashService() {
+        return nativeCrashService;
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)

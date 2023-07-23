@@ -105,8 +105,7 @@ CrashReportExceptionHandler::CrashReportExceptionHandler(
     const std::map<std::string, std::string>* process_annotations,
     const std::vector<base::FilePath>* attachments,
     //region change for AppMetrica
-    const std::string clientDescriptionArg,
-    const std::string runtimeConfigArg,
+    const std::string appMetricaMetadata,
     //endregion change for AppMetrica
     bool write_minidump_to_database,
     bool write_minidump_to_log,
@@ -116,8 +115,7 @@ CrashReportExceptionHandler::CrashReportExceptionHandler(
       process_annotations_(process_annotations),
       attachments_(attachments),
       //region change for AppMetrica
-      clientDescription(clientDescriptionArg),
-      runtimeConfig(runtimeConfigArg),
+      appMetricaMetadata(appMetricaMetadata),
       //endregion change for AppMetrica
       write_minidump_to_database_(write_minidump_to_database),
       write_minidump_to_log_(write_minidump_to_log),
@@ -221,8 +219,7 @@ bool CrashReportExceptionHandler::WriteMinidumpToDatabase(
   }
 
   //region change for AppMetrica
-  new_report->SetClientDescription(clientDescription);
-  new_report->SetRuntimeConfig(runtimeConfig);
+  new_report->SetAppMetricaMetadata(appMetricaMetadata);
   //endregion change for AppMetrica
   process_snapshot->SetReportID(new_report->ReportID());
 

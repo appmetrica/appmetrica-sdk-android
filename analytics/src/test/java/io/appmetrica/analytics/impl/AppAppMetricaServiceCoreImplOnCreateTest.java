@@ -1,19 +1,14 @@
 package io.appmetrica.analytics.impl;
 
 import android.content.Context;
-
 import io.appmetrica.analytics.coreapi.internal.backport.Consumer;
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
 import io.appmetrica.analytics.coreutils.internal.services.ActivationBarrier;
 import io.appmetrica.analytics.impl.component.clients.ClientRepository;
 import io.appmetrica.analytics.impl.core.MetricaCoreImplFirstCreateTaskLauncher;
 import io.appmetrica.analytics.impl.core.MetricaCoreImplFirstCreateTaskLauncherProvider;
-import io.appmetrica.analytics.impl.crash.CrashpadListenerImpl;
 import io.appmetrica.analytics.impl.crash.ReadOldCrashesRunnable;
 import io.appmetrica.analytics.impl.crash.jvm.CrashDirectoryWatcher;
-import io.appmetrica.analytics.impl.crash.ndk.crashpad.CrashpadCrashReader;
-import io.appmetrica.analytics.impl.crash.ndk.crashpad.CrashpadLoader;
-import io.appmetrica.analytics.impl.crash.ndk.crashpad.RemoveCompletedCrashesRunnable;
 import io.appmetrica.analytics.impl.db.VitalCommonDataProvider;
 import io.appmetrica.analytics.impl.id.AdvertisingIdGetter;
 import io.appmetrica.analytics.impl.modules.ModuleLifecycleControllerImpl;
@@ -26,7 +21,7 @@ import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import io.appmetrica.analytics.testutils.MockedConstructionRule;
 import io.appmetrica.analytics.testutils.TestUtils;
 import io.appmetrica.analytics.testutils.rules.coreutils.UtilityServiceLocatorRule;
-
+import java.io.File;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -39,12 +34,8 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
 
-import java.io.File;
-import java.util.concurrent.TimeUnit;
-
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Mockito.clearInvocations;
@@ -76,19 +67,11 @@ public class AppAppMetricaServiceCoreImplOnCreateTest extends CommonTest {
     @Mock
     private ApplicationStateProviderImpl applicationStateProvider;
     @Mock
-    private CrashpadListenerImpl crashpadListener;
-    @Mock
-    private CrashpadLoader crashpadLoader;
-    @Mock
     private AppMetricaServiceCoreImplFieldsFactory fieldsFactory;
     @Mock
     private CrashDirectoryWatcher crashDirectoryWatcher;
     @Mock
     private ICommonExecutor reportExecutor;
-    @Mock
-    private ICommonExecutor defaultExecutor;
-    @Mock
-    private CrashpadCrashReader crashpadCrashReader;
     @Mock
     private ReportConsumer reportConsumer;
     @Mock
@@ -134,7 +117,6 @@ public class AppAppMetricaServiceCoreImplOnCreateTest extends CommonTest {
             any(Consumer.class)
         );
         doReturn(reportConsumer).when(fieldsFactory).createReportConsumer(same(mContext), any(ClientRepository.class));
-        doReturn(crashpadCrashReader).when(fieldsFactory).createCrashpadCrashReader(reportConsumer);
     }
 
     @Test
@@ -174,37 +156,6 @@ public class AppAppMetricaServiceCoreImplOnCreateTest extends CommonTest {
         initMetricaCoreImpl();
         mMetricaCore.onCreate();
         verify(advertisingIdGetter).init(same(mContext), any(StartupState.class));
-    }
-
-    @Test
-    public void subscribeToCrashpad() {
-        initMetricaCoreImpl();
-        mMetricaCore.onCreate();
-        verify(crashpadListener).addListener(any(Consumer.class));
-    }
-
-    @Test
-    public void checkPrevSessionCrashpadCrashes() {
-        initMetricaCoreImpl();
-        doReturn(crashpadCrashReader).when(fieldsFactory).createCrashpadCrashReader(reportConsumer);
-        doReturn(true).when(crashpadLoader).loadIfNeeded();
-
-        mMetricaCore.onCreate();
-
-        verify(crashpadCrashReader).checkForPreviousSessionCrashes();
-        verify(defaultExecutor).executeDelayed(any(RemoveCompletedCrashesRunnable.class), eq(1L), eq(TimeUnit.MINUTES));
-    }
-
-    @Test
-    public void checkPrevSessionCrashpadCrashesWithoutLibrary() {
-        initMetricaCoreImpl();
-        doReturn(crashpadCrashReader).when(fieldsFactory).createCrashpadCrashReader(reportConsumer);
-        doReturn(false).when(crashpadLoader).loadIfNeeded();
-
-        mMetricaCore.onCreate();
-
-        verifyZeroInteractions(crashpadCrashReader);
-        verify(defaultExecutor, never()).executeDelayed(any(RemoveCompletedCrashesRunnable.class), anyLong(), any(TimeUnit.class));
     }
 
     @Test
@@ -268,10 +219,7 @@ public class AppAppMetricaServiceCoreImplOnCreateTest extends CommonTest {
             mFileProvider,
             firstServiceEntryPointManager,
             applicationStateProvider,
-            crashpadListener,
-            crashpadLoader,
             reportExecutor,
-            defaultExecutor,
             fieldsFactory,
             screenInfoHolder
         );
@@ -281,7 +229,6 @@ public class AppAppMetricaServiceCoreImplOnCreateTest extends CommonTest {
     public void onCreateTwice() {
         try (MockedStatic<AppMetricaSelfReportFacade> ignored = Mockito.mockStatic(AppMetricaSelfReportFacade.class)) {
             when(AppMetricaSelfReportFacade.getReporter()).thenReturn(mock(IReporterExtended.class));
-            when(crashpadLoader.loadIfNeeded()).thenReturn(true);
             initMetricaCoreImpl();
             mMetricaCore.onCreate();
             GlobalServiceLocator globalServiceLocator = GlobalServiceLocator.getInstance();
@@ -297,16 +244,11 @@ public class AppAppMetricaServiceCoreImplOnCreateTest extends CommonTest {
             AppMetricaSelfReportFacade.warmupForMetricaProcess(mContext);
             verify(reportExecutor).execute(any(Runnable.class));
             verify(crashDirectoryWatcher).startWatching();
-            verify(crashpadLoader).loadIfNeeded();
-            verify(crashpadCrashReader).checkForPreviousSessionCrashes();
-            verify(defaultExecutor).executeDelayed(any(RemoveCompletedCrashesRunnable.class), anyLong(), any(TimeUnit.class));
-            verify(crashpadListener).addListener(any(Consumer.class));
+            verify(globalServiceLocator.getNativeCrashService()).initNativeCrashReporting(mContext, reportConsumer);
 
             mMetricaCore.onDestroy();
-            verify(crashpadListener).removeListener(any(Consumer.class));
             clearInvocations(activationBarrier, firstServiceEntryPointManager, globalServiceLocator, mAppMetricaServiceLifecycle,
-                advertisingIdGetter, fieldsFactory, reportExecutor, crashDirectoryWatcher,
-                crashpadLoader, crashpadCrashReader, defaultExecutor, crashpadListener);
+                advertisingIdGetter, fieldsFactory, reportExecutor, crashDirectoryWatcher, globalServiceLocator.getNativeCrashService());
             mMetricaCore.onCreate();
 
             verify(firstServiceEntryPointManager, never()).onPossibleFirstEntry(mContext);
@@ -318,10 +260,7 @@ public class AppAppMetricaServiceCoreImplOnCreateTest extends CommonTest {
             AppMetricaSelfReportFacade.warmupForMetricaProcess(mContext);
             verify(reportExecutor, never()).execute(any(Runnable.class));
             verify(crashDirectoryWatcher, never()).startWatching();
-            verify(crashpadLoader, never()).loadIfNeeded();
-            verify(crashpadCrashReader, never()).checkForPreviousSessionCrashes();
-            verify(defaultExecutor, never()).executeDelayed(any(RemoveCompletedCrashesRunnable.class), anyLong(), any(TimeUnit.class));
-            verify(crashpadListener).addListener(any(Consumer.class));
+            verify(globalServiceLocator.getNativeCrashService(), never()).initNativeCrashReporting(any(Context.class), any(ReportConsumer.class));
         }
     }
 

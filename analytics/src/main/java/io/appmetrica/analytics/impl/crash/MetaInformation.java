@@ -41,11 +41,11 @@ public class MetaInformation {
                 new MetaInformation(CrashSource.JVM, DeliveryMethod.FILE)
         );
         META_INFORMATION_MAPPING.put(
-                InternalEvents.EVENT_TYPE_CURRENT_SESSION_CRASHPAD_CRASH_PROTOBUF.getTypeId(),
+                InternalEvents.EVENT_TYPE_CURRENT_SESSION_NATIVE_CRASH_PROTOBUF.getTypeId(),
                 new MetaInformation(CrashSource.JNI_NATIVE, DeliveryMethod.FILE)
         );
         META_INFORMATION_MAPPING.put(
-            InternalEvents.EVENT_TYPE_PREV_SESSION_CRASHPAD_CRASH_PROTOBUF.getTypeId(),
+            InternalEvents.EVENT_TYPE_PREV_SESSION_NATIVE_CRASH_PROTOBUF.getTypeId(),
             new MetaInformation(CrashSource.JNI_NATIVE, DeliveryMethod.FILE)
         );
     }

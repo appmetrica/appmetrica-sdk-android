@@ -12,7 +12,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.RandomAccessFile;
 import java.io.Reader;
 import java.io.StringWriter;
@@ -58,24 +57,6 @@ public final class IOUtils {
      */
     public static int copyChars(Reader input, Writer output) throws IOException {
         char [] bufferChars = new char [Base64Utils.IO_BUFFER_SIZE];
-
-        int resultCountChars = 0;
-        int readCountChars = 0;
-
-        while (-1 != (readCountChars = input.read(bufferChars, 0, Base64Utils.IO_BUFFER_SIZE))) {
-            output.write(bufferChars, 0, readCountChars);
-            resultCountChars += readCountChars;
-        }
-
-        return resultCountChars;
-    }
-
-    /**
-     * Copies {@link java.io.InputStream} to {@link java.io.OutputStream}.
-     * @throws IOException
-     */
-    public static int copyChars(InputStream input, OutputStream output) throws IOException {
-        byte [] bufferChars = new byte [Base64Utils.IO_BUFFER_SIZE];
 
         int resultCountChars = 0;
         int readCountChars = 0;

@@ -7,6 +7,7 @@ cmake_minimum_required(VERSION 3.10.2)
 include_directories(
         ${CRASHPAD_SOURCE_DIR}/
         ${CRASHPAD_SOURCE_DIR}/third_party/mini_chromium/mini_chromium/
+        ${CRASHPAD_BUILD_DIR}/${ANDROID_ABI}/gen/
 )
 
 find_library(log-lib log)
@@ -16,29 +17,29 @@ add_library(
         appmetrica-native
         SHARED
         # source files
-        AppmetricaCrashpadConfig.cpp
-        AppProcessConfig.cpp
-        JniUtil.cpp
-        NativeUncaughtExceptionHandler.cpp
+        core/AppMetricaCrashpadConfig.cpp
+        core/NativeCrashCoreJni.cpp
+        core/NativeCrashUtilsJni.cpp
+        utils/JNIUtils.cpp
 )
-target_compile_definitions(appmetrica-native PRIVATE LIBRARY_VERSION_NAME="${LIBRARY_VERSION_NAME}")
 
 add_library(
         appmetrica-native-runner
         SHARED
         # source files
-        JniUtil.cpp
-        HandlerRunnerJni.cpp
+        runner/NativeCrashHandlerRunnerJni.cpp
+        utils/JNIUtils.cpp
 )
 
 add_library(
         appmetrica-service-native
         SHARED
         # source files
-        AppmetricaCrashpadConfig.cpp
-        JniUtil.cpp
-        NativeCrashReaderJni.cpp
-        NativeCrashReader.cpp
+        service/CrashpadCrash.cpp
+        service/NativeCrashDatabase.cpp
+        service/NativeCrashServiceJni.cpp
+        utils/JNIUtils.cpp
+        utils/ArrayList.cpp
 )
 
 # imported libraries
@@ -65,6 +66,12 @@ target_link_libraries(
         crashpad_client
         crashpad_util
         minichromium_base
+)
+
+target_link_libraries(
+        appmetrica-native-runner
+
+        ${log-lib}
 )
 
 target_link_libraries(

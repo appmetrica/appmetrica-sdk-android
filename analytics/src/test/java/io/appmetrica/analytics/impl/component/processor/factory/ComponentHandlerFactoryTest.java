@@ -10,6 +10,7 @@ import io.appmetrica.analytics.impl.component.processor.event.ReportFeaturesHand
 import io.appmetrica.analytics.impl.component.processor.event.ReportFirstHandler;
 import io.appmetrica.analytics.impl.component.processor.event.ReportFirstOccurrenceStatusHandler;
 import io.appmetrica.analytics.impl.component.processor.event.ReportPermissionHandler;
+import io.appmetrica.analytics.impl.component.processor.event.ReportPrevSessionNativeCrashHandler;
 import io.appmetrica.analytics.impl.component.processor.event.ReportPurgeBufferHandler;
 import io.appmetrica.analytics.impl.component.processor.event.ReportSaveToDatabaseHandler;
 import io.appmetrica.analytics.impl.component.processor.event.ReportSessionHandler;
@@ -52,6 +53,8 @@ public class ComponentHandlerFactoryTest extends CommonTest {
     @Mock
     private ReportFirstHandler mReportFirstHandler;
     @Mock
+    private ReportPrevSessionNativeCrashHandler mReportPrevSessionNativeCrashHandler;
+    @Mock
     private ReportPermissionHandler mReportPermissionsHandler;
     @Mock
     private ReportFeaturesHandler mReportFeaturesHandler;
@@ -83,6 +86,7 @@ public class ComponentHandlerFactoryTest extends CommonTest {
         when(mProvider.getReportSessionHandler()).thenReturn(mReportSessionHandler);
         when(mProvider.getReportSessionStopHandler()).thenReturn(mReportSessionStopHandler);
         when(mProvider.getReportFirstHandler()).thenReturn(mReportFirstHandler);
+        when(mProvider.getReportPrevSessionNativeCrashHandler()).thenReturn(mReportPrevSessionNativeCrashHandler);
         when(mProvider.getReportPermissionsHandler()).thenReturn(mReportPermissionsHandler);
         when(mProvider.getReportFeaturesHandler()).thenReturn(mReportFeaturesHandler);
         when(mProvider.getReportAppOpenHandler()).thenReturn(mReportAppOpenHandler);
@@ -212,5 +216,39 @@ public class ComponentHandlerFactoryTest extends CommonTest {
 
         factory.addHandlers(mHandlersList);
         assertThat(mHandlersList).containsExactly(mReportAppOpenHandler, mReportSaveToDatabaseHandler);
+    }
+
+    @Test
+    public void testCurrentSessionNativeCrashHandlerFactory() {
+        CurrentSessionNativeCrashHandlerFactory factory = new CurrentSessionNativeCrashHandlerFactory(mProvider);
+
+        factory.addHandlers(mHandlersList);
+        assertThat(mHandlersList).containsExactly(
+            mReportSaveToDatabaseHandler,
+            mReportPurgeBufferHandler,
+            mReportSessionStopHandler
+        );
+    }
+
+    @Test
+    public void testPrevSessionNativeCrashHandlerFactory() {
+        PrevSessionNativeCrashHandlerFactory factory = new PrevSessionNativeCrashHandlerFactory(mProvider);
+
+        factory.addHandlers(mHandlersList);
+        assertThat(mHandlersList).containsExactly(
+            mReportPrevSessionNativeCrashHandler,
+            mReportPurgeBufferHandler
+        );
+    }
+
+    @Test
+    public void testUnhandledExceptionFromFileFactory() {
+        UnhandledExceptionFromFileFactory factory = new UnhandledExceptionFromFileFactory(mProvider);
+
+        factory.addHandlers(mHandlersList);
+        assertThat(mHandlersList).containsExactly(
+            mReportPrevSessionNativeCrashHandler,
+            reportCrashMetaInformation
+        );
     }
 }

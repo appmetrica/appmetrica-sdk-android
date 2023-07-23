@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-
 import io.appmetrica.analytics.CounterConfiguration;
 import io.appmetrica.analytics.coreapi.internal.backport.Consumer;
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
@@ -15,10 +14,7 @@ import io.appmetrica.analytics.impl.component.clients.ClientDescription;
 import io.appmetrica.analytics.impl.component.clients.ClientRepository;
 import io.appmetrica.analytics.impl.core.MetricaCoreImplFirstCreateTaskLauncher;
 import io.appmetrica.analytics.impl.core.MetricaCoreImplFirstCreateTaskLauncherProvider;
-import io.appmetrica.analytics.impl.crash.CrashpadListenerImpl;
 import io.appmetrica.analytics.impl.crash.jvm.CrashDirectoryWatcher;
-import io.appmetrica.analytics.impl.crash.ndk.crashpad.CrashpadCrashReader;
-import io.appmetrica.analytics.impl.crash.ndk.crashpad.CrashpadLoader;
 import io.appmetrica.analytics.impl.db.VitalCommonDataProvider;
 import io.appmetrica.analytics.impl.service.MetricaServiceCallback;
 import io.appmetrica.analytics.impl.startup.CollectingFlags;
@@ -27,7 +23,7 @@ import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import io.appmetrica.analytics.testutils.MockedConstructionRule;
 import io.appmetrica.analytics.testutils.MockedStaticRule;
-
+import java.io.File;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -37,8 +33,6 @@ import org.mockito.MockedConstruction;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
-
-import java.io.File;
 
 import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Matchers.any;
@@ -73,17 +67,9 @@ public class AppAppMetricaServiceCoreImplStaticTests extends CommonTest {
     @Mock
     private CrashDirectoryWatcher crashDirectoryWatcher;
     @Mock
-    private CrashpadListenerImpl crashpadListener;
-    @Mock
-    private CrashpadLoader crashpadLoader;
-    @Mock
     private ICommonExecutor reportExecutor;
     @Mock
-    private ICommonExecutor defaultExecutor;
-    @Mock
     private ReportConsumer reportConsumer;
-    @Mock
-    private CrashpadCrashReader crashpadCrashReader;
     @Mock
     private ScreenInfoHolder screenInfoHolder;
     @Mock
@@ -129,7 +115,6 @@ public class AppAppMetricaServiceCoreImplStaticTests extends CommonTest {
                 any(Consumer.class)
         );
         doReturn(reportConsumer).when(fieldsFactory).createReportConsumer(same(mContext), any(ClientRepository.class));
-        doReturn(crashpadCrashReader).when(fieldsFactory).createCrashpadCrashReader(reportConsumer);
 
         mMetricaCore = new AppAppMetricaServiceCoreImpl(
             mContext,
@@ -139,10 +124,7 @@ public class AppAppMetricaServiceCoreImplStaticTests extends CommonTest {
             mFileProvider,
             firstServiceEntryPointManager,
             mApplicationStateProvider,
-            crashpadListener,
-            crashpadLoader,
             reportExecutor,
-            defaultExecutor,
             fieldsFactory,
             screenInfoHolder
         );

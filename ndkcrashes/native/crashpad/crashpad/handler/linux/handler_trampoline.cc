@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//change for AppMetrica
+#include <android/log.h>
 #include <dlfcn.h>
 #include <stdlib.h>
 
@@ -22,16 +22,16 @@
 // exporting the symbol `CrashpadHandlerMain`. The remaining arguments are the
 // same as for `HandlerMain()`.
 int main(int argc, char* argv[]) {
-  //change for AppMetrica
+  static constexpr char kTag[] = "crashpad";
 
   if (argc < 2) {
-    //change for AppMetrica
+    __android_log_print(ANDROID_LOG_FATAL, kTag, "usage: %s <path>", argv[0]);
     return EXIT_FAILURE;
   }
 
   void* handle = dlopen(argv[1], RTLD_LAZY | RTLD_GLOBAL);
   if (!handle) {
-    //change for AppMetrica
+    __android_log_print(ANDROID_LOG_FATAL, kTag, "dlopen: %s", dlerror());
     return EXIT_FAILURE;
   }
 
@@ -39,7 +39,7 @@ int main(int argc, char* argv[]) {
   const crashpad::NoCfiIcall<MainType> crashpad_main(
       dlsym(handle, "CrashpadHandlerMain"));
   if (!crashpad_main) {
-    //change for AppMetrica
+    __android_log_print(ANDROID_LOG_FATAL, kTag, "dlsym: %s", dlerror());
     return EXIT_FAILURE;
   }
 

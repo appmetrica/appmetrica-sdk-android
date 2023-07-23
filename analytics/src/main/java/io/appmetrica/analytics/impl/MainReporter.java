@@ -20,7 +20,7 @@ import io.appmetrica.analytics.impl.crash.client.converter.AnrConverter;
 import io.appmetrica.analytics.impl.crash.client.converter.CustomErrorConverter;
 import io.appmetrica.analytics.impl.crash.client.converter.RegularErrorConverter;
 import io.appmetrica.analytics.impl.crash.client.converter.UnhandledExceptionConverter;
-import io.appmetrica.analytics.impl.crash.ndk.NdkCrashHelper;
+import io.appmetrica.analytics.impl.crash.ndk.NativeCrashClient;
 import io.appmetrica.analytics.impl.crash.utils.ThreadsStateDumper;
 import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoWrapper;
 import io.appmetrica.analytics.impl.reporter.MainReporterContext;
@@ -57,7 +57,7 @@ public class MainReporter extends BaseReporter implements IMainReporter {
     private final AtomicBoolean anrMonitorBarrier = new AtomicBoolean(false);
     private final ThreadsStateDumper threadsStateDumper = new ThreadsStateDumper();
     @NonNull
-    private final NdkCrashHelper nativeCrashesHelper;
+    private final NativeCrashClient nativeCrashClient;
 
     @WorkerThread
     public MainReporter(@NonNull Context context,
@@ -72,7 +72,7 @@ public class MainReporter extends BaseReporter implements IMainReporter {
                 processConfiguration,
                 config,
                 reportsHandler,
-                new NdkCrashHelper(context, processConfiguration),
+                new NativeCrashClient(processConfiguration),
                 startupHelper,
                 appmetricaReporterProvider,
                 pushReporterProvider,
@@ -87,7 +87,7 @@ public class MainReporter extends BaseReporter implements IMainReporter {
                  @NonNull ProcessConfiguration processConfiguration,
                  @NonNull AppMetricaConfig config,
                  @NonNull ReportsHandler reportsHandler,
-                 @NonNull NdkCrashHelper nativeCrashesHelper,
+                 @NonNull NativeCrashClient nativeCrashClient,
                  @NonNull StartupHelper startupHelper,
                  @NonNull UnhandledSituationReporterProvider appmetricaReporterProvider,
                  @NonNull UnhandledSituationReporterProvider pushReporterProvider,
@@ -97,7 +97,7 @@ public class MainReporter extends BaseReporter implements IMainReporter {
                 context,
                 config,
                 reportsHandler,
-                nativeCrashesHelper,
+                nativeCrashClient,
                 new ReporterEnvironment(
                         processConfiguration,
                         new CounterConfiguration(config, CounterConfigurationReporterType.MAIN),
@@ -126,7 +126,7 @@ public class MainReporter extends BaseReporter implements IMainReporter {
     MainReporter(@NonNull Context context,
                  @NonNull AppMetricaConfig config,
                  @NonNull ReportsHandler reportsHandler,
-                 @NonNull NdkCrashHelper nativeCrashesHelper,
+                 @NonNull NativeCrashClient nativeCrashClient,
                  @NonNull ReporterEnvironment reporterEnvironment,
                  @NonNull AppStatusMonitor appStatusMonitor,
                  @NonNull StartupHelper startupHelper,
@@ -158,10 +158,10 @@ public class MainReporter extends BaseReporter implements IMainReporter {
         // Create environment for SDK's crashes to be able to send to the separate API-key
         mReporterEnvironment.setPreloadInfoWrapper(createPreloadInfoWrapper(config));
         mAppStatusMonitor = appStatusMonitor;
-        this.nativeCrashesHelper = nativeCrashesHelper;
+        this.nativeCrashClient = nativeCrashClient;
         mConfig = config;
         this.activityStateManager = activityStateManager;
-        setReportNativeCrashesEnabled(config.nativeCrashReporting, mReporterEnvironment);
+        enableNativeCrashHandling(config.nativeCrashReporting);
         anrMonitor = createAnrMonitor(
             executor,
             libraryAnrDetector,
@@ -366,25 +366,27 @@ public class MainReporter extends BaseReporter implements IMainReporter {
     }
 
     @WorkerThread
-    private void setReportNativeCrashesEnabled(@Nullable Boolean enabledFromConfig,
-                                               final ReporterEnvironment reporterEnvironment) {
+    private void enableNativeCrashHandling(@Nullable Boolean enabledFromConfig) {
         final boolean enabled = WrapUtils.getOrDefault(
-                enabledFromConfig,
-                DefaultValuesForCrashReporting.DEFAULT_REPORTS_NATIVE_CRASHES_ENABLED
-        );
-        nativeCrashesHelper.setReportsEnabled(enabled,
-                reporterEnvironment.getReporterConfiguration().getApiKey(),
-                reporterEnvironment.getErrorEnvironment()
+            enabledFromConfig,
+            DefaultValuesForCrashReporting.DEFAULT_REPORTS_NATIVE_CRASHES_ENABLED
         );
         if (mPublicLogger.isEnabled()) {
-            mPublicLogger.fi("Set report native crashes enabled: %b", enabled);
+            mPublicLogger.fi("native crash reporting enabled: %b", enabled);
+        }
+        if (enabled) {
+            nativeCrashClient.initHandling(
+                mContext,
+                mReporterEnvironment.getReporterConfiguration().getApiKey(),
+                mReporterEnvironment.getErrorEnvironment()
+            );
         }
     }
 
     @Override
     public void putErrorEnvironmentValue(String key, String value) {
         super.putErrorEnvironmentValue(key, value);
-        nativeCrashesHelper.updateErrorEnvironment(mReporterEnvironment.getErrorEnvironment());
+        nativeCrashClient.updateErrorEnvironment(mReporterEnvironment.getErrorEnvironment());
     }
 
     @NonNull

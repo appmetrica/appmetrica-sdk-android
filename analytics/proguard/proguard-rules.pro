@@ -6,8 +6,3 @@
     public *;
     protected *;
 }
-
--keep class io.appmetrica.analytics.impl.ac.** {
-    public static <methods>;
-    native <methods>;
-}

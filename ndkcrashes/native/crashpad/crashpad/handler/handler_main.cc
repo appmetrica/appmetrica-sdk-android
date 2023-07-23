@@ -239,8 +239,7 @@ struct Options {
   bool write_minidump_to_log;
   bool write_minidump_to_database;
   //region change for AppMetrica
-  std::string clientDescription;
-  std::string runtimeConfig;
+  std::string appMetricaMetadata;
   //endregion change for AppMetrica
 #endif  // BUILDFLAG(IS_ANDROID)
 #elif BUILDFLAG(IS_WIN)
@@ -614,8 +613,7 @@ int HandlerMain(int argc,
 #if BUILDFLAG(IS_ANDROID)
     kOptionNoWriteMinidumpToDatabase,
     //region change for AppMetrica
-    kOptionClientDescription,
-    kOptionRuntimeConfig,
+    kOptionAppMetricaMetadata,
     //endregion change for AppMetrica
 #endif  // BUILDFLAG(IS_ANDROID)
 #if BUILDFLAG(IS_WIN)
@@ -689,8 +687,7 @@ int HandlerMain(int argc,
      nullptr,
      kOptionNoWriteMinidumpToDatabase},
     //region change for AppMetrica
-    {"client-description", required_argument, nullptr, kOptionClientDescription},
-    {"appmetrica-runtime-config", required_argument, nullptr, kOptionRuntimeConfig},
+    {"appmetrica-metadata", required_argument, nullptr, kOptionAppMetricaMetadata},
     //endregion change for AppMetrica
 #endif  // BUILDFLAG(IS_ANDROID)
 #if BUILDFLAG(IS_WIN)
@@ -851,12 +848,8 @@ int HandlerMain(int argc,
         break;
       }
       //region change for AppMetrica
-      case kOptionClientDescription: {
-        options.clientDescription = optarg;
-        break;
-      }
-      case kOptionRuntimeConfig: {
-        options.runtimeConfig = optarg;
+      case kOptionAppMetricaMetadata: {
+        options.appMetricaMetadata = optarg;
         break;
       }
       //endregion change for AppMetrica
@@ -1100,8 +1093,7 @@ int HandlerMain(int argc,
 #endif  // ATTACHMENTS_SUPPORTED
 #if BUILDFLAG(IS_ANDROID)
       //region change for AppMetrica
-      options.clientDescription,
-      options.runtimeConfig,
+      options.appMetricaMetadata,
       //endregion change for AppMetrica
       options.write_minidump_to_database,
       options.write_minidump_to_log,

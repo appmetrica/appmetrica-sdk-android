@@ -5,23 +5,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-
 import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.annotation.VisibleForTesting;
 import androidx.annotation.WorkerThread;
-
-import java.io.File;
-import java.util.concurrent.TimeUnit;
-
 import io.appmetrica.analytics.CounterConfiguration;
 import io.appmetrica.analytics.coreapi.internal.backport.Consumer;
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
-import io.appmetrica.analytics.coreutils.internal.AndroidUtils;
 import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.client.ClientConfiguration;
 import io.appmetrica.analytics.impl.client.ProcessConfiguration;
@@ -30,12 +22,9 @@ import io.appmetrica.analytics.impl.component.clients.ClientDescription;
 import io.appmetrica.analytics.impl.component.clients.ClientRepository;
 import io.appmetrica.analytics.impl.component.clients.ComponentsRepository;
 import io.appmetrica.analytics.impl.core.MetricaCoreImplFirstCreateTaskLauncherProvider;
-import io.appmetrica.analytics.impl.crash.CrashpadListener;
 import io.appmetrica.analytics.impl.crash.ReadOldCrashesRunnable;
 import io.appmetrica.analytics.impl.crash.jvm.CrashDirectoryWatcher;
-import io.appmetrica.analytics.impl.crash.ndk.NativeCrashReader;
-import io.appmetrica.analytics.impl.crash.ndk.crashpad.CrashpadLoader;
-import io.appmetrica.analytics.impl.crash.ndk.crashpad.RemoveCompletedCrashesRunnable;
+import io.appmetrica.analytics.impl.crash.ndk.NativeCrashService;
 import io.appmetrica.analytics.impl.modules.ModuleLifecycleControllerImpl;
 import io.appmetrica.analytics.impl.modules.ModulesController;
 import io.appmetrica.analytics.impl.modules.ServiceContextFacade;
@@ -45,6 +34,7 @@ import io.appmetrica.analytics.impl.service.MetricaServiceCallback;
 import io.appmetrica.analytics.impl.startup.StartupState;
 import io.appmetrica.analytics.impl.utils.JsonHelper;
 import io.appmetrica.analytics.impl.utils.ServerTime;
+import java.io.File;
 
 public class AppAppMetricaServiceCoreImpl implements AppMetricaServiceCore, MetricaCoreReporter {
     private static final String TAG = "[AppMetricaCoreImpl]";
@@ -66,17 +56,13 @@ public class AppAppMetricaServiceCoreImpl implements AppMetricaServiceCore, Metr
     @NonNull
     private final FirstServiceEntryPointManager firstServiceEntryPointManager;
     @NonNull
-    private final CrashpadListener crashpadListener;
-    @NonNull
-    private final CrashpadLoader crashpadLoader;
+    private final NativeCrashService nativeCrashService;
     @NonNull
     private final ApplicationStateProviderImpl applicationStateProvider;
     @NonNull
     private final ICommonExecutor reportExecutor;
     @NonNull
     private final AppMetricaServiceCoreImplFieldsFactory fieldsFactory;
-    @NonNull
-    private Consumer<String> crashpadCrashConsumer;
     @NonNull
     private final Consumer<File> crashesListener = new Consumer<File>() {
         @WorkerThread // special FileObserver thread
@@ -85,9 +71,6 @@ public class AppAppMetricaServiceCoreImpl implements AppMetricaServiceCore, Metr
             handleNewCrashFromFile(data);
         }
     };
-    @Nullable
-    private NativeCrashReader<String> crashpadCrashReader;
-    private final ICommonExecutor defaultExecutor;
     @NonNull
     private ReportProxy reportProxy;
     @NonNull
@@ -116,11 +99,7 @@ public class AppAppMetricaServiceCoreImpl implements AppMetricaServiceCore, Metr
             new FileProvider(),
             FirstServiceEntryPointManager.INSTANCE,
             GlobalServiceLocator.getInstance().getApplicationStateProvider(),
-            GlobalServiceLocator.getInstance().getLifecycleDependentComponentManager()
-                .getCrashpadListener(),
-            CrashpadLoader.getInstance(),
             GlobalServiceLocator.getInstance().getServiceExecutorProvider().getReportRunnableExecutor(),
-            GlobalServiceLocator.getInstance().getServiceExecutorProvider().getDefaultExecutor(),
             new AppMetricaServiceCoreImplFieldsFactory(),
             GlobalServiceLocator.getInstance().getScreenInfoHolder()
         );
@@ -135,10 +114,7 @@ public class AppAppMetricaServiceCoreImpl implements AppMetricaServiceCore, Metr
                                  @NonNull FileProvider fileProvider,
                                  @NonNull FirstServiceEntryPointManager firstServiceEntryPointManager,
                                  @NonNull ApplicationStateProviderImpl applicationStateProvider,
-                                 @NonNull CrashpadListener crashpadListener,
-                                 @NonNull CrashpadLoader crashpadLoader,
                                  @NonNull ICommonExecutor reportExecutor,
-                                 @NonNull ICommonExecutor defaultExecutor,
                                  @NonNull AppMetricaServiceCoreImplFieldsFactory fieldsFactory,
                                  @NonNull ScreenInfoHolder screenInfoHolder) {
         mContext = context;
@@ -149,10 +125,8 @@ public class AppAppMetricaServiceCoreImpl implements AppMetricaServiceCore, Metr
         this.firstServiceEntryPointManager = firstServiceEntryPointManager;
         this.applicationStateProvider = applicationStateProvider;
         this.reportExecutor = reportExecutor;
-        this.defaultExecutor = defaultExecutor;
         this.fieldsFactory = fieldsFactory;
-        this.crashpadListener = crashpadListener;
-        this.crashpadLoader = crashpadLoader;
+        this.nativeCrashService = GlobalServiceLocator.getInstance().getNativeCrashService();
         this.reportProxy = new ReportProxy();
         this.screenInfoHolder = screenInfoHolder;
     }
@@ -173,9 +147,6 @@ public class AppAppMetricaServiceCoreImpl implements AppMetricaServiceCore, Metr
         } else {
             YLogger.info(TAG, "onNonFirstCreate()");
             loadLocaleFromConfiguration(mContext.getResources().getConfiguration());
-        }
-        if (AndroidUtils.isApiAchieved(Build.VERSION_CODES.LOLLIPOP)) {
-            crashpadListener.addListener(crashpadCrashConsumer);
         }
     }
 
@@ -204,9 +175,7 @@ public class AppAppMetricaServiceCoreImpl implements AppMetricaServiceCore, Metr
 
         AppMetricaSelfReportFacade.warmupForMetricaProcess(mContext);
         initJvmCrashWatcher();
-        if (AndroidUtils.isApiAchieved(Build.VERSION_CODES.LOLLIPOP)) {
-            initCrashpad();
-        }
+        initNativeCrashReporting();
         YLogger.info(TAG, "Run scheduler on first create additional tasks");
         new MetricaCoreImplFirstCreateTaskLauncherProvider().getLauncher().run();
         YLogger.info(TAG, "Finish onFirstCreate");
@@ -238,20 +207,8 @@ public class AppAppMetricaServiceCoreImpl implements AppMetricaServiceCore, Metr
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-    private void initCrashpad() {
-        crashpadCrashReader = fieldsFactory.createCrashpadCrashReader(mReportConsumer);
-
-        crashpadCrashConsumer = new Consumer<String>() {
-            @Override
-            public void consume(@NonNull String input) {
-                crashpadCrashReader.handleRealtimeCrash(input);
-            }
-        };
-        if (crashpadLoader.loadIfNeeded()) {
-            crashpadCrashReader.checkForPreviousSessionCrashes();
-            defaultExecutor.executeDelayed(new RemoveCompletedCrashesRunnable(), 1, TimeUnit.MINUTES);
-        }
+    private void initNativeCrashReporting() {
+        nativeCrashService.initNativeCrashReporting(mContext, mReportConsumer);
     }
 
     @WorkerThread
@@ -351,9 +308,6 @@ public class AppAppMetricaServiceCoreImpl implements AppMetricaServiceCore, Metr
     @Override
     public void onDestroy() {
         YLogger.debug(TAG, "onDestroy()");
-        if (AndroidUtils.isApiAchieved(Build.VERSION_CODES.LOLLIPOP)) {
-            crashpadListener.removeListener(crashpadCrashConsumer);
-        }
     }
 
     @WorkerThread

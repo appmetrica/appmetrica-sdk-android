@@ -210,6 +210,7 @@ public final class io.appmetrica.analytics.coreutils.internal.io.FileUtils {
     public static final [Nullable] java.io.File getFileFromAppStorage([NonNull] android.content.Context, [NonNull] String)
     public static final [NonNull] java.io.File getFileFromPath([NonNull] String)
     public static final [Nullable] java.io.File getFileFromSdkStorage([NonNull] android.content.Context, [NonNull] String)
+    public static final [Nullable] java.io.File getNativeCrashDirectory([NonNull] android.content.Context)
     public static final boolean move([Nullable] java.io.File, [Nullable] java.io.File)
     public final boolean moveByCopy([Nullable] java.io.File, [Nullable] java.io.File)
     public final boolean moveByRename([Nullable] java.io.File, [Nullable] java.io.File)

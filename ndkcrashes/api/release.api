@@ -1,0 +1,104 @@
+public final class io.appmetrica.analytics.ndkcrashes.BuildConfig {
+    public static final boolean APPMETRICA_DEBUG
+    public static final String BUILD_TYPE
+    public static final boolean DEBUG
+    public static final String LIBRARY_PACKAGE_NAME
+    public static final String VERSION_NAME
+
+    public <init>()
+}
+
+public final class io.appmetrica.analytics.ndkcrashes.JavaHandlerRunner {
+    public static final [NonNull] io.appmetrica.analytics.ndkcrashes.JavaHandlerRunner INSTANCE
+
+    public static final void main([NonNull] String[])
+}
+
+public final class io.appmetrica.analytics.ndkcrashes.NativeCrashClientModuleImpl extends io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrashClientModule {
+    public <init>()
+    public void initHandling([NonNull] android.content.Context, [NonNull] io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrashClientConfig)
+    public void updateAppMetricaMetadata([NonNull] String)
+}
+
+public final class io.appmetrica.analytics.ndkcrashes.NativeCrashServiceModuleImpl extends io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrashServiceModule {
+    public <init>()
+    public static final io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrash access$toNativeCrash(io.appmetrica.analytics.ndkcrashes.NativeCrashServiceModuleImpl, io.appmetrica.analytics.ndkcrashes.jni.service.CrashpadCrash)
+    public void deleteCompletedCrashes()
+    public [NonNull] java.util.List<io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrash> getAllCrashes()
+    public void init([NonNull] android.content.Context, [NonNull] io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrashServiceConfig)
+    public void markCrashCompleted([NonNull] String)
+    public void setDefaultCrashHandler([Nullable] io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrashHandler)
+}
+
+public final class io.appmetrica.analytics.ndkcrashes.jni.core.AppMetricaCrashpadConfig {
+    public <init>([NonNull] String, [NonNull] String, [NonNull] String, [NonNull] String, boolean, [NonNull] String, [NonNull] String, [NonNull] String, [NonNull] String)
+    public final [NonNull] String getApkPath()
+    public final [NonNull] String getAppMetricaMetadata()
+    public final [NonNull] String getCrashFolder()
+    public final [NonNull] String getDataDir()
+    public final [NonNull] String getHandlerPath()
+    public final [NonNull] String getJavaHandlerClassName()
+    public final [NonNull] String getLibPath()
+    public final [NonNull] String getSocketName()
+    public final boolean is64bit()
+    public [NonNull] String toString()
+}
+
+public final class io.appmetrica.analytics.ndkcrashes.jni.core.NativeCrashCoreJni {
+    public static final [NonNull] io.appmetrica.analytics.ndkcrashes.jni.core.NativeCrashCoreJni INSTANCE
+
+    public final boolean startHandlerAtCrash([NonNull] io.appmetrica.analytics.ndkcrashes.jni.core.AppMetricaCrashpadConfig)
+    public final boolean startHandlerWithLinkerAtCrash([NonNull] io.appmetrica.analytics.ndkcrashes.jni.core.AppMetricaCrashpadConfig)
+    public final boolean startJavaHandlerAtCrash([NonNull] io.appmetrica.analytics.ndkcrashes.jni.core.AppMetricaCrashpadConfig)
+    public final void updateAppMetricaMetadataJni([NonNull] String)
+}
+
+public final class io.appmetrica.analytics.ndkcrashes.jni.core.NativeCrashCoreJniWrapper {
+    public static final [NonNull] io.appmetrica.analytics.ndkcrashes.jni.core.NativeCrashCoreJniWrapper INSTANCE
+
+    public static final boolean startHandlerAtCrash([NonNull] String, [NonNull] String, [NonNull] String, [NonNull] String)
+    public static final boolean startHandlerWithLinkerAtCrash([NonNull] String, [NonNull] String, [NonNull] String, boolean, [NonNull] String)
+    public static final boolean startJavaHandlerAtCrash([NonNull] String, [NonNull] String, [NonNull] String, [NonNull] String, [NonNull] String, [NonNull] String, [NonNull] String, [NonNull] String)
+    public static final void updateAppMetricaMetadata([NonNull] String)
+}
+
+public final class io.appmetrica.analytics.ndkcrashes.jni.core.NativeCrashUtilsJni {
+    public static final [NonNull] io.appmetrica.analytics.ndkcrashes.jni.core.NativeCrashUtilsJni INSTANCE
+
+    public static final [Nullable] String getLibDirInsideApk()
+}
+
+public final class io.appmetrica.analytics.ndkcrashes.jni.runner.NativeCrashHandlerRunnerJni {
+    public static final [NonNull] io.appmetrica.analytics.ndkcrashes.jni.runner.NativeCrashHandlerRunnerJni INSTANCE
+
+    public final int runHandler([NonNull] String[])
+}
+
+public final class io.appmetrica.analytics.ndkcrashes.jni.service.CrashpadCrash {
+    public <init>([NonNull] String, [NonNull] String, long, [NonNull] String)
+    public final [NonNull] String getAppMetricaData()
+    public final long getCreationTime()
+    public final [NonNull] String getDumpFile()
+    public final [NonNull] String getUuid()
+}
+
+public final class io.appmetrica.analytics.ndkcrashes.jni.service.NativeCrashServiceJni {
+    public static final [NonNull] io.appmetrica.analytics.ndkcrashes.jni.service.NativeCrashServiceJni INSTANCE
+
+    public final boolean deleteCompletedCrashes()
+    public final void init([NonNull] String)
+    public final boolean markCrashCompleted([NonNull] String)
+    public final [NonNull] java.util.List<io.appmetrica.analytics.ndkcrashes.jni.service.CrashpadCrash> readAllCrashes()
+    public final [Nullable] io.appmetrica.analytics.ndkcrashes.jni.service.CrashpadCrash readCrash([NonNull] String)
+}
+
+public final class io.appmetrica.analytics.ndkcrashes.jni.service.NativeCrashServiceJniWrapper {
+    public static final [NonNull] io.appmetrica.analytics.ndkcrashes.jni.service.NativeCrashServiceJniWrapper INSTANCE
+
+    public static final boolean deleteCompletedCrashes()
+    public static final void init([NonNull] String)
+    public static final boolean markCrashCompleted([NonNull] String)
+    public static final [NonNull] java.util.List<io.appmetrica.analytics.ndkcrashes.jni.service.CrashpadCrash> readAllCrashes()
+    public static final [Nullable] io.appmetrica.analytics.ndkcrashes.jni.service.CrashpadCrash readCrash([NonNull] String)
+}
+

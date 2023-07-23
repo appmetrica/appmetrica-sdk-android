@@ -59,12 +59,8 @@ CrashReportDatabase::NewReport::NewReport()
 CrashReportDatabase::NewReport::~NewReport() = default;
 
 //region change for AppMetrica
-void CrashReportDatabase::NewReport::SetClientDescription(const std::string clientDescription) {
-  this->clientDescription = clientDescription;
-}
-
-void CrashReportDatabase::NewReport::SetRuntimeConfig(const std::string runtimeConfig) {
-  this->runtimeConfig = runtimeConfig;
+void CrashReportDatabase::NewReport::SetAppMetricaMetadata(const std::string appMetricaMetadata) {
+  this->appMetricaMetadata = appMetricaMetadata;
 }
 //endregion change for AppMetrica
 

@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.impl;
 
 import android.app.Activity;
+import android.content.Context;
 import android.location.Location;
 import androidx.annotation.NonNull;
 import io.appmetrica.analytics.AppMetricaConfig;
@@ -205,34 +206,43 @@ public class MainReporterTest extends BaseReporterTest {
                 .withUserProfileID(userProfileID)
                 .build();
         return new MainReporter(
-                mContext, mProcessConfiguration, config, mReportsHandler, ndkCrashHelper, mStartupHelper, mAppmetricaReporterProvider,
-                mPushReporterProvider, clientServiceLocator, mExtraMetaInfoRetriever
+                mContext, mProcessConfiguration, config, mReportsHandler, nativeCrashClient, mStartupHelper,
+                mAppmetricaReporterProvider, mPushReporterProvider, clientServiceLocator, mExtraMetaInfoRetriever
         );
     }
 
     @Test
     public void testNativeCrashReportingEnabled() {
-        Mockito.reset(ndkCrashHelper);
+        Mockito.reset(nativeCrashClient);
         mConfig = AppMetricaConfig.newConfigBuilder(apiKey).withNativeCrashReporting(true).build();
         String errorEnv = "erroorrenen";
         doReturn(errorEnv).when(mReporterEnvironment).getErrorEnvironment();
         mMainReporter = getReporter();
-        verify(ndkCrashHelper).setReportsEnabled(eq(true), eq(apiKey), eq(errorEnv));
+        verify(nativeCrashClient).initHandling(eq(mContext), eq(apiKey), eq(errorEnv));
     }
 
     @Test
     public void testNativeCrashReportingNotSet() {
-        Mockito.reset(ndkCrashHelper);
+        Mockito.reset(nativeCrashClient);
         mConfig = AppMetricaConfig.newConfigBuilder(apiKey).build();
         mMainReporter = getReporter();
-        verify(ndkCrashHelper).setReportsEnabled(eq(true), eq(apiKey), eq((String) null));
+        verify(nativeCrashClient).initHandling(eq(mContext), eq(apiKey), eq((String) null));
     }
 
     @Test
     public void testNativeCrashReportingDisabled() {
         mConfig = AppMetricaConfig.newConfigBuilder(apiKey).withNativeCrashReporting(false).build();
         mMainReporter = getReporter();
-        verify(ndkCrashHelper).setReportsEnabled(eq(false), eq(apiKey), eq((String) null));
+        verify(nativeCrashClient, never()).initHandling(any(Context.class), any(String.class), any(String.class));
+    }
+
+    @Test
+    public void testPutErrorEnvironmentShouldUpdateEnvInNativeCrashClient() {
+        String errorEnv = "erroorrenen";
+        doReturn(errorEnv).when(mReporterEnvironment).getErrorEnvironment();
+        mMainReporter = getReporter();
+        mMainReporter.putErrorEnvironmentValue("key", "value");
+        verify(nativeCrashClient).updateErrorEnvironment(eq(errorEnv));
     }
 
     @Test
@@ -401,7 +411,7 @@ public class MainReporterTest extends BaseReporterTest {
                 mContext,
                 config,
                 mReportsHandler,
-                ndkCrashHelper,
+                nativeCrashClient,
                 environment,
                 mAppStatusMonitor,
                 mStartupHelper,
@@ -599,7 +609,7 @@ public class MainReporterTest extends BaseReporterTest {
                 mProcessConfiguration,
                 config,
                 mReportsHandler,
-                ndkCrashHelper,
+                nativeCrashClient,
                 mStartupHelper,
                 mAppmetricaReporterProvider,
                 mPushReporterProvider,
@@ -654,7 +664,7 @@ public class MainReporterTest extends BaseReporterTest {
                     mContext,
                     mConfig,
                     mReportsHandler,
-                    ndkCrashHelper,
+                    nativeCrashClient,
                     mReporterEnvironment,
                     mAppStatusMonitor,
                     mStartupHelper,

@@ -68,8 +68,7 @@ class CrashReportExceptionHandler : public ExceptionHandlerServer::Delegate {
       const std::map<std::string, std::string>* process_annotations,
       const std::vector<base::FilePath>* attachments,
       //region change for AppMetrica
-      const std::string clientDescriptionArg,
-      const std::string runtimeConfigArg,
+      const std::string appMetricaMetadata,
       //endregion change for AppMetrica
       bool write_minidump_to_database,
       bool write_minidump_to_log,
@@ -118,8 +117,7 @@ class CrashReportExceptionHandler : public ExceptionHandlerServer::Delegate {
   const std::map<std::string, std::string>* process_annotations_;  // weak
   const std::vector<base::FilePath>* attachments_;  // weak
   //region change for AppMetrica
-  const std::string clientDescription;
-  const std::string runtimeConfig;
+  const std::string appMetricaMetadata;
   //endregion change for AppMetrica
   bool write_minidump_to_database_;
   bool write_minidump_to_log_;

@@ -27,9 +27,9 @@ import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_APP_ENVIRON
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_APP_ENVIRONMENT_UPDATED;
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_APP_OPEN;
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_CLEANUP;
-import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_CURRENT_SESSION_CRASHPAD_CRASH_PROTOBUF;
+import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_CURRENT_SESSION_NATIVE_CRASH_PROTOBUF;
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_CUSTOM_EVENT;
-import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_PREV_SESSION_CRASHPAD_CRASH_PROTOBUF;
+import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_PREV_SESSION_NATIVE_CRASH_PROTOBUF;
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_REGULAR;
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_SET_SESSION_EXTRA;
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_START;
@@ -264,17 +264,17 @@ public class EventProcessorStrategyFactoryTest extends CommonTest {
 
     @Test
     public void getProcessingStrategyHandlers_EventType_PrevSessionCrashpadCrash() {
-        assertThat(getHandlers(EVENT_TYPE_PREV_SESSION_CRASHPAD_CRASH_PROTOBUF))
+        assertThat(getHandlers(EVENT_TYPE_PREV_SESSION_NATIVE_CRASH_PROTOBUF))
             .containsExactly(
                 mEventProcessingStrategyFactory.getHandlersProvider().getModulesEventHandler(),
-                mEventProcessingStrategyFactory.getHandlersProvider().getReportPrevSessionCrashpadCrashHandler(),
+                mEventProcessingStrategyFactory.getHandlersProvider().getReportPrevSessionNativeCrashHandler(),
                 mEventProcessingStrategyFactory.getHandlersProvider().getReportPurgeBufferHandler()
             );
     }
 
     @Test
     public void getProcessingStrategyHandlers_EventType_CurrentSessionCrashpadCrash() {
-        assertThat(getHandlers(EVENT_TYPE_CURRENT_SESSION_CRASHPAD_CRASH_PROTOBUF))
+        assertThat(getHandlers(EVENT_TYPE_CURRENT_SESSION_NATIVE_CRASH_PROTOBUF))
             .containsExactly(
                 mEventProcessingStrategyFactory.getHandlersProvider().getModulesEventHandler(),
                 mEventProcessingStrategyFactory.getHandlersProvider().getReportSessionHandler(),

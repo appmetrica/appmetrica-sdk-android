@@ -1,0 +1,74 @@
+public final class io.appmetrica.analytics.ndkcrashesapi.BuildConfig {
+    public static final String BUILD_TYPE
+    public static final boolean DEBUG
+    public static final String LIBRARY_PACKAGE_NAME
+
+    public <init>()
+}
+
+public final class io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrash {
+    public final long getCreationTime()
+    public final [NonNull] String getDumpFile()
+    public final [NonNull] String getHandlerVersion()
+    public final [NonNull] String getMetadata()
+    public final [NonNull] io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrashSource getSource()
+    public final [NonNull] String getUuid()
+}
+
+public static final class io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrash$Builder {
+    public <init>([NonNull] io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrashSource, [NonNull] String, [NonNull] String, [NonNull] String, long, [NonNull] String)
+    public final [NonNull] io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrash build()
+}
+
+public final class io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrashClientConfig {
+    public <init>([NonNull] String, [NonNull] String)
+    public final [NonNull] String getNativeCrashFolder()
+    public final [NonNull] String getNativeCrashMetadata()
+}
+
+public abstract class io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrashClientModule {
+    public <init>()
+    public abstract void initHandling([NonNull] android.content.Context, [NonNull] io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrashClientConfig)
+    public abstract void updateAppMetricaMetadata([NonNull] String)
+}
+
+public final class io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrashClientModuleDummy extends io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrashClientModule {
+    public <init>()
+    public void initHandling([NonNull] android.content.Context, [NonNull] io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrashClientConfig)
+    public void updateAppMetricaMetadata([NonNull] String)
+}
+
+public interface io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrashHandler {
+    public abstract void newCrash([NonNull] io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrash)
+}
+
+public final class io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrashServiceConfig {
+    public <init>([NonNull] String)
+    public final [NonNull] String getNativeCrashFolder()
+}
+
+public abstract class io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrashServiceModule {
+    public <init>()
+    public abstract void deleteCompletedCrashes()
+    public abstract [NonNull] java.util.List<io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrash> getAllCrashes()
+    public abstract void init([NonNull] android.content.Context, [NonNull] io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrashServiceConfig)
+    public abstract void markCrashCompleted([NonNull] String)
+    public abstract void setDefaultCrashHandler([Nullable] io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrashHandler)
+}
+
+public final class io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrashServiceModuleDummy extends io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrashServiceModule {
+    public <init>()
+    public void deleteCompletedCrashes()
+    public [NonNull] java.util.List<io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrash> getAllCrashes()
+    public void init([NonNull] android.content.Context, [NonNull] io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrashServiceConfig)
+    public void markCrashCompleted([NonNull] String)
+    public void setDefaultCrashHandler([Nullable] io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrashHandler)
+}
+
+public enum io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrashSource {
+    CRASHPAD, UNKNOWN
+
+    public static io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrashSource valueOf(String)
+    public static io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrashSource[] values()
+}
+

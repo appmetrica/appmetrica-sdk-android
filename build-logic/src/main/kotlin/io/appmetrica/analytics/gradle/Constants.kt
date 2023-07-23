@@ -25,9 +25,8 @@ object Constants {
     }
 
     object NdkCrashes {
-        const val versionName = "2.1.0"
-        const val versionCode = 4
-        const val group = "io.appmetrica.analytics"
+        const val versionName = "3.0.0"
+        const val versionCode = 5
     }
 }
 

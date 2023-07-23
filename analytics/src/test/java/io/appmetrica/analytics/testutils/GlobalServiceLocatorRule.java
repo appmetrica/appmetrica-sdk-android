@@ -21,6 +21,7 @@ import io.appmetrica.analytics.impl.SelfDiagnosticReporterStorage;
 import io.appmetrica.analytics.impl.StartupStateHolder;
 import io.appmetrica.analytics.impl.StatisticsRestrictionControllerImpl;
 import io.appmetrica.analytics.impl.component.ComponentId;
+import io.appmetrica.analytics.impl.crash.ndk.NativeCrashService;
 import io.appmetrica.analytics.impl.db.VitalCommonDataProvider;
 import io.appmetrica.analytics.impl.db.VitalComponentDataProvider;
 import io.appmetrica.analytics.impl.db.VitalDataProviderStorage;
@@ -117,6 +118,7 @@ public class GlobalServiceLocatorRule extends ExternalResource {
         when(globalServiceLocator.getTelephonyDataProvider()).thenReturn(telephonyDataProvider);
         when(globalServiceLocator.getModuleEntryPointsRegister()).thenReturn(mock(ModuleEntryPointsRegister.class));
         when(globalServiceLocator.getMultiProcessSafeUuidProvider()).thenReturn(mock(MultiProcessSafeUuidProvider.class));
+        when(globalServiceLocator.getNativeCrashService()).thenReturn(mock(NativeCrashService.class));
         GlobalServiceLocator.setInstance(globalServiceLocator);
     }
 

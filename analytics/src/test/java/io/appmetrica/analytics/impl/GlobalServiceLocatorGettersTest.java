@@ -2,6 +2,7 @@ package io.appmetrica.analytics.impl;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import io.appmetrica.analytics.impl.crash.ndk.NativeCrashService;
 import io.appmetrica.analytics.impl.db.VitalDataProviderStorage;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesServiceDbStorage;
 import io.appmetrica.analytics.impl.id.AdvertisingIdGetter;
@@ -280,6 +281,15 @@ public class GlobalServiceLocatorGettersTest extends CommonTest {
                     @Override
                     public MultiProcessSafeUuidProvider getService(GlobalServiceLocator globalServiceLocator) {
                         return globalServiceLocator.getMultiProcessSafeUuidProvider();
+                    }
+                }
+            },
+            {
+                "nativeCrashService",
+                new ServiceExtractor<NativeCrashService>() {
+                    @Override
+                    public NativeCrashService getService(GlobalServiceLocator globalServiceLocator) {
+                        return globalServiceLocator.getNativeCrashService();
                     }
                 }
             }

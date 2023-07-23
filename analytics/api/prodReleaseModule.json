@@ -153,6 +153,13 @@
                 },
                 {
                     "group": "io.appmetrica.analytics",
+                    "module": "analytics-ndkcrashes-api",
+                    "version": {
+                        "requires": "6.0.0"
+                    }
+                },
+                {
+                    "group": "io.appmetrica.analytics",
                     "module": "analytics-network-tasks",
                     "version": {
                         "requires": "6.0.0"

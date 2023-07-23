@@ -669,31 +669,6 @@ public class io.appmetrica.analytics.ecommerce.ECommerceScreen {
     public String toString()
 }
 
-public class io.appmetrica.analytics.impl.ac.CrashpadHelper {
-    public <init>()
-    public static void cancelSetUpNativeUncaughtExceptionHandler()
-    public static [Nullable] String getLibDirInsideApk()
-    public static String getLibraryVersion()
-    public static void logsEnabled(boolean)
-    public static void setUpNativeUncaughtExceptionHandler([NonNull] android.os.Bundle)
-    public static void updateRuntimeConfig([NonNull] String)
-}
-
-public class io.appmetrica.analytics.impl.ac.CrashpadServiceHelper {
-    public <init>()
-    public static void cancelSetUpServiceHelper()
-    public static boolean deleteCompletedReports()
-    public static boolean markCrashCompletedAndDeleteAllCompleted(String)
-    public static android.os.Bundle readCrash(String)
-    public static java.util.List<android.os.Bundle> readOldCrashes()
-    public static void setUpServiceHelper(String)
-}
-
-public class io.appmetrica.analytics.impl.ac.HandlerRunner {
-    public <init>()
-    public static void main(String[])
-}
-
 public interface io.appmetrica.analytics.plugins.AppMetricaPlugins {
     public abstract void reportError([NonNull] io.appmetrica.analytics.plugins.PluginErrorDetails, [Nullable] String)
     public abstract void reportError([NonNull] String, [Nullable] String, [Nullable] io.appmetrica.analytics.plugins.PluginErrorDetails)

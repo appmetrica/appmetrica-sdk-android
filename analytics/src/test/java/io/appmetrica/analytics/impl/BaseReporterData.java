@@ -5,7 +5,7 @@ import android.content.Context;
 import io.appmetrica.analytics.AppMetricaConfig;
 import io.appmetrica.analytics.CounterConfiguration;
 import io.appmetrica.analytics.impl.client.ProcessConfiguration;
-import io.appmetrica.analytics.impl.crash.ndk.NdkCrashHelper;
+import io.appmetrica.analytics.impl.crash.ndk.NativeCrashClient;
 import io.appmetrica.analytics.impl.startup.StartupHelper;
 import io.appmetrica.analytics.impl.utils.ProcessDetector;
 import io.appmetrica.analytics.impl.utils.PublicLogger;
@@ -31,7 +31,7 @@ public class BaseReporterData extends CommonTest {
     @Mock
     protected ReportsHandler mReportsHandler;
     @Mock
-    protected NdkCrashHelper ndkCrashHelper;
+    protected NativeCrashClient nativeCrashClient;
     @Mock
     protected ReporterEnvironment mReporterEnvironment;
     @Mock

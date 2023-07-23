@@ -1,10 +1,8 @@
 package io.appmetrica.analytics.impl;
 
 import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.backport.Consumer;
 import io.appmetrica.analytics.coreapi.internal.backport.Function;
@@ -15,14 +13,13 @@ import io.appmetrica.analytics.impl.component.clients.ClientDescription;
 import io.appmetrica.analytics.impl.component.clients.ClientRepository;
 import io.appmetrica.analytics.impl.component.clients.ClientUnit;
 import io.appmetrica.analytics.impl.crash.ReadAndReportRunnable;
+import io.appmetrica.analytics.impl.crash.client.converter.NativeCrashConverter;
 import io.appmetrica.analytics.impl.crash.jvm.JvmCrash;
 import io.appmetrica.analytics.impl.crash.jvm.JvmCrashReader;
+import io.appmetrica.analytics.impl.crash.ndk.AppMetricaNativeCrash;
+import io.appmetrica.analytics.impl.crash.ndk.AppMetricaNativeCrashMetadata;
+import io.appmetrica.analytics.impl.crash.ndk.NativeCrashDumpReader;
 import io.appmetrica.analytics.impl.crash.ndk.NativeCrashHandlerDescription;
-import io.appmetrica.analytics.impl.crash.ndk.NativeCrashSource;
-import io.appmetrica.analytics.impl.crash.ndk.NativeDumpHandler;
-import io.appmetrica.analytics.impl.crash.ndk.NativeDumpHandlerWrapper;
-import io.appmetrica.analytics.impl.crash.ndk.crashpad.CrashpadCrash;
-import io.appmetrica.analytics.impl.crash.ndk.crashpad.CrashpadCrashReporter;
 import io.appmetrica.analytics.impl.request.StartupRequestConfig;
 import io.appmetrica.analytics.impl.utils.LoggerStorage;
 import java.io.File;
@@ -43,10 +40,10 @@ public class ReportConsumer {
     public ReportConsumer(@NonNull Context context,
                           @NonNull ClientRepository clientRepository) {
         this(
-                context,
-                clientRepository,
-                GlobalServiceLocator.getInstance().getServiceExecutorProvider().getReportRunnableExecutor(),
-                new FileProvider()
+            context,
+            clientRepository,
+            GlobalServiceLocator.getInstance().getServiceExecutorProvider().getReportRunnableExecutor(),
+            new FileProvider()
         );
     }
 
@@ -78,31 +75,31 @@ public class ReportConsumer {
     public void consumeCrashFromFile(@NonNull File crashFile) {
         JvmCrashReader reader = new JvmCrashReader();
         mTasksExecutor.execute(
-                new ReadAndReportRunnable<JvmCrash>(crashFile, reader, reader,
+            new ReadAndReportRunnable<JvmCrash>(crashFile, reader, reader,
                 new Consumer<JvmCrash>() {
                     @Override
                     public void consume(JvmCrash input) {
                         consumeCrash(
-                                new ClientDescription(
-                                        input.getApiKey(),
-                                        input.getPackageName(),
-                                        input.getPid(),
-                                        input.getPsid(),
-                                        input.getReporterType()
-                                ),
-                                EventsManager.unhandledExceptionFromFileReportEntry(
-                                        input.getName(),
-                                        input.getCrashValue(),
-                                        input.getBytesTruncated(),
-                                        input.getTrimmedFields(),
-                                        input.getEnvironment(),
-                                        LoggerStorage.getOrCreatePublicLogger(input.getApiKey())
-                                ),
-                                new CommonArguments(
-                                        new StartupRequestConfig.Arguments(),
-                                        new CommonArguments.ReporterArguments(),
-                                        null
-                                )
+                            new ClientDescription(
+                                input.getApiKey(),
+                                input.getPackageName(),
+                                input.getPid(),
+                                input.getPsid(),
+                                input.getReporterType()
+                            ),
+                            EventsManager.unhandledExceptionFromFileReportEntry(
+                                input.getName(),
+                                input.getCrashValue(),
+                                input.getBytesTruncated(),
+                                input.getTrimmedFields(),
+                                input.getEnvironment(),
+                                LoggerStorage.getOrCreatePublicLogger(input.getApiKey())
+                            ),
+                            new CommonArguments(
+                                new StartupRequestConfig.Arguments(),
+                                new CommonArguments.ReporterArguments(),
+                                null
+                            )
                         );
                     }
                 }
@@ -116,50 +113,98 @@ public class ReportConsumer {
         ClientUnit unit = mClientRepository.getOrCreateClient(clientDescription, arguments);
         unit.handle(reportData, arguments);
         mClientRepository.remove(
-                clientDescription.getPackageName(),
-                clientDescription.getProcessID(),
-                clientDescription.getProcessSessionID()
+            clientDescription.getPackageName(),
+            clientDescription.getProcessID(),
+            clientDescription.getProcessSessionID()
         );
     }
 
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-    public void consumeCrashpadCrash(
-            @NonNull final CrashpadCrash crashpadCrash,
-            @NonNull final Function<String, CounterReport> reportCreator
+    public void consumeCurrentSessionNativeCrash(
+        @NonNull final AppMetricaNativeCrash nativeCrash,
+        @NonNull final Consumer<File> finalizer
+    ) {
+        consumeNativeCrash(nativeCrash, finalizer,
+            new Function<String, CounterReport>() {
+                @Override
+                public CounterReport apply(String input) {
+                    CounterReport counterReport = EventsManager.currentSessionNativeCrashEntry(
+                        input,
+                        nativeCrash.getUuid(),
+                        LoggerStorage.getOrCreatePublicLogger(nativeCrash.getMetadata().getApiKey())
+                    );
+                    counterReport.setEventEnvironment(nativeCrash.getMetadata().getErrorEnvironment());
+                    return counterReport;
+                }
+            }
+        );
+    }
+
+    public void consumePrevSessionNativeCrash(
+        @NonNull final AppMetricaNativeCrash nativeCrash,
+        @NonNull final Consumer<File> finalizer
+    ) {
+        consumeNativeCrash(nativeCrash, finalizer,
+            new Function<String, CounterReport>() {
+                @Override
+                public CounterReport apply(String input) {
+                    CounterReport counterReport = EventsManager.prevSessionNativeCrashEntry(
+                        input,
+                        nativeCrash.getUuid(),
+                        LoggerStorage.getOrCreatePublicLogger(nativeCrash.getMetadata().getApiKey())
+                    );
+                    counterReport.setEventEnvironment(nativeCrash.getMetadata().getErrorEnvironment());
+                    return counterReport;
+                }
+            }
+        );
+    }
+
+    private void consumeNativeCrash(
+        @NonNull final AppMetricaNativeCrash nativeCrash,
+        @NonNull final Consumer<File> finalizer,
+        @NonNull final Function<String, CounterReport> reportCreator
     ) {
         mTasksExecutor.execute(
-                new ReadAndReportRunnable<String>(
-                        fileProvider.getFileByNonNullPath(crashpadCrash.crashReport.dumpFile),
-                        new NativeDumpHandlerWrapper(new NativeCrashHandlerDescription(
-                                NativeCrashSource.CRASHPAD, crashpadCrash.runtimeConfig.handlerVersion
-                        ), new NativeDumpHandler()),
-                        new CrashpadCrashReporter.CrashCompletedConsumer(crashpadCrash.crashReport.uuid),
-                        new CrashpadConsumer(crashpadCrash.clientDescription, reportCreator)
-                )
+            new ReadAndReportRunnable<>(
+                fileProvider.getFileByNonNullPath(nativeCrash.getDumpFile()),
+                new NativeCrashDumpReader(
+                    new NativeCrashHandlerDescription(nativeCrash.getSource(), nativeCrash.getHandlerVersion()),
+                    new NativeCrashConverter()
+                ),
+                finalizer,
+                new NativeCrashConsumer(nativeCrash.getMetadata(), reportCreator)
+            )
         );
     }
 
     @VisibleForTesting
-    protected class CrashpadConsumer implements Consumer<String> {
+    protected class NativeCrashConsumer implements Consumer<String> {
 
-        private final ClientDescription clientDescription;
+        private final AppMetricaNativeCrashMetadata metadata;
         private final Function<String, CounterReport> reportCreator;
 
-        public CrashpadConsumer(ClientDescription clientDescription, Function<String, CounterReport> reportCreator) {
-            this.clientDescription = clientDescription;
+        public NativeCrashConsumer(AppMetricaNativeCrashMetadata metadata,
+                                   Function<String, CounterReport> reportCreator) {
+            this.metadata = metadata;
             this.reportCreator = reportCreator;
         }
 
         @Override
         public void consume(@NonNull String input) {
             consumeCrash(
-                    clientDescription,
-                    reportCreator.apply(input),
-                    new CommonArguments(
-                            new StartupRequestConfig.Arguments(),
-                            new CommonArguments.ReporterArguments(),
-                            null
-                    )
+                new ClientDescription(
+                    metadata.getApiKey(),
+                    metadata.getPackageName(),
+                    metadata.getProcessID(),
+                    metadata.getProcessSessionID(),
+                    metadata.getReporterType()
+                ),
+                reportCreator.apply(input),
+                new CommonArguments(
+                    new StartupRequestConfig.Arguments(),
+                    new CommonArguments.ReporterArguments(),
+                    null
+                )
             );
         }
     }

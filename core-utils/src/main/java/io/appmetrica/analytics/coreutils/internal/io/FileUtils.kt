@@ -13,6 +13,7 @@ object FileUtils {
     private const val TAG = "[FileUtils]"
     const val SDK_STORAGE_RELATIVE_PATH = "/appmetrica/analytics"
     const val SDK_FILES_PREFIX = "appmetrica_analytics"
+    private const val NATIVE_CRASH_FOLDER_NAME = "appmetrica_native_crashes"
 
     @Volatile
     private var sdkStorage: File? = null
@@ -59,6 +60,10 @@ object FileUtils {
     @JvmStatic
     fun getFileFromAppStorage(context: Context, fileName: String): File? =
         getAppStorageDirectory(context)?.let { File(it, fileName) }
+
+    @JvmStatic // for tests
+    fun getNativeCrashDirectory(context: Context): File? =
+        getFileFromAppStorage(context, NATIVE_CRASH_FOLDER_NAME)
 
     @JvmStatic
     fun getFileFromPath(filePath: String): File = File(filePath)

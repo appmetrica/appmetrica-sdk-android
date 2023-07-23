@@ -24,3 +24,19 @@ Maven: `io.appmetrica.analytics:analytics-ndk-crashes:${VERSION}`.
 ### Publish to MavenLocal
 
 `./gradlew :ndkcrashes:publishReleasePublicationToMavenLocal -Pndkcrashes.native.enabled=true`
+
+### Tests
+
+`./gradlew :ndkcrashes:testReleaseUnitTest :ndkcrashes:generateReleaseJacocoReport`
+
+### Code style
+
+`./gradlew :ndkcrashes:codequality`
+
+### Check AAR API
+
+`./gradlew :ndkcrashes:aarCheck`
+
+### Regenerate AAR API dump
+
+`./gradlew :ndkcrashes:aarDump`

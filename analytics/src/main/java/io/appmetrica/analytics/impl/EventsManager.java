@@ -5,7 +5,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import io.appmetrica.analytics.coreutils.internal.StringUtils;
 import io.appmetrica.analytics.coreutils.internal.collection.CollectionUtils;
-import io.appmetrica.analytics.impl.crash.ndk.crashpad.CrashpadCrashReport;
 import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoWrapper;
 import io.appmetrica.analytics.impl.utils.JsonHelper;
 import io.appmetrica.analytics.impl.utils.PublicLogger;
@@ -39,7 +38,7 @@ public final class EventsManager {
             InternalEvents.EVENT_TYPE_APP_ENVIRONMENT_UPDATED,
             InternalEvents.EVENT_TYPE_APP_ENVIRONMENT_CLEARED,
             InternalEvents.EVENT_TYPE_ACTIVATION,
-            InternalEvents.EVENT_TYPE_PREV_SESSION_CRASHPAD_CRASH_PROTOBUF,
+            InternalEvents.EVENT_TYPE_PREV_SESSION_NATIVE_CRASH_PROTOBUF,
             InternalEvents.EVENT_TYPE_SET_SESSION_EXTRA
         );
 
@@ -55,15 +54,15 @@ public final class EventsManager {
         InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_PROTOBUF,
         InternalEvents.EVENT_TYPE_EXCEPTION_USER_PROTOBUF,
         InternalEvents.EVENT_TYPE_EXCEPTION_USER_CUSTOM_PROTOBUF,
-        InternalEvents.EVENT_TYPE_CURRENT_SESSION_CRASHPAD_CRASH_PROTOBUF,
-        InternalEvents.EVENT_TYPE_PREV_SESSION_CRASHPAD_CRASH_PROTOBUF,
+        InternalEvents.EVENT_TYPE_CURRENT_SESSION_NATIVE_CRASH_PROTOBUF,
+        InternalEvents.EVENT_TYPE_PREV_SESSION_NATIVE_CRASH_PROTOBUF,
         InternalEvents.EVENT_TYPE_REGULAR
     );
 
     private static final EnumSet<InternalEvents> LOG_EVENT_VALUE = EnumSet.of(InternalEvents.EVENT_TYPE_REGULAR);
 
     private static final EnumSet<InternalEvents> EVENTS_WITHOUT_GLOBAL_NUMBER = EnumSet.of(
-        InternalEvents.EVENT_TYPE_PREV_SESSION_CRASHPAD_CRASH_PROTOBUF
+        InternalEvents.EVENT_TYPE_PREV_SESSION_NATIVE_CRASH_PROTOBUF
     );
 
     private static final EnumSet<InternalEvents> SHOULD_NOT_APPLY_MODULE_HANDLERS =
@@ -87,6 +86,8 @@ public final class EventsManager {
     public static final List<Integer> EVENTS_WITH_SECOND_HIGHEST_PRIORITY = Arrays.asList(
         InternalEvents.EVENT_TYPE_CLEANUP.getTypeId()
     );
+
+    public static final String PAYLOAD_CRASH_ID = "payload_crash_id";
 
     // Prevent installation
     private EventsManager() {}
@@ -119,34 +120,34 @@ public final class EventsManager {
         return EVENTS_WITHOUT_GLOBAL_NUMBER.contains(InternalEvents.valueOf(eventType)) == false;
     }
 
-    public static CounterReport currentSessionCrashpadCrashEntry(@NonNull String nativeCrash,
-                                                                 @NonNull String uuid,
-                                                                 @NonNull PublicLogger logger) {
-        return crashpadCrashEntry(
-            InternalEvents.EVENT_TYPE_CURRENT_SESSION_CRASHPAD_CRASH_PROTOBUF,
+    public static CounterReport currentSessionNativeCrashEntry(@NonNull String nativeCrash,
+                                                               @NonNull String uuid,
+                                                               @NonNull PublicLogger logger) {
+        return nativeCrashEntry(
+            InternalEvents.EVENT_TYPE_CURRENT_SESSION_NATIVE_CRASH_PROTOBUF,
             nativeCrash,
             uuid,
             logger
         );
     }
 
-    public static CounterReport prevSessionCrashpadCrashEntry(@NonNull String nativeCrash,
-                                                              @NonNull String uuid,
-                                                              @NonNull PublicLogger logger) {
-        return crashpadCrashEntry(
-            InternalEvents.EVENT_TYPE_PREV_SESSION_CRASHPAD_CRASH_PROTOBUF,
+    public static CounterReport prevSessionNativeCrashEntry(@NonNull String nativeCrash,
+                                                            @NonNull String uuid,
+                                                            @NonNull PublicLogger logger) {
+        return nativeCrashEntry(
+            InternalEvents.EVENT_TYPE_PREV_SESSION_NATIVE_CRASH_PROTOBUF,
             nativeCrash,
             uuid,
             logger
         );
     }
 
-    static CounterReport crashpadCrashEntry(@NonNull InternalEvents eventType,
-                                                       @NonNull String nativeCrash,
-                                                       @NonNull String uuid,
-                                                       @NonNull PublicLogger logger) {
+    private static CounterReport nativeCrashEntry(@NonNull InternalEvents eventType,
+                                                  @NonNull String nativeCrash,
+                                                  @NonNull String uuid,
+                                                  @NonNull PublicLogger logger) {
         Bundle payload = new Bundle();
-        payload.putString(CrashpadCrashReport.PAYLOAD_CRASH_ID, uuid);
+        payload.putString(PAYLOAD_CRASH_ID, uuid);
         CounterReport counterReport = nativeCrashEntry(
             nativeCrash,
             eventType,

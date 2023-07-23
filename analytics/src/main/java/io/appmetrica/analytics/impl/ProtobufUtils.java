@@ -91,11 +91,11 @@ public final class ProtobufUtils {
                 EventProto.ReportMessage.Session.Event.EVENT_PROTOBUF_ANR
         );
         typesMapping.put(
-                InternalEvents.EVENT_TYPE_PREV_SESSION_CRASHPAD_CRASH_PROTOBUF,
+                InternalEvents.EVENT_TYPE_PREV_SESSION_NATIVE_CRASH_PROTOBUF,
                 Session.Event.EVENT_PROTOBUF_CRASH
         );
         typesMapping.put(
-                InternalEvents.EVENT_TYPE_CURRENT_SESSION_CRASHPAD_CRASH_PROTOBUF,
+                InternalEvents.EVENT_TYPE_CURRENT_SESSION_NATIVE_CRASH_PROTOBUF,
                 Session.Event.EVENT_PROTOBUF_CRASH
         );
 
@@ -212,8 +212,8 @@ public final class ProtobufUtils {
                 .withNetworkInfoComposer(new DummyNetworkInfoComposer())
                 .build()
         );
-        eventsMapping.put(InternalEvents.EVENT_TYPE_PREV_SESSION_CRASHPAD_CRASH_PROTOBUF, nativeCrashPreparer);
-        eventsMapping.put(InternalEvents.EVENT_TYPE_CURRENT_SESSION_CRASHPAD_CRASH_PROTOBUF, nativeCrashPreparer);
+        eventsMapping.put(InternalEvents.EVENT_TYPE_PREV_SESSION_NATIVE_CRASH_PROTOBUF, nativeCrashPreparer);
+        eventsMapping.put(InternalEvents.EVENT_TYPE_CURRENT_SESSION_NATIVE_CRASH_PROTOBUF, nativeCrashPreparer);
         eventsMapping.put(
                 InternalEvents.EVENT_TYPE_EXCEPTION_USER_PROTOBUF,
                 preparerWithBase64DecodedValue

@@ -2,19 +2,17 @@ package io.appmetrica.analytics.impl;
 
 import android.content.Context;
 import android.os.Bundle;
-import io.appmetrica.analytics.coreapi.internal.backport.Function;
+import io.appmetrica.analytics.coreapi.internal.backport.Consumer;
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
 import io.appmetrica.analytics.impl.component.CommonArguments;
 import io.appmetrica.analytics.impl.component.clients.ClientDescription;
 import io.appmetrica.analytics.impl.component.clients.ClientRepository;
 import io.appmetrica.analytics.impl.component.clients.ClientUnit;
 import io.appmetrica.analytics.impl.crash.ReadAndReportRunnable;
-import io.appmetrica.analytics.impl.crash.ndk.NativeCrashSource;
-import io.appmetrica.analytics.impl.crash.ndk.NativeDumpHandlerWrapper;
-import io.appmetrica.analytics.impl.crash.ndk.crashpad.CrashpadCrash;
-import io.appmetrica.analytics.impl.crash.ndk.crashpad.CrashpadCrashReport;
-import io.appmetrica.analytics.impl.crash.ndk.crashpad.CrashpadCrashReporter;
-import io.appmetrica.analytics.impl.crash.ndk.crashpad.RuntimeConfig;
+import io.appmetrica.analytics.impl.crash.ndk.AppMetricaNativeCrash;
+import io.appmetrica.analytics.impl.crash.ndk.AppMetricaNativeCrashMetadata;
+import io.appmetrica.analytics.impl.crash.ndk.NativeCrashDumpReader;
+import io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrashSource;
 import io.appmetrica.analytics.testutils.CommonTest;
 import java.io.File;
 import java.util.List;
@@ -28,11 +26,11 @@ import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 
-import static org.assertj.core.api.Assertions.tuple;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -97,32 +95,61 @@ public class ReportConsumerTest extends CommonTest {
     }
 
     @Test
-    public void testCrashpadCrash() {
-        ClientDescription description = mock(ClientDescription.class);
-        final CrashpadCrashReport report = new CrashpadCrashReport("uuid", "dumpFile", 12321321L);
-        Function<String, CounterReport> reportFunction = mock(Function.class);
+    public void testNativeCrash() {
         String version = "someVersion";
-        mReportConsumer.consumeCrashpadCrash(new CrashpadCrash(report, description, new RuntimeConfig(null, version)), reportFunction);
+        AppMetricaNativeCrash crash = new AppMetricaNativeCrash(
+            NativeCrashSource.UNKNOWN,
+            version,
+            "uuid",
+            "dumpFile",
+            12321321L,
+            new AppMetricaNativeCrashMetadata("apiKey",
+                "packageName",
+                CounterConfigurationReporterType.MAIN,
+                0,
+                "0",
+                "error")
+        );
+        Consumer<File> finalizer = mock(Consumer.class);
+        mReportConsumer.consumeCurrentSessionNativeCrash(crash, finalizer);
+        mReportConsumer.consumePrevSessionNativeCrash(crash, finalizer);
 
         ArgumentCaptor<ReadAndReportRunnable<String>> captor = ArgumentCaptor.forClass(ReadAndReportRunnable.class);
-        verify(mTasksExcutor).execute(captor.capture());
+        verify(mTasksExcutor, times(2)).execute(captor.capture());
 
         SoftAssertions assertions = new SoftAssertions();
 
         List<ReadAndReportRunnable<String>> values = captor.getAllValues();
 
-        assertions.assertThat(values).extracting("crashFile").extracting("name")
-                .containsExactly(dumpFile);
-        assertions.assertThat(values).extracting("finalizator").extracting("class").as("finalizator")
-                .containsExactly(CrashpadCrashReporter.CrashCompletedConsumer.class);
-        assertions.assertThat(values).extracting("fileReader").extracting("class").as("fileReader")
-                .containsExactly(NativeDumpHandlerWrapper.class);
-        assertions.assertThat(values).extracting("fileReader").extracting("description").extracting("source", "handlerVersion").as("description ")
-                .containsExactly(tuple(NativeCrashSource.CRASHPAD, version));
-        assertions.assertThat(values).extracting("crashConsumer").extracting("class").as("consumer")
-                .containsExactly(ReportConsumer.CrashpadConsumer.class);
-
+        int index = 0;
+        for (ReadAndReportRunnable<String> value : values) {
+            assertions.assertThat(value)
+                .extracting("crashFile")
+                .extracting("name")
+                .as("dumpFile[" + index + "]")
+                .isEqualTo(dumpFile);
+            assertions.assertThat(value)
+                .extracting("finalizator")
+                .as("finalizator[" + index + "]")
+                .isEqualTo(finalizer);
+            assertions.assertThat(value)
+                .extracting("fileReader")
+                .extracting("class")
+                .as("fileReader[" + index + "]")
+                .isEqualTo(NativeCrashDumpReader.class);
+            assertions.assertThat(value)
+                .extracting("fileReader")
+                .extracting("description")
+                .extracting("source", "handlerVersion")
+                .as("description[" + index + "]")
+                .containsExactly(NativeCrashSource.UNKNOWN, version);
+            assertions.assertThat(value)
+                .extracting("crashConsumer")
+                .extracting("class")
+                .as("consumer[" + index + "]")
+                .isEqualTo(ReportConsumer.NativeCrashConsumer.class);
+            index++;
+        }
         assertions.assertAll();
     }
-
 }

@@ -1,11 +1,18 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     id("io.appmetrica.gradle.kotlin-library")
 }
 
+tasks.withType<KotlinCompile> {
+    kotlinOptions.jvmTarget = JavaVersion.VERSION_1_6.toString()
+}
+
 dependencies {
-    implementation("junit:junit:4.13.2")
-    implementation("org.assertj:assertj-core:3.15.0")
-    implementation("org.mockito:mockito-inline:3.5.15")
+    api("junit:junit:4.13.2")
+    api("org.assertj:assertj-core:3.15.0")
+    api("org.mockito:mockito-inline:3.12.4")
+    api("org.mockito.kotlin:mockito-kotlin:3.2.0")
     // https://github.com/robolectric/robolectric
-    implementation("org.robolectric:robolectric:4.8.2")
+    api("org.robolectric:robolectric:4.9")
 }

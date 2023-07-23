@@ -104,8 +104,7 @@ class CrashReportDatabase {
     uint64_t total_size;
 
     //region change for AppMetrica
-    std::string clientDescription;
-    std::string runtimeConfig;
+    std::string appMetricaMetadata;
     //endregion change for AppMetrica
   };
 
@@ -143,8 +142,7 @@ class CrashReportDatabase {
     FileWriter* AddAttachment(const std::string& name);
 
     //region change for AppMetrica
-    void SetClientDescription(const std::string clientDescription);
-    void SetRuntimeConfig(const std::string runtimeConfig);
+    void SetAppMetricaMetadata(const std::string appMetricaMetadata);
     //endregion change for AppMetrica
 
    private:
@@ -164,8 +162,7 @@ class CrashReportDatabase {
     UUID uuid_;
     CrashReportDatabase* database_;
     //region change for AppMetrica
-    std::string clientDescription;
-    std::string runtimeConfig;
+    std::string appMetricaMetadata;
     //endregion change for AppMetrica
   };
 

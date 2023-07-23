@@ -16,8 +16,6 @@ import io.appmetrica.analytics.impl.crash.client.ThreadState;
 import io.appmetrica.analytics.impl.crash.client.ThreadStateTest;
 import io.appmetrica.analytics.impl.crash.client.ThrowableModel;
 import io.appmetrica.analytics.impl.crash.client.UnhandledException;
-import io.appmetrica.analytics.impl.crash.ndk.NativeCrashModel;
-import io.appmetrica.analytics.impl.crash.ndk.NativeCrashSource;
 import io.appmetrica.analytics.impl.db.DatabaseStorageFactoryTestUtils;
 import io.appmetrica.analytics.impl.ecommerce.client.converter.Result;
 import io.appmetrica.analytics.impl.ecommerce.client.model.ProtoSerializable;
@@ -590,20 +588,5 @@ public class ReportsHandlerTest extends CommonTest {
 
         mReportsHandlerSpy.reportRequestReferrerEvent(receiver);
         verify(mReportsHandlerSpy).reportEvent(any(CounterReport.class), any(ReporterEnvironment.class));
-    }
-
-    private static class NativeCrashMatcher implements ArgumentMatcher<NativeCrashModel> {
-
-        private final byte[] data;
-
-        private NativeCrashMatcher(byte[] data) {
-            this.data = data;
-        }
-
-        @Override
-        public boolean matches(NativeCrashModel argument) {
-            return Arrays.equals(argument.getData(), data)
-                    && argument.getHandlerDescription().getSource() == NativeCrashSource.USER;
-        }
     }
 }

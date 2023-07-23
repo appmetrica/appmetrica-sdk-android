@@ -1,6 +1,5 @@
 package io.appmetrica.analytics.impl;
 
-import io.appmetrica.analytics.impl.crash.CrashpadListenerImpl;
 import io.appmetrica.analytics.testutils.CommonTest;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.Before;
@@ -16,8 +15,6 @@ import static org.mockito.Mockito.verify;
 public class LifecycleDependentComponentManagerTest extends CommonTest {
 
     @Mock
-    private CrashpadListenerImpl crashpadListener;
-    @Mock
     private BatteryChargeTypeListener batteryChargeTypeListener;
     @Mock
     private ApplicationStateProviderImpl applicationStateProvider;
@@ -29,7 +26,6 @@ public class LifecycleDependentComponentManagerTest extends CommonTest {
     public void setUp() {
         MockitoAnnotations.openMocks(this);
         lifecycleDependentComponentManager = new LifecycleDependentComponentManager(
-                crashpadListener,
                 batteryChargeTypeListener,
                 applicationStateProvider
         );
@@ -38,7 +34,6 @@ public class LifecycleDependentComponentManagerTest extends CommonTest {
     @Test
     public void getters() {
         SoftAssertions softly = new SoftAssertions();
-        softly.assertThat(lifecycleDependentComponentManager.getCrashpadListener()).isSameAs(crashpadListener);
         softly.assertThat(lifecycleDependentComponentManager.getBatteryChargeTypeListener()).isSameAs(batteryChargeTypeListener);
         softly.assertThat(lifecycleDependentComponentManager.getApplicationStateProvider()).isSameAs(applicationStateProvider);
         softly.assertAll();
@@ -48,7 +43,6 @@ public class LifecycleDependentComponentManagerTest extends CommonTest {
     public void onCreate() {
         lifecycleDependentComponentManager.addLifecycleObserver(listener);
         lifecycleDependentComponentManager.onCreate();
-        verify(crashpadListener).onCreate();
         verify(batteryChargeTypeListener).onCreate();
         verify(applicationStateProvider).onCreate();
         verify(listener).onCreate();
@@ -58,7 +52,6 @@ public class LifecycleDependentComponentManagerTest extends CommonTest {
     public void onDestroyed() {
         lifecycleDependentComponentManager.addLifecycleObserver(listener);
         lifecycleDependentComponentManager.onDestroy();
-        verify(crashpadListener).onDestroy();
         verify(batteryChargeTypeListener).onDestroy();
         verify(applicationStateProvider).onDestroy();
         verify(listener).onDestroy();

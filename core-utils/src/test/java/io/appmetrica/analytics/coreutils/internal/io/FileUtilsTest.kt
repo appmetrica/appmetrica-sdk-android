@@ -143,6 +143,13 @@ class FileUtilsTest {
     }
 
     @Test
+    fun getNativeCrashDirectory() {
+        val file = FileUtils.getNativeCrashDirectory(context)
+        assertThat(file!!.parentFile).isEqualTo(noBackupDir)
+        assertThat(file.name).isEqualTo("appmetrica_native_crashes")
+    }
+
+    @Test
     @Config(sdk = [Build.VERSION_CODES.KITKAT])
     fun getFileFromSdkStoragePreLollipopIfFileDirIsNull() {
         whenever(context.filesDir).thenReturn(null)

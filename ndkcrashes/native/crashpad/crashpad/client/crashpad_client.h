@@ -25,9 +25,7 @@
 
 #include "base/files/file_path.h"
 #include "build/build_config.h"
-//region change for AppMetrica
-//#include "build/chromeos_buildflags.h"
-//endregion change for AppMetrica
+#include "build/chromeos_buildflags.h"
 #include "util/file/file_io.h"
 #include "util/misc/capture_context.h"
 
@@ -219,7 +217,7 @@ class CrashpadClient {
       const std::map<std::string, std::string>& annotations,
       //region change for AppMetrica
       const std::vector<std::string>& arguments,
-      const std::string& runtimeConfig = "");
+      const std::string& appMetricaMetadata = "");
       //endregion change for AppMetrica
 
   //! \brief Executes `/system/bin/app_process` and loads a Java class.
@@ -296,9 +294,7 @@ class CrashpadClient {
   //! \return `true` on success, `false` on failure with a message logged.
   bool StartHandlerWithLinkerAtCrash(
       const std::string& handler_trampoline,
-      //region change for AppMetrica
-      // const std::string& handler_library,
-      //endregion change for AppMetrica
+      const std::string& handler_library,
       bool is_64_bit,
       const std::vector<std::string>* env,
       const base::FilePath& database,
@@ -307,7 +303,7 @@ class CrashpadClient {
       const std::map<std::string, std::string>& annotations,
       //region change for AppMetrica
       const std::vector<std::string>& arguments,
-      const std::string& runtimeConfig = "");
+      const std::string& appMetricaMetadata = "");
       //endregion change for AppMetrica
 
   //! \brief Starts a Crashpad handler process with an initial client by loading
@@ -389,11 +385,13 @@ class CrashpadClient {
       const std::string& url,
       const std::map<std::string, std::string>& annotations,
       const std::vector<std::string>& arguments,
-  //region change for AppMetrica
+      //region change for AppMetrica
       const std::vector<base::FilePath>& attachments = {},
-      const std::string& runtimeConfig = "");
+      const std::string& appMetricaMetadata = "");
+      //endregion change for AppMetrica
 
-  void UpdateRuntimeConfig(std::string& runtimeConfig);
+  //region change for AppMetrica
+  void UpdateAppMetricaMetadata(const std::string& appMetricaMetadata);
   //endregion change for AppMetrica
 
   //! \brief Starts a handler process with an initial client.
@@ -790,18 +788,15 @@ class CrashpadClient {
   static void UseSystemDefaultHandler();
 #endif
 
-//region change for AppMetrica
-//exclude chrome os check to avoid missing import
-//#if BUILDFLAG(IS_CHROMEOS_ASH)
+#if BUILDFLAG(IS_CHROMEOS_ASH)
   //! \brief Sets a timestamp on the signal handler to be passed on to
   //!     crashpad_handler and then eventually Chrome OS's crash_reporter.
   //!
   //! \note This method is used by clients that use `StartHandler()` to start
   //!     a handler and not by clients that use any other handler starting
   //!     methods.
-//  static void SetCrashLoopBefore(uint64_t crash_loop_before_time);
-//#endif
-//endregion change for AppMetrica
+  static void SetCrashLoopBefore(uint64_t crash_loop_before_time);
+#endif
 
  private:
 #if BUILDFLAG(IS_APPLE)

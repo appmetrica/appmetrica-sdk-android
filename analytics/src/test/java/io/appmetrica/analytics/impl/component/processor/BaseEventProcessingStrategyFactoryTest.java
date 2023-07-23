@@ -9,7 +9,7 @@ import io.appmetrica.analytics.impl.component.processor.event.ReportComponentHan
 import io.appmetrica.analytics.impl.component.processor.event.UpdateUserProfileIDHandler;
 import io.appmetrica.analytics.impl.component.processor.factory.ActivationFactory;
 import io.appmetrica.analytics.impl.component.processor.factory.CommonConditionalFactory;
-import io.appmetrica.analytics.impl.component.processor.factory.CurrentSessionCrashpadCrashHandlerFactory;
+import io.appmetrica.analytics.impl.component.processor.factory.CurrentSessionNativeCrashHandlerFactory;
 import io.appmetrica.analytics.impl.component.processor.factory.HandlersFactory;
 import io.appmetrica.analytics.impl.component.processor.factory.JustSaveToDataBaseFactory;
 import io.appmetrica.analytics.impl.component.processor.factory.PurgeBufferFactory;
@@ -40,14 +40,14 @@ import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_APP_ENVIRON
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_APP_ENVIRONMENT_UPDATED;
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_APP_OPEN;
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_CLEANUP;
-import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_CURRENT_SESSION_CRASHPAD_CRASH_PROTOBUF;
+import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_CURRENT_SESSION_NATIVE_CRASH_PROTOBUF;
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_CUSTOM_EVENT;
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_FROM_FILE;
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_FROM_INTENT;
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_PROTOBUF;
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_EXCEPTION_USER_CUSTOM_PROTOBUF;
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_EXCEPTION_USER_PROTOBUF;
-import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_PREV_SESSION_CRASHPAD_CRASH_PROTOBUF;
+import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_PREV_SESSION_NATIVE_CRASH_PROTOBUF;
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_PURGE_BUFFER;
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_REGULAR;
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_SEND_AD_REVENUE_EVENT;
@@ -118,8 +118,8 @@ public class BaseEventProcessingStrategyFactoryTest extends CommonTest {
             LISTED_EVENTS.add(EVENT_TYPE_SEND_REVENUE_EVENT);
             LISTED_EVENTS.add(EVENT_TYPE_SEND_AD_REVENUE_EVENT);
             LISTED_EVENTS.add(EVENT_TYPE_CLEANUP);
-            LISTED_EVENTS.add(EVENT_TYPE_PREV_SESSION_CRASHPAD_CRASH_PROTOBUF);
-            LISTED_EVENTS.add(EVENT_TYPE_CURRENT_SESSION_CRASHPAD_CRASH_PROTOBUF);
+            LISTED_EVENTS.add(EVENT_TYPE_PREV_SESSION_NATIVE_CRASH_PROTOBUF);
+            LISTED_EVENTS.add(EVENT_TYPE_CURRENT_SESSION_NATIVE_CRASH_PROTOBUF);
             LISTED_EVENTS.add(EVENT_TYPE_SEND_ECOMMERCE_EVENT);
             LISTED_EVENTS.add(EVENT_TYPE_WEBVIEW_SYNC);
             LISTED_EVENTS.add(EVENT_TYPE_SET_SESSION_EXTRA);
@@ -193,7 +193,7 @@ public class BaseEventProcessingStrategyFactoryTest extends CommonTest {
                     {EVENT_TYPE_EXCEPTION_UNHANDLED_PROTOBUF, unhandledExceptionFactory},
                     {EVENT_TYPE_EXCEPTION_UNHANDLED_FROM_INTENT, unhandledExceptionFactory},
                     {EVENT_TYPE_EXCEPTION_UNHANDLED_FROM_FILE, UnhandledExceptionFromFileFactory.class},
-                    {EVENT_TYPE_CURRENT_SESSION_CRASHPAD_CRASH_PROTOBUF, CurrentSessionCrashpadCrashHandlerFactory.class},
+                    {EVENT_TYPE_CURRENT_SESSION_NATIVE_CRASH_PROTOBUF, CurrentSessionNativeCrashHandlerFactory.class},
                     {EVENT_TYPE_SEND_USER_PROFILE, justSaveFactory},
                     {EVENT_TYPE_SEND_REVENUE_EVENT, justSaveFactory},
                     {EVENT_TYPE_SEND_AD_REVENUE_EVENT, justSaveFactory},

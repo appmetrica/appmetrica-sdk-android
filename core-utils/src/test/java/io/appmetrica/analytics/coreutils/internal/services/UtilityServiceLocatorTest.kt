@@ -30,31 +30,31 @@ class UtilityServiceLocatorTest {
     @Test
     fun activationBarrier() {
         val utilityServiceLocator = UtilityServiceLocator()
-        assertThat(activationBarrierMockedRule.getConstructionMock().constructed()).hasSize(1)
+        assertThat(activationBarrierMockedRule.constructionMock.constructed()).hasSize(1)
         assertThat(utilityServiceLocator.activationBarrier)
-            .isEqualTo(activationBarrierMockedRule.getConstructionMock().constructed()[0])
+            .isEqualTo(activationBarrierMockedRule.constructionMock.constructed()[0])
     }
 
     @Test
     fun firstExecutionService() {
         val utilityServiceLocator = UtilityServiceLocator()
-        assertThat(firstExecutionConditionServiceMockedRule.getConstructionMock().constructed()).isEmpty()
+        assertThat(firstExecutionConditionServiceMockedRule.constructionMock.constructed()).isEmpty()
         assertThat(utilityServiceLocator.firstExecutionService)
-            .isEqualTo(firstExecutionConditionServiceMockedRule.getConstructionMock().constructed()[0])
+            .isEqualTo(firstExecutionConditionServiceMockedRule.constructionMock.constructed()[0])
     }
 
     @Test
     fun activate() {
         val utilityServiceLocator = UtilityServiceLocator()
         utilityServiceLocator.initAsync()
-        verify(activationBarrierMockedRule.getConstructionMock().constructed()[0]).activate()
+        verify(activationBarrierMockedRule.constructionMock.constructed()[0]).activate()
     }
 
     @Test
     fun updateConfiguration() {
         val utilityServiceLocator = UtilityServiceLocator()
         utilityServiceLocator.updateConfiguration(configuration)
-        verify(firstExecutionConditionServiceMockedRule.getConstructionMock().constructed()[0])
+        verify(firstExecutionConditionServiceMockedRule.constructionMock.constructed()[0])
             .updateConfig(configuration)
     }
 }

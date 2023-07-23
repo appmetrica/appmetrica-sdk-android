@@ -12,7 +12,7 @@ public class UnhandledExceptionFromFileFactory extends HandlersFactory<ReportCom
 
     @Override
     public void addHandlers(@NonNull List<ReportComponentHandler> reportHandlers) {
-        reportHandlers.add(getProvider().getReportPrevSessionCrashpadCrashHandler());
+        reportHandlers.add(getProvider().getReportPrevSessionNativeCrashHandler());
         reportHandlers.add(getProvider().getReportCrashMetaInformation());
     }
 }

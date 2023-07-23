@@ -208,19 +208,19 @@ public class EventToPreparerGeneralTest extends CommonTest {
                 {InternalEvents.EVENT_TYPE_UPDATE_FOREGROUND_TIME, defaultComposers()},
                 {InternalEvents.EVENT_TYPE_UPDATE_PRE_ACTIVATION_CONFIG, defaultComposers()},
                 {
-                        InternalEvents.EVENT_TYPE_PREV_SESSION_CRASHPAD_CRASH_PROTOBUF,
+                        InternalEvents.EVENT_TYPE_PREV_SESSION_NATIVE_CRASH_PROTOBUF,
                         defaultComposers()
                                 .withCustomValueComposerClass(ProtobufNativeCrashComposer.class)
                                 .withCustomEncodingTypeProviderClass(ProtobufNativeCrashComposer.class)
                 },
                 {
-                        InternalEvents.EVENT_TYPE_CURRENT_SESSION_CRASHPAD_CRASH_PROTOBUF,
+                        InternalEvents.EVENT_TYPE_CURRENT_SESSION_NATIVE_CRASH_PROTOBUF,
                         defaultComposers()
                                 .withCustomValueComposerClass(ProtobufNativeCrashComposer.class)
                                 .withCustomEncodingTypeProviderClass(ProtobufNativeCrashComposer.class)
                 },
                 {
-                        InternalEvents.EVENT_TYPE_CURRENT_SESSION_CRASHPAD_CRASH_PROTOBUF,
+                        InternalEvents.EVENT_TYPE_CURRENT_SESSION_NATIVE_CRASH_PROTOBUF,
                         defaultComposers()
                                 .withCustomValueComposerClass(ProtobufNativeCrashComposer.class)
                                 .withCustomEncodingTypeProviderClass(ProtobufNativeCrashComposer.class)

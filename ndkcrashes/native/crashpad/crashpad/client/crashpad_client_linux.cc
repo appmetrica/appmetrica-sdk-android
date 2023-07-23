@@ -54,7 +54,7 @@ namespace crashpad {
 namespace {
 
 //region change for AppMetrica
-constexpr char kArgumentRuntimeConfig[] = "appmetrica-runtime-config";
+constexpr char kArgumentAppMetricaMetadata[] = "appmetrica-metadata";
 //endregion change for AppMetrica
 
 std::string FormatArgumentInt(const std::string& name, int value) {
@@ -105,9 +105,7 @@ std::vector<std::string> BuildAppProcessArgs(
 
 std::vector<std::string> BuildArgsToLaunchWithLinker(
     const std::string& handler_trampoline,
-    //region change for AppMetrica
-    // const std::string& handler_library,
-    //endregion change for AppMetrica
+    const std::string& handler_library,
     bool is_64_bit,
     const base::FilePath& database,
     const base::FilePath& metrics_dir,
@@ -121,10 +119,12 @@ std::vector<std::string> BuildArgsToLaunchWithLinker(
   } else {
     argv.push_back("/system/bin/linker");
   }
-  argv.push_back(handler_trampoline);
   //region change for AppMetrica
-  // argv.push_back(handler_library);
+  if (!handler_trampoline.empty()) {
+    argv.push_back(handler_trampoline);
+  }
   //endregion change for AppMetrica
+  argv.push_back(handler_library);
 
   std::vector<std::string> handler_argv = BuildHandlerArgvStrings(
       base::FilePath(), database, metrics_dir, url, annotations, arguments);
@@ -296,7 +296,7 @@ class LaunchAtCrashHandler : public SignalHandler {
                   const std::vector<std::string>* envp,
                   //region change for AppMetrica
                   const std::set<int>* unhandled_signals,
-                  const std::string runtimeConfig) {
+                  const std::string appMetricaMetadata) {
                   //endregion change for AppMetrica
     argv_strings_.swap(*argv_in);
 
@@ -309,7 +309,7 @@ class LaunchAtCrashHandler : public SignalHandler {
     argv_strings_.push_back(FormatArgumentAddress("trace-parent-with-exception",
                                                   &GetExceptionInfo()));
     //region change for AppMetrica
-    argv_strings_.push_back(FormatArgumentString(kArgumentRuntimeConfig, runtimeConfig));
+    argv_strings_.push_back(FormatArgumentString(kArgumentAppMetricaMetadata, appMetricaMetadata));
     //endregion change for AppMetrica
 
     StringVectorToCStringVector(argv_strings_, &argv_);
@@ -317,10 +317,10 @@ class LaunchAtCrashHandler : public SignalHandler {
   }
 
   //region change for AppMetrica
-  void UpdateRuntimeConfig(std::string& runtimeConfig) {
+  void UpdateAppMetricaMetadata(const std::string& appMetricaMetadata) {
     if (!argv_strings_.empty()) {
       argv_strings_.pop_back();
-      argv_strings_.push_back(FormatArgumentString(kArgumentRuntimeConfig, runtimeConfig));
+      argv_strings_.push_back(FormatArgumentString(kArgumentAppMetricaMetadata, appMetricaMetadata));
       StringVectorToCStringVector(argv_strings_, &argv_);
     }
   }
@@ -625,7 +625,7 @@ bool CrashpadClient::StartJavaHandlerAtCrash(
     const std::map<std::string, std::string>& annotations,
     //region change for AppMetrica
     const std::vector<std::string>& arguments,
-    const std::string& runtimeConfig) {
+    const std::string& appMetricaMetadata) {
     //endregion change for AppMetrica
   std::vector<std::string> argv = BuildAppProcessArgs(class_name,
                                                       database,
@@ -637,7 +637,7 @@ bool CrashpadClient::StartJavaHandlerAtCrash(
 
   auto signal_handler = LaunchAtCrashHandler::Get();
   //region change for AppMetrica
-  return signal_handler->Initialize(&argv, env, &unhandled_signals_, runtimeConfig);
+  return signal_handler->Initialize(&argv, env, &unhandled_signals_, appMetricaMetadata);
   //region change for AppMetrica
 }
 
@@ -658,9 +658,7 @@ bool CrashpadClient::StartJavaHandlerForClient(
 
 bool CrashpadClient::StartHandlerWithLinkerAtCrash(
     const std::string& handler_trampoline,
-    //region change for AppMetrica
-    // const std::string& handler_library,
-    //endregion change for AppMetrica
+    const std::string& handler_library,
     bool is_64_bit,
     const std::vector<std::string>* env,
     const base::FilePath& database,
@@ -669,13 +667,11 @@ bool CrashpadClient::StartHandlerWithLinkerAtCrash(
     const std::map<std::string, std::string>& annotations,
     //region change for AppMetrica
     const std::vector<std::string>& arguments,
-    const std::string& runtimeConfig) {
+    const std::string& appMetricaMetadata) {
     //endregion change for AppMetrica
   std::vector<std::string> argv =
       BuildArgsToLaunchWithLinker(handler_trampoline,
-                                  //region change for AppMetrica
-                                  // handler_library,
-                                  //endregion change for AppMetrica
+                                  handler_library,
                                   is_64_bit,
                                   database,
                                   metrics_dir,
@@ -685,7 +681,7 @@ bool CrashpadClient::StartHandlerWithLinkerAtCrash(
                                   kInvalidFileHandle);
   auto signal_handler = LaunchAtCrashHandler::Get();
   //region change for AppMetrica
-  return signal_handler->Initialize(&argv, env, &unhandled_signals_, runtimeConfig);
+  return signal_handler->Initialize(&argv, env, &unhandled_signals_, appMetricaMetadata);
   //endregion change for AppMetrica
 }
 
@@ -703,9 +699,7 @@ bool CrashpadClient::StartHandlerWithLinkerForClient(
     int socket) {
   std::vector<std::string> argv =
       BuildArgsToLaunchWithLinker(handler_trampoline,
-                                  //region change for AppMetrica
-                                  // handler_library,
-                                  //endregion change for AppMetrica
+                                  handler_library,
                                   is_64_bit,
                                   database,
                                   metrics_dir,
@@ -727,21 +721,21 @@ bool CrashpadClient::StartHandlerAtCrash(
     const std::vector<std::string>& arguments,
     //region change for AppMetrica
     const std::vector<base::FilePath>& attachments,
-    const std::string& runtimeConfig) {
+    const std::string& appMetricaMetadata) {
     //endregion change for AppMetrica
   std::vector<std::string> argv = BuildHandlerArgvStrings(
       handler, database, metrics_dir, url, annotations, arguments, attachments);
 
   auto signal_handler = LaunchAtCrashHandler::Get();
   //region change for AppMetrica
-  return signal_handler->Initialize(&argv, nullptr, &unhandled_signals_, runtimeConfig);
+  return signal_handler->Initialize(&argv, nullptr, &unhandled_signals_, appMetricaMetadata);
   //endregion change for AppMetrica
 }
 
 //region change for AppMetrica
-void CrashpadClient::UpdateRuntimeConfig(std::string& runtimeConfig) {
+void CrashpadClient::UpdateAppMetricaMetadata(const std::string& appMetricaMetadata) {
   auto signal_handler = LaunchAtCrashHandler::Get();
-  signal_handler->UpdateRuntimeConfig(runtimeConfig);
+  signal_handler->UpdateAppMetricaMetadata(appMetricaMetadata);
 }
 //endregion change for AppMetrica
 

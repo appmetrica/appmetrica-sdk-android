@@ -15,10 +15,7 @@ import io.appmetrica.analytics.impl.client.ProcessConfiguration;
 import io.appmetrica.analytics.impl.component.clients.ClientRepository;
 import io.appmetrica.analytics.impl.core.MetricaCoreImplFirstCreateTaskLauncher;
 import io.appmetrica.analytics.impl.core.MetricaCoreImplFirstCreateTaskLauncherProvider;
-import io.appmetrica.analytics.impl.crash.CrashpadListenerImpl;
 import io.appmetrica.analytics.impl.crash.jvm.CrashDirectoryWatcher;
-import io.appmetrica.analytics.impl.crash.ndk.crashpad.CrashpadCrashReader;
-import io.appmetrica.analytics.impl.crash.ndk.crashpad.CrashpadLoader;
 import io.appmetrica.analytics.impl.db.VitalCommonDataProvider;
 import io.appmetrica.analytics.impl.modules.ServiceContextFacade;
 import io.appmetrica.analytics.impl.service.MetricaServiceCallback;
@@ -81,17 +78,9 @@ public class AppAppMetricaServiceCoreImplTests extends CommonTest {
     @Mock
     private CrashDirectoryWatcher crashDirectoryWatcher;
     @Mock
-    private CrashpadListenerImpl crashpadListener;
-    @Mock
-    private CrashpadLoader crashpadLoader;
-    @Mock
     private ICommonExecutor reportExecutor;
     @Mock
-    private ICommonExecutor defaultExecutor;
-    @Mock
     private ReportConsumer reportConsumer;
-    @Mock
-    private CrashpadCrashReader crashpadCrashReader;
     @Mock
     private ScreenInfoHolder screenInfoHolder;
     @Mock
@@ -148,7 +137,6 @@ public class AppAppMetricaServiceCoreImplTests extends CommonTest {
                 any(Consumer.class)
         );
         doReturn(reportConsumer).when(fieldsFactory).createReportConsumer(same(mContext), any(ClientRepository.class));
-        doReturn(crashpadCrashReader).when(fieldsFactory).createCrashpadCrashReader(reportConsumer);
 
         when(mContext.getResources()).thenReturn(resources);
         when(resources.getConfiguration()).thenReturn(configuration);
@@ -163,10 +151,7 @@ public class AppAppMetricaServiceCoreImplTests extends CommonTest {
             mFileProvider,
             firstServiceEntryPointManager,
             mApplicationStateProvider,
-            crashpadListener,
-            crashpadLoader,
             reportExecutor,
-            defaultExecutor,
             fieldsFactory,
             screenInfoHolder
         );
@@ -375,10 +360,7 @@ public class AppAppMetricaServiceCoreImplTests extends CommonTest {
 
     @Test
     public void onDestroy() {
-        ArgumentCaptor<Consumer<String>> nativeCrashConsumer = ArgumentCaptor.forClass(Consumer.class);
-        verify(crashpadListener).addListener(nativeCrashConsumer.capture());
         mMetricaCore.onDestroy();
-        verify(crashpadListener).removeListener(nativeCrashConsumer.getValue());
     }
 
     @Test

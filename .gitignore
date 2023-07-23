@@ -8,6 +8,7 @@ _*
 *.iml
 .idea/*
 !.idea/copyright
+!.idea/inspectionProfiles
 .gradle
 .svn
 .deps
