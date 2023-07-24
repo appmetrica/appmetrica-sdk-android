@@ -11,7 +11,12 @@ val projectToFlavorMapping = mapOf(
     "analytics" to "binaryProd",
 ).withDefault { "" }
 
-fun createTaskName(prefix: String, flavor: String, buildType: String, suffix: String = ""): String {
+fun createTaskName(
+    prefix: String,
+    flavor: String = "",
+    buildType: String = "",
+    suffix: String = ""
+): String {
     return "${prefix}${projectToFlavorMapping.getValue(flavor).capitalize()}${buildType.capitalize()}${suffix.capitalize()}"
 }
 
@@ -25,4 +30,17 @@ buildTypes.forEach { buildType ->
     tasks.register("test${buildType.capitalize()}UnitTest") {
         dependsOn(modules.map { it.tasks.named(createTaskName("test", it.name, buildType, "unitTest")) })
     }
+    tasks.register("generate${buildType.capitalize()}JacocoReport") {
+        dependsOn(modules.map { it.tasks.named(createTaskName("generate", it.name, buildType, "jacocoReport")) })
+    }
+}
+
+tasks.register("codequality") {
+    dependsOn(modules.map { it.tasks.named(createTaskName("codequality")) })
+}
+tasks.register("aarCheck") {
+    dependsOn(modules.map { it.tasks.named(createTaskName("aarCheck")) })
+}
+tasks.register("aarDump") {
+    dependsOn(modules.map { it.tasks.named(createTaskName("aarDump")) })
 }
