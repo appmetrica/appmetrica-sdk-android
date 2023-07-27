@@ -7,6 +7,7 @@ import android.os.Bundle;
 import io.appmetrica.analytics.CounterConfiguration;
 import io.appmetrica.analytics.coreapi.internal.backport.Consumer;
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
+import io.appmetrica.analytics.coreutils.internal.io.FileUtils;
 import io.appmetrica.analytics.impl.client.ClientConfiguration;
 import io.appmetrica.analytics.impl.client.ProcessConfiguration;
 import io.appmetrica.analytics.impl.component.CommonArguments;
@@ -55,8 +56,6 @@ public class AppAppMetricaServiceCoreImplStaticTests extends CommonTest {
     @Mock
     private CollectingFlags mCollectingFlags;
     @Mock
-    private FileProvider mFileProvider;
-    @Mock
     private ReportConsumer mReportConsumer;
     @Mock
     private ApplicationStateProviderImpl mApplicationStateProvider;
@@ -90,6 +89,8 @@ public class AppAppMetricaServiceCoreImplStaticTests extends CommonTest {
     @Rule
     public final MockedStaticRule<ClientConfiguration> sClientConfiguration = new MockedStaticRule<>(ClientConfiguration.class);
     @Rule
+    public final MockedStaticRule<FileUtils> sFileUtils = new MockedStaticRule<>(FileUtils.class);
+    @Rule
     public MockedConstructionRule<MetricaCoreImplFirstCreateTaskLauncherProvider> firstCreateTaskLauncherProviderRule =
         new MockedConstructionRule<>(
             MetricaCoreImplFirstCreateTaskLauncherProvider.class,
@@ -109,7 +110,7 @@ public class AppAppMetricaServiceCoreImplStaticTests extends CommonTest {
         when(GlobalServiceLocator.getInstance().getVitalDataProviderStorage().getCommonDataProvider())
                 .thenReturn(mock(VitalCommonDataProvider.class));
 
-        when(mFileProvider.getCrashesDirectory(mContext)).thenReturn(mock(File.class));
+        when(FileUtils.getCrashesDirectory(mContext)).thenReturn(mock(File.class));
         doReturn(crashDirectoryWatcher).when(fieldsFactory).createCrashDirectoryWatcher(
                 any(File.class),
                 any(Consumer.class)
@@ -121,7 +122,6 @@ public class AppAppMetricaServiceCoreImplStaticTests extends CommonTest {
             mCallback,
             mClientRepository,
             mAppMetricaServiceLifecycle,
-            mFileProvider,
             firstServiceEntryPointManager,
             mApplicationStateProvider,
             reportExecutor,

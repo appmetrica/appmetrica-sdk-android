@@ -11,6 +11,7 @@ import android.os.ResultReceiver;
 import io.appmetrica.analytics.coreapi.internal.backport.Consumer;
 import io.appmetrica.analytics.coreapi.internal.device.ScreenInfo;
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
+import io.appmetrica.analytics.coreutils.internal.io.FileUtils;
 import io.appmetrica.analytics.impl.client.ProcessConfiguration;
 import io.appmetrica.analytics.impl.component.clients.ClientRepository;
 import io.appmetrica.analytics.impl.core.MetricaCoreImplFirstCreateTaskLauncher;
@@ -64,8 +65,6 @@ public class AppAppMetricaServiceCoreImplTests extends CommonTest {
     @Mock
     private CollectingFlags mCollectingFlags;
     @Mock
-    private FileProvider mFileProvider;
-    @Mock
     private ReportConsumer mReportConsumer;
     @Mock
     private ApplicationStateProviderImpl mApplicationStateProvider;
@@ -106,6 +105,8 @@ public class AppAppMetricaServiceCoreImplTests extends CommonTest {
     @Rule
     public MockedStaticRule<LocaleHolder> localeHolderMockedStaticRule = new MockedStaticRule<>(LocaleHolder.class);
     @Rule
+    public MockedStaticRule<FileUtils> fileUtilsMockedStaticRule = new MockedStaticRule<>(FileUtils.class);
+    @Rule
     public MockedConstructionRule<ReportProxy> reportProxyMockedConstructionRule = new MockedConstructionRule<>(ReportProxy.class);
     @Rule
     public MockedConstructionRule<MetricaCoreImplFirstCreateTaskLauncherProvider> firstCreateTaskLauncherProviderRule =
@@ -131,7 +132,7 @@ public class AppAppMetricaServiceCoreImplTests extends CommonTest {
         intent = new Intent();
         mContext = TestUtils.createMockedContext();
 
-        when(mFileProvider.getCrashesDirectory(mContext)).thenReturn(mock(File.class));
+        when(FileUtils.getCrashesDirectory(mContext)).thenReturn(mock(File.class));
         doReturn(crashDirectoryWatcher).when(fieldsFactory).createCrashDirectoryWatcher(
                 any(File.class),
                 any(Consumer.class)
@@ -148,7 +149,6 @@ public class AppAppMetricaServiceCoreImplTests extends CommonTest {
             mCallback,
             mClientRepository,
             mAppMetricaServiceLifecycle,
-            mFileProvider,
             firstServiceEntryPointManager,
             mApplicationStateProvider,
             reportExecutor,

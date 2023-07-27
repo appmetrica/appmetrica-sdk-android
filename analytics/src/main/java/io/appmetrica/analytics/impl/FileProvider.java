@@ -25,11 +25,6 @@ public class FileProvider {
         return FileUtils.getFileFromAppStorage(context, fileName);
     }
 
-    @Nullable
-    public File getCrashesDirectory(@NonNull Context context) {
-        return getStorageSubDirectoryFile(context, "appmetrica_crashes");
-    }
-
     @NonNull
     public File getFileByNonNullPath(@NonNull String path) {
         return new File(path);

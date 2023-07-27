@@ -207,6 +207,7 @@ public final class io.appmetrica.analytics.coreutils.internal.io.FileUtils {
 
     public static final [Nullable] java.io.File getAppDataDir([NonNull] android.content.Context)
     public static final [Nullable] java.io.File getAppStorageDirectory([NonNull] android.content.Context)
+    public static final [Nullable] java.io.File getCrashesDirectory([NonNull] android.content.Context)
     public static final [Nullable] java.io.File getFileFromAppStorage([NonNull] android.content.Context, [NonNull] String)
     public static final [NonNull] java.io.File getFileFromPath([NonNull] String)
     public static final [Nullable] java.io.File getFileFromSdkStorage([NonNull] android.content.Context, [NonNull] String)

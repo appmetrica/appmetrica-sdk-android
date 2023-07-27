@@ -42,11 +42,6 @@ class FileProviderStorageDirectoryTest(
                     { dir: File -> File(dir, "file") },
                     "getFileFromStorage"
                 ),
-                arrayOf(
-                    { fileProvider: FileProvider, context: Context -> fileProvider.getCrashesDirectory(context) },
-                    { dir: File -> File(dir, "appmetrica_crashes") },
-                    "getCrashesDirectory"
-                ),
             )
         }
     }

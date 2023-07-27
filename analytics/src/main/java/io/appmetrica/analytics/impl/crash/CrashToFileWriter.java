@@ -3,6 +3,7 @@ package io.appmetrica.analytics.impl.crash;
 import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
+import io.appmetrica.analytics.coreutils.internal.io.FileUtils;
 import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.FileProvider;
 import io.appmetrica.analytics.impl.ReportToSend;
@@ -49,7 +50,7 @@ public class CrashToFileWriter {
     }
 
     public void writeToFile(@NonNull ReportToSend toSend) {
-        File crashFolder = mFileProvider.getCrashesDirectory(mContext);
+        File crashFolder = FileUtils.getCrashesDirectory(mContext);
         if (mCrashFolderPreparer.prepareCrashFolder(crashFolder)) {
             ProcessConfiguration configuration = toSend.getEnvironment().getProcessConfiguration();
             Integer processID = configuration.getProcessID();

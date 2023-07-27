@@ -3,6 +3,7 @@ package io.appmetrica.analytics.impl;
 import android.content.Context;
 import io.appmetrica.analytics.coreapi.internal.backport.Consumer;
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
+import io.appmetrica.analytics.coreutils.internal.io.FileUtils;
 import io.appmetrica.analytics.coreutils.internal.services.ActivationBarrier;
 import io.appmetrica.analytics.impl.component.clients.ClientRepository;
 import io.appmetrica.analytics.impl.core.MetricaCoreImplFirstCreateTaskLauncher;
@@ -19,6 +20,7 @@ import io.appmetrica.analytics.impl.startup.StartupState;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import io.appmetrica.analytics.testutils.MockedConstructionRule;
+import io.appmetrica.analytics.testutils.MockedStaticRule;
 import io.appmetrica.analytics.testutils.TestUtils;
 import io.appmetrica.analytics.testutils.rules.coreutils.UtilityServiceLocatorRule;
 import java.io.File;
@@ -58,8 +60,6 @@ public class AppAppMetricaServiceCoreImplOnCreateTest extends CommonTest {
     private ClientRepository mClientRepository;
     @Mock
     private AppMetricaServiceLifecycle mAppMetricaServiceLifecycle;
-    @Mock
-    private FileProvider mFileProvider;
     @Mock
     private File mCrashesDirectory;
     @Mock
@@ -105,13 +105,16 @@ public class AppAppMetricaServiceCoreImplOnCreateTest extends CommonTest {
                 }
             });
 
+    @Rule
+    public MockedStaticRule<FileUtils> fileUtilsMockedRule = new MockedStaticRule<>(FileUtils.class);
+
     @Before
     public void setUp() {
         mContext = TestUtils.createMockedContext();
         MockitoAnnotations.openMocks(this);
         when(GlobalServiceLocator.getInstance().getVitalDataProviderStorage().getCommonDataProvider())
             .thenReturn(mock(VitalCommonDataProvider.class));
-        when(mFileProvider.getCrashesDirectory(mContext)).thenReturn(mCrashesDirectory);
+        when(FileUtils.getCrashesDirectory(mContext)).thenReturn(mCrashesDirectory);
         doReturn(crashDirectoryWatcher).when(fieldsFactory).createCrashDirectoryWatcher(
             any(File.class),
             any(Consumer.class)
@@ -160,7 +163,7 @@ public class AppAppMetricaServiceCoreImplOnCreateTest extends CommonTest {
 
     @Test
     public void doNotSubscribeToCrashesIfDirectoryIsNull() {
-        when(mFileProvider.getCrashesDirectory(mContext)).thenReturn(null);
+        when(FileUtils.getCrashesDirectory(mContext)).thenReturn(null);
         initMetricaCoreImpl();
         mMetricaCore.onCreate();
         verifyZeroInteractions(reportExecutor, crashDirectoryWatcher);
@@ -216,7 +219,6 @@ public class AppAppMetricaServiceCoreImplOnCreateTest extends CommonTest {
             mCallback,
             mClientRepository,
             mAppMetricaServiceLifecycle,
-            mFileProvider,
             firstServiceEntryPointManager,
             applicationStateProvider,
             reportExecutor,

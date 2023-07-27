@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.impl.crash;
 
 import android.content.Context;
+import io.appmetrica.analytics.coreutils.internal.io.FileUtils;
 import io.appmetrica.analytics.impl.FileProvider;
 import io.appmetrica.analytics.impl.ReportToSend;
 import io.appmetrica.analytics.impl.ReporterEnvironment;
@@ -8,8 +9,10 @@ import io.appmetrica.analytics.impl.client.ProcessConfiguration;
 import io.appmetrica.analytics.impl.utils.concurrency.ExclusiveMultiProcessFileLock;
 import io.appmetrica.analytics.impl.utils.concurrency.FileLocksHolder;
 import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.analytics.testutils.MockedStaticRule;
 import java.io.File;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InOrder;
@@ -43,11 +46,14 @@ public class CrashToFileWriterTest extends CommonTest {
     private FileLocksHolder fileLocksHolder;
     private CrashToFileWriter mCrashToFileWriter;
 
+    @Rule
+    public MockedStaticRule<FileUtils> fileUtilsMockedStaticRule = new MockedStaticRule<>(FileUtils.class);
+
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
         mContext = RuntimeEnvironment.getApplication();
-        when(mFileProvider.getCrashesDirectory(mContext)).thenReturn(mCrashFolder);
+        when(FileUtils.getCrashesDirectory(mContext)).thenReturn(mCrashFolder);
         when(mReport.getEnvironment()).thenReturn(mReporterEnvironment);
         when(mReporterEnvironment.getProcessConfiguration()).thenReturn(mProcessConfiguration);
         when(mProcessConfiguration.getProcessID()).thenReturn(7766);

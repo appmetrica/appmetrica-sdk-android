@@ -143,10 +143,15 @@ class FileUtilsTest {
     }
 
     @Test
+    fun getCrashesDirectory() {
+        val file = FileUtils.getCrashesDirectory(context)
+        assertThat(file!!.canonicalPath).endsWith("/appmetrica/analytics/crashes")
+    }
+
+    @Test
     fun getNativeCrashDirectory() {
         val file = FileUtils.getNativeCrashDirectory(context)
-        assertThat(file!!.parentFile).isEqualTo(noBackupDir)
-        assertThat(file.name).isEqualTo("appmetrica_native_crashes")
+        assertThat(file!!.canonicalPath).endsWith("/appmetrica/analytics/native_crashes")
     }
 
     @Test

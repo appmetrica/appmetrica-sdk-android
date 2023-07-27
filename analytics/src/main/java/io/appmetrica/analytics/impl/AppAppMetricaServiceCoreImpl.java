@@ -14,6 +14,7 @@ import androidx.annotation.WorkerThread;
 import io.appmetrica.analytics.CounterConfiguration;
 import io.appmetrica.analytics.coreapi.internal.backport.Consumer;
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
+import io.appmetrica.analytics.coreutils.internal.io.FileUtils;
 import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.client.ClientConfiguration;
 import io.appmetrica.analytics.impl.client.ProcessConfiguration;
@@ -44,8 +45,6 @@ public class AppAppMetricaServiceCoreImpl implements AppMetricaServiceCore, Metr
     private final Context mContext;
     @NonNull
     private volatile MetricaServiceCallback mCallback;
-    @NonNull
-    private final FileProvider mFileProvider;
 
     @NonNull
     private ClientRepository mClientRepository;
@@ -96,7 +95,6 @@ public class AppAppMetricaServiceCoreImpl implements AppMetricaServiceCore, Metr
             callback,
             new ClientRepository(context, componentsRepository),
             new AppMetricaServiceLifecycle(),
-            new FileProvider(),
             FirstServiceEntryPointManager.INSTANCE,
             GlobalServiceLocator.getInstance().getApplicationStateProvider(),
             GlobalServiceLocator.getInstance().getServiceExecutorProvider().getReportRunnableExecutor(),
@@ -111,7 +109,6 @@ public class AppAppMetricaServiceCoreImpl implements AppMetricaServiceCore, Metr
                                  @NonNull MetricaServiceCallback callback,
                                  @NonNull ClientRepository clientRepository,
                                  @NonNull AppMetricaServiceLifecycle appMetricaServiceLifecycle,
-                                 @NonNull FileProvider fileProvider,
                                  @NonNull FirstServiceEntryPointManager firstServiceEntryPointManager,
                                  @NonNull ApplicationStateProviderImpl applicationStateProvider,
                                  @NonNull ICommonExecutor reportExecutor,
@@ -121,7 +118,6 @@ public class AppAppMetricaServiceCoreImpl implements AppMetricaServiceCore, Metr
         mCallback = callback;
         mClientRepository = clientRepository;
         mAppMetricaServiceLifecycle = appMetricaServiceLifecycle;
-        mFileProvider = fileProvider;
         this.firstServiceEntryPointManager = firstServiceEntryPointManager;
         this.applicationStateProvider = applicationStateProvider;
         this.reportExecutor = reportExecutor;
@@ -195,7 +191,7 @@ public class AppAppMetricaServiceCoreImpl implements AppMetricaServiceCore, Metr
     }
 
     private void initJvmCrashWatcher() {
-        File crashDirectory = mFileProvider.getCrashesDirectory(mContext);
+        File crashDirectory = FileUtils.getCrashesDirectory(mContext);
         if (crashDirectory != null) {
             crashDirectoryWatcher = fieldsFactory.createCrashDirectoryWatcher(crashDirectory, crashesListener);
             YLogger.info(TAG, "readOldCrashes for directory: %s", crashDirectory.getAbsolutePath());
