@@ -4,9 +4,6 @@ import com.android.build.gradle.LibraryExtension
 import com.android.build.gradle.api.LibraryVariant
 import io.appmetrica.analytics.gradle.isCIBuild
 import io.appmetrica.gradle.repositories.sonatypeRepository
-import io.appmetrica.gradle.repositories.yandexMobileReleasesRepository
-import io.appmetrica.gradle.repositories.yandexMobileSnapshotsRepository
-import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -59,8 +56,6 @@ class PublishingPlugin : Plugin<Project> {
 
         project.configure<PublishingExtension> {
             sonatypeRepository("sonatypeRelease")
-            yandexMobileReleasesRepository("artifactoryRelease")
-            yandexMobileSnapshotsRepository("artifactorySnapshot")
 
             publications {
                 project.the<LibraryExtension>().libraryVariants.configureEach {
