@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.location.Location;
 import androidx.annotation.NonNull;
+import io.appmetrica.analytics.AnrListener;
 import io.appmetrica.analytics.AppMetricaConfig;
 import io.appmetrica.analytics.PreloadInfo;
 import io.appmetrica.analytics.ValidationException;
@@ -447,6 +448,30 @@ public class MainReporterTest extends BaseReporterTest {
         mMainReporter.enableAnrMonitoring();
         verify(anrMonitor, times(1)).startMonitoring();
         verifyNoMoreInteractions(anrMonitor);
+    }
+
+    @Test
+    public void testRegisterAnrListener() {
+        AnrListener listener1 = mock(AnrListener.class);
+        AnrListener listener2 = mock(AnrListener.class);
+        ANRMonitor anrMonitor = mock(ANRMonitor.class);
+        mMainReporter.setAnrMonitor(anrMonitor);
+        mMainReporter.registerAnrListener(listener1);
+        mMainReporter.registerAnrListener(listener2);
+
+        ArgumentCaptor<ANRMonitor.Listener> anrListenerCaptor = ArgumentCaptor.forClass(ANRMonitor.Listener.class);
+        verify(anrMonitor, times(2)).subscribe(anrListenerCaptor.capture());
+
+        ANRMonitor.Listener anrListener1 = anrListenerCaptor.getAllValues().get(0);
+        ANRMonitor.Listener anrListener2 = anrListenerCaptor.getAllValues().get(1);
+
+        anrListener1.onAppNotResponding();
+        verify(listener1).onAppNotResponding();
+        verifyNoMoreInteractions(listener2);
+
+        anrListener2.onAppNotResponding();
+        verify(listener2).onAppNotResponding();
+        verifyNoMoreInteractions(listener1);
     }
 
     @Test

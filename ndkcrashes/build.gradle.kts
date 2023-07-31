@@ -54,7 +54,12 @@ if (project.property("ndkcrashes.native.enabled").toString().toBoolean()) {
     configureNdkCrashes()
 } else {
     tasks.configureEach {
-        if (name.startsWith("assemble") || name.startsWith("publish")) {
+        if (name.matches("bundle.*Aar".toRegex()) || name.startsWith("assemble")) {
+            doFirst {
+                project.logger.error("ndkcrashes.native.enabled is disabled. '.so' files will not be built")
+            }
+        }
+        if (name.startsWith("publish")) {
             doFirst {
                 throw GradleException("ndkcrashes.native.enabled is disabled. '.so' files will not be built")
             }

@@ -4,6 +4,7 @@ import android.app.Activity;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import java.util.List;
+import io.appmetrica.analytics.AnrListener;
 
 public interface IMainReporter extends IBaseReporter, MetricaConfigurator {
 
@@ -22,4 +23,6 @@ public interface IMainReporter extends IBaseReporter, MetricaConfigurator {
     List<String> getCustomHosts();
 
     void onWebViewReportingInit(@NonNull WebViewJsInterfaceHandler webViewJsInterfaceHandler);
+
+    void registerAnrListener(@NonNull AnrListener listener);
 }

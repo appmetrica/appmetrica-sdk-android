@@ -31,6 +31,7 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -321,5 +322,12 @@ public class AppMetricaTests extends CommonTest {
         IdentifiersResult identifiersResult = new IdentifiersResult(null, IdentifierStatus.OK, null);
         when(mProxy.getUuid(mContext)).thenReturn(identifiersResult);
         assertThat(AppMetrica.getUuid(mContext)).isNull();
+    }
+
+    @Test
+    public void registerAnrListener() {
+        AnrListener listener = mock(AnrListener.class);
+        AppMetrica.registerAnrListener(listener);
+        verify(mProxy).registerAnrListener(eq(listener));
     }
 }

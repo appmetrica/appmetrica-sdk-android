@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.AdRevenue;
+import io.appmetrica.analytics.AnrListener;
 import io.appmetrica.analytics.AppMetricaConfig;
 import io.appmetrica.analytics.DeferredDeeplinkListener;
 import io.appmetrica.analytics.DeferredDeeplinkParametersListener;
@@ -537,6 +538,18 @@ public final class AppMetricaProxy extends BaseAppMetricaProxy {
             @Override
             public void run() {
                 getProvider().getInitializedImpl(context).requestStartupParams(callback, params);
+            }
+        });
+    }
+
+    public void registerAnrListener(@NonNull final AnrListener listener) {
+        getActivationValidator().validate();
+        mMainFacadeBarrier.registerAnrListener(listener);
+        getSynchronousStageExecutor().registerAnrListener(listener);
+        getExecutor().execute(new Runnable() {
+            @Override
+            public void run() {
+                getMainReporter().registerAnrListener(listener);
             }
         });
     }

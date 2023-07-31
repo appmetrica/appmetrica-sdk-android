@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import androidx.annotation.WorkerThread;
+import io.appmetrica.analytics.AnrListener;
 import io.appmetrica.analytics.AppMetricaConfig;
 import io.appmetrica.analytics.CounterConfiguration;
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
@@ -363,6 +364,17 @@ public class MainReporter extends BaseReporter implements IMainReporter {
     @Override
     public void onWebViewReportingInit(@NonNull WebViewJsInterfaceHandler webViewJsInterfaceHandler) {
         webViewJsInterfaceHandler.setLogger(mPublicLogger);
+    }
+
+    @Override
+    public void registerAnrListener(@NonNull final AnrListener listener) {
+        final ANRMonitor.Listener anrListener = new ANRMonitor.Listener() {
+            @Override
+            public void onAppNotResponding() {
+                listener.onAppNotResponding();
+            }
+        };
+        anrMonitor.subscribe(anrListener);
     }
 
     @WorkerThread

@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.impl.proxy
 
 import android.content.Context
+import io.appmetrica.analytics.AnrListener
 import io.appmetrica.analytics.AppMetricaConfig
 import io.appmetrica.analytics.ReporterConfig
 import io.appmetrica.analytics.StartupParamsCallback
@@ -25,9 +26,12 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.ArgumentMatchers.same
 import org.mockito.Mock
 import org.mockito.Mockito.doReturn
+import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
 import org.mockito.Mockito.`when`
 import org.mockito.MockitoAnnotations
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.refEq
 import java.util.UUID
 
 class AppMetricaProxyContextTest : CommonTest() {
@@ -37,38 +41,55 @@ class AppMetricaProxyContextTest : CommonTest() {
 
     @Mock
     private lateinit var mainReporter: MainReporter
+
     @Mock
     private lateinit var mainReporterApiConsumerProvider: MainReporterApiConsumerProvider
+
     @Mock
     private lateinit var deeplinkConsumer: DeeplinkConsumer
+
     @Mock
     private lateinit var impl: AppMetricaFacade
+
     @Mock
     private lateinit var provider: AppMetricaFacadeProvider
+
     @Mock
     private lateinit var reporterProxyStorage: ReporterProxyStorage
+
     @Mock
     private lateinit var barrier: MainFacadeBarrier
+
     @Mock
     private lateinit var context: Context
+
     @Mock
     private lateinit var synchronousStageExecutor: SynchronousStageExecutor
+
     @Mock
     private lateinit var defaultOneShotMetricaConfig: DefaultOneShotMetricaConfig
+
     @Mock
     private lateinit var webViewJsInterfaceHandler: WebViewJsInterfaceHandler
+
     @Mock
     private lateinit var silentActivationValidator: SilentActivationValidator
+
     @Mock
     private lateinit var activationValidator: ActivationValidator
+
     @Mock
     private lateinit var sessionsTrackingManager: SessionsTrackingManager
+
     @Mock
     private lateinit var contextAppearedListener: ContextAppearedListener
+
     @Mock
     private lateinit var executor: ICommonExecutor
+
     @Mock
     private lateinit var startupParamsCallback: StartupParamsCallback
+
     @Mock
     private lateinit var params: List<String>
     private lateinit var proxy: AppMetricaProxy

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.webkit.WebView;
+import io.appmetrica.analytics.AnrListener;
 import io.appmetrica.analytics.AppMetricaConfig;
 import io.appmetrica.analytics.DeferredDeeplinkListener;
 import io.appmetrica.analytics.DeferredDeeplinkParametersListener;
@@ -269,5 +270,15 @@ public class MainFacadeBarrierTest extends CommonTest {
     @Test
     public void getUuidForNonNullContext() {
         mBarrier.getUuid(mock(Context.class));
+    }
+
+    @Test
+    public void registerAnrListener() {
+        mBarrier.registerAnrListener(mock(AnrListener.class));
+    }
+
+    @Test(expected = ValidationException.class)
+    public void registerAnrListenerNullListener() {
+        mBarrier.registerAnrListener(null);
     }
 }

@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.AdRevenue;
+import io.appmetrica.analytics.AnrListener;
 import io.appmetrica.analytics.AppMetricaConfig;
 import io.appmetrica.analytics.DeferredDeeplinkListener;
 import io.appmetrica.analytics.DeferredDeeplinkParametersListener;
@@ -300,5 +301,9 @@ public class SynchronousStageExecutor {
 
     public void getUuid(@NonNull Context context) {
         contextAppearedListener.onProbablyAppeared(context);
+    }
+
+    public void registerAnrListener(@NonNull AnrListener listener) {
+
     }
 }

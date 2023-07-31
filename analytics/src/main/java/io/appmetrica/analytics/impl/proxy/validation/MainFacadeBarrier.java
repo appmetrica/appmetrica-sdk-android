@@ -8,6 +8,7 @@ import android.location.Location;
 import android.webkit.WebView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import io.appmetrica.analytics.AnrListener;
 import io.appmetrica.analytics.AppMetricaConfig;
 import io.appmetrica.analytics.DeferredDeeplinkListener;
 import io.appmetrica.analytics.DeferredDeeplinkParametersListener;
@@ -67,6 +68,10 @@ public class MainFacadeBarrier extends ReporterBarrier {
             new ThrowIfFailedValidator<>(
                     new NonNullValidator<>("AppMetricaDeviceIdentifiers callback")
             );
+    private static final Validator<AnrListener> sAnrListenerValidator =
+        new ThrowIfFailedValidator<AnrListener>(
+            new NonNullValidator<AnrListener>("ANR listener")
+        );
 
     public void enableActivityAutoTracking(@NonNull Application application) {
         sApplicationValidator.validate(application);
@@ -150,5 +155,9 @@ public class MainFacadeBarrier extends ReporterBarrier {
 
     public void getUuid(@NonNull Context context) {
         sCallbackValidator.validate(context);
+    }
+
+    public void registerAnrListener(@NonNull AnrListener listener) {
+        sAnrListenerValidator.validate(listener);
     }
 }

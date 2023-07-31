@@ -57,6 +57,10 @@ public enum io.appmetrica.analytics.AdsIdentifiersResult$Details {
     public static io.appmetrica.analytics.AdsIdentifiersResult$Details[] values()
 }
 
+public interface io.appmetrica.analytics.AnrListener {
+    public abstract void onAppNotResponding()
+}
+
 public final class io.appmetrica.analytics.AppMetrica {
     public static void activate([NonNull] android.content.Context, [NonNull] io.appmetrica.analytics.AppMetricaConfig)
     public static void activateReporter([NonNull] android.content.Context, [NonNull] io.appmetrica.analytics.ReporterConfig)
@@ -72,6 +76,7 @@ public final class io.appmetrica.analytics.AppMetrica {
     public static void pauseSession([Nullable] android.app.Activity)
     public static void putAppEnvironmentValue([NonNull] String, [Nullable] String)
     public static void putErrorEnvironmentValue([NonNull] String, [Nullable] String)
+    public static void registerAnrListener([NonNull] io.appmetrica.analytics.AnrListener)
     public static void reportAdRevenue([NonNull] io.appmetrica.analytics.AdRevenue)
     public static void reportAppOpen([NonNull] android.app.Activity)
     public static void reportAppOpen([NonNull] android.content.Intent)

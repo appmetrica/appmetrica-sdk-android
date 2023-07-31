@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.webkit.WebView;
+import io.appmetrica.analytics.AnrListener;
 import io.appmetrica.analytics.AppMetricaConfig;
 import io.appmetrica.analytics.DeferredDeeplinkListener;
 import io.appmetrica.analytics.DeferredDeeplinkParametersListener;
@@ -459,6 +460,12 @@ public class SynchronousStageExecutorTest extends CommonTest {
     @Test
     public void getUuid() {
         mSynchronousStageExecutor.getUuid(mContext);
+        verifyNoInteractions(mProvider);
+    }
+
+    @Test
+    public void registerAnrListener() {
+        mSynchronousStageExecutor.registerAnrListener(mock(AnrListener.class));
         verifyNoInteractions(mProvider);
     }
 }

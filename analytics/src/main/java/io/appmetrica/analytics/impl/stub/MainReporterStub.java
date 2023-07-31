@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.location.Location;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import io.appmetrica.analytics.AnrListener;
 import io.appmetrica.analytics.ModuleEvent;
 import io.appmetrica.analytics.impl.ActivityLifecycleManager;
 import io.appmetrica.analytics.impl.IMainReporter;
@@ -88,6 +89,11 @@ public class MainReporterStub extends ReporterExtendedStub implements IMainRepor
 
     @Override
     public void onWebViewReportingInit(@NonNull WebViewJsInterfaceHandler webViewJsInterfaceHandler) {
+        //Do nothing
+    }
+
+    @Override
+    public void registerAnrListener(@NonNull AnrListener listener) {
         //Do nothing
     }
 

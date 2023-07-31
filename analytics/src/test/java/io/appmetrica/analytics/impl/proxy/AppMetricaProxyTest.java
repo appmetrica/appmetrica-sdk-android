@@ -9,6 +9,7 @@ import android.util.ArrayMap;
 import android.webkit.WebView;
 import androidx.annotation.NonNull;
 import io.appmetrica.analytics.AdRevenue;
+import io.appmetrica.analytics.AnrListener;
 import io.appmetrica.analytics.AppMetricaConfig;
 import io.appmetrica.analytics.DeferredDeeplinkListener;
 import io.appmetrica.analytics.DeferredDeeplinkParametersListener;
@@ -692,6 +693,17 @@ public class AppMetricaProxyTest extends CommonTest {
         InOrder order = inOrder(mSynchronousStageExecutor, mProvider);
         order.verify(mSynchronousStageExecutor).clearAppEnvironment();
         order.verify(mProvider).clearAppEnvironment();
+    }
+
+    @Test
+    public void registerAnrListener() {
+        AnrListener listener = mock(AnrListener.class);
+        mProxy.registerAnrListener(listener);
+        InOrder order = inOrder(activationValidator, mBarrier, mSynchronousStageExecutor, mMainReporter);
+        order.verify(activationValidator).validate();
+        order.verify(mBarrier).registerAnrListener(eq(listener));
+        order.verify(mSynchronousStageExecutor).registerAnrListener(eq(listener));
+        order.verify(mMainReporter).registerAnrListener(eq(listener));
     }
 
     private void testSetStatisticSending(boolean value) {

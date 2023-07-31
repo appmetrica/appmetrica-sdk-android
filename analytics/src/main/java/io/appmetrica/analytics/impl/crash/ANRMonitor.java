@@ -8,16 +8,20 @@ import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import androidx.annotation.WorkerThread;
 import io.appmetrica.analytics.AppMetricaDefaultValues;
+import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.utils.executors.NamedThreadFactory;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ANRMonitor {
+    private static final String TAG = "[ANRMonitor]";
     private static final long TIME_TO_WAIT = TimeUnit.SECONDS.toMillis(1);
     private static final String THREAD_NAME = NamedThreadFactory.adoptThreadName("WatchDog");
 
     @NonNull
-    private final Listener mListener;
+    private final List<Listener> mListeners = new CopyOnWriteArrayList<>();
     private final int anrTicksCount;
     private final Handler mUiHandler = new Handler(Looper.getMainLooper());
     private final Thread mMonitorThread = new MonitorThread();
@@ -39,7 +43,8 @@ public class ANRMonitor {
         @NonNull final Listener listener,
         @Nullable final Integer anrMonitoringTimeout
     ) {
-        mListener = listener;
+        YLogger.debug(TAG, "Create ANRMonitor with listener %s", listener);
+        mListeners.add(listener);
         this.anrTicksCount = getAnrTicksCount(anrMonitoringTimeout);
     }
 
@@ -51,9 +56,18 @@ public class ANRMonitor {
         mMonitorThread.start();
     }
 
+    public void subscribe(@NonNull Listener listener) {
+        mListeners.add(listener);
+        YLogger.debug(TAG, "Subscribe listener %s. Actual listeners: %s", listener, mListeners);
+    }
+
     @VisibleForTesting
     public void handleAppNotResponding() {
-        mListener.onAppNotResponding();
+        YLogger.debug(TAG, "Notify %d listeners about ANR", mListeners.size());
+        for (Listener listener : mListeners) {
+            YLogger.debug(TAG, "Notify listener %s about ANR", listener);
+            listener.onAppNotResponding();
+        }
     }
 
     private int getAnrTicksCount(@Nullable final Integer anrMonitoringTimeout) {

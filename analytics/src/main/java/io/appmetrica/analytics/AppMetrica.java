@@ -613,4 +613,14 @@ public final class AppMetrica {
                 ) : params
         );
     }
+
+    /**
+     * Add listener for detect ANR.
+     * It should be called after {@link AppMetrica#activate} method.
+     *
+     * @param listener An object that implements {@link AnrListener} interface.
+     */
+    public static void registerAnrListener(@NonNull AnrListener listener) {
+        AppMetricaProxyProvider.getProxy().registerAnrListener(listener);
+    }
 }
