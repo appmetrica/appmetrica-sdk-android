@@ -20,6 +20,7 @@ class UpdateVersionPlugin : Plugin<Project> {
                 project.updateConstants(version)
                 project.updateGradleConstants(version)
                 project.updateSdkDataClass(version)
+                project.updateVersionInCi(version)
                 project.updateVersionInAutotests(version)
             }
         }
@@ -62,6 +63,11 @@ class UpdateVersionPlugin : Plugin<Project> {
     private fun Project.updateSdkDataClass(version: String) {
         val filePath = "analytics/src/main/java/io/appmetrica/analytics/impl/SdkData.java"
         updateVersion(filePath, ".*CURRENT_VERSION_NAME_FOR_MAPPING = \"", "\";", version)
+    }
+
+    private fun Project.updateVersionInCi(version: String) {
+        val filePath = "../a.yaml"
+        updateVersion(filePath, ".*appmetrica-sdk/r-", "-.*", version)
     }
 
     private fun Project.updateVersionInAutotestsVersionProvider(version: String, filePath: String) {
