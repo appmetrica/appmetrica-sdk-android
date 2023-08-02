@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.impl.db.storage
 
 import android.content.Context
+import io.appmetrica.analytics.coreutils.internal.io.FileUtils.copyToNullable
 import io.appmetrica.analytics.coreutils.internal.io.FileUtils.move
 import io.appmetrica.analytics.coreutils.internal.logger.YLogger
 import java.io.File
@@ -8,6 +9,7 @@ import java.io.File
 internal class DatabaseStoragePathProvider(
     private val targetDirProvider: DatabaseFullPathProvider,
     private val possibleOldDirProviders: List<DatabaseFullPathProvider>,
+    private val doNotDeleteSourceFile: Boolean,
     tagPostfix: String
 ) {
 
@@ -71,14 +73,14 @@ internal class DatabaseStoragePathProvider(
         } else {
             try {
                 YLogger.info(tag, "Old db `${oldDbFile.path} exists`. Importing...")
-                move(oldDbFile, targetDbFile)
+                import(oldDbFile, targetDbFile)
 
                 val oldDbFilePath = oldDbFile.path
                 val targetDbFilePath = targetDbFile.path
 
                 YLogger.info(tag, "Move journal files for db: ${oldDbFile.path}...")
                 listOf("-journal", "-shm", "-wal").forEach {
-                    move(File(oldDbFilePath + it), File(targetDbFilePath + it))
+                    import(File(oldDbFilePath + it), File(targetDbFilePath + it))
                 }
                 return true
             } catch (e: Throwable) {
@@ -88,8 +90,15 @@ internal class DatabaseStoragePathProvider(
         return false
     }
 
-    private fun move(from: File, to: File) {
-        val status = from.move(to)
-        YLogger.info(tag, "Move $from -> $to with status $status")
+    private fun import(from: File, to: File) {
+        if (doNotDeleteSourceFile) {
+            from.copyToNullable(to).also {
+                YLogger.info(tag, "Copy: $from -> $to with status $it")
+            }
+        } else {
+            from.move(to).also {
+                YLogger.info(tag, "Move: $from -> $to with status $it")
+            }
+        }
     }
 }

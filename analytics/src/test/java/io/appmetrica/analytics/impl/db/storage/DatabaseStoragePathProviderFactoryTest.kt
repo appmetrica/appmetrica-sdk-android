@@ -151,13 +151,15 @@ internal class DatabaseStoragePathProviderFactoryTest : CommonTest() {
         expectedTargetDirProvider: DatabaseFullPathProvider,
         expectedPossibleDatabaseDirProviders: List<DatabaseFullPathProvider>
     ) {
-        assertThat(databaseStoragePathProviderFactory.create(tag))
+        val doNotDeleteSourceFile = true
+        assertThat(databaseStoragePathProviderFactory.create(tag, doNotDeleteSourceFile))
             .isSameAs(databaseStoragePathProviderMockedConstructionRule.constructionMock.constructed().first())
         assertThat(databaseStoragePathProviderMockedConstructionRule.constructionMock.constructed()).hasSize(1)
         assertThat(databaseStoragePathProviderMockedConstructionRule.argumentInterceptor.flatArguments())
             .containsExactly(
                 expectedTargetDirProvider,
                 expectedPossibleDatabaseDirProviders,
+                doNotDeleteSourceFile,
                 tag
             )
     }

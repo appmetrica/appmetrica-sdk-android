@@ -5,6 +5,7 @@ import android.content.Context
 import android.os.Build
 import androidx.annotation.VisibleForTesting
 import io.appmetrica.analytics.coreutils.internal.AndroidUtils
+import io.appmetrica.analytics.coreutils.internal.io.FileUtils.moveByCopy
 import io.appmetrica.analytics.coreutils.internal.logger.YLogger
 import java.io.File
 
@@ -96,6 +97,26 @@ object FileUtils {
 
     @JvmStatic
     fun File?.move(to: File?): Boolean = this.moveByRename(to) || this.moveByCopy(to)
+
+    @JvmStatic
+    fun File?.copyToNullable(to: File?): Boolean {
+        if (this == null || to == null) {
+            YLogger.info(TAG, "Source or destination is null, so ignore copying")
+            return false
+        }
+        if (this.exists()) {
+            YLogger.info(TAG, "Copy from `${this.path}` -> ${this.path} via copy")
+            try {
+                this.copyTo(to)
+                return true
+            } catch (e: Throwable) {
+                YLogger.error(TAG, e)
+            }
+        } else {
+            YLogger.warning(TAG, "Source file with path `${this.path}` does not exist. Abort moving")
+        }
+        return false
+    }
 
     fun File?.moveByCopy(to: File?): Boolean {
         if (this == null || to == null) {

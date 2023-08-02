@@ -205,6 +205,7 @@ public final class io.appmetrica.analytics.coreutils.internal.io.FileUtils {
     public static final [NonNull] String SDK_FILES_PREFIX
     public static final [NonNull] String SDK_STORAGE_RELATIVE_PATH
 
+    public static final boolean copyToNullable([Nullable] java.io.File, [Nullable] java.io.File)
     public static final [Nullable] java.io.File getAppDataDir([NonNull] android.content.Context)
     public static final [Nullable] java.io.File getAppStorageDirectory([NonNull] android.content.Context)
     public static final [Nullable] java.io.File getCrashesDirectory([NonNull] android.content.Context)

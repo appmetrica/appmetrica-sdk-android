@@ -73,7 +73,7 @@ class PersistentUuidHolder {
             File old = FileUtils.getFileFromAppStorage(context, FILE_NAME);
             if (old != null && old.exists()) {
                 YLogger.info(TAG, "Found old uuid.data file with path = `%s`. Move it.", old.getPath());
-                boolean status = FileUtils.move(old, file);
+                boolean status = FileUtils.copyToNullable(old, file);
                 YLogger.info(TAG, "Move finished with status = %s", status);
             }
         }

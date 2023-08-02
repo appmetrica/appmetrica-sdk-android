@@ -22,6 +22,7 @@ import java.io.File
 internal class DatabaseStorageMigrationComplexTest(
     private val description: String,
     private val isLollipopAchieved: Boolean,
+    private val doNotDeleteSourceFile: Boolean,
     private val outerDatabaseDirPath: String?,
     private val oldFilesPaths: List<String>,
     private val expectedPath: String,
@@ -42,6 +43,7 @@ internal class DatabaseStorageMigrationComplexTest(
             arrayOf(
                 "Pre-lollipop without outer dir and with actual database exists",
                 false,
+                false,
                 null,
                 listOf(
                     "databases/$oldFileName", "databases/$oldFileName-journal",
@@ -52,11 +54,12 @@ internal class DatabaseStorageMigrationComplexTest(
                     "databases/appmetrica_analytics_$actualFileName"
                 ),
                 listOf(
-                    "databases/appmetrica_analytics_$actualFileName-journal"
+                    "databases/appmetrica_analytics_$actualFileName-journal",
                 ),
             ),
             arrayOf(
                 "Pre-lollipop without outer dir and old databases in database directory",
+                false,
                 false,
                 null,
                 listOf("databases/$oldFileName", "databases/$oldFileName-journal"),
@@ -70,6 +73,7 @@ internal class DatabaseStorageMigrationComplexTest(
             arrayOf(
                 "Pre-lollipop without outer dir and without old databases in database directory",
                 false,
+                false,
                 null,
                 listOf<String>(),
                 "databases/appmetrica_analytics_$actualFileName",
@@ -82,6 +86,7 @@ internal class DatabaseStorageMigrationComplexTest(
             arrayOf(
                 "Pre-lollipop without outer dir and only main db file in db directory",
                 false,
+                false,
                 null,
                 listOf("databases/$oldFileName"),
                 "databases/appmetrica_analytics_$actualFileName",
@@ -91,7 +96,21 @@ internal class DatabaseStorageMigrationComplexTest(
                 listOf("databases/$oldFileName"),
             ),
             arrayOf(
+                "Pre-lollipop without outer dir and only main db file in db directory with noNotDeleteSourceFileFlag",
+                false,
+                true,
+                null,
+                listOf("databases/$oldFileName"),
+                "databases/appmetrica_analytics_$actualFileName",
+                listOf(
+                    "databases/appmetrica_analytics_$actualFileName",
+                    "databases/$oldFileName"
+                ),
+                listOf<String>(),
+            ),
+            arrayOf(
                 "Pre-lollipop without outer dir and only journal file in database directory",
+                false,
                 false,
                 null,
                 listOf("databases/$oldFileName-journal"),
@@ -101,6 +120,7 @@ internal class DatabaseStorageMigrationComplexTest(
             ),
             arrayOf(
                 "Pre-lollipop without outer dir and odd files in database directory",
+                false,
                 false,
                 null,
                 listOf(
@@ -126,6 +146,7 @@ internal class DatabaseStorageMigrationComplexTest(
             arrayOf(
                 "Pre-lollipop without outer dir and old databases in outer and database directory",
                 false,
+                false,
                 null,
                 listOf(
                     "databases/$oldFileName", "databases/$oldFileName-journal",
@@ -141,6 +162,7 @@ internal class DatabaseStorageMigrationComplexTest(
             arrayOf(
                 "Pre-lollipop with outer dir and old databases in database directory",
                 false,
+                false,
                 outerDir,
                 listOf("databases/$oldFileName", "databases/$oldFileName-journal"),
                 "databases/appmetrica_analytics_$actualFileName",
@@ -152,6 +174,7 @@ internal class DatabaseStorageMigrationComplexTest(
             ),
             arrayOf(
                 "Pre-lollipop with outer dir and old databases in outer directory",
+                false,
                 false,
                 outerDir,
                 listOf("$outerDir/$oldFileName", "$outerDir/$oldFileName-journal"),
@@ -166,6 +189,7 @@ internal class DatabaseStorageMigrationComplexTest(
             arrayOf(
                 "Lollipop without outer dir and with actual database exists",
                 true,
+                false,
                 null,
                 listOf(
                     "no_backup/$oldFileName", "no_backup/$oldFileName-journal",
@@ -182,6 +206,7 @@ internal class DatabaseStorageMigrationComplexTest(
             arrayOf(
                 "Lollipop without outer dir and old databases in no_backup directory",
                 true,
+                false,
                 null,
                 listOf("no_backup/$oldFileName", "no_backup/$oldFileName-journal"),
                 "no_backup/appmetrica/analytics/db/$actualFileName",
@@ -192,8 +217,23 @@ internal class DatabaseStorageMigrationComplexTest(
                 listOf("no_backup/$oldFileName", "no_backup/$oldFileName-journal"),
             ),
             arrayOf(
+                "Lollipop without outer dir and old databases in no_backup directory with doNotDeleteSourceFile",
+                true,
+                true,
+                null,
+                listOf("no_backup/$oldFileName", "no_backup/$oldFileName-journal"),
+                "no_backup/appmetrica/analytics/db/$actualFileName",
+                listOf(
+                    "no_backup/appmetrica/analytics/db/$actualFileName",
+                    "no_backup/appmetrica/analytics/db/$actualFileName-journal",
+                    "no_backup/$oldFileName", "no_backup/$oldFileName-journal"
+                ),
+                listOf<String>(),
+            ),
+            arrayOf(
                 "Lollipop without outer dir and without old databases in no_backup directory",
                 true,
+                false,
                 null,
                 listOf<String>(),
                 "no_backup/appmetrica/analytics/db/$actualFileName",
@@ -206,6 +246,7 @@ internal class DatabaseStorageMigrationComplexTest(
             arrayOf(
                 "Lollipop without outer dir and only main db file in no_backup directory",
                 true,
+                false,
                 null,
                 listOf("no_backup/$oldFileName"),
                 "no_backup/appmetrica/analytics/db/$actualFileName",
@@ -215,8 +256,22 @@ internal class DatabaseStorageMigrationComplexTest(
                 listOf("no_backup/$oldFileName"),
             ),
             arrayOf(
+                "Lollipop without outer dir and only main db file in no_backup directory with doNotDeleteSourceFile",
+                true,
+                true,
+                null,
+                listOf("no_backup/$oldFileName"),
+                "no_backup/appmetrica/analytics/db/$actualFileName",
+                listOf(
+                    "no_backup/appmetrica/analytics/db/$actualFileName",
+                    "no_backup/$oldFileName"
+                ),
+                listOf<String>(),
+            ),
+            arrayOf(
                 "Lollipop without outer dir and only journal file in database directory",
                 true,
+                false,
                 null,
                 listOf("no_backup/$oldFileName-journal"),
                 "no_backup/appmetrica/analytics/db/$actualFileName",
@@ -226,6 +281,7 @@ internal class DatabaseStorageMigrationComplexTest(
             arrayOf(
                 "Lollipop without outer dir and odd files in no_backup directory",
                 true,
+                false,
                 null,
                 listOf(
                     "no_backup/$oldFileName", "no_backup/$oldFileName-journal",
@@ -251,6 +307,7 @@ internal class DatabaseStorageMigrationComplexTest(
             arrayOf(
                 "Lollipop with outer dir and with actual database exists if old database in no_backup exists too",
                 true,
+                false,
                 outerDir,
                 listOf(
                     "$outerDir/appmetrica/analytics/db/$actualFileName",
@@ -267,6 +324,7 @@ internal class DatabaseStorageMigrationComplexTest(
             arrayOf(
                 "Lollipop with outer dir and with actual database exists if old database in outer storagr exists too",
                 true,
+                false,
                 outerDir,
                 listOf(
                     "$outerDir/appmetrica/analytics/db/$actualFileName",
@@ -281,8 +339,9 @@ internal class DatabaseStorageMigrationComplexTest(
                 ),
             ),
             arrayOf(
-                "Lollipop цшер outer dir and old databases in no_backup directory",
+                "Lollipop with outer dir and old databases in no_backup directory",
                 true,
+                false,
                 outerDir,
                 listOf("no_backup/$oldFileName", "no_backup/$oldFileName-journal"),
                 "$outerDir/appmetrica/analytics/db/$actualFileName",
@@ -293,8 +352,23 @@ internal class DatabaseStorageMigrationComplexTest(
                 listOf("no_backup/$oldFileName", "no_backup/$oldFileName-journal"),
             ),
             arrayOf(
-                "Lollipop цшер outer dir and old databases in no_backup directory",
+                "Lollipop with outer dir and old databases in no_backup directory with doNotDeleteSourceFile",
                 true,
+                true,
+                outerDir,
+                listOf("no_backup/$oldFileName", "no_backup/$oldFileName-journal"),
+                "$outerDir/appmetrica/analytics/db/$actualFileName",
+                listOf(
+                    "$outerDir/appmetrica/analytics/db/$actualFileName",
+                    "$outerDir/appmetrica/analytics/db/$actualFileName-journal",
+                    "no_backup/$oldFileName", "no_backup/$oldFileName-journal"
+                ),
+                listOf<String>(),
+            ),
+            arrayOf(
+                "Lollipop with outer dir and old databases in no_backup directory",
+                true,
+                false,
                 outerDir,
                 listOf("$outerDir/$oldFileName", "$outerDir/$oldFileName-journal"),
                 "$outerDir/appmetrica/analytics/db/$actualFileName",
@@ -303,10 +377,25 @@ internal class DatabaseStorageMigrationComplexTest(
                     "$outerDir/appmetrica/analytics/db/$actualFileName-journal"
                 ),
                 listOf("$outerDir/$oldFileName", "$outerDir/$oldFileName-journal"),
+            ),
+            arrayOf(
+                "Lollipop with outer dir and old databases in no_backup directory with doNotDeleteSourceFile",
+                true,
+                true,
+                outerDir,
+                listOf("$outerDir/$oldFileName", "$outerDir/$oldFileName-journal"),
+                "$outerDir/appmetrica/analytics/db/$actualFileName",
+                listOf(
+                    "$outerDir/appmetrica/analytics/db/$actualFileName",
+                    "$outerDir/appmetrica/analytics/db/$actualFileName-journal",
+                    "$outerDir/$oldFileName", "$outerDir/$oldFileName-journal"
+                ),
+                listOf<String>(),
             ),
             arrayOf(
                 "Lollipop with outer dir and without old databases",
                 true,
+                false,
                 outerDir,
                 listOf<String>(),
                 "$outerDir/appmetrica/analytics/db/$actualFileName",
@@ -319,6 +408,7 @@ internal class DatabaseStorageMigrationComplexTest(
             arrayOf(
                 "Lollipop with outer dir and without old databases in no_backup directory",
                 true,
+                false,
                 outerDir,
                 listOf<String>(),
                 "$outerDir/appmetrica/analytics/db/$actualFileName",
@@ -331,6 +421,7 @@ internal class DatabaseStorageMigrationComplexTest(
             arrayOf(
                 "Lollipop with outer dir and only main db file in no_backup directory",
                 true,
+                false,
                 outerDir,
                 listOf("no_backup/$oldFileName"),
                 "$outerDir/appmetrica/analytics/db/$actualFileName",
@@ -342,6 +433,7 @@ internal class DatabaseStorageMigrationComplexTest(
             arrayOf(
                 "Lollipop with outer dir and only main db file in outerDir directory",
                 true,
+                false,
                 outerDir,
                 listOf("$outerDir/$oldFileName"),
                 "$outerDir/appmetrica/analytics/db/$actualFileName",
@@ -353,6 +445,7 @@ internal class DatabaseStorageMigrationComplexTest(
             arrayOf(
                 "Lollipop with outer dir and only journal file in database directory",
                 true,
+                false,
                 outerDir,
                 listOf("no_backup/$oldFileName-journal"),
                 "$outerDir/appmetrica/analytics/db/$actualFileName",
@@ -362,6 +455,7 @@ internal class DatabaseStorageMigrationComplexTest(
             arrayOf(
                 "Lollipop with outer dir and only journal file in database directory",
                 true,
+                false,
                 outerDir,
                 listOf("$outerDir/$oldFileName-journal"),
                 "$outerDir/appmetrica/analytics/db/$actualFileName",
@@ -371,6 +465,7 @@ internal class DatabaseStorageMigrationComplexTest(
             arrayOf(
                 "Lollipop with outer dir and odd files in no_backup directory",
                 true,
+                false,
                 outerDir,
                 listOf(
                     "no_backup/$oldFileName", "no_backup/$oldFileName-journal",
@@ -395,6 +490,7 @@ internal class DatabaseStorageMigrationComplexTest(
             arrayOf(
                 "Lollipop with outer dir and odd files in no_backup directory",
                 true,
+                false,
                 outerDir,
                 listOf(
                     "$outerDir/$oldFileName", "$outerDir/$oldFileName-journal",
@@ -454,7 +550,7 @@ internal class DatabaseStorageMigrationComplexTest(
         }
         databaseStoragePathProviderFactory =
             DatabaseStoragePathProviderFactory(outerDatabaseDirPath?.let { File(dataDir, it) })
-        databaseStoragePathProvider = databaseStoragePathProviderFactory.create("Some tag")
+        databaseStoragePathProvider = databaseStoragePathProviderFactory.create("Some tag", doNotDeleteSourceFile)
         databaseSimpleNameProvider = object : DatabaseSimpleNameProvider {
             override val databaseName: String = actualFileName
             override val legacyDatabaseName: String = oldFileName

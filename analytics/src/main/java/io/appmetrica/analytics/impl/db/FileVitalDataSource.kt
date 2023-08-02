@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.db
 
 import android.content.Context
 import io.appmetrica.analytics.coreutils.internal.io.FileUtils
-import io.appmetrica.analytics.coreutils.internal.io.FileUtils.move
+import io.appmetrica.analytics.coreutils.internal.io.FileUtils.copyToNullable
 import io.appmetrica.analytics.coreutils.internal.logger.YLogger
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade
 import java.io.FileNotFoundException
@@ -23,7 +23,7 @@ class FileVitalDataSource(
                     "Vital data for path = `${file.path}` does not exist. Try to import from old location"
                 )
             }
-            FileUtils.getFileFromAppStorage(context, fileName)?.move(file)
+            FileUtils.getFileFromAppStorage(context, fileName)?.copyToNullable(file)
             YLogger.info(TAG, "Read data from file with name = ${file.path}")
             file.readText()
         }

@@ -64,7 +64,7 @@ class FileUtilsTest {
 
     @Test
     @Config(sdk = [Build.VERSION_CODES.KITKAT, Build.VERSION_CODES.LOLLIPOP])
-    fun `sdkStorage  twice`() {
+    fun `sdkStorage twice`() {
         val testFileName = "test_file.dat"
         val testText = "Test text"
         val sdkStorage = FileUtils.sdkStorage(context)

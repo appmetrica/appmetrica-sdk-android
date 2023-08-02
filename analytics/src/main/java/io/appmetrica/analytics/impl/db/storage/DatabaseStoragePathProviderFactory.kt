@@ -35,6 +35,11 @@ internal class DatabaseStoragePathProviderFactory(
         }
     }
 
-    fun create(tagPostfix: String): DatabaseStoragePathProvider =
-        DatabaseStoragePathProvider(targetDirProvider, possibleOldDatabaseDirProviders, tagPostfix)
+    fun create(tagPostfix: String, doNotDeleteSourceFile: Boolean): DatabaseStoragePathProvider =
+        DatabaseStoragePathProvider(
+            targetDirProvider,
+            possibleOldDatabaseDirProviders,
+            doNotDeleteSourceFile,
+            tagPostfix
+        )
 }

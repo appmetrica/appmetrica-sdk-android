@@ -63,7 +63,7 @@ internal class DatabaseStorageFactoryTest : CommonTest() {
     @get:Rule
     val databaseStoragePathProviderFactoryMockedConstructionRule =
         MockedConstructionRule(DatabaseStoragePathProviderFactory::class.java) { mock, _ ->
-            whenever(mock.create(any())).thenReturn(databaseStoragePathProvider)
+            whenever(mock.create(any(), any())).thenReturn(databaseStoragePathProvider)
         }
 
     @get:Rule
@@ -156,8 +156,8 @@ internal class DatabaseStorageFactoryTest : CommonTest() {
         }
 
         inOrder(databaseStoragePathProviderFactory) {
-            verify(databaseStoragePathProviderFactory).create(firstComponentDbName)
-            verify(databaseStoragePathProviderFactory).create(secondComponentDbName)
+            verify(databaseStoragePathProviderFactory).create(firstComponentDbName, false)
+            verify(databaseStoragePathProviderFactory).create(secondComponentDbName, false)
             verifyNoMoreInteractions()
         }
     }
@@ -229,7 +229,7 @@ internal class DatabaseStorageFactoryTest : CommonTest() {
         assertThat(databaseStorageMockedConstructionRule.argumentInterceptor.flatArguments())
             .containsExactly(context, serviceStoragePath, serviceDatabaseManager)
 
-        verify(databaseStoragePathProviderFactory).create("service")
+        verify(databaseStoragePathProviderFactory).create("service", true)
         verify(databaseStoragePathProvider)
             .getPath(
                 context,
@@ -311,7 +311,7 @@ internal class DatabaseStorageFactoryTest : CommonTest() {
                 autoInappDatabaseManager
             )
 
-        verify(databaseStoragePathProviderFactory).create("autoinapp")
+        verify(databaseStoragePathProviderFactory).create("autoinapp", false)
         verifyNoMoreInteractions(databaseStoragePathProviderFactory)
 
         verify(databaseStoragePathProvider)
@@ -399,7 +399,7 @@ internal class DatabaseStorageFactoryTest : CommonTest() {
         assertThat(lockedOnFileDBConnectorMockedConstructionRule.argumentInterceptor.flatArguments())
             .containsExactly(context, clientStoragePath, clientDatabaseManager)
 
-        verify(databaseStoragePathProviderFactory).create("client")
+        verify(databaseStoragePathProviderFactory).create("client", true)
         verify(databaseStoragePathProvider)
             .getPath(
                 context,

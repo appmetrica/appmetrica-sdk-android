@@ -102,7 +102,7 @@ public class DatabaseStorageFactory {
             YLogger.info(TAG, "Database instance IS NULL, we will create a new one for %s", componentId);
             storage = new DatabaseStorage(
                 context,
-                databaseStoragePathProviderFactory.create(componentDatabaseSimpleNameProvider.getDatabaseName())
+                databaseStoragePathProviderFactory.create(componentDatabaseSimpleNameProvider.getDatabaseName(), false)
                     .getPath(context, componentDatabaseSimpleNameProvider),
                 databaseManagerProvider.buildComponentDatabaseManager(componentId)
             );
@@ -116,7 +116,7 @@ public class DatabaseStorageFactory {
         if (autoInappDatabaseStorage == null) {
             autoInappDatabaseStorage = new DatabaseStorage(
                 context,
-                databaseStoragePathProviderFactory.create("autoinapp")
+                databaseStoragePathProviderFactory.create("autoinapp", false)
                     .getPath(context, new AutoInappDatabaseSimpleNameProvider()),
                 databaseManagerProvider.buildAutoInappDatabaseManager()
             );
@@ -128,7 +128,7 @@ public class DatabaseStorageFactory {
         if (serviceDatabaseStorage == null) {
             serviceDatabaseStorage = new DatabaseStorage(
                 context,
-                databaseStoragePathProviderFactory.create("service")
+                databaseStoragePathProviderFactory.create("service", true)
                     .getPath(context, new ServiceDatabaseSimpleNameProvider()),
                 databaseManagerProvider.buildServiceDatabaseManager()
             );
@@ -262,7 +262,7 @@ public class DatabaseStorageFactory {
     @NonNull
     private synchronized LockedOnFileDBConnector getClientDbConnector() {
         if (clientDbConnector == null) {
-            String dbPath = databaseStoragePathProviderFactory.create("client")
+            String dbPath = databaseStoragePathProviderFactory.create("client", true)
                 .getPath(context, new ClientDatabaseSimpleNameProvider());
             clientDbConnector = new LockedOnFileDBConnector(
                 context,
