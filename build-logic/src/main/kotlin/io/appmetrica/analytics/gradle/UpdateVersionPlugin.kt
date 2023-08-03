@@ -4,7 +4,7 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import java.io.File
 
-private val VERSION_REG = Regex("[0-9]+\\.[0-9]+\\.[0-9]+(-RC)?")
+private val VERSION_REG = Regex("[0-9]+\\.[0-9]+\\.[0-9]+(-RC[0-9]*)?")
 
 class UpdateVersionPlugin : Plugin<Project> {
 
