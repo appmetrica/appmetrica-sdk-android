@@ -3,7 +3,7 @@
     "component": {
         "group": "io.appmetrica.analytics",
         "module": "analytics-billing-v4",
-        "version": "6.0.0-RC",
+        "version": "6.0.0-RC1",
         "attributes": {
             "org.gradle.status": "release"
         }
@@ -25,8 +25,8 @@
             },
             "files": [
                 {
-                    "name": "analytics-billing-v4-6.0.0-RC.aar",
-                    "url": "analytics-billing-v4-6.0.0-RC.aar",
+                    "name": "analytics-billing-v4-6.0.0-RC1.aar",
+                    "url": "analytics-billing-v4-6.0.0-RC1.aar",
                     "size": -1,
                     "sha512": "<sha512>",
                     "sha256": "<sha256>",
@@ -55,21 +55,21 @@
                     "group": "io.appmetrica.analytics",
                     "module": "analytics-core-utils",
                     "version": {
-                        "requires": "6.0.0-RC"
+                        "requires": "6.0.0-RC1"
                     }
                 },
                 {
                     "group": "io.appmetrica.analytics",
                     "module": "analytics-billing-interface",
                     "version": {
-                        "requires": "6.0.0-RC"
+                        "requires": "6.0.0-RC1"
                     }
                 }
             ],
             "files": [
                 {
-                    "name": "analytics-billing-v4-6.0.0-RC.aar",
-                    "url": "analytics-billing-v4-6.0.0-RC.aar",
+                    "name": "analytics-billing-v4-6.0.0-RC1.aar",
+                    "url": "analytics-billing-v4-6.0.0-RC1.aar",
                     "size": -1,
                     "sha512": "<sha512>",
                     "sha256": "<sha256>",

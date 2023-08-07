@@ -3,7 +3,7 @@
     "component": {
         "group": "io.appmetrica.analytics",
         "module": "analytics-modules-api",
-        "version": "6.0.0-RC",
+        "version": "6.0.0-RC1",
         "attributes": {
             "org.gradle.status": "release"
         }
@@ -25,8 +25,8 @@
             },
             "files": [
                 {
-                    "name": "analytics-modules-api-6.0.0-RC.aar",
-                    "url": "analytics-modules-api-6.0.0-RC.aar",
+                    "name": "analytics-modules-api-6.0.0-RC1.aar",
+                    "url": "analytics-modules-api-6.0.0-RC1.aar",
                     "size": -1,
                     "sha512": "<sha512>",
                     "sha256": "<sha256>",
@@ -55,35 +55,35 @@
                     "group": "io.appmetrica.analytics",
                     "module": "analytics-core-api",
                     "version": {
-                        "requires": "6.0.0-RC"
+                        "requires": "6.0.0-RC1"
                     }
                 },
                 {
                     "group": "io.appmetrica.analytics",
                     "module": "analytics-core-utils",
                     "version": {
-                        "requires": "6.0.0-RC"
+                        "requires": "6.0.0-RC1"
                     }
                 },
                 {
                     "group": "io.appmetrica.analytics",
                     "module": "analytics-location-api",
                     "version": {
-                        "requires": "6.0.0-RC"
+                        "requires": "6.0.0-RC1"
                     }
                 },
                 {
                     "group": "io.appmetrica.analytics",
                     "module": "analytics-proto",
                     "version": {
-                        "requires": "6.0.0-RC"
+                        "requires": "6.0.0-RC1"
                     }
                 }
             ],
             "files": [
                 {
-                    "name": "analytics-modules-api-6.0.0-RC.aar",
-                    "url": "analytics-modules-api-6.0.0-RC.aar",
+                    "name": "analytics-modules-api-6.0.0-RC1.aar",
+                    "url": "analytics-modules-api-6.0.0-RC1.aar",
                     "size": -1,
                     "sha512": "<sha512>",
                     "sha256": "<sha256>",

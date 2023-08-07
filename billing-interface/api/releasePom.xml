@@ -8,7 +8,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.appmetrica.analytics</groupId>
   <artifactId>analytics-billing-interface</artifactId>
-  <version>6.0.0-RC</version>
+  <version>6.0.0-RC1</version>
   <packaging>aar</packaging>
   <name>AppMetrica SDK Billing API</name>
   <url>http://appmetrica.yandex.com/</url>
@@ -40,7 +40,7 @@
     <dependency>
       <groupId>io.appmetrica.analytics</groupId>
       <artifactId>analytics-core-utils</artifactId>
-      <version>6.0.0-RC</version>
+      <version>6.0.0-RC1</version>
       <scope>runtime</scope>
     </dependency>
   </dependencies>

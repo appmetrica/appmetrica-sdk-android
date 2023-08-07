@@ -3,7 +3,7 @@
     "component": {
         "group": "io.appmetrica.analytics",
         "module": "analytics-core-utils",
-        "version": "6.0.0-RC",
+        "version": "6.0.0-RC1",
         "attributes": {
             "org.gradle.status": "release"
         }
@@ -25,8 +25,8 @@
             },
             "files": [
                 {
-                    "name": "analytics-core-utils-6.0.0-RC.aar",
-                    "url": "analytics-core-utils-6.0.0-RC.aar",
+                    "name": "analytics-core-utils-6.0.0-RC1.aar",
+                    "url": "analytics-core-utils-6.0.0-RC1.aar",
                     "size": -1,
                     "sha512": "<sha512>",
                     "sha256": "<sha256>",
@@ -55,21 +55,21 @@
                     "group": "io.appmetrica.analytics",
                     "module": "analytics-core-api",
                     "version": {
-                        "requires": "6.0.0-RC"
+                        "requires": "6.0.0-RC1"
                     }
                 },
                 {
                     "group": "io.appmetrica.analytics",
                     "module": "analytics-location-api",
                     "version": {
-                        "requires": "6.0.0-RC"
+                        "requires": "6.0.0-RC1"
                     }
                 }
             ],
             "files": [
                 {
-                    "name": "analytics-core-utils-6.0.0-RC.aar",
-                    "url": "analytics-core-utils-6.0.0-RC.aar",
+                    "name": "analytics-core-utils-6.0.0-RC1.aar",
+                    "url": "analytics-core-utils-6.0.0-RC1.aar",
                     "size": -1,
                     "sha512": "<sha512>",
                     "sha256": "<sha256>",
