@@ -76,12 +76,12 @@ class PublishingPlugin : Plugin<Project> {
                         pom {
                             name.set(extension.name)
                             description.set(extension.description)
-                            url.set("http://appmetrica.yandex.com/")
+                            url.set("https://appmetrica.yandex.com/")
 
                             licenses {
                                 license {
                                     name.set("MIT License")
-                                    url.set("http://www.opensource.org/licenses/mit-license.php")
+                                    url.set("https://www.opensource.org/licenses/mit-license.php")
                                     distribution.set("repo")
                                 }
                             }
@@ -89,7 +89,7 @@ class PublishingPlugin : Plugin<Project> {
                             developers {
                                 developer {
                                     name.set("AppMetrica")
-                                    url.set("http://appmetrica.yandex.com/")
+                                    url.set("https://appmetrica.yandex.com/")
                                 }
                             }
 
@@ -97,13 +97,6 @@ class PublishingPlugin : Plugin<Project> {
                                 connection.set("scm:git:https://github.com/appmetrica/appmetrica-sdk-android.git")
                                 developerConnection.set("scm:git:https://github.com/appmetrica/appmetrica-sdk-android.git")
                                 url.set("https://github.com/appmetrica/appmetrica-sdk-android")
-                            }
-
-                            withXml {
-                                val parent = asNode().appendNode("parent")
-                                parent.appendNode("groupId", "org.sonatype.oss")
-                                parent.appendNode("artifactId", "oss-parent")
-                                parent.appendNode("version", "7")
                             }
                         }
                     }
