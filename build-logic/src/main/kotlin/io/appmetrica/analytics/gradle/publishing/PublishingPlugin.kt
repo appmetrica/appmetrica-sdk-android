@@ -52,7 +52,7 @@ class PublishingPlugin : Plugin<Project> {
 
         val extension = project.createExtensions()
         project.configureSign()
-        project.configureJavadoc()
+        project.configureJavadoc(extension)
 
         project.configure<PublishingExtension> {
             sonatypeRepository("sonatypeRelease")
@@ -105,10 +105,10 @@ class PublishingPlugin : Plugin<Project> {
         }
     }
 
-    private fun Project.configureJavadoc() {
+    private fun Project.configureJavadoc(extension: PublishingInfoExtension) {
         val docConfiguration: (DokkaTask) -> Unit = {
             val artifactName = it.name.replace("dokka", "").toLowerCase()
-            it.moduleName.set("AppMetrica")
+            it.moduleName.set(extension.name)
             it.outputDirectory.set(project.layout.buildDirectory.dir("artifacts/$artifactName").map { it.asFile })
             it.dokkaSourceSets.configureEach {
                 reportUndocumented.set(true)
