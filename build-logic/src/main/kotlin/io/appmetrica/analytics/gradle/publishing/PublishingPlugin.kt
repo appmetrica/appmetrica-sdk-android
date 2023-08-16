@@ -88,7 +88,7 @@ class PublishingPlugin : Plugin<Project> {
 
                             developers {
                                 developer {
-                                    name.set("Yandex")
+                                    name.set("AppMetrica")
                                     url.set("http://appmetrica.yandex.com/")
                                 }
                             }
