@@ -129,13 +129,13 @@ class PublishingPlugin : Plugin<Project> {
         project.the<LibraryExtension>().productFlavors.configureEach {
             val ext = extensions.create<PublishingInfoFlavorExtension>(EXTENSION_NAME)
             ext.artifactIdSuffix.convention("")
-            ext.withSources.convention(false)
+            ext.withSources.convention(true)
             flavorExtensions[name] = ext
         }
         project.the<LibraryExtension>().buildTypes.configureEach {
             val ext = extensions.create<PublishingInfoBuildTypeExtension>(EXTENSION_NAME)
             ext.artifactIdSuffix.convention("")
-            ext.withSources.convention(false)
+            ext.withSources.convention(true)
             buildTypeExtensions[name] = ext
         }
         return extension
@@ -167,9 +167,11 @@ class PublishingPlugin : Plugin<Project> {
     }
 
     private fun Project.getSourcesForVariant(variant: LibraryVariant): Iterable<Any> {
-        val withSources = variant.productFlavors.any { flavorExtensions.getValue(it.name).withSources.get() } ||
-            buildTypeExtensions.getValue(variant.buildType.name).withSources.get()
-        return if (withSources) {
+        val withSourcesForFlavors = variant.productFlavors.all {
+            flavorExtensions.getValue(it.name).withSources.get()
+        }
+        val withSourcesForBuildType = buildTypeExtensions.getValue(variant.buildType.name).withSources.get()
+        return if (withSourcesForFlavors && withSourcesForBuildType) {
             variant.sourceSets.map { it.javaDirectories }
         } else {
             zipTree(PublishingPlugin::class.java.getResource("/source_code.txt")!!.path.replace("!/source_code.txt", ""))
