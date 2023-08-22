@@ -14,6 +14,7 @@ import io.appmetrica.gradle.nologs.NoLogsExtension
 import io.appmetrica.gradle.nologs.NoLogsPlugin
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.plugins.ExtensionAware
 import org.gradle.api.tasks.compile.JavaCompile
 import org.gradle.api.tasks.testing.TestDescriptor
 import org.gradle.kotlin.dsl.apply
@@ -23,6 +24,7 @@ import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getValue
 import org.gradle.kotlin.dsl.getting
 import org.gradle.kotlin.dsl.withType
+import org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.util.Locale
 
@@ -54,6 +56,11 @@ class AppMetricaCommonModulePlugin : Plugin<Project> {
         project.tasks.withType<JavaCompile> {
             // suppress 'java 7 is obsolete' warning
             options.compilerArgs.add("-Xlint:-options")
+        }
+
+        project.tasks.withType<KotlinCompile> {
+            // https://nda.ya.ru/t/htF7GLnh6cCW4c
+            kotlinOptions.suppressWarnings = true
         }
     }
 

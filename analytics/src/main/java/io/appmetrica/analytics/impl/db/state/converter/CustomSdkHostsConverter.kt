@@ -17,6 +17,7 @@ internal class CustomSdkHostsConverter :
         return result
     }
 
-    override fun toModel(nano: Array<StartupStateProtobuf.StartupState.CustomSdkHostsPair>): Map<String, List<String>> =
-        nano.associate { it.key to it.hosts.toList() }
+    override fun toModel(
+        value: Array<StartupStateProtobuf.StartupState.CustomSdkHostsPair>
+    ): Map<String, List<String>> = value.associate { it.key to it.hosts.toList() }
 }

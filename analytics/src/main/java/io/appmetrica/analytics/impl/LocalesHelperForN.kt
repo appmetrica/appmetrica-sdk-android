@@ -10,7 +10,10 @@ object LocalesHelperForN {
     @JvmStatic
     fun getLocales(configuration: Configuration): List<String> {
         val result = mutableListOf<String>()
+
+        @Suppress("USELESS_ELVIS")
         val locales = configuration.locales ?: return result
+
         for (i in 0 until locales.size()) {
             locales[i]?.let { result.add(PhoneUtils.normalizedLocale(it)) }
         }

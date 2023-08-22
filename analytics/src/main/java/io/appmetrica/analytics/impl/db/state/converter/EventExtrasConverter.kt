@@ -16,6 +16,6 @@ class EventExtrasConverter : Converter<Map<String, ByteArray>, ByteArray> {
         return MessageNano.toByteArray(proto)
     }
 
-    override fun toModel(input: ByteArray): Map<String, ByteArray> =
-        EventExtrasProto.EventExtras.parseFrom(input).extras.associate { it.key to it.value }
+    override fun toModel(value: ByteArray): Map<String, ByteArray> =
+        EventExtrasProto.EventExtras.parseFrom(value).extras.associate { it.key to it.value }
 }

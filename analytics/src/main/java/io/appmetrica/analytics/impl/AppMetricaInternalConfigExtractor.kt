@@ -10,7 +10,8 @@ object AppMetricaInternalConfigExtractor {
 
     @JvmStatic
     fun getClids(config: AppMetricaConfig): Map<String, String?>? {
-        return config.additionalConfig[CLIDS_KEY] as Map<String, String?>?
+        @Suppress("UNCHECKED_CAST")
+        return config.additionalConfig[CLIDS_KEY] as? Map<String, String?>
     }
 
     @JvmStatic

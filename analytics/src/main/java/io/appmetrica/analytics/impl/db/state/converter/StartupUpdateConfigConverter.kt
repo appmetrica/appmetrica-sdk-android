@@ -12,6 +12,6 @@ internal class StartupUpdateConfigConverter :
             interval = value.intervalSeconds
         }
 
-    override fun toModel(nano: StartupStateProtobuf.StartupState.StartupUpdateConfig): StartupUpdateConfig =
-        StartupUpdateConfig(nano.interval)
+    override fun toModel(value: StartupStateProtobuf.StartupState.StartupUpdateConfig): StartupUpdateConfig =
+        StartupUpdateConfig(value.interval)
 }

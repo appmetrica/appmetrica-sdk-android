@@ -30,6 +30,7 @@ object ReflectionUtils {
         try {
             val clazz = Class.forName(className)
             if (targetType.isAssignableFrom(clazz)) {
+                @Suppress("UNCHECKED_CAST")
                 return clazz as Class<T>
             }
             YLogger.error(TAG, "Loaded class = %s for name %s couldn't be cast to %s", clazz, className, targetType)

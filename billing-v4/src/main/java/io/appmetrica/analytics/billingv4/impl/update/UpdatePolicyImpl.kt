@@ -20,11 +20,11 @@ class UpdatePolicyImpl(
         history: Map<String, BillingInfo>,
         storage: BillingInfoManager
     ): Map<String, BillingInfo> {
-        return history.filterValues {
+        val productsToUpdate = history.filterValues {
             shouldUpdateBillingInfo(config, it, storage)
-        }.also { productsToUpdate ->
-            YLogger.info(TAG, "Products ${productsToUpdate.values.map { it.sku }} should be updated")
         }
+        YLogger.info(TAG, "Products ${productsToUpdate.values.map { it.sku }} should be updated")
+        return productsToUpdate
     }
 
     private fun shouldUpdateBillingInfo(

@@ -65,7 +65,7 @@ internal class CrashpadHandlerExtractor(
     private fun copyChars(input: InputStream, output: OutputStream): Int {
         val bufferChars = ByteArray(ioBufferSize)
         var resultCountChars = 0
-        var readCountChars = 0
+        var readCountChars: Int
         while (-1 != input.read(bufferChars, 0, ioBufferSize).also { readCountChars = it }) {
             output.write(bufferChars, 0, readCountChars)
             resultCountChars += readCountChars

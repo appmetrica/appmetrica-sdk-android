@@ -24,7 +24,7 @@ abstract class ReportToServiceCallable(
                 return
             }
             isExecuted = true
-            var retry = false
+            var retry: Boolean
             var triesCount = 0
             do {
                 val service = serviceConnector.service

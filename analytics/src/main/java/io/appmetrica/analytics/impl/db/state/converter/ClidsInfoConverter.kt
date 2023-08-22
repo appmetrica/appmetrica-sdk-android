@@ -13,9 +13,9 @@ internal class ClidsInfoConverter :
         candidates = Array(value.candidates.size) { candidateToProto(value.candidates[it]) }
     }
 
-    override fun toModel(nano: ClidsInfoProto.ClidsInfo): ClidsInfo = ClidsInfo(
-        candidateToModel(nano.chosenClids ?: ClidsInfoProto.ClidsInfo.ClidsCandidate()),
-        nano.candidates.map { candidateToModel(it) }
+    override fun toModel(value: ClidsInfoProto.ClidsInfo): ClidsInfo = ClidsInfo(
+        candidateToModel(value.chosenClids ?: ClidsInfoProto.ClidsInfo.ClidsCandidate()),
+        value.candidates.map { candidateToModel(it) }
     )
 
     private fun candidateToProto(model: ClidsInfo.Candidate): ClidsInfoProto.ClidsInfo.ClidsCandidate =
@@ -42,7 +42,6 @@ internal class ClidsInfoConverter :
             DistributionSource.SATELLITE -> ClidsInfoProto.ClidsInfo.SATELLITE
             DistributionSource.RETAIL -> ClidsInfoProto.ClidsInfo.RETAIL
             DistributionSource.UNDEFINED -> ClidsInfoProto.ClidsInfo.UNDEFINED
-            else -> ClidsInfoProto.ClidsInfo.UNDEFINED
         }
 
     private fun candidateToModel(proto: ClidsInfoProto.ClidsInfo.ClidsCandidate): ClidsInfo.Candidate =

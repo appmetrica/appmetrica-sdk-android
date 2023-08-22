@@ -48,6 +48,7 @@ object SystemServiceUtils {
         tryBlock: FunctionWithThrowable<T, S?>
     ): S? {
         try {
+            @Suppress("UNCHECKED_CAST")
             return accessSystemServiceSafely(
                 context.getSystemService(serviceName) as T,
                 whileWhat,
@@ -70,7 +71,8 @@ object SystemServiceUtils {
         tryBlock: FunctionWithThrowable<T, S?>
     ): S {
         try {
-            return accessSystemServiceSafelyOrDefault<T, S>(
+            @Suppress("UNCHECKED_CAST")
+            return accessSystemServiceSafelyOrDefault(
                 context.getSystemService(serviceName) as T,
                 whileWhat,
                 whatIsNull,

@@ -31,7 +31,7 @@ internal class NetworkTaskRunnable @VisibleForTesting constructor(
 
     override fun run() {
         var taskFinished = false
-        var shouldExecuteTask = false
+        var shouldExecuteTask: Boolean
         val exponentialBackoffPolicy = networkTask.exponentialBackoffPolicy
         val connectionBasedPolicy = networkTask.connectionExecutionPolicy
         if (rootThreadStateSource.isRunning) {
