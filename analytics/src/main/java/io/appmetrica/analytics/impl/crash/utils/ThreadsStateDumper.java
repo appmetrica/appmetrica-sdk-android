@@ -103,6 +103,7 @@ public class ThreadsStateDumper {
             }
         };
 
+        @SuppressWarnings("unchecked")
         final Map<Thread, StackTraceElement[]> stackTraces = new TreeMap<Thread, StackTraceElement[]>(threadComparator);
 
         Map<Thread, StackTraceElement[]> allStackTraces = null;

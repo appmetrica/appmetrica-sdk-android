@@ -34,6 +34,7 @@ public abstract class PreferencesDbStorage {
         return new PreferencesItem(key, getSuffix());
     }
 
+    @SuppressWarnings("unchecked")
     protected <T extends PreferencesDbStorage> T writeString(final String key, final String value) {
         synchronized (this) {
             mDbHelper.put(key, value);
@@ -41,6 +42,7 @@ public abstract class PreferencesDbStorage {
         }
     }
 
+    @SuppressWarnings("unchecked")
     protected  <T extends PreferencesDbStorage> T writeLong(final String key, final long value) {
         synchronized (this) {
             mDbHelper.put(key, value);
@@ -49,6 +51,7 @@ public abstract class PreferencesDbStorage {
     }
 
     @NonNull
+    @SuppressWarnings("unchecked")
     protected <T extends PreferencesDbStorage> T writeInt(final String key, final int value) {
         synchronized (this) {
             mDbHelper.put(key, value);
@@ -56,6 +59,7 @@ public abstract class PreferencesDbStorage {
         }
     }
 
+    @SuppressWarnings("unchecked")
     protected  <T extends PreferencesDbStorage> T writeBoolean(final String key, final boolean value) {
         synchronized (this) {
             mDbHelper.put(key, value);
@@ -63,6 +67,7 @@ public abstract class PreferencesDbStorage {
         }
     }
 
+    @SuppressWarnings("unchecked")
     protected <T extends PreferencesDbStorage> T writeFloat(final String key, final float value) {
         synchronized (this) {
             mDbHelper.put(key, value);
@@ -70,6 +75,7 @@ public abstract class PreferencesDbStorage {
         }
     }
 
+    @SuppressWarnings("unchecked")
     protected <T extends PreferencesDbStorage> T writeStringArray(final String key, final String[] value) {
         String savedValue = null;
         try {
@@ -89,6 +95,7 @@ public abstract class PreferencesDbStorage {
         return writeStringArray(key, value.toArray(new String[value.size()]));
     }
 
+    @SuppressWarnings("unchecked")
     protected <T extends PreferencesDbStorage> T removeKey(final String key) {
         synchronized (this) {
             mDbHelper.remove(key);

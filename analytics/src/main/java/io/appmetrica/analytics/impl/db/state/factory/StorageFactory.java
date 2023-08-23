@@ -199,10 +199,12 @@ public interface StorageFactory<T> {
             mFactories.put(ClidsInfo.class, clidsInfoStorageFactory);
         }
 
+        @SuppressWarnings("unchecked")
         <T> StorageFactory<T> getInternal(Class<T> clazz) {
             return (StorageFactory<T>) mFactories.get(clazz);
         }
 
+        @SuppressWarnings("unchecked")
         <T> StorageFactory<Collection<T>> getInternalForCollection(Class<T> clazz) {
             return (StorageFactory<Collection<T>>) mFactories.get(clazz);
         }

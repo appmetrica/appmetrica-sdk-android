@@ -5,14 +5,14 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import io.appmetrica.analytics.coreapi.internal.identifiers.AdTrackingInfoResult;
 import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus;
 import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.id.AdvIdProvider;
 import io.appmetrica.analytics.impl.id.NoRetriesStrategy;
 import io.appmetrica.analytics.impl.id.RetryStrategy;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
 public class ReflectionAdsIdProvider implements AdvIdProvider {
 
@@ -73,6 +73,7 @@ public class ReflectionAdsIdProvider implements AdvIdProvider {
     }
 
     @Nullable
+    @SuppressWarnings("unchecked")
     private AdTrackingInfoResult tryToGetAdTrackingInfo(@NonNull Context context) throws Throwable {
         Class clazz = Class.forName(CLASS);
         Method method = clazz.getMethod(METHOD, Context.class, Bundle.class);

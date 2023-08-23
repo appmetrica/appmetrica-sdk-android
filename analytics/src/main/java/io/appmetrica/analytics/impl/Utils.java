@@ -214,6 +214,7 @@ public final class Utils {
         return value.length() > limit ? value.substring(0, limit) : value;
     }
 
+    @SafeVarargs
     public static <T> boolean isAnyNull(final T... values) {
         if (null == values) {
             return false;

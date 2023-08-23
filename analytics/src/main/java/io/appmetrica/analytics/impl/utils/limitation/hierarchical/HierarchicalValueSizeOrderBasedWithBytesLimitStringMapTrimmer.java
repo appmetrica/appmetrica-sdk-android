@@ -97,6 +97,7 @@ public class HierarchicalValueSizeOrderBasedWithBytesLimitStringMapTrimmer
         );
     }
 
+    @SuppressWarnings("unchecked")
     private Map.Entry<String, String>[] sortedEntries(@NonNull Map<String, String> input) {
         Set<Map.Entry<String, String>> entrySet = input.entrySet();
         Map.Entry<String, String>[] entries = entrySet.toArray(new Map.Entry[entrySet.size()]);

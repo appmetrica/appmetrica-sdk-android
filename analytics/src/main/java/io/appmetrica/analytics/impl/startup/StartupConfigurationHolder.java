@@ -19,7 +19,7 @@ public class StartupConfigurationHolder extends
 
     //This operation is not so frequent. And comparing two Arguments more complex, then new StartupRequestConfig loading
     public synchronized void updateArguments(@NonNull StartupRequestConfig.Arguments newArguments) {
-        setDataSource(new CoreRequestConfig.CoreDataSource(
+        setDataSource(new CoreRequestConfig.CoreDataSource<>(
                 getStartupState(), getArguments().mergeFrom(newArguments)
         ));
         reset();

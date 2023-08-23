@@ -97,8 +97,8 @@ public class HashMultimap<K, V> {
     }
 
     public void putAll(@NonNull Map<? extends K, ? extends V> m) {
-        for(Map.Entry entry : m.entrySet()) {
-            this.put((K) entry.getKey(), (V) entry.getValue());
+        for (Map.Entry<? extends K, ? extends V> entry : m.entrySet()) {
+            this.put(entry.getKey(), entry.getValue());
         }
     }
 
