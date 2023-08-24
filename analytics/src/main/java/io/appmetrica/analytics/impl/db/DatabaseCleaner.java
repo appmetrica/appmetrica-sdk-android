@@ -95,7 +95,7 @@ public class DatabaseCleaner {
         try {
             deletedRowsCount = database.delete(tableName, whereClause, null);
         } catch (Throwable ex) {
-            YLogger.e(ex, "%s Could not delete rows for db", TAG);
+            YLogger.error(TAG, ex, "Could not delete rows for db");
         }
         if (somethingWrong(reports, deletedRowsCount)) {
             YLogger.warning(
@@ -108,10 +108,10 @@ public class DatabaseCleaner {
             );
         } else {
             if (shouldFormCleanupEvent) {
-                YLogger.d("%sShould form EVENT_CLEANUP", TAG);
+                YLogger.info(TAG,"Should form EVENT_CLEANUP");
                 reportCleanupEvent(reports, reason, apiKey, deletedRowsCount);
             }
-            YLogger.d("%s cleared %d", TAG, deletedRowsCount);
+            YLogger.info(TAG,"cleared %d", deletedRowsCount);
         }
         return new DeletionInfo(reports, deletedRowsCount);
     }
@@ -139,7 +139,7 @@ public class DatabaseCleaner {
             reports = cursorToList(dataCursor);
         } catch (Throwable ex) {
             AppMetricaSelfReportFacade.getReporter().reportError("select_rows_to_delete_exception", ex);
-            YLogger.e(ex, "%s Exception while selecting rows from %s to delete.", TAG, tableName);
+            YLogger.error(TAG, ex, "Exception while selecting rows from %s to delete.", tableName);
         } finally {
             Utils.closeCursor(dataCursor);
         }
@@ -166,8 +166,8 @@ public class DatabaseCleaner {
                             InternalEvents.valueOf(internalReportType)
                     ));
                 } else {
-                    YLogger.w("%s Some field was not filled, ContentValues: %s, expected to have %s and %s",
-                            TAG,
+                    YLogger.warning(TAG, "Some field was not filled, ContentValues: %s, " +
+                            "expected to have %s and %s",
                             report,
                             Constants.EventsTable.EventTableEntry.FIELD_EVENT_GLOBAL_NUMBER,
                             Constants.EventsTable.EventTableEntry.FIELD_EVENT_TYPE
@@ -187,7 +187,7 @@ public class DatabaseCleaner {
                     LoggerStorage.getOrCreatePublicLogger(apiKey);
             return EventsManager.cleanupEventReportEntry(value.toString(), logger);
         } catch (Throwable ex) {
-            YLogger.e(ex, "%s Something went wrong while forming cleanup event", TAG);
+            YLogger.error(TAG, ex, "Something went wrong while forming cleanup event");
         }
         return null;
     }
@@ -204,8 +204,8 @@ public class DatabaseCleaner {
                 reporter.reportEvent(report);
             }
         } else {
-            YLogger.w("%sEVENT_CLEANUP will not be reported.  ApiKey: %s, reporter storage: %s",
-                    TAG, apiKey, mSelfDiagnosticReporterStorage);
+            YLogger.warning(TAG, "EVENT_CLEANUP will not be reported.  ApiKey: %s, reporter storage: %s",
+                    apiKey, mSelfDiagnosticReporterStorage);
         }
     }
 }
