@@ -314,6 +314,22 @@ public class CounterReportTest extends CommonTest {
     }
 
     @Test
+    public void setValueForNull() {
+        CounterReport counterReport = new CounterReport();
+        counterReport.setValue(null);
+        assertThat(counterReport.getValue()).isNull();
+        assertThat(counterReport.getValueBytes()).isNull();
+    }
+
+    @Test
+    public void setValueBytesForNull() {
+        CounterReport counterReport = new CounterReport();
+        counterReport.setValueBytes(null);
+        assertThat(counterReport.getValue()).isNull();
+        assertThat(counterReport.getValueBytes()).isNull();
+    }
+
+    @Test
     public void testReadBytes() {
         byte[] bytes = new byte[]{1, 2, 3, 4, 10, 11, 12, 13, 14, 15, 21};
         CounterReport report = new CounterReport();

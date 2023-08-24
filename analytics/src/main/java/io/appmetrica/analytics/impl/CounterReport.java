@@ -188,7 +188,7 @@ public class CounterReport implements CounterReportApi, Parcelable {
     @Override
     @Nullable
     public byte[] getValueBytes() {
-        return Base64.decode(value, Base64.DEFAULT);
+        return value == null ? null : Base64.decode(value, Base64.DEFAULT);
     }
 
     @Override
@@ -198,7 +198,7 @@ public class CounterReport implements CounterReportApi, Parcelable {
 
     @Override
     public void setValueBytes(@Nullable byte[] bytes) {
-        value = new String(Base64.encode(bytes, Base64.DEFAULT));
+        value = bytes == null ? null : new String(Base64.encode(bytes, Base64.DEFAULT));
     }
 
     @Override
@@ -242,7 +242,7 @@ public class CounterReport implements CounterReportApi, Parcelable {
 
     void setAppEnvironment(@NonNull String key, @Nullable String value) {
         if (appEnvironmentDiff == null) {
-            appEnvironmentDiff = new Pair<String, String>(key, value);
+            appEnvironmentDiff = new Pair<>(key, value);
         }
     }
 
@@ -351,6 +351,7 @@ public class CounterReport implements CounterReportApi, Parcelable {
         return data;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return String.format(
@@ -375,7 +376,7 @@ public class CounterReport implements CounterReportApi, Parcelable {
             data.containsKey(CounterReportBundleKeys.APP_ENVIRONMENT_DIFF_VALUE)) {
             String key = data.getString(CounterReportBundleKeys.APP_ENVIRONMENT_DIFF_KEY);
             String value = data.getString(CounterReportBundleKeys.APP_ENVIRONMENT_DIFF_VALUE);
-            return new Pair<String, String>(key, value);
+            return new Pair<>(key, value);
         } else {
             return null;
         }
