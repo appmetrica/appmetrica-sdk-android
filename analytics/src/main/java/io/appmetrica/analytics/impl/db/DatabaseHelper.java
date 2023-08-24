@@ -288,7 +288,7 @@ public class DatabaseHelper {
             final long currentRowCount = mRowCount.get();
             YLogger.d("Should clear db? Current reports count: %d, max: %d", currentRowCount, maxReportsInDbCount);
             if (currentRowCount > maxReportsInDbCount) {
-                YLogger.i("%sTrying to clear reports table. Row count: %d, rows count: %d, max: %d",
+                YLogger.i("%sTrying to clear reports table. Row count: %s, rows count: %s, max: %s",
                         TAG, currentRowCount, mRowCount, maxReportsInDbCount);
                 SQLiteDatabase db = mStorage.getWritableDatabase();
                 if (db != null) {

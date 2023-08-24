@@ -22,9 +22,7 @@ import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade;
 import io.appmetrica.analytics.impl.utils.LoggerStorage;
 import io.appmetrica.analytics.impl.utils.PublicLogger;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -94,32 +92,32 @@ public class DatabaseCleaner {
                                     final boolean shouldFormCleanupEvent) {
         final List<ContentValues> reports = queryReportsToDelete(database, tableName, whereClause);
         int deletedRowsCount = 0;
-        if (Utils.isNullOrEmpty(reports) == false) {
-            try {
-                deletedRowsCount = database.delete(tableName, whereClause, null);
-            } catch (Throwable ex) {
-                YLogger.e(ex, "%s Could not delete rows for db", TAG);
-            }
+        try {
+            deletedRowsCount = database.delete(tableName, whereClause, null);
+        } catch (Throwable ex) {
+            YLogger.e(ex, "%s Could not delete rows for db", TAG);
+        }
+        if (somethingWrong(reports, deletedRowsCount)) {
+            YLogger.warning(
+                TAG,
+                "Something wrong happened while cleaning db. " +
+                    "Deleted rows: %d, rows that formed up EVENT_CLEANUP: %s. Where clause = %s",
+                deletedRowsCount,
+                reports == null ? "null" : reports.size(),
+                whereClause
+            );
+        } else {
             if (shouldFormCleanupEvent) {
                 YLogger.d("%sShould form EVENT_CLEANUP", TAG);
                 reportCleanupEvent(reports, reason, apiKey, deletedRowsCount);
             }
-            if (deletedRowsCount != reports.size()) {
-                YLogger.w("%s Something wrong happened while cleaning db. " +
-                        "Deleted rows: %d, rows that formed up EVENT_CLEANUP: %d",
-                        TAG, deletedRowsCount, reports.size());
-            } else {
-                YLogger.d("%s cleared %d", TAG, deletedRowsCount);
-            }
-        } else {
-            final Map<String, Object> eventArguments = new HashMap<String, Object>();
-            eventArguments.put("table_name", tableName);
-            eventArguments.put("api_key", String.valueOf(apiKey));
-            AppMetricaSelfReportFacade.getReporter()
-                    .reportEvent("select_rows_to_delete_failed", eventArguments);
-            YLogger.w("%s Could not select rows from %s to delete.", TAG, tableName);
+            YLogger.d("%s cleared %d", TAG, deletedRowsCount);
         }
         return new DeletionInfo(reports, deletedRowsCount);
+    }
+
+    private boolean somethingWrong(@Nullable List<ContentValues> reports, int deletedRowsCount) {
+        return reports == null || reports.size() == 0 || deletedRowsCount != reports.size();
     }
 
     @Nullable

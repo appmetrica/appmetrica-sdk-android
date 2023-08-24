@@ -19,9 +19,8 @@ import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade;
 import io.appmetrica.analytics.impl.utils.PublicLogger;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
+import io.appmetrica.analytics.testutils.LogRule;
 import java.nio.charset.StandardCharsets;
-import java.util.AbstractMap;
-import java.util.Map;
 import java.util.function.Function;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -41,7 +40,6 @@ import org.skyscreamer.jsonassert.JSONAssert;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
@@ -51,6 +49,8 @@ public class DatabaseCleanerTest extends CommonTest {
 
     @Rule
     public final GlobalServiceLocatorRule rule = new GlobalServiceLocatorRule();
+    @Rule
+    public final LogRule logRule = new LogRule();
 
     private SQLiteDatabase db;
     private String tableName = "events";
@@ -210,9 +210,6 @@ public class DatabaseCleanerTest extends CommonTest {
             );
             assertThat(deletionInfo.selectedEvents).isNull();
             assertThat(deletionInfo.mDeletedRowsCount).isEqualTo(0);
-            ArgumentCaptor<Map> captor = ArgumentCaptor.forClass(Map.class);
-            verify(selfReporter).reportEvent(eq("select_rows_to_delete_failed"), captor.capture());
-            assertThat(captor.getValue()).containsExactly(new AbstractMap.SimpleEntry("api_key", apiKey), new AbstractMap.SimpleEntry("table_name", "bad_table"));
         }
     }
 

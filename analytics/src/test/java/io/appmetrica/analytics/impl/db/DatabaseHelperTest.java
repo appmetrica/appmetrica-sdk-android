@@ -20,6 +20,7 @@ import io.appmetrica.analytics.impl.utils.PublicLogger;
 import io.appmetrica.analytics.impl.utils.TimeUtils;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
+import io.appmetrica.analytics.testutils.LogRule;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -77,6 +78,8 @@ public class DatabaseHelperTest extends CommonTest {
     private DbEventModelConverter dbEventModelConverter;
     @Rule
     public GlobalServiceLocatorRule rule = new GlobalServiceLocatorRule();
+    @Rule
+    public LogRule logRule = new LogRule();
     private final long maxEventsInDbCount = 200;
     private long session1;
     private long session2;
