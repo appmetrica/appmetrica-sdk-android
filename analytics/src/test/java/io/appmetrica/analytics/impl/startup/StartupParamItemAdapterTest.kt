@@ -40,6 +40,7 @@ class StartupParamItemAdapterTest : CommonTest() {
     fun adapt() {
         val input = IdentifiersResult("Some value", identifierStatus, "Some error")
         ObjectPropertyAssertions(startupParamItemAdapter.adapt(input))
+            .withPrivateFields(true)
             .checkField("id", input.id)
             .checkField("status", startupParamsItemStatus)
             .checkField("errorDetails", input.errorExplanation)
@@ -50,6 +51,7 @@ class StartupParamItemAdapterTest : CommonTest() {
     fun `adapt with nulls`() {
         val input = IdentifiersResult(null, identifierStatus, null)
         ObjectPropertyAssertions(startupParamItemAdapter.adapt(input))
+            .withPrivateFields(true)
             .checkFieldIsNull("id")
             .checkField("status", startupParamsItemStatus)
             .checkFieldIsNull("errorDetails")

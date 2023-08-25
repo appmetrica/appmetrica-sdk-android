@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.coreutils.internal.asserts
 
-import io.appmetrica.analytics.coreutils.DebugProvider
+import io.appmetrica.analytics.coreutils.internal.DebugProvider
 
 object DebugAssert {
 

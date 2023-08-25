@@ -387,52 +387,44 @@ public class io.appmetrica.analytics.IdentifiersResult implementation android.os
 }
 
 public final class io.appmetrica.analytics.ModuleEvent {
-    public static final [NonNull] io.appmetrica.analytics.ModuleEvent$Companion Companion
-
-    public <init>(int, [Nullable] String, [Nullable] String, int, [Nullable] java.util.Map<String, ? extends Object>, [Nullable] java.util.Map<String, byte[]>, [Nullable] java.util.Map<String, ? extends Object>)
-    public final [Nullable] java.util.Map<String, Object> getAttributes()
-    public final [Nullable] java.util.Map<String, Object> getEnvironment()
-    public final [Nullable] java.util.Map<String, byte[]> getExtras()
-    public final int getMetricaServiceDataReporterType()
-    public final [Nullable] String getName()
-    public final int getType()
-    public final [Nullable] String getValue()
-    public static final [NonNull] io.appmetrica.analytics.ModuleEvent$Builder newBuilder(int)
+    public [Nullable] java.util.Map<String, Object> getAttributes()
+    public [Nullable] java.util.Map<String, Object> getEnvironment()
+    public [Nullable] java.util.Map<String, byte[]> getExtras()
+    public int getMetricaServiceDataReporterType()
+    public [Nullable] String getName()
+    public int getType()
+    public [Nullable] String getValue()
+    public static io.appmetrica.analytics.ModuleEvent$Builder newBuilder(int)
     public [NonNull] String toString()
 }
 
-public static final class io.appmetrica.analytics.ModuleEvent$Builder {
-    public <init>(int)
-    public final [NonNull] io.appmetrica.analytics.ModuleEvent build()
-    public final [NonNull] io.appmetrica.analytics.ModuleEvent$Builder withAttributes([Nullable] java.util.Map<String, ? extends Object>)
-    public final [NonNull] io.appmetrica.analytics.ModuleEvent$Builder withEnvironment([Nullable] java.util.Map<String, ? extends Object>)
-    public final [NonNull] io.appmetrica.analytics.ModuleEvent$Builder withExtras([Nullable] java.util.Map<String, byte[]>)
-    public final [NonNull] io.appmetrica.analytics.ModuleEvent$Builder withMetricaServiceDataReporterType(int)
-    public final [NonNull] io.appmetrica.analytics.ModuleEvent$Builder withName([Nullable] String)
-    public final [NonNull] io.appmetrica.analytics.ModuleEvent$Builder withValue([Nullable] String)
-}
-
-public static final class io.appmetrica.analytics.ModuleEvent$Companion {
-    public final [NonNull] io.appmetrica.analytics.ModuleEvent$Builder newBuilder(int)
+public static class io.appmetrica.analytics.ModuleEvent$Builder {
+    public io.appmetrica.analytics.ModuleEvent build()
+    public io.appmetrica.analytics.ModuleEvent$Builder withAttributes([Nullable] java.util.Map<String, Object>)
+    public io.appmetrica.analytics.ModuleEvent$Builder withEnvironment([Nullable] java.util.Map<String, Object>)
+    public io.appmetrica.analytics.ModuleEvent$Builder withExtras([Nullable] java.util.Map<String, byte[]>)
+    public io.appmetrica.analytics.ModuleEvent$Builder withMetricaServiceDataReporterType(int)
+    public io.appmetrica.analytics.ModuleEvent$Builder withName([Nullable] String)
+    public io.appmetrica.analytics.ModuleEvent$Builder withValue([Nullable] String)
 }
 
 public final class io.appmetrica.analytics.ModulesFacade {
-    public static final [NonNull] io.appmetrica.analytics.ModulesFacade INSTANCE
-
-    public static final [NonNull] io.appmetrica.analytics.IModuleReporter getModuleReporter([NonNull] android.content.Context, [NonNull] String)
-    public static final boolean isActivatedForApp()
-    public static final void reportEvent([NonNull] io.appmetrica.analytics.ModuleEvent)
-    public static final void sendEventsBuffer()
-    public final void setProxy([NonNull] OBFUSCATED[io.appmetrica.analytics.impl.proxy.ModulesProxy])
-    public static final void setSessionExtra([NonNull] String, [Nullable] byte[])
+    public <init>()
+    public static [NonNull] io.appmetrica.analytics.IModuleReporter getModuleReporter([NonNull] android.content.Context, [NonNull] String)
+    public static boolean isActivatedForApp()
+    public static void reportEvent([NonNull] io.appmetrica.analytics.ModuleEvent)
+    public static void sendEventsBuffer()
+    public static void setProxy([NonNull] OBFUSCATED[io.appmetrica.analytics.impl.proxy.ModulesProxy])
+    public static void setSessionExtra([NonNull] String, [Nullable] byte[])
 }
 
-public final class io.appmetrica.analytics.PredefinedDeviceTypes {
-    public static final [NonNull] String CAR
-    public static final [NonNull] io.appmetrica.analytics.PredefinedDeviceTypes INSTANCE
-    public static final [NonNull] String PHONE
-    public static final [NonNull] String TABLET
-    public static final [NonNull] String TV
+public class io.appmetrica.analytics.PredefinedDeviceTypes {
+    public static final String CAR
+    public static final String PHONE
+    public static final String TABLET
+    public static final String TV
+
+    public <init>()
 }
 
 public class io.appmetrica.analytics.PreloadInfo {
@@ -552,10 +544,10 @@ public static final class io.appmetrica.analytics.StartupParamsCallback$Result {
 
 public final class io.appmetrica.analytics.StartupParamsItem {
     public <init>([Nullable] String, [NonNull] io.appmetrica.analytics.StartupParamsItemStatus, [Nullable] String)
-    public boolean equals([Nullable] Object)
-    public final [Nullable] String getErrorDetails()
-    public final [Nullable] String getId()
-    public final [NonNull] io.appmetrica.analytics.StartupParamsItemStatus getStatus()
+    public boolean equals(Object)
+    public [Nullable] String getErrorDetails()
+    public [Nullable] String getId()
+    public [NonNull] io.appmetrica.analytics.StartupParamsItemStatus getStatus()
     public int hashCode()
     public [NonNull] String toString()
 }

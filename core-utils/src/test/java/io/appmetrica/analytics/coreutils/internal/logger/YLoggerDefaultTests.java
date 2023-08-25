@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.coreutils.internal.logger;
 
-import io.appmetrica.analytics.coreutils.DebugProvider;
+import io.appmetrica.analytics.coreutils.internal.DebugProvider;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

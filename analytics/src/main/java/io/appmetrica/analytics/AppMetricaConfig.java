@@ -451,8 +451,7 @@ public class AppMetricaConfig {
          * {@value AppMetricaDefaultValues#DEFAULT_REPORTS_NATIVE_CRASHES_ENABLED}
          *
          * @param enabled {@code true} if we need to send reports about native crashes,
-         * otherwise {@code false}. In the case of {@code false} you can still send
-         * information about native crashes via {@link AppMetrica#reportNativeCrash(String)} method.
+         * otherwise {@code false}.
          *
          * @see Builder#withCrashReporting(boolean)
          *

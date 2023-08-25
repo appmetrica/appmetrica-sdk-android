@@ -56,8 +56,7 @@ public class ThreadsStateDumper {
     }
 
     /**
-     * @return String dump of all a thread details {@see {@link #}}
-     * and stacktraces.
+     * @return String dump of all a thread details and stacktraces.
      */
     //region changed code
     public AllThreads getThreadsDumpForAnr() {

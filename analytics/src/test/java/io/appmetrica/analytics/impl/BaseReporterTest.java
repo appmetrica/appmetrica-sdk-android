@@ -618,7 +618,7 @@ public abstract class BaseReporterTest extends BaseReporterData {
         String eventValue = randomString();
         int eventType = 14;
         int metricaServiceDataReporterType = MetricaServiceDataReporter.TYPE_CORE;
-        Map<String, String> environment = new HashMap<String, String>();
+        Map<String, Object> environment = new HashMap<>();
         Map<String, byte[]> extras = Collections.singletonMap("Key", new byte[]{1, 2, 3, 7, 8});
         Map<String, Object> attributes = new HashMap<>();
         String key = randomString();

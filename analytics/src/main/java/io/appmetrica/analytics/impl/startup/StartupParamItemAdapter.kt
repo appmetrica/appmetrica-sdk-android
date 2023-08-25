@@ -8,8 +8,8 @@ class StartupParamItemAdapter {
     private val startupParamItemStatusAdapter = StartupParamItemStatusAdapter()
 
     fun adapt(input: IdentifiersResult): StartupParamsItem = StartupParamsItem(
-        id = input.id,
-        status = startupParamItemStatusAdapter.adapt(input.status),
-        errorDetails = input.errorExplanation
+        input.id,
+        startupParamItemStatusAdapter.adapt(input.status),
+        input.errorExplanation
     )
 }

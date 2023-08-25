@@ -32,8 +32,6 @@ dependencies {
     implementation("com.android.tools.build:gradle:${agpVersion}")
     // https://kotlinlang.org/docs/gradle.html
     implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.32")
-    // https://github.com/Kotlin/dokka/releases
-    implementation("org.jetbrains.dokka:dokka-gradle-plugin:1.4.32")
     // by source
     implementation(libs.appMetricaAarCheck)
     implementation(libs.appMetricaAndroid)

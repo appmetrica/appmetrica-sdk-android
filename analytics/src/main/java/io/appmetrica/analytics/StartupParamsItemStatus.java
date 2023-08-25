@@ -1,11 +1,10 @@
-package io.appmetrica.analytics
+package io.appmetrica.analytics;
 
-enum class StartupParamsItemStatus {
+public enum StartupParamsItemStatus {
     OK,
     PROVIDER_UNAVAILABLE,
     INVALID_VALUE_FROM_PROVIDER,
     NETWORK_ERROR,
     FEATURE_DISABLED,
     UNKNOWN_ERROR
-    ;
 }

@@ -12,6 +12,7 @@ import org.gradle.api.publish.maven.MavenPublication
 import org.gradle.api.publish.maven.internal.publication.MavenPublicationInternal
 import org.gradle.api.publish.maven.plugins.MavenPublishPlugin
 import org.gradle.api.tasks.TaskProvider
+import org.gradle.api.tasks.javadoc.Javadoc
 import org.gradle.jvm.tasks.Jar
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
@@ -25,8 +26,6 @@ import org.gradle.kotlin.dsl.withType
 import org.gradle.plugins.signing.Sign
 import org.gradle.plugins.signing.SigningExtension
 import org.gradle.plugins.signing.SigningPlugin
-import org.jetbrains.dokka.gradle.DokkaPlugin
-import org.jetbrains.dokka.gradle.DokkaTask
 import java.io.File
 import java.util.Locale
 
@@ -42,7 +41,6 @@ class PublishingPlugin : Plugin<Project> {
     override fun apply(project: Project) {
         project.apply<MavenPublishPlugin>() // id("maven-publish")
         project.apply<SigningPlugin>() // id("signing")
-        project.apply<DokkaPlugin>() // id("org.jetbrains.dokka")
 
         if (!project.plugins.hasPlugin("com.android.library")) {
             throw GradleException("appmetrica-publish plugin requires the com.android.library plugin")
@@ -52,7 +50,9 @@ class PublishingPlugin : Plugin<Project> {
 
         val extension = project.createExtensions()
         project.configureSign()
-        project.configureJavadoc(extension)
+        project.the<LibraryExtension>().libraryVariants.configureEach {
+            project.configureJavadoc(this, extension)
+        }
 
         project.configure<PublishingExtension> {
             sonatypeRepository("sonatypeRelease")
@@ -105,21 +105,27 @@ class PublishingPlugin : Plugin<Project> {
         }
     }
 
-    private fun Project.configureJavadoc(extension: PublishingInfoExtension) {
-        val docConfiguration: (DokkaTask) -> Unit = {
-            val artifactName = it.name.replace("dokka", "").toLowerCase()
-            it.moduleName.set(extension.name)
-            it.outputDirectory.set(project.layout.buildDirectory.dir("artifacts/$artifactName").map { it.asFile })
-            it.dokkaSourceSets.configureEach {
-                reportUndocumented.set(true)
-                perPackageOption {
-                    matchingRegex.set(".*\\.impl.*")
-                    suppress.set(true)
-                }
-            }
+    private fun Project.configureJavadoc(
+        variant: LibraryVariant,
+        extension: PublishingInfoExtension
+    ) {
+        val capitalVariantName = variant.name.capitalize(Locale.ROOT)
+        val android = project.the<LibraryExtension>()
+
+        project.tasks.register("prepare${capitalVariantName}Javadoc", Javadoc::class.java) {
+            source = files(variant.sourceSets.flatMap { it.javaDirectories }).asFileTree
+            exclude("**/impl/**")
+            exclude("**/internal/**")
+
+            classpath = files(variant.javaCompile.outputs.files) +
+                files("${android.sdkDirectory.path}/platforms/${android.compileSdkVersion}/android.jar") +
+                variant.getCompileClasspath(null)
+
+            title = extension.name.get()
+            options.encoding = "UTF-8"
+            // TODO https://nda.ya.ru/t/wGHxAUgc6cVCMT
+            // (options as CoreJavadocOptions).addStringOption("Xwerror", "-quiet")
         }
-        project.tasks.named("dokkaGfm", docConfiguration)
-        project.tasks.named("dokkaJavadoc", docConfiguration)
     }
 
     private fun Project.createExtensions(): PublishingInfoExtension {
@@ -200,7 +206,7 @@ class PublishingPlugin : Plugin<Project> {
             archiveClassifier.set("javadoc")
             archiveBaseName.set(getArtifactIdFor(variant, extension))
             destinationDirectory.set(layout.buildDirectory.dir("artifacts/javadoc-jar/$capitalVariantName/"))
-            from(tasks.named<DokkaTask>("dokkaJavadoc").get().outputDirectory)
+            from(project.tasks.named<Javadoc>("prepare${capitalVariantName}Javadoc").get().outputs)
 
             mustRunAfter(variant.assembleProvider)
         }

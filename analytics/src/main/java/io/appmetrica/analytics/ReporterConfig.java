@@ -250,7 +250,7 @@ public class ReporterConfig {
          * can't be changed too often. For frequently changed parameters use extended reportMessage methods.
          * @param key the environment key.
          * @param value the environment value. To remove pair from environment pass {@code null} value.
-         * @return the same {@link ReporterYandexConfig.Builder} object
+         * @return the same object
          */
         @NonNull
         public Builder withAppEnvironmentValue(String key, String value) {

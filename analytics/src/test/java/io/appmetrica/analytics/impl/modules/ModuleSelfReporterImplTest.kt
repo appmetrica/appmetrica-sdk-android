@@ -61,6 +61,7 @@ class ModuleSelfReporterImplTest : CommonTest() {
         assertThat(moduleEventArgumentCaptor.allValues).hasSize(1)
 
         ObjectPropertyAssertions(moduleEventArgumentCaptor.firstValue)
+            .withPrivateFields(true)
             .checkField("type", eventType)
             .checkField("name", eventName)
             .checkField("value", stringValue)

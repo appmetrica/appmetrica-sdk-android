@@ -6,15 +6,15 @@ public final class io.appmetrica.analytics.coreutils.BuildConfig {
     public <init>()
 }
 
-public final class io.appmetrica.analytics.coreutils.DebugProvider {
-    public static final boolean DEBUG
-    public static final [NonNull] io.appmetrica.analytics.coreutils.DebugProvider INSTANCE
-}
-
 public final class io.appmetrica.analytics.coreutils.internal.AndroidUtils {
     public static final [NonNull] io.appmetrica.analytics.coreutils.internal.AndroidUtils INSTANCE
 
     public static final boolean isApiAchieved(int)
+}
+
+public final class io.appmetrica.analytics.coreutils.internal.DebugProvider {
+    public static final boolean DEBUG
+    public static final [NonNull] io.appmetrica.analytics.coreutils.internal.DebugProvider INSTANCE
 }
 
 public final class io.appmetrica.analytics.coreutils.internal.LocationUtils {

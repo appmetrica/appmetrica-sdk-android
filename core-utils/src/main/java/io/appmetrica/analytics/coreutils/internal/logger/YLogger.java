@@ -3,7 +3,7 @@ package io.appmetrica.analytics.coreutils.internal.logger;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
-import io.appmetrica.analytics.coreutils.DebugProvider;
+import io.appmetrica.analytics.coreutils.internal.DebugProvider;
 import org.json.JSONObject;
 
 public final class YLogger {

@@ -568,7 +568,7 @@ public final class AppMetrica {
     }
 
     /**
-     * <p>Returns only requested params (possible options are listed in {@link StartupParamsCallback#Companion}
+     * <p>Returns only requested params (possible options are listed in {@link StartupParamsCallback}
      * and any other custom keys assuming they are present in startup)
      * by {@link StartupParamsCallback}.
      * For example, to retrieve custom host which will be present in startup by key "my_sdk_host",

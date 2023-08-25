@@ -1,4 +1,4 @@
-package io.appmetrica.analytics.coreutils
+package io.appmetrica.analytics.coreutils.internal
 
 object DebugProvider {
 

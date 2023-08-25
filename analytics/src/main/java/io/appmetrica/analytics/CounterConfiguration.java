@@ -378,7 +378,7 @@ public class CounterConfiguration implements Parcelable {
 
     /**
      * Overlaps configuration by {@link Bundle} object.
-     * <br/> <bb>NOTE</bb>: for backward compatibility.
+     * NOTE: for backward compatibility.
      *
      * @param cfg {@link Bundle} object.
      */
