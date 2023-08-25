@@ -2,7 +2,6 @@ package io.appmetrica.analytics.impl.db
 
 import androidx.annotation.WorkerThread
 import io.appmetrica.analytics.coreutils.internal.logger.YLogger
-import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade
 import org.json.JSONObject
 
 internal class VitalDataProvider(
@@ -30,7 +29,7 @@ internal class VitalDataProvider(
     private fun VitalDataSource.read(): JSONObject = try {
         getVitalData()?.let { JSONObject(it) } ?: JSONObject()
     } catch (ex: Throwable) {
-        processException(ex)
+        YLogger.error(tag, ex)
         JSONObject()
     }
 
@@ -47,23 +46,7 @@ internal class VitalDataProvider(
         try {
             putVitalData(content)
         } catch (ex: Throwable) {
-            processException(ex)
+            YLogger.error(tag, ex)
         }
-    }
-
-    private fun processException(ex: Throwable) {
-        AppMetricaSelfReportFacade.getReporter()
-            .reportEvent(
-                "vital_data_provider_exception",
-                mapOf(
-                    "tag" to tag,
-                    "exception" to ex::class.simpleName
-                )
-            )
-        AppMetricaSelfReportFacade.getReporter().reportError(
-            "Error during reading vital data for tag = $tag",
-            ex
-        )
-        YLogger.error(tag, ex)
     }
 }
