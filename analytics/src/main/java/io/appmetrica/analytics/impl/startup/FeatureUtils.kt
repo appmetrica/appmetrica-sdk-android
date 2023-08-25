@@ -9,12 +9,13 @@ private const val KEY_FALSE = "false"
 
 internal object FeatureUtils {
 
-    fun Boolean.featureToIdentifierResultInternal(
+    fun featureToIdentifierResultInternal(
+        value: Boolean,
         status: IdentifierStatus,
         errorExplanation: String?
     ): IdentifiersResult {
         return IdentifiersResult(
-            when (this) {
+            when (value) {
                 true -> KEY_TRUE
                 false -> KEY_FALSE
             },

@@ -3,7 +3,6 @@ package io.appmetrica.analytics.impl.startup
 import io.appmetrica.analytics.IdentifiersResult
 import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
 import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus
-import io.appmetrica.analytics.impl.startup.FeatureUtils.featureToIdentifierResultInternal
 import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
@@ -15,7 +14,7 @@ class FeaturesUtilsTest : CommonTest() {
 
     @Test
     fun featureToIdentifierResultInternalTrue() {
-        ObjectPropertyAssertions(true.featureToIdentifierResultInternal(status, errorExplanation))
+        ObjectPropertyAssertions(FeatureUtils.featureToIdentifierResultInternal(true, status, errorExplanation))
             .checkField("id", "true")
             .checkField("status", status)
             .checkField("errorExplanation", errorExplanation)
@@ -24,7 +23,7 @@ class FeaturesUtilsTest : CommonTest() {
 
     @Test
     fun featureToIdentifierResultInternalFalse() {
-        ObjectPropertyAssertions(false.featureToIdentifierResultInternal(status, errorExplanation))
+        ObjectPropertyAssertions(FeatureUtils.featureToIdentifierResultInternal(false, status, errorExplanation))
             .checkField("id", "false")
             .checkField("status", status)
             .checkField("errorExplanation", errorExplanation)

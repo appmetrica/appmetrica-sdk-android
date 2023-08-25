@@ -2,7 +2,6 @@ package io.appmetrica.analytics.impl.startup
 
 import io.appmetrica.analytics.IdentifiersResult
 import io.appmetrica.analytics.StartupParamsItem
-import io.appmetrica.analytics.impl.startup.FeatureUtils.featureToIdentifierResultInternal
 
 internal class FeaturesHolder {
 
@@ -17,10 +16,9 @@ internal class FeaturesHolder {
         identifiers.forEach { identifier ->
             when (identifier) {
                 Constants.StartupParamsCallbackKeys.FEATURE_LIB_SSL_ENABLED ->
-                    features.sslPinning?.featureToIdentifierResultInternal(
-                        features.status,
-                        features.errorExplanation
-                    )?.let {
+                    features.sslPinning?.let {
+                        FeatureUtils.featureToIdentifierResultInternal(it, features.status, features.errorExplanation)
+                    }?.let {
                         map[Constants.StartupParamsCallbackKeys.FEATURE_LIB_SSL_ENABLED] =
                             startupParamItemAdapter.adapt(it)
                     }
@@ -32,7 +30,7 @@ internal class FeaturesHolder {
         with(features) {
             return when (key) {
                 Constants.StartupParamsCallbackKeys.FEATURE_LIB_SSL_ENABLED ->
-                    sslPinning?.featureToIdentifierResultInternal(status, errorExplanation)
+                    sslPinning?.let { FeatureUtils.featureToIdentifierResultInternal(it, status, errorExplanation) }
                 else -> null
             }
         }
