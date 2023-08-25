@@ -85,7 +85,10 @@ public class AppMetricaProxyTest extends CommonTest {
     private MainFacadeBarrier mBarrier;
     @Mock
     private ICommonExecutor mExecutor;
-    private Context mContext;
+    @Mock
+    private Context context;
+    @Mock
+    private Context applicationContext;
     @Mock
     private Throwable mThrowable;
     @Mock
@@ -116,10 +119,10 @@ public class AppMetricaProxyTest extends CommonTest {
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        mContext = RuntimeEnvironment.getApplication();
+        when(context.getApplicationContext()).thenReturn(applicationContext);
         mStubbedExecutor = new StubbedBlockingExecutor();
         when(mProvider.peekInitializedImpl()).thenReturn(mImpl);
-        when(mProvider.getInitializedImpl(mContext)).thenReturn(mImpl);
+        when(mProvider.getInitializedImpl(applicationContext)).thenReturn(mImpl);
         mProxy = new AppMetricaProxy(
                 mProvider,
                 mStubbedExecutor,
@@ -156,10 +159,10 @@ public class AppMetricaProxyTest extends CommonTest {
         AppMetricaConfig config = mock(AppMetricaConfig.class);
         AppMetricaConfig mergedConfig = mock(AppMetricaConfig.class);
         when(mDefaultOneShotMetricaConfig.mergeWithUserConfig(config)).thenReturn(mergedConfig);
-        mProxy.activate(RuntimeEnvironment.getApplication(), config);
-        verify(mBarrier).activate(RuntimeEnvironment.getApplication(), config);
+        mProxy.activate(context, config);
+        verify(mBarrier).activate(context, config);
         InOrder order = inOrder(mSynchronousStageExecutor, mProvider);
-        order.verify(mSynchronousStageExecutor).activate(RuntimeEnvironment.getApplication(), config);
+        order.verify(mSynchronousStageExecutor).activate(applicationContext, config);
         order.verify(mProvider).markActivated();
         verify(mImpl).activateFull(config, mergedConfig);
     }
@@ -672,9 +675,9 @@ public class AppMetricaProxyTest extends CommonTest {
     @Test
     public void testGetUuid() {
         IdentifiersResult uuidResult = mock(IdentifiersResult.class);
-        when(ClientServiceLocator.getInstance().getMultiProcessSafeUuidProvider(mContext).readUuid())
+        when(ClientServiceLocator.getInstance().getMultiProcessSafeUuidProvider(applicationContext).readUuid())
             .thenReturn(uuidResult);
-        assertThat(mProxy.getUuid(mContext)).isEqualTo(uuidResult);
+        assertThat(mProxy.getUuid(context)).isEqualTo(uuidResult);
     }
 
     @Test
@@ -707,10 +710,10 @@ public class AppMetricaProxyTest extends CommonTest {
     }
 
     private void testSetStatisticSending(boolean value) {
-        mProxy.setStatisticsSending(mContext, value);
+        mProxy.setStatisticsSending(context, value);
         InOrder order = inOrder(mBarrier, mSynchronousStageExecutor, mProvider);
-        order.verify(mBarrier).setStatisticsSending(mContext, value);
-        order.verify(mSynchronousStageExecutor).setStatisticsSending(mContext, value);
+        order.verify(mBarrier).setStatisticsSending(context, value);
+        order.verify(mSynchronousStageExecutor).setStatisticsSending(applicationContext, value);
         order.verify(mProvider).setStatisticsSending(value);
         verifyZeroInteractions(activationValidator);
     }

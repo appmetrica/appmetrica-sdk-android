@@ -108,11 +108,11 @@ public final class AppMetricaProxy extends BaseAppMetricaProxy {
 
     public void activate(@NonNull final Context context, @NonNull final AppMetricaConfig config) {
         mMainFacadeBarrier.activate(context, config);
-        getSynchronousStageExecutor().activate(context, config);
+        getSynchronousStageExecutor().activate(context.getApplicationContext(), config);
         getExecutor().execute(new Runnable() {
             @Override
             public void run() {
-                getProvider().getInitializedImpl(context).activateFull(
+                getProvider().getInitializedImpl(context.getApplicationContext()).activateFull(
                         config,
                         getDefaultOneShotConfig().mergeWithUserConfig(config)
                 );
@@ -320,7 +320,7 @@ public final class AppMetricaProxy extends BaseAppMetricaProxy {
 
     public void setLocationTracking(@NonNull final Context context, final boolean enabled) {
         mMainFacadeBarrier.setLocationTracking(context, enabled);
-        getSynchronousStageExecutor().setLocationTracking(context, enabled);
+        getSynchronousStageExecutor().setLocationTracking(context.getApplicationContext(), enabled);
         getExecutor().execute(new Runnable() {
             @Override
             public void run() {
@@ -331,7 +331,7 @@ public final class AppMetricaProxy extends BaseAppMetricaProxy {
 
     public void setStatisticsSending(@NonNull final Context context, final boolean enabled) {
         mMainFacadeBarrier.setStatisticsSending(context, enabled);
-        getSynchronousStageExecutor().setStatisticsSending(context, enabled);
+        getSynchronousStageExecutor().setStatisticsSending(context.getApplicationContext(), enabled);
         getExecutor().execute(new Runnable() {
             @Override
             public void run() {
@@ -426,14 +426,14 @@ public final class AppMetricaProxy extends BaseAppMetricaProxy {
     @NonNull
     public IReporterExtended getReporter(@NonNull Context context, @NonNull String apiKey) {
         mMainFacadeBarrier.getReporter(context, apiKey);
-        getContextAppearedListener().onProbablyAppeared(context);
-        return getReporterProxyStorage().getOrCreate(context, apiKey);
+        getContextAppearedListener().onProbablyAppeared(context.getApplicationContext());
+        return getReporterProxyStorage().getOrCreate(context.getApplicationContext(), apiKey);
     }
 
     public void activateReporter(@NonNull Context context, @NonNull ReporterConfig config) {
         mMainFacadeBarrier.activateReporter(context, config);
-        getSynchronousStageExecutor().activateReporter(context, config);
-        getReporterProxyStorage().getOrCreate(context, config);
+        getSynchronousStageExecutor().activateReporter(context.getApplicationContext(), config);
+        getReporterProxyStorage().getOrCreate(context.getApplicationContext(), config);
     }
 
     public void putErrorEnvironmentValue(@NonNull final String key, @Nullable final String value) {
@@ -501,8 +501,9 @@ public final class AppMetricaProxy extends BaseAppMetricaProxy {
     @NonNull
     public IdentifiersResult getUuid(@NonNull Context context) {
         mMainFacadeBarrier.getUuid(context);
-        getSynchronousStageExecutor().getUuid(context);
-        return ClientServiceLocator.getInstance().getMultiProcessSafeUuidProvider(context).readUuid();
+        getSynchronousStageExecutor().getUuid(context.getApplicationContext());
+        return ClientServiceLocator.getInstance().getMultiProcessSafeUuidProvider(context.getApplicationContext())
+            .readUuid();
     }
 
     public void putAppEnvironmentValue(@NonNull final String key, @Nullable final String value) {
@@ -533,11 +534,12 @@ public final class AppMetricaProxy extends BaseAppMetricaProxy {
             @NonNull final List<String> params
     ) {
         mMainFacadeBarrier.requestStartupParams(context, callback, params);
-        getSynchronousStageExecutor().requestStartupParams(context, callback, params);
+        getSynchronousStageExecutor().requestStartupParams(context.getApplicationContext(), callback, params);
         getExecutor().execute(new Runnable() {
             @Override
             public void run() {
-                getProvider().getInitializedImpl(context).requestStartupParams(callback, params);
+                getProvider().getInitializedImpl(context.getApplicationContext())
+                    .requestStartupParams(callback, params);
             }
         });
     }

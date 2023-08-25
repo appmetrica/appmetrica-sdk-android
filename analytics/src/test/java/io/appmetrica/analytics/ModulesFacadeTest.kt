@@ -8,6 +8,7 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoMoreInteractions
@@ -59,7 +60,10 @@ class ModulesFacadeTest {
     @Test
     fun getModuleReporter() {
         val reporter: IModuleReporter = mock()
-        val context: Context = mock()
+        val appContext: Context = mock()
+        val context: Context = mock {
+            on { applicationContext } doReturn appContext
+        }
         val apiKey = "some api key"
         whenever(proxy.getReporter(context, apiKey)).thenReturn(reporter)
 

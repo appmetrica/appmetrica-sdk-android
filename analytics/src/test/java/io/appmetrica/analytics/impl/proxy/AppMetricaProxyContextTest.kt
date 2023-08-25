@@ -1,7 +1,6 @@
 package io.appmetrica.analytics.impl.proxy
 
 import android.content.Context
-import io.appmetrica.analytics.AnrListener
 import io.appmetrica.analytics.AppMetricaConfig
 import io.appmetrica.analytics.ReporterConfig
 import io.appmetrica.analytics.StartupParamsCallback
@@ -24,14 +23,11 @@ import org.junit.Rule
 import org.junit.Test
 import org.mockito.ArgumentMatchers.any
 import org.mockito.ArgumentMatchers.same
-import org.mockito.Mock
-import org.mockito.Mockito.doReturn
-import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
-import org.mockito.Mockito.`when`
 import org.mockito.MockitoAnnotations
+import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
-import org.mockito.kotlin.refEq
+import org.mockito.kotlin.whenever
 import java.util.UUID
 
 class AppMetricaProxyContextTest : CommonTest() {
@@ -39,67 +35,36 @@ class AppMetricaProxyContextTest : CommonTest() {
     @get:Rule
     val clientServiceLocatorRule = ClientServiceLocatorRule()
 
-    @Mock
-    private lateinit var mainReporter: MainReporter
+    private val mainReporter: MainReporter = mock()
+    private val mainReporterApiConsumerProvider: MainReporterApiConsumerProvider = mock()
+    private val deeplinkConsumer: DeeplinkConsumer = mock()
+    private val impl: AppMetricaFacade = mock()
+    private val provider: AppMetricaFacadeProvider = mock()
+    private val reporterProxyStorage: ReporterProxyStorage = mock()
+    private val barrier: MainFacadeBarrier = mock()
+    private val applicationContext: Context = mock()
+    private val context: Context = mock {
+        on { applicationContext } doReturn applicationContext
+    }
+    private val synchronousStageExecutor: SynchronousStageExecutor = mock()
+    private val defaultOneShotMetricaConfig: DefaultOneShotMetricaConfig = mock()
+    private val webViewJsInterfaceHandler: WebViewJsInterfaceHandler = mock()
+    private val silentActivationValidator: SilentActivationValidator = mock()
+    private val activationValidator: ActivationValidator = mock()
+    private val sessionsTrackingManager: SessionsTrackingManager = mock()
+    private val contextAppearedListener: ContextAppearedListener = mock()
+    private val executor: ICommonExecutor = mock()
+    private val startupParamsCallback: StartupParamsCallback = mock()
+    private val params: List<String> = mock()
 
-    @Mock
-    private lateinit var mainReporterApiConsumerProvider: MainReporterApiConsumerProvider
-
-    @Mock
-    private lateinit var deeplinkConsumer: DeeplinkConsumer
-
-    @Mock
-    private lateinit var impl: AppMetricaFacade
-
-    @Mock
-    private lateinit var provider: AppMetricaFacadeProvider
-
-    @Mock
-    private lateinit var reporterProxyStorage: ReporterProxyStorage
-
-    @Mock
-    private lateinit var barrier: MainFacadeBarrier
-
-    @Mock
-    private lateinit var context: Context
-
-    @Mock
-    private lateinit var synchronousStageExecutor: SynchronousStageExecutor
-
-    @Mock
-    private lateinit var defaultOneShotMetricaConfig: DefaultOneShotMetricaConfig
-
-    @Mock
-    private lateinit var webViewJsInterfaceHandler: WebViewJsInterfaceHandler
-
-    @Mock
-    private lateinit var silentActivationValidator: SilentActivationValidator
-
-    @Mock
-    private lateinit var activationValidator: ActivationValidator
-
-    @Mock
-    private lateinit var sessionsTrackingManager: SessionsTrackingManager
-
-    @Mock
-    private lateinit var contextAppearedListener: ContextAppearedListener
-
-    @Mock
-    private lateinit var executor: ICommonExecutor
-
-    @Mock
-    private lateinit var startupParamsCallback: StartupParamsCallback
-
-    @Mock
-    private lateinit var params: List<String>
     private lateinit var proxy: AppMetricaProxy
     private val apiKey = UUID.randomUUID().toString()
 
     @Before
     fun setUp() {
         MockitoAnnotations.openMocks(this)
-        `when`(provider.peekInitializedImpl()).thenReturn(impl)
-        `when`(provider.getInitializedImpl(context)).thenReturn(impl)
+        whenever(provider.peekInitializedImpl()).thenReturn(impl)
+        whenever(provider.getInitializedImpl(context)).thenReturn(impl)
         proxy = AppMetricaProxy(
             provider,
             executor,
@@ -113,53 +78,60 @@ class AppMetricaProxyContextTest : CommonTest() {
             sessionsTrackingManager,
             contextAppearedListener
         )
-        `when`(impl.mainReporterApiConsumerProvider).thenReturn(mainReporterApiConsumerProvider)
-        doReturn(mainReporter).`when`(mainReporterApiConsumerProvider).mainReporter
-        doReturn(deeplinkConsumer).`when`(mainReporterApiConsumerProvider).deeplinkConsumer
+        whenever(impl.mainReporterApiConsumerProvider).thenReturn(mainReporterApiConsumerProvider)
+        doReturn(mainReporter).whenever(mainReporterApiConsumerProvider).mainReporter
+        doReturn(deeplinkConsumer).whenever(mainReporterApiConsumerProvider).deeplinkConsumer
     }
 
     @Test
     fun activate() {
         val config = AppMetricaConfig.newConfigBuilder(apiKey).build()
         proxy.activate(context, config)
-        verify(synchronousStageExecutor).activate(same(context), any(AppMetricaConfig::class.java))
+        verify(barrier).activate(context, config)
+        verify(synchronousStageExecutor).activate(applicationContext, config)
     }
 
     @Test
     fun setLocationTracking() {
         proxy.setLocationTracking(context, true)
-        verify(synchronousStageExecutor).setLocationTracking(context, true)
+        verify(barrier).setLocationTracking(context, true)
+        verify(synchronousStageExecutor).setLocationTracking(applicationContext, true)
     }
 
     @Test
     fun setStatisticsSending() {
         proxy.setStatisticsSending(context, true)
-        verify(synchronousStageExecutor).setStatisticsSending(context, true)
+        verify(barrier).setStatisticsSending(context, true)
+        verify(synchronousStageExecutor).setStatisticsSending(applicationContext, true)
     }
 
     @Test
     fun getReporter() {
         proxy.getReporter(context, apiKey)
-        verify(contextAppearedListener).onProbablyAppeared(context)
+        verify(barrier).getReporter(context, apiKey)
+        verify(contextAppearedListener).onProbablyAppeared(applicationContext)
     }
 
     @Test
     fun activateReporter() {
         val config = ReporterConfig.newConfigBuilder(apiKey).build()
         proxy.activateReporter(context, config)
-        verify(synchronousStageExecutor).activateReporter(same(context), any(ReporterConfig::class.java))
+        verify(barrier).activateReporter(context, config)
+        verify(synchronousStageExecutor).activateReporter(applicationContext, config)
     }
 
     @Test
     fun requestStartupParams() {
         proxy.requestStartupParams(context, startupParamsCallback, params)
-        verify(synchronousStageExecutor).requestStartupParams(context, startupParamsCallback, params)
+        verify(barrier).requestStartupParams(context, startupParamsCallback, params)
+        verify(synchronousStageExecutor).requestStartupParams(applicationContext, startupParamsCallback, params)
     }
 
     @Test
     fun getUuid() {
         proxy.getUuid(context)
-        verify(synchronousStageExecutor).getUuid(context)
+        verify(barrier).getUuid(context)
+        verify(synchronousStageExecutor).getUuid(applicationContext)
     }
 
     @Test

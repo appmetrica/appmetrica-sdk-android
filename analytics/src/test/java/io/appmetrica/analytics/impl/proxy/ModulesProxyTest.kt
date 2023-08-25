@@ -17,6 +17,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.KArgumentCaptor
 import org.mockito.kotlin.argumentCaptor
+import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.inOrder
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.times
@@ -106,7 +107,9 @@ class ModulesProxyTest : CommonTest() {
 
     @Test
     fun getReporter() {
-        val context: Context = mock()
+        val context: Context = mock {
+            on { applicationContext } doReturn it
+        }
         val apiKey = UUID.randomUUID().toString()
         whenever(reporterProxyStorageImpl.getOrCreate(context, apiKey)).thenReturn(mock())
         whenever(ReporterProxyStorage.getInstance()).thenReturn(reporterProxyStorageImpl)

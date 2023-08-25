@@ -63,8 +63,8 @@ class ModulesProxy @VisibleForTesting constructor(
 
     fun getReporter(context: Context, apiKey: String): IModuleReporter {
         modulesBarrier.getReporter(context, apiKey)
-        ClientServiceLocator.getInstance().contextAppearedListener.onProbablyAppeared(context)
-        return ReporterProxyStorage.getInstance().getOrCreate(context, apiKey)
+        ClientServiceLocator.getInstance().contextAppearedListener.onProbablyAppeared(context.applicationContext)
+        return ReporterProxyStorage.getInstance().getOrCreate(context.applicationContext, apiKey)
     }
 
     /*
