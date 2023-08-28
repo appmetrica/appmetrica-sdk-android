@@ -23,6 +23,7 @@ import io.appmetrica.analytics.ecommerce.ECommerceProduct;
 import io.appmetrica.analytics.ecommerce.ECommerceReferrer;
 import io.appmetrica.analytics.ecommerce.ECommerceScreen;
 import io.appmetrica.analytics.impl.ClientIdentifiersHolder;
+import io.appmetrica.analytics.internal.CounterConfiguration;
 import io.appmetrica.analytics.impl.CounterConfigurationReporterType;
 import io.appmetrica.analytics.impl.DeferredDeeplinkState;
 import io.appmetrica.analytics.impl.DistributionSource;

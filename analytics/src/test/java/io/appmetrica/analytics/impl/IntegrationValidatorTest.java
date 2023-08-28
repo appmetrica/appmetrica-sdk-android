@@ -17,7 +17,7 @@ import static org.mockito.Mockito.when;
 @Config(sdk = Build.VERSION_CODES.LOLLIPOP)
 public class IntegrationValidatorTest extends CommonTest {
 
-    private static final String COUNTER_CONFIGURATION_CLASS = "io.appmetrica.analytics.CounterConfiguration";
+    private static final String COUNTER_CONFIGURATION_CLASS = "io.appmetrica.analytics.internal.CounterConfiguration";
 
     @Rule
     public final MockedStaticRule<IntegrationValidator> sValidator = new MockedStaticRule<>(IntegrationValidator.class);

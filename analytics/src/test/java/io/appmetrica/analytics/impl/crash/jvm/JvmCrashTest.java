@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.crash.jvm;
 
 import android.util.Base64;
 import androidx.annotation.NonNull;
-import io.appmetrica.analytics.CounterConfiguration;
+import io.appmetrica.analytics.internal.CounterConfiguration;
 import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
 import io.appmetrica.analytics.impl.ClientCounterReport;
 import io.appmetrica.analytics.impl.CounterConfigurationReporterType;

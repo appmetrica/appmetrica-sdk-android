@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.modules
 
 import android.content.Context
 import android.content.Intent
-import io.appmetrica.analytics.AppMetricaService
+import io.appmetrica.analytics.internal.AppMetricaService
 
 class AppMetricaServiceWakeLockIntentProvider : ServiceWakeLockIntentProvider {
 

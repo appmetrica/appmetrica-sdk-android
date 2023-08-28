@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.component.processor.commutation;
 
 import androidx.annotation.Nullable;
-import io.appmetrica.analytics.CounterConfiguration;
+import io.appmetrica.analytics.internal.CounterConfiguration;
 import io.appmetrica.analytics.impl.CounterReport;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.StatisticsRestrictionControllerImpl;

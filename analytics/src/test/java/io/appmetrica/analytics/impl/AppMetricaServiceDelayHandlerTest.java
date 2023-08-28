@@ -47,7 +47,7 @@ public class AppMetricaServiceDelayHandlerTest extends CommonTest {
     public void setUp() {
         MockitoAnnotations.openMocks(this);
         context = TestUtils.createMockedContext();
-        metricaServiceInfo.service = new ComponentName(context.getPackageName(), "io.appmetrica.analytics.AppMetricaService");
+        metricaServiceInfo.service = new ComponentName(context.getPackageName(), "io.appmetrica.analytics.internal.AppMetricaService");
         delayFile = new File(RuntimeEnvironment.getApplication().getFilesDir(), METRICA_SERVICE_SETTING_FILENAME);
         when(fileProvider.getFileFromStorage(context, METRICA_SERVICE_SETTING_FILENAME)).thenReturn(delayFile);
         when(mainProcessDetector.isMainProcess()).thenReturn(true);

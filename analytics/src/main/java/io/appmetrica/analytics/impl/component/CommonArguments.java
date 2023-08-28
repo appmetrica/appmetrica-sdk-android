@@ -4,7 +4,7 @@ import android.location.Location;
 import android.os.ResultReceiver;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import io.appmetrica.analytics.CounterConfiguration;
+import io.appmetrica.analytics.internal.CounterConfiguration;
 import io.appmetrica.analytics.coreutils.internal.WrapUtils;
 import io.appmetrica.analytics.impl.client.ClientConfiguration;
 import io.appmetrica.analytics.impl.request.StartupRequestConfig;

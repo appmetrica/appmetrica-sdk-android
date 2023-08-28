@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.crash.jvm;
 
 import android.os.ResultReceiver;
-import io.appmetrica.analytics.CounterConfiguration;
+import io.appmetrica.analytics.internal.CounterConfiguration;
 import io.appmetrica.analytics.TestData;
 import io.appmetrica.analytics.impl.ClientCounterReport;
 import io.appmetrica.analytics.impl.CounterReport;

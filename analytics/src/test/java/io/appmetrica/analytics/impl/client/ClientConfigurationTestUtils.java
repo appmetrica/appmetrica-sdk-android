@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.client;
 
 import android.os.ResultReceiver;
-import io.appmetrica.analytics.CounterConfiguration;
+import io.appmetrica.analytics.internal.CounterConfiguration;
 import io.appmetrica.analytics.testutils.CommonTest;
 import org.robolectric.RuntimeEnvironment;
 

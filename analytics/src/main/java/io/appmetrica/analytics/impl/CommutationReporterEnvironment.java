@@ -1,8 +1,8 @@
 package io.appmetrica.analytics.impl;
 
 import androidx.annotation.NonNull;
-import io.appmetrica.analytics.CounterConfiguration;
 import io.appmetrica.analytics.impl.client.ProcessConfiguration;
+import io.appmetrica.analytics.internal.CounterConfiguration;
 
 class CommutationReporterEnvironment extends ReporterEnvironment {
 

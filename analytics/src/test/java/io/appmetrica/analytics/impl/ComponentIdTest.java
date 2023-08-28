@@ -1,11 +1,11 @@
 package io.appmetrica.analytics.impl;
 
-import io.appmetrica.analytics.CounterConfiguration;
 import io.appmetrica.analytics.impl.client.ClientConfiguration;
 import io.appmetrica.analytics.impl.client.ProcessConfiguration;
 import io.appmetrica.analytics.impl.component.ComponentId;
 import io.appmetrica.analytics.impl.component.MainReporterComponentId;
 import io.appmetrica.analytics.impl.component.clients.ClientDescription;
+import io.appmetrica.analytics.internal.CounterConfiguration;
 import io.appmetrica.analytics.testutils.CommonTest;
 import java.util.UUID;
 import org.junit.Test;

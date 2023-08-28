@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl;
 
-import io.appmetrica.analytics.CounterConfiguration;
 import io.appmetrica.analytics.impl.client.ProcessConfiguration;
+import io.appmetrica.analytics.internal.CounterConfiguration;
 import io.appmetrica.analytics.testutils.CommonTest;
 import org.junit.Before;
 import org.junit.Test;

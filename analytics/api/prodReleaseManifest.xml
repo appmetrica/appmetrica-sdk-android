@@ -15,7 +15,7 @@
 
         <!-- AppMetrica Analytics: common service -->
         <service
-            android:name="io.appmetrica.analytics.AppMetricaService"
+            android:name="io.appmetrica.analytics.internal.AppMetricaService"
             android:enabled="true"
             android:exported="false"
             android:process=":AppMetrica" >
@@ -30,7 +30,7 @@
 
         <!-- To track preinstallations -->
         <provider
-            android:name="io.appmetrica.analytics.PreloadInfoContentProvider"
+            android:name="io.appmetrica.analytics.internal.PreloadInfoContentProvider"
             android:authorities="${applicationId}.appmetrica.preloadinfo.retail"
             android:enabled="true"
             android:exported="true"

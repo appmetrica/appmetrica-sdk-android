@@ -3,10 +3,10 @@ package io.appmetrica.analytics.impl;
 import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import io.appmetrica.analytics.CounterConfiguration;
 import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.client.ProcessConfiguration;
 import io.appmetrica.analytics.impl.service.MetricaServiceDataReporter;
+import io.appmetrica.analytics.internal.CounterConfiguration;
 
 public class SelfDiagnosticReporter {
 

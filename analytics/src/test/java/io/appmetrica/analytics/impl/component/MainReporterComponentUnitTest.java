@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.component;
 
-import io.appmetrica.analytics.CounterConfiguration;
+import io.appmetrica.analytics.internal.CounterConfiguration;
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.applicationstate.ApplicationState;
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.applicationstate.ApplicationStateObserver;
 import io.appmetrica.analytics.impl.ApplicationStateProviderImpl;

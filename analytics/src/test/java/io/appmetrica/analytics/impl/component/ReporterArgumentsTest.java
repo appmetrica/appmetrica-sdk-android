@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.component;
 
 import android.location.Location;
-import io.appmetrica.analytics.CounterConfiguration;
+import io.appmetrica.analytics.internal.CounterConfiguration;
 import io.appmetrica.analytics.testutils.CommonTest;
 import java.util.HashMap;
 import java.util.Map;

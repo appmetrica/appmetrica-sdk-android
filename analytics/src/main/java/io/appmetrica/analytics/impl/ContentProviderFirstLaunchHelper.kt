@@ -3,8 +3,8 @@ package io.appmetrica.analytics.impl
 import android.content.ComponentName
 import android.content.Context
 import android.content.pm.PackageManager
-import io.appmetrica.analytics.PreloadInfoContentProvider
 import io.appmetrica.analytics.coreutils.internal.logger.YLogger
+import io.appmetrica.analytics.internal.PreloadInfoContentProvider
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 

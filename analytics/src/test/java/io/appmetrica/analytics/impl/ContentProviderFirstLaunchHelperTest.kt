@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl
 import android.content.ComponentName
 import android.content.Context
 import android.content.pm.PackageManager
-import io.appmetrica.analytics.PreloadInfoContentProvider
+import io.appmetrica.analytics.internal.PreloadInfoContentProvider
 import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test

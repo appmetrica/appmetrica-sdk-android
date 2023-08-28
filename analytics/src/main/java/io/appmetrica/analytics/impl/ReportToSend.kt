@@ -1,9 +1,9 @@
 package io.appmetrica.analytics.impl
 
-import io.appmetrica.analytics.CounterConfiguration
 import io.appmetrica.analytics.impl.ClientCounterReport.TrimmedField
 import io.appmetrica.analytics.impl.client.ProcessConfiguration
 import io.appmetrica.analytics.impl.service.MetricaServiceDataReporter
+import io.appmetrica.analytics.internal.CounterConfiguration
 
 class ReportToSend(
     val report: CounterReport,

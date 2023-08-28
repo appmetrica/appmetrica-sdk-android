@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.service.commands
 import android.content.Context
 import android.content.Intent
 import android.os.ResultReceiver
-import io.appmetrica.analytics.CounterConfiguration
+import io.appmetrica.analytics.internal.CounterConfiguration
 import io.appmetrica.analytics.impl.AppMetricaConnector
 import io.appmetrica.analytics.impl.CounterReport
 import io.appmetrica.analytics.impl.AppMetricaUncaughtExceptionHandler

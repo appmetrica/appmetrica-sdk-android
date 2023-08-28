@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.crash;
 
-import io.appmetrica.analytics.CounterConfiguration;
+import io.appmetrica.analytics.internal.CounterConfiguration;
 import io.appmetrica.analytics.impl.ClientCounterReport;
 import io.appmetrica.analytics.impl.EventsManager;
 import io.appmetrica.analytics.impl.ReportToSend;

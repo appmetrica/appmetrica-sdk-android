@@ -200,18 +200,6 @@ public class io.appmetrica.analytics.AppMetricaJsInterface {
     public void reportEvent(String, String)
 }
 
-public class io.appmetrica.analytics.AppMetricaService extends android.app.Service {
-    public <init>()
-    public android.os.IBinder onBind(android.content.Intent)
-    public void onConfigurationChanged([NonNull] android.content.res.Configuration)
-    public void onCreate()
-    public void onDestroy()
-    public void onRebind(android.content.Intent)
-    public void onStart(android.content.Intent, int)
-    public int onStartCommand(android.content.Intent, int, int)
-    public boolean onUnbind(android.content.Intent)
-}
-
 public final class io.appmetrica.analytics.BuildConfig {
     public static final int API_LEVEL
     public static final String BUILD_DATE
@@ -231,56 +219,6 @@ public final class io.appmetrica.analytics.BuildConfig {
     public static final String VERSION_NAME
 
     public <init>()
-}
-
-public class io.appmetrica.analytics.CounterConfiguration implementation android.os.Parcelable {
-    public static final android.os.Parcelable$Creator<io.appmetrica.analytics.CounterConfiguration> CREATOR
-    public static final String ORIGINAL_CLASS_PATH
-
-    public <init>()
-    public <init>(io.appmetrica.analytics.AppMetricaConfig, [NonNull] OBFUSCATED[io.appmetrica.analytics.impl.CounterConfigurationReporterType])
-    public <init>([NonNull] io.appmetrica.analytics.CounterConfiguration)
-    public <init>([NonNull] io.appmetrica.analytics.ReporterConfig)
-    public <init>([NonNull] String)
-    public int describeContents()
-    public static io.appmetrica.analytics.CounterConfiguration fromBundle(android.os.Bundle)
-    public String getApiKey()
-    public String getAppBuildNumber()
-    public String getAppVersion()
-    public [Nullable] String getDeviceType()
-    public [Nullable] Integer getDispatchPeriod()
-    public android.location.Location getManualLocation()
-    public [Nullable] Integer getMaxReportsCount()
-    public [Nullable] Integer getMaxReportsInDbCount()
-    public [Nullable] Boolean getReportNativeCrashesEnabled()
-    public [NonNull] OBFUSCATED[io.appmetrica.analytics.impl.CounterConfigurationReporterType] getReporterType()
-    public [Nullable] Integer getSessionTimeout()
-    public Boolean getStatisticsSending()
-    public String getUuid()
-    public [Nullable] Boolean isFirstActivationAsUpdate()
-    public [Nullable] Boolean isLocationTrackingEnabled()
-    public [Nullable] Boolean isLogEnabled()
-    public [Nullable] Boolean isRevenueAutoTrackingEnabled()
-    public void overlapByBundle(android.os.Bundle)
-    public void setApiKey(String)
-    public void setAppBuildNumber(int)
-    public final void setCustomAppVersion(String)
-    public final void setDeviceType([Nullable] String)
-    public void setDispatchPeriod(int)
-    public final void setFirstActivationAsUpdate(boolean)
-    public void setLocationTracking(boolean)
-    public void setLogEnabled(boolean)
-    public final void setManualLocation([Nullable] android.location.Location)
-    public void setMaxReportsCount(int)
-    public void setMaxReportsInDbCount(int)
-    public void setReporterType([NonNull] OBFUSCATED[io.appmetrica.analytics.impl.CounterConfigurationReporterType])
-    public void setRevenueAutoTrackingEnabled(boolean)
-    public void setSessionTimeout(int)
-    public final void setStatisticsSending(boolean)
-    public void setUuid(String)
-    public void toBundle(android.os.Bundle)
-    public String toString()
-    public void writeToParcel(android.os.Parcel, int)
 }
 
 public interface io.appmetrica.analytics.DeferredDeeplinkListener {
@@ -307,29 +245,6 @@ public enum io.appmetrica.analytics.DeferredDeeplinkParametersListener$Error {
     public String getDescription()
     public static io.appmetrica.analytics.DeferredDeeplinkParametersListener$Error valueOf(String)
     public static io.appmetrica.analytics.DeferredDeeplinkParametersListener$Error[] values()
-}
-
-public interface io.appmetrica.analytics.IAppMetricaService extends android.os.IInterface {
-    public abstract void pauseUserSession(android.os.Bundle)
-    public abstract void reportData(int, android.os.Bundle)
-    public abstract void resumeUserSession(android.os.Bundle)
-}
-
-public static class io.appmetrica.analytics.IAppMetricaService$Default implementation io.appmetrica.analytics.IAppMetricaService {
-    public <init>()
-    public android.os.IBinder asBinder()
-    public void pauseUserSession(android.os.Bundle)
-    public void reportData(int, android.os.Bundle)
-    public void resumeUserSession(android.os.Bundle)
-}
-
-public abstract static class io.appmetrica.analytics.IAppMetricaService$Stub extends android.os.Binder implementation io.appmetrica.analytics.IAppMetricaService {
-    public <init>()
-    public android.os.IBinder asBinder()
-    public static io.appmetrica.analytics.IAppMetricaService asInterface(android.os.IBinder)
-    public static io.appmetrica.analytics.IAppMetricaService getDefaultImpl()
-    public boolean onTransact(int, android.os.Parcel, android.os.Parcel, int)
-    public static boolean setDefaultImpl(io.appmetrica.analytics.IAppMetricaService)
 }
 
 public interface io.appmetrica.analytics.ICrashTransformer {
@@ -427,17 +342,6 @@ public class io.appmetrica.analytics.PreloadInfo {
 public static class io.appmetrica.analytics.PreloadInfo$Builder {
     public io.appmetrica.analytics.PreloadInfo build()
     public io.appmetrica.analytics.PreloadInfo$Builder setAdditionalParams(String, String)
-}
-
-public class io.appmetrica.analytics.PreloadInfoContentProvider extends android.content.ContentProvider {
-    public <init>()
-    public int delete([NonNull] android.net.Uri, [Nullable] String, [Nullable] String[])
-    public void disable()
-    public [Nullable] String getType([NonNull] android.net.Uri)
-    public [Nullable] android.net.Uri insert([NonNull] android.net.Uri, [Nullable] android.content.ContentValues)
-    public boolean onCreate()
-    public [Nullable] android.database.Cursor query([NonNull] android.net.Uri, [Nullable] String[], [Nullable] String, [Nullable] String[], [Nullable] String)
-    public int update([NonNull] android.net.Uri, [Nullable] android.content.ContentValues, [Nullable] String, [Nullable] String[])
 }
 
 public class io.appmetrica.analytics.ReporterConfig {
@@ -644,6 +548,102 @@ public class io.appmetrica.analytics.ecommerce.ECommerceScreen {
     public io.appmetrica.analytics.ecommerce.ECommerceScreen setPayload([Nullable] java.util.Map<String, String>)
     public io.appmetrica.analytics.ecommerce.ECommerceScreen setSearchQuery([Nullable] String)
     public String toString()
+}
+
+public class io.appmetrica.analytics.internal.AppMetricaService extends android.app.Service {
+    public <init>()
+    public android.os.IBinder onBind(android.content.Intent)
+    public void onConfigurationChanged([NonNull] android.content.res.Configuration)
+    public void onCreate()
+    public void onDestroy()
+    public void onRebind(android.content.Intent)
+    public void onStart(android.content.Intent, int)
+    public int onStartCommand(android.content.Intent, int, int)
+    public boolean onUnbind(android.content.Intent)
+}
+
+public class io.appmetrica.analytics.internal.CounterConfiguration implementation android.os.Parcelable {
+    public static final android.os.Parcelable$Creator<io.appmetrica.analytics.internal.CounterConfiguration> CREATOR
+    public static final String ORIGINAL_CLASS_PATH
+
+    public <init>()
+    public <init>(io.appmetrica.analytics.AppMetricaConfig, [NonNull] OBFUSCATED[io.appmetrica.analytics.impl.CounterConfigurationReporterType])
+    public <init>([NonNull] io.appmetrica.analytics.ReporterConfig)
+    public <init>([NonNull] io.appmetrica.analytics.internal.CounterConfiguration)
+    public <init>([NonNull] String)
+    public int describeContents()
+    public static io.appmetrica.analytics.internal.CounterConfiguration fromBundle(android.os.Bundle)
+    public String getApiKey()
+    public String getAppBuildNumber()
+    public String getAppVersion()
+    public [Nullable] String getDeviceType()
+    public [Nullable] Integer getDispatchPeriod()
+    public android.location.Location getManualLocation()
+    public [Nullable] Integer getMaxReportsCount()
+    public [Nullable] Integer getMaxReportsInDbCount()
+    public [Nullable] Boolean getReportNativeCrashesEnabled()
+    public [NonNull] OBFUSCATED[io.appmetrica.analytics.impl.CounterConfigurationReporterType] getReporterType()
+    public [Nullable] Integer getSessionTimeout()
+    public Boolean getStatisticsSending()
+    public String getUuid()
+    public [Nullable] Boolean isFirstActivationAsUpdate()
+    public [Nullable] Boolean isLocationTrackingEnabled()
+    public [Nullable] Boolean isLogEnabled()
+    public [Nullable] Boolean isRevenueAutoTrackingEnabled()
+    public void overlapByBundle(android.os.Bundle)
+    public void setApiKey(String)
+    public void setAppBuildNumber(int)
+    public final void setCustomAppVersion(String)
+    public final void setDeviceType([Nullable] String)
+    public void setDispatchPeriod(int)
+    public final void setFirstActivationAsUpdate(boolean)
+    public void setLocationTracking(boolean)
+    public void setLogEnabled(boolean)
+    public final void setManualLocation([Nullable] android.location.Location)
+    public void setMaxReportsCount(int)
+    public void setMaxReportsInDbCount(int)
+    public void setReporterType([NonNull] OBFUSCATED[io.appmetrica.analytics.impl.CounterConfigurationReporterType])
+    public void setRevenueAutoTrackingEnabled(boolean)
+    public void setSessionTimeout(int)
+    public final void setStatisticsSending(boolean)
+    public void setUuid(String)
+    public void toBundle(android.os.Bundle)
+    public String toString()
+    public void writeToParcel(android.os.Parcel, int)
+}
+
+public interface io.appmetrica.analytics.internal.IAppMetricaService extends android.os.IInterface {
+    public abstract void pauseUserSession(android.os.Bundle)
+    public abstract void reportData(int, android.os.Bundle)
+    public abstract void resumeUserSession(android.os.Bundle)
+}
+
+public static class io.appmetrica.analytics.internal.IAppMetricaService$Default implementation io.appmetrica.analytics.internal.IAppMetricaService {
+    public <init>()
+    public android.os.IBinder asBinder()
+    public void pauseUserSession(android.os.Bundle)
+    public void reportData(int, android.os.Bundle)
+    public void resumeUserSession(android.os.Bundle)
+}
+
+public abstract static class io.appmetrica.analytics.internal.IAppMetricaService$Stub extends android.os.Binder implementation io.appmetrica.analytics.internal.IAppMetricaService {
+    public <init>()
+    public android.os.IBinder asBinder()
+    public static io.appmetrica.analytics.internal.IAppMetricaService asInterface(android.os.IBinder)
+    public static io.appmetrica.analytics.internal.IAppMetricaService getDefaultImpl()
+    public boolean onTransact(int, android.os.Parcel, android.os.Parcel, int)
+    public static boolean setDefaultImpl(io.appmetrica.analytics.internal.IAppMetricaService)
+}
+
+public class io.appmetrica.analytics.internal.PreloadInfoContentProvider extends android.content.ContentProvider {
+    public <init>()
+    public int delete([NonNull] android.net.Uri, [Nullable] String, [Nullable] String[])
+    public void disable()
+    public [Nullable] String getType([NonNull] android.net.Uri)
+    public [Nullable] android.net.Uri insert([NonNull] android.net.Uri, [Nullable] android.content.ContentValues)
+    public boolean onCreate()
+    public [Nullable] android.database.Cursor query([NonNull] android.net.Uri, [Nullable] String[], [Nullable] String, [Nullable] String[], [Nullable] String)
+    public int update([NonNull] android.net.Uri, [Nullable] android.content.ContentValues, [Nullable] String, [Nullable] String[])
 }
 
 public interface io.appmetrica.analytics.plugins.AppMetricaPlugins {

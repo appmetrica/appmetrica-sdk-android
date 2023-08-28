@@ -8,7 +8,7 @@ import android.os.Bundle;
 import android.os.Process;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import io.appmetrica.analytics.AppMetricaService;
+import io.appmetrica.analytics.internal.AppMetricaService;
 import io.appmetrica.analytics.coreapi.internal.device.ScreenInfo;
 import io.appmetrica.analytics.coreutils.internal.services.SafePackageManager;
 import io.appmetrica.analytics.impl.client.ProcessConfiguration;

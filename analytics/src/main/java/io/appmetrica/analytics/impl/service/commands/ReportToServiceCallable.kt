@@ -1,11 +1,11 @@
 package io.appmetrica.analytics.impl.service.commands
 
 import android.os.RemoteException
-import io.appmetrica.analytics.IAppMetricaService
 import io.appmetrica.analytics.coreutils.internal.logger.YLogger
 import io.appmetrica.analytics.impl.AppMetricaConnector
 import io.appmetrica.analytics.impl.AppMetricaUncaughtExceptionHandler
 import io.appmetrica.analytics.impl.ShouldDisconnectFromServiceChecker
+import io.appmetrica.analytics.internal.IAppMetricaService
 import java.util.concurrent.Callable
 
 abstract class ReportToServiceCallable(

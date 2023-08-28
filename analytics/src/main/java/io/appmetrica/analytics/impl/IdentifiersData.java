@@ -18,10 +18,11 @@ import kotlin.jvm.functions.Function0;
 public class IdentifiersData implements Parcelable {
 
     public static final String BUNDLE_KEY = "io.appmetrica.analytics.impl.IdentifiersData";
-    private static final String RECEIVER = "io.appmetrica.analytics.CounterConfiguration.receiver";
-    private static final String IDENTIFIERS_LIST = "io.appmetrica.analytics.CounterConfiguration.identifiersList";
+    private static final String RECEIVER = "io.appmetrica.analytics.internal.CounterConfiguration.receiver";
+    private static final String IDENTIFIERS_LIST =
+        "io.appmetrica.analytics.internal.CounterConfiguration.identifiersList";
     private static final String CLIDS_FOR_VERIFICATION =
-        "io.appmetrica.analytics.CounterConfiguration.clidsForVerification";
+        "io.appmetrica.analytics.internal.CounterConfiguration.clidsForVerification";
 
     @Nullable
     private ResultReceiver mDataReceiver;

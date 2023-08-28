@@ -6,7 +6,7 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ServiceInfo;
-import io.appmetrica.analytics.AppMetricaService;
+import io.appmetrica.analytics.internal.AppMetricaService;
 import io.appmetrica.analytics.coreutils.internal.services.SafePackageManager;
 
 public class ManifestUtils {

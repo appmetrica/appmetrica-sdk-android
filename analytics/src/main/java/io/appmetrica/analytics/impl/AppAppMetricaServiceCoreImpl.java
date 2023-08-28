@@ -11,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import androidx.annotation.WorkerThread;
-import io.appmetrica.analytics.CounterConfiguration;
 import io.appmetrica.analytics.coreapi.internal.backport.Consumer;
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
 import io.appmetrica.analytics.coreutils.internal.io.FileUtils;
@@ -35,6 +34,7 @@ import io.appmetrica.analytics.impl.service.MetricaServiceCallback;
 import io.appmetrica.analytics.impl.startup.StartupState;
 import io.appmetrica.analytics.impl.utils.JsonHelper;
 import io.appmetrica.analytics.impl.utils.ServerTime;
+import io.appmetrica.analytics.internal.CounterConfiguration;
 import java.io.File;
 
 public class AppAppMetricaServiceCoreImpl implements AppMetricaServiceCore, MetricaCoreReporter {

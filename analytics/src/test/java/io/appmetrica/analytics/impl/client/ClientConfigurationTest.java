@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.client;
 import android.content.Context;
 import android.os.Bundle;
 import io.appmetrica.analytics.BuildConfig;
-import io.appmetrica.analytics.CounterConfiguration;
+import io.appmetrica.analytics.internal.CounterConfiguration;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.MockedStaticRule;
 import io.appmetrica.analytics.testutils.TestUtils;

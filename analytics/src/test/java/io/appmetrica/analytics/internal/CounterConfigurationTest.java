@@ -1,8 +1,10 @@
-package io.appmetrica.analytics;
+package io.appmetrica.analytics.internal;
 
 import android.location.Location;
 import android.os.Build;
 import androidx.annotation.NonNull;
+import io.appmetrica.analytics.AppMetricaConfig;
+import io.appmetrica.analytics.ReporterConfig;
 import io.appmetrica.analytics.impl.CounterConfigurationReporterType;
 import io.appmetrica.analytics.impl.SdkData;
 import io.appmetrica.analytics.testutils.CommonTest;

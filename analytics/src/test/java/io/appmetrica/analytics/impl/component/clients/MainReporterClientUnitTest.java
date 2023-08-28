@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.component.clients;
 
-import io.appmetrica.analytics.CounterConfiguration;
+import io.appmetrica.analytics.internal.CounterConfiguration;
 import io.appmetrica.analytics.impl.CounterReport;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.InternalEvents;

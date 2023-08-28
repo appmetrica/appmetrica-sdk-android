@@ -1,12 +1,12 @@
-package io.appmetrica.analytics;
+package io.appmetrica.analytics.internal;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
+import io.appmetrica.analytics.impl.AppAppMetricaServiceCoreExecutionDispatcher;
 import io.appmetrica.analytics.impl.AppAppMetricaServiceCoreImpl;
 import io.appmetrica.analytics.impl.LocaleHolder;
-import io.appmetrica.analytics.impl.AppAppMetricaServiceCoreExecutionDispatcher;
 import io.appmetrica.analytics.impl.service.AppMetricaServiceAction;
 import io.appmetrica.analytics.impl.service.MetricaServiceCallback;
 import io.appmetrica.analytics.testutils.CommonTest;

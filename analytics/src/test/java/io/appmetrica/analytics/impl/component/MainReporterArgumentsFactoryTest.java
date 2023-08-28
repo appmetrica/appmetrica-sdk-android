@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.component;
 
-import io.appmetrica.analytics.CounterConfiguration;
+import io.appmetrica.analytics.internal.CounterConfiguration;
 import io.appmetrica.analytics.impl.StatisticsRestrictionControllerImpl;
 import io.appmetrica.analytics.testutils.CommonTest;
 import org.junit.Test;

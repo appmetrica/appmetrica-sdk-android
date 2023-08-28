@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.crash.jvm;
 import android.util.Base64;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import io.appmetrica.analytics.CounterConfiguration;
+import io.appmetrica.analytics.internal.CounterConfiguration;
 import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.coreutils.internal.parsing.JsonUtils;
 import io.appmetrica.analytics.impl.ClientCounterReport;

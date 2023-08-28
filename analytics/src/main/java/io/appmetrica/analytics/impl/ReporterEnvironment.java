@@ -4,12 +4,12 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
-import io.appmetrica.analytics.CounterConfiguration;
 import io.appmetrica.analytics.impl.client.ClientConfiguration;
 import io.appmetrica.analytics.impl.client.ProcessConfiguration;
 import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoWrapper;
 import io.appmetrica.analytics.impl.startup.StartupIdentifiersProvider;
 import io.appmetrica.analytics.impl.utils.limitation.SimpleMapLimitation;
+import io.appmetrica.analytics.internal.CounterConfiguration;
 
 public class ReporterEnvironment extends ClientConfiguration {
 

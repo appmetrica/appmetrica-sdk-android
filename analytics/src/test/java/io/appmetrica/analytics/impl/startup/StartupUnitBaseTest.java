@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.startup;
 
 import android.content.Context;
-import io.appmetrica.analytics.CounterConfiguration;
+import io.appmetrica.analytics.internal.CounterConfiguration;
 import io.appmetrica.analytics.IdentifiersResult;
 import io.appmetrica.analytics.coreapi.internal.identifiers.AdvertisingIdsHolder;
 import io.appmetrica.analytics.coreapi.internal.identifiers.AppSetId;

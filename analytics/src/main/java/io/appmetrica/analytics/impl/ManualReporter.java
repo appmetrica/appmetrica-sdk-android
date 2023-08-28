@@ -3,7 +3,6 @@ package io.appmetrica.analytics.impl;
 import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
-import io.appmetrica.analytics.CounterConfiguration;
 import io.appmetrica.analytics.ReporterConfig;
 import io.appmetrica.analytics.impl.client.ProcessConfiguration;
 import io.appmetrica.analytics.impl.crash.PluginErrorDetailsConverter;
@@ -14,6 +13,7 @@ import io.appmetrica.analytics.impl.crash.client.converter.UnhandledExceptionCon
 import io.appmetrica.analytics.impl.reporter.ManualReporterContext;
 import io.appmetrica.analytics.impl.reporter.ReporterLifecycleListener;
 import io.appmetrica.analytics.impl.utils.ProcessDetector;
+import io.appmetrica.analytics.internal.CounterConfiguration;
 
 class ManualReporter extends BaseReporter {
 

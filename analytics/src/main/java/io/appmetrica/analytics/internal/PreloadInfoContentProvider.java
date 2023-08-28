@@ -1,4 +1,4 @@
-package io.appmetrica.analytics;
+package io.appmetrica.analytics.internal;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;

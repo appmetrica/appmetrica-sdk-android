@@ -2,10 +2,10 @@ package io.appmetrica.analytics.impl
 
 import android.content.Context
 import android.os.ResultReceiver
-import io.appmetrica.analytics.CounterConfiguration
 import io.appmetrica.analytics.impl.ClientCounterReport.TrimmedField
 import io.appmetrica.analytics.impl.client.ProcessConfiguration
 import io.appmetrica.analytics.impl.service.MetricaServiceDataReporter
+import io.appmetrica.analytics.internal.CounterConfiguration
 import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.SoftAssertions

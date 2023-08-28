@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl;
 
-import io.appmetrica.analytics.CounterConfiguration;
+import io.appmetrica.analytics.internal.CounterConfiguration;
 
 public class IntegrationValidator {
 

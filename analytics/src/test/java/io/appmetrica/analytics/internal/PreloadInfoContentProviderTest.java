@@ -1,4 +1,4 @@
-package io.appmetrica.analytics;
+package io.appmetrica.analytics.internal;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -8,6 +8,7 @@ import io.appmetrica.analytics.impl.ContentProviderFirstLaunchHelper;
 import io.appmetrica.analytics.impl.ContentProviderHelper;
 import io.appmetrica.analytics.impl.preloadinfo.ContentProviderHelperFactory;
 import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoState;
+import io.appmetrica.analytics.internal.PreloadInfoContentProvider;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.MockedStaticRule;
 import java.util.Map;

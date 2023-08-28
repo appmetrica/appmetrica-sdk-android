@@ -4,7 +4,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import io.appmetrica.analytics.AppMetricaService;
+import io.appmetrica.analytics.internal.AppMetricaService;
 import io.appmetrica.analytics.coreapi.internal.constants.DeviceTypeValues;
 import io.appmetrica.analytics.coreapi.internal.device.ScreenInfo;
 import io.appmetrica.analytics.impl.client.ProcessConfiguration;
@@ -47,7 +47,7 @@ public class ServiceUtilsTest extends CommonTest {
         Intent intent = ServiceUtils.getOwnMetricaServiceIntent(context);
         assertThat(intent.getAction()).isEqualTo("io.appmetrica.analytics.IAppMetricaService");
         assertThat(intent.getPackage()).isEqualTo(context.getPackageName());
-        assertThat(intent.getComponent()).isEqualTo(new ComponentName(context.getPackageName(), "io.appmetrica.analytics.AppMetricaService"));
+        assertThat(intent.getComponent()).isEqualTo(new ComponentName(context.getPackageName(), "io.appmetrica.analytics.internal.AppMetricaService"));
         assertThat(intent.getFlags() & FLAG_INCLUDE_STOPPED_PACKAGES).isNotZero();
         assertThat(intent.getStringExtra(ServiceUtils.EXTRA_SCREEN_SIZE))
                 .isEqualTo(JsonHelper.screenInfoToJsonString(screenInfo));
@@ -78,7 +78,7 @@ public class ServiceUtilsTest extends CommonTest {
         assertThat(intent.getAction()).isEqualTo("io.appmetrica.analytics.IAppMetricaService");
         assertThat(intent.getPackage()).isNull();
         assertThat(intent.getFlags() & FLAG_INCLUDE_STOPPED_PACKAGES).isNotZero();
-        assertThat(intent.getComponent()).isEqualTo(new ComponentName(context.getPackageName(), "io.appmetrica.analytics.AppMetricaService"));
+        assertThat(intent.getComponent()).isEqualTo(new ComponentName(context.getPackageName(), "io.appmetrica.analytics.internal.AppMetricaService"));
         assertThat(intent.getBundleExtra(ServiceUtils.EXTRA_SCREEN_SIZE)).isNull();
 
         Uri data = intent.getData();

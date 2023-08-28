@@ -1,4 +1,4 @@
-package io.appmetrica.analytics;
+package io.appmetrica.analytics.internal;
 
 import android.content.ContentValues;
 import android.location.Location;
@@ -9,6 +9,8 @@ import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
+import io.appmetrica.analytics.AppMetricaConfig;
+import io.appmetrica.analytics.ReporterConfig;
 import io.appmetrica.analytics.coreutils.internal.LocationUtils;
 import io.appmetrica.analytics.impl.CounterConfigurationKeys;
 import io.appmetrica.analytics.impl.CounterConfigurationReporterType;
@@ -20,9 +22,9 @@ import io.appmetrica.analytics.impl.Utils;
 @SuppressWarnings("PMD.ConstructorCallsOverridableMethod")
 public class CounterConfiguration implements Parcelable {
 
-    public static final String ORIGINAL_CLASS_PATH = "io.appmetrica.analytics.CounterConfiguration";
+    public static final String ORIGINAL_CLASS_PATH = "io.appmetrica.analytics.internal.CounterConfiguration";
 
-    private static final String DATA = "io.appmetrica.analytics.CounterConfiguration.data";
+    private static final String DATA = "io.appmetrica.analytics.internal.CounterConfiguration.data";
 
     @Override
     public synchronized String toString() {
