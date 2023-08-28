@@ -309,15 +309,6 @@ public enum io.appmetrica.analytics.DeferredDeeplinkParametersListener$Error {
     public static io.appmetrica.analytics.DeferredDeeplinkParametersListener$Error[] values()
 }
 
-public enum io.appmetrica.analytics.DeviceType {
-    PHONE, TABLET, TV
-
-    public String getType()
-    public static io.appmetrica.analytics.DeviceType of(String)
-    public static io.appmetrica.analytics.DeviceType valueOf(String)
-    public static io.appmetrica.analytics.DeviceType[] values()
-}
-
 public interface io.appmetrica.analytics.IAppMetricaService extends android.os.IInterface {
     public abstract void pauseUserSession(android.os.Bundle)
     public abstract void reportData(int, android.os.Bundle)

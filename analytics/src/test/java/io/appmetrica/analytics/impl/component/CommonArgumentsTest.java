@@ -3,8 +3,8 @@ package io.appmetrica.analytics.impl.component;
 import android.location.Location;
 import android.os.ResultReceiver;
 import io.appmetrica.analytics.CounterConfiguration;
-import io.appmetrica.analytics.DeviceType;
 import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
+import io.appmetrica.analytics.coreapi.internal.constants.DeviceTypeValues;
 import io.appmetrica.analytics.impl.client.ClientConfiguration;
 import io.appmetrica.analytics.impl.client.ProcessConfiguration;
 import io.appmetrica.analytics.impl.request.StartupRequestConfig;
@@ -50,7 +50,7 @@ public class CommonArgumentsTest extends CommonTest {
 
     @Test
     public void testReporterArgumentsConstructor() throws IllegalAccessException {
-        String deviceType = DeviceType.PHONE.getType();
+        String deviceType = DeviceTypeValues.PHONE;
         String appVersion = "appVersion";
         String appBuildNumber = "appBuildNumber";
         String apiKey = "apiKey";
@@ -108,7 +108,7 @@ public class CommonArgumentsTest extends CommonTest {
 
     @Test
     public void testCommonArgumentsConstructor() throws IllegalAccessException {
-        String deviceType = DeviceType.PHONE.getType();
+        String deviceType = DeviceTypeValues.PHONE;
         String appVersion = "appVersion";
         String appBuildNumber = "appBuildNumber";
         String apiKey = "apiKey";
