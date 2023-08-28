@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.ecommerce.client.model;
 
-import io.appmetrica.analytics.ecommerce.ECommerceEventProviderTest;
 import io.appmetrica.analytics.ecommerce.ECommerceScreen;
+import io.appmetrica.analytics.impl.ecommerce.ECommerceEventProviderTest;
 import io.appmetrica.analytics.impl.ecommerce.client.converter.ECommerceEventConverter;
 import io.appmetrica.analytics.impl.ecommerce.client.converter.Result;
 import io.appmetrica.analytics.impl.ecommerce.client.converter.ShownScreenInfoEventConverter;

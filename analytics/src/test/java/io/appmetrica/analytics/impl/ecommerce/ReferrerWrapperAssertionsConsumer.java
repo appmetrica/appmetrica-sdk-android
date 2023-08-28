@@ -1,4 +1,4 @@
-package io.appmetrica.analytics.ecommerce;
+package io.appmetrica.analytics.impl.ecommerce;
 
 import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
 import io.appmetrica.analytics.impl.ecommerce.client.model.ReferrerWrapper;

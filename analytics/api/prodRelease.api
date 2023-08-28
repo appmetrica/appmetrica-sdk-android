@@ -587,17 +587,6 @@ public abstract class io.appmetrica.analytics.ecommerce.ECommerceEvent implement
     public static [NonNull] io.appmetrica.analytics.ecommerce.ECommerceEvent showScreenEvent([NonNull] io.appmetrica.analytics.ecommerce.ECommerceScreen)
 }
 
-public class io.appmetrica.analytics.ecommerce.ECommerceEventProvider {
-    public <init>()
-    public [NonNull] io.appmetrica.analytics.ecommerce.ECommerceEvent addCartItemEvent([NonNull] io.appmetrica.analytics.ecommerce.ECommerceCartItem)
-    public [NonNull] io.appmetrica.analytics.ecommerce.ECommerceEvent beginCheckoutEvent([NonNull] io.appmetrica.analytics.ecommerce.ECommerceOrder)
-    public [NonNull] io.appmetrica.analytics.ecommerce.ECommerceEvent purchaseEvent([NonNull] io.appmetrica.analytics.ecommerce.ECommerceOrder)
-    public [NonNull] io.appmetrica.analytics.ecommerce.ECommerceEvent removeCartItemEvent([NonNull] io.appmetrica.analytics.ecommerce.ECommerceCartItem)
-    public [NonNull] io.appmetrica.analytics.ecommerce.ECommerceEvent showProductCardEvent([NonNull] io.appmetrica.analytics.ecommerce.ECommerceProduct, [NonNull] io.appmetrica.analytics.ecommerce.ECommerceScreen)
-    public [NonNull] io.appmetrica.analytics.ecommerce.ECommerceEvent showProductDetailsEvent([NonNull] io.appmetrica.analytics.ecommerce.ECommerceProduct, [Nullable] io.appmetrica.analytics.ecommerce.ECommerceReferrer)
-    public [NonNull] io.appmetrica.analytics.ecommerce.ECommerceEvent showScreenEvent([NonNull] io.appmetrica.analytics.ecommerce.ECommerceScreen)
-}
-
 public class io.appmetrica.analytics.ecommerce.ECommerceOrder {
     public <init>([NonNull] String, [NonNull] java.util.List<io.appmetrica.analytics.ecommerce.ECommerceCartItem>)
     public [NonNull] java.util.List<io.appmetrica.analytics.ecommerce.ECommerceCartItem> getCartItems()

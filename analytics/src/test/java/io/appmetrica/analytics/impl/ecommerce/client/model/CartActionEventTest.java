@@ -4,6 +4,7 @@ import io.appmetrica.analytics.ecommerce.ECommerceAmount;
 import io.appmetrica.analytics.ecommerce.ECommerceCartItem;
 import io.appmetrica.analytics.ecommerce.ECommercePrice;
 import io.appmetrica.analytics.ecommerce.ECommerceProduct;
+import io.appmetrica.analytics.impl.ecommerce.ECommerceEventProvider;
 import io.appmetrica.analytics.impl.ecommerce.client.converter.CartActionInfoEventConverter;
 import io.appmetrica.analytics.impl.ecommerce.client.converter.ECommerceEventConverter;
 import io.appmetrica.analytics.impl.ecommerce.client.converter.Result;
@@ -22,8 +23,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 /**
- * @see io.appmetrica.analytics.ecommerce.ECommerceEventProvider#addCartItemEvent(ECommerceCartItem)
- * @see io.appmetrica.analytics.ecommerce.ECommerceEventProvider#removeCartItemEvent(ECommerceCartItem)
+ * @see ECommerceEventProvider#addCartItemEvent(ECommerceCartItem)
+ * @see ECommerceEventProvider#removeCartItemEvent(ECommerceCartItem)
  */
 @RunWith(RobolectricTestRunner.class)
 public class CartActionEventTest extends CommonTest {

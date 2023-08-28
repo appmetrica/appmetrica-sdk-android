@@ -1,6 +1,8 @@
-package io.appmetrica.analytics.ecommerce;
+package io.appmetrica.analytics.impl.ecommerce;
 
 import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
+import io.appmetrica.analytics.ecommerce.ECommercePrice;
+import io.appmetrica.analytics.ecommerce.ECommerceProduct;
 import io.appmetrica.analytics.impl.ecommerce.client.model.ProductWrapper;
 import java.util.List;
 import java.util.Map;

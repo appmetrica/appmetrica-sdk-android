@@ -1,6 +1,14 @@
-package io.appmetrica.analytics.ecommerce;
+package io.appmetrica.analytics.impl.ecommerce;
 
 import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
+import io.appmetrica.analytics.ecommerce.ECommerceAmount;
+import io.appmetrica.analytics.ecommerce.ECommerceCartItem;
+import io.appmetrica.analytics.ecommerce.ECommerceEvent;
+import io.appmetrica.analytics.ecommerce.ECommerceOrder;
+import io.appmetrica.analytics.ecommerce.ECommercePrice;
+import io.appmetrica.analytics.ecommerce.ECommerceProduct;
+import io.appmetrica.analytics.ecommerce.ECommerceReferrer;
+import io.appmetrica.analytics.ecommerce.ECommerceScreen;
 import io.appmetrica.analytics.impl.ecommerce.client.model.CartActionInfoEvent;
 import io.appmetrica.analytics.impl.ecommerce.client.model.OrderInfoEvent;
 import io.appmetrica.analytics.impl.ecommerce.client.model.ShownProductCardInfoEvent;

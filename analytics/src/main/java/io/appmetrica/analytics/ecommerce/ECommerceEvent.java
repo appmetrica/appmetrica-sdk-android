@@ -3,6 +3,7 @@ package io.appmetrica.analytics.ecommerce;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
+import io.appmetrica.analytics.impl.ecommerce.ECommerceEventProvider;
 import io.appmetrica.analytics.impl.ecommerce.client.model.ProtoSerializable;
 
 /**
