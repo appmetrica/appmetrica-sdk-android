@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.startup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import io.appmetrica.analytics.AdsIdentifiersResult;
-import io.appmetrica.analytics.IdentifiersResult;
+import io.appmetrica.analytics.internal.IdentifiersResult;
 
 public class AdsIdentifiersFromIdentifierResultConverter {
 

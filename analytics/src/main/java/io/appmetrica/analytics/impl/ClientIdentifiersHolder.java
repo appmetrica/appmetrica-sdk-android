@@ -5,7 +5,7 @@ import android.os.Parcelable;
 import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import io.appmetrica.analytics.IdentifiersResult;
+import io.appmetrica.analytics.internal.IdentifiersResult;
 import io.appmetrica.analytics.coreapi.internal.identifiers.AdvertisingIdsHolder;
 import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus;
 import io.appmetrica.analytics.impl.startup.FeaturesInternal;

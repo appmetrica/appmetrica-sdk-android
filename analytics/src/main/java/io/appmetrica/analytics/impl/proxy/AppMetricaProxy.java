@@ -15,7 +15,7 @@ import io.appmetrica.analytics.AnrListener;
 import io.appmetrica.analytics.AppMetricaConfig;
 import io.appmetrica.analytics.DeferredDeeplinkListener;
 import io.appmetrica.analytics.DeferredDeeplinkParametersListener;
-import io.appmetrica.analytics.IdentifiersResult;
+import io.appmetrica.analytics.internal.IdentifiersResult;
 import io.appmetrica.analytics.ReporterConfig;
 import io.appmetrica.analytics.Revenue;
 import io.appmetrica.analytics.StartupParamsCallback;

@@ -1,8 +1,6 @@
 package io.appmetrica.analytics.impl.startup;
 
 import android.content.Context;
-import io.appmetrica.analytics.internal.CounterConfiguration;
-import io.appmetrica.analytics.IdentifiersResult;
 import io.appmetrica.analytics.coreapi.internal.identifiers.AdvertisingIdsHolder;
 import io.appmetrica.analytics.coreapi.internal.identifiers.AppSetId;
 import io.appmetrica.analytics.coreapi.internal.identifiers.AppSetIdScope;
@@ -20,6 +18,8 @@ import io.appmetrica.analytics.impl.id.RetryStrategy;
 import io.appmetrica.analytics.impl.request.StartupArgumentsTest;
 import io.appmetrica.analytics.impl.request.StartupRequestConfig;
 import io.appmetrica.analytics.impl.startup.parsing.StartupResult;
+import io.appmetrica.analytics.internal.CounterConfiguration;
+import io.appmetrica.analytics.internal.IdentifiersResult;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import io.appmetrica.analytics.testutils.ServiceMigrationCheckedRule;

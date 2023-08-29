@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
 import io.appmetrica.analytics.AdsIdentifiersResult;
-import io.appmetrica.analytics.IdentifiersResult;
+import io.appmetrica.analytics.internal.IdentifiersResult;
 import io.appmetrica.analytics.StartupParamsItemStatus;
 import io.appmetrica.analytics.StartupParamsCallback;
 import io.appmetrica.analytics.StartupParamsItem;

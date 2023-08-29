@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.startup
 
-import io.appmetrica.analytics.IdentifiersResult
 import io.appmetrica.analytics.StartupParamsItem
+import io.appmetrica.analytics.internal.IdentifiersResult
 
 internal class FeaturesHolder {
 

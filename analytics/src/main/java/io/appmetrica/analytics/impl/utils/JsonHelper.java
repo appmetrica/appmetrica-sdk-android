@@ -5,7 +5,7 @@ import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
-import io.appmetrica.analytics.IdentifiersResult;
+import io.appmetrica.analytics.internal.IdentifiersResult;
 import io.appmetrica.analytics.billinginterface.internal.config.BillingConfig;
 import io.appmetrica.analytics.coreapi.internal.constants.DeviceTypeValues;
 import io.appmetrica.analytics.coreapi.internal.device.ScreenInfo;

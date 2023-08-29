@@ -278,20 +278,6 @@ public interface io.appmetrica.analytics.IReporter {
     public abstract void setUserProfileID([Nullable] String)
 }
 
-public class io.appmetrica.analytics.IdentifiersResult implementation android.os.Parcelable {
-    public static final android.os.Parcelable$Creator<io.appmetrica.analytics.IdentifiersResult> CREATOR
-    public final [Nullable] String errorExplanation
-    public final [Nullable] String id
-    public final [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus status
-
-    public <init>([Nullable] String, [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus, [Nullable] String)
-    public int describeContents()
-    public boolean equals(Object)
-    public int hashCode()
-    public String toString()
-    public void writeToParcel(android.os.Parcel, int)
-}
-
 public final class io.appmetrica.analytics.ModuleEvent {
     public [Nullable] java.util.Map<String, Object> getAttributes()
     public [Nullable] java.util.Map<String, Object> getEnvironment()
@@ -633,6 +619,20 @@ public abstract static class io.appmetrica.analytics.internal.IAppMetricaService
     public static io.appmetrica.analytics.internal.IAppMetricaService getDefaultImpl()
     public boolean onTransact(int, android.os.Parcel, android.os.Parcel, int)
     public static boolean setDefaultImpl(io.appmetrica.analytics.internal.IAppMetricaService)
+}
+
+public class io.appmetrica.analytics.internal.IdentifiersResult implementation android.os.Parcelable {
+    public static final android.os.Parcelable$Creator<io.appmetrica.analytics.internal.IdentifiersResult> CREATOR
+    public final [Nullable] String errorExplanation
+    public final [Nullable] String id
+    public final [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus status
+
+    public <init>([Nullable] String, [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus, [Nullable] String)
+    public int describeContents()
+    public boolean equals(Object)
+    public int hashCode()
+    public String toString()
+    public void writeToParcel(android.os.Parcel, int)
 }
 
 public class io.appmetrica.analytics.internal.PreloadInfoContentProvider extends android.content.ContentProvider {

@@ -13,6 +13,7 @@ import io.appmetrica.analytics.impl.IReporterExtended;
 import io.appmetrica.analytics.impl.TestsData;
 import io.appmetrica.analytics.impl.proxy.AppMetricaProxy;
 import io.appmetrica.analytics.impl.proxy.AppMetricaProxyProvider;
+import io.appmetrica.analytics.internal.IdentifiersResult;
 import io.appmetrica.analytics.plugins.AppMetricaPlugins;
 import io.appmetrica.analytics.profile.UserProfile;
 import io.appmetrica.analytics.testutils.CommonTest;

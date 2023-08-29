@@ -4,7 +4,7 @@ import android.content.Context;
 import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import io.appmetrica.analytics.IdentifiersResult;
+import io.appmetrica.analytics.internal.IdentifiersResult;
 import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesClientDbStorage;
 import io.appmetrica.analytics.impl.db.storage.DatabaseStorageFactory;

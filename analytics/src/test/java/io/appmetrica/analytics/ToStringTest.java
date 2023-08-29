@@ -58,6 +58,7 @@ import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedInfo;
 import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedProvider;
 import io.appmetrica.analytics.impl.utils.limitation.CollectionTrimInfo;
 import io.appmetrica.analytics.impl.utils.limitation.TrimmingResult;
+import io.appmetrica.analytics.internal.IdentifiersResult;
 import io.appmetrica.analytics.networktasks.internal.AppInfo;
 import io.appmetrica.analytics.networktasks.internal.NetworkAppContext;
 import io.appmetrica.analytics.networktasks.internal.NetworkServiceLocator;

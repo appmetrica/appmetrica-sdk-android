@@ -8,6 +8,7 @@ import io.appmetrica.analytics.coreapi.internal.device.ScreenInfo;
 import io.appmetrica.analytics.coreapi.internal.permission.PermissionState;
 import io.appmetrica.analytics.impl.component.CommonArguments;
 import io.appmetrica.analytics.impl.referrer.common.ReferrerInfo;
+import io.appmetrica.analytics.internal.IdentifiersResult;
 import io.appmetrica.analytics.testutils.CommonTest;
 import java.util.Arrays;
 import java.util.Collection;

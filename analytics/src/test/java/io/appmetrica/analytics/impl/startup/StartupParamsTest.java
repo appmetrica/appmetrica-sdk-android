@@ -4,7 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import io.appmetrica.analytics.AdsIdentifiersResult;
-import io.appmetrica.analytics.IdentifiersResult;
+import io.appmetrica.analytics.internal.IdentifiersResult;
 import io.appmetrica.analytics.StartupParamsItemStatus;
 import io.appmetrica.analytics.StartupParamsItem;
 import io.appmetrica.analytics.TestData;

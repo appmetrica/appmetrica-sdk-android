@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.startup
 
-import io.appmetrica.analytics.IdentifiersResult
+import io.appmetrica.analytics.internal.IdentifiersResult
 import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
 import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus
 import io.appmetrica.analytics.testutils.CommonTest

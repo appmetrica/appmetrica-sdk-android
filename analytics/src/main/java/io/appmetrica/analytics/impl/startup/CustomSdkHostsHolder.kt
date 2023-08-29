@@ -1,10 +1,10 @@
 package io.appmetrica.analytics.impl.startup
 
-import io.appmetrica.analytics.IdentifiersResult
 import io.appmetrica.analytics.StartupParamsItem
 import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus
 import io.appmetrica.analytics.coreutils.internal.logger.YLogger
 import io.appmetrica.analytics.impl.utils.JsonHelper
+import io.appmetrica.analytics.internal.IdentifiersResult
 
 private const val TAG = "[CustomSdkHostsHolder]"
 

@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.startup
 
-import io.appmetrica.analytics.IdentifiersResult
+import io.appmetrica.analytics.internal.IdentifiersResult
 import io.appmetrica.analytics.StartupParamsItemStatus
 import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
 import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus
@@ -38,7 +38,11 @@ class StartupParamItemAdapterTest : CommonTest() {
 
     @Test
     fun adapt() {
-        val input = IdentifiersResult("Some value", identifierStatus, "Some error")
+        val input = IdentifiersResult(
+            "Some value",
+            identifierStatus,
+            "Some error"
+        )
         ObjectPropertyAssertions(startupParamItemAdapter.adapt(input))
             .withPrivateFields(true)
             .checkField("id", input.id)
@@ -49,7 +53,11 @@ class StartupParamItemAdapterTest : CommonTest() {
 
     @Test
     fun `adapt with nulls`() {
-        val input = IdentifiersResult(null, identifierStatus, null)
+        val input = IdentifiersResult(
+            null,
+            identifierStatus,
+            null
+        )
         ObjectPropertyAssertions(startupParamItemAdapter.adapt(input))
             .withPrivateFields(true)
             .checkFieldIsNull("id")

@@ -1,4 +1,4 @@
-package io.appmetrica.analytics;
+package io.appmetrica.analytics.internal;
 
 import android.os.Parcel;
 import android.os.Parcelable;

@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.startup
 
-import io.appmetrica.analytics.IdentifiersResult
+import io.appmetrica.analytics.internal.IdentifiersResult
 import io.appmetrica.analytics.StartupParamsItemStatus
 import io.appmetrica.analytics.StartupParamsItem
 import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus
@@ -82,7 +82,13 @@ class FeaturesHolderTest : CommonTest() {
         val libSslStartupParamsItem = StartupParamsItem("false", StartupParamsItemStatus.OK, "some error")
         val map = mutableMapOf(firstEntry)
 
-        whenever(startupParamItemAdapter.adapt(eq(IdentifiersResult("false", IdentifierStatus.OK, "some error"))))
+        whenever(startupParamItemAdapter.adapt(eq(
+            IdentifiersResult(
+                "false",
+                IdentifierStatus.OK,
+                "some error"
+            )
+        )))
             .thenReturn(libSslStartupParamsItem)
 
         featuresHolder.features = FeaturesInternal(false, IdentifierStatus.OK, "some error")
@@ -103,7 +109,13 @@ class FeaturesHolderTest : CommonTest() {
         val libSslStartupParamsItem = StartupParamsItem("false", StartupParamsItemStatus.OK, "some error")
         val map = mutableMapOf(initialEntry)
         featuresHolder.features= FeaturesInternal(false, IdentifierStatus.OK, "some error")
-        whenever(startupParamItemAdapter.adapt(eq(IdentifiersResult("false", IdentifierStatus.OK, "some error"))))
+        whenever(startupParamItemAdapter.adapt(eq(
+            IdentifiersResult(
+                "false",
+                IdentifierStatus.OK,
+                "some error"
+            )
+        )))
             .thenReturn(libSslStartupParamsItem)
         featuresHolder.putToMap(listOf(Constants.StartupParamsCallbackKeys.FEATURE_LIB_SSL_ENABLED, "unknown key"), map)
         assertThat(map).containsExactlyInAnyOrderEntriesOf(mapOf(

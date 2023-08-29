@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl;
 
 import android.os.Bundle;
-import io.appmetrica.analytics.IdentifiersResult;
+import io.appmetrica.analytics.internal.IdentifiersResult;
 import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
 import io.appmetrica.analytics.billinginterface.internal.config.BillingConfig;
 import io.appmetrica.analytics.coreapi.internal.identifiers.AdTrackingInfo;
