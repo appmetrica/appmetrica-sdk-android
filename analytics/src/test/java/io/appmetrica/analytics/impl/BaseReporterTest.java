@@ -617,7 +617,7 @@ public abstract class BaseReporterTest extends BaseReporterData {
         String eventName = randomString();
         String eventValue = randomString();
         int eventType = 14;
-        int metricaServiceDataReporterType = MetricaServiceDataReporter.TYPE_CORE;
+        int serviceDataReporterType = MetricaServiceDataReporter.TYPE_CORE;
         Map<String, Object> environment = new HashMap<>();
         Map<String, byte[]> extras = Collections.singletonMap("Key", new byte[]{1, 2, 3, 7, 8});
         Map<String, Object> attributes = new HashMap<>();
@@ -630,7 +630,7 @@ public abstract class BaseReporterTest extends BaseReporterData {
         final ModuleEvent moduleEvent = ModuleEvent.newBuilder(eventType)
             .withName(eventName)
             .withValue(eventValue)
-            .withMetricaServiceDataReporterType(metricaServiceDataReporterType)
+            .withServiceDataReporterType(serviceDataReporterType)
             .withEnvironment(environment)
             .withExtras(extras)
             .withAttributes(attributes)
@@ -642,7 +642,7 @@ public abstract class BaseReporterTest extends BaseReporterData {
         verify(mReportsHandler).reportEvent(
             same(mockedEvent),
             any(ReporterEnvironment.class),
-            eq(metricaServiceDataReporterType),
+            eq(serviceDataReporterType),
             eq(attributes)
         );
     }
@@ -652,13 +652,13 @@ public abstract class BaseReporterTest extends BaseReporterData {
         String eventName = randomString();
         String eventValue = randomString();
         int eventType = 14;
-        int metricaServiceDataReporterType = MetricaServiceDataReporter.TYPE_CORE;
+        int serviceDataReporterType = MetricaServiceDataReporter.TYPE_CORE;
         Map<String, Object> attributes = new HashMap<>();
 
         final ModuleEvent moduleEvent = ModuleEvent.newBuilder(eventType)
             .withName(eventName)
             .withValue(eventValue)
-            .withMetricaServiceDataReporterType(metricaServiceDataReporterType)
+            .withServiceDataReporterType(serviceDataReporterType)
             .withAttributes(attributes)
             .build();
 
@@ -668,7 +668,7 @@ public abstract class BaseReporterTest extends BaseReporterData {
         verify(mReportsHandler).reportEvent(
             same(mockedEvent),
             any(ReporterEnvironment.class),
-            eq(metricaServiceDataReporterType),
+            eq(serviceDataReporterType),
             eq(attributes)
         );
     }
@@ -736,12 +736,12 @@ public abstract class BaseReporterTest extends BaseReporterData {
 
         @Test
         public void testShouldIgnoringMetricaInternalEventTypes() {
-            int metricaServiceDataReporterType = MetricaServiceDataReporter.TYPE_CORE;
+            int serviceDataReporterType = MetricaServiceDataReporter.TYPE_CORE;
 
             final ModuleEvent moduleEvent = ModuleEvent.newBuilder(mEventType)
                 .withName(randomString())
                 .withValue(randomString())
-                .withMetricaServiceDataReporterType(metricaServiceDataReporterType)
+                .withServiceDataReporterType(serviceDataReporterType)
                 .withEnvironment(new HashMap<String, Object>())
                 .withExtras(new HashMap<String, byte[]>())
                 .withAttributes(new HashMap<String, Object>())
@@ -755,7 +755,7 @@ public abstract class BaseReporterTest extends BaseReporterData {
                 .reportEvent(
                     same(mockedEvent),
                     any(ReporterEnvironment.class),
-                    same(metricaServiceDataReporterType),
+                    same(serviceDataReporterType),
                     any(Map.class)
                 );
         }

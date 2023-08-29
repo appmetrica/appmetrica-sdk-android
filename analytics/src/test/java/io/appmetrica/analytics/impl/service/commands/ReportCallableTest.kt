@@ -40,7 +40,7 @@ internal class ReportCallableTest : CommonTest() {
     private val service: IAppMetricaService = mock()
     private val reportData: CounterReport = mock()
     private val reportBundle: Bundle = mock()
-    private val metricaServiceDataReporterType = 42
+    private val serviceDataReporterType = 42
 
     private val processConfiguration = ProcessConfiguration(mock<Context>(), mock<ResultReceiver>())
     private val counterConfiguration = CounterConfiguration()
@@ -60,7 +60,7 @@ internal class ReportCallableTest : CommonTest() {
     @Before
     fun setUp() {
         val reportToSend = ReportToSend.newBuilder(reportData, reporterEnvironment)
-            .withMetricaServiceDataReporterType(metricaServiceDataReporterType)
+            .withServiceDataReporterType(serviceDataReporterType)
             .build()
         reportCallable = ReportCallable(
             appMetricaConnector,
@@ -80,7 +80,7 @@ internal class ReportCallableTest : CommonTest() {
 
         reportCallable.call()
 
-        verify(service).reportData(metricaServiceDataReporterType, reportBundle)
+        verify(service).reportData(serviceDataReporterType, reportBundle)
     }
 
     @Test
@@ -92,7 +92,7 @@ internal class ReportCallableTest : CommonTest() {
 
         val inOrder = inOrder(appMetricaConnector, service)
         inOrder.verify(appMetricaConnector).bindService()
-        inOrder.verify(service).reportData(metricaServiceDataReporterType, reportBundle)
+        inOrder.verify(service).reportData(serviceDataReporterType, reportBundle)
     }
 
     @Test

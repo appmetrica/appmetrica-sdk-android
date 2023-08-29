@@ -282,8 +282,8 @@ public final class io.appmetrica.analytics.ModuleEvent {
     public [Nullable] java.util.Map<String, Object> getAttributes()
     public [Nullable] java.util.Map<String, Object> getEnvironment()
     public [Nullable] java.util.Map<String, byte[]> getExtras()
-    public int getMetricaServiceDataReporterType()
     public [Nullable] String getName()
+    public int getServiceDataReporterType()
     public int getType()
     public [Nullable] String getValue()
     public static io.appmetrica.analytics.ModuleEvent$Builder newBuilder(int)
@@ -295,8 +295,8 @@ public static class io.appmetrica.analytics.ModuleEvent$Builder {
     public io.appmetrica.analytics.ModuleEvent$Builder withAttributes([Nullable] java.util.Map<String, Object>)
     public io.appmetrica.analytics.ModuleEvent$Builder withEnvironment([Nullable] java.util.Map<String, Object>)
     public io.appmetrica.analytics.ModuleEvent$Builder withExtras([Nullable] java.util.Map<String, byte[]>)
-    public io.appmetrica.analytics.ModuleEvent$Builder withMetricaServiceDataReporterType(int)
     public io.appmetrica.analytics.ModuleEvent$Builder withName([Nullable] String)
+    public io.appmetrica.analytics.ModuleEvent$Builder withServiceDataReporterType(int)
     public io.appmetrica.analytics.ModuleEvent$Builder withValue([Nullable] String)
 }
 

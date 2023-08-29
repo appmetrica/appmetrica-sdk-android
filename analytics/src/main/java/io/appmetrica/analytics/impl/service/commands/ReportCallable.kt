@@ -24,10 +24,10 @@ internal open class ReportCallable(
             tag,
             "send event $reportData " +
                 "with environment ${reporterEnvironment.processConfiguration.customHosts} " +
-                "with metricaServiceDataReporterType ${reportToSend.metricaServiceDataReporterType}"
+                "with serviceDataReporterType ${reportToSend.serviceDataReporterType}"
         )
         service.reportData(
-            reportToSend.metricaServiceDataReporterType,
+            reportToSend.serviceDataReporterType,
             reportData.toBundle(reporterEnvironment.configBundle)
         )
     }

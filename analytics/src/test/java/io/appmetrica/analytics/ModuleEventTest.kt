@@ -12,7 +12,7 @@ class ModuleEventTest {
     private val type = 42
     private val name = "some name"
     private val value = "some value"
-    private val metricaServiceDataReporterType = 4242
+    private val serviceDataReporterType = 4242
     private val environment = mapOf(
         "first environment key" to "first enviroment value",
         "second environment key" to "second environment value"
@@ -35,7 +35,7 @@ class ModuleEventTest {
             assertThat(moduleEvent.type).isEqualTo(type)
             assertThat(moduleEvent.name).isNull()
             assertThat(moduleEvent.value).isNull()
-            assertThat(moduleEvent.metricaServiceDataReporterType).isEqualTo(MetricaServiceDataReporter.TYPE_CORE)
+            assertThat(moduleEvent.serviceDataReporterType).isEqualTo(MetricaServiceDataReporter.TYPE_CORE)
             assertThat(moduleEvent.environment).isNull()
             assertThat(moduleEvent.extras).isNull()
             assertThat(moduleEvent.attributes).isNull()
@@ -52,7 +52,7 @@ class ModuleEventTest {
             assertThat(moduleEvent.type).isEqualTo(type)
             assertThat(moduleEvent.name).isEqualTo(name)
             assertThat(moduleEvent.value).isNull()
-            assertThat(moduleEvent.metricaServiceDataReporterType).isEqualTo(MetricaServiceDataReporter.TYPE_CORE)
+            assertThat(moduleEvent.serviceDataReporterType).isEqualTo(MetricaServiceDataReporter.TYPE_CORE)
             assertThat(moduleEvent.environment).isNull()
             assertThat(moduleEvent.extras).isNull()
             assertThat(moduleEvent.attributes).isNull()
@@ -69,7 +69,7 @@ class ModuleEventTest {
             assertThat(moduleEvent.type).isEqualTo(type)
             assertThat(moduleEvent.name).isNull()
             assertThat(moduleEvent.value).isEqualTo(value)
-            assertThat(moduleEvent.metricaServiceDataReporterType).isEqualTo(MetricaServiceDataReporter.TYPE_CORE)
+            assertThat(moduleEvent.serviceDataReporterType).isEqualTo(MetricaServiceDataReporter.TYPE_CORE)
             assertThat(moduleEvent.environment).isNull()
             assertThat(moduleEvent.extras).isNull()
             assertThat(moduleEvent.attributes).isNull()
@@ -77,16 +77,16 @@ class ModuleEventTest {
     }
 
     @Test
-    fun withMetricaServiceDataReporterType() {
+    fun withServiceDataReporterType() {
         val moduleEvent = ModuleEvent.newBuilder(type)
-            .withMetricaServiceDataReporterType(metricaServiceDataReporterType)
+            .withServiceDataReporterType(serviceDataReporterType)
             .build()
 
         SoftAssertions().apply {
             assertThat(moduleEvent.type).isEqualTo(type)
             assertThat(moduleEvent.name).isNull()
             assertThat(moduleEvent.value).isNull()
-            assertThat(moduleEvent.metricaServiceDataReporterType).isEqualTo(metricaServiceDataReporterType)
+            assertThat(moduleEvent.serviceDataReporterType).isEqualTo(serviceDataReporterType)
             assertThat(moduleEvent.environment).isNull()
             assertThat(moduleEvent.extras).isNull()
             assertThat(moduleEvent.attributes).isNull()
@@ -103,7 +103,7 @@ class ModuleEventTest {
             assertThat(moduleEvent.type).isEqualTo(type)
             assertThat(moduleEvent.name).isNull()
             assertThat(moduleEvent.value).isNull()
-            assertThat(moduleEvent.metricaServiceDataReporterType).isEqualTo(MetricaServiceDataReporter.TYPE_CORE)
+            assertThat(moduleEvent.serviceDataReporterType).isEqualTo(MetricaServiceDataReporter.TYPE_CORE)
             assertThat(moduleEvent.environment).isEqualTo(environment)
             assertThat(moduleEvent.extras).isNull()
             assertThat(moduleEvent.attributes).isNull()
@@ -120,7 +120,7 @@ class ModuleEventTest {
             assertThat(moduleEvent.type).isEqualTo(type)
             assertThat(moduleEvent.name).isNull()
             assertThat(moduleEvent.value).isNull()
-            assertThat(moduleEvent.metricaServiceDataReporterType).isEqualTo(MetricaServiceDataReporter.TYPE_CORE)
+            assertThat(moduleEvent.serviceDataReporterType).isEqualTo(MetricaServiceDataReporter.TYPE_CORE)
             assertThat(moduleEvent.environment).isNull()
             assertThat(moduleEvent.extras).isEqualTo(extras)
             assertThat(moduleEvent.attributes).isNull()
@@ -137,7 +137,7 @@ class ModuleEventTest {
             assertThat(moduleEvent.type).isEqualTo(type)
             assertThat(moduleEvent.name).isNull()
             assertThat(moduleEvent.value).isNull()
-            assertThat(moduleEvent.metricaServiceDataReporterType).isEqualTo(MetricaServiceDataReporter.TYPE_CORE)
+            assertThat(moduleEvent.serviceDataReporterType).isEqualTo(MetricaServiceDataReporter.TYPE_CORE)
             assertThat(moduleEvent.environment).isNull()
             assertThat(moduleEvent.extras).isNull()
             assertThat(moduleEvent.attributes).isEqualTo(attributes)

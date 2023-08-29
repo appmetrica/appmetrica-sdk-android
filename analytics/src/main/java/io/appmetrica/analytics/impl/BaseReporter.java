@@ -315,7 +315,7 @@ public abstract class BaseReporter implements IBaseReporter {
             mReportsHandler.reportEvent(
                 event,
                 mReporterEnvironment,
-                moduleEvent.getMetricaServiceDataReporterType(),
+                moduleEvent.getServiceDataReporterType(),
                 moduleEvent.getAttributes()
             );
         }

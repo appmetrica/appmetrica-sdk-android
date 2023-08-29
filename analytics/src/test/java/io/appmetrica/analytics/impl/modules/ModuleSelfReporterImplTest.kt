@@ -65,7 +65,7 @@ class ModuleSelfReporterImplTest : CommonTest() {
             .checkField("type", eventType)
             .checkField("name", eventName)
             .checkField("value", stringValue)
-            .checkField("metricaServiceDataReporterType", MetricaServiceDataReporter.TYPE_CORE)
+            .checkField("serviceDataReporterType", MetricaServiceDataReporter.TYPE_CORE)
             .checkFieldsAreNull("environment", "extras", "attributes")
             .checkAll()
     }

@@ -13,7 +13,7 @@ public final class ModuleEvent {
     private final String name;
     @Nullable
     private final String value;
-    private final int metricaServiceDataReporterType;
+    private final int serviceDataReporterType;
     @Nullable
     private final Map<String, Object> environment;
     @Nullable
@@ -35,8 +35,8 @@ public final class ModuleEvent {
         return value;
     }
 
-    public int getMetricaServiceDataReporterType() {
-        return metricaServiceDataReporterType;
+    public int getServiceDataReporterType() {
+        return serviceDataReporterType;
     }
 
     @Nullable
@@ -58,7 +58,7 @@ public final class ModuleEvent {
         this.type = builder.type;
         this.name = builder.name;
         this.value = builder.value;
-        this.metricaServiceDataReporterType = builder.metricaServiceDataReporterType;
+        this.serviceDataReporterType = builder.serviceDataReporterType;
         this.environment = builder.environment;
         this.extras = builder.extras;
         this.attributes = builder.attributes;
@@ -75,7 +75,7 @@ public final class ModuleEvent {
             "type=" + type +
             ", name='" + name + '\'' +
             ", value='" + value + '\'' +
-            ", metricaServiceDataReporterType=" + metricaServiceDataReporterType +
+            ", serviceDataReporterType=" + serviceDataReporterType +
             ", environment=" + environment +
             ", extras=" + extras +
             ", attributes=" + attributes +
@@ -89,7 +89,7 @@ public final class ModuleEvent {
         private String name;
         @Nullable
         private String value;
-        private int metricaServiceDataReporterType = MetricaServiceDataReporter.TYPE_CORE;
+        private int serviceDataReporterType = MetricaServiceDataReporter.TYPE_CORE;
         @Nullable
         private Map<String, Object> environment;
         @Nullable
@@ -111,8 +111,8 @@ public final class ModuleEvent {
             return this;
         }
 
-        public Builder withMetricaServiceDataReporterType(final int metricaServiceDataReporterType) {
-            this.metricaServiceDataReporterType = metricaServiceDataReporterType;
+        public Builder withServiceDataReporterType(final int serviceDataReporterType) {
+            this.serviceDataReporterType = serviceDataReporterType;
             return this;
         }
 

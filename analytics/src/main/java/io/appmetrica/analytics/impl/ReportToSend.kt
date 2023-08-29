@@ -8,7 +8,7 @@ import io.appmetrica.analytics.internal.CounterConfiguration
 class ReportToSend(
     val report: CounterReport,
     val isCrashReport: Boolean,
-    val metricaServiceDataReporterType: Int,
+    val serviceDataReporterType: Int,
     val trimmedFields: HashMap<TrimmedField, Int>?,
     val environment: ReporterEnvironment
 ) {
@@ -16,7 +16,7 @@ class ReportToSend(
     override fun toString(): String {
         return "ReportToSend(" +
             "report=$report, " +
-            "metricaServiceDataReporterType=$metricaServiceDataReporterType, " +
+            "serviceDataReporterType=$serviceDataReporterType, " +
             "environment=$environment, " +
             "isCrashReport=$isCrashReport, " +
             "trimmedFields=$trimmedFields" +
@@ -36,7 +36,7 @@ class ReportToSend(
     ) {
 
         private var isCrashReport = false
-        private var metricaServiceDataReporterType = MetricaServiceDataReporter.TYPE_CORE
+        private var serviceDataReporterType = MetricaServiceDataReporter.TYPE_CORE
         private var trimmedFields: HashMap<TrimmedField, Int>? = null
 
         fun asCrash(isCrash: Boolean) = apply {
@@ -47,14 +47,14 @@ class ReportToSend(
             this.trimmedFields = trimmedFields
         }
 
-        fun withMetricaServiceDataReporterType(type: Int) = apply {
-            this.metricaServiceDataReporterType = type
+        fun withServiceDataReporterType(type: Int) = apply {
+            this.serviceDataReporterType = type
         }
 
         fun build() = ReportToSend(
             report,
             isCrashReport,
-            metricaServiceDataReporterType,
+            serviceDataReporterType,
             trimmedFields,
             ReporterEnvironment(
                 ProcessConfiguration(environment.processConfiguration),

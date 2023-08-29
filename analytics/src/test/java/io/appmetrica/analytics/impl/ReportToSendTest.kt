@@ -27,7 +27,7 @@ class ReportToSendTest : CommonTest() {
         SoftAssertions().apply {
             assertThat(reportToSend.report).isSameAs(counterReport)
             assertThat(reportToSend.isCrashReport).isFalse
-            assertThat(reportToSend.metricaServiceDataReporterType).isEqualTo(MetricaServiceDataReporter.TYPE_CORE)
+            assertThat(reportToSend.serviceDataReporterType).isEqualTo(MetricaServiceDataReporter.TYPE_CORE)
             assertThat(reportToSend.trimmedFields).isNull()
         }.assertAll()
     }
@@ -43,7 +43,7 @@ class ReportToSendTest : CommonTest() {
         SoftAssertions().apply {
             assertThat(reportToSend.report).isSameAs(counterReport)
             assertThat(reportToSend.isCrashReport).isTrue
-            assertThat(reportToSend.metricaServiceDataReporterType).isEqualTo(MetricaServiceDataReporter.TYPE_CORE)
+            assertThat(reportToSend.serviceDataReporterType).isEqualTo(MetricaServiceDataReporter.TYPE_CORE)
             assertThat(reportToSend.trimmedFields).isNull()
         }.assertAll()
     }
@@ -60,23 +60,23 @@ class ReportToSendTest : CommonTest() {
         SoftAssertions().apply {
             assertThat(reportToSend.report).isSameAs(counterReport)
             assertThat(reportToSend.isCrashReport).isFalse
-            assertThat(reportToSend.metricaServiceDataReporterType).isEqualTo(MetricaServiceDataReporter.TYPE_CORE)
+            assertThat(reportToSend.serviceDataReporterType).isEqualTo(MetricaServiceDataReporter.TYPE_CORE)
             assertThat(reportToSend.trimmedFields).isSameAs(trimmedField)
         }.assertAll()
     }
 
     @Test
-    fun builderWithMetricaServiceDataReporterType() {
+    fun builderWithServiceDataReporterType() {
         val counterReport = mock<CounterReport>()
         val reporterEnvironment = ReporterEnvironmentTest.createStubbedEnvironment()
         val reportToSend = ReportToSend.newBuilder(counterReport, reporterEnvironment)
-            .withMetricaServiceDataReporterType(42)
+            .withServiceDataReporterType(42)
             .build()
 
         SoftAssertions().apply {
             assertThat(reportToSend.report).isSameAs(counterReport)
             assertThat(reportToSend.isCrashReport).isFalse
-            assertThat(reportToSend.metricaServiceDataReporterType).isEqualTo(42)
+            assertThat(reportToSend.serviceDataReporterType).isEqualTo(42)
             assertThat(reportToSend.trimmedFields).isNull()
         }.assertAll()
     }

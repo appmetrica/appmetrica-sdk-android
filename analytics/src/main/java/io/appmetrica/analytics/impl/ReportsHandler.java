@@ -158,7 +158,7 @@ public class ReportsHandler {
     public void reportEvent(
         CounterReport report,
         final ReporterEnvironment environment,
-        final int metricaServiceDataReporterType,
+        final int serviceDataReporterType,
         final Map<String, Object> attributes
     ) {
         if (report.getType() == InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_PROTOBUF.getTypeId()) {
@@ -174,7 +174,7 @@ public class ReportsHandler {
             prepareRegularReport(report, environment);
         }
         ReportToSend reportToSend = ReportToSend.newBuilder(report, environment)
-            .withMetricaServiceDataReporterType(metricaServiceDataReporterType)
+            .withServiceDataReporterType(serviceDataReporterType)
             .build();
         queueReport(reportToSend);
     }
