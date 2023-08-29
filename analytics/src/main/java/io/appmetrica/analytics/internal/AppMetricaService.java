@@ -19,7 +19,6 @@ import io.appmetrica.analytics.impl.service.AppMetricaServiceAction;
 import io.appmetrica.analytics.impl.service.MetricaServiceCallback;
 import io.appmetrica.analytics.impl.service.MetricaServiceDataReporter;
 import io.appmetrica.analytics.impl.utils.PublicLogger;
-import io.appmetrica.analytics.internal.IAppMetricaService;
 
 public class AppMetricaService extends Service {
 

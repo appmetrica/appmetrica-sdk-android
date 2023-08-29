@@ -1,7 +1,6 @@
 package io.appmetrica.analytics;
 
 import androidx.annotation.NonNull;
-import io.appmetrica.analytics.testutils.RandomStringGenerator;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -30,7 +29,8 @@ public class ToStringTestUtils {
         Field[] fields = clazz.getDeclaredFields();
         List<Predicate<String>> result = new ArrayList<>();
         for (final Field field : fields) {
-            if (modifiersMatchPreconditions(field.getModifiers(), modifierPreconditions) && !excludedFields.contains(field.getName())) {
+            if (modifiersMatchPreconditions(field.getModifiers(), modifierPreconditions) &&
+                !excludedFields.contains(field.getName())) {
                 field.setAccessible(true);
                 final String value = extractStringFromFieldValue(field, object);
                 result.add(new Predicate<String>() {
@@ -38,7 +38,8 @@ public class ToStringTestUtils {
                     @Override
                     public boolean test(String s) {
                         for (String valueQuote : valueQuotes) {
-                            final String pair = String.format("%s=%s%s%s", field.getName(), valueQuote, value, valueQuote);
+                            final String pair =
+                                String.format("%s=%s%s%s", field.getName(), valueQuote, value, valueQuote);
                             if (s.contains(pair)) {
                                 return true;
                             }
@@ -85,29 +86,22 @@ public class ToStringTestUtils {
         return true;
     }
 
-    public static <T> T mockValue(String clazzName) throws Exception {
-        return (T) mockValue(Class.forName(clazzName));
-    }
-
     public static <T> T mockValue(Class<T> clazz) {
         T mock = mock(clazz);
         when(mock.toString()).thenCallRealMethod();
         return mock;
     }
 
-    public static <T> T mockField(Class<T> clazz) {
-        RandomStringGenerator randomStringGenerator = new RandomStringGenerator(100);
-        T mock = mock(clazz);
-        when(mock.toString()).thenReturn(randomStringGenerator.nextString());
-        return mock;
-    }
-
-    public static void testToString(@NonNull Object actualValue, @NonNull List<Predicate<String>> extractedFieldAndValuesPredicates) {
+    public static void testToString(@NonNull Object actualValue,
+                                    @NonNull List<Predicate<String>> extractedFieldAndValuesPredicates) {
         String toStringValue = actualValue.toString();
 
         SoftAssertions softly = new SoftAssertions();
         for (final Predicate<String> fieldAndValuePredicate : extractedFieldAndValuesPredicates) {
-            softly.assertThat(toStringValue).matches(fieldAndValuePredicate, String.format("Containing pair: %s)", fieldAndValuePredicate));
+            softly.assertThat(toStringValue).matches(
+                fieldAndValuePredicate,
+                String.format("Containing pair: %s)", fieldAndValuePredicate)
+            );
         }
         softly.assertAll();
     }
