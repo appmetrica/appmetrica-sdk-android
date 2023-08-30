@@ -147,7 +147,7 @@ public class DefaultOneShotMetricaConfig implements MetricaConfigurator {
             builder.withAppBuildNumber(config.appBuildNumber);
         }
         if (isFieldSet(config.maxReportsCount)) {
-            builder.withMaxReportCount(config.maxReportsCount);
+            builder.withMaxReportsCount(config.maxReportsCount);
         }
         if (isFieldSet(config.logs) && config.logs) {
             builder.withLogs();

@@ -208,7 +208,7 @@ public class AppMetricaConfig {
     /**
      * Maximum buffer size for reports
      *
-     * @see AppMetricaConfig.Builder#withMaxReportCount(int)
+     * @see AppMetricaConfig.Builder#withMaxReportsCount(int)
      */
     @Nullable
     public final Integer maxReportsCount;
@@ -720,7 +720,7 @@ public class AppMetricaConfig {
          *
          * @param dispatchPeriodSeconds Timeout in seconds to automatically send reports.
          *
-         * @see AppMetricaConfig.Builder#withMaxReportCount(int)
+         * @see AppMetricaConfig.Builder#withMaxReportsCount(int)
          *
          * @return the same {@link AppMetricaConfig.Builder} object.
          */
@@ -746,7 +746,7 @@ public class AppMetricaConfig {
          * @return the same {@link AppMetricaConfig.Builder} object.
          */
         @NonNull
-        public Builder withMaxReportCount(int maxReportsCount) {
+        public Builder withMaxReportsCount(int maxReportsCount) {
             this.maxReportsCount = maxReportsCount;
             return this;
         }

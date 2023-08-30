@@ -85,7 +85,7 @@ class ClientConfigSerializerTest : CommonTest() {
             .withDeviceType(deviceType)
             .withAppBuildNumber(appBuildNumber)
             .withDispatchPeriodSeconds(dispatchPeriodSeconds)
-            .withMaxReportCount(maxReportsCount)
+            .withMaxReportsCount(maxReportsCount)
             .withAppEnvironmentValue(appEnvKeyFirst, appEnvValueFirst)
             .withAppEnvironmentValue(appEnvKeySecond, appEnvValueSecond)
             .withAnrMonitoring(anrMonitoring)

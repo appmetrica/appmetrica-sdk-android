@@ -151,7 +151,7 @@ public class ClientConfigSerializer {
                     builder.withDispatchPeriodSeconds(jsonConfig.optInt(KEY_DISPATCH_PERIOD_SECONDS));
                 }
                 if (jsonConfig.has(KEY_MAX_REPORTS_COUNT)) {
-                    builder.withMaxReportCount(jsonConfig.optInt(KEY_MAX_REPORTS_COUNT));
+                    builder.withMaxReportsCount(jsonConfig.optInt(KEY_MAX_REPORTS_COUNT));
                 }
                 if (jsonConfig.has(KEY_APP_ENVIRONMENT)) {
                     withAppEnvironmentValues(jsonConfig.optString(KEY_APP_ENVIRONMENT), builder);

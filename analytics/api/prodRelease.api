@@ -160,7 +160,7 @@ public static class io.appmetrica.analytics.AppMetricaConfig$Builder {
     public [NonNull] io.appmetrica.analytics.AppMetricaConfig$Builder withLocation([Nullable] android.location.Location)
     public [NonNull] io.appmetrica.analytics.AppMetricaConfig$Builder withLocationTracking(boolean)
     public [NonNull] io.appmetrica.analytics.AppMetricaConfig$Builder withLogs()
-    public [NonNull] io.appmetrica.analytics.AppMetricaConfig$Builder withMaxReportCount(int)
+    public [NonNull] io.appmetrica.analytics.AppMetricaConfig$Builder withMaxReportsCount(int)
     public [NonNull] io.appmetrica.analytics.AppMetricaConfig$Builder withMaxReportsInDatabaseCount(int)
     public [NonNull] io.appmetrica.analytics.AppMetricaConfig$Builder withNativeCrashReporting(boolean)
     public [NonNull] io.appmetrica.analytics.AppMetricaConfig$Builder withPreloadInfo([Nullable] io.appmetrica.analytics.PreloadInfo)

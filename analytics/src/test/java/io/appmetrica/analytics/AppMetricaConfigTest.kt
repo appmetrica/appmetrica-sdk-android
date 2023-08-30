@@ -167,7 +167,7 @@ class AppMetricaConfigTest : CommonTest() {
             .withDeviceType(deviceType)
             .withAppBuildNumber(appBuildNumber)
             .withDispatchPeriodSeconds(dispatchPeriodSeconds)
-            .withMaxReportCount(maxReportsCount)
+            .withMaxReportsCount(maxReportsCount)
             .withAppEnvironmentValue(appEnvKeyFirst, appEnvValueFirst)
             .withAppEnvironmentValue(appEnvKeySecond, appEnvValueSecond)
             .withCrashTransformer(crashTransformer)
@@ -401,7 +401,7 @@ class AppMetricaConfigTest : CommonTest() {
 
     @Test
     fun maxReportsCount() {
-        val config = defaultConfigBuilder.withMaxReportCount(TestData.TEST_MAX_REPORTS_COUNT).build()
+        val config = defaultConfigBuilder.withMaxReportsCount(TestData.TEST_MAX_REPORTS_COUNT).build()
         assertThat(config.maxReportsCount).isEqualTo(TestData.TEST_MAX_REPORTS_COUNT)
     }
 
@@ -413,7 +413,7 @@ class AppMetricaConfigTest : CommonTest() {
 
     @Test
     fun negativeMaxReportsCount() {
-        val config = defaultConfigBuilder.withMaxReportCount(TestData.TEST_NEGATIVE_MAX_REPORTS_COUNT).build()
+        val config = defaultConfigBuilder.withMaxReportsCount(TestData.TEST_NEGATIVE_MAX_REPORTS_COUNT).build()
         assertThat(config.maxReportsCount).isNegative
     }
 
