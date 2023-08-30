@@ -1,4 +1,4 @@
-package io.appmetrica.analytics
+package io.appmetrica.analytics.internal.js
 
 import io.appmetrica.analytics.impl.proxy.AppMetricaProxy
 import io.appmetrica.analytics.testutils.CommonTest

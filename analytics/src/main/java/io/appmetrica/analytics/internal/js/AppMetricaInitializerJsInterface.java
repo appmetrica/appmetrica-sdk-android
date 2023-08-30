@@ -1,4 +1,4 @@
-package io.appmetrica.analytics;
+package io.appmetrica.analytics.internal.js;
 
 import android.webkit.JavascriptInterface;
 import androidx.annotation.NonNull;

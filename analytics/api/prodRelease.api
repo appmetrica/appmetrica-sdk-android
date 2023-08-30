@@ -190,16 +190,6 @@ public class io.appmetrica.analytics.AppMetricaDefaultValues {
     public <init>()
 }
 
-public class io.appmetrica.analytics.AppMetricaInitializerJsInterface {
-    public <init>([NonNull] OBFUSCATED[io.appmetrica.analytics.impl.proxy.AppMetricaProxy])
-    public void init(String)
-}
-
-public class io.appmetrica.analytics.AppMetricaJsInterface {
-    public <init>([NonNull] OBFUSCATED[io.appmetrica.analytics.impl.proxy.AppMetricaProxy])
-    public void reportEvent(String, String)
-}
-
 public final class io.appmetrica.analytics.BuildConfig {
     public static final int API_LEVEL
     public static final String BUILD_DATE
@@ -644,6 +634,16 @@ public class io.appmetrica.analytics.internal.PreloadInfoContentProvider extends
     public boolean onCreate()
     public [Nullable] android.database.Cursor query([NonNull] android.net.Uri, [Nullable] String[], [Nullable] String, [Nullable] String[], [Nullable] String)
     public int update([NonNull] android.net.Uri, [Nullable] android.content.ContentValues, [Nullable] String, [Nullable] String[])
+}
+
+public class io.appmetrica.analytics.internal.js.AppMetricaInitializerJsInterface {
+    public <init>([NonNull] OBFUSCATED[io.appmetrica.analytics.impl.proxy.AppMetricaProxy])
+    public void init(String)
+}
+
+public class io.appmetrica.analytics.internal.js.AppMetricaJsInterface {
+    public <init>([NonNull] OBFUSCATED[io.appmetrica.analytics.impl.proxy.AppMetricaProxy])
+    public void reportEvent(String, String)
 }
 
 public interface io.appmetrica.analytics.plugins.AppMetricaPlugins {

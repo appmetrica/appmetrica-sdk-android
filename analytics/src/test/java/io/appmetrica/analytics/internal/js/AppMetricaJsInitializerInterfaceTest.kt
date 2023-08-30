@@ -1,11 +1,9 @@
-package io.appmetrica.analytics
+package io.appmetrica.analytics.internal.js
 
 import io.appmetrica.analytics.impl.proxy.AppMetricaProxy
 import io.appmetrica.analytics.testutils.CommonTest
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Mockito
-import org.mockito.MockitoAnnotations
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 

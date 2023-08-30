@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import io.appmetrica.analytics.ecommerce.ECommerceEvent;
 import io.appmetrica.analytics.impl.AppMetricaPluginsImplProvider;
 import io.appmetrica.analytics.impl.proxy.AppMetricaProxyProvider;
+import io.appmetrica.analytics.internal.js.AppMetricaJsInterface;
 import io.appmetrica.analytics.plugins.AppMetricaPlugins;
 import io.appmetrica.analytics.profile.UserProfile;
 import java.util.Arrays;
@@ -477,7 +478,7 @@ public final class AppMetrica {
      * <br>
      * <b>NOTE:</b> Reporting from JS code will not be enabled on API levels 16 and less due to security issues.
      *
-     * @see io.appmetrica.analytics.AppMetricaJsInterface
+     * @see AppMetricaJsInterface
      *
      * @param webView WebView where AppMetrica should enable reporting
      */
