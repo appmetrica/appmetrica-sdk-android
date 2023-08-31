@@ -39,6 +39,10 @@ public class SdkUtils {
         Log.e(APPMETRICA_ATTRIBUTION_TAG, String.format(message, arguments), ex);
     }
 
+    public static void logStubUsage() {
+        Log.i(APPMETRICA_TAG, "User is locked. So use stubs. Events will not be sent.");
+    }
+
     public static boolean isExceptionFromMetrica(@Nullable Throwable exception) {
         String stackTrace = Utils.getStackTrace(exception);
 

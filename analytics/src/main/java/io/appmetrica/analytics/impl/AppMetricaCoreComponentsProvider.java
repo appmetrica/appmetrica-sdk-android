@@ -25,7 +25,7 @@ public class AppMetricaCoreComponentsProvider {
     }
 
     public synchronized IAppMetricaCore getCore(@NonNull Context context,
-                                                   @NonNull ClientExecutorProvider clientExecutorProvider) {
+                                                @NonNull ClientExecutorProvider clientExecutorProvider) {
         if (appMetricaCore == null) {
             if (useStubs(context)) {
                 appMetricaCore = new AppMetricaCoreStub(clientExecutorProvider);
@@ -38,7 +38,7 @@ public class AppMetricaCoreComponentsProvider {
     }
 
     public synchronized IAppMetricaImpl getImpl(@NonNull Context context,
-                                                   @NonNull IAppMetricaCore appMetricaCore) {
+                                                @NonNull IAppMetricaCore appMetricaCore) {
         if (appMetricaImpl == null) {
             if (useStubs(context)) {
                 appMetricaImpl = new AppMetricaImplStub();
@@ -53,6 +53,9 @@ public class AppMetricaCoreComponentsProvider {
     private synchronized boolean useStubs(@NonNull Context context) {
         if (useStubs == null) {
             useStubs = !unlockedUserStateProvider.isUserUnlocked(context);
+            if (useStubs) {
+                SdkUtils.logStubUsage();
+            }
         }
         return useStubs;
     }

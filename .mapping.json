@@ -1148,7 +1148,7 @@
   "analytics/src/test/java/io/appmetrica/analytics/impl/ScreenInfoHolderTest.kt":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/test/java/io/appmetrica/analytics/impl/ScreenInfoHolderTest.kt",
   "analytics/src/test/java/io/appmetrica/analytics/impl/ScreenInfoRetrieverTest.kt":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/test/java/io/appmetrica/analytics/impl/ScreenInfoRetrieverTest.kt",
   "analytics/src/test/java/io/appmetrica/analytics/impl/SdkDataTest.java":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/test/java/io/appmetrica/analytics/impl/SdkDataTest.java",
-  "analytics/src/test/java/io/appmetrica/analytics/impl/SdkUtilsTest.java":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/test/java/io/appmetrica/analytics/impl/SdkUtilsTest.java",
+  "analytics/src/test/java/io/appmetrica/analytics/impl/SdkUtilsTest.kt":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/test/java/io/appmetrica/analytics/impl/SdkUtilsTest.kt",
   "analytics/src/test/java/io/appmetrica/analytics/impl/SelfDiagnosticReporterStorageTest.java":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/test/java/io/appmetrica/analytics/impl/SelfDiagnosticReporterStorageTest.java",
   "analytics/src/test/java/io/appmetrica/analytics/impl/SelfDiagnosticReporterTest.java":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/test/java/io/appmetrica/analytics/impl/SelfDiagnosticReporterTest.java",
   "analytics/src/test/java/io/appmetrica/analytics/impl/SelfProcessReporterTest.java":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/test/java/io/appmetrica/analytics/impl/SelfProcessReporterTest.java",

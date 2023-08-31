@@ -7,16 +7,19 @@ import io.appmetrica.analytics.impl.utils.UnlockedUserStateProvider;
 import io.appmetrica.analytics.impl.utils.executors.ClientExecutorProvider;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.MockedConstructionRule;
+import io.appmetrica.analytics.testutils.MockedStaticRule;
 import io.appmetrica.analytics.testutils.TestUtils;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
@@ -30,6 +33,8 @@ public class AppAppMetricaServiceCoreComponentsProviderTest extends CommonTest {
     public MockedConstructionRule<AppMetricaImpl> cAppMetricaImpl = new MockedConstructionRule<>(AppMetricaImpl.class);
     @Rule
     public MockedConstructionRule<AppMetricaImplStub> cAppMetricaImplStub = new MockedConstructionRule<>(AppMetricaImplStub.class);
+    @Rule
+    public MockedStaticRule<SdkUtils> sdkUtilsMockedStaticRule = new MockedStaticRule<>(SdkUtils.class);
 
     private Context context;
     @Mock
@@ -141,5 +146,29 @@ public class AppAppMetricaServiceCoreComponentsProviderTest extends CommonTest {
         coreComponentsProvider.getCore(context, clientExecutorProvider);
         assertThat(cAppMetricaCoreStub.getArgumentInterceptor().flatArguments())
                 .containsExactly(clientExecutorProvider);
+    }
+
+    @Test
+    public void logForUserLockedState() {
+        when(unlockedUserStateProvider.isUserUnlocked(context)).thenReturn(false);
+        coreComponentsProvider.getImpl(context, appMetricaCore);
+        sdkUtilsMockedStaticRule.getStaticMock().verify(new MockedStatic.Verification() {
+            @Override
+            public void apply() throws Throwable {
+                SdkUtils.logStubUsage();
+            }
+        });
+    }
+
+    @Test
+    public void logForUserUnlockedState() {
+        when(unlockedUserStateProvider.isUserUnlocked(context)).thenReturn(true);
+        coreComponentsProvider.getImpl(context, appMetricaCore);
+        sdkUtilsMockedStaticRule.getStaticMock().verify(new MockedStatic.Verification() {
+            @Override
+            public void apply() throws Throwable {
+                SdkUtils.logStubUsage();
+            }
+        }, never());
     }
 }
