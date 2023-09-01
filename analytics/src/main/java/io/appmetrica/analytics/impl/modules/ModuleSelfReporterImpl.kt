@@ -1,19 +1,36 @@
 package io.appmetrica.analytics.impl.modules
 
 import io.appmetrica.analytics.ModuleEvent
+import io.appmetrica.analytics.impl.InternalEvents
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade
 import io.appmetrica.analytics.modulesapi.internal.ModuleSelfReporter
 
 class ModuleSelfReporterImpl : ModuleSelfReporter {
 
     private val reporter = AppMetricaSelfReportFacade.getReporter()
+    private val defaultEventType = InternalEvents.EVENT_TYPE_REGULAR.typeId
 
-    override fun reportEvent(eventName: String) = reporter.reportEvent(eventName)
+    override fun reportEvent(eventName: String) {
+        reporter.reportEvent(ModuleEvent.newBuilder(defaultEventType).withName(eventName).build())
+    }
 
-    override fun reportEvent(eventName: String, eventValue: Map<String, Any>?) =
-        reporter.reportEvent(eventName, eventValue)
+    override fun reportEvent(eventName: String, eventValue: Map<String, Any>?) {
+        reporter.reportEvent(
+            ModuleEvent.newBuilder(defaultEventType)
+                .withName(eventName)
+                .withAttributes(eventValue)
+                .build()
+        )
+    }
 
-    override fun reportEvent(eventName: String, eventValue: String?) = reporter.reportEvent(eventName, eventValue)
+    override fun reportEvent(eventName: String, eventValue: String?) {
+        reporter.reportEvent(
+            ModuleEvent.newBuilder(defaultEventType)
+                .withName(eventName)
+                .withValue(eventValue)
+                .build()
+        )
+    }
 
     override fun reportEvent(type: Int, eventName: String, eventValue: String?) {
         reporter.reportEvent(

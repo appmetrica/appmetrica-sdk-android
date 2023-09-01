@@ -3,6 +3,7 @@ package io.appmetrica.analytics.impl.modules
 import io.appmetrica.analytics.ModuleEvent
 import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
 import io.appmetrica.analytics.impl.IReporterExtended
+import io.appmetrica.analytics.impl.InternalEvents
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade
 import io.appmetrica.analytics.impl.service.MetricaServiceDataReporter
 import io.appmetrica.analytics.testutils.CommonTest
@@ -31,6 +32,7 @@ class ModuleSelfReporterImplTest : CommonTest() {
     private val stringValue = "string value"
     private val stringErrorMessage = "string error message"
     private val errorIdentifier = "error identifier"
+    private val clientEventType = InternalEvents.EVENT_TYPE_REGULAR.typeId
 
     private lateinit var moduleSelfReporterImpl: ModuleSelfReporterImpl
 
@@ -44,13 +46,39 @@ class ModuleSelfReporterImplTest : CommonTest() {
     @Test
     fun reportEvent() {
         moduleSelfReporterImpl.reportEvent(eventName)
-        verify(reporter).reportEvent(eventName)
+
+        verify(reporter).reportEvent(moduleEventArgumentCaptor.capture())
+        assertThat(moduleEventArgumentCaptor.allValues).hasSize(1)
+
+        ObjectPropertyAssertions(moduleEventArgumentCaptor.firstValue)
+            .withPrivateFields(true)
+            .checkField("type", "getType", clientEventType)
+            .checkField("serviceDataReporterType", MetricaServiceDataReporter.TYPE_CORE)
+            .checkField("name", "getName", eventName)
+            .checkField("value", "getValue", null)
+            .checkField("environment", "getEnvironment", null)
+            .checkField("extras", "getExtras", null)
+            .checkField("attributes", "getAttributes", null)
+            .checkAll()
     }
 
     @Test
     fun reportEventWithMapValue() {
         moduleSelfReporterImpl.reportEvent(eventName, mapValue)
-        verify(reporter).reportEvent(eventName, mapValue)
+
+        verify(reporter).reportEvent(moduleEventArgumentCaptor.capture())
+        assertThat(moduleEventArgumentCaptor.allValues).hasSize(1)
+
+        ObjectPropertyAssertions(moduleEventArgumentCaptor.firstValue)
+            .withPrivateFields(true)
+            .checkField("type", "getType", clientEventType)
+            .checkField("serviceDataReporterType", MetricaServiceDataReporter.TYPE_CORE)
+            .checkField("name", "getName", eventName)
+            .checkField("value", "getValue", null)
+            .checkField("environment", "getEnvironment", null)
+            .checkField("extras", "getExtras", null)
+            .checkField("attributes", "getAttributes", mapValue)
+            .checkAll()
     }
 
     @Test
@@ -73,7 +101,18 @@ class ModuleSelfReporterImplTest : CommonTest() {
     @Test
     fun reportEventWithStringValue() {
         moduleSelfReporterImpl.reportEvent(eventName, stringValue)
-        verify(reporter).reportEvent(eventName, stringValue)
+
+        verify(reporter).reportEvent(moduleEventArgumentCaptor.capture())
+        assertThat(moduleEventArgumentCaptor.allValues).hasSize(1)
+
+        ObjectPropertyAssertions(moduleEventArgumentCaptor.firstValue)
+            .withPrivateFields(true)
+            .checkField("type", clientEventType)
+            .checkField("name", eventName)
+            .checkField("value", stringValue)
+            .checkField("serviceDataReporterType", MetricaServiceDataReporter.TYPE_CORE)
+            .checkFieldsAreNull("environment", "extras", "attributes")
+            .checkAll()
     }
 
     @Test
