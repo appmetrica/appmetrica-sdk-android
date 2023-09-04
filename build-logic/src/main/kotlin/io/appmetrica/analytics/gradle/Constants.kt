@@ -16,7 +16,7 @@ object Constants {
     }
 
     object Library {
-        const val versionName = "6.0.0-RC1"
+        const val versionName = "6.0.0"
         val versionCode = BUILD_NUMBER.toInt()
         val buildNumber = BUILD_NUMBER
         //Also need to update api level at https://nda.ya.ru/t/rFFwGoT66NsxJm and https://nda.ya.ru/t/4_qxHC-N6NsxL4
