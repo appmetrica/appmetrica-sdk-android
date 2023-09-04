@@ -91,7 +91,7 @@ public class PreferencesClientDbStorageTest extends CommonTest {
 
             IdentifiersResult responseClids = mock(IdentifiersResult.class);
             final JSONObject json = new JSONObject().put("key", "value");
-            when(JsonHelper.adsIdentifiersResultFromJson(argThat(new JsonMatcher(json)))).thenReturn(responseClids);
+            when(JsonHelper.advIdentifiersResultFromJson(argThat(new JsonMatcher(json)))).thenReturn(responseClids);
             doReturn(json.toString()).when(mDbStorage)
                     .getString(eq(PreferencesClientDbStorage.RESPONSE_CLIDS_RESULT.fullKey()), nullable(String.class));
 
@@ -106,7 +106,7 @@ public class PreferencesClientDbStorageTest extends CommonTest {
             IdentifiersResult responseClids = mock(IdentifiersResult.class);
 
             final JSONObject json = new JSONObject().put("key", "value");
-            when(JsonHelper.adsIdentifiersResultToJson(responseClids)).thenReturn(json);
+            when(JsonHelper.advIdentifiersResultToJson(responseClids)).thenReturn(json);
 
             clientDbStorage.putResponseClidsResult(responseClids);
             verify(mDbStorage).put(PreferencesClientDbStorage.RESPONSE_CLIDS_RESULT.fullKey(), json.toString());
@@ -138,7 +138,7 @@ public class PreferencesClientDbStorageTest extends CommonTest {
 
             IdentifiersResult uuid = mock(IdentifiersResult.class);
             final JSONObject json = new JSONObject().put("key", "value");
-            when(JsonHelper.adsIdentifiersResultFromJson(argThat(new JsonMatcher(json)))).thenReturn(uuid);
+            when(JsonHelper.advIdentifiersResultFromJson(argThat(new JsonMatcher(json)))).thenReturn(uuid);
             doReturn(json.toString()).when(mDbStorage)
                     .getString(eq(PreferencesClientDbStorage.UUID_RESULT.fullKey()), nullable(String.class));
 
@@ -153,7 +153,7 @@ public class PreferencesClientDbStorageTest extends CommonTest {
             IdentifiersResult uuid = mock(IdentifiersResult.class);
 
             final JSONObject json = new JSONObject().put("key", "value");
-            when(JsonHelper.adsIdentifiersResultToJson(uuid)).thenReturn(json);
+            when(JsonHelper.advIdentifiersResultToJson(uuid)).thenReturn(json);
 
             clientDbStorage.putUuidResult(uuid);
             verify(mDbStorage).put(PreferencesClientDbStorage.UUID_RESULT.fullKey(), json.toString());
@@ -167,7 +167,7 @@ public class PreferencesClientDbStorageTest extends CommonTest {
 
             IdentifiersResult deviceId = mock(IdentifiersResult.class);
             final JSONObject json = new JSONObject().put("key", "value");
-            when(JsonHelper.adsIdentifiersResultFromJson(argThat(new JsonMatcher(json)))).thenReturn(deviceId);
+            when(JsonHelper.advIdentifiersResultFromJson(argThat(new JsonMatcher(json)))).thenReturn(deviceId);
             doReturn(json.toString()).when(mDbStorage)
                     .getString(eq(PreferencesClientDbStorage.DEVICE_ID_RESULT.fullKey()), nullable(String.class));
 
@@ -182,7 +182,7 @@ public class PreferencesClientDbStorageTest extends CommonTest {
             IdentifiersResult deviceId = mock(IdentifiersResult.class);
 
             final JSONObject json = new JSONObject().put("key", "value");
-            when(JsonHelper.adsIdentifiersResultToJson(deviceId)).thenReturn(json);
+            when(JsonHelper.advIdentifiersResultToJson(deviceId)).thenReturn(json);
 
             clientDbStorage.putDeviceIdResult(deviceId);
             verify(mDbStorage).put(PreferencesClientDbStorage.DEVICE_ID_RESULT.fullKey(), json.toString());
@@ -196,7 +196,7 @@ public class PreferencesClientDbStorageTest extends CommonTest {
 
             IdentifiersResult deviceIdHash = mock(IdentifiersResult.class);
             final JSONObject json = new JSONObject().put("key", "value");
-            when(JsonHelper.adsIdentifiersResultFromJson(argThat(new JsonMatcher(json)))).thenReturn(deviceIdHash);
+            when(JsonHelper.advIdentifiersResultFromJson(argThat(new JsonMatcher(json)))).thenReturn(deviceIdHash);
             doReturn(json.toString()).when(mDbStorage)
                     .getString(eq(PreferencesClientDbStorage.DEVICE_ID_HASH_RESULT.fullKey()), nullable(String.class));
 
@@ -211,7 +211,7 @@ public class PreferencesClientDbStorageTest extends CommonTest {
             IdentifiersResult deviceIdHash = mock(IdentifiersResult.class);
 
             final JSONObject json = new JSONObject().put("key", "value");
-            when(JsonHelper.adsIdentifiersResultToJson(deviceIdHash)).thenReturn(json);
+            when(JsonHelper.advIdentifiersResultToJson(deviceIdHash)).thenReturn(json);
 
             clientDbStorage.putDeviceIdHashResult(deviceIdHash);
             verify(mDbStorage).put(PreferencesClientDbStorage.DEVICE_ID_HASH_RESULT.fullKey(), json.toString());
@@ -260,7 +260,7 @@ public class PreferencesClientDbStorageTest extends CommonTest {
 
             IdentifiersResult adUrlGet = mock(IdentifiersResult.class);
             final JSONObject json = new JSONObject().put("key", "value");
-            when(JsonHelper.adsIdentifiersResultFromJson(argThat(new JsonMatcher(json)))).thenReturn(adUrlGet);
+            when(JsonHelper.advIdentifiersResultFromJson(argThat(new JsonMatcher(json)))).thenReturn(adUrlGet);
             doReturn(json.toString()).when(mDbStorage)
                     .getString(eq(PreferencesClientDbStorage.AD_URL_GET_RESULT.fullKey()), nullable(String.class));
 
@@ -275,7 +275,7 @@ public class PreferencesClientDbStorageTest extends CommonTest {
             IdentifiersResult adUrlGet = mock(IdentifiersResult.class);
 
             final JSONObject json = new JSONObject().put("key", "value");
-            when(JsonHelper.adsIdentifiersResultToJson(adUrlGet)).thenReturn(json);
+            when(JsonHelper.advIdentifiersResultToJson(adUrlGet)).thenReturn(json);
 
             clientDbStorage.putAdUrlGetResult(adUrlGet);
             verify(mDbStorage).put(PreferencesClientDbStorage.AD_URL_GET_RESULT.fullKey(), json.toString());
@@ -289,7 +289,7 @@ public class PreferencesClientDbStorageTest extends CommonTest {
 
             IdentifiersResult adUrlReport = mock(IdentifiersResult.class);
             final JSONObject json = new JSONObject().put("key", "value");
-            when(JsonHelper.adsIdentifiersResultFromJson(argThat(new JsonMatcher(json)))).thenReturn(adUrlReport);
+            when(JsonHelper.advIdentifiersResultFromJson(argThat(new JsonMatcher(json)))).thenReturn(adUrlReport);
             doReturn(json.toString()).when(mDbStorage)
                     .getString(eq(PreferencesClientDbStorage.AD_URL_REPORT_RESULT.fullKey()), nullable(String.class));
 
@@ -304,7 +304,7 @@ public class PreferencesClientDbStorageTest extends CommonTest {
             IdentifiersResult adUrlReport = mock(IdentifiersResult.class);
 
             final JSONObject json = new JSONObject().put("key", "value");
-            when(JsonHelper.adsIdentifiersResultToJson(adUrlReport)).thenReturn(json);
+            when(JsonHelper.advIdentifiersResultToJson(adUrlReport)).thenReturn(json);
 
             clientDbStorage.putAdUrlReportResult(adUrlReport);
             verify(mDbStorage).put(PreferencesClientDbStorage.AD_URL_REPORT_RESULT.fullKey(), json.toString());
@@ -318,7 +318,7 @@ public class PreferencesClientDbStorageTest extends CommonTest {
 
             IdentifiersResult gaid = mock(IdentifiersResult.class);
             final JSONObject json = new JSONObject().put("key", "value");
-            when(JsonHelper.adsIdentifiersResultFromJson(argThat(new JsonMatcher(json)))).thenReturn(gaid);
+            when(JsonHelper.advIdentifiersResultFromJson(argThat(new JsonMatcher(json)))).thenReturn(gaid);
             doReturn(json.toString()).when(mDbStorage)
                     .getString(eq(PreferencesClientDbStorage.GAID.fullKey()), nullable(String.class));
 
@@ -333,7 +333,7 @@ public class PreferencesClientDbStorageTest extends CommonTest {
             IdentifiersResult gaid = mock(IdentifiersResult.class);
 
             final JSONObject json = new JSONObject().put("key", "value");
-            when(JsonHelper.adsIdentifiersResultToJson(gaid)).thenReturn(json);
+            when(JsonHelper.advIdentifiersResultToJson(gaid)).thenReturn(json);
 
             clientDbStorage.putGaid(gaid);
             verify(mDbStorage).put(PreferencesClientDbStorage.GAID.fullKey(), json.toString());
@@ -347,7 +347,7 @@ public class PreferencesClientDbStorageTest extends CommonTest {
 
             IdentifiersResult hoaid = mock(IdentifiersResult.class);
             final JSONObject json = new JSONObject().put("key", "value");
-            when(JsonHelper.adsIdentifiersResultFromJson(argThat(new JsonMatcher(json)))).thenReturn(hoaid);
+            when(JsonHelper.advIdentifiersResultFromJson(argThat(new JsonMatcher(json)))).thenReturn(hoaid);
             doReturn(json.toString()).when(mDbStorage)
                     .getString(eq(PreferencesClientDbStorage.HOAID.fullKey()), nullable(String.class));
 
@@ -362,7 +362,7 @@ public class PreferencesClientDbStorageTest extends CommonTest {
             IdentifiersResult hoaid = mock(IdentifiersResult.class);
 
             final JSONObject json = new JSONObject().put("key", "value");
-            when(JsonHelper.adsIdentifiersResultToJson(hoaid)).thenReturn(json);
+            when(JsonHelper.advIdentifiersResultToJson(hoaid)).thenReturn(json);
 
             clientDbStorage.putHoaid(hoaid);
             verify(mDbStorage).put(PreferencesClientDbStorage.HOAID.fullKey(), json.toString());
@@ -376,7 +376,7 @@ public class PreferencesClientDbStorageTest extends CommonTest {
 
             IdentifiersResult yandexAdvId = mock(IdentifiersResult.class);
             final JSONObject json = new JSONObject().put("key", "value");
-            when(JsonHelper.adsIdentifiersResultFromJson(argThat(new JsonMatcher(json)))).thenReturn(yandexAdvId);
+            when(JsonHelper.advIdentifiersResultFromJson(argThat(new JsonMatcher(json)))).thenReturn(yandexAdvId);
             doReturn(json.toString()).when(mDbStorage)
                     .getString(eq(PreferencesClientDbStorage.YANDEX_ADV_ID.fullKey()), nullable(String.class));
 
@@ -391,7 +391,7 @@ public class PreferencesClientDbStorageTest extends CommonTest {
             IdentifiersResult yandexAdvId = mock(IdentifiersResult.class);
 
             final JSONObject json = new JSONObject().put("key", "value");
-            when(JsonHelper.adsIdentifiersResultToJson(yandexAdvId)).thenReturn(json);
+            when(JsonHelper.advIdentifiersResultToJson(yandexAdvId)).thenReturn(json);
 
             clientDbStorage.putYandexAdvId(yandexAdvId);
             verify(mDbStorage).put(PreferencesClientDbStorage.YANDEX_ADV_ID.fullKey(), json.toString());
@@ -481,7 +481,7 @@ public class PreferencesClientDbStorageTest extends CommonTest {
 
             IdentifiersResult customSdkHosts = mock(IdentifiersResult.class);
             final JSONObject json = new JSONObject().put("key", "value");
-            when(JsonHelper.adsIdentifiersResultFromJson(argThat(new JsonMatcher(json)))).thenReturn(customSdkHosts);
+            when(JsonHelper.advIdentifiersResultFromJson(argThat(new JsonMatcher(json)))).thenReturn(customSdkHosts);
             doReturn(json.toString()).when(mDbStorage)
                     .getString(eq(PreferencesClientDbStorage.CUSTOM_SDK_HOSTS.fullKey()), nullable(String.class));
 
@@ -496,7 +496,7 @@ public class PreferencesClientDbStorageTest extends CommonTest {
             IdentifiersResult customSdkHosts = mock(IdentifiersResult.class);
 
             final JSONObject json = new JSONObject().put("key", "value");
-            when(JsonHelper.adsIdentifiersResultToJson(customSdkHosts)).thenReturn(json);
+            when(JsonHelper.advIdentifiersResultToJson(customSdkHosts)).thenReturn(json);
 
             clientDbStorage.putCustomSdkHosts(customSdkHosts);
             verify(mDbStorage).put(PreferencesClientDbStorage.CUSTOM_SDK_HOSTS.fullKey(), json.toString());

@@ -35,9 +35,9 @@ class GoogleAdvIdGetterTest {
             on { AdvertisingIdClient.getAdvertisingIdInfo(context) } doReturn info
         }
         assertThat(GoogleAdvIdGetter().getAdTrackingInfo(context)).isEqualTo(
-            AdsIdResult(
+            AdvIdResult(
                 IdentifierStatus.OK,
-                AdsIdInfo(
+                AdvIdInfo(
                     Constants.Providers.GOOGLE,
                     someId, limited
                 )
@@ -53,7 +53,7 @@ class GoogleAdvIdGetterTest {
             } doThrow GooglePlayServicesNotAvailableException(100500)
         }
         assertThat(GoogleAdvIdGetter().getAdTrackingInfo(context)).isEqualTo(
-            AdsIdResult(
+            AdvIdResult(
                 IdentifierStatus.IDENTIFIER_PROVIDER_UNAVAILABLE,
                 errorExplanation = "could not resolve google services"
             )
@@ -67,7 +67,7 @@ class GoogleAdvIdGetterTest {
             on { AdvertisingIdClient.getAdvertisingIdInfo(context) } doThrow RuntimeException(message)
         }
         assertThat(GoogleAdvIdGetter().getAdTrackingInfo(context)).isEqualTo(
-            AdsIdResult(
+            AdvIdResult(
                 IdentifierStatus.UNKNOWN,
                 errorExplanation = "exception while fetching google adv_id: $message"
             )

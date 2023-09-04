@@ -46,32 +46,32 @@ public class PreferencesClientDbStorage extends PreferencesDbStorage {
 
     @NonNull
     public IdentifiersResult getUuidResult() {
-        return getAdsIdentifiersResult(UUID_RESULT.fullKey());
+        return getAdvIdentifiersResult(UUID_RESULT.fullKey());
     }
 
     @NonNull
     public IdentifiersResult getDeviceIdResult() {
-        return getAdsIdentifiersResult(DEVICE_ID_RESULT.fullKey());
+        return getAdvIdentifiersResult(DEVICE_ID_RESULT.fullKey());
     }
 
     @NonNull
     public IdentifiersResult getDeviceIdHashResult() {
-        return getAdsIdentifiersResult(DEVICE_ID_HASH_RESULT.fullKey());
+        return getAdvIdentifiersResult(DEVICE_ID_HASH_RESULT.fullKey());
     }
 
     @NonNull
     public IdentifiersResult getAdUrlGetResult() {
-        return getAdsIdentifiersResult(AD_URL_GET_RESULT.fullKey());
+        return getAdvIdentifiersResult(AD_URL_GET_RESULT.fullKey());
     }
 
     @NonNull
     public IdentifiersResult getAdUrlReportResult() {
-        return getAdsIdentifiersResult(AD_URL_REPORT_RESULT.fullKey());
+        return getAdvIdentifiersResult(AD_URL_REPORT_RESULT.fullKey());
     }
 
     @NonNull
     public IdentifiersResult getCustomSdkHosts() {
-        return getAdsIdentifiersResult(CUSTOM_SDK_HOSTS.fullKey());
+        return getAdvIdentifiersResult(CUSTOM_SDK_HOSTS.fullKey());
     }
 
     @NonNull
@@ -82,22 +82,22 @@ public class PreferencesClientDbStorage extends PreferencesDbStorage {
 
     @NonNull
     public IdentifiersResult getResponseClidsResult() {
-        return getAdsIdentifiersResult(RESPONSE_CLIDS_RESULT.fullKey());
+        return getAdvIdentifiersResult(RESPONSE_CLIDS_RESULT.fullKey());
     }
 
     @NonNull
     public IdentifiersResult getGaid() {
-        return getAdsIdentifiersResult(GAID.fullKey());
+        return getAdvIdentifiersResult(GAID.fullKey());
     }
 
     @NonNull
     public IdentifiersResult getHoaid() {
-        return getAdsIdentifiersResult(HOAID.fullKey());
+        return getAdvIdentifiersResult(HOAID.fullKey());
     }
 
     @NonNull
     public IdentifiersResult getYandexAdvId() {
-        return getAdsIdentifiersResult(YANDEX_ADV_ID.fullKey());
+        return getAdvIdentifiersResult(YANDEX_ADV_ID.fullKey());
     }
 
     public boolean getClientClidsChangedAfterLastIdentifiersUpdate(boolean defaultValue) {
@@ -124,37 +124,37 @@ public class PreferencesClientDbStorage extends PreferencesDbStorage {
 
     @NonNull
     public PreferencesClientDbStorage putUuidResult(@Nullable IdentifiersResult uuid) {
-        return putAdsIdentifiersResult(UUID_RESULT.fullKey(), uuid);
+        return putAdvIdentifiersResult(UUID_RESULT.fullKey(), uuid);
     }
 
     @NonNull
     public PreferencesClientDbStorage putDeviceIdResult(@Nullable IdentifiersResult deviceId) {
-        return putAdsIdentifiersResult(DEVICE_ID_RESULT.fullKey(), deviceId);
+        return putAdvIdentifiersResult(DEVICE_ID_RESULT.fullKey(), deviceId);
     }
 
     @NonNull
     public PreferencesClientDbStorage putDeviceIdHashResult(@Nullable IdentifiersResult deviceIdHash) {
-        return putAdsIdentifiersResult(DEVICE_ID_HASH_RESULT.fullKey(), deviceIdHash);
+        return putAdvIdentifiersResult(DEVICE_ID_HASH_RESULT.fullKey(), deviceIdHash);
     }
 
     @NonNull
     public PreferencesClientDbStorage putAdUrlGetResult(@Nullable IdentifiersResult adUrlGet) {
-        return putAdsIdentifiersResult(AD_URL_GET_RESULT.fullKey(), adUrlGet);
+        return putAdvIdentifiersResult(AD_URL_GET_RESULT.fullKey(), adUrlGet);
     }
 
     @NonNull
     public PreferencesClientDbStorage putAdUrlReportResult(@Nullable IdentifiersResult adUrlReport) {
-        return putAdsIdentifiersResult(AD_URL_REPORT_RESULT.fullKey(), adUrlReport);
+        return putAdvIdentifiersResult(AD_URL_REPORT_RESULT.fullKey(), adUrlReport);
     }
 
     @NonNull
     public PreferencesClientDbStorage putResponseClidsResult(@Nullable IdentifiersResult clids) {
-        return putAdsIdentifiersResult(RESPONSE_CLIDS_RESULT.fullKey(), clids);
+        return putAdvIdentifiersResult(RESPONSE_CLIDS_RESULT.fullKey(), clids);
     }
 
     @NonNull
     public PreferencesClientDbStorage putCustomSdkHosts(@Nullable IdentifiersResult customSdkHosts) {
-        return putAdsIdentifiersResult(CUSTOM_SDK_HOSTS.fullKey(), customSdkHosts);
+        return putAdvIdentifiersResult(CUSTOM_SDK_HOSTS.fullKey(), customSdkHosts);
     }
 
     @NonNull
@@ -164,17 +164,17 @@ public class PreferencesClientDbStorage extends PreferencesDbStorage {
 
     @NonNull
     public PreferencesClientDbStorage putGaid(@Nullable IdentifiersResult gaid) {
-        return putAdsIdentifiersResult(GAID.fullKey(), gaid);
+        return putAdvIdentifiersResult(GAID.fullKey(), gaid);
     }
 
     @NonNull
     public PreferencesClientDbStorage putHoaid(@Nullable IdentifiersResult hoaid) {
-        return putAdsIdentifiersResult(HOAID.fullKey(), hoaid);
+        return putAdvIdentifiersResult(HOAID.fullKey(), hoaid);
     }
 
     @NonNull
     public PreferencesClientDbStorage putYandexAdvId(@Nullable IdentifiersResult hoaid) {
-        return putAdsIdentifiersResult(YANDEX_ADV_ID.fullKey(), hoaid);
+        return putAdvIdentifiersResult(YANDEX_ADV_ID.fullKey(), hoaid);
     }
 
     public PreferencesClientDbStorage putClientClidsChangedAfterLastIdentifiersUpdate(boolean value) {
@@ -240,12 +240,12 @@ public class PreferencesClientDbStorage extends PreferencesDbStorage {
     }
 
     @NonNull
-    private IdentifiersResult getAdsIdentifiersResult(@NonNull String key) {
+    private IdentifiersResult getAdvIdentifiersResult(@NonNull String key) {
         IdentifiersResult result = null;
         try {
             String savedValue = readString(key, null);
             if (savedValue != null) {
-                result = JsonHelper.adsIdentifiersResultFromJson(new JSONObject(savedValue));
+                result = JsonHelper.advIdentifiersResultFromJson(new JSONObject(savedValue));
             }
         } catch (Throwable e) {
             YLogger.e(e, "%s%s", TAG, e.getMessage());
@@ -257,14 +257,14 @@ public class PreferencesClientDbStorage extends PreferencesDbStorage {
         ) : result;
     }
 
-    private PreferencesClientDbStorage putAdsIdentifiersResult(
+    private PreferencesClientDbStorage putAdvIdentifiersResult(
             @NonNull String key,
             @Nullable IdentifiersResult identifiersResult
     ) {
         String valueToSave = null;
         if (identifiersResult != null) {
             try {
-                valueToSave = JsonHelper.adsIdentifiersResultToJson(identifiersResult).toString();
+                valueToSave = JsonHelper.advIdentifiersResultToJson(identifiersResult).toString();
             } catch (Throwable e) {
                 YLogger.e(e, "%s%s", TAG, e.getMessage());
             }

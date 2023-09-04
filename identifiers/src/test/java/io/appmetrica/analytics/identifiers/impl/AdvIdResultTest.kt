@@ -15,13 +15,13 @@ import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class AdsIdResultTest {
+class AdvIdResultTest {
 
     @get:Rule
     val rule: MockitoRule = MockitoJUnit.rule()
 
     @Mock
-    internal lateinit var info: AdsIdInfo
+    internal lateinit var info: AdvIdInfo
 
     @Mock
     internal lateinit var trackingBundle: Bundle
@@ -36,7 +36,7 @@ class AdsIdResultTest {
         val status = IdentifierStatus.OK
         val error = "asodjasdo"
 
-        val data = AdsIdResult(status, info, error).toBundle()
+        val data = AdvIdResult(status, info, error).toBundle()
 
         val soft = SoftAssertions()
 
@@ -52,7 +52,7 @@ class AdsIdResultTest {
     fun emptyInfo() {
         val status = IdentifierStatus.OK
 
-        val data = AdsIdResult(status).toBundle()
+        val data = AdvIdResult(status).toBundle()
 
         val soft = SoftAssertions()
 

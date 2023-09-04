@@ -180,7 +180,7 @@ public class StartupParamsContainsIdentifiersForResultReceiverTest extends Commo
                         filledClientIdentifiersHolder,
                         doNothingConsumer,
                         false,
-                        StartupParamsTestUtils.ALL_IDENTIFIERS_EXCEPT_ADS,
+                        StartupParamsTestUtils.ALL_IDENTIFIERS_EXCEPT_ADV,
                         null, true,
                         true, false, false
                 },
@@ -188,7 +188,7 @@ public class StartupParamsContainsIdentifiersForResultReceiverTest extends Commo
                         filledClientIdentifiersHolder,
                         doNothingConsumer,
                         true,
-                        StartupParamsTestUtils.ALL_IDENTIFIERS_EXCEPT_ADS,
+                        StartupParamsTestUtils.ALL_IDENTIFIERS_EXCEPT_ADV,
                         null, true,
                         true, true, true
                 },
@@ -197,7 +197,7 @@ public class StartupParamsContainsIdentifiersForResultReceiverTest extends Commo
                         emptyClientIdentifiersHolder,
                         doNothingConsumer,
                         false,
-                        StartupParamsTestUtils.ALL_IDENTIFIERS_EXCEPT_ADS,
+                        StartupParamsTestUtils.ALL_IDENTIFIERS_EXCEPT_ADV,
                         null, false,
                         false, true, true
                 },
@@ -1102,7 +1102,7 @@ public class StartupParamsContainsIdentifiersForResultReceiverTest extends Commo
                         filledClientIdentifiersHolder,
                         doNothingConsumer,
                         false,
-                        StartupParamsTestUtils.ALL_IDENTIFIERS_WITH_CUSTOM_AND_FEATURE_EXCEPT_ADS,
+                        StartupParamsTestUtils.ALL_IDENTIFIERS_WITH_CUSTOM_AND_FEATURE_EXCEPT_ADV,
                         StartupParamsTestUtils.CLIDS_MAP_1, true,
                         true, false, false
                 },
@@ -1110,7 +1110,7 @@ public class StartupParamsContainsIdentifiersForResultReceiverTest extends Commo
                         filledClientIdentifiersHolder,
                         doNothingConsumer,
                         true,
-                        StartupParamsTestUtils.ALL_IDENTIFIERS_WITH_CUSTOM_AND_FEATURE_EXCEPT_ADS,
+                        StartupParamsTestUtils.ALL_IDENTIFIERS_WITH_CUSTOM_AND_FEATURE_EXCEPT_ADV,
                         StartupParamsTestUtils.CLIDS_MAP_1, true,
                         true, true, true
                 },
@@ -1123,7 +1123,7 @@ public class StartupParamsContainsIdentifiersForResultReceiverTest extends Commo
     @Mock
     private MultiProcessSafeUuidProvider multiProcessSafeUuidProvider;
     @Mock
-    private AdsIdentifiersFromIdentifierResultConverter adsIdentifiersConverter;
+    private AdvIdentifiersFromIdentifierResultConverter advIdentifiersConverter;
     @Mock
     private ClidsStateChecker clidsStateChecker;
     @Rule
@@ -1147,7 +1147,7 @@ public class StartupParamsContainsIdentifiersForResultReceiverTest extends Commo
 
         mStartupParams = new StartupParams(
                 mStorage,
-                adsIdentifiersConverter,
+            advIdentifiersConverter,
                 clidsStateChecker,
                 multiProcessSafeUuidProvider,
                 new CustomSdkHostsHolder(),

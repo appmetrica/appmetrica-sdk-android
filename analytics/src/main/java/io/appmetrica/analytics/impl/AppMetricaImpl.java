@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import androidx.annotation.WorkerThread;
-import io.appmetrica.analytics.AdsIdentifiersResult;
+import io.appmetrica.analytics.AdvIdentifiersResult;
 import io.appmetrica.analytics.AppMetricaConfig;
 import io.appmetrica.analytics.DeferredDeeplinkListener;
 import io.appmetrica.analytics.DeferredDeeplinkParametersListener;
@@ -192,8 +192,8 @@ public class AppMetricaImpl implements IAppMetricaImpl {
     @Override
     @AnyThread
     @NonNull
-    public AdsIdentifiersResult getCachedAdsIdentifiers() {
-        return mStartupHelper.getCachedAdsIdentifiers();
+    public AdvIdentifiersResult getCachedAdvIdentifiers() {
+        return mStartupHelper.getCachedAdvIdentifiers();
     }
 
     @Override

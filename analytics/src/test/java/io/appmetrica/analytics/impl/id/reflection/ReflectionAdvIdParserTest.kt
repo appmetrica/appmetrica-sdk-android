@@ -25,9 +25,9 @@ const val YANDEX = "yandex"
 const val TEST = "test"
 
 @RunWith(RobolectricTestRunner::class)
-class ReflectionAdsIdParserTest : CommonTest() {
+class ReflectionAdvIdParserTest : CommonTest() {
 
-    private val parser = ReflectionAdsIdParser()
+    private val parser = ReflectionAdvIdParser()
 
     @Test
     fun emptyBundle() {

@@ -6,7 +6,7 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class AdsIdInfoTest {
+class AdvIdInfoTest {
 
     @Test
     fun fullInfo() {
@@ -14,7 +14,7 @@ class AdsIdInfoTest {
         val id = "dsofhiuwfewieifjidfhi"
         val limited = false
 
-        val data = AdsIdInfo(provider, id, limited).toBundle()
+        val data = AdvIdInfo(provider, id, limited).toBundle()
 
         val soft = SoftAssertions()
 
@@ -30,7 +30,7 @@ class AdsIdInfoTest {
     fun emptyInfo() {
         val provider = "IUUIJI"
 
-        val data = AdsIdInfo(provider).toBundle()
+        val data = AdvIdInfo(provider).toBundle()
 
         val soft = SoftAssertions()
 

@@ -10,23 +10,23 @@ private const val TAG = "[GoogleAdvIdGetter]"
 
 internal class GoogleAdvIdGetter : AdvIdProvider {
 
-    override fun getAdTrackingInfo(context: Context): AdsIdResult {
+    override fun getAdTrackingInfo(context: Context): AdvIdResult {
         return try {
             val adInfo = AdvertisingIdClient.getAdvertisingIdInfo(context)
             YLogger.debug(TAG, "obtained info $adInfo")
-            AdsIdResult(
+            AdvIdResult(
                 IdentifierStatus.OK,
-                AdsIdInfo(Constants.Providers.GOOGLE, adInfo.id, adInfo.isLimitAdTrackingEnabled)
+                AdvIdInfo(Constants.Providers.GOOGLE, adInfo.id, adInfo.isLimitAdTrackingEnabled)
             )
         } catch (e: GooglePlayServicesNotAvailableException) {
             YLogger.debug(TAG, "AdvertisingIdProvider are not available")
-            AdsIdResult(
+            AdvIdResult(
                 IdentifierStatus.IDENTIFIER_PROVIDER_UNAVAILABLE,
                 errorExplanation = "could not resolve google services"
             )
         } catch (t: Throwable) {
             YLogger.error(TAG, t, "can't fetch adv id")
-            AdsIdResult(
+            AdvIdResult(
                 IdentifierStatus.UNKNOWN,
                 errorExplanation = "exception while fetching google adv_id: " + t.message
             )

@@ -126,75 +126,75 @@ public class StartupParamsContainsIdentifiersForPreferencesTest extends CommonTe
                         "Request all identifiers for all null"
                 },
                 //endregion
-                //region all identifiers except ads
+                //region all identifiers except adv
                 {
                         "InputDeviceId", "InputDeviceIdHash", "Input uuid", "InputGetAdUrl", "InputReportAdUrl", "InputGaid", "InputHoaid", "InputYandexAdvId",
                         null,
                         new HashMap<String, List<String>>(),
                         StartupParamsTestUtils.CLIDS_1, StartupParamsTestUtils.CLIDS_1,
-                        StartupParamsTestUtils.CUSTOM_HOST_SINGLE, StartupParamsTestUtils.ALL_IDENTIFIERS_EXCEPT_ADS, false,
+                        StartupParamsTestUtils.CUSTOM_HOST_SINGLE, StartupParamsTestUtils.ALL_IDENTIFIERS_EXCEPT_ADV, false,
                         true, false, false,
-                        "Request all identifiers except ads, all exist"
+                        "Request all identifiers except adv, all exist"
                 },
                 {
                         "InputDeviceId", "InputDeviceIdHash", "Input uuid", "InputGetAdUrl", "InputReportAdUrl", "InputGaid", "InputHoaid", "InputYandexAdvId",
                         null,
                         new HashMap<String, List<String>>(),
                         StartupParamsTestUtils.CLIDS_1, StartupParamsTestUtils.CLIDS_1,
-                        StartupParamsTestUtils.CUSTOM_HOST_SINGLE, StartupParamsTestUtils.ALL_IDENTIFIERS_EXCEPT_ADS, true,
+                        StartupParamsTestUtils.CUSTOM_HOST_SINGLE, StartupParamsTestUtils.ALL_IDENTIFIERS_EXCEPT_ADV, true,
                         true, true, true,
-                        "Request all identifiers except ads, all exist but outdated"
+                        "Request all identifiers except adv, all exist but outdated"
                 },
                 {
                         "InputDeviceId", "InputDeviceIdHash", "Input uuid", "InputGetAdUrl", "InputReportAdUrl", null, null, null,
                         null,
                         new HashMap<String, List<String>>(),
                         StartupParamsTestUtils.CLIDS_1, StartupParamsTestUtils.CLIDS_1,
-                        StartupParamsTestUtils.CUSTOM_HOST_SINGLE, StartupParamsTestUtils.ALL_IDENTIFIERS_EXCEPT_ADS, false,
+                        StartupParamsTestUtils.CUSTOM_HOST_SINGLE, StartupParamsTestUtils.ALL_IDENTIFIERS_EXCEPT_ADV, false,
                         true, false, false,
-                        "Request all identifiers except ads, all exist, but ads are null"
+                        "Request all identifiers except adv, all exist, but adv are null"
                 },
                 {
                         "InputDeviceId", "InputDeviceIdHash", "Input uuid", "InputGetAdUrl", "InputReportAdUrl", null, null, null,
                         null,
                         new HashMap<String, List<String>>(),
                         StartupParamsTestUtils.CLIDS_1, StartupParamsTestUtils.CLIDS_1,
-                        StartupParamsTestUtils.CUSTOM_HOST_SINGLE, StartupParamsTestUtils.ALL_IDENTIFIERS_EXCEPT_ADS, true,
+                        StartupParamsTestUtils.CUSTOM_HOST_SINGLE, StartupParamsTestUtils.ALL_IDENTIFIERS_EXCEPT_ADV, true,
                         true, true, true,
-                        "Request all identifiers except ads, all exist, but ads are null and outdated"
+                        "Request all identifiers except adv, all exist, but adv are null and outdated"
                 },
                 {
                         "InputDeviceId", "InputDeviceIdHash", "Input uuid", "InputGetAdUrl", "InputReportAdUrl", "", "", "",
                         null,
                         new HashMap<String, List<String>>(),
                         StartupParamsTestUtils.CLIDS_1, StartupParamsTestUtils.CLIDS_1,
-                        StartupParamsTestUtils.CUSTOM_HOST_SINGLE, StartupParamsTestUtils.ALL_IDENTIFIERS_EXCEPT_ADS, false,
+                        StartupParamsTestUtils.CUSTOM_HOST_SINGLE, StartupParamsTestUtils.ALL_IDENTIFIERS_EXCEPT_ADV, false,
                         true, false, false,
-                        "Request all identifiers except ads, all exists, but ads are empty"
+                        "Request all identifiers except adv, all exists, but adv are empty"
                 },
                 {
                         "InputDeviceId", "InputDeviceIdHash", "Input uuid", "InputGetAdUrl", "InputReportAdUrl", "", "", "",
                         null,
                         new HashMap<String, List<String>>(),
                         StartupParamsTestUtils.CLIDS_1, StartupParamsTestUtils.CLIDS_1,
-                        StartupParamsTestUtils.CUSTOM_HOST_SINGLE, StartupParamsTestUtils.ALL_IDENTIFIERS_EXCEPT_ADS, true,
+                        StartupParamsTestUtils.CUSTOM_HOST_SINGLE, StartupParamsTestUtils.ALL_IDENTIFIERS_EXCEPT_ADV, true,
                         true, true, true,
-                        "Request all identifiers except ads, all exists, but ads are empty and outdated"
+                        "Request all identifiers except adv, all exists, but adv are empty and outdated"
                 },
                 {
                         "", "", "", "", "", "", "", "",
                         null,
                         new HashMap<String, List<String>>(),
                         StartupParamsTestUtils.CLIDS_EMPTY, StartupParamsTestUtils.CLIDS_EMPTY,
-                        StartupParamsTestUtils.CUSTOM_HOST_EMPTY, StartupParamsTestUtils.ALL_IDENTIFIERS_EXCEPT_ADS, false,
+                        StartupParamsTestUtils.CUSTOM_HOST_EMPTY, StartupParamsTestUtils.ALL_IDENTIFIERS_EXCEPT_ADV, false,
                         false, true, true,
-                        "Request all identifiers except ads for all empty"
+                        "Request all identifiers except adv for all empty"
                 },
                 {
                         null, null, null, null, null, null, null, null, null, null, null, null, null,
-                        StartupParamsTestUtils.ALL_IDENTIFIERS_EXCEPT_ADS, false,
+                        StartupParamsTestUtils.ALL_IDENTIFIERS_EXCEPT_ADV, false,
                         false, true, true,
-                        "Request all identifiers except ads for all null"
+                        "Request all identifiers except adv for all null"
                 },
                 //endregion
                 //region uuid
@@ -801,9 +801,9 @@ public class StartupParamsContainsIdentifiersForPreferencesTest extends CommonTe
                         StartupParamsTestUtils.CUSTOM_HOSTS_MAP,
                         StartupParamsTestUtils.CLIDS_1, StartupParamsTestUtils.CLIDS_1,
                         StartupParamsTestUtils.CUSTOM_HOST_SINGLE,
-                        StartupParamsTestUtils.ALL_IDENTIFIERS_WITH_CUSTOM_AND_FEATURE_EXCEPT_ADS, false,
+                        StartupParamsTestUtils.ALL_IDENTIFIERS_WITH_CUSTOM_AND_FEATURE_EXCEPT_ADV, false,
                         true, false, false,
-                        "Request all identifiers with custom except ads has all"
+                        "Request all identifiers with custom except adv has all"
                 },
                 {
                         "InputDeviceId", "InputDeviceIdHash", "Input uuid", "InputGetAdUrl", "InputReportAdUrl", "InputGaid", "InputHoaid", "InputYandexAdvId",
@@ -811,9 +811,9 @@ public class StartupParamsContainsIdentifiersForPreferencesTest extends CommonTe
                         StartupParamsTestUtils.CUSTOM_HOSTS_MAP,
                         StartupParamsTestUtils.CLIDS_1, StartupParamsTestUtils.CLIDS_1,
                         StartupParamsTestUtils.CUSTOM_HOST_SINGLE,
-                        StartupParamsTestUtils.ALL_IDENTIFIERS_WITH_CUSTOM_AND_FEATURE_EXCEPT_ADS, true,
+                        StartupParamsTestUtils.ALL_IDENTIFIERS_WITH_CUSTOM_AND_FEATURE_EXCEPT_ADV, true,
                         true, true, true,
-                        "Request all identifiers with custom except ads has all but outdated"
+                        "Request all identifiers with custom except adv has all but outdated"
                 },
                 // end region
                 // region ssl_enabled feature
@@ -913,9 +913,9 @@ public class StartupParamsContainsIdentifiersForPreferencesTest extends CommonTe
                         StartupParamsTestUtils.CUSTOM_HOSTS_MAP,
                         StartupParamsTestUtils.CLIDS_1, StartupParamsTestUtils.CLIDS_1,
                         StartupParamsTestUtils.CUSTOM_HOST_SINGLE,
-                        StartupParamsTestUtils.ALL_IDENTIFIERS_WITH_CUSTOM_AND_FEATURE_EXCEPT_ADS, false,
+                        StartupParamsTestUtils.ALL_IDENTIFIERS_WITH_CUSTOM_AND_FEATURE_EXCEPT_ADV, false,
                         true, false, false,
-                        "Request all identifiers with custom and feature except ads has all"
+                        "Request all identifiers with custom and feature except adv has all"
                 },
                 {
                         "InputDeviceId", "InputDeviceIdHash", "Input uuid", "InputGetAdUrl", "InputReportAdUrl", "InputGaid", "InputHoaid", "InputYandexAdvId",
@@ -923,9 +923,9 @@ public class StartupParamsContainsIdentifiersForPreferencesTest extends CommonTe
                         StartupParamsTestUtils.CUSTOM_HOSTS_MAP,
                         StartupParamsTestUtils.CLIDS_1, StartupParamsTestUtils.CLIDS_1,
                         StartupParamsTestUtils.CUSTOM_HOST_SINGLE,
-                        StartupParamsTestUtils.ALL_IDENTIFIERS_WITH_CUSTOM_AND_FEATURE_EXCEPT_ADS, true,
+                        StartupParamsTestUtils.ALL_IDENTIFIERS_WITH_CUSTOM_AND_FEATURE_EXCEPT_ADV, true,
                         true, true, true,
-                        "Request all identifiers with custom and feature except ads has all but outdated"
+                        "Request all identifiers with custom and feature except adv has all but outdated"
                 },
                 // end region
         });
@@ -936,7 +936,7 @@ public class StartupParamsContainsIdentifiersForPreferencesTest extends CommonTe
     @Mock
     private MultiProcessSafeUuidProvider multiProcessSafeUuidProvider;
     @Mock
-    private AdsIdentifiersFromIdentifierResultConverter adsIdentifiersConverter;
+    private AdvIdentifiersFromIdentifierResultConverter advIdentifiersConverter;
     @Mock
     private ClidsStateChecker clidsStateChecker;
     @Mock
@@ -988,7 +988,7 @@ public class StartupParamsContainsIdentifiersForPreferencesTest extends CommonTe
 
         mStartupParams = new StartupParams(
                 mPreferencesClientDbStorage,
-                adsIdentifiersConverter,
+            advIdentifiersConverter,
                 clidsStateChecker,
                 multiProcessSafeUuidProvider,
                 new CustomSdkHostsHolder(),

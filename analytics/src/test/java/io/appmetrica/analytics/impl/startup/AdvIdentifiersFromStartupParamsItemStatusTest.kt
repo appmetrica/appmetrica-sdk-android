@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.startup
 
-import io.appmetrica.analytics.AdsIdentifiersResult
+import io.appmetrica.analytics.AdvIdentifiersResult
 import io.appmetrica.analytics.StartupParamsItem
 import io.appmetrica.analytics.StartupParamsItemStatus
 import org.assertj.core.api.Assertions.assertThat
@@ -13,9 +13,9 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 
 @RunWith(Parameterized::class)
-class AdsIdentifiersFromStartupParamsItemStatusTest(
+class AdvIdentifiersFromStartupParamsItemStatusTest(
     private val input: StartupParamsItemStatus,
-    private val expected: AdsIdentifiersResult.Details
+    private val expected: AdvIdentifiersResult.Details
 ) {
 
     companion object {
@@ -23,26 +23,26 @@ class AdsIdentifiersFromStartupParamsItemStatusTest(
         @JvmStatic
         @Parameters(name = "{0} -> {1}")
         fun data(): Collection<Array<Any?>> = listOf(
-            arrayOf(StartupParamsItemStatus.OK, AdsIdentifiersResult.Details.OK),
-            arrayOf(StartupParamsItemStatus.NETWORK_ERROR, AdsIdentifiersResult.Details.NO_STARTUP),
-            arrayOf(StartupParamsItemStatus.FEATURE_DISABLED, AdsIdentifiersResult.Details.FEATURE_DISABLED),
+            arrayOf(StartupParamsItemStatus.OK, AdvIdentifiersResult.Details.OK),
+            arrayOf(StartupParamsItemStatus.NETWORK_ERROR, AdvIdentifiersResult.Details.NO_STARTUP),
+            arrayOf(StartupParamsItemStatus.FEATURE_DISABLED, AdvIdentifiersResult.Details.FEATURE_DISABLED),
             arrayOf(
                 StartupParamsItemStatus.PROVIDER_UNAVAILABLE,
-                AdsIdentifiersResult.Details.IDENTIFIER_PROVIDER_UNAVAILABLE
+                AdvIdentifiersResult.Details.IDENTIFIER_PROVIDER_UNAVAILABLE
             ),
-            arrayOf(StartupParamsItemStatus.INVALID_VALUE_FROM_PROVIDER, AdsIdentifiersResult.Details.INVALID_ADV_ID),
-            arrayOf(StartupParamsItemStatus.UNKNOWN_ERROR, AdsIdentifiersResult.Details.INTERNAL_ERROR)
+            arrayOf(StartupParamsItemStatus.INVALID_VALUE_FROM_PROVIDER, AdvIdentifiersResult.Details.INVALID_ADV_ID),
+            arrayOf(StartupParamsItemStatus.UNKNOWN_ERROR, AdvIdentifiersResult.Details.INTERNAL_ERROR)
         )
     }
 
     private val startupParamsItem = mock<StartupParamsItem> {
         on { status } doReturn input
     }
-    private lateinit var converter: AdsIdentifiersFromStartupParamsItemConverter
+    private lateinit var converter: AdvIdentifiersFromStartupParamsItemConverter
 
     @Before
     fun setUp() {
-        converter = AdsIdentifiersFromStartupParamsItemConverter()
+        converter = AdvIdentifiersFromStartupParamsItemConverter()
     }
 
     @Test

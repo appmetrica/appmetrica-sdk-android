@@ -6,7 +6,7 @@ import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
-import io.appmetrica.analytics.AdsIdentifiersResult;
+import io.appmetrica.analytics.AdvIdentifiersResult;
 import io.appmetrica.analytics.internal.IdentifiersResult;
 import io.appmetrica.analytics.StartupParamsItem;
 import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
@@ -42,7 +42,7 @@ public class StartupParams {
     private static final String YANDEX_ADV_ID_KEY =
             Constants.StartupParamsCallbackKeys.YANDEX_ADV_ID;
 
-    private final Set<String> mAdsIdentifiersKeys = new HashSet<String>();
+    private final Set<String> advIdentifiersKeys = new HashSet<String>();
     private final Map<String, IdentifiersResult> mIdentifiers =
             new HashMap<String, IdentifiersResult>();
     private final StartupParamItemAdapter startupParamItemAdapter = new StartupParamItemAdapter();
@@ -54,7 +54,7 @@ public class StartupParams {
 
     private final PreferencesClientDbStorage mPreferences;
     @NonNull
-    private final AdsIdentifiersFromIdentifierResultConverter mAdsIdentifiersConverter;
+    private final AdvIdentifiersFromIdentifierResultConverter advIdentifiersConverter;
     @NonNull
     private final ClidsStateChecker clidsStateChecker;
     @NonNull
@@ -67,7 +67,7 @@ public class StartupParams {
     public StartupParams(@NonNull Context context, @NonNull PreferencesClientDbStorage preferencesClientDbStorage) {
         this(
             preferencesClientDbStorage,
-            new AdsIdentifiersFromIdentifierResultConverter(),
+            new AdvIdentifiersFromIdentifierResultConverter(),
             new ClidsStateChecker(),
             ClientServiceLocator.getInstance().getMultiProcessSafeUuidProvider(context),
             new CustomSdkHostsHolder(),
@@ -78,17 +78,17 @@ public class StartupParams {
 
     @VisibleForTesting
     StartupParams(@NonNull final PreferencesClientDbStorage preferences,
-                  @NonNull AdsIdentifiersFromIdentifierResultConverter adsIdentifiersConverter,
+                  @NonNull AdvIdentifiersFromIdentifierResultConverter advIdentifiersConverter,
                   @NonNull ClidsStateChecker clidsStateChecker,
                   @NonNull MultiProcessSafeUuidProvider multiProcessSafeUuidProvider,
                   @NonNull CustomSdkHostsHolder customSdkHostsHolder,
                   @NonNull FeaturesHolder featuresHolder,
                   @NonNull FeaturesConverter featuresConverter) {
-        mAdsIdentifiersKeys.add(GAID_KEY);
-        mAdsIdentifiersKeys.add(HOAID_KEY);
-        mAdsIdentifiersKeys.add(YANDEX_ADV_ID_KEY);
+        advIdentifiersKeys.add(GAID_KEY);
+        advIdentifiersKeys.add(HOAID_KEY);
+        advIdentifiersKeys.add(YANDEX_ADV_ID_KEY);
         mPreferences = preferences;
-        mAdsIdentifiersConverter = adsIdentifiersConverter;
+        this.advIdentifiersConverter = advIdentifiersConverter;
         this.clidsStateChecker = clidsStateChecker;
         this.customSdkHostsHolder = customSdkHostsHolder;
         this.featuresHolder = featuresHolder;
@@ -195,15 +195,15 @@ public class StartupParams {
         boolean notAllIdentifiers = !containsIdentifiers(
                 StartupRequiredUtils.pickIdentifiersThatShouldTriggerStartup(identifiers)
         );
-        boolean adsIdentifiersRequested = listContainsAdsIdentifiers(identifiers);
+        boolean advIdentifiersRequested = listContainsAdvIdentifiers(identifiers);
         boolean outdated = StartupRequiredUtils.isOutdated(nextStartupTime);
-        boolean result = notAllIdentifiers || adsIdentifiersRequested || outdated ||
+        boolean result = notAllIdentifiers || advIdentifiersRequested || outdated ||
                 mClientClidsChangedAfterLastIdentifiersUpdate;
 
         YLogger.d(
-                "%sshouldSendStartup = %b:  notAllIdentifiers = %b; adsIdentifiersRequested = %b, outdated = %b; " +
+                "%sshouldSendStartup = %b:  notAllIdentifiers = %b; advIdentifiersRequested = %b, outdated = %b; " +
                         "mClientClidsChanged = %b; identifiers = %s",
-                TAG, result, notAllIdentifiers, adsIdentifiersRequested, outdated,
+                TAG, result, notAllIdentifiers, advIdentifiersRequested, outdated,
                 mClientClidsChangedAfterLastIdentifiersUpdate, identifiers
         );
 
@@ -211,9 +211,9 @@ public class StartupParams {
     }
 
     @VisibleForTesting
-    boolean listContainsAdsIdentifiers(@NonNull List<String> identifiers) {
+    boolean listContainsAdvIdentifiers(@NonNull List<String> identifiers) {
         for (String identifier : identifiers) {
-            if (mAdsIdentifiersKeys.contains(identifier)) {
+            if (advIdentifiersKeys.contains(identifier)) {
                 return true;
             }
         }
@@ -387,8 +387,8 @@ public class StartupParams {
     }
 
     @NonNull
-    public AdsIdentifiersResult getCachedAdsIdentifiers() {
-        return mAdsIdentifiersConverter.convert(
+    public AdvIdentifiersResult getCachedAdvIdentifiers() {
+        return advIdentifiersConverter.convert(
                 mIdentifiers.get(GAID_KEY), mIdentifiers.get(HOAID_KEY), mIdentifiers.get(YANDEX_ADV_ID_KEY)
         );
     }

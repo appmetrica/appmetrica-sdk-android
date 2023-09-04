@@ -4,7 +4,7 @@ import android.content.Context;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
-import io.appmetrica.analytics.AdsIdentifiersResult;
+import io.appmetrica.analytics.AdvIdentifiersResult;
 import io.appmetrica.analytics.AppMetricaConfig;
 import io.appmetrica.analytics.DeferredDeeplinkListener;
 import io.appmetrica.analytics.DeferredDeeplinkParametersListener;
@@ -181,10 +181,10 @@ public class AppMetricaImplTest extends CommonTest {
     }
 
     @Test
-    public void getCachedAdsIdentifiers() {
-        AdsIdentifiersResult result = mock(AdsIdentifiersResult.class);
-        when(mStartupHelper.getCachedAdsIdentifiers()).thenReturn(result);
-        assertThat(mAppMetrica.getCachedAdsIdentifiers()).isSameAs(result);
+    public void getCachedAdvIdentifiers() {
+        AdvIdentifiersResult result = mock(AdvIdentifiersResult.class);
+        when(mStartupHelper.getCachedAdvIdentifiers()).thenReturn(result);
+        assertThat(mAppMetrica.getCachedAdvIdentifiers()).isSameAs(result);
     }
 
     @Test

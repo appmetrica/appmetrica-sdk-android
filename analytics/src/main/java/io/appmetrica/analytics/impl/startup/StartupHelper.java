@@ -8,7 +8,7 @@ import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
-import io.appmetrica.analytics.AdsIdentifiersResult;
+import io.appmetrica.analytics.AdvIdentifiersResult;
 import io.appmetrica.analytics.StartupParamsCallback;
 import io.appmetrica.analytics.StartupParamsItem;
 import io.appmetrica.analytics.coreutils.internal.collection.CollectionUtils;
@@ -378,8 +378,8 @@ public class StartupHelper implements StartupIdentifiersProvider, IServerTimeOff
     }
 
     @NonNull
-    public AdsIdentifiersResult getCachedAdsIdentifiers() {
-        return mStartupParams.getCachedAdsIdentifiers();
+    public AdvIdentifiersResult getCachedAdvIdentifiers() {
+        return mStartupParams.getCachedAdvIdentifiers();
     }
 
     @NonNull

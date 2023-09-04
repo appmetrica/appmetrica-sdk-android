@@ -10,9 +10,9 @@ import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 
-public class AdIdServiceConnection implements ServiceConnection {
+public class AdvIdServiceConnection implements ServiceConnection {
 
-    private static final String TAG_PATTERN = "[AdServiceConnection-%s]";
+    private static final String TAG_PATTERN = "[AdvServiceConnection-%s]";
 
     @NonNull
     private final Intent intent;
@@ -22,7 +22,7 @@ public class AdIdServiceConnection implements ServiceConnection {
     private IBinder service;
     private final Object monitor = new Object();
 
-    public AdIdServiceConnection(@NonNull Intent intent, @NonNull String serviceShortTag) {
+    public AdvIdServiceConnection(@NonNull Intent intent, @NonNull String serviceShortTag) {
         this.intent = intent;
         this.tag = String.format(TAG_PATTERN, serviceShortTag);
     }

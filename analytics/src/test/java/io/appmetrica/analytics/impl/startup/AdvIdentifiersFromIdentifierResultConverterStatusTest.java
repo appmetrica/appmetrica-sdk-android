@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.startup;
 
-import io.appmetrica.analytics.AdsIdentifiersResult;
+import io.appmetrica.analytics.AdvIdentifiersResult;
 import io.appmetrica.analytics.internal.IdentifiersResult;
 import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus;
 import io.appmetrica.analytics.testutils.CommonTest;
@@ -14,34 +14,34 @@ import org.robolectric.ParameterizedRobolectricTestRunner;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(ParameterizedRobolectricTestRunner.class)
-public class AdsIdentifiersFromIdentifierResultConverterStatusTest extends CommonTest {
+public class AdvIdentifiersFromIdentifierResultConverterStatusTest extends CommonTest {
 
     @ParameterizedRobolectricTestRunner.Parameters(name = "For {0} is {1}")
     public static Collection<Object[]> data() {
         List<Object[]> data = Arrays.asList(new Object[][]{
-                {IdentifierStatus.FEATURE_DISABLED, AdsIdentifiersResult.Details.FEATURE_DISABLED},
-                {IdentifierStatus.IDENTIFIER_PROVIDER_UNAVAILABLE, AdsIdentifiersResult.Details.IDENTIFIER_PROVIDER_UNAVAILABLE},
-                {IdentifierStatus.INVALID_ADV_ID, AdsIdentifiersResult.Details.INVALID_ADV_ID},
-                {IdentifierStatus.NO_STARTUP, AdsIdentifiersResult.Details.NO_STARTUP},
-                {IdentifierStatus.OK, AdsIdentifiersResult.Details.OK},
-                {IdentifierStatus.UNKNOWN, AdsIdentifiersResult.Details.INTERNAL_ERROR}
+                {IdentifierStatus.FEATURE_DISABLED, AdvIdentifiersResult.Details.FEATURE_DISABLED},
+                {IdentifierStatus.IDENTIFIER_PROVIDER_UNAVAILABLE, AdvIdentifiersResult.Details.IDENTIFIER_PROVIDER_UNAVAILABLE},
+                {IdentifierStatus.INVALID_ADV_ID, AdvIdentifiersResult.Details.INVALID_ADV_ID},
+                {IdentifierStatus.NO_STARTUP, AdvIdentifiersResult.Details.NO_STARTUP},
+                {IdentifierStatus.OK, AdvIdentifiersResult.Details.OK},
+                {IdentifierStatus.UNKNOWN, AdvIdentifiersResult.Details.INTERNAL_ERROR}
         });
         assert data.size() == IdentifierStatus.values().length;
-        assert data.size() ==  AdsIdentifiersResult.Details.values().length;
+        assert data.size() ==  AdvIdentifiersResult.Details.values().length;
         return data;
     }
 
-    public AdsIdentifiersFromIdentifierResultConverterStatusTest(IdentifierStatus internalStatus, AdsIdentifiersResult.Details expected) {
+    public AdvIdentifiersFromIdentifierResultConverterStatusTest(IdentifierStatus internalStatus, AdvIdentifiersResult.Details expected) {
         mInternalStatus = internalStatus;
         mExpected = expected;
     }
 
     private final IdentifierStatus mInternalStatus;
-    private final AdsIdentifiersResult.Details mExpected;
+    private final AdvIdentifiersResult.Details mExpected;
 
     @Test
     public void testConvertStatus() {
-        assertThat(new AdsIdentifiersFromIdentifierResultConverter()
+        assertThat(new AdvIdentifiersFromIdentifierResultConverter()
                 .convert(null, new IdentifiersResult(null, mInternalStatus, null), null)
                 .huaweiAdvId.details
         ).isEqualTo(mExpected);

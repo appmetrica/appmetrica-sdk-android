@@ -5,7 +5,7 @@ import io.appmetrica.analytics.coreapi.internal.identifiers.AdTrackingInfo
 import io.appmetrica.analytics.coreapi.internal.identifiers.AdTrackingInfoResult
 import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus
 
-internal class ReflectionAdsIdParser {
+internal class ReflectionAdvIdParser {
 
     fun fromBundle(bundle: Bundle?): AdTrackingInfoResult? {
         return bundle?.let { data ->

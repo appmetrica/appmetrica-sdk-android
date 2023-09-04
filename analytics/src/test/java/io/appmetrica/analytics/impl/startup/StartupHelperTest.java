@@ -4,7 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
-import io.appmetrica.analytics.AdsIdentifiersResult;
+import io.appmetrica.analytics.AdvIdentifiersResult;
 import io.appmetrica.analytics.internal.IdentifiersResult;
 import io.appmetrica.analytics.StartupParamsItemStatus;
 import io.appmetrica.analytics.StartupParamsCallback;
@@ -112,18 +112,18 @@ public class StartupHelperTest extends CommonTest {
     }
 
     @Test
-    public void testRequestAdsIdentifiers() {
-        List<String> adsIdentifiers = Arrays.asList(
+    public void requestAdvIdentifiers() {
+        List<String> advIdentifiers = Arrays.asList(
                 Constants.StartupParamsCallbackKeys.GOOGLE_ADV_ID,
                 Constants.StartupParamsCallbackKeys.HUAWEI_ADV_ID,
                 Constants.StartupParamsCallbackKeys.YANDEX_ADV_ID
         );
-        when(mStartupParams.shouldSendStartup(adsIdentifiers)).thenReturn(true);
-        when(mStartupParams.containsIdentifiers(adsIdentifiers)).thenReturn(true);
+        when(mStartupParams.shouldSendStartup(advIdentifiers)).thenReturn(true);
+        when(mStartupParams.containsIdentifiers(advIdentifiers)).thenReturn(true);
         ArgumentCaptor<ResultReceiver> receiverCaptor = ArgumentCaptor.forClass(ResultReceiver.class);
 
-        mStartupHelper.requestStartupParams(mCallback, adsIdentifiers, mClientClids);
-        verify(mReportsHandler).reportStartupEvent(eq(adsIdentifiers), receiverCaptor.capture(), eq(mClientClids));
+        mStartupHelper.requestStartupParams(mCallback, advIdentifiers, mClientClids);
+        verify(mReportsHandler).reportStartupEvent(eq(advIdentifiers), receiverCaptor.capture(), eq(mClientClids));
         receiverCaptor.getValue().send(0, mBundle);
         verify(mCallback).onReceive(any(StartupParamsCallback.Result.class));
     }
@@ -721,10 +721,10 @@ public class StartupHelperTest extends CommonTest {
     }
 
     @Test
-    public void testGetCachedAdsIdentifiers() {
-        AdsIdentifiersResult result = mock(AdsIdentifiersResult.class);
-        when(mStartupParams.getCachedAdsIdentifiers()).thenReturn(result);
-        assertThat(mStartupHelper.getCachedAdsIdentifiers()).isEqualTo(result);
+    public void getCachedAdvIdentifiers() {
+        AdvIdentifiersResult result = mock(AdvIdentifiersResult.class);
+        when(mStartupParams.getCachedAdvIdentifiers()).thenReturn(result);
+        assertThat(mStartupHelper.getCachedAdvIdentifiers()).isEqualTo(result);
     }
 
     @Test

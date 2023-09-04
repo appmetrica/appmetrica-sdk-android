@@ -3,22 +3,22 @@ package io.appmetrica.analytics.identifiers.impl
 import android.os.Bundle
 import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus
 
-internal fun getProviderUnavailableResult(errorMessage: String): AdsIdResult {
-    return AdsIdResult(
+internal fun getProviderUnavailableResult(errorMessage: String): AdvIdResult {
+    return AdvIdResult(
         IdentifierStatus.IDENTIFIER_PROVIDER_UNAVAILABLE,
         null,
         errorMessage
     )
 }
 
-internal data class AdsIdResult(
+internal data class AdvIdResult(
     val status: IdentifierStatus,
-    val adsIdInfo: AdsIdInfo? = null,
+    val advIdInfo: AdvIdInfo? = null,
     val errorExplanation: String? = null,
 ) {
 
     fun toBundle(): Bundle = Bundle().apply {
-        adsIdInfo?.toBundle()?.let {
+        advIdInfo?.toBundle()?.let {
             putBundle(Constants.TRACKING_INFO, it)
         }
         putString(Constants.STATUS, status.value)

@@ -17,7 +17,7 @@ public final class Constants {
         public static final String YANDEX_ADV_ID = "appmetrica_yandex_adv_id";
     }
 
-    public static final class AdsIdentifiersResultKeys {
+    public static final class AdvIdentifiersResultKeys {
         public static final String ID = "ID";
         public static final String STATUS = "STATUS";
         public static final String ERROR_EXPLANATION = "ERROR_EXPLANATION";

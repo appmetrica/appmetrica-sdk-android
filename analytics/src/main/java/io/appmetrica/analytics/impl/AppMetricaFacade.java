@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import androidx.annotation.WorkerThread;
-import io.appmetrica.analytics.AdsIdentifiersResult;
+import io.appmetrica.analytics.AdvIdentifiersResult;
 import io.appmetrica.analytics.AppMetricaConfig;
 import io.appmetrica.analytics.DeferredDeeplinkListener;
 import io.appmetrica.analytics.DeferredDeeplinkParametersListener;
@@ -231,8 +231,8 @@ public class AppMetricaFacade implements IReporterFactoryProvider {
 
     @AnyThread
     @NonNull
-    public AdsIdentifiersResult getCachedAdsIdentifiers() {
-        return getImpl().getCachedAdsIdentifiers();
+    public AdvIdentifiersResult getCachedAdvIdentifiers() {
+        return getImpl().getCachedAdvIdentifiers();
     }
 
     @AnyThread

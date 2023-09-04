@@ -177,7 +177,7 @@ public class AdvertisingIdGetterTest extends CommonTest {
                 .checkFieldComparingFieldByFieldRecursively("mGoogle", new AdTrackingInfoResult(
                         null,
                         IdentifierStatus.FEATURE_DISABLED,
-                        "startup forbade ads identifiers collecting"
+                        "startup forbade advertising identifiers collecting"
                 ))
                 .checkFieldComparingFieldByFieldRecursively("mHuawei", hoaidTrackingInfoResult)
                 .checkFieldComparingFieldByFieldRecursively("yandex", yandexTrackingInfoResult)
@@ -201,7 +201,7 @@ public class AdvertisingIdGetterTest extends CommonTest {
                 .checkFieldComparingFieldByFieldRecursively("mHuawei", new AdTrackingInfoResult(
                         null,
                         IdentifierStatus.FEATURE_DISABLED,
-                        "startup forbade ads identifiers collecting"
+                        "startup forbade advertising identifiers collecting"
                 ))
                 .checkFieldComparingFieldByFieldRecursively("yandex", yandexTrackingInfoResult)
                 .checkAll();

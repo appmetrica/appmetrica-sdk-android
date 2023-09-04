@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
+import io.appmetrica.analytics.impl.startup.Constants;
 import io.appmetrica.analytics.internal.IdentifiersResult;
 import io.appmetrica.analytics.billinginterface.internal.config.BillingConfig;
 import io.appmetrica.analytics.coreapi.internal.constants.DeviceTypeValues;
@@ -435,21 +436,21 @@ public class JsonHelper {
     }
 
     @NonNull
-    public static JSONObject adsIdentifiersResultToJson(@Nullable IdentifiersResult identifiersResult) {
+    public static JSONObject advIdentifiersResultToJson(@Nullable IdentifiersResult identifiersResult) {
         JSONObject json = new JSONObject();
         if (identifiersResult != null) {
             try {
                 json
                     .put(
-                        io.appmetrica.analytics.impl.startup.Constants.AdsIdentifiersResultKeys.ID,
+                        Constants.AdvIdentifiersResultKeys.ID,
                         identifiersResult.id
                     )
                     .put(
-                        io.appmetrica.analytics.impl.startup.Constants.AdsIdentifiersResultKeys.STATUS,
+                        Constants.AdvIdentifiersResultKeys.STATUS,
                         identifiersResult.status.getValue()
                     )
                     .put(
-                        io.appmetrica.analytics.impl.startup.Constants.AdsIdentifiersResultKeys.ERROR_EXPLANATION,
+                        Constants.AdvIdentifiersResultKeys.ERROR_EXPLANATION,
                         identifiersResult.errorExplanation
                     );
             } catch (Throwable ex) {
@@ -460,16 +461,16 @@ public class JsonHelper {
     }
 
     @NonNull
-    public static IdentifiersResult adsIdentifiersResultFromJson(@NonNull JSONObject json) {
+    public static IdentifiersResult advIdentifiersResultFromJson(@NonNull JSONObject json) {
         return new IdentifiersResult(
-            JsonUtils.optStringOrNull(json, io.appmetrica.analytics.impl.startup.Constants.AdsIdentifiersResultKeys.ID),
+            JsonUtils.optStringOrNull(json, Constants.AdvIdentifiersResultKeys.ID),
             IdentifierStatus.from(JsonUtils.optStringOrNull(
                 json,
-                io.appmetrica.analytics.impl.startup.Constants.AdsIdentifiersResultKeys.STATUS
+                Constants.AdvIdentifiersResultKeys.STATUS
             )),
             JsonUtils.optStringOrNull(
                 json,
-                io.appmetrica.analytics.impl.startup.Constants.AdsIdentifiersResultKeys.ERROR_EXPLANATION
+                Constants.AdvIdentifiersResultKeys.ERROR_EXPLANATION
             )
         );
     }
@@ -589,11 +590,11 @@ public class JsonHelper {
                     JsonUtils.optBooleanOrNull(json, KEY_LIB_SSL_ENABLED),
                     IdentifierStatus.from(JsonUtils.optStringOrNull(
                         json,
-                        io.appmetrica.analytics.impl.startup.Constants.AdsIdentifiersResultKeys.STATUS
+                        Constants.AdvIdentifiersResultKeys.STATUS
                     )),
                     JsonUtils.optStringOrNull(
                         json,
-                        io.appmetrica.analytics.impl.startup.Constants.AdsIdentifiersResultKeys.ERROR_EXPLANATION
+                        Constants.AdvIdentifiersResultKeys.ERROR_EXPLANATION
                     )
                 );
             }
@@ -610,11 +611,11 @@ public class JsonHelper {
             json
                 .putOpt(KEY_LIB_SSL_ENABLED, features.getSslPinning())
                 .put(
-                    io.appmetrica.analytics.impl.startup.Constants.AdsIdentifiersResultKeys.STATUS,
+                    Constants.AdvIdentifiersResultKeys.STATUS,
                     features.getStatus().getValue()
                 )
                 .putOpt(
-                    io.appmetrica.analytics.impl.startup.Constants.AdsIdentifiersResultKeys.ERROR_EXPLANATION,
+                    Constants.AdvIdentifiersResultKeys.ERROR_EXPLANATION,
                     features.getErrorExplanation()
                 );
         } catch (Throwable ignored) {

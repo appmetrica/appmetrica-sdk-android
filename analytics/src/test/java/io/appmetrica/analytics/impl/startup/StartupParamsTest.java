@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.startup;
 import android.content.Context;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
-import io.appmetrica.analytics.AdsIdentifiersResult;
+import io.appmetrica.analytics.AdvIdentifiersResult;
 import io.appmetrica.analytics.internal.IdentifiersResult;
 import io.appmetrica.analytics.StartupParamsItemStatus;
 import io.appmetrica.analytics.StartupParamsItem;
@@ -69,7 +69,7 @@ public class StartupParamsTest extends CommonTest {
     @Mock
     private Bundle mBundle;
     @Mock
-    private AdsIdentifiersFromIdentifierResultConverter mAdsIdentifiersConverter;
+    private AdvIdentifiersFromIdentifierResultConverter advIdentifiersConverter;
     @Mock
     private ClidsStateChecker clidsStateChecker;
     @Mock
@@ -182,7 +182,7 @@ public class StartupParamsTest extends CommonTest {
 
         mStartupParams = new StartupParams(
                 mPreferences,
-                mAdsIdentifiersConverter,
+            advIdentifiersConverter,
                 clidsStateChecker,
                 uuidProvider,
                 customSdkHostsHolder,
@@ -851,7 +851,7 @@ public class StartupParamsTest extends CommonTest {
     }
 
     @Test
-    public void testAdsIdentifiersAreUpdatedAnyway() {
+    public void advIdentifiersAreUpdatedAnyway() {
         StartupParamsTestUtils.mockPreferencesClientDbStoragePutResponses(mPreferences);
         mockPreferencesWithValidValues();
         mStartupParams = new StartupParams(context, mPreferences);
@@ -912,22 +912,22 @@ public class StartupParamsTest extends CommonTest {
 
     @Test
     public void testListContainsIdentifiersGaid() {
-        assertThat(mStartupParams.listContainsAdsIdentifiers(Arrays.asList(Constants.StartupParamsCallbackKeys.GOOGLE_ADV_ID))).isTrue();
+        assertThat(mStartupParams.listContainsAdvIdentifiers(Arrays.asList(Constants.StartupParamsCallbackKeys.GOOGLE_ADV_ID))).isTrue();
     }
 
     @Test
     public void testListContainsIdentifiersHoaid() {
-        assertThat(mStartupParams.listContainsAdsIdentifiers(Arrays.asList(Constants.StartupParamsCallbackKeys.HUAWEI_ADV_ID))).isTrue();
+        assertThat(mStartupParams.listContainsAdvIdentifiers(Arrays.asList(Constants.StartupParamsCallbackKeys.HUAWEI_ADV_ID))).isTrue();
     }
 
     @Test
     public void testListContainsIdentifiersYandexAdvId() {
-        assertThat(mStartupParams.listContainsAdsIdentifiers(Arrays.asList(Constants.StartupParamsCallbackKeys.YANDEX_ADV_ID))).isTrue();
+        assertThat(mStartupParams.listContainsAdvIdentifiers(Arrays.asList(Constants.StartupParamsCallbackKeys.YANDEX_ADV_ID))).isTrue();
     }
 
     @Test
     public void testListDoesNotContainIdentifiers() {
-        assertThat(mStartupParams.listContainsAdsIdentifiers(Arrays.asList(
+        assertThat(mStartupParams.listContainsAdvIdentifiers(Arrays.asList(
                 Constants.StartupParamsCallbackKeys.UUID,
                 Constants.StartupParamsCallbackKeys.DEVICE_ID,
                 Constants.StartupParamsCallbackKeys.DEVICE_ID_HASH,
@@ -938,21 +938,21 @@ public class StartupParamsTest extends CommonTest {
     }
 
     @Test
-    public void testGetCachedAdsIdentifiers() {
+    public void testGetCachedAdvIdentifiers() {
         when(mPreferences.getGaid()).thenReturn(mGaidResult);
         when(mPreferences.getHoaid()).thenReturn(mHoaidResult);
         when(mPreferences.getYandexAdvId()).thenReturn(yandexResult);
         mStartupParams = createStartupParams();
-        AdsIdentifiersResult converted = mock(AdsIdentifiersResult.class);
-        when(mAdsIdentifiersConverter.convert(mGaidResult, mHoaidResult, yandexResult)).thenReturn(converted);
-        assertThat(mStartupParams.getCachedAdsIdentifiers()).isSameAs(converted);
+        AdvIdentifiersResult converted = mock(AdvIdentifiersResult.class);
+        when(advIdentifiersConverter.convert(mGaidResult, mHoaidResult, yandexResult)).thenReturn(converted);
+        assertThat(mStartupParams.getCachedAdvIdentifiers()).isSameAs(converted);
     }
 
     @NonNull
     private StartupParams createStartupParams() {
         return new StartupParams(
                 mPreferences,
-                mAdsIdentifiersConverter,
+            advIdentifiersConverter,
                 clidsStateChecker,
                 uuidProvider,
                 customSdkHostsHolder,

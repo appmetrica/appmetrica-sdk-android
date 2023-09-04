@@ -26,13 +26,13 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
-public class AdIdConnectionControllerTest {
+public class AdvIdConnectionControllerTest {
 
     private Context context;
     @Mock
     private SafePackageManager safePackageManager;
     @Mock
-    private AdIdServiceConnection connection;
+    private AdvIdServiceConnection connection;
     @Mock
     private Function1<IBinder, Object> converter;
     @Mock
@@ -46,7 +46,7 @@ public class AdIdConnectionControllerTest {
 
     private final String serviceShortTag = "st";
 
-    private AdIdServiceConnectionController<Object> controller;
+    private AdvIdServiceConnectionController<Object> controller;
 
     private final long timeout = 3000L;
 
@@ -61,7 +61,7 @@ public class AdIdConnectionControllerTest {
         when(safePackageManager.resolveService(context, intent, 0)).thenReturn(resolveInfo);
 
         final String tag = "Tag";
-        controller = new AdIdServiceConnectionController<Object>(
+        controller = new AdvIdServiceConnectionController<Object>(
                 connection,
                 converter,
                 tag,
@@ -72,13 +72,13 @@ public class AdIdConnectionControllerTest {
 
     @Test
     public void defaultConstructor() throws Exception {
-        controller = new AdIdServiceConnectionController<>(intent, converter, serviceShortTag);
+        controller = new AdvIdServiceConnectionController<>(intent, converter, serviceShortTag);
 
         ObjectPropertyAssertions(controller)
                 .withPrivateFields(true)
                 .withIgnoredFields("connection")
                 .checkFieldNonNull("safePackageManager")
-                .checkField("tag", String.format("[AdInServiceConnectionController-%s]", serviceShortTag))
+                .checkField("tag", String.format("[AdvIdServiceConnectionController-%s]", serviceShortTag))
                 .checkField("serviceShortTag", serviceShortTag)
                 .checkField("converter", converter)
                 .checkAll();

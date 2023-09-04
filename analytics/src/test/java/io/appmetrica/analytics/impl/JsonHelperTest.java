@@ -96,14 +96,14 @@ public class JsonHelperTest extends CommonTest {
     }
 
     @Test
-    public void testAdsIdentifiersToJson() throws Exception {
+    public void advIdentifiersToJson() throws Exception {
         final String id = "4365384768";
         final IdentifierStatus status = IdentifierStatus.IDENTIFIER_PROVIDER_UNAVAILABLE;
         final String error = "error explanation";
-        IdentifiersResult adsIdentifiers = new IdentifiersResult(id, status, error);
-        JSONObject json = JsonHelper.adsIdentifiersResultToJson(adsIdentifiers);
-        IdentifiersResult deserialized = JsonHelper.adsIdentifiersResultFromJson(json);
-        assertThat(deserialized).isEqualToComparingFieldByField(adsIdentifiers);
+        IdentifiersResult advIdentifiers = new IdentifiersResult(id, status, error);
+        JSONObject json = JsonHelper.advIdentifiersResultToJson(advIdentifiers);
+        IdentifiersResult deserialized = JsonHelper.advIdentifiersResultFromJson(json);
+        assertThat(deserialized).isEqualToComparingFieldByField(advIdentifiers);
         ObjectPropertyAssertions<IdentifiersResult> assertions = ObjectPropertyAssertions(deserialized);
         assertions.checkField("id", id);
         assertions.checkField("status", status);

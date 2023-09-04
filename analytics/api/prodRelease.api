@@ -34,27 +34,27 @@ public enum io.appmetrica.analytics.AdType {
     public static io.appmetrica.analytics.AdType[] values()
 }
 
-public class io.appmetrica.analytics.AdsIdentifiersResult {
-    public final [NonNull] io.appmetrica.analytics.AdsIdentifiersResult$AdvId googleAdvId
-    public final [NonNull] io.appmetrica.analytics.AdsIdentifiersResult$AdvId huaweiAdvId
-    public final [NonNull] io.appmetrica.analytics.AdsIdentifiersResult$AdvId yandexAdvId
+public class io.appmetrica.analytics.AdvIdentifiersResult {
+    public final [NonNull] io.appmetrica.analytics.AdvIdentifiersResult$AdvId googleAdvId
+    public final [NonNull] io.appmetrica.analytics.AdvIdentifiersResult$AdvId huaweiAdvId
+    public final [NonNull] io.appmetrica.analytics.AdvIdentifiersResult$AdvId yandexAdvId
 
-    public <init>([NonNull] io.appmetrica.analytics.AdsIdentifiersResult$AdvId, [NonNull] io.appmetrica.analytics.AdsIdentifiersResult$AdvId, [NonNull] io.appmetrica.analytics.AdsIdentifiersResult$AdvId)
+    public <init>([NonNull] io.appmetrica.analytics.AdvIdentifiersResult$AdvId, [NonNull] io.appmetrica.analytics.AdvIdentifiersResult$AdvId, [NonNull] io.appmetrica.analytics.AdvIdentifiersResult$AdvId)
 }
 
-public static class io.appmetrica.analytics.AdsIdentifiersResult$AdvId {
+public static class io.appmetrica.analytics.AdvIdentifiersResult$AdvId {
     public final [Nullable] String advId
-    public final [NonNull] io.appmetrica.analytics.AdsIdentifiersResult$Details details
+    public final [NonNull] io.appmetrica.analytics.AdvIdentifiersResult$Details details
     public final [Nullable] String errorExplanation
 
-    public <init>([Nullable] String, [NonNull] io.appmetrica.analytics.AdsIdentifiersResult$Details, [Nullable] String)
+    public <init>([Nullable] String, [NonNull] io.appmetrica.analytics.AdvIdentifiersResult$Details, [Nullable] String)
 }
 
-public enum io.appmetrica.analytics.AdsIdentifiersResult$Details {
+public enum io.appmetrica.analytics.AdvIdentifiersResult$Details {
     FEATURE_DISABLED, IDENTIFIER_PROVIDER_UNAVAILABLE, INTERNAL_ERROR, INVALID_ADV_ID, NO_STARTUP, OK
 
-    public static io.appmetrica.analytics.AdsIdentifiersResult$Details valueOf(String)
-    public static io.appmetrica.analytics.AdsIdentifiersResult$Details[] values()
+    public static io.appmetrica.analytics.AdvIdentifiersResult$Details valueOf(String)
+    public static io.appmetrica.analytics.AdvIdentifiersResult$Details[] values()
 }
 
 public interface io.appmetrica.analytics.AnrListener {

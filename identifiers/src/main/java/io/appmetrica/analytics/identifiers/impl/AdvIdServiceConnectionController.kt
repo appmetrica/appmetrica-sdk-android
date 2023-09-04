@@ -9,9 +9,9 @@ import io.appmetrica.analytics.coreutils.internal.services.SafePackageManager
 
 internal const val ATTEMPT_TIMEOUT = 3000L
 
-internal class AdIdServiceConnectionController<T> @VisibleForTesting internal constructor(
+internal class AdvIdServiceConnectionController<T> @VisibleForTesting internal constructor(
     @get:VisibleForTesting
-    val connection: AdIdServiceConnection,
+    val connection: AdvIdServiceConnection,
     private val converter: (IBinder) -> T,
     private val tag: String,
     private val serviceShortTag: String,
@@ -23,9 +23,9 @@ internal class AdIdServiceConnectionController<T> @VisibleForTesting internal co
         converter: (IBinder) -> T,
         serviceShortTag: String
     ) : this(
-        AdIdServiceConnection(intent, serviceShortTag),
+        AdvIdServiceConnection(intent, serviceShortTag),
         converter,
-        "[AdInServiceConnectionController-$serviceShortTag]",
+        "[AdvIdServiceConnectionController-$serviceShortTag]",
         serviceShortTag,
         SafePackageManager()
     )

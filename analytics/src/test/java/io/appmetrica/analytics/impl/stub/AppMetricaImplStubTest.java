@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.stub;
 
 import android.location.Location;
 import android.os.Bundle;
-import io.appmetrica.analytics.AdsIdentifiersResult;
+import io.appmetrica.analytics.AdvIdentifiersResult;
 import io.appmetrica.analytics.AppMetricaConfig;
 import io.appmetrica.analytics.DeferredDeeplinkListener;
 import io.appmetrica.analytics.DeferredDeeplinkParametersListener;
@@ -96,8 +96,8 @@ public class AppMetricaImplStubTest extends CommonTest {
     }
 
     @Test
-    public void getCachedAdsIdentifiers() throws Exception {
-        assertAdsIdentifiersResult(stub.getCachedAdsIdentifiers());
+    public void getCachedAdvIdentifiers() throws Exception {
+        assertAdvIdentifiersResult(stub.getCachedAdvIdentifiers());
     }
 
     @Test
@@ -171,14 +171,14 @@ public class AppMetricaImplStubTest extends CommonTest {
                 .checkAll();
     }
 
-    private void assertAdsIdentifiersResult(AdsIdentifiersResult result) throws Exception {
-        Consumer<ObjectPropertyAssertions<AdsIdentifiersResult.AdvId>> verifier =
-                new Consumer<ObjectPropertyAssertions<AdsIdentifiersResult.AdvId>>() {
+    private void assertAdvIdentifiersResult(AdvIdentifiersResult result) throws Exception {
+        Consumer<ObjectPropertyAssertions<AdvIdentifiersResult.AdvId>> verifier =
+                new Consumer<ObjectPropertyAssertions<AdvIdentifiersResult.AdvId>>() {
                     @Override
-                    public void accept(ObjectPropertyAssertions<AdsIdentifiersResult.AdvId> assertions) {
+                    public void accept(ObjectPropertyAssertions<AdvIdentifiersResult.AdvId> assertions) {
                         try {
                             assertions.checkFieldIsNull("advId")
-                                    .checkField("details", AdsIdentifiersResult.Details.INTERNAL_ERROR)
+                                    .checkField("details", AdvIdentifiersResult.Details.INTERNAL_ERROR)
                                     .checkField("errorExplanation", AdvertisingIdGetterStub.USER_IN_LOCKED_STATE)
                                     .checkAll();
                         } catch (Exception e) {

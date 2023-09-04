@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl;
 
 import android.content.Context;
-import io.appmetrica.analytics.AdsIdentifiersResult;
+import io.appmetrica.analytics.AdvIdentifiersResult;
 import io.appmetrica.analytics.AppMetricaConfig;
 import io.appmetrica.analytics.DeferredDeeplinkListener;
 import io.appmetrica.analytics.DeferredDeeplinkParametersListener;
@@ -172,10 +172,10 @@ public class AppMetricaFacadeObjectTest extends CommonTest {
     }
 
     @Test
-    public void getCachedAdsIdentifiers() {
-        AdsIdentifiersResult result = mock(AdsIdentifiersResult.class);
-        when(mImpl.getCachedAdsIdentifiers()).thenReturn(result);
-        assertThat(mFacade.getCachedAdsIdentifiers()).isSameAs(result);
+    public void getCachedAdvIdentifiers() {
+        AdvIdentifiersResult result = mock(AdvIdentifiersResult.class);
+        when(mImpl.getCachedAdvIdentifiers()).thenReturn(result);
+        assertThat(mFacade.getCachedAdvIdentifiers()).isSameAs(result);
     }
 
     @Test

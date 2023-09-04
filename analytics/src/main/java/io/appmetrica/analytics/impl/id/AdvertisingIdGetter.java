@@ -10,7 +10,7 @@ import io.appmetrica.analytics.coreapi.internal.identifiers.AdvertisingIdsHolder
 import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus;
 import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.id.reflection.Constants;
-import io.appmetrica.analytics.impl.id.reflection.ReflectionAdsIdProvider;
+import io.appmetrica.analytics.impl.id.reflection.ReflectionAdvIdProvider;
 import io.appmetrica.analytics.impl.startup.StartupState;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -19,7 +19,7 @@ import java.util.concurrent.FutureTask;
 public class AdvertisingIdGetter implements IAdvertisingIdGetter {
 
     private static final String NO_STARTUP = "startup has not been received yet";
-    private static final String FEATURE_DISABLED = "startup forbade ads identifiers collecting";
+    private static final String FEATURE_DISABLED = "startup forbade advertising identifiers collecting";
     private static final String CANNOT_TRACK_AID = "identifiers collecting is forbidden for unknown reason";
 
     interface RestrictionsProvider {
@@ -117,9 +117,9 @@ public class AdvertisingIdGetter implements IAdvertisingIdGetter {
                 hoaidRestrictionsProvider,
                 yandexRestrictionProvider,
                 executor,
-                new AdvIdProviderWrapper(new ReflectionAdsIdProvider(Constants.Providers.GOOGLE)),
-                new AdvIdProviderWrapper(new ReflectionAdsIdProvider(Constants.Providers.HUAWEI)),
-                new AdvIdProviderWrapper(new ReflectionAdsIdProvider(Constants.Providers.YANDEX)),
+                new AdvIdProviderWrapper(new ReflectionAdvIdProvider(Constants.Providers.GOOGLE)),
+                new AdvIdProviderWrapper(new ReflectionAdvIdProvider(Constants.Providers.HUAWEI)),
+                new AdvIdProviderWrapper(new ReflectionAdvIdProvider(Constants.Providers.YANDEX)),
                 logSuffix
         );
     }

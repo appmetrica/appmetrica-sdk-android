@@ -6,7 +6,7 @@ public final class io.appmetrica.analytics.identifiers.BuildConfig {
     public <init>()
 }
 
-public class io.appmetrica.analytics.identifiers.internal.AdsIdentifiersProvider {
+public class io.appmetrica.analytics.identifiers.internal.AdvIdentifiersProvider {
     public <init>()
     public static android.os.Bundle requestIdentifiers([NonNull] android.content.Context, [NonNull] android.os.Bundle)
 }

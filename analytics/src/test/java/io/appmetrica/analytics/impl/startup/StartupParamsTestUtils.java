@@ -82,7 +82,7 @@ public class StartupParamsTestUtils {
             IDENTIFIER_HUAWEI_ADV_ID,
             IDENTIFIER_YANDEX_ADV_ID
     );
-    static final List<String> ALL_IDENTIFIERS_EXCEPT_ADS = Arrays.asList(
+    static final List<String> ALL_IDENTIFIERS_EXCEPT_ADV = Arrays.asList(
             IDENTIFIER_KEY_CLIDS,
             IDENTIFIER_KEY_UUID,
             IDENTIFIER_KEY_DEVICE_ID,
@@ -100,7 +100,7 @@ public class StartupParamsTestUtils {
             CUSTOM_IDENTIFIER1,
             CUSTOM_IDENTIFIER2
     );
-    static final List<String> ALL_IDENTIFIERS_WITH_CUSTOM_AND_FEATURE_EXCEPT_ADS = Arrays.asList(
+    static final List<String> ALL_IDENTIFIERS_WITH_CUSTOM_AND_FEATURE_EXCEPT_ADV = Arrays.asList(
             IDENTIFIER_KEY_CLIDS,
             IDENTIFIER_KEY_UUID,
             IDENTIFIER_KEY_DEVICE_ID,

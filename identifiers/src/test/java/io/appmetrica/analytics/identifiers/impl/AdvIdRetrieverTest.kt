@@ -15,7 +15,7 @@ import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class AdsIdRetrieverTest {
+class AdvIdRetrieverTest {
 
     @get:Rule
     val rule: MockitoRule = MockitoJUnit.rule()
@@ -29,18 +29,18 @@ class AdsIdRetrieverTest {
     internal lateinit var advIdProvider: AdvIdProvider
 
     @Mock
-    internal lateinit var adsIdResult: AdsIdResult
+    internal lateinit var advIdResult: AdvIdResult
 
     @Before
     fun setUp() {
-        doReturn(adsIdResult).whenever(advIdProvider).getAdTrackingInfo(context)
-        doReturn(data).whenever(adsIdResult).toBundle()
+        doReturn(advIdResult).whenever(advIdProvider).getAdTrackingInfo(context)
+        doReturn(data).whenever(advIdResult).toBundle()
     }
 
     @Test
     fun testIdRetrieving() {
         val provider = "sdijfof"
-        val retriever = AdsIdRetriever(mapOf(provider to advIdProvider))
+        val retriever = AdvIdRetriever(mapOf(provider to advIdProvider))
 
         assertThat(retriever.requestId(context, provider)).isSameAs(data)
     }

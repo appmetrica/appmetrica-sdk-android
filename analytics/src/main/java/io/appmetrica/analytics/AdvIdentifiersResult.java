@@ -4,10 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 /**
- * Ads identifiers (google and huawei) information.
+ * Advertising identifiers (google and huawei) information.
  * Information about one identifier is independent on information about others.
  */
-public class AdsIdentifiersResult {
+public class AdvIdentifiersResult {
 
     /**
      * Information about google adv_id.
@@ -25,7 +25,7 @@ public class AdsIdentifiersResult {
     @NonNull
     public final AdvId yandexAdvId;
 
-    public AdsIdentifiersResult(@NonNull AdvId googleAdvId,
+    public AdvIdentifiersResult(@NonNull AdvId googleAdvId,
                                 @NonNull AdvId huaweiAdvId,
                                 @NonNull AdvId yandexAdvId) {
         this.googleAdvId = googleAdvId;
@@ -74,7 +74,7 @@ public class AdsIdentifiersResult {
         public final Details details;
         /**
          * A string that explains what exactly went wrong while retrieving identifier.
-         * It will be null if {@link AdvId#details} is {@link io.appmetrica.analytics.AdsIdentifiersResult.Details#OK}
+         * It will be null if {@link AdvId#details} is {@link AdvIdentifiersResult.Details#OK}
          */
         @Nullable
         public final String errorExplanation;

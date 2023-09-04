@@ -2,7 +2,7 @@ package io.appmetrica.analytics.identifiers.impl
 
 import android.os.Bundle
 
-internal data class AdsIdInfo(
+internal data class AdvIdInfo(
     val provider: String,
     val advId: String? = null,
     val limitedAdTracking: Boolean? = null

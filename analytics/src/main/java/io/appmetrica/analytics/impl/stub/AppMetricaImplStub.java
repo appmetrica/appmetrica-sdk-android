@@ -4,7 +4,7 @@ import android.location.Location;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import io.appmetrica.analytics.AdsIdentifiersResult;
+import io.appmetrica.analytics.AdvIdentifiersResult;
 import io.appmetrica.analytics.AppMetricaConfig;
 import io.appmetrica.analytics.DeferredDeeplinkListener;
 import io.appmetrica.analytics.DeferredDeeplinkParametersListener;
@@ -62,21 +62,21 @@ public class AppMetricaImplStub implements IAppMetricaImpl {
 
     @NonNull
     @Override
-    public AdsIdentifiersResult getCachedAdsIdentifiers() {
-        return new AdsIdentifiersResult(
-                new AdsIdentifiersResult.AdvId(
+    public AdvIdentifiersResult getCachedAdvIdentifiers() {
+        return new AdvIdentifiersResult(
+                new AdvIdentifiersResult.AdvId(
                         null,
-                        AdsIdentifiersResult.Details.INTERNAL_ERROR,
+                        AdvIdentifiersResult.Details.INTERNAL_ERROR,
                         AdvertisingIdGetterStub.USER_IN_LOCKED_STATE
                 ),
-                new AdsIdentifiersResult.AdvId(
+                new AdvIdentifiersResult.AdvId(
                         null,
-                        AdsIdentifiersResult.Details.INTERNAL_ERROR,
+                        AdvIdentifiersResult.Details.INTERNAL_ERROR,
                         AdvertisingIdGetterStub.USER_IN_LOCKED_STATE
                 ),
-                new AdsIdentifiersResult.AdvId(
+                new AdvIdentifiersResult.AdvId(
                         null,
-                        AdsIdentifiersResult.Details.INTERNAL_ERROR,
+                        AdvIdentifiersResult.Details.INTERNAL_ERROR,
                         AdvertisingIdGetterStub.USER_IN_LOCKED_STATE
                 )
         );

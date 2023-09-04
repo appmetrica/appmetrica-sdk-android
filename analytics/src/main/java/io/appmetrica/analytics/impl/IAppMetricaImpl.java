@@ -4,7 +4,7 @@ import androidx.annotation.AnyThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.WorkerThread;
-import io.appmetrica.analytics.AdsIdentifiersResult;
+import io.appmetrica.analytics.AdvIdentifiersResult;
 import io.appmetrica.analytics.AppMetricaConfig;
 import io.appmetrica.analytics.DeferredDeeplinkListener;
 import io.appmetrica.analytics.DeferredDeeplinkParametersListener;
@@ -43,7 +43,7 @@ public interface IAppMetricaImpl
 
     @AnyThread
     @NonNull
-    AdsIdentifiersResult getCachedAdsIdentifiers();
+    AdvIdentifiersResult getCachedAdvIdentifiers();
 
     @AnyThread
     @Nullable

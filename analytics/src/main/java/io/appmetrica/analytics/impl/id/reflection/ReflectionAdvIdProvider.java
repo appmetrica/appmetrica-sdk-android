@@ -14,23 +14,23 @@ import io.appmetrica.analytics.impl.id.AdvIdProvider;
 import io.appmetrica.analytics.impl.id.NoRetriesStrategy;
 import io.appmetrica.analytics.impl.id.RetryStrategy;
 
-public class ReflectionAdsIdProvider implements AdvIdProvider {
+public class ReflectionAdvIdProvider implements AdvIdProvider {
 
-    private static final String CLASS = "io.appmetrica.analytics.identifiers.internal.AdsIdentifiersProvider";
+    private static final String CLASS = "io.appmetrica.analytics.identifiers.internal.AdvIdentifiersProvider";
     private static final String METHOD = "requestIdentifiers";
-    private static final String TAG = "[ReflectionAdsIdProvider]";
+    private static final String TAG = "[ReflectionAdvIdProvider]";
 
     @NonNull
     private final String provider;
     @NonNull
-    private final ReflectionAdsIdParser parser;
+    private final ReflectionAdvIdParser parser;
 
-    public ReflectionAdsIdProvider(@NonNull String provider) {
-        this(provider, new ReflectionAdsIdParser());
+    public ReflectionAdvIdProvider(@NonNull String provider) {
+        this(provider, new ReflectionAdvIdParser());
     }
 
     @VisibleForTesting
-    ReflectionAdsIdProvider(@NonNull String provider, @NonNull ReflectionAdsIdParser parser) {
+    ReflectionAdvIdProvider(@NonNull String provider, @NonNull ReflectionAdvIdParser parser) {
         this.provider = provider;
         this.parser = parser;
     }

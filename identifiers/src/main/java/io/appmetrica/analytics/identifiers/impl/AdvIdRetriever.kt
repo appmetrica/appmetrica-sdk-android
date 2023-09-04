@@ -4,7 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import io.appmetrica.analytics.identifiers.impl.huawei.HuaweiAdvIdGetter
 
-internal class AdsIdRetriever(
+internal class AdvIdRetriever(
     private val providers: Map<String, AdvIdProvider> = mapOf(
         Constants.Providers.GOOGLE to GoogleAdvIdGetter(),
         Constants.Providers.HUAWEI to HuaweiAdvIdGetter(),

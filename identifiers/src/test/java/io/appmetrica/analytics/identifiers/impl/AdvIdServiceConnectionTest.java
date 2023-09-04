@@ -17,7 +17,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 @RunWith(RobolectricTestRunner.class)
-public class AdIdServiceConnectionTest {
+public class AdvIdServiceConnectionTest {
 
     private Context context;
     @Mock
@@ -29,14 +29,14 @@ public class AdIdServiceConnectionTest {
 
     private final String serviceTag = "Service tag";
 
-    private AdIdServiceConnection connection;
+    private AdvIdServiceConnection connection;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.openMocks(this);
         context = mock(Context.class);
 
-        connection = new AdIdServiceConnection(intent, serviceTag);
+        connection = new AdvIdServiceConnection(intent, serviceTag);
     }
 
     @Test
