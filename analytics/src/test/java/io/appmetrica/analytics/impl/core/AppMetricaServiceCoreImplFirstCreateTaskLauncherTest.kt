@@ -19,7 +19,7 @@ import org.robolectric.RobolectricTestRunner
 import java.util.concurrent.TimeUnit
 
 @RunWith(RobolectricTestRunner::class)
-class AppAppMetricaServiceCoreImplFirstCreateTaskLauncherTest : CommonTest() {
+class AppMetricaServiceCoreImplFirstCreateTaskLauncherTest : CommonTest() {
 
     @get:Rule
     val globalServiceLocatorRule = GlobalServiceLocatorRule()
@@ -33,16 +33,16 @@ class AppAppMetricaServiceCoreImplFirstCreateTaskLauncherTest : CommonTest() {
 
     private val activationBarrierCallbackCaptor = argumentCaptor<ActivationBarrier.IActivationBarrierCallback>()
 
-    private lateinit var metricaCoreImplFirstCreateTaskLauncher: MetricaCoreImplFirstCreateTaskLauncher
+    private lateinit var coreImplFirstCreateTaskLauncher: CoreImplFirstCreateTaskLauncher
 
     @Before
     fun setUp() {
-        metricaCoreImplFirstCreateTaskLauncher = MetricaCoreImplFirstCreateTaskLauncher(tasks)
+        coreImplFirstCreateTaskLauncher = CoreImplFirstCreateTaskLauncher(tasks)
     }
 
     @Test
     fun run() {
-        metricaCoreImplFirstCreateTaskLauncher.run()
+        coreImplFirstCreateTaskLauncher.run()
         val executor = GlobalServiceLocator.getInstance().serviceExecutorProvider.defaultExecutor
         verify(UtilityServiceLocator.instance.activationBarrier)
             .subscribe(

@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl
 
 import io.appmetrica.analytics.impl.ClientCounterReport.TrimmedField
 import io.appmetrica.analytics.impl.client.ProcessConfiguration
-import io.appmetrica.analytics.impl.service.MetricaServiceDataReporter
+import io.appmetrica.analytics.impl.service.AppMetricaServiceDataReporter
 import io.appmetrica.analytics.internal.CounterConfiguration
 
 class ReportToSend(
@@ -36,7 +36,7 @@ class ReportToSend(
     ) {
 
         private var isCrashReport = false
-        private var serviceDataReporterType = MetricaServiceDataReporter.TYPE_CORE
+        private var serviceDataReporterType = AppMetricaServiceDataReporter.TYPE_CORE
         private var trimmedFields: HashMap<TrimmedField, Int>? = null
 
         fun asCrash(isCrash: Boolean) = apply {

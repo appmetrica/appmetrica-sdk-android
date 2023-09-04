@@ -2,9 +2,9 @@ package io.appmetrica.analytics.impl;
 
 import android.os.Bundle;
 import androidx.annotation.NonNull;
-import io.appmetrica.analytics.impl.service.MetricaServiceCallback;
+import io.appmetrica.analytics.impl.service.AppMetricaServiceCallback;
 
-public interface AppMetricaServiceCore extends MetricaServiceLifecycleCallback {
+public interface AppMetricaServiceCore extends AppMetricaServiceLifecycleCallback {
 
     void reportData(final int type, final Bundle data);
 
@@ -12,5 +12,5 @@ public interface AppMetricaServiceCore extends MetricaServiceLifecycleCallback {
 
     void pauseUserSession(@NonNull Bundle data);
 
-    void updateCallback(@NonNull MetricaServiceCallback callback);
+    void updateCallback(@NonNull AppMetricaServiceCallback callback);
 }

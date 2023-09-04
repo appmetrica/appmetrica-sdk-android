@@ -12,11 +12,11 @@ import io.appmetrica.analytics.impl.client.ProcessConfiguration;
 import io.appmetrica.analytics.impl.component.CommonArguments;
 import io.appmetrica.analytics.impl.component.clients.ClientDescription;
 import io.appmetrica.analytics.impl.component.clients.ClientRepository;
-import io.appmetrica.analytics.impl.core.MetricaCoreImplFirstCreateTaskLauncher;
-import io.appmetrica.analytics.impl.core.MetricaCoreImplFirstCreateTaskLauncherProvider;
+import io.appmetrica.analytics.impl.core.CoreImplFirstCreateTaskLauncher;
+import io.appmetrica.analytics.impl.core.CoreImplFirstCreateTaskLauncherProvider;
 import io.appmetrica.analytics.impl.crash.jvm.CrashDirectoryWatcher;
 import io.appmetrica.analytics.impl.db.VitalCommonDataProvider;
-import io.appmetrica.analytics.impl.service.MetricaServiceCallback;
+import io.appmetrica.analytics.impl.service.AppMetricaServiceCallback;
 import io.appmetrica.analytics.impl.startup.CollectingFlags;
 import io.appmetrica.analytics.impl.startup.StartupState;
 import io.appmetrica.analytics.internal.CounterConfiguration;
@@ -44,11 +44,11 @@ import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
-public class AppAppMetricaServiceCoreImplStaticTests extends CommonTest {
+public class AppMetricaServiceCoreImplStaticTests extends CommonTest {
 
     private Context mContext;
     @Mock
-    private MetricaServiceCallback mCallback;
+    private AppMetricaServiceCallback mCallback;
     @Mock
     private ClientRepository mClientRepository;
     @Mock
@@ -75,7 +75,7 @@ public class AppAppMetricaServiceCoreImplStaticTests extends CommonTest {
     private ClientConfiguration clientConfiguration;
 
     private StartupState mStartupState;
-    private AppAppMetricaServiceCoreImpl mMetricaCore;
+    private AppMetricaServiceCoreImpl mMetricaCore;
 
     @Rule
     public GlobalServiceLocatorRule globalServiceLocatorRule = new GlobalServiceLocatorRule();
@@ -91,14 +91,14 @@ public class AppAppMetricaServiceCoreImplStaticTests extends CommonTest {
     @Rule
     public final MockedStaticRule<FileUtils> sFileUtils = new MockedStaticRule<>(FileUtils.class);
     @Rule
-    public MockedConstructionRule<MetricaCoreImplFirstCreateTaskLauncherProvider> firstCreateTaskLauncherProviderRule =
+    public MockedConstructionRule<CoreImplFirstCreateTaskLauncherProvider> firstCreateTaskLauncherProviderRule =
         new MockedConstructionRule<>(
-            MetricaCoreImplFirstCreateTaskLauncherProvider.class,
-            new MockedConstruction.MockInitializer<MetricaCoreImplFirstCreateTaskLauncherProvider>() {
+            CoreImplFirstCreateTaskLauncherProvider.class,
+            new MockedConstruction.MockInitializer<CoreImplFirstCreateTaskLauncherProvider>() {
                 @Override
-                public void prepare(MetricaCoreImplFirstCreateTaskLauncherProvider mock,
+                public void prepare(CoreImplFirstCreateTaskLauncherProvider mock,
                                     MockedConstruction.Context context) throws Throwable {
-                    when(mock.getLauncher()).thenReturn(mock(MetricaCoreImplFirstCreateTaskLauncher.class));
+                    when(mock.getLauncher()).thenReturn(mock(CoreImplFirstCreateTaskLauncher.class));
                 }
             }
         );
@@ -117,7 +117,7 @@ public class AppAppMetricaServiceCoreImplStaticTests extends CommonTest {
         );
         doReturn(reportConsumer).when(fieldsFactory).createReportConsumer(same(mContext), any(ClientRepository.class));
 
-        mMetricaCore = new AppAppMetricaServiceCoreImpl(
+        mMetricaCore = new AppMetricaServiceCoreImpl(
             mContext,
             mCallback,
             mClientRepository,
@@ -156,7 +156,7 @@ public class AppAppMetricaServiceCoreImplStaticTests extends CommonTest {
 
     @Test
     public void testOnStartWithCrashIntentUpdatedCallback() {
-        MetricaServiceCallback secondCallback  = mock(MetricaServiceCallback.class);
+        AppMetricaServiceCallback secondCallback  = mock(AppMetricaServiceCallback.class);
         mMetricaCore.updateCallback(secondCallback);
         CounterReport counterReport = mock(CounterReport.class);
         Intent intent = prepareCrashIntent(counterReport);
@@ -179,7 +179,7 @@ public class AppAppMetricaServiceCoreImplStaticTests extends CommonTest {
 
     @Test
     public void testOnStartCommandWithCrashIntentUpdatedCallback() {
-        MetricaServiceCallback secondCallback  = mock(MetricaServiceCallback.class);
+        AppMetricaServiceCallback secondCallback  = mock(AppMetricaServiceCallback.class);
         mMetricaCore.updateCallback(secondCallback);
         CounterReport counterReport = mock(CounterReport.class);
         Intent intent = prepareCrashIntent(counterReport);

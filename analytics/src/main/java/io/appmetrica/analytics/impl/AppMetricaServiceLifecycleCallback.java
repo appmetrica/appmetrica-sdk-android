@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl;
 import android.content.Intent;
 import android.content.res.Configuration;
 
-public interface MetricaServiceLifecycleCallback {
+public interface AppMetricaServiceLifecycleCallback {
 
     void onCreate();
 

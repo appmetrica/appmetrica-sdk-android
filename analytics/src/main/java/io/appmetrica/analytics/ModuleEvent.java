@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
-import io.appmetrica.analytics.impl.service.MetricaServiceDataReporter;
+import io.appmetrica.analytics.impl.service.AppMetricaServiceDataReporter;
 
 public final class ModuleEvent {
 
@@ -89,7 +89,7 @@ public final class ModuleEvent {
         private String name;
         @Nullable
         private String value;
-        private int serviceDataReporterType = MetricaServiceDataReporter.TYPE_CORE;
+        private int serviceDataReporterType = AppMetricaServiceDataReporter.TYPE_CORE;
         @Nullable
         private Map<String, Object> environment;
         @Nullable

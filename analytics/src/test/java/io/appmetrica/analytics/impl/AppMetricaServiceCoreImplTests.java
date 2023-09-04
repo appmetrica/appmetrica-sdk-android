@@ -8,28 +8,6 @@ import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.ResultReceiver;
-import io.appmetrica.analytics.coreapi.internal.backport.Consumer;
-import io.appmetrica.analytics.coreapi.internal.device.ScreenInfo;
-import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
-import io.appmetrica.analytics.coreutils.internal.io.FileUtils;
-import io.appmetrica.analytics.impl.client.ProcessConfiguration;
-import io.appmetrica.analytics.impl.component.clients.ClientRepository;
-import io.appmetrica.analytics.impl.core.MetricaCoreImplFirstCreateTaskLauncher;
-import io.appmetrica.analytics.impl.core.MetricaCoreImplFirstCreateTaskLauncherProvider;
-import io.appmetrica.analytics.impl.crash.jvm.CrashDirectoryWatcher;
-import io.appmetrica.analytics.impl.db.VitalCommonDataProvider;
-import io.appmetrica.analytics.impl.modules.ServiceContextFacade;
-import io.appmetrica.analytics.impl.service.MetricaServiceCallback;
-import io.appmetrica.analytics.impl.startup.CollectingFlags;
-import io.appmetrica.analytics.impl.startup.StartupState;
-import io.appmetrica.analytics.impl.utils.JsonHelper;
-import io.appmetrica.analytics.testutils.CommonTest;
-import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
-import io.appmetrica.analytics.testutils.MockedConstructionRule;
-import io.appmetrica.analytics.testutils.MockedStaticRule;
-import io.appmetrica.analytics.testutils.TestUtils;
-import java.io.File;
-import java.util.UUID;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -40,6 +18,28 @@ import org.mockito.Mock;
 import org.mockito.MockedConstruction;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
+import java.io.File;
+import java.util.UUID;
+import io.appmetrica.analytics.coreapi.internal.backport.Consumer;
+import io.appmetrica.analytics.coreapi.internal.device.ScreenInfo;
+import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
+import io.appmetrica.analytics.coreutils.internal.io.FileUtils;
+import io.appmetrica.analytics.impl.client.ProcessConfiguration;
+import io.appmetrica.analytics.impl.component.clients.ClientRepository;
+import io.appmetrica.analytics.impl.core.CoreImplFirstCreateTaskLauncher;
+import io.appmetrica.analytics.impl.core.CoreImplFirstCreateTaskLauncherProvider;
+import io.appmetrica.analytics.impl.crash.jvm.CrashDirectoryWatcher;
+import io.appmetrica.analytics.impl.db.VitalCommonDataProvider;
+import io.appmetrica.analytics.impl.modules.ServiceContextFacade;
+import io.appmetrica.analytics.impl.service.AppMetricaServiceCallback;
+import io.appmetrica.analytics.impl.startup.CollectingFlags;
+import io.appmetrica.analytics.impl.startup.StartupState;
+import io.appmetrica.analytics.impl.utils.JsonHelper;
+import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
+import io.appmetrica.analytics.testutils.MockedConstructionRule;
+import io.appmetrica.analytics.testutils.MockedStaticRule;
+import io.appmetrica.analytics.testutils.TestUtils;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.same;
@@ -53,11 +53,11 @@ import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
-public class AppAppMetricaServiceCoreImplTests extends CommonTest {
+public class AppMetricaServiceCoreImplTests extends CommonTest {
 
     private Context mContext;
     @Mock
-    private MetricaServiceCallback mCallback;
+    private AppMetricaServiceCallback mCallback;
     @Mock
     private ClientRepository mClientRepository;
     @Mock
@@ -93,7 +93,7 @@ public class AppAppMetricaServiceCoreImplTests extends CommonTest {
     private Intent intent;
 
     private StartupState mStartupState;
-    private AppAppMetricaServiceCoreImpl mMetricaCore;
+    private AppMetricaServiceCoreImpl mMetricaCore;
 
     @Captor
     private ArgumentCaptor<AppMetricaServiceLifecycle.LifecycleObserver> mLifecycleObserverCaptor;
@@ -109,14 +109,14 @@ public class AppAppMetricaServiceCoreImplTests extends CommonTest {
     @Rule
     public MockedConstructionRule<ReportProxy> reportProxyMockedConstructionRule = new MockedConstructionRule<>(ReportProxy.class);
     @Rule
-    public MockedConstructionRule<MetricaCoreImplFirstCreateTaskLauncherProvider> firstCreateTaskLauncherProviderRule =
+    public MockedConstructionRule<CoreImplFirstCreateTaskLauncherProvider> firstCreateTaskLauncherProviderRule =
         new MockedConstructionRule<>(
-            MetricaCoreImplFirstCreateTaskLauncherProvider.class,
-            new MockedConstruction.MockInitializer<MetricaCoreImplFirstCreateTaskLauncherProvider>() {
+            CoreImplFirstCreateTaskLauncherProvider.class,
+            new MockedConstruction.MockInitializer<CoreImplFirstCreateTaskLauncherProvider>() {
                 @Override
-                public void prepare(MetricaCoreImplFirstCreateTaskLauncherProvider mock,
+                public void prepare(CoreImplFirstCreateTaskLauncherProvider mock,
                                     MockedConstruction.Context context) throws Throwable {
-                    when(mock.getLauncher()).thenReturn(mock(MetricaCoreImplFirstCreateTaskLauncher.class));
+                    when(mock.getLauncher()).thenReturn(mock(CoreImplFirstCreateTaskLauncher.class));
                 }
             }
         );
@@ -144,7 +144,7 @@ public class AppAppMetricaServiceCoreImplTests extends CommonTest {
 
         when(LocaleHolder.getInstance(mContext)).thenReturn(localeHolder);
 
-        mMetricaCore = new AppAppMetricaServiceCoreImpl(
+        mMetricaCore = new AppMetricaServiceCoreImpl(
             mContext,
             mCallback,
             mClientRepository,

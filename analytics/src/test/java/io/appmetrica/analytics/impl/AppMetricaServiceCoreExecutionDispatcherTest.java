@@ -20,10 +20,10 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 
 @RunWith(ParameterizedRobolectricTestRunner.class)
-public class AppAppMetricaServiceCoreExecutionDispatcherTest extends CommonTest {
+public class AppMetricaServiceCoreExecutionDispatcherTest extends CommonTest {
 
     interface Command {
-        void execute(AppAppMetricaServiceCoreExecutionDispatcher dispatcher);
+        void execute(AppMetricaServiceCoreExecutionDispatcher dispatcher);
     }
 
     interface Verifier {
@@ -34,9 +34,9 @@ public class AppAppMetricaServiceCoreExecutionDispatcherTest extends CommonTest 
     private Verifier mVerifier;
     private String description;
 
-    public AppAppMetricaServiceCoreExecutionDispatcherTest(Command command,
-                                                           Verifier verifier,
-                                                           String description) {
+    public AppMetricaServiceCoreExecutionDispatcherTest(Command command,
+                                                        Verifier verifier,
+                                                        String description) {
         mCommand = command;
         mVerifier = verifier;
         this.description = description;
@@ -55,7 +55,7 @@ public class AppAppMetricaServiceCoreExecutionDispatcherTest extends CommonTest 
                 {
                         new Command() {
                             @Override
-                            public void execute(AppAppMetricaServiceCoreExecutionDispatcher dispatcher) {
+                            public void execute(AppMetricaServiceCoreExecutionDispatcher dispatcher) {
                                 dispatcher.onStart(INTENT, START_ID);
                             }
                         },
@@ -70,7 +70,7 @@ public class AppAppMetricaServiceCoreExecutionDispatcherTest extends CommonTest 
                 {
                         new Command() {
                             @Override
-                            public void execute(AppAppMetricaServiceCoreExecutionDispatcher dispatcher) {
+                            public void execute(AppMetricaServiceCoreExecutionDispatcher dispatcher) {
                                 dispatcher.onStartCommand(INTENT, FLAGS, START_ID);
                             }
                         },
@@ -85,7 +85,7 @@ public class AppAppMetricaServiceCoreExecutionDispatcherTest extends CommonTest 
                 {
                         new Command() {
                             @Override
-                            public void execute(AppAppMetricaServiceCoreExecutionDispatcher dispatcher) {
+                            public void execute(AppMetricaServiceCoreExecutionDispatcher dispatcher) {
                                 dispatcher.onBind(INTENT);
                             }
                         },
@@ -100,7 +100,7 @@ public class AppAppMetricaServiceCoreExecutionDispatcherTest extends CommonTest 
                 {
                         new Command() {
                             @Override
-                            public void execute(AppAppMetricaServiceCoreExecutionDispatcher dispatcher) {
+                            public void execute(AppMetricaServiceCoreExecutionDispatcher dispatcher) {
                                 dispatcher.onRebind(INTENT);
                             }
                         },
@@ -115,7 +115,7 @@ public class AppAppMetricaServiceCoreExecutionDispatcherTest extends CommonTest 
                 {
                         new Command() {
                             @Override
-                            public void execute(AppAppMetricaServiceCoreExecutionDispatcher dispatcher) {
+                            public void execute(AppMetricaServiceCoreExecutionDispatcher dispatcher) {
                                 dispatcher.onUnbind(INTENT);
                             }
                         },
@@ -130,7 +130,7 @@ public class AppAppMetricaServiceCoreExecutionDispatcherTest extends CommonTest 
                 {
                         new Command() {
                             @Override
-                            public void execute(AppAppMetricaServiceCoreExecutionDispatcher dispatcher) {
+                            public void execute(AppMetricaServiceCoreExecutionDispatcher dispatcher) {
                                 dispatcher.onConfigurationChanged(CONFIGURATION);
                             }
                         },
@@ -145,7 +145,7 @@ public class AppAppMetricaServiceCoreExecutionDispatcherTest extends CommonTest 
                 {
                         new Command() {
                             @Override
-                            public void execute(AppAppMetricaServiceCoreExecutionDispatcher dispatcher) {
+                            public void execute(AppMetricaServiceCoreExecutionDispatcher dispatcher) {
                                 dispatcher.resumeUserSession(BUNDLE);
                             }
                         },
@@ -160,7 +160,7 @@ public class AppAppMetricaServiceCoreExecutionDispatcherTest extends CommonTest 
                 {
                         new Command() {
                             @Override
-                            public void execute(AppAppMetricaServiceCoreExecutionDispatcher dispatcher) {
+                            public void execute(AppMetricaServiceCoreExecutionDispatcher dispatcher) {
                                 dispatcher.pauseUserSession(BUNDLE);
                             }
                         },
@@ -175,7 +175,7 @@ public class AppAppMetricaServiceCoreExecutionDispatcherTest extends CommonTest 
                 {
                         new Command() {
                             @Override
-                            public void execute(AppAppMetricaServiceCoreExecutionDispatcher dispatcher) {
+                            public void execute(AppMetricaServiceCoreExecutionDispatcher dispatcher) {
                                 dispatcher.reportData(DATA_TYPE, BUNDLE);
                             }
                         },
@@ -199,13 +199,13 @@ public class AppAppMetricaServiceCoreExecutionDispatcherTest extends CommonTest 
     @Captor
     private ArgumentCaptor<Runnable> mRunnableCaptor;
 
-    private AppAppMetricaServiceCoreExecutionDispatcher mAppMetricaCoreExecutionDispatcher;
+    private AppMetricaServiceCoreExecutionDispatcher mAppMetricaCoreExecutionDispatcher;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.openMocks(this);
 
-        mAppMetricaCoreExecutionDispatcher = new AppAppMetricaServiceCoreExecutionDispatcher(mExecutor, mAppMetricaServiceCore, lifecycleDependentComponentManager);
+        mAppMetricaCoreExecutionDispatcher = new AppMetricaServiceCoreExecutionDispatcher(mExecutor, mAppMetricaServiceCore, lifecycleDependentComponentManager);
     }
 
     @Test

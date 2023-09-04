@@ -4,8 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.net.Uri
-import io.appmetrica.analytics.impl.AppAppMetricaServiceCoreExecutionDispatcher
-import io.appmetrica.analytics.impl.AppAppMetricaServiceCoreImpl
+import io.appmetrica.analytics.impl.AppMetricaServiceCoreExecutionDispatcher
+import io.appmetrica.analytics.impl.AppMetricaServiceCoreImpl
 import io.appmetrica.analytics.impl.LocaleHolder
 import io.appmetrica.analytics.impl.service.AppMetricaServiceAction
 import io.appmetrica.analytics.testutils.CommonTest
@@ -35,11 +35,11 @@ class AppMetricaServiceTest : CommonTest() {
     val rule = GlobalServiceLocatorRule()
 
     @get:Rule
-    val metricaCoreMockedConstructionRule = constructionRule<AppAppMetricaServiceCoreImpl>()
+    val metricaCoreMockedConstructionRule = constructionRule<AppMetricaServiceCoreImpl>()
 
     @get:Rule
     val metricaCoreExecutionDispatcherMockedConstructionRule =
-        constructionRule<AppAppMetricaServiceCoreExecutionDispatcher>()
+        constructionRule<AppMetricaServiceCoreExecutionDispatcher>()
 
     private val configuration: Configuration = mock()
 

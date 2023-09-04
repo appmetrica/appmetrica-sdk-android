@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl;
 
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
-import io.appmetrica.analytics.impl.service.MetricaServiceCallback;
+import io.appmetrica.analytics.impl.service.AppMetricaServiceCallback;
 import io.appmetrica.analytics.testutils.CommonTest;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,7 +20,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 @RunWith(RobolectricTestRunner.class)
-public class AppAppMetricaServiceCoreExecutionDispatcherSpecialCasesTest extends CommonTest {
+public class AppMetricaServiceCoreExecutionDispatcherSpecialCasesTest extends CommonTest {
 
     @Mock
     private ICommonExecutor executor;
@@ -31,12 +31,12 @@ public class AppAppMetricaServiceCoreExecutionDispatcherSpecialCasesTest extends
     @Captor
     private ArgumentCaptor<Runnable> runnableCaptor;
 
-    private AppAppMetricaServiceCoreExecutionDispatcher appMetricaCoreExecutionDispatcher;
+    private AppMetricaServiceCoreExecutionDispatcher appMetricaCoreExecutionDispatcher;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.openMocks(this);
-        appMetricaCoreExecutionDispatcher = new AppAppMetricaServiceCoreExecutionDispatcher(
+        appMetricaCoreExecutionDispatcher = new AppMetricaServiceCoreExecutionDispatcher(
                 executor, appMetricaServiceCore, lifecycleDependentComponentManager
         );
     }
@@ -83,7 +83,7 @@ public class AppAppMetricaServiceCoreExecutionDispatcherSpecialCasesTest extends
 
     @Test
     public void updateCallback() {
-        MetricaServiceCallback callback = mock(MetricaServiceCallback.class);
+        AppMetricaServiceCallback callback = mock(AppMetricaServiceCallback.class);
         appMetricaCoreExecutionDispatcher.updateCallback(callback);
         verify(appMetricaServiceCore).updateCallback(callback);
     }

@@ -21,7 +21,7 @@ import io.appmetrica.analytics.impl.crash.client.converter.UnhandledExceptionCon
 import io.appmetrica.analytics.impl.protobuf.backend.CrashAndroid;
 import io.appmetrica.analytics.impl.protobuf.backend.Userprofile;
 import io.appmetrica.analytics.impl.revenue.ad.AdRevenueWrapper;
-import io.appmetrica.analytics.impl.service.MetricaServiceDataReporter;
+import io.appmetrica.analytics.impl.service.AppMetricaServiceDataReporter;
 import io.appmetrica.analytics.impl.utils.LoggerStorage;
 import io.appmetrica.analytics.impl.utils.PublicLogger;
 import io.appmetrica.analytics.impl.utils.limitation.SimpleMapLimitation;
@@ -617,7 +617,7 @@ public abstract class BaseReporterTest extends BaseReporterData {
         String eventName = randomString();
         String eventValue = randomString();
         int eventType = 14;
-        int serviceDataReporterType = MetricaServiceDataReporter.TYPE_CORE;
+        int serviceDataReporterType = AppMetricaServiceDataReporter.TYPE_CORE;
         Map<String, Object> environment = new HashMap<>();
         Map<String, byte[]> extras = Collections.singletonMap("Key", new byte[]{1, 2, 3, 7, 8});
         Map<String, Object> attributes = new HashMap<>();
@@ -652,7 +652,7 @@ public abstract class BaseReporterTest extends BaseReporterData {
         String eventName = randomString();
         String eventValue = randomString();
         int eventType = 14;
-        int serviceDataReporterType = MetricaServiceDataReporter.TYPE_CORE;
+        int serviceDataReporterType = AppMetricaServiceDataReporter.TYPE_CORE;
         Map<String, Object> attributes = new HashMap<>();
 
         final ModuleEvent moduleEvent = ModuleEvent.newBuilder(eventType)
@@ -736,7 +736,7 @@ public abstract class BaseReporterTest extends BaseReporterData {
 
         @Test
         public void testShouldIgnoringMetricaInternalEventTypes() {
-            int serviceDataReporterType = MetricaServiceDataReporter.TYPE_CORE;
+            int serviceDataReporterType = AppMetricaServiceDataReporter.TYPE_CORE;
 
             final ModuleEvent moduleEvent = ModuleEvent.newBuilder(mEventType)
                 .withName(randomString())

@@ -17,7 +17,7 @@ import io.appmetrica.analytics.impl.protobuf.backend.Ecommerce;
 import io.appmetrica.analytics.impl.protobuf.backend.Userprofile;
 import io.appmetrica.analytics.impl.referrer.common.ReferrerResultReceiver;
 import io.appmetrica.analytics.impl.revenue.ad.AdRevenueWrapper;
-import io.appmetrica.analytics.impl.service.MetricaServiceDataReporter;
+import io.appmetrica.analytics.impl.service.AppMetricaServiceDataReporter;
 import io.appmetrica.analytics.impl.service.commands.ServiceCallableFactory;
 import io.appmetrica.analytics.impl.startup.StartupIdentifiersProvider;
 import io.appmetrica.analytics.impl.utils.JsonHelper;
@@ -152,7 +152,7 @@ public class ReportsHandler {
         final ReporterEnvironment reporterEnvironment,
         final Map<String, Object> attributes
     ) {
-        reportEvent(event, reporterEnvironment, MetricaServiceDataReporter.TYPE_CORE, attributes);
+        reportEvent(event, reporterEnvironment, AppMetricaServiceDataReporter.TYPE_CORE, attributes);
     }
 
     public void reportEvent(

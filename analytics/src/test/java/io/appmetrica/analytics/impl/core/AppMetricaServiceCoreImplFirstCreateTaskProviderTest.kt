@@ -7,21 +7,21 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-class AppAppMetricaServiceCoreImplFirstCreateTaskProviderTest : CommonTest() {
+class AppMetricaServiceCoreImplFirstCreateTaskProviderTest : CommonTest() {
 
     @get:Rule
     val reportKotlinVersionTaskMockedConstructionRule = MockedConstructionRule(ReportKotlinVersionTask::class.java)
 
-    private lateinit var metricaCoreImplFirstCreateTaskProvider: MetricaCoreImplFirstCreateTaskProvider
+    private lateinit var coreImplFirstCreateTaskProvider: CoreImplFirstCreateTaskProvider
 
     @Before
     fun setUp() {
-        metricaCoreImplFirstCreateTaskProvider = MetricaCoreImplFirstCreateTaskProvider()
+        coreImplFirstCreateTaskProvider = CoreImplFirstCreateTaskProvider()
     }
 
     @Test
     fun tasks() {
-        assertThat(metricaCoreImplFirstCreateTaskProvider.tasks()).containsExactly(reportKotlinVersionTask())
+        assertThat(coreImplFirstCreateTaskProvider.tasks()).containsExactly(reportKotlinVersionTask())
     }
 
     private fun reportKotlinVersionTask(): ReportKotlinVersionTask {

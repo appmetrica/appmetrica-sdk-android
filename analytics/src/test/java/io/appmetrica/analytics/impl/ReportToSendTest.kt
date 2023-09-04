@@ -4,7 +4,7 @@ import android.content.Context
 import android.os.ResultReceiver
 import io.appmetrica.analytics.impl.ClientCounterReport.TrimmedField
 import io.appmetrica.analytics.impl.client.ProcessConfiguration
-import io.appmetrica.analytics.impl.service.MetricaServiceDataReporter
+import io.appmetrica.analytics.impl.service.AppMetricaServiceDataReporter
 import io.appmetrica.analytics.internal.CounterConfiguration
 import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
@@ -27,7 +27,7 @@ class ReportToSendTest : CommonTest() {
         SoftAssertions().apply {
             assertThat(reportToSend.report).isSameAs(counterReport)
             assertThat(reportToSend.isCrashReport).isFalse
-            assertThat(reportToSend.serviceDataReporterType).isEqualTo(MetricaServiceDataReporter.TYPE_CORE)
+            assertThat(reportToSend.serviceDataReporterType).isEqualTo(AppMetricaServiceDataReporter.TYPE_CORE)
             assertThat(reportToSend.trimmedFields).isNull()
         }.assertAll()
     }
@@ -43,7 +43,7 @@ class ReportToSendTest : CommonTest() {
         SoftAssertions().apply {
             assertThat(reportToSend.report).isSameAs(counterReport)
             assertThat(reportToSend.isCrashReport).isTrue
-            assertThat(reportToSend.serviceDataReporterType).isEqualTo(MetricaServiceDataReporter.TYPE_CORE)
+            assertThat(reportToSend.serviceDataReporterType).isEqualTo(AppMetricaServiceDataReporter.TYPE_CORE)
             assertThat(reportToSend.trimmedFields).isNull()
         }.assertAll()
     }
@@ -60,7 +60,7 @@ class ReportToSendTest : CommonTest() {
         SoftAssertions().apply {
             assertThat(reportToSend.report).isSameAs(counterReport)
             assertThat(reportToSend.isCrashReport).isFalse
-            assertThat(reportToSend.serviceDataReporterType).isEqualTo(MetricaServiceDataReporter.TYPE_CORE)
+            assertThat(reportToSend.serviceDataReporterType).isEqualTo(AppMetricaServiceDataReporter.TYPE_CORE)
             assertThat(reportToSend.trimmedFields).isSameAs(trimmedField)
         }.assertAll()
     }

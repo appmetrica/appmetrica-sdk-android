@@ -8,10 +8,10 @@ import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
 import io.appmetrica.analytics.coreutils.internal.executors.SafeRunnable;
 import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
-import io.appmetrica.analytics.impl.service.MetricaServiceCallback;
+import io.appmetrica.analytics.impl.service.AppMetricaServiceCallback;
 
-public class AppAppMetricaServiceCoreExecutionDispatcher implements AppMetricaServiceCore {
-    private static final String TAG = "[MetricaCoreExecutionDispatcher]";
+public class AppMetricaServiceCoreExecutionDispatcher implements AppMetricaServiceCore {
+    private static final String TAG = "[AppMetricaCoreExecutionDispatcher]";
 
     private ICommonExecutor mCoreExecutor;
     private AppMetricaServiceCore mAppMetricaServiceCore;
@@ -19,7 +19,7 @@ public class AppAppMetricaServiceCoreExecutionDispatcher implements AppMetricaSe
     private final LifecycleDependentComponentManager lifecycleDependentComponentManager;
     private boolean shouldExecuteOnCreate = false;
 
-    public AppAppMetricaServiceCoreExecutionDispatcher(@NonNull AppMetricaServiceCore appMetricaServiceCore) {
+    public AppMetricaServiceCoreExecutionDispatcher(@NonNull AppMetricaServiceCore appMetricaServiceCore) {
         this(
                 GlobalServiceLocator.getInstance().getServiceExecutorProvider().getMetricaCoreExecutor(),
             appMetricaServiceCore,
@@ -34,7 +34,7 @@ public class AppAppMetricaServiceCoreExecutionDispatcher implements AppMetricaSe
         mCoreExecutor.execute(new SafeRunnable() {
             @Override
             public void runSafety() {
-                synchronized (AppAppMetricaServiceCoreExecutionDispatcher.this) {
+                synchronized (AppMetricaServiceCoreExecutionDispatcher.this) {
                     if (!shouldExecuteOnCreate) {
                         return;
                     }
@@ -145,7 +145,7 @@ public class AppAppMetricaServiceCoreExecutionDispatcher implements AppMetricaSe
     }
 
     @Override
-    public void updateCallback(@NonNull MetricaServiceCallback callback) {
+    public void updateCallback(@NonNull AppMetricaServiceCallback callback) {
         mAppMetricaServiceCore.updateCallback(callback);
     }
 
@@ -160,7 +160,7 @@ public class AppAppMetricaServiceCoreExecutionDispatcher implements AppMetricaSe
     }
 
     @VisibleForTesting
-    AppAppMetricaServiceCoreExecutionDispatcher(
+    AppMetricaServiceCoreExecutionDispatcher(
         @NonNull ICommonExecutor coreExecutor,
         @NonNull AppMetricaServiceCore appMetricaServiceCore,
         @NonNull LifecycleDependentComponentManager lifecycleDependentComponentManager

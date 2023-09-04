@@ -5,7 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import io.appmetrica.analytics.impl.client.ClientConfiguration;
-import io.appmetrica.analytics.impl.service.MetricaServiceDataReporter;
+import io.appmetrica.analytics.impl.service.AppMetricaServiceDataReporter;
 import io.appmetrica.analytics.testutils.CommonTest;
 import java.util.Arrays;
 import java.util.Collection;
@@ -57,7 +57,7 @@ public class SelfDiagnosticReporterTest extends CommonTest {
         selfDiagnosticReporter.reportEvent(new CounterReport());
         if (newReporterType != null) {
             verify(selfProcessReporter).reportData(
-                    eq(MetricaServiceDataReporter.TYPE_CORE),
+                    eq(AppMetricaServiceDataReporter.TYPE_CORE),
                     bundleCaptor.capture()
             );
             ClientConfiguration env = ClientConfiguration.fromBundle(context, bundleCaptor.getValue());

@@ -10,14 +10,14 @@ import android.os.RemoteException;
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
-import io.appmetrica.analytics.impl.AppAppMetricaServiceCoreExecutionDispatcher;
-import io.appmetrica.analytics.impl.AppAppMetricaServiceCoreImpl;
+import io.appmetrica.analytics.impl.AppMetricaServiceCoreExecutionDispatcher;
+import io.appmetrica.analytics.impl.AppMetricaServiceCoreImpl;
 import io.appmetrica.analytics.impl.AppMetricaServiceCore;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.SelfProcessReporter;
 import io.appmetrica.analytics.impl.service.AppMetricaServiceAction;
-import io.appmetrica.analytics.impl.service.MetricaServiceCallback;
-import io.appmetrica.analytics.impl.service.MetricaServiceDataReporter;
+import io.appmetrica.analytics.impl.service.AppMetricaServiceCallback;
+import io.appmetrica.analytics.impl.service.AppMetricaServiceDataReporter;
 import io.appmetrica.analytics.impl.utils.PublicLogger;
 
 public class AppMetricaService extends Service {
@@ -27,13 +27,13 @@ public class AppMetricaService extends Service {
     }
 
     private static final String TAG = "[AppMetricaService]";
-    private final MetricaServiceCallback mCallback = new MetricaServiceCallback() {
+    private final AppMetricaServiceCallback mCallback = new AppMetricaServiceCallback() {
         public void onStartFinished(int startId) {
             stopSelfResult(startId);
         }
     };
 
-    private static AppMetricaServiceCore METRICA_CORE;
+    private static AppMetricaServiceCore SERVICE_CORE;
 
     @Override
     public void onCreate() {
@@ -41,31 +41,31 @@ public class AppMetricaService extends Service {
         GlobalServiceLocator.init(this.getApplicationContext());
         PublicLogger.init(getApplicationContext());
         YLogger.info(TAG, "Service was created for owner with package %s, this: %s", getPackageName(), this);
-        if (METRICA_CORE == null) {
-            AppAppMetricaServiceCoreImpl appMetricaCoreImpl =
-                new AppAppMetricaServiceCoreImpl(getApplicationContext(), mCallback);
+        if (SERVICE_CORE == null) {
+            AppMetricaServiceCoreImpl appMetricaCoreImpl =
+                new AppMetricaServiceCoreImpl(getApplicationContext(), mCallback);
             GlobalServiceLocator.getInstance()
                     .getServiceDataReporterHolder()
                     .registerServiceDataReporter(
-                            MetricaServiceDataReporter.TYPE_CORE,
-                            new MetricaServiceDataReporter(appMetricaCoreImpl)
+                            AppMetricaServiceDataReporter.TYPE_CORE,
+                            new AppMetricaServiceDataReporter(appMetricaCoreImpl)
                     );
-            METRICA_CORE = new AppAppMetricaServiceCoreExecutionDispatcher(appMetricaCoreImpl);
+            SERVICE_CORE = new AppMetricaServiceCoreExecutionDispatcher(appMetricaCoreImpl);
         } else {
-            METRICA_CORE.updateCallback(mCallback);
+            SERVICE_CORE.updateCallback(mCallback);
         }
-        METRICA_CORE.onCreate();
-        GlobalServiceLocator.getInstance().initSelfDiagnosticReporterStorage(new SelfProcessReporter(METRICA_CORE));
+        SERVICE_CORE.onCreate();
+        GlobalServiceLocator.getInstance().initSelfDiagnosticReporterStorage(new SelfProcessReporter(SERVICE_CORE));
     }
 
     @Override
     public void onStart(Intent intent, int startId) {
-        METRICA_CORE.onStart(intent, startId);
+        SERVICE_CORE.onStart(intent, startId);
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        METRICA_CORE.onStartCommand(intent, flags, startId);
+        SERVICE_CORE.onStartCommand(intent, flags, startId);
         return START_NOT_STICKY;
     }
 
@@ -80,7 +80,7 @@ public class AppMetricaService extends Service {
             // The service in active state (client is connected with the service) therefore we want to listen updates
             binder = mBinder;
         }
-        METRICA_CORE.onBind(intent);
+        SERVICE_CORE.onBind(intent);
 
         return binder;
     }
@@ -89,20 +89,20 @@ public class AppMetricaService extends Service {
     public void onRebind(Intent intent) {
         super.onRebind(intent);
         YLogger.info(TAG, "Rebind to service with data: %s", intent);
-        METRICA_CORE.onRebind(intent);
+        SERVICE_CORE.onRebind(intent);
     }
 
     @Override
     public void onDestroy() {
         YLogger.info(TAG, "[Service has been destroyed");
-        METRICA_CORE.onDestroy();
+        SERVICE_CORE.onDestroy();
         super.onDestroy();
     }
 
     @Override
     public boolean onUnbind(Intent intent) {
         YLogger.info(TAG, "Unbind from the service with data: %s", intent);
-        METRICA_CORE.onUnbind(intent);
+        SERVICE_CORE.onUnbind(intent);
         String action = intent.getAction();
         if (action != null && action.startsWith(AppMetricaServiceAction.ACTION_SERVICE_WAKELOCK)) {
             return false;
@@ -119,7 +119,7 @@ public class AppMetricaService extends Service {
     @Override
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        METRICA_CORE.onConfigurationChanged(newConfig);
+        SERVICE_CORE.onConfigurationChanged(newConfig);
     }
 
     // Local-side IPC implementation stub class
@@ -127,17 +127,17 @@ public class AppMetricaService extends Service {
 
         @Override
         public void reportData(final int type, final Bundle data) throws RemoteException {
-            METRICA_CORE.reportData(type, data);
+            SERVICE_CORE.reportData(type, data);
         }
 
         @Override
         public void resumeUserSession(@NonNull Bundle bundle) throws RemoteException {
-            METRICA_CORE.resumeUserSession(bundle);
+            SERVICE_CORE.resumeUserSession(bundle);
         }
 
         @Override
         public void pauseUserSession(@NonNull Bundle bundle) throws RemoteException {
-            METRICA_CORE.pauseUserSession(bundle);
+            SERVICE_CORE.pauseUserSession(bundle);
         }
     };
 
@@ -147,6 +147,6 @@ public class AppMetricaService extends Service {
 
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)
     static void clearInstance() {
-        METRICA_CORE = null;
+        SERVICE_CORE = null;
     }
 }

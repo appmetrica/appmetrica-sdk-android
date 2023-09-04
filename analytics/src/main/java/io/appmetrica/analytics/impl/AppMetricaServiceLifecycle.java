@@ -14,7 +14,7 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class AppMetricaServiceLifecycle implements MetricaServiceLifecycleCallback {
+public class AppMetricaServiceLifecycle implements AppMetricaServiceLifecycleCallback {
 
     public interface LifecycleObserver {
         void onEvent(@NonNull Intent intent);

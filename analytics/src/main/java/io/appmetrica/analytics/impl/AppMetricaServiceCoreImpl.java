@@ -21,7 +21,7 @@ import io.appmetrica.analytics.impl.component.CommonArguments;
 import io.appmetrica.analytics.impl.component.clients.ClientDescription;
 import io.appmetrica.analytics.impl.component.clients.ClientRepository;
 import io.appmetrica.analytics.impl.component.clients.ComponentsRepository;
-import io.appmetrica.analytics.impl.core.MetricaCoreImplFirstCreateTaskLauncherProvider;
+import io.appmetrica.analytics.impl.core.CoreImplFirstCreateTaskLauncherProvider;
 import io.appmetrica.analytics.impl.crash.ReadOldCrashesRunnable;
 import io.appmetrica.analytics.impl.crash.jvm.CrashDirectoryWatcher;
 import io.appmetrica.analytics.impl.crash.ndk.NativeCrashService;
@@ -30,21 +30,21 @@ import io.appmetrica.analytics.impl.modules.ModulesController;
 import io.appmetrica.analytics.impl.modules.ServiceContextFacade;
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade;
 import io.appmetrica.analytics.impl.service.AppMetricaServiceAction;
-import io.appmetrica.analytics.impl.service.MetricaServiceCallback;
+import io.appmetrica.analytics.impl.service.AppMetricaServiceCallback;
 import io.appmetrica.analytics.impl.startup.StartupState;
 import io.appmetrica.analytics.impl.utils.JsonHelper;
 import io.appmetrica.analytics.impl.utils.ServerTime;
 import io.appmetrica.analytics.internal.CounterConfiguration;
 import java.io.File;
 
-public class AppAppMetricaServiceCoreImpl implements AppMetricaServiceCore, MetricaCoreReporter {
-    private static final String TAG = "[AppMetricaCoreImpl]";
+public class AppMetricaServiceCoreImpl implements AppMetricaServiceCore, AppMetricaCoreReporter {
+    private static final String TAG = "[AppMetricaServiceCoreImpl]";
 
     private boolean created = false;
     @NonNull
     private final Context mContext;
     @NonNull
-    private volatile MetricaServiceCallback mCallback;
+    private volatile AppMetricaServiceCallback mCallback;
 
     @NonNull
     private ClientRepository mClientRepository;
@@ -81,15 +81,15 @@ public class AppAppMetricaServiceCoreImpl implements AppMetricaServiceCore, Metr
     private CrashDirectoryWatcher crashDirectoryWatcher;
 
     @MainThread
-    public AppAppMetricaServiceCoreImpl(@NonNull Context context,
-                                        @NonNull MetricaServiceCallback callback) {
+    public AppMetricaServiceCoreImpl(@NonNull Context context,
+                                     @NonNull AppMetricaServiceCallback callback) {
         this(context, callback, new ComponentsRepository(context));
     }
 
     @MainThread
-    private AppAppMetricaServiceCoreImpl(@NonNull Context context,
-                                         @NonNull MetricaServiceCallback callback,
-                                         @NonNull ComponentsRepository componentsRepository) {
+    private AppMetricaServiceCoreImpl(@NonNull Context context,
+                                      @NonNull AppMetricaServiceCallback callback,
+                                      @NonNull ComponentsRepository componentsRepository) {
         this(
             context,
             callback,
@@ -105,15 +105,15 @@ public class AppAppMetricaServiceCoreImpl implements AppMetricaServiceCore, Metr
 
     @MainThread
     @VisibleForTesting
-    AppAppMetricaServiceCoreImpl(@NonNull Context context,
-                                 @NonNull MetricaServiceCallback callback,
-                                 @NonNull ClientRepository clientRepository,
-                                 @NonNull AppMetricaServiceLifecycle appMetricaServiceLifecycle,
-                                 @NonNull FirstServiceEntryPointManager firstServiceEntryPointManager,
-                                 @NonNull ApplicationStateProviderImpl applicationStateProvider,
-                                 @NonNull ICommonExecutor reportExecutor,
-                                 @NonNull AppMetricaServiceCoreImplFieldsFactory fieldsFactory,
-                                 @NonNull ScreenInfoHolder screenInfoHolder) {
+    AppMetricaServiceCoreImpl(@NonNull Context context,
+                              @NonNull AppMetricaServiceCallback callback,
+                              @NonNull ClientRepository clientRepository,
+                              @NonNull AppMetricaServiceLifecycle appMetricaServiceLifecycle,
+                              @NonNull FirstServiceEntryPointManager firstServiceEntryPointManager,
+                              @NonNull ApplicationStateProviderImpl applicationStateProvider,
+                              @NonNull ICommonExecutor reportExecutor,
+                              @NonNull AppMetricaServiceCoreImplFieldsFactory fieldsFactory,
+                              @NonNull ScreenInfoHolder screenInfoHolder) {
         mContext = context;
         mCallback = callback;
         mClientRepository = clientRepository;
@@ -173,7 +173,7 @@ public class AppAppMetricaServiceCoreImpl implements AppMetricaServiceCore, Metr
         initJvmCrashWatcher();
         initNativeCrashReporting();
         YLogger.info(TAG, "Run scheduler on first create additional tasks");
-        new MetricaCoreImplFirstCreateTaskLauncherProvider().getLauncher().run();
+        new CoreImplFirstCreateTaskLauncherProvider().getLauncher().run();
         YLogger.info(TAG, "Finish onFirstCreate");
     }
 
@@ -351,7 +351,7 @@ public class AppAppMetricaServiceCoreImpl implements AppMetricaServiceCore, Metr
     }
 
     @Override
-    public void updateCallback(@NonNull MetricaServiceCallback callback) {
+    public void updateCallback(@NonNull AppMetricaServiceCallback callback) {
         mCallback = callback;
     }
 

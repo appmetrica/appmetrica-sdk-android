@@ -5,7 +5,7 @@ import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
 import io.appmetrica.analytics.impl.IReporterExtended
 import io.appmetrica.analytics.impl.InternalEvents
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade
-import io.appmetrica.analytics.impl.service.MetricaServiceDataReporter
+import io.appmetrica.analytics.impl.service.AppMetricaServiceDataReporter
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.MockedStaticRule
 import org.assertj.core.api.Assertions.assertThat
@@ -53,7 +53,7 @@ class ModuleSelfReporterImplTest : CommonTest() {
         ObjectPropertyAssertions(moduleEventArgumentCaptor.firstValue)
             .withPrivateFields(true)
             .checkField("type", "getType", clientEventType)
-            .checkField("serviceDataReporterType", MetricaServiceDataReporter.TYPE_CORE)
+            .checkField("serviceDataReporterType", AppMetricaServiceDataReporter.TYPE_CORE)
             .checkField("name", "getName", eventName)
             .checkField("value", "getValue", null)
             .checkField("environment", "getEnvironment", null)
@@ -72,7 +72,7 @@ class ModuleSelfReporterImplTest : CommonTest() {
         ObjectPropertyAssertions(moduleEventArgumentCaptor.firstValue)
             .withPrivateFields(true)
             .checkField("type", "getType", clientEventType)
-            .checkField("serviceDataReporterType", MetricaServiceDataReporter.TYPE_CORE)
+            .checkField("serviceDataReporterType", AppMetricaServiceDataReporter.TYPE_CORE)
             .checkField("name", "getName", eventName)
             .checkField("value", "getValue", null)
             .checkField("environment", "getEnvironment", null)
@@ -93,7 +93,7 @@ class ModuleSelfReporterImplTest : CommonTest() {
             .checkField("type", eventType)
             .checkField("name", eventName)
             .checkField("value", stringValue)
-            .checkField("serviceDataReporterType", MetricaServiceDataReporter.TYPE_CORE)
+            .checkField("serviceDataReporterType", AppMetricaServiceDataReporter.TYPE_CORE)
             .checkFieldsAreNull("environment", "extras", "attributes")
             .checkAll()
     }
@@ -110,7 +110,7 @@ class ModuleSelfReporterImplTest : CommonTest() {
             .checkField("type", clientEventType)
             .checkField("name", eventName)
             .checkField("value", stringValue)
-            .checkField("serviceDataReporterType", MetricaServiceDataReporter.TYPE_CORE)
+            .checkField("serviceDataReporterType", AppMetricaServiceDataReporter.TYPE_CORE)
             .checkFieldsAreNull("environment", "extras", "attributes")
             .checkAll()
     }

@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit
 
 private const val TAG = "[MetricaCoreImplFirstCreateTaskLauncher]"
 
-class MetricaCoreImplFirstCreateTaskLauncher(private val tasks: List<Runnable>) : Runnable {
+class CoreImplFirstCreateTaskLauncher(private val tasks: List<Runnable>) : Runnable {
 
     private val executor = GlobalServiceLocator.getInstance().serviceExecutorProvider.defaultExecutor
     private val activationBarrier = UtilityServiceLocator.instance.activationBarrier

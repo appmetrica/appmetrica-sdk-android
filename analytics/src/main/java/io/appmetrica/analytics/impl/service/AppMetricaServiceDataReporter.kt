@@ -2,15 +2,15 @@ package io.appmetrica.analytics.impl.service
 
 import android.os.Bundle
 import androidx.annotation.WorkerThread
-import io.appmetrica.analytics.impl.MetricaCoreReporter
+import io.appmetrica.analytics.impl.AppMetricaCoreReporter
 
-class MetricaServiceDataReporter(
-    private val metricaCore: MetricaCoreReporter
+class AppMetricaServiceDataReporter(
+    private val reporter: AppMetricaCoreReporter
 ) : ServiceDataReporter {
 
     @WorkerThread
     override fun reportData(type: Int, bundle: Bundle) {
-        metricaCore.reportData(bundle)
+        reporter.reportData(bundle)
     }
 
     companion object {

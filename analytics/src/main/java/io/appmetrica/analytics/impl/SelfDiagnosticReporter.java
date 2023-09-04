@@ -5,7 +5,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.client.ProcessConfiguration;
-import io.appmetrica.analytics.impl.service.MetricaServiceDataReporter;
+import io.appmetrica.analytics.impl.service.AppMetricaServiceDataReporter;
 import io.appmetrica.analytics.internal.CounterConfiguration;
 
 public class SelfDiagnosticReporter {
@@ -48,7 +48,7 @@ public class SelfDiagnosticReporter {
                 CounterConfiguration counterConfiguration = new CounterConfiguration(mApiKey);
                 counterConfiguration.setReporterType(mReporterType);
                 mSelfProcessReporter.reportData(
-                        MetricaServiceDataReporter.TYPE_CORE,
+                        AppMetricaServiceDataReporter.TYPE_CORE,
                         report.toBundle(
                                 new ReporterEnvironment(
                                         new ProcessConfiguration(mContext, null),
