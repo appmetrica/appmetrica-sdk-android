@@ -21,8 +21,6 @@ import io.appmetrica.analytics.testutils.ContextCoverageUtils
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.ArgumentMatchers.any
-import org.mockito.ArgumentMatchers.same
 import org.mockito.Mockito.verify
 import org.mockito.MockitoAnnotations
 import org.mockito.kotlin.doReturn
@@ -89,13 +87,6 @@ class AppMetricaProxyContextTest : CommonTest() {
         proxy.activate(context, config)
         verify(barrier).activate(context, config)
         verify(synchronousStageExecutor).activate(applicationContext, config)
-    }
-
-    @Test
-    fun setLocationTracking() {
-        proxy.setLocationTracking(context, true)
-        verify(barrier).setLocationTracking(context, true)
-        verify(synchronousStageExecutor).setLocationTracking(applicationContext, true)
     }
 
     @Test

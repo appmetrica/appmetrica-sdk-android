@@ -13,7 +13,6 @@ import io.appmetrica.analytics.AnrListener;
 import io.appmetrica.analytics.AppMetricaConfig;
 import io.appmetrica.analytics.DeferredDeeplinkListener;
 import io.appmetrica.analytics.DeferredDeeplinkParametersListener;
-import io.appmetrica.analytics.internal.IdentifiersResult;
 import io.appmetrica.analytics.ReporterConfig;
 import io.appmetrica.analytics.Revenue;
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
@@ -33,6 +32,7 @@ import io.appmetrica.analytics.impl.WebViewJsInterfaceHandler;
 import io.appmetrica.analytics.impl.proxy.validation.MainFacadeBarrier;
 import io.appmetrica.analytics.impl.utils.validation.ValidationResult;
 import io.appmetrica.analytics.impl.utils.validation.Validator;
+import io.appmetrica.analytics.internal.IdentifiersResult;
 import io.appmetrica.analytics.profile.UserProfile;
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule;
 import io.appmetrica.analytics.testutils.CommonTest;
@@ -379,17 +379,6 @@ public class AppMetricaProxyTest extends CommonTest {
         order.verify(mBarrier).setLocation(location);
         order.verify(mSynchronousStageExecutor).setLocation(location);
         order.verify(mProvider).setLocation(location);
-        verifyZeroInteractions(activationValidator);
-    }
-
-    @Test
-    public void testSetLocationTracking() {
-        boolean locationTracking = true;
-        mProxy.setLocationTracking(RuntimeEnvironment.getApplication(), locationTracking);
-        InOrder order = inOrder(mBarrier, mSynchronousStageExecutor, mProvider);
-        order.verify(mBarrier).setLocationTracking(RuntimeEnvironment.getApplication(), locationTracking);
-        order.verify(mSynchronousStageExecutor).setLocationTracking(RuntimeEnvironment.getApplication(), locationTracking);
-        order.verify(mProvider).setLocationTracking(locationTracking);
         verifyZeroInteractions(activationValidator);
     }
 

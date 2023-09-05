@@ -86,12 +86,6 @@ class SynchronousStageExecutorContextTest : CommonTest() {
     }
 
     @Test
-    fun setLocationTracking() {
-        synchronousStageExecutor.setLocationTracking(context, true)
-        verify(contextAppearedListener).onProbablyAppeared(context)
-    }
-
-    @Test
     fun setStatisticsSending() {
         synchronousStageExecutor.setStatisticsSending(context, true)
         verify(contextAppearedListener).onProbablyAppeared(context)

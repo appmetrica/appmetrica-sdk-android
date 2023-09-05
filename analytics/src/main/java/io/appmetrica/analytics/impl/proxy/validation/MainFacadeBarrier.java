@@ -97,10 +97,6 @@ public class MainFacadeBarrier extends ReporterBarrier {
 
     public void setLocationTracking(boolean enabled) {}
 
-    public void setLocationTracking(@NonNull Context context, boolean enabled) {
-        sContextValidator.validate(context);
-    }
-
     public void requestDeferredDeeplinkParameters(@NonNull DeferredDeeplinkParametersListener listener) {
         sDeeplinkListenerValidator.validate(listener);
     }

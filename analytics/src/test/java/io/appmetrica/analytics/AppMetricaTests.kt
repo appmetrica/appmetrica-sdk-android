@@ -171,13 +171,6 @@ internal class AppMetricaTests : CommonTest() {
     }
 
     @Test
-    fun setLocationTrackingEnabledWithContext() {
-        val enabled = Random().nextBoolean()
-        AppMetrica.setLocationTracking(context, enabled)
-        verify(proxy).setLocationTracking(context, enabled)
-    }
-
-    @Test
     fun setStatisticsSending() {
         val enabled = Random().nextBoolean()
         AppMetrica.setStatisticsSending(context, enabled)

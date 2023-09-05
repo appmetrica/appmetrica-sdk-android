@@ -88,16 +88,6 @@ public class MainFacadeBarrierTest extends CommonTest {
     }
 
     @Test
-    public void testLocationTracking() {
-        mBarrier.setLocationTracking(RuntimeEnvironment.getApplication(), false);
-    }
-
-    @Test(expected = ValidationException.class)
-    public void testLocationTrackingNullContext() {
-        mBarrier.setLocationTracking(null, false);
-    }
-
-    @Test
     public void testDeeplinkParametersListener() {
         mBarrier.requestDeferredDeeplinkParameters(mock(DeferredDeeplinkParametersListener.class));
     }

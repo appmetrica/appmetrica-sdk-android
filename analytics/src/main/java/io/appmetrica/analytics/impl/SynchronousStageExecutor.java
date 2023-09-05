@@ -198,10 +198,6 @@ public class SynchronousStageExecutor {
 
     }
 
-    public void setLocationTracking(@NonNull final Context context, final boolean enabled) {
-        contextAppearedListener.onProbablyAppeared(context);
-    }
-
     public void setStatisticsSending(@NonNull final Context context, boolean enabled) {
         contextAppearedListener.onProbablyAppeared(context);
     }

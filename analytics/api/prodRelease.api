@@ -98,7 +98,6 @@ public final class io.appmetrica.analytics.AppMetrica {
     public static void resumeSession([Nullable] android.app.Activity)
     public static void sendEventsBuffer()
     public static void setLocation([Nullable] android.location.Location)
-    public static void setLocationTracking([NonNull] android.content.Context, boolean)
     public static void setLocationTracking(boolean)
     public static void setStatisticsSending([NonNull] android.content.Context, boolean)
     public static void setUserProfileID([Nullable] String)

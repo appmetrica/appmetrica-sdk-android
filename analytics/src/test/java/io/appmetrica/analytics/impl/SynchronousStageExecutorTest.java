@@ -321,12 +321,6 @@ public class SynchronousStageExecutorTest extends CommonTest {
     }
 
     @Test
-    public void testSetLocationTrackingWithContext() {
-        mSynchronousStageExecutor.setLocationTracking(mContext, true);
-        verifyZeroInteractions(mProvider);
-    }
-
-    @Test
     public void testSetStatisticsSendingWithContext() {
         mSynchronousStageExecutor.setStatisticsSending(mContext, true);
         verifyZeroInteractions(mProvider);

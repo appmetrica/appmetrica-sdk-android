@@ -15,7 +15,6 @@ import io.appmetrica.analytics.AnrListener;
 import io.appmetrica.analytics.AppMetricaConfig;
 import io.appmetrica.analytics.DeferredDeeplinkListener;
 import io.appmetrica.analytics.DeferredDeeplinkParametersListener;
-import io.appmetrica.analytics.internal.IdentifiersResult;
 import io.appmetrica.analytics.ReporterConfig;
 import io.appmetrica.analytics.Revenue;
 import io.appmetrica.analytics.StartupParamsCallback;
@@ -37,6 +36,7 @@ import io.appmetrica.analytics.impl.SynchronousStageExecutor;
 import io.appmetrica.analytics.impl.WebViewJsInterfaceHandler;
 import io.appmetrica.analytics.impl.proxy.validation.MainFacadeBarrier;
 import io.appmetrica.analytics.impl.utils.ApiProxyThread;
+import io.appmetrica.analytics.internal.IdentifiersResult;
 import io.appmetrica.analytics.profile.UserProfile;
 import java.util.List;
 import java.util.Map;
@@ -310,17 +310,6 @@ public final class AppMetricaProxy extends BaseAppMetricaProxy {
     public void setLocationTracking(final boolean enabled) {
         mMainFacadeBarrier.setLocationTracking(enabled);
         getSynchronousStageExecutor().setLocationTracking(enabled);
-        getExecutor().execute(new Runnable() {
-            @Override
-            public void run() {
-                getProvider().setLocationTracking(enabled);
-            }
-        });
-    }
-
-    public void setLocationTracking(@NonNull final Context context, final boolean enabled) {
-        mMainFacadeBarrier.setLocationTracking(context, enabled);
-        getSynchronousStageExecutor().setLocationTracking(context.getApplicationContext(), enabled);
         getExecutor().execute(new Runnable() {
             @Override
             public void run() {

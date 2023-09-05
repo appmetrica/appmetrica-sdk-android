@@ -296,7 +296,6 @@ public final class AppMetrica {
      * @param location location that will be used instead of auto collected
      *
      * @see AppMetrica#setLocationTracking(boolean)
-     * @see AppMetrica#setLocationTracking(Context, boolean)
      */
     public static void setLocation(@Nullable Location location) {
         AppMetricaProxyProvider.getProxy().setLocation(location);
@@ -309,24 +308,10 @@ public final class AppMetrica {
      * @param enabled {@code true} to allow AppMetrica to record location information in reports,
      *                otherwise {@code false}.
      *
-     * @see AppMetrica#setLocation(android.location.Location)
+     * @see AppMetrica#setLocation(Location)
      */
     public static void setLocationTracking(boolean enabled) {
         AppMetricaProxyProvider.getProxy().setLocationTracking(enabled);
-    }
-
-    /**
-     * Sets whether AppMetrica should include location information within its reports.<p>
-     * <b>NOTE:</b> Default value is {@code false}.
-     *
-     * @param context Context object
-     * @param enabled {@code true} to allow AppMetrica to record location information in reports,
-     *                otherwise {@code false}.
-     *
-     * @see AppMetrica#setLocation(android.location.Location)
-     */
-    public static void setLocationTracking(@NonNull Context context, boolean enabled) {
-        AppMetricaProxyProvider.getProxy().setLocationTracking(context, enabled);
     }
 
     /**
