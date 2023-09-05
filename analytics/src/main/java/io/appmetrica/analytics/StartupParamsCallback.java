@@ -30,21 +30,37 @@ public interface StartupParamsCallback {
      */
     final class Result {
 
+        /**
+         * Values for all requested parameters if they are present.
+         */
         @NonNull
         public final Map<String, StartupParamsItem> parameters;
+        /**
+         * UUID value or null.
+         */
         @Nullable
         public final String uuid;
+        /**
+         * Device ID value or null.
+         */
         @Nullable
         public final String deviceId;
+        /**
+         * Device ID hash or null.
+         */
         @Nullable
         public final String deviceIdHash;
 
+        /**
+         * Constructor for {@link Result}.
+         *
+         * @param parameters Values for all requested parameters.
+         */
         public Result(@NonNull final Map<String, StartupParamsItem> parameters) {
             this.parameters = parameters;
             this.uuid = parameterForKey(APPMETRICA_UUID);
             this.deviceId = parameterForKey(APPMETRICA_DEVICE_ID);
             this.deviceIdHash = parameterForKey(APPMETRICA_DEVICE_ID_HASH);
-
         }
 
         /**
@@ -64,6 +80,9 @@ public interface StartupParamsCallback {
         }
     }
 
+    /**
+     * Possible values that are passed when calling {@link StartupParamsCallback#onRequestError(Reason, Result)} method.
+     */
     final class Reason {
 
         /**
@@ -81,9 +100,17 @@ public interface StartupParamsCallback {
          */
         public static Reason INVALID_RESPONSE = new Reason("INVALID_RESPONSE");
 
+        /**
+         * Text value of Reason.
+         */
         @NonNull
         public final String value;
 
+        /**
+         * Constructor for {@link Reason}.
+         *
+         * @param value {@link String} with reason
+         */
         public Reason(@NonNull final String value) {
             this.value = value;
         }

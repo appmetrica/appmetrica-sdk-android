@@ -40,6 +40,9 @@ public class UserProfile {
         mUserProfileUpdates = CollectionUtils.unmodifiableListCopy(userProfileUpdates);
     }
 
+    /**
+     * @return list of all {@link UserProfileUpdate} objects
+     */
     @NonNull
     public List<UserProfileUpdate<? extends UserProfileUpdatePatcher>> getUserProfileUpdates() {
         return mUserProfileUpdates;

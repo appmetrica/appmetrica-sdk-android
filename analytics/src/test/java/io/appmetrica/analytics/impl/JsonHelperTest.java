@@ -1,13 +1,13 @@
 package io.appmetrica.analytics.impl;
 
 import android.os.Build;
-import io.appmetrica.analytics.internal.IdentifiersResult;
 import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
 import io.appmetrica.analytics.billinginterface.internal.config.BillingConfig;
 import io.appmetrica.analytics.coreapi.internal.constants.DeviceTypeValues;
 import io.appmetrica.analytics.coreapi.internal.device.ScreenInfo;
 import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus;
 import io.appmetrica.analytics.impl.utils.JsonHelper;
+import io.appmetrica.analytics.internal.IdentifiersResult;
 import io.appmetrica.analytics.testutils.CommonTest;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;

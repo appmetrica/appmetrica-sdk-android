@@ -5,6 +5,28 @@ package io.appmetrica.analytics;
  * @see AdRevenue#adType
  */
 public enum AdType {
-
-    NATIVE, BANNER, REWARDED, INTERSTITIAL, MREC, OTHER
+    /**
+     * NATIVE Ad Type.
+     */
+    NATIVE,
+    /**
+     * BANNER Ad Type.
+     */
+    BANNER,
+    /**
+     * REWARDED Ad Type.
+     */
+    REWARDED,
+    /**
+     * INTERSTITIAL Ad Type.
+     */
+    INTERSTITIAL,
+    /**
+     * MREC Ad Type.
+     */
+    MREC,
+    /**
+     * OTHER Ad Type.
+     */
+    OTHER
 }

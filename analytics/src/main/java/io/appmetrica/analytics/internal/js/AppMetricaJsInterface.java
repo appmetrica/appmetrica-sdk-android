@@ -6,7 +6,7 @@ import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.proxy.AppMetricaProxy;
 
 /**
- * This class is used as a bridge between Javascript and native code.
+ * This class is used as a bridge between JavaScript and native code.
  * It allows to report AppMetrica events directly from JS code.
  * For more info see method descriptions.
  */

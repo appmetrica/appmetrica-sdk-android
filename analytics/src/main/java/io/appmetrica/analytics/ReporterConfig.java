@@ -11,14 +11,46 @@ import io.appmetrica.analytics.impl.utils.validation.api.ApiKeyValidator;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Contains configuration of analytic processing in {@link IReporter}.
+ * Configuration created by {@link ReporterConfig.Builder}.
+ */
 public class ReporterConfig {
 
+    /**
+     * Unique identifier of app in AppMetrica.
+     *
+     * @see ReporterConfig#newConfigBuilder(String)
+     */
     @NonNull
     public final String apiKey;
+
+    /**
+     * Duration of AppMetrica foreground session timeout.
+     *
+     * @see Builder#withSessionTimeout(int)
+     */
     @Nullable
     public final Integer sessionTimeout;
+
+    /**
+     * Indicates whether statistics should be sent to the AppMetrica server.
+     *
+     * @see Builder#withStatisticsSending(boolean)
+     */
     @Nullable
     public final Boolean statisticsSending;
+
+    /**
+     * Maximum number of reports to store in database.
+     * Default value is {@value AppMetricaDefaultValues#DEFAULT_MAX_REPORTS_IN_DATABASE_COUNT}.
+     * Must be in range
+     * [{@value AppMetricaDefaultValues#DEFAULT_MAX_REPORTS_COUNT_LOWER_BOUND};
+     * {@value AppMetricaDefaultValues#DEFAULT_MAX_REPORTS_COUNT_UPPER_BOUND}].
+     * If not, closest possible value will be used.
+     *
+     * @see Builder#withMaxReportsInDatabaseCount(int)
+     */
     @Nullable
     public final Integer maxReportsInDatabaseCount;
     /**
@@ -26,7 +58,7 @@ public class ReporterConfig {
      *
      * <b>NOTE:</b> The string value can contain up to 200 characters.
      *
-     * @see AppMetricaConfig.Builder#withUserProfileID(String)
+     * @see Builder#withUserProfileID(String)
      */
     @Nullable
     public final String userProfileID;
@@ -36,7 +68,7 @@ public class ReporterConfig {
      *
      * <p>{@code true} if enabled, {@code false} if not</p>
      *
-     * @see AppMetricaConfig.Builder#withLogs()
+     * @see Builder#withLogs()
      */
     @Nullable
     public final Boolean logs;
@@ -67,12 +99,12 @@ public class ReporterConfig {
     /**
      * Additional configs
      *
-     * @see AppMetricaConfig.Builder#withAdditionalConfig(String, Object)
+     * @see Builder#withAdditionalConfig(String, Object)
      */
     @NonNull
     public final Map<String, Object> additionalConfig;
 
-    ReporterConfig(@NonNull Builder builder) {
+    private ReporterConfig(@NonNull Builder builder) {
         apiKey = builder.mApiKey;
         sessionTimeout = builder.mSessionTimeout;
         logs = builder.mLogs;
@@ -98,11 +130,26 @@ public class ReporterConfig {
         additionalConfig = config.additionalConfig;
     }
 
+    /**
+     * Creates the new instance of {@link Builder}
+     *
+     * @param apiKey API_KEY - unique identifier of app in AppMetrica.
+     *
+     * @see <a href="https://yandex.com/dev/appmetrica/doc/mobile-sdk-dg/concepts/android-initialize.html">
+     * AppMetrica SDK documentation </a>
+     *
+     * @return builder of {@link ReporterConfig}
+     *
+     * @throws IllegalArgumentException if {@code apiKey} is null, empty or has invalid format.
+     */
     @NonNull
     public static Builder newConfigBuilder(@NonNull String apiKey) {
         return new Builder(apiKey);
     }
 
+    /**
+     * Builds a new {@link ReporterConfig} object.
+     */
     public static class Builder {
 
         private static final Validator<String> sApiKeyValidator =
@@ -131,7 +178,7 @@ public class ReporterConfig {
         @NonNull
         private final HashMap<String, Object> additionalConfig = new HashMap<>();
 
-        Builder(@NonNull String apiKey) {
+        private Builder(@NonNull String apiKey) {
             sApiKeyValidator.validate(apiKey);
             this.configChecker = new ConfigChecker(apiKey);
             mApiKey = apiKey;
@@ -219,7 +266,7 @@ public class ReporterConfig {
          * <b>NOTE:</b> The string value can contain up to 200 characters.
          *
          * @param userProfileID The custom user profile ID.
-         * @return the same {@link AppMetricaConfig.Builder} object
+         * @return the same {@link Builder} object
          * @see AppMetrica#setUserProfileID(String)
          */
         @NonNull
@@ -228,12 +275,39 @@ public class ReporterConfig {
             return this;
         }
 
+        /**
+         * Sets maximum buffer size for reports.
+         * <p> <b>NOTE:</b> Default value is
+         * {@value AppMetricaDefaultValues#DEFAULT_MAX_REPORTS_COUNT}.
+         * If you set a non-positive value,
+         * then automatic sending will be disabled
+         * for the situation when the events buffer is full.
+         *
+         * @param maxReportsCount Max number of items/reports to automatically send reports.
+         *
+         * @see Builder#withDispatchPeriodSeconds(int)
+         *
+         * @return the same {@link Builder} object.
+         */
         @NonNull
         public Builder withMaxReportsCount(int maxReportsCount) {
             this.maxReportsCount = maxReportsCount;
             return this;
         }
 
+        /**
+         * Timeout of events sending if the number of events is less than {@link ReporterConfig#maxReportsCount}.
+         * <p> <b>NOTE:</b> Default value is
+         * {@value AppMetricaDefaultValues#DEFAULT_DISPATCH_PERIOD_SECONDS}.
+         * If you set a non-positive value,
+         * then automatic sending by timer will be disabled.
+         *
+         * @param dispatchPeriodSeconds Timeout in seconds to automatically send reports.
+         *
+         * @see Builder#withMaxReportsCount(int)
+         *
+         * @return the same {@link Builder} object.
+         */
         @NonNull
         public Builder withDispatchPeriodSeconds(int dispatchPeriodSeconds) {
             this.dispatchPeriodSeconds = dispatchPeriodSeconds;
@@ -262,7 +336,7 @@ public class ReporterConfig {
          * Sets key - config data
          * @param key the config key.
          * @param config the config value.
-         * @return the same {@link ReporterConfig.Builder} object.
+         * @return the same {@link Builder} object.
          */
         @NonNull
         public Builder withAdditionalConfig(

@@ -133,7 +133,6 @@ public class io.appmetrica.analytics.AppMetricaConfig {
     public final [Nullable] Boolean statisticsSending
     public final [Nullable] String userProfileID
 
-    protected <init>([NonNull] io.appmetrica.analytics.AppMetricaConfig$Builder)
     protected <init>([NonNull] io.appmetrica.analytics.AppMetricaConfig)
     public static io.appmetrica.analytics.AppMetricaConfig fromJson(String)
     public static [NonNull] io.appmetrica.analytics.AppMetricaConfig$Builder newConfigBuilder([NonNull] String)
@@ -141,7 +140,6 @@ public class io.appmetrica.analytics.AppMetricaConfig {
 }
 
 public static class io.appmetrica.analytics.AppMetricaConfig$Builder {
-    protected <init>([NonNull] String)
     public [NonNull] io.appmetrica.analytics.AppMetricaConfig build()
     public [NonNull] io.appmetrica.analytics.AppMetricaConfig$Builder handleFirstActivationAsUpdate(boolean)
     public [NonNull] io.appmetrica.analytics.AppMetricaConfig$Builder withAdditionalConfig([NonNull] String, [Nullable] Object)

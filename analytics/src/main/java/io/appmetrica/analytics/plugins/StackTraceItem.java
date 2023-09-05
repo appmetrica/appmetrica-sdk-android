@@ -36,31 +36,49 @@ public class StackTraceItem {
         this.methodName = methodName;
     }
 
+    /**
+     * @return class name if it is defined or null otherwise
+     */
     @Nullable
     public String getClassName() {
         return className;
     }
 
+    /**
+     * @return file name if it is defined or null otherwise
+     */
     @Nullable
     public String getFileName() {
         return fileName;
     }
 
+    /**
+     * @return line if it is defined or null otherwise
+     */
     @Nullable
     public Integer getLine() {
         return line;
     }
 
+    /**
+     * @return column if it is defined or null otherwise
+     */
     @Nullable
     public Integer getColumn() {
         return column;
     }
 
+    /**
+     * @return method name if it is defined or null otherwise
+     */
     @Nullable
     public String getMethodName() {
         return methodName;
     }
 
+    /**
+     * Builder for {@link StackTraceItem}.
+     */
     public static class Builder {
 
         @Nullable

@@ -5,6 +5,11 @@ import androidx.annotation.NonNull;
 import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.proxy.AppMetricaProxy;
 
+/**
+ * This class is used as a bridge between JavaScript and native code.
+ * It allows to report AppMetrica JacaScript init event directly from JS code.
+ * For more info see method descriptions.
+ */
 public class AppMetricaInitializerJsInterface {
 
     private static final String TAG = "[AppMetricaInitializerJsInterface]";
@@ -16,6 +21,11 @@ public class AppMetricaInitializerJsInterface {
         this.proxy = proxy;
     }
 
+    /**
+     * Send JS init event.
+     *
+     * @param value value for JS init event.
+     */
     @JavascriptInterface
     public void init(final String value) {
         YLogger.info(TAG, "init");

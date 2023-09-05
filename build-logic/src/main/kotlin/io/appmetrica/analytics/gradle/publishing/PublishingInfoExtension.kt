@@ -8,4 +8,5 @@ abstract class PublishingInfoExtension {
 
     abstract val baseArtifactId: Property<String>
     abstract val withJavadoc: Property<Boolean>
+    abstract val checkAllJavadoc: Property<Boolean>
 }

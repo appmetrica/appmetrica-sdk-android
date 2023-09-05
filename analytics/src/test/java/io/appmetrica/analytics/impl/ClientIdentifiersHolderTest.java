@@ -1,7 +1,6 @@
 package io.appmetrica.analytics.impl;
 
 import android.os.Bundle;
-import io.appmetrica.analytics.internal.IdentifiersResult;
 import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
 import io.appmetrica.analytics.billinginterface.internal.config.BillingConfig;
 import io.appmetrica.analytics.coreapi.internal.identifiers.AdTrackingInfo;
@@ -15,6 +14,7 @@ import io.appmetrica.analytics.impl.startup.StartupUpdateConfig;
 import io.appmetrica.analytics.impl.utils.JsonHelper;
 import io.appmetrica.analytics.impl.utils.StartupUtils;
 import io.appmetrica.analytics.impl.utils.TimeUtils;
+import io.appmetrica.analytics.internal.IdentifiersResult;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.MockedStaticRule;
 import io.appmetrica.analytics.testutils.TestUtils;

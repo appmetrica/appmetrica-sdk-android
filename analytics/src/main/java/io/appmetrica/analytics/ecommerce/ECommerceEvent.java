@@ -126,6 +126,9 @@ public abstract class ECommerceEvent implements ProtoSerializable {
         return provider;
     }
 
+    /**
+     * @return {@link String} with event description
+     */
     @NonNull
     public String getPublicDescription() {
         return "E-commerce base event";

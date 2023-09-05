@@ -10,6 +10,12 @@ import androidx.annotation.Nullable;
  */
 public interface ICrashTransformer {
 
+    /**
+     * This method is called before crash sending. It allows user to transform {@link Throwable} that is processed.
+     *
+     * @param crash Caught {@link Throwable}
+     * @return Transformed {@link Throwable}
+     */
     @Nullable
     Throwable process(@NonNull Throwable crash);
 }

@@ -3,6 +3,9 @@ package io.appmetrica.analytics;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+/**
+ * A listener for implementing a deferred deeplink handler.
+ */
 public interface DeferredDeeplinkListener {
 
     /**
@@ -33,6 +36,9 @@ public interface DeferredDeeplinkListener {
             mDescription = description;
         }
 
+        /**
+         * @return String value for {@link Error}
+         */
         public String getDescription() {
             return mDescription;
         }
@@ -50,7 +56,7 @@ public interface DeferredDeeplinkListener {
      * Called when error occurs during deferred deeplink obtaining by
      * {@link AppMetrica#requestDeferredDeeplink(DeferredDeeplinkListener)}
      *
-     * @param error error which tells why deferred deeplink parameters were not obtained
+     * @param error error which tells why deferred deeplink was not obtained
      * @param referrer Google Play referrer in case of {@link Error#PARSE_ERROR}
      */
     void onError(@NonNull Error error, @Nullable String referrer);

@@ -4,15 +4,34 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import java.util.Objects;
 
+/**
+ * Startup value with status and error description.
+ */
 public final class StartupParamsItem {
 
+    /**
+     * Startup value.
+     */
     @Nullable
     private final String id;
+    /**
+     * Startup value status.
+     */
     @NonNull
     private final StartupParamsItemStatus status;
+    /**
+     * Startup value error details.
+     */
     @Nullable
     private final String errorDetails;
 
+    /**
+     * Constructor for {@link StartupParamsItem}.
+     *
+     * @param id Value
+     * @param status Status
+     * @param errorDetails Error description
+     */
     public StartupParamsItem(
         @Nullable final String id,
         @NonNull final StartupParamsItemStatus status,
@@ -23,16 +42,25 @@ public final class StartupParamsItem {
         this.errorDetails = errorDetails;
     }
 
+    /**
+     * @return startup value if it is present or null otherwise.
+     */
     @Nullable
     public String getId() {
         return id;
     }
 
+    /**
+     * @return startup value status.
+     */
     @NonNull
     public StartupParamsItemStatus getStatus() {
         return status;
     }
 
+    /**
+     * @return startup value error details.
+     */
     @Nullable
     public String getErrorDetails() {
         return errorDetails;

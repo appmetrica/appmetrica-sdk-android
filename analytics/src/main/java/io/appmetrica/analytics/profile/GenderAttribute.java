@@ -114,8 +114,17 @@ public class GenderAttribute {
      * </ul>
      */
     public enum Gender {
+        /**
+         * Male gender
+         */
         MALE("M"),
+        /**
+         * Female gender
+         */
         FEMALE("F"),
+        /**
+         * Other gender
+         */
         OTHER("O"),
         ;
 

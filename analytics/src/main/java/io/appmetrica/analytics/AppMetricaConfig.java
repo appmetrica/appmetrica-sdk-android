@@ -276,8 +276,22 @@ public class AppMetricaConfig {
         return new Builder(apiKey);
     }
 
+    /**
+     *
+     * @param json {@link String} representing AppMetricaConfig
+     * @return {@link AppMetricaConfig} parsed from giver json
+     */
     public static AppMetricaConfig fromJson(String json) {
         return new ClientConfigSerializer().fromJson(json);
+    }
+
+    /**
+     * Serializes {@link AppMetricaConfig} to json
+     *
+     * @return {@link String} representing this {@link AppMetricaConfig}
+     */
+    public String toJson() {
+        return new ClientConfigSerializer().toJson(this);
     }
 
     /**
@@ -371,7 +385,7 @@ public class AppMetricaConfig {
         @NonNull
         private final HashMap<String, Object> additionalConfig = new HashMap<>();
 
-        protected Builder(@NonNull String apiKey) {
+        private Builder(@NonNull String apiKey) {
             sApiKeyValidator.validate(apiKey);
             this.configChecker = new ConfigChecker(apiKey);
             mApiKey = apiKey;
@@ -838,7 +852,7 @@ public class AppMetricaConfig {
         }
     }
 
-    protected AppMetricaConfig(@NonNull Builder builder) {
+    private AppMetricaConfig(@NonNull Builder builder) {
         apiKey = builder.mApiKey;
         appVersion = builder.mAppVersion;
         sessionTimeout = builder.mSessionTimeout;
@@ -868,6 +882,11 @@ public class AppMetricaConfig {
         additionalConfig = CollectionUtils.unmodifiableSameOrderMapCopy(builder.additionalConfig);
     }
 
+    /**
+     * Clone constructor
+     *
+     * @param source {@link AppMetricaConfig} to clone
+     */
     protected AppMetricaConfig(@NonNull AppMetricaConfig source) {
         apiKey = source.apiKey;
         appVersion = source.appVersion;
@@ -896,9 +915,5 @@ public class AppMetricaConfig {
         anrMonitoringTimeout = source.anrMonitoringTimeout;
         customHosts = source.customHosts;
         additionalConfig = source.additionalConfig;
-    }
-
-    public String toJson() {
-        return new ClientConfigSerializer().toJson(this);
     }
 }

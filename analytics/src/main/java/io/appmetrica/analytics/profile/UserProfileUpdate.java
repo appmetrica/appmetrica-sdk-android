@@ -11,12 +11,17 @@ import io.appmetrica.analytics.impl.profile.UserProfileUpdatePatcher;
 public class UserProfileUpdate<T extends UserProfileUpdatePatcher> {
 
     @NonNull
-    final T mUserProfileUpdatePatcher;
+    private final T mUserProfileUpdatePatcher;
 
     UserProfileUpdate(@NonNull T userProfileUpdatePatcher) {
         mUserProfileUpdatePatcher = userProfileUpdatePatcher;
     }
 
+    /**
+     * For internal usage.
+     *
+     * @return object of internal type
+     */
     @NonNull
     public T getUserProfileUpdatePatcher() {
         return mUserProfileUpdatePatcher;

@@ -25,9 +25,18 @@ public class AdvIdentifiersResult {
     @NonNull
     public final AdvId yandexAdvId;
 
-    public AdvIdentifiersResult(@NonNull AdvId googleAdvId,
-                                @NonNull AdvId huaweiAdvId,
-                                @NonNull AdvId yandexAdvId) {
+    /**
+     * Constructor for AdsIdentifiersResult
+     *
+     * @param googleAdvId google adv id
+     * @param huaweiAdvId huawei adv id
+     * @param yandexAdvId yandex adv id
+     */
+    public AdvIdentifiersResult(
+        @NonNull AdvId googleAdvId,
+        @NonNull AdvId huaweiAdvId,
+        @NonNull AdvId yandexAdvId
+    ) {
         this.googleAdvId = googleAdvId;
         this.huaweiAdvId = huaweiAdvId;
         this.yandexAdvId = yandexAdvId;
@@ -35,23 +44,34 @@ public class AdvIdentifiersResult {
 
     /**
      * Describes information about request status.
-     * {@link Details#OK} means that the identifier was retrieved
-     * and the value in {@link AdvId#advId} is not null and valid.
-     * {@link Details#IDENTIFIER_PROVIDER_UNAVAILABLE} means that
-     * the identifier could not be retrieved because providing services are either absent or unavailable.
-     * {@link Details#INVALID_ADV_ID} means that
-     * the identifier was retrieved successfully, but its value equals to default value,
-     * so it can't be used to identify device.
-     * {@link Details#FEATURE_DISABLED} means that
-     * the identifier could not be retrieved because access to adv_id is forbidden by startup.
-     * {@link Details#NO_STARTUP} means that
-     * the identifier could not be retrieved because there was no startup yet so we cannot know
-     * if access to adv_id is forbidden.
-     * {@link Details#INTERNAL_ERROR} means that
-     * the identifier could not be retrieved due to some unknown error.
      */
     public enum Details {
-        OK, IDENTIFIER_PROVIDER_UNAVAILABLE, INVALID_ADV_ID, FEATURE_DISABLED, NO_STARTUP, INTERNAL_ERROR
+        /**
+         * Identifier was retrieved and the value in {@link AdvId#advId} is not null and valid.
+         */
+        OK,
+        /**
+         * Identifier could not be retrieved because providing services are either absent or unavailable.
+         */
+        IDENTIFIER_PROVIDER_UNAVAILABLE,
+        /**
+         * Identifier was retrieved successfully, but its value equals to default value,
+         * so it can't be used to identify device.
+         */
+        INVALID_ADV_ID,
+        /**
+         * Identifier could not be retrieved because access to adv_id is forbidden by startup.
+         */
+        FEATURE_DISABLED,
+        /**
+         * Identifier could not be retrieved because there was no startup yet
+         * so we cannot know if access to adv_id is forbidden.
+         */
+        NO_STARTUP,
+        /**
+         * Identifier could not be retrieved due to some unknown error.
+         */
+        INTERNAL_ERROR
     }
 
     /**
@@ -79,6 +99,12 @@ public class AdvIdentifiersResult {
         @Nullable
         public final String errorExplanation;
 
+        /** Constructor for AdvId
+         *
+         * @param advId adv id
+         * @param details of adv id status
+         * @param errorExplanation with detailed message of adv id absence reasons
+         */
         public AdvId(@Nullable String advId, @NonNull Details details, @Nullable String errorExplanation) {
             this.advId = advId;
             this.details = details;

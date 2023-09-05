@@ -13,6 +13,7 @@ import org.gradle.api.publish.maven.internal.publication.MavenPublicationInterna
 import org.gradle.api.publish.maven.plugins.MavenPublishPlugin
 import org.gradle.api.tasks.TaskProvider
 import org.gradle.api.tasks.javadoc.Javadoc
+import org.gradle.external.javadoc.CoreJavadocOptions
 import org.gradle.jvm.tasks.Jar
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
@@ -123,8 +124,9 @@ class PublishingPlugin : Plugin<Project> {
 
             title = extension.name.get()
             options.encoding = "UTF-8"
-            // TODO https://nda.ya.ru/t/wGHxAUgc6cVCMT
-            // (options as CoreJavadocOptions).addStringOption("Xwerror", "-quiet")
+            if (extension.checkAllJavadoc.get()) {
+                (options as CoreJavadocOptions).addStringOption("Xwerror", "-quiet")
+            }
         }
     }
 
@@ -132,6 +134,7 @@ class PublishingPlugin : Plugin<Project> {
         val extension = extensions.create<PublishingInfoExtension>(EXTENSION_NAME)
         extension.baseArtifactId.convention(project.name)
         extension.withJavadoc.convention(true)
+        extension.checkAllJavadoc.convention(true)
         project.the<LibraryExtension>().productFlavors.configureEach {
             val ext = extensions.create<PublishingInfoFlavorExtension>(EXTENSION_NAME)
             ext.artifactIdSuffix.convention("")

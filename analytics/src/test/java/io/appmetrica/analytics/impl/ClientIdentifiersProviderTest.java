@@ -1,7 +1,6 @@
 package io.appmetrica.analytics.impl;
 
 import android.content.Context;
-import io.appmetrica.analytics.internal.IdentifiersResult;
 import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
 import io.appmetrica.analytics.billinginterface.internal.config.BillingConfig;
 import io.appmetrica.analytics.coreapi.internal.identifiers.AdTrackingInfo;
@@ -16,6 +15,7 @@ import io.appmetrica.analytics.impl.startup.StartupUnit;
 import io.appmetrica.analytics.impl.startup.StartupUpdateConfig;
 import io.appmetrica.analytics.impl.utils.JsonHelper;
 import io.appmetrica.analytics.impl.utils.StartupUtils;
+import io.appmetrica.analytics.internal.IdentifiersResult;
 import io.appmetrica.analytics.testutils.CommonTest;
 import java.util.Arrays;
 import java.util.HashMap;

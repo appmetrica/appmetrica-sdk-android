@@ -5,7 +5,6 @@ import android.os.Parcelable;
 import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import io.appmetrica.analytics.internal.IdentifiersResult;
 import io.appmetrica.analytics.coreapi.internal.identifiers.AdvertisingIdsHolder;
 import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus;
 import io.appmetrica.analytics.impl.startup.FeaturesInternal;
@@ -13,6 +12,7 @@ import io.appmetrica.analytics.impl.startup.StartupState;
 import io.appmetrica.analytics.impl.utils.JsonHelper;
 import io.appmetrica.analytics.impl.utils.StartupUtils;
 import io.appmetrica.analytics.impl.utils.TimeUtils;
+import io.appmetrica.analytics.internal.IdentifiersResult;
 import java.util.Map;
 
 public class ClientIdentifiersHolder {

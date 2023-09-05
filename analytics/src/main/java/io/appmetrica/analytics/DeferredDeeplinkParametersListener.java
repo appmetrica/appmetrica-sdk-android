@@ -36,6 +36,9 @@ public interface DeferredDeeplinkParametersListener {
             mDescription = description;
         }
 
+        /**
+         * @return String value for {@link Error}
+         */
         public String getDescription() {
             return mDescription;
         }

@@ -20,12 +20,29 @@ public class PluginErrorDetails {
      * Class containing popular constants used in {@link PluginErrorDetails.Builder#withPlatform(String)}.
      */
     public static final class Platform {
-
+        /**
+         * Constant for Native Android
+         */
         public static final String NATIVE = "native";
+        /**
+         * Constant for Flutter
+         */
         public static final String FLUTTER = "flutter";
+        /**
+         * Constant for Unity
+         */
         public static final String UNITY = "unity";
+        /**
+         * Constant for React Native
+         */
         public static final String REACT_NATIVE = "react_native";
+        /**
+         * Constant for Cordova
+         */
         public static final String CORDOVA = "cordova";
+        /**
+         * Constant for Xamarin
+         */
         public static final String XAMARIN = "xamarin";
     }
 
@@ -58,44 +75,71 @@ public class PluginErrorDetails {
         this.pluginEnvironment = CollectionUtils.getMapFromList(CollectionUtils.getListFromMap(pluginEnvironment));
     }
 
+    /**
+     * @return class name if it is defined or null otherwise
+     */
     @Nullable
     public String getExceptionClass() {
         return exceptionClass;
     }
 
+    /**
+     * @return message if it is defined or null otherwise
+     */
     @Nullable
     public String getMessage() {
         return message;
     }
 
+    /**
+     * @return list of {@link StackTraceItem}
+     */
     @NonNull
     public List<StackTraceItem> getStacktrace() {
         return stacktrace;
     }
 
+    /**
+     * @return platform if it is defined or null otherwise
+     */
     @Nullable
     public String getPlatform() {
         return platform;
     }
 
+    /**
+     * @return virtual machine version if it is defined or null otherwise
+     */
     @Nullable
     public String getVirtualMachineVersion() {
         return virtualMachineVersion;
     }
 
+    /**
+     * @return plugin environment
+     */
     @NonNull
     public Map<String, String> getPluginEnvironment() {
         return pluginEnvironment;
     }
 
+    /**
+     * Builder for {@link PluginErrorDetails}.
+     */
     public static class Builder {
 
-        @Nullable private String exceptionClass;
-        @Nullable private String message;
-        @Nullable private List<StackTraceItem> stacktrace;
-        @Nullable private String platform;
-        @Nullable private String virtualMachineVersion;
-        @Nullable private Map<String, String> pluginEnvironment;
+        @Nullable
+        private String exceptionClass;
+        @Nullable
+        private String message;
+        @Nullable
+        private List<StackTraceItem> stacktrace;
+        @Nullable
+        private String platform;
+        @Nullable
+        private String virtualMachineVersion;
+        @Nullable
+        private Map<String, String> pluginEnvironment;
 
         /**
          * Sets exception class.

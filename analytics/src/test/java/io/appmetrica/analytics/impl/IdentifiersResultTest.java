@@ -1,9 +1,9 @@
 package io.appmetrica.analytics.impl;
 
 import android.os.Parcel;
-import io.appmetrica.analytics.internal.IdentifiersResult;
 import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
 import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus;
+import io.appmetrica.analytics.internal.IdentifiersResult;
 import io.appmetrica.analytics.testutils.CommonTest;
 import org.junit.Test;
 import org.junit.runner.RunWith;

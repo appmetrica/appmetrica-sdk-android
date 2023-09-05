@@ -6,6 +6,7 @@ publishingInfo {
     baseArtifactId.set("analytics-proto")
     name.set("AppMetrica SDK Protocol Buffer JavaNano API")
     withJavadoc.set(false)
+    checkAllJavadoc.set(false)
 }
 
 android {
