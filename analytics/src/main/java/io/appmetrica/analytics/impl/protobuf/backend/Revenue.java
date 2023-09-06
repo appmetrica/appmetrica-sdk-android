@@ -654,9 +654,6 @@ public final class Revenue extends
   // optional uint32 quantity = 1 [default = 1];
   public int quantity;
 
-  // optional double price = 2;
-  public double price;
-
   // required bytes currency = 3;
   public byte[] currency;
 
@@ -693,7 +690,6 @@ public final class Revenue extends
 
   public Revenue clear() {
     quantity = 1;
-    price = 0D;
     currency = io.appmetrica.analytics.protobuf.nano.WireFormatNano.EMPTY_BYTES;
     productId = io.appmetrica.analytics.protobuf.nano.WireFormatNano.EMPTY_BYTES;
     payload = io.appmetrica.analytics.protobuf.nano.WireFormatNano.EMPTY_BYTES;
@@ -713,10 +709,6 @@ public final class Revenue extends
       throws java.io.IOException {
     if (this.quantity != 1) {
       output.writeUInt32(1, this.quantity);
-    }
-    if (java.lang.Double.doubleToLongBits(this.price)
-        != java.lang.Double.doubleToLongBits(0D)) {
-      output.writeDouble(2, this.price);
     }
     output.writeBytes(3, this.currency);
     if (!java.util.Arrays.equals(this.productId, io.appmetrica.analytics.protobuf.nano.WireFormatNano.EMPTY_BYTES)) {
@@ -755,11 +747,6 @@ public final class Revenue extends
     if (this.quantity != 1) {
       size += io.appmetrica.analytics.protobuf.nano.CodedOutputByteBufferNano
           .computeUInt32Size(1, this.quantity);
-    }
-    if (java.lang.Double.doubleToLongBits(this.price)
-        != java.lang.Double.doubleToLongBits(0D)) {
-      size += io.appmetrica.analytics.protobuf.nano.CodedOutputByteBufferNano
-          .computeDoubleSize(2, this.price);
     }
     size += io.appmetrica.analytics.protobuf.nano.CodedOutputByteBufferNano
         .computeBytesSize(3, this.currency);
@@ -819,10 +806,6 @@ public final class Revenue extends
         }
         case 8: {
           this.quantity = input.readUInt32();
-          break;
-        }
-        case 17: {
-          this.price = input.readDouble();
           break;
         }
         case 26: {

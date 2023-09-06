@@ -348,14 +348,12 @@ public static class io.appmetrica.analytics.ReporterConfig$Builder {
 public class io.appmetrica.analytics.Revenue {
     public final [NonNull] java.util.Currency currency
     public final [Nullable] String payload
-    public final [Nullable] Double price
-    public final [Nullable] Long priceMicros
+    public final long priceMicros
     public final [Nullable] String productID
     public final [Nullable] Integer quantity
     public final [Nullable] io.appmetrica.analytics.Revenue$Receipt receipt
 
-    public static [NonNull] io.appmetrica.analytics.Revenue$Builder newBuilder(double, [NonNull] java.util.Currency)
-    public static [NonNull] io.appmetrica.analytics.Revenue$Builder newBuilderWithMicros(long, [NonNull] java.util.Currency)
+    public static [NonNull] io.appmetrica.analytics.Revenue$Builder newBuilder(long, [NonNull] java.util.Currency)
 }
 
 public static class io.appmetrica.analytics.Revenue$Builder {

@@ -31,47 +31,14 @@ public class RevenueWrapperTest extends CommonTest {
     }
 
     @Test
-    public void testWithRequired() throws InvalidProtocolBufferNanoException {
-        Revenue revenue = Revenue.newBuilder(100, Currency.getInstance("USD")).build();
-        Pair<byte[], Integer> data = new RevenueWrapper(revenue, mPublicLogger).getDataToSend();
-
-        io.appmetrica.analytics.impl.protobuf.backend.Revenue proto = io.appmetrica.analytics.impl.protobuf.backend.Revenue.parseFrom(data.first);
-
-        SoftAssertions softAssertion = new SoftAssertions();
-        softAssertion.assertThat(proto.currency).as("currency").isEqualTo("USD".getBytes());
-        softAssertion.assertThat(proto.price).as("price").isEqualTo(100);
-        softAssertion.assertThat(proto.priceMicros).as("priceMicros").isZero();
-
-        softAssertion.assertThat(data.second).as("bytes_truncated").isZero();
-        softAssertion.assertAll();
-    }
-
-    @Test
-    public void testWithRequiredDecimal() throws InvalidProtocolBufferNanoException {
-        Revenue revenue = Revenue.newBuilder(55.5, Currency.getInstance("USD")).build();
-        Pair<byte[], Integer> data = new RevenueWrapper(revenue, mPublicLogger).getDataToSend();
-
-        io.appmetrica.analytics.impl.protobuf.backend.Revenue proto = io.appmetrica.analytics.impl.protobuf.backend.Revenue.parseFrom(data.first);
-
-        SoftAssertions softAssertion = new SoftAssertions();
-        softAssertion.assertThat(proto.currency).as("currency").isEqualTo("USD".getBytes());
-        softAssertion.assertThat(proto.price).as("price").isEqualTo(55.5);
-        softAssertion.assertThat(proto.priceMicros).as("priceMicros").isZero();
-
-        softAssertion.assertThat(data.second).as("bytes_truncated").isZero();
-        softAssertion.assertAll();
-    }
-
-    @Test
     public void testWithRequiredMicros() throws InvalidProtocolBufferNanoException {
-        Revenue revenue = Revenue.newBuilderWithMicros(55500000, Currency.getInstance("USD")).build();
+        Revenue revenue = Revenue.newBuilder(55500000, Currency.getInstance("USD")).build();
         Pair<byte[], Integer> data = new RevenueWrapper(revenue, mPublicLogger).getDataToSend();
 
         io.appmetrica.analytics.impl.protobuf.backend.Revenue proto = io.appmetrica.analytics.impl.protobuf.backend.Revenue.parseFrom(data.first);
 
         SoftAssertions softAssertion = new SoftAssertions();
         softAssertion.assertThat(proto.currency).as("currency").isEqualTo("USD".getBytes());
-        softAssertion.assertThat(proto.price).as("price").isZero();
         softAssertion.assertThat(proto.priceMicros).as("priceMicros").isEqualTo(55500000);
 
         softAssertion.assertThat(data.second).as("bytes_truncated").isZero();

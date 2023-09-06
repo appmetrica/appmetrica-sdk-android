@@ -48,12 +48,7 @@ class RevenueWrapper {
         io.appmetrica.analytics.impl.protobuf.backend.Revenue proto =
             new io.appmetrica.analytics.impl.protobuf.backend.Revenue();
         proto.currency = mRevenue.currency.getCurrencyCode().getBytes();
-        if (Utils.isFieldSet(mRevenue.price)) {
-            proto.price = mRevenue.price;
-        }
-        if (Utils.isFieldSet(mRevenue.priceMicros)) {
-            proto.priceMicros = mRevenue.priceMicros;
-        }
+        proto.priceMicros = mRevenue.priceMicros;
         proto.productId = StringUtils.stringToBytesForProtobuf(
                 new StringTrimmer(EventLimitationProcessor.REVENUE_PRODUCT_ID_MAX_LENGTH,
                         "revenue productID", mPublicLogger)

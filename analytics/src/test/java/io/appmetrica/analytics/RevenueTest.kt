@@ -13,25 +13,8 @@ import java.util.Currency
 class RevenueTest : CommonTest() {
 
     @Test
-    fun onlyRequired() {
-        val revenue = Revenue.newBuilder(100.0, Currency.getInstance("USD")).build()
-        assertThat(revenue.price).isEqualTo(100.0)
-        assertThat(revenue.priceMicros).isNull()
-        assertThat(revenue.currency.currencyCode).isEqualTo("USD")
-    }
-
-    @Test
-    fun onlyRequiredDecimal() {
-        val revenue = Revenue.newBuilder(55.5, Currency.getInstance("USD")).build()
-        assertThat(revenue.price).isEqualTo(55.5)
-        assertThat(revenue.priceMicros).isNull()
-        assertThat(revenue.currency.currencyCode).isEqualTo("USD")
-    }
-
-    @Test
     fun onlyRequiredMicros() {
-        val revenue = Revenue.newBuilderWithMicros(55500000, Currency.getInstance("USD")).build()
-        assertThat(revenue.price).isNull()
+        val revenue = Revenue.newBuilder(55500000, Currency.getInstance("USD")).build()
         assertThat(revenue.priceMicros).isEqualTo(55500000)
         assertThat(revenue.currency.currencyCode).isEqualTo("USD")
     }
@@ -39,7 +22,7 @@ class RevenueTest : CommonTest() {
     @Test
     fun optional() {
         val receipt = mock<Revenue.Receipt>()
-        val revenue = Revenue.newBuilder(100.0, Currency.getInstance("USD"))
+        val revenue = Revenue.newBuilder(100, Currency.getInstance("USD"))
             .withPayload("payload")
             .withProductID("productID")
             .withQuantity(300)

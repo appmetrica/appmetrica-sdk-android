@@ -873,9 +873,9 @@ public abstract class BaseReporterTest extends BaseReporterData {
     }
 
     @Test
-    public void logRevenueWithPriceInMicros() {
+    public void logRevenueWithPrice() {
         when(mPublicLogger.isEnabled()).thenReturn(true);
-        Revenue revenue = Revenue.newBuilderWithMicros(12000000, Currency.getInstance("USD")).build();
+        Revenue revenue = Revenue.newBuilder(12000000, Currency.getInstance("USD")).build();
         getReporter().reportRevenue(revenue);
         verify(mPublicLogger).i("Revenue received for productID: <null> of quantity: <null> with price (in micros): 12000000 USD");
     }
@@ -883,7 +883,7 @@ public abstract class BaseReporterTest extends BaseReporterData {
     @Test
     public void logRevenueFilled() {
         when(mPublicLogger.isEnabled()).thenReturn(true);
-        Revenue revenue = Revenue.newBuilderWithMicros(12000000, Currency.getInstance("USD"))
+        Revenue revenue = Revenue.newBuilder(12000000, Currency.getInstance("USD"))
                 .withProductID("12abc")
                 .withQuantity(3)
                 .withPayload("payload")

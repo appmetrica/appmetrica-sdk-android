@@ -122,7 +122,6 @@ public class ProductInfoWrapperTest extends CommonTest {
                             }
                         })
                 .checkField("payload", "".getBytes())
-                .checkField("price", 0.0)
                 .checkAll();
     }
 

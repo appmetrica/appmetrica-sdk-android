@@ -16,27 +16,13 @@ import java.util.Currency;
  * <p>Revenue events are displayed in the AppMetrica Revenue report.</p>
  */
 public class Revenue {
-
-    /**
-     * Price of the products purchased.
-     * <p>It can be negative, e.g. for refunds.</p>
-     *
-     * <p><b>EXAMPLE:</b> 0.99</p>
-     *
-     * @deprecated Use {@link Revenue#priceMicros} instead.
-     */
-    @Deprecated
-    @Nullable
-    public final Double price;
-
     /**
      * Price of the products purchased in micros (price * 10^6).
      * <p>It can be negative, e.g. for refunds.</p>
      *
      * <p><b>EXAMPLE:</b> 990000 (equivalent to 0.99 in real currency)</p>
      */
-    @Nullable
-    public final Long priceMicros;
+    public final long priceMicros;
 
     /**
      * Currency of the purchase.
@@ -88,32 +74,12 @@ public class Revenue {
     public final Receipt receipt;
 
     private Revenue(@NonNull Builder builder) {
-        price = builder.mPrice;
-        priceMicros = builder.mPriceMicros;
+        priceMicros = builder.priceMicros;
         currency = builder.mCurrency;
         quantity = builder.mQuantity;
         productID = builder.mProductID;
         payload = builder.mPayload;
         receipt = builder.mReceipt;
-    }
-
-    /**
-     * Creates the new instance of {@link Builder}.
-     *
-     * @param price Price of the products purchased
-     * @param currency Currency of the purchase
-     *
-     * @return The {@link Builder} object
-     *
-     * @see Revenue#price
-     * @see Revenue#currency
-     *
-     * @deprecated Use {@link Revenue#newBuilderWithMicros(long, Currency)} instead.
-     */
-    @Deprecated
-    @NonNull
-    public static Builder newBuilder(double price, @NonNull Currency currency) {
-        return new Builder(price, currency);
     }
 
     /**
@@ -128,7 +94,7 @@ public class Revenue {
      * @see Revenue#currency
      */
     @NonNull
-    public static Builder newBuilderWithMicros(long priceMicros, @NonNull Currency currency) {
+    public static Builder newBuilder(long priceMicros, @NonNull Currency currency) {
         return new Builder(priceMicros, currency);
     }
 
@@ -141,10 +107,7 @@ public class Revenue {
                 new NonNullValidator<Currency>("revenue currency")
         );
 
-        @Nullable
-        Double mPrice;
-        @Nullable
-        Long mPriceMicros;
+        long priceMicros;
         @NonNull
         Currency mCurrency;
         @Nullable
@@ -156,15 +119,9 @@ public class Revenue {
         @Nullable
         Receipt mReceipt;
 
-        Builder(double price, @NonNull Currency currency) {
-            CURRENCY_VALIDATOR.validate(currency);
-            mPrice = price;
-            mCurrency = currency;
-        }
-
         Builder(long priceMicros, @NonNull Currency currency) {
             CURRENCY_VALIDATOR.validate(currency);
-            mPriceMicros = priceMicros;
+            this.priceMicros = priceMicros;
             mCurrency = currency;
         }
 

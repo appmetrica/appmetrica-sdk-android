@@ -477,14 +477,8 @@ public abstract class BaseReporter implements IBaseReporter {
             builder.append(WrapUtils.wrapToTag(revenue.productID));
             builder.append(" of quantity: ");
             builder.append(WrapUtils.wrapToTag(revenue.quantity));
-            builder.append(" with price");
-            if (revenue.priceMicros != null) {
-                builder.append(" (in micros): ");
-                builder.append(revenue.priceMicros);
-            } else {
-                builder.append(": ");
-                builder.append(revenue.price);
-            }
+            builder.append(" with price (in micros): ");
+            builder.append(revenue.priceMicros);
             builder.append(" ");
             builder.append(revenue.currency);
             mPublicLogger.i(builder.toString());
