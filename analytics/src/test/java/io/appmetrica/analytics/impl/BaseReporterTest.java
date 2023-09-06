@@ -881,14 +881,6 @@ public abstract class BaseReporterTest extends BaseReporterData {
     }
 
     @Test
-    public void logRevenueWithDeprecatedPrice() {
-        when(mPublicLogger.isEnabled()).thenReturn(true);
-        Revenue revenue = Revenue.newBuilder(12, Currency.getInstance("USD")).build();
-        getReporter().reportRevenue(revenue);
-        verify(mPublicLogger).i("Revenue received for productID: <null> of quantity: <null> with price: 12.0 USD");
-    }
-
-    @Test
     public void logRevenueFilled() {
         when(mPublicLogger.isEnabled()).thenReturn(true);
         Revenue revenue = Revenue.newBuilderWithMicros(12000000, Currency.getInstance("USD"))

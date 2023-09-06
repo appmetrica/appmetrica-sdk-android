@@ -1,14 +1,14 @@
 package io.appmetrica.analytics.impl.modules
 
 import io.appmetrica.analytics.ModuleEvent
-import io.appmetrica.analytics.impl.InternalEvents
+import io.appmetrica.analytics.impl.protobuf.backend.EventProto
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade
 import io.appmetrica.analytics.modulesapi.internal.ModuleSelfReporter
 
 class ModuleSelfReporterImpl : ModuleSelfReporter {
 
     private val reporter = AppMetricaSelfReportFacade.getReporter()
-    private val defaultEventType = InternalEvents.EVENT_TYPE_REGULAR.typeId
+    private val defaultEventType = EventProto.ReportMessage.Session.Event.EVENT_CLIENT
 
     override fun reportEvent(eventName: String) {
         reporter.reportEvent(ModuleEvent.newBuilder(defaultEventType).withName(eventName).build())

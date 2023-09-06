@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.modules
 import io.appmetrica.analytics.ModuleEvent
 import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
 import io.appmetrica.analytics.impl.IReporterExtended
-import io.appmetrica.analytics.impl.InternalEvents
+import io.appmetrica.analytics.impl.protobuf.backend.EventProto
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade
 import io.appmetrica.analytics.impl.service.AppMetricaServiceDataReporter
 import io.appmetrica.analytics.testutils.CommonTest
@@ -32,7 +32,7 @@ class ModuleSelfReporterImplTest : CommonTest() {
     private val stringValue = "string value"
     private val stringErrorMessage = "string error message"
     private val errorIdentifier = "error identifier"
-    private val clientEventType = InternalEvents.EVENT_TYPE_REGULAR.typeId
+    private val clientEventType = EventProto.ReportMessage.Session.Event.EVENT_CLIENT
 
     private lateinit var moduleSelfReporterImpl: ModuleSelfReporterImpl
 
