@@ -374,20 +374,20 @@ public class SelfReporterWrapperTest extends CommonTest {
     }
 
     @Test
-    public void testSetStatisticsSendingInitialized() {
+    public void dataSendingEnabledInitialized() {
         final boolean enabled = true;
         mSelfReporterWrapper.onInitializationFinished(mContext);
-        mSelfReporterWrapper.setStatisticsSending(enabled);
-        verify(mReporter).setStatisticsSending(enabled);
+        mSelfReporterWrapper.setDataSendingEnabled(enabled);
+        verify(mReporter).setDataSendingEnabled(enabled);
     }
 
     @Test
-    public void testSetStatisticsSendingNotInitialized() {
+    public void dataSendingEnabledNotInitialized() {
         final boolean enabled = true;
-        mSelfReporterWrapper.setStatisticsSending(enabled);
-        verify(mReporter, never()).setStatisticsSending(enabled);
+        mSelfReporterWrapper.setDataSendingEnabled(enabled);
+        verify(mReporter, never()).setDataSendingEnabled(enabled);
         mSelfReporterWrapper.onInitializationFinished(mContext);
-        verify(mReporter).setStatisticsSending(enabled);
+        verify(mReporter).setDataSendingEnabled(enabled);
     }
 
     @Test

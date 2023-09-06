@@ -36,7 +36,7 @@ public class CommonArgumentsTest extends CommonTest {
         assertions.checkField("appBuildNumber", nullVariable);
         assertions.checkField("manualLocation", nullVariable);
         assertions.checkField("logEnabled", nullVariable);
-        assertions.checkField("statisticsSending", nullVariable);
+        assertions.checkField("dataSendingEnabled", nullVariable);
         assertions.checkField("sessionTimeout", nullVariable);
         assertions.checkField("locationTracking", nullVariable);
         assertions.checkField("maxReportsCount", nullVariable);
@@ -61,7 +61,7 @@ public class CommonArgumentsTest extends CommonTest {
         int maxReportsCount = 11;
         int dispatchPeriod = 222;
         boolean logEnabled = false;
-        boolean statisticsSending = true;
+        boolean dataSendingEnabled = true;
         int maxReportsInDbCount = 2000;
         boolean nativeCrashesEnabled = true;
         boolean revenueAutoTrackingEnabled = false;
@@ -81,7 +81,7 @@ public class CommonArgumentsTest extends CommonTest {
                         maxReportsCount,
                         dispatchPeriod,
                         logEnabled,
-                        statisticsSending,
+                        dataSendingEnabled,
                         clids,
                         maxReportsInDbCount,
                         nativeCrashesEnabled,
@@ -94,7 +94,7 @@ public class CommonArgumentsTest extends CommonTest {
         assertions.checkField("appBuildNumber", appBuildNumber);
         assertions.checkField("manualLocation", manualLocation);
         assertions.checkField("logEnabled", logEnabled);
-        assertions.checkField("statisticsSending", statisticsSending);
+        assertions.checkField("dataSendingEnabled", dataSendingEnabled);
         assertions.checkField("sessionTimeout", sessionTimeout);
         assertions.checkField("locationTracking", locationTracking);
         assertions.checkField("maxReportsCount", maxReportsCount);
@@ -120,7 +120,7 @@ public class CommonArgumentsTest extends CommonTest {
         int maxReportsInDbCount = 2000;
         int dispatchPeriod = 222;
         boolean logEnabled = false;
-        boolean statisticsSending = true;
+        boolean dataSendingEnabled = true;
         boolean nativeCrashesEnabled = true;
         boolean revenueAutoTrackingEnabled = false;
 
@@ -146,7 +146,7 @@ public class CommonArgumentsTest extends CommonTest {
         doReturn(maxReportsCount).when(counterConfiguration).getMaxReportsCount();
         doReturn(dispatchPeriod).when(counterConfiguration).getDispatchPeriod();
         doReturn(logEnabled).when(counterConfiguration).isLogEnabled();
-        doReturn(statisticsSending).when(counterConfiguration).getStatisticsSending();
+        doReturn(dataSendingEnabled).when(counterConfiguration).getDataSendingEnabled();
         doReturn(maxReportsInDbCount).when(counterConfiguration).getMaxReportsInDbCount();
         doReturn(nativeCrashesEnabled).when(counterConfiguration).getReportNativeCrashesEnabled();
         doReturn(revenueAutoTrackingEnabled).when(counterConfiguration).isRevenueAutoTrackingEnabled();
@@ -174,7 +174,7 @@ public class CommonArgumentsTest extends CommonTest {
         assertions.checkField("appBuildNumber", appBuildNumber);
         assertions.checkField("manualLocation", manualLocation);
         assertions.checkField("logEnabled", logEnabled);
-        assertions.checkField("statisticsSending", statisticsSending);
+        assertions.checkField("dataSendingEnabled", dataSendingEnabled);
         assertions.checkField("sessionTimeout", sessionTimeout);
         assertions.checkField("locationTracking", locationTracking);
         assertions.checkField("maxReportsCount", maxReportsCount);

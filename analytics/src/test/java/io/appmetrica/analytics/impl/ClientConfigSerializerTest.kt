@@ -48,7 +48,7 @@ class ClientConfigSerializerTest : CommonTest() {
         val nativeCrashReporting = random.nextBoolean()
         val preloadInfo = PreloadInfo.newBuilder("888999").setAdditionalParams("key", "value").build()
         val sessionTimeout = 23
-        val statisticsSending = random.nextBoolean()
+        val dataSendingEnabled = random.nextBoolean()
         val userProfileID = "user_profile_id"
         val revenueAutoTracking = false
         val sessionsAutoTracking = false
@@ -77,7 +77,7 @@ class ClientConfigSerializerTest : CommonTest() {
             .withNativeCrashReporting(nativeCrashReporting)
             .withPreloadInfo(preloadInfo)
             .withSessionTimeout(sessionTimeout)
-            .withStatisticsSending(statisticsSending)
+            .withDataSendingEnabled(dataSendingEnabled)
             .withUserProfileID(userProfileID)
             .withRevenueAutoTrackingEnabled(revenueAutoTracking)
             .withSessionsAutoTrackingEnabled(sessionsAutoTracking)
@@ -105,7 +105,7 @@ class ClientConfigSerializerTest : CommonTest() {
             .checkField("locationTracking", locationTracking)
             .checkField("logs", true)
             .checkField("firstActivationAsUpdate", handleFirstActivationAsUpdate)
-            .checkField("statisticsSending", statisticsSending)
+            .checkField("dataSendingEnabled", dataSendingEnabled)
             .checkField("maxReportsInDatabaseCount", maxReportsInDbCount)
             .checkField("errorEnvironment", errorEnvironmentMap)
             .checkField("userProfileID", userProfileID)
@@ -151,7 +151,7 @@ class ClientConfigSerializerTest : CommonTest() {
         .checkField("locationTracking", nullBoolean)
         .checkField("logs", nullBoolean)
         .checkField("firstActivationAsUpdate", nullBoolean)
-        .checkField("statisticsSending", nullBoolean)
+        .checkField("dataSendingEnabled", nullBoolean)
         .checkField("maxReportsInDatabaseCount", nullInt)
         .checkField("errorEnvironment", emptyMap<Any, Any>())
         .checkField("location", null as Location?)

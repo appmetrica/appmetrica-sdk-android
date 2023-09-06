@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.modules
 
-import io.appmetrica.analytics.coreapi.internal.control.StatisticsRestrictionController
+import io.appmetrica.analytics.coreapi.internal.control.DataSendingRestrictionController
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.applicationstate.ApplicationStateProvider
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.batteryinfo.ChargeTypeProvider
 import io.appmetrica.analytics.coreapi.internal.system.LocaleProvider
@@ -47,8 +47,8 @@ internal class ServiceContextFacade(
     override val chargeTypeProvider: ChargeTypeProvider
         get() = GlobalServiceLocator.getInstance().batteryInfoProvider
 
-    override val statisticsRestrictionController: StatisticsRestrictionController
-        get() = GlobalServiceLocator.getInstance().statisticsRestrictionController
+    override val dataSendingRestrictionController: DataSendingRestrictionController
+        get() = GlobalServiceLocator.getInstance().dataSendingRestrictionController
 
     override val localeProvider: LocaleProvider = LocaleHolder.getInstance(context)
 }

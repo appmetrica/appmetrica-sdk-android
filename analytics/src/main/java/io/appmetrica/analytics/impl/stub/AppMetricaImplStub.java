@@ -112,7 +112,7 @@ public class AppMetricaImplStub implements IAppMetricaImpl {
     }
 
     @Override
-    public void setStatisticsSending(boolean value) {
+    public void setDataSendingEnabled(boolean value) {
         //Do nothing
     }
 

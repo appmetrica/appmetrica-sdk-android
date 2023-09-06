@@ -115,14 +115,14 @@ public class ReportsHandler {
         Workaround. Uses only main reporter's config. Fill be fixed in https://nda.ya.ru/t/Oczi4wyf6Njj6k
      */
     void updatePreActivationConfig(@Nullable Boolean locationTracking,
-                                   @Nullable Boolean statisticsSending) {
-        YLogger.info(TAG, "updatePreActivationConfig. locationTracking = %b, statisticsSending = %b",
-            locationTracking, statisticsSending);
+                                   @Nullable Boolean dataSendingEnabled) {
+        YLogger.info(TAG, "updatePreActivationConfig. locationTracking = %b, dataSendingEnabled = %b",
+            locationTracking, dataSendingEnabled);
         if (Utils.isFieldSet(locationTracking)) {
             mCommutationReportEnvironment.getReporterConfiguration().setLocationTracking(locationTracking);
         }
-        if (Utils.isFieldSet(statisticsSending)) {
-            mCommutationReportEnvironment.getReporterConfiguration().setStatisticsSending(statisticsSending);
+        if (Utils.isFieldSet(dataSendingEnabled)) {
+            mCommutationReportEnvironment.getReporterConfiguration().setDataSendingEnabled(dataSendingEnabled);
         }
         reportEvent(CounterReport.formUpdatePreActivationConfig(), mCommutationReportEnvironment);
     }

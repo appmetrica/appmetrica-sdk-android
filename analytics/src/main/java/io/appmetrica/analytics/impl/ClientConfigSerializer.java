@@ -34,7 +34,7 @@ public class ClientConfigSerializer {
     private static final String KEY_MAX_REPORTS_IN_DB_COUNT = "max_reports_in_db_count";
     private static final String KEY_ERROR_ENVIRONMENT = "error_environment";
     private static final String KEY_FIRST_ACTIVATION_AS_UPDATE = "first_activation_as_update";
-    private static final String KEY_STATISTICS_SENDING = "statistics_sending";
+    private static final String KEY_DATA_SENDING_ENABLED = "data_sending_enabled";
     private static final String KEY_USER_PROFILE_ID = "user_profile_id";
     private static final String KEY_REVENUE_AUTO_TRACKING_ENABLED = "revenue_auto_tracking_enabled";
     private static final String KEY_SESSIONS_AUTO_TRACKING_ENABLED = "sessions_auto_tracking_enabled";
@@ -66,7 +66,7 @@ public class ClientConfigSerializer {
             jsonConfig.put(KEY_MAX_REPORTS_IN_DB_COUNT, config.maxReportsInDatabaseCount);
             jsonConfig.put(KEY_ERROR_ENVIRONMENT, JsonHelper.mapToJson(config.errorEnvironment));
             jsonConfig.put(KEY_FIRST_ACTIVATION_AS_UPDATE, config.firstActivationAsUpdate);
-            jsonConfig.put(KEY_STATISTICS_SENDING, config.statisticsSending);
+            jsonConfig.put(KEY_DATA_SENDING_ENABLED, config.dataSendingEnabled);
             jsonConfig.put(KEY_USER_PROFILE_ID, config.userProfileID);
             jsonConfig.put(KEY_REVENUE_AUTO_TRACKING_ENABLED, config.revenueAutoTrackingEnabled);
             jsonConfig.put(KEY_SESSIONS_AUTO_TRACKING_ENABLED, config.sessionsAutoTrackingEnabled);
@@ -126,8 +126,8 @@ public class ClientConfigSerializer {
                 if (jsonConfig.has(KEY_FIRST_ACTIVATION_AS_UPDATE)) {
                     builder.handleFirstActivationAsUpdate(jsonConfig.optBoolean(KEY_FIRST_ACTIVATION_AS_UPDATE));
                 }
-                if (jsonConfig.has(KEY_STATISTICS_SENDING)) {
-                    builder.withStatisticsSending(jsonConfig.optBoolean(KEY_STATISTICS_SENDING));
+                if (jsonConfig.has(KEY_DATA_SENDING_ENABLED)) {
+                    builder.withDataSendingEnabled(jsonConfig.optBoolean(KEY_DATA_SENDING_ENABLED));
                 }
                 if (jsonConfig.has(KEY_USER_PROFILE_ID)) {
                     builder.withUserProfileID(jsonConfig.optString(KEY_USER_PROFILE_ID, null));

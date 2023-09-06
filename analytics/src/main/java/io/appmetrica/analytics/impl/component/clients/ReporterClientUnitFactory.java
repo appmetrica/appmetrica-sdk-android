@@ -44,7 +44,7 @@ public class ReporterClientUnitFactory implements ClientUnitFactory,
                 context,
                 componentId,
                 sdkConfig,
-                GlobalServiceLocator.getInstance().getStatisticsRestrictionController(),
+                GlobalServiceLocator.getInstance().getDataSendingRestrictionController(),
                 startupUnit.getStartupState(),
                 new RegularExecutorFactory(startupUnit)
         );

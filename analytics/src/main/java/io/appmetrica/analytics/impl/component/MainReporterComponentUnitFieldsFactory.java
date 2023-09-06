@@ -25,7 +25,7 @@ public class MainReporterComponentUnitFieldsFactory extends ComponentUnitFieldsF
             @NonNull CommonArguments.ReporterArguments sdkConfig,
             @NonNull ComponentStartupExecutorFactory startupExecutorFactory,
             @NonNull StartupState startupState,
-            @NonNull ReportRequestConfig.StatisticsSendingStrategy strategy,
+            @NonNull ReportRequestConfig.DataSendingStrategy strategy,
             @NonNull ICommonExecutor taskExecutor,
             final int currentAppVersion,
             @NonNull final ServiceExecutorProvider serviceExecutorProvider,

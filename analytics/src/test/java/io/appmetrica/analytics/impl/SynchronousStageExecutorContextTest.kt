@@ -16,6 +16,7 @@ import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
 import org.mockito.Mockito.`when`
 import org.mockito.MockitoAnnotations
+import org.mockito.kotlin.verifyZeroInteractions
 import java.util.UUID
 
 class SynchronousStageExecutorContextTest : CommonTest() {
@@ -82,12 +83,6 @@ class SynchronousStageExecutorContextTest : CommonTest() {
     @Test
     fun requestStartupParamsWithStartupParamsCallback() {
         synchronousStageExecutor.requestStartupParams(context, mock(StartupParamsCallback::class.java), emptyList())
-        verify(contextAppearedListener).onProbablyAppeared(context)
-    }
-
-    @Test
-    fun setStatisticsSending() {
-        synchronousStageExecutor.setStatisticsSending(context, true)
         verify(contextAppearedListener).onProbablyAppeared(context)
     }
 

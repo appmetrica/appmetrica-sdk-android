@@ -33,7 +33,7 @@ import static org.mockito.Mockito.when;
 public class ReportRequestConfigLoaderClidsTest extends CommonTest {
 
     @Mock
-    private ReportRequestConfig.StatisticsSendingStrategy statisticsSendingStrategy;
+    private ReportRequestConfig.DataSendingStrategy dataSendingSendingStrategy;
     @Mock
     private ComponentUnit componentUnit;
     @Mock
@@ -58,7 +58,7 @@ public class ReportRequestConfigLoaderClidsTest extends CommonTest {
         doReturn(RuntimeEnvironment.getApplication()).when(componentUnit).getContext();
         doReturn(mock(CertificatesFingerprintsProvider.class)).when(componentUnit).getCertificatesFingerprintsProvider();
         doReturn(mock(VitalComponentDataProvider.class)).when(componentUnit).getVitalComponentDataProvider();
-        loader = new ReportRequestConfig.Loader(componentUnit, statisticsSendingStrategy, clidsStateChecker);
+        loader = new ReportRequestConfig.Loader(componentUnit, dataSendingSendingStrategy, clidsStateChecker);
         dataSource = new CoreRequestConfig.CoreDataSource<>(
                 TestUtils.createDefaultStartupState(), new ReportRequestConfig.Arguments(
                 null,
@@ -80,8 +80,8 @@ public class ReportRequestConfigLoaderClidsTest extends CommonTest {
     }
 
     @Test
-    public void testPassStatisticsSendingStrategy() {
-        assertThat(loader.load(dataSource).getStatisticSendingStrategy()).isSameAs(statisticsSendingStrategy);
+    public void passDataSendingStrategy() {
+        assertThat(loader.load(dataSource).getDataSendingStrategy()).isSameAs(dataSendingSendingStrategy);
     }
 
     @Test

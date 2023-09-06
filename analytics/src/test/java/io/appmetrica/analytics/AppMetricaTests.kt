@@ -171,10 +171,10 @@ internal class AppMetricaTests : CommonTest() {
     }
 
     @Test
-    fun setStatisticsSending() {
+    fun setDataSendingEnabled() {
         val enabled = Random().nextBoolean()
-        AppMetrica.setStatisticsSending(context, enabled)
-        verify(proxy).setStatisticsSending(context, enabled)
+        AppMetrica.setDataSendingEnabled(enabled)
+        verify(proxy).setDataSendingEnabled(enabled)
     }
 
     @Test

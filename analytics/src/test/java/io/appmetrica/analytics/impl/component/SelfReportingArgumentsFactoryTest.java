@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.component;
 
-import io.appmetrica.analytics.impl.StatisticsRestrictionControllerImpl;
+import io.appmetrica.analytics.impl.DataSendingRestrictionControllerImpl;
 import io.appmetrica.analytics.testutils.CommonTest;
 import java.util.Arrays;
 import java.util.Collection;
@@ -25,7 +25,7 @@ public class SelfReportingArgumentsFactoryTest extends CommonTest {
         );
     }
 
-    private final StatisticsRestrictionControllerImpl mController = mock(StatisticsRestrictionControllerImpl.class);
+    private final DataSendingRestrictionControllerImpl mController = mock(DataSendingRestrictionControllerImpl.class);
     private final boolean mConfiguration;
     private final SelfReportingArgumentsFactory mFactory = new SelfReportingArgumentsFactory(mController);
     private final boolean mResult;

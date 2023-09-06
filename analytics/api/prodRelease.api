@@ -97,9 +97,9 @@ public final class io.appmetrica.analytics.AppMetrica {
     public static void requestStartupParams([NonNull] android.content.Context, [NonNull] io.appmetrica.analytics.StartupParamsCallback, [NonNull] java.util.List<String>)
     public static void resumeSession([Nullable] android.app.Activity)
     public static void sendEventsBuffer()
+    public static void setDataSendingEnabled(boolean)
     public static void setLocation([Nullable] android.location.Location)
     public static void setLocationTracking(boolean)
-    public static void setStatisticsSending([NonNull] android.content.Context, boolean)
     public static void setUserProfileID([Nullable] String)
 }
 
@@ -115,6 +115,7 @@ public class io.appmetrica.analytics.AppMetricaConfig {
     public final [Nullable] Boolean crashReporting
     public final [Nullable] io.appmetrica.analytics.ICrashTransformer crashTransformer
     public final [Nullable] java.util.List<String> customHosts
+    public final [Nullable] Boolean dataSendingEnabled
     public final [Nullable] String deviceType
     public final [Nullable] Integer dispatchPeriodSeconds
     public final [Nullable] java.util.Map<String, String> errorEnvironment
@@ -129,7 +130,6 @@ public class io.appmetrica.analytics.AppMetricaConfig {
     public final [Nullable] Boolean revenueAutoTrackingEnabled
     public final [Nullable] Integer sessionTimeout
     public final [Nullable] Boolean sessionsAutoTrackingEnabled
-    public final [Nullable] Boolean statisticsSending
     public final [Nullable] String userProfileID
 
     protected <init>([NonNull] io.appmetrica.analytics.AppMetricaConfig)
@@ -151,6 +151,7 @@ public static class io.appmetrica.analytics.AppMetricaConfig$Builder {
     public [NonNull] io.appmetrica.analytics.AppMetricaConfig$Builder withCrashReporting(boolean)
     public [NonNull] io.appmetrica.analytics.AppMetricaConfig$Builder withCrashTransformer([Nullable] io.appmetrica.analytics.ICrashTransformer)
     public [NonNull] io.appmetrica.analytics.AppMetricaConfig$Builder withCustomHosts([NonNull] java.util.List<String>)
+    public [NonNull] io.appmetrica.analytics.AppMetricaConfig$Builder withDataSendingEnabled(boolean)
     public [NonNull] io.appmetrica.analytics.AppMetricaConfig$Builder withDeviceType([Nullable] String)
     public [NonNull] io.appmetrica.analytics.AppMetricaConfig$Builder withDispatchPeriodSeconds(int)
     public [NonNull] io.appmetrica.analytics.AppMetricaConfig$Builder withErrorEnvironmentValue([NonNull] String, [Nullable] String)
@@ -164,7 +165,6 @@ public static class io.appmetrica.analytics.AppMetricaConfig$Builder {
     public [NonNull] io.appmetrica.analytics.AppMetricaConfig$Builder withRevenueAutoTrackingEnabled(boolean)
     public [NonNull] io.appmetrica.analytics.AppMetricaConfig$Builder withSessionTimeout(int)
     public [NonNull] io.appmetrica.analytics.AppMetricaConfig$Builder withSessionsAutoTrackingEnabled(boolean)
-    public [NonNull] io.appmetrica.analytics.AppMetricaConfig$Builder withStatisticsSending(boolean)
     public [NonNull] io.appmetrica.analytics.AppMetricaConfig$Builder withUserProfileID([Nullable] String)
 }
 
@@ -176,7 +176,7 @@ public class io.appmetrica.analytics.AppMetricaDefaultValues {
     public static final int DEFAULT_MAX_REPORTS_COUNT_LOWER_BOUND
     public static final int DEFAULT_MAX_REPORTS_COUNT_UPPER_BOUND
     public static final int DEFAULT_MAX_REPORTS_IN_DATABASE_COUNT
-    public static final boolean DEFAULT_REPORTER_STATISTICS_SENDING
+    public static final boolean DEFAULT_REPORTER_DATA_SENDING_ENABLED
     public static final boolean DEFAULT_REPORTS_CRASHES_ENABLED
     public static final boolean DEFAULT_REPORTS_NATIVE_CRASHES_ENABLED
     public static final boolean DEFAULT_REPORT_LOCATION_ENABLED
@@ -261,7 +261,7 @@ public interface io.appmetrica.analytics.IReporter {
     public abstract void reportUserProfile([NonNull] io.appmetrica.analytics.profile.UserProfile)
     public abstract void resumeSession()
     public abstract void sendEventsBuffer()
-    public abstract void setStatisticsSending(boolean)
+    public abstract void setDataSendingEnabled(boolean)
     public abstract void setUserProfileID([Nullable] String)
 }
 
@@ -321,12 +321,12 @@ public class io.appmetrica.analytics.ReporterConfig {
     public final [NonNull] java.util.Map<String, Object> additionalConfig
     public final [NonNull] String apiKey
     public final java.util.Map<String, String> appEnvironment
+    public final [Nullable] Boolean dataSendingEnabled
     public final [Nullable] Integer dispatchPeriodSeconds
     public final [Nullable] Boolean logs
     public final [Nullable] Integer maxReportsCount
     public final [Nullable] Integer maxReportsInDatabaseCount
     public final [Nullable] Integer sessionTimeout
-    public final [Nullable] Boolean statisticsSending
     public final [Nullable] String userProfileID
 
     public static [NonNull] io.appmetrica.analytics.ReporterConfig$Builder newConfigBuilder([NonNull] String)
@@ -336,12 +336,12 @@ public static class io.appmetrica.analytics.ReporterConfig$Builder {
     public [NonNull] io.appmetrica.analytics.ReporterConfig build()
     public [NonNull] io.appmetrica.analytics.ReporterConfig$Builder withAdditionalConfig([NonNull] String, [Nullable] Object)
     public [NonNull] io.appmetrica.analytics.ReporterConfig$Builder withAppEnvironmentValue(String, String)
+    public [NonNull] io.appmetrica.analytics.ReporterConfig$Builder withDataSendingEnabled(boolean)
     public [NonNull] io.appmetrica.analytics.ReporterConfig$Builder withDispatchPeriodSeconds(int)
     public [NonNull] io.appmetrica.analytics.ReporterConfig$Builder withLogs()
     public [NonNull] io.appmetrica.analytics.ReporterConfig$Builder withMaxReportsCount(int)
     public [NonNull] io.appmetrica.analytics.ReporterConfig$Builder withMaxReportsInDatabaseCount(int)
     public [NonNull] io.appmetrica.analytics.ReporterConfig$Builder withSessionTimeout(int)
-    public [NonNull] io.appmetrica.analytics.ReporterConfig$Builder withStatisticsSending(boolean)
     public [NonNull] io.appmetrica.analytics.ReporterConfig$Builder withUserProfileID([Nullable] String)
 }
 
@@ -549,6 +549,7 @@ public class io.appmetrica.analytics.internal.CounterConfiguration implementatio
     public String getApiKey()
     public String getAppBuildNumber()
     public String getAppVersion()
+    public Boolean getDataSendingEnabled()
     public [Nullable] String getDeviceType()
     public [Nullable] Integer getDispatchPeriod()
     public android.location.Location getManualLocation()
@@ -557,7 +558,6 @@ public class io.appmetrica.analytics.internal.CounterConfiguration implementatio
     public [Nullable] Boolean getReportNativeCrashesEnabled()
     public [NonNull] OBFUSCATED[io.appmetrica.analytics.impl.CounterConfigurationReporterType] getReporterType()
     public [Nullable] Integer getSessionTimeout()
-    public Boolean getStatisticsSending()
     public String getUuid()
     public [Nullable] Boolean isFirstActivationAsUpdate()
     public [Nullable] Boolean isLocationTrackingEnabled()
@@ -567,6 +567,7 @@ public class io.appmetrica.analytics.internal.CounterConfiguration implementatio
     public void setApiKey(String)
     public void setAppBuildNumber(int)
     public final void setCustomAppVersion(String)
+    public final void setDataSendingEnabled(boolean)
     public final void setDeviceType([Nullable] String)
     public void setDispatchPeriod(int)
     public final void setFirstActivationAsUpdate(boolean)
@@ -578,7 +579,6 @@ public class io.appmetrica.analytics.internal.CounterConfiguration implementatio
     public void setReporterType([NonNull] OBFUSCATED[io.appmetrica.analytics.impl.CounterConfigurationReporterType])
     public void setRevenueAutoTrackingEnabled(boolean)
     public void setSessionTimeout(int)
-    public final void setStatisticsSending(boolean)
     public void setUuid(String)
     public void toBundle(android.os.Bundle)
     public String toString()

@@ -72,7 +72,7 @@ public class DefaultOneShotMetricaConfigTest extends CommonTest {
                 .checkField("crashReporting", userConfig.crashReporting)
                 .checkField("nativeCrashReporting", userConfig.nativeCrashReporting)
                 .checkField("locationTracking", userConfig.locationTracking)
-                .checkField("statisticsSending", userConfig.statisticsSending)
+                .checkField("dataSendingEnabled", userConfig.dataSendingEnabled)
                 .checkField("maxReportsCount", userConfig.maxReportsCount)
                 .checkField("maxReportsInDatabaseCount", userConfig.maxReportsInDatabaseCount)
                 .checkField("appEnvironment", userConfig.appEnvironment)
@@ -256,7 +256,7 @@ public class DefaultOneShotMetricaConfigTest extends CommonTest {
                 .withAdditionalConfig("YMM_customHosts", Collections.singletonList(TestData.TEST_CUSTOM_HOST_URL))
                 .withAnrMonitoring(true)
                 .withAnrMonitoringTimeout(42)
-                .withStatisticsSending(true)
+                .withDataSendingEnabled(true)
                 .withMaxReportsInDatabaseCount(500)
                 .withUserProfileID("user_profile_id")
                 .withSessionsAutoTrackingEnabled(true)
@@ -355,10 +355,10 @@ public class DefaultOneShotMetricaConfigTest extends CommonTest {
     }
 
     @Test
-    public void testProxyStatisticsSending() {
+    public void proxyDataSendingEnabled() {
         DefaultOneShotMetricaConfig config = new DefaultOneShotMetricaConfig();
         config.setReportsHandler(mReportsHandler);
-        config.setStatisticsSending(true);
+        config.setDataSendingEnabled(true);
         verify(mReportsHandler).updatePreActivationConfig(null, true);
     }
 }

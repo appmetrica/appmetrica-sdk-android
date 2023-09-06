@@ -4,7 +4,7 @@ import androidx.annotation.Nullable;
 import io.appmetrica.analytics.internal.CounterConfiguration;
 import io.appmetrica.analytics.impl.CounterReport;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
-import io.appmetrica.analytics.impl.StatisticsRestrictionControllerImpl;
+import io.appmetrica.analytics.impl.DataSendingRestrictionControllerImpl;
 import io.appmetrica.analytics.impl.component.CommonArguments;
 import io.appmetrica.analytics.impl.component.CommutationComponentId;
 import io.appmetrica.analytics.impl.component.CommutationDispatcherComponent;
@@ -44,7 +44,7 @@ public class UpdatePreActivationConfigHandlerTest extends CommonTest {
     @Mock
     private CounterConfiguration mCounterConfiguration;
     @Mock
-    private StatisticsRestrictionControllerImpl mRestrictionController;
+    private DataSendingRestrictionControllerImpl mRestrictionController;
     private UpdatePreActivationConfigHandler mHandler;
 
     @Before
@@ -57,7 +57,7 @@ public class UpdatePreActivationConfigHandlerTest extends CommonTest {
 
     @Test
     public void testRestriction() {
-        doReturn(null).when(mCounterConfiguration).getStatisticsSending();
+        doReturn(null).when(mCounterConfiguration).getDataSendingEnabled();
         doReturn(new CommonArguments.ReporterArguments(mCounterConfiguration, null)).when(mRegularDispatcherComponent).getConfiguration();
         mHandler.process(mCounterReport, mClientUnit);
         verify(mRestrictionController).setEnabledFromMainReporter(null);
@@ -78,7 +78,7 @@ public class UpdatePreActivationConfigHandlerTest extends CommonTest {
         @Mock
         private CounterConfiguration mCounterConfiguration;
         @Mock
-        private StatisticsRestrictionControllerImpl mRestrictionController;
+        private DataSendingRestrictionControllerImpl mRestrictionController;
         private UpdatePreActivationConfigHandler mHandler;
 
         private final boolean mShouldSet;

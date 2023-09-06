@@ -22,7 +22,7 @@ public class DefaultOneShotMetricaConfig implements MetricaConfigurator {
 
     private Location mLocation;
     private Boolean mLocationTracking;
-    private Boolean mStatisticsSending;
+    private Boolean dataSendingEnabled;
     private Map<String, String> mAppEnvironment = new LinkedHashMap<String, String>();
     private Map<String, String> mErrorEnvironment = new LinkedHashMap<String, String>();
 
@@ -49,14 +49,14 @@ public class DefaultOneShotMetricaConfig implements MetricaConfigurator {
         tryToUpdatePreActivationConfig();
     }
 
-    public Boolean isStatisticsSendingEnabled() {
-        return mStatisticsSending;
+    public Boolean isDataSendingEnabled() {
+        return dataSendingEnabled;
     }
 
     @Override
-    public void setStatisticsSending(boolean value) {
-        YLogger.info(TAG, "setStatisticsSending: %b", value);
-        mStatisticsSending = value;
+    public void setDataSendingEnabled(boolean value) {
+        YLogger.info(TAG, "setDataSendingEnabled: %b", value);
+        dataSendingEnabled = value;
         tryToUpdatePreActivationConfig();
     }
 
@@ -98,7 +98,7 @@ public class DefaultOneShotMetricaConfig implements MetricaConfigurator {
     private void reset() {
         mLocation = null;
         mLocationTracking = null;
-        mStatisticsSending = null;
+        dataSendingEnabled = null;
         mAppEnvironment.clear();
         mErrorEnvironment.clear();
 
@@ -167,8 +167,8 @@ public class DefaultOneShotMetricaConfig implements MetricaConfigurator {
         if (isFieldSet(config.firstActivationAsUpdate)) {
             builder.handleFirstActivationAsUpdate(config.firstActivationAsUpdate);
         }
-        if (isFieldSet(config.statisticsSending)) {
-            builder.withStatisticsSending(config.statisticsSending);
+        if (isFieldSet(config.dataSendingEnabled)) {
+            builder.withDataSendingEnabled(config.dataSendingEnabled);
         }
         if (isFieldSet(config.anrMonitoring)) {
             builder.withAnrMonitoring(config.anrMonitoring);
@@ -225,10 +225,10 @@ public class DefaultOneShotMetricaConfig implements MetricaConfigurator {
 
     private void mergeCommonPart(final AppMetricaConfig useConfig,
                                  final AppMetricaConfig.Builder builder) {
-        YLogger.info(TAG, "mergeCommonPart. Config = {locationTracking: %s, location: %s, statisticsSending: %s}, " +
-                "defaultConfig = {locationTracking: %s, location: %s, statisticsSending: %s}",
-                useConfig.locationTracking, useConfig.location, useConfig.statisticsSending,
-                mLocationTracking, mLocation, mStatisticsSending);
+        YLogger.info(TAG, "mergeCommonPart. Config = {locationTracking: %s, location: %s, dataSendingEnabled: %s}, " +
+                "defaultConfig = {locationTracking: %s, location: %s, dataSendingEnabled: %s}",
+                useConfig.locationTracking, useConfig.location, useConfig.dataSendingEnabled,
+                mLocationTracking, mLocation, dataSendingEnabled);
         Boolean trackLocationEnabled = isLocationTrackingEnabled();
         if (isNull(useConfig.locationTracking) && isFieldSet(trackLocationEnabled)) {
             builder.withLocationTracking(trackLocationEnabled);
@@ -237,9 +237,9 @@ public class DefaultOneShotMetricaConfig implements MetricaConfigurator {
         if (isNull(useConfig.location) && isFieldSet(location)) {
             builder.withLocation(location);
         }
-        Boolean statisticstSending = isStatisticsSendingEnabled();
-        if (isNull(useConfig.statisticsSending) && isFieldSet(statisticstSending)) {
-            builder.withStatisticsSending(statisticstSending);
+        Boolean dataSendingEnabled = isDataSendingEnabled();
+        if (isNull(useConfig.dataSendingEnabled) && isFieldSet(dataSendingEnabled)) {
+            builder.withDataSendingEnabled(dataSendingEnabled);
         }
         if (!isFieldSet(useConfig.userProfileID) && isFieldSet(userProfileID)) {
             builder.withUserProfileID(userProfileID);
@@ -266,7 +266,7 @@ public class DefaultOneShotMetricaConfig implements MetricaConfigurator {
 
     private void tryToUpdatePreActivationConfig() {
         if (mReportsHandler != null) {
-            mReportsHandler.updatePreActivationConfig(mLocationTracking, mStatisticsSending);
+            mReportsHandler.updatePreActivationConfig(mLocationTracking, dataSendingEnabled);
         }
     }
 }

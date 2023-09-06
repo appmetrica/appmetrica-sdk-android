@@ -2,12 +2,12 @@ package io.appmetrica.analytics.impl.component;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import io.appmetrica.analytics.impl.StatisticsRestrictionControllerImpl;
+import io.appmetrica.analytics.impl.DataSendingRestrictionControllerImpl;
 import io.appmetrica.analytics.impl.request.ReportRequestConfig;
 
-public class ReporterArgumentsFactory extends ReportRequestConfig.BaseStatisticsSendingStrategy {
+public class ReporterArgumentsFactory extends ReportRequestConfig.BaseDataSendingStrategy {
 
-    ReporterArgumentsFactory(@NonNull StatisticsRestrictionControllerImpl controller) {
+    ReporterArgumentsFactory(@NonNull DataSendingRestrictionControllerImpl controller) {
         super(controller);
     }
 

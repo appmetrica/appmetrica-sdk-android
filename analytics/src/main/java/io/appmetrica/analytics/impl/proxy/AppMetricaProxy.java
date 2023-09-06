@@ -318,13 +318,13 @@ public final class AppMetricaProxy extends BaseAppMetricaProxy {
         });
     }
 
-    public void setStatisticsSending(@NonNull final Context context, final boolean enabled) {
-        mMainFacadeBarrier.setStatisticsSending(context, enabled);
-        getSynchronousStageExecutor().setStatisticsSending(context.getApplicationContext(), enabled);
+    public void setDataSendingEnabled(final boolean enabled) {
+        mMainFacadeBarrier.setDataSendingEnabled(enabled);
+        getSynchronousStageExecutor().setDataSendingEnabled(enabled);
         getExecutor().execute(new Runnable() {
             @Override
             public void run() {
-                getProvider().setStatisticsSending(enabled);
+                getProvider().setDataSendingEnabled(enabled);
             }
         });
     }

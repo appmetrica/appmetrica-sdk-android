@@ -9,7 +9,7 @@ public interface MetricaConfigurator {
 
     void setLocationTracking(boolean enabled);
 
-    void setStatisticsSending(boolean value);
+    void setDataSendingEnabled(boolean value);
 
     void putAppEnvironmentValue(String key, String value);
 

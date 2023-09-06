@@ -505,7 +505,7 @@ public class ReportsHandlerTest extends CommonTest {
             public boolean matches(ReportToSend argument) {
                 CounterConfiguration configuration = argument.getEnvironment().getReporterConfiguration();
 
-                return configuration.getStatisticsSending() == null
+                return configuration.getDataSendingEnabled() == null
                         && configuration.isLocationTrackingEnabled() == null
                         && configuration.getManualLocation() == null;
             }
@@ -527,16 +527,16 @@ public class ReportsHandlerTest extends CommonTest {
     }
 
     @Test
-    public void testUpdatePreActivationWithStatisticsSending() {
-        final boolean statisticsSending = true;
-        mReportsHandler.updatePreActivationConfig(null, statisticsSending);
+    public void testUpdatePreActivationWithDataSendingEnabled() {
+        final boolean dataSendingEnabled = true;
+        mReportsHandler.updatePreActivationConfig(null, dataSendingEnabled);
 
         verify(mReportsSender).queueReport(argThat(new ArgumentMatcher<ReportToSend>() {
             @Override
             public boolean matches(ReportToSend argument) {
                 CounterConfiguration configuration = argument.getEnvironment().getReporterConfiguration();
 
-                return configuration.getStatisticsSending() == statisticsSending;
+                return configuration.getDataSendingEnabled() == dataSendingEnabled;
             }
         }));
     }

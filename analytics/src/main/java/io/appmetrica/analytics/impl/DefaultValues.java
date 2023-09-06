@@ -9,7 +9,7 @@ public class DefaultValues {
     public static final boolean DEFAULT_FIRST_ACTIVATION_AS_UPDATE = false;
     public static final boolean DEFAULT_AUTO_PRELOAD_INFO_DETECTION = false;
     public static final boolean DEFAULT_LOG_ENABLED = false;
-    public static final boolean DEFAULT_STATISTICS_SENDING = true;
+    public static final boolean DEFAULT_DATA_SENDING_ENABLED = true;
     public static final boolean DEFAULT_SESSIONS_AUTO_TRACKING_ENABLED = true;
     public static final boolean DEFAULT_REVENUE_AUTO_TRACKING_ENABLED = true;
     public static final boolean DEFAULT_APP_OPEN_TRACKING_ENABLED = true;

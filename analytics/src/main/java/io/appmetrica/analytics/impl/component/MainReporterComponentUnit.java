@@ -11,7 +11,7 @@ import io.appmetrica.analytics.impl.CounterConfigurationReporterType;
 import io.appmetrica.analytics.impl.CounterReport;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.InternalEvents;
-import io.appmetrica.analytics.impl.StatisticsRestrictionControllerImpl;
+import io.appmetrica.analytics.impl.DataSendingRestrictionControllerImpl;
 import io.appmetrica.analytics.impl.billing.BillingMonitorWrapper;
 import io.appmetrica.analytics.impl.component.processor.EventProcessingStrategyFactory;
 import io.appmetrica.analytics.impl.component.processor.factory.RegularMainReporterFactory;
@@ -35,7 +35,7 @@ public class MainReporterComponentUnit extends ComponentUnit
     @NonNull
     private final ReferrerListenerNotifier mReferrerListener;
     @NonNull
-    private final StatisticsRestrictionControllerImpl mStatisticsRestrictionController;
+    private final DataSendingRestrictionControllerImpl dateSendingRestrictionController;
     @NonNull
     private final BillingMonitorWrapper billingMonitorWrapper;
 
@@ -44,7 +44,7 @@ public class MainReporterComponentUnit extends ComponentUnit
                                      @NonNull ComponentId componentId,
                                      @NonNull CommonArguments.ReporterArguments sdkConfig,
                                      @NonNull ReferrerHolder referrerHolder,
-                                     @NonNull StatisticsRestrictionControllerImpl controller,
+                                     @NonNull DataSendingRestrictionControllerImpl controller,
                                      @NonNull ComponentStartupExecutorFactory executorFactory) {
         this(
             context,
@@ -80,7 +80,7 @@ public class MainReporterComponentUnit extends ComponentUnit
                               @NonNull TimePassedChecker timePassedChecker,
                               @NonNull MainReporterComponentUnitFieldsFactory fieldsFactory,
                               @NonNull ReferrerHolder referrerHolder,
-                              @NonNull StatisticsRestrictionControllerImpl controller) {
+                              @NonNull DataSendingRestrictionControllerImpl controller) {
         super(
             context,
             componentId,
@@ -92,7 +92,7 @@ public class MainReporterComponentUnit extends ComponentUnit
         EventProcessingStrategyFactory factory = getEventProcessingStrategyFactory();
         factory.mutateHandlers(EVENT_TYPE_REGULAR, new RegularMainReporterFactory(factory.getHandlersProvider()));
         mReferrerListener = fieldsFactory.createReferrerListener(this);
-        mStatisticsRestrictionController = controller;
+        dateSendingRestrictionController = controller;
         billingMonitorWrapper = fieldsFactory.createBillingMonitorWrapper(this);
         billingMonitorWrapper.maybeStartWatching(startupState, sdkConfig.revenueAutoTrackingEnabled);
     }
@@ -127,9 +127,7 @@ public class MainReporterComponentUnit extends ComponentUnit
     @Override
     public synchronized void updateSdkConfig(@NonNull CommonArguments.ReporterArguments sdkConfig) {
         super.updateSdkConfig(sdkConfig);
-        mStatisticsRestrictionController.setEnabledFromMainReporter(
-            sdkConfig.statisticsSending
-        );
+        dateSendingRestrictionController.setEnabledFromMainReporter(sdkConfig.dataSendingEnabled);
     }
 
     @Override

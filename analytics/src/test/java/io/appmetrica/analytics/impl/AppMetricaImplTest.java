@@ -221,11 +221,11 @@ public class AppMetricaImplTest extends CommonTest {
     }
 
     @Test
-    public void setStatisticsSending() {
+    public void setDataSendingEnabled() {
         final boolean value = new Random().nextBoolean();
         mAppMetrica.activate(originalConfig, mConfig);
-        mAppMetrica.setStatisticsSending(value);
-        verify(mMainReporter).setStatisticsSending(value);
+        mAppMetrica.setDataSendingEnabled(value);
+        verify(mMainReporter).setDataSendingEnabled(value);
     }
 
     @Test

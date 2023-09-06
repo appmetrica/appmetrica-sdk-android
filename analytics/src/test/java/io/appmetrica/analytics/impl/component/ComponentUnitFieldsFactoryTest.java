@@ -57,7 +57,7 @@ public class ComponentUnitFieldsFactoryTest extends CommonTest {
     @Mock
     StartupState mStartupState;
     @Mock
-    ReportRequestConfig.StatisticsSendingStrategy mStatisticsSendingStrategy;
+    ReportRequestConfig.DataSendingStrategy dataSendingStrategy;
     @Mock
     ICommonExecutor mExecutor;
     @Mock
@@ -94,7 +94,7 @@ public class ComponentUnitFieldsFactoryTest extends CommonTest {
                 mSdkConfig,
                 mStartupExecutorFactory,
                 mStartupState,
-                mStatisticsSendingStrategy,
+            dataSendingStrategy,
                 mExecutor,
                 mCurrentAppVersion,
                 lifecycleDependentComponentManager

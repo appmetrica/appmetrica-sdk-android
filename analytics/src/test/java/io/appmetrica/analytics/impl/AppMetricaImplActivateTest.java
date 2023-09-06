@@ -197,16 +197,16 @@ public class AppMetricaImplActivateTest extends CommonTest {
         Random random = new Random();
         boolean needToClearEnv = random.nextBoolean();
         boolean locationTracking = random.nextBoolean();
-        boolean statisticsSending = random.nextBoolean();
+        boolean dataSendingEnabled = random.nextBoolean();
         AppMetricaConfig config = AppMetricaConfig.newConfigBuilder(mApiKey)
                 .withLocationTracking(locationTracking)
-                .withStatisticsSending(statisticsSending)
+                .withDataSendingEnabled(dataSendingEnabled)
                 .build();
         when(mClientServiceLocatorRule.mDefaultOneShotMetricaConfig.wasAppEnvironmentCleared()).thenReturn(needToClearEnv);
         mAppMetrica.activate(originalConfig, config);
 
         verify(mProcessConfiguration).update(config);
-        verify(mReportsHandler).updatePreActivationConfig(locationTracking, statisticsSending);
+        verify(mReportsHandler).updatePreActivationConfig(locationTracking, dataSendingEnabled);
     }
 
     @Test

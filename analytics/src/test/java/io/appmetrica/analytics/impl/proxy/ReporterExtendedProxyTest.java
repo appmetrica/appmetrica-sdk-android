@@ -341,13 +341,13 @@ public class ReporterExtendedProxyTest extends CommonTest {
     }
 
     @Test
-    public void testSetStatisticsSending() {
+    public void setDataSendingEnabled() {
         final boolean enabled = true;
-        mReporterExtendedProxy.setStatisticsSending(enabled);
+        mReporterExtendedProxy.setDataSendingEnabled(enabled);
         InOrder inOrder = Mockito.inOrder(reporterBarrier, mSynchronousStageExecutor, mReporter);
-        inOrder.verify(reporterBarrier).setStatisticsSending(enabled);
-        inOrder.verify(mSynchronousStageExecutor).setStatisticsSending(enabled);
-        inOrder.verify(mReporter).setStatisticsSending(enabled);
+        inOrder.verify(reporterBarrier).setDataSendingEnabled(enabled);
+        inOrder.verify(mSynchronousStageExecutor).setDataSendingEnabled(enabled);
+        inOrder.verify(mReporter).setDataSendingEnabled(enabled);
     }
 
     @Test

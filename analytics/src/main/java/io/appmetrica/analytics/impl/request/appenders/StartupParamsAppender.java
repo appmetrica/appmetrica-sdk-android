@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.request.appenders;
 import android.net.Uri;
 import android.text.TextUtils;
 import androidx.annotation.NonNull;
-import io.appmetrica.analytics.coreapi.internal.control.StatisticsRestrictionController;
+import io.appmetrica.analytics.coreapi.internal.control.DataSendingRestrictionController;
 import io.appmetrica.analytics.coreapi.internal.identifiers.AdTrackingInfoResult;
 import io.appmetrica.analytics.coreapi.internal.identifiers.AdvertisingIdsHolder;
 import io.appmetrica.analytics.coreutils.internal.StringUtils;
@@ -49,7 +49,7 @@ public class StartupParamsAppender implements IParamsAppender<StartupRequestConf
 
         appendAdvIdIfAllowed(
                 uriBuilder,
-                GlobalServiceLocator.getInstance().getStatisticsRestrictionController(),
+                GlobalServiceLocator.getInstance().getDataSendingRestrictionController(),
                 requestConfig
         );
         uriBuilder.appendQueryParameter(mObfuscator.obfuscate(CommonUrlParts.APP_SET_ID),
@@ -166,7 +166,7 @@ public class StartupParamsAppender implements IParamsAppender<StartupRequestConf
     }
 
     protected void appendAdvIdIfAllowed(@NonNull Uri.Builder uriBuilder,
-                                        @NonNull StatisticsRestrictionController controller,
+                                        @NonNull DataSendingRestrictionController controller,
                                         @NonNull StartupRequestConfig requestConfig) {
         AdvertisingIdsHolder advertisingIdsHolder = requestConfig.getAdvertisingIdsHolder();
         if (controller.isRestrictedForReporter()) {

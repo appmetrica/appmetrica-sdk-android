@@ -35,16 +35,16 @@ public class MainReporterComponentUnitFieldsFactoryTest extends ComponentUnitFie
         when(serviceExecutorProvider.getUiExecutor()).thenReturn(uiExecutor);
 
         mainReporterComponentUnitFieldsFactory = new MainReporterComponentUnitFieldsFactory(
-                mContext,
-                mComponentId,
-                mSdkConfig,
-                mStartupExecutorFactory,
-                mStartupState,
-                mStatisticsSendingStrategy,
-                mExecutor,
-                mCurrentAppVersion,
-                serviceExecutorProvider,
-                lifecycleDependentComponentManager
+            mContext,
+            mComponentId,
+            mSdkConfig,
+            mStartupExecutorFactory,
+            mStartupState,
+            dataSendingStrategy,
+            mExecutor,
+            mCurrentAppVersion,
+            serviceExecutorProvider,
+            lifecycleDependentComponentManager
         );
     }
 

@@ -108,13 +108,8 @@ public class MainFacadeBarrierTest extends CommonTest {
     }
 
     @Test
-    public void testStatisticsSending() {
-        mBarrier.setStatisticsSending(RuntimeEnvironment.getApplication(), false);
-    }
-
-    @Test(expected = ValidationException.class)
-    public void testStatisticsSendingNullContext() {
-        mBarrier.setStatisticsSending(null, false);
+    public void setDataSendingEnabled() {
+        mBarrier.setDataSendingEnabled(false);
     }
 
     @Test

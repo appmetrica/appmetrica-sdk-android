@@ -105,8 +105,7 @@ public class MainFacadeBarrier extends ReporterBarrier {
         sDeeplinkListenerValidator.validate(listener);
     }
 
-    public void setStatisticsSending(@NonNull Context context, boolean enabled) {
-        sContextValidator.validate(context);
+    public void setDataSendingEnabled(boolean enabled) {
     }
 
     public void getReporter(@NonNull Context context, @NonNull String apiKey) {

@@ -113,10 +113,10 @@ public class AppMetricaConfig {
     public final Boolean firstActivationAsUpdate;
 
     /**
-     * <p>Indicates whether statistics should be sent to the AppMetrica server.</p>
+     * <p>Indicates whether data should be sent to the AppMetrica server.</p>
      */
     @Nullable
-    public final Boolean statisticsSending;
+    public final Boolean dataSendingEnabled;
 
     /**
      * Maximum number of reports to store in database.
@@ -335,7 +335,7 @@ public class AppMetricaConfig {
         private Boolean mFirstActivationAsUpdate;
 
         @Nullable
-        private Boolean mStatisticsSending;
+        private Boolean dataSendingEnabled;
 
         @Nullable
         private Integer mMaxReportsInDatabaseCount;
@@ -556,18 +556,18 @@ public class AppMetricaConfig {
         }
 
         /**
-         * Enables/disables statistics sending to the AppMetrica server. By default, the sending is enabled.
+         * Enables/disables data sending to the AppMetrica server. By default, the sending is enabled.
          *
          * <p><b>NOTE:</b> Disabling this option also turns off data sending from the reporters
          * that initialized for different apiKey.
          *
-         * @param value {@code true} to allow AppMetrica sending statistics,
+         * @param value {@code true} to allow AppMetrica sending data,
          *              otherwise {@code false}.
          * @return the same {@link Builder} object
          */
         @NonNull
-        public Builder withStatisticsSending(boolean value) {
-            mStatisticsSending = value;
+        public Builder withDataSendingEnabled(boolean value) {
+            dataSendingEnabled = value;
             return this;
         }
 
@@ -863,7 +863,7 @@ public class AppMetricaConfig {
         logs = builder.mLogs;
         preloadInfo = builder.mPreloadInfo;
         firstActivationAsUpdate = builder.mFirstActivationAsUpdate;
-        statisticsSending = builder.mStatisticsSending;
+        dataSendingEnabled = builder.dataSendingEnabled;
         maxReportsInDatabaseCount = builder.mMaxReportsInDatabaseCount;
         errorEnvironment = CollectionUtils.unmodifiableSameOrderMapCopy(builder.mErrorEnvironment);
         userProfileID = builder.userProfileID;
@@ -898,7 +898,7 @@ public class AppMetricaConfig {
         logs = source.logs;
         preloadInfo = source.preloadInfo;
         firstActivationAsUpdate = source.firstActivationAsUpdate;
-        statisticsSending = source.statisticsSending;
+        dataSendingEnabled = source.dataSendingEnabled;
         maxReportsInDatabaseCount = source.maxReportsInDatabaseCount;
         errorEnvironment = source.errorEnvironment;
         userProfileID = source.userProfileID;

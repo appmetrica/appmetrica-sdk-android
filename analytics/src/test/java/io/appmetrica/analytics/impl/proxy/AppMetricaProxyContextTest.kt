@@ -90,13 +90,6 @@ class AppMetricaProxyContextTest : CommonTest() {
     }
 
     @Test
-    fun setStatisticsSending() {
-        proxy.setStatisticsSending(context, true)
-        verify(barrier).setStatisticsSending(context, true)
-        verify(synchronousStageExecutor).setStatisticsSending(applicationContext, true)
-    }
-
-    @Test
     fun getReporter() {
         proxy.getReporter(context, apiKey)
         verify(barrier).getReporter(context, apiKey)

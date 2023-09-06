@@ -315,17 +315,16 @@ public final class AppMetrica {
     }
 
     /**
-     * Enables/disables statistics sending to the AppMetrica server. By default, the sending is enabled.
+     * Enables/disables data sending to the AppMetrica server. By default, the sending is enabled.
      *
      * <p><b>NOTE:</b> Disabling this option also turns off data sending from the reporters that initialized
      * for different apiKey.
      *
-     * @param context Context object
-     * @param enabled {@code true} to allow AppMetrica sending statistics,
+     * @param enabled {@code true} to allow AppMetrica sending data,
      *                otherwise {@code false}.
      */
-    public static void setStatisticsSending(@NonNull Context context, boolean enabled) {
-        AppMetricaProxyProvider.getProxy().setStatisticsSending(context, enabled);
+    public static void setDataSendingEnabled(boolean enabled) {
+        AppMetricaProxyProvider.getProxy().setDataSendingEnabled(enabled);
     }
 
     /**

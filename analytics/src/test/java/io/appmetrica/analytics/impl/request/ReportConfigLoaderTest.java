@@ -74,7 +74,7 @@ public class ReportConfigLoaderTest extends CommonTest {
 
         mLoader = new ReportRequestConfig.Loader(
             componentUnit,
-            mock(ReportRequestConfig.StatisticsSendingStrategy.class)
+            mock(ReportRequestConfig.DataSendingStrategy.class)
         );
         mDataSource = new CoreRequestConfig.CoreDataSource<>(
             new StartupState.Builder(
@@ -115,7 +115,7 @@ public class ReportConfigLoaderTest extends CommonTest {
 
         Location location = new Location("provider");
 
-        ReportRequestConfig reportRequestConfig = new ReportRequestConfig.Loader(componentUnit, mock(ReportRequestConfig.StatisticsSendingStrategy.class)).load(
+        ReportRequestConfig reportRequestConfig = new ReportRequestConfig.Loader(componentUnit, mock(ReportRequestConfig.DataSendingStrategy.class)).load(
             new CoreRequestConfig.CoreDataSource<ReportRequestConfig.Arguments>(
                 new StartupState.Builder(new CollectingFlags.CollectingFlagsBuilder()
                     .withPermissionsCollectingEnabled(true)
@@ -170,7 +170,7 @@ public class ReportConfigLoaderTest extends CommonTest {
             .isTrue();
         softAssertion.assertThat(reportRequestConfig.isFeaturesCollectingEnabled()).as("isFeaturesCollectingEnabled")
             .isTrue();
-        softAssertion.assertThat(reportRequestConfig.getCurrentStatisticSendingState()).as("statisticSending").isFalse();
+        softAssertion.assertThat(reportRequestConfig.getCurrentDataSendingState()).as("dataSendingEnabled").isFalse();
         softAssertion.assertThat(reportRequestConfig.getMaxEventsInDbCount()).as("maxReportsInDbCount").isEqualTo(250);
         softAssertion.assertThat(reportRequestConfig.getCertificates()).as("certificates fingerprints")
             .isEqualTo(fingerprints);

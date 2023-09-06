@@ -19,7 +19,7 @@ import io.appmetrica.analytics.impl.PreloadInfoStorage;
 import io.appmetrica.analytics.impl.ScreenInfoHolder;
 import io.appmetrica.analytics.impl.SelfDiagnosticReporterStorage;
 import io.appmetrica.analytics.impl.StartupStateHolder;
-import io.appmetrica.analytics.impl.StatisticsRestrictionControllerImpl;
+import io.appmetrica.analytics.impl.DataSendingRestrictionControllerImpl;
 import io.appmetrica.analytics.impl.component.ComponentId;
 import io.appmetrica.analytics.impl.crash.ndk.NativeCrashService;
 import io.appmetrica.analytics.impl.db.VitalCommonDataProvider;
@@ -94,7 +94,7 @@ public class GlobalServiceLocatorRule extends ExternalResource {
         when(globalServiceLocator.getPreloadInfoStorage()).thenReturn(mock(PreloadInfoStorage.class));
         when(globalServiceLocator.getReferrerHolder()).thenReturn(mock(ReferrerHolder.class));
         when(globalServiceLocator.getSelfDiagnosticReporterStorage()).thenReturn(mock(SelfDiagnosticReporterStorage.class));
-        when(globalServiceLocator.getStatisticsRestrictionController()).thenReturn(mock(StatisticsRestrictionControllerImpl.class));
+        when(globalServiceLocator.getDataSendingRestrictionController()).thenReturn(mock(DataSendingRestrictionControllerImpl.class));
         when(globalServiceLocator.getScreenInfoHolder()).thenReturn(mock(ScreenInfoHolder.class));
         when(globalServiceLocator.getAppSetIdGetter()).thenReturn(mock(AppSetIdGetter.class));
         when(globalServiceLocator.getSslSocketFactoryProvider()).thenReturn(mock(SslSocketFactoryProviderImpl.class));

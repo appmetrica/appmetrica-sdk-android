@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.modulesapi.internal
 
 import android.content.Context
-import io.appmetrica.analytics.coreapi.internal.control.StatisticsRestrictionController
+import io.appmetrica.analytics.coreapi.internal.control.DataSendingRestrictionController
 import io.appmetrica.analytics.coreapi.internal.identifiers.SimpleAdvertisingIdGetter
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.applicationstate.ApplicationStateProvider
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.batteryinfo.ChargeTypeProvider
@@ -31,7 +31,7 @@ interface ServiceContext {
 
     val chargeTypeProvider: ChargeTypeProvider
 
-    val statisticsRestrictionController: StatisticsRestrictionController
+    val dataSendingRestrictionController: DataSendingRestrictionController
 
     val localeProvider: LocaleProvider
 }

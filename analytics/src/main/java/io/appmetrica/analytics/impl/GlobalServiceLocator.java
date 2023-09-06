@@ -71,7 +71,7 @@ public final class GlobalServiceLocator {
     private final Context mContext;
     private volatile ReferrerHolder mReferrerHolder;
     @Nullable
-    private volatile StatisticsRestrictionControllerImpl mStatisticsRestrictionController;
+    private volatile DataSendingRestrictionControllerImpl dataSendingRestrictionController;
     @NonNull
     private final ServiceExecutorProvider mServiceExecutorProvider;
     @NonNull
@@ -173,17 +173,17 @@ public final class GlobalServiceLocator {
     }
 
     @NonNull
-    public StatisticsRestrictionControllerImpl getStatisticsRestrictionController() {
-        if (mStatisticsRestrictionController == null) {
+    public DataSendingRestrictionControllerImpl getDataSendingRestrictionController() {
+        if (dataSendingRestrictionController == null) {
             synchronized (this) {
-                if (mStatisticsRestrictionController == null) {
-                    mStatisticsRestrictionController = new StatisticsRestrictionControllerImpl(
-                            new StatisticsRestrictionControllerImpl.StorageImpl(getServicePreferences())
+                if (dataSendingRestrictionController == null) {
+                    dataSendingRestrictionController = new DataSendingRestrictionControllerImpl(
+                            new DataSendingRestrictionControllerImpl.StorageImpl(getServicePreferences())
                     );
                 }
             }
         }
-        return mStatisticsRestrictionController;
+        return dataSendingRestrictionController;
     }
 
     @NonNull

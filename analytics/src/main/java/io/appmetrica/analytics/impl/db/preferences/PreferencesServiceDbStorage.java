@@ -13,7 +13,7 @@ public class PreferencesServiceDbStorage extends NameSpacedPreferenceDbStorage
     static final PreferencesItem LOCATION_TRACKING_ENABLED = new PreferencesItem("LOCATION_TRACKING_ENABLED");
     static final PreferencesItem SERVER_TIME_OFFSET = new PreferencesItem("PREF_KEY_OFFSET");
     static final PreferencesItem UNCHECKED_TIME = new PreferencesItem("UNCHECKED_TIME");
-    static final PreferencesItem STATISTICS_RESTRICTED_IN_MAIN = new PreferencesItem("STATISTICS_RESTRICTED_IN_MAIN");
+    static final PreferencesItem DATA_SENDING_RESTRICTED_IN_MAIN = new PreferencesItem("STATISTICS_RESTRICTED_IN_MAIN");
     static final PreferencesItem LAST_IDENTITY_LIGHT_SEND_TIME = new PreferencesItem("LAST_IDENTITY_LIGHT_SEND_TIME");
     static final PreferencesItem NEXT_REPORT_SEND_ATTEMPT_NUMBER =
             new PreferencesItem("NEXT_REPORT_SEND_ATTEMPT_NUMBER");
@@ -63,14 +63,14 @@ public class PreferencesServiceDbStorage extends NameSpacedPreferenceDbStorage
     }
 
     @Nullable
-    public Boolean getStatisticsRestrictedFromMainReporter() {
-        return containsKey(STATISTICS_RESTRICTED_IN_MAIN.fullKey())
-                ? readBoolean(STATISTICS_RESTRICTED_IN_MAIN.fullKey(), true)
+    public Boolean getDataSendingRestrictedFromMainReporter() {
+        return containsKey(DATA_SENDING_RESTRICTED_IN_MAIN.fullKey())
+                ? readBoolean(DATA_SENDING_RESTRICTED_IN_MAIN.fullKey(), true)
                 : null;
     }
 
-    public PreferencesServiceDbStorage putStatisticsRestrictedFromMainReporter(boolean value) {
-        return writeBoolean(STATISTICS_RESTRICTED_IN_MAIN.fullKey(), value);
+    public PreferencesServiceDbStorage putDataSendingRestrictedFromMainReporter(boolean value) {
+        return writeBoolean(DATA_SENDING_RESTRICTED_IN_MAIN.fullKey(), value);
     }
 
     public long getLastIdentityLightSendTimeSeconds(long defaultValue) {

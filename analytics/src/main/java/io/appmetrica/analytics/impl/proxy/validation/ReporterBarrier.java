@@ -127,7 +127,7 @@ public class ReporterBarrier implements IReporter {
     }
 
     @Override
-    public void setStatisticsSending(boolean enabled) {
+    public void setDataSendingEnabled(boolean enabled) {
 
     }
 

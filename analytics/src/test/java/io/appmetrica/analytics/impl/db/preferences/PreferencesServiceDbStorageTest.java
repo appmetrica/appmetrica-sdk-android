@@ -263,19 +263,19 @@ public class PreferencesServiceDbStorageTest extends CommonTest {
     }
 
     @Test
-    public void testGetStatisticsRestricted() {
-        assertThat(mServiceDbStorage.getStatisticsRestrictedFromMainReporter()).isNull();
+    public void getDataSendingRestricted() {
+        assertThat(mServiceDbStorage.getDataSendingRestrictedFromMainReporter()).isNull();
 
-        when(mDbStorage.containsKey(PreferencesServiceDbStorage.STATISTICS_RESTRICTED_IN_MAIN.fullKey())).thenReturn(true);
-        when(mDbStorage.getBoolean(eq(PreferencesServiceDbStorage.STATISTICS_RESTRICTED_IN_MAIN.fullKey()), anyBoolean()))
+        when(mDbStorage.containsKey(PreferencesServiceDbStorage.DATA_SENDING_RESTRICTED_IN_MAIN.fullKey())).thenReturn(true);
+        when(mDbStorage.getBoolean(eq(PreferencesServiceDbStorage.DATA_SENDING_RESTRICTED_IN_MAIN.fullKey()), anyBoolean()))
                 .thenReturn(false);
-        assertThat(mServiceDbStorage.getStatisticsRestrictedFromMainReporter()).isFalse();
+        assertThat(mServiceDbStorage.getDataSendingRestrictedFromMainReporter()).isFalse();
     }
 
     @Test
-    public void testSaveStatisticsRestricted() {
-        mServiceDbStorage.putStatisticsRestrictedFromMainReporter(false);
-        verify(mDbStorage).put(PreferencesServiceDbStorage.STATISTICS_RESTRICTED_IN_MAIN.fullKey(), false);
+    public void saveDataSendingRestricted() {
+        mServiceDbStorage.putDataSendingRestrictedFromMainReporter(false);
+        verify(mDbStorage).put(PreferencesServiceDbStorage.DATA_SENDING_RESTRICTED_IN_MAIN.fullKey(), false);
     }
 
     @Test
@@ -380,8 +380,8 @@ public class PreferencesServiceDbStorageTest extends CommonTest {
     //just add new put methods when needed
     public static PreferencesServiceDbStorage createMock() {
         PreferencesServiceDbStorage mock = mock(PreferencesServiceDbStorage.class);
-        doReturn(mock).when(mock).putStatisticsRestrictedFromMainReporter(anyBoolean());
-        doReturn(null).when(mock).getStatisticsRestrictedFromMainReporter();
+        doReturn(mock).when(mock).putDataSendingRestrictedFromMainReporter(anyBoolean());
+        doReturn(null).when(mock).getDataSendingRestrictedFromMainReporter();
         return mock;
     }
 }

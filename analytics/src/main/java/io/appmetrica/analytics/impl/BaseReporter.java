@@ -569,8 +569,8 @@ public abstract class BaseReporter implements IBaseReporter {
     }
 
     @Override
-    public void setStatisticsSending(boolean value) {
-        mReporterEnvironment.getReporterConfiguration().setStatisticsSending(value);
+    public void setDataSendingEnabled(boolean value) {
+        mReporterEnvironment.getReporterConfiguration().setDataSendingEnabled(value);
     }
 
     @Override

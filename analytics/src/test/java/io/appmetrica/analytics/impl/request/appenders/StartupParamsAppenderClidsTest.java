@@ -4,7 +4,7 @@ import android.net.Uri;
 import io.appmetrica.analytics.TestData;
 import io.appmetrica.analytics.impl.DistributionSource;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
-import io.appmetrica.analytics.impl.StatisticsRestrictionControllerImpl;
+import io.appmetrica.analytics.impl.DataSendingRestrictionControllerImpl;
 import io.appmetrica.analytics.impl.clids.ClidsInfo;
 import io.appmetrica.analytics.impl.modules.ModulesRemoteConfigArgumentsCollector;
 import io.appmetrica.analytics.impl.referrer.service.ReferrerHolder;
@@ -38,7 +38,7 @@ public class StartupParamsAppenderClidsTest extends CommonTest {
     @Mock
     private ReferrerHolder referrerHolder;
     @Mock
-    private StatisticsRestrictionControllerImpl statisticsRestrictionController;
+    private DataSendingRestrictionControllerImpl dataSendingRestrictionController;
     @Mock
     private ModulesRemoteConfigArgumentsCollector modulesArgumentsCollector;
     private Map<String, String> chosenClids;
@@ -56,10 +56,10 @@ public class StartupParamsAppenderClidsTest extends CommonTest {
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        when(GlobalServiceLocator.getInstance().getStatisticsRestrictionController())
-                .thenReturn(statisticsRestrictionController);
-        when(statisticsRestrictionController.isRestrictedForSdk()).thenReturn(true);
-        when(statisticsRestrictionController.isRestrictedForReporter()).thenReturn(true);
+        when(GlobalServiceLocator.getInstance().getDataSendingRestrictionController())
+                .thenReturn(dataSendingRestrictionController);
+        when(dataSendingRestrictionController.isRestrictedForSdk()).thenReturn(true);
+        when(dataSendingRestrictionController.isRestrictedForReporter()).thenReturn(true);
         chosenClids = new HashMap<String, String>();
         chosenClids.put("clid00", "0");
         chosenClids.put("clid11", "1");

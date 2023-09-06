@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.component;
 
 import androidx.annotation.NonNull;
-import io.appmetrica.analytics.impl.StatisticsRestrictionControllerImpl;
+import io.appmetrica.analytics.impl.DataSendingRestrictionControllerImpl;
 import io.appmetrica.analytics.impl.client.ClientConfiguration;
 import io.appmetrica.analytics.impl.client.ClientConfigurationTestUtils;
 import io.appmetrica.analytics.impl.request.CoreRequestConfig;
@@ -38,8 +38,8 @@ public class ReportComponentConfigurationHolderTest extends CommonTest {
         ).when(componentUnit).getComponentId();
         mHolder = new ReportComponentConfigurationHolder(
                 new ReportRequestConfig.Loader(componentUnit,
-                        new ReportRequestConfig.BaseStatisticsSendingStrategy(
-                                new StatisticsRestrictionControllerImpl(mock(StatisticsRestrictionControllerImpl.Storage.class))
+                        new ReportRequestConfig.BaseDataSendingStrategy(
+                                new DataSendingRestrictionControllerImpl(mock(DataSendingRestrictionControllerImpl.Storage.class))
                         ) {
                         }
                 ) {

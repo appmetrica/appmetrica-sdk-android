@@ -25,7 +25,7 @@ class SelfSdkReportingFactory extends ReporterClientUnitFactory {
                 componentId,
                 sdkConfig,
                 new SelfReportingArgumentsFactory(
-                        GlobalServiceLocator.getInstance().getStatisticsRestrictionController()
+                        GlobalServiceLocator.getInstance().getDataSendingRestrictionController()
                 ),
                 new StubbedExecutorFactory()
         );

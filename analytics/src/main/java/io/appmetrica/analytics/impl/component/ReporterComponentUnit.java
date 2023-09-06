@@ -6,19 +6,19 @@ import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreutils.internal.services.PackageManagerUtils;
 import io.appmetrica.analytics.coreutils.internal.time.TimePassedChecker;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
-import io.appmetrica.analytics.impl.StatisticsRestrictionControllerImpl;
+import io.appmetrica.analytics.impl.DataSendingRestrictionControllerImpl;
 import io.appmetrica.analytics.impl.startup.StartupState;
 import io.appmetrica.analytics.impl.startup.executor.ComponentStartupExecutorFactory;
 
 public class ReporterComponentUnit extends ComponentUnit {
 
     private final String mApiKey;
-    private final StatisticsRestrictionControllerImpl mStatisticsRestrictionController;
+    private final DataSendingRestrictionControllerImpl dataSendingRestrictionController;
 
     public ReporterComponentUnit(@NonNull Context context,
                                  @NonNull ComponentId componentId,
                                  @NonNull CommonArguments.ReporterArguments sdkConfig,
-                                 @NonNull StatisticsRestrictionControllerImpl controller,
+                                 @NonNull DataSendingRestrictionControllerImpl controller,
                                  @NonNull StartupState startupState,
                                  @NonNull ComponentStartupExecutorFactory factory) {
         this(
@@ -48,7 +48,7 @@ public class ReporterComponentUnit extends ComponentUnit {
                           @NonNull AppEnvironmentProvider appEnvironmentProvider,
                           @NonNull TimePassedChecker timePassedChecker,
                           @NonNull ComponentUnitFieldsFactory fieldsFactory,
-                          @NonNull StatisticsRestrictionControllerImpl controller) {
+                          @NonNull DataSendingRestrictionControllerImpl controller) {
         super(
                 context,
                 componentId,
@@ -57,16 +57,16 @@ public class ReporterComponentUnit extends ComponentUnit {
                 fieldsFactory
         );
         mApiKey = componentId.getApiKey();
-        mStatisticsRestrictionController = controller;
+        dataSendingRestrictionController = controller;
     }
 
     @Override
     public synchronized void updateSdkConfig(@NonNull CommonArguments.ReporterArguments sdkConfig) {
         super.updateSdkConfig(sdkConfig);
-        mStatisticsRestrictionController
+        dataSendingRestrictionController
                 .setEnabledFromSharedReporter(
                         mApiKey,
-                        sdkConfig.statisticsSending
+                        sdkConfig.dataSendingEnabled
                 );
     }
 }

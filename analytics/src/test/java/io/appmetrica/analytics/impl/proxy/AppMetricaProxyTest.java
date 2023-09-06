@@ -545,13 +545,13 @@ public class AppMetricaProxyTest extends CommonTest {
     }
 
     @Test
-    public void testSetStatisticSendingIfTrue() {
-        testSetStatisticSending(true);
+    public void dataSendingEnabledIfTrue() {
+        checkSetDataSendingEnabled(true);
     }
 
     @Test
-    public void testSetStatisticSendingIfFalse() {
-        testSetStatisticSending(false);
+    public void dataSendingEnabledIfFalse() {
+        checkSetDataSendingEnabled(false);
     }
 
     @Test
@@ -698,12 +698,12 @@ public class AppMetricaProxyTest extends CommonTest {
         order.verify(mMainReporter).registerAnrListener(eq(listener));
     }
 
-    private void testSetStatisticSending(boolean value) {
-        mProxy.setStatisticsSending(context, value);
+    private void checkSetDataSendingEnabled(boolean value) {
+        mProxy.setDataSendingEnabled(value);
         InOrder order = inOrder(mBarrier, mSynchronousStageExecutor, mProvider);
-        order.verify(mBarrier).setStatisticsSending(context, value);
-        order.verify(mSynchronousStageExecutor).setStatisticsSending(applicationContext, value);
-        order.verify(mProvider).setStatisticsSending(value);
+        order.verify(mBarrier).setDataSendingEnabled(value);
+        order.verify(mSynchronousStageExecutor).setDataSendingEnabled(value);
+        order.verify(mProvider).setDataSendingEnabled(value);
         verifyZeroInteractions(activationValidator);
     }
 

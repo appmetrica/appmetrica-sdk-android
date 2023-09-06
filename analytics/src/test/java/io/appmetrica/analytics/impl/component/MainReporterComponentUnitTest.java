@@ -5,7 +5,7 @@ import io.appmetrica.analytics.coreapi.internal.servicecomponents.applicationsta
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.applicationstate.ApplicationStateObserver;
 import io.appmetrica.analytics.impl.ApplicationStateProviderImpl;
 import io.appmetrica.analytics.impl.CounterConfigurationReporterType;
-import io.appmetrica.analytics.impl.StatisticsRestrictionControllerImpl;
+import io.appmetrica.analytics.impl.DataSendingRestrictionControllerImpl;
 import io.appmetrica.analytics.impl.billing.BillingMonitorWrapper;
 import io.appmetrica.analytics.impl.component.processor.factory.HandlersFactory;
 import io.appmetrica.analytics.impl.component.processor.factory.RegularMainReporterFactory;
@@ -44,7 +44,7 @@ public class MainReporterComponentUnitTest extends ComponentUnitBaseTest {
     @Mock
     private MainReporterComponentUnitFieldsFactory mFieldsFactory;
     @Mock
-    private StatisticsRestrictionControllerImpl mStatisticsRestrictionController;
+    private DataSendingRestrictionControllerImpl dataSendingRestrictionController;
     @Mock
     private ApplicationStateProviderImpl applicationStateProvider;
     @Mock
@@ -76,15 +76,15 @@ public class MainReporterComponentUnitTest extends ComponentUnitBaseTest {
     @Override
     protected ComponentUnit createComponentUnit() {
         return new MainReporterComponentUnit(
-                mContext,
-                mComponentId,
-                startupState,
-                sdkConfig,
-                mAppEnvironmentProvider,
-                mTimePassedChecker,
-                mFieldsFactory,
-                mReferrerHolder,
-                mStatisticsRestrictionController
+            mContext,
+            mComponentId,
+            startupState,
+            sdkConfig,
+            mAppEnvironmentProvider,
+            mTimePassedChecker,
+            mFieldsFactory,
+            mReferrerHolder,
+            dataSendingRestrictionController
         );
     }
 
@@ -121,17 +121,17 @@ public class MainReporterComponentUnitTest extends ComponentUnitBaseTest {
     }
 
     @Test
-    public void testUpdateSdkConfigNullStatisticsSending() {
-        doReturn(null).when(mCounterConfiguration).getStatisticsSending();
+    public void testUpdateSdkConfigNullDataSendingEnabled() {
+        doReturn(null).when(mCounterConfiguration).getDataSendingEnabled();
         mMainReporterComponentUnit.updateSdkConfig(new CommonArguments.ReporterArguments(mCounterConfiguration, null));
-        verify(mStatisticsRestrictionController).setEnabledFromMainReporter(null);
+        verify(dataSendingRestrictionController).setEnabledFromMainReporter(null);
     }
 
     @Test
-    public void testUpdateSdkConfigNonNullStatisticsSending() {
-        doReturn(true).when(mCounterConfiguration).getStatisticsSending();
+    public void testUpdateSdkConfigNonNullDataSendingEnabled() {
+        doReturn(true).when(mCounterConfiguration).getDataSendingEnabled();
         mMainReporterComponentUnit.updateSdkConfig(new CommonArguments.ReporterArguments(mCounterConfiguration, null));
-        verify(mStatisticsRestrictionController).setEnabledFromMainReporter(true);
+        verify(dataSendingRestrictionController).setEnabledFromMainReporter(true);
     }
 
     @Test

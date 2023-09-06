@@ -186,16 +186,16 @@ internal class ServiceContextFacadeTest : CommonTest() {
     }
 
     @Test
-    fun statisticsRestrictionController() {
-        assertThat(serviceContextFacade.statisticsRestrictionController)
-            .isEqualTo(GlobalServiceLocator.getInstance().statisticsRestrictionController)
+    fun dataSendingRestrictionController() {
+        assertThat(serviceContextFacade.dataSendingRestrictionController)
+            .isEqualTo(GlobalServiceLocator.getInstance().dataSendingRestrictionController)
     }
 
     @Test
-    fun `statisticsRestrictionController twice`() {
-        val first = serviceContextFacade.statisticsRestrictionController
-        whenever(GlobalServiceLocator.getInstance().statisticsRestrictionController).thenReturn(mock())
-        val second = serviceContextFacade.statisticsRestrictionController
+    fun `dataSendingRestrictionController twice`() {
+        val first = serviceContextFacade.dataSendingRestrictionController
+        whenever(GlobalServiceLocator.getInstance().dataSendingRestrictionController).thenReturn(mock())
+        val second = serviceContextFacade.dataSendingRestrictionController
         assertThat(first).isNotEqualTo(second)
     }
 

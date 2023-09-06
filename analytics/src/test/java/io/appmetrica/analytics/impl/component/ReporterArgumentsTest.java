@@ -34,7 +34,7 @@ public class ReporterArgumentsTest extends CommonTest {
     private final Integer mMaxReportsCount = 20;
     private final Integer mDispatchPeriod = 17;
     private final Boolean mLogEnabled = true;
-    private final Boolean mStatisticsSending = true;
+    private final Boolean dataSendingEnabled = true;
     private final Map<String, String> mClidsFromClient = new HashMap<String, String>();
     private CommonArguments.ReporterArguments mArguments;
     private CommonArguments.ReporterArguments mOtherArguments;
@@ -54,7 +54,7 @@ public class ReporterArgumentsTest extends CommonTest {
         when(mReporterConfiguration.getMaxReportsCount()).thenReturn(mMaxReportsCount);
         when(mReporterConfiguration.getDispatchPeriod()).thenReturn(mDispatchPeriod);
         when(mReporterConfiguration.isLogEnabled()).thenReturn(mLogEnabled);
-        when(mReporterConfiguration.getStatisticsSending()).thenReturn(mStatisticsSending);
+        when(mReporterConfiguration.getDataSendingEnabled()).thenReturn(dataSendingEnabled);
     }
 
     @Test
@@ -74,7 +74,7 @@ public class ReporterArgumentsTest extends CommonTest {
         softly.assertThat(newArguments.maxReportsCount).isEqualTo(mMaxReportsCount);
         softly.assertThat(newArguments.dispatchPeriod).isEqualTo(mDispatchPeriod);
         softly.assertThat(newArguments.logEnabled).isEqualTo(mLogEnabled);
-        softly.assertThat(newArguments.statisticsSending).isEqualTo(mStatisticsSending);
+        softly.assertThat(newArguments.dataSendingEnabled).isEqualTo(dataSendingEnabled);
         softly.assertThat(newArguments.clidsFromClient).isEqualTo(mClidsFromClient);
         softly.assertAll();
     }
@@ -94,7 +94,7 @@ public class ReporterArgumentsTest extends CommonTest {
         when(mReporterConfiguration.getMaxReportsCount()).thenReturn(30);
         when(mReporterConfiguration.getDispatchPeriod()).thenReturn(30);
         when(mReporterConfiguration.isLogEnabled()).thenReturn(false);
-        when(mReporterConfiguration.getStatisticsSending()).thenReturn(false);
+        when(mReporterConfiguration.getDataSendingEnabled()).thenReturn(false);
         Map<String, String> clidsFromClient = new HashMap<String, String>();
         clidsFromClient.put("clid1", "1");
 
@@ -111,7 +111,7 @@ public class ReporterArgumentsTest extends CommonTest {
         softly.assertThat(newArguments.maxReportsCount).isEqualTo(mMaxReportsCount);
         softly.assertThat(newArguments.dispatchPeriod).isEqualTo(mDispatchPeriod);
         softly.assertThat(newArguments.logEnabled).isEqualTo(mLogEnabled);
-        softly.assertThat(newArguments.statisticsSending).isEqualTo(mStatisticsSending);
+        softly.assertThat(newArguments.dataSendingEnabled).isEqualTo(dataSendingEnabled);
         softly.assertThat(newArguments.clidsFromClient).isEqualTo(mClidsFromClient);
         softly.assertAll();
     }
@@ -132,7 +132,7 @@ public class ReporterArgumentsTest extends CommonTest {
         softly.assertThat(newArguments.maxReportsCount).isNull();
         softly.assertThat(newArguments.dispatchPeriod).isNull();
         softly.assertThat(newArguments.logEnabled).isNull();
-        softly.assertThat(newArguments.statisticsSending).isNull();
+        softly.assertThat(newArguments.dataSendingEnabled).isNull();
         softly.assertThat(newArguments.clidsFromClient).isNull();
         softly.assertAll();
     }

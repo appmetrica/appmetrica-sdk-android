@@ -193,8 +193,8 @@ public class SynchronousStageExecutorTest extends CommonTest {
     }
 
     @Test
-    public void testSetStatisticsSending() {
-        mSynchronousStageExecutor.setStatisticsSending(true);
+    public void setDataSendingEnabled() {
+        mSynchronousStageExecutor.setDataSendingEnabled(true);
         verifyZeroInteractions(mProvider);
     }
 
@@ -317,12 +317,6 @@ public class SynchronousStageExecutorTest extends CommonTest {
     @Test
     public void testSetLocationTracking() {
         mSynchronousStageExecutor.setLocationTracking(true);
-        verifyZeroInteractions(mProvider);
-    }
-
-    @Test
-    public void testSetStatisticsSendingWithContext() {
-        mSynchronousStageExecutor.setStatisticsSending(mContext, true);
         verifyZeroInteractions(mProvider);
     }
 

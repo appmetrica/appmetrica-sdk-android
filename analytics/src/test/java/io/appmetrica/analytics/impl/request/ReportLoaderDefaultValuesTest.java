@@ -65,7 +65,7 @@ public class ReportLoaderDefaultValuesTest extends CommonTest {
         when(clidsStorage.updateAndRetrieveData(any(ClidsInfo.Candidate.class)))
                 .thenReturn(new ClidsInfo.Candidate(null, DistributionSource.APP));
 
-        mLoader = new ReportRequestConfig.Loader(componentUnit, mock(ReportRequestConfig.StatisticsSendingStrategy.class));
+        mLoader = new ReportRequestConfig.Loader(componentUnit, mock(ReportRequestConfig.DataSendingStrategy.class));
         mDataSource = new CoreRequestConfig.CoreDataSource<>(
                 TestUtils.createDefaultStartupState(),
                 ReportArgumentsTest.createEmptyArguments()

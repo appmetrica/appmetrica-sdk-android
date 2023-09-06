@@ -57,7 +57,7 @@ class ReporterConfigTest : CommonTest() {
         val config = ReporterConfig.newConfigBuilder(mApiKey)
             .withSessionTimeout(SESSION_TIMEOUT)
             .withLogs()
-            .withStatisticsSending(STATISTICS_SENDING)
+            .withDataSendingEnabled(DATA_SENDING_ENABLED)
             .withMaxReportsInDatabaseCount(MAX_REPORTS_IN_DB_COUNT)
             .withUserProfileID(USER_PROFILE_ID)
             .withDispatchPeriodSeconds(DISPATCH_PERIOD)
@@ -71,7 +71,7 @@ class ReporterConfigTest : CommonTest() {
             .checkField("apiKey", mApiKey)
             .checkField("sessionTimeout", SESSION_TIMEOUT)
             .checkField("logs", true)
-            .checkField("statisticsSending", STATISTICS_SENDING)
+            .checkField("dataSendingEnabled", DATA_SENDING_ENABLED)
             .checkField("maxReportsInDatabaseCount", MAX_REPORTS_IN_DB_COUNT)
             .checkField("userProfileID", USER_PROFILE_ID)
             .checkField("dispatchPeriodSeconds", DISPATCH_PERIOD)
@@ -88,7 +88,7 @@ class ReporterConfigTest : CommonTest() {
             .checkField("apiKey", mApiKey)
             .checkField<Any>("sessionTimeout", null)
             .checkField<Any>("logs", null)
-            .checkField<Any>("statisticsSending", null)
+            .checkField<Any>("dataSendingEnabled", null)
             .checkField<Any>("maxReportsInDatabaseCount", null)
             .checkField<Any>("userProfileID", null)
             .checkField<Any>("dispatchPeriodSeconds", null)
@@ -112,7 +112,7 @@ class ReporterConfigTest : CommonTest() {
     }
     companion object {
         private const val SESSION_TIMEOUT = 44
-        private const val STATISTICS_SENDING = true
+        private const val DATA_SENDING_ENABLED = true
         private const val MAX_REPORTS_IN_DB_COUNT = 2000
         private const val USER_PROFILE_ID = "user_profile_id"
         private const val DISPATCH_PERIOD = 122

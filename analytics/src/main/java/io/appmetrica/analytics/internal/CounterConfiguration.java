@@ -68,7 +68,7 @@ public class CounterConfiguration implements Parcelable {
             applyAppVersionFromConfig(config);
             applyAppBuildNumberFromConfig(config);
             applyFirstActivationAsUpdateFromConfig(config);
-            applyStatisticsSendingFromConfig(config.statisticsSending);
+            applyDataSendingEnabledFromConfig(config.dataSendingEnabled);
             applyMaxReportsInDbCount(config.maxReportsInDatabaseCount);
             applyNativeCrashesFromConfig(config.nativeCrashReporting);
             applyRevenueAutoTrackingEnabledFromConfig(config);
@@ -84,7 +84,7 @@ public class CounterConfiguration implements Parcelable {
             applyDispatchPeriodFromConfig(config.dispatchPeriodSeconds);
             applyMaxReportsCountFromConfig(config.maxReportsCount);
             applyLogsFromConfig(config.logs);
-            applyStatisticsSendingFromConfig(config.statisticsSending);
+            applyDataSendingEnabledFromConfig(config.dataSendingEnabled);
             applyMaxReportsInDbCount(config.maxReportsInDatabaseCount);
             setManualReporterType(config.apiKey);
         }
@@ -171,9 +171,9 @@ public class CounterConfiguration implements Parcelable {
         }
     }
 
-    private void applyStatisticsSendingFromConfig(@Nullable Boolean statisticsSending) {
-        if (Utils.isFieldSet(statisticsSending)) {
-            setStatisticsSending(statisticsSending);
+    private void applyDataSendingEnabledFromConfig(@Nullable Boolean dataSendingEnabled) {
+        if (Utils.isFieldSet(dataSendingEnabled)) {
+            setDataSendingEnabled(dataSendingEnabled);
         }
     }
 
@@ -328,12 +328,12 @@ public class CounterConfiguration implements Parcelable {
         return mParamsMapping.getAsInteger(CounterConfigurationKeys.MAX_REPORTS_IN_DB_COUNT);
     }
 
-    public Boolean getStatisticsSending() {
-        return mParamsMapping.getAsBoolean(CounterConfigurationKeys.STATISTICS_SENDING);
+    public Boolean getDataSendingEnabled() {
+        return mParamsMapping.getAsBoolean(CounterConfigurationKeys.DATA_SENDING_ENABLED);
     }
 
-    public final synchronized void setStatisticsSending(boolean value) {
-        mParamsMapping.put(CounterConfigurationKeys.STATISTICS_SENDING, value);
+    public final synchronized void setDataSendingEnabled(boolean value) {
+        mParamsMapping.put(CounterConfigurationKeys.DATA_SENDING_ENABLED, value);
     }
 
     @Override

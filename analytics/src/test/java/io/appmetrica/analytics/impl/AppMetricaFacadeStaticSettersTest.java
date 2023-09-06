@@ -131,35 +131,35 @@ public class AppMetricaFacadeStaticSettersTest extends CommonTest {
     }
 
     @Test
-    public void setStatisticsSendingNoInstance() {
+    public void setDataSendingEnabledNoInstance() {
         boolean value = new Random().nextBoolean();
         setUpNoInstance();
-        AppMetricaFacade.setStatisticsSending(value);
-        verify(mClientServiceLocatorRule.mDefaultOneShotMetricaConfig).setStatisticsSending(value);
+        AppMetricaFacade.setDataSendingEnabled(value);
+        verify(mClientServiceLocatorRule.mDefaultOneShotMetricaConfig).setDataSendingEnabled(value);
     }
 
     @Test
-    public void setStatisticsSendingFutureNotDone() {
+    public void setDataSendingEnabledFutureNotDone() {
         boolean value = new Random().nextBoolean();
         setUpFutureNotDone();
-        AppMetricaFacade.setStatisticsSending(value);
-        verify(mClientServiceLocatorRule.mDefaultOneShotMetricaConfig).setStatisticsSending(value);
+        AppMetricaFacade.setDataSendingEnabled(value);
+        verify(mClientServiceLocatorRule.mDefaultOneShotMetricaConfig).setDataSendingEnabled(value);
     }
 
     @Test
-    public void setStatisticsSendingNoMainReporter() {
+    public void setDataSendingEnabledNoMainReporter() {
         boolean value = new Random().nextBoolean();
         setUpNoMainReporter();
-        AppMetricaFacade.setStatisticsSending(value);
-        verify(mClientServiceLocatorRule.mDefaultOneShotMetricaConfig).setStatisticsSending(value);
+        AppMetricaFacade.setDataSendingEnabled(value);
+        verify(mClientServiceLocatorRule.mDefaultOneShotMetricaConfig).setDataSendingEnabled(value);
     }
 
     @Test
-    public void setStatisticsSendingInitialized() {
+    public void setDataSendingEnabledInitialized() {
         boolean value = new Random().nextBoolean();
         setUpInitialized();
-        AppMetricaFacade.setStatisticsSending(value);
-        verify(mImpl).setStatisticsSending(value);
+        AppMetricaFacade.setDataSendingEnabled(value);
+        verify(mImpl).setDataSendingEnabled(value);
     }
 
     @Test

@@ -121,13 +121,13 @@ public class AppMetricaFacadeProviderTest extends CommonTest {
     }
 
     @Test
-    public void setStatisticsSending() {
-        final boolean statisticsSending = new Random().nextBoolean();
-        mProvider.setStatisticsSending(statisticsSending);
+    public void setDataSendingEnabled() {
+        final boolean dataSendingEnabled = new Random().nextBoolean();
+        mProvider.setDataSendingEnabled(dataSendingEnabled);
         sAppMetricaFacade.getStaticMock().verify(new MockedStatic.Verification() {
             @Override
             public void apply() throws Throwable {
-                AppMetricaFacade.setStatisticsSending(statisticsSending);
+                AppMetricaFacade.setDataSendingEnabled(dataSendingEnabled);
             }
         });
     }

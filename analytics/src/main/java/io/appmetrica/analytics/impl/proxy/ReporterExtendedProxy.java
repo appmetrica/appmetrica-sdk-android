@@ -346,13 +346,13 @@ public class ReporterExtendedProxy implements IReporterExtended {
     }
 
     @Override
-    public void setStatisticsSending(final boolean enabled) {
-        mBarrier.setStatisticsSending(enabled);
-        mSynchronousStageExecutor.setStatisticsSending(enabled);
+    public void setDataSendingEnabled(final boolean enabled) {
+        mBarrier.setDataSendingEnabled(enabled);
+        mSynchronousStageExecutor.setDataSendingEnabled(enabled);
         mExecutor.execute(new Runnable() {
             @Override
             public void run() {
-                getReporter().setStatisticsSending(enabled);
+                getReporter().setDataSendingEnabled(enabled);
             }
         });
     }

@@ -219,11 +219,11 @@ public class SelfReporterWrapper implements IReporterExtended, IPluginReporter {
     }
 
     @Override
-    public void setStatisticsSending(final boolean enabled) {
+    public void setDataSendingEnabled(final boolean enabled) {
         processCommand(new IReporterCommandPerformer() {
             @Override
             public void perform(@NonNull IReporterExtended reporter) {
-                reporter.setStatisticsSending(enabled);
+                reporter.setDataSendingEnabled(enabled);
             }
         });
     }

@@ -15,15 +15,15 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 @RunWith(RobolectricTestRunner.class)
-public class StatisticsRestrictionControllerGeneralTest extends CommonTest {
+public class DataSendingRestrictionControllerGeneralTest extends CommonTest {
 
-    private final StatisticsRestrictionControllerImpl.Storage mStorage = mock(StatisticsRestrictionControllerImpl.Storage.class);
-    private StatisticsRestrictionControllerImpl mController;
+    private final DataSendingRestrictionControllerImpl.Storage mStorage = mock(DataSendingRestrictionControllerImpl.Storage.class);
+    private DataSendingRestrictionControllerImpl mController;
 
     @Before
     public void setUp() {
         doReturn(null).when(mStorage).readRestrictionFromMainReporter();
-        mController = new StatisticsRestrictionControllerImpl(mStorage);
+        mController = new DataSendingRestrictionControllerImpl(mStorage);
     }
 
     @Test
@@ -72,22 +72,22 @@ public class StatisticsRestrictionControllerGeneralTest extends CommonTest {
 
         private final PreferencesServiceDbStorage mDbStorage = PreferencesServiceDbStorageTest.createMock();
 
-        private StatisticsRestrictionControllerImpl.StorageImpl mStorage = new StatisticsRestrictionControllerImpl.StorageImpl(
+        private DataSendingRestrictionControllerImpl.StorageImpl mStorage = new DataSendingRestrictionControllerImpl.StorageImpl(
                 mDbStorage
         );
 
         @Test
         public void testStore() {
             mStorage.storeRestrictionFromMainReporter(true);
-            verify(mDbStorage).putStatisticsRestrictedFromMainReporter(true);
+            verify(mDbStorage).putDataSendingRestrictedFromMainReporter(true);
             verify(mDbStorage).commit();
         }
 
         @Test
         public void testRead() {
-            doReturn(false).when(mDbStorage).getStatisticsRestrictedFromMainReporter();
+            doReturn(false).when(mDbStorage).getDataSendingRestrictedFromMainReporter();
             assertThat(mStorage.readRestrictionFromMainReporter()).isFalse();
-            verify(mDbStorage).getStatisticsRestrictedFromMainReporter();
+            verify(mDbStorage).getDataSendingRestrictedFromMainReporter();
         }
     }
 

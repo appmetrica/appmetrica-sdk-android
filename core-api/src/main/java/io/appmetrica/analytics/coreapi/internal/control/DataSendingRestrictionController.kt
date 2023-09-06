@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.coreapi.internal.control
 
-interface StatisticsRestrictionController {
+interface DataSendingRestrictionController {
 
     val isRestrictedForReporter: Boolean
 

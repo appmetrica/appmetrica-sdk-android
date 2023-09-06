@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.component;
 
 import io.appmetrica.analytics.internal.CounterConfiguration;
-import io.appmetrica.analytics.impl.StatisticsRestrictionControllerImpl;
+import io.appmetrica.analytics.impl.DataSendingRestrictionControllerImpl;
 import io.appmetrica.analytics.testutils.CommonTest;
 import java.util.Arrays;
 import java.util.Collection;
@@ -26,7 +26,7 @@ public class ReporterArgumentsFactoryTest extends CommonTest {
         );
     }
 
-    private final StatisticsRestrictionControllerImpl mController = mock(StatisticsRestrictionControllerImpl.class);
+    private final DataSendingRestrictionControllerImpl mController = mock(DataSendingRestrictionControllerImpl.class);
     private final CounterConfiguration mConfiguration = mock(CounterConfiguration.class);
     private final ReporterArgumentsFactory mFactory = new ReporterArgumentsFactory(mController);
     private final boolean mResult;
@@ -37,13 +37,13 @@ public class ReporterArgumentsFactoryTest extends CommonTest {
                                         boolean result
     ) {
         doReturn(controller).when(mController).isRestrictedForReporter();
-        doReturn(configuration).when(mConfiguration).getStatisticsSending();
+        doReturn(configuration).when(mConfiguration).getDataSendingEnabled();
         mResult = result;
     }
 
     @Test
     public void test() {
-        assertThat(mFactory.shouldSend(new CommonArguments.ReporterArguments(mConfiguration, null).statisticsSending)).isEqualTo(mResult);
+        assertThat(mFactory.shouldSend(new CommonArguments.ReporterArguments(mConfiguration, null).dataSendingEnabled)).isEqualTo(mResult);
     }
 
 }

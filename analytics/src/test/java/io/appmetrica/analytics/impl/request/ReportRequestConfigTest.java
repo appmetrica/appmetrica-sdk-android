@@ -98,7 +98,7 @@ public class ReportRequestConfigTest extends CommonTest {
         @Mock
         private ComponentId componentId;
         @Mock
-        private ReportRequestConfig.StatisticsSendingStrategy statisticsSendingStrategy;
+        private ReportRequestConfig.DataSendingStrategy dataSendingStrategy;
         @Mock
         private ClidsStateChecker clidsStateChecker;
         @Mock
@@ -144,7 +144,7 @@ public class ReportRequestConfigTest extends CommonTest {
             when(componentId.getPackage()).thenReturn(packageName);
 
             coreDataSource = new CoreRequestConfig.CoreDataSource<>(startupState, arguments);
-            loader = new ReportRequestConfig.Loader(componentUnit, statisticsSendingStrategy, clidsStateChecker);
+            loader = new ReportRequestConfig.Loader(componentUnit, dataSendingStrategy, clidsStateChecker);
 
             mReportRequestConfig = loader.load(coreDataSource);
             mReportRequestConfig.setClidsFromClientMatchClidsFromStartupRequest(clidsMatch);
@@ -166,7 +166,7 @@ public class ReportRequestConfigTest extends CommonTest {
     public GlobalServiceLocatorRule globalServiceLocatorRule = new GlobalServiceLocatorRule();
 
     @Mock
-    private ReportRequestConfig.StatisticsSendingStrategy statisticsSendingStrategy;
+    private ReportRequestConfig.DataSendingStrategy dataSendingStrategy;
     private ReportRequestConfig reportRequestConfig;
 
     @Mock
@@ -219,18 +219,18 @@ public class ReportRequestConfigTest extends CommonTest {
         when(componentId.getPackage()).thenReturn(packageName);
 
         coreDataSource = new CoreRequestConfig.CoreDataSource<>(startupState, arguments);
-        loader = new ReportRequestConfig.Loader(componentUnit, statisticsSendingStrategy, clidsStateChecker);
+        loader = new ReportRequestConfig.Loader(componentUnit, dataSendingStrategy, clidsStateChecker);
 
         reportRequestConfig = loader.load(coreDataSource);
     }
 
     @Test
     public void testStrategyCalled() {
-        reportRequestConfig.setStatisticSendingProperties(null, statisticsSendingStrategy);
+        reportRequestConfig.setDataSendingProperties(null, dataSendingStrategy);
 
-        reportRequestConfig.getCurrentStatisticSendingState();
+        reportRequestConfig.getCurrentDataSendingState();
 
-        verify(statisticsSendingStrategy).shouldSend(null);
+        verify(dataSendingStrategy).shouldSend(null);
     }
 
     @Test

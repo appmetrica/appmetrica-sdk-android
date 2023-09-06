@@ -45,7 +45,7 @@ class MainReporterClientFactory implements ClientUnitFactory, ComponentUnitFacto
                 componentId,
                 sdkConfig,
                 GlobalServiceLocator.getInstance().getReferrerHolder(),
-                GlobalServiceLocator.getInstance().getStatisticsRestrictionController(),
+                GlobalServiceLocator.getInstance().getDataSendingRestrictionController(),
                 new RegularExecutorFactory(startupUnit)
         );
     }

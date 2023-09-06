@@ -132,8 +132,8 @@ public class AppMetricaImplStubTest extends CommonTest {
     }
 
     @Test
-    public void setStatisticsSending() {
-        stub.setStatisticsSending(true);
+    public void setDataSendingEnabled() {
+        stub.setDataSendingEnabled(true);
     }
 
     @Test

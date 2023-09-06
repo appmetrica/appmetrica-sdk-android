@@ -213,14 +213,14 @@ public interface IReporter {
     void reportECommerce(@NonNull ECommerceEvent event);
 
     /**
-     * Enables/disables statistics sending to the AppMetrica server. By default, the sending is enabled.
+     * Enables/disables data sending to the AppMetrica server. By default, the sending is enabled.
      *
      * <p><b>NOTE:</b> Disabling this option doesn't affect data sending from the main apiKey and other
      * reporters.
      *
-     * @param enabled {@code true} to allow AppMetrica sending statistics, otherwise {@code false}.
+     * @param enabled {@code true} to allow AppMetrica sending data, otherwise {@code false}.
      */
-    void setStatisticsSending(boolean enabled);
+    void setDataSendingEnabled(boolean enabled);
 
     /**
      * <p>Creates an {@link io.appmetrica.analytics.plugins.IPluginReporter} that can send plugin events to this reporter.</p>

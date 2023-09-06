@@ -78,11 +78,11 @@ public class GlobalServiceLocatorGettersTest extends CommonTest {
                 }
             },
             {
-                "StatisticsRestrictionController",
-                new ServiceExtractor<StatisticsRestrictionControllerImpl>() {
+                "DataSendingRestrictionController",
+                new ServiceExtractor<DataSendingRestrictionControllerImpl>() {
                     @Override
-                    public StatisticsRestrictionControllerImpl getService(GlobalServiceLocator globalServiceLocator) {
-                        return globalServiceLocator.getStatisticsRestrictionController();
+                    public DataSendingRestrictionControllerImpl getService(GlobalServiceLocator globalServiceLocator) {
+                        return globalServiceLocator.getDataSendingRestrictionController();
                     }
                 }
             },

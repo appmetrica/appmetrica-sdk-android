@@ -9,7 +9,7 @@ import io.appmetrica.analytics.coreapi.internal.identifiers.AdvertisingIdsHolder
 import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus;
 import io.appmetrica.analytics.impl.DistributionSource;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
-import io.appmetrica.analytics.impl.StatisticsRestrictionControllerImpl;
+import io.appmetrica.analytics.impl.DataSendingRestrictionControllerImpl;
 import io.appmetrica.analytics.impl.clids.ClidsInfo;
 import io.appmetrica.analytics.impl.id.AdvertisingIdGetter;
 import io.appmetrica.analytics.impl.modules.ModulesRemoteConfigArgumentsCollector;
@@ -485,7 +485,7 @@ public class StartupParamsAppenderTest extends CommonTest {
 
         Uri.Builder builder = new Uri.Builder();
         @Mock
-        StatisticsRestrictionControllerImpl restrictionController;
+        DataSendingRestrictionControllerImpl restrictionController;
         @Mock
         StartupRequestConfig requestConfig;
         @Mock
@@ -602,7 +602,7 @@ public class StartupParamsAppenderTest extends CommonTest {
         }
 
         @Test
-        public void testStatisticsRestricted() {
+        public void dataSendingRestricted() {
             doReturn(true).when(restrictionController).isRestrictedForReporter();
             when(mAdvertisingIdsHolder.getGoogle()).thenReturn(new AdTrackingInfoResult(
                     googleAdvInfo,

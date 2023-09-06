@@ -62,7 +62,7 @@ public class CommonArguments {
         @Nullable
         public final Boolean logEnabled;
         @Nullable
-        public final Boolean statisticsSending;
+        public final Boolean dataSendingEnabled;
         @Nullable
         public final Map<String, String> clidsFromClient;
         @Nullable
@@ -83,7 +83,7 @@ public class CommonArguments {
                           @Nullable Integer maxReportsCount,
                           @Nullable Integer dispatchPeriod,
                           @Nullable Boolean logEnabled,
-                          @Nullable Boolean statisticsSending,
+                          @Nullable Boolean dataSendingEnabled,
                           @Nullable Map<String, String> clidsFromClient,
                           @Nullable Integer maxReportsInDbCount,
                           @Nullable Boolean nativeCrashesEnabled,
@@ -99,7 +99,7 @@ public class CommonArguments {
             this.maxReportsCount = maxReportsCount;
             this.dispatchPeriod = dispatchPeriod;
             this.logEnabled = logEnabled;
-            this.statisticsSending = statisticsSending;
+            this.dataSendingEnabled = dataSendingEnabled;
             this.clidsFromClient = clidsFromClient;
             this.maxReportsInDbCount = maxReportsInDbCount;
             this.nativeCrashesEnabled = nativeCrashesEnabled;
@@ -120,7 +120,7 @@ public class CommonArguments {
                     reporterConfiguration.getMaxReportsCount(),
                     reporterConfiguration.getDispatchPeriod(),
                     reporterConfiguration.isLogEnabled(),
-                    reporterConfiguration.getStatisticsSending(),
+                    reporterConfiguration.getDataSendingEnabled(),
                     clidsFromClient,
                     reporterConfiguration.getMaxReportsInDbCount(),
                     reporterConfiguration.getReportNativeCrashesEnabled(),
@@ -164,7 +164,7 @@ public class CommonArguments {
                     WrapUtils.getOrDefaultNullable(maxReportsCount, other.maxReportsCount),
                     WrapUtils.getOrDefaultNullable(dispatchPeriod, other.dispatchPeriod),
                     WrapUtils.getOrDefaultNullable(logEnabled, other.logEnabled),
-                    WrapUtils.getOrDefaultNullable(statisticsSending, other.statisticsSending),
+                    WrapUtils.getOrDefaultNullable(dataSendingEnabled, other.dataSendingEnabled),
                     WrapUtils.getOrDefaultNullable(clidsFromClient, other.clidsFromClient),
                     WrapUtils.getOrDefaultNullable(maxReportsInDbCount, other.maxReportsInDbCount),
                     WrapUtils.getOrDefaultNullable(nativeCrashesEnabled, other.nativeCrashesEnabled),
@@ -207,8 +207,8 @@ public class CommonArguments {
                 return false;
             if (logEnabled != null ? !logEnabled.equals(that.logEnabled) : that.logEnabled != null)
                 return false;
-            if (statisticsSending != null ? !statisticsSending.equals(that.statisticsSending) :
-                    that.statisticsSending != null)
+            if (dataSendingEnabled != null ? !dataSendingEnabled.equals(that.dataSendingEnabled) :
+                    that.dataSendingEnabled != null)
                 return false;
             if (clidsFromClient != null ? !clidsFromClient.equals(that.clidsFromClient) : that.clidsFromClient != null)
                 return false;
@@ -236,7 +236,7 @@ public class CommonArguments {
             result = 31 * result + (maxReportsCount != null ? maxReportsCount.hashCode() : 0);
             result = 31 * result + (dispatchPeriod != null ? dispatchPeriod.hashCode() : 0);
             result = 31 * result + (logEnabled != null ? logEnabled.hashCode() : 0);
-            result = 31 * result + (statisticsSending != null ? statisticsSending.hashCode() : 0);
+            result = 31 * result + (dataSendingEnabled != null ? dataSendingEnabled.hashCode() : 0);
             result = 31 * result + (clidsFromClient != null ? clidsFromClient.hashCode() : 0);
             result = 31 * result + (maxReportsInDbCount != null ? maxReportsInDbCount.hashCode() : 0);
             result = 31 * result + (nativeCrashesEnabled != null ? nativeCrashesEnabled.hashCode() : 0);

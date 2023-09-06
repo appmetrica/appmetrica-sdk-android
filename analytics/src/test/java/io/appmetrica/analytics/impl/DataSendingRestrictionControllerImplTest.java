@@ -9,9 +9,9 @@ import org.junit.runner.RunWith;
 import org.robolectric.ParameterizedRobolectricTestRunner;
 
 @RunWith(ParameterizedRobolectricTestRunner.class)
-public class StatisticsRestrictionControllerImplTest extends CommonTest {
+public class DataSendingRestrictionControllerImplTest extends CommonTest {
 
-    private static class EmptyStorage implements StatisticsRestrictionControllerImpl.Storage {
+    private static class EmptyStorage implements DataSendingRestrictionControllerImpl.Storage {
 
         @Override
         public void storeRestrictionFromMainReporter(boolean value) {
@@ -27,45 +27,45 @@ public class StatisticsRestrictionControllerImplTest extends CommonTest {
     @ParameterizedRobolectricTestRunner.Parameters(name = "{0}")
     public static Collection<Object[]> data() {
         ArrayList<Object[]> data = new ArrayList<Object[]>();
-        StatisticsRestrictionControllerImpl controller;
+        DataSendingRestrictionControllerImpl controller;
 
-        controller = new StatisticsRestrictionControllerImpl(new EmptyStorage());
+        controller = new DataSendingRestrictionControllerImpl(new EmptyStorage());
         controller.setEnabledFromMainReporter(true);
         data.add(new Object[]{"enabled in main reporter", controller, false, false, false});
 
-        controller = new StatisticsRestrictionControllerImpl(new EmptyStorage());
+        controller = new DataSendingRestrictionControllerImpl(new EmptyStorage());
         controller.setEnabledFromMainReporter(false);
         data.add(new Object[]{"disabled in main reporter", controller, true, true, true});
 
-        controller = new StatisticsRestrictionControllerImpl(new EmptyStorage());
+        controller = new DataSendingRestrictionControllerImpl(new EmptyStorage());
         controller.setEnabledFromSharedReporter("1", true);
         data.add(new Object[]{"enabled in all reporters", controller, false, false, false});
 
-        controller = new StatisticsRestrictionControllerImpl(new EmptyStorage());
+        controller = new DataSendingRestrictionControllerImpl(new EmptyStorage());
         controller.setEnabledFromSharedReporter("1", false);
         data.add(new Object[]{"disabled in all reporters", controller, false, true, true});
 
-        controller = new StatisticsRestrictionControllerImpl(new EmptyStorage());
+        controller = new DataSendingRestrictionControllerImpl(new EmptyStorage());
         controller.setEnabledFromSharedReporter("1", false);
         controller.setEnabledFromSharedReporter("2", true);
         data.add(new Object[]{"different in all reporters", controller, false, false, true});
 
-        controller = new StatisticsRestrictionControllerImpl(new EmptyStorage());
+        controller = new DataSendingRestrictionControllerImpl(new EmptyStorage());
         data.add(new Object[]{"test no data", controller, true, true, true});
 
         return data;
     }
 
-    private final StatisticsRestrictionControllerImpl mController;
+    private final DataSendingRestrictionControllerImpl mController;
     private final boolean mReporter;
     private final boolean mAppMetrica;
     private final boolean mLocation;
 
-    public StatisticsRestrictionControllerImplTest(String description,
-                                                   StatisticsRestrictionControllerImpl controller,
-                                                   boolean reporter,
-                                                   boolean appMetrica,
-                                                   boolean location) {
+    public DataSendingRestrictionControllerImplTest(String description,
+                                                    DataSendingRestrictionControllerImpl controller,
+                                                    boolean reporter,
+                                                    boolean appMetrica,
+                                                    boolean location) {
         mController = controller;
         mReporter = reporter;
         mAppMetrica = appMetrica;

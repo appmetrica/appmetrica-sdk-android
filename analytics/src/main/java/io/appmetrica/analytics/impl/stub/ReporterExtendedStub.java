@@ -105,7 +105,7 @@ public class ReporterExtendedStub implements IReporterExtended {
     }
 
     @Override
-    public void setStatisticsSending(boolean enabled) {
+    public void setDataSendingEnabled(boolean enabled) {
         //Do nothing
     }
 

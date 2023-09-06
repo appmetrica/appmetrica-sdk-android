@@ -117,7 +117,7 @@ public class ComponentUnit implements IReportableComponent, IComponent, EventsFl
                          @NonNull StartupState startupState,
                          @NonNull ComponentId componentId,
                          @NonNull CommonArguments.ReporterArguments sdkConfig,
-                         @NonNull ReportRequestConfig.StatisticsSendingStrategy statisticsSendingStrategy,
+                         @NonNull ReportRequestConfig.DataSendingStrategy dataSendingStrategy,
                          @NonNull ComponentStartupExecutorFactory startupExecutorFactory) {
         this(
                 context,
@@ -130,7 +130,7 @@ public class ComponentUnit implements IReportableComponent, IComponent, EventsFl
                         sdkConfig,
                         startupExecutorFactory,
                         startupState,
-                        statisticsSendingStrategy,
+                        dataSendingStrategy,
                         GlobalServiceLocator.getInstance().getServiceExecutorProvider()
                                 .getNetworkTaskProcessorExecutor(),
                         PackageManagerUtils.getAppVersionCodeInt(context),

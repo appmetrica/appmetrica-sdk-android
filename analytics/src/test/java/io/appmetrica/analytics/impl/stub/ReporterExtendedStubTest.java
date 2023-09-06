@@ -121,8 +121,8 @@ public class ReporterExtendedStubTest extends CommonTest {
     }
 
     @Test
-    public void setStatisticsSending() {
-        getStub().setStatisticsSending(true);
+    public void setDataSendingEnabled() {
+        getStub().setDataSendingEnabled(true);
     }
 
     @Test

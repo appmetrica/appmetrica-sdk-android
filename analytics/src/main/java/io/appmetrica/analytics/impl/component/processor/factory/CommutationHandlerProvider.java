@@ -20,7 +20,7 @@ public class CommutationHandlerProvider {
         requestReferrerHandler = new RequestReferrerHandler(component);
         mPreActivationConfigHandler = new UpdatePreActivationConfigHandler(
                 component,
-                GlobalServiceLocator.getInstance().getStatisticsRestrictionController()
+                GlobalServiceLocator.getInstance().getDataSendingRestrictionController()
         );
     }
 

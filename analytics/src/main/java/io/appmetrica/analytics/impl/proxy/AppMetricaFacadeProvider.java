@@ -47,8 +47,8 @@ public class AppMetricaFacadeProvider {
     }
 
     @WorkerThread
-    public void setStatisticsSending(final boolean enabled) {
-        AppMetricaFacade.setStatisticsSending(enabled);
+    public void setDataSendingEnabled(final boolean enabled) {
+        AppMetricaFacade.setDataSendingEnabled(enabled);
     }
 
     @WorkerThread

@@ -41,7 +41,7 @@ class AppMetricaConfigTest : CommonTest() {
     private val maxReportsInDbCount = 800
     private val nativeCrashReporting = random.nextBoolean()
     private val sessionTimeout = 23
-    private val statisticsSending = random.nextBoolean()
+    private val dataSendingEnabled = random.nextBoolean()
     private val revenueAutoTrackingEnabled = random.nextBoolean()
     private val sessionsAutoTrackingEnabled = random.nextBoolean()
     private val appOpenTrackingEnabled = random.nextBoolean()
@@ -100,7 +100,7 @@ class AppMetricaConfigTest : CommonTest() {
             .checkField("logs", true)
             .checkField("preloadInfo", preloadInfo)
             .checkField("firstActivationAsUpdate", handleFirstActivationAsUpdate)
-            .checkField("statisticsSending", statisticsSending)
+            .checkField("dataSendingEnabled", dataSendingEnabled)
             .checkField("maxReportsInDatabaseCount", maxReportsInDbCount)
             .checkField("errorEnvironment", errorEnvironmentMap)
             .checkField("userProfileID", userProfileID)
@@ -138,7 +138,7 @@ class AppMetricaConfigTest : CommonTest() {
             .checkField("additionalConfig", HashMap<String, String>())
             .checkFieldsAreNull(
                 "appVersion", "sessionTimeout", "crashReporting", "nativeCrashReporting", "location",
-                "locationTracking", "logs", "preloadInfo", "firstActivationAsUpdate", "statisticsSending",
+                "locationTracking", "logs", "preloadInfo", "firstActivationAsUpdate", "dataSendingEnabled",
                 "maxReportsInDatabaseCount", "userProfileID", "revenueAutoTrackingEnabled",
                 "sessionsAutoTrackingEnabled", "appOpenTrackingEnabled", "deviceType", "appBuildNumber",
                 "dispatchPeriodSeconds", "maxReportsCount", "crashTransformer", "anrMonitoring",
@@ -157,7 +157,7 @@ class AppMetricaConfigTest : CommonTest() {
             .withNativeCrashReporting(nativeCrashReporting)
             .withPreloadInfo(preloadInfo)
             .withSessionTimeout(sessionTimeout)
-            .withStatisticsSending(statisticsSending)
+            .withDataSendingEnabled(dataSendingEnabled)
             .withErrorEnvironmentValue(errorEnvKeyFirst, errorEnvValueFirst)
             .withErrorEnvironmentValue(errorEnvKeySecond, errorEnvValueSecond)
             .withUserProfileID(userProfileID)

@@ -145,10 +145,6 @@ public class SynchronousStageExecutor {
 
     }
 
-    public void setStatisticsSending(boolean enabled) {
-
-    }
-
     public void activate(@NonNull final Context context, @NonNull final AppMetricaConfig config) {
         activateInternal(context, config);
     }
@@ -198,8 +194,7 @@ public class SynchronousStageExecutor {
 
     }
 
-    public void setStatisticsSending(@NonNull final Context context, boolean enabled) {
-        contextAppearedListener.onProbablyAppeared(context);
+    public void setDataSendingEnabled(boolean enabled) {
     }
 
     public void requestDeferredDeeplinkParameters(@NonNull final DeferredDeeplinkParametersListener listener) {

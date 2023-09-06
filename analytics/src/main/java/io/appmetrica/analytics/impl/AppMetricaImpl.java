@@ -221,7 +221,7 @@ public class AppMetricaImpl implements IAppMetricaImpl {
 
     @WorkerThread
     private void initMainReporterForApiKey(AppMetricaConfig config, final boolean needToClearEnvironment) {
-        mReportsHandler.updatePreActivationConfig(config.locationTracking, config.statisticsSending);
+        mReportsHandler.updatePreActivationConfig(config.locationTracking, config.dataSendingEnabled);
         MainReporter reporter = mReporterFactory.buildMainReporter(config, needToClearEnvironment);
         mainReporterApiConsumerProvider = new MainReporterApiConsumerProvider(reporter);
         appOpenWatcher.setDeeplinkConsumer(mainReporterApiConsumerProvider.getDeeplinkConsumer());
@@ -256,8 +256,8 @@ public class AppMetricaImpl implements IAppMetricaImpl {
 
     @WorkerThread
     @Override
-    public void setStatisticsSending(boolean value) {
-        getMainReporter().setStatisticsSending(value);
+    public void setDataSendingEnabled(boolean value) {
+        getMainReporter().setDataSendingEnabled(value);
     }
 
     @WorkerThread

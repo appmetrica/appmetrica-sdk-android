@@ -34,12 +34,12 @@ public class ReporterConfig {
     public final Integer sessionTimeout;
 
     /**
-     * Indicates whether statistics should be sent to the AppMetrica server.
+     * Indicates whether data should be sent to the AppMetrica server.
      *
-     * @see Builder#withStatisticsSending(boolean)
+     * @see Builder#withDataSendingEnabled(boolean)
      */
     @Nullable
-    public final Boolean statisticsSending;
+    public final Boolean dataSendingEnabled;
 
     /**
      * Maximum number of reports to store in database.
@@ -108,7 +108,7 @@ public class ReporterConfig {
         apiKey = builder.mApiKey;
         sessionTimeout = builder.mSessionTimeout;
         logs = builder.mLogs;
-        statisticsSending = builder.mStatisticsSending;
+        dataSendingEnabled = builder.dataSendingEnabled;
         maxReportsInDatabaseCount = builder.mMaxReportsInDatabaseCount;
         userProfileID = builder.userProfileID;
         dispatchPeriodSeconds = builder.dispatchPeriodSeconds;
@@ -121,7 +121,7 @@ public class ReporterConfig {
         apiKey = config.apiKey;
         sessionTimeout = config.sessionTimeout;
         logs = config.logs;
-        statisticsSending = config.statisticsSending;
+        dataSendingEnabled = config.dataSendingEnabled;
         maxReportsInDatabaseCount = config.maxReportsInDatabaseCount;
         userProfileID = config.userProfileID;
         dispatchPeriodSeconds = config.dispatchPeriodSeconds;
@@ -164,7 +164,7 @@ public class ReporterConfig {
         @Nullable
         private Boolean mLogs;
         @Nullable
-        private Boolean mStatisticsSending;
+        private Boolean dataSendingEnabled;
         @Nullable
         private Integer mMaxReportsInDatabaseCount;
         @Nullable
@@ -225,17 +225,17 @@ public class ReporterConfig {
         }
 
         /**
-         * Enables/disables statistics sending to the AppMetrica server. By default, the sending is enabled.
+         * Enables/disables data sending to the AppMetrica server. By default, the sending is enabled.
          *
          * <p><b>NOTE:</b> Disabling this option doesn't affect data sending from the main apiKey and other
          * reporters.
          *
-         * @param enabled {@code true} to allow AppMetrica sending statistics, otherwise {@code false}.
+         * @param enabled {@code true} to allow AppMetrica sending data, otherwise {@code false}.
          * @return the same {@link Builder} object.
          */
         @NonNull
-        public Builder withStatisticsSending(boolean enabled) {
-            mStatisticsSending = enabled;
+        public Builder withDataSendingEnabled(boolean enabled) {
+            dataSendingEnabled = enabled;
             return this;
         }
 

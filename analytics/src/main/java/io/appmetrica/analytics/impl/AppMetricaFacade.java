@@ -147,8 +147,8 @@ public class AppMetricaFacade implements IReporterFactoryProvider {
     }
 
     @WorkerThread
-    public static void setStatisticsSending(final boolean enabled) {
-        getConfigurator().setStatisticsSending(enabled);
+    public static void setDataSendingEnabled(final boolean enabled) {
+        getConfigurator().setDataSendingEnabled(enabled);
     }
 
     @WorkerThread

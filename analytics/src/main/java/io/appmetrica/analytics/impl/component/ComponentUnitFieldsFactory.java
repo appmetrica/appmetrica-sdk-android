@@ -90,7 +90,7 @@ class ComponentUnitFieldsFactory {
     @NonNull
     protected final StartupState mStartupState;
     @NonNull
-    private final ReportRequestConfig.StatisticsSendingStrategy mStatisticsSendingStrategy;
+    private final ReportRequestConfig.DataSendingStrategy mDataSendingStrategy;
     @NonNull
     private final EventEncrypterProvider mEventEncrypterProvider;
     @NonNull
@@ -104,7 +104,7 @@ class ComponentUnitFieldsFactory {
                                @NonNull CommonArguments.ReporterArguments sdkConfig,
                                @NonNull ComponentStartupExecutorFactory startupExecutorFactory,
                                @NonNull StartupState startupState,
-                               @NonNull ReportRequestConfig.StatisticsSendingStrategy statSendingStrategy,
+                               @NonNull ReportRequestConfig.DataSendingStrategy statSendingStrategy,
                                @NonNull ICommonExecutor taskExecutor,
                                final int currentAppVersion,
                                @NonNull LifecycleDependentComponentManager lifecycleDependentComponentManager) {
@@ -130,7 +130,7 @@ class ComponentUnitFieldsFactory {
                                @NonNull CommonArguments.ReporterArguments sdkConfig,
                                @NonNull ComponentStartupExecutorFactory startupExecutorFactory,
                                @NonNull StartupState startupState,
-                               @NonNull ReportRequestConfig.StatisticsSendingStrategy statSendingStrategy,
+                               @NonNull ReportRequestConfig.DataSendingStrategy statSendingStrategy,
                                @NonNull ICommonExecutor taskExecutor,
                                @NonNull EventEncrypterProvider eventEncrypterProvider,
                                final int currentAppVersion,
@@ -142,7 +142,7 @@ class ComponentUnitFieldsFactory {
         mSdkConfig = sdkConfig;
         mStartupExecutorFactory = startupExecutorFactory;
         mStartupState = startupState;
-        mStatisticsSendingStrategy = statSendingStrategy;
+        mDataSendingStrategy = statSendingStrategy;
         mTaskExecutor = taskExecutor;
         mEventEncrypterProvider = eventEncrypterProvider;
         mCurrentAppVersion = currentAppVersion;
@@ -186,7 +186,7 @@ class ComponentUnitFieldsFactory {
     @NonNull
     ReportComponentConfigurationHolder createConfigHolder(@NonNull ComponentUnit componentUnit) {
         return new ReportComponentConfigurationHolder(
-                new ReportRequestConfig.Loader(componentUnit, mStatisticsSendingStrategy),
+                new ReportRequestConfig.Loader(componentUnit, mDataSendingStrategy),
                 mStartupState,
                 new ReportRequestConfig.Arguments(mSdkConfig)
         );

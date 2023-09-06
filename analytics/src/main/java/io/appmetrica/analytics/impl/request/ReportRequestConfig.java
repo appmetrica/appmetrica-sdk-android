@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.AppMetricaDefaultValues;
-import io.appmetrica.analytics.coreapi.internal.control.StatisticsRestrictionController;
+import io.appmetrica.analytics.coreapi.internal.control.DataSendingRestrictionController;
 import io.appmetrica.analytics.coreutils.internal.AndroidUtils;
 import io.appmetrica.analytics.coreutils.internal.StringUtils;
 import io.appmetrica.analytics.coreutils.internal.WrapUtils;
@@ -33,8 +33,8 @@ public class ReportRequestConfig extends CoreRequestConfig {
             ", mDispatchPeriod=" + mDispatchPeriod +
             ", mLogEnabled=" + mLogEnabled +
             ", mMaxReportsCount=" + mMaxReportsCount +
-            ", statisticSendingFromArguments=" + statisticSendingFromArguments +
-            ", statisticsSendingStrategy=" + statisticsSendingStrategy +
+            ", dataSendingEnabledFromArguments=" + dataSendingEnabledFromArguments +
+            ", dataSendingStrategy=" + dataSendingStrategy +
             ", mPreloadInfoSendingStrategy=" + mPreloadInfoSendingStrategy +
             ", mApiKey='" + mApiKey + '\'' +
             ", mPermissionsCollectingEnabled=" + mPermissionsCollectingEnabled +
@@ -50,7 +50,7 @@ public class ReportRequestConfig extends CoreRequestConfig {
             "} " + super.toString();
     }
 
-    public interface StatisticsSendingStrategy {
+    public interface DataSendingStrategy {
 
         boolean shouldSend(@Nullable Boolean fromArguments);
 
@@ -62,12 +62,12 @@ public class ReportRequestConfig extends CoreRequestConfig {
 
     }
 
-    public abstract static class BaseStatisticsSendingStrategy implements StatisticsSendingStrategy {
+    public abstract static class BaseDataSendingStrategy implements DataSendingStrategy {
 
         @NonNull
-        protected final StatisticsRestrictionController controller;
+        protected final DataSendingRestrictionController controller;
 
-        public BaseStatisticsSendingStrategy(@NonNull StatisticsRestrictionController controller) {
+        public BaseDataSendingStrategy(@NonNull DataSendingRestrictionController controller) {
             this.controller = controller;
         }
 
@@ -75,7 +75,7 @@ public class ReportRequestConfig extends CoreRequestConfig {
         public boolean shouldSend(@Nullable Boolean fromArguments) {
             return WrapUtils.getOrDefault(
                 fromArguments,
-                AppMetricaDefaultValues.DEFAULT_REPORTER_STATISTICS_SENDING
+                AppMetricaDefaultValues.DEFAULT_REPORTER_DATA_SENDING_ENABLED
             );
         }
     }
@@ -87,8 +87,8 @@ public class ReportRequestConfig extends CoreRequestConfig {
     private int mDispatchPeriod;
     private boolean mLogEnabled;
     private int mMaxReportsCount;
-    private Boolean statisticSendingFromArguments;
-    private StatisticsSendingStrategy statisticsSendingStrategy;
+    private Boolean dataSendingEnabledFromArguments;
+    private DataSendingStrategy dataSendingStrategy;
     @NonNull
     private final PreloadInfoSendingStrategy mPreloadInfoSendingStrategy;
 
@@ -255,8 +255,8 @@ public class ReportRequestConfig extends CoreRequestConfig {
         mMaxReportsInDbCount = maxReportsInDbCount;
     }
 
-    public boolean getCurrentStatisticSendingState() {
-        return statisticsSendingStrategy.shouldSend(statisticSendingFromArguments);
+    public boolean getCurrentDataSendingState() {
+        return dataSendingStrategy.shouldSend(dataSendingEnabledFromArguments);
     }
 
     @Nullable
@@ -269,8 +269,8 @@ public class ReportRequestConfig extends CoreRequestConfig {
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)
-    StatisticsSendingStrategy getStatisticSendingStrategy() {
-        return statisticsSendingStrategy;
+    DataSendingStrategy getDataSendingStrategy() {
+        return dataSendingStrategy;
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)
@@ -278,10 +278,10 @@ public class ReportRequestConfig extends CoreRequestConfig {
         return mPreloadInfoSendingStrategy;
     }
 
-    public void setStatisticSendingProperties(@Nullable Boolean statisticSendingFromArguments,
-                                              @NonNull StatisticsSendingStrategy statisticsSendingStrategy) {
-        this.statisticSendingFromArguments = statisticSendingFromArguments;
-        this.statisticsSendingStrategy = statisticsSendingStrategy;
+    public void setDataSendingProperties(@Nullable Boolean dataSendingFromArguments,
+                                         @NonNull DataSendingStrategy dataSendingStrategy) {
+        this.dataSendingEnabledFromArguments = dataSendingFromArguments;
+        this.dataSendingStrategy = dataSendingStrategy;
     }
 
     public boolean getClidsFromClientMatchClidsFromStartupRequest() {
@@ -383,7 +383,7 @@ public class ReportRequestConfig extends CoreRequestConfig {
         public final int maxReportsCount;
         public final int dispatchPeriod;
         public final boolean logEnabled;
-        public final boolean statisticsSending;
+        public final boolean dataSendingEnabled;
         @Nullable
         public final Map<String, String> clidsFromClient;
         public final int maxReportsInDbCount;
@@ -403,7 +403,7 @@ public class ReportRequestConfig extends CoreRequestConfig {
                 reporterArguments.maxReportsCount,
                 reporterArguments.dispatchPeriod,
                 reporterArguments.logEnabled,
-                reporterArguments.statisticsSending,
+                reporterArguments.dataSendingEnabled,
                 reporterArguments.clidsFromClient,
                 reporterArguments.maxReportsInDbCount
             );
@@ -420,7 +420,7 @@ public class ReportRequestConfig extends CoreRequestConfig {
                   @Nullable Integer maxReportsCount,
                   @Nullable Integer dispatchPeriod,
                   @Nullable Boolean logEnabled,
-                  @Nullable Boolean statisticsSending,
+                  @Nullable Boolean dataSendingEnabled,
                   @Nullable Map<String, String> clidsFromClient,
                   @Nullable Integer maxReportsInDbCount) {
             super(deviceType, appVersion, appBuildNumber);
@@ -437,8 +437,8 @@ public class ReportRequestConfig extends CoreRequestConfig {
             this.dispatchPeriod = WrapUtils.getOrDefault(dispatchPeriod,
                 DefaultValues.DEFAULT_DISPATCH_PERIOD_SECONDS);
             this.logEnabled = WrapUtils.getOrDefault(logEnabled, DefaultValues.DEFAULT_LOG_ENABLED);
-            this.statisticsSending = WrapUtils.getOrDefault(statisticsSending,
-                DefaultValues.DEFAULT_STATISTICS_SENDING);
+            this.dataSendingEnabled = WrapUtils.getOrDefault(dataSendingEnabled,
+                DefaultValues.DEFAULT_DATA_SENDING_ENABLED);
             this.clidsFromClient = clidsFromClient;
             this.maxReportsInDbCount = WrapUtils.getOrDefault(maxReportsInDbCount,
                 DefaultValues.MAX_REPORTS_IN_DB_COUNT_DEFAULT);
@@ -485,7 +485,7 @@ public class ReportRequestConfig extends CoreRequestConfig {
                 WrapUtils.getOrDefaultNullable(
                     other.dispatchPeriod, dispatchPeriod),
                 WrapUtils.getOrDefaultNullable(other.logEnabled, logEnabled),
-                WrapUtils.getOrDefaultNullable(other.statisticsSending, statisticsSending),
+                WrapUtils.getOrDefaultNullable(other.dataSendingEnabled, dataSendingEnabled),
                 WrapUtils.getOrDefaultNullable(other.clidsFromClient, clidsFromClient),
                 WrapUtils.getOrDefaultNullable(other.maxReportsInDbCount, maxReportsInDbCount)
             );
@@ -539,8 +539,8 @@ public class ReportRequestConfig extends CoreRequestConfig {
                     return false;
                 }
             }
-            if (arguments.statisticsSending != null) {
-                if (statisticsSending != arguments.statisticsSending) {
+            if (arguments.dataSendingEnabled != null) {
+                if (dataSendingEnabled != arguments.dataSendingEnabled) {
                     return false;
                 }
             }
@@ -569,23 +569,23 @@ public class ReportRequestConfig extends CoreRequestConfig {
         @NonNull
         private final ComponentUnit mComponentUnit;
         @NonNull
-        private final StatisticsSendingStrategy statisticsSendingStrategy;
+        private final DataSendingStrategy dataSendingStrategy;
         @NonNull
         private final ClidsStateChecker clidsStateChecker;
 
         public Loader(@NonNull ComponentUnit componentUnit,
-                      @NonNull StatisticsSendingStrategy statisticsSendingStrategy
+                      @NonNull DataSendingStrategy dataSendingStrategy
         ) {
-            this(componentUnit, statisticsSendingStrategy, new ClidsStateChecker());
+            this(componentUnit, dataSendingStrategy, new ClidsStateChecker());
         }
 
         @VisibleForTesting
         Loader(@NonNull ComponentUnit componentUnit,
-               @NonNull StatisticsSendingStrategy statisticsSendingStrategy,
+               @NonNull DataSendingStrategy dataSendingStrategy,
                @NonNull ClidsStateChecker clidsStateChecker) {
             super(componentUnit.getContext(), componentUnit.getComponentId().getPackage());
             mComponentUnit = componentUnit;
-            this.statisticsSendingStrategy = statisticsSendingStrategy;
+            this.dataSendingStrategy = dataSendingStrategy;
             this.clidsStateChecker = clidsStateChecker;
         }
 
@@ -611,9 +611,9 @@ public class ReportRequestConfig extends CoreRequestConfig {
             config.setMaxReportsCount(dataSource.componentArguments.maxReportsCount);
             config.setDispatchPeriod(dataSource.componentArguments.dispatchPeriod);
             config.setLogEnabled(dataSource.componentArguments.logEnabled);
-            config.setStatisticSendingProperties(
-                dataSource.componentArguments.statisticsSending,
-                statisticsSendingStrategy
+            config.setDataSendingProperties(
+                dataSource.componentArguments.dataSendingEnabled,
+                dataSendingStrategy
             );
             config.setMaxReportsInDbCount(dataSource.componentArguments.maxReportsInDbCount);
             loadParametersFromStartup(config, dataSource.startupState, dataSource.componentArguments);

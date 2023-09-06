@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.component;
 
 import io.appmetrica.analytics.internal.CounterConfiguration;
 import io.appmetrica.analytics.impl.CounterConfigurationReporterType;
-import io.appmetrica.analytics.impl.StatisticsRestrictionControllerImpl;
+import io.appmetrica.analytics.impl.DataSendingRestrictionControllerImpl;
 import io.appmetrica.analytics.impl.db.storage.DatabaseStorageFactory;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import java.lang.reflect.Field;
@@ -22,7 +22,7 @@ import static org.mockito.Mockito.verify;
 public class ReporterComponentUnitTest extends ComponentUnitBaseTest {
 
     @Mock
-    private StatisticsRestrictionControllerImpl mStatisticsRestrictionController;
+    private DataSendingRestrictionControllerImpl dataSendingRestrictionController;
     @Mock
     private CounterConfiguration mCounterConfiguration;
     @Mock
@@ -46,17 +46,17 @@ public class ReporterComponentUnitTest extends ComponentUnitBaseTest {
     }
 
     @Test
-    public void testUpdateConfigNonNullStatisticsSending() {
-        doReturn(true).when(mCounterConfiguration).getStatisticsSending();
+    public void testUpdateConfigNonNullDataSendingEnabled() {
+        doReturn(true).when(mCounterConfiguration).getDataSendingEnabled();
         mReporterComponentUnit.updateSdkConfig(new CommonArguments.ReporterArguments(mCounterConfiguration, null));
-        verify(mStatisticsRestrictionController).setEnabledFromSharedReporter(mApiKey, true);
+        verify(dataSendingRestrictionController).setEnabledFromSharedReporter(mApiKey, true);
     }
 
     @Test
-    public void testUpdateConfigNullStatisticsSending() {
-        doReturn(null).when(mCounterConfiguration).getStatisticsSending();
+    public void testUpdateConfigNullDataSendingEnabled() {
+        doReturn(null).when(mCounterConfiguration).getDataSendingEnabled();
         mReporterComponentUnit.updateSdkConfig(new CommonArguments.ReporterArguments(mCounterConfiguration, null));
-        verify(mStatisticsRestrictionController).setEnabledFromSharedReporter(mApiKey, null);
+        verify(dataSendingRestrictionController).setEnabledFromSharedReporter(mApiKey, null);
     }
 
     @Override
@@ -77,7 +77,7 @@ public class ReporterComponentUnitTest extends ComponentUnitBaseTest {
                 mAppEnvironmentProvider,
                 mTimePassedChecker,
                 mFieldsFactory,
-                mStatisticsRestrictionController
+            dataSendingRestrictionController
         );
     }
 

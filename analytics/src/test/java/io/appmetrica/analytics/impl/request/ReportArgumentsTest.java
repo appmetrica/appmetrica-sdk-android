@@ -30,7 +30,7 @@ public class ReportArgumentsTest extends CommonTest {
     private static final boolean REPORT_LOCATION_ENABLED = true;
     private static final boolean FIRST_ACTIVATION_AS_UPDATE = true;
     private static final boolean LOG_ENABLED = true;
-    private static final boolean STATISTICS_SENDING = false;
+    private static final boolean DATA_SENDING_ENABLED = false;
     private static final String CUSTOM_VERSION = "customVersion";
     private static final String DEVICE_TYPE = "phone";
 
@@ -38,7 +38,7 @@ public class ReportArgumentsTest extends CommonTest {
     public static final boolean DEFAULT_REPORT_LOCATION_ENABLED = BuildConfig.DEFAULT_LOCATION_COLLECTING;
     public static final boolean DEFAULT_FIRST_ACTIVATION_AS_UPDATE = false;
     public static final boolean DEFAULT_LOG_ENABLED = false;
-    public static final boolean DEFAULT_STATISTICS_SENDING = true;
+    public static final boolean DEFAULT_DATASENDING_ENABLED = true;
     public static final int DEFAULT_MAX_REPORTS_IN_DB_COUNT = 1000;
 
     public static final int DEFAULT_DISPATCH_PERIOD_SECONDS = 90;
@@ -70,22 +70,22 @@ public class ReportArgumentsTest extends CommonTest {
     @Test
     public void testFromConfigurationOnly() {
         assertArguments(
-                ReportRequestConfig.Arguments.empty().mergeFrom(fillConfiguration()),
-                DEVICE_TYPE,
-                CUSTOM_VERSION,
-                String.valueOf(APP_BUILD_NUMBER),
-                API_KEY,
-                REPORT_LOCATION_ENABLED,
-                new Location("provider"),
-                FIRST_ACTIVATION_AS_UPDATE,
-                SESSION_TIMEOUT,
-                MAX_REPORTS_COUNT,
-                DISPATCH_PERIOD_SECONDS,
-                LOG_ENABLED,
-                STATISTICS_SENDING,
-                clids,
-                MAX_REPORTS_IN_DB_COUNT,
-                REVENUE_AUTO_TRACKING_ENABLED
+            ReportRequestConfig.Arguments.empty().mergeFrom(fillConfiguration()),
+            DEVICE_TYPE,
+            CUSTOM_VERSION,
+            String.valueOf(APP_BUILD_NUMBER),
+            API_KEY,
+            REPORT_LOCATION_ENABLED,
+            new Location("provider"),
+            FIRST_ACTIVATION_AS_UPDATE,
+            SESSION_TIMEOUT,
+            MAX_REPORTS_COUNT,
+            DISPATCH_PERIOD_SECONDS,
+            LOG_ENABLED,
+            DATA_SENDING_ENABLED,
+            clids,
+            MAX_REPORTS_IN_DB_COUNT,
+            REVENUE_AUTO_TRACKING_ENABLED
         );
     }
 
@@ -104,7 +104,7 @@ public class ReportArgumentsTest extends CommonTest {
                 MAX_REPORTS_COUNT,
                 DISPATCH_PERIOD_SECONDS,
                 LOG_ENABLED,
-                STATISTICS_SENDING,
+            DATA_SENDING_ENABLED,
                 clids,
                 MAX_REPORTS_IN_DB_COUNT,
                 REVENUE_AUTO_TRACKING_ENABLED
@@ -136,22 +136,22 @@ public class ReportArgumentsTest extends CommonTest {
     @Test
     public void testAllParametersAreEmpty() {
         assertArguments(
-                ReportRequestConfig.Arguments.empty(),
-                null,
-                null,
-                null,
-                null,
-                DEFAULT_REPORT_LOCATION_ENABLED,
-                null,
-                DEFAULT_FIRST_ACTIVATION_AS_UPDATE,
-                DEFAULT_SESSION_TIMEOUT_SECONDS,
-                DEFAULT_MAX_REPORTS_COUNT,
-                DEFAULT_DISPATCH_PERIOD_SECONDS,
-                DEFAULT_LOG_ENABLED,
-                DEFAULT_STATISTICS_SENDING,
-                null,
-                DEFAULT_MAX_REPORTS_IN_DB_COUNT,
-                REVENUE_AUTO_TRACKING_ENABLED
+            ReportRequestConfig.Arguments.empty(),
+            null,
+            null,
+            null,
+            null,
+            DEFAULT_REPORT_LOCATION_ENABLED,
+            null,
+            DEFAULT_FIRST_ACTIVATION_AS_UPDATE,
+            DEFAULT_SESSION_TIMEOUT_SECONDS,
+            DEFAULT_MAX_REPORTS_COUNT,
+            DEFAULT_DISPATCH_PERIOD_SECONDS,
+            DEFAULT_LOG_ENABLED,
+            DEFAULT_DATASENDING_ENABLED,
+            null,
+            DEFAULT_MAX_REPORTS_IN_DB_COUNT,
+            REVENUE_AUTO_TRACKING_ENABLED
         );
     }
 
@@ -167,7 +167,7 @@ public class ReportArgumentsTest extends CommonTest {
                                  @Nullable Integer maxReportsCount,
                                  @Nullable Integer dispatchPeriod,
                                  @Nullable Boolean logEnabled,
-                                 @Nullable Boolean statisticsSending,
+                                 @Nullable Boolean dataSendingEnabled,
                                  @Nullable Map<String, String> clids,
                                  @Nullable Integer maxReportsInDbCount,
                                  @Nullable Boolean revenueAutoTrackingEnabled) {
@@ -183,7 +183,7 @@ public class ReportArgumentsTest extends CommonTest {
         softAssertion.assertThat(arguments.maxReportsCount).as("maxReportsCount").isEqualTo(maxReportsCount);
         softAssertion.assertThat(arguments.dispatchPeriod).as("dispatchPeriod").isEqualTo(dispatchPeriod);
         softAssertion.assertThat(arguments.logEnabled).as("logEnabled").isEqualTo(logEnabled);
-        softAssertion.assertThat(arguments.statisticsSending).as("statisticsSending").isEqualTo(statisticsSending);
+        softAssertion.assertThat(arguments.dataSendingEnabled).as("dataSendingEnabled").isEqualTo(dataSendingEnabled);
         softAssertion.assertThat(arguments.clidsFromClient).as("clidsFromClient").isEqualTo(clids);
         softAssertion.assertThat(arguments.maxReportsInDbCount).as("maxReportsInDbCount").isEqualTo(maxReportsInDbCount);
         softAssertion.assertAll();
@@ -202,7 +202,7 @@ public class ReportArgumentsTest extends CommonTest {
         counterConfiguration.setMaxReportsCount(MAX_REPORTS_COUNT);
         counterConfiguration.setDispatchPeriod(DISPATCH_PERIOD_SECONDS);
         counterConfiguration.setLogEnabled(LOG_ENABLED);
-        counterConfiguration.setStatisticsSending(STATISTICS_SENDING);
+        counterConfiguration.setDataSendingEnabled(DATA_SENDING_ENABLED);
         counterConfiguration.setMaxReportsInDbCount(MAX_REPORTS_IN_DB_COUNT);
         counterConfiguration.setRevenueAutoTrackingEnabled(REVENUE_AUTO_TRACKING_ENABLED);
         return new CommonArguments.ReporterArguments(counterConfiguration, clids);
