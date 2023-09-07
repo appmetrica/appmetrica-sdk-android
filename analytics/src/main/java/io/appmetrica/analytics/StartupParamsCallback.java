@@ -146,7 +146,6 @@ public interface StartupParamsCallback {
      * Called when the startup params couldn't be obtained for some reason.
      * @param reason the reason explaining why startup params could not be obtained.
      * @param partialResult the {@link Result} containing startup params that could be obtained.
-     * For example,
      */
     void onRequestError(@NonNull final Reason reason, @Nullable final Result partialResult);
 }
