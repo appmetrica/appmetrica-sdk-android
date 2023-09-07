@@ -1,7 +1,7 @@
-# [AppMetrica SDK](https://appmetrica.yandex.com)
+# [AppMetrica SDK](https://appmetrica.io)
 
 AppMetrica is a free real-time ad tracking and mobile app analytics solution. AppMetrica covers the three key features for discovering your app's performance — ad tracking, usage analytics and crash analytics.
-Detailed information and instructions for integration are available in the [documentation](https://appmetrica.yandex.com/docs/).
+Detailed information and instructions for integration are available in the [documentation](https://appmetrica.io/docs/).
 
 Classes in packages `${MODULE_NAMESPACE}.internal` are intended for interaction between modules and are not part of the public API. Also changing these classes does not correspond to [semver](https://semver.org/).
 

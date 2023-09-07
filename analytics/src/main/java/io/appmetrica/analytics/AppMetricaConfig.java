@@ -78,7 +78,7 @@ public class AppMetricaConfig {
     /**
      * <p>Indicates whether AppMetrica should include location information within its reports</p>
      *
-     * <p>{@code true} if allow Yandex Metrica to record location information in reports,
+     * <p>{@code true} if allow AppMetrica to record location information in reports,
      * otherwise {@code false}</p>
      *
      * @see Builder#withLocationTracking(boolean)
@@ -264,7 +264,7 @@ public class AppMetricaConfig {
      *
      * @param apiKey API_KEY - unique identifier of app in AppMetrica.
      *
-     * @see <a href="https://yandex.com/dev/appmetrica/doc/mobile-sdk-dg/concepts/android-initialize.html">
+     * @see <a href="https://appmetrica.io/docs/mobile-sdk-dg/android/about/android-initialize.html">
      * AppMetrica SDK documentation </a>
      *
      * @return builder of AppMetricaConfig
@@ -517,7 +517,7 @@ public class AppMetricaConfig {
          * <b>NOTE:</b> Default value is
          * {@value AppMetricaDefaultValues#DEFAULT_REPORT_LOCATION_ENABLED}
          *
-         * @param enabled {@code true} to allow Yandex Metrica to record location information in reports,
+         * @param enabled {@code true} to allow AppMetrica to record location information in reports,
          * otherwise {@code false}.
          *
          * @see Builder#withLocation(Location)

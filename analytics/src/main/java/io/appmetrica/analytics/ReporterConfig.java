@@ -135,7 +135,7 @@ public class ReporterConfig {
      *
      * @param apiKey API_KEY - unique identifier of app in AppMetrica.
      *
-     * @see <a href="https://yandex.com/dev/appmetrica/doc/mobile-sdk-dg/concepts/android-initialize.html">
+     * @see <a href="https://appmetrica.io/docs/mobile-sdk-dg/android/about/android-initialize.html">
      * AppMetrica SDK documentation </a>
      *
      * @return builder of {@link ReporterConfig}

@@ -15,12 +15,12 @@ public class ApiKeyValidatorTest extends CommonTest {
     @Test
     public void testMessageContainsUrlForEmptyApiKey() {
         String description = mValidator.validate("").getDescription();
-        assertThat(description).contains("https://yandex.com/dev/appmetrica/doc/mobile-sdk-dg/concepts/android-initialize.html");
+        assertThat(description).contains("https://appmetrica.io/docs/mobile-sdk-dg/android/about/android-initialize.html");
     }
 
     @Test
     public void testMessageContainsUrl() {
         String description = mValidator.validate("1").getDescription();
-        assertThat(description).contains("https://yandex.com/dev/appmetrica/doc/mobile-sdk-dg/concepts/android-initialize.html");
+        assertThat(description).contains("https://appmetrica.io/docs/mobile-sdk-dg/android/about/android-initialize.html");
     }
 }

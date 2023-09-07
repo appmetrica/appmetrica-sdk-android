@@ -10,7 +10,7 @@ public class ApiKeyValidator implements Validator<String> {
 
     private static final String REF_TO_DOC = "Please, read official documentation how to obtain one:";
     private static final String DOC_URL =
-            "https://yandex.com/dev/appmetrica/doc/mobile-sdk-dg/concepts/android-initialize.html";
+            "https://appmetrica.io/docs/mobile-sdk-dg/android/about/android-initialize.html";
 
     @Override
     public ValidationResult validate(@Nullable String data) {

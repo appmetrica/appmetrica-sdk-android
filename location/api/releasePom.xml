@@ -12,7 +12,7 @@
   <version>6.0.0</version>
   <packaging>aar</packaging>
   <name>AppMetrica SDK location API implementation.</name>
-  <url>https://appmetrica.yandex.com/</url>
+  <url>https://appmetrica.io/</url>
   <licenses>
     <license>
       <name>MIT License</name>
@@ -23,7 +23,7 @@
   <developers>
     <developer>
       <name>AppMetrica</name>
-      <url>https://appmetrica.yandex.com/</url>
+      <url>https://appmetrica.io/</url>
     </developer>
   </developers>
   <scm>

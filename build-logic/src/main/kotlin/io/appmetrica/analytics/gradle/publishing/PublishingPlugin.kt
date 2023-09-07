@@ -77,7 +77,7 @@ class PublishingPlugin : Plugin<Project> {
                         pom {
                             name.set(extension.name)
                             description.set(extension.description)
-                            url.set("https://appmetrica.yandex.com/")
+                            url.set("https://appmetrica.io/")
 
                             licenses {
                                 license {
@@ -90,7 +90,7 @@ class PublishingPlugin : Plugin<Project> {
                             developers {
                                 developer {
                                     name.set("AppMetrica")
-                                    url.set("https://appmetrica.yandex.com/")
+                                    url.set("https://appmetrica.io/")
                                 }
                             }
 
