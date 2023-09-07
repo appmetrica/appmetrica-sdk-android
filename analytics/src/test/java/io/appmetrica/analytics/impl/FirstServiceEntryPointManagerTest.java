@@ -3,6 +3,7 @@ package io.appmetrica.analytics.impl;
 import android.content.Context;
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceComponentsInitializer;
 import io.appmetrica.analytics.impl.modules.ModulesSeeker;
+import io.appmetrica.analytics.impl.service.migration.ServiceMigrationManager;
 import io.appmetrica.analytics.impl.servicecomponents.ServiceComponentsInitializerProvider;
 import io.appmetrica.analytics.impl.startup.uuid.MultiProcessSafeUuidProvider;
 import io.appmetrica.analytics.testutils.CommonTest;

@@ -1,10 +1,13 @@
-package io.appmetrica.analytics.impl;
+package io.appmetrica.analytics.impl.service.migration;
 
 import android.content.Context;
 import android.util.SparseArray;
 import io.appmetrica.analytics.AppMetrica;
 import io.appmetrica.analytics.BuildConfig;
 import io.appmetrica.analytics.coreutils.internal.io.FileUtils;
+import io.appmetrica.analytics.impl.GlobalServiceLocator;
+import io.appmetrica.analytics.impl.MigrationManager;
+import io.appmetrica.analytics.impl.SdkData;
 import io.appmetrica.analytics.impl.db.VitalCommonDataProvider;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesServiceDbStorage;
 import io.appmetrica.analytics.testutils.CommonTest;
@@ -12,11 +15,14 @@ import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import io.appmetrica.analytics.testutils.MockedConstructionRule;
 import io.appmetrica.analytics.testutils.MockedStaticRule;
 import io.appmetrica.analytics.testutils.rules.networktasks.NetworkServiceLocatorRule;
+import java.util.HashMap;
+import java.util.Map;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -71,7 +77,7 @@ public class ServiceMigrationManagerTest extends CommonTest {
         mMigrationManager = spy(new ServiceMigrationManager(vitalCommonDataProvider));
 
         doReturn(1).when(mMigrationManager).getLastApiLevel();
-        doReturn(SdkData.CURRENT).when(mMigrationManager).getCurrentApiLevel();
+        Mockito.doReturn(SdkData.CURRENT).when(mMigrationManager).getCurrentApiLevel();
     }
 
     @Test
@@ -82,9 +88,19 @@ public class ServiceMigrationManagerTest extends CommonTest {
     }
 
     @Test
-    public void testScripts() {
+    public void getScripts() {
+        Map<Integer, Class<?>> expectedScriptClassesByVersion = new HashMap<>();
+        expectedScriptClassesByVersion.put(112, ServiceMigrationScriptToV112.class);
         SparseArray<MigrationManager.MigrationScript> scripts = mMigrationManager.getScripts();
-        assertThat(scripts.size()).isEqualTo(0);
+        assertThat(extractVersionsAndClasses(scripts)).containsExactlyEntriesOf(expectedScriptClassesByVersion);
+    }
+
+    private Map<Integer, Class<?>> extractVersionsAndClasses(SparseArray<MigrationManager.MigrationScript> input) {
+        Map<Integer, Class<?>> versionToClassMapping = new HashMap<>(input.size());
+        for (int i = 0; i < input.size(); i++) {
+            versionToClassMapping.put(input.keyAt(i), input.valueAt(i).getClass());
+        }
+        return versionToClassMapping;
     }
 
     @Test
@@ -126,7 +142,6 @@ public class ServiceMigrationManagerTest extends CommonTest {
         doReturn(-1).when(vitalCommonDataProvider).getLastMigrationApiLevel();
 
         mMigrationManager.checkMigration(mContext);
-        verify(mMigrationManager, never()).getScripts();
         verify(vitalCommonDataProvider).setLastMigrationApiLevel(SdkData.CURRENT);
     }
 

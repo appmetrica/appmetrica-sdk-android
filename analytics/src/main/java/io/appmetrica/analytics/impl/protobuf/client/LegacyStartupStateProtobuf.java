@@ -31,10 +31,10 @@ public interface LegacyStartupStateProtobuf {
     // optional bool hadFirstStartup = 22 [default = false];
     public boolean hadFirstStartup;
 
-    // optional string deviceId = 24 [deprecated = true];
+    // optional string deviceId = 25 [deprecated = true];
     public java.lang.String deviceId;
 
-    // optional string deviceIdHash = 25 [deprecated = true];
+    // optional string deviceIdHash = 26 [deprecated = true];
     public java.lang.String deviceIdHash;
 
     public LegacyStartupState() {
@@ -64,10 +64,10 @@ public interface LegacyStartupStateProtobuf {
         output.writeBool(22, this.hadFirstStartup);
       }
       if (!this.deviceId.equals("")) {
-        output.writeString(24, this.deviceId);
+        output.writeString(25, this.deviceId);
       }
       if (!this.deviceIdHash.equals("")) {
-        output.writeString(25, this.deviceIdHash);
+        output.writeString(26, this.deviceIdHash);
       }
       super.writeTo(output);
     }
@@ -89,11 +89,11 @@ public interface LegacyStartupStateProtobuf {
       }
       if (!this.deviceId.equals("")) {
         size += io.appmetrica.analytics.protobuf.nano.CodedOutputByteBufferNano
-            .computeStringSize(24, this.deviceId);
+            .computeStringSize(25, this.deviceId);
       }
       if (!this.deviceIdHash.equals("")) {
         size += io.appmetrica.analytics.protobuf.nano.CodedOutputByteBufferNano
-            .computeStringSize(25, this.deviceIdHash);
+            .computeStringSize(26, this.deviceIdHash);
       }
       return size;
     }
@@ -125,11 +125,11 @@ public interface LegacyStartupStateProtobuf {
             this.hadFirstStartup = input.readBool();
             break;
           }
-          case 194: {
+          case 202: {
             this.deviceId = input.readString();
             break;
           }
-          case 202: {
+          case 210: {
             this.deviceIdHash = input.readString();
             break;
           }

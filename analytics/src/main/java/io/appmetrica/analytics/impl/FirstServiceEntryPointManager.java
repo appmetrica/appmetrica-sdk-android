@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceComponentsInitializer;
 import io.appmetrica.analytics.impl.modules.ModulesSeeker;
+import io.appmetrica.analytics.impl.service.migration.ServiceMigrationManager;
 import io.appmetrica.analytics.impl.servicecomponents.ServiceComponentsInitializerProvider;
 
 public class FirstServiceEntryPointManager {

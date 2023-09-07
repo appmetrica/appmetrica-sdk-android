@@ -4,6 +4,6 @@ message LegacyStartupState {
     optional string uuid = 1 [deprecated = true];
     optional string countryInit = 19;
     optional bool hadFirstStartup = 22 [default = false];
-    optional string deviceId = 24 [deprecated = true];
-    optional string deviceIdHash = 25 [deprecated = true];
+    optional string deviceId = 25 [deprecated = true];
+    optional string deviceIdHash = 26 [deprecated = true];
 }

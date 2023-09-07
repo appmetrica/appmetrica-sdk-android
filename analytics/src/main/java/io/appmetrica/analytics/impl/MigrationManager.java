@@ -7,18 +7,18 @@ import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 
 public abstract class MigrationManager {
 
-    static interface MigrationScript {
+    public interface MigrationScript {
         public void run(Context context);
     }
 
-    abstract SparseArray<MigrationScript> getScripts();
+    protected abstract SparseArray<MigrationScript> getScripts();
 
     public synchronized void checkMigration(final Context context) {
         final int apiLevelFrom = getLastApiLevel();
         final int apiLevelTo = getCurrentApiLevel();
         YLogger.d("Try to migrate from api level %d to %d", apiLevelFrom, apiLevelTo);
         if (apiLevelFrom != apiLevelTo) {
-            if (apiLevelFrom > 0 && apiLevelFrom < apiLevelTo) {
+            if (apiLevelFrom < apiLevelTo) {
                 YLogger.d("Need to migrate from api level %d to %d", apiLevelFrom, apiLevelTo);
                 migrate(context, apiLevelFrom, apiLevelTo);
             }
@@ -26,7 +26,7 @@ public abstract class MigrationManager {
         }
     }
 
-    int getCurrentApiLevel() {
+    public int getCurrentApiLevel() {
         return AppMetrica.getLibraryApiLevel();
     }
 

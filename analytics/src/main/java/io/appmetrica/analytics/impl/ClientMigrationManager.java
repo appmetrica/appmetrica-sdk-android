@@ -23,7 +23,7 @@ public class ClientMigrationManager extends MigrationManager {
     }
 
     @Override
-    SparseArray<MigrationScript> getScripts() {
+    protected SparseArray<MigrationScript> getScripts() {
         return new SparseArray<>();
     }
 

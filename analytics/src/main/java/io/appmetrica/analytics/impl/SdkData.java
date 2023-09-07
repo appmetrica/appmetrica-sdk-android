@@ -9,10 +9,10 @@ public final class SdkData {
 
     public static final String CURRENT_VERSION = BuildConfig.VERSION_NAME;
 
-    static final int CURRENT = 112; // Also change in constants.gradle
+    public static final int CURRENT = 112; // Also change in constants.gradle
 
     //This version used for creation merge conflicts for parallel version or api level updating
-    static final String CURRENT_VERSION_NAME_FOR_MAPPING = "6.0.0";
+    public static final String CURRENT_VERSION_NAME_FOR_MAPPING = "6.0.0";
 
     public static final int INITIAL_API_LEVEL = 112;
 }

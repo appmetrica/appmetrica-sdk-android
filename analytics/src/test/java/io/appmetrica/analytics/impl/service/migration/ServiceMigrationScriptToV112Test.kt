@@ -1,6 +1,5 @@
-package io.appmetrica.analytics.impl.db.constants.migration
+package io.appmetrica.analytics.impl.service.migration
 
-import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import android.database.MatrixCursor
@@ -8,15 +7,19 @@ import android.database.sqlite.SQLiteDatabase
 import io.appmetrica.analytics.assertions.ProtoObjectPropertyAssertions
 import io.appmetrica.analytics.coreutils.internal.encryption.AESEncrypter
 import io.appmetrica.analytics.impl.GlobalServiceLocator
+import io.appmetrica.analytics.impl.db.DatabaseStorage
 import io.appmetrica.analytics.impl.db.constants.Constants
-import io.appmetrica.analytics.impl.db.constants.migrations.ServiceDatabaseUpgradeScriptToV112
+import io.appmetrica.analytics.impl.db.storage.DatabaseStorageFactory
 import io.appmetrica.analytics.impl.protobuf.client.LegacyStartupStateProtobuf
-import io.appmetrica.analytics.impl.protobuf.client.StartupStateProtobuf
+import io.appmetrica.analytics.impl.startup.StartupState
 import io.appmetrica.analytics.impl.utils.encryption.AESCredentialProvider
 import io.appmetrica.analytics.protobuf.nano.MessageNano
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
+import io.appmetrica.analytics.testutils.LogRule
 import io.appmetrica.analytics.testutils.MockedConstructionRule
+import io.appmetrica.analytics.testutils.constructionRule
+import io.appmetrica.analytics.testutils.staticRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
 import org.junit.Before
@@ -26,6 +29,7 @@ import org.junit.runner.RunWith
 import org.mockito.kotlin.any
 import org.mockito.kotlin.anyOrNull
 import org.mockito.kotlin.argumentCaptor
+import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
@@ -33,11 +37,10 @@ import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-internal class ServiceDatabaseUpgradeScriptToV112Test : CommonTest() {
+internal class ServiceMigrationScriptToV112Test : CommonTest() {
 
     private val database = mock<SQLiteDatabase>()
-    private val contentValueCaptor = argumentCaptor<ContentValues>()
-    private val bytesArgumentCaptor = argumentCaptor<ByteArray>()
+    private val startupStateCaptor = argumentCaptor<StartupState>()
 
     @get:Rule
     val globalServiceLocatorRule = GlobalServiceLocatorRule()
@@ -59,6 +62,21 @@ internal class ServiceDatabaseUpgradeScriptToV112Test : CommonTest() {
         whenever(mock.encrypt(any())).thenReturn(startupStateEncryptedValue)
     }
 
+    private val databaseStorage = mock<DatabaseStorage> {
+        on { readableDatabase } doReturn database
+    }
+    private val databaseStorageFactory = mock<DatabaseStorageFactory> {
+        on { storageForService } doReturn databaseStorage
+    }
+    @get:Rule
+    val databaseMockedStaticRule = staticRule<DatabaseStorageFactory>()
+
+    @get:Rule
+    val startupStateStorageMockedConstructionRule = constructionRule<StartupState.Storage>()
+
+    @get:Rule
+    val logRule = LogRule()
+
     private val uuid = "uuid"
     private val deviceID = "deviceID"
     private val deviceIDHash = "deviceIDHash"
@@ -67,14 +85,15 @@ internal class ServiceDatabaseUpgradeScriptToV112Test : CommonTest() {
     private var cursor: Cursor? = null
     private lateinit var context: Context
 
-    private lateinit var serviceDatabaseUpgradeScriptToV112: ServiceDatabaseUpgradeScriptToV112
+    private lateinit var serviceMigrationScriptToV112: ServiceMigrationScriptToV112
     private lateinit var aesCredentialProvider: AESCredentialProvider
     private lateinit var aesEncrypter: AESEncrypter
 
     @Before
     fun setUp() {
-        serviceDatabaseUpgradeScriptToV112 = ServiceDatabaseUpgradeScriptToV112()
         context = GlobalServiceLocator.getInstance().context
+        whenever(DatabaseStorageFactory.getInstance(context)).thenReturn(databaseStorageFactory)
+        serviceMigrationScriptToV112 = ServiceMigrationScriptToV112()
         aesCredentialProvider = aesCredentialProvider()
         aesEncrypter = aesEncrypter()
     }
@@ -94,15 +113,16 @@ internal class ServiceDatabaseUpgradeScriptToV112Test : CommonTest() {
         legacyStartupState.hadFirstStartup = true
         stubDatabaseWithLegacyStartupState(legacyStartupState)
 
-        serviceDatabaseUpgradeScriptToV112.runScript(database)
+        serviceMigrationScriptToV112.run(context)
 
         val result = interceptStartupState()
 
         ProtoObjectPropertyAssertions(result)
-            .withPermittedFields("uuid", "deviceID", "deviceIDHash", "countryInit", "hadFirstStartup")
+            .withPrivateFields(true)
+            .withPermittedFields("uuid", "deviceId", "deviceIdHash", "countryInit", "hadFirstStartup")
             .checkField("uuid", uuid)
-            .checkField("deviceID", deviceID)
-            .checkField("deviceIDHash", deviceIDHash)
+            .checkField("deviceId", deviceID)
+            .checkField("deviceIdHash", deviceIDHash)
             .checkField("countryInit", countryInit)
             .checkField("hadFirstStartup", true)
             .checkAll()
@@ -115,15 +135,16 @@ internal class ServiceDatabaseUpgradeScriptToV112Test : CommonTest() {
         legacyStartupState.deviceIdHash = deviceIDHash
         stubDatabaseWithLegacyStartupState(legacyStartupState)
 
-        serviceDatabaseUpgradeScriptToV112.runScript(database)
+        serviceMigrationScriptToV112.run(context)
 
         val result = interceptStartupState()
 
         ProtoObjectPropertyAssertions(result)
-            .withPermittedFields("uuid", "deviceID", "deviceIDHash")
-            .checkField("uuid", "")
-            .checkField("deviceID", deviceID)
-            .checkField("deviceIDHash", deviceIDHash)
+            .withPrivateFields(true)
+            .withPermittedFields("uuid", "deviceId", "deviceIdHash")
+            .checkField("deviceId", deviceID)
+            .checkField("deviceIdHash", deviceIDHash)
+            .checkFieldIsNull("uuid")
             .checkAll()
     }
 
@@ -134,15 +155,16 @@ internal class ServiceDatabaseUpgradeScriptToV112Test : CommonTest() {
         legacyStartupState.deviceIdHash = deviceIDHash
         stubDatabaseWithLegacyStartupState(legacyStartupState)
 
-        serviceDatabaseUpgradeScriptToV112.runScript(database)
+        serviceMigrationScriptToV112.run(context)
 
         val result = interceptStartupState()
 
         ProtoObjectPropertyAssertions(result)
-            .withPermittedFields("uuid", "deviceID", "deviceIDHash")
+            .withPrivateFields(true)
+            .withPermittedFields("uuid", "deviceId", "deviceIdHash")
             .checkField("uuid", uuid)
-            .checkField("deviceID", "")
-            .checkField("deviceIDHash", deviceIDHash)
+            .checkField("deviceIdHash", deviceIDHash)
+            .checkFieldIsNull("deviceId")
             .checkAll()
     }
 
@@ -153,15 +175,16 @@ internal class ServiceDatabaseUpgradeScriptToV112Test : CommonTest() {
         legacyStartupState.deviceId = deviceID
         stubDatabaseWithLegacyStartupState(legacyStartupState)
 
-        serviceDatabaseUpgradeScriptToV112.runScript(database)
+        serviceMigrationScriptToV112.run(context)
 
         val result = interceptStartupState()
 
         ProtoObjectPropertyAssertions(result)
-            .withPermittedFields("uuid", "deviceID", "deviceIDHash")
+            .withPrivateFields(true)
+            .withPermittedFields("uuid", "deviceId", "deviceIdHash")
             .checkField("uuid", uuid)
-            .checkField("deviceID", deviceID)
-            .checkField("deviceIDHash", "")
+            .checkField("deviceId", deviceID)
+            .checkFieldIsNull("deviceIdHash")
             .checkAll()
     }
 
@@ -171,9 +194,10 @@ internal class ServiceDatabaseUpgradeScriptToV112Test : CommonTest() {
         legacyStartupState.hadFirstStartup = false
         stubDatabaseWithLegacyStartupState(legacyStartupState)
 
-        serviceDatabaseUpgradeScriptToV112.runScript(database)
+        serviceMigrationScriptToV112.run(context)
 
         ProtoObjectPropertyAssertions(interceptStartupState())
+            .withPrivateFields(true)
             .withPermittedFields("hadFirstStartup")
             .checkField("hadFirstStartup", false)
             .checkAll()
@@ -184,17 +208,16 @@ internal class ServiceDatabaseUpgradeScriptToV112Test : CommonTest() {
         val legacyStartupState = LegacyStartupStateProtobuf.LegacyStartupState()
         stubDatabaseWithLegacyStartupState(legacyStartupState)
 
-        serviceDatabaseUpgradeScriptToV112.runScript(database)
+        serviceMigrationScriptToV112.run(context)
 
         val result = interceptStartupState()
 
         ProtoObjectPropertyAssertions(result)
-            .withPermittedFields("uuid", "deviceID", "deviceIDHash", "hadFirstStartup", "countryInit")
-            .checkField("uuid", "")
-            .checkField("deviceID", "")
-            .checkField("deviceIDHash", "")
+            .withPrivateFields(true)
+            .withPermittedFields("uuid", "deviceId", "deviceIdHash", "hadFirstStartup", "countryInit")
             .checkField("hadFirstStartup", false)
             .checkField("countryInit", "")
+            .checkFieldsAreNull("uuid", "deviceId", "deviceIdHash")
             .checkAll()
     }
 
@@ -202,50 +225,45 @@ internal class ServiceDatabaseUpgradeScriptToV112Test : CommonTest() {
     fun `runScript for legacy data with empty bytes`() {
         stubDatabaseWithLegacyStartupState(ByteArray(0))
 
-        serviceDatabaseUpgradeScriptToV112.runScript(database)
+        serviceMigrationScriptToV112.run(context)
 
         val result = interceptStartupState()
 
         ProtoObjectPropertyAssertions(result)
-            .withPermittedFields("uuid", "deviceID", "deviceIDHash", "hadFirstStartup", "countryInit")
-            .checkField("uuid", "")
-            .checkField("deviceID", "")
-            .checkField("deviceIDHash", "")
+            .withPrivateFields(true)
+            .withPermittedFields("uuid", "deviceId", "deviceIdHash", "hadFirstStartup", "countryInit")
             .checkField("hadFirstStartup", false)
             .checkField("countryInit", "")
+            .checkFieldsAreNull("uuid", "deviceId", "deviceIdHash")
             .checkAll()
     }
 
     @Test
     fun `runScript for missing legacy data`() {
-        serviceDatabaseUpgradeScriptToV112.runScript(database)
+        serviceMigrationScriptToV112.run(context)
 
         val result = interceptStartupState()
 
         ProtoObjectPropertyAssertions(result)
-            .withPermittedFields("uuid", "deviceID", "deviceIDHash", "hadFirstStartup", "countryInit")
-            .checkField("uuid", "")
-            .checkField("deviceID", "")
-            .checkField("deviceIDHash", "")
+            .withPrivateFields(true)
+            .withPermittedFields("uuid", "deviceId", "deviceIdHash", "hadFirstStartup", "countryInit")
             .checkField("hadFirstStartup", false)
-            .checkField("countryInit", "")
+            .checkFieldsAreNull("uuid", "deviceId", "deviceIdHash", "countryInit")
             .checkAll()
     }
 
     @Test
     fun `runScript for wrong legacy data`() {
         stubDatabaseWithLegacyStartupState("wrong value".toByteArray())
-        serviceDatabaseUpgradeScriptToV112.runScript(database)
+        serviceMigrationScriptToV112.run(context)
 
         val result = interceptStartupState()
 
         ProtoObjectPropertyAssertions(result)
-            .withPermittedFields("uuid", "deviceID", "deviceIDHash", "hadFirstStartup", "countryInit")
-            .checkField("uuid", "")
-            .checkField("deviceID", "")
-            .checkField("deviceIDHash", "")
+            .withPrivateFields(true)
+            .withPermittedFields("uuid", "deviceId", "deviceIdHash", "hadFirstStartup", "countryInit")
             .checkField("hadFirstStartup", false)
-            .checkField("countryInit", "")
+            .checkFieldsAreNull("uuid", "deviceId", "deviceIdHash", "countryInit")
             .checkAll()
     }
 
@@ -263,17 +281,15 @@ internal class ServiceDatabaseUpgradeScriptToV112Test : CommonTest() {
             )
         ).thenReturn(null)
 
-        serviceDatabaseUpgradeScriptToV112.runScript(database)
+        serviceMigrationScriptToV112.run(context)
 
         val result = interceptStartupState()
 
         ProtoObjectPropertyAssertions(result)
-            .withPermittedFields("uuid", "deviceID", "deviceIDHash", "hadFirstStartup", "countryInit")
-            .checkField("uuid", "")
-            .checkField("deviceID", "")
-            .checkField("deviceIDHash", "")
+            .withPrivateFields(true)
+            .withPermittedFields("uuid", "deviceId", "deviceIdHash", "hadFirstStartup", "countryInit")
             .checkField("hadFirstStartup", false)
-            .checkField("countryInit", "")
+            .checkFieldsAreNull("uuid", "deviceId", "deviceIdHash", "countryInit")
             .checkAll()
     }
 
@@ -291,34 +307,16 @@ internal class ServiceDatabaseUpgradeScriptToV112Test : CommonTest() {
             )
         ).thenThrow(RuntimeException("Some exception"))
 
-        serviceDatabaseUpgradeScriptToV112.runScript(database)
+        serviceMigrationScriptToV112.run(context)
 
         val result = interceptStartupState()
 
         ProtoObjectPropertyAssertions(result)
-            .withPermittedFields("uuid", "deviceID", "deviceIDHash", "hadFirstStartup", "countryInit")
-            .checkField("uuid", "")
-            .checkField("deviceID", "")
-            .checkField("deviceIDHash", "")
+            .withPrivateFields(true)
+            .withPermittedFields("uuid", "deviceId", "deviceIdHash", "hadFirstStartup", "countryInit")
             .checkField("hadFirstStartup", false)
-            .checkField("countryInit", "")
+            .checkFieldsAreNull("uuid", "deviceId", "deviceIdHash", "countryInit")
             .checkAll()
-    }
-
-    @Test
-    fun `runScript for write exception`() {
-        stubDatabaseWithLegacyStartupState(LegacyStartupStateProtobuf.LegacyStartupState())
-
-        whenever(
-            database.insertWithOnConflict(
-                eq(Constants.BinaryDataTable.TABLE_NAME),
-                eq(null),
-                contentValueCaptor.capture(),
-                eq(SQLiteDatabase.CONFLICT_REPLACE)
-            )
-        ).thenThrow(RuntimeException())
-
-        serviceDatabaseUpgradeScriptToV112.runScript(database)
     }
 
     private fun aesEncrypter(): AESEncrypter {
@@ -335,23 +333,10 @@ internal class ServiceDatabaseUpgradeScriptToV112Test : CommonTest() {
         return aesCredentialProviderMockedConstructionRule.constructionMock.constructed().first()
     }
 
-    private fun interceptStartupState(): StartupStateProtobuf.StartupState? {
-        verify(database).insertWithOnConflict(
-            eq(Constants.BinaryDataTable.TABLE_NAME),
-            eq(null),
-            contentValueCaptor.capture(),
-            eq(SQLiteDatabase.CONFLICT_REPLACE)
-        )
-        assertThat(contentValueCaptor.allValues).hasSize(1)
-
-        val contentValues = contentValueCaptor.firstValue
-        assertThat(contentValues.get(Constants.BinaryDataTable.DATA_KEY)).isEqualTo("startup_state")
-        assertThat(contentValues.getAsByteArray(Constants.BinaryDataTable.VALUE)).isEqualTo(startupStateEncryptedValue)
-
-        verify(aesEncrypter).encrypt(bytesArgumentCaptor.capture())
-
-        assertThat(bytesArgumentCaptor.allValues).hasSize(1)
-        return StartupStateProtobuf.StartupState.parseFrom(bytesArgumentCaptor.firstValue)
+    private fun interceptStartupState(): StartupState {
+        verify(startupStorage()).save(startupStateCaptor.capture())
+        assertThat(startupStateCaptor.allValues).hasSize(1)
+        return startupStateCaptor.firstValue
     }
 
     private fun stubDatabaseWithLegacyStartupState(
@@ -377,5 +362,12 @@ internal class ServiceDatabaseUpgradeScriptToV112Test : CommonTest() {
                 addRow(arrayOf(legacyStartupStateEncryptedValue))
             }
         )
+    }
+
+    private fun startupStorage(): StartupState.Storage {
+        assertThat(startupStateStorageMockedConstructionRule.constructionMock.constructed()).hasSize(1)
+        assertThat(startupStateStorageMockedConstructionRule.argumentInterceptor.flatArguments())
+            .containsExactly(context)
+        return startupStateStorageMockedConstructionRule.constructionMock.constructed().first()
     }
 }

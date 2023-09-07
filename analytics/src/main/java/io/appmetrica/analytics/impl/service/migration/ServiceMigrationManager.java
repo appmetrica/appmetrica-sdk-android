@@ -1,8 +1,11 @@
-package io.appmetrica.analytics.impl;
+package io.appmetrica.analytics.impl.service.migration;
 
 import android.util.SparseArray;
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
+import io.appmetrica.analytics.impl.GlobalServiceLocator;
+import io.appmetrica.analytics.impl.MigrationManager;
+import io.appmetrica.analytics.impl.SdkData;
 import io.appmetrica.analytics.impl.db.VitalCommonDataProvider;
 
 public class ServiceMigrationManager extends MigrationManager {
@@ -24,8 +27,10 @@ public class ServiceMigrationManager extends MigrationManager {
     }
 
     @Override
-    SparseArray<MigrationScript> getScripts() {
-        return new SparseArray<>();
+    protected SparseArray<MigrationScript> getScripts() {
+        SparseArray<MigrationScript> migrations = new SparseArray<>(1);
+        migrations.put(SdkData.INITIAL_API_LEVEL, new ServiceMigrationScriptToV112());
+        return migrations;
     }
 
     @Override

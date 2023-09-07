@@ -42,7 +42,6 @@ public class MigrationManagerTest extends CommonTest {
     public void testShouldNotMigrateFromMinus1() {
         mMigrationManager = createMigrationManager(-1);
         mMigrationManager.checkMigration(mContext);
-        verify(mMigrationScript, never()).run(mContext);
         assertThat(mMigrationManager.getLastApiLevel()).isEqualTo(SdkData.CURRENT);
     }
 
@@ -60,7 +59,7 @@ public class MigrationManagerTest extends CommonTest {
             private int mApiLevel = apiLevel;
 
             @Override
-            SparseArray<MigrationScript> getScripts() {
+            protected SparseArray<MigrationScript> getScripts() {
                 SparseArray<MigrationScript> result = new SparseArray<MigrationScript>();
                 result.put(SdkData.CURRENT, mMigrationScript);
                 return result;

@@ -8,7 +8,6 @@ import io.appmetrica.analytics.impl.SdkData;
 import io.appmetrica.analytics.impl.db.constants.DatabaseScriptsHolder;
 import io.appmetrica.analytics.impl.db.constants.migrations.ClientDatabaseUpgradeScriptToV112;
 import io.appmetrica.analytics.impl.db.constants.migrations.ComponentDatabaseUpgradeScriptToV112;
-import io.appmetrica.analytics.impl.db.constants.migrations.ServiceDatabaseUpgradeScriptToV112;
 import io.appmetrica.analytics.impl.utils.collection.HashMultimap;
 import io.appmetrica.analytics.modulesapi.internal.ModuleServicesDatabase;
 import io.appmetrica.analytics.modulesapi.internal.TableDescription;
@@ -49,8 +48,6 @@ public class DatabaseScriptsProvider {
     @NonNull
     private HashMultimap<Integer, DatabaseScript> collectUpgradeServiceDbScripts() {
         HashMultimap<Integer, DatabaseScript> result = new HashMultimap<>();
-
-        result.put(SdkData.INITIAL_API_LEVEL, new ServiceDatabaseUpgradeScriptToV112());
 
         for (ModuleServicesDatabase moduleServicesDatabase :
             GlobalServiceLocator.getInstance().getModulesController().collectModuleServiceDatabases()) {

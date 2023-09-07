@@ -41,7 +41,7 @@ public class DatabaseScriptProviderTest extends CommonTest {
 
     @Test
     public void testGetUpgradeServiceDbScripts() throws Exception {
-        assertThatHasScriptsForVersions(mDatabaseScriptsProvider.getUpgradeServiceDbScripts(), "ServiceDatabaseUpgradeScriptToV", 112);
+        assertThatHasScriptsForVersions(mDatabaseScriptsProvider.getUpgradeServiceDbScripts(), "ServiceDatabaseUpgradeScriptToV");
     }
 
     @Test
