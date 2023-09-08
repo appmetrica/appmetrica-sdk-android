@@ -241,12 +241,10 @@ internal class ComponentDatabaseUpgradeScriptToV112 : DatabaseScript() {
                     encryptingMode =
                     encryptingModeByCode(cursor.getInt(cursor.getColumnIndexOrThrow(oldKeyEncryptingMode))),
                     profileId = cursor.getString(cursor.getColumnIndexOrThrow(oldKeyProfileId)),
-                    firstOccurrenceStatus = firstOccurrenceStatusByCode(
-                        cursor.getInt(cursor.getColumnIndexOrThrow(oldKeyFirstOccurrenceStatus))
-                    ),
-                    source = sourceByCode(cursor.getInt(cursor.getColumnIndexOrThrow(oldKeySource))),
-                    attributionIdChanged = cursor.getInt(cursor.getColumnIndexOrThrow(oldKeyAttributionIdChanged)) == 1,
-                    openId = cursor.getInt(cursor.getColumnIndexOrThrow(oldKeyOpenId)),
+                    firstOccurrenceStatus = extractFirstOccurrenceStatus(cursor),
+                    source = extractSource(cursor),
+                    attributionIdChanged = extractAttributionIdChanged(cursor),
+                    openId = extractOpenId(cursor),
                     extras = cursor.getColumnIndex(oldKeyExtras).let {
                         if (it < 0) {
                             null
@@ -261,6 +259,29 @@ internal class ComponentDatabaseUpgradeScriptToV112 : DatabaseScript() {
             null
         }
 
+        private fun extractFirstOccurrenceStatus(cursor: Cursor): FirstOccurrenceStatus? = try {
+            firstOccurrenceStatusByCode(cursor.getInt(cursor.getColumnIndexOrThrow(oldKeyFirstOccurrenceStatus)))
+        } catch (e: Throwable) {
+            FirstOccurrenceStatus.UNKNOWN
+        }
+        private fun extractSource(cursor: Cursor): EventSource? = try {
+            sourceByCode(cursor.getInt(cursor.getColumnIndexOrThrow(oldKeySource)))
+        } catch (e: Throwable) {
+            EventSource.NATIVE
+        }
+
+        private fun extractAttributionIdChanged(cursor: Cursor): Boolean = try {
+            cursor.getInt(cursor.getColumnIndexOrThrow(oldKeyAttributionIdChanged)) == 1
+        } catch (e: Throwable) {
+            false
+        }
+
+        private fun extractOpenId(cursor: Cursor): Int = try {
+            cursor.getInt(cursor.getColumnIndexOrThrow(oldKeyOpenId))
+        } catch (e: Throwable) {
+            -1
+        }
+
         private fun sourceByCode(code: Int?): EventSource? = when (code) {
             EventSource.NATIVE.code -> EventSource.NATIVE
             EventSource.JS.code -> EventSource.JS
@@ -270,8 +291,7 @@ internal class ComponentDatabaseUpgradeScriptToV112 : DatabaseScript() {
         private fun firstOccurrenceStatusByCode(code: Int?): FirstOccurrenceStatus? = when (code) {
             FirstOccurrenceStatus.FIRST_OCCURRENCE.mStatusCode -> FirstOccurrenceStatus.FIRST_OCCURRENCE
             FirstOccurrenceStatus.NON_FIRST_OCCURENCE.mStatusCode -> FirstOccurrenceStatus.NON_FIRST_OCCURENCE
-            FirstOccurrenceStatus.UNKNOWN.mStatusCode -> FirstOccurrenceStatus.UNKNOWN
-            else -> null
+            else -> FirstOccurrenceStatus.UNKNOWN
         }
 
         private fun sessionTypeByCode(sessionType: Int?): SessionType? = when (sessionType) {
@@ -296,8 +316,7 @@ internal class ComponentDatabaseUpgradeScriptToV112 : DatabaseScript() {
                 dbEventModel.globalNumber != null && dbEventModel.globalNumber >= 0 &&
                 dbEventModel.time != null && dbEventModel.time >= 0 &&
                 (dbEventModel.description.numberOfType == null || dbEventModel.description.numberOfType >= 0) &&
-                (dbEventModel.description.truncated == null || dbEventModel.description.truncated >= 0) &&
-                (dbEventModel.description.openId == null || dbEventModel.description.openId >= 0)
+                (dbEventModel.description.truncated == null || dbEventModel.description.truncated >= 0)
 
         private fun drop(database: SQLiteDatabase) {
             val dropSql = "DROP TABLE IF EXISTS $oldTableName"

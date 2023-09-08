@@ -301,7 +301,7 @@ internal class EventMigratorToV112CommonCasesTest(
             arrayOf(
                 "firstOccurrenceStatus = negative",
                 EventCursorRecord(firstOccurrenceStatus = -1),
-                EventCursorRecord(firstOccurrenceStatus = null)
+                EventCursorRecord(firstOccurrenceStatus = FirstOccurrenceStatus.UNKNOWN.mStatusCode)
             ),
             arrayOf(
                 "firstOccurrenceStatus = 0",
@@ -311,12 +311,12 @@ internal class EventMigratorToV112CommonCasesTest(
             arrayOf(
                 "firstOccurrenceStatus = unknown code",
                 EventCursorRecord(firstOccurrenceStatus = 100500),
-                EventCursorRecord(firstOccurrenceStatus = null)
+                EventCursorRecord(firstOccurrenceStatus = FirstOccurrenceStatus.UNKNOWN.mStatusCode)
             ),
             arrayOf(
                 "firstOccurrenceStatus = invalid value",
                 EventCursorRecord(firstOccurrenceStatus = "string value"),
-                null
+                EventCursorRecord(firstOccurrenceStatus = FirstOccurrenceStatus.UNKNOWN.mStatusCode)
             ),
             // endregion
             // region source
@@ -346,7 +346,11 @@ internal class EventMigratorToV112CommonCasesTest(
                 EventCursorRecord(source = 100500),
                 EventCursorRecord(source = null)
             ),
-            arrayOf("source = invalid format", EventCursorRecord(source = "invalid format"), null),
+            arrayOf(
+                "source = invalid format",
+                EventCursorRecord(source = "invalid format"),
+                EventCursorRecord(source = EventSource.NATIVE.code)
+            ),
             // endregion
             // region attributionIdChanged
             arrayOf(
@@ -377,15 +381,19 @@ internal class EventMigratorToV112CommonCasesTest(
             arrayOf(
                 "attributionIdChanged = invalid format",
                 EventCursorRecord(attributionIdChanged = "invalid value"),
-                null
+                EventCursorRecord(attributionIdChanged = 0)
             ),
             // endregion
             // region openId
             arrayOf("openId = null", EventCursorRecord(openId = null), EventCursorRecord(openId = 0)),
-            arrayOf("openId = negative value", EventCursorRecord(openId = -1), null),
+            arrayOf("openId = negative value", EventCursorRecord(openId = -1), EventCursorRecord(openId = -1)),
             arrayOf("openId = 0", EventCursorRecord(openId = 0), EventCursorRecord(openId = 0)),
             arrayOf("openId = positive", EventCursorRecord(openId = 100500), EventCursorRecord(openId = 100500)),
-            arrayOf("openId = invalid format", EventCursorRecord(openId = "invalid format"), null),
+            arrayOf(
+                "openId = invalid format",
+                EventCursorRecord(openId = "invalid format"),
+                EventCursorRecord(openId = -1)
+            ),
             // endregion
             // region extras
             arrayOf("extras = null", EventCursorRecord(extras = null), EventCursorRecord(extras = null)),
