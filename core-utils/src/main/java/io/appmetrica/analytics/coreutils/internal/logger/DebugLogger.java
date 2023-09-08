@@ -37,6 +37,10 @@ class DebugLogger extends BaseLogger {
                 break;
             }
         }
-        return String.format(Locale.US, "[%d] %s: %s", Thread.currentThread().getId(), caller, msg);
+        return String.format(
+            Locale.US,
+            "[%d-%s] %s: %s",
+            Thread.currentThread().getId(), Thread.currentThread().getName(), caller, msg
+        );
     }
 }
