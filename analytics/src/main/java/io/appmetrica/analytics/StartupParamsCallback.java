@@ -23,7 +23,7 @@ public interface StartupParamsCallback {
     /**
      * The key for device id hash at [List] in [AppMetrica.requestStartupParams]
      */
-     String APPMETRICA_DEVICE_ID_HASH = Constants.StartupParamsCallbackKeys.DEVICE_ID_HASH;
+    String APPMETRICA_DEVICE_ID_HASH = Constants.StartupParamsCallbackKeys.DEVICE_ID_HASH;
 
     /**
      * Objects of this class contain information about retrieved startup parameters.

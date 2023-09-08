@@ -3,6 +3,7 @@ package io.appmetrica.analytics.ecommerce;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
+
 import io.appmetrica.analytics.impl.ecommerce.ECommerceEventProvider;
 import io.appmetrica.analytics.impl.ecommerce.client.model.ProtoSerializable;
 
@@ -14,6 +15,10 @@ import io.appmetrica.analytics.impl.ecommerce.client.model.ProtoSerializable;
  * Each method corresponds to one specific type. See method descriptions for more info.
  */
 public abstract class ECommerceEvent implements ProtoSerializable {
+    /**
+     * Constructor for {@link ECommerceEvent}
+     */
+    protected ECommerceEvent() {}
 
     @NonNull
     private static ECommerceEventProvider provider = new ECommerceEventProvider();

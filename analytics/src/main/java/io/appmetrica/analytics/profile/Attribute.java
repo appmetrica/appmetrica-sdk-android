@@ -16,7 +16,8 @@ import io.appmetrica.analytics.impl.utils.limitation.StringTrimmer;
  * Attributes are applied by using the
  * {@link io.appmetrica.analytics.profile.UserProfile.Builder#apply(UserProfileUpdate)} method.
  */
-public class Attribute {
+public final class Attribute {
+    private Attribute() {}
 
     /**
      * Creates a custom string attribute.

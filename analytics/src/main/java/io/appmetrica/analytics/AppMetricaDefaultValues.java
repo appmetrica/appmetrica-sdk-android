@@ -6,7 +6,9 @@ import io.appmetrica.analytics.impl.DefaultValuesForCrashReporting;
 /**
  * This class contains constants with default values for different aspects of SDK.
  */
-public class AppMetricaDefaultValues {
+public final class AppMetricaDefaultValues {
+    private AppMetricaDefaultValues() {}
+
     /**
      * Default session timeout in seconds.
      */

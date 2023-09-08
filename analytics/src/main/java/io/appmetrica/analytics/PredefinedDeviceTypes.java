@@ -5,7 +5,9 @@ import io.appmetrica.analytics.coreapi.internal.constants.DeviceTypeValues;
 /**
  * Predefined device types for {@link AppMetricaConfig.Builder#withDeviceType(String)} method.
  */
-public class PredefinedDeviceTypes {
+public final class PredefinedDeviceTypes {
+    private PredefinedDeviceTypes() {}
+
     /**
      * Phone.
      */

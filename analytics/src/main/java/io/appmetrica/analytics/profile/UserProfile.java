@@ -66,7 +66,7 @@ public class UserProfile {
         private final LinkedList<UserProfileUpdate<? extends UserProfileUpdatePatcher>> mUserProfileUpdates =
                 new LinkedList<UserProfileUpdate<? extends UserProfileUpdatePatcher>>();
 
-        Builder() {}
+        private Builder() {}
 
         /**
          * Applies user profile update.

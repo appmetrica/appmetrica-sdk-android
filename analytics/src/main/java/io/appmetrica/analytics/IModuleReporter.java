@@ -20,9 +20,7 @@ public interface IModuleReporter {
      *
      * @param moduleEvent Event parameters
      */
-    void reportEvent(
-        @NonNull final ModuleEvent moduleEvent
-    );
+    void reportEvent(@NonNull final ModuleEvent moduleEvent);
 
     /**
      * Sets session extra for current reporter.

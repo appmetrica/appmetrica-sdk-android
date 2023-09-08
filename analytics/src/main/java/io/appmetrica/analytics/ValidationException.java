@@ -9,6 +9,7 @@ public class ValidationException extends IllegalArgumentException {
 
     /**
      * Constructor for {@link ValidationException}
+     *
      * @param message description
      */
     public ValidationException(@NonNull String message) {

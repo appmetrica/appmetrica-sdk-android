@@ -119,7 +119,7 @@ public class Revenue {
         @Nullable
         Receipt mReceipt;
 
-        Builder(long priceMicros, @NonNull Currency currency) {
+        private Builder(long priceMicros, @NonNull Currency currency) {
             CURRENCY_VALIDATOR.validate(currency);
             this.priceMicros = priceMicros;
             mCurrency = currency;
@@ -256,7 +256,7 @@ public class Revenue {
             @Nullable
             private String mSignature;
 
-            Builder() {}
+            private Builder() {}
 
             /**
              * Sets details about the in-app purchase order from Google Play.
