@@ -32,11 +32,6 @@ internal class ServiceMigrationScriptToV112 : MigrationScript {
 
     override fun run(context: Context) {
         YLogger.info(tag, "Run migration")
-        val actualDeviceId = GlobalServiceLocator.getInstance().vitalDataProviderStorage.commonDataProvider.deviceId
-        if (!TextUtils.isEmpty(actualDeviceId)) {
-            YLogger.info(tag, "Device id presents in actual storage. No need migrate from legacy")
-            return
-        }
         val startupStorage = StartupState.Storage(context)
         DatabaseStorageFactory.getInstance(context).storageForService.readableDatabase?.let { database ->
             YLogger.info(tag, "Legacy database exists... Try to import data")
@@ -44,25 +39,12 @@ internal class ServiceMigrationScriptToV112 : MigrationScript {
                 val legacyStartupState = readLegacyStartupState(database)
                 val startupStateBuilder = StartupState.Builder(CollectingFlags.CollectingFlagsBuilder().build())
                 if (legacyStartupState != null) {
-                    if (!TextUtils.isEmpty(legacyStartupState.deviceId)) {
-                        startupStateBuilder.withDeviceId(legacyStartupState.deviceId)
-                        YLogger.info(tag, "Imported deviceId = ${legacyStartupState.deviceId}")
-                    } else {
-                        YLogger.info(tag, "DeviceId not found")
-                    }
-                    if (!TextUtils.isEmpty(legacyStartupState.deviceIdHash)) {
-                        startupStateBuilder.withDeviceIdHash(legacyStartupState.deviceIdHash)
-                        YLogger.info(tag, "Imported deviceIdHash = ${legacyStartupState.deviceIdHash}")
-                    } else {
-                        YLogger.info(tag, "DeviceIdHash not found")
-                    }
-                    if (!TextUtils.isEmpty(legacyStartupState.uuid)) {
-                        startupStateBuilder.withUuid(legacyStartupState.uuid)
-                        YLogger.info(tag, "Successfully imported uuid = ${legacyStartupState.uuid}")
-                    } else {
-                        YLogger.info(tag, "Uuid not found")
-                    }
-                    YLogger.info(tag, "Import country init info")
+                    fillIdentifiersToStartupState(startupStateBuilder, legacyStartupState)
+                    YLogger.info(
+                        tag,
+                        "Import country init info: hadFirstStartup = ${legacyStartupState.hadFirstStartup}; " +
+                            "countryInit = ${legacyStartupState.countryInit}"
+                    )
                     startupStateBuilder.withHadFirstStartup(legacyStartupState.hadFirstStartup)
                         .withCountryInit(legacyStartupState.countryInit)
                 } else {
@@ -70,10 +52,47 @@ internal class ServiceMigrationScriptToV112 : MigrationScript {
                 }
                 val startupState = startupStateBuilder.build()
                 YLogger.info(tag, "write startup: $startupState")
-                startupStorage.save(startupStateBuilder.build())
+                startupStorage.saveFromMigration(context, startupStateBuilder.build())
             } catch (e: Throwable) {
                 YLogger.error(tag, e)
             }
+        }
+    }
+
+    private fun fillIdentifiersToStartupState(
+        startupStateBuilder: StartupState.Builder,
+        legacyStartupState: LegacyStartupState
+    ) {
+        YLogger.info(tag, "Import identifiers from legacy storage...")
+        val vitalDataStorage = GlobalServiceLocator.getInstance().vitalDataProviderStorage.commonDataProvider
+        val actualDeviceId = vitalDataStorage.deviceId
+        if (TextUtils.isEmpty(actualDeviceId)) {
+            if (!TextUtils.isEmpty(legacyStartupState.deviceId)) {
+                startupStateBuilder.withDeviceId(legacyStartupState.deviceId)
+                YLogger.info(tag, "Imported deviceId = ${legacyStartupState.deviceId}")
+            } else {
+                YLogger.info(tag, "DeviceId not found")
+            }
+            if (!TextUtils.isEmpty(legacyStartupState.deviceIdHash)) {
+                startupStateBuilder.withDeviceIdHash(legacyStartupState.deviceIdHash)
+                YLogger.info(tag, "Imported deviceIdHash = ${legacyStartupState.deviceIdHash}")
+            } else {
+                YLogger.info(tag, "DeviceIdHash not found")
+            }
+            if (!TextUtils.isEmpty(legacyStartupState.uuid)) {
+                startupStateBuilder.withUuid(legacyStartupState.uuid)
+                YLogger.info(tag, "Successfully imported uuid = ${legacyStartupState.uuid}")
+            } else {
+                YLogger.info(tag, "Uuid not found")
+            }
+        } else {
+            YLogger.info(
+                tag,
+                "Device id presents in actual storage. Use values from vital storage: " +
+                    "deviceId = ${vitalDataStorage.deviceId}; deviceIdHash = ${vitalDataStorage.deviceIdHash}"
+            )
+            startupStateBuilder.withDeviceId(vitalDataStorage.deviceId)
+                .withDeviceIdHash(vitalDataStorage.deviceIdHash)
         }
     }
 

@@ -334,7 +334,7 @@ internal class ServiceMigrationScriptToV112Test : CommonTest() {
     }
 
     private fun interceptStartupState(): StartupState {
-        verify(startupStorage()).save(startupStateCaptor.capture())
+        verify(startupStorage()).saveFromMigration(eq(context), startupStateCaptor.capture())
         assertThat(startupStateCaptor.allValues).hasSize(1)
         return startupStateCaptor.firstValue
     }

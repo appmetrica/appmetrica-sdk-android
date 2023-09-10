@@ -140,5 +140,12 @@ internal class StartupState private constructor(
             vitalCommonDataProvider.deviceIdHash = startupState.deviceIdHash
             modelStorage.save(startupState.startupStateModel)
         }
+
+        fun saveFromMigration(context: Context, startupState: StartupState) {
+            vitalCommonDataProvider.deviceId = startupState.deviceId
+            vitalCommonDataProvider.deviceIdHash = startupState.deviceIdHash
+            StorageFactory.Provider.get(StartupStateModel::class.java).createForMigration(context)
+                .save(startupState.startupStateModel)
+        }
     }
 }
