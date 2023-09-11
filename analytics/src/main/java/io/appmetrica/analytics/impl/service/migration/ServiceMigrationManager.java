@@ -29,7 +29,7 @@ public class ServiceMigrationManager extends MigrationManager {
     @Override
     protected SparseArray<MigrationScript> getScripts() {
         SparseArray<MigrationScript> migrations = new SparseArray<>(1);
-        migrations.put(SdkData.INITIAL_API_LEVEL, new ServiceMigrationScriptToV112());
+        migrations.put(SdkData.INITIAL_API_LEVEL, new ServiceMigrationScriptToV112(vitalCommonDataProvider));
         return migrations;
     }
 

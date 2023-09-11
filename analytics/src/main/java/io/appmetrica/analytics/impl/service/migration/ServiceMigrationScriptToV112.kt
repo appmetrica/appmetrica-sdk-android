@@ -10,14 +10,16 @@ import io.appmetrica.analytics.coreutils.internal.logger.YLogger
 import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.MigrationManager.MigrationScript
 import io.appmetrica.analytics.impl.Utils
+import io.appmetrica.analytics.impl.db.VitalCommonDataProvider
 import io.appmetrica.analytics.impl.db.constants.Constants
+import io.appmetrica.analytics.impl.db.state.factory.StorageFactory
 import io.appmetrica.analytics.impl.db.storage.DatabaseStorageFactory
 import io.appmetrica.analytics.impl.protobuf.client.LegacyStartupStateProtobuf.LegacyStartupState
 import io.appmetrica.analytics.impl.startup.CollectingFlags
-import io.appmetrica.analytics.impl.startup.StartupState
+import io.appmetrica.analytics.impl.startup.StartupStateModel
 import io.appmetrica.analytics.impl.utils.encryption.AESCredentialProvider
 
-internal class ServiceMigrationScriptToV112 : MigrationScript {
+internal class ServiceMigrationScriptToV112(private val vitalDataStorage: VitalCommonDataProvider) : MigrationScript {
 
     private val tag = "[ServiceMigrationScriptToV112]"
     private val startupStateKey = "startup_state"
@@ -32,27 +34,28 @@ internal class ServiceMigrationScriptToV112 : MigrationScript {
 
     override fun run(context: Context) {
         YLogger.info(tag, "Run migration")
-        val startupStorage = StartupState.Storage(context)
         DatabaseStorageFactory.getInstance(context).storageForService.readableDatabase?.let { database ->
             YLogger.info(tag, "Legacy database exists... Try to import data")
             try {
                 val legacyStartupState = readLegacyStartupState(database)
-                val startupStateBuilder = StartupState.Builder(CollectingFlags.CollectingFlagsBuilder().build())
+                val startupStateModelBuilder =
+                    StartupStateModel.StartupStateBuilder(CollectingFlags.CollectingFlagsBuilder().build())
                 if (legacyStartupState != null) {
-                    fillIdentifiersToStartupState(startupStateBuilder, legacyStartupState)
+                    fillIdentifiersToStartupState(vitalDataStorage, startupStateModelBuilder, legacyStartupState)
                     YLogger.info(
                         tag,
                         "Import country init info: hadFirstStartup = ${legacyStartupState.hadFirstStartup}; " +
                             "countryInit = ${legacyStartupState.countryInit}"
                     )
-                    startupStateBuilder.withHadFirstStartup(legacyStartupState.hadFirstStartup)
+                    startupStateModelBuilder.withHadFirstStartup(legacyStartupState.hadFirstStartup)
                         .withCountryInit(legacyStartupState.countryInit)
                 } else {
                     YLogger.info(tag, "Legacy startup state missing or invalid")
                 }
-                val startupState = startupStateBuilder.build()
-                YLogger.info(tag, "write startup: $startupState")
-                startupStorage.saveFromMigration(context, startupStateBuilder.build())
+                val startupStateModel = startupStateModelBuilder.build()
+                YLogger.info(tag, "write startup: $startupStateModel")
+                StorageFactory.Provider.get(StartupStateModel::class.java).createForMigration(context)
+                    .save(startupStateModel)
             } catch (e: Throwable) {
                 YLogger.error(tag, e)
             }
@@ -60,21 +63,21 @@ internal class ServiceMigrationScriptToV112 : MigrationScript {
     }
 
     private fun fillIdentifiersToStartupState(
-        startupStateBuilder: StartupState.Builder,
+        vitalDataStorage: VitalCommonDataProvider,
+        startupStateBuilder: StartupStateModel.StartupStateBuilder,
         legacyStartupState: LegacyStartupState
     ) {
         YLogger.info(tag, "Import identifiers from legacy storage...")
-        val vitalDataStorage = GlobalServiceLocator.getInstance().vitalDataProviderStorage.commonDataProvider
         val actualDeviceId = vitalDataStorage.deviceId
         if (TextUtils.isEmpty(actualDeviceId)) {
             if (!TextUtils.isEmpty(legacyStartupState.deviceId)) {
-                startupStateBuilder.withDeviceId(legacyStartupState.deviceId)
+                vitalDataStorage.deviceId = legacyStartupState.deviceId
                 YLogger.info(tag, "Imported deviceId = ${legacyStartupState.deviceId}")
             } else {
                 YLogger.info(tag, "DeviceId not found")
             }
             if (!TextUtils.isEmpty(legacyStartupState.deviceIdHash)) {
-                startupStateBuilder.withDeviceIdHash(legacyStartupState.deviceIdHash)
+                vitalDataStorage.deviceIdHash = legacyStartupState.deviceIdHash
                 YLogger.info(tag, "Imported deviceIdHash = ${legacyStartupState.deviceIdHash}")
             } else {
                 YLogger.info(tag, "DeviceIdHash not found")
@@ -91,9 +94,8 @@ internal class ServiceMigrationScriptToV112 : MigrationScript {
                 "Device id presents in actual storage. Use values from vital storage: " +
                     "deviceId = ${vitalDataStorage.deviceId}; deviceIdHash = ${vitalDataStorage.deviceIdHash}"
             )
-            startupStateBuilder.withDeviceId(vitalDataStorage.deviceId)
-                .withDeviceIdHash(vitalDataStorage.deviceIdHash)
         }
+        startupStateBuilder.withDeviceID(vitalDataStorage.deviceId).withDeviceIDHash(vitalDataStorage.deviceIdHash)
     }
 
     private fun readLegacyStartupState(database: SQLiteDatabase): LegacyStartupState? {

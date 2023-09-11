@@ -5,13 +5,17 @@ import android.database.Cursor
 import android.database.MatrixCursor
 import android.database.sqlite.SQLiteDatabase
 import io.appmetrica.analytics.assertions.ProtoObjectPropertyAssertions
+import io.appmetrica.analytics.coreapi.internal.data.ProtobufStateStorage
 import io.appmetrica.analytics.coreutils.internal.encryption.AESEncrypter
 import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.db.DatabaseStorage
+import io.appmetrica.analytics.impl.db.VitalCommonDataProvider
 import io.appmetrica.analytics.impl.db.constants.Constants
+import io.appmetrica.analytics.impl.db.state.factory.StorageFactory
 import io.appmetrica.analytics.impl.db.storage.DatabaseStorageFactory
 import io.appmetrica.analytics.impl.protobuf.client.LegacyStartupStateProtobuf
 import io.appmetrica.analytics.impl.startup.StartupState
+import io.appmetrica.analytics.impl.startup.StartupStateModel
 import io.appmetrica.analytics.impl.utils.encryption.AESCredentialProvider
 import io.appmetrica.analytics.protobuf.nano.MessageNano
 import io.appmetrica.analytics.testutils.CommonTest
@@ -19,6 +23,7 @@ import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
 import io.appmetrica.analytics.testutils.LogRule
 import io.appmetrica.analytics.testutils.MockedConstructionRule
 import io.appmetrica.analytics.testutils.constructionRule
+import io.appmetrica.analytics.testutils.on
 import io.appmetrica.analytics.testutils.staticRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
@@ -32,6 +37,7 @@ import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
@@ -40,7 +46,7 @@ import org.robolectric.RobolectricTestRunner
 internal class ServiceMigrationScriptToV112Test : CommonTest() {
 
     private val database = mock<SQLiteDatabase>()
-    private val startupStateCaptor = argumentCaptor<StartupState>()
+    private val startupStateModelCaptor = argumentCaptor<StartupStateModel>()
 
     @get:Rule
     val globalServiceLocatorRule = GlobalServiceLocatorRule()
@@ -77,6 +83,17 @@ internal class ServiceMigrationScriptToV112Test : CommonTest() {
     @get:Rule
     val logRule = LogRule()
 
+    private val protobufStateStorage = mock<ProtobufStateStorage<StartupStateModel>>()
+
+    private val storageFactory = mock<StorageFactory<StartupStateModel>>()
+
+    @get:Rule
+    val storageFactoryProviderMockedStaticRule = staticRule<StorageFactory.Provider> {
+        on { StorageFactory.Provider.get(StartupStateModel::class.java) } doReturn storageFactory
+    }
+
+    private val vitalCommonDataProvider = mock<VitalCommonDataProvider>()
+
     private val uuid = "uuid"
     private val deviceID = "deviceID"
     private val deviceIDHash = "deviceIDHash"
@@ -93,7 +110,8 @@ internal class ServiceMigrationScriptToV112Test : CommonTest() {
     fun setUp() {
         context = GlobalServiceLocator.getInstance().context
         whenever(DatabaseStorageFactory.getInstance(context)).thenReturn(databaseStorageFactory)
-        serviceMigrationScriptToV112 = ServiceMigrationScriptToV112()
+        whenever(storageFactory.createForMigration(context)).thenReturn(protobufStateStorage)
+        serviceMigrationScriptToV112 = ServiceMigrationScriptToV112(vitalCommonDataProvider)
         aesCredentialProvider = aesCredentialProvider()
         aesEncrypter = aesEncrypter()
     }
@@ -112,20 +130,27 @@ internal class ServiceMigrationScriptToV112Test : CommonTest() {
         legacyStartupState.countryInit = countryInit
         legacyStartupState.hadFirstStartup = true
         stubDatabaseWithLegacyStartupState(legacyStartupState)
+        whenever(vitalCommonDataProvider.deviceId).thenReturn(
+            null, // For starting migration
+            deviceID // For rewriting to vital storage
+        )
+        whenever(vitalCommonDataProvider.deviceIdHash).thenReturn(deviceIDHash)
 
         serviceMigrationScriptToV112.run(context)
 
         val result = interceptStartupState()
 
         ProtoObjectPropertyAssertions(result)
-            .withPrivateFields(true)
-            .withPermittedFields("uuid", "deviceId", "deviceIdHash", "countryInit", "hadFirstStartup")
+            .withPermittedFields("uuid", "deviceID", "deviceIDHash", "countryInit", "hadFirstStartup")
             .checkField("uuid", uuid)
-            .checkField("deviceId", deviceID)
-            .checkField("deviceIdHash", deviceIDHash)
+            .checkField("deviceID", deviceID)
+            .checkField("deviceIDHash", deviceIDHash)
             .checkField("countryInit", countryInit)
             .checkField("hadFirstStartup", true)
             .checkAll()
+
+        verify(vitalCommonDataProvider).deviceId = deviceID
+        verify(vitalCommonDataProvider).deviceIdHash = deviceIDHash
     }
 
     @Test
@@ -140,12 +165,12 @@ internal class ServiceMigrationScriptToV112Test : CommonTest() {
         val result = interceptStartupState()
 
         ProtoObjectPropertyAssertions(result)
-            .withPrivateFields(true)
-            .withPermittedFields("uuid", "deviceId", "deviceIdHash")
-            .checkField("deviceId", deviceID)
-            .checkField("deviceIdHash", deviceIDHash)
+            .withPermittedFields("uuid")
             .checkFieldIsNull("uuid")
             .checkAll()
+
+        verify(vitalCommonDataProvider).deviceId = deviceID
+        verify(vitalCommonDataProvider).deviceIdHash = deviceIDHash
     }
 
     @Test
@@ -161,11 +186,12 @@ internal class ServiceMigrationScriptToV112Test : CommonTest() {
 
         ProtoObjectPropertyAssertions(result)
             .withPrivateFields(true)
-            .withPermittedFields("uuid", "deviceId", "deviceIdHash")
+            .withPermittedFields("uuid")
             .checkField("uuid", uuid)
-            .checkField("deviceIdHash", deviceIDHash)
-            .checkFieldIsNull("deviceId")
             .checkAll()
+
+        verify(vitalCommonDataProvider, never()).deviceId = any()
+        verify(vitalCommonDataProvider).deviceIdHash = deviceIDHash
     }
 
     @Test
@@ -177,15 +203,8 @@ internal class ServiceMigrationScriptToV112Test : CommonTest() {
 
         serviceMigrationScriptToV112.run(context)
 
-        val result = interceptStartupState()
-
-        ProtoObjectPropertyAssertions(result)
-            .withPrivateFields(true)
-            .withPermittedFields("uuid", "deviceId", "deviceIdHash")
-            .checkField("uuid", uuid)
-            .checkField("deviceId", deviceID)
-            .checkFieldIsNull("deviceIdHash")
-            .checkAll()
+        verify(vitalCommonDataProvider).deviceId = deviceID
+        verify(vitalCommonDataProvider, never()).deviceIdHash = any()
     }
 
     @Test
@@ -213,12 +232,14 @@ internal class ServiceMigrationScriptToV112Test : CommonTest() {
         val result = interceptStartupState()
 
         ProtoObjectPropertyAssertions(result)
-            .withPrivateFields(true)
-            .withPermittedFields("uuid", "deviceId", "deviceIdHash", "hadFirstStartup", "countryInit")
+            .withPermittedFields("uuid", "deviceID", "deviceIDHash", "hadFirstStartup", "countryInit")
             .checkField("hadFirstStartup", false)
             .checkField("countryInit", "")
-            .checkFieldsAreNull("uuid", "deviceId", "deviceIdHash")
+            .checkFieldsAreNull("uuid", "deviceID", "deviceIDHash")
             .checkAll()
+
+        verify(vitalCommonDataProvider, never()).deviceId = any()
+        verify(vitalCommonDataProvider, never()).deviceIdHash = any()
     }
 
     @Test
@@ -231,11 +252,14 @@ internal class ServiceMigrationScriptToV112Test : CommonTest() {
 
         ProtoObjectPropertyAssertions(result)
             .withPrivateFields(true)
-            .withPermittedFields("uuid", "deviceId", "deviceIdHash", "hadFirstStartup", "countryInit")
+            .withPermittedFields("uuid", "hadFirstStartup", "countryInit")
             .checkField("hadFirstStartup", false)
             .checkField("countryInit", "")
-            .checkFieldsAreNull("uuid", "deviceId", "deviceIdHash")
+            .checkFieldsAreNull("uuid")
             .checkAll()
+
+        verify(vitalCommonDataProvider, never()).deviceId = any()
+        verify(vitalCommonDataProvider, never()).deviceIdHash = any()
     }
 
     @Test
@@ -245,11 +269,13 @@ internal class ServiceMigrationScriptToV112Test : CommonTest() {
         val result = interceptStartupState()
 
         ProtoObjectPropertyAssertions(result)
-            .withPrivateFields(true)
-            .withPermittedFields("uuid", "deviceId", "deviceIdHash", "hadFirstStartup", "countryInit")
+            .withPermittedFields("uuid", "hadFirstStartup", "countryInit")
             .checkField("hadFirstStartup", false)
-            .checkFieldsAreNull("uuid", "deviceId", "deviceIdHash", "countryInit")
+            .checkFieldsAreNull("uuid", "countryInit")
             .checkAll()
+
+        verify(vitalCommonDataProvider, never()).deviceId = any()
+        verify(vitalCommonDataProvider, never()).deviceIdHash = any()
     }
 
     @Test
@@ -260,11 +286,13 @@ internal class ServiceMigrationScriptToV112Test : CommonTest() {
         val result = interceptStartupState()
 
         ProtoObjectPropertyAssertions(result)
-            .withPrivateFields(true)
-            .withPermittedFields("uuid", "deviceId", "deviceIdHash", "hadFirstStartup", "countryInit")
+            .withPermittedFields("uuid", "hadFirstStartup", "countryInit")
             .checkField("hadFirstStartup", false)
-            .checkFieldsAreNull("uuid", "deviceId", "deviceIdHash", "countryInit")
+            .checkFieldsAreNull("uuid", "countryInit")
             .checkAll()
+
+        verify(vitalCommonDataProvider, never()).deviceId = any()
+        verify(vitalCommonDataProvider, never()).deviceIdHash = any()
     }
 
     @Test
@@ -286,11 +314,13 @@ internal class ServiceMigrationScriptToV112Test : CommonTest() {
         val result = interceptStartupState()
 
         ProtoObjectPropertyAssertions(result)
-            .withPrivateFields(true)
-            .withPermittedFields("uuid", "deviceId", "deviceIdHash", "hadFirstStartup", "countryInit")
+            .withPermittedFields("uuid", "deviceID", "deviceIDHash", "hadFirstStartup", "countryInit")
             .checkField("hadFirstStartup", false)
-            .checkFieldsAreNull("uuid", "deviceId", "deviceIdHash", "countryInit")
+            .checkFieldsAreNull("uuid", "deviceID", "deviceIDHash", "countryInit")
             .checkAll()
+
+        verify(vitalCommonDataProvider, never()).deviceId = any()
+        verify(vitalCommonDataProvider, never()).deviceIdHash = any()
     }
 
     @Test
@@ -312,11 +342,13 @@ internal class ServiceMigrationScriptToV112Test : CommonTest() {
         val result = interceptStartupState()
 
         ProtoObjectPropertyAssertions(result)
-            .withPrivateFields(true)
-            .withPermittedFields("uuid", "deviceId", "deviceIdHash", "hadFirstStartup", "countryInit")
+            .withPermittedFields("uuid", "deviceID", "deviceIDHash", "hadFirstStartup", "countryInit")
             .checkField("hadFirstStartup", false)
-            .checkFieldsAreNull("uuid", "deviceId", "deviceIdHash", "countryInit")
+            .checkFieldsAreNull("uuid", "deviceID", "deviceIDHash", "countryInit")
             .checkAll()
+
+        verify(vitalCommonDataProvider, never()).deviceId = any()
+        verify(vitalCommonDataProvider, never()).deviceIdHash = any()
     }
 
     private fun aesEncrypter(): AESEncrypter {
@@ -333,10 +365,10 @@ internal class ServiceMigrationScriptToV112Test : CommonTest() {
         return aesCredentialProviderMockedConstructionRule.constructionMock.constructed().first()
     }
 
-    private fun interceptStartupState(): StartupState {
-        verify(startupStorage()).saveFromMigration(eq(context), startupStateCaptor.capture())
-        assertThat(startupStateCaptor.allValues).hasSize(1)
-        return startupStateCaptor.firstValue
+    private fun interceptStartupState(): StartupStateModel {
+        verify(protobufStateStorage).save(startupStateModelCaptor.capture())
+        assertThat(startupStateModelCaptor.allValues).hasSize(1)
+        return startupStateModelCaptor.firstValue
     }
 
     private fun stubDatabaseWithLegacyStartupState(
