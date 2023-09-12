@@ -9,7 +9,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.appmetrica.analytics</groupId>
   <artifactId>analytics-gpllibrary</artifactId>
-  <version>6.0.0</version>
+  <version>6.1.0</version>
   <packaging>aar</packaging>
   <name>AppMetrica SDK Google Play Location Library wrapper</name>
   <url>https://appmetrica.io/</url>

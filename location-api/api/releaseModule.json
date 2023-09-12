@@ -3,7 +3,7 @@
     "component": {
         "group": "io.appmetrica.analytics",
         "module": "analytics-location-api",
-        "version": "6.0.0",
+        "version": "6.1.0",
         "attributes": {
             "org.gradle.status": "release"
         }
@@ -25,8 +25,8 @@
             },
             "files": [
                 {
-                    "name": "analytics-location-api-6.0.0.aar",
-                    "url": "analytics-location-api-6.0.0.aar",
+                    "name": "analytics-location-api-6.1.0.aar",
+                    "url": "analytics-location-api-6.1.0.aar",
                     "size": -1,
                     "sha512": "<sha512>",
                     "sha256": "<sha256>",
@@ -55,14 +55,14 @@
                     "group": "io.appmetrica.analytics",
                     "module": "analytics-core-api",
                     "version": {
-                        "requires": "6.0.0"
+                        "requires": "6.1.0"
                     }
                 }
             ],
             "files": [
                 {
-                    "name": "analytics-location-api-6.0.0.aar",
-                    "url": "analytics-location-api-6.0.0.aar",
+                    "name": "analytics-location-api-6.1.0.aar",
+                    "url": "analytics-location-api-6.1.0.aar",
                     "size": -1,
                     "sha512": "<sha512>",
                     "sha256": "<sha256>",

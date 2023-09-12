@@ -9,7 +9,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.appmetrica.analytics</groupId>
   <artifactId>analytics-ndkcrashes-api</artifactId>
-  <version>6.0.0</version>
+  <version>6.1.0</version>
   <packaging>aar</packaging>
   <name>AppMetrica SDK NdkCrashes API</name>
   <url>https://appmetrica.io/</url>
@@ -41,7 +41,7 @@
     <dependency>
       <groupId>io.appmetrica.analytics</groupId>
       <artifactId>analytics-core-utils</artifactId>
-      <version>6.0.0</version>
+      <version>6.1.0</version>
       <scope>runtime</scope>
     </dependency>
   </dependencies>
