@@ -1,7 +1,7 @@
 {
   ".gitignore":"mobile/metrika/android/appmetrica/appmetrica-sdk/.gitignore",
   ".idea/inspectionProfiles/Project_Default.xml":"mobile/metrika/android/appmetrica/appmetrica-sdk/.idea/inspectionProfiles/Project_Default.xml",
-  "CONTRIBUTING":"mobile/metrika/android/appmetrica/appmetrica-sdk/CONTRIBUTING",
+  "CONTRIBUTING.md":"mobile/metrika/android/appmetrica/appmetrica-sdk/CONTRIBUTING.md",
   "LICENSE":"mobile/metrika/android/appmetrica/appmetrica-sdk/LICENSE",
   "README.md":"mobile/metrika/android/appmetrica/appmetrica-sdk/README.md",
   "analytics/README.MD":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/README.MD",
