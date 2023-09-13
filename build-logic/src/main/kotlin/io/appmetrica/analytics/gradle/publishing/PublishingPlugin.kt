@@ -76,7 +76,7 @@ class PublishingPlugin : Plugin<Project> {
 
                         pom {
                             name.set(extension.name)
-                            description.set(extension.description)
+                            description.set("AppMetrica SDK Module")
                             url.set("https://appmetrica.io/")
 
                             licenses {

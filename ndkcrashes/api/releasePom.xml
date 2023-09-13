@@ -12,6 +12,7 @@
   <version>3.0.0</version>
   <packaging>aar</packaging>
   <name>AppMetrica NDK Crashes</name>
+  <description>AppMetrica SDK Module</description>
   <url>https://appmetrica.io/</url>
   <licenses>
     <license>

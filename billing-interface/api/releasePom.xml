@@ -12,6 +12,7 @@
   <version>6.0.0</version>
   <packaging>aar</packaging>
   <name>AppMetrica SDK Billing API</name>
+  <description>AppMetrica SDK Module</description>
   <url>https://appmetrica.io/</url>
   <licenses>
     <license>
