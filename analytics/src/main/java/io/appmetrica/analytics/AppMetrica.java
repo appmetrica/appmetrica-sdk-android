@@ -553,35 +553,27 @@ public final class AppMetrica {
     }
 
     /**
-     * <p>Returns only requested params (possible options are listed in {@link StartupParamsCallback}
-     * and any other custom keys assuming they are present in startup)
-     * by {@link StartupParamsCallback}.
-     * For example, to retrieve custom host which will be present in startup by key "my_sdk_host",
-     * use the following invocation:
-     * <code>AppMetrica.requestStartupParams(context, callback, Arrays.asList("my_sdk_host"));</code>.
+     * <p>Gets specific startup parameters based on the options in {@link StartupParamsCallback}.
+     * 
+     * Parameters might not be available right away. When they do arrive,
+     * the <code>callback</code> is informed instantly. If the parameters are already there,
+     * the <code>callback</code> also gets notified right away.
+     * After one notification, the <code>callback</code> is removed.</p>
      *
-     * It's possible, that params won't be returned immediately if they haven't yet received.
-     * But the <code>callback</code> is notified immediately when the params are received,
-     * otherwise if they have already presented, then the <code>callback</code> will be notified immediately.
-     * When the <code>callback</code> is notified once, then it will be removed. </p>
+     * <p>Avoid using anonymous callbacks. They are wrapped by {@link java.lang.ref.WeakReference}
+     * and will be removed automatically, which can cause them to disappear unexpectedly
+     * after garbage collection (<code>GC</code>).</p>
      *
-     * <p>Please don't use fully anonymous callbacks, because they are wrapped
-     * by {@link java.lang.ref.WeakReference} and cleaned-up automatically.
-     * The problem with this approach that you can't have a callback
-     * which is only referenced in the collection
-     * as it will disappear randomly (on the next <code>GC</code>).</p>
-     *
-     * {@code NOTE}: You're able to call this method without general initialization
-     * via {@link AppMetrica#activate(Context, AppMetricaConfig)}, but without
-     * this call it will take longer to retrieve startup identifiers.
+     * {@code NOTE}: This method can be called even without initializing via 
+     * {@link AppMetrica#activate(Context, AppMetricaConfig)}, but it will take more time to get the startup identifiers.
      *
      * @param context Context object
-     * @param callback An object that implements {@link StartupParamsCallback} interface.
-     * @param params List of params to be requested.
-     *               If params is empty list of {@link StartupParamsCallback#APPMETRICA_UUID},
+     * @param callback Object that implements the {@link StartupParamsCallback} interface.
+     * @param params List of parameters to request.
+     *               If the list is empty, the default request is for {@link StartupParamsCallback#APPMETRICA_UUID},
      *               {@link StartupParamsCallback#APPMETRICA_DEVICE_ID},
-     *               {@link StartupParamsCallback#APPMETRICA_DEVICE_ID_HASH} will be requested.
-     */
+     *               {@link StartupParamsCallback#APPMETRICA_DEVICE_ID_HASH}.
+     */    
     public static void requestStartupParams(
             @NonNull final Context context,
             @NonNull final StartupParamsCallback callback,
