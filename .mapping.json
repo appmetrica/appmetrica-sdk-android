@@ -1,4 +1,6 @@
 {
+  ".github/ISSUE_TEMPLATE/BUG_REPORT.yml":"mobile/metrika/android/appmetrica/appmetrica-sdk/.github/ISSUE_TEMPLATE/BUG_REPORT.yml",
+  ".github/ISSUE_TEMPLATE/config.yml":"mobile/metrika/android/appmetrica/appmetrica-sdk/.github/ISSUE_TEMPLATE/config.yml",
   ".gitignore":"mobile/metrika/android/appmetrica/appmetrica-sdk/.gitignore",
   ".idea/inspectionProfiles/Project_Default.xml":"mobile/metrika/android/appmetrica/appmetrica-sdk/.idea/inspectionProfiles/Project_Default.xml",
   "CONTRIBUTING.md":"mobile/metrika/android/appmetrica/appmetrica-sdk/CONTRIBUTING.md",

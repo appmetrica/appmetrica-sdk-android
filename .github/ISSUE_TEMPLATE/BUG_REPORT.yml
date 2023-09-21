@@ -1,0 +1,61 @@
+name: 🐞 Bug Report
+description: File a bug report.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        If the issue is related to the web interface, API or account, then write to us at [AppMetrica Support](https://appmetrica.io/docs/troubleshooting/feedback-new.html) for help.
+        
+        If users do not appear in the web interface, check the [documentation](https://yandex.ru/support2/appmetrica-io/ru/sdk/android/analytics/quick-start) for correct SDK integration.
+        If you are using Firebase Performance Monitoring version 31 or later, please see the [issue](https://appmetrica.io/docs/troubleshooting/update-firebase.html).
+  - type: input
+    attributes:
+      label: 📚 AppMetrica SDK Version
+      description: |
+        What version of AppMetrica SDK has this issue?
+      placeholder: 6.0.0
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: 📝 Description
+      description: |
+        Provide a detailed description of the issue. Include both your expected outcome and what actually happened. You may also attach files for additional context.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: 🔍 Reproducing the issue
+      description: |
+        Share **steps to reproduce** or a [**minimal reproducible example**](https://stackoverflow.com/help/minimal-reproducible-example) to expedite resolution.
+      placeholder: |
+        1. Open the app while standing on one leg
+        2. Whisper "AppMetrica" three times to your device
+        3. Rotate the phone counterclockwise
+        4. Notice the app still doesn't levitate
+  - type: textarea
+    attributes:
+      label: 📋 Relevant AppMetrica Log Output or Crash Logs
+      description: |
+        Please copy and paste any relevant AppMetrica log output or crash logs.
+      value: |
+        <!--- Replace the contents between the <details> tags with your own logs. --->
+        <details>
+        <summary>Expand to view logs</summary>
+        <br>
+        
+        ```
+        // Your logs go here
+        ```
+        
+        </details>
+    validations:
+      required: false
+  - type: textarea
+    attributes:
+      label: 📦 Dependencies
+      description: |
+        Dependencies can help us detect conflicts with other libraries. For example, like [this problem](https://appmetrica.io/docs/troubleshooting/update-firebase.html).
+      value: |
+        <!--- Run `./gradlew :app:dependencies > dependencies.log` and attach dependencies.log to this field. --->
