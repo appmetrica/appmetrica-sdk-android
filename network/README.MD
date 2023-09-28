@@ -19,7 +19,7 @@ Maven: `io.appmetrica.analytics:network:${VERSION}`.
 
 ### Code style
 
-`./gradlew :network:codequality`
+`./gradlew :network:lint :network:ktlint :network:checkstyleRelease`
 
 ### Check AAR API
 

@@ -31,7 +31,7 @@ Maven: `io.appmetrica.analytics:analytics-ndk-crashes:${VERSION}`.
 
 ### Code style
 
-`./gradlew :ndkcrashes:codequality`
+`./gradlew :ndkcrashes:lint :ndkcrashes:ktlint :ndkcrashes:checkstyleRelease`
 
 ### Check AAR API
 

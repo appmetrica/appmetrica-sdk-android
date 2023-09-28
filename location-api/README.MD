@@ -19,7 +19,7 @@ Maven: `io.appmetrica.analytics:analytics-location-api:${VERSION}`.
 
 ### Code style
 
-`./gradlew :location-api:codequality`
+`./gradlew :location-api:lint :location-api:ktlint :location-api:checkstyleRelease`
 
 ### Check AAR API
 

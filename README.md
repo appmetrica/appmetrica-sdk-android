@@ -21,7 +21,7 @@ Classes in packages `${MODULE_NAMESPACE}.internal` are intended for interaction 
 
 ### Code style
 
-`./gradlew :codequality`
+`./gradlew lint ktlint checkstyle`
 
 ### Check AAR API
 

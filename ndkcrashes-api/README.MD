@@ -21,7 +21,7 @@ Minimum supported version of ndkcrashes is 3.0.0.
 
 ### Code style
 
-`./gradlew :ndkcrashes-api:codequality`
+`./gradlew :ndkcrashes-api:lint :ndkcrashes-api:ktlint :ndkcrashes-api:checkstyleRelease`
 
 ### Check AAR API
 

@@ -19,7 +19,7 @@ Maven: `io.appmetrica.analytics:analytics-remote-permissions:${VERSION}`.
 
 ### Code style
 
-`./gradlew :remote-permissions:codequality`
+`./gradlew :remote-permissions:lint :remote-permissions:ktlint :remote-permissions:checkstyleRelease`
 
 ### Check AAR API
 

@@ -19,7 +19,7 @@ Maven: `io.appmetrica.analytics:analytics-network-tasks:${VERSION}`.
 
 ### Code style
 
-`./gradlew :network-tasks:codequality`
+`./gradlew :network-tasks:lint :network-tasks:ktlint :network-tasks:checkstyleRelease`
 
 ### Check AAR API
 

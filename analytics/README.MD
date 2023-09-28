@@ -15,11 +15,11 @@ Maven: `io.appmetrica.analytics:analytics:${VERSION}`.
 
 ### Tests
 
-`./gradlew :analytics:testBinaryProdReleaseUnitTest :analytics:generateProdReleaseJacocoReport`
+`./gradlew :analytics:testBinaryProdReleaseUnitTest :analytics:generateBinaryProdReleaseJacocoReport`
 
 ### Code style
 
-`./gradlew :analytics:codequality`
+`./gradlew :analytics:lint :analytics:ktlint :analytics:checkstyleBinaryProdRelease`
 
 ### Check AAR API
 

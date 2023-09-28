@@ -35,9 +35,6 @@ buildTypes.forEach { buildType ->
     }
 }
 
-tasks.register("codequality") {
-    dependsOn(modules.map { it.tasks.named(createTaskName("codequality")) })
-}
 tasks.register("aarCheck") {
     dependsOn(modules.map { it.tasks.named(createTaskName("aarCheck")) })
 }

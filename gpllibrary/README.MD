@@ -19,7 +19,7 @@ Maven: `io.appmetrica.analytics:analytics-gpllibrary:${VERSION}`.
 
 ### Code style
 
-`./gradlew :gpllibrary:codequality`
+`./gradlew :gpllibrary:lint :gpllibrary:ktlint :gpllibrary:checkstyleRelease`
 
 ### Check AAR API
 

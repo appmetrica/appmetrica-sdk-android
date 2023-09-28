@@ -21,7 +21,7 @@ Maven: `io.appmetrica.analytics:analytics-proto:${VERSION}`.
 
 ### Code style
 
-`./gradlew :proto:codequality`
+`./gradlew :proto:lint :proto:ktlint :proto:checkstyleRelease`
 
 ### Check AAR API
 

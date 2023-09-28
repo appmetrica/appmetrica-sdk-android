@@ -19,7 +19,7 @@ Maven: `io.appmetrica.analytics:analytics-modules-api:${VERSION}`.
 
 ### Code style
 
-`./gradlew :modules-api:codequality`
+`./gradlew :modules-api:lint :modules-api:ktlint :modules-api:checkstyleRelease`
 
 ### Check AAR API
 

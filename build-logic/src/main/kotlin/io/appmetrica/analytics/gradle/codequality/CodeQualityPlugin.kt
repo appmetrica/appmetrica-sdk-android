@@ -45,14 +45,8 @@ class CodeQualityPlugin : Plugin<Project> {
             codequalityTasks += configureKtLintTaskAndGetRootTask(project)
         }
 
-        val codequalityTask = project.tasks.register("codequality") {
-            group = CODEQUALITY_TASK_GROUP
-            description = "Run all codequality analysis for all classes"
-
-            dependsOn(codequalityTasks)
-        }
         project.tasks.named("check").configure {
-            dependsOn(codequalityTask)
+            dependsOn(codequalityTasks)
         }
     }
 

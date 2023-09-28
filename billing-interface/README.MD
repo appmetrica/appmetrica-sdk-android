@@ -19,7 +19,7 @@ Maven: `io.appmetrica.analytics:analytics-billing-interface:${VERSION}`.
 
 ### Code style
 
-`./gradlew :billing-interface:codequality`
+`./gradlew :billing-interface:lint :billing-interface:ktlint :billing-interface:checkstyleRelease`
 
 ### Check AAR API
 
