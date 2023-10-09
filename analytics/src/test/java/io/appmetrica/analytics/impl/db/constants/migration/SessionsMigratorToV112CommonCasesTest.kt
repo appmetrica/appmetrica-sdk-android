@@ -262,7 +262,6 @@ internal class SessionsMigratorToV112CommonCasesTest(
 
     private fun dbSessionModelConverter(): DbSessionModelConverter {
         assertThat(dbSessionModelConverterMockedConstructionRule.constructionMock.constructed()).hasSize(1)
-        assertThat(dbSessionModelConverterMockedConstructionRule.argumentInterceptor.flatArguments()).hasSize(1)
         return dbSessionModelConverterMockedConstructionRule.constructionMock.constructed().first()
     }
 

@@ -6,13 +6,11 @@ import org.gradle.api.Project
 import org.gradle.api.file.Directory
 import org.gradle.api.tasks.Copy
 import org.gradle.api.tasks.Exec
+import org.gradle.configurationcache.extensions.capitalized
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.extra
 import org.gradle.kotlin.dsl.register
 import org.gradle.kotlin.dsl.the
-import java.io.File
-import java.math.BigInteger
-import java.security.MessageDigest
 import java.util.Locale
 
 private val nativeBuildTypes = mapOf(
@@ -73,6 +71,19 @@ private fun Project.configureNative() {
                     arguments("-DCRASHPAD_BUILD_DIR:STRING=${crashpadNinjaDir(nativeBuildType)}")
                     if (enableLogs) {
                         cppFlags("-DAPPMETRICA_DEBUG")
+                    }
+                }
+            }
+        }
+
+        afterEvaluate {
+            buildTypes.forEach { buildType ->
+                val nativeBuildType = nativeBuildTypes[buildType.name]
+                requireNotNull(nativeBuildType) { "Unknown native build type for ${buildType.name}" }
+
+                tasks.named("merge${buildType.name.capitalized()}JniLibFolders").configure {
+                    crashpadArchs.values.forEach {
+                        dependsOn(tasks.named("build${nativeBuildType.capitalized()}${it.capitalized()}Crashpad"))
                     }
                 }
             }

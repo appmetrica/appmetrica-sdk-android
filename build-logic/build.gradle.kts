@@ -7,7 +7,7 @@ plugins {
 
 group = "io.appmetrica.analytics.gradle"
 
-val agpVersion: String = detectAgpVersion("7.2.2")
+val agpVersion: String = detectAgpVersion("7.4.1")
 
 fun GradlePluginDevelopmentExtension.plugin(name: String, impl: String) {
     plugins.create(name.split('.', '-').joinToString("") { it.capitalize() }) {
@@ -31,7 +31,7 @@ dependencies {
     // https://developer.android.com/studio/releases/gradle-plugin
     implementation("com.android.tools.build:gradle:${agpVersion}")
     // https://kotlinlang.org/docs/gradle.html
-    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.32")
+    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.21")
     // by source
     implementation(libs.appMetricaAarCheck)
     implementation(libs.appMetricaAndroid)

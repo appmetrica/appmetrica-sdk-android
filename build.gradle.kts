@@ -1,5 +1,4 @@
 import io.appmetrica.analytics.gradle.AppMetricaModulePlugin
-import io.appmetrica.analytics.gradle.Constants
 
 plugins {
     id("appmetrica-update-version")

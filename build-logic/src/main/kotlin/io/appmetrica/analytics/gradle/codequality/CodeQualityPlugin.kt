@@ -1,7 +1,6 @@
 package io.appmetrica.analytics.gradle.codequality
 
 import com.android.build.gradle.LibraryExtension
-import io.appmetrica.gradle.nologs.RemoveLogsTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Task
@@ -77,10 +76,6 @@ class CodeQualityPlugin : Plugin<Project> {
                     source(variants.map { it.javaCompile.inputs.files })
                     exclude(DEFAULT_EXCLUDE_CLASSES)
                     exclude(extension.exclude.get())
-
-                    // Checkstyle tasks execute in parallel by default https://docs.gradle.org/current/userguide/upgrading_version_7.html#checkstyle_worker_api
-                    // But we change source and comment on logs before build. Because of this, we get 'Unused import' error
-                    mustRunAfter(project.tasks.withType<RemoveLogsTask>())
                 }
 
                 checkstyleTask.configure { dependsOn(checkstyleVariantTask) }
@@ -119,7 +114,7 @@ class CodeQualityPlugin : Plugin<Project> {
             group = CODEQUALITY_TASK_GROUP
             description = "Check Kotlin code style"
             classpath = ktlint
-            main = "com.pinterest.ktlint.Main"
+            mainClass.set("com.pinterest.ktlint.Main")
             args(
                 "src/**/*.kt",
                 "!src/test*/**/*.kt",

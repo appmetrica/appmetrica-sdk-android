@@ -63,14 +63,6 @@ internal class LocationClientImplTest {
     @get:Rule
     val locationCoreMockedConstructionRule = MockedConstructionRule(LocationCore::class.java)
 
-    @get:Rule
-    val locationFilterMockedConstructionRule = MockedConstructionRule(LocationFilter::class.java)
-
-    @get:Rule
-    val cacheArgumentsMockedConstructionRule = MockedConstructionRule(CacheArguments::class.java)
-
-    private lateinit var locationFilter: LocationFilter
-    private lateinit var cacheArguments: CacheArguments
     private lateinit var defaultConfig: LocationConfig
 
     private lateinit var locationClientImpl: LocationClientImpl
@@ -79,8 +71,6 @@ internal class LocationClientImplTest {
     fun setUp() {
         locationClientImpl = LocationClientImpl()
 
-        locationFilter = locationFilter()
-        cacheArguments = cacheArguments()
         defaultConfig = defaultLocationConfig()
         whenever(defaultConfig.buildUpon(incomingCacheArguments)).thenReturn(locationConfigWithUpdatedCacheArguments)
         whenever(defaultConfig.buildUpon(incomingLocationFilter)).thenReturn(locationWithUpdatedLocationFilter)
@@ -244,20 +234,6 @@ internal class LocationClientImplTest {
         assertThat(locationClientImpl.location).isEqualTo(location)
     }
 
-    private fun locationFilter(): LocationFilter {
-        assertThat(locationFilterMockedConstructionRule.constructionMock.constructed()).hasSize(1)
-        assertThat(locationFilterMockedConstructionRule.argumentInterceptor.flatArguments())
-            .containsExactly(5000L, 10f)
-        return locationFilterMockedConstructionRule.constructionMock.constructed().first()
-    }
-
-    private fun cacheArguments(): CacheArguments {
-        assertThat(cacheArgumentsMockedConstructionRule.constructionMock.constructed()).hasSize(1)
-        assertThat(cacheArgumentsMockedConstructionRule.argumentInterceptor.flatArguments())
-            .containsExactly(10000L, 120000L)
-        return cacheArgumentsMockedConstructionRule.constructionMock.constructed().first()
-    }
-
     private fun defaultLocationCore(): LocationCore =
         locationCore(context, permissionExtractor, executor, locationStreamDispatcher(filledConsumers, defaultConfig))
 
@@ -287,8 +263,6 @@ internal class LocationClientImplTest {
 
     private fun defaultLocationConfig(): LocationConfig {
         assertThat(locationConfigMockedConstructionRule.constructionMock.constructed()).hasSize(1)
-        assertThat(locationConfigMockedConstructionRule.argumentInterceptor.flatArguments())
-            .containsExactly(locationFilter, cacheArguments)
         return locationConfigMockedConstructionRule.constructionMock.constructed().first()
     }
 

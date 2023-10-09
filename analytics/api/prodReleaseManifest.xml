@@ -3,9 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="io.appmetrica.analytics" >
 
-    <uses-sdk
-        android:minSdkVersion="14"
-        android:targetSdkVersion="34" />
+    <uses-sdk android:minSdkVersion="14" />
 
     <!-- Open network sockets -->
     <uses-permission android:name="android.permission.INTERNET" />

@@ -552,7 +552,6 @@ public final class io.appmetrica.analytics.coreutils.internal.toggle.Conjunctive
     public static final void access$acquireLock(io.appmetrica.analytics.coreutils.internal.toggle.ConjunctiveCompositeThreadSafeToggle)
     public static final void access$releaseLock(io.appmetrica.analytics.coreutils.internal.toggle.ConjunctiveCompositeThreadSafeToggle)
     public static final void access$updateState(io.appmetrica.analytics.coreutils.internal.toggle.ConjunctiveCompositeThreadSafeToggle, io.appmetrica.analytics.coreapi.internal.control.ToggleObserver, boolean, String)
-    public static final void access$withLock(io.appmetrica.analytics.coreutils.internal.toggle.ConjunctiveCompositeThreadSafeToggle, kotlin.jvm.functions.Function0)
     public boolean getActualState()
     public void registerObserver([NonNull] io.appmetrica.analytics.coreapi.internal.control.ToggleObserver, boolean)
     public void removeObserver([NonNull] io.appmetrica.analytics.coreapi.internal.control.ToggleObserver)

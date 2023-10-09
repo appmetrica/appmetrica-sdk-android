@@ -2,15 +2,9 @@ package io.appmetrica.analytics.gradle.jacoco
 
 import com.android.build.gradle.LibraryExtension
 import com.android.build.gradle.api.LibraryVariant
-import groovy.namespace.QName
-import groovy.util.Node
-import groovy.util.XmlParser
-import io.appmetrica.analytics.gradle.teamcity.TeamCityExtension
 import io.appmetrica.analytics.gradle.teamcity.TeamCityPlugin
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.file.Directory
-import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.testing.Test
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
@@ -38,22 +32,19 @@ class JacocoPlugin : Plugin<Project> {
 
         val extension = project.extensions.create<JacocoSettingsExtension>("jacocoSettings")
 
-        val jacocoReportDir = project.layout.buildDirectory.dir("jacoco")
-
         project.configure<JacocoPluginExtension> {
             toolVersion = "0.8.7" // https://github.com/jacoco/jacoco/releases
-            setReportsDir(jacocoReportDir.map { it.asFile })
         }
 
         project.plugins.withId("com.android.library") {
             project.the<LibraryExtension>().libraryVariants.configureEach {
-                project.registerJacocoTaskForVariant(extension, this, jacocoReportDir)
+                project.registerJacocoTaskForVariant(extension, this)
             }
         }
 
         project.tasks.withType<Test> {
             reports {
-                junitXml.isEnabled = true
+                junitXml.required.set(true)
             }
             configure<JacocoTaskExtension> {
                 // without this coverage does not work
@@ -63,34 +54,11 @@ class JacocoPlugin : Plugin<Project> {
         }
     }
 
-    fun getValueFromCounter(parsedXmlReport: Node, type: String, attribute: String): Int {
-        val counter = parsedXmlReport
-            .getAt(QName("counter"))
-            .find { counter -> (counter as Node).attribute("type") == type } as Node?
-        val value = counter?.attribute(attribute)?.toString() ?: "0"
-
-        return value.toInt()
-    }
-
-    fun Project.printInTeamcityAndReturnCoverage(parsedXmlReport: Node, type: String): String {
-        val covered = getValueFromCounter(parsedXmlReport, type, "covered")
-        val missed = getValueFromCounter(parsedXmlReport, type, "missed")
-        val coverage = 100.0 * covered / (covered + missed)
-
-        the<TeamCityExtension>().buildStatisticValue("CodeCoverageAbs${type[0]}Covered", covered)
-        the<TeamCityExtension>().buildStatisticValue("CodeCoverageAbs${type[0]}Total", covered + missed)
-
-        return String.format("%.1f", coverage).replace(",", ".")
-    }
-
     fun Project.registerJacocoTaskForVariant(
         extension: JacocoSettingsExtension,
-        variant: LibraryVariant,
-        jacocoReportDir: Provider<Directory>
+        variant: LibraryVariant
     ) {
-        val jacocoVariantReportDir = jacocoReportDir.map { it.dir(variant.name) }
-
-        val jacocoVariantTask = tasks.register<JacocoReport>("generate${variant.name.capitalize(Locale.ROOT)}JacocoReport") {
+        tasks.register<JacocoReport>("generate${variant.name.capitalize(Locale.ROOT)}JacocoReport") {
             val testTask = tasks.named<Test>("test${variant.name.capitalize(Locale.ROOT)}UnitTest").get()
             val kotlinTask = tasks.named<KotlinCompile>("compile${variant.name.capitalize(Locale.ROOT)}Kotlin").get()
 
@@ -103,9 +71,7 @@ class JacocoPlugin : Plugin<Project> {
 
             reports {
                 xml.required.set(true)
-                xml.setDestination(jacocoVariantReportDir.map { it.file("${name}.xml").asFile })
                 html.required.set(true)
-                html.setDestination(jacocoVariantReportDir.map { it.dir("html").asFile })
             }
 
             classDirectories.from(fileTree(variant.javaCompileProvider.get().destinationDirectory.get()) {
@@ -120,27 +86,5 @@ class JacocoPlugin : Plugin<Project> {
 
             dependsOn(testTask)
         }
-
-        val printCoverageTask = tasks.register("print${variant.name.capitalize(Locale.ROOT)}CoverageInTeamcity") {
-            group = JACOCO_TASK_GROUP
-            description = "Prints coverage to teamcity for ${variant.name}"
-
-            onlyIf { jacocoVariantTask.get().reports.xml.destination.exists() }
-
-            doLast {
-                val xmlParser = XmlParser()
-                xmlParser.setFeature("http://apache.org/xml/features/disallow-doctype-decl", false)
-                xmlParser.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false)
-                val parsedXmlReport = xmlParser.parse(jacocoVariantTask.get().reports.xml.destination)
-
-                val classesCoverage = printInTeamcityAndReturnCoverage(parsedXmlReport, "CLASS")
-                val methodsCoverage = printInTeamcityAndReturnCoverage(parsedXmlReport, "METHOD")
-                val linesCoverage = printInTeamcityAndReturnCoverage(parsedXmlReport, "LINE")
-
-                project.the<TeamCityExtension>().appendToBuildStatus("Coverage: ${classesCoverage}%/${methodsCoverage}%/${linesCoverage}%")
-            }
-        }
-
-        jacocoVariantTask.configure { finalizedBy(printCoverageTask) }
     }
 }
