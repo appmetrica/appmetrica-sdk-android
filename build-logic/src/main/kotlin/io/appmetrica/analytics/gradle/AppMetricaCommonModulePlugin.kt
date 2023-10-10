@@ -104,6 +104,7 @@ class AppMetricaCommonModulePlugin : Plugin<Project> {
 
     private fun Project.configureAarCheck() {
         configure<AarCheckExtension> {
+            checkDependencies = true
             checkManifest = true
             checkModule = true
             checkPom = true
