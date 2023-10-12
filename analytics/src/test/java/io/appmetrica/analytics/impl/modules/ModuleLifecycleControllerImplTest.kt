@@ -9,7 +9,7 @@ import org.junit.Test
 import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
-import org.mockito.kotlin.verifyZeroInteractions
+import org.mockito.kotlin.verifyNoMoreInteractions
 
 class ModuleLifecycleControllerImplTest : CommonTest() {
 
@@ -24,7 +24,7 @@ class ModuleLifecycleControllerImplTest : CommonTest() {
     @Test
     fun registerOnFirstClientConnectedObserver() {
         moduleLifecycleControllerImpl.registerObserver(moduleLifecycleObserver)
-        verifyZeroInteractions(moduleLifecycleObserver)
+        verifyNoMoreInteractions(moduleLifecycleObserver)
         verify(serviceLifecycle).addFirstClientConnectObserver(serviceLifecycleObserverCaptor.capture())
         assertThat(serviceLifecycleObserverCaptor.allValues.size).isEqualTo(1)
         serviceLifecycleObserverCaptor.firstValue.onEvent(intent)
@@ -34,7 +34,7 @@ class ModuleLifecycleControllerImplTest : CommonTest() {
     @Test
     fun registerOnAllClientsDisconnectedObserver() {
         moduleLifecycleControllerImpl.registerObserver(moduleLifecycleObserver)
-        verifyZeroInteractions(moduleLifecycleObserver)
+        verifyNoMoreInteractions(moduleLifecycleObserver)
         verify(serviceLifecycle).addAllClientDisconnectedObserver(serviceLifecycleObserverCaptor.capture())
         assertThat(serviceLifecycleObserverCaptor.allValues.size).isEqualTo(1)
         serviceLifecycleObserverCaptor.firstValue.onEvent(intent)

@@ -18,7 +18,7 @@ import org.robolectric.ParameterizedRobolectricTestRunner;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @RunWith(ParameterizedRobolectricTestRunner.class)
@@ -63,7 +63,7 @@ public class SimplePermissionExtractorTest extends CommonTest {
     public void testDoNotCallSystemWhenForbidden() throws Exception {
         when(mShouldAskSystemForPermissionStrategy.forbidUsePermission(mPermissionName)).thenReturn(true);
         boolean actual = invokePermissionExtractorCurrentMethod();
-        verifyZeroInteractions(mContext);
+        verifyNoMoreInteractions(mContext);
         assertThat(actual).isFalse();
     }
 

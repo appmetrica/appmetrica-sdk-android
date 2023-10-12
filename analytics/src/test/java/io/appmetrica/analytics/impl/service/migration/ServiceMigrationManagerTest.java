@@ -40,7 +40,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
@@ -84,7 +84,7 @@ public class ServiceMigrationManagerTest extends CommonTest {
     public void defaultConstructor() {
         mMigrationManager = new ServiceMigrationManager();
         mMigrationManager.checkMigration(mContext);
-        verifyZeroInteractions(mPreferencesServiceDbStorage);
+        verifyNoMoreInteractions(mPreferencesServiceDbStorage);
     }
 
     @Test

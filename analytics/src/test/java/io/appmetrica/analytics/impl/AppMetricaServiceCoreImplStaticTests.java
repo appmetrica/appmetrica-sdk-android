@@ -40,7 +40,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
@@ -164,7 +164,7 @@ public class AppMetricaServiceCoreImplStaticTests extends CommonTest {
         mMetricaCore.onStart(intent, startId);
         verify(mReportConsumer).consumeCrash(any(ClientDescription.class), same(counterReport), any(CommonArguments.class));
         verify(secondCallback).onStartFinished(startId);
-        verifyZeroInteractions(mCallback);
+        verifyNoMoreInteractions(mCallback);
     }
 
     @Test
@@ -187,7 +187,7 @@ public class AppMetricaServiceCoreImplStaticTests extends CommonTest {
         mMetricaCore.onStartCommand(intent, 0, startId);
         verify(mReportConsumer).consumeCrash(any(ClientDescription.class), same(counterReport), any(CommonArguments.class));
         verify(secondCallback).onStartFinished(startId);
-        verifyZeroInteractions(mCallback);
+        verifyNoMoreInteractions(mCallback);
     }
 
     private Intent prepareCrashIntent(CounterReport counterReport) {

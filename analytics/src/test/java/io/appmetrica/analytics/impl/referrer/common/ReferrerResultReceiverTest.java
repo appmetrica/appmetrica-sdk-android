@@ -17,7 +17,7 @@ import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 @RunWith(RobolectricTestRunner.class)
 public class ReferrerResultReceiverTest extends CommonTest {
@@ -39,7 +39,7 @@ public class ReferrerResultReceiverTest extends CommonTest {
     @Test
     public void onReceiveResultBadCode() {
         referrerResultReceiver.onReceiveResult(99, new Bundle());
-        verifyZeroInteractions(listener);
+        verifyNoMoreInteractions(listener);
     }
 
     @Test

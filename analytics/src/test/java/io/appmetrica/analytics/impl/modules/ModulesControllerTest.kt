@@ -32,7 +32,7 @@ import org.mockito.kotlin.inOrder
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
-import org.mockito.kotlin.verifyZeroInteractions
+import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
@@ -165,7 +165,7 @@ internal class ModulesControllerTest : CommonTest() {
     @Test
     fun `register module should not register moduleEventHandler if null`() {
         modulesController.registerModule(lightModule)
-        verifyZeroInteractions(moduleEventHandlersHolder)
+        verifyNoMoreInteractions(moduleEventHandlersHolder)
     }
 
     @Test
@@ -410,7 +410,7 @@ internal class ModulesControllerTest : CommonTest() {
     @Test
     fun onStartupChangedWithoutModules() {
         modulesController.onStartupStateChanged(startupState)
-        verifyZeroInteractions(firstModule, secondModule, lightModule)
+        verifyNoMoreInteractions(firstModule, secondModule, lightModule)
     }
 
     @Test

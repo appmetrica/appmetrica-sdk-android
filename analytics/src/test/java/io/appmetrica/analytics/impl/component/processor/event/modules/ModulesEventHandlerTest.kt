@@ -19,7 +19,7 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.inOrder
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
-import org.mockito.kotlin.verifyZeroInteractions
+import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 import java.util.UUID
@@ -100,7 +100,7 @@ class ModulesEventHandlerTest : CommonTest() {
         whenever(firstModuleEventHandler.handle(firstModuleEventHandlerContext, currentReport)).thenReturn(true)
         assertThat(modulesEventHandler.process(currentReport)).isTrue()
         verify(firstModuleEventHandler).handle(firstModuleEventHandlerContext, currentReport)
-        verifyZeroInteractions(secondModuleEventHandler, thirdModuleEventHandler)
+        verifyNoMoreInteractions(secondModuleEventHandler, thirdModuleEventHandler)
     }
 
     @Test
@@ -112,7 +112,7 @@ class ModulesEventHandlerTest : CommonTest() {
             verify(secondModuleEventHandler).handle(secondModuleEventHandlerContext, currentReport)
         }
 
-        verifyZeroInteractions(thirdModuleEventHandler)
+        verifyNoMoreInteractions(thirdModuleEventHandler)
     }
 
     @Test
@@ -120,7 +120,7 @@ class ModulesEventHandlerTest : CommonTest() {
         whenever(modulesEventHandlersHolder.getHandlers(apiKey)).thenReturn(LinkedHashMap())
         modulesEventHandler = ModulesEventHandler(component)
         assertThat(modulesEventHandler.process(currentReport)).isFalse()
-        verifyZeroInteractions(firstModuleEventHandler, secondModuleEventHandler, thirdModuleEventHandler)
+        verifyNoMoreInteractions(firstModuleEventHandler, secondModuleEventHandler, thirdModuleEventHandler)
     }
 
     private fun initEventHandlerContextProvider() {

@@ -20,7 +20,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
@@ -78,13 +78,13 @@ public class ContextReceiverSafeWrapperTest extends CommonTest {
         verify(context).unregisterReceiver(broadcastReceiver);
         clearInvocations(context);
         contextReceiverSafeWrapper.unregisterReceiver(context);
-        verifyZeroInteractions(context);
+        verifyNoMoreInteractions(context);
     }
 
     @Test
     public void doNotUnregisterIfNotRegistered() {
         contextReceiverSafeWrapper.unregisterReceiver(context);
-        verifyZeroInteractions(context);
+        verifyNoMoreInteractions(context);
     }
 
     @Test

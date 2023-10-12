@@ -113,7 +113,7 @@ public class PreloadInfoDataSerializerTest extends CommonTest {
 
     @Test
     public void testDefaultValue() {
-        assertThat(serializer.defaultValue()).isEqualToComparingFieldByFieldRecursively(
+        assertThat(serializer.defaultValue()).usingRecursiveComparison().isEqualTo(
                 new PreloadInfoProto.PreloadInfoData()
         );
     }

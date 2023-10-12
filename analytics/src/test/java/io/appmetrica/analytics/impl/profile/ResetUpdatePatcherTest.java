@@ -18,7 +18,7 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 @RunWith(RobolectricTestRunner.class)
 public class ResetUpdatePatcherTest extends CommonTest {
@@ -76,6 +76,6 @@ public class ResetUpdatePatcherTest extends CommonTest {
         Validator<String> validator = mock(Validator.class);
         doReturn(ValidationResult.failed(validator, "some error")).when(validator).validate(anyString());
         new ResetUpdatePatcher(100, "key", validator, mAttributeSaver).apply(mock(UserProfileStorage.class));
-        verifyZeroInteractions(mAttributeSaver);
+        verifyNoMoreInteractions(mAttributeSaver);
     }
 }

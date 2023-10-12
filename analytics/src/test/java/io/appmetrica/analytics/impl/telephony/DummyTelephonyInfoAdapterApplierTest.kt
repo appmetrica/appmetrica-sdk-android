@@ -4,7 +4,7 @@ import io.appmetrica.analytics.testutils.CommonTest
 import org.junit.Before
 import org.junit.Test
 import org.mockito.kotlin.mock
-import org.mockito.kotlin.verifyZeroInteractions
+import org.mockito.kotlin.verifyNoMoreInteractions
 
 class DummyTelephonyInfoAdapterApplierTest : CommonTest() {
 
@@ -20,6 +20,6 @@ class DummyTelephonyInfoAdapterApplierTest : CommonTest() {
     @Test
     fun applyAdapter() {
         dummyTelephonyInfoAdapterApplier.applyAdapter(adapter)
-        verifyZeroInteractions(adapter)
+        verifyNoMoreInteractions(adapter)
     }
 }

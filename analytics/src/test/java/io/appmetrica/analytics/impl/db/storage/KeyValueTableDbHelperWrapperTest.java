@@ -33,7 +33,7 @@ public class KeyValueTableDbHelperWrapperTest extends CommonTest {
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        wrapper = new KeyValueTableDbHelperWrapper(RuntimeEnvironment.systemContext, StorageType.SERVICE, actualHelper);
+        wrapper = new KeyValueTableDbHelperWrapper(RuntimeEnvironment.getApplication(), StorageType.SERVICE, actualHelper);
     }
 
     @Test

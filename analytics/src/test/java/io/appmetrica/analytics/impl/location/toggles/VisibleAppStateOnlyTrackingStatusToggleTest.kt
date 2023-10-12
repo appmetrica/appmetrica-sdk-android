@@ -12,7 +12,7 @@ import org.junit.runner.RunWith
 import org.mockito.kotlin.clearInvocations
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
-import org.mockito.kotlin.verifyZeroInteractions
+import org.mockito.kotlin.verifyNoMoreInteractions
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
@@ -46,23 +46,23 @@ class VisibleAppStateOnlyTrackingStatusToggleTest : CommonTest() {
         toggle.registerObserver(observer, sticky = false)
 
         toggle.onApplicationStateChanged(ApplicationState.UNKNOWN)
-        verifyZeroInteractions(observer)
+        verifyNoMoreInteractions(observer)
 
         toggle.onApplicationStateChanged(ApplicationState.BACKGROUND)
-        verifyZeroInteractions(observer)
+        verifyNoMoreInteractions(observer)
 
         toggle.onApplicationStateChanged(ApplicationState.VISIBLE)
         verify(observer).onStateChanged(true)
         clearInvocations(observer)
 
         toggle.onApplicationStateChanged(ApplicationState.VISIBLE)
-        verifyZeroInteractions(observer)
+        verifyNoMoreInteractions(observer)
 
         toggle.onApplicationStateChanged(ApplicationState.BACKGROUND)
         verify(observer).onStateChanged(false)
         clearInvocations(observer)
 
         toggle.onApplicationStateChanged(ApplicationState.BACKGROUND)
-        verifyZeroInteractions(observer)
+        verifyNoMoreInteractions(observer)
     }
 }

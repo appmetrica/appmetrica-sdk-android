@@ -38,7 +38,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
@@ -97,8 +97,8 @@ public class PurchaseHistoryResponseListenerImplTest {
                         .build(),
                 null
         );
-        verifyZeroInteractions(billingClient);
-        verifyZeroInteractions(billingInfoManager);
+        verifyNoMoreInteractions(billingClient);
+        verifyNoMoreInteractions(billingInfoManager);
         verify(billingLibraryConnectionHolder).removeListener(purchaseHistoryResponseListener);
     }
 
@@ -110,8 +110,8 @@ public class PurchaseHistoryResponseListenerImplTest {
                         .build(),
                 null
         );
-        verifyZeroInteractions(billingClient);
-        verifyZeroInteractions(billingInfoManager);
+        verifyNoMoreInteractions(billingClient);
+        verifyNoMoreInteractions(billingInfoManager);
         verify(billingLibraryConnectionHolder).removeListener(purchaseHistoryResponseListener);
     }
 
@@ -132,9 +132,9 @@ public class PurchaseHistoryResponseListenerImplTest {
         );
         ArgumentCaptor<Map<String, BillingInfo>> argument = ArgumentCaptor.forClass(Map.class);
         verify(updatePolicy).getBillingInfoToUpdate(eq(billingConfig), argument.capture(), eq(billingInfoManager));
-        assertThat(argument.getValue()).isEqualToComparingFieldByFieldRecursively(getBillingInfoToUpdate(ProductType.SUBS));
+        assertThat(argument.getValue()).usingRecursiveComparison().isEqualTo(getBillingInfoToUpdate(ProductType.SUBS));
 
-        verifyZeroInteractions(billingInfoManager);
+        verifyNoMoreInteractions(billingInfoManager);
         verify(billingLibraryConnectionHolder).addListener(any(SkuDetailsResponseListenerImpl.class));
         verify(billingLibraryConnectionHolder, never()).removeListener(any(SkuDetailsResponseListenerImpl.class));
         verify(billingLibraryConnectionHolder).removeListener(purchaseHistoryResponseListener);
@@ -159,7 +159,7 @@ public class PurchaseHistoryResponseListenerImplTest {
 
         ArgumentCaptor<Map<String, BillingInfo>> captor = ArgumentCaptor.forClass(Map.class);
         verify(billingInfoManager).update(captor.capture());
-        assertThat(captor.getValue()).isEqualToComparingFieldByFieldRecursively(changedHistory);
+        assertThat(captor.getValue()).usingRecursiveComparison().isEqualTo(changedHistory);
     }
 
     @Test
@@ -179,7 +179,7 @@ public class PurchaseHistoryResponseListenerImplTest {
         );
         ArgumentCaptor<Map<String, BillingInfo>> captor = ArgumentCaptor.forClass(Map.class);
         verify(billingInfoManager).update(captor.capture());
-        assertThat(captor.getValue()).isEqualToComparingFieldByFieldRecursively(getBillingInfoToUpdate(ProductType.SUBS));
+        assertThat(captor.getValue()).usingRecursiveComparison().isEqualTo(getBillingInfoToUpdate(ProductType.SUBS));
         verify(billingInfoManager, never()).markFirstInappCheckOccurred();
     }
 
@@ -201,7 +201,7 @@ public class PurchaseHistoryResponseListenerImplTest {
         );
         ArgumentCaptor<Map<String, BillingInfo>> captor = ArgumentCaptor.forClass(Map.class);
         verify(billingInfoManager).update(captor.capture());
-        assertThat(captor.getValue()).isEqualToComparingFieldByFieldRecursively(getBillingInfoToUpdate(ProductType.INAPP));
+        assertThat(captor.getValue()).usingRecursiveComparison().isEqualTo(getBillingInfoToUpdate(ProductType.INAPP));
         verify(billingInfoManager).markFirstInappCheckOccurred();
     }
 
@@ -223,7 +223,7 @@ public class PurchaseHistoryResponseListenerImplTest {
         );
         ArgumentCaptor<Map<String, BillingInfo>> captor = ArgumentCaptor.forClass(Map.class);
         verify(billingInfoManager).update(captor.capture());
-        assertThat(captor.getValue()).isEqualToComparingFieldByFieldRecursively(getBillingInfoToUpdate(ProductType.SUBS));
+        assertThat(captor.getValue()).usingRecursiveComparison().isEqualTo(getBillingInfoToUpdate(ProductType.SUBS));
         verify(billingInfoManager, never()).markFirstInappCheckOccurred();
     }
 

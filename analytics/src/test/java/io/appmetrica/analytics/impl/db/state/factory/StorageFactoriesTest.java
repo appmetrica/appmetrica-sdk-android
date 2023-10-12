@@ -54,6 +54,7 @@ public class StorageFactoriesTest extends CommonTest {
 
     @ParameterizedRobolectricTestRunner.Parameters(name = "{0}")
     public static Collection<Object[]> data() {
+        //noinspection deprecation
         return Arrays.asList(new Object[][]{
                 {
                         StartupStateModel.class, "startup_state", StartupStateSerializer.class, StartupStateConverter.class

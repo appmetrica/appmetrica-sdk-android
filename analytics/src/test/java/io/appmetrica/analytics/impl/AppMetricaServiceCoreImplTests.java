@@ -49,7 +49,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
@@ -246,7 +246,7 @@ public class AppMetricaServiceCoreImplTests extends CommonTest {
     private void testResumeUserSessionForInvalidBundle(Bundle bundle) {
         mMetricaCore.resumeUserSession(bundle);
 
-        verifyZeroInteractions(mApplicationStateProvider);
+        verifyNoMoreInteractions(mApplicationStateProvider);
     }
 
     @Test
@@ -292,7 +292,7 @@ public class AppMetricaServiceCoreImplTests extends CommonTest {
     private void testPauseUserSessionForInvalidBundle(Bundle bundle) {
         mMetricaCore.pauseUserSession(bundle);
 
-        verifyZeroInteractions(mApplicationStateProvider);
+        verifyNoMoreInteractions(mApplicationStateProvider);
     }
 
     @Test
@@ -375,7 +375,7 @@ public class AppMetricaServiceCoreImplTests extends CommonTest {
     private void testOnUnbindDoNotNotifyApplicationStateProvider(String action, String path, Integer pid, String psid) {
         Intent intent = prepareMetricaIntent(action, path, pid, psid);
         mMetricaCore.onUnbind(intent);
-        verifyZeroInteractions(mApplicationStateProvider);
+        verifyNoMoreInteractions(mApplicationStateProvider);
     }
 
     private Intent prepareMetricaIntent(String action, String path, Integer pid, String psid) {

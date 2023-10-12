@@ -15,7 +15,7 @@ import org.robolectric.RobolectricTestRunner;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verifyNoInteractions;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 @RunWith(RobolectricTestRunner.class)
 public class MainReporterStubTest extends ReporterExtendedStubTest {
@@ -57,13 +57,13 @@ public class MainReporterStubTest extends ReporterExtendedStubTest {
     @Test
     public void resumeSessionWithActivity() {
         getStub().resumeSession(activity);
-        verifyZeroInteractions(activity);
+        verifyNoMoreInteractions(activity);
     }
 
     @Test
     public void pauseSessionWithActivity() {
         getStub().pauseSession(activity);
-        verifyZeroInteractions(activity);
+        verifyNoMoreInteractions(activity);
     }
 
     @Test
@@ -84,7 +84,7 @@ public class MainReporterStubTest extends ReporterExtendedStubTest {
     @Test
     public void setLocation() {
         getStub().setLocation(location);
-        verifyZeroInteractions(location);
+        verifyNoMoreInteractions(location);
     }
 
     @Test
@@ -110,7 +110,7 @@ public class MainReporterStubTest extends ReporterExtendedStubTest {
     @Test
     public void onWebViewReportingInit() {
         getStub().onWebViewReportingInit(webViewJsInterfaceHandler);
-        verifyZeroInteractions(webViewJsInterfaceHandler);
+        verifyNoMoreInteractions(webViewJsInterfaceHandler);
     }
 
     @Test

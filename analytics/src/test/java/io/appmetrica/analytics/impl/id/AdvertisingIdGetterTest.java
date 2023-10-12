@@ -31,7 +31,7 @@ import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
@@ -313,7 +313,7 @@ public class AdvertisingIdGetterTest extends CommonTest {
                         "identifiers collecting is forbidden for unknown reason"
                 ))
                 .checkAll();
-        verifyZeroInteractions(yandexAdvIdProvider);
+        verifyNoMoreInteractions(yandexAdvIdProvider);
     }
 
     @Test
@@ -362,7 +362,7 @@ public class AdvertisingIdGetterTest extends CommonTest {
         when(mHuaweiAdvIdProvider.getAdTrackingInfo(mContext)).thenReturn(new AdTrackingInfoResult(null, IdentifierStatus.UNKNOWN, hoaidError));
         when(yandexAdvIdProvider.getAdTrackingInfo(same(mContext), any(RetryStrategy.class))).thenReturn(new AdTrackingInfoResult(null, IdentifierStatus.UNKNOWN, yandexError));
         AdvertisingIdsHolder identifiers = mAdvertisingIdGetter.getIdentifiersForced(mContext);
-        assertThat(identifiers).isEqualToComparingFieldByFieldRecursively(new AdvertisingIdsHolder(
+        assertThat(identifiers).usingRecursiveComparison().isEqualTo(new AdvertisingIdsHolder(
                 new AdTrackingInfoResult(gaidTrackingInfoResult.mAdTrackingInfo, IdentifierStatus.UNKNOWN, gaidError),
                 new AdTrackingInfoResult(hoaidTrackingInfoResult.mAdTrackingInfo, IdentifierStatus.UNKNOWN, hoaidError),
                 new AdTrackingInfoResult(yandexTrackingInfoResult.mAdTrackingInfo, IdentifierStatus.UNKNOWN, yandexError)

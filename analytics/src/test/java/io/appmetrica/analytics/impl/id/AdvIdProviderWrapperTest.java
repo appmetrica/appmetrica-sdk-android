@@ -103,7 +103,7 @@ public class AdvIdProviderWrapperTest extends CommonTest {
                 new AdTrackingInfo(AdTrackingInfo.Provider.GOOGLE, "00000000-0000-0000-0000-000000000000", false),
                 IdentifierStatus.OK, null);
         originalProviderMocker.consume(originalProvider, result);
-        assertThat(methodExecutor.apply(providerWrapper)).isEqualToComparingFieldByFieldRecursively(new AdTrackingInfoResult(
+        assertThat(methodExecutor.apply(providerWrapper)).usingRecursiveComparison().isEqualTo(new AdTrackingInfoResult(
                 null,
                 IdentifierStatus.INVALID_ADV_ID,
                 "AdvId is invalid: 00000000-0000-0000-0000-000000000000"

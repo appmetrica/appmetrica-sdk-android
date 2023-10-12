@@ -17,7 +17,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
-import org.mockito.kotlin.verifyZeroInteractions
+import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.locks.ReentrantLock
@@ -178,7 +178,7 @@ class ConjunctiveCompositeThreadSafeToggleTest : CommonTest() {
 
         toggleObserverCaptor.secondValue.onStateChanged(true)
         verify(firstObserver).onStateChanged(true)
-        verifyZeroInteractions(secondObserver)
+        verifyNoMoreInteractions(secondObserver)
     }
 
     private fun verifyToggleObserversRegistration() {

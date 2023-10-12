@@ -63,7 +63,7 @@ import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
@@ -379,7 +379,7 @@ public class AppMetricaProxyTest extends CommonTest {
         order.verify(mBarrier).setLocation(location);
         order.verify(mSynchronousStageExecutor).setLocation(location);
         order.verify(mProvider).setLocation(location);
-        verifyZeroInteractions(activationValidator);
+        verifyNoMoreInteractions(activationValidator);
     }
 
     @Test
@@ -390,7 +390,7 @@ public class AppMetricaProxyTest extends CommonTest {
         order.verify(mBarrier).setLocationTracking(locationTracking);
         order.verify(mSynchronousStageExecutor).setLocationTracking(locationTracking);
         order.verify(mProvider).setLocationTracking(locationTracking);
-        verifyZeroInteractions(activationValidator);
+        verifyNoMoreInteractions(activationValidator);
     }
 
     @Test
@@ -425,7 +425,7 @@ public class AppMetricaProxyTest extends CommonTest {
         order.verify(mSynchronousStageExecutor).setUserProfileID(userProfileID);
         order.verify(mProvider).setUserProfileID(userProfileID);
         order.verifyNoMoreInteractions();
-        verifyZeroInteractions(activationValidator);
+        verifyNoMoreInteractions(activationValidator);
     }
 
     public void testSetUserProfileIDNonActivated() {
@@ -437,7 +437,7 @@ public class AppMetricaProxyTest extends CommonTest {
         order.verify(mSynchronousStageExecutor).setUserProfileID(userProfileID);
         order.verify(mProvider).setUserProfileID(userProfileID);
         order.verifyNoMoreInteractions();
-        verifyZeroInteractions(activationValidator);
+        verifyNoMoreInteractions(activationValidator);
     }
 
     @Test
@@ -492,7 +492,7 @@ public class AppMetricaProxyTest extends CommonTest {
         inOrder.verify(mBarrier).getReporter(RuntimeEnvironment.getApplication(), apiKey);
         inOrder.verify(contextAppearedListener).onProbablyAppeared(RuntimeEnvironment.getApplication());
         inOrder.verify(mReporterProxyStorage).getOrCreate(RuntimeEnvironment.getApplication(), apiKey);
-        verifyZeroInteractions(activationValidator);
+        verifyNoMoreInteractions(activationValidator);
     }
 
     @Test
@@ -506,7 +506,7 @@ public class AppMetricaProxyTest extends CommonTest {
         order.verify(mBarrier).activateReporter(same(RuntimeEnvironment.getApplication()), syncConfigCaptor.capture());
         order.verify(mSynchronousStageExecutor).activateReporter(same(RuntimeEnvironment.getApplication()), syncConfigCaptor.capture());
         order.verify(mReporterProxyStorage).getOrCreate(same(RuntimeEnvironment.getApplication()), providerConfigCaptor.capture());
-        verifyZeroInteractions(activationValidator);
+        verifyNoMoreInteractions(activationValidator);
         assertThat(syncConfigCaptor.getValue()).isEqualToComparingFieldByField(config);
         assertThat(providerConfigCaptor.getValue()).isEqualToComparingFieldByField(config);
 
@@ -563,7 +563,7 @@ public class AppMetricaProxyTest extends CommonTest {
         order.verify(mBarrier).putErrorEnvironmentValue(key, value);
         order.verify(mSynchronousStageExecutor).putErrorEnvironmentValue(key, value);
         order.verify(mProvider).putErrorEnvironmentValue(key, value);
-        verifyZeroInteractions(activationValidator);
+        verifyNoMoreInteractions(activationValidator);
     }
 
     @Test
@@ -615,7 +615,7 @@ public class AppMetricaProxyTest extends CommonTest {
         order.verify(mBarrier).reportJsInitEvent(value);
         order.verify(mSynchronousStageExecutor).reportJsInitEvent(value);
         order.verify(mMainReporter).reportJsInitEvent(value);
-        verifyZeroInteractions(activationValidator);
+        verifyNoMoreInteractions(activationValidator);
     }
 
     @Test
@@ -628,7 +628,7 @@ public class AppMetricaProxyTest extends CommonTest {
         InOrder order = inOrder(silentActivationValidator, mBarrier);
         order.verify(silentActivationValidator).validate();
         order.verify(mBarrier).reportJsInitEvent(value);
-        verifyZeroInteractions(activationValidator, mSynchronousStageExecutor, mMainReporter);
+        verifyNoMoreInteractions(activationValidator, mSynchronousStageExecutor, mMainReporter);
     }
 
     @Test
@@ -640,7 +640,7 @@ public class AppMetricaProxyTest extends CommonTest {
         mProxy.reportJsInitEvent(value);
         InOrder order = inOrder(silentActivationValidator);
         order.verify(silentActivationValidator).validate();
-        verifyZeroInteractions(activationValidator, mBarrier, mSynchronousStageExecutor, mMainReporter);
+        verifyNoMoreInteractions(activationValidator, mBarrier, mSynchronousStageExecutor, mMainReporter);
     }
 
     @Test
@@ -704,7 +704,7 @@ public class AppMetricaProxyTest extends CommonTest {
         order.verify(mBarrier).setDataSendingEnabled(value);
         order.verify(mSynchronousStageExecutor).setDataSendingEnabled(value);
         order.verify(mProvider).setDataSendingEnabled(value);
-        verifyZeroInteractions(activationValidator);
+        verifyNoMoreInteractions(activationValidator);
     }
 
     private AppMetricaProxy createProxyWithMockedExecutor(@NonNull ICommonExecutor executor) {

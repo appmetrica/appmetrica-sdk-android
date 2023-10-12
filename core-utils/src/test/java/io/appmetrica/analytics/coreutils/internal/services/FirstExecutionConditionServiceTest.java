@@ -17,7 +17,7 @@ import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
@@ -69,7 +69,7 @@ public class FirstExecutionConditionServiceTest {
     public void testTryExecuteShouldNot() {
         when(mFirstExecutionConditionChecker.shouldExecute()).thenReturn(false);
         assertThat(mFirstExecutionHandler.tryExecute(mLaunchDelay)).isFalse();
-        verifyZeroInteractions(mActivationBarrierHelper);
+        verifyNoMoreInteractions(mActivationBarrierHelper);
         verify(mFirstExecutionConditionChecker, never()).setFirstExecutionAlreadyAllowed();
     }
 

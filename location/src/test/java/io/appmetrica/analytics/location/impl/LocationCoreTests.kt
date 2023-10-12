@@ -22,7 +22,7 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.inOrder
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
-import org.mockito.kotlin.verifyZeroInteractions
+import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
@@ -165,7 +165,7 @@ internal class LocationCoreTests : CommonTest() {
         locationCore.registerLastKnownSource(firstLastKnownExtractorProvider)
         locationCore.registerLastKnownSource(secondLastKnownExtractorProvider)
 
-        verifyZeroInteractions(firstLastKnownExtractor, secondLastKnownExtractor)
+        verifyNoMoreInteractions(firstLastKnownExtractor, secondLastKnownExtractor)
 
         locationCore.startLocationTracking()
 
@@ -183,7 +183,7 @@ internal class LocationCoreTests : CommonTest() {
         clearInvocations(firstLocationReceiver, firstLastKnownExtractor)
 
         locationCore.startLocationTracking()
-        verifyZeroInteractions(firstLocationReceiver, firstLastKnownExtractor)
+        verifyNoMoreInteractions(firstLocationReceiver, firstLastKnownExtractor)
     }
 
     @Test
@@ -193,7 +193,7 @@ internal class LocationCoreTests : CommonTest() {
         clearInvocations(firstLastKnownExtractor, secondLastKnownExtractor)
         locationCore.stopLocationTracking()
 
-        verifyZeroInteractions(firstLastKnownExtractor, secondLastKnownExtractor)
+        verifyNoMoreInteractions(firstLastKnownExtractor, secondLastKnownExtractor)
     }
 
     @Test
@@ -204,7 +204,7 @@ internal class LocationCoreTests : CommonTest() {
         clearInvocations(firstLastKnownExtractor, secondLastKnownExtractor)
         locationCore.stopLocationTracking()
 
-        verifyZeroInteractions(firstLastKnownExtractor, secondLastKnownExtractor)
+        verifyNoMoreInteractions(firstLastKnownExtractor, secondLastKnownExtractor)
     }
 
     @Test
@@ -229,7 +229,7 @@ internal class LocationCoreTests : CommonTest() {
         clearInvocations(firstLocationReceiver, secondLocationReceiver)
         locationCore.stopLocationTracking()
 
-        verifyZeroInteractions(firstLocationReceiver, secondLocationReceiver)
+        verifyNoMoreInteractions(firstLocationReceiver, secondLocationReceiver)
     }
 
     @Test
@@ -255,7 +255,7 @@ internal class LocationCoreTests : CommonTest() {
 
         locationCore.stopLocationTracking()
 
-        verifyZeroInteractions(firstLocationReceiver, secondLocationReceiver)
+        verifyNoMoreInteractions(firstLocationReceiver, secondLocationReceiver)
     }
 
     @Test
@@ -276,7 +276,7 @@ internal class LocationCoreTests : CommonTest() {
     @Test
     fun `unregisterLastKnownSource for absent`() {
         locationCore.unregisterLastKnownSource(firstLastKnownExtractorProvider)
-        verifyZeroInteractions(firstLastKnownExtractor)
+        verifyNoMoreInteractions(firstLastKnownExtractor)
     }
 
     @Test
@@ -287,7 +287,7 @@ internal class LocationCoreTests : CommonTest() {
         locationCore.updateLastKnown()
 
         verify(secondLastKnownExtractor).updateLastKnownLocation()
-        verifyZeroInteractions(firstLastKnownExtractor)
+        verifyNoMoreInteractions(firstLastKnownExtractor)
     }
 
     @Test
@@ -305,7 +305,7 @@ internal class LocationCoreTests : CommonTest() {
         locationCore.registerLocationReceiver(firstLocationReceiverWithSameIdentifierProvider)
         locationCore.registerLocationReceiver(secondLocationReceiverProvider)
 
-        verifyZeroInteractions(firstLocationReceiver, secondLocationReceiver)
+        verifyNoMoreInteractions(firstLocationReceiver, secondLocationReceiver)
     }
 
     @Test
@@ -335,7 +335,7 @@ internal class LocationCoreTests : CommonTest() {
         verify(firstLocationReceiverWithSameIdentifier).startLocationUpdates()
         verify(secondLocationReceiver).startLocationUpdates()
 
-        verifyZeroInteractions(firstLocationReceiver)
+        verifyNoMoreInteractions(firstLocationReceiver)
     }
 
     @Test
@@ -348,7 +348,7 @@ internal class LocationCoreTests : CommonTest() {
         locationCore.unregisterLocationReceiver(firstLocationReceiverWithSameIdentifierProvider)
         locationCore.unregisterLocationReceiver(secondLocationReceiverProvider)
 
-        verifyZeroInteractions(firstLocationReceiver, firstLocationReceiverWithSameIdentifier, secondLocationReceiver)
+        verifyNoMoreInteractions(firstLocationReceiver, firstLocationReceiverWithSameIdentifier, secondLocationReceiver)
     }
 
     @Test
@@ -368,7 +368,7 @@ internal class LocationCoreTests : CommonTest() {
         verify(firstLocationReceiverWithSameIdentifier).stopLocationUpdates()
         verify(secondLocationReceiver).stopLocationUpdates()
 
-        verifyZeroInteractions(firstLocationReceiver)
+        verifyNoMoreInteractions(firstLocationReceiver)
     }
 
     @Test
@@ -389,7 +389,7 @@ internal class LocationCoreTests : CommonTest() {
 
         locationCore.updateConfig(locationConfig)
 
-        verifyZeroInteractions(locationStreamDispatcher)
+        verifyNoMoreInteractions(locationStreamDispatcher)
         verify(executor).execute(runnableCaptor.capture())
 
         assertThat(runnableCaptor.allValues).hasSize(1)

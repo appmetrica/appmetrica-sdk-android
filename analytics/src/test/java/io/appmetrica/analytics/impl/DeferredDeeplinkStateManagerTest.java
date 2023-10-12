@@ -16,7 +16,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 @RunWith(RobolectricTestRunner.class)
 public class DeferredDeeplinkStateManagerTest extends CommonTest {
@@ -79,13 +79,13 @@ public class DeferredDeeplinkStateManagerTest extends CommonTest {
     @Test
     public void requestDeferredDeeplinkNoSavedState() {
         mDeferredDeeplinkStateManager.requestDeferredDeeplink(mDeeplinkListener);
-        verifyZeroInteractions(mDeeplinkListener);
+        verifyNoMoreInteractions(mDeeplinkListener);
     }
 
     @Test
     public void requestDeferredDeeplinkParametersNoSavedState() {
         mDeferredDeeplinkStateManager.requestDeferredDeeplinkParameters(mDeeplinkParametersListener);
-        verifyZeroInteractions(mDeeplinkParametersListener);
+        verifyNoMoreInteractions(mDeeplinkParametersListener);
     }
 
     @Test
@@ -158,7 +158,7 @@ public class DeferredDeeplinkStateManagerTest extends CommonTest {
         mDeferredDeeplinkStateManager.requestDeferredDeeplink(mDeeplinkListener);
         mDeferredDeeplinkStateManager.onDeeplinkLoaded(mValidState);
         verify(mDeeplinkListener).onDeeplinkLoaded(mValidDeeplink);
-        verifyZeroInteractions(mDeeplinkParametersListener);
+        verifyNoMoreInteractions(mDeeplinkParametersListener);
     }
 
     @Test
@@ -166,14 +166,14 @@ public class DeferredDeeplinkStateManagerTest extends CommonTest {
         mDeferredDeeplinkStateManager.requestDeferredDeeplinkParameters(mDeeplinkParametersListener);
         mDeferredDeeplinkStateManager.onDeeplinkLoaded(mValidState);
         verify(mDeeplinkParametersListener).onParametersLoaded(mValidParameters);
-        verifyZeroInteractions(mDeeplinkListener);
+        verifyNoMoreInteractions(mDeeplinkListener);
     }
 
     @Test
     public void onValidDeeplinkLoadedNoListeners() {
         mDeferredDeeplinkStateManager.onDeeplinkLoaded(mValidState);
-        verifyZeroInteractions(mDeeplinkListener);
-        verifyZeroInteractions(mDeeplinkParametersListener);
+        verifyNoMoreInteractions(mDeeplinkListener);
+        verifyNoMoreInteractions(mDeeplinkParametersListener);
     }
 
     @Test
@@ -190,7 +190,7 @@ public class DeferredDeeplinkStateManagerTest extends CommonTest {
         mDeferredDeeplinkStateManager.requestDeferredDeeplink(mDeeplinkListener);
         mDeferredDeeplinkStateManager.onDeeplinkLoaded(mStateWithoutDeeplink);
         verify(mDeeplinkListener).onError(DeferredDeeplinkListener.Error.PARSE_ERROR, mUnparsedReferrer);
-        verifyZeroInteractions(mDeeplinkParametersListener);
+        verifyNoMoreInteractions(mDeeplinkParametersListener);
     }
 
     @Test
@@ -199,14 +199,14 @@ public class DeferredDeeplinkStateManagerTest extends CommonTest {
         mDeferredDeeplinkStateManager.requestDeferredDeeplinkParameters(mDeeplinkParametersListener);
         mDeferredDeeplinkStateManager.onDeeplinkLoaded(mStateWithoutDeeplink);
         verify(mDeeplinkParametersListener).onError(DeferredDeeplinkParametersListener.Error.PARSE_ERROR, mUnparsedReferrer);
-        verifyZeroInteractions(mDeeplinkListener);
+        verifyNoMoreInteractions(mDeeplinkListener);
     }
 
     @Test
     public void onErrorNoListeners() {
         mDeferredDeeplinkStateManager.onDeeplinkLoaded(mStateWithoutDeeplink);
-        verifyZeroInteractions(mDeeplinkParametersListener);
-        verifyZeroInteractions(mDeeplinkListener);
+        verifyNoMoreInteractions(mDeeplinkParametersListener);
+        verifyNoMoreInteractions(mDeeplinkListener);
     }
 
     @Test

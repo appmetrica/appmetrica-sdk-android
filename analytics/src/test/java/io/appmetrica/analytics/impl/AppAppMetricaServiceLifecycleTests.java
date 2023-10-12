@@ -19,7 +19,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
@@ -102,7 +102,7 @@ public class AppAppMetricaServiceLifecycleTests extends CommonTest {
     public void testFirstClientConnectObserverOnBindMetricaClientAction() {
         mAppMetricaServiceLifecycle.addFirstClientConnectObserver(mObserver);
         mAppMetricaServiceLifecycle.onBind(prepareIntentWithClientActionAndMetricaProcess());
-        verifyZeroInteractions(mObserver);
+        verifyNoMoreInteractions(mObserver);
     }
 
     @Test
@@ -125,7 +125,7 @@ public class AppAppMetricaServiceLifecycleTests extends CommonTest {
     public void testFirstClientConnectObserverOnRebindMetricaClientAction() {
         mAppMetricaServiceLifecycle.addFirstClientConnectObserver(mObserver);
         mAppMetricaServiceLifecycle.onRebind(prepareIntentWithClientActionAndMetricaProcess());
-        verifyZeroInteractions(mObserver);
+        verifyNoMoreInteractions(mObserver);
     }
 
     @Test
@@ -149,7 +149,7 @@ public class AppAppMetricaServiceLifecycleTests extends CommonTest {
         mAppMetricaServiceLifecycle.onBind(prepareIntentWithClientActionAndMetricaProcess());
         mAppMetricaServiceLifecycle.addFirstClientConnectObserver(mObserver);
         mAppMetricaServiceLifecycle.onBind(prepareIntentWithClientActionAndMetricaProcess());
-        verifyZeroInteractions(mObserver);
+        verifyNoMoreInteractions(mObserver);
     }
 
     @Test
@@ -157,7 +157,7 @@ public class AppAppMetricaServiceLifecycleTests extends CommonTest {
         mAppMetricaServiceLifecycle.onBind(prepareIntentWithClientActionAndNonMetricaProcess());
         mAppMetricaServiceLifecycle.addFirstClientConnectObserver(mObserver);
         mAppMetricaServiceLifecycle.onBind(prepareIntentWithClientActionAndNonMetricaProcess());
-        verifyZeroInteractions(mObserver);
+        verifyNoMoreInteractions(mObserver);
     }
 
     @Test
@@ -165,7 +165,7 @@ public class AppAppMetricaServiceLifecycleTests extends CommonTest {
         mAppMetricaServiceLifecycle.onBind(prepareIntentWithClientActionAndNonMetricaProcess());
         mAppMetricaServiceLifecycle.addFirstClientConnectObserver(mObserver);
         mAppMetricaServiceLifecycle.onBind(prepareIntentWithClientActionAndMetricaProcess());
-        verifyZeroInteractions(mObserver);
+        verifyNoMoreInteractions(mObserver);
     }
 
     @Test
@@ -190,7 +190,7 @@ public class AppAppMetricaServiceLifecycleTests extends CommonTest {
         mAppMetricaServiceLifecycle.onRebind(prepareIntentWithClientActionAndMetricaProcess());
         mAppMetricaServiceLifecycle.addFirstClientConnectObserver(mObserver);
         mAppMetricaServiceLifecycle.onRebind(prepareIntentWithClientActionAndMetricaProcess());
-        verifyZeroInteractions(mObserver);
+        verifyNoMoreInteractions(mObserver);
     }
 
     @Test
@@ -198,7 +198,7 @@ public class AppAppMetricaServiceLifecycleTests extends CommonTest {
         mAppMetricaServiceLifecycle.onRebind(prepareIntentWithClientActionAndNonMetricaProcess());
         mAppMetricaServiceLifecycle.addFirstClientConnectObserver(mObserver);
         mAppMetricaServiceLifecycle.onRebind(prepareIntentWithClientActionAndNonMetricaProcess());
-        verifyZeroInteractions(mObserver);
+        verifyNoMoreInteractions(mObserver);
     }
 
     @Test
@@ -206,7 +206,7 @@ public class AppAppMetricaServiceLifecycleTests extends CommonTest {
         mAppMetricaServiceLifecycle.onRebind(prepareIntentWithClientActionAndNonMetricaProcess());
         mAppMetricaServiceLifecycle.addFirstClientConnectObserver(mObserver);
         mAppMetricaServiceLifecycle.onRebind(prepareIntentWithClientActionAndMetricaProcess());
-        verifyZeroInteractions(mObserver);
+        verifyNoMoreInteractions(mObserver);
     }
 
     @Test
@@ -223,7 +223,7 @@ public class AppAppMetricaServiceLifecycleTests extends CommonTest {
         mAppMetricaServiceLifecycle.onRebind(prepareIntentWithClientActionAndMetricaProcess());
         mAppMetricaServiceLifecycle.addFirstClientConnectObserver(mObserver);
         mAppMetricaServiceLifecycle.onBind(prepareIntentWithClientActionAndMetricaProcess());
-        verifyZeroInteractions(mObserver);
+        verifyNoMoreInteractions(mObserver);
     }
 
     @Test
@@ -231,7 +231,7 @@ public class AppAppMetricaServiceLifecycleTests extends CommonTest {
         mAppMetricaServiceLifecycle.onBind(prepareIntentWithClientActionAndMetricaProcess());
         mAppMetricaServiceLifecycle.addFirstClientConnectObserver(mObserver);
         mAppMetricaServiceLifecycle.onRebind(prepareIntentWithClientActionAndMetricaProcess());
-        verifyZeroInteractions(mObserver);
+        verifyNoMoreInteractions(mObserver);
     }
 
     @Test
@@ -239,7 +239,7 @@ public class AppAppMetricaServiceLifecycleTests extends CommonTest {
         mAppMetricaServiceLifecycle.onRebind(prepareIntentWithClientActionAndNonMetricaProcess());
         mAppMetricaServiceLifecycle.addFirstClientConnectObserver(mObserver);
         mAppMetricaServiceLifecycle.onBind(prepareIntentWithClientActionAndNonMetricaProcess());
-        verifyZeroInteractions(mObserver);
+        verifyNoMoreInteractions(mObserver);
     }
 
     @Test
@@ -247,7 +247,7 @@ public class AppAppMetricaServiceLifecycleTests extends CommonTest {
         mAppMetricaServiceLifecycle.onBind(prepareIntentWithClientActionAndNonMetricaProcess());
         mAppMetricaServiceLifecycle.addFirstClientConnectObserver(mObserver);
         mAppMetricaServiceLifecycle.onRebind(prepareIntentWithClientActionAndNonMetricaProcess());
-        verifyZeroInteractions(mObserver);
+        verifyNoMoreInteractions(mObserver);
     }
 
     @Test
@@ -264,7 +264,7 @@ public class AppAppMetricaServiceLifecycleTests extends CommonTest {
         mAppMetricaServiceLifecycle.onRebind(prepareIntentWithClientActionAndNonMetricaProcess());
         mAppMetricaServiceLifecycle.addFirstClientConnectObserver(mObserver);
         mAppMetricaServiceLifecycle.onBind(prepareIntentWithClientActionAndMetricaProcess());
-        verifyZeroInteractions(mObserver);
+        verifyNoMoreInteractions(mObserver);
     }
 
     @Test
@@ -281,7 +281,7 @@ public class AppAppMetricaServiceLifecycleTests extends CommonTest {
         mAppMetricaServiceLifecycle.onBind(prepareIntentWithClientActionAndNonMetricaProcess());
         mAppMetricaServiceLifecycle.addFirstClientConnectObserver(mObserver);
         mAppMetricaServiceLifecycle.onRebind(prepareIntentWithClientActionAndMetricaProcess());
-        verifyZeroInteractions(mObserver);
+        verifyNoMoreInteractions(mObserver);
     }
 
     @Test
@@ -309,14 +309,14 @@ public class AppAppMetricaServiceLifecycleTests extends CommonTest {
     public void testFirstClientConnectObserverOnUnbindMetricaClientAction() {
         mAppMetricaServiceLifecycle.addFirstClientConnectObserver(mObserver);
         mAppMetricaServiceLifecycle.onUnbind(prepareIntentWithClientActionAndMetricaProcess());
-        verifyZeroInteractions(mObserver);
+        verifyNoMoreInteractions(mObserver);
     }
 
     @Test
     public void testFirstClientConnectObserverOnUnbindNonMetricaClientAction() {
         mAppMetricaServiceLifecycle.addFirstClientConnectObserver(mObserver);
         mAppMetricaServiceLifecycle.onUnbind(prepareIntentWithClientActionAndNonMetricaProcess());
-        verifyZeroInteractions(mObserver);
+        verifyNoMoreInteractions(mObserver);
     }
 
     @Test
@@ -339,7 +339,7 @@ public class AppAppMetricaServiceLifecycleTests extends CommonTest {
         mAppMetricaServiceLifecycle.addNewClientConnectObserver(mObserver);
         Intent intent = prepareIntentWithClientActionAndMetricaProcess();
         mAppMetricaServiceLifecycle.onBind(intent);
-        verifyZeroInteractions(mObserver);
+        verifyNoMoreInteractions(mObserver);
     }
 
     @Test
@@ -362,7 +362,7 @@ public class AppAppMetricaServiceLifecycleTests extends CommonTest {
     public void testNewClientConnectObserverOnRebindMetricaClientAction() {
         mAppMetricaServiceLifecycle.addNewClientConnectObserver(mObserver);
         mAppMetricaServiceLifecycle.onRebind(prepareIntentWithClientActionAndMetricaProcess());
-        verifyZeroInteractions(mObserver);
+        verifyNoMoreInteractions(mObserver);
     }
 
     @Test
@@ -388,7 +388,7 @@ public class AppAppMetricaServiceLifecycleTests extends CommonTest {
         mAppMetricaServiceLifecycle.onBind(intent);
         mAppMetricaServiceLifecycle.addNewClientConnectObserver(mObserver);
         mAppMetricaServiceLifecycle.onBind(intent);
-        verifyZeroInteractions(mObserver);
+        verifyNoMoreInteractions(mObserver);
     }
 
     @Test
@@ -414,7 +414,7 @@ public class AppAppMetricaServiceLifecycleTests extends CommonTest {
         mAppMetricaServiceLifecycle.onRebind(prepareIntentWithClientActionAndMetricaProcess());
         mAppMetricaServiceLifecycle.addNewClientConnectObserver(mObserver);
         mAppMetricaServiceLifecycle.onRebind(prepareIntentWithClientActionAndMetricaProcess());
-        verifyZeroInteractions(mObserver);
+        verifyNoMoreInteractions(mObserver);
     }
 
     @Test
@@ -441,7 +441,7 @@ public class AppAppMetricaServiceLifecycleTests extends CommonTest {
         Intent intent = prepareIntentWithClientActionAndMetricaProcess();
         mAppMetricaServiceLifecycle.onBind(intent);
         mAppMetricaServiceLifecycle.onBind(intent);
-        verifyZeroInteractions(mObserver);
+        verifyNoMoreInteractions(mObserver);
     }
 
     @Test
@@ -467,7 +467,7 @@ public class AppAppMetricaServiceLifecycleTests extends CommonTest {
         mAppMetricaServiceLifecycle.addNewClientConnectObserver(mObserver);
         mAppMetricaServiceLifecycle.onRebind(prepareIntentWithClientActionAndMetricaProcess());
         mAppMetricaServiceLifecycle.onRebind(prepareIntentWithClientActionAndMetricaProcess());
-        verifyZeroInteractions(mObserver);
+        verifyNoMoreInteractions(mObserver);
     }
 
     @Test
@@ -504,14 +504,14 @@ public class AppAppMetricaServiceLifecycleTests extends CommonTest {
     public void testNewClientConnectObserverOnUnbindMetricaClientAction() {
         mAppMetricaServiceLifecycle.addNewClientConnectObserver(mObserver);
         mAppMetricaServiceLifecycle.onUnbind(prepareIntentWithClientActionAndMetricaProcess());
-        verifyZeroInteractions(mObserver);
+        verifyNoMoreInteractions(mObserver);
     }
 
     @Test
     public void testNewClientConnectObserverOnUnbindNonMetricaClientAction() {
         mAppMetricaServiceLifecycle.addNewClientConnectObserver(mObserver);
         mAppMetricaServiceLifecycle.onUnbind(prepareIntentWithClientActionAndNonMetricaProcess());
-        verifyZeroInteractions(mObserver);
+        verifyNoMoreInteractions(mObserver);
     }
 
     @Test
@@ -532,14 +532,14 @@ public class AppAppMetricaServiceLifecycleTests extends CommonTest {
     public void testAllClientDisconnectObserverOnBindMetricaClientAction() {
         mAppMetricaServiceLifecycle.addAllClientDisconnectedObserver(mObserver);
         mAppMetricaServiceLifecycle.onBind(prepareIntentWithClientActionAndMetricaProcess());
-        verifyZeroInteractions(mObserver);
+        verifyNoMoreInteractions(mObserver);
     }
 
     @Test
     public void testAllClientDisconnectObserverOnBindNonMetricaClientAction() {
         mAppMetricaServiceLifecycle.addAllClientDisconnectedObserver(mObserver);
         mAppMetricaServiceLifecycle.onBind(prepareIntentWithClientActionAndNonMetricaProcess());
-        verifyZeroInteractions(mObserver);
+        verifyNoMoreInteractions(mObserver);
     }
 
     @Test
@@ -553,14 +553,14 @@ public class AppAppMetricaServiceLifecycleTests extends CommonTest {
     public void testAllClientDisconnectObserverOnRebindMetricaClientAction() {
         mAppMetricaServiceLifecycle.addAllClientDisconnectedObserver(mObserver);
         mAppMetricaServiceLifecycle.onRebind(prepareIntentWithClientActionAndMetricaProcess());
-        verifyZeroInteractions(mObserver);
+        verifyNoMoreInteractions(mObserver);
     }
 
     @Test
     public void testAllClientDisconnectObserverOnRebindNonMetricaClientAction() {
         mAppMetricaServiceLifecycle.addAllClientDisconnectedObserver(mObserver);
         mAppMetricaServiceLifecycle.onRebind(prepareIntentWithClientActionAndNonMetricaProcess());
-        verifyZeroInteractions(mObserver);
+        verifyNoMoreInteractions(mObserver);
     }
 
     @Test
@@ -596,7 +596,7 @@ public class AppAppMetricaServiceLifecycleTests extends CommonTest {
     public void testAllClientDisconnectObserverOnUnbindMetricaClientAction() {
         mAppMetricaServiceLifecycle.addAllClientDisconnectedObserver(mObserver);
         mAppMetricaServiceLifecycle.onUnbind(prepareIntentWithClientActionAndMetricaProcess());
-        verifyZeroInteractions(mObserver);
+        verifyNoMoreInteractions(mObserver);
     }
 
     @Test
@@ -621,7 +621,7 @@ public class AppAppMetricaServiceLifecycleTests extends CommonTest {
         mAppMetricaServiceLifecycle.addAllClientDisconnectedObserver(mObserver);
         mAppMetricaServiceLifecycle.onBind(prepareIntentWithClientActionAndMetricaProcess());
         mAppMetricaServiceLifecycle.onUnbind(prepareIntentWithClientActionAndMetricaProcess());
-        verifyZeroInteractions(mObserver);
+        verifyNoMoreInteractions(mObserver);
     }
 
     @Test
@@ -647,7 +647,7 @@ public class AppAppMetricaServiceLifecycleTests extends CommonTest {
         mAppMetricaServiceLifecycle.addAllClientDisconnectedObserver(mObserver);
         mAppMetricaServiceLifecycle.onRebind(prepareIntentWithClientActionAndMetricaProcess());
         mAppMetricaServiceLifecycle.onUnbind(prepareIntentWithClientActionAndMetricaProcess());
-        verifyZeroInteractions(mObserver);
+        verifyNoMoreInteractions(mObserver);
     }
 
     @Test
@@ -674,7 +674,7 @@ public class AppAppMetricaServiceLifecycleTests extends CommonTest {
         mAppMetricaServiceLifecycle.onBind(prepareIntentWithClientActionAndMetricaProcess());
         mAppMetricaServiceLifecycle.onBind(prepareIntentWithClientActionAndMetricaProcess());
         mAppMetricaServiceLifecycle.onUnbind(prepareIntentWithClientActionAndMetricaProcess());
-        verifyZeroInteractions(mObserver);
+        verifyNoMoreInteractions(mObserver);
     }
 
     @Test
@@ -683,7 +683,7 @@ public class AppAppMetricaServiceLifecycleTests extends CommonTest {
         mAppMetricaServiceLifecycle.onBind(prepareIntentWithClientActionAndNonMetricaProcess());
         mAppMetricaServiceLifecycle.onBind(prepareIntentWithClientActionAndNonMetricaProcess());
         mAppMetricaServiceLifecycle.onUnbind(prepareIntentWithClientActionAndNonMetricaProcess());
-        verifyZeroInteractions(mObserver);
+        verifyNoMoreInteractions(mObserver);
     }
 
     @Test
@@ -704,7 +704,7 @@ public class AppAppMetricaServiceLifecycleTests extends CommonTest {
         mAppMetricaServiceLifecycle.onRebind(prepareIntentWithClientActionAndMetricaProcess());
         mAppMetricaServiceLifecycle.onUnbind(prepareIntentWithClientActionAndMetricaProcess());
         mAppMetricaServiceLifecycle.onUnbind(prepareIntentWithClientActionAndMetricaProcess());
-        verifyZeroInteractions(mObserver);
+        verifyNoMoreInteractions(mObserver);
     }
 
     @Test
@@ -728,7 +728,7 @@ public class AppAppMetricaServiceLifecycleTests extends CommonTest {
         mAppMetricaServiceLifecycle.onUnbind(prepareIntentWithClientActionAndMetricaProcess());
         mAppMetricaServiceLifecycle.onUnbind(prepareIntentWithClientActionAndMetricaProcess());
         mAppMetricaServiceLifecycle.onUnbind(prepareIntentWithClientActionAndNonMetricaProcess());
-        verifyZeroInteractions(mObserver);
+        verifyNoMoreInteractions(mObserver);
     }
 
     @Test

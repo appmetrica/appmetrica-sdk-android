@@ -68,7 +68,7 @@ public class ReadAndReportRunnableTest extends CommonTest {
         readAndReportRunnable.run();
         ArgumentCaptor<JvmCrash> newCrash = ArgumentCaptor.forClass(JvmCrash.class);
         verify(crashConsumer).consume(newCrash.capture());
-        assertThat(crash).isEqualToComparingFieldByFieldRecursively(newCrash.getValue());
+        assertThat(crash).usingRecursiveComparison().isEqualTo(newCrash.getValue());
     }
 
     @Test

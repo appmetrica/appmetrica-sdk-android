@@ -64,7 +64,7 @@ public class FileLockerTest extends CommonTest {
 
     @Before
     public void setUp() {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
         context = RuntimeEnvironment.getApplication();
         when(FileUtils.getFileFromSdkStorage(context, name + ".lock")).thenReturn(lockFile);
         mDbFileLock = new FileLocker(RuntimeEnvironment.getApplication(), name);

@@ -14,7 +14,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 public class ReferrerManagerTest extends CommonTest {
 
@@ -71,7 +71,7 @@ public class ReferrerManagerTest extends CommonTest {
         ReferrerInfo referrerInfo = mock(ReferrerInfo.class);
         referrerManager.addOneShotListener(firstReferrerChosenListener);
         referrerManager.addOneShotListener(secondReferrerChosenListener);
-        verifyZeroInteractions(firstReferrerChosenListener, secondReferrerChosenListener);
+        verifyNoMoreInteractions(firstReferrerChosenListener, secondReferrerChosenListener);
         referrerManager.handleReferrer(referrerInfo);
         verify(firstReferrerChosenListener).onReferrerChosen(referrerInfo);
         verify(secondReferrerChosenListener).onReferrerChosen(referrerInfo);
@@ -81,7 +81,7 @@ public class ReferrerManagerTest extends CommonTest {
     public void addTwoListenersThenHandleNullReferrer() {
         referrerManager.addOneShotListener(firstReferrerChosenListener);
         referrerManager.addOneShotListener(secondReferrerChosenListener);
-        verifyZeroInteractions(firstReferrerChosenListener, secondReferrerChosenListener);
+        verifyNoMoreInteractions(firstReferrerChosenListener, secondReferrerChosenListener);
         referrerManager.handleReferrer(null);
         verify(firstReferrerChosenListener).onReferrerChosen(null);
         verify(secondReferrerChosenListener).onReferrerChosen(null);
@@ -91,7 +91,7 @@ public class ReferrerManagerTest extends CommonTest {
     public void addOneListenerHandleReferrerAndAddAnother() {
         ReferrerInfo referrerInfo = mock(ReferrerInfo.class);
         referrerManager.addOneShotListener(firstReferrerChosenListener);
-        verifyZeroInteractions(firstReferrerChosenListener);
+        verifyNoMoreInteractions(firstReferrerChosenListener);
         referrerManager.handleReferrer(referrerInfo);
         verify(firstReferrerChosenListener).onReferrerChosen(referrerInfo);
         referrerManager.addOneShotListener(secondReferrerChosenListener);
@@ -102,7 +102,7 @@ public class ReferrerManagerTest extends CommonTest {
     public void handleReferrerTwice() {
         ReferrerInfo referrerInfo = mock(ReferrerInfo.class);
         referrerManager.addOneShotListener(firstReferrerChosenListener);
-        verifyZeroInteractions(firstReferrerChosenListener);
+        verifyNoMoreInteractions(firstReferrerChosenListener);
         referrerManager.handleReferrer(referrerInfo);
         referrerManager.handleReferrer(referrerInfo);
         verify(firstReferrerChosenListener, times(1)).onReferrerChosen(referrerInfo);
@@ -112,7 +112,7 @@ public class ReferrerManagerTest extends CommonTest {
     public void handleReferrerTwiceFirstIsNull() {
         ReferrerInfo referrerInfo = mock(ReferrerInfo.class);
         referrerManager.addOneShotListener(firstReferrerChosenListener);
-        verifyZeroInteractions(firstReferrerChosenListener);
+        verifyNoMoreInteractions(firstReferrerChosenListener);
         referrerManager.handleReferrer(null);
         referrerManager.handleReferrer(referrerInfo);
         verify(firstReferrerChosenListener, times(1)).onReferrerChosen(null);

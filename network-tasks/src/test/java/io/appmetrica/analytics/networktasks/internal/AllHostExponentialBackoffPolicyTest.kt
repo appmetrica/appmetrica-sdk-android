@@ -5,7 +5,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
-import org.mockito.kotlin.verifyZeroInteractions
+import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
 
 class AllHostExponentialBackoffPolicyTest : CommonTest() {
@@ -22,7 +22,7 @@ class AllHostExponentialBackoffPolicyTest : CommonTest() {
 
     private fun onHostAttemptFinished(success: Boolean) {
         policy.onHostAttemptFinished(success)
-        verifyZeroInteractions(dataHolder)
+        verifyNoMoreInteractions(dataHolder)
     }
 
     @Test

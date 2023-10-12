@@ -9,7 +9,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.kotlin.mock
-import org.mockito.kotlin.verifyZeroInteractions
+import org.mockito.kotlin.verifyNoMoreInteractions
 
 class LocationApiStubTest : CommonTest() {
 
@@ -50,13 +50,13 @@ class LocationApiStubTest : CommonTest() {
     @Test
     fun registerWakelock() {
         locationApiStub.registerWakelock(wakelock)
-        verifyZeroInteractions(wakelock)
+        verifyNoMoreInteractions(wakelock)
     }
 
     @Test
     fun removeWakelock() {
         locationApiStub.removeWakelock(wakelock)
-        verifyZeroInteractions(wakelock)
+        verifyNoMoreInteractions(wakelock)
     }
 
     @Test
@@ -67,31 +67,31 @@ class LocationApiStubTest : CommonTest() {
     @Test
     fun registerControllerObserver() {
         locationApiStub.registerControllerObserver(locationControllerObserver)
-        verifyZeroInteractions(locationControllerObserver)
+        verifyNoMoreInteractions(locationControllerObserver)
     }
 
     @Test
     fun `registerSource for last known`() {
         locationApiStub.registerSource(lastKnownLocationExtractorProvider)
-        verifyZeroInteractions(lastKnownLocationExtractorProvider)
+        verifyNoMoreInteractions(lastKnownLocationExtractorProvider)
     }
 
     @Test
     fun `unregisterSource for last known`() {
         locationApiStub.unregisterSource(lastKnownLocationExtractorProvider)
-        verifyZeroInteractions(lastKnownLocationExtractorProvider)
+        verifyNoMoreInteractions(lastKnownLocationExtractorProvider)
     }
 
     @Test
     fun `registerSource for receiver`() {
         locationApiStub.registerSource(locationReceiverProvider)
-        verifyZeroInteractions(locationReceiverProvider)
+        verifyNoMoreInteractions(locationReceiverProvider)
     }
 
     @Test
     fun `unregisterSource for receiver`() {
         locationApiStub.unregisterSource(locationReceiverProvider)
-        verifyZeroInteractions(locationReceiverProvider)
+        verifyNoMoreInteractions(locationReceiverProvider)
     }
 
     @Test
@@ -127,6 +127,6 @@ class LocationApiStubTest : CommonTest() {
     @Test
     fun updateLocationFilter() {
         locationApiStub.updateLocationFilter(locationFilter)
-        verifyZeroInteractions(locationFilter)
+        verifyNoMoreInteractions(locationFilter)
     }
 }

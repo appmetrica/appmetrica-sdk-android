@@ -12,7 +12,7 @@ import org.robolectric.RobolectricTestRunner;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 @RunWith(RobolectricTestRunner.class)
 public class LocationListenerWrapperTest extends CommonTest {
@@ -30,7 +30,7 @@ public class LocationListenerWrapperTest extends CommonTest {
     @Test
     public void testOnLocationChangedNull() {
         mLocationListenerWrapper.onLocationChanged((Location) null);
-        verifyZeroInteractions(mLocationStreamDispatcher);
+        verifyNoMoreInteractions(mLocationStreamDispatcher);
     }
 
     @Test
@@ -43,18 +43,18 @@ public class LocationListenerWrapperTest extends CommonTest {
     @Test
     public void testOnStatusChanged() {
         mLocationListenerWrapper.onStatusChanged("gps", 0, mock(Bundle.class));
-        verifyZeroInteractions(mLocationStreamDispatcher);
+        verifyNoMoreInteractions(mLocationStreamDispatcher);
     }
 
     @Test
     public void testOnProviderEnabled() {
         mLocationListenerWrapper.onProviderEnabled("network");
-        verifyZeroInteractions(mLocationStreamDispatcher);
+        verifyNoMoreInteractions(mLocationStreamDispatcher);
     }
 
     @Test
     public void testOnProviderDisabled() {
         mLocationListenerWrapper.onProviderDisabled("network");
-        verifyZeroInteractions(mLocationStreamDispatcher);
+        verifyNoMoreInteractions(mLocationStreamDispatcher);
     }
 }

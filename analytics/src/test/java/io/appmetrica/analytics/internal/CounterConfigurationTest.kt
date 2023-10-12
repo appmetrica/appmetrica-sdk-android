@@ -177,7 +177,7 @@ class CounterConfigurationTest : CommonTest() {
     fun writeManualLocation() {
         val location = DummyLocationProvider.getLocation()
         counterConfiguration.manualLocation = location
-        assertThat(counterConfiguration.manualLocation).isEqualToComparingFieldByFieldRecursively(location)
+        assertThat(counterConfiguration.manualLocation).usingRecursiveComparison().isEqualTo(location)
     }
 
     @Test

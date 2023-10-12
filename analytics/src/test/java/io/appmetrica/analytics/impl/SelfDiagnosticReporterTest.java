@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 @RunWith(ParameterizedRobolectricTestRunner.class)
 public class SelfDiagnosticReporterTest extends CommonTest {
@@ -64,7 +64,7 @@ public class SelfDiagnosticReporterTest extends CommonTest {
             assertThat(env.getReporterConfiguration().getReporterType()).isEqualTo(newReporterType);
             assertThat(env.getReporterConfiguration().getApiKey()).isEqualTo(apiKey);
         } else {
-            verifyZeroInteractions(selfProcessReporter);
+            verifyNoMoreInteractions(selfProcessReporter);
         }
     }
 }

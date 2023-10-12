@@ -26,7 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
@@ -77,7 +77,7 @@ public class ReferrerValidityCheckerGeneralTest extends CommonTest {
     @Test
     public void doesInstallerMatchReferrerNullInfo() {
         assertThat(referrerValidityChecker.doesInstallerMatchReferrer(null)).isFalse();
-        verifyZeroInteractions(packageManager);
+        verifyNoMoreInteractions(packageManager);
     }
 
     @Test

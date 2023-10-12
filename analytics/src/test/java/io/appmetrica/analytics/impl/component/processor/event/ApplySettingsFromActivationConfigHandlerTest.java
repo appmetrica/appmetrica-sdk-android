@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
@@ -64,7 +64,7 @@ public class ApplySettingsFromActivationConfigHandlerTest extends CommonTest {
     public void nothingIsDoneIfFirstStateExists() {
         when(vitalComponentDataProvider.isFirstEventDone()).thenReturn(true);
         mHandler.process(new CounterReport());
-        verifyZeroInteractions(mEventFirstOccurrenceService);
+        verifyNoMoreInteractions(mEventFirstOccurrenceService);
         verify(mConfig, never()).isFirstActivationAsUpdate();
     }
 
@@ -72,7 +72,7 @@ public class ApplySettingsFromActivationConfigHandlerTest extends CommonTest {
     public void nothingIsDoneIfInitStateExists() {
         when(vitalComponentDataProvider.isInitEventDone()).thenReturn(true);
         mHandler.process(new CounterReport());
-        verifyZeroInteractions(mEventFirstOccurrenceService);
+        verifyNoMoreInteractions(mEventFirstOccurrenceService);
         verify(mConfig, never()).isFirstActivationAsUpdate();
     }
 

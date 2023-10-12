@@ -26,7 +26,7 @@ import org.mockito.kotlin.inOrder
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
-import org.mockito.kotlin.verifyZeroInteractions
+import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
@@ -103,6 +103,6 @@ internal class ReportCallableTest : CommonTest() {
         reportCallable.call()
 
         verify(appMetricaConnector, times(3)).bindService()
-        verifyZeroInteractions(service)
+        verifyNoMoreInteractions(service)
     }
 }

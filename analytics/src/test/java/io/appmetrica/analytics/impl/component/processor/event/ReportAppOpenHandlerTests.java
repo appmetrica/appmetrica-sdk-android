@@ -25,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @RunWith(ParameterizedRobolectricTestRunner.class)
@@ -306,7 +306,7 @@ public class ReportAppOpenHandlerTests extends CommonTest {
         } else {
             verify(vitalComponentDataProvider, never()).incrementAttributionId();
             verify(mComponent, never()).resetConfigHolder();
-            verifyZeroInteractions(mEventFirstOccurrenceService);
+            verifyNoMoreInteractions(mEventFirstOccurrenceService);
             assertThat(counterReport.getAttributionIdChanged()).isNull();
         }
     }

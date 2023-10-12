@@ -10,7 +10,7 @@ import org.junit.Test
 import org.mockito.kotlin.inOrder
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
-import org.mockito.kotlin.verifyZeroInteractions
+import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
 
 internal class StartupStateHolderTest {
@@ -43,13 +43,13 @@ internal class StartupStateHolderTest {
     @Test
     fun `init without observers`() {
         startupStateHolder.init(context)
-        verifyZeroInteractions(firstObserver, secondObserver)
+        verifyNoMoreInteractions(firstObserver, secondObserver)
     }
 
     @Test
     fun `init with observer`() {
         startupStateHolder.registerObserver(firstObserver)
-        verifyZeroInteractions(firstObserver)
+        verifyNoMoreInteractions(firstObserver)
         startupStateHolder.init(context)
         verify(firstObserver).onStartupStateChanged(startupStateFromStorage)
     }

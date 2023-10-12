@@ -9,11 +9,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
-import junit.framework.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.ParameterizedRobolectricTestRunner;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 
@@ -22,7 +22,7 @@ public class ClientConfigConverterTest extends CommonTest {
 
     private static final String API_KEY = UUID.randomUUID().toString();
 
-    private final AppMetricaConfig mTestConfig;
+    private final AppMetricaConfig testConfig;
 
     private static final List<AppMetricaConfig> TEST_CONFIGS = new ArrayList<AppMetricaConfig>() {
         {
@@ -77,7 +77,7 @@ public class ClientConfigConverterTest extends CommonTest {
     }
 
     public ClientConfigConverterTest(int index) {
-        mTestConfig = TEST_CONFIGS.get(index);
+        testConfig = TEST_CONFIGS.get(index);
     }
 
     @NonNull
@@ -113,39 +113,39 @@ public class ClientConfigConverterTest extends CommonTest {
     public void assertConfigEquals() {
         ClientConfigSerializer storage = new ClientConfigSerializer();
 
-        String jsonConfig = storage.toJson(mTestConfig);
+        String jsonConfig = storage.toJson(testConfig);
         AppMetricaConfig resultConfig = storage.fromJson(jsonConfig);
 
-        Assert.assertEquals(resultConfig.apiKey, mTestConfig.apiKey);
-        Assert.assertEquals(resultConfig.appVersion, mTestConfig.appVersion);
-        Assert.assertEquals(resultConfig.sessionTimeout, mTestConfig.sessionTimeout);
+        assertThat(resultConfig.apiKey).isEqualTo(testConfig.apiKey);
+        assertThat(resultConfig.appVersion).isEqualTo(testConfig.appVersion);
+        assertThat(resultConfig.sessionTimeout).isEqualTo(testConfig.sessionTimeout);
 
 
-        Assert.assertEquals(resultConfig.logs, mTestConfig.logs);
-        Assert.assertEquals(resultConfig.crashReporting, mTestConfig.crashReporting);
-        Assert.assertEquals(resultConfig.nativeCrashReporting, mTestConfig.nativeCrashReporting);
-        Assert.assertEquals(resultConfig.locationTracking, mTestConfig.locationTracking);
+        assertThat(resultConfig.logs).isEqualTo(testConfig.logs);
+        assertThat(resultConfig.crashReporting).isEqualTo(testConfig.crashReporting);
+        assertThat(resultConfig.nativeCrashReporting).isEqualTo(testConfig.nativeCrashReporting);
+        assertThat(resultConfig.locationTracking).isEqualTo(testConfig.locationTracking);
 
-        assertLocationsEquals(mTestConfig.location, resultConfig.location);
-        assertPreloadInfoEquals(mTestConfig.preloadInfo, resultConfig.preloadInfo);
+        assertLocationsEquals(testConfig.location, resultConfig.location);
+        assertPreloadInfoEquals(testConfig.preloadInfo, resultConfig.preloadInfo);
     }
 
     private void assertLocationsEquals(final Location expected, final Location actual) {
-        Assert.assertEquals(expected != null, actual != null);
+        assertThat(expected != null).isEqualTo(actual != null);
         if (expected != null) {
-            Assert.assertEquals(expected.getProvider(), actual.getProvider());
-            Assert.assertEquals(expected.getLatitude(), actual.getLatitude());
-            Assert.assertEquals(expected.getLongitude(), actual.getLongitude());
-            Assert.assertEquals(expected.getTime(), actual.getTime());
-            Assert.assertEquals(expected.getAccuracy(), actual.getAccuracy());
+            assertThat(actual.getProvider()).isEqualTo(expected.getProvider());
+            assertThat(actual.getLatitude()).isEqualTo(expected.getLatitude());
+            assertThat(actual.getLongitude()).isEqualTo(expected.getLongitude());
+            assertThat(actual.getTime()).isEqualTo(expected.getTime());
+            assertThat(actual.getAccuracy()).isEqualTo(expected.getAccuracy());
         }
     }
 
     private void assertPreloadInfoEquals(final PreloadInfo expected, final PreloadInfo actual) {
-        Assert.assertEquals(expected != null, actual != null);
+        assertThat(expected != null).isEqualTo(actual != null);
         if (expected != null) {
-            Assert.assertEquals(expected.getTrackingId(), actual.getTrackingId());
-            Assert.assertEquals(expected.getAdditionalParams(), actual.getAdditionalParams());
+            assertThat(actual.getTrackingId()).isEqualTo(expected.getTrackingId());
+            assertThat(actual.getAdditionalParams()).isEqualTo(expected.getAdditionalParams());
         }
     }
 }

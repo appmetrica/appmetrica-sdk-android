@@ -17,7 +17,7 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
-import org.mockito.kotlin.verifyZeroInteractions
+import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
@@ -69,7 +69,7 @@ class SingleProviderLocationFiltratorTests : CommonTest() {
     fun `handleLocation if receive the same location`() {
         clearInvocations(firstConsumer, secondConsumer)
         singleProviderLocationFiltrator.handleLocation(firstLocation)
-        verifyZeroInteractions(firstConsumer, secondConsumer)
+        verifyNoMoreInteractions(firstConsumer, secondConsumer)
     }
 
     @Test
@@ -84,7 +84,7 @@ class SingleProviderLocationFiltratorTests : CommonTest() {
     fun `handleLocation if second location close to first`() {
         clearInvocations(firstConsumer, secondConsumer)
         singleProviderLocationFiltrator.handleLocation(secondLocation)
-        verifyZeroInteractions(firstConsumer, secondConsumer)
+        verifyNoMoreInteractions(firstConsumer, secondConsumer)
     }
 
     @Test
@@ -114,7 +114,7 @@ class SingleProviderLocationFiltratorTests : CommonTest() {
         whenever(secondLocation.time).thenReturn(firstLocationTime - 10)
         clearInvocations(firstConsumer, secondConsumer)
         singleProviderLocationFiltrator.handleLocation(secondLocation)
-        verifyZeroInteractions(firstConsumer, secondConsumer)
+        verifyNoMoreInteractions(firstConsumer, secondConsumer)
     }
 
     private fun timePassChecker(): TimePassedChecker {

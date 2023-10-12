@@ -22,7 +22,7 @@ public class AutoInappCollectingInfoSerializerTest extends CommonTest {
                 new AutoInappCollectingInfoProto.AutoInappCollectingInfo();
         byte[] rawData = mSerializer.toByteArray(protoState);
         AutoInappCollectingInfoProto.AutoInappCollectingInfo restored = mSerializer.toState(rawData);
-        assertThat(restored).isEqualToComparingFieldByFieldRecursively(protoState);
+        assertThat(restored).usingRecursiveComparison().isEqualTo(protoState);
     }
 
     @Test
@@ -37,7 +37,7 @@ public class AutoInappCollectingInfoSerializerTest extends CommonTest {
         byte[] rawData = mSerializer.toByteArray(protoState);
         assertThat(rawData).isNotEmpty();
         AutoInappCollectingInfoProto.AutoInappCollectingInfo restored = mSerializer.toState(rawData);
-        assertThat(restored).isEqualToComparingFieldByFieldRecursively(protoState);
+        assertThat(restored).usingRecursiveComparison().isEqualTo(protoState);
     }
 
     @Test(expected = InvalidProtocolBufferNanoException.class)
@@ -47,7 +47,7 @@ public class AutoInappCollectingInfoSerializerTest extends CommonTest {
 
     @Test
     public void testDefaultValue() {
-        assertThat(mSerializer.defaultValue()).isEqualToComparingFieldByFieldRecursively(
+        assertThat(mSerializer.defaultValue()).usingRecursiveComparison().isEqualTo(
                 new AutoInappCollectingInfoProto.AutoInappCollectingInfo()
         );
     }

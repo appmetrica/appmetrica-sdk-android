@@ -21,7 +21,7 @@ import static org.mockito.Mockito.clearInvocations;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
@@ -115,13 +115,13 @@ public class WebViewJsInterfaceHandlerTest extends CommonTest {
         verify(logger).i("WebView interface setup is successful.");
         clearInvocations(webView, logger);
         webViewJsInterfaceHandler.setLogger(logger);
-        verifyZeroInteractions(logger);
+        verifyNoMoreInteractions(logger);
         webViewJsInterfaceHandler.initWebViewReporting(webView, proxy);
         verify(webView).addJavascriptInterface(any(AppMetricaJsInterface.class), eq("AppMetrica"));
         verify(webView).addJavascriptInterface(any(AppMetricaInitializerJsInterface.class), eq("AppMetricaInitializer"));
         verify(logger).i("WebView interface setup is successful.");
         clearInvocations(webView, logger);
         webViewJsInterfaceHandler.setLogger(logger);
-        verifyZeroInteractions(logger);
+        verifyNoMoreInteractions(logger);
     }
 }

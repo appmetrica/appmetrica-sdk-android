@@ -5,7 +5,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
-import org.mockito.kotlin.verifyZeroInteractions
+import org.mockito.kotlin.verifyNoMoreInteractions
 
 class SimpleThreadSafeToggleTest {
 
@@ -30,7 +30,7 @@ class SimpleThreadSafeToggleTest {
         toggle.registerObserver(secondObserver, false)
 
         verify(firstObserver).onStateChanged(false)
-        verifyZeroInteractions(secondObserver)
+        verifyNoMoreInteractions(secondObserver)
     }
 
     @Test
@@ -40,7 +40,7 @@ class SimpleThreadSafeToggleTest {
 
         val initialState = toggle.actualState
         toggle.notifyState(initialState)
-        verifyZeroInteractions(firstObserver, secondObserver)
+        verifyNoMoreInteractions(firstObserver, secondObserver)
 
         toggle.notifyState(!initialState)
         verify(firstObserver).onStateChanged(!initialState)
@@ -56,6 +56,6 @@ class SimpleThreadSafeToggleTest {
         val initialState = toggle.actualState
         toggle.notifyState(!initialState)
         verify(secondObserver).onStateChanged(!initialState)
-        verifyZeroInteractions(firstObserver)
+        verifyNoMoreInteractions(firstObserver)
     }
 }

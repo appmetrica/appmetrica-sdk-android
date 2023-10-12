@@ -8,7 +8,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
-import org.mockito.kotlin.verifyZeroInteractions
+import org.mockito.kotlin.verifyNoMoreInteractions
 
 class LazyReportConfigProviderTest : CommonTest() {
 
@@ -20,7 +20,7 @@ class LazyReportConfigProviderTest : CommonTest() {
     @Test
     fun getConfig() {
         val configProvider = LazyReportConfigProvider(componentUnit)
-        verifyZeroInteractions(componentUnit)
+        verifyNoMoreInteractions(componentUnit)
         assertThat(configProvider.config).isEqualTo(reportRequestConfig)
     }
 

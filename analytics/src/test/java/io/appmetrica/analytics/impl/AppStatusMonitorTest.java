@@ -22,7 +22,7 @@ import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
@@ -75,7 +75,7 @@ public class AppStatusMonitorTest extends CommonTest {
     public void testPause() {
         mMonitor.registerObserver(mObserver);
         mMonitor.pause();
-        verifyZeroInteractions(mObserver);
+        verifyNoMoreInteractions(mObserver);
     }
 
     @Test
@@ -92,7 +92,7 @@ public class AppStatusMonitorTest extends CommonTest {
         mMonitor.registerObserver(mObserver);
         mMonitor.pause();
         mMonitor.pause();
-        verifyZeroInteractions(mExecutor, mObserver);
+        verifyNoMoreInteractions(mExecutor, mObserver);
     }
 
     @Test

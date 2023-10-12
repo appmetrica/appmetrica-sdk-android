@@ -132,7 +132,7 @@ public class HuaweiAdvIdGetterTest {
                 new AdvIdInfo(Constants.Providers.HUAWEI, oaid, limitAdTracking),
                 null
         );
-        assertThat(mHuaweiAdvIdGetter.getAdTrackingInfo(mContext)).isEqualToComparingFieldByFieldRecursively(expected);
+        assertThat(mHuaweiAdvIdGetter.getAdTrackingInfo(mContext)).usingRecursiveComparison().isEqualTo(expected);
         verify(connectionController).disconnect(mContext);
     }
 }

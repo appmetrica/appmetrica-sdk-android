@@ -5,7 +5,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.mockito.kotlin.mock
-import org.mockito.kotlin.verifyZeroInteractions
+import org.mockito.kotlin.verifyNoMoreInteractions
 
 class AlwaysAllowPermissionStrategyTest {
 
@@ -21,6 +21,6 @@ class AlwaysAllowPermissionStrategyTest {
     @Test
     fun hasNecessaryPermissions() {
         assertThat(strategy.hasNecessaryPermissions(context)).isTrue()
-        verifyZeroInteractions(context)
+        verifyNoMoreInteractions(context)
     }
 }

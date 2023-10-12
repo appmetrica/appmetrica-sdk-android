@@ -216,7 +216,7 @@ public class JvmCrashTest extends CommonTest {
                 mErrorEnvironment,
                 mock(PublicLogger.class)
         ), clientConfiguration, mTrimmedFields);
-        assertThat(new JvmCrash(crash.toJSONString())).isEqualToComparingFieldByFieldRecursively(crash);
+        assertThat(new JvmCrash(crash.toJSONString())).usingRecursiveComparison().isEqualTo(crash);
     }
 
     @Test

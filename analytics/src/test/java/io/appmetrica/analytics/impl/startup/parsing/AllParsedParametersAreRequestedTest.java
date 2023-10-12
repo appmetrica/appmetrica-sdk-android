@@ -95,7 +95,7 @@ public class AllParsedParametersAreRequestedTest extends CommonTest {
         Iterable<String> requestedBlocks = getRequestedBlocks();
         List<String> parsedBlocks = getParsedBlocks();
         List<String> transformedToParametersBlocks = getParametersManager.transformToParameters(parsedBlocks);
-        assertThat(requestedBlocks).containsOnlyElementsOf(transformedToParametersBlocks);
+        assertThat(requestedBlocks).containsExactlyInAnyOrderElementsOf(transformedToParametersBlocks);
     }
 
     private String[] getRequestedFeatures() {

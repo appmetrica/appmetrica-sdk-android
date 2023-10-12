@@ -662,11 +662,14 @@ public class NetworkTaskStatesAssertTest {
     // end region
 
     private void checkAssertIsExecuted(final Boolean expected) {
-        sDebugAssert.getStaticMock().verify(atLeastOnce(), new MockedStatic.Verification() {
-            @Override
-            public void apply() {
-                DebugAssert.assertNotNull(eq(expected), startsWith("Unexpected state change:"));
-            }
-        });
+        sDebugAssert.getStaticMock().verify(
+            new MockedStatic.Verification() {
+                @Override
+                public void apply() {
+                    DebugAssert.assertNotNull(eq(expected), startsWith("Unexpected state change:"));
+                }
+            },
+            atLeastOnce()
+        );
     }
 }

@@ -20,7 +20,7 @@ import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
@@ -104,7 +104,7 @@ public class SessionsTrackingManagerTest extends CommonTest {
                 .thenReturn(false);
         sessionsTrackingManager.resumeActivityManually(activity, mainReporter);
         verify(activityAppearedListener).onActivityAppeared(activity);
-        verifyZeroInteractions(mainReporter);
+        verifyNoMoreInteractions(mainReporter);
     }
 
     @Test
@@ -131,7 +131,7 @@ public class SessionsTrackingManagerTest extends CommonTest {
         when(activityStateManager.didStateChange(activity, ActivityStateManager.ActivityState.PAUSED))
                 .thenReturn(false);
         sessionsTrackingManager.pauseActivityManually(activity, mainReporter);
-        verifyZeroInteractions(mainReporter);
+        verifyNoMoreInteractions(mainReporter);
         verify(activityAppearedListener).onActivityAppeared(activity);
     }
 
@@ -161,7 +161,7 @@ public class SessionsTrackingManagerTest extends CommonTest {
         listenerCaptor.getValue().onEvent(activity, ActivityLifecycleManager.ActivityEvent.RESUMED);
         verify(conditionalExecutor).addCommand(commandCaptor.capture());
         commandCaptor.getValue().consume(mainReporter);
-        verifyZeroInteractions(mainReporter);
+        verifyNoMoreInteractions(mainReporter);
         verifyNoInteractions(activityAppearedListener);
     }
 
@@ -185,7 +185,7 @@ public class SessionsTrackingManagerTest extends CommonTest {
         listenerCaptor.getValue().onEvent(activity, ActivityLifecycleManager.ActivityEvent.PAUSED);
         verify(conditionalExecutor).addCommand(commandCaptor.capture());
         commandCaptor.getValue().consume(mainReporter);
-        verifyZeroInteractions(mainReporter);
+        verifyNoMoreInteractions(mainReporter);
         verifyNoInteractions(activityAppearedListener);
     }
 }

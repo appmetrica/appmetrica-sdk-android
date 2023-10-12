@@ -24,7 +24,7 @@ import org.skyscreamer.jsonassert.JSONAssert;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.clearInvocations;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
@@ -65,7 +65,7 @@ public class AppMetricaServiceDelayHandlerTest extends CommonTest {
     public void setDelayNonMainProcess() {
         when(mainProcessDetector.isMainProcess()).thenReturn(false);
         appMetricaServiceDelayHandler.setDelay(context, 1000);
-        verifyZeroInteractions(fileProvider);
+        verifyNoMoreInteractions(fileProvider);
     }
 
     @Test
@@ -91,7 +91,7 @@ public class AppMetricaServiceDelayHandlerTest extends CommonTest {
     public void removeDelayNonMainProcess() {
         when(mainProcessDetector.isMainProcess()).thenReturn(false);
         appMetricaServiceDelayHandler.removeDelay(context);
-        verifyZeroInteractions(fileProvider);
+        verifyNoMoreInteractions(fileProvider);
     }
 
     @Test
@@ -122,7 +122,7 @@ public class AppMetricaServiceDelayHandlerTest extends CommonTest {
         appMetricaServiceDelayHandler.maybeDelay(context);
         long end = System.currentTimeMillis();
         assertThat(end - start).isLessThan(1000);
-        verifyZeroInteractions(activityManager);
+        verifyNoMoreInteractions(activityManager);
     }
 
     @Test

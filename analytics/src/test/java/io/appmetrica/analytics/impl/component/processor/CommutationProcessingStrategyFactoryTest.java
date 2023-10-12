@@ -58,6 +58,6 @@ public class CommutationProcessingStrategyFactoryTest extends CommonTest {
     @Test
     public void testProperHandlerList() {
         assertThat(mFactory.getProcessingStrategy(mEvent.getTypeId()).getEventHandlers()).
-                extracting("class").containsOnlyElementsOf(mHandlers);
+                extracting("class").containsExactlyInAnyOrderElementsOf(mHandlers);
     }
 }

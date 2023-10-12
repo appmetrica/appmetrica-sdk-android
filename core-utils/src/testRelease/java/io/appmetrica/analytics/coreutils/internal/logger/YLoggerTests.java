@@ -8,7 +8,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
 
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 @RunWith(RobolectricTestRunner.class)
 public class YLoggerTests {
@@ -33,73 +33,73 @@ public class YLoggerTests {
     @Test
     public void debug() {
         YLogger.debug(tag, message, args);
-        verifyZeroInteractions(mYLogger);
+        verifyNoMoreInteractions(mYLogger);
     }
 
     @Test
     public void d() {
         YLogger.d(message, args);
-        verifyZeroInteractions(mYLogger);
+        verifyNoMoreInteractions(mYLogger);
     }
 
     @Test
     public void info() {
         YLogger.info(tag, message, args);
-        verifyZeroInteractions(mYLogger);
+        verifyNoMoreInteractions(mYLogger);
     }
 
     @Test
     public void i() {
         YLogger.i(message, args);
-        verifyZeroInteractions(mYLogger);
+        verifyNoMoreInteractions(mYLogger);
     }
 
     @Test
     public void warning() {
         YLogger.warning(tag, message, args);
-        verifyZeroInteractions(mYLogger);
+        verifyNoMoreInteractions(mYLogger);
     }
 
     @Test
     public void w() {
         YLogger.w(message, args);
-        verifyZeroInteractions(mYLogger);
+        verifyNoMoreInteractions(mYLogger);
     }
 
     @Test
     public void errorWithoutThrowable() {
         YLogger.error(tag, message, args);
-        verifyZeroInteractions(mYLogger);
+        verifyNoMoreInteractions(mYLogger);
     }
 
     @Test
     public void eWithoutThrowable() {
         YLogger.e(message, args);
-        verifyZeroInteractions(mYLogger);
+        verifyNoMoreInteractions(mYLogger);
     }
 
     @Test
     public void errorWithThrowable() {
         YLogger.error(tag, mThrowable, message, args);
-        verifyZeroInteractions(mYLogger);
+        verifyNoMoreInteractions(mYLogger);
     }
 
     @Test
     public void eWithThrowable() {
         YLogger.e(mThrowable, message, args);
-        verifyZeroInteractions(mYLogger);
+        verifyNoMoreInteractions(mYLogger);
     }
 
     @Test
     public void errorWithThrowableNoMessage() {
         YLogger.error(tag, mThrowable);
-        verifyZeroInteractions(mYLogger);
+        verifyNoMoreInteractions(mYLogger);
     }
 
     @Test
     public void dumpJson() {
         YLogger.dumpJson(tag, mJSONObject);
-        verifyZeroInteractions(mYLogger);
+        verifyNoMoreInteractions(mYLogger);
     }
 
 }

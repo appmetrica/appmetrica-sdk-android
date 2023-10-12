@@ -65,21 +65,21 @@ public class AppPermissionsStateConverterTest extends CommonTest {
 
     @Test
     public void testDefaultToModel() {
-        assertThat(mConverter.toModel(mEmptyProto)).isEqualToComparingFieldByFieldRecursively(mEmptyModel);
+        assertThat(mConverter.toModel(mEmptyProto)).usingRecursiveComparison().isEqualTo(mEmptyModel);
     }
 
     @Test
     public void testDefaultToProto() {
-        assertThat(mConverter.fromModel(mEmptyModel)).isEqualToComparingFieldByFieldRecursively(mEmptyProto);
+        assertThat(mConverter.fromModel(mEmptyModel)).usingRecursiveComparison().isEqualTo(mEmptyProto);
     }
 
     @Test
     public void testFilledToModel() {
-        assertThat(mConverter.toModel(mFilledProto)).isEqualToComparingFieldByFieldRecursively(mFilledModel);
+        assertThat(mConverter.toModel(mFilledProto)).usingRecursiveComparison().isEqualTo(mFilledModel);
     }
 
     @Test
     public void testFilledToProto() {
-        assertThat(mConverter.fromModel(mFilledModel)).isEqualToComparingFieldByFieldRecursively(mFilledProto);
+        assertThat(mConverter.fromModel(mFilledModel)).usingRecursiveComparison().isEqualTo(mFilledProto);
     }
 }

@@ -22,7 +22,7 @@ import org.mockito.kotlin.inOrder
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
-import org.mockito.kotlin.verifyZeroInteractions
+import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 import java.util.concurrent.TimeUnit
@@ -100,7 +100,7 @@ class ReportKotlinVersionTaskTest : CommonTest() {
     fun `run for nearest last known send time`() {
         whenever(preferences.lastKotlinVersionSendTime()).thenReturn(nearestSendTime)
         reportKotlinVersionTask.run()
-        verifyZeroInteractions(reporter)
+        verifyNoMoreInteractions(reporter)
         verify(preferences, never()).putLastKotlinVersionSendTime(any())
     }
 

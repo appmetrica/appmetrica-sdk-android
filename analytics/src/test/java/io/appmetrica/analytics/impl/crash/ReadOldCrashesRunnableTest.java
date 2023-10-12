@@ -16,7 +16,7 @@ import org.robolectric.RobolectricTestRunner;
 
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
@@ -45,7 +45,7 @@ public class ReadOldCrashesRunnableTest extends CommonTest {
     public void testNoDirectory() {
         doReturn(false).when(crashDirectory).exists();
         readOldCrashesRunnable.run();
-        verifyZeroInteractions(newCrashListener);
+        verifyNoMoreInteractions(newCrashListener);
     }
 
     @Test
@@ -53,7 +53,7 @@ public class ReadOldCrashesRunnableTest extends CommonTest {
         doReturn(true).when(crashDirectory).exists();
         doReturn(false).when(crashDirectory).isDirectory();
         readOldCrashesRunnable.run();
-        verifyZeroInteractions(newCrashListener);
+        verifyNoMoreInteractions(newCrashListener);
     }
 
     @Test

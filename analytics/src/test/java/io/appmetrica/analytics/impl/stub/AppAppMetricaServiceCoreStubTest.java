@@ -18,7 +18,7 @@ import org.robolectric.RobolectricTestRunner;
 
 import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
@@ -68,7 +68,7 @@ public class AppAppMetricaServiceCoreStubTest extends CommonTest {
     @Test
     public void activate() {
         stub.activate(appMetricaConfig, reporterFactoryProvider);
-        verifyZeroInteractions(appMetricaConfig, reporterFactoryProvider);
+        verifyNoMoreInteractions(appMetricaConfig, reporterFactoryProvider);
     }
 
     @Test

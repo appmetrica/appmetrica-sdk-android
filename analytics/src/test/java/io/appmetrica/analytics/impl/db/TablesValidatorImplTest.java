@@ -9,11 +9,11 @@ import java.util.HashMap;
 import java.util.List;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentMatchers;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Matchers.isNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -37,22 +37,26 @@ public class TablesValidatorImplTest extends CommonTest {
         });
         Cursor cursor2 = mock(Cursor.class);
         when(cursor2.getColumnNames()).thenReturn(columns2);
-        when(database.query(eq(table1),
-                isNull(String[].class),
-                isNull(String.class),
-                isNull(String[].class),
-                isNull(String.class),
-                isNull(String.class),
-                isNull(String.class)
-        )).thenReturn(cursor1);
-        when(database.query(eq(table2),
-                isNull(String[].class),
-                isNull(String.class),
-                isNull(String[].class),
-                isNull(String.class),
-                isNull(String.class),
-                isNull(String.class)
-        )).thenReturn(cursor2);
+        when(
+            database.query(eq(table1),
+                ArgumentMatchers.<String[]>isNull(),
+                ArgumentMatchers.<String>isNull(),
+                ArgumentMatchers.<String[]>isNull(),
+                ArgumentMatchers.<String>isNull(),
+                ArgumentMatchers.<String>isNull(),
+                ArgumentMatchers.<String>isNull()
+            )
+        ).thenReturn(cursor1);
+        when(
+            database.query(eq(table2),
+                ArgumentMatchers.<String[]>isNull(),
+                ArgumentMatchers.<String>isNull(),
+                ArgumentMatchers.<String[]>isNull(),
+                ArgumentMatchers.<String>isNull(),
+                ArgumentMatchers.<String>isNull(),
+                ArgumentMatchers.<String>isNull()
+            )
+        ).thenReturn(cursor2);
         TablesValidatorImpl impl = new TablesValidatorImpl("test", new HashMap<String, List<String>>() {
             {
                 put(table1, CollectionUtils.createSortedListWithoutRepetitions(columns1));
@@ -79,22 +83,26 @@ public class TablesValidatorImplTest extends CommonTest {
         });
         Cursor cursor2 = mock(Cursor.class);
         when(cursor2.getColumnNames()).thenReturn(columns2);
-        when(database.query(eq(table1),
-                isNull(String[].class),
-                isNull(String.class),
-                isNull(String[].class),
-                isNull(String.class),
-                isNull(String.class),
-                isNull(String.class)
-        )).thenReturn(cursor1);
-        when(database.query(eq(table2),
-                isNull(String[].class),
-                isNull(String.class),
-                isNull(String[].class),
-                isNull(String.class),
-                isNull(String.class),
-                isNull(String.class)
-        )).thenReturn(cursor2);
+        when(
+            database.query(eq(table1),
+                ArgumentMatchers.<String[]>isNull(),
+                ArgumentMatchers.<String>isNull(),
+                ArgumentMatchers.<String[]>isNull(),
+                ArgumentMatchers.<String>isNull(),
+                ArgumentMatchers.<String>isNull(),
+                ArgumentMatchers.<String>isNull()
+            )
+        ).thenReturn(cursor1);
+        when(
+            database.query(eq(table2),
+                ArgumentMatchers.<String[]>isNull(),
+                ArgumentMatchers.<String>isNull(),
+                ArgumentMatchers.<String[]>isNull(),
+                ArgumentMatchers.<String>isNull(),
+                ArgumentMatchers.<String>isNull(),
+                ArgumentMatchers.<String>isNull()
+            )
+        ).thenReturn(cursor2);
         TablesValidatorImpl impl = new TablesValidatorImpl("test", new HashMap<String, List<String>>() {
             {
                 put(table1, CollectionUtils.createSortedListWithoutRepetitions(columns1));
@@ -119,14 +127,16 @@ public class TablesValidatorImplTest extends CommonTest {
         when(cursor1.getColumnNames()).thenReturn(new String[]{
                 "A", "B", "C"
         });
-        when(database.query(eq(table1),
-                isNull(String[].class),
-                isNull(String.class),
-                isNull(String[].class),
-                isNull(String.class),
-                isNull(String.class),
-                isNull(String.class)
-        )).thenReturn(cursor1);
+        when(
+            database.query(eq(table1),
+                ArgumentMatchers.<String[]>isNull(),
+                ArgumentMatchers.<String>isNull(),
+                ArgumentMatchers.<String[]>isNull(),
+                ArgumentMatchers.<String>isNull(),
+                ArgumentMatchers.<String>isNull(),
+                ArgumentMatchers.<String>isNull()
+            )
+        ).thenReturn(cursor1);
         TablesValidatorImpl impl = new TablesValidatorImpl("test", new HashMap<String, List<String>>() {
             {
                 put(table1, CollectionUtils.createSortedListWithoutRepetitions(columns1));

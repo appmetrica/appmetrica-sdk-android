@@ -38,6 +38,6 @@ public class EventToPreparerGeneralTestCoverageCheck extends CommonTest {
                 .as("Internal events exclude ignored. " +
                         "If unexpected event types were detected, add new event type to EventToPreparerGeneralTest or" +
                         "ignored list. If couldn't find some event types, delete it from ignoredEventTypes.")
-                .containsOnlyElementsOf(coveredEventTypes);
+                .isSubsetOf(coveredEventTypes);
     }
 }

@@ -50,7 +50,7 @@ import org.mockito.kotlin.inOrder
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
-import org.mockito.kotlin.verifyZeroInteractions
+import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 import java.util.UUID
@@ -303,70 +303,70 @@ internal class ReportTaskTest : CommonTest() {
     fun onCreateTaskIfQueryParametersIsEmpty() {
         whenever(databaseHelper.collectAllQueryParameters()).thenReturn(emptyList())
         assertThat(reportTask.onCreateTask()).isFalse()
-        verifyZeroInteractions(sendingTaskHelperMockedRule.constructionMock.constructed()[0])
+        verifyNoMoreInteractions(sendingTaskHelperMockedRule.constructionMock.constructed()[0])
     }
 
     @Test
     fun onCreateTaskIfNoCertificated() {
         whenever(reportRequestConfig.certificates).thenReturn(null)
         assertThat(reportTask.onCreateTask()).isFalse()
-        verifyZeroInteractions(sendingTaskHelperMockedRule.constructionMock.constructed()[0])
+        verifyNoMoreInteractions(sendingTaskHelperMockedRule.constructionMock.constructed()[0])
     }
 
     @Test
     fun onCreateTaskIfCertificatedIsEmpty() {
         whenever(reportRequestConfig.certificates).thenReturn(emptyList())
         assertThat(reportTask.onCreateTask()).isFalse()
-        verifyZeroInteractions(sendingTaskHelperMockedRule.constructionMock.constructed()[0])
+        verifyNoMoreInteractions(sendingTaskHelperMockedRule.constructionMock.constructed()[0])
     }
 
     @Test
     fun onCreateIfNotReadyForSending() {
         whenever(reportRequestConfig.isReadyForSending).thenReturn(false)
         assertThat(reportTask.onCreateTask()).isFalse()
-        verifyZeroInteractions(sendingTaskHelperMockedRule.constructionMock.constructed()[0])
+        verifyNoMoreInteractions(sendingTaskHelperMockedRule.constructionMock.constructed()[0])
     }
 
     @Test
     fun onCreateIfNullHosts() {
         whenever(fullUrlFormer.allHosts).thenReturn(null)
         assertThat(reportTask.onCreateTask()).isFalse()
-        verifyZeroInteractions(sendingTaskHelperMockedRule.constructionMock.constructed()[0])
+        verifyNoMoreInteractions(sendingTaskHelperMockedRule.constructionMock.constructed()[0])
     }
 
     @Test
     fun onCreateIfEmptyHosts() {
         whenever(fullUrlFormer.allHosts).thenReturn(emptyList())
         assertThat(reportTask.onCreateTask()).isFalse()
-        verifyZeroInteractions(sendingTaskHelperMockedRule.constructionMock.constructed()[0])
+        verifyNoMoreInteractions(sendingTaskHelperMockedRule.constructionMock.constructed()[0])
     }
 
     @Test
     fun onCreateIfSessionsCursorIsNull() {
         whenever(databaseHelper.querySessions(any())).thenReturn(null)
         assertThat(reportTask.onCreateTask()).isFalse()
-        verifyZeroInteractions(sendingTaskHelperMockedRule.constructionMock.constructed()[0])
+        verifyNoMoreInteractions(sendingTaskHelperMockedRule.constructionMock.constructed()[0])
     }
 
     @Test
     fun onCreateIfSessionsCursorIsEmpty() {
         whenever(databaseHelper.querySessions(any())).thenReturn(MatrixCursor(columnSession))
         assertThat(reportTask.onCreateTask()).isFalse()
-        verifyZeroInteractions(sendingTaskHelperMockedRule.constructionMock.constructed()[0])
+        verifyNoMoreInteractions(sendingTaskHelperMockedRule.constructionMock.constructed()[0])
     }
 
     @Test
     fun onCreateIfEventsCursorIsNull() {
         whenever(databaseHelper.queryReports(any(), any())).thenReturn(null)
         assertThat(reportTask.onCreateTask()).isFalse()
-        verifyZeroInteractions(sendingTaskHelperMockedRule.constructionMock.constructed()[0])
+        verifyNoMoreInteractions(sendingTaskHelperMockedRule.constructionMock.constructed()[0])
     }
 
     @Test
     fun onCreateIfEventsCursorIsEmpty() {
         whenever(databaseHelper.queryReports(any(), any())).thenReturn(MatrixCursor(columnReport))
         assertThat(reportTask.onCreateTask()).isFalse()
-        verifyZeroInteractions(sendingTaskHelperMockedRule.constructionMock.constructed()[0])
+        verifyNoMoreInteractions(sendingTaskHelperMockedRule.constructionMock.constructed()[0])
     }
 
     @Test

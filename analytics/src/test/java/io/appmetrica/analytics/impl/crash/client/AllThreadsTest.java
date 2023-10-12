@@ -22,7 +22,7 @@ public class AllThreadsTest extends CommonTest {
 
         SoftAssertions assertions = new SoftAssertions();
         assertions.assertThat(dump.affectedThread).as("affectedThread").isSameAs(mainThread);
-        assertions.assertThat(dump.threads).as("threads").containsOnlyElementsOf(threads);
+        assertions.assertThat(dump.threads).as("threads").containsExactlyElementsOf(threads);
         assertions.assertThat(dump.threads).as("threads").isNotSameAs(threads);
         assertions.assertThat(dump.processName).as("processName").isEqualTo(processName);
         assertions.assertAll();

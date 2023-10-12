@@ -13,7 +13,7 @@ import org.robolectric.RobolectricTestRunner;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
@@ -34,13 +34,13 @@ public class PreloadInfoWrapperGeneralTest extends CommonTest {
     @Test
     public void validPreloadInfo() {
         new PreloadInfoWrapper(PreloadInfo.newBuilder("1111").build(), mPublicLogger, true);
-        verifyZeroInteractions(mPublicLogger);
+        verifyNoMoreInteractions(mPublicLogger);
     }
 
     @Test
     public void nullPreloadInfo() {
         new PreloadInfoWrapper(null, mPublicLogger, true);
-        verifyZeroInteractions(mPublicLogger);
+        verifyNoMoreInteractions(mPublicLogger);
     }
 
     @Test

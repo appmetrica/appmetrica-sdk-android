@@ -26,7 +26,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
@@ -81,8 +81,8 @@ public class BillingMonitorWrapperTest extends CommonTest {
     @Test
     public void startWatchingFeatureDisabled() {
         wrapper.maybeStartWatching(startupState, false);
-        verifyZeroInteractions(billingMonitorProvider);
-        verifyZeroInteractions(applicationStateProvider);
+        verifyNoMoreInteractions(billingMonitorProvider);
+        verifyNoMoreInteractions(applicationStateProvider);
     }
 
     @Test

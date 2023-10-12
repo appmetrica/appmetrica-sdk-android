@@ -212,6 +212,7 @@ public class StartupStateModelTest extends CommonTest {
         final StartupUpdateConfig startupUpdateConfig = mock(StartupUpdateConfig.class);
         final Map<String, Object> modulesRemoteConfigs = Collections.singletonMap("Identifier", mock(Object.class));
 
+        @SuppressWarnings("deprecation")
         StartupStateModel startupState = new StartupStateModel.StartupStateBuilder(mCollectingFlags)
             .withUuid(uuid)
             .withDeviceID(deviceID)

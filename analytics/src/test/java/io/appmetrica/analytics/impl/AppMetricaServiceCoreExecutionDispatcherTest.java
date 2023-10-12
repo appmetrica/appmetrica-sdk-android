@@ -17,7 +17,7 @@ import org.mockito.MockitoAnnotations;
 import org.robolectric.ParameterizedRobolectricTestRunner;
 
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 @RunWith(ParameterizedRobolectricTestRunner.class)
 public class AppMetricaServiceCoreExecutionDispatcherTest extends CommonTest {
@@ -211,7 +211,7 @@ public class AppMetricaServiceCoreExecutionDispatcherTest extends CommonTest {
     @Test
     public void testDispatchCallToMetricaCoreImpl() throws Exception {
         mCommand.execute(mAppMetricaCoreExecutionDispatcher);
-        verifyZeroInteractions(mAppMetricaServiceCore);
+        verifyNoMoreInteractions(mAppMetricaServiceCore);
         verify(mExecutor).execute(mRunnableCaptor.capture());
         mRunnableCaptor.getValue().run();
         mVerifier.verify(verify(mAppMetricaServiceCore));

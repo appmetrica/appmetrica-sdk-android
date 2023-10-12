@@ -10,7 +10,7 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.inOrder
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
-import org.mockito.kotlin.verifyZeroInteractions
+import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
@@ -37,19 +37,19 @@ class DeeplinkConsumerTest : CommonTest() {
     @Test
     fun `reportAppOpen with null intent`() {
         deeplinkConsumer.reportAppOpen(null as Intent?)
-        verifyZeroInteractions(reporter)
+        verifyNoMoreInteractions(reporter)
     }
 
     @Test
     fun `reportAppOpen with null string`() {
         deeplinkConsumer.reportAppOpen(null as String?)
-        verifyZeroInteractions(reporter)
+        verifyNoMoreInteractions(reporter)
     }
 
     @Test
     fun `reportAutoAppOpen with null string`() {
         deeplinkConsumer.reportAutoAppOpen(null)
-        verifyZeroInteractions(reporter)
+        verifyNoMoreInteractions(reporter)
     }
 
 
@@ -77,26 +77,26 @@ class DeeplinkConsumerTest : CommonTest() {
     @Test
     fun `reportAppOpen with empty intent`() {
         deeplinkConsumer.reportAppOpen(mock<Intent>())
-        verifyZeroInteractions(reporter)
+        verifyNoMoreInteractions(reporter)
     }
 
     @Test
     fun `reportAppOpen with intent with empty deeplink`() {
         whenever(intent.dataString).thenReturn("")
         deeplinkConsumer.reportAppOpen(intent)
-        verifyZeroInteractions(reporter)
+        verifyNoMoreInteractions(reporter)
     }
 
     @Test
     fun `reportAppOpen with empty deeplink`() {
         deeplinkConsumer.reportAppOpen("")
-        verifyZeroInteractions(reporter)
+        verifyNoMoreInteractions(reporter)
     }
 
     @Test
     fun `reportAutoAppOpen with empty deeplink`() {
         deeplinkConsumer.reportAutoAppOpen("")
-        verifyZeroInteractions(reporter)
+        verifyNoMoreInteractions(reporter)
     }
 
     @Test
@@ -166,7 +166,7 @@ class DeeplinkConsumerTest : CommonTest() {
         deeplinkConsumer.reportAppOpen(intent)
         clearInvocations(reporter)
         deeplinkConsumer.reportAppOpen(intent)
-        verifyZeroInteractions(reporter)
+        verifyNoMoreInteractions(reporter)
     }
 
     @Test
@@ -174,7 +174,7 @@ class DeeplinkConsumerTest : CommonTest() {
         deeplinkConsumer.reportAppOpen(deeplink)
         clearInvocations(reporter)
         deeplinkConsumer.reportAppOpen(deeplink)
-        verifyZeroInteractions(reporter)
+        verifyNoMoreInteractions(reporter)
     }
 
     @Test
@@ -182,7 +182,7 @@ class DeeplinkConsumerTest : CommonTest() {
         deeplinkConsumer.reportAutoAppOpen(deeplink)
         clearInvocations(reporter)
         deeplinkConsumer.reportAutoAppOpen(deeplink)
-        verifyZeroInteractions(reporter)
+        verifyNoMoreInteractions(reporter)
     }
 
     @Test

@@ -41,7 +41,6 @@ import java.util.Random;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.ArgumentMatcher;
@@ -147,9 +146,6 @@ public class ReportsHandlerTest extends CommonTest {
         mReportsHandler.setStartupParamsProvider(startupParamsProvider);
         mReportsHandlerSpy = spy(mReportsHandler);
     }
-
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
 
     @Test
     public void testReportStartupExecutorCalls() {

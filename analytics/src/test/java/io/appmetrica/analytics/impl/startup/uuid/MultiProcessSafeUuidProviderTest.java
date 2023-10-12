@@ -27,7 +27,7 @@ import static org.mockito.Mockito.clearInvocations;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
@@ -118,7 +118,7 @@ public class MultiProcessSafeUuidProviderTest extends CommonTest {
         inOrder.verify(persistentUuidHolder).handleUuid(uuidFromOuterSource);
         inOrder.verify(lock).unlock();
         inOrder.verifyNoMoreInteractions();
-        verifyZeroInteractions(outerSourceUuidImporter, lock);
+        verifyNoMoreInteractions(outerSourceUuidImporter, lock);
     }
 
     @Test

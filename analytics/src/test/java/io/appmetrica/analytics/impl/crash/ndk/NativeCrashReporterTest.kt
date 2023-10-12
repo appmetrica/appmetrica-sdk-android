@@ -17,7 +17,7 @@ import org.mockito.kotlin.never
 import org.mockito.kotlin.refEq
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoMoreInteractions
-import org.mockito.kotlin.verifyZeroInteractions
+import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 import java.io.File
@@ -85,8 +85,8 @@ class NativeCrashReporterTest : CommonTest() {
     fun `reportCrashesFromPrevSession zero crashes`() {
         reporter.reportCrashesFromPrevSession(emptyList())
 
-        verifyZeroInteractions(reportConsumer)
-        verifyZeroInteractions(markCrashCompletedFunc)
+        verifyNoMoreInteractions(reportConsumer)
+        verifyNoMoreInteractions(markCrashCompletedFunc)
     }
 
     private fun createCrash(): Pair<String, NativeCrash> {

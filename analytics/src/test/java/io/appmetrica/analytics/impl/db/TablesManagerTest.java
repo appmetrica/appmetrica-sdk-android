@@ -16,13 +16,13 @@ import org.json.JSONException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Matchers.isNull;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -184,12 +184,13 @@ public class TablesManagerTest extends CommonTest {
         when(cursor.getColumnNames()).thenReturn(mTestTableColumns);
         when(mDBMock.query(
                 eq(TEST_TABLE_NAME),
-                isNull(String[].class),
-                isNull(String.class),
-                isNull(String[].class),
-                isNull(String.class),
-                isNull(String.class),
-                isNull(String.class))
+                ArgumentMatchers.<String[]>isNull(),
+                ArgumentMatchers.<String>isNull(),
+                ArgumentMatchers.<String[]>isNull(),
+                ArgumentMatchers.<String>isNull(),
+                ArgumentMatchers.<String>isNull(),
+                ArgumentMatchers.<String>isNull()
+            )
         ).thenReturn(cursor);
         TablesManager manager = spy(mCreator.createTablesManager(
                 "test",

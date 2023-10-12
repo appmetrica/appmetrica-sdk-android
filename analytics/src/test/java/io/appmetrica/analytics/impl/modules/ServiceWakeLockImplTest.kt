@@ -10,7 +10,7 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
-import org.mockito.kotlin.verifyZeroInteractions
+import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
 
 class ServiceWakeLockImplTest : CommonTest() {
@@ -44,7 +44,7 @@ class ServiceWakeLockImplTest : CommonTest() {
     @Test
     fun releaseWakeLockWithoutAcquire() {
         serviceWakeLockImpl.releaseWakeLock(wakeLockId)
-        verifyZeroInteractions(serviceWakeLockBinder)
+        verifyNoMoreInteractions(serviceWakeLockBinder)
     }
 
     @Test

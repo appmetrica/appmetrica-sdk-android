@@ -42,7 +42,7 @@ public class AppPermissionsStateSerializerTest extends CommonTest {
         byte[] rawData = mSerializer.toByteArray(protoState);
         assertThat(rawData).isNotEmpty();
         AppPermissionsStateProtobuf.AppPermissionsState restored = mSerializer.toState(rawData);
-        assertThat(restored).isEqualToComparingFieldByFieldRecursively(protoState);
+        assertThat(restored).usingRecursiveComparison().isEqualTo(protoState);
     }
 
     @Test(expected = InvalidProtocolBufferNanoException.class)
@@ -52,7 +52,7 @@ public class AppPermissionsStateSerializerTest extends CommonTest {
 
     @Test
     public void testDefaultValue() {
-        assertThat(mSerializer.defaultValue()).isEqualToComparingFieldByFieldRecursively(
+        assertThat(mSerializer.defaultValue()).usingRecursiveComparison().isEqualTo(
                 new AppPermissionsStateProtobuf.AppPermissionsState()
         );
     }

@@ -43,7 +43,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
@@ -97,37 +97,37 @@ public class SynchronousStageExecutorTest extends CommonTest {
     @Test
     public void testPutAppEnvironmentValue() {
         mSynchronousStageExecutor.putAppEnvironmentValue("key", "value");
-        verifyZeroInteractions(mProvider);
+        verifyNoMoreInteractions(mProvider);
     }
 
     @Test
     public void testClearAppEnvironment() {
         mSynchronousStageExecutor.clearAppEnvironment();
-        verifyZeroInteractions(mProvider);
+        verifyNoMoreInteractions(mProvider);
     }
 
     @Test
     public void testSendEventsBuffer() {
         mSynchronousStageExecutor.sendEventsBuffer();
-        verifyZeroInteractions(mProvider);
+        verifyNoMoreInteractions(mProvider);
     }
 
     @Test
     public void testReportEvent() {
         mSynchronousStageExecutor.reportEvent(mEventName);
-        verifyZeroInteractions(mProvider);
+        verifyNoMoreInteractions(mProvider);
     }
 
     @Test
     public void testReportEventWithStringValue() {
         mSynchronousStageExecutor.reportEvent(mEventName, mEventValue);
-        verifyZeroInteractions(mProvider);
+        verifyNoMoreInteractions(mProvider);
     }
 
     @Test
     public void testReportEventAttributes() {
         mSynchronousStageExecutor.reportEvent(mEventName, new HashMap<String, Object>());
-        verifyZeroInteractions(mProvider);
+        verifyNoMoreInteractions(mProvider);
     }
 
     @Test
@@ -137,7 +137,7 @@ public class SynchronousStageExecutorTest extends CommonTest {
         throwable.fillInStackTrace();
         Throwable resultThrowable = mSynchronousStageExecutor.reportError(mEventName, throwable);
         assertThat(resultThrowable).isEqualToComparingFieldByField(throwable);
-        verifyZeroInteractions(mProvider);
+        verifyNoMoreInteractions(mProvider);
     }
 
     @Test
@@ -147,55 +147,55 @@ public class SynchronousStageExecutorTest extends CommonTest {
         StackTraceElement[] stacktrace = resultThrowable.getStackTrace();
         assertThat(stacktrace[0].getClassName()).isEqualTo("io.appmetrica.analytics.impl.SynchronousStageExecutor");
         assertThat(stacktrace[0].getMethodName()).isEqualTo("reportError");
-        verifyZeroInteractions(mProvider);
+        verifyNoMoreInteractions(mProvider);
     }
 
     @Test
     public void testReportUnhandledExceptionThrowable() {
         mSynchronousStageExecutor.reportUnhandledException(mock(Throwable.class));
-        verifyZeroInteractions(mProvider);
+        verifyNoMoreInteractions(mProvider);
     }
 
     @Test
     public void testResumeSessionActivity() {
         mSynchronousStageExecutor.resumeSession(mock(Activity.class));
-        verifyZeroInteractions(mProvider);
+        verifyNoMoreInteractions(mProvider);
     }
 
     @Test
     public void testPauseSessionActivity() {
         mSynchronousStageExecutor.pauseSession(mock(Activity.class));
-        verifyZeroInteractions(mProvider);
+        verifyNoMoreInteractions(mProvider);
     }
 
     @Test
     public void testSetUserProfileID() {
         mSynchronousStageExecutor.setUserProfileID("id");
-        verifyZeroInteractions(mProvider);
+        verifyNoMoreInteractions(mProvider);
     }
 
     @Test
     public void testReportUserProfile() {
         mSynchronousStageExecutor.reportUserProfile(mock(UserProfile.class));
-        verifyZeroInteractions(mProvider);
+        verifyNoMoreInteractions(mProvider);
     }
 
     @Test
     public void testReportRevenue() {
         mSynchronousStageExecutor.reportRevenue(mock(Revenue.class));
-        verifyZeroInteractions(mProvider);
+        verifyNoMoreInteractions(mProvider);
     }
 
     @Test
     public void reportECommerce() {
         mSynchronousStageExecutor.reportECommerce(eCommerceEvent);
-        verifyZeroInteractions(mProvider);
+        verifyNoMoreInteractions(mProvider);
     }
 
     @Test
     public void setDataSendingEnabled() {
         mSynchronousStageExecutor.setDataSendingEnabled(true);
-        verifyZeroInteractions(mProvider);
+        verifyNoMoreInteractions(mProvider);
     }
 
     @Test
@@ -299,43 +299,43 @@ public class SynchronousStageExecutorTest extends CommonTest {
     @Test
     public void testReportAppOpenIntent() {
         mSynchronousStageExecutor.reportAppOpen(mock(Intent.class));
-        verifyZeroInteractions(mProvider);
+        verifyNoMoreInteractions(mProvider);
     }
 
     @Test
     public void testReportAppOpenDeeplink() {
         mSynchronousStageExecutor.reportAppOpen(mEventName);
-        verifyZeroInteractions(mProvider);
+        verifyNoMoreInteractions(mProvider);
     }
 
     @Test
     public void testSetLocation() {
         mSynchronousStageExecutor.setLocation(mock(Location.class));
-        verifyZeroInteractions(mProvider);
+        verifyNoMoreInteractions(mProvider);
     }
 
     @Test
     public void testSetLocationTracking() {
         mSynchronousStageExecutor.setLocationTracking(true);
-        verifyZeroInteractions(mProvider);
+        verifyNoMoreInteractions(mProvider);
     }
 
     @Test
     public void testRequestDeferredDeeplinkParameters() {
         mSynchronousStageExecutor.requestDeferredDeeplinkParameters(mock(DeferredDeeplinkParametersListener.class));
-        verifyZeroInteractions(mProvider);
+        verifyNoMoreInteractions(mProvider);
     }
 
     @Test
     public void testRequestDeferredDeeplink() {
         mSynchronousStageExecutor.requestDeferredDeeplink(mock(DeferredDeeplinkListener.class));
-        verifyZeroInteractions(mProvider);
+        verifyNoMoreInteractions(mProvider);
     }
 
     @Test
     public void testInitialize() {
         mSynchronousStageExecutor.initialize(mContext);
-        verifyZeroInteractions(mProvider);
+        verifyNoMoreInteractions(mProvider);
     }
 
     @Test
@@ -348,57 +348,57 @@ public class SynchronousStageExecutorTest extends CommonTest {
     @Test
     public void testPutErrorEnvironmentValue() {
         mSynchronousStageExecutor.putErrorEnvironmentValue("key", "value");
-        verifyZeroInteractions(mProvider);
+        verifyNoMoreInteractions(mProvider);
 
     }
 
     @Test
     public void testEnableAnrMonitoring() {
         mSynchronousStageExecutor.enableAnrMonitoring();
-        verifyZeroInteractions(mProvider);
+        verifyNoMoreInteractions(mProvider);
 
     }
 
     @Test
     public void testActivateReporter() {
         mSynchronousStageExecutor.activateReporter(mContext, mock(ReporterConfig.class));
-        verifyZeroInteractions(mProvider);
+        verifyNoMoreInteractions(mProvider);
     }
 
     @Test
     public void testResumeSession() {
         mSynchronousStageExecutor.resumeSession();
-        verifyZeroInteractions(mProvider);
+        verifyNoMoreInteractions(mProvider);
     }
 
     @Test
     public void testPauseSession() {
         mSynchronousStageExecutor.pauseSession();
-        verifyZeroInteractions(mProvider);
+        verifyNoMoreInteractions(mProvider);
     }
 
     @Test
     public void testActivateWithReporterConfig() {
         mSynchronousStageExecutor.activate(mock(ReporterConfig.class));
-        verifyZeroInteractions(mProvider);
+        verifyNoMoreInteractions(mProvider);
     }
 
     @Test
     public void testActivateWithApiKeyOnly() {
         mSynchronousStageExecutor.activate("apiKey");
-        verifyZeroInteractions(mProvider);
+        verifyNoMoreInteractions(mProvider);
     }
 
     @Test
     public void testReportUnhandledException() {
         mSynchronousStageExecutor.reportUnhandledException(mock(UnhandledException.class));
-        verifyZeroInteractions(mProvider);
+        verifyNoMoreInteractions(mProvider);
     }
 
     @Test
     public void testReportAnr() {
         mSynchronousStageExecutor.reportAnr(mock(AllThreads.class));
-        verifyZeroInteractions(mProvider);
+        verifyNoMoreInteractions(mProvider);
     }
 
     @Test
@@ -412,13 +412,13 @@ public class SynchronousStageExecutorTest extends CommonTest {
     @Test
     public void reportJsEvent() {
         mSynchronousStageExecutor.reportJsEvent("name", "value");
-        verifyZeroInteractions(mProvider);
+        verifyNoMoreInteractions(mProvider);
     }
 
     @Test
     public void reportJsInitEvent() {
         mSynchronousStageExecutor.reportJsInitEvent("value");
-        verifyZeroInteractions(mProvider);
+        verifyNoMoreInteractions(mProvider);
     }
 
     @Test

@@ -19,7 +19,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
@@ -103,7 +102,7 @@ public class ActivityLifecycleManagerTest extends CommonTest {
         activityLifecycleManager.maybeInit(context);
         verify(context).getApplicationContext();
         verifyNoMoreInteractions(context);
-        verifyZeroInteractions(application);
+        verifyNoMoreInteractions(application);
         assertThat(activityLifecycleManager.getWatchingStatus()).isEqualTo(ActivityLifecycleManager.WatchingStatus.NO_APPLICATION);
     }
 
@@ -111,7 +110,7 @@ public class ActivityLifecycleManagerTest extends CommonTest {
     public void unregisterListenerNotWatching() {
         activityLifecycleManager.registerListener(firstListener, ActivityLifecycleManager.ActivityEvent.CREATED);
         activityLifecycleManager.unregisterListener(firstListener, ActivityLifecycleManager.ActivityEvent.CREATED);
-        verifyZeroInteractions(application);
+        verifyNoMoreInteractions(application);
         assertThat(activityLifecycleManager.getWatchingStatus()).isEqualTo(ActivityLifecycleManager.WatchingStatus.NO_APPLICATION);
     }
 
@@ -168,41 +167,41 @@ public class ActivityLifecycleManagerTest extends CommonTest {
         activityLifecycleManager.onActivityCreated(activity, null);
         verify(firstListener).onEvent(activity, ActivityLifecycleManager.ActivityEvent.CREATED);
         verify(fifthListener).onEvent(activity, ActivityLifecycleManager.ActivityEvent.CREATED);
-        verifyZeroInteractions(secondListener, thirdListener, fourthListener);
+        verifyNoMoreInteractions(secondListener, thirdListener, fourthListener);
         clearInvocations(firstListener, secondListener, thirdListener, fourthListener, fifthListener);
         activityLifecycleManager.onActivityResumed(activity);
         verify(firstListener).onEvent(activity, ActivityLifecycleManager.ActivityEvent.RESUMED);
         verify(thirdListener).onEvent(activity, ActivityLifecycleManager.ActivityEvent.RESUMED);
         verify(fifthListener).onEvent(activity, ActivityLifecycleManager.ActivityEvent.RESUMED);
-        verifyZeroInteractions(secondListener, fourthListener);
+        verifyNoMoreInteractions(secondListener, fourthListener);
         clearInvocations(firstListener, secondListener, thirdListener, fourthListener, fifthListener);
         activityLifecycleManager.onActivityPaused(activity);
         verify(secondListener).onEvent(activity, ActivityLifecycleManager.ActivityEvent.PAUSED);
         verify(fifthListener).onEvent(activity, ActivityLifecycleManager.ActivityEvent.PAUSED);
-        verifyZeroInteractions(firstListener, thirdListener, fourthListener);
+        verifyNoMoreInteractions(firstListener, thirdListener, fourthListener);
         clearInvocations(firstListener, secondListener, thirdListener, fourthListener, fifthListener);
 
         activityLifecycleManager.onActivityStarted(activity);
         verify(fourthListener).onEvent(activity, ActivityLifecycleManager.ActivityEvent.STARTED);
         verify(fifthListener).onEvent(activity, ActivityLifecycleManager.ActivityEvent.STARTED);
-        verifyZeroInteractions(firstListener, secondListener, thirdListener);
+        verifyNoMoreInteractions(firstListener, secondListener, thirdListener);
         clearInvocations(firstListener, secondListener, thirdListener, fourthListener, fifthListener);
 
         activityLifecycleManager.onActivityStopped(activity);
         verify(fourthListener).onEvent(activity, ActivityLifecycleManager.ActivityEvent.STOPPED);
         verify(fifthListener).onEvent(activity, ActivityLifecycleManager.ActivityEvent.STOPPED);
-        verifyZeroInteractions(firstListener, secondListener, thirdListener);
+        verifyNoMoreInteractions(firstListener, secondListener, thirdListener);
         clearInvocations(firstListener, secondListener, thirdListener, fourthListener, fifthListener);
 
         activityLifecycleManager.onActivityDestroyed(activity);
         verify(fourthListener).onEvent(activity, ActivityLifecycleManager.ActivityEvent.DESTROYED);
         verify(fifthListener).onEvent(activity, ActivityLifecycleManager.ActivityEvent.DESTROYED);
-        verifyZeroInteractions(firstListener, secondListener, thirdListener);
+        verifyNoMoreInteractions(firstListener, secondListener, thirdListener);
         clearInvocations(firstListener, secondListener, thirdListener, fourthListener, fifthListener);
 
         activityLifecycleManager.unregisterListener(firstListener, ActivityLifecycleManager.ActivityEvent.RESUMED);
         activityLifecycleManager.onActivityResumed(activity);
-        verifyZeroInteractions(firstListener);
+        verifyNoMoreInteractions(firstListener);
         verify(thirdListener).onEvent(activity, ActivityLifecycleManager.ActivityEvent.RESUMED);
         clearInvocations(firstListener, thirdListener);
         activityLifecycleManager.onActivityCreated(activity, null);
@@ -210,6 +209,6 @@ public class ActivityLifecycleManagerTest extends CommonTest {
 
         activityLifecycleManager.unregisterListener(fourthListener);
         activityLifecycleManager.onActivityStopped(activity);
-        verifyZeroInteractions(fourthListener);
+        verifyNoMoreInteractions(fourthListener);
     }
 }

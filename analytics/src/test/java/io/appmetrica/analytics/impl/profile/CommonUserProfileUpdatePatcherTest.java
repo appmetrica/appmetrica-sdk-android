@@ -20,7 +20,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 @RunWith(RobolectricTestRunner.class)
 public class CommonUserProfileUpdatePatcherTest extends CommonTest {
@@ -106,8 +106,8 @@ public class CommonUserProfileUpdatePatcherTest extends CommonTest {
 
             }
         }.apply(storage);
-        verifyZeroInteractions(storage);
-        verifyZeroInteractions(mAttributeSaver);
+        verifyNoMoreInteractions(storage);
+        verifyNoMoreInteractions(mAttributeSaver);
     }
 
     public static Userprofile.Profile.Attribute createEmptyAttribute() {

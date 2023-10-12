@@ -22,7 +22,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
-import org.mockito.kotlin.verifyZeroInteractions
+import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
 
 internal class LocationClientImplTest {
@@ -142,7 +142,7 @@ internal class LocationClientImplTest {
     @Test
     fun `registerLocationSource with last known extractor provider without init`() {
         locationClientImpl.registerLocationSource(lastKnownLocationExtractorProvider)
-        verifyZeroInteractions(lastKnownLocationExtractorProvider)
+        verifyNoMoreInteractions(lastKnownLocationExtractorProvider)
     }
 
     @Test
@@ -155,7 +155,7 @@ internal class LocationClientImplTest {
     @Test
     fun `unregisterLocationSource with last known extractor provider without init`() {
         locationClientImpl.unregisterLocationSource(lastKnownLocationExtractorProvider)
-        verifyZeroInteractions(lastKnownLocationExtractorProvider)
+        verifyNoMoreInteractions(lastKnownLocationExtractorProvider)
     }
 
     @Test
@@ -168,7 +168,7 @@ internal class LocationClientImplTest {
     @Test
     fun `registerLocationSource with location receiver before init`() {
         locationClientImpl.registerLocationSource(locationReceiverProvider)
-        verifyZeroInteractions(locationReceiverProvider)
+        verifyNoMoreInteractions(locationReceiverProvider)
     }
 
     @Test
@@ -181,7 +181,7 @@ internal class LocationClientImplTest {
     @Test
     fun `unregisterLocationSource with location receiver before init`() {
         locationClientImpl.unregisterLocationSource(locationReceiverProvider)
-        verifyZeroInteractions(locationReceiverProvider)
+        verifyNoMoreInteractions(locationReceiverProvider)
     }
 
     @Test

@@ -93,7 +93,7 @@ public class YandexAdvIdGetterTest {
                 service
         ));
         assertThat(yandexAdvIdGetter.getAdTrackingInfo(context))
-                .isEqualToComparingFieldByFieldRecursively(new AdvIdResult(
+                .usingRecursiveComparison().isEqualTo(new AdvIdResult(
                         IdentifierStatus.IDENTIFIER_PROVIDER_UNAVAILABLE,
                         null,
                         "some error"
@@ -225,7 +225,7 @@ public class YandexAdvIdGetterTest {
     public void testHasServiceBindedOK() throws Throwable {
         when(connectionController.connect(context)).thenReturn(service);
         assertThat(yandexAdvIdGetter.getAdTrackingInfo(context))
-                .isEqualToComparingFieldByFieldRecursively(new AdvIdResult(
+                .usingRecursiveComparison().isEqualTo(new AdvIdResult(
                         IdentifierStatus.OK,
                         new AdvIdInfo(Constants.Providers.YANDEX, advId, limitAdTracking),
                         null
@@ -237,7 +237,7 @@ public class YandexAdvIdGetterTest {
     public void withRetriesHasServiceBindedOK() throws Throwable {
         when(connectionController.connect(context)).thenReturn(service);
         assertThat(yandexAdvIdGetter.getAdTrackingInfo(context))
-                .isEqualToComparingFieldByFieldRecursively(new AdvIdResult(
+                .usingRecursiveComparison().isEqualTo(new AdvIdResult(
                         IdentifierStatus.OK,
                         new AdvIdInfo(Constants.Providers.YANDEX, advId, limitAdTracking),
                         null
@@ -262,7 +262,7 @@ public class YandexAdvIdGetterTest {
             }
         });
         assertThat(yandexAdvIdGetter.getAdTrackingInfo(context))
-                .isEqualToComparingFieldByFieldRecursively(new AdvIdResult(
+                .usingRecursiveComparison().isEqualTo(new AdvIdResult(
                         IdentifierStatus.OK,
                         new AdvIdInfo(Constants.Providers.YANDEX, advId, limitAdTracking),
                         null

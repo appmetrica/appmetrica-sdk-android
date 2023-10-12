@@ -23,7 +23,7 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
@@ -65,7 +65,7 @@ public class CrashToFileWriterTest extends CommonTest {
     public void writeToFileCouldNotPrepareCrashFolder() {
         when(mCrashFolderPreparer.prepareCrashFolder(mCrashFolder)).thenReturn(false);
         mCrashToFileWriter.writeToFile(mReport);
-        verifyZeroInteractions(mReport);
+        verifyNoMoreInteractions(mReport);
     }
 
     @Test

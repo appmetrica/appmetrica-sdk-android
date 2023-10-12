@@ -57,7 +57,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
@@ -592,7 +592,7 @@ public class StartupHelperTest extends CommonTest {
                 eq(StartupParamsCallback.Reason.UNKNOWN),
                 any(StartupParamsCallback.Result.class)
         );
-        verifyZeroInteractions(publicLogger);
+        verifyNoMoreInteractions(publicLogger);
     }
 
     @Test
@@ -649,7 +649,7 @@ public class StartupHelperTest extends CommonTest {
         interceptReceiver().send(0, mBundle);
 
         verify(callback).onRequestError(eq(StartupParamsCallback.Reason.UNKNOWN), any(StartupParamsCallback.Result.class));
-        verifyZeroInteractions(publicLogger);
+        verifyNoMoreInteractions(publicLogger);
     }
 
     @Test
@@ -664,14 +664,14 @@ public class StartupHelperTest extends CommonTest {
     public void testSetClidsForEmpty() {
         StartupHelper startupHelper = new StartupHelper(mReportsHandler, mStartupParams, mHandler);
         startupHelper.setClids(new HashMap<String, String>());
-        verifyZeroInteractions(mStartupParams, mReportsHandler);
+        verifyNoMoreInteractions(mStartupParams, mReportsHandler);
     }
 
     @Test
     public void testSetClidsForNull() {
         StartupHelper startupHelper = new StartupHelper(mReportsHandler, mStartupParams, mHandler);
         startupHelper.setClids(null);
-        verifyZeroInteractions(mStartupParams, mReportsHandler);
+        verifyNoMoreInteractions(mStartupParams, mReportsHandler);
     }
 
     @Test

@@ -29,7 +29,7 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
@@ -82,7 +82,7 @@ public class PreferencesServiceDbStorageTest extends CommonTest {
         @Test
         public void testPutNextSendAttemptNumber() {
             mServicePreferences.putNextSendAttemptNumber(networkHost, 5);
-            verifyZeroInteractions(mDbStorage);
+            verifyNoMoreInteractions(mDbStorage);
         }
 
         @Test
@@ -99,7 +99,7 @@ public class PreferencesServiceDbStorageTest extends CommonTest {
         @Test
         public void testPutLastSendAttemptTime() {
             mServicePreferences.putLastSendAttemptTimeSeconds(networkHost, 5);
-            verifyZeroInteractions(mDbStorage);
+            verifyNoMoreInteractions(mDbStorage);
         }
 
     }
@@ -176,7 +176,7 @@ public class PreferencesServiceDbStorageTest extends CommonTest {
             if (mNextSendAttemptNumber != null) {
                 verify(mDbStorage).put(mNextSendAttemptNumber.fullKey(), 5);
             } else {
-                verifyZeroInteractions(mDbStorage);
+                verifyNoMoreInteractions(mDbStorage);
             }
         }
 
@@ -201,7 +201,7 @@ public class PreferencesServiceDbStorageTest extends CommonTest {
             if (mLastSendAttemptTime != null) {
                 verify(mDbStorage).put(mLastSendAttemptTime.fullKey(), 5L);
             } else {
-                verifyZeroInteractions(mDbStorage);
+                verifyNoMoreInteractions(mDbStorage);
             }
         }
     }

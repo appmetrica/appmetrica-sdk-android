@@ -34,7 +34,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
@@ -85,8 +85,8 @@ public class SkuDetailsResponseListenerImplTest {
         );
         verify(executor).execute(any(Runnable.class));
         verify(billingLibraryConnectionHolder).removeListener(skuDetailsResponseListener);
-        verifyZeroInteractions(billingInfoSender);
-        verifyZeroInteractions(billingInfoSentListener);
+        verifyNoMoreInteractions(billingInfoSender);
+        verifyNoMoreInteractions(billingInfoSentListener);
     }
 
     @Test
@@ -116,8 +116,8 @@ public class SkuDetailsResponseListenerImplTest {
         );
         verify(executor).execute(any(Runnable.class));
         verify(billingLibraryConnectionHolder).removeListener(skuDetailsResponseListener);
-        verifyZeroInteractions(billingInfoSender);
-        verifyZeroInteractions(billingInfoSentListener);
+        verifyNoMoreInteractions(billingInfoSender);
+        verifyNoMoreInteractions(billingInfoSentListener);
     }
 
     @Test
@@ -130,8 +130,8 @@ public class SkuDetailsResponseListenerImplTest {
         );
         verify(executor).execute(any(Runnable.class));
         verify(billingLibraryConnectionHolder).removeListener(skuDetailsResponseListener);
-        verifyZeroInteractions(billingInfoSender);
-        verifyZeroInteractions(billingInfoSender);
+        verifyNoMoreInteractions(billingInfoSender);
+        verifyNoMoreInteractions(billingInfoSender);
     }
 
     @Test

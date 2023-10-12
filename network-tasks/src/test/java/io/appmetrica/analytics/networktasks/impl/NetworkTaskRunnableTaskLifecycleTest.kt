@@ -13,7 +13,7 @@ import org.mockito.kotlin.inOrder
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.stubbing
 import org.mockito.kotlin.verify
-import org.mockito.kotlin.verifyZeroInteractions
+import org.mockito.kotlin.verifyNoMoreInteractions
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
@@ -50,7 +50,7 @@ class NetworkTaskRunnableTaskLifecycleTest {
         }
         networkTaskRunnable.run()
         verify(networkTask).onCreateNetworkTask()
-        verifyZeroInteractions(performingStrategy)
+        verifyNoMoreInteractions(performingStrategy)
     }
 
     @Test

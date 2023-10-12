@@ -22,7 +22,7 @@ import org.robolectric.RobolectricTestRunner;
 
 import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 @RunWith(RobolectricTestRunner.class)
 public class AttributionConfigParserTest extends CommonTest {
@@ -41,7 +41,7 @@ public class AttributionConfigParserTest extends CommonTest {
     @Test
     public void noAttributionBlock() {
         parser.parse(result, new JSONObject());
-        verifyZeroInteractions(result);
+        verifyNoMoreInteractions(result);
     }
 
     @Test
@@ -156,7 +156,7 @@ public class AttributionConfigParserTest extends CommonTest {
     public void attributionIsNotJsonObject() throws JSONException {
         JSONObject response = new JSONObject().put(AttributionConfigParser.KEY_ATTRIBUTION, "some string");
         parser.parse(result, response);
-        verifyZeroInteractions(result);
+        verifyNoMoreInteractions(result);
     }
 
     private void testParse(@NonNull JSONObject response, @NonNull List<Pair<String, AttributionConfig.Filter>> expectedConditions) throws IllegalAccessException {

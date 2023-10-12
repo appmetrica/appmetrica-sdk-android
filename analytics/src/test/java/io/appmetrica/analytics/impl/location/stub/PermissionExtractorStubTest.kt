@@ -7,7 +7,7 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
-import org.mockito.kotlin.verifyZeroInteractions
+import org.mockito.kotlin.verifyNoMoreInteractions
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
@@ -26,6 +26,6 @@ class PermissionExtractorStubTest : CommonTest() {
     @Test
     fun hasPermission() {
         assertThat(permissionExtractorStub.hasPermission(context, permission)).isFalse()
-        verifyZeroInteractions(context)
+        verifyNoMoreInteractions(context)
     }
 }

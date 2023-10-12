@@ -14,7 +14,7 @@ import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
-import org.mockito.kotlin.verifyZeroInteractions
+import org.mockito.kotlin.verifyNoMoreInteractions
 import org.robolectric.RobolectricTestRunner
 import java.util.concurrent.TimeUnit
 
@@ -50,7 +50,7 @@ class AppMetricaServiceCoreImplFirstCreateTaskLauncherTest : CommonTest() {
                 eq(executor),
                 activationBarrierCallbackCaptor.capture()
             )
-        verifyZeroInteractions(firstTask, secondTask)
+        verifyNoMoreInteractions(firstTask, secondTask)
         activationBarrierCallbackCaptor.firstValue.onWaitFinished()
         verify(firstTask).run()
         verify(secondTask).run()

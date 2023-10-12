@@ -14,7 +14,7 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
@@ -65,6 +65,6 @@ public class UnlockedUserStateProviderTest extends CommonTest {
     @Test
     public void isUserUnlockedPreN() {
         assertThat(unlockedUserStateProvider.isUserUnlocked(context)).isTrue();
-        verifyZeroInteractions(context, userManager);
+        verifyNoMoreInteractions(context, userManager);
     }
 }

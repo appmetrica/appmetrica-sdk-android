@@ -89,9 +89,9 @@ public class UnhandledExceptionEventFormerTest extends CommonTest {
             verify(clientCounterReport).setEventEnvironment(environment);
             SoftAssertions softly = new SoftAssertions();
             softly.assertThat(report.getEnvironment().getReporterConfiguration())
-                    .isEqualToComparingFieldByFieldRecursively(mReporterEnvironment.getReporterConfiguration());
+                    .usingRecursiveComparison().isEqualTo(mReporterEnvironment.getReporterConfiguration());
             softly.assertThat(report.getEnvironment().getProcessConfiguration())
-                    .isEqualToComparingFieldByFieldRecursively(mReporterEnvironment.getProcessConfiguration());
+                    .usingRecursiveComparison().isEqualTo(mReporterEnvironment.getProcessConfiguration());
             softly.assertThat(report.isCrashReport()).isTrue();
             softly.assertThat(report.getTrimmedFields()).isEqualTo(trimmedFields);
             softly.assertThat(report.getReport()).isSameAs(clientCounterReport);

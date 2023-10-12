@@ -19,7 +19,7 @@ import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.clearInvocations
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
-import org.mockito.kotlin.verifyZeroInteractions
+import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
@@ -67,7 +67,7 @@ internal class LocationControllerImplTest : CommonTest() {
     @Test
     fun `registerObserver sticky before state updating`() {
         locationControllerImpl.registerObserver(firstLocationControllerObserver, true)
-        verifyZeroInteractions(firstLocationControllerObserver)
+        verifyNoMoreInteractions(firstLocationControllerObserver)
         touchLocationExecutorRunnable()
         verify(firstLocationControllerObserver).stopLocationTracking()
     }
@@ -75,15 +75,15 @@ internal class LocationControllerImplTest : CommonTest() {
     @Test
     fun `registerObserver non sticky before state updating`() {
         locationControllerImpl.registerObserver(firstLocationControllerObserver, false)
-        verifyZeroInteractions(firstLocationControllerObserver)
+        verifyNoMoreInteractions(firstLocationControllerObserver)
         touchLocationExecutorRunnable()
-        verifyZeroInteractions(firstLocationControllerObserver)
+        verifyNoMoreInteractions(firstLocationControllerObserver)
     }
 
     @Test
     fun `registerObserver default sticky before state updating`() {
         locationControllerImpl.registerObserver(firstLocationControllerObserver)
-        verifyZeroInteractions(firstLocationControllerObserver)
+        verifyNoMoreInteractions(firstLocationControllerObserver)
         touchLocationExecutorRunnable()
         verify(firstLocationControllerObserver).stopLocationTracking()
     }
@@ -93,7 +93,7 @@ internal class LocationControllerImplTest : CommonTest() {
         locationControllerImpl.onStateChanged(true)
         touchLocationExecutorRunnable()
         locationControllerImpl.registerObserver(firstLocationControllerObserver)
-        verifyZeroInteractions(firstLocationControllerObserver)
+        verifyNoMoreInteractions(firstLocationControllerObserver)
         touchLocationExecutorRunnable()
         verify(firstLocationControllerObserver).startLocationTracking()
     }
@@ -103,9 +103,9 @@ internal class LocationControllerImplTest : CommonTest() {
         locationControllerImpl.onStateChanged(true)
         touchLocationExecutorRunnable()
         locationControllerImpl.registerObserver(firstLocationControllerObserver, false)
-        verifyZeroInteractions(firstLocationControllerObserver)
+        verifyNoMoreInteractions(firstLocationControllerObserver)
         touchLocationExecutorRunnable()
-        verifyZeroInteractions(firstLocationControllerObserver)
+        verifyNoMoreInteractions(firstLocationControllerObserver)
     }
 
     @Test
@@ -113,7 +113,7 @@ internal class LocationControllerImplTest : CommonTest() {
         locationControllerImpl.onStateChanged(true)
         touchLocationExecutorRunnable()
         locationControllerImpl.registerObserver(firstLocationControllerObserver)
-        verifyZeroInteractions(firstLocationControllerObserver)
+        verifyNoMoreInteractions(firstLocationControllerObserver)
         touchLocationExecutorRunnable()
         verify(firstLocationControllerObserver).startLocationTracking()
     }
@@ -123,14 +123,14 @@ internal class LocationControllerImplTest : CommonTest() {
         registerBothNonStickyObservers()
         locationControllerImpl.onStateChanged(false)
         touchLocationExecutorRunnable()
-        verifyZeroInteractions(firstLocationControllerObserver, secondLocationControllerObserver)
+        verifyNoMoreInteractions(firstLocationControllerObserver, secondLocationControllerObserver)
     }
 
     @Test
     fun `onStateChanged from false to true`() {
         registerBothNonStickyObservers()
         locationControllerImpl.onStateChanged(true)
-        verifyZeroInteractions(firstLocationControllerObserver, secondLocationControllerObserver)
+        verifyNoMoreInteractions(firstLocationControllerObserver, secondLocationControllerObserver)
         touchLocationExecutorRunnable()
         verify(firstLocationControllerObserver).startLocationTracking()
         verify(secondLocationControllerObserver).startLocationTracking()
@@ -142,7 +142,7 @@ internal class LocationControllerImplTest : CommonTest() {
         touchLocationExecutorRunnable()
         registerBothNonStickyObservers()
         locationControllerImpl.onStateChanged(false)
-        verifyZeroInteractions(firstLocationControllerObserver, secondLocationControllerObserver)
+        verifyNoMoreInteractions(firstLocationControllerObserver, secondLocationControllerObserver)
         touchLocationExecutorRunnable()
         verify(firstLocationControllerObserver).stopLocationTracking()
         verify(secondLocationControllerObserver).stopLocationTracking()

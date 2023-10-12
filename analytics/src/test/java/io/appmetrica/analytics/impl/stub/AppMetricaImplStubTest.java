@@ -24,7 +24,7 @@ import org.robolectric.RobolectricTestRunner;
 import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 @RunWith(RobolectricTestRunner.class)
 public class AppMetricaImplStubTest extends CommonTest {
@@ -56,7 +56,7 @@ public class AppMetricaImplStubTest extends CommonTest {
     @Test
     public void activate() {
         stub.activate(appMetricaConfig, appMetricaConfig);
-        verifyZeroInteractions(appMetricaConfig, appMetricaConfig);
+        verifyNoMoreInteractions(appMetricaConfig, appMetricaConfig);
     }
 
     @Test
@@ -68,19 +68,19 @@ public class AppMetricaImplStubTest extends CommonTest {
     @Test
     public void requestDeferredDeeplinkParameters() {
         stub.requestDeferredDeeplinkParameters(deferredDeeplinkParametersListener);
-        verifyZeroInteractions(deferredDeeplinkListener);
+        verifyNoMoreInteractions(deferredDeeplinkListener);
     }
 
     @Test
     public void requestDeferredDeeplink() {
         stub.requestDeferredDeeplink(deferredDeeplinkListener);
-        verifyZeroInteractions(deferredDeeplinkListener);
+        verifyNoMoreInteractions(deferredDeeplinkListener);
     }
 
     @Test
     public void activateReporter() {
         stub.activateReporter(reporterInternalConfig);
-        verifyZeroInteractions(reporterInternalConfig);
+        verifyNoMoreInteractions(reporterInternalConfig);
     }
 
     @Test
@@ -117,13 +117,13 @@ public class AppMetricaImplStubTest extends CommonTest {
     @Test
     public void onReceiveResult() {
         stub.onReceiveResult(10, bundle);
-        verifyZeroInteractions(bundle);
+        verifyNoMoreInteractions(bundle);
     }
 
     @Test
     public void setLocation() {
         stub.setLocation(location);
-        verifyZeroInteractions(location);
+        verifyNoMoreInteractions(location);
     }
 
     @Test

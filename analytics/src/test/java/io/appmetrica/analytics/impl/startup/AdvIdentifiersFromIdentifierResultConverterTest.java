@@ -19,7 +19,7 @@ public class AdvIdentifiersFromIdentifierResultConverterTest extends CommonTest 
     @Test
     public void testConvertNulls() {
         AdvIdentifiersResult result = advIdentifiersConverter.convert(null, null, null);
-        assertThat(result).isEqualToComparingFieldByFieldRecursively(
+        assertThat(result).usingRecursiveComparison().isEqualTo(
                 new AdvIdentifiersResult(
                         new AdvIdentifiersResult.AdvId(null, AdvIdentifiersResult.Details.INTERNAL_ERROR, null),
                         new AdvIdentifiersResult.AdvId(null, AdvIdentifiersResult.Details.INTERNAL_ERROR, null),
@@ -38,7 +38,7 @@ public class AdvIdentifiersFromIdentifierResultConverterTest extends CommonTest 
                 new IdentifiersResult(hoaid, IdentifierStatus.OK, errorExplanation),
                 new IdentifiersResult(yandex, IdentifierStatus.OK, errorExplanation)
         );
-        assertThat(result).isEqualToComparingFieldByFieldRecursively(
+        assertThat(result).usingRecursiveComparison().isEqualTo(
                 new AdvIdentifiersResult(
                         new AdvIdentifiersResult.AdvId(null, AdvIdentifiersResult.Details.INTERNAL_ERROR, null),
                         new AdvIdentifiersResult.AdvId(hoaid, AdvIdentifiersResult.Details.OK, errorExplanation),
@@ -57,7 +57,7 @@ public class AdvIdentifiersFromIdentifierResultConverterTest extends CommonTest 
                 null,
                 new IdentifiersResult(yandex, IdentifierStatus.OK, errorExplanation)
         );
-        assertThat(result).isEqualToComparingFieldByFieldRecursively(
+        assertThat(result).usingRecursiveComparison().isEqualTo(
                 new AdvIdentifiersResult(
                         new AdvIdentifiersResult.AdvId(gaid, AdvIdentifiersResult.Details.OK, errorExplanation),
                         new AdvIdentifiersResult.AdvId(null, AdvIdentifiersResult.Details.INTERNAL_ERROR, null),
@@ -76,7 +76,7 @@ public class AdvIdentifiersFromIdentifierResultConverterTest extends CommonTest 
                 new IdentifiersResult(hoaid, IdentifierStatus.OK, errorExplanation),
                 null
         );
-        assertThat(result).isEqualToComparingFieldByFieldRecursively(
+        assertThat(result).usingRecursiveComparison().isEqualTo(
                 new AdvIdentifiersResult(
                         new AdvIdentifiersResult.AdvId(gaid, AdvIdentifiersResult.Details.OK, errorExplanation),
                         new AdvIdentifiersResult.AdvId(hoaid, AdvIdentifiersResult.Details.OK, errorExplanation),
@@ -98,7 +98,7 @@ public class AdvIdentifiersFromIdentifierResultConverterTest extends CommonTest 
                 new IdentifiersResult(hoaid, IdentifierStatus.FEATURE_DISABLED, hoaidError),
                 new IdentifiersResult(yandex, IdentifierStatus.INVALID_ADV_ID, yandexError)
         );
-        assertThat(result).isEqualToComparingFieldByFieldRecursively(
+        assertThat(result).usingRecursiveComparison().isEqualTo(
                 new AdvIdentifiersResult(
                         new AdvIdentifiersResult.AdvId(gaid, AdvIdentifiersResult.Details.OK, gaidError),
                         new AdvIdentifiersResult.AdvId(hoaid, AdvIdentifiersResult.Details.FEATURE_DISABLED, hoaidError),

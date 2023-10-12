@@ -16,7 +16,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
-import org.mockito.kotlin.verifyZeroInteractions
+import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
@@ -85,7 +85,7 @@ class FileVitalDataSourceTest : CommonTest() {
     fun anotherException() {
         whenever(FileUtils.getFileFromSdkStorage(context, fileName)).thenThrow(IllegalStateException())
         assertThat(fileVitalDataSource.getVitalData()).isNull()
-        verifyZeroInteractions(selfReporter)
+        verifyNoMoreInteractions(selfReporter)
     }
 
     @Test

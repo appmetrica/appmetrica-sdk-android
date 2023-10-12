@@ -33,7 +33,7 @@ public class StorageFactoryImplTest extends CommonTest {
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        context = RuntimeEnvironment.systemContext;
+        context = RuntimeEnvironment.getApplication();
         storageFactory = new StorageFactoryImpl<Integer>() {
             @NonNull
             @Override

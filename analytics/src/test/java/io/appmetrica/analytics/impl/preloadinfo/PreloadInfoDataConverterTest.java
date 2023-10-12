@@ -72,7 +72,7 @@ public class PreloadInfoDataConverterTest extends CommonTest {
         ArgumentCaptor<PreloadInfoProto.PreloadInfoData.PreloadInfo> captor = ArgumentCaptor
                 .forClass(PreloadInfoProto.PreloadInfoData.PreloadInfo.class);
         verify(stateConverter).toModel(captor.capture());
-        assertThat(captor.getValue()).isEqualToComparingFieldByFieldRecursively(new PreloadInfoProto.PreloadInfoData.PreloadInfo());
+        assertThat(captor.getValue()).usingRecursiveComparison().isEqualTo(new PreloadInfoProto.PreloadInfoData.PreloadInfo());
     }
 
     @Test

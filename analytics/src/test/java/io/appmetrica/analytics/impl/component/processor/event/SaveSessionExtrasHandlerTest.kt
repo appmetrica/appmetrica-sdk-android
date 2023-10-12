@@ -12,7 +12,7 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoMoreInteractions
-import org.mockito.kotlin.verifyZeroInteractions
+import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
 
 class SaveSessionExtrasHandlerTest : CommonTest() {
@@ -36,7 +36,7 @@ class SaveSessionExtrasHandlerTest : CommonTest() {
     fun `process for empty extras`() {
         whenever(report.extras).thenReturn(mutableMapOf())
         assertThat(saveSessionExtrasHandler.process(report)).isTrue()
-        verifyZeroInteractions(sessionExtrasHolder)
+        verifyNoMoreInteractions(sessionExtrasHolder)
     }
 
     @Test

@@ -17,7 +17,7 @@ class ClidsInfoStateSerializerTest : CommonTest() {
         val protoState = ClidsInfoProto.ClidsInfo()
         val rawData: ByteArray = serializer.toByteArray(protoState)
         val restored = serializer.toState(rawData)
-        assertThat(restored).isEqualToComparingFieldByFieldRecursively(protoState)
+        assertThat(restored).usingRecursiveComparison().isEqualTo(protoState)
         ProtoObjectPropertyAssertions(restored)
             .checkFieldIsNull("chosenClids")
             .checkField("candidates", emptyArray<ClidsInfoProto.ClidsInfo.ClidsCandidate>())
@@ -78,7 +78,7 @@ class ClidsInfoStateSerializerTest : CommonTest() {
         val rawData = serializer.toByteArray(protoState)
         assertThat(rawData).isNotEmpty
         val restored = serializer.toState(rawData)
-        assertThat(restored).isEqualToComparingFieldByFieldRecursively(protoState)
+        assertThat(restored).usingRecursiveComparison().isEqualTo(protoState)
         ProtoObjectPropertyAssertions(restored)
             .withIgnoredFields("candidates")
             .checkFieldRecursively<ClidsInfoProto.ClidsInfo.ClidsCandidate>("chosenClids") {

@@ -29,7 +29,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
@@ -97,7 +97,7 @@ public class StartupNetworkResponseHandlerTest extends CommonTest {
     public void testHandleWithErrorResponseCode() {
         when(responseDataHolder.getResponseCode()).thenReturn(304);
         assertThat(mResponseHandler.handle(responseDataHolder)).isNull();
-        verifyZeroInteractions(mStartupParser);
+        verifyNoMoreInteractions(mStartupParser);
     }
 
     @Test
@@ -154,7 +154,7 @@ public class StartupNetworkResponseHandlerTest extends CommonTest {
         when(responseDataHolder.getResponseHeaders()).thenReturn(headersMap);
         when(mStartupParser.parseStartupResponse(mUncompressedBody)).thenReturn(mResult);
         assertValidResponseWithEncryption();
-        verifyZeroInteractions(mStartupParser);
+        verifyNoMoreInteractions(mStartupParser);
     }
 
     @Test
@@ -163,7 +163,7 @@ public class StartupNetworkResponseHandlerTest extends CommonTest {
         when(mBodyDecoder.decode(eq(mResponseBody), eq(mPassword))).thenReturn(null);
         assertThat(mResponseHandler.handle(responseDataHolder)).isNull();
         verify(mBodyDecoder).decode(eq(mResponseBody), eq(mPassword));
-        verifyZeroInteractions(mStartupParser);
+        verifyNoMoreInteractions(mStartupParser);
     }
 
     @Test

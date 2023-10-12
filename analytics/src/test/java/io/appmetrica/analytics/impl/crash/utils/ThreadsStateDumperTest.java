@@ -84,7 +84,7 @@ public class ThreadsStateDumperTest extends CommonTest {
         withoutExcluded.add(mainThreadState);
 
         List<ThreadState> forCrash = threadsStateDumper.getThreadsDumpForCrash(excluded);
-        assertThat(forCrash).containsOnlyElementsOf(withoutExcluded);
+        assertThat(forCrash).containsExactlyInAnyOrderElementsOf(withoutExcluded);
     }
 
 }

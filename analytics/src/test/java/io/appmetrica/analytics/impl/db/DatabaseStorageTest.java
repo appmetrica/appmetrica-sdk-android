@@ -21,7 +21,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
@@ -55,13 +55,13 @@ public class DatabaseStorageTest extends CommonTest {
     @Test
     public void testGetReadableDatabase() {
         assertThat(mDatabaseStorage.getReadableDatabase()).isNotNull();
-        verifyZeroInteractions(mPublicLogger);
+        verifyNoMoreInteractions(mPublicLogger);
     }
 
     @Test
     public void testGetWritableDatabase() {
         assertThat(mDatabaseStorage.getWritableDatabase()).isNotNull();
-        verifyZeroInteractions(mPublicLogger);
+        verifyNoMoreInteractions(mPublicLogger);
     }
 
     @Test

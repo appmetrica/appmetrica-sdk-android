@@ -37,7 +37,7 @@ import org.mockito.kotlin.clearInvocations
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
-import org.mockito.kotlin.verifyZeroInteractions
+import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
@@ -176,7 +176,7 @@ internal class LocationApiImplTest : CommonTest() {
         clearInvocations(locationSourcesController)
         locationApiImpl.init()
         verify(locationSourcesController).init()
-        verifyZeroInteractions(locationSourcesController)
+        verifyNoMoreInteractions(locationSourcesController)
     }
 
     @Test
@@ -246,7 +246,7 @@ internal class LocationApiImplTest : CommonTest() {
     fun `onStartupStateChanged if cacheControl is null`() {
         clearInvocations(locationClient)
         whenever(startupState.cacheControl).thenReturn(null)
-        verifyZeroInteractions(locationClient)
+        verifyNoMoreInteractions(locationClient)
     }
 
     @Test

@@ -23,7 +23,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoMoreInteractions
-import org.mockito.kotlin.verifyZeroInteractions
+import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 import java.util.UUID
@@ -70,7 +70,7 @@ class ModulesProxyTest : CommonTest() {
         val inOrder = inOrder(modulesBarrier, executor)
         inOrder.verify(modulesBarrier).reportEvent(moduleEvent)
         inOrder.verify(executor, times(1)).execute(runnableArgumentCaptor.capture())
-        verifyZeroInteractions(mainReporter)
+        verifyNoMoreInteractions(mainReporter)
 
         runnableArgumentCaptor.firstValue.run()
 
@@ -88,7 +88,7 @@ class ModulesProxyTest : CommonTest() {
         inOrder(modulesBarrier, executor, mainReporter) {
             verify(modulesBarrier).setSessionExtra(key, value)
             verify(executor).execute(runnableArgumentCaptor.capture())
-            verifyZeroInteractions(mainReporter)
+            verifyNoMoreInteractions(mainReporter)
         }
 
         runnableArgumentCaptor.firstValue.run()

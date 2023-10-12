@@ -11,7 +11,7 @@ import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 @RunWith(RobolectricTestRunner.class)
 public class ReporterFactoryStubTest extends CommonTest {
@@ -35,13 +35,13 @@ public class ReporterFactoryStubTest extends CommonTest {
         assertThat(reporterFactoryStub.buildMainReporter(appMetricaConfig, true))
             .isNotNull()
             .isInstanceOf(MainReporterStub.class);
-        verifyZeroInteractions(appMetricaConfig);
+        verifyNoMoreInteractions(appMetricaConfig);
     }
 
     @Test
     public void activateReporter() {
         reporterFactoryStub.activateReporter(reporterInternalConfig);
-        verifyZeroInteractions(reporterInternalConfig);
+        verifyNoMoreInteractions(reporterInternalConfig);
     }
 
     @Test
@@ -49,7 +49,7 @@ public class ReporterFactoryStubTest extends CommonTest {
         assertThat(reporterFactoryStub.getOrCreateReporter(reporterInternalConfig))
                 .isNotNull()
                 .isInstanceOf(ReporterExtendedStub.class);
-        verifyZeroInteractions(reporterInternalConfig);
+        verifyNoMoreInteractions(reporterInternalConfig);
     }
 
     @Test

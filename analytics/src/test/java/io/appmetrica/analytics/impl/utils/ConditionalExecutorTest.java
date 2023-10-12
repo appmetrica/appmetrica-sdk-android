@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.clearInvocations;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 @RunWith(RobolectricTestRunner.class)
 public class ConditionalExecutorTest extends CommonTest {
@@ -57,11 +57,11 @@ public class ConditionalExecutorTest extends CommonTest {
         for (Runnable runnable : addCommandRunnables) {
             runnable.run();
         }
-        verifyZeroInteractions(reporter);
+        verifyNoMoreInteractions(reporter);
 
         clearInvocations(executor);
         conditionalExecutor.setResource(reporter);
-        verifyZeroInteractions(executor);
+        verifyNoMoreInteractions(executor);
         InOrder inOrder = Mockito.inOrder(reporter);
         inOrder.verify(reporter).resumeSession();
         inOrder.verify(reporter).pauseSession();

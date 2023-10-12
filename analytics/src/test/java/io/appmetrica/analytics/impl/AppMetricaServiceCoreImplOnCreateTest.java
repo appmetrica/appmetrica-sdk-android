@@ -47,7 +47,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
@@ -166,7 +166,7 @@ public class AppMetricaServiceCoreImplOnCreateTest extends CommonTest {
         when(FileUtils.getCrashesDirectory(mContext)).thenReturn(null);
         initMetricaCoreImpl();
         mMetricaCore.onCreate();
-        verifyZeroInteractions(reportExecutor, crashDirectoryWatcher);
+        verifyNoMoreInteractions(reportExecutor, crashDirectoryWatcher);
     }
 
     @Test
@@ -199,7 +199,7 @@ public class AppMetricaServiceCoreImplOnCreateTest extends CommonTest {
         clearInvocations(fieldsFactory, crashDirectoryWatcher);
         mMetricaCore.onCreate();
         verify(fieldsFactory, never()).createCrashDirectoryWatcher(any(File.class), any(Consumer.class));
-        verifyZeroInteractions(crashDirectoryWatcher);
+        verifyNoMoreInteractions(crashDirectoryWatcher);
     }
 
     @Test
@@ -255,7 +255,7 @@ public class AppMetricaServiceCoreImplOnCreateTest extends CommonTest {
 
             verify(firstServiceEntryPointManager, never()).onPossibleFirstEntry(mContext);
             verify(globalServiceLocator, never()).initAsync();
-            verifyZeroInteractions(mAppMetricaServiceLifecycle);
+            verifyNoMoreInteractions(mAppMetricaServiceLifecycle);
             verify(advertisingIdGetter, never()).init(same(mContext), any(StartupState.class));
             verify(fieldsFactory, never()).createReportConsumer(same(mContext), any(ClientRepository.class));
             verify(AppMetricaSelfReportFacade.class, times(1));

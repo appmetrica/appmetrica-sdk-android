@@ -17,7 +17,7 @@ import org.robolectric.RobolectricTestRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
@@ -61,7 +61,7 @@ public class TaskProcessorTest extends CommonTest {
         processor.onCreate();
         processor.onDestroy();
         processor.flushAllTasks();
-        verifyZeroInteractions(startupExecutor);
+        verifyNoMoreInteractions(startupExecutor);
         processor.onCreate();
         processor.flushAllTasks();
         verify(startupExecutor).sendStartupIfRequired();
@@ -81,14 +81,14 @@ public class TaskProcessorTest extends CommonTest {
         processor.onDestroy();
         processor.onDestroy();
         processor.flushAllTasks();
-        verifyZeroInteractions(startupExecutor);
+        verifyNoMoreInteractions(startupExecutor);
     }
 
     @Test
     public void onDestroyWithoutOnCreate() {
         processor.onDestroy();
         processor.flushAllTasks();
-        verifyZeroInteractions(startupExecutor);
+        verifyNoMoreInteractions(startupExecutor);
     }
 
     @Test

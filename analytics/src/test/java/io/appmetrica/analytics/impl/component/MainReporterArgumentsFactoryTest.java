@@ -10,7 +10,7 @@ import org.robolectric.RobolectricTestRunner;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 @RunWith(RobolectricTestRunner.class)
 public class MainReporterArgumentsFactoryTest extends CommonTest {
@@ -23,7 +23,7 @@ public class MainReporterArgumentsFactoryTest extends CommonTest {
         CounterConfiguration configuration = mock(CounterConfiguration.class);
         doReturn(true).when(configuration).getDataSendingEnabled();
         assertThat(mFactory.shouldSend(new CommonArguments.ReporterArguments(configuration, null).dataSendingEnabled)).isTrue();
-        verifyZeroInteractions(mController);
+        verifyNoMoreInteractions(mController);
     }
 
     @Test
@@ -31,7 +31,7 @@ public class MainReporterArgumentsFactoryTest extends CommonTest {
         CounterConfiguration configuration = mock(CounterConfiguration.class);
         doReturn(false).when(configuration).getDataSendingEnabled();
         assertThat(mFactory.shouldSend(new CommonArguments.ReporterArguments(configuration, null).dataSendingEnabled)).isFalse();
-        verifyZeroInteractions(mController);
+        verifyNoMoreInteractions(mController);
     }
 
 }

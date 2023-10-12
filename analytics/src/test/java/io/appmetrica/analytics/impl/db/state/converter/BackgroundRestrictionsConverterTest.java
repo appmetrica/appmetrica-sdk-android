@@ -130,11 +130,11 @@ public class BackgroundRestrictionsConverterTest extends CommonTest {
 
     @Test
     public void testToProto() {
-        assertThat(mConverter.fromModel(mState)).isEqualToComparingFieldByFieldRecursively(mProto);
+        assertThat(mConverter.fromModel(mState)).usingRecursiveComparison().isEqualTo(mProto);
     }
 
     @Test
     public void testToModel() {
-        assertThat(mConverter.toModel(mProto)).isEqualToComparingFieldByFieldRecursively(mState);
+        assertThat(mConverter.toModel(mProto)).usingRecursiveComparison().isEqualTo(mState);
     }
 }

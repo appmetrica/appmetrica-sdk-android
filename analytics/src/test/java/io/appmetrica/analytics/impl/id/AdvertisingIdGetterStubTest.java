@@ -18,7 +18,7 @@ import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
 
 import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 @RunWith(RobolectricTestRunner.class)
 public class AdvertisingIdGetterStubTest extends CommonTest {
@@ -42,43 +42,43 @@ public class AdvertisingIdGetterStubTest extends CommonTest {
     @Test
     public void lazyInit() {
         advertisingIdGetterStub.lazyInit(context);
-        verifyZeroInteractions(context);
+        verifyNoMoreInteractions(context);
     }
 
     @Test
     public void init() {
         advertisingIdGetterStub.init(context);
-        verifyZeroInteractions(context);
+        verifyNoMoreInteractions(context);
     }
 
     @Test
     public void initWithStartupState() {
         advertisingIdGetterStub.init(context, startupState);
-        verifyZeroInteractions(context, startupState);
+        verifyNoMoreInteractions(context, startupState);
     }
 
     @Test
     public void getIdentifiers() throws Exception {
         assertAdvertisingIdsHolder(advertisingIdGetterStub.getIdentifiers(context));
-        verifyZeroInteractions(context);
+        verifyNoMoreInteractions(context);
     }
 
     @Test
     public void getIdentifiersForced() throws Exception {
         assertAdvertisingIdsHolder(advertisingIdGetterStub.getIdentifiersForced(context));
-        verifyZeroInteractions(context);
+        verifyNoMoreInteractions(context);
     }
 
     @Test
     public void getIdentifiersForcedWithRetryStrategy() throws Exception {
         assertAdvertisingIdsHolder(advertisingIdGetterStub.getIdentifiersForced(context, retryStrategy));
-        verifyZeroInteractions(context, retryStrategy);
+        verifyNoMoreInteractions(context, retryStrategy);
     }
 
     @Test
     public void onStartupStateChanged() {
         advertisingIdGetterStub.onStartupStateChanged(startupState);
-        verifyZeroInteractions(startupState);
+        verifyNoMoreInteractions(startupState);
     }
 
     private void assertAdvertisingIdsHolder(AdvertisingIdsHolder advertisingIdsHolder) throws Exception {

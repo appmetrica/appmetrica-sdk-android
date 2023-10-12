@@ -14,7 +14,7 @@ import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
-import org.mockito.kotlin.verifyZeroInteractions
+import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
 
 internal class GplLastKnownLocationExtractorTest {
@@ -53,7 +53,7 @@ internal class GplLastKnownLocationExtractorTest {
     fun `updateLastKnownLocation() if no permission`() {
         whenever(permissionResolutionStrategy.hasNecessaryPermissions(context)).thenReturn(false)
         gplLastKnownLocationExtractor.updateLastKnownLocation()
-        verifyZeroInteractions(wrapperFactory(), gplWrapper)
+        verifyNoMoreInteractions(wrapperFactory(), gplWrapper)
     }
 
     @Test
