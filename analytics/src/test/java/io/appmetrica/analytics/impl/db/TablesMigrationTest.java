@@ -1,6 +1,5 @@
 package io.appmetrica.analytics.impl.db;
 
-import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -9,11 +8,9 @@ import io.appmetrica.analytics.coreapi.internal.db.DatabaseScript;
 import io.appmetrica.analytics.impl.component.ComponentId;
 import io.appmetrica.analytics.impl.db.DatabaseRevisions.DatabaseRevision;
 import io.appmetrica.analytics.impl.db.constants.Constants;
-import io.appmetrica.analytics.impl.db.storage.KeyValueTableDbHelperTestProxy;
 import io.appmetrica.analytics.impl.utils.collection.HashMultimap;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.LogRule;
-import io.appmetrica.analytics.testutils.RandomStringGenerator;
 import io.appmetrica.analytics.testutils.TestUtils;
 import java.io.Closeable;
 import java.util.ArrayList;
@@ -31,9 +28,6 @@ abstract class TablesMigrationTest extends CommonTest {
 
     @Rule
     public LogRule logRule =  new LogRule();
-
-    public static final String TEST_DATA = "referrer from tryToSavePreferences";
-    public static final String TEST_KEY = "test_key";
 
     final DatabaseRevision mStartUpgradeFromRevision;
     protected final DatabaseManagerProvider mDatabaseManagerProvider;
@@ -58,20 +52,6 @@ abstract class TablesMigrationTest extends CommonTest {
         }
     }
 
-    ContentValues createSimpleRandomKeyValueRecord() {
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(Constants.KeyValueTable.KeyValueTableEntry.FIELD_KEY, new RandomStringGenerator(100).nextString());
-        return contentValues;
-    }
-
-    ContentValues createSimpleKeyValueRecord(String key, String value, int type) {
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(Constants.KeyValueTable.KeyValueTableEntry.FIELD_KEY, key);
-        contentValues.put(Constants.KeyValueTable.KeyValueTableEntry.FIELD_TYPE, type);
-        contentValues.put(Constants.KeyValueTable.KeyValueTableEntry.FIELD_VALUE, value);
-        return contentValues;
-    }
-
     DatabaseRevisions.DatabaseRevision getDatabaseRevision(final int databaseRevisionNumber) {
         DatabaseRevision databaseRevision = null;
         for (int i = 1; i <= databaseRevisionNumber; i++) {
@@ -84,38 +64,6 @@ abstract class TablesMigrationTest extends CommonTest {
     }
 
     abstract HashMap<Integer, DatabaseRevision> getDatabaseRevisions();
-
-    void tryToSaveAndReadPreferences(final DatabaseStorage dbStorage) {
-        KeyValueTableDbHelperTestProxy keyValueTableDbHelper =
-                createKeyValueDbHelperTestProxy(dbStorage, Constants.PreferencesTable.TABLE_NAME);
-
-        assertThat(keyValueTableDbHelper.getString(TEST_KEY, null)).isNull();
-
-        keyValueTableDbHelper.put(TEST_KEY, TEST_DATA).commit();
-
-        waitingForDataRecording();
-
-        KeyValueTableDbHelperTestProxy anotherKeyValueTableDbHelper =
-                createKeyValueDbHelperTestProxy(dbStorage, Constants.PreferencesTable.TABLE_NAME);
-
-        assertThat(anotherKeyValueTableDbHelper.getString(TEST_KEY, null)).isEqualTo(TEST_DATA);
-    }
-
-    private KeyValueTableDbHelperTestProxy createKeyValueDbHelperTestProxy(DatabaseStorage databaseStorage,
-                                                                           String tableName) {
-        KeyValueTableDbHelperTestProxy proxy =
-                new KeyValueTableDbHelperTestProxy(databaseStorage, Constants.PreferencesTable.TABLE_NAME);
-        closeables.add(proxy);
-        return proxy;
-    }
-
-    protected void waitingForDataRecording() {
-        try {
-            Thread.sleep(10);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
 
     void checkTableStructure(String tableName, List<String> expectedColumns) {
         SQLiteDatabase db = upgradeDbFromOldNoNewestUsingStubDbValidator(getOldDb());
