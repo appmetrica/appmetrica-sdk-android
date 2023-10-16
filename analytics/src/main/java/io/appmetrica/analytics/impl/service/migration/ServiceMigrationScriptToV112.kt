@@ -95,7 +95,6 @@ internal class ServiceMigrationScriptToV112(private val vitalDataStorage: VitalC
                     "deviceId = ${vitalDataStorage.deviceId}; deviceIdHash = ${vitalDataStorage.deviceIdHash}"
             )
         }
-        startupStateBuilder.withDeviceID(vitalDataStorage.deviceId).withDeviceIDHash(vitalDataStorage.deviceIdHash)
     }
 
     private fun readLegacyStartupState(database: SQLiteDatabase): LegacyStartupState? {

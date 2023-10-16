@@ -61,8 +61,7 @@ message StartupState {
     required StatSending statSending = 16;
     optional bool hadFirstStartup = 17 [default = false];
 
-    optional string deviceID = 18 [deprecated = true]; // Moved to undeletable storage: appmetrica_vital.dat
-    optional string deviceIDHash = 19 [deprecated = true]; // Moved to undeletable storage: appmetrica_vital.dat
+    reserved 18, 19;
 
     optional string certificateUrl = 20;
 

@@ -141,10 +141,8 @@ internal class ServiceMigrationScriptToV112Test : CommonTest() {
         val result = interceptStartupState()
 
         ProtoObjectPropertyAssertions(result)
-            .withPermittedFields("uuid", "deviceID", "deviceIDHash", "countryInit", "hadFirstStartup")
+            .withPermittedFields("uuid", "countryInit", "hadFirstStartup")
             .checkField("uuid", uuid)
-            .checkField("deviceID", deviceID)
-            .checkField("deviceIDHash", deviceIDHash)
             .checkField("countryInit", countryInit)
             .checkField("hadFirstStartup", true)
             .checkAll()
@@ -232,10 +230,10 @@ internal class ServiceMigrationScriptToV112Test : CommonTest() {
         val result = interceptStartupState()
 
         ProtoObjectPropertyAssertions(result)
-            .withPermittedFields("uuid", "deviceID", "deviceIDHash", "hadFirstStartup", "countryInit")
+            .withPermittedFields("uuid", "hadFirstStartup", "countryInit")
             .checkField("hadFirstStartup", false)
             .checkField("countryInit", "")
-            .checkFieldsAreNull("uuid", "deviceID", "deviceIDHash")
+            .checkFieldsAreNull("uuid")
             .checkAll()
 
         verify(vitalCommonDataProvider, never()).deviceId = any()
@@ -314,9 +312,9 @@ internal class ServiceMigrationScriptToV112Test : CommonTest() {
         val result = interceptStartupState()
 
         ProtoObjectPropertyAssertions(result)
-            .withPermittedFields("uuid", "deviceID", "deviceIDHash", "hadFirstStartup", "countryInit")
+            .withPermittedFields("uuid", "hadFirstStartup", "countryInit")
             .checkField("hadFirstStartup", false)
-            .checkFieldsAreNull("uuid", "deviceID", "deviceIDHash", "countryInit")
+            .checkFieldsAreNull("uuid", "countryInit")
             .checkAll()
 
         verify(vitalCommonDataProvider, never()).deviceId = any()
@@ -342,9 +340,9 @@ internal class ServiceMigrationScriptToV112Test : CommonTest() {
         val result = interceptStartupState()
 
         ProtoObjectPropertyAssertions(result)
-            .withPermittedFields("uuid", "deviceID", "deviceIDHash", "hadFirstStartup", "countryInit")
+            .withPermittedFields("uuid", "hadFirstStartup", "countryInit")
             .checkField("hadFirstStartup", false)
-            .checkFieldsAreNull("uuid", "deviceID", "deviceIDHash", "countryInit")
+            .checkFieldsAreNull("uuid", "countryInit")
             .checkAll()
 
         verify(vitalCommonDataProvider, never()).deviceId = any()

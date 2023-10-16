@@ -129,8 +129,6 @@ class StartupStateStorageTest : CommonTest() {
             .withFinalFieldOnly(false)
 
         assertions.checkFieldIsNull("uuid")
-        assertions.checkFieldIsNull("deviceID")
-        assertions.checkFieldIsNull("deviceIDHash")
         assertions.checkFieldIsNull("reportUrls")
         assertions.checkFieldIsNull("getAdUrl")
         assertions.checkFieldIsNull("reportAdUrl")
@@ -174,8 +172,6 @@ class StartupStateStorageTest : CommonTest() {
 
         val startupStateModel = StartupStateBuilder(collectingFlags)
             .withUuid(uuid)
-            .withDeviceID("another device id")
-            .withDeviceIDHash("another device id hash")
             .withReportUrls(reportUrls)
             .withGetAdUrl(getAdUrl)
             .withReportAdUrl(reportAdUrl)
@@ -283,8 +279,6 @@ class StartupStateStorageTest : CommonTest() {
             .withFinalFieldOnly(false)
 
         assertions.checkField("uuid", uuid)
-        assertions.checkFieldIsNull("deviceID")
-        assertions.checkFieldIsNull("deviceIDHash")
         assertions.checkField("reportUrls", reportUrls)
         assertions.checkField("getAdUrl", getAdUrl)
         assertions.checkField("reportAdUrl", reportAdUrl)

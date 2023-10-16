@@ -141,8 +141,6 @@ public class StartupStateConverterTest extends CommonTest {
         StartupStateProtobuf.StartupState stateProto = new StartupStateProtobuf.StartupState();
 
         stateProto.uuid = UUID;
-        stateProto.deviceID = DEVICE_ID;
-        stateProto.deviceIDHash = DEVICE_ID_HASH;
         stateProto.obtainTime = OBTAIN_TIME;
         stateProto.hadFirstStartup = HAD_FIRST_STARTUP;
         stateProto.reportUrls = REPORT_URLS;
@@ -191,8 +189,6 @@ public class StartupStateConverterTest extends CommonTest {
         );
 
         assertions.checkField("uuid", UUID);
-        assertions.checkField("deviceID", DEVICE_ID);
-        assertions.checkField("deviceIDHash", DEVICE_ID_HASH);
         assertions.checkField("obtainTime", OBTAIN_TIME);
         assertions.checkField("hadFirstStartup", HAD_FIRST_STARTUP);
         assertions.checkField("reportUrls", Arrays.asList(REPORT_URLS));
@@ -236,8 +232,6 @@ public class StartupStateConverterTest extends CommonTest {
 
         StartupStateModel stateModel = new StartupStateModel.StartupStateBuilder(flagsModel)
             .withUuid(StartupStateConverterTest.UUID)
-            .withDeviceID(StartupStateConverterTest.DEVICE_ID)
-            .withDeviceIDHash(StartupStateConverterTest.DEVICE_ID_HASH)
             .withObtainTime(StartupStateConverterTest.OBTAIN_TIME)
             .withHadFirstStartup(true)
             .withReportUrls(Arrays.asList(StartupStateConverterTest.REPORT_URLS))
@@ -283,8 +277,6 @@ public class StartupStateConverterTest extends CommonTest {
         );
 
         assertions.checkField("uuid", UUID);
-        assertions.checkField("deviceID", DEVICE_ID);
-        assertions.checkField("deviceIDHash", DEVICE_ID_HASH);
         assertions.checkField("obtainTime", OBTAIN_TIME);
         assertions.checkField("hadFirstStartup", HAD_FIRST_STARTUP);
         assertions.checkField("reportUrls", REPORT_URLS);

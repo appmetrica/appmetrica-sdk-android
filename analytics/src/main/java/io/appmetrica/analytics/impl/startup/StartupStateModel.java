@@ -11,18 +11,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-@Deprecated // use only for migration and read/write from storage
 public class StartupStateModel {
 
     //region AppMetricaDeviceIdentifiers
     @Nullable
     public final String uuid;
-    @Deprecated
-    @Nullable
-    public final String deviceID;
-    @Deprecated
-    @Nullable
-    public final String deviceIDHash;
     //endregion
 
     //region Urls
@@ -56,7 +49,6 @@ public class StartupStateModel {
     public final CollectingFlags collectingFlags;
     //endregion
 
-    //todo (avitenko) rename filed after adopting to new proto generator.
     public final long obtainTime;
     public final boolean hadFirstStartup;
     public final boolean startupDidNotOverrideClids;
@@ -89,8 +81,6 @@ public class StartupStateModel {
 
     private StartupStateModel(@NonNull StartupStateBuilder builder) {
         this.uuid = builder.mUuid;
-        this.deviceID = builder.mDeviceId;
-        this.deviceIDHash = builder.mDeviceIdHash;
         this.reportUrls = builder.mReportUrls == null ?
             null : CollectionUtils.unmodifiableListCopy(builder.mReportUrls);
         this.getAdUrl = builder.mGetAdUrl;
@@ -144,8 +134,6 @@ public class StartupStateModel {
     public StartupStateBuilder buildUpon(@NonNull CollectingFlags collectingFlags) {
         return new StartupStateModel.StartupStateBuilder(collectingFlags)
             .withUuid(uuid)
-            .withDeviceID(deviceID)
-            .withDeviceIDHash(deviceIDHash)
             .withHostUrlsFromStartup(hostUrlsFromStartup)
             .withHostUrlsFromClient(hostUrlsFromClient)
             .withEncodedClidsFromResponse(encodedClidsFromResponse)
@@ -179,8 +167,6 @@ public class StartupStateModel {
     public String toString() {
         return "StartupStateModel{" +
             "uuid='" + uuid + '\'' +
-            ", deviceID='" + deviceID + '\'' +
-            ", deviceIDHash='" + deviceIDHash + '\'' +
             ", reportUrls=" + reportUrls +
             ", getAdUrl='" + getAdUrl + '\'' +
             ", reportAdUrl='" + reportAdUrl + '\'' +
@@ -211,7 +197,6 @@ public class StartupStateModel {
             '}';
     }
 
-    @Deprecated // use only for migration and read/write from storage
     public static class StartupStateBuilder {
 
         @Nullable
@@ -275,18 +260,6 @@ public class StartupStateModel {
 
         public StartupStateBuilder withUuid(@Nullable String uuid) {
             mUuid = uuid;
-            return this;
-        }
-
-        @Deprecated
-        public StartupStateBuilder withDeviceID(@Nullable String deviceID) {
-            mDeviceId = deviceID;
-            return this;
-        }
-
-        @Deprecated
-        public StartupStateBuilder withDeviceIDHash(@Nullable String deviceIDHash) {
-            mDeviceIdHash = deviceIDHash;
             return this;
         }
 

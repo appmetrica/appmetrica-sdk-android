@@ -30,8 +30,6 @@ public class StartupStateConverter implements ProtobufConverter<StartupStateMode
         state.obtainServerTime = value.obtainServerTime;
         state.firstStartupServerTime = value.firstStartupServerTime;
         if (value.uuid != null) { state.uuid = value.uuid; }
-        if (value.deviceID != null) { state.deviceID = value.deviceID; }
-        if (value.deviceIDHash != null) { state.deviceIDHash = value.deviceIDHash; }
         if (value.hostUrlsFromStartup != null) {
             state.hostUrlsFromStartup = value.hostUrlsFromStartup.toArray(new String[value.hostUrlsFromStartup.size()]);
         }
@@ -94,8 +92,6 @@ public class StartupStateConverter implements ProtobufConverter<StartupStateMode
         StartupStateModel.StartupStateBuilder builder =
                 new StartupStateModel.StartupStateBuilder(mFlagsConverter.toModel(nano.flags))
                 .withUuid(nano.uuid)
-                .withDeviceID(nano.deviceID)
-                .withDeviceIDHash(nano.deviceIDHash)
                 .withEncodedClidsFromResponse(nano.encodedClidsFromResponse)
                 .withGetAdUrl(nano.getAdUrl)
                 .withReportUrls(Arrays.asList(nano.reportUrls))

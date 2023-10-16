@@ -67,8 +67,6 @@ public class StartupStateModelTest extends CommonTest {
 
         StartupStateModel startupState = new StartupStateModel.StartupStateBuilder(mCollectingFlags)
             .withUuid(uuid)
-            .withDeviceID(deviceID)
-            .withDeviceIDHash(deviceIDHash)
             .withReportUrls(reportUrls)
             .withGetAdUrl(getAdUrl)
             .withReportAdUrl(reportAdUrl)
@@ -102,8 +100,6 @@ public class StartupStateModelTest extends CommonTest {
                 .withFinalFieldOnly(false);
 
         assertions.checkField("uuid", uuid);
-        assertions.checkField("deviceID", deviceID);
-        assertions.checkField("deviceIDHash", deviceIDHash);
         assertions.checkField("reportUrls", reportUrls);
         assertions.checkField("getAdUrl", getAdUrl);
         assertions.checkField("reportAdUrl", reportAdUrl);
@@ -145,8 +141,6 @@ public class StartupStateModelTest extends CommonTest {
                 .withFinalFieldOnly(false);
 
         assertions.checkField("uuid", (String) null);
-        assertions.checkField("deviceID", (String) null);
-        assertions.checkField("deviceIDHash", (String) null);
         assertions.checkField("reportUrls", (List) null);
         assertions.checkField("getAdUrl", (String) null);
         assertions.checkField("reportAdUrl", (String) null);
@@ -215,8 +209,6 @@ public class StartupStateModelTest extends CommonTest {
         @SuppressWarnings("deprecation")
         StartupStateModel startupState = new StartupStateModel.StartupStateBuilder(mCollectingFlags)
             .withUuid(uuid)
-            .withDeviceID(deviceID)
-            .withDeviceIDHash(deviceIDHash)
             .withReportUrls(reportUrls)
             .withGetAdUrl(getAdUrl)
             .withReportAdUrl(reportAdUrl)
@@ -252,8 +244,6 @@ public class StartupStateModelTest extends CommonTest {
                 .withFinalFieldOnly(false);
 
         assertions.checkField("uuid", uuid);
-        assertions.checkField("deviceID", deviceID);
-        assertions.checkField("deviceIDHash", deviceIDHash);
         assertions.checkField("reportUrls", reportUrls);
         assertions.checkField("getAdUrl", getAdUrl);
         assertions.checkField("reportAdUrl", reportAdUrl);

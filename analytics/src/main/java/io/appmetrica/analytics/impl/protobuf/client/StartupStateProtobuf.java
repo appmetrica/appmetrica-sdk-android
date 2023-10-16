@@ -1188,12 +1188,6 @@ public interface StartupStateProtobuf {
     // optional bool hadFirstStartup = 17 [default = false];
     public boolean hadFirstStartup;
 
-    // optional string deviceID = 18 [deprecated = true];
-    public java.lang.String deviceID;
-
-    // optional string deviceIDHash = 19 [deprecated = true];
-    public java.lang.String deviceIDHash;
-
     // optional string certificateUrl = 20;
     public java.lang.String certificateUrl;
 
@@ -1252,8 +1246,6 @@ public interface StartupStateProtobuf {
       diagnosticUrls = io.appmetrica.analytics.protobuf.nano.WireFormatNano.EMPTY_STRING_ARRAY;
       statSending = null;
       hadFirstStartup = false;
-      deviceID = "";
-      deviceIDHash = "";
       certificateUrl = "";
       obtainServerTime = 0L;
       firstStartupServerTime = 0L;
@@ -1344,12 +1336,6 @@ public interface StartupStateProtobuf {
       }
       if (this.hadFirstStartup != false) {
         output.writeBool(17, this.hadFirstStartup);
-      }
-      if (!this.deviceID.equals("")) {
-        output.writeString(18, this.deviceID);
-      }
-      if (!this.deviceIDHash.equals("")) {
-        output.writeString(19, this.deviceIDHash);
       }
       if (!this.certificateUrl.equals("")) {
         output.writeString(20, this.certificateUrl);
@@ -1498,14 +1484,6 @@ public interface StartupStateProtobuf {
       if (this.hadFirstStartup != false) {
         size += io.appmetrica.analytics.protobuf.nano.CodedOutputByteBufferNano
             .computeBoolSize(17, this.hadFirstStartup);
-      }
-      if (!this.deviceID.equals("")) {
-        size += io.appmetrica.analytics.protobuf.nano.CodedOutputByteBufferNano
-            .computeStringSize(18, this.deviceID);
-      }
-      if (!this.deviceIDHash.equals("")) {
-        size += io.appmetrica.analytics.protobuf.nano.CodedOutputByteBufferNano
-            .computeStringSize(19, this.deviceIDHash);
       }
       if (!this.certificateUrl.equals("")) {
         size += io.appmetrica.analytics.protobuf.nano.CodedOutputByteBufferNano
@@ -1710,14 +1688,6 @@ public interface StartupStateProtobuf {
           }
           case 136: {
             this.hadFirstStartup = input.readBool();
-            break;
-          }
-          case 146: {
-            this.deviceID = input.readString();
-            break;
-          }
-          case 154: {
-            this.deviceIDHash = input.readString();
             break;
           }
           case 162: {
