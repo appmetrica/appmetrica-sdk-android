@@ -153,14 +153,12 @@ public class StartupCenter {
     }
 
     @VisibleForTesting
-    @Deprecated
-    public Collection<StartupListener> getListeners(String packageName) {
+    Collection<StartupListener> getListeners(String packageName) {
         return mStartupListenersByPackage.get(packageName);
     }
 
     @VisibleForTesting
-    @Deprecated
-    public StartupUnit getStartupUnit(String packageName) {
+    StartupUnit getStartupUnit(String packageName) {
         return mStartupUnitsByPackage.get(packageName);
     }
 
