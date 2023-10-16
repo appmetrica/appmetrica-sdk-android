@@ -16,22 +16,15 @@ public class PreferencesComponentDbStorage extends NameSpacedPreferenceDbStorage
     public static final long DEFAULT_PERMISSIONS_CHECK_TIME = SessionDefaults.REGULAR_EVENT_NOT_SENT;
     public static final int DEFAULT_LAST_APP_VERSION_WITH_FEATURES = -1;
     public static final String DEFAULT_APPLICATION_FEATURES = StringUtils.EMPTY;
-    public static final long DEFAULT_LAST_MIGRATION_VERSION = 0;
     public static final String DEFAULT_SESSION_PARAMETERS = StringUtils.EMPTY;
-    public static final long DEFAULT_LAST_STAT_SENDING_DISABLED_REPORTING_TIMESTAMP = 0;
-
     private static final PreferencesItem PERMISSIONS_CHECK_TIME = new PreferencesItem("PERMISSIONS_CHECK_TIME");
     private static final PreferencesItem PROFILE_ID = new PreferencesItem("PROFILE_ID");
 
     private static final PreferencesItem APP_ENVIRONMENT = new PreferencesItem("APP_ENVIRONMENT");
     private static final PreferencesItem APP_ENVIRONMENT_REVISION = new PreferencesItem("APP_ENVIRONMENT_REVISION");
-
-    private static final PreferencesItem LAST_MIGRATION_VERSION = new PreferencesItem("LAST_MIGRATION_VERSION");
     private static final PreferencesItem LAST_APP_VERSION_WITH_FEATURES =
             new PreferencesItem("LAST_APP_VERSION_WITH_FEATURES");
     private static final PreferencesItem APPLICATION_FEATURES = new PreferencesItem("APPLICATION_FEATURES");
-    private static final PreferencesItem LAST_STAT_SENDING_DISABLED_REPORTING_TIMESTAMP =
-            new PreferencesItem("LAST_STAT_SENDING_DISABLED_REPORTING_TIMESTAMP");
     private static final PreferencesItem CERTIFICATES_SHA1_FINGERPRINTS =
             new PreferencesItem("CERTIFICATES_SHA1_FINGERPRINTS");
     private static final PreferencesItem VITAL_DATA = new PreferencesItem("VITAL_DATA");
@@ -75,21 +68,6 @@ public class PreferencesComponentDbStorage extends NameSpacedPreferenceDbStorage
         return writeLong(PERMISSIONS_CHECK_TIME.fullKey(), value);
     }
 
-    @Deprecated
-    @Nullable
-    public Integer getLastMigrationVersion() {
-        if (!containsKey(LAST_MIGRATION_VERSION.fullKey())) {
-            return null;
-        }
-        return (int) readLong(LAST_MIGRATION_VERSION.fullKey(), DEFAULT_LAST_MIGRATION_VERSION);
-    }
-
-    @NonNull
-    @Deprecated
-    public PreferencesComponentDbStorage removeLastMigrationVersion() {
-        return removeKey(LAST_MIGRATION_VERSION.fullKey());
-    }
-
     public PreferencesComponentDbStorage putLastAppVersionWithFeatures(int value) {
         return writeInt(LAST_APP_VERSION_WITH_FEATURES.fullKey(), value);
     }
@@ -113,15 +91,6 @@ public class PreferencesComponentDbStorage extends NameSpacedPreferenceDbStorage
 
     public PreferencesComponentDbStorage putProfileID(@Nullable String profileID) {
         return writeString(PROFILE_ID.fullKey(), profileID);
-    }
-
-    public long getLastStatSendingDisabledReportingTimestamp() {
-        return readLong(LAST_STAT_SENDING_DISABLED_REPORTING_TIMESTAMP.fullKey(),
-                DEFAULT_LAST_STAT_SENDING_DISABLED_REPORTING_TIMESTAMP);
-    }
-
-    public PreferencesComponentDbStorage putLastStatSendingDisabledReportingTimestamp(long value) {
-        return writeLong(LAST_STAT_SENDING_DISABLED_REPORTING_TIMESTAMP.fullKey(), value);
     }
 
     @NonNull

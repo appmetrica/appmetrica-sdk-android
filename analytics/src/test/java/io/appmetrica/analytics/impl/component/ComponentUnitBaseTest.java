@@ -152,8 +152,8 @@ public abstract class ComponentUnitBaseTest extends CommonTest {
         when(mFieldsFactory.createSessionExtraHolder()).thenReturn(sessionExtrasHolder);
         when(mMigrationHelperCreator.create()).thenReturn(mMigrationHelper);
         when(mAppEnvironment.getLastRevision()).thenReturn(mRevision);
-        //noinspection deprecation
-        when(mComponentPreferences.getLastMigrationVersion()).thenReturn(AppMetrica.getLibraryApiLevel());
+        when(vitalComponentDataProvider.getLastMigrationApiLevel()).thenReturn(AppMetrica.getLibraryApiLevel());
+        when(vitalComponentDataProvider.getLastMigrationApiLevel()).thenReturn(AppMetrica.getLibraryApiLevel());
         when(GlobalServiceLocator.getInstance().getPreloadInfoStorage()).thenReturn(mPreloadInfoStorage);
         when(GlobalServiceLocator.getInstance().getServicePreferences()).thenReturn(mServicePreferences);
         initCustomFields();
@@ -175,15 +175,13 @@ public abstract class ComponentUnitBaseTest extends CommonTest {
     public void testPreferencesMigratedHasOldApiLevelShouldMigrate() {
         int apiLevel = AppMetrica.getLibraryApiLevel();
         when(mPreferencesProvider.createPreferencesComponentDbStorage()).thenReturn(mComponentPreferences);
-        //noinspection deprecation
-        when(mComponentPreferences.getLastMigrationVersion()).thenReturn(apiLevel - 1);
+        when(vitalComponentDataProvider.getLastMigrationApiLevel()).thenReturn(apiLevel - 1);
         ComponentMigrationHelper.Creator creator = mock(ComponentMigrationHelper.Creator.class);
         ComponentMigrationHelper migrationHelper = mock(ComponentMigrationHelper.class);
         when(mFieldsFactory.createMigrationHelperCreator(any(ComponentUnit.class))).thenReturn(creator);
         when(creator.create()).thenReturn(migrationHelper);
         mComponentUnit = createComponentUnit();
         verify(migrationHelper).checkMigration();
-        verify(vitalComponentDataProvider, never()).getLastMigrationApiLevel();
         verify(vitalComponentDataProvider).setLastMigrationApiLevel(apiLevel);
     }
 
@@ -191,15 +189,13 @@ public abstract class ComponentUnitBaseTest extends CommonTest {
     public void testPreferencesMigratedShouldNotMigrate() {
         int apiLevel = AppMetrica.getLibraryApiLevel();
         when(mPreferencesProvider.createPreferencesComponentDbStorage()).thenReturn(mComponentPreferences);
-        //noinspection deprecation
-        when(mComponentPreferences.getLastMigrationVersion()).thenReturn(apiLevel);
+        when(vitalComponentDataProvider.getLastMigrationApiLevel()).thenReturn(apiLevel);
         ComponentMigrationHelper.Creator creator = mock(ComponentMigrationHelper.Creator.class);
         ComponentMigrationHelper migrationHelper = mock(ComponentMigrationHelper.class);
         when(mFieldsFactory.createMigrationHelperCreator(any(ComponentUnit.class))).thenReturn(creator);
         when(creator.create()).thenReturn(migrationHelper);
         mComponentUnit = createComponentUnit();
         verify(migrationHelper, never()).checkMigration();
-        verify(vitalComponentDataProvider,  never()).getLastMigrationApiLevel();
         verify(vitalComponentDataProvider, never()).setLastMigrationApiLevel(apiLevel);
     }
 
@@ -207,8 +203,6 @@ public abstract class ComponentUnitBaseTest extends CommonTest {
     public void testPreferencesMigratedDoesNotHaveOldApiLevelShouldMigrate() {
         int apiLevel = AppMetrica.getLibraryApiLevel();
         when(mPreferencesProvider.createPreferencesComponentDbStorage()).thenReturn(mComponentPreferences);
-        //noinspection deprecation
-        when(mComponentPreferences.getLastMigrationVersion()).thenReturn(null);
         when(vitalComponentDataProvider.getLastMigrationApiLevel()).thenReturn(apiLevel - 1);
         ComponentMigrationHelper.Creator creator = mock(ComponentMigrationHelper.Creator.class);
         ComponentMigrationHelper migrationHelper = mock(ComponentMigrationHelper.class);
@@ -223,8 +217,6 @@ public abstract class ComponentUnitBaseTest extends CommonTest {
     public void testPreferencesMigratedDoesNotHaveOldApiLevelShouldNotMigrate() {
         int apiLevel = AppMetrica.getLibraryApiLevel();
         when(mPreferencesProvider.createPreferencesComponentDbStorage()).thenReturn(mComponentPreferences);
-        //noinspection deprecation
-        when(mComponentPreferences.getLastMigrationVersion()).thenReturn(null);
         when(vitalComponentDataProvider.getLastMigrationApiLevel()).thenReturn(apiLevel);
         ComponentMigrationHelper.Creator creator = mock(ComponentMigrationHelper.Creator.class);
         ComponentMigrationHelper migrationHelper = mock(ComponentMigrationHelper.class);

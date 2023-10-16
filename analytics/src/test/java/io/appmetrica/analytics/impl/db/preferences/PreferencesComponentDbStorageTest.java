@@ -109,24 +109,6 @@ public class PreferencesComponentDbStorageTest extends CommonTest {
     }
 
     @Test
-    public void testMissingLastMigrationVersion() {
-        assertThat(mComponentDbStorage.getLastMigrationVersion()).isNull();
-    }
-
-    @Test
-    public void hasLastMigrationVersion() {
-        mComponentDbStorage.writeLong("LAST_MIGRATION_VERSION", 5);
-        assertThat(mComponentDbStorage.getLastMigrationVersion()).isEqualTo(5);
-    }
-
-    @Test
-    public void removeLastMigrationVersion() {
-        mComponentDbStorage.writeLong("LAST_MIGRATION_VERSION", 5);
-        mComponentDbStorage.removeLastMigrationVersion();
-        assertThat(mComponentDbStorage.getLastMigrationVersion()).isNull();
-    }
-
-    @Test
     public void testMissingSessionParameters() {
         assertThat(mComponentDbStorage.getSessionParameters("")).isEqualTo("");
     }

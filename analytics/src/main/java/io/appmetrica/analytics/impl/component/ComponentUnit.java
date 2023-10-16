@@ -350,10 +350,7 @@ public class ComponentUnit implements IReportableComponent, IComponent, EventsFl
 
     private void migratePreferencesIfNeeded() {
         int apiLevel = AppMetrica.getLibraryApiLevel();
-        Integer lastApiLevel = mComponentPreferences.getLastMigrationVersion();
-        if (lastApiLevel == null) {
-            lastApiLevel = vitalComponentDataProvider.getLastMigrationApiLevel();
-        }
+        Integer lastApiLevel = vitalComponentDataProvider.getLastMigrationApiLevel();
         if (lastApiLevel < apiLevel) {
             mComponentMigrationHelperCreator.create().checkMigration();
             vitalComponentDataProvider.setLastMigrationApiLevel(apiLevel);
