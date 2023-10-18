@@ -220,20 +220,6 @@ public class JvmCrashTest extends CommonTest {
     }
 
     @Test
-    public void testIsCommutation() throws JSONException {
-        assertThat(
-                new JvmCrash(
-                        fillJson(
-                                new JSONObject()
-                                        .put(KEY_API_KEY, "api")
-                                        .put("is_commutation", true)
-                                        .put("is_main", true)
-                        ).toString()
-                ).getReporterType()
-        ).isEqualTo(CounterConfigurationReporterType.COMMUTATION);
-    }
-
-    @Test
     public void testIsMain() throws JSONException {
         assertThat(
                 new JvmCrash(

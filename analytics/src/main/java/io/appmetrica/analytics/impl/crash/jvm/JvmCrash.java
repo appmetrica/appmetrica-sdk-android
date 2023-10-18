@@ -35,8 +35,6 @@ public class JvmCrash implements JSONable {
     private static final String API_KEY = "api_key";
     private static final String REPORTER_TYPE = "reporter_type";
     private static final String ENVIRONMENT = "environment";
-    @Deprecated
-    private static final String IS_COMMUTATION = "is_commutation";
 
     private final byte[] crash;
     private final String name;
@@ -174,13 +172,9 @@ public class JvmCrash implements JSONable {
     }
 
     @NonNull
-    @Deprecated
     private CounterConfigurationReporterType readReporterType(@NonNull JSONObject json) throws JSONException {
         if (json.has(REPORTER_TYPE)) {
             return CounterConfigurationReporterType.fromStringValue(json.getString(REPORTER_TYPE));
-        }
-        if (json.getBoolean(IS_COMMUTATION)) {
-            return CounterConfigurationReporterType.COMMUTATION;
         }
         return CounterConfigurationReporterType.MAIN;
     }
