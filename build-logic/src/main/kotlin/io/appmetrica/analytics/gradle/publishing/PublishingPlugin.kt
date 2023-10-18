@@ -64,7 +64,7 @@ class PublishingPlugin : Plugin<Project> {
                         val flavor = this.name
                         singleVariant("${flavor}${buildType.capitalize()}")
                     }
-                    singleVariant(buildType.capitalize())
+                    singleVariant(buildType)
                 }
             }
         }

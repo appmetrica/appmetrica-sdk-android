@@ -16,11 +16,12 @@
     },
     "variants": [
         {
-            "name": "releaseApiElements-published",
+            "name": "releaseVariantReleaseApiPublication",
             "attributes": {
                 "org.gradle.category": "library",
-                "org.gradle.usage": "java-api",
-                "org.jetbrains.kotlin.platform.type": "androidJvm"
+                "org.gradle.dependency.bundling": "external",
+                "org.gradle.libraryelements": "aar",
+                "org.gradle.usage": "java-api"
             },
             "files": [
                 {
@@ -35,11 +36,12 @@
             ]
         },
         {
-            "name": "releaseRuntimeElements-published",
+            "name": "releaseVariantReleaseRuntimePublication",
             "attributes": {
                 "org.gradle.category": "library",
-                "org.gradle.usage": "java-runtime",
-                "org.jetbrains.kotlin.platform.type": "androidJvm"
+                "org.gradle.dependency.bundling": "external",
+                "org.gradle.libraryelements": "aar",
+                "org.gradle.usage": "java-runtime"
             },
             "dependencies": [
                 {
