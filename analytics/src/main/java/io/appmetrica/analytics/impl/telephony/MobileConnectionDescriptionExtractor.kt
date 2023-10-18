@@ -46,6 +46,7 @@ internal class MobileConnectionDescriptionExtractor(
         put(TelephonyManager.NETWORK_TYPE_HSPA, "HSPA")
         put(TelephonyManager.NETWORK_TYPE_HSPAP, "HSPA+")
         put(TelephonyManager.NETWORK_TYPE_HSUPA, "HSUPA")
+        @Suppress("DEPRECATION")
         put(TelephonyManager.NETWORK_TYPE_IDEN, "iDen")
         put(TelephonyManager.NETWORK_TYPE_UMTS, "UMTS")
         put(TelephonyManager.NETWORK_TYPE_EVDO_B, "EVDO rev.B")

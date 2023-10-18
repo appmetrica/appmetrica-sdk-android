@@ -57,5 +57,5 @@ internal class DeviceIdGenerator @VisibleForTesting constructor(
     }
 
     private fun generateRandomIdentifierWithUuidPattern(): String =
-        UUID.randomUUID().toString().replace("-", "").toLowerCase(Locale.US)
+        UUID.randomUUID().toString().replace("-", "").lowercase(Locale.US)
 }

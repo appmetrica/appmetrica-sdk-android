@@ -26,11 +26,13 @@ internal object SimInfoExtractorForM {
                 simCountryCode = if (AndroidUtils.isApiAchieved(Build.VERSION_CODES.Q)) {
                     SimInfoHelperForQ.mobileCountryCode(it)
                 } else {
+                    @Suppress("DEPRECATION")
                     it.mcc
                 },
                 simNetworkCode = if (AndroidUtils.isApiAchieved(Build.VERSION_CODES.Q)) {
                     SimInfoHelperForQ.mobileNetworkCode(it)
                 } else {
+                    @Suppress("DEPRECATION")
                     it.mnc
                 },
                 isNetworkRoaming = it.dataRoaming == SubscriptionManager.DATA_ROAMING_ENABLE,
