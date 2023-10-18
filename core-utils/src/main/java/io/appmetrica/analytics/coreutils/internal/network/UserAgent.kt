@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.coreutils.internal.network
 
 import android.os.Build
-import java.util.Locale
+import io.appmetrica.analytics.coreutils.internal.replaceFirstCharWithTitleCase
 
 object UserAgent {
 
@@ -14,10 +14,12 @@ object UserAgent {
         "$sdkName/$versionName.$buildNumber (${formDeviceName()}; Android ${Build.VERSION.RELEASE})"
 
     private fun formDeviceName(): String {
-        return if (Build.MODEL.startsWith(Build.MANUFACTURER)) {
-            Build.MODEL
-        } else {
-            Build.MANUFACTURER + " " + Build.MODEL
-        }.capitalize(Locale.US)
+        return (
+            if (Build.MODEL.startsWith(Build.MANUFACTURER)) {
+                Build.MODEL
+            } else {
+                Build.MANUFACTURER + " " + Build.MODEL
+            }
+            ).replaceFirstCharWithTitleCase()
     }
 }

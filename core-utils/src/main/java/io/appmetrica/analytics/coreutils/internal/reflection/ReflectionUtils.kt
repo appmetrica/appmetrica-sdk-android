@@ -13,7 +13,7 @@ object ReflectionUtils {
 
     @JvmStatic
     fun <T> loadAndInstantiateClassWithDefaultConstructor(className: String, targetType: Class<T>): T? = try {
-        loadClass(className, targetType)?.newInstance()
+        loadClass(className, targetType)?.getConstructor()?.newInstance()
     } catch (e: Throwable) {
         YLogger.error(
             TAG,

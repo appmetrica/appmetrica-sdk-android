@@ -24,6 +24,11 @@ public final class io.appmetrica.analytics.coreutils.internal.LocationUtils {
     public static final [Nullable] byte[] locationToBytes([Nullable] android.location.Location)
 }
 
+public final class io.appmetrica.analytics.coreutils.internal.StringExtensionsKt {
+    public static final [NonNull] String replaceFirstCharWithTitleCase([NonNull] String)
+    public static final [NonNull] String replaceFirstCharWithTitleCase([NonNull] String, [NonNull] java.util.Locale)
+}
+
 public final class io.appmetrica.analytics.coreutils.internal.StringUtils {
     public static final String COMMA
     public static final String EMPTY

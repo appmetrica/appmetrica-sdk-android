@@ -53,7 +53,7 @@ object CollectionUtils {
 
     @JvmStatic
     fun <T> convertMapKeysToLowerCase(map: Map<String?, T>): Map<String?, T> {
-        return map.mapKeys { it.key?.toLowerCase(Locale.getDefault()) }
+        return map.mapKeys { it.key?.lowercase(Locale.getDefault()) }
     }
 
     @JvmStatic
