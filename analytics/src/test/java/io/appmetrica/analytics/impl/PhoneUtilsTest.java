@@ -118,10 +118,12 @@ public class PhoneUtilsTest extends CommonTest {
 
     @Test
     public void testGetConnectionTypeWhenPermittedAndOffline() {
+        //noinspection deprecation
         when(mNetworkInfo.isConnected()).thenReturn(false);
         PhoneUtils.NetworkType actual = PhoneUtils.getConnectionType(mContext);
         verify(mContext, times(1)).getSystemService(Mockito.anyString());
         verify(mConnectivityManager, times(1)).getActiveNetworkInfo();
+        //noinspection deprecation
         verify(mNetworkInfo, times(1)).isConnected();
         verify(mNetworkInfo, never()).getType();
         assertThat(actual).isEqualTo(PhoneUtils.NetworkType.OFFLINE);
@@ -137,6 +139,7 @@ public class PhoneUtilsTest extends CommonTest {
     @Config(sdk = Build.VERSION_CODES.LOLLIPOP)
     public void testVpn() {
         when(mConnectivityManager.getActiveNetworkInfo()).thenReturn(mNetworkInfo);
+        //noinspection deprecation
         when(mNetworkInfo.isConnected()).thenReturn(true);
         when(mNetworkInfo.getType()).thenReturn(ConnectivityManager.TYPE_VPN);
         assertThat(PhoneUtils.getConnectionType(mContext)).isEqualTo(PhoneUtils.NetworkType.VPN);
@@ -177,6 +180,7 @@ public class PhoneUtilsTest extends CommonTest {
             mContext = TestUtils.createMockedContext();
             when(mContext.getSystemService(any(String.class))).thenReturn(mConnectivityManager);
             when(mConnectivityManager.getActiveNetworkInfo()).thenReturn(mNetworkInfo);
+            //noinspection deprecation
             when(mNetworkInfo.isConnected()).thenReturn(true);
             when(mNetworkInfo.getType()).thenReturn(connectivityManagerType);
             mExpected = enumType;
@@ -224,6 +228,7 @@ public class PhoneUtilsTest extends CommonTest {
             when(mContext.getSystemService(any(String.class))).thenReturn(mConnectivityManager);
             when(mConnectivityManager.getActiveNetwork()).thenReturn(mNetwork);
             when(mConnectivityManager.getNetworkInfo(mNetwork)).thenReturn(mNetworkInfo);
+            //noinspection deprecation
             when(mNetworkInfo.isConnected()).thenReturn(true);
             when(mConnectivityManager.getNetworkCapabilities(mNetwork)).thenReturn(mNetworkCapabilities);
             when(mNetworkCapabilities.hasTransport(networkCapabilitiesType)).thenReturn(true);
@@ -266,12 +271,14 @@ public class PhoneUtilsTest extends CommonTest {
 
         @Test
         public void testNotConnected() {
+            //noinspection deprecation
             when(mNetworkInfo.isConnected()).thenReturn(false);
             assertThat(PhoneUtils.getConnectionType(mContext)).isEqualTo(PhoneUtils.NetworkType.OFFLINE);
         }
 
         @Test
         public void testNetworkCapabilitiesNull() {
+            //noinspection deprecation
             when(mNetworkInfo.isConnected()).thenReturn(true);
             when(mConnectivityManager.getNetworkCapabilities(mNetwork)).thenReturn(null);
             assertThat(PhoneUtils.getConnectionType(mContext)).isEqualTo(PhoneUtils.NetworkType.UNDEFINED);
@@ -281,6 +288,7 @@ public class PhoneUtilsTest extends CommonTest {
         @Config(sdk = Build.VERSION_CODES.O_MR1)
         public void testLowPan() {
             NetworkCapabilities networkCapabilities = mock(NetworkCapabilities.class);
+            //noinspection deprecation
             when(mNetworkInfo.isConnected()).thenReturn(true);
             when(mConnectivityManager.getNetworkCapabilities(mNetwork)).thenReturn(networkCapabilities);
             when(networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_LOWPAN)).thenReturn(true);
@@ -291,6 +299,7 @@ public class PhoneUtilsTest extends CommonTest {
         @Config(sdk = Build.VERSION_CODES.O)
         public void testWifiAware() {
             NetworkCapabilities networkCapabilities = mock(NetworkCapabilities.class);
+            //noinspection deprecation
             when(mNetworkInfo.isConnected()).thenReturn(true);
             when(mConnectivityManager.getNetworkCapabilities(mNetwork)).thenReturn(networkCapabilities);
             when(networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI_AWARE)).thenReturn(true);

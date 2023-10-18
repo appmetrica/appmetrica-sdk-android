@@ -373,7 +373,7 @@ class KeyValueTableDbHelper implements IKeyValueTableDbHelper, Closeable {
         }
     }
 
-    @Deprecated @VisibleForTesting
+    @VisibleForTesting
     KeyValueTableDbHelper(DatabaseStorage dbStorage) {
         mTableName = null;
         mWorker = new Worker(String.format(Locale.US, NamedThreadFactory.DB_WORKER_THREAD_PATTERN,

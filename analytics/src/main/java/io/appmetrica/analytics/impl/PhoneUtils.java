@@ -227,6 +227,7 @@ public final class PhoneUtils {
         }
     }
 
+    @SuppressWarnings("deprecation")
     @TargetApi(Build.VERSION_CODES.M)
     private static boolean isOfflineBeforeQ(@NonNull ConnectivityManager connectivityManager,
                                             @Nullable Network activeNetwork) {
@@ -237,6 +238,7 @@ public final class PhoneUtils {
         return activeNetworkInfo != null && activeNetworkInfo.isConnected() == false;
     }
 
+    @SuppressWarnings("deprecation")
     @NonNull
     private static NetworkType getNetworkTypeBeforeM(@NonNull ConnectivityManager connManager) {
         NetworkType result;
