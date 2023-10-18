@@ -787,9 +787,8 @@ public class AppMetricaConfig {
 
         /**
          * Custom crash transformer which is applied to crashes.
-         * <p>
-         * @param crashTransformer {@link ICrashTransformer} implementation to be applied.
          *
+         * @param crashTransformer {@link ICrashTransformer} implementation to be applied.
          * @return the same {@link AppMetricaConfig.Builder} object.
          */
         @NonNull
