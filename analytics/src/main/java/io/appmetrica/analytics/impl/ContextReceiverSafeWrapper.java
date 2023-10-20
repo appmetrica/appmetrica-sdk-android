@@ -1,5 +1,6 @@
 package io.appmetrica.analytics.impl;
 
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -28,6 +29,7 @@ public class ContextReceiverSafeWrapper {
         this.receiver = receiver;
     }
 
+    @SuppressLint("UnspecifiedRegisterReceiverFlag")
     @Nullable
     public synchronized Intent registerReceiver(@NonNull Context context,
                                                 @NonNull final IntentFilter filter) {

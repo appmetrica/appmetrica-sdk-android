@@ -4,13 +4,14 @@ import io.appmetrica.analytics.testutils.CommonTest;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.tuple;
 
 @RunWith(JUnit4.class)
 public class HashMultimapTest extends CommonTest {
@@ -170,10 +171,10 @@ public class HashMultimapTest extends CommonTest {
         mMap.put(2, 2);
         mMap.put(2, 3);
         mMap.put(2, 4);
-        assertThat(mMap.entrySet()).extracting("key", "value").containsOnly(
-                tuple(1, Arrays.asList(1, 2, 3)),
-                tuple(2, Arrays.asList(1, 2, 3, 4))
-        );
+        final Map<Integer, List<Integer>> expected = new HashMap<>();
+        expected.put(1, Arrays.asList(1, 2, 3));
+        expected.put(2, Arrays.asList(1, 2, 3, 4));
+        assertThat(mMap.entrySet()).containsExactlyInAnyOrderElementsOf(expected.entrySet());
     }
 
     @Test

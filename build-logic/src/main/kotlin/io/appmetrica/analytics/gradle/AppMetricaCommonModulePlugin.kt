@@ -69,6 +69,11 @@ class AppMetricaCommonModulePlugin : Plugin<Project> {
                 consumerProguardFiles("proguard/consumer-rules.pro")
             }
 
+            buildFeatures {
+                buildConfig = true
+                aidl = true
+            }
+
             buildTypes {
                 debug {
                     isMinifyEnabled = false
@@ -175,7 +180,7 @@ class AppMetricaCommonModulePlugin : Plugin<Project> {
 
             testCompileOnly("androidx.annotation:annotation:${Deps.androidX}")
 
-            testImplementation("nl.jqno.equalsverifier:equalsverifier:3.4.2")
+            testImplementation("nl.jqno.equalsverifier:equalsverifier:3.15.2")
             testImplementation("org.skyscreamer:jsonassert:1.5.0")
             testImplementation("io.appmetrica.analytics:common_assertions")
             testImplementation(findProject(":test-utils") ?: "io.appmetrica.analytics:test-utils")

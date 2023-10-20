@@ -224,7 +224,7 @@ class RemoteConfigJsonUtilsTest {
                 })
             })
         }
-        assertThat(RemoteConfigJsonUtils.extractHosts(input, hostType))
+        assertThat(RemoteConfigJsonUtils.extractHosts(input, hostType).toList())
             .containsExactly(host.toByteArray())
     }
 
@@ -246,7 +246,7 @@ class RemoteConfigJsonUtilsTest {
                 })
             })
         }
-        assertThat(RemoteConfigJsonUtils.extractHosts(input, hostType))
+        assertThat(RemoteConfigJsonUtils.extractHosts(input, hostType).toList())
             .containsExactly(
                 firstHost.toByteArray(),
                 secondHost.toByteArray(),

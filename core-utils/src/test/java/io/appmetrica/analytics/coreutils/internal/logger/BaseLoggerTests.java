@@ -1,8 +1,8 @@
 package io.appmetrica.analytics.coreutils.internal.logger;
 
 import android.util.Log;
+import io.appmetrica.analytics.testutils.RandomStringGenerator;
 import java.util.Locale;
-import org.assertj.core.internal.bytebuddy.utility.RandomString;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -49,7 +49,7 @@ public class BaseLoggerTests {
 
     @Test
     public void testDShouldNotThrowExceptionIfMsgIsNullWithArgs() {
-        mLogger.fd(null, RandomString.make(100));
+        mLogger.fd(null, new RandomStringGenerator(100).nextString());
     }
 
     @Test
@@ -59,7 +59,7 @@ public class BaseLoggerTests {
 
     @Test
     public void testDShouldNotThrowExceptionIfMsgIsEmptyWithArgs() {
-        mLogger.fd("", RandomString.make(100));
+        mLogger.fd("", new RandomStringGenerator(100).nextString());
     }
 
     @Test
@@ -69,7 +69,7 @@ public class BaseLoggerTests {
 
     @Test
     public void testWShouldNotThrowExceptionIfMsgIsNullWithArgs() {
-        mLogger.fw(null, RandomString.make(100));
+        mLogger.fw(null, new RandomStringGenerator(100).nextString());
     }
 
     @Test
@@ -79,7 +79,7 @@ public class BaseLoggerTests {
 
     @Test
     public void testWShouldNotThrowExceptionIfMsgIsEmptyWithArgs() {
-        mLogger.fw("", RandomString.make(100));
+        mLogger.fw("", new RandomStringGenerator(100).nextString());
     }
 
     @Test
@@ -89,7 +89,7 @@ public class BaseLoggerTests {
 
     @Test
     public void testIShouldNotThrowExceptionIfMsgIsNullWithArgs() {
-        mLogger.fi(null, RandomString.make(100));
+        mLogger.fi(null, new RandomStringGenerator(100).nextString());
     }
 
     @Test
@@ -99,7 +99,7 @@ public class BaseLoggerTests {
 
     @Test
     public void testIShouldNotThrowExceptionIfMsgIsEmptyWithArgs() {
-        mLogger.fi("", RandomString.make(100));
+        mLogger.fi("", new RandomStringGenerator(100).nextString());
     }
 
     @Test
@@ -114,7 +114,7 @@ public class BaseLoggerTests {
 
     @Test
     public void testEShouldNotThrowExceptionIfMsgIsNullWithArgs() {
-        mLogger.fe((String) null, RandomString.make(100));
+        mLogger.fe((String) null, new RandomStringGenerator(100).nextString());
     }
 
     @Test
@@ -124,7 +124,7 @@ public class BaseLoggerTests {
 
     @Test
     public void testEShouldNotThrowExceptionIfMsgIsEmptyWithArgs() {
-        mLogger.fe("", RandomString.make(100));
+        mLogger.fe("", new RandomStringGenerator(100).nextString());
     }
 
     @Test
@@ -134,7 +134,7 @@ public class BaseLoggerTests {
 
     @Test
     public void testEWithThrowableShouldNotThrowExceptionIfMsgIsNullWithArgs() {
-        mLogger.fe(new Exception(), null, RandomString.make(100));
+        mLogger.fe(new Exception(), null, new RandomStringGenerator(100).nextString());
     }
 
     @Test
@@ -144,7 +144,7 @@ public class BaseLoggerTests {
 
     @Test
     public void testEWithThrowableShouldNotThrowExceptionIfMsgIsEmptyWithArgs() {
-        mLogger.fe(new Exception(), "", RandomString.make(100));
+        mLogger.fe(new Exception(), "", new RandomStringGenerator(100).nextString());
     }
 
     @Test

@@ -5,39 +5,63 @@ import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.junit.runners.Parameterized
-import org.robolectric.util.ReflectionHelpers
-import kotlin.reflect.KFunction
+import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 
-@RunWith(Parameterized::class)
-class AndroidUtilsTest(
-    private val testId: String,
-    private val func: () -> Boolean,
-    private val needApi: Int,
-    private val curApi: Int,
-) : CommonTest() {
-    companion object {
-        private val APIS = 10..50
+@RunWith(RobolectricTestRunner::class)
+class AndroidUtilsTest : CommonTest() {
 
-        @JvmStatic
-        @Parameterized.Parameters(name = "{0}")
-        fun data(): Collection<Array<Any>> = listOf(
-            AndroidUtils::isAndroidMAchieved to 23,
-            AndroidUtils::isAndroidNAchieved to 24,
-            AndroidUtils::isAndroidQAchieved to 29,
-        ).flatMap { (func, needApi) ->
-            APIS.map { api ->
-                entry(func, needApi, api)
-            }
-        }
-
-        private fun entry(func: KFunction<Boolean>, needApi: Int, curApi: Int) =
-            arrayOf("${func.name} with $curApi", func, needApi, curApi)
+    @Test
+    @Config(sdk = [Build.VERSION_CODES.M])
+    fun isAndroidMAchievedForSame() {
+        assertThat(AndroidUtils.isAndroidMAchieved()).isTrue()
     }
 
     @Test
-    fun checkApi() {
-        ReflectionHelpers.setStaticField(Build.VERSION::class.java, "SDK_INT", curApi)
-        assertThat(func()).isEqualTo(curApi >= needApi)
+    @Config(sdk = [Build.VERSION_CODES.LOLLIPOP_MR1])
+    fun isAndroidMAchievedForLower() {
+        assertThat(AndroidUtils.isAndroidMAchieved()).isFalse()
+    }
+
+    @Test
+    @Config(sdk = [Build.VERSION_CODES.N])
+    fun isAndroidMAchievedForHigher() {
+        assertThat(AndroidUtils.isAndroidMAchieved()).isTrue()
+    }
+
+    @Test
+    @Config(sdk = [Build.VERSION_CODES.N])
+    fun isAndroidNAchievedForSame() {
+        assertThat(AndroidUtils.isAndroidNAchieved()).isTrue()
+    }
+
+    @Test
+    @Config(sdk = [Build.VERSION_CODES.M])
+    fun isAndroidNAchievedForLower() {
+        assertThat(AndroidUtils.isAndroidNAchieved()).isFalse()
+    }
+
+    @Test
+    @Config(sdk = [Build.VERSION_CODES.N_MR1])
+    fun isAndroidNAchievedForHigher() {
+        assertThat(AndroidUtils.isAndroidNAchieved()).isTrue()
+    }
+
+    @Test
+    @Config(sdk = [Build.VERSION_CODES.Q])
+    fun isAndroidQAchievedForSame() {
+        assertThat(AndroidUtils.isAndroidQAchieved()).isTrue()
+    }
+
+    @Test
+    @Config(sdk = [Build.VERSION_CODES.P])
+    fun isAndroidQAchievedForLower() {
+        assertThat(AndroidUtils.isAndroidQAchieved()).isFalse()
+    }
+
+    @Test
+    @Config(sdk = [Build.VERSION_CODES.R])
+    fun isAndroidQAchievedForHigher() {
+        assertThat(AndroidUtils.isAndroidQAchieved()).isTrue()
     }
 }

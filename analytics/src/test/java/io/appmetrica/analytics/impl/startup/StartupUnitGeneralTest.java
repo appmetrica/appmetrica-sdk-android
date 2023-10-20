@@ -14,7 +14,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.assertj.core.internal.bytebuddy.utility.RandomString;
+import net.bytebuddy.utility.RandomString;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Before;
