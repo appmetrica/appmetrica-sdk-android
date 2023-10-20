@@ -477,6 +477,23 @@ public static final class io.appmetrica.analytics.coreutils.internal.services.Ut
     public final void setInstance([NonNull] io.appmetrica.analytics.coreutils.internal.services.UtilityServiceLocator)
 }
 
+public final class io.appmetrica.analytics.coreutils.internal.services.telephony.CellularNetworkTypeConverter {
+    public static final [NonNull] io.appmetrica.analytics.coreutils.internal.services.telephony.CellularNetworkTypeConverter INSTANCE
+
+    public static final [NonNull] String convert([Nullable] Integer)
+}
+
+public final class io.appmetrica.analytics.coreutils.internal.services.telephony.CellularNetworkTypeExtractor {
+    public static final [NonNull] io.appmetrica.analytics.coreutils.internal.services.telephony.CellularNetworkTypeExtractor$Companion Companion
+    public static final [NonNull] String UNKNOWN_NETWORK_TYPE_VALUE
+
+    public <init>([NonNull] android.content.Context)
+    public final [NonNull] android.content.Context getContext()
+    public final [NonNull] String getNetworkType()
+}
+
+public static final class io.appmetrica.analytics.coreutils.internal.services.telephony.CellularNetworkTypeExtractor$Companion
+
 public class io.appmetrica.analytics.coreutils.internal.system.ConstantDeviceInfo {
     public static final [NonNull] String APP_PLATFORM
     public final [NonNull] String appPlatform

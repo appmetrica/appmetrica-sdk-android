@@ -3,14 +3,15 @@ package io.appmetrica.analytics.impl.telephony
 import android.Manifest
 import android.content.Context
 import android.os.Build
-import android.telephony.TelephonyManager
 import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
 import io.appmetrica.analytics.coreapi.internal.system.PermissionExtractor
 import io.appmetrica.analytics.coreutils.internal.cache.CachedDataProvider
+import io.appmetrica.analytics.coreutils.internal.services.telephony.CellularNetworkTypeExtractor
 import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
 import io.appmetrica.analytics.testutils.MockedConstructionRule
+import io.appmetrica.analytics.testutils.constructionRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Rule
@@ -30,14 +31,8 @@ import java.util.concurrent.TimeUnit
 @RunWith(RobolectricTestRunner::class)
 class MobileConnectionDescriptionExtractorTest : CommonTest() {
 
-    private val networkTypeValue = TelephonyManager.NETWORK_TYPE_GPRS
     private val networkTypeString = "GPRS"
-    private val telephonyManager = mock<TelephonyManager> {
-        on { networkType } doReturn networkTypeValue
-    }
-    private val context = mock<Context> {
-        on { getSystemService(Context.TELEPHONY_SERVICE) } doReturn telephonyManager
-    }
+    private val context = mock<Context> ()
 
     private val cachedMobileConnectionDescription = mock<MobileConnectionDescription>()
 
@@ -48,6 +43,12 @@ class MobileConnectionDescriptionExtractorTest : CommonTest() {
 
     @get:Rule
     val globalServiceLocatorRule = GlobalServiceLocatorRule()
+
+    @get:Rule
+    val cellularNetworkTypeExtractorMockedConstruction = constructionRule<CellularNetworkTypeExtractor> {
+        on { getNetworkType() } doReturn networkTypeString
+    }
+    private val networkTypeExtractor: CellularNetworkTypeExtractor by cellularNetworkTypeExtractorMockedConstruction
 
     private val cacheExpiryTime = TimeUnit.SECONDS.toMillis(20)
 
@@ -61,6 +62,12 @@ class MobileConnectionDescriptionExtractorTest : CommonTest() {
         whenever(permissionExtractor.hasPermission(context, Manifest.permission.READ_PHONE_STATE)).thenReturn(true)
         mobileConnectionDescriptionExtractor = MobileConnectionDescriptionExtractor(context)
         cachedData = cachedData()
+    }
+
+    @Test
+    fun checkNetworkTypeExtractor() {
+        assertThat(cellularNetworkTypeExtractorMockedConstruction.argumentInterceptor.flatArguments())
+            .containsExactly(context)
     }
 
     @Config(sdk = [Build.VERSION_CODES.P])
@@ -109,46 +116,36 @@ class MobileConnectionDescriptionExtractorTest : CommonTest() {
 
     @Config(sdk = [Build.VERSION_CODES.P])
     @Test
-    fun `extract on PreQ if networkType is invalid`() {
-        whenever(permissionExtractor.hasPermission(context, Manifest.permission.READ_PHONE_STATE)).thenReturn(false)
-        whenever(telephonyManager.networkType).thenReturn(-999999999)
+    fun `extract on PreQ if networkType is unknown`() {
+        val unknownNetworkType = "unknown"
+        whenever(permissionExtractor.hasPermission(context, Manifest.permission.READ_PHONE_STATE))
+            .thenReturn(false)
+        whenever(networkTypeExtractor.getNetworkType()).thenReturn(unknownNetworkType)
         val result = mobileConnectionDescriptionExtractor.extract()
         ObjectPropertyAssertions(result)
-            .checkField("networkType", "unknown")
+            .checkField("networkType", unknownNetworkType)
             .checkAll()
         verify(cachedData).data = result
     }
 
     @Config(sdk = [Build.VERSION_CODES.P])
     @Test
-    fun `extract on PreQ if networkType throws exception`() {
-        whenever(permissionExtractor.hasPermission(context, Manifest.permission.READ_PHONE_STATE)).thenReturn(false)
-        whenever(telephonyManager.networkType).thenThrow(RuntimeException())
+    fun `extract on PreQ if networkType is null`() {
+        whenever(networkTypeExtractor.getNetworkType()).thenReturn(null)
         val result = mobileConnectionDescriptionExtractor.extract()
         ObjectPropertyAssertions(result)
-            .checkField("networkType", "unknown")
+            .checkFieldIsNull("networkType")
             .checkAll()
         verify(cachedData).data = result
     }
 
     @Config(sdk = [Build.VERSION_CODES.P])
     @Test
-    fun `extract on PreQ if networkOperator is null `() {
-        whenever(telephonyManager.networkOperatorName).thenReturn(null)
+    fun `extract on PreQ if networkType is empty`() {
+        whenever(networkTypeExtractor.getNetworkType()).thenReturn("")
         val result = mobileConnectionDescriptionExtractor.extract()
         ObjectPropertyAssertions(result)
-            .checkField("networkType", networkTypeString)
-            .checkAll()
-        verify(cachedData).data = result
-    }
-
-    @Config(sdk = [Build.VERSION_CODES.P])
-    @Test
-    fun `extract on PreQ if networkOperator is empty `() {
-        whenever(telephonyManager.networkOperatorName).thenReturn("")
-        val result = mobileConnectionDescriptionExtractor.extract()
-        ObjectPropertyAssertions(result)
-            .checkField("networkType", networkTypeString)
+            .checkField("networkType", "")
             .checkAll()
         verify(cachedData).data = result
     }
