@@ -580,6 +580,8 @@ public class io.appmetrica.analytics.internal.CounterConfiguration implementatio
 }
 
 public interface io.appmetrica.analytics.internal.IAppMetricaService extends android.os.IInterface {
+    public static final String DESCRIPTOR
+
     public abstract void pauseUserSession(android.os.Bundle)
     public abstract void reportData(int, android.os.Bundle)
     public abstract void resumeUserSession(android.os.Bundle)
@@ -597,9 +599,11 @@ public abstract static class io.appmetrica.analytics.internal.IAppMetricaService
     public <init>()
     public android.os.IBinder asBinder()
     public static io.appmetrica.analytics.internal.IAppMetricaService asInterface(android.os.IBinder)
-    public static io.appmetrica.analytics.internal.IAppMetricaService getDefaultImpl()
     public boolean onTransact(int, android.os.Parcel, android.os.Parcel, int)
-    public static boolean setDefaultImpl(io.appmetrica.analytics.internal.IAppMetricaService)
+}
+
+public static class io.appmetrica.analytics.internal.IAppMetricaService$_Parcel {
+    public <init>()
 }
 
 public class io.appmetrica.analytics.internal.IdentifiersResult implementation android.os.Parcelable {
