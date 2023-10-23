@@ -21,12 +21,14 @@ class ModulesBarrier(
     )
     private val apiKeyValidator = ThrowIfFailedValidator(ApiKeyValidator())
 
+    @Suppress("UNUSED_PARAMETER")
     fun reportEvent(
         event: ModuleEvent
     ) {
         activationValidator.validate()
     }
 
+    @Suppress("UNUSED_PARAMETER")
     fun setSessionExtra(key: String?, value: ByteArray?) {
         sessionExtraKeyValidator.validate(key)
     }

@@ -5,5 +5,5 @@ import java.util.UUID
 
 internal class UuidGenerator {
 
-    fun generateUuid(): String = UUID.randomUUID().toString().replace("-", "").toLowerCase(Locale.US)
+    fun generateUuid(): String = UUID.randomUUID().toString().replace("-", "").lowercase(Locale.US)
 }
