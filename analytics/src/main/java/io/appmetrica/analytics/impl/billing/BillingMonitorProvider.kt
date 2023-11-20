@@ -7,8 +7,7 @@ import io.appmetrica.analytics.billinginterface.internal.storage.BillingInfoSend
 import io.appmetrica.analytics.billinginterface.internal.storage.BillingInfoStorage
 import io.appmetrica.analytics.coreutils.internal.logger.YLogger
 import java.util.concurrent.Executor
-import io.appmetrica.analytics.billingv3.internal.BillingLibraryMonitor as BillingV3LibraryMonitor
-import io.appmetrica.analytics.billingv4.internal.BillingLibraryMonitor as BillingV4LibraryMonitor
+import io.appmetrica.analytics.billingv6.internal.BillingLibraryMonitor as BillingV6LibraryMonitor
 
 private const val TAG = "[BillingMonitorProvider]"
 
@@ -23,19 +22,9 @@ internal class BillingMonitorProvider {
         billingInfoSender: BillingInfoSender
     ): BillingMonitor {
         return when (type) {
-            BillingType.LIBRARY_V4 -> {
-                YLogger.info(TAG, "Tracking purchases using Billing Library 4")
-                BillingV4LibraryMonitor(
-                    context,
-                    workerExecutor,
-                    uiExecutor,
-                    billingInfoStorage,
-                    billingInfoSender
-                )
-            }
-            BillingType.LIBRARY_V3 -> {
-                YLogger.info(TAG, "Tracking purchases using Billing Library 3")
-                BillingV3LibraryMonitor(
+            BillingType.LIBRARY_V6 -> {
+                YLogger.info(TAG, "Tracking purchases using Billing Library 6")
+                BillingV6LibraryMonitor(
                     context,
                     workerExecutor,
                     uiExecutor,

@@ -83,13 +83,7 @@
     </dependency>
     <dependency>
       <groupId>io.appmetrica.analytics</groupId>
-      <artifactId>analytics-billing-v3</artifactId>
-      <version>6.1.0</version>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.appmetrica.analytics</groupId>
-      <artifactId>analytics-billing-v4</artifactId>
+      <artifactId>analytics-billing-v6</artifactId>
       <version>6.1.0</version>
       <scope>runtime</scope>
     </dependency>

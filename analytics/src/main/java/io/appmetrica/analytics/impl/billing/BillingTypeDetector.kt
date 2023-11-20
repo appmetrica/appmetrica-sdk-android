@@ -22,11 +22,13 @@ internal object BillingTypeDetector {
         YLogger.info(LOG_TAG, "Billing library version: $version")
 
         return when {
-            version == null -> BillingType.NONE
-            version.startsWith("2.") -> BillingType.LIBRARY_V3
-            version.startsWith("3.") -> BillingType.LIBRARY_V3
-            version.startsWith("4.") -> BillingType.LIBRARY_V4
-            else -> BillingType.LIBRARY_V4
+            version.isNullOrBlank() -> BillingType.NONE
+            version.startsWith("2.") -> BillingType.NONE
+            version.startsWith("3.") -> BillingType.NONE
+            version.startsWith("4.") -> BillingType.NONE
+            version.startsWith("5.") -> BillingType.LIBRARY_V6
+            version.startsWith("6.") -> BillingType.LIBRARY_V6
+            else -> BillingType.LIBRARY_V6
         }
     }
 }

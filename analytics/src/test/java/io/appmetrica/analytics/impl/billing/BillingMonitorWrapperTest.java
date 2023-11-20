@@ -38,7 +38,7 @@ public class BillingMonitorWrapperTest extends CommonTest {
     private Executor workingExecutor;
     @Mock
     private Executor uiExecutor;
-    private final BillingType billingType = BillingType.LIBRARY_V3;
+    private final BillingType billingType = BillingType.LIBRARY_V6;
     @Mock
     private BillingInfoStorage storage;
     @Mock

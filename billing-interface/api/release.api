@@ -7,10 +7,10 @@ public final class io.appmetrica.analytics.billinginterface.BuildConfig {
 }
 
 public class io.appmetrica.analytics.billinginterface.internal.BillingInfo {
+    public final [NonNull] String productId
     public final long purchaseTime
     public final [NonNull] String purchaseToken
     public long sendTime
-    public final [NonNull] String sku
     public final [NonNull] io.appmetrica.analytics.billinginterface.internal.ProductType type
 
     public <init>([NonNull] io.appmetrica.analytics.billinginterface.internal.ProductType, [NonNull] String, [NonNull] String, long, long)
@@ -18,7 +18,7 @@ public class io.appmetrica.analytics.billinginterface.internal.BillingInfo {
 }
 
 public enum io.appmetrica.analytics.billinginterface.internal.BillingType {
-    LIBRARY_V3, LIBRARY_V4, NONE
+    LIBRARY_V6, NONE
 
     public static io.appmetrica.analytics.billinginterface.internal.BillingType valueOf(String)
     public static io.appmetrica.analytics.billinginterface.internal.BillingType[] values()

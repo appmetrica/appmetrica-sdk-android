@@ -33,8 +33,7 @@ com.google.android.gms:play-services-basement:18.0.0
 com.google.android.gms:play-services-tasks:18.0.1
 io.appmetrica.analytics:appsetid:unspecified
 io.appmetrica.analytics:billing-interface:unspecified
-io.appmetrica.analytics:billing-v3:unspecified
-io.appmetrica.analytics:billing-v4:unspecified
+io.appmetrica.analytics:billing-v6:unspecified
 io.appmetrica.analytics:core-api:unspecified
 io.appmetrica.analytics:core-utils:unspecified
 io.appmetrica.analytics:gpllibrary:unspecified

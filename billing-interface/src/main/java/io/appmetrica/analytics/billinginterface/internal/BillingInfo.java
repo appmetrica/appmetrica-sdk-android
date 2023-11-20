@@ -7,19 +7,19 @@ public class BillingInfo {
     @NonNull
     public final ProductType type;
     @NonNull
-    public final String sku;
+    public final String productId;
     @NonNull
     public final String purchaseToken;
     public final long purchaseTime;
     public long sendTime;
 
     public BillingInfo(@NonNull final ProductType type,
-                       @NonNull final String sku,
+                       @NonNull final String productId,
                        @NonNull final String purchaseToken,
                        final long purchaseTime,
                        final long sendTime) {
         this.type = type;
-        this.sku = sku;
+        this.productId = productId;
         this.purchaseToken = purchaseToken;
         this.purchaseTime = purchaseTime;
         this.sendTime = sendTime;
@@ -30,7 +30,7 @@ public class BillingInfo {
     public String toString() {
         return "BillingInfo{" +
                 "type=" + type +
-                "sku='" + sku + "'" +
+                "productId='" + productId + "'" +
                 "purchaseToken='" + purchaseToken + "'" +
                 "purchaseTime=" + purchaseTime +
                 "sendTime=" + sendTime +

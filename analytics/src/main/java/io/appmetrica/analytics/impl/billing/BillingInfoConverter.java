@@ -15,7 +15,7 @@ class BillingInfoConverter implements
         final AutoInappCollectingInfoProto.AutoInappCollectingInfo.BillingInfo nano =
                 new AutoInappCollectingInfoProto.AutoInappCollectingInfo.BillingInfo();
         nano.type = toInappType(value.type);
-        nano.sku = value.sku;
+        nano.sku = value.productId;
         nano.purchaseToken = value.purchaseToken;
         nano.purchaseTime = value.purchaseTime;
         nano.sendTime = value.sendTime;

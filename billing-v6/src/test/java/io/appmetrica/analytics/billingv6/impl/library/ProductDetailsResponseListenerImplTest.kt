@@ -1,0 +1,117 @@
+package io.appmetrica.analytics.billingv6.impl.library
+
+import com.android.billingclient.api.BillingClient
+import com.android.billingclient.api.BillingResult
+import com.android.billingclient.api.ProductDetails
+import com.android.billingclient.api.PurchaseHistoryRecord
+import com.android.billingclient.api.QueryPurchasesParams
+import io.appmetrica.analytics.billinginterface.internal.library.UtilsProvider
+import io.appmetrica.analytics.billinginterface.internal.storage.BillingInfoSender
+import io.appmetrica.analytics.coreutils.internal.executors.SafeRunnable
+import io.appmetrica.analytics.testutils.CommonTest
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.mockito.Mockito.never
+import org.mockito.Mockito.verify
+import org.mockito.Mockito.verifyNoInteractions
+import org.mockito.kotlin.any
+import org.mockito.kotlin.doAnswer
+import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.whenever
+import org.robolectric.RobolectricTestRunner
+import java.util.concurrent.Executor
+
+@RunWith(RobolectricTestRunner::class)
+class ProductDetailsResponseListenerImplTest : CommonTest() {
+
+    private val workerExecutor: Executor = mock {
+        on { execute(any<SafeRunnable>()) } doAnswer {
+            (it.getArgument<Any>(0) as Runnable).run()
+            null
+        }
+    }
+    private val uiExecutor: Executor = mock {
+        on { execute(any<SafeRunnable>()) } doAnswer {
+            (it.getArgument<Any>(0) as Runnable).run()
+            null
+        }
+    }
+    private val billingClient: BillingClient = mock()
+    private val billingInfoSender: BillingInfoSender = mock()
+    private val utilsProvider: UtilsProvider = mock {
+        on { billingInfoSender } doReturn billingInfoSender
+        on { uiExecutor } doReturn uiExecutor
+        on { workerExecutor } doReturn workerExecutor
+    }
+    private val billingInfoSentListener: () -> Unit = mock()
+    private val billingLibraryConnectionHolder: BillingLibraryConnectionHolder = mock()
+
+    private val purchaseHistoryRecord: PurchaseHistoryRecord = mock()
+    private val purchaseHistoryRecords = listOf(
+        purchaseHistoryRecord
+    )
+
+    private val productDetails: ProductDetails = mock()
+    private val productDetailsList = listOf(
+        productDetails
+    )
+
+    private val skuDetailsResponseListener = ProductDetailsResponseListenerImpl(
+        BillingClient.ProductType.INAPP,
+        billingClient,
+        utilsProvider,
+        billingInfoSentListener,
+        purchaseHistoryRecords,
+        billingLibraryConnectionHolder
+    )
+
+    @Test
+    fun onSkuDetailsResponseIfError() {
+        skuDetailsResponseListener.onProductDetailsResponse(
+            BillingResult.newBuilder()
+                .setResponseCode(BillingClient.BillingResponseCode.ERROR)
+                .build(),
+            emptyList()
+        )
+        verifyNoInteractions(billingClient)
+        verifyNoInteractions(billingInfoSender)
+        verifyNoInteractions(billingInfoSentListener)
+        verify(billingLibraryConnectionHolder).removeListener(skuDetailsResponseListener)
+    }
+
+    @Test
+    fun onSkuDetailsResponseIfOk() {
+        whenever(billingClient.isReady).thenReturn(true)
+        skuDetailsResponseListener.onProductDetailsResponse(
+            BillingResult.newBuilder()
+                .setResponseCode(BillingClient.BillingResponseCode.OK)
+                .build(),
+            productDetailsList
+        )
+        verify(billingLibraryConnectionHolder).addListener(
+            any<PurchaseResponseListenerImpl>()
+        )
+        verify(billingLibraryConnectionHolder, never()).removeListener(
+            any<PurchaseResponseListenerImpl>()
+        )
+        verify(billingLibraryConnectionHolder).removeListener(
+            skuDetailsResponseListener
+        )
+        verify(billingClient).queryPurchasesAsync(any<QueryPurchasesParams>(), any())
+    }
+
+    @Test
+    fun onSkuDetailsResponseIfOkAndEmptyList() {
+        skuDetailsResponseListener.onProductDetailsResponse(
+            BillingResult.newBuilder()
+                .setResponseCode(BillingClient.BillingResponseCode.OK)
+                .build(),
+            emptyList()
+        )
+        verifyNoInteractions(billingClient)
+        verifyNoInteractions(billingInfoSender)
+        verifyNoInteractions(billingInfoSentListener)
+        verify(billingLibraryConnectionHolder).removeListener(skuDetailsResponseListener)
+    }
+}

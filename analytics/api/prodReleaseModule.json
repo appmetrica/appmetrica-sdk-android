@@ -111,14 +111,7 @@
                 },
                 {
                     "group": "io.appmetrica.analytics",
-                    "module": "analytics-billing-v3",
-                    "version": {
-                        "requires": "6.1.0"
-                    }
-                },
-                {
-                    "group": "io.appmetrica.analytics",
-                    "module": "analytics-billing-v4",
+                    "module": "analytics-billing-v6",
                     "version": {
                         "requires": "6.1.0"
                     }
