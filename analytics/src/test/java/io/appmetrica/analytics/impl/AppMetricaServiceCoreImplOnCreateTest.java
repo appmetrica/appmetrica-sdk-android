@@ -247,10 +247,12 @@ public class AppMetricaServiceCoreImplOnCreateTest extends CommonTest {
             verify(reportExecutor).execute(any(Runnable.class));
             verify(crashDirectoryWatcher).startWatching();
             verify(globalServiceLocator.getNativeCrashService()).initNativeCrashReporting(mContext, reportConsumer);
+            verify(globalServiceLocator.getLifecycleDependentComponentManager()).onCreate();
 
             mMetricaCore.onDestroy();
             clearInvocations(activationBarrier, firstServiceEntryPointManager, globalServiceLocator, mAppMetricaServiceLifecycle,
-                advertisingIdGetter, fieldsFactory, reportExecutor, crashDirectoryWatcher, globalServiceLocator.getNativeCrashService());
+                advertisingIdGetter, fieldsFactory, reportExecutor, crashDirectoryWatcher, globalServiceLocator.getNativeCrashService(),
+                globalServiceLocator.getLifecycleDependentComponentManager());
             mMetricaCore.onCreate();
 
             verify(firstServiceEntryPointManager, never()).onPossibleFirstEntry(mContext);
@@ -263,6 +265,7 @@ public class AppMetricaServiceCoreImplOnCreateTest extends CommonTest {
             verify(reportExecutor, never()).execute(any(Runnable.class));
             verify(crashDirectoryWatcher, never()).startWatching();
             verify(globalServiceLocator.getNativeCrashService(), never()).initNativeCrashReporting(any(Context.class), any(ReportConsumer.class));
+            verify(globalServiceLocator.getLifecycleDependentComponentManager()).onCreate();
         }
     }
 

@@ -361,6 +361,7 @@ public class AppMetricaServiceCoreImplTests extends CommonTest {
     @Test
     public void onDestroy() {
         mMetricaCore.onDestroy();
+        verify(GlobalServiceLocator.getInstance().getLifecycleDependentComponentManager()).onDestroy();
     }
 
     @Test

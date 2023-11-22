@@ -74,8 +74,8 @@ public final class GlobalServiceLocator {
     private volatile DataSendingRestrictionControllerImpl dataSendingRestrictionController;
     @NonNull
     private final ServiceExecutorProvider mServiceExecutorProvider;
-    @NonNull
-    private volatile BatteryInfoProvider mBatteryInfoProvider;
+    @Nullable
+    private volatile BatteryInfoProvider batteryInfoProvider;
     @Nullable
     private volatile SelfDiagnosticReporterStorage mSelfDiagnosticReporterStorage;
     @Nullable
@@ -90,10 +90,10 @@ public final class GlobalServiceLocator {
     private volatile PreferencesServiceDbStorage servicePreferences;
     @Nullable
     private volatile VitalDataProviderStorage vitalDataProviderStorage;
-    @NonNull
-    private ScreenInfoHolder screenInfoHolder;
-    @NonNull
-    private LifecycleDependentComponentManager lifecycleDependentComponentManager;
+    @Nullable
+    private volatile ScreenInfoHolder screenInfoHolder;
+    @Nullable
+    private volatile LifecycleDependentComponentManager lifecycleDependentComponentManager;
     @Nullable
     private BaseSslSocketFactoryProvider sslSocketFactoryProvider;
     @NonNull
@@ -108,8 +108,8 @@ public final class GlobalServiceLocator {
             NetworkServiceLocator.getInstance().onDestroy();
         }
     };
-    @NonNull
-    private ModulesController modulesController;
+    @Nullable
+    private volatile ModulesController modulesController;
     @NonNull
     private final ModuleEntryPointsRegister moduleEntryPointsRegister = new ModuleEntryPointsRegister();
     @NonNull
@@ -132,17 +132,6 @@ public final class GlobalServiceLocator {
     private GlobalServiceLocator(@NonNull Context applicationContext) {
         mContext = applicationContext;
         mServiceExecutorProvider = new ServiceExecutorProvider();
-        lifecycleDependentComponentManager = new LifecycleDependentComponentManager(
-                applicationContext,
-                mServiceExecutorProvider.getDefaultExecutor()
-        );
-        mBatteryInfoProvider = new BatteryInfoProvider(
-                mServiceExecutorProvider.getDefaultExecutor(),
-                lifecycleDependentComponentManager.getBatteryChargeTypeListener()
-        );
-        screenInfoHolder = new ScreenInfoHolder();
-        modulesController = new ModulesController();
-        NetworkServiceLocator.init();
     }
 
     public synchronized void initAsync() {
@@ -150,8 +139,9 @@ public final class GlobalServiceLocator {
         UtilityServiceLocator.getInstance().initAsync();
         startupStateHolder.init(mContext);
         startupStateHolder.registerObserver(new UtilityServiceStartupStateObserver());
+        NetworkServiceLocator.init();
         NetworkServiceLocator.getInstance().initAsync(new NetworkAppContextProvider().getNetworkAppContext());
-        lifecycleDependentComponentManager.addLifecycleObserver(networkServiceLifecycleObserver);
+        getLifecycleDependentComponentManager().addLifecycleObserver(networkServiceLifecycleObserver);
         initPreloadInfoStorage();
     }
 
@@ -224,7 +214,20 @@ public final class GlobalServiceLocator {
 
     @NonNull
     public BatteryInfoProvider getBatteryInfoProvider() {
-        return mBatteryInfoProvider;
+        BatteryInfoProvider local = batteryInfoProvider;
+        if (local == null) {
+            synchronized (this) {
+                local = batteryInfoProvider;
+                if (local == null) {
+                    local = new BatteryInfoProvider(
+                        getServiceExecutorProvider().getDefaultExecutor(),
+                        getLifecycleDependentComponentManager().getBatteryChargeTypeListener()
+                    );
+                    batteryInfoProvider = local;
+                }
+            }
+        }
+        return local;
     }
 
     @NonNull
@@ -284,7 +287,20 @@ public final class GlobalServiceLocator {
 
     @NonNull
     public LifecycleDependentComponentManager getLifecycleDependentComponentManager() {
-        return lifecycleDependentComponentManager;
+        LifecycleDependentComponentManager localCopy = lifecycleDependentComponentManager;
+        if (localCopy == null) {
+            synchronized (this) {
+                localCopy = lifecycleDependentComponentManager;
+                if (localCopy == null) {
+                    localCopy = new LifecycleDependentComponentManager(
+                        getContext(),
+                        getServiceExecutorProvider().getDefaultExecutor()
+                    );
+                    lifecycleDependentComponentManager = localCopy;
+                }
+            }
+        }
+        return localCopy;
     }
 
     @NonNull
@@ -316,12 +332,22 @@ public final class GlobalServiceLocator {
 
     @NonNull
     public ApplicationStateProviderImpl getApplicationStateProvider() {
-        return lifecycleDependentComponentManager.getApplicationStateProvider();
+        return getLifecycleDependentComponentManager().getApplicationStateProvider();
     }
 
     @NonNull
     public ScreenInfoHolder getScreenInfoHolder() {
-        return screenInfoHolder;
+        ScreenInfoHolder local = screenInfoHolder;
+        if (local == null) {
+            synchronized (this) {
+                local = screenInfoHolder;
+                if (local == null) {
+                    local = new ScreenInfoHolder();
+                     screenInfoHolder = local;
+                }
+            }
+        }
+        return local;
     }
 
     @NonNull
@@ -331,7 +357,17 @@ public final class GlobalServiceLocator {
 
     @NonNull
     public ModulesController getModulesController() {
-        return modulesController;
+        ModulesController local = modulesController;
+        if (local == null) {
+            synchronized (this) {
+                local = modulesController;
+                if (local == null) {
+                    local = new ModulesController();
+                    modulesController = local;
+                }
+            }
+        }
+        return local;
     }
 
     @NonNull
@@ -463,7 +499,7 @@ public final class GlobalServiceLocator {
 
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)
     public void setBatteryInfoProvider(@Nullable BatteryInfoProvider batteryInfoProvider) {
-        mBatteryInfoProvider = batteryInfoProvider;
+        this.batteryInfoProvider = batteryInfoProvider;
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)

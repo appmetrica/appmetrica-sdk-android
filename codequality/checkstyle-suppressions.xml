@@ -23,6 +23,7 @@
     <suppress checks="FileLength" files="JsonHelper\.java"/>
     <suppress checks="FileLength" files="ReportRequestConfig\.java" />
     <suppress checks="FileLength" files="ReportTask\.java" />
+    <suppress checks="FileLength" files="GlobalServiceLocator\.java"/>
 
     <!-- Tests -->
     <suppress checks="FileLength" files="test.*\/.*\.java" />

@@ -194,8 +194,6 @@ public class AppMetricaServiceCoreExecutionDispatcherTest extends CommonTest {
     private ICommonExecutor mExecutor;
     @Mock
     private AppMetricaServiceCore mAppMetricaServiceCore;
-    @Mock
-    private LifecycleDependentComponentManager lifecycleDependentComponentManager;
     @Captor
     private ArgumentCaptor<Runnable> mRunnableCaptor;
 
@@ -205,7 +203,8 @@ public class AppMetricaServiceCoreExecutionDispatcherTest extends CommonTest {
     public void setUp() throws Exception {
         MockitoAnnotations.openMocks(this);
 
-        mAppMetricaCoreExecutionDispatcher = new AppMetricaServiceCoreExecutionDispatcher(mExecutor, mAppMetricaServiceCore, lifecycleDependentComponentManager);
+        mAppMetricaCoreExecutionDispatcher =
+            new AppMetricaServiceCoreExecutionDispatcher(mExecutor, mAppMetricaServiceCore);
     }
 
     @Test

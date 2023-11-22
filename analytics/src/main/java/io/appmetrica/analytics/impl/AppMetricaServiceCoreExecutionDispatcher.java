@@ -15,15 +15,12 @@ public class AppMetricaServiceCoreExecutionDispatcher implements AppMetricaServi
 
     private ICommonExecutor mCoreExecutor;
     private AppMetricaServiceCore mAppMetricaServiceCore;
-    @NonNull
-    private final LifecycleDependentComponentManager lifecycleDependentComponentManager;
     private boolean shouldExecuteOnCreate = false;
 
     public AppMetricaServiceCoreExecutionDispatcher(@NonNull AppMetricaServiceCore appMetricaServiceCore) {
         this(
-                GlobalServiceLocator.getInstance().getServiceExecutorProvider().getMetricaCoreExecutor(),
-            appMetricaServiceCore,
-                GlobalServiceLocator.getInstance().getLifecycleDependentComponentManager()
+            GlobalServiceLocator.getInstance().getServiceExecutorProvider().getMetricaCoreExecutor(),
+            appMetricaServiceCore
         );
     }
 
@@ -38,7 +35,6 @@ public class AppMetricaServiceCoreExecutionDispatcher implements AppMetricaServi
                     if (!shouldExecuteOnCreate) {
                         return;
                     }
-                    lifecycleDependentComponentManager.onCreate();
                 }
                 mAppMetricaServiceCore.onCreate();
             }
@@ -105,7 +101,6 @@ public class AppMetricaServiceCoreExecutionDispatcher implements AppMetricaServi
         YLogger.d("%sPost onDestroy on the same thread", TAG);
         mCoreExecutor.removeAll();
         synchronized (this) {
-            lifecycleDependentComponentManager.onDestroy();
             shouldExecuteOnCreate = false;
         }
         mAppMetricaServiceCore.onDestroy();
@@ -162,11 +157,9 @@ public class AppMetricaServiceCoreExecutionDispatcher implements AppMetricaServi
     @VisibleForTesting
     AppMetricaServiceCoreExecutionDispatcher(
         @NonNull ICommonExecutor coreExecutor,
-        @NonNull AppMetricaServiceCore appMetricaServiceCore,
-        @NonNull LifecycleDependentComponentManager lifecycleDependentComponentManager
+        @NonNull AppMetricaServiceCore appMetricaServiceCore
     ) {
         mCoreExecutor = coreExecutor;
         mAppMetricaServiceCore = appMetricaServiceCore;
-        this.lifecycleDependentComponentManager = lifecycleDependentComponentManager;
     }
 }

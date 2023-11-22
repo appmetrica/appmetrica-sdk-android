@@ -7,9 +7,9 @@ import io.appmetrica.analytics.coreapi.internal.identifiers.AdTrackingInfo;
 import io.appmetrica.analytics.coreapi.internal.identifiers.AdTrackingInfoResult;
 import io.appmetrica.analytics.coreapi.internal.identifiers.AdvertisingIdsHolder;
 import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus;
+import io.appmetrica.analytics.impl.DataSendingRestrictionControllerImpl;
 import io.appmetrica.analytics.impl.DistributionSource;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
-import io.appmetrica.analytics.impl.DataSendingRestrictionControllerImpl;
 import io.appmetrica.analytics.impl.clids.ClidsInfo;
 import io.appmetrica.analytics.impl.id.AdvertisingIdGetter;
 import io.appmetrica.analytics.impl.modules.ModulesRemoteConfigArgumentsCollector;
@@ -367,10 +367,15 @@ public class StartupParamsAppenderTest extends CommonTest {
         private Obfuscator mObfuscator;
         @Mock
         private ModulesRemoteConfigArgumentsCollector modulesRemoteConfigArgumentsCollector;
+        @Mock
+        private AdvertisingIdsHolder advertisingIdsHolder;
         private Uri.Builder mBuilder = new Uri.Builder();
         private StartupParamsAppender mStartupParamsAppender;
         private final String mParameter;
         private final String mValue;
+
+        @Rule
+        public GlobalServiceLocatorRule globalServiceLocatorRule = new GlobalServiceLocatorRule();
 
         @ParameterizedRobolectricTestRunner.Parameters(name = "Contains {0}={1}")
         public static Collection<Object[]> data() {
@@ -400,6 +405,13 @@ public class StartupParamsAppenderTest extends CommonTest {
             MockitoAnnotations.openMocks(this);
             GlobalServiceLocator.init(RuntimeEnvironment.getApplication());
             when(mStartupRequestConfig.getChosenClids()).thenReturn(new ClidsInfo.Candidate(null, DistributionSource.APP));
+            when(mStartupRequestConfig.getAdvertisingIdsHolder()).thenReturn(advertisingIdsHolder);
+            when(advertisingIdsHolder.getGoogle())
+                .thenReturn(new AdTrackingInfoResult(null, IdentifierStatus.IDENTIFIER_PROVIDER_UNAVAILABLE, null));
+            when(advertisingIdsHolder.getHuawei())
+                .thenReturn(new AdTrackingInfoResult(null, IdentifierStatus.IDENTIFIER_PROVIDER_UNAVAILABLE, null));
+            when(advertisingIdsHolder.getYandex())
+                .thenReturn(new AdTrackingInfoResult(null, IdentifierStatus.IDENTIFIER_PROVIDER_UNAVAILABLE, null));
             Map<String, Integer> modulesFeatures = new HashMap<>();
             modulesFeatures.put(FIRST_MODULE_BLOCK_ID, FIRST_MODULE_BLOCK_VALUE);
             modulesFeatures.put(SECOND_MODULE_BLOCK_ID, SECOND_MODULE_BLOCK_VALUE);
@@ -431,9 +443,14 @@ public class StartupParamsAppenderTest extends CommonTest {
         private Obfuscator mObfuscator;
         @Mock
         private ModulesRemoteConfigArgumentsCollector modulesArgumentsCollector;
+        @Mock
+        private AdvertisingIdsHolder advertisingIdsHolder;
         private Uri.Builder mBuilder = new Uri.Builder();
         private StartupParamsAppender mStartupParamsAppender;
         private final String mFeature;
+
+        @Rule
+        public GlobalServiceLocatorRule globalServiceLocatorRule = new GlobalServiceLocatorRule();
 
         @ParameterizedRobolectricTestRunner.Parameters(name = "{0}")
         public static Collection<Object[]> data() {
@@ -456,8 +473,14 @@ public class StartupParamsAppenderTest extends CommonTest {
         @Before
         public void setUp() {
             MockitoAnnotations.openMocks(this);
-            GlobalServiceLocator.init(RuntimeEnvironment.getApplication());
             when(mStartupRequestConfig.getChosenClids()).thenReturn(new ClidsInfo.Candidate(null, DistributionSource.APP));
+            when(mStartupRequestConfig.getAdvertisingIdsHolder()).thenReturn(advertisingIdsHolder);
+            when(advertisingIdsHolder.getGoogle())
+                .thenReturn(new AdTrackingInfoResult(null, IdentifierStatus.IDENTIFIER_PROVIDER_UNAVAILABLE, null));
+            when(advertisingIdsHolder.getHuawei())
+                .thenReturn(new AdTrackingInfoResult(null, IdentifierStatus.IDENTIFIER_PROVIDER_UNAVAILABLE, null));
+            when(advertisingIdsHolder.getYandex())
+                .thenReturn(new AdTrackingInfoResult(null, IdentifierStatus.IDENTIFIER_PROVIDER_UNAVAILABLE, null));
             when(modulesArgumentsCollector.collectFeatures())
                     .thenReturn(Arrays.asList(FIRST_MODULE_FEATURE, SECOND_MODULE_FEATURE));
             mStartupParamsAppender = new StartupParamsAppender(mObfuscator, modulesArgumentsCollector);

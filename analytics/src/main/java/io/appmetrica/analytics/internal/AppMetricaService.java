@@ -38,6 +38,7 @@ public class AppMetricaService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        YLogger.info(TAG, "AppMetricaService#onCreate()");
         GlobalServiceLocator.init(this.getApplicationContext());
         PublicLogger.init(getApplicationContext());
         YLogger.info(TAG, "Service was created for owner with package %s, this: %s", getPackageName(), this);

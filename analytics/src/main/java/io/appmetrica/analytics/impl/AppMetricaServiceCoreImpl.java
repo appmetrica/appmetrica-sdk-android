@@ -144,6 +144,7 @@ public class AppMetricaServiceCoreImpl implements AppMetricaServiceCore, AppMetr
             YLogger.info(TAG, "onNonFirstCreate()");
             loadLocaleFromConfiguration(mContext.getResources().getConfiguration());
         }
+        GlobalServiceLocator.getInstance().getLifecycleDependentComponentManager().onCreate();
     }
 
     @SuppressLint("NewApi")
@@ -304,6 +305,7 @@ public class AppMetricaServiceCoreImpl implements AppMetricaServiceCore, AppMetr
     @Override
     public void onDestroy() {
         YLogger.debug(TAG, "onDestroy()");
+        GlobalServiceLocator.getInstance().getLifecycleDependentComponentManager().onDestroy();
     }
 
     @WorkerThread

@@ -136,17 +136,6 @@ public class GlobalServiceLocatorTest extends CommonTest {
     }
 
     @Test
-    public void initDispatchToNetworkServiceLocator() {
-        GlobalServiceLocator.init(mContext);
-        networkServiceLocatorRule.mockedStatic.verify(new MockedStatic.Verification() {
-            @Override
-            public void apply() throws Throwable {
-                NetworkServiceLocator.init();
-            }
-        });
-    }
-
-    @Test
     public void initAsync() {
         GlobalServiceLocator.init(mContext);
         mGlobalServiceLocator = GlobalServiceLocator.getInstance();
@@ -164,6 +153,12 @@ public class GlobalServiceLocatorTest extends CommonTest {
         inOrder.verify(startupStateHolder).init(mContext);
         inOrder.verify(startupStateHolder)
             .registerObserver(utilityServiceStartupObserverMockedRule.getConstructionMock().constructed().get(0));
+        networkServiceLocatorRule.getMockedStatic().verify(new MockedStatic.Verification() {
+            @Override
+            public void apply() throws Throwable {
+                NetworkServiceLocator.init();
+            }
+        });
         inOrder.verify(NetworkServiceLocator.getInstance()).initAsync(networkAppContext);
         inOrder.verifyNoMoreInteractions();
     }

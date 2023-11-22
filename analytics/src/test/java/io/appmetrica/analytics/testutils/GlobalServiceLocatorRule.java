@@ -12,6 +12,7 @@ import io.appmetrica.analytics.coreapi.internal.system.PermissionExtractor;
 import io.appmetrica.analytics.impl.ApplicationStateProviderImpl;
 import io.appmetrica.analytics.impl.BatteryInfoProvider;
 import io.appmetrica.analytics.impl.ClidsInfoStorage;
+import io.appmetrica.analytics.impl.DataSendingRestrictionControllerImpl;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.LifecycleDependentComponentManager;
 import io.appmetrica.analytics.impl.ModuleEntryPointsRegister;
@@ -19,7 +20,6 @@ import io.appmetrica.analytics.impl.PreloadInfoStorage;
 import io.appmetrica.analytics.impl.ScreenInfoHolder;
 import io.appmetrica.analytics.impl.SelfDiagnosticReporterStorage;
 import io.appmetrica.analytics.impl.StartupStateHolder;
-import io.appmetrica.analytics.impl.DataSendingRestrictionControllerImpl;
 import io.appmetrica.analytics.impl.component.ComponentId;
 import io.appmetrica.analytics.impl.crash.ndk.NativeCrashService;
 import io.appmetrica.analytics.impl.db.VitalCommonDataProvider;
@@ -119,6 +119,7 @@ public class GlobalServiceLocatorRule extends ExternalResource {
         when(globalServiceLocator.getModuleEntryPointsRegister()).thenReturn(mock(ModuleEntryPointsRegister.class));
         when(globalServiceLocator.getMultiProcessSafeUuidProvider()).thenReturn(mock(MultiProcessSafeUuidProvider.class));
         when(globalServiceLocator.getNativeCrashService()).thenReturn(mock(NativeCrashService.class));
+        when(globalServiceLocator.getServicePreferences()).thenReturn(mock(PreferencesServiceDbStorage.class));
         GlobalServiceLocator.setInstance(globalServiceLocator);
     }
 
