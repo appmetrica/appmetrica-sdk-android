@@ -276,7 +276,7 @@ public class ComponentUnit implements IReportableComponent, IComponent, EventsFl
     }
 
     @Override
-    public synchronized void onStartupError(@NonNull StartupError error, @Nullable StartupState existingState) {
+    public void onStartupError(@NonNull StartupError error, @Nullable StartupState existingState) {
 
     }
 

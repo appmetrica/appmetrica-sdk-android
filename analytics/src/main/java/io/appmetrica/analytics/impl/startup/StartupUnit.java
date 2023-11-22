@@ -403,8 +403,7 @@ public class StartupUnit implements IBaseComponent, IStartupUnit {
     }
 
     public synchronized void updateConfiguration(@NonNull StartupRequestConfig.Arguments arguments) {
-        YLogger.d(TAG + " update configuration for %s", mComponentId.toString());
-        YLogger.d(TAG + " update configuration. New configuration %s", arguments);
+        YLogger.d(TAG + " update configuration for %s. New configuration %s", mComponentId.toString(), arguments);
         mConfigHolder.updateArguments(arguments);
         findHosts(mConfigHolder.get());
     }
