@@ -29,7 +29,6 @@ public class ReferrerRetrieverWrapper {
         try {
             mReferrerRetriever.retrieveReferrer(referrerListener);
         } catch (Throwable ex) {
-            YLogger.e(ex, TAG);
             referrerListener.onReferrerRetrieveError(ex);
         }
     }
