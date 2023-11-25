@@ -6,10 +6,14 @@ import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
 import io.appmetrica.analytics.coreapi.internal.identifiers.AdTrackingInfo
 import io.appmetrica.analytics.coreapi.internal.identifiers.AdTrackingInfoResult
 import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus
+import io.appmetrica.analytics.coreutils.internal.reflection.ReflectionUtils
 import io.appmetrica.analytics.identifiers.internal.AdvIdentifiersProvider
+import io.appmetrica.analytics.impl.id.RetryStrategy
 import io.appmetrica.analytics.impl.id.TimesBasedRetryStrategy
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.MockedStaticRule
+import io.appmetrica.analytics.testutils.on
+import io.appmetrica.analytics.testutils.staticRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Rule
 import org.junit.Test
@@ -18,8 +22,10 @@ import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.doThrow
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.never
 import org.mockito.kotlin.same
 import org.mockito.kotlin.stubbing
+import org.mockito.kotlin.verifyZeroInteractions
 import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
@@ -28,6 +34,15 @@ class ReflectionAdvIdProviderTest : CommonTest() {
 
     @get:Rule
     val advIdentifiersProvider = MockedStaticRule(AdvIdentifiersProvider::class.java)
+
+    private val advIdentifiersProviderClass = "io.appmetrica.analytics.identifiers.internal.AdvIdentifiersProvider"
+
+    @get:Rule
+    val reflectiveUtilsStaticMockedRule = staticRule<ReflectionUtils> {
+        on { ReflectionUtils.detectClassExists(advIdentifiersProviderClass) } doReturn true
+    }
+
+    private val retryStrategy = mock<RetryStrategy>()
 
     private val context = mock<Context>()
     private val parser = mock<ReflectionAdvIdParser>()
@@ -83,5 +98,26 @@ class ReflectionAdvIdProviderTest : CommonTest() {
         assertions.checkField("mErrorExplanation", "exception while fetching $providerName adv_id: $message")
 
         assertions.checkAll()
+    }
+
+    @Test
+    fun noAdvIdProviderClass() {
+        whenever(ReflectionUtils.detectClassExists(advIdentifiersProviderClass)).thenReturn(false)
+
+        ObjectPropertyAssertions(provider.getAdTrackingInfo(context, retryStrategy))
+            .checkField("mAdTrackingInfo", null as AdTrackingInfo?)
+            .checkField("mStatus", IdentifierStatus.IDENTIFIER_PROVIDER_UNAVAILABLE)
+            .checkField(
+                "mErrorExplanation",
+                "Module io.appmetrica.analytics:analytics-identifiers does not exist"
+            )
+            .checkAll()
+
+        verifyZeroInteractions(retryStrategy)
+
+        advIdentifiersProvider.staticMock.verify(
+            { AdvIdentifiersProvider.requestIdentifiers(any(), any()) },
+            never()
+        )
     }
 }
