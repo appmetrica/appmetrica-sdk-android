@@ -10,9 +10,11 @@ import io.appmetrica.analytics.impl.SdkData
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.DummyLocationProvider
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.SoftAssertions
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.mock
 import org.robolectric.ParameterizedRobolectricTestRunner
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
@@ -406,5 +408,82 @@ class CounterConfigurationTest : CommonTest() {
     @Test
     fun reporterTypeFromNullValue() {
         assertThat(fromStringValue(null)).isEqualTo(CounterConfigurationReporterType.MAIN)
+    }
+
+    @Test
+    fun `constructor with AppMetricaConfig`() {
+        val reporterType = CounterConfigurationReporterType.MAIN
+        val inputConfig = AppMetricaConfig.newConfigBuilder(UUID.randomUUID().toString())
+            .withSessionTimeout(100500)
+            .withLocation(mock())
+            .withLocationTracking(true)
+            .withDeviceType("Device type")
+            .withDispatchPeriodSeconds(400)
+            .withMaxReportsCount(100)
+            .withLogs()
+            .withAppVersion("3.1.1")
+            .withAppBuildNumber(300010001)
+            .handleFirstActivationAsUpdate(true)
+            .withDataSendingEnabled(true)
+            .withMaxReportsInDatabaseCount(5000)
+            .withNativeCrashReporting(true)
+            .withRevenueAutoTrackingEnabled(true)
+            .build()
+
+        val actual = CounterConfiguration(inputConfig, reporterType)
+
+        with(SoftAssertions()) {
+            assertThat(actual.apiKey).isEqualTo(inputConfig.apiKey)
+            assertThat(actual.sessionTimeout).isEqualTo(inputConfig.sessionTimeout)
+            assertThat(actual.manualLocation).isNotNull
+            assertThat(actual.isLocationTrackingEnabled).isEqualTo(inputConfig.locationTracking)
+            assertThat(actual.deviceType).isEqualTo(inputConfig.deviceType)
+            assertThat(actual.dispatchPeriod).isEqualTo(inputConfig.dispatchPeriodSeconds)
+            assertThat(actual.maxReportsCount).isEqualTo(inputConfig.maxReportsCount)
+            assertThat(actual.maxReportsInDbCount).isEqualTo(inputConfig.maxReportsInDatabaseCount)
+            assertThat(actual.isLogEnabled).isEqualTo(inputConfig.logs)
+            assertThat(actual.appVersion).isEqualTo(inputConfig.appVersion)
+            assertThat(actual.appBuildNumber).isEqualTo(inputConfig.appBuildNumber.toString())
+            assertThat(actual.isFirstActivationAsUpdate).isEqualTo(inputConfig.firstActivationAsUpdate)
+            assertThat(actual.dataSendingEnabled).isEqualTo(inputConfig.dataSendingEnabled)
+            assertThat(actual.maxReportsInDbCount).isEqualTo(inputConfig.maxReportsInDatabaseCount)
+            assertThat(actual.reportNativeCrashesEnabled).isEqualTo(inputConfig.nativeCrashReporting)
+            assertThat(actual.isRevenueAutoTrackingEnabled).isEqualTo(inputConfig.revenueAutoTrackingEnabled)
+            assertThat(actual.reporterType).isEqualTo(reporterType)
+            assertAll()
+        }
+    }
+
+    @Test
+    fun `fun constructor with empty AppMetricaConfig`() {
+        val reporterType = CounterConfigurationReporterType.SELF_SDK
+
+        val inputConfig = AppMetricaConfig.newConfigBuilder(UUID.randomUUID().toString())
+            .withDataSendingEnabled(false)
+            .build()
+
+        val actual = CounterConfiguration(inputConfig, reporterType)
+
+        with(SoftAssertions()) {
+            assertThat(actual.apiKey).isEqualTo(inputConfig.apiKey)
+            assertThat(actual.sessionTimeout).isNull()
+            assertThat(actual.manualLocation).isNull()
+            assertThat(actual.isLocationTrackingEnabled).isNull()
+            assertThat(actual.deviceType).isNull()
+            assertThat(actual.dispatchPeriod).isNull()
+            assertThat(actual.maxReportsCount).isNull()
+            assertThat(actual.maxReportsInDbCount).isNull()
+            assertThat(actual.isLogEnabled).isNull()
+            assertThat(actual.appVersion).isNull()
+            assertThat(actual.appBuildNumber).isNull()
+            assertThat(actual.isFirstActivationAsUpdate).isNull()
+            assertThat(actual.dataSendingEnabled).isFalse
+            assertThat(actual.maxReportsInDbCount).isNull()
+            assertThat(actual.reportNativeCrashesEnabled).isNull()
+            assertThat(actual.isRevenueAutoTrackingEnabled).isNull()
+            assertThat(actual.reporterType).isEqualTo(reporterType)
+            assertAll()
+
+        }
     }
 }

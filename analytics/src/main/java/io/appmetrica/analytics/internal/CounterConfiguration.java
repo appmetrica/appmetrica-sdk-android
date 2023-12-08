@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
@@ -65,6 +66,7 @@ public class CounterConfiguration implements Parcelable {
             applyDeviceTypeFromConfig(config);
             applyDispatchPeriodFromConfig(config.dispatchPeriodSeconds);
             applyMaxReportsCountFromConfig(config.maxReportsCount);
+            applyLogsFromConfig(config.logs);
             applyAppVersionFromConfig(config);
             applyAppBuildNumberFromConfig(config);
             applyFirstActivationAsUpdateFromConfig(config);
