@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import java.util.List;
 import io.appmetrica.analytics.AnrListener;
+import io.appmetrica.analytics.ExternalAttribution;
 
 public interface IMainReporter extends IBaseReporter, MetricaConfigurator {
 
@@ -25,4 +26,6 @@ public interface IMainReporter extends IBaseReporter, MetricaConfigurator {
     void onWebViewReportingInit(@NonNull WebViewJsInterfaceHandler webViewJsInterfaceHandler);
 
     void registerAnrListener(@NonNull AnrListener listener);
+
+    void reportExternalAttribution(@NonNull final ExternalAttribution value);
 }

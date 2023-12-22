@@ -13,6 +13,7 @@ import io.appmetrica.analytics.AnrListener;
 import io.appmetrica.analytics.AppMetricaConfig;
 import io.appmetrica.analytics.DeferredDeeplinkListener;
 import io.appmetrica.analytics.DeferredDeeplinkParametersListener;
+import io.appmetrica.analytics.ExternalAttribution;
 import io.appmetrica.analytics.ReporterConfig;
 import io.appmetrica.analytics.Revenue;
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
@@ -696,6 +697,17 @@ public class AppMetricaProxyTest extends CommonTest {
         order.verify(mBarrier).registerAnrListener(eq(listener));
         order.verify(mSynchronousStageExecutor).registerAnrListener(eq(listener));
         order.verify(mMainReporter).registerAnrListener(eq(listener));
+    }
+
+    @Test
+    public void reportExternalAttribution() {
+        ExternalAttribution attribution = mock(ExternalAttribution.class);
+        mProxy.reportExternalAttribution(attribution);
+        InOrder order = inOrder(activationValidator, mBarrier, mSynchronousStageExecutor, mMainReporter);
+        order.verify(activationValidator).validate();
+        order.verify(mBarrier).reportExternalAttribution(eq(attribution));
+        order.verify(mSynchronousStageExecutor).reportExternalAttribution(eq(attribution));
+        order.verify(mMainReporter).reportExternalAttribution(eq(attribution));
     }
 
     private void checkSetDataSendingEnabled(boolean value) {

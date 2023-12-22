@@ -63,6 +63,7 @@ class StartupStateStorageTest : CommonTest() {
     private val attributionConfig = mock<AttributionConfig>()
     private val startupUpdateConfig = mock<StartupUpdateConfig>()
     private val modulesRemoteConfigs = mapOf("some id" to mock<Any>())
+    private val externalAttributionConfig = mock<ExternalAttributionConfig>()
 
     @Before
     fun setUp() {
@@ -114,6 +115,7 @@ class StartupStateStorageTest : CommonTest() {
                 it.checkField("intervalSeconds", 86400)
             }
             .checkField("modulesRemoteConfigs", emptyMap<String, Any>())
+            .checkFieldIsNull("externalAttributionConfig")
             .checkAll()
     }
 
@@ -161,6 +163,7 @@ class StartupStateStorageTest : CommonTest() {
             it.checkField("intervalSeconds", 86400)
         }
         assertions.checkField("modulesRemoteConfigs", emptyMap<String, Any>())
+        assertions.checkFieldIsNull("externalAttributionConfig")
 
         assertions.checkAll()
     }
@@ -198,6 +201,7 @@ class StartupStateStorageTest : CommonTest() {
             .withCustomSdkHosts(customSdkHosts)
             .withStartupUpdateConfig(startupUpdateConfig)
             .withModulesRemoteConfigs(modulesRemoteConfigs)
+            .withExternalAttributionConfig(externalAttributionConfig)
             .build()
         `when`(modelStorage.read()).thenReturn(startupStateModel)
 
@@ -233,6 +237,7 @@ class StartupStateStorageTest : CommonTest() {
             .checkField("customSdkHosts", customSdkHosts)
             .checkField("startupUpdateConfig", startupUpdateConfig)
             .checkField("modulesRemoteConfigs", modulesRemoteConfigs)
+            .checkField("externalAttributionConfig", externalAttributionConfig)
             .checkAll()
     }
 
@@ -268,6 +273,7 @@ class StartupStateStorageTest : CommonTest() {
             .withCustomSdkHosts(customSdkHosts)
             .withStartupUpdateConfig(startupUpdateConfig)
             .withModulesRemoteConfigs(modulesRemoteConfigs)
+            .withExternalAttributionConfig(externalAttributionConfig)
             .build()
         startupStateStorage.save(startupState)
 
@@ -306,6 +312,7 @@ class StartupStateStorageTest : CommonTest() {
         assertions.checkField("customSdkHosts", customSdkHosts)
         assertions.checkField("startupUpdateConfig", startupUpdateConfig)
         assertions.checkField("modulesRemoteConfigs", modulesRemoteConfigs)
+        assertions.checkField("externalAttributionConfig", externalAttributionConfig)
 
         assertions.checkAll()
     }

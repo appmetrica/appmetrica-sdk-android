@@ -88,6 +88,7 @@ public final class io.appmetrica.analytics.AppMetrica {
     public static void reportEvent([NonNull] String)
     public static void reportEvent([NonNull] String, [Nullable] String)
     public static void reportEvent([NonNull] String, [Nullable] java.util.Map<String, Object>)
+    public static void reportExternalAttribution([NonNull] io.appmetrica.analytics.ExternalAttribution)
     public static void reportReferralUrl([NonNull] String)
     public static void reportRevenue([NonNull] io.appmetrica.analytics.Revenue)
     public static void reportUnhandledException([NonNull] Throwable)
@@ -230,6 +231,18 @@ public enum io.appmetrica.analytics.DeferredDeeplinkParametersListener$Error {
     public String getDescription()
     public static io.appmetrica.analytics.DeferredDeeplinkParametersListener$Error valueOf(String)
     public static io.appmetrica.analytics.DeferredDeeplinkParametersListener$Error[] values()
+}
+
+public interface io.appmetrica.analytics.ExternalAttribution {
+    public abstract byte[] toBytes()
+}
+
+public final class io.appmetrica.analytics.ExternalAttributions {
+    public static [NonNull] io.appmetrica.analytics.ExternalAttribution adjust([Nullable] Object)
+    public static [NonNull] io.appmetrica.analytics.ExternalAttribution airbridge([Nullable] java.util.Map<String, String>)
+    public static [NonNull] io.appmetrica.analytics.ExternalAttribution appsflyer([Nullable] java.util.Map<String, Object>)
+    public static [NonNull] io.appmetrica.analytics.ExternalAttribution kochava([Nullable] org.json.JSONObject)
+    public static [NonNull] io.appmetrica.analytics.ExternalAttribution tenjin([Nullable] java.util.Map<String, String>)
 }
 
 public interface io.appmetrica.analytics.ICrashTransformer {

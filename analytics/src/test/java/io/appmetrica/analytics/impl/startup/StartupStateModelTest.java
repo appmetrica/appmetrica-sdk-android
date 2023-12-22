@@ -64,6 +64,7 @@ public class StartupStateModelTest extends CommonTest {
         final AttributionConfig attributionConfig = mock(AttributionConfig.class);
         final StartupUpdateConfig startupUpdateConfig = mock(StartupUpdateConfig.class);
         final Map<String, Object> modulesRemoteConfigs = Collections.singletonMap("Identifier", mock(Object.class));
+        final ExternalAttributionConfig externalAttributionConfig = mock(ExternalAttributionConfig.class);
 
         StartupStateModel startupState = new StartupStateModel.StartupStateBuilder(mCollectingFlags)
             .withUuid(uuid)
@@ -93,6 +94,7 @@ public class StartupStateModelTest extends CommonTest {
             .withCustomSdkHosts(customSdkHosts)
             .withStartupUpdateConfig(startupUpdateConfig)
             .withModulesRemoteConfigs(modulesRemoteConfigs)
+            .withExternalAttributionConfig(externalAttributionConfig)
             .build();
 
         ObjectPropertyAssertions<StartupStateModel> assertions =
@@ -127,6 +129,7 @@ public class StartupStateModelTest extends CommonTest {
         assertions.checkField("customSdkHosts", customSdkHosts);
         assertions.checkField("startupUpdateConfig", startupUpdateConfig);
         assertions.checkField("modulesRemoteConfigs", modulesRemoteConfigs);
+        assertions.checkField("externalAttributionConfig", externalAttributionConfig);
 
         assertions.checkAll();
     }
@@ -169,6 +172,7 @@ public class StartupStateModelTest extends CommonTest {
         assertions.checkFieldComparingFieldByFieldRecursively("startupUpdateConfig",
             new StartupUpdateConfig(DefaultValues.STARTUP_UPDATE_CONFIG.interval));
         assertions.checkField("modulesRemoteConfigs", Collections.emptyMap());
+        assertions.checkField("externalAttributionConfig", (ExternalAttributionConfig) null);
         assertions.checkAll();
     }
 
@@ -205,6 +209,7 @@ public class StartupStateModelTest extends CommonTest {
         final AttributionConfig attributionConfig = mock(AttributionConfig.class);
         final StartupUpdateConfig startupUpdateConfig = mock(StartupUpdateConfig.class);
         final Map<String, Object> modulesRemoteConfigs = Collections.singletonMap("Identifier", mock(Object.class));
+        final ExternalAttributionConfig externalAttributionConfig = mock(ExternalAttributionConfig.class);
 
         @SuppressWarnings("deprecation")
         StartupStateModel startupState = new StartupStateModel.StartupStateBuilder(mCollectingFlags)
@@ -235,6 +240,7 @@ public class StartupStateModelTest extends CommonTest {
             .withCustomSdkHosts(customSdkHosts)
             .withStartupUpdateConfig(startupUpdateConfig)
             .withModulesRemoteConfigs(modulesRemoteConfigs)
+            .withExternalAttributionConfig(externalAttributionConfig)
             .build()
             .buildUpon()
             .build();
@@ -271,6 +277,7 @@ public class StartupStateModelTest extends CommonTest {
         assertions.checkField("customSdkHosts", customSdkHosts);
         assertions.checkField("startupUpdateConfig", startupUpdateConfig);
         assertions.checkField("modulesRemoteConfigs", modulesRemoteConfigs);
+        assertions.checkField("externalAttributionConfig", externalAttributionConfig);
 
         assertions.checkAll();
     }

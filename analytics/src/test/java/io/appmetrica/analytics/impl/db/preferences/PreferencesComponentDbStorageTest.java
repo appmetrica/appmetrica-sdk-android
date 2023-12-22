@@ -4,8 +4,10 @@ import io.appmetrica.analytics.impl.AppEnvironment;
 import io.appmetrica.analytics.impl.db.storage.MockedKeyValueTableDbHelper;
 import io.appmetrica.analytics.testutils.CommonTest;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import org.junit.Before;
 import org.junit.Test;
@@ -148,5 +150,16 @@ public class PreferencesComponentDbStorageTest extends CommonTest {
         mComponentDbStorage.putVitalData("safdsdgfa");
         mComponentDbStorage.putVitalData(data);
         assertThat(mComponentDbStorage.getVitalData()).isEqualTo(data);
+    }
+
+    @Test
+    public void sentExternalAttributions() {
+        Map<Integer, String> attributions = new HashMap<>();
+        attributions.put(1, "firstString");
+        attributions.put(2, "secondString");
+
+        mComponentDbStorage.putSentExternalAttributions(attributions);
+
+        assertThat(mComponentDbStorage.getSentExternalAttributions()).isEqualTo(attributions);
     }
 }

@@ -353,6 +353,7 @@ public class StartupUnit implements IBaseComponent, IStartupUnit {
             .withAttributionConfig(result.getAttributionConfig())
             .withStartupUpdateConfig(result.getStartupUpdateConfig())
             .withModulesRemoteConfigs(result.getModulesRemoteConfigs())
+            .withExternalAttributionConfig(result.getExternalAttributionConfig())
             .build();
     }
 

@@ -510,6 +510,7 @@ public interface EventProto {
         public static final int EVENT_ECOMMERCE = 35;
         public static final int EVENT_WEBVIEW_SYNC = 38;
         public static final int EVENT_AD_REVENUE = 40;
+        public static final int EVENT_CLIENT_EXTERNAL_ATTRIBUTION = 42;
 
         // enum EncodingType
         public static final int NONE = 0;

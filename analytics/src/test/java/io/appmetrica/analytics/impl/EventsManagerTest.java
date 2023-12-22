@@ -273,6 +273,15 @@ public class EventsManagerTest extends CommonTest {
     }
 
     @Test
+    public void clientExternalAttributionEntry() {
+        byte[] value = new byte[]{1, 4, 7};
+        CounterReport report = EventsManager.clientExternalAttributionEntry(value, mPublicLogger);
+        assertThat(report.getType()).isEqualTo(InternalEvents.EVENT_CLIENT_EXTERNAL_ATTRIBUTION.getTypeId());
+        assertThat(report.getName()).isEmpty();
+        assertThat(report.getValueBytes()).isEqualTo(value);
+    }
+
+    @Test
     public void eventAndGlobalNumber() {
         assertThat(InternalEvents.values()).filteredOn(new Predicate<InternalEvents>() {
             @Override
@@ -314,7 +323,8 @@ public class EventsManagerTest extends CommonTest {
             InternalEvents.EVENT_TYPE_CLEANUP,
             InternalEvents.EVENT_TYPE_SEND_ECOMMERCE_EVENT,
             InternalEvents.EVENT_TYPE_WEBVIEW_SYNC,
-            InternalEvents.EVENT_TYPE_SET_SESSION_EXTRA
+            InternalEvents.EVENT_TYPE_SET_SESSION_EXTRA,
+            InternalEvents.EVENT_CLIENT_EXTERNAL_ATTRIBUTION
         );
         assertThat(InternalEvents.values()).filteredOn(new Predicate<InternalEvents>() {
             @Override
@@ -341,7 +351,8 @@ public class EventsManagerTest extends CommonTest {
             InternalEvents.EVENT_TYPE_EXCEPTION_USER_CUSTOM_PROTOBUF,
             InternalEvents.EVENT_TYPE_PREV_SESSION_NATIVE_CRASH_PROTOBUF,
             InternalEvents.EVENT_TYPE_CURRENT_SESSION_NATIVE_CRASH_PROTOBUF,
-            InternalEvents.EVENT_TYPE_REGULAR
+            InternalEvents.EVENT_TYPE_REGULAR,
+            InternalEvents.EVENT_CLIENT_EXTERNAL_ATTRIBUTION
         );
 
         assertThat(InternalEvents.values()).filteredOn(new Predicate<InternalEvents>() {
@@ -416,7 +427,8 @@ public class EventsManagerTest extends CommonTest {
             InternalEvents.EVENT_TYPE_STARTUP,
             InternalEvents.EVENT_TYPE_APP_UPDATE,
             InternalEvents.EVENT_TYPE_SEND_ECOMMERCE_EVENT,
-            InternalEvents.EVENT_TYPE_WEBVIEW_SYNC
+            InternalEvents.EVENT_TYPE_WEBVIEW_SYNC,
+            InternalEvents.EVENT_CLIENT_EXTERNAL_ATTRIBUTION
         );
 
         assertThat(InternalEvents.values()).filteredOn(new Predicate<InternalEvents>() {

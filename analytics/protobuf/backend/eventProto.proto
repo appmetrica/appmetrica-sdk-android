@@ -98,6 +98,8 @@ message ReportMessage {
                 EVENT_WEBVIEW_SYNC = 38;
                 // reserved 39;
                 EVENT_AD_REVENUE = 40;
+                // reserved 41;
+                EVENT_CLIENT_EXTERNAL_ATTRIBUTION = 42;
             }
             required uint32 type = 3;
             optional string name = 4;

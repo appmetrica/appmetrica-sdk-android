@@ -172,6 +172,18 @@ public class StartupJsonMock extends JsonHelper.OptJSONObject {
         );
     }
 
+    public void addEmptyExternalAttributionConfig() throws JSONException {
+        put(JsonResponseKey.EXTERNAL_ATTRIBUTION, new JSONObject());
+    }
+
+    public void addExternalAttributionConfig(long collectingIntervalSeconds) throws JSONException {
+        put(
+            JsonResponseKey.EXTERNAL_ATTRIBUTION,
+            new JSONObject()
+                .put(JsonResponseKey.COLLECTING_INTERVAL_SECONDS, collectingIntervalSeconds)
+        );
+    }
+
     public void setHosts(String type, List<String> hosts) throws JSONException {
         getJSONObject(JsonResponseKey.QUERY_HOSTS).getJSONObject(JsonResponseKey.LIST).put(type, buildArrayFieldJson(JsonResponseKey.URLS, hosts));
     }

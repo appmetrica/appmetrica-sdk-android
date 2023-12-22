@@ -80,4 +80,9 @@ public final class JsonResponseKey {
     public static final String STARTUP_UPDATE = "startup_update";
     public static final String STARTUP_UPDATE_INTERVAL_SECONDS = "interval_seconds";
     //endregion
+
+    //region ExternalAttribution
+    static final String EXTERNAL_ATTRIBUTION = "external_attribution";
+    static final String COLLECTING_INTERVAL_SECONDS = "collecting_interval_seconds";
+    //endregion
 }

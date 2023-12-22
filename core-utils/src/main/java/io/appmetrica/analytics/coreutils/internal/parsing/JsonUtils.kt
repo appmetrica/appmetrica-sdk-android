@@ -3,6 +3,7 @@
 package io.appmetrica.analytics.coreutils.internal.parsing
 
 import io.appmetrica.analytics.coreutils.internal.logger.YLogger
+import org.json.JSONArray
 import org.json.JSONObject
 
 fun JSONObject?.optLongOrDefault(key: String, fallback: Long?): Long? = optLongOrNull(key) ?: fallback
@@ -68,3 +69,57 @@ fun JSONObject?.optJsonObjectOrNullable(key: String, fallback: JSONObject?): JSO
     this.optJsonObjectOrNull(key) ?: fallback
 
 fun JSONObject?.optJsonObjectOrNull(key: String): JSONObject? = this?.optJSONObject(key)
+
+fun JSONObject.isEqualTo(value: JSONObject): Boolean {
+    if (keys().asSequence().toSet() != value.keys().asSequence().toSet()) {
+        return false
+    }
+    return keys().asSequence().all { key ->
+        val first = get(key)
+        val second = value.get(key)
+        when {
+            (first is JSONObject) -> {
+                if (second is JSONObject) {
+                    first.isEqualTo(second)
+                } else {
+                    false
+                }
+            }
+            (first is JSONArray) -> {
+                if (second is JSONArray) {
+                    first.isEqualTo(second)
+                } else {
+                    false
+                }
+            }
+            else -> first.equals(second)
+        }
+    }
+}
+
+fun JSONArray.isEqualTo(value: JSONArray): Boolean {
+    if (length() != value.length()) {
+        return false
+    }
+    return (0 until length()).all { index ->
+        val first = get(index)
+        val second = value.get(index)
+        when {
+            (first is JSONObject) -> {
+                if (second is JSONObject) {
+                    first.isEqualTo(second)
+                } else {
+                    false
+                }
+            }
+            (first is JSONArray) -> {
+                if (second is JSONArray) {
+                    first.isEqualTo(second)
+                } else {
+                    false
+                }
+            }
+            else -> first.equals(second)
+        }
+    }
+}

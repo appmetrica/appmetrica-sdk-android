@@ -100,6 +100,7 @@ public class StartupUnitGeneralTest extends StartupUnitBaseTest {
         AttributionConfig attributionConfig = mock(AttributionConfig.class);
         StartupUpdateConfig startupUpdateConfig = mock(StartupUpdateConfig.class);
         Map<String, Object> modulesRemoteConfigs = Collections.singletonMap("String", mock(Object.class));
+        ExternalAttributionConfig externalAttributionConfig = mock(ExternalAttributionConfig.class);
 
         when(result.getDeviceId()).thenReturn(deviceId);
         when(result.getDeviceIDHash()).thenReturn(deviceIdHash);
@@ -132,6 +133,7 @@ public class StartupUnitGeneralTest extends StartupUnitBaseTest {
         when(result.getCustomSdkHosts()).thenReturn(customSdkHosts);
         when(result.getStartupUpdateConfig()).thenReturn(startupUpdateConfig);
         when(result.getModulesRemoteConfigs()).thenReturn(modulesRemoteConfigs);
+        when(result.getExternalAttributionConfig()).thenReturn(externalAttributionConfig);
 
         StartupState startupState = mStartupUnit.parseStartupResult(result, startupRequestConfig, serverTime);
         ObjectPropertyAssertions<StartupState> assertions = ObjectPropertyAssertions(startupState)
@@ -165,6 +167,7 @@ public class StartupUnitGeneralTest extends StartupUnitBaseTest {
         assertions.checkField("customSdkHosts", customSdkHosts);
         assertions.checkField("startupUpdateConfig", startupUpdateConfig);
         assertions.checkField("modulesRemoteConfigs", modulesRemoteConfigs);
+        assertions.checkField("externalAttributionConfig", externalAttributionConfig);
         assertions.checkAll();
 
         assertThat(startupState.getObtainTime()).isEqualTo(obtainTime);

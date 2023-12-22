@@ -78,6 +78,8 @@ public class StartupStateModel {
     public final StartupUpdateConfig startupUpdateConfig;
     @NonNull
     public final Map<String, Object> modulesRemoteConfigs;
+    @Nullable
+    public final ExternalAttributionConfig externalAttributionConfig;
 
     private StartupStateModel(@NonNull StartupStateBuilder builder) {
         this.uuid = builder.mUuid;
@@ -125,6 +127,7 @@ public class StartupStateModel {
         this.modulesRemoteConfigs = builder.modulesRemoteConfigs == null ?
             Collections.<String, Object>emptyMap() :
             builder.modulesRemoteConfigs;
+        this.externalAttributionConfig = builder.externalAttributionConfig;
     }
 
     public StartupStateBuilder buildUpon() {
@@ -160,7 +163,8 @@ public class StartupStateModel {
             .withAutoInappCollectingConfig(autoInappCollectingConfig)
             .withAttributionConfig(attributionConfig)
             .withStartupUpdateConfig(startupUpdateConfig)
-            .withModulesRemoteConfigs(modulesRemoteConfigs);
+            .withModulesRemoteConfigs(modulesRemoteConfigs)
+            .withExternalAttributionConfig(externalAttributionConfig);
     }
 
     @Override
@@ -194,6 +198,7 @@ public class StartupStateModel {
             ", attributionConfig=" + attributionConfig +
             ", startupUpdateConfig=" + startupUpdateConfig +
             ", modulesRemoteConfigs=" + modulesRemoteConfigs +
+            ", externalAttributionConfig=" + externalAttributionConfig +
             '}';
     }
 
@@ -253,6 +258,8 @@ public class StartupStateModel {
         private StartupUpdateConfig startupUpdateConfig;
         @Nullable
         private Map<String, Object> modulesRemoteConfigs;
+        @Nullable
+        private ExternalAttributionConfig externalAttributionConfig;
 
         public StartupStateBuilder(@NonNull CollectingFlags collectingFlags) {
             mCollectingFlags = collectingFlags;
@@ -393,6 +400,14 @@ public class StartupStateModel {
         @NonNull
         public StartupStateBuilder withModulesRemoteConfigs(@NonNull Map<String, Object> modulesRemoteConfigs) {
             this.modulesRemoteConfigs = modulesRemoteConfigs;
+            return this;
+        }
+
+        @NonNull
+        public StartupStateBuilder withExternalAttributionConfig(
+            @Nullable ExternalAttributionConfig externalAttributionConfig
+        ) {
+            this.externalAttributionConfig = externalAttributionConfig;
             return this;
         }
 

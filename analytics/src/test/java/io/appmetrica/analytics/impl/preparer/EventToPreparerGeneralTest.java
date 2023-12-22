@@ -108,132 +108,146 @@ public class EventToPreparerGeneralTest extends CommonTest {
     @ParameterizedRobolectricTestRunner.Parameters(name = "{0} to {1}")
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
-                {InternalEvents.EVENT_TYPE_ACTIVATION, defaultComposers()},
-                {
-                        InternalEvents.EVENT_TYPE_ALIVE,
-                        defaultComposers()
-                                .withCustomNameComposerClass(EmptyNameComposer.class)
-                                .withCustomValueComposerClass(EmptyValueComposer.class)
-                                .withCustomLocationInfoComposerClass(DummyLocationInfoComposer.class)
-                                .withCustomNetworkInfoComposerClass(DummyNetworkInfoComposer.class)
-                },
-                {
-                        InternalEvents.EVENT_TYPE_ANR,
-                        defaultComposers().withCustomValueComposerClass(BytesValueComposer.class)
-                },
-                {
-                        InternalEvents.EVENT_TYPE_APP_ENVIRONMENT_CLEARED,
-                        defaultComposers()
-                },
-                {
-                        InternalEvents.EVENT_TYPE_APP_ENVIRONMENT_UPDATED,
-                        defaultComposers()
-                },
-                {
-                        InternalEvents.EVENT_TYPE_APP_FEATURES,
-                        defaultComposers().withCustomNameComposerClass(EmptyNameComposer.class)
-                },
-                {
-                        InternalEvents.EVENT_TYPE_APP_OPEN,
-                        defaultComposers().withCustomValueComposerClass(EncryptedStringValueComposer.class)
-                },
-                {
-                        InternalEvents.EVENT_TYPE_APP_UPDATE,
-                        defaultComposers().withCustomValueComposerClass(ValueWithPreloadInfoComposer.class)
-                },
-                {InternalEvents.EVENT_TYPE_CLEANUP, defaultComposers()},
-                {
-                        InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_FROM_INTENT,
-                        defaultComposers().withCustomValueComposerClass(BytesValueComposer.class)
-                },
-                {
-                        InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_FROM_FILE,
-                        defaultComposers().withCustomValueComposerClass(BytesValueComposer.class)
-                },
-                {
-                        InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_PROTOBUF,
-                        defaultComposers().withCustomValueComposerClass(BytesValueComposer.class)
-                },
-                {
-                        InternalEvents.EVENT_TYPE_EXCEPTION_USER_PROTOBUF,
-                        defaultComposers().withCustomValueComposerClass(BytesValueComposer.class)
-                },
-                {
-                        InternalEvents.EVENT_TYPE_EXCEPTION_USER_CUSTOM_PROTOBUF,
-                        defaultComposers().withCustomValueComposerClass(BytesValueComposer.class)
-                },
-                {
-                        InternalEvents.EVENT_TYPE_FIRST_ACTIVATION,
-                        defaultComposers().withCustomValueComposerClass(EncryptedStringValueComposer.class)
-                },
-                {
-                        InternalEvents.EVENT_TYPE_INIT,
-                        defaultComposers().withCustomValueComposerClass(ValueWithPreloadInfoComposer.class)
-                },
-                {
-                        InternalEvents.EVENT_TYPE_PERMISSIONS,
-                        defaultComposers().withCustomNameComposerClass(EmptyNameComposer.class)
-                },
-                {InternalEvents.EVENT_TYPE_PURGE_BUFFER, defaultComposers()},
-                {InternalEvents.EVENT_TYPE_REQUEST_REFERRER, defaultComposers()},
-                {
-                        InternalEvents.EVENT_TYPE_REGULAR,
-                        defaultComposers().withCustomValueComposerClass(EncryptedStringValueComposer.class)
-                },
-                {
-                        InternalEvents.EVENT_TYPE_SEND_REVENUE_EVENT,
-                        defaultComposers().withCustomValueComposerClass(BytesValueComposer.class)
-                },
-                {
-                        InternalEvents.EVENT_TYPE_SEND_AD_REVENUE_EVENT,
-                        defaultComposers().withCustomValueComposerClass(BytesValueComposer.class)
-                },
-                {
-                        InternalEvents.EVENT_TYPE_SEND_ECOMMERCE_EVENT,
-                        defaultComposers().withCustomValueComposerClass(UnGzipBytesValueComposer.class)
-                },
-                {
-                        InternalEvents.EVENT_TYPE_SEND_USER_PROFILE,
-                        defaultComposers().withCustomValueComposerClass(BytesValueComposer.class)
-                },
-                {InternalEvents.EVENT_TYPE_SET_USER_PROFILE_ID, defaultComposers()},
-                {
-                        InternalEvents.EVENT_TYPE_START,
-                        defaultComposers()
-                                .withCustomNameComposerClass(EmptyNameComposer.class)
-                                .withCustomValueComposerClass(BytesValueComposer.class)
-                },
-                {InternalEvents.EVENT_TYPE_STARTUP, defaultComposers()},
-                {InternalEvents.EVENT_TYPE_UNDEFINED, defaultComposers()},
-                {InternalEvents.EVENT_TYPE_UPDATE_FOREGROUND_TIME, defaultComposers()},
-                {InternalEvents.EVENT_TYPE_UPDATE_PRE_ACTIVATION_CONFIG, defaultComposers()},
-                {
-                        InternalEvents.EVENT_TYPE_PREV_SESSION_NATIVE_CRASH_PROTOBUF,
-                        defaultComposers()
-                                .withCustomValueComposerClass(ProtobufNativeCrashComposer.class)
-                                .withCustomEncodingTypeProviderClass(ProtobufNativeCrashComposer.class)
-                },
-                {
-                        InternalEvents.EVENT_TYPE_CURRENT_SESSION_NATIVE_CRASH_PROTOBUF,
-                        defaultComposers()
-                                .withCustomValueComposerClass(ProtobufNativeCrashComposer.class)
-                                .withCustomEncodingTypeProviderClass(ProtobufNativeCrashComposer.class)
-                },
-                {
-                        InternalEvents.EVENT_TYPE_CURRENT_SESSION_NATIVE_CRASH_PROTOBUF,
-                        defaultComposers()
-                                .withCustomValueComposerClass(ProtobufNativeCrashComposer.class)
-                                .withCustomEncodingTypeProviderClass(ProtobufNativeCrashComposer.class)
-                },
-                {
-                        InternalEvents.EVENT_TYPE_WEBVIEW_SYNC,
-                        defaultComposers().withCustomValueComposerClass(EncryptedStringValueComposer.class)
-                },
-                {
-                        InternalEvents.EVENT_TYPE_SET_SESSION_EXTRA,
-                        defaultComposers()
-                },
-                {null, defaultComposers()},
+            {InternalEvents.EVENT_TYPE_ACTIVATION, defaultComposers()},
+            {
+                InternalEvents.EVENT_TYPE_ALIVE,
+                defaultComposers()
+                    .withCustomNameComposerClass(EmptyNameComposer.class)
+                    .withCustomValueComposerClass(EmptyValueComposer.class)
+                    .withCustomLocationInfoComposerClass(DummyLocationInfoComposer.class)
+                    .withCustomNetworkInfoComposerClass(DummyNetworkInfoComposer.class)
+            },
+            {
+                InternalEvents.EVENT_TYPE_ANR,
+                defaultComposers()
+                    .withCustomValueComposerClass(BytesValueComposer.class)
+            },
+            {InternalEvents.EVENT_TYPE_APP_ENVIRONMENT_CLEARED, defaultComposers()},
+            {InternalEvents.EVENT_TYPE_APP_ENVIRONMENT_UPDATED, defaultComposers()},
+            {
+                InternalEvents.EVENT_TYPE_APP_FEATURES,
+                defaultComposers()
+                    .withCustomNameComposerClass(EmptyNameComposer.class)
+            },
+            {
+                InternalEvents.EVENT_TYPE_APP_OPEN,
+                defaultComposers()
+                    .withCustomValueComposerClass(EncryptedStringValueComposer.class)
+            },
+            {
+                InternalEvents.EVENT_TYPE_APP_UPDATE,
+                defaultComposers()
+                    .withCustomValueComposerClass(ValueWithPreloadInfoComposer.class)
+            },
+            {InternalEvents.EVENT_TYPE_CLEANUP, defaultComposers()},
+            {
+                InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_FROM_INTENT,
+                defaultComposers()
+                    .withCustomValueComposerClass(BytesValueComposer.class)
+            },
+            {
+                InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_FROM_FILE,
+                defaultComposers()
+                    .withCustomValueComposerClass(BytesValueComposer.class)
+            },
+            {
+                InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_PROTOBUF,
+                defaultComposers()
+                    .withCustomValueComposerClass(BytesValueComposer.class)
+            },
+            {
+                InternalEvents.EVENT_TYPE_EXCEPTION_USER_PROTOBUF,
+                defaultComposers()
+                    .withCustomValueComposerClass(BytesValueComposer.class)
+            },
+            {
+                InternalEvents.EVENT_TYPE_EXCEPTION_USER_CUSTOM_PROTOBUF,
+                defaultComposers()
+                    .withCustomValueComposerClass(BytesValueComposer.class)
+            },
+            {
+                InternalEvents.EVENT_TYPE_FIRST_ACTIVATION,
+                defaultComposers()
+                    .withCustomValueComposerClass(EncryptedStringValueComposer.class)
+            },
+            {
+                InternalEvents.EVENT_TYPE_INIT,
+                defaultComposers()
+                    .withCustomValueComposerClass(ValueWithPreloadInfoComposer.class)
+            },
+            {
+                InternalEvents.EVENT_TYPE_PERMISSIONS,
+                defaultComposers()
+                    .withCustomNameComposerClass(EmptyNameComposer.class)
+            },
+            {InternalEvents.EVENT_TYPE_PURGE_BUFFER, defaultComposers()},
+            {InternalEvents.EVENT_TYPE_REQUEST_REFERRER, defaultComposers()},
+            {
+                InternalEvents.EVENT_TYPE_REGULAR,
+                defaultComposers()
+                    .withCustomValueComposerClass(EncryptedStringValueComposer.class)
+            },
+            {
+                InternalEvents.EVENT_TYPE_SEND_REVENUE_EVENT,
+                defaultComposers()
+                    .withCustomValueComposerClass(BytesValueComposer.class)
+            },
+            {
+                InternalEvents.EVENT_TYPE_SEND_AD_REVENUE_EVENT,
+                defaultComposers()
+                    .withCustomValueComposerClass(BytesValueComposer.class)
+            },
+            {
+                InternalEvents.EVENT_TYPE_SEND_ECOMMERCE_EVENT,
+                defaultComposers()
+                    .withCustomValueComposerClass(UnGzipBytesValueComposer.class)
+            },
+            {
+                InternalEvents.EVENT_TYPE_SEND_USER_PROFILE,
+                defaultComposers()
+                    .withCustomValueComposerClass(BytesValueComposer.class)
+            },
+            {InternalEvents.EVENT_TYPE_SET_USER_PROFILE_ID, defaultComposers()},
+            {
+                InternalEvents.EVENT_TYPE_START,
+                defaultComposers()
+                    .withCustomNameComposerClass(EmptyNameComposer.class)
+                    .withCustomValueComposerClass(BytesValueComposer.class)
+            },
+            {InternalEvents.EVENT_TYPE_STARTUP, defaultComposers()},
+            {InternalEvents.EVENT_TYPE_UNDEFINED, defaultComposers()},
+            {InternalEvents.EVENT_TYPE_UPDATE_FOREGROUND_TIME, defaultComposers()},
+            {InternalEvents.EVENT_TYPE_UPDATE_PRE_ACTIVATION_CONFIG, defaultComposers()},
+            {
+                InternalEvents.EVENT_TYPE_PREV_SESSION_NATIVE_CRASH_PROTOBUF,
+                defaultComposers()
+                    .withCustomValueComposerClass(ProtobufNativeCrashComposer.class)
+                    .withCustomEncodingTypeProviderClass(ProtobufNativeCrashComposer.class)
+            },
+            {
+                InternalEvents.EVENT_TYPE_CURRENT_SESSION_NATIVE_CRASH_PROTOBUF,
+                defaultComposers()
+                    .withCustomValueComposerClass(ProtobufNativeCrashComposer.class)
+                    .withCustomEncodingTypeProviderClass(ProtobufNativeCrashComposer.class)
+            },
+            {
+                InternalEvents.EVENT_TYPE_CURRENT_SESSION_NATIVE_CRASH_PROTOBUF,
+                defaultComposers()
+                    .withCustomValueComposerClass(ProtobufNativeCrashComposer.class)
+                    .withCustomEncodingTypeProviderClass(ProtobufNativeCrashComposer.class)
+            },
+            {
+                InternalEvents.EVENT_TYPE_WEBVIEW_SYNC,
+                defaultComposers()
+                    .withCustomValueComposerClass(EncryptedStringValueComposer.class)
+            },
+            {InternalEvents.EVENT_TYPE_SET_SESSION_EXTRA, defaultComposers()},
+            {
+                InternalEvents.EVENT_CLIENT_EXTERNAL_ATTRIBUTION,
+                defaultComposers()
+                    .withCustomValueComposerClass(BytesValueComposer.class)
+            },
+            {null, defaultComposers()},
         });
     }
 

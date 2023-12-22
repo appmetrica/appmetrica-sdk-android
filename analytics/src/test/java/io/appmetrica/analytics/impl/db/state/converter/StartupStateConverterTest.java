@@ -6,6 +6,7 @@ import io.appmetrica.analytics.impl.protobuf.client.StartupStateProtobuf;
 import io.appmetrica.analytics.impl.startup.AttributionConfig;
 import io.appmetrica.analytics.impl.startup.CacheControl;
 import io.appmetrica.analytics.impl.startup.CollectingFlags;
+import io.appmetrica.analytics.impl.startup.ExternalAttributionConfig;
 import io.appmetrica.analytics.impl.startup.PermissionsCollectingConfig;
 import io.appmetrica.analytics.impl.startup.StartupStateModel;
 import io.appmetrica.analytics.impl.startup.StartupUpdateConfig;
@@ -72,6 +73,8 @@ public class StartupStateConverterTest extends CommonTest {
     private StartupStateProtobuf.StartupState.StartupUpdateConfig startupUpdateNanoConfig;
     @Mock
     private ModulesRemoteConfigsConverter modulesRemoteConfigsConverter;
+    @Mock
+    private ExternalAttributionConfigConverter externalAttributionConfigConverter;
 
     @InjectMocks
     private StartupStateConverter mConverter;
@@ -103,6 +106,11 @@ public class StartupStateConverterTest extends CommonTest {
     private Map<String, Object> modulesModel = new HashMap<>();
     private StartupStateProtobuf.StartupState.ModulesRemoteConfigsEntry[] modulesProto =
         new StartupStateProtobuf.StartupState.ModulesRemoteConfigsEntry[2];
+    private final ExternalAttributionConfig externalAttributionConfigModel = new ExternalAttributionConfig(1);
+    private final StartupStateProtobuf.StartupState.ExternalAttributionConfig externalAttributionConfigProto =
+        new StartupStateProtobuf.StartupState.ExternalAttributionConfig();
+    private final StartupStateProtobuf.StartupState.ExternalAttributionConfig externalAttributionConfigProtoForNull =
+        new StartupStateProtobuf.StartupState.ExternalAttributionConfig();
 
     @Rule
     public GlobalServiceLocatorRule globalServiceLocatorRule = new GlobalServiceLocatorRule();
@@ -130,6 +138,12 @@ public class StartupStateConverterTest extends CommonTest {
         when(startupUpdateConfigConverter.fromModel(startupUpdateConfig)).thenReturn(startupUpdateNanoConfig);
         when(modulesRemoteConfigsConverter.fromModel(modulesModel)).thenReturn(modulesProto);
         when(modulesRemoteConfigsConverter.toModel(modulesProto)).thenReturn(modulesModel);
+        when(externalAttributionConfigConverter.fromModel(externalAttributionConfigModel))
+            .thenReturn(externalAttributionConfigProto);
+        when(externalAttributionConfigConverter.toModel(externalAttributionConfigProto))
+            .thenReturn(externalAttributionConfigModel);
+        when(externalAttributionConfigConverter.fromModel(null))
+            .thenReturn(externalAttributionConfigProtoForNull);
     }
 
     @Test
@@ -174,6 +188,7 @@ public class StartupStateConverterTest extends CommonTest {
         stateProto.attribution = attributionNanoConfig;
         stateProto.startupUpdateConfig = startupUpdateNanoConfig;
         stateProto.modulesRemoteConfigs = modulesProto;
+        stateProto.externalAttributionConfig = externalAttributionConfigProto;
 
         ObjectPropertyAssertions<StartupStateModel> assertions
             = ObjectPropertyAssertions(mConverter.toModel(stateProto));
@@ -213,6 +228,7 @@ public class StartupStateConverterTest extends CommonTest {
         assertions.checkField("customSdkHosts", customSdkHostsModel);
         assertions.checkField("startupUpdateConfig", startupUpdateConfig);
         assertions.checkField("modulesRemoteConfigs", modulesModel);
+        assertions.checkField("externalAttributionConfig", externalAttributionConfigModel);
 
         assertions.checkAll();
 
@@ -259,6 +275,7 @@ public class StartupStateConverterTest extends CommonTest {
             .withCustomSdkHosts(customSdkHostsModel)
             .withStartupUpdateConfig(startupUpdateConfig)
             .withModulesRemoteConfigs(modulesModel)
+            .withExternalAttributionConfig(externalAttributionConfigModel)
             .build();
 
         StartupStateProtobuf.StartupState proto = mConverter.fromModel(stateModel);
@@ -302,6 +319,7 @@ public class StartupStateConverterTest extends CommonTest {
         assertions.checkField("customSdkHosts", customSdkHostsProto);
         assertions.checkField("startupUpdateConfig", startupUpdateNanoConfig);
         assertions.checkField("modulesRemoteConfigs", modulesProto);
+        assertions.checkField("externalAttributionConfig", externalAttributionConfigProto);
 
         assertions.checkAll();
 
@@ -326,6 +344,7 @@ public class StartupStateConverterTest extends CommonTest {
             .withAutoInappCollectingConfig(null)
             .withAttributionConfig(null)
             .withCustomSdkHosts(null)
+            .withExternalAttributionConfig(null)
             .build();
 
         StartupStateProtobuf.StartupState stateProto = mConverter.fromModel(stateModel);

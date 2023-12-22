@@ -600,4 +600,13 @@ public final class AppMetrica {
     public static void registerAnrListener(@NonNull AnrListener listener) {
         AppMetricaProxyProvider.getProxy().registerAnrListener(listener);
     }
+
+    /**
+     * Reports attribution from different sources to AppMetrica.
+     *
+     * @param value An object that implements {@link ExternalAttribution} interface.
+     */
+    public static void reportExternalAttribution(@NonNull ExternalAttribution value) {
+        AppMetricaProxyProvider.getProxy().reportExternalAttribution(value);
+    }
 }

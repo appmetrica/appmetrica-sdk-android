@@ -2,6 +2,7 @@ package io.appmetrica.analytics.impl.component.processor.event;
 
 import android.content.Context;
 import io.appmetrica.analytics.coreutils.internal.services.SafePackageManager;
+import io.appmetrica.analytics.coreutils.internal.time.TimeProvider;
 import io.appmetrica.analytics.impl.CounterReport;
 import io.appmetrica.analytics.impl.DistributionSource;
 import io.appmetrica.analytics.impl.InternalEvents;
@@ -29,6 +30,7 @@ import org.skyscreamer.jsonassert.JSONAssert;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyBoolean;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -57,11 +59,14 @@ public class ReportSaveInitHandlerTest extends CommonTest {
     private PreloadInfoState mPreloadInfoState;
     @Mock
     private SafePackageManager mSafePackageManager;
+    @Mock
+    private TimeProvider timeProvider;
     @Captor
     private ArgumentCaptor<CounterReport> mReportCaptor;
     private Context mContext;
     private final String mPackage = "test.package";
     private final String mInstaller = "yandex.store";
+    private final Long currentTime = 100500L;
     private ReportSaveInitHandler mReportSaveInitHandler;
 
     @Before
@@ -78,7 +83,14 @@ public class ReportSaveInitHandlerTest extends CommonTest {
         when(mComponent.getComponentId()).thenReturn(componentId);
         when(mComponent.getContext()).thenReturn(mContext);
         when(mPreloadInfoStorage.retrieveData()).thenReturn(mPreloadInfoState);
-        mReportSaveInitHandler = new ReportSaveInitHandler(mComponent, vitalComponentDataProvider, mPreloadInfoStorage, mSafePackageManager);
+        when(timeProvider.currentTimeMillis()).thenReturn(currentTime);
+        mReportSaveInitHandler = new ReportSaveInitHandler(
+            mComponent,
+            vitalComponentDataProvider,
+            mPreloadInfoStorage,
+            mSafePackageManager,
+            timeProvider
+        );
     }
 
     @Test
@@ -90,6 +102,8 @@ public class ReportSaveInitHandlerTest extends CommonTest {
         verify(mEventSaver, times(1)).identifyAndSaveReport(arg.capture());
         assertThat(arg.getValue().getType()).isEqualTo(InternalEvents.EVENT_TYPE_INIT.getTypeId());
         verify(vitalComponentDataProvider, times(1)).setInitEventDone(true);
+        verify(vitalComponentDataProvider, times(1))
+            .setExternalAttributionWindowStart(currentTime);
     }
 
     @Test
@@ -100,6 +114,7 @@ public class ReportSaveInitHandlerTest extends CommonTest {
         verify(mEventSaver, never()).identifyAndSaveReport(arg2.capture());
 
         verify(vitalComponentDataProvider, never()).setInitEventDone(anyBoolean());
+        verify(vitalComponentDataProvider, never()).setExternalAttributionWindowStart(anyLong());
     }
 
     @Test
@@ -168,5 +183,7 @@ public class ReportSaveInitHandlerTest extends CommonTest {
         mReportSaveInitHandler.process(new CounterReport());
 
         verify(vitalComponentDataProvider, times(1)).setInitEventDone(true);
+        verify(vitalComponentDataProvider, times(1))
+            .setExternalAttributionWindowStart(currentTime);
     }
 }

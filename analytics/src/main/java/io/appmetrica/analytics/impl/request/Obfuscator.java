@@ -22,6 +22,7 @@ public class Obfuscator {
         mMapping.put(UrlParts.ATTRIBUTION, "at");
         mMapping.put(UrlParts.STARTUP_UPDATE, "su");
         mMapping.put(UrlParts.FEATURE_SSL_PINNING, "sp");
+        mMapping.put(UrlParts.EXTERNAL_ATTRIBUTION, "exta");
     }
 
     @NonNull

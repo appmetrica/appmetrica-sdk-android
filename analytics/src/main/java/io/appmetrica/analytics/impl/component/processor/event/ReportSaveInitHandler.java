@@ -6,6 +6,8 @@ import io.appmetrica.analytics.coreutils.internal.StringUtils;
 import io.appmetrica.analytics.coreutils.internal.WrapUtils;
 import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.coreutils.internal.services.SafePackageManager;
+import io.appmetrica.analytics.coreutils.internal.time.SystemTimeProvider;
+import io.appmetrica.analytics.coreutils.internal.time.TimeProvider;
 import io.appmetrica.analytics.impl.CounterReport;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.PreloadInfoStorage;
@@ -28,25 +30,32 @@ public class ReportSaveInitHandler extends ReportComponentHandler {
     private final VitalComponentDataProvider vitalComponentDataProvider;
     @NonNull
     private final SafePackageManager mPackageManager;
+    @NonNull
+    private final TimeProvider timeProvider;
 
     public ReportSaveInitHandler(@NonNull ComponentUnit component) {
         this(
-                component,
-                component.getVitalComponentDataProvider(),
-                GlobalServiceLocator.getInstance().getPreloadInfoStorage(),
-                new SafePackageManager()
+            component,
+            component.getVitalComponentDataProvider(),
+            GlobalServiceLocator.getInstance().getPreloadInfoStorage(),
+            new SafePackageManager(),
+            new SystemTimeProvider()
         );
     }
 
     @VisibleForTesting
-    ReportSaveInitHandler(@NonNull final ComponentUnit component,
-                          @NonNull VitalComponentDataProvider vitalComponentDataProvider,
-                          @NonNull PreloadInfoStorage preloadInfoStorage,
-                          @NonNull SafePackageManager safePackageManager) {
+    ReportSaveInitHandler(
+        @NonNull final ComponentUnit component,
+        @NonNull VitalComponentDataProvider vitalComponentDataProvider,
+        @NonNull PreloadInfoStorage preloadInfoStorage,
+        @NonNull SafePackageManager safePackageManager,
+        @NonNull final TimeProvider timeProvider
+    ) {
         super(component);
         this.vitalComponentDataProvider = vitalComponentDataProvider;
         mPreloadInfoStorage = preloadInfoStorage;
         mPackageManager = safePackageManager;
+        this.timeProvider = timeProvider;
     }
 
     @Override
@@ -82,6 +91,7 @@ public class ReportSaveInitHandler extends ReportComponentHandler {
             reportToSave.setValue(eventValue.toString());
             component.getEventSaver().identifyAndSaveReport(reportToSave);
             vitalComponentDataProvider.setInitEventDone(true);
+            vitalComponentDataProvider.setExternalAttributionWindowStart(timeProvider.currentTimeMillis());
         } else {
             YLogger.info(TAG, "Event init has already been sent");
         }

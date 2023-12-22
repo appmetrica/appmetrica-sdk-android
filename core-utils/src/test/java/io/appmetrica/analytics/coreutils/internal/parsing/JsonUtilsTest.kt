@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.coreutils.internal.parsing
 
 import org.assertj.core.api.Assertions.assertThat
+import org.json.JSONArray
 import org.json.JSONObject
 import org.junit.Test
 
@@ -249,5 +250,123 @@ class JsonUtilsTest {
         val value = JSONObject()
         val input = JSONObject().put(valueKey, value)
         assertThat(input.optJsonObjectOrNull(valueKey)).isEqualTo(value)
+    }
+
+    @Test
+    fun `isEqualTo if equal`() {
+        val firstJSONObject = JSONObject().apply {
+            put("jsonArray", JSONArray().apply {
+                put(1)
+                put("string")
+                put(JSONObject().apply {
+                    put("jsonArray-jsonObject-key-1", "jsonArray-jsonObject-value-1")
+                    put("jsonArray-jsonObject-key-2", "jsonArray-jsonObject-value-2")
+                })
+            })
+            put("jsonObject-key-1", "jsonObject-value-1")
+            put("jsonObject-key-2", 42)
+            put("jsonObject-key-3", JSONObject().apply {
+                put("jsonObject-jsonObject-key-1", "jsonObject-jsonObject-value-1")
+                put("jsonObject-jsonObject-key-2", "jsonObject-jsonObject-value-2")
+            })
+        }
+        val secondJSONObject = JSONObject().apply {
+            put("jsonObject-key-2", 42)
+            put("jsonObject-key-1", "jsonObject-value-1")
+            put("jsonArray", JSONArray().apply {
+                put(1)
+                put("string")
+                put(JSONObject().apply {
+                    put("jsonArray-jsonObject-key-1", "jsonArray-jsonObject-value-1")
+                    put("jsonArray-jsonObject-key-2", "jsonArray-jsonObject-value-2")
+                })
+            })
+            put("jsonObject-key-3", JSONObject().apply {
+                put("jsonObject-jsonObject-key-2", "jsonObject-jsonObject-value-2")
+                put("jsonObject-jsonObject-key-1", "jsonObject-jsonObject-value-1")
+            })
+        }
+
+        assertThat(firstJSONObject)
+            .usingComparator { p0, p1 ->
+                if (p0!!.isEqualTo(p1!!)) 0 else 1
+            }
+            .isEqualTo(secondJSONObject)
+    }
+
+    @Test
+    fun `isEqualTo if not equal since jsonArray items order differ`() {
+        val firstJSONObject = JSONObject().apply {
+            put("jsonArray", JSONArray().apply {
+                put(1)
+                put("string")
+                put(JSONObject().apply {
+                    put("jsonArray-jsonObject-key-1", "jsonArray-jsonObject-value-1")
+                    put("jsonArray-jsonObject-key-2", "jsonArray-jsonObject-value-2")
+                })
+            })
+            put("jsonObject-key-1", "jsonObject-value-1")
+            put("jsonObject-key-2", 42)
+            put("jsonObject-key-3", JSONObject().apply {
+                put("jsonObject-jsonObject-key-1", "jsonObject-jsonObject-value-1")
+                put("jsonObject-jsonObject-key-2", "jsonObject-jsonObject-value-2")
+            })
+        }
+        val secondJSONObject = JSONObject().apply {
+            put("jsonArray", JSONArray().apply {
+                put("string")
+                put(1)
+                put(JSONObject().apply {
+                    put("jsonArray-jsonObject-key-1", "jsonArray-jsonObject-value-1")
+                    put("jsonArray-jsonObject-key-2", "jsonArray-jsonObject-value-2")
+                })
+            })
+            put("jsonObject-key-1", "jsonObject-value-1")
+            put("jsonObject-key-2", 42)
+            put("jsonObject-key-3", JSONObject().apply {
+                put("jsonObject-jsonObject-key-1", "jsonObject-jsonObject-value-1")
+                put("jsonObject-jsonObject-key-2", "jsonObject-jsonObject-value-2")
+            })
+        }
+
+        assertThat(firstJSONObject)
+            .usingComparator { p0, p1 ->
+                if (p0!!.isEqualTo(p1!!)) 0 else 1
+            }
+            .isNotEqualTo(secondJSONObject)
+    }
+
+    @Test
+    fun `isEqualTo if not equal since jsonObject keys differ`() {
+        val firstJSONObject = JSONObject().apply {
+            put("jsonArray", JSONArray().apply {
+                put(1)
+                put("string")
+                put(JSONObject().apply {
+                    put("jsonArray-jsonObject-key-1", "jsonArray-jsonObject-value-1")
+                    put("jsonArray-jsonObject-key-2", "jsonArray-jsonObject-value-2")
+                })
+            })
+            put("jsonObject-key-1", "jsonObject-value-1")
+            put("jsonObject-key-2", 42)
+            put("jsonObject-key-3", JSONObject().apply {
+                put("jsonObject-jsonObject-key-1", "jsonObject-jsonObject-value-1")
+                put("jsonObject-jsonObject-key-2", "jsonObject-jsonObject-value-2")
+            })
+        }
+        val secondJSONObject = JSONObject().apply {
+            put("jsonObject-key-1", "jsonObject-value-1")
+            put("jsonObject-key-2", 42)
+            put("jsonObject-key-3", JSONObject().apply {
+                put("jsonObject-jsonObject-key-1", "jsonObject-jsonObject-value-1")
+                put("jsonObject-jsonObject-key-2", "jsonObject-jsonObject-value-2")
+            })
+        }
+
+        assertThat(firstJSONObject)
+            .usingComparator { p0, p1 ->
+                if (p0!!.isEqualTo(p1!!)) 0 else 1
+            }
+            .isNotEqualTo(secondJSONObject)
     }
 }

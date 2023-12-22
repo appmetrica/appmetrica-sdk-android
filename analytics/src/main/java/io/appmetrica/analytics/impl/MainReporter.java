@@ -9,6 +9,7 @@ import androidx.annotation.VisibleForTesting;
 import androidx.annotation.WorkerThread;
 import io.appmetrica.analytics.AnrListener;
 import io.appmetrica.analytics.AppMetricaConfig;
+import io.appmetrica.analytics.ExternalAttribution;
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
 import io.appmetrica.analytics.coreutils.internal.WrapUtils;
 import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
@@ -375,6 +376,17 @@ public class MainReporter extends BaseReporter implements IMainReporter {
             }
         };
         anrMonitor.subscribe(anrListener);
+    }
+
+    @Override
+    public void reportExternalAttribution(@NonNull ExternalAttribution value) {
+        if (mPublicLogger.isEnabled()) {
+            mPublicLogger.fi("External attribution received: %s", value);
+        }
+        mReportsHandler.reportEvent(
+            EventsManager.clientExternalAttributionEntry(value.toBytes(), mPublicLogger),
+            mReporterEnvironment
+        );
     }
 
     @WorkerThread

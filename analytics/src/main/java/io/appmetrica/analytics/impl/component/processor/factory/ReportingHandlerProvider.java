@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.impl.component.processor.factory;
 
 import androidx.annotation.NonNull;
+import io.appmetrica.analytics.coreutils.internal.time.SystemTimeProvider;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.impl.component.processor.event.ApplySettingsFromActivationConfigHandler;
 import io.appmetrica.analytics.impl.component.processor.event.ReportAppEnvironmentClearedHandler;
@@ -19,6 +20,7 @@ import io.appmetrica.analytics.impl.component.processor.event.SaveInitialUserPro
 import io.appmetrica.analytics.impl.component.processor.event.SavePreloadInfoHandler;
 import io.appmetrica.analytics.impl.component.processor.event.SaveSessionExtrasHandler;
 import io.appmetrica.analytics.impl.component.processor.event.SubscribeForReferrerHandler;
+import io.appmetrica.analytics.impl.component.processor.event.ExternalAttributionHandler;
 import io.appmetrica.analytics.impl.component.processor.event.UpdateUserProfileIDHandler;
 import io.appmetrica.analytics.impl.component.processor.event.modules.ModulesEventHandler;
 import io.appmetrica.analytics.impl.component.processor.session.ReportSessionStopHandler;
@@ -47,6 +49,7 @@ public class ReportingHandlerProvider {
     private final SaveInitialUserProfileIDHandler saveInitialUserProfileIDHandler;
     private final ModulesEventHandler modulesEventHandler;
     private final SaveSessionExtrasHandler saveSessionExtrasHandler;
+    private final ExternalAttributionHandler externalAttributionHandler;
 
     public ReportingHandlerProvider(ComponentUnit component) {
         mReportPurgeBufferHandler = new ReportPurgeBufferHandler(component);
@@ -75,6 +78,7 @@ public class ReportingHandlerProvider {
         saveInitialUserProfileIDHandler = new SaveInitialUserProfileIDHandler(component);
         modulesEventHandler = new ModulesEventHandler(component);
         saveSessionExtrasHandler = new SaveSessionExtrasHandler(component);
+        externalAttributionHandler = new ExternalAttributionHandler(component, new SystemTimeProvider());
     }
 
     public ReportPurgeBufferHandler getReportPurgeBufferHandler() {
@@ -160,5 +164,10 @@ public class ReportingHandlerProvider {
     @NonNull
     public SaveSessionExtrasHandler getSaveSessionExtrasHandler() {
         return saveSessionExtrasHandler;
+    }
+
+    @NonNull
+    public ExternalAttributionHandler getExternalAttributionHandler() {
+        return externalAttributionHandler;
     }
 }

@@ -51,6 +51,8 @@ public class StartupParser {
     private final StartupUpdateConfigParser startupUpdateConfigParser;
     @NonNull
     private final ModulesRemoteConfigsParser modulesRemoteConfigsParser;
+    @NonNull
+    private final ExternalAttributionConfigParser externalAttributionConfigParser;
 
     public StartupParser() {
         this(
@@ -64,22 +66,26 @@ public class StartupParser {
             new AutoInappCollectingConfigParser(),
             new AttributionConfigParser(),
             new StartupUpdateConfigParser(),
-            new ModulesRemoteConfigsParser()
+            new ModulesRemoteConfigsParser(),
+            new ExternalAttributionConfigParser()
         );
     }
 
     @VisibleForTesting
-    public StartupParser(@NonNull JsonResponseProvider jsonResponseProvider,
-                         @NonNull HostsParser hostsParser,
-                         @NonNull FeaturesParser featuresParser,
-                         @NonNull RetryPolicyConfigParser retryPolicyConfigParser,
-                         @NonNull PermissionsCollectingConfigParser permissionsCollectingConfigParser,
-                         @NonNull StatSendingConverter statSendingConverter,
-                         @NonNull CacheControlParser cacheControlParser,
-                         @NonNull AutoInappCollectingConfigParser autoInappCollectingConfigParser,
-                         @NonNull AttributionConfigParser attributionConfigParser,
-                         @NonNull StartupUpdateConfigParser startupUpdateConfigParser,
-                         @NonNull ModulesRemoteConfigsParser modulesRemoteConfigsParser) {
+    public StartupParser(
+        @NonNull JsonResponseProvider jsonResponseProvider,
+        @NonNull HostsParser hostsParser,
+        @NonNull FeaturesParser featuresParser,
+        @NonNull RetryPolicyConfigParser retryPolicyConfigParser,
+        @NonNull PermissionsCollectingConfigParser permissionsCollectingConfigParser,
+        @NonNull StatSendingConverter statSendingConverter,
+        @NonNull CacheControlParser cacheControlParser,
+        @NonNull AutoInappCollectingConfigParser autoInappCollectingConfigParser,
+        @NonNull AttributionConfigParser attributionConfigParser,
+        @NonNull StartupUpdateConfigParser startupUpdateConfigParser,
+        @NonNull ModulesRemoteConfigsParser modulesRemoteConfigsParser,
+        @NonNull ExternalAttributionConfigParser externalAttributionConfigParser
+    ) {
         mHostsParser = hostsParser;
         mFeaturesParser = featuresParser;
         mRetryPolicyConfigParser = retryPolicyConfigParser;
@@ -91,6 +97,7 @@ public class StartupParser {
         this.jsonResponseProvider = jsonResponseProvider;
         this.startupUpdateConfigParser = startupUpdateConfigParser;
         this.modulesRemoteConfigsParser = modulesRemoteConfigsParser;
+        this.externalAttributionConfigParser = externalAttributionConfigParser;
     }
 
     public StartupResult parseStartupResponse(final byte[] rawResponse) {
@@ -132,6 +139,7 @@ public class StartupParser {
         attributionConfigParser.parse(result, response);
         startupUpdateConfigParser.parse(result, response);
         modulesRemoteConfigsParser.parse(result, response);
+        externalAttributionConfigParser.parse(result, response);
     }
 
     private void parseDeviceId(@NonNull StartupResult result,

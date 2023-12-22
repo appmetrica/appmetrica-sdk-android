@@ -45,6 +45,7 @@ class StartupStateTest : CommonTest() {
     private val attributionConfig = mock<AttributionConfig>()
     private val startupUpdateConfig = mock<StartupUpdateConfig>()
     private val modulesRemoteConfigs = mapOf("first module" to mock<Any>())
+    private val externalAttributionConfig = mock<ExternalAttributionConfig>()
 
     @Before
     fun setUp() {
@@ -89,6 +90,7 @@ class StartupStateTest : CommonTest() {
             .checkFieldComparingFieldByFieldRecursively("startupUpdateConfig",
                 StartupUpdateConfig(DefaultValues.STARTUP_UPDATE_CONFIG.interval))
             .checkField("modulesRemoteConfigs", emptyMap<String, Any>())
+            .checkFieldIsNull("externalAttributionConfig")
             .checkAll()
     }
 
@@ -124,6 +126,7 @@ class StartupStateTest : CommonTest() {
             .withCustomSdkHosts(customSdkHosts)
             .withStartupUpdateConfig(startupUpdateConfig)
             .withModulesRemoteConfigs(modulesRemoteConfigs)
+            .withExternalAttributionConfig(externalAttributionConfig)
             .build()
         ObjectPropertyAssertions(startupState)
             .withIgnoredFields("startupStateModel")
@@ -157,6 +160,7 @@ class StartupStateTest : CommonTest() {
             .checkField("customSdkHosts", customSdkHosts)
             .checkField("startupUpdateConfig", startupUpdateConfig)
             .checkField("modulesRemoteConfigs", modulesRemoteConfigs)
+            .checkField("externalAttributionConfig", externalAttributionConfig)
             .checkAll()
     }
 
@@ -192,6 +196,7 @@ class StartupStateTest : CommonTest() {
             .withCustomSdkHosts(customSdkHosts)
             .withStartupUpdateConfig(startupUpdateConfig)
             .withModulesRemoteConfigs(modulesRemoteConfigs)
+            .withExternalAttributionConfig(externalAttributionConfig)
             .build()
             .buildUpon()
             .build()
@@ -227,6 +232,7 @@ class StartupStateTest : CommonTest() {
             .checkField("customSdkHosts", customSdkHosts)
             .checkField("startupUpdateConfig", startupUpdateConfig)
             .checkField("modulesRemoteConfigs", modulesRemoteConfigs)
+            .checkField("externalAttributionConfig", externalAttributionConfig)
             .checkAll()
     }
 

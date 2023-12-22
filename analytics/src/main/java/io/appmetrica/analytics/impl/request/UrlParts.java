@@ -38,6 +38,7 @@ public final class UrlParts {
     public static final String CACHE_CONTROL = "cache_control";
     public static final String AUTO_INAPP_COLLECTING = "auto_inapp_collecting";
     public static final String ATTRIBUTION = "attribution";
+    public static final String EXTERNAL_ATTRIBUTION = "external_attribution";
 
     public static final Map<AdTrackingInfo.Provider, String> ADV_ID_PROVIDER_TO_PARAMETER;
     public static final Map<AdTrackingInfo.Provider, String> LIMITED_AD_TRACKING_PROVIDER_TO_PARAMETER;

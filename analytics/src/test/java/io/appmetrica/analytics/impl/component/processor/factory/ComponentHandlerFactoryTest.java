@@ -17,6 +17,7 @@ import io.appmetrica.analytics.impl.component.processor.event.ReportSessionHandl
 import io.appmetrica.analytics.impl.component.processor.event.SaveInitialUserProfileIDHandler;
 import io.appmetrica.analytics.impl.component.processor.event.SavePreloadInfoHandler;
 import io.appmetrica.analytics.impl.component.processor.event.SubscribeForReferrerHandler;
+import io.appmetrica.analytics.impl.component.processor.event.ExternalAttributionHandler;
 import io.appmetrica.analytics.impl.component.processor.event.UpdateUserProfileIDHandler;
 import io.appmetrica.analytics.impl.component.processor.event.modules.ModulesEventHandler;
 import io.appmetrica.analytics.impl.component.processor.session.ReportSessionStopHandler;
@@ -74,6 +75,8 @@ public class ComponentHandlerFactoryTest extends CommonTest {
     private SaveInitialUserProfileIDHandler saveInitialUserProfileIDHandler;
     @Mock
     private ModulesEventHandler moduleEventHandler;
+    @Mock
+    private ExternalAttributionHandler externalAttributionHandler;
 
     List<ReportComponentHandler> mHandlersList = new ArrayList<ReportComponentHandler>();
 
@@ -97,6 +100,7 @@ public class ComponentHandlerFactoryTest extends CommonTest {
         when(mProvider.getUpdateUserProfileIDHandler()).thenReturn(updateUserProfileIDHandler);
         when(mProvider.getSaveInitialUserProfileIDHandler()).thenReturn(saveInitialUserProfileIDHandler);
         when(mProvider.getModulesEventHandler()).thenReturn(moduleEventHandler);
+        when(mProvider.getExternalAttributionHandler()).thenReturn(externalAttributionHandler);
         doReturn(reportCrashMetaInformation).when(mProvider).getReportCrashMetaInformation();
     }
 
@@ -249,6 +253,17 @@ public class ComponentHandlerFactoryTest extends CommonTest {
         assertThat(mHandlersList).containsExactly(
             mReportPrevSessionNativeCrashHandler,
             reportCrashMetaInformation
+        );
+    }
+
+    @Test
+    public void externalAttributionFactory() {
+        ExternalAttributionFactory factory = new ExternalAttributionFactory(mProvider);
+
+        factory.addHandlers(mHandlersList);
+        assertThat(mHandlersList).containsExactly(
+            externalAttributionHandler,
+            mReportSaveToDatabaseHandler
         );
     }
 }

@@ -6,6 +6,7 @@ import android.location.Location;
 import androidx.annotation.NonNull;
 import io.appmetrica.analytics.AnrListener;
 import io.appmetrica.analytics.AppMetricaConfig;
+import io.appmetrica.analytics.ExternalAttribution;
 import io.appmetrica.analytics.PreloadInfo;
 import io.appmetrica.analytics.ValidationException;
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
@@ -472,6 +473,24 @@ public class MainReporterTest extends BaseReporterTest {
         anrListener2.onAppNotResponding();
         verify(listener2).onAppNotResponding();
         verifyNoMoreInteractions(listener1);
+    }
+
+    @Test
+    public void reportExternalAttribution() {
+        when(mPublicLogger.isEnabled()).thenReturn(true);
+
+        byte[] bytes = new byte[]{1, 4, 7};
+        ExternalAttribution attribution = mock(ExternalAttribution.class);
+        when(attribution.toBytes()).thenReturn(bytes);
+        when(EventsManager.clientExternalAttributionEntry(bytes, mPublicLogger)).thenReturn(mockedEvent);
+
+        mMainReporter.reportExternalAttribution(attribution);
+
+        verify(mReportsHandler).reportEvent(
+            mockedEvent,
+            mReporterEnvironment
+        );
+        verify(mPublicLogger).fi("External attribution received: %s", attribution);
     }
 
     @Test

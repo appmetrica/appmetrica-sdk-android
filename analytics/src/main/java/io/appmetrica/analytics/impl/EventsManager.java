@@ -56,7 +56,8 @@ public final class EventsManager {
         InternalEvents.EVENT_TYPE_EXCEPTION_USER_CUSTOM_PROTOBUF,
         InternalEvents.EVENT_TYPE_CURRENT_SESSION_NATIVE_CRASH_PROTOBUF,
         InternalEvents.EVENT_TYPE_PREV_SESSION_NATIVE_CRASH_PROTOBUF,
-        InternalEvents.EVENT_TYPE_REGULAR
+        InternalEvents.EVENT_TYPE_REGULAR,
+        InternalEvents.EVENT_CLIENT_EXTERNAL_ATTRIBUTION
     );
 
     private static final EnumSet<InternalEvents> LOG_EVENT_VALUE = EnumSet.of(InternalEvents.EVENT_TYPE_REGULAR);
@@ -323,5 +324,17 @@ public final class EventsManager {
         counterReport.setExtras(Collections.singletonMap(key, value == null ? new byte[0] : value));
 
         return counterReport;
+    }
+
+    public static CounterReport clientExternalAttributionEntry(
+        byte[] value,
+        @NonNull PublicLogger publicLogger
+    ) {
+        return new ClientCounterReport(
+            value,
+            "",
+            InternalEvents.EVENT_CLIENT_EXTERNAL_ATTRIBUTION.getTypeId(),
+            publicLogger
+        );
     }
 }

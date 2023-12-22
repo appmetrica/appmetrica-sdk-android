@@ -14,6 +14,7 @@ public enum InternalEvents {
     EVENT_TYPE_REGULAR(1, "Regular event"),
     EVENT_TYPE_UPDATE_FOREGROUND_TIME(3, "Update foreground time"),
     EVENT_TYPE_ALIVE(7, "App is still alive"),
+    EVENT_CLIENT_EXTERNAL_ATTRIBUTION(42, "External attribution event"),
 
     EVENT_TYPE_SEND_USER_PROFILE(40961, "Send user profile"),
     EVENT_TYPE_SET_USER_PROFILE_ID(40962, "Set user profile ID"),

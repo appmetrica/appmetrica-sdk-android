@@ -5,6 +5,7 @@ import android.location.Location;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import io.appmetrica.analytics.AnrListener;
+import io.appmetrica.analytics.ExternalAttribution;
 import io.appmetrica.analytics.ModuleEvent;
 import io.appmetrica.analytics.impl.ActivityLifecycleManager;
 import io.appmetrica.analytics.impl.IMainReporter;
@@ -95,6 +96,11 @@ public class MainReporterStub extends ReporterExtendedStub implements IMainRepor
     @Override
     public void registerAnrListener(@NonNull AnrListener listener) {
         //Do nothing
+    }
+
+    @Override
+    public void reportExternalAttribution(@NonNull ExternalAttribution value) {
+        // Do nothing
     }
 
     @Override

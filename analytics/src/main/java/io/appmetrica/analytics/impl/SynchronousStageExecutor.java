@@ -14,6 +14,7 @@ import io.appmetrica.analytics.AnrListener;
 import io.appmetrica.analytics.AppMetricaConfig;
 import io.appmetrica.analytics.DeferredDeeplinkListener;
 import io.appmetrica.analytics.DeferredDeeplinkParametersListener;
+import io.appmetrica.analytics.ExternalAttribution;
 import io.appmetrica.analytics.ReporterConfig;
 import io.appmetrica.analytics.Revenue;
 import io.appmetrica.analytics.StartupParamsCallback;
@@ -295,6 +296,10 @@ public class SynchronousStageExecutor {
     }
 
     public void registerAnrListener(@NonNull AnrListener listener) {
+
+    }
+
+    public void reportExternalAttribution(@NonNull final ExternalAttribution value) {
 
     }
 }

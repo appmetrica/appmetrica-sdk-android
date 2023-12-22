@@ -158,6 +158,7 @@ public class StartupParamsAppender implements IParamsAppender<StartupRequestConf
         uriBuilder.appendQueryParameter(mObfuscator.obfuscate(UrlParts.AUTO_INAPP_COLLECTING), String.valueOf(1));
         uriBuilder.appendQueryParameter(mObfuscator.obfuscate(UrlParts.ATTRIBUTION), String.valueOf(1));
         uriBuilder.appendQueryParameter(mObfuscator.obfuscate(UrlParts.STARTUP_UPDATE), String.valueOf(1));
+        uriBuilder.appendQueryParameter(mObfuscator.obfuscate(UrlParts.EXTERNAL_ATTRIBUTION), String.valueOf(1));
         //modulesArgumentsCollector provides obfuscated blocks
         Map<String, Integer> modulesBlocks = modulesArgumentsCollector.collectBlocks();
         for (String block : modulesBlocks.keySet()) {

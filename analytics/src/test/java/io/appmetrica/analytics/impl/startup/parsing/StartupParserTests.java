@@ -57,6 +57,8 @@ public class StartupParserTests extends CommonTest {
     private StartupUpdateConfigParser startupUpdateConfigParser;
     @Mock
     private ModulesRemoteConfigsParser modulesRemoteConfigsParser;
+    @Mock
+    private ExternalAttributionConfigParser externalAttributionConfigParser;
 
     private StartupParser mStartupParser;
 
@@ -75,7 +77,8 @@ public class StartupParserTests extends CommonTest {
             autoInappCollectingConfigParser,
             attributionConfigParser,
             startupUpdateConfigParser,
-            modulesRemoteConfigsParser
+            modulesRemoteConfigsParser,
+            externalAttributionConfigParser
         );
     }
 

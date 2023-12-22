@@ -131,17 +131,18 @@ public class AllParsedParametersAreRequestedTest extends CommonTest {
         when(jsonResponseProvider.jsonFromBytes(any(byte[].class))).thenReturn(response);
 
         StartupParser startupParser = new StartupParser(
-                jsonResponseProvider,
-                new HostsParser(),
-                new FeaturesParser(),
-                new RetryPolicyConfigParser(),
-                new PermissionsCollectingConfigParser(),
-                new StatSendingConverter(),
-                new CacheControlParser(),
-                new AutoInappCollectingConfigParser(),
-                new AttributionConfigParser(),
-                new StartupUpdateConfigParser(),
-                new ModulesRemoteConfigsParser()
+            jsonResponseProvider,
+            new HostsParser(),
+            new FeaturesParser(),
+            new RetryPolicyConfigParser(),
+            new PermissionsCollectingConfigParser(),
+            new StatSendingConverter(),
+            new CacheControlParser(),
+            new AutoInappCollectingConfigParser(),
+            new AttributionConfigParser(),
+            new StartupUpdateConfigParser(),
+            new ModulesRemoteConfigsParser(),
+            new ExternalAttributionConfigParser()
         );
         startupParser.parseStartupResponse("{}".getBytes());
 

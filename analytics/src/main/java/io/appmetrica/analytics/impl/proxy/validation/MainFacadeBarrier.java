@@ -12,6 +12,7 @@ import io.appmetrica.analytics.AnrListener;
 import io.appmetrica.analytics.AppMetricaConfig;
 import io.appmetrica.analytics.DeferredDeeplinkListener;
 import io.appmetrica.analytics.DeferredDeeplinkParametersListener;
+import io.appmetrica.analytics.ExternalAttribution;
 import io.appmetrica.analytics.ReporterConfig;
 import io.appmetrica.analytics.StartupParamsCallback;
 import io.appmetrica.analytics.impl.utils.validation.NonEmptyStringValidator;
@@ -71,6 +72,10 @@ public class MainFacadeBarrier extends ReporterBarrier {
     private static final Validator<AnrListener> sAnrListenerValidator =
         new ThrowIfFailedValidator<AnrListener>(
             new NonNullValidator<AnrListener>("ANR listener")
+        );
+    private static final Validator<ExternalAttribution> externalAttributionValidator =
+        new ThrowIfFailedValidator<>(
+            new NonNullValidator<ExternalAttribution>("External attribution")
         );
 
     public void enableActivityAutoTracking(@NonNull Application application) {
@@ -154,5 +159,9 @@ public class MainFacadeBarrier extends ReporterBarrier {
 
     public void registerAnrListener(@NonNull AnrListener listener) {
         sAnrListenerValidator.validate(listener);
+    }
+
+    public void reportExternalAttribution(@NonNull final ExternalAttribution value) {
+        externalAttributionValidator.validate(value);
     }
 }

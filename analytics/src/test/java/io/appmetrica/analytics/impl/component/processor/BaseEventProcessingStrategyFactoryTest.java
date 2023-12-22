@@ -17,6 +17,7 @@ import io.appmetrica.analytics.impl.component.processor.factory.RegularFactory;
 import io.appmetrica.analytics.impl.component.processor.factory.ReportAppOpenFactory;
 import io.appmetrica.analytics.impl.component.processor.factory.SingleHandlerFactory;
 import io.appmetrica.analytics.impl.component.processor.factory.StartFactory;
+import io.appmetrica.analytics.impl.component.processor.factory.ExternalAttributionFactory;
 import io.appmetrica.analytics.impl.component.processor.factory.UnhandledExceptionFactory;
 import io.appmetrica.analytics.impl.component.processor.factory.UnhandledExceptionFromFileFactory;
 import io.appmetrica.analytics.testutils.CommonTest;
@@ -34,6 +35,7 @@ import org.junit.runner.RunWith;
 import org.robolectric.ParameterizedRobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 
+import static io.appmetrica.analytics.impl.InternalEvents.EVENT_CLIENT_EXTERNAL_ATTRIBUTION;
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_ACTIVATION;
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_ANR;
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_APP_ENVIRONMENT_CLEARED;
@@ -123,6 +125,7 @@ public class BaseEventProcessingStrategyFactoryTest extends CommonTest {
             LISTED_EVENTS.add(EVENT_TYPE_SEND_ECOMMERCE_EVENT);
             LISTED_EVENTS.add(EVENT_TYPE_WEBVIEW_SYNC);
             LISTED_EVENTS.add(EVENT_TYPE_SET_SESSION_EXTRA);
+            LISTED_EVENTS.add(EVENT_CLIENT_EXTERNAL_ATTRIBUTION);
         }
 
         @ParameterizedRobolectricTestRunner.Parameters(name = "Test for event {0}")
@@ -180,25 +183,26 @@ public class BaseEventProcessingStrategyFactoryTest extends CommonTest {
             Class<JustSaveToDataBaseFactory> justSaveFactory = JustSaveToDataBaseFactory.class;
             Class<UnhandledExceptionFactory> unhandledExceptionFactory = UnhandledExceptionFactory.class;
             return Arrays.asList(new Object[][]{
-                    {EVENT_TYPE_ACTIVATION, ActivationFactory.class},
-                    {EVENT_TYPE_START, StartFactory.class},
-                    {EVENT_TYPE_REGULAR, RegularFactory.class},
-                    {EVENT_TYPE_EXCEPTION_USER_PROTOBUF, justSaveFactory},
-                    {EVENT_TYPE_EXCEPTION_USER_CUSTOM_PROTOBUF, justSaveFactory},
-                    {EVENT_TYPE_SEND_REFERRER, justSaveFactory},
-                    {EVENT_TYPE_CUSTOM_EVENT, justSaveFactory},
-                    {EVENT_TYPE_ANR, justSaveFactory},
-                    {EVENT_TYPE_APP_OPEN, ReportAppOpenFactory.class},
-                    {EVENT_TYPE_PURGE_BUFFER, PurgeBufferFactory.class},
-                    {EVENT_TYPE_EXCEPTION_UNHANDLED_PROTOBUF, unhandledExceptionFactory},
-                    {EVENT_TYPE_EXCEPTION_UNHANDLED_FROM_INTENT, unhandledExceptionFactory},
-                    {EVENT_TYPE_EXCEPTION_UNHANDLED_FROM_FILE, UnhandledExceptionFromFileFactory.class},
-                    {EVENT_TYPE_CURRENT_SESSION_NATIVE_CRASH_PROTOBUF, CurrentSessionNativeCrashHandlerFactory.class},
-                    {EVENT_TYPE_SEND_USER_PROFILE, justSaveFactory},
-                    {EVENT_TYPE_SEND_REVENUE_EVENT, justSaveFactory},
-                    {EVENT_TYPE_SEND_AD_REVENUE_EVENT, justSaveFactory},
-                    {EVENT_TYPE_SEND_ECOMMERCE_EVENT, justSaveFactory},
-                    {EVENT_TYPE_WEBVIEW_SYNC, justSaveFactory}
+                {EVENT_TYPE_ACTIVATION, ActivationFactory.class},
+                {EVENT_TYPE_START, StartFactory.class},
+                {EVENT_TYPE_REGULAR, RegularFactory.class},
+                {EVENT_TYPE_EXCEPTION_USER_PROTOBUF, justSaveFactory},
+                {EVENT_TYPE_EXCEPTION_USER_CUSTOM_PROTOBUF, justSaveFactory},
+                {EVENT_TYPE_SEND_REFERRER, justSaveFactory},
+                {EVENT_TYPE_CUSTOM_EVENT, justSaveFactory},
+                {EVENT_TYPE_ANR, justSaveFactory},
+                {EVENT_TYPE_APP_OPEN, ReportAppOpenFactory.class},
+                {EVENT_TYPE_PURGE_BUFFER, PurgeBufferFactory.class},
+                {EVENT_TYPE_EXCEPTION_UNHANDLED_PROTOBUF, unhandledExceptionFactory},
+                {EVENT_TYPE_EXCEPTION_UNHANDLED_FROM_INTENT, unhandledExceptionFactory},
+                {EVENT_TYPE_EXCEPTION_UNHANDLED_FROM_FILE, UnhandledExceptionFromFileFactory.class},
+                {EVENT_TYPE_CURRENT_SESSION_NATIVE_CRASH_PROTOBUF, CurrentSessionNativeCrashHandlerFactory.class},
+                {EVENT_TYPE_SEND_USER_PROFILE, justSaveFactory},
+                {EVENT_TYPE_SEND_REVENUE_EVENT, justSaveFactory},
+                {EVENT_TYPE_SEND_AD_REVENUE_EVENT, justSaveFactory},
+                {EVENT_TYPE_SEND_ECOMMERCE_EVENT, justSaveFactory},
+                {EVENT_TYPE_WEBVIEW_SYNC, justSaveFactory},
+                {EVENT_CLIENT_EXTERNAL_ATTRIBUTION, ExternalAttributionFactory.class},
             });
         }
 

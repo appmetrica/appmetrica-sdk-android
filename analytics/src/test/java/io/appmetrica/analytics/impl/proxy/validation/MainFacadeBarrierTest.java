@@ -8,6 +8,7 @@ import io.appmetrica.analytics.AnrListener;
 import io.appmetrica.analytics.AppMetricaConfig;
 import io.appmetrica.analytics.DeferredDeeplinkListener;
 import io.appmetrica.analytics.DeferredDeeplinkParametersListener;
+import io.appmetrica.analytics.ExternalAttribution;
 import io.appmetrica.analytics.ReporterConfig;
 import io.appmetrica.analytics.StartupParamsCallback;
 import io.appmetrica.analytics.ValidationException;
@@ -265,5 +266,15 @@ public class MainFacadeBarrierTest extends CommonTest {
     @Test(expected = ValidationException.class)
     public void registerAnrListenerNullListener() {
         mBarrier.registerAnrListener(null);
+    }
+
+    @Test
+    public void reportExternalAttribution() {
+        mBarrier.reportExternalAttribution(mock(ExternalAttribution.class));
+    }
+
+    @Test(expected = ValidationException.class)
+    public void reportExternalAttributionIfNullAttribution() {
+        mBarrier.reportExternalAttribution(null);
     }
 }

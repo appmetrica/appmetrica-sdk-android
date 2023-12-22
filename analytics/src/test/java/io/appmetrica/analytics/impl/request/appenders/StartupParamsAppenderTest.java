@@ -380,18 +380,19 @@ public class StartupParamsAppenderTest extends CommonTest {
         @ParameterizedRobolectricTestRunner.Parameters(name = "Contains {0}={1}")
         public static Collection<Object[]> data() {
             return Arrays.asList(
-                    new Object[]{"queries", 1},
-                    new Object[]{"query_hosts", 2},
-                    new Object[]{"time", 1},
-                    new Object[]{"stat_sending", 1},
-                    new Object[]{"retry_policy", 1},
-                    new Object[]{"cache_control", 1},
-                    new Object[]{"permissions_collecting", 1},
-                    new Object[]{"auto_inapp_collecting", 1},
-                    new Object[]{"attribution", 1},
-                    new Object[]{"startup_update", 1},
-                    new Object[]{FIRST_MODULE_BLOCK_ID, FIRST_MODULE_BLOCK_VALUE},
-                    new Object[]{SECOND_MODULE_BLOCK_ID, SECOND_MODULE_BLOCK_VALUE}
+                new Object[] {"queries", 1},
+                new Object[] {"query_hosts", 2},
+                new Object[] {"time", 1},
+                new Object[] {"stat_sending", 1},
+                new Object[] {"retry_policy", 1},
+                new Object[] {"cache_control", 1},
+                new Object[] {"permissions_collecting", 1},
+                new Object[] {"auto_inapp_collecting", 1},
+                new Object[] {"attribution", 1},
+                new Object[] {"startup_update", 1},
+                new Object[] {"external_attribution", 1},
+                new Object[] {FIRST_MODULE_BLOCK_ID, FIRST_MODULE_BLOCK_VALUE},
+                new Object[] {SECOND_MODULE_BLOCK_ID, SECOND_MODULE_BLOCK_VALUE}
             );
         }
 

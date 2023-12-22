@@ -17,6 +17,7 @@ private const val KEY_REFERRER_HANDLED = "referrer_handled"
 private const val KEY_OPEN_ID = "open_id"
 private const val KEY_ATTRIBUTION_ID = "attribution_id"
 private const val KEY_LAST_MIGRATION_API_LEVEL = "last_migration_api_level"
+private const val KEY_EXTERNAL_ATTRIBUTION_WINDOW_START = "external_attribution_window_start"
 
 private const val DEFAULT_HAS_FIRST = false
 private const val DEFAULT_HAS_INIT = false
@@ -27,6 +28,7 @@ private const val DEFAULT_REFERRER_HANDLED = false
 private const val DEFAULT_OPEN_ID = 1
 private const val DEFAULT_ATTRIBUTION_ID = 1
 private const val DEFAULT_LAST_MIGRATION_API_LEVEL = 0
+private const val DEFAULT_EXTERNAL_ATTRIBUTION_WINDOW_START = -1L
 
 internal class VitalComponentDataProvider(
     primaryDataSource: VitalDataSource,
@@ -93,6 +95,12 @@ internal class VitalComponentDataProvider(
                     primary, backup, KEY_LAST_MIGRATION_API_LEVEL, DEFAULT_LAST_MIGRATION_API_LEVEL
                 )
             )
+            put(
+                KEY_EXTERNAL_ATTRIBUTION_WINDOW_START,
+                JsonHelper.optLongOrDefaultWithBackup(
+                    primary, backup, KEY_EXTERNAL_ATTRIBUTION_WINDOW_START, DEFAULT_EXTERNAL_ATTRIBUTION_WINDOW_START
+                )
+            )
         }
     }
 
@@ -155,6 +163,12 @@ internal class VitalComponentDataProvider(
         @WorkerThread @Synchronized set(value) {
             vitalDataProvider.save(vitalDataProvider.getOrLoadData().put(KEY_LAST_MIGRATION_API_LEVEL, value))
         }
+    var externalAttributionWindowStart: Long
+        @WorkerThread @Synchronized get() = vitalDataProvider.getOrLoadData()
+            .optLong(KEY_EXTERNAL_ATTRIBUTION_WINDOW_START, DEFAULT_EXTERNAL_ATTRIBUTION_WINDOW_START)
+        @WorkerThread @Synchronized set(value) {
+            vitalDataProvider.save(vitalDataProvider.getOrLoadData().put(KEY_EXTERNAL_ATTRIBUTION_WINDOW_START, value))
+        }
 
     @Synchronized
     @WorkerThread
@@ -181,7 +195,8 @@ internal class VitalComponentDataProvider(
         numbersOfType: JSONObject?,
         openId: Int?,
         attributionId: Int?,
-        lastMigrationApiLevel: Int?
+        lastMigrationApiLevel: Int?,
+        externalAttributionWindowStart: Long?
     ) {
         val json = JSONObject()
             .put(FIRST_EVENT_DONE, isFirstEventDone)
@@ -194,6 +209,7 @@ internal class VitalComponentDataProvider(
             .put(KEY_ATTRIBUTION_ID, attributionId)
             .put(KEY_NUMBERS_OF_TYPE, numbersOfType)
             .put(KEY_LAST_MIGRATION_API_LEVEL, lastMigrationApiLevel)
+            .put(KEY_EXTERNAL_ATTRIBUTION_WINDOW_START, externalAttributionWindowStart)
         vitalDataProvider.save(json)
     }
 }

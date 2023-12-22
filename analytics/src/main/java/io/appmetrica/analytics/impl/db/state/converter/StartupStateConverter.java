@@ -21,6 +21,8 @@ public class StartupStateConverter implements ProtobufConverter<StartupStateMode
     private CustomSdkHostsConverter customSdkHostsConverter = new CustomSdkHostsConverter();
     private StartupUpdateConfigConverter startupUpdateConfigConverter = new StartupUpdateConfigConverter();
     private ModulesRemoteConfigsConverter modulesRemoteConfigsConverter = new ModulesRemoteConfigsConverter();
+    private ExternalAttributionConfigConverter externalAttributionConfigConverter =
+        new ExternalAttributionConfigConverter();
 
     @SuppressWarnings("checkstyle:methodLength")
     @NonNull
@@ -81,6 +83,7 @@ public class StartupStateConverter implements ProtobufConverter<StartupStateMode
         }
         state.startupUpdateConfig = startupUpdateConfigConverter.fromModel(value.startupUpdateConfig);
         state.modulesRemoteConfigs = modulesRemoteConfigsConverter.fromModel(value.modulesRemoteConfigs);
+        state.externalAttributionConfig = externalAttributionConfigConverter.fromModel(value.externalAttributionConfig);
 
         return state;
     }
@@ -138,6 +141,11 @@ public class StartupStateConverter implements ProtobufConverter<StartupStateMode
             builder.withStartupUpdateConfig(startupUpdateConfigConverter.toModel(nano.startupUpdateConfig));
         }
         builder.withModulesRemoteConfigs(modulesRemoteConfigsConverter.toModel(nano.modulesRemoteConfigs));
+        if (nano.externalAttributionConfig != null) {
+            builder.withExternalAttributionConfig(
+                externalAttributionConfigConverter.toModel(nano.externalAttributionConfig)
+            );
+        }
 
         return builder.build();
     }

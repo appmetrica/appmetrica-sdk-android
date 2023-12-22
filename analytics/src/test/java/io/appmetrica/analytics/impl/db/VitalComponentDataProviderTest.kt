@@ -36,6 +36,7 @@ internal class VitalComponentDataProviderTest : CommonTest() {
     private val openId = 987
     private val attributionId = 432
     private val lastMigrationApiLevel = 43
+    private val externalAttributionWindowStart = 123L
 
     private val filledJson = JSONObject()
         .put("first_event_done", true)
@@ -48,6 +49,7 @@ internal class VitalComponentDataProviderTest : CommonTest() {
         .put("open_id", openId)
         .put("attribution_id", attributionId)
         .put("last_migration_api_level", lastMigrationApiLevel)
+        .put("external_attribution_window_start", externalAttributionWindowStart)
 
     @Before
     fun setUp() {
@@ -70,6 +72,7 @@ internal class VitalComponentDataProviderTest : CommonTest() {
         softly.assertThat(vitalComponentDataProvider.attributionId).isEqualTo(attributionId)
         softly.assertThat(vitalComponentDataProvider.globalNumber).isEqualTo(globalNumber)
         softly.assertThat(vitalComponentDataProvider.lastMigrationApiLevel).isEqualTo(lastMigrationApiLevel)
+        softly.assertThat(vitalComponentDataProvider.externalAttributionWindowStart).isEqualTo(externalAttributionWindowStart)
         JSONAssert.assertEquals(numbersOfType, vitalComponentDataProvider.numbersOfType, true)
         softly.assertAll()
     }
@@ -140,6 +143,14 @@ internal class VitalComponentDataProviderTest : CommonTest() {
     }
 
     @Test
+    fun setSentExternalAttribution() {
+        wheneverVitalDataProviderGetOrLoad().thenReturn(filledJson)
+        vitalComponentDataProvider.externalAttributionWindowStart = 123L
+        val expectedJson = JSONObject(filledJson.toString()).put("external_attribution_window_start", 123L)
+        JSONAssert.assertEquals(expectedJson.toString(), interceptSavedJson(), true)
+    }
+
+    @Test
     fun incrementOpenIdNoInitial() {
         wheneverVitalDataProviderGetOrLoad().thenReturn(JSONObject())
         vitalComponentDataProvider.incrementOpenId()
@@ -182,6 +193,7 @@ internal class VitalComponentDataProviderTest : CommonTest() {
         val newOpenId = 545
         val newAttributionId = 232
         val newLastMigrationApiLevel = 21
+        val externalAttributionWindowStart = 123L
 
         vitalComponentDataProvider.setInitialState(
             isFirstEventDone = false,
@@ -193,7 +205,8 @@ internal class VitalComponentDataProviderTest : CommonTest() {
             openId = newOpenId,
             attributionId = newAttributionId,
             lastMigrationApiLevel = newLastMigrationApiLevel,
-            referrerHandled = false
+            referrerHandled = false,
+            externalAttributionWindowStart = externalAttributionWindowStart
         )
 
         val expectedJson = JSONObject()
@@ -207,6 +220,7 @@ internal class VitalComponentDataProviderTest : CommonTest() {
             .put("open_id", newOpenId)
             .put("attribution_id", newAttributionId)
             .put("last_migration_api_level", newLastMigrationApiLevel)
+            .put("external_attribution_window_start", externalAttributionWindowStart)
         JSONAssert.assertEquals(expectedJson.toString(), interceptSavedJson(), true)
     }
 
@@ -239,6 +253,7 @@ internal class VitalComponentDataProviderTest : CommonTest() {
         softly.assertThat(vitalComponentDataProvider.referrerHandled).isFalse
         softly.assertThat(vitalComponentDataProvider.reportRequestId).isEqualTo(-1)
         softly.assertThat(vitalComponentDataProvider.sessionId).isEqualTo(-1)
+        softly.assertThat(vitalComponentDataProvider.externalAttributionWindowStart).isEqualTo(-1)
         softly.assertAll()
     }
 

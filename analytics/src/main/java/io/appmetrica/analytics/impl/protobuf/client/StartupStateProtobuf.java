@@ -1123,6 +1123,90 @@ public interface StartupStateProtobuf {
       }
     }
 
+    public static final class ExternalAttributionConfig extends
+        io.appmetrica.analytics.protobuf.nano.MessageNano {
+
+      private static volatile ExternalAttributionConfig[] _emptyArray;
+      public static ExternalAttributionConfig[] emptyArray() {
+        // Lazily initializes the empty array
+        if (_emptyArray == null) {
+          synchronized (
+              io.appmetrica.analytics.protobuf.nano.InternalNano.LAZY_INIT_LOCK) {
+            if (_emptyArray == null) {
+              _emptyArray = new ExternalAttributionConfig[0];
+            }
+          }
+        }
+        return _emptyArray;
+      }
+
+      // optional int64 collectingInterval = 1 [default = 864000000];
+      public long collectingInterval;
+
+      public ExternalAttributionConfig() {
+        clear();
+      }
+
+      public ExternalAttributionConfig clear() {
+        collectingInterval = 864000000L;
+        cachedSize = -1;
+        return this;
+      }
+
+      @Override
+      public void writeTo(io.appmetrica.analytics.protobuf.nano.CodedOutputByteBufferNano output)
+          throws java.io.IOException {
+        if (this.collectingInterval != 864000000L) {
+          output.writeInt64(1, this.collectingInterval);
+        }
+        super.writeTo(output);
+      }
+
+      @Override
+      protected int computeSerializedSize() {
+        int size = super.computeSerializedSize();
+        if (this.collectingInterval != 864000000L) {
+          size += io.appmetrica.analytics.protobuf.nano.CodedOutputByteBufferNano
+              .computeInt64Size(1, this.collectingInterval);
+        }
+        return size;
+      }
+
+      @Override
+      public ExternalAttributionConfig mergeFrom(
+              io.appmetrica.analytics.protobuf.nano.CodedInputByteBufferNano input)
+          throws java.io.IOException {
+        while (true) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              return this;
+            default: {
+              if (!io.appmetrica.analytics.protobuf.nano.WireFormatNano.parseUnknownField(input, tag)) {
+                return this;
+              }
+              break;
+            }
+            case 8: {
+              this.collectingInterval = input.readInt64();
+              break;
+            }
+          }
+        }
+      }
+
+      public static ExternalAttributionConfig parseFrom(byte[] data)
+          throws io.appmetrica.analytics.protobuf.nano.InvalidProtocolBufferNanoException {
+        return io.appmetrica.analytics.protobuf.nano.MessageNano.mergeFrom(new ExternalAttributionConfig(), data);
+      }
+
+      public static ExternalAttributionConfig parseFrom(
+              io.appmetrica.analytics.protobuf.nano.CodedInputByteBufferNano input)
+          throws java.io.IOException {
+        return new ExternalAttributionConfig().mergeFrom(input);
+      }
+    }
+
     private static volatile StartupState[] _emptyArray;
     public static StartupState[] emptyArray() {
       // Lazily initializes the empty array
@@ -1224,6 +1308,9 @@ public interface StartupStateProtobuf {
     // map<string, bytes> modulesRemoteConfigs = 31;
     public StartupStateProtobuf.StartupState.ModulesRemoteConfigsEntry[] modulesRemoteConfigs;
 
+    // optional .StartupState.ExternalAttributionConfig externalAttributionConfig = 32;
+    public StartupStateProtobuf.StartupState.ExternalAttributionConfig externalAttributionConfig;
+
     public StartupState() {
       clear();
     }
@@ -1258,6 +1345,7 @@ public interface StartupStateProtobuf {
       attribution = null;
       startupUpdateConfig = null;
       modulesRemoteConfigs = StartupStateProtobuf.StartupState.ModulesRemoteConfigsEntry.emptyArray();
+      externalAttributionConfig = null;
       cachedSize = -1;
       return this;
     }
@@ -1369,6 +1457,9 @@ public interface StartupStateProtobuf {
             output.writeMessage(31, element);
           }
         }
+      }
+      if (this.externalAttributionConfig != null) {
+        output.writeMessage(32, this.externalAttributionConfig);
       }
       super.writeTo(output);
     }
@@ -1529,6 +1620,10 @@ public interface StartupStateProtobuf {
               .computeMessageSize(31, element);
           }
         }
+      }
+      if (this.externalAttributionConfig != null) {
+        size += io.appmetrica.analytics.protobuf.nano.CodedOutputByteBufferNano
+          .computeMessageSize(32, this.externalAttributionConfig);
       }
       return size;
     }
@@ -1767,6 +1862,13 @@ public interface StartupStateProtobuf {
             newArray[i] = new StartupStateProtobuf.StartupState.ModulesRemoteConfigsEntry();
             input.readMessage(newArray[i]);
             this.modulesRemoteConfigs = newArray;
+            break;
+          }
+          case 258: {
+            if (this.externalAttributionConfig == null) {
+              this.externalAttributionConfig = new StartupStateProtobuf.StartupState.ExternalAttributionConfig();
+            }
+            input.readMessage(this.externalAttributionConfig);
             break;
           }
         }

@@ -10,6 +10,7 @@ import io.appmetrica.analytics.AnrListener;
 import io.appmetrica.analytics.AppMetricaConfig;
 import io.appmetrica.analytics.DeferredDeeplinkListener;
 import io.appmetrica.analytics.DeferredDeeplinkParametersListener;
+import io.appmetrica.analytics.ExternalAttribution;
 import io.appmetrica.analytics.ReporterConfig;
 import io.appmetrica.analytics.Revenue;
 import io.appmetrica.analytics.ecommerce.ECommerceEvent;
@@ -454,6 +455,12 @@ public class SynchronousStageExecutorTest extends CommonTest {
     @Test
     public void registerAnrListener() {
         mSynchronousStageExecutor.registerAnrListener(mock(AnrListener.class));
+        verifyNoInteractions(mProvider);
+    }
+
+    @Test
+    public void reportExternalAttribution() {
+        mSynchronousStageExecutor.reportExternalAttribution(mock(ExternalAttribution.class));
         verifyNoInteractions(mProvider);
     }
 }

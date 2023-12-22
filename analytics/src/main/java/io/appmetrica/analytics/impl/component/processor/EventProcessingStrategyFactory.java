@@ -18,6 +18,7 @@ import io.appmetrica.analytics.impl.component.processor.factory.ReportAppOpenFac
 import io.appmetrica.analytics.impl.component.processor.factory.ReportingHandlerProvider;
 import io.appmetrica.analytics.impl.component.processor.factory.SingleHandlerFactory;
 import io.appmetrica.analytics.impl.component.processor.factory.StartFactory;
+import io.appmetrica.analytics.impl.component.processor.factory.ExternalAttributionFactory;
 import io.appmetrica.analytics.impl.component.processor.factory.UnhandledExceptionFactory;
 import io.appmetrica.analytics.impl.component.processor.factory.UnhandledExceptionFromFileFactory;
 import java.util.HashMap;
@@ -25,6 +26,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import static io.appmetrica.analytics.impl.InternalEvents.EVENT_CLIENT_EXTERNAL_ATTRIBUTION;
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_ACTIVATION;
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_ANR;
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_APP_ENVIRONMENT_CLEARED;
@@ -116,6 +118,7 @@ public class EventProcessingStrategyFactory extends ProcessingStrategyFactory<Re
         map.put(EVENT_TYPE_CLEANUP, justSaveFactory);
         map.put(EVENT_TYPE_SEND_ECOMMERCE_EVENT, justSaveFactory);
         map.put(EVENT_TYPE_WEBVIEW_SYNC, justSaveFactory);
+        map.put(EVENT_CLIENT_EXTERNAL_ATTRIBUTION, new ExternalAttributionFactory(mHandlersProvider));
 
         return map;
     }

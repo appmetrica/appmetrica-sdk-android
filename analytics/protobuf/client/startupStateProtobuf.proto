@@ -111,5 +111,12 @@ message StartupState {
     }
     optional StartupUpdateConfig startupUpdateConfig = 30;
     map<string, bytes> modulesRemoteConfigs = 31;
+
+    // region externalAttributionConfig
+    message ExternalAttributionConfig {
+        optional int64 collectingInterval = 1 [default = 864000000]; // 10 days
+    }
+    optional ExternalAttributionConfig externalAttributionConfig = 32;
+    // endregion
 }
 

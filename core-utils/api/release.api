@@ -288,6 +288,8 @@ public final class io.appmetrica.analytics.coreutils.internal.network.UserAgent 
 }
 
 public final class io.appmetrica.analytics.coreutils.internal.parsing.JsonUtils {
+    public static final boolean isEqualTo([NonNull] org.json.JSONArray, [NonNull] org.json.JSONArray)
+    public static final boolean isEqualTo([NonNull] org.json.JSONObject, [NonNull] org.json.JSONObject)
     public static final boolean optBooleanOrDefault([Nullable] org.json.JSONObject, [NonNull] String, boolean)
     public static final [Nullable] Boolean optBooleanOrNull([Nullable] org.json.JSONObject, [NonNull] String)
     public static final [Nullable] Boolean optBooleanOrNullable([Nullable] org.json.JSONObject, [NonNull] String, [Nullable] Boolean)

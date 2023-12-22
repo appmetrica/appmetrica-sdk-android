@@ -6,6 +6,7 @@ import io.appmetrica.analytics.billinginterface.internal.config.BillingConfig;
 import io.appmetrica.analytics.impl.startup.AttributionConfig;
 import io.appmetrica.analytics.impl.startup.CacheControl;
 import io.appmetrica.analytics.impl.startup.CollectingFlags;
+import io.appmetrica.analytics.impl.startup.ExternalAttributionConfig;
 import io.appmetrica.analytics.impl.startup.PermissionsCollectingConfig;
 import io.appmetrica.analytics.impl.startup.StartupUpdateConfig;
 import io.appmetrica.analytics.impl.startup.StatSending;
@@ -51,6 +52,8 @@ public class StartupResult {
     private StartupUpdateConfig startupUpdateConfig;
     @NonNull
     private Map<String, Object> moduleRemoteConfigs;
+    @Nullable
+    private ExternalAttributionConfig externalAttributionConfig;
 
     @NonNull
     public CollectingFlags getCollectionFlags() {
@@ -243,5 +246,14 @@ public class StartupResult {
 
     public Map<String, Object> getModulesRemoteConfigs() {
         return this.moduleRemoteConfigs;
+    }
+
+    @Nullable
+    public ExternalAttributionConfig getExternalAttributionConfig() {
+        return externalAttributionConfig;
+    }
+
+    public void setExternalAttributionConfig(@Nullable ExternalAttributionConfig externalAttributionConfig) {
+        this.externalAttributionConfig = externalAttributionConfig;
     }
 }

@@ -155,6 +155,10 @@ public final class ProtobufUtils {
                 InternalEvents.EVENT_TYPE_WEBVIEW_SYNC,
                 Session.Event.EVENT_WEBVIEW_SYNC
         );
+        typesMapping.put(
+            InternalEvents.EVENT_CLIENT_EXTERNAL_ATTRIBUTION,
+            Session.Event.EVENT_CLIENT_EXTERNAL_ATTRIBUTION
+        );
         INTERNAL_TO_PROTOBUF_TYPES_MAPPING = Collections.unmodifiableMap(typesMapping);
 
         Map<InternalEvents, EventPreparer> eventsMapping = new HashMap<InternalEvents, EventPreparer>();
@@ -263,6 +267,7 @@ public final class ProtobufUtils {
         eventsMapping.put(InternalEvents.EVENT_TYPE_APP_UPDATE, preparerWithPreloadInfoHandling);
         eventsMapping.put(InternalEvents.EVENT_TYPE_FIRST_ACTIVATION, preparerWithEncryptedValue);
         eventsMapping.put(InternalEvents.EVENT_TYPE_WEBVIEW_SYNC, preparerWithEncryptedValue);
+        eventsMapping.put(InternalEvents.EVENT_CLIENT_EXTERNAL_ATTRIBUTION, preparerWithBase64DecodedValue);
         INTERNAL_TO_PROTOBUF_EVENTS_MAPPING = Collections.unmodifiableMap(eventsMapping);
     }
 

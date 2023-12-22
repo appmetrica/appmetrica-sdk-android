@@ -313,4 +313,11 @@ internal class AppMetricaTests : CommonTest() {
         AppMetrica.registerAnrListener(listener)
         verify(proxy).registerAnrListener(eq(listener))
     }
+
+    @Test
+    fun reportExternalAttribution() {
+        val attribution = mock<ExternalAttribution>()
+        AppMetrica.reportExternalAttribution(attribution)
+        verify(proxy).reportExternalAttribution(eq(attribution))
+    }
 }

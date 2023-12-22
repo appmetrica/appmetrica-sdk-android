@@ -119,10 +119,11 @@ protobuf {
     protoFile(srcPath = "backend/adRevenue.proto", years = "2022")
     protoFile(srcPath = "backend/crashAndroid.proto", years = "2019")
     protoFile(srcPath = "backend/ecommerce.proto", years = "2020")
-    protoFile(srcPath = "backend/eventStart.proto", years = "2019")
     protoFile(srcPath = "backend/eventProto.proto", years = "2012-2017")
+    protoFile(srcPath = "backend/eventStart.proto", years = "2019")
     protoFile(srcPath = "backend/referrer.proto", years = "2018")
     protoFile(srcPath = "backend/revenue.proto", years = "2018")
+    protoFile(srcPath = "backend/externalAttribution.proto", years = "2023")
     protoFile(srcPath = "backend/userprofile.proto", years = "2018")
 
     protoFile(srcPath = "client/appPermissionsStateProtobuf.proto", years = "2019")
