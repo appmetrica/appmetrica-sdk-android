@@ -25,8 +25,8 @@ object Constants {
     }
 
     object NdkCrashes {
-        const val versionName = "3.0.0"
-        const val versionCode = 5
+        const val versionName = "3.1.0"
+        const val versionCode = 6
     }
 }
 

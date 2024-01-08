@@ -9,7 +9,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.appmetrica.analytics</groupId>
   <artifactId>analytics-ndk-crashes</artifactId>
-  <version>3.0.0</version>
+  <version>3.1.0</version>
   <packaging>aar</packaging>
   <name>AppMetrica NDK Crashes</name>
   <description>AppMetrica SDK Module</description>
