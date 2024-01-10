@@ -1,10 +1,6 @@
 package io.appmetrica.analytics.assertions
 
 import io.appmetrica.analytics.assertions.Utils.getFieldsFromClass
-import io.appmetrica.analytics.assertions.equality.ComparingFieldByFieldEqualityStrategy
-import io.appmetrica.analytics.assertions.equality.ComparingFieldByFieldRecursivelyEqualityStrategy
-import io.appmetrica.analytics.assertions.equality.EqualityStrategy
-import io.appmetrica.analytics.assertions.equality.SimpleEqualityStrategy
 import io.appmetrica.analytics.assertions.matcher.CompositeFieldMatcher
 import io.appmetrica.analytics.assertions.matcher.FieldMatcher
 import io.appmetrica.analytics.assertions.matcher.FinalModifierFieldMatcher
@@ -41,11 +37,6 @@ abstract class BaseObjectPropertyAssertions<T : Any>(value: T?) : ObjectProperty
     protected var ignoredFields = mutableSetOf<String>()
     protected var permittedFields = mutableSetOf<String>()
     protected var softAssertions = SoftAssertions()
-
-    protected val simpleEqualityStrategy: EqualityStrategy = SimpleEqualityStrategy()
-    protected val comparingFieldByFieldEqualityStrategy: EqualityStrategy = ComparingFieldByFieldEqualityStrategy()
-    protected val comparingFieldByFieldRecursivelyEqualityStrategy: EqualityStrategy =
-        ComparingFieldByFieldRecursivelyEqualityStrategy()
 
     init {
         reInitializeFields()
@@ -124,7 +115,7 @@ abstract class BaseObjectPropertyAssertions<T : Any>(value: T?) : ObjectProperty
         fieldName: String,
         expected: Any?
     ): ObjectPropertyAssertions<T> {
-        return checkFieldUsingEqualityStrategy(fieldName, expected, simpleEqualityStrategy)
+        return checkFieldUsingEqualityStrategy(fieldName, expected, false)
     }
 
     override fun checkField(
@@ -132,14 +123,14 @@ abstract class BaseObjectPropertyAssertions<T : Any>(value: T?) : ObjectProperty
         getterName: String,
         expected: Any?
     ): ObjectPropertyAssertions<T> {
-        return checkFieldUsingEqualityStrategy(fieldName, getterName, expected, simpleEqualityStrategy)
+        return checkFieldUsingEqualityStrategy(fieldName, getterName, expected, false)
     }
 
     override fun checkFieldComparingFieldByField(
         fieldName: String,
         expected: Any?
     ): ObjectPropertyAssertions<T> {
-        return checkFieldUsingEqualityStrategy(fieldName, expected, comparingFieldByFieldEqualityStrategy)
+        return checkFieldUsingEqualityStrategy(fieldName, expected, true)
     }
 
     override fun checkFieldComparingFieldByField(
@@ -147,18 +138,14 @@ abstract class BaseObjectPropertyAssertions<T : Any>(value: T?) : ObjectProperty
         getterName: String,
         expected: Any?
     ): ObjectPropertyAssertions<T> {
-        return checkFieldUsingEqualityStrategy(fieldName, getterName, expected, comparingFieldByFieldEqualityStrategy)
+        return checkFieldUsingEqualityStrategy(fieldName, getterName, expected, true)
     }
 
     override fun checkFieldComparingFieldByFieldRecursively(
         fieldName: String,
         expected: Any?
     ): ObjectPropertyAssertions<T> {
-        return checkFieldUsingEqualityStrategy(
-            fieldName,
-            expected,
-            comparingFieldByFieldRecursivelyEqualityStrategy
-        )
+        return checkFieldUsingEqualityStrategy(fieldName, expected, true)
     }
 
     override fun checkFieldComparingFieldByFieldRecursively(
@@ -166,18 +153,13 @@ abstract class BaseObjectPropertyAssertions<T : Any>(value: T?) : ObjectProperty
         getterName: String,
         expected: Any?
     ): ObjectPropertyAssertions<T> {
-        return checkFieldUsingEqualityStrategy(
-            fieldName,
-            getterName,
-            expected,
-            comparingFieldByFieldRecursivelyEqualityStrategy
-        )
+        return checkFieldUsingEqualityStrategy(fieldName, getterName, expected, true)
     }
 
     protected fun checkFieldUsingEqualityStrategy(
         fieldName: String,
         expected: Any?,
-        equalityStrategy: EqualityStrategy
+        isRecursive: Boolean
     ): ObjectPropertyAssertions<T> {
         val value = getValueOfField<Any>(fieldName)
         val assertValue = softAssertions.assertThat(value)
@@ -185,7 +167,11 @@ abstract class BaseObjectPropertyAssertions<T : Any>(value: T?) : ObjectProperty
         if (expected == null) {
             assertValue.isNull()
         } else {
-            equalityStrategy.isEqual(assertValue, expected)
+            if (isRecursive) {
+                assertValue.usingRecursiveComparison().isEqualTo(expected)
+            } else {
+                assertValue.isEqualTo(expected)
+            }
         }
         unverifiedFields.remove(fieldName)
         return this
@@ -195,7 +181,7 @@ abstract class BaseObjectPropertyAssertions<T : Any>(value: T?) : ObjectProperty
         fieldName: String,
         getterName: String,
         expected: Any?,
-        equalityStrategy: EqualityStrategy
+        isRecursive: Boolean
     ): ObjectPropertyAssertions<T> {
         val value = getValueOfField<Any>(fieldName, getterName)
         val assertValue = softAssertions.assertThat(value)
@@ -203,7 +189,11 @@ abstract class BaseObjectPropertyAssertions<T : Any>(value: T?) : ObjectProperty
         if (expected == null) {
             assertValue.isNull()
         } else {
-            equalityStrategy.isEqual(assertValue, expected)
+            if (isRecursive) {
+                assertValue.usingRecursiveComparison().isEqualTo(expected)
+            } else {
+                assertValue.isEqualTo(expected)
+            }
         }
         unverifiedFields.remove(fieldName)
         return this
@@ -251,8 +241,8 @@ abstract class BaseObjectPropertyAssertions<T : Any>(value: T?) : ObjectProperty
     ): ObjectPropertyAssertions<T> {
         val value = getValueOfField<S>(fieldName)
         when {
-            value == null -> softAssertions.fail("Expected field \"$fieldName\" to be nonnull")
-            predicate.test(value) == false -> softAssertions.fail("Expected field \"$fieldName\" to match predicate")
+            value == null -> softAssertions.fail<Any>("Expected field \"$fieldName\" to be nonnull")
+            predicate.test(value) == false -> softAssertions.fail<Any>("Expected field \"$fieldName\" to match predicate")
         }
         unverifiedFields.remove(fieldName)
         return this
@@ -265,8 +255,8 @@ abstract class BaseObjectPropertyAssertions<T : Any>(value: T?) : ObjectProperty
     ): ObjectPropertyAssertions<T> {
         val value = getValueOfField<S>(fieldName, getterName)
         when {
-            value == null -> softAssertions.fail("Expected field \"$fieldName\" to be nonnull")
-            predicate.test(value) == false -> softAssertions.fail("Expected field \"$fieldName\" with getter \"$getterName\" to match predicate")
+            value == null -> softAssertions.fail<Any>("Expected field \"$fieldName\" to be nonnull")
+            predicate.test(value) == false -> softAssertions.fail<Any>("Expected field \"$fieldName\" with getter \"$getterName\" to match predicate")
         }
         unverifiedFields.remove(fieldName)
         return this
@@ -323,7 +313,7 @@ abstract class BaseObjectPropertyAssertions<T : Any>(value: T?) : ObjectProperty
     override fun checkFloatField(fieldName: String, expected: Float, accuracy: Float): ObjectPropertyAssertions<T> {
         val value = getValueOfField<Float>(fieldName)
         if (value == null) {
-            softAssertions.fail("Expected field \"$fieldName\" to be nonnull")
+            softAssertions.fail<Any>("Expected field \"$fieldName\" to be nonnull")
         } else {
             softAssertions.assertThat(abs(value - expected))
                 .`as`("Field \"$fieldName\"")
@@ -341,7 +331,7 @@ abstract class BaseObjectPropertyAssertions<T : Any>(value: T?) : ObjectProperty
     ): ObjectPropertyAssertions<T> {
         val value = getValueOfField<Float>(fieldName, getterName)
         if (value == null) {
-            softAssertions.fail("Expected field \"$fieldName\" to be nonnull")
+            softAssertions.fail<Any>("Expected field \"$fieldName\" to be nonnull")
         } else {
             softAssertions.assertThat(abs(value - expected))
                 .`as`("Field \"$fieldName\" from getter \"$getterName\"")
@@ -404,11 +394,11 @@ abstract class BaseObjectPropertyAssertions<T : Any>(value: T?) : ObjectProperty
         if (expected == null) {
             assertValue.isNull()
         } else {
-            val assertThatArray = assertValue.usingFieldByFieldElementComparator()
+            val assertThatArray = assertValue.usingRecursiveFieldByFieldElementComparator()
             if (sameOrder) {
-                assertThatArray.containsExactly(*expected)
+                assertThatArray.containsExactlyElementsOf(expected.toList())
             } else {
-                assertThatArray.containsExactlyInAnyOrder(*expected)
+                assertThatArray.containsExactlyInAnyOrderElementsOf(expected.toList())
             }
         }
         unverifiedFields.remove(fieldName)
@@ -527,7 +517,7 @@ abstract class BaseObjectPropertyAssertions<T : Any>(value: T?) : ObjectProperty
         try {
             val field = allFields[fieldName]
             if (field == null) {
-                softAssertions.fail("Actual object does not contain field \"$fieldName\"")
+                softAssertions.fail<Any>("Actual object does not contain field \"$fieldName\"")
                 return null
             }
             if (doesFieldMatch(field)) {
@@ -539,7 +529,7 @@ abstract class BaseObjectPropertyAssertions<T : Any>(value: T?) : ObjectProperty
                 is IllegalAccessException,
                 is InvocationTargetException,
                 is NoSuchMethodException ->
-                    softAssertions.fail("Field \"$fieldName\" with getter \"$getterName\" is not accessible with cause $e")
+                    softAssertions.fail<Any>("Field \"$fieldName\" with getter \"$getterName\" is not accessible with cause $e")
                 else -> throw e
             }
         }
@@ -551,7 +541,7 @@ abstract class BaseObjectPropertyAssertions<T : Any>(value: T?) : ObjectProperty
         if (matches) {
             return true
         } else {
-            softAssertions.fail("Field \"${field.name}\" does not match precondition. $noMatchCause. Actual object: $actual")
+            softAssertions.fail<Any>("Field \"${field.name}\" does not match precondition. $noMatchCause. Actual object: $actual")
         }
         return false
     }

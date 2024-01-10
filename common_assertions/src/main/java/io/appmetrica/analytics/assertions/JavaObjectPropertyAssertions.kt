@@ -9,14 +9,14 @@ open class JavaObjectPropertyAssertions<T : Any>(actual: T?) : BaseObjectPropert
         try {
             val field = allFields[fieldName] as? JavaField
             if (field == null) {
-                softAssertions.fail("Actual object does not contain field \"$fieldName\"")
+                softAssertions.fail<Any>("Actual object does not contain field \"$fieldName\"")
                 return null
             }
             if (doesFieldMatch(field)) {
                 return getFieldValueReflective(field.field)
             }
         } catch (e: IllegalAccessException) {
-            softAssertions.fail("Field \"$fieldName\" is not accessible with cause $e")
+            softAssertions.fail<Any>("Field \"$fieldName\" is not accessible with cause $e")
         }
         return null
     }

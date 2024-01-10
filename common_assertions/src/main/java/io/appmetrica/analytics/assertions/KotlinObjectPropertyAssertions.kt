@@ -23,14 +23,14 @@ class KotlinObjectPropertyAssertions<T : Any> internal constructor(actual: T) : 
         try {
             val field = allFields[fieldName] as? KotlinField
             if (field == null) {
-                softAssertions.fail("Actual object does not contain field \"$fieldName\"")
+                softAssertions.fail<Any>("Actual object does not contain field \"$fieldName\"")
                 return null
             }
             if (doesFieldMatch(field)) {
                 return field.field.getter.call(actual) as F
             }
         } catch (e: IllegalAccessException) {
-            softAssertions.fail("Field \"$fieldName\" is not accessible with cause $e")
+            softAssertions.fail<Any>("Field \"$fieldName\" is not accessible with cause $e")
         }
         return null
     }

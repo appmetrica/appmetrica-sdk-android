@@ -137,7 +137,7 @@ public class SynchronousStageExecutorTest extends CommonTest {
         Throwable throwable = new Throwable(message);
         throwable.fillInStackTrace();
         Throwable resultThrowable = mSynchronousStageExecutor.reportError(mEventName, throwable);
-        assertThat(resultThrowable).isEqualToComparingFieldByField(throwable);
+        assertThat(resultThrowable).usingRecursiveComparison().isEqualTo(throwable);
         verifyNoMoreInteractions(mProvider);
     }
 

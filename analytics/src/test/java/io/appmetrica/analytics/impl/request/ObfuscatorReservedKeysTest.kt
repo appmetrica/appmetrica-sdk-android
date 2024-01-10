@@ -50,6 +50,6 @@ class ObfuscatorReservedKeysTest(
 
     @Test
     fun reservedFeature() {
-        assertThat(Obfuscator().obfuscationKeys).`as`(description).doesNotContain(obfuscatedKey)
+        assertThat(Obfuscator().obfuscationKeys).doesNotContain(obfuscatedKey)
     }
 }

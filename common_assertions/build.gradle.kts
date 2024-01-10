@@ -6,6 +6,6 @@ plugins {
 group = "io.appmetrica.analytics"
 
 dependencies {
-    implementation("org.assertj:assertj-core:3.11.0")
+    implementation("org.assertj:assertj-core:3.24.2")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
 }
