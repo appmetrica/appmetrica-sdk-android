@@ -15,7 +15,7 @@ public class io.appmetrica.analytics.gpllibrary.internal.GplLibraryWrapper imple
     public void updateLastKnownLocation()
 }
 
-package static class io.appmetrica.analytics.gpllibrary.internal.GplLibraryWrapper$ClientProvider
+public static class io.appmetrica.analytics.gpllibrary.internal.GplLibraryWrapper$ClientProvider
 
 public enum io.appmetrica.analytics.gpllibrary.internal.GplLibraryWrapper$Priority {
     PRIORITY_BALANCED_POWER_ACCURACY, PRIORITY_HIGH_ACCURACY, PRIORITY_LOW_POWER, PRIORITY_NO_POWER

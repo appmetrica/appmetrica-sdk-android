@@ -13,6 +13,7 @@ object ReflectionUtils {
 
     @JvmStatic
     fun <T> loadAndInstantiateClassWithDefaultConstructor(className: String, targetType: Class<T>): T? = try {
+        YLogger.info(TAG, "Load and instantiate class `$className` with default constructor")
         loadClass(className, targetType)?.getConstructor()?.newInstance()
     } catch (e: Throwable) {
         YLogger.error(

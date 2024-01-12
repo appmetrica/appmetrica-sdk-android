@@ -7,7 +7,7 @@ plugins {
 
 group = "io.appmetrica.analytics.gradle"
 
-val agpVersion: String = detectAgpVersion("7.4.1")
+val agpVersion: String = detectAgpVersion("8.2.0")
 
 fun GradlePluginDevelopmentExtension.plugin(name: String, impl: String) {
     plugins.create(name.split('.', '-').joinToString("") { it.capitalize() }) {

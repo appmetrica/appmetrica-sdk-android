@@ -6,7 +6,6 @@ import io.appmetrica.analytics.locationapi.internal.LocationClient
 internal class LocationClientProvider {
 
     fun getLocationClient(): LocationClient? = ReflectionUtils.loadAndInstantiateClassWithDefaultConstructor(
-        "io.appmetrica.analytics.location.internal.LocationClientImpl",
-        LocationClient::class.java
+        "io.appmetrica.analytics.location.internal.LocationClientImpl"
     )
 }

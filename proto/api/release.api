@@ -202,7 +202,7 @@ public class io.appmetrica.analytics.protobuf.nano.Extension<M extends io.appmet
     protected void writeSingularData(Object, io.appmetrica.analytics.protobuf.nano.CodedOutputByteBufferNano)
 }
 
-private static class io.appmetrica.analytics.protobuf.nano.Extension$PrimitiveExtension<M extends io.appmetrica.analytics.protobuf.nano.ExtendableMessageNano<M>, T> extends io.appmetrica.analytics.protobuf.nano.Extension<M, T> {
+public static class io.appmetrica.analytics.protobuf.nano.Extension$PrimitiveExtension<M extends io.appmetrica.analytics.protobuf.nano.ExtendableMessageNano<M>, T> extends io.appmetrica.analytics.protobuf.nano.Extension<M, T> {
     public <init>(int, Class<T>, int, boolean, int, int)
     protected int computeRepeatedSerializedSize(Object)
     protected final int computeSingularSerializedSize(Object)
@@ -279,7 +279,7 @@ public final class io.appmetrica.analytics.protobuf.nano.MapFactories {
     public static io.appmetrica.analytics.protobuf.nano.MapFactories$MapFactory getMapFactory()
 }
 
-private static class io.appmetrica.analytics.protobuf.nano.MapFactories$DefaultMapFactory implementation io.appmetrica.analytics.protobuf.nano.MapFactories$MapFactory {
+public static class io.appmetrica.analytics.protobuf.nano.MapFactories$DefaultMapFactory implementation io.appmetrica.analytics.protobuf.nano.MapFactories$MapFactory {
     public <K, V> java.util.Map<K, V> forMap(java.util.Map<K, V>)
 }
 

@@ -31,3 +31,8 @@
     public static void checkParameterIsNotNull(...);
     public static void checkNotNullParameter(...);
 }
+
+-keepclassmembers,allowoptimization,allowobfuscation public class * implements io.appmetrica.analytics.** {
+    public *;
+    protected *;
+}
