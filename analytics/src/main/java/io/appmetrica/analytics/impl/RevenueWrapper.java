@@ -15,7 +15,7 @@ import io.appmetrica.analytics.protobuf.nano.MessageNano;
 
 class RevenueWrapper {
 
-    private static final String TRUNCATED_DATA_LINK_TO_TICKET = "<truncated data was not sent, see METRIKALIB-4568>";
+    private static final String TRUNCATED_DATA_MESSAGE = "<truncated data was not sent, exceeded the limit of 180kb>";
     @NonNull
     private final Revenue mRevenue;
 
@@ -28,17 +28,17 @@ class RevenueWrapper {
         mPublicLogger = logger;
         mRevenue = revenue;
         mPayloadTrimmer = new StringByBytesTrimmer(
-                EventLimitationProcessor.REVENUE_PAYLOAD_MAX_SIZE, "revenue payload", mPublicLogger
+            EventLimitationProcessor.REVENUE_PAYLOAD_MAX_SIZE, "revenue payload", mPublicLogger
         );
-        mReceiptDataTrimmer= new SubstituteTrimmer<String>(
-                new StringByBytesTrimmer(EventLimitationProcessor.RECEIPT_DATA_MAX_SIZE, "receipt data",
-                        mPublicLogger),
-                TRUNCATED_DATA_LINK_TO_TICKET
+        mReceiptDataTrimmer = new SubstituteTrimmer<String>(
+            new StringByBytesTrimmer(EventLimitationProcessor.RECEIPT_DATA_MAX_SIZE, "receipt data",
+                mPublicLogger),
+            TRUNCATED_DATA_MESSAGE
         );
         mReceiptSignatureTrimmer = new SubstituteTrimmer<String>(
-                new StringTrimmer(EventLimitationProcessor.RECEIPT_SIGNATURE_MAX_LENGTH, "receipt signature",
-                        mPublicLogger),
-                TRUNCATED_DATA_LINK_TO_TICKET
+            new StringTrimmer(EventLimitationProcessor.RECEIPT_SIGNATURE_MAX_LENGTH, "receipt signature",
+                mPublicLogger),
+            TRUNCATED_DATA_MESSAGE
         );
     }
 

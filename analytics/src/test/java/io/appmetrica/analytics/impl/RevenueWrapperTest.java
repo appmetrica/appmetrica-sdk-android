@@ -22,6 +22,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(RobolectricTestRunner.class)
 public class RevenueWrapperTest extends CommonTest {
 
+    private static final String TRUNCATED_DATA_MESSAGE = "<truncated data was not sent, exceeded the limit of 180kb>";
+
     @Mock
     private PublicLogger mPublicLogger;
 
@@ -83,8 +85,12 @@ public class RevenueWrapperTest extends CommonTest {
 
         io.appmetrica.analytics.impl.protobuf.backend.Revenue proto = io.appmetrica.analytics.impl.protobuf.backend.Revenue.parseFrom(pair.first);
         SoftAssertions assertion = new SoftAssertions();
-        assertion.assertThat(proto.receipt.data).as("receipt.data").isEqualTo("<truncated data was not sent, see METRIKALIB-4568>".getBytes());
-        assertion.assertThat(proto.receipt.signature).as("receipt.signature").isEqualTo("<truncated data was not sent, see METRIKALIB-4568>".getBytes());
+        assertion.assertThat(proto.receipt.data)
+            .as("receipt.data")
+            .isEqualTo(TRUNCATED_DATA_MESSAGE.getBytes());
+        assertion.assertThat(proto.receipt.signature)
+            .as("receipt.signature")
+            .isEqualTo(TRUNCATED_DATA_MESSAGE.getBytes());
         assertion.assertAll();
 
         assertThat(pair.second).isEqualTo(data.getBytes().length);
@@ -112,16 +118,16 @@ public class RevenueWrapperTest extends CommonTest {
     public void testWithHugeData() throws InvalidProtocolBufferNanoException {
         String string = new RandomStringGenerator(EventLimitationProcessor.RECEIPT_DATA_MAX_SIZE + 1).nextString();
         Pair<byte[], Integer> data = new RevenueWrapper(Revenue.newBuilder(100, Currency.getInstance("USD"))
-                .withReceipt(Revenue.Receipt.newBuilder()
-                        .withData(string)
-                        .build())
-                .build(), mPublicLogger).getDataToSend();
+            .withReceipt(Revenue.Receipt.newBuilder()
+                .withData(string)
+                .build())
+            .build(), mPublicLogger).getDataToSend();
 
         io.appmetrica.analytics.impl.protobuf.backend.Revenue proto = io.appmetrica.analytics.impl.protobuf.backend.Revenue.parseFrom(data.first);
 
         SoftAssertions assertion = new SoftAssertions();
         assertion.assertThat(proto.receipt.data).as("receipt.data")
-                .isEqualTo("<truncated data was not sent, see METRIKALIB-4568>".getBytes());
+            .isEqualTo(TRUNCATED_DATA_MESSAGE.getBytes());
         assertion.assertThat(data.second).as("bytesTruncated").isEqualTo(string.getBytes().length);
         assertion.assertAll();
     }
@@ -138,8 +144,9 @@ public class RevenueWrapperTest extends CommonTest {
         io.appmetrica.analytics.impl.protobuf.backend.Revenue proto = io.appmetrica.analytics.impl.protobuf.backend.Revenue.parseFrom(data.first);
 
         SoftAssertions assertion = new SoftAssertions();
-        assertion.assertThat(proto.receipt.signature).as("receipt.signature")
-                .isEqualTo("<truncated data was not sent, see METRIKALIB-4568>".getBytes());
+        assertion.assertThat(proto.receipt.signature)
+            .as("receipt.signature")
+            .isEqualTo(TRUNCATED_DATA_MESSAGE.getBytes());
         assertion.assertThat(data.second).as("bytesTruncated").isZero();
         assertion.assertAll();
     }
