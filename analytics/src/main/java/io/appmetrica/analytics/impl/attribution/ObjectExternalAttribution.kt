@@ -1,5 +1,6 @@
 package io.appmetrica.analytics.impl.attribution
 
+import io.appmetrica.analytics.coreutils.internal.logger.YLogger
 import io.appmetrica.analytics.impl.protobuf.backend.ExternalAttribution.ClientExternalAttribution
 import org.json.JSONObject
 
@@ -21,7 +22,11 @@ class ObjectExternalAttribution(
 
         private fun Any.toJsonObject() = JSONObject().also { jsonObject ->
             javaClass.fields.forEach {
-                jsonObject.put(it.name, it.get(this))
+                try {
+                    jsonObject.put(it.name, it.get(this))
+                } catch (e: Throwable) {
+                    YLogger.e(e, "Found field `${it.name}` with illegal value for JSONObject")
+                }
             }
         }
     }
