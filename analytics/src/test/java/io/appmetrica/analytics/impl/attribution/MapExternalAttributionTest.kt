@@ -17,7 +17,12 @@ class MapExternalAttributionTest : CommonTest() {
 
     private val provider = ExternalAttributionType.AIRBRIDGE
     private val value = mapOf(
-        "key" to "value"
+        "key" to "value",
+        "numberKey" to Double.NaN
+    )
+    private val expectedValue = mapOf(
+        "key" to "value",
+        "numberKey" to null
     )
 
     @get:Rule
@@ -40,7 +45,7 @@ class MapExternalAttributionTest : CommonTest() {
         val proto = captor.firstValue
         SoftAssertions().apply {
             assertThat(proto.attributionType).isEqualTo(ClientExternalAttribution.AIRBRIDGE)
-            assertThat(JSONObject(String(proto.value))).isEqualToComparingFieldByField(JSONObject(value))
+            assertThat(JSONObject(String(proto.value))).isEqualToComparingFieldByField(JSONObject(expectedValue))
             assertAll()
         }
     }

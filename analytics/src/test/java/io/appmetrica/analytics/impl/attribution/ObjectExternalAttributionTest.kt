@@ -23,6 +23,8 @@ class ObjectExternalAttributionTest : CommonTest() {
         val intField = 42
         @JvmField
         val doubleField = 3.14
+        @JvmField
+        val numberField = Double.NaN
     }
     private val jsonValue = JSONObject().apply {
         put("stringField", "stringField")

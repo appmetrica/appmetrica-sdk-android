@@ -125,6 +125,12 @@ public class JsonHelper {
             if (source instanceof Map) {
                 return prepareMapForJson((Map) source);
             }
+            if (source instanceof Number) {
+                if (Double.isInfinite(((Number) source).doubleValue()) ||
+                    Double.isNaN(((Number) source).doubleValue())) {
+                    return null;
+                }
+            }
         } catch (Throwable ignored) {
             return null;
         }
@@ -198,13 +204,7 @@ public class JsonHelper {
         if (Utils.isNullOrEmpty(map)) {
             return null;
         }
-        JSONObject value;
-        if (AndroidUtils.isApiAchieved(Build.VERSION_CODES.KITKAT)) {
-            value = new JSONObject(map);
-        } else {
-            value = prepareMapForJson(map);
-        }
-        return value;
+        return prepareMapForJson(map);
     }
 
     @Nullable
