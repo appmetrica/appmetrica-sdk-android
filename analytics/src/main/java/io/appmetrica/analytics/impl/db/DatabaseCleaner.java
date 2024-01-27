@@ -128,9 +128,10 @@ public class DatabaseCleaner {
         Cursor dataCursor = null;
         try {
             dataCursor = database.rawQuery(
-                    String.format("SELECT %s, %s FROM %s WHERE %s",
+                    String.format("SELECT %s, %s, %s FROM %s WHERE %s",
                             Constants.EventsTable.EventTableEntry.FIELD_EVENT_GLOBAL_NUMBER,
                             Constants.EventsTable.EventTableEntry.FIELD_EVENT_TYPE,
+                            Constants.EventsTable.EventTableEntry.FIELD_EVENT_DESCRIPTION,
                             Constants.EventsTable.TABLE_NAME,
                             whereClause
                     ),
