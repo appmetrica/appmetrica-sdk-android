@@ -71,9 +71,6 @@ public class ReportArgumentsTest extends CommonTest {
     public void testFromConfigurationOnly() {
         assertArguments(
             ReportRequestConfig.Arguments.empty().mergeFrom(fillConfiguration()),
-            DEVICE_TYPE,
-            CUSTOM_VERSION,
-            String.valueOf(APP_BUILD_NUMBER),
             API_KEY,
             REPORT_LOCATION_ENABLED,
             new Location("provider"),
@@ -93,9 +90,6 @@ public class ReportArgumentsTest extends CommonTest {
     public void testChooseFromConfiguration() {
         assertArguments(
                 ReportRequestConfig.Arguments.empty().mergeFrom(fillConfiguration()),
-                DEVICE_TYPE,
-                CUSTOM_VERSION,
-                String.valueOf(APP_BUILD_NUMBER),
                 API_KEY,
                 REPORT_LOCATION_ENABLED,
                 new Location("provider"),
@@ -114,9 +108,6 @@ public class ReportArgumentsTest extends CommonTest {
     @Test
     public void chooseFromOldAttributes() {
         ReportRequestConfig.Arguments oldArguments = new ReportRequestConfig.Arguments(
-                "phone",
-                "oldCustomVersion",
-                "old178",
                 "oldApiKey",
                 false,
                 new Location("oldProvider"),
@@ -138,9 +129,6 @@ public class ReportArgumentsTest extends CommonTest {
         assertArguments(
             ReportRequestConfig.Arguments.empty(),
             null,
-            null,
-            null,
-            null,
             DEFAULT_REPORT_LOCATION_ENABLED,
             null,
             DEFAULT_FIRST_ACTIVATION_AS_UPDATE,
@@ -156,9 +144,6 @@ public class ReportArgumentsTest extends CommonTest {
     }
 
     private void assertArguments(@NonNull ReportRequestConfig.Arguments arguments,
-                                 @Nullable String deviceType,
-                                 @Nullable String appVersion,
-                                 @Nullable String appBuildNumber,
                                  @Nullable String apiKey,
                                  @Nullable Boolean reportLocationEnabled,
                                  @Nullable Location manualLocation,
@@ -172,9 +157,6 @@ public class ReportArgumentsTest extends CommonTest {
                                  @Nullable Integer maxReportsInDbCount,
                                  @Nullable Boolean revenueAutoTrackingEnabled) {
         SoftAssertions softAssertion = new SoftAssertions();
-        softAssertion.assertThat(arguments.deviceType).as("deviceType").isEqualTo(deviceType);
-        softAssertion.assertThat(arguments.appVersion).as("appVersion").isEqualTo(appVersion);
-        softAssertion.assertThat(arguments.appBuildNumber).as("appBuildNumber").isEqualTo(appBuildNumber);
         softAssertion.assertThat(arguments.apiKey).as("apiKey").isEqualTo(apiKey);
         softAssertion.assertThat(arguments.locationTracking).as("reportLocationEnabled").isEqualTo(reportLocationEnabled);
         //assertThat(arguments.manualLocation).isEqualTo(manualLocation); todo (avitenko) remove strange location marshalling
@@ -211,9 +193,6 @@ public class ReportArgumentsTest extends CommonTest {
     @NonNull
     public static ReportRequestConfig.Arguments createEmptyArguments() {
         return new ReportRequestConfig.Arguments(
-                null,
-                null,
-                null,
                 null,
                 null,
                 null,

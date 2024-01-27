@@ -2,6 +2,7 @@ package io.appmetrica.analytics.impl;
 
 import android.content.Context;
 import io.appmetrica.analytics.coreapi.internal.data.ProtobufStateStorage;
+import io.appmetrica.analytics.coreapi.internal.identifiers.PlatformIdentifiers;
 import io.appmetrica.analytics.coreutils.internal.services.UtilityServiceLocator;
 import io.appmetrica.analytics.impl.clids.ClidsCandidatesHelper;
 import io.appmetrica.analytics.impl.clids.ClidsDataAwaiter;
@@ -25,7 +26,7 @@ import io.appmetrica.analytics.impl.startup.StartupState;
 import io.appmetrica.analytics.impl.startup.uuid.MultiProcessSafeUuidProvider;
 import io.appmetrica.analytics.impl.startup.uuid.UuidFromStartupStateImporter;
 import io.appmetrica.analytics.impl.utils.DebugAssert;
-import io.appmetrica.analytics.networktasks.internal.NetworkAppContext;
+import io.appmetrica.analytics.networktasks.internal.NetworkCore;
 import io.appmetrica.analytics.networktasks.internal.NetworkServiceLocator;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.ConstructionArgumentCaptor;
@@ -33,7 +34,6 @@ import io.appmetrica.analytics.testutils.MockedConstructionRule;
 import io.appmetrica.analytics.testutils.MockedStaticRule;
 import io.appmetrica.analytics.testutils.TestUtils;
 import io.appmetrica.analytics.testutils.rules.coreutils.UtilityServiceLocatorRule;
-import io.appmetrica.analytics.testutils.rules.networktasks.NetworkServiceLocatorRule;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -70,8 +70,9 @@ public class GlobalServiceLocatorTest extends CommonTest {
     @Mock
     private IReporterExtended reporter;
     @Mock
-    private NetworkAppContext networkAppContext;
-
+    private NetworkServiceLocator networkServiceLocator;
+    @Mock
+    private NetworkCore networkCore;
     @Rule
     public final MockedStaticRule<DebugAssert> sDebugAssert = new MockedStaticRule<>(DebugAssert.class);
     @Rule
@@ -79,23 +80,13 @@ public class GlobalServiceLocatorTest extends CommonTest {
     @Rule
     public final MockedConstructionRule<PreloadInfoStorage> preloadInfoMock = new MockedConstructionRule<>(PreloadInfoStorage.class);
     @Rule
-    public final NetworkServiceLocatorRule networkServiceLocatorRule = new NetworkServiceLocatorRule();
+    public final MockedStaticRule<NetworkServiceLocator> networkServiceLocatorMockedStaticRule =
+        new MockedStaticRule<>(NetworkServiceLocator.class);
     @Rule
     public final UtilityServiceLocatorRule utilityServiceLocatorRule = new UtilityServiceLocatorRule();
     @Rule
     public final MockedStaticRule<AppMetricaSelfReportFacade> appMetricaSelfReportFacadeMockedRule =
         new MockedStaticRule<>(AppMetricaSelfReportFacade.class);
-    @Rule
-    public final MockedConstructionRule<NetworkAppContextProvider> networkAppContextProviderMockedRule =
-        new MockedConstructionRule<>(
-            NetworkAppContextProvider.class,
-            new MockedConstruction.MockInitializer<NetworkAppContextProvider>() {
-                @Override
-                public void prepare(NetworkAppContextProvider mock, MockedConstruction.Context context) throws Throwable {
-                    when(mock.getNetworkAppContext()).thenReturn(networkAppContext);
-                }
-            }
-        );
     @Rule
     public final MockedConstructionRule<UtilityServiceStartupStateObserver> utilityServiceStartupObserverMockedRule =
         new MockedConstructionRule<>(UtilityServiceStartupStateObserver.class);
@@ -121,11 +112,21 @@ public class GlobalServiceLocatorTest extends CommonTest {
     public final MockedConstructionRule<UuidFromStartupStateImporter> uuidFromStartupStateImporterMockedConstructionRule =
         new MockedConstructionRule<>(UuidFromStartupStateImporter.class);
 
+    @Rule
+    public final MockedConstructionRule<PlatformIdentifiers> platformIdentifiersMockedConstructionRule =
+        new MockedConstructionRule<>(PlatformIdentifiers.class);
+
+    @Rule
+    public final MockedConstructionRule<SdkEnvironmentHolder> sdkEnvironmentHolderMockedConstructionRule =
+        new MockedConstructionRule<>(SdkEnvironmentHolder.class);
+
     private GlobalServiceLocator mGlobalServiceLocator;
 
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
+        when(NetworkServiceLocator.getInstance()).thenReturn(networkServiceLocator);
+        when(networkServiceLocator.getNetworkCore()).thenReturn(networkCore);
         when(AppMetricaSelfReportFacade.getReporter()).thenReturn(reporter);
         mContext = TestUtils.createMockedContext();
     }
@@ -153,13 +154,13 @@ public class GlobalServiceLocatorTest extends CommonTest {
         inOrder.verify(startupStateHolder).init(mContext);
         inOrder.verify(startupStateHolder)
             .registerObserver(utilityServiceStartupObserverMockedRule.getConstructionMock().constructed().get(0));
-        networkServiceLocatorRule.getMockedStatic().verify(new MockedStatic.Verification() {
+        networkServiceLocatorMockedStaticRule.getStaticMock().verify(new MockedStatic.Verification() {
             @Override
             public void apply() throws Throwable {
                 NetworkServiceLocator.init();
             }
         });
-        inOrder.verify(NetworkServiceLocator.getInstance()).initAsync(networkAppContext);
+        inOrder.verify(NetworkServiceLocator.getInstance()).initAsync();
         inOrder.verifyNoMoreInteractions();
     }
 
@@ -349,6 +350,39 @@ public class GlobalServiceLocatorTest extends CommonTest {
             .hasSize(1);
         assertThat(uuidFromStartupStateImporterMockedConstructionRule.getArgumentInterceptor().flatArguments())
             .isEmpty();
+    }
+
+    @Test
+    public void getPlatformIdentifiers() {
+        GlobalServiceLocator.init(mContext);
+
+        assertThat(GlobalServiceLocator.getInstance().getPlatformIdentifiers())
+            .isSameAs(platformIdentifiersMockedConstructionRule.getConstructionMock().constructed().get(0));
+        assertThat(platformIdentifiersMockedConstructionRule.getConstructionMock().constructed()).hasSize(1);
+
+        assertThat(platformIdentifiersMockedConstructionRule.getArgumentInterceptor().flatArguments())
+            .containsExactly(
+                GlobalServiceLocator.getInstance().getServiceInternalAdvertisingIdGetter(),
+                GlobalServiceLocator.getInstance().getAppSetIdGetter()
+            );
+    }
+
+    @Test
+    public void getNetworkCore() {
+        GlobalServiceLocator.init(mContext);
+
+        assertThat(GlobalServiceLocator.getInstance().getNetworkCore()).isSameAs(networkCore);
+    }
+
+    @Test
+    public void getSdkEnvironmentHolder() {
+        GlobalServiceLocator.init(mContext);
+
+        assertThat(GlobalServiceLocator.getInstance().getSdkEnvironmentHolder())
+            .isSameAs(sdkEnvironmentHolderMockedConstructionRule.getConstructionMock().constructed().get(0));
+        assertThat(sdkEnvironmentHolderMockedConstructionRule.getConstructionMock().constructed()).hasSize(1);
+        assertThat(sdkEnvironmentHolderMockedConstructionRule.getArgumentInterceptor().flatArguments())
+            .containsExactly(mContext);
     }
 
     private StartupStateHolder startupStateHolder() {

@@ -22,9 +22,6 @@ public class ReporterArgumentsTest extends CommonTest {
 
     @Mock
     private CounterConfiguration mReporterConfiguration;
-    private final String mDeviceType = "deviceType";
-    private final String mAppVersion = "appVersion";
-    private final String mAppBuildNumber = "appBuildNumber";
     private final String mApiKey = "apiKey";
     private final Boolean mLocationTracking = true;
     @Mock
@@ -43,9 +40,6 @@ public class ReporterArgumentsTest extends CommonTest {
     public void setUp() {
         MockitoAnnotations.openMocks(this);
         mClidsFromClient.put("clid0", "0");
-        when(mReporterConfiguration.getDeviceType()).thenReturn(mDeviceType);
-        when(mReporterConfiguration.getAppVersion()).thenReturn(mAppVersion);
-        when(mReporterConfiguration.getAppBuildNumber()).thenReturn(mAppBuildNumber);
         when(mReporterConfiguration.getApiKey()).thenReturn(mApiKey);
         when(mReporterConfiguration.getManualLocation()).thenReturn(mManualLocation);
         when(mReporterConfiguration.isLocationTrackingEnabled()).thenReturn(mLocationTracking);
@@ -63,9 +57,6 @@ public class ReporterArgumentsTest extends CommonTest {
         mOtherArguments = new CommonArguments.ReporterArguments(mReporterConfiguration, mClidsFromClient);
         CommonArguments.ReporterArguments newArguments = mArguments.mergeFrom(mOtherArguments);
         SoftAssertions softly = new SoftAssertions();
-        softly.assertThat(newArguments.deviceType).isEqualTo(mDeviceType);
-        softly.assertThat(newArguments.appVersion).isEqualTo(mAppVersion);
-        softly.assertThat(newArguments.appBuildNumber).isEqualTo(mAppBuildNumber);
         softly.assertThat(newArguments.apiKey).isEqualTo(mApiKey);
         softly.assertThat(newArguments.manualLocation).isEqualTo(mManualLocation);
         softly.assertThat(newArguments.locationTracking).isEqualTo(mLocationTracking);
@@ -101,9 +92,6 @@ public class ReporterArgumentsTest extends CommonTest {
         mOtherArguments = new CommonArguments.ReporterArguments(mReporterConfiguration, clidsFromClient);
         CommonArguments.ReporterArguments newArguments = mArguments.mergeFrom(mOtherArguments);
         SoftAssertions softly = new SoftAssertions();
-        softly.assertThat(newArguments.deviceType).isEqualTo(mDeviceType);
-        softly.assertThat(newArguments.appVersion).isEqualTo(mAppVersion);
-        softly.assertThat(newArguments.appBuildNumber).isEqualTo(mAppBuildNumber);
         softly.assertThat(newArguments.apiKey).isEqualTo(mApiKey);
         softly.assertThat(newArguments.manualLocation).isEqualTo(mManualLocation);
         softly.assertThat(newArguments.firstActivationAsUpdate).isEqualTo(mFirstActivationAsUpdate);
@@ -122,9 +110,6 @@ public class ReporterArgumentsTest extends CommonTest {
         mOtherArguments = new CommonArguments.ReporterArguments();
         CommonArguments.ReporterArguments newArguments = mArguments.mergeFrom(mOtherArguments);
         SoftAssertions softly = new SoftAssertions();
-        softly.assertThat(newArguments.deviceType).isNull();
-        softly.assertThat(newArguments.appVersion).isNull();
-        softly.assertThat(newArguments.appBuildNumber).isNull();
         softly.assertThat(newArguments.apiKey).isNull();
         softly.assertThat(newArguments.manualLocation).isNull();
         softly.assertThat(newArguments.firstActivationAsUpdate).isNull();

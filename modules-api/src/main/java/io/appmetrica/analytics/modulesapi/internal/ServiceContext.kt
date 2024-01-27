@@ -2,10 +2,10 @@ package io.appmetrica.analytics.modulesapi.internal
 
 import android.content.Context
 import io.appmetrica.analytics.coreapi.internal.control.DataSendingRestrictionController
-import io.appmetrica.analytics.coreapi.internal.identifiers.SimpleAdvertisingIdGetter
+import io.appmetrica.analytics.coreapi.internal.identifiers.PlatformIdentifiers
+import io.appmetrica.analytics.coreapi.internal.servicecomponents.SdkEnvironmentProvider
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.applicationstate.ApplicationStateProvider
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.batteryinfo.ChargeTypeProvider
-import io.appmetrica.analytics.coreapi.internal.system.LocaleProvider
 
 interface ServiceContext {
 
@@ -21,7 +21,9 @@ interface ServiceContext {
 
     val selfReporter: ModuleSelfReporter
 
-    val advertisingIdGetter: SimpleAdvertisingIdGetter
+    val sdkEnvironmentProvider: SdkEnvironmentProvider
+
+    val platformIdentifiers: PlatformIdentifiers
 
     val serviceWakeLock: ServiceWakeLock
 
@@ -32,6 +34,4 @@ interface ServiceContext {
     val chargeTypeProvider: ChargeTypeProvider
 
     val dataSendingRestrictionController: DataSendingRestrictionController
-
-    val localeProvider: LocaleProvider
 }

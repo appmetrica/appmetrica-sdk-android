@@ -122,24 +122,6 @@ public abstract class io.appmetrica.analytics.coreapi.internal.db.DatabaseScript
     public abstract void runScript([NonNull] android.database.sqlite.SQLiteDatabase)
 }
 
-public final class io.appmetrica.analytics.coreapi.internal.device.ScreenInfo {
-    public <init>(int, int, int, float, [NonNull] String)
-    public final int component1()
-    public final int component2()
-    public final int component3()
-    public final float component4()
-    public final [NonNull] String component5()
-    public final [NonNull] io.appmetrica.analytics.coreapi.internal.device.ScreenInfo copy(int, int, int, float, [NonNull] String)
-    public boolean equals([Nullable] Object)
-    public final [NonNull] String getDeviceType()
-    public final int getDpi()
-    public final int getHeight()
-    public final float getScaleFactor()
-    public final int getWidth()
-    public int hashCode()
-    public [NonNull] String toString()
-}
-
 public interface io.appmetrica.analytics.coreapi.internal.event.CounterReportApi {
     public abstract int getBytesTruncated()
     public abstract int getCustomType()
@@ -261,12 +243,24 @@ public static final class io.appmetrica.analytics.coreapi.internal.identifiers.I
     public final [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus from([Nullable] String)
 }
 
-public final class io.appmetrica.analytics.coreapi.internal.identifiers.Identifiers {
+public final class io.appmetrica.analytics.coreapi.internal.identifiers.PlatformIdentifiers {
+    public <init>([NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.SimpleAdvertisingIdGetter, [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.AppSetIdProvider)
+    public final [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.SimpleAdvertisingIdGetter component1()
+    public final [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.AppSetIdProvider component2()
+    public final [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.PlatformIdentifiers copy([NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.SimpleAdvertisingIdGetter, [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.AppSetIdProvider)
+    public boolean equals([Nullable] Object)
+    public final [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.SimpleAdvertisingIdGetter getAdvIdentifiersProvider()
+    public final [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.AppSetIdProvider getAppSetIdProvider()
+    public int hashCode()
+    public [NonNull] String toString()
+}
+
+public final class io.appmetrica.analytics.coreapi.internal.identifiers.SdkIdentifiers {
     public <init>([Nullable] String, [Nullable] String, [Nullable] String)
     public final [Nullable] String component1()
     public final [Nullable] String component2()
     public final [Nullable] String component3()
-    public final [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.Identifiers copy([Nullable] String, [Nullable] String, [Nullable] String)
+    public final [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.SdkIdentifiers copy([Nullable] String, [Nullable] String, [Nullable] String)
     public boolean equals([Nullable] Object)
     public final [Nullable] String getDeviceId()
     public final [Nullable] String getDeviceIdHash()
@@ -292,6 +286,68 @@ public interface io.appmetrica.analytics.coreapi.internal.io.SslSocketFactoryPro
     public abstract [Nullable] javax.net.ssl.SSLSocketFactory getSslSocketFactory()
 }
 
+public final class io.appmetrica.analytics.coreapi.internal.model.AppVersionInfo {
+    public <init>([NonNull] String, [NonNull] String)
+    public final [NonNull] String component1()
+    public final [NonNull] String component2()
+    public final [NonNull] io.appmetrica.analytics.coreapi.internal.model.AppVersionInfo copy([NonNull] String, [NonNull] String)
+    public boolean equals([Nullable] Object)
+    public final [NonNull] String getAppBuildNumber()
+    public final [NonNull] String getAppVersionName()
+    public int hashCode()
+    public [NonNull] String toString()
+}
+
+public final class io.appmetrica.analytics.coreapi.internal.model.ScreenInfo {
+    public <init>(int, int, int, float)
+    public final int component1()
+    public final int component2()
+    public final int component3()
+    public final float component4()
+    public final [NonNull] io.appmetrica.analytics.coreapi.internal.model.ScreenInfo copy(int, int, int, float)
+    public boolean equals([Nullable] Object)
+    public final int getDpi()
+    public final int getHeight()
+    public final float getScaleFactor()
+    public final int getWidth()
+    public int hashCode()
+    public [NonNull] String toString()
+}
+
+public final class io.appmetrica.analytics.coreapi.internal.model.SdkEnvironment {
+    public <init>([NonNull] io.appmetrica.analytics.coreapi.internal.model.AppVersionInfo, [NonNull] String, [NonNull] io.appmetrica.analytics.coreapi.internal.model.ScreenInfo, [NonNull] io.appmetrica.analytics.coreapi.internal.model.SdkInfo, [NonNull] String, [NonNull] java.util.List<String>)
+    public final [NonNull] io.appmetrica.analytics.coreapi.internal.model.AppVersionInfo component1()
+    public final [NonNull] String component2()
+    public final [NonNull] io.appmetrica.analytics.coreapi.internal.model.ScreenInfo component3()
+    public final [NonNull] io.appmetrica.analytics.coreapi.internal.model.SdkInfo component4()
+    public final [NonNull] String component5()
+    public final [NonNull] java.util.List<String> component6()
+    public final [NonNull] io.appmetrica.analytics.coreapi.internal.model.SdkEnvironment copy([NonNull] io.appmetrica.analytics.coreapi.internal.model.AppVersionInfo, [NonNull] String, [NonNull] io.appmetrica.analytics.coreapi.internal.model.ScreenInfo, [NonNull] io.appmetrica.analytics.coreapi.internal.model.SdkInfo, [NonNull] String, [NonNull] java.util.List<String>)
+    public boolean equals([Nullable] Object)
+    public final [NonNull] String getAppFramework()
+    public final [NonNull] io.appmetrica.analytics.coreapi.internal.model.AppVersionInfo getAppVersionInfo()
+    public final [NonNull] String getDeviceType()
+    public final [NonNull] java.util.List<String> getLocales()
+    public final [NonNull] io.appmetrica.analytics.coreapi.internal.model.ScreenInfo getScreenInfo()
+    public final [NonNull] io.appmetrica.analytics.coreapi.internal.model.SdkInfo getSdkInfo()
+    public int hashCode()
+    public [NonNull] String toString()
+}
+
+public final class io.appmetrica.analytics.coreapi.internal.model.SdkInfo {
+    public <init>([NonNull] String, [NonNull] String, [NonNull] String)
+    public final [NonNull] String component1()
+    public final [NonNull] String component2()
+    public final [NonNull] String component3()
+    public final [NonNull] io.appmetrica.analytics.coreapi.internal.model.SdkInfo copy([NonNull] String, [NonNull] String, [NonNull] String)
+    public boolean equals([Nullable] Object)
+    public final [NonNull] String getSdkBuildNumber()
+    public final [NonNull] String getSdkBuildType()
+    public final [NonNull] String getSdkVersionName()
+    public int hashCode()
+    public [NonNull] String toString()
+}
+
 public interface io.appmetrica.analytics.coreapi.internal.permission.PermissionResolutionStrategy {
     public abstract boolean hasNecessaryPermissions([NonNull] android.content.Context)
 }
@@ -308,6 +364,10 @@ public class io.appmetrica.analytics.coreapi.internal.permission.PermissionState
 
 public interface io.appmetrica.analytics.coreapi.internal.permission.PermissionStrategy {
     public abstract boolean forbidUsePermission([NonNull] String)
+}
+
+public interface io.appmetrica.analytics.coreapi.internal.servicecomponents.SdkEnvironmentProvider {
+    public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.model.SdkEnvironment getSdkEnvironment()
 }
 
 public interface io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceComponentsInitializer {

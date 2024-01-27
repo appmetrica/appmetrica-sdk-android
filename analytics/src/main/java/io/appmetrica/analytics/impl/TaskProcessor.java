@@ -5,7 +5,6 @@ import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.component.IComponent;
 import io.appmetrica.analytics.impl.startup.executor.StartupExecutor;
-import io.appmetrica.analytics.networktasks.internal.NetworkServiceLocator;
 import io.appmetrica.analytics.networktasks.internal.NetworkTask;
 
 public class TaskProcessor<C extends IComponent> implements ServiceLifecycleObserver {
@@ -73,7 +72,7 @@ public class TaskProcessor<C extends IComponent> implements ServiceLifecycleObse
     }
 
     void startTask(@NonNull NetworkTask networkTask) {
-        NetworkServiceLocator.getInstance().getNetworkCore().startTask(networkTask);
+        GlobalServiceLocator.getInstance().getNetworkCore().startTask(networkTask);
     }
 
     void runTasks() {

@@ -204,12 +204,4 @@ class ScreenInfoExtractorTest : CommonTest() {
         softly.assertThat(screenInfo.scaleFactor).isEqualTo(scaleFactor)
         softly.assertAll()
     }
-
-    @Test
-    fun deviceType() {
-        `when`(PhoneUtils.getDeviceType(same(context), any(Point::class.java))).thenReturn(
-            DeviceTypeValues.TABLET)
-        val screenInfo = screenInfoExtractor.extractScreenInfo(context)
-        assertThat(screenInfo!!.deviceType).isEqualTo(DeviceTypeValues.TABLET)
-    }
 }

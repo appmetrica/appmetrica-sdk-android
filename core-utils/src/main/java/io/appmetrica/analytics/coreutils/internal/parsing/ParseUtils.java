@@ -12,7 +12,7 @@ public class ParseUtils {
 
     public static int parseInt(String intString, int defaultValue) {
         try {
-            return Integer.parseInt(intString);
+            return intString == null ? defaultValue : Integer.parseInt(intString);
         } catch (NumberFormatException exception) {
             return defaultValue;
         }

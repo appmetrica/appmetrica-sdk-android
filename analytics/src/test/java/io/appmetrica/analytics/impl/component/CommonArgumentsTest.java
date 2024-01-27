@@ -3,7 +3,6 @@ package io.appmetrica.analytics.impl.component;
 import android.location.Location;
 import android.os.ResultReceiver;
 import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
-import io.appmetrica.analytics.coreapi.internal.constants.DeviceTypeValues;
 import io.appmetrica.analytics.impl.client.ClientConfiguration;
 import io.appmetrica.analytics.impl.client.ProcessConfiguration;
 import io.appmetrica.analytics.impl.request.StartupRequestConfig;
@@ -29,11 +28,8 @@ public class CommonArgumentsTest extends CommonTest {
         ObjectPropertyAssertions<CommonArguments.ReporterArguments> assertions =
                 ObjectPropertyAssertions(new CommonArguments.ReporterArguments());
         Object nullVariable = null;
-        assertions.checkField("deviceType", nullVariable);
-        assertions.checkField("appVersion", nullVariable);
         assertions.checkField("apiKey", nullVariable);
         assertions.checkField("dispatchPeriod", nullVariable);
-        assertions.checkField("appBuildNumber", nullVariable);
         assertions.checkField("manualLocation", nullVariable);
         assertions.checkField("logEnabled", nullVariable);
         assertions.checkField("dataSendingEnabled", nullVariable);
@@ -50,9 +46,6 @@ public class CommonArgumentsTest extends CommonTest {
 
     @Test
     public void testReporterArgumentsConstructor() throws IllegalAccessException {
-        String deviceType = DeviceTypeValues.PHONE;
-        String appVersion = "appVersion";
-        String appBuildNumber = "appBuildNumber";
         String apiKey = "apiKey";
         boolean locationTracking = false;
         Location manualLocation = null;
@@ -70,9 +63,6 @@ public class CommonArgumentsTest extends CommonTest {
         clids.put("clid1", "1");
         ObjectPropertyAssertions<CommonArguments.ReporterArguments> assertions =
                 ObjectPropertyAssertions(new CommonArguments.ReporterArguments(
-                        deviceType,
-                        appVersion,
-                        appBuildNumber,
                         apiKey,
                         locationTracking,
                         manualLocation,
@@ -87,11 +77,8 @@ public class CommonArgumentsTest extends CommonTest {
                         nativeCrashesEnabled,
                         revenueAutoTrackingEnabled
                 ));
-        assertions.checkField("deviceType", deviceType);
-        assertions.checkField("appVersion", appVersion);
         assertions.checkField("apiKey", apiKey);
         assertions.checkField("dispatchPeriod", dispatchPeriod);
-        assertions.checkField("appBuildNumber", appBuildNumber);
         assertions.checkField("manualLocation", manualLocation);
         assertions.checkField("logEnabled", logEnabled);
         assertions.checkField("dataSendingEnabled", dataSendingEnabled);
@@ -108,9 +95,6 @@ public class CommonArgumentsTest extends CommonTest {
 
     @Test
     public void testCommonArgumentsConstructor() throws IllegalAccessException {
-        String deviceType = DeviceTypeValues.PHONE;
-        String appVersion = "appVersion";
-        String appBuildNumber = "appBuildNumber";
         String apiKey = "apiKey";
         boolean locationTracking = false;
         Location manualLocation = null;
@@ -135,9 +119,6 @@ public class CommonArgumentsTest extends CommonTest {
         ProcessConfiguration processConfiguration = mock(ProcessConfiguration.class);
         CounterConfiguration counterConfiguration = mock(CounterConfiguration.class);
 
-        doReturn(deviceType).when(counterConfiguration).getDeviceType();
-        doReturn(appVersion).when(counterConfiguration).getAppVersion();
-        doReturn(appBuildNumber).when(counterConfiguration).getAppBuildNumber();
         doReturn(apiKey).when(counterConfiguration).getApiKey();
         doReturn(locationTracking).when(counterConfiguration).isLocationTrackingEnabled();
         doReturn(manualLocation).when(counterConfiguration).getManualLocation();
@@ -167,11 +148,9 @@ public class CommonArgumentsTest extends CommonTest {
                 ObjectPropertyAssertions(
                         commonArguments.componentArguments
                 );
-        assertions.checkField("deviceType", deviceType);
-        assertions.checkField("appVersion", appVersion);
+
         assertions.checkField("apiKey", apiKey);
         assertions.checkField("dispatchPeriod", dispatchPeriod);
-        assertions.checkField("appBuildNumber", appBuildNumber);
         assertions.checkField("manualLocation", manualLocation);
         assertions.checkField("logEnabled", logEnabled);
         assertions.checkField("dataSendingEnabled", dataSendingEnabled);
@@ -187,12 +166,9 @@ public class CommonArgumentsTest extends CommonTest {
 
         ObjectPropertyAssertions<StartupRequestConfig.Arguments> startupAssertions =
                 ObjectPropertyAssertions(commonArguments.startupArguments);
-        startupAssertions.checkField("deviceType", deviceType);
-        startupAssertions.checkField("appVersion", appVersion);
         startupAssertions.checkField("hasNewCustomHosts", hasNewCustomHosts);
         startupAssertions.checkField("newCustomHosts", newCustomHosts);
         startupAssertions.checkField("clientClids", clids);
-        startupAssertions.checkField("appBuildNumber", appBuildNumber);
         startupAssertions.checkField("distributionReferrer", distributionReferrer);
         startupAssertions.checkField("installReferrerSource", referrerSource);
         startupAssertions.checkAll();

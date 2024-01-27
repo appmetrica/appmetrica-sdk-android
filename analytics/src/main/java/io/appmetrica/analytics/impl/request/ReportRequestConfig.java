@@ -26,27 +26,27 @@ public class ReportRequestConfig extends CoreRequestConfig {
     @Override
     public String toString() {
         return "ReportRequestConfig{" +
-            "mLocationTracking=" + mLocationTracking +
-            ", mManualLocation=" + mManualLocation +
-            ", mFirstActivationAsUpdate=" + mFirstActivationAsUpdate +
-            ", mSessionTimeout=" + mSessionTimeout +
-            ", mDispatchPeriod=" + mDispatchPeriod +
-            ", mLogEnabled=" + mLogEnabled +
-            ", mMaxReportsCount=" + mMaxReportsCount +
+            "mLocationTracking=" + locationTracking +
+            ", mManualLocation=" + manualLocation +
+            ", mFirstActivationAsUpdate=" + firstActivationAsUpdate +
+            ", mSessionTimeout=" + sessionTimeout +
+            ", mDispatchPeriod=" + dispatchPeriod +
+            ", mLogEnabled=" + logEnabled +
+            ", mMaxReportsCount=" + maxReportsCount +
             ", dataSendingEnabledFromArguments=" + dataSendingEnabledFromArguments +
             ", dataSendingStrategy=" + dataSendingStrategy +
-            ", mPreloadInfoSendingStrategy=" + mPreloadInfoSendingStrategy +
-            ", mApiKey='" + mApiKey + '\'' +
-            ", mPermissionsCollectingEnabled=" + mPermissionsCollectingEnabled +
-            ", mFeaturesCollectingEnabled=" + mFeaturesCollectingEnabled +
-            ", mClidsFromStartupResponse='" + mClidsFromStartupResponse + '\'' +
-            ", mReportHosts=" + mReportHosts +
-            ", mAttributionId=" + mAttributionId +
-            ", mPermissionsCollectingIntervalSeconds=" + mPermissionsCollectingIntervalSeconds +
-            ", mPermissionsForceSendIntervalSeconds=" + mPermissionsForceSendIntervalSeconds +
-            ", mClidsFromClientMatchClidsFromStartupRequest=" + mClidsFromClientMatchClidsFromStartupRequest +
-            ", mMaxReportsInDbCount=" + mMaxReportsInDbCount +
-            ", mCertificates=" + mCertificates +
+            ", mPreloadInfoSendingStrategy=" + preloadInfoSendingStrategy +
+            ", mApiKey='" + apiKey + '\'' +
+            ", mPermissionsCollectingEnabled=" + permissionsCollectingEnabled +
+            ", mFeaturesCollectingEnabled=" + featuresCollectingEnabled +
+            ", mClidsFromStartupResponse='" + clidsFromStartupResponse + '\'' +
+            ", mReportHosts=" + reportHosts +
+            ", mAttributionId=" + attributionId +
+            ", mPermissionsCollectingIntervalSeconds=" + permissionsCollectingIntervalSeconds +
+            ", mPermissionsForceSendIntervalSeconds=" + permissionsForceSendIntervalSeconds +
+            ", mClidsFromClientMatchClidsFromStartupRequest=" + clidsFromClientMatchClidsFromStartupRequest +
+            ", mMaxReportsInDbCount=" + maxReportsInDbCount +
+            ", mCertificates=" + certificates +
             "} " + super.toString();
     }
 
@@ -80,179 +80,175 @@ public class ReportRequestConfig extends CoreRequestConfig {
         }
     }
 
-    private boolean mLocationTracking;
-    private Location mManualLocation;
-    private boolean mFirstActivationAsUpdate;
-    private int mSessionTimeout;
-    private int mDispatchPeriod;
-    private boolean mLogEnabled;
-    private int mMaxReportsCount;
+    private boolean locationTracking;
+    private Location manualLocation;
+    private boolean firstActivationAsUpdate;
+    private int sessionTimeout;
+    private int dispatchPeriod;
+    private boolean logEnabled;
+    private int maxReportsCount;
     private Boolean dataSendingEnabledFromArguments;
     private DataSendingStrategy dataSendingStrategy;
     @NonNull
-    private final PreloadInfoSendingStrategy mPreloadInfoSendingStrategy;
+    private final PreloadInfoSendingStrategy preloadInfoSendingStrategy;
 
     // AppMetricaDeviceIdentifiers
-    private String mApiKey;
+    private String apiKey;
 
-    private boolean mPermissionsCollectingEnabled;
-    private boolean mFeaturesCollectingEnabled;
+    private boolean permissionsCollectingEnabled;
+    private boolean featuresCollectingEnabled;
 
-    private String mClidsFromStartupResponse;
+    private String clidsFromStartupResponse;
 
-    private List<String> mReportHosts;
+    private List<String> reportHosts;
 
-    private int mAttributionId;
-    private long mPermissionsCollectingIntervalSeconds;
-    private long mPermissionsForceSendIntervalSeconds;
-    private boolean mClidsFromClientMatchClidsFromStartupRequest;
-    private long mMaxReportsInDbCount;
+    private int attributionId;
+    private long permissionsCollectingIntervalSeconds;
+    private long permissionsForceSendIntervalSeconds;
+    private boolean clidsFromClientMatchClidsFromStartupRequest;
+    private long maxReportsInDbCount;
 
     @Nullable
-    private List<String> mCertificates;
+    private List<String> certificates;
 
     @VisibleForTesting()
     ReportRequestConfig(@NonNull PreloadInfoSendingStrategy preloadInfoSendingStrategy) {
-        mPreloadInfoSendingStrategy = preloadInfoSendingStrategy;
+        this.preloadInfoSendingStrategy = preloadInfoSendingStrategy;
     }
 
     @NonNull
     public String getClidsFromStartupResponse() {
-        return WrapUtils.getOrDefault(mClidsFromStartupResponse, StringUtils.EMPTY);
+        return WrapUtils.getOrDefault(clidsFromStartupResponse, StringUtils.EMPTY);
     }
 
     void setClidsFromStartupResponse(final String clids) {
-        mClidsFromStartupResponse = clids;
+        clidsFromStartupResponse = clids;
     }
 
     public void setReportHosts(final List<String> hosts) {
-        mReportHosts = hosts;
+        reportHosts = hosts;
     }
 
     public List<String> getReportHosts() {
-        return mReportHosts;
+        return reportHosts;
     }
 
     public String getApiKey() {
-        return mApiKey;
+        return apiKey;
     }
 
     public boolean isPermissionsCollectingEnabled() {
-        return mPermissionsCollectingEnabled;
+        return permissionsCollectingEnabled;
     }
 
     public boolean isFeaturesCollectingEnabled() {
-        return mFeaturesCollectingEnabled;
+        return featuresCollectingEnabled;
     }
 
     public void setPermissionsCollectingIntervalSeconds(long permissionsCollectingIntervalSeconds) {
-        mPermissionsCollectingIntervalSeconds = permissionsCollectingIntervalSeconds;
+        this.permissionsCollectingIntervalSeconds = permissionsCollectingIntervalSeconds;
     }
 
     public long getPermissionsCollectingIntervalSeconds() {
-        return mPermissionsCollectingIntervalSeconds;
+        return permissionsCollectingIntervalSeconds;
     }
 
     public void setPermissionsForceSendIntervalSeconds(long permissionsForceSendIntervalSeconds) {
-        mPermissionsForceSendIntervalSeconds = permissionsForceSendIntervalSeconds;
+        this.permissionsForceSendIntervalSeconds = permissionsForceSendIntervalSeconds;
     }
 
     public long getPermissionsForceSendIntervalSeconds() {
-        return mPermissionsForceSendIntervalSeconds;
+        return permissionsForceSendIntervalSeconds;
     }
 
     public void setPermissionsCollectingEnabled(boolean value) {
-        mPermissionsCollectingEnabled = value;
+        permissionsCollectingEnabled = value;
     }
 
     public void setFeaturesCollectingEnabled(boolean value) {
-        mFeaturesCollectingEnabled = value;
+        featuresCollectingEnabled = value;
     }
 
     public boolean isReadyForSending() {
         return isIdentifiersValid() &&
-            Utils.isNullOrEmpty(getReportHosts()) == false &&
+            !Utils.isNullOrEmpty(getReportHosts()) &&
             getClidsFromClientMatchClidsFromStartupRequest();
     }
 
     private void setApiKey(String apiKey) {
-        mApiKey = apiKey;
+        this.apiKey = apiKey;
     }
 
     public boolean needToSendPreloadInfo() {
-        return mPreloadInfoSendingStrategy.shouldSend();
+        return preloadInfoSendingStrategy.shouldSend();
     }
 
     public boolean isLocationTracking() {
-        return mLocationTracking;
+        return locationTracking;
     }
 
     public void setLocationTracking(boolean locationTracking) {
-        mLocationTracking = locationTracking;
+        this.locationTracking = locationTracking;
     }
 
     public Location getManualLocation() {
-        return mManualLocation;
+        return manualLocation;
     }
 
     public void setManualLocation(Location manualLocation) {
-        mManualLocation = manualLocation;
+        this.manualLocation = manualLocation;
     }
 
     public boolean isFirstActivationAsUpdate() {
-        return mFirstActivationAsUpdate;
+        return firstActivationAsUpdate;
     }
 
     public void setFirstActivationAsUpdate(boolean firstActivationAsUpdate) {
-        mFirstActivationAsUpdate = firstActivationAsUpdate;
+        this.firstActivationAsUpdate = firstActivationAsUpdate;
     }
 
     public int getSessionTimeout() {
-        return mSessionTimeout;
+        return sessionTimeout;
     }
 
     public void setSessionTimeout(int sessionTimeout) {
-        mSessionTimeout = sessionTimeout;
+        this.sessionTimeout = sessionTimeout;
     }
 
     public int getDispatchPeriod() {
-        return mDispatchPeriod;
+        return dispatchPeriod;
     }
 
     public void setDispatchPeriod(int dispatchPeriod) {
-        mDispatchPeriod = dispatchPeriod;
-    }
-
-    public boolean isLogEnabled() {
-        return mLogEnabled;
+        this.dispatchPeriod = dispatchPeriod;
     }
 
     public void setLogEnabled(boolean logEnabled) {
-        mLogEnabled = logEnabled;
+        this.logEnabled = logEnabled;
     }
 
     public int getMaxReportsCount() {
-        return mMaxReportsCount;
+        return maxReportsCount;
     }
 
     public void setMaxReportsCount(int maxReportsCount) {
-        mMaxReportsCount = maxReportsCount;
+        this.maxReportsCount = maxReportsCount;
     }
 
     public int getAttributionId() {
-        return mAttributionId;
+        return attributionId;
     }
 
     public void setAttributionId(final int attributionId) {
-        mAttributionId = attributionId;
+        this.attributionId = attributionId;
     }
 
     public long getMaxEventsInDbCount() {
-        return mMaxReportsInDbCount;
+        return maxReportsInDbCount;
     }
 
     public void setMaxReportsInDbCount(long maxReportsInDbCount) {
-        mMaxReportsInDbCount = maxReportsInDbCount;
+        this.maxReportsInDbCount = maxReportsInDbCount;
     }
 
     public boolean getCurrentDataSendingState() {
@@ -261,21 +257,11 @@ public class ReportRequestConfig extends CoreRequestConfig {
 
     @Nullable
     public List<String> getCertificates() {
-        return mCertificates;
+        return certificates;
     }
 
     public void setCertificates(@NonNull List<String> certificates) {
-        mCertificates = certificates;
-    }
-
-    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
-    DataSendingStrategy getDataSendingStrategy() {
-        return dataSendingStrategy;
-    }
-
-    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
-    PreloadInfoSendingStrategy getPreloadInfoSendingStrategy() {
-        return mPreloadInfoSendingStrategy;
+        this.certificates = certificates;
     }
 
     public void setDataSendingProperties(@Nullable Boolean dataSendingFromArguments,
@@ -285,53 +271,14 @@ public class ReportRequestConfig extends CoreRequestConfig {
     }
 
     public boolean getClidsFromClientMatchClidsFromStartupRequest() {
-        return mClidsFromClientMatchClidsFromStartupRequest;
+        return clidsFromClientMatchClidsFromStartupRequest;
     }
 
     public void setClidsFromClientMatchClidsFromStartupRequest(final boolean match) {
-        mClidsFromClientMatchClidsFromStartupRequest = match;
+        clidsFromClientMatchClidsFromStartupRequest = match;
     }
 
     public static final class Arguments extends BaseRequestArguments<CommonArguments.ReporterArguments, Arguments> {
-
-        @SuppressLint("NewApi")
-        public int locationHashCode(@NonNull Location location) {
-            int result;
-            long temp;
-            result = location.getProvider() != null ? location.getProvider().hashCode() : 0;
-            result = 31 * result + (int) (location.getTime() ^ (location.getTime() >>> 32));
-
-            if (AndroidUtils.isApiAchieved(Build.VERSION_CODES.JELLY_BEAN_MR1)) {
-                result = 31 * result +
-                    (int) (location.getElapsedRealtimeNanos() ^ (location.getElapsedRealtimeNanos() >>> 32));
-            }
-            temp = Double.doubleToLongBits(location.getLatitude());
-            result = 31 * result + (int) (temp ^ (temp >>> 32));
-            temp = Double.doubleToLongBits(location.getLongitude());
-            result = 31 * result + (int) (temp ^ (temp >>> 32));
-            temp = Double.doubleToLongBits(location.getAltitude());
-            result = 31 * result + (int) (temp ^ (temp >>> 32));
-            result = 31 * result
-                + (location.getSpeed() != +0.0f ? Float.floatToIntBits(location.getSpeed()) : 0);
-            result = 31 * result
-                + (location.getBearing() != +0.0f ? Float.floatToIntBits(location.getBearing()) : 0);
-            result = 31 * result
-                + (location.getAccuracy() != +0.0f ? Float.floatToIntBits(location.getAccuracy()) : 0);
-            if (AndroidUtils.isApiAchieved(Build.VERSION_CODES.O)) {
-                result = 31 * result + (location.getVerticalAccuracyMeters() != +0.0f ?
-                    Float.floatToIntBits(location.getVerticalAccuracyMeters()) : 0
-                );
-                result = 31 * result + (location.getSpeedAccuracyMetersPerSecond() != +0.0f ?
-                    Float.floatToIntBits(location.getSpeedAccuracyMetersPerSecond()) : 0
-                );
-                result = 31 * result + (location.getBearingAccuracyDegrees() != +0.0f ?
-                    Float.floatToIntBits(location.getBearingAccuracyDegrees()) : 0
-                );
-            }
-            result = 31 * result + (location.getExtras() != null ? location.getExtras().hashCode() : 0);
-            return result;
-        }
-
         @SuppressLint("NewApi")
         boolean compareLocations(@Nullable Location thisLocation, @Nullable Location thatLocation) {
             if (thisLocation == thatLocation) {
@@ -392,9 +339,6 @@ public class ReportRequestConfig extends CoreRequestConfig {
             @NonNull CommonArguments.ReporterArguments reporterArguments
         ) {
             this(
-                reporterArguments.deviceType,
-                reporterArguments.appVersion,
-                reporterArguments.appBuildNumber,
                 reporterArguments.apiKey,
                 reporterArguments.locationTracking,
                 reporterArguments.manualLocation,
@@ -409,10 +353,7 @@ public class ReportRequestConfig extends CoreRequestConfig {
             );
         }
 
-        Arguments(@Nullable String deviceType,
-                  @Nullable String appVersion,
-                  @Nullable String appBuildNumber,
-                  @Nullable String apiKey,
+        Arguments(@Nullable String apiKey,
                   @Nullable Boolean locationTracking,
                   @Nullable Location manualLocation,
                   @Nullable Boolean firstActivationAsUpdate,
@@ -423,7 +364,7 @@ public class ReportRequestConfig extends CoreRequestConfig {
                   @Nullable Boolean dataSendingEnabled,
                   @Nullable Map<String, String> clidsFromClient,
                   @Nullable Integer maxReportsInDbCount) {
-            super(deviceType, appVersion, appBuildNumber);
+            super();
             this.apiKey = apiKey;
             this.locationTracking = WrapUtils.getOrDefault(locationTracking,
                 DefaultValues.DEFAULT_REPORT_LOCATION_ENABLED);
@@ -456,9 +397,6 @@ public class ReportRequestConfig extends CoreRequestConfig {
                 null,
                 null,
                 null,
-                null,
-                null,
-                null,
                 null
             );
         }
@@ -467,10 +405,6 @@ public class ReportRequestConfig extends CoreRequestConfig {
         @NonNull
         public Arguments mergeFrom(@NonNull CommonArguments.ReporterArguments other) {
             return new Arguments(
-                WrapUtils.getOrDefaultNullable(other.deviceType, deviceType),
-                WrapUtils.getOrDefaultNullable(other.appVersion, appVersion),
-                WrapUtils.getOrDefaultNullable(
-                    other.appBuildNumber, appBuildNumber),
                 WrapUtils.getOrDefaultNullable(other.apiKey, apiKey),
                 WrapUtils.getOrDefaultNullable(
                     other.locationTracking, locationTracking),
@@ -494,21 +428,6 @@ public class ReportRequestConfig extends CoreRequestConfig {
         @SuppressWarnings("checkstyle:methodLength")
         @Override
         public boolean compareWithOtherArguments(@NonNull CommonArguments.ReporterArguments arguments) {
-            if (arguments.deviceType != null) {
-                if (!arguments.deviceType.equals(deviceType)) {
-                    return false;
-                }
-            }
-            if (arguments.appVersion != null) {
-                if (!arguments.appVersion.equals(appVersion)) {
-                    return false;
-                }
-            }
-            if (arguments.appBuildNumber != null) {
-                if (!arguments.appBuildNumber.equals(appBuildNumber)) {
-                    return false;
-                }
-            }
             if (arguments.locationTracking != null) {
                 if (locationTracking != arguments.locationTracking) {
                     return false;
@@ -550,7 +469,7 @@ public class ReportRequestConfig extends CoreRequestConfig {
                 }
             }
             if (arguments.clidsFromClient != null) {
-                if (clidsFromClient == null || clidsFromClient.equals(arguments.clidsFromClient) == false) {
+                if (clidsFromClient == null || !clidsFromClient.equals(arguments.clidsFromClient)) {
                     return false;
                 }
             }

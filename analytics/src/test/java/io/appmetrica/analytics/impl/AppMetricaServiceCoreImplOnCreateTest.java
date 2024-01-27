@@ -76,8 +76,6 @@ public class AppMetricaServiceCoreImplOnCreateTest extends CommonTest {
     private ReportConsumer reportConsumer;
     @Mock
     private ActivationBarrier activationBarrier;
-    @Mock
-    private ScreenInfoHolder screenInfoHolder;
 
     private AppMetricaServiceCoreImpl mMetricaCore;
 
@@ -222,8 +220,7 @@ public class AppMetricaServiceCoreImplOnCreateTest extends CommonTest {
             firstServiceEntryPointManager,
             applicationStateProvider,
             reportExecutor,
-            fieldsFactory,
-            screenInfoHolder
+            fieldsFactory
         );
     }
 

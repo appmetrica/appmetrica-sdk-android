@@ -11,8 +11,6 @@ public final class NetworkServiceLocator implements NetworkServiceLifecycleObser
 
     @Nullable
     private NetworkCore networkCore;
-    @Nullable
-    private NetworkAppContext networkAppContext;
 
     @NonNull
     private static volatile NetworkServiceLocator INSTANCE;
@@ -31,7 +29,7 @@ public final class NetworkServiceLocator implements NetworkServiceLifecycleObser
     }
 
     @WorkerThread
-    public void initAsync(@NonNull NetworkAppContext networkAppContext) {
+    public void initAsync() {
         YLogger.info(TAG, "initAsync");
         if (networkCore == null) {
             synchronized (this) {
@@ -39,13 +37,6 @@ public final class NetworkServiceLocator implements NetworkServiceLifecycleObser
                     networkCore = new NetworkCore();
                     networkCore.setName("YMM-NC");
                     networkCore.start();
-                }
-            }
-        }
-        if (this.networkAppContext == null) {
-            synchronized (this) {
-                if (this.networkAppContext == null) {
-                    this.networkAppContext = networkAppContext;
                 }
             }
         }
@@ -77,11 +68,6 @@ public final class NetworkServiceLocator implements NetworkServiceLifecycleObser
         if (networkCore != null) {
             networkCore.onDestroy();
         }
-    }
-
-    @NonNull
-    public NetworkAppContext getNetworkAppContext() {
-        return networkAppContext;
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)

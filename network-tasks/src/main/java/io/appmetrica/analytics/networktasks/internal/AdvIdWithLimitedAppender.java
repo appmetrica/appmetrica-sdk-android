@@ -16,26 +16,26 @@ public class AdvIdWithLimitedAppender implements IParamsAppender<AdvertisingIdsH
     @Override
     public void appendParams(
             @NonNull Uri.Builder uriBuilder,
-            @NonNull AdvertisingIdsHolder advertisingIdsHolder
+            @Nullable AdvertisingIdsHolder advertisingIdsHolder
     ) {
         YLogger.info(TAG, "append adv id params with holder: %s", advertisingIdsHolder);
         appendAdvIdInfo(
                 uriBuilder,
                 CommonUrlParts.ADV_ID,
                 CommonUrlParts.LIMIT_AD_TRACKING,
-                advertisingIdsHolder.getGoogle().mAdTrackingInfo
+                advertisingIdsHolder == null ? null : advertisingIdsHolder.getGoogle().mAdTrackingInfo
         );
         appendAdvIdInfo(
                 uriBuilder,
                 CommonUrlParts.HUAWEI_OAID,
                 CommonUrlParts.HUAWEI_OAID_LIMIT_TRACKING,
-                advertisingIdsHolder.getHuawei().mAdTrackingInfo
+                advertisingIdsHolder == null ? null : advertisingIdsHolder.getHuawei().mAdTrackingInfo
         );
         appendAdvIdInfo(
                 uriBuilder,
                 CommonUrlParts.YANDEX_ADV_ID,
                 CommonUrlParts.YANDEX_ADV_ID_LIMIT_TRACKING,
-                advertisingIdsHolder.getYandex().mAdTrackingInfo
+                advertisingIdsHolder == null ? null : advertisingIdsHolder.getYandex().mAdTrackingInfo
         );
     }
 

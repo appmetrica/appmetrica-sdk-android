@@ -2,14 +2,23 @@ package io.appmetrica.analytics.impl.request;
 
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
+import io.appmetrica.analytics.coreapi.internal.identifiers.AppSetId;
+import io.appmetrica.analytics.coreapi.internal.identifiers.AppSetIdProvider;
+import io.appmetrica.analytics.coreapi.internal.identifiers.AppSetIdScope;
+import io.appmetrica.analytics.coreapi.internal.identifiers.PlatformIdentifiers;
+import io.appmetrica.analytics.coreapi.internal.servicecomponents.SdkEnvironmentProvider;
 import io.appmetrica.analytics.coreutils.internal.services.SafePackageManager;
+import io.appmetrica.analytics.impl.id.AdvertisingIdGetter;
 import io.appmetrica.analytics.impl.startup.StartupState;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.TestUtils;
 import java.util.UUID;
 import org.assertj.core.api.SoftAssertions;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -21,6 +30,26 @@ import static org.mockito.Mockito.when;
 @RunWith(RobolectricTestRunner.class)
 public abstract class CoreRequestConfigLoaderTest extends CommonTest {
 
+    @Mock
+    protected SdkEnvironmentProvider sdkEnvironmentProvider;
+    protected AppSetId appSetId = new AppSetId(UUID.randomUUID().toString(), AppSetIdScope.APP);
+    @Mock
+    protected AppSetIdProvider appSetIdProvider;
+    @Mock
+    protected AdvertisingIdGetter advertisingIdGetter;
+    @Mock
+    protected PlatformIdentifiers platformIdentifiers;
+    protected Context context;
+
+    @Before
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+        context = TestUtils.createMockedContext();
+        when(appSetIdProvider.getAppSetId()).thenReturn(appSetId);
+        when(platformIdentifiers.getAppSetIdProvider()).thenReturn(appSetIdProvider);
+        when(platformIdentifiers.getAdvIdentifiersProvider()).thenReturn(advertisingIdGetter);
+    }
+
     @Test
     public void loadIdentifiers() {
         String uuid = UUID.randomUUID().toString();
@@ -30,7 +59,14 @@ public abstract class CoreRequestConfigLoaderTest extends CommonTest {
         when(startupState.getUuid()).thenReturn(uuid);
         when(startupState.getDeviceId()).thenReturn(deviceId);
         when(startupState.getDeviceIdHash()).thenReturn(deviceIdHash);
-        CoreRequestConfig config = getLoader().load(new CoreRequestConfig.CoreDataSource(startupState, getArguments()));
+        CoreRequestConfig config = getLoader().load(
+            new CoreRequestConfig.CoreDataSource(
+                startupState,
+                sdkEnvironmentProvider,
+                platformIdentifiers,
+                getArguments()
+            )
+        );
         SoftAssertions assertions = new SoftAssertions();
         assertions.assertThat(config.getDeviceId()).isEqualTo(deviceId);
         assertions.assertThat(config.getUuid()).isEqualTo(uuid);
@@ -43,10 +79,14 @@ public abstract class CoreRequestConfigLoaderTest extends CommonTest {
         ApplicationInfo applicationInfo = mock(ApplicationInfo.class);
         when(getSafePackageManagerMock().getApplicationInfo(any(Context.class), anyString(), eq(0))).thenReturn(applicationInfo);
         applicationInfo.flags |= ApplicationInfo.FLAG_DEBUGGABLE | ApplicationInfo.FLAG_SYSTEM;
-        CoreRequestConfig config = getLoader().load(new CoreRequestConfig.CoreDataSource(
+        CoreRequestConfig config = getLoader().load(
+            new CoreRequestConfig.CoreDataSource(
                 TestUtils.createDefaultStartupState(),
+                sdkEnvironmentProvider,
+                platformIdentifiers,
                 getArguments()
-        ));
+            )
+        );
 
         SoftAssertions softly = new SoftAssertions();
         softly.assertThat(config.isAppDebuggable()).isEqualTo("1");
@@ -59,10 +99,14 @@ public abstract class CoreRequestConfigLoaderTest extends CommonTest {
         ApplicationInfo applicationInfo = mock(ApplicationInfo.class);
         when(getSafePackageManagerMock().getApplicationInfo(any(Context.class), anyString(), eq(0))).thenReturn(applicationInfo);
         applicationInfo.flags &= ~ApplicationInfo.FLAG_DEBUGGABLE & ~ApplicationInfo.FLAG_SYSTEM;
-        CoreRequestConfig config = getLoader().load(new CoreRequestConfig.CoreDataSource(
+        CoreRequestConfig config = getLoader().load(
+            new CoreRequestConfig.CoreDataSource(
                 TestUtils.createDefaultStartupState(),
+                sdkEnvironmentProvider,
+                platformIdentifiers,
                 getArguments()
-        ));
+            )
+        );
 
         SoftAssertions softly = new SoftAssertions();
         softly.assertThat(config.isAppDebuggable()).isEqualTo("0");
@@ -78,10 +122,14 @@ public abstract class CoreRequestConfigLoaderTest extends CommonTest {
         ApplicationInfo applicationInfo = mock(ApplicationInfo.class);
         applicationInfo.flags |= ApplicationInfo.FLAG_DEBUGGABLE | ApplicationInfo.FLAG_SYSTEM;
         when(context.getApplicationInfo()).thenReturn(applicationInfo);
-        CoreRequestConfig config = getLoader().load(new CoreRequestConfig.CoreDataSource(
+        CoreRequestConfig config = getLoader().load(
+            new CoreRequestConfig.CoreDataSource(
                 TestUtils.createDefaultStartupState(),
+                sdkEnvironmentProvider,
+                platformIdentifiers,
                 getArguments()
-        ));
+            )
+        );
 
         SoftAssertions softly = new SoftAssertions();
         softly.assertThat(config.isAppDebuggable()).isEqualTo("1");
@@ -96,10 +144,14 @@ public abstract class CoreRequestConfigLoaderTest extends CommonTest {
         ApplicationInfo applicationInfo = mock(ApplicationInfo.class);
         applicationInfo.flags |= ApplicationInfo.FLAG_DEBUGGABLE | ApplicationInfo.FLAG_SYSTEM;
         when(context.getApplicationInfo()).thenReturn(applicationInfo);
-        CoreRequestConfig config = getLoader().load(new CoreRequestConfig.CoreDataSource(
+        CoreRequestConfig config = getLoader().load(
+            new CoreRequestConfig.CoreDataSource(
                 TestUtils.createDefaultStartupState(),
+                sdkEnvironmentProvider,
+                platformIdentifiers,
                 getArguments()
-        ));
+            )
+        );
 
         SoftAssertions softly = new SoftAssertions();
         softly.assertThat(config.isAppDebuggable()).isEqualTo("0");

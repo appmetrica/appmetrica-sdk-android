@@ -1,21 +1,18 @@
 package io.appmetrica.analytics.networktasks.internal;
 
 import android.content.Context;
-import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.constants.DeviceTypeValues;
-import io.appmetrica.analytics.coreapi.internal.device.ScreenInfo;
 import io.appmetrica.analytics.coreapi.internal.identifiers.AdvertisingIdsHolder;
 import io.appmetrica.analytics.coreapi.internal.identifiers.AppSetId;
-import io.appmetrica.analytics.coreapi.internal.identifiers.Identifiers;
+import io.appmetrica.analytics.coreapi.internal.identifiers.PlatformIdentifiers;
+import io.appmetrica.analytics.coreapi.internal.identifiers.SdkIdentifiers;
+import io.appmetrica.analytics.coreapi.internal.model.SdkEnvironment;
+import io.appmetrica.analytics.coreapi.internal.servicecomponents.SdkEnvironmentProvider;
 import io.appmetrica.analytics.coreutils.internal.StringUtils;
 import io.appmetrica.analytics.coreutils.internal.WrapUtils;
 import io.appmetrica.analytics.coreutils.internal.collection.CollectionUtils;
-import io.appmetrica.analytics.coreutils.internal.parsing.ParseUtils;
-import io.appmetrica.analytics.coreutils.internal.services.FrameworkDetector;
-import io.appmetrica.analytics.coreutils.internal.services.PackageManagerUtils;
 import io.appmetrica.analytics.coreutils.internal.system.ConstantDeviceInfo;
 import io.appmetrica.analytics.networktasks.impl.utils.ConfigUtils;
 
@@ -31,20 +28,10 @@ public class BaseRequestConfig {
         return "BaseRequestConfig{" +
             "mPackageName='" + mPackageName + '\'' +
             ", mConstantDeviceInfo=" + mConstantDeviceInfo +
-            ", screenInfo=" + screenInfo +
-            ", mSdkVersionName='" + mSdkVersionName + '\'' +
-            ", mSdkBuildNumber='" + mSdkBuildNumber + '\'' +
-            ", mSdkBuildType='" + mSdkBuildType + '\'' +
+            ", sdkEnvironment=" + sdkEnvironment +
             ", mAppPlatform='" + mAppPlatform + '\'' +
             ", mProtocolVersion='" + mProtocolVersion + '\'' +
-            ", mAppFramework='" + mAppFramework + '\'' +
-            ", mAppVersion='" + mAppVersion + '\'' +
-            ", mAppBuildNumber='" + mAppBuildNumber + '\'' +
-            ", appSetId=" + appSetId +
-            ", mAdvertisingIdsHolder=" + mAdvertisingIdsHolder +
-            ", mDeviceType='" + mDeviceType + '\'' +
-            ", mLocale='" + mLocale + '\'' +
-            ", identifiers=" + identifiers +
+            ", sdkIdentifiers=" + sdkIdentifiers +
             ", retryPolicyConfig=" + retryPolicyConfig +
             '}';
     }
@@ -65,42 +52,25 @@ public class BaseRequestConfig {
     }
 
     private ConstantDeviceInfo mConstantDeviceInfo;
-    private ScreenInfo screenInfo;
 
-    private final String mSdkVersionName;
-    private final String mSdkBuildNumber;
-    @NonNull
-    private final String mSdkBuildType;
+    @Nullable
+    private SdkEnvironment sdkEnvironment;
+
     private final String mAppPlatform = ConstantDeviceInfo.APP_PLATFORM;
     private final String mProtocolVersion = "2";
-    @NonNull private String mAppFramework;
-    // Application's components versions
-    private String mAppVersion;
-    private String mAppBuildNumber;
 
+    @Nullable
+    private SdkIdentifiers sdkIdentifiers;
+
+    @Nullable
+    private AdvertisingIdsHolder advertisingIdsHolder;
+
+    @Nullable
     private AppSetId appSetId;
-
-    @NonNull
-    private AdvertisingIdsHolder mAdvertisingIdsHolder;
-
-    // Device configuration
-    @Nullable
-    private String mDeviceType;
-
-    private String mLocale;
-
-    @Nullable
-    private Identifiers identifiers;
 
     private RetryPolicyConfig retryPolicyConfig;
 
     protected BaseRequestConfig() {
-        NetworkAppContext networkAppContext = NetworkServiceLocator.getInstance().getNetworkAppContext();
-        SdkInfo sdkInfo = networkAppContext.getSdkInfo();
-        mSdkVersionName = sdkInfo.getSdkVersionName();
-        mSdkBuildNumber = sdkInfo.getSdkBuildNumber();
-        mSdkBuildType = sdkInfo.getSdkBuildType();
-        mAppFramework = FrameworkDetector.framework();
     }
 
     public RetryPolicyConfig getRetryPolicyConfig() {
@@ -108,23 +78,19 @@ public class BaseRequestConfig {
     }
 
     public synchronized boolean isIdentifiersValid() {
-        return identifiers != null && ConfigUtils.areMainIdentifiersValid(identifiers);
+        return sdkIdentifiers != null && ConfigUtils.areMainIdentifiersValid(sdkIdentifiers);
     }
 
     protected void setConstantDeviceInfo(ConstantDeviceInfo constantDeviceInfo) {
         mConstantDeviceInfo = constantDeviceInfo;
     }
 
-    protected void setScreenInfo(@NonNull ScreenInfo screenInfo) {
-        this.screenInfo = screenInfo;
-    }
-
     protected void setRetryPolicyConfig(RetryPolicyConfig retryPolicyConfig) {
         this.retryPolicyConfig = retryPolicyConfig;
     }
 
-    protected void setIdentifiers(@Nullable Identifiers identifiers) {
-        this.identifiers = identifiers;
+    protected void setSdkIdentifiers(@Nullable SdkIdentifiers sdkIdentifiers) {
+        this.sdkIdentifiers = sdkIdentifiers;
     }
 
     @NonNull
@@ -137,16 +103,16 @@ public class BaseRequestConfig {
     }
 
     public String getAnalyticsSdkVersionName() {
-        return mSdkVersionName;
+        return sdkEnvironment == null ? StringUtils.EMPTY : sdkEnvironment.getSdkInfo().getSdkVersionName();
     }
 
-    public String getKitBuildNumber() {
-        return mSdkBuildNumber;
+    public String getAnalyticsSdkBuildNumber() {
+        return sdkEnvironment == null ? StringUtils.EMPTY  : sdkEnvironment.getSdkInfo().getSdkBuildNumber();
     }
 
     @NonNull
-    public String getKitBuildType() {
-        return mSdkBuildType;
+    public String getAnalyticsSdkBuildType() {
+        return sdkEnvironment == null ? StringUtils.EMPTY  : sdkEnvironment.getSdkInfo().getSdkBuildType();
     }
 
     public String getAppPlatform() {
@@ -166,58 +132,54 @@ public class BaseRequestConfig {
     public int getOsApiLevel() {
         return mConstantDeviceInfo.osApiLevel;
     }
-
-    protected void setAppBuildNumber(@Nullable final String appBuildNumber) {
-        if (TextUtils.isEmpty(appBuildNumber) == false) {
-            mAppBuildNumber = appBuildNumber;
-        }
-    }
-
+    
     public String getAppBuildNumber() {
-        return WrapUtils.getOrDefault(mAppBuildNumber, StringUtils.EMPTY);
-    }
-
-    public int getAppBuildNumberInt() {
-        return ParseUtils.parseIntOrZero(mAppBuildNumber);
+        return sdkEnvironment == null ? StringUtils.EMPTY : sdkEnvironment.getAppVersionInfo().getAppBuildNumber();
     }
 
     public String getAppVersion() {
-        return WrapUtils.getOrDefault(mAppVersion, StringUtils.EMPTY);
-    }
-
-    protected void setAppVersion(@Nullable final String appVersion) {
-        if (TextUtils.isEmpty(appVersion) == false) {
-            mAppVersion = appVersion;
-        }
+        return sdkEnvironment == null ? StringUtils.EMPTY : sdkEnvironment.getAppVersionInfo().getAppVersionName();
     }
 
     @NonNull
     public synchronized String getDeviceId() {
-        return WrapUtils.getOrDefault(identifiers == null ? null : identifiers.getDeviceId(), StringUtils.EMPTY);
+        String deviceId = StringUtils.EMPTY;
+        if (sdkIdentifiers != null && sdkIdentifiers.getDeviceId() != null) {
+            deviceId = sdkIdentifiers.getDeviceId();
+        }
+        return deviceId;
     }
 
-    @NonNull
-    public synchronized String getAppSetId() {
-        return WrapUtils.getOrDefault(appSetId == null ? null : appSetId.getId(), StringUtils.EMPTY);
-    }
-
-    @NonNull
-    public synchronized String getAppSetIdScope() {
-        return WrapUtils.getOrDefault(appSetId == null ? null : appSetId.getScope().getValue(), StringUtils.EMPTY);
-    }
-
-    public synchronized void setAppSetId(@NonNull AppSetId appSetId) {
+    protected void setAppSetId(@NonNull AppSetId appSetId) {
         this.appSetId = appSetId;
     }
 
     @NonNull
+    public synchronized String getAppSetId() {
+        return appSetId == null || appSetId.getId() == null ? StringUtils.EMPTY : appSetId.getId();
+    }
+
+    @NonNull
+    public synchronized String getAppSetIdScope() {
+        return appSetId == null ? StringUtils.EMPTY : appSetId.getScope().getValue();
+    }
+
+    @NonNull
     public synchronized String getUuid() {
-        return WrapUtils.getOrDefault(identifiers == null ? null : identifiers.getUuid(), StringUtils.EMPTY);
+        String uuid = StringUtils.EMPTY;
+        if (sdkIdentifiers != null && sdkIdentifiers.getUuid() != null) {
+            uuid = sdkIdentifiers.getUuid();
+        }
+        return uuid;
     }
 
     @NonNull
     public synchronized String getDeviceIDHash() {
-        return WrapUtils.getOrDefault(identifiers == null ? null : identifiers.getDeviceIdHash(), StringUtils.EMPTY);
+        String deviceIdHash = StringUtils.EMPTY;
+        if (sdkIdentifiers != null && sdkIdentifiers.getDeviceIdHash() != null) {
+            deviceIdHash = sdkIdentifiers.getDeviceIdHash();
+        }
+        return deviceIdHash;
     }
 
     @NonNull
@@ -227,84 +189,78 @@ public class BaseRequestConfig {
 
     @NonNull
     public String getAppFramework() {
-        return mAppFramework;
+        return sdkEnvironment == null ? StringUtils.EMPTY : sdkEnvironment.getAppFramework();
     }
 
     public int getScreenWidth() {
-        return screenInfo.getWidth();
+        return sdkEnvironment == null ? 0 : sdkEnvironment.getScreenInfo().getWidth();
     }
 
     public int getScreenHeight() {
-        return screenInfo.getHeight();
+        return sdkEnvironment == null ? 0 : sdkEnvironment.getScreenInfo().getHeight();
     }
 
     public int getScreenDpi() {
-        return screenInfo.getDpi();
+        return sdkEnvironment == null ? 0 : sdkEnvironment.getScreenInfo().getDpi();
     }
 
     public float getScaleFactor() {
-        return screenInfo.getScaleFactor();
+        return sdkEnvironment == null ? 0 : sdkEnvironment.getScreenInfo().getScaleFactor();
     }
 
     @NonNull
     public String getLocale() {
-        return WrapUtils.getOrDefault(mLocale, StringUtils.EMPTY);
-    }
-
-    protected final void setLocale(String locale) {
-        mLocale = locale;
+        String locale = StringUtils.EMPTY;
+        if (sdkEnvironment != null) {
+            String candidate = CollectionUtils.getFirstOrNull(sdkEnvironment.getLocales());
+            if (candidate != null) {
+                locale = candidate;
+            }
+        }
+        return locale;
     }
 
     @NonNull
     public String getDeviceType() {
-        return WrapUtils.getOrDefault(mDeviceType, DeviceTypeValues.PHONE);
-    }
-
-    protected void setDeviceType(@Nullable String deviceType) {
-        mDeviceType = deviceType;
-    }
-
-    @NonNull
-    public AdvertisingIdsHolder getAdvertisingIdsHolder() {
-        return mAdvertisingIdsHolder;
+        return sdkEnvironment != null ? sdkEnvironment.getDeviceType() : DeviceTypeValues.PHONE;
     }
 
     protected void setAdvertisingIdsHolder(@NonNull AdvertisingIdsHolder advertisingIdsHolder) {
-        mAdvertisingIdsHolder = advertisingIdsHolder;
+        this.advertisingIdsHolder = advertisingIdsHolder;
+    }
+
+    @Nullable
+    public AdvertisingIdsHolder getAdvertisingIdsHolder() {
+        return advertisingIdsHolder;
+    }
+
+    protected void setSdkEnvironment(@NonNull SdkEnvironment sdkEnvironment) {
+        this.sdkEnvironment = sdkEnvironment;
     }
 
     public static class DataSource<A> {
 
         @NonNull
-        public final Identifiers identifiers;
+        public final SdkIdentifiers sdkIdentifiers;
+        @NonNull
+        public final SdkEnvironmentProvider sdkEnvironmentProvider;
+        @NonNull
+        public final PlatformIdentifiers platformIdentifiers;
         @NonNull
         public final A componentArguments;
 
-        public DataSource(@NonNull Identifiers identifiers, A arguments) {
-            this.identifiers = identifiers;
+        public DataSource(@NonNull SdkIdentifiers sdkIdentifiers,
+                          @NonNull SdkEnvironmentProvider sdkEnvironmentProvider,
+                          @NonNull PlatformIdentifiers platformIdentifiers,
+                          @NonNull A arguments) {
+            this.sdkIdentifiers = sdkIdentifiers;
             this.componentArguments = arguments;
+            this.sdkEnvironmentProvider = sdkEnvironmentProvider;
+            this.platformIdentifiers = platformIdentifiers;
         }
     }
 
-    public abstract static class BaseRequestArguments<I, O> implements
-        ArgumentsMerger<I, O> {
-
-        @Nullable
-        public final String deviceType;
-        @Nullable
-        public final String appVersion;
-        @Nullable
-        public final String appBuildNumber;
-
-        public BaseRequestArguments(@Nullable String deviceType,
-                                    @Nullable String appVersion,
-                                    @Nullable String appBuildNumber) {
-            this.deviceType = deviceType;
-            this.appVersion = appVersion;
-            this.appBuildNumber = appBuildNumber;
-        }
-
-    }
+    public abstract static class BaseRequestArguments<I, O> implements ArgumentsMerger<I, O> {}
 
     public abstract static class ComponentLoader
         <T extends BaseRequestConfig, A extends BaseRequestArguments, D extends DataSource<A>>
@@ -327,58 +283,18 @@ public class BaseRequestConfig {
         public T load(@NonNull D dataSource) {
             final T config = createBlankConfig();
 
-            ConstantDeviceInfo constantDeviceInfo = ConstantDeviceInfo.getInstance();
-            NetworkAppContext networkAppContext = NetworkServiceLocator.getInstance().getNetworkAppContext();
-            ScreenInfo screenInfo = networkAppContext.getScreenInfoProvider().getScreenInfo();
+            config.setSdkIdentifiers(dataSource.sdkIdentifiers);
+            config.setConstantDeviceInfo(ConstantDeviceInfo.getInstance());
 
-            config.setConstantDeviceInfo(constantDeviceInfo);
-            config.setScreenInfo(screenInfo);
-            config.setIdentifiers(dataSource.identifiers);
-
-            config.setDeviceType(loadDeviceType(dataSource.componentArguments.deviceType, screenInfo));
-
-            loadAppVersion(config, dataSource.componentArguments.appVersion, mContext);
-            loadAppBuildNumber(config, dataSource.componentArguments.appBuildNumber, mContext);
+            SdkEnvironmentProvider sdkEnvironmentProvider = dataSource.sdkEnvironmentProvider;
+            config.setSdkEnvironment(sdkEnvironmentProvider.getSdkEnvironment());
+            PlatformIdentifiers platformIdentifiers = dataSource.platformIdentifiers;
+            config.setAppSetId(platformIdentifiers.getAppSetIdProvider().getAppSetId());
+            config.setAdvertisingIdsHolder(platformIdentifiers.getAdvIdentifiersProvider().getIdentifiers(mContext));
 
             config.setPackageName(mPackageName);
-            config.setAdvertisingIdsHolder(networkAppContext.getAdvertisingIdGetter().getIdentifiers(mContext));
-            config.setAppSetId(networkAppContext.getAppSetIdProvider().getAppSetId());
-            config.setLocale(CollectionUtils.getFirstOrNull(networkAppContext.getLocaleProvider().getLocales()));
+
             return config;
-        }
-
-        private void loadAppVersion(@NonNull T config,
-                                    @Nullable String passedAppVersion,
-                                    @NonNull final Context context) {
-            String appVersion = passedAppVersion;
-            if (TextUtils.isEmpty(appVersion)) {
-                appVersion = PackageManagerUtils.getAppVersionName(context);
-            }
-
-            config.setAppVersion(appVersion);
-        }
-
-        private void loadAppBuildNumber(@NonNull T config,
-                                        @Nullable String passedAppBuildNumber,
-                                        @NonNull Context context) {
-            String appBuildNumber = passedAppBuildNumber;
-            if (TextUtils.isEmpty(appBuildNumber)) {
-                appBuildNumber = PackageManagerUtils.getAppVersionCodeString(context);
-            }
-
-            config.setAppBuildNumber(appBuildNumber);
-        }
-
-        @VisibleForTesting
-        @Nullable
-        String loadDeviceType(@Nullable String appDeviceType, @NonNull ScreenInfo screenInfo) {
-            String deviceType = null;
-            if (appDeviceType != null) {
-                deviceType = appDeviceType;
-            } else {
-                deviceType = screenInfo.getDeviceType();
-            }
-            return deviceType;
         }
 
         @NonNull

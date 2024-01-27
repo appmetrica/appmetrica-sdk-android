@@ -11,7 +11,7 @@ import androidx.annotation.AnyThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import io.appmetrica.analytics.coreapi.internal.backport.FunctionWithThrowable;
-import io.appmetrica.analytics.coreapi.internal.device.ScreenInfo;
+import io.appmetrica.analytics.coreapi.internal.model.ScreenInfo;
 import io.appmetrica.analytics.coreutils.internal.AndroidUtils;
 import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.coreutils.internal.system.SystemServiceUtils;
@@ -39,7 +39,7 @@ public class ScreenInfoExtractor {
         } catch (Throwable ex) {
             YLogger.error(TAG, ex);
         }
-        return new ScreenInfo(width, height, dpi, scaleFactor, PhoneUtils.getDeviceType(context, size));
+        return new ScreenInfo(width, height, dpi, scaleFactor);
     }
 
     @SuppressLint("NewApi")

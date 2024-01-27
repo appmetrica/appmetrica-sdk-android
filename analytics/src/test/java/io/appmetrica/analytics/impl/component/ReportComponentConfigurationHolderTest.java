@@ -72,11 +72,14 @@ public class ReportComponentConfigurationHolderTest extends CommonTest {
         ClientConfiguration newConfiguration = ClientConfigurationTestUtils.createStubbedConfiguration();
         StartupState startupState = mHolder.getStartupState();
         ReportRequestConfig.Arguments arguments = mHolder.getArguments();
+        newConfiguration.getReporterConfiguration().setApiKey(UUID.randomUUID().toString());
         newConfiguration.getReporterConfiguration().setCustomAppVersion(
                 newConfiguration.getReporterConfiguration().getAppVersion() + "_new"
         );
 
-        mHolder.updateArguments(new CommonArguments.ReporterArguments(newConfiguration.getReporterConfiguration(), null));
+        mHolder.updateArguments(
+            new CommonArguments.ReporterArguments(newConfiguration.getReporterConfiguration(), null)
+        );
 
         assertThat(mHolder.get()).isNotSameAs(requestConfig);
         assertThat(mHolder.getStartupState()).isSameAs(startupState);

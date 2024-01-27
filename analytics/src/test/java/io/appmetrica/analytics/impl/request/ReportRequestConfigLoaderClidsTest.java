@@ -2,19 +2,25 @@ package io.appmetrica.analytics.impl.request;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import io.appmetrica.analytics.coreapi.internal.identifiers.AppSetId;
+import io.appmetrica.analytics.coreapi.internal.identifiers.AppSetIdProvider;
+import io.appmetrica.analytics.coreapi.internal.identifiers.AppSetIdScope;
+import io.appmetrica.analytics.coreapi.internal.identifiers.PlatformIdentifiers;
+import io.appmetrica.analytics.coreapi.internal.servicecomponents.SdkEnvironmentProvider;
 import io.appmetrica.analytics.impl.CertificatesFingerprintsProvider;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.component.ComponentId;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.impl.db.VitalComponentDataProvider;
+import io.appmetrica.analytics.impl.id.AdvertisingIdGetter;
 import io.appmetrica.analytics.impl.startup.ClidsStateChecker;
 import io.appmetrica.analytics.impl.startup.StartupState;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import io.appmetrica.analytics.testutils.TestUtils;
-import io.appmetrica.analytics.testutils.rules.networktasks.NetworkServiceLocatorRule;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -40,15 +46,21 @@ public class ReportRequestConfigLoaderClidsTest extends CommonTest {
     private ComponentId componentId;
     @Mock
     private ClidsStateChecker clidsStateChecker;
+    @Mock
+    private SdkEnvironmentProvider sdkEnvironmentProvider;
+    private AppSetId appSetId = new AppSetId(UUID.randomUUID().toString(), AppSetIdScope.APP);
+    @Mock
+    private AppSetIdProvider appSetIdProvider;
+    @Mock
+    private AdvertisingIdGetter advertisingIdGetter;
+    @Mock
+    private PlatformIdentifiers platformIdentifiers;
 
     private ReportRequestConfig.Loader loader;
     private CoreRequestConfig.CoreDataSource<ReportRequestConfig.Arguments> dataSource;
 
     @Rule
     public GlobalServiceLocatorRule mRule = new GlobalServiceLocatorRule();
-
-    @Rule
-    public NetworkServiceLocatorRule networkServiceLocatorRule = new NetworkServiceLocatorRule();
 
     @Before
     public void setUp() {
@@ -58,12 +70,15 @@ public class ReportRequestConfigLoaderClidsTest extends CommonTest {
         doReturn(RuntimeEnvironment.getApplication()).when(componentUnit).getContext();
         doReturn(mock(CertificatesFingerprintsProvider.class)).when(componentUnit).getCertificatesFingerprintsProvider();
         doReturn(mock(VitalComponentDataProvider.class)).when(componentUnit).getVitalComponentDataProvider();
+        when(appSetIdProvider.getAppSetId()).thenReturn(appSetId);
+        when(platformIdentifiers.getAdvIdentifiersProvider()).thenReturn(advertisingIdGetter);
+        when(platformIdentifiers.getAppSetIdProvider()).thenReturn(appSetIdProvider);
         loader = new ReportRequestConfig.Loader(componentUnit, dataSendingSendingStrategy, clidsStateChecker);
         dataSource = new CoreRequestConfig.CoreDataSource<>(
-                TestUtils.createDefaultStartupState(), new ReportRequestConfig.Arguments(
-                null,
-                null,
-                null,
+                TestUtils.createDefaultStartupState(),
+            sdkEnvironmentProvider,
+            platformIdentifiers,
+            new ReportRequestConfig.Arguments(
                 null,
                 null,
                 null,
@@ -77,16 +92,6 @@ public class ReportRequestConfigLoaderClidsTest extends CommonTest {
                 null
         )
         );
-    }
-
-    @Test
-    public void passDataSendingStrategy() {
-        assertThat(loader.load(dataSource).getDataSendingStrategy()).isSameAs(dataSendingSendingStrategy);
-    }
-
-    @Test
-    public void testPassPreloadInfoSendingStrategy() {
-        assertThat(loader.load(dataSource).getPreloadInfoSendingStrategy()).isSameAs(componentUnit);
     }
 
     @Test
@@ -123,10 +128,9 @@ public class ReportRequestConfigLoaderClidsTest extends CommonTest {
                                                               @Nullable Map<String, String> clientClids) {
         return new CoreRequestConfig.CoreDataSource(
                 startupState,
+                sdkEnvironmentProvider,
+                platformIdentifiers,
                 new ReportRequestConfig.Arguments(
-                        null,
-                        null,
-                        null,
                         null,
                         null,
                         null,

@@ -36,7 +36,10 @@ class DbSessionModelFactory(
                 .put(Constants.RequestParametersJsonKeys.UUID, reportRequestConfig.uuid)
                 .put(Constants.RequestParametersJsonKeys.APP_VERSION, reportRequestConfig.appVersion)
                 .put(Constants.RequestParametersJsonKeys.APP_BUILD, reportRequestConfig.appBuildNumber)
-                .put(Constants.RequestParametersJsonKeys.KIT_BUILD_TYPE, reportRequestConfig.kitBuildType)
+                .put(
+                    Constants.RequestParametersJsonKeys.ANALYTICS_SDK_BUILD_TYPE,
+                    reportRequestConfig.analyticsSdkBuildType
+                )
                 .put(Constants.RequestParametersJsonKeys.OS_VERSION, reportRequestConfig.osVersion)
                 .put(Constants.RequestParametersJsonKeys.OS_API_LEVEL, reportRequestConfig.osApiLevel)
                 .put(Constants.RequestParametersJsonKeys.LOCALE, reportRequestConfig.locale)
@@ -48,7 +51,10 @@ class DbSessionModelFactory(
                     Constants.RequestParametersJsonKeys.ANALYTICS_SDK_VERSION_NAME,
                     reportRequestConfig.analyticsSdkVersionName
                 )
-                .put(Constants.RequestParametersJsonKeys.KIT_BUILD_NUMBER, reportRequestConfig.kitBuildNumber)
+                .put(
+                    Constants.RequestParametersJsonKeys.ANALYTICS_SDK_BUILD_NUMBER,
+                    reportRequestConfig.analyticsSdkBuildNumber
+                )
         } catch (exception: Throwable) {
             YLogger.error(tag, exception, "Something was wrong while filling request parameters.")
             JSONObject()

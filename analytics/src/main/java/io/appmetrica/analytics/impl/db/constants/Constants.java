@@ -297,8 +297,8 @@ public final class Constants {
         public static final String DEVICE_ID = "dId";
         public static final String UUID = "uId";
         public static final String ANALYTICS_SDK_VERSION_NAME = "analyticsSdkVersionName";
-        public static final String KIT_BUILD_NUMBER = "kitBuildNumber";
-        public static final String KIT_BUILD_TYPE = "kitBuildType";
+        public static final String ANALYTICS_SDK_BUILD_NUMBER = "kitBuildNumber";
+        public static final String ANALYTICS_SDK_BUILD_TYPE = "kitBuildType";
         public static final String OS_VERSION = "osVer";
         public static final String OS_API_LEVEL = "osApiLev";
         public static final String APP_VERSION = "appVer";

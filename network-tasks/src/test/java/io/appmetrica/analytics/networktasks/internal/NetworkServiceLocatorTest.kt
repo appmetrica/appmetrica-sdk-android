@@ -11,8 +11,6 @@ import org.mockito.kotlin.verify
 
 class NetworkServiceLocatorTest {
 
-    private val networkAppContext = mock<NetworkAppContext>()
-    private val secondNetworkAppContext = mock<NetworkAppContext>()
     @get:Rule
     val newNetworkCore = MockedConstructionRule(NetworkCore::class.java)
 
@@ -41,14 +39,13 @@ class NetworkServiceLocatorTest {
     @Test
     fun initAsyncTwice() {
         NetworkServiceLocator.init()
-        NetworkServiceLocator.getInstance().initAsync(networkAppContext)
+        NetworkServiceLocator.getInstance().initAsync()
         val networkCore = NetworkServiceLocator.getInstance().networkCore
         assertThat(networkCore).isNotNull
         verify(networkCore).start()
         verify(networkCore).name = "YMM-NC"
-        NetworkServiceLocator.getInstance().initAsync(secondNetworkAppContext)
+        NetworkServiceLocator.getInstance().initAsync()
         assertThat(NetworkServiceLocator.getInstance().networkCore).isSameAs(networkCore)
-        assertThat(NetworkServiceLocator.getInstance().networkAppContext).isSameAs(networkAppContext)
     }
 
     @Test
@@ -61,7 +58,7 @@ class NetworkServiceLocatorTest {
     @Test
     fun onDestroyWithInitAsync() {
         NetworkServiceLocator.init()
-        NetworkServiceLocator.getInstance().initAsync(networkAppContext)
+        NetworkServiceLocator.getInstance().initAsync()
         NetworkServiceLocator.getInstance().onDestroy()
         assertThat(NetworkServiceLocator.getInstance().networkCore).isNotNull
         verify(newNetworkCore.constructionMock.constructed()[0]).onDestroy()

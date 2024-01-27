@@ -8,12 +8,12 @@ import android.os.Bundle;
 import android.os.Process;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import io.appmetrica.analytics.internal.AppMetricaService;
-import io.appmetrica.analytics.coreapi.internal.device.ScreenInfo;
+import io.appmetrica.analytics.coreapi.internal.model.ScreenInfo;
 import io.appmetrica.analytics.coreutils.internal.services.SafePackageManager;
 import io.appmetrica.analytics.impl.client.ProcessConfiguration;
 import io.appmetrica.analytics.impl.service.AppMetricaServiceAction;
 import io.appmetrica.analytics.impl.utils.JsonHelper;
+import io.appmetrica.analytics.internal.AppMetricaService;
 
 public final class ServiceUtils {
 

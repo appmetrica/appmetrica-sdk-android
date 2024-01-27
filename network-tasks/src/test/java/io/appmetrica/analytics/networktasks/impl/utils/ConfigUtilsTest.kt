@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.networktasks.impl.utils
 
-import io.appmetrica.analytics.coreapi.internal.identifiers.Identifiers
+import io.appmetrica.analytics.coreapi.internal.identifiers.SdkIdentifiers
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import java.util.UUID
@@ -13,49 +13,49 @@ class ConfigUtilsTest {
 
     @Test
     fun `areMainIdentifiersValid for filledIdentifiers object`() {
-        assertThat(ConfigUtils.areMainIdentifiersValid(Identifiers(uuid, deviceId, deviceIdHash)))
+        assertThat(ConfigUtils.areMainIdentifiersValid(SdkIdentifiers(uuid, deviceId, deviceIdHash)))
             .isTrue()
     }
 
     @Test
     fun `areMainIdentifiersValid for null uuid`() {
-        assertThat(ConfigUtils.areMainIdentifiersValid(Identifiers(null, deviceId, deviceIdHash)))
+        assertThat(ConfigUtils.areMainIdentifiersValid(SdkIdentifiers(null, deviceId, deviceIdHash)))
             .isFalse()
     }
 
     @Test
     fun `areMainIdentifiersValid for empty uuid`() {
-        assertThat(ConfigUtils.areMainIdentifiersValid(Identifiers("", deviceId, deviceIdHash)))
+        assertThat(ConfigUtils.areMainIdentifiersValid(SdkIdentifiers("", deviceId, deviceIdHash)))
             .isFalse()
     }
 
     @Test
     fun `areMainIdentifiersValid for null deviceId`() {
-        assertThat(ConfigUtils.areMainIdentifiersValid(Identifiers(uuid, null, deviceIdHash)))
+        assertThat(ConfigUtils.areMainIdentifiersValid(SdkIdentifiers(uuid, null, deviceIdHash)))
             .isFalse()
     }
 
     @Test
     fun `areMainIdentifiersValid for empty deviceId`() {
-        assertThat(ConfigUtils.areMainIdentifiersValid(Identifiers(uuid, "", deviceIdHash)))
+        assertThat(ConfigUtils.areMainIdentifiersValid(SdkIdentifiers(uuid, "", deviceIdHash)))
             .isFalse()
     }
 
     @Test
     fun `areMainIdentifiersValid for null deviceIdHash`() {
-        assertThat(ConfigUtils.areMainIdentifiersValid(Identifiers(uuid, deviceId, null)))
+        assertThat(ConfigUtils.areMainIdentifiersValid(SdkIdentifiers(uuid, deviceId, null)))
             .isFalse()
     }
 
     @Test
     fun `areMainIdentifierValid for empty deviceIdHash`() {
-        assertThat(ConfigUtils.areMainIdentifiersValid(Identifiers(uuid, deviceId, "")))
+        assertThat(ConfigUtils.areMainIdentifiersValid(SdkIdentifiers(uuid, deviceId, "")))
             .isFalse()
     }
 
     @Test
     fun `areMainIdentifiersValid for empty identifiers object`() {
-        assertThat(ConfigUtils.areMainIdentifiersValid(Identifiers(null, null, null)))
+        assertThat(ConfigUtils.areMainIdentifiersValid(SdkIdentifiers(null, null, null)))
             .isFalse()
     }
 }

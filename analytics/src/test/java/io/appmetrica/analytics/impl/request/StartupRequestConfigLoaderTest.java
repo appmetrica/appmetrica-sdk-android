@@ -1,19 +1,13 @@
 package io.appmetrica.analytics.impl.request;
 
 import android.content.Context;
-import io.appmetrica.analytics.coreapi.internal.constants.DeviceTypeValues;
-import io.appmetrica.analytics.coreapi.internal.device.ScreenInfo;
 import io.appmetrica.analytics.coreutils.internal.services.SafePackageManager;
 import io.appmetrica.analytics.impl.ClidsInfoStorage;
 import io.appmetrica.analytics.impl.DistributionSource;
-import io.appmetrica.analytics.impl.GlobalServiceLocator;
-import io.appmetrica.analytics.impl.ScreenInfoHolder;
 import io.appmetrica.analytics.impl.clids.ClidsInfo;
 import io.appmetrica.analytics.impl.startup.StartupState;
-import io.appmetrica.analytics.networktasks.internal.NetworkServiceLocator;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import io.appmetrica.analytics.testutils.TestUtils;
-import io.appmetrica.analytics.testutils.rules.networktasks.NetworkServiceLocatorRule;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -24,7 +18,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.mockito.Mockito.when;
@@ -36,25 +29,16 @@ public class StartupRequestConfigLoaderTest extends CoreRequestConfigLoaderTest 
     private SafePackageManager mSafePackageManager;
     @Mock
     private ClidsInfoStorage clidsStorage;
-    @Mock
-    private ScreenInfoHolder screenInfoHolder;
-    private Context mContext;
     private StartupRequestConfig.Loader mLoader;
     private String mPackageName = "another package name";
 
     @Rule
     public final GlobalServiceLocatorRule mRule = new GlobalServiceLocatorRule();
 
-    @Rule
-    public NetworkServiceLocatorRule networkServiceLocatorRule = new NetworkServiceLocatorRule();
-
     @Before
     public void setUp() {
-        MockitoAnnotations.openMocks(this);
-        when(GlobalServiceLocator.getInstance().getScreenInfoHolder()).thenReturn(screenInfoHolder);
-        when(screenInfoHolder.getScreenInfo()).thenReturn(new ScreenInfo(0, 0, 0, 0f, DeviceTypeValues.PHONE));
-        mContext = TestUtils.createMockedContext();
-        mLoader = new StartupRequestConfig.Loader(mContext, mPackageName, mSafePackageManager, clidsStorage);
+        super.setUp();
+        mLoader = new StartupRequestConfig.Loader(context, mPackageName, mSafePackageManager, clidsStorage);
     }
 
     @Test
@@ -77,9 +61,6 @@ public class StartupRequestConfigLoaderTest extends CoreRequestConfigLoaderTest 
                 .withFirstStartupServerTime(firstStartupServerTime)
                 .build();
         StartupRequestConfig.Arguments componentArguments = new StartupRequestConfig.Arguments(
-                null,
-                null,
-                null,
                 referrer,
                 referrerSource,
                 clidsFromClient,
@@ -88,7 +69,12 @@ public class StartupRequestConfigLoaderTest extends CoreRequestConfigLoaderTest 
         );
 
         CoreRequestConfig.CoreDataSource<StartupRequestConfig.Arguments> dataSource =
-                new CoreRequestConfig.CoreDataSource<>(startupState, componentArguments);
+                new CoreRequestConfig.CoreDataSource<>(
+                    startupState,
+                    sdkEnvironmentProvider,
+                    platformIdentifiers,
+                    componentArguments
+                );
         StartupRequestConfig config = mLoader.load(dataSource);
 
         SoftAssertions softly = new SoftAssertions();
@@ -103,15 +89,6 @@ public class StartupRequestConfigLoaderTest extends CoreRequestConfigLoaderTest 
         softly.assertThat(config.getFirstStartupTime()).isEqualTo(firstStartupServerTime);
         softly.assertThat(config.getStartupHostsFromStartup()).isEqualTo(hostUrlsFromStartup);
         softly.assertThat(config.getStartupHostsFromClient()).isEqualTo(hostUrlsFromClient);
-        softly.assertThat(config.getAppSetId())
-            .isEqualTo(
-                NetworkServiceLocator.getInstance().getNetworkAppContext().getAppSetIdProvider().getAppSetId().getId()
-            );
-        softly.assertThat(config.getAppSetIdScope())
-            .isEqualTo(
-                NetworkServiceLocator.getInstance().getNetworkAppContext().getAppSetIdProvider()
-                    .getAppSetId().getScope().getValue()
-            );
         softly.assertAll();
     }
 
@@ -121,7 +98,12 @@ public class StartupRequestConfigLoaderTest extends CoreRequestConfigLoaderTest 
         StartupRequestConfig.Arguments componentArguments = new StartupRequestConfig.Arguments();
 
         CoreRequestConfig.CoreDataSource<StartupRequestConfig.Arguments> dataSource =
-                new CoreRequestConfig.CoreDataSource<>(startupState, componentArguments);
+                new CoreRequestConfig.CoreDataSource<>(
+                    startupState,
+                    sdkEnvironmentProvider,
+                    platformIdentifiers,
+                    componentArguments
+                );
         StartupRequestConfig config = mLoader.load(dataSource);
         SoftAssertions softly = new SoftAssertions();
         softly.assertThat(config.getDistributionReferrer()).isNull();
@@ -135,9 +117,6 @@ public class StartupRequestConfigLoaderTest extends CoreRequestConfigLoaderTest 
         String argumentsReferrerSource = "broadcase";
         StartupState startupState = TestUtils.createDefaultStartupState();
         StartupRequestConfig.Arguments componentArguments = new StartupRequestConfig.Arguments(
-                null,
-                null,
-                null,
                 argumentsReferrer,
                 argumentsReferrerSource,
                 null,
@@ -146,7 +125,12 @@ public class StartupRequestConfigLoaderTest extends CoreRequestConfigLoaderTest 
         );
 
         CoreRequestConfig.CoreDataSource<StartupRequestConfig.Arguments> dataSource =
-                new CoreRequestConfig.CoreDataSource<>(startupState, componentArguments);
+                new CoreRequestConfig.CoreDataSource<>(
+                    startupState,
+                    sdkEnvironmentProvider,
+                    platformIdentifiers,
+                    componentArguments
+                );
         StartupRequestConfig config = mLoader.load(dataSource);
         SoftAssertions softly = new SoftAssertions();
         softly.assertThat(config.getDistributionReferrer()).isEqualTo(argumentsReferrer);
@@ -166,7 +150,7 @@ public class StartupRequestConfigLoaderTest extends CoreRequestConfigLoaderTest 
 
     @Override
     Context getContextMock() {
-        return mContext;
+        return context;
     }
 
     @Override

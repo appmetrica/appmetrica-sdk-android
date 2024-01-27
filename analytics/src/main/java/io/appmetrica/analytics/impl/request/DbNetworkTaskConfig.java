@@ -28,8 +28,9 @@ public class DbNetworkTaskConfig {
         uuid = requestParameters.getStringOrEmpty(Constants.RequestParametersJsonKeys.UUID);
         analyticsSdkVersionName =
                 requestParameters.getStringOrEmpty(Constants.RequestParametersJsonKeys.ANALYTICS_SDK_VERSION_NAME);
-        kitBuildNumber = requestParameters.getStringOrEmpty(Constants.RequestParametersJsonKeys.KIT_BUILD_NUMBER);
-        kitBuildType = requestParameters.getStringOrEmpty(Constants.RequestParametersJsonKeys.KIT_BUILD_TYPE);
+        kitBuildNumber =
+            requestParameters.getStringOrEmpty(Constants.RequestParametersJsonKeys.ANALYTICS_SDK_BUILD_NUMBER);
+        kitBuildType = requestParameters.getStringOrEmpty(Constants.RequestParametersJsonKeys.ANALYTICS_SDK_BUILD_TYPE);
         appVersion = requestParameters.getStringOrEmpty(Constants.RequestParametersJsonKeys.APP_VERSION);
         appDebuggable = requestParameters.optString(Constants.RequestParametersJsonKeys.APP_DEBUGGABLE, "0");
         appBuildNumber = requestParameters.getStringOrEmpty(Constants.RequestParametersJsonKeys.APP_BUILD);

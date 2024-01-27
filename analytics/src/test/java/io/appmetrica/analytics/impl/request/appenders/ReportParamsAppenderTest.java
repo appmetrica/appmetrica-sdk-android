@@ -164,7 +164,7 @@ public class ReportParamsAppenderTest extends CommonTest {
 
     @Test
     public void testAnalyticsSdkBuildNumberEmpty() {
-        when(mReportRequestConfig.getKitBuildNumber()).thenReturn("43212");
+        when(mReportRequestConfig.getAnalyticsSdkBuildNumber()).thenReturn("43212");
         mParamsAppender.appendParams(mBuilder, mReportRequestConfig);
         assertThat(mBuilder.toString()).doesNotContain("analytics_sdk_build_number");
     }

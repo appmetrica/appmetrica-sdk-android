@@ -16,7 +16,7 @@ public class io.appmetrica.analytics.networktasks.internal.AESRSARequestBodyEncr
 
 public class io.appmetrica.analytics.networktasks.internal.AdvIdWithLimitedAppender implementation io.appmetrica.analytics.networktasks.internal.IParamsAppender<io.appmetrica.analytics.coreapi.internal.identifiers.AdvertisingIdsHolder> {
     public <init>()
-    public void appendParams([NonNull] android.net.Uri$Builder, [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.AdvertisingIdsHolder)
+    public void appendParams([NonNull] android.net.Uri$Builder, [Nullable] io.appmetrica.analytics.coreapi.internal.identifiers.AdvertisingIdsHolder)
 }
 
 public final class io.appmetrica.analytics.networktasks.internal.AllHostsExponentialBackoffPolicy implementation io.appmetrica.analytics.networktasks.internal.ExponentialBackoffPolicy {
@@ -28,10 +28,6 @@ public final class io.appmetrica.analytics.networktasks.internal.AllHostsExponen
 
 public final class io.appmetrica.analytics.networktasks.internal.AllHostsExponentialBackoffPolicyKt
 
-public interface io.appmetrica.analytics.networktasks.internal.AppInfo {
-    public abstract [NonNull] String getAppFramework()
-}
-
 public interface io.appmetrica.analytics.networktasks.internal.ArgumentsMerger<I, O> {
     public abstract boolean compareWithOtherArguments([NonNull] I)
     public abstract [NonNull] O mergeFrom([NonNull] I)
@@ -39,10 +35,11 @@ public interface io.appmetrica.analytics.networktasks.internal.ArgumentsMerger<I
 
 public class io.appmetrica.analytics.networktasks.internal.BaseRequestConfig {
     protected <init>()
-    public [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.AdvertisingIdsHolder getAdvertisingIdsHolder()
+    public [Nullable] io.appmetrica.analytics.coreapi.internal.identifiers.AdvertisingIdsHolder getAdvertisingIdsHolder()
+    public String getAnalyticsSdkBuildNumber()
+    public [NonNull] String getAnalyticsSdkBuildType()
     public String getAnalyticsSdkVersionName()
     public String getAppBuildNumber()
-    public int getAppBuildNumberInt()
     public [NonNull] String getAppFramework()
     public String getAppPlatform()
     public [NonNull] String getAppSetId()
@@ -52,8 +49,6 @@ public class io.appmetrica.analytics.networktasks.internal.BaseRequestConfig {
     public [NonNull] String getDeviceId()
     public [NonNull] String getDeviceRootStatus()
     public [NonNull] String getDeviceType()
-    public String getKitBuildNumber()
-    public [NonNull] String getKitBuildType()
     public [NonNull] String getLocale()
     public [NonNull] String getManufacturer()
     public [NonNull] String getModel()
@@ -69,25 +64,17 @@ public class io.appmetrica.analytics.networktasks.internal.BaseRequestConfig {
     public [NonNull] String getUuid()
     public boolean isIdentifiersValid()
     protected void setAdvertisingIdsHolder([NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.AdvertisingIdsHolder)
-    protected void setAppBuildNumber([Nullable] String)
-    public void setAppSetId([NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.AppSetId)
-    protected void setAppVersion([Nullable] String)
+    protected void setAppSetId([NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.AppSetId)
     protected void setConstantDeviceInfo(io.appmetrica.analytics.coreutils.internal.system.ConstantDeviceInfo)
-    protected void setDeviceType([Nullable] String)
-    protected void setIdentifiers([Nullable] io.appmetrica.analytics.coreapi.internal.identifiers.Identifiers)
-    protected final void setLocale(String)
     protected void setPackageName(String)
     protected void setRetryPolicyConfig(io.appmetrica.analytics.networktasks.internal.RetryPolicyConfig)
-    protected void setScreenInfo([NonNull] io.appmetrica.analytics.coreapi.internal.device.ScreenInfo)
+    protected void setSdkEnvironment([NonNull] io.appmetrica.analytics.coreapi.internal.model.SdkEnvironment)
+    protected void setSdkIdentifiers([Nullable] io.appmetrica.analytics.coreapi.internal.identifiers.SdkIdentifiers)
     public String toString()
 }
 
 public abstract static class io.appmetrica.analytics.networktasks.internal.BaseRequestConfig$BaseRequestArguments<I, O> implementation io.appmetrica.analytics.networktasks.internal.ArgumentsMerger<I, O> {
-    public final [Nullable] String appBuildNumber
-    public final [Nullable] String appVersion
-    public final [Nullable] String deviceType
-
-    public <init>([Nullable] String, [Nullable] String, [Nullable] String)
+    public <init>()
 }
 
 public abstract static class io.appmetrica.analytics.networktasks.internal.BaseRequestConfig$ComponentLoader<T extends io.appmetrica.analytics.networktasks.internal.BaseRequestConfig, A extends io.appmetrica.analytics.networktasks.internal.BaseRequestConfig$BaseRequestArguments, D extends io.appmetrica.analytics.networktasks.internal.BaseRequestConfig$DataSource<A>> implementation io.appmetrica.analytics.networktasks.internal.BaseRequestConfig$RequestConfigLoader<T, D> {
@@ -100,9 +87,11 @@ public abstract static class io.appmetrica.analytics.networktasks.internal.BaseR
 
 public static class io.appmetrica.analytics.networktasks.internal.BaseRequestConfig$DataSource<A> {
     public final [NonNull] A componentArguments
-    public final [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.Identifiers identifiers
+    public final [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.PlatformIdentifiers platformIdentifiers
+    public final [NonNull] io.appmetrica.analytics.coreapi.internal.servicecomponents.SdkEnvironmentProvider sdkEnvironmentProvider
+    public final [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.SdkIdentifiers sdkIdentifiers
 
-    public <init>([NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.Identifiers, A)
+    public <init>([NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.SdkIdentifiers, [NonNull] io.appmetrica.analytics.coreapi.internal.servicecomponents.SdkEnvironmentProvider, [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.PlatformIdentifiers, [NonNull] A)
 }
 
 public interface io.appmetrica.analytics.networktasks.internal.BaseRequestConfig$RequestConfigLoader<T extends io.appmetrica.analytics.networktasks.internal.BaseRequestConfig, D> {
@@ -238,15 +227,6 @@ public interface io.appmetrica.analytics.networktasks.internal.IParamsAppender<T
     public abstract void appendParams([NonNull] android.net.Uri$Builder, [NonNull] T)
 }
 
-public interface io.appmetrica.analytics.networktasks.internal.NetworkAppContext {
-    public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.SimpleAdvertisingIdGetter getAdvertisingIdGetter()
-    public abstract [NonNull] io.appmetrica.analytics.networktasks.internal.AppInfo getAppInfo()
-    public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.AppSetIdProvider getAppSetIdProvider()
-    public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.system.LocaleProvider getLocaleProvider()
-    public abstract [NonNull] io.appmetrica.analytics.networktasks.internal.ScreenInfoProvider getScreenInfoProvider()
-    public abstract [NonNull] io.appmetrica.analytics.networktasks.internal.SdkInfo getSdkInfo()
-}
-
 public class io.appmetrica.analytics.networktasks.internal.NetworkCore extends io.appmetrica.analytics.coreapi.internal.executors.InterruptionSafeThread {
     public <init>()
     public void onDestroy()
@@ -266,10 +246,9 @@ public interface io.appmetrica.analytics.networktasks.internal.NetworkServiceLif
 public final class io.appmetrica.analytics.networktasks.internal.NetworkServiceLocator implementation io.appmetrica.analytics.networktasks.internal.NetworkServiceLifecycleObserver {
     public static void destroy()
     public static [NonNull] io.appmetrica.analytics.networktasks.internal.NetworkServiceLocator getInstance()
-    public [NonNull] io.appmetrica.analytics.networktasks.internal.NetworkAppContext getNetworkAppContext()
     public [NonNull] io.appmetrica.analytics.networktasks.internal.NetworkCore getNetworkCore()
     public static void init()
-    public void initAsync([NonNull] io.appmetrica.analytics.networktasks.internal.NetworkAppContext)
+    public void initAsync()
     public void onCreate()
     public void onDestroy()
 }
@@ -361,16 +340,6 @@ public class io.appmetrica.analytics.networktasks.internal.RetryPolicyConfig {
     public boolean equals(Object)
     public int hashCode()
     public String toString()
-}
-
-public interface io.appmetrica.analytics.networktasks.internal.ScreenInfoProvider {
-    public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.device.ScreenInfo getScreenInfo()
-}
-
-public interface io.appmetrica.analytics.networktasks.internal.SdkInfo {
-    public abstract [NonNull] String getSdkBuildNumber()
-    public abstract [NonNull] String getSdkBuildType()
-    public abstract [NonNull] String getSdkVersionName()
 }
 
 public class io.appmetrica.analytics.networktasks.internal.SendingDataTaskHelper {

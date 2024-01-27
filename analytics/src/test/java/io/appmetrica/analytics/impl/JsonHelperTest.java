@@ -3,9 +3,8 @@ package io.appmetrica.analytics.impl;
 import android.os.Build;
 import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
 import io.appmetrica.analytics.billinginterface.internal.config.BillingConfig;
-import io.appmetrica.analytics.coreapi.internal.constants.DeviceTypeValues;
-import io.appmetrica.analytics.coreapi.internal.device.ScreenInfo;
 import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus;
+import io.appmetrica.analytics.coreapi.internal.model.ScreenInfo;
 import io.appmetrica.analytics.impl.utils.JsonHelper;
 import io.appmetrica.analytics.internal.IdentifiersResult;
 import io.appmetrica.analytics.testutils.CommonTest;
@@ -148,14 +147,12 @@ public class JsonHelperTest extends CommonTest {
         int height = 3478;
         int dpi = 888999;
         float scaleFactor = 5.6f;
-        String deviceType = DeviceTypeValues.TABLET;
         JSONObject json = new JSONObject()
             .put("width", width)
             .put("height", height)
             .put("dpi", dpi)
-            .put("scaleFactor", scaleFactor)
-            .put("deviceType", "tablet");
-        assertThat(JsonHelper.screenInfoFromJson(json)).isEqualTo(new ScreenInfo(width, height, dpi, scaleFactor, deviceType));
+            .put("scaleFactor", scaleFactor);
+        assertThat(JsonHelper.screenInfoFromJson(json)).isEqualTo(new ScreenInfo(width, height, dpi, scaleFactor));
     }
 
     @Test
@@ -166,7 +163,6 @@ public class JsonHelperTest extends CommonTest {
             .checkField("height", "getHeight", 76)
             .checkField("dpi", "getDpi", 50)
             .checkFloatField("scaleFactor", "getScaleFactor", 0.5f, 0.0000001f)
-            .checkField("deviceType", "getDeviceType", DeviceTypeValues.TABLET)
             .checkAll();
     }
 
@@ -192,7 +188,6 @@ public class JsonHelperTest extends CommonTest {
             .checkField("height", "getHeight", 0)
             .checkField("dpi", "getDpi", 0)
             .checkFloatField("scaleFactor", "getScaleFactor", 0f, 0.0000001f)
-            .checkField("deviceType", DeviceTypeValues.PHONE)
             .checkAll();
     }
 
@@ -207,14 +202,12 @@ public class JsonHelperTest extends CommonTest {
         int height = 3478;
         int dpi = 888999;
         float scaleFactor = 5.6f;
-        String deviceType = DeviceTypeValues.TABLET;
-        ScreenInfo screenInfo = new ScreenInfo(width, height, dpi, scaleFactor, deviceType);
+        ScreenInfo screenInfo = new ScreenInfo(width, height, dpi, scaleFactor);
         JSONObject expected = new JSONObject()
             .put("width", width)
             .put("height", height)
             .put("dpi", dpi)
-            .put("scaleFactor", scaleFactor)
-            .put("deviceType", "tablet");
+            .put("scaleFactor", scaleFactor);
         JSONObject actual = JsonHelper.screenInfoToJson(screenInfo);
         JSONAssert.assertEquals(actual, expected, true);
         assertThat(JsonHelper.screenInfoFromJson(actual)).isEqualTo(screenInfo);
@@ -231,15 +224,13 @@ public class JsonHelperTest extends CommonTest {
         int height = 654;
         int dpi = 12312;
         float scaleFactor = 23423f;
-        String deviceType = DeviceTypeValues.TV;
         String expected = new JSONObject()
             .put("width", width)
             .put("height", height)
             .put("dpi", dpi)
             .put("scaleFactor", scaleFactor)
-            .put("deviceType", "tv")
             .toString();
-        String actual = JsonHelper.screenInfoToJsonString(new ScreenInfo(width, height, dpi, scaleFactor, deviceType));
+        String actual = JsonHelper.screenInfoToJsonString(new ScreenInfo(width, height, dpi, scaleFactor));
         assertThat(actual).isEqualTo(expected);
     }
 

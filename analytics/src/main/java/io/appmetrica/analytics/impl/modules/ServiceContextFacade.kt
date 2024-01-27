@@ -1,11 +1,11 @@
 package io.appmetrica.analytics.impl.modules
 
 import io.appmetrica.analytics.coreapi.internal.control.DataSendingRestrictionController
+import io.appmetrica.analytics.coreapi.internal.identifiers.PlatformIdentifiers
+import io.appmetrica.analytics.coreapi.internal.servicecomponents.SdkEnvironmentProvider
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.applicationstate.ApplicationStateProvider
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.batteryinfo.ChargeTypeProvider
-import io.appmetrica.analytics.coreapi.internal.system.LocaleProvider
 import io.appmetrica.analytics.impl.GlobalServiceLocator
-import io.appmetrica.analytics.impl.LocaleHolder
 import io.appmetrica.analytics.impl.db.storage.DatabaseStorageFactory
 import io.appmetrica.analytics.modulesapi.internal.ExecutorProvider
 import io.appmetrica.analytics.modulesapi.internal.LocationServiceApi
@@ -23,8 +23,11 @@ internal class ServiceContextFacade(
 
     override val selfReporter = ModuleSelfReporterImpl()
 
-    override val advertisingIdGetter
-        get() = GlobalServiceLocator.getInstance().serviceInternalAdvertisingIdGetter
+    override val sdkEnvironmentProvider: SdkEnvironmentProvider
+        get() = GlobalServiceLocator.getInstance().sdkEnvironmentHolder
+
+    override val platformIdentifiers: PlatformIdentifiers
+        get() = GlobalServiceLocator.getInstance().platformIdentifiers
 
     override val serviceWakeLock = ServiceWakeLockImpl(
         context,
@@ -49,6 +52,4 @@ internal class ServiceContextFacade(
 
     override val dataSendingRestrictionController: DataSendingRestrictionController
         get() = GlobalServiceLocator.getInstance().dataSendingRestrictionController
-
-    override val localeProvider: LocaleProvider = LocaleHolder.getInstance(context)
 }

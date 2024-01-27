@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.modules
 
-import io.appmetrica.analytics.coreapi.internal.identifiers.Identifiers
+import io.appmetrica.analytics.coreapi.internal.identifiers.SdkIdentifiers
 import io.appmetrica.analytics.impl.startup.StartupState
 import io.appmetrica.analytics.modulesapi.internal.ModuleRemoteConfig
 import io.appmetrica.analytics.modulesapi.internal.RemoteConfigMetaInfo
@@ -36,7 +36,7 @@ class ModuleRemoteConfigProviderTest : CommonTest() {
         on { modulesRemoteConfigs } doReturn modulesRemoteConfigs
     }
 
-    private val identifiers = Identifiers(uuid, deviceId, deviceIdHash)
+    private val identifiers = SdkIdentifiers(uuid, deviceId, deviceIdHash)
     private val remoteConfigMetaInfo = RemoteConfigMetaInfo(firstStartupTime, serverTime)
 
     private val moduleRemoteConfigProvider = ModuleRemoteConfigProvider(startupState)

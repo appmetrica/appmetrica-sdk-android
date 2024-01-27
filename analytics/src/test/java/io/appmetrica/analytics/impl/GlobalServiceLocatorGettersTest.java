@@ -2,6 +2,7 @@ package io.appmetrica.analytics.impl;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import io.appmetrica.analytics.coreapi.internal.identifiers.PlatformIdentifiers;
 import io.appmetrica.analytics.impl.crash.ndk.NativeCrashService;
 import io.appmetrica.analytics.impl.db.VitalDataProviderStorage;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesServiceDbStorage;
@@ -22,6 +23,8 @@ import io.appmetrica.analytics.impl.telephony.TelephonyDataProvider;
 import io.appmetrica.analytics.impl.utils.DebugAssert;
 import io.appmetrica.analytics.impl.utils.executors.ServiceExecutorProvider;
 import io.appmetrica.analytics.modulesapi.internal.LocationServiceApi;
+import io.appmetrica.analytics.networktasks.internal.NetworkCore;
+import io.appmetrica.analytics.networktasks.internal.NetworkServiceLocator;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.MockedStaticRule;
 import io.appmetrica.analytics.testutils.TestUtils;
@@ -249,15 +252,6 @@ public class GlobalServiceLocatorGettersTest extends CommonTest {
                 }
             },
             {
-                "screenInfoHolder",
-                new ServiceExtractor<ScreenInfoHolder>() {
-                    @Override
-                    public ScreenInfoHolder getService(GlobalServiceLocator globalServiceLocator) {
-                        return globalServiceLocator.getScreenInfoHolder();
-                    }
-                }
-            },
-            {
                 "selfDiagnosticReporterStorage",
                 new ServiceExtractor<SelfDiagnosticReporterStorage>() {
                     @Override
@@ -292,6 +286,33 @@ public class GlobalServiceLocatorGettersTest extends CommonTest {
                         return globalServiceLocator.getNativeCrashService();
                     }
                 }
+            },
+            {
+               "platformIdentifier",
+               new ServiceExtractor<PlatformIdentifiers>() {
+                   @Override
+                   public PlatformIdentifiers getService(GlobalServiceLocator globalServiceLocator) {
+                       return globalServiceLocator.getPlatformIdentifiers();
+                   }
+               }
+            },
+            {
+                "sdlEnvironmenHolder",
+                new ServiceExtractor<SdkEnvironmentHolder>() {
+                    @Override
+                    public SdkEnvironmentHolder getService(GlobalServiceLocator globalServiceLocator) {
+                        return globalServiceLocator.getSdkEnvironmentHolder();
+                    }
+                }
+            },
+            {
+                "networkCore",
+                new ServiceExtractor<NetworkCore>() {
+                    @Override
+                    public NetworkCore getService(GlobalServiceLocator globalServiceLocator) {
+                        return globalServiceLocator.getNetworkCore();
+                    }
+                }
             }
         });
     }
@@ -308,6 +329,10 @@ public class GlobalServiceLocatorGettersTest extends CommonTest {
     private StartupState startupState;
     @Mock
     private SelfProcessReporter selfProcessReporter;
+    @Mock
+    private NetworkServiceLocator networkServiceLocator;
+    @Mock
+    private NetworkCore networkCore;
 
     @Rule
     public final MockedStaticRule<DebugAssert> sDebugAssert = new MockedStaticRule<>(DebugAssert.class);
@@ -315,6 +340,10 @@ public class GlobalServiceLocatorGettersTest extends CommonTest {
     @Rule
     public final MockedStaticRule<AppMetricaSelfReportFacade> sAppMetricaSelfReporterFacadeMockedRule =
         new MockedStaticRule<>(AppMetricaSelfReportFacade.class);
+
+    @Rule
+    public final MockedStaticRule<NetworkServiceLocator> networkServiceLocatorMockedStaticRule =
+        new MockedStaticRule<>(NetworkServiceLocator.class);
 
     private GlobalServiceLocator mGlobalServiceLocator;
 
@@ -327,6 +356,8 @@ public class GlobalServiceLocatorGettersTest extends CommonTest {
         when(mSharedPreferences.edit()).thenReturn(mEditor);
 
         when(AppMetricaSelfReportFacade.getReporter()).thenReturn(selfReporterWrapper);
+        when(NetworkServiceLocator.getInstance()).thenReturn(networkServiceLocator);
+        when(networkServiceLocator.getNetworkCore()).thenReturn(networkCore);
 
         GlobalServiceLocator.init(mContext);
         GlobalServiceLocator.getInstance().getStartupStateHolder().onStartupStateChanged(startupState);

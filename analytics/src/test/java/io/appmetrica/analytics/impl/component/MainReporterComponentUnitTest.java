@@ -53,7 +53,7 @@ public class MainReporterComponentUnitTest extends ComponentUnitBaseTest {
     private StartupState startupState;
     private MainReporterComponentUnit mMainReporterComponentUnit;
     private CommonArguments.ReporterArguments sdkConfig = new CommonArguments.ReporterArguments(
-            null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, false
+            null, null, null, null, null, null, null, null, null, null, null, null, false
     );
 
     @Rule

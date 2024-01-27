@@ -72,8 +72,6 @@ public class AppMetricaServiceCoreImpl implements AppMetricaServiceCore, AppMetr
     };
     @NonNull
     private ReportProxy reportProxy;
-    @NonNull
-    private final ScreenInfoHolder screenInfoHolder;
 
     // Attention!! Do not convert to local variable or it will broken CrashFileObserver.
     // See warning block from description of https://developer.android.com/reference/android/os/FileObserver
@@ -98,8 +96,7 @@ public class AppMetricaServiceCoreImpl implements AppMetricaServiceCore, AppMetr
             FirstServiceEntryPointManager.INSTANCE,
             GlobalServiceLocator.getInstance().getApplicationStateProvider(),
             GlobalServiceLocator.getInstance().getServiceExecutorProvider().getReportRunnableExecutor(),
-            new AppMetricaServiceCoreImplFieldsFactory(),
-            GlobalServiceLocator.getInstance().getScreenInfoHolder()
+            new AppMetricaServiceCoreImplFieldsFactory()
         );
     }
 
@@ -112,8 +109,7 @@ public class AppMetricaServiceCoreImpl implements AppMetricaServiceCore, AppMetr
                               @NonNull FirstServiceEntryPointManager firstServiceEntryPointManager,
                               @NonNull ApplicationStateProviderImpl applicationStateProvider,
                               @NonNull ICommonExecutor reportExecutor,
-                              @NonNull AppMetricaServiceCoreImplFieldsFactory fieldsFactory,
-                              @NonNull ScreenInfoHolder screenInfoHolder) {
+                              @NonNull AppMetricaServiceCoreImplFieldsFactory fieldsFactory) {
         mContext = context;
         mCallback = callback;
         mClientRepository = clientRepository;
@@ -124,7 +120,6 @@ public class AppMetricaServiceCoreImpl implements AppMetricaServiceCore, AppMetr
         this.fieldsFactory = fieldsFactory;
         this.nativeCrashService = GlobalServiceLocator.getInstance().getNativeCrashService();
         this.reportProxy = new ReportProxy();
-        this.screenInfoHolder = screenInfoHolder;
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)
@@ -273,8 +268,9 @@ public class AppMetricaServiceCoreImpl implements AppMetricaServiceCore, AppMetr
     }
 
     private void updateScreenInfo(@NonNull Intent intent) {
-        screenInfoHolder.maybeUpdateInfo(JsonHelper.screenInfoFromJsonString(
-            intent.getStringExtra(ServiceUtils.EXTRA_SCREEN_SIZE)));
+        GlobalServiceLocator.getInstance().getSdkEnvironmentHolder().mayBeUpdateScreenInfo(
+            JsonHelper.screenInfoFromJsonString(intent.getStringExtra(ServiceUtils.EXTRA_SCREEN_SIZE))
+        );
     }
 
     @WorkerThread
@@ -297,8 +293,8 @@ public class AppMetricaServiceCoreImpl implements AppMetricaServiceCore, AppMetr
         loadLocaleFromConfiguration(newConfig);
     }
 
-    private void loadLocaleFromConfiguration(@NonNull Configuration configuration) {
-        LocaleHolder.getInstance(mContext).updateLocales(configuration);
+    private void loadLocaleFromConfiguration(Configuration configuration) {
+        GlobalServiceLocator.getInstance().getSdkEnvironmentHolder().mayBeUpdateConfiguration(configuration);
     }
 
     @MainThread

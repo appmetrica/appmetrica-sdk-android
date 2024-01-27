@@ -1,6 +1,10 @@
 package io.appmetrica.analytics.impl.request;
 
 import android.location.Location;
+import io.appmetrica.analytics.coreapi.internal.identifiers.AppSetId;
+import io.appmetrica.analytics.coreapi.internal.identifiers.AppSetIdScope;
+import io.appmetrica.analytics.coreapi.internal.identifiers.PlatformIdentifiers;
+import io.appmetrica.analytics.coreapi.internal.servicecomponents.SdkEnvironmentProvider;
 import io.appmetrica.analytics.impl.CertificatesFingerprintsProvider;
 import io.appmetrica.analytics.impl.ClidsInfoStorage;
 import io.appmetrica.analytics.impl.DistributionSource;
@@ -9,12 +13,12 @@ import io.appmetrica.analytics.impl.clids.ClidsInfo;
 import io.appmetrica.analytics.impl.component.ComponentId;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.impl.db.VitalComponentDataProvider;
+import io.appmetrica.analytics.impl.id.AdvertisingIdGetter;
+import io.appmetrica.analytics.impl.id.AppSetIdGetter;
 import io.appmetrica.analytics.impl.startup.CollectingFlags;
 import io.appmetrica.analytics.impl.startup.StartupState;
-import io.appmetrica.analytics.networktasks.internal.NetworkServiceLocator;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
-import io.appmetrica.analytics.testutils.rules.networktasks.NetworkServiceLocatorRule;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -50,12 +54,19 @@ public class ReportConfigLoaderTest extends CommonTest {
     private VitalComponentDataProvider vitalComponentDataProvider;
     @Mock
     private CertificatesFingerprintsProvider certificatesFingerprintsProvider;
+    @Mock
+    private SdkEnvironmentProvider sdkEnvironmentProvider;
+    @Mock
+    private AdvertisingIdGetter advertisingIdGetter;
+    @Mock
+    private AppSetIdGetter appSetIdGetter;
+    @Mock
+    private PlatformIdentifiers platformIdentifiers;
+
+    private AppSetId appSetId = new AppSetId(UUID.randomUUID().toString(), AppSetIdScope.DEVELOPER);
 
     @Rule
     public GlobalServiceLocatorRule mRule = new GlobalServiceLocatorRule();
-
-    @Rule
-    public NetworkServiceLocatorRule networkServiceLocatorRule = new NetworkServiceLocatorRule();
 
     @Before
     public void setUp() throws Exception {
@@ -76,14 +87,16 @@ public class ReportConfigLoaderTest extends CommonTest {
             componentUnit,
             mock(ReportRequestConfig.DataSendingStrategy.class)
         );
+        when(platformIdentifiers.getAdvIdentifiersProvider()).thenReturn(advertisingIdGetter);
+        when(platformIdentifiers.getAppSetIdProvider()).thenReturn(appSetIdGetter);
+        when(appSetIdGetter.getAppSetId()).thenReturn(appSetId);
         mDataSource = new CoreRequestConfig.CoreDataSource<>(
             new StartupState.Builder(
                 new CollectingFlags.CollectingFlagsBuilder().build()
             ).build(),
+            sdkEnvironmentProvider,
+            platformIdentifiers,
             new ReportRequestConfig.Arguments(
-                null,
-                null,
-                null,
                 null,
                 null,
                 null,
@@ -115,7 +128,8 @@ public class ReportConfigLoaderTest extends CommonTest {
 
         Location location = new Location("provider");
 
-        ReportRequestConfig reportRequestConfig = new ReportRequestConfig.Loader(componentUnit, mock(ReportRequestConfig.DataSendingStrategy.class)).load(
+        ReportRequestConfig reportRequestConfig =
+            new ReportRequestConfig.Loader(componentUnit, mock(ReportRequestConfig.DataSendingStrategy.class)).load(
             new CoreRequestConfig.CoreDataSource<ReportRequestConfig.Arguments>(
                 new StartupState.Builder(new CollectingFlags.CollectingFlagsBuilder()
                     .withPermissionsCollectingEnabled(true)
@@ -124,10 +138,9 @@ public class ReportConfigLoaderTest extends CommonTest {
                     .withReportUrls(Arrays.asList("url1", "url2"))
                     .withEncodedClidsFromResponse("clidsFromRepsonse")
                     .build(),
+                sdkEnvironmentProvider,
+                platformIdentifiers,
                 new ReportRequestConfig.Arguments(
-                    NetworkServiceLocator.getInstance().getNetworkAppContext().getScreenInfoProvider().getScreenInfo().getDeviceType(),
-                    "customVersion",
-                    "178",
                     "apiKey",
                     true,
                     location,
@@ -156,8 +169,6 @@ public class ReportConfigLoaderTest extends CommonTest {
             .isEqualTo(200);
         softAssertion.assertThat(reportRequestConfig.getDispatchPeriod()).as("dispatchPeriod")
             .isEqualTo(300);
-        softAssertion.assertThat(reportRequestConfig.isLogEnabled()).as("logEnabled")
-            .isTrue();
 
         softAssertion.assertThat(reportRequestConfig.getReportHosts()).as("reportHosts")
             .containsExactly("url1", "url2");
@@ -174,11 +185,8 @@ public class ReportConfigLoaderTest extends CommonTest {
         softAssertion.assertThat(reportRequestConfig.getMaxEventsInDbCount()).as("maxReportsInDbCount").isEqualTo(250);
         softAssertion.assertThat(reportRequestConfig.getCertificates()).as("certificates fingerprints")
             .isEqualTo(fingerprints);
-        softAssertion.assertThat(reportRequestConfig.getAppSetId())
-            .isEqualTo(
-                NetworkServiceLocator.getInstance().getNetworkAppContext().getAppSetIdProvider().getAppSetId().getId()
-            );
-        softAssertion.assertThat(reportRequestConfig.getAppSetIdScope()).isEqualTo("developer");
+        softAssertion.assertThat(reportRequestConfig.getAppSetId()).isEqualTo(appSetId.getId());
+        softAssertion.assertThat(reportRequestConfig.getAppSetIdScope()).isEqualTo(appSetId.getScope().getValue());
         softAssertion.assertThat(reportRequestConfig.getAttributionId()).isEqualTo(attributionId);
 
         softAssertion.assertAll();

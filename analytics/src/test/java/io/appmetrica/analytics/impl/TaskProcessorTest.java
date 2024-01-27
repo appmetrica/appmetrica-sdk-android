@@ -2,11 +2,9 @@ package io.appmetrica.analytics.impl;
 
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.impl.startup.executor.StartupExecutor;
-import io.appmetrica.analytics.networktasks.internal.NetworkCore;
-import io.appmetrica.analytics.networktasks.internal.NetworkServiceLocator;
 import io.appmetrica.analytics.networktasks.internal.NetworkTask;
 import io.appmetrica.analytics.testutils.CommonTest;
-import io.appmetrica.analytics.testutils.MockedStaticRule;
+import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -18,7 +16,6 @@ import org.robolectric.RobolectricTestRunner;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
 public class TaskProcessorTest extends CommonTest {
@@ -30,22 +27,14 @@ public class TaskProcessorTest extends CommonTest {
     @Mock
     private StartupExecutor startupExecutor;
     @Mock
-    private NetworkServiceLocator networkServiceLocator;
-    @Mock
-    private NetworkCore networkCore;
-    @Mock
     private NetworkTask networkTask;
 
     @Rule
-    public MockedStaticRule<NetworkServiceLocator> networkServiceLocatorRule =
-            new MockedStaticRule<>(NetworkServiceLocator.class);
+    public GlobalServiceLocatorRule globalServiceLocatorRule = new GlobalServiceLocatorRule();
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.openMocks(this);
-
-        when(NetworkServiceLocator.getInstance()).thenReturn(networkServiceLocator);
-        when(networkServiceLocator.getNetworkCore()).thenReturn(networkCore);
 
         processor = new TaskProcessor(componentUnit, startupExecutor);
     }
@@ -94,7 +83,7 @@ public class TaskProcessorTest extends CommonTest {
     @Test
     public void startTask() {
         processor.startTask(networkTask);
-        verify(networkCore).startTask(networkTask);
+        verify(GlobalServiceLocator.getInstance().getNetworkCore()).startTask(networkTask);
     }
 
     @Test

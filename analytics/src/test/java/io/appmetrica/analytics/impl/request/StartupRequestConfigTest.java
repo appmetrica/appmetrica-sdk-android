@@ -2,17 +2,21 @@ package io.appmetrica.analytics.impl.request;
 
 import androidx.annotation.NonNull;
 import io.appmetrica.analytics.coreapi.internal.identifiers.AppSetId;
+import io.appmetrica.analytics.coreapi.internal.identifiers.AppSetIdProvider;
 import io.appmetrica.analytics.coreapi.internal.identifiers.AppSetIdScope;
+import io.appmetrica.analytics.coreapi.internal.identifiers.PlatformIdentifiers;
+import io.appmetrica.analytics.coreapi.internal.servicecomponents.SdkEnvironmentProvider;
+import io.appmetrica.analytics.impl.GlobalServiceLocator;
+import io.appmetrica.analytics.impl.id.AdvertisingIdGetter;
 import io.appmetrica.analytics.impl.referrer.service.ReferrerHolder;
 import io.appmetrica.analytics.impl.startup.StartupState;
-import io.appmetrica.analytics.networktasks.internal.NetworkServiceLocator;
 import io.appmetrica.analytics.networktasks.internal.RetryPolicyConfig;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import io.appmetrica.analytics.testutils.TestUtils;
-import io.appmetrica.analytics.testutils.rules.networktasks.NetworkServiceLocatorRule;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.UUID;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -33,18 +37,28 @@ public class StartupRequestConfigTest extends CommonTest {
     private ReferrerHolder mReferrerHolder;
     @Mock
     private DefaultStartupHostsProvider defaultStartupHostsProvider;
+    @Mock
+    private SdkEnvironmentProvider sdkEnvironmentProvider;
+    @Mock
+    private AppSetIdProvider appSetIdProvider;
+    @Mock
+    private AdvertisingIdGetter advertisingIdGetter;
+    @Mock
+    private PlatformIdentifiers platformIdentifiers;
     @NonNull
     private StartupState.Builder mStartupStateBuilder;
+    private AppSetId appSetId = new AppSetId(UUID.randomUUID().toString(), AppSetIdScope.DEVELOPER);
 
     @Rule
     public GlobalServiceLocatorRule mRule = new GlobalServiceLocatorRule();
 
-    @Rule
-    public NetworkServiceLocatorRule networkServiceLocatorRule = new NetworkServiceLocatorRule();
-
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
+        when(GlobalServiceLocator.getInstance().getAppSetIdGetter().getAppSetId()).thenReturn(appSetId);
+        when(platformIdentifiers.getAppSetIdProvider()).thenReturn(appSetIdProvider);
+        when(platformIdentifiers.getAdvIdentifiersProvider()).thenReturn(advertisingIdGetter);
+        when(appSetIdProvider.getAppSetId()).thenReturn(appSetId);
         mStartupStateBuilder = TestUtils.createDefaultStartupStateBuilder();
     }
 
@@ -115,8 +129,7 @@ public class StartupRequestConfigTest extends CommonTest {
 
     @Test
     public void appSetIdIsNotSet() {
-        when(NetworkServiceLocator.getInstance().getNetworkAppContext().getAppSetIdProvider().getAppSetId())
-            .thenReturn(new AppSetId(null, AppSetIdScope.UNKNOWN));
+        when(appSetIdProvider.getAppSetId()).thenReturn(new AppSetId(null, AppSetIdScope.UNKNOWN));
         StartupRequestConfig requestConfig = createStartupRequestConfigWithNullArgs(mStartupStateBuilder);
         assertThat(requestConfig.getAppSetId()).isNotNull().isEmpty();
         assertThat(requestConfig.getAppSetIdScope()).isNotNull().isEmpty();
@@ -125,16 +138,8 @@ public class StartupRequestConfigTest extends CommonTest {
     @Test
     public void appSetIdIsSet() {
         StartupRequestConfig requestConfig = createStartupRequestConfigWithNullArgs(mStartupStateBuilder);
-        assertThat(requestConfig.getAppSetId())
-            .isEqualTo(
-                NetworkServiceLocator.getInstance().getNetworkAppContext().getAppSetIdProvider()
-                    .getAppSetId().getId()
-            );
-        assertThat(requestConfig.getAppSetIdScope())
-            .isEqualTo(
-                NetworkServiceLocator.getInstance().getNetworkAppContext().getAppSetIdProvider()
-                    .getAppSetId().getScope().getValue()
-            );
+        assertThat(requestConfig.getAppSetId()).isEqualTo(appSetId.getId());
+        assertThat(requestConfig.getAppSetIdScope()).isEqualTo(appSetId.getScope().getValue());
     }
 
     @Test
@@ -186,10 +191,9 @@ public class StartupRequestConfigTest extends CommonTest {
                 RuntimeEnvironment.getApplication(), RuntimeEnvironment.getApplication().getPackageName()
         ).load(new CoreRequestConfig.CoreDataSource<StartupRequestConfig.Arguments>(
                 builder.build(),
+                sdkEnvironmentProvider,
+                platformIdentifiers,
                 new StartupRequestConfig.Arguments(
-                        null,
-                        null,
-                        null,
                         null,
                         null,
                         null,

@@ -414,20 +414,12 @@ public class io.appmetrica.analytics.coreutils.internal.services.FrameworkDetect
 }
 
 public final class io.appmetrica.analytics.coreutils.internal.services.PackageManagerUtils {
-    public static final [NonNull] io.appmetrica.analytics.coreutils.internal.services.PackageManagerUtils$Companion Companion
+    public static final [NonNull] io.appmetrica.analytics.coreutils.internal.services.PackageManagerUtils INSTANCE
 
-    public <init>()
     public static final int getAppVersionCodeInt([NonNull] android.content.Context)
     public static final [NonNull] String getAppVersionCodeString([NonNull] android.content.Context)
     public static final [NonNull] String getAppVersionName([NonNull] android.content.Context)
     public static final [Nullable] android.content.pm.PackageInfo getPackageInfo([NonNull] android.content.Context)
-}
-
-public static final class io.appmetrica.analytics.coreutils.internal.services.PackageManagerUtils$Companion {
-    public final int getAppVersionCodeInt([NonNull] android.content.Context)
-    public final [NonNull] String getAppVersionCodeString([NonNull] android.content.Context)
-    public final [NonNull] String getAppVersionName([NonNull] android.content.Context)
-    public final [Nullable] android.content.pm.PackageInfo getPackageInfo([NonNull] android.content.Context)
 }
 
 public class io.appmetrica.analytics.coreutils.internal.services.SafePackageManager {

@@ -2,8 +2,8 @@ package io.appmetrica.analytics.impl.startup.executor;
 
 import androidx.annotation.NonNull;
 import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
+import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.startup.StartupUnit;
-import io.appmetrica.analytics.networktasks.internal.NetworkServiceLocator;
 import io.appmetrica.analytics.networktasks.internal.NetworkTask;
 
 public class RegularStartupExecutor implements StartupExecutor {
@@ -21,7 +21,7 @@ public class RegularStartupExecutor implements StartupExecutor {
         YLogger.info(TAG, "sendStartupIfRequired");
         NetworkTask startupTask = startupUnit.getOrCreateStartupTaskIfRequired();
         if (startupTask != null) {
-            NetworkServiceLocator.getInstance().getNetworkCore().startTask(startupTask);
+            GlobalServiceLocator.getInstance().getNetworkCore().startTask(startupTask);
         } else {
             YLogger.d("%s Not sending startup because startup task is null", TAG);
         }

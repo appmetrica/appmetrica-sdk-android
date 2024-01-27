@@ -118,7 +118,7 @@ public abstract class BaseSessionTest extends CommonTest {
     @Test
     public void testSessionInvalidIfKitBuildNumberParamChanged() throws Exception {
         ReportRequestConfig reportRequestConfig = prepareRequestParamsTest();
-        doReturn("9876").when(reportRequestConfig).getKitBuildNumber();
+        doReturn("9876").when(reportRequestConfig).getAnalyticsSdkBuildNumber();
 
         Session session = getSessionFactory().create(mock(SessionArguments.class));
         assertThat(session.isValid(SystemClock.elapsedRealtime())).isFalse();
@@ -244,7 +244,7 @@ public abstract class BaseSessionTest extends CommonTest {
         requestParameters.putOpt(Constants.RequestParametersJsonKeys.APP_VERSION, reportRequestConfig.getAppVersion());
         requestParameters.putOpt(Constants.RequestParametersJsonKeys.APP_BUILD, reportRequestConfig.getAppBuildNumber());
         requestParameters.putOpt(Constants.RequestParametersJsonKeys.ANALYTICS_SDK_VERSION_NAME, reportRequestConfig.getAnalyticsSdkVersionName());
-        requestParameters.putOpt(Constants.RequestParametersJsonKeys.KIT_BUILD_NUMBER, reportRequestConfig.getKitBuildNumber());
+        requestParameters.putOpt(Constants.RequestParametersJsonKeys.ANALYTICS_SDK_BUILD_NUMBER, reportRequestConfig.getAnalyticsSdkBuildNumber());
         requestParameters.putOpt(Constants.RequestParametersJsonKeys.OS_VERSION, reportRequestConfig.getOsVersion());
         requestParameters.putOpt(Constants.RequestParametersJsonKeys.OS_API_LEVEL, reportRequestConfig.getOsApiLevel());
         requestParameters.putOpt(Constants.RequestParametersJsonKeys.ATTRIBUTION_ID, reportRequestConfig.getAttributionId());

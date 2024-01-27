@@ -1,7 +1,6 @@
 package io.appmetrica.analytics.impl.modules
 
 import io.appmetrica.analytics.impl.GlobalServiceLocator
-import io.appmetrica.analytics.impl.LocaleHolder
 import io.appmetrica.analytics.impl.db.DatabaseStorage
 import io.appmetrica.analytics.impl.db.storage.DatabaseStorageFactory
 import io.appmetrica.analytics.modulesapi.internal.ModuleLifecycleController
@@ -24,7 +23,6 @@ internal class ServiceContextFacadeTest : CommonTest() {
     private val moduleLifecycleController = mock<ModuleLifecycleController>()
     private val databaseStorageFactory = mock<DatabaseStorageFactory>()
     private val storageForService = mock<DatabaseStorage>()
-    private val localeHolder = mock<LocaleHolder>()
 
     @get:Rule
     val globalServiceLocatorRule = GlobalServiceLocatorRule()
@@ -54,9 +52,6 @@ internal class ServiceContextFacadeTest : CommonTest() {
     @get:Rule
     val databaseStorageFactoryMockedStaticRule = MockedStaticRule(DatabaseStorageFactory::class.java)
 
-    @get:Rule
-    val localeHolderMockedStaticRule = MockedStaticRule(LocaleHolder::class.java)
-
     private lateinit var serviceContextFacade: ServiceContextFacade
 
     @Before
@@ -64,7 +59,6 @@ internal class ServiceContextFacadeTest : CommonTest() {
         whenever(DatabaseStorageFactory.getInstance(GlobalServiceLocator.getInstance().context))
             .thenReturn(databaseStorageFactory)
         whenever(databaseStorageFactory.storageForService).thenReturn(storageForService)
-        whenever(LocaleHolder.getInstance(GlobalServiceLocator.getInstance().context)).thenReturn(localeHolder)
         serviceContextFacade = ServiceContextFacade(moduleLifecycleController)
     }
 
@@ -88,21 +82,6 @@ internal class ServiceContextFacadeTest : CommonTest() {
             .isEqualTo(moduleSelfReporterImplMockedRule.constructionMock.constructed()[0])
         assertThat(moduleSelfReporterImplMockedRule.constructionMock.constructed()).hasSize(1)
         assertThat(moduleSelfReporterImplMockedRule.argumentInterceptor.flatArguments()).isEmpty()
-    }
-
-    @Test
-    fun advertisingIdGetter() {
-        assertThat(serviceContextFacade.advertisingIdGetter)
-            .isEqualTo(GlobalServiceLocator.getInstance().serviceInternalAdvertisingIdGetter)
-    }
-
-    @Test
-    fun `advertisingIdGetter twice`() {
-        val first = serviceContextFacade.advertisingIdGetter
-        whenever(GlobalServiceLocator.getInstance().serviceInternalAdvertisingIdGetter)
-            .thenReturn(mock())
-        val second = serviceContextFacade.advertisingIdGetter
-        assertThat(first).isNotEqualTo(second)
     }
 
     @Test
@@ -200,7 +179,30 @@ internal class ServiceContextFacadeTest : CommonTest() {
     }
 
     @Test
-    fun localeProvider() {
-        assertThat(serviceContextFacade.localeProvider).isEqualTo(localeHolder)
+    fun sdkEnvironmentProvider() {
+        assertThat(serviceContextFacade.sdkEnvironmentProvider)
+            .isEqualTo(GlobalServiceLocator.getInstance().sdkEnvironmentHolder)
+    }
+
+    @Test
+    fun `sdkEnvironmentProvider twice`() {
+        val first = serviceContextFacade.sdkEnvironmentProvider
+        whenever(GlobalServiceLocator.getInstance().sdkEnvironmentHolder).thenReturn(mock())
+        val second = serviceContextFacade.sdkEnvironmentProvider
+        assertThat(first).isNotEqualTo(second)
+    }
+
+    @Test
+    fun platformIdentifiers() {
+        assertThat(serviceContextFacade.platformIdentifiers)
+            .isEqualTo(GlobalServiceLocator.getInstance().platformIdentifiers)
+    }
+
+    @Test
+    fun `platformIdentifiers twice`() {
+        val first = serviceContextFacade.platformIdentifiers
+        whenever(GlobalServiceLocator.getInstance().platformIdentifiers).thenReturn(mock())
+        val second = serviceContextFacade.platformIdentifiers
+        assertThat(first).isNotEqualTo(second)
     }
 }

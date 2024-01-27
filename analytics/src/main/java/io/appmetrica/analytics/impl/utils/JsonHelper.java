@@ -6,9 +6,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.billinginterface.internal.config.BillingConfig;
-import io.appmetrica.analytics.coreapi.internal.constants.DeviceTypeValues;
-import io.appmetrica.analytics.coreapi.internal.device.ScreenInfo;
 import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus;
+import io.appmetrica.analytics.coreapi.internal.model.ScreenInfo;
 import io.appmetrica.analytics.coreutils.internal.AndroidUtils;
 import io.appmetrica.analytics.coreutils.internal.StringUtils;
 import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
@@ -481,8 +480,7 @@ public class JsonHelper {
             json.optInt(KEY_WIDTH),
             json.optInt(KEY_HEIGHT),
             json.optInt(KEY_DPI),
-            (float) json.optDouble(KEY_SCALE_FACTOR, 0),
-            json.optString(KEY_DEVICE_TYPE, DeviceTypeValues.PHONE)
+            (float) json.optDouble(KEY_SCALE_FACTOR, 0)
         );
     }
 
@@ -510,8 +508,7 @@ public class JsonHelper {
                 .put(KEY_WIDTH, screenInfo.getWidth())
                 .put(KEY_HEIGHT, screenInfo.getHeight())
                 .put(KEY_DPI, screenInfo.getDpi())
-                .put(KEY_SCALE_FACTOR, screenInfo.getScaleFactor())
-                .putOpt(KEY_DEVICE_TYPE, screenInfo.getDeviceType());
+                .put(KEY_SCALE_FACTOR, screenInfo.getScaleFactor());
         } catch (Throwable ignored) {
         }
         return result;

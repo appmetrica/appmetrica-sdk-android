@@ -4,7 +4,9 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.text.TextUtils;
 import androidx.annotation.NonNull;
-import io.appmetrica.analytics.coreapi.internal.identifiers.Identifiers;
+import io.appmetrica.analytics.coreapi.internal.identifiers.PlatformIdentifiers;
+import io.appmetrica.analytics.coreapi.internal.identifiers.SdkIdentifiers;
+import io.appmetrica.analytics.coreapi.internal.servicecomponents.SdkEnvironmentProvider;
 import io.appmetrica.analytics.coreutils.internal.services.SafePackageManager;
 import io.appmetrica.analytics.impl.startup.StartupState;
 import io.appmetrica.analytics.networktasks.internal.BaseRequestConfig;
@@ -49,16 +51,25 @@ public class CoreRequestConfig extends BaseRequestConfig {
     public static class CoreDataSource<A> extends DataSource<A> {
         @NonNull
         public final StartupState startupState;
+        @NonNull
+        public final SdkEnvironmentProvider sdkEnvironmentProvider;
 
-        public CoreDataSource(@NonNull StartupState startupState, A arguments) {
+        public CoreDataSource(@NonNull StartupState startupState,
+                              @NonNull SdkEnvironmentProvider sdkEnvironmentProvider,
+                              @NonNull PlatformIdentifiers platformIdentifiers,
+                              A arguments) {
             super(
-                new Identifiers(
+                new SdkIdentifiers(
                     startupState.getUuid(),
                     startupState.getDeviceId(),
                     startupState.getDeviceIdHash()
-                ), arguments
+                ),
+                sdkEnvironmentProvider,
+                platformIdentifiers,
+                arguments
             );
             this.startupState = startupState;
+            this.sdkEnvironmentProvider = sdkEnvironmentProvider;
         }
     }
 

@@ -1,7 +1,5 @@
 package io.appmetrica.analytics.testutils.rules.networktasks
 
-import io.appmetrica.analytics.coreapi.internal.constants.DeviceTypeValues
-import io.appmetrica.analytics.coreapi.internal.device.ScreenInfo
 import io.appmetrica.analytics.coreapi.internal.identifiers.AdTrackingInfo
 import io.appmetrica.analytics.coreapi.internal.identifiers.AdTrackingInfoResult
 import io.appmetrica.analytics.coreapi.internal.identifiers.AdvertisingIdsHolder
@@ -9,17 +7,10 @@ import io.appmetrica.analytics.coreapi.internal.identifiers.AppSetId
 import io.appmetrica.analytics.coreapi.internal.identifiers.AppSetIdProvider
 import io.appmetrica.analytics.coreapi.internal.identifiers.AppSetIdScope
 import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus
-import io.appmetrica.analytics.coreapi.internal.identifiers.SimpleAdvertisingIdGetter
-import io.appmetrica.analytics.coreapi.internal.system.LocaleProvider
-import io.appmetrica.analytics.networktasks.internal.AppInfo
-import io.appmetrica.analytics.networktasks.internal.NetworkAppContext
 import io.appmetrica.analytics.networktasks.internal.NetworkServiceLocator
-import io.appmetrica.analytics.networktasks.internal.ScreenInfoProvider
-import io.appmetrica.analytics.networktasks.internal.SdkInfo
 import org.junit.rules.ExternalResource
 import org.mockito.MockedStatic
 import org.mockito.Mockito
-import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
@@ -36,35 +27,6 @@ class NetworkServiceLocatorRule : ExternalResource() {
     override fun before() {
         super.before()
         mockedStatic = Mockito.mockStatic(NetworkServiceLocator::class.java)
-        val appInfoMock = mock<AppInfo> {
-            on { appFramework } doReturn "app_framework"
-        }
-        val sdkInfoMock = mock<SdkInfo> {
-            on { sdkVersionName } doReturn "5.0.0"
-            on { sdkBuildNumber } doReturn "500000000"
-            on { sdkBuildType } doReturn "internalProdRelease"
-        }
-        val screenInfoMock = mock<ScreenInfo> {
-            on { width } doReturn 600
-            on { height } doReturn 800
-            on { dpi } doReturn 160
-            on { scaleFactor } doReturn 2f
-            on { deviceType } doReturn DeviceTypeValues.TABLET
-        }
-
-        val screenInfoProviderMock = mock<ScreenInfoProvider> {
-            on { screenInfo } doReturn screenInfoMock
-        }
-
-        val advertisingIdsHolder = prepareAdvertisingIdHolder()
-
-        val advertisingIdGetterMock = mock<SimpleAdvertisingIdGetter> {
-            on { getIdentifiers(any()) } doReturn advertisingIdsHolder
-        }
-
-        val localeProviderMock = mock<LocaleProvider> {
-            on { locales } doReturn listOf("ru", "en")
-        }
 
         val appSetIdMock = AppSetId(UUID.randomUUID().toString(), AppSetIdScope.DEVELOPER)
 
@@ -72,18 +34,8 @@ class NetworkServiceLocatorRule : ExternalResource() {
             on { getAppSetId() } doReturn appSetIdMock
         }
 
-        val networkAppContextMock = mock<NetworkAppContext> {
-            on { appInfo } doReturn appInfoMock
-            on { sdkInfo } doReturn sdkInfoMock
-            on { screenInfoProvider } doReturn screenInfoProviderMock
-            on { advertisingIdGetter } doReturn advertisingIdGetterMock
-            on { localeProvider } doReturn localeProviderMock
-            on { appSetIdProvider } doReturn appSetIdProviderMock
-        }
-
         val networkServiceMock = mock<NetworkServiceLocator> {
             on { networkCore } doReturn mock()
-            on { networkAppContext } doReturn networkAppContextMock
         }
         whenever(NetworkServiceLocator.getInstance()).thenReturn(networkServiceMock)
     }

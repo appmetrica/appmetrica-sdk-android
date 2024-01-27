@@ -25,117 +25,103 @@ public class StartupArgumentsTest extends CommonTest {
     @Test
     public void testCreationWithoutArguments() {
         StartupRequestConfig.Arguments arguments = new StartupRequestConfig.Arguments(createStubedConfiguration());
-        assertArgument(arguments,
-                "phone",
-                "customAppVersion",
-                "666",
-                "distributionReferrer",
-                "gpl",
-                Collections.singletonMap("clid", "12"),
-                true,
-                Arrays.asList("host1", "host2"));
+        assertArgument(
+            arguments,
+            "distributionReferrer",
+            "gpl",
+            Collections.singletonMap("clid", "12"),
+            true,
+            Arrays.asList("host1", "host2")
+        );
     }
 
     @Test
     public void testCreationWithEmptyArguments() {
         StartupRequestConfig.Arguments arguments = new StartupRequestConfig.Arguments(createStubedConfiguration());
 
-        assertArgument(arguments,
-                "phone",
-                "customAppVersion",
-                "666",
-                "distributionReferrer",
-                "gpl",
-                Collections.singletonMap("clid", "12"),
-                true,
-                Arrays.asList("host1", "host2"));
+        assertArgument(
+            arguments,
+            "distributionReferrer",
+            "gpl",
+            Collections.singletonMap("clid", "12"),
+            true,
+            Arrays.asList("host1", "host2")
+        );
     }
 
     @Test
     public void testCreationWithNonEmptyArguments() {
         StartupRequestConfig.Arguments emptyArguments = new StartupRequestConfig.Arguments(
-                "phone",
-                "nonEmptyVersion",
-                "42",
-                "oldReferrer",
-                "gpl",
-                Collections.singletonMap("clid2", "55"),
-                true,
-                Arrays.asList("newHost")
+            "oldReferrer",
+            "gpl",
+            Collections.singletonMap("clid2", "55"),
+            true,
+            Arrays.asList("newHost")
         );
 
         StartupRequestConfig.Arguments arguments = emptyArguments.mergeFrom(new StartupRequestConfig.Arguments(ClientConfigurationTestUtils.createStubbedConfiguration()));
-        assertArgument(arguments,
-                "phone",
-                "nonEmptyVersion",
-                "42",
-                "oldReferrer",
-                "gpl",
-                Collections.singletonMap("clid2", "55"),
-                true,
-                Arrays.asList("newHost"));
+        assertArgument(
+            arguments,
+            "oldReferrer",
+            "gpl",
+            Collections.singletonMap("clid2", "55"),
+            true,
+            Arrays.asList("newHost")
+        );
     }
 
     @Test
     public void testCreationWithAllEmpty() {
         StartupRequestConfig.Arguments emptyArguments = new StartupRequestConfig.Arguments(
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                false,
-                null
+            null,
+            null,
+            null,
+            false,
+            null
         );
 
         StartupRequestConfig.Arguments arguments = emptyArguments.mergeFrom(new StartupRequestConfig.Arguments(ClientConfigurationTestUtils.createStubbedConfiguration()));
-        assertArgument(arguments,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                false,
-                null
+        assertArgument(
+            arguments,
+            null,
+            null,
+            null,
+            false,
+            null
         );
     }
 
     @Test
     public void chooseCustomHostsForTrueAndTrue() {
         assertThat(createArgsWithHasCustomHost(true).mergeFrom(createArgsWithHasCustomHost(true)).hasNewCustomHosts)
-                .isTrue();
+            .isTrue();
     }
 
     @Test
     public void chooseCustomHostsForTrueAndFalse() {
         assertThat(createArgsWithHasCustomHost(true).mergeFrom(createArgsWithHasCustomHost(false)).hasNewCustomHosts)
-                .isTrue();
+            .isTrue();
     }
 
     @Test
     public void chooseCustomHostsForFalseAndTrue() {
         assertThat(createArgsWithHasCustomHost(false).mergeFrom(createArgsWithHasCustomHost(true)).hasNewCustomHosts)
-                .isTrue();
+            .isTrue();
     }
 
     @Test
     public void chooseCustomHostsForFalseAndFalse() {
         assertThat(createArgsWithHasCustomHost(false).mergeFrom(createArgsWithHasCustomHost(false)).hasNewCustomHosts)
-                .isFalse();
+            .isFalse();
     }
 
     private StartupRequestConfig.Arguments createArgsWithHasCustomHost(boolean value) {
         return new StartupRequestConfig.Arguments(
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                value,
-                null
+            null,
+            null,
+            null,
+            value,
+            null
         );
     }
 
@@ -157,17 +143,11 @@ public class StartupArgumentsTest extends CommonTest {
     }
 
     private void assertArgument(@NonNull StartupRequestConfig.Arguments arguments,
-                                @Nullable String deviceType,
-                                @Nullable String appVersion,
-                                @Nullable String appBuildNumber,
                                 @Nullable String distributionReferrer,
                                 @Nullable String referrerSource,
                                 @Nullable Map<String, String> clids,
                                 boolean hasNewCustomHosts,
                                 @Nullable List<String> newCustomHosts) {
-        assertThat(arguments.deviceType).isEqualTo(deviceType);
-        assertThat(arguments.appVersion).isEqualTo(appVersion);
-        assertThat(arguments.appBuildNumber).isEqualTo(appBuildNumber);
         assertThat(arguments.distributionReferrer).isEqualTo(distributionReferrer);
         assertThat(arguments.installReferrerSource).isEqualTo(referrerSource);
         if (clids == null) {

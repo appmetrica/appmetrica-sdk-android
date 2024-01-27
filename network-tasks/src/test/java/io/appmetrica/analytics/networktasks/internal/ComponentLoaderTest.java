@@ -3,15 +3,22 @@ package io.appmetrica.analytics.networktasks.internal;
 import android.content.Context;
 import androidx.annotation.NonNull;
 import io.appmetrica.analytics.coreapi.internal.constants.DeviceTypeValues;
-import io.appmetrica.analytics.coreapi.internal.device.ScreenInfo;
-import io.appmetrica.analytics.coreapi.internal.identifiers.Identifiers;
-import io.appmetrica.analytics.coreutils.internal.services.FrameworkDetector;
+import io.appmetrica.analytics.coreapi.internal.identifiers.AdvertisingIdsHolder;
+import io.appmetrica.analytics.coreapi.internal.identifiers.AppSetId;
+import io.appmetrica.analytics.coreapi.internal.identifiers.AppSetIdProvider;
+import io.appmetrica.analytics.coreapi.internal.identifiers.AppSetIdScope;
+import io.appmetrica.analytics.coreapi.internal.identifiers.PlatformIdentifiers;
+import io.appmetrica.analytics.coreapi.internal.identifiers.SdkIdentifiers;
+import io.appmetrica.analytics.coreapi.internal.identifiers.SimpleAdvertisingIdGetter;
+import io.appmetrica.analytics.coreapi.internal.model.AppVersionInfo;
+import io.appmetrica.analytics.coreapi.internal.model.ScreenInfo;
+import io.appmetrica.analytics.coreapi.internal.model.SdkEnvironment;
+import io.appmetrica.analytics.coreapi.internal.model.SdkInfo;
+import io.appmetrica.analytics.coreapi.internal.servicecomponents.SdkEnvironmentProvider;
 import io.appmetrica.analytics.coreutils.internal.system.ConstantDeviceInfo;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.MockedStaticRule;
-import io.appmetrica.analytics.testutils.NetworkServiceLocatorRule;
 import java.util.UUID;
-import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.Before;
 import org.junit.Rule;
@@ -22,7 +29,6 @@ import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
@@ -36,17 +42,32 @@ public class ComponentLoaderTest extends CommonTest {
     @Rule
     public MockedStaticRule<ConstantDeviceInfo> sConstantDeviceInfo = new MockedStaticRule<>(ConstantDeviceInfo.class);
 
-    @Rule
-    public NetworkServiceLocatorRule networkServiceLocatorRule = new NetworkServiceLocatorRule();
-
     private final String packageName = "test.package.name";
     @Mock
     private Context context;
+    @Mock
+    private SdkEnvironmentProvider sdkEnvironmentProvider;
+    @Mock
+    private SdkEnvironment sdkEnvironment;
+    private AppSetId appSetId = new AppSetId(UUID.randomUUID().toString(), AppSetIdScope.DEVELOPER);
+    @Mock
+    private AppSetIdProvider appSetIdProvider;
+    @Mock
+    private SimpleAdvertisingIdGetter advertisingIdGetter;
+    @Mock
+    private PlatformIdentifiers platformIdentifiers;
+    private AppVersionInfo appVersionInfo = new AppVersionInfo("10300", "3123");
+    private SdkInfo sdkInfo = new SdkInfo("4.2.2", "13123", "buildType");
+    private String appFramework = "native";
+    private String deviceType = DeviceTypeValues.TABLET;
+    private ScreenInfo screenInfo = new ScreenInfo(100, 200, 300, 400f);
+    @Mock
+    private AdvertisingIdsHolder advertisingIdsHolder;
 
     private final String uuid = UUID.randomUUID().toString();
     private final String deviceId = UUID.randomUUID().toString();
     private final String deviceIdHash = UUID.randomUUID().toString();
-    private final Identifiers identifiers = new Identifiers(uuid, deviceId, deviceIdHash);
+    private final SdkIdentifiers identifiers = new SdkIdentifiers(uuid, deviceId, deviceIdHash);
     private ConstantDeviceInfo constantDeviceInfo;
 
     @Before
@@ -56,6 +77,16 @@ public class ComponentLoaderTest extends CommonTest {
         when(context.getPackageName()).thenReturn(packageName);
         constantDeviceInfo = new ConstantDeviceInfo();
         when(ConstantDeviceInfo.getInstance()).thenReturn(constantDeviceInfo);
+        when(appSetIdProvider.getAppSetId()).thenReturn(appSetId);
+        when(platformIdentifiers.getAppSetIdProvider()).thenReturn(appSetIdProvider);
+        when(advertisingIdGetter.getIdentifiers(context)).thenReturn(advertisingIdsHolder);
+        when(platformIdentifiers.getAdvIdentifiersProvider()).thenReturn(advertisingIdGetter);
+        when(sdkEnvironmentProvider.getSdkEnvironment()).thenReturn(sdkEnvironment);
+        when(sdkEnvironment.getAppVersionInfo()).thenReturn(appVersionInfo);
+        when(sdkEnvironment.getAppFramework()).thenReturn(appFramework);
+        when(sdkEnvironment.getSdkInfo()).thenReturn(sdkInfo);
+        when(sdkEnvironment.getDeviceType()).thenReturn(deviceType);
+        when(sdkEnvironment.getScreenInfo()).thenReturn(screenInfo);
 
         mLoader = new BaseRequestConfig.ComponentLoader<
             BaseRequestConfig,
@@ -72,17 +103,12 @@ public class ComponentLoaderTest extends CommonTest {
 
     @Test
     public void loadDeviceTypeFromUser() {
-        when(NetworkServiceLocator.getInstance().getNetworkAppContext().getScreenInfoProvider().getScreenInfo())
-            .thenReturn(new ScreenInfo(0, 0, 0, 0, DeviceTypeValues.TV));
-
         BaseRequestConfig config = mLoader.load(
             new BaseRequestConfig.DataSource<BaseRequestConfig.BaseRequestArguments>(
                 identifiers,
-                new BaseRequestConfig.BaseRequestArguments(
-                    "tablet",
-                    "10300",
-                    "3123"
-                ) {
+                sdkEnvironmentProvider,
+                platformIdentifiers,
+                new BaseRequestConfig.BaseRequestArguments() {
 
                     @Override
                     public Object mergeFrom(@NonNull Object other) {
@@ -100,54 +126,16 @@ public class ComponentLoaderTest extends CommonTest {
     }
 
     @Test
-    public void loadDeviceTypeFromAppMetrica() {
-        when(NetworkServiceLocator.getInstance().getNetworkAppContext().getScreenInfoProvider().getScreenInfo())
-            .thenReturn(new ScreenInfo(0, 0, 0, 0, DeviceTypeValues.TV));
-
-        BaseRequestConfig config = mLoader.load(
-            new BaseRequestConfig.DataSource<BaseRequestConfig.BaseRequestArguments>(
-                identifiers,
-                new BaseRequestConfig.BaseRequestArguments(
-                    null,
-                    "10300",
-                    "3123"
-                ) {
-
-                    @Override
-                    public Object mergeFrom(@NonNull Object other) {
-                        return other;
-                    }
-
-                    @Override
-                    public boolean compareWithOtherArguments(@NonNull Object other) {
-                        return false;
-                    }
-                }
-            )
-        );
-        Assertions.assertThat(config.getDeviceType()).isEqualTo("tv");
-    }
-
-    @Test
     public void testLoadWhenAllArgumentsExist() {
-        int screenWidth = 2880;
-        int screenHeight = 1440;
-        int screenDpi = 55;
-        float screenScaleFactor = 7.8f;
-        when(NetworkServiceLocator.getInstance().getNetworkAppContext().getScreenInfoProvider().getScreenInfo()).thenReturn(
-            new ScreenInfo(screenWidth, screenHeight, screenDpi, screenScaleFactor, DeviceTypeValues.TV)
-        );
 
         ConstantDeviceInfo constantDeviceInfo = ConstantDeviceInfo.getInstance();
 
         BaseRequestConfig config = mLoader.load(
             new BaseRequestConfig.DataSource<BaseRequestConfig.BaseRequestArguments>(
                 identifiers,
-                new BaseRequestConfig.BaseRequestArguments(
-                    "phone",
-                    "10300",
-                    "3123"
-                ) {
+                sdkEnvironmentProvider,
+                platformIdentifiers,
+                new BaseRequestConfig.BaseRequestArguments() {
 
                     @Override
                     public Object mergeFrom(@NonNull Object other) {
@@ -161,42 +149,40 @@ public class ComponentLoaderTest extends CommonTest {
                 }
             )
         );
-        NetworkAppContext networkAppContext = NetworkServiceLocator.getInstance().getNetworkAppContext();
         SoftAssertions softAssertion = new SoftAssertions();
-        softAssertion.assertThat(config.getAnalyticsSdkVersionName()).as("analyticsSdkVersionName")
-            .isEqualTo(networkAppContext.getSdkInfo().getSdkVersionName());
+        softAssertion.assertThat(config.getAnalyticsSdkVersionName())
+            .as("sdk version name")
+            .isEqualTo(sdkInfo.getSdkVersionName());
+        softAssertion.assertThat(config.getAnalyticsSdkBuildNumber())
+            .as("sdk build number")
+            .isEqualTo(sdkInfo.getSdkBuildNumber());
+        softAssertion.assertThat(config.getAnalyticsSdkBuildType())
+            .as("sdk build type")
+            .isEqualTo(sdkInfo.getSdkBuildType());
         softAssertion.assertThat(config.getDeviceType()).as("deviceType")
-            .isEqualTo("phone");
+            .isEqualTo(deviceType);
         softAssertion.assertThat(config.getAppVersion()).as("appVersion")
-            .isEqualTo("10300");
+            .isEqualTo(appVersionInfo.getAppVersionName());
         softAssertion.assertThat(config.getAppBuildNumber()).as("appBuildNumber")
-            .isEqualTo("3123");
-        softAssertion.assertThat(config.getAppBuildNumberInt()).as("appBuildNumberInt")
-            .isEqualTo(3123);
+            .isEqualTo(appVersionInfo.getAppBuildNumber());
+        softAssertion.assertThat(config.getAppSetId())
+            .as("app set id")
+            .isEqualTo(appSetId.getId());
+        softAssertion.assertThat(config.getAppSetIdScope())
+            .as("app set id scope")
+            .isEqualTo(appSetId.getScope().getValue());
         softAssertion.assertThat(config.getPackageName()).as("packageName")
             .isEqualTo(packageName);
         softAssertion.assertThat(config.getAppFramework()).as("appFramework")
-            .isEqualTo(FrameworkDetector.framework());
+            .isEqualTo(appFramework);
         softAssertion.assertThat(config.getProtocolVersion()).as("protocolVersion")
             .isEqualTo("2");
-        softAssertion.assertThat(config.getKitBuildNumber()).as("kitBuildNumber")
-            .isEqualTo(networkAppContext.getSdkInfo().getSdkBuildNumber());
-        softAssertion.assertThat(config.getKitBuildType()).as("kitBuildType")
-            .isEqualTo(networkAppContext.getSdkInfo().getSdkBuildType());
         softAssertion.assertThat(config.getUuid()).as("uuid")
             .isEqualTo(uuid);
         softAssertion.assertThat(config.getDeviceId()).as("deviceId")
             .isEqualTo(deviceId);
         softAssertion.assertThat(config.getDeviceIDHash()).as("deviceIdHash")
             .isEqualTo(deviceIdHash);
-        softAssertion.assertThat(config.getScreenWidth()).as("screenWidth")
-            .isEqualTo(screenWidth);
-        softAssertion.assertThat(config.getScreenHeight()).as("screenHeight")
-            .isEqualTo(screenHeight);
-        softAssertion.assertThat(config.getScreenDpi()).as("screenDpi")
-            .isEqualTo(screenDpi);
-        softAssertion.assertThat(config.getScaleFactor()).as("scaleFactor")
-            .isEqualTo(screenScaleFactor);
         softAssertion.assertThat(config.getManufacturer()).as("manufacturer")
             .isEqualTo(constantDeviceInfo.manufacturer);
         softAssertion.assertThat(config.getModel()).as("model")
@@ -207,17 +193,23 @@ public class ComponentLoaderTest extends CommonTest {
             .isEqualTo(constantDeviceInfo.osApiLevel);
         softAssertion.assertThat(config.getDeviceRootStatus()).as("deviceRootStatus")
             .isEqualTo(constantDeviceInfo.deviceRootStatus);
-        softAssertion.assertThat(config.getLocale()).as("locale")
-            .isEqualTo(
-                NetworkServiceLocator.getInstance().getNetworkAppContext().getLocaleProvider().getLocales().get(0)
-            );
         softAssertion.assertThat(config.getAppPlatform()).as("appPlatform")
             .isEqualTo(ConstantDeviceInfo.APP_PLATFORM);
+        softAssertion.assertThat(config.getScreenWidth())
+            .as("screen width")
+            .isEqualTo(screenInfo.getWidth());
+        softAssertion.assertThat(config.getScreenHeight())
+            .as("scree height")
+            .isEqualTo(screenInfo.getHeight());
+        softAssertion.assertThat(config.getScreenDpi())
+            .as("screen dpi")
+            .isEqualTo(screenInfo.getDpi());
+        softAssertion.assertThat(config.getScaleFactor())
+            .as("screen scale factor")
+            .isEqualTo(screenInfo.getScaleFactor());
         softAssertion.assertThat(config.getAdvertisingIdsHolder())
-            .isEqualTo(
-                NetworkServiceLocator.getInstance().getNetworkAppContext()
-                    .getAdvertisingIdGetter().getIdentifiers(mock(Context.class))
-            );
+            .as("advertising ids holder")
+            .isEqualTo(advertisingIdsHolder);
         softAssertion.assertAll();
     }
 }

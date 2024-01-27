@@ -84,14 +84,14 @@ public interface io.appmetrica.analytics.modulesapi.internal.ModulePreferences {
 public static final class io.appmetrica.analytics.modulesapi.internal.ModulePreferences$DefaultImpls
 
 public final class io.appmetrica.analytics.modulesapi.internal.ModuleRemoteConfig<T> {
-    public <init>([NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.Identifiers, [NonNull] io.appmetrica.analytics.modulesapi.internal.RemoteConfigMetaInfo, T)
-    public final [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.Identifiers component1()
+    public <init>([NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.SdkIdentifiers, [NonNull] io.appmetrica.analytics.modulesapi.internal.RemoteConfigMetaInfo, T)
+    public final [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.SdkIdentifiers component1()
     public final [NonNull] io.appmetrica.analytics.modulesapi.internal.RemoteConfigMetaInfo component2()
     public final T component3()
-    public final [NonNull] io.appmetrica.analytics.modulesapi.internal.ModuleRemoteConfig<T> copy([NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.Identifiers, [NonNull] io.appmetrica.analytics.modulesapi.internal.RemoteConfigMetaInfo, T)
+    public final [NonNull] io.appmetrica.analytics.modulesapi.internal.ModuleRemoteConfig<T> copy([NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.SdkIdentifiers, [NonNull] io.appmetrica.analytics.modulesapi.internal.RemoteConfigMetaInfo, T)
     public boolean equals([Nullable] Object)
     public final T getFeaturesConfig()
-    public final [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.Identifiers getIdentifiers()
+    public final [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.SdkIdentifiers getIdentifiers()
     public final [NonNull] io.appmetrica.analytics.modulesapi.internal.RemoteConfigMetaInfo getRemoteConfigMetaInfo()
     public int hashCode()
     public [NonNull] String toString()
@@ -143,16 +143,16 @@ public interface io.appmetrica.analytics.modulesapi.internal.RemoteConfigUpdateL
 }
 
 public interface io.appmetrica.analytics.modulesapi.internal.ServiceContext {
-    public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.SimpleAdvertisingIdGetter getAdvertisingIdGetter()
     public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.servicecomponents.applicationstate.ApplicationStateProvider getApplicationStateProvider()
     public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.servicecomponents.batteryinfo.ChargeTypeProvider getChargeTypeProvider()
     public abstract [NonNull] android.content.Context getContext()
     public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.control.DataSendingRestrictionController getDataSendingRestrictionController()
     public abstract [NonNull] io.appmetrica.analytics.modulesapi.internal.ExecutorProvider getExecutorProvider()
-    public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.system.LocaleProvider getLocaleProvider()
     public abstract [NonNull] io.appmetrica.analytics.modulesapi.internal.LocationServiceApi getLocationServiceApi()
     public abstract [NonNull] io.appmetrica.analytics.modulesapi.internal.ModuleLifecycleController getModuleLifecycleController()
     public abstract [NonNull] io.appmetrica.analytics.modulesapi.internal.NetworkContext getNetworkContext()
+    public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.PlatformIdentifiers getPlatformIdentifiers()
+    public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.servicecomponents.SdkEnvironmentProvider getSdkEnvironmentProvider()
     public abstract [NonNull] io.appmetrica.analytics.modulesapi.internal.ModuleSelfReporter getSelfReporter()
     public abstract [NonNull] io.appmetrica.analytics.modulesapi.internal.ServiceWakeLock getServiceWakeLock()
     public abstract [NonNull] io.appmetrica.analytics.modulesapi.internal.StorageProvider getStorageProvider()

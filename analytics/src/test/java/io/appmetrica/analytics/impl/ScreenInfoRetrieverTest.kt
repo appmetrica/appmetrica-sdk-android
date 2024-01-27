@@ -4,7 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.os.Build
 import io.appmetrica.analytics.coreapi.internal.constants.DeviceTypeValues
-import io.appmetrica.analytics.coreapi.internal.device.ScreenInfo
+import io.appmetrica.analytics.coreapi.internal.model.ScreenInfo
 import io.appmetrica.analytics.impl.db.preferences.PreferencesClientDbStorage
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule
 import io.appmetrica.analytics.testutils.CommonTest
@@ -62,7 +62,7 @@ class ScreenInfoRetrieverTest : CommonTest() {
 
     @Test
     fun retrieveScreenInfoNoActivityNonNull() {
-        val screenInfo = ScreenInfo(555, 666, 777, 88.8f, DeviceTypeValues.TABLET)
+        val screenInfo = ScreenInfo(555, 666, 777, 88.8f)
         `when`(extractor.extractScreenInfo(context)).thenReturn(screenInfo)
         assertThat(screenInfoRetriever.retrieveScreenInfo()).isEqualTo(screenInfo)
         verify(extractor).extractScreenInfo(context)
@@ -73,7 +73,7 @@ class ScreenInfoRetrieverTest : CommonTest() {
     fun retrieveScreenInfoNoActivityHasInitial() {
         clearInvocations(extractor, clientPreferences)
 
-        val initialScreenInfo = ScreenInfo(555, 666, 777, 88.8f, DeviceTypeValues.TABLET)
+        val initialScreenInfo = ScreenInfo(555, 666, 777, 88.8f)
         `when`(clientPreferences.screenInfo).thenReturn(initialScreenInfo)
         screenInfoRetriever = ScreenInfoRetriever(context, clientPreferences, extractor)
         assertThat(screenInfoRetriever.retrieveScreenInfo()).isEqualTo(initialScreenInfo)
@@ -96,7 +96,7 @@ class ScreenInfoRetrieverTest : CommonTest() {
 
     @Test
     fun retrieveScreenInfoHasActivityNullForActivityNonNullForContext() {
-        val screenInfo = ScreenInfo(222, 333, 444, 55.5f, DeviceTypeValues.TABLET)
+        val screenInfo = ScreenInfo(222, 333, 444, 55.5f)
         screenInfoRetriever.onActivityAppeared(activity)
 
         clearInvocations(extractor, clientPreferences)
@@ -110,7 +110,7 @@ class ScreenInfoRetrieverTest : CommonTest() {
 
     @Test
     fun retrieveScreenInfoHasActivityNonNull() {
-        val screenInfo = ScreenInfo(222, 333, 444, 55.5f, DeviceTypeValues.TABLET)
+        val screenInfo = ScreenInfo(222, 333, 444, 55.5f)
         screenInfoRetriever.onActivityAppeared(activity)
 
         clearInvocations(extractor, clientPreferences)
@@ -123,8 +123,8 @@ class ScreenInfoRetrieverTest : CommonTest() {
 
     @Test
     fun retrieveScreenInfoHasActivityHasAnotherInitial() {
-        val initialScreenInfo = ScreenInfo(666, 777, 888, 99.9f, DeviceTypeValues.TV)
-        val newScreenInfo = ScreenInfo(222, 333, 444, 55.5f, DeviceTypeValues.TABLET)
+        val initialScreenInfo = ScreenInfo(666, 777, 888, 99.9f)
+        val newScreenInfo = ScreenInfo(222, 333, 444, 55.5f)
         `when`(clientPreferences.screenInfo).thenReturn(initialScreenInfo)
         screenInfoRetriever = ScreenInfoRetriever(context, clientPreferences, extractor)
         screenInfoRetriever.onActivityAppeared(activity)
@@ -139,7 +139,7 @@ class ScreenInfoRetrieverTest : CommonTest() {
 
     @Test
     fun retrieveScreenInfoHasActivityHasSameInitial() {
-        val initialScreenInfo = ScreenInfo(222, 333, 444, 55.5f, DeviceTypeValues.TABLET)
+        val initialScreenInfo = ScreenInfo(222, 333, 444, 55.5f)
         `when`(clientPreferences.screenInfo).thenReturn(initialScreenInfo)
         screenInfoRetriever = ScreenInfoRetriever(context, clientPreferences, extractor)
         screenInfoRetriever.onActivityAppeared(activity)
@@ -154,7 +154,7 @@ class ScreenInfoRetrieverTest : CommonTest() {
 
     @Test
     fun retrieveScreenInfoHasActivityHasInitialNullForActivity() {
-        val initialScreenInfo = ScreenInfo(222, 333, 444, 55.5f, DeviceTypeValues.TABLET)
+        val initialScreenInfo = ScreenInfo(222, 333, 444, 55.5f)
         `when`(clientPreferences.screenInfo).thenReturn(initialScreenInfo)
         screenInfoRetriever = ScreenInfoRetriever(context, clientPreferences, extractor)
         screenInfoRetriever.onActivityAppeared(activity)
@@ -169,7 +169,7 @@ class ScreenInfoRetrieverTest : CommonTest() {
 
     @Test
     fun onActivityAppearedHasCached() {
-        val initialScreenInfo = ScreenInfo(222, 333, 444, 55.5f, DeviceTypeValues.TABLET)
+        val initialScreenInfo = ScreenInfo(222, 333, 444, 55.5f)
         `when`(clientPreferences.screenInfo).thenReturn(initialScreenInfo)
         screenInfoRetriever = ScreenInfoRetriever(context, clientPreferences, extractor)
 
@@ -189,7 +189,7 @@ class ScreenInfoRetrieverTest : CommonTest() {
 
     @Test
     fun onActivityAppearedNoCachedNonNull() {
-        val screenInfo = ScreenInfo(222, 333, 444, 55.5f, DeviceTypeValues.TABLET)
+        val screenInfo = ScreenInfo(222, 333, 444, 55.5f)
         `when`(extractor.extractScreenInfo(activity)).thenReturn(screenInfo)
         screenInfoRetriever.onActivityAppeared(activity)
         verify(extractor).extractScreenInfo(activity)
@@ -220,7 +220,7 @@ class ScreenInfoRetrieverTest : CommonTest() {
     @Test
     @Config(sdk = [Build.VERSION_CODES.R])
     fun retrieveScreenInfoRNullForActivityNotCheckedForDeprecatedNonNullForContext() {
-        val screenInfo = ScreenInfo(222, 333, 444, 55.5f, DeviceTypeValues.TABLET)
+        val screenInfo = ScreenInfo(222, 333, 444, 55.5f)
         `when`(extractor.extractScreenInfo(context)).thenReturn(screenInfo)
         assertThat(screenInfoRetriever.retrieveScreenInfo()).isEqualTo(screenInfo)
         verify(extractor).extractScreenInfo(context)

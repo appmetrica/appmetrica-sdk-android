@@ -612,6 +612,13 @@ public class StartupParamsAppenderTest extends CommonTest {
         }
 
         @Test
+        public void noGaidIfMissingAdvIdsHolder() {
+            when(requestConfig.getAdvertisingIdsHolder()).thenReturn(null);
+            startupParamsAppender.appendAdvIdIfAllowed(builder, restrictionController, requestConfig);
+            checkQueryParameter(builder, obfuscatedGaidParametedName, "");
+        }
+
+        @Test
         public void noHoaid() {
             doReturn(false).when(restrictionController).isRestrictedForReporter();
             startupParamsAppender.appendAdvIdIfAllowed(builder, restrictionController, requestConfig);
@@ -619,8 +626,22 @@ public class StartupParamsAppenderTest extends CommonTest {
         }
 
         @Test
+        public void noHoaidIfMissingAdvIdsHolder() {
+            when(requestConfig.getAdvertisingIdsHolder()).thenReturn(null);
+            startupParamsAppender.appendAdvIdIfAllowed(builder, restrictionController, requestConfig);
+            checkQueryParameter(builder, obfuscatedOaidParametedName, "");
+        }
+
+        @Test
         public void noYandexAdvId() {
             doReturn(false).when(restrictionController).isRestrictedForReporter();
+            startupParamsAppender.appendAdvIdIfAllowed(builder, restrictionController, requestConfig);
+            checkQueryParameter(builder, obfuscatedYandexAdvIdParametedName, "");
+        }
+
+        @Test
+        public void noYandexAdvIdIfMissingAdbIdsHolder() {
+            when(requestConfig.getAdvertisingIdsHolder()).thenReturn(null);
             startupParamsAppender.appendAdvIdIfAllowed(builder, restrictionController, requestConfig);
             checkQueryParameter(builder, obfuscatedYandexAdvIdParametedName, "");
         }

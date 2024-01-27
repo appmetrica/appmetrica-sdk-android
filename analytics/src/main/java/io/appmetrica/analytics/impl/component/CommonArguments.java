@@ -10,6 +10,7 @@ import io.appmetrica.analytics.impl.client.ClientConfiguration;
 import io.appmetrica.analytics.impl.request.StartupRequestConfig;
 import io.appmetrica.analytics.networktasks.internal.ArgumentsMerger;
 import java.util.Map;
+import java.util.Objects;
 
 public class CommonArguments {
 
@@ -40,12 +41,6 @@ public class CommonArguments {
     public static class ReporterArguments implements ArgumentsMerger<ReporterArguments, ReporterArguments>  {
 
         @Nullable
-        public final String deviceType;
-        @Nullable
-        public final String appVersion;
-        @Nullable
-        public final String appBuildNumber;
-        @Nullable
         public final String apiKey;
         @Nullable
         public final Boolean locationTracking;
@@ -72,10 +67,7 @@ public class CommonArguments {
         @Nullable
         public final Boolean revenueAutoTrackingEnabled;
 
-        ReporterArguments(@Nullable String deviceType,
-                          @Nullable String appVersion,
-                          @Nullable String appBuildNumber,
-                          @Nullable String apiKey,
+        ReporterArguments(@Nullable String apiKey,
                           @Nullable Boolean locationTracking,
                           @Nullable Location manualLocation,
                           @Nullable Boolean firstActivationAsUpdate,
@@ -88,9 +80,6 @@ public class CommonArguments {
                           @Nullable Integer maxReportsInDbCount,
                           @Nullable Boolean nativeCrashesEnabled,
                           @Nullable Boolean revenueAutoTrackingEnabled) {
-            this.deviceType = deviceType;
-            this.appVersion = appVersion;
-            this.appBuildNumber = appBuildNumber;
             this.apiKey = apiKey;
             this.locationTracking = locationTracking;
             this.manualLocation = manualLocation;
@@ -109,9 +98,6 @@ public class CommonArguments {
         public ReporterArguments(@NonNull CounterConfiguration reporterConfiguration,
                                  @Nullable Map<String, String> clidsFromClient) {
             this(
-                    reporterConfiguration.getDeviceType(),
-                    reporterConfiguration.getAppVersion(),
-                    reporterConfiguration.getAppBuildNumber(),
                     reporterConfiguration.getApiKey(),
                     reporterConfiguration.isLocationTrackingEnabled(),
                     reporterConfiguration.getManualLocation(),
@@ -142,9 +128,6 @@ public class CommonArguments {
                     null,
                     null,
                     null,
-                    null,
-                    null,
-                    null,
                     null
             );
         }
@@ -153,9 +136,6 @@ public class CommonArguments {
         @Override
         public ReporterArguments mergeFrom(@NonNull ReporterArguments other) {
             return new ReporterArguments(
-                    WrapUtils.getOrDefaultNullable(deviceType, other.deviceType),
-                    WrapUtils.getOrDefaultNullable(appVersion, other.appVersion),
-                    WrapUtils.getOrDefaultNullable(appBuildNumber, other.appBuildNumber),
                     WrapUtils.getOrDefaultNullable(apiKey, other.apiKey),
                     WrapUtils.getOrDefaultNullable(locationTracking, other.locationTracking),
                     WrapUtils.getOrDefaultNullable(manualLocation, other.manualLocation),
@@ -182,53 +162,36 @@ public class CommonArguments {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
 
-            ReporterArguments that = (ReporterArguments) o;
+            final ReporterArguments that = (ReporterArguments) o;
 
-            if (deviceType != null ? !deviceType.equals(that.deviceType) : that.deviceType != null)
+            if (!Objects.equals(apiKey, that.apiKey)) return false;
+            if (!Objects.equals(locationTracking, that.locationTracking))
                 return false;
-            if (appVersion != null ? !appVersion.equals(that.appVersion) : that.appVersion != null)
+            if (!Objects.equals(manualLocation, that.manualLocation))
                 return false;
-            if (appBuildNumber != null ? !appBuildNumber.equals(that.appBuildNumber) : that.appBuildNumber != null)
+            if (!Objects.equals(firstActivationAsUpdate, that.firstActivationAsUpdate))
                 return false;
-            if (apiKey != null ? !apiKey.equals(that.apiKey) : that.apiKey != null) return false;
-            if (locationTracking != null ? !locationTracking.equals(that.locationTracking) :
-                    that.locationTracking != null)
+            if (!Objects.equals(sessionTimeout, that.sessionTimeout))
                 return false;
-            if (manualLocation != null ? !manualLocation.equals(that.manualLocation) : that.manualLocation != null)
+            if (!Objects.equals(maxReportsCount, that.maxReportsCount))
                 return false;
-            if (firstActivationAsUpdate != null ? !firstActivationAsUpdate.equals(that.firstActivationAsUpdate) :
-                    that.firstActivationAsUpdate != null)
+            if (!Objects.equals(dispatchPeriod, that.dispatchPeriod))
                 return false;
-            if (sessionTimeout != null ? !sessionTimeout.equals(that.sessionTimeout) : that.sessionTimeout != null)
+            if (!Objects.equals(logEnabled, that.logEnabled)) return false;
+            if (!Objects.equals(dataSendingEnabled, that.dataSendingEnabled))
                 return false;
-            if (maxReportsCount != null ? !maxReportsCount.equals(that.maxReportsCount) : that.maxReportsCount != null)
+            if (!Objects.equals(clidsFromClient, that.clidsFromClient))
                 return false;
-            if (dispatchPeriod != null ? !dispatchPeriod.equals(that.dispatchPeriod) : that.dispatchPeriod != null)
+            if (!Objects.equals(maxReportsInDbCount, that.maxReportsInDbCount))
                 return false;
-            if (logEnabled != null ? !logEnabled.equals(that.logEnabled) : that.logEnabled != null)
+            if (!Objects.equals(nativeCrashesEnabled, that.nativeCrashesEnabled))
                 return false;
-            if (dataSendingEnabled != null ? !dataSendingEnabled.equals(that.dataSendingEnabled) :
-                    that.dataSendingEnabled != null)
-                return false;
-            if (clidsFromClient != null ? !clidsFromClient.equals(that.clidsFromClient) : that.clidsFromClient != null)
-                return false;
-            if (maxReportsInDbCount != null ? !maxReportsInDbCount.equals(that.maxReportsInDbCount) :
-                    that.maxReportsInDbCount != null)
-                return false;
-            if (nativeCrashesEnabled != null ? !nativeCrashesEnabled.equals(that.nativeCrashesEnabled) :
-                    that.nativeCrashesEnabled != null)
-                return false;
-            return revenueAutoTrackingEnabled != null ?
-                    revenueAutoTrackingEnabled.equals(that.revenueAutoTrackingEnabled) :
-                    that.revenueAutoTrackingEnabled == null;
+            return Objects.equals(revenueAutoTrackingEnabled, that.revenueAutoTrackingEnabled);
         }
 
         @Override
         public int hashCode() {
-            int result = deviceType != null ? deviceType.hashCode() : 0;
-            result = 31 * result + (appVersion != null ? appVersion.hashCode() : 0);
-            result = 31 * result + (appBuildNumber != null ? appBuildNumber.hashCode() : 0);
-            result = 31 * result + (apiKey != null ? apiKey.hashCode() : 0);
+            int result = apiKey != null ? apiKey.hashCode() : 0;
             result = 31 * result + (locationTracking != null ? locationTracking.hashCode() : 0);
             result = 31 * result + (manualLocation != null ? manualLocation.hashCode() : 0);
             result = 31 * result + (firstActivationAsUpdate != null ? firstActivationAsUpdate.hashCode() : 0);

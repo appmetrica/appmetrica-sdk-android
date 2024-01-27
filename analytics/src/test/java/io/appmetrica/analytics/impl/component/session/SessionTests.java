@@ -154,7 +154,7 @@ public class SessionTests extends CommonTest {
         ReportRequestConfig requestConfig = mock(ReportRequestConfig.class);
 
         doReturn(null).when(requestConfig).getAnalyticsSdkVersionName();
-        doReturn(null).when(requestConfig).getKitBuildNumber();
+        doReturn(null).when(requestConfig).getAnalyticsSdkBuildNumber();
         doReturn(null).when(requestConfig).getAppVersion();
         doReturn(null).when(requestConfig).getAppBuildNumber();
         doReturn(null).when(requestConfig).getOsVersion();

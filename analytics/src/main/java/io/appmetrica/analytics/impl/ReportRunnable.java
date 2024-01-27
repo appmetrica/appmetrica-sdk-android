@@ -46,8 +46,15 @@ class ReportRunnable implements Runnable {
 
         ClientDescription clientDescription = ClientDescription.fromClientConfiguration(sdkConfig);
 
-        CommonArguments arguments = new CommonArguments(sdkConfig);
+        SdkEnvironmentHolder sdkEnvironmentHolder = GlobalServiceLocator.getInstance().getSdkEnvironmentHolder();
 
+        sdkEnvironmentHolder.mayBeUpdateAppVersion(
+            sdkConfig.getReporterConfiguration().getAppVersion(),
+            sdkConfig.getReporterConfiguration().getAppBuildNumber()
+        );
+        sdkEnvironmentHolder.mayBeUpdateDeviceTypeFromClient(sdkConfig.getReporterConfiguration().getDeviceType());
+
+        CommonArguments arguments = new CommonArguments(sdkConfig);
         ClientUnit clientUnit = mClientRepository.getOrCreateClient(clientDescription, arguments);
 
         clientUnit.handle(mReport, arguments);

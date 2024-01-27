@@ -205,7 +205,10 @@ public class Session {
         SessionRequestParams(final JSONObject requestParameters) {
             mKitVersionName = requestParameters
                     .optString(Constants.RequestParametersJsonKeys.ANALYTICS_SDK_VERSION_NAME,  null);
-            mKitBuildNumber = requestParameters.optString(Constants.RequestParametersJsonKeys.KIT_BUILD_NUMBER,  null);
+            mKitBuildNumber = requestParameters.optString(
+                Constants.RequestParametersJsonKeys.ANALYTICS_SDK_BUILD_NUMBER,
+                null
+            );
             mAppVersion = requestParameters.optString(Constants.RequestParametersJsonKeys.APP_VERSION,  null);
             mAppBuild = requestParameters.optString(Constants.RequestParametersJsonKeys.APP_BUILD,  null);
             mOsVersion = requestParameters.optString(Constants.RequestParametersJsonKeys.OS_VERSION,  null);
@@ -215,7 +218,7 @@ public class Session {
 
         boolean areParamsSameAsInConfig(final ReportRequestConfig reportRequestConfig) {
             boolean result = TextUtils.equals(reportRequestConfig.getAnalyticsSdkVersionName(), mKitVersionName) &&
-                    TextUtils.equals(reportRequestConfig.getKitBuildNumber(), mKitBuildNumber) &&
+                    TextUtils.equals(reportRequestConfig.getAnalyticsSdkBuildNumber(), mKitBuildNumber) &&
                     TextUtils.equals(reportRequestConfig.getAppVersion(), mAppVersion) &&
                     TextUtils.equals(reportRequestConfig.getAppBuildNumber(), mAppBuild) &&
                     TextUtils.equals(reportRequestConfig.getOsVersion(), mOsVersion) &&
@@ -231,7 +234,7 @@ public class Session {
         private String requestConfigToString(ReportRequestConfig reportRequestConfig) {
             return "ReportRequestConfig{" +
                     "mKitVersionName='" + reportRequestConfig.getAnalyticsSdkVersionName() + '\'' +
-                    ", mKitBuildNumber='" + reportRequestConfig.getKitBuildNumber() + '\'' +
+                    ", mKitBuildNumber='" + reportRequestConfig.getAnalyticsSdkBuildNumber() + '\'' +
                     ", mAppVersion='" + reportRequestConfig.getAppVersion() + '\'' +
                     ", mAppBuild='" + reportRequestConfig.getAppBuildNumber() + '\'' +
                     ", mOsVersion='" + reportRequestConfig.getOsVersion() + '\'' +

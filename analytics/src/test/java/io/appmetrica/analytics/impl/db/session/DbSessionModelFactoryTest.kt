@@ -58,8 +58,8 @@ class DbSessionModelFactoryTest : CommonTest() {
         on { uuid } doReturn uuid
         on { appVersion } doReturn appVersion
         on { appBuildNumber } doReturn appBuildNumber
-        on { kitBuildNumber } doReturn kitBuildNumber
-        on { kitBuildType } doReturn kitBuildType
+        on { analyticsSdkBuildNumber } doReturn kitBuildNumber
+        on { analyticsSdkBuildType } doReturn kitBuildType
         on { osVersion } doReturn osVersion
         on { osApiLevel } doReturn osApiLevel
         on { analyticsSdkVersionName } doReturn analyticsSdkVersionName

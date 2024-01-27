@@ -70,8 +70,6 @@ public class AppMetricaServiceCoreImplStaticTests extends CommonTest {
     @Mock
     private ReportConsumer reportConsumer;
     @Mock
-    private ScreenInfoHolder screenInfoHolder;
-    @Mock
     private ClientConfiguration clientConfiguration;
 
     private StartupState mStartupState;
@@ -125,8 +123,7 @@ public class AppMetricaServiceCoreImplStaticTests extends CommonTest {
             firstServiceEntryPointManager,
             mApplicationStateProvider,
             reportExecutor,
-            fieldsFactory,
-            screenInfoHolder
+            fieldsFactory
         );
 
         mStartupState = new StartupState.Builder(mCollectingFlags).build();

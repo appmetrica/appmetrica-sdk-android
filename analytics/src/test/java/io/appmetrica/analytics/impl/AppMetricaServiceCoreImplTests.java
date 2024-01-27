@@ -8,21 +8,9 @@ import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.ResultReceiver;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
-import org.mockito.Mock;
-import org.mockito.MockedConstruction;
-import org.mockito.MockitoAnnotations;
-import org.robolectric.RobolectricTestRunner;
-import java.io.File;
-import java.util.UUID;
 import io.appmetrica.analytics.coreapi.internal.backport.Consumer;
-import io.appmetrica.analytics.coreapi.internal.device.ScreenInfo;
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
+import io.appmetrica.analytics.coreapi.internal.model.ScreenInfo;
 import io.appmetrica.analytics.coreutils.internal.io.FileUtils;
 import io.appmetrica.analytics.impl.client.ProcessConfiguration;
 import io.appmetrica.analytics.impl.component.clients.ClientRepository;
@@ -40,6 +28,18 @@ import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import io.appmetrica.analytics.testutils.MockedConstructionRule;
 import io.appmetrica.analytics.testutils.MockedStaticRule;
 import io.appmetrica.analytics.testutils.TestUtils;
+import java.io.File;
+import java.util.UUID;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.Mock;
+import org.mockito.MockedConstruction;
+import org.mockito.MockitoAnnotations;
+import org.robolectric.RobolectricTestRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.same;
@@ -81,19 +81,17 @@ public class AppMetricaServiceCoreImplTests extends CommonTest {
     @Mock
     private ReportConsumer reportConsumer;
     @Mock
-    private ScreenInfoHolder screenInfoHolder;
-    @Mock
     private Resources resources;
     @Mock
     private Configuration configuration;
     @Mock
     private Configuration newConfiguration;
-    @Mock
-    private LocaleHolder localeHolder;
     private Intent intent;
 
     private StartupState mStartupState;
     private AppMetricaServiceCoreImpl mMetricaCore;
+
+    private SdkEnvironmentHolder sdkEnvironmentHolder;
 
     @Captor
     private ArgumentCaptor<AppMetricaServiceLifecycle.LifecycleObserver> mLifecycleObserverCaptor;
@@ -102,8 +100,6 @@ public class AppMetricaServiceCoreImplTests extends CommonTest {
     public GlobalServiceLocatorRule globalServiceLocatorRule = new GlobalServiceLocatorRule();
     @Rule
     public MockedStaticRule<JsonHelper> mockedStaticRule = new MockedStaticRule<>(JsonHelper.class);
-    @Rule
-    public MockedStaticRule<LocaleHolder> localeHolderMockedStaticRule = new MockedStaticRule<>(LocaleHolder.class);
     @Rule
     public MockedStaticRule<FileUtils> fileUtilsMockedStaticRule = new MockedStaticRule<>(FileUtils.class);
     @Rule
@@ -141,8 +137,7 @@ public class AppMetricaServiceCoreImplTests extends CommonTest {
 
         when(mContext.getResources()).thenReturn(resources);
         when(resources.getConfiguration()).thenReturn(configuration);
-
-        when(LocaleHolder.getInstance(mContext)).thenReturn(localeHolder);
+        sdkEnvironmentHolder = GlobalServiceLocator.getInstance().getSdkEnvironmentHolder();
 
         mMetricaCore = new AppMetricaServiceCoreImpl(
             mContext,
@@ -152,8 +147,7 @@ public class AppMetricaServiceCoreImplTests extends CommonTest {
             firstServiceEntryPointManager,
             mApplicationStateProvider,
             reportExecutor,
-            fieldsFactory,
-            screenInfoHolder
+            fieldsFactory
         );
 
         mStartupState = new StartupState.Builder(mCollectingFlags).build();
@@ -169,19 +163,19 @@ public class AppMetricaServiceCoreImplTests extends CommonTest {
 
     @Test
     public void onCreateDoesNotUpdateLocaleForFistTime() {
-        verify(localeHolder, never()).updateLocales(configuration);
+        verify(sdkEnvironmentHolder, never()).mayBeUpdateConfiguration(configuration);
     }
 
     @Test
     public void onCreateUpdatesLocaleForNonFirstTime() {
         mMetricaCore.onCreate();
-        verify(localeHolder).updateLocales(configuration);
+        verify(sdkEnvironmentHolder).mayBeUpdateConfiguration(configuration);
     }
 
     @Test
     public void onConfigurationChanged() {
         mMetricaCore.onConfigurationChanged(newConfiguration);
-        verify(localeHolder).updateLocales(newConfiguration);
+        verify(sdkEnvironmentHolder).mayBeUpdateConfiguration(newConfiguration);
     }
 
     @Test
@@ -201,16 +195,16 @@ public class AppMetricaServiceCoreImplTests extends CommonTest {
     }
 
     @Test
-    public void testNewClientConnectObserveDoesNotUpdateScreenSizeIfNoExtras() {
+    public void newClientConnectObserveDoesNotUpdateScreenSizeIfNoExtras() {
         touchNewClientConnectedObserver();
-        verify(screenInfoHolder).maybeUpdateInfo(null);
+        verify(sdkEnvironmentHolder).mayBeUpdateScreenInfo(null);
     }
 
     @Test
-    public void testNewClientConnectObserveUpdatesScreenSizeToNull() {
+    public void newClientConnectObserveUpdatesScreenSizeToNull() {
         intent.putExtra(ServiceUtils.EXTRA_SCREEN_SIZE, new Bundle());
         touchNewClientConnectedObserver();
-        verify(screenInfoHolder).maybeUpdateInfo(null);
+        verify(sdkEnvironmentHolder).mayBeUpdateScreenInfo(null);
     }
 
     @Test
@@ -220,7 +214,7 @@ public class AppMetricaServiceCoreImplTests extends CommonTest {
         intent.putExtra(ServiceUtils.EXTRA_SCREEN_SIZE, screenInfoString);
         when(JsonHelper.screenInfoFromJsonString(screenInfoString)).thenReturn(screenInfo);
         touchNewClientConnectedObserver();
-        verify(screenInfoHolder).maybeUpdateInfo(screenInfo);
+        verify(sdkEnvironmentHolder).mayBeUpdateScreenInfo(screenInfo);
     }
 
     @Test

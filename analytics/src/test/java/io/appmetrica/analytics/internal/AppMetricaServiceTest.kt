@@ -6,7 +6,6 @@ import android.content.res.Configuration
 import android.net.Uri
 import io.appmetrica.analytics.impl.AppMetricaServiceCoreExecutionDispatcher
 import io.appmetrica.analytics.impl.AppMetricaServiceCoreImpl
-import io.appmetrica.analytics.impl.LocaleHolder
 import io.appmetrica.analytics.impl.service.AppMetricaServiceAction
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
@@ -42,9 +41,6 @@ class AppMetricaServiceTest : CommonTest() {
         constructionRule<AppMetricaServiceCoreExecutionDispatcher>()
 
     private val configuration: Configuration = mock()
-
-    @get:Rule
-    val locationHolderMockedRule = constructionRule<LocaleHolder>()
 
     private var context: Context = mock()
 

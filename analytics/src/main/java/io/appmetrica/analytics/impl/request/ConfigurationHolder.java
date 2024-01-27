@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
-import io.appmetrica.analytics.impl.LocaleHolder;
+import io.appmetrica.analytics.impl.SdkEnvironmentHolder;
 import io.appmetrica.analytics.impl.startup.StartupState;
 import io.appmetrica.analytics.networktasks.internal.ArgumentsMerger;
 import io.appmetrica.analytics.networktasks.internal.BaseRequestConfig;
@@ -12,7 +12,7 @@ import io.appmetrica.analytics.networktasks.internal.BaseRequestConfig;
 public abstract class ConfigurationHolder
         <T extends BaseRequestConfig, IA, A extends ArgumentsMerger<IA, A>,
         L extends BaseRequestConfig.RequestConfigLoader<T, CoreRequestConfig.CoreDataSource<A>>>
-        implements LocaleHolder.Listener {
+        implements SdkEnvironmentHolder.Listener {
 
     @Nullable
     private T mRequestConfig;
@@ -25,14 +25,19 @@ public abstract class ConfigurationHolder
                                @NonNull StartupState startupState,
                                @NonNull A initialArguments) {
         mRequestConfigLoader = loader;
-        LocaleHolder.getInstance(GlobalServiceLocator.getInstance().getContext()).registerLocaleUpdatedListener(this);
-        setDataSource(new CoreRequestConfig.CoreDataSource<A>(
-                startupState, initialArguments)
+        GlobalServiceLocator.getInstance().getSdkEnvironmentHolder().registerListener(this);
+        setDataSource(
+            new CoreRequestConfig.CoreDataSource<A>(
+                startupState,
+                GlobalServiceLocator.getInstance().getSdkEnvironmentHolder(),
+                GlobalServiceLocator.getInstance().getPlatformIdentifiers(),
+                initialArguments
+            )
         );
     }
 
     @Override
-    public void onLocalesUpdated() {
+    public void onSdkEnvironmentChanged() {
         reset();
     }
 
@@ -47,9 +52,12 @@ public abstract class ConfigurationHolder
     public synchronized void updateArguments(@NonNull IA newArguments) {
         if (mDataSource.componentArguments.compareWithOtherArguments(newArguments) == false) {
             setDataSource(
-                        new CoreRequestConfig.CoreDataSource<A>(getStartupState(),
-                        mDataSource.componentArguments.mergeFrom(newArguments)
-                    )
+                new CoreRequestConfig.CoreDataSource<A>(
+                    getStartupState(),
+                    GlobalServiceLocator.getInstance().getSdkEnvironmentHolder(),
+                    GlobalServiceLocator.getInstance().getPlatformIdentifiers(),
+                    mDataSource.componentArguments.mergeFrom(newArguments)
+                )
             );
             reset();
         }
@@ -57,7 +65,14 @@ public abstract class ConfigurationHolder
 
     public synchronized void updateStartupState(@NonNull StartupState startupState) {
         //it's not so frequent operation. Just load new config, without any comparing with previous state.
-        setDataSource(new CoreRequestConfig.CoreDataSource<A>(startupState, getArguments()));
+        setDataSource(
+            new CoreRequestConfig.CoreDataSource<A>(
+                startupState,
+                GlobalServiceLocator.getInstance().getSdkEnvironmentHolder(),
+                GlobalServiceLocator.getInstance().getPlatformIdentifiers(),
+                getArguments()
+            )
+        );
         reset();
     }
 

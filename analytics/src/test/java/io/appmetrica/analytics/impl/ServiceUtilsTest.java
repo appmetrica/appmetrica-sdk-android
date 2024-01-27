@@ -4,11 +4,10 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import io.appmetrica.analytics.internal.AppMetricaService;
-import io.appmetrica.analytics.coreapi.internal.constants.DeviceTypeValues;
-import io.appmetrica.analytics.coreapi.internal.device.ScreenInfo;
+import io.appmetrica.analytics.coreapi.internal.model.ScreenInfo;
 import io.appmetrica.analytics.impl.client.ProcessConfiguration;
 import io.appmetrica.analytics.impl.utils.JsonHelper;
+import io.appmetrica.analytics.internal.AppMetricaService;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.MockedStaticRule;
 import org.junit.Before;
@@ -32,7 +31,7 @@ public class ServiceUtilsTest extends CommonTest {
     @Mock
     private ScreenInfoRetriever retriever;
     private Context context;
-    private final ScreenInfo screenInfo = new ScreenInfo(777, 888, 999, 66.6f, DeviceTypeValues.PHONE);
+    private final ScreenInfo screenInfo = new ScreenInfo(777, 888, 999, 66.6f);
 
     @Before
     public void setUp() {

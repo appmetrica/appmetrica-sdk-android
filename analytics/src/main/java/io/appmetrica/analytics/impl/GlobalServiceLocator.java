@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.data.ProtobufStateStorage;
+import io.appmetrica.analytics.coreapi.internal.identifiers.PlatformIdentifiers;
 import io.appmetrica.analytics.coreapi.internal.system.PermissionExtractor;
 import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.coreutils.internal.services.UtilityServiceLocator;
@@ -44,6 +45,7 @@ import io.appmetrica.analytics.impl.startup.uuid.UuidFromStartupStateImporter;
 import io.appmetrica.analytics.impl.telephony.TelephonyDataProvider;
 import io.appmetrica.analytics.impl.utils.executors.ServiceExecutorProvider;
 import io.appmetrica.analytics.modulesapi.internal.LocationServiceApi;
+import io.appmetrica.analytics.networktasks.internal.NetworkCore;
 import io.appmetrica.analytics.networktasks.internal.NetworkServiceLocator;
 
 public final class GlobalServiceLocator {
@@ -79,9 +81,11 @@ public final class GlobalServiceLocator {
     @Nullable
     private volatile SelfDiagnosticReporterStorage mSelfDiagnosticReporterStorage;
     @Nullable
-    private volatile AdvertisingIdGetter mServiceInternalAdvertisingIdGetter;
+    private volatile AdvertisingIdGetter serviceInternalAdvertisingIdGetter;
     @Nullable
     private volatile AppSetIdGetter appSetIdGetter;
+    @Nullable
+    private volatile PlatformIdentifiers platformIdentifiers;
     @Nullable
     private volatile PreloadInfoStorage mPreloadInfoStorage;
     @Nullable
@@ -91,7 +95,7 @@ public final class GlobalServiceLocator {
     @Nullable
     private volatile VitalDataProviderStorage vitalDataProviderStorage;
     @Nullable
-    private volatile ScreenInfoHolder screenInfoHolder;
+    private volatile SdkEnvironmentHolder sdkEnvironmentHolder;
     @Nullable
     private volatile LifecycleDependentComponentManager lifecycleDependentComponentManager;
     @Nullable
@@ -140,7 +144,7 @@ public final class GlobalServiceLocator {
         startupStateHolder.init(mContext);
         startupStateHolder.registerObserver(new UtilityServiceStartupStateObserver());
         NetworkServiceLocator.init();
-        NetworkServiceLocator.getInstance().initAsync(new NetworkAppContextProvider().getNetworkAppContext());
+        NetworkServiceLocator.getInstance().initAsync();
         getLifecycleDependentComponentManager().addLifecycleObserver(networkServiceLifecycleObserver);
         initPreloadInfoStorage();
     }
@@ -182,34 +186,55 @@ public final class GlobalServiceLocator {
     }
 
     @NonNull
-    public AdvertisingIdGetter getServiceInternalAdvertisingIdGetter() {
-        if (mServiceInternalAdvertisingIdGetter == null) {
+    public AppSetIdGetter getAppSetIdGetter() {
+        AppSetIdGetter local = appSetIdGetter;
+        if (local == null) {
             synchronized (this) {
-                if (mServiceInternalAdvertisingIdGetter == null) {
-                    mServiceInternalAdvertisingIdGetter = new AdvertisingIdGetter(
-                            new AdvertisingIdGetter.ServiceInternalGaidRestrictionProvider(),
-                            new AdvertisingIdGetter.InternalHoaidRestrictionProvider(),
-                            new AdvertisingIdGetter.AlwaysAllowedRestrictionsProvider(),
-                            getServiceExecutorProvider().getDefaultExecutor(),
-                            "ServiceInternal"
-                    );
-                    startupStateHolder.registerObserver(mServiceInternalAdvertisingIdGetter);
+                local = appSetIdGetter;
+                if (local == null) {
+                    local = new AppSetIdGetter(mContext);
+                    appSetIdGetter = local;
                 }
             }
         }
-        return mServiceInternalAdvertisingIdGetter;
+        return local;
     }
 
     @NonNull
-    public AppSetIdGetter getAppSetIdGetter() {
-        if (appSetIdGetter == null) {
+    public AdvertisingIdGetter getServiceInternalAdvertisingIdGetter() {
+        AdvertisingIdGetter local = serviceInternalAdvertisingIdGetter;
+        if (local == null) {
             synchronized (this) {
-                if (appSetIdGetter == null) {
-                    appSetIdGetter = new AppSetIdGetter(mContext);
+                local = serviceInternalAdvertisingIdGetter;
+                if (local == null) {
+                    local = new AdvertisingIdGetter(
+                        new AdvertisingIdGetter.ServiceInternalGaidRestrictionProvider(),
+                        new AdvertisingIdGetter.InternalHoaidRestrictionProvider(),
+                        new AdvertisingIdGetter.AlwaysAllowedRestrictionsProvider(),
+                        getServiceExecutorProvider().getDefaultExecutor(),
+                        "ServiceInternal"
+                    );
+                    startupStateHolder.registerObserver(local);
+                    serviceInternalAdvertisingIdGetter = local;
                 }
             }
         }
-        return appSetIdGetter;
+        return local;
+    }
+
+    @NonNull
+    public PlatformIdentifiers getPlatformIdentifiers() {
+        PlatformIdentifiers local = platformIdentifiers;
+        if (local == null) {
+            synchronized (this) {
+                local = platformIdentifiers;
+                if (local == null) {
+                    local = new PlatformIdentifiers(getServiceInternalAdvertisingIdGetter(), getAppSetIdGetter());
+                    platformIdentifiers = local;
+                }
+            }
+        }
+        return local;
     }
 
     @NonNull
@@ -336,14 +361,14 @@ public final class GlobalServiceLocator {
     }
 
     @NonNull
-    public ScreenInfoHolder getScreenInfoHolder() {
-        ScreenInfoHolder local = screenInfoHolder;
+    public SdkEnvironmentHolder getSdkEnvironmentHolder() {
+        SdkEnvironmentHolder local = sdkEnvironmentHolder;
         if (local == null) {
             synchronized (this) {
-                local = screenInfoHolder;
+                local = sdkEnvironmentHolder;
                 if (local == null) {
-                    local = new ScreenInfoHolder();
-                     screenInfoHolder = local;
+                    local = new SdkEnvironmentHolder(getContext());
+                    sdkEnvironmentHolder = local;
                 }
             }
         }
@@ -486,6 +511,11 @@ public final class GlobalServiceLocator {
         return nativeCrashService;
     }
 
+    @NonNull
+    public NetworkCore getNetworkCore() {
+        return NetworkServiceLocator.getInstance().getNetworkCore();
+    }
+
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)
     public static synchronized void destroy() {
         GlobalServiceLocator instance = GlobalServiceLocator.getInstance();
@@ -500,11 +530,6 @@ public final class GlobalServiceLocator {
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)
     public void setBatteryInfoProvider(@Nullable BatteryInfoProvider batteryInfoProvider) {
         this.batteryInfoProvider = batteryInfoProvider;
-    }
-
-    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
-    public void setAdvertisingIdGetter(@NonNull AdvertisingIdGetter getter) {
-        mServiceInternalAdvertisingIdGetter = getter;
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)

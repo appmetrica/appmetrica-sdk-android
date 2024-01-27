@@ -3,25 +3,29 @@ package io.appmetrica.analytics.impl.request;
 import android.content.Context;
 import androidx.annotation.Nullable;
 import io.appmetrica.analytics.coreapi.internal.identifiers.AppSetId;
+import io.appmetrica.analytics.coreapi.internal.identifiers.AppSetIdProvider;
+import io.appmetrica.analytics.coreapi.internal.identifiers.AppSetIdScope;
+import io.appmetrica.analytics.coreapi.internal.identifiers.PlatformIdentifiers;
+import io.appmetrica.analytics.coreapi.internal.servicecomponents.SdkEnvironmentProvider;
 import io.appmetrica.analytics.coreutils.internal.services.PackageManagerUtils;
 import io.appmetrica.analytics.impl.CertificatesFingerprintsProvider;
 import io.appmetrica.analytics.impl.component.ComponentId;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.impl.db.VitalComponentDataProvider;
+import io.appmetrica.analytics.impl.id.AdvertisingIdGetter;
 import io.appmetrica.analytics.impl.startup.ClidsStateChecker;
 import io.appmetrica.analytics.impl.startup.CollectingFlags;
 import io.appmetrica.analytics.impl.startup.StartupState;
-import io.appmetrica.analytics.networktasks.internal.NetworkServiceLocator;
 import io.appmetrica.analytics.networktasks.internal.RetryPolicyConfig;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import io.appmetrica.analytics.testutils.MockedStaticRule;
-import io.appmetrica.analytics.testutils.rules.networktasks.NetworkServiceLocatorRule;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -80,8 +84,6 @@ public class ReportRequestConfigTest extends CommonTest {
         }
 
         @Rule
-        public NetworkServiceLocatorRule networkServiceLocatorRule = new NetworkServiceLocatorRule();
-        @Rule
         public MockedStaticRule<PackageManagerUtils> packageManagerUtilsMockedRule =
             new MockedStaticRule<>(PackageManagerUtils.class);
         @Rule
@@ -109,6 +111,15 @@ public class ReportRequestConfigTest extends CommonTest {
         private CertificatesFingerprintsProvider certificatesFingerprintsProvider;
         @Mock
         private CollectingFlags collectingFlags;
+        @Mock
+        private SdkEnvironmentProvider sdkEnvironmentProvider;
+        @Mock
+        private AdvertisingIdGetter advertisingIdGetter;
+        private AppSetId appSetId = new AppSetId(UUID.randomUUID().toString(), AppSetIdScope.DEVELOPER);
+        @Mock
+        private AppSetIdProvider appSetIdProvider;
+        @Mock
+        private PlatformIdentifiers platformIdentifiers;
 
         private final String packageName = "test.package.name";
         private final String appVersionName = "2.4.5";
@@ -143,7 +154,16 @@ public class ReportRequestConfigTest extends CommonTest {
             when(componentUnit.getComponentId()).thenReturn(componentId);
             when(componentId.getPackage()).thenReturn(packageName);
 
-            coreDataSource = new CoreRequestConfig.CoreDataSource<>(startupState, arguments);
+            when(appSetIdProvider.getAppSetId()).thenReturn(appSetId);
+            when(platformIdentifiers.getAdvIdentifiersProvider()).thenReturn(advertisingIdGetter);
+            when(platformIdentifiers.getAppSetIdProvider()).thenReturn(appSetIdProvider);
+
+            coreDataSource = new CoreRequestConfig.CoreDataSource<>(
+                startupState,
+                sdkEnvironmentProvider,
+                platformIdentifiers,
+                arguments
+            );
             loader = new ReportRequestConfig.Loader(componentUnit, dataSendingStrategy, clidsStateChecker);
 
             mReportRequestConfig = loader.load(coreDataSource);
@@ -157,8 +177,6 @@ public class ReportRequestConfigTest extends CommonTest {
         }
     }
 
-    @Rule
-    public NetworkServiceLocatorRule networkServiceLocatorRule = new NetworkServiceLocatorRule();
     @Rule
     public MockedStaticRule<PackageManagerUtils> packageManagerUtilsMockedRule =
         new MockedStaticRule<>(PackageManagerUtils.class);
@@ -189,7 +207,19 @@ public class ReportRequestConfigTest extends CommonTest {
     private CertificatesFingerprintsProvider certificatesFingerprintsProvider;
     @Mock
     private CollectingFlags collectingFlags;
+    @Mock
+    private SdkEnvironmentProvider sdkEnvironmentProvider;
+    @Mock
+    private AppSetIdProvider appSetIdProvider;
+    @Mock
+    private AppSetId appSetId;
+    @Mock
+    private AdvertisingIdGetter advertisingIdGetter;
+    @Mock
+    private PlatformIdentifiers platformIdentifiers;
 
+    private String appSetIdValue = "AppSetIdValue";
+    private AppSetIdScope appSetIdScope = AppSetIdScope.APP;
     private final String packageName = "test.package.name";
     private final String appVersionName = "2.4.5";
     private final String appVersionCode = "245";
@@ -217,8 +247,18 @@ public class ReportRequestConfigTest extends CommonTest {
         when(certificatesFingerprintsProvider.getSha1()).thenReturn(Collections.singletonList(certificateFingerprint));
         when(componentUnit.getComponentId()).thenReturn(componentId);
         when(componentId.getPackage()).thenReturn(packageName);
+        when(platformIdentifiers.getAdvIdentifiersProvider()).thenReturn(advertisingIdGetter);
+        when(platformIdentifiers.getAppSetIdProvider()).thenReturn(appSetIdProvider);
+        when(appSetIdProvider.getAppSetId()).thenReturn(appSetId);
+        when(appSetId.getId()).thenReturn(appSetIdValue);
+        when(appSetId.getScope()).thenReturn(appSetIdScope);
 
-        coreDataSource = new CoreRequestConfig.CoreDataSource<>(startupState, arguments);
+        coreDataSource = new CoreRequestConfig.CoreDataSource<>(
+            startupState,
+            sdkEnvironmentProvider,
+            platformIdentifiers,
+            arguments
+        );
         loader = new ReportRequestConfig.Loader(componentUnit, dataSendingStrategy, clidsStateChecker);
 
         reportRequestConfig = loader.load(coreDataSource);
@@ -252,8 +292,7 @@ public class ReportRequestConfigTest extends CommonTest {
 
     @Test
     public void appSetIdIsNotSet() {
-        when(NetworkServiceLocator.getInstance().getNetworkAppContext().getAppSetIdProvider().getAppSetId())
-            .thenReturn(null);
+        when(platformIdentifiers.getAppSetIdProvider().getAppSetId()).thenReturn(null);
         reportRequestConfig = loader.load(coreDataSource);
         assertThat(reportRequestConfig.getAppSetId()).isNotNull().isEmpty();
         assertThat(reportRequestConfig.getAppSetIdScope()).isNotNull().isEmpty();
@@ -261,10 +300,8 @@ public class ReportRequestConfigTest extends CommonTest {
 
     @Test
     public void appSetIdIsSet() {
-        AppSetId appSetId =
-            NetworkServiceLocator.getInstance().getNetworkAppContext().getAppSetIdProvider().getAppSetId();
-        assertThat(reportRequestConfig.getAppSetId()).isEqualTo(appSetId.getId());
-        assertThat(reportRequestConfig.getAppSetIdScope()).isEqualTo(appSetId.getScope().getValue());
+        assertThat(reportRequestConfig.getAppSetId()).isEqualTo(appSetIdValue);
+        assertThat(reportRequestConfig.getAppSetIdScope()).isEqualTo(appSetIdScope.getValue());
     }
 
 }

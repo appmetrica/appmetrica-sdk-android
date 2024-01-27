@@ -202,9 +202,6 @@ public class StartupRequestConfig extends CoreRequestConfig {
 
         public Arguments(@NonNull ClientConfiguration configuration) {
             this(
-                    configuration.getReporterConfiguration().getDeviceType(),
-                    configuration.getReporterConfiguration().getAppVersion(),
-                    configuration.getReporterConfiguration().getAppBuildNumber(),
                     configuration.getProcessConfiguration().getDistributionReferrer(),
                     configuration.getProcessConfiguration().getInstallReferrerSource(),
                     configuration.getProcessConfiguration().getClientClids(),
@@ -222,15 +219,12 @@ public class StartupRequestConfig extends CoreRequestConfig {
         @Nullable
         public final List<String> newCustomHosts;
 
-        public Arguments(@Nullable String deviceType,
-                         @Nullable String appVersion,
-                         @Nullable String appBuildNumber,
-                         @Nullable String distributionReferrer,
+        public Arguments(@Nullable String distributionReferrer,
                          @Nullable String installReferrerSource,
                          @Nullable Map<String, String> clientClids,
                          boolean hasNewCustomHosts,
                          @Nullable List<String> newCustomHosts) {
-            super(deviceType, appVersion, appBuildNumber);
+            super();
             this.distributionReferrer = distributionReferrer;
             this.installReferrerSource = installReferrerSource;
             this.clientClids = clientClids;
@@ -239,7 +233,7 @@ public class StartupRequestConfig extends CoreRequestConfig {
         }
 
         public Arguments() {
-            this(null, null, null, null, null, null, false, null);
+            this(null, null, null, false, null);
         }
 
         boolean chooseHasNewCustomHosts(@NonNull Arguments other) {
@@ -254,9 +248,6 @@ public class StartupRequestConfig extends CoreRequestConfig {
         @Override
         public Arguments mergeFrom(@NonNull Arguments other) {
             return new Arguments(
-                    WrapUtils.getOrDefaultNullable(deviceType, other.deviceType),
-                    WrapUtils.getOrDefaultNullable(appVersion, other.appVersion),
-                    WrapUtils.getOrDefaultNullable(appBuildNumber, other.appBuildNumber),
                     WrapUtils.getOrDefaultNullable(distributionReferrer, other.distributionReferrer),
                     WrapUtils.getOrDefaultNullable(installReferrerSource, other.installReferrerSource),
                     WrapUtils.getOrDefaultNullable(clientClids, other.clientClids),
