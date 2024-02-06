@@ -5,8 +5,7 @@ import androidx.annotation.VisibleForTesting
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor
 import io.appmetrica.analytics.impl.IMainReporter
 import io.appmetrica.analytics.impl.SdkUtils
-import io.appmetrica.analytics.impl.SynchronousStageExecutor
-import io.appmetrica.analytics.impl.WebViewJsInterfaceHandler
+import io.appmetrica.analytics.impl.proxy.synchronous.PluginsSynchronousStageExecutor
 import io.appmetrica.analytics.impl.proxy.validation.MainFacadeBarrier
 import io.appmetrica.analytics.plugins.PluginErrorDetails
 
@@ -15,7 +14,7 @@ internal class AppMetricaPluginsProxy @VisibleForTesting constructor(
     private val provider: AppMetricaFacadeProvider,
     private val activationValidator: ActivationValidator,
     private val barrier: MainFacadeBarrier,
-    private val synchronousStageExecutor: SynchronousStageExecutor
+    private val synchronousStageExecutor: PluginsSynchronousStageExecutor
 ) {
 
     constructor(executor: ICommonExecutor) : this(
@@ -28,7 +27,7 @@ internal class AppMetricaPluginsProxy @VisibleForTesting constructor(
         provider,
         ActivationValidator(provider),
         MainFacadeBarrier(),
-        SynchronousStageExecutor(provider, WebViewJsInterfaceHandler())
+        PluginsSynchronousStageExecutor()
     )
 
     fun reportUnhandledException(errorDetails: PluginErrorDetails?) {

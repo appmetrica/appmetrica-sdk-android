@@ -11,10 +11,10 @@ import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
 import io.appmetrica.analytics.ecommerce.ECommerceEvent;
 import io.appmetrica.analytics.impl.AppMetricaFacade;
 import io.appmetrica.analytics.impl.IReporterExtended;
-import io.appmetrica.analytics.impl.SynchronousStageExecutor;
 import io.appmetrica.analytics.impl.TestsData;
 import io.appmetrica.analytics.impl.crash.client.AllThreads;
 import io.appmetrica.analytics.impl.crash.client.UnhandledException;
+import io.appmetrica.analytics.impl.proxy.synchronous.ReporterSynchronousStageExecutor;
 import io.appmetrica.analytics.impl.proxy.validation.ReporterBarrier;
 import io.appmetrica.analytics.profile.UserProfile;
 import io.appmetrica.analytics.testutils.CommonTest;
@@ -60,7 +60,7 @@ public class ReporterExtendedProxyTest extends CommonTest {
     @Mock
     private IReporterExtended mReporter;
     @Mock
-    private SynchronousStageExecutor mSynchronousStageExecutor;
+    private ReporterSynchronousStageExecutor mSynchronousStageExecutor;
     @Mock
     private ECommerceEvent eCommerceEvent;
     @Mock

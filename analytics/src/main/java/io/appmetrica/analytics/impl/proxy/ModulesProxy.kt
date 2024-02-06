@@ -7,14 +7,15 @@ import io.appmetrica.analytics.IModuleReporter
 import io.appmetrica.analytics.ModuleEvent
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor
 import io.appmetrica.analytics.coreutils.internal.executors.SafeRunnable
-import io.appmetrica.analytics.impl.ClientServiceLocator
 import io.appmetrica.analytics.impl.IMainReporter
+import io.appmetrica.analytics.impl.proxy.synchronous.ModulesSynchronousStageExecutor
 import io.appmetrica.analytics.impl.proxy.validation.ModulesBarrier
 
 class ModulesProxy @VisibleForTesting constructor(
     private val executor: ICommonExecutor,
     private val provider: AppMetricaFacadeProvider,
     private val modulesBarrier: ModulesBarrier,
+    private val synchronousStageExecutor: ModulesSynchronousStageExecutor,
 ) {
     private val TAG = "[ModulesProxy]"
 
@@ -26,13 +27,15 @@ class ModulesProxy @VisibleForTesting constructor(
     private constructor(executor: ICommonExecutor, provider: AppMetricaFacadeProvider) : this(
         executor,
         provider,
-        ModulesBarrier(provider)
+        ModulesBarrier(provider),
+        ModulesSynchronousStageExecutor()
     )
 
     fun reportEvent(
         moduleEvent: ModuleEvent
     ) {
         modulesBarrier.reportEvent(moduleEvent)
+        synchronousStageExecutor.reportEvent(moduleEvent)
 
         executor.execute(object : SafeRunnable() {
             override fun runSafety() {
@@ -43,6 +46,7 @@ class ModulesProxy @VisibleForTesting constructor(
 
     fun setSessionExtra(key: String, value: ByteArray?) {
         modulesBarrier.setSessionExtra(key, value)
+        synchronousStageExecutor.setSessionExtra(key, value)
 
         executor.execute(object : SafeRunnable() {
             override fun runSafety() {
@@ -53,17 +57,19 @@ class ModulesProxy @VisibleForTesting constructor(
 
     fun isActivatedForApp(): Boolean {
         modulesBarrier.isActivatedForApp()
+        synchronousStageExecutor.isActivatedForApp()
         return provider.isActivated
     }
 
     fun sendEventsBuffer() {
         modulesBarrier.sendEventsBuffer()
+        synchronousStageExecutor.sendEventsBuffer()
         AppMetrica.sendEventsBuffer()
     }
 
     fun getReporter(context: Context, apiKey: String): IModuleReporter {
         modulesBarrier.getReporter(context, apiKey)
-        ClientServiceLocator.getInstance().contextAppearedListener.onProbablyAppeared(context.applicationContext)
+        synchronousStageExecutor.getReporter(context.applicationContext, apiKey)
         return ReporterProxyStorage.getInstance().getOrCreate(context.applicationContext, apiKey)
     }
 

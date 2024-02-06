@@ -21,15 +21,14 @@ import io.appmetrica.analytics.ecommerce.ECommerceEvent;
 import io.appmetrica.analytics.impl.ActivityLifecycleManager;
 import io.appmetrica.analytics.impl.AppMetricaFacade;
 import io.appmetrica.analytics.impl.ClientServiceLocator;
-import io.appmetrica.analytics.impl.ContextAppearedListener;
 import io.appmetrica.analytics.impl.DeeplinkConsumer;
 import io.appmetrica.analytics.impl.DefaultOneShotMetricaConfig;
 import io.appmetrica.analytics.impl.MainReporter;
 import io.appmetrica.analytics.impl.MainReporterApiConsumerProvider;
 import io.appmetrica.analytics.impl.SessionsTrackingManager;
-import io.appmetrica.analytics.impl.SynchronousStageExecutor;
 import io.appmetrica.analytics.impl.TestsData;
 import io.appmetrica.analytics.impl.WebViewJsInterfaceHandler;
+import io.appmetrica.analytics.impl.proxy.synchronous.SynchronousStageExecutor;
 import io.appmetrica.analytics.impl.proxy.validation.MainFacadeBarrier;
 import io.appmetrica.analytics.impl.utils.validation.ValidationResult;
 import io.appmetrica.analytics.impl.utils.validation.Validator;
@@ -106,8 +105,6 @@ public class AppMetricaProxyTest extends CommonTest {
     private ActivationValidator activationValidator;
     @Mock
     private SessionsTrackingManager sessionsTrackingManager;
-    @Mock
-    private ContextAppearedListener contextAppearedListener;
 
     @Rule
     public ClientServiceLocatorRule clientServiceLocatorRule = new ClientServiceLocatorRule();
@@ -134,8 +131,7 @@ public class AppMetricaProxyTest extends CommonTest {
                 mSynchronousStageExecutor,
                 mReporterProxyStorage,
                 mDefaultOneShotMetricaConfig,
-                sessionsTrackingManager,
-                contextAppearedListener
+                sessionsTrackingManager
         );
         when(mImpl.getMainReporterApiConsumerProvider()).thenReturn(mainReporterApiConsumerProvider);
         doReturn(mMainReporter).when(mainReporterApiConsumerProvider).getMainReporter();
@@ -150,7 +146,6 @@ public class AppMetricaProxyTest extends CommonTest {
         softAssertions.assertThat(mProxy.getExecutor()).as("Executor").isEqualTo(mExecutor);
         softAssertions.assertThat(mProxy.getProvider()).as("Provider").isNotNull();
         softAssertions.assertThat(mProxy.getMainFacadeBarrier()).as("Main facade barrier").isNotNull();
-        softAssertions.assertThat(mProxy.getSynchronousStageExecutor()).as("Synchronous stage executor").isNotNull();
         softAssertions.assertThat(mProxy.getReporterProxyStorage()).as("Reporter proxy storage").isNotNull();
         softAssertions.assertAll();
     }
@@ -488,11 +483,11 @@ public class AppMetricaProxyTest extends CommonTest {
     @Test
     public void testGetReporter() {
         String apiKey = TestsData.generateApiKey();
-        mProxy.getReporter(RuntimeEnvironment.getApplication(), apiKey);
-        InOrder inOrder = inOrder(mBarrier, contextAppearedListener, mReporterProxyStorage);
-        inOrder.verify(mBarrier).getReporter(RuntimeEnvironment.getApplication(), apiKey);
-        inOrder.verify(contextAppearedListener).onProbablyAppeared(RuntimeEnvironment.getApplication());
-        inOrder.verify(mReporterProxyStorage).getOrCreate(RuntimeEnvironment.getApplication(), apiKey);
+        mProxy.getReporter(context, apiKey);
+        InOrder inOrder = inOrder(mBarrier, mSynchronousStageExecutor, mReporterProxyStorage);
+        inOrder.verify(mBarrier).getReporter(context, apiKey);
+        inOrder.verify(mSynchronousStageExecutor).getReporter(applicationContext, apiKey);
+        inOrder.verify(mReporterProxyStorage).getOrCreate(applicationContext, apiKey);
         verifyNoMoreInteractions(activationValidator);
     }
 
@@ -730,8 +725,7 @@ public class AppMetricaProxyTest extends CommonTest {
                 mSynchronousStageExecutor,
                 mReporterProxyStorage,
                 mDefaultOneShotMetricaConfig,
-                sessionsTrackingManager,
-                contextAppearedListener
+                sessionsTrackingManager
         );
     }
 

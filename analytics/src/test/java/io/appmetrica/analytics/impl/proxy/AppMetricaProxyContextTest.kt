@@ -6,14 +6,13 @@ import io.appmetrica.analytics.ReporterConfig
 import io.appmetrica.analytics.StartupParamsCallback
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor
 import io.appmetrica.analytics.impl.AppMetricaFacade
-import io.appmetrica.analytics.impl.ContextAppearedListener
 import io.appmetrica.analytics.impl.DeeplinkConsumer
 import io.appmetrica.analytics.impl.DefaultOneShotMetricaConfig
 import io.appmetrica.analytics.impl.MainReporter
 import io.appmetrica.analytics.impl.MainReporterApiConsumerProvider
 import io.appmetrica.analytics.impl.SessionsTrackingManager
-import io.appmetrica.analytics.impl.SynchronousStageExecutor
 import io.appmetrica.analytics.impl.WebViewJsInterfaceHandler
+import io.appmetrica.analytics.impl.proxy.synchronous.SynchronousStageExecutor
 import io.appmetrica.analytics.impl.proxy.validation.MainFacadeBarrier
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule
 import io.appmetrica.analytics.testutils.CommonTest
@@ -50,7 +49,6 @@ class AppMetricaProxyContextTest : CommonTest() {
     private val silentActivationValidator: SilentActivationValidator = mock()
     private val activationValidator: ActivationValidator = mock()
     private val sessionsTrackingManager: SessionsTrackingManager = mock()
-    private val contextAppearedListener: ContextAppearedListener = mock()
     private val executor: ICommonExecutor = mock()
     private val startupParamsCallback: StartupParamsCallback = mock()
     private val params: List<String> = mock()
@@ -73,8 +71,7 @@ class AppMetricaProxyContextTest : CommonTest() {
             synchronousStageExecutor,
             reporterProxyStorage,
             defaultOneShotMetricaConfig,
-            sessionsTrackingManager,
-            contextAppearedListener
+            sessionsTrackingManager
         )
         whenever(impl.mainReporterApiConsumerProvider).thenReturn(mainReporterApiConsumerProvider)
         doReturn(mainReporter).whenever(mainReporterApiConsumerProvider).mainReporter
@@ -93,7 +90,7 @@ class AppMetricaProxyContextTest : CommonTest() {
     fun getReporter() {
         proxy.getReporter(context, apiKey)
         verify(barrier).getReporter(context, apiKey)
-        verify(contextAppearedListener).onProbablyAppeared(applicationContext)
+        verify(synchronousStageExecutor).getReporter(applicationContext, apiKey)
     }
 
     @Test

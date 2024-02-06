@@ -5,8 +5,8 @@ import io.appmetrica.analytics.ReporterConfig;
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
 import io.appmetrica.analytics.impl.AppMetricaFacade;
 import io.appmetrica.analytics.impl.IReporterExtended;
-import io.appmetrica.analytics.impl.SynchronousStageExecutor;
 import io.appmetrica.analytics.impl.TestsData;
+import io.appmetrica.analytics.impl.proxy.synchronous.ReporterSynchronousStageExecutor;
 import io.appmetrica.analytics.impl.proxy.validation.ReporterBarrier;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.StubbedBlockingExecutor;
@@ -31,7 +31,7 @@ public class ReporterProxyReportErrorTest extends CommonTest {
     private static final String API_KEY = TestsData.generateApiKey();
 
     @Mock
-    private SynchronousStageExecutor mSynchronousStageExecutor;
+    private ReporterSynchronousStageExecutor mSynchronousStageExecutor;
     @Mock
     private ReporterBarrier mBarrier;
     @Mock

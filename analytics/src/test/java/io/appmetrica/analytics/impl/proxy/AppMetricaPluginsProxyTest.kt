@@ -4,7 +4,7 @@ import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor
 import io.appmetrica.analytics.impl.AppMetricaFacade
 import io.appmetrica.analytics.impl.MainReporter
 import io.appmetrica.analytics.impl.MainReporterApiConsumerProvider
-import io.appmetrica.analytics.impl.SynchronousStageExecutor
+import io.appmetrica.analytics.impl.proxy.synchronous.PluginsSynchronousStageExecutor
 import io.appmetrica.analytics.impl.proxy.validation.MainFacadeBarrier
 import io.appmetrica.analytics.impl.proxy.validation.PluginsBarrier
 import io.appmetrica.analytics.plugins.IPluginReporter
@@ -42,7 +42,7 @@ class AppMetricaPluginsProxyTest : CommonTest() {
     @Mock
     private lateinit var pluginBarrier: PluginsBarrier
     @Mock
-    private lateinit var synchronousStageExecutor: SynchronousStageExecutor
+    private lateinit var synchronousStageExecutor: PluginsSynchronousStageExecutor
     @Mock
     private lateinit var errorDetails: PluginErrorDetails
     @Mock

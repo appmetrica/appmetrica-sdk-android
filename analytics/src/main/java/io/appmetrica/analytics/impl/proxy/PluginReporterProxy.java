@@ -8,7 +8,7 @@ import io.appmetrica.analytics.coreapi.internal.backport.Provider;
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
 import io.appmetrica.analytics.impl.IReporterExtended;
 import io.appmetrica.analytics.impl.SdkUtils;
-import io.appmetrica.analytics.impl.SynchronousStageExecutor;
+import io.appmetrica.analytics.impl.proxy.synchronous.PluginsReporterSynchronousStageExecutor;
 import io.appmetrica.analytics.impl.proxy.validation.PluginsBarrier;
 import io.appmetrica.analytics.plugins.IPluginReporter;
 import io.appmetrica.analytics.plugins.PluginErrorDetails;
@@ -18,18 +18,17 @@ public class PluginReporterProxy implements IPluginReporter {
     @NonNull
     private final PluginsBarrier barrier;
     @NonNull
-    private final SynchronousStageExecutor synchronousStageExecutor;
+    private final PluginsReporterSynchronousStageExecutor synchronousStageExecutor;
     @NonNull
     private final ICommonExecutor executor;
     @NonNull
     private final Provider<IReporterExtended> reporterProvider;
 
     public PluginReporterProxy(@NonNull PluginsBarrier barrier,
-                               @NonNull SynchronousStageExecutor synchronousStageExecutor,
                                @NonNull ICommonExecutor executor,
                                @NonNull Provider<IReporterExtended> reporterProvider) {
         this.barrier = barrier;
-        this.synchronousStageExecutor = synchronousStageExecutor;
+        this.synchronousStageExecutor = new PluginsReporterSynchronousStageExecutor();
         this.executor = executor;
         this.reporterProvider = reporterProvider;
     }

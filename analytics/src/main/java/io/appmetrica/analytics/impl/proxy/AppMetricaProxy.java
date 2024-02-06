@@ -26,15 +26,14 @@ import io.appmetrica.analytics.ecommerce.ECommerceEvent;
 import io.appmetrica.analytics.impl.ActivityLifecycleManager;
 import io.appmetrica.analytics.impl.AppMetricaFacade;
 import io.appmetrica.analytics.impl.ClientServiceLocator;
-import io.appmetrica.analytics.impl.ContextAppearedListener;
 import io.appmetrica.analytics.impl.DefaultOneShotMetricaConfig;
 import io.appmetrica.analytics.impl.IMainReporter;
 import io.appmetrica.analytics.impl.IReporterExtended;
 import io.appmetrica.analytics.impl.MainReporterApiConsumerProvider;
 import io.appmetrica.analytics.impl.SdkUtils;
 import io.appmetrica.analytics.impl.SessionsTrackingManager;
-import io.appmetrica.analytics.impl.SynchronousStageExecutor;
 import io.appmetrica.analytics.impl.WebViewJsInterfaceHandler;
+import io.appmetrica.analytics.impl.proxy.synchronous.SynchronousStageExecutor;
 import io.appmetrica.analytics.impl.proxy.validation.MainFacadeBarrier;
 import io.appmetrica.analytics.impl.utils.ApiProxyThread;
 import io.appmetrica.analytics.internal.IdentifiersResult;
@@ -48,7 +47,10 @@ public final class AppMetricaProxy extends BaseAppMetricaProxy {
 
     @NonNull
     private final SilentActivationValidator silentActivationValidator;
+    @NonNull
     private final MainFacadeBarrier mMainFacadeBarrier;
+    @NonNull
+    private final SynchronousStageExecutor synchronousStageExecutor;
     @NonNull
     private final SessionsTrackingManager sessionsTrackingManager;
 
@@ -75,8 +77,7 @@ public final class AppMetricaProxy extends BaseAppMetricaProxy {
                 new SynchronousStageExecutor(provider, webViewJsInterfaceHandler),
                 ReporterProxyStorage.getInstance(),
                 ClientServiceLocator.getInstance().getDefaultOneShotConfig(),
-                ClientServiceLocator.getInstance().getSessionsTrackingManager(),
-                ClientServiceLocator.getInstance().getContextAppearedListener()
+                ClientServiceLocator.getInstance().getSessionsTrackingManager()
         );
     }
 
@@ -90,26 +91,24 @@ public final class AppMetricaProxy extends BaseAppMetricaProxy {
                        @NonNull SynchronousStageExecutor synchronousStageExecutor,
                        @NonNull ReporterProxyStorage reporterProxyStorage,
                        @NonNull DefaultOneShotMetricaConfig defaultOneShotConfig,
-                       @NonNull SessionsTrackingManager sessionsTrackingManager,
-                       @NonNull ContextAppearedListener contextAppearedListener) {
+                       @NonNull SessionsTrackingManager sessionsTrackingManager) {
         super(
                 provider,
                 executor,
                 activationValidator,
                 webViewJsInterfaceHandler,
-                synchronousStageExecutor,
                 reporterProxyStorage,
-                defaultOneShotConfig,
-                contextAppearedListener
+                defaultOneShotConfig
         );
         mMainFacadeBarrier = mainFacadeBarrier;
+        this.synchronousStageExecutor = synchronousStageExecutor;
         this.silentActivationValidator = silentActivationValidator;
         this.sessionsTrackingManager = sessionsTrackingManager;
     }
 
     public void activate(@NonNull final Context context, @NonNull final AppMetricaConfig config) {
         mMainFacadeBarrier.activate(context, config);
-        getSynchronousStageExecutor().activate(context.getApplicationContext(), config);
+        synchronousStageExecutor.activate(context.getApplicationContext(), config);
         getExecutor().execute(new Runnable() {
             @Override
             public void run() {
@@ -126,7 +125,7 @@ public final class AppMetricaProxy extends BaseAppMetricaProxy {
     public void sendEventsBuffer() {
         getActivationValidator().validate();
         mMainFacadeBarrier.sendEventsBuffer();
-        getSynchronousStageExecutor().sendEventsBuffer();
+        synchronousStageExecutor.sendEventsBuffer();
         getExecutor().execute(new Runnable() {
             @Override
             public void run() {
@@ -138,7 +137,7 @@ public final class AppMetricaProxy extends BaseAppMetricaProxy {
     public void resumeSession(@Nullable final Activity activity) {
         getActivationValidator().validate();
         mMainFacadeBarrier.resumeSession();
-        getSynchronousStageExecutor().resumeSession(activity);
+        synchronousStageExecutor.resumeSession(activity);
         getExecutor().execute(new Runnable() {
             @Override
             @ApiProxyThread
@@ -151,7 +150,7 @@ public final class AppMetricaProxy extends BaseAppMetricaProxy {
     public void pauseSession(@Nullable final Activity activity) {
         getActivationValidator().validate();
         mMainFacadeBarrier.pauseSession();
-        getSynchronousStageExecutor().pauseSession(activity);
+        synchronousStageExecutor.pauseSession(activity);
         getExecutor().execute(new Runnable() {
             @Override
             @ApiProxyThread
@@ -164,7 +163,7 @@ public final class AppMetricaProxy extends BaseAppMetricaProxy {
     public void enableActivityAutoTracking(@NonNull final Application application) {
         getActivationValidator().validate();
         mMainFacadeBarrier.enableActivityAutoTracking(application);
-        final ActivityLifecycleManager.WatchingStatus status = getSynchronousStageExecutor()
+        final ActivityLifecycleManager.WatchingStatus status = synchronousStageExecutor
                 .enableActivityAutoTracking(application);
         getExecutor().execute(new Runnable() {
             @Override
@@ -177,7 +176,7 @@ public final class AppMetricaProxy extends BaseAppMetricaProxy {
     public void reportEvent(@NonNull final String eventName) {
         getActivationValidator().validate();
         mMainFacadeBarrier.reportEvent(eventName);
-        getSynchronousStageExecutor().reportEvent(eventName);
+        synchronousStageExecutor.reportEvent(eventName);
         getExecutor().execute(new Runnable() {
             @Override
             public void run() {
@@ -189,7 +188,7 @@ public final class AppMetricaProxy extends BaseAppMetricaProxy {
     public void reportEvent(@NonNull final String eventName, @Nullable final String jsonValue) {
         getActivationValidator().validate();
         mMainFacadeBarrier.reportEvent(eventName, jsonValue);
-        getSynchronousStageExecutor().reportEvent(eventName, jsonValue);
+        synchronousStageExecutor.reportEvent(eventName, jsonValue);
         getExecutor().execute(new Runnable() {
             @Override
             public void run() {
@@ -201,7 +200,7 @@ public final class AppMetricaProxy extends BaseAppMetricaProxy {
     public void reportEvent(@NonNull final String eventName, @Nullable final Map<String, Object> attributes) {
         getActivationValidator().validate();
         mMainFacadeBarrier.reportEvent(eventName, attributes);
-        getSynchronousStageExecutor().reportEvent(eventName, attributes);
+        synchronousStageExecutor.reportEvent(eventName, attributes);
         final List<Map.Entry<String, Object>> entries = CollectionUtils.getListFromMap(attributes);
         getExecutor().execute(new Runnable() {
             @Override
@@ -214,7 +213,7 @@ public final class AppMetricaProxy extends BaseAppMetricaProxy {
     public void reportError(@NonNull final String message, @Nullable final Throwable error) {
         getActivationValidator().validate();
         mMainFacadeBarrier.reportError(message, error);
-        final Throwable nonNullError = getSynchronousStageExecutor().reportError(message, error);
+        final Throwable nonNullError = synchronousStageExecutor.reportError(message, error);
         getExecutor().execute(new Runnable() {
             @Override
             public void run() {
@@ -230,6 +229,7 @@ public final class AppMetricaProxy extends BaseAppMetricaProxy {
     ) {
         getActivationValidator().validate();
         mMainFacadeBarrier.reportError(identifier, message, error);
+        synchronousStageExecutor.reportError(identifier, message, error);
         getExecutor().execute(new Runnable() {
             @Override
             public void run() {
@@ -241,7 +241,7 @@ public final class AppMetricaProxy extends BaseAppMetricaProxy {
     public void reportUnhandledException(@NonNull final Throwable exception) {
         getActivationValidator().validate();
         mMainFacadeBarrier.reportUnhandledException(exception);
-        getSynchronousStageExecutor().reportUnhandledException(exception);
+        synchronousStageExecutor.reportUnhandledException(exception);
         getExecutor().execute(new Runnable() {
             @Override
             public void run() {
@@ -253,7 +253,7 @@ public final class AppMetricaProxy extends BaseAppMetricaProxy {
     public void reportAppOpen(@NonNull final Activity activity) {
         getActivationValidator().validate();
         mMainFacadeBarrier.reportAppOpen(activity);
-        final Intent openIntent = getSynchronousStageExecutor().reportAppOpen(activity);
+        final Intent openIntent = synchronousStageExecutor.reportAppOpen(activity);
         getExecutor().execute(new Runnable() {
             @Override
             public void run() {
@@ -265,7 +265,7 @@ public final class AppMetricaProxy extends BaseAppMetricaProxy {
     public void reportAppOpen(@NonNull final String deeplink) {
         getActivationValidator().validate();
         mMainFacadeBarrier.reportAppOpen(deeplink);
-        getSynchronousStageExecutor().reportAppOpen(deeplink);
+        synchronousStageExecutor.reportAppOpen(deeplink);
         getExecutor().execute(new Runnable() {
             @Override
             public void run() {
@@ -277,7 +277,7 @@ public final class AppMetricaProxy extends BaseAppMetricaProxy {
     public void reportAppOpen(@NonNull final Intent intent) {
         getActivationValidator().validate();
         mMainFacadeBarrier.reportAppOpen(intent);
-        getSynchronousStageExecutor().reportAppOpen(intent);
+        synchronousStageExecutor.reportAppOpen(intent);
         getExecutor().execute(new Runnable() {
             @Override
             public void run() {
@@ -289,6 +289,7 @@ public final class AppMetricaProxy extends BaseAppMetricaProxy {
     public void reportReferralUrl(@NonNull final String referralUrl) {
         getActivationValidator().validate();
         mMainFacadeBarrier.reportReferralUrl(referralUrl);
+        synchronousStageExecutor.reportReferralUrl(referralUrl);
         getExecutor().execute(new Runnable() {
             @Override
             public void run() {
@@ -299,7 +300,7 @@ public final class AppMetricaProxy extends BaseAppMetricaProxy {
 
     public void setLocation(@Nullable final Location location) {
         mMainFacadeBarrier.setLocation(location);
-        getSynchronousStageExecutor().setLocation(location);
+        synchronousStageExecutor.setLocation(location);
         getExecutor().execute(new Runnable() {
             @Override
             public void run() {
@@ -310,7 +311,7 @@ public final class AppMetricaProxy extends BaseAppMetricaProxy {
 
     public void setLocationTracking(final boolean enabled) {
         mMainFacadeBarrier.setLocationTracking(enabled);
-        getSynchronousStageExecutor().setLocationTracking(enabled);
+        synchronousStageExecutor.setLocationTracking(enabled);
         getExecutor().execute(new Runnable() {
             @Override
             public void run() {
@@ -321,7 +322,7 @@ public final class AppMetricaProxy extends BaseAppMetricaProxy {
 
     public void setDataSendingEnabled(final boolean enabled) {
         mMainFacadeBarrier.setDataSendingEnabled(enabled);
-        getSynchronousStageExecutor().setDataSendingEnabled(enabled);
+        synchronousStageExecutor.setDataSendingEnabled(enabled);
         getExecutor().execute(new Runnable() {
             @Override
             public void run() {
@@ -332,7 +333,7 @@ public final class AppMetricaProxy extends BaseAppMetricaProxy {
 
     public void setUserProfileID(@Nullable final String userProfileID) {
         mMainFacadeBarrier.setUserProfileID(userProfileID);
-        getSynchronousStageExecutor().setUserProfileID(userProfileID);
+        synchronousStageExecutor.setUserProfileID(userProfileID);
         getExecutor().execute(new Runnable() {
             @Override
             public void run() {
@@ -344,7 +345,7 @@ public final class AppMetricaProxy extends BaseAppMetricaProxy {
     public void reportUserProfile(@NonNull final UserProfile profile) {
         getActivationValidator().validate();
         mMainFacadeBarrier.reportUserProfile(profile);
-        getSynchronousStageExecutor().reportUserProfile(profile);
+        synchronousStageExecutor.reportUserProfile(profile);
         getExecutor().execute(new Runnable() {
             @Override
             public void run() {
@@ -356,7 +357,7 @@ public final class AppMetricaProxy extends BaseAppMetricaProxy {
     public void reportRevenue(@NonNull final Revenue revenue) {
         getActivationValidator().validate();
         mMainFacadeBarrier.reportRevenue(revenue);
-        getSynchronousStageExecutor().reportRevenue(revenue);
+        synchronousStageExecutor.reportRevenue(revenue);
         getExecutor().execute(new Runnable() {
             @Override
             public void run() {
@@ -368,7 +369,7 @@ public final class AppMetricaProxy extends BaseAppMetricaProxy {
     public void reportAdRevenue(@NonNull final AdRevenue adRevenue) {
         getActivationValidator().validate();
         mMainFacadeBarrier.reportAdRevenue(adRevenue);
-        getSynchronousStageExecutor().reportAdRevenue(adRevenue);
+        synchronousStageExecutor.reportAdRevenue(adRevenue);
         getExecutor().execute(new Runnable() {
             @Override
             public void run() {
@@ -380,7 +381,7 @@ public final class AppMetricaProxy extends BaseAppMetricaProxy {
     public void reportECommerce(@NonNull final ECommerceEvent event) {
         getActivationValidator().validate();
         mMainFacadeBarrier.reportECommerce(event);
-        getSynchronousStageExecutor().reportECommerce(event);
+        synchronousStageExecutor.reportECommerce(event);
         getExecutor().execute(new Runnable() {
             @Override
             public void run() {
@@ -392,7 +393,7 @@ public final class AppMetricaProxy extends BaseAppMetricaProxy {
     public void requestDeferredDeeplinkParameters(@NonNull final DeferredDeeplinkParametersListener listener) {
         getActivationValidator().validate();
         mMainFacadeBarrier.requestDeferredDeeplinkParameters(listener);
-        getSynchronousStageExecutor().requestDeferredDeeplinkParameters(listener);
+        synchronousStageExecutor.requestDeferredDeeplinkParameters(listener);
         getExecutor().execute(new Runnable() {
             @Override
             public void run() {
@@ -404,7 +405,7 @@ public final class AppMetricaProxy extends BaseAppMetricaProxy {
     public void requestDeferredDeeplink(@NonNull final DeferredDeeplinkListener listener) {
         getActivationValidator().validate();
         mMainFacadeBarrier.requestDeferredDeeplink(listener);
-        getSynchronousStageExecutor().requestDeferredDeeplink(listener);
+        synchronousStageExecutor.requestDeferredDeeplink(listener);
         getExecutor().execute(new Runnable() {
             @Override
             public void run() {
@@ -416,19 +417,19 @@ public final class AppMetricaProxy extends BaseAppMetricaProxy {
     @NonNull
     public IReporterExtended getReporter(@NonNull Context context, @NonNull String apiKey) {
         mMainFacadeBarrier.getReporter(context, apiKey);
-        getContextAppearedListener().onProbablyAppeared(context.getApplicationContext());
+        synchronousStageExecutor.getReporter(context.getApplicationContext(), apiKey);
         return getReporterProxyStorage().getOrCreate(context.getApplicationContext(), apiKey);
     }
 
     public void activateReporter(@NonNull Context context, @NonNull ReporterConfig config) {
         mMainFacadeBarrier.activateReporter(context, config);
-        getSynchronousStageExecutor().activateReporter(context.getApplicationContext(), config);
+        synchronousStageExecutor.activateReporter(context.getApplicationContext(), config);
         getReporterProxyStorage().getOrCreate(context.getApplicationContext(), config);
     }
 
     public void putErrorEnvironmentValue(@NonNull final String key, @Nullable final String value) {
         mMainFacadeBarrier.putErrorEnvironmentValue(key, value);
-        getSynchronousStageExecutor().putErrorEnvironmentValue(key, value);
+        synchronousStageExecutor.putErrorEnvironmentValue(key, value);
         getExecutor().execute(new Runnable() {
             @Override
             public void run() {
@@ -440,7 +441,7 @@ public final class AppMetricaProxy extends BaseAppMetricaProxy {
     public void initWebViewReporting(@NonNull WebView webView) {
         getActivationValidator().validate();
         mMainFacadeBarrier.initWebViewReporting(webView);
-        getSynchronousStageExecutor().initWebViewReporting(webView, this);
+        synchronousStageExecutor.initWebViewReporting(webView, this);
         getExecutor().execute(new Runnable() {
             @Override
             public void run() {
@@ -455,7 +456,7 @@ public final class AppMetricaProxy extends BaseAppMetricaProxy {
             Log.w(SdkUtils.APPMETRICA_TAG, "Impossible to report event because parameters are invalid.");
             return;
         }
-        getSynchronousStageExecutor().reportJsEvent(eventName, eventValue);
+        synchronousStageExecutor.reportJsEvent(eventName, eventValue);
         getExecutor().execute(new Runnable() {
             @Override
             public void run() {
@@ -473,7 +474,7 @@ public final class AppMetricaProxy extends BaseAppMetricaProxy {
             YLogger.warning(TAG, "Impossible to report JS init event because value is invalid");
             return;
         }
-        getSynchronousStageExecutor().reportJsInitEvent(value);
+        synchronousStageExecutor.reportJsInitEvent(value);
         getExecutor().execute(new Runnable() {
             @Override
             public void run() {
@@ -491,14 +492,14 @@ public final class AppMetricaProxy extends BaseAppMetricaProxy {
     @NonNull
     public IdentifiersResult getUuid(@NonNull Context context) {
         mMainFacadeBarrier.getUuid(context);
-        getSynchronousStageExecutor().getUuid(context.getApplicationContext());
+        synchronousStageExecutor.getUuid(context.getApplicationContext());
         return ClientServiceLocator.getInstance().getMultiProcessSafeUuidProvider(context.getApplicationContext())
             .readUuid();
     }
 
     public void putAppEnvironmentValue(@NonNull final String key, @Nullable final String value) {
         mMainFacadeBarrier.putAppEnvironmentValue(key, value);
-        getSynchronousStageExecutor().putAppEnvironmentValue(key, value);
+        synchronousStageExecutor.putAppEnvironmentValue(key, value);
         getExecutor().execute(new Runnable() {
             @Override
             public void run() {
@@ -509,7 +510,7 @@ public final class AppMetricaProxy extends BaseAppMetricaProxy {
 
     public void clearAppEnvironment() {
         mMainFacadeBarrier.clearAppEnvironment();
-        getSynchronousStageExecutor().clearAppEnvironment();
+        synchronousStageExecutor.clearAppEnvironment();
         getExecutor().execute(new Runnable() {
             @Override
             public void run() {
@@ -524,7 +525,7 @@ public final class AppMetricaProxy extends BaseAppMetricaProxy {
             @NonNull final List<String> params
     ) {
         mMainFacadeBarrier.requestStartupParams(context, callback, params);
-        getSynchronousStageExecutor().requestStartupParams(context.getApplicationContext(), callback, params);
+        synchronousStageExecutor.requestStartupParams(context.getApplicationContext(), callback, params);
         getExecutor().execute(new Runnable() {
             @Override
             public void run() {
@@ -537,7 +538,7 @@ public final class AppMetricaProxy extends BaseAppMetricaProxy {
     public void registerAnrListener(@NonNull final AnrListener listener) {
         getActivationValidator().validate();
         mMainFacadeBarrier.registerAnrListener(listener);
-        getSynchronousStageExecutor().registerAnrListener(listener);
+        synchronousStageExecutor.registerAnrListener(listener);
         getExecutor().execute(new Runnable() {
             @Override
             public void run() {
@@ -549,7 +550,7 @@ public final class AppMetricaProxy extends BaseAppMetricaProxy {
     public void reportExternalAttribution(@NonNull final ExternalAttribution value) {
         getActivationValidator().validate();
         mMainFacadeBarrier.reportExternalAttribution(value);
-        getSynchronousStageExecutor().reportExternalAttribution(value);
+        synchronousStageExecutor.reportExternalAttribution(value);
         getExecutor().execute(new Runnable() {
             @Override
             public void run() {

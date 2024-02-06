@@ -7,6 +7,7 @@ import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor
 import io.appmetrica.analytics.impl.AppMetricaFacade
 import io.appmetrica.analytics.impl.MainReporter
 import io.appmetrica.analytics.impl.MainReporterApiConsumerProvider
+import io.appmetrica.analytics.impl.proxy.synchronous.ModulesSynchronousStageExecutor
 import io.appmetrica.analytics.impl.proxy.validation.ModulesBarrier
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.MockedStaticRule
@@ -23,7 +24,6 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoMoreInteractions
-import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 import java.util.UUID
@@ -38,6 +38,7 @@ class ModulesProxyTest : CommonTest() {
     private val mainReporterApiConsumerProvider: MainReporterApiConsumerProvider = mock()
     private val facade: AppMetricaFacade = mock()
     private val reporterProxyStorageImpl: ReporterProxyStorage = mock()
+    private val synchronousStageExecutor: ModulesSynchronousStageExecutor = mock()
 
     private val runnableArgumentCaptor: KArgumentCaptor<Runnable> = argumentCaptor()
 
@@ -58,7 +59,8 @@ class ModulesProxyTest : CommonTest() {
         proxy = ModulesProxy(
             executor,
             provider,
-            modulesBarrier
+            modulesBarrier,
+            synchronousStageExecutor
         )
     }
 
@@ -67,8 +69,9 @@ class ModulesProxyTest : CommonTest() {
         val moduleEvent: ModuleEvent = mock()
         proxy.reportEvent(moduleEvent)
 
-        val inOrder = inOrder(modulesBarrier, executor)
+        val inOrder = inOrder(modulesBarrier, synchronousStageExecutor, executor)
         inOrder.verify(modulesBarrier).reportEvent(moduleEvent)
+        inOrder.verify(synchronousStageExecutor).reportEvent(moduleEvent)
         inOrder.verify(executor, times(1)).execute(runnableArgumentCaptor.capture())
         verifyNoMoreInteractions(mainReporter)
 
@@ -85,8 +88,9 @@ class ModulesProxyTest : CommonTest() {
 
         proxy.setSessionExtra(key, value)
 
-        inOrder(modulesBarrier, executor, mainReporter) {
+        inOrder(modulesBarrier, synchronousStageExecutor, executor, mainReporter) {
             verify(modulesBarrier).setSessionExtra(key, value)
+            verify(synchronousStageExecutor).setSessionExtra(key, value)
             verify(executor).execute(runnableArgumentCaptor.capture())
             verifyNoMoreInteractions(mainReporter)
         }
@@ -103,6 +107,7 @@ class ModulesProxyTest : CommonTest() {
         appMetrica.staticMock.verify { AppMetrica.sendEventsBuffer() }
         appMetrica.staticMock.verifyNoMoreInteractions()
         verify(modulesBarrier).sendEventsBuffer()
+        verify(synchronousStageExecutor).sendEventsBuffer()
     }
 
     @Test
@@ -115,6 +120,7 @@ class ModulesProxyTest : CommonTest() {
         whenever(ReporterProxyStorage.getInstance()).thenReturn(reporterProxyStorageImpl)
         proxy.getReporter(context, apiKey)
         verify(modulesBarrier).getReporter(context, apiKey)
+        verify(synchronousStageExecutor).getReporter(context, apiKey)
         verify(reporterProxyStorageImpl).getOrCreate(context, apiKey)
     }
 
@@ -132,5 +138,6 @@ class ModulesProxyTest : CommonTest() {
         whenever(provider.isActivated).thenReturn(value)
         assertThat(proxy.isActivatedForApp()).isEqualTo(value)
         verify(modulesBarrier).isActivatedForApp()
+        verify(synchronousStageExecutor).isActivatedForApp()
     }
 }
