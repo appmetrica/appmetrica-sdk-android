@@ -58,13 +58,13 @@ public class MockSessionFactory implements ISessionFactory<SessionArguments> {
             public Object answer(InvocationOnMock invocation) throws Throwable {
                 return 0;
             }
-        }).when(newSession).getAndUpdateLastEventTime(anyLong());
+        }).when(newSession).getAndUpdateLastEventTimeSeconds(anyLong());
 
         doAnswer(new Answer() {
             public Object answer(InvocationOnMock invocation) throws Throwable {
                 return ((Long) (invocation.getArguments()[0])) / 1000;
             }
-        }).when(newSession).getAndUpdateLastEventTime(anyLong());
+        }).when(newSession).getAndUpdateLastEventTimeSeconds(anyLong());
         aliveNeededMap.put(sessionId, true);
         doAnswer(new Answer() {
             @Override

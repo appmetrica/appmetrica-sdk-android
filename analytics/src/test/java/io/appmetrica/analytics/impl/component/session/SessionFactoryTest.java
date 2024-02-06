@@ -121,7 +121,7 @@ public class SessionFactoryTest extends CommonTest {
         }, false);
         Session session = factory.create(mock(SessionArguments.class));
         assertThat(session.getType()).isEqualTo(SessionType.BACKGROUND);
-        assertThat(session.getTimeout()).isEqualTo(60 * 60);
+        assertThat(session.getTimeoutSeconds()).isEqualTo(60 * 60);
     }
 
     @Test
@@ -137,7 +137,7 @@ public class SessionFactoryTest extends CommonTest {
         }, false);
         Session session = factory.create(mock(SessionArguments.class));
         assertThat(session.getType()).isEqualTo(SessionType.FOREGROUND);
-        assertThat(session.getTimeout()).isEqualTo(10);
+        assertThat(session.getTimeoutSeconds()).isEqualTo(10);
     }
 
     @Test

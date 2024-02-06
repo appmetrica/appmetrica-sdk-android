@@ -150,7 +150,7 @@ public abstract class ComponentUnitBaseTest extends CommonTest {
         when(mFieldsFactory.createCertificateFingerprintProvider(mComponentPreferences)).thenReturn(mCertificatesFingerprintsProvider);
         when(mFieldsFactory.getVitalComponentDataProvider()).thenReturn(vitalComponentDataProvider);
         when(mFieldsFactory.createSessionExtraHolder()).thenReturn(sessionExtrasHolder);
-        when(mMigrationHelperCreator.create()).thenReturn(mMigrationHelper);
+        when(mMigrationHelperCreator.create(any(ComponentUnit.class))).thenReturn(mMigrationHelper);
         when(mAppEnvironment.getLastRevision()).thenReturn(mRevision);
         when(vitalComponentDataProvider.getLastMigrationApiLevel()).thenReturn(AppMetrica.getLibraryApiLevel());
         when(vitalComponentDataProvider.getLastMigrationApiLevel()).thenReturn(AppMetrica.getLibraryApiLevel());
@@ -179,9 +179,9 @@ public abstract class ComponentUnitBaseTest extends CommonTest {
         ComponentMigrationHelper.Creator creator = mock(ComponentMigrationHelper.Creator.class);
         ComponentMigrationHelper migrationHelper = mock(ComponentMigrationHelper.class);
         when(mFieldsFactory.createMigrationHelperCreator(any(ComponentUnit.class))).thenReturn(creator);
-        when(creator.create()).thenReturn(migrationHelper);
+        when(creator.create(any(ComponentUnit.class))).thenReturn(migrationHelper);
         mComponentUnit = createComponentUnit();
-        verify(migrationHelper).checkMigration();
+        verify(migrationHelper).migrate(apiLevel - 1);
         verify(vitalComponentDataProvider).setLastMigrationApiLevel(apiLevel);
     }
 
@@ -193,9 +193,9 @@ public abstract class ComponentUnitBaseTest extends CommonTest {
         ComponentMigrationHelper.Creator creator = mock(ComponentMigrationHelper.Creator.class);
         ComponentMigrationHelper migrationHelper = mock(ComponentMigrationHelper.class);
         when(mFieldsFactory.createMigrationHelperCreator(any(ComponentUnit.class))).thenReturn(creator);
-        when(creator.create()).thenReturn(migrationHelper);
+        when(creator.create(mComponentUnit)).thenReturn(migrationHelper);
         mComponentUnit = createComponentUnit();
-        verify(migrationHelper, never()).checkMigration();
+        verify(migrationHelper, never()).migrate(apiLevel);
         verify(vitalComponentDataProvider, never()).setLastMigrationApiLevel(apiLevel);
     }
 
@@ -207,9 +207,9 @@ public abstract class ComponentUnitBaseTest extends CommonTest {
         ComponentMigrationHelper.Creator creator = mock(ComponentMigrationHelper.Creator.class);
         ComponentMigrationHelper migrationHelper = mock(ComponentMigrationHelper.class);
         when(mFieldsFactory.createMigrationHelperCreator(any(ComponentUnit.class))).thenReturn(creator);
-        when(creator.create()).thenReturn(migrationHelper);
+        when(creator.create(any(ComponentUnit.class))).thenReturn(migrationHelper);
         mComponentUnit = createComponentUnit();
-        verify(migrationHelper).checkMigration();
+        verify(migrationHelper).migrate(apiLevel - 1);
         verify(vitalComponentDataProvider).setLastMigrationApiLevel(apiLevel);
     }
 
@@ -221,9 +221,9 @@ public abstract class ComponentUnitBaseTest extends CommonTest {
         ComponentMigrationHelper.Creator creator = mock(ComponentMigrationHelper.Creator.class);
         ComponentMigrationHelper migrationHelper = mock(ComponentMigrationHelper.class);
         when(mFieldsFactory.createMigrationHelperCreator(any(ComponentUnit.class))).thenReturn(creator);
-        when(creator.create()).thenReturn(migrationHelper);
+        when(creator.create(any(ComponentUnit.class))).thenReturn(migrationHelper);
         mComponentUnit = createComponentUnit();
-        verify(migrationHelper, never()).checkMigration();
+        verify(migrationHelper, never()).migrate(apiLevel);
         verify(vitalComponentDataProvider, never()).setLastMigrationApiLevel(apiLevel);
     }
 

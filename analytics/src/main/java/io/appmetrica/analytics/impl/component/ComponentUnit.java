@@ -352,7 +352,7 @@ public class ComponentUnit implements IReportableComponent, IComponent, EventsFl
         int apiLevel = AppMetrica.getLibraryApiLevel();
         Integer lastApiLevel = vitalComponentDataProvider.getLastMigrationApiLevel();
         if (lastApiLevel < apiLevel) {
-            mComponentMigrationHelperCreator.create().checkMigration();
+            mComponentMigrationHelperCreator.create(this).migrate(lastApiLevel);
             vitalComponentDataProvider.setLastMigrationApiLevel(apiLevel);
         }
     }

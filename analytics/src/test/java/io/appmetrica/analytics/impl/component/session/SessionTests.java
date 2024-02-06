@@ -60,7 +60,7 @@ public class SessionTests extends CommonTest {
     @Test
     public void testIsValidIfNotExpired() {
         long elapsedRealtime = SLEEP_START_TIME + TimeUnit.SECONDS.toMillis(SESSION_TIMEOUT) - 10000;
-        when(mSessionArguments.getSleepStart(anyLong())).thenReturn(TimeUnit.MILLISECONDS.toSeconds(SLEEP_START_TIME));
+        when(mSessionArguments.getSleepStart(anyLong())).thenReturn(SLEEP_START_TIME);
         when(mSessionArguments.getTimeout(anyInt())).thenReturn(SESSION_TIMEOUT);
         doReturn(elapsedRealtime).when(mSystemTimeProvider).elapsedRealtime();
         mSession = new Session(mComponentUnit, mSessionStorage, mSessionArguments, mSystemTimeProvider);
@@ -113,31 +113,30 @@ public class SessionTests extends CommonTest {
     @Test
     public void testUpdateLastActiveTime() {
         Long value = 345454656L;
-        Long expected = TimeUnit.MILLISECONDS.toSeconds(value);
         when(mSessionStorage.putSleepStart(anyLong())).thenReturn(mSessionStorage);
         mSession.updateLastActiveTime(value);
-        assertThat(mSession.getSleepStart()).isEqualTo(expected);
-        verify(mSessionStorage, times(1)).putSleepStart(expected);
+        assertThat(mSession.getSleepStart()).isEqualTo(value);
+        verify(mSessionStorage, times(1)).putSleepStart(value);
     }
 
     @Test
     public void testGetLastEventTimeOffset() {
         final long lastEventTimeOffsetSeconds = 123456;
-        mSession.getAndUpdateLastEventTime(SESSION_CREATION_TIME + TimeUnit.SECONDS.toMillis(lastEventTimeOffsetSeconds));
-        assertThat(mSession.getLastEventTimeOffset()).isEqualTo(lastEventTimeOffsetSeconds);
+        mSession.getAndUpdateLastEventTimeSeconds(SESSION_CREATION_TIME + TimeUnit.SECONDS.toMillis(lastEventTimeOffsetSeconds));
+        assertThat(mSession.getLastEventTimeOffsetSeconds()).isEqualTo(lastEventTimeOffsetSeconds);
         // to make sure value was not updated
-        assertThat(mSession.getLastEventTimeOffset()).isEqualTo(lastEventTimeOffsetSeconds);
+        assertThat(mSession.getLastEventTimeOffsetSeconds()).isEqualTo(lastEventTimeOffsetSeconds);
     }
 
     @Test
     public void toStringContainsExpectedFields() {
         SoftAssertions assertions = new SoftAssertions();
         assertions.assertThat(mSession.toString())
-                .contains("mId=0")
-                .contains("mInitTime=" + SESSION_CREATION_TIME)
-                .contains("mCurrentReportId=0")
-                .contains("mSessionRequestParams=null")
-                .contains("mSleepStartSeconds=0");
+                .contains("id=0")
+                .contains("creationTime=" + SESSION_CREATION_TIME)
+                .contains("currentReportId=0")
+                .contains("sessionRequestParams=null")
+                .contains("sleepStart=0");
         assertions.assertAll();
     }
 
@@ -153,11 +152,11 @@ public class SessionTests extends CommonTest {
     private ReportRequestConfig getRequestConfig() {
         ReportRequestConfig requestConfig = mock(ReportRequestConfig.class);
 
-        doReturn(null).when(requestConfig).getAnalyticsSdkVersionName();
-        doReturn(null).when(requestConfig).getAnalyticsSdkBuildNumber();
-        doReturn(null).when(requestConfig).getAppVersion();
-        doReturn(null).when(requestConfig).getAppBuildNumber();
-        doReturn(null).when(requestConfig).getOsVersion();
+        doReturn("").when(requestConfig).getAnalyticsSdkVersionName();
+        doReturn("").when(requestConfig).getAnalyticsSdkBuildNumber();
+        doReturn("").when(requestConfig).getAppVersion();
+        doReturn("").when(requestConfig).getAppBuildNumber();
+        doReturn("").when(requestConfig).getOsVersion();
         doReturn(-1).when(requestConfig).getOsApiLevel();
 
         return requestConfig;

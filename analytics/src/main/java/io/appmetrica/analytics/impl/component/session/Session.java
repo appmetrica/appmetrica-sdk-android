@@ -2,6 +2,7 @@ package io.appmetrica.analytics.impl.component.session;
 
 import android.content.ContentValues;
 import android.text.TextUtils;
+import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.coreutils.internal.time.SystemTimeProvider;
@@ -16,19 +17,19 @@ import static io.appmetrica.analytics.impl.component.session.SessionDefaults.MIN
 
 public class Session {
 
-    private final ComponentUnit mComponent;
-    private final SessionStorage mSessionStorage;
-    private final SessionArgumentsInternal mArguments;
+    private final ComponentUnit component;
+    private final SessionStorage sessionStorage;
+    private final SessionArgumentsInternal sessionArguments;
 
-    private long mId;
-    private long mCreationTime;
-    private AtomicLong mCurrentReportId;
-    private boolean mAliveNeeded;
-    private volatile SessionRequestParams mSessionRequestParams;
-    private long mSleepStartSeconds;
-    private long mLastEventTimeOffset;
+    private long id;
+    private long creationTime;
+    private AtomicLong currentReportId;
+    private boolean aliveNeeded;
+    private volatile SessionRequestParams sessionRequestParams;
+    private long sleepStart;
+    private long lastEventTimeOffset;
 
-    private SystemTimeProvider mSystemTimeProvider;
+    private final SystemTimeProvider systemTimeProvider;
 
     Session(ComponentUnit component, SessionStorage storage, SessionArgumentsInternal arguments) {
         this(component, storage, arguments, new SystemTimeProvider());
@@ -36,44 +37,44 @@ public class Session {
 
     Session(ComponentUnit component, SessionStorage storage, SessionArgumentsInternal arguments,
             SystemTimeProvider systemTimeProvider) {
-        mComponent = component;
-        mSessionStorage = storage;
-        mArguments = arguments;
-        mSystemTimeProvider = systemTimeProvider;
+        this.component = component;
+        sessionStorage = storage;
+        sessionArguments = arguments;
+        this.systemTimeProvider = systemTimeProvider;
         initializeWithArguments();
     }
 
     private void initializeWithArguments() {
-        mCreationTime = mArguments.getCreationTime(mSystemTimeProvider.elapsedRealtime());
-        mId = mArguments.getId(SessionDefaults.INVALID_UI_SESSION_ID);
-        mCurrentReportId = new AtomicLong(mArguments.getCurrentReportId(SessionDefaults.INITIAL_REPORT_ID));
-        mAliveNeeded = mArguments.isAliveNeeded(true);
-        mSleepStartSeconds = mArguments.getSleepStart(SessionDefaults.INITIAL_SESSION_TIME);
-        mLastEventTimeOffset = mArguments.getLastEventOffset(mSleepStartSeconds - mCreationTime);
+        creationTime = sessionArguments.getCreationTime(systemTimeProvider.elapsedRealtime());
+        id = sessionArguments.getId(SessionDefaults.INVALID_UI_SESSION_ID);
+        currentReportId = new AtomicLong(sessionArguments.getCurrentReportId(SessionDefaults.INITIAL_REPORT_ID));
+        aliveNeeded = sessionArguments.isAliveNeeded(true);
+        sleepStart = sessionArguments.getSleepStart(SessionDefaults.INITIAL_SESSION_TIME);
+        lastEventTimeOffset = sessionArguments.getLastEventOffset(sleepStart - creationTime);
     }
 
     protected SessionType getType() {
-        return mArguments.getType();
+        return sessionArguments.getType();
     }
 
-    protected int getTimeout() {
-        return mArguments.getTimeout(mComponent.getFreshReportRequestConfig().getSessionTimeout());
+    protected int getTimeoutSeconds() {
+        return sessionArguments.getTimeout(component.getFreshReportRequestConfig().getSessionTimeout());
     }
 
     public long getId() {
-        return mId;
+        return id;
     }
 
-    long getAliveReportOffset() {
-        return Math.max(mSleepStartSeconds - TimeUnit.MILLISECONDS.toSeconds(mCreationTime), mLastEventTimeOffset);
+    long getAliveReportOffsetSeconds() {
+        return TimeUnit.MILLISECONDS.toSeconds(Math.max(sleepStart - creationTime, lastEventTimeOffset));
     }
 
     boolean isValid(long reportElapsedRealtime) {
-        boolean validID = mId >= MIN_VALID_UI_SESSION_ID;
+        boolean validID = id >= MIN_VALID_UI_SESSION_ID;
         boolean consistentRequestParameters = consistentRequestParameters();
-        boolean notExpired = isExpired(reportElapsedRealtime, mSystemTimeProvider.elapsedRealtime()) == false;
+        boolean notExpired = !isExpired(reportElapsedRealtime, systemTimeProvider.elapsedRealtime());
         YLogger.d("Session id=%d and type %s validity. validID=%b, consistentRequestParameters=%b, notExpired=%b",
-                mId, mArguments.getType(), validID, consistentRequestParameters, notExpired);
+            id, sessionArguments.getType(), validID, consistentRequestParameters, notExpired);
         return validID && consistentRequestParameters && notExpired;
     }
 
@@ -81,86 +82,89 @@ public class Session {
         SessionRequestParams requestParams = getSessionRequestParams();
         boolean consistentRequestParameters = false;
         if (requestParams != null) {
-            ReportRequestConfig reportRequestConfig = mComponent.getFreshReportRequestConfig();
+            ReportRequestConfig reportRequestConfig = component.getFreshReportRequestConfig();
             consistentRequestParameters = requestParams.areParamsSameAsInConfig(reportRequestConfig);
         } else {
-            YLogger.d("SessionRequestParameters are null. SessionID %d, SessionType %s", mId, mArguments.getType());
+            YLogger.d(
+                "SessionRequestParameters are null. SessionID %d, SessionType %s",
+                id,
+                sessionArguments.getType()
+            );
         }
 
         return consistentRequestParameters;
     }
 
     private long getSessionTimeOffset(long ellapsedRealtime) {
-        return TimeUnit.MILLISECONDS.toSeconds(ellapsedRealtime - mCreationTime);
+        return ellapsedRealtime - creationTime;
     }
 
     @VisibleForTesting
     boolean isExpired(long reportElapsedRealtime, long currentElapsedRealtime) {
-        final long sleepStartTimeSeconds = mSleepStartSeconds;
-        boolean wasRebooted = TimeUnit.MILLISECONDS.toSeconds(currentElapsedRealtime) < sleepStartTimeSeconds;
-        final long sinceLastActiveSeconds =
-                TimeUnit.MILLISECONDS.toSeconds(reportElapsedRealtime) - sleepStartTimeSeconds;
+        boolean wasRebooted = currentElapsedRealtime < sleepStart;
+        final long sinceLastActive= reportElapsedRealtime - sleepStart;
         long sessionLength = getSessionTimeOffset(reportElapsedRealtime);
         if (YLogger.DEBUG) {
-            YLogger.d("Session: id = %d, type = %s, sleepStartTimeSeconds = %d, " +
-                            "sinceLastActiveSeconds = %d, sessionTimeout = %d",
-                    getId(), getType().toString(), sleepStartTimeSeconds, sinceLastActiveSeconds, getTimeout());
+            YLogger.d("Session: id = %d, type = %s, sleepStart = %d, " +
+                            "sinceLastActive = %d, sessionTimeout = %d",
+                    getId(), getType().toString(), sleepStart, sinceLastActive, getTimeoutSeconds());
         }
         return wasRebooted
-                || sinceLastActiveSeconds >= getTimeout() || sessionLength >= SessionDefaults.SESSION_MAX_LENGTH_SEC;
+            || sinceLastActive >= TimeUnit.SECONDS.toMillis(getTimeoutSeconds())
+            || sessionLength >= TimeUnit.SECONDS.toMillis(SessionDefaults.SESSION_MAX_LENGTH_SEC);
     }
 
     synchronized void stopSession() {
-        mSessionStorage.clear();
-        mSessionRequestParams = null;
+        sessionStorage.clear();
+        sessionRequestParams = null;
     }
 
     void updateLastActiveTime(long elapsedRealtime) {
-        mSessionStorage.putSleepStart(mSleepStartSeconds = TimeUnit.MILLISECONDS.toSeconds(elapsedRealtime)).commit();
+        sessionStorage.putSleepStart(sleepStart = elapsedRealtime).commit();
     }
 
-    long getAndUpdateLastEventTime(long elapsedRealtime) {
-        mSessionStorage.putLastEventOffset(mLastEventTimeOffset = getSessionTimeOffset(elapsedRealtime));
-        return mLastEventTimeOffset;
+    long getAndUpdateLastEventTimeSeconds(long elapsedRealtime) {
+        sessionStorage.putLastEventOffset(lastEventTimeOffset = getSessionTimeOffset(elapsedRealtime));
+        return TimeUnit.MILLISECONDS.toSeconds(lastEventTimeOffset);
     }
 
-    long getLastEventTimeOffset() {
-        return mLastEventTimeOffset;
+    long getLastEventTimeOffsetSeconds() {
+        return TimeUnit.MILLISECONDS.toSeconds(lastEventTimeOffset);
     }
 
     long getNextReportId() {
-        long reportId = mCurrentReportId.getAndIncrement();
-        mSessionStorage.putReportId(mCurrentReportId.get()).commit();
+        long reportId = currentReportId.getAndIncrement();
+        sessionStorage.putReportId(currentReportId.get()).commit();
         return reportId;
     }
 
     boolean isAliveNeeded() {
-        return mAliveNeeded && getId() > 0;
+        return aliveNeeded && getId() > 0;
     }
 
     public void updateAliveReportNeeded(final boolean value) {
-        if (mAliveNeeded != value) {
-            mAliveNeeded = value;
-            mSessionStorage.putAliveReportNeeded(mAliveNeeded).commit();
+        if (aliveNeeded != value) {
+            aliveNeeded = value;
+            sessionStorage.putAliveReportNeeded(aliveNeeded).commit();
         }
     }
 
     private SessionRequestParams getSessionRequestParams() {
-        if (mSessionRequestParams == null) {
+        if (sessionRequestParams == null) {
             synchronized (this) {
-                if (mSessionRequestParams == null) {
+                if (sessionRequestParams == null) {
                     try {
-                        ContentValues params = mComponent.getDbHelper().getSessionRequestParameters(getId(), getType());
+                        ContentValues params = component.getDbHelper().getSessionRequestParameters(getId(), getType());
                         final String paramsJson = params.getAsString(
                                 Constants.SessionTable.SessionTableEntry.FIELD_SESSION_REPORT_REQUEST_PARAMETERS
                         );
 
-                        if (TextUtils.isEmpty(paramsJson) == false) {
+                        if (!TextUtils.isEmpty(paramsJson)) {
                             JSONObject requestParameters = new JSONObject(paramsJson);
-                            mSessionRequestParams = new SessionRequestParams(requestParameters);
+                            sessionRequestParams = new SessionRequestParams(requestParameters);
                         } else {
                             YLogger.d("SessionRequestParameters is empty sessionID=%d, SessionType=%s",
-                                    mId, mArguments.getType());
+                                id, sessionArguments.getType());
                         }
                     } catch (Throwable e) {
                         YLogger.e(e, "Something was wrong while getting session's request parameters.");
@@ -168,91 +172,23 @@ public class Session {
                 }
             }
         }
-        return mSessionRequestParams;
+        return sessionRequestParams;
     }
 
     @Override
+    @NonNull
     public String toString() {
         return "Session{" +
-                "mId=" + mId +
-                ", mInitTime=" + mCreationTime +
-                ", mCurrentReportId=" + mCurrentReportId +
-                ", mSessionRequestParams=" + mSessionRequestParams +
-                ", mSleepStartSeconds=" + mSleepStartSeconds +
+                "id=" + id +
+                ", creationTime=" + creationTime +
+                ", currentReportId=" + currentReportId +
+                ", sessionRequestParams=" + sessionRequestParams +
+                ", sleepStart=" + sleepStart +
                 '}';
     }
 
     @VisibleForTesting
     public long getSleepStart() {
-        return mSleepStartSeconds;
-    }
-
-    @VisibleForTesting
-    public long getCreationTime() {
-        return mCreationTime;
-    }
-
-    static class SessionRequestParams {
-
-        private final String mKitVersionName;
-        private final String mKitBuildNumber;
-        private final String mAppVersion;
-        private final String mAppBuild;
-        private final String mOsVersion;
-        private final int mApiLevel;
-        private final int mAttributionId;
-
-        SessionRequestParams(final JSONObject requestParameters) {
-            mKitVersionName = requestParameters
-                    .optString(Constants.RequestParametersJsonKeys.ANALYTICS_SDK_VERSION_NAME,  null);
-            mKitBuildNumber = requestParameters.optString(
-                Constants.RequestParametersJsonKeys.ANALYTICS_SDK_BUILD_NUMBER,
-                null
-            );
-            mAppVersion = requestParameters.optString(Constants.RequestParametersJsonKeys.APP_VERSION,  null);
-            mAppBuild = requestParameters.optString(Constants.RequestParametersJsonKeys.APP_BUILD,  null);
-            mOsVersion = requestParameters.optString(Constants.RequestParametersJsonKeys.OS_VERSION,  null);
-            mApiLevel = requestParameters.optInt(Constants.RequestParametersJsonKeys.OS_API_LEVEL, -1);
-            mAttributionId = requestParameters.optInt(Constants.RequestParametersJsonKeys.ATTRIBUTION_ID, 0);
-        }
-
-        boolean areParamsSameAsInConfig(final ReportRequestConfig reportRequestConfig) {
-            boolean result = TextUtils.equals(reportRequestConfig.getAnalyticsSdkVersionName(), mKitVersionName) &&
-                    TextUtils.equals(reportRequestConfig.getAnalyticsSdkBuildNumber(), mKitBuildNumber) &&
-                    TextUtils.equals(reportRequestConfig.getAppVersion(), mAppVersion) &&
-                    TextUtils.equals(reportRequestConfig.getAppBuildNumber(), mAppBuild) &&
-                    TextUtils.equals(reportRequestConfig.getOsVersion(), mOsVersion) &&
-                    mApiLevel == reportRequestConfig.getOsApiLevel() &&
-                    mAttributionId == reportRequestConfig.getAttributionId();
-            if (result == false) {
-                YLogger.d("SessionRequestParameters are not equal: %s and %s", this,
-                        requestConfigToString(reportRequestConfig));
-            }
-            return result;
-        }
-
-        private String requestConfigToString(ReportRequestConfig reportRequestConfig) {
-            return "ReportRequestConfig{" +
-                    "mKitVersionName='" + reportRequestConfig.getAnalyticsSdkVersionName() + '\'' +
-                    ", mKitBuildNumber='" + reportRequestConfig.getAnalyticsSdkBuildNumber() + '\'' +
-                    ", mAppVersion='" + reportRequestConfig.getAppVersion() + '\'' +
-                    ", mAppBuild='" + reportRequestConfig.getAppBuildNumber() + '\'' +
-                    ", mOsVersion='" + reportRequestConfig.getOsVersion() + '\'' +
-                    ", mApiLevel=" + reportRequestConfig.getOsApiLevel() +
-                    '}';
-        }
-
-        @Override
-        public String toString() {
-            return "SessionRequestParams{" +
-                    "mKitVersionName='" + mKitVersionName + '\'' +
-                    ", mKitBuildNumber='" + mKitBuildNumber + '\'' +
-                    ", mAppVersion='" + mAppVersion + '\'' +
-                    ", mAppBuild='" + mAppBuild + '\'' +
-                    ", mOsVersion='" + mOsVersion + '\'' +
-                    ", mApiLevel=" + mApiLevel +
-                    ", mAttributionId=" + mAttributionId +
-                    '}';
-        }
+        return sleepStart;
     }
 }

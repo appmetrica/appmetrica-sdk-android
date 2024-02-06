@@ -187,44 +187,44 @@ public abstract class BaseSessionTest extends CommonTest {
 
     @Test
     public void testDefaultAliveOffset() {
-        int sleepStart = 1999;
+        int sleepStart = 1999000;
         int initTime = 1000000;
         mSessionStorage.putSleepStart(sleepStart);
         mSessionStorage.putCreationTime(initTime);
         Session session = getSessionFactory().load();
-        assertThat(session.getAliveReportOffset()).isEqualTo(999);
+        assertThat(session.getAliveReportOffsetSeconds()).isEqualTo(999);
     }
 
     @Test
     public void testLoadAliveOffset() {
-        int lastEventOffset = new Random().nextInt(1000);
-        mSessionStorage.putLastEventOffset(lastEventOffset);
+        long lastEventOffsetSeconds = new Random().nextInt(1000);
+        mSessionStorage.putLastEventOffset(TimeUnit.SECONDS.toMillis(lastEventOffsetSeconds));
         Session session = getSessionFactory().load();
-        assertThat(session.getAliveReportOffset()).isEqualTo(lastEventOffset);
+        assertThat(session.getAliveReportOffsetSeconds()).isEqualTo(lastEventOffsetSeconds);
     }
 
     @Test
     public void testUseLastEventTimeAsAliveOffset() {
         long initTime = 300000;
         when(timeProvider.elapsedRealtime()).thenReturn(initTime);
-        mSessionStorage.putSleepStart(TimeUnit.MILLISECONDS.toSeconds(initTime) + 1);
+        mSessionStorage.putSleepStart(initTime + TimeUnit.SECONDS.toMillis(1));
         mSessionStorage.putCreationTime(initTime);
         Session session = getSessionFactory().load();
-        assertThat(session.getAliveReportOffset()).isEqualTo(1);
-        long lastEventTime = session.getAndUpdateLastEventTime(initTime + 3000);
+        assertThat(session.getAliveReportOffsetSeconds()).isEqualTo(1);
+        long lastEventTime = session.getAndUpdateLastEventTimeSeconds(initTime + 3000);
         assertThat(lastEventTime).isEqualTo(3);
-        assertThat(session.getAliveReportOffset()).isEqualTo(lastEventTime);
+        assertThat(session.getAliveReportOffsetSeconds()).isEqualTo(lastEventTime);
     }
 
     @Test
     public void testUseSleepStartTimeAsAliveOffset() {
         long initTime = 300000;
-        mSessionStorage.putSleepStart(TimeUnit.MILLISECONDS.toSeconds(initTime) + 1);
+        mSessionStorage.putSleepStart(initTime + 1000);
         mSessionStorage.putCreationTime(initTime);
         Session session = getSessionFactory().load();
-        assertThat(session.getAliveReportOffset()).isEqualTo(1);
+        assertThat(session.getAliveReportOffsetSeconds()).isEqualTo(1);
         session.updateLastActiveTime(initTime + 5000);
-        assertThat(session.getAliveReportOffset()).isEqualTo(5);
+        assertThat(session.getAliveReportOffsetSeconds()).isEqualTo(5);
     }
 
     private ReportRequestConfig prepareRequestParamsTest() throws JSONException {
@@ -254,7 +254,14 @@ public abstract class BaseSessionTest extends CommonTest {
     }
 
     private ReportRequestConfig getTestRequestConfig() {
-        return mock(ReportRequestConfig.class);
+        ReportRequestConfig reportRequestConfig = mock(ReportRequestConfig.class);
+        when(reportRequestConfig.getAnalyticsSdkVersionName()).thenReturn("");
+        when(reportRequestConfig.getAnalyticsSdkBuildNumber()).thenReturn("");
+        when(reportRequestConfig.getAppVersion()).thenReturn("");
+        when(reportRequestConfig.getAppBuildNumber()).thenReturn("");
+        when(reportRequestConfig.getOsVersion()).thenReturn("");
+
+        return reportRequestConfig;
     }
 
 }

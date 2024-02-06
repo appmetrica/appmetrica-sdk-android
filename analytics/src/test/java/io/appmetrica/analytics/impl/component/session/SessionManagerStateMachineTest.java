@@ -292,7 +292,7 @@ public class SessionManagerStateMachineTest extends CommonTest {
         long reportId = 1111;
         when(mFgSession.getId()).thenReturn(sessionId);
         when(mFgSession.isValid(anyLong())).thenReturn(false);
-        when(mFgSession.getLastEventTimeOffset()).thenReturn(lastEventTimeOffset);
+        when(mFgSession.getLastEventTimeOffsetSeconds()).thenReturn(lastEventTimeOffset);
         when(mFgSession.getNextReportId()).thenReturn(reportId);
         mManager = new SessionManagerStateMachine(
                 mComponentUnit,
@@ -317,7 +317,7 @@ public class SessionManagerStateMachineTest extends CommonTest {
         when(mFgSession.isValid(anyLong())).thenReturn(true);
         when(mBgSession.isValid(anyLong())).thenReturn(false);
         when(mBgSession.getId()).thenReturn(sessionId);
-        when(mBgSession.getLastEventTimeOffset()).thenReturn(lastEventTimeOffset);
+        when(mBgSession.getLastEventTimeOffsetSeconds()).thenReturn(lastEventTimeOffset);
         when(mBgSession.getNextReportId()).thenReturn(reportId);
         mManager = new SessionManagerStateMachine(
                 mComponentUnit,
@@ -341,7 +341,7 @@ public class SessionManagerStateMachineTest extends CommonTest {
         long lastEventTimeOffset = 2222222;
         long reportId = 1111;
         when(newSession.getId()).thenReturn(sessionId);
-        when(newSession.getLastEventTimeOffset()).thenReturn(lastEventTimeOffset);
+        when(newSession.getLastEventTimeOffsetSeconds()).thenReturn(lastEventTimeOffset);
         when(newSession.getNextReportId()).thenReturn(reportId);
         when(newSession.getType()).thenReturn(SessionType.FOREGROUND);
         when(mFgSessionFactory.create(any())).thenReturn(newSession);

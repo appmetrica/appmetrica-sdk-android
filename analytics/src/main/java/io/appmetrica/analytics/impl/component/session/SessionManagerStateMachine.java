@@ -270,14 +270,14 @@ public class SessionManagerStateMachine {
                 .withSessionId(session.getId())
                 .withSessionType(session.getType())
                 .withReportId(session.getNextReportId())
-                .withReportTime(session.getAliveReportOffset());
+                .withReportTime(session.getAliveReportOffsetSeconds());
     }
 
     @NonNull private SessionState getStateFromSession(@NonNull Session currentSession, long creationElapsedRealtime) {
         return new SessionState()
                 .withSessionId(currentSession.getId())
                 .withReportId(currentSession.getNextReportId())
-                .withReportTime(currentSession.getAndUpdateLastEventTime(creationElapsedRealtime))
+                .withReportTime(currentSession.getAndUpdateLastEventTimeSeconds(creationElapsedRealtime))
                 .withSessionType(currentSession.getType());
     }
 
@@ -288,7 +288,7 @@ public class SessionManagerStateMachine {
             return new SessionState()
                     .withSessionId(lastSession.getId())
                     .withReportId(lastSession.getNextReportId())
-                    .withReportTime(lastSession.getLastEventTimeOffset())
+                    .withReportTime(lastSession.getLastEventTimeOffsetSeconds())
                     .withSessionType(lastSession.getType());
         } else {
             YLogger.w(TAG + " Could not load session, creating background stub.");
