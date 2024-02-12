@@ -16,6 +16,7 @@ import org.json.JSONObject;
 import static io.appmetrica.analytics.impl.component.session.SessionDefaults.MIN_VALID_UI_SESSION_ID;
 
 public class Session {
+    public static final String TAG = "[Session]";
 
     private final ComponentUnit component;
     private final SessionStorage sessionStorage;
@@ -73,8 +74,11 @@ public class Session {
         boolean validID = id >= MIN_VALID_UI_SESSION_ID;
         boolean consistentRequestParameters = consistentRequestParameters();
         boolean notExpired = !isExpired(reportElapsedRealtime, systemTimeProvider.elapsedRealtime());
-        YLogger.d("Session id=%d and type %s validity. validID=%b, consistentRequestParameters=%b, notExpired=%b",
-            id, sessionArguments.getType(), validID, consistentRequestParameters, notExpired);
+        YLogger.info(
+            TAG,
+            "Session id=%d and type %s validity. validID=%b, consistentRequestParameters=%b, notExpired=%b",
+            id, sessionArguments.getType(), validID, consistentRequestParameters, notExpired
+        );
         return validID && consistentRequestParameters && notExpired;
     }
 
@@ -85,7 +89,8 @@ public class Session {
             ReportRequestConfig reportRequestConfig = component.getFreshReportRequestConfig();
             consistentRequestParameters = requestParams.areParamsSameAsInConfig(reportRequestConfig);
         } else {
-            YLogger.d(
+            YLogger.info(
+                TAG,
                 "SessionRequestParameters are null. SessionID %d, SessionType %s",
                 id,
                 sessionArguments.getType()
@@ -105,9 +110,11 @@ public class Session {
         final long sinceLastActive= reportElapsedRealtime - sleepStart;
         long sessionLength = getSessionTimeOffset(reportElapsedRealtime);
         if (YLogger.DEBUG) {
-            YLogger.d("Session: id = %d, type = %s, sleepStart = %d, " +
-                            "sinceLastActive = %d, sessionTimeout = %d",
-                    getId(), getType().toString(), sleepStart, sinceLastActive, getTimeoutSeconds());
+            YLogger.info(
+                TAG,
+                "Session: id = %d, type = %s, sleepStart = %d, sinceLastActive = %d, sessionTimeout = %d",
+                getId(), getType().toString(), sleepStart, sinceLastActive, getTimeoutSeconds()
+            );
         }
         return wasRebooted
             || sinceLastActive >= TimeUnit.SECONDS.toMillis(getTimeoutSeconds())
@@ -120,7 +127,9 @@ public class Session {
     }
 
     void updateLastActiveTime(long elapsedRealtime) {
-        sessionStorage.putSleepStart(sleepStart = elapsedRealtime).commit();
+        sleepStart = elapsedRealtime;
+        YLogger.info(TAG, "updateLastActiveTime: %s", sleepStart);
+        sessionStorage.putSleepStart(sleepStart).commit();
     }
 
     long getAndUpdateLastEventTimeSeconds(long elapsedRealtime) {

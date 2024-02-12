@@ -58,7 +58,7 @@ public abstract class AbstractSessionFactory implements ISessionFactory<SessionA
 
         long sessionId = sessionIDProvider.getNextSessionId();
         mStorage.putSessionId(sessionId)
-                .putSleepStart(TimeUnit.MILLISECONDS.toSeconds(arguments.creationElapsedRealtime))
+                .putSleepStart(arguments.creationElapsedRealtime)
                 .putCreationTime(arguments.creationElapsedRealtime)
                 .putReportId(SessionDefaults.INITIAL_REPORT_ID)
                 .putAliveReportNeeded(true)

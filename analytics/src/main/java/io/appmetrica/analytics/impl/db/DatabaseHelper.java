@@ -160,7 +160,7 @@ public class DatabaseHelper {
     }
 
     // Creates and writes a new session by Id
-    public void newSession(final long sessionId, final SessionType type, final long sessionStartTime) {
+    public void newSession(final long sessionId, final SessionType type, final long sessionStartTimeSeconds) {
         YLogger.d(TAG + "New session was created. Session Id: %d", sessionId);
 
         final ContentValues sessionValues = new DbSessionModelConverter().fromModel(
@@ -168,7 +168,7 @@ public class DatabaseHelper {
                 mComponent.getFreshReportRequestConfig(),
                 sessionId,
                 type,
-                sessionStartTime
+                sessionStartTimeSeconds
             ).create()
         );
 

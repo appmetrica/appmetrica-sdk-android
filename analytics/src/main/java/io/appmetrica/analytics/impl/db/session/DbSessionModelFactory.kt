@@ -12,7 +12,7 @@ class DbSessionModelFactory(
     private val reportRequestConfig: ReportRequestConfig,
     private val id: Long?,
     private val type: SessionType?,
-    private val startTime: Long?
+    private val startTimeSeconds: Long?
 ) {
     private val tag = "[DbSessionModel]"
 
@@ -24,7 +24,7 @@ class DbSessionModelFactory(
     )
 
     private fun getSessionDescription() = DbSessionModel.Description(
-        startTime,
+        startTimeSeconds,
         TimeUtils.getServerTimeOffset(),
         ServerTime.getInstance().isUncheckedTime
     )
