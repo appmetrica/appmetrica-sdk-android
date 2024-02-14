@@ -114,6 +114,7 @@ public interface io.appmetrica.analytics.modulesapi.internal.ModuleServicesDatab
 
 public interface io.appmetrica.analytics.modulesapi.internal.NetworkContext {
     public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.io.IExecutionPolicy getExecutionPolicy()
+    public abstract [NonNull] io.appmetrica.analytics.modulesapi.internal.network.SimpleNetworkApi getNetworkApi()
     public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.io.SslSocketFactoryProvider getSslSocketFactoryProvider()
     public abstract [NonNull] String getUserAgent()
 }
@@ -220,5 +221,16 @@ public interface io.appmetrica.analytics.modulesapi.internal.event.ModuleEventHa
 
 public interface io.appmetrica.analytics.modulesapi.internal.event.ModuleEventHandlerReporter {
     public abstract void report([NonNull] io.appmetrica.analytics.coreapi.internal.event.CounterReportApi)
+}
+
+public interface io.appmetrica.analytics.modulesapi.internal.network.NetworkClientWithCacheControl {
+    public abstract [Nullable] String getETag()
+    public abstract void onError()
+    public abstract void onNotModified()
+    public abstract void onResponse([NonNull] String, [NonNull] byte[])
+}
+
+public interface io.appmetrica.analytics.modulesapi.internal.network.SimpleNetworkApi {
+    public abstract void performRequestWithCacheControl([NonNull] String, [NonNull] io.appmetrica.analytics.modulesapi.internal.network.NetworkClientWithCacheControl)
 }
 
