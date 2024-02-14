@@ -4,10 +4,10 @@ import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.data.ProtobufConverter;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.Utils;
 import io.appmetrica.analytics.impl.crash.client.UnhandledException;
 import io.appmetrica.analytics.impl.protobuf.backend.CrashAndroid;
+import io.appmetrica.analytics.logger.internal.YLogger;
 
 public class UnhandledExceptionConverter implements ProtobufConverter<UnhandledException, CrashAndroid.Crash> {
 

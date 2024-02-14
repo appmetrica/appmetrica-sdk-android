@@ -4,9 +4,9 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.backport.Consumer;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.utils.concurrency.ExclusiveMultiProcessFileLock;
 import io.appmetrica.analytics.impl.utils.concurrency.FileLocksHolder;
+import io.appmetrica.analytics.logger.internal.YLogger;
 import java.io.File;
 
 public class ReadOldCrashesRunnable implements Runnable {

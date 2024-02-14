@@ -1,9 +1,9 @@
 package io.appmetrica.analytics.impl.crash.ndk
 
 import android.util.Base64
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger
 import io.appmetrica.analytics.coreutils.internal.parsing.optStringOrNull
 import io.appmetrica.analytics.impl.CounterConfigurationReporterType
+import io.appmetrica.analytics.logger.internal.YLogger
 import org.json.JSONObject
 
 data class AppMetricaNativeCrashMetadata(

@@ -2,12 +2,12 @@ package io.appmetrica.analytics.impl.startup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.ClidsInfoStorage;
 import io.appmetrica.analytics.impl.DistributionSource;
 import io.appmetrica.analytics.impl.Utils;
 import io.appmetrica.analytics.impl.clids.ClidsInfo;
 import io.appmetrica.analytics.impl.utils.StartupUtils;
+import io.appmetrica.analytics.logger.internal.YLogger;
 import java.util.Map;
 
 public class ClidsStateChecker {

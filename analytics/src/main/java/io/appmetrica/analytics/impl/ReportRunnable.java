@@ -3,12 +3,12 @@ package io.appmetrica.analytics.impl;
 import android.content.Context;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.client.ClientConfiguration;
 import io.appmetrica.analytics.impl.component.CommonArguments;
 import io.appmetrica.analytics.impl.component.clients.ClientDescription;
 import io.appmetrica.analytics.impl.component.clients.ClientRepository;
 import io.appmetrica.analytics.impl.component.clients.ClientUnit;
+import io.appmetrica.analytics.logger.internal.YLogger;
 
 class ReportRunnable implements Runnable {
 

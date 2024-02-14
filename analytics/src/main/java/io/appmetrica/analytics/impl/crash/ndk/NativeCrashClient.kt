@@ -2,10 +2,10 @@ package io.appmetrica.analytics.impl.crash.ndk
 
 import android.content.Context
 import io.appmetrica.analytics.coreutils.internal.io.FileUtils
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger
 import io.appmetrica.analytics.coreutils.internal.reflection.ReflectionUtils
 import io.appmetrica.analytics.impl.CounterConfigurationReporterType
 import io.appmetrica.analytics.impl.client.ProcessConfiguration
+import io.appmetrica.analytics.logger.internal.YLogger
 import io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrashClientConfig
 import io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrashClientModule
 import io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrashClientModuleDummy

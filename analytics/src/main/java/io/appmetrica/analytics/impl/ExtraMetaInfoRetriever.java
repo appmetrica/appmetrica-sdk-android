@@ -4,7 +4,7 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
+import io.appmetrica.analytics.logger.internal.YLogger;
 
 public class ExtraMetaInfoRetriever {
 

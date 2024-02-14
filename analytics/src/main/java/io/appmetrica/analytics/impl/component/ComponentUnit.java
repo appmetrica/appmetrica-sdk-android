@@ -5,7 +5,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.AppMetrica;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.coreutils.internal.services.PackageManagerUtils;
 import io.appmetrica.analytics.coreutils.internal.time.TimePassedChecker;
 import io.appmetrica.analytics.impl.AppEnvironment;
@@ -38,6 +37,7 @@ import io.appmetrica.analytics.impl.startup.StartupState;
 import io.appmetrica.analytics.impl.startup.executor.ComponentStartupExecutorFactory;
 import io.appmetrica.analytics.impl.utils.BooleanUtils;
 import io.appmetrica.analytics.impl.utils.PublicLogger;
+import io.appmetrica.analytics.logger.internal.YLogger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -359,9 +359,9 @@ public class ComponentUnit implements IReportableComponent, IComponent, EventsFl
 
     private void updateLoggerEnabledState(@NonNull CommonArguments.ReporterArguments config) {
         if (BooleanUtils.isTrue(config.logEnabled)) {
-            mPublicLogger.setEnabled();
+            mPublicLogger.setEnabled(true);
         } else if (BooleanUtils.isFalse(config.logEnabled)) {
-            mPublicLogger.setDisabled();
+            mPublicLogger.setEnabled(false);
         }
     }
 

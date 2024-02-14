@@ -2,7 +2,6 @@ package io.appmetrica.analytics.impl
 
 import android.content.Context
 import android.content.res.Resources
-import android.graphics.Point
 import android.os.Build
 import android.util.DisplayMetrics
 import android.view.Display
@@ -18,7 +17,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers.any
-import org.mockito.ArgumentMatchers.same
 import org.mockito.Mock
 import org.mockito.Mockito.never
 import org.mockito.Mockito.verify

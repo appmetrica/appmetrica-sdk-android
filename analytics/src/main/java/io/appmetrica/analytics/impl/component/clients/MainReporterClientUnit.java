@@ -4,12 +4,12 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreutils.internal.WrapUtils;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.CounterReport;
 import io.appmetrica.analytics.impl.DefaultValues;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.component.CommonArguments;
 import io.appmetrica.analytics.impl.component.RegularDispatcherComponent;
+import io.appmetrica.analytics.logger.internal.YLogger;
 
 public class MainReporterClientUnit extends AbstractClientUnit {
 

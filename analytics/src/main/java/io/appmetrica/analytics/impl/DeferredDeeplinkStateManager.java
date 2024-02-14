@@ -6,7 +6,7 @@ import io.appmetrica.analytics.DeferredDeeplinkListener;
 import io.appmetrica.analytics.DeferredDeeplinkParametersListener;
 import io.appmetrica.analytics.coreutils.internal.StringUtils;
 import io.appmetrica.analytics.coreutils.internal.WrapUtils;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
+import io.appmetrica.analytics.logger.internal.YLogger;
 import java.util.Map;
 
 public class DeferredDeeplinkStateManager {

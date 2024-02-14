@@ -5,8 +5,8 @@ import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreutils.internal.encryption.AESEncrypter;
 import io.appmetrica.analytics.coreutils.internal.io.GZIPCompressor;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.Utils;
+import io.appmetrica.analytics.logger.internal.YLogger;
 import java.util.Arrays;
 
 public class BodyDecoder {

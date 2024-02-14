@@ -4,14 +4,13 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.coreutils.internal.services.PackageManagerUtils;
 import io.appmetrica.analytics.coreutils.internal.time.TimePassedChecker;
 import io.appmetrica.analytics.impl.CounterConfigurationReporterType;
 import io.appmetrica.analytics.impl.CounterReport;
+import io.appmetrica.analytics.impl.DataSendingRestrictionControllerImpl;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.InternalEvents;
-import io.appmetrica.analytics.impl.DataSendingRestrictionControllerImpl;
 import io.appmetrica.analytics.impl.billing.BillingMonitorWrapper;
 import io.appmetrica.analytics.impl.component.processor.EventProcessingStrategyFactory;
 import io.appmetrica.analytics.impl.component.processor.factory.RegularMainReporterFactory;
@@ -22,6 +21,7 @@ import io.appmetrica.analytics.impl.referrer.service.ReferrerHolder;
 import io.appmetrica.analytics.impl.referrer.service.ReferrerListenerNotifier;
 import io.appmetrica.analytics.impl.startup.StartupState;
 import io.appmetrica.analytics.impl.startup.executor.ComponentStartupExecutorFactory;
+import io.appmetrica.analytics.logger.internal.YLogger;
 
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_REGULAR;
 

@@ -9,6 +9,7 @@ import io.appmetrica.analytics.impl.component.processor.factory.ActivationFactor
 import io.appmetrica.analytics.impl.component.processor.factory.CommonConditionalFactory;
 import io.appmetrica.analytics.impl.component.processor.factory.CommonHandlersFactory;
 import io.appmetrica.analytics.impl.component.processor.factory.CurrentSessionNativeCrashHandlerFactory;
+import io.appmetrica.analytics.impl.component.processor.factory.ExternalAttributionFactory;
 import io.appmetrica.analytics.impl.component.processor.factory.HandlersFactory;
 import io.appmetrica.analytics.impl.component.processor.factory.JustSaveToDataBaseFactory;
 import io.appmetrica.analytics.impl.component.processor.factory.PrevSessionNativeCrashHandlerFactory;
@@ -18,7 +19,6 @@ import io.appmetrica.analytics.impl.component.processor.factory.ReportAppOpenFac
 import io.appmetrica.analytics.impl.component.processor.factory.ReportingHandlerProvider;
 import io.appmetrica.analytics.impl.component.processor.factory.SingleHandlerFactory;
 import io.appmetrica.analytics.impl.component.processor.factory.StartFactory;
-import io.appmetrica.analytics.impl.component.processor.factory.ExternalAttributionFactory;
 import io.appmetrica.analytics.impl.component.processor.factory.UnhandledExceptionFactory;
 import io.appmetrica.analytics.impl.component.processor.factory.UnhandledExceptionFromFileFactory;
 import java.util.HashMap;

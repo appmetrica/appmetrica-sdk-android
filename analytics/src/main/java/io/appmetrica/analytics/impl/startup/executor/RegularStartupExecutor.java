@@ -1,9 +1,9 @@
 package io.appmetrica.analytics.impl.startup.executor;
 
 import androidx.annotation.NonNull;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.startup.StartupUnit;
+import io.appmetrica.analytics.logger.internal.YLogger;
 import io.appmetrica.analytics.networktasks.internal.NetworkTask;
 
 public class RegularStartupExecutor implements StartupExecutor {

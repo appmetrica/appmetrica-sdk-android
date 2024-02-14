@@ -5,7 +5,6 @@ import android.location.Location
 import io.appmetrica.analytics.coreapi.internal.backport.Consumer
 import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor
 import io.appmetrica.analytics.coreapi.internal.system.PermissionExtractor
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger
 import io.appmetrica.analytics.location.impl.LastKnownLocationExtractorProviderFactoryImpl
 import io.appmetrica.analytics.location.impl.LocationConfig
 import io.appmetrica.analytics.location.impl.LocationCore
@@ -19,6 +18,7 @@ import io.appmetrica.analytics.locationapi.internal.LocationClient
 import io.appmetrica.analytics.locationapi.internal.LocationFilter
 import io.appmetrica.analytics.locationapi.internal.LocationReceiverProvider
 import io.appmetrica.analytics.locationapi.internal.LocationReceiverProviderFactory
+import io.appmetrica.analytics.logger.internal.YLogger
 
 class LocationClientImpl : LocationClient {
 

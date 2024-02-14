@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import androidx.annotation.VisibleForTesting
 import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger
 import io.appmetrica.analytics.identifiers.impl.AdvIdInfo
 import io.appmetrica.analytics.identifiers.impl.AdvIdProvider
 import io.appmetrica.analytics.identifiers.impl.AdvIdResult
@@ -12,6 +11,7 @@ import io.appmetrica.analytics.identifiers.impl.AdvIdServiceConnectionController
 import io.appmetrica.analytics.identifiers.impl.ConnectionException
 import io.appmetrica.analytics.identifiers.impl.Constants
 import io.appmetrica.analytics.identifiers.impl.getProviderUnavailableResult
+import io.appmetrica.analytics.logger.internal.YLogger
 
 private const val TAG = "[Huawei OAID] "
 private val HMS_ADV_ID_INTENT =

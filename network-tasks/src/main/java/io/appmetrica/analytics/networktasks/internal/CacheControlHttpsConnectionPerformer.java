@@ -5,7 +5,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreutils.internal.collection.CollectionUtils;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
+import io.appmetrica.analytics.logger.internal.YLogger;
 import io.appmetrica.analytics.network.internal.NetworkClient;
 import io.appmetrica.analytics.network.internal.Request;
 import io.appmetrica.analytics.network.internal.Response;

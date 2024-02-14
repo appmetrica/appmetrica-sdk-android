@@ -2,7 +2,7 @@ package io.appmetrica.analytics.coreutils.internal.toggle
 
 import io.appmetrica.analytics.coreapi.internal.control.Toggle
 import io.appmetrica.analytics.coreapi.internal.control.ToggleObserver
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger
+import io.appmetrica.analytics.logger.internal.YLogger
 
 abstract class SimpleThreadSafeToggle(
     initialState: Boolean = false,

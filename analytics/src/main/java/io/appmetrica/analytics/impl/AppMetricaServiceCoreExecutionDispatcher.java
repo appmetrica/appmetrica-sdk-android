@@ -7,8 +7,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
 import io.appmetrica.analytics.coreutils.internal.executors.SafeRunnable;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.service.AppMetricaServiceCallback;
+import io.appmetrica.analytics.logger.internal.YLogger;
 
 public class AppMetricaServiceCoreExecutionDispatcher implements AppMetricaServiceCore {
     private static final String TAG = "[AppMetricaCoreExecutionDispatcher]";

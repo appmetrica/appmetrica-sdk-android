@@ -4,11 +4,11 @@ import android.content.Context
 import android.database.Cursor
 import android.net.Uri
 import android.text.TextUtils
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger
 import io.appmetrica.analytics.impl.DistributionSource
 import io.appmetrica.analytics.impl.SatelliteDataProvider
 import io.appmetrica.analytics.impl.SdkUtils
 import io.appmetrica.analytics.impl.Utils
+import io.appmetrica.analytics.logger.internal.YLogger
 import org.json.JSONObject
 
 class PreloadInfoFromSatelliteProvider(private val context: Context) : SatelliteDataProvider<PreloadInfoState?> {

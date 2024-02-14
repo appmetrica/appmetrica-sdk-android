@@ -7,7 +7,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.client.ProcessConfiguration;
 import io.appmetrica.analytics.impl.crash.UnhandledExceptionEventFormer;
 import io.appmetrica.analytics.impl.crash.client.UnhandledException;
@@ -24,6 +23,7 @@ import io.appmetrica.analytics.impl.utils.JsonHelper;
 import io.appmetrica.analytics.impl.utils.LoggerStorage;
 import io.appmetrica.analytics.impl.utils.PublicLogger;
 import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedProvider;
+import io.appmetrica.analytics.logger.internal.YLogger;
 import java.util.List;
 import java.util.Map;
 

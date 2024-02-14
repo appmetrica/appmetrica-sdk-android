@@ -3,10 +3,10 @@ package io.appmetrica.analytics.impl.startup.parsing;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import io.appmetrica.analytics.coreutils.internal.WrapUtils;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.protobuf.client.StartupStateProtobuf;
 import io.appmetrica.analytics.impl.startup.CollectingFlags;
 import io.appmetrica.analytics.impl.utils.JsonHelper;
+import io.appmetrica.analytics.logger.internal.YLogger;
 import org.json.JSONException;
 import org.json.JSONObject;
 

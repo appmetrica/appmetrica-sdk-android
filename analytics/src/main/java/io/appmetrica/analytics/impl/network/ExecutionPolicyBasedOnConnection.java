@@ -3,10 +3,10 @@ package io.appmetrica.analytics.impl.network;
 import android.content.Context;
 import androidx.annotation.NonNull;
 import io.appmetrica.analytics.coreapi.internal.io.IExecutionPolicy;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.PhoneUtils;
 import io.appmetrica.analytics.impl.utils.ConnectionTypeProviderImpl;
 import io.appmetrica.analytics.impl.utils.IConnectionTypeProvider;
+import io.appmetrica.analytics.logger.internal.YLogger;
 import java.util.EnumSet;
 
 public class ExecutionPolicyBasedOnConnection implements IExecutionPolicy {

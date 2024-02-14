@@ -7,9 +7,9 @@ import android.location.LocationListener
 import android.location.LocationManager
 import io.appmetrica.analytics.coreapi.internal.annotations.GeoThread
 import io.appmetrica.analytics.coreapi.internal.permission.PermissionResolutionStrategy
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger
 import io.appmetrica.analytics.coreutils.internal.system.SystemServiceUtils
 import io.appmetrica.analytics.locationapi.internal.LastKnownLocationExtractor
+import io.appmetrica.analytics.logger.internal.YLogger
 
 internal open class SystemLastKnownLocationExtractor(
     protected val context: Context,

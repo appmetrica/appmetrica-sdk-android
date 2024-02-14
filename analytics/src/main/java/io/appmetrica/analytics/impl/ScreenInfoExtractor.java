@@ -13,8 +13,8 @@ import androidx.annotation.Nullable;
 import io.appmetrica.analytics.coreapi.internal.backport.FunctionWithThrowable;
 import io.appmetrica.analytics.coreapi.internal.model.ScreenInfo;
 import io.appmetrica.analytics.coreutils.internal.AndroidUtils;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.coreutils.internal.system.SystemServiceUtils;
+import io.appmetrica.analytics.logger.internal.YLogger;
 import java.lang.reflect.Method;
 
 public class ScreenInfoExtractor {

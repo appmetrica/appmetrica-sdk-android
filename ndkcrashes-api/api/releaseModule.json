@@ -53,7 +53,7 @@
                 },
                 {
                     "group": "io.appmetrica.analytics",
-                    "module": "analytics-core-utils",
+                    "module": "analytics-logger",
                     "version": {
                         "requires": "6.3.0"
                     }

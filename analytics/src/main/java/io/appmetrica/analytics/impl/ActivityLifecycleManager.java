@@ -8,8 +8,8 @@ import androidx.annotation.AnyThread;
 import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.utils.collection.HashMultimap;
+import io.appmetrica.analytics.logger.internal.YLogger;
 import java.util.Collection;
 
 public class ActivityLifecycleManager extends DefaultActivityLifecycleCallbacks {

@@ -41,7 +41,7 @@
     </dependency>
     <dependency>
       <groupId>io.appmetrica.analytics</groupId>
-      <artifactId>analytics-core-utils</artifactId>
+      <artifactId>analytics-logger</artifactId>
       <version>6.3.0</version>
       <scope>runtime</scope>
     </dependency>

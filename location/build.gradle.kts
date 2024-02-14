@@ -19,6 +19,7 @@ dependencies {
     implementation(project(":core-utils"))
     implementation(project(":gpllibrary"))
     implementation(project(":location-api"))
+    implementation(project(":logger"))
 
     testImplementation("com.google.android.gms:play-services-location:${Deps.gmsLocationVersion}")
 }

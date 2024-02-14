@@ -7,7 +7,6 @@ import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.backport.Consumer;
 import io.appmetrica.analytics.coreapi.internal.backport.Function;
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.component.CommonArguments;
 import io.appmetrica.analytics.impl.component.clients.ClientDescription;
 import io.appmetrica.analytics.impl.component.clients.ClientRepository;
@@ -22,6 +21,7 @@ import io.appmetrica.analytics.impl.crash.ndk.NativeCrashDumpReader;
 import io.appmetrica.analytics.impl.crash.ndk.NativeCrashHandlerDescription;
 import io.appmetrica.analytics.impl.request.StartupRequestConfig;
 import io.appmetrica.analytics.impl.utils.LoggerStorage;
+import io.appmetrica.analytics.logger.internal.YLogger;
 import java.io.File;
 
 public class ReportConsumer {

@@ -16,11 +16,11 @@ import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.backport.FunctionWithThrowable;
 import io.appmetrica.analytics.coreapi.internal.constants.DeviceTypeValues;
 import io.appmetrica.analytics.coreutils.internal.AndroidUtils;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.coreutils.internal.services.SafePackageManager;
 import io.appmetrica.analytics.coreutils.internal.system.SystemServiceUtils;
 import io.appmetrica.analytics.impl.protobuf.backend.EventProto;
 import io.appmetrica.analytics.impl.utils.MapWithDefault;
+import io.appmetrica.analytics.logger.internal.YLogger;
 import java.util.Locale;
 
 public final class PhoneUtils {

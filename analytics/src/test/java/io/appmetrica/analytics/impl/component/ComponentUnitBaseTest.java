@@ -35,6 +35,7 @@ import java.util.List;
 import java.util.UUID;
 import org.json.JSONObject;
 import org.junit.Test;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.RuntimeEnvironment;
@@ -282,7 +283,7 @@ public abstract class ComponentUnitBaseTest extends CommonTest {
                 null
         );
         mComponentUnit.updateSdkConfig(arguments.componentArguments);
-        verify(mPublicLogger).setEnabled();
+        verify(mPublicLogger).setEnabled(true);
     }
 
     @Test
@@ -293,7 +294,7 @@ public abstract class ComponentUnitBaseTest extends CommonTest {
                 null
         );
         mComponentUnit.updateSdkConfig(arguments.componentArguments);
-        verify(mPublicLogger).setDisabled();
+        verify(mPublicLogger).setEnabled(false);
     }
 
     @Test
@@ -304,8 +305,7 @@ public abstract class ComponentUnitBaseTest extends CommonTest {
                 null
         );
         mComponentUnit.updateSdkConfig(arguments.componentArguments);
-        verify(mPublicLogger, never()).setEnabled();
-        verify(mPublicLogger, never()).setDisabled();
+        verify(mPublicLogger, never()).setEnabled(ArgumentMatchers.nullable(Boolean.class));
     }
 
     @Test

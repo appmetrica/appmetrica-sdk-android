@@ -15,5 +15,6 @@ android {
 dependencies {
     implementation(project(":core-api"))
     implementation(project(":core-utils"))
+    implementation(project(":logger"))
     implementation("com.google.android.gms:play-services-ads-identifier:18.0.1")
 }

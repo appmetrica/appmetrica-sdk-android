@@ -4,7 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
+import io.appmetrica.analytics.logger.internal.YLogger;
 
 public abstract class ResourceRetriever<T> {
 

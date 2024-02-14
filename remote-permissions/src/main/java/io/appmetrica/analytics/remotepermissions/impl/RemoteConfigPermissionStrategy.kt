@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.remotepermissions.impl
 
 import io.appmetrica.analytics.coreapi.internal.permission.PermissionStrategy
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger
+import io.appmetrica.analytics.logger.internal.YLogger
 
 class RemoteConfigPermissionStrategy :
     PermissionStrategy {

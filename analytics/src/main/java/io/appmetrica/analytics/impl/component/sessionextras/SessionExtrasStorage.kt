@@ -1,9 +1,9 @@
 package io.appmetrica.analytics.impl.component.sessionextras
 
 import android.content.Context
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger
 import io.appmetrica.analytics.impl.component.ComponentId
 import io.appmetrica.analytics.impl.db.storage.DatabaseStorageFactory
+import io.appmetrica.analytics.logger.internal.YLogger
 
 class SessionExtrasStorage(context: Context, componentId: ComponentId) {
 

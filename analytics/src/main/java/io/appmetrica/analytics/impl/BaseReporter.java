@@ -9,7 +9,6 @@ import io.appmetrica.analytics.ModuleEvent;
 import io.appmetrica.analytics.Revenue;
 import io.appmetrica.analytics.coreutils.internal.WrapUtils;
 import io.appmetrica.analytics.coreutils.internal.collection.CollectionUtils;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.ecommerce.ECommerceEvent;
 import io.appmetrica.analytics.impl.crash.AppMetricaThrowable;
 import io.appmetrica.analytics.impl.crash.PluginErrorDetailsConverter;
@@ -40,6 +39,7 @@ import io.appmetrica.analytics.impl.utils.limitation.SimpleMapLimitation;
 import io.appmetrica.analytics.impl.utils.validation.ValidationResult;
 import io.appmetrica.analytics.impl.utils.validation.Validator;
 import io.appmetrica.analytics.impl.utils.validation.revenue.RevenueValidator;
+import io.appmetrica.analytics.logger.internal.YLogger;
 import io.appmetrica.analytics.plugins.IPluginReporter;
 import io.appmetrica.analytics.plugins.PluginErrorDetails;
 import io.appmetrica.analytics.profile.UserProfile;
@@ -134,7 +134,7 @@ public abstract class BaseReporter implements IBaseReporter {
                 new SimpleMapLimitation(mPublicLogger, ErrorEnvironment.TAG)
         );
         if (BooleanUtils.isTrue(mReporterEnvironment.getReporterConfiguration().isLogEnabled())) {
-            mPublicLogger.setEnabled();
+            mPublicLogger.setEnabled(true);
         }
         this.processDetector = processDetector;
     }

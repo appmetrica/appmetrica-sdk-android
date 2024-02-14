@@ -11,7 +11,7 @@ import io.appmetrica.analytics.coreapi.internal.servicecomponents.batteryinfo.Ch
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.batteryinfo.ChargeTypeChangeListener;
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.batteryinfo.ChargeTypeProvider;
 import io.appmetrica.analytics.coreutils.internal.executors.SafeRunnable;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
+import io.appmetrica.analytics.logger.internal.YLogger;
 import java.util.ArrayList;
 import java.util.List;
 

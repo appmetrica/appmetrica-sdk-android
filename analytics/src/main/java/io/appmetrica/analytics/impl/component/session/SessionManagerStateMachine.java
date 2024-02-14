@@ -3,12 +3,12 @@ package io.appmetrica.analytics.impl.component.session;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.CounterReport;
 import io.appmetrica.analytics.impl.ExtraMetaInfoRetriever;
 import io.appmetrica.analytics.impl.InternalEvents;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.impl.utils.PublicLogger;
+import io.appmetrica.analytics.logger.internal.YLogger;
 
 public class SessionManagerStateMachine {
 

@@ -5,7 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.cache.CacheUpdateScheduler;
 import io.appmetrica.analytics.coreapi.internal.cache.UpdateConditionsChecker;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
+import io.appmetrica.analytics.logger.internal.YLogger;
 
 public abstract class DataCache<T> implements UpdateConditionsChecker {
 

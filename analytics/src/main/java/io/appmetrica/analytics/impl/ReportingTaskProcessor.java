@@ -3,11 +3,11 @@ package io.appmetrica.analytics.impl;
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.impl.network.NetworkTaskFactory;
 import io.appmetrica.analytics.impl.request.ReportRequestConfig;
 import io.appmetrica.analytics.impl.startup.executor.StartupExecutor;
+import io.appmetrica.analytics.logger.internal.YLogger;
 import io.appmetrica.analytics.networktasks.internal.NetworkTask;
 import java.util.concurrent.TimeUnit;
 

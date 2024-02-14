@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.modules
 
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger
+import io.appmetrica.analytics.logger.internal.YLogger
 import io.appmetrica.analytics.modulesapi.internal.event.ModuleEventHandlerFactory
 
 private const val TAG = "[ModuleEventHandlersHolder]"

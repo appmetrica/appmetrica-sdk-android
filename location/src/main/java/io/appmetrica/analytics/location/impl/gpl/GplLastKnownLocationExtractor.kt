@@ -5,8 +5,8 @@ import android.location.LocationListener
 import io.appmetrica.analytics.coreapi.internal.annotations.GeoThread
 import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor
 import io.appmetrica.analytics.coreapi.internal.permission.PermissionResolutionStrategy
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger
 import io.appmetrica.analytics.locationapi.internal.LastKnownLocationExtractor
+import io.appmetrica.analytics.logger.internal.YLogger
 
 private const val TAG = "[GplLastKnownLocationExtractor]"
 

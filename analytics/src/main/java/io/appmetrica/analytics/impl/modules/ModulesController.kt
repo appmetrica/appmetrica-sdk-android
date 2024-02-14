@@ -4,11 +4,11 @@ import android.location.Location
 import io.appmetrica.analytics.coreapi.internal.backport.Consumer
 import io.appmetrica.analytics.coreapi.internal.control.Toggle
 import io.appmetrica.analytics.coreapi.internal.permission.PermissionStrategy
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger
 import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.StartupStateObserver
 import io.appmetrica.analytics.impl.permissions.DefaultAskForPermissionStrategyProvider
 import io.appmetrica.analytics.impl.startup.StartupState
+import io.appmetrica.analytics.logger.internal.YLogger
 import io.appmetrica.analytics.modulesapi.internal.AskForPermissionStrategyModuleProvider
 import io.appmetrica.analytics.modulesapi.internal.ModuleEntryPoint
 import io.appmetrica.analytics.modulesapi.internal.ModuleLocationSourcesController

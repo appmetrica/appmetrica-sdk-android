@@ -2,7 +2,6 @@ package io.appmetrica.analytics.impl.crash.jvm;
 
 import android.util.Base64;
 import androidx.annotation.NonNull;
-import io.appmetrica.analytics.internal.CounterConfiguration;
 import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
 import io.appmetrica.analytics.impl.ClientCounterReport;
 import io.appmetrica.analytics.impl.CounterConfigurationReporterType;
@@ -11,6 +10,7 @@ import io.appmetrica.analytics.impl.TestsData;
 import io.appmetrica.analytics.impl.client.ClientConfiguration;
 import io.appmetrica.analytics.impl.client.ProcessConfiguration;
 import io.appmetrica.analytics.impl.utils.PublicLogger;
+import io.appmetrica.analytics.internal.CounterConfiguration;
 import io.appmetrica.analytics.testutils.CommonTest;
 import java.util.AbstractMap;
 import java.util.Arrays;

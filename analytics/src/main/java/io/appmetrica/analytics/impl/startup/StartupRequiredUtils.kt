@@ -1,10 +1,10 @@
 package io.appmetrica.analytics.impl.startup
 
 import androidx.annotation.VisibleForTesting
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger
 import io.appmetrica.analytics.coreutils.internal.time.SystemTimeProvider
 import io.appmetrica.analytics.coreutils.internal.time.TimeProvider
 import io.appmetrica.analytics.impl.ClidsInfoStorage
+import io.appmetrica.analytics.logger.internal.YLogger
 
 private const val TAG = "[StartupRequiredUtils]"
 

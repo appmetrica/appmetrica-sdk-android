@@ -3,10 +3,10 @@ package io.appmetrica.analytics.impl.preparer;
 import android.util.Base64;
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.request.ReportRequestConfig;
 import io.appmetrica.analytics.impl.utils.encryption.EventEncrypter;
 import io.appmetrica.analytics.impl.utils.encryption.EventEncrypterProvider;
+import io.appmetrica.analytics.logger.internal.YLogger;
 
 public class BytesValueComposer implements ValueComposer {
 

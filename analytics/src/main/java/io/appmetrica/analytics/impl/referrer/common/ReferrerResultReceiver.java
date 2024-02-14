@@ -5,7 +5,7 @@ import android.os.Handler;
 import android.os.ResultReceiver;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
+import io.appmetrica.analytics.logger.internal.YLogger;
 
 public class ReferrerResultReceiver extends ResultReceiver {
 

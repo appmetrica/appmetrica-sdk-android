@@ -1,6 +1,5 @@
 package io.appmetrica.analytics.impl.component;
 
-import io.appmetrica.analytics.internal.CounterConfiguration;
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.applicationstate.ApplicationState;
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.applicationstate.ApplicationStateObserver;
 import io.appmetrica.analytics.impl.ApplicationStateProviderImpl;
@@ -12,6 +11,7 @@ import io.appmetrica.analytics.impl.component.processor.factory.RegularMainRepor
 import io.appmetrica.analytics.impl.referrer.service.ReferrerHolder;
 import io.appmetrica.analytics.impl.referrer.service.ReferrerListenerNotifier;
 import io.appmetrica.analytics.impl.startup.StartupState;
+import io.appmetrica.analytics.internal.CounterConfiguration;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import java.util.Random;
 import org.junit.Before;

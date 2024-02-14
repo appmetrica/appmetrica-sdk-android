@@ -2,14 +2,14 @@ package io.appmetrica.analytics.impl.component.processor.commutation;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.CounterReport;
-import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.DataSendingRestrictionControllerImpl;
+import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.component.CommonArguments;
 import io.appmetrica.analytics.impl.component.CommutationDispatcherComponent;
 import io.appmetrica.analytics.impl.component.clients.CommutationClientUnit;
 import io.appmetrica.analytics.impl.utils.BooleanUtils;
+import io.appmetrica.analytics.logger.internal.YLogger;
 
 public class UpdatePreActivationConfigHandler extends CommutationHandler {
 

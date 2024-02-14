@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl
 
 import android.os.Bundle
 import androidx.annotation.WorkerThread
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger
+import io.appmetrica.analytics.logger.internal.YLogger
 
 class ReportProxy {
 

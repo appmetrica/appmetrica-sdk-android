@@ -3,10 +3,10 @@ package io.appmetrica.analytics.impl.utils.limitation;
 import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.IOUtils;
 import io.appmetrica.analytics.impl.utils.LoggerStorage;
 import io.appmetrica.analytics.impl.utils.PublicLogger;
+import io.appmetrica.analytics.logger.internal.YLogger;
 import java.io.UnsupportedEncodingException;
 
 public class StringByBytesTrimmer extends BaseTrimmer<String> {

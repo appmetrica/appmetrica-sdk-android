@@ -1,8 +1,8 @@
 package io.appmetrica.analytics.impl
 
 import android.content.Intent
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger
 import io.appmetrica.analytics.impl.utils.ApiProxyThread
+import io.appmetrica.analytics.logger.internal.YLogger
 
 class DeeplinkConsumer(private val mainReporter: IMainReporter) {
 

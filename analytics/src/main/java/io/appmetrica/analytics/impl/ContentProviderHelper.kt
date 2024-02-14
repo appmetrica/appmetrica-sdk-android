@@ -4,7 +4,7 @@ import android.content.ContentValues
 import android.content.Context
 import androidx.annotation.MainThread
 import androidx.annotation.VisibleForTesting
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger
+import io.appmetrica.analytics.logger.internal.YLogger
 
 private const val TAG = "[ContentProviderHelper]"
 

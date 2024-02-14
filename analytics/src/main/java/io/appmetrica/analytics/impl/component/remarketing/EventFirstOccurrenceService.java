@@ -4,9 +4,9 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.FirstOccurrenceStatus;
 import io.appmetrica.analytics.impl.component.ComponentId;
+import io.appmetrica.analytics.logger.internal.YLogger;
 
 public class EventFirstOccurrenceService {
     private static final String TAG = "[EventFirstOccurrenceService]";

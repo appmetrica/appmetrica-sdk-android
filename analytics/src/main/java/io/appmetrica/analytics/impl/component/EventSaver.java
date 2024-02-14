@@ -2,7 +2,6 @@ package io.appmetrica.analytics.impl.component;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.coreutils.internal.time.SystemTimeProvider;
 import io.appmetrica.analytics.coreutils.internal.time.TimeProvider;
 import io.appmetrica.analytics.impl.AppEnvironment;
@@ -15,6 +14,7 @@ import io.appmetrica.analytics.impl.db.VitalComponentDataProvider;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesComponentDbStorage;
 import io.appmetrica.analytics.impl.utils.encryption.EventEncrypter;
 import io.appmetrica.analytics.impl.utils.encryption.EventEncrypterProvider;
+import io.appmetrica.analytics.logger.internal.YLogger;
 
 public class EventSaver {
 

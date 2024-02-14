@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.crash;
 import androidx.annotation.NonNull;
 import io.appmetrica.analytics.coreapi.internal.backport.Consumer;
 import io.appmetrica.analytics.coreapi.internal.backport.Function;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
+import io.appmetrica.analytics.logger.internal.YLogger;
 import java.io.File;
 
 public class ReadAndReportRunnable<Output> implements Runnable {

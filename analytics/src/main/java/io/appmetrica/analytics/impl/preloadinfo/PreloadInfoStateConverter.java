@@ -4,8 +4,8 @@ import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import io.appmetrica.analytics.coreapi.internal.data.ProtobufConverter;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.protobuf.client.PreloadInfoProto;
+import io.appmetrica.analytics.logger.internal.YLogger;
 import org.json.JSONObject;
 
 public class PreloadInfoStateConverter implements

@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.network.impl
 
 import androidx.annotation.VisibleForTesting
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger
+import io.appmetrica.analytics.logger.internal.YLogger
 import io.appmetrica.analytics.network.impl.utils.Utils
 import io.appmetrica.analytics.network.internal.Call
 import io.appmetrica.analytics.network.internal.NetworkClient

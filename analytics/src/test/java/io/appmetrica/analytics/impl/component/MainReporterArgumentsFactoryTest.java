@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.component;
 
-import io.appmetrica.analytics.internal.CounterConfiguration;
 import io.appmetrica.analytics.impl.DataSendingRestrictionControllerImpl;
+import io.appmetrica.analytics.internal.CounterConfiguration;
 import io.appmetrica.analytics.testutils.CommonTest;
 import org.junit.Test;
 import org.junit.runner.RunWith;

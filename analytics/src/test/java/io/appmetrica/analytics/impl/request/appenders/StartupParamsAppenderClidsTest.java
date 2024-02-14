@@ -2,9 +2,9 @@ package io.appmetrica.analytics.impl.request.appenders;
 
 import android.net.Uri;
 import io.appmetrica.analytics.TestData;
+import io.appmetrica.analytics.impl.DataSendingRestrictionControllerImpl;
 import io.appmetrica.analytics.impl.DistributionSource;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
-import io.appmetrica.analytics.impl.DataSendingRestrictionControllerImpl;
 import io.appmetrica.analytics.impl.clids.ClidsInfo;
 import io.appmetrica.analytics.impl.modules.ModulesRemoteConfigArgumentsCollector;
 import io.appmetrica.analytics.impl.referrer.service.ReferrerHolder;

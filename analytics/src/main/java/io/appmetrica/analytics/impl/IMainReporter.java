@@ -3,9 +3,9 @@ package io.appmetrica.analytics.impl;
 import android.app.Activity;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import java.util.List;
 import io.appmetrica.analytics.AnrListener;
 import io.appmetrica.analytics.ExternalAttribution;
+import java.util.List;
 
 public interface IMainReporter extends IBaseReporter, MetricaConfigurator {
 

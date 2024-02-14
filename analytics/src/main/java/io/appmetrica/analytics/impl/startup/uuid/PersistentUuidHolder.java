@@ -6,11 +6,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreutils.internal.io.FileUtils;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.FileProvider;
 import io.appmetrica.analytics.impl.IOUtils;
 import io.appmetrica.analytics.impl.db.FileConstants;
 import io.appmetrica.analytics.impl.utils.UuidGenerator;
+import io.appmetrica.analytics.logger.internal.YLogger;
 import java.io.File;
 import java.io.FileOutputStream;
 

@@ -2,10 +2,10 @@ package io.appmetrica.analytics.impl.preloadinfo;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.coreutils.internal.parsing.JsonUtils;
 import io.appmetrica.analytics.impl.DistributionSource;
 import io.appmetrica.analytics.impl.DistributionSourceProvider;
+import io.appmetrica.analytics.logger.internal.YLogger;
 import org.json.JSONObject;
 
 public class PreloadInfoState implements DistributionSourceProvider {

@@ -1,9 +1,9 @@
 package io.appmetrica.analytics.impl.component.processor.event
 
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger
 import io.appmetrica.analytics.impl.CounterReport
 import io.appmetrica.analytics.impl.Utils
 import io.appmetrica.analytics.impl.component.ComponentUnit
+import io.appmetrica.analytics.logger.internal.YLogger
 
 class SaveSessionExtrasHandler(component: ComponentUnit) : ReportComponentHandler(component) {
 

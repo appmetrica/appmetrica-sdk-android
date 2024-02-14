@@ -6,7 +6,6 @@ import androidx.annotation.Nullable;
 import io.appmetrica.analytics.coreutils.internal.StringUtils;
 import io.appmetrica.analytics.impl.CounterReport;
 import io.appmetrica.analytics.impl.EventsManager;
-import io.appmetrica.analytics.impl.SdkUtils;
 import io.appmetrica.analytics.impl.protobuf.backend.EventProto;
 
 import static io.appmetrica.analytics.impl.protobuf.backend.EventProto.ReportMessage.Session.Event;
@@ -29,11 +28,6 @@ public class PublicLogger extends LoggerWithApiKey {
 
     public static PublicLogger getAnonymousInstance() {
         return ANONYMOUS_INSTANCE;
-    }
-
-    @Override
-    public String getTag() {
-        return SdkUtils.APPMETRICA_TAG;
     }
 
     public void logEvent(final CounterReport reportData, String msg) {

@@ -2,7 +2,6 @@ package io.appmetrica.analytics.impl.location
 
 import android.content.Context
 import android.location.Location
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger
 import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.StartupStateObserver
 import io.appmetrica.analytics.impl.permissions.CompositePermissionStrategy
@@ -17,6 +16,7 @@ import io.appmetrica.analytics.locationapi.internal.LocationControllerObserver
 import io.appmetrica.analytics.locationapi.internal.LocationFilter
 import io.appmetrica.analytics.locationapi.internal.LocationReceiverProvider
 import io.appmetrica.analytics.locationapi.internal.LocationReceiverProviderFactory
+import io.appmetrica.analytics.logger.internal.YLogger
 
 private const val TAG = "[LocationServiceApiImpl]"
 

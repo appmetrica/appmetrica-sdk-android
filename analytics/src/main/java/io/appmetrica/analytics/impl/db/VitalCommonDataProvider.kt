@@ -2,10 +2,10 @@ package io.appmetrica.analytics.impl.db
 
 import android.util.Base64
 import androidx.annotation.WorkerThread
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger
 import io.appmetrica.analytics.coreutils.internal.parsing.optStringOrNull
 import io.appmetrica.analytics.impl.referrer.common.ReferrerInfo
 import io.appmetrica.analytics.impl.utils.JsonHelper
+import io.appmetrica.analytics.logger.internal.YLogger
 import org.json.JSONObject
 
 private const val KEY_DEVICE_ID = "device_id"

@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.utils;
 
 import androidx.annotation.Nullable;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
+import io.appmetrica.analytics.logger.internal.YLogger;
 import java.util.concurrent.Callable;
 
 public abstract class SafeCallable<T> implements Callable<T> {

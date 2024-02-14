@@ -18,4 +18,5 @@ android {
 dependencies {
     implementation(project(":core-api"))
     implementation(project(":location-api"))
+    implementation(project(":logger"))
 }

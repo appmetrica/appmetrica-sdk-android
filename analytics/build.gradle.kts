@@ -168,6 +168,7 @@ dependencies {
     implementation(project(":core-api"))
     implementation(project(":core-utils"))
     implementation(project(":location-api"))
+    implementation(project(":logger"))
     implementation(project(":modules-api"))
     implementation(project(":ndkcrashes-api"))
     implementation(project(":network-tasks"))

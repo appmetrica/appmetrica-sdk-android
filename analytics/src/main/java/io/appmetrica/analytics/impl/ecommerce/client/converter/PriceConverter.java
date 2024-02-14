@@ -3,7 +3,6 @@ package io.appmetrica.analytics.impl.ecommerce.client.converter;
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.data.Converter;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.Utils;
 import io.appmetrica.analytics.impl.ecommerce.ECommerceConstants;
 import io.appmetrica.analytics.impl.ecommerce.client.model.AmountWrapper;
@@ -14,6 +13,7 @@ import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedInfo;
 import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedProvider;
 import io.appmetrica.analytics.impl.utils.limitation.CollectionTrimInfo;
 import io.appmetrica.analytics.impl.utils.limitation.TrimmingResult;
+import io.appmetrica.analytics.logger.internal.YLogger;
 import java.util.List;
 
 public class PriceConverter

@@ -1,8 +1,8 @@
 package io.appmetrica.analytics.impl
 
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger
 import io.appmetrica.analytics.impl.component.ComponentUnit
 import io.appmetrica.analytics.impl.request.ReportRequestConfig
+import io.appmetrica.analytics.logger.internal.YLogger
 import io.appmetrica.analytics.networktasks.internal.ConfigProvider
 
 private const val TAG = "[LazyReportConfigProvider]"

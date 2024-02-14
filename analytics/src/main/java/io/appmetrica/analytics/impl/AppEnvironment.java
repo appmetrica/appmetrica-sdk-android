@@ -3,11 +3,11 @@ package io.appmetrica.analytics.impl;
 import android.util.Pair;
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.utils.JsonHelper;
 import io.appmetrica.analytics.impl.utils.MeasuredJsonMap;
 import io.appmetrica.analytics.impl.utils.PublicLogger;
 import io.appmetrica.analytics.impl.utils.limitation.SimpleMapLimitation;
+import io.appmetrica.analytics.logger.internal.YLogger;
 
 /**
  * Accumulate event's environment changes on service side. After adding or removing value

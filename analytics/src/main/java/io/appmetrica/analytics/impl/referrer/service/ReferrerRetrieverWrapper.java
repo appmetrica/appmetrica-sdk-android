@@ -4,8 +4,8 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.coreutils.internal.reflection.ReflectionUtils;
+import io.appmetrica.analytics.logger.internal.YLogger;
 
 public class ReferrerRetrieverWrapper {
 

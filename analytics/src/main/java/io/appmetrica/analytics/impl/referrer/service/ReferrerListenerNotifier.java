@@ -3,8 +3,8 @@ package io.appmetrica.analytics.impl.referrer.service;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.referrer.common.ReferrerInfo;
+import io.appmetrica.analytics.logger.internal.YLogger;
 
 public class ReferrerListenerNotifier {
 

@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import io.appmetrica.analytics.coreutils.internal.time.SystemTimeProvider;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.impl.component.processor.event.ApplySettingsFromActivationConfigHandler;
+import io.appmetrica.analytics.impl.component.processor.event.ExternalAttributionHandler;
 import io.appmetrica.analytics.impl.component.processor.event.ReportAppEnvironmentClearedHandler;
 import io.appmetrica.analytics.impl.component.processor.event.ReportAppEnvironmentUpdatedHandler;
 import io.appmetrica.analytics.impl.component.processor.event.ReportAppOpenHandler;
@@ -20,7 +21,6 @@ import io.appmetrica.analytics.impl.component.processor.event.SaveInitialUserPro
 import io.appmetrica.analytics.impl.component.processor.event.SavePreloadInfoHandler;
 import io.appmetrica.analytics.impl.component.processor.event.SaveSessionExtrasHandler;
 import io.appmetrica.analytics.impl.component.processor.event.SubscribeForReferrerHandler;
-import io.appmetrica.analytics.impl.component.processor.event.ExternalAttributionHandler;
 import io.appmetrica.analytics.impl.component.processor.event.UpdateUserProfileIDHandler;
 import io.appmetrica.analytics.impl.component.processor.event.modules.ModulesEventHandler;
 import io.appmetrica.analytics.impl.component.processor.session.ReportSessionStopHandler;

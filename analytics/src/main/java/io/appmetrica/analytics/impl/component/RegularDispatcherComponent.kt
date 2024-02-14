@@ -2,7 +2,6 @@ package io.appmetrica.analytics.impl.component
 
 import android.content.Context
 import androidx.annotation.VisibleForTesting
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger
 import io.appmetrica.analytics.impl.CounterReport
 import io.appmetrica.analytics.impl.EventsManager
 import io.appmetrica.analytics.impl.component.CommonArguments.ReporterArguments
@@ -13,6 +12,7 @@ import io.appmetrica.analytics.impl.startup.StartupError
 import io.appmetrica.analytics.impl.startup.StartupListener
 import io.appmetrica.analytics.impl.startup.StartupState
 import io.appmetrica.analytics.impl.startup.StartupUnit
+import io.appmetrica.analytics.logger.internal.YLogger
 
 internal class RegularDispatcherComponent<COMPONENT>(
     @get:VisibleForTesting val context: Context,

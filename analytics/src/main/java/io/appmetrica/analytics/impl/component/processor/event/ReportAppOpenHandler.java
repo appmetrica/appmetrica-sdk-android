@@ -5,12 +5,12 @@ import android.text.TextUtils;
 import android.util.Pair;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.CounterReport;
 import io.appmetrica.analytics.impl.EventsManager;
 import io.appmetrica.analytics.impl.Utils;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.impl.startup.AttributionConfig;
+import io.appmetrica.analytics.logger.internal.YLogger;
 import org.json.JSONObject;
 
 public class ReportAppOpenHandler extends ReportComponentHandler {

@@ -5,9 +5,9 @@ import androidx.annotation.Nullable;
 import io.appmetrica.analytics.AppMetricaDefaultValues;
 import io.appmetrica.analytics.coreapi.internal.control.DataSendingRestrictionController;
 import io.appmetrica.analytics.coreutils.internal.WrapUtils;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesServiceDbStorage;
 import io.appmetrica.analytics.impl.utils.BooleanUtils;
+import io.appmetrica.analytics.logger.internal.YLogger;
 import java.util.HashSet;
 
 public class DataSendingRestrictionControllerImpl implements DataSendingRestrictionController {

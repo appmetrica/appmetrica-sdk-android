@@ -1,8 +1,8 @@
 package io.appmetrica.analytics.impl.utils.encryption;
 
 import android.util.Base64;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.CounterReport;
+import io.appmetrica.analytics.logger.internal.YLogger;
 
 public class ExternallyEncryptedEventCrypter implements EventEncrypter {
 

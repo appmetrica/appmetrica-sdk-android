@@ -1,8 +1,8 @@
 package io.appmetrica.analytics.impl.startup;
 
 import io.appmetrica.analytics.AdvIdentifiersResult;
-import io.appmetrica.analytics.internal.IdentifiersResult;
 import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus;
+import io.appmetrica.analytics.internal.IdentifiersResult;
 import io.appmetrica.analytics.testutils.CommonTest;
 import java.util.Arrays;
 import java.util.Collection;

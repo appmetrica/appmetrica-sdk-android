@@ -6,7 +6,6 @@ import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.DeferredDeeplinkListener;
 import io.appmetrica.analytics.DeferredDeeplinkParametersListener;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.DeferredDeeplinkStateManager;
 import io.appmetrica.analytics.impl.ReferrerParser;
 import io.appmetrica.analytics.impl.ReportsHandler;
@@ -14,6 +13,7 @@ import io.appmetrica.analytics.impl.db.preferences.PreferencesClientDbStorage;
 import io.appmetrica.analytics.impl.referrer.common.ReferrerChosenListener;
 import io.appmetrica.analytics.impl.referrer.common.ReferrerInfo;
 import io.appmetrica.analytics.impl.referrer.common.ReferrerResultReceiver;
+import io.appmetrica.analytics.logger.internal.YLogger;
 
 public class ReferrerHelper implements ReferrerChosenListener {
 

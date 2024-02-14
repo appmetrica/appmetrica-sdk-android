@@ -2,9 +2,9 @@ package io.appmetrica.analytics.impl
 
 import android.content.Context
 import io.appmetrica.analytics.IReporter
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger
 import io.appmetrica.analytics.impl.ActivityLifecycleManager.ActivityEvent
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade
+import io.appmetrica.analytics.logger.internal.YLogger
 
 class ContextAppearedListener
 @JvmOverloads constructor(

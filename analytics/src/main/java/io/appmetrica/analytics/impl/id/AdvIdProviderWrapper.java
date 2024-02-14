@@ -5,7 +5,7 @@ import androidx.annotation.NonNull;
 import io.appmetrica.analytics.coreapi.internal.backport.Provider;
 import io.appmetrica.analytics.coreapi.internal.identifiers.AdTrackingInfoResult;
 import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
+import io.appmetrica.analytics.logger.internal.YLogger;
 
 public class AdvIdProviderWrapper implements AdvIdProvider {
 

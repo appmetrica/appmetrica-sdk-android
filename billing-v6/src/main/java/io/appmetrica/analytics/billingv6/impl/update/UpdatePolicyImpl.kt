@@ -7,8 +7,8 @@ import io.appmetrica.analytics.billinginterface.internal.config.BillingConfig
 import io.appmetrica.analytics.billinginterface.internal.storage.BillingInfoManager
 import io.appmetrica.analytics.billinginterface.internal.update.UpdatePolicy
 import io.appmetrica.analytics.billingv6.impl.TAG
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger
 import io.appmetrica.analytics.coreutils.internal.time.SystemTimeProvider
+import io.appmetrica.analytics.logger.internal.YLogger
 import java.util.concurrent.TimeUnit
 
 class UpdatePolicyImpl(

@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.preloadinfo
 
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger
 import io.appmetrica.analytics.impl.DistributionPriorityProvider
+import io.appmetrica.analytics.logger.internal.YLogger
 
 private const val TAG = "[PreloadInfoPriorityProvider]"
 

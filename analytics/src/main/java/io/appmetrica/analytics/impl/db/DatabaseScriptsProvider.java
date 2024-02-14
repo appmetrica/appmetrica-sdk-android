@@ -2,13 +2,13 @@ package io.appmetrica.analytics.impl.db;
 
 import androidx.annotation.NonNull;
 import io.appmetrica.analytics.coreapi.internal.db.DatabaseScript;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.SdkData;
 import io.appmetrica.analytics.impl.db.constants.DatabaseScriptsHolder;
 import io.appmetrica.analytics.impl.db.constants.migrations.ClientDatabaseUpgradeScriptToV112;
 import io.appmetrica.analytics.impl.db.constants.migrations.ComponentDatabaseUpgradeScriptToV112;
 import io.appmetrica.analytics.impl.utils.collection.HashMultimap;
+import io.appmetrica.analytics.logger.internal.YLogger;
 import io.appmetrica.analytics.modulesapi.internal.ModuleServicesDatabase;
 import io.appmetrica.analytics.modulesapi.internal.TableDescription;
 import java.util.Map;

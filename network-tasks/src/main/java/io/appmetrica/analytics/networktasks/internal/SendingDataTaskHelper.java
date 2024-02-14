@@ -2,7 +2,7 @@ package io.appmetrica.analytics.networktasks.internal;
 
 import androidx.annotation.NonNull;
 import io.appmetrica.analytics.coreapi.internal.io.Compressor;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
+import io.appmetrica.analytics.logger.internal.YLogger;
 import io.appmetrica.analytics.coreutils.internal.time.SystemTimeProvider;
 import io.appmetrica.analytics.coreutils.internal.time.TimeProvider;
 import io.appmetrica.analytics.networktasks.impl.Constants;

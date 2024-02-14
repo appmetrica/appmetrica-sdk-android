@@ -2,8 +2,8 @@ package io.appmetrica.analytics.impl.db.constants;
 
 import android.database.sqlite.SQLiteDatabase;
 import io.appmetrica.analytics.coreapi.internal.db.DatabaseScript;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
+import io.appmetrica.analytics.logger.internal.YLogger;
 import io.appmetrica.analytics.modulesapi.internal.ModuleServicesDatabase;
 import io.appmetrica.analytics.modulesapi.internal.TableDescription;
 import java.sql.SQLException;

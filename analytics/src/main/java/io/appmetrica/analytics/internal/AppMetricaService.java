@@ -9,16 +9,16 @@ import android.os.IBinder;
 import android.os.RemoteException;
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
+import io.appmetrica.analytics.impl.AppMetricaServiceCore;
 import io.appmetrica.analytics.impl.AppMetricaServiceCoreExecutionDispatcher;
 import io.appmetrica.analytics.impl.AppMetricaServiceCoreImpl;
-import io.appmetrica.analytics.impl.AppMetricaServiceCore;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.SelfProcessReporter;
 import io.appmetrica.analytics.impl.service.AppMetricaServiceAction;
 import io.appmetrica.analytics.impl.service.AppMetricaServiceCallback;
 import io.appmetrica.analytics.impl.service.AppMetricaServiceDataReporter;
 import io.appmetrica.analytics.impl.utils.PublicLogger;
+import io.appmetrica.analytics.logger.internal.YLogger;
 
 public class AppMetricaService extends Service {
 

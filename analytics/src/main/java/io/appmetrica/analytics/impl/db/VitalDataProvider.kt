@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.db
 
 import androidx.annotation.WorkerThread
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger
+import io.appmetrica.analytics.logger.internal.YLogger
 import org.json.JSONObject
 
 internal class VitalDataProvider(

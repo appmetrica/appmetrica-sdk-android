@@ -3,8 +3,8 @@ package io.appmetrica.analytics.impl.telephony;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import androidx.annotation.NonNull;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.coreutils.internal.services.SafePackageManager;
+import io.appmetrica.analytics.logger.internal.YLogger;
 import java.util.List;
 
 public class TelephonyDataProvider {

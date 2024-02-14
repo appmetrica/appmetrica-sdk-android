@@ -6,7 +6,7 @@ import android.os.Build
 import androidx.annotation.VisibleForTesting
 import io.appmetrica.analytics.coreutils.internal.AndroidUtils
 import io.appmetrica.analytics.coreutils.internal.io.FileUtils.moveByCopy
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger
+import io.appmetrica.analytics.logger.internal.YLogger
 import java.io.File
 
 object FileUtils {

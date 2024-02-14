@@ -1,7 +1,6 @@
 package io.appmetrica.analytics.impl;
 
 import android.content.Context;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceComponentsInitializer;

@@ -6,11 +6,11 @@ import android.content.Context
 import android.os.Build
 import io.appmetrica.analytics.coreutils.internal.AndroidUtils
 import io.appmetrica.analytics.coreutils.internal.cache.CachedDataProvider
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger
 import io.appmetrica.analytics.coreutils.internal.permission.AlwaysAllowPermissionStrategy
 import io.appmetrica.analytics.coreutils.internal.permission.SinglePermissionStrategy
 import io.appmetrica.analytics.coreutils.internal.services.telephony.CellularNetworkTypeExtractor
 import io.appmetrica.analytics.impl.GlobalServiceLocator
+import io.appmetrica.analytics.logger.internal.YLogger
 import java.util.concurrent.TimeUnit
 
 private const val TAG = "[MobileConnectionDescriptionExtractor]"

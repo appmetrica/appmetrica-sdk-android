@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.permissions
 
 import io.appmetrica.analytics.coreapi.internal.permission.PermissionStrategy
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger
+import io.appmetrica.analytics.logger.internal.YLogger
 
 class CompositePermissionStrategy(
     private vararg val strategies: PermissionStrategy

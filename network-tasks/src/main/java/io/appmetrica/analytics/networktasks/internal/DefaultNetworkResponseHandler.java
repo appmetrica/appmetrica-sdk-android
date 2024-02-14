@@ -3,7 +3,7 @@ package io.appmetrica.analytics.networktasks.internal;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
+import io.appmetrica.analytics.logger.internal.YLogger;
 import javax.net.ssl.HttpsURLConnection;
 
 public class DefaultNetworkResponseHandler implements NetworkResponseHandler<DefaultResponseParser.Response> {

@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.modules
 
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger
 import io.appmetrica.analytics.impl.GlobalServiceLocator
+import io.appmetrica.analytics.logger.internal.YLogger
 
 private const val TAG = "[ModuleSeeker]"
 

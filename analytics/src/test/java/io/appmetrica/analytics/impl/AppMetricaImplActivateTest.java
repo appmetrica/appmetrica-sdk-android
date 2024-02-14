@@ -127,15 +127,15 @@ public class AppMetricaImplActivateTest extends CommonTest {
     public void logsEnabled() {
         AppMetricaConfig originalConfig = AppMetricaConfig.newConfigBuilder(mApiKey).build();
         mAppMetrica.activate(originalConfig, AppMetricaConfig.newConfigBuilder(mApiKey).withLogs().build());
-        verify(mPublicLogger).setEnabled();
-        verify(mPublicAnonymousLogger).setEnabled();
+        verify(mPublicLogger).setEnabled(true);
+        verify(mPublicAnonymousLogger).setEnabled(true);
     }
 
     @Test
     public void logsDisabled() {
         mAppMetrica.activate(AppMetricaConfig.newConfigBuilder(mApiKey).withLogs().build(), mConfig);
-        verify(mPublicLogger).setDisabled();
-        verify(mPublicAnonymousLogger).setDisabled();
+        verify(mPublicLogger).setEnabled(false);
+        verify(mPublicAnonymousLogger).setEnabled(false);
     }
 
     @Test

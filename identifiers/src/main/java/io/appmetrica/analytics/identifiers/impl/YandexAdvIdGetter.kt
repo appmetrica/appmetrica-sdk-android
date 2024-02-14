@@ -5,7 +5,7 @@ import android.content.Intent
 import androidx.annotation.VisibleForTesting
 import com.yandex.android.advid.service.YandexAdvIdInterface
 import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger
+import io.appmetrica.analytics.logger.internal.YLogger
 
 private const val TAG = "[YandexAdvIdGetter]"
 private val YANDEX_ADV_ID_INTENT =

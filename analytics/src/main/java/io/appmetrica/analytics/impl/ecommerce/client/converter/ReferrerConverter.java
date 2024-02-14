@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.data.Converter;
 import io.appmetrica.analytics.coreutils.internal.StringUtils;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.ecommerce.ECommerceConstants;
 import io.appmetrica.analytics.impl.ecommerce.client.model.ReferrerWrapper;
 import io.appmetrica.analytics.impl.protobuf.backend.Ecommerce;
@@ -12,6 +11,7 @@ import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedInfo;
 import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedProvider;
 import io.appmetrica.analytics.impl.utils.limitation.TrimmingResult;
 import io.appmetrica.analytics.impl.utils.limitation.hierarchical.HierarchicalStringTrimmer;
+import io.appmetrica.analytics.logger.internal.YLogger;
 
 public class ReferrerConverter
         implements Converter<ReferrerWrapper, Result<Ecommerce.ECommerceEvent.Referrer, BytesTruncatedProvider>> {

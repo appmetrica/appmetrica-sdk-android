@@ -3,13 +3,13 @@ package io.appmetrica.analytics.impl.utils
 import android.content.Context
 import androidx.annotation.VisibleForTesting
 import io.appmetrica.analytics.coreutils.internal.StringUtils
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger
 import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.IOUtils
 import io.appmetrica.analytics.impl.id.AdvertisingIdGetter
 import io.appmetrica.analytics.impl.id.AppSetIdGetter
 import io.appmetrica.analytics.impl.id.Constants
 import io.appmetrica.analytics.impl.id.TimesBasedRetryStrategy
+import io.appmetrica.analytics.logger.internal.YLogger
 import java.util.Locale
 import java.util.UUID
 

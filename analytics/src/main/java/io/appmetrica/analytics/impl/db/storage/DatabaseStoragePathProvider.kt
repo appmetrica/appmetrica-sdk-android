@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.db.storage
 import android.content.Context
 import io.appmetrica.analytics.coreutils.internal.io.FileUtils.copyToNullable
 import io.appmetrica.analytics.coreutils.internal.io.FileUtils.move
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger
+import io.appmetrica.analytics.logger.internal.YLogger
 import java.io.File
 
 internal class DatabaseStoragePathProvider(

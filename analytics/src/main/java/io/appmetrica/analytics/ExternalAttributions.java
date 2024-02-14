@@ -2,13 +2,13 @@ package io.appmetrica.analytics;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import org.json.JSONObject;
-import java.util.Map;
 import io.appmetrica.analytics.impl.attribution.ExternalAttributionType;
 import io.appmetrica.analytics.impl.attribution.JSONObjectExternalAttribution;
 import io.appmetrica.analytics.impl.attribution.MapExternalAttribution;
 import io.appmetrica.analytics.impl.attribution.NullExternalAttribution;
 import io.appmetrica.analytics.impl.attribution.ObjectExternalAttribution;
+import java.util.Map;
+import org.json.JSONObject;
 
 /**
  * Class with implementations of {@link ExternalAttribution} interface.

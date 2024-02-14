@@ -16,7 +16,6 @@ import io.appmetrica.analytics.DeferredDeeplinkListener;
 import io.appmetrica.analytics.DeferredDeeplinkParametersListener;
 import io.appmetrica.analytics.ReporterConfig;
 import io.appmetrica.analytics.StartupParamsCallback;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.client.ProcessConfiguration;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesClientDbStorage;
 import io.appmetrica.analytics.impl.db.storage.DatabaseStorageFactory;
@@ -26,6 +25,7 @@ import io.appmetrica.analytics.impl.startup.StartupHelper;
 import io.appmetrica.analytics.impl.utils.BooleanUtils;
 import io.appmetrica.analytics.impl.utils.LoggerStorage;
 import io.appmetrica.analytics.impl.utils.PublicLogger;
+import io.appmetrica.analytics.logger.internal.YLogger;
 import java.util.List;
 import java.util.Map;
 
@@ -130,11 +130,11 @@ public class AppMetricaImpl implements IAppMetricaImpl {
             Log.i(SdkUtils.APPMETRICA_TAG,
                     "Activate AppMetrica with APIKey " + Utils.createPartialApiKey(config.apiKey));
             if (BooleanUtils.isTrue(config.logs)) {
-                publicLogger.setEnabled();
-                LoggerStorage.getAnonymousPublicLogger().setEnabled();
+                publicLogger.setEnabled(true);
+                LoggerStorage.getAnonymousPublicLogger().setEnabled(true);
             } else {
-                publicLogger.setDisabled();
-                LoggerStorage.getAnonymousPublicLogger().setDisabled();
+                publicLogger.setEnabled(false);
+                LoggerStorage.getAnonymousPublicLogger().setEnabled(false);
             }
         } else {
             if (publicLogger.isEnabled()) {

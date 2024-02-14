@@ -10,9 +10,9 @@ import androidx.annotation.VisibleForTesting;
 import androidx.annotation.WorkerThread;
 import io.appmetrica.analytics.coreapi.internal.model.ScreenInfo;
 import io.appmetrica.analytics.coreutils.internal.AndroidUtils;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesClientDbStorage;
 import io.appmetrica.analytics.impl.db.storage.DatabaseStorageFactory;
+import io.appmetrica.analytics.logger.internal.YLogger;
 import java.lang.ref.WeakReference;
 
 public class ScreenInfoRetriever implements ActivityAppearedListener.Listener {

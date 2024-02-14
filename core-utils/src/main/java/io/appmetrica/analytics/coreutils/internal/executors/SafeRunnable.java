@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.coreutils.internal.executors;
 
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
+import io.appmetrica.analytics.logger.internal.YLogger;
 
 public abstract class SafeRunnable implements Runnable {
 

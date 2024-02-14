@@ -5,8 +5,8 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import androidx.annotation.NonNull;
 import io.appmetrica.analytics.coreapi.internal.permission.PermissionState;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.coreutils.internal.services.SafePackageManager;
+import io.appmetrica.analytics.logger.internal.YLogger;
 import java.util.ArrayList;
 import java.util.List;
 

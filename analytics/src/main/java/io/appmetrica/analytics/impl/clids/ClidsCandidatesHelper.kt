@@ -1,8 +1,8 @@
 package io.appmetrica.analytics.impl.clids
 
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger
 import io.appmetrica.analytics.impl.DistributionSource
 import io.appmetrica.analytics.impl.UpdatedCandidatesProvider
+import io.appmetrica.analytics.logger.internal.YLogger
 
 private const val TAG = "[ClidsCandidatesHelper]"
 

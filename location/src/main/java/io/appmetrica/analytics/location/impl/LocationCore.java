@@ -9,13 +9,13 @@ import io.appmetrica.analytics.coreapi.internal.annotations.GeoThread;
 import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor;
 import io.appmetrica.analytics.coreapi.internal.system.PermissionExtractor;
 import io.appmetrica.analytics.coreutils.internal.cache.LocationDataCacheUpdateScheduler;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.locationapi.internal.ILastKnownUpdater;
 import io.appmetrica.analytics.locationapi.internal.LastKnownLocationExtractor;
 import io.appmetrica.analytics.locationapi.internal.LastKnownLocationExtractorProvider;
 import io.appmetrica.analytics.locationapi.internal.LocationControllerObserver;
 import io.appmetrica.analytics.locationapi.internal.LocationReceiver;
 import io.appmetrica.analytics.locationapi.internal.LocationReceiverProvider;
+import io.appmetrica.analytics.logger.internal.YLogger;
 import java.util.HashMap;
 import java.util.Map;
 

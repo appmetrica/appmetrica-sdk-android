@@ -32,5 +32,6 @@ android {
 dependencies {
     implementation(project(":core-api"))
     implementation(project(":core-utils"))
+    implementation(project(":logger"))
     implementation(project(":network"))
 }

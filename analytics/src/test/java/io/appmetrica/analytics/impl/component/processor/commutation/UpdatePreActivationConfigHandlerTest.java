@@ -1,14 +1,14 @@
 package io.appmetrica.analytics.impl.component.processor.commutation;
 
 import androidx.annotation.Nullable;
-import io.appmetrica.analytics.internal.CounterConfiguration;
 import io.appmetrica.analytics.impl.CounterReport;
-import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.DataSendingRestrictionControllerImpl;
+import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.component.CommonArguments;
 import io.appmetrica.analytics.impl.component.CommutationComponentId;
 import io.appmetrica.analytics.impl.component.CommutationDispatcherComponent;
 import io.appmetrica.analytics.impl.component.clients.CommutationClientUnit;
+import io.appmetrica.analytics.internal.CounterConfiguration;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import java.util.Arrays;

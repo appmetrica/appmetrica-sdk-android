@@ -1,8 +1,8 @@
 package io.appmetrica.analytics.impl.core
 
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger
 import io.appmetrica.analytics.coreutils.internal.services.UtilityServiceLocator
 import io.appmetrica.analytics.impl.GlobalServiceLocator
+import io.appmetrica.analytics.logger.internal.YLogger
 import java.util.concurrent.TimeUnit
 
 private const val TAG = "[MetricaCoreImplFirstCreateTaskLauncher]"

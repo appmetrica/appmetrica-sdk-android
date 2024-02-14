@@ -4,9 +4,9 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.ClientServiceLocator;
 import io.appmetrica.analytics.impl.proxy.ModulesProxy;
+import io.appmetrica.analytics.logger.internal.YLogger;
 
 /**
  * Class with methods for communication of different AppMetrica modules.

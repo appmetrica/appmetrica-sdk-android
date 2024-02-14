@@ -2,9 +2,9 @@ package io.appmetrica.analytics.impl.location
 
 import io.appmetrica.analytics.coreapi.internal.control.Toggle
 import io.appmetrica.analytics.coreapi.internal.control.ToggleObserver
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger
 import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.locationapi.internal.LocationControllerObserver
+import io.appmetrica.analytics.logger.internal.YLogger
 
 private const val TAG = "[LocationControllerImpl]"
 

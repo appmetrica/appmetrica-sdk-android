@@ -2,19 +2,15 @@ package io.appmetrica.analytics.impl;
 
 import android.content.Context;
 import android.text.TextUtils;
-
 import androidx.annotation.AnyThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
-
-import org.json.JSONObject;
-
+import io.appmetrica.analytics.impl.utils.MainProcessDetector;
+import io.appmetrica.analytics.logger.internal.YLogger;
 import java.io.File;
 import java.io.FileOutputStream;
-
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
-import io.appmetrica.analytics.impl.utils.MainProcessDetector;
+import org.json.JSONObject;
 
 public class AppMetricaServiceDelayHandler {
 

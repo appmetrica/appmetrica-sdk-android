@@ -3,7 +3,7 @@ package io.appmetrica.analytics.coreutils.internal.services;
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
+import io.appmetrica.analytics.logger.internal.YLogger;
 import io.appmetrica.analytics.coreutils.internal.time.SystemTimeProvider;
 
 public class ActivationBarrier {

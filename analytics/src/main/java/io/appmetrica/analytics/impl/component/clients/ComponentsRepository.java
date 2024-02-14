@@ -3,13 +3,13 @@ package io.appmetrica.analytics.impl.component.clients;
 import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.component.CommonArguments;
 import io.appmetrica.analytics.impl.component.CommutationDispatcherComponent;
 import io.appmetrica.analytics.impl.component.ComponentId;
 import io.appmetrica.analytics.impl.component.DispatcherComponentFactory;
 import io.appmetrica.analytics.impl.component.IDispatcherComponent;
 import io.appmetrica.analytics.impl.component.RegularDispatcherComponent;
+import io.appmetrica.analytics.logger.internal.YLogger;
 import java.util.HashMap;
 import java.util.Map;
 

@@ -3,9 +3,9 @@ package io.appmetrica.analytics.impl.component.session;
 import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesComponentDbStorage;
 import io.appmetrica.analytics.impl.utils.JsonHelper;
+import io.appmetrica.analytics.logger.internal.YLogger;
 
 public class SessionStorageImpl implements SessionStorage {
 

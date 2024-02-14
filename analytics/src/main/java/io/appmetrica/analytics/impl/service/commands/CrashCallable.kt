@@ -2,7 +2,6 @@ package io.appmetrica.analytics.impl.service.commands
 
 import android.content.Context
 import androidx.annotation.VisibleForTesting
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger
 import io.appmetrica.analytics.impl.AppMetricaConnector
 import io.appmetrica.analytics.impl.ClientServiceLocator
 import io.appmetrica.analytics.impl.InternalEvents
@@ -10,6 +9,7 @@ import io.appmetrica.analytics.impl.ReportToSend
 import io.appmetrica.analytics.impl.ServiceUtils
 import io.appmetrica.analytics.impl.ShouldDisconnectFromServiceChecker
 import io.appmetrica.analytics.impl.crash.CrashToFileWriter
+import io.appmetrica.analytics.logger.internal.YLogger
 
 internal class CrashCallable(
     private val context: Context,

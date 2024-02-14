@@ -4,11 +4,11 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.client.ProcessConfiguration;
 import io.appmetrica.analytics.impl.service.ServiceDataReporter;
 import io.appmetrica.analytics.impl.service.commands.ReportToServiceCallable;
 import io.appmetrica.analytics.impl.service.commands.ServiceCallableFactory;
+import io.appmetrica.analytics.logger.internal.YLogger;
 import java.util.concurrent.TimeUnit;
 
 public class ReportsSender implements ServiceDataReporter {

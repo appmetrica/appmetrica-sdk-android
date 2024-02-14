@@ -1,9 +1,9 @@
 package io.appmetrica.analytics.impl.component;
 
-import io.appmetrica.analytics.internal.CounterConfiguration;
 import io.appmetrica.analytics.impl.CounterConfigurationReporterType;
 import io.appmetrica.analytics.impl.DataSendingRestrictionControllerImpl;
 import io.appmetrica.analytics.impl.db.storage.DatabaseStorageFactory;
+import io.appmetrica.analytics.internal.CounterConfiguration;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import java.lang.reflect.Field;
 import org.junit.After;

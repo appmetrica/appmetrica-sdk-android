@@ -4,7 +4,6 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.AppMetricaConfig;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.client.ProcessConfiguration;
 import io.appmetrica.analytics.impl.crash.CrashToFileWriter;
 import io.appmetrica.analytics.impl.crash.PluginErrorDetailsConverter;
@@ -18,6 +17,7 @@ import io.appmetrica.analytics.impl.reporter.CrashReporterContext;
 import io.appmetrica.analytics.impl.reporter.ReporterLifecycleListener;
 import io.appmetrica.analytics.impl.utils.ProcessDetector;
 import io.appmetrica.analytics.internal.CounterConfiguration;
+import io.appmetrica.analytics.logger.internal.YLogger;
 
 public class CrashReporter extends BaseReporter {
 

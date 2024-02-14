@@ -2,12 +2,12 @@ package io.appmetrica.analytics.impl.component.processor.event;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.CounterReport;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.PreloadInfoStorage;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoState;
+import io.appmetrica.analytics.logger.internal.YLogger;
 import org.json.JSONObject;
 
 public class SavePreloadInfoHandler extends ReportComponentHandler {

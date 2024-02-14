@@ -5,13 +5,13 @@ import android.os.Build;
 import android.webkit.WebView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import io.appmetrica.analytics.internal.js.AppMetricaInitializerJsInterface;
-import io.appmetrica.analytics.internal.js.AppMetricaJsInterface;
 import io.appmetrica.analytics.coreapi.internal.backport.Consumer;
 import io.appmetrica.analytics.coreutils.internal.AndroidUtils;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.proxy.AppMetricaProxy;
 import io.appmetrica.analytics.impl.utils.PublicLogger;
+import io.appmetrica.analytics.internal.js.AppMetricaInitializerJsInterface;
+import io.appmetrica.analytics.internal.js.AppMetricaJsInterface;
+import io.appmetrica.analytics.logger.internal.YLogger;
 import java.util.ArrayList;
 import java.util.List;
 

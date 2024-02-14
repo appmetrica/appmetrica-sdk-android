@@ -3,10 +3,10 @@ package io.appmetrica.analytics.location.impl.gpl
 import android.content.Context
 import android.location.LocationListener
 import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger
 import io.appmetrica.analytics.coreutils.internal.reflection.ReflectionUtils
 import io.appmetrica.analytics.gpllibrary.internal.GplLibraryWrapper
 import io.appmetrica.analytics.gpllibrary.internal.IGplLibraryWrapper
+import io.appmetrica.analytics.logger.internal.YLogger
 import java.util.concurrent.TimeUnit
 
 private const val TAG = "[GplWrapperFactory]"

@@ -7,7 +7,6 @@ import io.appmetrica.analytics.impl.startup.CollectingFlags.CollectingFlagsBuild
 import io.appmetrica.analytics.impl.startup.StartupStateModel
 import io.appmetrica.analytics.impl.startup.StartupStateModel.StartupStateBuilder
 import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.MockedStaticRule
 import io.appmetrica.analytics.testutils.on
 import io.appmetrica.analytics.testutils.staticRule
 import org.assertj.core.api.Assertions.assertThat
@@ -19,6 +18,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 import java.util.UUID
+
 @RunWith(RobolectricTestRunner::class)
 
 class UuidFromStartupStateImporterTest : CommonTest() {

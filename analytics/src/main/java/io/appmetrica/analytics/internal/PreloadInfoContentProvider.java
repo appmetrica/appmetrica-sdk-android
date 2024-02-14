@@ -8,11 +8,11 @@ import android.database.Cursor;
 import android.net.Uri;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.ContentProviderFirstLaunchHelper;
 import io.appmetrica.analytics.impl.ContentProviderHelper;
 import io.appmetrica.analytics.impl.SdkUtils;
 import io.appmetrica.analytics.impl.preloadinfo.ContentProviderHelperFactory;
+import io.appmetrica.analytics.logger.internal.YLogger;
 
 public class PreloadInfoContentProvider extends ContentProvider {
 

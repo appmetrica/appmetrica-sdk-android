@@ -2,12 +2,12 @@ package io.appmetrica.analytics.impl.utils;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.coreutils.internal.time.SystemTimeProvider;
 import io.appmetrica.analytics.coreutils.internal.time.TimeProvider;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.IServerTimeOffsetProvider;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesServiceDbStorage;
+import io.appmetrica.analytics.logger.internal.YLogger;
 import java.util.concurrent.TimeUnit;
 
 public class ServerTime implements IServerTimeOffsetProvider {

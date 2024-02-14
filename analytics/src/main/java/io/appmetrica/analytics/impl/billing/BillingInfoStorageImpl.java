@@ -6,8 +6,8 @@ import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.billinginterface.internal.BillingInfo;
 import io.appmetrica.analytics.billinginterface.internal.storage.BillingInfoStorage;
 import io.appmetrica.analytics.coreapi.internal.data.ProtobufStateStorage;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.db.state.factory.StorageFactory;
+import io.appmetrica.analytics.logger.internal.YLogger;
 import java.util.List;
 
 public class BillingInfoStorageImpl implements BillingInfoStorage {

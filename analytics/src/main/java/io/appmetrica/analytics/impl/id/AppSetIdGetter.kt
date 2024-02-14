@@ -10,8 +10,8 @@ import io.appmetrica.analytics.appsetid.internal.IAppSetIdRetriever
 import io.appmetrica.analytics.coreapi.internal.identifiers.AppSetId
 import io.appmetrica.analytics.coreapi.internal.identifiers.AppSetIdProvider
 import io.appmetrica.analytics.coreapi.internal.identifiers.AppSetIdScope
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger
 import io.appmetrica.analytics.coreutils.internal.reflection.ReflectionUtils
+import io.appmetrica.analytics.logger.internal.YLogger
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 

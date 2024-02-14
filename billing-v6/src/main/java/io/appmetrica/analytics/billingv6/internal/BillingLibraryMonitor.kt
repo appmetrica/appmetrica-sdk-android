@@ -16,7 +16,7 @@ import io.appmetrica.analytics.billingv6.impl.library.PurchasesUpdatedListenerIm
 import io.appmetrica.analytics.billingv6.impl.storage.BillingInfoManagerImpl
 import io.appmetrica.analytics.billingv6.impl.update.UpdatePolicyImpl
 import io.appmetrica.analytics.coreutils.internal.executors.SafeRunnable
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger
+import io.appmetrica.analytics.logger.internal.YLogger
 import java.util.concurrent.Executor
 
 class BillingLibraryMonitor(

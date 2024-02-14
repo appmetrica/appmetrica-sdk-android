@@ -2,8 +2,8 @@ package io.appmetrica.analytics.impl.db.connectors;
 
 import android.database.sqlite.SQLiteDatabase;
 import androidx.annotation.Nullable;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.db.DatabaseStorage;
+import io.appmetrica.analytics.logger.internal.YLogger;
 
 public class SimpleDBConnector implements DBConnector {
     private final DatabaseStorage mStorage;

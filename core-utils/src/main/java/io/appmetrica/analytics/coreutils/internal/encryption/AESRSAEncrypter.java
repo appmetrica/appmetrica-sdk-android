@@ -4,7 +4,7 @@ import android.annotation.SuppressLint;
 import android.util.Base64;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreutils.internal.io.CloseableUtilsKt;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
+import io.appmetrica.analytics.logger.internal.YLogger;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.security.KeyFactory;

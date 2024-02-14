@@ -2,8 +2,8 @@ package io.appmetrica.analytics.internal.js;
 
 import android.webkit.JavascriptInterface;
 import androidx.annotation.NonNull;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.proxy.AppMetricaProxy;
+import io.appmetrica.analytics.logger.internal.YLogger;
 
 /**
  * This class is used as a bridge between JavaScript and native code.

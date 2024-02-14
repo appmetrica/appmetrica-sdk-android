@@ -2,11 +2,11 @@ package io.appmetrica.analytics.impl.utils.limitation.hierarchical;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.ecommerce.ECommerceConstants;
 import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedInfo;
 import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedProvider;
 import io.appmetrica.analytics.impl.utils.limitation.TrimmingResult;
+import io.appmetrica.analytics.logger.internal.YLogger;
 
 public class HierarchicalStringTrimmer extends BaseHierarchicalTrimmer<String, BytesTruncatedProvider> {
 

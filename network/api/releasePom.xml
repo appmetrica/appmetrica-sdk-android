@@ -45,5 +45,11 @@
       <version>6.3.0</version>
       <scope>runtime</scope>
     </dependency>
+    <dependency>
+      <groupId>io.appmetrica.analytics</groupId>
+      <artifactId>analytics-logger</artifactId>
+      <version>6.3.0</version>
+      <scope>runtime</scope>
+    </dependency>
   </dependencies>
 </project>

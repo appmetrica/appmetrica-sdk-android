@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.network.impl.utils
 
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger
+import io.appmetrica.analytics.logger.internal.YLogger
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
 import java.util.Collections

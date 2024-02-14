@@ -11,11 +11,11 @@ import io.appmetrica.analytics.coreapi.internal.servicecomponents.applicationsta
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.applicationstate.ApplicationStateObserver;
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.applicationstate.ApplicationStateProvider;
 import io.appmetrica.analytics.coreutils.internal.WrapUtils;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.DefaultValues;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.StartupStateObserver;
 import io.appmetrica.analytics.impl.startup.StartupState;
+import io.appmetrica.analytics.logger.internal.YLogger;
 import java.util.concurrent.Executor;
 
 public class BillingMonitorWrapper implements StartupStateObserver {

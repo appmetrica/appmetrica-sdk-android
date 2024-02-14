@@ -7,7 +7,6 @@ import io.appmetrica.analytics.coreapi.internal.control.DataSendingRestrictionCo
 import io.appmetrica.analytics.coreapi.internal.identifiers.AdTrackingInfoResult;
 import io.appmetrica.analytics.coreapi.internal.identifiers.AdvertisingIdsHolder;
 import io.appmetrica.analytics.coreutils.internal.StringUtils;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.DistributionSource;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.Utils;
@@ -18,6 +17,7 @@ import io.appmetrica.analytics.impl.request.Obfuscator;
 import io.appmetrica.analytics.impl.request.StartupRequestConfig;
 import io.appmetrica.analytics.impl.request.UrlParts;
 import io.appmetrica.analytics.impl.utils.StartupUtils;
+import io.appmetrica.analytics.logger.internal.YLogger;
 import io.appmetrica.analytics.networktasks.internal.CommonUrlParts;
 import io.appmetrica.analytics.networktasks.internal.IParamsAppender;
 import java.util.Map;

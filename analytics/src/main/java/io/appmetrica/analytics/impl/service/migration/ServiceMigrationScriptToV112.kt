@@ -6,7 +6,6 @@ import android.database.sqlite.SQLiteDatabase
 import android.text.TextUtils
 import io.appmetrica.analytics.coreutils.internal.encryption.AESEncrypter
 import io.appmetrica.analytics.coreutils.internal.io.closeSafely
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger
 import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.MigrationManager.MigrationScript
 import io.appmetrica.analytics.impl.Utils
@@ -18,6 +17,7 @@ import io.appmetrica.analytics.impl.protobuf.client.LegacyStartupStateProtobuf.L
 import io.appmetrica.analytics.impl.startup.CollectingFlags
 import io.appmetrica.analytics.impl.startup.StartupStateModel
 import io.appmetrica.analytics.impl.utils.encryption.AESCredentialProvider
+import io.appmetrica.analytics.logger.internal.YLogger
 
 internal class ServiceMigrationScriptToV112(private val vitalDataStorage: VitalCommonDataProvider) : MigrationScript {
 

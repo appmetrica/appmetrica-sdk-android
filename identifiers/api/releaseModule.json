@@ -66,6 +66,13 @@
                     }
                 },
                 {
+                    "group": "io.appmetrica.analytics",
+                    "module": "analytics-logger",
+                    "version": {
+                        "requires": "6.3.0"
+                    }
+                },
+                {
                     "group": "com.google.android.gms",
                     "module": "play-services-ads-identifier",
                     "version": {

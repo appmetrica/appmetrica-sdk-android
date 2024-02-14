@@ -1,9 +1,9 @@
 package io.appmetrica.analytics.impl.startup.uuid
 
 import android.content.Context
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger
 import io.appmetrica.analytics.impl.db.state.factory.StorageFactory
 import io.appmetrica.analytics.impl.startup.StartupStateModel
+import io.appmetrica.analytics.logger.internal.YLogger
 
 class UuidFromStartupStateImporter : IOuterSourceUuidImporter {
 

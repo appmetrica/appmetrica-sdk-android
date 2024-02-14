@@ -14,7 +14,6 @@ import androidx.annotation.WorkerThread;
 import io.appmetrica.analytics.coreapi.internal.backport.Consumer;
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
 import io.appmetrica.analytics.coreutils.internal.io.FileUtils;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.client.ClientConfiguration;
 import io.appmetrica.analytics.impl.client.ProcessConfiguration;
 import io.appmetrica.analytics.impl.component.CommonArguments;
@@ -35,6 +34,7 @@ import io.appmetrica.analytics.impl.startup.StartupState;
 import io.appmetrica.analytics.impl.utils.JsonHelper;
 import io.appmetrica.analytics.impl.utils.ServerTime;
 import io.appmetrica.analytics.internal.CounterConfiguration;
+import io.appmetrica.analytics.logger.internal.YLogger;
 import java.io.File;
 
 public class AppMetricaServiceCoreImpl implements AppMetricaServiceCore, AppMetricaCoreReporter {

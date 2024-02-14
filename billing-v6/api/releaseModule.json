@@ -53,6 +53,13 @@
                 },
                 {
                     "group": "io.appmetrica.analytics",
+                    "module": "analytics-billing-interface",
+                    "version": {
+                        "requires": "6.3.0"
+                    }
+                },
+                {
+                    "group": "io.appmetrica.analytics",
                     "module": "analytics-core-utils",
                     "version": {
                         "requires": "6.3.0"
@@ -60,7 +67,7 @@
                 },
                 {
                     "group": "io.appmetrica.analytics",
-                    "module": "analytics-billing-interface",
+                    "module": "analytics-logger",
                     "version": {
                         "requires": "6.3.0"
                     }

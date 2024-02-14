@@ -40,6 +40,7 @@ io.appmetrica.analytics:gpllibrary:unspecified
 io.appmetrica.analytics:identifiers:unspecified
 io.appmetrica.analytics:location-api:unspecified
 io.appmetrica.analytics:location:unspecified
+io.appmetrica.analytics:logger:unspecified
 io.appmetrica.analytics:modules-api:unspecified
 io.appmetrica.analytics:ndkcrashes-api:unspecified
 io.appmetrica.analytics:network-tasks:unspecified

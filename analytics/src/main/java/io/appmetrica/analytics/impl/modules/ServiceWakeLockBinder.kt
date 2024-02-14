@@ -4,7 +4,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.ServiceConnection
 import android.os.IBinder
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger
+import io.appmetrica.analytics.logger.internal.YLogger
 
 class ServiceWakeLockBinder(private val intentProvider: ServiceWakeLockIntentProvider) {
     private val tag = "[ServiceWakeLockBinder]"

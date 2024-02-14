@@ -2,7 +2,7 @@ package io.appmetrica.analytics.coreutils.internal.system
 
 import android.annotation.SuppressLint
 import android.content.Context
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger
+import io.appmetrica.analytics.logger.internal.YLogger
 
 object SystemPropertiesHelper {
 

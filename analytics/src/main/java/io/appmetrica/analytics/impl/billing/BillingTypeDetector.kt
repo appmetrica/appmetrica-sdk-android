@@ -1,8 +1,8 @@
 package io.appmetrica.analytics.impl.billing
 
 import io.appmetrica.analytics.billinginterface.internal.BillingType
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger
 import io.appmetrica.analytics.coreutils.internal.reflection.ReflectionUtils
+import io.appmetrica.analytics.logger.internal.YLogger
 
 private const val LOG_TAG = "[BillingTypeDetector]"
 

@@ -1,10 +1,10 @@
 package io.appmetrica.analytics.impl.component;
 
 import androidx.annotation.NonNull;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.AppEnvironment;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesComponentDbStorage;
 import io.appmetrica.analytics.impl.utils.PublicLogger;
+import io.appmetrica.analytics.logger.internal.YLogger;
 import java.util.HashMap;
 
 class AppEnvironmentProvider {

@@ -3,12 +3,12 @@ package io.appmetrica.analytics.impl.utils.limitation.hierarchical;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.Utils;
 import io.appmetrica.analytics.impl.ecommerce.ECommerceConstants;
 import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedProvider;
 import io.appmetrica.analytics.impl.utils.limitation.CollectionTrimInfo;
 import io.appmetrica.analytics.impl.utils.limitation.TrimmingResult;
+import io.appmetrica.analytics.logger.internal.YLogger;
 import java.util.ArrayList;
 import java.util.List;
 

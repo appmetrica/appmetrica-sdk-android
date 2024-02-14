@@ -12,8 +12,9 @@ android {
 }
 
 dependencies {
-    implementation(project(":core-utils"))
     implementation(project(":billing-interface"))
+    implementation(project(":core-utils"))
+    implementation(project(":logger"))
 
     compileOnly("com.android.billingclient:billing:6.0.1")
 

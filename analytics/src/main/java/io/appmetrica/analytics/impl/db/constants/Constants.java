@@ -6,11 +6,11 @@ import io.appmetrica.analytics.AppMetrica;
 import io.appmetrica.analytics.coreapi.internal.db.DatabaseScript;
 import io.appmetrica.analytics.coreutils.internal.collection.CollectionUtils;
 import io.appmetrica.analytics.coreutils.internal.io.FileUtils;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.db.DatabaseManagerProvider;
 import io.appmetrica.analytics.impl.db.DatabaseScriptsProvider;
 import io.appmetrica.analytics.impl.db.DbTablesColumnsProvider;
 import io.appmetrica.analytics.impl.utils.collection.HashMultimap;
+import io.appmetrica.analytics.logger.internal.YLogger;
 import java.util.List;
 import java.util.Locale;
 

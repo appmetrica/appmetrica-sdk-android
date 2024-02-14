@@ -1,9 +1,9 @@
 package io.appmetrica.analytics.impl.startup
 
-import io.appmetrica.analytics.internal.IdentifiersResult
-import io.appmetrica.analytics.StartupParamsItemStatus
 import io.appmetrica.analytics.StartupParamsItem
+import io.appmetrica.analytics.StartupParamsItemStatus
 import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus
+import io.appmetrica.analytics.internal.IdentifiersResult
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.MockedConstructionRule
 import org.assertj.core.api.Assertions.assertThat

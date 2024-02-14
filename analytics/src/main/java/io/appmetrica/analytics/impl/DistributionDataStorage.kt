@@ -2,10 +2,10 @@ package io.appmetrica.analytics.impl
 
 import android.content.Context
 import io.appmetrica.analytics.coreapi.internal.data.ProtobufStateStorage
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger
 import io.appmetrica.analytics.impl.clids.ClidsInfo
 import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoData
 import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoState
+import io.appmetrica.analytics.logger.internal.YLogger
 
 internal class ClidsInfoStorage(
     context: Context,

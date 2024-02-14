@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl;
 import android.content.Context;
 import android.util.SparseArray;
 import io.appmetrica.analytics.AppMetrica;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
+import io.appmetrica.analytics.logger.internal.YLogger;
 
 public abstract class MigrationManager {
 

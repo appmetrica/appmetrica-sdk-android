@@ -3,6 +3,7 @@ package io.appmetrica.analytics.impl.component.processor.factory;
 import io.appmetrica.analytics.impl.EventsManager;
 import io.appmetrica.analytics.impl.InternalEvents;
 import io.appmetrica.analytics.impl.component.processor.event.ApplySettingsFromActivationConfigHandler;
+import io.appmetrica.analytics.impl.component.processor.event.ExternalAttributionHandler;
 import io.appmetrica.analytics.impl.component.processor.event.ReportAppOpenHandler;
 import io.appmetrica.analytics.impl.component.processor.event.ReportComponentHandler;
 import io.appmetrica.analytics.impl.component.processor.event.ReportCrashMetaInformation;
@@ -17,7 +18,6 @@ import io.appmetrica.analytics.impl.component.processor.event.ReportSessionHandl
 import io.appmetrica.analytics.impl.component.processor.event.SaveInitialUserProfileIDHandler;
 import io.appmetrica.analytics.impl.component.processor.event.SavePreloadInfoHandler;
 import io.appmetrica.analytics.impl.component.processor.event.SubscribeForReferrerHandler;
-import io.appmetrica.analytics.impl.component.processor.event.ExternalAttributionHandler;
 import io.appmetrica.analytics.impl.component.processor.event.UpdateUserProfileIDHandler;
 import io.appmetrica.analytics.impl.component.processor.event.modules.ModulesEventHandler;
 import io.appmetrica.analytics.impl.component.processor.session.ReportSessionStopHandler;

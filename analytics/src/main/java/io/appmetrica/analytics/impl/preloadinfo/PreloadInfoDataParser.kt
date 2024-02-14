@@ -2,10 +2,10 @@ package io.appmetrica.analytics.impl.preloadinfo
 
 import android.content.ContentValues
 import android.text.TextUtils
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger
 import io.appmetrica.analytics.impl.ContentProviderDataParser
 import io.appmetrica.analytics.impl.DistributionSource
 import io.appmetrica.analytics.impl.SdkUtils
+import io.appmetrica.analytics.logger.internal.YLogger
 import org.json.JSONObject
 
 private const val TAG = "[PreloadInfoDataParser]"

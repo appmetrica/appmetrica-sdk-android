@@ -3,10 +3,10 @@ package io.appmetrica.analytics.impl.component.session;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.coreutils.internal.time.SystemTimeProvider;
 import io.appmetrica.analytics.impl.IReporterExtended;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
+import io.appmetrica.analytics.logger.internal.YLogger;
 import java.util.concurrent.TimeUnit;
 
 public abstract class AbstractSessionFactory implements ISessionFactory<SessionArguments> {

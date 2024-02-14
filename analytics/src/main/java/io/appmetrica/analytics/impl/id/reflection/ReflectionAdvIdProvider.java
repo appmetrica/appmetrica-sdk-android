@@ -2,18 +2,16 @@ package io.appmetrica.analytics.impl.id.reflection;
 
 import android.content.Context;
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.identifiers.AdTrackingInfoResult;
 import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.coreutils.internal.reflection.ReflectionUtils;
 import io.appmetrica.analytics.impl.id.AdvIdProvider;
 import io.appmetrica.analytics.impl.id.NoRetriesStrategy;
 import io.appmetrica.analytics.impl.id.RetryStrategy;
-
+import io.appmetrica.analytics.logger.internal.YLogger;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 

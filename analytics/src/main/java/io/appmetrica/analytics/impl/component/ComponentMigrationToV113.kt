@@ -1,10 +1,10 @@
 package io.appmetrica.analytics.impl.component
 
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger
 import io.appmetrica.analytics.impl.SdkData
 import io.appmetrica.analytics.impl.component.session.BackgroundSessionFactory
 import io.appmetrica.analytics.impl.component.session.ForegroundSessionFactory
 import io.appmetrica.analytics.impl.component.session.SessionStorageImpl
+import io.appmetrica.analytics.logger.internal.YLogger
 import java.util.concurrent.TimeUnit
 
 internal class ComponentMigrationToV113(

@@ -4,7 +4,6 @@ import android.content.ContentValues
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import io.appmetrica.analytics.coreapi.internal.db.DatabaseScript
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger
 import io.appmetrica.analytics.impl.EventSource
 import io.appmetrica.analytics.impl.FirstOccurrenceStatus
 import io.appmetrica.analytics.impl.InternalEvents
@@ -15,6 +14,7 @@ import io.appmetrica.analytics.impl.db.protobuf.converter.DbEventModelConverter
 import io.appmetrica.analytics.impl.db.protobuf.converter.DbSessionModelConverter
 import io.appmetrica.analytics.impl.db.session.DbSessionModel
 import io.appmetrica.analytics.impl.utils.encryption.EventEncryptionMode
+import io.appmetrica.analytics.logger.internal.YLogger
 
 internal class ComponentDatabaseUpgradeScriptToV112 : DatabaseScript() {
 

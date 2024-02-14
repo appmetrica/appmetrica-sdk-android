@@ -1,0 +1,25 @@
+public final class io.appmetrica.analytics.logger.BuildConfig {
+    public static final String BUILD_TYPE
+    public static final boolean DEBUG
+    public static final String LIBRARY_PACKAGE_NAME
+
+    public <init>()
+}
+
+public final class io.appmetrica.analytics.logger.internal.YLogger {
+    public static final boolean DEBUG
+
+    public static void d([NonNull] String, Object...)
+    public static void debug([NonNull] String, [NonNull] String, Object...)
+    public static void dumpJson([NonNull] String, [NonNull] org.json.JSONObject)
+    public static void e([NonNull] String, Object...)
+    public static void e([NonNull] Throwable, [Nullable] String, Object...)
+    public static void error([NonNull] String, [NonNull] String, Object...)
+    public static void error([NonNull] String, [Nullable] Throwable)
+    public static void error([NonNull] String, [Nullable] Throwable, [Nullable] String, Object...)
+    public static void i([NonNull] String, Object...)
+    public static void info([NonNull] String, [NonNull] String, Object...)
+    public static void w([NonNull] String, Object...)
+    public static void warning([NonNull] String, [NonNull] String, Object...)
+}
+

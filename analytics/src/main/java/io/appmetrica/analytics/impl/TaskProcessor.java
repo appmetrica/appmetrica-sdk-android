@@ -2,9 +2,9 @@ package io.appmetrica.analytics.impl;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.component.IComponent;
 import io.appmetrica.analytics.impl.startup.executor.StartupExecutor;
+import io.appmetrica.analytics.logger.internal.YLogger;
 import io.appmetrica.analytics.networktasks.internal.NetworkTask;
 
 public class TaskProcessor<C extends IComponent> implements ServiceLifecycleObserver {

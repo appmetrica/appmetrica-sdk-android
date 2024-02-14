@@ -3,7 +3,7 @@ package io.appmetrica.analytics.networktasks.internal;
 import android.net.Uri;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
+import io.appmetrica.analytics.logger.internal.YLogger;
 import io.appmetrica.analytics.networktasks.impl.ForcedHttpsUrlProvider;
 import java.util.ArrayList;
 import java.util.List;

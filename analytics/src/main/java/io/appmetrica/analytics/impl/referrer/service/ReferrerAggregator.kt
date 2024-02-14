@@ -3,9 +3,9 @@ package io.appmetrica.analytics.impl.referrer.service
 import android.content.Context
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.WorkerThread
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger
 import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.referrer.common.ReferrerInfo
+import io.appmetrica.analytics.logger.internal.YLogger
 
 class ReferrerAggregator @VisibleForTesting internal constructor(
     private val referrerHolder: ReferrerHolder,

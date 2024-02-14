@@ -3,12 +3,12 @@ package io.appmetrica.analytics.impl.ecommerce.client.converter;
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.data.Converter;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.ecommerce.ECommerceConstants;
 import io.appmetrica.analytics.impl.ecommerce.client.model.CartItemWrapper;
 import io.appmetrica.analytics.impl.protobuf.backend.Ecommerce;
 import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedInfo;
 import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedProvider;
+import io.appmetrica.analytics.logger.internal.YLogger;
 
 public class CartItemConverter
         implements Converter<CartItemWrapper, Result<Ecommerce.ECommerceEvent.CartItem, BytesTruncatedProvider>> {

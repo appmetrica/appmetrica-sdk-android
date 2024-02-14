@@ -3,12 +3,12 @@ package io.appmetrica.analytics.impl;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.crash.client.AllThreads;
 import io.appmetrica.analytics.impl.crash.client.ICrashProcessor;
 import io.appmetrica.analytics.impl.crash.utils.CrashedThreadConverter;
 import io.appmetrica.analytics.impl.crash.utils.ThreadsStateDumper;
 import io.appmetrica.analytics.impl.utils.ProcessDetector;
+import io.appmetrica.analytics.logger.internal.YLogger;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 

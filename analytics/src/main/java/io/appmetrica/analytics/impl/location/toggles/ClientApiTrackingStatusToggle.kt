@@ -1,9 +1,9 @@
 package io.appmetrica.analytics.impl.location.toggles
 
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger
 import io.appmetrica.analytics.coreutils.internal.toggle.SimpleThreadSafeToggle
 import io.appmetrica.analytics.impl.db.preferences.PreferencesServiceDbStorage
 import io.appmetrica.analytics.impl.location.ClientTrackingStatusController
+import io.appmetrica.analytics.logger.internal.YLogger
 
 class ClientApiTrackingStatusToggle(
     private val storage: PreferencesServiceDbStorage

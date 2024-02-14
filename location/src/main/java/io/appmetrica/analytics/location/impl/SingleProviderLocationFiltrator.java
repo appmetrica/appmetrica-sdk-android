@@ -5,9 +5,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import io.appmetrica.analytics.coreapi.internal.annotations.GeoThread;
 import io.appmetrica.analytics.coreapi.internal.backport.Consumer;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.coreutils.internal.time.TimePassedChecker;
 import io.appmetrica.analytics.locationapi.internal.LocationFilter;
+import io.appmetrica.analytics.logger.internal.YLogger;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 

@@ -61,8 +61,7 @@ public class DatabaseStorage extends SQLiteOpenHelper implements Closeable {
         try {
             return super.getReadableDatabase();
         } catch (Throwable ex) {
-            mPublicLogger.forceE(ex, "");
-            mPublicLogger.forceW("Could not get readable database %s due to an exception. " +
+            mPublicLogger.fe(ex,"Could not get readable database %s due to an exception. " +
                     "AppMetrica SDK may behave unexpectedly.", mDbName);
             AppMetricaSelfReportFacade.getReporter().reportError("db_read_error", ex);
             return null;
@@ -75,8 +74,7 @@ public class DatabaseStorage extends SQLiteOpenHelper implements Closeable {
         try {
             return super.getWritableDatabase();
         } catch (Throwable ex) {
-            mPublicLogger.forceE(ex, "");
-            mPublicLogger.forceW("Could not get writable database %s due to an exception. " +
+            mPublicLogger.fe(ex, "Could not get writable database %s due to an exception. " +
                     "AppMetrica SDK may behave unexpectedly.", mDbName);
             AppMetricaSelfReportFacade.getReporter().reportError("db_write_error", ex);
             return null;

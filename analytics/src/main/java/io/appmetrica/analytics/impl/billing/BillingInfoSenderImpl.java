@@ -5,10 +5,10 @@ import io.appmetrica.analytics.billinginterface.internal.ProductInfo;
 import io.appmetrica.analytics.billinginterface.internal.storage.BillingInfoSender;
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
 import io.appmetrica.analytics.coreutils.internal.executors.SafeRunnable;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.CounterReport;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.component.IReportableComponent;
+import io.appmetrica.analytics.logger.internal.YLogger;
 import java.util.List;
 
 public class BillingInfoSenderImpl implements BillingInfoSender {

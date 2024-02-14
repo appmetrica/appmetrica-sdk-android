@@ -2,9 +2,9 @@ package io.appmetrica.analytics.impl.component.clients;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.CounterConfigurationReporterType;
 import io.appmetrica.analytics.impl.client.ClientConfiguration;
+import io.appmetrica.analytics.logger.internal.YLogger;
 
 public class ClientDescription {
 

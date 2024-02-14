@@ -3,8 +3,8 @@ package io.appmetrica.analytics.impl.utils.encryption;
 import android.content.Context;
 import androidx.annotation.NonNull;
 import io.appmetrica.analytics.coreutils.internal.encryption.AESEncrypter;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.utils.SecurityUtils;
+import io.appmetrica.analytics.logger.internal.YLogger;
 
 public class AESCredentialProvider {
 

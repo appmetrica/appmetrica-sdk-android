@@ -2,9 +2,9 @@ package io.appmetrica.analytics.impl.component.processor.event;
 
 import android.text.TextUtils;
 import androidx.annotation.NonNull;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.CounterReport;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
+import io.appmetrica.analytics.logger.internal.YLogger;
 
 public class SaveInitialUserProfileIDHandler extends ReportComponentHandler {
 

@@ -10,6 +10,7 @@ import io.appmetrica.analytics.impl.component.processor.event.UpdateUserProfileI
 import io.appmetrica.analytics.impl.component.processor.factory.ActivationFactory;
 import io.appmetrica.analytics.impl.component.processor.factory.CommonConditionalFactory;
 import io.appmetrica.analytics.impl.component.processor.factory.CurrentSessionNativeCrashHandlerFactory;
+import io.appmetrica.analytics.impl.component.processor.factory.ExternalAttributionFactory;
 import io.appmetrica.analytics.impl.component.processor.factory.HandlersFactory;
 import io.appmetrica.analytics.impl.component.processor.factory.JustSaveToDataBaseFactory;
 import io.appmetrica.analytics.impl.component.processor.factory.PurgeBufferFactory;
@@ -17,7 +18,6 @@ import io.appmetrica.analytics.impl.component.processor.factory.RegularFactory;
 import io.appmetrica.analytics.impl.component.processor.factory.ReportAppOpenFactory;
 import io.appmetrica.analytics.impl.component.processor.factory.SingleHandlerFactory;
 import io.appmetrica.analytics.impl.component.processor.factory.StartFactory;
-import io.appmetrica.analytics.impl.component.processor.factory.ExternalAttributionFactory;
 import io.appmetrica.analytics.impl.component.processor.factory.UnhandledExceptionFactory;
 import io.appmetrica.analytics.impl.component.processor.factory.UnhandledExceptionFromFileFactory;
 import io.appmetrica.analytics.testutils.CommonTest;

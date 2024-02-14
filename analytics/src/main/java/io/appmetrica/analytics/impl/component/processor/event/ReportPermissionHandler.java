@@ -6,7 +6,6 @@ import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.data.ProtobufStateStorage;
 import io.appmetrica.analytics.coreapi.internal.permission.PermissionState;
 import io.appmetrica.analytics.coreutils.internal.collection.CollectionUtils;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.AppStandbyBucketConverter;
 import io.appmetrica.analytics.impl.AvailableProvidersRetriever;
 import io.appmetrica.analytics.impl.BackgroundRestrictionsState;
@@ -18,6 +17,7 @@ import io.appmetrica.analytics.impl.component.EventSaver;
 import io.appmetrica.analytics.impl.db.state.factory.StorageFactory;
 import io.appmetrica.analytics.impl.permissions.AppPermissionsState;
 import io.appmetrica.analytics.impl.permissions.PermissionsChecker;
+import io.appmetrica.analytics.logger.internal.YLogger;
 import java.util.List;
 
 public class ReportPermissionHandler extends ReportComponentHandler {

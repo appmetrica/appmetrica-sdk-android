@@ -2,13 +2,13 @@ package io.appmetrica.analytics.impl.referrer.service
 
 import android.content.Context
 import android.content.pm.PackageInfo
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger
 import io.appmetrica.analytics.coreutils.internal.services.SafePackageManager
 import io.appmetrica.analytics.impl.IReporterExtended
 import io.appmetrica.analytics.impl.referrer.common.ReferrerInfo
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade
 import io.appmetrica.analytics.impl.utils.JsonHelper
 import io.appmetrica.analytics.impl.utils.MapWithDefault
+import io.appmetrica.analytics.logger.internal.YLogger
 import org.json.JSONObject
 import java.util.concurrent.TimeUnit
 import kotlin.math.abs

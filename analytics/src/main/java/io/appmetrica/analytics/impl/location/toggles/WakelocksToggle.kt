@@ -1,8 +1,8 @@
 package io.appmetrica.analytics.impl.location.toggles
 
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger
 import io.appmetrica.analytics.coreutils.internal.toggle.SimpleThreadSafeToggle
 import io.appmetrica.analytics.impl.location.LocationSubscribers
+import io.appmetrica.analytics.logger.internal.YLogger
 import java.util.WeakHashMap
 
 class WakelocksToggle :

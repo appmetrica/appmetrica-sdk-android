@@ -1,6 +1,5 @@
 package io.appmetrica.analytics.impl.crash;
 
-import io.appmetrica.analytics.internal.CounterConfiguration;
 import io.appmetrica.analytics.impl.ClientCounterReport;
 import io.appmetrica.analytics.impl.EventsManager;
 import io.appmetrica.analytics.impl.ReportToSend;
@@ -10,6 +9,7 @@ import io.appmetrica.analytics.impl.crash.client.ThrowableModel;
 import io.appmetrica.analytics.impl.crash.client.UnhandledException;
 import io.appmetrica.analytics.impl.crash.client.converter.JvmCrashConverter;
 import io.appmetrica.analytics.impl.utils.PublicLogger;
+import io.appmetrica.analytics.internal.CounterConfiguration;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.MockedStaticRule;
 import java.util.HashMap;

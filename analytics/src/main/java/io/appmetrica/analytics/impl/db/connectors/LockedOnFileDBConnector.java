@@ -6,11 +6,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import androidx.annotation.WorkerThread;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.Utils;
 import io.appmetrica.analytics.impl.db.DatabaseStorage;
 import io.appmetrica.analytics.impl.db.TablesManager;
 import io.appmetrica.analytics.impl.utils.concurrency.FileLocker;
+import io.appmetrica.analytics.logger.internal.YLogger;
 
 public class LockedOnFileDBConnector implements DBConnector {
 

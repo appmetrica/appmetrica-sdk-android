@@ -3,7 +3,6 @@ package io.appmetrica.analytics.impl
 import android.app.Activity
 import android.content.Context
 import android.os.Build
-import io.appmetrica.analytics.coreapi.internal.constants.DeviceTypeValues
 import io.appmetrica.analytics.coreapi.internal.model.ScreenInfo
 import io.appmetrica.analytics.impl.db.preferences.PreferencesClientDbStorage
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule

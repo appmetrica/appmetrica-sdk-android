@@ -1,9 +1,9 @@
 package io.appmetrica.analytics.impl.component.session
 
 import android.text.TextUtils
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger
 import io.appmetrica.analytics.impl.db.constants.Constants
 import io.appmetrica.analytics.impl.request.ReportRequestConfig
+import io.appmetrica.analytics.logger.internal.YLogger
 import org.json.JSONObject
 
 internal class SessionRequestParams(requestParameters: JSONObject) {

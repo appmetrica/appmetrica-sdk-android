@@ -2,10 +2,10 @@ package io.appmetrica.analytics.impl.component.processor;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.CounterReport;
 import io.appmetrica.analytics.impl.InternalEvents;
 import io.appmetrica.analytics.impl.component.IComponent;
+import io.appmetrica.analytics.logger.internal.YLogger;
 import java.util.List;
 
 public class BaseReportProcessor<T, C extends IComponent> {

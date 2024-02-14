@@ -1,5 +1,6 @@
 package io.appmetrica.analytics.impl.preloadinfo;
 
+import io.appmetrica.analytics.testutils.CommonTest;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -8,8 +9,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
-import io.appmetrica.analytics.testutils.CommonTest;
 
 import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.assertj.core.api.Assertions.assertThat;

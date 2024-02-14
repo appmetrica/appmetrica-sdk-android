@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.coreutils.internal.parsing;
 
 import androidx.annotation.Nullable;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
+import io.appmetrica.analytics.logger.internal.YLogger;
 
 public class ParseUtils {
 

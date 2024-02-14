@@ -5,7 +5,7 @@ import com.android.billingclient.api.BillingClient
 import io.appmetrica.analytics.billinginterface.internal.library.UtilsProvider
 import io.appmetrica.analytics.billingv6.impl.TAG
 import io.appmetrica.analytics.coreutils.internal.executors.SafeRunnable
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger
+import io.appmetrica.analytics.logger.internal.YLogger
 
 internal class BillingLibraryConnectionHolder(
     private val billingClient: BillingClient,

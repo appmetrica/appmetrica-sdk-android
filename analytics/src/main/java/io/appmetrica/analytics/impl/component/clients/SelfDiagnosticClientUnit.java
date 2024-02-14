@@ -2,10 +2,10 @@ package io.appmetrica.analytics.impl.component.clients;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import io.appmetrica.analytics.coreutils.internal.logger.YLogger;
 import io.appmetrica.analytics.impl.CounterReport;
 import io.appmetrica.analytics.impl.component.CommonArguments;
 import io.appmetrica.analytics.impl.component.RegularDispatcherComponent;
+import io.appmetrica.analytics.logger.internal.YLogger;
 
 public class SelfDiagnosticClientUnit implements ClientUnit {
 
