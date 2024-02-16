@@ -77,12 +77,8 @@ class SynchronousStageExecutor @VisibleForTesting constructor(
         message: String,
         error: Throwable?
     ): Throwable {
-        return if (error == null) {
-            val nonNullError: Throwable = AppMetricaThrowable()
-            nonNullError.fillInStackTrace()
-            nonNullError
-        } else {
-            error
+        return error ?: AppMetricaThrowable().apply {
+            fillInStackTrace()
         }
     }
 

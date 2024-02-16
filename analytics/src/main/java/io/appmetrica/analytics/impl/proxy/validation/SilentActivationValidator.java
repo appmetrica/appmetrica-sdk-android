@@ -1,8 +1,9 @@
-package io.appmetrica.analytics.impl.proxy;
+package io.appmetrica.analytics.impl.proxy.validation;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import io.appmetrica.analytics.impl.VerificationConstants;
+import io.appmetrica.analytics.impl.proxy.AppMetricaFacadeProvider;
 import io.appmetrica.analytics.impl.utils.validation.ValidationResult;
 import io.appmetrica.analytics.impl.utils.validation.Validator;
 

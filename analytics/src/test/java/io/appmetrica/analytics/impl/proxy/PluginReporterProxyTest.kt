@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.proxy
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor
 import io.appmetrica.analytics.impl.IReporterExtended
 import io.appmetrica.analytics.impl.proxy.synchronous.PluginsReporterSynchronousStageExecutor
-import io.appmetrica.analytics.impl.proxy.validation.PluginsBarrier
+import io.appmetrica.analytics.impl.proxy.validation.PluginsReporterBarrier
 import io.appmetrica.analytics.plugins.IPluginReporter
 import io.appmetrica.analytics.plugins.PluginErrorDetails
 import io.appmetrica.analytics.testutils.CommonTest
@@ -11,24 +11,30 @@ import io.appmetrica.analytics.testutils.MockedConstructionRule
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.ArgumentCaptor
-import org.mockito.Mockito
 import org.mockito.Mockito.verifyNoInteractions
-import org.mockito.Mockito.`when`
 import org.mockito.kotlin.any
+import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.inOrder
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.stub
 import org.mockito.kotlin.stubbing
 import org.mockito.kotlin.verify
+import org.mockito.kotlin.verifyNoMoreInteractions
+import org.mockito.kotlin.whenever
 
 class PluginReporterProxyTest : CommonTest() {
 
-    private val barrier: PluginsBarrier = mock()
     private val executor: ICommonExecutor = mock()
     private val reporter: IReporterExtended = mock()
     private val pluginReporter: IPluginReporter = mock()
     private lateinit var pluginReporterProxy: PluginReporterProxy
+
+    private lateinit var barrier: PluginsReporterBarrier
+    @get:Rule
+    val barrierRule = MockedConstructionRule(PluginsReporterBarrier::class.java) { mock, _ ->
+        barrier = mock
+    }
 
     private lateinit var synchronousStageExecutor: PluginsReporterSynchronousStageExecutor
     @get:Rule
@@ -36,48 +42,59 @@ class PluginReporterProxyTest : CommonTest() {
         synchronousStageExecutor = mock
     }
 
+    private val runnableCaptor = argumentCaptor<Runnable>()
+
     @Before
     fun setUp() {
         stubbing(reporter) {
             on { pluginExtension } doReturn pluginReporter
         }
         reporter.stub { pluginReporter }
-        pluginReporterProxy = PluginReporterProxy(barrier, executor) { reporter }
+        pluginReporterProxy = PluginReporterProxy(executor) { reporter }
     }
 
     @Test
     fun reportPluginUnhandledException() {
-        val error = Mockito.mock(PluginErrorDetails::class.java)
+        val error: PluginErrorDetails = mock()
         pluginReporterProxy.reportUnhandledException(error)
-        val inOrder = Mockito.inOrder(barrier, synchronousStageExecutor, pluginReporter)
+
+        val inOrder = inOrder(barrier, synchronousStageExecutor, executor)
         inOrder.verify(barrier).reportUnhandledException(error)
         inOrder.verify(synchronousStageExecutor).reportPluginUnhandledException(error)
-        runOnExecutor()
-        inOrder.verify(pluginReporter).reportUnhandledException(error)
-        inOrder.verifyNoMoreInteractions()
+        inOrder.verify(executor).execute(runnableCaptor.capture())
+        verifyNoInteractions(pluginReporter)
+
+        runnableCaptor.firstValue.run()
+        verify(pluginReporter).reportUnhandledException(error)
+        verifyNoMoreInteractions(pluginReporter)
     }
 
     @Test
     fun reportPluginError() {
-        `when`(barrier.reportErrorWithFilledStacktrace(any(), any())).thenReturn(true)
+        whenever(barrier.reportErrorWithFilledStacktrace(any(), any())).thenReturn(true)
         val message = "some message"
-        val error = Mockito.mock(PluginErrorDetails::class.java)
+        val error: PluginErrorDetails = mock()
         pluginReporterProxy.reportError(error, message)
-        val inOrder = Mockito.inOrder(barrier, synchronousStageExecutor, pluginReporter)
+
+        val inOrder = inOrder(barrier, synchronousStageExecutor, executor)
         inOrder.verify(barrier).reportErrorWithFilledStacktrace(error, message)
         inOrder.verify(synchronousStageExecutor).reportPluginError(error, message)
-        runOnExecutor()
-        inOrder.verify(pluginReporter).reportError(error, message)
-        inOrder.verifyNoMoreInteractions()
+        inOrder.verify(executor).execute(runnableCaptor.capture())
+        verifyNoInteractions(pluginReporter)
+
+        runnableCaptor.firstValue.run()
+        verify(pluginReporter).reportError(error, message)
+        verifyNoMoreInteractions(pluginReporter)
     }
 
     @Test
     fun reportPluginErrorValidationFailed() {
-        `when`(barrier.reportErrorWithFilledStacktrace(any(), any())).thenReturn(false)
+        whenever(barrier.reportErrorWithFilledStacktrace(any(), any())).thenReturn(false)
         val message = "some message"
-        val error = Mockito.mock(PluginErrorDetails::class.java)
+        val error: PluginErrorDetails = mock()
         pluginReporterProxy.reportError(error, message)
-        val inOrder = Mockito.inOrder(barrier)
+
+        val inOrder = inOrder(barrier)
         inOrder.verify(barrier).reportErrorWithFilledStacktrace(error, message)
         verifyNoInteractions(synchronousStageExecutor, executor, pluginReporter)
     }
@@ -86,19 +103,17 @@ class PluginReporterProxyTest : CommonTest() {
     fun reportPluginErrorWithIdentifier() {
         val id = "some id"
         val message = "some message"
-        val error = Mockito.mock(PluginErrorDetails::class.java)
+        val error: PluginErrorDetails = mock()
         pluginReporterProxy.reportError(id, message, error)
-        val inOrder = Mockito.inOrder(barrier, synchronousStageExecutor, pluginReporter)
+
+        val inOrder = inOrder(barrier, synchronousStageExecutor, executor)
         inOrder.verify(barrier).reportError(id, message, error)
         inOrder.verify(synchronousStageExecutor).reportPluginError(id, message, error)
-        runOnExecutor()
-        inOrder.verify(pluginReporter).reportError(id, message, error)
-        inOrder.verifyNoMoreInteractions()
-    }
+        inOrder.verify(executor).execute(runnableCaptor.capture())
+        verifyNoInteractions(pluginReporter)
 
-    private fun runOnExecutor() {
-        val captor = ArgumentCaptor.forClass(Runnable::class.java)
-        verify(executor).execute(captor.capture())
-        captor.value.run()
+        runnableCaptor.firstValue.run()
+        verify(pluginReporter).reportError(id, message, error)
+        verifyNoMoreInteractions(pluginReporter)
     }
 }

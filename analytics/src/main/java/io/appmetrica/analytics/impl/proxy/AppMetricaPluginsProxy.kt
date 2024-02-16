@@ -6,14 +6,13 @@ import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor
 import io.appmetrica.analytics.impl.IMainReporter
 import io.appmetrica.analytics.impl.SdkUtils
 import io.appmetrica.analytics.impl.proxy.synchronous.PluginsSynchronousStageExecutor
-import io.appmetrica.analytics.impl.proxy.validation.MainFacadeBarrier
+import io.appmetrica.analytics.impl.proxy.validation.PluginsBarrier
 import io.appmetrica.analytics.plugins.PluginErrorDetails
 
 internal class AppMetricaPluginsProxy @VisibleForTesting constructor(
     private val executor: ICommonExecutor,
     private val provider: AppMetricaFacadeProvider,
-    private val activationValidator: ActivationValidator,
-    private val barrier: MainFacadeBarrier,
+    private val barrier: PluginsBarrier,
     private val synchronousStageExecutor: PluginsSynchronousStageExecutor
 ) {
 
@@ -25,14 +24,12 @@ internal class AppMetricaPluginsProxy @VisibleForTesting constructor(
     private constructor(executor: ICommonExecutor, provider: AppMetricaFacadeProvider) : this(
         executor,
         provider,
-        ActivationValidator(provider),
-        MainFacadeBarrier(),
+        PluginsBarrier(provider),
         PluginsSynchronousStageExecutor()
     )
 
     fun reportUnhandledException(errorDetails: PluginErrorDetails?) {
-        activationValidator.validate()
-        barrier.pluginExtension.reportUnhandledException(errorDetails)
+        barrier.reportUnhandledException(errorDetails)
         // objects are non-null because otherwise validation would have failed
         synchronousStageExecutor.reportPluginUnhandledException(errorDetails!!)
         executor.execute {
@@ -41,8 +38,7 @@ internal class AppMetricaPluginsProxy @VisibleForTesting constructor(
     }
 
     fun reportError(errorDetails: PluginErrorDetails?, message: String?) {
-        activationValidator.validate()
-        if (!barrier.pluginExtension.reportErrorWithFilledStacktrace(errorDetails, message)) {
+        if (!barrier.reportErrorWithFilledStacktrace(errorDetails, message)) {
             Log.w(SdkUtils.APPMETRICA_TAG, "Error stacktrace must be non empty")
             return
         }
@@ -54,8 +50,7 @@ internal class AppMetricaPluginsProxy @VisibleForTesting constructor(
     }
 
     fun reportError(identifier: String?, message: String?, errorDetails: PluginErrorDetails?) {
-        activationValidator.validate()
-        barrier.pluginExtension.reportError(identifier, message, errorDetails)
+        barrier.reportError(identifier, message, errorDetails)
         // objects are non-null because otherwise validation would have failed
         synchronousStageExecutor.reportPluginError(identifier!!, message, errorDetails)
         executor.execute {

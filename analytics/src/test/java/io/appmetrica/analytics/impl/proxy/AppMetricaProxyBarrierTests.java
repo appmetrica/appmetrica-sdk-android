@@ -4,7 +4,8 @@ import io.appmetrica.analytics.impl.DefaultOneShotMetricaConfig;
 import io.appmetrica.analytics.impl.SessionsTrackingManager;
 import io.appmetrica.analytics.impl.WebViewJsInterfaceHandler;
 import io.appmetrica.analytics.impl.proxy.synchronous.SynchronousStageExecutor;
-import io.appmetrica.analytics.impl.proxy.validation.MainFacadeBarrier;
+import io.appmetrica.analytics.impl.proxy.validation.Barrier;
+import io.appmetrica.analytics.impl.proxy.validation.SilentActivationValidator;
 import io.appmetrica.analytics.impl.utils.validation.ValidationResult;
 import io.appmetrica.analytics.impl.utils.validation.Validator;
 import io.appmetrica.analytics.testutils.StubbedBlockingExecutor;
@@ -25,13 +26,12 @@ import static org.mockito.Mockito.when;
 public class AppMetricaProxyBarrierTests extends BaseAppMetricaProxyBarrierTests {
 
     private static final List<String> methodsNotToCheck = Arrays.asList(
-            "getDeviceId",
-            "getUuid"
+        "getDeviceId"
     );
 
     private static final List<String> methodsWithNoArguments = Arrays.asList(
-            "pauseSession",
-            "resumeSession"
+        "pauseSession",
+        "resumeSession"
     );
 
     @Mock
@@ -51,13 +51,12 @@ public class AppMetricaProxyBarrierTests extends BaseAppMetricaProxyBarrierTests
     @Before
     public void setUp() {
         super.setUp();
-        mBarrier = mock(MainFacadeBarrier.class);
+        mBarrier = mock(Barrier.class);
         when(silentActivationValidator.validate()).thenReturn(ValidationResult.successful(mock(Validator.class)));
         mProxy = new AppMetricaProxy(
                 mProvider,
                 new StubbedBlockingExecutor(),
-                (MainFacadeBarrier) mBarrier,
-                mActivationValidator,
+                mBarrier,
                 silentActivationValidator,
                 mock(WebViewJsInterfaceHandler.class),
                 mock(SynchronousStageExecutor.class),

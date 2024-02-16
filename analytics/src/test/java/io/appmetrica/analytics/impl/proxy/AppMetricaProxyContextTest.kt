@@ -13,7 +13,8 @@ import io.appmetrica.analytics.impl.MainReporterApiConsumerProvider
 import io.appmetrica.analytics.impl.SessionsTrackingManager
 import io.appmetrica.analytics.impl.WebViewJsInterfaceHandler
 import io.appmetrica.analytics.impl.proxy.synchronous.SynchronousStageExecutor
-import io.appmetrica.analytics.impl.proxy.validation.MainFacadeBarrier
+import io.appmetrica.analytics.impl.proxy.validation.Barrier
+import io.appmetrica.analytics.impl.proxy.validation.SilentActivationValidator
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.ContextCoverageUtils
@@ -38,7 +39,7 @@ class AppMetricaProxyContextTest : CommonTest() {
     private val impl: AppMetricaFacade = mock()
     private val provider: AppMetricaFacadeProvider = mock()
     private val reporterProxyStorage: ReporterProxyStorage = mock()
-    private val barrier: MainFacadeBarrier = mock()
+    private val barrier: Barrier = mock()
     private val applicationContext: Context = mock()
     private val context: Context = mock {
         on { applicationContext } doReturn applicationContext
@@ -47,7 +48,6 @@ class AppMetricaProxyContextTest : CommonTest() {
     private val defaultOneShotMetricaConfig: DefaultOneShotMetricaConfig = mock()
     private val webViewJsInterfaceHandler: WebViewJsInterfaceHandler = mock()
     private val silentActivationValidator: SilentActivationValidator = mock()
-    private val activationValidator: ActivationValidator = mock()
     private val sessionsTrackingManager: SessionsTrackingManager = mock()
     private val executor: ICommonExecutor = mock()
     private val startupParamsCallback: StartupParamsCallback = mock()
@@ -65,7 +65,6 @@ class AppMetricaProxyContextTest : CommonTest() {
             provider,
             executor,
             barrier,
-            activationValidator,
             silentActivationValidator,
             webViewJsInterfaceHandler,
             synchronousStageExecutor,

@@ -96,7 +96,8 @@ public class ReporterExtendedProxyTest extends CommonTest {
     public void testReportUnhandledException() {
         UnhandledException unhandledException = mock(UnhandledException.class);
         mReporterExtendedProxy.reportUnhandledException(unhandledException);
-        InOrder inOrder = Mockito.inOrder(mSynchronousStageExecutor, mReporter);
+        InOrder inOrder = Mockito.inOrder(reporterBarrier, mSynchronousStageExecutor, mReporter);
+        inOrder.verify(reporterBarrier).reportUnhandledException(unhandledException);
         inOrder.verify(mSynchronousStageExecutor).reportUnhandledException(unhandledException);
         inOrder.verify(mReporter).reportUnhandledException(unhandledException);
     }
@@ -105,7 +106,8 @@ public class ReporterExtendedProxyTest extends CommonTest {
     public void testReportAnr() {
         AllThreads allThreads = mock(AllThreads.class);
         mReporterExtendedProxy.reportAnr(allThreads);
-        InOrder inOrder = Mockito.inOrder(mSynchronousStageExecutor, mReporter);
+        InOrder inOrder = Mockito.inOrder(reporterBarrier, mSynchronousStageExecutor, mReporter);
+        inOrder.verify(reporterBarrier).reportAnr(allThreads);
         inOrder.verify(mSynchronousStageExecutor).reportAnr(allThreads);
         inOrder.verify(mReporter).reportAnr(allThreads);
     }
@@ -248,6 +250,7 @@ public class ReporterExtendedProxyTest extends CommonTest {
         mReporterExtendedProxy.reportError(id, name);
         InOrder inOrder = Mockito.inOrder(reporterBarrier, mSynchronousStageExecutor, mReporter);
         inOrder.verify(reporterBarrier).reportError(id, name, null);
+        inOrder.verify(mSynchronousStageExecutor).reportError(id, name, null);
         inOrder.verify(mReporter).reportError(id, name, null);
     }
 
@@ -259,6 +262,7 @@ public class ReporterExtendedProxyTest extends CommonTest {
         mReporterExtendedProxy.reportError(id, name, throwable);
         InOrder inOrder = Mockito.inOrder(reporterBarrier, mSynchronousStageExecutor, mReporter);
         inOrder.verify(reporterBarrier).reportError(id, name, throwable);
+        inOrder.verify(mSynchronousStageExecutor).reportError(id, name, throwable);
         inOrder.verify(mReporter).reportError(id, name, throwable);
     }
 
@@ -371,7 +375,8 @@ public class ReporterExtendedProxyTest extends CommonTest {
             }
         };
         mReporterExtendedProxy.activate(mApiKey);
-        InOrder inOrder = Mockito.inOrder(mSynchronousStageExecutor, mAppMetricaFacade);
+        InOrder inOrder = Mockito.inOrder(reporterBarrier, mSynchronousStageExecutor, mAppMetricaFacade);
+        inOrder.verify(reporterBarrier).activate(argThat(configWithApiKey));
         inOrder.verify(mSynchronousStageExecutor).activate(argThat(configWithApiKey));
         inOrder.verify(mAppMetricaFacade).activateReporter(argThat(configWithApiKey));
     }
@@ -380,7 +385,8 @@ public class ReporterExtendedProxyTest extends CommonTest {
     public void testActivateWithConfig() {
         ReporterConfig originalConfig = mock(ReporterConfig.class);
         mReporterExtendedProxy.activate(originalConfig);
-        InOrder inOrder = Mockito.inOrder(mSynchronousStageExecutor, mAppMetricaFacade);
+        InOrder inOrder = Mockito.inOrder(reporterBarrier, mSynchronousStageExecutor, mAppMetricaFacade);
+        inOrder.verify(reporterBarrier).activate(originalConfig);
         inOrder.verify(mSynchronousStageExecutor).activate(originalConfig);
         inOrder.verify(mAppMetricaFacade).activateReporter(originalConfig);
     }

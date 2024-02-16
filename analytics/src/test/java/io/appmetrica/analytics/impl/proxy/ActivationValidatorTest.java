@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.impl.proxy;
 
 import io.appmetrica.analytics.ValidationException;
+import io.appmetrica.analytics.impl.proxy.validation.ActivationValidator;
 import io.appmetrica.analytics.testutils.CommonTest;
 import org.junit.Test;
 import org.junit.runner.RunWith;

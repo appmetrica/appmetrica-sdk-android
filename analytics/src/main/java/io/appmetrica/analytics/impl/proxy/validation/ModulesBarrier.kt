@@ -2,7 +2,6 @@ package io.appmetrica.analytics.impl.proxy.validation
 
 import android.content.Context
 import io.appmetrica.analytics.ModuleEvent
-import io.appmetrica.analytics.impl.proxy.ActivationValidator
 import io.appmetrica.analytics.impl.proxy.AppMetricaFacadeProvider
 import io.appmetrica.analytics.impl.utils.validation.NonNullValidator
 import io.appmetrica.analytics.impl.utils.validation.ThrowIfFailedValidator
@@ -12,7 +11,10 @@ class ModulesBarrier(
     provider: AppMetricaFacadeProvider,
 ) {
 
-    private val activationValidator = ActivationValidator(provider)
+    private val activationValidator =
+        ActivationValidator(
+            provider
+        )
     private val contextValidator = ThrowIfFailedValidator(
         NonNullValidator<Context>("Context")
     )

@@ -13,8 +13,6 @@ public class BaseAppMetricaProxy {
     @NonNull
     private final ICommonExecutor mExecutor;
     @NonNull
-    private final ActivationValidator mActivationValidator;
-    @NonNull
     private final WebViewJsInterfaceHandler webViewJsInterfaceHandler;
     @NonNull
     private final ReporterProxyStorage mReporterProxyStorage;
@@ -24,13 +22,11 @@ public class BaseAppMetricaProxy {
     @VisibleForTesting
     BaseAppMetricaProxy(@NonNull AppMetricaFacadeProvider provider,
                            @NonNull ICommonExecutor executor,
-                           @NonNull ActivationValidator activationValidator,
                            @NonNull WebViewJsInterfaceHandler webViewJsInterfaceHandler,
                            @NonNull ReporterProxyStorage reporterProxyStorage,
                            @NonNull DefaultOneShotMetricaConfig defaultOneShotConfig) {
         mProvider = provider;
         mExecutor = executor;
-        mActivationValidator = activationValidator;
         this.webViewJsInterfaceHandler = webViewJsInterfaceHandler;
         mReporterProxyStorage = reporterProxyStorage;
         mDefaultOneShotConfig = defaultOneShotConfig;
@@ -44,11 +40,6 @@ public class BaseAppMetricaProxy {
     @NonNull
     AppMetricaFacadeProvider getProvider() {
         return mProvider;
-    }
-
-    @NonNull
-    ActivationValidator getActivationValidator() {
-        return mActivationValidator;
     }
 
     @NonNull
