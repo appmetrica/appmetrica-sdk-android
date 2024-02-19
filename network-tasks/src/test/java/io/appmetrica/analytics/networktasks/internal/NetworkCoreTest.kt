@@ -42,7 +42,7 @@ internal class NetworkCoreTest {
 
     @After
     fun tearDown() {
-        networkCore.onDestroy()
+        networkCore.stopTasks()
         try {
             networkCore.stopRunning()
         } catch (ignored: Throwable) { }
@@ -112,13 +112,13 @@ internal class NetworkCoreTest {
         doAnswer { sleep(1000) }.`when`(executor).execute(any())
         networkCore.startTask(networkTask)
         verify(executor, timeout(500).times(1)).execute(networkTaskRunnable)
-        networkCore.onDestroy()
+        networkCore.stopTasks()
         verify(networkTask).onTaskRemoved()
     }
 
     @Test
     fun destroyWithNoRunningTask() {
-        networkCore.onDestroy()
+        networkCore.stopTasks()
     }
 
     @Test
@@ -137,7 +137,7 @@ internal class NetworkCoreTest {
         networkCore.startTask(networkTask)
         networkCore.startTask(task1)
         networkCore.startTask(task2)
-        networkCore.onDestroy()
+        networkCore.stopTasks()
         verify(networkTask).onTaskRemoved()
         verify(task1).onTaskRemoved()
         verify(task2).onTaskRemoved()

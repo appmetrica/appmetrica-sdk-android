@@ -229,9 +229,9 @@ public interface io.appmetrica.analytics.networktasks.internal.IParamsAppender<T
 
 public class io.appmetrica.analytics.networktasks.internal.NetworkCore extends io.appmetrica.analytics.coreapi.internal.executors.InterruptionSafeThread {
     public <init>()
-    public void onDestroy()
     public void run()
     public void startTask(io.appmetrica.analytics.networktasks.internal.NetworkTask)
+    public void stopTasks()
 }
 
 public interface io.appmetrica.analytics.networktasks.internal.NetworkResponseHandler<T> {
@@ -244,13 +244,21 @@ public interface io.appmetrica.analytics.networktasks.internal.NetworkServiceLif
 }
 
 public final class io.appmetrica.analytics.networktasks.internal.NetworkServiceLocator implementation io.appmetrica.analytics.networktasks.internal.NetworkServiceLifecycleObserver {
-    public static void destroy()
-    public static [NonNull] io.appmetrica.analytics.networktasks.internal.NetworkServiceLocator getInstance()
-    public [NonNull] io.appmetrica.analytics.networktasks.internal.NetworkCore getNetworkCore()
-    public static void init()
-    public void initAsync()
+    public static final [NonNull] io.appmetrica.analytics.networktasks.internal.NetworkServiceLocator$Companion Companion
+
+    public <init>()
+    public static final [NonNull] io.appmetrica.analytics.networktasks.internal.NetworkServiceLocator getInstance()
+    public final [NonNull] io.appmetrica.analytics.networktasks.internal.NetworkCore getNetworkCore()
+    public static final void init()
+    public static final void init([NonNull] io.appmetrica.analytics.networktasks.internal.NetworkServiceLocator)
     public void onCreate()
     public void onDestroy()
+}
+
+public static final class io.appmetrica.analytics.networktasks.internal.NetworkServiceLocator$Companion {
+    public final [NonNull] io.appmetrica.analytics.networktasks.internal.NetworkServiceLocator getInstance()
+    public final void init()
+    public final void init([NonNull] io.appmetrica.analytics.networktasks.internal.NetworkServiceLocator)
 }
 
 public class io.appmetrica.analytics.networktasks.internal.NetworkTask {

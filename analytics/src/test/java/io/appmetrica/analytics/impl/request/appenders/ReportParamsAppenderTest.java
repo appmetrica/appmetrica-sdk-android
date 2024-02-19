@@ -12,7 +12,6 @@ import io.appmetrica.analytics.networktasks.internal.AdvIdWithLimitedAppender;
 import io.appmetrica.analytics.networktasks.internal.NetworkTaskForSendingDataParamsAppender;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
-import io.appmetrica.analytics.testutils.rules.networktasks.NetworkServiceLocatorRule;
 import java.util.Arrays;
 import java.util.Collection;
 import org.junit.Before;
@@ -36,8 +35,6 @@ import static org.mockito.Mockito.when;
 @RunWith(RobolectricTestRunner.class)
 public class ReportParamsAppenderTest extends CommonTest {
 
-    @Rule
-    public NetworkServiceLocatorRule networkServiceLocatorRule = new NetworkServiceLocatorRule();
     @Rule
     public GlobalServiceLocatorRule globalServiceLocatorRule = new GlobalServiceLocatorRule();
 

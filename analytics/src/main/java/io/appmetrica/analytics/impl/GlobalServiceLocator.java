@@ -144,7 +144,6 @@ public final class GlobalServiceLocator {
         startupStateHolder.init(mContext);
         startupStateHolder.registerObserver(new UtilityServiceStartupStateObserver());
         NetworkServiceLocator.init();
-        NetworkServiceLocator.getInstance().initAsync();
         getLifecycleDependentComponentManager().addLifecycleObserver(networkServiceLifecycleObserver);
         initPreloadInfoStorage();
     }

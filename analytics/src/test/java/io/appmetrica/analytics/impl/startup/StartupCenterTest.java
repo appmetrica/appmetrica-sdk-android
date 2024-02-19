@@ -13,7 +13,6 @@ import io.appmetrica.analytics.internal.IdentifiersResult;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import io.appmetrica.analytics.testutils.ServiceMigrationCheckedRule;
-import io.appmetrica.analytics.testutils.rules.networktasks.NetworkServiceLocatorRule;
 import java.util.UUID;
 import org.junit.Before;
 import org.junit.Rule;
@@ -42,7 +41,6 @@ public class StartupCenterTest extends CommonTest {
     @Rule
     public RuleChain mRuleChain = RuleChain.outerRule(
             new GlobalServiceLocatorRule())
-            .around(new NetworkServiceLocatorRule())
             .around(new ServiceMigrationCheckedRule()
     );
 

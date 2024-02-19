@@ -160,7 +160,6 @@ public class GlobalServiceLocatorTest extends CommonTest {
                 NetworkServiceLocator.init();
             }
         });
-        inOrder.verify(NetworkServiceLocator.getInstance()).initAsync();
         inOrder.verifyNoMoreInteractions();
     }
 

@@ -58,7 +58,7 @@ public class NetworkCore extends InterruptionSafeThread {
         }
     }
 
-    public void onDestroy() {
+    public void stopTasks() {
         synchronized (mStopTasksLock) {
             YLogger.info(TAG, "NetworkCore shall stop");
             QueueTaskEntry entry = mCurrentTask;

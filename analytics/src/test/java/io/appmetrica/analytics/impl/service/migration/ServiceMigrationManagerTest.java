@@ -14,7 +14,6 @@ import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import io.appmetrica.analytics.testutils.MockedConstructionRule;
 import io.appmetrica.analytics.testutils.MockedStaticRule;
-import io.appmetrica.analytics.testutils.rules.networktasks.NetworkServiceLocatorRule;
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.Before;
@@ -54,9 +53,6 @@ public class ServiceMigrationManagerTest extends CommonTest {
 
     @Rule
     public MockedStaticRule<FileUtils> sFileUtilsRule = new MockedStaticRule<>(FileUtils.class);
-
-    @Rule
-    public NetworkServiceLocatorRule networkServiceLocatorRule = new NetworkServiceLocatorRule();
 
     @Rule
     public MockedConstructionRule<VitalCommonDataProvider> vitalCommonDataProviderMockedRule =
