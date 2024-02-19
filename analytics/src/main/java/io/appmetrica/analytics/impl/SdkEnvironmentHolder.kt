@@ -38,7 +38,7 @@ class SdkEnvironmentHolder(private val context: Context) : SdkEnvironmentProvide
             sdkInfo = SdkInfo(
                 BuildConfig.VERSION_NAME,
                 BuildConfig.BUILD_NUMBER,
-                "${BuildConfig.SDK_BUILD_FLAVOR}_${BuildConfig.SDK_DEPENDENCY}_${BuildConfig.SDK_BUILD_TYPE}"
+                SdkUtils.formSdkBuildType()
             ),
             deviceType = DeviceTypeValues.PHONE,
             locales = localeExtractor.extractLocales(context.resources.configuration)

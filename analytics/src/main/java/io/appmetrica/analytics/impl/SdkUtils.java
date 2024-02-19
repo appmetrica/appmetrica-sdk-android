@@ -57,4 +57,16 @@ public class SdkUtils {
                 && PUSH_PATTERN.matcher(stackTrace).find();
     }
 
+    @NonNull
+    public static String formSdkBuildType() {
+        StringBuilder builder = new StringBuilder();
+        builder.append(BuildConfig.SDK_BUILD_FLAVOR);
+        if (!TextUtils.isEmpty(BuildConfig.SDK_DEPENDENCY)) {
+            builder.append("_" + BuildConfig.SDK_DEPENDENCY);
+        }
+        if (!TextUtils.isEmpty(BuildConfig.SDK_BUILD_TYPE)) {
+            builder.append("_" + BuildConfig.SDK_BUILD_TYPE);
+        }
+        return builder.toString();
+    }
 }

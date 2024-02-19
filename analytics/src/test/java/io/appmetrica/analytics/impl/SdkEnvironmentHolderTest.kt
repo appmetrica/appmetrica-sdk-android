@@ -75,6 +75,13 @@ class SdkEnvironmentHolderTest : CommonTest() {
         on { PhoneUtils.getDeviceType(any(), any()) } doReturn DeviceTypeValues.PHONE
     }
 
+    private val sdkBuildType = "sdk_build_type"
+
+    @get:Rule
+    val sdkBuildTypeMockedStaticRule = staticRule<SdkUtils> {
+        on { SdkUtils.formSdkBuildType() } doReturn sdkBuildType
+    }
+
     private val listener: SdkEnvironmentHolder.Listener = mock()
 
     private val sdkEnvironmentHolder: SdkEnvironmentHolder by setUp { SdkEnvironmentHolder(context) }
@@ -286,8 +293,7 @@ class SdkEnvironmentHolderTest : CommonTest() {
                     .checkField("sdkBuildNumber", BuildConfig.BUILD_NUMBER)
                     .checkField(
                         "sdkBuildType",
-                        "${BuildConfig.SDK_BUILD_FLAVOR}_${BuildConfig.SDK_DEPENDENCY}" +
-                            "_${BuildConfig.SDK_BUILD_TYPE}"
+                        sdkBuildType
                     )
             }
             .checkField("deviceType", DeviceTypeValues.PHONE)
