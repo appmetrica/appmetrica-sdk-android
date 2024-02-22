@@ -4,6 +4,7 @@ import android.content.Context
 import android.database.Cursor
 import android.net.Uri
 import android.text.TextUtils
+import io.appmetrica.analytics.coreutils.internal.parsing.ParseUtils
 import io.appmetrica.analytics.impl.DistributionSource
 import io.appmetrica.analytics.impl.SatelliteDataProvider
 import io.appmetrica.analytics.impl.SdkUtils
@@ -31,19 +32,23 @@ class PreloadInfoFromSatelliteProvider(private val context: Context) : Satellite
 
                     YLogger.info(tag, "Parsed tracking id: $trackingId, additional parameters: $additionalParams")
 
-                    SdkUtils.logAttribution(
-                        "Preload info from Satellite: {tracking id = %s, additional parameters = %s}",
-                        trackingId,
-                        additionalParams
-                    )
+                    if (TextUtils.isEmpty(trackingId) || ParseUtils.parseLong(trackingId) != null) {
+                        SdkUtils.logAttribution(
+                            "Preload info from Satellite: {tracking id = %s, additional parameters = %s}",
+                            trackingId,
+                            additionalParams
+                        )
 
-                    return PreloadInfoState(
-                        trackingId,
-                        additionalParams,
-                        !TextUtils.isEmpty(trackingId),
-                        false,
-                        DistributionSource.SATELLITE
-                    )
+                        return PreloadInfoState(
+                            trackingId,
+                            additionalParams,
+                            !TextUtils.isEmpty(trackingId),
+                            false,
+                            DistributionSource.SATELLITE
+                        )
+                    } else {
+                        SdkUtils.logAttributionW("Tracking id from Satellite is not a number.")
+                    }
                 } else {
                     SdkUtils.logAttribution("No Preload Info data in Satellite content provider")
                 }

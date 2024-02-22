@@ -37,6 +37,14 @@ internal class PreloadInfoDataParserTest : CommonTest() {
     }
 
     @Test
+    fun notANumberTrackingId() {
+        val values = ContentValues()
+        values.put(KEY_TRACKING_ID, "not a number tracking id")
+        values.put(KEY_ADDITIONAL_PARAMS, additionalParams.toString())
+        assertThat(parser.invoke(values)).isNull()
+    }
+
+    @Test
     fun noParameters() {
         val values = ContentValues()
         values.put(KEY_TRACKING_ID, trackingId)

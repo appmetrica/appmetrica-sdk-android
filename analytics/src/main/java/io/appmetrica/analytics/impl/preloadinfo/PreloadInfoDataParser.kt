@@ -2,6 +2,7 @@ package io.appmetrica.analytics.impl.preloadinfo
 
 import android.content.ContentValues
 import android.text.TextUtils
+import io.appmetrica.analytics.coreutils.internal.parsing.ParseUtils
 import io.appmetrica.analytics.impl.ContentProviderDataParser
 import io.appmetrica.analytics.impl.DistributionSource
 import io.appmetrica.analytics.impl.SdkUtils
@@ -18,6 +19,10 @@ internal class PreloadInfoDataParser : ContentProviderDataParser<PreloadInfoStat
         val trackingId = values.getAsString(KEY_TRACKING_ID)
         if (TextUtils.isEmpty(trackingId)) {
             SdkUtils.logAttributionW("Tracking id is empty")
+            return null
+        }
+        if (ParseUtils.parseLong(trackingId) == null) {
+            SdkUtils.logAttributionW("Tracking id from preload info content provider is not a number")
             return null
         }
         try {

@@ -82,6 +82,14 @@ class PreloadInfoFromSatelliteProviderTest : CommonTest() {
     }
 
     @Test
+    fun retrievePreloadInfoNotANumberTrackingId() {
+        whenever(cursor.moveToFirst()).thenReturn(true)
+        whenever(cursor.getString(trackingIdColumn)).thenReturn("not-a-number-tracking-id")
+        whenever(cursor.getString(additionalParamsColumn)).thenReturn(additionalParams.toString())
+        assertThat(provider.invoke()).isNull()
+    }
+
+    @Test
     fun retrievePreloadInfoNoAdditionalParams() {
         whenever(cursor.moveToFirst()).thenReturn(true)
         whenever(cursor.getString(trackingIdColumn)).thenReturn(trackingId)

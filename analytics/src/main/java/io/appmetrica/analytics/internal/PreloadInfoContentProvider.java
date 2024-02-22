@@ -69,7 +69,7 @@ public class PreloadInfoContentProvider extends ContentProvider {
                     );
                     break;
                 default:
-                    SdkUtils.logAttributionW("Bad content provider uri: %s", uri);
+                    SdkUtils.logAttributionW("Bad content provider uri.");
                     YLogger.info(TAG, "Bad uri: " + uri);
                     break;
             }
