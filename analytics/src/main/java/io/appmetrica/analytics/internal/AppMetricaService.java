@@ -55,8 +55,8 @@ public class AppMetricaService extends Service {
         } else {
             SERVICE_CORE.updateCallback(mCallback);
         }
-        SERVICE_CORE.onCreate();
         GlobalServiceLocator.getInstance().initSelfDiagnosticReporterStorage(new SelfProcessReporter(SERVICE_CORE));
+        SERVICE_CORE.onCreate();
     }
 
     @Override

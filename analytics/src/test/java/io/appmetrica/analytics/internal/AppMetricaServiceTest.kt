@@ -6,6 +6,7 @@ import android.content.res.Configuration
 import android.net.Uri
 import io.appmetrica.analytics.impl.AppMetricaServiceCoreExecutionDispatcher
 import io.appmetrica.analytics.impl.AppMetricaServiceCoreImpl
+import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.service.AppMetricaServiceAction
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
@@ -19,6 +20,7 @@ import org.junit.runner.RunWith
 import org.mockito.kotlin.any
 import org.mockito.kotlin.clearInvocations
 import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.inOrder
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.spy
@@ -73,6 +75,17 @@ class AppMetricaServiceTest : CommonTest() {
         assertThat(metricaCoreExecutionDispatcherMockedConstructionRule.constructionMock.constructed()).hasSize(1)
         verify(mockedCore).updateCallback(any())
         verify(mockedCore).onCreate()
+    }
+
+    @Test
+    fun `onCreate calls order`() {
+        metricaService.onCreate()
+        val globalServiceLocator = GlobalServiceLocator.getInstance()
+        val metricaCore = metricaCoreExecutionDispatcherMockedConstructionRule.constructionMock.constructed().first()
+        inOrder(globalServiceLocator, metricaCore) {
+            globalServiceLocator.initSelfDiagnosticReporterStorage(any())
+            metricaCore.onCreate()
+        }
     }
 
     @Test
