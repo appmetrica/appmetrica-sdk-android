@@ -7,7 +7,9 @@ import io.appmetrica.analytics.coreapi.internal.data.Converter
 import io.appmetrica.analytics.coreapi.internal.data.JsonParser
 import io.appmetrica.analytics.coreapi.internal.permission.PermissionStrategy
 import io.appmetrica.analytics.impl.GlobalServiceLocator
+import io.appmetrica.analytics.impl.IReporterExtended
 import io.appmetrica.analytics.impl.permissions.NeverForbidPermissionStrategy
+import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade
 import io.appmetrica.analytics.impl.startup.StartupState
 import io.appmetrica.analytics.modulesapi.internal.AskForPermissionStrategyModuleProvider
 import io.appmetrica.analytics.modulesapi.internal.LocationExtension
@@ -22,19 +24,27 @@ import io.appmetrica.analytics.modulesapi.internal.event.ModuleEventHandlerFacto
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
 import io.appmetrica.analytics.testutils.MockedConstructionRule
+import io.appmetrica.analytics.testutils.on
+import io.appmetrica.analytics.testutils.staticRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.any
+import org.mockito.kotlin.argumentCaptor
+import org.mockito.kotlin.clearInvocations
 import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.doThrow
 import org.mockito.kotlin.inOrder
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoMoreInteractions
+import org.mockito.kotlin.verifyZeroInteractions
 import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
+import kotlin.RuntimeException
 
 @RunWith(RobolectricTestRunner::class)
 internal class ModulesControllerTest : CommonTest() {
@@ -150,6 +160,13 @@ internal class ModulesControllerTest : CommonTest() {
 
     @get:Rule
     val globalServiceLocatorRule = GlobalServiceLocatorRule()
+
+    private val selfReporter = mock<IReporterExtended>()
+
+    @get:Rule
+    val selfReporterFacadeMockedStaticRule = staticRule<AppMetricaSelfReportFacade> {
+        on { AppMetricaSelfReportFacade.getReporter() } doReturn selfReporter
+    }
 
     private lateinit var modulesController: ModulesController
     private lateinit var moduleEventHandlersHolder: ModuleEventHandlersHolder
@@ -377,6 +394,28 @@ internal class ModulesControllerTest : CommonTest() {
     }
 
     @Test
+    fun `collectModuleServiceDatabases if module throw exception`() {
+        modulesController.registerModule(firstModule)
+        modulesController.registerModule(secondModule)
+
+        val exception = RuntimeException()
+        doThrow(exception).whenever(firstModule).moduleServicesDatabase
+
+        assertThat(modulesController.collectModuleServiceDatabases()).containsExactly(secondModuleServicesDatabase)
+
+        verify(selfReporter).reportEvent(
+            "module_errors",
+            mapOf(firstModuleIdentifier to mapOf ("db" to exception.stackTraceToString()))
+        )
+
+        clearInvocations(firstModule, secondModule)
+
+        modulesController.initServiceSide(serviceContext, startupState)
+        verify(secondModule).initServiceSide(serviceContext, secondModuleRemoteConfig)
+        verifyZeroInteractions(firstModule)
+    }
+
+    @Test
     fun collectRemoteConfigControllersWithSeveralModules() {
         modulesController.registerModule(firstModule)
         modulesController.registerModule(secondModule)
@@ -428,6 +467,28 @@ internal class ModulesControllerTest : CommonTest() {
             verify(moduleEventHandlersHolder).register(secondModuleIdentifier, secondModuleEventHandlerFactory)
             verify(lightModule).initServiceSide(serviceContext, moduleWithoutRemoteConfigFullConfig)
         }
+    }
+
+    @Test
+    fun `initServiceSide if module throw exception`() {
+        modulesController.registerModule(firstModule)
+        modulesController.registerModule(secondModule)
+
+        val exception = RuntimeException()
+        doThrow(exception).whenever(firstModule).initServiceSide(serviceContext, firstModuleRemoteConfig)
+
+        modulesController.initServiceSide(serviceContext, startupState)
+
+        verify(selfReporter).reportEvent(
+            "module_errors",
+            mapOf(firstModuleIdentifier to mapOf ("init" to exception.stackTraceToString()))
+        )
+
+        clearInvocations(firstModule, secondModule)
+        modulesController.onStartupStateChanged(startupState)
+
+        verifyZeroInteractions(firstModule)
+        verify(secondModuleConfigUpdateListener).onRemoteConfigUpdated(secondModuleRemoteConfig)
     }
 
     @Test

@@ -7,6 +7,7 @@ import io.appmetrica.analytics.coreapi.internal.permission.PermissionStrategy
 import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.StartupStateObserver
 import io.appmetrica.analytics.impl.permissions.DefaultAskForPermissionStrategyProvider
+import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade
 import io.appmetrica.analytics.impl.startup.StartupState
 import io.appmetrica.analytics.logger.internal.YLogger
 import io.appmetrica.analytics.modulesapi.internal.AskForPermissionStrategyModuleProvider
@@ -40,7 +41,6 @@ internal class ModulesController :
         val result = modules.flatMap { module ->
             module.remoteConfigExtensionConfiguration?.getFeatures() ?: emptyList()
         }
-
         YLogger.info(tag, "Collected features from modules: $result")
 
         return result
@@ -73,16 +73,31 @@ internal class ModulesController :
 
     override fun chooseLocationSourceController(): ModuleLocationSourcesController? {
         YLogger.info(tag, "Collect location source controller")
-        return modules.mapNotNull { it.locationExtension?.locationSourcesController }.firstOrNull()
+        return modules.firstNotNullOfOrNull { it.locationExtension?.locationSourcesController }
     }
 
     override fun chooseLocationAppStateControlToggle(): Toggle? {
         YLogger.info(tag, "Collect location app state control toggle")
-        return modules.mapNotNull { it.locationExtension?.locationControllerAppStateToggle }.firstOrNull()
+        return modules.firstNotNullOfOrNull { it.locationExtension?.locationControllerAppStateToggle }
     }
 
-    override fun collectModuleServiceDatabases(): List<ModuleServicesDatabase> =
-        modules.mapNotNull { it.moduleServicesDatabase }
+    override fun collectModuleServiceDatabases(): List<ModuleServicesDatabase> {
+        val wrongModules = hashSetOf<ModuleEntryPoint<Any>>()
+        val result = arrayListOf<ModuleServicesDatabase>()
+        modules.mapNotNull { module ->
+            try {
+                module.moduleServicesDatabase?.let { result.add(it) }
+            } catch (e: Throwable) {
+                wrongModules.add(module)
+                YLogger.error("$tag [${module.identifier}]", e)
+                reportSelfErrorEvent(module.identifier, "db", e)
+            }
+        }
+        YLogger.warning(tag, "Disabling defective modules: ${wrongModules.joinToString(", ")}")
+        modules.removeAll(wrongModules)
+
+        return result
+    }
 
     override fun registerModule(moduleEntryPoint: ModuleEntryPoint<Any>) {
         YLogger.info(tag, "Register new module with identifier = ${moduleEntryPoint.identifier}")
@@ -104,16 +119,25 @@ internal class ModulesController :
 
     override fun initServiceSide(serviceContext: ServiceContext, startupState: StartupState) {
         YLogger.info(tag, "Init service side. Total modules count = ${modules.size}")
+        val modulesWithProblems = hashSetOf<ModuleEntryPoint<Any>>()
         modules.forEach { module ->
-            val configProvider = ModuleRemoteConfigProvider(startupState)
-            val config = configProvider.getRemoteConfigForModule(module.identifier)
-            module.initServiceSide(serviceContext, config)
+            try {
+                val configProvider = ModuleRemoteConfigProvider(startupState)
+                val config = configProvider.getRemoteConfigForModule(module.identifier)
+                module.initServiceSide(serviceContext, config)
 
-            module.moduleEventHandlerFactory?.let {
-                YLogger.info(tag, "Register new event handler with identifier = ${module.identifier}")
-                GlobalServiceLocator.getInstance().moduleEventHandlersHolder.register(module.identifier, it)
+                module.moduleEventHandlerFactory?.let {
+                    YLogger.info(tag, "Register new event handler with identifier = ${module.identifier}")
+                    GlobalServiceLocator.getInstance().moduleEventHandlersHolder.register(module.identifier, it)
+                }
+            } catch (e: Throwable) {
+                YLogger.error("$tag [${module.identifier}]", e)
+                reportSelfErrorEvent(module.identifier, "init", e)
+                modulesWithProblems.add(module)
             }
         }
+        YLogger.warning(tag, "Disabling defective modules: ${modulesWithProblems.joinToString(", ")}")
+        modules.removeAll(modulesWithProblems)
     }
 
     private fun registerAskForPermissionStrategyIfNeeded(moduleEntryPoint: ModuleEntryPoint<Any>) {
@@ -126,5 +150,12 @@ internal class ModulesController :
             )
             askForPermissionStrategyProvider = moduleEntryPoint
         }
+    }
+
+    private fun reportSelfErrorEvent(moduleIdentifier: String, tag: String, throwable: Throwable) {
+        AppMetricaSelfReportFacade.getReporter().reportEvent(
+            "module_errors",
+            mapOf(moduleIdentifier to mapOf(tag to throwable.stackTraceToString()))
+        )
     }
 }
