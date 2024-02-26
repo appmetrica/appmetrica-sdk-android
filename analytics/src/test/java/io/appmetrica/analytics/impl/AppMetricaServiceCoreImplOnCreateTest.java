@@ -4,7 +4,8 @@ import android.content.Context;
 import io.appmetrica.analytics.coreapi.internal.backport.Consumer;
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
 import io.appmetrica.analytics.coreutils.internal.io.FileUtils;
-import io.appmetrica.analytics.coreutils.internal.services.ActivationBarrier;
+import io.appmetrica.analytics.coreutils.internal.services.UtilityServiceProvider;
+import io.appmetrica.analytics.coreutils.internal.services.WaitForActivationDelayBarrier;
 import io.appmetrica.analytics.impl.component.clients.ClientRepository;
 import io.appmetrica.analytics.impl.core.CoreImplFirstCreateTaskLauncher;
 import io.appmetrica.analytics.impl.core.CoreImplFirstCreateTaskLauncherProvider;
@@ -22,7 +23,6 @@ import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import io.appmetrica.analytics.testutils.MockedConstructionRule;
 import io.appmetrica.analytics.testutils.MockedStaticRule;
 import io.appmetrica.analytics.testutils.TestUtils;
-import io.appmetrica.analytics.testutils.rules.coreutils.UtilityServiceLocatorRule;
 import java.io.File;
 import org.junit.Before;
 import org.junit.Rule;
@@ -75,14 +75,15 @@ public class AppMetricaServiceCoreImplOnCreateTest extends CommonTest {
     @Mock
     private ReportConsumer reportConsumer;
     @Mock
-    private ActivationBarrier activationBarrier;
+    private WaitForActivationDelayBarrier activationBarrier;
 
     private AppMetricaServiceCoreImpl mMetricaCore;
 
     @Rule
     public GlobalServiceLocatorRule mRule = new GlobalServiceLocatorRule();
     @Rule
-    public UtilityServiceLocatorRule utilityServiceLocatorMockingRule = new UtilityServiceLocatorRule();
+    public MockedConstructionRule<UtilityServiceProvider> utilitiesMockedConstructionRule =
+        new MockedConstructionRule<>(UtilityServiceProvider.class);
     @Rule
     public MockedConstructionRule<ServiceContextFacade> serviceContextFacadeMockedRule =
         new MockedConstructionRule<>(ServiceContextFacade.class);

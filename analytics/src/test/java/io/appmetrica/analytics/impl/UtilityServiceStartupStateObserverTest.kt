@@ -1,10 +1,9 @@
 package io.appmetrica.analytics.impl
 
 import io.appmetrica.analytics.coreutils.internal.services.UtilityServiceConfiguration
-import io.appmetrica.analytics.coreutils.internal.services.UtilityServiceLocator
+import io.appmetrica.analytics.coreutils.internal.services.UtilityServiceProvider
 import io.appmetrica.analytics.impl.startup.StartupState
 import io.appmetrica.analytics.testutils.MockedConstructionRule
-import io.appmetrica.analytics.testutils.rules.coreutils.UtilityServiceLocatorRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Rule
@@ -22,16 +21,16 @@ internal class UtilityServiceStartupStateObserverTest {
         on { obtainServerTime } doReturn obtainServerTime
     }
 
+    private val utilitiesServiceProvider: UtilityServiceProvider = mock()
+
     @get:Rule
     val updateConfigurationMockedRule = MockedConstructionRule(UtilityServiceConfiguration::class.java)
-    @get:Rule
-    val utilityServiceLocatorRule = UtilityServiceLocatorRule()
 
     private lateinit var utilityServiceStartupStateObserver: UtilityServiceStartupStateObserver
 
     @Before
     fun setUp() {
-        utilityServiceStartupStateObserver = UtilityServiceStartupStateObserver()
+        utilityServiceStartupStateObserver = UtilityServiceStartupStateObserver(utilitiesServiceProvider)
     }
 
     @Test
@@ -41,7 +40,7 @@ internal class UtilityServiceStartupStateObserverTest {
         assertThat(updateConfigurationMockedRule.constructionMock.constructed()).hasSize(1)
         assertThat(updateConfigurationMockedRule.argumentInterceptor.flatArguments())
             .containsExactly(firstStartupServerTime, obtainServerTime)
-        verify(UtilityServiceLocator.instance)
+        verify(utilitiesServiceProvider)
             .updateConfiguration(updateConfigurationMockedRule.constructionMock.constructed()[0])
     }
 }

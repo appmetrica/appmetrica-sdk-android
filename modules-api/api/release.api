@@ -144,11 +144,14 @@ public interface io.appmetrica.analytics.modulesapi.internal.RemoteConfigUpdateL
 }
 
 public interface io.appmetrica.analytics.modulesapi.internal.ServiceContext {
+    public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.servicecomponents.ActivationBarrier getActivationBarrier()
     public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.servicecomponents.applicationstate.ApplicationStateProvider getApplicationStateProvider()
     public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.servicecomponents.batteryinfo.ChargeTypeProvider getChargeTypeProvider()
     public abstract [NonNull] android.content.Context getContext()
+    public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.crypto.CryptoProvider getCryptoProvider()
     public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.control.DataSendingRestrictionController getDataSendingRestrictionController()
     public abstract [NonNull] io.appmetrica.analytics.modulesapi.internal.ExecutorProvider getExecutorProvider()
+    public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.servicecomponents.FirstExecutionConditionService getFirstExecutionConditionService()
     public abstract [NonNull] io.appmetrica.analytics.modulesapi.internal.LocationServiceApi getLocationServiceApi()
     public abstract [NonNull] io.appmetrica.analytics.modulesapi.internal.ModuleLifecycleController getModuleLifecycleController()
     public abstract [NonNull] io.appmetrica.analytics.modulesapi.internal.NetworkContext getNetworkContext()
@@ -165,7 +168,10 @@ public interface io.appmetrica.analytics.modulesapi.internal.ServiceWakeLock {
 }
 
 public interface io.appmetrica.analytics.modulesapi.internal.StorageProvider {
+    public abstract [Nullable] java.io.File getAppDataStorage()
+    public abstract [Nullable] java.io.File getAppFileStorage()
     public abstract [NonNull] android.database.sqlite.SQLiteOpenHelper getDbStorage()
+    public abstract [Nullable] java.io.File getSdkDataStorage()
     public abstract [NonNull] io.appmetrica.analytics.modulesapi.internal.ModulePreferences legacyModulePreferences()
     public abstract [NonNull] io.appmetrica.analytics.modulesapi.internal.ModulePreferences modulePreferences([NonNull] String)
 }

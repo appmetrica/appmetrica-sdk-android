@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.coreutils.internal.services;
 
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
+import io.appmetrica.analytics.testutils.CommonTest;
 import java.lang.reflect.Field;
 import java.util.concurrent.TimeUnit;
 import org.junit.Before;
@@ -21,39 +22,41 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
-public class FirstExecutionConditionServiceTest {
+public class FirstExecutionConditionServiceImplTest extends CommonTest {
 
-    private FirstExecutionConditionService mFirstExecutionConditionService;
-    private FirstExecutionConditionService.FirstExecutionHandler mFirstExecutionHandler;
+    private FirstExecutionConditionServiceImpl mFirstExecutionConditionServiceImpl;
+    private FirstExecutionConditionServiceImpl.FirstExecutionHandler mFirstExecutionHandler;
     private final int mLaunchDelay = 3;
 
     @Mock
-    private FirstExecutionConditionService.FirstExecutionConditionChecker mFirstExecutionConditionChecker;
+    private FirstExecutionConditionServiceImpl.FirstExecutionConditionChecker mFirstExecutionConditionChecker;
     @Mock
     private ICommonExecutor mExecutor;
     @Mock
-    private ActivationBarrier.ActivationBarrierHelper mActivationBarrierHelper;
+    private WaitForActivationDelayBarrier.ActivationBarrierHelper mActivationBarrierHelper;
     @Mock
     private UtilityServiceConfiguration utilityServiceConfiguration;
+    @Mock
+    private UtilityServiceProvider utilityServiceProvider;
 
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        mFirstExecutionConditionService = new FirstExecutionConditionService();
-        mFirstExecutionHandler = mFirstExecutionConditionService
+        mFirstExecutionConditionServiceImpl = new FirstExecutionConditionServiceImpl(utilityServiceProvider);
+        mFirstExecutionHandler = mFirstExecutionConditionServiceImpl
                 .createFirstExecutionHandler(mExecutor, mActivationBarrierHelper, mFirstExecutionConditionChecker);
     }
 
     @Test
     public void testSetDelay() {
         final long delay = 10;
-        mFirstExecutionHandler.setDelaySeconds(delay);
-        verify(mFirstExecutionConditionChecker).setDelay(delay, TimeUnit.SECONDS);
+        mFirstExecutionHandler.setInitialDelaySeconds(delay);
+        verify(mFirstExecutionConditionChecker).setDelaySeconds(delay);
     }
 
     @Test
     public void testOnStartupChanged() {
-        mFirstExecutionConditionService.updateConfig(utilityServiceConfiguration);
+        mFirstExecutionConditionServiceImpl.updateConfig(utilityServiceConfiguration);
         verify(mFirstExecutionConditionChecker).updateConfig(same(utilityServiceConfiguration));
     }
 
@@ -95,11 +98,11 @@ public class FirstExecutionConditionServiceTest {
     public static class FirstExecutionConditionCheckerTest {
 
         @Mock
-        private FirstExecutionConditionService.FirstExecutionDelayChecker mFirstExecutionDelayChecker;
+        private FirstExecutionConditionServiceImpl.FirstExecutionDelayChecker mFirstExecutionDelayChecker;
         @Mock
         private UtilityServiceConfiguration configuration;
 
-        private FirstExecutionConditionService.FirstExecutionConditionChecker mFirstExecutionConditionChecker;
+        private FirstExecutionConditionServiceImpl.FirstExecutionConditionChecker mFirstExecutionConditionChecker;
         private final long mFirstStartupTime = 1000;
         private final long mLastStartupTime = 2000;
         private final long mDelay = 10;
@@ -114,7 +117,7 @@ public class FirstExecutionConditionServiceTest {
 
         @Test
         public void testDefault() {
-            mFirstExecutionConditionChecker = new FirstExecutionConditionService.FirstExecutionConditionChecker(
+            mFirstExecutionConditionChecker = new FirstExecutionConditionServiceImpl.FirstExecutionConditionChecker(
                     null,
                     mFirstExecutionDelayChecker,
                     "Some string tag"
@@ -128,7 +131,7 @@ public class FirstExecutionConditionServiceTest {
 
         @Test
         public void testIfDelayPassed() {
-            mFirstExecutionConditionChecker = new FirstExecutionConditionService.FirstExecutionConditionChecker(
+            mFirstExecutionConditionChecker = new FirstExecutionConditionServiceImpl.FirstExecutionConditionChecker(
                     configuration,
                     mFirstExecutionDelayChecker,
                     "Tag"
@@ -138,13 +141,13 @@ public class FirstExecutionConditionServiceTest {
                     mLastStartupTime,
                     TimeUnit.SECONDS.toMillis(mDelay)
             )).thenReturn(true);
-            mFirstExecutionConditionChecker.setDelay(mDelay, TimeUnit.SECONDS);
+            mFirstExecutionConditionChecker.setDelaySeconds(mDelay);
             assertThat(mFirstExecutionConditionChecker.shouldExecute()).isTrue();
         }
 
         @Test
         public void testIfDelayDidNotPass() {
-            mFirstExecutionConditionChecker = new FirstExecutionConditionService.FirstExecutionConditionChecker(
+            mFirstExecutionConditionChecker = new FirstExecutionConditionServiceImpl.FirstExecutionConditionChecker(
                     configuration,
                     mFirstExecutionDelayChecker,
                     "Tag"
@@ -154,13 +157,13 @@ public class FirstExecutionConditionServiceTest {
                     mLastStartupTime,
                     TimeUnit.SECONDS.toMillis(mDelay)
             )).thenReturn(false);
-            mFirstExecutionConditionChecker.setDelay(mDelay, TimeUnit.SECONDS);
+            mFirstExecutionConditionChecker.setDelaySeconds(mDelay);
             assertThat(mFirstExecutionConditionChecker.shouldExecute()).isFalse();
         }
 
         @Test
         public void onStartupChanged() {
-            mFirstExecutionConditionChecker = new FirstExecutionConditionService.FirstExecutionConditionChecker(
+            mFirstExecutionConditionChecker = new FirstExecutionConditionServiceImpl.FirstExecutionConditionChecker(
                     null,
                     mFirstExecutionDelayChecker,
                     "Tag"
@@ -171,13 +174,13 @@ public class FirstExecutionConditionServiceTest {
                     TimeUnit.SECONDS.toMillis(mDelay)
             )).thenReturn(true);
             mFirstExecutionConditionChecker.updateConfig(configuration);
-            mFirstExecutionConditionChecker.setDelay(mDelay, TimeUnit.SECONDS);
+            mFirstExecutionConditionChecker.setDelaySeconds(mDelay);
             assertThat(mFirstExecutionConditionChecker.shouldExecute()).isTrue();
         }
 
         @Test
         public void testAfterFirstExecution() {
-            mFirstExecutionConditionChecker = new FirstExecutionConditionService.FirstExecutionConditionChecker(
+            mFirstExecutionConditionChecker = new FirstExecutionConditionServiceImpl.FirstExecutionConditionChecker(
                     null,
                     mFirstExecutionDelayChecker,
                     "Tag"
@@ -191,7 +194,7 @@ public class FirstExecutionConditionServiceTest {
         @Test
         public void tag() {
             String tag = "Some tag";
-            assertThat(new FirstExecutionConditionService.FirstExecutionConditionChecker(
+            assertThat(new FirstExecutionConditionServiceImpl.FirstExecutionConditionChecker(
                     null, mFirstExecutionDelayChecker, tag
             ).tag).isEqualTo(tag);
         }

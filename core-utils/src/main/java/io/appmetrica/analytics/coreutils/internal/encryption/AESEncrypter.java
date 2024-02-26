@@ -1,12 +1,18 @@
 package io.appmetrica.analytics.coreutils.internal.encryption;
 
 import android.annotation.SuppressLint;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
+import io.appmetrica.analytics.coreapi.internal.crypto.Encrypter;
+import io.appmetrica.analytics.logger.internal.YLogger;
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
-public class AESEncrypter {
+public class AESEncrypter implements Encrypter {
+
+    public static final String TAG = "[AESEncrypter]";
 
     public static final String DEFAULT_ALGORITHM = "AES/CBC/PKCS5Padding";
 
@@ -25,26 +31,40 @@ public class AESEncrypter {
     }
 
     @SuppressLint("TrulyRandom")
-    public byte[] encrypt(byte[] input) throws Throwable {
-        SecretKeySpec secretKeySpec = new SecretKeySpec(mPassword, SECRET_KEY_ALGORITHM);
-        Cipher aesCipher = Cipher.getInstance(mAlgorithm);
-        IvParameterSpec spec = new IvParameterSpec(mIV);
-        aesCipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, spec);
+    @Override
+    @Nullable
+    public byte[] encrypt(@NonNull byte[] input) {
+        try {
+            SecretKeySpec secretKeySpec = new SecretKeySpec(mPassword, SECRET_KEY_ALGORITHM);
+            Cipher aesCipher = Cipher.getInstance(mAlgorithm);
+            IvParameterSpec spec = new IvParameterSpec(mIV);
+            aesCipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, spec);
 
-        return aesCipher.doFinal(input);
+            return aesCipher.doFinal(input);
+        } catch (Throwable e) {
+            YLogger.error(TAG, e);
+        }
+        return null;
     }
 
     @SuppressLint("TrulyRandom")
-    public byte[] decrypt(byte[] input) throws Throwable {
+    @Nullable
+    public byte[] decrypt(@NonNull byte[] input)  {
         return decrypt(input, 0, input.length);
     }
 
-    public byte[] decrypt(byte[] input, int offset, int length) throws Throwable {
-        SecretKeySpec secretKeySpec = new SecretKeySpec(mPassword, SECRET_KEY_ALGORITHM);
-        Cipher aesCipher = Cipher.getInstance(mAlgorithm);
-        IvParameterSpec spec = new IvParameterSpec(mIV);
-        aesCipher.init(Cipher.DECRYPT_MODE, secretKeySpec, spec);
-        return aesCipher.doFinal(input, offset, length);
+    @Nullable
+    public byte[] decrypt(@NonNull byte[] input, int offset, int length) {
+        try {
+            SecretKeySpec secretKeySpec = new SecretKeySpec(mPassword, SECRET_KEY_ALGORITHM);
+            Cipher aesCipher = Cipher.getInstance(mAlgorithm);
+            IvParameterSpec spec = new IvParameterSpec(mIV);
+            aesCipher.init(Cipher.DECRYPT_MODE, secretKeySpec, spec);
+            return aesCipher.doFinal(input, offset, length);
+        } catch (Throwable e) {
+            YLogger.error(TAG, e);
+        }
+        return null;
     }
 
     @VisibleForTesting

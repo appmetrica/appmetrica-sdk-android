@@ -1,10 +1,11 @@
 package io.appmetrica.analytics.coreutils.internal.services;
 
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
+import io.appmetrica.analytics.coreapi.internal.servicecomponents.ActivationBarrierCallback;
 import io.appmetrica.analytics.coreutils.internal.time.SystemTimeProvider;
+import io.appmetrica.analytics.testutils.CommonTest;
 import java.util.Arrays;
 import java.util.Collection;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,26 +29,26 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @RunWith(ParameterizedRobolectricTestRunner.class)
-public class ActivationBarrierTest {
+public class WaitForActivationDelayBarrierTest extends CommonTest {
 
     @Mock
     private SystemTimeProvider mTimeProvider;
     @Mock
     private ICommonExecutor mExecutor;
     @Mock
-    private ActivationBarrier.IActivationBarrierCallback mCallback;
+    private ActivationBarrierCallback mCallback;
 
     private long mActivationTimestamp;
     private long mRequestTimestamp;
     private long mRequestedWaiting;
     private long mExpectedDelay;
 
-    private ActivationBarrier mActivationBarrier;
+    private WaitForActivationDelayBarrier mActivationBarrier;
 
-    public ActivationBarrierTest(long activationTimestamp,
-                                 long requestTimestamp,
-                                 long requestedWaiting,
-                                 long expectedDelay) {
+    public WaitForActivationDelayBarrierTest(long activationTimestamp,
+                                             long requestTimestamp,
+                                             long requestedWaiting,
+                                             long expectedDelay) {
         mActivationTimestamp = activationTimestamp;
         mRequestTimestamp = requestTimestamp;
         mRequestedWaiting = requestedWaiting;
@@ -72,7 +73,7 @@ public class ActivationBarrierTest {
     public void setUp() {
         MockitoAnnotations.openMocks(this);
         when(mTimeProvider.currentTimeMillis()).thenReturn(mActivationTimestamp);
-        mActivationBarrier = new ActivationBarrier(mTimeProvider);
+        mActivationBarrier = new WaitForActivationDelayBarrier(mTimeProvider);
     }
 
     @Test
@@ -92,36 +93,29 @@ public class ActivationBarrierTest {
     }
 
     @RunWith(RobolectricTestRunner.class)
-    public static class ActivationBarrierHelperTest {
+    public static class WaitForActivationDelayBarrierHelperTest extends CommonTest {
 
         private final long delay = 5000;
-        private ActivationBarrier.ActivationBarrierHelper helper;
+        private WaitForActivationDelayBarrier.ActivationBarrierHelper helper;
 
         @Mock
-        private ActivationBarrier activationBarrier;
+        private WaitForActivationDelayBarrier activationBarrier;
         @Mock
         private Runnable runnable;
         @Mock
         private ICommonExecutor executor;
         @Mock
-        private UtilityServiceLocator mockedUtilityServiceLocator;
+        private UtilityServiceProvider mockedUtilityServiceProvider;
         @Captor
         private ArgumentCaptor<Runnable> runnableCaptor;
-
-        private UtilityServiceLocator originalUtilityServiceLocator;
+        @Mock
+        private UtilityServiceProvider originalUtilityServiceProvider;
 
         @Before
         public void setUp() {
             MockitoAnnotations.openMocks(this);
-            originalUtilityServiceLocator = UtilityServiceLocator.Companion.getInstance();
-            UtilityServiceLocator.Companion.setInstance(mockedUtilityServiceLocator);
-            when(mockedUtilityServiceLocator.getActivationBarrier()).thenReturn(activationBarrier);
-            helper = new ActivationBarrier.ActivationBarrierHelper(runnable, activationBarrier);
-        }
-
-        @After
-        public void tearDown() {
-            UtilityServiceLocator.Companion.setInstance(originalUtilityServiceLocator);
+            when(mockedUtilityServiceProvider.getActivationBarrier()).thenReturn(activationBarrier);
+            helper = new WaitForActivationDelayBarrier.ActivationBarrierHelper(runnable, activationBarrier);
         }
 
         @Test
@@ -129,13 +123,13 @@ public class ActivationBarrierTest {
             doAnswer(new Answer() {
                 @Override
                 public Object answer(InvocationOnMock invocation) throws Throwable {
-                    ActivationBarrier.IActivationBarrierCallback callback = invocation.getArgument(2);
+                    ActivationBarrierCallback callback = invocation.getArgument(2);
                     callback.onWaitFinished();
                     return null;
                 }
-            }).when(activationBarrier).subscribe(eq(delay), same(executor), any(ActivationBarrier.IActivationBarrierCallback.class));
+            }).when(activationBarrier).subscribe(eq(delay), same(executor), any(ActivationBarrierCallback.class));
             helper.subscribeIfNeeded(delay, executor);
-            verify(activationBarrier).subscribe(eq(delay), same(executor), any(ActivationBarrier.IActivationBarrierCallback.class));
+            verify(activationBarrier).subscribe(eq(delay), same(executor), any(ActivationBarrierCallback.class));
             verify(runnable, times(1)).run();
             helper.subscribeIfNeeded(delay, executor);
             verifyNoMoreInteractions(activationBarrier);

@@ -1,16 +1,18 @@
 package io.appmetrica.analytics.impl.core
 
-import io.appmetrica.analytics.coreutils.internal.services.ActivationBarrier
-import io.appmetrica.analytics.coreutils.internal.services.UtilityServiceLocator
+import io.appmetrica.analytics.coreapi.internal.servicecomponents.ActivationBarrierCallback
+import io.appmetrica.analytics.coreutils.internal.services.UtilityServiceProvider
+import io.appmetrica.analytics.coreutils.internal.services.WaitForActivationDelayBarrier
 import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
-import io.appmetrica.analytics.testutils.rules.coreutils.UtilityServiceLocatorRule
+import io.appmetrica.analytics.testutils.constructionRule
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.argumentCaptor
+import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
@@ -24,14 +26,11 @@ class AppMetricaServiceCoreImplFirstCreateTaskLauncherTest : CommonTest() {
     @get:Rule
     val globalServiceLocatorRule = GlobalServiceLocatorRule()
 
-    @get:Rule
-    val utilityServiceLocatorRule = UtilityServiceLocatorRule()
-
     private val firstTask = mock<Runnable>()
     private val secondTask = mock<Runnable>()
     private val tasks = listOf(firstTask, secondTask)
 
-    private val activationBarrierCallbackCaptor = argumentCaptor<ActivationBarrier.IActivationBarrierCallback>()
+    private val activationBarrierCallbackCaptor = argumentCaptor<ActivationBarrierCallback>()
 
     private lateinit var coreImplFirstCreateTaskLauncher: CoreImplFirstCreateTaskLauncher
 
@@ -44,7 +43,7 @@ class AppMetricaServiceCoreImplFirstCreateTaskLauncherTest : CommonTest() {
     fun run() {
         coreImplFirstCreateTaskLauncher.run()
         val executor = GlobalServiceLocator.getInstance().serviceExecutorProvider.defaultExecutor
-        verify(UtilityServiceLocator.instance.activationBarrier)
+        verify(GlobalServiceLocator.getInstance().activationBarrier)
             .subscribe(
                 eq(TimeUnit.SECONDS.toMillis(10)),
                 eq(executor),

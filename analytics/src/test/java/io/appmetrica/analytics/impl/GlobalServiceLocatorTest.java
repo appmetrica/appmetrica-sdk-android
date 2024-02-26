@@ -3,7 +3,9 @@ package io.appmetrica.analytics.impl;
 import android.content.Context;
 import io.appmetrica.analytics.coreapi.internal.data.ProtobufStateStorage;
 import io.appmetrica.analytics.coreapi.internal.identifiers.PlatformIdentifiers;
-import io.appmetrica.analytics.coreutils.internal.services.UtilityServiceLocator;
+import io.appmetrica.analytics.coreutils.internal.services.FirstExecutionConditionServiceImpl;
+import io.appmetrica.analytics.coreutils.internal.services.UtilityServiceProvider;
+import io.appmetrica.analytics.coreutils.internal.services.WaitForActivationDelayBarrier;
 import io.appmetrica.analytics.impl.clids.ClidsCandidatesHelper;
 import io.appmetrica.analytics.impl.clids.ClidsDataAwaiter;
 import io.appmetrica.analytics.impl.clids.ClidsInfo;
@@ -33,7 +35,6 @@ import io.appmetrica.analytics.testutils.ConstructionArgumentCaptor;
 import io.appmetrica.analytics.testutils.MockedConstructionRule;
 import io.appmetrica.analytics.testutils.MockedStaticRule;
 import io.appmetrica.analytics.testutils.TestUtils;
-import io.appmetrica.analytics.testutils.rules.coreutils.UtilityServiceLocatorRule;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -83,8 +84,6 @@ public class GlobalServiceLocatorTest extends CommonTest {
     public final MockedStaticRule<NetworkServiceLocator> networkServiceLocatorMockedStaticRule =
         new MockedStaticRule<>(NetworkServiceLocator.class);
     @Rule
-    public final UtilityServiceLocatorRule utilityServiceLocatorRule = new UtilityServiceLocatorRule();
-    @Rule
     public final MockedStaticRule<AppMetricaSelfReportFacade> appMetricaSelfReportFacadeMockedRule =
         new MockedStaticRule<>(AppMetricaSelfReportFacade.class);
     @Rule
@@ -120,6 +119,20 @@ public class GlobalServiceLocatorTest extends CommonTest {
     public final MockedConstructionRule<SdkEnvironmentHolder> sdkEnvironmentHolderMockedConstructionRule =
         new MockedConstructionRule<>(SdkEnvironmentHolder.class);
 
+    private final FirstExecutionConditionServiceImpl firstExecutionConditionService =
+        mock(FirstExecutionConditionServiceImpl.class);
+    private final WaitForActivationDelayBarrier activationBarrierCallback = mock(WaitForActivationDelayBarrier.class);
+
+    @Rule
+    public final MockedConstructionRule<UtilityServiceProvider> utilityServiceProviderMockedConstructionRule =
+        new MockedConstructionRule<>(UtilityServiceProvider.class, new MockedConstruction.MockInitializer<UtilityServiceProvider>() {
+            @Override
+            public void prepare(UtilityServiceProvider mock, MockedConstruction.Context context) throws Throwable {
+                when(mock.getActivationBarrier()).thenReturn(activationBarrierCallback);
+                when(mock.getFirstExecutionService()).thenReturn(firstExecutionConditionService);
+            }
+        });
+
     private GlobalServiceLocator mGlobalServiceLocator;
 
     @Before
@@ -141,16 +154,18 @@ public class GlobalServiceLocatorTest extends CommonTest {
         GlobalServiceLocator.init(mContext);
         mGlobalServiceLocator = GlobalServiceLocator.getInstance();
         mGlobalServiceLocator.initAsync();
+        UtilityServiceProvider utilityServiceProvider =
+            utilityServiceProviderMockedConstructionRule.getConstructionMock().constructed().get(0);
 
         StartupStateHolder startupStateHolder = startupStateHolder();
 
         InOrder inOrder = inOrder(
-            UtilityServiceLocator.getInstance(),
+            utilityServiceProvider,
             NetworkServiceLocator.getInstance(),
             startupStateHolder
         );
 
-        inOrder.verify(UtilityServiceLocator.getInstance()).initAsync();
+        inOrder.verify(utilityServiceProvider).initAsync();
         inOrder.verify(startupStateHolder).init(mContext);
         inOrder.verify(startupStateHolder)
             .registerObserver(utilityServiceStartupObserverMockedRule.getConstructionMock().constructed().get(0));
@@ -382,6 +397,28 @@ public class GlobalServiceLocatorTest extends CommonTest {
         assertThat(sdkEnvironmentHolderMockedConstructionRule.getConstructionMock().constructed()).hasSize(1);
         assertThat(sdkEnvironmentHolderMockedConstructionRule.getArgumentInterceptor().flatArguments())
             .containsExactly(mContext);
+    }
+
+    @Test
+    public void utilityServiceProvider() {
+        GlobalServiceLocator.init(mContext);
+
+        assertThat(utilityServiceProviderMockedConstructionRule.getConstructionMock().constructed()).hasSize(1);
+        assertThat(utilityServiceProviderMockedConstructionRule.getArgumentInterceptor().flatArguments()).isEmpty();
+    }
+
+    @Test
+    public void getFirstExecutionConditionService() {
+        GlobalServiceLocator.init(mContext);
+        assertThat(GlobalServiceLocator.getInstance().getFirstExecutionConditionService())
+            .isEqualTo(firstExecutionConditionService);
+    }
+
+    @Test
+    public void getActivationBarrier() {
+        GlobalServiceLocator.init(mContext);
+        assertThat(GlobalServiceLocator.getInstance().getActivationBarrier())
+            .isEqualTo(activationBarrierCallback);
     }
 
     private StartupStateHolder startupStateHolder() {

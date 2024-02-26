@@ -4,12 +4,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
+import io.appmetrica.analytics.coreapi.internal.servicecomponents.FirstExecutionConditionService;
+import io.appmetrica.analytics.coreapi.internal.servicecomponents.FirstExecutionDelayedTask;
 import io.appmetrica.analytics.logger.internal.YLogger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class FirstExecutionConditionService {
+public class FirstExecutionConditionServiceImpl implements FirstExecutionConditionService {
 
     private static final String TAG = "[FirstExecutionConditionChecker]";
 
@@ -29,7 +31,7 @@ public class FirstExecutionConditionService {
         private boolean firstExecutionAlreadyAllowed;
         private long lastUpdateConfigTime;
         private long initialUpdateConfigTime;
-        private long mDelay;
+        private long delay;
         public final String tag;
 
         @NonNull
@@ -41,13 +43,13 @@ public class FirstExecutionConditionService {
         }
 
         public FirstExecutionConditionChecker(@Nullable UtilityServiceConfiguration configuration,
-                                              @NonNull  FirstExecutionDelayChecker firstExecutionDelayChecker,
+                                              @NonNull FirstExecutionDelayChecker firstExecutionDelayChecker,
                                               @NonNull String tag) {
             mFirstExecutionDelayChecker = firstExecutionDelayChecker;
             firstExecutionAlreadyAllowed = false;
             initialUpdateConfigTime = configuration == null ? 0 : configuration.getInitialConfigTime();
             lastUpdateConfigTime = configuration == null ? 0 : configuration.getLastUpdateConfigTime();
-            mDelay = Long.MAX_VALUE;
+            delay = Long.MAX_VALUE;
             this.tag = tag;
             YLogger.info(TAG, "%s init with configuration: %s", tag, configuration);
         }
@@ -55,20 +57,20 @@ public class FirstExecutionConditionService {
         boolean shouldExecute() {
             YLogger.info(TAG, "%s shouldExecute: mHasFirstExecutionOccurred: %b, mFirstStartupServerTime: %d, " +
                     "mLastStartupServerTime: %d, mDelay: %d", tag, firstExecutionAlreadyAllowed,
-                    initialUpdateConfigTime, lastUpdateConfigTime, mDelay);
+                initialUpdateConfigTime, lastUpdateConfigTime, delay);
             if (firstExecutionAlreadyAllowed) {
                 return true;
             }
             return mFirstExecutionDelayChecker.delaySinceFirstStartupWasPassed(
-                    initialUpdateConfigTime,
-                    lastUpdateConfigTime,
-                    mDelay
+                initialUpdateConfigTime,
+                lastUpdateConfigTime,
+                delay
             );
         }
 
-        void setDelay(final long delay, @NonNull TimeUnit timeUnit) {
-            mDelay = timeUnit.toMillis(delay);
-            YLogger.info(TAG, "%s update delay with %d", tag, mDelay);
+        void setDelaySeconds(final long delaySeconds) {
+            delay = TimeUnit.SECONDS.toMillis(delaySeconds);
+            YLogger.info(TAG, "%s update delay with %d", tag, delay);
         }
 
         void setFirstExecutionAlreadyAllowed() {
@@ -79,82 +81,95 @@ public class FirstExecutionConditionService {
             initialUpdateConfigTime = configuration.getInitialConfigTime();
             lastUpdateConfigTime = configuration.getLastUpdateConfigTime();
             YLogger.info(TAG, "%s Update times from startup. mLastStartupServerTime: %d, mFirstStartupServerTime: %d",
-                    tag, lastUpdateConfigTime, initialUpdateConfigTime);
+                tag, lastUpdateConfigTime, initialUpdateConfigTime);
         }
     }
 
-    public static class FirstExecutionHandler {
+    public static class FirstExecutionHandler implements FirstExecutionDelayedTask {
 
         @NonNull
-        private FirstExecutionConditionChecker mFirstExecutionConditionChecker;
+        private final FirstExecutionConditionChecker firstExecutionConditionChecker;
         @NonNull
-        private final ActivationBarrier.ActivationBarrierHelper mActivationBarrierHelper;
+        private final WaitForActivationDelayBarrier.ActivationBarrierHelper activationBarrierHelper;
         @NonNull
-        private final ICommonExecutor mExecutor;
+        private final ICommonExecutor executor;
 
-        private FirstExecutionHandler(@NonNull ICommonExecutor executor,
-                                      @NonNull ActivationBarrier.ActivationBarrierHelper activationBarrierHelper,
-                                      @NonNull FirstExecutionConditionChecker firstExecutionConditionChecker) {
-            mActivationBarrierHelper = activationBarrierHelper;
-            mFirstExecutionConditionChecker = firstExecutionConditionChecker;
-            mExecutor = executor;
+        private FirstExecutionHandler(
+            @NonNull ICommonExecutor executor,
+            @NonNull WaitForActivationDelayBarrier.ActivationBarrierHelper activationBarrierHelper,
+            @NonNull FirstExecutionConditionChecker firstExecutionConditionChecker
+        ) {
+            this.activationBarrierHelper = activationBarrierHelper;
+            this.firstExecutionConditionChecker = firstExecutionConditionChecker;
+            this.executor = executor;
         }
 
         public void updateConfig(@NonNull UtilityServiceConfiguration configuration) {
-            mFirstExecutionConditionChecker.updateConfig(configuration);
+            firstExecutionConditionChecker.updateConfig(configuration);
         }
 
-        public void setDelaySeconds(final long delay) {
-            mFirstExecutionConditionChecker.setDelay(delay, TimeUnit.SECONDS);
+        @Override
+        public void setInitialDelaySeconds(long delaySeconds) {
+            firstExecutionConditionChecker.setDelaySeconds(delaySeconds);
         }
 
-        public boolean tryExecute(final int launchDelaySeconds) {
-            if (mFirstExecutionConditionChecker.shouldExecute()) {
+        @Override
+        public boolean tryExecute(final long launchDelaySeconds) {
+            if (firstExecutionConditionChecker.shouldExecute()) {
                 YLogger.info(TAG, "%s try execute with delay = %d. First execution conditions are met",
-                        mFirstExecutionConditionChecker.tag, 0);
-                mActivationBarrierHelper.subscribeIfNeeded(TimeUnit.SECONDS.toMillis(launchDelaySeconds), mExecutor);
-                mFirstExecutionConditionChecker.setFirstExecutionAlreadyAllowed();
+                    firstExecutionConditionChecker.tag, 0);
+                activationBarrierHelper.subscribeIfNeeded(TimeUnit.SECONDS.toMillis(launchDelaySeconds), executor);
+                firstExecutionConditionChecker.setFirstExecutionAlreadyAllowed();
                 return true;
             } else {
                 YLogger.info(TAG, "%s try execute with delay = %d. First execution conditions were not met",
-                        mFirstExecutionConditionChecker.tag, 0);
+                    firstExecutionConditionChecker.tag, 0);
                 return false;
             }
         }
 
         public boolean canExecute() {
-            boolean result = mFirstExecutionConditionChecker.shouldExecute();
+            boolean result = firstExecutionConditionChecker.shouldExecute();
             if (result) {
-                mFirstExecutionConditionChecker.setFirstExecutionAlreadyAllowed();
+                firstExecutionConditionChecker.setFirstExecutionAlreadyAllowed();
             }
             return result;
         }
     }
 
     @NonNull
-    private final List<FirstExecutionHandler> mFirstExecutionHandlers;
+    private final List<FirstExecutionHandler> mFirstExecutionHandlers = new ArrayList<>();
     @Nullable
     private UtilityServiceConfiguration configuration;
 
-    public FirstExecutionConditionService() {
-        mFirstExecutionHandlers = new ArrayList<FirstExecutionHandler>();
+    @NonNull
+    UtilityServiceProvider utilityServiceProvider;
+
+    public FirstExecutionConditionServiceImpl(@NonNull UtilityServiceProvider utilityServiceProvider) {
+        this.utilityServiceProvider = utilityServiceProvider;
     }
 
-    public synchronized FirstExecutionHandler createFirstExecutionHandler(@NonNull Runnable runnable,
-                                                                          @NonNull ICommonExecutor executor,
-                                                                          @NonNull String tag) {
+    @Override
+    @NonNull
+    public synchronized FirstExecutionDelayedTask createDelayedTask(@NonNull String tag,
+                                                                    @NonNull ICommonExecutor executor,
+                                                                    @NonNull Runnable runnable) {
         return createFirstExecutionHandler(
-                executor,
-                new ActivationBarrier.ActivationBarrierHelper(runnable),
-                new FirstExecutionConditionChecker(configuration, tag)
+            executor,
+            new WaitForActivationDelayBarrier.ActivationBarrierHelper(
+                runnable,
+                utilityServiceProvider.getActivationBarrier()
+            ),
+            new FirstExecutionConditionChecker(configuration, tag)
         );
     }
 
     @VisibleForTesting
+    @NonNull
     synchronized FirstExecutionHandler createFirstExecutionHandler(
-            @NonNull ICommonExecutor executor,
-            @NonNull ActivationBarrier.ActivationBarrierHelper actHelper,
-            @NonNull FirstExecutionConditionChecker checker
+        @NonNull ICommonExecutor executor,
+        @NonNull WaitForActivationDelayBarrier.ActivationBarrierHelper actHelper,
+        @NonNull FirstExecutionConditionChecker checker
     ) {
         FirstExecutionHandler firstExecutionHandler = new FirstExecutionHandler(executor, actHelper, checker);
         mFirstExecutionHandlers.add(firstExecutionHandler);

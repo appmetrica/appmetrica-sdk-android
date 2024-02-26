@@ -1,5 +1,6 @@
 package io.appmetrica.analytics.impl.modules
 
+import android.content.Context
 import android.database.sqlite.SQLiteOpenHelper
 import io.appmetrica.analytics.impl.db.preferences.PreferencesServiceDbStorage
 import io.appmetrica.analytics.testutils.CommonTest
@@ -11,6 +12,7 @@ import org.mockito.kotlin.mock
 
 internal class StorageProviderImplTest : CommonTest() {
 
+    private val context: Context = mock()
     private val preferenceServiceDbStorage = mock<PreferencesServiceDbStorage>()
     private val dbStorage = mock<SQLiteOpenHelper>()
     private val identifier = "moduleIdentifier"
@@ -21,7 +23,7 @@ internal class StorageProviderImplTest : CommonTest() {
     @get:Rule
     val legacyModulePreferencesAdapterMockedRule = MockedConstructionRule(LegacyModulePreferenceAdapter::class.java)
 
-    private val storageProviderImpl = StorageProviderImpl(preferenceServiceDbStorage, dbStorage)
+    private val storageProviderImpl = StorageProviderImpl(context, preferenceServiceDbStorage, dbStorage)
 
     @Test
     fun modulePreferences() {

@@ -7,8 +7,10 @@ import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.data.ProtobufStateStorage;
 import io.appmetrica.analytics.coreapi.internal.identifiers.PlatformIdentifiers;
+import io.appmetrica.analytics.coreapi.internal.servicecomponents.FirstExecutionConditionService;
 import io.appmetrica.analytics.coreapi.internal.system.PermissionExtractor;
-import io.appmetrica.analytics.coreutils.internal.services.UtilityServiceLocator;
+import io.appmetrica.analytics.coreutils.internal.services.WaitForActivationDelayBarrier;
+import io.appmetrica.analytics.coreutils.internal.services.UtilityServiceProvider;
 import io.appmetrica.analytics.impl.clids.ClidsCandidatesHelper;
 import io.appmetrica.analytics.impl.clids.ClidsDataAwaiter;
 import io.appmetrica.analytics.impl.clids.ClidsInfo;
@@ -132,6 +134,8 @@ public final class GlobalServiceLocator {
     private volatile MultiProcessSafeUuidProvider multiProcessSafeUuidProvider;
     @NonNull
     private final NativeCrashService nativeCrashService = new NativeCrashService();
+    @NonNull
+    private final UtilityServiceProvider utilityServiceProvider = new UtilityServiceProvider();
 
     private GlobalServiceLocator(@NonNull Context applicationContext) {
         mContext = applicationContext;
@@ -140,9 +144,9 @@ public final class GlobalServiceLocator {
 
     public synchronized void initAsync() {
         YLogger.info(TAG, "Init async");
-        UtilityServiceLocator.getInstance().initAsync();
+        utilityServiceProvider.initAsync();
         startupStateHolder.init(mContext);
-        startupStateHolder.registerObserver(new UtilityServiceStartupStateObserver());
+        startupStateHolder.registerObserver(new UtilityServiceStartupStateObserver(utilityServiceProvider));
         NetworkServiceLocator.init();
         getLifecycleDependentComponentManager().addLifecycleObserver(networkServiceLifecycleObserver);
         initPreloadInfoStorage();
@@ -513,6 +517,16 @@ public final class GlobalServiceLocator {
     @NonNull
     public NetworkCore getNetworkCore() {
         return NetworkServiceLocator.getInstance().getNetworkCore();
+    }
+
+    @NonNull
+    public FirstExecutionConditionService getFirstExecutionConditionService() {
+        return utilityServiceProvider.getFirstExecutionService();
+    }
+
+    @NonNull
+    public WaitForActivationDelayBarrier getActivationBarrier() {
+        return utilityServiceProvider.getActivationBarrier();
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)

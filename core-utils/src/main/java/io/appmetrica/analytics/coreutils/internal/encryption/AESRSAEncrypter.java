@@ -2,21 +2,24 @@ package io.appmetrica.analytics.coreutils.internal.encryption;
 
 import android.annotation.SuppressLint;
 import android.util.Base64;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
+import io.appmetrica.analytics.coreapi.internal.crypto.Encrypter;
 import io.appmetrica.analytics.coreutils.internal.io.CloseableUtilsKt;
 import io.appmetrica.analytics.logger.internal.YLogger;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.security.KeyFactory;
-import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.SecureRandom;
-import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
 import javax.crypto.Cipher;
 
-public class AESRSAEncrypter {
+public class AESRSAEncrypter implements Encrypter {
+
+    private static final String TAG = "[AESRSAEncrypter]";
 
     private static final String RSA_ALGORITHM = "RSA/ECB/PKCS1Padding";
 
@@ -30,13 +33,14 @@ public class AESRSAEncrypter {
     }
 
     @VisibleForTesting
-    AESRSAEncrypter(String aesAlgorithm, String rsaAlgorithm) {
+    AESRSAEncrypter(@NonNull String aesAlgorithm, @NonNull String rsaAlgorithm) {
         mAESAlgorithm = aesAlgorithm;
         mRSAAlgorithm = rsaAlgorithm;
     }
 
     @SuppressLint("TrulyRandom")
-    public byte[] encrypt(byte[] input) {
+    @Nullable
+    public byte[] encrypt(@NonNull byte[] input) {
         try {
             SecureRandom random = new SecureRandom();
             final byte[] iv = new byte[AESEncrypter.DEFAULT_KEY_LENGTH];
@@ -48,15 +52,18 @@ public class AESRSAEncrypter {
             );
 
             return encryptInternal(input, password, iv, publicKey);
-        } catch (InvalidKeySpecException e) {
-
-        } catch (NoSuchAlgorithmException e) {
+        } catch (Throwable e) {
+            YLogger.error(TAG, e);
         }
         return null;
     }
 
     @VisibleForTesting
-    byte[] encryptInternal(byte[] input, byte[] password, byte[] iv, PublicKey publicKey) {
+    @Nullable
+    byte[] encryptInternal(@NonNull byte[] input,
+                           @NonNull byte[] password,
+                           @NonNull byte[] iv,
+                           @NonNull PublicKey publicKey) {
         ByteArrayOutputStream outputStream = null;
         try {
             ByteArrayOutputStream stream = new ByteArrayOutputStream(password.length + iv.length);
@@ -73,11 +80,14 @@ public class AESRSAEncrypter {
 
             outputStream = new ByteArrayOutputStream(input.length);
             outputStream.write(rsaCipher.doFinal(keys));
-            outputStream.write(new AESEncrypter(mAESAlgorithm, password, iv).encrypt(input));
 
-            return outputStream.toByteArray();
+            byte[] aesEncryptedBytes = new AESEncrypter(mAESAlgorithm, password, iv).encrypt(input);
+            if (aesEncryptedBytes != null) {
+                outputStream.write(aesEncryptedBytes);
+                return outputStream.toByteArray();
+            }
         } catch (Throwable e) {
-            YLogger.e(e.getMessage(), e);
+            YLogger.error(TAG, e);
         } finally {
             CloseableUtilsKt.closeSafely(outputStream);
         }
@@ -104,7 +114,7 @@ public class AESRSAEncrypter {
 
             return new AESEncrypter(mAESAlgorithm, password, iv).decrypt(text);
         } catch (Throwable e) {
-            YLogger.e(e.getMessage(), e);
+            YLogger.error(TAG, e);
         }
         return null;
     }

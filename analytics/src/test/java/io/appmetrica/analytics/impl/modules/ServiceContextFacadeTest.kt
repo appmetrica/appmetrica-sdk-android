@@ -109,6 +109,7 @@ internal class ServiceContextFacadeTest : CommonTest() {
         assertThat(storageProviderImplMockedRule.constructionMock.constructed()).hasSize(1)
         assertThat(storageProviderImplMockedRule.argumentInterceptor.flatArguments())
             .containsExactly(
+                GlobalServiceLocator.getInstance().context,
                 GlobalServiceLocator.getInstance().servicePreferences,
                 storageForService
             )

@@ -138,7 +138,7 @@ internal class ServiceMigrationScriptToV112(private val vitalDataStorage: VitalC
     private fun parseBytes(bytes: ByteArray): LegacyStartupState {
         YLogger.info(tag, "encrypted legacy startup size = ${bytes.size}")
         val result = aesEncrypter.decrypt(bytes)
-        YLogger.info(tag, "legacy startup size = ${result.size}")
+        YLogger.info(tag, "legacy startup size = ${result?.size}")
         return LegacyStartupState.parseFrom(result)
     }
 }

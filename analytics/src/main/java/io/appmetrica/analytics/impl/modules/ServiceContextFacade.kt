@@ -1,7 +1,10 @@
 package io.appmetrica.analytics.impl.modules
 
 import io.appmetrica.analytics.coreapi.internal.control.DataSendingRestrictionController
+import io.appmetrica.analytics.coreapi.internal.crypto.CryptoProvider
 import io.appmetrica.analytics.coreapi.internal.identifiers.PlatformIdentifiers
+import io.appmetrica.analytics.coreapi.internal.servicecomponents.ActivationBarrier
+import io.appmetrica.analytics.coreapi.internal.servicecomponents.FirstExecutionConditionService
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.SdkEnvironmentProvider
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.applicationstate.ApplicationStateProvider
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.batteryinfo.ChargeTypeProvider
@@ -35,6 +38,7 @@ internal class ServiceContextFacade(
     )
 
     override val storageProvider = StorageProviderImpl(
+        context,
         GlobalServiceLocator.getInstance().servicePreferences,
         DatabaseStorageFactory.getInstance(context).storageForService
     )
@@ -52,4 +56,12 @@ internal class ServiceContextFacade(
 
     override val dataSendingRestrictionController: DataSendingRestrictionController
         get() = GlobalServiceLocator.getInstance().dataSendingRestrictionController
+
+    override val firstExecutionConditionService: FirstExecutionConditionService
+        get() = GlobalServiceLocator.getInstance().firstExecutionConditionService
+
+    override val activationBarrier: ActivationBarrier
+        get() = GlobalServiceLocator.getInstance().activationBarrier
+
+    override val cryptoProvider: CryptoProvider = CryptoProviderImpl()
 }

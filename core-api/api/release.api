@@ -79,6 +79,14 @@ public interface io.appmetrica.analytics.coreapi.internal.control.ToggleObserver
     public abstract void onStateChanged(boolean)
 }
 
+public interface io.appmetrica.analytics.coreapi.internal.crypto.CryptoProvider {
+    public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.crypto.Encrypter getAesRsaEncrypter()
+}
+
+public interface io.appmetrica.analytics.coreapi.internal.crypto.Encrypter {
+    public abstract [Nullable] byte[] encrypt([NonNull] byte[])
+}
+
 public interface io.appmetrica.analytics.coreapi.internal.data.Converter<S, P> {
     public abstract P fromModel(S)
     public abstract S toModel(P)
@@ -364,6 +372,23 @@ public class io.appmetrica.analytics.coreapi.internal.permission.PermissionState
 
 public interface io.appmetrica.analytics.coreapi.internal.permission.PermissionStrategy {
     public abstract boolean forbidUsePermission([NonNull] String)
+}
+
+public interface io.appmetrica.analytics.coreapi.internal.servicecomponents.ActivationBarrier {
+    public abstract void subscribe(long, [NonNull] io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor, [NonNull] io.appmetrica.analytics.coreapi.internal.servicecomponents.ActivationBarrierCallback)
+}
+
+public interface io.appmetrica.analytics.coreapi.internal.servicecomponents.ActivationBarrierCallback {
+    public abstract void onWaitFinished()
+}
+
+public interface io.appmetrica.analytics.coreapi.internal.servicecomponents.FirstExecutionConditionService {
+    public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.servicecomponents.FirstExecutionDelayedTask createDelayedTask([NonNull] String, [NonNull] io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor, [NonNull] Runnable)
+}
+
+public interface io.appmetrica.analytics.coreapi.internal.servicecomponents.FirstExecutionDelayedTask {
+    public abstract void setInitialDelaySeconds(long)
+    public abstract boolean tryExecute(long)
 }
 
 public interface io.appmetrica.analytics.coreapi.internal.servicecomponents.SdkEnvironmentProvider {

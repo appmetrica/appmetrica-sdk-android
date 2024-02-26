@@ -12,6 +12,8 @@ import io.appmetrica.analytics.coreapi.internal.identifiers.PlatformIdentifiers;
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.applicationstate.ApplicationState;
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.applicationstate.ApplicationStateObserver;
 import io.appmetrica.analytics.coreapi.internal.system.PermissionExtractor;
+import io.appmetrica.analytics.coreutils.internal.services.FirstExecutionConditionServiceImpl;
+import io.appmetrica.analytics.coreutils.internal.services.WaitForActivationDelayBarrier;
 import io.appmetrica.analytics.impl.ApplicationStateProviderImpl;
 import io.appmetrica.analytics.impl.BatteryInfoProvider;
 import io.appmetrica.analytics.impl.ClidsInfoStorage;
@@ -133,6 +135,9 @@ public class GlobalServiceLocatorRule extends ExternalResource {
         when(globalServiceLocator.getAppSetIdGetter()).thenReturn(appSetIdGetter);
         when(globalServiceLocator.getServiceInternalAdvertisingIdGetter()).thenReturn(advertisingIdGetter);
         when(globalServiceLocator.getPlatformIdentifiers()).thenReturn(platformIdentifiers);
+        when(globalServiceLocator.getActivationBarrier()).thenReturn(mock(WaitForActivationDelayBarrier.class));
+        when(globalServiceLocator.getFirstExecutionConditionService())
+            .thenReturn(mock(FirstExecutionConditionServiceImpl.class));
         GlobalServiceLocator.setInstance(globalServiceLocator);
     }
 

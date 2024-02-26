@@ -4,7 +4,6 @@ import io.appmetrica.analytics.coreutils.internal.encryption.AESEncrypter;
 import io.appmetrica.analytics.coreutils.internal.io.GZIPCompressor;
 import io.appmetrica.analytics.testutils.CommonTest;
 import java.io.IOException;
-import java.security.InvalidKeyException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -61,7 +60,7 @@ public class BodyDecoderTest extends CommonTest {
 
     @Test
     public void testAesEncrypterThrows() throws Throwable {
-        when(mAesEncrypter.decrypt(eq(mEncoded), anyInt(), anyInt())).thenThrow(new InvalidKeyException());
+        when(mAesEncrypter.decrypt(eq(mEncoded), anyInt(), anyInt())).thenThrow(new RuntimeException());
         assertThat(mBodyDecoder.decode(mEncoded, mKey)).isNull();
     }
 

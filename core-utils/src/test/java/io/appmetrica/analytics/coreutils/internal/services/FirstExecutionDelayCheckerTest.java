@@ -17,7 +17,7 @@ public class FirstExecutionDelayCheckerTest {
     private long mDelay;
     private boolean mExpectedValue;
 
-    private FirstExecutionConditionService.FirstExecutionDelayChecker mChecker;
+    private FirstExecutionConditionServiceImpl.FirstExecutionDelayChecker mChecker;
 
     public FirstExecutionDelayCheckerTest(long firstStartupTimestamp,
                                           long lastStartupTimestamp,
@@ -40,7 +40,7 @@ public class FirstExecutionDelayCheckerTest {
 
     @Before
     public void setUp() throws Exception {
-        mChecker = new FirstExecutionConditionService.FirstExecutionDelayChecker();
+        mChecker = new FirstExecutionConditionServiceImpl.FirstExecutionDelayChecker();
     }
 
     @Test

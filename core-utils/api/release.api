@@ -144,22 +144,23 @@ public class io.appmetrica.analytics.coreutils.internal.db.DBUtils {
     public static long queryRowsCount(android.database.sqlite.SQLiteDatabase, String)
 }
 
-public class io.appmetrica.analytics.coreutils.internal.encryption.AESEncrypter {
+public class io.appmetrica.analytics.coreutils.internal.encryption.AESEncrypter implementation io.appmetrica.analytics.coreapi.internal.crypto.Encrypter {
     public static final String DEFAULT_ALGORITHM
     public static final int DEFAULT_KEY_LENGTH
+    public static final String TAG
 
     public <init>(String, byte[], byte[])
-    public byte[] decrypt(byte[])
-    public byte[] decrypt(byte[], int, int)
-    public byte[] encrypt(byte[])
+    public [Nullable] byte[] decrypt([NonNull] byte[])
+    public [Nullable] byte[] decrypt([NonNull] byte[], int, int)
+    public [Nullable] byte[] encrypt([NonNull] byte[])
     public String getAlgorithm()
     public byte[] getIV()
     public byte[] getPassword()
 }
 
-public class io.appmetrica.analytics.coreutils.internal.encryption.AESRSAEncrypter {
+public class io.appmetrica.analytics.coreutils.internal.encryption.AESRSAEncrypter implementation io.appmetrica.analytics.coreapi.internal.crypto.Encrypter {
     public <init>()
-    public byte[] encrypt(byte[])
+    public [Nullable] byte[] encrypt([NonNull] byte[])
 }
 
 public class io.appmetrica.analytics.coreutils.internal.executors.BlockingExecutor implementation java.util.concurrent.Executor {
@@ -326,42 +327,27 @@ public final class io.appmetrica.analytics.coreutils.internal.reflection.Reflect
 
 public final class io.appmetrica.analytics.coreutils.internal.reflection.ReflectionUtilsKt
 
-public class io.appmetrica.analytics.coreutils.internal.services.ActivationBarrier {
-    public <init>()
-    public void activate()
-    public void subscribe(long, [NonNull] io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor, [NonNull] io.appmetrica.analytics.coreutils.internal.services.ActivationBarrier$IActivationBarrierCallback)
-}
-
-public static class io.appmetrica.analytics.coreutils.internal.services.ActivationBarrier$ActivationBarrierHelper {
-    public <init>([NonNull] Runnable)
-    public void subscribeIfNeeded(long, [NonNull] io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor)
-}
-
-public interface io.appmetrica.analytics.coreutils.internal.services.ActivationBarrier$IActivationBarrierCallback {
-    public abstract void onWaitFinished()
-}
-
-public class io.appmetrica.analytics.coreutils.internal.services.FirstExecutionConditionService {
-    public <init>()
-    public io.appmetrica.analytics.coreutils.internal.services.FirstExecutionConditionService$FirstExecutionHandler createFirstExecutionHandler([NonNull] Runnable, [NonNull] io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor, [NonNull] String)
+public class io.appmetrica.analytics.coreutils.internal.services.FirstExecutionConditionServiceImpl implementation io.appmetrica.analytics.coreapi.internal.servicecomponents.FirstExecutionConditionService {
+    public <init>([NonNull] io.appmetrica.analytics.coreutils.internal.services.UtilityServiceProvider)
+    public [NonNull] io.appmetrica.analytics.coreapi.internal.servicecomponents.FirstExecutionDelayedTask createDelayedTask([NonNull] String, [NonNull] io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor, [NonNull] Runnable)
     public void updateConfig([NonNull] io.appmetrica.analytics.coreutils.internal.services.UtilityServiceConfiguration)
 }
 
-public static class io.appmetrica.analytics.coreutils.internal.services.FirstExecutionConditionService$FirstExecutionConditionChecker {
+public static class io.appmetrica.analytics.coreutils.internal.services.FirstExecutionConditionServiceImpl$FirstExecutionConditionChecker {
     public final String tag
 
-    public <init>([Nullable] io.appmetrica.analytics.coreutils.internal.services.UtilityServiceConfiguration, [NonNull] io.appmetrica.analytics.coreutils.internal.services.FirstExecutionConditionService$FirstExecutionDelayChecker, [NonNull] String)
+    public <init>([Nullable] io.appmetrica.analytics.coreutils.internal.services.UtilityServiceConfiguration, [NonNull] io.appmetrica.analytics.coreutils.internal.services.FirstExecutionConditionServiceImpl$FirstExecutionDelayChecker, [NonNull] String)
 }
 
-public static class io.appmetrica.analytics.coreutils.internal.services.FirstExecutionConditionService$FirstExecutionDelayChecker {
+public static class io.appmetrica.analytics.coreutils.internal.services.FirstExecutionConditionServiceImpl$FirstExecutionDelayChecker {
     public <init>()
     public boolean delaySinceFirstStartupWasPassed(long, long, long)
 }
 
-public static class io.appmetrica.analytics.coreutils.internal.services.FirstExecutionConditionService$FirstExecutionHandler {
+public static class io.appmetrica.analytics.coreutils.internal.services.FirstExecutionConditionServiceImpl$FirstExecutionHandler implementation io.appmetrica.analytics.coreapi.internal.servicecomponents.FirstExecutionDelayedTask {
     public boolean canExecute()
-    public void setDelaySeconds(long)
-    public boolean tryExecute(int)
+    public void setInitialDelaySeconds(long)
+    public boolean tryExecute(long)
     public void updateConfig([NonNull] io.appmetrica.analytics.coreutils.internal.services.UtilityServiceConfiguration)
 }
 
@@ -413,20 +399,23 @@ public final class io.appmetrica.analytics.coreutils.internal.services.UtilitySe
     public [NonNull] String toString()
 }
 
-public final class io.appmetrica.analytics.coreutils.internal.services.UtilityServiceLocator {
-    public static final [NonNull] io.appmetrica.analytics.coreutils.internal.services.UtilityServiceLocator$Companion Companion
-
+public final class io.appmetrica.analytics.coreutils.internal.services.UtilityServiceProvider {
     public <init>()
-    public final [NonNull] io.appmetrica.analytics.coreutils.internal.services.ActivationBarrier getActivationBarrier()
-    public final [NonNull] io.appmetrica.analytics.coreutils.internal.services.FirstExecutionConditionService getFirstExecutionService()
-    public static final [NonNull] io.appmetrica.analytics.coreutils.internal.services.UtilityServiceLocator getInstance()
+    public final [NonNull] io.appmetrica.analytics.coreutils.internal.services.WaitForActivationDelayBarrier getActivationBarrier()
+    public final [NonNull] io.appmetrica.analytics.coreutils.internal.services.FirstExecutionConditionServiceImpl getFirstExecutionService()
     public final void initAsync()
     public final void updateConfiguration([NonNull] io.appmetrica.analytics.coreutils.internal.services.UtilityServiceConfiguration)
 }
 
-public static final class io.appmetrica.analytics.coreutils.internal.services.UtilityServiceLocator$Companion {
-    public final [NonNull] io.appmetrica.analytics.coreutils.internal.services.UtilityServiceLocator getInstance()
-    public final void setInstance([NonNull] io.appmetrica.analytics.coreutils.internal.services.UtilityServiceLocator)
+public class io.appmetrica.analytics.coreutils.internal.services.WaitForActivationDelayBarrier implementation io.appmetrica.analytics.coreapi.internal.servicecomponents.ActivationBarrier {
+    public <init>()
+    public void activate()
+    public void subscribe(long, [NonNull] io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor, [NonNull] io.appmetrica.analytics.coreapi.internal.servicecomponents.ActivationBarrierCallback)
+}
+
+public static class io.appmetrica.analytics.coreutils.internal.services.WaitForActivationDelayBarrier$ActivationBarrierHelper {
+    public <init>([NonNull] Runnable, [NonNull] io.appmetrica.analytics.coreutils.internal.services.WaitForActivationDelayBarrier)
+    public void subscribeIfNeeded(long, [NonNull] io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor)
 }
 
 public final class io.appmetrica.analytics.coreutils.internal.services.telephony.CellularNetworkTypeConverter {

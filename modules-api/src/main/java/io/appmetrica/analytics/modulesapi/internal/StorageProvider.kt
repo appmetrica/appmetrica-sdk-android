@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.modulesapi.internal
 
 import android.database.sqlite.SQLiteOpenHelper
+import java.io.File
 
 interface StorageProvider {
 
@@ -9,4 +10,10 @@ interface StorageProvider {
     fun legacyModulePreferences(): ModulePreferences
 
     val dbStorage: SQLiteOpenHelper
+
+    val appFileStorage: File?
+
+    val appDataStorage: File?
+
+    val sdkDataStorage: File?
 }

@@ -3,6 +3,8 @@ package io.appmetrica.analytics.impl;
 import android.content.Context;
 import android.content.SharedPreferences;
 import io.appmetrica.analytics.coreapi.internal.identifiers.PlatformIdentifiers;
+import io.appmetrica.analytics.coreapi.internal.servicecomponents.FirstExecutionConditionService;
+import io.appmetrica.analytics.coreutils.internal.services.WaitForActivationDelayBarrier;
 import io.appmetrica.analytics.impl.crash.ndk.NativeCrashService;
 import io.appmetrica.analytics.impl.db.VitalDataProviderStorage;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesServiceDbStorage;
@@ -311,6 +313,24 @@ public class GlobalServiceLocatorGettersTest extends CommonTest {
                     @Override
                     public NetworkCore getService(GlobalServiceLocator globalServiceLocator) {
                         return globalServiceLocator.getNetworkCore();
+                    }
+                }
+            },
+            {
+                "getFirstExecutionService",
+                new ServiceExtractor<FirstExecutionConditionService>() {
+                    @Override
+                    public FirstExecutionConditionService getService(GlobalServiceLocator globalServiceLocator) {
+                        return globalServiceLocator.getFirstExecutionConditionService();
+                    }
+                }
+            },
+            {
+                "getActivationBarrier",
+                new ServiceExtractor<WaitForActivationDelayBarrier>() {
+                    @Override
+                    public WaitForActivationDelayBarrier getService(GlobalServiceLocator globalServiceLocator) {
+                        return globalServiceLocator.getActivationBarrier();
                     }
                 }
             }

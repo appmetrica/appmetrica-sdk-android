@@ -3,54 +3,49 @@ package io.appmetrica.analytics.coreutils.internal.services;
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
+import io.appmetrica.analytics.coreapi.internal.servicecomponents.ActivationBarrier;
+import io.appmetrica.analytics.coreapi.internal.servicecomponents.ActivationBarrierCallback;
 import io.appmetrica.analytics.logger.internal.YLogger;
 import io.appmetrica.analytics.coreutils.internal.time.SystemTimeProvider;
 
-public class ActivationBarrier {
-
-    public interface IActivationBarrierCallback {
-
-        void onWaitFinished();
-    }
+public class WaitForActivationDelayBarrier implements ActivationBarrier {
 
     public static class ActivationBarrierHelper {
 
-        private boolean mActivated;
-        @NonNull private final IActivationBarrierCallback mActivationCallback;
-        @NonNull private final ActivationBarrier mActivationBarrier;
+        private boolean activated;
+        @NonNull
+        private final ActivationBarrierCallback activationCallback;
+        @NonNull
+        private final WaitForActivationDelayBarrier activationBarrier;
 
-        public ActivationBarrierHelper(@NonNull final Runnable runnable) {
-            this(runnable, UtilityServiceLocator.getInstance().getActivationBarrier());
-        }
-
-        @VisibleForTesting
-        ActivationBarrierHelper(@NonNull final Runnable runnable, @NonNull ActivationBarrier activationBarrier) {
-            mActivated = false;
-            mActivationCallback = new IActivationBarrierCallback() {
+        public ActivationBarrierHelper(@NonNull final Runnable runnable,
+                                       @NonNull WaitForActivationDelayBarrier activationBarrier) {
+            activated = false;
+            activationCallback = new ActivationBarrierCallback() {
                 @Override
                 public void onWaitFinished() {
                     YLogger.info(TAG, "Wait finished. Execute callback");
-                    mActivated = true;
+                    activated = true;
                     runnable.run();
                 }
             };
-            mActivationBarrier = activationBarrier;
+            this.activationBarrier = activationBarrier;
         }
 
         public void subscribeIfNeeded(final long delay, @NonNull ICommonExecutor executor) {
-            if (mActivated == false) {
+            if (!activated) {
                 YLogger.info(TAG, "Has not been activated yet. Subscribe with delay %d.", delay);
-                mActivationBarrier.subscribe(
+                activationBarrier.subscribe(
                         delay,
                         executor,
-                        mActivationCallback
+                    activationCallback
                 );
             } else {
                 YLogger.info(TAG, "Already has been activated. Execute now.");
                 executor.execute(new Runnable() {
                     @Override
                     public void run() {
-                        mActivationCallback.onWaitFinished();
+                        activationCallback.onWaitFinished();
                     }
                 });
             }
@@ -65,12 +60,12 @@ public class ActivationBarrier {
     @NonNull
     private final SystemTimeProvider mTimeProvider;
 
-    public ActivationBarrier() {
+    public WaitForActivationDelayBarrier() {
         this(new SystemTimeProvider());
     }
 
     @VisibleForTesting
-    ActivationBarrier(@NonNull SystemTimeProvider timeProvider) {
+    WaitForActivationDelayBarrier(@NonNull SystemTimeProvider timeProvider) {
         mTimeProvider = timeProvider;
     }
 
@@ -78,9 +73,10 @@ public class ActivationBarrier {
         mStartTime = mTimeProvider.currentTimeMillis();
     }
 
+    @Override
     public void subscribe(final long delta,
                           @NonNull ICommonExecutor executor,
-                          @NonNull final IActivationBarrierCallback callback) {
+                          @NonNull final ActivationBarrierCallback callback) {
         final long timeToWait = Math.max(delta - (mTimeProvider.currentTimeMillis() - mStartTime), 0);
         executor.executeDelayed(new Runnable() {
             @Override
