@@ -1,7 +1,6 @@
 package io.appmetrica.analytics.impl;
 
 import android.content.Context;
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
 import io.appmetrica.analytics.impl.crash.CrashProcessorFactory;
 import io.appmetrica.analytics.impl.reporter.ReporterLifecycleListener;
@@ -51,6 +50,8 @@ public class ClientServiceLocatorTest extends CommonTest {
     private ReporterLifecycleListener reporterLifecycleListener;
     @Mock
     private CrashProcessorFactory crashProcessorFactory;
+    @Mock
+    private AppMetricaCoreComponentsProvider coreComponentsProvider;
 
     @Rule
     public MockedConstructionRule<MultiProcessSafeUuidProvider> multiProcessSafeUuidProviderMockedConstructionRule =
@@ -76,7 +77,8 @@ public class ClientServiceLocatorTest extends CommonTest {
             activityLifecycleManager,
             sessionsTrackingManager,
             contextAppearedListener,
-            crashProcessorFactory
+            crashProcessorFactory,
+            coreComponentsProvider
         );
     }
 
@@ -129,18 +131,19 @@ public class ClientServiceLocatorTest extends CommonTest {
 
     @Test
     public void allFieldsFilled() throws Exception {
-        ObjectPropertyAssertions<ClientServiceLocator> assertions = ObjectPropertyAssertions(mClientServiceLocator)
-            .withDeclaredAccessibleFields(true);
-        assertions.checkField("mainProcessDetector", "getMainProcessDetector", mMainProcessDetector);
-        assertions.checkField("defaultOneShotConfig", "getDefaultOneShotConfig", mDefaultOneShotMetricaConfig);
-        assertions.checkField("clientExecutorProvider", "getClientExecutorProvider", mClientExecutorProvider);
-        assertions.checkField("appMetricaServiceDelayHandler", "getAppMetricaServiceDelayHandler", appMetricaServiceDelayHandler);
-        assertions.checkField("activityLifecycleManager", "getActivityLifecycleManager", activityLifecycleManager);
-        assertions.checkField("sessionsTrackingManager", "getSessionsTrackingManager", sessionsTrackingManager);
-        assertions.checkField("contextAppearedListener", "getContextAppearedListener", contextAppearedListener);
-        assertions.checkField("activityAppearedListener", "getActivityAppearedListener", activityAppearedListener);
-        assertions.checkField("crashProcessorFactory", "getCrashProcessorFactory", crashProcessorFactory);
-        assertions.checkAll();
+        ObjectPropertyAssertions(mClientServiceLocator)
+            .withDeclaredAccessibleFields(true)
+            .checkField("mainProcessDetector", "getMainProcessDetector", mMainProcessDetector)
+            .checkField("defaultOneShotConfig", "getDefaultOneShotConfig", mDefaultOneShotMetricaConfig)
+            .checkField("clientExecutorProvider", "getClientExecutorProvider", mClientExecutorProvider)
+            .checkField("appMetricaServiceDelayHandler", "getAppMetricaServiceDelayHandler", appMetricaServiceDelayHandler)
+            .checkField("activityLifecycleManager", "getActivityLifecycleManager", activityLifecycleManager)
+            .checkField("sessionsTrackingManager", "getSessionsTrackingManager", sessionsTrackingManager)
+            .checkField("contextAppearedListener", "getContextAppearedListener", contextAppearedListener)
+            .checkField("activityAppearedListener", "getActivityAppearedListener", activityAppearedListener)
+            .checkField("crashProcessorFactory", "getCrashProcessorFactory", crashProcessorFactory)
+            .checkField("appMetricaCoreComponentsProvider", "getAppMetricaCoreComponentsProvider", coreComponentsProvider)
+            .checkAll();
     }
 
     @Test

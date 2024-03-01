@@ -116,7 +116,7 @@ public class MainReporterTest extends BaseReporterTest {
         when(ClientServiceLocator.getInstance().getReporterLifecycleListener())
                 .thenReturn(reporterLifecycleListener);
         final MainReporter reporter = getReporter();
-        verify(reporterLifecycleListener).onCreateMainReporter(any(MainReporterContext.class));
+        verify(reporterLifecycleListener).onCreateMainReporter(any(MainReporterContext.class), eq(reporter));
     }
 
     @Test

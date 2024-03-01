@@ -23,7 +23,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
-public class AppAppMetricaServiceCoreComponentsProviderTest extends CommonTest {
+public class AppMetricaServiceCoreComponentsProviderTest extends CommonTest {
 
     @Rule
     public MockedConstructionRule<AppMetricaCore> cAppMetricaCore = new MockedConstructionRule<>(AppMetricaCore.class);
@@ -170,5 +170,17 @@ public class AppAppMetricaServiceCoreComponentsProviderTest extends CommonTest {
                 SdkUtils.logStubUsage();
             }
         }, never());
+    }
+
+    @Test
+    public void useStubsIfUnlocked() {
+        when(unlockedUserStateProvider.isUserUnlocked(context)).thenReturn(true);
+        assertThat(coreComponentsProvider.useStubs(context)).isFalse();
+    }
+
+    @Test
+    public void useStubsIfLocked() {
+        when(unlockedUserStateProvider.isUserUnlocked(context)).thenReturn(false);
+        assertThat(coreComponentsProvider.useStubs(context)).isTrue();
     }
 }

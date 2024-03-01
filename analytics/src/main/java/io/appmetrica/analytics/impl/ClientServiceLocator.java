@@ -56,6 +56,8 @@ public class ClientServiceLocator {
     private final CrashProcessorFactory crashProcessorFactory;
     @Nullable
     private MultiProcessSafeUuidProvider multiProcessSafeUuidProvider;
+    @NonNull
+    private final AppMetricaCoreComponentsProvider appMetricaCoreComponentsProvider;
 
     private ClientServiceLocator() {
         this(new MainProcessDetector(), new ActivityLifecycleManager(), new ClientExecutorProvider());
@@ -89,7 +91,8 @@ public class ClientServiceLocator {
                 activityAppearedListener
             ),
             new ContextAppearedListener(activityLifecycleManager),
-            new CrashProcessorFactory()
+            new CrashProcessorFactory(),
+            new AppMetricaCoreComponentsProvider()
         );
     }
 
@@ -102,7 +105,8 @@ public class ClientServiceLocator {
                          @NonNull ActivityLifecycleManager activityLifecycleManager,
                          @NonNull SessionsTrackingManager sessionsTrackingManager,
                          @NonNull ContextAppearedListener contextAppearedListener,
-                         @NonNull CrashProcessorFactory crashProcessorFactory) {
+                         @NonNull CrashProcessorFactory crashProcessorFactory,
+                         @NonNull AppMetricaCoreComponentsProvider appMetricaCoreComponentsProvider) {
         this.mainProcessDetector = mainProcessDetector;
         this.defaultOneShotConfig = defaultOneShotMetricaConfig;
         this.clientExecutorProvider = clientExecutorProvider;
@@ -112,6 +116,7 @@ public class ClientServiceLocator {
         this.sessionsTrackingManager = sessionsTrackingManager;
         this.contextAppearedListener = contextAppearedListener;
         this.crashProcessorFactory = crashProcessorFactory;
+        this.appMetricaCoreComponentsProvider = appMetricaCoreComponentsProvider;
     }
 
     @NonNull
@@ -189,8 +194,12 @@ public class ClientServiceLocator {
         return multiProcessSafeUuidProvider;
     }
 
-    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    @NonNull
+    public AppMetricaCoreComponentsProvider getAppMetricaCoreComponentsProvider() {
+        return appMetricaCoreComponentsProvider;
+    }
 
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
     public static void setInstance(@Nullable ClientServiceLocator clientServiceLocator) {
         sHolder = clientServiceLocator;
     }

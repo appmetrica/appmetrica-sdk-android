@@ -186,7 +186,7 @@ public class MainReporter extends BaseReporter implements IMainReporter {
                     mPublicLogger,
                     reportsHandler
             );
-            listener.onCreateMainReporter(mainReporterContext);
+            listener.onCreateMainReporter(mainReporterContext, this);
         }
         if (mPublicLogger.isEnabled()) {
             mPublicLogger.i("Actual sessions timeout is " + getSessionTimeout(config));

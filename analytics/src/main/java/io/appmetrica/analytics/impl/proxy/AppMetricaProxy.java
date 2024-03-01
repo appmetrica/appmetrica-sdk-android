@@ -402,6 +402,7 @@ public final class AppMetricaProxy extends BaseAppMetricaProxy {
     }
 
     public void activateReporter(@NonNull Context context, @NonNull ReporterConfig config) {
+        YLogger.info(TAG, "activate reporter with apiKey = %s", config.apiKey);
         barrier.activateReporter(context, config);
         synchronousStageExecutor.activateReporter(context.getApplicationContext(), config);
         getReporterProxyStorage().getOrCreate(context.getApplicationContext(), config);

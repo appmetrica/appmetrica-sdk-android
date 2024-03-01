@@ -50,7 +50,7 @@ public class AppMetricaCoreComponentsProvider {
         return appMetricaImpl;
     }
 
-    private synchronized boolean useStubs(@NonNull Context context) {
+    public synchronized boolean useStubs(@NonNull Context context) {
         if (useStubs == null) {
             useStubs = !unlockedUserStateProvider.isUserUnlocked(context);
             if (useStubs) {

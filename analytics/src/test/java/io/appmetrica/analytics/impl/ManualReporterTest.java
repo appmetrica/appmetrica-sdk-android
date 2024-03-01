@@ -36,8 +36,9 @@ public class ManualReporterTest extends BaseReporterTest {
                 .thenReturn(reporterLifecycleListener);
         final BaseReporter reporter = getReporter();
         verify(reporterLifecycleListener).onCreateManualReporter(
-                eq(apiKey),
-                any(ManualReporterContext.class)
+            eq(apiKey),
+            any(ManualReporterContext.class),
+            eq(reporter)
         );
     }
 

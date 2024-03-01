@@ -74,10 +74,11 @@ class ManualReporter extends BaseReporter {
                 ClientServiceLocator.getInstance().getReporterLifecycleListener();
         if (listener != null) {
             final ManualReporterContext manualReporterContext = new ManualReporterContext(
-                    config,
-                    reportsHandler
+                context,
+                config,
+                reportsHandler
             );
-            listener.onCreateManualReporter(config.apiKey, manualReporterContext);
+            listener.onCreateManualReporter(config.apiKey, manualReporterContext, this);
         }
     }
 
