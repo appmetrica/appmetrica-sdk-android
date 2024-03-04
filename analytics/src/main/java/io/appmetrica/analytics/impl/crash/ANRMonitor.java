@@ -87,31 +87,40 @@ public class ANRMonitor {
 
         @Override
         public void run() {
-            boolean isWaiting = false;
-            int counter = 1;
             while (!isInterrupted()) {
-                if (!isWaiting) {
-                    counter = 1;
-                    mCompleted.set(false);
-                    mUiHandler.post(mUiRunnable);
-                }
+                // Post task and start waiting for it to complete.
+                mCompleted.set(false);
+                mUiHandler.postAtFrontOfQueue(mUiRunnable);
 
-                try {
-                    Thread.sleep(TIME_TO_WAIT);
-                } catch (InterruptedException e) {
-                    return;
-                }
-
-                if (!mCompleted.get()) {
-                    isWaiting = true;
-                    counter++;
-                    if (counter == anrTicksCount && !Debug.isDebuggerConnected()) {
-                        handleAppNotResponding();
+                // Poll until task completes or anrTicksCount passes.
+                int counter = anrTicksCount;
+                while (counter > 0) {
+                    try {
+                        Thread.sleep(TIME_TO_WAIT);
+                    } catch (InterruptedException e) {
+                        return;
                     }
-                    continue;
+
+                    if (mCompleted.get()) {
+                        break;
+                    }
+
+                    --counter;
                 }
 
-                isWaiting = false;
+                // If still is not completed and not under debugger, report ANR.
+                if (counter == 0 && !Debug.isDebuggerConnected()) {
+                    handleAppNotResponding();
+                }
+
+                // If not complete, wait until completion to avoid double ANR report.
+                while (!mCompleted.get()) {
+                    try {
+                        Thread.sleep(TIME_TO_WAIT);
+                    } catch (InterruptedException e) {
+                        return;
+                    }
+                }
             }
         }
     }
