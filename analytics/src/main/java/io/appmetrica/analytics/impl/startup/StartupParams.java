@@ -14,6 +14,7 @@ import io.appmetrica.analytics.impl.FeaturesResult;
 import io.appmetrica.analytics.impl.Utils;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesClientDbStorage;
 import io.appmetrica.analytics.impl.startup.uuid.MultiProcessSafeUuidProvider;
+import io.appmetrica.analytics.impl.startup.uuid.UuidValidator;
 import io.appmetrica.analytics.impl.utils.JsonHelper;
 import io.appmetrica.analytics.impl.utils.StartupUtils;
 import io.appmetrica.analytics.internal.IdentifiersResult;
@@ -63,6 +64,8 @@ public class StartupParams {
     private final FeaturesHolder featuresHolder;
     @NonNull
     private final FeaturesConverter featuresConverter;
+    @NonNull
+    private final UuidValidator uuidValidator;
 
     public StartupParams(@NonNull Context context, @NonNull PreferencesClientDbStorage preferencesClientDbStorage) {
         this(
@@ -72,7 +75,8 @@ public class StartupParams {
             ClientServiceLocator.getInstance().getMultiProcessSafeUuidProvider(context),
             new CustomSdkHostsHolder(),
             new FeaturesHolder(),
-            new FeaturesConverter()
+            new FeaturesConverter(),
+            new UuidValidator()
         );
     }
 
@@ -83,7 +87,8 @@ public class StartupParams {
                   @NonNull MultiProcessSafeUuidProvider multiProcessSafeUuidProvider,
                   @NonNull CustomSdkHostsHolder customSdkHostsHolder,
                   @NonNull FeaturesHolder featuresHolder,
-                  @NonNull FeaturesConverter featuresConverter) {
+                  @NonNull FeaturesConverter featuresConverter,
+                  @NonNull UuidValidator uuidValidator) {
         advIdentifiersKeys.add(GAID_KEY);
         advIdentifiersKeys.add(HOAID_KEY);
         advIdentifiersKeys.add(YANDEX_ADV_ID_KEY);
@@ -93,8 +98,9 @@ public class StartupParams {
         this.customSdkHostsHolder = customSdkHostsHolder;
         this.featuresHolder = featuresHolder;
         this.featuresConverter = featuresConverter;
+        this.uuidValidator = uuidValidator;
 
-        putIdentifierIfNotEmpty(UUID_KEY, multiProcessSafeUuidProvider.readUuid());
+        putUuidIfValid(multiProcessSafeUuidProvider.readUuid());
 
         putIdentifierIfNotEmpty(DEVICE_ID_KEY, mPreferences.getDeviceIdResult());
         putIdentifierIfNotEmpty(DEVICE_ID_HASH_KEY, mPreferences.getDeviceIdHashResult());
@@ -145,6 +151,12 @@ public class StartupParams {
         }
     }
 
+    private void putUuidIfValid(@Nullable IdentifiersResult identifier) {
+        if (isUuidValid(identifier)) {
+            mIdentifiers.put(UUID_KEY, identifier);
+        }
+    }
+
     private void putIdentifierIfNotNull(@NonNull String key, @Nullable IdentifiersResult identifier) {
         if (isIdentifierNull(identifier) == false) {
             mIdentifiers.put(key, identifier);
@@ -152,9 +164,13 @@ public class StartupParams {
     }
 
     private void initUuid(@Nullable IdentifiersResult uuid) {
-        if (isIdentifierNullOrEmpty(UUID_KEY) && isIdentifierNullOrEmpty(uuid) == false) {
-            putIdentifierIfNotEmpty(UUID_KEY, uuid);
+        if (!isUuidValid(mIdentifiers.get(UUID_KEY))) {
+            putUuidIfValid(uuid);
         }
+    }
+
+    private boolean isUuidValid(@Nullable IdentifiersResult identifier) {
+        return identifier != null && uuidValidator.isValid(identifier.id);
     }
 
     private boolean isIdentifierNull(@Nullable IdentifiersResult identifier) {

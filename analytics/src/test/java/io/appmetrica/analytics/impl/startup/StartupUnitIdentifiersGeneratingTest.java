@@ -9,6 +9,7 @@ import io.appmetrica.analytics.impl.ClidsInfoStorage;
 import io.appmetrica.analytics.impl.component.ComponentId;
 import io.appmetrica.analytics.impl.request.StartupRequestConfig;
 import io.appmetrica.analytics.impl.startup.uuid.MultiProcessSafeUuidProvider;
+import io.appmetrica.analytics.impl.startup.uuid.UuidValidator;
 import io.appmetrica.analytics.impl.utils.DeviceIdGenerator;
 import io.appmetrica.analytics.internal.IdentifiersResult;
 import io.appmetrica.analytics.testutils.CommonTest;
@@ -53,9 +54,12 @@ public class StartupUnitIdentifiersGeneratingTest extends CommonTest {
     private ClidsStateChecker clidsStateChecker;
     @Mock
     private MultiProcessSafeUuidProvider uuidProvider;
+    @Mock
+    private UuidValidator uuidValidator;
 
     private StartupState mStartupState;
     private String mGeneratedUuid = "generated uuid";
+    private String invalidUuid = "invalid uuid";
     private String mGeneratedDeviceId = "generated deviceid";
 
     @Rule
@@ -67,6 +71,8 @@ public class StartupUnitIdentifiersGeneratingTest extends CommonTest {
         mContext = RuntimeEnvironment.getApplication();
         when(mStartupRequestConfig.getAdvertisingIdsHolder()).thenReturn(mAdvertisingIdsHolder);
         when(uuidProvider.readUuid()).thenReturn(new IdentifiersResult(mGeneratedUuid, IdentifierStatus.OK, null));
+        when(uuidValidator.isValid(mGeneratedUuid)).thenReturn(true);
+        when(uuidValidator.isValid(invalidUuid)).thenReturn(false);
     }
 
     @Test
@@ -77,6 +83,11 @@ public class StartupUnitIdentifiersGeneratingTest extends CommonTest {
     @Test
     public void testUuidGeneratedIfNull() {
         checkUuidGenerated(null);
+    }
+
+    @Test
+    public void uuidGeneratedIfInvalid() {
+        checkUuidGenerated(invalidUuid);
     }
 
     @Test
@@ -134,7 +145,7 @@ public class StartupUnitIdentifiersGeneratingTest extends CommonTest {
         StartupUnit startupUnit = new StartupUnit(
                 mContext, mComponentId, mStartupResultListener, mStorage, mStartupState, deviceIdGenerator,
                 mStartupConfigurationHolder, new SystemTimeProvider(), clidsStorage, clidsStateChecker,
-                uuidProvider
+                uuidProvider, uuidValidator
         );
     }
 

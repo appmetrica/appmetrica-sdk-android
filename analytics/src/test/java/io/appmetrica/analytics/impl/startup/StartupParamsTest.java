@@ -12,6 +12,7 @@ import io.appmetrica.analytics.impl.ClientIdentifiersHolder;
 import io.appmetrica.analytics.impl.FeaturesResult;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesClientDbStorage;
 import io.appmetrica.analytics.impl.startup.uuid.MultiProcessSafeUuidProvider;
+import io.appmetrica.analytics.impl.startup.uuid.UuidValidator;
 import io.appmetrica.analytics.impl.utils.JsonHelper;
 import io.appmetrica.analytics.impl.utils.StartupUtils;
 import io.appmetrica.analytics.internal.IdentifiersResult;
@@ -80,6 +81,8 @@ public class StartupParamsTest extends CommonTest {
     private FeaturesHolder featuresHolder;
     @Mock
     private FeaturesConverter featuresConverter;
+    @Mock
+    private UuidValidator uuidValidator;
     private Context context;
 
     private StartupParams mStartupParams;
@@ -180,14 +183,17 @@ public class StartupParamsTest extends CommonTest {
             }
         });
 
+        when(uuidValidator.isValid(mUuid)).thenReturn(true);
+
         mStartupParams = new StartupParams(
-                mPreferences,
+            mPreferences,
             advIdentifiersConverter,
-                clidsStateChecker,
-                uuidProvider,
-                customSdkHostsHolder,
-                featuresHolder,
-                featuresConverter
+            clidsStateChecker,
+            uuidProvider,
+            customSdkHostsHolder,
+            featuresHolder,
+            featuresConverter,
+            uuidValidator
         );
     }
 
@@ -202,6 +208,7 @@ public class StartupParamsTest extends CommonTest {
     @Test
     public void testUuidShouldBeSameAsStoredIfExternalUuidIsEmptyAndStoredUuidIsNotEmpty() {
         String uuidString = UUID.randomUUID().toString();
+        when(uuidValidator.isValid(uuidString)).thenReturn(true);
         IdentifiersResult prefUuid = new IdentifiersResult(uuidString, IdentifierStatus.OK, null);
         when(uuidProvider.readUuid()).thenReturn(prefUuid);
 
@@ -213,6 +220,9 @@ public class StartupParamsTest extends CommonTest {
     @Test
     public void testUuidShouldNotBeChangedIfCallbackReturnsDifferentUuid() {
         String initialUuidString = UUID.randomUUID().toString();
+        final String anotherUuidString = UUID.randomUUID().toString();
+        when(uuidValidator.isValid(initialUuidString)).thenReturn(true);
+        when(uuidValidator.isValid(anotherUuidString)).thenReturn(true);
         IdentifiersResult initialUuid = new IdentifiersResult(initialUuidString, IdentifierStatus.OK, null);
         when(uuidProvider.readUuid()).thenReturn(initialUuid);
         StartupParams startupParams = createStartupParams();
@@ -220,7 +230,7 @@ public class StartupParamsTest extends CommonTest {
         additionalInitializer = new MockedConstruction.MockInitializer<ClientIdentifiersHolder>() {
             @Override
             public void prepare(ClientIdentifiersHolder mock, MockedConstruction.Context context) throws Throwable {
-                when(mock.getUuid()).thenReturn(new IdentifiersResult("another uuid", IdentifierStatus.OK, null));
+                when(mock.getUuid()).thenReturn(new IdentifiersResult(anotherUuidString, IdentifierStatus.OK, null));
             }
         };
         startupParams.updateAllParamsByReceiver(mBundle);
@@ -380,6 +390,7 @@ public class StartupParamsTest extends CommonTest {
         final String getAdUrl = "getAdUrl";
         when(uuidProvider.readUuid()).thenReturn(new IdentifiersResult(uuid, IdentifierStatus.OK, null));
         when(mPreferences.getAdUrlGetResult()).thenReturn(new IdentifiersResult(getAdUrl, IdentifierStatus.OK, null));
+        when(uuidValidator.isValid(uuid)).thenReturn(true);
 
         StartupParams startupParams = createStartupParams();
         List<String> params = Arrays.asList(
@@ -399,6 +410,7 @@ public class StartupParamsTest extends CommonTest {
     public void testPutToMapInvalidIdentifier() {
         final String uuid = "uuid";
         when(uuidProvider.readUuid()).thenReturn(new IdentifiersResult(uuid, IdentifierStatus.OK, null));
+        when(uuidValidator.isValid(uuid)).thenReturn(true);
 
         StartupParams startupParams = createStartupParams();
         List<String> params = Arrays.asList(
@@ -951,13 +963,14 @@ public class StartupParamsTest extends CommonTest {
     @NonNull
     private StartupParams createStartupParams() {
         return new StartupParams(
-                mPreferences,
+            mPreferences,
             advIdentifiersConverter,
-                clidsStateChecker,
-                uuidProvider,
-                customSdkHostsHolder,
-                featuresHolder,
-                featuresConverter
+            clidsStateChecker,
+            uuidProvider,
+            customSdkHostsHolder,
+            featuresHolder,
+            featuresConverter,
+            uuidValidator
         );
     }
 

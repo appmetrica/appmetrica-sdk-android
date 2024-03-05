@@ -20,6 +20,7 @@ import io.appmetrica.analytics.impl.request.StartupRequestConfig;
 import io.appmetrica.analytics.impl.startup.parsing.StartupParser;
 import io.appmetrica.analytics.impl.startup.parsing.StartupResult;
 import io.appmetrica.analytics.impl.startup.uuid.MultiProcessSafeUuidProvider;
+import io.appmetrica.analytics.impl.startup.uuid.UuidValidator;
 import io.appmetrica.analytics.impl.utils.DeviceIdGenerator;
 import io.appmetrica.analytics.impl.utils.ServerTime;
 import io.appmetrica.analytics.impl.utils.StartupUtils;
@@ -53,6 +54,8 @@ public class StartupUnit implements IBaseComponent, IStartupUnit {
     private final ClidsInfoStorage clidsStorage;
     @NonNull
     private final ClidsStateChecker clidsStateChecker;
+    @NonNull
+    private final UuidValidator uuidValidator;
 
     public StartupUnit(@NonNull Context context,
                        @NonNull String packageName,
@@ -141,7 +144,8 @@ public class StartupUnit implements IBaseComponent, IStartupUnit {
             timeProvider,
             clidsStorage,
             clidsStateChecker,
-            GlobalServiceLocator.getInstance().getMultiProcessSafeUuidProvider()
+            GlobalServiceLocator.getInstance().getMultiProcessSafeUuidProvider(),
+            new UuidValidator()
         );
     }
 
@@ -156,7 +160,8 @@ public class StartupUnit implements IBaseComponent, IStartupUnit {
                 @NonNull TimeProvider timeProvider,
                 @NonNull ClidsInfoStorage clidsStorage,
                 @NonNull ClidsStateChecker clidsStateChecker,
-                @NonNull MultiProcessSafeUuidProvider uuidProvider) {
+                @NonNull MultiProcessSafeUuidProvider uuidProvider,
+                @NonNull UuidValidator uuidValidator) {
         mContext = context;
         mComponentId = componentId;
         mListener = listener;
@@ -165,20 +170,23 @@ public class StartupUnit implements IBaseComponent, IStartupUnit {
         systemTimeProvider = timeProvider;
         this.clidsStorage = clidsStorage;
         this.clidsStateChecker = clidsStateChecker;
+        this.uuidValidator = uuidValidator;
         YLogger.info(TAG, "Create startup unit for componentId = %s", componentId);
         generateIdentifiersIfNeeded(
             deviceIdGenerator,
             uuidProvider,
-            startupState
+            startupState,
+            uuidValidator
         );
     }
 
     private void generateIdentifiersIfNeeded(@NonNull DeviceIdGenerator deviceIdGenerator,
                                              @NonNull MultiProcessSafeUuidProvider multiProcessSafeUuidProvider,
-                                             @NonNull StartupState startupState) {
+                                             @NonNull StartupState startupState,
+                                             @NonNull UuidValidator uuidValidator) {
         YLogger.info(TAG, "Generate identifier if needed");
         StartupState.Builder startupStateBuilder = startupState.buildUpon();
-        if (TextUtils.isEmpty(startupState.getUuid())) {
+        if (!uuidValidator.isValid(startupState.getUuid())) {
             String uuid = multiProcessSafeUuidProvider.readUuid().id;
             startupStateBuilder = startupStateBuilder.withUuid(uuid);
             YLogger.info(TAG, "Extracted new uuid from storage = %s", uuid);

@@ -6,6 +6,7 @@ import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus;
 import io.appmetrica.analytics.impl.ClientIdentifiersHolder;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesClientDbStorage;
 import io.appmetrica.analytics.impl.startup.uuid.MultiProcessSafeUuidProvider;
+import io.appmetrica.analytics.impl.startup.uuid.UuidValidator;
 import io.appmetrica.analytics.impl.utils.JsonHelper;
 import io.appmetrica.analytics.impl.utils.StartupUtils;
 import io.appmetrica.analytics.internal.IdentifiersResult;
@@ -1126,6 +1127,8 @@ public class StartupParamsContainsIdentifiersForResultReceiverTest extends Commo
     private AdvIdentifiersFromIdentifierResultConverter advIdentifiersConverter;
     @Mock
     private ClidsStateChecker clidsStateChecker;
+    @Mock
+    private UuidValidator uuidValidator;
     @Rule
     public final MockedStaticRule<StartupRequiredUtils> sStartupRequiredUtils = new MockedStaticRule<>(StartupRequiredUtils.class);
 
@@ -1144,15 +1147,17 @@ public class StartupParamsContainsIdentifiersForResultReceiverTest extends Commo
         when(mStorage.getClientClidsChangedAfterLastIdentifiersUpdate(true)).thenReturn(false);
         when(mStorage.getCustomSdkHosts()).thenReturn(new IdentifiersResult(null, IdentifierStatus.UNKNOWN, null));
         when(mStorage.getFeatures()).thenReturn(new FeaturesInternal());
+        when(uuidValidator.isValid(UUID.id)).thenReturn(true);
 
         mStartupParams = new StartupParams(
-                mStorage,
+            mStorage,
             advIdentifiersConverter,
-                clidsStateChecker,
-                multiProcessSafeUuidProvider,
-                new CustomSdkHostsHolder(),
-                new FeaturesHolder(),
-                new FeaturesConverter()
+            clidsStateChecker,
+            multiProcessSafeUuidProvider,
+            new CustomSdkHostsHolder(),
+            new FeaturesHolder(),
+            new FeaturesConverter(),
+            uuidValidator
         );
         mStartupParams.setClientClids(mClientClids);
         Map<String, String> requestClids = JsonHelper.clidsFromString(mClientIdentifiersHolder.getClientClidsForRequest().id);

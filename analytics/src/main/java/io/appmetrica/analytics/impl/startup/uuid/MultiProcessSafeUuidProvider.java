@@ -1,7 +1,6 @@
 package io.appmetrica.analytics.impl.startup.uuid;
 
 import android.content.Context;
-import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
@@ -9,11 +8,10 @@ import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus;
 import io.appmetrica.analytics.impl.utils.concurrency.ExclusiveMultiProcessFileLock;
 import io.appmetrica.analytics.internal.IdentifiersResult;
 import io.appmetrica.analytics.logger.internal.YLogger;
-import kotlin.jvm.Volatile;
 
 public class MultiProcessSafeUuidProvider {
 
-    private static final String TAG = "[UuidProcessSafeProvider]";
+    private static final String TAG = "[MultiProcessSafeUuidProvider]";
 
     @NonNull
     private final Context context;
@@ -23,9 +21,10 @@ public class MultiProcessSafeUuidProvider {
     private final ExclusiveMultiProcessFileLock lock;
     @NonNull
     private final PersistentUuidHolder persistentUuidHolder;
-    @Volatile
+    @NonNull
+    private final UuidValidator uuidValidator;
     @Nullable
-    private IdentifiersResult uuidResult;
+    private volatile IdentifiersResult uuidResult;
 
     public MultiProcessSafeUuidProvider(@NonNull Context context,
                                         @NonNull IOuterSourceUuidImporter outerSourceUuidImporter) {
@@ -33,7 +32,8 @@ public class MultiProcessSafeUuidProvider {
             context,
             outerSourceUuidImporter,
             MultiProcessUuidLockProvider.getLock(context),
-            new PersistentUuidHolder(context)
+            new PersistentUuidHolder(context),
+            new UuidValidator()
         );
     }
 
@@ -41,12 +41,14 @@ public class MultiProcessSafeUuidProvider {
     MultiProcessSafeUuidProvider(@NonNull Context context,
                                  @NonNull IOuterSourceUuidImporter outerSourceUuidImporter,
                                  @NonNull ExclusiveMultiProcessFileLock lock,
-                                 @NonNull PersistentUuidHolder persistentUuidHolder) {
+                                 @NonNull PersistentUuidHolder persistentUuidHolder,
+                                 @NonNull UuidValidator uuidValidator) {
 
         this.context = context;
         this.outerSourceUuidImporter = outerSourceUuidImporter;
         this.lock = lock;
         this.persistentUuidHolder = persistentUuidHolder;
+        this.uuidValidator = uuidValidator;
         try {
             this.lock.lock();
             this.persistentUuidHolder.checkMigration();
@@ -64,20 +66,20 @@ public class MultiProcessSafeUuidProvider {
             YLogger.info(TAG, "Return valid uuid result from memory state");
             return localUuidResult;
         }
-        String resultUuid = null;
         try {
             YLogger.info(TAG, "Acquire file lock: uuid.data.lock");
             lock.lock();
             localUuidResult = uuidResult;
             if (!isOk(localUuidResult)) {
+                String resultUuid;
                 resultUuid = persistentUuidHolder.readUuid();
                 YLogger.info(TAG, "Current uuid in existing uuid storage after acquiring lock = %s", resultUuid);
-                if (TextUtils.isEmpty(resultUuid)) {
+                if (!uuidValidator.isValid(resultUuid)) {
                     resultUuid = outerSourceUuidImporter.get(context);
                     YLogger.info(TAG, "Uuid from outer importer = %s", resultUuid);
                     resultUuid = persistentUuidHolder.handleUuid(resultUuid);
                 }
-                if (!TextUtils.isEmpty(resultUuid)) {
+                if (uuidValidator.isValid(resultUuid)) {
                     localUuidResult = new IdentifiersResult(resultUuid, IdentifierStatus.OK, null);
                     uuidResult = localUuidResult;
                 }
@@ -97,6 +99,6 @@ public class MultiProcessSafeUuidProvider {
     }
 
     private boolean isOk(@Nullable IdentifiersResult result) {
-        return result != null && result.status == IdentifierStatus.OK && result.id != null;
+        return result != null && result.status == IdentifierStatus.OK && uuidValidator.isValid(result.id);
     }
 }

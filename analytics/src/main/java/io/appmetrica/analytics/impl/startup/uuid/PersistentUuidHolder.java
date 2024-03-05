@@ -1,12 +1,10 @@
 package io.appmetrica.analytics.impl.startup.uuid;
 
 import android.content.Context;
-import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreutils.internal.io.FileUtils;
-import io.appmetrica.analytics.impl.FileProvider;
 import io.appmetrica.analytics.impl.IOUtils;
 import io.appmetrica.analytics.impl.db.FileConstants;
 import io.appmetrica.analytics.impl.utils.UuidGenerator;
@@ -24,12 +22,12 @@ class PersistentUuidHolder {
     @NonNull
     private final Context context;
     @NonNull
-    private final FileProvider fileProvider;
-    @NonNull
     private final UuidGenerator uuidGenerator;
+    @NonNull
+    private final UuidValidator uuidValidator;
 
     public PersistentUuidHolder(@NonNull Context context) {
-        this(context, new FileProvider(), new UuidGenerator());
+        this(context, new UuidGenerator(), new UuidValidator());
     }
 
     @Nullable
@@ -45,10 +43,10 @@ class PersistentUuidHolder {
     public String handleUuid(@Nullable String knownUuid) {
         YLogger.info(TAG, "Uuid generation started...");
         try {
-            String uuid = TextUtils.isEmpty(knownUuid) ? uuidGenerator.generateUuid() : knownUuid;
+            String uuid = uuidValidator.isValid(knownUuid) ? knownUuid : uuidGenerator.generateUuid();
             YLogger.info(TAG, "Save new uuid = %s", uuid);
-            File file = fileProvider.getFileFromStorage(context, FILE_NAME);
-            if (file != null) {
+            File file = FileUtils.getFileFromSdkStorage(context, FILE_NAME);
+            if (file != null && uuid != null) {
                 IOUtils.writeStringFileLocked(uuid, FILE_NAME, new FileOutputStream(file));
                 YLogger.info(TAG, "Generated uuid = \"%s\" was stored to file with path = \"%s\"",
                         uuid, file.getPath());
@@ -81,10 +79,10 @@ class PersistentUuidHolder {
 
     @VisibleForTesting
     PersistentUuidHolder(@NonNull Context context,
-                         @NonNull FileProvider fileProvider,
-                         @NonNull UuidGenerator uuidGenerator) {
+                         @NonNull UuidGenerator uuidGenerator,
+                         @NonNull UuidValidator uuidValidator) {
         this.context = context;
-        this.fileProvider = fileProvider;
         this.uuidGenerator = uuidGenerator;
+        this.uuidValidator = uuidValidator;
     }
 }

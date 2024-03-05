@@ -3,6 +3,7 @@ package io.appmetrica.analytics.impl.startup;
 import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesClientDbStorage;
 import io.appmetrica.analytics.impl.startup.uuid.MultiProcessSafeUuidProvider;
+import io.appmetrica.analytics.impl.startup.uuid.UuidValidator;
 import io.appmetrica.analytics.impl.utils.JsonHelper;
 import io.appmetrica.analytics.internal.IdentifiersResult;
 import io.appmetrica.analytics.testutils.CommonTest;
@@ -415,7 +416,7 @@ public class StartupParamsContainsIdentifiersForPreferencesTest extends CommonTe
                         "Request only gaid for all null"
                 },
                 {
-                        "InputDeviceId", "InputDeviceIdHash", "InputUuid", "InputGetAdUrl", "InputReportAdUrl", null, "InputHoaid", "InputYandexAdvId",
+                        "InputDeviceId", "InputDeviceIdHash", "Input uuid", "InputGetAdUrl", "InputReportAdUrl", null, "InputHoaid", "InputYandexAdvId",
                         null,
                         new HashMap<String, List<String>>(),
                         StartupParamsTestUtils.CLIDS_1, StartupParamsTestUtils.CLIDS_1,
@@ -425,7 +426,7 @@ public class StartupParamsContainsIdentifiersForPreferencesTest extends CommonTe
                         "Request only gaid if all defined except gaid"
                 },
                 {
-                        "InputDeviceId", "InputDeviceIdHash", "InputUuid", "InputGetAdUrl", "InputReportAdUrl", null, "InputHoaid", "InputYandexAdvId",
+                        "InputDeviceId", "InputDeviceIdHash", "Input uuid", "InputGetAdUrl", "InputReportAdUrl", null, "InputHoaid", "InputYandexAdvId",
                         null,
                         new HashMap<String, List<String>>(),
                         StartupParamsTestUtils.CLIDS_1, StartupParamsTestUtils.CLIDS_1,
@@ -479,7 +480,7 @@ public class StartupParamsContainsIdentifiersForPreferencesTest extends CommonTe
                         "Request only hoaid for all null"
                 },
                 {
-                        "InputDeviceId", "InputDeviceIdHash", "InputUuid", "InputGetAdUrl", "InputReportAdUrl", "InputGaid", null, "InputYandexAdvId",
+                        "InputDeviceId", "InputDeviceIdHash", "Input uuid", "InputGetAdUrl", "InputReportAdUrl", "InputGaid", null, "InputYandexAdvId",
                         null,
                         new HashMap<String, List<String>>(),
                         StartupParamsTestUtils.CLIDS_1, StartupParamsTestUtils.CLIDS_1,
@@ -489,7 +490,7 @@ public class StartupParamsContainsIdentifiersForPreferencesTest extends CommonTe
                         "Request only hoaid if all defined except hoaid"
                 },
                 {
-                        "InputDeviceId", "InputDeviceIdHash", "InputUuid", "InputGetAdUrl", "InputReportAdUrl", "InputGaid", null, "InputYandexAdvId",
+                        "InputDeviceId", "InputDeviceIdHash", "Input uuid", "InputGetAdUrl", "InputReportAdUrl", "InputGaid", null, "InputYandexAdvId",
                         null,
                         new HashMap<String, List<String>>(),
                         StartupParamsTestUtils.CLIDS_1, StartupParamsTestUtils.CLIDS_1,
@@ -543,7 +544,7 @@ public class StartupParamsContainsIdentifiersForPreferencesTest extends CommonTe
                         "Request only yandex adv id for all null"
                 },
                 {
-                        "InputDeviceId", "InputDeviceIdHash", "InputUuid", "InputGetAdUrl", "InputReportAdUrl", "InputGaid", "InputHoaid", null,
+                        "InputDeviceId", "InputDeviceIdHash", "Input uuid", "InputGetAdUrl", "InputReportAdUrl", "InputGaid", "InputHoaid", null,
                         null,
                         new HashMap<String, List<String>>(),
                         StartupParamsTestUtils.CLIDS_1, StartupParamsTestUtils.CLIDS_1,
@@ -553,7 +554,7 @@ public class StartupParamsContainsIdentifiersForPreferencesTest extends CommonTe
                         "Request only yandex adv id if all defined except yandex adv id"
                 },
                 {
-                        "InputDeviceId", "InputDeviceIdHash", "InputUuid", "InputGetAdUrl", "InputReportAdUrl", "InputGaid", "InputHoaid", null,
+                        "InputDeviceId", "InputDeviceIdHash", "Input uuid", "InputGetAdUrl", "InputReportAdUrl", "InputGaid", "InputHoaid", null,
                         null,
                         new HashMap<String, List<String>>(),
                         StartupParamsTestUtils.CLIDS_1, StartupParamsTestUtils.CLIDS_1,
@@ -941,6 +942,8 @@ public class StartupParamsContainsIdentifiersForPreferencesTest extends CommonTe
     private ClidsStateChecker clidsStateChecker;
     @Mock
     private FeaturesHolder featuresHolder;
+    @Mock
+    private UuidValidator uuidValidator;
     @Rule
     public final MockedStaticRule<StartupRequiredUtils> sStartupRequiredUtils = new MockedStaticRule<>(StartupRequiredUtils.class);
     private final long nextStartupTime = 2374687;
@@ -985,15 +988,17 @@ public class StartupParamsContainsIdentifiersForPreferencesTest extends CommonTe
         when(StartupRequiredUtils.isOutdated(nextStartupTime)).thenReturn(isOutdated);
 
         when(multiProcessSafeUuidProvider.readUuid()).thenReturn(new IdentifiersResult(mInputUuid, IdentifierStatus.OK, null));
+        when(uuidValidator.isValid("Input uuid")).thenReturn(true);
 
         mStartupParams = new StartupParams(
-                mPreferencesClientDbStorage,
+            mPreferencesClientDbStorage,
             advIdentifiersConverter,
-                clidsStateChecker,
-                multiProcessSafeUuidProvider,
-                new CustomSdkHostsHolder(),
-                featuresHolder,
-                new FeaturesConverter()
+            clidsStateChecker,
+            multiProcessSafeUuidProvider,
+            new CustomSdkHostsHolder(),
+            featuresHolder,
+            new FeaturesConverter(),
+            uuidValidator
         );
     }
 
