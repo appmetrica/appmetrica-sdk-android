@@ -1,7 +1,6 @@
 package io.appmetrica.analytics.impl.modules
 
 import io.appmetrica.analytics.impl.GlobalServiceLocator
-import io.appmetrica.analytics.impl.ModuleEntryPointsRegister
 import io.appmetrica.analytics.modulesapi.internal.ModuleEntryPoint
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule

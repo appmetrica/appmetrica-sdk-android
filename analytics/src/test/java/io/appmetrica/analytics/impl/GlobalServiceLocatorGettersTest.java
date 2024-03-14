@@ -11,6 +11,7 @@ import io.appmetrica.analytics.impl.db.preferences.PreferencesServiceDbStorage;
 import io.appmetrica.analytics.impl.id.AdvertisingIdGetter;
 import io.appmetrica.analytics.impl.id.AppSetIdGetter;
 import io.appmetrica.analytics.impl.location.LocationClientApi;
+import io.appmetrica.analytics.impl.modules.ModuleEntryPointsRegister;
 import io.appmetrica.analytics.impl.modules.ModuleEventHandlersHolder;
 import io.appmetrica.analytics.impl.modules.ModulesController;
 import io.appmetrica.analytics.impl.network.http.BaseSslSocketFactoryProvider;

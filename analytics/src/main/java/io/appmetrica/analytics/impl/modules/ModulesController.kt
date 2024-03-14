@@ -93,7 +93,7 @@ internal class ModulesController :
                 reportSelfErrorEvent(module.identifier, "db", e)
             }
         }
-        YLogger.warning(tag, "Disabling defective modules: ${wrongModules.joinToString(", ")}")
+        YLogger.warning(tag, "Disabling defective modules: ${wrongModules.joinToString(", ") { it.identifier }}")
         modules.removeAll(wrongModules)
 
         return result
@@ -136,7 +136,10 @@ internal class ModulesController :
                 modulesWithProblems.add(module)
             }
         }
-        YLogger.warning(tag, "Disabling defective modules: ${modulesWithProblems.joinToString(", ")}")
+        YLogger.warning(
+            tag,
+            "Disabling defective modules: ${modulesWithProblems.joinToString(", ") { it.identifier }}"
+        )
         modules.removeAll(modulesWithProblems)
     }
 

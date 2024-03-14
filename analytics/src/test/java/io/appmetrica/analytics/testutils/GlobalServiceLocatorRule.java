@@ -20,7 +20,7 @@ import io.appmetrica.analytics.impl.ClidsInfoStorage;
 import io.appmetrica.analytics.impl.DataSendingRestrictionControllerImpl;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.LifecycleDependentComponentManager;
-import io.appmetrica.analytics.impl.ModuleEntryPointsRegister;
+import io.appmetrica.analytics.impl.modules.ModuleEntryPointsRegister;
 import io.appmetrica.analytics.impl.PreloadInfoStorage;
 import io.appmetrica.analytics.impl.SdkEnvironmentHolder;
 import io.appmetrica.analytics.impl.SelfDiagnosticReporterStorage;

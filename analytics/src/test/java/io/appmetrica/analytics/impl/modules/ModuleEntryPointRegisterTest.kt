@@ -1,4 +1,4 @@
-package io.appmetrica.analytics.impl
+package io.appmetrica.analytics.impl.modules
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
@@ -22,7 +22,10 @@ class ModuleEntryPointRegisterTest {
     fun `moduleEntryPoints after registration`() {
         val first = "first"
         val second = "second"
-        moduleEntryPointsRegister.register(first, second)
-        assertThat(moduleEntryPointsRegister.classNames).containsExactlyInAnyOrder(first, second)
+        moduleEntryPointsRegister.register(
+            ConstantModuleEntryPointProvider(first),
+            ConstantModuleEntryPointProvider(second)
+        )
+        assertThat(moduleEntryPointsRegister.classNames).containsExactly(first, second)
     }
 }
