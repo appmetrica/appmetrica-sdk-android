@@ -5,4 +5,5 @@ interface TimeProvider {
     fun currentTimeSeconds(): Long
     fun elapsedRealtime(): Long
     fun systemNanoTime(): Long
+    fun uptimeMillis(): Long
 }

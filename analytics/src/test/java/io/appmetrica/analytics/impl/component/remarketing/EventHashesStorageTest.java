@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.component.remarketing;
 
 import android.content.Context;
 import io.appmetrica.analytics.impl.component.ComponentId;
-import io.appmetrica.analytics.impl.db.IBinaryDataHelper;
+import io.appmetrica.analytics.coreapi.internal.data.IBinaryDataHelper;
 import io.appmetrica.analytics.impl.protobuf.client.Eventhashes;
 import io.appmetrica.analytics.testutils.CommonTest;
 import java.io.IOException;

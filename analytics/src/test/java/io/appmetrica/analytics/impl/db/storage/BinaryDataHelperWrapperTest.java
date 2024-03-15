@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.db.storage;
 
-import io.appmetrica.analytics.impl.db.IBinaryDataHelper;
+import io.appmetrica.analytics.coreapi.internal.data.IBinaryDataHelper;
 import io.appmetrica.analytics.impl.db.StorageType;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.ServiceMigrationCheckedRule;

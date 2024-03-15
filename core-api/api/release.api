@@ -92,6 +92,12 @@ public interface io.appmetrica.analytics.coreapi.internal.data.Converter<S, P> {
     public abstract S toModel(P)
 }
 
+public interface io.appmetrica.analytics.coreapi.internal.data.IBinaryDataHelper {
+    public abstract byte[] get([NonNull] String)
+    public abstract void insert([NonNull] String, [NonNull] byte[])
+    public abstract void remove([NonNull] String)
+}
+
 public interface io.appmetrica.analytics.coreapi.internal.data.JsonParser<T> extends io.appmetrica.analytics.coreapi.internal.data.Parser<org.json.JSONObject, T>
 
 public static final class io.appmetrica.analytics.coreapi.internal.data.JsonParser$DefaultImpls {

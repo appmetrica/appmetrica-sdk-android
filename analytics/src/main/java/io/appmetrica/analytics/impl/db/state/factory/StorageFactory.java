@@ -6,7 +6,7 @@ import io.appmetrica.analytics.coreapi.internal.data.ProtobufStateStorage;
 import io.appmetrica.analytics.impl.billing.AutoInappCollectingInfo;
 import io.appmetrica.analytics.impl.billing.AutoInappCollectingInfoConverter;
 import io.appmetrica.analytics.impl.clids.ClidsInfo;
-import io.appmetrica.analytics.impl.db.IBinaryDataHelper;
+import io.appmetrica.analytics.coreapi.internal.data.IBinaryDataHelper;
 import io.appmetrica.analytics.impl.db.protobuf.ProtobufStateStorageImpl;
 import io.appmetrica.analytics.impl.db.state.converter.AppPermissionsStateConverter;
 import io.appmetrica.analytics.impl.db.state.converter.ClidsInfoConverter;

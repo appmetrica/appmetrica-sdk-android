@@ -8,7 +8,7 @@ import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.impl.component.ComponentId;
 import io.appmetrica.analytics.impl.db.DatabaseManagerProvider;
 import io.appmetrica.analytics.impl.db.DatabaseStorage;
-import io.appmetrica.analytics.impl.db.IBinaryDataHelper;
+import io.appmetrica.analytics.coreapi.internal.data.IBinaryDataHelper;
 import io.appmetrica.analytics.impl.db.IKeyValueTableDbHelper;
 import io.appmetrica.analytics.impl.db.StorageType;
 import io.appmetrica.analytics.impl.db.connectors.LockedOnFileDBConnector;

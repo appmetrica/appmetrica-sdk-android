@@ -1,16 +1,11 @@
 package io.appmetrica.analytics.impl.db.storage;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.never;
-
 import android.content.Context;
-
-import io.appmetrica.analytics.impl.db.IBinaryDataHelper;
+import io.appmetrica.analytics.coreapi.internal.data.IBinaryDataHelper;
 import io.appmetrica.analytics.impl.db.StorageType;
 import io.appmetrica.analytics.impl.utils.DebugAssert;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.MockedStaticRule;
-
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -20,6 +15,9 @@ import org.mockito.MockedStatic;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
 
 @RunWith(RobolectricTestRunner.class)
 public class BinaryDataHelperWrapperAssertTest extends CommonTest {

@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.impl.Utils;
-import io.appmetrica.analytics.impl.db.IBinaryDataHelper;
+import io.appmetrica.analytics.coreapi.internal.data.IBinaryDataHelper;
 import io.appmetrica.analytics.impl.db.connectors.DBConnector;
 import io.appmetrica.analytics.impl.db.constants.Constants;
 import io.appmetrica.analytics.logger.internal.YLogger;

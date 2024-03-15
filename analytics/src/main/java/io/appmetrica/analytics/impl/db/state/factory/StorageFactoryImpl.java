@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.db.state.factory;
 import android.content.Context;
 import androidx.annotation.NonNull;
 import io.appmetrica.analytics.coreapi.internal.data.ProtobufStateStorage;
-import io.appmetrica.analytics.impl.db.IBinaryDataHelper;
+import io.appmetrica.analytics.coreapi.internal.data.IBinaryDataHelper;
 
 public abstract class StorageFactoryImpl<T> implements StorageFactory<T> {
 

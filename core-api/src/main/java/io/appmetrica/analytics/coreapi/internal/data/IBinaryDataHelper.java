@@ -1,4 +1,4 @@
-package io.appmetrica.analytics.impl.db;
+package io.appmetrica.analytics.coreapi.internal.data;
 
 import androidx.annotation.NonNull;
 

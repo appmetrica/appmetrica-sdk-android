@@ -418,6 +418,27 @@ public static class io.appmetrica.analytics.coreutils.internal.services.WaitForA
     public void subscribeIfNeeded(long, [NonNull] io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor)
 }
 
+public final class io.appmetrica.analytics.coreutils.internal.services.frequency.EventFrequencyOverWindowLimitDetector {
+    public <init>(long, int, [NonNull] io.appmetrica.analytics.coreutils.internal.services.frequency.EventFrequencyStorage)
+    public final boolean detect([NonNull] String)
+    public final void updateParameters(long, int)
+}
+
+public interface io.appmetrica.analytics.coreutils.internal.services.frequency.EventFrequencyStorage {
+    public abstract [Nullable] Integer getWindowOccurrencesCount([NonNull] String)
+    public abstract [Nullable] Long getWindowStart([NonNull] String)
+    public abstract void putWindowOccurrencesCount([NonNull] String, int)
+    public abstract void putWindowStart([NonNull] String, long)
+}
+
+public final class io.appmetrica.analytics.coreutils.internal.services.frequency.InMemoryEventFrequencyStorage implementation io.appmetrica.analytics.coreutils.internal.services.frequency.EventFrequencyStorage {
+    public <init>()
+    public [Nullable] Integer getWindowOccurrencesCount([NonNull] String)
+    public [Nullable] Long getWindowStart([NonNull] String)
+    public void putWindowOccurrencesCount([NonNull] String, int)
+    public void putWindowStart([NonNull] String, long)
+}
+
 public final class io.appmetrica.analytics.coreutils.internal.services.telephony.CellularNetworkTypeConverter {
     public static final [NonNull] io.appmetrica.analytics.coreutils.internal.services.telephony.CellularNetworkTypeConverter INSTANCE
 
@@ -494,6 +515,7 @@ public final class io.appmetrica.analytics.coreutils.internal.time.SystemTimePro
     public long currentTimeSeconds()
     public long elapsedRealtime()
     public long systemNanoTime()
+    public long uptimeMillis()
 }
 
 public final class io.appmetrica.analytics.coreutils.internal.time.TimePassedChecker {
@@ -508,6 +530,7 @@ public interface io.appmetrica.analytics.coreutils.internal.time.TimeProvider {
     public abstract long currentTimeSeconds()
     public abstract long elapsedRealtime()
     public abstract long systemNanoTime()
+    public abstract long uptimeMillis()
 }
 
 public final class io.appmetrica.analytics.coreutils.internal.toggle.ConjunctiveCompositeThreadSafeToggle implementation io.appmetrica.analytics.coreapi.internal.control.Toggle {
