@@ -6,8 +6,8 @@ import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.component.ComponentId;
 import io.appmetrica.analytics.impl.db.constants.Constants;
 import io.appmetrica.analytics.impl.utils.collection.HashMultimap;
-import io.appmetrica.analytics.modulesapi.internal.ModuleServicesDatabase;
-import io.appmetrica.analytics.modulesapi.internal.TableDescription;
+import io.appmetrica.analytics.modulesapi.internal.service.ModuleServicesDatabase;
+import io.appmetrica.analytics.modulesapi.internal.common.TableDescription;
 import java.util.HashMap;
 import java.util.List;
 

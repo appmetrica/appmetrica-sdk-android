@@ -10,11 +10,11 @@ import io.appmetrica.analytics.impl.permissions.DefaultAskForPermissionStrategyP
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade
 import io.appmetrica.analytics.impl.startup.StartupState
 import io.appmetrica.analytics.logger.internal.YLogger
-import io.appmetrica.analytics.modulesapi.internal.AskForPermissionStrategyModuleProvider
-import io.appmetrica.analytics.modulesapi.internal.ModuleEntryPoint
-import io.appmetrica.analytics.modulesapi.internal.ModuleLocationSourcesController
-import io.appmetrica.analytics.modulesapi.internal.ModuleServicesDatabase
-import io.appmetrica.analytics.modulesapi.internal.ServiceContext
+import io.appmetrica.analytics.modulesapi.internal.common.AskForPermissionStrategyModuleProvider
+import io.appmetrica.analytics.modulesapi.internal.service.ModuleLocationSourcesServiceController
+import io.appmetrica.analytics.modulesapi.internal.service.ModuleServiceEntryPoint
+import io.appmetrica.analytics.modulesapi.internal.service.ModuleServicesDatabase
+import io.appmetrica.analytics.modulesapi.internal.service.ServiceContext
 import java.util.concurrent.CopyOnWriteArrayList
 
 internal class ModulesController :
@@ -28,7 +28,7 @@ internal class ModulesController :
 
     private val askForPermissionStrategyModuleId = "rp"
 
-    private val modules = CopyOnWriteArrayList<ModuleEntryPoint<Any>>()
+    private val modules = CopyOnWriteArrayList<ModuleServiceEntryPoint<Any>>()
 
     @Volatile
     private var askForPermissionStrategyProvider: AskForPermissionStrategyModuleProvider =
@@ -66,23 +66,23 @@ internal class ModulesController :
     }
 
     override fun collectLocationConsumers(): List<Consumer<Location?>> {
-        val consumers = modules.mapNotNull { it.locationExtension?.locationConsumer }
+        val consumers = modules.mapNotNull { it.locationServiceExtension?.locationConsumer }
         YLogger.info(tag, "Collect location consumers: $consumers")
         return consumers
     }
 
-    override fun chooseLocationSourceController(): ModuleLocationSourcesController? {
+    override fun chooseLocationSourceController(): ModuleLocationSourcesServiceController? {
         YLogger.info(tag, "Collect location source controller")
-        return modules.firstNotNullOfOrNull { it.locationExtension?.locationSourcesController }
+        return modules.firstNotNullOfOrNull { it.locationServiceExtension?.locationSourcesController }
     }
 
     override fun chooseLocationAppStateControlToggle(): Toggle? {
         YLogger.info(tag, "Collect location app state control toggle")
-        return modules.firstNotNullOfOrNull { it.locationExtension?.locationControllerAppStateToggle }
+        return modules.firstNotNullOfOrNull { it.locationServiceExtension?.locationControllerAppStateToggle }
     }
 
     override fun collectModuleServiceDatabases(): List<ModuleServicesDatabase> {
-        val wrongModules = hashSetOf<ModuleEntryPoint<Any>>()
+        val wrongModules = hashSetOf<ModuleServiceEntryPoint<Any>>()
         val result = arrayListOf<ModuleServicesDatabase>()
         modules.mapNotNull { module ->
             try {
@@ -99,10 +99,10 @@ internal class ModulesController :
         return result
     }
 
-    override fun registerModule(moduleEntryPoint: ModuleEntryPoint<Any>) {
-        YLogger.info(tag, "Register new module with identifier = ${moduleEntryPoint.identifier}")
-        modules.add(moduleEntryPoint)
-        registerAskForPermissionStrategyIfNeeded(moduleEntryPoint)
+    override fun registerModule(moduleServiceEntryPoint: ModuleServiceEntryPoint<Any>) {
+        YLogger.info(tag, "Register new module with identifier = ${moduleServiceEntryPoint.identifier}")
+        modules.add(moduleServiceEntryPoint)
+        registerAskForPermissionStrategyIfNeeded(moduleServiceEntryPoint)
     }
 
     override fun onStartupStateChanged(newState: StartupState) {
@@ -119,14 +119,14 @@ internal class ModulesController :
 
     override fun initServiceSide(serviceContext: ServiceContext, startupState: StartupState) {
         YLogger.info(tag, "Init service side. Total modules count = ${modules.size}")
-        val modulesWithProblems = hashSetOf<ModuleEntryPoint<Any>>()
+        val modulesWithProblems = hashSetOf<ModuleServiceEntryPoint<Any>>()
         modules.forEach { module ->
             try {
                 val configProvider = ModuleRemoteConfigProvider(startupState)
                 val config = configProvider.getRemoteConfigForModule(module.identifier)
                 module.initServiceSide(serviceContext, config)
 
-                module.moduleEventHandlerFactory?.let {
+                module.moduleEventServiceHandlerFactory?.let {
                     YLogger.info(tag, "Register new event handler with identifier = ${module.identifier}")
                     GlobalServiceLocator.getInstance().moduleEventHandlersHolder.register(module.identifier, it)
                 }
@@ -143,15 +143,15 @@ internal class ModulesController :
         modules.removeAll(modulesWithProblems)
     }
 
-    private fun registerAskForPermissionStrategyIfNeeded(moduleEntryPoint: ModuleEntryPoint<Any>) {
-        if (askForPermissionStrategyModuleId == moduleEntryPoint.identifier &&
-            moduleEntryPoint is AskForPermissionStrategyModuleProvider
+    private fun registerAskForPermissionStrategyIfNeeded(moduleServiceEntryPoint: ModuleServiceEntryPoint<Any>) {
+        if (askForPermissionStrategyModuleId == moduleServiceEntryPoint.identifier &&
+            moduleServiceEntryPoint is AskForPermissionStrategyModuleProvider
         ) {
             YLogger.info(
                 tag,
                 "Register askForPermissionStrategy from module with id = $askForPermissionStrategyModuleId"
             )
-            askForPermissionStrategyProvider = moduleEntryPoint
+            askForPermissionStrategyProvider = moduleServiceEntryPoint
         }
     }
 

@@ -23,7 +23,7 @@ import io.appmetrica.analytics.locationapi.internal.LocationControllerObserver
 import io.appmetrica.analytics.locationapi.internal.LocationFilter
 import io.appmetrica.analytics.locationapi.internal.LocationReceiverProvider
 import io.appmetrica.analytics.locationapi.internal.LocationReceiverProviderFactory
-import io.appmetrica.analytics.modulesapi.internal.ModuleLocationSourcesController
+import io.appmetrica.analytics.modulesapi.internal.service.ModuleLocationSourcesServiceController
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
 import io.appmetrica.analytics.testutils.MockedConstructionRule
@@ -70,7 +70,7 @@ internal class LocationApiImplTest : CommonTest() {
         on { locationReceiverProviderFactory } doReturn locationReceiverProviderFactory
     }
 
-    private val locationSourcesController = mock<ModuleLocationSourcesController>()
+    private val locationSourcesController = mock<ModuleLocationSourcesServiceController>()
 
     private val firstLocationConsumer = mock<Consumer<Location?>>()
     private val secondLocationConsumer = mock<Consumer<Location?>>()

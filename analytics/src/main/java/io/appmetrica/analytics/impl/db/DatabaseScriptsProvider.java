@@ -9,8 +9,8 @@ import io.appmetrica.analytics.impl.db.constants.migrations.ClientDatabaseUpgrad
 import io.appmetrica.analytics.impl.db.constants.migrations.ComponentDatabaseUpgradeScriptToV112;
 import io.appmetrica.analytics.impl.utils.collection.HashMultimap;
 import io.appmetrica.analytics.logger.internal.YLogger;
-import io.appmetrica.analytics.modulesapi.internal.ModuleServicesDatabase;
-import io.appmetrica.analytics.modulesapi.internal.TableDescription;
+import io.appmetrica.analytics.modulesapi.internal.service.ModuleServicesDatabase;
+import io.appmetrica.analytics.modulesapi.internal.common.TableDescription;
 import java.util.Map;
 
 public class DatabaseScriptsProvider {

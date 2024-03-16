@@ -24,7 +24,7 @@ import io.appmetrica.analytics.impl.core.CoreImplFirstCreateTaskLauncherProvider
 import io.appmetrica.analytics.impl.crash.ReadOldCrashesRunnable;
 import io.appmetrica.analytics.impl.crash.jvm.CrashDirectoryWatcher;
 import io.appmetrica.analytics.impl.crash.ndk.NativeCrashService;
-import io.appmetrica.analytics.impl.modules.ModuleLifecycleControllerImpl;
+import io.appmetrica.analytics.impl.modules.ModuleServiceLifecycleControllerImpl;
 import io.appmetrica.analytics.impl.modules.ModulesController;
 import io.appmetrica.analytics.impl.modules.ServiceContextFacade;
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade;
@@ -179,7 +179,7 @@ public class AppMetricaServiceCoreImpl implements AppMetricaServiceCore, AppMetr
         ModulesController modulesController = GlobalServiceLocator.getInstance().getModulesController();
         modulesController.initServiceSide(
             new ServiceContextFacade(
-                new ModuleLifecycleControllerImpl(mAppMetricaServiceLifecycle)
+                new ModuleServiceLifecycleControllerImpl(mAppMetricaServiceLifecycle)
             ),
             startupState
         );

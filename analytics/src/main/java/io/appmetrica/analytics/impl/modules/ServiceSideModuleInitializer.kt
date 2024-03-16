@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.modules
 
 import io.appmetrica.analytics.impl.startup.StartupState
-import io.appmetrica.analytics.modulesapi.internal.ServiceContext
+import io.appmetrica.analytics.modulesapi.internal.service.ServiceContext
 
 internal interface ServiceSideModuleInitializer {
 

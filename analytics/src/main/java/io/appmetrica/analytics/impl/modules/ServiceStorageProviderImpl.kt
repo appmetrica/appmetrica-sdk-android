@@ -4,15 +4,15 @@ import android.content.Context
 import android.database.sqlite.SQLiteOpenHelper
 import io.appmetrica.analytics.coreutils.internal.io.FileUtils
 import io.appmetrica.analytics.impl.db.preferences.SimplePreferenceStorage
-import io.appmetrica.analytics.modulesapi.internal.ModulePreferences
-import io.appmetrica.analytics.modulesapi.internal.StorageProvider
+import io.appmetrica.analytics.modulesapi.internal.common.ModulePreferences
+import io.appmetrica.analytics.modulesapi.internal.service.ServiceStorageProvider
 import java.io.File
 
-internal class StorageProviderImpl(
+internal class ServiceStorageProviderImpl(
     private val context: Context,
     private val preferencesDbStorage: SimplePreferenceStorage,
     override val dbStorage: SQLiteOpenHelper
-) : StorageProvider {
+) : ServiceStorageProvider {
 
     override fun modulePreferences(moduleIdentifier: String): ModulePreferences =
         ModulePreferencesAdapter(moduleIdentifier, preferencesDbStorage)

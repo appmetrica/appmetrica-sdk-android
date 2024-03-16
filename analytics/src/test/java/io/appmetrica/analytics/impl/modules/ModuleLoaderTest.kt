@@ -1,12 +1,12 @@
 package io.appmetrica.analytics.impl.modules
 
-import io.appmetrica.analytics.modulesapi.internal.LocationExtension
-import io.appmetrica.analytics.modulesapi.internal.ModuleEntryPoint
-import io.appmetrica.analytics.modulesapi.internal.ModuleRemoteConfig
-import io.appmetrica.analytics.modulesapi.internal.ModuleServicesDatabase
-import io.appmetrica.analytics.modulesapi.internal.RemoteConfigExtensionConfiguration
-import io.appmetrica.analytics.modulesapi.internal.ServiceContext
-import io.appmetrica.analytics.modulesapi.internal.event.ModuleEventHandlerFactory
+import io.appmetrica.analytics.modulesapi.internal.service.LocationServiceExtension
+import io.appmetrica.analytics.modulesapi.internal.service.ModuleRemoteConfig
+import io.appmetrica.analytics.modulesapi.internal.service.ModuleServiceEntryPoint
+import io.appmetrica.analytics.modulesapi.internal.service.ModuleServicesDatabase
+import io.appmetrica.analytics.modulesapi.internal.service.RemoteConfigExtensionConfiguration
+import io.appmetrica.analytics.modulesapi.internal.service.ServiceContext
+import io.appmetrica.analytics.modulesapi.internal.service.event.ModuleEventServiceHandlerFactory
 import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
@@ -41,26 +41,26 @@ class ModuleLoaderTest : CommonTest() {
 
 }
 
-class TestClass1 : ModuleEntryPoint<Any> {
+class TestClass1 : ModuleServiceEntryPoint<Any> {
     override val identifier: String
         get() = "Some string"
 
     override val remoteConfigExtensionConfiguration: RemoteConfigExtensionConfiguration<Any>?
         get() = null
 
-    override val moduleEventHandlerFactory: ModuleEventHandlerFactory? = null
+    override val moduleEventServiceHandlerFactory: ModuleEventServiceHandlerFactory? = null
 
     override fun initServiceSide(serviceContext: ServiceContext, config: ModuleRemoteConfig<Any?>) {
     }
 
-    override val locationExtension: LocationExtension?
+    override val locationServiceExtension: LocationServiceExtension?
         get() = null
 
     override val moduleServicesDatabase: ModuleServicesDatabase?
         get() = null
 }
 
-class TestClass2 : ModuleEntryPoint<Any> {
+class TestClass2 : ModuleServiceEntryPoint<Any> {
     constructor(arg1: Any)
 
     override val identifier: String
@@ -69,12 +69,12 @@ class TestClass2 : ModuleEntryPoint<Any> {
     override val remoteConfigExtensionConfiguration: RemoteConfigExtensionConfiguration<Any>?
         get() = null
 
-    override val moduleEventHandlerFactory: ModuleEventHandlerFactory? = null
+    override val moduleEventServiceHandlerFactory: ModuleEventServiceHandlerFactory? = null
 
     override fun initServiceSide(serviceContext: ServiceContext, config: ModuleRemoteConfig<Any?>) {
     }
 
-    override val locationExtension: LocationExtension?
+    override val locationServiceExtension: LocationServiceExtension?
         get() = null
 
     override val moduleServicesDatabase: ModuleServicesDatabase?

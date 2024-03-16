@@ -5,7 +5,7 @@ import io.appmetrica.analytics.impl.component.ComponentUnit
 import io.appmetrica.analytics.impl.component.EventSaver
 import io.appmetrica.analytics.impl.modules.LegacyModulePreferenceAdapter
 import io.appmetrica.analytics.impl.modules.ModulePreferencesAdapter
-import io.appmetrica.analytics.modulesapi.internal.event.ModuleEventHandlerContext
+import io.appmetrica.analytics.modulesapi.internal.service.event.ModuleEventServiceHandlerContext
 
 class ModuleEventHandlerContextProvider(component: ComponentUnit, moduleIdentifier: String) {
 
@@ -13,7 +13,9 @@ class ModuleEventHandlerContextProvider(component: ComponentUnit, moduleIdentifi
     private val modulePreferenceAdapter = ModulePreferencesAdapter(moduleIdentifier, component.componentPreferences)
     private val eventSaver: EventSaver = component.eventSaver
 
-    fun getContext(currentReport: CounterReport): ModuleEventHandlerContext = ModuleEventHandlerContextImpl(
+    fun getContext(
+        currentReport: CounterReport
+    ): ModuleEventServiceHandlerContext = ModuleEventServiceHandlerContextImpl(
         modulePreferenceAdapter,
         legacyModulePreferenceAdapter,
         ModuleEventReporter(eventSaver, currentReport)

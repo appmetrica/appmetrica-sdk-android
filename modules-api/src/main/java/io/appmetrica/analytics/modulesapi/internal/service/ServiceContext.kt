@@ -1,4 +1,4 @@
-package io.appmetrica.analytics.modulesapi.internal
+package io.appmetrica.analytics.modulesapi.internal.service
 
 import android.content.Context
 import io.appmetrica.analytics.coreapi.internal.control.DataSendingRestrictionController
@@ -9,16 +9,18 @@ import io.appmetrica.analytics.coreapi.internal.servicecomponents.FirstExecution
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.SdkEnvironmentProvider
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.applicationstate.ApplicationStateProvider
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.batteryinfo.ChargeTypeProvider
+import io.appmetrica.analytics.modulesapi.internal.common.ExecutorProvider
+import io.appmetrica.analytics.modulesapi.internal.common.ModuleSelfReporter
 
 interface ServiceContext {
 
     val context: Context
 
-    val moduleLifecycleController: ModuleLifecycleController
+    val moduleServiceLifecycleController: ModuleServiceLifecycleController
 
-    val storageProvider: StorageProvider
+    val serviceStorageProvider: ServiceStorageProvider
 
-    val networkContext: NetworkContext
+    val networkContext: ServiceNetworkContext
 
     val executorProvider: ExecutorProvider
 

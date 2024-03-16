@@ -23,7 +23,7 @@ internal class StorageProviderImplTest : CommonTest() {
     @get:Rule
     val legacyModulePreferencesAdapterMockedRule = MockedConstructionRule(LegacyModulePreferenceAdapter::class.java)
 
-    private val storageProviderImpl = StorageProviderImpl(context, preferenceServiceDbStorage, dbStorage)
+    private val storageProviderImpl = ServiceStorageProviderImpl(context, preferenceServiceDbStorage, dbStorage)
 
     @Test
     fun modulePreferences() {

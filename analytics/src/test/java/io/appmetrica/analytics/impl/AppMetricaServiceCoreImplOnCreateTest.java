@@ -13,7 +13,7 @@ import io.appmetrica.analytics.impl.crash.ReadOldCrashesRunnable;
 import io.appmetrica.analytics.impl.crash.jvm.CrashDirectoryWatcher;
 import io.appmetrica.analytics.impl.db.VitalCommonDataProvider;
 import io.appmetrica.analytics.impl.id.AdvertisingIdGetter;
-import io.appmetrica.analytics.impl.modules.ModuleLifecycleControllerImpl;
+import io.appmetrica.analytics.impl.modules.ModuleServiceLifecycleControllerImpl;
 import io.appmetrica.analytics.impl.modules.ServiceContextFacade;
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade;
 import io.appmetrica.analytics.impl.service.AppMetricaServiceCallback;
@@ -88,8 +88,8 @@ public class AppMetricaServiceCoreImplOnCreateTest extends CommonTest {
     public MockedConstructionRule<ServiceContextFacade> serviceContextFacadeMockedRule =
         new MockedConstructionRule<>(ServiceContextFacade.class);
     @Rule
-    public MockedConstructionRule<ModuleLifecycleControllerImpl> moduleLifecycleControllerMockedRule =
-        new MockedConstructionRule<>(ModuleLifecycleControllerImpl.class);
+    public MockedConstructionRule<ModuleServiceLifecycleControllerImpl> moduleLifecycleControllerMockedRule =
+        new MockedConstructionRule<>(ModuleServiceLifecycleControllerImpl.class);
 
     @Rule
     public MockedConstructionRule<CoreImplFirstCreateTaskLauncherProvider>

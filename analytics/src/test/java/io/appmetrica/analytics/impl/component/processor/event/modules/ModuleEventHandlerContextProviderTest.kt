@@ -39,7 +39,7 @@ internal class ModuleEventHandlerContextProviderTest : CommonTest() {
 
     @get:Rule
     val moduleEventHandlerContextImplMockedConstructionRule =
-        MockedConstructionRule(ModuleEventHandlerContextImpl::class.java)
+        MockedConstructionRule(ModuleEventServiceHandlerContextImpl::class.java)
 
     @get:Rule
     val moduleEventReporterMockedConstructionRule = MockedConstructionRule(ModuleEventReporter::class.java)

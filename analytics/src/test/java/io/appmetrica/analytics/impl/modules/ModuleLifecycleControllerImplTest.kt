@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.modules
 
 import android.content.Intent
 import io.appmetrica.analytics.impl.AppMetricaServiceLifecycle
-import io.appmetrica.analytics.modulesapi.internal.ModuleLifecycleObserver
+import io.appmetrica.analytics.modulesapi.internal.service.ModuleServiceLifecycleObserver
 import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
@@ -14,12 +14,12 @@ import org.mockito.kotlin.verifyNoMoreInteractions
 class ModuleLifecycleControllerImplTest : CommonTest() {
 
     private val serviceLifecycle = mock<AppMetricaServiceLifecycle>()
-    private val moduleLifecycleObserver = mock<ModuleLifecycleObserver>()
+    private val moduleLifecycleObserver = mock<ModuleServiceLifecycleObserver>()
     private val intent = mock<Intent>()
 
     private val serviceLifecycleObserverCaptor = argumentCaptor<AppMetricaServiceLifecycle.LifecycleObserver>()
 
-    private val moduleLifecycleControllerImpl = ModuleLifecycleControllerImpl(serviceLifecycle)
+    private val moduleLifecycleControllerImpl = ModuleServiceLifecycleControllerImpl(serviceLifecycle)
 
     @Test
     fun registerOnFirstClientConnectedObserver() {

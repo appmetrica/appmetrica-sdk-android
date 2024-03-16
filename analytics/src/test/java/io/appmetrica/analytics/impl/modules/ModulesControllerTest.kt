@@ -11,16 +11,16 @@ import io.appmetrica.analytics.impl.IReporterExtended
 import io.appmetrica.analytics.impl.permissions.NeverForbidPermissionStrategy
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade
 import io.appmetrica.analytics.impl.startup.StartupState
-import io.appmetrica.analytics.modulesapi.internal.AskForPermissionStrategyModuleProvider
-import io.appmetrica.analytics.modulesapi.internal.LocationExtension
-import io.appmetrica.analytics.modulesapi.internal.ModuleEntryPoint
-import io.appmetrica.analytics.modulesapi.internal.ModuleLocationSourcesController
-import io.appmetrica.analytics.modulesapi.internal.ModuleRemoteConfig
-import io.appmetrica.analytics.modulesapi.internal.ModuleServicesDatabase
-import io.appmetrica.analytics.modulesapi.internal.RemoteConfigExtensionConfiguration
-import io.appmetrica.analytics.modulesapi.internal.RemoteConfigUpdateListener
-import io.appmetrica.analytics.modulesapi.internal.ServiceContext
-import io.appmetrica.analytics.modulesapi.internal.event.ModuleEventHandlerFactory
+import io.appmetrica.analytics.modulesapi.internal.common.AskForPermissionStrategyModuleProvider
+import io.appmetrica.analytics.modulesapi.internal.service.LocationServiceExtension
+import io.appmetrica.analytics.modulesapi.internal.service.ModuleLocationSourcesServiceController
+import io.appmetrica.analytics.modulesapi.internal.service.ModuleRemoteConfig
+import io.appmetrica.analytics.modulesapi.internal.service.ModuleServiceEntryPoint
+import io.appmetrica.analytics.modulesapi.internal.service.ModuleServicesDatabase
+import io.appmetrica.analytics.modulesapi.internal.service.RemoteConfigExtensionConfiguration
+import io.appmetrica.analytics.modulesapi.internal.service.RemoteConfigUpdateListener
+import io.appmetrica.analytics.modulesapi.internal.service.ServiceContext
+import io.appmetrica.analytics.modulesapi.internal.service.event.ModuleEventServiceHandlerFactory
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
 import io.appmetrica.analytics.testutils.MockedConstructionRule
@@ -31,8 +31,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.kotlin.any
-import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.clearInvocations
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.doThrow
@@ -44,7 +42,6 @@ import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.verifyZeroInteractions
 import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
-import kotlin.RuntimeException
 
 @RunWith(RobolectricTestRunner::class)
 internal class ModulesControllerTest : CommonTest() {
@@ -54,7 +51,7 @@ internal class ModulesControllerTest : CommonTest() {
     private val firstModuleJsonParser = mock<JsonParser<Any>>()
     private val firstModuleProtobufConverter = mock<Converter<Any, ByteArray>>()
     private val firstModuleRemoteConfigListener = mock<RemoteConfigUpdateListener<Any>>()
-    private val firstModuleEventHandlerFactory = mock<ModuleEventHandlerFactory>()
+    private val firstModuleEventHandlerFactory = mock<ModuleEventServiceHandlerFactory>()
 
     private val firstRemoteConfigExtensionConfiguration = mock<RemoteConfigExtensionConfiguration<Any>> {
         on { getFeatures() } doReturn firstModuleFeatures
@@ -66,10 +63,10 @@ internal class ModulesControllerTest : CommonTest() {
     private val firstModuleIdentifier = "First module with remote config identifier"
 
     private val firstLocationConsumer = mock<Consumer<Location?>>()
-    private val firstLocationSourcesController = mock<ModuleLocationSourcesController>()
+    private val firstLocationSourcesController = mock<ModuleLocationSourcesServiceController>()
     private val firstLocationControllerAppStateToggle = mock<Toggle>()
 
-    private val firstLocationExtension = mock<LocationExtension> {
+    private val firstLocationExtension = mock<LocationServiceExtension> {
         on { locationConsumer } doReturn firstLocationConsumer
         on { locationSourcesController } doReturn firstLocationSourcesController
         on { locationControllerAppStateToggle } doReturn firstLocationControllerAppStateToggle
@@ -77,11 +74,11 @@ internal class ModulesControllerTest : CommonTest() {
 
     private val firstModuleServiceDatabase = mock<ModuleServicesDatabase>()
 
-    private val firstModule = mock<ModuleEntryPoint<Any>> {
+    private val firstModule = mock<ModuleServiceEntryPoint<Any>> {
         on { identifier } doReturn firstModuleIdentifier
         on { remoteConfigExtensionConfiguration } doReturn firstRemoteConfigExtensionConfiguration
-        on { moduleEventHandlerFactory } doReturn firstModuleEventHandlerFactory
-        on { locationExtension } doReturn firstLocationExtension
+        on { moduleEventServiceHandlerFactory } doReturn firstModuleEventHandlerFactory
+        on { locationServiceExtension } doReturn firstLocationExtension
         on { moduleServicesDatabase } doReturn firstModuleServiceDatabase
     }
 
@@ -90,7 +87,7 @@ internal class ModulesControllerTest : CommonTest() {
     private val secondModuleJsonParser = mock<JsonParser<Any>>()
     private val secondModuleProtobufConverter = mock<Converter<Any, ByteArray>>()
     private val secondModuleConfigUpdateListener = mock<RemoteConfigUpdateListener<Any>>()
-    private val secondModuleEventHandlerFactory = mock<ModuleEventHandlerFactory>()
+    private val secondModuleEventHandlerFactory = mock<ModuleEventServiceHandlerFactory>()
 
     private val secondRemoteConfigExtensionConfiguration = mock<RemoteConfigExtensionConfiguration<Any>> {
         on { getFeatures() } doReturn secondModuleFeatures
@@ -102,10 +99,10 @@ internal class ModulesControllerTest : CommonTest() {
     private val secondModuleIdentifier = "Second module with remote config identifier"
 
     private val secondLocationConsumer = mock<Consumer<Location?>>()
-    private val secondLocationSourcesController = mock<ModuleLocationSourcesController>()
+    private val secondLocationSourcesController = mock<ModuleLocationSourcesServiceController>()
     private val secondLocationControllerAppStateToggle = mock<Toggle>()
 
-    private val secondLocationExtension = mock<LocationExtension> {
+    private val secondLocationExtension = mock<LocationServiceExtension> {
         on { locationConsumer } doReturn secondLocationConsumer
         on { locationSourcesController } doReturn secondLocationSourcesController
         on { locationControllerAppStateToggle } doReturn secondLocationControllerAppStateToggle
@@ -113,17 +110,17 @@ internal class ModulesControllerTest : CommonTest() {
 
     private val secondModuleServicesDatabase = mock<ModuleServicesDatabase>()
 
-    private val secondModule = mock<ModuleEntryPoint<Any>> {
+    private val secondModule = mock<ModuleServiceEntryPoint<Any>> {
         on { identifier } doReturn secondModuleIdentifier
         on { remoteConfigExtensionConfiguration } doReturn secondRemoteConfigExtensionConfiguration
-        on { moduleEventHandlerFactory } doReturn secondModuleEventHandlerFactory
-        on { locationExtension } doReturn secondLocationExtension
+        on { moduleEventServiceHandlerFactory } doReturn secondModuleEventHandlerFactory
+        on { locationServiceExtension } doReturn secondLocationExtension
         on { moduleServicesDatabase } doReturn secondModuleServicesDatabase
     }
 
     private val moduleWithoutRemoteConfigIdentifier = "Module without remote config identifier"
 
-    private val lightModule = mock<ModuleEntryPoint<Any>> {
+    private val lightModule = mock<ModuleServiceEntryPoint<Any>> {
         on { identifier } doReturn moduleWithoutRemoteConfigIdentifier
     }
 
@@ -136,9 +133,9 @@ internal class ModulesControllerTest : CommonTest() {
 
     private val serviceContext = mock<ServiceContext>()
 
-    private val firstModuleRemoteConfig = mock<ModuleRemoteConfig<Any?>>()
-    private val secondModuleRemoteConfig = mock<ModuleRemoteConfig<Any?>>()
-    private val moduleWithoutRemoteConfigFullConfig = mock<ModuleRemoteConfig<Any?>>()
+    private val firstModuleRemoteConfig = mock<ModuleRemoteConfigModel<Any?>>()
+    private val secondModuleRemoteConfig = mock<ModuleRemoteConfigModel<Any?>>()
+    private val moduleWithoutRemoteConfigFullConfig = mock<ModuleRemoteConfigModel<Any?>>()
 
     private val startupState = mock<StartupState>()
 
@@ -201,7 +198,7 @@ internal class ModulesControllerTest : CommonTest() {
         val remoteConfigExtensionConfigurationValue = mock<RemoteConfigExtensionConfiguration<Any>> {
             on { getFeatures() } doReturn emptyList()
         }
-        val module = mock<ModuleEntryPoint<Any>> {
+        val module = mock<ModuleServiceEntryPoint<Any>> {
             on { remoteConfigExtensionConfiguration } doReturn remoteConfigExtensionConfigurationValue
         }
         modulesController.registerModule(module)
@@ -533,5 +530,5 @@ internal class ModulesControllerTest : CommonTest() {
         return neverForbidPermissionStrategyMockedConstructionRule.constructionMock.constructed().first()
     }
 
-    interface AskForPermissionStrategyModule : ModuleEntryPoint<Any>, AskForPermissionStrategyModuleProvider
+    interface AskForPermissionStrategyModule : ModuleServiceEntryPoint<Any>, AskForPermissionStrategyModuleProvider
 }

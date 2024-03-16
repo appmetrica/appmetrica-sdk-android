@@ -1,8 +1,8 @@
-package io.appmetrica.analytics.modulesapi.internal.event
+package io.appmetrica.analytics.modulesapi.internal.service.event
 
 import io.appmetrica.analytics.coreapi.internal.event.CounterReportApi
 
-interface ModuleEventHandlerReporter {
+interface ModuleEventServiceHandlerReporter {
 
     fun report(report: CounterReportApi)
 }

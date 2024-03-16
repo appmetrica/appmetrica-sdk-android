@@ -5,8 +5,8 @@ import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.component.ComponentId
 import io.appmetrica.analytics.impl.component.ComponentUnit
 import io.appmetrica.analytics.impl.modules.ModuleEventHandlersHolder
-import io.appmetrica.analytics.modulesapi.internal.event.ModuleEventHandler
-import io.appmetrica.analytics.modulesapi.internal.event.ModuleEventHandlerContext
+import io.appmetrica.analytics.modulesapi.internal.service.event.ModuleEventServiceHandlerContext
+import io.appmetrica.analytics.modulesapi.internal.service.event.ModuleServiceEventHandler
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
 import io.appmetrica.analytics.testutils.MockedConstructionRule
@@ -40,13 +40,13 @@ class ModulesEventHandlerTest : CommonTest() {
     private val currentReport = mock<CounterReport>()
 
     private val firstIdentifier = "First identifier"
-    private val firstModuleEventHandler = mock<ModuleEventHandler>()
+    private val firstModuleEventHandler = mock<ModuleServiceEventHandler>()
 
     private val secondIdentifier = "Second identifier"
-    private val secondModuleEventHandler = mock<ModuleEventHandler>()
+    private val secondModuleEventHandler = mock<ModuleServiceEventHandler>()
 
     private val thirdIdentifier = "Third identifier"
-    private val thirdModuleEventHandler = mock<ModuleEventHandler>()
+    private val thirdModuleEventHandler = mock<ModuleServiceEventHandler>()
 
     @get:Rule
     val globalServiceLocatorRule = GlobalServiceLocatorRule()
@@ -67,9 +67,9 @@ class ModulesEventHandlerTest : CommonTest() {
 
     private lateinit var modulesEventHandler: ModulesEventHandler
 
-    private val firstModuleEventHandlerContext = mock<ModuleEventHandlerContext>()
-    private val secondModuleEventHandlerContext = mock<ModuleEventHandlerContext>()
-    private val thirdModuleEventHandlerContext = mock<ModuleEventHandlerContext>()
+    private val firstModuleEventHandlerContext = mock<ModuleEventServiceHandlerContext>()
+    private val secondModuleEventHandlerContext = mock<ModuleEventServiceHandlerContext>()
+    private val thirdModuleEventHandlerContext = mock<ModuleEventServiceHandlerContext>()
 
     @Before
     fun setUp() {

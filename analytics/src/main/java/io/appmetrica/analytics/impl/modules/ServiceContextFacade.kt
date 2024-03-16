@@ -10,13 +10,13 @@ import io.appmetrica.analytics.coreapi.internal.servicecomponents.applicationsta
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.batteryinfo.ChargeTypeProvider
 import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.db.storage.DatabaseStorageFactory
-import io.appmetrica.analytics.modulesapi.internal.ExecutorProvider
-import io.appmetrica.analytics.modulesapi.internal.LocationServiceApi
-import io.appmetrica.analytics.modulesapi.internal.ModuleLifecycleController
-import io.appmetrica.analytics.modulesapi.internal.ServiceContext
+import io.appmetrica.analytics.modulesapi.internal.common.ExecutorProvider
+import io.appmetrica.analytics.modulesapi.internal.service.LocationServiceApi
+import io.appmetrica.analytics.modulesapi.internal.service.ModuleServiceLifecycleController
+import io.appmetrica.analytics.modulesapi.internal.service.ServiceContext
 
 internal class ServiceContextFacade(
-    override val moduleLifecycleController: ModuleLifecycleController
+    override val moduleServiceLifecycleController: ModuleServiceLifecycleController
 ) : ServiceContext {
 
     override val context
@@ -37,7 +37,7 @@ internal class ServiceContextFacade(
         ServiceWakeLockBinder(AppMetricaServiceWakeLockIntentProvider())
     )
 
-    override val storageProvider = StorageProviderImpl(
+    override val serviceStorageProvider = ServiceStorageProviderImpl(
         context,
         GlobalServiceLocator.getInstance().servicePreferences,
         DatabaseStorageFactory.getInstance(context).storageForService

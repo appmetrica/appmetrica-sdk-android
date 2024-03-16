@@ -4,8 +4,8 @@ import android.database.sqlite.SQLiteDatabase;
 import io.appmetrica.analytics.coreapi.internal.db.DatabaseScript;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.logger.internal.YLogger;
-import io.appmetrica.analytics.modulesapi.internal.ModuleServicesDatabase;
-import io.appmetrica.analytics.modulesapi.internal.TableDescription;
+import io.appmetrica.analytics.modulesapi.internal.service.ModuleServicesDatabase;
+import io.appmetrica.analytics.modulesapi.internal.common.TableDescription;
 import java.sql.SQLException;
 
 public class DatabaseScriptsHolder {

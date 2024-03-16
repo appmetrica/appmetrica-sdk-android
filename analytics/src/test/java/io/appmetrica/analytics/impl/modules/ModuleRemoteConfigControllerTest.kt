@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.modules
 
 import io.appmetrica.analytics.coreapi.internal.data.Converter
 import io.appmetrica.analytics.coreapi.internal.data.JsonParser
-import io.appmetrica.analytics.modulesapi.internal.RemoteConfigExtensionConfiguration
+import io.appmetrica.analytics.modulesapi.internal.service.RemoteConfigExtensionConfiguration
 import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.json.JSONObject

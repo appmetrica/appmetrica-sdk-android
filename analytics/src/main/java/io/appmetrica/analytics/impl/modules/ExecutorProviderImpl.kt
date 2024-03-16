@@ -5,7 +5,7 @@ import io.appmetrica.analytics.coreapi.internal.executors.InterruptionSafeThread
 import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.utils.executors.NamedThreadFactory
 import io.appmetrica.analytics.impl.utils.executors.ServiceExecutorProvider
-import io.appmetrica.analytics.modulesapi.internal.ExecutorProvider
+import io.appmetrica.analytics.modulesapi.internal.common.ExecutorProvider
 import java.util.concurrent.Executor
 
 internal class ExecutorProviderImpl : ExecutorProvider {

@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.modules
 import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.db.DatabaseStorage
 import io.appmetrica.analytics.impl.db.storage.DatabaseStorageFactory
-import io.appmetrica.analytics.modulesapi.internal.ModuleLifecycleController
+import io.appmetrica.analytics.modulesapi.internal.service.ModuleServiceLifecycleController
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
 import io.appmetrica.analytics.testutils.MockedConstructionRule
@@ -20,7 +20,7 @@ import org.robolectric.RobolectricTestRunner
 @RunWith(RobolectricTestRunner::class)
 internal class ServiceContextFacadeTest : CommonTest() {
 
-    private val moduleLifecycleController = mock<ModuleLifecycleController>()
+    private val moduleLifecycleController = mock<ModuleServiceLifecycleController>()
     private val databaseStorageFactory = mock<DatabaseStorageFactory>()
     private val storageForService = mock<DatabaseStorage>()
 
@@ -44,7 +44,7 @@ internal class ServiceContextFacadeTest : CommonTest() {
         MockedConstructionRule(AppMetricaServiceWakeLockIntentProvider::class.java)
 
     @get:Rule
-    val storageProviderImplMockedRule = MockedConstructionRule(StorageProviderImpl::class.java)
+    val storageProviderImplMockedRule = MockedConstructionRule(ServiceStorageProviderImpl::class.java)
 
     @get:Rule
     val executorProviderImplMockedRule = MockedConstructionRule(ExecutorProviderImpl::class.java)
@@ -104,7 +104,7 @@ internal class ServiceContextFacadeTest : CommonTest() {
 
     @Test
     fun storageProvider() {
-        assertThat(serviceContextFacade.storageProvider)
+        assertThat(serviceContextFacade.serviceStorageProvider)
             .isEqualTo(storageProviderImplMockedRule.constructionMock.constructed()[0])
         assertThat(storageProviderImplMockedRule.constructionMock.constructed()).hasSize(1)
         assertThat(storageProviderImplMockedRule.argumentInterceptor.flatArguments())

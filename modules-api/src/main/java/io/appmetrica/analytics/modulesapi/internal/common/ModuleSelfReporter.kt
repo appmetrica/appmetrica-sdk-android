@@ -1,4 +1,4 @@
-package io.appmetrica.analytics.modulesapi.internal
+package io.appmetrica.analytics.modulesapi.internal.common
 
 interface ModuleSelfReporter {
 

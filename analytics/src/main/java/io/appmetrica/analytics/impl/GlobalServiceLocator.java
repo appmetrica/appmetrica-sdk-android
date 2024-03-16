@@ -47,7 +47,7 @@ import io.appmetrica.analytics.impl.startup.uuid.UuidFromStartupStateImporter;
 import io.appmetrica.analytics.impl.telephony.TelephonyDataProvider;
 import io.appmetrica.analytics.impl.utils.executors.ServiceExecutorProvider;
 import io.appmetrica.analytics.logger.internal.YLogger;
-import io.appmetrica.analytics.modulesapi.internal.LocationServiceApi;
+import io.appmetrica.analytics.modulesapi.internal.service.LocationServiceApi;
 import io.appmetrica.analytics.networktasks.internal.NetworkCore;
 import io.appmetrica.analytics.networktasks.internal.NetworkServiceLocator;
 

@@ -4,22 +4,22 @@ import io.appmetrica.analytics.coreapi.internal.data.Converter
 import io.appmetrica.analytics.coreapi.internal.data.JsonParser
 import io.appmetrica.analytics.coreapi.internal.permission.PermissionStrategy
 import io.appmetrica.analytics.logger.internal.YLogger
-import io.appmetrica.analytics.modulesapi.internal.AskForPermissionStrategyModuleProvider
-import io.appmetrica.analytics.modulesapi.internal.LocationExtension
-import io.appmetrica.analytics.modulesapi.internal.ModuleEntryPoint
-import io.appmetrica.analytics.modulesapi.internal.ModuleRemoteConfig
-import io.appmetrica.analytics.modulesapi.internal.ModuleServicesDatabase
-import io.appmetrica.analytics.modulesapi.internal.RemoteConfigExtensionConfiguration
-import io.appmetrica.analytics.modulesapi.internal.RemoteConfigUpdateListener
-import io.appmetrica.analytics.modulesapi.internal.ServiceContext
-import io.appmetrica.analytics.modulesapi.internal.event.ModuleEventHandlerFactory
+import io.appmetrica.analytics.modulesapi.internal.common.AskForPermissionStrategyModuleProvider
+import io.appmetrica.analytics.modulesapi.internal.service.LocationServiceExtension
+import io.appmetrica.analytics.modulesapi.internal.service.ModuleRemoteConfig
+import io.appmetrica.analytics.modulesapi.internal.service.ModuleServiceEntryPoint
+import io.appmetrica.analytics.modulesapi.internal.service.ModuleServicesDatabase
+import io.appmetrica.analytics.modulesapi.internal.service.RemoteConfigExtensionConfiguration
+import io.appmetrica.analytics.modulesapi.internal.service.RemoteConfigUpdateListener
+import io.appmetrica.analytics.modulesapi.internal.service.ServiceContext
+import io.appmetrica.analytics.modulesapi.internal.service.event.ModuleEventServiceHandlerFactory
 import io.appmetrica.analytics.remotepermissions.impl.FeatureConfig
 import io.appmetrica.analytics.remotepermissions.impl.FeatureConfigToProtoBytesConverter
 import io.appmetrica.analytics.remotepermissions.impl.FeatureParser
 import io.appmetrica.analytics.remotepermissions.impl.RemoteConfigPermissionStrategy
 
 class RemotePermissionsModuleEntryPoint :
-    ModuleEntryPoint<FeatureConfig>,
+    ModuleServiceEntryPoint<FeatureConfig>,
     AskForPermissionStrategyModuleProvider,
     RemoteConfigUpdateListener<FeatureConfig> {
 
@@ -50,9 +50,9 @@ class RemotePermissionsModuleEntryPoint :
             override fun getRemoteConfigUpdateListener(): RemoteConfigUpdateListener<FeatureConfig> = listener
         }
 
-    override val moduleEventHandlerFactory: ModuleEventHandlerFactory? = null
+    override val moduleEventServiceHandlerFactory: ModuleEventServiceHandlerFactory? = null
 
-    override val locationExtension: LocationExtension? = null
+    override val locationServiceExtension: LocationServiceExtension? = null
 
     override val moduleServicesDatabase: ModuleServicesDatabase? = null
 

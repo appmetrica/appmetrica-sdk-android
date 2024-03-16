@@ -2,8 +2,8 @@ package io.appmetrica.analytics.impl.modules
 
 import io.appmetrica.analytics.coreapi.internal.identifiers.SdkIdentifiers
 import io.appmetrica.analytics.impl.startup.StartupState
-import io.appmetrica.analytics.modulesapi.internal.ModuleRemoteConfig
-import io.appmetrica.analytics.modulesapi.internal.RemoteConfigMetaInfo
+import io.appmetrica.analytics.modulesapi.internal.service.ModuleRemoteConfig
+import io.appmetrica.analytics.modulesapi.internal.service.RemoteConfigMetaInfo
 import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
@@ -37,7 +37,7 @@ class ModuleRemoteConfigProviderTest : CommonTest() {
     }
 
     private val identifiers = SdkIdentifiers(uuid, deviceId, deviceIdHash)
-    private val remoteConfigMetaInfo = RemoteConfigMetaInfo(firstStartupTime, serverTime)
+    private val remoteConfigMetaInfo = RemoteConfigMetaInfoModel(firstStartupTime, serverTime)
 
     private val moduleRemoteConfigProvider = ModuleRemoteConfigProvider(startupState)
 
@@ -45,7 +45,7 @@ class ModuleRemoteConfigProviderTest : CommonTest() {
     fun getRemoteConfigForFirstModule() {
         assertThat(moduleRemoteConfigProvider.getRemoteConfigForModule(firstIdentifier))
             .isEqualToComparingFieldByField(
-                ModuleRemoteConfig(identifiers, remoteConfigMetaInfo, firstRemoteConfig)
+                ModuleRemoteConfigModel(identifiers, remoteConfigMetaInfo, firstRemoteConfig)
             )
     }
 
@@ -53,7 +53,7 @@ class ModuleRemoteConfigProviderTest : CommonTest() {
     fun getRemoteConfigForSecondModule() {
         assertThat(moduleRemoteConfigProvider.getRemoteConfigForModule(secondIdentifier))
             .isEqualToComparingFieldByField(
-                ModuleRemoteConfig(identifiers, remoteConfigMetaInfo, secondRemoteConfig)
+                ModuleRemoteConfigModel(identifiers, remoteConfigMetaInfo, secondRemoteConfig)
             )
     }
 
@@ -61,7 +61,7 @@ class ModuleRemoteConfigProviderTest : CommonTest() {
     fun getRemoteConfigForUnknownModule() {
         assertThat(moduleRemoteConfigProvider.getRemoteConfigForModule("unknown module"))
             .isEqualToComparingFieldByField(
-                ModuleRemoteConfig(identifiers, remoteConfigMetaInfo, null)
+                ModuleRemoteConfigModel(identifiers, remoteConfigMetaInfo, null)
             )
     }
 }

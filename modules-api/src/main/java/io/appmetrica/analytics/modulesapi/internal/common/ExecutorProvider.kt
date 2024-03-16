@@ -1,4 +1,4 @@
-package io.appmetrica.analytics.modulesapi.internal
+package io.appmetrica.analytics.modulesapi.internal.common
 
 import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor
 import io.appmetrica.analytics.coreapi.internal.executors.InterruptionSafeThread

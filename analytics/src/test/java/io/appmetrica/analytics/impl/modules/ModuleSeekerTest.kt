@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.modules
 
 import io.appmetrica.analytics.impl.GlobalServiceLocator
-import io.appmetrica.analytics.modulesapi.internal.ModuleEntryPoint
+import io.appmetrica.analytics.modulesapi.internal.service.ModuleServiceEntryPoint
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
 import io.appmetrica.analytics.testutils.MockedConstructionRule
@@ -31,8 +31,8 @@ class ModuleSeekerTest : CommonTest() {
     private val secondModuleClass = "io.appmetrica.analytics.SecondModulesClass"
     private val missingModuleClass = "io.appmetrica.analytics.MissingModuleClass"
 
-    private val firstModuleEntryPoint = mock<ModuleEntryPoint<Any>>()
-    private val secondModuleEntryPoint = mock<ModuleEntryPoint<Any>>()
+    private val firstModuleEntryPoint = mock<ModuleServiceEntryPoint<Any>>()
+    private val secondModuleEntryPoint = mock<ModuleServiceEntryPoint<Any>>()
 
     private lateinit var modulesController: ModulesController
     private lateinit var moduleLoader: ModuleLoader

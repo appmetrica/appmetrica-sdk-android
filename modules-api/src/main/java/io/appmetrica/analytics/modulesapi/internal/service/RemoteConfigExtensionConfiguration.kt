@@ -1,4 +1,4 @@
-package io.appmetrica.analytics.modulesapi.internal
+package io.appmetrica.analytics.modulesapi.internal.service
 
 import io.appmetrica.analytics.coreapi.internal.data.Converter
 import io.appmetrica.analytics.coreapi.internal.data.JsonParser

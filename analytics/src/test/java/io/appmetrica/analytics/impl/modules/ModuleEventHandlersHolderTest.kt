@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.modules
 
-import io.appmetrica.analytics.modulesapi.internal.event.ModuleEventHandler
-import io.appmetrica.analytics.modulesapi.internal.event.ModuleEventHandlerFactory
+import io.appmetrica.analytics.modulesapi.internal.service.event.ModuleEventServiceHandlerFactory
+import io.appmetrica.analytics.modulesapi.internal.service.event.ModuleServiceEventHandler
 import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
@@ -14,16 +14,16 @@ class ModuleEventHandlersHolderTest : CommonTest() {
 
     private val apiKey = UUID.randomUUID().toString()
     private val firstIdentifier = "Identifier #1"
-    private val firstHandler = mock<ModuleEventHandler>()
+    private val firstHandler = mock<ModuleServiceEventHandler>()
 
-    private val firstHandlerFactory = mock<ModuleEventHandlerFactory> {
+    private val firstHandlerFactory = mock<ModuleEventServiceHandlerFactory> {
         on { createEventHandler(apiKey) } doReturn firstHandler
     }
 
     private val secondIdentifier = "Identifier #2"
-    private val secondHandler = mock<ModuleEventHandler>()
+    private val secondHandler = mock<ModuleServiceEventHandler>()
 
-    private val secondHandlerFactory = mock<ModuleEventHandlerFactory> {
+    private val secondHandlerFactory = mock<ModuleEventServiceHandlerFactory> {
         on { createEventHandler(apiKey) } doReturn secondHandler
     }
 

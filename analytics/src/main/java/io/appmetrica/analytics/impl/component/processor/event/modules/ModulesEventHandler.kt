@@ -5,7 +5,7 @@ import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.component.ComponentUnit
 import io.appmetrica.analytics.impl.component.processor.event.ReportComponentHandler
 import io.appmetrica.analytics.logger.internal.YLogger
-import io.appmetrica.analytics.modulesapi.internal.event.ModuleEventHandler
+import io.appmetrica.analytics.modulesapi.internal.service.event.ModuleServiceEventHandler
 
 private const val TAG_PREFIX = "[ModulesEventHandler-%s]"
 
@@ -14,7 +14,7 @@ class ModulesEventHandler(component: ComponentUnit) : ReportComponentHandler(com
     private val apiKey = component.componentId.apiKey ?: "empty"
     private val tag = String.format(TAG_PREFIX, apiKey)
 
-    private val moduleHandlersWithContextProviders: List<Pair<ModuleEventHandler, ModuleEventHandlerContextProvider>> =
+    private val processingChain: List<Pair<ModuleServiceEventHandler, ModuleEventHandlerContextProvider>> =
         GlobalServiceLocator.getInstance().moduleEventHandlersHolder.getHandlers(
             apiKey
         ).map {
@@ -24,10 +24,10 @@ class ModulesEventHandler(component: ComponentUnit) : ReportComponentHandler(com
     override fun process(reportData: CounterReport): Boolean {
         YLogger.info(
             tag,
-            "Apply ${moduleHandlersWithContextProviders.size} module handlers to report with type = " +
+            "Apply ${processingChain.size} module handlers to report with type = " +
                 "${reportData.type}; customType = ${reportData.customType}; name = ${reportData.name}"
         )
-        return moduleHandlersWithContextProviders.any { (handler, contextProvider) ->
+        return processingChain.any { (handler, contextProvider) ->
             handler.handle(contextProvider.getContext(reportData), reportData)
         }
     }

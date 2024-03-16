@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.modules
 
 import io.appmetrica.analytics.impl.db.preferences.SimplePreferenceStorage
-import io.appmetrica.analytics.modulesapi.internal.ModulePreferences
+import io.appmetrica.analytics.modulesapi.internal.common.ModulePreferences
 
 internal abstract class BaseModulePreferencesAdapter(
     private val preferences: SimplePreferenceStorage

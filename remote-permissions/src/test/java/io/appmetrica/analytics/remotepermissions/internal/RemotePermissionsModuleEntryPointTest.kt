@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.remotepermissions.internal
 
-import io.appmetrica.analytics.modulesapi.internal.ModuleRemoteConfig
-import io.appmetrica.analytics.modulesapi.internal.ServiceContext
+import io.appmetrica.analytics.modulesapi.internal.service.ModuleRemoteConfig
+import io.appmetrica.analytics.modulesapi.internal.service.ServiceContext
 import io.appmetrica.analytics.remotepermissions.impl.FeatureConfig
 import io.appmetrica.analytics.remotepermissions.impl.FeatureConfigToProtoBytesConverter
 import io.appmetrica.analytics.remotepermissions.impl.FeatureParser
@@ -194,12 +194,12 @@ internal class RemotePermissionsModuleEntryPointTest {
 
     @Test
     fun moduleEventHandler() {
-        assertThat(remotePermissionsModuleEntryPoint.moduleEventHandlerFactory).isNull()
+        assertThat(remotePermissionsModuleEntryPoint.moduleEventServiceHandlerFactory).isNull()
     }
 
     @Test
     fun locationExtension() {
-        assertThat(remotePermissionsModuleEntryPoint.locationExtension).isNull()
+        assertThat(remotePermissionsModuleEntryPoint.locationServiceExtension).isNull()
     }
 
     @Test

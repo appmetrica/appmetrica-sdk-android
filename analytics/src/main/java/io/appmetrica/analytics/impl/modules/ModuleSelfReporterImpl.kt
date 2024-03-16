@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.modules
 import io.appmetrica.analytics.ModuleEvent
 import io.appmetrica.analytics.impl.protobuf.backend.EventProto
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade
-import io.appmetrica.analytics.modulesapi.internal.ModuleSelfReporter
+import io.appmetrica.analytics.modulesapi.internal.common.ModuleSelfReporter
 
 class ModuleSelfReporterImpl : ModuleSelfReporter {
 
