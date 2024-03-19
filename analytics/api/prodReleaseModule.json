@@ -3,7 +3,7 @@
     "component": {
         "group": "io.appmetrica.analytics",
         "module": "analytics",
-        "version": "6.3.0",
+        "version": "6.4.0",
         "attributes": {
             "org.gradle.status": "release"
         }
@@ -34,8 +34,8 @@
             ],
             "files": [
                 {
-                    "name": "analytics-6.3.0.aar",
-                    "url": "analytics-6.3.0.aar",
+                    "name": "analytics-6.4.0.aar",
+                    "url": "analytics-6.4.0.aar",
                     "size": -1,
                     "sha512": "<sha512>",
                     "sha256": "<sha256>",
@@ -57,21 +57,21 @@
                     "group": "io.appmetrica.analytics",
                     "module": "analytics-identifiers",
                     "version": {
-                        "requires": "6.3.0"
+                        "requires": "6.4.0"
                     }
                 },
                 {
                     "group": "io.appmetrica.analytics",
                     "module": "analytics-location",
                     "version": {
-                        "requires": "6.3.0"
+                        "requires": "6.4.0"
                     }
                 },
                 {
                     "group": "io.appmetrica.analytics",
                     "module": "analytics-remote-permissions",
                     "version": {
-                        "requires": "6.3.0"
+                        "requires": "6.4.0"
                     }
                 },
                 {
@@ -92,84 +92,84 @@
                     "group": "io.appmetrica.analytics",
                     "module": "analytics-proto",
                     "version": {
-                        "requires": "6.3.0"
+                        "requires": "6.4.0"
                     }
                 },
                 {
                     "group": "io.appmetrica.analytics",
                     "module": "analytics-appsetid",
                     "version": {
-                        "requires": "6.3.0"
+                        "requires": "6.4.0"
                     }
                 },
                 {
                     "group": "io.appmetrica.analytics",
                     "module": "analytics-billing-interface",
                     "version": {
-                        "requires": "6.3.0"
+                        "requires": "6.4.0"
                     }
                 },
                 {
                     "group": "io.appmetrica.analytics",
                     "module": "analytics-billing-v6",
                     "version": {
-                        "requires": "6.3.0"
+                        "requires": "6.4.0"
                     }
                 },
                 {
                     "group": "io.appmetrica.analytics",
                     "module": "analytics-core-api",
                     "version": {
-                        "requires": "6.3.0"
+                        "requires": "6.4.0"
                     }
                 },
                 {
                     "group": "io.appmetrica.analytics",
                     "module": "analytics-core-utils",
                     "version": {
-                        "requires": "6.3.0"
+                        "requires": "6.4.0"
                     }
                 },
                 {
                     "group": "io.appmetrica.analytics",
                     "module": "analytics-location-api",
                     "version": {
-                        "requires": "6.3.0"
+                        "requires": "6.4.0"
                     }
                 },
                 {
                     "group": "io.appmetrica.analytics",
                     "module": "analytics-logger",
                     "version": {
-                        "requires": "6.3.0"
+                        "requires": "6.4.0"
                     }
                 },
                 {
                     "group": "io.appmetrica.analytics",
                     "module": "analytics-modules-api",
                     "version": {
-                        "requires": "6.3.0"
+                        "requires": "6.4.0"
                     }
                 },
                 {
                     "group": "io.appmetrica.analytics",
                     "module": "analytics-ndkcrashes-api",
                     "version": {
-                        "requires": "6.3.0"
+                        "requires": "6.4.0"
                     }
                 },
                 {
                     "group": "io.appmetrica.analytics",
                     "module": "analytics-network-tasks",
                     "version": {
-                        "requires": "6.3.0"
+                        "requires": "6.4.0"
                     }
                 }
             ],
             "files": [
                 {
-                    "name": "analytics-6.3.0.aar",
-                    "url": "analytics-6.3.0.aar",
+                    "name": "analytics-6.4.0.aar",
+                    "url": "analytics-6.4.0.aar",
                     "size": -1,
                     "sha512": "<sha512>",
                     "sha256": "<sha256>",
