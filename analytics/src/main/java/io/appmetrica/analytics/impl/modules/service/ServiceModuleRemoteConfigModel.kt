@@ -1,10 +1,10 @@
-package io.appmetrica.analytics.impl.modules
+package io.appmetrica.analytics.impl.modules.service
 
 import io.appmetrica.analytics.coreapi.internal.identifiers.SdkIdentifiers
 import io.appmetrica.analytics.modulesapi.internal.service.ModuleRemoteConfig
 import io.appmetrica.analytics.modulesapi.internal.service.RemoteConfigMetaInfo
 
-data class ModuleRemoteConfigModel<T>(
+data class ServiceModuleRemoteConfigModel<T>(
     override val identifiers: SdkIdentifiers,
     override val remoteConfigMetaInfo: RemoteConfigMetaInfo,
     override val featuresConfig: T

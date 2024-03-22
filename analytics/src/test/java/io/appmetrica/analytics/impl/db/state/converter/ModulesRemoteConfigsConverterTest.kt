@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.db.state.converter
 
 import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.modules.ModuleRemoteConfigController
-import io.appmetrica.analytics.impl.modules.ModulesController
+import io.appmetrica.analytics.impl.modules.service.ServiceModulesController
 import io.appmetrica.analytics.impl.protobuf.client.StartupStateProtobuf
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
@@ -53,7 +53,7 @@ class ModulesRemoteConfigsConverterTest : CommonTest() {
         thirdIdentifier to thirdModuleRemoteConfigController
     )
 
-    private lateinit var modulesController: ModulesController
+    private lateinit var modulesController: ServiceModulesController
     private lateinit var modulesRemoteConfigConverter: ModulesRemoteConfigsConverter
 
     @Before

@@ -9,6 +9,8 @@ import io.appmetrica.analytics.impl.ContextAppearedListener;
 import io.appmetrica.analytics.impl.DefaultOneShotMetricaConfig;
 import io.appmetrica.analytics.impl.SessionsTrackingManager;
 import io.appmetrica.analytics.impl.crash.CrashProcessorFactory;
+import io.appmetrica.analytics.impl.modules.ModuleEntryPointsRegister;
+import io.appmetrica.analytics.impl.modules.client.ClientModulesController;
 import io.appmetrica.analytics.impl.startup.uuid.MultiProcessSafeUuidProvider;
 import io.appmetrica.analytics.impl.utils.MainProcessDetector;
 import io.appmetrica.analytics.impl.utils.ProcessDetector;
@@ -33,6 +35,8 @@ public class ClientServiceLocatorRule extends ExternalResource {
     public CrashProcessorFactory crashProcessorFactory;
     public MultiProcessSafeUuidProvider defaultMultiProcessSafeUuidProvider;
     public MultiProcessSafeUuidProvider multiProcessSafeUuidProviderWithOuterSourceImporter;
+    public ClientModulesController modulesController;
+    public ModuleEntryPointsRegister moduleEntryPointsRegister;
     public ClientServiceLocator instance;
 
     @Override
@@ -50,6 +54,8 @@ public class ClientServiceLocatorRule extends ExternalResource {
         crashProcessorFactory = mock(CrashProcessorFactory.class);
         defaultMultiProcessSafeUuidProvider = mock(MultiProcessSafeUuidProvider.class);
         multiProcessSafeUuidProviderWithOuterSourceImporter = mock(MultiProcessSafeUuidProvider.class);
+        modulesController = mock(ClientModulesController.class);
+        moduleEntryPointsRegister = mock(ModuleEntryPointsRegister.class);
         when(instance.getClientExecutorProvider()).thenReturn(clientExecutorProvider);
         when(instance.getApiProxyExecutor()).thenReturn(clientExecutorProvider.getApiProxyExecutor());
         when(instance.getDefaultOneShotConfig()).thenReturn(mDefaultOneShotMetricaConfig);
@@ -63,6 +69,8 @@ public class ClientServiceLocatorRule extends ExternalResource {
         when(instance.getCrashProcessorFactory()).thenReturn(crashProcessorFactory);
         when(instance.getMultiProcessSafeUuidProvider(ArgumentMatchers.<Context>any()))
             .thenReturn(defaultMultiProcessSafeUuidProvider);
+        when(instance.getModulesController()).thenReturn(modulesController);
+        when(instance.getModuleEntryPointsRegister()).thenReturn(moduleEntryPointsRegister);
         ClientServiceLocator.setInstance(instance);
     }
 

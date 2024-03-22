@@ -1,4 +1,4 @@
-package io.appmetrica.analytics.impl.modules
+package io.appmetrica.analytics.impl.modules.service
 
 import android.location.Location
 import io.appmetrica.analytics.coreapi.internal.backport.Consumer
@@ -6,6 +6,8 @@ import io.appmetrica.analytics.coreapi.internal.control.Toggle
 import io.appmetrica.analytics.coreapi.internal.permission.PermissionStrategy
 import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.StartupStateObserver
+import io.appmetrica.analytics.impl.modules.ModuleApi
+import io.appmetrica.analytics.impl.modules.ModuleRemoteConfigController
 import io.appmetrica.analytics.impl.permissions.DefaultAskForPermissionStrategyProvider
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade
 import io.appmetrica.analytics.impl.startup.StartupState
@@ -17,9 +19,9 @@ import io.appmetrica.analytics.modulesapi.internal.service.ModuleServicesDatabas
 import io.appmetrica.analytics.modulesapi.internal.service.ServiceContext
 import java.util.concurrent.CopyOnWriteArrayList
 
-internal class ModulesController :
+internal class ServiceModulesController :
     ModuleApi,
-    ModuleHolder,
+    ServiceModuleHolder,
     StartupStateObserver,
     ServiceSideModuleInitializer,
     AskForPermissionStrategyModuleProvider {
@@ -110,7 +112,7 @@ internal class ModulesController :
         val configProvider = ModuleRemoteConfigProvider(newState)
         modules.forEach { module ->
             module.remoteConfigExtensionConfiguration?.let {
-                val config = configProvider.getRemoteConfigForModule(module.identifier)
+                val config = configProvider.getRemoteConfigForServiceModule(module.identifier)
                 YLogger.info(tag, "Notify module with id = ${module.identifier} with config = $config")
                 it.getRemoteConfigUpdateListener().onRemoteConfigUpdated(config)
             }
@@ -123,7 +125,7 @@ internal class ModulesController :
         modules.forEach { module ->
             try {
                 val configProvider = ModuleRemoteConfigProvider(startupState)
-                val config = configProvider.getRemoteConfigForModule(module.identifier)
+                val config = configProvider.getRemoteConfigForServiceModule(module.identifier)
                 module.initServiceSide(serviceContext, config)
 
                 module.moduleEventServiceHandlerFactory?.let {
@@ -157,7 +159,7 @@ internal class ModulesController :
 
     private fun reportSelfErrorEvent(moduleIdentifier: String, tag: String, throwable: Throwable) {
         AppMetricaSelfReportFacade.getReporter().reportEvent(
-            "module_errors",
+            "service_module_errors",
             mapOf(moduleIdentifier to mapOf(tag to throwable.stackTraceToString()))
         )
     }

@@ -1,4 +1,4 @@
-package io.appmetrica.analytics.impl.modules
+package io.appmetrica.analytics.impl.modules.service
 
 import android.location.Location
 import io.appmetrica.analytics.coreapi.internal.backport.Consumer
@@ -8,13 +8,14 @@ import io.appmetrica.analytics.coreapi.internal.data.JsonParser
 import io.appmetrica.analytics.coreapi.internal.permission.PermissionStrategy
 import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.IReporterExtended
+import io.appmetrica.analytics.impl.modules.ModuleEventHandlersHolder
+import io.appmetrica.analytics.impl.modules.ModuleRemoteConfigController
 import io.appmetrica.analytics.impl.permissions.NeverForbidPermissionStrategy
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade
 import io.appmetrica.analytics.impl.startup.StartupState
 import io.appmetrica.analytics.modulesapi.internal.common.AskForPermissionStrategyModuleProvider
 import io.appmetrica.analytics.modulesapi.internal.service.LocationServiceExtension
 import io.appmetrica.analytics.modulesapi.internal.service.ModuleLocationSourcesServiceController
-import io.appmetrica.analytics.modulesapi.internal.service.ModuleRemoteConfig
 import io.appmetrica.analytics.modulesapi.internal.service.ModuleServiceEntryPoint
 import io.appmetrica.analytics.modulesapi.internal.service.ModuleServicesDatabase
 import io.appmetrica.analytics.modulesapi.internal.service.RemoteConfigExtensionConfiguration
@@ -44,7 +45,7 @@ import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-internal class ModulesControllerTest : CommonTest() {
+internal class ServiceModulesControllerTest : CommonTest() {
 
     private val firstModuleFeatures = listOf("First module feature")
     private val firstModuleBlocks = mapOf("First module block" to 1)
@@ -133,9 +134,9 @@ internal class ModulesControllerTest : CommonTest() {
 
     private val serviceContext = mock<ServiceContext>()
 
-    private val firstModuleRemoteConfig = mock<ModuleRemoteConfigModel<Any?>>()
-    private val secondModuleRemoteConfig = mock<ModuleRemoteConfigModel<Any?>>()
-    private val moduleWithoutRemoteConfigFullConfig = mock<ModuleRemoteConfigModel<Any?>>()
+    private val firstModuleRemoteConfig = mock<ServiceModuleRemoteConfigModel<Any?>>()
+    private val secondModuleRemoteConfig = mock<ServiceModuleRemoteConfigModel<Any?>>()
+    private val moduleWithoutRemoteConfigFullConfig = mock<ServiceModuleRemoteConfigModel<Any?>>()
 
     private val startupState = mock<StartupState>()
 
@@ -143,11 +144,11 @@ internal class ModulesControllerTest : CommonTest() {
     val configProviderMockedConstructionRule = MockedConstructionRule(
         ModuleRemoteConfigProvider::class.java
     ) { mock, context ->
-        whenever(mock.getRemoteConfigForModule(firstModuleIdentifier))
+        whenever(mock.getRemoteConfigForServiceModule(firstModuleIdentifier))
             .thenReturn(firstModuleRemoteConfig)
-        whenever(mock.getRemoteConfigForModule(secondModuleIdentifier))
+        whenever(mock.getRemoteConfigForServiceModule(secondModuleIdentifier))
             .thenReturn(secondModuleRemoteConfig)
-        whenever(mock.getRemoteConfigForModule(moduleWithoutRemoteConfigIdentifier))
+        whenever(mock.getRemoteConfigForServiceModule(moduleWithoutRemoteConfigIdentifier))
             .thenReturn(moduleWithoutRemoteConfigFullConfig)
     }
 
@@ -165,13 +166,13 @@ internal class ModulesControllerTest : CommonTest() {
         on { AppMetricaSelfReportFacade.getReporter() } doReturn selfReporter
     }
 
-    private lateinit var modulesController: ModulesController
+    private lateinit var modulesController: ServiceModulesController
     private lateinit var moduleEventHandlersHolder: ModuleEventHandlersHolder
     private lateinit var neverForbidPermissionStrategy: NeverForbidPermissionStrategy
 
     @Before
     fun setUp() {
-        modulesController = ModulesController()
+        modulesController = ServiceModulesController()
         moduleEventHandlersHolder = GlobalServiceLocator.getInstance().moduleEventHandlersHolder
         neverForbidPermissionStrategy = alwaysAskForPermissionStrategy()
     }
@@ -401,7 +402,7 @@ internal class ModulesControllerTest : CommonTest() {
         assertThat(modulesController.collectModuleServiceDatabases()).containsExactly(secondModuleServicesDatabase)
 
         verify(selfReporter).reportEvent(
-            "module_errors",
+            "service_module_errors",
             mapOf(firstModuleIdentifier to mapOf ("db" to exception.stackTraceToString()))
         )
 
@@ -440,7 +441,7 @@ internal class ModulesControllerTest : CommonTest() {
         verify(firstModuleRemoteConfigListener).onRemoteConfigUpdated(firstModuleRemoteConfig)
         verify(secondModuleConfigUpdateListener).onRemoteConfigUpdated(secondModuleRemoteConfig)
         verify(configProviderMockedConstructionRule.constructionMock.constructed()[0], never())
-            .getRemoteConfigForModule(moduleWithoutRemoteConfigIdentifier)
+            .getRemoteConfigForServiceModule(moduleWithoutRemoteConfigIdentifier)
     }
 
     @Test
@@ -477,7 +478,7 @@ internal class ModulesControllerTest : CommonTest() {
         modulesController.initServiceSide(serviceContext, startupState)
 
         verify(selfReporter).reportEvent(
-            "module_errors",
+            "service_module_errors",
             mapOf(firstModuleIdentifier to mapOf ("init" to exception.stackTraceToString()))
         )
 

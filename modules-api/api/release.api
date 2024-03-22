@@ -6,6 +6,14 @@ public final class io.appmetrica.analytics.modulesapi.BuildConfig {
     public <init>()
 }
 
+public interface io.appmetrica.analytics.modulesapi.internal.client.ClientContext
+
+public interface io.appmetrica.analytics.modulesapi.internal.client.ModuleClientEntryPoint<T> {
+    public abstract [NonNull] String getIdentifier()
+    public abstract void initClientSide([NonNull] io.appmetrica.analytics.modulesapi.internal.client.ClientContext)
+    public abstract void onActivated()
+}
+
 public interface io.appmetrica.analytics.modulesapi.internal.common.AskForPermissionStrategyModuleProvider {
     public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.permission.PermissionStrategy getAskForPermissionStrategy()
 }

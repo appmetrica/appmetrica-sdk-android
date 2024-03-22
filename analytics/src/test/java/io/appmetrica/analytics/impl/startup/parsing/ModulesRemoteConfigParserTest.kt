@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.startup.parsing
 
 import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.modules.ModuleRemoteConfigController
-import io.appmetrica.analytics.impl.modules.ModulesController
+import io.appmetrica.analytics.impl.modules.service.ServiceModulesController
 import io.appmetrica.analytics.impl.utils.JsonHelper
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
@@ -46,7 +46,7 @@ class ModulesRemoteConfigParserTest : CommonTest() {
 
     private val mapCaptor = argumentCaptor<Map<String, Any>>()
 
-    private val modulesController = mock<ModulesController> {
+    private val modulesController = mock<ServiceModulesController> {
         on { collectRemoteConfigControllers() } doReturn controllers
     }
 

@@ -3,6 +3,8 @@ package io.appmetrica.analytics.impl;
 import android.content.Context;
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
 import io.appmetrica.analytics.impl.crash.CrashProcessorFactory;
+import io.appmetrica.analytics.impl.modules.ModuleEntryPointsRegister;
+import io.appmetrica.analytics.impl.modules.client.ClientModulesController;
 import io.appmetrica.analytics.impl.reporter.ReporterLifecycleListener;
 import io.appmetrica.analytics.impl.startup.uuid.MultiProcessSafeUuidProvider;
 import io.appmetrica.analytics.impl.startup.uuid.UuidFromClientPreferencesImporter;
@@ -133,6 +135,7 @@ public class ClientServiceLocatorTest extends CommonTest {
     public void allFieldsFilled() throws Exception {
         ObjectPropertyAssertions(mClientServiceLocator)
             .withDeclaredAccessibleFields(true)
+            .withIgnoredFields("moduleEntryPointsRegister")
             .checkField("mainProcessDetector", "getMainProcessDetector", mMainProcessDetector)
             .checkField("defaultOneShotConfig", "getDefaultOneShotConfig", mDefaultOneShotMetricaConfig)
             .checkField("clientExecutorProvider", "getClientExecutorProvider", mClientExecutorProvider)
@@ -144,6 +147,22 @@ public class ClientServiceLocatorTest extends CommonTest {
             .checkField("crashProcessorFactory", "getCrashProcessorFactory", crashProcessorFactory)
             .checkField("appMetricaCoreComponentsProvider", "getAppMetricaCoreComponentsProvider", coreComponentsProvider)
             .checkAll();
+    }
+
+    @Test
+    public void moduleEntryPointsRegisterCreatedOnce() {
+        final ModuleEntryPointsRegister first = mClientServiceLocator.getModuleEntryPointsRegister();
+        final ModuleEntryPointsRegister second = mClientServiceLocator.getModuleEntryPointsRegister();
+
+        assertThat(first).isSameAs(second);
+    }
+
+    @Test
+    public void moduleControllerCreatedOnce() {
+        final ClientModulesController first = mClientServiceLocator.getModulesController();
+        final ClientModulesController second = mClientServiceLocator.getModulesController();
+
+        assertThat(first).isSameAs(second);
     }
 
     @Test

@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.db;
 
 import io.appmetrica.analytics.coreapi.internal.db.DatabaseScript;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
-import io.appmetrica.analytics.impl.modules.ModulesController;
+import io.appmetrica.analytics.impl.modules.service.ServiceModulesController;
 import io.appmetrica.analytics.impl.utils.collection.HashMultimap;
 import io.appmetrica.analytics.modulesapi.internal.common.TableDescription;
 import io.appmetrica.analytics.modulesapi.internal.service.ModuleServicesDatabase;
@@ -68,7 +68,7 @@ public class DatabaseScriptProviderTest extends CommonTest {
         secondTableScripts.put(secondTableFirstScriptVersion, secondTableFirstScript);
         secondTableScripts.put(secondTableSecondScriptVersion, secondTableSecondScript);
 
-        ModulesController modulesController = GlobalServiceLocator.getInstance().getModulesController();
+        ServiceModulesController modulesController = GlobalServiceLocator.getInstance().getModulesController();
         ModuleServicesDatabase moduleServicesDatabase = mock(ModuleServicesDatabase.class);
         TableDescription firstTableDescription = mock(TableDescription.class);
         when(firstTableDescription.getDatabaseProviderUpgradeScript()).thenReturn(firstTableScripts);

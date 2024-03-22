@@ -13,12 +13,15 @@ import io.appmetrica.analytics.StartupParamsCallback;
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
 import io.appmetrica.analytics.impl.client.ProcessConfiguration;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesClientDbStorage;
+import io.appmetrica.analytics.impl.modules.ModulesSeeker;
 import io.appmetrica.analytics.impl.referrer.client.ReferrerHelper;
 import io.appmetrica.analytics.impl.startup.Constants;
 import io.appmetrica.analytics.impl.startup.StartupHelper;
 import io.appmetrica.analytics.impl.utils.executors.ClientExecutorProvider;
+import io.appmetrica.analytics.modulesapi.internal.client.ClientContext;
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule;
 import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.analytics.testutils.MockedConstructionRule;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -28,7 +31,10 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentMatchers;
+import org.mockito.InOrder;
 import org.mockito.Mock;
+import org.mockito.MockedConstruction;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
@@ -37,6 +43,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.same;
+import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -80,6 +87,15 @@ public class AppMetricaImplTest extends CommonTest {
 
     @Rule
     public final ClientServiceLocatorRule mClientServiceLocatorRule = new ClientServiceLocatorRule();
+    private ModulesSeeker modulesSeeker;
+    @Rule
+    public final MockedConstructionRule<ModulesSeeker> mockedConstructionRule =
+        new MockedConstructionRule<>(ModulesSeeker.class, new MockedConstruction.MockInitializer<ModulesSeeker>() {
+            @Override
+            public void prepare(ModulesSeeker mock, MockedConstruction.Context context) throws Throwable {
+                modulesSeeker = mock;
+            }
+        });
 
     @Before
     public void setUp() {
@@ -114,6 +130,11 @@ public class AppMetricaImplTest extends CommonTest {
     public void constructor() {
         verify(mFieldsProvider).createDataResultReceiver(mHandler, mAppMetrica);
         verify(mClientServiceLocatorRule.mDefaultOneShotMetricaConfig).setReportsHandler(mReportsHandler);
+        verify(mClientServiceLocatorRule.modulesController).initClientSide(ArgumentMatchers.<ClientContext>any());
+        InOrder inOrder = inOrder(modulesSeeker, ClientServiceLocator.getInstance().getModulesController());
+        inOrder.verify(modulesSeeker).discoverClientModules();
+        inOrder.verify(ClientServiceLocator.getInstance().getModulesController())
+            .initClientSide(ArgumentMatchers.<ClientContext>any());
     }
 
     @Test

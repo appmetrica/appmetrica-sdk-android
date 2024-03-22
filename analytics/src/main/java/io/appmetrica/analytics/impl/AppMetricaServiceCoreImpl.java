@@ -25,8 +25,8 @@ import io.appmetrica.analytics.impl.crash.ReadOldCrashesRunnable;
 import io.appmetrica.analytics.impl.crash.jvm.CrashDirectoryWatcher;
 import io.appmetrica.analytics.impl.crash.ndk.NativeCrashService;
 import io.appmetrica.analytics.impl.modules.ModuleServiceLifecycleControllerImpl;
-import io.appmetrica.analytics.impl.modules.ModulesController;
 import io.appmetrica.analytics.impl.modules.ServiceContextFacade;
+import io.appmetrica.analytics.impl.modules.service.ServiceModulesController;
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade;
 import io.appmetrica.analytics.impl.service.AppMetricaServiceAction;
 import io.appmetrica.analytics.impl.service.AppMetricaServiceCallback;
@@ -176,7 +176,7 @@ public class AppMetricaServiceCoreImpl implements AppMetricaServiceCore, AppMetr
     private void initModules(@NonNull StartupStateHolder startupStateHolder) {
         YLogger.info(TAG, "Load and init modules");
         StartupState startupState = startupStateHolder.getStartupState();
-        ModulesController modulesController = GlobalServiceLocator.getInstance().getModulesController();
+        ServiceModulesController modulesController = GlobalServiceLocator.getInstance().getModulesController();
         modulesController.initServiceSide(
             new ServiceContextFacade(
                 new ModuleServiceLifecycleControllerImpl(mAppMetricaServiceLifecycle)

@@ -29,7 +29,7 @@ import io.appmetrica.analytics.impl.location.LocationApiProvider;
 import io.appmetrica.analytics.impl.location.LocationClientApi;
 import io.appmetrica.analytics.impl.modules.ModuleEntryPointsRegister;
 import io.appmetrica.analytics.impl.modules.ModuleEventHandlersHolder;
-import io.appmetrica.analytics.impl.modules.ModulesController;
+import io.appmetrica.analytics.impl.modules.service.ServiceModulesController;
 import io.appmetrica.analytics.impl.network.http.BaseSslSocketFactoryProvider;
 import io.appmetrica.analytics.impl.network.http.SslSocketFactoryProviderImpl;
 import io.appmetrica.analytics.impl.permissions.SimplePermissionExtractor;
@@ -116,7 +116,7 @@ public final class GlobalServiceLocator {
         }
     };
     @Nullable
-    private volatile ModulesController modulesController;
+    private volatile ServiceModulesController modulesController;
     @NonNull
     private final ModuleEntryPointsRegister moduleEntryPointsRegister = new ModuleEntryPointsRegister();
     @NonNull
@@ -385,13 +385,13 @@ public final class GlobalServiceLocator {
     }
 
     @NonNull
-    public ModulesController getModulesController() {
-        ModulesController local = modulesController;
+    public ServiceModulesController getModulesController() {
+        ServiceModulesController local = modulesController;
         if (local == null) {
             synchronized (this) {
                 local = modulesController;
                 if (local == null) {
-                    local = new ModulesController();
+                    local = new ServiceModulesController();
                     modulesController = local;
                 }
             }
@@ -554,7 +554,7 @@ public final class GlobalServiceLocator {
     }
 
     @VisibleForTesting
-    public void setModulesController(@NonNull ModulesController modulesController) {
+    public void setModulesController(@NonNull ServiceModulesController modulesController) {
         this.modulesController = modulesController;
     }
 

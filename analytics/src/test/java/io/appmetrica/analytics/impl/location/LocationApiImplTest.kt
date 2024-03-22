@@ -9,7 +9,7 @@ import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor
 import io.appmetrica.analytics.coreapi.internal.permission.PermissionStrategy
 import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.StartupStateHolder
-import io.appmetrica.analytics.impl.modules.ModulesController
+import io.appmetrica.analytics.impl.modules.service.ServiceModulesController
 import io.appmetrica.analytics.impl.permissions.CompositePermissionStrategy
 import io.appmetrica.analytics.impl.permissions.LocationFlagStrategy
 import io.appmetrica.analytics.impl.permissions.SimplePermissionExtractor
@@ -89,7 +89,7 @@ internal class LocationApiImplTest : CommonTest() {
     @get:Rule
     val globalServiceLocatorRule = GlobalServiceLocatorRule()
 
-    private lateinit var modulesController: ModulesController
+    private lateinit var modulesController: ServiceModulesController
     private lateinit var modulesExecutor: IHandlerExecutor
     private lateinit var startupStateHolder: StartupStateHolder
     private lateinit var locationFlagStrategy: LocationFlagStrategy

@@ -96,7 +96,7 @@ public class FirstServiceEntryPointManagerTest extends CommonTest {
             multiProcessSafeUuidProvider
         );
         inOrder.verify(serviceComponentsInitializerProvider.getServiceComponentsInitializer()).onCreate(context);
-        inOrder.verify(modulesSeeker).discoverModules();
+        inOrder.verify(modulesSeeker).discoverServiceModules();
         inOrder.verify(serviceMigrationManager).checkMigration(context);
         inOrder.verify(multiProcessSafeUuidProvider).readUuid();
         inOrder.verifyNoMoreInteractions();

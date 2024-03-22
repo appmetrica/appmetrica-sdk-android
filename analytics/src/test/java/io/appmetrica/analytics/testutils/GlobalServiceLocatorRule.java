@@ -35,7 +35,7 @@ import io.appmetrica.analytics.impl.id.AdvertisingIdGetter;
 import io.appmetrica.analytics.impl.id.AppSetIdGetter;
 import io.appmetrica.analytics.impl.location.LocationApi;
 import io.appmetrica.analytics.impl.modules.ModuleEventHandlersHolder;
-import io.appmetrica.analytics.impl.modules.ModulesController;
+import io.appmetrica.analytics.impl.modules.service.ServiceModulesController;
 import io.appmetrica.analytics.impl.network.http.SslSocketFactoryProviderImpl;
 import io.appmetrica.analytics.impl.referrer.service.ReferrerHolder;
 import io.appmetrica.analytics.impl.service.ServiceDataReporterHolder;
@@ -107,7 +107,7 @@ public class GlobalServiceLocatorRule extends ExternalResource {
         when(vitalDataProviderStorage.getCommonDataProviderForMigration()).thenReturn(mock(VitalCommonDataProvider.class));
         when(vitalDataProviderStorage.getComponentDataProvider(any(ComponentId.class))).thenReturn(mock(VitalComponentDataProvider.class));
         when(globalServiceLocator.getVitalDataProviderStorage()).thenReturn(vitalDataProviderStorage);
-        when(globalServiceLocator.getModulesController()).thenReturn(mock(ModulesController.class));
+        when(globalServiceLocator.getModulesController()).thenReturn(mock(ServiceModulesController.class));
         when(globalServiceLocator.getGeneralPermissionExtractor()).thenReturn(mock(PermissionExtractor.class));
         StartupStateHolder startupStateHolder = mock(StartupStateHolder.class);
         when(startupStateHolder.getStartupState())

@@ -194,6 +194,12 @@ public class MainReporter extends BaseReporter implements IMainReporter {
     }
 
     @Override
+    public void start() {
+        super.start();
+        ClientServiceLocator.getInstance().getModulesController().onActivated();
+    }
+
+    @Override
     public final void enableAnrMonitoring() {
         if (anrMonitorBarrier.compareAndSet(false, true)) {
             anrMonitor.startMonitoring();

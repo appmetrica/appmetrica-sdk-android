@@ -1,9 +1,8 @@
-package io.appmetrica.analytics.impl.modules
+package io.appmetrica.analytics.impl.modules.service
 
 import io.appmetrica.analytics.coreapi.internal.identifiers.SdkIdentifiers
+import io.appmetrica.analytics.impl.modules.RemoteConfigMetaInfoModel
 import io.appmetrica.analytics.impl.startup.StartupState
-import io.appmetrica.analytics.modulesapi.internal.service.ModuleRemoteConfig
-import io.appmetrica.analytics.modulesapi.internal.service.RemoteConfigMetaInfo
 import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
@@ -43,25 +42,25 @@ class ModuleRemoteConfigProviderTest : CommonTest() {
 
     @Test
     fun getRemoteConfigForFirstModule() {
-        assertThat(moduleRemoteConfigProvider.getRemoteConfigForModule(firstIdentifier))
+        assertThat(moduleRemoteConfigProvider.getRemoteConfigForServiceModule(firstIdentifier))
             .isEqualToComparingFieldByField(
-                ModuleRemoteConfigModel(identifiers, remoteConfigMetaInfo, firstRemoteConfig)
+                ServiceModuleRemoteConfigModel(identifiers, remoteConfigMetaInfo, firstRemoteConfig)
             )
     }
 
     @Test
     fun getRemoteConfigForSecondModule() {
-        assertThat(moduleRemoteConfigProvider.getRemoteConfigForModule(secondIdentifier))
+        assertThat(moduleRemoteConfigProvider.getRemoteConfigForServiceModule(secondIdentifier))
             .isEqualToComparingFieldByField(
-                ModuleRemoteConfigModel(identifiers, remoteConfigMetaInfo, secondRemoteConfig)
+                ServiceModuleRemoteConfigModel(identifiers, remoteConfigMetaInfo, secondRemoteConfig)
             )
     }
 
     @Test
     fun getRemoteConfigForUnknownModule() {
-        assertThat(moduleRemoteConfigProvider.getRemoteConfigForModule("unknown module"))
+        assertThat(moduleRemoteConfigProvider.getRemoteConfigForServiceModule("unknown module"))
             .isEqualToComparingFieldByField(
-                ModuleRemoteConfigModel(identifiers, remoteConfigMetaInfo, null)
+                ServiceModuleRemoteConfigModel(identifiers, remoteConfigMetaInfo, null)
             )
     }
 }

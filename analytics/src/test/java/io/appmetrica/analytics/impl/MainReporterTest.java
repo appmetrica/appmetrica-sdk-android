@@ -24,10 +24,12 @@ import io.appmetrica.analytics.impl.reporter.ReporterLifecycleListener;
 import io.appmetrica.analytics.impl.startup.StartupHelper;
 import io.appmetrica.analytics.impl.utils.LoggerStorage;
 import io.appmetrica.analytics.impl.utils.PublicLogger;
+import io.appmetrica.analytics.testutils.ClientServiceLocatorRule;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -87,6 +89,8 @@ public class MainReporterTest extends BaseReporterTest {
     private ReporterLifecycleListener reporterLifecycleListener;
     @Captor
     private ArgumentCaptor<PreloadInfoWrapper> mPreloadInfoWrapperCaptor;
+    @Rule
+    public final ClientServiceLocatorRule clientServiceLocatorRule = new ClientServiceLocatorRule();
 
     private MainReporter mMainReporter;
 
@@ -109,6 +113,14 @@ public class MainReporterTest extends BaseReporterTest {
                 return null;
             }
         }).when(mExecutor).execute(any(Runnable.class));
+    }
+
+    @Test
+    public void callModulesOnActivatedOnStart() {
+        mMainReporter = getReporter();
+        mMainReporter.start();
+
+        verify(clientServiceLocatorRule.modulesController).onActivated();
     }
 
     @Test

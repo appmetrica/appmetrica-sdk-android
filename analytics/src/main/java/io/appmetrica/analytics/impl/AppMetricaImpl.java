@@ -19,6 +19,8 @@ import io.appmetrica.analytics.StartupParamsCallback;
 import io.appmetrica.analytics.impl.client.ProcessConfiguration;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesClientDbStorage;
 import io.appmetrica.analytics.impl.db.storage.DatabaseStorageFactory;
+import io.appmetrica.analytics.impl.modules.ModulesSeeker;
+import io.appmetrica.analytics.impl.modules.client.ClientContextFacade;
 import io.appmetrica.analytics.impl.referrer.client.ReferrerHelper;
 import io.appmetrica.analytics.impl.referrer.common.Constants;
 import io.appmetrica.analytics.impl.startup.StartupHelper;
@@ -55,6 +57,8 @@ public class AppMetricaImpl implements IAppMetricaImpl {
     private final SessionsTrackingManager sessionsTrackingManager;
     @Nullable
     private volatile MainReporterApiConsumerProvider mainReporterApiConsumerProvider;
+    @NonNull
+    private final ModulesSeeker modulesSeeker = new ModulesSeeker();
 
     @WorkerThread
     AppMetricaImpl(@NonNull Context context, @NonNull IAppMetricaCore appMetricaCore) {
@@ -88,6 +92,10 @@ public class AppMetricaImpl implements IAppMetricaImpl {
                       @NonNull AppMetricaImplFieldsProvider fieldsProvider,
                       @NonNull ClientServiceLocator clientServiceLocator) {
         mContext = context;
+        modulesSeeker.discoverClientModules();
+        ClientServiceLocator.getInstance().getModulesController().initClientSide(
+            new ClientContextFacade()
+        );
         mClientPreferences = preferences;
         final Handler metricaHandler = appMetricaCore.getMetricaHandler();
         final DataResultReceiver dataResultReceiver = fieldsProvider.createDataResultReceiver(metricaHandler, this);

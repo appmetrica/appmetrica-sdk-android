@@ -35,7 +35,7 @@ public class FirstServiceEntryPointManager {
     private void init(@NonNull Context context) {
         GlobalServiceLocator.init(context);
         serviceComponentsInitializer.onCreate(context);
-        modulesSeeker.discoverModules();
+        modulesSeeker.discoverServiceModules();
         new ServiceMigrationManager().checkMigration(context);
         GlobalServiceLocator.getInstance().getMultiProcessSafeUuidProvider().readUuid();
     }

@@ -7,6 +7,8 @@ import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
 import io.appmetrica.analytics.impl.crash.CrashProcessorFactory;
+import io.appmetrica.analytics.impl.modules.ModuleEntryPointsRegister;
+import io.appmetrica.analytics.impl.modules.client.ClientModulesController;
 import io.appmetrica.analytics.impl.reporter.ReporterLifecycleListener;
 import io.appmetrica.analytics.impl.startup.uuid.MultiProcessSafeUuidProvider;
 import io.appmetrica.analytics.impl.startup.uuid.UuidFromClientPreferencesImporter;
@@ -58,6 +60,10 @@ public class ClientServiceLocator {
     private MultiProcessSafeUuidProvider multiProcessSafeUuidProvider;
     @NonNull
     private final AppMetricaCoreComponentsProvider appMetricaCoreComponentsProvider;
+    @Nullable
+    private volatile ClientModulesController modulesController;
+    @NonNull
+    private final ModuleEntryPointsRegister moduleEntryPointsRegister = new ModuleEntryPointsRegister();
 
     private ClientServiceLocator() {
         this(new MainProcessDetector(), new ActivityLifecycleManager(), new ClientExecutorProvider());
@@ -199,8 +205,33 @@ public class ClientServiceLocator {
         return appMetricaCoreComponentsProvider;
     }
 
+    @NonNull
+    public ModuleEntryPointsRegister getModuleEntryPointsRegister() {
+        return moduleEntryPointsRegister;
+    }
+
+    @NonNull
+    public ClientModulesController getModulesController() {
+        ClientModulesController local = modulesController;
+        if (local == null) {
+            synchronized (this) {
+                local = modulesController;
+                if (local == null) {
+                    local = new ClientModulesController();
+                    modulesController = local;
+                }
+            }
+        }
+        return local;
+    }
+
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)
     public static void setInstance(@Nullable ClientServiceLocator clientServiceLocator) {
         sHolder = clientServiceLocator;
+    }
+
+    @VisibleForTesting
+    public void setModulesController(@NonNull ClientModulesController modulesController) {
+        this.modulesController = modulesController;
     }
 }

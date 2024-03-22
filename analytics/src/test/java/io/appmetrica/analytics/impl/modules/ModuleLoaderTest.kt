@@ -17,25 +17,25 @@ class ModuleLoaderTest : CommonTest() {
 
     @Test
     fun loadModule() {
-        assertThat(moduleLoader.loadModule(TestClass1::class.java.name))
+        assertThat(moduleLoader.loadModule<ModuleServiceEntryPoint<Any>>(TestClass1::class.java.name))
             .isNotNull
     }
 
     @Test
-    fun loadWrongModule() {
-        assertThat(moduleLoader.loadModule(TestClass2::class.java.name))
+    fun loadModuleWithoutDefaultConstructor() {
+        assertThat(moduleLoader.loadModule<ModuleServiceEntryPoint<Any>>(TestClass2::class.java.name))
             .isNull()
     }
 
     @Test
-    fun loadModuleWithoutDefaultConstructor() {
-        assertThat(moduleLoader.loadModule(TestClass3::class.java.name))
+    fun loadWrongModule() {
+        assertThat(moduleLoader.loadModule<ModuleServiceEntryPoint<Any>>(TestClass3::class.java.name))
             .isNull()
     }
 
     @Test
     fun loadModuleIfEntryPointClassNotPresent() {
-        assertThat(moduleLoader.loadModule("io.appmetrica.analytics.impl.modules.TestClassNotPresent"))
+        assertThat(moduleLoader.loadModule<ModuleServiceEntryPoint<Any>>("io.appmetrica.analytics.impl.modules.TestClassNotPresent"))
             .isNull()
     }
 
