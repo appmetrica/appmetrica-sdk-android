@@ -39,7 +39,9 @@ class ReportLoaderDefaultValuesTest(
 ) : CommonTest() {
 
     private val context: Context = RuntimeEnvironment.getApplication()
-    private val componentId: ComponentId = mock()
+    private val componentId: ComponentId = mock {
+        on { `package` } doReturn context.packageName
+    }
     private val certificatesFingerprintsProvider: CertificatesFingerprintsProvider = mock()
     private val vitalComponentDataProvider: VitalComponentDataProvider = mock()
 

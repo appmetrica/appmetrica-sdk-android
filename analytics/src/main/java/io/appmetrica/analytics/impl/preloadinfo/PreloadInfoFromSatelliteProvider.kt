@@ -5,6 +5,7 @@ import android.database.Cursor
 import android.net.Uri
 import android.text.TextUtils
 import io.appmetrica.analytics.coreutils.internal.parsing.ParseUtils
+import io.appmetrica.analytics.coreutils.internal.services.PackageManagerUtils
 import io.appmetrica.analytics.impl.DistributionSource
 import io.appmetrica.analytics.impl.SatelliteDataProvider
 import io.appmetrica.analytics.impl.SdkUtils
@@ -15,11 +16,15 @@ import org.json.JSONObject
 class PreloadInfoFromSatelliteProvider(private val context: Context) : SatelliteDataProvider<PreloadInfoState?> {
     private val tag = "[PreloadInfoFromSatelliteProvider]"
 
-    private val uri = "content://com.yandex.preinstallsatellite.appmetrica.provider/preload_info"
+    private val uri = "content://${authority()}/preload_info"
     private val columnNameTrackingId = "tracking_id"
     private val columnNameAdditionalParameters = "additional_parameters"
 
     override fun invoke(): PreloadInfoState? {
+        if (!PackageManagerUtils.hasContentProvider(context, authority())) {
+            SdkUtils.logAttribution("Satellite content provider with preload info was not found.")
+            return null
+        }
         var cursor: Cursor? = null
         try {
             val contentResolver = context.contentResolver

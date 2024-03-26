@@ -17,6 +17,7 @@ import io.appmetrica.analytics.impl.clids.ClidsInfo;
 import io.appmetrica.analytics.impl.clids.ClidsPriorityProvider;
 import io.appmetrica.analytics.impl.clids.ClidsSatelliteCheckedProvider;
 import io.appmetrica.analytics.impl.clids.ClidsStateProvider;
+import io.appmetrica.analytics.impl.clids.SatelliteClidsInfoProvider;
 import io.appmetrica.analytics.impl.crash.ndk.NativeCrashService;
 import io.appmetrica.analytics.impl.db.VitalDataProviderStorage;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesServiceDbStorage;

@@ -5,12 +5,17 @@ import android.content.Context
 import android.database.Cursor
 import android.net.Uri
 import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
+import io.appmetrica.analytics.coreutils.internal.services.PackageManagerUtils
 import io.appmetrica.analytics.impl.DistributionSource
 import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.analytics.testutils.on
+import io.appmetrica.analytics.testutils.staticRule
 import org.assertj.core.api.Assertions.assertThat
 import org.json.JSONObject
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
@@ -20,7 +25,8 @@ import org.skyscreamer.jsonassert.JSONAssert
 @RunWith(RobolectricTestRunner::class)
 class PreloadInfoFromSatelliteProviderTest : CommonTest() {
 
-    private val uri = "content://com.yandex.preinstallsatellite.appmetrica.provider/preload_info"
+    private val authorities = "com.yandex.preinstallsatellite.appmetrica.provider"
+    private val uri = "content://$authorities/preload_info"
     private val columnTrackingId = "tracking_id"
     private val columnAdditionalParameters = "additional_parameters"
 
@@ -45,7 +51,18 @@ class PreloadInfoFromSatelliteProviderTest : CommonTest() {
         on { contentResolver } doReturn contentResolver
     }
 
+    @get:Rule
+    val packageManagerUtilsMockedStaticRule = staticRule<PackageManagerUtils> {
+        on { PackageManagerUtils.hasContentProvider(context, authorities) } doReturn true
+    }
+
     private val provider: PreloadInfoFromSatelliteProvider by setUp { PreloadInfoFromSatelliteProvider(context) }
+
+    @Test
+    fun retrievePreloadInfoIfWasNotDetectedContentProvider() {
+        whenever(PackageManagerUtils.hasContentProvider(context, authorities)).thenReturn(false)
+        assertThat(provider.invoke()).isNull()
+    }
     
     @Test
     fun retrievePreloadInfoNullContentResolver() {

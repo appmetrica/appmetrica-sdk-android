@@ -364,20 +364,29 @@ public final class io.appmetrica.analytics.coreutils.internal.services.PackageMa
     public static final [NonNull] String getAppVersionCodeString([NonNull] android.content.Context)
     public static final [NonNull] String getAppVersionName([NonNull] android.content.Context)
     public static final [Nullable] android.content.pm.PackageInfo getPackageInfo([NonNull] android.content.Context)
+    public static final boolean hasContentProvider([NonNull] android.content.Context, [NonNull] String)
+    public static final [Nullable] android.content.pm.ProviderInfo resolveContentProvider([NonNull] android.content.Context, [NonNull] String)
 }
 
-public class io.appmetrica.analytics.coreutils.internal.services.SafePackageManager {
+public final class io.appmetrica.analytics.coreutils.internal.services.PackageManagerUtilsTiramisu {
+    public static final [NonNull] io.appmetrica.analytics.coreutils.internal.services.PackageManagerUtilsTiramisu INSTANCE
+
+    public final [Nullable] android.content.pm.ProviderInfo resolveContentProvider([NonNull] android.content.pm.PackageManager, [NonNull] String)
+}
+
+public final class io.appmetrica.analytics.coreutils.internal.services.SafePackageManager {
     public <init>()
-    public [Nullable] android.content.pm.ActivityInfo getActivityInfo([NonNull] android.content.Context, [NonNull] android.content.ComponentName, int)
-    public [Nullable] android.content.pm.ApplicationInfo getApplicationInfo([NonNull] android.content.Context, String, int)
-    public [Nullable] String getInstallerPackageName([NonNull] android.content.Context, [NonNull] String)
-    public [Nullable] android.content.pm.PackageInfo getPackageInfo(android.content.Context, String)
-    public [Nullable] android.content.pm.PackageInfo getPackageInfo(android.content.Context, String, int)
-    public [Nullable] android.content.pm.ServiceInfo getServiceInfo([NonNull] android.content.Context, android.content.ComponentName, int)
-    public boolean hasSystemFeature([NonNull] android.content.Context, [NonNull] String)
-    public [Nullable] android.content.pm.ResolveInfo resolveActivity([NonNull] android.content.Context, [NonNull] android.content.Intent, int)
-    public [Nullable] android.content.pm.ResolveInfo resolveService([NonNull] android.content.Context, android.content.Intent, int)
-    public void setComponentEnabledSetting([NonNull] android.content.Context, android.content.ComponentName, int, int)
+    public final [Nullable] android.content.pm.ActivityInfo getActivityInfo([NonNull] android.content.Context, [NonNull] android.content.ComponentName, int)
+    public final [Nullable] android.content.pm.ApplicationInfo getApplicationInfo([NonNull] android.content.Context, [NonNull] String, int)
+    public final [Nullable] String getInstallerPackageName([NonNull] android.content.Context, [NonNull] String)
+    public final [Nullable] android.content.pm.PackageInfo getPackageInfo([NonNull] android.content.Context, [NonNull] String)
+    public final [Nullable] android.content.pm.PackageInfo getPackageInfo([NonNull] android.content.Context, [NonNull] String, int)
+    public final [Nullable] android.content.pm.ServiceInfo getServiceInfo([NonNull] android.content.Context, [NonNull] android.content.ComponentName, int)
+    public final boolean hasSystemFeature([NonNull] android.content.Context, [NonNull] String)
+    public final [Nullable] android.content.pm.ResolveInfo resolveActivity([NonNull] android.content.Context, [NonNull] android.content.Intent, int)
+    public final [Nullable] android.content.pm.ProviderInfo resolveContentProvider([NonNull] android.content.Context, [NonNull] String)
+    public final [Nullable] android.content.pm.ResolveInfo resolveService([NonNull] android.content.Context, [NonNull] android.content.Intent, int)
+    public final void setComponentEnabledSetting([NonNull] android.content.Context, [NonNull] android.content.ComponentName, int, int)
 }
 
 public final class io.appmetrica.analytics.coreutils.internal.services.SafePackageManagerHelperForR {

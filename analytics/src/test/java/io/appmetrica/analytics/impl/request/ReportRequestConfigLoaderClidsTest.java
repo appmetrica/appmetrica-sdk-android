@@ -68,6 +68,7 @@ public class ReportRequestConfigLoaderClidsTest extends CommonTest {
 
         doReturn(componentId).when(componentUnit).getComponentId();
         doReturn(RuntimeEnvironment.getApplication()).when(componentUnit).getContext();
+        when(componentId.getPackage()).thenReturn(RuntimeEnvironment.getApplication().getPackageName());
         doReturn(mock(CertificatesFingerprintsProvider.class)).when(componentUnit).getCertificatesFingerprintsProvider();
         doReturn(mock(VitalComponentDataProvider.class)).when(componentUnit).getVitalComponentDataProvider();
         when(appSetIdProvider.getAppSetId()).thenReturn(appSetId);
