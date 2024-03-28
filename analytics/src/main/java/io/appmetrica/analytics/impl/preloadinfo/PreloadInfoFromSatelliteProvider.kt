@@ -16,12 +16,12 @@ import org.json.JSONObject
 class PreloadInfoFromSatelliteProvider(private val context: Context) : SatelliteDataProvider<PreloadInfoState?> {
     private val tag = "[PreloadInfoFromSatelliteProvider]"
 
-    private val uri = "content://${authority()}/preload_info"
+    private val uri = "content://$authority/preload_info"
     private val columnNameTrackingId = "tracking_id"
     private val columnNameAdditionalParameters = "additional_parameters"
 
     override fun invoke(): PreloadInfoState? {
-        if (!PackageManagerUtils.hasContentProvider(context, authority())) {
+        if (!PackageManagerUtils.hasContentProvider(context, authority)) {
             SdkUtils.logAttribution("Satellite content provider with preload info was not found.")
             return null
         }
@@ -58,7 +58,6 @@ class PreloadInfoFromSatelliteProvider(private val context: Context) : Satellite
                     SdkUtils.logAttribution("No Preload Info data in Satellite content provider")
                 }
             } else {
-                YLogger.info(tag, "Failed to retrieve cursor")
                 SdkUtils.logAttribution("No Satellite content provider found")
             }
         } catch (ex: Throwable) {

@@ -16,12 +16,12 @@ internal class SatelliteClidsInfoProvider(
 ) : SatelliteDataProvider<ClidsInfo.Candidate?> {
     private val tag = "[SatelliteClidsInfoProvider]"
 
-    private val uri = "content://${authority()}/clids"
+    private val uri = "content://$authority/clids"
     private val columnClidKey = "clid_key"
     private val columnClidValue = "clid_value"
 
     override fun invoke(): ClidsInfo.Candidate? {
-        if (!PackageManagerUtils.hasContentProvider(context, authority())) {
+        if (!PackageManagerUtils.hasContentProvider(context, authority)) {
             SdkUtils.logAttribution("Satellite content provider with clids was not found.")
             return null
         }
@@ -38,18 +38,15 @@ internal class SatelliteClidsInfoProvider(
                         if (!TextUtils.isEmpty(clidKey) && !TextUtils.isEmpty(clidValue)) {
                             clidsFromSatellite[clidKey] = clidValue
                         } else {
-                            YLogger.warning(tag, "Invalid clid {%s : %s}", clidKey, clidValue)
                             SdkUtils.logAttribution("Invalid clid {%s : %s}", clidKey, clidValue)
                         }
                     } catch (ex: Throwable) {
                         YLogger.error(tag, ex)
                     }
                 }
-                YLogger.info(tag, "Parsed clids: %s", clidsFromSatellite)
                 SdkUtils.logAttribution("Clids from satellite: %s", clidsFromSatellite)
                 return ClidsInfo.Candidate(clidsFromSatellite, DistributionSource.SATELLITE)
             } else {
-                YLogger.info(tag, "Failed to retrieve cursor")
                 SdkUtils.logAttribution("No Satellite content provider found")
             }
         } catch (ex: Throwable) {
