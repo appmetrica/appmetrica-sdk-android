@@ -386,7 +386,7 @@ public final class io.appmetrica.analytics.coreutils.internal.services.SafePacka
     public final [Nullable] android.content.pm.ResolveInfo resolveActivity([NonNull] android.content.Context, [NonNull] android.content.Intent, int)
     public final [Nullable] android.content.pm.ProviderInfo resolveContentProvider([NonNull] android.content.Context, [NonNull] String)
     public final [Nullable] android.content.pm.ResolveInfo resolveService([NonNull] android.content.Context, [NonNull] android.content.Intent, int)
-    public final void setComponentEnabledSetting([NonNull] android.content.Context, [NonNull] android.content.ComponentName, int, int)
+    public final [Nullable] kotlin.Unit setComponentEnabledSetting([NonNull] android.content.Context, [NonNull] android.content.ComponentName, int, int)
 }
 
 public final class io.appmetrica.analytics.coreutils.internal.services.SafePackageManagerHelperForR {

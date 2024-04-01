@@ -12,7 +12,6 @@ import android.content.pm.ResolveInfo
 import android.content.pm.ServiceInfo
 import android.os.Build
 import io.appmetrica.analytics.coreutils.internal.AndroidUtils.isApiAchieved
-import io.appmetrica.analytics.coreutils.internal.services.SafePackageManagerHelperForR.extractPackageInstaller
 import io.appmetrica.analytics.logger.internal.YLogger
 
 class SafePackageManager {
@@ -21,87 +20,67 @@ class SafePackageManager {
 
     fun getPackageInfo(context: Context, packageName: String): PackageInfo? = getPackageInfo(context, packageName, 0)
 
-    fun getPackageInfo(context: Context, packageName: String, flags: Int): PackageInfo? = try {
+    fun getPackageInfo(context: Context, packageName: String, flags: Int): PackageInfo? = runSafely {
         context.packageManager.getPackageInfo(packageName, flags)
-    } catch (e: Throwable) {
-        YLogger.error(tag, e, e.message)
-        null
     }
 
-    fun getServiceInfo(context: Context, component: ComponentName, flags: Int): ServiceInfo? = try {
+    fun getServiceInfo(context: Context, component: ComponentName, flags: Int): ServiceInfo? = runSafely {
         context.packageManager.getServiceInfo(component, flags)
-    } catch (e: Throwable) {
-        YLogger.error(tag, e, e.message)
-        null
     }
 
-    fun resolveService(context: Context, intent: Intent, flags: Int): ResolveInfo? = try {
+    fun resolveService(context: Context, intent: Intent, flags: Int): ResolveInfo? = runSafely {
         context.packageManager.resolveService(intent, flags)
-    } catch (e: Throwable) {
-        YLogger.error(tag, e, e.message)
-        null
     }
 
-    fun resolveActivity(context: Context, intent: Intent, flags: Int): ResolveInfo? = try {
+    fun resolveActivity(context: Context, intent: Intent, flags: Int): ResolveInfo? = runSafely {
         context.packageManager.resolveActivity(intent, flags)
-    } catch (e: Throwable) {
-        YLogger.error(tag, e, e.message)
-        null
     }
 
-    fun resolveContentProvider(context: Context, authority: String): ProviderInfo? = try {
+    fun resolveContentProvider(context: Context, authority: String): ProviderInfo? = runSafely {
         val pm = context.packageManager
         if (isApiAchieved(Build.VERSION_CODES.TIRAMISU)) {
             PackageManagerUtilsTiramisu.resolveContentProvider(pm, authority)
         } else {
             pm.resolveContentProvider(authority, PackageManager.GET_META_DATA)
         }
-    } catch (e: Throwable) {
-        YLogger.error(tag, e, e.message)
-        null
     }
 
-    fun getApplicationInfo(context: Context, packageName: String, flags: Int): ApplicationInfo? = try {
+    fun getApplicationInfo(context: Context, packageName: String, flags: Int): ApplicationInfo? = runSafely {
         context.packageManager.getApplicationInfo(packageName, flags)
-    } catch (e: Throwable) {
-        YLogger.error(tag, e, e.message)
-        null
     }
 
-    fun getActivityInfo(context: Context, componentName: ComponentName, flags: Int): ActivityInfo? = try {
+    fun getActivityInfo(context: Context, componentName: ComponentName, flags: Int): ActivityInfo? = runSafely {
         context.packageManager.getActivityInfo(componentName, flags)
-    } catch (e: Throwable) {
-        YLogger.error(tag, e, e.message)
-        null
     }
 
-    fun setComponentEnabledSetting(context: Context, componentName: ComponentName, newState: Int, flags: Int) {
-        try {
-            val pm = context.packageManager
-            pm.setComponentEnabledSetting(componentName, newState, flags)
-        } catch (e: Throwable) {
-            YLogger.error(tag, e, e.message)
-        }
-    }
+    fun setComponentEnabledSetting(
+        context: Context,
+        componentName: ComponentName,
+        newState: Int,
+        flags: Int
+    ) = runSafely { context.packageManager.setComponentEnabledSetting(componentName, newState, flags) }
 
-    fun hasSystemFeature(context: Context, name: String): Boolean = try {
+    fun hasSystemFeature(context: Context, name: String): Boolean = runSafely(defaultValue = false) {
         context.packageManager.hasSystemFeature(name)
-    } catch (e: Throwable) {
-        YLogger.error(tag, e, e.message)
-        false
     }
 
-    fun getInstallerPackageName(context: Context, packageName: String): String? = try {
+    fun getInstallerPackageName(context: Context, packageName: String): String? = runSafely {
         val pm = context.packageManager
         val installer = if (isApiAchieved(Build.VERSION_CODES.R)) {
-            extractPackageInstaller(pm, packageName)
+            SafePackageManagerHelperForR.extractPackageInstaller(pm, packageName)
         } else {
             pm.getInstallerPackageName(packageName)
         }
         YLogger.info(tag, "AppInstaller = %s", installer)
         installer
+    }
+
+    private fun <T> runSafely(block: () -> T): T? = runSafely(defaultValue = null, block)
+
+    private fun <T> runSafely(defaultValue: T, block: () -> T?): T = try {
+        block() ?: defaultValue
     } catch (e: Throwable) {
-        YLogger.error(tag, e, e.message)
-        null
+        YLogger.e(tag, e, e.message)
+        defaultValue
     }
 }
