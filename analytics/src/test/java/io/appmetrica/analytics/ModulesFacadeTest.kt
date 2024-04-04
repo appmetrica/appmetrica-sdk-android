@@ -41,6 +41,15 @@ class ModulesFacadeTest {
     }
 
     @Test
+    fun reportExternalAttribution() {
+        val source = 200500
+        val value = "some value"
+        ModulesFacade.reportExternalAttribution(source, value)
+        verify(proxy).reportExternalAttribution(source, value)
+        verifyNoMoreInteractions(proxy)
+    }
+
+    @Test
     fun testSendEventsBuffer() {
         ModulesFacade.sendEventsBuffer()
         verify(proxy).sendEventsBuffer()

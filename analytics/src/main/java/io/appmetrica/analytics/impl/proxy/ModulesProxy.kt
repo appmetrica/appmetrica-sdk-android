@@ -8,6 +8,7 @@ import io.appmetrica.analytics.ModuleEvent
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor
 import io.appmetrica.analytics.coreutils.internal.executors.SafeRunnable
 import io.appmetrica.analytics.impl.IMainReporter
+import io.appmetrica.analytics.impl.attribution.ExternalAttributionFromModule
 import io.appmetrica.analytics.impl.proxy.synchronous.ModulesSynchronousStageExecutor
 import io.appmetrica.analytics.impl.proxy.validation.ModulesBarrier
 
@@ -51,6 +52,17 @@ class ModulesProxy @VisibleForTesting constructor(
         executor.execute(object : SafeRunnable() {
             override fun runSafety() {
                 getMainReporter().setSessionExtra(key, value)
+            }
+        })
+    }
+
+    fun reportExternalAttribution(source: Int, value: String?) {
+        modulesBarrier.reportExternalAttribution(source, value)
+        synchronousStageExecutor.reportExternalAttribution(source, value)
+
+        executor.execute(object : SafeRunnable() {
+            override fun runSafety() {
+                getMainReporter().reportExternalAttribution(ExternalAttributionFromModule(source, value))
             }
         })
     }

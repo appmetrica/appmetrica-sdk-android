@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.impl.ClientServiceLocator;
+import io.appmetrica.analytics.impl.protobuf.backend.ExternalAttribution;
 import io.appmetrica.analytics.impl.proxy.ModulesProxy;
 import io.appmetrica.analytics.logger.internal.YLogger;
 
@@ -12,6 +13,27 @@ import io.appmetrica.analytics.logger.internal.YLogger;
  * Class with methods for communication of different AppMetrica modules.
  */
 public final class ModulesFacade {
+
+    /**
+     * Attribution source "Appsflyer SDK" for {@link ModulesFacade#reportExternalAttribution(int, String)}.
+     */
+    public static final int EXTERNAL_ATTRIBUTION_APPSFLYER = ExternalAttribution.ClientExternalAttribution.APPSFLYER;
+    /**
+     * Attribution source "Adjust SDK" for {@link ModulesFacade#reportExternalAttribution(int, String)}.
+     */
+    public static final int EXTERNAL_ATTRIBUTION_ADJUST = ExternalAttribution.ClientExternalAttribution.ADJUST;
+    /**
+     * Attribution source "Kochava SDK" for {@link ModulesFacade#reportExternalAttribution(int, String)}.
+     */
+    public static final int EXTERNAL_ATTRIBUTION_KOCHAVA = ExternalAttribution.ClientExternalAttribution.KOCHAVA;
+    /**
+     * Attribution source "Tenjin SDK" for {@link ModulesFacade#reportExternalAttribution(int, String)}.
+     */
+    public static final int EXTERNAL_ATTRIBUTION_TENJIN = ExternalAttribution.ClientExternalAttribution.TENJIN;
+    /**
+     * Attribution source "Airbridge SDK" for {@link ModulesFacade#reportExternalAttribution(int, String)}.
+     */
+    public static final int EXTERNAL_ATTRIBUTION_AIRBRIDGE = ExternalAttribution.ClientExternalAttribution.AIRBRIDGE;
 
     private static final String TAG = "[ModulesFacade]";
 
@@ -48,6 +70,23 @@ public final class ModulesFacade {
             value != null ? value.length : null
         );
         proxy.setSessionExtra(key, value);
+    }
+
+    /**
+     * Reports attribution from external library.
+     *
+     * @param source the SDK that provided the attribution.
+     *               One of
+     *               {@link ModulesFacade#EXTERNAL_ATTRIBUTION_APPSFLYER},
+     *               {@link ModulesFacade#EXTERNAL_ATTRIBUTION_ADJUST},
+     *               {@link ModulesFacade#EXTERNAL_ATTRIBUTION_KOCHAVA},
+     *               {@link ModulesFacade#EXTERNAL_ATTRIBUTION_TENJIN},
+     *               {@link ModulesFacade#EXTERNAL_ATTRIBUTION_AIRBRIDGE}
+     *
+     * @param value the attribution value.
+     */
+    public static void reportExternalAttribution(int source, @NonNull String value) {
+        proxy.reportExternalAttribution(source, value);
     }
 
     /**

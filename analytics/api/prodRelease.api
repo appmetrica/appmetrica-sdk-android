@@ -299,10 +299,17 @@ public static class io.appmetrica.analytics.ModuleEvent$Builder {
 }
 
 public final class io.appmetrica.analytics.ModulesFacade {
+    public static final int EXTERNAL_ATTRIBUTION_ADJUST
+    public static final int EXTERNAL_ATTRIBUTION_AIRBRIDGE
+    public static final int EXTERNAL_ATTRIBUTION_APPSFLYER
+    public static final int EXTERNAL_ATTRIBUTION_KOCHAVA
+    public static final int EXTERNAL_ATTRIBUTION_TENJIN
+
     public <init>()
     public static [NonNull] io.appmetrica.analytics.IModuleReporter getModuleReporter([NonNull] android.content.Context, [NonNull] String)
     public static boolean isActivatedForApp()
     public static void reportEvent([NonNull] io.appmetrica.analytics.ModuleEvent)
+    public static void reportExternalAttribution(int, [NonNull] String)
     public static void sendEventsBuffer()
     public static void setProxy([NonNull] OBFUSCATED[io.appmetrica.analytics.impl.proxy.ModulesProxy])
     public static void setSessionExtra([NonNull] String, [Nullable] byte[])

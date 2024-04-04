@@ -18,6 +18,8 @@ class ModulesSynchronousStageExecutor @VisibleForTesting constructor(
 
     fun setSessionExtra(key: String, value: ByteArray?) {}
 
+    fun reportExternalAttribution(source: Int, value: String?) {}
+
     fun isActivatedForApp() {}
 
     fun sendEventsBuffer() {}

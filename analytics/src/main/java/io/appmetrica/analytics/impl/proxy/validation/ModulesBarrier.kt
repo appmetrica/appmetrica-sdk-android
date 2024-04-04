@@ -35,6 +35,8 @@ class ModulesBarrier(
         sessionExtraKeyValidator.validate(key)
     }
 
+    fun reportExternalAttribution(source: Int, value: String?) {}
+
     fun isActivatedForApp() {
     }
 

@@ -7,10 +7,12 @@ import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor
 import io.appmetrica.analytics.impl.AppMetricaFacade
 import io.appmetrica.analytics.impl.MainReporter
 import io.appmetrica.analytics.impl.MainReporterApiConsumerProvider
+import io.appmetrica.analytics.impl.attribution.ExternalAttributionFromModule
 import io.appmetrica.analytics.impl.proxy.synchronous.ModulesSynchronousStageExecutor
 import io.appmetrica.analytics.impl.proxy.validation.ModulesBarrier
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.MockedStaticRule
+import io.appmetrica.analytics.testutils.constructionRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Rule
@@ -24,6 +26,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoMoreInteractions
+import org.mockito.kotlin.verifyZeroInteractions
 import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 import java.util.UUID
@@ -47,6 +50,9 @@ class ModulesProxyTest : CommonTest() {
 
     @get:Rule
     val appMetrica = MockedStaticRule(AppMetrica::class.java)
+
+    @get:Rule
+    val externalAttributionFromModuleMockedConstructionRule = constructionRule<ExternalAttributionFromModule>()
 
     private lateinit var proxy: ModulesProxy
 
@@ -99,6 +105,31 @@ class ModulesProxyTest : CommonTest() {
 
         verify(mainReporter).setSessionExtra(key, value)
         verifyNoMoreInteractions(mainReporter)
+    }
+
+    @Test
+    fun reportExternalAttribution() {
+        val source = 14
+        val value = "Value"
+
+        proxy.reportExternalAttribution(source, value)
+
+        inOrder(modulesBarrier, synchronousStageExecutor, executor, mainReporter) {
+            verify(modulesBarrier).reportExternalAttribution(source, value)
+            verify(synchronousStageExecutor).reportExternalAttribution(source, value)
+            verify(executor).execute(runnableArgumentCaptor.capture())
+            verifyZeroInteractions(mainReporter)
+        }
+
+        runnableArgumentCaptor.firstValue.run()
+        verify(mainReporter).reportExternalAttribution(
+            externalAttributionFromModuleMockedConstructionRule.constructionMock.constructed().first()
+        )
+        verifyNoMoreInteractions(mainReporter)
+
+        assertThat(externalAttributionFromModuleMockedConstructionRule.constructionMock.constructed()).hasSize(1)
+        assertThat(externalAttributionFromModuleMockedConstructionRule.argumentInterceptor.flatArguments())
+            .containsExactly(source, value)
     }
 
     @Test
