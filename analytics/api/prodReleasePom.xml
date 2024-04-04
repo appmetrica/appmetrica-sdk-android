@@ -41,6 +41,12 @@
     </dependency>
     <dependency>
       <groupId>io.appmetrica.analytics</groupId>
+      <artifactId>analytics-ad-revenue</artifactId>
+      <version>6.4.0</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.appmetrica.analytics</groupId>
       <artifactId>analytics-identifiers</artifactId>
       <version>6.4.0</version>
       <scope>runtime</scope>

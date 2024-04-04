@@ -1,0 +1,7 @@
+<manifest xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-sdk tools:overrideLibrary="
+        com.fyber.fairbid.sdk
+        com.fyber.inneractive.sdk
+        com.iab.omid.library.fyber
+        "/></manifest>

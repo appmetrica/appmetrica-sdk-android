@@ -2,6 +2,7 @@ package io.appmetrica.analytics.impl.proxy.synchronous
 
 import android.content.Context
 import androidx.annotation.VisibleForTesting
+import io.appmetrica.analytics.AdRevenue
 import io.appmetrica.analytics.ModuleEvent
 import io.appmetrica.analytics.impl.ClientServiceLocator
 import io.appmetrica.analytics.impl.ContextAppearedListener
@@ -26,5 +27,8 @@ class ModulesSynchronousStageExecutor @VisibleForTesting constructor(
 
     fun getReporter(context: Context, apiKey: String) {
         contextAppearedListener.onProbablyAppeared(context.applicationContext)
+    }
+
+    fun reportAdRevenue(adRevenue: AdRevenue) {
     }
 }

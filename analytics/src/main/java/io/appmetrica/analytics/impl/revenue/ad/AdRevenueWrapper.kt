@@ -3,6 +3,7 @@ package io.appmetrica.analytics.impl.revenue.ad
 import io.appmetrica.analytics.AdRevenue
 import io.appmetrica.analytics.AdType
 import io.appmetrica.analytics.coreutils.internal.StringUtils
+import io.appmetrica.analytics.impl.adrevenue.AdRevenueDataSource
 import io.appmetrica.analytics.impl.utils.DecimalProtoModel
 import io.appmetrica.analytics.impl.utils.JsonHelper
 import io.appmetrica.analytics.impl.utils.PublicLogger
@@ -23,7 +24,11 @@ private val adTypeMapping = mapOf(
     AdType.OTHER to AdRevenueProto.OTHER,
 )
 
-internal class AdRevenueWrapper(private val revenue: AdRevenue, logger: PublicLogger) {
+internal class AdRevenueWrapper(
+    private val revenue: AdRevenue,
+    private val autoCollected: Boolean,
+    logger: PublicLogger
+) {
 
     private val genericStringTrimmer: Trimmer<String> = StringTrimmer(
         EventLimitationProcessor.AD_REVENUE_GENERIC_STRING_MAX_SIZE, "ad revenue strings", logger
@@ -61,6 +66,10 @@ internal class AdRevenueWrapper(private val revenue: AdRevenue, logger: PublicLo
             val payloadResult = StringUtils.stringToBytesForProtobuf(payloadTrimmer.trim(payload))
             proto.payload = payloadResult
             bytesTruncated += StringUtils.stringToBytesForProtobuf(payload).size - payloadResult.size
+        }
+
+        if (autoCollected) {
+            proto.dataSource = AdRevenueDataSource.AUTOCOLLECTED.value.toByteArray()
         }
 
         return MessageNano.toByteArray(proto) to bytesTruncated

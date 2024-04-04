@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.impl.proxy.validation
 
 import android.content.Context
+import io.appmetrica.analytics.AdRevenue
 import io.appmetrica.analytics.ModuleEvent
 import io.appmetrica.analytics.impl.proxy.AppMetricaFacadeProvider
 import io.appmetrica.analytics.impl.utils.validation.NonNullValidator
@@ -46,5 +47,8 @@ class ModulesBarrier(
     fun getReporter(context: Context, apiKey: String) {
         contextValidator.validate(context)
         apiKeyValidator.validate(apiKey)
+    }
+
+    fun reportAdRevenue(adRevenue: AdRevenue) {
     }
 }

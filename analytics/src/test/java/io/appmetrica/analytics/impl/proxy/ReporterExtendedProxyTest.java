@@ -415,6 +415,32 @@ public class ReporterExtendedProxyTest extends CommonTest {
         inOrder.verifyNoMoreInteractions();
     }
 
+    @Test
+    public void reportAdRevenueIfAutoCollected() {
+        AdRevenue adRevenue = mock(AdRevenue.class);
+        boolean autoCollected = true;
+        mReporterExtendedProxy.reportAdRevenue(adRevenue, autoCollected);
+
+        InOrder inOrder = Mockito.inOrder(reporterBarrier, mSynchronousStageExecutor, mReporter);
+        inOrder.verify(reporterBarrier).reportAdRevenue(adRevenue, autoCollected);
+        inOrder.verify(mSynchronousStageExecutor).reportAdRevenue(adRevenue, autoCollected);
+        inOrder.verify(mReporter).reportAdRevenue(adRevenue, autoCollected);
+        inOrder.verifyNoMoreInteractions();
+    }
+
+    @Test
+    public void reportAdRevenueIfNotAutoCollected() {
+        AdRevenue adRevenue = mock(AdRevenue.class);
+        boolean autoCollected = false;
+        mReporterExtendedProxy.reportAdRevenue(adRevenue, autoCollected);
+
+        InOrder inOrder = Mockito.inOrder(reporterBarrier, mSynchronousStageExecutor, mReporter);
+        inOrder.verify(reporterBarrier).reportAdRevenue(adRevenue, autoCollected);
+        inOrder.verify(mSynchronousStageExecutor).reportAdRevenue(adRevenue, autoCollected);
+        inOrder.verify(mReporter).reportAdRevenue(adRevenue, autoCollected);
+        inOrder.verifyNoMoreInteractions();
+    }
+
     private ReporterExtendedProxy createProxyWithMockedExecutor(@NonNull ICommonExecutor executor) {
         return new ReporterExtendedProxy(
                 executor,

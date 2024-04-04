@@ -88,6 +88,14 @@ class ModulesFacadeTest {
         verifyNoMoreInteractions(proxy)
     }
 
+    @Test
+    fun reportAdRevenue() {
+        val adRevenue: AdRevenue = mock()
+        ModulesFacade.reportAdRevenue(adRevenue)
+        verify(proxy).reportAdRevenue(adRevenue)
+        verifyNoMoreInteractions(proxy)
+    }
+
     private fun testIifa(returnValue: Boolean) {
         whenever(proxy.isActivatedForApp()).thenReturn(returnValue)
         assertThat(ModulesFacade.isActivatedForApp()).isEqualTo(returnValue)

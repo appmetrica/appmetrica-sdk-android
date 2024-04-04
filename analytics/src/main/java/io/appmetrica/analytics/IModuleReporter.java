@@ -30,4 +30,12 @@ public interface IModuleReporter {
      * @param value Value of extra
      */
     void setSessionExtra(@NonNull String key, @Nullable byte[] value);
+
+    /**
+     * Reports auto collected adRevenue to AppMetrica
+     *
+     * @param adRevenue AdRevenue
+     * @param autoCollected true if data is auto collected and false otherwise
+     */
+    void reportAdRevenue(@NonNull final AdRevenue adRevenue, final boolean autoCollected);
 }

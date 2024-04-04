@@ -498,4 +498,20 @@ public class SelfReporterWrapperTest extends CommonTest {
         mSelfReporterWrapper.onInitializationFinished(mContext);
         verify(mReporter).setSessionExtra(key, value);
     }
+
+    @Test
+    public void reportAdRevenueWithAutoCollectedInitialized() {
+        mSelfReporterWrapper.onInitializationFinished(mContext);
+        mSelfReporterWrapper.reportAdRevenue(adRevenue, true);
+        verify(mReporter).reportAdRevenue(adRevenue, true);
+    }
+
+    @Test
+    public void reportAdRevenueWithAutoCollectedNotInitialized() {
+        mSelfReporterWrapper.reportAdRevenue(adRevenue, true);
+        verify(mReporter, never()).reportAdRevenue(adRevenue, true);
+
+        mSelfReporterWrapper.onInitializationFinished(mContext);
+        verify(mReporter).reportAdRevenue(adRevenue, true);
+    }
 }

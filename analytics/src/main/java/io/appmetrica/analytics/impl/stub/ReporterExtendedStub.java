@@ -141,4 +141,9 @@ public class ReporterExtendedStub implements IReporterExtended {
     public void setSessionExtra(@NonNull String key, @Nullable byte[] value) {
         //Do nothing
     }
+
+    @Override
+    public void reportAdRevenue(@NonNull AdRevenue adRevenue, boolean autoCollected) {
+        //Do nothing
+    }
 }

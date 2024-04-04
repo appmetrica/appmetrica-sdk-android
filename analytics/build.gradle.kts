@@ -108,6 +108,7 @@ android {
         htmlReport = true
         htmlOutput = file("${project.buildDir}/reports/lint/lint.html")
         lintConfig = file("${projectDir}/lint.xml")
+        checkDependencies = false
 
         disable += "GradleDependency"
         disable += "LongLogTag"
@@ -173,6 +174,7 @@ dependencies {
     implementation(project(":ndkcrashes-api"))
     implementation(project(":network-tasks"))
 
+    runtimeOnly(project(":ad-revenue"))
     runtimeOnly(project(":identifiers"))
     runtimeOnly(project(":location"))
     runtimeOnly(project(":remote-permissions"))

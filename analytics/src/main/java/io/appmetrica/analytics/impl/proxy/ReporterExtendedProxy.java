@@ -416,4 +416,16 @@ public class ReporterExtendedProxy implements IReporterExtended {
             }
         });
     }
+
+    @Override
+    public void reportAdRevenue(@NonNull final AdRevenue adRevenue, final boolean autoCollected) {
+        barrier.reportAdRevenue(adRevenue, autoCollected);
+        synchronousStageExecutor.reportAdRevenue(adRevenue, autoCollected);
+        mExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+                getReporter().reportAdRevenue(adRevenue, autoCollected);
+            }
+        });
+    }
 }

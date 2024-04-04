@@ -12,6 +12,9 @@ includeBuild("build-logic") {
 }
 
 // modules
+include("ad-revenue")
+include("ad-revenue-fyber-v3")
+include("ad-revenue-ironsource-v7")
 include("analytics")
 include("appsetid")
 include("billing-interface")

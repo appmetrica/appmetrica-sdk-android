@@ -107,6 +107,10 @@ class ReporterBarrier {
         adRevenueNonNullValidator.validate(adRevenue)
     }
 
+    fun reportAdRevenue(adRevenue: AdRevenue?, autoCollected: Boolean) {
+        adRevenueNonNullValidator.validate(adRevenue)
+    }
+
     fun putAppEnvironmentValue(
         key: String?,
         value: String?

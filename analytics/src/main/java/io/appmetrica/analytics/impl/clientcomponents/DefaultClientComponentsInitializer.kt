@@ -7,14 +7,21 @@ import io.appmetrica.analytics.logger.internal.YLogger
 
 class DefaultClientComponentsInitializer : ClientComponentsInitializer {
 
-    private val tag = "[PublicClientComponentsInitializer]"
+    private val tag = "[DefaultClientComponentsInitializer]"
 
-    private val moduleEntryPoints = listOf<String>()
+    private val moduleEntryPoints = listOf(
+        "io.appmetrica.analytics.adrevenue.fyber.v3.internal.FyberClientModuleEntryPoint",
+        "io.appmetrica.analytics.adrevenue.ironsource.v7.internal.IronSourceClientModuleEntryPoint",
+    )
 
     override fun onCreate() {
-        YLogger.info(tag, "Register public modules")
-        ClientServiceLocator.getInstance().moduleEntryPointsRegister.register(
-            *moduleEntryPoints.map { ConstantModuleEntryPointProvider(it) }.toTypedArray()
-        )
+        if (ClientServiceLocator.getInstance().mainProcessDetector.isMainProcess) {
+            YLogger.info(tag, "Register public modules")
+            ClientServiceLocator.getInstance().moduleEntryPointsRegister.register(
+                *moduleEntryPoints.map { ConstantModuleEntryPointProvider(it) }.toTypedArray()
+            )
+        } else {
+            YLogger.info(tag, "Public modules not registered for non main process")
+        }
     }
 }

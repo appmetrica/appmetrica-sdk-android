@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.location.Location;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import io.appmetrica.analytics.AdRevenue;
 import io.appmetrica.analytics.AnrListener;
 import io.appmetrica.analytics.ExternalAttribution;
 import io.appmetrica.analytics.ModuleEvent;
@@ -55,6 +56,11 @@ public class MainReporterStub extends ReporterExtendedStub implements IMainRepor
     public void reportEvent(
         @NonNull final ModuleEvent moduleEvent
     ) {
+        //Do nothing
+    }
+
+    @Override
+    public void reportAdRevenue(@NonNull AdRevenue adRevenue, boolean autoCollected) {
         //Do nothing
     }
 

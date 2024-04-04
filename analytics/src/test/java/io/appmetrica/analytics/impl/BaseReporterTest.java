@@ -859,9 +859,22 @@ public abstract class BaseReporterTest extends BaseReporterData {
         final AdRevenue mock = mock(AdRevenue.class);
         getReporter().reportAdRevenue(mock);
         assertThat(adRevenueWrapperConstructor.getArgumentInterceptor().getArguments().get(0).get(0)).isSameAs(mock);
+        assertThat(adRevenueWrapperConstructor.getArgumentInterceptor().getArguments().get(0).get(1)).isEqualTo(false);
         verify(mReportsHandler).sendAdRevenue(
                 same(adRevenueWrapperConstructor.getConstructionMock().constructed().get(0)),
                 any(ReporterEnvironment.class)
+        );
+    }
+
+    @Test
+    public void testAdRevenueSentIfAutoCollected() {
+        final AdRevenue mock = mock(AdRevenue.class);
+        getReporter().reportAdRevenue(mock, true);
+        assertThat(adRevenueWrapperConstructor.getArgumentInterceptor().getArguments().get(0).get(0)).isSameAs(mock);
+        assertThat(adRevenueWrapperConstructor.getArgumentInterceptor().getArguments().get(0).get(1)).isEqualTo(true);
+        verify(mReportsHandler).sendAdRevenue(
+            same(adRevenueWrapperConstructor.getConstructionMock().constructed().get(0)),
+            any(ReporterEnvironment.class)
         );
     }
 

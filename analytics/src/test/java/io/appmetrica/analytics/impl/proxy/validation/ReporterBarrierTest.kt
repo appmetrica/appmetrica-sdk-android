@@ -209,4 +209,14 @@ class ReporterBarrierTest : CommonTest() {
     fun setSessionExtra() {
         mBarrier.setSessionExtra("key", "value".toByteArray())
     }
+
+    @Test
+    fun reportAdRevenueWithBoolean() {
+        mBarrier.reportAdRevenue(mock<AdRevenue>(), true)
+    }
+
+    @Test(expected = ValidationException::class)
+    fun reportAdRevenueWithBooleanIfAdRevenueIsNull() {
+        mBarrier.reportAdRevenue(null, true)
+    }
 }

@@ -30,6 +30,7 @@ private const val adUnitName = "someAdUnitName"
 private const val precision = "somePrecision"
 private val currency = Currency.getInstance("USD")
 private const val currencyAnswer = "USD"
+private const val autoCollected = true
 
 private const val bigAdNetwork = "bigAdNetworkbigAdNetwork"
 private const val bigAdNetworkTrimmed = "bigAdNetwork"
@@ -119,7 +120,7 @@ class AdRevenueWrapperTest : CommonTest() {
             .withPayload(payload)
             .build()
 
-        val pair = AdRevenueWrapper(adRevenue, publicLogger).getDataToSend()
+        val pair = AdRevenueWrapper(adRevenue, autoCollected, publicLogger).getDataToSend()
 
         val proto = AdRevenueProto.parseFrom(pair.first)
 
@@ -132,7 +133,7 @@ class AdRevenueWrapperTest : CommonTest() {
         assertions.checkField("adUnitName", StringUtils.stringToBytesForProtobuf(adUnitName))
         assertions.checkField("precision", StringUtils.stringToBytesForProtobuf(precision))
         assertions.checkField("currency", StringUtils.stringToBytesForProtobuf(currencyAnswer))
-        assertions.checkField("dataSource", StringUtils.stringToBytesForProtobuf("manual"))
+        assertions.checkField("dataSource", StringUtils.stringToBytesForProtobuf("autocollected"))
         assertions.checkField("payload", StringUtils.stringToBytesForProtobuf(JsonHelper.mapToJsonString(payload)))
         assertions.checkField("adType", 2)
         assertions.checkFieldRecursively("adRevenue") {
@@ -163,7 +164,7 @@ class AdRevenueWrapperTest : CommonTest() {
             .withPayload(bigPayload)
             .build()
 
-        val pair = AdRevenueWrapper(adRevenue, publicLogger).getDataToSend()
+        val pair = AdRevenueWrapper(adRevenue, false, publicLogger).getDataToSend()
 
         val range = 0..10
         val mock = stringTrimmer.constructionMock.constructed().first()

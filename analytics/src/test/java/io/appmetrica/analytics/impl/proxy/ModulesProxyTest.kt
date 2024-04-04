@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.impl.proxy
 
 import android.content.Context
+import io.appmetrica.analytics.AdRevenue
 import io.appmetrica.analytics.AppMetrica
 import io.appmetrica.analytics.ModuleEvent
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor
@@ -163,6 +164,23 @@ class ModulesProxyTest : CommonTest() {
     @Test
     fun testIsActivatedForFalse() {
         testIsActivated(false)
+    }
+
+    @Test
+    fun reportAdRevenue() {
+        val adRevenue: AdRevenue = mock()
+        proxy.reportAdRevenue(adRevenue)
+
+        val inOrder = inOrder(modulesBarrier, synchronousStageExecutor, executor)
+        inOrder.verify(modulesBarrier).reportAdRevenue(adRevenue)
+        inOrder.verify(synchronousStageExecutor).reportAdRevenue(adRevenue)
+        inOrder.verify(executor, times(1)).execute(runnableArgumentCaptor.capture())
+        verifyNoMoreInteractions(mainReporter)
+
+        runnableArgumentCaptor.firstValue.run()
+
+        verify(mainReporter).reportAdRevenue(adRevenue, true)
+        verifyNoMoreInteractions(mainReporter)
     }
 
     private fun testIsActivated(value: Boolean) {

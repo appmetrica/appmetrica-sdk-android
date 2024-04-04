@@ -16,6 +16,7 @@ import io.appmetrica.analytics.DeferredDeeplinkListener;
 import io.appmetrica.analytics.DeferredDeeplinkParametersListener;
 import io.appmetrica.analytics.ReporterConfig;
 import io.appmetrica.analytics.StartupParamsCallback;
+import io.appmetrica.analytics.impl.adrevenue.AppMetricaAutoAdRevenueReporter;
 import io.appmetrica.analytics.impl.client.ProcessConfiguration;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesClientDbStorage;
 import io.appmetrica.analytics.impl.db.storage.DatabaseStorageFactory;
@@ -94,7 +95,9 @@ public class AppMetricaImpl implements IAppMetricaImpl {
         mContext = context;
         modulesSeeker.discoverClientModules();
         ClientServiceLocator.getInstance().getModulesController().initClientSide(
-            new ClientContextFacade()
+            new ClientContextFacade(
+                new AppMetricaAutoAdRevenueReporter()
+            )
         );
         mClientPreferences = preferences;
         final Handler metricaHandler = appMetricaCore.getMetricaHandler();

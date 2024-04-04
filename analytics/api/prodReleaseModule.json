@@ -55,6 +55,13 @@
             "dependencies": [
                 {
                     "group": "io.appmetrica.analytics",
+                    "module": "analytics-ad-revenue",
+                    "version": {
+                        "requires": "6.4.0"
+                    }
+                },
+                {
+                    "group": "io.appmetrica.analytics",
                     "module": "analytics-identifiers",
                     "version": {
                         "requires": "6.4.0"

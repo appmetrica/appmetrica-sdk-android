@@ -48,6 +48,8 @@ class ReporterSynchronousStageExecutor {
 
     fun reportAdRevenue(adRevenue: AdRevenue) {}
 
+    fun reportAdRevenue(adRevenue: AdRevenue, autoCollected: Boolean) {}
+
     fun reportECommerce(event: ECommerceEvent) {}
 
     fun activate(config: ReporterConfig) {}

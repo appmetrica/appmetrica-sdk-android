@@ -2,6 +2,7 @@ package io.appmetrica.analytics.impl.proxy
 
 import android.content.Context
 import androidx.annotation.VisibleForTesting
+import io.appmetrica.analytics.AdRevenue
 import io.appmetrica.analytics.AppMetrica
 import io.appmetrica.analytics.IModuleReporter
 import io.appmetrica.analytics.ModuleEvent
@@ -83,6 +84,17 @@ class ModulesProxy @VisibleForTesting constructor(
         modulesBarrier.getReporter(context, apiKey)
         synchronousStageExecutor.getReporter(context.applicationContext, apiKey)
         return ReporterProxyStorage.getInstance().getOrCreate(context.applicationContext, apiKey)
+    }
+
+    fun reportAdRevenue(adRevenue: AdRevenue) {
+        modulesBarrier.reportAdRevenue(adRevenue)
+        synchronousStageExecutor.reportAdRevenue(adRevenue)
+
+        executor.execute(object : SafeRunnable() {
+            override fun runSafety() {
+                getMainReporter().reportAdRevenue(adRevenue, true)
+            }
+        })
     }
 
     /*

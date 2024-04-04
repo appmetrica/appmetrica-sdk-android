@@ -305,4 +305,14 @@ public class SelfReporterWrapper implements IReporterExtended, IPluginReporter {
             }
         });
     }
+
+    @Override
+    public void reportAdRevenue(@NonNull final AdRevenue adRevenue, final boolean autoCollected) {
+        processCommand(new IReporterCommandPerformer() {
+            @Override
+            public void perform(@NonNull IReporterExtended reporter) {
+                reporter.reportAdRevenue(adRevenue, autoCollected);
+            }
+        });
+    }
 }

@@ -487,11 +487,19 @@ public abstract class BaseReporter implements IBaseReporter {
 
     @Override
     public void reportAdRevenue(@NonNull AdRevenue adRevenue) {
-        mReportsHandler.sendAdRevenue(new AdRevenueWrapper(adRevenue, mPublicLogger), mReporterEnvironment);
-        logAdRevenue(adRevenue);
+        reportAdRevenue(adRevenue, false);
     }
 
-    private void logAdRevenue(@NonNull AdRevenue adRevenue) {
+    @Override
+    public void reportAdRevenue(@NonNull AdRevenue adRevenue, boolean autoCollected) {
+        mReportsHandler.sendAdRevenue(
+            new AdRevenueWrapper(adRevenue, autoCollected, mPublicLogger),
+            mReporterEnvironment
+        );
+        logAdRevenue(adRevenue, autoCollected);
+    }
+
+    private void logAdRevenue(@NonNull AdRevenue adRevenue, boolean autoCollected) {
         if (mPublicLogger.isEnabled()) {
             mPublicLogger.i(
                     "AdRevenue Received: AdRevenue{" +
@@ -505,6 +513,7 @@ public abstract class BaseReporter implements IBaseReporter {
                             ", adPlacementName='" + WrapUtils.wrapToTag(adRevenue.adPlacementName) + '\'' +
                             ", precision='" + WrapUtils.wrapToTag(adRevenue.precision) + '\'' +
                             ", payload=" +  JsonHelper.mapToJsonString(adRevenue.payload) +
+                            ", autoCollected=" + autoCollected +
                             '}'
             );
         }

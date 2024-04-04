@@ -1,0 +1,82 @@
+{
+    "formatVersion": "1.1",
+    "component": {
+        "group": "io.appmetrica.analytics",
+        "module": "analytics-ad-revenue",
+        "version": "6.4.0",
+        "attributes": {
+            "org.gradle.status": "release"
+        }
+    },
+    "createdBy": {
+        "gradle": {
+            "version": "8.2.1",
+            "buildId": "<random-string>"
+        }
+    },
+    "variants": [
+        {
+            "name": "releaseVariantReleaseApiPublication",
+            "attributes": {
+                "org.gradle.category": "library",
+                "org.gradle.dependency.bundling": "external",
+                "org.gradle.libraryelements": "aar",
+                "org.gradle.usage": "java-api"
+            },
+            "files": [
+                {
+                    "name": "analytics-ad-revenue-6.4.0.aar",
+                    "url": "analytics-ad-revenue-6.4.0.aar",
+                    "size": -1,
+                    "sha512": "<sha512>",
+                    "sha256": "<sha256>",
+                    "sha1": "<sha1>",
+                    "md5": "<md5>"
+                }
+            ]
+        },
+        {
+            "name": "releaseVariantReleaseRuntimePublication",
+            "attributes": {
+                "org.gradle.category": "library",
+                "org.gradle.dependency.bundling": "external",
+                "org.gradle.libraryelements": "aar",
+                "org.gradle.usage": "java-runtime"
+            },
+            "dependencies": [
+                {
+                    "group": "io.appmetrica.analytics",
+                    "module": "analytics-ad-revenue-fyber-v3",
+                    "version": {
+                        "requires": "6.4.0"
+                    }
+                },
+                {
+                    "group": "io.appmetrica.analytics",
+                    "module": "analytics-ad-revenue-ironsource-v7",
+                    "version": {
+                        "requires": "6.4.0"
+                    }
+                },
+                {
+                    "group": "org.jetbrains.kotlin",
+                    "module": "kotlin-stdlib",
+                    "version": {
+                        "requires": "1.6.21"
+                    }
+                }
+            ],
+            "files": [
+                {
+                    "name": "analytics-ad-revenue-6.4.0.aar",
+                    "url": "analytics-ad-revenue-6.4.0.aar",
+                    "size": -1,
+                    "sha512": "<sha512>",
+                    "sha256": "<sha256>",
+                    "sha1": "<sha1>",
+                    "md5": "<md5>"
+                }
+            ]
+        }
+    ]
+}
