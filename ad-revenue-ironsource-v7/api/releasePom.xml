@@ -9,7 +9,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.appmetrica.analytics</groupId>
   <artifactId>analytics-ad-revenue-ironsource-v7</artifactId>
-  <version>6.4.0</version>
+  <version>6.5.0</version>
   <packaging>aar</packaging>
   <name>AppMetrica SDK Ad Revenue Auto Collection Adapter for IronSource v7</name>
   <description>AppMetrica SDK Module</description>
@@ -42,19 +42,19 @@
     <dependency>
       <groupId>io.appmetrica.analytics</groupId>
       <artifactId>analytics-core-utils</artifactId>
-      <version>6.4.0</version>
+      <version>6.5.0</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>io.appmetrica.analytics</groupId>
       <artifactId>analytics-logger</artifactId>
-      <version>6.4.0</version>
+      <version>6.5.0</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>io.appmetrica.analytics</groupId>
       <artifactId>analytics-modules-api</artifactId>
-      <version>6.4.0</version>
+      <version>6.5.0</version>
       <scope>runtime</scope>
     </dependency>
   </dependencies>
