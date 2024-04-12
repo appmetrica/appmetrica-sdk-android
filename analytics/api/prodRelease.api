@@ -242,6 +242,7 @@ public final class io.appmetrica.analytics.ExternalAttributions {
     public static [NonNull] io.appmetrica.analytics.ExternalAttribution airbridge([Nullable] java.util.Map<String, String>)
     public static [NonNull] io.appmetrica.analytics.ExternalAttribution appsflyer([Nullable] java.util.Map<String, Object>)
     public static [NonNull] io.appmetrica.analytics.ExternalAttribution kochava([Nullable] org.json.JSONObject)
+    public static [NonNull] io.appmetrica.analytics.ExternalAttribution singular([Nullable] java.util.Map<String, Object>)
     public static [NonNull] io.appmetrica.analytics.ExternalAttribution tenjin([Nullable] java.util.Map<String, String>)
 }
 
@@ -304,6 +305,7 @@ public final class io.appmetrica.analytics.ModulesFacade {
     public static final int EXTERNAL_ATTRIBUTION_AIRBRIDGE
     public static final int EXTERNAL_ATTRIBUTION_APPSFLYER
     public static final int EXTERNAL_ATTRIBUTION_KOCHAVA
+    public static final int EXTERNAL_ATTRIBUTION_SINGULAR
     public static final int EXTERNAL_ATTRIBUTION_TENJIN
 
     public <init>()

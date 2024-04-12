@@ -132,4 +132,26 @@ class ExternalAttributionsTest : CommonTest() {
             ExternalAttributionType.AIRBRIDGE
         )
     }
+
+    @Test
+    fun singular() {
+        val value = mapOf<String, Any>()
+        val attribution = ExternalAttributions.singular(value)
+
+        assertThat(attribution).isEqualTo(mapExternalAttributionRule.constructionMock.constructed().first())
+        assertThat(mapExternalAttributionRule.argumentInterceptor.flatArguments()).containsExactly(
+            ExternalAttributionType.SINGULAR,
+            value
+        )
+    }
+
+    @Test
+    fun singularIfNull() {
+        val attribution = ExternalAttributions.singular(null)
+
+        assertThat(attribution).isEqualTo(nullExternalAttributionRule.constructionMock.constructed().first())
+        assertThat(nullExternalAttributionRule.argumentInterceptor.flatArguments()).containsExactly(
+            ExternalAttributionType.SINGULAR
+        )
+    }
 }

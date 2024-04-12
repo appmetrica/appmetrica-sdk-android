@@ -12,6 +12,7 @@ object ExternalAttributionTypeConverter {
             ExternalAttributionType.KOCHAVA -> ClientExternalAttribution.KOCHAVA
             ExternalAttributionType.TENJIN -> ClientExternalAttribution.TENJIN
             ExternalAttributionType.AIRBRIDGE -> ClientExternalAttribution.AIRBRIDGE
+            ExternalAttributionType.SINGULAR -> ClientExternalAttribution.SINGULAR
         }
     }
 
@@ -23,6 +24,7 @@ object ExternalAttributionTypeConverter {
             ClientExternalAttribution.KOCHAVA -> "KOCHAVA"
             ClientExternalAttribution.TENJIN -> "TENJIN"
             ClientExternalAttribution.AIRBRIDGE -> "AIRBRIDGE"
+            ClientExternalAttribution.SINGULAR -> "SINGULAR"
             else -> "UNKNOWN"
         }
     }

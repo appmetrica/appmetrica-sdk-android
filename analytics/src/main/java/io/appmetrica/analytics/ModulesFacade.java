@@ -34,6 +34,10 @@ public final class ModulesFacade {
      * Attribution source "Airbridge SDK" for {@link ModulesFacade#reportExternalAttribution(int, String)}.
      */
     public static final int EXTERNAL_ATTRIBUTION_AIRBRIDGE = ExternalAttribution.ClientExternalAttribution.AIRBRIDGE;
+    /**
+     * Attribution source "Singular SDK" for {@link ModulesFacade#reportExternalAttribution(int, String)}.
+     */
+    public static final int EXTERNAL_ATTRIBUTION_SINGULAR = ExternalAttribution.ClientExternalAttribution.SINGULAR;
 
     private static final String TAG = "[ModulesFacade]";
 

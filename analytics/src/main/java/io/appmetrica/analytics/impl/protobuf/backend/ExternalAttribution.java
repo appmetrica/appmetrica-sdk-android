@@ -15,6 +15,7 @@ public interface ExternalAttribution {
     public static final int KOCHAVA = 3;
     public static final int TENJIN = 4;
     public static final int AIRBRIDGE = 5;
+    public static final int SINGULAR = 6;
 
     private static volatile ClientExternalAttribution[] _emptyArray;
     public static ClientExternalAttribution[] emptyArray() {
@@ -97,6 +98,7 @@ public interface ExternalAttribution {
               case ExternalAttribution.ClientExternalAttribution.KOCHAVA:
               case ExternalAttribution.ClientExternalAttribution.TENJIN:
               case ExternalAttribution.ClientExternalAttribution.AIRBRIDGE:
+              case ExternalAttribution.ClientExternalAttribution.SINGULAR:
                 this.attributionType = value;
                 break;
             }

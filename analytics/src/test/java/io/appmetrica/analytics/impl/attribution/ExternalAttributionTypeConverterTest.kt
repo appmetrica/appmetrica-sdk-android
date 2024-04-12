@@ -21,6 +21,8 @@ class ExternalAttributionTypeConverterTest : CommonTest() {
             .isEqualTo(ClientExternalAttribution.TENJIN)
         assertThat(ExternalAttributionTypeConverter.fromModel(ExternalAttributionType.AIRBRIDGE))
             .isEqualTo(ClientExternalAttribution.AIRBRIDGE)
+        assertThat(ExternalAttributionTypeConverter.fromModel(ExternalAttributionType.SINGULAR))
+            .isEqualTo(ClientExternalAttribution.SINGULAR)
     }
 
     @Test
@@ -37,5 +39,7 @@ class ExternalAttributionTypeConverterTest : CommonTest() {
             .isEqualTo("TENJIN")
         assertThat(ExternalAttributionTypeConverter.toString(ClientExternalAttribution.AIRBRIDGE))
             .isEqualTo("AIRBRIDGE")
+        assertThat(ExternalAttributionTypeConverter.toString(ClientExternalAttribution.SINGULAR))
+            .isEqualTo("SINGULAR")
     }
 }

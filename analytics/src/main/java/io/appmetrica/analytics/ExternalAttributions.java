@@ -97,4 +97,20 @@ public final class ExternalAttributions {
         }
         return new MapExternalAttribution(ExternalAttributionType.AIRBRIDGE, value);
     }
+
+    /**
+     * Creates Singular implementation of {@link ExternalAttribution} interface.
+     *
+     * @param value data from Singular library
+     * @return Singular implementation of {@link ExternalAttribution} interface
+     */
+    @NonNull
+    public static ExternalAttribution singular(
+        @Nullable final Map<String, Object> value
+    ) {
+        if (value == null) {
+            return new NullExternalAttribution(ExternalAttributionType.SINGULAR);
+        }
+        return new MapExternalAttribution(ExternalAttributionType.SINGULAR, value);
+    }
 }
