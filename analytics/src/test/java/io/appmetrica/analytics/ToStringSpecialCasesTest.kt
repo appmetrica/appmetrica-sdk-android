@@ -1,6 +1,7 @@
 package io.appmetrica.analytics
 
 import io.appmetrica.analytics.coreapi.internal.permission.PermissionStrategy
+import io.appmetrica.analytics.impl.db.storage.TempCacheEntry
 import io.appmetrica.analytics.impl.permissions.CompositePermissionStrategy
 import io.appmetrica.analytics.impl.request.StartupRequestConfig
 import io.appmetrica.analytics.impl.startup.CollectingFlags.CollectingFlagsBuilder
@@ -47,12 +48,24 @@ class ToStringSpecialCasesTest : CommonTest() {
         val second = mock<PermissionStrategy>()
         val actualValue = CompositePermissionStrategy(first, second)
         val pattern = "strategies=${arrayOf(first, second).contentToString()}"
-        val predicate = object: Predicate<String> {
+        val predicate = object : Predicate<String> {
 
             override fun test(t: String): Boolean = t.contains(pattern)
 
             override fun toString(): String = "Contains `$pattern`"
         }
         ToStringTestUtils.testToString(actualValue, listOf(predicate))
+    }
+
+    @Test
+    fun tempCacheEntryToStringTest() {
+        val actualValue = TempCacheEntry(100500, "scope", 200500, ByteArray(10) { it.toByte() })
+        val extractedFieldAndValues = ToStringTestUtils.extractFieldsAndValues(
+            TempCacheEntry::class.java,
+            actualValue,
+            Modifier.PUBLIC or Modifier.FINAL,
+            setOf("id", "scope", "timestamp")
+        )
+        ToStringTestUtils.testToString(actualValue, extractedFieldAndValues)
     }
 }

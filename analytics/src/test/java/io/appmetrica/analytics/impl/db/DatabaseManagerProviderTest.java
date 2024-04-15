@@ -3,6 +3,7 @@ package io.appmetrica.analytics.impl.db;
 import io.appmetrica.analytics.coreapi.internal.db.DatabaseScript;
 import io.appmetrica.analytics.impl.component.ComponentId;
 import io.appmetrica.analytics.impl.db.constants.Constants;
+import io.appmetrica.analytics.impl.db.constants.TempCacheTable;
 import io.appmetrica.analytics.impl.utils.collection.HashMultimap;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
@@ -146,8 +147,9 @@ public class DatabaseManagerProviderTest extends CommonTest {
                 mTablesValidatorCaptor.capture()
         );
         assertThat(((TablesValidatorImpl) mTablesValidatorCaptor.getValue()).getTableColumnsToCheck()).containsOnly(
-                new AbstractMap.SimpleEntry(Constants.PreferencesTable.TABLE_NAME, Constants.PreferencesTable.ACTUAL_COLUMNS),
-                new AbstractMap.SimpleEntry(Constants.BinaryDataTable.TABLE_NAME, Constants.BinaryDataTable.ACTUAL_COLUMNS)
+            new AbstractMap.SimpleEntry(Constants.PreferencesTable.TABLE_NAME, Constants.PreferencesTable.ACTUAL_COLUMNS),
+            new AbstractMap.SimpleEntry(Constants.BinaryDataTable.TABLE_NAME, Constants.BinaryDataTable.ACTUAL_COLUMNS),
+            new AbstractMap.SimpleEntry(TempCacheTable.TABLE_NAME, TempCacheTable.COLUMNS)
         );
     }
 }

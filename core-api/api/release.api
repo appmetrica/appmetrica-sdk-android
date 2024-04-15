@@ -131,6 +131,21 @@ public interface io.appmetrica.analytics.coreapi.internal.data.StateSerializer<T
     public abstract [NonNull] T toState([NonNull] byte[])
 }
 
+public interface io.appmetrica.analytics.coreapi.internal.data.TempCacheStorage {
+    public abstract [Nullable] io.appmetrica.analytics.coreapi.internal.data.TempCacheStorage$Entry get([NonNull] String)
+    public abstract [NonNull] java.util.Collection<io.appmetrica.analytics.coreapi.internal.data.TempCacheStorage$Entry> get([NonNull] String, int)
+    public abstract long put([NonNull] String, long, [NonNull] byte[])
+    public abstract void remove(long)
+    public abstract void removeOlderThan([NonNull] String, long)
+}
+
+public interface io.appmetrica.analytics.coreapi.internal.data.TempCacheStorage$Entry {
+    public abstract [NonNull] byte[] getData()
+    public abstract long getId()
+    public abstract [NonNull] String getScope()
+    public abstract long getTimestamp()
+}
+
 public abstract class io.appmetrica.analytics.coreapi.internal.db.DatabaseScript {
     public <init>()
     public abstract void runScript([NonNull] android.database.sqlite.SQLiteDatabase)

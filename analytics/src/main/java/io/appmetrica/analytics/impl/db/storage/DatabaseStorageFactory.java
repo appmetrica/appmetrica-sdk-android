@@ -5,6 +5,7 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
+import io.appmetrica.analytics.coreapi.internal.data.TempCacheStorage;
 import io.appmetrica.analytics.impl.component.ComponentId;
 import io.appmetrica.analytics.impl.db.DatabaseManagerProvider;
 import io.appmetrica.analytics.impl.db.DatabaseStorage;
@@ -14,6 +15,7 @@ import io.appmetrica.analytics.impl.db.StorageType;
 import io.appmetrica.analytics.impl.db.connectors.LockedOnFileDBConnector;
 import io.appmetrica.analytics.impl.db.connectors.SimpleDBConnector;
 import io.appmetrica.analytics.impl.db.constants.Constants;
+import io.appmetrica.analytics.impl.db.constants.TempCacheTable;
 import io.appmetrica.analytics.logger.internal.YLogger;
 import java.io.File;
 import java.util.HashMap;
@@ -75,6 +77,10 @@ public class DatabaseStorageFactory {
     private IKeyValueTableDbHelper mServicePreferencesDbHelper;
     @Nullable
     private IKeyValueTableDbHelper servicePreferencesDbHelperWrapper;
+    @Nullable
+    private TempCacheStorage serviceTempCacheDbHelper;
+    @Nullable
+    private TempCacheStorage serviceTempCacheDbHelperWrapper;
     @Nullable
     private IKeyValueTableDbHelper mClientDbHelper;
     @Nullable
@@ -235,6 +241,31 @@ public class DatabaseStorageFactory {
             );
         }
         return mServicePreferencesDbHelper;
+    }
+
+    public synchronized TempCacheStorage getTempCacheStorageForService() {
+        if (serviceTempCacheDbHelperWrapper == null) {
+            serviceTempCacheDbHelperWrapper = new TempCacheDbHelperWrapper(
+                context,
+                StorageType.SERVICE,
+                getRawTempCacheDbHelperForService()
+            );
+        }
+        return serviceTempCacheDbHelperWrapper;
+    }
+
+    public synchronized TempCacheStorage getServiceTempCacheDbHelperForMigration() {
+        return getRawTempCacheDbHelperForService();
+    }
+
+    private TempCacheStorage getRawTempCacheDbHelperForService() {
+        if (serviceTempCacheDbHelper == null) {
+            serviceTempCacheDbHelper = new TempCacheDbHelper(
+                new SimpleDBConnector(getStorageForService()),
+                TempCacheTable.TABLE_NAME
+            );
+        }
+        return serviceTempCacheDbHelper;
     }
 
     public synchronized IKeyValueTableDbHelper getClientDbHelper() {

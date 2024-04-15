@@ -5,6 +5,7 @@ import io.appmetrica.analytics.coreapi.internal.db.DatabaseScript;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.component.ComponentId;
 import io.appmetrica.analytics.impl.db.constants.Constants;
+import io.appmetrica.analytics.impl.db.constants.TempCacheTable;
 import io.appmetrica.analytics.impl.utils.collection.HashMultimap;
 import io.appmetrica.analytics.modulesapi.internal.service.ModuleServicesDatabase;
 import io.appmetrica.analytics.modulesapi.internal.common.TableDescription;
@@ -64,6 +65,7 @@ public class DatabaseManagerProvider {
         HashMap<String, List<String>> tableColumnsToCheck = new HashMap<String, List<String>>();
         tableColumnsToCheck.put(Constants.PreferencesTable.TABLE_NAME, Constants.PreferencesTable.ACTUAL_COLUMNS);
         tableColumnsToCheck.put(Constants.BinaryDataTable.TABLE_NAME, Constants.BinaryDataTable.ACTUAL_COLUMNS);
+        tableColumnsToCheck.put(TempCacheTable.TABLE_NAME, TempCacheTable.COLUMNS);
 
         for (ModuleServicesDatabase moduleServicesDatabase :
             GlobalServiceLocator.getInstance().getModulesController().collectModuleServiceDatabases()) {

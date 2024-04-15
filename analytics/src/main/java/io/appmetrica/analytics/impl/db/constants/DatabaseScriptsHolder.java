@@ -67,6 +67,8 @@ public class DatabaseScriptsHolder {
 
             database.execSQL(Constants.BinaryDataTable.CREATE_TABLE);
 
+            database.execSQL(TempCacheTable.CREATE_TABLE);
+
             for (ModuleServicesDatabase moduleServicesDatabase :
                 GlobalServiceLocator.getInstance().getModulesController().collectModuleServiceDatabases()) {
                 for (TableDescription tableDescription : moduleServicesDatabase.getTables()) {
@@ -85,6 +87,8 @@ public class DatabaseScriptsHolder {
             database.execSQL(Constants.PreferencesTable.DROP_TABLE);
 
             database.execSQL(Constants.BinaryDataTable.DROP_TABLE);
+
+            database.execSQL(TempCacheTable.DROP_TABLE);
 
             for (ModuleServicesDatabase moduleServicesDatabase :
                 GlobalServiceLocator.getInstance().getModulesController().collectModuleServiceDatabases()) {

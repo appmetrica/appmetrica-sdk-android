@@ -10,6 +10,7 @@ import io.appmetrica.analytics.impl.BackgroundRestrictionsState
 import io.appmetrica.analytics.impl.component.CommonArguments.ReporterArguments
 import io.appmetrica.analytics.impl.component.ComponentId
 import io.appmetrica.analytics.impl.component.clients.ClientDescription
+import io.appmetrica.analytics.impl.db.storage.TempCacheEntry
 import io.appmetrica.analytics.impl.features.FeatureDescription
 import io.appmetrica.analytics.impl.referrer.common.ReferrerInfo
 import io.appmetrica.analytics.impl.startup.CacheControl
@@ -31,24 +32,25 @@ class AllFieldsTest(private val clazz: Class<*>) : CommonTest() {
         @ParameterizedRobolectricTestRunner.Parameters(name = "class = {0}")
         @JvmStatic
         fun data(): Collection<Array<Any?>> = listOf(
-                arrayOf(EnvironmentRevision::class.java),
-                arrayOf(FeatureDescription::class.java),
-                arrayOf(PermissionState::class.java),
-                arrayOf(StatSending::class.java),
-                arrayOf(CollectingFlags::class.java),
-                arrayOf(FeatureDescription::class.java),
-                arrayOf(ReferrerInfo::class.java),
-                arrayOf(PermissionState::class.java),
-                arrayOf(BackgroundRestrictionsState::class.java),
-                arrayOf(ClientDescription::class.java),
-                arrayOf(ClientDescription::class.java),
-                arrayOf(IdentifiersResult::class.java),
-                arrayOf(CacheControl::class.java),
-                arrayOf(BillingConfig::class.java),
-                arrayOf(Period::class.java),
-                arrayOf(ProductInfo::class.java),
-                arrayOf(StartupParamsItem::class.java)
-            )
+            arrayOf(EnvironmentRevision::class.java),
+            arrayOf(FeatureDescription::class.java),
+            arrayOf(PermissionState::class.java),
+            arrayOf(StatSending::class.java),
+            arrayOf(CollectingFlags::class.java),
+            arrayOf(FeatureDescription::class.java),
+            arrayOf(ReferrerInfo::class.java),
+            arrayOf(PermissionState::class.java),
+            arrayOf(BackgroundRestrictionsState::class.java),
+            arrayOf(ClientDescription::class.java),
+            arrayOf(ClientDescription::class.java),
+            arrayOf(IdentifiersResult::class.java),
+            arrayOf(CacheControl::class.java),
+            arrayOf(BillingConfig::class.java),
+            arrayOf(Period::class.java),
+            arrayOf(ProductInfo::class.java),
+            arrayOf(StartupParamsItem::class.java),
+            arrayOf(TempCacheEntry::class.java)
+        )
     }
 
     @Test

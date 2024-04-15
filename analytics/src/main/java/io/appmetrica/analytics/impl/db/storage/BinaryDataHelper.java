@@ -91,7 +91,6 @@ class BinaryDataHelper implements IBinaryDataHelper {
         } finally {
             mConnector.closeDb(database);
         }
-
     }
 
     @VisibleForTesting

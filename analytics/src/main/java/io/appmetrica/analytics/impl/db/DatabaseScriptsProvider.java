@@ -7,6 +7,7 @@ import io.appmetrica.analytics.impl.SdkData;
 import io.appmetrica.analytics.impl.db.constants.DatabaseScriptsHolder;
 import io.appmetrica.analytics.impl.db.constants.migrations.ClientDatabaseUpgradeScriptToV112;
 import io.appmetrica.analytics.impl.db.constants.migrations.ComponentDatabaseUpgradeScriptToV112;
+import io.appmetrica.analytics.impl.db.constants.migrations.ServiceDatabaseUpgradeScriptToV114;
 import io.appmetrica.analytics.impl.utils.collection.HashMultimap;
 import io.appmetrica.analytics.logger.internal.YLogger;
 import io.appmetrica.analytics.modulesapi.internal.service.ModuleServicesDatabase;
@@ -48,6 +49,7 @@ public class DatabaseScriptsProvider {
     @NonNull
     private HashMultimap<Integer, DatabaseScript> collectUpgradeServiceDbScripts() {
         HashMultimap<Integer, DatabaseScript> result = new HashMultimap<>();
+        result.put(SdkData.TEMP_CACHE_ADDED, new ServiceDatabaseUpgradeScriptToV114());
 
         for (ModuleServicesDatabase moduleServicesDatabase :
             GlobalServiceLocator.getInstance().getModulesController().collectModuleServiceDatabases()) {

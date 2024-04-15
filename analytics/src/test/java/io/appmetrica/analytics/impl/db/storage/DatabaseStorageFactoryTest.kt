@@ -9,9 +9,11 @@ import io.appmetrica.analytics.impl.db.TablesManager
 import io.appmetrica.analytics.impl.db.connectors.LockedOnFileDBConnector
 import io.appmetrica.analytics.impl.db.connectors.SimpleDBConnector
 import io.appmetrica.analytics.impl.db.constants.Constants
+import io.appmetrica.analytics.impl.db.constants.TempCacheTable
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.MockedConstructionRule
-import io.appmetrica.analytics.testutils.MockedStaticRule
+import io.appmetrica.analytics.testutils.constructionRule
+import io.appmetrica.analytics.testutils.staticRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Rule
@@ -58,12 +60,12 @@ internal class DatabaseStorageFactoryTest : CommonTest() {
     }
 
     @get:Rule
-    val constantsMockedStaticRule = MockedStaticRule(Constants::class.java)
+    val constantsMockedStaticRule = staticRule<Constants>()
 
     @get:Rule
     val databaseStoragePathProviderFactoryMockedConstructionRule =
-        MockedConstructionRule(DatabaseStoragePathProviderFactory::class.java) { mock, _ ->
-            whenever(mock.create(any(), any())).thenReturn(databaseStoragePathProvider)
+        constructionRule<DatabaseStoragePathProviderFactory> {
+            on { mock.create(any(), any())} doReturn databaseStoragePathProvider
         }
 
     @get:Rule
@@ -77,38 +79,41 @@ internal class DatabaseStorageFactoryTest : CommonTest() {
         }
 
     @get:Rule
-    val serviceDatabaseSimpleNameProviderMockedConstructionRule =
-        MockedConstructionRule(ServiceDatabaseSimpleNameProvider::class.java)
+    val serviceDatabaseSimpleNameProviderMockedConstructionRule = constructionRule<ServiceDatabaseSimpleNameProvider>()
 
     @get:Rule
     val autoInappDatabaseSimpleNameProviderMockedConstructionRule =
-        MockedConstructionRule(AutoInappDatabaseSimpleNameProvider::class.java)
+        constructionRule<AutoInappDatabaseSimpleNameProvider>()
 
     @get:Rule
-    val clientDatabaseSimpleNameProviderMockedConstructionRule =
-        MockedConstructionRule(ClientDatabaseSimpleNameProvider::class.java)
+    val clientDatabaseSimpleNameProviderMockedConstructionRule = constructionRule<ClientDatabaseSimpleNameProvider>()
 
     @get:Rule
-    val databaseStorageMockedConstructionRule = MockedConstructionRule(DatabaseStorage::class.java)
+    val databaseStorageMockedConstructionRule = constructionRule<DatabaseStorage>()
 
     @get:Rule
-    val binaryDbHelperMockedConstructionRule = MockedConstructionRule(BinaryDataHelper::class.java)
+    val binaryDbHelperMockedConstructionRule = constructionRule<BinaryDataHelper>()
 
     @get:Rule
-    val binaryDbHelperWrapperMockedConstructionRule = MockedConstructionRule(BinaryDataHelperWrapper::class.java)
+    val binaryDbHelperWrapperMockedConstructionRule = constructionRule<BinaryDataHelperWrapper>()
 
     @get:Rule
-    val keyValueDbHelperMockedConstructionRule = MockedConstructionRule(KeyValueTableDbHelper::class.java)
+    val tempStorageMockedConstructionRule = constructionRule<TempCacheDbHelper>()
 
     @get:Rule
-    val keyValueDbHelperWrapperMockedConstructionRule = MockedConstructionRule(KeyValueTableDbHelperWrapper::class.java)
+    val tempStorageWrapperMockedConstructionRule = constructionRule<TempCacheDbHelperWrapper>()
 
     @get:Rule
-    val simpleDBConnectorMockedConstructionRule = MockedConstructionRule(SimpleDBConnector::class.java)
+    val keyValueDbHelperMockedConstructionRule = constructionRule<KeyValueTableDbHelper>()
 
     @get:Rule
-    val lockedOnFileDBConnectorMockedConstructionRule = MockedConstructionRule(LockedOnFileDBConnector::class.java)
+    val keyValueDbHelperWrapperMockedConstructionRule = constructionRule<KeyValueTableDbHelperWrapper>()
 
+    @get:Rule
+    val simpleDBConnectorMockedConstructionRule = constructionRule<SimpleDBConnector>()
+
+    @get:Rule
+    val lockedOnFileDBConnectorMockedConstructionRule = constructionRule<LockedOnFileDBConnector>()
 
     private lateinit var databaseStorageFactory: DatabaseStorageFactory
 
@@ -275,6 +280,38 @@ internal class DatabaseStorageFactoryTest : CommonTest() {
     }
 
     @Test
+    fun getTempCacheStorageForService() {
+        val first = databaseStorageFactory.tempCacheStorageForService
+        val second = databaseStorageFactory.tempCacheStorageForService
+
+        assertThat(first)
+            .isSameAs(second)
+            .isSameAs(tempStorageWrapperMockedConstructionRule.constructionMock.constructed().first())
+
+        assertThat(tempStorageWrapperMockedConstructionRule.constructionMock.constructed()).hasSize(1)
+        assertThat(tempStorageWrapperMockedConstructionRule.argumentInterceptor.flatArguments())
+            .containsExactly(
+                context,
+                StorageType.SERVICE,
+                tempStorageMockedConstructionRule.constructionMock.constructed().first()
+            )
+
+        checkTempCacheDbHelper()
+    }
+
+    @Test
+    fun getServiceTempCacheDbHelperForMigration() {
+        val first = databaseStorageFactory.serviceTempCacheDbHelperForMigration
+        val second = databaseStorageFactory.serviceTempCacheDbHelperForMigration
+
+        assertThat(first)
+            .isSameAs(second)
+            .isSameAs(tempStorageMockedConstructionRule.constructionMock.constructed().first())
+
+        checkTempCacheDbHelper()
+    }
+
+    @Test
     fun getAutoInappBinaryDataHelper() {
         val first = databaseStorageFactory.autoInappBinaryDataHelper
         val second = databaseStorageFactory.autoInappBinaryDataHelper
@@ -428,6 +465,21 @@ internal class DatabaseStorageFactoryTest : CommonTest() {
             .containsExactly(
                 simpleDBConnectorMockedConstructionRule.constructionMock.constructed().first(),
                 Constants.BinaryDataTable.TABLE_NAME
+            )
+
+        assertThat(simpleDBConnectorMockedConstructionRule.constructionMock.constructed()).hasSize(1)
+        assertThat(simpleDBConnectorMockedConstructionRule.argumentInterceptor.flatArguments())
+            .containsExactly(databaseStorageMockedConstructionRule.constructionMock.constructed().first())
+
+        assertThat(databaseStorageMockedConstructionRule.constructionMock.constructed()).hasSize(1)
+    }
+
+    private fun checkTempCacheDbHelper() {
+        assertThat(tempStorageMockedConstructionRule.constructionMock.constructed()).hasSize(1)
+        assertThat(tempStorageMockedConstructionRule.argumentInterceptor.flatArguments())
+            .containsExactly(
+                simpleDBConnectorMockedConstructionRule.constructionMock.constructed().first(),
+                TempCacheTable.TABLE_NAME
             )
 
         assertThat(simpleDBConnectorMockedConstructionRule.constructionMock.constructed()).hasSize(1)

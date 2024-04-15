@@ -195,6 +195,7 @@ public interface io.appmetrica.analytics.modulesapi.internal.service.ServiceStor
     public abstract [Nullable] java.io.File getAppFileStorage()
     public abstract [NonNull] android.database.sqlite.SQLiteOpenHelper getDbStorage()
     public abstract [Nullable] java.io.File getSdkDataStorage()
+    public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.data.TempCacheStorage getTempCacheStorage()
     public abstract [NonNull] io.appmetrica.analytics.modulesapi.internal.common.ModulePreferences legacyModulePreferences()
     public abstract [NonNull] io.appmetrica.analytics.modulesapi.internal.common.ModulePreferences modulePreferences([NonNull] String)
 }
