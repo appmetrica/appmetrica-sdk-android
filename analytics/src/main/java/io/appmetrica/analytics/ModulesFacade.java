@@ -85,7 +85,8 @@ public final class ModulesFacade {
      *               {@link ModulesFacade#EXTERNAL_ATTRIBUTION_ADJUST},
      *               {@link ModulesFacade#EXTERNAL_ATTRIBUTION_KOCHAVA},
      *               {@link ModulesFacade#EXTERNAL_ATTRIBUTION_TENJIN},
-     *               {@link ModulesFacade#EXTERNAL_ATTRIBUTION_AIRBRIDGE}
+     *               {@link ModulesFacade#EXTERNAL_ATTRIBUTION_AIRBRIDGE},
+     *               {@link ModulesFacade#EXTERNAL_ATTRIBUTION_SINGULAR}
      *
      * @param value the attribution value.
      */
