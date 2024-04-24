@@ -10,8 +10,6 @@ import io.appmetrica.analytics.impl.startup.StartupState;
 
 public interface IAdvertisingIdGetter extends SimpleAdvertisingIdGetter, StartupStateObserver {
 
-    void lazyInit(@NonNull Context context);
-
     void init(@NonNull Context context);
 
     void init(@NonNull final Context context, @Nullable StartupState startupState);

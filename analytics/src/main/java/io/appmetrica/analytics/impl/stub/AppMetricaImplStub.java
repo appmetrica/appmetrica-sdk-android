@@ -15,11 +15,12 @@ import io.appmetrica.analytics.impl.IAppMetricaImpl;
 import io.appmetrica.analytics.impl.IReporterExtended;
 import io.appmetrica.analytics.impl.IReporterFactory;
 import io.appmetrica.analytics.impl.MainReporterApiConsumerProvider;
-import io.appmetrica.analytics.impl.id.AdvertisingIdGetterStub;
 import java.util.List;
 import java.util.Map;
 
 public class AppMetricaImplStub implements IAppMetricaImpl {
+
+    private static final String DEVICE_USER_IN_LOCKED_STATE = "Device user is in locked state";
 
     @Override
     public void activate(@NonNull AppMetricaConfig originalConfig,
@@ -64,21 +65,21 @@ public class AppMetricaImplStub implements IAppMetricaImpl {
     @Override
     public AdvIdentifiersResult getCachedAdvIdentifiers() {
         return new AdvIdentifiersResult(
-                new AdvIdentifiersResult.AdvId(
-                        null,
-                        AdvIdentifiersResult.Details.INTERNAL_ERROR,
-                        AdvertisingIdGetterStub.USER_IN_LOCKED_STATE
-                ),
-                new AdvIdentifiersResult.AdvId(
-                        null,
-                        AdvIdentifiersResult.Details.INTERNAL_ERROR,
-                        AdvertisingIdGetterStub.USER_IN_LOCKED_STATE
-                ),
-                new AdvIdentifiersResult.AdvId(
-                        null,
-                        AdvIdentifiersResult.Details.INTERNAL_ERROR,
-                        AdvertisingIdGetterStub.USER_IN_LOCKED_STATE
-                )
+            new AdvIdentifiersResult.AdvId(
+                null,
+                AdvIdentifiersResult.Details.INTERNAL_ERROR,
+                DEVICE_USER_IN_LOCKED_STATE
+            ),
+            new AdvIdentifiersResult.AdvId(
+                null,
+                AdvIdentifiersResult.Details.INTERNAL_ERROR,
+                DEVICE_USER_IN_LOCKED_STATE
+            ),
+            new AdvIdentifiersResult.AdvId(
+                null,
+                AdvIdentifiersResult.Details.INTERNAL_ERROR,
+                DEVICE_USER_IN_LOCKED_STATE
+            )
         );
     }
 

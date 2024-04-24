@@ -145,11 +145,6 @@ public class AdvertisingIdGetter implements IAdvertisingIdGetter {
     }
 
     @Override
-    public void lazyInit(@NonNull Context context) {
-        mContext = context.getApplicationContext();
-    }
-
-    @Override
     public void init(@NonNull final Context context) {
         mContext = context.getApplicationContext();
         if (mInitFuture == null) {

@@ -8,7 +8,6 @@ import io.appmetrica.analytics.DeferredDeeplinkParametersListener;
 import io.appmetrica.analytics.ReporterConfig;
 import io.appmetrica.analytics.StartupParamsCallback;
 import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor;
-import io.appmetrica.analytics.impl.id.AdvertisingIdGetter;
 import io.appmetrica.analytics.impl.startup.Constants;
 import io.appmetrica.analytics.impl.utils.executors.ClientExecutorProvider;
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule;
@@ -191,13 +190,6 @@ public class AppMetricaFacadeObjectTest extends CommonTest {
         ClientTimeTracker clientTimeTracker = mock(ClientTimeTracker.class);
         when(mCore.getClientTimeTracker()).thenReturn(clientTimeTracker);
         assertThat(mFacade.getClientTimeTracker()).isSameAs(clientTimeTracker);
-    }
-
-    @Test
-    public void getAdvertisingIdGetter() {
-        AdvertisingIdGetter advertisingIdGetter = mock(AdvertisingIdGetter.class);
-        when(mCore.getAdvertisingIdGetter()).thenReturn(advertisingIdGetter);
-        assertThat(mFacade.getAdvertisingIdGetter()).isSameAs(advertisingIdGetter);
     }
 
     @Test

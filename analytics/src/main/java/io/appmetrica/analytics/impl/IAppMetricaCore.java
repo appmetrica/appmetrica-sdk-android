@@ -4,7 +4,6 @@ import android.os.Handler;
 import androidx.annotation.NonNull;
 import io.appmetrica.analytics.AppMetricaConfig;
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
-import io.appmetrica.analytics.impl.id.IAdvertisingIdGetter;
 
 public interface IAppMetricaCore {
 
@@ -16,9 +15,6 @@ public interface IAppMetricaCore {
 
     @NonNull
     ClientTimeTracker getClientTimeTracker();
-
-    @NonNull
-    IAdvertisingIdGetter getAdvertisingIdGetter();
 
     @NonNull
     ICommonExecutor getExecutor();

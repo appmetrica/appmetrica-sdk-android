@@ -9,7 +9,6 @@ import io.appmetrica.analytics.DeferredDeeplinkParametersListener;
 import io.appmetrica.analytics.ReporterConfig;
 import io.appmetrica.analytics.StartupParamsCallback;
 import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
-import io.appmetrica.analytics.impl.id.AdvertisingIdGetterStub;
 import io.appmetrica.analytics.impl.startup.Constants;
 import io.appmetrica.analytics.testutils.CommonTest;
 import java.util.Collections;
@@ -179,7 +178,7 @@ public class AppMetricaImplStubTest extends CommonTest {
                         try {
                             assertions.checkFieldIsNull("advId")
                                     .checkField("details", AdvIdentifiersResult.Details.INTERNAL_ERROR)
-                                    .checkField("errorExplanation", AdvertisingIdGetterStub.USER_IN_LOCKED_STATE)
+                                    .checkField("errorExplanation", "Device user is in locked state")
                                     .checkAll();
                         } catch (Exception e) {
                             throw new RuntimeException(e);

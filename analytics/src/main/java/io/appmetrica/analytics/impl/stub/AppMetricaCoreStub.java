@@ -9,8 +9,6 @@ import io.appmetrica.analytics.impl.AppOpenWatcher;
 import io.appmetrica.analytics.impl.ClientTimeTracker;
 import io.appmetrica.analytics.impl.IAppMetricaCore;
 import io.appmetrica.analytics.impl.IReporterFactoryProvider;
-import io.appmetrica.analytics.impl.id.AdvertisingIdGetterStub;
-import io.appmetrica.analytics.impl.id.IAdvertisingIdGetter;
 import io.appmetrica.analytics.impl.utils.executors.ClientExecutorProvider;
 
 public class AppMetricaCoreStub implements IAppMetricaCore {
@@ -60,12 +58,6 @@ public class AppMetricaCoreStub implements IAppMetricaCore {
     @Override
     public ClientTimeTracker getClientTimeTracker() {
         return clientTimeTracker;
-    }
-
-    @NonNull
-    @Override
-    public IAdvertisingIdGetter getAdvertisingIdGetter() {
-        return new AdvertisingIdGetterStub();
     }
 
     @NonNull

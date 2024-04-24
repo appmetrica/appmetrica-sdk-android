@@ -8,17 +8,14 @@ import io.appmetrica.analytics.coreapi.internal.clientcomponents.ClientComponent
 import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor;
 import io.appmetrica.analytics.impl.clientcomponents.ClientComponentsInitializerProvider;
 import io.appmetrica.analytics.impl.crash.client.ICrashProcessor;
-import io.appmetrica.analytics.impl.id.AdvertisingIdGetter;
 import io.appmetrica.analytics.impl.utils.LoggerWithApiKey;
 import io.appmetrica.analytics.impl.utils.ManifestUtils;
 import io.appmetrica.analytics.impl.utils.PublicLogger;
-import io.appmetrica.analytics.impl.utils.executors.ClientExecutorProvider;
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.MockedConstructionRule;
 import io.appmetrica.analytics.testutils.MockedStaticRule;
 import java.util.Collections;
-import org.assertj.core.api.SoftAssertions;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -43,8 +40,6 @@ import static org.mockito.Mockito.when;
 @RunWith(RobolectricTestRunner.class)
 public class AppAppMetricaServiceCoreTest extends CommonTest {
 
-    @Mock
-    private AdvertisingIdGetter mAdvertisingIdGetter;
     @Mock
     private Handler mHandler;
     @Mock
@@ -93,7 +88,6 @@ public class AppAppMetricaServiceCoreTest extends CommonTest {
         AppMetricaFacade.killInstance();
         mCore = new AppMetricaCore(
                 mContext,
-                mAdvertisingIdGetter,
                 mDefaultExecutor,
                 mClientTimeTracker,
                 appOpenWatcher
@@ -107,7 +101,6 @@ public class AppAppMetricaServiceCoreTest extends CommonTest {
 
     @Test
     public void constructor() {
-        verify(mAdvertisingIdGetter).lazyInit(mContext);
         verify(mClientTimeTracker).trackCoreCreation();
         sLoggerWithApiKey.getStaticMock().verify(new MockedStatic.Verification() {
             @Override
@@ -141,19 +134,6 @@ public class AppAppMetricaServiceCoreTest extends CommonTest {
     }
 
     @Test
-    public void advertisingIdGetterCreation() {
-        ClientExecutorProvider clientExecutorProvider = mock(ClientExecutorProvider.class);
-        when(clientExecutorProvider.getDefaultExecutor()).thenReturn(mDefaultExecutor);
-        mCore = new AppMetricaCore(mContext, clientExecutorProvider);
-        AdvertisingIdGetter advertisingIdGetter = mCore.getAdvertisingIdGetter();
-        SoftAssertions softly = new SoftAssertions();
-        softly.assertThat(advertisingIdGetter.getGaidRestrictionsProvider()).isInstanceOf(AdvertisingIdGetter.AlwaysAllowedRestrictionsProvider.class);
-        softly.assertThat(advertisingIdGetter.getHoaidRestrictionsProvider()).isInstanceOf(AdvertisingIdGetter.NeverAllowedRestrictionsProvider.class);
-        softly.assertThat(advertisingIdGetter.getYandexRestrictionsProvider()).isInstanceOf(AdvertisingIdGetter.NeverAllowedRestrictionsProvider.class);
-        softly.assertAll();
-    }
-
-    @Test
     public void getMetricaHandler() {
         assertThat(mCore.getMetricaHandler()).isSameAs(mHandler);
     }
@@ -161,11 +141,6 @@ public class AppAppMetricaServiceCoreTest extends CommonTest {
     @Test
     public void getClientTimeTracker() {
         assertThat(mCore.getClientTimeTracker()).isSameAs(mClientTimeTracker);
-    }
-
-    @Test
-    public void getAdvertisingIdGetter() {
-        assertThat(mCore.getAdvertisingIdGetter()).isSameAs(mAdvertisingIdGetter);
     }
 
     @Test

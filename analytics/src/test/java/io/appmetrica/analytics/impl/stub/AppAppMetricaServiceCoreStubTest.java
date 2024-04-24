@@ -6,7 +6,6 @@ import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
 import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor;
 import io.appmetrica.analytics.impl.ClientTimeTracker;
 import io.appmetrica.analytics.impl.IReporterFactoryProvider;
-import io.appmetrica.analytics.impl.id.AdvertisingIdGetterStub;
 import io.appmetrica.analytics.impl.utils.executors.ClientExecutorProvider;
 import io.appmetrica.analytics.testutils.CommonTest;
 import org.junit.Before;
@@ -38,8 +37,6 @@ public class AppAppMetricaServiceCoreStubTest extends CommonTest {
     private AppMetricaConfig appMetricaConfig;
     @Mock
     private IReporterFactoryProvider reporterFactoryProvider;
-    @Mock
-    private Throwable throwable;
 
     private AppMetricaCoreStub stub;
 
@@ -79,13 +76,6 @@ public class AppAppMetricaServiceCoreStubTest extends CommonTest {
     @Test
     public void getClientTimeTracker() {
         assertThat(stub.getClientTimeTracker()).isEqualTo(clientTimeTracker);
-    }
-
-    @Test
-    public void getAdvertisingIdGetter() {
-        assertThat(stub.getAdvertisingIdGetter())
-                .isNotNull()
-                .isInstanceOf(AdvertisingIdGetterStub.class);
     }
 
     @Test

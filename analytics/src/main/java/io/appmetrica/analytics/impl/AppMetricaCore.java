@@ -11,7 +11,6 @@ import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
 import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor;
 import io.appmetrica.analytics.coreutils.internal.WrapUtils;
 import io.appmetrica.analytics.impl.clientcomponents.ClientComponentsInitializerProvider;
-import io.appmetrica.analytics.impl.id.AdvertisingIdGetter;
 import io.appmetrica.analytics.impl.utils.ManifestUtils;
 import io.appmetrica.analytics.impl.utils.PublicLogger;
 import io.appmetrica.analytics.impl.utils.executors.ClientExecutorProvider;
@@ -25,8 +24,6 @@ public class AppMetricaCore implements IAppMetricaCore {
     private final Handler mMetricaHandler;
     @NonNull
     private final ClientTimeTracker mClientTimeTracker;
-    @NonNull
-    private final AdvertisingIdGetter mAdvertisingIdGetter;
     @NonNull
     private final ICommonExecutor mDefaultExecutor;
     @NonNull
@@ -48,13 +45,6 @@ public class AppMetricaCore implements IAppMetricaCore {
                               @NonNull ICommonExecutor apiProxyExecutor) {
         this(
                 context,
-                new AdvertisingIdGetter(
-                        new AdvertisingIdGetter.AlwaysAllowedRestrictionsProvider(),
-                        new AdvertisingIdGetter.NeverAllowedRestrictionsProvider(),
-                        new AdvertisingIdGetter.NeverAllowedRestrictionsProvider(),
-                        defaultExecutor,
-                        "Client"
-                ),
                 defaultExecutor,
                 new ClientTimeTracker(),
                 new AppOpenWatcher(apiProxyExecutor)
@@ -63,7 +53,6 @@ public class AppMetricaCore implements IAppMetricaCore {
 
     @VisibleForTesting
     AppMetricaCore(@NonNull Context context,
-                      @NonNull AdvertisingIdGetter clientAdvertisingIdGetter,
                       @NonNull IHandlerExecutor defaultExecutor,
                       @NonNull ClientTimeTracker clientTimeTracker,
                       @NonNull AppOpenWatcher appOpenWatcher) {
@@ -72,8 +61,6 @@ public class AppMetricaCore implements IAppMetricaCore {
         this.appOpenWatcher = appOpenWatcher;
         PublicLogger.init(mContext);
         SdkUtils.logSdkInfo();
-        mAdvertisingIdGetter = clientAdvertisingIdGetter;
-        mAdvertisingIdGetter.lazyInit(mContext);
         mMetricaHandler = defaultExecutor.getHandler();
         mClientTimeTracker = clientTimeTracker;
         mClientTimeTracker.trackCoreCreation();
@@ -114,12 +101,6 @@ public class AppMetricaCore implements IAppMetricaCore {
     @NonNull
     public ClientTimeTracker getClientTimeTracker() {
         return mClientTimeTracker;
-    }
-
-    @Override
-    @NonNull
-    public AdvertisingIdGetter getAdvertisingIdGetter() {
-        return mAdvertisingIdGetter;
     }
 
     @Override

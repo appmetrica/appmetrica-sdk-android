@@ -14,7 +14,6 @@ import io.appmetrica.analytics.DeferredDeeplinkListener;
 import io.appmetrica.analytics.DeferredDeeplinkParametersListener;
 import io.appmetrica.analytics.ReporterConfig;
 import io.appmetrica.analytics.StartupParamsCallback;
-import io.appmetrica.analytics.impl.id.IAdvertisingIdGetter;
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade;
 import io.appmetrica.analytics.impl.utils.executors.ClientExecutorProvider;
 import io.appmetrica.analytics.logger.internal.YLogger;
@@ -253,12 +252,6 @@ public class AppMetricaFacade implements IReporterFactoryProvider {
     @NonNull
     public ClientTimeTracker getClientTimeTracker() {
         return mCore.getClientTimeTracker();
-    }
-
-    @AnyThread
-    @NonNull
-    public IAdvertisingIdGetter getAdvertisingIdGetter() {
-        return mCore.getAdvertisingIdGetter();
     }
 
     @AnyThread
