@@ -22,14 +22,14 @@ class RegularStartupExecutorTest : CommonTest() {
 
     private val networkTask: NetworkTask = mock()
     private val startupUnit: StartupUnit = mock {
-        on { orCreateStartupTaskIfRequired } doReturn networkTask
+        on { getOrCreateStartupTaskIfRequired() } doReturn networkTask
     }
 
     private val executor: RegularStartupExecutor by setUp { RegularStartupExecutor(startupUnit) }
 
     @Test
     fun `sendStartupIfRequired - no startup without task`() {
-        whenever(startupUnit.orCreateStartupTaskIfRequired).thenReturn(null)
+        whenever(startupUnit.getOrCreateStartupTaskIfRequired()).thenReturn(null)
         executor.sendStartupIfRequired()
         verifyNoInteractions(GlobalServiceLocator.getInstance().networkCore)
     }

@@ -97,12 +97,16 @@ public class StartupCenter {
                                   @NonNull ComponentId componentId,
                                   @NonNull StartupRequestConfig.Arguments arguments) {
         YLogger.d("%s  createStartupUnit for component %s", TAG, componentId);
-        return new StartupUnit(
+        StartupUnit startupUnit = new StartupUnit(
+            new StartupUnitComponents(
                 context,
                 componentId.getPackage(),
                 arguments,
                 mResultListener
+            )
         );
+        startupUnit.init();
+        return startupUnit;
     }
 
     public void registerStartupListener(@NonNull ComponentId componentId,

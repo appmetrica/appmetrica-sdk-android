@@ -107,7 +107,7 @@ class StartupTaskTest : CommonTest() {
     fun onCreateTaskIfNotRequired() = onCreateTask(false)
 
     private fun onCreateTask(startupRequired:Boolean) {
-        whenever(startupUnit.isStartupRequired).thenReturn(startupRequired)
+        whenever(startupUnit.isStartupRequired()).thenReturn(startupRequired)
         assertThat(startupTask.onCreateTask()).isEqualTo(startupRequired)
         verify(requestDataHolder)
             .setHeader(Constants.Headers.ACCEPT_ENCODING, Constants.Config.ENCODING_ENCRYPTED)
