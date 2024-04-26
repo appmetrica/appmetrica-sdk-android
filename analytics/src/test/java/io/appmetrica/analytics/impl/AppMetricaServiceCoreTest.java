@@ -9,7 +9,6 @@ import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor;
 import io.appmetrica.analytics.impl.clientcomponents.ClientComponentsInitializerProvider;
 import io.appmetrica.analytics.impl.crash.client.ICrashProcessor;
 import io.appmetrica.analytics.impl.utils.LoggerWithApiKey;
-import io.appmetrica.analytics.impl.utils.ManifestUtils;
 import io.appmetrica.analytics.impl.utils.PublicLogger;
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule;
 import io.appmetrica.analytics.testutils.CommonTest;
@@ -21,7 +20,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentMatcher;
 import org.mockito.Mock;
 import org.mockito.MockedConstruction;
 import org.mockito.MockedStatic;
@@ -30,7 +28,6 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -38,7 +35,7 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
-public class AppAppMetricaServiceCoreTest extends CommonTest {
+public class AppMetricaServiceCoreTest extends CommonTest {
 
     @Mock
     private Handler mHandler;
@@ -64,8 +61,6 @@ public class AppAppMetricaServiceCoreTest extends CommonTest {
     public final MockedStaticRule<LoggerWithApiKey> sLoggerWithApiKey = new MockedStaticRule<>(LoggerWithApiKey.class);
     @Rule
     public final MockedStaticRule<SdkUtils> sSdkUtils = new MockedStaticRule<>(SdkUtils.class);
-    @Rule
-    public final MockedStaticRule<IntegrationValidator> sIntegrationValidator = new MockedStaticRule<>(IntegrationValidator.class);
     @Rule
     public final MockedConstructionRule<ClientComponentsInitializerProvider> clientComponentsInitializerProviderMockedConstructionRule =
         new MockedConstructionRule<>(
@@ -114,18 +109,6 @@ public class AppAppMetricaServiceCoreTest extends CommonTest {
                 SdkUtils.logSdkInfo();
             }
         });
-        sIntegrationValidator.getStaticMock().verify(new MockedStatic.Verification() {
-            @Override
-            public void apply() {
-                IntegrationValidator.checkValidityOfAppMetricaConfiguration();
-            }
-        });
-        verify(mDefaultExecutor).execute(argThat(new ArgumentMatcher<Runnable>() {
-            @Override
-            public boolean matches(Runnable argument) {
-                return argument instanceof ManifestUtils.SwitchOnComponentsRunnable;
-            }
-        }));
         assertThat(clientComponentsInitializerProviderMockedConstructionRule.getConstructionMock().constructed().size())
             .isEqualTo(1);
         assertThat(clientComponentsInitializerProviderMockedConstructionRule.getArgumentInterceptor().flatArguments())

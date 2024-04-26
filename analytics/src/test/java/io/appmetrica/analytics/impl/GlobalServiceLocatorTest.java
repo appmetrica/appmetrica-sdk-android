@@ -13,6 +13,7 @@ import io.appmetrica.analytics.impl.clids.ClidsPriorityProvider;
 import io.appmetrica.analytics.impl.clids.ClidsSatelliteCheckedProvider;
 import io.appmetrica.analytics.impl.clids.ClidsStateProvider;
 import io.appmetrica.analytics.impl.clids.SatelliteClidsInfoProvider;
+import io.appmetrica.analytics.impl.db.state.factory.StorageFactory;
 import io.appmetrica.analytics.impl.id.AdvertisingIdGetter;
 import io.appmetrica.analytics.impl.network.http.BaseSslSocketFactoryProvider;
 import io.appmetrica.analytics.impl.network.http.SslSocketFactoryProviderImpl;
@@ -22,6 +23,7 @@ import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoDataAwaiter;
 import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoFromSatelliteProvider;
 import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoPriorityProvider;
 import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoSatelliteCheckedProvider;
+import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoState;
 import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoStateProvider;
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade;
 import io.appmetrica.analytics.impl.service.ServiceDataReporterHolder;
@@ -38,6 +40,7 @@ import io.appmetrica.analytics.testutils.MockedStaticRule;
 import io.appmetrica.analytics.testutils.TestUtils;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 import org.assertj.core.api.SoftAssertions;
@@ -134,15 +137,38 @@ public class GlobalServiceLocatorTest extends CommonTest {
             }
         });
 
+    @Rule
+    public final MockedStaticRule<StorageFactory.Provider> storageFactoryProviderMockedStaticRule =
+        new MockedStaticRule<>(StorageFactory.Provider.class);
+
+    @Mock
+    private StorageFactory<ClidsInfo> clidsStorageFactory;
+    @Mock
+    private ProtobufStateStorage<ClidsInfo> clidsStorage;
+    @Mock
+    private ClidsInfo clidsInfo;
+    @Mock
+    private StorageFactory<PreloadInfoData> preloadInfoStorageFactory;
+    @Mock
+    private ProtobufStateStorage<PreloadInfoData> preloadInfoStorage;
     private GlobalServiceLocator mGlobalServiceLocator;
 
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
+        mContext = TestUtils.createMockedContext();
         when(NetworkServiceLocator.getInstance()).thenReturn(networkServiceLocator);
         when(networkServiceLocator.getNetworkCore()).thenReturn(networkCore);
         when(AppMetricaSelfReportFacade.getReporter()).thenReturn(reporter);
-        mContext = TestUtils.createMockedContext();
+        when(StorageFactory.Provider.get(ClidsInfo.class)).thenReturn(clidsStorageFactory);
+        when(clidsStorageFactory.create(mContext)).thenReturn(clidsStorage);
+        when(clidsStorage.read()).thenReturn(clidsInfo);
+        when(StorageFactory.Provider.get(PreloadInfoData.class)).thenReturn(preloadInfoStorageFactory);
+        when(preloadInfoStorageFactory.create(mContext)).thenReturn(preloadInfoStorage);
+        when(preloadInfoStorage.read())
+            .thenReturn(
+                new PreloadInfoData(mock(PreloadInfoState.class), Collections.<PreloadInfoData.Candidate>emptyList())
+            );
     }
 
     @After

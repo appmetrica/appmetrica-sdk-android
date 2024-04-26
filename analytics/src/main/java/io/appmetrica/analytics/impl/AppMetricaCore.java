@@ -11,7 +11,6 @@ import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
 import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor;
 import io.appmetrica.analytics.coreutils.internal.WrapUtils;
 import io.appmetrica.analytics.impl.clientcomponents.ClientComponentsInitializerProvider;
-import io.appmetrica.analytics.impl.utils.ManifestUtils;
 import io.appmetrica.analytics.impl.utils.PublicLogger;
 import io.appmetrica.analytics.impl.utils.executors.ClientExecutorProvider;
 
@@ -64,7 +63,6 @@ public class AppMetricaCore implements IAppMetricaCore {
         mMetricaHandler = defaultExecutor.getHandler();
         mClientTimeTracker = clientTimeTracker;
         mClientTimeTracker.trackCoreCreation();
-        checkAppMetricaValidation();
         new ClientComponentsInitializerProvider()
             .getClientComponentsInitializer()
             .onCreate();
@@ -107,11 +105,6 @@ public class AppMetricaCore implements IAppMetricaCore {
     @NonNull
     public ICommonExecutor getExecutor() {
         return mDefaultExecutor;
-    }
-
-    private void checkAppMetricaValidation() {
-        IntegrationValidator.checkValidityOfAppMetricaConfiguration();
-        mDefaultExecutor.execute(new ManifestUtils.SwitchOnComponentsRunnable(mContext));
     }
 
     @AnyThread

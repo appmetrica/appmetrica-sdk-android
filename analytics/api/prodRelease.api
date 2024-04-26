@@ -555,7 +555,6 @@ public class io.appmetrica.analytics.internal.AppMetricaService extends android.
 
 public class io.appmetrica.analytics.internal.CounterConfiguration implementation android.os.Parcelable {
     public static final android.os.Parcelable$Creator<io.appmetrica.analytics.internal.CounterConfiguration> CREATOR
-    public static final String ORIGINAL_CLASS_PATH
 
     public <init>()
     public <init>(io.appmetrica.analytics.AppMetricaConfig, [NonNull] OBFUSCATED[io.appmetrica.analytics.impl.CounterConfigurationReporterType])

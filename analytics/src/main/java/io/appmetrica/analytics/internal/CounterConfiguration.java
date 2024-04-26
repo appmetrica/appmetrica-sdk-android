@@ -22,8 +22,6 @@ import io.appmetrica.analytics.impl.Utils;
 @SuppressWarnings("PMD.ConstructorCallsOverridableMethod")
 public class CounterConfiguration implements Parcelable {
 
-    public static final String ORIGINAL_CLASS_PATH = "io.appmetrica.analytics.internal.CounterConfiguration";
-
     private static final String DATA = "io.appmetrica.analytics.internal.CounterConfiguration.data";
 
     @Override
