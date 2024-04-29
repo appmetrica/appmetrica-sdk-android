@@ -2,14 +2,14 @@ package io.appmetrica.analytics.impl.proxy;
 
 import android.content.Context;
 import android.util.ArrayMap;
-import androidx.annotation.NonNull;
 import io.appmetrica.analytics.AdRevenue;
 import io.appmetrica.analytics.ModuleEvent;
 import io.appmetrica.analytics.ReporterConfig;
 import io.appmetrica.analytics.Revenue;
-import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
+import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor;
 import io.appmetrica.analytics.ecommerce.ECommerceEvent;
 import io.appmetrica.analytics.impl.AppMetricaFacade;
+import io.appmetrica.analytics.impl.ClientServiceLocator;
 import io.appmetrica.analytics.impl.IReporterExtended;
 import io.appmetrica.analytics.impl.TestsData;
 import io.appmetrica.analytics.impl.crash.client.AllThreads;
@@ -17,10 +17,13 @@ import io.appmetrica.analytics.impl.crash.client.UnhandledException;
 import io.appmetrica.analytics.impl.proxy.synchronous.ReporterSynchronousStageExecutor;
 import io.appmetrica.analytics.impl.proxy.validation.ReporterBarrier;
 import io.appmetrica.analytics.profile.UserProfile;
+import io.appmetrica.analytics.testutils.ClientServiceLocatorRule;
 import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.analytics.testutils.StubbedBlockingExecutor;
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -29,8 +32,6 @@ import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 
@@ -39,7 +40,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.same;
-import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
@@ -49,8 +49,6 @@ import static org.mockito.Mockito.when;
 @RunWith(RobolectricTestRunner.class)
 public class ReporterExtendedProxyTest extends CommonTest {
 
-    @Mock
-    private ICommonExecutor mExecutor;
     @Mock
     private ReporterBarrier reporterBarrier;
     @Mock
@@ -66,23 +64,20 @@ public class ReporterExtendedProxyTest extends CommonTest {
     @Mock
     private PluginReporterProxy pluginReporterProxy;
 
+    @Rule
+    public ClientServiceLocatorRule clientServiceLocatorRule = new ClientServiceLocatorRule();
+
     private String mApiKey = TestsData.generateApiKey();
     private ReporterExtendedProxy mReporterExtendedProxy;
 
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        doAnswer(new Answer() {
-            @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
-                ((Runnable) invocation.getArgument(0)).run();
-                return null;
-            }
-        }).when(mExecutor).execute(any(Runnable.class));
+        when(ClientServiceLocator.getInstance().getClientExecutorProvider().getDefaultExecutor())
+            .thenReturn(new StubbedBlockingExecutor());
         when(mProvider.getInitializedImpl(any(Context.class))).thenReturn(mAppMetricaFacade);
         when(mAppMetricaFacade.getReporter(any(ReporterConfig.class))).thenReturn(mReporter);
         mReporterExtendedProxy = new ReporterExtendedProxy(
-                mExecutor,
                 RuntimeEnvironment.getApplication(),
                 reporterBarrier,
                 mProvider,
@@ -194,15 +189,18 @@ public class ReporterExtendedProxyTest extends CommonTest {
 
     @Test
     public void testReportEventWithAttributesMapChanged() {
-        mReporterExtendedProxy = createProxyWithMockedExecutor(mExecutor);
-        doNothing().when(mExecutor).execute(any(Runnable.class));
+        IHandlerExecutor executor = mock(IHandlerExecutor.class);
+        when(ClientServiceLocator.getInstance().getClientExecutorProvider().getDefaultExecutor())
+            .thenReturn(executor);
+        mReporterExtendedProxy = createProxyWithMockedExecutor();
+        doNothing().when(executor).execute(any(Runnable.class));
         doReturn(true).when(mProvider).isActivated();
         final String name = "name";
         final Map<String, Object> attributes = new HashMap<String, Object>();
         attributes.put("k1", "v1");
         mReporterExtendedProxy.reportEvent(name, attributes);
         ArgumentCaptor<Runnable> runnableCaptor = ArgumentCaptor.forClass(Runnable.class);
-        verify(mExecutor).execute(runnableCaptor.capture());
+        verify(executor).execute(runnableCaptor.capture());
         attributes.put("k1", "v2");
         runnableCaptor.getValue().run();
         verify(mReporter).reportEvent(eq(name), argThat(new ArgumentMatcher<Map<String, Object>>() {
@@ -441,9 +439,8 @@ public class ReporterExtendedProxyTest extends CommonTest {
         inOrder.verifyNoMoreInteractions();
     }
 
-    private ReporterExtendedProxy createProxyWithMockedExecutor(@NonNull ICommonExecutor executor) {
+    private ReporterExtendedProxy createProxyWithMockedExecutor() {
         return new ReporterExtendedProxy(
-                executor,
                 RuntimeEnvironment.getApplication(),
                 reporterBarrier,
                 mProvider,

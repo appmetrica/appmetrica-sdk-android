@@ -7,12 +7,21 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.WorkerThread;
 import io.appmetrica.analytics.impl.AppMetricaFacade;
+import io.appmetrica.analytics.logger.internal.YLogger;
 
 public class AppMetricaFacadeProvider {
 
+    private static final String TAG = "[AppMetricaFacadeProvider]";
+
+    @AnyThread
+    public AppMetricaFacade getInitializedImpl(@NonNull Context context, boolean asyncInit) {
+        YLogger.info(TAG, "getInitializedImpl");
+        return AppMetricaFacade.getInstance(context, asyncInit);
+    }
+
     @AnyThread
     public AppMetricaFacade getInitializedImpl(@NonNull Context context) {
-        return AppMetricaFacade.getInstance(context);
+        return getInitializedImpl(context, false);
     }
 
     @AnyThread

@@ -2,9 +2,11 @@ package io.appmetrica.analytics.impl;
 
 import android.app.Activity;
 import android.content.Intent;
-import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
+import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor;
+import io.appmetrica.analytics.testutils.ClientServiceLocatorRule;
 import io.appmetrica.analytics.testutils.CommonTest;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -21,8 +23,11 @@ import static org.mockito.Mockito.when;
 @RunWith(RobolectricTestRunner.class)
 public class AppOpenWatcherTest extends CommonTest {
 
+    @Rule
+    public ClientServiceLocatorRule clientServiceLocatorRule = new ClientServiceLocatorRule();
+
     @Mock
-    private ICommonExecutor apiProxyExecutor;
+    private IHandlerExecutor executor;
     @Mock
     private Activity activity;
     @Mock
@@ -32,31 +37,31 @@ public class AppOpenWatcherTest extends CommonTest {
     @Captor
     private ArgumentCaptor<Runnable> runnableCaptor;
     private final String deeplink = "some deeplink";
-    @Mock
-    private ActivityLifecycleManager activityLifecycleManager;
     private AppOpenWatcher appOpenWatcher;
 
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
+        when(ClientServiceLocator.getInstance().getClientExecutorProvider().getDefaultExecutor()).thenReturn(executor);
         when(activity.getIntent()).thenReturn(intent);
         when(intent.getDataString()).thenReturn(deeplink);
-        appOpenWatcher = new AppOpenWatcher(apiProxyExecutor, activityLifecycleManager);
+        appOpenWatcher = new AppOpenWatcher();
     }
 
     @Test
     public void startWatching() {
         appOpenWatcher.startWatching();
-        verify(activityLifecycleManager).registerListener(appOpenWatcher, ActivityLifecycleManager.ActivityEvent.CREATED);
+        verify(ClientServiceLocator.getInstance().getActivityLifecycleManager())
+            .registerListener(appOpenWatcher, ActivityLifecycleManager.ActivityEvent.CREATED);
     }
 
     @Test
     public void hasCallbacksNoDeeplinkConsumer() {
         appOpenWatcher.startWatching();
         appOpenWatcher.onEvent(activity, ActivityLifecycleManager.ActivityEvent.CREATED);
-        verifyNoMoreInteractions(apiProxyExecutor, deeplinkConsumer);
+        verifyNoMoreInteractions(executor, deeplinkConsumer);
         appOpenWatcher.setDeeplinkConsumer(deeplinkConsumer);
-        verifyNoMoreInteractions(apiProxyExecutor);
+        verifyNoMoreInteractions(executor);
         verify(deeplinkConsumer).reportAutoAppOpen(deeplink);
     }
 
@@ -64,9 +69,9 @@ public class AppOpenWatcherTest extends CommonTest {
     public void hasCallbacksHasDeeplinkConsumer() {
         appOpenWatcher.startWatching();
         appOpenWatcher.setDeeplinkConsumer(deeplinkConsumer);
-        clearInvocations(apiProxyExecutor);
+        clearInvocations(executor);
         appOpenWatcher.onEvent(activity, ActivityLifecycleManager.ActivityEvent.CREATED);
-        verify(apiProxyExecutor).execute(runnableCaptor.capture());
+        verify(executor).execute(runnableCaptor.capture());
         runnableCaptor.getValue().run();
         verify(deeplinkConsumer).reportAutoAppOpen(deeplink);
     }
@@ -77,7 +82,7 @@ public class AppOpenWatcherTest extends CommonTest {
         appOpenWatcher.startWatching();
         appOpenWatcher.setDeeplinkConsumer(deeplinkConsumer);
         appOpenWatcher.onEvent(activity, ActivityLifecycleManager.ActivityEvent.CREATED);
-        verifyNoMoreInteractions(apiProxyExecutor, deeplinkConsumer);
+        verifyNoMoreInteractions(executor, deeplinkConsumer);
     }
 
     @Test
@@ -86,7 +91,7 @@ public class AppOpenWatcherTest extends CommonTest {
         appOpenWatcher.startWatching();
         appOpenWatcher.setDeeplinkConsumer(deeplinkConsumer);
         appOpenWatcher.onEvent(activity, ActivityLifecycleManager.ActivityEvent.CREATED);
-        verifyNoMoreInteractions(apiProxyExecutor, deeplinkConsumer);
+        verifyNoMoreInteractions(executor, deeplinkConsumer);
     }
 
     @Test
@@ -95,7 +100,7 @@ public class AppOpenWatcherTest extends CommonTest {
         appOpenWatcher.startWatching();
         appOpenWatcher.setDeeplinkConsumer(deeplinkConsumer);
         appOpenWatcher.onEvent(activity, ActivityLifecycleManager.ActivityEvent.CREATED);
-        verifyNoMoreInteractions(apiProxyExecutor, deeplinkConsumer);
+        verifyNoMoreInteractions(executor, deeplinkConsumer);
     }
 
     @Test
@@ -104,7 +109,7 @@ public class AppOpenWatcherTest extends CommonTest {
         appOpenWatcher.startWatching();
         appOpenWatcher.setDeeplinkConsumer(deeplinkConsumer);
         appOpenWatcher.onEvent(activity, ActivityLifecycleManager.ActivityEvent.CREATED);
-        verifyNoMoreInteractions(apiProxyExecutor, deeplinkConsumer);
+        verifyNoMoreInteractions(executor, deeplinkConsumer);
     }
 
     @Test
@@ -113,7 +118,7 @@ public class AppOpenWatcherTest extends CommonTest {
         appOpenWatcher.startWatching();
         appOpenWatcher.setDeeplinkConsumer(deeplinkConsumer);
         appOpenWatcher.onEvent(activity, ActivityLifecycleManager.ActivityEvent.CREATED);
-        verifyNoMoreInteractions(apiProxyExecutor, deeplinkConsumer);
+        verifyNoMoreInteractions(executor, deeplinkConsumer);
     }
 
 }

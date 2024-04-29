@@ -5,7 +5,6 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
-import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
 import io.appmetrica.analytics.impl.crash.CrashProcessorFactory;
 import io.appmetrica.analytics.impl.modules.ModuleEntryPointsRegister;
 import io.appmetrica.analytics.impl.modules.client.ClientModulesController;
@@ -76,7 +75,7 @@ public class ClientServiceLocator {
             mainProcessDetector,
             activityLifecycleManager,
             clientExecutorProvider,
-            new ActivityAppearedListener(activityLifecycleManager, clientExecutorProvider.getApiProxyExecutor())
+            new ActivityAppearedListener(activityLifecycleManager)
         );
     }
 
@@ -93,7 +92,6 @@ public class ClientServiceLocator {
             activityLifecycleManager,
             new SessionsTrackingManager(
                 activityLifecycleManager,
-                clientExecutorProvider.getApiProxyExecutor(),
                 activityAppearedListener
             ),
             new ContextAppearedListener(activityLifecycleManager),
@@ -143,11 +141,6 @@ public class ClientServiceLocator {
     @NonNull
     public ClientExecutorProvider getClientExecutorProvider() {
         return clientExecutorProvider;
-    }
-
-    @NonNull
-    public ICommonExecutor getApiProxyExecutor() {
-        return clientExecutorProvider.getApiProxyExecutor();
     }
 
     @NonNull

@@ -4,7 +4,7 @@ import androidx.annotation.AnyThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.WorkerThread;
-import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
+import io.appmetrica.analytics.impl.ClientServiceLocator;
 import io.appmetrica.analytics.impl.NonNullConsumer;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,18 +13,11 @@ public class ConditionalExecutor<T> {
 
     @Nullable
     private T resource;
-    @NonNull
-    private final ICommonExecutor executor;
     private final List<NonNullConsumer<T>> commands = new ArrayList<NonNullConsumer<T>>();
 
     @AnyThread
-    public ConditionalExecutor(@NonNull ICommonExecutor executor) {
-        this.executor = executor;
-    }
-
-    @AnyThread
     public void addCommand(@NonNull final NonNullConsumer<T> command) {
-        executor.execute(new Runnable() {
+        ClientServiceLocator.getInstance().getClientExecutorProvider().getDefaultExecutor().execute(new Runnable() {
             @Override
             public void run() {
                 synchronized (ConditionalExecutor.this) {

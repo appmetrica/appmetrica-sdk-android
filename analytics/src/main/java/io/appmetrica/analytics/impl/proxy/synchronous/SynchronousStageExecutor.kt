@@ -121,7 +121,7 @@ class SynchronousStageExecutor @VisibleForTesting constructor(
                 logger.i("Session auto tracking disabled")
             }
         }
-        provider.getInitializedImpl(context).activateCore(config)
+        provider.getInitializedImpl(context, true).activateCore(config)
     }
 
     fun enableActivityAutoTracking(application: Application): WatchingStatus {

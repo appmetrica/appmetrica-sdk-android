@@ -2,8 +2,9 @@ package io.appmetrica.analytics.impl.proxy;
 
 import android.content.Context;
 import io.appmetrica.analytics.ReporterConfig;
-import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
+import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor;
 import io.appmetrica.analytics.impl.AppMetricaFacade;
+import io.appmetrica.analytics.impl.ClientServiceLocator;
 import io.appmetrica.analytics.impl.TestsData;
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule;
 import io.appmetrica.analytics.testutils.CommonTest;
@@ -28,19 +29,19 @@ public class ReporterProxyStorageTest extends CommonTest {
     private final String mApiKey = TestsData.generateApiKey();
 
     @Mock
-    private ICommonExecutor mExecutor;
+    private IHandlerExecutor executor;
 
     private ReporterProxyStorage storage;
 
     @Rule
-    public final ClientServiceLocatorRule mClientServiceLocatorRule = new ClientServiceLocatorRule();
+    public final ClientServiceLocatorRule clientServiceLocatorRule = new ClientServiceLocatorRule();
 
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
         mContext = RuntimeEnvironment.getApplication();
-        when(mClientServiceLocatorRule.instance.getApiProxyExecutor()).thenReturn(mExecutor);
-        storage = new ReporterProxyStorage(mExecutor, mock(AppMetricaFacadeProvider.class));
+        when(ClientServiceLocator.getInstance().getClientExecutorProvider().getDefaultExecutor()).thenReturn(executor);
+        storage = new ReporterProxyStorage(mock(AppMetricaFacadeProvider.class));
     }
 
     @After

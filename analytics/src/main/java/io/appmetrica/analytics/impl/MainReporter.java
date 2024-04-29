@@ -10,7 +10,6 @@ import androidx.annotation.WorkerThread;
 import io.appmetrica.analytics.AnrListener;
 import io.appmetrica.analytics.AppMetricaConfig;
 import io.appmetrica.analytics.ExternalAttribution;
-import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
 import io.appmetrica.analytics.coreutils.internal.WrapUtils;
 import io.appmetrica.analytics.impl.client.ProcessConfiguration;
 import io.appmetrica.analytics.impl.crash.ANRMonitor;
@@ -111,7 +110,6 @@ public class MainReporter extends BaseReporter implements IMainReporter {
                 clientServiceLocator.getProcessDetector(),
                 appmetricaReporterProvider,
                 pushReporterProvider,
-                clientServiceLocator.getApiProxyExecutor(),
                 extraMetaInfoRetriever,
                 new ActivityStateManager(),
                 new PluginErrorDetailsConverter(extraMetaInfoRetriever),
@@ -136,7 +134,6 @@ public class MainReporter extends BaseReporter implements IMainReporter {
                  @NonNull ProcessDetector processDetector,
                  @NonNull final UnhandledSituationReporterProvider appmetricaReporterProvider,
                  @NonNull final UnhandledSituationReporterProvider pushReporterProvider,
-                 @NonNull final ICommonExecutor executor,
                  @NonNull ExtraMetaInfoRetriever extraMetaInfoRetriever,
                  @NonNull ActivityStateManager activityStateManager,
                  @NonNull PluginErrorDetailsConverter pluginErrorDetailsConverter,
@@ -165,7 +162,6 @@ public class MainReporter extends BaseReporter implements IMainReporter {
         this.activityStateManager = activityStateManager;
         enableNativeCrashHandling(config.nativeCrashReporting);
         anrMonitor = createAnrMonitor(
-            executor,
             libraryAnrDetector,
             appmetricaReporterProvider,
             pushReporterProvider,
@@ -312,8 +308,7 @@ public class MainReporter extends BaseReporter implements IMainReporter {
     }
 
     @NonNull
-    private ANRMonitor createAnrMonitor(@NonNull final ICommonExecutor executor,
-                                        @NonNull final LibraryAnrDetector libraryAnrDetector,
+    private ANRMonitor createAnrMonitor(@NonNull final LibraryAnrDetector libraryAnrDetector,
                                         @NonNull final UnhandledSituationReporterProvider appmetricaReporterProvider,
                                         @NonNull final UnhandledSituationReporterProvider pushReporterProvider,
                                         @Nullable final Integer anrMonitoringTimeout) {
@@ -321,7 +316,8 @@ public class MainReporter extends BaseReporter implements IMainReporter {
             @Override
             public void onAppNotResponding() {
                 final AllThreads allThreads = threadsStateDumper.getThreadsDumpForAnr();
-                executor.execute(new Runnable() {
+                ClientServiceLocator.getInstance().getClientExecutorProvider().getDefaultExecutor()
+                    .execute(new Runnable() {
                     @Override
                     public void run() {
                         reportAnr(allThreads);

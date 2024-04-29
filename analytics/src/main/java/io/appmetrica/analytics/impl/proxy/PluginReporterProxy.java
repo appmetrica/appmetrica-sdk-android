@@ -6,6 +6,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.WorkerThread;
 import io.appmetrica.analytics.coreapi.internal.backport.Provider;
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
+import io.appmetrica.analytics.impl.ClientServiceLocator;
 import io.appmetrica.analytics.impl.IReporterExtended;
 import io.appmetrica.analytics.impl.SdkUtils;
 import io.appmetrica.analytics.impl.proxy.synchronous.PluginsReporterSynchronousStageExecutor;
@@ -25,12 +26,11 @@ public class PluginReporterProxy implements IPluginReporter {
     private final Provider<IReporterExtended> reporterProvider;
 
     public PluginReporterProxy(
-        @NonNull ICommonExecutor executor,
         @NonNull Provider<IReporterExtended> reporterProvider
     ) {
         this.barrier = new PluginsReporterBarrier();
         this.synchronousStageExecutor = new PluginsReporterSynchronousStageExecutor();
-        this.executor = executor;
+        this.executor = ClientServiceLocator.getInstance().getClientExecutorProvider().getDefaultExecutor();
         this.reporterProvider = reporterProvider;
     }
 

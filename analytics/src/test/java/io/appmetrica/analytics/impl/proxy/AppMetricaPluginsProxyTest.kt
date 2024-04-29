@@ -1,15 +1,21 @@
 package io.appmetrica.analytics.impl.proxy
 
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor
+import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor
 import io.appmetrica.analytics.impl.AppMetricaFacade
+import io.appmetrica.analytics.impl.ClientServiceLocator
 import io.appmetrica.analytics.impl.MainReporter
 import io.appmetrica.analytics.impl.MainReporterApiConsumerProvider
 import io.appmetrica.analytics.impl.proxy.synchronous.PluginsSynchronousStageExecutor
+import io.appmetrica.analytics.impl.proxy.synchronous.SynchronousStageExecutor
 import io.appmetrica.analytics.impl.proxy.validation.PluginsBarrier
 import io.appmetrica.analytics.plugins.IPluginReporter
 import io.appmetrica.analytics.plugins.PluginErrorDetails
+import io.appmetrica.analytics.testutils.ClientServiceLocatorRule
 import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.analytics.testutils.constructionRule
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito.verifyNoInteractions
@@ -27,31 +33,49 @@ import org.robolectric.RobolectricTestRunner
 @RunWith(RobolectricTestRunner::class)
 class AppMetricaPluginsProxyTest : CommonTest() {
 
-    private val executor: ICommonExecutor = mock()
-    private val provider: AppMetricaFacadeProvider = mock()
-    private val barrier: PluginsBarrier = mock()
-    private val synchronousStageExecutor: PluginsSynchronousStageExecutor = mock()
+    @get:Rule
+    val clientServiceLocatorRule = ClientServiceLocatorRule()
+
     private val errorDetails: PluginErrorDetails = mock()
-    private val mainReporter: MainReporter = mock()
     private val pluginReporter: IPluginReporter = mock()
+    private val executor: IHandlerExecutor = mock()
+
+    private val mainReporter: MainReporter = mock {
+        on { pluginExtension } doReturn pluginReporter
+    }
 
     private val runnableCaptor = argumentCaptor<Runnable>()
+
+    private val mainReporterApiConsumerProvider: MainReporterApiConsumerProvider = mock {
+        on { mainReporter } doReturn mainReporter
+    }
+
+    private val appmetricaFacade: AppMetricaFacade = mock {
+        on { mainReporterApiConsumerProvider } doReturn mainReporterApiConsumerProvider
+    }
+
+    @get:Rule
+    val providerMockedConstructionRule = constructionRule<AppMetricaFacadeProvider> {
+        on { peekInitializedImpl() } doReturn appmetricaFacade
+    }
+
+    @get:Rule
+    val barrierMockedConstructionRule = constructionRule<PluginsBarrier>()
+    private val barrier: PluginsBarrier by barrierMockedConstructionRule
+
+    @get:Rule
+    val synchronousStageExecutorMockedConstructionRule = constructionRule<PluginsSynchronousStageExecutor>()
+    private val synchronousStageExecutor: PluginsSynchronousStageExecutor
+    by synchronousStageExecutorMockedConstructionRule
 
     private lateinit var proxy: AppMetricaPluginsProxy
 
     @Before
     fun setUp() {
-        stubbing(mainReporter) {
-            on { pluginExtension } doReturn pluginReporter
+        stubbing(ClientServiceLocator.getInstance().clientExecutorProvider) {
+            on { defaultExecutor } doReturn executor
         }
-
-        val facade: AppMetricaFacade = mock()
-        val mainReporterApiConsumerProvider: MainReporterApiConsumerProvider = mock()
-        whenever(provider.peekInitializedImpl()).thenReturn(facade)
-        whenever(facade.mainReporterApiConsumerProvider).thenReturn(mainReporterApiConsumerProvider)
-        whenever(mainReporterApiConsumerProvider.mainReporter).thenReturn(mainReporter)
-
-        proxy = AppMetricaPluginsProxy(executor, provider, barrier, synchronousStageExecutor)
+        proxy = AppMetricaPluginsProxy()
     }
 
     @Test

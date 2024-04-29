@@ -6,7 +6,7 @@ import io.appmetrica.analytics.plugins.PluginErrorDetails
 
 internal class AppMetricaPluginsImpl(private val proxy: AppMetricaPluginsProxy) : AppMetricaPlugins {
 
-    constructor() : this(AppMetricaPluginsProxy(ClientServiceLocator.getInstance().apiProxyExecutor))
+    constructor() : this(AppMetricaPluginsProxy())
 
     override fun reportUnhandledException(errorDetails: PluginErrorDetails) {
         proxy.reportUnhandledException(errorDetails)

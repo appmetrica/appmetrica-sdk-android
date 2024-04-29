@@ -1,9 +1,11 @@
 package io.appmetrica.analytics.impl;
 
 import android.app.Activity;
-import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
+import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor;
+import io.appmetrica.analytics.testutils.ClientServiceLocatorRule;
 import io.appmetrica.analytics.testutils.CommonTest;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -14,12 +16,14 @@ import org.robolectric.RobolectricTestRunner;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
 public class ActivityAppearedListenerTest extends CommonTest {
 
-    @Mock
-    private ICommonExecutor executor;
+    @Rule
+    public ClientServiceLocatorRule clientServiceLocatorRule = new ClientServiceLocatorRule();
+
     @Mock
     private ActivityLifecycleManager activityLifecycleManager;
     @Mock
@@ -28,6 +32,8 @@ public class ActivityAppearedListenerTest extends CommonTest {
     private ActivityAppearedListener.Listener secondListener;
     @Mock
     private Activity activity;
+    @Mock
+    private IHandlerExecutor executor;
     @Captor
     private ArgumentCaptor<Runnable> runnableCaptor;
     private ActivityAppearedListener activityAppearedListener;
@@ -35,7 +41,8 @@ public class ActivityAppearedListenerTest extends CommonTest {
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        activityAppearedListener = new ActivityAppearedListener(activityLifecycleManager, executor);
+        when(ClientServiceLocator.getInstance().getClientExecutorProvider().getDefaultExecutor()).thenReturn(executor);
+        activityAppearedListener = new ActivityAppearedListener(activityLifecycleManager);
     }
 
     @Test

@@ -32,6 +32,7 @@ import org.robolectric.RobolectricTestRunner;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -70,7 +71,7 @@ public class SynchronousStageExecutorTest extends CommonTest {
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        when(mProvider.getInitializedImpl(mContext)).thenReturn(mAppMetricaFacade);
+        when(mProvider.getInitializedImpl(eq(mContext), anyBoolean())).thenReturn(mAppMetricaFacade);
         when(mProvider.peekInitializedImpl()).thenReturn(mAppMetricaFacade);
         when(LoggerStorage.getOrCreatePublicLogger(apiKey)).thenReturn(publicLogger);
         synchronousStageExecutor = new SynchronousStageExecutor(

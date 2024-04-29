@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.location.Location;
 import android.util.ArrayMap;
 import android.webkit.WebView;
-import androidx.annotation.NonNull;
 import io.appmetrica.analytics.AdRevenue;
 import io.appmetrica.analytics.AnrListener;
 import io.appmetrica.analytics.AppMetricaConfig;
@@ -16,7 +15,7 @@ import io.appmetrica.analytics.DeferredDeeplinkParametersListener;
 import io.appmetrica.analytics.ExternalAttribution;
 import io.appmetrica.analytics.ReporterConfig;
 import io.appmetrica.analytics.Revenue;
-import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
+import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor;
 import io.appmetrica.analytics.ecommerce.ECommerceEvent;
 import io.appmetrica.analytics.impl.ActivityLifecycleManager;
 import io.appmetrica.analytics.impl.AppMetricaFacade;
@@ -85,8 +84,6 @@ public class AppMetricaProxyTest extends CommonTest {
     @Mock
     private Barrier mBarrier;
     @Mock
-    private ICommonExecutor mExecutor;
-    @Mock
     private Context context;
     @Mock
     private Context applicationContext;
@@ -108,7 +105,7 @@ public class AppMetricaProxyTest extends CommonTest {
     @Rule
     public ClientServiceLocatorRule clientServiceLocatorRule = new ClientServiceLocatorRule();
 
-    private ICommonExecutor mStubbedExecutor;
+    private IHandlerExecutor mStubbedExecutor;
     private AppMetricaProxy mProxy;
 
     private static final String ERROR_MESSAGE = "error message";
@@ -120,17 +117,9 @@ public class AppMetricaProxyTest extends CommonTest {
         mStubbedExecutor = new StubbedBlockingExecutor();
         when(mProvider.peekInitializedImpl()).thenReturn(mImpl);
         when(mProvider.getInitializedImpl(applicationContext)).thenReturn(mImpl);
-        mProxy = new AppMetricaProxy(
-                mProvider,
-                mStubbedExecutor,
-                mBarrier,
-                silentActivationValidator,
-                webViewJsInterfaceHandler,
-                mSynchronousStageExecutor,
-                mReporterProxyStorage,
-                mDefaultOneShotMetricaConfig,
-                sessionsTrackingManager
-        );
+        when(ClientServiceLocator.getInstance().getClientExecutorProvider().getDefaultExecutor())
+            .thenReturn(mStubbedExecutor);
+        mProxy = createProxy();
         when(mImpl.getMainReporterApiConsumerProvider()).thenReturn(mainReporterApiConsumerProvider);
         doReturn(mMainReporter).when(mainReporterApiConsumerProvider).getMainReporter();
         doReturn(deeplinkConsumer).when(mainReporterApiConsumerProvider).getDeeplinkConsumer();
@@ -138,9 +127,10 @@ public class AppMetricaProxyTest extends CommonTest {
 
     @Test
     public void testDefaultConstructor() {
-        mProxy = new AppMetricaProxy(mExecutor);
+        mProxy = new AppMetricaProxy();
         SoftAssertions softAssertions = new SoftAssertions();
-        softAssertions.assertThat(mProxy.getExecutor()).as("Executor").isEqualTo(mExecutor);
+        softAssertions.assertThat(mProxy.getExecutor()).as("Executor")
+            .isEqualTo(ClientServiceLocator.getInstance().getClientExecutorProvider().getDefaultExecutor());
         softAssertions.assertThat(mProxy.getProvider()).as("Provider").isNotNull();
         softAssertions.assertThat(mProxy.getMainFacadeBarrier()).as("Main facade barrier").isNotNull();
         softAssertions.assertThat(mProxy.getReporterProxyStorage()).as("Reporter proxy storage").isNotNull();
@@ -270,13 +260,16 @@ public class AppMetricaProxyTest extends CommonTest {
 
     @Test
     public void testReportEventWithAttributesMapChanged() {
-        mProxy = createProxyWithMockedExecutor(mExecutor);
+        IHandlerExecutor executor = mock(IHandlerExecutor.class);
+        when(ClientServiceLocator.getInstance().getClientExecutorProvider().getDefaultExecutor())
+            .thenReturn(executor);
+        mProxy = createProxy();
         final String name = "name";
         final Map<String, Object> attributes = new HashMap<String, Object>();
         attributes.put("k1", "v1");
         mProxy.reportEvent(name, attributes);
         ArgumentCaptor<Runnable> runnableCaptor = ArgumentCaptor.forClass(Runnable.class);
-        verify(mExecutor).execute(runnableCaptor.capture());
+        verify(executor).execute(runnableCaptor.capture());
         attributes.put("k1", "v2");
         runnableCaptor.getValue().run();
         verify(mMainReporter).reportEvent(eq(name), argThat(new ArgumentMatcher<Map<String, Object>>() {
@@ -678,10 +671,9 @@ public class AppMetricaProxyTest extends CommonTest {
         order.verify(mProvider).setDataSendingEnabled(value);
     }
 
-    private AppMetricaProxy createProxyWithMockedExecutor(@NonNull ICommonExecutor executor) {
+    private AppMetricaProxy createProxy() {
         return new AppMetricaProxy(
                 mProvider,
-                executor,
                 mBarrier,
                 silentActivationValidator,
                 webViewJsInterfaceHandler,

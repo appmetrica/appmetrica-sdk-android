@@ -1,7 +1,5 @@
 package io.appmetrica.analytics.impl.proxy;
 
-import io.appmetrica.analytics.impl.ClientServiceLocator;
-
 /*
     Java 15 does not allow static final fields changing. That approach was widely used for public api testing.
     Hopefully, new mockito version could easily mock static methods.
@@ -9,9 +7,7 @@ import io.appmetrica.analytics.impl.ClientServiceLocator;
  */
 public class AppMetricaProxyProvider {
 
-    private static final AppMetricaProxy sProxy = new AppMetricaProxy(
-            ClientServiceLocator.getInstance().getApiProxyExecutor()
-    );
+    private static final AppMetricaProxy sProxy = new AppMetricaProxy();
 
     public static AppMetricaProxy getProxy() {
         return sProxy;

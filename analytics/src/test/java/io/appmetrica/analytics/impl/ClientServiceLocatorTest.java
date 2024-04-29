@@ -23,7 +23,6 @@ import org.robolectric.RobolectricTestRunner;
 
 import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
 public class ClientServiceLocatorTest extends CommonTest {
@@ -69,7 +68,6 @@ public class ClientServiceLocatorTest extends CommonTest {
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        when(mClientExecutorProvider.getApiProxyExecutor()).thenReturn(mApiProxyExecutor);
         mClientServiceLocator = new ClientServiceLocator(
             mMainProcessDetector,
             mDefaultOneShotMetricaConfig,
@@ -82,11 +80,6 @@ public class ClientServiceLocatorTest extends CommonTest {
             crashProcessorFactory,
             coreComponentsProvider
         );
-    }
-
-    @Test
-    public void getApiProxyExecutor() {
-        assertThat(mClientServiceLocator.getApiProxyExecutor()).isSameAs(mApiProxyExecutor);
     }
 
     @Test

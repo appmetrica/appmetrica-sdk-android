@@ -1,11 +1,14 @@
 package io.appmetrica.analytics.impl.proxy
 
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor
+import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor
+import io.appmetrica.analytics.impl.ClientServiceLocator
 import io.appmetrica.analytics.impl.IReporterExtended
 import io.appmetrica.analytics.impl.proxy.synchronous.PluginsReporterSynchronousStageExecutor
 import io.appmetrica.analytics.impl.proxy.validation.PluginsReporterBarrier
 import io.appmetrica.analytics.plugins.IPluginReporter
 import io.appmetrica.analytics.plugins.PluginErrorDetails
+import io.appmetrica.analytics.testutils.ClientServiceLocatorRule
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.MockedConstructionRule
 import org.junit.Before
@@ -25,22 +28,28 @@ import org.mockito.kotlin.whenever
 
 class PluginReporterProxyTest : CommonTest() {
 
-    private val executor: ICommonExecutor = mock()
     private val reporter: IReporterExtended = mock()
     private val pluginReporter: IPluginReporter = mock()
+    private val executor: IHandlerExecutor = mock()
     private lateinit var pluginReporterProxy: PluginReporterProxy
 
     private lateinit var barrier: PluginsReporterBarrier
+
     @get:Rule
     val barrierRule = MockedConstructionRule(PluginsReporterBarrier::class.java) { mock, _ ->
         barrier = mock
     }
 
     private lateinit var synchronousStageExecutor: PluginsReporterSynchronousStageExecutor
+
     @get:Rule
-    val synchronousStageExecutorRule = MockedConstructionRule(PluginsReporterSynchronousStageExecutor::class.java) { mock, _ ->
-        synchronousStageExecutor = mock
-    }
+    val synchronousStageExecutorRule =
+        MockedConstructionRule(PluginsReporterSynchronousStageExecutor::class.java) { mock, _ ->
+            synchronousStageExecutor = mock
+        }
+
+    @get:Rule
+    val clientServiceLocatorRule = ClientServiceLocatorRule()
 
     private val runnableCaptor = argumentCaptor<Runnable>()
 
@@ -49,8 +58,11 @@ class PluginReporterProxyTest : CommonTest() {
         stubbing(reporter) {
             on { pluginExtension } doReturn pluginReporter
         }
+        stubbing(ClientServiceLocator.getInstance().clientExecutorProvider) {
+            on { defaultExecutor } doReturn executor
+        }
         reporter.stub { pluginReporter }
-        pluginReporterProxy = PluginReporterProxy(executor) { reporter }
+        pluginReporterProxy = PluginReporterProxy { reporter }
     }
 
     @Test

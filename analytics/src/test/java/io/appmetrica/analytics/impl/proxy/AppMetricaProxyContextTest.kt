@@ -5,7 +5,9 @@ import io.appmetrica.analytics.AppMetricaConfig
 import io.appmetrica.analytics.ReporterConfig
 import io.appmetrica.analytics.StartupParamsCallback
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor
+import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor
 import io.appmetrica.analytics.impl.AppMetricaFacade
+import io.appmetrica.analytics.impl.ClientServiceLocator
 import io.appmetrica.analytics.impl.DeeplinkConsumer
 import io.appmetrica.analytics.impl.DefaultOneShotMetricaConfig
 import io.appmetrica.analytics.impl.MainReporter
@@ -49,9 +51,9 @@ class AppMetricaProxyContextTest : CommonTest() {
     private val webViewJsInterfaceHandler: WebViewJsInterfaceHandler = mock()
     private val silentActivationValidator: SilentActivationValidator = mock()
     private val sessionsTrackingManager: SessionsTrackingManager = mock()
-    private val executor: ICommonExecutor = mock()
     private val startupParamsCallback: StartupParamsCallback = mock()
     private val params: List<String> = mock()
+    private val executor: IHandlerExecutor = mock()
 
     private lateinit var proxy: AppMetricaProxy
     private val apiKey = UUID.randomUUID().toString()
@@ -61,9 +63,9 @@ class AppMetricaProxyContextTest : CommonTest() {
         MockitoAnnotations.openMocks(this)
         whenever(provider.peekInitializedImpl()).thenReturn(impl)
         whenever(provider.getInitializedImpl(context)).thenReturn(impl)
+        whenever(ClientServiceLocator.getInstance().clientExecutorProvider.defaultExecutor).thenReturn(executor)
         proxy = AppMetricaProxy(
             provider,
-            executor,
             barrier,
             silentActivationValidator,
             webViewJsInterfaceHandler,

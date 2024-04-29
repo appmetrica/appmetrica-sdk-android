@@ -4,7 +4,6 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
-import io.appmetrica.analytics.impl.ClientServiceLocator;
 import io.appmetrica.analytics.impl.protobuf.backend.ExternalAttribution;
 import io.appmetrica.analytics.impl.proxy.ModulesProxy;
 import io.appmetrica.analytics.logger.internal.YLogger;
@@ -42,9 +41,7 @@ public final class ModulesFacade {
     private static final String TAG = "[ModulesFacade]";
 
     @NonNull
-    private static ModulesProxy proxy = new ModulesProxy(
-        ClientServiceLocator.getInstance().getApiProxyExecutor()
-    );
+    private static ModulesProxy proxy = new ModulesProxy();
 
     /**
      * Reports custom event with various parameters.

@@ -71,8 +71,7 @@ public class AppMetricaServiceCoreComponentsProviderTest extends CommonTest {
     public void getCoreIfUserIsNotUnlocked() {
         when(unlockedUserStateProvider.isUserUnlocked(context)).thenReturn(false);
         coreComponentsProvider.getCore(context, clientExecutorProvider);
-        assertThat(cAppMetricaCoreStub.getArgumentInterceptor().flatArguments()).
-                containsExactly(clientExecutorProvider);
+        assertThat(cAppMetricaCoreStub.getArgumentInterceptor().flatArguments()).containsExactly();
         for (int i = 2; i < 10; i++) {
             assertThat(coreComponentsProvider.getCore(context, clientExecutorProvider))
                     .as("Attempt %d to get component", i)
@@ -144,8 +143,7 @@ public class AppMetricaServiceCoreComponentsProviderTest extends CommonTest {
         coreComponentsProvider.getImpl(context, appMetricaCore);
         when(unlockedUserStateProvider.isUserUnlocked(context)).thenReturn(true);
         coreComponentsProvider.getCore(context, clientExecutorProvider);
-        assertThat(cAppMetricaCoreStub.getArgumentInterceptor().flatArguments())
-                .containsExactly(clientExecutorProvider);
+        assertThat(cAppMetricaCoreStub.getArgumentInterceptor().flatArguments()).containsExactly();
     }
 
     @Test

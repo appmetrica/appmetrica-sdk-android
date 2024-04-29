@@ -1,7 +1,6 @@
 package io.appmetrica.analytics.impl;
 
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
-import io.appmetrica.analytics.testutils.ClientExecutorProviderStub;
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule;
 import io.appmetrica.analytics.testutils.CommonTest;
 import org.junit.Before;
@@ -22,7 +21,6 @@ import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
 public class AppStatusMonitorTest extends CommonTest {
@@ -52,7 +50,6 @@ public class AppStatusMonitorTest extends CommonTest {
         stubExecuteDelayed(SESSION_TIMEOUT);
 
         mMonitor = new AppStatusMonitor(SESSION_TIMEOUT, mExecutor);
-        when(mClientServiceLocator.getClientExecutorProvider()).thenReturn(new ClientExecutorProviderStub());
     }
 
     @Test

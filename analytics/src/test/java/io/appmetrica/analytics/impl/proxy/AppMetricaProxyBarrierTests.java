@@ -1,5 +1,6 @@
 package io.appmetrica.analytics.impl.proxy;
 
+import io.appmetrica.analytics.impl.ClientServiceLocator;
 import io.appmetrica.analytics.impl.DefaultOneShotMetricaConfig;
 import io.appmetrica.analytics.impl.SessionsTrackingManager;
 import io.appmetrica.analytics.impl.WebViewJsInterfaceHandler;
@@ -8,12 +9,14 @@ import io.appmetrica.analytics.impl.proxy.validation.Barrier;
 import io.appmetrica.analytics.impl.proxy.validation.SilentActivationValidator;
 import io.appmetrica.analytics.impl.utils.validation.ValidationResult;
 import io.appmetrica.analytics.impl.utils.validation.Validator;
+import io.appmetrica.analytics.testutils.ClientServiceLocatorRule;
 import io.appmetrica.analytics.testutils.StubbedBlockingExecutor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -34,6 +37,9 @@ public class AppMetricaProxyBarrierTests extends BaseAppMetricaProxyBarrierTests
         "resumeSession"
     );
 
+    @Rule
+    public ClientServiceLocatorRule clientServiceLocatorRule = new ClientServiceLocatorRule();
+
     @Mock
     private ReporterProxyStorage mReporterProxyStorage;
     @Mock
@@ -53,9 +59,10 @@ public class AppMetricaProxyBarrierTests extends BaseAppMetricaProxyBarrierTests
         super.setUp();
         mBarrier = mock(Barrier.class);
         when(silentActivationValidator.validate()).thenReturn(ValidationResult.successful(mock(Validator.class)));
+        when(ClientServiceLocator.getInstance().getClientExecutorProvider().getDefaultExecutor())
+            .thenReturn(new StubbedBlockingExecutor());
         mProxy = new AppMetricaProxy(
                 mProvider,
-                new StubbedBlockingExecutor(),
                 mBarrier,
                 silentActivationValidator,
                 mock(WebViewJsInterfaceHandler.class),

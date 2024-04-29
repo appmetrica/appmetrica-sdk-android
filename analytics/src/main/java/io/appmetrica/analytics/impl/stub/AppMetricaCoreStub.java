@@ -2,44 +2,28 @@ package io.appmetrica.analytics.impl.stub;
 
 import android.os.Handler;
 import androidx.annotation.NonNull;
-import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.AppMetricaConfig;
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
+import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor;
 import io.appmetrica.analytics.impl.AppOpenWatcher;
+import io.appmetrica.analytics.impl.ClientServiceLocator;
 import io.appmetrica.analytics.impl.ClientTimeTracker;
 import io.appmetrica.analytics.impl.IAppMetricaCore;
 import io.appmetrica.analytics.impl.IReporterFactoryProvider;
-import io.appmetrica.analytics.impl.utils.executors.ClientExecutorProvider;
 
 public class AppMetricaCoreStub implements IAppMetricaCore {
 
     @NonNull
     private final Handler metricaHandler;
     @NonNull
-    private final ICommonExecutor executor;
-    @NonNull
-    private final ICommonExecutor apiProxyExecutor;
+    private final IHandlerExecutor executor;
     @NonNull
     private final ClientTimeTracker clientTimeTracker;
 
-    public AppMetricaCoreStub(@NonNull ClientExecutorProvider clientExecutorProvider) {
-        this(
-                clientExecutorProvider.getDefaultExecutor(),
-                clientExecutorProvider.getDefaultExecutor().getHandler(),
-                clientExecutorProvider.getApiProxyExecutor(),
-                new ClientTimeTracker()
-        );
-    }
-
-    @VisibleForTesting
-    public AppMetricaCoreStub(@NonNull ICommonExecutor executor,
-                                 @NonNull Handler metricaHandler,
-                                 @NonNull ICommonExecutor apiProxyExecutor,
-                                 @NonNull ClientTimeTracker clientTimeTracker) {
-        this.executor = executor;
-        this.metricaHandler = metricaHandler;
-        this.apiProxyExecutor = apiProxyExecutor;
-        this.clientTimeTracker = clientTimeTracker;
+    public AppMetricaCoreStub() {
+        this.executor = ClientServiceLocator.getInstance().getClientExecutorProvider().getDefaultExecutor();
+        this.metricaHandler = this.executor.getHandler();
+        this.clientTimeTracker = new ClientTimeTracker();
     }
 
     @Override
@@ -69,6 +53,6 @@ public class AppMetricaCoreStub implements IAppMetricaCore {
     @NonNull
     @Override
     public AppOpenWatcher getAppOpenWatcher() {
-        return new AppOpenWatcher(apiProxyExecutor);
+        return new AppOpenWatcher();
     }
 }

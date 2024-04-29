@@ -13,17 +13,21 @@ import io.appmetrica.analytics.coreapi.internal.backport.Provider;
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
 import io.appmetrica.analytics.coreutils.internal.collection.CollectionUtils;
 import io.appmetrica.analytics.ecommerce.ECommerceEvent;
+import io.appmetrica.analytics.impl.ClientServiceLocator;
 import io.appmetrica.analytics.impl.IReporterExtended;
 import io.appmetrica.analytics.impl.crash.client.AllThreads;
 import io.appmetrica.analytics.impl.crash.client.UnhandledException;
 import io.appmetrica.analytics.impl.proxy.synchronous.ReporterSynchronousStageExecutor;
 import io.appmetrica.analytics.impl.proxy.validation.ReporterBarrier;
+import io.appmetrica.analytics.logger.internal.YLogger;
 import io.appmetrica.analytics.plugins.IPluginReporter;
 import io.appmetrica.analytics.profile.UserProfile;
 import java.util.List;
 import java.util.Map;
 
 public class ReporterExtendedProxy implements IReporterExtended {
+
+    private static final String TAG = "[ReporterExtendedProxy]";
 
     @NonNull
     private final AppMetricaFacadeProvider mProvider;
@@ -54,7 +58,6 @@ public class ReporterExtendedProxy implements IReporterExtended {
                                   @NonNull String apiKey,
                                   @NonNull AppMetricaFacadeProvider provider) {
         this(
-                executor,
                 context,
                 new ReporterBarrier(),
                 provider,
@@ -63,21 +66,18 @@ public class ReporterExtendedProxy implements IReporterExtended {
         );
     }
 
-    private ReporterExtendedProxy(@NonNull ICommonExecutor executor,
-                                  @NonNull final Context context,
+    private ReporterExtendedProxy(@NonNull final Context context,
                                   @NonNull ReporterBarrier barrier,
                                   @NonNull final AppMetricaFacadeProvider provider,
                                   @NonNull ReporterSynchronousStageExecutor synchronousStageExecutor,
                                   @NonNull final ReporterConfig config) {
         this(
-                executor,
                 context,
                 barrier,
                 provider,
                 synchronousStageExecutor,
                 config,
                 new PluginReporterProxy(
-                    executor,
                     new Provider<IReporterExtended>() {
                             @Override
                             public IReporterExtended get() {
@@ -89,14 +89,13 @@ public class ReporterExtendedProxy implements IReporterExtended {
     }
 
     @VisibleForTesting
-    ReporterExtendedProxy(@NonNull ICommonExecutor executor,
-                          @NonNull Context context,
+    ReporterExtendedProxy(@NonNull Context context,
                           @NonNull ReporterBarrier barrier,
                           @NonNull AppMetricaFacadeProvider provider,
                           @NonNull ReporterSynchronousStageExecutor synchronousStageExecutor,
                           @NonNull ReporterConfig config,
                           @NonNull PluginReporterProxy pluginReporterProxy) {
-        mExecutor = executor;
+        mExecutor = ClientServiceLocator.getInstance().getClientExecutorProvider().getDefaultExecutor();
         mContext = context;
         this.barrier = barrier;
         mProvider = provider;
@@ -378,9 +377,11 @@ public class ReporterExtendedProxy implements IReporterExtended {
     public void activate(@NonNull final ReporterConfig config) {
         barrier.activate(config);
         synchronousStageExecutor.activate(config);
+        YLogger.info(TAG, "activate with apiKey: %s", config.apiKey);
         mExecutor.execute(new Runnable() {
             @Override
             public void run() {
+                YLogger.info(TAG, "activate internal with apiKey = %s", config.apiKey);
                 activateInternal(config);
             }
         });

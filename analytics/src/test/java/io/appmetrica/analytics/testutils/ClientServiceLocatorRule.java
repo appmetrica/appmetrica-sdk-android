@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.testutils;
 
 import android.content.Context;
+import android.os.Handler;
 import io.appmetrica.analytics.impl.ActivityAppearedListener;
 import io.appmetrica.analytics.impl.ActivityLifecycleManager;
 import io.appmetrica.analytics.impl.AppMetricaServiceDelayHandler;
@@ -41,7 +42,7 @@ public class ClientServiceLocatorRule extends ExternalResource {
 
     @Override
     public void before() {
-        clientExecutorProvider = new ClientExecutorProviderStub();
+        clientExecutorProvider = mock(ClientExecutorProvider.class);
         mDefaultOneShotMetricaConfig = mock(DefaultOneShotMetricaConfig.class);
         mainProcessDetector =  mock(MainProcessDetector.class);
         processDetector = mock(ProcessDetector.class);
@@ -57,7 +58,6 @@ public class ClientServiceLocatorRule extends ExternalResource {
         modulesController = mock(ClientModulesController.class);
         moduleEntryPointsRegister = mock(ModuleEntryPointsRegister.class);
         when(instance.getClientExecutorProvider()).thenReturn(clientExecutorProvider);
-        when(instance.getApiProxyExecutor()).thenReturn(clientExecutorProvider.getApiProxyExecutor());
         when(instance.getDefaultOneShotConfig()).thenReturn(mDefaultOneShotMetricaConfig);
         when(instance.getMainProcessDetector()).thenReturn(mainProcessDetector);
         when(instance.getProcessDetector()).thenReturn(processDetector);
@@ -71,6 +71,10 @@ public class ClientServiceLocatorRule extends ExternalResource {
             .thenReturn(defaultMultiProcessSafeUuidProvider);
         when(instance.getModulesController()).thenReturn(modulesController);
         when(instance.getModuleEntryPointsRegister()).thenReturn(moduleEntryPointsRegister);
+        when(clientExecutorProvider.getDefaultExecutor()).thenReturn(new StubbedBlockingExecutor());
+        when(clientExecutorProvider.getReportSenderExecutor()).thenReturn(new StubbedBlockingExecutor());
+        Handler mainHandler = TestUtils.createBlockingExecutionHandlerStub();
+        when(clientExecutorProvider.getMainHandler()).thenReturn(mainHandler);
         ClientServiceLocator.setInstance(instance);
     }
 

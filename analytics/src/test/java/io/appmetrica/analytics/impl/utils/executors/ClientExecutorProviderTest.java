@@ -20,8 +20,6 @@ public class ClientExecutorProviderTest extends CommonTest {
     @Mock
     private ClientExecutorFactory mClientExecutorFactory;
     @Mock
-    private ExecutorWrapper mApiProxyExecutor;
-    @Mock
     private ExecutorWrapper mReportsSenderExecutor;
     @Mock
     private ExecutorWrapper mDefaultExecutor;
@@ -37,7 +35,6 @@ public class ClientExecutorProviderTest extends CommonTest {
         MockitoAnnotations.openMocks(this);
 
         when(mClientExecutorFactory.createDefaultExecutor()).thenReturn(mDefaultExecutor);
-        when(mClientExecutorFactory.createApiProxyExecutor()).thenReturn(mApiProxyExecutor);
         when(mClientExecutorFactory.createReportsSenderExecutor()).thenReturn(mReportsSenderExecutor);
         when(mClientExecutorFactory.createMainHandler()).thenReturn(mHandler);
 
@@ -69,15 +66,6 @@ public class ClientExecutorProviderTest extends CommonTest {
                     .isEqualTo(mHandler);
         }
         verify(mClientExecutorFactory).createMainHandler();
-        verifyNoMoreInteractions(mClientExecutorFactory);
-    }
-
-    @Test
-    public void testGetApiProxyExecutor() {
-        for (int i = 0; i < CALLS_COUNT; i++) {
-            assertThat(mClientExecutorProvider.getApiProxyExecutor()).as("Attempt #%d", i).isEqualTo(mApiProxyExecutor);
-        }
-        verify(mClientExecutorFactory).createApiProxyExecutor();
         verifyNoMoreInteractions(mClientExecutorFactory);
     }
 

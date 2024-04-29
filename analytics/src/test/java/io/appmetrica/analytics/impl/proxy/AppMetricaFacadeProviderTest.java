@@ -57,7 +57,7 @@ public class AppMetricaFacadeProviderTest extends CommonTest {
 
     @Test
     public void getInitializedImpl() {
-        when(AppMetricaFacade.getInstance(mContext)).thenReturn(mAppMetricaFacade);
+        when(AppMetricaFacade.getInstance(mContext, false)).thenReturn(mAppMetricaFacade);
         assertThat(mProvider.getInitializedImpl(mContext)).isEqualTo(mAppMetricaFacade);
     }
 

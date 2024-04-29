@@ -38,6 +38,8 @@ public class AppMetricaFacadeStaticSettersTest extends CommonTest {
     private AppMetricaImpl mImpl;
     @Mock
     private IReporterExtended someReporter;
+    @Mock
+    private IHandlerExecutor executor;
 
     private Context mContext;
 
@@ -63,6 +65,7 @@ public class AppMetricaFacadeStaticSettersTest extends CommonTest {
         MockitoAnnotations.openMocks(this);
         mContext = TestUtils.createMockedContext();
         AppMetricaFacade.killInstance();
+        when(ClientServiceLocator.getInstance().getClientExecutorProvider().getDefaultExecutor()).thenReturn(executor);
         doReturn(someReporter).when(mImpl).getReporter(ArgumentMatchers.<ReporterConfig>any());
     }
 
@@ -302,15 +305,15 @@ public class AppMetricaFacadeStaticSettersTest extends CommonTest {
         ClientExecutorProvider clientExecutorProvider = mock(ClientExecutorProvider.class);
         when(clientExecutorProvider.getDefaultExecutor()).thenReturn(mock(IHandlerExecutor.class));
         when(mClientServiceLocatorRule.instance.getClientExecutorProvider()).thenReturn(clientExecutorProvider);
-        AppMetricaFacade.getInstance(mContext);
+        AppMetricaFacade.getInstance(mContext, true);
     }
 
     private void setUpNoMainReporter() {
-        AppMetricaFacade.getInstance(mContext);
+        AppMetricaFacade.getInstance(mContext, false);
     }
 
     private void setUpInitialized() {
         when(mImpl.getMainReporterApiConsumerProvider()).thenReturn(mainReporterApiConsumerProvider);
-        AppMetricaFacade.getInstance(mContext);
+        AppMetricaFacade.getInstance(mContext, false);
     }
 }

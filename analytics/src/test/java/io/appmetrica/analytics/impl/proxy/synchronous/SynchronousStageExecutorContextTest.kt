@@ -16,7 +16,9 @@ import io.appmetrica.analytics.testutils.ContextCoverageUtils
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mockito
+import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import java.util.UUID
@@ -26,7 +28,7 @@ class SynchronousStageExecutorContextTest : CommonTest() {
     private val context: Context = mock()
     private val appMetricaFacade: AppMetricaFacade = mock()
     private val provider: AppMetricaFacadeProvider = mock {
-        on { getInitializedImpl(context) } doReturn appMetricaFacade
+        on { getInitializedImpl(eq(context), any()) } doReturn appMetricaFacade
         on { peekInitializedImpl() } doReturn appMetricaFacade
     }
     private val webViewJsInterfaceHandler: WebViewJsInterfaceHandler = mock()

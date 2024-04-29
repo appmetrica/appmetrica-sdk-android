@@ -81,7 +81,7 @@ public class AppMetricaFacadeTest extends CommonTest {
     @Test
     public void getInstanceCreate() {
         AppMetricaFacade.killInstance();
-        assertThat(AppMetricaFacade.getInstance(mContext)).isNotNull();
+        assertThat(AppMetricaFacade.getInstance(mContext, true)).isNotNull();
         selfReporterFacadeRule.getStaticMock().verify(new MockedStatic.Verification() {
             @Override
             public void apply() throws Throwable {
@@ -93,16 +93,16 @@ public class AppMetricaFacadeTest extends CommonTest {
     @Test
     public void getInstanceCreatedOnlyOnce() {
         AppMetricaFacade.killInstance();
-        AppMetricaFacade instance = AppMetricaFacade.getInstance(mContext);
+        AppMetricaFacade instance = AppMetricaFacade.getInstance(mContext, true);
         assertThat(instance).isNotNull();
-        assertThat(AppMetricaFacade.getInstance(mContext)).isSameAs(instance);
+        assertThat(AppMetricaFacade.getInstance(mContext, true)).isSameAs(instance);
         assertThat(AppMetricaFacade.peekInstance()).isSameAs(instance);
     }
 
     @Test
     public void getInstanceAlreadyCreated() {
         AppMetricaFacade.setInstance(mInstance);
-        assertThat(AppMetricaFacade.getInstance(mContext)).isSameAs(mInstance);
+        assertThat(AppMetricaFacade.getInstance(mContext, true)).isSameAs(mInstance);
     }
 
     @Test

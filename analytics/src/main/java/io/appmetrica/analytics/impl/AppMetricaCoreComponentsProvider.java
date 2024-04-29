@@ -28,7 +28,7 @@ public class AppMetricaCoreComponentsProvider {
                                                 @NonNull ClientExecutorProvider clientExecutorProvider) {
         if (appMetricaCore == null) {
             if (useStubs(context)) {
-                appMetricaCore = new AppMetricaCoreStub(clientExecutorProvider);
+                appMetricaCore = new AppMetricaCoreStub();
             } else {
                 appMetricaCore = new AppMetricaCore(context, clientExecutorProvider);
             }

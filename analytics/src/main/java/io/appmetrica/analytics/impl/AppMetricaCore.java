@@ -33,28 +33,26 @@ public class AppMetricaCore implements IAppMetricaCore {
 
     AppMetricaCore(@NonNull Context context, @NonNull ClientExecutorProvider clientExecutorProvider) {
         this(
-                context.getApplicationContext(),
-                clientExecutorProvider.getDefaultExecutor(),
-                clientExecutorProvider.getApiProxyExecutor()
+            context.getApplicationContext(),
+            clientExecutorProvider.getDefaultExecutor()
         );
     }
 
     private AppMetricaCore(@NonNull Context context,
-                              @NonNull IHandlerExecutor defaultExecutor,
-                              @NonNull ICommonExecutor apiProxyExecutor) {
+                           @NonNull IHandlerExecutor defaultExecutor) {
         this(
-                context,
-                defaultExecutor,
-                new ClientTimeTracker(),
-                new AppOpenWatcher(apiProxyExecutor)
+            context,
+            defaultExecutor,
+            new ClientTimeTracker(),
+            new AppOpenWatcher()
         );
     }
 
     @VisibleForTesting
     AppMetricaCore(@NonNull Context context,
-                      @NonNull IHandlerExecutor defaultExecutor,
-                      @NonNull ClientTimeTracker clientTimeTracker,
-                      @NonNull AppOpenWatcher appOpenWatcher) {
+                   @NonNull IHandlerExecutor defaultExecutor,
+                   @NonNull ClientTimeTracker clientTimeTracker,
+                   @NonNull AppOpenWatcher appOpenWatcher) {
         mContext = context;
         mDefaultExecutor = defaultExecutor;
         this.appOpenWatcher = appOpenWatcher;
@@ -78,14 +76,14 @@ public class AppMetricaCore implements IAppMetricaCore {
                                       @NonNull IReporterFactoryProvider reporterFactoryProvider) {
         if (!activated) {
             final boolean crashReportingEnabled = WrapUtils.getOrDefault(
-                    config.crashReporting, DefaultValuesForCrashReporting.DEFAULT_REPORTS_CRASHES_ENABLED);
+                config.crashReporting, DefaultValuesForCrashReporting.DEFAULT_REPORTS_CRASHES_ENABLED);
             if (crashReportingEnabled && mUncaughtExceptionHandler == null) {
                 mUncaughtExceptionHandler = createUncaughtExceptionHandler(config, reporterFactoryProvider);
                 Thread.setDefaultUncaughtExceptionHandler(mUncaughtExceptionHandler);
             }
             final boolean appOpenTrackingEnabled = WrapUtils.getOrDefault(
-                    config.appOpenTrackingEnabled,
-                    DefaultValues.DEFAULT_APP_OPEN_TRACKING_ENABLED
+                config.appOpenTrackingEnabled,
+                DefaultValues.DEFAULT_APP_OPEN_TRACKING_ENABLED
             );
             if (appOpenTrackingEnabled) {
                 appOpenWatcher.startWatching();
@@ -115,18 +113,18 @@ public class AppMetricaCore implements IAppMetricaCore {
     @AnyThread
     @NonNull
     private AppMetricaUncaughtExceptionHandler createUncaughtExceptionHandler(
-            @NonNull AppMetricaConfig config,
-            @NonNull IReporterFactoryProvider reporterFactoryProvider
+        @NonNull AppMetricaConfig config,
+        @NonNull IReporterFactoryProvider reporterFactoryProvider
     ) {
         return new AppMetricaUncaughtExceptionHandler(
-                Thread.getDefaultUncaughtExceptionHandler(),
-                ClientServiceLocator.getInstance()
-                        .getCrashProcessorFactory()
-                        .createCrashProcessors(
-                                mContext,
-                                config,
-                                reporterFactoryProvider
-                        )
+            Thread.getDefaultUncaughtExceptionHandler(),
+            ClientServiceLocator.getInstance()
+                .getCrashProcessorFactory()
+                .createCrashProcessors(
+                    mContext,
+                    config,
+                    reporterFactoryProvider
+                )
         );
     }
 

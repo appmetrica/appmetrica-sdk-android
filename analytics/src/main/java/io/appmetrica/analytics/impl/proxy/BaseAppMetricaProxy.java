@@ -3,6 +3,7 @@ package io.appmetrica.analytics.impl.proxy;
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
+import io.appmetrica.analytics.impl.ClientServiceLocator;
 import io.appmetrica.analytics.impl.DefaultOneShotMetricaConfig;
 import io.appmetrica.analytics.impl.WebViewJsInterfaceHandler;
 
@@ -10,8 +11,6 @@ public class BaseAppMetricaProxy {
 
     @NonNull
     private final AppMetricaFacadeProvider mProvider;
-    @NonNull
-    private final ICommonExecutor mExecutor;
     @NonNull
     private final WebViewJsInterfaceHandler webViewJsInterfaceHandler;
     @NonNull
@@ -21,12 +20,10 @@ public class BaseAppMetricaProxy {
 
     @VisibleForTesting
     BaseAppMetricaProxy(@NonNull AppMetricaFacadeProvider provider,
-                           @NonNull ICommonExecutor executor,
                            @NonNull WebViewJsInterfaceHandler webViewJsInterfaceHandler,
                            @NonNull ReporterProxyStorage reporterProxyStorage,
                            @NonNull DefaultOneShotMetricaConfig defaultOneShotConfig) {
         mProvider = provider;
-        mExecutor = executor;
         this.webViewJsInterfaceHandler = webViewJsInterfaceHandler;
         mReporterProxyStorage = reporterProxyStorage;
         mDefaultOneShotConfig = defaultOneShotConfig;
@@ -34,7 +31,7 @@ public class BaseAppMetricaProxy {
 
     @NonNull
     ICommonExecutor getExecutor() {
-        return mExecutor;
+        return ClientServiceLocator.getInstance().getClientExecutorProvider().getDefaultExecutor();
     }
 
     @NonNull

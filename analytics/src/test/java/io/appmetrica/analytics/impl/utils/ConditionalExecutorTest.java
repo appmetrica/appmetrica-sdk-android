@@ -1,12 +1,15 @@
 package io.appmetrica.analytics.impl.utils;
 
 import androidx.annotation.NonNull;
-import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
+import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor;
+import io.appmetrica.analytics.impl.ClientServiceLocator;
 import io.appmetrica.analytics.impl.MainReporter;
 import io.appmetrica.analytics.impl.NonNullConsumer;
+import io.appmetrica.analytics.testutils.ClientServiceLocatorRule;
 import io.appmetrica.analytics.testutils.CommonTest;
 import java.util.List;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -21,20 +24,27 @@ import static org.mockito.Mockito.clearInvocations;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
 public class ConditionalExecutorTest extends CommonTest {
 
     @Mock
     private MainReporter reporter;
-    @Mock
-    private ICommonExecutor executor;
+
+    @Rule
+    public ClientServiceLocatorRule clientServiceLocatorRule = new ClientServiceLocatorRule();
+
     private ConditionalExecutor<MainReporter> conditionalExecutor;
+
+    @Mock
+    private IHandlerExecutor executor;
 
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        conditionalExecutor = new ConditionalExecutor<MainReporter>(executor);
+        when(ClientServiceLocator.getInstance().getClientExecutorProvider().getDefaultExecutor()).thenReturn(executor);
+        conditionalExecutor = new ConditionalExecutor<MainReporter>();
     }
 
     @Test

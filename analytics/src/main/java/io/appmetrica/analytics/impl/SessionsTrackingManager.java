@@ -5,7 +5,6 @@ import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
-import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
 import io.appmetrica.analytics.impl.utils.ApiProxyThread;
 import io.appmetrica.analytics.impl.utils.ConditionalExecutor;
 import io.appmetrica.analytics.logger.internal.YLogger;
@@ -28,12 +27,11 @@ public class SessionsTrackingManager {
     private final ActivityAppearedListener activityAppearedListener;
 
     public SessionsTrackingManager(@NonNull ActivityLifecycleManager activityLifecycleManager,
-                                   @NonNull ICommonExecutor apiProxyExecutor,
                                    @NonNull ActivityAppearedListener activityAppearedListener) {
         this(
                 activityLifecycleManager,
                 activityAppearedListener,
-                new ConditionalExecutor<MainReporter>(apiProxyExecutor),
+                new ConditionalExecutor<MainReporter>(),
                 new ActivityStateManager()
         );
     }

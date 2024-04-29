@@ -12,11 +12,6 @@ public class ClientExecutorFactory {
     }
 
     @NonNull
-    public ExecutorWrapper createApiProxyExecutor() {
-        return new ExecutorWrapper(NamedThreadFactory.CLIENT_API_PROXY_THREAD);
-    }
-
-    @NonNull
     public ExecutorWrapper createReportsSenderExecutor() {
         return new ExecutorWrapper(NamedThreadFactory.CLIENT_REPORTS_SENDER_THREAD);
     }

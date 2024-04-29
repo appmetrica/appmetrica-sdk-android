@@ -8,26 +8,25 @@ import io.appmetrica.analytics.IModuleReporter
 import io.appmetrica.analytics.ModuleEvent
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor
 import io.appmetrica.analytics.coreutils.internal.executors.SafeRunnable
+import io.appmetrica.analytics.impl.ClientServiceLocator
 import io.appmetrica.analytics.impl.IMainReporter
 import io.appmetrica.analytics.impl.attribution.ExternalAttributionFromModule
 import io.appmetrica.analytics.impl.proxy.synchronous.ModulesSynchronousStageExecutor
 import io.appmetrica.analytics.impl.proxy.validation.ModulesBarrier
 
 class ModulesProxy @VisibleForTesting constructor(
-    private val executor: ICommonExecutor,
     private val provider: AppMetricaFacadeProvider,
     private val modulesBarrier: ModulesBarrier,
     private val synchronousStageExecutor: ModulesSynchronousStageExecutor,
 ) {
-    private val TAG = "[ModulesProxy]"
 
-    constructor(executor: ICommonExecutor) : this(
-        executor,
+    private val executor: ICommonExecutor = ClientServiceLocator.getInstance().clientExecutorProvider.defaultExecutor
+
+    constructor() : this(
         AppMetricaFacadeProvider()
     )
 
-    private constructor(executor: ICommonExecutor, provider: AppMetricaFacadeProvider) : this(
-        executor,
+    private constructor(provider: AppMetricaFacadeProvider) : this(
         provider,
         ModulesBarrier(provider),
         ModulesSynchronousStageExecutor()

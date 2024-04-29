@@ -9,7 +9,6 @@ import io.appmetrica.analytics.AppMetricaConfig;
 import io.appmetrica.analytics.ExternalAttribution;
 import io.appmetrica.analytics.PreloadInfo;
 import io.appmetrica.analytics.ValidationException;
-import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
 import io.appmetrica.analytics.impl.crash.ANRMonitor;
 import io.appmetrica.analytics.impl.crash.PluginErrorDetailsConverter;
 import io.appmetrica.analytics.impl.crash.client.AllThreads;
@@ -25,6 +24,7 @@ import io.appmetrica.analytics.impl.startup.StartupHelper;
 import io.appmetrica.analytics.impl.utils.LoggerStorage;
 import io.appmetrica.analytics.impl.utils.PublicLogger;
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule;
+import io.appmetrica.analytics.testutils.StubbedBlockingExecutor;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,8 +37,6 @@ import org.mockito.Captor;
 import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 import org.robolectric.ParameterizedRobolectricTestRunner;
 import org.robolectric.RobolectricTestRunner;
 
@@ -48,7 +46,6 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.atLeast;
-import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
@@ -73,8 +70,6 @@ public class MainReporterTest extends BaseReporterTest {
     private UnhandledSituationReporterProvider mAppmetricaReporterProvider;
     @Mock
     private UnhandledSituationReporterProvider mPushReporterProvider;
-    @Mock
-    private ICommonExecutor mExecutor;
     @Captor
     private ArgumentCaptor<AppStatusMonitor.Observer> mObserverArgumentCaptor;
     @Mock
@@ -106,13 +101,8 @@ public class MainReporterTest extends BaseReporterTest {
         when(mStartupHelper.getDeviceId()).thenReturn(DEVICE_ID);
         when(mAppmetricaReporterProvider.getReporter()).thenReturn(mAppmetricaReporter);
         when(mPushReporterProvider.getReporter()).thenReturn(mPushReporter);
-        doAnswer(new Answer() {
-            @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
-                ((Runnable) invocation.getArgument(0)).run();
-                return null;
-            }
-        }).when(mExecutor).execute(any(Runnable.class));
+        when(ClientServiceLocator.getInstance().getClientExecutorProvider().getDefaultExecutor())
+            .thenReturn(new StubbedBlockingExecutor());
     }
 
     @Test
@@ -433,7 +423,6 @@ public class MainReporterTest extends BaseReporterTest {
                 processDetector,
                 mAppmetricaReporterProvider,
                 mPushReporterProvider,
-                mExecutor,
                 mExtraMetaInfoRetriever,
                 activityStateManager,
                 pluginErrorDetailsConverter,
@@ -728,7 +717,6 @@ public class MainReporterTest extends BaseReporterTest {
                     processDetector,
                     mock(UnhandledSituationReporterProvider.class),
                     mock(UnhandledSituationReporterProvider.class),
-                    mock(ICommonExecutor.class),
                     mock(ExtraMetaInfoRetriever.class),
                     mock(ActivityStateManager.class),
                     mock(PluginErrorDetailsConverter.class),

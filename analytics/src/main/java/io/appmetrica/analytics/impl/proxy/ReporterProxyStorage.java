@@ -6,14 +6,16 @@ import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.ReporterConfig;
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
 import io.appmetrica.analytics.impl.ClientServiceLocator;
+import io.appmetrica.analytics.logger.internal.YLogger;
 import java.util.HashMap;
 import java.util.Map;
 
 public class ReporterProxyStorage {
 
+    private static final String TAG = "[ReporterProxyStorage]";
+
     private static class Holder {
         private static final ReporterProxyStorage sInstance = new ReporterProxyStorage(
-                ClientServiceLocator.getInstance().getApiProxyExecutor(),
                 new AppMetricaFacadeProvider()
         );
     }
@@ -22,8 +24,6 @@ public class ReporterProxyStorage {
             new HashMap<String, ReporterExtendedProxy>();
     @NonNull
     private final AppMetricaFacadeProvider mFacadeProvider;
-    @NonNull
-    private final ICommonExecutor mExecutor;
 
     @NonNull
     public static ReporterProxyStorage getInstance() {
@@ -31,23 +31,25 @@ public class ReporterProxyStorage {
     }
 
     @VisibleForTesting
-    ReporterProxyStorage(@NonNull ICommonExecutor executor, @NonNull AppMetricaFacadeProvider provider) {
-        mExecutor = executor;
+    ReporterProxyStorage(@NonNull AppMetricaFacadeProvider provider) {
         mFacadeProvider = provider;
     }
 
     @NonNull
     private ReporterExtendedProxy prepareImplAndCreate(@NonNull final Context context, @NonNull String apiKey) {
-        //workaround for Ad's SDK workaround
+        YLogger.info(TAG, "prepareImplAndCreate");
+        ICommonExecutor executor = ClientServiceLocator.getInstance().getClientExecutorProvider().getDefaultExecutor();
         if (mFacadeProvider.peekInitializedImpl() == null) {
-            mExecutor.execute(new Runnable() {
+            YLogger.info(TAG, "needs warm up core");
+            executor.execute(new Runnable() {
                 @Override
                 public void run() {
+                    YLogger.info(TAG, "getInitializedImpl");
                     mFacadeProvider.getInitializedImpl(context);
                 }
             });
         }
-        ReporterExtendedProxy proxy = new ReporterExtendedProxy(mExecutor, context, apiKey);
+        ReporterExtendedProxy proxy = new ReporterExtendedProxy(executor, context, apiKey);
         mReportersProxies.put(apiKey, proxy);
         return proxy;
     }
@@ -69,11 +71,14 @@ public class ReporterProxyStorage {
 
     @NonNull
     public ReporterExtendedProxy getOrCreate(@NonNull final Context context, @NonNull ReporterConfig config) {
+        YLogger.info(TAG, "getOrCreate");
         ReporterExtendedProxy proxy = mReportersProxies.get(config.apiKey);
         if (proxy == null) {
+            YLogger.info(TAG, "needs create proxy");
             synchronized (mReportersProxies) {
                 proxy = mReportersProxies.get(config.apiKey);
                 if (proxy == null) {
+                    YLogger.info(TAG, "Create proxy...");
                     proxy = prepareImplAndCreate(context, config.apiKey);
                     proxy.activate(config);
                 }

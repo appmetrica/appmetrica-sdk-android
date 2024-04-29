@@ -24,6 +24,7 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
+import org.mockito.MockedConstruction;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
@@ -42,8 +43,6 @@ public class AppMetricaFacadeObjectTest extends CommonTest {
     @Mock
     private AppMetricaImpl mImpl;
     @Mock
-    private AppMetricaCoreComponentsProvider coreComponentsProvider;
-    @Mock
     private IHandlerExecutor executor;
     @Mock
     private ClientExecutorProvider clientExecutorProvider;
@@ -59,52 +58,69 @@ public class AppMetricaFacadeObjectTest extends CommonTest {
     public final MockedConstructionRule<ClientMigrationManager> clientMigrationManagerMockedConstructionRule =
         new MockedConstructionRule<>(ClientMigrationManager.class);
 
+    @Rule
+    public final MockedConstructionRule<AppMetricaCoreComponentsProvider> coreComponentsProviderConstructionRule =
+        new MockedConstructionRule<>(
+            AppMetricaCoreComponentsProvider.class,
+            new MockedConstruction.MockInitializer<AppMetricaCoreComponentsProvider>() {
+                @Override
+                public void prepare(AppMetricaCoreComponentsProvider mock,
+                                    MockedConstruction.Context context) throws Throwable {
+                    when(mock.getImpl(mContext, mCore)).thenReturn(mImpl);
+                    when(mock.getCore(mContext, clientExecutorProvider)).thenReturn(mCore);
+                }
+            }
+        );
+    private AppMetricaCoreComponentsProvider coreComponentsProvider;
+
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.openMocks(this);
         mContext = RuntimeEnvironment.getApplication();
+        when(ClientServiceLocator.getInstance().getClientExecutorProvider()).thenReturn(clientExecutorProvider);
         when(clientExecutorProvider.getDefaultExecutor()).thenReturn(executor);
-        when(coreComponentsProvider.getImpl(mContext, mCore)).thenReturn(mImpl);
         AppMetricaFacade.killInstance();
-        mFacade = new AppMetricaFacade(
-                mContext, coreComponentsProvider, mCore, ClientServiceLocator.getInstance().getClientExecutorProvider()
-        );
-    }
-
-    @Test(expected = RuntimeException.class)
-    public void exceptionWhileCreatingImpl() throws Exception {
-        when(coreComponentsProvider.getImpl(mContext, mCore)).thenThrow(new NullPointerException());
-        AppMetricaFacade.killInstance();
-        mFacade = new AppMetricaFacade(
-                mContext, coreComponentsProvider, mCore, mClientServiceLocatorRule.clientExecutorProvider
-        );
-        mFacade.getClids();
+        mFacade = new AppMetricaFacade(mContext);
+        coreComponentsProvider = coreComponentsProviderConstructionRule.getConstructionMock().constructed().get(0);
     }
 
     @Test
     public void futureIsInited() {
+        mFacade.init(false);
+        assertThat(mFacade.isFullyInitialized()).isTrue();
+    }
+
+    @Test
+    public void futureIsInitedAsynchronously() {
+        mFacade.init(true);
+        assertThat(mFacade.isFullyInitialized()).isFalse();
+        verify(executor, times(2)).execute(runnableArgumentCaptor.capture());
+        for (Runnable runnable : runnableArgumentCaptor.getAllValues()) {
+            runnable.run();
+        }
         assertThat(mFacade.isFullyInitialized()).isTrue();
     }
 
     @Test
     public void futureIsNotInited() {
-        mFacade = new AppMetricaFacade(mContext, coreComponentsProvider, mCore, clientExecutorProvider);
+        mFacade.init(true);
         // One for warm up uuid and one more for full init future
         verify(executor, times(2)).execute(runnableArgumentCaptor.capture());
         assertThat(mFacade.isFullyInitialized()).isFalse();
         runnableArgumentCaptor.getAllValues().get(0).run();
 
         //One from setUp and one more - at this test
-        verify(clientMigrationManagerMockedConstructionRule.getConstructionMock().constructed().get(1))
+        verify(clientMigrationManagerMockedConstructionRule.getConstructionMock().constructed().get(0))
             .checkMigration(mContext);
-        assertThat(clientMigrationManagerMockedConstructionRule.getConstructionMock().constructed()).hasSize(2);
+        assertThat(clientMigrationManagerMockedConstructionRule.getConstructionMock().constructed()).hasSize(1);
         assertThat(clientMigrationManagerMockedConstructionRule.getArgumentInterceptor().flatArguments())
             .containsOnly(mContext);
-        verify(ClientServiceLocator.getInstance().getMultiProcessSafeUuidProvider(mContext), times(2)).readUuid();
+        verify(ClientServiceLocator.getInstance().getMultiProcessSafeUuidProvider(mContext), times(1)).readUuid();
     }
 
     @Test
     public void activateCore() {
+        mFacade.init(false);
         AppMetricaConfig config = mock(AppMetricaConfig.class);
         mFacade.activateCore(config);
         verify(mCore).activate(config, mFacade);
@@ -112,6 +128,7 @@ public class AppMetricaFacadeObjectTest extends CommonTest {
 
     @Test
     public void activateFull() {
+        mFacade.init(false);
         AppMetricaConfig originalConfig = mock(AppMetricaConfig.class);
         AppMetricaConfig config = mock(AppMetricaConfig.class);
         mFacade.activateFull(originalConfig, config);
@@ -120,6 +137,7 @@ public class AppMetricaFacadeObjectTest extends CommonTest {
 
     @Test
     public void getMainReporterApiConsumerProvider() {
+        mFacade.init(false);
         MainReporterApiConsumerProvider mainReporterApiConsumerProvider = mock(MainReporterApiConsumerProvider.class);
         when(mImpl.getMainReporterApiConsumerProvider()).thenReturn(mainReporterApiConsumerProvider);
         assertThat(mFacade.getMainReporterApiConsumerProvider()).isSameAs(mainReporterApiConsumerProvider);
@@ -127,6 +145,7 @@ public class AppMetricaFacadeObjectTest extends CommonTest {
 
     @Test
     public void requestDeferredDeeplinkParameters() {
+        mFacade.init(false);
         DeferredDeeplinkParametersListener listener = mock(DeferredDeeplinkParametersListener.class);
         mFacade.requestDeferredDeeplinkParameters(listener);
         verify(mImpl).requestDeferredDeeplinkParameters(listener);
@@ -134,6 +153,7 @@ public class AppMetricaFacadeObjectTest extends CommonTest {
 
     @Test
     public void requestDeferredDeeplink() {
+        mFacade.init(false);
         DeferredDeeplinkListener listener = mock(DeferredDeeplinkListener.class);
         mFacade.requestDeferredDeeplink(listener);
         verify(mImpl).requestDeferredDeeplink(listener);
@@ -141,6 +161,7 @@ public class AppMetricaFacadeObjectTest extends CommonTest {
 
     @Test
     public void activateReporter() {
+        mFacade.init(false);
         ReporterConfig config = mock(ReporterConfig.class);
         mFacade.activateReporter(config);
         verify(mImpl).activateReporter(config);
@@ -148,6 +169,7 @@ public class AppMetricaFacadeObjectTest extends CommonTest {
 
     @Test
     public void getReporter() {
+        mFacade.init(false);
         ReporterConfig config = mock(ReporterConfig.class);
         IReporterExtended reporter = mock(IReporterExtended.class);
         when(mImpl.getReporter(config)).thenReturn(reporter);
@@ -156,6 +178,7 @@ public class AppMetricaFacadeObjectTest extends CommonTest {
 
     @Test
     public void getDeviceId() {
+        mFacade.init(false);
         String deviceId = "3467583476";
         when(mImpl.getDeviceId()).thenReturn(deviceId);
         assertThat(mFacade.getDeviceId()).isEqualTo(deviceId);
@@ -163,6 +186,7 @@ public class AppMetricaFacadeObjectTest extends CommonTest {
 
     @Test
     public void getClids() {
+        mFacade.init(false);
         Map<String, String> clids = new HashMap<String, String>();
         clids.put("key1", "value1");
         clids.put("key2", "value2");
@@ -172,6 +196,7 @@ public class AppMetricaFacadeObjectTest extends CommonTest {
 
     @Test
     public void getCachedAdvIdentifiers() {
+        mFacade.init(false);
         AdvIdentifiersResult result = mock(AdvIdentifiersResult.class);
         when(mImpl.getCachedAdvIdentifiers()).thenReturn(result);
         assertThat(mFacade.getCachedAdvIdentifiers()).isSameAs(result);
@@ -179,6 +204,7 @@ public class AppMetricaFacadeObjectTest extends CommonTest {
 
     @Test
     public void requestStartupParamsWithStartupParamsCallback() {
+        mFacade.init(false);
         StartupParamsCallback callback = mock(StartupParamsCallback.class);
         List<String> params = Arrays.asList(Constants.StartupParamsCallbackKeys.DEVICE_ID, Constants.StartupParamsCallbackKeys.UUID);
         mFacade.requestStartupParams(callback, params);
@@ -187,6 +213,7 @@ public class AppMetricaFacadeObjectTest extends CommonTest {
 
     @Test
     public void getClientTimeTracker() {
+        mFacade.init(false);
         ClientTimeTracker clientTimeTracker = mock(ClientTimeTracker.class);
         when(mCore.getClientTimeTracker()).thenReturn(clientTimeTracker);
         assertThat(mFacade.getClientTimeTracker()).isSameAs(clientTimeTracker);
@@ -194,6 +221,7 @@ public class AppMetricaFacadeObjectTest extends CommonTest {
 
     @Test
     public void getFeatures() {
+        mFacade.init(false);
         FeaturesResult features = mock(FeaturesResult.class);
         when(mImpl.getFeatures()).thenReturn(features);
         assertThat(mFacade.getFeatures()).isSameAs(features);

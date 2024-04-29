@@ -2,41 +2,46 @@ package io.appmetrica.analytics.impl.stub;
 
 import android.os.Handler;
 import io.appmetrica.analytics.AppMetricaConfig;
-import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
 import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor;
+import io.appmetrica.analytics.impl.ClientServiceLocator;
 import io.appmetrica.analytics.impl.ClientTimeTracker;
 import io.appmetrica.analytics.impl.IReporterFactoryProvider;
 import io.appmetrica.analytics.impl.utils.executors.ClientExecutorProvider;
+import io.appmetrica.analytics.testutils.ClientServiceLocatorRule;
 import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.analytics.testutils.MockedConstructionRule;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
 
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
-public class AppAppMetricaServiceCoreStubTest extends CommonTest {
+public class AppMetricaServiceCoreStubTest extends CommonTest {
 
     @Mock
     private Handler handler;
     @Mock
     private IHandlerExecutor handlerExecutor;
     @Mock
-    private ICommonExecutor apiProxyExecutor;
-    @Mock
     private ClientExecutorProvider clientExecutorProvider;
-    @Mock
-    private ClientTimeTracker clientTimeTracker;
     @Mock
     private AppMetricaConfig appMetricaConfig;
     @Mock
     private IReporterFactoryProvider reporterFactoryProvider;
+
+    @Rule
+    public ClientServiceLocatorRule clientServiceLocatorRule = new ClientServiceLocatorRule();
+
+    @Rule
+    public MockedConstructionRule<ClientTimeTracker> clientTimeTrackerMockedConstructionRule =
+        new MockedConstructionRule<>(ClientTimeTracker.class);
 
     private AppMetricaCoreStub stub;
 
@@ -44,22 +49,11 @@ public class AppAppMetricaServiceCoreStubTest extends CommonTest {
     public void setUp() throws Exception {
         MockitoAnnotations.openMocks(this);
 
+        when(ClientServiceLocator.getInstance().getClientExecutorProvider()).thenReturn(clientExecutorProvider);
         when(clientExecutorProvider.getDefaultExecutor()).thenReturn(handlerExecutor);
-        when(clientExecutorProvider.getApiProxyExecutor()).thenReturn(apiProxyExecutor);
         when(handlerExecutor.getHandler()).thenReturn(handler);
 
-        stub = new AppMetricaCoreStub(handlerExecutor, handler, apiProxyExecutor, clientTimeTracker);
-    }
-
-    @Test
-    public void constructor() throws Exception {
-        ObjectPropertyAssertions(new AppMetricaCoreStub(clientExecutorProvider))
-                .withPrivateFields(true)
-                .checkField("executor", handlerExecutor)
-                .checkField("metricaHandler", handler)
-                .checkField("apiProxyExecutor", apiProxyExecutor)
-                .checkFieldsNonNull("clientTimeTracker")
-                .checkAll();
+        stub = new AppMetricaCoreStub();
     }
 
     @Test
@@ -75,7 +69,10 @@ public class AppAppMetricaServiceCoreStubTest extends CommonTest {
 
     @Test
     public void getClientTimeTracker() {
-        assertThat(stub.getClientTimeTracker()).isEqualTo(clientTimeTracker);
+        assertThat(stub.getClientTimeTracker())
+            .isEqualTo(clientTimeTrackerMockedConstructionRule.getConstructionMock().constructed().get(0));
+        assertThat(clientTimeTrackerMockedConstructionRule.getConstructionMock().constructed()).hasSize(1);
+        assertThat(clientTimeTrackerMockedConstructionRule.getArgumentInterceptor().flatArguments()).isEmpty();
     }
 
     @Test

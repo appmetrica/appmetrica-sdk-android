@@ -5,12 +5,15 @@ import io.appmetrica.analytics.AdRevenue
 import io.appmetrica.analytics.AppMetrica
 import io.appmetrica.analytics.ModuleEvent
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor
+import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor
 import io.appmetrica.analytics.impl.AppMetricaFacade
+import io.appmetrica.analytics.impl.ClientServiceLocator
 import io.appmetrica.analytics.impl.MainReporter
 import io.appmetrica.analytics.impl.MainReporterApiConsumerProvider
 import io.appmetrica.analytics.impl.attribution.ExternalAttributionFromModule
 import io.appmetrica.analytics.impl.proxy.synchronous.ModulesSynchronousStageExecutor
 import io.appmetrica.analytics.impl.proxy.validation.ModulesBarrier
+import io.appmetrica.analytics.testutils.ClientServiceLocatorRule
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.MockedStaticRule
 import io.appmetrica.analytics.testutils.constructionRule
@@ -36,13 +39,13 @@ import java.util.UUID
 class ModulesProxyTest : CommonTest() {
 
     private val provider: AppMetricaFacadeProvider = mock()
-    private val executor: ICommonExecutor = mock()
     private val modulesBarrier: ModulesBarrier = mock()
     private val mainReporter: MainReporter = mock()
     private val mainReporterApiConsumerProvider: MainReporterApiConsumerProvider = mock()
     private val facade: AppMetricaFacade = mock()
     private val reporterProxyStorageImpl: ReporterProxyStorage = mock()
     private val synchronousStageExecutor: ModulesSynchronousStageExecutor = mock()
+    private val executor: IHandlerExecutor = mock()
 
     private val runnableArgumentCaptor: KArgumentCaptor<Runnable> = argumentCaptor()
 
@@ -55,6 +58,9 @@ class ModulesProxyTest : CommonTest() {
     @get:Rule
     val externalAttributionFromModuleMockedConstructionRule = constructionRule<ExternalAttributionFromModule>()
 
+    @get:Rule
+    val clientServiceLocatorRule = ClientServiceLocatorRule()
+
     private lateinit var proxy: ModulesProxy
 
     @Before
@@ -62,9 +68,9 @@ class ModulesProxyTest : CommonTest() {
         whenever(provider.peekInitializedImpl()).thenReturn(facade)
         whenever(facade.mainReporterApiConsumerProvider).thenReturn(mainReporterApiConsumerProvider)
         whenever(mainReporterApiConsumerProvider.mainReporter).thenReturn(mainReporter)
+        whenever(ClientServiceLocator.getInstance().clientExecutorProvider.defaultExecutor).thenReturn(executor)
 
         proxy = ModulesProxy(
-            executor,
             provider,
             modulesBarrier,
             synchronousStageExecutor

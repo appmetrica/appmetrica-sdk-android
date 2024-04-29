@@ -14,12 +14,14 @@ import io.appmetrica.analytics.DeferredDeeplinkListener;
 import io.appmetrica.analytics.DeferredDeeplinkParametersListener;
 import io.appmetrica.analytics.ReporterConfig;
 import io.appmetrica.analytics.StartupParamsCallback;
+import io.appmetrica.analytics.coreutils.internal.executors.BlockingExecutor;
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade;
-import io.appmetrica.analytics.impl.utils.executors.ClientExecutorProvider;
 import io.appmetrica.analytics.logger.internal.YLogger;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
+import java.util.concurrent.Executor;
 import java.util.concurrent.FutureTask;
 
 public class AppMetricaFacade implements IReporterFactoryProvider {
@@ -37,53 +39,39 @@ public class AppMetricaFacade implements IReporterFactoryProvider {
     private static volatile AppMetricaFacade sInstance;
     @NonNull
     private final IAppMetricaCore mCore;
-    @NonNull
-    private final ClientExecutorProvider mClientExecutorProvider;
     private static volatile boolean sActivated = false;
 
     @AnyThread
-    private AppMetricaFacade(@NonNull final Context context) {
-        this(
-                context.getApplicationContext(),
-                new AppMetricaCoreComponentsProvider(),
-                ClientServiceLocator.getInstance().getClientExecutorProvider()
-        );
-    }
-
-    private AppMetricaFacade(@NonNull Context context,
-                                @NonNull AppMetricaCoreComponentsProvider coreComponentsProvider,
-                                @NonNull ClientExecutorProvider clientExecutorProvider) {
-        this(
-                context,
-                coreComponentsProvider,
-                coreComponentsProvider.getCore(context, clientExecutorProvider),
-                clientExecutorProvider
-        );
-    }
-
-    @VisibleForTesting
-    AppMetricaFacade(@NonNull final Context context,
-                        @NonNull AppMetricaCoreComponentsProvider coreComponentsProvider,
-                        @NonNull IAppMetricaCore core,
-                        @NonNull ClientExecutorProvider clientExecutorProvider) {
+    public AppMetricaFacade(@NonNull final Context context) {
         mContext = context;
-        this.coreComponentsProvider = coreComponentsProvider;
-        mCore = core;
-        mClientExecutorProvider = clientExecutorProvider;
-        mFullInitFuture = new FutureTask<IAppMetricaImpl>(new Callable<IAppMetricaImpl>() {
+        coreComponentsProvider = new AppMetricaCoreComponentsProvider();
+        mCore = coreComponentsProvider.getCore(context, ClientServiceLocator.getInstance().getClientExecutorProvider());
+
+        mFullInitFuture = new FutureTask<>(new Callable<IAppMetricaImpl>() {
             @Override
-            public IAppMetricaImpl call() throws Exception {
+            public IAppMetricaImpl call() {
+                YLogger.info(TAG, "createImpl");
                 return createImpl();
             }
         });
-        mClientExecutorProvider.getDefaultExecutor().execute(new Runnable() {
+    }
+
+    public void init(boolean async) {
+        Executor executorForInit = async
+            ? ClientServiceLocator.getInstance().getClientExecutorProvider().getDefaultExecutor()
+            : new BlockingExecutor();
+
+        executorForInit.execute(new Runnable() {
             @Override
             public void run() {
-                new ClientMigrationManager(context).checkMigration(context);
-                ClientServiceLocator.getInstance().getMultiProcessSafeUuidProvider(context).readUuid();
+                YLogger.info(TAG, "Check client migration");
+                new ClientMigrationManager(mContext).checkMigration(mContext);
+                YLogger.info(TAG, "Warm up uuid");
+                ClientServiceLocator.getInstance().getMultiProcessSafeUuidProvider(mContext).readUuid();
             }
         });
-        mClientExecutorProvider.getDefaultExecutor().execute(mFullInitFuture);
+        YLogger.info(TAG, "schedule createImpl");
+        executorForInit.execute(mFullInitFuture);
     }
 
     @AnyThread
@@ -94,27 +82,34 @@ public class AppMetricaFacade implements IReporterFactoryProvider {
 
     @AnyThread
     @NonNull
-    public static AppMetricaFacade getInstance(@NonNull final Context context) {
-        if (sInstance == null) {
+    public static AppMetricaFacade getInstance(
+        @NonNull final Context context,
+        boolean asyncInit // For calls from non default executor
+    ) {
+        YLogger.info(TAG, "getInstance: %s", Arrays.toString(Thread.currentThread().getStackTrace()));
+        AppMetricaFacade localCopy = sInstance;
+        if (localCopy == null) {
             synchronized (AppMetricaFacade.class) {
-                if (sInstance == null) {
-                    sInstance = new AppMetricaFacade(context);
-                    sInstance.onInstanceCreated();
+                localCopy = sInstance;
+                if (localCopy == null) {
+                    YLogger.info(TAG, "needs create facade");
+                    localCopy = new AppMetricaFacade(context);
+                    localCopy.init(asyncInit);
+                    localCopy.onInstanceCreated();
+                    sInstance = localCopy;
                 }
             }
         }
-        return sInstance;
+        return localCopy;
     }
 
     private void onInstanceCreated() {
-        mClientExecutorProvider.getDefaultExecutor().execute(new Runnable() {
+        YLogger.info(TAG, "onInstanceCreated");
+        ClientServiceLocator.getInstance().getClientExecutorProvider().getDefaultExecutor().execute(new Runnable() {
             @Override
             public void run() {
-                mClientExecutorProvider.getApiProxyExecutor().execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        AppMetricaSelfReportFacade.onInitializationFinished(mContext);                    }
-                });
+                YLogger.info(TAG, "onInitializationFinished");
+                AppMetricaSelfReportFacade.onInitializationFinished(mContext);
             }
         });
     }
@@ -131,8 +126,9 @@ public class AppMetricaFacade implements IReporterFactoryProvider {
 
     @AnyThread
     public synchronized static boolean isInitializedForApp() {
-        return sInstance != null && sInstance.isFullyInitialized() &&
-                sInstance.peekMainReporterApiConsumerProvider() != null;
+        AppMetricaFacade localCopy = sInstance;
+        return localCopy != null && localCopy.isFullyInitialized() &&
+            localCopy.peekMainReporterApiConsumerProvider() != null;
     }
 
     @WorkerThread
@@ -258,6 +254,7 @@ public class AppMetricaFacade implements IReporterFactoryProvider {
     @NonNull
     private IAppMetricaImpl getImpl() {
         try {
+            YLogger.info(TAG, "getImpl: %s", Arrays.toString(Thread.currentThread().getStackTrace()));
             return mFullInitFuture.get();
         } catch (Exception e) {
             YLogger.e(e, TAG);

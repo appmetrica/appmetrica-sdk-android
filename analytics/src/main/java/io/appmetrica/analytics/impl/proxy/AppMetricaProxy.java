@@ -19,7 +19,6 @@ import io.appmetrica.analytics.ExternalAttribution;
 import io.appmetrica.analytics.ReporterConfig;
 import io.appmetrica.analytics.Revenue;
 import io.appmetrica.analytics.StartupParamsCallback;
-import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
 import io.appmetrica.analytics.coreutils.internal.collection.CollectionUtils;
 import io.appmetrica.analytics.ecommerce.ECommerceEvent;
 import io.appmetrica.analytics.impl.ActivityLifecycleManager;
@@ -55,22 +54,19 @@ public final class AppMetricaProxy extends BaseAppMetricaProxy {
     @NonNull
     private final SessionsTrackingManager sessionsTrackingManager;
 
-    public AppMetricaProxy(@NonNull ICommonExecutor executor) {
+    public AppMetricaProxy() {
         this(
             new AppMetricaFacadeProvider(),
-            executor,
             new WebViewJsInterfaceHandler()
         );
     }
 
     private AppMetricaProxy(
         @NonNull AppMetricaFacadeProvider provider,
-        @NonNull ICommonExecutor executor,
         @NonNull WebViewJsInterfaceHandler webViewJsInterfaceHandler
     ) {
         this(
             provider,
-            executor,
             new Barrier(provider),
             new SilentActivationValidator(provider),
             webViewJsInterfaceHandler,
@@ -84,7 +80,6 @@ public final class AppMetricaProxy extends BaseAppMetricaProxy {
     @VisibleForTesting
     AppMetricaProxy(
         @NonNull AppMetricaFacadeProvider provider,
-        @NonNull ICommonExecutor executor,
         @NonNull Barrier barrier,
         @NonNull SilentActivationValidator silentActivationValidator,
         @NonNull WebViewJsInterfaceHandler webViewJsInterfaceHandler,
@@ -95,7 +90,6 @@ public final class AppMetricaProxy extends BaseAppMetricaProxy {
     ) {
         super(
             provider,
-            executor,
             webViewJsInterfaceHandler,
             reporterProxyStorage,
             defaultOneShotConfig

@@ -1,32 +1,20 @@
 package io.appmetrica.analytics.impl.proxy
 
 import android.util.Log
-import androidx.annotation.VisibleForTesting
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor
+import io.appmetrica.analytics.impl.ClientServiceLocator
 import io.appmetrica.analytics.impl.IMainReporter
 import io.appmetrica.analytics.impl.SdkUtils
 import io.appmetrica.analytics.impl.proxy.synchronous.PluginsSynchronousStageExecutor
 import io.appmetrica.analytics.impl.proxy.validation.PluginsBarrier
 import io.appmetrica.analytics.plugins.PluginErrorDetails
 
-internal class AppMetricaPluginsProxy @VisibleForTesting constructor(
-    private val executor: ICommonExecutor,
-    private val provider: AppMetricaFacadeProvider,
-    private val barrier: PluginsBarrier,
-    private val synchronousStageExecutor: PluginsSynchronousStageExecutor
-) {
+internal class AppMetricaPluginsProxy {
 
-    constructor(executor: ICommonExecutor) : this(
-        executor,
-        AppMetricaFacadeProvider()
-    )
-
-    private constructor(executor: ICommonExecutor, provider: AppMetricaFacadeProvider) : this(
-        executor,
-        provider,
-        PluginsBarrier(provider),
-        PluginsSynchronousStageExecutor()
-    )
+    private val executor: ICommonExecutor = ClientServiceLocator.getInstance().clientExecutorProvider.defaultExecutor
+    private val provider = AppMetricaFacadeProvider()
+    private val barrier = PluginsBarrier(provider)
+    private val synchronousStageExecutor = PluginsSynchronousStageExecutor()
 
     fun reportUnhandledException(errorDetails: PluginErrorDetails?) {
         barrier.reportUnhandledException(errorDetails)

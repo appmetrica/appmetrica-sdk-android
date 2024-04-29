@@ -19,12 +19,6 @@ public class ClientExecutorFactoryTest extends CommonTest {
     }
 
     @Test
-    public void testCreateApiProxyExecutor() {
-        assertThat(mClientExecutorFactory.createApiProxyExecutor().getLooper().getThread().getName())
-                .startsWith("IAA-CAPT");
-    }
-
-    @Test
     public void testCreateReportsSenderExecutor() {
         assertThat(mClientExecutorFactory.createReportsSenderExecutor().getLooper().getThread().getName())
                 .startsWith("IAA-CRS");

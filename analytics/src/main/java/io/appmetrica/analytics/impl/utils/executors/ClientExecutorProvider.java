@@ -14,26 +14,12 @@ public class ClientExecutorProvider {
     @Nullable
     private volatile IHandlerExecutor mDefaultExecutorWrapper;
     @Nullable
-    private volatile ICommonExecutor mApiProxyExecutor;
-    @Nullable
     private volatile ICommonExecutor mReportSenderExecutor;
     @Nullable
     private volatile Handler mMainHandler;
 
     public ClientExecutorProvider() {
         this(new ClientExecutorFactory());
-    }
-
-    @NonNull
-    public ICommonExecutor getApiProxyExecutor() {
-        if (mApiProxyExecutor == null) {
-            synchronized (this) {
-                if (mApiProxyExecutor == null) {
-                    mApiProxyExecutor = mThreadFactory.createApiProxyExecutor();
-                }
-            }
-        }
-        return mApiProxyExecutor;
     }
 
     @NonNull

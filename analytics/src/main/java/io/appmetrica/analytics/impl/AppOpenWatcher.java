@@ -6,9 +6,7 @@ import android.text.TextUtils;
 import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.backport.FunctionWithThrowable;
-import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
 import io.appmetrica.analytics.coreutils.internal.system.SystemServiceUtils;
 import io.appmetrica.analytics.impl.utils.ApiProxyThread;
 import io.appmetrica.analytics.logger.internal.YLogger;
@@ -24,25 +22,13 @@ public class AppOpenWatcher implements ActivityLifecycleManager.Listener {
         new ArrayList<NonNullConsumer<DeeplinkConsumer>>();
     @Nullable
     private volatile DeeplinkConsumer deeplinkConsumer = null;
-    @NonNull
-    private final ActivityLifecycleManager activityLifecycleManager;
-    @NonNull
-    private final ICommonExecutor apiProxyExecutor;
-
-    public AppOpenWatcher(@NonNull ICommonExecutor apiProxyExecutor) {
-        this(apiProxyExecutor, ClientServiceLocator.getInstance().getActivityLifecycleManager());
-    }
-
-    @VisibleForTesting
-    AppOpenWatcher(@NonNull ICommonExecutor apiProxyExecutor,
-                   @NonNull ActivityLifecycleManager activityLifecycleManager) {
-        this.apiProxyExecutor = apiProxyExecutor;
-        this.activityLifecycleManager = activityLifecycleManager;
-    }
 
     public void startWatching() {
         YLogger.info(TAG, "Start watching app opens");
-        activityLifecycleManager.registerListener(this, ActivityLifecycleManager.ActivityEvent.CREATED);
+        ClientServiceLocator.getInstance().getActivityLifecycleManager().registerListener(
+            this,
+            ActivityLifecycleManager.ActivityEvent.CREATED
+        );
     }
 
     @ApiProxyThread
@@ -73,7 +59,7 @@ public class AppOpenWatcher implements ActivityLifecycleManager.Listener {
         if (deeplinkConsumerCopy == null) {
             savedCommands.add(command);
         } else {
-            apiProxyExecutor.execute(new Runnable() {
+            ClientServiceLocator.getInstance().getClientExecutorProvider().getDefaultExecutor().execute(new Runnable() {
                 @Override
                 public void run() {
                     command.consume(deeplinkConsumerCopy);

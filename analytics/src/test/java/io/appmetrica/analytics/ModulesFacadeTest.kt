@@ -3,9 +3,11 @@ package io.appmetrica.analytics
 import android.content.Context
 import io.appmetrica.analytics.impl.ClientServiceLocator
 import io.appmetrica.analytics.impl.proxy.ModulesProxy
+import io.appmetrica.analytics.testutils.ClientServiceLocatorRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.doReturn
@@ -21,16 +23,12 @@ class ModulesFacadeTest {
     private val proxy: ModulesProxy = mock()
     private val moduleEvent: ModuleEvent = mock()
 
+    @get:Rule
+    val clientServiceLocatorRule = ClientServiceLocatorRule()
+
     @Before
     fun setUp() {
         ModulesFacade.setProxy(proxy)
-    }
-
-    @After
-    fun tearDown() {
-        ModulesFacade.setProxy(ModulesProxy(
-            ClientServiceLocator.getInstance().apiProxyExecutor
-        ))
     }
 
     @Test
