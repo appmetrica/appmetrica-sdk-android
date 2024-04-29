@@ -59,7 +59,12 @@ public class AppMetricaCore implements IAppMetricaCore {
         mDefaultExecutor = defaultExecutor;
         this.appOpenWatcher = appOpenWatcher;
         PublicLogger.init(mContext);
-        SdkUtils.logSdkInfo();
+        defaultExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+                SdkUtils.logSdkInfo();
+            }
+        });
         mMetricaHandler = defaultExecutor.getHandler();
         mClientTimeTracker = clientTimeTracker;
         mClientTimeTracker.trackCoreCreation();

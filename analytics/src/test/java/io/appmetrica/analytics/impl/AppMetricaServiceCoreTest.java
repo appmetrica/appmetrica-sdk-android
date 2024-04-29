@@ -20,6 +20,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockedConstruction;
 import org.mockito.MockedStatic;
@@ -77,7 +78,6 @@ public class AppMetricaServiceCoreTest extends CommonTest {
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        mClientServiceLocatorRule.before();
         mContext = RuntimeEnvironment.getApplication();
         when(mDefaultExecutor.getHandler()).thenReturn(mHandler);
         AppMetricaFacade.killInstance();
@@ -103,6 +103,18 @@ public class AppMetricaServiceCoreTest extends CommonTest {
                 LoggerWithApiKey.init(mContext);
             }
         });
+        sSdkUtils.getStaticMock().verify(
+            new MockedStatic.Verification() {
+                @Override
+                public void apply() {
+                    SdkUtils.logSdkInfo();
+                }
+            },
+            never()
+        );
+        ArgumentCaptor<Runnable> runnableArgumentCaptor = ArgumentCaptor.forClass(Runnable.class);
+        verify(mDefaultExecutor).execute(runnableArgumentCaptor.capture());
+        runnableArgumentCaptor.getValue().run();
         sSdkUtils.getStaticMock().verify(new MockedStatic.Verification() {
             @Override
             public void apply() {
