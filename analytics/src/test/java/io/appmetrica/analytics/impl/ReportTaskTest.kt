@@ -49,6 +49,7 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.inOrder
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
+import org.mockito.kotlin.stubbing
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
@@ -478,5 +479,67 @@ internal class ReportTaskTest : CommonTest() {
     @Test
     fun description() {
         assertThat(reportTask.description()).contains(apiKey)
+    }
+
+    @Test
+    fun eventCountLimitation() {
+        val sessionCursorWithLargeAmountOfEvents = MatrixCursor(columnSession).apply {
+            repeat(100) {
+                newRow()
+                    .add(it) // FIELD_SESSION_ID
+                    .add(type) // FIELD_SESSION_TYPE
+                    .add("") // FIELD_SESSION_REPORT_REQUEST_PARAMETERS
+                    .add(DbSessionDescriptionToBytesConverter().fromModel(DbSessionModel.Description(
+                        startTime = TimeUtils.currentDeviceTimeSec() + it,
+                        serverTimeOffset = 10L * it,
+                        obtainedBeforeFirstSynchronization = true
+                    ))) // FIELD_SESSION_DESCRIPTION
+            }
+        }
+        val reportCursorWithLargeAmountOfEvents = MatrixCursor(columnReport).apply {
+            repeat(1000) {
+                newRow()
+                    .add(sessionId) // FIELD_REPORT_SESSION
+                    .add(SessionType.BACKGROUND.code) // FIELD_REPORT_SESSION_TYPE
+                    .add(it) // FIELD_REPORT_NUMBER_IN_SESSION
+                    .add(InternalEvents.EVENT_TYPE_REGULAR.typeId) // FIELD_REPORT_TYPE
+                    .add(it) // FIELD_REPORT_GLOBAL_NUMBER
+                    .add(it) // FIELD_REPORT_TIME
+                    .add(DbEventDescriptionToBytesConverter().fromModel(DbEventModel.Description(
+                        customType = null,
+                        name = null,
+                        value = eventValue,
+                        numberOfType = it.toLong(),
+                        locationInfo = null,
+                        errorEnvironment = null,
+                        appEnvironment = "{}",
+                        appEnvironmentRevision = 0,
+                        truncated = 0,
+                        connectionType = 0,
+                        cellularConnectionType = "0",
+                        encryptingMode = EventEncryptionMode.NONE,
+                        profileId = profileId,
+                        firstOccurrenceStatus = null,
+                        source = null,
+                        attributionIdChanged = null,
+                        openId = null,
+                        extras = null
+                    ))) // FIELD_EVENT_DESCRIPTION
+            }
+        }
+        stubbing(databaseHelper) {
+            on { collectAllQueryParameters() } doReturn queryParameters
+            on { querySessions(any()) } doReturn sessionCursorWithLargeAmountOfEvents
+            on { queryReports(any(), any()) } doReturn reportCursorWithLargeAmountOfEvents
+        }
+
+        reportTask.onCreateTask()
+        val bodyCaptor = ArgumentCaptor.forClass(ByteArray::class.java)
+        verify(sendingTaskHelperMockedRule.constructionMock.constructed()[0])
+            .prepareAndSetPostData(bodyCaptor.capture())
+        val body = bodyCaptor.value
+        val reportMessage = EventProto.ReportMessage.parseFrom(body)
+        assertThat(reportMessage.sessions).hasSize(1)
+        assertThat(reportMessage.sessions.first().events).hasSize(100)
     }
 }

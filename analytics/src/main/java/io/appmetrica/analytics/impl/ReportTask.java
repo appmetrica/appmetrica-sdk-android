@@ -67,6 +67,8 @@ public class ReportTask implements UnderlyingNetworkTask {
     private static final int ENVIRONMENT_VARIABLE_FIELD_NUMBER = 7;
     private static final int EVENT_FIELD_NUMBER = 3;
 
+    private static final int MAX_EVENT_COUNT_PER_REQUEST = 100;
+
     private static final String PROTOBUF_ERROR_EVENT_NAME = "protobuf_serialization_error";
 
     @NonNull
@@ -85,6 +87,7 @@ public class ReportTask implements UnderlyingNetworkTask {
     private List<Long> mAllInternalSessionsIds;
 
     private int mReportDataSize = 0;
+    private int eventsCount = 0;
     private int mEnvironmentSize = -1;
 
     @Nullable
@@ -306,6 +309,7 @@ public class ReportTask implements UnderlyingNetworkTask {
         mAllInternalSessionsIds = null;
 
         mMessageToSend = getSessions(requestConfig);
+        YLogger.info(TAG, "Selected for sending %s events", eventsCount);
 
         // Check if no sessions to report
         if (mMessageToSend.sessions.isEmpty()) {
@@ -427,7 +431,8 @@ public class ReportTask implements UnderlyingNetworkTask {
         try {
             cursor = getSessionsCursor();
             if (cursor != null) {
-                while (cursor.moveToNext()) {
+                // EventsCount incrementing in getSession method during adding events to request proto
+                while (cursor.moveToNext() && eventsCount < MAX_EVENT_COUNT_PER_REQUEST) {
                     final ContentValues sessionValues = new ContentValues();
                     DBUtils.cursorRowToContentValues(cursor, sessionValues);
                     final DbSessionModel sessionModel = new DbSessionModelConverter().toModel(sessionValues);
@@ -559,7 +564,7 @@ public class ReportTask implements UnderlyingNetworkTask {
             if (cursor != null) {
                 final List<Session.Event> eventsOfSession = new ArrayList<Session.Event>();
 
-                while (cursor.moveToNext()) {
+                while (cursor.moveToNext() && eventsCount < MAX_EVENT_COUNT_PER_REQUEST) {
                     ContentValues contentValues = new ContentValues();
                     DBUtils.cursorRowToContentValues(cursor, contentValues);
                     final Session.Event sessionEvent = getEvent(contentValues, config, exceptions);
@@ -591,6 +596,7 @@ public class ReportTask implements UnderlyingNetworkTask {
                         YLogger.warning(TAG, "Event #%d in session %d is null", eventsOfSession.size(), sessionId);
                     }
                     eventsOfSession.add(sessionEvent);
+                    eventsCount++;
                 }
 
                 if (eventsOfSession.size() > 0) {
