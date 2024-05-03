@@ -21,6 +21,7 @@ import io.appmetrica.analytics.impl.utils.TimeUtils;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import io.appmetrica.analytics.testutils.LogRule;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -49,6 +50,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
@@ -76,6 +78,8 @@ public class DatabaseHelperTest extends CommonTest {
     private DatabaseCleaner databaseCleaner;
     @Mock
     private DbEventModelConverter dbEventModelConverter;
+    @Mock
+    private EventListener eventListener;
     @Rule
     public GlobalServiceLocatorRule rule = new GlobalServiceLocatorRule();
     @Rule
@@ -139,9 +143,19 @@ public class DatabaseHelperTest extends CommonTest {
         addGeneralEvents(db, 19, TimeUtils.currentDeviceTimeSec());
 
         helper = new DatabaseHelper(componentUnit, storage, databaseCleaner, dbEventModelConverter);
+        helper.addEventListener(eventListener);
         helper.clearIfTooManyEvents();
 
-        verify(databaseCleaner, never()).cleanEvents(any(SQLiteDatabase.class), anyString(), anyString(), any(DatabaseCleaner.Reason.class), anyString(), anyBoolean());
+        verify(databaseCleaner, never())
+            .cleanEvents(
+                any(SQLiteDatabase.class),
+                anyString(),
+                anyString(),
+                any(DatabaseCleaner.Reason.class),
+                anyString(),
+                anyBoolean()
+            );
+        verifyNoInteractions(eventListener);
     }
 
     @Test
@@ -150,9 +164,30 @@ public class DatabaseHelperTest extends CommonTest {
         addGeneralEvents(db, 21, TimeUtils.currentDeviceTimeSec());
 
         helper = new DatabaseHelper(componentUnit, storage, databaseCleaner, dbEventModelConverter);
+        helper.addEventListener(eventListener);
+
+        when(databaseCleaner.cleanEvents(
+            same(db),
+            eq("events"),
+            anyString(),
+            eq(DatabaseCleaner.Reason.DB_OVERFLOW),
+            anyString(),
+            eq(true)
+        )).thenReturn(new DatabaseCleaner.DeletionInfo(new ArrayList<ContentValues>(), 100));
+
         helper.clearIfTooManyEvents();
 
-        verify(databaseCleaner).cleanEvents(same(db), eq("events"), anyString(), eq(DatabaseCleaner.Reason.DB_OVERFLOW), anyString(), eq(true));
+        verify(databaseCleaner)
+            .cleanEvents(
+                same(db),
+                eq("events"),
+                anyString(),
+                eq(DatabaseCleaner.Reason.DB_OVERFLOW),
+                anyString(),
+                eq(true)
+            );
+
+        verify(eventListener).onEventsUpdated();
     }
 
     @Test

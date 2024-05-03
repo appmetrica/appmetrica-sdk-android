@@ -296,6 +296,11 @@ public class DatabaseHelper {
                     long allRowsCount = mRowCount.addAndGet(-deletedRowsCount);
                     YLogger.i("%sReports table cleared. %d rows deleted. Row count: %d",
                             TAG, deletedRowsCount, allRowsCount);
+                    if (deletedRowsCount != 0) {
+                        for (EventListener listener : mEventListeners) {
+                            listener.onEventsUpdated();
+                        }
+                    }
                 }
             }
         } catch (Throwable e) {
