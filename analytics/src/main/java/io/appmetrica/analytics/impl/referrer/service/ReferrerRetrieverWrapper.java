@@ -25,7 +25,7 @@ public class ReferrerRetrieverWrapper {
     }
 
     public void retrieveReferrer(@NonNull final ReferrerReceivedListener referrerListener) {
-        YLogger.d("%s try to retriever referrer", TAG);
+        YLogger.debug(TAG, "try to retriever referrer");
         try {
             mReferrerRetriever.retrieveReferrer(referrerListener);
         } catch (Throwable ex) {
@@ -41,10 +41,10 @@ public class ReferrerRetrieverWrapper {
             try {
                 referrerRetriever = new ReferrerFromLibraryRetriever(context, executor);
             } catch (Throwable ex) {
-                YLogger.e(ex, TAG);
+                YLogger.error(TAG, ex);
             }
         } else {
-            YLogger.d("%s Install Referrer Client class was not detected", TAG);
+            YLogger.debug(TAG, "Install Referrer Client class was not detected");
         }
         if (referrerRetriever == null) {
             referrerRetriever = new IReferrerRetriever() {

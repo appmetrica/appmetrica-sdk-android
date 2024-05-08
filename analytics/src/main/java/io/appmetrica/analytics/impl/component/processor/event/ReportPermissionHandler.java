@@ -22,6 +22,8 @@ import java.util.List;
 
 public class ReportPermissionHandler extends ReportComponentHandler {
 
+    private static final String TAG = "[ReportPermissionHandler]";
+
     private final PermissionsChecker mPermissionsChecker;
     @NonNull
     private final ProtobufStateStorage<AppPermissionsState> mPermissionsStorage;
@@ -66,7 +68,7 @@ public class ReportPermissionHandler extends ReportComponentHandler {
         String componentIdName = component.getComponentId().toString();
 
         if (component.getVitalComponentDataProvider().isFirstEventDone() && component.needToCheckPermissions()) {
-            YLogger.d("Sending PermissionsChecker Event for %s", componentIdName);
+            YLogger.debug(TAG, "Sending PermissionsChecker Event for %s", componentIdName);
 
             AppPermissionsState oldAppPermissionsState = mPermissionsStorage.read();
             AppPermissionsState newAppPermissionsState = getNewAppPermissionsStateOrNull(oldAppPermissionsState);

@@ -21,10 +21,10 @@ public class SelfDiagnosticClientUnit implements ClientUnit {
     @Override
     public void handle(@NonNull CounterReport report, @NonNull CommonArguments sdkConfig) {
         if (mComponentUnit != null) {
-            YLogger.d("%s handle report %s with sdkConfig %s", TAG, report, sdkConfig);
+            YLogger.debug(TAG, "handle report %s with sdkConfig %s", report, sdkConfig);
             mComponentUnit.handleReport(report, sdkConfig);
         } else {
-            YLogger.d("%s ComponentUnit is null. Will not handle report %s with sdkConfig", TAG, report, sdkConfig);
+            YLogger.debug(TAG, "ComponentUnit is null. Will not handle report %s with sdkConfig", report, sdkConfig);
         }
     }
 

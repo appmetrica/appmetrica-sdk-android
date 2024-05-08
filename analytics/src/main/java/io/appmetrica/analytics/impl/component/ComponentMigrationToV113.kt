@@ -25,7 +25,7 @@ internal class ComponentMigrationToV113(
                 backgroundSessionStorage.putLastEventOffset(TimeUnit.SECONDS.toMillis(it))
             }
         } catch (e: Throwable) {
-            YLogger.e(tag, e)
+            YLogger.error(tag, e)
         }
         try {
             val foregroundSessionStorage = SessionStorageImpl(preferences, ForegroundSessionFactory.SESSION_TAG)
@@ -36,7 +36,7 @@ internal class ComponentMigrationToV113(
                 foregroundSessionStorage.putLastEventOffset(TimeUnit.SECONDS.toMillis(it))
             }
         } catch (e: Throwable) {
-            YLogger.e(tag, e)
+            YLogger.error(tag, e)
         }
         YLogger.info(tag, "Migration finished.")
     }

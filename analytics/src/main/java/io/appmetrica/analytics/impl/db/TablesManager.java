@@ -56,19 +56,19 @@ public class TablesManager {
 
     public void onOpen(SQLiteDatabase db) {
         try {
-            YLogger.d(TAG + " OnOpen was called for %s", mDatabaseLogIdentifier);
+            YLogger.debug(TAG, "OnOpen was called for %s", mDatabaseLogIdentifier);
             if (mValidator != null) {
                 if (mValidator.isDbSchemeValid(db) == false) {
                     recreateDatabase(db);
                 }
             }
         } catch (Throwable exception) {
-            YLogger.e(TAG + " Exception was occurred during opening %s.\n%s", mDatabaseLogIdentifier, exception);
+            YLogger.error(TAG, "Exception was occurred during opening %s.\n%s", mDatabaseLogIdentifier, exception);
         }
     }
 
     public void onCreate(final SQLiteDatabase database) {
-        YLogger.d("[DbTables] OnCreate was called for %s", mDatabaseLogIdentifier);
+        YLogger.debug(TAG, "OnCreate was called for %s", mDatabaseLogIdentifier);
         createDatabase(mCreateScript, database);
     }
 
@@ -77,7 +77,7 @@ public class TablesManager {
         try {
             createScript.runScript(database);
         } catch (Throwable exception) {
-            YLogger.e(TAG + " Exception was occurred while creating %s.\n%s", mDatabaseLogIdentifier, exception);
+            YLogger.error(TAG, "Exception was occurred while creating %s.\n%s", mDatabaseLogIdentifier, exception);
         }
     }
 
@@ -101,7 +101,7 @@ public class TablesManager {
                     }
                 }
             } catch (Throwable exception) {
-                YLogger.e(TAG + " Exception was occurred while upgrading %s.\n%s", mDatabaseLogIdentifier, exception);
+                YLogger.error(TAG, "Exception was occurred while upgrading %s.\n%s", mDatabaseLogIdentifier, exception);
                 hasErrors = true;
             }
         }
@@ -121,7 +121,7 @@ public class TablesManager {
 
     @VisibleForTesting
     void recreateDatabase(SQLiteDatabase database) {
-        YLogger.d(TAG + " recreate %s due to some errors.", mDatabaseLogIdentifier);
+        YLogger.debug(TAG, "recreate %s due to some errors.", mDatabaseLogIdentifier);
         dropDatabase(mDropScript, database);
         createDatabase(mCreateScript, database);
     }
@@ -130,7 +130,7 @@ public class TablesManager {
         try {
             dropScript.runScript(database);
         } catch (Throwable exception) {
-            YLogger.e(TAG + " Exception was occurred while dropping %s.\n%s", mDatabaseLogIdentifier, exception);
+            YLogger.error(TAG, "Exception was occurred while dropping %s.\n%s", mDatabaseLogIdentifier, exception);
         }
     }
 }

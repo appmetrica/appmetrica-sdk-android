@@ -68,7 +68,7 @@ public class ReportConsumer {
             final Runnable reportTask = new ReportRunnable(mContext, reportData, extras, mClientRepository);
             mTasksExecutor.execute(reportTask);
         } else {
-            YLogger.w("%sUndefined report type: %d", TAG, reportData.getType());
+            YLogger.warning(TAG, "Undefined report type: %d", reportData.getType());
         }
     }
 

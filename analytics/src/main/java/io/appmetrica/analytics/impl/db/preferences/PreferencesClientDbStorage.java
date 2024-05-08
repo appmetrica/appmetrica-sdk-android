@@ -248,7 +248,7 @@ public class PreferencesClientDbStorage extends PreferencesDbStorage {
                 result = JsonHelper.advIdentifiersResultFromJson(new JSONObject(savedValue));
             }
         } catch (Throwable e) {
-            YLogger.e(e, "%s%s", TAG, e.getMessage());
+            YLogger.error(TAG, e, e.getMessage());
         }
         return result == null ? new IdentifiersResult(
                 null,
@@ -266,7 +266,7 @@ public class PreferencesClientDbStorage extends PreferencesDbStorage {
             try {
                 valueToSave = JsonHelper.advIdentifiersResultToJson(identifiersResult).toString();
             } catch (Throwable e) {
-                YLogger.e(e, "%s%s", TAG, e.getMessage());
+                YLogger.error(TAG, e, e.getMessage());
             }
         }
 

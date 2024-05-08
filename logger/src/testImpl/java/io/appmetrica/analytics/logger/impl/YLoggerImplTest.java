@@ -77,13 +77,6 @@ public class YLoggerImplTest {
     }
 
     @Test
-    public void d() {
-        mYLogger.d(message, args);
-        verify(mDebugConsumer, times(times)).consume(message, args);
-        verifyNoMoreInteractionsWithMocks();
-    }
-
-    @Test
     public void info() {
         mYLogger.info(tag, message, args);
         verify(mInfoConsumer, times(times)).consumeWithTag(tag, message, args);
@@ -91,23 +84,9 @@ public class YLoggerImplTest {
     }
 
     @Test
-    public void i() {
-        mYLogger.i(message, args);
-        verify(mInfoConsumer, times(times)).consume(message, args);
-        verifyNoMoreInteractionsWithMocks();
-    }
-
-    @Test
     public void warning() {
         mYLogger.warning(tag, message, args);
         verify(mWarningConsumer, times(times)).consumeWithTag(tag, message, args);
-        verifyNoMoreInteractionsWithMocks();
-    }
-
-    @Test
-    public void w() {
-        mYLogger.w(message, args);
-        verify(mWarningConsumer, times(times)).consume(message, args);
         verifyNoMoreInteractionsWithMocks();
     }
 
@@ -122,20 +101,6 @@ public class YLoggerImplTest {
     public void errorWithThrowable() {
         mYLogger.error(tag, mThrowable, message, args);
         verify(mBaseLogger, times(times)).fe(mThrowable, tag + message, args);
-        verifyNoMoreInteractionsWithMocks();
-    }
-
-    @Test
-    public void eWithoutThrowable() {
-        mYLogger.e(message, args);
-        verify(mBaseLogger, times(times)).fe(message, args);
-        verifyNoMoreInteractionsWithMocks();
-    }
-
-    @Test
-    public void eWithThrowable() {
-        mYLogger.e(mThrowable, message, args);
-        verify(mBaseLogger, times(times)).fe(mThrowable, message, args);
         verifyNoMoreInteractionsWithMocks();
     }
 

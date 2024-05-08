@@ -34,10 +34,10 @@ public abstract class ResourceRetriever<T> {
             try {
                 return callAppropriateMethod(resourceId);
             } catch (Throwable ex) {
-                YLogger.e(ex, TAG + ": Error while parsing " + mResourceName);
+                YLogger.error(TAG, ex, "Error while parsing " + mResourceName);
             }
         } else {
-            YLogger.d(TAG + ": no " + mResourceName + " resource found.");
+            YLogger.debug(TAG, "no " + mResourceName + " resource found.");
         }
         return null;
     }

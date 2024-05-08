@@ -15,19 +15,7 @@ public final class YLogger {
         // Do nothing
     }
 
-    public static void d(@NonNull String msg, Object... args) {
-        // Do nothing
-    }
-
-    public static void i(@NonNull String msg, Object... args) {
-        // Do nothing
-    }
-
     public static void info(@NonNull String tag, @NonNull String message, Object... args) {
-        // Do nothing
-    }
-
-    public static void w(@NonNull String msg, final Object... args) {
         // Do nothing
     }
 
@@ -35,15 +23,7 @@ public final class YLogger {
         // Do nothing
     }
 
-    public static void e(@NonNull String msg, final Object... args) {
-        // Do nothing
-    }
-
     public static void error(@NonNull String tag, @NonNull String msg, Object... args) {
-        // Do nothing
-    }
-
-    public static void e(@NonNull Throwable e, @Nullable String msg, final Object... args) {
         // Do nothing
     }
 

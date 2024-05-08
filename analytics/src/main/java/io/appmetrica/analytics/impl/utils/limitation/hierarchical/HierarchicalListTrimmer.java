@@ -45,7 +45,7 @@ public class HierarchicalListTrimmer<T> extends BaseHierarchicalTrimmer<List<T>,
                         TrimmingResult<T, BytesTruncatedProvider> trimmingResult = itemTrimmer.trim(item);
                         itemToAdd = trimmingResult.value;
                         bytesTruncated += trimmingResult.getBytesTruncated();
-                        if (YLogger.DEBUG && !Utils.areEqual(item, trimmingResult.value)) {
+                        if (!Utils.areEqual(item, trimmingResult.value)) {
                             YLogger.debug(
                                     ECommerceConstants.FEATURE_TAG + TAG,
                                     "List item #%d. Trim list item: \"%s\" -> \"%s\" with bytesTruncated = %d. " +

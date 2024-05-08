@@ -56,7 +56,7 @@ internal class RegularDispatcherComponent<COMPONENT>(
     }
 
     fun handleReport(counterReport: CounterReport, configuration: CommonArguments) {
-        YLogger.d("%s handle report for componentId: %s; data: %s", tag, componentId, counterReport)
+        YLogger.debug(tag, "handle report for componentId: %s; data: %s", componentId, counterReport)
 
         if (!EventsManager.isEventWithoutAppConfigUpdate(counterReport.type)) {
             updateComponentConfig(configuration.componentArguments)
@@ -66,7 +66,7 @@ internal class RegularDispatcherComponent<COMPONENT>(
     }
 
     private fun updateComponentConfig(sdkConfig: ReporterArguments) {
-        YLogger.d("%sUpdate sdk config for componentId: %s; config: %s", tag, componentId, sdkConfig)
+        YLogger.debug(tag, "Update sdk config for componentId: %s; config: %s", componentId, sdkConfig)
         reportingComponent.updateSdkConfig(sdkConfig)
     }
 

@@ -88,7 +88,7 @@ public class ProductConverter
                 skuTrimmingResult, nameTrimmingResult, categoriesProtoResult, payloadResult, actualPriceResult,
                 originalPriceResult, promocodesResult);
 
-        if (YLogger.DEBUG && totalTruncationInfo.getBytesTruncated() > 0) {
+        if (totalTruncationInfo.getBytesTruncated() > 0) {
             YLogger.debug(
                     ECommerceConstants.FEATURE_TAG + TAG,
                     "Total bytes truncated (sku (%d) + name (%d) + categoriesPath (%d) + payload (%d) + " +

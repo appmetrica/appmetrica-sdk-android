@@ -34,7 +34,7 @@ public class ReferrerFromLibraryRetriever implements IReferrerRetriever {
 
     @Override
     public void retrieveReferrer(@NonNull final ReferrerReceivedListener referrerListener) throws Throwable {
-        YLogger.d("%s try to retrieve referrer via Google Play referrer library", TAG);
+        YLogger.debug(TAG, "try to retrieve referrer via Google Play referrer library");
         InstallReferrerStateListener listener = new InstallReferrerStateListener() {
             @Override
             @MainThread
@@ -67,7 +67,7 @@ public class ReferrerFromLibraryRetriever implements IReferrerRetriever {
                 try {
                     mClient.endConnection();
                 } catch (Throwable ex) {
-                    YLogger.e(ex, TAG);
+                    YLogger.error(TAG, ex);
                 }
             }
 

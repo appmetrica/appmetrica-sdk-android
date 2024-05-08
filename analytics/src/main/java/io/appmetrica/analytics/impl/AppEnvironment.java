@@ -73,7 +73,7 @@ public class AppEnvironment {
         try {
             mValues = new MeasuredJsonMap(value);
         } catch (Throwable e) {
-            YLogger.e(e, "Some problems during parse %s", value);
+            YLogger.error(TAG, e, "Some problems during parse %s", value);
             mValues = new MeasuredJsonMap();
         }
         mSimpleMapLimitation = mapLimitation;

@@ -162,7 +162,9 @@ public class ReportsHandler {
         final Map<String, Object> attributes
     ) {
         if (report.getType() == InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_PROTOBUF.getTypeId()) {
-            YLogger.d("Report event %s, value size: %d apiKey %s",
+            YLogger.debug(
+                TAG,
+                "Report event %s, value size: %d apiKey %s",
                 InternalEvents.valueOf(report.getType()).toString(),
                 report.getValueBytes().length,
                 environment.getReporterConfiguration().getApiKey()
@@ -180,12 +182,12 @@ public class ReportsHandler {
     }
 
     public void reportResumeUserSession(@NonNull ProcessConfiguration processConfiguration) {
-        YLogger.d("%sReport resume user session", TAG);
+        YLogger.debug(TAG, "Report resume user session");
         mReportsSender.queueResumeUserSession(processConfiguration);
     }
 
     public void reportPauseUserSession(@NonNull ProcessConfiguration processConfiguration) {
-        YLogger.d("%sReport pause user session", TAG);
+        YLogger.debug(TAG, "Report pause user session");
         mReportsSender.queuePauseUserSession(processConfiguration);
     }
 
@@ -251,7 +253,7 @@ public class ReportsHandler {
     private ReportToSend prepareUnhandledExceptionReport(
         @NonNull UnhandledException unhandledException,
         @NonNull ReporterEnvironment reporterEnvironment) {
-        YLogger.i("Unhandled exception was captured");
+        YLogger.info(TAG, "Unhandled exception was captured");
         mConnector.removeScheduleDisconnect();
         return mEventFormer.formEvent(unhandledException, reporterEnvironment);
     }

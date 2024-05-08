@@ -12,6 +12,8 @@ import java.util.concurrent.TimeUnit;
 
 public class ServerTime implements IServerTimeOffsetProvider {
 
+    private static final String TAG = "[ServerTime]";
+
     private static class LazyServerTimeHolder {
         static ServerTime singletonInstance = new ServerTime();
     }
@@ -50,7 +52,7 @@ public class ServerTime implements IServerTimeOffsetProvider {
         mPreferences.putServerTimeOffset(mServerTimeOffsetSeconds);
         mPreferences.commit();
 
-        YLogger.i("Server time updated, offset = " + mServerTimeOffsetSeconds);
+        YLogger.info(TAG, "Server time updated, offset = " + mServerTimeOffsetSeconds);
     }
 
     public synchronized void disableTimeDifferenceChecking() {
@@ -72,6 +74,6 @@ public class ServerTime implements IServerTimeOffsetProvider {
         mServerTimeOffsetSeconds = mPreferences.getServerTimeOffset(0);
         mTimeProvider = timeProvider;
 
-        YLogger.i("Server time initialized, offset = " + mServerTimeOffsetSeconds);
+        YLogger.info(TAG, "Server time initialized, offset = " + mServerTimeOffsetSeconds);
     }
 }

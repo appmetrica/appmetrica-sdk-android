@@ -57,10 +57,10 @@ public class JsonHelper {
                 try {
                     result = super.getString(name);
                 } catch (Throwable th) {
-                    YLogger.e(th, th.getMessage());
+                    YLogger.error(TAG, th, th.getMessage());
                 }
             } else {
-                YLogger.e(new JSONException("No value for " + name), "%s", TAG);
+                YLogger.error(TAG, new JSONException("No value for " + name));
             }
             return result;
         }
@@ -271,7 +271,7 @@ public class JsonHelper {
             try {
                 return jsonToMap(new JSONObject(json));
             } catch (Throwable e) {
-                YLogger.e(e, "Exception while parsing json");
+                YLogger.error(TAG, e, "Exception while parsing json");
             }
         }
         return null;
@@ -293,7 +293,7 @@ public class JsonHelper {
                     result.add(jsonArray.getString(i));
                 }
             } catch (Throwable e) {
-                YLogger.e(e, e.getMessage());
+                YLogger.error(TAG, e, e.getMessage());
             }
         }
         return result;
@@ -344,7 +344,7 @@ public class JsonHelper {
             try {
                 result = jsonObject.getInt(key);
             } catch (Throwable e) {
-                YLogger.e(e, e.getMessage());
+                YLogger.error(TAG, e, e.getMessage());
             }
         }
         return result;
@@ -380,7 +380,7 @@ public class JsonHelper {
             try {
                 result = StringUtils.hexToBytes(stringToDecode);
             } catch (Throwable e) {
-                YLogger.e(e, "%sFail to decode hex string: %s", TAG, stringToDecode);
+                YLogger.error(TAG, e, "%sFail to decode hex string: %s", TAG, stringToDecode);
             }
         }
 
@@ -453,7 +453,7 @@ public class JsonHelper {
                         identifiersResult.errorExplanation
                     );
             } catch (Throwable ex) {
-                YLogger.e(ex, TAG);
+                YLogger.error(TAG, ex);
             }
         }
         return json;

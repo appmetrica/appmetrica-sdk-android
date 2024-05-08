@@ -88,7 +88,7 @@ public class CertificatesFingerprintsProvider {
                 }
             }
         } catch (Throwable th) {
-            YLogger.e(th, TAG);
+            YLogger.error(TAG, th);
         }
         Collections.sort(fingerprints);
         return fingerprints;
@@ -114,7 +114,7 @@ public class CertificatesFingerprintsProvider {
                     MessageDigest.getInstance(SHA1).digest(signature.toByteArray())
             );
         } catch (Throwable th) {
-            YLogger.e(th, TAG);
+            YLogger.error(TAG, th);
             return null;
         }
     }

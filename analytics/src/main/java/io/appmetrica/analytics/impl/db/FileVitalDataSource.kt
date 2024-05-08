@@ -26,7 +26,7 @@ class FileVitalDataSource(
             file.readText()
         }
     } catch (ex: Throwable) {
-        YLogger.e(ex, "File $fileName exception")
+        YLogger.error(TAG, ex, "File $fileName exception")
         null
     }
 
@@ -35,7 +35,7 @@ class FileVitalDataSource(
         try {
             FileUtils.getFileFromSdkStorage(context, fileName)?.writeText(data)
         } catch (ex: Throwable) {
-            YLogger.e(ex, "File $fileName exception")
+            YLogger.error(TAG, ex, "File $fileName exception")
         }
     }
 }

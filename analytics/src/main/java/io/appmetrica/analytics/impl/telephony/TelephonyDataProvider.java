@@ -18,7 +18,7 @@ public class TelephonyDataProvider {
 
     public TelephonyDataProvider(@NonNull Context context) {
         if (new SafePackageManager().hasSystemFeature(context, PackageManager.FEATURE_TELEPHONY)) {
-            YLogger.i("%sUse real applier", TAG);
+            YLogger.info(TAG, "Use real applier");
             simInfoAdapterApplier = new BaseTelephonyInfoAdapterApplier<>(
                 new SimInfoExtractor(context)
             );
@@ -26,7 +26,7 @@ public class TelephonyDataProvider {
                 new MobileConnectionDescriptionExtractor(context)
             );
         } else {
-            YLogger.w("%sFeature \'android.hardware.telephony\' is missing. So use stubs", TAG);
+            YLogger.warning(TAG, "Feature 'android.hardware.telephony' is missing. So use stubs");
             simInfoAdapterApplier = new DummyTelephonyInfoAdapterApplier<>();
             mobileConnectionDescriptionAdapter = new DummyTelephonyInfoAdapterApplier<>();
         }

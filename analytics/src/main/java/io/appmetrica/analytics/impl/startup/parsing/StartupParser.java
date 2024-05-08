@@ -107,14 +107,13 @@ public class StartupParser {
         try {
             final JsonHelper.OptJSONObject response = jsonResponseProvider.jsonFromBytes(rawResponse);
 
-            if (YLogger.DEBUG) {
-                YLogger.info(TAG + "Full response: ", response.toString());
-                YLogger.dumpJson(TAG + "Full response: ", response);
-            }
+            YLogger.info(TAG + "Full response: ", response.toString());
+            YLogger.dumpJson(TAG + "Full response: ", response);
+
             parseDeviceId(result, response);
             parseComplexBlocks(result, response);
         } catch (Throwable exception) {
-            YLogger.e(exception, "Smth was wrong while parsing startup answer.\n%s", exception);
+            YLogger.error(TAG, exception, "Smth was wrong while parsing startup answer.\n%s", exception);
             result = new StartupResult();
             result.setResult(StartupResult.Result.BAD);
             return result;
@@ -159,10 +158,10 @@ public class StartupParser {
         JSONObject locale = response.optJSONObject(JsonResponseKey.LOCALE);
         String countryInit = "";
         if (locale != null) {
-            YLogger.d("%s locale %s", TAG, locale.toString());
+            YLogger.debug(TAG, "locale %s", locale.toString());
             JSONObject country = locale.optJSONObject(JsonResponseKey.COUNTRY);
             if (country != null) {
-                YLogger.d("%s reliable %b", TAG, country.optBoolean(JsonResponseKey.RELIABLE, false));
+                YLogger.debug(TAG, "reliable %b", country.optBoolean(JsonResponseKey.RELIABLE, false));
                 if (country.optBoolean(JsonResponseKey.RELIABLE, false)) {
                     countryInit = country.optString(JsonResponseKey.VALUE, "");
                 }
@@ -174,7 +173,7 @@ public class StartupParser {
     private void parseQueries(@NonNull StartupResult result, @NonNull JsonHelper.OptJSONObject response) {
         JSONObject queries = response.optJSONObject(JsonResponseKey.QUERIES);
         if (queries != null) {
-            YLogger.d("%s queries %s", TAG, queries);
+            YLogger.debug(TAG, "queries %s", queries);
             JSONObject list = queries.optJSONObject(JsonResponseKey.LIST);
             if (list != null) {
                 JSONObject certificate = list.optJSONObject(JsonResponseKey.CERTIFICATE);
@@ -231,8 +230,12 @@ public class StartupParser {
                 long validTimeDifference = timeJson.getLong(JsonResponseKey.MAX_VALID_DIFFERENCE_SECONDS);
                 startupResult.setValidTimeDifference(validTimeDifference);
             } catch (Throwable e) {
-                YLogger.e(e, "%s Couldn't parse %s from startup response",
-                    TAG, JsonResponseKey.MAX_VALID_DIFFERENCE_SECONDS);
+                YLogger.error(
+                    TAG,
+                    e,
+                    "Couldn't parse %s from startup response",
+                    JsonResponseKey.MAX_VALID_DIFFERENCE_SECONDS
+                );
             }
         }
     }
@@ -251,7 +254,7 @@ public class StartupParser {
                     serverTime = dt.parse(headerValue).getTime();
                     YLogger.info(TAG, "ParserServerTime = %s", String.valueOf(serverTime));
                 } catch (Throwable e) {
-                    YLogger.e("Smth was wrong while parsing startup response header.\n%s", e);
+                    YLogger.error(TAG, "Smth was wrong while parsing startup response header.\n%s", e);
                 }
             }
         }

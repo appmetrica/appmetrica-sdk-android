@@ -130,7 +130,7 @@ public class AppMetricaServiceCoreImpl implements AppMetricaServiceCore, AppMetr
     @WorkerThread
     @Override
     public void onCreate() {
-        YLogger.d("%sonCreate", TAG);
+        YLogger.debug(TAG, "onCreate");
         if (!created) {
             YLogger.info(TAG, "onFirstCreate()");
             onFirstCreate();
@@ -209,7 +209,7 @@ public class AppMetricaServiceCoreImpl implements AppMetricaServiceCore, AppMetr
         mAppMetricaServiceLifecycle.addNewClientConnectObserver(new AppMetricaServiceLifecycle.LifecycleObserver() {
             @Override
             public void onEvent(@NonNull Intent intent) {
-                YLogger.d("%sonNewClientConnect", TAG);
+                YLogger.debug(TAG, "onNewClientConnect");
                 onNewClientConnected(intent);
             }
         });
@@ -218,42 +218,47 @@ public class AppMetricaServiceCoreImpl implements AppMetricaServiceCore, AppMetr
     @WorkerThread
     @Override
     public void onStart(Intent intent, int startId) {
-        YLogger.d("%sonStart", TAG);
+        YLogger.debug(TAG, "onStart");
         handleStart(intent, startId);
     }
 
     @WorkerThread
     @Override
     public void onStartCommand(Intent intent, int flags, int startId) {
-        YLogger.d("%sonStartCommand", TAG);
+        YLogger.debug(TAG, "onStartCommand");
         handleStart(intent, startId);
     }
 
     @WorkerThread
     @Override
     public void onBind(Intent intent) {
-        YLogger.d("%sonBind with intent:%s", TAG, intent);
+        YLogger.debug(TAG, "onBind with intent:%s", intent);
         mAppMetricaServiceLifecycle.onBind(intent);
     }
 
     @WorkerThread
     @Override
     public void onRebind(Intent intent) {
-        YLogger.d("%sonRebind()", TAG);
+        YLogger.debug(TAG, "onRebind()");
         mAppMetricaServiceLifecycle.onRebind(intent);
     }
 
     @WorkerThread
     @Override
     public void onUnbind(Intent intent) {
-        YLogger.d("%sonUnbind()", TAG);
+        YLogger.debug(TAG, "onUnbind()");
         mAppMetricaServiceLifecycle.onUnbind(intent);
         if (intent != null) {
             String action = intent.getAction();
             Uri intentData = intent.getData();
             String packageName = intentData == null ? null : intentData.getEncodedAuthority();
-            YLogger.d("%sUnbind from the service with data: %s and action: %s and package: %s", TAG, intent, action,
-                packageName);
+            YLogger.debug(
+                TAG,
+                "Unbind from the service with data: %s and action: %s and package: %s",
+                intent,
+                action,
+                packageName
+            );
 
             if (AppMetricaServiceAction.ACTION_CLIENT_CONNECTION.equals(action)) {
                 removeClients(intentData, packageName);
@@ -263,7 +268,7 @@ public class AppMetricaServiceCoreImpl implements AppMetricaServiceCore, AppMetr
 
     @WorkerThread
     private void onNewClientConnected(@NonNull Intent intent) {
-        YLogger.d("%sremove scheduled disconnect from onBind()", TAG);
+        YLogger.debug(TAG, "remove scheduled disconnect from onBind()");
         updateScreenInfo(intent);
     }
 
@@ -279,9 +284,9 @@ public class AppMetricaServiceCoreImpl implements AppMetricaServiceCore, AppMetr
         if (intentData != null && intentData.getPath().equals("/" + ServiceUtils.PATH_CLIENT)) {
             int pid = Integer.parseInt(intentData.getQueryParameter(ServiceUtils.PARAMETER_PID));
             String psid = intentData.getQueryParameter(ServiceUtils.PARAMETER_PSID);
-            YLogger.d("%sunbounded client pid %d and psid %s", TAG, pid, psid);
+            YLogger.debug(TAG, "unbounded client pid %d and psid %s", pid, psid);
             mClientRepository.remove(packageName, pid, psid);
-            YLogger.i("%sRemains clients after unbind: %d", TAG, mClientRepository.getClientsCount());
+            YLogger.info(TAG, "Remains clients after unbind: %d", mClientRepository.getClientsCount());
             applicationStateProvider.notifyProcessDisconnected(pid);
         }
     }
@@ -328,11 +333,11 @@ public class AppMetricaServiceCoreImpl implements AppMetricaServiceCore, AppMetr
     @Override
     public void resumeUserSession(@NonNull Bundle data) {
         Integer processId = extractProcessId(data);
-        YLogger.d("%sresumeUserSession for pid = %s", TAG, processId);
+        YLogger.debug(TAG, "resumeUserSession for pid = %s", processId);
         if (processId != null) {
             applicationStateProvider.resumeUserSessionForPid(processId);
         } else {
-            YLogger.e("%sProcess configuration or processId is null", TAG);
+            YLogger.error(TAG, "Process configuration or processId is null");
         }
     }
 
@@ -340,11 +345,11 @@ public class AppMetricaServiceCoreImpl implements AppMetricaServiceCore, AppMetr
     @Override
     public void pauseUserSession(@NonNull Bundle data) {
         Integer processId = extractProcessId(data);
-        YLogger.d("%spauseUserSession for pid = %s", TAG, processId);
+        YLogger.debug(TAG, "pauseUserSession for pid = %s", processId);
         if (processId != null) {
             applicationStateProvider.pauseUserSessionForPid(processId);
         } else {
-            YLogger.e("%sProcess configuration or processId is null", TAG);
+            YLogger.error(TAG, "Process configuration or processId is null");
         }
     }
 
@@ -362,12 +367,12 @@ public class AppMetricaServiceCoreImpl implements AppMetricaServiceCore, AppMetr
 
     @WorkerThread
     public void handleNewCrashFromFile(@NonNull File crashFile) {
-        YLogger.d("%s handleNewCrashFromFile %s", TAG, crashFile.getName());
+        YLogger.debug(TAG, "handleNewCrashFromFile %s", crashFile.getName());
         mReportConsumer.consumeCrashFromFile(crashFile);
     }
 
     private void handleStart(Intent intent, int startId) {
-        YLogger.d("%sHandle start of service with data: %s and startId: %d", TAG, intent, startId);
+        YLogger.debug(TAG, "Handle start of service with data: %s and startId: %d", intent, startId);
 
         if (null != intent) {
             // Set class loader for unmarshalling
@@ -412,7 +417,7 @@ public class AppMetricaServiceCoreImpl implements AppMetricaServiceCore, AppMetr
                 new CommonArguments(clientConfiguration)
             );
         } catch (Throwable exception) {
-            YLogger.e("%sSomething was wrong while handling event.\n%s", TAG, exception);
+            YLogger.error(TAG, "Something was wrong while handling event.\n%s", exception);
         }
     }
 

@@ -22,7 +22,7 @@ public class LocationListenerWrapper implements LocationListener {
     @GeoThread
     @Override
     public void onLocationChanged(@Nullable Location location) {
-        YLogger.d("%s Location changed: %s", TAG, location);
+        YLogger.debug(TAG, "Location changed: %s", location);
         if (location != null) {
             mLocationStreamDispatcher.onLocationChanged(location);
         }

@@ -327,7 +327,7 @@ public class MainReporter extends BaseReporter implements IMainReporter {
                         if (libraryAnrDetector.isPushAnr(allThreads.affectedThread.stacktrace)) {
                             pushReporterProvider.getReporter().reportAnr(allThreads);
                         }
-                        YLogger.d("anr registered %s", allThreads);
+                        YLogger.debug(TAG, "anr registered %s", allThreads);
                     }
                 });
             }

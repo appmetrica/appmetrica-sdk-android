@@ -81,7 +81,7 @@ public class WaitForActivationDelayBarrier implements ActivationBarrier {
         executor.executeDelayed(new Runnable() {
             @Override
             public void run() {
-                YLogger.d("%sActivation finished", TAG);
+                YLogger.debug(TAG, "Activation finished");
                 callback.onWaitFinished();
             }
         }, timeToWait);

@@ -9,6 +9,8 @@ import java.util.HashMap;
 
 class AppEnvironmentProvider {
 
+    private static final String TAG = "[AppEnvironmentProvider]";
+
     private final HashMap<String, AppEnvironment> mStorage = new HashMap<String, AppEnvironment>();
 
     public synchronized AppEnvironment getOrCreate(@NonNull ComponentId componentId,
@@ -17,11 +19,11 @@ class AppEnvironmentProvider {
         AppEnvironment appEnvironment = mStorage.get(componentId.toString());
         if (appEnvironment == null) {
             AppEnvironment.EnvironmentRevision revision = preferences.getAppEnvironmentRevision();
-            YLogger.d("Create environment for component with id %s", componentId.toString());
+            YLogger.debug(TAG, "Create environment for component with id %s", componentId.toString());
             appEnvironment = new AppEnvironment(revision.value, revision.revisionNumber, publicLogger);
             mStorage.put(componentId.toString(), appEnvironment);
         }
-        YLogger.d("will return environment %s", appEnvironment.toString());
+        YLogger.debug(TAG, "will return environment %s", appEnvironment.toString());
         return appEnvironment;
     }
 

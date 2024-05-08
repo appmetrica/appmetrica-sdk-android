@@ -34,11 +34,11 @@ class ReportRunnable implements Runnable {
     @Override
     public void run() {
         final ClientConfiguration sdkConfig = ClientConfiguration.fromBundle(mContext, mExtras);
-        YLogger.d(
-                "%sHandle new report with sdkConfig: %s; report = %s",
-                TAG,
-                sdkConfig,
-                mReport
+        YLogger.debug(
+            TAG,
+            "Handle new report with sdkConfig: %s; report = %s",
+            sdkConfig,
+            mReport
         );
         if (sdkConfig == null) {
             return;

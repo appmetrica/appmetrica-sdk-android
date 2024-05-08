@@ -63,7 +63,7 @@ public class HostsParser {
                 startupResult.setCustomSdkHosts(parseCustomSdkHosts(hosts));
             }
         } catch (Throwable ex) {
-            YLogger.e(ex, "%s", TAG);
+            YLogger.error(TAG, ex);
         }
     }
 
@@ -87,7 +87,7 @@ public class HostsParser {
         try {
             return object.getJSONObject(name).getJSONArray(JsonResponseKey.URLS).getString(0);
         } catch (Throwable e) {
-            YLogger.e(e, e.getMessage());
+            YLogger.error(TAG, e, e.getMessage());
             return StringUtils.EMPTY;
         }
     }
@@ -100,7 +100,7 @@ public class HostsParser {
                 result = JsonHelper.toStringList(json.getJSONArray(JsonResponseKey.URLS));
             }
         } catch (Throwable e) {
-            YLogger.e(e, e.getMessage());
+            YLogger.error(TAG, e, e.getMessage());
         }
         return result;
     }

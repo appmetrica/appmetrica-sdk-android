@@ -46,15 +46,19 @@ public class ReportingTaskProcessor<C extends ComponentUnit> extends TaskProcess
     void runTasks() {
         super.runTasks();
         ReportRequestConfig config = getComponent().getFreshReportRequestConfig();
-        YLogger.d("%s Should run report task. ID = %s. Data sending enabled is %b",
-                TAG, config.getApiKey(), config.getCurrentDataSendingState());
+        YLogger.debug(
+            TAG,
+            "Should run report task. ID = %s. Data sending enabled is %b",
+            config.getApiKey(),
+            config.getCurrentDataSendingState()
+        );
         if (config.getCurrentDataSendingState() && Utils.isApiKeyDefined(config.getApiKey())) {
             final NetworkTask reportTask;
 
             try {
                 reportTask = NetworkTaskFactory.createReportTask(getComponent());
             } catch (Throwable exception) {
-                YLogger.e(exception, "%s", TAG);
+                YLogger.error(TAG, exception);
                 return;
             }
 

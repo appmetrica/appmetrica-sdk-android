@@ -13,6 +13,8 @@ import io.appmetrica.analytics.logger.internal.YLogger;
 
 public class AESEventEncrypter implements EventEncrypter {
 
+    private static final String TAG = "[AESEventEncrypter]";
+
     @NonNull
     private final AESEncrypter mAESEncrypter;
 
@@ -42,7 +44,7 @@ public class AESEventEncrypter implements EventEncrypter {
                     result = Base64.encodeToString(encryptedBytes, Base64.DEFAULT);
                 }
             } catch (Throwable e) {
-                YLogger.e(e, e.getMessage());
+                YLogger.error(TAG, e, e.getMessage());
             }
         }
         counterReport.setValue(result);
@@ -57,7 +59,7 @@ public class AESEventEncrypter implements EventEncrypter {
                 byte[] bytesToDecrypt = Base64.decode(input, Base64.DEFAULT);
                 result = mAESEncrypter.decrypt(bytesToDecrypt);
             } catch (Throwable e) {
-                YLogger.e(e, e.getMessage());
+                YLogger.error(TAG, e, e.getMessage());
             }
         }
         return result;

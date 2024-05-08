@@ -37,8 +37,12 @@ public class CartActionInfoEventConverter implements ECommerceEventConverter<Car
 
         BytesTruncatedProvider total = BytesTruncatedInfo.total(cartItemConvertingResult);
 
-        if (YLogger.DEBUG && total.getBytesTruncated() > 0) {
-            YLogger.d(ECommerceConstants.FEATURE_TAG + TAG, "Total bytes truncated = %d", total.getBytesTruncated());
+        if (total.getBytesTruncated() > 0) {
+            YLogger.debug(
+                ECommerceConstants.FEATURE_TAG + TAG,
+                "Total bytes truncated = %d",
+                total.getBytesTruncated()
+            );
         }
 
         return Collections.singletonList(new Result<Ecommerce.ECommerceEvent, BytesTruncatedProvider>(proto, total));

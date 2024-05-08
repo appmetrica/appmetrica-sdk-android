@@ -35,8 +35,8 @@ public class StartupCenter {
                 mLastStartupState = newState;
                 listeners = getStartupListeners(packageName);
             }
-            YLogger.d("%s startup changed for package %s. Total listeners: %d. New value %s",
-                    TAG, packageName, listeners.size(), newState);
+            YLogger.debug(TAG,"startup changed for package %s. Total listeners: %d. New value %s",
+                packageName, listeners.size(), newState);
             for (StartupListener listener : listeners) {
                 listener.onStartupChanged(newState);
             }
@@ -45,13 +45,13 @@ public class StartupCenter {
         public void onStartupError(@NonNull String packageName,
                                    @NonNull StartupError error,
                                    @Nullable StartupState existingState) {
-            YLogger.d("%s startup failed for package %s. reason %s", TAG, packageName, error);
+            YLogger.debug(TAG, "startup failed for package %s. reason %s", packageName, error);
             final List<StartupListener> listeners;
             synchronized (mStartupUnitsByPackage) {
                 listeners = getStartupListeners(packageName);
             }
             for (StartupListener listener : listeners) {
-                YLogger.d("%sNotify listener %s with new startup error", TAG, listener);
+                YLogger.debug(TAG, "Notify listener %s with new startup error", listener);
                 listener.onStartupError(error, existingState);
             }
         }
@@ -60,10 +60,10 @@ public class StartupCenter {
         public List<StartupListener> getStartupListeners(@NonNull String packageName) {
             Collection<StartupListener> startupListeners = mStartupListenersByPackage.get(packageName);
             if (startupListeners == null) {
-                YLogger.d("%s no listeners found", TAG);
+                YLogger.debug(TAG, "no listeners found");
                 return new ArrayList<StartupListener>();
             } else {
-                YLogger.d("%s %d listeners found", TAG, startupListeners.size());
+                YLogger.debug(TAG, "%d listeners found", startupListeners.size());
                 return new ArrayList<StartupListener>(startupListeners);
             }
         }
@@ -74,7 +74,7 @@ public class StartupCenter {
                                               @NonNull StartupRequestConfig.Arguments arguments) {
         StartupUnit unit;
         boolean needToUpdateConfiguration = true;
-        YLogger.d("%s  getOrCreateStartupUnit for component %s", TAG, componentId);
+        YLogger.debug(TAG, "getOrCreateStartupUnit for component %s", componentId);
         unit = mStartupUnitsByPackage.get(componentId.getPackage());
         if (unit == null) {
             synchronized (mStartupUnitsByPackage) {
@@ -96,7 +96,7 @@ public class StartupCenter {
     StartupUnit createStartupUnit(@NonNull Context context,
                                   @NonNull ComponentId componentId,
                                   @NonNull StartupRequestConfig.Arguments arguments) {
-        YLogger.d("%s  createStartupUnit for component %s", TAG, componentId);
+        YLogger.debug(TAG, "createStartupUnit for component %s", componentId);
         StartupUnit startupUnit = new StartupUnit(
             new StartupUnitComponents(
                 context,
@@ -112,11 +112,11 @@ public class StartupCenter {
     public void registerStartupListener(@NonNull ComponentId componentId,
                                         @NonNull StartupListener startupListener) {
         synchronized (mStartupUnitsByPackage) {
-            YLogger.d(
-                    "%s  registerStartupListener: %s for component %s",
-                    TAG,
-                    startupListener,
-                    componentId
+            YLogger.debug(
+                TAG,
+                "registerStartupListener: %s for component %s",
+                startupListener,
+                componentId
             );
             mStartupListenersByPackage.put(componentId.getPackage(), startupListener);
             if (mLastStartupState != null) {
@@ -127,11 +127,11 @@ public class StartupCenter {
 
     public void unregisterStartupListener(@NonNull ComponentId componentId, StartupListener startupListener) {
         Collection<StartupListener> remainingUnits;
-        YLogger.d(
-                "%s  unregisterStartupListeners %s for component %s",
-                TAG,
-                startupListener,
-                componentId
+        YLogger.debug(
+            TAG,
+            "unregisterStartupListeners %s for component %s",
+            startupListener,
+            componentId
         );
         synchronized (mStartupUnitsByPackage) {
             remainingUnits = mStartupListenersByPackage.remove(

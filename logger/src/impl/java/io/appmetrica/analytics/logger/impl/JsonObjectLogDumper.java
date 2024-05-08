@@ -6,6 +6,8 @@ import org.json.JSONObject;
 
 class JsonObjectLogDumper implements IObjectLogDumper<JSONObject> {
 
+    private static final String TAG = "[JsonObjectLogDumper]";
+
     static final int JSON_INDENT_SPACES = 2;
     private static final String DUMP_EXCEPTION_MESSAGE = "Exception during dumping JSONObject";
 
@@ -14,7 +16,7 @@ class JsonObjectLogDumper implements IObjectLogDumper<JSONObject> {
         try {
             return input.toString(JSON_INDENT_SPACES);
         } catch (Throwable e) {
-            YLogger.e(e, DUMP_EXCEPTION_MESSAGE);
+            YLogger.error(TAG, e, DUMP_EXCEPTION_MESSAGE);
         }
         return DUMP_EXCEPTION_MESSAGE;
     }

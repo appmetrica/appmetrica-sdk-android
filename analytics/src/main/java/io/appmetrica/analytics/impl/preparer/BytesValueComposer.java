@@ -10,6 +10,8 @@ import io.appmetrica.analytics.logger.internal.YLogger;
 
 public class BytesValueComposer implements ValueComposer {
 
+    private static final String TAG = "[BytesValueComposer]";
+
     @NonNull
     private final EventEncrypterProvider mEventEncrypterProvider;
 
@@ -30,7 +32,7 @@ public class BytesValueComposer implements ValueComposer {
             try {
                 value = Base64.decode(event.getValue(), Base64.DEFAULT);
             } catch (Throwable e) {
-                YLogger.e(e, "Something went wrong while decoding base 64 event value.");
+                YLogger.error(TAG, e, "Something went wrong while decoding base 64 event value.");
             }
         }
         EventEncrypter eventEncrypter = mEventEncrypterProvider.getEventEncrypter(event.getEventEncryptionMode());

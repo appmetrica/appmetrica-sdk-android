@@ -63,12 +63,12 @@ public class ComponentsRepository {
                     clientConfiguration
             );
             components.put(componentId.toString(), component);
-            YLogger.d(
-                    "%sNew %s, component with Id: %s. Size: %d",
-                    TAG,
-                    component.getClass().getSimpleName(),
-                    componentId,
-                    components.size()
+            YLogger.debug(
+                TAG,
+                "New %s, component with Id: %s. Size: %d",
+                component.getClass().getSimpleName(),
+                componentId,
+                components.size()
             );
         } else {
             component.updateConfig(clientConfiguration);

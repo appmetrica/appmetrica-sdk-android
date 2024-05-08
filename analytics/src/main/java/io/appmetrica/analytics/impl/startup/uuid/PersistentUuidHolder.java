@@ -63,7 +63,7 @@ class PersistentUuidHolder {
     public void checkMigration() {
         File file = FileUtils.getFileFromSdkStorage(context, FILE_NAME);
         if (file == null) {
-            YLogger.w(TAG, "UUID file is null");
+            YLogger.warning(TAG, "UUID file is null");
             return;
         }
         if (!file.exists()) {

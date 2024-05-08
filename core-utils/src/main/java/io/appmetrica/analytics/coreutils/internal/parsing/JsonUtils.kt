@@ -6,6 +6,8 @@ import io.appmetrica.analytics.logger.internal.YLogger
 import org.json.JSONArray
 import org.json.JSONObject
 
+private const val TAG = "[JsonUtils]"
+
 fun JSONObject?.optLongOrDefault(key: String, fallback: Long?): Long? = optLongOrNull(key) ?: fallback
 
 fun JSONObject?.optLongOrNull(key: String): Long? {
@@ -13,7 +15,7 @@ fun JSONObject?.optLongOrNull(key: String): Long? {
         try {
             return this.getLong(key)
         } catch (e: Throwable) {
-            YLogger.e(e, e.message)
+            YLogger.error(TAG, e, e.message)
         }
     }
     return null
@@ -26,7 +28,7 @@ fun JSONObject?.optFloatOrNull(key: String): Float? {
         try {
             return this.getDouble(key).toFloat()
         } catch (e: Throwable) {
-            YLogger.e(e, e.message)
+            YLogger.error(TAG, e, e.message)
         }
     }
     return null
@@ -40,7 +42,7 @@ fun JSONObject?.optStringOrNull(key: String): String? {
         try {
             return this.getString(key)
         } catch (e: Throwable) {
-            YLogger.e(e, e.message)
+            YLogger.error(TAG, e, e.message)
         }
     }
     return null
@@ -56,7 +58,7 @@ fun JSONObject?.optBooleanOrNull(key: String): Boolean? {
         try {
             return this.getBoolean(key)
         } catch (e: Throwable) {
-            YLogger.e(e, e.message)
+            YLogger.error(TAG, e, e.message)
         }
     }
     return null

@@ -6,13 +6,15 @@ import java.util.concurrent.Callable;
 
 public abstract class SafeCallable<T> implements Callable<T> {
 
+    private static final String TAG = "[SafeCallable]";
+
     @Override
     @Nullable
     public T call() {
         try {
             return callSafely();
         } catch (Throwable e) {
-            YLogger.e(e, e.getMessage());
+            YLogger.error(TAG, e, e.getMessage());
         }
         return null;
     }

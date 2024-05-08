@@ -58,10 +58,10 @@ public class DataSendingRestrictionControllerImpl implements DataSendingRestrict
 
     public synchronized void setEnabledFromMainReporter(@Nullable Boolean dataSendingEnabled) {
         if (Utils.isFieldSet(dataSendingEnabled) || mRestrictedInMainReporter == null) {
-            YLogger.d(
-                    "%ssetEnabledFromMainReporter: %s",
-                    TAG,
-                    dataSendingEnabled == null ? "null" : String.valueOf(dataSendingEnabled)
+            YLogger.debug(
+                TAG,
+                "setEnabledFromMainReporter: %s",
+                dataSendingEnabled == null ? "null" : String.valueOf(dataSendingEnabled)
             );
             mRestrictedInMainReporter = BooleanUtils.isFalse(dataSendingEnabled);
             mPreferencesServiceDbStorage.storeRestrictionFromMainReporter(mRestrictedInMainReporter);
@@ -72,11 +72,11 @@ public class DataSendingRestrictionControllerImpl implements DataSendingRestrict
                                                           @Nullable Boolean dataSendingEnabled) {
         if (Utils.isFieldSet(dataSendingEnabled) ||
                 (mEnabledReporters.contains(apiKey) == false && mRestrictedReporters.contains(apiKey) == false)) {
-            YLogger.d(
-                    "%ssetEnabledForReporter with API_KEY=%s: %s",
-                    TAG,
-                    apiKey,
-                    dataSendingEnabled == null ? "null" : String.valueOf(dataSendingEnabled)
+            YLogger.debug(
+                TAG,
+                "setEnabledForReporter with API_KEY=%s: %s",
+                apiKey,
+                dataSendingEnabled == null ? "null" : String.valueOf(dataSendingEnabled)
             );
             if (WrapUtils.getOrDefault(dataSendingEnabled,
                     AppMetricaDefaultValues.DEFAULT_REPORTER_DATA_SENDING_ENABLED)) {
@@ -95,14 +95,14 @@ public class DataSendingRestrictionControllerImpl implements DataSendingRestrict
                 ? mEnabledReporters.isEmpty() && mRestrictedReporters.isEmpty()
                 : mRestrictedInMainReporter;
 
-        YLogger.d(
-                "%sisRestrictedForReporter = %b (mRestrictedInMainReporter = %s; mEnabledReportersCount = %d); " +
-                        "mRestrictedReportersCount = %d",
-                TAG,
-                result,
-                mRestrictedInMainReporter == null ? "null" : String.valueOf(mRestrictedInMainReporter),
-                mEnabledReporters.size(),
-                mRestrictedReporters.size()
+        YLogger.debug(
+            TAG,
+            "isRestrictedForReporter = %b (mRestrictedInMainReporter = %s; mEnabledReportersCount = %d); " +
+                "mRestrictedReportersCount = %d",
+            result,
+            mRestrictedInMainReporter == null ? "null" : String.valueOf(mRestrictedInMainReporter),
+            mEnabledReporters.size(),
+            mRestrictedReporters.size()
         );
 
         return result;
@@ -113,12 +113,12 @@ public class DataSendingRestrictionControllerImpl implements DataSendingRestrict
 
         boolean result = mRestrictedInMainReporter == null ? mEnabledReporters.isEmpty() : mRestrictedInMainReporter;
 
-        YLogger.d(
-                "%sisRestrictedForAppMetrica = %b (mRestrictedInMainReporter = %s); mEnabledReportersCount = %d",
-                TAG,
-                result,
-                mRestrictedInMainReporter == null ? "null" : String.valueOf(mRestrictedInMainReporter),
-                mEnabledReporters.size()
+        YLogger.debug(
+            TAG,
+            "isRestrictedForAppMetrica = %b (mRestrictedInMainReporter = %s); mEnabledReportersCount = %d",
+            result,
+            mRestrictedInMainReporter == null ? "null" : String.valueOf(mRestrictedInMainReporter),
+            mEnabledReporters.size()
         );
 
         return result;
@@ -130,14 +130,14 @@ public class DataSendingRestrictionControllerImpl implements DataSendingRestrict
                 ? !mRestrictedReporters.isEmpty() || mEnabledReporters.isEmpty()
                 : mRestrictedInMainReporter;
 
-        YLogger.d(
-                "%sisRestrictedForBackgroundDataCollection = %b (mRestrictedInMainReporter = %s; " +
-                        "mRestrictedReporters = %s; mEnabledReporters = %s)",
-                TAG,
-                result,
-                String.valueOf(mRestrictedInMainReporter),
-                mRestrictedReporters.size(),
-                mEnabledReporters.size()
+        YLogger.debug(
+            TAG,
+            "isRestrictedForBackgroundDataCollection = %b (mRestrictedInMainReporter = %s; " +
+                "mRestrictedReporters = %s; mEnabledReporters = %s)",
+            result,
+            String.valueOf(mRestrictedInMainReporter),
+            mRestrictedReporters.size(),
+            mEnabledReporters.size()
         );
         return result;
     }

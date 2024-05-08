@@ -11,6 +11,8 @@ import java.util.concurrent.TimeUnit;
 
 public abstract class AbstractSessionFactory implements ISessionFactory<SessionArguments> {
 
+    private static final String TAG = "[AbstractSessionFactory]";
+
     private final ComponentUnit mComponentUnit;
     @NonNull
     private final SessionIDProvider sessionIDProvider;
@@ -70,7 +72,7 @@ public abstract class AbstractSessionFactory implements ISessionFactory<SessionA
                 TimeUnit.MILLISECONDS.toSeconds(arguments.creationTimestamp)
         );
 
-        YLogger.d("%s session created: %s", mArguments.getType(), sessionId);
+        YLogger.debug(TAG, "%s session created: %s", mArguments.getType(), sessionId);
         return fillFromStorage();
     }
 

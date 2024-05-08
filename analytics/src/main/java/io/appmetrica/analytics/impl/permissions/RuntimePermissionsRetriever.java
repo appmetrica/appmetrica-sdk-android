@@ -16,6 +16,8 @@ import java.util.List;
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 class RuntimePermissionsRetriever implements PermissionRetriever {
 
+    private static final String TAG = "[RuntimePermissionsRetriever]";
+
     private final Context mContext;
     private final SafePackageManager mSafePackageManager;
 
@@ -49,10 +51,10 @@ class RuntimePermissionsRetriever implements PermissionRetriever {
             String permissionName = permissions[i];
             if (permissionFlags != null && permissionFlags.length > i &&
                     (permissionFlags[i] & PackageInfo.REQUESTED_PERMISSION_GRANTED) != 0) {
-                YLogger.d("Permission %s is granted", permissionName);
+                YLogger.debug(TAG, "Permission %s is granted", permissionName);
                 stateList.add(new PermissionState(permissionName, true));
             } else {
-                YLogger.d("Permission %s is not granted", permissionName);
+                YLogger.debug(TAG, "Permission %s is not granted", permissionName);
                 stateList.add(new PermissionState(permissionName, false));
             }
         }

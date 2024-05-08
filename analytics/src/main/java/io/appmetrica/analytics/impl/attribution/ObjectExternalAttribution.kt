@@ -12,6 +12,8 @@ class ObjectExternalAttribution(
 ) {
 
     companion object {
+        private const val TAG = "[ObjectExternalAttribution]"
+
         private fun toProto(
             provider: ExternalAttributionType,
             value: Any
@@ -25,7 +27,7 @@ class ObjectExternalAttribution(
                 try {
                     jsonObject.put(it.name, it.get(this))
                 } catch (e: Throwable) {
-                    YLogger.e(e, "Found field `${it.name}` with illegal value for JSONObject")
+                    YLogger.error(TAG, e, "Found field `${it.name}` with illegal value for JSONObject")
                 }
             }
         }

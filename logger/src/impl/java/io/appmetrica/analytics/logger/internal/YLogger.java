@@ -22,27 +22,9 @@ public final class YLogger {
         }
     }
 
-    public static void d(@NonNull String msg, Object... args) {
-        if (DEBUG) {
-            impl.d(msg, args);
-        }
-    }
-
-    public static void i(@NonNull String msg, Object... args) {
-        if (DEBUG) {
-            impl.i(msg, args);
-        }
-    }
-
     public static void info(@NonNull String tag, @NonNull String message, Object... args) {
         if (DEBUG) {
             impl.info(tag, message, args);
-        }
-    }
-
-    public static void w(@NonNull String msg, final Object... args) {
-        if (DEBUG) {
-            impl.w(msg, args);
         }
     }
 
@@ -52,21 +34,9 @@ public final class YLogger {
         }
     }
 
-    public static void e(@NonNull String msg, final Object... args) {
-        if (DEBUG) {
-            impl.e(msg, args);
-        }
-    }
-
     public static void error(@NonNull String tag, @NonNull String msg, Object... args) {
         if (DEBUG) {
             impl.error(tag, msg, args);
-        }
-    }
-
-    public static void e(@NonNull Throwable e, @Nullable String msg, final Object... args) {
-        if (DEBUG) {
-            impl.e(e, msg, args);
         }
     }
 
@@ -77,7 +47,9 @@ public final class YLogger {
     }
 
     public static void error(@NonNull String tag, @Nullable Throwable e) {
-        error(tag, e, null);
+        if (DEBUG) {
+            error(tag, e, null);
+        }
     }
 
     public static void dumpJson(@NonNull String tag, @NonNull JSONObject jsonObject) {

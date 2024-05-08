@@ -11,6 +11,8 @@ class ExternalAttributionHelper(
     private val timeProvider: TimeProvider
 ) {
 
+    private val tag = "[ExternalAttributionHelper]"
+
     fun isInAttributionCollectingWindow(): Boolean {
         val collectingInterval = component.startupState.externalAttributionConfig?.collectingInterval
 
@@ -20,7 +22,7 @@ class ExternalAttributionHelper(
                 return false
             }
         } else {
-            YLogger.e("Attribution collecting interval is null")
+            YLogger.error(tag, "Attribution collecting interval is null")
             return false
         }
         return true
@@ -35,7 +37,7 @@ class ExternalAttributionHelper(
         return (prevValue == null) || try {
             !JSONObject(data).isEqualTo(JSONObject(prevValue))
         } catch (e: Throwable) {
-            YLogger.e(e, "Failed to parse attribution")
+            YLogger.error(tag, e, "Failed to parse attribution")
             true
         }
     }

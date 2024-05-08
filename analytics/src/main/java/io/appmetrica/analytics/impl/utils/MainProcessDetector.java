@@ -15,6 +15,8 @@ import java.util.concurrent.TimeUnit;
  */
 public class MainProcessDetector implements ProcessDetector {
 
+    private static final String TAG = "[MainProcessDetector]";
+
     private volatile String mProcessName;
 
     /** @return The name of the current process. E.g. "org.chromium.chrome:privileged_process0". */
@@ -51,7 +53,7 @@ public class MainProcessDetector implements ProcessDetector {
             ClientServiceLocator.getInstance().getClientExecutorProvider().getMainHandler().post(future);
             result = future.get(5, TimeUnit.SECONDS);
         } catch (Throwable e) {
-            YLogger.e(e, e.getMessage());
+            YLogger.error(TAG, e, e.getMessage());
         }
 
         return result;

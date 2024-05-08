@@ -57,7 +57,7 @@ public class CartItemConverter
         BytesTruncatedProvider totalTruncationInfo =
                 BytesTruncatedInfo.total(productResult, revenueResult, referrerResult);
 
-        if (YLogger.DEBUG && totalTruncationInfo.getBytesTruncated() > 0) {
+        if (totalTruncationInfo.getBytesTruncated() > 0) {
             YLogger.debug(
                     ECommerceConstants.FEATURE_TAG + TAG,
                     "Total bytes truncated (product + revenue + referrer ) = %d(%d + %d + %d)",

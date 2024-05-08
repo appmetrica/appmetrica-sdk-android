@@ -41,7 +41,7 @@ public class PromocodesConverter
             }
         }
 
-        if (YLogger.DEBUG && promocodesTrimmingResult.getBytesTruncated() > 0) {
+        if (promocodesTrimmingResult.getBytesTruncated() > 0) {
             YLogger.debug(
                    ECommerceConstants.FEATURE_TAG + TAG,
                    "Trim %s -> %s with %d dropped items and bytesTruncated = %d",

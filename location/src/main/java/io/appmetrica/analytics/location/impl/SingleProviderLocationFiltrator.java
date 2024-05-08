@@ -109,18 +109,16 @@ class SingleProviderLocationFiltrator {
 
     private boolean isLocationNewerOrTheSame(@NonNull Location location) {
         boolean result = lastLocation == null || (location.getTime() - lastLocation.getTime() >= 0);
-        if (YLogger.DEBUG) {
-            if (lastLocation == null) {
-                YLogger.info(TAG, "[LocationHandler] isLocationNewerOrTheSame: mLastLocation = null");
-            } else {
-                YLogger.info(TAG, "[LocationHandler] isLocationNewerOrTheSame = mLastLocation == null (%s) || " +
-                        "(locationTime(%s) - lastLocationTime(%s) = %s >= 0 ? %s)",
-                    String.valueOf(false),
-                    String.valueOf(location.getTime()),
-                    String.valueOf(lastLocation.getTime()),
-                    String.valueOf(location.getTime() - lastLocation.getTime()),
-                    String.valueOf(result));
-            }
+        if (lastLocation == null) {
+            YLogger.info(TAG, "[LocationHandler] isLocationNewerOrTheSame: mLastLocation = null");
+        } else {
+            YLogger.info(TAG, "[LocationHandler] isLocationNewerOrTheSame = mLastLocation == null (%s) || " +
+                    "(locationTime(%s) - lastLocationTime(%s) = %s >= 0 ? %s)",
+                String.valueOf(false),
+                String.valueOf(location.getTime()),
+                String.valueOf(lastLocation.getTime()),
+                String.valueOf(location.getTime() - lastLocation.getTime()),
+                String.valueOf(result));
         }
 
         return result;

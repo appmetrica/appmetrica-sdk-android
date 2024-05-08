@@ -15,7 +15,7 @@ public class ReferrerParser {
 
     @NonNull
     public DeferredDeeplinkState parseDeferredDeeplinkState(@Nullable String referrer) {
-        YLogger.d("%s parse deeplink from referrer: %s", TAG, referrer);
+        YLogger.debug(TAG, "parse deeplink from referrer: %s", referrer);
         Map<String, String> parameters = splitQuery(referrer);
         String deeplink = Uri.decode(parameters.get(DEFERRED_DEEPLINK_KEY));
         Map<String, String> deeplinkParameters = null;

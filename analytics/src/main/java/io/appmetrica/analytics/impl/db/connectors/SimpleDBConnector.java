@@ -6,6 +6,9 @@ import io.appmetrica.analytics.impl.db.DatabaseStorage;
 import io.appmetrica.analytics.logger.internal.YLogger;
 
 public class SimpleDBConnector implements DBConnector {
+
+    private static final String TAG = "[SimpleDBConnector]";
+
     private final DatabaseStorage mStorage;
 
     public SimpleDBConnector(DatabaseStorage storage) {
@@ -17,7 +20,7 @@ public class SimpleDBConnector implements DBConnector {
         try {
             return mStorage.getWritableDatabase();
         } catch (Throwable ex) {
-            YLogger.w("Something went wrong while opening database\n" + ex);
+            YLogger.warning(TAG,"Something went wrong while opening database\n" + ex);
         }
         return null;
     }

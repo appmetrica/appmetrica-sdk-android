@@ -11,6 +11,8 @@ import org.json.JSONObject;
 
 public class PreloadInfoWrapper {
 
+    private static final String TAG = "[PreloadInfoWrapper]";
+
     @Nullable
     private PreloadInfoState mPreloadInfoState;
 
@@ -41,7 +43,7 @@ public class PreloadInfoWrapper {
             try {
                 eventValue.put(PreloadInfoState.JsonKeys.PRELOAD_INFO, mPreloadInfoState.toInternalJson());
             } catch (Throwable e) {
-                YLogger.e(e, e.getMessage());
+                YLogger.error(TAG, e, e.getMessage());
             }
         }
         return eventValue;

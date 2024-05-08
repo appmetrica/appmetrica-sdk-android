@@ -32,17 +32,17 @@ public class BatteryInfoProvider implements ChargeTypeProvider {
     private final Consumer<Intent> batteryChargeTypeRootListener = new Consumer<Intent>() {
         @Override
         public void consume(@Nullable Intent intent) {
-            YLogger.d("%sonReceive power state update with intent: %s", TAG, intent);
+            YLogger.debug(TAG, "onReceive power state update with intent: %s", intent);
             final BatteryInfo oldBatteryInfo = mBatteryInfo;
             ChargeType oldChargeType = oldBatteryInfo == null ? null : oldBatteryInfo.chargeType;
             final BatteryInfo newBatteryInfo = extractBatteryInfo(intent);
             mBatteryInfo = newBatteryInfo;
             if (oldChargeType != newBatteryInfo.chargeType) {
-                YLogger.d(
-                        "%sPost update charge type: %s -> %s",
-                        TAG,
-                        oldChargeType == null ? null : oldChargeType.name(),
-                        newBatteryInfo.chargeType.name()
+                YLogger.debug(
+                    TAG,
+                    "Post update charge type: %s -> %s",
+                    oldChargeType == null ? null : oldChargeType.name(),
+                    newBatteryInfo.chargeType.name()
                 );
                 mExecutor.execute(new SafeRunnable() {
                     @Override
@@ -73,14 +73,14 @@ public class BatteryInfoProvider implements ChargeTypeProvider {
         final BatteryInfo batteryInfo = mBatteryInfo;
         ChargeType chargeType =
                 batteryInfo == null ? ChargeType.UNKNOWN : batteryInfo.chargeType;
-        YLogger.d("%sReturn charge type = %s", TAG, chargeType);
+        YLogger.debug(TAG, "Return charge type = %s", chargeType);
         return chargeType;
     }
 
     @Override
     public synchronized void registerChargeTypeListener(@NonNull ChargeTypeChangeListener listener) {
         mChargeTypeChangeListeners.add(listener);
-        YLogger.d("%s Register charge type listener. Total count: %d", TAG, mChargeTypeChangeListeners.size());
+        YLogger.debug(TAG, "Register charge type listener. Total count: %d", mChargeTypeChangeListeners.size());
         listener.onChargeTypeChanged(getChargeType());
     }
 
@@ -99,7 +99,7 @@ public class BatteryInfoProvider implements ChargeTypeProvider {
             batteryLevel = extractBatteryLevel(batteryStatus);
             chargeType = extractChargeType(batteryStatus);
         } else {
-            YLogger.d("%sCould not get battery status from sticky broadcast", TAG);
+            YLogger.debug(TAG, "Could not get battery status from sticky broadcast");
         }
 
         return new BatteryInfo(batteryLevel, chargeType);
@@ -115,7 +115,7 @@ public class BatteryInfoProvider implements ChargeTypeProvider {
     @NonNull
     private ChargeType extractChargeType(@NonNull Intent batteryStatus) {
         int chargePlugType = batteryStatus.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);
-        YLogger.d("%sExtracted chargeType: %d", TAG, chargePlugType);
+        YLogger.debug(TAG, "Extracted chargeType: %d", chargePlugType);
         ChargeType chargeType = ChargeType.NONE;
 
         switch (chargePlugType) {

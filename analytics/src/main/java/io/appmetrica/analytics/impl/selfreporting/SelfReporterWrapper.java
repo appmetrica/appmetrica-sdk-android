@@ -31,7 +31,7 @@ public class SelfReporterWrapper implements IReporterExtended, IPluginReporter {
     private volatile IReporterExtended mReporter;
 
     synchronized void onInitializationFinished(@NonNull Context context) {
-        YLogger.d("%score initialization finished. Initializing SelfReporter", TAG);
+        YLogger.debug(TAG, "core initialization finished. Initializing SelfReporter");
         mReporter = ReporterProxyStorage.getInstance().getOrCreate(context, SdkData.SDK_API_KEY_UUID);
         for (IReporterCommandPerformer performer : mBufferedEvents) {
             performer.perform(mReporter);

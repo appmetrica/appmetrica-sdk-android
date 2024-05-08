@@ -14,6 +14,8 @@ import io.appmetrica.analytics.logger.internal.YLogger;
 
 public class LockedOnFileDBConnector implements DBConnector {
 
+    private static final String TAG = "[LockedOnFileDBConnector]";
+
     private final Context mContext;
     private final String mDbName;
     @NonNull
@@ -46,10 +48,10 @@ public class LockedOnFileDBConnector implements DBConnector {
         try {
             mDbFileLock.lock();
             mStorage = new DatabaseStorage(mContext, mDbName, tablesManager);
-            YLogger.i(this + mDbName);
+            YLogger.info(TAG, this + mDbName);
             return mStorage.getWritableDatabase();
         } catch (Throwable e) {
-            YLogger.e(e, "Exception while opening DatabaseStorage for %s", mDbName);
+            YLogger.error(TAG, e, "Exception while opening DatabaseStorage for %s", mDbName);
         }
         return null;
     }

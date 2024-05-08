@@ -53,7 +53,7 @@ public class ReferrerConverter
         BytesTruncatedProvider totalTruncationInfo =
                 BytesTruncatedInfo.total(typeTrimmingResult, idTrimmingResult, screenConvertingResult);
 
-        if (YLogger.DEBUG && totalTruncationInfo.getBytesTruncated() > 0) {
+        if (totalTruncationInfo.getBytesTruncated() > 0) {
             YLogger.debug(
                     ECommerceConstants.FEATURE_TAG + TAG,
                     "Total bytes truncated (type + id + screen) = %d (%d + %d + %d)",

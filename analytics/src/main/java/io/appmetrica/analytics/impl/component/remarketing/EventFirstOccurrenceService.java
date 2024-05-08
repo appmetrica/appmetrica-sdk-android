@@ -47,22 +47,22 @@ public class EventFirstOccurrenceService {
             save();
         }
 
-        YLogger.d(
-                "%sReturn status: %s for eventName: %s. Current service status: hashesCount = %d for version: " +
-                        "%d with treatUnknownEventAsNew: %b",
-                TAG,
-                status.name(),
-                eventName,
-                mEventHashes.getHashesCountFromLastVersion(),
-                mEventHashes.getLastVersionCode(),
-                mEventHashes.treatUnknownEventAsNew()
+        YLogger.debug(
+            TAG,
+            "Return status: %s for eventName: %s. Current service status: hashesCount = %d for version: " +
+                "%d with treatUnknownEventAsNew: %b",
+            status.name(),
+            eventName,
+            mEventHashes.getHashesCountFromLastVersion(),
+            mEventHashes.getLastVersionCode(),
+            mEventHashes.treatUnknownEventAsNew()
         );
 
         return status;
     }
 
     public void reset() {
-        YLogger.d("%sReset", TAG);
+        YLogger.debug(TAG, "Reset");
         if (mEventHashes == null) {
             readEventHashes();
         }
@@ -72,17 +72,17 @@ public class EventFirstOccurrenceService {
     }
 
     private void readEventHashes() {
-        YLogger.d("%sRead data from storage", TAG);
+        YLogger.debug(TAG, "Read data from storage");
         mEventHashes = mEventHashesStorage.read();
         if (mEventHashes.getLastVersionCode() != mCurrentVersionCode) {
-            YLogger.d("%sUpdate version", TAG);
+            YLogger.debug(TAG, "Update version");
             mEventHashes.setLastVersionCode(mCurrentVersionCode);
             save();
         }
     }
 
     private void save() {
-        YLogger.d("%sSave data to storage", TAG);
+        YLogger.debug(TAG, "Save data to storage");
         mEventHashesStorage.write(mEventHashes);
     }
 

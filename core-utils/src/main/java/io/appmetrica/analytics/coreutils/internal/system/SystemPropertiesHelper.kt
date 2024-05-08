@@ -6,6 +6,8 @@ import io.appmetrica.analytics.logger.internal.YLogger
 
 object SystemPropertiesHelper {
 
+    private const val TAG = "[SystemPropertiesHelper]"
+
     @JvmStatic
     @SuppressLint("PrivateApi")
     fun readSystemProperty(name: String): String {
@@ -15,7 +17,7 @@ object SystemPropertiesHelper {
             val methodGet = systemProperties.getMethod("get", String::class.java)
             methodGet.invoke(systemProperties, name) as? String ?: ""
         } catch (error: Exception) {
-            YLogger.e(error, "[SystemPropertiesHelper] Cannot get system property %s", name)
+            YLogger.error(TAG, error, "[SystemPropertiesHelper] Cannot get system property %s", name)
             ""
         }
     }

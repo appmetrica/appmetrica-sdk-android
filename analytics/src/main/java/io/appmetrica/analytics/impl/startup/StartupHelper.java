@@ -168,7 +168,7 @@ public class StartupHelper implements StartupIdentifiersProvider, IServerTimeOff
 
     @SuppressLint("VisibleForTests") //fixme https://nda.ya.ru/t/lvWXFf0t6Njj6X
     private void updateAllParamsByReceiver(@NonNull Bundle resultData) {
-        YLogger.d("%sUpdateAllParamsByReceiver: %s", TAG, resultData);
+        YLogger.debug(TAG, "UpdateAllParamsByReceiver: %s", resultData);
         mStartupParams.updateAllParamsByReceiver(resultData);
         notifyCallbacksIfValid();
     }
@@ -176,7 +176,7 @@ public class StartupHelper implements StartupIdentifiersProvider, IServerTimeOff
     public void sendStartupIfNeeded() {
         synchronized (mStartupParamsLock) {
             if (mStartupParams.shouldSendStartup()) {
-                YLogger.d("%sSend startup event", TAG);
+                YLogger.debug(TAG, "Send startup event");
                 sendStartupEvent(mClientClids);
             }
         }
@@ -231,9 +231,12 @@ public class StartupHelper implements StartupIdentifiersProvider, IServerTimeOff
         } else {
             result = mClientClids;
         }
-        YLogger.d(
-                "%sGet clids return %s (startupClids = %s; mClientClids = %s)",
-                TAG, result, startupClids, mClientClids
+        YLogger.debug(
+            TAG,
+            "Get clids return %s (startupClids = %s; mClientClids = %s)",
+            result,
+            startupClids,
+            mClientClids
         );
         return result;
     }
@@ -244,13 +247,13 @@ public class StartupHelper implements StartupIdentifiersProvider, IServerTimeOff
 
     private void notifyCallbackIfNotYet(@NonNull StartupParamsCallback callback,
                                         @NonNull Bundle bundle) {
-        YLogger.d("%s notifyCallbackIfNotYet. Callback: %s, bundle: %s", TAG, callback, bundle);
+        YLogger.debug(TAG, "notifyCallbackIfNotYet. Callback: %s, bundle: %s", callback, bundle);
         if (mStartupParamsCallbacks.containsKey(callback)) {
             List<String> identifiers = mStartupParamsCallbacks.get(callback);
             if (mStartupParams.containsIdentifiers(identifiers)) {
                 notifyCallbackOnReceive(callback, identifiers);
             } else {
-                YLogger.d("%s notify callback with error. Callback: %s, bundle: %s", TAG, callback, bundle);
+                YLogger.debug(TAG, "notify callback with error. Callback: %s, bundle: %s", callback, bundle);
                 StartupError error = StartupError.fromBundle(bundle);
                 StartupParamsCallback.Reason reason = null;
                 if (error == null) {
@@ -279,29 +282,29 @@ public class StartupHelper implements StartupIdentifiersProvider, IServerTimeOff
 
     private void notifyCallbackOnReceive(@NonNull StartupParamsCallback callback,
                                          @NonNull List<String> identifiers) {
-        YLogger.d("%s notifyCallbackOnReceive with identifiers: %s", TAG, identifiers);
+        YLogger.debug(TAG, "notifyCallbackOnReceive with identifiers: %s", identifiers);
         callback.onReceive(createMapWithRequestedIdentifiersOnly(identifiers));
     }
 
     private void notifyCallbackOnError(@NonNull StartupParamsCallback callback,
                                        @NonNull List<String> identifiers,
                                        @NonNull StartupParamsCallback.Reason reason) {
-        YLogger.d("%s notifyCallbackOnError, reason :%s, identifiers: %s", TAG, reason, identifiers);
+        YLogger.debug(TAG, "notifyCallbackOnError, reason :%s, identifiers: %s", reason, identifiers);
         callback.onRequestError(reason, createMapWithRequestedIdentifiersOnly(identifiers));
     }
 
     private void notifyCallbacksIfValid() {
-        YLogger.d("%sNotifyCallbacksIfValid", TAG);
+        YLogger.debug(TAG, "NotifyCallbacksIfValid");
 
         final Map<StartupParamsCallback, List<String>> callbacksToNotify = new WeakHashMap<>();
 
-        YLogger.d("%sTry to notify %d identifiers callbacks", TAG, mStartupParamsCallbacks.size());
+        YLogger.debug(TAG, "Try to notify %d identifiers callbacks", mStartupParamsCallbacks.size());
         for (final Map.Entry<StartupParamsCallback, List<String>> entry : mStartupParamsCallbacks.entrySet()) {
             List<String> requestedIdentifiers = entry.getValue();
-            YLogger.d("%s callback requested identifiers: %s", TAG, requestedIdentifiers);
+            YLogger.debug(TAG, "callback requested identifiers: %s", requestedIdentifiers);
             if (mStartupParams.containsIdentifiers(requestedIdentifiers)) {
                 callbacksToNotify.put(entry.getKey(), requestedIdentifiers);
-                YLogger.d("%s add callback to notify", TAG);
+                YLogger.debug(TAG, "add callback to notify");
             }
         }
         for (final Map.Entry<StartupParamsCallback, List<String>> entry : callbacksToNotify.entrySet()) {
@@ -310,13 +313,11 @@ public class StartupHelper implements StartupIdentifiersProvider, IServerTimeOff
                 notifyCallbackWithLocalDataIfNotYet(callbackWrapper);
             }
         }
-        if (YLogger.DEBUG) {
-            final int nCallbacks = callbacksToNotify.size();
-            YLogger.i(
-                    "%sRemove listeners for startup params, their identifiers are valid. Number of notices: %d",
-                    TAG, nCallbacks
-            );
-        }
+        YLogger.info(
+            TAG,
+            "Remove listeners for startup params, their identifiers are valid. Number of notices: %d",
+            callbacksToNotify.size()
+        );
 
         callbacksToNotify.clear();
     }
@@ -336,32 +337,32 @@ public class StartupHelper implements StartupIdentifiersProvider, IServerTimeOff
     private void registerIdentifiersCallback(final StartupParamsCallback callback, List<String> identifiers) {
         if (mStartupParamsCallbacks.isEmpty()) {
             mReportsHandler.onStartupRequestStarted();
-            YLogger.d("%sNotify startup request started.", TAG);
+            YLogger.debug(TAG, "Notify startup request started.");
         }
         mStartupParamsCallbacks.put(callback, identifiers);
 
-        YLogger.d(
-                "%sRegister callback. Total callbacks count = %d. Callback details: %s with identifiers mask %s",
-                TAG,
-                mStartupParamsCallbacks.size(),
-                callback,
-                identifiers
+        YLogger.debug(
+            TAG,
+            "Register callback. Total callbacks count = %d. Callback details: %s with identifiers mask %s",
+            mStartupParamsCallbacks.size(),
+            callback,
+            identifiers
         );
     }
 
     private void unregisterIdentifiersCallback(final StartupParamsCallback callback) {
         mStartupParamsCallbacks.remove(callback);
 
-        YLogger.d(
-                "%s Unregister callback. Total callbacks count = %d. Callback details: %s.",
-                TAG,
-                mStartupParamsCallbacks.size(),
-                callback
+        YLogger.debug(
+            TAG,
+            "Unregister callback. Total callbacks count = %d. Callback details: %s.",
+            mStartupParamsCallbacks.size(),
+            callback
         );
 
         if (mStartupParamsCallbacks.isEmpty()) {
             mReportsHandler.onStartupRequestFinished();
-            YLogger.d("%sNotify all startup requests finished.", TAG);
+            YLogger.debug(TAG, "Notify all startup requests finished.");
         }
     }
 

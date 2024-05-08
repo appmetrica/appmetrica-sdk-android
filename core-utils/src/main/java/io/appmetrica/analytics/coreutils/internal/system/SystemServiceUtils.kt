@@ -19,7 +19,7 @@ object SystemServiceUtils {
             try {
                 return tryBlock.apply(systemService)
             } catch (ex: Throwable) {
-                YLogger.e(ex, "Exception while $whileWhat")
+                YLogger.error(TAG, ex, "Exception while $whileWhat")
             }
         } else {
             YLogger.warning(TAG, "$whatIsNull is null.")

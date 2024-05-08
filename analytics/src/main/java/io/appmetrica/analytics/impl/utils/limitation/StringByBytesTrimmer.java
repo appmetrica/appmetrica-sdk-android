@@ -11,6 +11,8 @@ import java.io.UnsupportedEncodingException;
 
 public class StringByBytesTrimmer extends BaseTrimmer<String> {
 
+    private static final String TAG = "[StringByBytesTrimmer]";
+
     public StringByBytesTrimmer(int maxSize, @NonNull String tag) {
         this(maxSize, tag, LoggerStorage.getAnonymousPublicLogger());
     }
@@ -38,7 +40,7 @@ public class StringByBytesTrimmer extends BaseTrimmer<String> {
                     }
                 }
             } catch (UnsupportedEncodingException e) {
-                YLogger.e(e, "error while cutting string for %s", getLogName());
+                YLogger.error(TAG, e, "error while cutting string for %s", getLogName());
             }
         }
         return result;

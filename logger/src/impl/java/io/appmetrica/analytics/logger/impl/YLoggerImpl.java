@@ -41,21 +41,9 @@ public class YLoggerImpl {
         }
     }
 
-    public void d(@NonNull String message, Object... args) {
-        if (enabled) {
-            debugMessageLogConsumer.consume(message, args);
-        }
-    }
-
     public void info(@NonNull String tag, @NonNull String message, Object... args) {
         if (enabled) {
             infoMessageLogConsumer.consumeWithTag(tag, message, args);
-        }
-    }
-
-    public void i(@NonNull String message, Object... args) {
-        if (enabled) {
-            infoMessageLogConsumer.consume(message, args);
         }
     }
 
@@ -65,27 +53,9 @@ public class YLoggerImpl {
         }
     }
 
-    public void w(@NonNull String message, Object... args) {
-        if (enabled) {
-            warningMessageLogConsumer.consume(message, args);
-        }
-    }
-
-    public void e(@NonNull String msg, final Object... args) {
-        if (enabled) {
-            baseLogConsumer.fe(msg, args);
-        }
-    }
-
     public void error(@NonNull String tag, @NonNull String msg, Object... args) {
         if (enabled) {
             baseLogConsumer.fe(tag + msg, args);
-        }
-    }
-
-    public void e(@NonNull Throwable e, @Nullable String msg, final Object... args) {
-        if (enabled) {
-            baseLogConsumer.fe(e, msg, args);
         }
     }
 

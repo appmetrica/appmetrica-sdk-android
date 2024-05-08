@@ -8,6 +8,8 @@ import java.io.IOException;
 
 public class EncryptedStateSerializer<T> implements StateSerializer<T> {
 
+    private static final String TAG = "[EncryptedStateSerializer]";
+
     @NonNull
     private final StateSerializer<T> mBackedSerializer;
     @NonNull
@@ -25,7 +27,7 @@ public class EncryptedStateSerializer<T> implements StateSerializer<T> {
         try {
             return mEncrypter.encrypt(mBackedSerializer.toByteArray(message));
         } catch (Throwable e) {
-            YLogger.e(e.getMessage(), e);
+            YLogger.error(TAG, e, e.getMessage());
         }
         return new byte[0];
     }

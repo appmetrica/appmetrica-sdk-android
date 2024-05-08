@@ -146,7 +146,12 @@ public class ComponentUnit implements IReportableComponent, IComponent, EventsFl
                   @NonNull AppEnvironmentProvider appEnvironmentProvider,
                   @NonNull TimePassedChecker timePassedChecker,
                   @NonNull ComponentUnitFieldsFactory fieldsFactory) {
-        YLogger.d("Start to create a new component with Id/APIkey: \"%s\"/%s", componentId, componentId.getApiKey());
+        YLogger.debug(
+            TAG,
+            "Start to create a new component with Id/APIkey: \"%s\"/%s",
+            componentId,
+            componentId.getApiKey()
+        );
 
         mContext = context.getApplicationContext();
         mComponentId = componentId;
@@ -163,8 +168,11 @@ public class ComponentUnit implements IReportableComponent, IComponent, EventsFl
         mReportsDbHelper = fieldsFactory.createDatabaseHelper(this);
         mTaskProcessor = fieldsFactory.createTaskProcessor(this);
 
-        YLogger.d("create holder for a new component with Id/APIkey: \"%s\"/%s",
-                componentId, componentId.getApiKey()
+        YLogger.debug(
+            TAG,
+            "create holder for a new component with Id/APIkey: \"%s\"/%s",
+            componentId,
+            componentId.getApiKey()
         );
         mComponentMigrationHelperCreator = fieldsFactory.createMigrationHelperCreator(this);
         mMaxReportsCondition = fieldsFactory.createMaxReportsCondition(mReportsDbHelper, mConfigHolder);
@@ -207,7 +215,12 @@ public class ComponentUnit implements IReportableComponent, IComponent, EventsFl
         mCertificatesFingerprintsProvider = fieldsFactory.createCertificateFingerprintProvider(mComponentPreferences);
 
         mReportsDbHelper.onComponentCreated();
-        YLogger.d("Create a new component with Id/APIkey: \"%s\"/%s", componentId, componentId.getApiKey());
+        YLogger.debug(
+            TAG,
+            "Create a new component with Id/APIkey: \"%s\"/%s",
+            componentId,
+            componentId.getApiKey()
+        );
     }
 
     @NonNull
@@ -222,7 +235,7 @@ public class ComponentUnit implements IReportableComponent, IComponent, EventsFl
 
     @Override
     public void handleReport(@NonNull CounterReport reportData) {
-        YLogger.i(TAG + " A new report for component \"%s\", data: %s", mComponentId, reportData);
+        YLogger.info(TAG, "A new report for component \"%s\", data: %s", mComponentId, reportData);
 
         if (mPublicLogger.isEnabled()) {
             mPublicLogger.logEvent(reportData, "Event received on service");
@@ -230,7 +243,7 @@ public class ComponentUnit implements IReportableComponent, IComponent, EventsFl
 
         // Just to be sure. Don't report if API key isn't defined for some reasons
         if (!Utils.isApiKeyDefined(mComponentId.getApiKey())) {
-            YLogger.w("Attempt to send report when API key isn't defined correctly");
+            YLogger.warning(TAG, "Attempt to send report when API key isn't defined correctly");
             return;
         }
 
@@ -245,9 +258,7 @@ public class ComponentUnit implements IReportableComponent, IComponent, EventsFl
 
     @Override
     public synchronized void flushEvents() {
-        if (YLogger.DEBUG) {
-            YLogger.i("[ComponentUnit] Flushing has started for component with id \"%s\" ...", mComponentId);
-        }
+        YLogger.info(TAG, "Flushing has started for component with id \"%s\" ...", mComponentId);
 
         mTaskProcessor.flushAllTasks();
     }
@@ -271,7 +282,7 @@ public class ComponentUnit implements IReportableComponent, IComponent, EventsFl
     @Override
     public synchronized void onStartupChanged(@NonNull StartupState newState) {
         mConfigHolder.updateStartupState(newState);
-        YLogger.d("%s startup changed. new StartupState: %s", mComponentId, newState);
+        YLogger.debug(TAG, "%s startup changed. new StartupState: %s", mComponentId, newState);
         mEventTrigger.trigger();
     }
 

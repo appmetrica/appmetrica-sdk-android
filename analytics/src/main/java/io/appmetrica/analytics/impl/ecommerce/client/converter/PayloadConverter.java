@@ -51,7 +51,7 @@ public class PayloadConverter implements
             }
         }
 
-        if (YLogger.DEBUG && truncatedPayload.metaInfo.bytesTruncated > 0) {
+        if (truncatedPayload.metaInfo.bytesTruncated > 0) {
             YLogger.debug(
                     ECommerceConstants.FEATURE_TAG + TAG,
                     "Truncate payload %s -> %s with dropped %d pairs and bytesTruncated = %d",

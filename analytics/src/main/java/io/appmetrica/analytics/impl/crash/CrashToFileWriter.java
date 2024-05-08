@@ -20,6 +20,8 @@ import java.io.PrintWriter;
 
 public class CrashToFileWriter {
 
+    private static final String TAG = "[CrashToFileWriter]";
+
     @NonNull
     private final FileProvider mFileProvider;
     @NonNull
@@ -67,17 +69,17 @@ public class CrashToFileWriter {
                         toSend.getEnvironment(),
                         toSend.getTrimmedFields()
                 ).toJSONString());
-                YLogger.d("Crash saved: %s.", crash.getName());
+                YLogger.debug(TAG, "Crash saved: %s.", crash.getName());
             } catch (IOException ioe) {
-                YLogger.e(ioe, "Can't write crash to file.");
+                YLogger.error(TAG, ioe, "Can't write crash to file.");
             } catch (Throwable e) {
-                YLogger.e(e, "Can't write crash to file. Wrong json.");
+                YLogger.error(TAG, e, "Can't write crash to file. Wrong json.");
             } finally {
                 Utils.closeCloseable(printWriter);
                 fileLocker.unlockAndClear();
             }
         } else {
-            YLogger.e("Failed to prepare crash folder %s", crashFolder.getAbsolutePath());
+            YLogger.error(TAG, "Failed to prepare crash folder %s", crashFolder.getAbsolutePath());
         }
     }
 }

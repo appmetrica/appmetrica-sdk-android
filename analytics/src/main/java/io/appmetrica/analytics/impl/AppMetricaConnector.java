@@ -56,7 +56,7 @@ public class AppMetricaConnector {
     }
 
     public void bindService() {
-        YLogger.d(TAG + " Binding to service ... Application: %s", mContext.getPackageName());
+        YLogger.debug(TAG, "Binding to service ... Application: %s", mContext.getPackageName());
         synchronized (this) {
             if (mService != null) {
                 return;
@@ -69,9 +69,9 @@ public class AppMetricaConnector {
             YLogger.info(TAG, "May be delay");
             appMetricaServiceDelayHandler.maybeDelay(mContext);
             boolean status = mContext.bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
-            YLogger.d("%s bind to service with status: %b", TAG, status);
+            YLogger.debug(TAG, "bind to service with status: %b", status);
         } catch (Throwable exception) {
-            YLogger.e(TAG + " Exception while binding ...\n%s", exception);
+            YLogger.error(TAG, "Exception while binding ...\n%s", exception);
         }
     }
 
@@ -124,13 +124,13 @@ public class AppMetricaConnector {
 
     private synchronized void fullUnbind() {
         if (null != mContext && isConnected()) {
-            YLogger.d(TAG + " Unbinding from service ... Application: %s", mContext.getPackageName());
+            YLogger.debug(TAG, "Unbinding from service ... Application: %s", mContext.getPackageName());
 
             try {
                 mService = null;
                 mContext.unbindService(mConnection);
             } catch (Throwable exception) {
-                YLogger.e(TAG + " Exception while unbinding ...\n%s", exception);
+                YLogger.error(TAG, "Exception while unbinding ...\n%s", exception);
             }
         }
 
@@ -141,7 +141,7 @@ public class AppMetricaConnector {
 
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            YLogger.d(TAG + " Service connected. Component name: %s", name);
+            YLogger.debug(TAG, "Service connected. Component name: %s", name);
 
             synchronized (AppMetricaConnector.this) {
                 mService = IAppMetricaService.Stub.asInterface(service);
@@ -152,7 +152,7 @@ public class AppMetricaConnector {
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-            YLogger.d(TAG + " Service disconnected. Component name: %s", name);
+            YLogger.debug(TAG, "Service disconnected. Component name: %s", name);
 
             synchronized (AppMetricaConnector.this) {
                 mService = null;

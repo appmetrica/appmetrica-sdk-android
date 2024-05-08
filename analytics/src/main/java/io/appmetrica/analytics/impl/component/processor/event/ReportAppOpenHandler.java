@@ -37,7 +37,7 @@ public class ReportAppOpenHandler extends ReportComponentHandler {
                     }
                 }
             } catch (Throwable e) {
-                YLogger.e(e, e.getMessage());
+                YLogger.error(TAG, e, e.getMessage());
             }
         }
         return false;

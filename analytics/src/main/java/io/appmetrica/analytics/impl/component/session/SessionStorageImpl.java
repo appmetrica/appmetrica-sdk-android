@@ -9,6 +9,8 @@ import io.appmetrica.analytics.logger.internal.YLogger;
 
 public class SessionStorageImpl implements SessionStorage {
 
+    private static final String TAG = "[SessionStorageImpl]";
+
     public static final String SLEEP_START = "SESSION_SLEEP_START";
     public static final String LAST_EVENT_OFFSET = "SESSION_LAST_EVENT_OFFSET";
     public static final String SESSION_ID = "SESSION_ID";
@@ -36,7 +38,7 @@ public class SessionStorageImpl implements SessionStorage {
                 jsonObject = new JsonHelper.OptJSONObject(session);
             }
         } catch (Throwable e) {
-            YLogger.e(e, "can't read %s session description", mSessionTag);
+            YLogger.error(TAG, e, "can't read %s session description", mSessionTag);
         }
         mJSONObject = jsonObject;
     }

@@ -37,7 +37,7 @@ public class ReadOldCrashesRunnable implements Runnable {
 
     @Override
     public void run() {
-        YLogger.d("%s read crashes from directory %s", TAG, crashDirectory.getAbsolutePath());
+        YLogger.debug(TAG, "read crashes from directory %s", crashDirectory.getAbsolutePath());
         if (crashDirectory.exists() && crashDirectory.isDirectory()) {
             File[] files = crashDirectory.listFiles();
             if (files != null) {
@@ -45,7 +45,7 @@ public class ReadOldCrashesRunnable implements Runnable {
                     final ExclusiveMultiProcessFileLock fileLocker = fileLocksHolder.getOrCreate(file.getName());
                     try {
                         fileLocker.lock();
-                        YLogger.d("%s handle file %s", TAG, file.getName());
+                        YLogger.debug(TAG, "handle file %s", file.getName());
                         newCrashListener.consume(file);
                     } catch (Throwable ex) {
                         YLogger.error(TAG, ex);
@@ -54,12 +54,15 @@ public class ReadOldCrashesRunnable implements Runnable {
                     }
                 }
             } else {
-                YLogger.d("%s there is no files in %s directory", TAG, crashDirectory.getName());
+                YLogger.debug(TAG, "there is no files in %s directory", crashDirectory.getName());
             }
         } else {
-            YLogger.d(
-                    "%s directory %s exists %b, isDirectory %b", TAG,
-                    crashDirectory.getName(), crashDirectory.exists(), crashDirectory.isDirectory()
+            YLogger.debug(
+                TAG,
+                "directory %s exists %b, isDirectory %b",
+                crashDirectory.getName(),
+                crashDirectory.exists(),
+                crashDirectory.isDirectory()
             );
         }
     }

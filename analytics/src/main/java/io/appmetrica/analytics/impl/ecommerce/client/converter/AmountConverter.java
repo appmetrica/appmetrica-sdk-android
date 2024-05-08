@@ -38,7 +38,7 @@ public class AmountConverter
         proto.unitType = StringUtils.getUTF8Bytes(unitTypeTruncationTrimmingResult.value);
 
         BytesTruncatedProvider totalTruncationInfo = BytesTruncatedInfo.total(unitTypeTruncationTrimmingResult);
-        if (YLogger.DEBUG && totalTruncationInfo.getBytesTruncated() > 0) {
+        if (totalTruncationInfo.getBytesTruncated() > 0) {
             YLogger.debug(
                     ECommerceConstants.FEATURE_TAG + TAG,
                     "Truncate amount. Total bytes truncated = %d",

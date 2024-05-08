@@ -24,12 +24,12 @@ public class JvmCrashReader implements Function<File, JvmCrash>, Consumer<File> 
     @Nullable
     JvmCrash handleCrashData(@NonNull File crashFile, @Nullable String crashData) {
         if (TextUtils.isEmpty(crashData)) {
-            YLogger.e("%s can't read crash %s", TAG, crashFile.getName());
+            YLogger.error(TAG, "can't read crash %s", crashFile.getName());
         } else {
             try {
                 return new JvmCrash(crashData);
             } catch (Throwable e) {
-                YLogger.e("%s can't read crash %s due to JSONException", TAG, crashFile.getName());
+                YLogger.error(TAG, "can't read crash %s due to JSONException", crashFile.getName());
             }
         }
         return null;
@@ -41,12 +41,14 @@ public class JvmCrashReader implements Function<File, JvmCrash>, Consumer<File> 
         try {
             boolean isDeleted = crashFile.delete();
             if (isDeleted == false) {
-                YLogger.w("%s file %s was not deleted.", TAG, crashFile.getName());
+                YLogger.warning(TAG, "file %s was not deleted.", crashFile.getName());
             }
         } catch (Throwable exception) {
-            YLogger.e(
-                    "%s can't handle delete crash file %s due to Exception",
-                    TAG, crashFile.getName(), exception
+            YLogger.error(
+                TAG,
+                "can't handle delete crash file %s due to Exception",
+                crashFile.getName(),
+                exception
             );
         }
     }

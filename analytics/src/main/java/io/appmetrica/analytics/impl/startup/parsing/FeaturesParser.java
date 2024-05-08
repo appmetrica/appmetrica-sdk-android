@@ -46,7 +46,7 @@ public class FeaturesParser {
                 startupResult.setCollectingFlags(collectingFlags);
             }
         } catch (Throwable ex) {
-            YLogger.e(ex, "%s", TAG);
+            YLogger.error(TAG, ex);
         }
     }
 

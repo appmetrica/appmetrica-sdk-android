@@ -125,7 +125,7 @@ public class EventSaver {
 
     @VisibleForTesting
     public void saveReport(@NonNull final CounterReport reportData, @NonNull final SessionState sessionState) {
-        YLogger.d("%s saveReport: %s of type: %d", TAG, reportData.getName(), reportData.getType());
+        YLogger.debug(TAG, "saveReport: %s of type: %d", reportData.getName(), reportData.getType());
         reportData.getExtras().putAll(sessionExtrasHolder.getSnapshot());
         reportData.setProfileID(mPreferences.getProfileID());
         reportData.setOpenId(vitalComponentDataProvider.getOpenId());

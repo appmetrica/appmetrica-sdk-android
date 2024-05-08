@@ -38,7 +38,7 @@ class BinaryDataHelper implements IBinaryDataHelper {
                 database.insertWithOnConflict(mTableName, null, values, SQLiteDatabase.CONFLICT_REPLACE);
             }
         } catch (Throwable e) {
-            YLogger.e("%s could not insert %s into %s", TAG, key, mTableName);
+            YLogger.error(TAG, "could not insert %s into %s", key, mTableName);
         } finally {
             mConnector.closeDb(database);
         }
@@ -59,14 +59,14 @@ class BinaryDataHelper implements IBinaryDataHelper {
                     return data.getBlob(data.getColumnIndexOrThrow(Constants.BinaryDataTable.VALUE));
                 } else {
                     if (Utils.isNullOrEmpty(data) == false) {
-                        YLogger.e("%s invalid cursor for key %s from %s", TAG, key, mTableName);
+                        YLogger.error(TAG, "invalid cursor for key %s from %s", key, mTableName);
                     } else {
-                        YLogger.i("%s database for key %s from %s is empty.", TAG, key, mTableName);
+                        YLogger.info(TAG, "database for key %s from %s is empty.", key, mTableName);
                     }
                 }
             }
         } catch (Throwable e) {
-            YLogger.e("%s could not get %s from %s", TAG, key, mTableName);
+            YLogger.error(TAG, "could not get %s from %s", key, mTableName);
         } finally {
             Utils.closeCursor(data);
             mConnector.closeDb(database);
@@ -87,7 +87,7 @@ class BinaryDataHelper implements IBinaryDataHelper {
                         new String[] { key });
             }
         } catch (Throwable e) {
-            YLogger.e("%s could not delete %s from %s", TAG, key, mTableName);
+            YLogger.error(TAG, "could not delete %s from %s", key, mTableName);
         } finally {
             mConnector.closeDb(database);
         }

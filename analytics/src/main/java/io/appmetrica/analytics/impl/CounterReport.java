@@ -34,6 +34,8 @@ import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_START;
 
 public class CounterReport implements CounterReportApi, Parcelable {
 
+    private static final String TAG = "[CounterReport]";
+
     @Override
     public int describeContents() {
         return 0;
@@ -466,7 +468,7 @@ public class CounterReport implements CounterReportApi, Parcelable {
                 .put("available_providers", new JSONArray(availableProviders))
                 .toString();
         } catch (Throwable e) {
-            YLogger.e(e, "error while forming permissions value");
+            YLogger.error(TAG, e, "error while forming permissions value");
         }
         resultData.setType(EVENT_TYPE_PERMISSIONS.getTypeId());
         resultData.setValue(value);

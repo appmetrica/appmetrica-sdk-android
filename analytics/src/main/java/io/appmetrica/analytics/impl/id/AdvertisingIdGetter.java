@@ -18,6 +18,8 @@ import java.util.concurrent.FutureTask;
 
 public class AdvertisingIdGetter implements IAdvertisingIdGetter {
 
+    private static final String TAG = "[AdvertisingIdGetter]";
+
     private static final String NO_STARTUP = "startup has not been received yet";
     private static final String FEATURE_DISABLED = "startup forbade advertising identifiers collecting";
     private static final String CANNOT_TRACK_AID = "identifiers collecting is forbidden for unknown reason";
@@ -154,7 +156,7 @@ public class AdvertisingIdGetter implements IAdvertisingIdGetter {
                             new Callable<Void>() {
                                 @Override
                                 public Void call() {
-                                    YLogger.d("%s init advertising identifiers", logTag);
+                                    YLogger.debug(logTag, "init advertising identifiers");
                                     mAdvertisingIdsHolder = new AdvertisingIdsHolder(
                                             getGaidIfAllowed(mContext),
                                             getHoaidIfAllowed(mContext),
@@ -184,9 +186,9 @@ public class AdvertisingIdGetter implements IAdvertisingIdGetter {
         try {
             future.get();
         } catch (InterruptedException e) {
-            YLogger.e("can't get adv_id. Error: %s", e.getMessage());
+            YLogger.error(TAG, "can't get adv_id. Error: %s", e.getMessage());
         } catch (ExecutionException e) {
-            YLogger.e("can't get adv_id. Error: %s", e.getMessage());
+            YLogger.error(TAG, "can't get adv_id. Error: %s", e.getMessage());
         }
     }
 
@@ -213,7 +215,7 @@ public class AdvertisingIdGetter implements IAdvertisingIdGetter {
                 new Callable<Void>() {
                     @Override
                     public Void call() {
-                        YLogger.d("%s get advertising identifiers forced", logTag);
+                        YLogger.debug(logTag, "get advertising identifiers forced");
                         AdvertisingIdsHolder advertisingIdsHolderFixed = mAdvertisingIdsHolder;
                         mAdvertisingIdsHolder = new AdvertisingIdsHolder(
                                 mergeIdentifierData(

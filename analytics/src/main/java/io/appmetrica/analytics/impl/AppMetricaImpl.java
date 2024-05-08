@@ -164,7 +164,7 @@ public class AppMetricaImpl implements IAppMetricaImpl {
     @AnyThread
     @Override
     public void onReceiveResult(int resultCode, @NonNull Bundle resultData) {
-        YLogger.i("%s On receive data, result code: %d", TAG, resultCode);
+        YLogger.info(TAG, "On receive data, result code: %d", resultCode);
         mStartupHelper.processResultFromResultReceiver(resultData);
     }
 

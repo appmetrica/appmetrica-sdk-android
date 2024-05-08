@@ -43,11 +43,11 @@ public class ClientRepository {
 
     public ClientUnit getOrCreateClient(@NonNull ClientDescription clientDescription,
                                         @NonNull CommonArguments sdkConfig) {
-        YLogger.d("%s try to find client for %s", TAG, clientDescription);
+        YLogger.debug(TAG, "try to find client for %s", clientDescription);
         synchronized (mMonitor) {
             ClientUnit unit = mConnectedClients.get(clientDescription);
             if (unit == null) {
-                YLogger.d("%s no client found for %s. Create new.", TAG, clientDescription);
+                YLogger.debug(TAG, "no client found for %s. Create new.", clientDescription);
                 unit = mClientUnitFactoryHolder.getClientUnitFactory(clientDescription)
                         .createClientUnit(mContext, mComponentsRepository, clientDescription, sdkConfig);
                 mConnectedClients.put(clientDescription, unit);
@@ -63,16 +63,27 @@ public class ClientRepository {
     }
 
     private void removeInternal(@NonNull String packageName, @Nullable Integer pid, @Nullable String psid) {
-        YLogger.d("%s remove clients for (packageName, pid, psid) = (%s, %d, %s)", TAG, packageName, pid, psid);
+        YLogger.debug(TAG, "remove clients for (packageName, pid, psid) = (%s, %d, %s)", packageName, pid, psid);
         synchronized (mMonitor) {
             Collection<ClientDescription> clientDescriptions =
                     mTaggedClients.removeAll(new Tag(packageName, pid, psid));
             if (Utils.isNullOrEmpty(clientDescriptions)) {
-                YLogger.d("%s remove clients for (packageName, pid, psid) = (%s, %d, %s). No clients found.",
-                        TAG, packageName, pid, psid);
+                YLogger.debug(
+                    TAG,
+                    "remove clients for (packageName, pid, psid) = (%s, %d, %s). No clients found.",
+                    packageName,
+                    pid,
+                    psid
+                );
             } else  {
-                YLogger.d("%s remove clients for (packageName, pid, psid) = (%s, %d, %s). %d clients removed.",
-                        TAG, packageName, pid, psid, clientDescriptions.size());
+                YLogger.debug(
+                    TAG,
+                    "remove clients for (packageName, pid, psid) = (%s, %d, %s). %d clients removed.",
+                    packageName,
+                    pid,
+                    psid,
+                    clientDescriptions.size()
+                );
                 mClientsCount -= clientDescriptions.size();
 
                 ArrayList<ClientUnit> clientUnits = new ArrayList<ClientUnit>(clientDescriptions.size());

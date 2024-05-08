@@ -38,6 +38,8 @@ import static io.appmetrica.analytics.impl.protobuf.backend.EventProto.ReportMes
 
 public final class ProtobufUtils {
 
+    private static final String TAG = "[ProtobufUtils]";
+
     private ProtobufUtils() {
     }
 
@@ -200,7 +202,7 @@ public final class ProtobufUtils {
                                 referrer.source = sourceToProto(info.source);
                                 return MessageNano.toByteArray(referrer);
                             } catch (Throwable e) {
-                                YLogger.e(e, "Something went wrong while serializing referrer event.");
+                                YLogger.error(TAG, e, "Something went wrong while serializing referrer event.");
                             }
                         }
                         return new byte[0];
@@ -337,23 +339,21 @@ public final class ProtobufUtils {
     }
 
     public static void logSessionEvents(final Session session) {
-        if (YLogger.DEBUG) {
-            final Session.Event[] events = session.events;
-            StringBuilder eventsIds = new StringBuilder(
-                    "Session events' (numberInSession, globalNumber, numberOfType): "
-            );
+        final Session.Event[] events = session.events;
+        StringBuilder eventsIds = new StringBuilder(
+            "Session events' (numberInSession, globalNumber, numberOfType): "
+        );
 
-            if (null != events) {
-                for (Session.Event event : events) {
-                    if (event != null) {
-                        eventsIds.append("(" + event.numberInSession + ", " +
-                                event.globalNumber + ", " + event.numberOfType + ") ");
-                    }
+        if (null != events) {
+            for (Session.Event event : events) {
+                if (event != null) {
+                    eventsIds.append("(" + event.numberInSession + ", " +
+                        event.globalNumber + ", " + event.numberOfType + ") ");
                 }
             }
-
-            YLogger.i(eventsIds.toString());
         }
+
+        YLogger.info(TAG, eventsIds.toString());
     }
 
     @NonNull

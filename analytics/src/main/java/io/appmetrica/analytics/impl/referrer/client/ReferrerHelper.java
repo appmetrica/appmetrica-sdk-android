@@ -96,7 +96,7 @@ public class ReferrerHelper implements ReferrerChosenListener {
     }
 
     public synchronized void requestDeferredDeeplinkParameters(@NonNull DeferredDeeplinkParametersListener listener) {
-        YLogger.d("%s requestDeferredDeeplinkParameters for listener: %s", TAG, listener);
+        YLogger.debug(TAG, "requestDeferredDeeplinkParameters for listener: %s", listener);
         try {
             mDeferredDeeplinkStateManager.requestDeferredDeeplinkParameters(listener);
         } finally {
@@ -105,7 +105,7 @@ public class ReferrerHelper implements ReferrerChosenListener {
     }
 
     public synchronized void requestDeferredDeeplink(@NonNull DeferredDeeplinkListener listener) {
-        YLogger.d("%s requestDeferredDeeplink for listener: %s", TAG, listener);
+        YLogger.debug(TAG, "requestDeferredDeeplink for listener: %s", listener);
         try {
             mDeferredDeeplinkStateManager.requestDeferredDeeplink(listener);
         } finally {

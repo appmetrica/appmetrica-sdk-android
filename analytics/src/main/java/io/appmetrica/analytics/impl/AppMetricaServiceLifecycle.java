@@ -66,12 +66,12 @@ public class AppMetricaServiceLifecycle implements AppMetricaServiceLifecycleCal
         String action = intent.getAction();
         if (TextUtils.isEmpty(action) == false) {
             mBoundProcesses.put(action, getPid(intent));
-            YLogger.d(
-                    "%sonBindOrRebind with action = %s. Is metrica process: %b. Current bound clients: %s",
-                    TAG,
-                    action,
-                    isMetricaProcess(getPid(intent)),
-                    mBoundProcesses
+            YLogger.debug(
+                TAG,
+                "onBindOrRebind with action = %s. Is metrica process: %b. Current bound clients: %s",
+                action,
+                isMetricaProcess(getPid(intent)),
+                mBoundProcesses
             );
         }
         notifyObservers(intent, mConnectObservers);
@@ -96,12 +96,12 @@ public class AppMetricaServiceLifecycle implements AppMetricaServiceLifecycleCal
         String action = intent.getAction();
         if (TextUtils.isEmpty(action) == false) {
             mBoundProcesses.remove(action, getPid(intent));
-            YLogger.d(
-                    "%sonUnbind with action = %s. Is metrica process: %b. Current bound clients after remove: %s",
-                    TAG,
-                    action,
-                    isMetricaProcess(getPid(intent)),
-                    mBoundProcesses
+            YLogger.debug(
+                TAG,
+                "onUnbind with action = %s. Is metrica process: %b. Current bound clients after remove: %s",
+                action,
+                isMetricaProcess(getPid(intent)),
+                mBoundProcesses
             );
         }
         notifyObservers(intent, mDisconnectObservers);
@@ -197,7 +197,7 @@ public class AppMetricaServiceLifecycle implements AppMetricaServiceLifecycleCal
             try {
                 pid = Integer.parseInt(intentData.getQueryParameter(ServiceUtils.PARAMETER_PID));
             } catch (Throwable e) {
-                YLogger.e(e, "%s:%s", TAG, e.getMessage());
+                YLogger.error(TAG, e, e.getMessage());
             }
         }
         return pid;

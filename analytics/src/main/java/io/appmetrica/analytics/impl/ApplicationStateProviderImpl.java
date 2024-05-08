@@ -24,7 +24,7 @@ public class ApplicationStateProviderImpl implements ServiceLifecycleObserver, A
     @Override
     public void onCreate() {
         updateApplicationState();
-        YLogger.d("%sInit finished. Inital application state = %s", TAG, mCurrentState.name());
+        YLogger.debug(TAG, "Init finished. Inital application state = %s", mCurrentState.name());
     }
 
     @Override
@@ -32,7 +32,7 @@ public class ApplicationStateProviderImpl implements ServiceLifecycleObserver, A
         if (mCurrentState == ApplicationState.VISIBLE) {
             mCurrentState = ApplicationState.BACKGROUND;
         }
-        YLogger.d("%sDestroy. Actual application state = %s", TAG, mCurrentState.name());
+        YLogger.debug(TAG, "Destroy. Actual application state = %s", mCurrentState.name());
     }
 
     @Override
@@ -40,7 +40,7 @@ public class ApplicationStateProviderImpl implements ServiceLifecycleObserver, A
     public ApplicationState registerStickyObserver(@Nullable ApplicationStateObserver observer) {
         if (observer != null) {
             mObservers.add(observer);
-            YLogger.d("%sRegister observer(%s). Actual observers count = %d", TAG, observer, mObservers.size());
+            YLogger.debug(TAG, "Register observer(%s). Actual observers count = %d", observer, mObservers.size());
         }
         return mCurrentState;
     }
@@ -54,12 +54,12 @@ public class ApplicationStateProviderImpl implements ServiceLifecycleObserver, A
     public void resumeUserSessionForPid(int pid) {
         mVisibleProcessesPids.add(pid);
         mPausedProcessesPids.remove(pid);
-        YLogger.d(
-                "%sResumeUserSessionForPid = %d. Visible processes count = %d; paused processes count = %d",
-                TAG,
-                pid,
-                mVisibleProcessesPids.size(),
-                mPausedProcessesPids.size()
+        YLogger.debug(
+            TAG,
+            "ResumeUserSessionForPid = %d. Visible processes count = %d; paused processes count = %d",
+            pid,
+            mVisibleProcessesPids.size(),
+            mPausedProcessesPids.size()
         );
         updateApplicationState();
     }
@@ -67,24 +67,24 @@ public class ApplicationStateProviderImpl implements ServiceLifecycleObserver, A
     public void pauseUserSessionForPid(int pid) {
         mPausedProcessesPids.add(pid);
         mVisibleProcessesPids.remove(pid);
-        YLogger.d(
-                "%sPauseUserSessionForPid = %d. Visible processes count = %d; paused processes count = %d",
-                TAG,
-                pid,
-                mVisibleProcessesPids.size(),
-                mPausedProcessesPids.size()
+        YLogger.debug(
+            TAG,
+            "PauseUserSessionForPid = %d. Visible processes count = %d; paused processes count = %d",
+            pid,
+            mVisibleProcessesPids.size(),
+            mPausedProcessesPids.size()
         );
         updateApplicationState();
     }
 
     public void notifyProcessDisconnected(int pid) {
         mVisibleProcessesPids.remove(pid);
-        YLogger.d(
-                "%sNotifyProcessDisconnected for pid = %d. Visible processes count = %d; paused processes count = %d ",
-                TAG,
-                pid,
-                mVisibleProcessesPids.size(),
-                mPausedProcessesPids.size()
+        YLogger.debug(
+            TAG,
+            "NotifyProcessDisconnected for pid = %d. Visible processes count = %d; paused processes count = %d ",
+            pid,
+            mVisibleProcessesPids.size(),
+            mPausedProcessesPids.size()
         );
         updateApplicationState();
     }
@@ -92,14 +92,14 @@ public class ApplicationStateProviderImpl implements ServiceLifecycleObserver, A
     private void updateApplicationState() {
         ApplicationState incomingState = calculateApplicationState();
         if (mCurrentState != incomingState) {
-            YLogger.d(
-                    "%sChange application state: %s -> %s; Actual details: visible processes pids = %d; " +
-                            "paused processes pids = %d",
-                    TAG,
-                    mCurrentState.name(),
-                    incomingState.name(),
-                    mVisibleProcessesPids.size(),
-                    mPausedProcessesPids.size()
+            YLogger.debug(
+                TAG,
+                "Change application state: %s -> %s; Actual details: visible processes pids = %d; " +
+                    "paused processes pids = %d",
+                mCurrentState.name(),
+                incomingState.name(),
+                mVisibleProcessesPids.size(),
+                mPausedProcessesPids.size()
             );
             mCurrentState = incomingState;
             notifyApplicationStateChanged();
@@ -118,7 +118,7 @@ public class ApplicationStateProviderImpl implements ServiceLifecycleObserver, A
     }
 
     private void notifyApplicationStateChanged() {
-        YLogger.d("%sNotifyApplicationStateChanged. Total observers = %d", TAG, mObservers.size());
+        YLogger.debug(TAG, "NotifyApplicationStateChanged. Total observers = %d", mObservers.size());
         for (ApplicationStateObserver observer : mObservers) {
             observer.onApplicationStateChanged(mCurrentState);
         }

@@ -94,7 +94,7 @@ public class ReportParamsAppender implements IParamsAppender<ReportRequestConfig
                 mDbReportRequestConfig.appFramework, requestConfig.getAppFramework());
             appendIfNotEmpty(uriBuilder, UrlParts.ATTRIBUTION_ID, mDbReportRequestConfig.attributionId);
         } else {
-            YLogger.w("%s: dbReportRequestConfig is null.", TAG);
+            YLogger.warning(TAG, "dbReportRequestConfig is null.");
         }
     }
 

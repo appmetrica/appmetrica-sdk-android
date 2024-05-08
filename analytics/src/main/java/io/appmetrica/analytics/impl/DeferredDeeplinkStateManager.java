@@ -30,14 +30,14 @@ public class DeferredDeeplinkStateManager {
     }
 
     public void onDeeplinkLoaded(@Nullable DeferredDeeplinkState deferredDeeplinkState) {
-        YLogger.d("%s onDeeplinkLoaded: %s", TAG, deferredDeeplinkState);
+        YLogger.debug(TAG, "onDeeplinkLoaded: %s", deferredDeeplinkState);
         mDeferredDeeplinkState = deferredDeeplinkState;
         notifyListenerIfNeeded();
     }
 
     private void notifyListenersOnError(@NonNull Error error) {
         String referrer = mDeferredDeeplinkState == null ? null : mDeferredDeeplinkState.mUnparsedReferrer;
-        YLogger.d("%s onError: %s, referrer: %s.", TAG, error, referrer);
+        YLogger.debug(TAG, "onError: %s, referrer: %s.", error, referrer);
         notifyDeeplinkListenerOnError(error, referrer);
         notifyParametersListenerOnError(error, referrer);
     }
@@ -53,8 +53,12 @@ public class DeferredDeeplinkStateManager {
     }
 
     private void requestSomeDeferredDeeplinkInfo() {
-        YLogger.d("%s requestSomeDeferredDeeplinkInfo. mDeferredDeeplinkWasChecked: %b, state: %s",
-                TAG, mDeferredDeeplinkWasChecked, mDeferredDeeplinkState);
+        YLogger.debug(
+            TAG,
+            "requestSomeDeferredDeeplinkInfo. mDeferredDeeplinkWasChecked: %b, state: %s",
+            mDeferredDeeplinkWasChecked,
+            mDeferredDeeplinkState
+        );
         if (mDeferredDeeplinkWasChecked) {
             notifyListenersOnError(DeferredDeeplinkStateManager.Error.NOT_A_FIRST_LAUNCH);
         } else {
@@ -63,7 +67,7 @@ public class DeferredDeeplinkStateManager {
     }
 
     private void notifyListenerIfNeeded() {
-        YLogger.d("%s notifyListenerIfNeeded: %s", TAG, mDeferredDeeplinkState);
+        YLogger.debug(TAG, "notifyListenerIfNeeded: %s", mDeferredDeeplinkState);
         if (mDeferredDeeplinkState != null) {
             if (mDeferredDeeplinkState.mDeeplink != null) {
                 notifyDeeplinkListener(mDeferredDeeplinkState.mDeeplink);
@@ -81,8 +85,12 @@ public class DeferredDeeplinkStateManager {
     }
 
     private void notifyDeeplinkListener(@NonNull String deeplink) {
-        YLogger.d("%s notifyDeeplinkListener. Deeplink: %s, listener: %s",
-                TAG, deeplink, mDeferredDeeplinkListener);
+        YLogger.debug(
+            TAG,
+            "notifyDeeplinkListener. Deeplink: %s, listener: %s",
+            deeplink,
+            mDeferredDeeplinkListener
+        );
         if (mDeferredDeeplinkListener != null) {
             mDeferredDeeplinkListener.onDeeplinkLoaded(deeplink);
             mDeferredDeeplinkListener = null;
@@ -90,8 +98,12 @@ public class DeferredDeeplinkStateManager {
     }
 
     private void notifyParametersListener(@NonNull Map<String, String> parameters) {
-        YLogger.d("%s notifyParametersListener. Parameters: %s, listener: %s",
-                TAG, parameters, mDeferredDeeplinkParametersListener);
+        YLogger.debug(
+            TAG,
+            "notifyParametersListener. Parameters: %s, listener: %s",
+            parameters,
+            mDeferredDeeplinkParametersListener
+        );
         if (mDeferredDeeplinkParametersListener != null) {
             mDeferredDeeplinkParametersListener.onParametersLoaded(parameters);
             mDeferredDeeplinkParametersListener = null;
@@ -99,8 +111,13 @@ public class DeferredDeeplinkStateManager {
     }
 
     private void notifyDeeplinkListenerOnError(@NonNull Error error, @Nullable String unparsedReferrer) {
-        YLogger.d("%s notifyDeeplinkListenerOnError. Error: %s, unparsed referrer: %s, listener: %s",
-                TAG, error, unparsedReferrer, mDeferredDeeplinkListener);
+        YLogger.debug(
+            TAG,
+            "notifyDeeplinkListenerOnError. Error: %s, unparsed referrer: %s, listener: %s",
+            error,
+            unparsedReferrer,
+            mDeferredDeeplinkListener
+        );
         if (mDeferredDeeplinkListener != null) {
             mDeferredDeeplinkListener.onError(
                     convertErrorForDeeplinkListener(error),
@@ -111,8 +128,13 @@ public class DeferredDeeplinkStateManager {
     }
 
     private void notifyParametersListenerOnError(@NonNull Error error, @Nullable String unparsedReferrer) {
-        YLogger.d("%s notifyDeeplinkLParametersistenerOnError. Error: %s, unparsed referrer: %s, listener: %s",
-                TAG, error, unparsedReferrer, mDeferredDeeplinkParametersListener);
+        YLogger.debug(
+            TAG,
+            "notifyDeeplinkLParameterListenerOnError. Error: %s, unparsed referrer: %s, listener: %s",
+            error,
+            unparsedReferrer,
+            mDeferredDeeplinkParametersListener
+        );
         if (mDeferredDeeplinkParametersListener != null) {
             mDeferredDeeplinkParametersListener.onError(
                     convertErrorForDeeplinkParametersListener(error),

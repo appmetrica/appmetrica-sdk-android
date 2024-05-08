@@ -257,7 +257,7 @@ public class AppMetricaFacade implements IReporterFactoryProvider {
             YLogger.info(TAG, "getImpl: %s", Arrays.toString(Thread.currentThread().getStackTrace()));
             return mFullInitFuture.get();
         } catch (Exception e) {
-            YLogger.e(e, TAG);
+            YLogger.error(TAG, e);
             throw new RuntimeException(e);
         }
     }

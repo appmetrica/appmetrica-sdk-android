@@ -6,6 +6,8 @@ import io.appmetrica.analytics.logger.internal.YLogger;
 
 public class ExternallyEncryptedEventCrypter implements EventEncrypter {
 
+    private static final String TAG = "[ExternallyEncryptedEventCrypter]";
+
     public EncryptedCounterReport encrypt(CounterReport input) {
         throw new UnsupportedOperationException();
     }
@@ -14,7 +16,7 @@ public class ExternallyEncryptedEventCrypter implements EventEncrypter {
         try {
             return Base64.decode(input, Base64.DEFAULT);
         } catch (Throwable ex) {
-            YLogger.e(ex, "Could not decode base 64 value.");
+            YLogger.error(TAG, ex, "Could not decode base 64 value.");
         }
         return new byte[0];
     }

@@ -23,7 +23,7 @@ public class RegularStartupExecutor implements StartupExecutor {
         if (startupTask != null) {
             GlobalServiceLocator.getInstance().getNetworkCore().startTask(startupTask);
         } else {
-            YLogger.d("%s Not sending startup because startup task is null", TAG);
+            YLogger.debug(TAG, "Not sending startup because startup task is null");
         }
     }
 

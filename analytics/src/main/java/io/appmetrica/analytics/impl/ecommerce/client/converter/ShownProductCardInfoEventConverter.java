@@ -43,7 +43,7 @@ public class ShownProductCardInfoEventConverter implements ECommerceEventConvert
 
         BytesTruncatedProvider totalTruncationInfo = BytesTruncatedInfo.total(screenResult, productResult);
 
-        if (YLogger.DEBUG && totalTruncationInfo.getBytesTruncated() > 0) {
+        if (totalTruncationInfo.getBytesTruncated() > 0) {
             YLogger.debug(
                     ECommerceConstants.FEATURE_TAG + TAG,
                     "Total bytes truncated (screen + product) = %d (%d + %d)",

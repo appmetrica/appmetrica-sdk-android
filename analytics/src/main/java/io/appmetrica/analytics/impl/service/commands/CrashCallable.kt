@@ -60,7 +60,7 @@ internal class CrashCallable(
                 context.startService(intent)
             } catch (e: Throwable) {
                 writeToFile(toSend)
-                YLogger.e(e, e.message)
+                YLogger.error(tag, e, e.message)
             }
         } else {
             writeToFile(toSend)

@@ -45,7 +45,7 @@ public class ShownProductDetailsInfoEventConverter implements ECommerceEventConv
 
         BytesTruncatedProvider totalTruncationInfo = BytesTruncatedInfo.total(productResult, referrerResult);
 
-        if (YLogger.DEBUG && totalTruncationInfo.getBytesTruncated() > 0) {
+        if (totalTruncationInfo.getBytesTruncated() > 0) {
             YLogger.debug(
                     ECommerceConstants.FEATURE_TAG + TAG,
                     "Total bytes truncated (product + referrer) = %d (%d + %d)",

@@ -67,7 +67,7 @@ public class ScreenConverter
                 payloadResult
         );
 
-        if (YLogger.DEBUG && totalBytesTruncatedInfo.getBytesTruncated() > 0) {
+        if (totalBytesTruncatedInfo.getBytesTruncated() > 0) {
             YLogger.debug(
                     ECommerceConstants.FEATURE_TAG + TAG,
                     "Total bytes truncated = name (%d) + categoriesPath (%d) + searchQuery (%d) + payload (%d) = %d",

@@ -13,6 +13,8 @@ import io.appmetrica.analytics.logger.internal.YLogger;
 
 public class UpdatePreActivationConfigHandler extends CommutationHandler {
 
+    private static final String TAG = "[UpdatePreActivationConfigHandler]";
+
     private final DataSendingRestrictionControllerImpl mRestrictionController;
 
     public UpdatePreActivationConfigHandler(@NonNull CommutationDispatcherComponent component,
@@ -32,9 +34,11 @@ public class UpdatePreActivationConfigHandler extends CommutationHandler {
     }
 
     private void updateTrackingLocationStatus(@Nullable Boolean trackingEnabled) {
-        YLogger.d("Update location status for %s: enabled = %s",
-                getComponent().getComponentId().toString(),
-                String.valueOf(trackingEnabled)
+        YLogger.debug(
+            TAG,
+            "Update location status for %s: enabled = %s",
+            getComponent().getComponentId().toString(),
+            String.valueOf(trackingEnabled)
         );
 
         if (BooleanUtils.isTrue(trackingEnabled)) {

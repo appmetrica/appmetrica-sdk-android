@@ -85,7 +85,7 @@ public abstract class PreferencesDbStorage {
             }
             savedValue = jsonArray.toString();
         } catch (Throwable e) {
-            YLogger.e(e.getMessage(), e);
+            YLogger.error(TAG, e, e.getMessage());
         }
         mDbHelper.put(key, savedValue);
         return (T) this;
@@ -155,7 +155,7 @@ public abstract class PreferencesDbStorage {
                     result[i] = jsonArray.optString(i);
                 }
             } catch (Throwable e) {
-                YLogger.e(e.getMessage(), e);
+                YLogger.error(TAG, e, e.getMessage());
             }
         }
         return result;

@@ -7,6 +7,7 @@ import io.appmetrica.analytics.logger.internal.YLogger
 import org.json.JSONObject
 
 internal class SessionRequestParams(requestParameters: JSONObject) {
+    private val tag = "[SessionRequestParams]"
     private val analyticsSdkVersionName: String = requestParameters.optString(
         Constants.RequestParametersJsonKeys.ANALYTICS_SDK_VERSION_NAME,
         ""
@@ -33,7 +34,8 @@ internal class SessionRequestParams(requestParameters: JSONObject) {
         ).all { it }
 
         if (!paramsAreSame) {
-            YLogger.d(
+            YLogger.debug(
+                tag,
                 "SessionRequestParameters are not equal: %s and %s",
                 this,
                 requestConfigToString(reportRequestConfig)

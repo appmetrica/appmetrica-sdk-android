@@ -137,7 +137,7 @@ class KeyValueTableDbHelper implements IKeyValueTableDbHelper, Closeable {
                 }
             }
         } catch (Throwable e) {
-            YLogger.e(e, "Smth was wrong while loading preference values.");
+            YLogger.error(TAG, e, "Smth was wrong while loading preference values.");
         } finally {
             Utils.closeCursor(dataCursor);
             mDbConnector.closeDb(db);
@@ -205,16 +205,16 @@ class KeyValueTableDbHelper implements IKeyValueTableDbHelper, Closeable {
                     if (row.getAsString(KeyValueTableEntry.FIELD_VALUE) == null) {
                         String key = row.getAsString(KeyValueTableEntry.FIELD_KEY);
                         db.delete(getTableName(), PreferencesTable.DELETE_WHERE_KEY, new String[] {key});
-                        YLogger.d("remove preferences from db: " + key);
+                        YLogger.debug(TAG, "remove preferences from db: " + key);
                     } else {
                         db.insertWithOnConflict(getTableName(), null, row, SQLiteDatabase.CONFLICT_REPLACE);
-                        YLogger.d("Write preferences in db: " + row.toString().replace("%", "%%"));
+                        YLogger.debug(TAG, "Write preferences in db: " + row.toString().replace("%", "%%"));
                     }
                 }
                 db.setTransactionSuccessful();
             }
         } catch (Throwable exception) {
-            YLogger.e(TAG + "Smth was wrong while inserting preferences into database.\n%s\n%s", exception, values);
+            YLogger.error(TAG, "Smth was wrong while inserting preferences into database.\n%s\n%s", exception, values);
         } finally {
             Utils.endTransaction(db);
             mDbConnector.closeDb(db);

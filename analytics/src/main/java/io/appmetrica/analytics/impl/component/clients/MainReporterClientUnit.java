@@ -13,6 +13,8 @@ import io.appmetrica.analytics.logger.internal.YLogger;
 
 public class MainReporterClientUnit extends AbstractClientUnit {
 
+    private static final String TAG = "[MainReporterClientUnit]";
+
     MainReporterClientUnit(@NonNull Context context,
                            @NonNull RegularDispatcherComponent componentUnit) {
 
@@ -29,7 +31,7 @@ public class MainReporterClientUnit extends AbstractClientUnit {
 
     @VisibleForTesting
     void updateLocationTracking(boolean enabled) {
-        YLogger.d("Update location status for %s: enabled = %b", getComponentUnit().toString(), enabled);
+        YLogger.debug(TAG, "Update location status for %s: enabled = %b", getComponentUnit().toString(), enabled);
         GlobalServiceLocator.getInstance().getLocationClientApi().updateTrackingStatusFromClient(enabled);
     }
 }

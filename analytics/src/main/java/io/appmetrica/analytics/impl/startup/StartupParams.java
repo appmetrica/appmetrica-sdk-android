@@ -125,7 +125,7 @@ public class StartupParams {
 
     public void setClientClids(@Nullable Map<String, String> clids) {
         if (Utils.isNullOrEmpty(clids) == false && Utils.areEqual(clids, mClientClids) == false) {
-            YLogger.d("%sUpdate client clids from %s to %s", TAG, mClientClids, clids);
+            YLogger.debug(TAG, "Update client clids from %s to %s", mClientClids, clids);
             mClientClids = new HashMap<String, String>(clids);
             mClientClidsChangedAfterLastIdentifiersUpdate = true;
 
@@ -216,11 +216,16 @@ public class StartupParams {
         boolean result = notAllIdentifiers || advIdentifiersRequested || outdated ||
                 mClientClidsChangedAfterLastIdentifiersUpdate;
 
-        YLogger.d(
-                "%sshouldSendStartup = %b:  notAllIdentifiers = %b; advIdentifiersRequested = %b, outdated = %b; " +
-                        "mClientClidsChanged = %b; identifiers = %s",
-                TAG, result, notAllIdentifiers, advIdentifiersRequested, outdated,
-                mClientClidsChangedAfterLastIdentifiersUpdate, identifiers
+        YLogger.debug(
+            TAG,
+            "shouldSendStartup = %b:  notAllIdentifiers = %b; advIdentifiersRequested = %b, outdated = %b; " +
+                "mClientClidsChanged = %b; identifiers = %s",
+            result,
+            notAllIdentifiers,
+            advIdentifiersRequested,
+            outdated,
+            mClientClidsChangedAfterLastIdentifiersUpdate,
+            identifiers
         );
 
         return result;
@@ -246,9 +251,14 @@ public class StartupParams {
                 savedIdentifier = featuresHolder.getFeature(identifier);
             }
             if (Constants.StartupParamsCallbackKeys.CLIDS.equals(identifier)) {
-                YLogger.d("%s checking if contains clids. Client clids: %s, response clids: %s, " +
-                                "mClientClidsChangedAfterLastIdentifiersUpdate: %b",
-                        TAG, mClientClids, savedIdentifier, mClientClidsChangedAfterLastIdentifiersUpdate);
+                YLogger.debug(
+                    TAG,
+                    "checking if contains clids. Client clids: %s, response clids: %s, " +
+                        "mClientClidsChangedAfterLastIdentifiersUpdate: %b",
+                    mClientClids,
+                    savedIdentifier,
+                    mClientClidsChangedAfterLastIdentifiersUpdate
+                );
                 if (mClientClidsChangedAfterLastIdentifiersUpdate || isIdentifierNull(savedIdentifier) ||
                         (savedIdentifier.id.isEmpty() && Utils.isNullOrEmpty(mClientClids) == false)) {
                     return false;

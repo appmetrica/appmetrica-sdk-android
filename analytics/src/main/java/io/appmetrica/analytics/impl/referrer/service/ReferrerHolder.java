@@ -55,7 +55,7 @@ public class ReferrerHolder {
     }
 
     public synchronized void storeReferrer(@Nullable ReferrerInfo referrer) {
-        YLogger.d("%s store referrer %s", TAG, referrer);
+        YLogger.debug(TAG, "store referrer %s", referrer);
         mReferrerFromServices = referrer;
         isReferrerChecked = true;
         vitalCommonDataProvider.setReferrer(referrer);

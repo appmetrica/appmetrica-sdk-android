@@ -32,11 +32,11 @@ public class TablesValidatorImpl implements TablesValidator {
 
     public boolean isDbSchemeValid(SQLiteDatabase db) {
         try {
-            YLogger.d(
-                    "%sValidate %s. Actual tables to check: %s",
-                    TAG,
-                    mDatabaseLogIdentifier,
-                    tableColumnsToString(mTableColumnsToCheck)
+            YLogger.debug(
+                TAG,
+                "Validate %s. Actual tables to check: %s",
+                mDatabaseLogIdentifier,
+                tableColumnsToString(mTableColumnsToCheck)
             );
             boolean valid = true;
             for (Map.Entry<String, List<String>> entry : mTableColumnsToCheck.entrySet()) {
@@ -51,11 +51,11 @@ public class TablesValidatorImpl implements TablesValidator {
                     Utils.closeCursor(cursor);
                 }
             }
-            YLogger.d(TAG + " %s Database scheme is %s.", mDatabaseLogIdentifier,  valid ? "valid" : "invalid");
+            YLogger.debug(TAG, "%s Database scheme is %s.", mDatabaseLogIdentifier,  valid ? "valid" : "invalid");
 
             return valid;
         } catch (Throwable e) {
-            YLogger.e(e, "Exception while validating %s tables", mDatabaseLogIdentifier);
+            YLogger.error(TAG, e, "Exception while validating %s tables", mDatabaseLogIdentifier);
         }
         return false;
     }
@@ -81,13 +81,13 @@ public class TablesValidatorImpl implements TablesValidator {
         boolean result = columns.equals(cursorColumns);
 
         if (result == false) {
-            YLogger.e(
-                    "%sInvalid db: %s; for table %s expected columns: \n%s;\nactual columns:\n%s",
-                    TAG,
-                    mDatabaseLogIdentifier,
-                    tableName,
-                    columns.toString(),
-                    cursorColumns.toString()
+            YLogger.error(
+                TAG,
+                "Invalid db: %s; for table %s expected columns: \n%s;\nactual columns:\n%s",
+                mDatabaseLogIdentifier,
+                tableName,
+                columns.toString(),
+                cursorColumns.toString()
             );
         }
 

@@ -64,7 +64,7 @@ public class SessionManagerStateMachine {
     }
 
     public synchronized void heartbeat(@NonNull CounterReport reportData) {
-        YLogger.d(TAG + " " + mComponent.getComponentId() + " heartbeat");
+        YLogger.debug(TAG, mComponent.getComponentId() + " heartbeat");
         loadValidSession(reportData);
         switch (mState) {
             case FOREGROUND:
@@ -96,11 +96,11 @@ public class SessionManagerStateMachine {
     public synchronized Session getSomeSession(@NonNull CounterReport report) {
         loadValidSession(report);
         if (mState != State.EMPTY && checkValidityOrClose(mCurrentSession, report) == false) {
-            YLogger.d(TAG + " " + mComponent.getComponentId() + " session %s is invalid", mCurrentSession);
+            YLogger.debug(TAG, mComponent.getComponentId() + " session %s is invalid", mCurrentSession);
             mState = State.EMPTY;
             mCurrentSession = null;
         }
-        YLogger.d(TAG + " " + mComponent.getComponentId() + " getSomeSession. current state is %s", mState);
+        YLogger.debug(TAG, mComponent.getComponentId() + " getSomeSession. current state is %s", mState);
         switch (mState) {
             case FOREGROUND:
                 return mCurrentSession;
@@ -138,7 +138,7 @@ public class SessionManagerStateMachine {
 
     @NonNull
     private Session createForegroundSession(@NonNull CounterReport reportData) {
-        YLogger.d(TAG + " " + mComponent.getComponentId() + " create foreground session");
+        YLogger.debug(TAG, mComponent.getComponentId() + " create foreground session");
         final PublicLogger logger = mComponent.getPublicLogger();
         if (logger.isEnabled()) {
             logger.i("Start foreground session");
@@ -220,7 +220,7 @@ public class SessionManagerStateMachine {
             mSaver.saveEvent(CounterReport.formAliveReportData(reportData), getAliveReportSessionState(session));
             session.updateAliveReportNeeded(false);
         }
-        YLogger.d(TAG + " " + mComponent.getComponentId() + " stop session %d type %s", session.getId(),
+        YLogger.debug(TAG, mComponent.getComponentId() + " stop session %d type %s", session.getId(),
                 session.getType().toString());
         final PublicLogger logger = mComponent.getPublicLogger();
         if (logger.isEnabled()) {
@@ -237,7 +237,7 @@ public class SessionManagerStateMachine {
     }
 
     @NonNull private Session createBackgroundSession(@NonNull CounterReport reportData) {
-        YLogger.d(TAG + " " + mComponent.getComponentId() + " create background session");
+        YLogger.debug(TAG, mComponent.getComponentId() + " create background session");
         final PublicLogger logger = mComponent.getPublicLogger();
         if (logger.isEnabled()) {
             logger.i("Start background session");
@@ -291,7 +291,7 @@ public class SessionManagerStateMachine {
                     .withReportTime(lastSession.getLastEventTimeOffsetSeconds())
                     .withSessionType(lastSession.getType());
         } else {
-            YLogger.w(TAG + " Could not load session, creating background stub.");
+            YLogger.warning(TAG, "Could not load session, creating background stub.");
             return createBackgroundSessionStub(report.getCreationTimestamp());
         }
     }

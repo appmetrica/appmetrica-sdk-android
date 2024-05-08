@@ -13,6 +13,8 @@ import java.util.Locale;
  */
 public final class StringUtils {
 
+    private static final String TAG = "[StringUtils]";
+
     public static final String EMPTY = "";
     public static final String COMMA = ",";
     public static final String PROCESS_POSTFIX_DELIMITER = ":";
@@ -64,7 +66,7 @@ public final class StringUtils {
             try {
                 return value.getBytes("UTF-8");
             } catch (Throwable e) {
-                YLogger.e(e, e.getMessage());
+                YLogger.error(TAG, e, e.getMessage());
             }
         }
         return new byte[0];

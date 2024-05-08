@@ -35,7 +35,7 @@ public class DataResultReceiver extends ResultReceiver {
     @Override
     protected void onReceiveResult(int resultCode, Bundle resultData) {
         Bundle resultBundle = resultData == null ? new Bundle() : resultData;
-        YLogger.d(TAG + " Receive result %d %s", resultCode, resultData);
+        YLogger.debug(TAG, "Receive result %d %s", resultCode, resultData);
         mReceiver.onReceiveResult(resultCode, resultBundle);
     }
 

@@ -52,7 +52,7 @@ public final class Utils {
             try {
                 return value.getStackTrace();
             } catch (Throwable ex) {
-                YLogger.e(ex, "Could not get stack trace.");
+                YLogger.error(TAG, ex, "Could not get stack trace.");
             }
         }
         return new StackTraceElement[0];
@@ -140,7 +140,7 @@ public final class Utils {
                 database.close();
             }
         } catch (Throwable exception) {
-            YLogger.e(exception, "Could not close database.");
+            YLogger.error(TAG, exception, "Could not close database.");
         }
     }
 

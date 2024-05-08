@@ -40,12 +40,12 @@ public class CrashDirectoryWatcher {
 
     public void startWatching() {
         crashFolderPreparer.prepareCrashFolder(crashDirectory);
-        YLogger.d("%s startWatching for crashDirectory %s", TAG, crashDirectory.getAbsolutePath());
+        YLogger.debug(TAG, "startWatching for crashDirectory %s", crashDirectory.getAbsolutePath());
         observer.startWatching();
     }
 
     public void stopWatching() {
-        YLogger.d("%s stopWatching for crashDirectory %s", TAG, crashDirectory.getAbsolutePath());
+        YLogger.debug(TAG, "%s stopWatching for crashDirectory %s", crashDirectory.getAbsolutePath());
         observer.stopWatching();
     }
 }

@@ -58,7 +58,7 @@ public class StartupNetworkResponseHandler implements NetworkResponseHandler<Sta
             }
 
             if (bodyToParse != null) {
-                YLogger.d("%sParse startup response", TAG);
+                YLogger.debug(TAG, "Parse startup response");
                 final StartupResult parseResult = mStartupParser.parseStartupResponse(bodyToParse);
 
                 if (StartupResult.Result.OK == parseResult.getResult()) {

@@ -39,7 +39,7 @@ public class CategoryConverter
         Ecommerce.ECommerceEvent.Category category = new Ecommerce.ECommerceEvent.Category();
         category.path = StringUtils.getUTF8Bytes(trimmedValue.value);
 
-        if (YLogger.DEBUG && trimmedValue.metaInfo.bytesTruncated > 0) {
+        if (trimmedValue.metaInfo.bytesTruncated > 0) {
             YLogger.debug(
                     ECommerceConstants.FEATURE_TAG + TAG,
                     "Total bytes truncated = %d(%d items)",

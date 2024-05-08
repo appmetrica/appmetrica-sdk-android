@@ -46,9 +46,9 @@ public class LocationStreamDispatcher {
                 createLocationHandler(locationConfig.getLocationFilter());
             locationHandlers.put(provider, singleProviderLocationFiltrator);
         } else {
-            YLogger.d(
-                "%sLocation handler set location collection config: %s; and handleLocation: %s",
+            YLogger.debug(
                 TAG,
+                "Location handler set location collection config: %s; and handleLocation: %s",
                 locationConfig.getLocationFilter(),
                 location
             );
@@ -76,7 +76,7 @@ public class LocationStreamDispatcher {
 
     @GeoThread
     public void setLocationConfig(@NonNull LocationConfig locationConfig) {
-        YLogger.d("%supdate collection config %s", TAG, locationConfig);
+        YLogger.debug(TAG, "update collection config %s", locationConfig);
         this.locationConfig = locationConfig;
         CacheArguments cacheArguments = locationConfig.getCacheArguments();
         locationDataCache.updateCacheControl(

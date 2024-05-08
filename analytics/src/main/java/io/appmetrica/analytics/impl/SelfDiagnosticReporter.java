@@ -35,8 +35,8 @@ public class SelfDiagnosticReporter {
                 mReporterType = CounterConfigurationReporterType.SELF_DIAGNOSTIC_MANUAL;
                 break;
             default:
-                YLogger.w("%s cannot create self diagnostic reporter for original reporter of type %s",
-                        TAG, originalReporterType.getStringValue());
+                YLogger.warning(TAG, "cannot create self diagnostic reporter for original reporter of type %s",
+                    originalReporterType.getStringValue());
                 mReporterType = null;
         }
         mSelfProcessReporter = selfProcessReporter;
@@ -58,7 +58,7 @@ public class SelfDiagnosticReporter {
                         )
                 );
             } catch (Throwable ex) {
-                YLogger.e(ex, TAG);
+                YLogger.error(TAG, ex);
             }
         }
     }

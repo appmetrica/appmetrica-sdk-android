@@ -36,7 +36,7 @@ public class ShownScreenInfoEventConverter implements ECommerceEventConverter<Sh
 
         BytesTruncatedProvider totalTruncationInfo = BytesTruncatedInfo.total(screenConvertingResult);
 
-        if (YLogger.DEBUG && screenConvertingResult.getBytesTruncated() > 0) {
+        if (screenConvertingResult.getBytesTruncated() > 0) {
             YLogger.debug(
                     ECommerceConstants.FEATURE_TAG + TAG,
                     "Bytes truncated (screen) = %d (%d)",

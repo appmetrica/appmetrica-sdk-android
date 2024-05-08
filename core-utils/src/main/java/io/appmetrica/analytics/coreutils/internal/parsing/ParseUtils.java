@@ -31,7 +31,7 @@ public class ParseUtils {
         try {
             return Long.parseLong(longString);
         } catch (NumberFormatException e) {
-            YLogger.e(e, e.getMessage());
+            YLogger.error(TAG, e, e.getMessage());
         }
         return null;
     }
@@ -41,7 +41,7 @@ public class ParseUtils {
         try {
             return Float.parseFloat(floatString);
         } catch (NumberFormatException e) {
-            YLogger.e(e, e.getMessage());
+            YLogger.error(TAG, e, e.getMessage());
         }
         return null;
     }
@@ -51,7 +51,7 @@ public class ParseUtils {
         try {
             return Integer.parseInt(intString);
         } catch (NumberFormatException e) {
-            YLogger.e(e, e.getMessage());
+            YLogger.error(TAG, e, e.getMessage());
         }
         return null;
     }

@@ -58,7 +58,7 @@ public class PriceConverter
         BytesTruncatedProvider totalTruncationInfo = BytesTruncatedInfo.total(fiatResult, componentsTrimmingResult,
                 internalComponentAmountsTruncationInfo);
 
-        if (YLogger.DEBUG && totalTruncationInfo.getBytesTruncated() > 0) {
+        if (totalTruncationInfo.getBytesTruncated() > 0) {
             YLogger.debug(
                     ECommerceConstants.FEATURE_TAG + TAG,
                     "TotalBytesTruncated (fiat + droppedInternalComponents + truncatedInternalComponents) = " +

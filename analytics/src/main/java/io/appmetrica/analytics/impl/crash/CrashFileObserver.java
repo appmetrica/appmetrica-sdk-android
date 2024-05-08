@@ -28,9 +28,11 @@ public class CrashFileObserver extends FileObserver {
                       @NonNull Consumer<File> newCrashListener,
                       @NonNull FileProvider fileProvider) {
         super(crashDirectory.getAbsolutePath(), FileObserver.ALL_EVENTS);
-        YLogger.d(
-                "%s start watching directory %s for events with type %d",
-                TAG, crashDirectory.getAbsolutePath(), FileObserver.CLOSE_WRITE
+        YLogger.debug(
+            TAG,
+            "start watching directory %s for events with type %d",
+            crashDirectory.getAbsolutePath(),
+            FileObserver.CLOSE_WRITE
         );
         this.newCrashListener = newCrashListener;
         this.crashDirectory = crashDirectory;
@@ -39,10 +41,10 @@ public class CrashFileObserver extends FileObserver {
 
     @Override
     public void onEvent(int event, @Nullable String path) {
-        YLogger.d("%s event %d for path %s received", TAG, event, path);
+        YLogger.debug(TAG, "event %d for path %s received", event, path);
         if (event == FileObserver.CLOSE_WRITE && TextUtils.isEmpty(path) == false) {
             newCrashListener.consume(fileProvider.getFileByNonNullPath(crashDirectory, path));
-            YLogger.d("%s event %d for path %s handled", TAG, event, path);
+            YLogger.debug(TAG, "event %d for path %s handled", event, path);
         }
     }
 }

@@ -109,13 +109,15 @@ public class Session {
         boolean wasRebooted = currentElapsedRealtime < sleepStart;
         final long sinceLastActive= reportElapsedRealtime - sleepStart;
         long sessionLength = getSessionTimeOffset(reportElapsedRealtime);
-        if (YLogger.DEBUG) {
-            YLogger.info(
-                TAG,
-                "Session: id = %d, type = %s, sleepStart = %d, sinceLastActive = %d, sessionTimeout = %d",
-                getId(), getType().toString(), sleepStart, sinceLastActive, getTimeoutSeconds()
-            );
-        }
+        YLogger.info(
+            TAG,
+            "Session: id = %d, type = %s, sleepStart = %d, sinceLastActive = %d, sessionTimeout = %d",
+            getId(),
+            getType().toString(),
+            sleepStart,
+            sinceLastActive,
+            getTimeoutSeconds()
+        );
         return wasRebooted
             || sinceLastActive >= TimeUnit.SECONDS.toMillis(getTimeoutSeconds())
             || sessionLength >= TimeUnit.SECONDS.toMillis(SessionDefaults.SESSION_MAX_LENGTH_SEC);
@@ -172,11 +174,11 @@ public class Session {
                             JSONObject requestParameters = new JSONObject(paramsJson);
                             sessionRequestParams = new SessionRequestParams(requestParameters);
                         } else {
-                            YLogger.d("SessionRequestParameters is empty sessionID=%d, SessionType=%s",
+                            YLogger.debug(TAG, "SessionRequestParameters is empty sessionID=%d, SessionType=%s",
                                 id, sessionArguments.getType());
                         }
                     } catch (Throwable e) {
-                        YLogger.e(e, "Something was wrong while getting session's request parameters.");
+                        YLogger.error(TAG, e, "Something was wrong while getting session's request parameters.");
                     }
                 }
             }

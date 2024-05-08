@@ -22,7 +22,7 @@ public class AESCredentialProvider {
         try {
             password = SecurityUtils.getMD5Hash(context.getPackageName());
         } catch (Throwable e) {
-            YLogger.e(e, "%s could not get password", TAG);
+            YLogger.error(TAG, e, "could not get password");
             password = new byte[AESEncrypter.DEFAULT_KEY_LENGTH];
         }
         return password;
@@ -37,7 +37,7 @@ public class AESCredentialProvider {
                             .toString()
             );
         } catch (Throwable e) {
-            YLogger.e(e, "%s could not get iv", TAG);
+            YLogger.error(TAG, e, "could not get iv");
             iv = new byte[AESEncrypter.DEFAULT_KEY_LENGTH];
         }
         return iv;

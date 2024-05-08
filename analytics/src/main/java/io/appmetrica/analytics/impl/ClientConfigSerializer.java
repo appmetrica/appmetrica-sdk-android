@@ -14,6 +14,8 @@ import org.json.JSONObject;
 
 public class ClientConfigSerializer {
 
+    private static final String TAG = "[ClientConfigSerializer]";
+
     private static final String KEY_API_KEY = "apikey";
     private static final String KEY_APP_VERSION = "app_version";
     private static final String KEY_SESSION_TIMEOUT = "session_timeout";
@@ -170,7 +172,7 @@ public class ClientConfigSerializer {
                 }
                 config = builder.build();
             } catch (Throwable e) {
-                YLogger.e(e, "Exception while serializing AppMetricaConfig to json.");
+                YLogger.error(TAG, e, "Exception while serializing AppMetricaConfig to json.");
             }
         }
         return config;

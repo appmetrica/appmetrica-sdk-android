@@ -9,6 +9,8 @@ import io.appmetrica.analytics.logger.internal.YLogger;
 
 public class SimpleMapLimitation {
 
+    private static final String TAG = "[SimpleMapLimitation]";
+
     @NonNull
     private final MapTrimmers mLimitation;
     @NonNull
@@ -59,15 +61,21 @@ public class SimpleMapLimitation {
         if (map.size() < mLimitation.getCollectionLimitation().getMaxSize() ||
                 (mLimitation.getCollectionLimitation().getMaxSize() == map.size() && map.containsKey(key))) {
             if (mTotalLimitChecker.willLimitBeReached(map, key, value) == false) {
-                YLogger.d("Will insert pair (%s, %s) to environment %s\n. Old value %s",
-                        key, value, toString(), oldValue);
+                YLogger.debug(
+                    TAG,
+                    "Will insert pair (%s, %s) to environment %s\n. Old value %s",
+                    key,
+                    value,
+                    toString(),
+                    oldValue
+                );
                 map.put(key, value);
                 return true;
             } else {
                 mTotalLimitChecker.logTotalLimitReached(key);
             }
         } else {
-            YLogger.d("Size limit for environment %s was reached.", toString());
+            YLogger.debug(TAG, "Size limit for environment %s was reached.", toString());
             mLimitation.logContainerLimitReached(key);
         }
         return false;

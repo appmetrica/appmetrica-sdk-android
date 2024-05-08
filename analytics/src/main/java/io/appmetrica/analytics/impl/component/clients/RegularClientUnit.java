@@ -18,11 +18,11 @@ public class RegularClientUnit extends AbstractClientUnit {
 
     @Override
     protected void handleReport(@NonNull CounterReport report, @NonNull CommonArguments sdkConfig) {
-        YLogger.d(
-                "%s handle report for client unit: %s; data: %s",
-                TAG,
-                sdkConfig.startupArguments,
-                report
+        YLogger.debug(
+            TAG,
+            "handle report for client unit: %s; data: %s",
+            sdkConfig.startupArguments,
+            report
         );
         getComponentUnit().handleReport(report, sdkConfig);
     }

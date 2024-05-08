@@ -301,7 +301,7 @@ public abstract class BaseReporter implements IBaseReporter {
         @NonNull final ModuleEvent moduleEvent
     ) {
         if (reservedEventType(moduleEvent.getType())) {
-            YLogger.w("Try to send custom event with event type = %s, reserved for metrica usage only",
+            YLogger.warning(TAG, "Try to send custom event with event type = %s, reserved for metrica usage only",
                 String.valueOf(moduleEvent.getType()));
         } else {
             final CounterReport event = EventsManager.customEventReportEntry(
@@ -402,7 +402,7 @@ public abstract class BaseReporter implements IBaseReporter {
 
     @Override
     public void sendEventsBuffer() {
-        YLogger.d("Send event buffer for %s.", mReporterEnvironment.getReporterConfiguration().getApiKey());
+        YLogger.debug(TAG, "Send event buffer for %s.", mReporterEnvironment.getReporterConfiguration().getApiKey());
         mReportsHandler.reportEvent(
             EventsManager.reportEntry(EVENT_TYPE_PURGE_BUFFER, mPublicLogger),
             mReporterEnvironment

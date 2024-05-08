@@ -68,7 +68,7 @@ public class StartupTask implements UnderlyingNetworkTask {
         this.requestConfigProvider = configProvider;
         this.fullUrlFormer = fullUrlFormer;
         fullUrlFormer.setHosts(configProvider.getConfig().getStartupHosts());
-        YLogger.d(TAG + " create new task with config %s", configProvider.getConfig());
+        YLogger.debug(TAG, "create new task with config %s", configProvider.getConfig());
     }
 
     @Override

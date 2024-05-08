@@ -11,6 +11,8 @@ import java.util.Arrays;
 
 public class BodyDecoder {
 
+    private static final String TAG = "[BodyDecoder]";
+
     public static class AESEncryptedProvider {
 
         AESEncrypter getEncrypter(byte[] password, byte[] iv) {
@@ -48,7 +50,7 @@ public class BodyDecoder {
                 result = mGzipCompressor.uncompress(decryptedData);
             }
         } catch (Throwable e) {
-            YLogger.e(e.getMessage(), e);
+            YLogger.error(TAG, e, e.getMessage());
             result = null;
         }
         return result;

@@ -73,7 +73,7 @@ public class JvmCrash implements JSONable {
                     }
                 }
             } catch (Throwable th) {
-                YLogger.e(th, TAG);
+                YLogger.error(TAG, th);
             }
         }
         JSONObject processConfiguration = jsonObject.getJSONObject(PROCESS_CONFIGURATION);

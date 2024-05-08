@@ -7,6 +7,8 @@ import java.io.File;
 
 public class CrashFolderPreparer {
 
+    private static final String TAG = "[CrashFolderPreparer]";
+
     public boolean prepareCrashFolder(@Nullable File crashFolder) {
         if (crashFolder == null) {
             return false;
@@ -18,7 +20,7 @@ public class CrashFolderPreparer {
                 if (crashFolder.delete()) {
                     return makeCrashesFolder(crashFolder);
                 } else {
-                    YLogger.d("Can't delete non-directory file with crash directory path.");
+                    YLogger.debug(TAG, "Can't delete non-directory file with crash directory path.");
                     return false;
                 }
             }
@@ -31,7 +33,7 @@ public class CrashFolderPreparer {
         if (crashFolder.mkdir()) {
             return true;
         } else {
-            YLogger.d("Can't make crash directory.");
+            YLogger.debug(TAG, "Can't make crash directory.");
             return false;
         }
     }

@@ -28,9 +28,16 @@ public class ClientDescription {
         mProcessID = processID;
         mProcessSessionID = processSessionID;
         mReporterType = reporterType;
-        YLogger.d("%s create ClientDescription for next arguments: " +
-                        "package %s, apiKey %s, processId %d, psid %s, reporter_type: %s",
-                TAG, mPackageName, mApiKey, mProcessID, mProcessSessionID, mReporterType);
+        YLogger.debug(
+            TAG,
+            "create ClientDescription for next arguments: " +
+                "package %s, apiKey %s, processId %d, psid %s, reporter_type: %s",
+            mPackageName,
+            mApiKey,
+            mProcessID,
+            mProcessSessionID,
+            mReporterType
+        );
     }
 
     @Nullable

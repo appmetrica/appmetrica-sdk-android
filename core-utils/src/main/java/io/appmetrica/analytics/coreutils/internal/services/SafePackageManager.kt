@@ -80,7 +80,7 @@ class SafePackageManager {
     private fun <T> runSafely(defaultValue: T, block: () -> T?): T = try {
         block() ?: defaultValue
     } catch (e: Throwable) {
-        YLogger.e(tag, e, e.message)
+        YLogger.error(tag, e, e.message)
         defaultValue
     }
 }

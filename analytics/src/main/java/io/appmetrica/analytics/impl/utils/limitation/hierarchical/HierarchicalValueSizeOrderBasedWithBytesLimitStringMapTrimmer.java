@@ -83,7 +83,7 @@ public class HierarchicalValueSizeOrderBasedWithBytesLimitStringMapTrimmer
                     truncatedMap.put(keyTrimmingResult.value, valueTrimmingResult.value);
                 }
             }
-            if (YLogger.DEBUG && (pairsDropped != 0 || bytesTruncated != 0)) {
+            if (pairsDropped != 0 || bytesTruncated != 0) {
                 YLogger.debug(
                        ECommerceConstants.FEATURE_TAG + TAG,
                        "Trim map \"%s\" -> \"%s\": pairsDropped = %d; bytesTruncated = %d",

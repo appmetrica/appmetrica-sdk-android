@@ -50,7 +50,7 @@ public class CommutationClientUnit implements ClientIdentifiersChangedListener, 
 
     @Override
     public void onClientIdentifiersChanged(@NonNull ClientIdentifiersHolder clientIdentifiersHolder) {
-        YLogger.d(TAG + " onClientIdentifiersChanged. Receiver %s", mResultReceiver);
+        YLogger.debug(TAG, "onClientIdentifiersChanged. Receiver %s", mResultReceiver);
         DataResultReceiver.notifyOnStartupUpdated(mResultReceiver, clientIdentifiersHolder);
     }
 

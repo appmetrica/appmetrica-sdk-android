@@ -26,7 +26,7 @@ public class AppMetricaServiceCoreExecutionDispatcher implements AppMetricaServi
 
     @Override
     public synchronized void onCreate() {
-        YLogger.d("%sPost onCreate", TAG);
+        YLogger.debug(TAG, "Post onCreate");
         shouldExecuteOnCreate = true;
         mCoreExecutor.execute(new SafeRunnable() {
             @Override
@@ -43,7 +43,7 @@ public class AppMetricaServiceCoreExecutionDispatcher implements AppMetricaServi
 
     @Override
     public void onStart(final Intent intent, final int startId) {
-        YLogger.d("%sPost onStart", TAG);
+        YLogger.debug(TAG, "Post onStart");
         mCoreExecutor.execute(new SafeRunnable() {
             @Override
             public void runSafety() {
@@ -54,7 +54,7 @@ public class AppMetricaServiceCoreExecutionDispatcher implements AppMetricaServi
 
     @Override
     public void onStartCommand(final Intent intent, final int flags, final int startId) {
-        YLogger.d("%sPost onStartCommand", TAG);
+        YLogger.debug(TAG, "Post onStartCommand");
         mCoreExecutor.execute(new SafeRunnable() {
             @Override
             public void runSafety() {
@@ -65,7 +65,7 @@ public class AppMetricaServiceCoreExecutionDispatcher implements AppMetricaServi
 
     @Override
     public void onBind(final Intent intent) {
-        YLogger.d("%sPost onBind", TAG);
+        YLogger.debug(TAG, "Post onBind");
         mCoreExecutor.execute(new SafeRunnable() {
             @Override
             public void runSafety() {
@@ -76,7 +76,7 @@ public class AppMetricaServiceCoreExecutionDispatcher implements AppMetricaServi
 
     @Override
     public void onRebind(final Intent intent) {
-        YLogger.d("%sPost onRebind", TAG);
+        YLogger.debug(TAG, "Post onRebind");
         mCoreExecutor.execute(new SafeRunnable() {
             @Override
             public void runSafety() {
@@ -87,7 +87,7 @@ public class AppMetricaServiceCoreExecutionDispatcher implements AppMetricaServi
 
     @Override
     public void onUnbind(final Intent intent) {
-        YLogger.d("%sPost onUnbind", TAG);
+        YLogger.debug(TAG, "Post onUnbind");
         mCoreExecutor.execute(new SafeRunnable() {
             @Override
             public void runSafety() {
@@ -98,7 +98,7 @@ public class AppMetricaServiceCoreExecutionDispatcher implements AppMetricaServi
 
     @Override
     public void onDestroy() {
-        YLogger.d("%sPost onDestroy on the same thread", TAG);
+        YLogger.debug(TAG, "Post onDestroy on the same thread");
         mCoreExecutor.removeAll();
         synchronized (this) {
             shouldExecuteOnCreate = false;
@@ -108,7 +108,7 @@ public class AppMetricaServiceCoreExecutionDispatcher implements AppMetricaServi
 
     @Override
     public void reportData(final int type, final Bundle data) {
-        YLogger.d("%sPost reportEvent. Type: %d", TAG, type);
+        YLogger.debug(TAG, "Post reportEvent. Type: %d", type);
         mCoreExecutor.execute(new SafeRunnable() {
             @Override
             public void runSafety() throws Exception {
@@ -119,7 +119,7 @@ public class AppMetricaServiceCoreExecutionDispatcher implements AppMetricaServi
 
     @Override
     public void resumeUserSession(@NonNull final Bundle data) {
-        YLogger.d("%sPost resumeUserSession", TAG);
+        YLogger.debug(TAG, "Post resumeUserSession");
         mCoreExecutor.execute(new SafeRunnable() {
             @Override
             public void runSafety() throws Exception {
@@ -130,7 +130,7 @@ public class AppMetricaServiceCoreExecutionDispatcher implements AppMetricaServi
 
     @Override
     public void pauseUserSession(@NonNull final Bundle data) {
-        YLogger.d("%sPost pauseUserSession", TAG);
+        YLogger.debug(TAG, "Post pauseUserSession");
         mCoreExecutor.execute(new SafeRunnable() {
             @Override
             public void runSafety() throws Exception {

@@ -23,6 +23,8 @@ import org.json.JSONObject;
 
 public class ReportFeaturesHandler extends ReportComponentHandler {
 
+    private static final String TAG = "[ReportFeaturesHandler]";
+
     @NonNull
     private final SafePackageManager mSafePackageManager;
 
@@ -58,7 +60,7 @@ public class ReportFeaturesHandler extends ReportComponentHandler {
                     componentPreferences.putApplicationFeatures(newFeatures.toString());
                 }
             } catch (Throwable e) {
-                YLogger.e(e, "can't write features");
+                YLogger.error(TAG, e, "can't write features");
             }
         }
         return false;
@@ -80,7 +82,7 @@ public class ReportFeaturesHandler extends ReportComponentHandler {
                 }
                 return fromDB;
             } catch (Throwable e) {
-                YLogger.e(e, "can't parse features");
+                YLogger.error(TAG, e, "can't parse features");
                 return null;
             }
         }
@@ -106,7 +108,7 @@ public class ReportFeaturesHandler extends ReportComponentHandler {
             }
             return fromSystem;
         } catch (Throwable e) {
-            YLogger.e(e, "can't get features from system");
+            YLogger.error(TAG, e, "can't get features from system");
             return null;
         }
     }

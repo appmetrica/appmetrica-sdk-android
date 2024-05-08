@@ -146,7 +146,7 @@ public class OrderInfoEventConverter implements ECommerceEventConverter<OrderInf
                 cartItemConverter.fromModel(input);
         orderCartItemProto.item = cartItemConvertingResult.result;
 
-        if (YLogger.DEBUG && cartItemConvertingResult.getBytesTruncated() > 0) {
+        if (cartItemConvertingResult.getBytesTruncated() > 0) {
             YLogger.debug(
                     ECommerceConstants.FEATURE_TAG + TAG,
                     "Cart item #%d has bytes_truncated = %d",

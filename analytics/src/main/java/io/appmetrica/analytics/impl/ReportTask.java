@@ -350,7 +350,7 @@ public class ReportTask implements UnderlyingNetworkTask {
                     variable.value = data.getString(key);
                     variables[i] = variable;
                 } catch (Throwable e) {
-                    YLogger.e(e, "Can not find string value for key %s", key);
+                    YLogger.error(TAG, e, "Can not find string value for key %s", key);
                 }
                 i++;
             }
@@ -380,7 +380,7 @@ public class ReportTask implements UnderlyingNetworkTask {
 
         int count = mDbHelper.removeEmptySessions(mComponent.getSessionManager()
                 .getThresholdSessionIdForActualSessions());
-        YLogger.i("Remove %s sessions", String.valueOf(count));
+        YLogger.info(TAG, "Remove %s sessions", String.valueOf(count));
     }
 
     private void saveRequestId() {
@@ -484,7 +484,7 @@ public class ReportTask implements UnderlyingNetworkTask {
                             try {
                                 environmentJSON = new JSONObject(session.environmentRevision.value);
                             } catch (Throwable e) {
-                                YLogger.e(e, "Some problems while parsing environment");
+                                YLogger.error(TAG, e, "Some problems while parsing environment");
                             }
                         }
                         if (session.nextEventWithOtherEnvironment) {
@@ -496,7 +496,7 @@ public class ReportTask implements UnderlyingNetworkTask {
                 YLogger.error(TAG, "no sessions cursor");
             }
         } catch (Throwable ex) {
-            YLogger.e(ex, "Some problems while getting sessions");
+            YLogger.error(TAG, ex, "Some problems while getting sessions");
             exceptions.add(ex);
         } finally {
             Utils.closeCursor(cursor);
@@ -601,15 +601,21 @@ public class ReportTask implements UnderlyingNetworkTask {
 
                 if (eventsOfSession.size() > 0) {
                     session.events = eventsOfSession.toArray(new Session.Event[eventsOfSession.size()]);
-                    YLogger.d("Session %d, Send %d events with env %d %s", sessionId, eventsOfSession.size(),
-                            latestRevision.revisionNumber, latestRevision.value);
+                    YLogger.debug(
+                        TAG,
+                        "Session %d, Send %d events with env %d %s",
+                        sessionId,
+                        eventsOfSession.size(),
+                        latestRevision.revisionNumber,
+                        latestRevision.value
+                    );
                     retrievedSession = new RetrievedSession(session, latestRevision, nextEventHasDifferentRevision);
                 }
             } else {
                 YLogger.error(TAG, "no reports cursor for session: %s", session.toString());
             }
         } catch (Throwable ex) {
-            YLogger.e(ex, "Some problems while getting session with id = %d.", sessionId);
+            YLogger.error(TAG, ex, "Some problems while getting session with id = %d.", sessionId);
             exceptions.add(ex);
         } finally {
             Utils.closeCursor(cursor);
@@ -648,7 +654,7 @@ public class ReportTask implements UnderlyingNetworkTask {
             final EventFromDbModel eventModel = new EventFromDbModel(contentValues);
             return ProtobufUtils.getEventPreparer(eventModel.getEventType()).toSessionEvent(eventModel, config);
         } catch (Throwable ex) {
-            YLogger.e(ex, "Something went wrong while getting event");
+            YLogger.error(TAG, ex, "Something went wrong while getting event");
             exceptions.add(ex);
         }
         return null;

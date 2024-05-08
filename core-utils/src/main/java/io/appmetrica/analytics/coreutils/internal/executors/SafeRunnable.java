@@ -4,11 +4,13 @@ import io.appmetrica.analytics.logger.internal.YLogger;
 
 public abstract class SafeRunnable implements Runnable {
 
+    private static final String TAG = "[SafeRunnable]";
+
     public void run() {
         try {
             runSafety();
         } catch (Throwable e) {
-            YLogger.e(e, e.getMessage());
+            YLogger.error(TAG, e, e.getMessage());
         }
     }
 

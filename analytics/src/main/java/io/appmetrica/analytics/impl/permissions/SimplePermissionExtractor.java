@@ -21,7 +21,7 @@ public class SimplePermissionExtractor implements PermissionExtractor {
     @Override
     public boolean hasPermission(@NonNull Context context, @NonNull String permission) {
         if (getShouldAskSystemStrategy().forbidUsePermission(permission)) {
-            YLogger.d("%sShould ask system strategy restrict using permission \"%s\"", TAG, permission);
+            YLogger.debug(TAG, "Should ask system strategy restrict using permission \"%s\"", permission);
             return false;
         }
         return ContextPermissionChecker.hasPermission(context, permission);

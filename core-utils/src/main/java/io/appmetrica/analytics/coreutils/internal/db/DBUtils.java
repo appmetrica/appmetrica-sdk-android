@@ -14,7 +14,7 @@ public class DBUtils {
         try {
             enhancedCursorRowToContentValues(cursor, values);
         } catch (Throwable ex) {
-            YLogger.e(ex, "%s Something went wrong while filling content values from cursor", TAG);
+            YLogger.error(TAG, ex, "%s Something went wrong while filling content values from cursor", TAG);
         }
     }
 

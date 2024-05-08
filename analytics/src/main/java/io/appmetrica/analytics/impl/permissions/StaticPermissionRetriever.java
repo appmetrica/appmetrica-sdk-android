@@ -12,6 +12,8 @@ import java.util.List;
 
 public class StaticPermissionRetriever implements PermissionRetriever {
 
+    private static final String TAG = "[StaticPermissionRetriever]";
+
     @NonNull private final Context mContext;
     @NonNull private final String mPackageName;
     @NonNull private final SafePackageManager mSafePackageManager;
@@ -35,7 +37,7 @@ public class StaticPermissionRetriever implements PermissionRetriever {
                 mSafePackageManager.getPackageInfo(mContext, mPackageName, PackageManager.GET_PERMISSIONS);
         if (packageInfo != null) {
             for (String permissionName : packageInfo.requestedPermissions) {
-                YLogger.d("has Permission %s", permissionName);
+                YLogger.debug(TAG, "has Permission %s", permissionName);
                 stateList.add(new PermissionState(permissionName, true));
             }
         }
