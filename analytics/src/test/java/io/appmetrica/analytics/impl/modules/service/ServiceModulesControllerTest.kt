@@ -40,7 +40,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoMoreInteractions
-import org.mockito.kotlin.verifyZeroInteractions
+import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
@@ -410,7 +410,7 @@ internal class ServiceModulesControllerTest : CommonTest() {
 
         modulesController.initServiceSide(serviceContext, startupState)
         verify(secondModule).initServiceSide(serviceContext, secondModuleRemoteConfig)
-        verifyZeroInteractions(firstModule)
+        verifyNoInteractions(firstModule)
     }
 
     @Test
@@ -485,7 +485,7 @@ internal class ServiceModulesControllerTest : CommonTest() {
         clearInvocations(firstModule, secondModule)
         modulesController.onStartupStateChanged(startupState)
 
-        verifyZeroInteractions(firstModule)
+        verifyNoInteractions(firstModule)
         verify(secondModuleConfigUpdateListener).onRemoteConfigUpdated(secondModuleRemoteConfig)
     }
 

@@ -1,16 +1,11 @@
 package io.appmetrica.analytics.networktasks.internal;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.ArgumentMatchers.startsWith;
-import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.when;
-
 import io.appmetrica.analytics.coreapi.internal.io.IExecutionPolicy;
 import io.appmetrica.analytics.coreutils.internal.asserts.DebugAssert;
-import io.appmetrica.analytics.networktasks.internal.ExponentialBackoffPolicy;
 import io.appmetrica.analytics.testutils.MockedStaticRule;
-
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.Executor;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -20,9 +15,11 @@ import org.mockito.MockedStatic;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.Executor;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.startsWith;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
 public class NetworkTaskStatesAssertTest {
@@ -660,11 +657,14 @@ public class NetworkTaskStatesAssertTest {
     // end region
 
     private void checkAssertIsExecuted(final Boolean expected) {
-        sDebugAssert.getStaticMock().verify(atLeastOnce(), new MockedStatic.Verification() {
-            @Override
-            public void apply() {
-                DebugAssert.assertNotNull(eq(expected), startsWith("Unexpected state change:"));
-            }
-        });
+        sDebugAssert.getStaticMock().verify(
+            new MockedStatic.Verification() {
+                @Override
+                public void apply() {
+                    DebugAssert.assertNotNull(eq(expected), startsWith("Unexpected state change:"));
+                }
+            },
+            atLeastOnce()
+        );
     }
 }

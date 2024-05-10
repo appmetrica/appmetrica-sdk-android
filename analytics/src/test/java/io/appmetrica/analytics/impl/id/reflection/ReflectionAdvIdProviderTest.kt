@@ -25,7 +25,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.same
 import org.mockito.kotlin.stubbing
-import org.mockito.kotlin.verifyZeroInteractions
+import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
@@ -113,7 +113,7 @@ class ReflectionAdvIdProviderTest : CommonTest() {
             )
             .checkAll()
 
-        verifyZeroInteractions(retryStrategy)
+        verifyNoInteractions(retryStrategy)
 
         advIdentifiersProvider.staticMock.verify(
             { AdvIdentifiersProvider.requestIdentifiers(any(), any()) },

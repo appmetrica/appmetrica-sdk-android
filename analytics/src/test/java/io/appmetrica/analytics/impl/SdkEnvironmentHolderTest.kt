@@ -26,7 +26,7 @@ import org.mockito.kotlin.clearInvocations
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
-import org.mockito.kotlin.verifyZeroInteractions
+import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
@@ -114,7 +114,7 @@ class SdkEnvironmentHolderTest : CommonTest() {
     @Test
     fun `mayBeUpdateScreenInfo if null`() {
         sdkEnvironmentHolder.mayBeUpdateScreenInfo(null)
-        verifyZeroInteractions(listener)
+        verifyNoInteractions(listener)
     }
 
     @Test
@@ -124,7 +124,7 @@ class SdkEnvironmentHolderTest : CommonTest() {
             ScreenInfo(old.width, old.height, old.dpi, old.scaleFactor)
         )
         checkSdkEnvironmentIsDefault()
-        verifyZeroInteractions(listener)
+        verifyNoInteractions(listener)
     }
 
     @Test
@@ -148,7 +148,7 @@ class SdkEnvironmentHolderTest : CommonTest() {
     fun `mayBeUpdateDeviceTypeFromClient if null`() {
         sdkEnvironmentHolder.mayBeUpdateDeviceTypeFromClient(null)
         assertThat(sdkEnvironmentHolder.sdkEnvironment.deviceType).isEqualTo(DeviceTypeValues.PHONE)
-        verifyZeroInteractions(listener)
+        verifyNoInteractions(listener)
     }
 
     @Test
@@ -157,14 +157,14 @@ class SdkEnvironmentHolderTest : CommonTest() {
         clearInvocations(listener)
         sdkEnvironmentHolder.mayBeUpdateDeviceTypeFromClient(DeviceTypeValues.TV)
         assertThat(sdkEnvironmentHolder.sdkEnvironment.deviceType).isEqualTo(DeviceTypeValues.TV)
-        verifyZeroInteractions(listener)
+        verifyNoInteractions(listener)
     }
 
     @Test
     fun `mayBeUpdateDeviceTypeFromClient if the same as initial value`() {
         sdkEnvironmentHolder.mayBeUpdateDeviceTypeFromClient(DeviceTypeValues.PHONE)
         assertThat(sdkEnvironmentHolder.sdkEnvironment.deviceType).isEqualTo(DeviceTypeValues.PHONE)
-        verifyZeroInteractions(listener)
+        verifyNoInteractions(listener)
     }
 
     @Test
@@ -200,7 +200,7 @@ class SdkEnvironmentHolderTest : CommonTest() {
         assertThat(appVersionInfo.appVersionName).isEqualTo(defaultAppVersion)
         assertThat(appVersionInfo.appBuildNumber).isEqualTo(defaultAppBuildNumber)
 
-        verifyZeroInteractions(listener)
+        verifyNoInteractions(listener)
     }
 
     @Test
@@ -235,7 +235,7 @@ class SdkEnvironmentHolderTest : CommonTest() {
         assertThat(appVersionInfo.appVersionName).isEqualTo(defaultAppVersion)
         assertThat(appVersionInfo.appBuildNumber).isEqualTo(defaultAppBuildNumber)
 
-        verifyZeroInteractions(listener)
+        verifyNoInteractions(listener)
     }
 
     @Test
@@ -258,7 +258,7 @@ class SdkEnvironmentHolderTest : CommonTest() {
         sdkEnvironmentHolder.mayBeUpdateConfiguration(newConfiguration)
         assertThat(sdkEnvironmentHolder.sdkEnvironment.locales).isEqualTo(locales)
 
-        verifyZeroInteractions(listener)
+        verifyNoInteractions(listener)
     }
 
     @Test
@@ -269,7 +269,7 @@ class SdkEnvironmentHolderTest : CommonTest() {
         sdkEnvironmentHolder.mayBeUpdateAppVersion("100500", "100500")
 
         verify(secondListener).onSdkEnvironmentChanged()
-        verifyZeroInteractions(listener)
+        verifyNoInteractions(listener)
     }
 
     private fun checkSdkEnvironmentIsDefault() {

@@ -80,7 +80,7 @@ public class BytesTrimmerTest extends CommonTest {
     @Test
     public void testPrintLogForLongBytes() {
         mBytesTrimmer.trim(mLongBytes);
-        verify(mLogger).fw(anyString(), any());
+        verify(mLogger).fw(anyString(), any(Object[].class));
     }
 
     @Test

@@ -7,7 +7,7 @@ import io.appmetrica.analytics.testutils.CommonTest
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.kotlin.verify
-import org.mockito.kotlin.verifyZeroInteractions
+import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.whenever
 
 class DefaultClientComponentsInitializerTest : CommonTest() {
@@ -34,6 +34,6 @@ class DefaultClientComponentsInitializerTest : CommonTest() {
     fun onCreateIfNotMainProcess() {
         whenever(ClientServiceLocator.getInstance().mainProcessDetector.isMainProcess).thenReturn(false)
         initializer.onCreate()
-        verifyZeroInteractions( ClientServiceLocator.getInstance().moduleEntryPointsRegister)
+        verifyNoInteractions( ClientServiceLocator.getInstance().moduleEntryPointsRegister)
     }
 }

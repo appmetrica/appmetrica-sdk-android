@@ -10,11 +10,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -70,7 +71,7 @@ public class EventLimitationsProcessorTest extends CommonTest {
         assertThat(randomString).contains(trimmedString);
         assertThat(trimmedString.length()).isEqualTo(randomString.length() - 1);
         verify(mPublicLogger).isEnabled();
-        verify(mPublicLogger).fw(Mockito.anyString(), Mockito.any());
+        verify(mPublicLogger).fw(anyString(), any(Object[].class));
     }
 
     @Test
@@ -92,8 +93,7 @@ public class EventLimitationsProcessorTest extends CommonTest {
         assertThat(Arrays.equals(src, trimmed)).isFalse();
         assertThat(trimmed.length).isEqualTo(MAX_SIZE);
         verify(mPublicLogger).isEnabled();
-        ;
-        verify(mPublicLogger).fw(Mockito.anyString(), Mockito.any());
+        verify(mPublicLogger).fw(anyString(), any(Object[].class));
 
         byte[] srcCopy = new byte[trimmed.length];
         System.arraycopy(trimmed, 0, srcCopy, 0, trimmed.length);

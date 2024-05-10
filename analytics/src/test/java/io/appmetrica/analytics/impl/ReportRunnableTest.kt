@@ -23,7 +23,8 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.inOrder
 import org.mockito.kotlin.mock
-import org.mockito.kotlin.verifyZeroInteractions
+import org.mockito.kotlin.verifyNoInteractions
+import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
@@ -97,6 +98,6 @@ class ReportRunnableTest : CommonTest() {
     fun `run if config is null`() {
         whenever(ClientConfiguration.fromBundle(context, extras)).thenReturn(null)
         reportRunnable.run()
-        verifyZeroInteractions(GlobalServiceLocator.getInstance().sdkEnvironmentHolder, clientUnit)
+        verifyNoInteractions(GlobalServiceLocator.getInstance().sdkEnvironmentHolder, clientUnit)
     }
 }

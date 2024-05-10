@@ -40,35 +40,44 @@ public class BinaryDataHelperWrapperAssertTest extends CommonTest {
     public void doNotCheckOnInsert() {
         dataHelper = new BinaryDataHelperWrapper(context, StorageType.SERVICE, actualHelper);
         dataHelper.insert("key", "value".getBytes());
-        sDebugAssert.getStaticMock().verify(never(), new MockedStatic.Verification() {
-            @Override
-            public void apply() {
-                DebugAssert.assertMigrated(any(Context.class), any(StorageType.class));
-            }
-        });
+        sDebugAssert.getStaticMock().verify(
+            new MockedStatic.Verification() {
+                @Override
+                public void apply() {
+                    DebugAssert.assertMigrated(any(Context.class), any(StorageType.class));
+                }
+            },
+            never()
+        );
     }
 
     @Test
     public void doNotCheckOnGet() {
         dataHelper = new BinaryDataHelperWrapper(context, StorageType.CLIENT, actualHelper);
         dataHelper.get("key");
-        sDebugAssert.getStaticMock().verify(never(), new MockedStatic.Verification() {
-            @Override
-            public void apply() {
-                DebugAssert.assertMigrated(any(Context.class), any(StorageType.class));
-            }
-        });
+        sDebugAssert.getStaticMock().verify(
+            new MockedStatic.Verification() {
+                @Override
+                public void apply() {
+                    DebugAssert.assertMigrated(any(Context.class), any(StorageType.class));
+                }
+            },
+            never()
+        );
     }
 
     @Test
     public void doNotCheckOnRemove() {
         dataHelper = new BinaryDataHelperWrapper(context, StorageType.SERVICE, actualHelper);
         dataHelper.remove("key");
-        sDebugAssert.getStaticMock().verify(never(), new MockedStatic.Verification() {
-            @Override
-            public void apply() {
-                DebugAssert.assertMigrated(any(Context.class), any(StorageType.class));
-            }
-        });
+        sDebugAssert.getStaticMock().verify(
+            new MockedStatic.Verification() {
+                @Override
+                public void apply() {
+                    DebugAssert.assertMigrated(any(Context.class), any(StorageType.class));
+                }
+            },
+            never()
+        );
     }
 }

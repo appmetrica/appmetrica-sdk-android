@@ -1,17 +1,12 @@
 package io.appmetrica.analytics.snapshot.impl.db.storage;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.never;
-
 import android.content.Context;
-
 import io.appmetrica.analytics.impl.db.IKeyValueTableDbHelper;
 import io.appmetrica.analytics.impl.db.StorageType;
 import io.appmetrica.analytics.impl.db.storage.KeyValueTableDbHelperWrapperTestProxy;
 import io.appmetrica.analytics.impl.utils.DebugAssert;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.MockedStaticRule;
-
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -21,6 +16,9 @@ import org.mockito.MockedStatic;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
 
 @RunWith(RobolectricTestRunner.class)
 public class KeyValueTableDbHelperWrapperAssertTest extends CommonTest {
@@ -175,23 +173,29 @@ public class KeyValueTableDbHelperWrapperAssertTest extends CommonTest {
     public void doNotCheckOnContainsKey() {
         helper = new KeyValueTableDbHelperWrapperTestProxy(context, StorageType.CLIENT, actualHelper);
         helper.containsKey("key");
-        sDebugAssert.getStaticMock().verify(never(), new MockedStatic.Verification() {
-            @Override
-            public void apply() {
-                DebugAssert.assertMigrated(any(Context.class), any(StorageType.class));
-            }
-        });
+        sDebugAssert.getStaticMock().verify(
+            new MockedStatic.Verification() {
+                @Override
+                public void apply() {
+                    DebugAssert.assertMigrated(any(Context.class), any(StorageType.class));
+                }
+            },
+            never()
+        );
     }
 
     @Test
     public void doNotCheckOnCommit() {
         helper = new KeyValueTableDbHelperWrapperTestProxy(context, StorageType.CLIENT, actualHelper);
         helper.commit();
-        sDebugAssert.getStaticMock().verify(never(), new MockedStatic.Verification() {
-            @Override
-            public void apply() {
-                DebugAssert.assertMigrated(any(Context.class), any(StorageType.class));
-            }
-        });
+        sDebugAssert.getStaticMock().verify(
+            new MockedStatic.Verification() {
+                @Override
+                public void apply() {
+                    DebugAssert.assertMigrated(any(Context.class), any(StorageType.class));
+                }
+            },
+            never()
+        );
     }
 }
