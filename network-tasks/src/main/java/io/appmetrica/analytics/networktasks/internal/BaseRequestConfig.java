@@ -27,9 +27,7 @@ public class BaseRequestConfig {
     public String toString() {
         return "BaseRequestConfig{" +
             "mPackageName='" + mPackageName + '\'' +
-            ", mConstantDeviceInfo=" + mConstantDeviceInfo +
             ", sdkEnvironment=" + sdkEnvironment +
-            ", mAppPlatform='" + mAppPlatform + '\'' +
             ", mProtocolVersion='" + mProtocolVersion + '\'' +
             ", sdkIdentifiers=" + sdkIdentifiers +
             ", retryPolicyConfig=" + retryPolicyConfig +
@@ -51,12 +49,9 @@ public class BaseRequestConfig {
         mPackageName = packageName;
     }
 
-    private ConstantDeviceInfo mConstantDeviceInfo;
-
     @Nullable
     private SdkEnvironment sdkEnvironment;
 
-    private final String mAppPlatform = ConstantDeviceInfo.APP_PLATFORM;
     private final String mProtocolVersion = "2";
 
     @Nullable
@@ -81,10 +76,6 @@ public class BaseRequestConfig {
         return sdkIdentifiers != null && ConfigUtils.areMainIdentifiersValid(sdkIdentifiers);
     }
 
-    protected void setConstantDeviceInfo(ConstantDeviceInfo constantDeviceInfo) {
-        mConstantDeviceInfo = constantDeviceInfo;
-    }
-
     protected void setRetryPolicyConfig(RetryPolicyConfig retryPolicyConfig) {
         this.retryPolicyConfig = retryPolicyConfig;
     }
@@ -95,7 +86,7 @@ public class BaseRequestConfig {
 
     @NonNull
     public String getManufacturer() {
-        return WrapUtils.getOrDefault(mConstantDeviceInfo.manufacturer, StringUtils.EMPTY);
+        return WrapUtils.getOrDefault(ConstantDeviceInfo.MANUFACTURER, StringUtils.EMPTY);
     }
 
     public String getProtocolVersion() {
@@ -116,21 +107,21 @@ public class BaseRequestConfig {
     }
 
     public String getAppPlatform() {
-        return mAppPlatform;
+        return ConstantDeviceInfo.APP_PLATFORM;
     }
 
     @NonNull
     public String getModel() {
-        return mConstantDeviceInfo.model;
+        return ConstantDeviceInfo.MODEL;
     }
 
     @NonNull
     public String getOsVersion() {
-        return mConstantDeviceInfo.osVersion;
+        return ConstantDeviceInfo.OS_VERSION;
     }
 
     public int getOsApiLevel() {
-        return mConstantDeviceInfo.osApiLevel;
+        return ConstantDeviceInfo.OS_API_LEVEL;
     }
     
     public String getAppBuildNumber() {
@@ -184,7 +175,7 @@ public class BaseRequestConfig {
 
     @NonNull
     public String getDeviceRootStatus() {
-        return mConstantDeviceInfo.deviceRootStatus;
+        return ConstantDeviceInfo.DEVICE_ROOT_STATUS;
     }
 
     @NonNull
@@ -284,7 +275,6 @@ public class BaseRequestConfig {
             final T config = createBlankConfig();
 
             config.setSdkIdentifiers(dataSource.sdkIdentifiers);
-            config.setConstantDeviceInfo(ConstantDeviceInfo.getInstance());
 
             SdkEnvironmentProvider sdkEnvironmentProvider = dataSource.sdkEnvironmentProvider;
             config.setSdkEnvironment(sdkEnvironmentProvider.getSdkEnvironment());

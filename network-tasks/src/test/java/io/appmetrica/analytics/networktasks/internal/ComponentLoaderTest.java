@@ -17,11 +17,9 @@ import io.appmetrica.analytics.coreapi.internal.model.SdkInfo;
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.SdkEnvironmentProvider;
 import io.appmetrica.analytics.coreutils.internal.system.ConstantDeviceInfo;
 import io.appmetrica.analytics.testutils.CommonTest;
-import io.appmetrica.analytics.testutils.MockedStaticRule;
 import java.util.UUID;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -38,9 +36,6 @@ public class ComponentLoaderTest extends CommonTest {
         <BaseRequestConfig, BaseRequestConfig.BaseRequestArguments,
             BaseRequestConfig.DataSource<BaseRequestConfig.BaseRequestArguments>>
         mLoader;
-
-    @Rule
-    public MockedStaticRule<ConstantDeviceInfo> sConstantDeviceInfo = new MockedStaticRule<>(ConstantDeviceInfo.class);
 
     private final String packageName = "test.package.name";
     @Mock
@@ -68,15 +63,12 @@ public class ComponentLoaderTest extends CommonTest {
     private final String deviceId = UUID.randomUUID().toString();
     private final String deviceIdHash = UUID.randomUUID().toString();
     private final SdkIdentifiers identifiers = new SdkIdentifiers(uuid, deviceId, deviceIdHash);
-    private ConstantDeviceInfo constantDeviceInfo;
 
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
 
         when(context.getPackageName()).thenReturn(packageName);
-        constantDeviceInfo = new ConstantDeviceInfo();
-        when(ConstantDeviceInfo.getInstance()).thenReturn(constantDeviceInfo);
         when(appSetIdProvider.getAppSetId()).thenReturn(appSetId);
         when(platformIdentifiers.getAppSetIdProvider()).thenReturn(appSetIdProvider);
         when(advertisingIdGetter.getIdentifiers(context)).thenReturn(advertisingIdsHolder);
@@ -127,8 +119,6 @@ public class ComponentLoaderTest extends CommonTest {
 
     @Test
     public void testLoadWhenAllArgumentsExist() {
-
-        ConstantDeviceInfo constantDeviceInfo = ConstantDeviceInfo.getInstance();
 
         BaseRequestConfig config = mLoader.load(
             new BaseRequestConfig.DataSource<BaseRequestConfig.BaseRequestArguments>(
@@ -184,15 +174,15 @@ public class ComponentLoaderTest extends CommonTest {
         softAssertion.assertThat(config.getDeviceIDHash()).as("deviceIdHash")
             .isEqualTo(deviceIdHash);
         softAssertion.assertThat(config.getManufacturer()).as("manufacturer")
-            .isEqualTo(constantDeviceInfo.manufacturer);
+            .isEqualTo(ConstantDeviceInfo.MANUFACTURER);
         softAssertion.assertThat(config.getModel()).as("model")
-            .isEqualTo(constantDeviceInfo.model);
+            .isEqualTo(ConstantDeviceInfo.MODEL);
         softAssertion.assertThat(config.getOsVersion()).as("osVersion")
-            .isEqualTo(constantDeviceInfo.osVersion);
+            .isEqualTo(ConstantDeviceInfo.OS_VERSION);
         softAssertion.assertThat(config.getOsApiLevel()).as("osApiLevel")
-            .isEqualTo(constantDeviceInfo.osApiLevel);
+            .isEqualTo(ConstantDeviceInfo.OS_API_LEVEL);
         softAssertion.assertThat(config.getDeviceRootStatus()).as("deviceRootStatus")
-            .isEqualTo(constantDeviceInfo.deviceRootStatus);
+            .isEqualTo(ConstantDeviceInfo.DEVICE_ROOT_STATUS);
         softAssertion.assertThat(config.getAppPlatform()).as("appPlatform")
             .isEqualTo(ConstantDeviceInfo.APP_PLATFORM);
         softAssertion.assertThat(config.getScreenWidth())

@@ -65,7 +65,6 @@ public class io.appmetrica.analytics.networktasks.internal.BaseRequestConfig {
     public boolean isIdentifiersValid()
     protected void setAdvertisingIdsHolder([NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.AdvertisingIdsHolder)
     protected void setAppSetId([NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.AppSetId)
-    protected void setConstantDeviceInfo(io.appmetrica.analytics.coreutils.internal.system.ConstantDeviceInfo)
     protected void setPackageName(String)
     protected void setRetryPolicyConfig(io.appmetrica.analytics.networktasks.internal.RetryPolicyConfig)
     protected void setSdkEnvironment([NonNull] io.appmetrica.analytics.coreapi.internal.model.SdkEnvironment)

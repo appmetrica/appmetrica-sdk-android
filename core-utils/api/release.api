@@ -465,18 +465,14 @@ public final class io.appmetrica.analytics.coreutils.internal.services.telephony
 
 public static final class io.appmetrica.analytics.coreutils.internal.services.telephony.CellularNetworkTypeExtractor$Companion
 
-public class io.appmetrica.analytics.coreutils.internal.system.ConstantDeviceInfo {
+public final class io.appmetrica.analytics.coreutils.internal.system.ConstantDeviceInfo {
     public static final [NonNull] String APP_PLATFORM
-    public final [NonNull] String appPlatform
-    public final [NonNull] String deviceRootStatus
-    public final [NonNull] java.util.List<String> deviceRootStatusMarkers
-    public final String manufacturer
-    public final String model
-    public final int osApiLevel
-    public final String osVersion
-
-    public <init>()
-    public static io.appmetrica.analytics.coreutils.internal.system.ConstantDeviceInfo getInstance()
+    public static final [NonNull] String DEVICE_ROOT_STATUS
+    public static final [NonNull] io.appmetrica.analytics.coreutils.internal.system.ConstantDeviceInfo INSTANCE
+    public static final [NonNull] String MANUFACTURER
+    public static final [NonNull] String MODEL
+    public static final int OS_API_LEVEL
+    public static final [NonNull] String OS_VERSION
 }
 
 public final class io.appmetrica.analytics.coreutils.internal.system.RootChecker {
