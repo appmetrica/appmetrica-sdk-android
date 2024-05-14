@@ -5,6 +5,7 @@ import android.os.Build;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.permission.PermissionState;
+import io.appmetrica.analytics.coreutils.internal.AndroidUtils;
 import io.appmetrica.analytics.coreutils.internal.collection.CollectionUtils;
 import java.util.List;
 
@@ -21,11 +22,10 @@ public class PermissionsChecker {
 
     @VisibleForTesting
     PermissionRetriever createPermissionsRetriever(final Context context) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN ) {
+        if (AndroidUtils.isApiAchieved(Build.VERSION_CODES.JELLY_BEAN )) {
             return new RuntimePermissionsRetriever(context);
         } else {
             return new StaticPermissionRetriever(context);
         }
     }
-
 }

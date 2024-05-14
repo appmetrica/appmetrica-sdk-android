@@ -9,6 +9,7 @@ class CustomHashCodeEqualsTest {
     fun testNetworkCoreQueueTaskEntryEqualsAndHashCode() {
         EqualsVerifier.forClass(Class.forName("io.appmetrica.analytics.networktasks.internal.NetworkCore\$QueueTaskEntry"))
             .usingGetClass()
+            .withNonnullFields("taskDescription")
             .withIgnoredFields("networkTask")
             .verify()
     }

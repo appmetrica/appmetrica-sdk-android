@@ -1217,7 +1217,7 @@
   "analytics/src/test/java/io/appmetrica/analytics/impl/InternalEventsToProtoMappingTest.java":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/test/java/io/appmetrica/analytics/impl/InternalEventsToProtoMappingTest.java",
   "analytics/src/test/java/io/appmetrica/analytics/impl/JsonHelperCustomSdkHostsTest.kt":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/test/java/io/appmetrica/analytics/impl/JsonHelperCustomSdkHostsTest.kt",
   "analytics/src/test/java/io/appmetrica/analytics/impl/JsonHelperFeaturesTest.kt":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/test/java/io/appmetrica/analytics/impl/JsonHelperFeaturesTest.kt",
-  "analytics/src/test/java/io/appmetrica/analytics/impl/JsonHelperOldApiTest.java":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/test/java/io/appmetrica/analytics/impl/JsonHelperOldApiTest.java",
+  "analytics/src/test/java/io/appmetrica/analytics/impl/JsonHelperOldApiTest.kt":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/test/java/io/appmetrica/analytics/impl/JsonHelperOldApiTest.kt",
   "analytics/src/test/java/io/appmetrica/analytics/impl/JsonHelperTest.java":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/test/java/io/appmetrica/analytics/impl/JsonHelperTest.java",
   "analytics/src/test/java/io/appmetrica/analytics/impl/LibraryAnrDetectorTest.java":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/test/java/io/appmetrica/analytics/impl/LibraryAnrDetectorTest.java",
   "analytics/src/test/java/io/appmetrica/analytics/impl/LifecycleDependentComponentManagerTest.java":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/test/java/io/appmetrica/analytics/impl/LifecycleDependentComponentManagerTest.java",
@@ -1657,7 +1657,7 @@
   "analytics/src/test/java/io/appmetrica/analytics/impl/permissions/LocationFlagStrategyTest.java":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/test/java/io/appmetrica/analytics/impl/permissions/LocationFlagStrategyTest.java",
   "analytics/src/test/java/io/appmetrica/analytics/impl/permissions/NeverForbidPermissionStrategyTest.java":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/test/java/io/appmetrica/analytics/impl/permissions/NeverForbidPermissionStrategyTest.java",
   "analytics/src/test/java/io/appmetrica/analytics/impl/permissions/PermissionRetrieverTest.java":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/test/java/io/appmetrica/analytics/impl/permissions/PermissionRetrieverTest.java",
-  "analytics/src/test/java/io/appmetrica/analytics/impl/permissions/PermissionsCheckerTest.java":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/test/java/io/appmetrica/analytics/impl/permissions/PermissionsCheckerTest.java",
+  "analytics/src/test/java/io/appmetrica/analytics/impl/permissions/PermissionsCheckerTest.kt":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/test/java/io/appmetrica/analytics/impl/permissions/PermissionsCheckerTest.kt",
   "analytics/src/test/java/io/appmetrica/analytics/impl/permissions/RuntimePermissionsRetrieverTest.kt":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/test/java/io/appmetrica/analytics/impl/permissions/RuntimePermissionsRetrieverTest.kt",
   "analytics/src/test/java/io/appmetrica/analytics/impl/permissions/SimplePermissionExtractorTest.java":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/test/java/io/appmetrica/analytics/impl/permissions/SimplePermissionExtractorTest.java",
   "analytics/src/test/java/io/appmetrica/analytics/impl/preloadinfo/ContentProviderHelperFactoryTest.kt":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/test/java/io/appmetrica/analytics/impl/preloadinfo/ContentProviderHelperFactoryTest.kt",
@@ -4579,5 +4579,6 @@
   "test-utils/src/main/java/io/appmetrica/analytics/testutils/PrintExecutorRule.kt":"mobile/metrika/android/appmetrica/appmetrica-sdk/test-utils/src/main/java/io/appmetrica/analytics/testutils/PrintExecutorRule.kt",
   "test-utils/src/main/java/io/appmetrica/analytics/testutils/RandomStringGenerator.java":"mobile/metrika/android/appmetrica/appmetrica-sdk/test-utils/src/main/java/io/appmetrica/analytics/testutils/RandomStringGenerator.java",
   "test-utils/src/main/java/io/appmetrica/analytics/testutils/SetUpDelegate.kt":"mobile/metrika/android/appmetrica/appmetrica-sdk/test-utils/src/main/java/io/appmetrica/analytics/testutils/SetUpDelegate.kt",
-  "test-utils/src/main/java/io/appmetrica/analytics/testutils/ToStringTestUtils.java":"mobile/metrika/android/appmetrica/appmetrica-sdk/test-utils/src/main/java/io/appmetrica/analytics/testutils/ToStringTestUtils.java"
+  "test-utils/src/main/java/io/appmetrica/analytics/testutils/ToStringTestUtils.java":"mobile/metrika/android/appmetrica/appmetrica-sdk/test-utils/src/main/java/io/appmetrica/analytics/testutils/ToStringTestUtils.java",
+  "test-utils/src/main/java/io/appmetrica/analytics/testutils/matchers/ArgMatchers.kt":"mobile/metrika/android/appmetrica/appmetrica-sdk/test-utils/src/main/java/io/appmetrica/analytics/testutils/matchers/ArgMatchers.kt"
 }
