@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import io.appmetrica.analytics.coreapi.internal.io.IExecutionPolicy;
 import io.appmetrica.analytics.coreutils.internal.asserts.DebugAssert;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -58,7 +58,7 @@ public class NetworkTask {
      * {@code false} otherwise.
      */
     public boolean onCreateNetworkTask() {
-        YLogger.info(TAG, "onCreateNetworkTask");
+        DebugLogger.info(TAG, "onCreateNetworkTask");
         boolean result = maybeChangeStateTo(State.PREPARING);
         if (result) {
             return underlyingTask.onCreateTask();
@@ -73,7 +73,7 @@ public class NetworkTask {
      * (e.g. Http code is 200 and all data provided in full disclosure), {@code false} otherwise.
      */
     public boolean onRequestComplete() {
-        YLogger.info(TAG, "onRequestComplete (url = %s)", getUrl());
+        DebugLogger.info(TAG, "onRequestComplete (url = %s)", getUrl());
         boolean switchedState = false;
         boolean successful = false;
         synchronized (this) {
@@ -94,7 +94,7 @@ public class NetworkTask {
     }
 
     public boolean onPerformRequest() {
-        YLogger.info(TAG, "onPerformRequest");
+        DebugLogger.info(TAG, "onPerformRequest");
         boolean result = maybeChangeStateTo(State.EXECUTING);
         if (result) {
             underlyingTask.getFullUrlFormer().incrementAttemptNumber();
@@ -105,14 +105,14 @@ public class NetworkTask {
     }
 
     public void onRequestError(@Nullable final Throwable error) {
-        YLogger.info(TAG, "onRequestError: %s", error);
+        DebugLogger.info(TAG, "onRequestError: %s", error);
         if (maybeChangeStateTo(State.FAILED)) {
             underlyingTask.onRequestError(error);
         }
     }
 
     public void onShouldNotExecute() {
-        YLogger.info(TAG, "onShouldNotExecute");
+        DebugLogger.info(TAG, "onShouldNotExecute");
         if (maybeChangeStateTo(State.SHOULD_NOT_EXECUTE)) {
             underlyingTask.onShouldNotExecute();
         }
@@ -144,13 +144,13 @@ public class NetworkTask {
                 underlyingTask.getResponseDataHolder().getResponseCode()
         );
         boolean result = state != State.REMOVED && state != State.FINISHED && hasMoreHosts && allConditionsAreTrue;
-        YLogger.info(TAG, "shouldTryNextHost? %b (state = %s, has more hosts = %b, all conditions are true = %b)",
+        DebugLogger.info(TAG, "shouldTryNextHost? %b (state = %s, has more hosts = %b, all conditions are true = %b)",
                 result, state, hasMoreHosts, allConditionsAreTrue);
         return result;
     }
 
     public boolean onTaskAdded() {
-        YLogger.info(TAG, "onTaskAdded");
+        DebugLogger.info(TAG, "onTaskAdded");
         boolean result = maybeChangeStateTo(State.PENDING);
         if (result) {
             underlyingTask.onTaskAdded();
@@ -159,7 +159,7 @@ public class NetworkTask {
     }
 
     public void onTaskFinished() {
-        YLogger.info(TAG, "onTaskFinished from state %s", state);
+        DebugLogger.info(TAG, "onTaskFinished from state %s", state);
         State oldState;
         boolean result;
         synchronized (this) {
@@ -177,7 +177,7 @@ public class NetworkTask {
     }
 
     public void onTaskRemoved() {
-        YLogger.info(TAG, "onTaskRemoved");
+        DebugLogger.info(TAG, "onTaskRemoved");
         if (maybeChangeStateTo(State.REMOVED)) {
             underlyingTask.onTaskRemoved();
         }
@@ -238,7 +238,7 @@ public class NetworkTask {
         DebugAssert.assertNotNull(result, String.format("Unexpected state change: from %s to one of %s",
             oldState, Arrays.toString(newStates)));
         if (!Boolean.TRUE.equals(result)) {
-            YLogger.warning(TAG, "cannot change state from %s to one of %s", oldState, Arrays.toString(newStates));
+            DebugLogger.warning(TAG, "cannot change state from %s to one of %s", oldState, Arrays.toString(newStates));
         }
 
         return Boolean.TRUE.equals(result);

@@ -6,7 +6,7 @@ import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.ReporterConfig;
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
 import io.appmetrica.analytics.impl.ClientServiceLocator;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,14 +37,14 @@ public class ReporterProxyStorage {
 
     @NonNull
     private ReporterExtendedProxy prepareImplAndCreate(@NonNull final Context context, @NonNull String apiKey) {
-        YLogger.info(TAG, "prepareImplAndCreate");
+        DebugLogger.info(TAG, "prepareImplAndCreate");
         ICommonExecutor executor = ClientServiceLocator.getInstance().getClientExecutorProvider().getDefaultExecutor();
         if (mFacadeProvider.peekInitializedImpl() == null) {
-            YLogger.info(TAG, "needs warm up core");
+            DebugLogger.info(TAG, "needs warm up core");
             executor.execute(new Runnable() {
                 @Override
                 public void run() {
-                    YLogger.info(TAG, "getInitializedImpl");
+                    DebugLogger.info(TAG, "getInitializedImpl");
                     mFacadeProvider.getInitializedImpl(context);
                 }
             });
@@ -71,14 +71,14 @@ public class ReporterProxyStorage {
 
     @NonNull
     public ReporterExtendedProxy getOrCreate(@NonNull final Context context, @NonNull ReporterConfig config) {
-        YLogger.info(TAG, "getOrCreate");
+        DebugLogger.info(TAG, "getOrCreate");
         ReporterExtendedProxy proxy = mReportersProxies.get(config.apiKey);
         if (proxy == null) {
-            YLogger.info(TAG, "needs create proxy");
+            DebugLogger.info(TAG, "needs create proxy");
             synchronized (mReportersProxies) {
                 proxy = mReportersProxies.get(config.apiKey);
                 if (proxy == null) {
-                    YLogger.info(TAG, "Create proxy...");
+                    DebugLogger.info(TAG, "Create proxy...");
                     proxy = prepareImplAndCreate(context, config.apiKey);
                     proxy.activate(config);
                 }

@@ -8,7 +8,7 @@ import androidx.annotation.WorkerThread;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.db.VitalCommonDataProvider;
 import io.appmetrica.analytics.impl.referrer.common.ReferrerInfo;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -44,18 +44,18 @@ public class ReferrerHolder {
         this.vitalCommonDataProvider = vitalCommonDataProvider;
         mReferrerFromServices = vitalCommonDataProvider.getReferrer();
         isReferrerChecked = vitalCommonDataProvider.getReferrerChecked();
-        YLogger.debug(TAG, "Init ReferrerHolder with referrer = %s", mReferrerFromServices);
+        DebugLogger.info(TAG, "Init ReferrerHolder with referrer = %s", mReferrerFromServices);
     }
 
     public void retrieveReferrerIfNeeded() {
-        YLogger.info(TAG, "retrieveReferrerIfNeeded. isReferrerChecked: %b", isReferrerChecked);
+        DebugLogger.info(TAG, "retrieveReferrerIfNeeded. isReferrerChecked: %b", isReferrerChecked);
         if (!isReferrerChecked) {
             new ReferrerAggregator(context, this).retrieveReferrer();
         }
     }
 
     public synchronized void storeReferrer(@Nullable ReferrerInfo referrer) {
-        YLogger.debug(TAG, "store referrer %s", referrer);
+        DebugLogger.info(TAG, "store referrer %s", referrer);
         mReferrerFromServices = referrer;
         isReferrerChecked = true;
         vitalCommonDataProvider.setReferrer(referrer);
@@ -70,7 +70,7 @@ public class ReferrerHolder {
 
     public synchronized void subscribe(@NonNull ReferrerListenerNotifier listener) {
         mListeners.add(listener);
-        YLogger.info(TAG, "Subscribe listener. Actual listeners: %s, referrer checked: %b",
+        DebugLogger.info(TAG, "Subscribe listener. Actual listeners: %s, referrer checked: %b",
                 mListeners, isReferrerChecked);
         if (isReferrerChecked) {
             notifyListener(mReferrerFromServices, listener);
@@ -78,7 +78,7 @@ public class ReferrerHolder {
     }
 
     private synchronized void notifyListeners(@Nullable ReferrerInfo referrerInfo) {
-        YLogger.debug(TAG, "notifyListeners. Listeners size: %d, referrer: %s",
+        DebugLogger.info(TAG, "notifyListeners. Listeners size: %d, referrer: %s",
                 mListeners.size(), referrerInfo);
         for (ReferrerListenerNotifier listener : mListeners) {
             notifyListener(referrerInfo, listener);
@@ -87,7 +87,7 @@ public class ReferrerHolder {
 
     private void notifyListener(@Nullable ReferrerInfo referrerInfo,
                                 @NonNull ReferrerListenerNotifier listener) {
-        YLogger.debug(TAG, "notifyListener. Listener: %s, referrer: %s", listener, referrerInfo);
+        DebugLogger.info(TAG, "notifyListener. Listener: %s, referrer: %s", listener, referrerInfo);
         listener.notifyIfNeeded(referrerInfo);
     }
 }

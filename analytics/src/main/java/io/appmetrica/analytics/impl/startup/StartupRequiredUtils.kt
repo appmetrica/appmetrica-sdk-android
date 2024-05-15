@@ -4,7 +4,7 @@ import androidx.annotation.VisibleForTesting
 import io.appmetrica.analytics.coreutils.internal.time.SystemTimeProvider
 import io.appmetrica.analytics.coreutils.internal.time.TimeProvider
 import io.appmetrica.analytics.impl.ClidsInfoStorage
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 
 private const val TAG = "[StartupRequiredUtils]"
 
@@ -31,7 +31,7 @@ internal object StartupRequiredUtils {
             startupState.outdated ||
                 isOutdated(startupState.obtainTime + startupState.startupUpdateConfig.intervalSeconds)
             ).also {
-            YLogger.info(
+            DebugLogger.info(
                 TAG,
                 "Is startup outdated? $it. " +
                     "Outdated field: ${startupState.outdated}, obtainTime: ${startupState.obtainTime}"
@@ -42,7 +42,7 @@ internal object StartupRequiredUtils {
     @JvmStatic
     fun isOutdated(nextStartupTime: Long): Boolean {
         return (timeProvider.currentTimeSeconds() > nextStartupTime).also {
-            YLogger.info(
+            DebugLogger.info(
                 TAG,
                 "Is startup outdated? $it. Next startup time: $nextStartupTime"
             )
@@ -57,7 +57,7 @@ internal object StartupRequiredUtils {
                 isIdentifierValid(startupState.deviceIdHash)
             )
             .also {
-                YLogger.info(
+                DebugLogger.info(
                     TAG,
                     "Are main identifiers valid? $it. " +
                         "Uuid: ${startupState.uuid}, " +
@@ -99,7 +99,7 @@ internal object StartupRequiredUtils {
                 else -> !isOutdated(startupState)
             }
         }
-        YLogger.info(
+        DebugLogger.info(
             TAG,
             "Contains identifiers $identifiers? $result." +
                 "Uuid: ${startupState.uuid}, device id: ${startupState.deviceId}, " +
@@ -117,7 +117,7 @@ internal object StartupRequiredUtils {
     @JvmStatic
     fun pickIdentifiersThatShouldTriggerStartup(identifiers: Collection<String>): Collection<String> {
         return identifiers.intersect(STARTUP_TRIGGER_IDENTIFIERS).also {
-            YLogger.info(TAG, "From $identifiers only $it should trigger startup")
+            DebugLogger.info(TAG, "From $identifiers only $it should trigger startup")
         }
     }
 }

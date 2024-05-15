@@ -5,7 +5,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import io.appmetrica.analytics.coreapi.internal.data.ProtobufConverter;
 import io.appmetrica.analytics.impl.protobuf.client.PreloadInfoProto;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import org.json.JSONObject;
 
 public class PreloadInfoStateConverter implements
@@ -48,7 +48,7 @@ public class PreloadInfoStateConverter implements
             try {
                 return new JSONObject(params);
             } catch (Throwable ex) {
-                YLogger.error(TAG, ex);
+                DebugLogger.error(TAG, ex);
             }
         }
         return new JSONObject();

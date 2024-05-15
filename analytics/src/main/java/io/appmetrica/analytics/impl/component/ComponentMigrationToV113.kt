@@ -4,7 +4,7 @@ import io.appmetrica.analytics.impl.SdkData
 import io.appmetrica.analytics.impl.component.session.BackgroundSessionFactory
 import io.appmetrica.analytics.impl.component.session.ForegroundSessionFactory
 import io.appmetrica.analytics.impl.component.session.SessionStorageImpl
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 import java.util.concurrent.TimeUnit
 
 internal class ComponentMigrationToV113(
@@ -14,7 +14,7 @@ internal class ComponentMigrationToV113(
     override fun shouldMigrate(from: Int): Boolean = from < SdkData.MIGRATE_SESSION_SLEEP_START_TIME_TO_MILLISECONDS
 
     override fun run() {
-        YLogger.info(tag, "Migrate...")
+        DebugLogger.info(tag, "Migrate...")
         val preferences = componentUnit.componentPreferences
         try {
             val backgroundSessionStorage = SessionStorageImpl(preferences, BackgroundSessionFactory.SESSION_TAG)
@@ -25,7 +25,7 @@ internal class ComponentMigrationToV113(
                 backgroundSessionStorage.putLastEventOffset(TimeUnit.SECONDS.toMillis(it))
             }
         } catch (e: Throwable) {
-            YLogger.error(tag, e)
+            DebugLogger.error(tag, e)
         }
         try {
             val foregroundSessionStorage = SessionStorageImpl(preferences, ForegroundSessionFactory.SESSION_TAG)
@@ -36,8 +36,8 @@ internal class ComponentMigrationToV113(
                 foregroundSessionStorage.putLastEventOffset(TimeUnit.SECONDS.toMillis(it))
             }
         } catch (e: Throwable) {
-            YLogger.error(tag, e)
+            DebugLogger.error(tag, e)
         }
-        YLogger.info(tag, "Migration finished.")
+        DebugLogger.info(tag, "Migration finished.")
     }
 }

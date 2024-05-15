@@ -12,7 +12,7 @@ import io.appmetrica.analytics.impl.startup.StartupError
 import io.appmetrica.analytics.impl.startup.StartupListener
 import io.appmetrica.analytics.impl.startup.StartupState
 import io.appmetrica.analytics.impl.startup.StartupUnit
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 
 internal class RegularDispatcherComponent<COMPONENT>(
     @get:VisibleForTesting val context: Context,
@@ -56,7 +56,7 @@ internal class RegularDispatcherComponent<COMPONENT>(
     }
 
     fun handleReport(counterReport: CounterReport, configuration: CommonArguments) {
-        YLogger.debug(tag, "handle report for componentId: %s; data: %s", componentId, counterReport)
+        DebugLogger.info(tag, "handle report for componentId: %s; data: %s", componentId, counterReport)
 
         if (!EventsManager.isEventWithoutAppConfigUpdate(counterReport.type)) {
             updateComponentConfig(configuration.componentArguments)
@@ -66,7 +66,7 @@ internal class RegularDispatcherComponent<COMPONENT>(
     }
 
     private fun updateComponentConfig(sdkConfig: ReporterArguments) {
-        YLogger.debug(tag, "Update sdk config for componentId: %s; config: %s", componentId, sdkConfig)
+        DebugLogger.info(tag, "Update sdk config for componentId: %s; config: %s", componentId, sdkConfig)
         reportingComponent.updateSdkConfig(sdkConfig)
     }
 

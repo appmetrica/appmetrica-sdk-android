@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.attribution
 
 import io.appmetrica.analytics.impl.protobuf.backend.ExternalAttribution.ClientExternalAttribution
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 import org.json.JSONObject
 
 class ObjectExternalAttribution(
@@ -27,7 +27,7 @@ class ObjectExternalAttribution(
                 try {
                     jsonObject.put(it.name, it.get(this))
                 } catch (e: Throwable) {
-                    YLogger.error(TAG, e, "Found field `${it.name}` with illegal value for JSONObject")
+                    DebugLogger.error(TAG, e, "Found field `${it.name}` with illegal value for JSONObject")
                 }
             }
         }

@@ -5,7 +5,7 @@ import io.appmetrica.analytics.coreapi.internal.data.ProtobufStateStorage
 import io.appmetrica.analytics.impl.clids.ClidsInfo
 import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoData
 import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoState
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 
 internal class ClidsInfoStorage(
     context: Context,
@@ -70,20 +70,20 @@ internal open class DistributionDataStorage<CANDIDATE, CHOSEN, STORAGE> (
 
     @Synchronized
     fun updateIfNeeded(newData: CHOSEN): Boolean {
-        YLogger.info(tag, "Update if needed: $newData")
+        DebugLogger.info(tag, "Update if needed: $newData")
         val updatedChosen: Boolean
         if (newData.source == DistributionSource.UNDEFINED) {
-            YLogger.info(tag, "Do not update to $newData because its source is undefined")
+            DebugLogger.info(tag, "Do not update to $newData because its source is undefined")
             return false
         }
         if (newData == data.chosen) {
-            YLogger.info(tag, "Do not update to $newData because it's the same as ${data.chosen}")
+            DebugLogger.info(tag, "Do not update to $newData because it's the same as ${data.chosen}")
             return false
         }
         var newCandidates = candidatesProvider(data.candidates, newData)
         val updatedCandidates = newCandidates != null
         newCandidates = newCandidates ?: data.candidates
-        YLogger.info(
+        DebugLogger.info(
             tag,
             "Updated candidates got by merging ${data.candidates} with $newData is $newCandidates. " +
                 "Were candidates updated: $updatedCandidates"
@@ -92,12 +92,12 @@ internal open class DistributionDataStorage<CANDIDATE, CHOSEN, STORAGE> (
         if (priorityProvider.isNewDataMoreImportant(newData, data.chosen)) {
             updatedChosen = true
             newChosen = newData
-            YLogger.info(tag, "Updated chosen data to $newChosen from ${data.chosen}.")
+            DebugLogger.info(tag, "Updated chosen data to $newChosen from ${data.chosen}.")
         } else {
             updatedChosen = false
             newChosen = data.chosen
         }
-        YLogger.info(tag, "New chosen data is $newChosen. Was chosen updated: $updatedChosen. New state is: $data")
+        DebugLogger.info(tag, "New chosen data is $newChosen. Was chosen updated: $updatedChosen. New state is: $data")
         if (updatedChosen || updatedCandidates) {
             val oldData = data
             data = stateProvider(newChosen, newCandidates)
@@ -119,7 +119,7 @@ internal open class DistributionDataStorage<CANDIDATE, CHOSEN, STORAGE> (
 
     fun updateAndRetrieveData(newData: CHOSEN): CHOSEN {
         dataWaiter.waitForData(context)
-        YLogger.info(tag, "Maybe update to $newData and then retrieve.")
+        DebugLogger.info(tag, "Maybe update to $newData and then retrieve.")
         synchronized(this) {
             updateIfNeeded(newData)
             return retrieveStateInternal()
@@ -129,15 +129,15 @@ internal open class DistributionDataStorage<CANDIDATE, CHOSEN, STORAGE> (
     @Synchronized
     private fun retrieveStateInternal(): CHOSEN {
         maybeUpdateSatelliteData()
-        YLogger.info(tag, "Choosing distribution data: $data")
+        DebugLogger.info(tag, "Choosing distribution data: $data")
         return data.chosen
     }
 
     private fun maybeUpdateSatelliteData() {
-        YLogger.info(tag, "Maybe update satellite data. Current data: $data")
+        DebugLogger.info(tag, "Maybe update satellite data. Current data: $data")
         if (!satelliteCheckedProvider.wasSatelliteChecked()) {
             val dataFromSatellite = satelliteDataProvider()
-            YLogger.info(tag, "Retrieved data from satellite: $dataFromSatellite")
+            DebugLogger.info(tag, "Retrieved data from satellite: $dataFromSatellite")
             satelliteCheckedProvider.markSatelliteChecked()
             if (dataFromSatellite != null) {
                 updateIfNeeded(dataFromSatellite)

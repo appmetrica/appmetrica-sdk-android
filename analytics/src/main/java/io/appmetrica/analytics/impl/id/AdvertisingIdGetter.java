@@ -11,7 +11,7 @@ import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus;
 import io.appmetrica.analytics.impl.id.reflection.Constants;
 import io.appmetrica.analytics.impl.id.reflection.ReflectionAdvIdProvider;
 import io.appmetrica.analytics.impl.startup.StartupState;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
@@ -156,7 +156,7 @@ public class AdvertisingIdGetter implements IAdvertisingIdGetter {
                             new Callable<Void>() {
                                 @Override
                                 public Void call() {
-                                    YLogger.debug(logTag, "init advertising identifiers");
+                                    DebugLogger.info(logTag, "init advertising identifiers");
                                     mAdvertisingIdsHolder = new AdvertisingIdsHolder(
                                             getGaidIfAllowed(mContext),
                                             getHoaidIfAllowed(mContext),
@@ -186,9 +186,9 @@ public class AdvertisingIdGetter implements IAdvertisingIdGetter {
         try {
             future.get();
         } catch (InterruptedException e) {
-            YLogger.error(TAG, "can't get adv_id. Error: %s", e.getMessage());
+            DebugLogger.error(TAG, "can't get adv_id. Error: %s", e.getMessage());
         } catch (ExecutionException e) {
-            YLogger.error(TAG, "can't get adv_id. Error: %s", e.getMessage());
+            DebugLogger.error(TAG, "can't get adv_id. Error: %s", e.getMessage());
         }
     }
 
@@ -215,7 +215,7 @@ public class AdvertisingIdGetter implements IAdvertisingIdGetter {
                 new Callable<Void>() {
                     @Override
                     public Void call() {
-                        YLogger.debug(logTag, "get advertising identifiers forced");
+                        DebugLogger.info(logTag, "get advertising identifiers forced");
                         AdvertisingIdsHolder advertisingIdsHolderFixed = mAdvertisingIdsHolder;
                         mAdvertisingIdsHolder = new AdvertisingIdsHolder(
                                 mergeIdentifierData(

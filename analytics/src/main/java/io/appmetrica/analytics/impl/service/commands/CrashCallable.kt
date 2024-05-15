@@ -9,7 +9,7 @@ import io.appmetrica.analytics.impl.ReportToSend
 import io.appmetrica.analytics.impl.ServiceUtils
 import io.appmetrica.analytics.impl.ShouldDisconnectFromServiceChecker
 import io.appmetrica.analytics.impl.crash.CrashToFileWriter
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 
 internal class CrashCallable(
     private val context: Context,
@@ -45,7 +45,7 @@ internal class CrashCallable(
     }
 
     override fun handleAbsentService(): Boolean {
-        YLogger.debug(tag, "Send crash via intent.")
+        DebugLogger.info(tag, "Send crash via intent.")
         tryToSendCrashIntent(reportToSend)
         return false
     }
@@ -60,7 +60,7 @@ internal class CrashCallable(
                 context.startService(intent)
             } catch (e: Throwable) {
                 writeToFile(toSend)
-                YLogger.error(tag, e, e.message)
+                DebugLogger.error(tag, e, e.message)
             }
         } else {
             writeToFile(toSend)

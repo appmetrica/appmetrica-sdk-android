@@ -19,7 +19,7 @@ import io.appmetrica.analytics.impl.db.constants.Constants;
 import io.appmetrica.analytics.impl.db.constants.Constants.KeyValueTable.KeyValueTableEntry;
 import io.appmetrica.analytics.impl.db.constants.Constants.PreferencesTable;
 import io.appmetrica.analytics.impl.utils.executors.NamedThreadFactory;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import java.io.Closeable;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -137,7 +137,7 @@ class KeyValueTableDbHelper implements IKeyValueTableDbHelper, Closeable {
                 }
             }
         } catch (Throwable e) {
-            YLogger.error(TAG, e, "Smth was wrong while loading preference values.");
+            DebugLogger.error(TAG, e, "Smth was wrong while loading preference values.");
         } finally {
             Utils.closeCursor(dataCursor);
             mDbConnector.closeDb(db);
@@ -205,16 +205,24 @@ class KeyValueTableDbHelper implements IKeyValueTableDbHelper, Closeable {
                     if (row.getAsString(KeyValueTableEntry.FIELD_VALUE) == null) {
                         String key = row.getAsString(KeyValueTableEntry.FIELD_KEY);
                         db.delete(getTableName(), PreferencesTable.DELETE_WHERE_KEY, new String[] {key});
-                        YLogger.debug(TAG, "remove preferences from db: " + key);
+                        DebugLogger.info(TAG, "remove preferences from db: " + key);
                     } else {
                         db.insertWithOnConflict(getTableName(), null, row, SQLiteDatabase.CONFLICT_REPLACE);
-                        YLogger.debug(TAG, "Write preferences in db: " + row.toString().replace("%", "%%"));
+                        DebugLogger.info(
+                            TAG,
+                            "Write preferences in db: " + row.toString().replace("%", "%%")
+                        );
                     }
                 }
                 db.setTransactionSuccessful();
             }
         } catch (Throwable exception) {
-            YLogger.error(TAG, "Smth was wrong while inserting preferences into database.\n%s\n%s", exception, values);
+            DebugLogger.error(
+                TAG,
+                "Smth was wrong while inserting preferences into database.\n%s\n%s",
+                exception,
+                values
+            );
         } finally {
             Utils.endTransaction(db);
             mDbConnector.closeDb(db);

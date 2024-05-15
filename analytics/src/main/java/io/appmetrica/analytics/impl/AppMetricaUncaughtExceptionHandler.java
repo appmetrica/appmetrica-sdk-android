@@ -8,7 +8,7 @@ import io.appmetrica.analytics.impl.crash.client.ICrashProcessor;
 import io.appmetrica.analytics.impl.crash.utils.CrashedThreadConverter;
 import io.appmetrica.analytics.impl.crash.utils.ThreadsStateDumper;
 import io.appmetrica.analytics.impl.utils.ProcessDetector;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -54,7 +54,7 @@ public class AppMetricaUncaughtExceptionHandler implements Thread.UncaughtExcept
 
     public void uncaughtException(Thread thread, Throwable ex) {
         try {
-            YLogger.info(TAG, "Process is dying");
+            DebugLogger.info(TAG, "Process is dying");
             processDying.set(true);
             processUnhandledException(
                     ex,

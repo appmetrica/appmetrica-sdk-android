@@ -11,7 +11,7 @@ import io.appmetrica.analytics.coreutils.internal.reflection.ReflectionUtils;
 import io.appmetrica.analytics.impl.id.AdvIdProvider;
 import io.appmetrica.analytics.impl.id.NoRetriesStrategy;
 import io.appmetrica.analytics.impl.id.RetryStrategy;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -45,7 +45,7 @@ public class ReflectionAdvIdProvider implements AdvIdProvider {
     @NonNull
     @Override
     public AdTrackingInfoResult getAdTrackingInfo(@NonNull Context context, @NonNull RetryStrategy retryStrategy) {
-        YLogger.info(TAG, "getAdTrackingInfo. Connecting to library for %s adv_id", provider);
+        DebugLogger.info(TAG, "getAdTrackingInfo. Connecting to library for %s adv_id", provider);
         AdTrackingInfoResult result = null;
         if (ReflectionUtils.detectClassExists(CLASS)) {
             retryStrategy.reset();
@@ -53,14 +53,14 @@ public class ReflectionAdvIdProvider implements AdvIdProvider {
                 try {
                     return tryToGetAdTrackingInfo(context);
                 } catch (InvocationTargetException ite) {
-                    YLogger.error(TAG, ite, "can't fetch adv id");
+                    DebugLogger.error(TAG, ite, "can't fetch adv id");
                     String message = ite.getTargetException() != null ? ite.getTargetException().getMessage() : null;
                     result = new AdTrackingInfoResult(null,
                         IdentifierStatus.UNKNOWN,
                         "exception while fetching " + provider + " adv_id: " + message
                     );
                 } catch (Throwable e) {
-                    YLogger.error(TAG, e, "can't fetch adv id");
+                    DebugLogger.error(TAG, e, "can't fetch adv id");
                     result = new AdTrackingInfoResult(null,
                         IdentifierStatus.UNKNOWN,
                         "exception while fetching " + provider + " adv_id: " + e.getMessage()
@@ -72,7 +72,7 @@ public class ReflectionAdvIdProvider implements AdvIdProvider {
                 }
             }
         } else {
-            YLogger.info(
+            DebugLogger.info(
                 TAG,
                 " [%s] Class %s not found. " +
                     "Module io.appmetrica.analytics:analytics-identifiers does not exist. " +

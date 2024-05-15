@@ -2,7 +2,7 @@ package io.appmetrica.analytics.coreutils.internal.system
 
 import android.content.Context
 import io.appmetrica.analytics.coreapi.internal.backport.FunctionWithThrowable
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 
 object SystemServiceUtils {
 
@@ -19,10 +19,10 @@ object SystemServiceUtils {
             try {
                 return tryBlock.apply(systemService)
             } catch (ex: Throwable) {
-                YLogger.error(TAG, ex, "Exception while $whileWhat")
+                DebugLogger.error(TAG, ex, "Exception while $whileWhat")
             }
         } else {
-            YLogger.warning(TAG, "$whatIsNull is null.")
+            DebugLogger.warning(TAG, "$whatIsNull is null.")
         }
         return null
     }
@@ -56,7 +56,7 @@ object SystemServiceUtils {
                 tryBlock
             )
         } catch (ex: Throwable) {
-            YLogger.error(TAG, ex)
+            DebugLogger.error(TAG, ex)
         }
         return null
     }
@@ -80,7 +80,7 @@ object SystemServiceUtils {
                 tryBlock
             )
         } catch (ex: Throwable) {
-            YLogger.error(TAG, ex)
+            DebugLogger.error(TAG, ex)
         }
         return defaultValue
     }

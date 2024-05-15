@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.component.sessionextras
 import android.content.Context
 import io.appmetrica.analytics.impl.component.ComponentId
 import io.appmetrica.analytics.impl.db.storage.DatabaseStorageFactory
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 
 class SessionExtrasStorage(context: Context, componentId: ComponentId) {
 
@@ -15,7 +15,7 @@ class SessionExtrasStorage(context: Context, componentId: ComponentId) {
 
     private val binaryDataHelper =
         DatabaseStorageFactory.getInstance(context).getBinaryDbHelperForComponent(componentId).also {
-            YLogger.info(tag, "create helper for componentId = $componentId")
+            DebugLogger.info(tag, "create helper for componentId = $componentId")
         }
 
     var extras: Map<String, ByteArray>
@@ -26,7 +26,7 @@ class SessionExtrasStorage(context: Context, componentId: ComponentId) {
                     return converter.toModel(serializer.toState(valueFromDb))
                 }
             } catch (e: Throwable) {
-                YLogger.error(tag, e)
+                DebugLogger.error(tag, e)
             }
             return converter.toModel(serializer.defaultValue())
         }

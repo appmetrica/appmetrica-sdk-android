@@ -6,7 +6,7 @@ import androidx.annotation.NonNull;
 import io.appmetrica.analytics.AppMetricaConfig;
 import io.appmetrica.analytics.PreloadInfo;
 import io.appmetrica.analytics.impl.utils.JsonHelper;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import java.util.HashMap;
 import java.util.Map;
 import org.json.JSONException;
@@ -172,7 +172,7 @@ public class ClientConfigSerializer {
                 }
                 config = builder.build();
             } catch (Throwable e) {
-                YLogger.error(TAG, e, "Exception while serializing AppMetricaConfig to json.");
+                DebugLogger.error(TAG, e, "Exception while serializing AppMetricaConfig to json.");
             }
         }
         return config;

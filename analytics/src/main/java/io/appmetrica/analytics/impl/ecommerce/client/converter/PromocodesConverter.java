@@ -10,7 +10,7 @@ import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedProvider;
 import io.appmetrica.analytics.impl.utils.limitation.CollectionTrimInfo;
 import io.appmetrica.analytics.impl.utils.limitation.TrimmingResult;
 import io.appmetrica.analytics.impl.utils.limitation.hierarchical.HierarchicalStringListTrimmer;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import java.util.List;
 
 public class PromocodesConverter
@@ -42,7 +42,7 @@ public class PromocodesConverter
         }
 
         if (promocodesTrimmingResult.getBytesTruncated() > 0) {
-            YLogger.debug(
+            DebugLogger.info(
                    ECommerceConstants.FEATURE_TAG + TAG,
                    "Trim %s -> %s with %d dropped items and bytesTruncated = %d",
                     value,

@@ -9,7 +9,7 @@ import io.appmetrica.analytics.impl.id.AdvertisingIdGetter
 import io.appmetrica.analytics.impl.id.AppSetIdGetter
 import io.appmetrica.analytics.impl.id.Constants
 import io.appmetrica.analytics.impl.id.TimesBasedRetryStrategy
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 import java.util.Locale
 import java.util.UUID
 
@@ -29,14 +29,14 @@ internal class DeviceIdGenerator @VisibleForTesting constructor(
 
     fun generateDeviceId(): String {
         val yandexAdvId = advertisingIdGetter.getIdentifiersForced(context, TimesBasedRetryStrategy(5, 500)).yandex
-        YLogger.info(TAG, "Yandex Adv ID: $yandexAdvId")
+        DebugLogger.info(TAG, "Yandex Adv ID: $yandexAdvId")
         return if (yandexAdvId.isValid) {
             // !! is safe because of isValid check
-            YLogger.info(TAG, "Yandex Adv ID is valid. Using it for device ID")
+            DebugLogger.info(TAG, "Yandex Adv ID is valid. Using it for device ID")
             StringUtils.toHexString(IOUtils.md5(yandexAdvId.mAdTrackingInfo!!.advId!!.toByteArray()))
         } else {
             val appSetId = appSetIdGetter.getAppSetId().id
-            YLogger.info(TAG, "Yandex Adv ID is not valid. App Set ID: $appSetId")
+            DebugLogger.info(TAG, "Yandex Adv ID is not valid. App Set ID: $appSetId")
             if (appSetId != null && appSetId.isValidAppSetId()) {
                 appSetId.replace("-", "")
             } else {

@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import io.appmetrica.analytics.impl.service.AppMetricaServiceAction;
 import io.appmetrica.analytics.impl.utils.collection.HashMultimap;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -66,7 +66,7 @@ public class AppMetricaServiceLifecycle implements AppMetricaServiceLifecycleCal
         String action = intent.getAction();
         if (TextUtils.isEmpty(action) == false) {
             mBoundProcesses.put(action, getPid(intent));
-            YLogger.debug(
+            DebugLogger.info(
                 TAG,
                 "onBindOrRebind with action = %s. Is metrica process: %b. Current bound clients: %s",
                 action,
@@ -96,7 +96,7 @@ public class AppMetricaServiceLifecycle implements AppMetricaServiceLifecycleCal
         String action = intent.getAction();
         if (TextUtils.isEmpty(action) == false) {
             mBoundProcesses.remove(action, getPid(intent));
-            YLogger.debug(
+            DebugLogger.info(
                 TAG,
                 "onUnbind with action = %s. Is metrica process: %b. Current bound clients after remove: %s",
                 action,
@@ -197,7 +197,7 @@ public class AppMetricaServiceLifecycle implements AppMetricaServiceLifecycleCal
             try {
                 pid = Integer.parseInt(intentData.getQueryParameter(ServiceUtils.PARAMETER_PID));
             } catch (Throwable e) {
-                YLogger.error(TAG, e, e.getMessage());
+                DebugLogger.error(TAG, e, e.getMessage());
             }
         }
         return pid;

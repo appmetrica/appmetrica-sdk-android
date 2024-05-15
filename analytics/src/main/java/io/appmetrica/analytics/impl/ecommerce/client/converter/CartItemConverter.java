@@ -8,7 +8,7 @@ import io.appmetrica.analytics.impl.ecommerce.client.model.CartItemWrapper;
 import io.appmetrica.analytics.impl.protobuf.backend.Ecommerce;
 import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedInfo;
 import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedProvider;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 
 public class CartItemConverter
         implements Converter<CartItemWrapper, Result<Ecommerce.ECommerceEvent.CartItem, BytesTruncatedProvider>> {
@@ -58,7 +58,7 @@ public class CartItemConverter
                 BytesTruncatedInfo.total(productResult, revenueResult, referrerResult);
 
         if (totalTruncationInfo.getBytesTruncated() > 0) {
-            YLogger.debug(
+            DebugLogger.info(
                     ECommerceConstants.FEATURE_TAG + TAG,
                     "Total bytes truncated (product + revenue + referrer ) = %d(%d + %d + %d)",
                     totalTruncationInfo.getBytesTruncated(), productResult.metaInfo, revenueResult.metaInfo,

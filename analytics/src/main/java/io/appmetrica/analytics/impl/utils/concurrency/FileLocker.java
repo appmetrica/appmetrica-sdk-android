@@ -5,7 +5,7 @@ import androidx.annotation.NonNull;
 import io.appmetrica.analytics.coreutils.internal.io.FileUtils;
 import io.appmetrica.analytics.impl.IOUtils;
 import io.appmetrica.analytics.impl.Utils;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import java.io.File;
 import java.io.RandomAccessFile;
 import java.nio.channels.FileChannel;
@@ -59,7 +59,7 @@ public class FileLocker {
     public synchronized void unlockAndClear() {
         unlock();
         if (!lockFile.delete()) {
-            YLogger.warning(TAG, "Could not unlock lock file for %s", lockFile.getName());
+            DebugLogger.warning(TAG, "Could not unlock lock file for %s", lockFile.getName());
         }
     }
 

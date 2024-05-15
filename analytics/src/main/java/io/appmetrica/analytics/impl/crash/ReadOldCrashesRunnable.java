@@ -6,7 +6,7 @@ import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.backport.Consumer;
 import io.appmetrica.analytics.impl.utils.concurrency.ExclusiveMultiProcessFileLock;
 import io.appmetrica.analytics.impl.utils.concurrency.FileLocksHolder;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import java.io.File;
 
 public class ReadOldCrashesRunnable implements Runnable {
@@ -37,7 +37,7 @@ public class ReadOldCrashesRunnable implements Runnable {
 
     @Override
     public void run() {
-        YLogger.debug(TAG, "read crashes from directory %s", crashDirectory.getAbsolutePath());
+        DebugLogger.info(TAG, "read crashes from directory %s", crashDirectory.getAbsolutePath());
         if (crashDirectory.exists() && crashDirectory.isDirectory()) {
             File[] files = crashDirectory.listFiles();
             if (files != null) {
@@ -45,19 +45,19 @@ public class ReadOldCrashesRunnable implements Runnable {
                     final ExclusiveMultiProcessFileLock fileLocker = fileLocksHolder.getOrCreate(file.getName());
                     try {
                         fileLocker.lock();
-                        YLogger.debug(TAG, "handle file %s", file.getName());
+                        DebugLogger.info(TAG, "handle file %s", file.getName());
                         newCrashListener.consume(file);
                     } catch (Throwable ex) {
-                        YLogger.error(TAG, ex);
+                        DebugLogger.error(TAG, ex);
                     } finally {
                         fileLocker.unlockAndClear();
                     }
                 }
             } else {
-                YLogger.debug(TAG, "there is no files in %s directory", crashDirectory.getName());
+                DebugLogger.info(TAG, "there is no files in %s directory", crashDirectory.getName());
             }
         } else {
-            YLogger.debug(
+            DebugLogger.info(
                 TAG,
                 "directory %s exists %b, isDirectory %b",
                 crashDirectory.getName(),

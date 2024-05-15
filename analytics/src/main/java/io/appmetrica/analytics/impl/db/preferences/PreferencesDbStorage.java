@@ -4,7 +4,7 @@ import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import io.appmetrica.analytics.impl.db.IKeyValueTableDbHelper;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
@@ -85,7 +85,7 @@ public abstract class PreferencesDbStorage {
             }
             savedValue = jsonArray.toString();
         } catch (Throwable e) {
-            YLogger.error(TAG, e, e.getMessage());
+            DebugLogger.error(TAG, e, e.getMessage());
         }
         mDbHelper.put(key, savedValue);
         return (T) this;
@@ -155,7 +155,7 @@ public abstract class PreferencesDbStorage {
                     result[i] = jsonArray.optString(i);
                 }
             } catch (Throwable e) {
-                YLogger.error(TAG, e, e.getMessage());
+                DebugLogger.error(TAG, e, e.getMessage());
             }
         }
         return result;

@@ -9,7 +9,7 @@ import io.appmetrica.analytics.coreutils.internal.StringUtils;
 import io.appmetrica.analytics.impl.request.DbNetworkTaskConfig;
 import io.appmetrica.analytics.impl.request.ReportRequestConfig;
 import io.appmetrica.analytics.impl.request.UrlParts;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import io.appmetrica.analytics.networktasks.internal.AdvIdWithLimitedAppender;
 import io.appmetrica.analytics.networktasks.internal.CommonUrlParts;
 import io.appmetrica.analytics.networktasks.internal.IParamsAppender;
@@ -40,18 +40,18 @@ public class ReportParamsAppender implements IParamsAppender<ReportRequestConfig
     }
 
     public void setDbReportRequestConfig(@NonNull DbNetworkTaskConfig config) {
-        YLogger.info(TAG, "set db report request config to %s", config);
+        DebugLogger.info(TAG, "set db report request config to %s", config);
         mDbReportRequestConfig = config;
     }
 
     public void setRequestId(final long requestId) {
-        YLogger.info(TAG, "set request id to %d", requestId);
+        DebugLogger.info(TAG, "set request id to %d", requestId);
         mRequestId = requestId;
     }
 
     @Override
     public void appendParams(@NonNull Uri.Builder uriBuilder, @NonNull ReportRequestConfig requestConfig) {
-        YLogger.info(TAG, "append params with requestId: %d, config: %s, db config: %s",
+        DebugLogger.info(TAG, "append params with requestId: %d, config: %s, db config: %s",
                 mRequestId, requestConfig, mDbReportRequestConfig);
         uriBuilder.path(UrlParts.REPORT_PATH);
         sendingDataParamsAppender.appendEncryptedData(uriBuilder);
@@ -94,7 +94,7 @@ public class ReportParamsAppender implements IParamsAppender<ReportRequestConfig
                 mDbReportRequestConfig.appFramework, requestConfig.getAppFramework());
             appendIfNotEmpty(uriBuilder, UrlParts.ATTRIBUTION_ID, mDbReportRequestConfig.attributionId);
         } else {
-            YLogger.warning(TAG, "dbReportRequestConfig is null.");
+            DebugLogger.warning(TAG, "dbReportRequestConfig is null.");
         }
     }
 

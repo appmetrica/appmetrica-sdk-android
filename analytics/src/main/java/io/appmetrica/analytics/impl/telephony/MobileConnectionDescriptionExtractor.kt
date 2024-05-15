@@ -10,7 +10,7 @@ import io.appmetrica.analytics.coreutils.internal.permission.AlwaysAllowPermissi
 import io.appmetrica.analytics.coreutils.internal.permission.SinglePermissionStrategy
 import io.appmetrica.analytics.coreutils.internal.services.telephony.CellularNetworkTypeExtractor
 import io.appmetrica.analytics.impl.GlobalServiceLocator
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 import java.util.concurrent.TimeUnit
 
 private const val TAG = "[MobileConnectionDescriptionExtractor]"
@@ -45,7 +45,7 @@ internal class MobileConnectionDescriptionExtractor(
             data = extractInternal()
             cachedData.data = data
         }
-        YLogger.info(TAG, "Extract returns $data")
+        DebugLogger.info(TAG, "Extract returns $data")
         return data
     }
 

@@ -8,7 +8,7 @@ import io.appmetrica.analytics.coreutils.internal.time.SystemTimeProvider;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.impl.db.constants.Constants;
 import io.appmetrica.analytics.impl.request.ReportRequestConfig;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 import org.json.JSONObject;
@@ -74,7 +74,7 @@ public class Session {
         boolean validID = id >= MIN_VALID_UI_SESSION_ID;
         boolean consistentRequestParameters = consistentRequestParameters();
         boolean notExpired = !isExpired(reportElapsedRealtime, systemTimeProvider.elapsedRealtime());
-        YLogger.info(
+        DebugLogger.info(
             TAG,
             "Session id=%d and type %s validity. validID=%b, consistentRequestParameters=%b, notExpired=%b",
             id, sessionArguments.getType(), validID, consistentRequestParameters, notExpired
@@ -89,7 +89,7 @@ public class Session {
             ReportRequestConfig reportRequestConfig = component.getFreshReportRequestConfig();
             consistentRequestParameters = requestParams.areParamsSameAsInConfig(reportRequestConfig);
         } else {
-            YLogger.info(
+            DebugLogger.info(
                 TAG,
                 "SessionRequestParameters are null. SessionID %d, SessionType %s",
                 id,
@@ -109,7 +109,7 @@ public class Session {
         boolean wasRebooted = currentElapsedRealtime < sleepStart;
         final long sinceLastActive= reportElapsedRealtime - sleepStart;
         long sessionLength = getSessionTimeOffset(reportElapsedRealtime);
-        YLogger.info(
+        DebugLogger.info(
             TAG,
             "Session: id = %d, type = %s, sleepStart = %d, sinceLastActive = %d, sessionTimeout = %d",
             getId(),
@@ -130,7 +130,7 @@ public class Session {
 
     void updateLastActiveTime(long elapsedRealtime) {
         sleepStart = elapsedRealtime;
-        YLogger.info(TAG, "updateLastActiveTime: %s", sleepStart);
+        DebugLogger.info(TAG, "updateLastActiveTime: %s", sleepStart);
         sessionStorage.putSleepStart(sleepStart).commit();
     }
 
@@ -174,11 +174,11 @@ public class Session {
                             JSONObject requestParameters = new JSONObject(paramsJson);
                             sessionRequestParams = new SessionRequestParams(requestParameters);
                         } else {
-                            YLogger.debug(TAG, "SessionRequestParameters is empty sessionID=%d, SessionType=%s",
+                            DebugLogger.info(TAG, "SessionRequestParameters is empty sessionID=%d, SessionType=%s",
                                 id, sessionArguments.getType());
                         }
                     } catch (Throwable e) {
-                        YLogger.error(TAG, e, "Something was wrong while getting session's request parameters.");
+                        DebugLogger.error(TAG, e, "Something was wrong while getting session's request parameters.");
                     }
                 }
             }

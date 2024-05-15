@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.attribution
 import io.appmetrica.analytics.coreutils.internal.parsing.isEqualTo
 import io.appmetrica.analytics.coreutils.internal.time.TimeProvider
 import io.appmetrica.analytics.impl.component.ComponentUnit
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 import org.json.JSONObject
 
 class ExternalAttributionHelper(
@@ -22,7 +22,7 @@ class ExternalAttributionHelper(
                 return false
             }
         } else {
-            YLogger.error(tag, "Attribution collecting interval is null")
+            DebugLogger.error(tag, "Attribution collecting interval is null")
             return false
         }
         return true
@@ -37,7 +37,7 @@ class ExternalAttributionHelper(
         return (prevValue == null) || try {
             !JSONObject(data).isEqualTo(JSONObject(prevValue))
         } catch (e: Throwable) {
-            YLogger.error(tag, e, "Failed to parse attribution")
+            DebugLogger.error(tag, e, "Failed to parse attribution")
             true
         }
     }

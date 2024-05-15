@@ -6,7 +6,7 @@ import io.appmetrica.analytics.impl.ecommerce.ECommerceConstants;
 import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedInfo;
 import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedProvider;
 import io.appmetrica.analytics.impl.utils.limitation.TrimmingResult;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 
 public class HierarchicalStringTrimmer extends BaseHierarchicalTrimmer<String, BytesTruncatedProvider> {
 
@@ -24,7 +24,7 @@ public class HierarchicalStringTrimmer extends BaseHierarchicalTrimmer<String, B
         if (truncatedString != null && truncatedString.length() > getLimit()) {
             truncatedString = truncatedString.substring(0, getLimit());
             truncatedBytes = input.getBytes().length - truncatedString.getBytes().length;
-            YLogger.debug(
+            DebugLogger.info(
                     ECommerceConstants.FEATURE_TAG + TAG,
                     "Trim \"%s\" -> \"%s\" with bytes truncated = %d",
                     input, truncatedString, truncatedBytes

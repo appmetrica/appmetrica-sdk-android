@@ -11,7 +11,7 @@ import io.appmetrica.analytics.impl.CounterReport;
 import io.appmetrica.analytics.impl.DataResultReceiver;
 import io.appmetrica.analytics.impl.component.CommonArguments;
 import io.appmetrica.analytics.impl.component.CommutationDispatcherComponent;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 
 /*
  * This class main purpose is to bind client process with service process.
@@ -50,7 +50,7 @@ public class CommutationClientUnit implements ClientIdentifiersChangedListener, 
 
     @Override
     public void onClientIdentifiersChanged(@NonNull ClientIdentifiersHolder clientIdentifiersHolder) {
-        YLogger.debug(TAG, "onClientIdentifiersChanged. Receiver %s", mResultReceiver);
+        DebugLogger.info(TAG, "onClientIdentifiersChanged. Receiver %s", mResultReceiver);
         DataResultReceiver.notifyOnStartupUpdated(mResultReceiver, clientIdentifiersHolder);
     }
 

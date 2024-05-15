@@ -2,7 +2,7 @@ package io.appmetrica.analytics.networktasks.internal
 
 import androidx.annotation.AnyThread
 import androidx.annotation.VisibleForTesting
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 
 class NetworkServiceLocator @AnyThread @VisibleForTesting constructor() : NetworkServiceLifecycleObserver {
 
@@ -11,7 +11,7 @@ class NetworkServiceLocator @AnyThread @VisibleForTesting constructor() : Networ
     val networkCore: NetworkCore = NetworkCore().apply {
         name = "IAA-NC"
         start()
-        YLogger.info(tag, "network core started")
+        DebugLogger.info(tag, "network core started")
     }
 
     override fun onCreate() {
@@ -19,7 +19,7 @@ class NetworkServiceLocator @AnyThread @VisibleForTesting constructor() : Networ
     }
 
     override fun onDestroy() {
-        YLogger.info(tag, "onDestroy")
+        DebugLogger.info(tag, "onDestroy")
         networkCore.stopTasks()
     }
 

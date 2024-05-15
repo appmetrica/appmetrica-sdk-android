@@ -6,7 +6,7 @@ import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.referrer.common.ReferrerChosenListener;
 import io.appmetrica.analytics.impl.referrer.common.ReferrerInfo;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -35,7 +35,7 @@ public class ReferrerManager implements ReferrerHolder.Listener {
 
     @Override
     public synchronized void handleReferrer(@Nullable ReferrerInfo referrer) {
-        YLogger.info(TAG, "handle referrer %s", referrer);
+        DebugLogger.info(TAG, "handle referrer %s", referrer);
         chosenReferrer = referrer;
         referrerChosen = true;
         notifyListenersIfNeeded();
@@ -44,13 +44,13 @@ public class ReferrerManager implements ReferrerHolder.Listener {
     // end region
 
     public synchronized void addOneShotListener(@NonNull ReferrerChosenListener listener) {
-        YLogger.info(TAG, "add listener: %s, current listeners count: %d", listener, listeners.size());
+        DebugLogger.info(TAG, "add listener: %s, current listeners count: %d", listener, listeners.size());
         listeners.add(listener);
         notifyListenerIfNeeded(listener);
     }
 
     private void notifyListenersIfNeeded() {
-        YLogger.info(TAG, "notifyListenersIfNeeded. Listeners count: %d", listeners.size());
+        DebugLogger.info(TAG, "notifyListenersIfNeeded. Listeners count: %d", listeners.size());
         if (referrerChosen) {
             for (ReferrerChosenListener listener : listeners) {
                 listener.onReferrerChosen(chosenReferrer);
@@ -60,7 +60,7 @@ public class ReferrerManager implements ReferrerHolder.Listener {
     }
 
     private void notifyListenerIfNeeded(@NonNull ReferrerChosenListener listener) {
-        YLogger.info(TAG, "notify listener %s, referrerChosen: %b", listener, referrerChosen);
+        DebugLogger.info(TAG, "notify listener %s, referrerChosen: %b", listener, referrerChosen);
         if (referrerChosen) {
             listener.onReferrerChosen(chosenReferrer);
             listeners.remove(listener);

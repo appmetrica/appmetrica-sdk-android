@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.db.state;
 import androidx.annotation.NonNull;
 import io.appmetrica.analytics.coreapi.internal.data.StateSerializer;
 import io.appmetrica.analytics.coreutils.internal.encryption.AESEncrypter;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import java.io.IOException;
 
 public class EncryptedStateSerializer<T> implements StateSerializer<T> {
@@ -27,7 +27,7 @@ public class EncryptedStateSerializer<T> implements StateSerializer<T> {
         try {
             return mEncrypter.encrypt(mBackedSerializer.toByteArray(message));
         } catch (Throwable e) {
-            YLogger.error(TAG, e, e.getMessage());
+            DebugLogger.error(TAG, e, e.getMessage());
         }
         return new byte[0];
     }

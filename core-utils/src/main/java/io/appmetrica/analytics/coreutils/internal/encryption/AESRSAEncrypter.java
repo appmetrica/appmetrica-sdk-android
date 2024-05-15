@@ -7,7 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.crypto.Encrypter;
 import io.appmetrica.analytics.coreutils.internal.io.CloseableUtilsKt;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.security.KeyFactory;
@@ -53,7 +53,7 @@ public class AESRSAEncrypter implements Encrypter {
 
             return encryptInternal(input, password, iv, publicKey);
         } catch (Throwable e) {
-            YLogger.error(TAG, e);
+            DebugLogger.error(TAG, e);
         }
         return null;
     }
@@ -87,7 +87,7 @@ public class AESRSAEncrypter implements Encrypter {
                 return outputStream.toByteArray();
             }
         } catch (Throwable e) {
-            YLogger.error(TAG, e);
+            DebugLogger.error(TAG, e);
         } finally {
             CloseableUtilsKt.closeSafely(outputStream);
         }
@@ -114,7 +114,7 @@ public class AESRSAEncrypter implements Encrypter {
 
             return new AESEncrypter(mAESAlgorithm, password, iv).decrypt(text);
         } catch (Throwable e) {
-            YLogger.error(TAG, e);
+            DebugLogger.error(TAG, e);
         }
         return null;
     }

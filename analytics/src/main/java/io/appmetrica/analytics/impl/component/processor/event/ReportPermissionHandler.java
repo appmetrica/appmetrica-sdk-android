@@ -17,7 +17,7 @@ import io.appmetrica.analytics.impl.component.EventSaver;
 import io.appmetrica.analytics.impl.db.state.factory.StorageFactory;
 import io.appmetrica.analytics.impl.permissions.AppPermissionsState;
 import io.appmetrica.analytics.impl.permissions.PermissionsChecker;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import java.util.List;
 
 public class ReportPermissionHandler extends ReportComponentHandler {
@@ -68,7 +68,7 @@ public class ReportPermissionHandler extends ReportComponentHandler {
         String componentIdName = component.getComponentId().toString();
 
         if (component.getVitalComponentDataProvider().isFirstEventDone() && component.needToCheckPermissions()) {
-            YLogger.debug(TAG, "Sending PermissionsChecker Event for %s", componentIdName);
+            DebugLogger.info(TAG, "Sending PermissionsChecker Event for %s", componentIdName);
 
             AppPermissionsState oldAppPermissionsState = mPermissionsStorage.read();
             AppPermissionsState newAppPermissionsState = getNewAppPermissionsStateOrNull(oldAppPermissionsState);

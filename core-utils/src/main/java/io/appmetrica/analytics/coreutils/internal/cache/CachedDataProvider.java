@@ -3,7 +3,7 @@ package io.appmetrica.analytics.coreutils.internal.cache;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 
 public interface CachedDataProvider {
 
@@ -33,7 +33,7 @@ public interface CachedDataProvider {
         public void setData(@Nullable final T data) {
             mCachedData = data;
             updateCacheTime();
-            YLogger.info(tag, "set data %s at %d", mCachedData, mCachedTime);
+            DebugLogger.info(tag, "set data %s at %d", mCachedData, mCachedTime);
         }
 
         public final boolean isEmpty() {

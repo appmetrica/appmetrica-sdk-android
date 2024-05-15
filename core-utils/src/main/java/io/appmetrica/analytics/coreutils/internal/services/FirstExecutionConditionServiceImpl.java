@@ -6,7 +6,7 @@ import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.FirstExecutionConditionService;
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.FirstExecutionDelayedTask;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -51,13 +51,19 @@ public class FirstExecutionConditionServiceImpl implements FirstExecutionConditi
             lastUpdateConfigTime = configuration == null ? 0 : configuration.getLastUpdateConfigTime();
             delay = Long.MAX_VALUE;
             this.tag = tag;
-            YLogger.info(TAG, "%s init with configuration: %s", tag, configuration);
+            DebugLogger.info(TAG, "%s init with configuration: %s", tag, configuration);
         }
 
         boolean shouldExecute() {
-            YLogger.info(TAG, "%s shouldExecute: mHasFirstExecutionOccurred: %b, mFirstStartupServerTime: %d, " +
-                    "mLastStartupServerTime: %d, mDelay: %d", tag, firstExecutionAlreadyAllowed,
-                initialUpdateConfigTime, lastUpdateConfigTime, delay);
+            DebugLogger.info(
+                TAG,
+                "shouldExecute: mHasFirstExecutionOccurred: %b, mFirstStartupServerTime: %d, " +
+                    "mLastStartupServerTime: %d, mDelay: %d",
+                firstExecutionAlreadyAllowed,
+                initialUpdateConfigTime,
+                lastUpdateConfigTime,
+                delay
+            );
             if (firstExecutionAlreadyAllowed) {
                 return true;
             }
@@ -70,7 +76,7 @@ public class FirstExecutionConditionServiceImpl implements FirstExecutionConditi
 
         void setDelaySeconds(final long delaySeconds) {
             delay = TimeUnit.SECONDS.toMillis(delaySeconds);
-            YLogger.info(TAG, "%s update delay with %d", tag, delay);
+            DebugLogger.info(TAG, "%s update delay with %d", tag, delay);
         }
 
         void setFirstExecutionAlreadyAllowed() {
@@ -80,8 +86,12 @@ public class FirstExecutionConditionServiceImpl implements FirstExecutionConditi
         void updateConfig(@NonNull UtilityServiceConfiguration configuration) {
             initialUpdateConfigTime = configuration.getInitialConfigTime();
             lastUpdateConfigTime = configuration.getLastUpdateConfigTime();
-            YLogger.info(TAG, "%s Update times from startup. mLastStartupServerTime: %d, mFirstStartupServerTime: %d",
-                tag, lastUpdateConfigTime, initialUpdateConfigTime);
+            DebugLogger.info(
+                TAG,
+                "Update times from startup. mLastStartupServerTime: %d, mFirstStartupServerTime: %d",
+                lastUpdateConfigTime,
+                initialUpdateConfigTime
+            );
         }
     }
 
@@ -116,13 +126,13 @@ public class FirstExecutionConditionServiceImpl implements FirstExecutionConditi
         @Override
         public boolean tryExecute(final long launchDelaySeconds) {
             if (firstExecutionConditionChecker.shouldExecute()) {
-                YLogger.info(TAG, "%s try execute with delay = %d. First execution conditions are met",
+                DebugLogger.info(TAG, "%s try execute with delay = %d. First execution conditions are met",
                     firstExecutionConditionChecker.tag, 0);
                 activationBarrierHelper.subscribeIfNeeded(TimeUnit.SECONDS.toMillis(launchDelaySeconds), executor);
                 firstExecutionConditionChecker.setFirstExecutionAlreadyAllowed();
                 return true;
             } else {
-                YLogger.info(TAG, "%s try execute with delay = %d. First execution conditions were not met",
+                DebugLogger.info(TAG, "%s try execute with delay = %d. First execution conditions were not met",
                     firstExecutionConditionChecker.tag, 0);
                 return false;
             }
@@ -173,7 +183,7 @@ public class FirstExecutionConditionServiceImpl implements FirstExecutionConditi
     ) {
         FirstExecutionHandler firstExecutionHandler = new FirstExecutionHandler(executor, actHelper, checker);
         mFirstExecutionHandlers.add(firstExecutionHandler);
-        YLogger.info(
+        DebugLogger.info(
             TAG,
             "Create new first execution handler. Initial configuration = %s. Total handlers count = %d",
             configuration,
@@ -185,7 +195,7 @@ public class FirstExecutionConditionServiceImpl implements FirstExecutionConditi
     public void updateConfig(@NonNull UtilityServiceConfiguration configuration) {
         final List<FirstExecutionHandler> firstExecutionHandlersCopy;
         synchronized (this) {
-            YLogger.info(
+            DebugLogger.info(
                 TAG,
                 "update configuration: %s for %d handlers",
                 configuration,

@@ -4,7 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import io.appmetrica.analytics.coreutils.internal.io.CloseableUtilsKt;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 
 public class DBUtils {
 
@@ -14,7 +14,7 @@ public class DBUtils {
         try {
             enhancedCursorRowToContentValues(cursor, values);
         } catch (Throwable ex) {
-            YLogger.error(TAG, ex, "%s Something went wrong while filling content values from cursor", TAG);
+            DebugLogger.error(TAG, ex, "%s Something went wrong while filling content values from cursor", TAG);
         }
     }
 

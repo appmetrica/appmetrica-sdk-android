@@ -11,7 +11,7 @@ import androidx.annotation.WorkerThread;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.Utils;
 import io.appmetrica.analytics.impl.referrer.common.ReferrerInfo;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import java.util.concurrent.Callable;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
@@ -43,7 +43,7 @@ public class HuaweiReferrerRetriever {
                     .getHmsReferrerThread(referrerInfoFuture).start();
             resultReferrerInfo = referrerInfoFuture.get(FUTURE_TIMEOUT_SECONDS, TimeUnit.SECONDS);
         } catch (Throwable ex) {
-            YLogger.error(TAG, ex, "Could not retrieve Huawei referrer");
+            DebugLogger.error(TAG, ex, "Could not retrieve Huawei referrer");
             referrerListener.onReferrerRetrieveError(ex);
             return;
         } finally {
@@ -73,15 +73,15 @@ public class HuaweiReferrerRetriever {
                                     installTimestamp,
                                     ReferrerInfo.Source.HMS
                             );
-                            YLogger.info(TAG, "Parsed referrer: %s", referrerInfo);
+                            DebugLogger.info(TAG, "Parsed referrer: %s", referrerInfo);
                         } else {
-                            YLogger.info(TAG, "Referrer is empty");
+                            DebugLogger.info(TAG, "Referrer is empty");
                         }
                     } else {
-                        YLogger.info(TAG, "Empty cursor");
+                        DebugLogger.info(TAG, "Empty cursor");
                     }
                 } else {
-                    YLogger.info(TAG, "No content provider found");
+                    DebugLogger.info(TAG, "No content provider found");
                 }
                 return referrerInfo;
             }

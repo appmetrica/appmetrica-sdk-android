@@ -8,7 +8,7 @@ import io.appmetrica.analytics.coreutils.internal.io.FileUtils;
 import io.appmetrica.analytics.impl.IOUtils;
 import io.appmetrica.analytics.impl.db.FileConstants;
 import io.appmetrica.analytics.impl.utils.UuidGenerator;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import java.io.File;
 import java.io.FileOutputStream;
 
@@ -34,28 +34,28 @@ class PersistentUuidHolder {
     public String readUuid() {
         File file = FileUtils.getFileFromSdkStorage(context, FILE_NAME);
         String result = IOUtils.getStringFileLocked(file);
-        YLogger.info(TAG, "Uuid from file with path \"%s\" (file exists? %b) is \"%s\".",
+        DebugLogger.info(TAG, "Uuid from file with path \"%s\" (file exists? %b) is \"%s\".",
                 file == null ? null : file.getPath(), file != null && file.exists(), result);
         return result;
     }
 
     @Nullable
     public String handleUuid(@Nullable String knownUuid) {
-        YLogger.info(TAG, "Uuid generation started...");
+        DebugLogger.info(TAG, "Uuid generation started...");
         try {
             String uuid = uuidValidator.isValid(knownUuid) ? knownUuid : uuidGenerator.generateUuid();
-            YLogger.info(TAG, "Save new uuid = %s", uuid);
+            DebugLogger.info(TAG, "Save new uuid = %s", uuid);
             File file = FileUtils.getFileFromSdkStorage(context, FILE_NAME);
             if (file != null && uuid != null) {
                 IOUtils.writeStringFileLocked(uuid, FILE_NAME, new FileOutputStream(file));
-                YLogger.info(TAG, "Generated uuid = \"%s\" was stored to file with path = \"%s\"",
+                DebugLogger.info(TAG, "Generated uuid = \"%s\" was stored to file with path = \"%s\"",
                         uuid, file.getPath());
             } else {
-                YLogger.info(TAG, "File is null");
+                DebugLogger.info(TAG, "File is null");
             }
             return uuid;
         } catch (Throwable e) {
-            YLogger.error(TAG, e);
+            DebugLogger.error(TAG, e);
         }
         return null;
     }
@@ -63,16 +63,16 @@ class PersistentUuidHolder {
     public void checkMigration() {
         File file = FileUtils.getFileFromSdkStorage(context, FILE_NAME);
         if (file == null) {
-            YLogger.warning(TAG, "UUID file is null");
+            DebugLogger.warning(TAG, "UUID file is null");
             return;
         }
         if (!file.exists()) {
-            YLogger.info(TAG, "File with path = `%s` is not exist. Trying migrate old", file.getPath());
+            DebugLogger.info(TAG, "File with path = `%s` is not exist. Trying migrate old", file.getPath());
             File old = FileUtils.getFileFromAppStorage(context, FILE_NAME);
             if (old != null && old.exists()) {
-                YLogger.info(TAG, "Found old uuid.data file with path = `%s`. Move it.", old.getPath());
+                DebugLogger.info(TAG, "Found old uuid.data file with path = `%s`. Move it.", old.getPath());
                 boolean status = FileUtils.copyToNullable(old, file);
-                YLogger.info(TAG, "Move finished with status = %s", status);
+                DebugLogger.info(TAG, "Move finished with status = %s", status);
             }
         }
     }

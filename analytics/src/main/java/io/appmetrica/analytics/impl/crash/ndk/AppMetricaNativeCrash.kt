@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.crash.ndk
 
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 import io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrash
 import io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrashSource
 
@@ -33,7 +33,7 @@ internal object AppMetricaNativeCrashConverter {
             metadata = metadataSerializer.deserialize(crash.metadata)!!,
         )
     } catch (t: Throwable) {
-        YLogger.error(tag, "Failed to transform native crash to appmetrica crash", t)
+        DebugLogger.error(tag, "Failed to transform native crash to appmetrica crash", t)
         null
     }
 }

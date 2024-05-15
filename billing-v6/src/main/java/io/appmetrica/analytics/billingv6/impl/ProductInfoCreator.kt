@@ -5,7 +5,7 @@ import com.android.billingclient.api.ProductDetails
 import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.PurchaseHistoryRecord
 import io.appmetrica.analytics.billinginterface.internal.ProductInfo
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 
 object ProductInfoCreator {
 
@@ -18,7 +18,7 @@ object ProductInfoCreator {
             ProductType.INAPP -> createFromInapp(purchasesHistoryRecord, skuDetails, purchase)
             ProductType.SUBS -> createFromSubs(purchasesHistoryRecord, skuDetails, purchase)
             else -> {
-                YLogger.info(
+                DebugLogger.info(
                     TAG,
                     "createFrom unknown product type=${skuDetails.productType}, " +
                         "productId=${skuDetails.productId}"

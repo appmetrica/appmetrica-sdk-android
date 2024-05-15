@@ -7,7 +7,7 @@ import io.appmetrica.analytics.coreapi.internal.data.ProtobufConverter;
 import io.appmetrica.analytics.impl.Utils;
 import io.appmetrica.analytics.impl.crash.client.UnhandledException;
 import io.appmetrica.analytics.impl.protobuf.backend.CrashAndroid;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 
 public class UnhandledExceptionConverter implements ProtobufConverter<UnhandledException, CrashAndroid.Crash> {
 
@@ -65,7 +65,7 @@ public class UnhandledExceptionConverter implements ProtobufConverter<UnhandledE
         if (value.methodCallStacktrace != null) {
             outCrash.methodCallStacktrace = stackTraceConverter.fromModel(value.methodCallStacktrace);
         }
-        YLogger.info(TAG, "Convert build_id: %s", value.buildId);
+        DebugLogger.info(TAG, "Convert build_id: %s", value.buildId);
         if (value.buildId != null) {
             outCrash.buildId = value.buildId;
         }

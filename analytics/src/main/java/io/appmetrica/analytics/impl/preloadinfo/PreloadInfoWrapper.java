@@ -6,7 +6,7 @@ import androidx.annotation.Nullable;
 import io.appmetrica.analytics.PreloadInfo;
 import io.appmetrica.analytics.impl.DistributionSource;
 import io.appmetrica.analytics.impl.utils.PublicLogger;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import org.json.JSONObject;
 
 public class PreloadInfoWrapper {
@@ -43,7 +43,7 @@ public class PreloadInfoWrapper {
             try {
                 eventValue.put(PreloadInfoState.JsonKeys.PRELOAD_INFO, mPreloadInfoState.toInternalJson());
             } catch (Throwable e) {
-                YLogger.error(TAG, e, e.getMessage());
+                DebugLogger.error(TAG, e, e.getMessage());
             }
         }
         return eventValue;

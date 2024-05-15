@@ -11,7 +11,7 @@ import io.appmetrica.analytics.coreapi.internal.identifiers.AppSetId
 import io.appmetrica.analytics.coreapi.internal.identifiers.AppSetIdProvider
 import io.appmetrica.analytics.coreapi.internal.identifiers.AppSetIdScope
 import io.appmetrica.analytics.coreutils.internal.reflection.ReflectionUtils
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
@@ -33,14 +33,14 @@ internal class AppSetIdGetter @VisibleForTesting constructor(
     private val appSetIdListener: AppSetIdListener = object : AppSetIdListener {
         @MainThread
         override fun onAppSetIdRetrieved(id: String?, scope: AppSetIdScope) {
-            YLogger.info(TAG, "Received id: $id, scope: $scope")
+            DebugLogger.info(TAG, "Received id: $id, scope: $scope")
             appSetId = AppSetId(id, scope)
             countDownLatch.countDown()
         }
 
         @MainThread
         override fun onFailure(ex: Throwable?) {
-            YLogger.error(TAG, ex)
+            DebugLogger.error(TAG, ex)
             countDownLatch.countDown()
         }
     }
@@ -48,14 +48,14 @@ internal class AppSetIdGetter @VisibleForTesting constructor(
     @Synchronized
     @WorkerThread
     override fun getAppSetId(): AppSetId {
-        YLogger.info(TAG, "Retrieve app set id. Current: $appSetId")
+        DebugLogger.info(TAG, "Retrieve app set id. Current: $appSetId")
         if (appSetId == null) {
             try {
                 countDownLatch = CountDownLatch(1)
                 appSetIdRetriever.retrieveAppSetId(context, appSetIdListener)
                 countDownLatch.await(timeoutSeconds, TimeUnit.SECONDS)
             } catch (ex: Throwable) {
-                YLogger.error(TAG, ex)
+                DebugLogger.error(TAG, ex)
             }
         }
         return appSetId ?: AppSetId(null, AppSetIdScope.UNKNOWN).also { appSetId = it }

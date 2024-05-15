@@ -5,7 +5,7 @@ import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.impl.CounterReport;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.impl.db.VitalComponentDataProvider;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 
 public class ReportFirstHandler extends ReportComponentHandler {
 
@@ -29,9 +29,9 @@ public class ReportFirstHandler extends ReportComponentHandler {
     public boolean process(@NonNull final CounterReport reportData) {
         ComponentUnit component = getComponent();
         if (!vitalComponentDataProvider.isFirstEventDone()) {
-            YLogger.info(TAG, "For componentId = %s: first event does not exist", component.getComponentId());
+            DebugLogger.info(TAG, "For componentId = %s: first event does not exist", component.getComponentId());
             if (!vitalComponentDataProvider.isInitEventDone()) {
-                YLogger.info(TAG, "For componentId = %s: init event does not exist", component.getComponentId());
+                DebugLogger.info(TAG, "For componentId = %s: init event does not exist", component.getComponentId());
                 component.getEventSaver().identifyAndSaveFirstEventReport(
                         CounterReport.formFirstEventReportData(reportData)
                 );

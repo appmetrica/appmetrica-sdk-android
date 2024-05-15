@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.utils.encryption;
 
 import android.util.Base64;
 import io.appmetrica.analytics.impl.CounterReport;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 
 public class ExternallyEncryptedEventCrypter implements EventEncrypter {
 
@@ -16,7 +16,7 @@ public class ExternallyEncryptedEventCrypter implements EventEncrypter {
         try {
             return Base64.decode(input, Base64.DEFAULT);
         } catch (Throwable ex) {
-            YLogger.error(TAG, ex, "Could not decode base 64 value.");
+            DebugLogger.error(TAG, ex, "Could not decode base 64 value.");
         }
         return new byte[0];
     }

@@ -10,7 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
 import io.appmetrica.analytics.internal.IAppMetricaService;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
@@ -56,7 +56,7 @@ public class AppMetricaConnector {
     }
 
     public void bindService() {
-        YLogger.debug(TAG, "Binding to service ... Application: %s", mContext.getPackageName());
+        DebugLogger.info(TAG, "Binding to service ... Application: %s", mContext.getPackageName());
         synchronized (this) {
             if (mService != null) {
                 return;
@@ -66,12 +66,12 @@ public class AppMetricaConnector {
 
         Intent intent = ServiceUtils.getOwnMetricaServiceIntent(mContext);
         try {
-            YLogger.info(TAG, "May be delay");
+            DebugLogger.info(TAG, "May be delay");
             appMetricaServiceDelayHandler.maybeDelay(mContext);
             boolean status = mContext.bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
-            YLogger.debug(TAG, "bind to service with status: %b", status);
+            DebugLogger.info(TAG, "bind to service with status: %b", status);
         } catch (Throwable exception) {
-            YLogger.error(TAG, "Exception while binding ...\n%s", exception);
+            DebugLogger.error(TAG, "Exception while binding ...\n%s", exception);
         }
     }
 
@@ -82,10 +82,10 @@ public class AppMetricaConnector {
     @VisibleForTesting
     void scheduleDisconnect(@NonNull ICommonExecutor executor) {
         synchronized (disconnectLock) {
-            YLogger.info(TAG, "remove unbind runnable");
+            DebugLogger.info(TAG, "remove unbind runnable");
             executor.remove(mUnbindRunnable);
             if (mShouldNeverDisconnect == false) {
-                YLogger.info(TAG, "plan unbind runnable in %d", SERVICE_UNBIND_DELAY_MILLIS);
+                DebugLogger.info(TAG, "plan unbind runnable in %d", SERVICE_UNBIND_DELAY_MILLIS);
                 executor.executeDelayed(mUnbindRunnable, SERVICE_UNBIND_DELAY_MILLIS);
             }
         }
@@ -93,13 +93,13 @@ public class AppMetricaConnector {
 
     void removeScheduleDisconnect() {
         synchronized (disconnectLock) {
-            YLogger.info(TAG, "removeScheduleDisconnect");
+            DebugLogger.info(TAG, "removeScheduleDisconnect");
             mUnbindExecutor.remove(mUnbindRunnable);
         }
     }
 
     public synchronized boolean isConnected() {
-        YLogger.info(TAG, "isConnected");
+        DebugLogger.info(TAG, "isConnected");
         return null != mService;
     }
 
@@ -124,13 +124,13 @@ public class AppMetricaConnector {
 
     private synchronized void fullUnbind() {
         if (null != mContext && isConnected()) {
-            YLogger.debug(TAG, "Unbinding from service ... Application: %s", mContext.getPackageName());
+            DebugLogger.info(TAG, "Unbinding from service ... Application: %s", mContext.getPackageName());
 
             try {
                 mService = null;
                 mContext.unbindService(mConnection);
             } catch (Throwable exception) {
-                YLogger.error(TAG, "Exception while unbinding ...\n%s", exception);
+                DebugLogger.error(TAG, "Exception while unbinding ...\n%s", exception);
             }
         }
 
@@ -141,18 +141,18 @@ public class AppMetricaConnector {
 
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            YLogger.debug(TAG, "Service connected. Component name: %s", name);
+            DebugLogger.info(TAG, "Service connected. Component name: %s", name);
 
             synchronized (AppMetricaConnector.this) {
                 mService = IAppMetricaService.Stub.asInterface(service);
-                YLogger.info(TAG, "onServiceConnected - countDown");
+                DebugLogger.info(TAG, "onServiceConnected - countDown");
                 bindCountDown.countDown();
             }
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-            YLogger.debug(TAG, "Service disconnected. Component name: %s", name);
+            DebugLogger.info(TAG, "Service disconnected. Component name: %s", name);
 
             synchronized (AppMetricaConnector.this) {
                 mService = null;
@@ -162,7 +162,7 @@ public class AppMetricaConnector {
     };
 
     public void forbidDisconnect() {
-        YLogger.info(TAG, "forbidDisconnect");
+        DebugLogger.info(TAG, "forbidDisconnect");
         synchronized (disconnectLock) {
             mShouldNeverDisconnect = true;
             removeScheduleDisconnect();
@@ -170,7 +170,7 @@ public class AppMetricaConnector {
     }
 
     public void allowDisconnect() {
-        YLogger.info(TAG, "allowDisconnect");
+        DebugLogger.info(TAG, "allowDisconnect");
         synchronized (disconnectLock) {
             mShouldNeverDisconnect = false;
             scheduleDisconnect();
@@ -178,17 +178,17 @@ public class AppMetricaConnector {
     }
 
     public boolean waitForConnect(@NonNull final Long timeout) {
-        YLogger.info(TAG, "waitForConnect with timeout = %s", timeout);
+        DebugLogger.info(TAG, "waitForConnect with timeout = %s", timeout);
         try {
             synchronized (this) {
                 if (bindCountDown == null) {
-                    YLogger.info(TAG, "Bind to service has not started yet. Ignore waiting.");
+                    DebugLogger.info(TAG, "Bind to service has not started yet. Ignore waiting.");
                     return false;
                 }
             }
             return bindCountDown.await(timeout, TimeUnit.MILLISECONDS);
         } catch (InterruptedException e) {
-            YLogger.error(TAG, e);
+            DebugLogger.error(TAG, e);
         }
         return false;
     }

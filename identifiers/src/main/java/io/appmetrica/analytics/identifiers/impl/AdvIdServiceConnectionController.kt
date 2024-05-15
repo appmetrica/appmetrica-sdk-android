@@ -5,7 +5,7 @@ import android.content.Intent
 import android.os.IBinder
 import androidx.annotation.VisibleForTesting
 import io.appmetrica.analytics.coreutils.internal.services.SafePackageManager
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 
 internal const val ATTEMPT_TIMEOUT = 3000L
 
@@ -33,18 +33,18 @@ internal class AdvIdServiceConnectionController<T> @VisibleForTesting internal c
     @Throws(ConnectionException::class)
     fun connect(context: Context): T {
         val intent = connection.intent
-        YLogger.info(tag, "Begin establish connection to service: %s...", intent)
+        DebugLogger.info(tag, "Begin establish connection to service: %s...", intent)
         if (safePackageManager.resolveService(context, intent, 0) == null) {
             throw NoProviderException("could not resolve $serviceShortTag services")
         }
-        YLogger.info(tag, "Intent (%s) resolved. Begin binding...", intent)
+        DebugLogger.info(tag, "Intent (%s) resolved. Begin binding...", intent)
         var service: IBinder? = null
         try {
-            YLogger.info(tag, "Bind with intent = %s...", intent)
+            DebugLogger.info(tag, "Bind with intent = %s...", intent)
             val status = connection.bindService(context)
-            YLogger.info(tag, "Bind with intent = %s... Status = %b", intent, status)
+            DebugLogger.info(tag, "Bind with intent = %s... Status = %b", intent, status)
             if (status) {
-                YLogger.info(
+                DebugLogger.info(
                     tag,
                     "Binding... Wait connection or binding for %d ms...",
                     ATTEMPT_TIMEOUT
@@ -52,9 +52,9 @@ internal class AdvIdServiceConnectionController<T> @VisibleForTesting internal c
                 service = connection.awaitBinding(3000L)
             }
         } catch (e: Throwable) {
-            YLogger.error(tag, e)
+            DebugLogger.error(tag, e)
         }
-        YLogger.info(tag, "Binding... Service after waiting: %s", service)
+        DebugLogger.info(tag, "Binding... Service after waiting: %s", service)
         if (service == null) {
             throw ConnectionException("could not bind to $serviceShortTag services")
         }
@@ -64,10 +64,10 @@ internal class AdvIdServiceConnectionController<T> @VisibleForTesting internal c
     fun disconnect(context: Context) {
         try {
             connection.unbindService(context)
-            YLogger.info(tag, "Unbind from %s successful", connection.intent)
+            DebugLogger.info(tag, "Unbind from %s successful", connection.intent)
         } catch (ignored: IllegalArgumentException) {
         } catch (e: Throwable) {
-            YLogger.error(
+            DebugLogger.error(
                 tag, e, "Could not unbind from service with intent = %s", connection.intent
             )
         }

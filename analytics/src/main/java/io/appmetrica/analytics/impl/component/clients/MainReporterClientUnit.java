@@ -9,7 +9,7 @@ import io.appmetrica.analytics.impl.DefaultValues;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.component.CommonArguments;
 import io.appmetrica.analytics.impl.component.RegularDispatcherComponent;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 
 public class MainReporterClientUnit extends AbstractClientUnit {
 
@@ -31,7 +31,7 @@ public class MainReporterClientUnit extends AbstractClientUnit {
 
     @VisibleForTesting
     void updateLocationTracking(boolean enabled) {
-        YLogger.debug(TAG, "Update location status for %s: enabled = %b", getComponentUnit().toString(), enabled);
+        DebugLogger.info(TAG, "Update location status for %s: enabled = %b", getComponentUnit().toString(), enabled);
         GlobalServiceLocator.getInstance().getLocationClientApi().updateTrackingStatusFromClient(enabled);
     }
 }

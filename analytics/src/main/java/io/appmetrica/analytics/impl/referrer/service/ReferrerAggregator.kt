@@ -5,7 +5,7 @@ import androidx.annotation.VisibleForTesting
 import androidx.annotation.WorkerThread
 import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.referrer.common.ReferrerInfo
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 
 class ReferrerAggregator @VisibleForTesting internal constructor(
     private val referrerHolder: ReferrerHolder,
@@ -33,7 +33,7 @@ class ReferrerAggregator @VisibleForTesting internal constructor(
         object : BadReferrerHandler {
             @WorkerThread
             override fun onBadReferrer() {
-                YLogger.info(tag, "Retrieve huawei referrer as google does not match package installer")
+                DebugLogger.info(tag, "Retrieve huawei referrer as google does not match package installer")
                 huaweiReferrerRetriever.retrieveReferrer(object : ReferrerReceivedListener {
                     @WorkerThread
                     override fun onReferrerReceived(referrerInfo: ReferrerInfo?) {
@@ -42,7 +42,7 @@ class ReferrerAggregator @VisibleForTesting internal constructor(
 
                     @WorkerThread
                     override fun onReferrerRetrieveError(exception: Throwable) {
-                        YLogger.info(tag, "onReferrerRetrieveError for huawei: %s", exception)
+                        DebugLogger.info(tag, "onReferrerRetrieveError for huawei: %s", exception)
                         onSomeReferrerChecked(null, badHuaweiReferrerHandler)
                     }
                 })
@@ -58,7 +58,7 @@ class ReferrerAggregator @VisibleForTesting internal constructor(
 
             @WorkerThread
             override fun onReferrerRetrieveError(exception: Throwable) {
-                YLogger.info(tag, "onReferrerRetrieveError for google: %s", exception)
+                DebugLogger.info(tag, "onReferrerRetrieveError for google: %s", exception)
                 onSomeReferrerChecked(null, badGoogleReferrerHandler)
             }
         }
@@ -73,7 +73,7 @@ class ReferrerAggregator @VisibleForTesting internal constructor(
     )
 
     fun retrieveReferrer() {
-        YLogger.info(tag, "retrieveReferrer")
+        DebugLogger.info(tag, "retrieveReferrer")
         googleReferrerRetriever.retrieveReferrer(googleListener)
     }
 
@@ -84,7 +84,7 @@ class ReferrerAggregator @VisibleForTesting internal constructor(
     ) {
         cachedReferrers.add(referrer)
         if (referrerValidityChecker.doesInstallerMatchReferrer(referrer)) {
-            YLogger.info(tag, "Choosing referrer %s as it matches package installer", referrer)
+            DebugLogger.info(tag, "Choosing referrer %s as it matches package installer", referrer)
             onServicesReferrerChosen(referrer)
         } else {
             badReferrerHandler.onBadReferrer()
@@ -92,19 +92,19 @@ class ReferrerAggregator @VisibleForTesting internal constructor(
     }
 
     private fun chooseReferrerAnyway() {
-        YLogger.info(tag, "Choosing referrer between candidates: %s", cachedReferrers)
+        DebugLogger.info(tag, "Choosing referrer between candidates: %s", cachedReferrers)
         val validReferrersList: List<ReferrerInfo> = cachedReferrers
             .filter { referrerValidityChecker.hasReferrer(it) }
             // this is unnecessary (hasReferrer contains the not null check) but kotlin won't let me do it otherwise
             .filterNotNull()
         val chosenReferrer = referrerValidityChecker.chooseReferrerFromValid(validReferrersList)
-        YLogger.info(tag, "Chose referrer: $chosenReferrer")
+        DebugLogger.info(tag, "Chose referrer: $chosenReferrer")
         onServicesReferrerChosen(chosenReferrer)
     }
 
     @WorkerThread
     private fun onServicesReferrerChosen(referrer: ReferrerInfo?) {
-        YLogger.info(tag, "onServicesReferrerChosen: %s", referrer)
+        DebugLogger.info(tag, "onServicesReferrerChosen: %s", referrer)
         referrerHolder.storeReferrer(referrer)
     }
 }

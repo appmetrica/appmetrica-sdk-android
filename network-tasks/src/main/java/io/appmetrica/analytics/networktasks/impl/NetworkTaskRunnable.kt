@@ -2,7 +2,7 @@ package io.appmetrica.analytics.networktasks.impl
 
 import androidx.annotation.VisibleForTesting
 import io.appmetrica.analytics.coreapi.internal.executors.InterruptionSafeThread
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 import io.appmetrica.analytics.networktasks.internal.NetworkTask
 
 private const val TAG = "[NetworkTaskRunnable]"
@@ -42,7 +42,7 @@ internal class NetworkTaskRunnable @VisibleForTesting constructor(
                 var countRequest = 0
                 shouldExecuteTask = networkTask.onCreateNetworkTask()
                 if (!shouldExecuteTask) {
-                    YLogger.info(TAG, "Skipping task, desc: ${networkTask.description()}")
+                    DebugLogger.info(TAG, "Skipping task, desc: ${networkTask.description()}")
                 }
                 var requestSuccessful: Boolean? = null
                 while (
@@ -50,7 +50,7 @@ internal class NetworkTaskRunnable @VisibleForTesting constructor(
                     exponentialBackoffPolicy.canBeExecuted(networkTask.retryPolicyConfig)
                 ) {
                     ++countRequest
-                    YLogger.info(
+                    DebugLogger.info(
                         TAG,
                         "Executing task .. attempt: $countRequest, desc: ${networkTask.description()}",
                     )
@@ -70,7 +70,7 @@ internal class NetworkTaskRunnable @VisibleForTesting constructor(
     }
 
     private fun handleIncompatibleNetworkType() {
-        YLogger.info(
+        DebugLogger.info(
             TAG,
             "Task: ${networkTask.description()} didn't finished because of incompatible network type",
         )

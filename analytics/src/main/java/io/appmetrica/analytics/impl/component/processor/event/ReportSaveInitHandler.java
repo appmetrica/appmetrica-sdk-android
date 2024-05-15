@@ -12,7 +12,7 @@ import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.PreloadInfoStorage;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.impl.db.VitalComponentDataProvider;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import org.json.JSONObject;
 
 public class ReportSaveInitHandler extends ReportComponentHandler {
@@ -77,7 +77,7 @@ public class ReportSaveInitHandler extends ReportComponentHandler {
                     ),
                     StringUtils.EMPTY
             );
-            YLogger.info(TAG, "PackageInstaller = %s", packageInstaller);
+            DebugLogger.info(TAG, "PackageInstaller = %s", packageInstaller);
             try {
                 eventValue.put(JsonKeys.APP_INSTALLER, packageInstaller);
                 eventValue.put(
@@ -85,15 +85,15 @@ public class ReportSaveInitHandler extends ReportComponentHandler {
                         mPreloadInfoStorage.retrieveData().toEventJson()
                 );
             } catch (Throwable ex) {
-                YLogger.error(TAG, ex);
+                DebugLogger.error(TAG, ex);
             }
-            YLogger.debug(TAG, "save init event: %s", eventValue);
+            DebugLogger.info(TAG, "save init event: %s", eventValue);
             reportToSave.setValue(eventValue.toString());
             component.getEventSaver().identifyAndSaveReport(reportToSave);
             vitalComponentDataProvider.setInitEventDone(true);
             vitalComponentDataProvider.setExternalAttributionWindowStart(timeProvider.currentTimeMillis());
         } else {
-            YLogger.info(TAG, "Event init has already been sent");
+            DebugLogger.info(TAG, "Event init has already been sent");
         }
         return false;
     }

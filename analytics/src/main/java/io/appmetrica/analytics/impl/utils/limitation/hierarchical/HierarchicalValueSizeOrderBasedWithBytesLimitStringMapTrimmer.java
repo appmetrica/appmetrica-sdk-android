@@ -7,7 +7,7 @@ import io.appmetrica.analytics.impl.ecommerce.ECommerceConstants;
 import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedProvider;
 import io.appmetrica.analytics.impl.utils.limitation.CollectionTrimInfo;
 import io.appmetrica.analytics.impl.utils.limitation.TrimmingResult;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -65,7 +65,7 @@ public class HierarchicalValueSizeOrderBasedWithBytesLimitStringMapTrimmer
                 int entrySizeBeforeTruncation = sizeOf(entry.getKey()) + sizeOf(entry.getValue());
                 int trimmedEntrySize = sizeOf(keyTrimmingResult.value) + sizeOf(valueTrimmingResult.value);
                 if (maxCapacityReached || (currentSize + trimmedEntrySize > getLimit())) {
-                    YLogger.debug(
+                    DebugLogger.info(
                             ECommerceConstants.FEATURE_TAG + TAG,
                             "Map limit reached so drop map entry. Already dropped %d pairs. " +
                                     "Max capacity reached = %b; actual map size = %d; limit = %d. " +
@@ -84,7 +84,7 @@ public class HierarchicalValueSizeOrderBasedWithBytesLimitStringMapTrimmer
                 }
             }
             if (pairsDropped != 0 || bytesTruncated != 0) {
-                YLogger.debug(
+                DebugLogger.info(
                        ECommerceConstants.FEATURE_TAG + TAG,
                        "Trim map \"%s\" -> \"%s\": pairsDropped = %d; bytesTruncated = %d",
                         input, truncatedMap, pairsDropped, bytesTruncated

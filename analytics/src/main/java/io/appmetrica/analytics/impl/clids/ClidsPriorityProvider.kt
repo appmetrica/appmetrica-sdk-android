@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.clids
 import io.appmetrica.analytics.impl.DistributionPriorityProvider
 import io.appmetrica.analytics.impl.DistributionSource
 import io.appmetrica.analytics.impl.Utils
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 
 private const val TAG = "[ClidsPriorityProvider]"
 
@@ -19,7 +19,7 @@ internal class ClidsPriorityProvider : DistributionPriorityProvider<ClidsInfo.Ca
         } else {
             priorities[newData.source] > priorities[oldData.source]
         }.also {
-            YLogger.info(
+            DebugLogger.info(
                 TAG,
                 "Choosing the most important data from new data: $newData and old data: $oldData, result: $it"
             )

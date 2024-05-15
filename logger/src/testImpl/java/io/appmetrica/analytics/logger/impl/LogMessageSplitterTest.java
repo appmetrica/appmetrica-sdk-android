@@ -1,5 +1,6 @@
 package io.appmetrica.analytics.logger.impl;
 
+import io.appmetrica.analytics.testutils.CommonTest;
 import java.util.Arrays;
 import java.util.Collection;
 import org.junit.Before;
@@ -16,17 +17,19 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 @RunWith(ParameterizedRobolectricTestRunner.class)
-public class LogMessageByLineLimitSplitterTest {
+public class LogMessageSplitterTest extends CommonTest {
 
     private final String input;
     private final int lineLimit;
     private final int[] wordBreakerStubs;
     private final String[] expected;
 
-    public LogMessageByLineLimitSplitterTest(String input,
-                                             int lineLimit,
-                                             int[] wordBreakerStubs,
-                                             String[] expected) {
+    public LogMessageSplitterTest(
+        String input,
+        int lineLimit,
+        int[] wordBreakerStubs,
+        String[] expected
+    ) {
         this.input = input;
         this.lineLimit = lineLimit;
         this.wordBreakerStubs = wordBreakerStubs;
@@ -36,20 +39,21 @@ public class LogMessageByLineLimitSplitterTest {
     @ParameterizedRobolectricTestRunner.Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
-                {"", 100, new int[0], new String[0]},
-                {"qwertyuiop", 100, new int[0], new String[]{"qwertyuiop"}},
-                {"qwertyuiop", 5, new int[0], new String[] {"qwert", "yuiop"}},
-                {"qwertyuiop", 4, new int[0], new String[] {"qwer", "tyui", "op"}},
-                {"qwertyuiop", 20, new int[]{10}, new String[] {"qwertyuiop"}},
-                {"qwe,rtyu,iop", 5, new int[]{3,8}, new String[] {"qwe,", "rtyu,", "iop"}},
-                {"qwe,rtyu,iop", 8, new int[]{3,8}, new String[] {"qwe,", "rtyu,iop"}}
+            {"", 100, new int[0], new String[0]},
+            {"qwertyuiop", 100, new int[0], new String[] {"qwertyuiop"}},
+            {"qwert\nyuiop", 100, new int[0], new String[] {"qwert", "yuiop"}},
+            {"qwertyuiop", 5, new int[0], new String[] {"qwert", "yuiop"}},
+            {"qwertyuiop", 4, new int[0], new String[] {"qwer", "tyui", "op"}},
+            {"qwertyuiop", 20, new int[]{10}, new String[] {"qwertyuiop"}},
+            {"qwe,rtyu,iop", 5, new int[]{3,8}, new String[] {"qwe,", "rtyu,", "iop"}},
+            {"qwe,rtyu,iop", 8, new int[]{3,8}, new String[] {"qwe,", "rtyu,iop"}}
         });
     }
 
     @Mock
     private WordBreakFinder mWordBreakFinder;
 
-    private LogMessageByLineLimitSplitter mSplitter;
+    private LogMessageSplitter mSplitter;
 
     @Before
     public void setUp() throws Exception {
@@ -64,7 +68,7 @@ public class LogMessageByLineLimitSplitterTest {
             }
         }
 
-        mSplitter = new LogMessageByLineLimitSplitter(mWordBreakFinder, lineLimit);
+        mSplitter = new LogMessageSplitter(mWordBreakFinder, lineLimit);
     }
 
     @Test

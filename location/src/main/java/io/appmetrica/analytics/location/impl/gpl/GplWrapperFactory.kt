@@ -6,7 +6,7 @@ import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor
 import io.appmetrica.analytics.coreutils.internal.reflection.ReflectionUtils
 import io.appmetrica.analytics.gpllibrary.internal.GplLibraryWrapper
 import io.appmetrica.analytics.gpllibrary.internal.IGplLibraryWrapper
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 import java.util.concurrent.TimeUnit
 
 private const val TAG = "[GplWrapperFactory]"
@@ -24,10 +24,10 @@ internal class GplWrapperFactory {
                     TimeUnit.SECONDS.toMillis(1)
                 )
             } catch (ex: Throwable) {
-                YLogger.error(TAG, ex, "could not create GplLibraryWrapper")
+                DebugLogger.error(TAG, ex, "could not create GplLibraryWrapper")
             }
         } else {
-            YLogger.info(TAG, "Google Play Location Library does not exist")
+            DebugLogger.info(TAG, "Google Play Location Library does not exist")
         }
         return DummyGplLibraryWrapper()
     }

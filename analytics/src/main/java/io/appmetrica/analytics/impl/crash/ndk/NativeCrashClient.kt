@@ -5,7 +5,7 @@ import io.appmetrica.analytics.coreutils.internal.io.FileUtils
 import io.appmetrica.analytics.coreutils.internal.reflection.ReflectionUtils
 import io.appmetrica.analytics.impl.CounterConfigurationReporterType
 import io.appmetrica.analytics.impl.client.ProcessConfiguration
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 import io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrashClientConfig
 import io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrashClientModule
 import io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrashClientModuleDummy
@@ -22,7 +22,7 @@ class NativeCrashClient(private val processConfiguration: ProcessConfiguration) 
     private lateinit var nativeCrashMetadata: AppMetricaNativeCrashMetadata
 
     fun initHandling(context: Context, apiKey: String, errorEnvironment: String?) {
-        YLogger.debug(tag, "Start handling native crashes")
+        DebugLogger.info(tag, "Start handling native crashes")
         nativeCrashMetadata = AppMetricaNativeCrashMetadata(
             apiKey,
             processConfiguration.packageName,
@@ -33,7 +33,7 @@ class NativeCrashClient(private val processConfiguration: ProcessConfiguration) 
         )
         val nativeCrashFolder = FileUtils.getNativeCrashDirectory(context)?.absolutePath
         if (nativeCrashFolder == null) {
-            YLogger.error(tag, "Skip handle native crash. Failed to get native crash folder")
+            DebugLogger.error(tag, "Skip handle native crash. Failed to get native crash folder")
             return
         }
         clientModule.initHandling(
@@ -46,12 +46,12 @@ class NativeCrashClient(private val processConfiguration: ProcessConfiguration) 
     }
 
     fun updateErrorEnvironment(errorEnvironment: String?) {
-        YLogger.debug(tag, "Update error environment for native crashes. Env: $errorEnvironment")
+        DebugLogger.info(tag, "Update error environment for native crashes. Env: $errorEnvironment")
         if (this::nativeCrashMetadata.isInitialized) {
             nativeCrashMetadata = nativeCrashMetadata.copy(errorEnvironment = errorEnvironment)
             clientModule.updateAppMetricaMetadata(metadataSerializer.serialize(nativeCrashMetadata))
         } else {
-            YLogger.error(tag, "Skipp update error environment. nativeCrashMetadata is not initialized")
+            DebugLogger.error(tag, "Skipp update error environment. nativeCrashMetadata is not initialized")
         }
     }
 }

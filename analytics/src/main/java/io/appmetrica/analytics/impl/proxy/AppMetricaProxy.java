@@ -36,7 +36,7 @@ import io.appmetrica.analytics.impl.proxy.validation.Barrier;
 import io.appmetrica.analytics.impl.proxy.validation.SilentActivationValidator;
 import io.appmetrica.analytics.impl.utils.ApiProxyThread;
 import io.appmetrica.analytics.internal.IdentifiersResult;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import io.appmetrica.analytics.profile.UserProfile;
 import java.util.List;
 import java.util.Map;
@@ -396,7 +396,7 @@ public final class AppMetricaProxy extends BaseAppMetricaProxy {
     }
 
     public void activateReporter(@NonNull Context context, @NonNull ReporterConfig config) {
-        YLogger.info(TAG, "activate reporter with apiKey = %s", config.apiKey);
+        DebugLogger.info(TAG, "activate reporter with apiKey = %s", config.apiKey);
         barrier.activateReporter(context, config);
         synchronousStageExecutor.activateReporter(context.getApplicationContext(), config);
         getReporterProxyStorage().getOrCreate(context.getApplicationContext(), config);
@@ -440,11 +440,14 @@ public final class AppMetricaProxy extends BaseAppMetricaProxy {
 
     public void reportJsInitEvent(@NonNull final String value) {
         if (!silentActivationValidator.validate().isValid()) {
-            YLogger.warning(TAG, "Impossible to report JS init event because AppMetrica has not been activated yet");
+            DebugLogger.warning(
+                TAG,
+                "Impossible to report JS init event because AppMetrica has not been activated yet"
+            );
             return;
         }
         if (!barrier.reportJsInitEvent(value)) {
-            YLogger.warning(TAG, "Impossible to report JS init event because value is invalid");
+            DebugLogger.warning(TAG, "Impossible to report JS init event because value is invalid");
             return;
         }
         synchronousStageExecutor.reportJsInitEvent(value);

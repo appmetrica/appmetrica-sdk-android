@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.preloadinfo
 
 import io.appmetrica.analytics.impl.DistributionSource
 import io.appmetrica.analytics.impl.UpdatedCandidatesProvider
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 
 private const val TAG = "[PreloadInfoCandidatesHelper]"
 
@@ -31,7 +31,7 @@ internal class PreloadInfoCandidatesHelper(stateFromDisk: PreloadInfoData) :
         } else {
             oldCandidates + newListCandidate
         }.also {
-            YLogger.info(
+            DebugLogger.info(
                 TAG,
                 "get updated candidates from $oldCandidates and $newCandidate. " +
                     "isFirstLaunchWithPreloadInfoFromApp  = $isFirstLaunchWithPreloadInfoFromApp. Result is $it"

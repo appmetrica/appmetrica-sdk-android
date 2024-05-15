@@ -6,7 +6,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.impl.FirstOccurrenceStatus;
 import io.appmetrica.analytics.impl.component.ComponentId;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 
 public class EventFirstOccurrenceService {
     private static final String TAG = "[EventFirstOccurrenceService]";
@@ -47,7 +47,7 @@ public class EventFirstOccurrenceService {
             save();
         }
 
-        YLogger.debug(
+        DebugLogger.info(
             TAG,
             "Return status: %s for eventName: %s. Current service status: hashesCount = %d for version: " +
                 "%d with treatUnknownEventAsNew: %b",
@@ -62,7 +62,7 @@ public class EventFirstOccurrenceService {
     }
 
     public void reset() {
-        YLogger.debug(TAG, "Reset");
+        DebugLogger.info(TAG, "Reset");
         if (mEventHashes == null) {
             readEventHashes();
         }
@@ -72,17 +72,17 @@ public class EventFirstOccurrenceService {
     }
 
     private void readEventHashes() {
-        YLogger.debug(TAG, "Read data from storage");
+        DebugLogger.info(TAG, "Read data from storage");
         mEventHashes = mEventHashesStorage.read();
         if (mEventHashes.getLastVersionCode() != mCurrentVersionCode) {
-            YLogger.debug(TAG, "Update version");
+            DebugLogger.info(TAG, "Update version");
             mEventHashes.setLastVersionCode(mCurrentVersionCode);
             save();
         }
     }
 
     private void save() {
-        YLogger.debug(TAG, "Save data to storage");
+        DebugLogger.info(TAG, "Save data to storage");
         mEventHashesStorage.write(mEventHashes);
     }
 

@@ -16,7 +16,7 @@ import io.appmetrica.analytics.billingv6.impl.library.PurchasesUpdatedListenerIm
 import io.appmetrica.analytics.billingv6.impl.storage.BillingInfoManagerImpl
 import io.appmetrica.analytics.billingv6.impl.update.UpdatePolicyImpl
 import io.appmetrica.analytics.coreutils.internal.executors.SafeRunnable
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 import java.util.concurrent.Executor
 
 class BillingLibraryMonitor(
@@ -33,7 +33,7 @@ class BillingLibraryMonitor(
 
     @WorkerThread
     override fun onSessionResumed() {
-        YLogger.info(TAG, "onSessionResumed with billingConfig=$billingConfig")
+        DebugLogger.info(TAG, "onSessionResumed with billingConfig=$billingConfig")
         val localBillingConfig = billingConfig ?: return
         uiExecutor.execute(object : SafeRunnable() {
             override fun runSafety() {
@@ -65,7 +65,7 @@ class BillingLibraryMonitor(
 
     @Synchronized
     override fun onBillingConfigChanged(billingConfig: BillingConfig?) {
-        YLogger.info(TAG, "onBillingConfigChanged: $billingConfig")
+        DebugLogger.info(TAG, "onBillingConfigChanged: $billingConfig")
         this.billingConfig = billingConfig
     }
 }

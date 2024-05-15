@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.network.impl
 
 import androidx.annotation.VisibleForTesting
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 import io.appmetrica.analytics.network.impl.utils.Utils
 import io.appmetrica.analytics.network.internal.Call
 import io.appmetrica.analytics.network.internal.NetworkClient
@@ -20,16 +20,16 @@ internal class CallImpl @VisibleForTesting constructor(
     constructor(client: NetworkClient, request: Request) : this(client, request, UrlProvider())
 
     override fun execute(): Response {
-        YLogger.info(tag, "Try to execute request [%s] for client [%s]", request, client)
+        DebugLogger.info(tag, "Try to execute request [%s] for client [%s]", request, client)
         val openConnection = try {
             urlProvider.createUrl(request.url).openConnection()
         } catch (ex: Throwable) {
-            YLogger.error(tag, ex)
+            DebugLogger.error(tag, ex)
             return Response(ex)
         }
         val httpsConnection = openConnection as? HttpsURLConnection?
             ?: with("Connection created for ${request.url} does not represent https connection") {
-                YLogger.info(tag, this)
+                DebugLogger.info(tag, this)
                 return Response(IllegalArgumentException(this))
             }
         var completed: Boolean
@@ -49,19 +49,19 @@ internal class CallImpl @VisibleForTesting constructor(
             errorData = Utils.readSafely(client.maxResponseSize) { httpsConnection.errorStream }
             completed = true
         } catch (ex: Throwable) {
-            YLogger.error(tag, ex)
+            DebugLogger.error(tag, ex)
             exception = ex
             completed = false
         } finally {
             try {
                 httpsConnection.disconnect()
             } catch (ex: Throwable) {
-                YLogger.error(tag, ex)
+                DebugLogger.error(tag, ex)
             }
         }
 
         return Response(completed, responseCode, responseData, errorData, responseHeaders, exception).also {
-            YLogger.info(tag, "Response: $it")
+            DebugLogger.info(tag, "Response: $it")
         }
     }
 

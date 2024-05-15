@@ -12,7 +12,7 @@ import io.appmetrica.analytics.billingv6.impl.BillingUtils
 import io.appmetrica.analytics.billingv6.impl.ProductInfoCreator
 import io.appmetrica.analytics.billingv6.impl.TAG
 import io.appmetrica.analytics.coreutils.internal.executors.SafeRunnable
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 
 internal class PurchaseResponseListenerImpl(
     private val type: String,
@@ -40,7 +40,7 @@ internal class PurchaseResponseListenerImpl(
         billingResult: BillingResult,
         purchases: List<Purchase>
     ) {
-        YLogger.info(
+        DebugLogger.info(
             TAG,
             "onQueryPurchasesResponse type=$type, " +
                 "result=${BillingUtils.toString(billingResult)}, " +
@@ -56,7 +56,7 @@ internal class PurchaseResponseListenerImpl(
                 ProductInfoCreator.createFrom(purchasesHistoryRecord, record, purchasesMap[record.productId])
             }
         }
-        YLogger.debug(TAG, "Product info to send $productInfos")
+        DebugLogger.info(TAG, "Product info to send $productInfos")
         utilsProvider.billingInfoSender.sendInfo(productInfos)
         billingInfoSentListener()
     }

@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.impl.startup.StartupError;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 
 @SuppressLint("ParcelCreator")
 public class DataResultReceiver extends ResultReceiver {
@@ -35,7 +35,7 @@ public class DataResultReceiver extends ResultReceiver {
     @Override
     protected void onReceiveResult(int resultCode, Bundle resultData) {
         Bundle resultBundle = resultData == null ? new Bundle() : resultData;
-        YLogger.debug(TAG, "Receive result %d %s", resultCode, resultData);
+        DebugLogger.info(TAG, "Receive result %d %s", resultCode, resultData);
         mReceiver.onReceiveResult(resultCode, resultBundle);
     }
 
@@ -51,7 +51,7 @@ public class DataResultReceiver extends ResultReceiver {
     public static void notifyOnStartupError(final ResultReceiver receiver,
                                             final StartupError error,
                                             @Nullable ClientIdentifiersHolder clientData) {
-        YLogger.debug(TAG, "Notify receiver %s with startup error %s with data %s", receiver, error, clientData);
+        DebugLogger.info(TAG, "Notify receiver %s with startup error %s with data %s", receiver, error, clientData);
         if (null != receiver) {
             Bundle data = new Bundle();
             error.toBundle(data);

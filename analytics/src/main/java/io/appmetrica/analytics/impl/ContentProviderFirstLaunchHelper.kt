@@ -4,7 +4,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.pm.PackageManager
 import io.appmetrica.analytics.internal.PreloadInfoContentProvider
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
@@ -19,14 +19,14 @@ internal object ContentProviderFirstLaunchHelper {
 
     @JvmStatic
     fun onCreate(contentProvider: PreloadInfoContentProvider) {
-        YLogger.info(TAG, "On Create")
+        DebugLogger.info(TAG, "On Create")
         countDownLatch = CountDownLatch(1)
         this.contentProvider = contentProvider
     }
 
     @JvmStatic
     fun onInsertFinished() {
-        YLogger.info(TAG, "Insert finished")
+        DebugLogger.info(TAG, "Insert finished")
         countDownLatch?.countDown()
     }
 
@@ -45,9 +45,9 @@ internal object ContentProviderFirstLaunchHelper {
                     PackageManager.DONT_KILL_APP
                 )
                 contentProvider?.disable()
-                YLogger.info(TAG, "Provider disabled successfully")
+                DebugLogger.info(TAG, "Provider disabled successfully")
             } catch (ex: Throwable) {
-                YLogger.error(TAG, ex)
+                DebugLogger.error(TAG, ex)
             }
             countDownLatch = null
         }

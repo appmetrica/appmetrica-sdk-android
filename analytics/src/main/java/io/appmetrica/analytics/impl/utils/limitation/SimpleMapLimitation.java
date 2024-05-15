@@ -5,7 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.impl.utils.MeasuredJsonMap;
 import io.appmetrica.analytics.impl.utils.PublicLogger;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 
 public class SimpleMapLimitation {
 
@@ -61,7 +61,7 @@ public class SimpleMapLimitation {
         if (map.size() < mLimitation.getCollectionLimitation().getMaxSize() ||
                 (mLimitation.getCollectionLimitation().getMaxSize() == map.size() && map.containsKey(key))) {
             if (mTotalLimitChecker.willLimitBeReached(map, key, value) == false) {
-                YLogger.debug(
+                DebugLogger.info(
                     TAG,
                     "Will insert pair (%s, %s) to environment %s\n. Old value %s",
                     key,
@@ -75,7 +75,7 @@ public class SimpleMapLimitation {
                 mTotalLimitChecker.logTotalLimitReached(key);
             }
         } else {
-            YLogger.debug(TAG, "Size limit for environment %s was reached.", toString());
+            DebugLogger.info(TAG, "Size limit for environment %s was reached.", toString());
             mLimitation.logContainerLimitReached(key);
         }
         return false;

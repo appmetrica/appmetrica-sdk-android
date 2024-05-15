@@ -39,7 +39,7 @@ import io.appmetrica.analytics.impl.utils.limitation.SimpleMapLimitation;
 import io.appmetrica.analytics.impl.utils.validation.ValidationResult;
 import io.appmetrica.analytics.impl.utils.validation.Validator;
 import io.appmetrica.analytics.impl.utils.validation.revenue.RevenueValidator;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import io.appmetrica.analytics.plugins.IPluginReporter;
 import io.appmetrica.analytics.plugins.PluginErrorDetails;
 import io.appmetrica.analytics.profile.UserProfile;
@@ -301,8 +301,11 @@ public abstract class BaseReporter implements IBaseReporter {
         @NonNull final ModuleEvent moduleEvent
     ) {
         if (reservedEventType(moduleEvent.getType())) {
-            YLogger.warning(TAG, "Try to send custom event with event type = %s, reserved for metrica usage only",
-                String.valueOf(moduleEvent.getType()));
+            DebugLogger.warning(
+                TAG,
+                "Try to send custom event with event type = %s, reserved for metrica usage only",
+                String.valueOf(moduleEvent.getType())
+            );
         } else {
             final CounterReport event = EventsManager.customEventReportEntry(
                 moduleEvent.getType(),
@@ -402,7 +405,11 @@ public abstract class BaseReporter implements IBaseReporter {
 
     @Override
     public void sendEventsBuffer() {
-        YLogger.debug(TAG, "Send event buffer for %s.", mReporterEnvironment.getReporterConfiguration().getApiKey());
+        DebugLogger.info(
+            TAG,
+            "Send event buffer for %s.",
+            mReporterEnvironment.getReporterConfiguration().getApiKey()
+        );
         mReportsHandler.reportEvent(
             EventsManager.reportEntry(EVENT_TYPE_PURGE_BUFFER, mPublicLogger),
             mReporterEnvironment
@@ -521,7 +528,11 @@ public abstract class BaseReporter implements IBaseReporter {
 
     @Override
     public void reportECommerce(@NonNull ECommerceEvent event) {
-        YLogger.debug(ECommerceConstants.FEATURE_TAG + getTag(), "receive e-commerce event: %s", event);
+        DebugLogger.info(
+            ECommerceConstants.FEATURE_TAG + getTag(),
+            "receive e-commerce event: %s",
+            event
+        );
         if (mPublicLogger.isEnabled()) {
             mPublicLogger.i("E-commerce event received: " + event.getPublicDescription());
         }
@@ -607,7 +618,7 @@ public abstract class BaseReporter implements IBaseReporter {
 
     @Override
     public void reportUnhandledException(@NonNull PluginErrorDetails errorDetails) {
-        YLogger.debug(TAG, "report unhandled exception from plugin %s",
+        DebugLogger.info(TAG, "report unhandled exception from plugin %s",
                 PluginErrorDetailsExtensionKt.toLogString(errorDetails));
         UnhandledException unhandledException = pluginErrorDetailsConverter.toUnhandledException(errorDetails);
         mReportsHandler.reportEvent(
@@ -625,7 +636,7 @@ public abstract class BaseReporter implements IBaseReporter {
 
     @Override
     public void reportError(@NonNull PluginErrorDetails errorDetails, @Nullable String message) {
-        YLogger.debug(TAG, "report error from plugin. Message: %s, error %s",
+        DebugLogger.info(TAG, "report error from plugin. Message: %s, error %s",
                 message, PluginErrorDetailsExtensionKt.toLogString(errorDetails));
         RegularError error = pluginErrorDetailsConverter.toRegularError(message, errorDetails);
         mReportsHandler.reportEvent(
@@ -645,8 +656,13 @@ public abstract class BaseReporter implements IBaseReporter {
     public void reportError(@NonNull String identifier,
                             @Nullable String message,
                             @Nullable PluginErrorDetails errorDetails) {
-        YLogger.debug(TAG, "report error from plugin. Message: %s, identifier: %s, error %s", message, identifier,
-                errorDetails == null ? "null" : PluginErrorDetailsExtensionKt.toLogString(errorDetails));
+        DebugLogger.info(
+            TAG,
+            "report error from plugin. Message: %s, identifier: %s, error %s",
+            message,
+            identifier,
+            errorDetails == null ? "null" : PluginErrorDetailsExtensionKt.toLogString(errorDetails)
+        );
         CustomError customError = new CustomError(
                 pluginErrorDetailsConverter.toRegularError(message, errorDetails), identifier
         );

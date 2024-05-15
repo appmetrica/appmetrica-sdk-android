@@ -9,7 +9,7 @@ import io.appmetrica.analytics.coreutils.internal.encryption.AESEncrypter;
 import io.appmetrica.analytics.impl.CounterReport;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.IOUtils;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 
 public class AESEventEncrypter implements EventEncrypter {
 
@@ -44,7 +44,7 @@ public class AESEventEncrypter implements EventEncrypter {
                     result = Base64.encodeToString(encryptedBytes, Base64.DEFAULT);
                 }
             } catch (Throwable e) {
-                YLogger.error(TAG, e, e.getMessage());
+                DebugLogger.error(TAG, e, e.getMessage());
             }
         }
         counterReport.setValue(result);
@@ -59,7 +59,7 @@ public class AESEventEncrypter implements EventEncrypter {
                 byte[] bytesToDecrypt = Base64.decode(input, Base64.DEFAULT);
                 result = mAESEncrypter.decrypt(bytesToDecrypt);
             } catch (Throwable e) {
-                YLogger.error(TAG, e, e.getMessage());
+                DebugLogger.error(TAG, e, e.getMessage());
             }
         }
         return result;

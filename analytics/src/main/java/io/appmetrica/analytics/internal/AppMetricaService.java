@@ -18,7 +18,7 @@ import io.appmetrica.analytics.impl.service.AppMetricaServiceAction;
 import io.appmetrica.analytics.impl.service.AppMetricaServiceCallback;
 import io.appmetrica.analytics.impl.service.AppMetricaServiceDataReporter;
 import io.appmetrica.analytics.impl.utils.PublicLogger;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 
 public class AppMetricaService extends Service {
 
@@ -38,10 +38,10 @@ public class AppMetricaService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        YLogger.info(TAG, "AppMetricaService#onCreate()");
+        DebugLogger.info(TAG, "AppMetricaService#onCreate()");
         GlobalServiceLocator.init(this.getApplicationContext());
         PublicLogger.init(getApplicationContext());
-        YLogger.info(TAG, "Service was created for owner with package %s, this: %s", getPackageName(), this);
+        DebugLogger.info(TAG, "Service was created for owner with package %s, this: %s", getPackageName(), this);
         if (SERVICE_CORE == null) {
             AppMetricaServiceCoreImpl appMetricaCoreImpl =
                 new AppMetricaServiceCoreImpl(getApplicationContext(), mCallback);
@@ -72,7 +72,7 @@ public class AppMetricaService extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
-        YLogger.info(TAG, "Bind to the service with data: %s", intent);
+        DebugLogger.info(TAG, "Bind to the service with data: %s", intent);
         String action = intent.getAction();
         Binder binder = null;
         if (action != null && action.startsWith(AppMetricaServiceAction.ACTION_SERVICE_WAKELOCK)) {
@@ -89,27 +89,27 @@ public class AppMetricaService extends Service {
     @Override
     public void onRebind(Intent intent) {
         super.onRebind(intent);
-        YLogger.info(TAG, "Rebind to service with data: %s", intent);
+        DebugLogger.info(TAG, "Rebind to service with data: %s", intent);
         SERVICE_CORE.onRebind(intent);
     }
 
     @Override
     public void onDestroy() {
-        YLogger.info(TAG, "[Service has been destroyed");
+        DebugLogger.info(TAG, "[Service has been destroyed");
         SERVICE_CORE.onDestroy();
         super.onDestroy();
     }
 
     @Override
     public boolean onUnbind(Intent intent) {
-        YLogger.info(TAG, "Unbind from the service with data: %s", intent);
+        DebugLogger.info(TAG, "Unbind from the service with data: %s", intent);
         SERVICE_CORE.onUnbind(intent);
         String action = intent.getAction();
         if (action != null && action.startsWith(AppMetricaServiceAction.ACTION_SERVICE_WAKELOCK)) {
             return false;
         } else {
             if (isInvalidIntentData(intent)) {
-                YLogger.info(TAG, "Invalid intent data");
+                DebugLogger.info(TAG, "Invalid intent data");
                 return false;
             }
 

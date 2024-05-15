@@ -2,7 +2,7 @@
 
 package io.appmetrica.analytics.coreutils.internal.parsing
 
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -15,7 +15,7 @@ fun JSONObject?.optLongOrNull(key: String): Long? {
         try {
             return this.getLong(key)
         } catch (e: Throwable) {
-            YLogger.error(TAG, e, e.message)
+            DebugLogger.error(TAG, e, e.message)
         }
     }
     return null
@@ -28,7 +28,7 @@ fun JSONObject?.optFloatOrNull(key: String): Float? {
         try {
             return this.getDouble(key).toFloat()
         } catch (e: Throwable) {
-            YLogger.error(TAG, e, e.message)
+            DebugLogger.error(TAG, e, e.message)
         }
     }
     return null
@@ -42,7 +42,7 @@ fun JSONObject?.optStringOrNull(key: String): String? {
         try {
             return this.getString(key)
         } catch (e: Throwable) {
-            YLogger.error(TAG, e, e.message)
+            DebugLogger.error(TAG, e, e.message)
         }
     }
     return null
@@ -58,7 +58,7 @@ fun JSONObject?.optBooleanOrNull(key: String): Boolean? {
         try {
             return this.getBoolean(key)
         } catch (e: Throwable) {
-            YLogger.error(TAG, e, e.message)
+            DebugLogger.error(TAG, e, e.message)
         }
     }
     return null

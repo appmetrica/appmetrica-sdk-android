@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.component.session
 import android.text.TextUtils
 import io.appmetrica.analytics.impl.db.constants.Constants
 import io.appmetrica.analytics.impl.request.ReportRequestConfig
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 import org.json.JSONObject
 
 internal class SessionRequestParams(requestParameters: JSONObject) {
@@ -34,7 +34,7 @@ internal class SessionRequestParams(requestParameters: JSONObject) {
         ).all { it }
 
         if (!paramsAreSame) {
-            YLogger.debug(
+            DebugLogger.info(
                 tag,
                 "SessionRequestParameters are not equal: %s and %s",
                 this,

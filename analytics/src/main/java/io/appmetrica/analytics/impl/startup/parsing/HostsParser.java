@@ -5,7 +5,7 @@ import androidx.annotation.NonNull;
 import io.appmetrica.analytics.coreutils.internal.StringUtils;
 import io.appmetrica.analytics.impl.Utils;
 import io.appmetrica.analytics.impl.utils.JsonHelper;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -63,7 +63,7 @@ public class HostsParser {
                 startupResult.setCustomSdkHosts(parseCustomSdkHosts(hosts));
             }
         } catch (Throwable ex) {
-            YLogger.error(TAG, ex);
+            DebugLogger.error(TAG, ex);
         }
     }
 
@@ -87,7 +87,7 @@ public class HostsParser {
         try {
             return object.getJSONObject(name).getJSONArray(JsonResponseKey.URLS).getString(0);
         } catch (Throwable e) {
-            YLogger.error(TAG, e, e.getMessage());
+            DebugLogger.error(TAG, e, e.getMessage());
             return StringUtils.EMPTY;
         }
     }
@@ -100,7 +100,7 @@ public class HostsParser {
                 result = JsonHelper.toStringList(json.getJSONArray(JsonResponseKey.URLS));
             }
         } catch (Throwable e) {
-            YLogger.error(TAG, e, e.getMessage());
+            DebugLogger.error(TAG, e, e.getMessage());
         }
         return result;
     }

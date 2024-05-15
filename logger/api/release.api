@@ -6,15 +6,13 @@ public final class io.appmetrica.analytics.logger.BuildConfig {
     public <init>()
 }
 
-public final class io.appmetrica.analytics.logger.internal.YLogger {
-    public static final boolean DEBUG
-
-    public static void debug([NonNull] String, [NonNull] String, Object...)
+public final class io.appmetrica.analytics.logger.internal.DebugLogger {
+    public static void debug([NonNull] String, [NonNull] String, [Nullable] Object...)
     public static void dumpJson([NonNull] String, [NonNull] org.json.JSONObject)
-    public static void error([NonNull] String, [NonNull] String, Object...)
+    public static void error([NonNull] String, [NonNull] String, [Nullable] Object...)
     public static void error([NonNull] String, [Nullable] Throwable)
-    public static void error([NonNull] String, [Nullable] Throwable, [Nullable] String, Object...)
-    public static void info([NonNull] String, [NonNull] String, Object...)
-    public static void warning([NonNull] String, [NonNull] String, Object...)
+    public static void error([NonNull] String, [Nullable] Throwable, [Nullable] String, [Nullable] Object...)
+    public static void info([NonNull] String, [NonNull] String, [Nullable] Object...)
+    public static void warning([NonNull] String, [NonNull] String, [Nullable] Object...)
 }
 

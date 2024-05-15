@@ -7,7 +7,7 @@ import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.impl.network.NetworkTaskFactory;
 import io.appmetrica.analytics.impl.request.ReportRequestConfig;
 import io.appmetrica.analytics.impl.startup.executor.StartupExecutor;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import io.appmetrica.analytics.networktasks.internal.NetworkTask;
 import java.util.concurrent.TimeUnit;
 
@@ -46,7 +46,7 @@ public class ReportingTaskProcessor<C extends ComponentUnit> extends TaskProcess
     void runTasks() {
         super.runTasks();
         ReportRequestConfig config = getComponent().getFreshReportRequestConfig();
-        YLogger.debug(
+        DebugLogger.info(
             TAG,
             "Should run report task. ID = %s. Data sending enabled is %b",
             config.getApiKey(),
@@ -58,7 +58,7 @@ public class ReportingTaskProcessor<C extends ComponentUnit> extends TaskProcess
             try {
                 reportTask = NetworkTaskFactory.createReportTask(getComponent());
             } catch (Throwable exception) {
-                YLogger.error(TAG, exception);
+                DebugLogger.error(TAG, exception);
                 return;
             }
 

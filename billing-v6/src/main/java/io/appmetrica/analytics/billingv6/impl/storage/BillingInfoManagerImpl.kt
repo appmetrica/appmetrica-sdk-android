@@ -5,7 +5,7 @@ import io.appmetrica.analytics.billinginterface.internal.BillingInfo
 import io.appmetrica.analytics.billinginterface.internal.storage.BillingInfoManager
 import io.appmetrica.analytics.billinginterface.internal.storage.BillingInfoStorage
 import io.appmetrica.analytics.billingv6.impl.TAG
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 
 class BillingInfoManagerImpl(
     private val storage: BillingInfoStorage
@@ -20,7 +20,7 @@ class BillingInfoManagerImpl(
         for (billingInfo in history.values) {
             billingInfos[billingInfo.productId] = billingInfo
         }
-        YLogger.info(TAG, "updating $billingInfos")
+        DebugLogger.info(TAG, "updating $billingInfos")
         storage.saveInfo(billingInfos.values.toList(), firstInappCheckOccurred)
     }
 

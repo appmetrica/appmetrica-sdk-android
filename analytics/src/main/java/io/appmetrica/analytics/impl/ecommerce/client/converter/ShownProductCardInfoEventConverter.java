@@ -7,7 +7,7 @@ import io.appmetrica.analytics.impl.ecommerce.client.model.ShownProductCardInfoE
 import io.appmetrica.analytics.impl.protobuf.backend.Ecommerce;
 import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedInfo;
 import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedProvider;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import java.util.Collections;
 import java.util.List;
 
@@ -44,7 +44,7 @@ public class ShownProductCardInfoEventConverter implements ECommerceEventConvert
         BytesTruncatedProvider totalTruncationInfo = BytesTruncatedInfo.total(screenResult, productResult);
 
         if (totalTruncationInfo.getBytesTruncated() > 0) {
-            YLogger.debug(
+            DebugLogger.info(
                     ECommerceConstants.FEATURE_TAG + TAG,
                     "Total bytes truncated (screen + product) = %d (%d + %d)",
                     totalTruncationInfo.getBytesTruncated(), screenResult.getBytesTruncated(),

@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.component
 
 import androidx.annotation.VisibleForTesting
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 
 internal class ComponentMigrationHelper private constructor(componentUnit: ComponentUnit) {
 
@@ -19,7 +19,7 @@ internal class ComponentMigrationHelper private constructor(componentUnit: Compo
 
     fun migrate(from: Int) {
         this.migrationScripts.forEach {
-            YLogger.info(tag, "run migration: `${it.javaClass}` from apiLevel = `$from`")
+            DebugLogger.info(tag, "run migration: `${it.javaClass}` from apiLevel = `$from`")
             it.run(from)
         }
     }

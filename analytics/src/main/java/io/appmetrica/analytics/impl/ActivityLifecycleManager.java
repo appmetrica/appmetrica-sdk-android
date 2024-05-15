@@ -9,7 +9,7 @@ import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import io.appmetrica.analytics.impl.utils.collection.HashMultimap;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import java.util.Collection;
 
 public class ActivityLifecycleManager extends DefaultActivityLifecycleCallbacks {
@@ -49,7 +49,7 @@ public class ActivityLifecycleManager extends DefaultActivityLifecycleCallbacks 
     @AnyThread
     public synchronized void registerListener(@NonNull ActivityLifecycleManager.Listener listener,
                                               @Nullable ActivityLifecycleManager.ActivityEvent... events) {
-        YLogger.info(TAG, "register listener %s", listener);
+        DebugLogger.info(TAG, "register listener %s", listener);
         for (ActivityLifecycleManager.ActivityEvent event : eventsOrAll(events)) {
             listeners.put(event, listener);
         }
@@ -59,7 +59,7 @@ public class ActivityLifecycleManager extends DefaultActivityLifecycleCallbacks 
     @AnyThread
     public synchronized void unregisterListener(@NonNull ActivityLifecycleManager.Listener listener,
                                                 ActivityLifecycleManager.ActivityEvent... events) {
-        YLogger.info(TAG, "unregister listener %s", listener);
+        DebugLogger.info(TAG, "unregister listener %s", listener);
         for (ActivityLifecycleManager.ActivityEvent event : eventsOrAll(events)) {
             listeners.remove(event, listener);
         }
@@ -72,7 +72,7 @@ public class ActivityLifecycleManager extends DefaultActivityLifecycleCallbacks 
             try {
                 application = (Application) context.getApplicationContext();
             } catch (Throwable ex) {
-                YLogger.error(TAG, ex, "Context is not application");
+                DebugLogger.error(TAG, ex, "Context is not application");
             }
         }
         maybeInitInternal();
@@ -96,7 +96,7 @@ public class ActivityLifecycleManager extends DefaultActivityLifecycleCallbacks 
             return;
         }
         watchingStatus = WatchingStatus.WATCHING;
-        YLogger.info(TAG, "register activity lifecycle callbacks");
+        DebugLogger.info(TAG, "register activity lifecycle callbacks");
         application.registerActivityLifecycleCallbacks(this);
     }
 
@@ -104,7 +104,7 @@ public class ActivityLifecycleManager extends DefaultActivityLifecycleCallbacks 
     private synchronized void maybeUnregister() {
         if (watchingStatus == WatchingStatus.WATCHING && listeners.isEmpty()) {
             watchingStatus = WatchingStatus.NOT_WATCHING_YET;
-            YLogger.info(TAG, "unregister activity lifecycle callbacks");
+            DebugLogger.info(TAG, "unregister activity lifecycle callbacks");
             application.unregisterActivityLifecycleCallbacks(this);
         }
     }

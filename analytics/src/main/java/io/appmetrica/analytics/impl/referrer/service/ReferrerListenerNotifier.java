@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.impl.referrer.common.ReferrerInfo;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 
 public class ReferrerListenerNotifier {
 
@@ -26,10 +26,10 @@ public class ReferrerListenerNotifier {
     }
 
     public void notifyIfNeeded(@Nullable ReferrerInfo referrerInfo) {
-        YLogger.debug(TAG, "notifyListenerIfNeeded with referrer %s, listener: %s",
+        DebugLogger.info(TAG, "notifyListenerIfNeeded with referrer %s, listener: %s",
                 referrerInfo, mListener);
         if (mFilter.shouldNotify(referrerInfo)) {
-            YLogger.debug(TAG, "should notify listener");
+            DebugLogger.info(TAG, "should notify listener");
             mListener.handleReferrer(referrerInfo);
             mReferrerHandledNotifier.onReferrerHandled();
         }

@@ -4,7 +4,7 @@ import io.appmetrica.analytics.coreapi.internal.control.Toggle
 import io.appmetrica.analytics.coreapi.internal.control.ToggleObserver
 import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.locationapi.internal.LocationControllerObserver
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 
 private const val TAG = "[LocationControllerImpl]"
 
@@ -17,17 +17,17 @@ internal class LocationControllerImpl : LocationController, ToggleObserver {
     private var activated = false
 
     override fun init(outerAppStateToggle: Toggle?) {
-        YLogger.info(TAG, "Init")
+        DebugLogger.info(TAG, "Init")
         togglesHolder = TogglesHolder(outerAppStateToggle)
         togglesHolder.resultLocationControlToggle.registerObserver(this, true)
     }
 
     override fun registerObserver(observer: LocationControllerObserver, sticky: Boolean) {
-        YLogger.info(TAG, "registerObserver: $observer")
+        DebugLogger.info(TAG, "registerObserver: $observer")
         executor.execute {
             observers.add(observer)
             if (sticky) {
-                YLogger.info(TAG, "Notify observer $observer as sticky - activated = $activated")
+                DebugLogger.info(TAG, "Notify observer $observer as sticky - activated = $activated")
                 if (activated) {
                     observer.startLocationTracking()
                 } else {
@@ -38,10 +38,10 @@ internal class LocationControllerImpl : LocationController, ToggleObserver {
     }
 
     override fun onStateChanged(incomingState: Boolean) {
-        YLogger.info(TAG, "onStateChanged = $incomingState")
+        DebugLogger.info(TAG, "onStateChanged = $incomingState")
         executor.execute {
             if (activated != incomingState) {
-                YLogger.info(TAG, "State changed from $activated to $incomingState")
+                DebugLogger.info(TAG, "State changed from $activated to $incomingState")
                 activated = incomingState
                 val api = if (activated) {
                     { locationControllerObserver: LocationControllerObserver ->

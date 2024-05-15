@@ -6,7 +6,7 @@ import io.appmetrica.analytics.billinginterface.internal.BillingInfo
 import io.appmetrica.analytics.billinginterface.internal.storage.BillingInfoManager
 import io.appmetrica.analytics.billingv6.impl.TAG
 import io.appmetrica.analytics.coreutils.internal.time.SystemTimeProvider
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 
 object StorageUpdater {
 
@@ -18,7 +18,7 @@ object StorageUpdater {
         billingInfoManager: BillingInfoManager,
         systemTimeProvider: SystemTimeProvider = SystemTimeProvider(),
     ) {
-        YLogger.info(TAG, "updating storage")
+        DebugLogger.info(TAG, "updating storage")
         val now = systemTimeProvider.currentTimeMillis()
         for (billingInfo in history.values) {
             if (newBillingInfo.containsKey(billingInfo.productId)) {
@@ -31,7 +31,7 @@ object StorageUpdater {
         }
         billingInfoManager.update(history)
         if (!billingInfoManager.isFirstInappCheckOccurred && BillingClient.ProductType.INAPP == type) {
-            YLogger.info(TAG, "marking markFirstInappCheckOccurred")
+            DebugLogger.info(TAG, "marking markFirstInappCheckOccurred")
             billingInfoManager.markFirstInappCheckOccurred()
         }
     }

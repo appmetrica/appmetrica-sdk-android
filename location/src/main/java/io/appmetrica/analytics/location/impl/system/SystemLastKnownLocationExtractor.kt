@@ -9,7 +9,7 @@ import io.appmetrica.analytics.coreapi.internal.annotations.GeoThread
 import io.appmetrica.analytics.coreapi.internal.permission.PermissionResolutionStrategy
 import io.appmetrica.analytics.coreutils.internal.system.SystemServiceUtils
 import io.appmetrica.analytics.locationapi.internal.LastKnownLocationExtractor
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 
 internal open class SystemLastKnownLocationExtractor(
     protected val context: Context,
@@ -23,7 +23,7 @@ internal open class SystemLastKnownLocationExtractor(
     @SuppressLint("MissingPermission")
     @GeoThread
     override fun updateLastKnownLocation() {
-        YLogger.info(tag, "Update last known location")
+        DebugLogger.info(tag, "Update last known location")
         if (permissionResolutionStrategy.hasNecessaryPermissions(context)) {
             SystemServiceUtils.accessSystemServiceByNameSafely<LocationManager, Location?>(
                 context,
@@ -31,11 +31,11 @@ internal open class SystemLastKnownLocationExtractor(
                 "getting last known location for provider $provider",
                 "location manager"
             ) { it.getLastKnownLocation(provider) }.let { location ->
-                YLogger.info(tag, "Notify listener with new location = $location")
+                DebugLogger.info(tag, "Notify listener with new location = $location")
                 location?.let { locationListener.onLocationChanged(it) }
             }
         } else {
-            YLogger.info(tag, "Permission resolution strategy forbid updating last known location")
+            DebugLogger.info(tag, "Permission resolution strategy forbid updating last known location")
         }
     }
 }

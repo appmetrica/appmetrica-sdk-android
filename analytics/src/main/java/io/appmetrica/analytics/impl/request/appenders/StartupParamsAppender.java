@@ -17,7 +17,7 @@ import io.appmetrica.analytics.impl.request.Obfuscator;
 import io.appmetrica.analytics.impl.request.StartupRequestConfig;
 import io.appmetrica.analytics.impl.request.UrlParts;
 import io.appmetrica.analytics.impl.utils.StartupUtils;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import io.appmetrica.analytics.networktasks.internal.CommonUrlParts;
 import io.appmetrica.analytics.networktasks.internal.IParamsAppender;
 import java.util.Map;
@@ -40,7 +40,7 @@ public class StartupParamsAppender implements IParamsAppender<StartupRequestConf
     @SuppressWarnings("checkstyle:methodLength")
     @Override
     public void appendParams(@NonNull Uri.Builder uriBuilder, @NonNull StartupRequestConfig requestConfig) {
-        YLogger.info(TAG, "append params with config: %s", requestConfig);
+        DebugLogger.info(TAG, "append params with config: %s", requestConfig);
         uriBuilder.path(UrlParts.STARTUP_PATH);
 
         //deviceid parameter must be present even if empty. Without it no device id will be returned.
@@ -210,10 +210,15 @@ public class StartupParamsAppender implements IParamsAppender<StartupRequestConf
     private void appendReferrer(@NonNull Uri.Builder uriBuilder, @NonNull StartupRequestConfig requestConfig) {
         String referrer = requestConfig.getDistributionReferrer();
         String installReferrerSource = requestConfig.getInstallReferrerSource();
-        YLogger.debug(TAG, "append referrer. Referrer from config: %s, source: %s", referrer, installReferrerSource);
+        DebugLogger.info(
+            TAG,
+            "append referrer. Referrer from config: %s, source: %s",
+            referrer,
+            installReferrerSource
+        );
         if (TextUtils.isEmpty(referrer)) {
             final ReferrerInfo referrerInfo = requestConfig.getReferrerHolder().getReferrerInfo();
-            YLogger.debug(TAG, "referrer from ReferrerHolder: %s", referrerInfo);
+            DebugLogger.info(TAG, "referrer from ReferrerHolder: %s", referrerInfo);
             if (referrerInfo != null) {
                 referrer = referrerInfo.installReferrer;
                 installReferrerSource = referrerInfo.source.value;

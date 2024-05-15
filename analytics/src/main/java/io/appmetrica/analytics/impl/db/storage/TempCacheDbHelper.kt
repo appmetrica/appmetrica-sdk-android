@@ -8,7 +8,7 @@ import io.appmetrica.analytics.coreutils.internal.time.SystemTimeProvider
 import io.appmetrica.analytics.impl.Utils
 import io.appmetrica.analytics.impl.db.connectors.DBConnector
 import io.appmetrica.analytics.impl.db.constants.TempCacheTable
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 
 class TempCacheDbHelper(
     private val dbConnector: DBConnector,
@@ -30,7 +30,7 @@ class TempCacheDbHelper(
                     put(TempCacheTable.Column.DATA, data)
                 }
                 val id = db.insertOrThrow(tableName, null, values)
-                YLogger.info(
+                DebugLogger.info(
                     tag,
                     "Inserted record with scope = $scope; timestamp = $timestamp; data = array[${data.size}]. " +
                         "Id = $id"
@@ -38,7 +38,7 @@ class TempCacheDbHelper(
                 return id
             }
         } catch (e: Throwable) {
-            YLogger.error(tag, e)
+            DebugLogger.error(tag, e)
         } finally {
             dbConnector.closeDb(database)
         }
@@ -72,12 +72,12 @@ class TempCacheDbHelper(
                 }
             }
         } catch (e: Throwable) {
-            YLogger.error(tag, e)
+            DebugLogger.error(tag, e)
         } finally {
             Utils.closeCursor(dataCursor)
             dbConnector.closeDb(database)
         }
-        YLogger.info(
+        DebugLogger.info(
             tag,
             "Requested data: scope = $scope; limit = $limit; returned ${result.size} records"
         )
@@ -100,9 +100,9 @@ class TempCacheDbHelper(
         try {
             database = dbConnector.openDb()
             val count = database?.delete(tableName, whereClause, whereArgs)
-            YLogger.info(tag, "Removed $count records. Where clause = $whereClause; args = $whereArgs")
+            DebugLogger.info(tag, "Removed $count records. Where clause = $whereClause; args = $whereArgs")
         } catch (e: Throwable) {
-            YLogger.error(tag, e)
+            DebugLogger.error(tag, e)
         } finally {
             dbConnector.closeDb(database)
         }
@@ -117,7 +117,7 @@ class TempCacheDbHelper(
                 data = getBlob(getColumnIndexOrThrow(TempCacheTable.Column.DATA))
             )
         } catch (e: Throwable) {
-            YLogger.error(tag, e)
+            DebugLogger.error(tag, e)
             null
         }
 }

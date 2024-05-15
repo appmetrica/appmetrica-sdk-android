@@ -6,7 +6,7 @@ import android.content.pm.PackageManager;
 import androidx.annotation.NonNull;
 import io.appmetrica.analytics.coreapi.internal.permission.PermissionState;
 import io.appmetrica.analytics.coreutils.internal.services.SafePackageManager;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,7 +37,7 @@ public class StaticPermissionRetriever implements PermissionRetriever {
                 mSafePackageManager.getPackageInfo(mContext, mPackageName, PackageManager.GET_PERMISSIONS);
         if (packageInfo != null) {
             for (String permissionName : packageInfo.requestedPermissions) {
-                YLogger.debug(TAG, "has Permission %s", permissionName);
+                DebugLogger.info(TAG, "has Permission %s", permissionName);
                 stateList.add(new PermissionState(permissionName, true));
             }
         }

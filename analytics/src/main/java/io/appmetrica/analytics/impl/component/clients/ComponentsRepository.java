@@ -9,7 +9,7 @@ import io.appmetrica.analytics.impl.component.ComponentId;
 import io.appmetrica.analytics.impl.component.DispatcherComponentFactory;
 import io.appmetrica.analytics.impl.component.IDispatcherComponent;
 import io.appmetrica.analytics.impl.component.RegularDispatcherComponent;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -63,7 +63,7 @@ public class ComponentsRepository {
                     clientConfiguration
             );
             components.put(componentId.toString(), component);
-            YLogger.debug(
+            DebugLogger.info(
                 TAG,
                 "New %s, component with Id: %s. Size: %d",
                 component.getClass().getSimpleName(),

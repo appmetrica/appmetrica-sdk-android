@@ -5,7 +5,7 @@ import io.appmetrica.analytics.billinginterface.internal.BillingType
 import io.appmetrica.analytics.billinginterface.internal.monitor.BillingMonitor
 import io.appmetrica.analytics.billinginterface.internal.storage.BillingInfoSender
 import io.appmetrica.analytics.billinginterface.internal.storage.BillingInfoStorage
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 import java.util.concurrent.Executor
 import io.appmetrica.analytics.billingv6.internal.BillingLibraryMonitor as BillingV6LibraryMonitor
 
@@ -23,7 +23,7 @@ internal class BillingMonitorProvider {
     ): BillingMonitor {
         return when (type) {
             BillingType.LIBRARY_V6 -> {
-                YLogger.info(TAG, "Tracking purchases using Billing Library 6")
+                DebugLogger.info(TAG, "Tracking purchases using Billing Library 6")
                 BillingV6LibraryMonitor(
                     context,
                     workerExecutor,
@@ -33,7 +33,7 @@ internal class BillingMonitorProvider {
                 )
             }
             else -> {
-                YLogger.info(TAG, "Do not track purchases")
+                DebugLogger.info(TAG, "Do not track purchases")
                 DummyBillingMonitor()
             }
         }

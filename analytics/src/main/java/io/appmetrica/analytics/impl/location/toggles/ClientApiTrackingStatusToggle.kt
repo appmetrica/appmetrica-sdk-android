@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.location.toggles
 import io.appmetrica.analytics.coreutils.internal.toggle.SimpleThreadSafeToggle
 import io.appmetrica.analytics.impl.db.preferences.PreferencesServiceDbStorage
 import io.appmetrica.analytics.impl.location.ClientTrackingStatusController
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 
 class ClientApiTrackingStatusToggle(
     private val storage: PreferencesServiceDbStorage
@@ -14,7 +14,7 @@ class ClientApiTrackingStatusToggle(
     ClientTrackingStatusController {
 
     override fun updateTrackingStatus(status: Boolean) {
-        YLogger.info(tag, "update tracking status to `$status`")
+        DebugLogger.info(tag, "update tracking status to `$status`")
         updateState(status)
         storage.saveLocationTrackingEnabled(status)
     }

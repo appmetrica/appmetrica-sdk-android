@@ -2,7 +2,7 @@ package io.appmetrica.analytics.networktasks.impl
 
 import android.text.TextUtils
 import io.appmetrica.analytics.coreutils.internal.collection.CollectionUtils
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 import io.appmetrica.analytics.network.internal.NetworkClient
 import io.appmetrica.analytics.network.internal.Request
 import io.appmetrica.analytics.networktasks.internal.NetworkTask
@@ -15,7 +15,7 @@ internal class NetworkTaskPerformingStrategy {
     fun performRequest(task: NetworkTask): Boolean {
         if (task.onPerformRequest()) {
             val url = task.url
-            YLogger.info(TAG, "Task %s perform request: %s", task.description(), url)
+            DebugLogger.info(TAG, "Task %s perform request: %s", task.description(), url)
             if (url == null || TextUtils.isEmpty(url.trim())) {
                 val errorMessage = "Task ${task.description()} url is `$url`. " +
                     "All hosts = ${task.underlyingTask.fullUrlFormer.allHosts?.toString()}"
@@ -56,7 +56,7 @@ internal class NetworkTaskPerformingStrategy {
             responseDataHolder.responseCode = responseCode
             responseDataHolder.responseHeaders = CollectionUtils.convertMapKeysToLowerCase(response.headers)
             if (responseDataHolder.isValidResponse) {
-                YLogger.info(
+                DebugLogger.info(
                     TAG,
                     "Task response: %d, desc: %s, url: %s, responseHeaders: %s",
                     responseCode,
@@ -66,7 +66,7 @@ internal class NetworkTaskPerformingStrategy {
                 )
                 responseDataHolder.responseData = response.responseData
             } else {
-                YLogger.warning(
+                DebugLogger.warning(
                     TAG,
                     "Task error response: %d, desc: %s; errorStream: %s; url = %s",
                     responseCode,
@@ -81,7 +81,7 @@ internal class NetworkTaskPerformingStrategy {
                 task.onRequestError(response.exception)
             }
         } else {
-            YLogger.info(TAG, "Will not perform task %s", task.description())
+            DebugLogger.info(TAG, "Will not perform task %s", task.description())
             task.onRequestError(null)
         }
         return false

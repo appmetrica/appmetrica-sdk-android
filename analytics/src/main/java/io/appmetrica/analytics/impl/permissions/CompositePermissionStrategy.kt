@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.permissions
 
 import io.appmetrica.analytics.coreapi.internal.permission.PermissionStrategy
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 
 class CompositePermissionStrategy(
     private vararg val strategies: PermissionStrategy
@@ -11,7 +11,7 @@ class CompositePermissionStrategy(
 
     override fun forbidUsePermission(permission: String): Boolean = strategies.any {
         it.forbidUsePermission(permission).also { value ->
-            YLogger.info(tag, "$it forbidUsePermission? $value")
+            DebugLogger.info(tag, "$it forbidUsePermission? $value")
         }
     }
 

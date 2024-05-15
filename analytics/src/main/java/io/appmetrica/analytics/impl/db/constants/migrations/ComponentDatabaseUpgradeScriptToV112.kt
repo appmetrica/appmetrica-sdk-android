@@ -14,7 +14,7 @@ import io.appmetrica.analytics.impl.db.protobuf.converter.DbEventModelConverter
 import io.appmetrica.analytics.impl.db.protobuf.converter.DbSessionModelConverter
 import io.appmetrica.analytics.impl.db.session.DbSessionModel
 import io.appmetrica.analytics.impl.utils.encryption.EventEncryptionMode
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 
 internal class ComponentDatabaseUpgradeScriptToV112 : DatabaseScript() {
 
@@ -43,15 +43,15 @@ internal class ComponentDatabaseUpgradeScriptToV112 : DatabaseScript() {
         private val dbSessionModelConverter = DbSessionModelConverter()
 
         override fun runScript(database: SQLiteDatabase) {
-            YLogger.info(tag, "run session migrations...")
+            DebugLogger.info(tag, "run session migrations...")
             val sessionsDump = read(database)
-            YLogger.info(tag, "reading from old db ${sessionsDump.size} valid records finished.")
+            DebugLogger.info(tag, "reading from old db ${sessionsDump.size} valid records finished.")
             drop(database)
-            YLogger.info(tag, "old session table dropped.")
+            DebugLogger.info(tag, "old session table dropped.")
             create(database)
-            YLogger.info(tag, "new session table created.")
+            DebugLogger.info(tag, "new session table created.")
             write(database, sessionsDump)
-            YLogger.info(tag, "importing session records finished.")
+            DebugLogger.info(tag, "importing session records finished.")
         }
 
         private fun read(database: SQLiteDatabase): List<ContentValues> {
@@ -73,12 +73,12 @@ internal class ComponentDatabaseUpgradeScriptToV112 : DatabaseScript() {
                     if (model != null && isValid(model)) {
                         sessionsDump.add(dbSessionModelConverter.fromModel(model))
                     } else {
-                        YLogger.info(tag, "Ignore null or invalid record with id = ${model?.id}")
+                        DebugLogger.info(tag, "Ignore null or invalid record with id = ${model?.id}")
                     }
                 }
-                YLogger.info(tag, "found ${sessionsDump.size} sessions from legacy db")
+                DebugLogger.info(tag, "found ${sessionsDump.size} sessions from legacy db")
             } catch (e: Throwable) {
-                YLogger.error(tag, e)
+                DebugLogger.error(tag, e)
             } finally {
                 cursor?.close()
             }
@@ -104,7 +104,7 @@ internal class ComponentDatabaseUpgradeScriptToV112 : DatabaseScript() {
                 )
             )
         } catch (e: Throwable) {
-            YLogger.error(tag, e)
+            DebugLogger.error(tag, e)
             null
         }
 
@@ -116,12 +116,12 @@ internal class ComponentDatabaseUpgradeScriptToV112 : DatabaseScript() {
 
         private fun drop(database: SQLiteDatabase) {
             val sql = "DROP TABLE IF EXISTS $oldSessionTable"
-            YLogger.info(tag, "Execute sql: $sql")
+            DebugLogger.info(tag, "Execute sql: $sql")
             database.execSQL(sql)
         }
 
         private fun create(database: SQLiteDatabase) {
-            YLogger.info(tag, "Execute sql: ${Constants.SessionTable.CREATE_TABLE}")
+            DebugLogger.info(tag, "Execute sql: ${Constants.SessionTable.CREATE_TABLE}")
             database.execSQL(Constants.SessionTable.CREATE_TABLE)
         }
 
@@ -134,7 +134,7 @@ internal class ComponentDatabaseUpgradeScriptToV112 : DatabaseScript() {
                         it
                     )
                 } catch (e: Throwable) {
-                    YLogger.error(tag, e)
+                    DebugLogger.error(tag, e)
                 }
             }
         }
@@ -172,13 +172,13 @@ internal class ComponentDatabaseUpgradeScriptToV112 : DatabaseScript() {
         private val converter = DbEventModelConverter()
 
         override fun runScript(database: SQLiteDatabase) {
-            YLogger.info(tag, "run events migrations...")
+            DebugLogger.info(tag, "run events migrations...")
             createNewTable(database)
-            YLogger.info(tag, "new events table created")
+            DebugLogger.info(tag, "new events table created")
             importRecords(database)
-            YLogger.info(tag, "records import finished")
+            DebugLogger.info(tag, "records import finished")
             drop(database)
-            YLogger.info(tag, "old reports table dropped.")
+            DebugLogger.info(tag, "old reports table dropped.")
         }
 
         private fun importRecords(database: SQLiteDatabase) {
@@ -204,15 +204,15 @@ internal class ComponentDatabaseUpgradeScriptToV112 : DatabaseScript() {
                             importedRecordsCount += 1
                         }
                     } else {
-                        YLogger.info(
+                        DebugLogger.info(
                             tag,
                             "ignore invalid or null event with type = ${model?.type} and id = ${model?.globalNumber}"
                         )
                     }
                 }
-                YLogger.info(tag, "Read $readRecordsCount records; imported $importedRecordsCount records")
+                DebugLogger.info(tag, "Read $readRecordsCount records; imported $importedRecordsCount records")
             } catch (e: Throwable) {
-                YLogger.error(tag, e)
+                DebugLogger.error(tag, e)
             } finally {
                 cursor?.close()
             }
@@ -255,7 +255,7 @@ internal class ComponentDatabaseUpgradeScriptToV112 : DatabaseScript() {
                 )
             )
         } catch (e: Throwable) {
-            YLogger.error(tag, e)
+            DebugLogger.error(tag, e)
             null
         }
 
@@ -320,12 +320,12 @@ internal class ComponentDatabaseUpgradeScriptToV112 : DatabaseScript() {
 
         private fun drop(database: SQLiteDatabase) {
             val dropSql = "DROP TABLE IF EXISTS $oldTableName"
-            YLogger.info(tag, "Execute sql: $dropSql")
+            DebugLogger.info(tag, "Execute sql: $dropSql")
             database.execSQL(dropSql)
         }
 
         private fun createNewTable(database: SQLiteDatabase) {
-            YLogger.info(tag, "Execute sql: ${Constants.EventsTable.CREATE_TABLE}")
+            DebugLogger.info(tag, "Execute sql: ${Constants.EventsTable.CREATE_TABLE}")
             database.execSQL(Constants.EventsTable.CREATE_TABLE)
         }
 
@@ -337,7 +337,7 @@ internal class ComponentDatabaseUpgradeScriptToV112 : DatabaseScript() {
                     record
                 ) >= 0
             } catch (e: Throwable) {
-                YLogger.error(tag, e)
+                DebugLogger.error(tag, e)
                 false
             }
     }

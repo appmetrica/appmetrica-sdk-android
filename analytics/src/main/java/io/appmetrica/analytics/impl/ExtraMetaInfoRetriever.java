@@ -4,7 +4,7 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 
 public class ExtraMetaInfoRetriever {
 
@@ -35,7 +35,7 @@ public class ExtraMetaInfoRetriever {
     @Nullable
     public String getBuildId() {
         String buildId =  mBuildIdRetriever.getResource();
-        YLogger.info(TAG, "Retrieved build_id: %s", buildId);
+        DebugLogger.info(TAG, "Retrieved build_id: %s", buildId);
         return buildId;
     }
 

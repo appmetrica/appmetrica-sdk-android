@@ -8,7 +8,7 @@ import io.appmetrica.analytics.impl.component.CommonArguments;
 import io.appmetrica.analytics.impl.component.clients.ClientDescription;
 import io.appmetrica.analytics.impl.component.clients.ClientRepository;
 import io.appmetrica.analytics.impl.component.clients.ClientUnit;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 
 class ReportRunnable implements Runnable {
 
@@ -34,7 +34,7 @@ class ReportRunnable implements Runnable {
     @Override
     public void run() {
         final ClientConfiguration sdkConfig = ClientConfiguration.fromBundle(mContext, mExtras);
-        YLogger.debug(
+        DebugLogger.info(
             TAG,
             "Handle new report with sdkConfig: %s; report = %s",
             sdkConfig,

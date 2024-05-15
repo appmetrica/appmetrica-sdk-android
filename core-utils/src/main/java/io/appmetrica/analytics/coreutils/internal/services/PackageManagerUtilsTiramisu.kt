@@ -5,7 +5,7 @@ import android.content.pm.PackageManager
 import android.content.pm.ProviderInfo
 import android.os.Build
 import io.appmetrica.analytics.coreapi.internal.annotations.DoNotInline
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 
 @DoNotInline
 @TargetApi(Build.VERSION_CODES.TIRAMISU)
@@ -20,7 +20,7 @@ internal object PackageManagerUtilsTiramisu {
                 PackageManager.ComponentInfoFlags.of(PackageManager.GET_PROVIDERS.toLong())
             )
         } catch (e: Throwable) {
-            YLogger.info(tag, e.message ?: "", e)
+            DebugLogger.info(tag, e.message ?: "", e)
             null
         }
 }

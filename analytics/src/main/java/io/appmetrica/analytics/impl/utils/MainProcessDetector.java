@@ -5,7 +5,7 @@ import android.os.Build;
 import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import io.appmetrica.analytics.impl.ClientServiceLocator;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import java.util.concurrent.Callable;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
@@ -53,7 +53,7 @@ public class MainProcessDetector implements ProcessDetector {
             ClientServiceLocator.getInstance().getClientExecutorProvider().getMainHandler().post(future);
             result = future.get(5, TimeUnit.SECONDS);
         } catch (Throwable e) {
-            YLogger.error(TAG, e, e.getMessage());
+            DebugLogger.error(TAG, e, e.getMessage());
         }
 
         return result;

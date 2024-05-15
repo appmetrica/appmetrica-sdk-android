@@ -17,7 +17,7 @@ import io.appmetrica.analytics.impl.protobuf.client.LegacyStartupStateProtobuf.L
 import io.appmetrica.analytics.impl.startup.CollectingFlags
 import io.appmetrica.analytics.impl.startup.StartupStateModel
 import io.appmetrica.analytics.impl.utils.encryption.AESCredentialProvider
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 
 internal class ServiceMigrationScriptToV112(private val vitalDataStorage: VitalCommonDataProvider) : MigrationScript {
 
@@ -33,16 +33,16 @@ internal class ServiceMigrationScriptToV112(private val vitalDataStorage: VitalC
     }
 
     override fun run(context: Context) {
-        YLogger.info(tag, "Run migration")
+        DebugLogger.info(tag, "Run migration")
         DatabaseStorageFactory.getInstance(context).storageForService.readableDatabase?.let { database ->
-            YLogger.info(tag, "Legacy database exists... Try to import data")
+            DebugLogger.info(tag, "Legacy database exists... Try to import data")
             try {
                 val legacyStartupState = readLegacyStartupState(database)
                 val startupStateModelBuilder =
                     StartupStateModel.StartupStateBuilder(CollectingFlags.CollectingFlagsBuilder().build())
                 if (legacyStartupState != null) {
                     fillIdentifiersToStartupState(vitalDataStorage, startupStateModelBuilder, legacyStartupState)
-                    YLogger.info(
+                    DebugLogger.info(
                         tag,
                         "Import country init info: hadFirstStartup = ${legacyStartupState.hadFirstStartup}; " +
                             "countryInit = ${legacyStartupState.countryInit}"
@@ -50,14 +50,14 @@ internal class ServiceMigrationScriptToV112(private val vitalDataStorage: VitalC
                     startupStateModelBuilder.withHadFirstStartup(legacyStartupState.hadFirstStartup)
                         .withCountryInit(legacyStartupState.countryInit)
                 } else {
-                    YLogger.info(tag, "Legacy startup state missing or invalid")
+                    DebugLogger.info(tag, "Legacy startup state missing or invalid")
                 }
                 val startupStateModel = startupStateModelBuilder.build()
-                YLogger.info(tag, "write startup: $startupStateModel")
+                DebugLogger.info(tag, "write startup: $startupStateModel")
                 StorageFactory.Provider.get(StartupStateModel::class.java).createForMigration(context)
                     .save(startupStateModel)
             } catch (e: Throwable) {
-                YLogger.error(tag, e)
+                DebugLogger.error(tag, e)
             }
         }
     }
@@ -67,29 +67,29 @@ internal class ServiceMigrationScriptToV112(private val vitalDataStorage: VitalC
         startupStateBuilder: StartupStateModel.StartupStateBuilder,
         legacyStartupState: LegacyStartupState
     ) {
-        YLogger.info(tag, "Import identifiers from legacy storage...")
+        DebugLogger.info(tag, "Import identifiers from legacy storage...")
         val actualDeviceId = vitalDataStorage.deviceId
         if (TextUtils.isEmpty(actualDeviceId)) {
             if (!TextUtils.isEmpty(legacyStartupState.deviceId)) {
                 vitalDataStorage.deviceId = legacyStartupState.deviceId
-                YLogger.info(tag, "Imported deviceId = ${legacyStartupState.deviceId}")
+                DebugLogger.info(tag, "Imported deviceId = ${legacyStartupState.deviceId}")
             } else {
-                YLogger.info(tag, "DeviceId not found")
+                DebugLogger.info(tag, "DeviceId not found")
             }
             if (!TextUtils.isEmpty(legacyStartupState.deviceIdHash)) {
                 vitalDataStorage.deviceIdHash = legacyStartupState.deviceIdHash
-                YLogger.info(tag, "Imported deviceIdHash = ${legacyStartupState.deviceIdHash}")
+                DebugLogger.info(tag, "Imported deviceIdHash = ${legacyStartupState.deviceIdHash}")
             } else {
-                YLogger.info(tag, "DeviceIdHash not found")
+                DebugLogger.info(tag, "DeviceIdHash not found")
             }
             if (!TextUtils.isEmpty(legacyStartupState.uuid)) {
                 startupStateBuilder.withUuid(legacyStartupState.uuid)
-                YLogger.info(tag, "Successfully imported uuid = ${legacyStartupState.uuid}")
+                DebugLogger.info(tag, "Successfully imported uuid = ${legacyStartupState.uuid}")
             } else {
-                YLogger.info(tag, "Uuid not found")
+                DebugLogger.info(tag, "Uuid not found")
             }
         } else {
-            YLogger.info(
+            DebugLogger.info(
                 tag,
                 "Device id presents in actual storage. Use values from vital storage: " +
                     "deviceId = ${vitalDataStorage.deviceId}; deviceIdHash = ${vitalDataStorage.deviceIdHash}"
@@ -114,13 +114,13 @@ internal class ServiceMigrationScriptToV112(private val vitalDataStorage: VitalC
                 return parseBytes(binaryData)
             } else {
                 if (Utils.isNullOrEmpty(cursor) == false) {
-                    YLogger.error(
+                    DebugLogger.error(
                         tag,
                         "invalid cursor for key ${Constants.BinaryDataTable.DATA_KEY} " +
                             "from ${Constants.BinaryDataTable.TABLE_NAME}"
                     )
                 } else {
-                    YLogger.info(
+                    DebugLogger.info(
                         tag,
                         "value for key ${Constants.BinaryDataTable.DATA_KEY} = $startupStateKey " +
                             "from ${Constants.BinaryDataTable.TABLE_NAME} is empty."
@@ -128,7 +128,7 @@ internal class ServiceMigrationScriptToV112(private val vitalDataStorage: VitalC
                 }
             }
         } catch (e: Throwable) {
-            YLogger.error(tag, e)
+            DebugLogger.error(tag, e)
         } finally {
             cursor.closeSafely()
         }
@@ -136,9 +136,9 @@ internal class ServiceMigrationScriptToV112(private val vitalDataStorage: VitalC
     }
 
     private fun parseBytes(bytes: ByteArray): LegacyStartupState {
-        YLogger.info(tag, "encrypted legacy startup size = ${bytes.size}")
+        DebugLogger.info(tag, "encrypted legacy startup size = ${bytes.size}")
         val result = aesEncrypter.decrypt(bytes)
-        YLogger.info(tag, "legacy startup size = ${result?.size}")
+        DebugLogger.info(tag, "legacy startup size = ${result?.size}")
         return LegacyStartupState.parseFrom(result)
     }
 }

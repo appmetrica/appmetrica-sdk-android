@@ -32,7 +32,7 @@ import io.appmetrica.analytics.impl.utils.validation.NonEmptyStringValidator;
 import io.appmetrica.analytics.impl.utils.validation.ThrowIfFailedValidator;
 import io.appmetrica.analytics.impl.utils.validation.Validator;
 import io.appmetrica.analytics.internal.CounterConfiguration;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -327,7 +327,7 @@ public class MainReporter extends BaseReporter implements IMainReporter {
                         if (libraryAnrDetector.isPushAnr(allThreads.affectedThread.stacktrace)) {
                             pushReporterProvider.getReporter().reportAnr(allThreads);
                         }
-                        YLogger.debug(TAG, "anr registered %s", allThreads);
+                        DebugLogger.info(TAG, "anr registered %s", allThreads);
                     }
                 });
             }

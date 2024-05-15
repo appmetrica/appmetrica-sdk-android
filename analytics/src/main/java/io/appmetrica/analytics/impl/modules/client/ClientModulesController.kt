@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.modules.client
 
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 import io.appmetrica.analytics.modulesapi.internal.client.ClientContext
 import io.appmetrica.analytics.modulesapi.internal.client.ModuleClientEntryPoint
 import java.util.concurrent.CopyOnWriteArrayList
@@ -16,18 +16,18 @@ internal class ClientModulesController :
     private val modules = CopyOnWriteArrayList<ModuleClientEntryPoint<Any>>()
 
     override fun registerModule(moduleClientEntryPoint: ModuleClientEntryPoint<Any>) {
-        YLogger.info(tag, "Register new module with identifier = ${moduleClientEntryPoint.identifier}")
+        DebugLogger.info(tag, "Register new module with identifier = ${moduleClientEntryPoint.identifier}")
         modules.add(moduleClientEntryPoint)
     }
 
     override fun initClientSide(clientContext: ClientContext) {
-        YLogger.info(tag, "Init client side. Total modules count = ${modules.size}")
+        DebugLogger.info(tag, "Init client side. Total modules count = ${modules.size}")
         val modulesWithProblems = hashSetOf<ModuleClientEntryPoint<Any>>()
         modules.forEach { module ->
             try {
                 module.initClientSide(clientContext)
             } catch (e: Throwable) {
-                YLogger.error(
+                DebugLogger.error(
                     "$tag [${module.identifier}]",
                     e,
                     "unhandled exception when calling initClientSide"
@@ -36,7 +36,7 @@ internal class ClientModulesController :
                 modulesWithProblems.add(module)
             }
         }
-        YLogger.warning(
+        DebugLogger.warning(
             tag,
             "Disabling defective modules: ${modulesWithProblems.joinToString(", ") { it.identifier }}"
         )
@@ -44,12 +44,12 @@ internal class ClientModulesController :
     }
 
     override fun onActivated() {
-        YLogger.info(tag, "Notify modules with remote config updated")
+        DebugLogger.info(tag, "Notify modules with remote config updated")
         modules.forEach { module ->
             try {
                 module.onActivated()
             } catch (e: Throwable) {
-                YLogger.error(
+                DebugLogger.error(
                     "$tag [${module.identifier}]",
                     e,
                     "unhandled exception when calling onActivated"

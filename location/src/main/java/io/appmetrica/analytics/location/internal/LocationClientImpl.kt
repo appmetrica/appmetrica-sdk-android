@@ -18,7 +18,7 @@ import io.appmetrica.analytics.locationapi.internal.LocationClient
 import io.appmetrica.analytics.locationapi.internal.LocationFilter
 import io.appmetrica.analytics.locationapi.internal.LocationReceiverProvider
 import io.appmetrica.analytics.locationapi.internal.LocationReceiverProviderFactory
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 
 class LocationClientImpl : LocationClient {
 
@@ -42,9 +42,9 @@ class LocationClientImpl : LocationClient {
         executor: IHandlerExecutor,
         consumers: List<Consumer<Location?>>
     ) {
-        YLogger.info(tag, "init with consumers: %s", consumers)
+        DebugLogger.info(tag, "init with consumers: %s", consumers)
         if (locationCore == null) {
-            YLogger.info(tag, "Create location core...")
+            DebugLogger.info(tag, "Create location core...")
             locationCore = LocationCore(
                 context,
                 permissionExtractor,
@@ -52,57 +52,57 @@ class LocationClientImpl : LocationClient {
                 LocationStreamDispatcher(consumers, locationConfig)
             )
         } else {
-            YLogger.info(tag, "Location core exists... ")
+            DebugLogger.info(tag, "Location core exists... ")
         }
     }
 
     @Synchronized
     override fun updateCacheArguments(cacheArguments: CacheArguments) {
-        YLogger.info(tag, "updateCacheArguments: $cacheArguments")
+        DebugLogger.info(tag, "updateCacheArguments: $cacheArguments")
         locationConfig = locationConfig.buildUpon(cacheArguments)
         locationCore?.updateConfig(locationConfig)
     }
 
     @Synchronized
     override fun updateLocationFilter(locationFilter: LocationFilter) {
-        YLogger.info(tag, "updateLocationFilter: $locationFilter")
+        DebugLogger.info(tag, "updateLocationFilter: $locationFilter")
         locationConfig = locationConfig.buildUpon(locationFilter)
         locationCore?.updateConfig(locationConfig)
     }
 
     @Synchronized
     override fun registerLocationSource(lastKnownLocationExtractorProvider: LastKnownLocationExtractorProvider) {
-        YLogger.info(tag, "registerLocationSource: $lastKnownLocationExtractorProvider")
+        DebugLogger.info(tag, "registerLocationSource: $lastKnownLocationExtractorProvider")
         locationCore?.registerLastKnownSource(lastKnownLocationExtractorProvider)
     }
 
     @Synchronized
     override fun unregisterLocationSource(lastKnownLocationExtractorProvider: LastKnownLocationExtractorProvider) {
-        YLogger.info(tag, "unregisterLocationSource: $lastKnownLocationExtractorProvider")
+        DebugLogger.info(tag, "unregisterLocationSource: $lastKnownLocationExtractorProvider")
         locationCore?.unregisterLastKnownSource(lastKnownLocationExtractorProvider)
     }
 
     @Synchronized
     override fun registerLocationSource(locationReceiverProvider: LocationReceiverProvider) {
-        YLogger.info(tag, "registerLocationSource: $locationReceiverProvider")
+        DebugLogger.info(tag, "registerLocationSource: $locationReceiverProvider")
         locationCore?.registerLocationReceiver(locationReceiverProvider)
     }
 
     @Synchronized
     override fun unregisterLocationSource(locationReceiverProvider: LocationReceiverProvider) {
-        YLogger.info(tag, "unregisterLocationSource: $locationReceiverProvider")
+        DebugLogger.info(tag, "unregisterLocationSource: $locationReceiverProvider")
         locationCore?.unregisterLocationReceiver(locationReceiverProvider)
     }
 
     @Synchronized
     override fun startLocationTracking() {
-        YLogger.info(tag, "startLocationTracking")
+        DebugLogger.info(tag, "startLocationTracking")
         locationCore?.startLocationTracking()
     }
 
     @Synchronized
     override fun stopLocationTracking() {
-        YLogger.info(tag, "stopLocationTracking")
+        DebugLogger.info(tag, "stopLocationTracking")
         locationCore?.stopLocationTracking()
     }
 

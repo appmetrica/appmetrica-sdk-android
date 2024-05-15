@@ -4,7 +4,7 @@ import io.appmetrica.analytics.impl.CounterReport
 import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.component.ComponentUnit
 import io.appmetrica.analytics.impl.component.processor.event.ReportComponentHandler
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 import io.appmetrica.analytics.modulesapi.internal.service.event.ModuleServiceEventHandler
 
 private const val TAG_PREFIX = "[ModulesEventHandler-%s]"
@@ -22,7 +22,7 @@ class ModulesEventHandler(component: ComponentUnit) : ReportComponentHandler(com
         }
 
     override fun process(reportData: CounterReport): Boolean {
-        YLogger.info(
+        DebugLogger.info(
             tag,
             "Apply ${processingChain.size} module handlers to report with type = " +
                 "${reportData.type}; customType = ${reportData.customType}; name = ${reportData.name}"

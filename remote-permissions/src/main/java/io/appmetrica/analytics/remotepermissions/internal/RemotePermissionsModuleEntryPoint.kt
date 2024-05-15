@@ -3,7 +3,7 @@ package io.appmetrica.analytics.remotepermissions.internal
 import io.appmetrica.analytics.coreapi.internal.data.Converter
 import io.appmetrica.analytics.coreapi.internal.data.JsonParser
 import io.appmetrica.analytics.coreapi.internal.permission.PermissionStrategy
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 import io.appmetrica.analytics.modulesapi.internal.common.AskForPermissionStrategyModuleProvider
 import io.appmetrica.analytics.modulesapi.internal.service.LocationServiceExtension
 import io.appmetrica.analytics.modulesapi.internal.service.ModuleRemoteConfig
@@ -57,7 +57,7 @@ class RemotePermissionsModuleEntryPoint :
     override val moduleServicesDatabase: ModuleServicesDatabase? = null
 
     override fun onRemoteConfigUpdated(config: ModuleRemoteConfig<FeatureConfig?>) {
-        YLogger.info(
+        DebugLogger.info(
             tag,
             "omRemoteConfigUpdated with permitted permissions = ${config.featuresConfig?.permittedPermissions}"
         )
@@ -67,7 +67,7 @@ class RemotePermissionsModuleEntryPoint :
     }
 
     override fun initServiceSide(serviceContext: ServiceContext, initialConfig: ModuleRemoteConfig<FeatureConfig?>) {
-        YLogger.info(
+        DebugLogger.info(
             tag,
             "initServiceSide with initial permitted permissions = " +
                 "${initialConfig.featuresConfig?.permittedPermissions}"

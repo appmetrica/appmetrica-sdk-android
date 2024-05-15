@@ -6,7 +6,7 @@ import androidx.annotation.Nullable;
 import io.appmetrica.analytics.impl.IOUtils;
 import io.appmetrica.analytics.impl.utils.LoggerStorage;
 import io.appmetrica.analytics.impl.utils.PublicLogger;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import java.io.UnsupportedEncodingException;
 
 public class StringByBytesTrimmer extends BaseTrimmer<String> {
@@ -40,7 +40,7 @@ public class StringByBytesTrimmer extends BaseTrimmer<String> {
                     }
                 }
             } catch (UnsupportedEncodingException e) {
-                YLogger.error(TAG, e, "error while cutting string for %s", getLogName());
+                DebugLogger.error(TAG, e, "error while cutting string for %s", getLogName());
             }
         }
         return result;

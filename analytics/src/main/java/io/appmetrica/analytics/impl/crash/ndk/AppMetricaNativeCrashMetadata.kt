@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.crash.ndk
 import android.util.Base64
 import io.appmetrica.analytics.coreutils.internal.parsing.optStringOrNull
 import io.appmetrica.analytics.impl.CounterConfigurationReporterType
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 import org.json.JSONObject
 
 data class AppMetricaNativeCrashMetadata(
@@ -37,7 +37,7 @@ class AppMetricaNativeCrashMetadataSerializer {
             .put(ERROR_ENVIRONMENT_KEY, metadata.errorEnvironment)
         Base64.encodeToString(json.toString().toByteArray(), Base64.DEFAULT)
     } catch (t: Throwable) {
-        YLogger.error(TAG, "Failed to serialize appmetrica native crash metadata", t)
+        DebugLogger.error(TAG, "Failed to serialize appmetrica native crash metadata", t)
         ""
     }
 
@@ -52,7 +52,7 @@ class AppMetricaNativeCrashMetadataSerializer {
             errorEnvironment = json.optStringOrNull(ERROR_ENVIRONMENT_KEY)
         )
     } catch (t: Throwable) {
-        YLogger.error(TAG, "Failed to deserialize appmetrica native crash metadata: $string", t)
+        DebugLogger.error(TAG, "Failed to deserialize appmetrica native crash metadata: $string", t)
         null
     }
 }

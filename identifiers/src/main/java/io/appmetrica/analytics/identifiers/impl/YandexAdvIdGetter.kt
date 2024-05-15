@@ -5,7 +5,7 @@ import android.content.Intent
 import androidx.annotation.VisibleForTesting
 import com.yandex.android.advid.service.YandexAdvIdInterface
 import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 
 private const val TAG = "[YandexAdvIdGetter]"
 private val YANDEX_ADV_ID_INTENT =
@@ -24,19 +24,19 @@ internal class YandexAdvIdGetter @VisibleForTesting internal constructor(
     )
 
     override fun getAdTrackingInfo(context: Context): AdvIdResult {
-        YLogger.info(TAG, "getAdTrackingInfo. Connecting to service...")
+        DebugLogger.info(TAG, "getAdTrackingInfo. Connecting to service...")
         return try {
             tryToGetAdTrackingInfo(context)
         } catch (noProviderException: NoProviderException) {
             val message = noProviderException.message ?: "No yandex adv_id service"
-            YLogger.error(TAG, noProviderException, message)
+            DebugLogger.error(TAG, noProviderException, message)
             AdvIdResult(IdentifierStatus.IDENTIFIER_PROVIDER_UNAVAILABLE, errorExplanation = message)
         } catch (connectionException: ConnectionException) {
             val message = connectionException.message ?: "unknown exception while binding yandex adv_id service"
-            YLogger.error(TAG, connectionException, message)
+            DebugLogger.error(TAG, connectionException, message)
             AdvIdResult(IdentifierStatus.IDENTIFIER_PROVIDER_UNAVAILABLE, errorExplanation = message)
         } catch (e: Throwable) {
-            YLogger.error(TAG, e, "can't fetch adv id")
+            DebugLogger.error(TAG, e, "can't fetch adv id")
             AdvIdResult(
                 IdentifierStatus.UNKNOWN,
                 errorExplanation = "exception while fetching yandex adv_id: " + e.message
@@ -45,7 +45,7 @@ internal class YandexAdvIdGetter @VisibleForTesting internal constructor(
             try {
                 connectionController.disconnect(context)
             } catch (ex: Throwable) {
-                YLogger.error(TAG, ex, "%s could not unbind from service")
+                DebugLogger.error(TAG, ex, "%s could not unbind from service")
             }
         }
     }
@@ -53,9 +53,9 @@ internal class YandexAdvIdGetter @VisibleForTesting internal constructor(
     private fun tryToGetAdTrackingInfo(context: Context): AdvIdResult {
         val service: YandexAdvIdInterface = connectionController.connect(context)
         val advId: String = service.advId
-        YLogger.info(TAG, "id fetched successfully: %s", advId)
+        DebugLogger.info(TAG, "id fetched successfully: %s", advId)
         val isDisabled: Boolean = service.isAdvIdTrackingLimited
-        YLogger.info(TAG, "limitedAdvertisingTracking flag fetched successfully: %b", isDisabled)
+        DebugLogger.info(TAG, "limitedAdvertisingTracking flag fetched successfully: %b", isDisabled)
         return AdvIdResult(IdentifierStatus.OK, AdvIdInfo(Constants.Providers.YANDEX, advId, isDisabled))
     }
 }

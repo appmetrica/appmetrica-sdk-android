@@ -3,7 +3,8 @@ package io.appmetrica.analytics.networktasks.internal;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
-import io.appmetrica.analytics.logger.internal.YLogger;
+
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import io.appmetrica.analytics.coreutils.internal.time.SystemTimeProvider;
 import io.appmetrica.analytics.coreutils.internal.time.TimePassedChecker;
 import io.appmetrica.analytics.coreutils.internal.time.TimeProvider;
@@ -34,12 +35,12 @@ public class ExponentialBackoffDataHolder {
         this.timePassedChecker = timePassedChecker;
         lastAttemptTimestampSeconds = retryInfoProvider.getLastAttemptTimeSeconds();
         nextAttemptNumber = retryInfoProvider.getNextSendAttemptNumber();
-        YLogger.info(TAG, "Created object with lastAttemptTimestampSeconds = %d, nextAttemptNumber = %d",
+        DebugLogger.info(TAG, "Created object with lastAttemptTimestampSeconds = %d, nextAttemptNumber = %d",
                 lastAttemptTimestampSeconds, nextAttemptNumber);
     }
 
     public void reset() {
-        YLogger.info(TAG, "reset");
+        DebugLogger.info(TAG, "reset");
         nextAttemptNumber = 1;
         lastAttemptTimestampSeconds = 0;
         retryInfoProvider.saveNextSendAttemptNumber(nextAttemptNumber);
@@ -49,7 +50,7 @@ public class ExponentialBackoffDataHolder {
     public void updateLastAttemptInfo() {
         lastAttemptTimestampSeconds = timeProvider.currentTimeSeconds();
         nextAttemptNumber++;
-        YLogger.info(TAG, "Updated info: lastAttemptTimestampSeconds = %d, nextAttemptNumber = %d",
+        DebugLogger.info(TAG, "Updated info: lastAttemptTimestampSeconds = %d, nextAttemptNumber = %d",
                 lastAttemptTimestampSeconds, nextAttemptNumber);
         retryInfoProvider.saveLastAttemptTimeSeconds(lastAttemptTimestampSeconds);
         retryInfoProvider.saveNextSendAttemptNumber(nextAttemptNumber);
@@ -57,7 +58,7 @@ public class ExponentialBackoffDataHolder {
 
     public boolean wasLastAttemptLongAgoEnough(@Nullable RetryPolicyConfig retryPolicyConfig) {
         if (retryPolicyConfig == null || lastAttemptTimestampSeconds == 0L) {
-            YLogger.info(TAG,
+            DebugLogger.info(TAG,
                     "Last attempt was long ago enough: retryPolicyConfig = %s, " +
                             "lastAttemptTimestampSeconds = %d",
                     retryPolicyConfig,
@@ -70,7 +71,7 @@ public class ExponentialBackoffDataHolder {
                     getNextSeconds(retryPolicyConfig),
                     "last send attempt"
             );
-            YLogger.info(TAG, "wasLastAttemptLongAgoEnough? %b", result);
+            DebugLogger.info(TAG, "wasLastAttemptLongAgoEnough? %b", result);
             return result;
         }
     }

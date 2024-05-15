@@ -33,7 +33,7 @@ import io.appmetrica.analytics.impl.utils.PublicLogger;
 import io.appmetrica.analytics.impl.utils.limitation.BytesTrimmer;
 import io.appmetrica.analytics.impl.utils.limitation.EventLimitationProcessor;
 import io.appmetrica.analytics.impl.utils.limitation.Trimmer;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import io.appmetrica.analytics.networktasks.internal.DefaultNetworkResponseHandler;
 import io.appmetrica.analytics.networktasks.internal.FullUrlFormer;
 import io.appmetrica.analytics.networktasks.internal.RequestBodyEncrypter;
@@ -215,13 +215,13 @@ public class ReportTask implements UnderlyingNetworkTask {
                 mDbReportRequestConfig = new DbNetworkTaskConfig(requestParameters);
                 paramsAppender.setDbReportRequestConfig(mDbReportRequestConfig);
             } catch (Throwable exception) {
-                YLogger.warning(TAG, "Something was wrong while filling request parameters.\n%s", exception);
+                DebugLogger.warning(TAG, "Something was wrong while filling request parameters.\n%s", exception);
                 withEmptyRequestConfig();
             }
         } else {
             withEmptyRequestConfig();
         }
-        YLogger.info(TAG,"inited mDbReportRequestConfig: %s", mDbReportRequestConfig);
+        DebugLogger.info(TAG,"inited mDbReportRequestConfig: %s", mDbReportRequestConfig);
     }
 
     private void withEmptyRequestConfig() {
@@ -281,39 +281,39 @@ public class ReportTask implements UnderlyingNetworkTask {
 
     @Override
     public boolean onCreateTask() {
-        YLogger.info(TAG, "onCreateTask: %s", description());
+        DebugLogger.info(TAG, "onCreateTask: %s", description());
         final List<ContentValues> queryParameters = mComponent.getDbHelper().collectAllQueryParameters();
 
         if (queryParameters.isEmpty()) {
-            YLogger.info(TAG, "Could not create task %s: queryParameters are empty", description());
+            DebugLogger.info(TAG, "Could not create task %s: queryParameters are empty", description());
             return false;
         }
 
         withQueryValues(queryParameters.get(0));
 
         ReportRequestConfig requestConfig = configProvider.getConfig();
-        YLogger.info(TAG, "Apply config %s", requestConfig);
+        DebugLogger.info(TAG, "Apply config %s", requestConfig);
 
         final List<String> certificates = requestConfig.getCertificates();
         if (Utils.isNullOrEmpty(certificates)) {
-            YLogger.info(TAG, "Could not create task %s: no certificates", description());
+            DebugLogger.info(TAG, "Could not create task %s: no certificates", description());
             return false;
         }
 
         fullUrlFormer.setHosts(requestConfig.getReportHosts());
         if (!requestConfig.isReadyForSending() || Utils.isNullOrEmpty(fullUrlFormer.getAllHosts())) {
-            YLogger.info(TAG, "Could not create task %s: not ready for sending", description());
+            DebugLogger.info(TAG, "Could not create task %s: not ready for sending", description());
             return false;
         }
 
         mAllInternalSessionsIds = null;
 
         mMessageToSend = getSessions(requestConfig);
-        YLogger.info(TAG, "Selected for sending %s events", eventsCount);
+        DebugLogger.info(TAG, "Selected for sending %s events", eventsCount);
 
         // Check if no sessions to report
         if (mMessageToSend.sessions.isEmpty()) {
-            YLogger.info(TAG, "Could not create task %s: empty sessions", description());
+            DebugLogger.info(TAG, "Could not create task %s: empty sessions", description());
             return false;
         }
 
@@ -330,7 +330,7 @@ public class ReportTask implements UnderlyingNetworkTask {
 
     @Override
     public void onPerformRequest() {
-        YLogger.info(TAG, "onPerformRequest (%s)", description());
+        DebugLogger.info(TAG, "onPerformRequest (%s)", description());
         sendingDataTaskHelper.onPerformRequest();
     }
 
@@ -350,7 +350,7 @@ public class ReportTask implements UnderlyingNetworkTask {
                     variable.value = data.getString(key);
                     variables[i] = variable;
                 } catch (Throwable e) {
-                    YLogger.error(TAG, e, "Can not find string value for key %s", key);
+                    DebugLogger.error(TAG, e, "Can not find string value for key %s", key);
                 }
                 i++;
             }
@@ -374,34 +374,34 @@ public class ReportTask implements UnderlyingNetworkTask {
                 mDbHelper.removeTop(internalSessionId, sessionType.getCode(), session.events.length, isBadRequest);
                 ProtobufUtils.logSessionEvents(session);
             } catch (Throwable ex) {
-                YLogger.error(TAG, ex, "Something went wrong while removing session from db");
+                DebugLogger.error(TAG, ex, "Something went wrong while removing session from db");
             }
         }
 
         int count = mDbHelper.removeEmptySessions(mComponent.getSessionManager()
                 .getThresholdSessionIdForActualSessions());
-        YLogger.info(TAG, "Remove %s sessions", String.valueOf(count));
+        DebugLogger.info(TAG, "Remove %s sessions", String.valueOf(count));
     }
 
     private void saveRequestId() {
-        YLogger.info(TAG, "save request id: %d", mRequestId);
+        DebugLogger.info(TAG, "save request id: %d", mRequestId);
         vitalComponentDataProvider.setReportRequestId(mRequestId);
     }
 
     @Override
     public boolean onRequestComplete() {
         boolean successful = sendingDataTaskHelper.isResponseValid();
-        YLogger.info(TAG, "onRequestComplete (%s) with success = %b", description(), successful);
+        DebugLogger.info(TAG, "onRequestComplete (%s) with success = %b", description(), successful);
         return successful;
     }
 
     @Override
     public void onPostRequestComplete(boolean success) {
-        YLogger.info(TAG, "onPostRequestComplete (%s) with success = %b", description(), success);
+        DebugLogger.info(TAG, "onPostRequestComplete (%s) with success = %b", description(), success);
         if (success) {
             cleanPostedData(false);
         } else if (Utils.isBadRequest(responseDataHolder.getResponseCode())) {
-            YLogger.info(TAG, "Bad request (%s)", description());
+            DebugLogger.info(TAG, "Bad request (%s)", description());
             cleanPostedData(true);
         }
         if (success) {
@@ -438,7 +438,7 @@ public class ReportTask implements UnderlyingNetworkTask {
                     final DbSessionModel sessionModel = new DbSessionModelConverter().toModel(sessionValues);
                     final Long sessionId = sessionModel.getId();
                     if (sessionId == null) {
-                        YLogger.error(TAG, "no session_id in values: %s", sessionValues.toString());
+                        DebugLogger.error(TAG, "no session_id in values: %s", sessionValues.toString());
                         continue;
                     }
 
@@ -484,7 +484,7 @@ public class ReportTask implements UnderlyingNetworkTask {
                             try {
                                 environmentJSON = new JSONObject(session.environmentRevision.value);
                             } catch (Throwable e) {
-                                YLogger.error(TAG, e, "Some problems while parsing environment");
+                                DebugLogger.error(TAG, e, "Some problems while parsing environment");
                             }
                         }
                         if (session.nextEventWithOtherEnvironment) {
@@ -493,10 +493,10 @@ public class ReportTask implements UnderlyingNetworkTask {
                     }
                 }
             } else {
-                YLogger.error(TAG, "no sessions cursor");
+                DebugLogger.error(TAG, "no sessions cursor");
             }
         } catch (Throwable ex) {
-            YLogger.error(TAG, ex, "Some problems while getting sessions");
+            DebugLogger.error(TAG, ex, "Some problems while getting sessions");
             exceptions.add(ex);
         } finally {
             Utils.closeCursor(cursor);
@@ -593,7 +593,7 @@ public class ReportTask implements UnderlyingNetworkTask {
                         }
 
                     } else {
-                        YLogger.warning(TAG, "Event #%d in session %d is null", eventsOfSession.size(), sessionId);
+                        DebugLogger.warning(TAG, "Event #%d in session %d is null", eventsOfSession.size(), sessionId);
                     }
                     eventsOfSession.add(sessionEvent);
                     eventsCount++;
@@ -601,7 +601,7 @@ public class ReportTask implements UnderlyingNetworkTask {
 
                 if (eventsOfSession.size() > 0) {
                     session.events = eventsOfSession.toArray(new Session.Event[eventsOfSession.size()]);
-                    YLogger.debug(
+                    DebugLogger.info(
                         TAG,
                         "Session %d, Send %d events with env %d %s",
                         sessionId,
@@ -612,10 +612,10 @@ public class ReportTask implements UnderlyingNetworkTask {
                     retrievedSession = new RetrievedSession(session, latestRevision, nextEventHasDifferentRevision);
                 }
             } else {
-                YLogger.error(TAG, "no reports cursor for session: %s", session.toString());
+                DebugLogger.error(TAG, "no reports cursor for session: %s", session.toString());
             }
         } catch (Throwable ex) {
-            YLogger.error(TAG, ex, "Some problems while getting session with id = %d.", sessionId);
+            DebugLogger.error(TAG, ex, "Some problems while getting session with id = %d.", sessionId);
             exceptions.add(ex);
         } finally {
             Utils.closeCursor(cursor);
@@ -637,7 +637,7 @@ public class ReportTask implements UnderlyingNetworkTask {
         if (sessionEvent.value != cut) {
             sessionEvent.bytesTruncated += getBytesArraySize(sessionEvent.value) - getBytesArraySize(cut);
             sessionEvent.value = cut;
-            YLogger.info(TAG, "truncated %d bytes", sessionEvent.bytesTruncated);
+            DebugLogger.info(TAG, "truncated %d bytes", sessionEvent.bytesTruncated);
         }
     }
 
@@ -654,7 +654,7 @@ public class ReportTask implements UnderlyingNetworkTask {
             final EventFromDbModel eventModel = new EventFromDbModel(contentValues);
             return ProtobufUtils.getEventPreparer(eventModel.getEventType()).toSessionEvent(eventModel, config);
         } catch (Throwable ex) {
-            YLogger.error(TAG, ex, "Something went wrong while getting event");
+            DebugLogger.error(TAG, ex, "Something went wrong while getting event");
             exceptions.add(ex);
         }
         return null;
@@ -672,26 +672,26 @@ public class ReportTask implements UnderlyingNetworkTask {
 
     @Override
     public void onTaskAdded() {
-        YLogger.info(TAG, "onTaskAdded: %s", description());
+        DebugLogger.info(TAG, "onTaskAdded: %s", description());
         mComponent.getEventTrigger().disableTrigger();
     }
 
     @Override
     public void onTaskFinished() {
-        YLogger.info(TAG, "onTaskFinished: %s", description());
+        DebugLogger.info(TAG, "onTaskFinished: %s", description());
         mComponent.getDbHelper().clearIfTooManyEvents();
         mComponent.getEventTrigger().enableTrigger();
     }
 
     @Override
     public void onTaskRemoved() {
-        YLogger.info(TAG, "onTaskRemoved: %s", description());
+        DebugLogger.info(TAG, "onTaskRemoved: %s", description());
         mComponent.getEventTrigger().enableTrigger();
     }
 
     @Override
     public void onSuccessfulTaskFinished() {
-        YLogger.info(TAG, "onSuccessfulTaskFinished: %s", description());
+        DebugLogger.info(TAG, "onSuccessfulTaskFinished: %s", description());
         mComponent.getEventTrigger().trigger();
     }
 

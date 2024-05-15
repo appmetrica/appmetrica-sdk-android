@@ -8,7 +8,7 @@ import io.appmetrica.analytics.impl.ecommerce.ECommerceConstants;
 import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedProvider;
 import io.appmetrica.analytics.impl.utils.limitation.CollectionTrimInfo;
 import io.appmetrica.analytics.impl.utils.limitation.TrimmingResult;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,7 +46,7 @@ public class HierarchicalListTrimmer<T> extends BaseHierarchicalTrimmer<List<T>,
                         itemToAdd = trimmingResult.value;
                         bytesTruncated += trimmingResult.getBytesTruncated();
                         if (!Utils.areEqual(item, trimmingResult.value)) {
-                            YLogger.debug(
+                            DebugLogger.info(
                                     ECommerceConstants.FEATURE_TAG + TAG,
                                     "List item #%d. Trim list item: \"%s\" -> \"%s\" with bytesTruncated = %d. " +
                                             "Current subtotal bytesTruncated = %d.",
@@ -59,7 +59,7 @@ public class HierarchicalListTrimmer<T> extends BaseHierarchicalTrimmer<List<T>,
                     int itemSize = byteSizeOf(item);
                     itemsDropped++;
                     bytesTruncated += itemSize;
-                    YLogger.debug(
+                    DebugLogger.info(
                             ECommerceConstants.FEATURE_TAG + TAG,
                             "List item #%d. Dropped item #%d with value = \"%s\". Add bytesTruncated = %d. " +
                                     "Subtotal bytesTruncated = %d",

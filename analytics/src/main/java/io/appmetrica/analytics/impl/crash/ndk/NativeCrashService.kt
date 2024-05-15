@@ -4,7 +4,7 @@ import android.content.Context
 import io.appmetrica.analytics.coreutils.internal.io.FileUtils
 import io.appmetrica.analytics.coreutils.internal.reflection.ReflectionUtils
 import io.appmetrica.analytics.impl.ReportConsumer
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 import io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrashServiceConfig
 import io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrashServiceModule
 import io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrashServiceModuleDummy
@@ -20,10 +20,10 @@ class NativeCrashService {
     private lateinit var crashReporter: NativeCrashReporter
 
     fun initNativeCrashReporting(context: Context, reportConsumer: ReportConsumer) {
-        YLogger.debug(tag, "Start native crash reporting")
+        DebugLogger.info(tag, "Start native crash reporting")
         val nativeCrashFolder = FileUtils.getNativeCrashDirectory(context)?.absolutePath
         if (nativeCrashFolder == null) {
-            YLogger.error(tag, "Skip handle native crash. Failed to get native crash folder")
+            DebugLogger.error(tag, "Skip handle native crash. Failed to get native crash folder")
             return
         }
         serviceModule.init(

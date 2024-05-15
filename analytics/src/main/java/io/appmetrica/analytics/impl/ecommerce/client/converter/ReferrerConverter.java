@@ -11,7 +11,7 @@ import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedInfo;
 import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedProvider;
 import io.appmetrica.analytics.impl.utils.limitation.TrimmingResult;
 import io.appmetrica.analytics.impl.utils.limitation.hierarchical.HierarchicalStringTrimmer;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 
 public class ReferrerConverter
         implements Converter<ReferrerWrapper, Result<Ecommerce.ECommerceEvent.Referrer, BytesTruncatedProvider>> {
@@ -54,7 +54,7 @@ public class ReferrerConverter
                 BytesTruncatedInfo.total(typeTrimmingResult, idTrimmingResult, screenConvertingResult);
 
         if (totalTruncationInfo.getBytesTruncated() > 0) {
-            YLogger.debug(
+            DebugLogger.info(
                     ECommerceConstants.FEATURE_TAG + TAG,
                     "Total bytes truncated (type + id + screen) = %d (%d + %d + %d)",
                     totalTruncationInfo.getBytesTruncated(), typeTrimmingResult.metaInfo, idTrimmingResult.metaInfo,

@@ -5,7 +5,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.db.DatabaseScript;
 import io.appmetrica.analytics.impl.utils.collection.HashMultimap;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import java.util.Collection;
 
 public class TablesManager {
@@ -56,19 +56,24 @@ public class TablesManager {
 
     public void onOpen(SQLiteDatabase db) {
         try {
-            YLogger.debug(TAG, "OnOpen was called for %s", mDatabaseLogIdentifier);
+            DebugLogger.info(TAG, "OnOpen was called for %s", mDatabaseLogIdentifier);
             if (mValidator != null) {
                 if (mValidator.isDbSchemeValid(db) == false) {
                     recreateDatabase(db);
                 }
             }
         } catch (Throwable exception) {
-            YLogger.error(TAG, "Exception was occurred during opening %s.\n%s", mDatabaseLogIdentifier, exception);
+            DebugLogger.error(
+                TAG,
+                "Exception was occurred during opening %s.\n%s",
+                mDatabaseLogIdentifier,
+                exception
+            );
         }
     }
 
     public void onCreate(final SQLiteDatabase database) {
-        YLogger.debug(TAG, "OnCreate was called for %s", mDatabaseLogIdentifier);
+        DebugLogger.info(TAG, "OnCreate was called for %s", mDatabaseLogIdentifier);
         createDatabase(mCreateScript, database);
     }
 
@@ -77,7 +82,12 @@ public class TablesManager {
         try {
             createScript.runScript(database);
         } catch (Throwable exception) {
-            YLogger.error(TAG, "Exception was occurred while creating %s.\n%s", mDatabaseLogIdentifier, exception);
+            DebugLogger.error(
+                TAG,
+                "Exception was occurred while creating %s.\n%s",
+                mDatabaseLogIdentifier,
+                exception
+            );
         }
     }
 
@@ -91,7 +101,7 @@ public class TablesManager {
                 for (int version = oldVersion + 1; version <= newVersion; ++ version) {
                     Collection<DatabaseScript> versionScripts = mUpgradeScripts.get(version);
                     if (versionScripts != null) {
-                        YLogger.info(
+                        DebugLogger.info(
                             TAG, "Upgrading %s ... to v%d with %d scripts",
                             mDatabaseLogIdentifier, version, versionScripts.size()
                         );
@@ -101,7 +111,12 @@ public class TablesManager {
                     }
                 }
             } catch (Throwable exception) {
-                YLogger.error(TAG, "Exception was occurred while upgrading %s.\n%s", mDatabaseLogIdentifier, exception);
+                DebugLogger.error(
+                    TAG,
+                    "Exception was occurred while upgrading %s.\n%s",
+                    mDatabaseLogIdentifier,
+                    exception
+                );
                 hasErrors = true;
             }
         }
@@ -121,7 +136,7 @@ public class TablesManager {
 
     @VisibleForTesting
     void recreateDatabase(SQLiteDatabase database) {
-        YLogger.debug(TAG, "recreate %s due to some errors.", mDatabaseLogIdentifier);
+        DebugLogger.info(TAG, "recreate %s due to some errors.", mDatabaseLogIdentifier);
         dropDatabase(mDropScript, database);
         createDatabase(mCreateScript, database);
     }
@@ -130,7 +145,12 @@ public class TablesManager {
         try {
             dropScript.runScript(database);
         } catch (Throwable exception) {
-            YLogger.error(TAG, "Exception was occurred while dropping %s.\n%s", mDatabaseLogIdentifier, exception);
+            DebugLogger.error(
+                TAG,
+                "Exception was occurred while dropping %s.\n%s",
+                mDatabaseLogIdentifier,
+                exception
+            );
         }
     }
 }

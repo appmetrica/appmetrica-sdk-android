@@ -4,7 +4,7 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import io.appmetrica.analytics.coreutils.internal.encryption.AESEncrypter;
 import io.appmetrica.analytics.impl.utils.SecurityUtils;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 
 public class AESCredentialProvider {
 
@@ -22,7 +22,7 @@ public class AESCredentialProvider {
         try {
             password = SecurityUtils.getMD5Hash(context.getPackageName());
         } catch (Throwable e) {
-            YLogger.error(TAG, e, "could not get password");
+            DebugLogger.error(TAG, e, "could not get password");
             password = new byte[AESEncrypter.DEFAULT_KEY_LENGTH];
         }
         return password;
@@ -37,7 +37,7 @@ public class AESCredentialProvider {
                             .toString()
             );
         } catch (Throwable e) {
-            YLogger.error(TAG, e, "could not get iv");
+            DebugLogger.error(TAG, e, "could not get iv");
             iv = new byte[AESEncrypter.DEFAULT_KEY_LENGTH];
         }
         return iv;

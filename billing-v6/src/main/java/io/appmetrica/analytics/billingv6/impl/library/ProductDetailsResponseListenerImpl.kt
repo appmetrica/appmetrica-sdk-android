@@ -12,7 +12,7 @@ import io.appmetrica.analytics.billinginterface.internal.library.UtilsProvider
 import io.appmetrica.analytics.billingv6.impl.BillingUtils
 import io.appmetrica.analytics.billingv6.impl.TAG
 import io.appmetrica.analytics.coreutils.internal.executors.SafeRunnable
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 
 internal class ProductDetailsResponseListenerImpl(
     private val type: String,
@@ -41,7 +41,7 @@ internal class ProductDetailsResponseListenerImpl(
         billingResult: BillingResult,
         productDetails: List<ProductDetails>
     ) {
-        YLogger.info(
+        DebugLogger.info(
             TAG,
             "onSkuDetailsResponse type=$type, " +
                 "result=${BillingUtils.toString(billingResult)}, " +

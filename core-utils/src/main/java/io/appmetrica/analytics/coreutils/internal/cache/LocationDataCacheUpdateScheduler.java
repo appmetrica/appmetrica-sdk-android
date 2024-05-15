@@ -5,7 +5,7 @@ import io.appmetrica.analytics.coreapi.internal.annotations.GeoThread;
 import io.appmetrica.analytics.coreapi.internal.cache.CacheUpdateScheduler;
 import io.appmetrica.analytics.coreapi.internal.cache.UpdateConditionsChecker;
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import io.appmetrica.analytics.locationapi.internal.ILastKnownUpdater;
 import java.util.concurrent.TimeUnit;
 
@@ -26,7 +26,7 @@ public class LocationDataCacheUpdateScheduler implements CacheUpdateScheduler {
         @GeoThread
         @Override
         public void run() {
-            YLogger.info(tag, "Executing last known update.");
+            DebugLogger.info(tag, "Executing last known update.");
             mLastKnownUpdater.updateLastKnown();
         }
     };
@@ -37,7 +37,7 @@ public class LocationDataCacheUpdateScheduler implements CacheUpdateScheduler {
         @Override
         public void run() {
             final boolean shouldUpdate = mUpdateConditionsChecker.shouldUpdate();
-            YLogger.info(tag, "Executing last known update. Should update? : %b", shouldUpdate);
+            DebugLogger.info(tag, "Executing last known update. Should update? : %b", shouldUpdate);
             if (shouldUpdate) {
                 mUpdateRunnable.run();
             }
@@ -68,14 +68,14 @@ public class LocationDataCacheUpdateScheduler implements CacheUpdateScheduler {
 
     @Override
     public void scheduleUpdateIfNeededNow() {
-        YLogger.info(tag, "Schedule last known update now.");
+        DebugLogger.info(tag, "Schedule last known update now.");
         mExecutor.execute(mUpdateIfNeededRunnable);
     }
 
     @Override
     public void onStateUpdated() {
         mExecutor.remove(mUpdateRunnable);
-        YLogger.info(tag, "Schedule update last known location by timer");
+        DebugLogger.info(tag, "Schedule update last known location by timer");
         mExecutor.executeDelayed(mUpdateRunnable, UPDATE_INTERVAL_SECONDS, TimeUnit.SECONDS);
     }
 }

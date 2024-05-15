@@ -9,9 +9,9 @@ import io.appmetrica.analytics.impl.db.constants.migrations.ClientDatabaseUpgrad
 import io.appmetrica.analytics.impl.db.constants.migrations.ComponentDatabaseUpgradeScriptToV112;
 import io.appmetrica.analytics.impl.db.constants.migrations.ServiceDatabaseUpgradeScriptToV114;
 import io.appmetrica.analytics.impl.utils.collection.HashMultimap;
-import io.appmetrica.analytics.logger.internal.YLogger;
-import io.appmetrica.analytics.modulesapi.internal.service.ModuleServicesDatabase;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import io.appmetrica.analytics.modulesapi.internal.common.TableDescription;
+import io.appmetrica.analytics.modulesapi.internal.service.ModuleServicesDatabase;
 import java.util.Map;
 
 public class DatabaseScriptsProvider {
@@ -56,7 +56,7 @@ public class DatabaseScriptsProvider {
             for (TableDescription tableDescription : moduleServicesDatabase.getTables()) {
                 for (Map.Entry<Integer, DatabaseScript> scriptEntry :
                     tableDescription.getDatabaseProviderUpgradeScript().entrySet()) {
-                    YLogger.info(
+                    DebugLogger.info(
                         TAG,
                         "[%s] Add module service database provider upgrade scripts... to version: %d...",
                         tableDescription.getTableName(), scriptEntry.getKey()

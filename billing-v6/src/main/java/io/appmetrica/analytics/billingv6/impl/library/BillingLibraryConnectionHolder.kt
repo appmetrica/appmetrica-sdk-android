@@ -5,7 +5,7 @@ import com.android.billingclient.api.BillingClient
 import io.appmetrica.analytics.billinginterface.internal.library.UtilsProvider
 import io.appmetrica.analytics.billingv6.impl.TAG
 import io.appmetrica.analytics.coreutils.internal.executors.SafeRunnable
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 
 internal class BillingLibraryConnectionHolder(
     private val billingClient: BillingClient,
@@ -28,14 +28,14 @@ internal class BillingLibraryConnectionHolder(
     @WorkerThread
     private fun endConnectionIfNeeded() {
         if (waitingListeners.size == 0) {
-            YLogger.info(TAG, "endConnection")
+            DebugLogger.info(TAG, "endConnection")
             utilsProvider.uiExecutor.execute(object : SafeRunnable() {
                 override fun runSafety() {
                     billingClient.endConnection()
                 }
             })
         } else {
-            YLogger.info(TAG, "Listeners remaining: %d", waitingListeners.size)
+            DebugLogger.info(TAG, "Listeners remaining: %d", waitingListeners.size)
         }
     }
 }

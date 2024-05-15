@@ -7,7 +7,7 @@ import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.PreloadInfoStorage;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoState;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import org.json.JSONObject;
 
 public class SavePreloadInfoHandler extends ReportComponentHandler {
@@ -38,7 +38,7 @@ public class SavePreloadInfoHandler extends ReportComponentHandler {
             JSONObject valueJson = new JSONObject(reportValue);
             preloadInfoJson = valueJson.optJSONObject(PreloadInfoState.JsonKeys.PRELOAD_INFO);
         } catch (Throwable ex) {
-            YLogger.error(TAG, ex);
+            DebugLogger.error(TAG, ex);
         }
         mPreloadInfoStorage.updateIfNeeded(PreloadInfoState.fromJson(preloadInfoJson));
         return false;

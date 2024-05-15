@@ -7,8 +7,8 @@ import io.appmetrica.analytics.impl.component.ComponentId;
 import io.appmetrica.analytics.impl.db.constants.Constants;
 import io.appmetrica.analytics.impl.db.constants.TempCacheTable;
 import io.appmetrica.analytics.impl.utils.collection.HashMultimap;
-import io.appmetrica.analytics.modulesapi.internal.service.ModuleServicesDatabase;
 import io.appmetrica.analytics.modulesapi.internal.common.TableDescription;
+import io.appmetrica.analytics.modulesapi.internal.service.ModuleServicesDatabase;
 import java.util.HashMap;
 import java.util.List;
 

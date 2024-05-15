@@ -5,7 +5,7 @@ import androidx.annotation.NonNull;
 import io.appmetrica.analytics.impl.CounterReport;
 import io.appmetrica.analytics.impl.component.CommonArguments;
 import io.appmetrica.analytics.impl.component.RegularDispatcherComponent;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 
 public class RegularClientUnit extends AbstractClientUnit {
 
@@ -18,7 +18,7 @@ public class RegularClientUnit extends AbstractClientUnit {
 
     @Override
     protected void handleReport(@NonNull CounterReport report, @NonNull CommonArguments sdkConfig) {
-        YLogger.debug(
+        DebugLogger.info(
             TAG,
             "handle report for client unit: %s; data: %s",
             sdkConfig.startupArguments,

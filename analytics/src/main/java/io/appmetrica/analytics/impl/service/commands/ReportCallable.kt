@@ -4,7 +4,7 @@ import io.appmetrica.analytics.impl.AppMetricaConnector
 import io.appmetrica.analytics.impl.ReportToSend
 import io.appmetrica.analytics.impl.ShouldDisconnectFromServiceChecker
 import io.appmetrica.analytics.internal.IAppMetricaService
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 
 internal open class ReportCallable(
     serviceConnector: AppMetricaConnector,
@@ -20,7 +20,7 @@ internal open class ReportCallable(
     override fun reportToService(service: IAppMetricaService) {
         val reportData = reportToSend.report
         val reporterEnvironment = reportToSend.environment
-        YLogger.debug(
+        DebugLogger.info(
             tag,
             "send event $reportData " +
                 "with environment ${reporterEnvironment.processConfiguration.customHosts} " +
@@ -33,6 +33,6 @@ internal open class ReportCallable(
     }
 
     override fun onReportToServiceError(throwable: Throwable?) {
-        YLogger.error(tag, throwable, "Exception during report sending. Report: $reportToSend")
+        DebugLogger.error(tag, throwable, "Exception during report sending. Report: $reportToSend")
     }
 }

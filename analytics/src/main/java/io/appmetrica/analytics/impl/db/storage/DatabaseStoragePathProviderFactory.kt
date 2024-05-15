@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.db.storage
 
 import android.os.Build
 import io.appmetrica.analytics.coreutils.internal.AndroidUtils
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 import java.io.File
 
 internal class DatabaseStoragePathProviderFactory(
@@ -17,19 +17,19 @@ internal class DatabaseStoragePathProviderFactory(
     init {
         if (AndroidUtils.isApiAchieved(Build.VERSION_CODES.LOLLIPOP)) {
             if (outerStorageDirectory != null) {
-                YLogger.info(tag, "Init for lollipop with outer database directory")
+                DebugLogger.info(tag, "Init for lollipop with outer database directory")
                 targetDirProvider =
                     OuterRootDatabaseFullPathProvider(outerStorageDirectory, DatabaseRelativePathFormer())
                 possibleOldDatabaseDirProviders.add(
                     OuterRootDatabaseFullPathProvider(outerStorageDirectory, OldDatabaseRelativePathFormer())
                 )
             } else {
-                YLogger.info(tag, "Init for lollipop without outer database directory")
+                DebugLogger.info(tag, "Init for lollipop without outer database directory")
                 targetDirProvider = LollipopDatabaseFullPathProvider(DatabaseRelativePathFormer())
             }
             possibleOldDatabaseDirProviders.add(LollipopDatabaseFullPathProvider(OldDatabaseRelativePathFormer()))
         } else {
-            YLogger.info(tag, "Init for pre-lollipop")
+            DebugLogger.info(tag, "Init for pre-lollipop")
             targetDirProvider = PreLollipopDatabaseFullPathProvider(PreLollipopRelativePathFormer())
             possibleOldDatabaseDirProviders.add(PreLollipopDatabaseFullPathProvider(OldDatabaseRelativePathFormer()))
         }

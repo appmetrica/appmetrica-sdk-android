@@ -2,7 +2,7 @@ package io.appmetrica.analytics.coreutils.internal.system
 
 import android.annotation.SuppressLint
 import android.content.Context
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 
 object SystemPropertiesHelper {
 
@@ -17,7 +17,7 @@ object SystemPropertiesHelper {
             val methodGet = systemProperties.getMethod("get", String::class.java)
             methodGet.invoke(systemProperties, name) as? String ?: ""
         } catch (error: Exception) {
-            YLogger.error(TAG, error, "[SystemPropertiesHelper] Cannot get system property %s", name)
+            DebugLogger.error(TAG, error, "[SystemPropertiesHelper] Cannot get system property %s", name)
             ""
         }
     }

@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.billing
 
 import io.appmetrica.analytics.billinginterface.internal.BillingType
 import io.appmetrica.analytics.coreutils.internal.reflection.ReflectionUtils
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 
 private const val LOG_TAG = "[BillingTypeDetector]"
 
@@ -16,10 +16,10 @@ internal object BillingTypeDetector {
                 ?.getField("VERSION_NAME")
                 ?.get(null) as String?
         } catch (e: Throwable) {
-            YLogger.info(LOG_TAG, "Failed to get billing library version: $e")
+            DebugLogger.info(LOG_TAG, "Failed to get billing library version: $e")
             null
         }
-        YLogger.info(LOG_TAG, "Billing library version: $version")
+        DebugLogger.info(LOG_TAG, "Billing library version: $version")
 
         return when {
             version.isNullOrBlank() -> BillingType.NONE

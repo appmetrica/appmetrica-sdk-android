@@ -2,7 +2,7 @@ package io.appmetrica.analytics.coreutils.internal.toggle
 
 import io.appmetrica.analytics.coreapi.internal.control.Toggle
 import io.appmetrica.analytics.coreapi.internal.control.ToggleObserver
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.locks.ReentrantLock
 
@@ -22,7 +22,7 @@ class ConjunctiveCompositeThreadSafeToggle(
     override var actualState: Boolean = false
 
     init {
-        YLogger.info(tag, "Init...")
+        DebugLogger.info(tag, "Init...")
         withLock {
             toggles.forEach { toggle ->
                 val observer = object : ToggleObserver {
@@ -36,16 +36,16 @@ class ConjunctiveCompositeThreadSafeToggle(
                 toggle.registerObserver(observer, false)
             }
             actualState = calculateState(toggleStates.values)
-            YLogger.info(tag, "Initial state = $actualState")
+            DebugLogger.info(tag, "Initial state = $actualState")
         }
-        YLogger.info(tag, "Init finished...")
+        DebugLogger.info(tag, "Init finished...")
     }
 
     override fun registerObserver(toggleObserver: ToggleObserver, sticky: Boolean) {
-        YLogger.info(tag, "Register observer {$toggleObserver} with sticky = $sticky")
+        DebugLogger.info(tag, "Register observer {$toggleObserver} with sticky = $sticky")
         withLock {
             observers.add(toggleObserver)
-            YLogger.info(tag, "Current observers count = ${observers.size}")
+            DebugLogger.info(tag, "Current observers count = ${observers.size}")
             if (sticky) {
                 toggleObserver.onStateChanged(actualState)
             }
@@ -53,22 +53,22 @@ class ConjunctiveCompositeThreadSafeToggle(
     }
 
     override fun removeObserver(toggleObserver: ToggleObserver) {
-        YLogger.info(tag, "Remove observer {$toggleObserver}")
+        DebugLogger.info(tag, "Remove observer {$toggleObserver}")
         withLock {
             observers.remove(toggleObserver)
-            YLogger.info(tag, "Current observers count = ${observers.size}")
+            DebugLogger.info(tag, "Current observers count = ${observers.size}")
         }
     }
 
     private fun updateState(observer: ToggleObserver, state: Boolean, desc: String) {
-        YLogger.info(tag, "Update state for observer = $desc: ${toggleStates[observer]} -> $state")
+        DebugLogger.info(tag, "Update state for observer = $desc: ${toggleStates[observer]} -> $state")
         toggleStates[observer] = state
         notifyStateChanged()
     }
 
     private fun notifyStateChanged() {
         val incomingState = calculateState(toggleStates.values)
-        YLogger.info(tag, "Notify state changed: $actualState -> $incomingState")
+        DebugLogger.info(tag, "Notify state changed: $actualState -> $incomingState")
         if (incomingState != actualState) {
             actualState = incomingState
             notifyObservers(incomingState)
@@ -76,7 +76,7 @@ class ConjunctiveCompositeThreadSafeToggle(
     }
 
     private fun notifyObservers(incomingState: Boolean) {
-        YLogger.info(tag, "Notify observers with status = $incomingState. Current count = ${observers.size}")
+        DebugLogger.info(tag, "Notify observers with status = $incomingState. Current count = ${observers.size}")
         observers.forEach {
             it.onStateChanged(incomingState)
         }
@@ -100,7 +100,7 @@ class ConjunctiveCompositeThreadSafeToggle(
                 acquired = lock.tryLock(100, TimeUnit.MILLISECONDS)
             }
             if (!acquired) {
-                YLogger.info(tag, "One more attempt to acquire lock after waiting")
+                DebugLogger.info(tag, "One more attempt to acquire lock after waiting")
                 kotlin.runCatching { Thread.sleep(100) }
             }
         }

@@ -11,7 +11,7 @@ import io.appmetrica.analytics.impl.proxy.AppMetricaProxy;
 import io.appmetrica.analytics.impl.utils.PublicLogger;
 import io.appmetrica.analytics.internal.js.AppMetricaInitializerJsInterface;
 import io.appmetrica.analytics.internal.js.AppMetricaJsInterface;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,7 +41,7 @@ public class WebViewJsInterfaceHandler {
                     logWOrQueue("WebView interface setup failed because javascript is disabled for the WebView.");
                 }
             } catch (Throwable ex) {
-                YLogger.error(TAG, ex);
+                DebugLogger.error(TAG, ex);
                 logEOrQueue("WebView interface setup failed because of an exception.", ex);
             }
         } else {

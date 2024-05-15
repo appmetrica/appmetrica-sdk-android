@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.location.toggles
 
 import io.appmetrica.analytics.coreutils.internal.toggle.SimpleThreadSafeToggle
 import io.appmetrica.analytics.impl.location.LocationSubscribers
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 import java.util.WeakHashMap
 
 class WakelocksToggle :
@@ -17,7 +17,7 @@ class WakelocksToggle :
     @Synchronized
     override fun registerWakelock(subscriber: Any) {
         subscribers[subscriber] = null
-        YLogger.info(tag, "Register location subscriber. Subscribers count = ${subscribers.size}")
+        DebugLogger.info(tag, "Register location subscriber. Subscribers count = ${subscribers.size}")
         if (subscribers.size == 1) {
             updateState(true)
         }
@@ -26,7 +26,7 @@ class WakelocksToggle :
     @Synchronized
     override fun removeWakelock(subscriber: Any) {
         subscribers.remove(subscriber)
-        YLogger.info(tag, "Unregister location subscriber. Subscribers count = ${subscribers.size}")
+        DebugLogger.info(tag, "Unregister location subscriber. Subscribers count = ${subscribers.size}")
         if (subscribers.isEmpty()) {
             updateState(false)
         }

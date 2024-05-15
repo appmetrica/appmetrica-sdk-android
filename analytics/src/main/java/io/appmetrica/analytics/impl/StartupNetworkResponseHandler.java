@@ -8,7 +8,7 @@ import io.appmetrica.analytics.impl.db.state.converter.BodyDecoder;
 import io.appmetrica.analytics.impl.network.Constants;
 import io.appmetrica.analytics.impl.startup.parsing.StartupParser;
 import io.appmetrica.analytics.impl.startup.parsing.StartupResult;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import io.appmetrica.analytics.networktasks.internal.NetworkResponseHandler;
 import io.appmetrica.analytics.networktasks.internal.ResponseDataHolder;
 import java.util.List;
@@ -31,7 +31,7 @@ public class StartupNetworkResponseHandler implements NetworkResponseHandler<Sta
     @Override
     @Nullable
     public StartupResult handle(@NonNull ResponseDataHolder responseDataHolder) {
-        YLogger.info(
+        DebugLogger.info(
             TAG, "handle response with code: %d; responseHeaders: %s",
             responseDataHolder.getResponseCode(),
             responseDataHolder.getResponseHeaders()
@@ -47,18 +47,18 @@ public class StartupNetworkResponseHandler implements NetworkResponseHandler<Sta
             }
             if (Utils.isNullOrEmpty(contentEncodingHeaderValues) == false) {
                 if (Constants.Config.ENCODING_ENCRYPTED.equals(contentEncodingHeaderValues.get(0))) {
-                    YLogger.info(TAG, "Detect `Content-Encoding=encrypted` so try to decrypt body");
+                    DebugLogger.info(TAG, "Detect `Content-Encoding=encrypted` so try to decrypt body");
                     bodyToParse = mBodyDecoder.decode(responseDataHolder.getResponseData(), "hBnBQbZrmjPXEWVJ");
                 }
             } else {
-                YLogger.info(
+                DebugLogger.info(
                     TAG, "Can't detect `Content-Encoding=encrypted`. Actual value: %s. Ignore decrypting",
                     contentEncodingHeaderValues
                 );
             }
 
             if (bodyToParse != null) {
-                YLogger.debug(TAG, "Parse startup response");
+                DebugLogger.info(TAG, "Parse startup response");
                 final StartupResult parseResult = mStartupParser.parseStartupResponse(bodyToParse);
 
                 if (StartupResult.Result.OK == parseResult.getResult()) {
@@ -66,7 +66,7 @@ public class StartupNetworkResponseHandler implements NetworkResponseHandler<Sta
                 }
             }
         } else {
-            YLogger.warning(TAG, "Response code != 200: %s. Ignore parsing.", responseDataHolder.getResponseCode());
+            DebugLogger.warning(TAG, "Response code != 200: %s. Ignore parsing.", responseDataHolder.getResponseCode());
         }
 
         return null;

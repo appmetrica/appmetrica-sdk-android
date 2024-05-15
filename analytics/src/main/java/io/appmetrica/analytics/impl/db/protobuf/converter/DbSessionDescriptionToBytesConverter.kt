@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.db.protobuf.converter
 import io.appmetrica.analytics.coreapi.internal.data.Converter
 import io.appmetrica.analytics.impl.db.session.DbSessionModel
 import io.appmetrica.analytics.impl.protobuf.client.DbProto
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 import io.appmetrica.analytics.protobuf.nano.InvalidProtocolBufferNanoException
 import io.appmetrica.analytics.protobuf.nano.MessageNano
 
@@ -23,7 +23,7 @@ class DbSessionDescriptionToBytesConverter(
                 DbProto.SessionDescription.parseFrom(it)
             } ?: DbProto.SessionDescription()
         } catch (e: InvalidProtocolBufferNanoException) {
-            YLogger.error(tag, e)
+            DebugLogger.error(tag, e)
             DbProto.SessionDescription()
         }
         return dbSessionDescriptionConverter.toModel(proto)

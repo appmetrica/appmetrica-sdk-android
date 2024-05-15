@@ -15,7 +15,7 @@ import io.appmetrica.analytics.billingv6.impl.ProductTypeParser
 import io.appmetrica.analytics.billingv6.impl.TAG
 import io.appmetrica.analytics.billingv6.impl.storage.StorageUpdater
 import io.appmetrica.analytics.coreutils.internal.executors.SafeRunnable
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 
 internal class PurchaseHistoryResponseListenerImpl(
     private val config: BillingConfig,
@@ -43,7 +43,7 @@ internal class PurchaseHistoryResponseListenerImpl(
         billingResult: BillingResult,
         purchaseHistoryRecords: List<PurchaseHistoryRecord>?
     ) {
-        YLogger.info(
+        DebugLogger.info(
             TAG,
             "onPurchaseHistoryResponse type=$type, " +
                 "result=${BillingUtils.toString(billingResult)}, " +
@@ -83,7 +83,7 @@ internal class PurchaseHistoryResponseListenerImpl(
                 result[info.productId] = info
             }
         }
-        YLogger.debug(TAG, "Billing info from history $result")
+        DebugLogger.info(TAG, "Billing info from history $result")
         return result
     }
 

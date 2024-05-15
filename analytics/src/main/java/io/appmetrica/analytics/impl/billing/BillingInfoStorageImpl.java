@@ -7,7 +7,7 @@ import io.appmetrica.analytics.billinginterface.internal.BillingInfo;
 import io.appmetrica.analytics.billinginterface.internal.storage.BillingInfoStorage;
 import io.appmetrica.analytics.coreapi.internal.data.ProtobufStateStorage;
 import io.appmetrica.analytics.impl.db.state.factory.StorageFactory;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import java.util.List;
 
 public class BillingInfoStorageImpl implements BillingInfoStorage {
@@ -32,9 +32,9 @@ public class BillingInfoStorageImpl implements BillingInfoStorage {
     @Override
     public void saveInfo(@NonNull final List<BillingInfo> billingInfos,
                          final boolean firstInappCheckOccurred) {
-        YLogger.info(TAG, "saveInfo");
+        DebugLogger.info(TAG, "saveInfo");
         for (final BillingInfo info: billingInfos) {
-            YLogger.info(TAG, info.toString());
+            DebugLogger.info(TAG, info.toString());
         }
         autoInappCollectingInfo = new AutoInappCollectingInfo(billingInfos, firstInappCheckOccurred);
         storage.save(autoInappCollectingInfo);
@@ -43,7 +43,7 @@ public class BillingInfoStorageImpl implements BillingInfoStorage {
     @NonNull
     @Override
     public List<BillingInfo> getBillingInfo() {
-        YLogger.info(TAG, "loadInfo");
+        DebugLogger.info(TAG, "loadInfo");
         return autoInappCollectingInfo.billingInfos;
     }
 

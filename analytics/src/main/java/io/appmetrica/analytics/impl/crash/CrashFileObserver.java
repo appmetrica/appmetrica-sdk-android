@@ -7,7 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.backport.Consumer;
 import io.appmetrica.analytics.impl.FileProvider;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import java.io.File;
 
 public class CrashFileObserver extends FileObserver {
@@ -28,7 +28,7 @@ public class CrashFileObserver extends FileObserver {
                       @NonNull Consumer<File> newCrashListener,
                       @NonNull FileProvider fileProvider) {
         super(crashDirectory.getAbsolutePath(), FileObserver.ALL_EVENTS);
-        YLogger.debug(
+        DebugLogger.info(
             TAG,
             "start watching directory %s for events with type %d",
             crashDirectory.getAbsolutePath(),
@@ -41,10 +41,10 @@ public class CrashFileObserver extends FileObserver {
 
     @Override
     public void onEvent(int event, @Nullable String path) {
-        YLogger.debug(TAG, "event %d for path %s received", event, path);
+        DebugLogger.info(TAG, "event %d for path %s received", event, path);
         if (event == FileObserver.CLOSE_WRITE && TextUtils.isEmpty(path) == false) {
             newCrashListener.consume(fileProvider.getFileByNonNullPath(crashDirectory, path));
-            YLogger.debug(TAG, "event %d for path %s handled", event, path);
+            DebugLogger.info(TAG, "event %d for path %s handled", event, path);
         }
     }
 }

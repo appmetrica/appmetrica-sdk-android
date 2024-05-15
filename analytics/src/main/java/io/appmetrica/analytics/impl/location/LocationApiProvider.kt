@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.location
 
 import android.content.Context
 import io.appmetrica.analytics.impl.location.stub.LocationApiStub
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 
 private const val TAG = "[LocationApiProvider]"
 
@@ -13,10 +13,10 @@ internal class LocationApiProvider {
     fun getLocationApi(context: Context): LocationApi {
         val locationClient = locationClientProvider.getLocationClient()
         return if (locationClient == null) {
-            YLogger.info(TAG, "Could not load location client. So use LocationApiStub")
+            DebugLogger.info(TAG, "Could not load location client. So use LocationApiStub")
             LocationApiStub()
         } else {
-            YLogger.info(TAG, "Successfully load location client. So use full implementation")
+            DebugLogger.info(TAG, "Successfully load location client. So use full implementation")
             LocationApiImpl(context, LocationControllerImpl(), locationClient)
         }
     }

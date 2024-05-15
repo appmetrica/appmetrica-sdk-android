@@ -4,7 +4,7 @@ import android.location.Location;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import io.appmetrica.analytics.coreapi.internal.backport.Consumer;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 
 public class LocationCacheConsumer implements Consumer<Location> {
     private static final String TAG = "[LocationCacheConsumer]";
@@ -18,7 +18,7 @@ public class LocationCacheConsumer implements Consumer<Location> {
 
     @Override
     public void consume(@Nullable Location location) {
-        YLogger.info(TAG, "Consume: %s", location);
+        DebugLogger.info(TAG, "Consume: %s", location);
         if (location != null) {
             locationDataCache.updateData(location);
         }

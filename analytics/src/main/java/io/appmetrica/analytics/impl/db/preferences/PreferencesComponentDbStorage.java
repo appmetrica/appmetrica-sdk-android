@@ -7,7 +7,7 @@ import io.appmetrica.analytics.impl.AppEnvironment;
 import io.appmetrica.analytics.impl.component.session.SessionDefaults;
 import io.appmetrica.analytics.impl.db.IKeyValueTableDbHelper;
 import io.appmetrica.analytics.impl.db.VitalDataSource;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -133,7 +133,7 @@ public class PreferencesComponentDbStorage extends NameSpacedPreferenceDbStorage
                 }
             }
         } catch (Throwable e) {
-            YLogger.error(TAG, e);
+            DebugLogger.error(TAG, e);
         }
         return result;
     }
@@ -146,7 +146,7 @@ public class PreferencesComponentDbStorage extends NameSpacedPreferenceDbStorage
             try {
                 json.put(entry.getKey().toString(), entry.getValue());
             } catch (Throwable e) {
-                YLogger.error(TAG, e);
+                DebugLogger.error(TAG, e);
             }
         }
         writeString(SENT_EXTERNAL_ATTRIBUTIONS.fullKey(), json.toString());

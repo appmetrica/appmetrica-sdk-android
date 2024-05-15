@@ -3,7 +3,7 @@ package io.appmetrica.analytics.networktasks.internal;
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.executors.InterruptionSafeThread;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import io.appmetrica.analytics.networktasks.impl.NetworkTaskRunnable;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +32,7 @@ public class NetworkCore extends InterruptionSafeThread {
     }
 
     public void startTask(final NetworkTask networkTask) {
-        YLogger.debug(TAG, "Try to start task %s", networkTask.description());
+        DebugLogger.info(TAG, "Try to start task %s", networkTask.description());
         synchronized (mAddTaskLock) {
             final QueueTaskEntry taskEntry = new QueueTaskEntry(networkTask);
 
@@ -41,13 +41,13 @@ public class NetworkCore extends InterruptionSafeThread {
             if (isRunning() && !containsTaskEntry(taskEntry)) {
                 if (taskEntry.networkTask.onTaskAdded()) {
                     final boolean isOfferOK = mTasksQueue.offer(taskEntry);
-                    YLogger.info(TAG, "Task was added: %s, desc: %s", isOfferOK, networkTask.description());
+                    DebugLogger.info(TAG, "Task was added: %s, desc: %s", isOfferOK, networkTask.description());
                 } else {
-                    YLogger.info(TAG, "Task %s was not added because its state is inconsistent",
+                    DebugLogger.info(TAG, "Task %s was not added because its state is inconsistent",
                             networkTask.description());
                 }
             } else {
-                YLogger.info(TAG,
+                DebugLogger.info(TAG,
                         "Task %s was not added because there is another entry. " +
                                 "Current task: %s, queue size: %d",
                         networkTask.description(),
@@ -60,14 +60,14 @@ public class NetworkCore extends InterruptionSafeThread {
 
     public void stopTasks() {
         synchronized (mStopTasksLock) {
-            YLogger.info(TAG, "NetworkCore shall stop");
+            DebugLogger.info(TAG, "NetworkCore shall stop");
             QueueTaskEntry entry = mCurrentTask;
             if (entry != null) {
                 entry.networkTask.onTaskRemoved();
             }
             List<QueueTaskEntry> queueTaskEntries = new ArrayList<QueueTaskEntry>(mTasksQueue.size());
             mTasksQueue.drainTo(queueTaskEntries);
-            YLogger.info(TAG, "Remove %d tasks from queue", queueTaskEntries.size());
+            DebugLogger.info(TAG, "Remove %d tasks from queue", queueTaskEntries.size());
             for (QueueTaskEntry queueTaskEntry : queueTaskEntries) {
                 queueTaskEntry.networkTask.onTaskRemoved();
             }
@@ -76,12 +76,12 @@ public class NetworkCore extends InterruptionSafeThread {
 
     @Override
     public void run() {
-        YLogger.info(TAG, "Starting tasks processing ...");
+        DebugLogger.info(TAG, "Starting tasks processing ...");
 
         NetworkTask networkTask = null;
         while (isRunning()) {
             try {
-                YLogger.info(TAG, "Getting task ...");
+                DebugLogger.info(TAG, "Getting task ...");
                 synchronized (mStopTasksLock) {}
                 mCurrentTask = mTasksQueue.take();
 
@@ -90,7 +90,7 @@ public class NetworkCore extends InterruptionSafeThread {
                 networkTask.getExecutor().execute(runnableProvider.create(networkTask, this));
 
             } catch (InterruptedException ex) {
-                YLogger.error(TAG, ex);
+                DebugLogger.error(TAG, ex);
             } finally {
                 synchronized (mStopTasksLock) {
                     mCurrentTask = null;
@@ -98,13 +98,13 @@ public class NetworkCore extends InterruptionSafeThread {
                         networkTask.onTaskFinished();
                         networkTask.onTaskRemoved();
                     } else {
-                        YLogger.warning(TAG, "Network task is null");
+                        DebugLogger.warning(TAG, "Network task is null");
                     }
                 }
             }
         }
 
-        YLogger.info(TAG, "Stopping tasks processing ...");
+        DebugLogger.info(TAG, "Stopping tasks processing ...");
     }
 
     private boolean containsTaskEntry(QueueTaskEntry entry) {

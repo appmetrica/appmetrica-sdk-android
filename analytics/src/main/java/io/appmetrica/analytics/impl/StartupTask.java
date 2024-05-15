@@ -8,7 +8,7 @@ import io.appmetrica.analytics.impl.request.StartupRequestConfig;
 import io.appmetrica.analytics.impl.startup.StartupError;
 import io.appmetrica.analytics.impl.startup.StartupUnit;
 import io.appmetrica.analytics.impl.startup.parsing.StartupResult;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import io.appmetrica.analytics.networktasks.internal.ConfigProvider;
 import io.appmetrica.analytics.networktasks.internal.FullUrlFormer;
 import io.appmetrica.analytics.networktasks.internal.NetworkResponseHandler;
@@ -68,12 +68,12 @@ public class StartupTask implements UnderlyingNetworkTask {
         this.requestConfigProvider = configProvider;
         this.fullUrlFormer = fullUrlFormer;
         fullUrlFormer.setHosts(configProvider.getConfig().getStartupHosts());
-        YLogger.debug(TAG, "create new task with config %s", configProvider.getConfig());
+        DebugLogger.info(TAG, "create new task with config %s", configProvider.getConfig());
     }
 
     @Override
     public boolean onCreateTask() {
-        YLogger.info(TAG, "onCreateTask: %s", description());
+        DebugLogger.info(TAG, "onCreateTask: %s", description());
         requestDataHolder.setHeader(Constants.Headers.ACCEPT_ENCODING, Constants.Config.ENCODING_ENCRYPTED);
         return mStartupUnit.isStartupRequired();
     }
@@ -82,13 +82,13 @@ public class StartupTask implements UnderlyingNetworkTask {
     public boolean onRequestComplete() {
         mParseResult = responseHandler.handle(responseDataHolder);
         boolean successful = mParseResult != null;
-        YLogger.info(TAG, "onRequestComplete with success = %b", successful);
+        DebugLogger.info(TAG, "onRequestComplete with success = %b", successful);
         return successful;
     }
 
     @Override
     public void onPostRequestComplete(boolean success) {
-        YLogger.info(TAG, "onPostRequestComplete with success = %b", success);
+        DebugLogger.info(TAG, "onPostRequestComplete with success = %b", success);
         if (!success) {
             mCause = StartupError.PARSE;
         }
@@ -96,19 +96,19 @@ public class StartupTask implements UnderlyingNetworkTask {
 
     @Override
     public void onRequestError(@Nullable Throwable error) {
-        YLogger.info(TAG, "onRequestError: %s", error);
+        DebugLogger.info(TAG, "onRequestError: %s", error);
         mCause = StartupError.NETWORK;
     }
 
     @Override
     public void onShouldNotExecute() {
-        YLogger.info(TAG, "onShouldNotExecute");
+        DebugLogger.info(TAG, "onShouldNotExecute");
         mCause = StartupError.NETWORK;
     }
 
     @Override
     public void onSuccessfulTaskFinished() {
-        YLogger.info(TAG, "Successful startup task is removed.");
+        DebugLogger.info(TAG, "Successful startup task is removed.");
         if (mParseResult != null && responseDataHolder.getResponseHeaders() != null) {
             mStartupUnit.onRequestComplete(
                     mParseResult,
@@ -116,13 +116,13 @@ public class StartupTask implements UnderlyingNetworkTask {
                     responseDataHolder.getResponseHeaders()
             );
         } else {
-            YLogger.info(TAG, "Startup task is successful, but no parse result");
+            DebugLogger.info(TAG, "Startup task is successful, but no parse result");
         }
     }
 
     @Override
     public void onUnsuccessfulTaskFinished() {
-        YLogger.info(TAG, "Failed startup task is removed.");
+        DebugLogger.info(TAG, "Failed startup task is removed.");
         if (mCause == null) {
             mCause = StartupError.UNKNOWN;
         }

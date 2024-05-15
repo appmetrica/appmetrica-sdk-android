@@ -16,7 +16,7 @@ import io.appmetrica.analytics.impl.protobuf.client.StartupStateProtobuf;
 import io.appmetrica.analytics.impl.startup.Constants;
 import io.appmetrica.analytics.impl.startup.FeaturesInternal;
 import io.appmetrica.analytics.internal.IdentifiersResult;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -57,10 +57,10 @@ public class JsonHelper {
                 try {
                     result = super.getString(name);
                 } catch (Throwable th) {
-                    YLogger.error(TAG, th, th.getMessage());
+                    DebugLogger.error(TAG, th, th.getMessage());
                 }
             } else {
-                YLogger.error(TAG, new JSONException("No value for " + name));
+                DebugLogger.error(TAG, new JSONException("No value for " + name));
             }
             return result;
         }
@@ -271,7 +271,7 @@ public class JsonHelper {
             try {
                 return jsonToMap(new JSONObject(json));
             } catch (Throwable e) {
-                YLogger.error(TAG, e, "Exception while parsing json");
+                DebugLogger.error(TAG, e, "Exception while parsing json");
             }
         }
         return null;
@@ -293,7 +293,7 @@ public class JsonHelper {
                     result.add(jsonArray.getString(i));
                 }
             } catch (Throwable e) {
-                YLogger.error(TAG, e, e.getMessage());
+                DebugLogger.error(TAG, e, e.getMessage());
             }
         }
         return result;
@@ -344,7 +344,7 @@ public class JsonHelper {
             try {
                 result = jsonObject.getInt(key);
             } catch (Throwable e) {
-                YLogger.error(TAG, e, e.getMessage());
+                DebugLogger.error(TAG, e, e.getMessage());
             }
         }
         return result;
@@ -380,7 +380,7 @@ public class JsonHelper {
             try {
                 result = StringUtils.hexToBytes(stringToDecode);
             } catch (Throwable e) {
-                YLogger.error(TAG, e, "%sFail to decode hex string: %s", TAG, stringToDecode);
+                DebugLogger.error(TAG, e, "%sFail to decode hex string: %s", TAG, stringToDecode);
             }
         }
 
@@ -453,7 +453,7 @@ public class JsonHelper {
                         identifiersResult.errorExplanation
                     );
             } catch (Throwable ex) {
-                YLogger.error(TAG, ex);
+                DebugLogger.error(TAG, ex);
             }
         }
         return json;
@@ -492,7 +492,7 @@ public class JsonHelper {
                 return JsonHelper.screenInfoFromJson(jsonObject);
             }
         } catch (Throwable e) {
-            YLogger.error(TAG, e);
+            DebugLogger.error(TAG, e);
         }
         return null;
     }
@@ -534,7 +534,7 @@ public class JsonHelper {
                 }
             }
         } catch (Throwable ex) {
-            YLogger.error(TAG, ex);
+            DebugLogger.error(TAG, ex);
         }
         return json.toString();
     }
@@ -556,11 +556,11 @@ public class JsonHelper {
                         result.put(key, list);
                     }
                 } catch (Throwable ex) {
-                    YLogger.error(TAG, ex);
+                    DebugLogger.error(TAG, ex);
                 }
             }
         } catch (Throwable ex) {
-            YLogger.error(TAG, ex);
+            DebugLogger.error(TAG, ex);
         }
         return result;
     }
@@ -573,7 +573,7 @@ public class JsonHelper {
         try {
             return toStringList(new JSONArray(stringArray));
         } catch (Throwable ex) {
-            YLogger.error(TAG, ex);
+            DebugLogger.error(TAG, ex);
         }
         return null;
     }
@@ -596,7 +596,7 @@ public class JsonHelper {
                 );
             }
         } catch (Throwable ex) {
-            YLogger.error(TAG, ex);
+            DebugLogger.error(TAG, ex);
         }
         return new FeaturesInternal();
     }

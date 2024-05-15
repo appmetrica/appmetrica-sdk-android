@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.coreutils.internal.services
 
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 
 class UtilityServiceProvider {
 
@@ -15,7 +15,7 @@ class UtilityServiceProvider {
     }
 
     fun updateConfiguration(configuration: UtilityServiceConfiguration) {
-        YLogger.info(tag, "updateConfiguration: $configuration")
+        DebugLogger.info(tag, "updateConfiguration: $configuration")
         firstExecutionService.updateConfig(configuration)
     }
 }

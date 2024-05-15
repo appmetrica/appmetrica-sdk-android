@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.networktasks.internal
 
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 
 private const val TAG = "[AllHostsExponentialBackoffPolicy]"
 
@@ -13,7 +13,7 @@ class AllHostsExponentialBackoffPolicy(
     }
 
     override fun onAllHostsAttemptsFinished(success: Boolean) {
-        YLogger.info(TAG, "onAllHostsAttemptsFinished with success = %b", success)
+        DebugLogger.info(TAG, "onAllHostsAttemptsFinished with success = %b", success)
         if (success) {
             exponentialBackoffDataHolder.reset()
         } else {

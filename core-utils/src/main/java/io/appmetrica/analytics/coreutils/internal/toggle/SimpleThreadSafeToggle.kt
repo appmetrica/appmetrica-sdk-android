@@ -2,7 +2,7 @@ package io.appmetrica.analytics.coreutils.internal.toggle
 
 import io.appmetrica.analytics.coreapi.internal.control.Toggle
 import io.appmetrica.analytics.coreapi.internal.control.ToggleObserver
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 
 abstract class SimpleThreadSafeToggle(
     initialState: Boolean = false,
@@ -18,7 +18,7 @@ abstract class SimpleThreadSafeToggle(
     private val observers = ArrayList<ToggleObserver>()
 
     init {
-        YLogger.info(tag, "Initial state = $initialState")
+        DebugLogger.info(tag, "Initial state = $initialState")
     }
 
     @Synchronized
@@ -37,7 +37,7 @@ abstract class SimpleThreadSafeToggle(
     @Synchronized
     protected fun updateState(value: Boolean) {
         if (value != actualState) {
-            YLogger.info(tag, "Notify update state from $actualState -> $value")
+            DebugLogger.info(tag, "Notify update state from $actualState -> $value")
             _actualState = value
             observers.forEach { it.onStateChanged(value) }
         }

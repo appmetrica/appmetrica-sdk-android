@@ -14,7 +14,7 @@ import io.appmetrica.analytics.impl.db.VitalComponentDataProvider;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesComponentDbStorage;
 import io.appmetrica.analytics.impl.utils.encryption.EventEncrypter;
 import io.appmetrica.analytics.impl.utils.encryption.EventEncrypterProvider;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 
 public class EventSaver {
 
@@ -125,7 +125,7 @@ public class EventSaver {
 
     @VisibleForTesting
     public void saveReport(@NonNull final CounterReport reportData, @NonNull final SessionState sessionState) {
-        YLogger.debug(TAG, "saveReport: %s of type: %d", reportData.getName(), reportData.getType());
+        DebugLogger.info(TAG, "saveReport: %s of type: %d", reportData.getName(), reportData.getType());
         reportData.getExtras().putAll(sessionExtrasHolder.getSnapshot());
         reportData.setProfileID(mPreferences.getProfileID());
         reportData.setOpenId(vitalComponentDataProvider.getOpenId());

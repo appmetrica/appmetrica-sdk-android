@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.modules
 
 import io.appmetrica.analytics.impl.ClientServiceLocator
 import io.appmetrica.analytics.impl.GlobalServiceLocator
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 import io.appmetrica.analytics.modulesapi.internal.client.ModuleClientEntryPoint
 import io.appmetrica.analytics.modulesapi.internal.service.ModuleServiceEntryPoint
 
@@ -29,14 +29,14 @@ class ModulesSeeker {
     }
 
     private inline fun <reified T> discoverModules(modules: Set<String>, register: (T) -> Unit) {
-        YLogger.info(TAG, "Discover modules...")
+        DebugLogger.info(TAG, "Discover modules...")
         modules.forEach { moduleEntryPoint ->
             val module = moduleLoader.loadModule<T>(moduleEntryPoint)
             if (module == null) {
-                YLogger.info(TAG, "Could not load module with entry point = $moduleEntryPoint")
+                DebugLogger.info(TAG, "Could not load module with entry point = $moduleEntryPoint")
             } else {
                 register(module)
-                YLogger.info(TAG, "Module with entry point = $moduleEntryPoint loaded.")
+                DebugLogger.info(TAG, "Module with entry point = $moduleEntryPoint loaded.")
             }
         }
     }

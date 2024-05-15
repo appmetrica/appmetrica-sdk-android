@@ -10,7 +10,7 @@ import io.appmetrica.analytics.impl.DistributionSource
 import io.appmetrica.analytics.impl.SatelliteDataProvider
 import io.appmetrica.analytics.impl.SdkUtils
 import io.appmetrica.analytics.impl.Utils
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 import org.json.JSONObject
 
 class PreloadInfoFromSatelliteProvider(private val context: Context) : SatelliteDataProvider<PreloadInfoState?> {
@@ -35,7 +35,7 @@ class PreloadInfoFromSatelliteProvider(private val context: Context) : Satellite
                     val additionalParamsColumn = cursor.getColumnIndexOrThrow(columnNameAdditionalParameters)
                     val additionalParams = parseAdditionalParams(cursor.getString(additionalParamsColumn))
 
-                    YLogger.info(tag, "Parsed tracking id: $trackingId, additional parameters: $additionalParams")
+                    DebugLogger.info(tag, "Parsed tracking id: $trackingId, additional parameters: $additionalParams")
 
                     if (TextUtils.isEmpty(trackingId) || ParseUtils.parseLong(trackingId) != null) {
                         SdkUtils.logAttribution(
@@ -61,7 +61,7 @@ class PreloadInfoFromSatelliteProvider(private val context: Context) : Satellite
                 SdkUtils.logAttribution("No Satellite content provider found")
             }
         } catch (ex: Throwable) {
-            YLogger.error(tag, ex)
+            DebugLogger.error(tag, ex)
         } finally {
             Utils.closeCursor(cursor)
         }
@@ -71,7 +71,7 @@ class PreloadInfoFromSatelliteProvider(private val context: Context) : Satellite
     private fun parseAdditionalParams(additionalParamsString: String?): JSONObject = try {
         if (additionalParamsString?.isEmpty() != false) JSONObject() else JSONObject(additionalParamsString)
     } catch (ex: Throwable) {
-        YLogger.error(tag, ex, "Could not parse additional parameters")
+        DebugLogger.error(tag, ex, "Could not parse additional parameters")
         JSONObject()
     }
 }

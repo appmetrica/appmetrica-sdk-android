@@ -3,7 +3,7 @@ package io.appmetrica.analytics.adrevenue.fyber.v3.impl;
 import androidx.annotation.NonNull;
 import com.fyber.fairbid.ads.ImpressionData;
 import com.fyber.fairbid.ads.interstitial.InterstitialListener;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import io.appmetrica.analytics.modulesapi.internal.client.ClientContext;
 
 public class FyberAdRevenueDataListener implements InterstitialListener {
@@ -32,10 +32,10 @@ public class FyberAdRevenueDataListener implements InterstitialListener {
     @Override
     public void onShow(@NonNull String s, @NonNull ImpressionData impressionData) {
         if (impressionData != null) {
-            YLogger.info(TAG, "impressionData is " + impressionData.getJsonString());
+            DebugLogger.info(TAG, "impressionData is " + impressionData.getJsonString());
             clientContext.getAutoAdRevenueReporter().reportAutoAdRevenue(adRevenueConverter.convert(impressionData));
         } else {
-            YLogger.info(TAG, "impressionData is null");
+            DebugLogger.info(TAG, "impressionData is null");
         }
     }
 

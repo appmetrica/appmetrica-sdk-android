@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.startup.uuid
 import android.content.Context
 import io.appmetrica.analytics.impl.db.state.factory.StorageFactory
 import io.appmetrica.analytics.impl.startup.StartupStateModel
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 
 class UuidFromStartupStateImporter : IOuterSourceUuidImporter {
 
@@ -12,7 +12,7 @@ class UuidFromStartupStateImporter : IOuterSourceUuidImporter {
     override fun get(context: Context): String? = try {
         StorageFactory.Provider.get(StartupStateModel::class.java)?.create(context)?.read()?.uuid
     } catch (e: Throwable) {
-        YLogger.error(tag, e)
+        DebugLogger.error(tag, e)
         null
     }
 }

@@ -5,7 +5,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.crypto.Encrypter;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
@@ -42,7 +42,7 @@ public class AESEncrypter implements Encrypter {
 
             return aesCipher.doFinal(input);
         } catch (Throwable e) {
-            YLogger.error(TAG, e);
+            DebugLogger.error(TAG, e);
         }
         return null;
     }
@@ -62,7 +62,7 @@ public class AESEncrypter implements Encrypter {
             aesCipher.init(Cipher.DECRYPT_MODE, secretKeySpec, spec);
             return aesCipher.doFinal(input, offset, length);
         } catch (Throwable e) {
-            YLogger.error(TAG, e);
+            DebugLogger.error(TAG, e);
         }
         return null;
     }

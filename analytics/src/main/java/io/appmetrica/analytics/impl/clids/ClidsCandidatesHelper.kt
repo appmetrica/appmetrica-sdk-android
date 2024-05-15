@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.clids
 
 import io.appmetrica.analytics.impl.DistributionSource
 import io.appmetrica.analytics.impl.UpdatedCandidatesProvider
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 
 private const val TAG = "[ClidsCandidatesHelper]"
 
@@ -21,7 +21,7 @@ internal class ClidsCandidatesHelper : UpdatedCandidatesProvider<ClidsInfo.Candi
         } else {
             oldCandidates + newCandidate
         }.also {
-            YLogger.info(TAG, "Get updated candidates from $oldCandidates  and $newCandidate. Result is $it")
+            DebugLogger.info(TAG, "Get updated candidates from $oldCandidates  and $newCandidate. Result is $it")
         }
     }
 }

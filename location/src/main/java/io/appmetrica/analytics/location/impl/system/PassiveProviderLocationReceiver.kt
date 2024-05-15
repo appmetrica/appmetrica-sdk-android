@@ -7,7 +7,7 @@ import android.os.Looper
 import io.appmetrica.analytics.coreapi.internal.permission.PermissionResolutionStrategy
 import io.appmetrica.analytics.coreutils.internal.system.SystemServiceUtils
 import io.appmetrica.analytics.locationapi.internal.LocationReceiver
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 import java.util.concurrent.TimeUnit
 
 private const val TAG = "[PassiveProviderLocationReceiver]"
@@ -45,15 +45,15 @@ internal class PassiveProviderLocationReceiver(
                     looper
                 )
             }
-            YLogger.info(TAG, "Request location updates for passive provider")
+            DebugLogger.info(TAG, "Request location updates for passive provider")
         } else {
-            YLogger.info(TAG, "Permission resolution strategy forbid location updates")
+            DebugLogger.info(TAG, "Permission resolution strategy forbid location updates")
         }
     }
 
     @SuppressWarnings("MissingPermission")
     override fun stopLocationUpdates() {
-        YLogger.info(TAG, "Stop location updates for passive provider")
+        DebugLogger.info(TAG, "Stop location updates for passive provider")
         SystemServiceUtils.accessSystemServiceByNameSafely<LocationManager, Unit>(
             context,
             Context.LOCATION_SERVICE,

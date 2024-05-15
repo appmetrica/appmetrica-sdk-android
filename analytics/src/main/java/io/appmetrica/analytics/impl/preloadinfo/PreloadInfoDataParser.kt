@@ -6,7 +6,7 @@ import io.appmetrica.analytics.coreutils.internal.parsing.ParseUtils
 import io.appmetrica.analytics.impl.ContentProviderDataParser
 import io.appmetrica.analytics.impl.DistributionSource
 import io.appmetrica.analytics.impl.SdkUtils
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 import org.json.JSONObject
 
 private const val TAG = "[PreloadInfoDataParser]"
@@ -48,7 +48,7 @@ internal class PreloadInfoDataParser : ContentProviderDataParser<PreloadInfoStat
                 DistributionSource.RETAIL
             )
         } catch (ex: Throwable) {
-            YLogger.error(TAG, ex)
+            DebugLogger.error(TAG, ex)
             SdkUtils.logAttributionE(ex, "Could not parse additional parameters")
         }
         return null

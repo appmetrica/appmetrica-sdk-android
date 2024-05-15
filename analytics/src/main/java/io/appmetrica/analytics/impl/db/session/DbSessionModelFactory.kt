@@ -5,7 +5,7 @@ import io.appmetrica.analytics.impl.db.constants.Constants
 import io.appmetrica.analytics.impl.request.ReportRequestConfig
 import io.appmetrica.analytics.impl.utils.ServerTime
 import io.appmetrica.analytics.impl.utils.TimeUtils
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 import org.json.JSONObject
 
 class DbSessionModelFactory(
@@ -56,11 +56,11 @@ class DbSessionModelFactory(
                     reportRequestConfig.analyticsSdkBuildNumber
                 )
         } catch (exception: Throwable) {
-            YLogger.error(tag, exception, "Something was wrong while filling request parameters.")
+            DebugLogger.error(tag, exception, "Something was wrong while filling request parameters.")
             JSONObject()
         }
 
-        YLogger.info(tag, "SessionRequestParameters in fill report request parameters $requestParameters")
+        DebugLogger.info(tag, "SessionRequestParameters in fill report request parameters $requestParameters")
         return requestParameters.toString()
     }
 }

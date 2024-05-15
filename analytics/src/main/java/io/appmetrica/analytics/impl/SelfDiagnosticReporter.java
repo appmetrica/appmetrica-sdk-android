@@ -6,7 +6,7 @@ import androidx.annotation.Nullable;
 import io.appmetrica.analytics.impl.client.ProcessConfiguration;
 import io.appmetrica.analytics.impl.service.AppMetricaServiceDataReporter;
 import io.appmetrica.analytics.internal.CounterConfiguration;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 
 public class SelfDiagnosticReporter {
 
@@ -35,7 +35,7 @@ public class SelfDiagnosticReporter {
                 mReporterType = CounterConfigurationReporterType.SELF_DIAGNOSTIC_MANUAL;
                 break;
             default:
-                YLogger.warning(TAG, "cannot create self diagnostic reporter for original reporter of type %s",
+                DebugLogger.warning(TAG, "cannot create self diagnostic reporter for original reporter of type %s",
                     originalReporterType.getStringValue());
                 mReporterType = null;
         }
@@ -58,7 +58,7 @@ public class SelfDiagnosticReporter {
                         )
                 );
             } catch (Throwable ex) {
-                YLogger.error(TAG, ex);
+                DebugLogger.error(TAG, ex);
             }
         }
     }

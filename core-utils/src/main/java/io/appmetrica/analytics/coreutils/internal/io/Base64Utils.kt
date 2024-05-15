@@ -2,7 +2,7 @@ package io.appmetrica.analytics.coreutils.internal.io
 
 import android.util.Base64
 import io.appmetrica.analytics.coreutils.internal.io.GZIPUtils.gzipBytes
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 import java.io.ByteArrayInputStream
 import java.util.zip.GZIPInputStream
 
@@ -43,7 +43,7 @@ object Base64Utils {
         try {
             result = String(decompressBase64GzipAsBytes(stringToUnZip))
         } catch (e: Throwable) {
-            YLogger.error(TAG, e)
+            DebugLogger.error(TAG, e)
         }
         return result
     }

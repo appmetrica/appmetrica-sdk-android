@@ -20,7 +20,7 @@ import io.appmetrica.analytics.impl.db.constants.Constants;
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade;
 import io.appmetrica.analytics.impl.utils.LoggerStorage;
 import io.appmetrica.analytics.impl.utils.PublicLogger;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONArray;
@@ -95,10 +95,10 @@ public class DatabaseCleaner {
         try {
             deletedRowsCount = database.delete(tableName, whereClause, null);
         } catch (Throwable ex) {
-            YLogger.error(TAG, ex, "Could not delete rows for db");
+            DebugLogger.error(TAG, ex, "Could not delete rows for db");
         }
         if (somethingWrong(reports, deletedRowsCount)) {
-            YLogger.warning(
+            DebugLogger.warning(
                 TAG,
                 "Something wrong happened while cleaning db. " +
                     "Deleted rows: %d, rows that formed up EVENT_CLEANUP: %s. Where clause = %s",
@@ -108,10 +108,10 @@ public class DatabaseCleaner {
             );
         } else {
             if (shouldFormCleanupEvent) {
-                YLogger.info(TAG,"Should form EVENT_CLEANUP");
+                DebugLogger.info(TAG,"Should form EVENT_CLEANUP");
                 reportCleanupEvent(reports, reason, apiKey, deletedRowsCount);
             }
-            YLogger.info(TAG,"cleared %d", deletedRowsCount);
+            DebugLogger.info(TAG,"cleared %d", deletedRowsCount);
         }
         return new DeletionInfo(reports, deletedRowsCount);
     }
@@ -140,7 +140,7 @@ public class DatabaseCleaner {
             reports = cursorToList(dataCursor);
         } catch (Throwable ex) {
             AppMetricaSelfReportFacade.getReporter().reportError("select_rows_to_delete_exception", ex);
-            YLogger.error(TAG, ex, "Exception while selecting rows from %s to delete.", tableName);
+            DebugLogger.error(TAG, ex, "Exception while selecting rows from %s to delete.", tableName);
         } finally {
             Utils.closeCursor(dataCursor);
         }
@@ -167,7 +167,7 @@ public class DatabaseCleaner {
                             InternalEvents.valueOf(internalReportType)
                     ));
                 } else {
-                    YLogger.warning(TAG, "Some field was not filled, ContentValues: %s, " +
+                    DebugLogger.warning(TAG, "Some field was not filled, ContentValues: %s, " +
                             "expected to have %s and %s",
                             report,
                             Constants.EventsTable.EventTableEntry.FIELD_EVENT_GLOBAL_NUMBER,
@@ -188,7 +188,7 @@ public class DatabaseCleaner {
                     LoggerStorage.getOrCreatePublicLogger(apiKey);
             return EventsManager.cleanupEventReportEntry(value.toString(), logger);
         } catch (Throwable ex) {
-            YLogger.error(TAG, ex, "Something went wrong while forming cleanup event");
+            DebugLogger.error(TAG, ex, "Something went wrong while forming cleanup event");
         }
         return null;
     }
@@ -205,7 +205,7 @@ public class DatabaseCleaner {
                 reporter.reportEvent(report);
             }
         } else {
-            YLogger.warning(TAG, "EVENT_CLEANUP will not be reported.  ApiKey: %s, reporter storage: %s",
+            DebugLogger.warning(TAG, "EVENT_CLEANUP will not be reported.  ApiKey: %s, reporter storage: %s",
                     apiKey, mSelfDiagnosticReporterStorage);
         }
     }

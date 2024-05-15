@@ -8,7 +8,7 @@ import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
 import io.appmetrica.analytics.coreutils.internal.executors.SafeRunnable;
 import io.appmetrica.analytics.impl.service.AppMetricaServiceCallback;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 
 public class AppMetricaServiceCoreExecutionDispatcher implements AppMetricaServiceCore {
     private static final String TAG = "[AppMetricaCoreExecutionDispatcher]";
@@ -26,7 +26,7 @@ public class AppMetricaServiceCoreExecutionDispatcher implements AppMetricaServi
 
     @Override
     public synchronized void onCreate() {
-        YLogger.debug(TAG, "Post onCreate");
+        DebugLogger.info(TAG, "Post onCreate");
         shouldExecuteOnCreate = true;
         mCoreExecutor.execute(new SafeRunnable() {
             @Override
@@ -43,7 +43,7 @@ public class AppMetricaServiceCoreExecutionDispatcher implements AppMetricaServi
 
     @Override
     public void onStart(final Intent intent, final int startId) {
-        YLogger.debug(TAG, "Post onStart");
+        DebugLogger.info(TAG, "Post onStart");
         mCoreExecutor.execute(new SafeRunnable() {
             @Override
             public void runSafety() {
@@ -54,7 +54,7 @@ public class AppMetricaServiceCoreExecutionDispatcher implements AppMetricaServi
 
     @Override
     public void onStartCommand(final Intent intent, final int flags, final int startId) {
-        YLogger.debug(TAG, "Post onStartCommand");
+        DebugLogger.info(TAG, "Post onStartCommand");
         mCoreExecutor.execute(new SafeRunnable() {
             @Override
             public void runSafety() {
@@ -65,7 +65,7 @@ public class AppMetricaServiceCoreExecutionDispatcher implements AppMetricaServi
 
     @Override
     public void onBind(final Intent intent) {
-        YLogger.debug(TAG, "Post onBind");
+        DebugLogger.info(TAG, "Post onBind");
         mCoreExecutor.execute(new SafeRunnable() {
             @Override
             public void runSafety() {
@@ -76,7 +76,7 @@ public class AppMetricaServiceCoreExecutionDispatcher implements AppMetricaServi
 
     @Override
     public void onRebind(final Intent intent) {
-        YLogger.debug(TAG, "Post onRebind");
+        DebugLogger.info(TAG, "Post onRebind");
         mCoreExecutor.execute(new SafeRunnable() {
             @Override
             public void runSafety() {
@@ -87,7 +87,7 @@ public class AppMetricaServiceCoreExecutionDispatcher implements AppMetricaServi
 
     @Override
     public void onUnbind(final Intent intent) {
-        YLogger.debug(TAG, "Post onUnbind");
+        DebugLogger.info(TAG, "Post onUnbind");
         mCoreExecutor.execute(new SafeRunnable() {
             @Override
             public void runSafety() {
@@ -98,7 +98,7 @@ public class AppMetricaServiceCoreExecutionDispatcher implements AppMetricaServi
 
     @Override
     public void onDestroy() {
-        YLogger.debug(TAG, "Post onDestroy on the same thread");
+        DebugLogger.info(TAG, "Post onDestroy on the same thread");
         mCoreExecutor.removeAll();
         synchronized (this) {
             shouldExecuteOnCreate = false;
@@ -108,7 +108,7 @@ public class AppMetricaServiceCoreExecutionDispatcher implements AppMetricaServi
 
     @Override
     public void reportData(final int type, final Bundle data) {
-        YLogger.debug(TAG, "Post reportEvent. Type: %d", type);
+        DebugLogger.info(TAG, "Post reportEvent. Type: %d", type);
         mCoreExecutor.execute(new SafeRunnable() {
             @Override
             public void runSafety() throws Exception {
@@ -119,7 +119,7 @@ public class AppMetricaServiceCoreExecutionDispatcher implements AppMetricaServi
 
     @Override
     public void resumeUserSession(@NonNull final Bundle data) {
-        YLogger.debug(TAG, "Post resumeUserSession");
+        DebugLogger.info(TAG, "Post resumeUserSession");
         mCoreExecutor.execute(new SafeRunnable() {
             @Override
             public void runSafety() throws Exception {
@@ -130,7 +130,7 @@ public class AppMetricaServiceCoreExecutionDispatcher implements AppMetricaServi
 
     @Override
     public void pauseUserSession(@NonNull final Bundle data) {
-        YLogger.debug(TAG, "Post pauseUserSession");
+        DebugLogger.info(TAG, "Post pauseUserSession");
         mCoreExecutor.execute(new SafeRunnable() {
             @Override
             public void runSafety() throws Exception {

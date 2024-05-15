@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.clientcomponents
 import io.appmetrica.analytics.coreapi.internal.clientcomponents.ClientComponentsInitializer
 import io.appmetrica.analytics.impl.ClientServiceLocator
 import io.appmetrica.analytics.impl.modules.ConstantModuleEntryPointProvider
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 
 class DefaultClientComponentsInitializer : ClientComponentsInitializer {
 
@@ -16,12 +16,12 @@ class DefaultClientComponentsInitializer : ClientComponentsInitializer {
 
     override fun onCreate() {
         if (ClientServiceLocator.getInstance().mainProcessDetector.isMainProcess) {
-            YLogger.info(tag, "Register public modules")
+            DebugLogger.info(tag, "Register public modules")
             ClientServiceLocator.getInstance().moduleEntryPointsRegister.register(
                 *moduleEntryPoints.map { ConstantModuleEntryPointProvider(it) }.toTypedArray()
             )
         } else {
-            YLogger.info(tag, "Public modules not registered for non main process")
+            DebugLogger.info(tag, "Public modules not registered for non main process")
         }
     }
 }

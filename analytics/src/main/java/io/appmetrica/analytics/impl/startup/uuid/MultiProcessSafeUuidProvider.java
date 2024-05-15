@@ -7,7 +7,7 @@ import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus;
 import io.appmetrica.analytics.impl.utils.concurrency.ExclusiveMultiProcessFileLock;
 import io.appmetrica.analytics.internal.IdentifiersResult;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 
 public class MultiProcessSafeUuidProvider {
 
@@ -53,7 +53,7 @@ public class MultiProcessSafeUuidProvider {
             this.lock.lock();
             this.persistentUuidHolder.checkMigration();
         } catch (Throwable throwable) {
-            YLogger.error(TAG, throwable);
+            DebugLogger.error(TAG, throwable);
         } finally {
             this.lock.unlock();
         }
@@ -63,20 +63,20 @@ public class MultiProcessSafeUuidProvider {
     public IdentifiersResult readUuid() {
         IdentifiersResult localUuidResult = uuidResult;
         if (isOk(localUuidResult)) {
-            YLogger.info(TAG, "Return valid uuid result from memory state");
+            DebugLogger.info(TAG, "Return valid uuid result from memory state");
             return localUuidResult;
         }
         try {
-            YLogger.info(TAG, "Acquire file lock: uuid.data.lock");
+            DebugLogger.info(TAG, "Acquire file lock: uuid.data.lock");
             lock.lock();
             localUuidResult = uuidResult;
             if (!isOk(localUuidResult)) {
                 String resultUuid;
                 resultUuid = persistentUuidHolder.readUuid();
-                YLogger.info(TAG, "Current uuid in existing uuid storage after acquiring lock = %s", resultUuid);
+                DebugLogger.info(TAG, "Current uuid in existing uuid storage after acquiring lock = %s", resultUuid);
                 if (!uuidValidator.isValid(resultUuid)) {
                     resultUuid = outerSourceUuidImporter.get(context);
-                    YLogger.info(TAG, "Uuid from outer importer = %s", resultUuid);
+                    DebugLogger.info(TAG, "Uuid from outer importer = %s", resultUuid);
                     resultUuid = persistentUuidHolder.handleUuid(resultUuid);
                 }
                 if (uuidValidator.isValid(resultUuid)) {
@@ -85,9 +85,9 @@ public class MultiProcessSafeUuidProvider {
                 }
             }
         } catch (Throwable throwable) {
-            YLogger.error(TAG, throwable);
+            DebugLogger.error(TAG, throwable);
         } finally {
-            YLogger.info(TAG, "Clear file lock: uuid.data.lock");
+            DebugLogger.info(TAG, "Clear file lock: uuid.data.lock");
             lock.unlock();
         }
         return localUuidResult != null ? localUuidResult : new IdentifiersResult(

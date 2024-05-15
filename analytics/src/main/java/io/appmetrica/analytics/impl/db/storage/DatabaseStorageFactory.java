@@ -5,18 +5,18 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
+import io.appmetrica.analytics.coreapi.internal.data.IBinaryDataHelper;
 import io.appmetrica.analytics.coreapi.internal.data.TempCacheStorage;
 import io.appmetrica.analytics.impl.component.ComponentId;
 import io.appmetrica.analytics.impl.db.DatabaseManagerProvider;
 import io.appmetrica.analytics.impl.db.DatabaseStorage;
-import io.appmetrica.analytics.coreapi.internal.data.IBinaryDataHelper;
 import io.appmetrica.analytics.impl.db.IKeyValueTableDbHelper;
 import io.appmetrica.analytics.impl.db.StorageType;
 import io.appmetrica.analytics.impl.db.connectors.LockedOnFileDBConnector;
 import io.appmetrica.analytics.impl.db.connectors.SimpleDBConnector;
 import io.appmetrica.analytics.impl.db.constants.Constants;
 import io.appmetrica.analytics.impl.db.constants.TempCacheTable;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
@@ -34,7 +34,7 @@ public class DatabaseStorageFactory {
         if (sStorageFactory == null) {
             synchronized (DatabaseStorageFactory.class) {
                 if (sStorageFactory == null) {
-                    YLogger.info(TAG, "Create default instance.");
+                    DebugLogger.info(TAG, "Create default instance.");
                     sStorageFactory = new DatabaseStorageFactory(context.getApplicationContext(), null);
                 }
             }
@@ -46,7 +46,7 @@ public class DatabaseStorageFactory {
         if (sStorageFactory == null) {
             synchronized (DatabaseStorageFactory.class) {
                 if (sStorageFactory == null) {
-                    YLogger.info(TAG, "Create instance with overwrittenDbStoragePath");
+                    DebugLogger.info(TAG, "Create instance with overwrittenDbStoragePath");
                     sStorageFactory = new DatabaseStorageFactory(context.getApplicationContext(), file);
                 }
             }
@@ -103,9 +103,9 @@ public class DatabaseStorageFactory {
         DatabaseStorage storage = databaseStorages.get(componentDatabaseSimpleNameProvider.getDatabaseName());
 
         if (null != storage) {
-            YLogger.info(TAG, "Database instance IN USE, we will just return for %s", componentId);
+            DebugLogger.info(TAG, "Database instance IN USE, we will just return for %s", componentId);
         } else {
-            YLogger.info(TAG, "Database instance IS NULL, we will create a new one for %s", componentId);
+            DebugLogger.info(TAG, "Database instance IS NULL, we will create a new one for %s", componentId);
             storage = new DatabaseStorage(
                 context,
                 databaseStoragePathProviderFactory.create(componentDatabaseSimpleNameProvider.getDatabaseName(), false)

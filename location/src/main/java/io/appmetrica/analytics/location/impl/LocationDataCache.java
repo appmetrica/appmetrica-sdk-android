@@ -6,7 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreutils.internal.cache.SynchronizedDataCache;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -49,7 +49,7 @@ public class LocationDataCache extends SynchronizedDataCache<Location> {
 
     @Override
     protected boolean shouldUpdate(@NonNull Location newData) {
-        YLogger.info(
+        DebugLogger.info(
             TAG,
             "ShouldUpdateLocation: %s -> %s?: isSavedLocationWorse: %s",
             mCachedData.getData(),

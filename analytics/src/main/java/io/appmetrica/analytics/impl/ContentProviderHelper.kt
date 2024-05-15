@@ -4,7 +4,7 @@ import android.content.ContentValues
 import android.content.Context
 import androidx.annotation.MainThread
 import androidx.annotation.VisibleForTesting
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 
 private const val TAG = "[ContentProviderHelper]"
 
@@ -22,13 +22,13 @@ internal class ContentProviderHelper<T> @VisibleForTesting constructor(
     ) : this(dataParser, dataSaver, FirstServiceEntryPointManager.INSTANCE, description)
 
     fun handle(context: Context, values: ContentValues) {
-        YLogger.info(TAG, "Try to handle %s", values)
+        DebugLogger.info(TAG, "Try to handle %s", values)
         try {
             val parsedData = dataParser(values)
-            YLogger.info(TAG, "Parsed data: %s", parsedData)
+            DebugLogger.info(TAG, "Parsed data: %s", parsedData)
             if (parsedData != null) {
                 val result = saveData(context, parsedData)
-                YLogger.info(TAG, "Saved data? %b", result)
+                DebugLogger.info(TAG, "Saved data? %b", result)
                 if (result) {
                     SdkUtils.logAttribution("Successfully saved $description")
                 } else {
@@ -36,7 +36,7 @@ internal class ContentProviderHelper<T> @VisibleForTesting constructor(
                 }
             }
         } catch (ex: Throwable) {
-            YLogger.error(TAG, ex)
+            DebugLogger.error(TAG, ex)
             SdkUtils.logAttributionE(ex, "Unexpected error occurred")
         }
     }

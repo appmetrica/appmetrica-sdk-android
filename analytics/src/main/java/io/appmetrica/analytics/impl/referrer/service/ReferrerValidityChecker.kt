@@ -8,7 +8,7 @@ import io.appmetrica.analytics.impl.referrer.common.ReferrerInfo
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade
 import io.appmetrica.analytics.impl.utils.JsonHelper
 import io.appmetrica.analytics.impl.utils.MapWithDefault
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 import org.json.JSONObject
 import java.util.concurrent.TimeUnit
 import kotlin.math.abs
@@ -31,9 +31,9 @@ class ReferrerValidityChecker(
     private val huaweiInstaller = "com.huawei.appmarket"
 
     fun doesInstallerMatchReferrer(referrerInfo: ReferrerInfo?): Boolean {
-        YLogger.info(tag, "Checking if %s matches package installer", referrerInfo)
+        DebugLogger.info(tag, "Checking if %s matches package installer", referrerInfo)
         if (referrerInfo == null) {
-            YLogger.info(tag, "Referrer is null")
+            DebugLogger.info(tag, "Referrer is null")
             return false
         }
         val packageInstaller = packageManager.getInstallerPackageName(context, context.packageName)
@@ -42,7 +42,7 @@ class ReferrerValidityChecker(
             ReferrerInfo.Source.HMS -> huaweiInstaller == packageInstaller
             else -> false
         }
-        YLogger.info(tag, "Package installer: %s, matches: %b", packageInstaller, matches)
+        DebugLogger.info(tag, "Package installer: %s, matches: %b", packageInstaller, matches)
         return matches
     }
 
@@ -54,7 +54,7 @@ class ReferrerValidityChecker(
             return referrers[0]
         }
         var chosenState: ReferrerInfo? = null
-        YLogger.info(tag, "Choosing from %s by install time", referrers)
+        DebugLogger.info(tag, "Choosing from %s by install time", referrers)
         val packageInfo = packageManager.getPackageInfo(context, context.packageName, 0)
         if (packageInfo != null) {
             val installTime = TimeUnit.MILLISECONDS.toSeconds(packageInfo.firstInstallTime)
@@ -66,7 +66,7 @@ class ReferrerValidityChecker(
             }
         }
         if (chosenState == null) {
-            YLogger.info(tag, "Choose referrer with latest install timestamp. Candidates: %s", referrers)
+            DebugLogger.info(tag, "Choose referrer with latest install timestamp. Candidates: %s", referrers)
             val referrerWithMaxTimestamp = referrers.maxOfWith({ first, second ->
                 val timestampDiff = (first.installBeginTimestampSeconds - second.installBeginTimestampSeconds).sign
                 if (timestampDiff == 0) {

@@ -2,7 +2,7 @@ package io.appmetrica.analytics.networktasks.internal;
 
 import androidx.annotation.NonNull;
 import io.appmetrica.analytics.coreapi.internal.io.Compressor;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import io.appmetrica.analytics.coreutils.internal.time.SystemTimeProvider;
 import io.appmetrica.analytics.coreutils.internal.time.TimeProvider;
 import io.appmetrica.analytics.networktasks.impl.Constants;
@@ -55,14 +55,14 @@ public class SendingDataTaskHelper {
     }
 
     public void onPerformRequest() {
-        YLogger.info(TAG, "onPerformRequest");
+        DebugLogger.info(TAG, "onPerformRequest");
         requestDataHolder.applySendTime(timeProvider.currentTimeMillis());
     }
 
     public boolean isResponseValid() {
         DefaultResponseParser.Response response = responseHandler.handle(responseDataHolder);
         boolean result = response != null && Constants.STATUS_ACCEPTED.equals(response.mStatus);
-        YLogger.info(TAG, "is response valid? %b. Response: %s", result, response);
+        DebugLogger.info(TAG, "is response valid? %b. Response: %s", result, response);
         return result;
     }
 
@@ -73,7 +73,7 @@ public class SendingDataTaskHelper {
             if (compressedBytes != null) {
 
                 byte[] encryptedBytes = requestBodyEncrypter.encrypt(compressedBytes);
-                YLogger.info(TAG, "Request raw data length: %d; after GZIP: %d; after encoding: %d",
+                DebugLogger.info(TAG, "Request raw data length: %d; after GZIP: %d; after encoding: %d",
                         postData.length,
                         compressedBytes == null ? null : compressedBytes.length,
                         encryptedBytes == null ? null : encryptedBytes.length);
@@ -84,7 +84,7 @@ public class SendingDataTaskHelper {
             }
             return processingPostDataStatus;
         } catch (IOException e) {
-            YLogger.error(TAG, e);
+            DebugLogger.error(TAG, e);
             return false;
         }
     }

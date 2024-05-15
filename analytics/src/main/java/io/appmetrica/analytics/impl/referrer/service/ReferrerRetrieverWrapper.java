@@ -5,7 +5,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
 import io.appmetrica.analytics.coreutils.internal.reflection.ReflectionUtils;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 
 public class ReferrerRetrieverWrapper {
 
@@ -25,7 +25,7 @@ public class ReferrerRetrieverWrapper {
     }
 
     public void retrieveReferrer(@NonNull final ReferrerReceivedListener referrerListener) {
-        YLogger.debug(TAG, "try to retriever referrer");
+        DebugLogger.info(TAG, "try to retriever referrer");
         try {
             mReferrerRetriever.retrieveReferrer(referrerListener);
         } catch (Throwable ex) {
@@ -41,10 +41,10 @@ public class ReferrerRetrieverWrapper {
             try {
                 referrerRetriever = new ReferrerFromLibraryRetriever(context, executor);
             } catch (Throwable ex) {
-                YLogger.error(TAG, ex);
+                DebugLogger.error(TAG, ex);
             }
         } else {
-            YLogger.debug(TAG, "Install Referrer Client class was not detected");
+            DebugLogger.info(TAG, "Install Referrer Client class was not detected");
         }
         if (referrerRetriever == null) {
             referrerRetriever = new IReferrerRetriever() {

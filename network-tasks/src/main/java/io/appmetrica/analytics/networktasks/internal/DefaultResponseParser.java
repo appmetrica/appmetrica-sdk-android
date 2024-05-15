@@ -2,7 +2,8 @@ package io.appmetrica.analytics.networktasks.internal;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import io.appmetrica.analytics.logger.internal.YLogger;
+
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import org.json.JSONObject;
 
 public class DefaultResponseParser {
@@ -40,10 +41,10 @@ public class DefaultResponseParser {
                 response = new Response(responseJson.optString(JsonKeys.STATUS));
             }
         } catch (Throwable e) {
-            YLogger.error(TAG, e);
+            DebugLogger.error(TAG, e);
         }
 
-        YLogger.info(TAG, "Parsed result is %s", response);
+        DebugLogger.info(TAG, "Parsed result is %s", response);
         return response;
     }
 }

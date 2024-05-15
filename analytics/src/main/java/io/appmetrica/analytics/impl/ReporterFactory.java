@@ -14,7 +14,7 @@ import io.appmetrica.analytics.impl.utils.PublicLogger;
 import io.appmetrica.analytics.impl.utils.validation.ThrowIfFailedValidator;
 import io.appmetrica.analytics.impl.utils.validation.Validator;
 import io.appmetrica.analytics.impl.utils.validation.api.ReporterKeyIsUsedValidator;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -124,7 +124,7 @@ public class ReporterFactory implements IReporterFactory {
             @NonNull AppMetricaConfig config) {
         IReporterExtended reporter = mReporters.get(config.apiKey);
         if (reporter == null) {
-            YLogger.debug(TAG, "No main reporter - will create crash reporter");
+            DebugLogger.info(TAG, "No main reporter - will create crash reporter");
             CrashReporter crashReporter = new CrashReporter(
                     mContext,
                     mProcessConfiguration,

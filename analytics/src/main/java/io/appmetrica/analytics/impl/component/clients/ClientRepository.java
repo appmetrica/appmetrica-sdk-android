@@ -7,7 +7,7 @@ import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.impl.Utils;
 import io.appmetrica.analytics.impl.component.CommonArguments;
 import io.appmetrica.analytics.impl.utils.collection.HashMultimap;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -43,11 +43,11 @@ public class ClientRepository {
 
     public ClientUnit getOrCreateClient(@NonNull ClientDescription clientDescription,
                                         @NonNull CommonArguments sdkConfig) {
-        YLogger.debug(TAG, "try to find client for %s", clientDescription);
+        DebugLogger.info(TAG, "try to find client for %s", clientDescription);
         synchronized (mMonitor) {
             ClientUnit unit = mConnectedClients.get(clientDescription);
             if (unit == null) {
-                YLogger.debug(TAG, "no client found for %s. Create new.", clientDescription);
+                DebugLogger.info(TAG, "no client found for %s. Create new.", clientDescription);
                 unit = mClientUnitFactoryHolder.getClientUnitFactory(clientDescription)
                         .createClientUnit(mContext, mComponentsRepository, clientDescription, sdkConfig);
                 mConnectedClients.put(clientDescription, unit);
@@ -63,12 +63,12 @@ public class ClientRepository {
     }
 
     private void removeInternal(@NonNull String packageName, @Nullable Integer pid, @Nullable String psid) {
-        YLogger.debug(TAG, "remove clients for (packageName, pid, psid) = (%s, %d, %s)", packageName, pid, psid);
+        DebugLogger.info(TAG, "remove clients for (packageName, pid, psid) = (%s, %d, %s)", packageName, pid, psid);
         synchronized (mMonitor) {
             Collection<ClientDescription> clientDescriptions =
                     mTaggedClients.removeAll(new Tag(packageName, pid, psid));
             if (Utils.isNullOrEmpty(clientDescriptions)) {
-                YLogger.debug(
+                DebugLogger.info(
                     TAG,
                     "remove clients for (packageName, pid, psid) = (%s, %d, %s). No clients found.",
                     packageName,
@@ -76,7 +76,7 @@ public class ClientRepository {
                     psid
                 );
             } else  {
-                YLogger.debug(
+                DebugLogger.info(
                     TAG,
                     "remove clients for (packageName, pid, psid) = (%s, %d, %s). %d clients removed.",
                     packageName,

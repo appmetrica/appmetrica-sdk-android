@@ -30,7 +30,7 @@ import io.appmetrica.analytics.impl.startup.StartupListener;
 import io.appmetrica.analytics.impl.startup.StartupState;
 import io.appmetrica.analytics.impl.startup.StartupUnit;
 import io.appmetrica.analytics.impl.utils.StartupUtils;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -130,11 +130,11 @@ public class CommutationDispatcherComponent implements IComponent, StartupListen
                 .createClientIdentifiersProvider(mStartupUnit, mAdvertisingIdGetter, mContext);
         mTaskProcessor = fieldsFactory.createTaskProcessor(this, mStartupUnit);
 
-        YLogger.debug(TAG, "Create a new commutation component for package: %s", componentId.getPackage());
+        DebugLogger.info(TAG, "Create a new commutation component for package: %s", componentId.getPackage());
         mReferrerHolder = referrerHolder;
 
         this.referrerManager = referrerManager;
-        YLogger.debug(TAG, "Subscribe on referrer updates from commutation dispatcher component");
+        DebugLogger.info(TAG, "Subscribe on referrer updates from commutation dispatcher component");
         mStartupCenter.registerStartupListener(mComponentId, this);
     }
 
@@ -151,7 +151,7 @@ public class CommutationDispatcherComponent implements IComponent, StartupListen
 
     public synchronized void connectClient(@NonNull CommutationClientUnit clientUnit) {
         mLifecycleManager.connectClient(clientUnit);
-        YLogger.debug(
+        DebugLogger.info(
             TAG,
             "add client. Clients count %d",
             mComponentId,
@@ -165,7 +165,7 @@ public class CommutationDispatcherComponent implements IComponent, StartupListen
 
     public synchronized void disconnectClient(@NonNull CommutationClientUnit clientUnit) {
         mLifecycleManager.disconnectClient(clientUnit);
-        YLogger.debug(
+        DebugLogger.info(
             TAG,
             "remove client. Clients count %d",
             mComponentId,
@@ -174,7 +174,7 @@ public class CommutationDispatcherComponent implements IComponent, StartupListen
     }
 
     public void handleReport(@NonNull CounterReport reportData, @NonNull CommutationClientUnit clientUnit) {
-        YLogger.debug(
+        DebugLogger.info(
             TAG,
             "handle report for componentId: %s; data: %s",
             mComponentId,
@@ -202,7 +202,7 @@ public class CommutationDispatcherComponent implements IComponent, StartupListen
 
     @Override
     public void onStartupError(@NonNull StartupError startupError, @Nullable StartupState existingState) {
-        YLogger.debug(TAG, "error %s for component %s", startupError, mComponentId);
+        DebugLogger.info(TAG, "error %s for component %s", startupError, mComponentId);
         synchronized (mStartupLock) {
             for (IdentifiersData identifiersData : mStartupEventReceivers) {
                 DataResultReceiver.notifyOnStartupError(
@@ -217,7 +217,7 @@ public class CommutationDispatcherComponent implements IComponent, StartupListen
     }
 
     private void notifyStartupUpdated(@NonNull StartupState state) {
-        YLogger.debug(TAG, "startupUpdated for component %s", mComponentId);
+        DebugLogger.info(TAG, "startupUpdated for component %s", mComponentId);
         synchronized (mStartupLock) {
             for (ClientIdentifiersChangedListener listener : mLifecycleManager.getConnectedClients()) {
                 notifyListener(listener, StartupUtils.decodeClids(state.getLastClientClidsForStartupRequest()));
@@ -245,7 +245,7 @@ public class CommutationDispatcherComponent implements IComponent, StartupListen
                                 @Nullable Map<String, String> clientClids) {
         ClientIdentifiersHolder clientIdentifiersHolder = mClientIdentifiersProvider
                 .createClientIdentifiersHolder(clientClids);
-        YLogger.debug(TAG, "Notify listener: %s with client identifiers: %s", listener, clientIdentifiersHolder);
+        DebugLogger.info(TAG, "Notify listener: %s with client identifiers: %s", listener, clientIdentifiersHolder);
         listener.onClientIdentifiersChanged(clientIdentifiersHolder);
     }
 
@@ -265,12 +265,12 @@ public class CommutationDispatcherComponent implements IComponent, StartupListen
             clidsForVerification = identifiersData.getClidsFromClientForVerification();
         }
         boolean startupRequiredForIdentifiers = mStartupUnit.isStartupRequired(identifiers, clidsForVerification);
-        YLogger.debug(TAG, "startupRequiredForIdentifiers %s is %b", identifiers, startupRequiredForIdentifiers);
+        DebugLogger.info(TAG, "startupRequiredForIdentifiers %s is %b", identifiers, startupRequiredForIdentifiers);
         if (startupRequiredForIdentifiers == false) {
             sendStartupToClient(resultReceiver, clidsForVerification);
         }
         if (mStartupUnit.isStartupRequired()) {
-            YLogger.debug(TAG, "Startup is required.");
+            DebugLogger.info(TAG, "Startup is required.");
             synchronized (mStartupLock) {
                 if (startupRequiredForIdentifiers && identifiersData != null) {
                     mStartupEventReceivers.add(identifiersData);
@@ -287,7 +287,7 @@ public class CommutationDispatcherComponent implements IComponent, StartupListen
     }
 
     public void requestReferrer(@Nullable final ResultReceiver receiver) {
-        YLogger.info(TAG, "Request referrer. Receiver: %s", receiver);
+        DebugLogger.info(TAG, "Request referrer. Receiver: %s", receiver);
         referrerManager.addOneShotListener(new ReferrerChosenListener() {
             @Override
             public void onReferrerChosen(@Nullable ReferrerInfo referrerInfo) {

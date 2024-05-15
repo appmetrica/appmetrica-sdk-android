@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.coreutils.internal.time
 
 import androidx.annotation.VisibleForTesting
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 
 class TimePassedChecker @VisibleForTesting internal constructor(private val mTimeProvider: TimeProvider) {
     constructor() : this(SystemTimeProvider())
@@ -15,12 +15,12 @@ class TimePassedChecker @VisibleForTesting internal constructor(private val mTim
     }
 
     private fun didTimePass(currentTime: Long, lastTime: Long, interval: Long, tag: String): Boolean {
-        YLogger.info(
+        DebugLogger.info(
             tag,
             "didTimePass? current time: $currentTime, last time: $lastTime, interval $interval."
         )
         if (currentTime < lastTime) {
-            YLogger.warning(tag, "current time is less than last.")
+            DebugLogger.warning(tag, "current time is less than last.")
             return true
         }
         return currentTime - lastTime >= interval

@@ -6,7 +6,7 @@ import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.backport.Consumer;
 import io.appmetrica.analytics.impl.crash.CrashFileObserver;
 import io.appmetrica.analytics.impl.crash.CrashFolderPreparer;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import java.io.File;
 
 public class CrashDirectoryWatcher {
@@ -40,12 +40,12 @@ public class CrashDirectoryWatcher {
 
     public void startWatching() {
         crashFolderPreparer.prepareCrashFolder(crashDirectory);
-        YLogger.debug(TAG, "startWatching for crashDirectory %s", crashDirectory.getAbsolutePath());
+        DebugLogger.info(TAG, "startWatching for crashDirectory %s", crashDirectory.getAbsolutePath());
         observer.startWatching();
     }
 
     public void stopWatching() {
-        YLogger.debug(TAG, "%s stopWatching for crashDirectory %s", crashDirectory.getAbsolutePath());
+        DebugLogger.info(TAG, "%s stopWatching for crashDirectory %s", crashDirectory.getAbsolutePath());
         observer.stopWatching();
     }
 }

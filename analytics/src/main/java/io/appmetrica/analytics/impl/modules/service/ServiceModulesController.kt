@@ -11,7 +11,7 @@ import io.appmetrica.analytics.impl.modules.ModuleRemoteConfigController
 import io.appmetrica.analytics.impl.permissions.DefaultAskForPermissionStrategyProvider
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade
 import io.appmetrica.analytics.impl.startup.StartupState
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 import io.appmetrica.analytics.modulesapi.internal.common.AskForPermissionStrategyModuleProvider
 import io.appmetrica.analytics.modulesapi.internal.service.ModuleLocationSourcesServiceController
 import io.appmetrica.analytics.modulesapi.internal.service.ModuleServiceEntryPoint
@@ -43,7 +43,7 @@ internal class ServiceModulesController :
         val result = modules.flatMap { module ->
             module.remoteConfigExtensionConfiguration?.getFeatures() ?: emptyList()
         }
-        YLogger.info(tag, "Collected features from modules: $result")
+        DebugLogger.info(tag, "Collected features from modules: $result")
 
         return result
     }
@@ -53,13 +53,13 @@ internal class ServiceModulesController :
             it.remoteConfigExtensionConfiguration?.getBlocks()?.toList() ?: emptyList()
         }.toMap()
 
-        YLogger.info(tag, "Collected blocks from modules: $result")
+        DebugLogger.info(tag, "Collected blocks from modules: $result")
 
         return result
     }
 
     override fun collectRemoteConfigControllers(): Map<String, ModuleRemoteConfigController> {
-        YLogger.info(tag, "Request remote config controllers")
+        DebugLogger.info(tag, "Request remote config controllers")
         return modules.mapNotNull { module ->
             module.remoteConfigExtensionConfiguration?.let {
                 module.identifier to ModuleRemoteConfigController(it)
@@ -69,17 +69,17 @@ internal class ServiceModulesController :
 
     override fun collectLocationConsumers(): List<Consumer<Location?>> {
         val consumers = modules.mapNotNull { it.locationServiceExtension?.locationConsumer }
-        YLogger.info(tag, "Collect location consumers: $consumers")
+        DebugLogger.info(tag, "Collect location consumers: $consumers")
         return consumers
     }
 
     override fun chooseLocationSourceController(): ModuleLocationSourcesServiceController? {
-        YLogger.info(tag, "Collect location source controller")
+        DebugLogger.info(tag, "Collect location source controller")
         return modules.firstNotNullOfOrNull { it.locationServiceExtension?.locationSourcesController }
     }
 
     override fun chooseLocationAppStateControlToggle(): Toggle? {
-        YLogger.info(tag, "Collect location app state control toggle")
+        DebugLogger.info(tag, "Collect location app state control toggle")
         return modules.firstNotNullOfOrNull { it.locationServiceExtension?.locationControllerAppStateToggle }
     }
 
@@ -91,36 +91,36 @@ internal class ServiceModulesController :
                 module.moduleServicesDatabase?.let { result.add(it) }
             } catch (e: Throwable) {
                 wrongModules.add(module)
-                YLogger.error("$tag [${module.identifier}]", e)
+                DebugLogger.error("$tag [${module.identifier}]", e)
                 reportSelfErrorEvent(module.identifier, "db", e)
             }
         }
-        YLogger.warning(tag, "Disabling defective modules: ${wrongModules.joinToString(", ") { it.identifier }}")
+        DebugLogger.warning(tag, "Disabling defective modules: ${wrongModules.joinToString(", ") { it.identifier }}")
         modules.removeAll(wrongModules)
 
         return result
     }
 
     override fun registerModule(moduleServiceEntryPoint: ModuleServiceEntryPoint<Any>) {
-        YLogger.info(tag, "Register new module with identifier = ${moduleServiceEntryPoint.identifier}")
+        DebugLogger.info(tag, "Register new module with identifier = ${moduleServiceEntryPoint.identifier}")
         modules.add(moduleServiceEntryPoint)
         registerAskForPermissionStrategyIfNeeded(moduleServiceEntryPoint)
     }
 
     override fun onStartupStateChanged(newState: StartupState) {
-        YLogger.info(tag, "Notify modules with remote config updated")
+        DebugLogger.info(tag, "Notify modules with remote config updated")
         val configProvider = ModuleRemoteConfigProvider(newState)
         modules.forEach { module ->
             module.remoteConfigExtensionConfiguration?.let {
                 val config = configProvider.getRemoteConfigForServiceModule(module.identifier)
-                YLogger.info(tag, "Notify module with id = ${module.identifier} with config = $config")
+                DebugLogger.info(tag, "Notify module with id = ${module.identifier} with config = $config")
                 it.getRemoteConfigUpdateListener().onRemoteConfigUpdated(config)
             }
         }
     }
 
     override fun initServiceSide(serviceContext: ServiceContext, startupState: StartupState) {
-        YLogger.info(tag, "Init service side. Total modules count = ${modules.size}")
+        DebugLogger.info(tag, "Init service side. Total modules count = ${modules.size}")
         val modulesWithProblems = hashSetOf<ModuleServiceEntryPoint<Any>>()
         modules.forEach { module ->
             try {
@@ -129,16 +129,16 @@ internal class ServiceModulesController :
                 module.initServiceSide(serviceContext, config)
 
                 module.moduleEventServiceHandlerFactory?.let {
-                    YLogger.info(tag, "Register new event handler with identifier = ${module.identifier}")
+                    DebugLogger.info(tag, "Register new event handler with identifier = ${module.identifier}")
                     GlobalServiceLocator.getInstance().moduleEventHandlersHolder.register(module.identifier, it)
                 }
             } catch (e: Throwable) {
-                YLogger.error("$tag [${module.identifier}]", e)
+                DebugLogger.error("$tag [${module.identifier}]", e)
                 reportSelfErrorEvent(module.identifier, "init", e)
                 modulesWithProblems.add(module)
             }
         }
-        YLogger.warning(
+        DebugLogger.warning(
             tag,
             "Disabling defective modules: ${modulesWithProblems.joinToString(", ") { it.identifier }}"
         )
@@ -149,7 +149,7 @@ internal class ServiceModulesController :
         if (askForPermissionStrategyModuleId == moduleServiceEntryPoint.identifier &&
             moduleServiceEntryPoint is AskForPermissionStrategyModuleProvider
         ) {
-            YLogger.info(
+            DebugLogger.info(
                 tag,
                 "Register askForPermissionStrategy from module with id = $askForPermissionStrategyModuleId"
             )

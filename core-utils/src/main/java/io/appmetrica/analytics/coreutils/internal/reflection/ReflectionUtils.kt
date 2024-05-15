@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.coreutils.internal.reflection
 
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 
 private const val TAG = "[ReflectionUtils]"
 
@@ -13,10 +13,10 @@ object ReflectionUtils {
 
     @JvmStatic
     fun <T> loadAndInstantiateClassWithDefaultConstructor(className: String, targetType: Class<T>): T? = try {
-        YLogger.info(TAG, "Load and instantiate class `$className` with default constructor")
+        DebugLogger.info(TAG, "Load and instantiate class `$className` with default constructor")
         loadClass(className, targetType)?.getConstructor()?.newInstance()
     } catch (e: Throwable) {
-        YLogger.error(
+        DebugLogger.error(
             TAG,
             e,
             "Failed to instantiate class with name \"%s\" and targetType: %",
@@ -34,9 +34,9 @@ object ReflectionUtils {
                 @Suppress("UNCHECKED_CAST")
                 return clazz as Class<T>
             }
-            YLogger.error(TAG, "Loaded class = %s for name %s couldn't be cast to %s", clazz, className, targetType)
+            DebugLogger.error(TAG, "Loaded class = %s for name %s couldn't be cast to %s", clazz, className, targetType)
         } catch (throwable: Throwable) {
-            YLogger.error(
+            DebugLogger.error(
                 TAG, throwable, "Failed to load class for name = %s and targetType = %s", className, targetType
             )
         }

@@ -2,7 +2,7 @@ package io.appmetrica.analytics.coreutils.internal.services.frequency
 
 import io.appmetrica.analytics.coreutils.internal.time.SystemTimeProvider
 import io.appmetrica.analytics.coreutils.internal.time.TimeProvider
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 
 class EventFrequencyOverWindowLimitDetector(
     private var window: Long,
@@ -19,7 +19,7 @@ class EventFrequencyOverWindowLimitDetector(
         val lastWindowStart = storage.getOrPutWindowStart(key, uptime)
         val delta = uptime - lastWindowStart
 
-        YLogger.info(
+        DebugLogger.info(
             tag,
             "detect for key: %s; uptime = %s; lastWindowStart = %s; delta = %s; " +
                 "windowOccurrencesCountFromStorage before = %s",

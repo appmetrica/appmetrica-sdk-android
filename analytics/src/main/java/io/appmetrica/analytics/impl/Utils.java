@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import io.appmetrica.analytics.coreutils.internal.StringUtils;
 import io.appmetrica.analytics.impl.crash.client.StackTraceItemInternal;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import io.appmetrica.analytics.networktasks.internal.NetworkTask;
 import java.io.Closeable;
 import java.io.PrintWriter;
@@ -52,7 +52,7 @@ public final class Utils {
             try {
                 return value.getStackTrace();
             } catch (Throwable ex) {
-                YLogger.error(TAG, ex, "Could not get stack trace.");
+                DebugLogger.error(TAG, ex, "Could not get stack trace.");
             }
         }
         return new StackTraceElement[0];
@@ -140,7 +140,7 @@ public final class Utils {
                 database.close();
             }
         } catch (Throwable exception) {
-            YLogger.error(TAG, exception, "Could not close database.");
+            DebugLogger.error(TAG, exception, "Could not close database.");
         }
     }
 
@@ -268,7 +268,7 @@ public final class Utils {
         try {
             application = (Application) context.getApplicationContext();
         } catch (Throwable ex) {
-            YLogger.error(TAG, ex, "Context %s is not application", context);
+            DebugLogger.error(TAG, ex, "Context %s is not application", context);
         }
         return application;
     }

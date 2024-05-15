@@ -5,11 +5,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
-import io.appmetrica.analytics.impl.Utils;
 import io.appmetrica.analytics.coreapi.internal.data.IBinaryDataHelper;
+import io.appmetrica.analytics.impl.Utils;
 import io.appmetrica.analytics.impl.db.connectors.DBConnector;
 import io.appmetrica.analytics.impl.db.constants.Constants;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 
 class BinaryDataHelper implements IBinaryDataHelper {
 
@@ -38,7 +38,7 @@ class BinaryDataHelper implements IBinaryDataHelper {
                 database.insertWithOnConflict(mTableName, null, values, SQLiteDatabase.CONFLICT_REPLACE);
             }
         } catch (Throwable e) {
-            YLogger.error(TAG, "could not insert %s into %s", key, mTableName);
+            DebugLogger.error(TAG, "could not insert %s into %s", key, mTableName);
         } finally {
             mConnector.closeDb(database);
         }
@@ -59,14 +59,14 @@ class BinaryDataHelper implements IBinaryDataHelper {
                     return data.getBlob(data.getColumnIndexOrThrow(Constants.BinaryDataTable.VALUE));
                 } else {
                     if (Utils.isNullOrEmpty(data) == false) {
-                        YLogger.error(TAG, "invalid cursor for key %s from %s", key, mTableName);
+                        DebugLogger.error(TAG, "invalid cursor for key %s from %s", key, mTableName);
                     } else {
-                        YLogger.info(TAG, "database for key %s from %s is empty.", key, mTableName);
+                        DebugLogger.info(TAG, "database for key %s from %s is empty.", key, mTableName);
                     }
                 }
             }
         } catch (Throwable e) {
-            YLogger.error(TAG, "could not get %s from %s", key, mTableName);
+            DebugLogger.error(TAG, "could not get %s from %s", key, mTableName);
         } finally {
             Utils.closeCursor(data);
             mConnector.closeDb(database);
@@ -87,7 +87,7 @@ class BinaryDataHelper implements IBinaryDataHelper {
                         new String[] { key });
             }
         } catch (Throwable e) {
-            YLogger.error(TAG, "could not delete %s from %s", key, mTableName);
+            DebugLogger.error(TAG, "could not delete %s from %s", key, mTableName);
         } finally {
             mConnector.closeDb(database);
         }

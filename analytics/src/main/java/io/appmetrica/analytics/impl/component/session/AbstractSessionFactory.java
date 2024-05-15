@@ -6,7 +6,7 @@ import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreutils.internal.time.SystemTimeProvider;
 import io.appmetrica.analytics.impl.IReporterExtended;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import java.util.concurrent.TimeUnit;
 
 public abstract class AbstractSessionFactory implements ISessionFactory<SessionArguments> {
@@ -72,7 +72,7 @@ public abstract class AbstractSessionFactory implements ISessionFactory<SessionA
                 TimeUnit.MILLISECONDS.toSeconds(arguments.creationTimestamp)
         );
 
-        YLogger.debug(TAG, "%s session created: %s", mArguments.getType(), sessionId);
+        DebugLogger.info(TAG, "%s session created: %s", mArguments.getType(), sessionId);
         return fillFromStorage();
     }
 

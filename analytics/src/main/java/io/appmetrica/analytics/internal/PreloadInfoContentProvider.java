@@ -12,7 +12,7 @@ import io.appmetrica.analytics.impl.ContentProviderFirstLaunchHelper;
 import io.appmetrica.analytics.impl.ContentProviderHelper;
 import io.appmetrica.analytics.impl.SdkUtils;
 import io.appmetrica.analytics.impl.preloadinfo.ContentProviderHelperFactory;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 
 public class PreloadInfoContentProvider extends ContentProvider {
 
@@ -27,17 +27,17 @@ public class PreloadInfoContentProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        YLogger.info(TAG, "onCreate");
+        DebugLogger.info(TAG, "onCreate");
         final Context context = getApplicationContext();
         final String authorityPrefix;
         if (context != null) {
             authorityPrefix = context.getPackageName();
         } else {
             authorityPrefix = "";
-            YLogger.info(TAG, "Could not form authority: context is null");
+            DebugLogger.info(TAG, "Could not form authority: context is null");
         }
         String authority = authorityPrefix + AUTHORITY_SUFFIX;
-        YLogger.info(TAG, "authority: " + authority);
+        DebugLogger.info(TAG, "authority: " + authority);
         uriMatcher.addURI(authority, "preloadinfo", PRELOAD_INFO_LIST);
         uriMatcher.addURI(authority, "clids", CLIDS);
         ContentProviderFirstLaunchHelper.onCreate(this);
@@ -49,11 +49,11 @@ public class PreloadInfoContentProvider extends ContentProvider {
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues values) {
         synchronized (this) {
             if (disabled) {
-                YLogger.info(TAG, "Will not insert into content provider as it is disabled");
+                DebugLogger.info(TAG, "Will not insert into content provider as it is disabled");
                 return null;
             }
         }
-        YLogger.info(TAG, "Received insert request with uri: %s, values: %s", uri, values);
+        DebugLogger.info(TAG, "Received insert request with uri: %s, values: %s", uri, values);
         if (values != null) {
             switch (uriMatcher.match(uri)) {
                 case PRELOAD_INFO_LIST:
@@ -70,7 +70,7 @@ public class PreloadInfoContentProvider extends ContentProvider {
                     break;
                 default:
                     SdkUtils.logAttributionW("Bad content provider uri.");
-                    YLogger.info(TAG, "Bad uri: " + uri);
+                    DebugLogger.info(TAG, "Bad uri: " + uri);
                     break;
             }
         }

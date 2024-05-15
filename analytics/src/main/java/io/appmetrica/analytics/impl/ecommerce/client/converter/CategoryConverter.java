@@ -10,7 +10,7 @@ import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedProvider;
 import io.appmetrica.analytics.impl.utils.limitation.CollectionTrimInfo;
 import io.appmetrica.analytics.impl.utils.limitation.TrimmingResult;
 import io.appmetrica.analytics.impl.utils.limitation.hierarchical.HierarchicalStringListTrimmer;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import java.util.List;
 
 public class CategoryConverter
@@ -40,7 +40,7 @@ public class CategoryConverter
         category.path = StringUtils.getUTF8Bytes(trimmedValue.value);
 
         if (trimmedValue.metaInfo.bytesTruncated > 0) {
-            YLogger.debug(
+            DebugLogger.info(
                     ECommerceConstants.FEATURE_TAG + TAG,
                     "Total bytes truncated = %d(%d items)",
                     trimmedValue.metaInfo.bytesTruncated,

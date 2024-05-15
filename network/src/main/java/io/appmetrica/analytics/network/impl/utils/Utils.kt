@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.network.impl.utils
 
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
 import java.util.Collections
@@ -28,12 +28,12 @@ internal object Utils {
                             }
                         }
                     } catch (ex: Throwable) {
-                        YLogger.error(TAG, ex)
+                        DebugLogger.error(TAG, ex)
                     }
                 }
             }
         } catch (ex: Throwable) {
-            YLogger.error(TAG, ex)
+            DebugLogger.error(TAG, ex)
         }
         return ByteArray(0)
     }

@@ -5,7 +5,7 @@ import io.appmetrica.analytics.impl.AppMetricaConnector
 import io.appmetrica.analytics.impl.AppMetricaUncaughtExceptionHandler
 import io.appmetrica.analytics.impl.ShouldDisconnectFromServiceChecker
 import io.appmetrica.analytics.internal.IAppMetricaService
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 import java.util.concurrent.Callable
 
 abstract class ReportToServiceCallable(
@@ -32,33 +32,33 @@ abstract class ReportToServiceCallable(
                     try {
                         reportToService(service)
                         if (shouldDisconnect()) {
-                            YLogger.info(tag, "schedule disconnect")
+                            DebugLogger.info(tag, "schedule disconnect")
                             serviceConnector.scheduleDisconnect()
                         }
                         return
                     } catch (e: RemoteException) {
-                        YLogger.error(
+                        DebugLogger.error(
                             tag,
                             e,
                             "[${javaClass.name}]Exception during sending data to service:\\n${e.message}"
                         )
                     }
                 }
-                YLogger.debug(tag, "[${javaClass.name}]There is no connected service. Try number $triesCount")
+                DebugLogger.info(tag, "[${javaClass.name}]There is no connected service. Try number $triesCount")
                 retry = handleAbsentService()
                 triesCount++
             } while (
                 retry && !AppMetricaUncaughtExceptionHandler.isProcessDying() && triesCount < CONNECTION_TRIES_COUNT
             )
         } catch (throwable: Throwable) {
-            YLogger.error(tag, throwable)
+            DebugLogger.error(tag, throwable)
             onReportToServiceError(throwable)
         }
         return
     }
 
     open fun onReportToServiceError(throwable: Throwable?) {
-        YLogger.error(tag, throwable, "[${javaClass.name}] Exception during reporting to service.")
+        DebugLogger.error(tag, throwable, "[${javaClass.name}] Exception during reporting to service.")
     }
 
     abstract fun reportToService(service: IAppMetricaService)

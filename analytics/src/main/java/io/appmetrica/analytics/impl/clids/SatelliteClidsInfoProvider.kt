@@ -9,7 +9,7 @@ import io.appmetrica.analytics.impl.DistributionSource
 import io.appmetrica.analytics.impl.SatelliteDataProvider
 import io.appmetrica.analytics.impl.SdkUtils
 import io.appmetrica.analytics.impl.Utils
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 
 internal class SatelliteClidsInfoProvider(
     private val context: Context
@@ -41,7 +41,7 @@ internal class SatelliteClidsInfoProvider(
                             SdkUtils.logAttribution("Invalid clid {%s : %s}", clidKey, clidValue)
                         }
                     } catch (ex: Throwable) {
-                        YLogger.error(tag, ex)
+                        DebugLogger.error(tag, ex)
                     }
                 }
                 SdkUtils.logAttribution("Clids from satellite: %s", clidsFromSatellite)
@@ -50,7 +50,7 @@ internal class SatelliteClidsInfoProvider(
                 SdkUtils.logAttribution("No Satellite content provider found")
             }
         } catch (ex: Throwable) {
-            YLogger.error(tag, ex)
+            DebugLogger.error(tag, ex)
             SdkUtils.logAttributionE(ex, "Error while getting satellite clids")
         } finally {
             Utils.closeCursor(cursor)

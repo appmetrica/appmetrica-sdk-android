@@ -5,8 +5,7 @@ import android.content.Context
 import android.os.Build
 import androidx.annotation.VisibleForTesting
 import io.appmetrica.analytics.coreutils.internal.AndroidUtils
-import io.appmetrica.analytics.coreutils.internal.io.FileUtils.moveByCopy
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 import java.io.File
 
 object FileUtils {
@@ -25,7 +24,7 @@ object FileUtils {
         if (sdkStorage == null) {
             synchronized(this) {
                 if (sdkStorage == null) {
-                    YLogger.info(TAG, "sdkStorage is null. So create it")
+                    DebugLogger.info(TAG, "sdkStorage is null. So create it")
                 }
                 sdkStorage = createSdkStorage(getAppStorageDirectory(context))
             }
@@ -38,13 +37,13 @@ object FileUtils {
             return null
         }
         val sdkStorage = File(file, SDK_STORAGE_RELATIVE_PATH)
-        YLogger.info(TAG, "Sdk storage path is ${sdkStorage.path}")
+        DebugLogger.info(TAG, "Sdk storage path is ${sdkStorage.path}")
         if (!sdkStorage.exists()) {
-            YLogger.info(TAG, "Sdk storage is not exist. So create it.")
+            DebugLogger.info(TAG, "Sdk storage is not exist. So create it.")
             val status = sdkStorage.mkdirs()
-            YLogger.info(TAG, "Sdk storage creating status = $status")
+            DebugLogger.info(TAG, "Sdk storage creating status = $status")
         } else {
-            YLogger.info(TAG, "Sdk storage exists.")
+            DebugLogger.info(TAG, "Sdk storage exists.")
         }
         return sdkStorage
     }
@@ -101,39 +100,39 @@ object FileUtils {
     @JvmStatic
     fun File?.copyToNullable(to: File?): Boolean {
         if (this == null || to == null) {
-            YLogger.info(TAG, "Source or destination is null, so ignore copying")
+            DebugLogger.info(TAG, "Source or destination is null, so ignore copying")
             return false
         }
         if (this.exists()) {
-            YLogger.info(TAG, "Copy from `${this.path}` -> ${this.path} via copy")
+            DebugLogger.info(TAG, "Copy from `${this.path}` -> ${this.path} via copy")
             try {
                 this.copyTo(to)
                 return true
             } catch (e: Throwable) {
-                YLogger.error(TAG, e)
+                DebugLogger.error(TAG, e)
             }
         } else {
-            YLogger.warning(TAG, "Source file with path `${this.path}` does not exist. Abort moving")
+            DebugLogger.warning(TAG, "Source file with path `${this.path}` does not exist. Abort moving")
         }
         return false
     }
 
     fun File?.moveByCopy(to: File?): Boolean {
         if (this == null || to == null) {
-            YLogger.info(TAG, "Source or destination is null, so ignore move")
+            DebugLogger.info(TAG, "Source or destination is null, so ignore move")
             return false
         }
         if (this.exists()) {
-            YLogger.info(TAG, "Move from `${this.path}` -> ${this.path} via copy")
+            DebugLogger.info(TAG, "Move from `${this.path}` -> ${this.path} via copy")
             try {
                 this.copyTo(to)
                 this.delete()
                 return true
             } catch (e: Throwable) {
-                YLogger.error(TAG, e)
+                DebugLogger.error(TAG, e)
             }
         } else {
-            YLogger.warning(TAG, "Source file with path `${this.path}` does not exist. Abort moving")
+            DebugLogger.warning(TAG, "Source file with path `${this.path}` does not exist. Abort moving")
         }
         return false
     }

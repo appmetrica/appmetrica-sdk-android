@@ -1,11 +1,11 @@
 package io.appmetrica.analytics.impl.db.protobuf;
 
 import androidx.annotation.NonNull;
+import io.appmetrica.analytics.coreapi.internal.data.IBinaryDataHelper;
 import io.appmetrica.analytics.coreapi.internal.data.ProtobufConverter;
 import io.appmetrica.analytics.coreapi.internal.data.ProtobufStateSerializer;
 import io.appmetrica.analytics.coreapi.internal.data.ProtobufStateStorage;
 import io.appmetrica.analytics.impl.Utils;
-import io.appmetrica.analytics.coreapi.internal.data.IBinaryDataHelper;
 import io.appmetrica.analytics.protobuf.nano.MessageNano;
 
 public class ProtobufStateStorageImpl<T, P extends MessageNano> implements ProtobufStateStorage<T> {

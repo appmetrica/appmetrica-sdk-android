@@ -10,12 +10,11 @@ import io.appmetrica.analytics.impl.db.DatabaseManagerProvider;
 import io.appmetrica.analytics.impl.db.DatabaseScriptsProvider;
 import io.appmetrica.analytics.impl.db.DbTablesColumnsProvider;
 import io.appmetrica.analytics.impl.utils.collection.HashMultimap;
-import io.appmetrica.analytics.logger.internal.YLogger;
 import java.util.List;
 import java.util.Locale;
 
 public final class Constants {
-    public static final Boolean PROFILE_SQL = YLogger.DEBUG && false;
+    public static final Boolean PROFILE_SQL = false;
 
     // Database version similar to level of SDK's API
     public static final int DATABASE_VERSION = AppMetrica.getLibraryApiLevel();

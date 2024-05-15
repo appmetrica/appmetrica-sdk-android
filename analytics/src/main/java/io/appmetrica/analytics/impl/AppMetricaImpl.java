@@ -28,7 +28,7 @@ import io.appmetrica.analytics.impl.startup.StartupHelper;
 import io.appmetrica.analytics.impl.utils.BooleanUtils;
 import io.appmetrica.analytics.impl.utils.LoggerStorage;
 import io.appmetrica.analytics.impl.utils.PublicLogger;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import java.util.List;
 import java.util.Map;
 
@@ -164,7 +164,7 @@ public class AppMetricaImpl implements IAppMetricaImpl {
     @AnyThread
     @Override
     public void onReceiveResult(int resultCode, @NonNull Bundle resultData) {
-        YLogger.info(TAG, "On receive data, result code: %d", resultCode);
+        DebugLogger.info(TAG, "On receive data, result code: %d", resultCode);
         mStartupHelper.processResultFromResultReceiver(resultData);
     }
 

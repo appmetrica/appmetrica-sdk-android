@@ -15,7 +15,7 @@ import io.appmetrica.analytics.locationapi.internal.LastKnownLocationExtractorPr
 import io.appmetrica.analytics.locationapi.internal.LocationControllerObserver;
 import io.appmetrica.analytics.locationapi.internal.LocationReceiver;
 import io.appmetrica.analytics.locationapi.internal.LocationReceiverProvider;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -70,7 +70,7 @@ public class LocationCore implements ILastKnownUpdater, LocationControllerObserv
     @Nullable
     public Location getCachedLocation() {
         Location location = locationStreamDispatcher.getCachedLocation();
-        YLogger.info(TAG, "getCachedLocation: %s", location);
+        DebugLogger.info(TAG, "getCachedLocation: %s", location);
         return location;
     }
 
@@ -79,16 +79,16 @@ public class LocationCore implements ILastKnownUpdater, LocationControllerObserv
     public synchronized void startLocationTracking() {
         if (!locationTrackingStarted) {
             locationTrackingStarted = true;
-            YLogger.info(TAG, "Start location tracking");
+            DebugLogger.info(TAG, "Start location tracking");
             startLocationTrackingInternal();
         } else {
-            YLogger.info(TAG, "Location tracking has already been started");
+            DebugLogger.info(TAG, "Location tracking has already been started");
         }
     }
 
     @GeoThread
     private synchronized void startLocationTrackingInternal() {
-        YLogger.info(TAG, "Start location tracking internal");
+        DebugLogger.info(TAG, "Start location tracking internal");
         cacheUpdateScheduler.startUpdates();
         for (LocationReceiver locationReceiver : locationReceivers.values()) {
             locationReceiver.startLocationUpdates();
@@ -100,17 +100,17 @@ public class LocationCore implements ILastKnownUpdater, LocationControllerObserv
     @GeoThread
     public synchronized void stopLocationTracking() {
         if (locationTrackingStarted) {
-            YLogger.info(TAG, "Stop location tracking");
+            DebugLogger.info(TAG, "Stop location tracking");
             locationTrackingStarted = false;
             stopLocationTrackingInternal();
         } else {
-            YLogger.info(TAG, "Location tracking hasn't been started. So ingnore stopLocationTracking.");
+            DebugLogger.info(TAG, "Location tracking hasn't been started. So ingnore stopLocationTracking.");
         }
     }
 
     @GeoThread
     private synchronized void stopLocationTrackingInternal() {
-        YLogger.info(TAG, "Stop location tracking internal");
+        DebugLogger.info(TAG, "Stop location tracking internal");
         cacheUpdateScheduler.stopUpdates();
         for (LocationReceiver locationReceiver : locationReceivers.values()) {
             locationReceiver.stopLocationUpdates();
@@ -131,7 +131,7 @@ public class LocationCore implements ILastKnownUpdater, LocationControllerObserv
     public synchronized void registerLastKnownSource(@NonNull LastKnownLocationExtractorProvider sourceProvider) {
         LastKnownLocationExtractor source =
             sourceProvider.getExtractor(context, permissionExtractor, executor, locationListener);
-        YLogger.info(
+        DebugLogger.info(
             TAG,
             "registerLastKnownLocationExtractor: %s with id = %s",
             source,
@@ -145,7 +145,7 @@ public class LocationCore implements ILastKnownUpdater, LocationControllerObserv
 
     @AnyThread
     public synchronized void unregisterLastKnownSource(@NonNull LastKnownLocationExtractorProvider sourceProvider) {
-        YLogger.info(TAG, "unregisterLastKnownLocationExtractor: %s", sourceProvider.getIdentifier());
+        DebugLogger.info(TAG, "unregisterLastKnownLocationExtractor: %s", sourceProvider.getIdentifier());
         lastKnownLocationExtractors.remove(sourceProvider.getIdentifier());
     }
 
@@ -153,7 +153,7 @@ public class LocationCore implements ILastKnownUpdater, LocationControllerObserv
     public synchronized void registerLocationReceiver(@NonNull LocationReceiverProvider receiverProvider) {
         LocationReceiver receiver =
             receiverProvider.getLocationReceiver(context, permissionExtractor, executor, locationListener);
-        YLogger.info(
+        DebugLogger.info(
             TAG,
             "register location receiver: %s with id = %s; locationTrackingStarted = %s",
             receiver,
@@ -163,23 +163,27 @@ public class LocationCore implements ILastKnownUpdater, LocationControllerObserv
         LocationReceiver oldReceiver = locationReceivers.put(receiverProvider.getIdentifier(), receiver);
         if (locationTrackingStarted) {
             if (oldReceiver != null) {
-                YLogger.info(TAG, "stop prev location receiver: %s with id = %s",
+                DebugLogger.info(TAG, "stop prev location receiver: %s with id = %s",
                     oldReceiver, receiverProvider.getIdentifier());
                 oldReceiver.stopLocationUpdates();
             }
-            YLogger.info(TAG, "start location updates for receiver = %s", receiver);
+            DebugLogger.info(TAG, "start location updates for receiver = %s", receiver);
             receiver.startLocationUpdates();
         }
     }
 
     @AnyThread
     public synchronized void unregisterLocationReceiver(@NonNull LocationReceiverProvider receiverProvider) {
-        YLogger.info(TAG, "unregister location receiver with id: %s; locationTrackingStarted = %s",
+        DebugLogger.info(TAG, "unregister location receiver with id: %s; locationTrackingStarted = %s",
             receiverProvider.getIdentifier(), locationTrackingStarted);
         LocationReceiver receiver = locationReceivers.remove(receiverProvider.getIdentifier());
         if (receiver != null) {
             if (locationTrackingStarted) {
-                YLogger.info(TAG, "stop location updates for receiver with id = %s", receiverProvider.getIdentifier());
+                DebugLogger.info(
+                    TAG,
+                    "stop location updates for receiver with id = %s",
+                    receiverProvider.getIdentifier()
+                );
                 receiver.stopLocationUpdates();
             }
         }

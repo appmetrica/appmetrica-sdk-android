@@ -7,7 +7,7 @@ import io.appmetrica.analytics.coreapi.internal.annotations.GeoThread;
 import io.appmetrica.analytics.coreapi.internal.backport.Consumer;
 import io.appmetrica.analytics.coreutils.internal.time.TimePassedChecker;
 import io.appmetrica.analytics.locationapi.internal.LocationFilter;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -33,11 +33,11 @@ class SingleProviderLocationFiltrator {
     @GeoThread
     public void handleLocation(@NonNull Location location) {
         if (shouldHandle(location)) {
-            YLogger.info(TAG, "Should handle and store location for provider: " + location.getProvider());
+            DebugLogger.info(TAG, "Should handle and store location for provider: " + location.getProvider());
             updateLastLocation(location);
             consumeLocation(location);
         } else {
-            YLogger.info(TAG, "Location %s will be ignored", location);
+            DebugLogger.info(TAG, "Location %s will be ignored", location);
         }
     }
 
@@ -72,7 +72,7 @@ class SingleProviderLocationFiltrator {
                 shouldHandle = true;
             }
 
-            YLogger.info(TAG, "[LocationHandler] shouldHandle = mLastLocation == null (%s) || " +
+            DebugLogger.info(TAG, "[LocationHandler] shouldHandle = mLastLocation == null (%s) || " +
                     "(isSavedLocationOutdated(%s) " +
                     "|| isDistanceGreaterThanUpdateInterval(%s) && isLocationNewerOrTheSame(%s)) = %s",
                 String.valueOf(lastLocation == null),
@@ -98,7 +98,7 @@ class SingleProviderLocationFiltrator {
         float distanceChanging = calculateDistanceChanging(location);
         boolean result = distanceChanging > filter.getUpdateDistanceInterval();
 
-        YLogger.info(TAG, "[LocationHandler] isDistanceGreaterThanUpdateInterval = distanceChanging(%s) > " +
+        DebugLogger.info(TAG, "[LocationHandler] isDistanceGreaterThanUpdateInterval = distanceChanging(%s) > " +
                 "updateDistanceInterval(%s) ? %s",
             String.valueOf(distanceChanging),
             String.valueOf(filter.getUpdateDistanceInterval()),
@@ -110,9 +110,9 @@ class SingleProviderLocationFiltrator {
     private boolean isLocationNewerOrTheSame(@NonNull Location location) {
         boolean result = lastLocation == null || (location.getTime() - lastLocation.getTime() >= 0);
         if (lastLocation == null) {
-            YLogger.info(TAG, "[LocationHandler] isLocationNewerOrTheSame: mLastLocation = null");
+            DebugLogger.info(TAG, "[LocationHandler] isLocationNewerOrTheSame: mLastLocation = null");
         } else {
-            YLogger.info(TAG, "[LocationHandler] isLocationNewerOrTheSame = mLastLocation == null (%s) || " +
+            DebugLogger.info(TAG, "[LocationHandler] isLocationNewerOrTheSame = mLastLocation == null (%s) || " +
                     "(locationTime(%s) - lastLocationTime(%s) = %s >= 0 ? %s)",
                 String.valueOf(false),
                 String.valueOf(location.getTime()),
@@ -130,13 +130,13 @@ class SingleProviderLocationFiltrator {
 
     @GeoThread
     public void setLocationFilter(@NonNull LocationFilter locationFilter) {
-        YLogger.info(TAG, "setLocationFilter: %s", locationFilter);
+        DebugLogger.info(TAG, "setLocationFilter: %s", locationFilter);
         this.locationFilter = locationFilter;
     }
 
     @GeoThread
     public void registerConsumer(@NonNull Consumer<Location> consumer) {
-        YLogger.info(TAG, "Register consumer: %s; total consumers = %d", consumer, consumers.size());
+        DebugLogger.info(TAG, "Register consumer: %s; total consumers = %d", consumer, consumers.size());
         consumers.add(consumer);
     }
 }

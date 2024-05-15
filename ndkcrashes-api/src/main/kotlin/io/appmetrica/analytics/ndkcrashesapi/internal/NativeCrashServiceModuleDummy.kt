@@ -1,17 +1,17 @@
 package io.appmetrica.analytics.ndkcrashesapi.internal
 
 import android.content.Context
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 
 class NativeCrashServiceModuleDummy : NativeCrashServiceModule() {
     private val tag = "[NativeCrashServiceModuleDummy]"
 
     override fun init(context: Context, config: NativeCrashServiceConfig) {
-        YLogger.debug(tag, "Skipping initialization of server part of native crashes")
+        DebugLogger.info(tag, "Skipping initialization of server part of native crashes")
     }
 
     override fun setDefaultCrashHandler(handler: NativeCrashHandler?) {
-        YLogger.debug(tag, "Skipping set default native crash handler")
+        DebugLogger.info(tag, "Skipping set default native crash handler")
     }
 
     override fun getAllCrashes(): List<NativeCrash> {
@@ -19,10 +19,10 @@ class NativeCrashServiceModuleDummy : NativeCrashServiceModule() {
     }
 
     override fun markCrashCompleted(uuid: String) {
-        YLogger.debug(tag, "Skipping mark crash completed $uuid")
+        DebugLogger.info(tag, "Skipping mark crash completed $uuid")
     }
 
     override fun deleteCompletedCrashes() {
-        YLogger.debug(tag, "Skipping delete completed crashes")
+        DebugLogger.info(tag, "Skipping delete completed crashes")
     }
 }

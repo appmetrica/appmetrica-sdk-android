@@ -6,7 +6,7 @@ import io.appmetrica.analytics.coreutils.internal.WrapUtils;
 import io.appmetrica.analytics.impl.protobuf.client.StartupStateProtobuf;
 import io.appmetrica.analytics.impl.startup.CollectingFlags;
 import io.appmetrica.analytics.impl.utils.JsonHelper;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -46,7 +46,7 @@ public class FeaturesParser {
                 startupResult.setCollectingFlags(collectingFlags);
             }
         } catch (Throwable ex) {
-            YLogger.error(TAG, ex);
+            DebugLogger.error(TAG, ex);
         }
     }
 

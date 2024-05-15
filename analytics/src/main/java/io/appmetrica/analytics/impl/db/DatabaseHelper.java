@@ -31,7 +31,7 @@ import io.appmetrica.analytics.impl.db.session.DbSessionModelFactory;
 import io.appmetrica.analytics.impl.events.EventListener;
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade;
 import io.appmetrica.analytics.impl.utils.encryption.EncryptedCounterReport;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -143,7 +143,7 @@ public class DatabaseHelper {
                 }
             }
         } catch (Throwable ex) {
-            YLogger.error(TAG, "Smth was wrong counting reports.\n%s", ex);
+            DebugLogger.error(TAG, "Smth was wrong counting reports.\n%s", ex);
         } finally {
             Utils.closeCursor(cursor);
             mReadLock.unlock();
@@ -161,7 +161,7 @@ public class DatabaseHelper {
 
     // Creates and writes a new session by Id
     public void newSession(final long sessionId, final SessionType type, final long sessionStartTimeSeconds) {
-        YLogger.debug(TAG, "New session was created. Session Id: %d", sessionId);
+        DebugLogger.info(TAG, "New session was created. Session Id: %d", sessionId);
 
         final ContentValues sessionValues = new DbSessionModelConverter().fromModel(
             new DbSessionModelFactory(
@@ -190,7 +190,7 @@ public class DatabaseHelper {
             environmentRevision
         ).create();
         final ContentValues reportValues = dbEventModelConverter.fromModel(dbEventModel);
-        YLogger.info(TAG, "A new report: %s", StringUtils.contentValuesToString(reportValues));
+        DebugLogger.info(TAG, "A new report: %s", StringUtils.contentValuesToString(reportValues));
         addReportValues(reportValues);
     }
 
@@ -203,7 +203,7 @@ public class DatabaseHelper {
                 rowCount = DBUtils.queryRowsCount(db, Constants.EventsTable.TABLE_NAME);
             }
         } catch (Throwable e) {
-            YLogger.error(TAG, e, e.getMessage());
+            DebugLogger.error(TAG, e, e.getMessage());
         } finally {
             mReadLock.unlock();
         };
@@ -234,14 +234,18 @@ public class DatabaseHelper {
 
             final SQLiteDatabase wDatabase = mStorage.getWritableDatabase();
             if (wDatabase != null) {
-                YLogger.debug(TAG, "Try to remove empty sessions with id less than %d", thresholdSessionId);
+                DebugLogger.info(
+                    TAG,
+                    "Try to remove empty sessions with id less than %d",
+                    thresholdSessionId
+                );
                 affectedRows = wDatabase.delete(SessionTable.TABLE_NAME, SessionTable.CLEAR_EMPTY_PREVIOUS_SESSIONS,
                         new String[]{String.valueOf(thresholdSessionId)});
 
-                YLogger.info(TAG, "Removed empty sessions - affected: %d", affectedRows);
+                DebugLogger.info(TAG, "Removed empty sessions - affected: %d", affectedRows);
             }
         } catch (Throwable exception) {
-            YLogger.error(TAG, "Smth was wrong while removing session.\n%s", exception);
+            DebugLogger.error(TAG, "Smth was wrong while removing session.\n%s", exception);
         } finally {
             mWriteLock.unlock();
         }
@@ -262,7 +266,7 @@ public class DatabaseHelper {
                 while (allSessionsCursor.moveToNext()) {
                     buf.append(allSessionsCursor.getString(0)).append(", ");
                 }
-                YLogger.info(TAG, buf.toString());
+                DebugLogger.info(TAG, buf.toString());
 
                 sessionsInReportsCursor = rDatabase.rawQuery(SessionTable.ALL_SESSION_IN_REPORTS, new String[]{});
                 StringBuffer buffer = new StringBuffer();
@@ -270,10 +274,10 @@ public class DatabaseHelper {
                 while (sessionsInReportsCursor.moveToNext()) {
                     buffer.append(sessionsInReportsCursor.getString(0)).append(", ");
                 }
-                YLogger.info(TAG, buffer.toString());
+                DebugLogger.info(TAG, buffer.toString());
             }
         } catch (Throwable exception) {
-            YLogger.error(TAG, "Smth was wrong while logging sessions.\n%s", exception);
+            DebugLogger.error(TAG, "Smth was wrong while logging sessions.\n%s", exception);
         } finally {
             mReadLock.unlock();
             Utils.closeCursor(allSessionsCursor);
@@ -286,20 +290,20 @@ public class DatabaseHelper {
             mWriteLock.lock();
             final long maxReportsInDbCount = mComponent.getFreshReportRequestConfig().getMaxEventsInDbCount();
             final long currentRowCount = mRowCount.get();
-            YLogger.debug(
+            DebugLogger.info(
                 TAG,
                 "Should clear db? Current reports count: %d, max: %d",
                 currentRowCount,
                 maxReportsInDbCount
             );
             if (currentRowCount > maxReportsInDbCount) {
-                YLogger.info(TAG, "Trying to clear reports table. Row count: %s, rows count: %s, max: %s",
+                DebugLogger.info(TAG, "Trying to clear reports table. Row count: %s, rows count: %s, max: %s",
                     currentRowCount, mRowCount, maxReportsInDbCount);
                 SQLiteDatabase db = mStorage.getWritableDatabase();
                 if (db != null) {
                     int deletedRowsCount = deleteExcessiveReports(db);
                     long allRowsCount = mRowCount.addAndGet(-deletedRowsCount);
-                    YLogger.info(TAG, "Reports table cleared. %d rows deleted. Row count: %d",
+                    DebugLogger.info(TAG, "Reports table cleared. %d rows deleted. Row count: %d",
                         deletedRowsCount, allRowsCount);
                     if (deletedRowsCount != 0) {
                         for (EventListener listener : mEventListeners) {
@@ -309,7 +313,7 @@ public class DatabaseHelper {
                 }
             }
         } catch (Throwable e) {
-            YLogger.error(TAG, e, "Smth was wrong while clearing database.");
+            DebugLogger.error(TAG, e, "Smth was wrong while clearing database.");
         } finally {
             mWriteLock.unlock();
         }
@@ -332,7 +336,7 @@ public class DatabaseHelper {
                     true
             ).mDeletedRowsCount;
         } catch (Throwable e) {
-            YLogger.error(TAG, e, "Something was wrong while removing excessive reports from db");
+            DebugLogger.error(TAG, e, "Something was wrong while removing excessive reports from db");
             AppMetricaSelfReportFacade.getReporter()
                     .reportError("deleteExcessiveReports exception", e);
             return 0;
@@ -384,10 +388,10 @@ public class DatabaseHelper {
                 }
                 final int deletedRows = deletionInfo.mDeletedRowsCount;
                 long rows = mRowCount.addAndGet(-deletedRows);
-                YLogger.debug(TAG, "%d reports removed. Row count %d", deletedRows, rows);
+                DebugLogger.info(TAG, "%d reports removed. Row count %d", deletedRows, rows);
             }
         } catch (Throwable exception) {
-            YLogger.error(TAG, "Smth was wrong while removing top records for session.\n%s", exception);
+            DebugLogger.error(TAG, "Smth was wrong while removing top records for session.\n%s", exception);
         } finally {
             mWriteLock.unlock();
         }
@@ -410,7 +414,7 @@ public class DatabaseHelper {
                 );
             }
         } catch (Throwable exception) {
-            YLogger.error(TAG, "Smth was wrong while querying sessions.\n%s", exception);
+            DebugLogger.error(TAG, "Smth was wrong while querying sessions.\n%s", exception);
         } finally {
             mReadLock.unlock();
         }
@@ -434,7 +438,7 @@ public class DatabaseHelper {
                 );
             }
         } catch (Throwable exception) {
-            YLogger.error(TAG, "Smth was wrong while querying session by Id.\n%s", exception);
+            DebugLogger.error(TAG, "Smth was wrong while querying session by Id.\n%s", exception);
         } finally {
             mReadLock.unlock();
         }
@@ -459,7 +463,7 @@ public class DatabaseHelper {
                 );
             }
         } catch (Throwable exception) {
-            YLogger.error(TAG, "Smth was wrong while querying reports by session Id.\n%s", exception);
+            DebugLogger.error(TAG, "Smth was wrong while querying reports by session Id.\n%s", exception);
         } finally {
             mReadLock.unlock();
         }
@@ -477,10 +481,10 @@ public class DatabaseHelper {
             final SQLiteDatabase wDatabase = mStorage.getWritableDatabase();
             if (wDatabase != null) {
                 wDatabase.insertOrThrow(SessionTable.TABLE_NAME, null, session);
-                YLogger.debug(TAG, "session saved %s", session);
+                DebugLogger.info(TAG, "session saved %s", session);
             }
         } catch (Throwable exception) {
-            YLogger.error(TAG, "Smth was wrong while inserting some session into database.\n%s", exception);
+            DebugLogger.error(TAG, "Smth was wrong while inserting some session into database.\n%s", exception);
         } finally {
             mWriteLock.unlock();
         }
@@ -508,10 +512,10 @@ public class DatabaseHelper {
 
                 wDatabase.setTransactionSuccessful();
                 long rows = mRowCount.get();
-                YLogger.debug(TAG, "report saved. Row count %d", rows);
+                DebugLogger.info(TAG, "report saved. Row count %d", rows);
             }
         } catch (Throwable exception) {
-            YLogger.error(TAG, "Smth was wrong while inserting reports into database.\n%s", exception);
+            DebugLogger.error(TAG, "Smth was wrong while inserting reports into database.\n%s", exception);
         } finally {
             Utils.endTransaction(wDatabase);
             mWriteLock.unlock();
@@ -561,7 +565,7 @@ public class DatabaseHelper {
             }
         } catch (Throwable exception) {
             queryParameters = new ArrayList<ContentValues>();
-            YLogger.error(TAG, "Smth was wrong while collecting all query parameters.\n%s", exception);
+            DebugLogger.error(TAG, "Smth was wrong while collecting all query parameters.\n%s", exception);
         } finally {
             Utils.closeCursor(dataCursor);
             mReadLock.unlock();
@@ -588,7 +592,12 @@ public class DatabaseHelper {
                 }
             }
         } catch (Throwable exception) {
-            YLogger.error(TAG, exception, "Smth was wrong while getting query parameters for session = %s", sessionId);
+            DebugLogger.error(
+                TAG,
+                exception,
+                "Smth was wrong while getting query parameters for session = %s",
+                sessionId
+            );
         } finally {
             Utils.closeCursor(dataCursor);
             mReadLock.unlock();

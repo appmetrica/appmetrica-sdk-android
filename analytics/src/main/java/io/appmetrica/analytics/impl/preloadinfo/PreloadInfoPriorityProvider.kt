@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.preloadinfo
 
 import io.appmetrica.analytics.impl.DistributionPriorityProvider
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 
 private const val TAG = "[PreloadInfoPriorityProvider]"
 
@@ -15,7 +15,7 @@ internal class PreloadInfoPriorityProvider : DistributionPriorityProvider<Preloa
             return true
         }
         return (priorities[newData.source] > priorities[oldData.source]).also {
-            YLogger.info(
+            DebugLogger.info(
                 TAG,
                 "Choosing the most important data from $newData and $oldData. " +
                     "Is new data more important: $it"

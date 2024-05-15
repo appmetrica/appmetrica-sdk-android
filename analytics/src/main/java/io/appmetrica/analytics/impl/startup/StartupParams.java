@@ -18,7 +18,7 @@ import io.appmetrica.analytics.impl.startup.uuid.UuidValidator;
 import io.appmetrica.analytics.impl.utils.JsonHelper;
 import io.appmetrica.analytics.impl.utils.StartupUtils;
 import io.appmetrica.analytics.internal.IdentifiersResult;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -125,7 +125,7 @@ public class StartupParams {
 
     public void setClientClids(@Nullable Map<String, String> clids) {
         if (Utils.isNullOrEmpty(clids) == false && Utils.areEqual(clids, mClientClids) == false) {
-            YLogger.debug(TAG, "Update client clids from %s to %s", mClientClids, clids);
+            DebugLogger.info(TAG, "Update client clids from %s to %s", mClientClids, clids);
             mClientClids = new HashMap<String, String>(clids);
             mClientClidsChangedAfterLastIdentifiersUpdate = true;
 
@@ -216,7 +216,7 @@ public class StartupParams {
         boolean result = notAllIdentifiers || advIdentifiersRequested || outdated ||
                 mClientClidsChangedAfterLastIdentifiersUpdate;
 
-        YLogger.debug(
+        DebugLogger.info(
             TAG,
             "shouldSendStartup = %b:  notAllIdentifiers = %b; advIdentifiersRequested = %b, outdated = %b; " +
                 "mClientClidsChanged = %b; identifiers = %s",
@@ -251,7 +251,7 @@ public class StartupParams {
                 savedIdentifier = featuresHolder.getFeature(identifier);
             }
             if (Constants.StartupParamsCallbackKeys.CLIDS.equals(identifier)) {
-                YLogger.debug(
+                DebugLogger.info(
                     TAG,
                     "checking if contains clids. Client clids: %s, response clids: %s, " +
                         "mClientClidsChangedAfterLastIdentifiersUpdate: %b",

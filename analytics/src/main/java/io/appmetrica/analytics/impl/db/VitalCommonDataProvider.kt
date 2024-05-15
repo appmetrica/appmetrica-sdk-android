@@ -5,7 +5,7 @@ import androidx.annotation.WorkerThread
 import io.appmetrica.analytics.coreutils.internal.parsing.optStringOrNull
 import io.appmetrica.analytics.impl.referrer.common.ReferrerInfo
 import io.appmetrica.analytics.impl.utils.JsonHelper
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 import org.json.JSONObject
 
 private const val KEY_DEVICE_ID = "device_id"
@@ -105,7 +105,7 @@ internal class VitalCommonDataProvider(
         return try {
             ReferrerInfo.parseFrom(Base64.decode(toByteArray(), 0))
         } catch (ex: Throwable) {
-            YLogger.error(tag, ex)
+            DebugLogger.error(tag, ex)
             null
         }
     }

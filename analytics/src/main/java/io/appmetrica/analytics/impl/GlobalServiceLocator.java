@@ -9,8 +9,8 @@ import io.appmetrica.analytics.coreapi.internal.data.ProtobufStateStorage;
 import io.appmetrica.analytics.coreapi.internal.identifiers.PlatformIdentifiers;
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.FirstExecutionConditionService;
 import io.appmetrica.analytics.coreapi.internal.system.PermissionExtractor;
-import io.appmetrica.analytics.coreutils.internal.services.WaitForActivationDelayBarrier;
 import io.appmetrica.analytics.coreutils.internal.services.UtilityServiceProvider;
+import io.appmetrica.analytics.coreutils.internal.services.WaitForActivationDelayBarrier;
 import io.appmetrica.analytics.impl.clids.ClidsCandidatesHelper;
 import io.appmetrica.analytics.impl.clids.ClidsDataAwaiter;
 import io.appmetrica.analytics.impl.clids.ClidsInfo;
@@ -47,7 +47,7 @@ import io.appmetrica.analytics.impl.startup.uuid.MultiProcessSafeUuidProvider;
 import io.appmetrica.analytics.impl.startup.uuid.UuidFromStartupStateImporter;
 import io.appmetrica.analytics.impl.telephony.TelephonyDataProvider;
 import io.appmetrica.analytics.impl.utils.executors.ServiceExecutorProvider;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import io.appmetrica.analytics.modulesapi.internal.service.LocationServiceApi;
 import io.appmetrica.analytics.networktasks.internal.NetworkCore;
 import io.appmetrica.analytics.networktasks.internal.NetworkServiceLocator;
@@ -145,7 +145,7 @@ public final class GlobalServiceLocator {
     }
 
     public synchronized void initAsync() {
-        YLogger.info(TAG, "Init async");
+        DebugLogger.info(TAG, "Init async");
         utilityServiceProvider.initAsync();
         startupStateHolder.init(mContext);
         startupStateHolder.registerObserver(new UtilityServiceStartupStateObserver(utilityServiceProvider));

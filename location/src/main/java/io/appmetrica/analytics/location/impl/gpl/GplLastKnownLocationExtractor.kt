@@ -6,7 +6,7 @@ import io.appmetrica.analytics.coreapi.internal.annotations.GeoThread
 import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor
 import io.appmetrica.analytics.coreapi.internal.permission.PermissionResolutionStrategy
 import io.appmetrica.analytics.locationapi.internal.LastKnownLocationExtractor
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 
 private const val TAG = "[GplLastKnownLocationExtractor]"
 
@@ -24,12 +24,12 @@ internal class GplLastKnownLocationExtractor(
         if (permissionResolutionStrategy.hasNecessaryPermissions(context)) {
             try {
                 factory.create(context, locationListener, executor).updateLastKnownLocation()
-                YLogger.info(TAG, "Update last known location")
+                DebugLogger.info(TAG, "Update last known location")
             } catch (ex: Throwable) {
-                YLogger.error(TAG, ex, "Could not update last known location")
+                DebugLogger.error(TAG, ex, "Could not update last known location")
             }
         } else {
-            YLogger.info(TAG, "Cannot update last known location: no permissions.")
+            DebugLogger.info(TAG, "Cannot update last known location: no permissions.")
         }
     }
 }

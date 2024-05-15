@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.startup.uuid
 
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 import java.util.UUID
 
 class UuidValidator {
@@ -11,13 +11,13 @@ class UuidValidator {
 
     fun isValid(uuidStr: String?): Boolean {
         if (uuidStr == null || uuidStr.length != 32) {
-            YLogger.info(tag, "Uuid is invalid: length = ${uuidStr?.length}; value = $uuidStr")
+            DebugLogger.info(tag, "Uuid is invalid: length = ${uuidStr?.length}; value = $uuidStr")
             return false
         }
 
         val uuid = parseUuid(uuidStr)
         if (uuid == null) {
-            YLogger.error(tag, "Uuid has invalid format: $uuidStr")
+            DebugLogger.error(tag, "Uuid has invalid format: $uuidStr")
             return false
         }
 
@@ -27,7 +27,7 @@ class UuidValidator {
     private fun parseUuid(uuidStr: String): UUID? = try {
         UUID.fromString(normalizeUuid(uuidStr))
     } catch (e: Throwable) {
-        YLogger.error(tag, e)
+        DebugLogger.error(tag, e)
         null
     }
 

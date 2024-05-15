@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.permissions
 import android.Manifest
 import io.appmetrica.analytics.coreapi.internal.permission.PermissionStrategy
 import io.appmetrica.analytics.locationapi.internal.LocationControllerObserver
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 
 internal class LocationFlagStrategy : PermissionStrategy, LocationControllerObserver {
 
@@ -22,7 +22,7 @@ internal class LocationFlagStrategy : PermissionStrategy, LocationControllerObse
 
     override fun forbidUsePermission(permission: String): Boolean {
         return if (locationPermissions.contains(permission)) {
-            YLogger.info(TAG, "forbidUsePermission %s = %s", permission, !enabled)
+            DebugLogger.info(TAG, "forbidUsePermission %s = %s", permission, !enabled)
             return !enabled
         } else {
             false

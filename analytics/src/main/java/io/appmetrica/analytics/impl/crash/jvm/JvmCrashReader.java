@@ -7,7 +7,7 @@ import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.backport.Consumer;
 import io.appmetrica.analytics.coreapi.internal.backport.Function;
 import io.appmetrica.analytics.impl.IOUtils;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import java.io.File;
 
 public class JvmCrashReader implements Function<File, JvmCrash>, Consumer<File> {
@@ -24,12 +24,12 @@ public class JvmCrashReader implements Function<File, JvmCrash>, Consumer<File> 
     @Nullable
     JvmCrash handleCrashData(@NonNull File crashFile, @Nullable String crashData) {
         if (TextUtils.isEmpty(crashData)) {
-            YLogger.error(TAG, "can't read crash %s", crashFile.getName());
+            DebugLogger.error(TAG, "can't read crash %s", crashFile.getName());
         } else {
             try {
                 return new JvmCrash(crashData);
             } catch (Throwable e) {
-                YLogger.error(TAG, "can't read crash %s due to JSONException", crashFile.getName());
+                DebugLogger.error(TAG, "can't read crash %s due to JSONException", crashFile.getName());
             }
         }
         return null;
@@ -41,10 +41,10 @@ public class JvmCrashReader implements Function<File, JvmCrash>, Consumer<File> 
         try {
             boolean isDeleted = crashFile.delete();
             if (isDeleted == false) {
-                YLogger.warning(TAG, "file %s was not deleted.", crashFile.getName());
+                DebugLogger.warning(TAG, "file %s was not deleted.", crashFile.getName());
             }
         } catch (Throwable exception) {
-            YLogger.error(
+            DebugLogger.error(
                 TAG,
                 "can't handle delete crash file %s due to Exception",
                 crashFile.getName(),

@@ -5,7 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.impl.Utils;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -32,7 +32,7 @@ public class TablesValidatorImpl implements TablesValidator {
 
     public boolean isDbSchemeValid(SQLiteDatabase db) {
         try {
-            YLogger.debug(
+            DebugLogger.info(
                 TAG,
                 "Validate %s. Actual tables to check: %s",
                 mDatabaseLogIdentifier,
@@ -51,11 +51,11 @@ public class TablesValidatorImpl implements TablesValidator {
                     Utils.closeCursor(cursor);
                 }
             }
-            YLogger.debug(TAG, "%s Database scheme is %s.", mDatabaseLogIdentifier,  valid ? "valid" : "invalid");
+            DebugLogger.info(TAG, "%s Database scheme is %s.", mDatabaseLogIdentifier,  valid ? "valid" : "invalid");
 
             return valid;
         } catch (Throwable e) {
-            YLogger.error(TAG, e, "Exception while validating %s tables", mDatabaseLogIdentifier);
+            DebugLogger.error(TAG, e, "Exception while validating %s tables", mDatabaseLogIdentifier);
         }
         return false;
     }
@@ -81,7 +81,7 @@ public class TablesValidatorImpl implements TablesValidator {
         boolean result = columns.equals(cursorColumns);
 
         if (result == false) {
-            YLogger.error(
+            DebugLogger.error(
                 TAG,
                 "Invalid db: %s; for table %s expected columns: \n%s;\nactual columns:\n%s",
                 mDatabaseLogIdentifier,

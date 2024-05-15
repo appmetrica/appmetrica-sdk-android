@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.db
 
 import androidx.annotation.WorkerThread
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 import org.json.JSONObject
 
 internal class VitalDataProvider(
@@ -16,7 +16,7 @@ internal class VitalDataProvider(
     @Synchronized
     fun getOrLoadData(): JSONObject {
         if (!this::fileContents.isInitialized) {
-            YLogger.info(tag, "Initial loading from storages for first getOrLoadData")
+            DebugLogger.info(tag, "Initial loading from storages for first getOrLoadData")
             val primaryJson = primaryDataSource.read()
             val backupJson = backupDataSource.read()
             val content = vitalDataProviderStateMerger.merge(primaryJson, backupJson)
@@ -29,14 +29,14 @@ internal class VitalDataProvider(
     private fun VitalDataSource.read(): JSONObject = try {
         getVitalData()?.let { JSONObject(it) } ?: JSONObject()
     } catch (ex: Throwable) {
-        YLogger.error(tag, ex)
+        DebugLogger.error(tag, ex)
         JSONObject()
     }
 
     @WorkerThread
     @Synchronized
     fun save(contents: JSONObject) {
-        YLogger.info(tag, "Save data = $contents")
+        DebugLogger.info(tag, "Save data = $contents")
         val data = contents.toString()
         primaryDataSource.saveSafely(data)
         backupDataSource.saveSafely(data)
@@ -46,7 +46,7 @@ internal class VitalDataProvider(
         try {
             putVitalData(content)
         } catch (ex: Throwable) {
-            YLogger.error(tag, ex)
+            DebugLogger.error(tag, ex)
         }
     }
 }

@@ -20,7 +20,7 @@ import io.appmetrica.analytics.coreutils.internal.services.SafePackageManager;
 import io.appmetrica.analytics.coreutils.internal.system.SystemServiceUtils;
 import io.appmetrica.analytics.impl.protobuf.backend.EventProto;
 import io.appmetrica.analytics.impl.utils.MapWithDefault;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import java.util.Locale;
 
 public final class PhoneUtils {
@@ -63,7 +63,7 @@ public final class PhoneUtils {
         try {
             density = ctx.getResources().getDisplayMetrics().density;
         } catch (Throwable ex) {
-            YLogger.error(TAG, ex);
+            DebugLogger.error(TAG, ex);
         }
         if (density == 0) {
             return DeviceTypeValues.PHONE;

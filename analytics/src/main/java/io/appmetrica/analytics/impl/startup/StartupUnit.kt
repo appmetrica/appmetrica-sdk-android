@@ -13,7 +13,7 @@ import io.appmetrica.analytics.impl.startup.parsing.StartupParser
 import io.appmetrica.analytics.impl.startup.parsing.StartupResult
 import io.appmetrica.analytics.impl.utils.ServerTime
 import io.appmetrica.analytics.impl.utils.StartupUtils
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 import io.appmetrica.analytics.networktasks.internal.NetworkTask
 
 internal class StartupUnit(
@@ -32,23 +32,23 @@ internal class StartupUnit(
         get() = startupUnitComponents.startupConfigurationHolder.get()
 
     fun init() {
-        YLogger.info(tag, "Init startup unit for componentId = ${startupUnitComponents.componentId}")
+        DebugLogger.info(tag, "Init startup unit for componentId = ${startupUnitComponents.componentId}")
         val startupState = startupUnitComponents.startupConfigurationHolder.startupState
         var startupStateBuilder = startupState.buildUpon()
         if (!startupUnitComponents.uuidValidator.isValid(startupState.uuid)) {
             val uuid = startupUnitComponents.multiProcessSafeUuidProvider.readUuid().id
             startupStateBuilder = startupStateBuilder.withUuid(uuid)
-            YLogger.info(tag, "Extracted new uuid from storage = $uuid")
+            DebugLogger.info(tag, "Extracted new uuid from storage = $uuid")
         }
         if (startupState.deviceId.isNullOrEmpty()) {
             val deviceIdCandidate = startupUnitComponents.deviceIdGenerator.generateDeviceId()
-            YLogger.info(tag, "Apply new deviceIdCandidate: $deviceIdCandidate")
+            DebugLogger.info(tag, "Apply new deviceIdCandidate: $deviceIdCandidate")
             startupStateBuilder = startupStateBuilder
                 .withDeviceId(deviceIdCandidate)
                 .withDeviceIdHash(StringUtils.EMPTY)
         }
         val updatedStartupState = startupStateBuilder.build()
-        YLogger.info(
+        DebugLogger.info(
             tag,
             "generate identifiers if needed - uuid: ${startupState.uuid} -> ${updatedStartupState.uuid}; " +
                 "deviceId: ${startupState.deviceId} -> ${updatedStartupState.deviceId}.",
@@ -66,9 +66,9 @@ internal class StartupUnit(
 
     @Synchronized
     fun getOrCreateStartupTaskIfRequired(): NetworkTask? = if (isStartupRequired()) {
-        YLogger.info(tag, "getOrCreateStartupTaskIfRequired - startupRequired")
+        DebugLogger.info(tag, "getOrCreateStartupTaskIfRequired - startupRequired")
         if (currentTask == null) {
-            YLogger.info(tag, "getOrCreateStartupTaskIfRequired - create startup task")
+            DebugLogger.info(tag, "getOrCreateStartupTaskIfRequired - create startup task")
             currentTask = createStartupTask(this, requestConfig)
         }
         currentTask
@@ -92,7 +92,7 @@ internal class StartupUnit(
     fun isStartupRequired(): Boolean {
         val startupState = startupState
         var required = StartupRequiredUtils.isOutdated(startupState)
-        YLogger.info(tag, "isStartupOutdated: $required")
+        DebugLogger.info(tag, "isStartupOutdated: $required")
         if (!required) {
             required = !StartupRequiredUtils.areMainIdentifiersValid(startupState)
             val validClids = startupUnitComponents.clidsStateChecker.doChosenClidsForRequestMatchLastRequestClids(
@@ -100,13 +100,13 @@ internal class StartupUnit(
                 startupState,
                 startupUnitComponents.clidsStorage
             )
-            YLogger.info(tag, " is startup required because of main identifiers being empty? $required")
+            DebugLogger.info(tag, " is startup required because of main identifiers being empty? $required")
             if (!required && !validClids) {
-                YLogger.info(tag, "Startup is required because of clids")
+                DebugLogger.info(tag, "Startup is required because of clids")
                 required = true
             }
         } else {
-            YLogger.info(tag, "Startup required because it's outdated.")
+            DebugLogger.info(tag, "Startup required because it's outdated.")
         }
         return required
     }
@@ -126,7 +126,7 @@ internal class StartupUnit(
             val serverTime = StartupParser.parseServerTime(responseHeaders) ?: 0L
             updateServerTime(result.validTimeDifference, serverTime)
             newState = parseStartupResult(result, requestConfig, serverTime)
-            YLogger.info(tag, " new state $newState")
+            DebugLogger.info(tag, " new state $newState")
             removeCurrentStartupTask()
             updateCurrentStartupData(newState)
         }
@@ -145,7 +145,7 @@ internal class StartupUnit(
             result.encodedClids,
             startupState.encodedClidsFromResponse
         )
-        YLogger.info(tag, "Selected clids: $validClidsFromResponse")
+        DebugLogger.info(tag, "Selected clids: $validClidsFromResponse")
         val deviceID = startupState.deviceId?.takeIf { it.isNotBlank() } ?: result.deviceId
 
         return StartupState.Builder(StartupStateBuilder(result.collectionFlags))
@@ -213,7 +213,7 @@ internal class StartupUnit(
         startupUnitComponents.startupConfigurationHolder.updateStartupState(state)
         startupUnitComponents.startupStateStorage.save(state)
         startupUnitComponents.startupStateHolder.onStartupStateChanged(state)
-        YLogger.info(tag, "Startup was updated for package: %s", startupUnitComponents.packageName)
+        DebugLogger.info(tag, "Startup was updated for package: %s", startupUnitComponents.packageName)
     }
 
     private fun notifyListener(state: StartupState) {
@@ -227,7 +227,7 @@ internal class StartupUnit(
 
     @Synchronized
     fun updateConfiguration(arguments: StartupRequestConfig.Arguments) {
-        YLogger.info(
+        DebugLogger.info(
             tag,
             " update configuration for %s. New configuration %s",
             startupUnitComponents.componentId.toString(),

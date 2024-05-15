@@ -12,7 +12,7 @@ import io.appmetrica.analytics.coreapi.internal.model.ScreenInfo;
 import io.appmetrica.analytics.coreutils.internal.AndroidUtils;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesClientDbStorage;
 import io.appmetrica.analytics.impl.db.storage.DatabaseStorageFactory;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import java.lang.ref.WeakReference;
 
 public class ScreenInfoRetriever implements ActivityAppearedListener.Listener {
@@ -75,7 +75,7 @@ public class ScreenInfoRetriever implements ActivityAppearedListener.Listener {
         tryToUpdateScreenInfo(activityHolder.get());
         if (screenInfo == null) {
             if (AndroidUtils.isApiAchieved(Build.VERSION_CODES.R)) {
-                YLogger.info(TAG, "Screen info not found. Maybe update by deprecated method. " +
+                DebugLogger.info(TAG, "Screen info not found. Maybe update by deprecated method. " +
                         "checkedByDeprecated = %b", checkedByDeprecated);
                 if (!checkedByDeprecated) {
                     tryToUpdateScreenInfo(context);
@@ -92,7 +92,7 @@ public class ScreenInfoRetriever implements ActivityAppearedListener.Listener {
     @Override
     @WorkerThread
     public synchronized void onActivityAppeared(@NonNull Activity activity) {
-        YLogger.info(TAG, "Activity appeared: %s", activity);
+        DebugLogger.info(TAG, "Activity appeared: %s", activity);
         activityHolder = new WeakReference<>(activity);
         if (screenInfo == null) {
             tryToUpdateScreenInfo(activity);
@@ -100,10 +100,10 @@ public class ScreenInfoRetriever implements ActivityAppearedListener.Listener {
     }
 
     private void tryToUpdateScreenInfo(@Nullable Context context) {
-        YLogger.info(TAG, "try to update screen info for context: %s", context);
+        DebugLogger.info(TAG, "try to update screen info for context: %s", context);
         if (context != null) {
             ScreenInfo newScreenInfo = screenInfoExtractor.extractScreenInfo(context);
-            YLogger.info(TAG, "Extracted screen info: %s, old screen info: %s", newScreenInfo, screenInfo);
+            DebugLogger.info(TAG, "Extracted screen info: %s, old screen info: %s", newScreenInfo, screenInfo);
             if (newScreenInfo != null && !newScreenInfo.equals(screenInfo)) {
                 screenInfo = newScreenInfo;
                 clientPreferences.saveScreenInfo(screenInfo);

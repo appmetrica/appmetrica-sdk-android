@@ -12,7 +12,7 @@ import io.appmetrica.analytics.billinginterface.internal.library.UtilsProvider
 import io.appmetrica.analytics.billingv6.impl.BillingUtils
 import io.appmetrica.analytics.billingv6.impl.TAG
 import io.appmetrica.analytics.coreutils.internal.executors.SafeRunnable
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 
 internal class BillingClientStateListenerImpl @VisibleForTesting constructor(
     private val config: BillingConfig,
@@ -46,7 +46,7 @@ internal class BillingClientStateListenerImpl @VisibleForTesting constructor(
 
     @WorkerThread
     private fun processResult(billingResult: BillingResult) {
-        YLogger.info(TAG, "onBillingSetupFinished result=${BillingUtils.toString(billingResult)}")
+        DebugLogger.info(TAG, "onBillingSetupFinished result=${BillingUtils.toString(billingResult)}")
         if (billingResult.responseCode != BillingClient.BillingResponseCode.OK) {
             return
         }
@@ -82,6 +82,6 @@ internal class BillingClientStateListenerImpl @VisibleForTesting constructor(
 
     @UiThread
     override fun onBillingServiceDisconnected() {
-        YLogger.info(TAG, "onBillingServiceDisconnected")
+        DebugLogger.info(TAG, "onBillingServiceDisconnected")
     }
 }

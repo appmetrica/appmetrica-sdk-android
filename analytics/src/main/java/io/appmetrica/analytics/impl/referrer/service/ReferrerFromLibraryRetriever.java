@@ -11,7 +11,7 @@ import com.android.installreferrer.api.InstallReferrerStateListener;
 import com.android.installreferrer.api.ReferrerDetails;
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
 import io.appmetrica.analytics.impl.referrer.common.ReferrerInfo;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 
 public class ReferrerFromLibraryRetriever implements IReferrerRetriever {
 
@@ -34,7 +34,7 @@ public class ReferrerFromLibraryRetriever implements IReferrerRetriever {
 
     @Override
     public void retrieveReferrer(@NonNull final ReferrerReceivedListener referrerListener) throws Throwable {
-        YLogger.debug(TAG, "try to retrieve referrer via Google Play referrer library");
+        DebugLogger.info(TAG, "try to retrieve referrer via Google Play referrer library");
         InstallReferrerStateListener listener = new InstallReferrerStateListener() {
             @Override
             @MainThread
@@ -67,7 +67,7 @@ public class ReferrerFromLibraryRetriever implements IReferrerRetriever {
                 try {
                     mClient.endConnection();
                 } catch (Throwable ex) {
-                    YLogger.error(TAG, ex);
+                    DebugLogger.error(TAG, ex);
                 }
             }
 

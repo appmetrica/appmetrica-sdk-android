@@ -7,7 +7,7 @@ import io.appmetrica.analytics.coreapi.internal.annotations.GeoThread;
 import io.appmetrica.analytics.coreapi.internal.backport.Consumer;
 import io.appmetrica.analytics.locationapi.internal.CacheArguments;
 import io.appmetrica.analytics.locationapi.internal.LocationFilter;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,7 +29,7 @@ public class LocationStreamDispatcher {
 
     public LocationStreamDispatcher(@NonNull List<Consumer<Location>> geoConsumers,
                                     @NonNull LocationConfig locationConfig) {
-        YLogger.info(TAG, "Consumers: ", geoConsumers);
+        DebugLogger.info(TAG, "Consumers: ", geoConsumers);
         this.geoConsumers = geoConsumers;
         this.locationConfig = locationConfig;
         locationDataCache = new LocationDataCache();
@@ -38,7 +38,7 @@ public class LocationStreamDispatcher {
 
     @GeoThread
     public void onLocationChanged(@NonNull final Location location) {
-        YLogger.info(TAG, "onLocation: %s", location);
+        DebugLogger.info(TAG, "onLocation: %s", location);
         String provider = location.getProvider();
         SingleProviderLocationFiltrator singleProviderLocationFiltrator = locationHandlers.get(provider);
         if (singleProviderLocationFiltrator == null) {
@@ -46,7 +46,7 @@ public class LocationStreamDispatcher {
                 createLocationHandler(locationConfig.getLocationFilter());
             locationHandlers.put(provider, singleProviderLocationFiltrator);
         } else {
-            YLogger.debug(
+            DebugLogger.info(
                 TAG,
                 "Location handler set location collection config: %s; and handleLocation: %s",
                 locationConfig.getLocationFilter(),
@@ -76,7 +76,7 @@ public class LocationStreamDispatcher {
 
     @GeoThread
     public void setLocationConfig(@NonNull LocationConfig locationConfig) {
-        YLogger.debug(TAG, "update collection config %s", locationConfig);
+        DebugLogger.info(TAG, "update collection config %s", locationConfig);
         this.locationConfig = locationConfig;
         CacheArguments cacheArguments = locationConfig.getCacheArguments();
         locationDataCache.updateCacheControl(

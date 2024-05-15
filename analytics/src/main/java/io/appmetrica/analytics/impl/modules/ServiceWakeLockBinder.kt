@@ -4,7 +4,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.ServiceConnection
 import android.os.IBinder
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 
 class ServiceWakeLockBinder(private val intentProvider: ServiceWakeLockIntentProvider) {
     private val tag = "[ServiceWakeLockBinder]"
@@ -13,18 +13,18 @@ class ServiceWakeLockBinder(private val intentProvider: ServiceWakeLockIntentPro
         val intent = intentProvider.getWakeLockIntent(context, action)
         val serviceConnection = object : ServiceConnection {
             override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
-                YLogger.info(tag, "Service connected for action = $action")
+                DebugLogger.info(tag, "Service connected for action = $action")
             }
 
             override fun onServiceDisconnected(name: ComponentName?) {
-                YLogger.info(tag, "Service disconnected for action = $action")
+                DebugLogger.info(tag, "Service disconnected for action = $action")
             }
         }
         try {
             context.bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE)
             return serviceConnection
         } catch (e: Throwable) {
-            YLogger.error(tag, e, "Failed bind to service with action = $action")
+            DebugLogger.error(tag, e, "Failed bind to service with action = $action")
         }
         return null
     }
@@ -33,7 +33,7 @@ class ServiceWakeLockBinder(private val intentProvider: ServiceWakeLockIntentPro
         try {
             context.unbindService(serviceConnection)
         } catch (e: Throwable) {
-            YLogger.error(tag, e, "Failed unbind to service with action = $action")
+            DebugLogger.error(tag, e, "Failed unbind to service with action = $action")
         }
     }
 }

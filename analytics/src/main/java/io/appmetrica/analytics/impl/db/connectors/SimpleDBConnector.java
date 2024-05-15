@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.db.connectors;
 import android.database.sqlite.SQLiteDatabase;
 import androidx.annotation.Nullable;
 import io.appmetrica.analytics.impl.db.DatabaseStorage;
-import io.appmetrica.analytics.logger.internal.YLogger;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 
 public class SimpleDBConnector implements DBConnector {
 
@@ -20,7 +20,7 @@ public class SimpleDBConnector implements DBConnector {
         try {
             return mStorage.getWritableDatabase();
         } catch (Throwable ex) {
-            YLogger.warning(TAG,"Something went wrong while opening database\n" + ex);
+            DebugLogger.warning(TAG,"Something went wrong while opening database\n" + ex);
         }
         return null;
     }

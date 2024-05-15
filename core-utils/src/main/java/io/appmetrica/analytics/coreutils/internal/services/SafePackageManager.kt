@@ -12,7 +12,7 @@ import android.content.pm.ResolveInfo
 import android.content.pm.ServiceInfo
 import android.os.Build
 import io.appmetrica.analytics.coreutils.internal.AndroidUtils.isApiAchieved
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 
 class SafePackageManager {
 
@@ -71,7 +71,7 @@ class SafePackageManager {
         } else {
             pm.getInstallerPackageName(packageName)
         }
-        YLogger.info(tag, "AppInstaller = %s", installer)
+        DebugLogger.info(tag, "AppInstaller = %s", installer)
         installer
     }
 
@@ -80,7 +80,7 @@ class SafePackageManager {
     private fun <T> runSafely(defaultValue: T, block: () -> T?): T = try {
         block() ?: defaultValue
     } catch (e: Throwable) {
-        YLogger.error(tag, e, e.message)
+        DebugLogger.error(tag, e, e.message)
         defaultValue
     }
 }

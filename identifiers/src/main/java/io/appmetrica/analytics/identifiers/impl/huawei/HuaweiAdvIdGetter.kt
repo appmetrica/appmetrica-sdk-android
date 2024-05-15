@@ -11,7 +11,7 @@ import io.appmetrica.analytics.identifiers.impl.AdvIdServiceConnectionController
 import io.appmetrica.analytics.identifiers.impl.ConnectionException
 import io.appmetrica.analytics.identifiers.impl.Constants
 import io.appmetrica.analytics.identifiers.impl.getProviderUnavailableResult
-import io.appmetrica.analytics.logger.internal.YLogger
+import io.appmetrica.analytics.logger.internal.DebugLogger
 
 private const val TAG = "[Huawei OAID] "
 private val HMS_ADV_ID_INTENT =
@@ -30,25 +30,25 @@ internal class HuaweiAdvIdGetter @VisibleForTesting internal constructor(
     )
 
     override fun getAdTrackingInfo(context: Context): AdvIdResult {
-        YLogger.info(TAG, "getAdTrackingInfo. Connecting to service...")
+        DebugLogger.info(TAG, "getAdTrackingInfo. Connecting to service...")
         return try {
             val service: OpenDeviceIdentifierService = connectionController.connect(context)
             val oaid = service.oaid
-            YLogger.debug(TAG, "id fetched successfully: %s", oaid)
+            DebugLogger.info(TAG, "id fetched successfully: %s", oaid)
             val isDisabled = service.isOaidTrackLimited
-            YLogger.debug(TAG, "mLimitedAdvertisingTracking flag fetched successfully: %b", isDisabled)
+            DebugLogger.info(TAG, "mLimitedAdvertisingTracking flag fetched successfully: %b", isDisabled)
             AdvIdResult(IdentifierStatus.OK, AdvIdInfo(Constants.Providers.HUAWEI, oaid, isDisabled))
         } catch (connectionException: ConnectionException) {
             val message = connectionException.message ?: "unknown exception during binding huawei services"
             getProviderUnavailableResult(message)
         } catch (e: Throwable) {
-            YLogger.error(TAG, e, "can't fetch adv id.")
+            DebugLogger.error(TAG, e, "can't fetch adv id.")
             getProviderUnavailableResult("exception while fetching hoaid: " + e.message)
         } finally {
             try {
                 connectionController.disconnect(context)
             } catch (ex: Throwable) {
-                YLogger.error(TAG, ex, "could not unbind from service")
+                DebugLogger.error(TAG, ex, "could not unbind from service")
             }
         }
     }
