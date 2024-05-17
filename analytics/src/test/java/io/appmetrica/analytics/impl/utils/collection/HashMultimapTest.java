@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import org.assertj.core.groups.Tuple;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -174,7 +175,11 @@ public class HashMultimapTest extends CommonTest {
         final Map<Integer, List<Integer>> expected = new HashMap<>();
         expected.put(1, Arrays.asList(1, 2, 3));
         expected.put(2, Arrays.asList(1, 2, 3, 4));
-        assertThat(mMap.entrySet()).containsExactlyInAnyOrderElementsOf(expected.entrySet());
+        assertThat(mMap.entrySet()).extracting(item -> Tuple.tuple(item.getKey(), item.getValue()))
+            .containsExactlyInAnyOrder(
+                Tuple.tuple(1, Arrays.asList(1, 2, 3)),
+                Tuple.tuple(2, Arrays.asList(1, 2, 3, 4))
+            );
     }
 
     @Test

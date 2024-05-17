@@ -16,7 +16,7 @@ public class WrapUtilsTest extends CommonTest {
 
     @Test
     public void testDefaultNull() {
-        assertThat(WrapUtils.getOrDefaultNullable(null, null)).isNull();
+        assertThat(WrapUtils.getOrDefaultNullable((Object) null, null)).isNull();
     }
 
     @Test

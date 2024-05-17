@@ -14,7 +14,6 @@ import io.appmetrica.gradle.nologs.NoLogsExtension
 import io.appmetrica.gradle.nologs.NoLogsPlugin
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.tasks.compile.JavaCompile
 import org.gradle.api.tasks.testing.TestDescriptor
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.closureOf
@@ -49,11 +48,6 @@ class AppMetricaCommonModulePlugin : Plugin<Project> {
 
             implementation("org.jetbrains.kotlin:kotlin-stdlib") // version is equal to plugin version
             compileOnly("androidx.annotation:annotation:${Deps.androidX}")
-        }
-
-        project.tasks.withType<JavaCompile> {
-            // suppress 'java 7 is obsolete' warning
-            options.compilerArgs.add("-Xlint:-options")
         }
 
         project.tasks.withType<KotlinCompile> {
