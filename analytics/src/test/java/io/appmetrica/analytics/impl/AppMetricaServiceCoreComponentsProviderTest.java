@@ -28,11 +28,13 @@ public class AppMetricaServiceCoreComponentsProviderTest extends CommonTest {
     @Rule
     public MockedConstructionRule<AppMetricaCore> cAppMetricaCore = new MockedConstructionRule<>(AppMetricaCore.class);
     @Rule
-    public MockedConstructionRule<AppMetricaCoreStub> cAppMetricaCoreStub = new MockedConstructionRule<>(AppMetricaCoreStub.class);
+    public MockedConstructionRule<AppMetricaCoreStub> cAppMetricaCoreStub =
+        new MockedConstructionRule<>(AppMetricaCoreStub.class);
     @Rule
     public MockedConstructionRule<AppMetricaImpl> cAppMetricaImpl = new MockedConstructionRule<>(AppMetricaImpl.class);
     @Rule
-    public MockedConstructionRule<AppMetricaImplStub> cAppMetricaImplStub = new MockedConstructionRule<>(AppMetricaImplStub.class);
+    public MockedConstructionRule<AppMetricaImplStub> cAppMetricaImplStub =
+        new MockedConstructionRule<>(AppMetricaImplStub.class);
     @Rule
     public MockedStaticRule<SdkUtils> sdkUtilsMockedStaticRule = new MockedStaticRule<>(SdkUtils.class);
 
@@ -173,12 +175,38 @@ public class AppMetricaServiceCoreComponentsProviderTest extends CommonTest {
     @Test
     public void useStubsIfUnlocked() {
         when(unlockedUserStateProvider.isUserUnlocked(context)).thenReturn(true);
-        assertThat(coreComponentsProvider.useStubs(context)).isFalse();
+        assertThat(coreComponentsProvider.shouldUseStubs(context)).isFalse();
     }
 
     @Test
     public void useStubsIfLocked() {
         when(unlockedUserStateProvider.isUserUnlocked(context)).thenReturn(false);
-        assertThat(coreComponentsProvider.useStubs(context)).isTrue();
+        assertThat(coreComponentsProvider.shouldUseStubs(context)).isTrue();
+    }
+
+    @Test
+    public void peekUseStubsBeforeGetIfLocked() {
+        when(unlockedUserStateProvider.isUserUnlocked(context)).thenReturn(false);
+        assertThat(coreComponentsProvider.peekShouldUseStubs()).isFalse();
+    }
+
+    @Test
+    public void peekUseStubsBeforeGetIfUnlocked() {
+        when(unlockedUserStateProvider.isUserUnlocked(context)).thenReturn(true);
+        assertThat(coreComponentsProvider.peekShouldUseStubs()).isFalse();
+    }
+
+    @Test
+    public void peekUseStubsAfterGetIsLocked() {
+        when(unlockedUserStateProvider.isUserUnlocked(context)).thenReturn(false);
+        coreComponentsProvider.shouldUseStubs(context);
+        assertThat(coreComponentsProvider.peekShouldUseStubs()).isTrue();
+    }
+
+    @Test
+    public void peekUseStubsAfterGetIfUnlocked() {
+        when(unlockedUserStateProvider.isUserUnlocked(context)).thenReturn(true);
+        coreComponentsProvider.shouldUseStubs(context);
+        assertThat(coreComponentsProvider.peekShouldUseStubs()).isFalse();
     }
 }

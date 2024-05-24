@@ -14,7 +14,8 @@ public class AppMetricaCoreComponentsProvider {
     @NonNull
     private final UnlockedUserStateProvider unlockedUserStateProvider;
 
-    private Boolean useStubs;
+    @Nullable
+    private volatile Boolean useStubs;
     @Nullable
     private IAppMetricaCore appMetricaCore;
     @Nullable
@@ -27,7 +28,7 @@ public class AppMetricaCoreComponentsProvider {
     public synchronized IAppMetricaCore getCore(@NonNull Context context,
                                                 @NonNull ClientExecutorProvider clientExecutorProvider) {
         if (appMetricaCore == null) {
-            if (useStubs(context)) {
+            if (shouldUseStubs(context)) {
                 appMetricaCore = new AppMetricaCoreStub();
             } else {
                 appMetricaCore = new AppMetricaCore(context, clientExecutorProvider);
@@ -40,7 +41,7 @@ public class AppMetricaCoreComponentsProvider {
     public synchronized IAppMetricaImpl getImpl(@NonNull Context context,
                                                 @NonNull IAppMetricaCore appMetricaCore) {
         if (appMetricaImpl == null) {
-            if (useStubs(context)) {
+            if (shouldUseStubs(context)) {
                 appMetricaImpl = new AppMetricaImplStub();
             } else {
                 appMetricaImpl = new AppMetricaImpl(context, appMetricaCore);
@@ -50,14 +51,25 @@ public class AppMetricaCoreComponentsProvider {
         return appMetricaImpl;
     }
 
-    public synchronized boolean useStubs(@NonNull Context context) {
-        if (useStubs == null) {
-            useStubs = !unlockedUserStateProvider.isUserUnlocked(context);
-            if (useStubs) {
-                SdkUtils.logStubUsage();
+    public boolean shouldUseStubs(@NonNull Context context) {
+        Boolean localCopy = useStubs;
+        if (localCopy == null) {
+            synchronized (this) {
+                localCopy = useStubs;
+                if (localCopy == null) {
+                    localCopy = !unlockedUserStateProvider.isUserUnlocked(context);
+                    useStubs = localCopy;
+                    if (localCopy) {
+                        SdkUtils.logStubUsage();
+                    }
+                }
             }
         }
-        return useStubs;
+        return localCopy;
+    }
+
+    public boolean peekShouldUseStubs() {
+        return Boolean.TRUE.equals(useStubs);
     }
 
     @VisibleForTesting
