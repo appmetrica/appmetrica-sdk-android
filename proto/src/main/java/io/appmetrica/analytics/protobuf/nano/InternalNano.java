@@ -33,7 +33,6 @@ package io.appmetrica.analytics.protobuf.nano;
 
 import io.appmetrica.analytics.protobuf.nano.MapFactories.MapFactory;
 //endregion change for AppMetrica
-
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Arrays;

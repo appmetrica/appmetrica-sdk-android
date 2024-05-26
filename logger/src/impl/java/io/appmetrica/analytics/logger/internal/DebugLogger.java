@@ -2,10 +2,10 @@ package io.appmetrica.analytics.logger.internal;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import io.appmetrica.analytics.logger.impl.SystemLogger;
-import io.appmetrica.analytics.logger.impl.MultilineLogger;
 import io.appmetrica.analytics.logger.impl.LogMessageConstructor;
 import io.appmetrica.analytics.logger.impl.LogMessageSplitter;
+import io.appmetrica.analytics.logger.impl.MultilineLogger;
+import io.appmetrica.analytics.logger.impl.SystemLogger;
 import org.json.JSONObject;
 
 /**

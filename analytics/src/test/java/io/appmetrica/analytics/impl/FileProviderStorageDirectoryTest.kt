@@ -75,18 +75,4 @@ class FileProviderStorageDirectoryTest(
         `when`(context.noBackupFilesDir).thenReturn(null)
         assertThat(applier(fileProvider, context)).isNull()
     }
-
-    @Test
-    @Config(sdk = [Build.VERSION_CODES.KITKAT])
-    fun preLollipop() {
-        `when`(context.filesDir).thenReturn(filesDir)
-        assertThat(applier(fileProvider, context)).isEqualTo(expected(filesDir))
-    }
-
-    @Test
-    @Config(sdk = [Build.VERSION_CODES.KITKAT])
-    fun preLollipopNull() {
-        `when`(context.filesDir).thenReturn(null)
-        assertThat(applier(fileProvider, context)).isNull()
-    }
 }

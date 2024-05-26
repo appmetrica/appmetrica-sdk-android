@@ -1,13 +1,11 @@
 package io.appmetrica.analytics.impl.proxy
 
-import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor
 import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor
 import io.appmetrica.analytics.impl.AppMetricaFacade
 import io.appmetrica.analytics.impl.ClientServiceLocator
 import io.appmetrica.analytics.impl.MainReporter
 import io.appmetrica.analytics.impl.MainReporterApiConsumerProvider
 import io.appmetrica.analytics.impl.proxy.synchronous.PluginsSynchronousStageExecutor
-import io.appmetrica.analytics.impl.proxy.synchronous.SynchronousStageExecutor
 import io.appmetrica.analytics.impl.proxy.validation.PluginsBarrier
 import io.appmetrica.analytics.plugins.IPluginReporter
 import io.appmetrica.analytics.plugins.PluginErrorDetails

@@ -15,7 +15,7 @@ import org.robolectric.annotation.Config
 
 @Config(sdk = [Build.VERSION_CODES.LOLLIPOP])
 @RunWith(RobolectricTestRunner::class)
-internal class LollipopDatabaseFullPathProviderTest : CommonTest() {
+internal class DatabaseFullPathProviderImplTest : CommonTest() {
 
     private lateinit var context: Context
 
@@ -25,18 +25,18 @@ internal class LollipopDatabaseFullPathProviderTest : CommonTest() {
         on { preparePath(simpleName) } doReturn preparedPath
     }
 
-    private lateinit var lollipopDatabaseFullPathProvider: LollipopDatabaseFullPathProvider
+    private lateinit var databaseFullPathProviderImpl: DatabaseFullPathProviderImpl
 
     @Before
     fun setUp() {
         context = RuntimeEnvironment.getApplication()
 
-        lollipopDatabaseFullPathProvider = LollipopDatabaseFullPathProvider(relativePathFormer)
+        databaseFullPathProviderImpl = DatabaseFullPathProviderImpl(relativePathFormer)
     }
 
     @Test
     fun fullPath() {
-        assertThat(lollipopDatabaseFullPathProvider.fullPath(context, simpleName).path)
+        assertThat(databaseFullPathProviderImpl.fullPath(context, simpleName).path)
             .isEqualTo("${context.noBackupFilesDir}/$preparedPath")
     }
 }

@@ -1,7 +1,5 @@
 package io.appmetrica.analytics.impl.crash.client.converter;
 
-import android.annotation.TargetApi;
-import android.os.Build;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
@@ -31,7 +29,9 @@ public class ThrowableConverter implements ProtobufConverter<ThrowableModel, Cra
         CrashAndroid.Throwable outState = new CrashAndroid.Throwable();
         outState.exceptionClass = WrapUtils.getOrDefault(value.getExceptionClass(), "");
         outState.message = WrapUtils.getOrDefault(value.getMessage(), "");
-        outState.backtrace = backtraceConverter.fromModel(value.getStacktrace());
+        if (value.getStacktrace() != null) {
+            outState.backtrace = backtraceConverter.fromModel(value.getStacktrace());
+        }
         if (value.getCause() != null) {
             outState.cause = fromModel(value.getCause());
         }
@@ -45,7 +45,6 @@ public class ThrowableConverter implements ProtobufConverter<ThrowableModel, Cra
         throw new UnsupportedOperationException();
     }
 
-    @TargetApi(Build.VERSION_CODES.KITKAT)
     private void fillSuppressedExceptions(@NonNull CrashAndroid.Throwable proto,
                                           @Nullable List<ThrowableModel> suppressedArray) {
         if (suppressedArray == null) {

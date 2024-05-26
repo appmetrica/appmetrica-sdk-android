@@ -1,8 +1,6 @@
 package io.appmetrica.analytics.impl.crash.client
 
 import android.annotation.SuppressLint
-import android.os.Build
-import io.appmetrica.analytics.coreutils.internal.AndroidUtils
 import io.appmetrica.analytics.impl.Utils
 
 internal object ThrowableModelFactory {
@@ -22,7 +20,7 @@ internal object ThrowableModelFactory {
             throwable.message,
             Utils.getStackTraceSafely(throwable).map(::StackTraceItemInternal),
             throwable.cause?.takeIf { curDepth < maxDepth }?.let { createModel(it, maxCauseDepth, curDepth + 1) },
-            if (AndroidUtils.isApiAchieved(Build.VERSION_CODES.KITKAT) && curDepth < maxDepth) {
+            if (curDepth < maxDepth) {
                 throwable.suppressed.map { createModel(it, maxSuppressedDepth, curDepth) }
             } else {
                 null

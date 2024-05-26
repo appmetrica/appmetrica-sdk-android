@@ -1,6 +1,5 @@
 package io.appmetrica.analytics.impl.proxy
 
-import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor
 import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor
 import io.appmetrica.analytics.impl.ClientServiceLocator
 import io.appmetrica.analytics.impl.IReporterExtended

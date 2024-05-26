@@ -100,26 +100,22 @@ public final class PhoneUtils {
             && !sSafePackageManager.hasSystemFeature(context, "android.hardware.touchscreen");
     }
 
-    @SuppressLint("NewApi")
     @NonNull
     public static String normalizedLocale(@NonNull Locale locale) {
         String language = locale.getLanguage();
         String country = locale.getCountry();
 
         StringBuilder sb = new StringBuilder(language);
-        if (AndroidUtils.isApiAchieved(Build.VERSION_CODES.LOLLIPOP)) {
-            String script = locale.getScript();
-            if (TextUtils.isEmpty(script) == false) {
-                sb.append('-').append(script);
-            }
+        String script = locale.getScript();
+        if (!TextUtils.isEmpty(script)) {
+            sb.append('-').append(script);
         }
-        if (TextUtils.isEmpty(country) == false) {
+        if (!TextUtils.isEmpty(country)) {
             sb.append('_').append(country);
         }
         return sb.toString();
     }
 
-    @SuppressLint("InlinedApi")
     private static final MapWithDefault<Integer, NetworkType> CONNECTIVITY_MANAGER_NETWORK_TYPE_MAPPING =
         new MapWithDefault<Integer, NetworkType>(NetworkType.UNDEFINED) {
             {
@@ -132,9 +128,7 @@ public final class PhoneUtils {
                 put(ConnectivityManager.TYPE_MOBILE_MMS, NetworkType.MOBILE_MMS);
                 put(ConnectivityManager.TYPE_MOBILE_SUPL, NetworkType.MOBILE_SUPL);
                 put(ConnectivityManager.TYPE_WIMAX, NetworkType.WIMAX);
-                if (AndroidUtils.isApiAchieved(Build.VERSION_CODES.LOLLIPOP)) {
-                    put(ConnectivityManager.TYPE_VPN, NetworkType.VPN);
-                }
+                put(ConnectivityManager.TYPE_VPN, NetworkType.VPN);
             }
         };
 

@@ -17,7 +17,6 @@ public final class RootChecker {
     };
 
     private static final String SYSTEM_APP_SUPERUSER_APK_LOLLIPOP = "/system/app/Superuser/Superuser.apk";
-    private static final String SYSTEM_APP_SUPERUSER_APK = "/system/app/Superuser.apk";
 
     public static final class RootStatus {
         public static final int ROOT = 1;
@@ -26,12 +25,7 @@ public final class RootChecker {
 
     public static boolean isSuperuserApkExists() {
         try {
-            final File file;
-            if (AndroidUtils.isApiAchieved(Build.VERSION_CODES.LOLLIPOP)) {
-                file = new File(SYSTEM_APP_SUPERUSER_APK_LOLLIPOP);
-            } else {
-                file = new File(SYSTEM_APP_SUPERUSER_APK);
-            }
+            final File file = new File(SYSTEM_APP_SUPERUSER_APK_LOLLIPOP);
             if (file.exists()) {
                 DebugLogger.info(TAG, "Detected ROOT_STATUS via superuser APK");
                 return true;

@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import io.appmetrica.analytics.logger.internal.DebugLogger;
 import java.util.List;
 import java.util.Locale;

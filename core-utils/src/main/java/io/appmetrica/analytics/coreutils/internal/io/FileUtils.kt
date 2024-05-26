@@ -49,10 +49,7 @@ object FileUtils {
     }
 
     @JvmStatic
-    fun getAppStorageDirectory(context: Context): File? = when {
-        needToUseNoBackup() -> AppStorageDirectoryProviderForLollipop.getAppStorageDirectory(context)
-        else -> context.filesDir
-    }
+    fun getAppStorageDirectory(context: Context): File? = context.noBackupFilesDir
 
     @JvmStatic
     fun getFileFromSdkStorage(context: Context, fileName: String): File? =
@@ -72,9 +69,6 @@ object FileUtils {
 
     @JvmStatic
     fun getFileFromPath(filePath: String): File = File(filePath)
-
-    @JvmStatic
-    fun needToUseNoBackup(): Boolean = AndroidUtils.isApiAchieved(Build.VERSION_CODES.LOLLIPOP)
 
     @JvmStatic
     @SuppressLint("NewApi")

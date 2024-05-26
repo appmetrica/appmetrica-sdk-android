@@ -25,9 +25,7 @@ class FileUtilsTest {
 
     val context = mock<Context> {
         on { filesDir } doReturn filesDir
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            on { noBackupFilesDir } doReturn noBackupDir
-        }
+        on { noBackupFilesDir } doReturn noBackupDir
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             on { dataDir } doReturn dataDir
         }
@@ -41,17 +39,7 @@ class FileUtilsTest {
         FileUtils.resetSdkStorage()
         dataDir.deleteRecursively()
         filesParentDir.deleteRecursively()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            noBackupDir.deleteRecursively()
-        }
-    }
-
-    @Test
-    @Config(sdk = [Build.VERSION_CODES.KITKAT])
-    fun `sdkStorage pre Lollipop`() {
-        val result = FileUtils.sdkStorage(context)
-        assertThat(result?.path).isEqualTo(filesDir.path + "/appmetrica/analytics")
-        assertThat(File(filesDir, "/appmetrica/analytics").exists()).isTrue()
+        noBackupDir.deleteRecursively()
     }
 
     @Test
@@ -63,26 +51,13 @@ class FileUtilsTest {
     }
 
     @Test
-    @Config(sdk = [Build.VERSION_CODES.KITKAT, Build.VERSION_CODES.LOLLIPOP])
+    @Config(sdk = [Build.VERSION_CODES.LOLLIPOP])
     fun `sdkStorage twice`() {
         val testFileName = "test_file.dat"
         val testText = "Test text"
         val sdkStorage = FileUtils.sdkStorage(context)
         File(sdkStorage, testFileName).writeText(testText)
         assertThat(File(FileUtils.sdkStorage(context), testFileName).readText()).isEqualTo(testText)
-    }
-
-    @Test
-    @Config(sdk = [Build.VERSION_CODES.KITKAT])
-    fun getStorageDirectoryPreLollipop() {
-        assertThat(FileUtils.getAppStorageDirectory(context)).isEqualTo(filesDir)
-    }
-
-    @Test
-    @Config(sdk = [Build.VERSION_CODES.KITKAT])
-    fun getStorageDirectoryPreLollipopNull() {
-        whenever(context.filesDir).thenReturn(null)
-        assertThat(FileUtils.getAppStorageDirectory(context)).isNull()
     }
 
     @Test
@@ -96,34 +71,6 @@ class FileUtilsTest {
     fun getStorageDirectoryLollipopNull() {
         whenever(context.noBackupFilesDir).thenReturn(null)
         assertThat(FileUtils.getAppStorageDirectory(context)).isNull()
-    }
-
-    @Test
-    @Config(sdk = [Build.VERSION_CODES.KITKAT])
-    fun needToUseBackupPreLollipop() {
-        assertThat(FileUtils.needToUseNoBackup()).isFalse()
-    }
-
-    @Test
-    @Config(sdk = [Build.VERSION_CODES.LOLLIPOP])
-    fun needToUseBackupLollipop() {
-        assertThat(FileUtils.needToUseNoBackup()).isTrue()
-    }
-
-    @Test
-    @Config(sdk = [Build.VERSION_CODES.KITKAT])
-    fun getFileFromAppStoragePreLollipopIfFileDirIsNull() {
-        whenever(context.filesDir).thenReturn(null)
-        assertThat(FileUtils.getFileFromAppStorage(context, "fileName")).isNull()
-    }
-
-    @Test
-    @Config(sdk = [Build.VERSION_CODES.KITKAT])
-    fun getFileFromAppStoragePreLollipop() {
-        val fileName = "fileName"
-        val file = FileUtils.getFileFromAppStorage(context, fileName)
-        assertThat(file!!.parentFile).isEqualTo(filesDir)
-        assertThat(file.name).isEqualTo(fileName)
     }
 
     @Test
@@ -152,22 +99,6 @@ class FileUtilsTest {
     fun getNativeCrashDirectory() {
         val file = FileUtils.getNativeCrashDirectory(context)
         assertThat(file!!.canonicalPath).endsWith("/appmetrica/analytics/native_crashes")
-    }
-
-    @Test
-    @Config(sdk = [Build.VERSION_CODES.KITKAT])
-    fun getFileFromSdkStoragePreLollipopIfFileDirIsNull() {
-        whenever(context.filesDir).thenReturn(null)
-        assertThat(FileUtils.getFileFromSdkStorage(context, "fileName")).isNull()
-    }
-
-    @Test
-    @Config(sdk = [Build.VERSION_CODES.KITKAT])
-    fun getFileFromSdkStoragePreLollipop() {
-        val fileName = "fileName"
-        val file = FileUtils.getFileFromSdkStorage(context, fileName)
-        assertThat(file!!.parentFile!!.parentFile!!.parentFile).isEqualTo(filesDir)
-        assertThat(file.name).isEqualTo(fileName)
     }
 
     @Test

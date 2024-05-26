@@ -16,8 +16,16 @@ class MapExternalAttribution(
             value: Map<String, Any?>
         ) = ClientExternalAttribution().also {
             it.attributionType = ExternalAttributionTypeConverter.fromModel(provider)
-            JsonHelper.mapToJson(value)?.toString()?.let { value ->
+            JsonHelper.mapToJson(value.normalize())?.toString()?.let { value ->
                 it.value = value.toByteArray()
+            }
+        }
+
+        private fun Map<String, Any?>.normalize(): Map<String, Any?> = entries.associate {
+            it.key to if (it.value is Number && !((it.value as Number).toDouble().isFinite())) {
+                null
+            } else {
+                it.value
             }
         }
     }

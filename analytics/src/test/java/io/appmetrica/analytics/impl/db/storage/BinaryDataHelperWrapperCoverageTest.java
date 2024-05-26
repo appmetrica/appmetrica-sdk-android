@@ -1,8 +1,8 @@
 package io.appmetrica.analytics.impl.db.storage;
 
 import androidx.annotation.NonNull;
-import io.appmetrica.analytics.impl.CoverageUtils;
 import io.appmetrica.analytics.coreapi.internal.data.IBinaryDataHelper;
+import io.appmetrica.analytics.impl.CoverageUtils;
 import io.appmetrica.analytics.testutils.CommonTest;
 import java.lang.reflect.Method;
 import java.util.ArrayList;

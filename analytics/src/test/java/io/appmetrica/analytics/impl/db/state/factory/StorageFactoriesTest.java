@@ -1,12 +1,12 @@
 package io.appmetrica.analytics.impl.db.state.factory;
 
 import android.content.Context;
+import io.appmetrica.analytics.coreapi.internal.data.IBinaryDataHelper;
 import io.appmetrica.analytics.coreutils.internal.encryption.AESEncrypter;
 import io.appmetrica.analytics.impl.billing.AutoInappCollectingInfo;
 import io.appmetrica.analytics.impl.billing.AutoInappCollectingInfoConverter;
 import io.appmetrica.analytics.impl.billing.AutoInappCollectingInfoSerializer;
 import io.appmetrica.analytics.impl.clids.ClidsInfo;
-import io.appmetrica.analytics.coreapi.internal.data.IBinaryDataHelper;
 import io.appmetrica.analytics.impl.db.protobuf.AppPermissionsStateSerializer;
 import io.appmetrica.analytics.impl.db.protobuf.ClidsInfoStateSerializer;
 import io.appmetrica.analytics.impl.db.protobuf.EncryptedProtobufStateSerializer;

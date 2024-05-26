@@ -289,9 +289,7 @@ public class ReportRequestConfig extends CoreRequestConfig {
             }
 
             if (thisLocation.getTime() != thatLocation.getTime()) return false;
-            if (AndroidUtils.isApiAchieved(Build.VERSION_CODES.JELLY_BEAN_MR1)) {
-                if (thisLocation.getElapsedRealtimeNanos() != thatLocation.getElapsedRealtimeNanos()) return false;
-            }
+            if (thisLocation.getElapsedRealtimeNanos() != thatLocation.getElapsedRealtimeNanos()) return false;
             if (Double.compare(thatLocation.getLatitude(), thisLocation.getLatitude()) != 0) return false;
             if (Double.compare(thatLocation.getLongitude(), thisLocation.getLongitude()) != 0) return false;
             if (Double.compare(thatLocation.getAltitude(), thisLocation.getAltitude()) != 0) return false;

@@ -1,10 +1,8 @@
 package io.appmetrica.analytics.impl.permissions;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.permission.PermissionState;
@@ -13,7 +11,6 @@ import io.appmetrica.analytics.logger.internal.DebugLogger;
 import java.util.ArrayList;
 import java.util.List;
 
-@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 class RuntimePermissionsRetriever implements PermissionRetriever {
 
     private static final String TAG = "[RuntimePermissionsRetriever]";

@@ -197,11 +197,12 @@ public class ThrowableConverterTest extends CommonTest {
     public void toProtoWithNullable() throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
         ThrowableModel model = new ThrowableModel(null, null, null, null, null);
         new ProtoObjectPropertyAssertions<>(throwableConverter.fromModel(model))
-                .checkField("exceptionClass", "")
-                .checkField("message", "")
-                .checkField("suppressed", new CrashAndroid.Throwable[0])
-                .checkFieldsAreNull("cause", "backtrace")
-                .checkAll();
+            .checkField("exceptionClass", "")
+            .checkField("message", "")
+            .checkField("suppressed", new CrashAndroid.Throwable[0])
+            .checkField("backtrace", new CrashAndroid.StackTraceElement[0])
+            .checkFieldsAreNull("cause")
+            .checkAll();
     }
 
     @Test(expected = UnsupportedOperationException.class)

@@ -1,14 +1,11 @@
 package io.appmetrica.analytics.impl.utils;
 
-import android.os.Build;
 import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.billinginterface.internal.config.BillingConfig;
 import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus;
 import io.appmetrica.analytics.coreapi.internal.model.ScreenInfo;
-import io.appmetrica.analytics.coreutils.internal.AndroidUtils;
 import io.appmetrica.analytics.coreutils.internal.StringUtils;
 import io.appmetrica.analytics.coreutils.internal.parsing.JsonUtils;
 import io.appmetrica.analytics.impl.Utils;
@@ -17,12 +14,9 @@ import io.appmetrica.analytics.impl.startup.Constants;
 import io.appmetrica.analytics.impl.startup.FeaturesInternal;
 import io.appmetrica.analytics.internal.IdentifiersResult;
 import io.appmetrica.analytics.logger.internal.DebugLogger;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -38,7 +32,6 @@ public class JsonHelper {
     private static final String KEY_HEIGHT = "height";
     private static final String KEY_DPI = "dpi";
     private static final String KEY_SCALE_FACTOR = "scaleFactor";
-    private static final String KEY_DEVICE_TYPE = "deviceType";
     private static final String KEY_LIB_SSL_ENABLED = "libSslEnabled";
 
     public static class OptJSONObject extends JSONObject {
@@ -65,23 +58,11 @@ public class JsonHelper {
             return result;
         }
 
-        public String getStringIfContainsOrEmpty(final String name) {
-            return super.has(name) ? getStringOrEmpty(name) : StringUtils.EMPTY;
-        }
-
         public Object get(final String name, final Object defValue) {
             try {
                 return super.get(name);
             } catch (Throwable exception) {
                 return defValue;
-            }
-        }
-
-        public boolean hasNotNull(final String name) {
-            try {
-                return NULL != super.get(name);
-            } catch (Throwable exception) {
-                return false;
             }
         }
 
@@ -104,67 +85,6 @@ public class JsonHelper {
         }
     }
 
-    @VisibleForTesting
-    public static Object prepareForJson(Object source) {
-        if (source == null) {
-            return null;
-        }
-        try {
-            if (source.getClass().isArray()) {
-                final int length = Array.getLength(source);
-                ArrayList<Object> values = new ArrayList<Object>(length);
-                for (int i = 0; i < length; ++i) {
-                    values.add(prepareForJson(Array.get(source, i)));
-                }
-                return new JSONArray(values);
-            }
-            if (source instanceof Collection) {
-                return prepareCollectionForJson((Collection<?>) source);
-            }
-            if (source instanceof Map) {
-                return prepareMapForJson((Map) source);
-            }
-            if (source instanceof Number) {
-                if (Double.isInfinite(((Number) source).doubleValue()) ||
-                    Double.isNaN(((Number) source).doubleValue())) {
-                    return null;
-                }
-            }
-        } catch (Throwable ignored) {
-            return null;
-        }
-        return source;
-    }
-
-    @Nullable
-    private static JSONArray prepareCollectionForJson(@Nullable Collection<?> source) {
-        if (source == null) {
-            return null;
-        }
-        try {
-            ArrayList<Object> values = new ArrayList<Object>(source.size());
-            for (Object obj : source) {
-                values.add(prepareForJson(obj));
-            }
-            return new JSONArray(values);
-        } catch (Throwable ignored) {
-        }
-        return null;
-    }
-
-    @NonNull
-    private static JSONObject prepareMapForJson(@NonNull Map map) {
-        Map<?, ?> contentsTyped = (Map<?, ?>) map;
-        LinkedHashMap<String, Object> jsonMap = new LinkedHashMap<String, Object>();
-        for (Map.Entry<?, ?> entry : contentsTyped.entrySet()) {
-            String key = entry.getKey().toString();
-            if (key != null) {
-                jsonMap.put(key, prepareForJson(entry.getValue()));
-            }
-        }
-        return new JSONObject(jsonMap);
-    }
-
     @Nullable
     public static String clidsToString(@Nullable Map<String, String> clidsMap) {
         if (clidsMap == null) {
@@ -181,48 +101,31 @@ public class JsonHelper {
         if (clidsStr == null) {
             return null;
         } else if (clidsStr.isEmpty()) {
-            return new HashMap<String, String>();
+            return new HashMap<>();
         } else {
             return jsonToMap(clidsStr);
         }
     }
 
     @Nullable
-    public static JSONObject mapToJsonNullEmptyWise(@Nullable final Map map) {
+    public static JSONObject mapToJson(@Nullable final Map<?, ?> map) {
         if (map == null) {
             return null;
-        } else if (map.isEmpty()) {
-            return new JSONObject();
-        } else {
-            return mapToJson(map);
         }
+        return new JSONObject(map);
     }
 
     @Nullable
-    public static JSONObject mapToJson(@Nullable final Map map) {
+    public static String mapToJsonString(@Nullable final Map<?, ?> map) {
         if (Utils.isNullOrEmpty(map)) {
             return null;
         }
-        return prepareMapForJson(map);
-    }
-
-    @Nullable
-    public static String mapToJsonString(@Nullable final Map map) {
-        if (Utils.isNullOrEmpty(map)) {
-            return null;
-        }
-        String value;
-        if (AndroidUtils.isApiAchieved(Build.VERSION_CODES.KITKAT)) {
-            value = new JSONObject(map).toString();
-        } else {
-            value = prepareForJson(map).toString();
-        }
-        return value;
+        return new JSONObject(map).toString();
     }
 
     @Nullable
     public static JSONArray setToJsonNullEmptyWise(@Nullable final Set<String> set) {
-        List<String> list = set == null ? null : new ArrayList<String>(set);
+        List<String> list = set == null ? null : new ArrayList<>(set);
         return listToJsonNullEmptyWise(list);
     }
 
@@ -242,13 +145,7 @@ public class JsonHelper {
         if (Utils.isNullOrEmpty(list)) {
             return null;
         }
-        JSONArray value;
-        if (AndroidUtils.isApiAchieved(Build.VERSION_CODES.KITKAT)) {
-            value = new JSONArray(list);
-        } else {
-            value = prepareCollectionForJson(list);
-        }
-        return value;
+        return new JSONArray(list);
     }
 
     @Nullable
@@ -256,13 +153,7 @@ public class JsonHelper {
         if (Utils.isNullOrEmpty(list)) {
             return null;
         }
-        String value;
-        if (AndroidUtils.isApiAchieved(Build.VERSION_CODES.KITKAT)) {
-            value = new JSONArray(list).toString();
-        } else {
-            value = prepareForJson(list).toString();
-        }
-        return value;
+        return new JSONArray(list).toString();
     }
 
     @Nullable
@@ -285,10 +176,10 @@ public class JsonHelper {
     @Nullable
     public static List<String> jsonToList(@Nullable final String json) {
         List<String> result = null;
-        if (TextUtils.isEmpty(json) == false) {
+        if (!TextUtils.isEmpty(json)) {
             try {
                 JSONArray jsonArray = new JSONArray(json);
-                result = new ArrayList<String>(jsonArray.length());
+                result = new ArrayList<>(jsonArray.length());
                 for (int i = 0; i < jsonArray.length(); i++) {
                     result.add(jsonArray.getString(i));
                 }
@@ -299,18 +190,15 @@ public class JsonHelper {
         return result;
     }
 
-    @Nullable
+    @NonNull
     public static HashMap<String, String> jsonToMap(final JSONObject json) {
-        HashMap<String, String> result = null;
+        HashMap<String, String> result = new HashMap<>();
         if (!JSONObject.NULL.equals(json)) {
-            result = new HashMap<String, String>();
             Iterator<String> keys = json.keys();
             while (keys.hasNext()) {
                 String key = keys.next();
                 String value = json.optString(key);
-                if (value != null) {
-                    result.put(key, value);
-                }
+                result.put(key, value);
             }
         }
         return result;
@@ -391,18 +279,12 @@ public class JsonHelper {
     public static List<String> toStringList(@Nullable JSONArray jsonArray) throws JSONException {
         List<String> items = null;
         if (jsonArray != null && jsonArray.length() > 0) {
-            items = new ArrayList<String>(jsonArray.length());
+            items = new ArrayList<>(jsonArray.length());
             for (int i = 0; i < jsonArray.length(); i++) {
                 items.add(jsonArray.getString(i));
             }
         }
         return items;
-    }
-
-    public static JSONObject statSendingDisabledValue() throws JSONException {
-        return new JSONObject()
-            .put("stat_sending", new JSONObject()
-                .put("disabled", true));
     }
 
     @NonNull
@@ -419,7 +301,7 @@ public class JsonHelper {
     }
 
     @NonNull
-    public static BillingConfig autoInappCollectingConfigFromJson(@NonNull JSONObject jsonObject) throws JSONException {
+    public static BillingConfig autoInappCollectingConfigFromJson(@NonNull JSONObject jsonObject) {
         StartupStateProtobuf.StartupState.AutoInappCollectingConfig defaultConfig =
             new StartupStateProtobuf.StartupState.AutoInappCollectingConfig();
         return new BillingConfig(

@@ -15,7 +15,6 @@ import io.appmetrica.analytics.coreapi.internal.model.ScreenInfo;
 import io.appmetrica.analytics.coreutils.internal.AndroidUtils;
 import io.appmetrica.analytics.coreutils.internal.system.SystemServiceUtils;
 import io.appmetrica.analytics.logger.internal.DebugLogger;
-import java.lang.reflect.Method;
 
 public class ScreenInfoExtractor {
 
@@ -23,10 +22,9 @@ public class ScreenInfoExtractor {
 
     @Nullable
     public ScreenInfo extractScreenInfo(@NonNull Context context) {
-        ScreenInfo result = null;
         Point size = extractScreenSize(context);
         if (size == null) {
-            return result;
+            return null;
         }
         int width = Math.max(size.x, size.y);
         int height = Math.min(size.x, size.y);
@@ -79,30 +77,11 @@ public class ScreenInfoExtractor {
             "Display",
             new FunctionWithThrowable<Display, Point>() {
                 @Override
-                public Point apply(@NonNull Display input) throws Throwable {
-                    int realWidth;
-                    int realHeight;
-
-                    if (AndroidUtils.isApiAchieved(Build.VERSION_CODES.JELLY_BEAN_MR1)) {
-                        // New pleasant way to get real metrics
-                        DisplayMetrics realMetrics = new DisplayMetrics();
-                        input.getRealMetrics(realMetrics);
-                        realWidth = realMetrics.widthPixels;
-                        realHeight = realMetrics.heightPixels;
-                    } else {
-                        // Reflection for this weird in-between time
-                        try {
-                            Method mGetRawH = Display.class.getMethod("getRawHeight");
-                            Method mGetRawW = Display.class.getMethod("getRawWidth");
-                            realWidth = (Integer) mGetRawW.invoke(input);
-                            realHeight = (Integer) mGetRawH.invoke(input);
-                        } catch (Throwable e) {
-                            // This may not be 100% accurate, but it's all we've got
-                            realWidth = input.getWidth();
-                            realHeight = input.getHeight();
-                        }
-                    }
-                    return new Point(realWidth, realHeight);
+                public Point apply(@NonNull Display input) {
+                    // New pleasant way to get real metrics
+                    DisplayMetrics realMetrics = new DisplayMetrics();
+                    input.getRealMetrics(realMetrics);
+                    return new Point(realMetrics.widthPixels, realMetrics.heightPixels);
                 }
             }
         );

@@ -226,15 +226,4 @@ class ThrowableModelFactoryTest : CommonTest() {
         }
         assertThat(currentModelThrowable!!.cause).isNull()
     }
-
-    @Test
-    fun noSuppressedForOldApis() {
-        `when`(AndroidUtils.isApiAchieved(Build.VERSION_CODES.KITKAT)).thenReturn(false)
-        `when`(Utils.getStackTraceSafely(any())).thenReturn(emptyArray())
-        `when`(throwable.cause).thenReturn(mock<IllegalStateException>())
-        `when`(throwable.suppressed).thenReturn(arrayOf(mock<IllegalStateException>()))
-        val result = ThrowableModelFactory.createModel(throwable)
-        assertThat(result.cause).isNotNull
-        assertThat(result.suppressed).isNull()
-    }
 }

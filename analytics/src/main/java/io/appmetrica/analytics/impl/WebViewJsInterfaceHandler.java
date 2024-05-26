@@ -1,12 +1,10 @@
 package io.appmetrica.analytics.impl;
 
 import android.annotation.SuppressLint;
-import android.os.Build;
 import android.webkit.WebView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import io.appmetrica.analytics.coreapi.internal.backport.Consumer;
-import io.appmetrica.analytics.coreutils.internal.AndroidUtils;
 import io.appmetrica.analytics.impl.proxy.AppMetricaProxy;
 import io.appmetrica.analytics.impl.utils.PublicLogger;
 import io.appmetrica.analytics.internal.js.AppMetricaInitializerJsInterface;
@@ -28,24 +26,20 @@ public class WebViewJsInterfaceHandler {
 
     @SuppressLint("AddJavascriptInterface")
     public void initWebViewReporting(@NonNull WebView webView, @NonNull AppMetricaProxy proxy) {
-        if (AndroidUtils.isApiAchieved(Build.VERSION_CODES.JELLY_BEAN_MR1)) {
-            try {
-                if (webView.getSettings().getJavaScriptEnabled()) {
-                    webView.addJavascriptInterface(new AppMetricaJsInterface(proxy), APPMETRICA_INTERFACE_NAME);
-                    webView.addJavascriptInterface(
-                            new AppMetricaInitializerJsInterface(proxy),
-                            APPMETRICA_INITIALIZER_INTERFACE_NAME
-                    );
-                    logIOrQueue("WebView interface setup is successful.");
-                } else {
-                    logWOrQueue("WebView interface setup failed because javascript is disabled for the WebView.");
-                }
-            } catch (Throwable ex) {
-                DebugLogger.error(TAG, ex);
-                logEOrQueue("WebView interface setup failed because of an exception.", ex);
+        try {
+            if (webView.getSettings().getJavaScriptEnabled()) {
+                webView.addJavascriptInterface(new AppMetricaJsInterface(proxy), APPMETRICA_INTERFACE_NAME);
+                webView.addJavascriptInterface(
+                    new AppMetricaInitializerJsInterface(proxy),
+                    APPMETRICA_INITIALIZER_INTERFACE_NAME
+                );
+                logIOrQueue("WebView interface setup is successful.");
+            } else {
+                logWOrQueue("WebView interface setup failed because javascript is disabled for the WebView.");
             }
-        } else {
-            logWOrQueue("WebView interface is not available on Android < 17.");
+        } catch (Throwable ex) {
+            DebugLogger.error(TAG, ex);
+            logEOrQueue("WebView interface setup failed because of an exception.", ex);
         }
     }
 

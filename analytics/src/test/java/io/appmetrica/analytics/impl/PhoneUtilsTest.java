@@ -146,53 +146,6 @@ public class PhoneUtilsTest extends CommonTest {
     }
 
     @RunWith(ParameterizedRobolectricTestRunner.class)
-    @Config(sdk = Build.VERSION_CODES.KITKAT)
-    public static class ConnectionTypesBeforeMTests {
-
-        private Context mContext;
-
-        @Mock
-        private ConnectivityManager mConnectivityManager;
-        @Mock
-        private NetworkInfo mNetworkInfo;
-
-        private final PhoneUtils.NetworkType mExpected;
-
-        @ParameterizedRobolectricTestRunner.Parameters(name = "expected type {1}")
-        public static Collection<Object[]> data() {
-            return Arrays.asList(new Object[][]{
-                    {ConnectivityManager.TYPE_BLUETOOTH, PhoneUtils.NetworkType.BLUETOOTH},
-                    {ConnectivityManager.TYPE_ETHERNET, PhoneUtils.NetworkType.ETHERNET},
-                    {ConnectivityManager.TYPE_MOBILE, PhoneUtils.NetworkType.CELL},
-                    {ConnectivityManager.TYPE_MOBILE_DUN, PhoneUtils.NetworkType.MOBILE_DUN},
-                    {ConnectivityManager.TYPE_MOBILE_HIPRI, PhoneUtils.NetworkType.MOBILE_HIPRI},
-                    {ConnectivityManager.TYPE_MOBILE_MMS, PhoneUtils.NetworkType.MOBILE_MMS},
-                    {ConnectivityManager.TYPE_MOBILE_SUPL, PhoneUtils.NetworkType.MOBILE_SUPL},
-                    {ConnectivityManager.TYPE_VPN, PhoneUtils.NetworkType.UNDEFINED},
-                    {ConnectivityManager.TYPE_WIFI, PhoneUtils.NetworkType.WIFI},
-                    {ConnectivityManager.TYPE_WIMAX, PhoneUtils.NetworkType.WIMAX},
-                    {99, PhoneUtils.NetworkType.UNDEFINED}
-            });
-        }
-
-        public ConnectionTypesBeforeMTests(final int connectivityManagerType, PhoneUtils.NetworkType enumType) {
-            MockitoAnnotations.openMocks(this);
-            mContext = TestUtils.createMockedContext();
-            when(mContext.getSystemService(any(String.class))).thenReturn(mConnectivityManager);
-            when(mConnectivityManager.getActiveNetworkInfo()).thenReturn(mNetworkInfo);
-            //noinspection deprecation
-            when(mNetworkInfo.isConnected()).thenReturn(true);
-            when(mNetworkInfo.getType()).thenReturn(connectivityManagerType);
-            mExpected = enumType;
-        }
-
-        @Test
-        public void test() {
-            assertThat(PhoneUtils.getConnectionType(mContext)).isEqualTo(mExpected);
-        }
-    }
-
-    @RunWith(ParameterizedRobolectricTestRunner.class)
     @Config(sdk = Build.VERSION_CODES.M)
     public static class ConnectionTypesMTests {
 

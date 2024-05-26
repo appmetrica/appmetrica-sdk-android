@@ -2,7 +2,6 @@ package io.appmetrica.analytics.networktasks.internal;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import io.appmetrica.analytics.logger.internal.DebugLogger;
 import org.json.JSONObject;
 

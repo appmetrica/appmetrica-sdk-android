@@ -5,8 +5,8 @@ import io.appmetrica.analytics.coreapi.internal.annotations.GeoThread;
 import io.appmetrica.analytics.coreapi.internal.cache.CacheUpdateScheduler;
 import io.appmetrica.analytics.coreapi.internal.cache.UpdateConditionsChecker;
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
 import io.appmetrica.analytics.locationapi.internal.ILastKnownUpdater;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 import java.util.concurrent.TimeUnit;
 
 public class LocationDataCacheUpdateScheduler implements CacheUpdateScheduler {

@@ -1,11 +1,9 @@
 package io.appmetrica.analytics
 
 import android.content.Context
-import io.appmetrica.analytics.impl.ClientServiceLocator
 import io.appmetrica.analytics.impl.proxy.ModulesProxy
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

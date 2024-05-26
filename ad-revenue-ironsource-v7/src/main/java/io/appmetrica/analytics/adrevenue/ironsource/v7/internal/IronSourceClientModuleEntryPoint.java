@@ -2,8 +2,8 @@ package io.appmetrica.analytics.adrevenue.ironsource.v7.internal;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import io.appmetrica.analytics.adrevenue.ironsource.v7.impl.IronSourceAdRevenueAdapter;
 import io.appmetrica.analytics.adrevenue.ironsource.v7.impl.Constants;
+import io.appmetrica.analytics.adrevenue.ironsource.v7.impl.IronSourceAdRevenueAdapter;
 import io.appmetrica.analytics.coreutils.internal.reflection.ReflectionUtils;
 import io.appmetrica.analytics.logger.internal.DebugLogger;
 import io.appmetrica.analytics.modulesapi.internal.client.ClientContext;

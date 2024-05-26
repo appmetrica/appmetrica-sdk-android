@@ -10,8 +10,14 @@ import org.robolectric.annotation.Config
 import java.util.UUID
 
 @RunWith(ParameterizedRobolectricTestRunner::class)
-@Config(sdk = [Build.VERSION_CODES.KITKAT, Build.VERSION_CODES.LOLLIPOP, Build.VERSION_CODES.Q,
-    Build.VERSION_CODES.TIRAMISU])
+@Config(
+    sdk = [
+        Build.VERSION_CODES.LOLLIPOP,
+        Build.VERSION_CODES.Q,
+        Build.VERSION_CODES.TIRAMISU,
+        Build.VERSION_CODES.UPSIDE_DOWN_CAKE
+    ]
+)
 class UuidValidatorTest(
     private val input: String?,
     private val expected: Boolean

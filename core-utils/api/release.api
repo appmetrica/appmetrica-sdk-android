@@ -185,12 +185,6 @@ public final class io.appmetrica.analytics.coreutils.internal.io.AppDataDirProvi
     public final [Nullable] java.io.File dataDir([NonNull] android.content.Context)
 }
 
-public final class io.appmetrica.analytics.coreutils.internal.io.AppStorageDirectoryProviderForLollipop {
-    public static final [NonNull] io.appmetrica.analytics.coreutils.internal.io.AppStorageDirectoryProviderForLollipop INSTANCE
-
-    public final [Nullable] java.io.File getAppStorageDirectory([NonNull] android.content.Context)
-}
-
 public final class io.appmetrica.analytics.coreutils.internal.io.Base64Utils {
     public static final [NonNull] io.appmetrica.analytics.coreutils.internal.io.Base64Utils INSTANCE
     public static final int IO_BUFFER_SIZE
@@ -222,7 +216,6 @@ public final class io.appmetrica.analytics.coreutils.internal.io.FileUtils {
     public static final boolean move([Nullable] java.io.File, [Nullable] java.io.File)
     public final boolean moveByCopy([Nullable] java.io.File, [Nullable] java.io.File)
     public final boolean moveByRename([Nullable] java.io.File, [Nullable] java.io.File)
-    public static final boolean needToUseNoBackup()
     public static final void resetSdkStorage()
     public static final [Nullable] java.io.File sdkStorage([NonNull] android.content.Context)
 }

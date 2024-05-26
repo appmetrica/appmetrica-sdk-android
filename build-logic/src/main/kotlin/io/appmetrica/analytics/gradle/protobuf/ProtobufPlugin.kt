@@ -7,7 +7,6 @@ import org.gradle.kotlin.dsl.create
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.register
 import java.io.File
-import java.util.Calendar
 import java.util.Locale
 
 class ProtobufPlugin : Plugin<Project> {

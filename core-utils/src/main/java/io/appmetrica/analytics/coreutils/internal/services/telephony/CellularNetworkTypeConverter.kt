@@ -26,11 +26,9 @@ internal object CellularNetworkTypeConverter {
         put(TelephonyManager.NETWORK_TYPE_IDEN, "iDen")
         put(TelephonyManager.NETWORK_TYPE_UMTS, "UMTS")
         put(TelephonyManager.NETWORK_TYPE_LTE, "LTE")
-        if (AndroidUtils.isApiAchieved(Build.VERSION_CODES.N_MR1)) {
-            put(TelephonyManager.NETWORK_TYPE_GSM, "GSM")
-            put(TelephonyManager.NETWORK_TYPE_TD_SCDMA, "TD_SCDMA")
-            put(TelephonyManager.NETWORK_TYPE_IWLAN, "IWLAN")
-        }
+        put(TelephonyManager.NETWORK_TYPE_GSM, "GSM")
+        put(TelephonyManager.NETWORK_TYPE_TD_SCDMA, "TD_SCDMA")
+        put(TelephonyManager.NETWORK_TYPE_IWLAN, "IWLAN")
         if (AndroidUtils.isApiAchieved(Build.VERSION_CODES.Q)) {
             put(TelephonyManager.NETWORK_TYPE_NR, "NR")
         }

@@ -1,18 +1,14 @@
 package io.appmetrica.analytics.impl.core
 
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.ActivationBarrierCallback
-import io.appmetrica.analytics.coreutils.internal.services.UtilityServiceProvider
-import io.appmetrica.analytics.coreutils.internal.services.WaitForActivationDelayBarrier
 import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
-import io.appmetrica.analytics.testutils.constructionRule
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.argumentCaptor
-import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify

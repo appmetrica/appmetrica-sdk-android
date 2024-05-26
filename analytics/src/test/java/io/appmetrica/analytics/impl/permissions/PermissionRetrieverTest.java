@@ -1,10 +1,8 @@
 package io.appmetrica.analytics.impl.permissions;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import io.appmetrica.analytics.coreapi.internal.permission.PermissionState;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.TestUtils;
@@ -41,7 +39,6 @@ public class PermissionRetrieverTest extends CommonTest {
         doReturn(mPackageManager).when(mContext).getPackageManager();
     }
 
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Test
     public void testPermissionsCheckerWithEqualPermissions() {
         PermissionsChecker checker = new PermissionsChecker();
@@ -57,7 +54,6 @@ public class PermissionRetrieverTest extends CommonTest {
         assertThat(result).isNull();
     }
 
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Test
     public void testPermissionsCheckerWithChangedState() {
         PermissionsChecker checker = new PermissionsChecker();
@@ -76,7 +72,6 @@ public class PermissionRetrieverTest extends CommonTest {
         );
     }
 
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Test
     public void testPermissionsCheckerWithChangedPermissionsList() {
         PermissionsChecker checker = new PermissionsChecker();
@@ -98,20 +93,6 @@ public class PermissionRetrieverTest extends CommonTest {
         );
     }
 
-    @Test
-    public void testStaticPermissionRetriever() {
-        mPackageInfo.requestedPermissions = new String[]{
-                "permissionA",
-                "permissionB",
-                "permissionC"
-        };
-        PermissionRetriever retriever = new StaticPermissionRetriever(mContext);
-        List<PermissionState> permissions = retriever.getPermissionsState();
-        assertThat(permissions).size().isEqualTo(3);
-        assertThat(permissions).extracting("granted").containsOnly(true);
-    }
-
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Test
     public void testRuntimePermissionRetriever() {
         mPackageInfo.requestedPermissions = new String[]{

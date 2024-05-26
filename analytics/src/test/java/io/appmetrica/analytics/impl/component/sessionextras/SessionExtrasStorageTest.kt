@@ -1,8 +1,8 @@
 package io.appmetrica.analytics.impl.component.sessionextras
 
 import android.content.Context
-import io.appmetrica.analytics.impl.component.ComponentId
 import io.appmetrica.analytics.coreapi.internal.data.IBinaryDataHelper
+import io.appmetrica.analytics.impl.component.ComponentId
 import io.appmetrica.analytics.impl.db.storage.DatabaseStorageFactory
 import io.appmetrica.analytics.impl.protobuf.client.SessionExtrasProtobuf
 import io.appmetrica.analytics.testutils.CommonTest

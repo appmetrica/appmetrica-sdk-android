@@ -3,11 +3,10 @@ package io.appmetrica.analytics.networktasks.internal;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
-
-import io.appmetrica.analytics.logger.internal.DebugLogger;
 import io.appmetrica.analytics.coreutils.internal.time.SystemTimeProvider;
 import io.appmetrica.analytics.coreutils.internal.time.TimePassedChecker;
 import io.appmetrica.analytics.coreutils.internal.time.TimeProvider;
+import io.appmetrica.analytics.logger.internal.DebugLogger;
 
 public class ExponentialBackoffDataHolder {
 

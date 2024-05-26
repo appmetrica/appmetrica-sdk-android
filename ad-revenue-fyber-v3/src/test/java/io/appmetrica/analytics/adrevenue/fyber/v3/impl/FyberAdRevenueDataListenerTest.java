@@ -1,20 +1,20 @@
 package io.appmetrica.analytics.adrevenue.fyber.v3.impl;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
-import static org.mockito.Mockito.when;
-
 import com.fyber.fairbid.ads.ImpressionData;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
 import io.appmetrica.analytics.modulesapi.internal.client.ClientContext;
 import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.AutoAdRevenue;
 import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.AutoAdRevenueReporter;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.MockedConstructionRule;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;
 
 public class FyberAdRevenueDataListenerTest extends CommonTest {
 
