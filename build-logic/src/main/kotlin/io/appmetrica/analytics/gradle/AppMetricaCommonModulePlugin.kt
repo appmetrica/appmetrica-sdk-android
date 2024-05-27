@@ -110,8 +110,8 @@ class AppMetricaCommonModulePlugin : Plugin<Project> {
             checkProguard = true
             forbiddenImports = listOf(
                 "io.appmetrica.analytics.coreutils.asserts.DebugAssert",
-                "io.appmetrica.analytics.coreutils.logger.YLogger",
                 "io.appmetrica.analytics.impl.utils.DebugAssert",
+                "io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger",
                 "io.appmetrica.analytics.ndkcrashes.impl.NativeCrashLogger",
             )
             forbiddenMethods = mapOf(
@@ -129,7 +129,12 @@ class AppMetricaCommonModulePlugin : Plugin<Project> {
 
     private fun Project.configureNoLogs() {
         configure<NoLogsExtension> {
-            loggerClasses = listOf("YLogger", "DebugAssert", "NativeCrashLogger")
+            loggerClasses = listOf(
+                "DebugAssert",
+                "DebugLogger",
+                "DebugLogger.INSTANCE",
+                "NativeCrashLogger"
+            )
             shouldRemoveLogs = { it.buildType.name == "release" }
         }
     }

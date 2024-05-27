@@ -4,7 +4,7 @@ import io.appmetrica.analytics.impl.CounterReport
 import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.component.ComponentUnit
 import io.appmetrica.analytics.impl.component.processor.event.ReportComponentHandler
-import io.appmetrica.analytics.logger.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import io.appmetrica.analytics.modulesapi.internal.service.event.ModuleServiceEventHandler
 
 private const val TAG_PREFIX = "[ModulesEventHandler-%s]"

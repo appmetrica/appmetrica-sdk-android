@@ -1,5 +1,6 @@
 io.appmetrica.analytics:ad-revenue-fyber-v3:unspecified
 io.appmetrica.analytics:ad-revenue-ironsource-v7:unspecified
+io.appmetrica.analytics:common-logger:unspecified
 io.appmetrica.analytics:core-api:unspecified
 io.appmetrica.analytics:core-utils:unspecified
 io.appmetrica.analytics:location-api:unspecified

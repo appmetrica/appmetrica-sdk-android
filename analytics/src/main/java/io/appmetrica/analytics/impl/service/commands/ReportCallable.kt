@@ -4,7 +4,7 @@ import io.appmetrica.analytics.impl.AppMetricaConnector
 import io.appmetrica.analytics.impl.ReportToSend
 import io.appmetrica.analytics.impl.ShouldDisconnectFromServiceChecker
 import io.appmetrica.analytics.internal.IAppMetricaService
-import io.appmetrica.analytics.logger.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
 internal open class ReportCallable(
     serviceConnector: AppMetricaConnector,

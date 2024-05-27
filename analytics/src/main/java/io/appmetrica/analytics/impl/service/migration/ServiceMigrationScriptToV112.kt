@@ -17,7 +17,7 @@ import io.appmetrica.analytics.impl.protobuf.client.LegacyStartupStateProtobuf.L
 import io.appmetrica.analytics.impl.startup.CollectingFlags
 import io.appmetrica.analytics.impl.startup.StartupStateModel
 import io.appmetrica.analytics.impl.utils.encryption.AESCredentialProvider
-import io.appmetrica.analytics.logger.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
 internal class ServiceMigrationScriptToV112(private val vitalDataStorage: VitalCommonDataProvider) : MigrationScript {
 

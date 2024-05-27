@@ -856,7 +856,8 @@ public abstract class BaseReporterTest extends BaseReporterData {
 
     @Test
     public void testAdRevenueSent() {
-        final AdRevenue mock = mock(AdRevenue.class);
+        final Currency currency = mock(Currency.class);
+        final AdRevenue mock = AdRevenue.newBuilder(1, currency).build();
         getReporter().reportAdRevenue(mock);
         assertThat(adRevenueWrapperConstructor.getArgumentInterceptor().getArguments().get(0).get(0)).isSameAs(mock);
         assertThat(adRevenueWrapperConstructor.getArgumentInterceptor().getArguments().get(0).get(1)).isEqualTo(false);
@@ -868,7 +869,8 @@ public abstract class BaseReporterTest extends BaseReporterData {
 
     @Test
     public void testAdRevenueSentIfAutoCollected() {
-        final AdRevenue mock = mock(AdRevenue.class);
+        final Currency currency = mock(Currency.class);
+        final AdRevenue mock = AdRevenue.newBuilder(1, currency).build();
         getReporter().reportAdRevenue(mock, true);
         assertThat(adRevenueWrapperConstructor.getArgumentInterceptor().getArguments().get(0).get(0)).isSameAs(mock);
         assertThat(adRevenueWrapperConstructor.getArgumentInterceptor().getArguments().get(0).get(1)).isEqualTo(true);
@@ -887,15 +889,13 @@ public abstract class BaseReporterTest extends BaseReporterData {
 
     @Test
     public void logRevenueWithPrice() {
-        when(mPublicLogger.isEnabled()).thenReturn(true);
         Revenue revenue = Revenue.newBuilder(12000000, Currency.getInstance("USD")).build();
         getReporter().reportRevenue(revenue);
-        verify(mPublicLogger).i("Revenue received for productID: <null> of quantity: <null> with price (in micros): 12000000 USD");
+        verify(mPublicLogger).info("Revenue received for productID: <null> of quantity: <null> with price (in micros): 12000000 USD");
     }
 
     @Test
     public void logRevenueFilled() {
-        when(mPublicLogger.isEnabled()).thenReturn(true);
         Revenue revenue = Revenue.newBuilder(12000000, Currency.getInstance("USD"))
                 .withProductID("12abc")
                 .withQuantity(3)
@@ -903,7 +903,7 @@ public abstract class BaseReporterTest extends BaseReporterData {
                 .withReceipt(Revenue.Receipt.newBuilder().withData("mydata").withSignature("mysignature").build())
                 .build();
         getReporter().reportRevenue(revenue);
-        verify(mPublicLogger).i("Revenue received for productID: 12abc of quantity: 3 with price (in micros): 12000000 USD");
+        verify(mPublicLogger).info("Revenue received for productID: 12abc of quantity: 3 with price (in micros): 12000000 USD");
     }
 
     @Test
@@ -915,23 +915,12 @@ public abstract class BaseReporterTest extends BaseReporterData {
 
     @Test
     public void reportECommercePublicLogIfEnabled() {
-        reportECommercePublicLog(true);
-    }
-
-    @Test
-    public void reportECommercePublicLogIfDisabled() {
-        reportECommercePublicLog(false);
-    }
-
-    private void reportECommercePublicLog(boolean enabled) {
-        when(mPublicLogger.isEnabled()).thenReturn(enabled);
-
         String eventDescription = "event description";
         ECommerceEvent event = mock(ECommerceEvent.class);
         when(event.getPublicDescription()).thenReturn(eventDescription);
 
         getReporter().reportECommerce(event);
-        verify(mPublicLogger, enabled ? times(1) : never()).i("E-commerce event received: " + eventDescription);
+        verify(mPublicLogger, times(1)).info("E-commerce event received: " + eventDescription);
     }
 
     @Test
@@ -971,14 +960,13 @@ public abstract class BaseReporterTest extends BaseReporterData {
 
     @Test
     public void reportJsEvent() {
-        when(mPublicLogger.isEnabled()).thenReturn(true);
         ClientCounterReport report = mock(ClientCounterReport.class);
         try (MockedStatic<ClientCounterReport> sClientCounterReport = Mockito.mockStatic(ClientCounterReport.class)) {
             final String eventName = "Event name";
             final String eventValue = "Event value";
             when(ClientCounterReport.formJsEvent(eventName, eventValue, mPublicLogger)).thenReturn(report);
             mReporter.reportJsEvent(eventName, eventValue);
-            verify(mPublicLogger).i("Event received: Event name. With value: Event value");
+            verify(mPublicLogger).info("Event received: Event name. With value: Event value");
             verify(mReportsHandler).reportEvent(report, mReporterEnvironment);
         }
     }
@@ -989,7 +977,6 @@ public abstract class BaseReporterTest extends BaseReporterData {
         when(CounterReport.formJsInitEvent(eventValue)).thenReturn(mockedEvent);
         mReporter.reportJsInitEvent(eventValue);
         verify(mReportsHandler).reportEvent(mockedEvent, mReporterEnvironment);
-        verify(mPublicLogger, never()).i(anyString());
     }
 
     @Test
@@ -1023,7 +1010,6 @@ public abstract class BaseReporterTest extends BaseReporterData {
 
     @Test
     public void reportPluginError() {
-        when(mPublicLogger.isEnabled()).thenReturn(true);
         final String message = "message";
         ClientCounterReport clientCounterReport = mock(ClientCounterReport.class);
         PluginErrorDetails errorDetails = mock(PluginErrorDetails.class);
@@ -1047,12 +1033,11 @@ public abstract class BaseReporterTest extends BaseReporterData {
                 MessageNano.toByteArray(error);
             }
         });
-        verify(mPublicLogger).fi("Error from plugin received: %s", message);
+        verify(mPublicLogger).info("Error from plugin received: %s", message);
     }
 
     @Test
     public void reportPluginErrorWithIdentifier() throws IllegalAccessException {
-        when(mPublicLogger.isEnabled()).thenReturn(true);
         String identifier = "id";
         final String message = "message";
         ClientCounterReport clientCounterReport = mock(ClientCounterReport.class);
@@ -1086,7 +1071,7 @@ public abstract class BaseReporterTest extends BaseReporterData {
                 MessageNano.toByteArray(error);
             }
         });
-        verify(mPublicLogger).fi("Error with identifier: %s from plugin received: %s", identifier, message);
+        verify(mPublicLogger).info("Error with identifier: %s from plugin received: %s", identifier, message);
     }
 
     @Test

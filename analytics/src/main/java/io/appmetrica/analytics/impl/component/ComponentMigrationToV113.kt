@@ -4,7 +4,7 @@ import io.appmetrica.analytics.impl.SdkData
 import io.appmetrica.analytics.impl.component.session.BackgroundSessionFactory
 import io.appmetrica.analytics.impl.component.session.ForegroundSessionFactory
 import io.appmetrica.analytics.impl.component.session.SessionStorageImpl
-import io.appmetrica.analytics.logger.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import java.util.concurrent.TimeUnit
 
 internal class ComponentMigrationToV113(

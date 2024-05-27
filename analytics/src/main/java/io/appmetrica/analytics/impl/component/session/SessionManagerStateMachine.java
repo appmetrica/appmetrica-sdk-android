@@ -8,7 +8,7 @@ import io.appmetrica.analytics.impl.ExtraMetaInfoRetriever;
 import io.appmetrica.analytics.impl.InternalEvents;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.impl.utils.PublicLogger;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 
 public class SessionManagerStateMachine {
 
@@ -64,7 +64,7 @@ public class SessionManagerStateMachine {
     }
 
     public synchronized void heartbeat(@NonNull CounterReport reportData) {
-        DebugLogger.info(TAG, mComponent.getComponentId() + " heartbeat");
+        DebugLogger.INSTANCE.info(TAG, mComponent.getComponentId() + " heartbeat");
         loadValidSession(reportData);
         switch (mState) {
             case FOREGROUND:
@@ -96,11 +96,19 @@ public class SessionManagerStateMachine {
     public synchronized Session getSomeSession(@NonNull CounterReport report) {
         loadValidSession(report);
         if (mState != State.EMPTY && checkValidityOrClose(mCurrentSession, report) == false) {
-            DebugLogger.info(TAG, mComponent.getComponentId() + " session %s is invalid", mCurrentSession);
+            DebugLogger.INSTANCE.info(
+                TAG,
+                mComponent.getComponentId() + " session %s is invalid",
+                mCurrentSession
+            );
             mState = State.EMPTY;
             mCurrentSession = null;
         }
-        DebugLogger.info(TAG, mComponent.getComponentId() + " getSomeSession. current state is %s", mState);
+        DebugLogger.INSTANCE.info(
+            TAG,
+            mComponent.getComponentId() + " getSomeSession. current state is %s",
+            mState
+        );
         switch (mState) {
             case FOREGROUND:
                 return mCurrentSession;
@@ -138,11 +146,9 @@ public class SessionManagerStateMachine {
 
     @NonNull
     private Session createForegroundSession(@NonNull CounterReport reportData) {
-        DebugLogger.info(TAG, mComponent.getComponentId() + " create foreground session");
+        DebugLogger.INSTANCE.info(TAG, mComponent.getComponentId() + " create foreground session");
         final PublicLogger logger = mComponent.getPublicLogger();
-        if (logger.isEnabled()) {
-            logger.i("Start foreground session");
-        }
+        logger.info("Start foreground session");
         long eventCreationElapsedRealtime = reportData.getCreationElapsedRealtime();
         Session session = mForegroundSessionFactory.create(
                 new SessionArguments(eventCreationElapsedRealtime,
@@ -220,28 +226,28 @@ public class SessionManagerStateMachine {
             mSaver.saveEvent(CounterReport.formAliveReportData(reportData), getAliveReportSessionState(session));
             session.updateAliveReportNeeded(false);
         }
-        DebugLogger.info(TAG, mComponent.getComponentId() + " stop session %d type %s", session.getId(),
-                session.getType().toString());
+        DebugLogger.INSTANCE.info(
+            TAG,
+            mComponent.getComponentId() + " stop session %d type %s",
+            session.getId(),
+            session.getType().toString()
+        );
         final PublicLogger logger = mComponent.getPublicLogger();
-        if (logger.isEnabled()) {
-            switch (session.getType()) {
-                case BACKGROUND:
-                    logger.i("Finish background session");
-                    break;
-                case FOREGROUND:
-                    logger.i("Finish foreground session");
-                    break;
-            }
+        switch (session.getType()) {
+            case BACKGROUND:
+                logger.info("Finish background session");
+                break;
+            case FOREGROUND:
+                logger.info("Finish foreground session");
+                break;
         }
         session.stopSession();
     }
 
     @NonNull private Session createBackgroundSession(@NonNull CounterReport reportData) {
-        DebugLogger.info(TAG, mComponent.getComponentId() + " create background session");
+        DebugLogger.INSTANCE.info(TAG, mComponent.getComponentId() + " create background session");
         final PublicLogger logger = mComponent.getPublicLogger();
-        if (logger.isEnabled()) {
-            logger.i("Start background session");
-        }
+        logger.info("Start background session");
         mState = State.BACKGROUND;
         long eventCreationElapsedRealtime = reportData.getCreationElapsedRealtime();
         Session session = mBackgroundSessionFactory.create(
@@ -291,7 +297,7 @@ public class SessionManagerStateMachine {
                     .withReportTime(lastSession.getLastEventTimeOffsetSeconds())
                     .withSessionType(lastSession.getType());
         } else {
-            DebugLogger.warning(TAG, "Could not load session, creating background stub.");
+            DebugLogger.INSTANCE.warning(TAG, "Could not load session, creating background stub.");
             return createBackgroundSessionStub(report.getCreationTimestamp());
         }
     }

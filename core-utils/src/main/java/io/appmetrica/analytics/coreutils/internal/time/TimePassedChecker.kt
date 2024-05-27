@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.coreutils.internal.time
 
 import androidx.annotation.VisibleForTesting
-import io.appmetrica.analytics.logger.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
 class TimePassedChecker @VisibleForTesting internal constructor(private val mTimeProvider: TimeProvider) {
     constructor() : this(SystemTimeProvider())

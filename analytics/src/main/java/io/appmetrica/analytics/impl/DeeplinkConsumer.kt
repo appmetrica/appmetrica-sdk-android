@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl
 
 import android.content.Intent
 import io.appmetrica.analytics.impl.utils.ApiProxyThread
-import io.appmetrica.analytics.logger.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
 class DeeplinkConsumer(private val mainReporter: IMainReporter) {
 

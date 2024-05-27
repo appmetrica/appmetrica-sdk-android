@@ -4,7 +4,6 @@ import android.content.Context;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import androidx.annotation.AnyThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,7 +27,8 @@ import io.appmetrica.analytics.impl.startup.StartupHelper;
 import io.appmetrica.analytics.impl.utils.BooleanUtils;
 import io.appmetrica.analytics.impl.utils.LoggerStorage;
 import io.appmetrica.analytics.impl.utils.PublicLogger;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.ImportantLogger;
 import java.util.List;
 import java.util.Map;
 
@@ -138,8 +138,10 @@ public class AppMetricaImpl implements IAppMetricaImpl {
             initStartup(config);
             mProcessConfiguration.update(config);
             initMainReporterForApiKey(config, needToClearEnvironment);
-            Log.i(SdkUtils.APPMETRICA_TAG,
-                    "Activate AppMetrica with APIKey " + Utils.createPartialApiKey(config.apiKey));
+            ImportantLogger.INSTANCE.info(
+                SdkUtils.APPMETRICA_TAG,
+                "Activate AppMetrica with APIKey " + Utils.createPartialApiKey(config.apiKey)
+            );
             if (BooleanUtils.isTrue(config.logs)) {
                 publicLogger.setEnabled(true);
                 LoggerStorage.getAnonymousPublicLogger().setEnabled(true);
@@ -148,9 +150,7 @@ public class AppMetricaImpl implements IAppMetricaImpl {
                 LoggerStorage.getAnonymousPublicLogger().setEnabled(false);
             }
         } else {
-            if (publicLogger.isEnabled()) {
-                publicLogger.w("Appmetrica already has been activated!");
-            }
+            publicLogger.warning("Appmetrica already has been activated!");
         }
     }
 
@@ -164,7 +164,7 @@ public class AppMetricaImpl implements IAppMetricaImpl {
     @AnyThread
     @Override
     public void onReceiveResult(int resultCode, @NonNull Bundle resultData) {
-        DebugLogger.info(TAG, "On receive data, result code: %d", resultCode);
+        DebugLogger.INSTANCE.info(TAG, "On receive data, result code: %d", resultCode);
         mStartupHelper.processResultFromResultReceiver(resultData);
     }
 

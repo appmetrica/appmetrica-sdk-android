@@ -5,7 +5,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.permission.PermissionStrategy;
 import io.appmetrica.analytics.coreapi.internal.system.PermissionExtractor;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 
 public class SimplePermissionExtractor implements PermissionExtractor {
 
@@ -21,7 +21,11 @@ public class SimplePermissionExtractor implements PermissionExtractor {
     @Override
     public boolean hasPermission(@NonNull Context context, @NonNull String permission) {
         if (getShouldAskSystemStrategy().forbidUsePermission(permission)) {
-            DebugLogger.info(TAG, "Should ask system strategy restrict using permission \"%s\"", permission);
+            DebugLogger.INSTANCE.info(
+                TAG,
+                "Should ask system strategy restrict using permission \"%s\"",
+                permission
+            );
             return false;
         }
         return ContextPermissionChecker.hasPermission(context, permission);

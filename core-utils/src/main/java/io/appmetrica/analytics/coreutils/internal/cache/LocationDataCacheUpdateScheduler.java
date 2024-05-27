@@ -6,7 +6,7 @@ import io.appmetrica.analytics.coreapi.internal.cache.CacheUpdateScheduler;
 import io.appmetrica.analytics.coreapi.internal.cache.UpdateConditionsChecker;
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
 import io.appmetrica.analytics.locationapi.internal.ILastKnownUpdater;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.util.concurrent.TimeUnit;
 
 public class LocationDataCacheUpdateScheduler implements CacheUpdateScheduler {
@@ -26,7 +26,7 @@ public class LocationDataCacheUpdateScheduler implements CacheUpdateScheduler {
         @GeoThread
         @Override
         public void run() {
-            DebugLogger.info(tag, "Executing last known update.");
+            DebugLogger.INSTANCE.info(tag, "Executing last known update.");
             mLastKnownUpdater.updateLastKnown();
         }
     };
@@ -37,7 +37,7 @@ public class LocationDataCacheUpdateScheduler implements CacheUpdateScheduler {
         @Override
         public void run() {
             final boolean shouldUpdate = mUpdateConditionsChecker.shouldUpdate();
-            DebugLogger.info(tag, "Executing last known update. Should update? : %b", shouldUpdate);
+            DebugLogger.INSTANCE.info(tag, "Executing last known update. Should update? : %b", shouldUpdate);
             if (shouldUpdate) {
                 mUpdateRunnable.run();
             }
@@ -68,14 +68,14 @@ public class LocationDataCacheUpdateScheduler implements CacheUpdateScheduler {
 
     @Override
     public void scheduleUpdateIfNeededNow() {
-        DebugLogger.info(tag, "Schedule last known update now.");
+        DebugLogger.INSTANCE.info(tag, "Schedule last known update now.");
         mExecutor.execute(mUpdateIfNeededRunnable);
     }
 
     @Override
     public void onStateUpdated() {
         mExecutor.remove(mUpdateRunnable);
-        DebugLogger.info(tag, "Schedule update last known location by timer");
+        DebugLogger.INSTANCE.info(tag, "Schedule update last known location by timer");
         mExecutor.executeDelayed(mUpdateRunnable, UPDATE_INTERVAL_SECONDS, TimeUnit.SECONDS);
     }
 }

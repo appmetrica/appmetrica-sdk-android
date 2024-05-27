@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.ndkcrashesapi.internal
 
 import android.content.Context
-import io.appmetrica.analytics.logger.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
 class NativeCrashClientModuleDummy : NativeCrashClientModule() {
     private val tag = "[NativeCrashClientModuleDummy]"

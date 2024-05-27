@@ -8,7 +8,7 @@ import io.appmetrica.analytics.impl.Utils;
 import io.appmetrica.analytics.impl.component.ComponentId;
 import io.appmetrica.analytics.impl.request.StartupRequestConfig;
 import io.appmetrica.analytics.impl.utils.collection.HashMultimap;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -35,7 +35,7 @@ public class StartupCenter {
                 mLastStartupState = newState;
                 listeners = getStartupListeners(packageName);
             }
-            DebugLogger.info(TAG,"startup changed for package %s. Total listeners: %d. New value %s",
+            DebugLogger.INSTANCE.info(TAG,"startup changed for package %s. Total listeners: %d. New value %s",
                 packageName, listeners.size(), newState);
             for (StartupListener listener : listeners) {
                 listener.onStartupChanged(newState);
@@ -45,13 +45,13 @@ public class StartupCenter {
         public void onStartupError(@NonNull String packageName,
                                    @NonNull StartupError error,
                                    @Nullable StartupState existingState) {
-            DebugLogger.info(TAG, "startup failed for package %s. reason %s", packageName, error);
+            DebugLogger.INSTANCE.info(TAG, "startup failed for package %s. reason %s", packageName, error);
             final List<StartupListener> listeners;
             synchronized (mStartupUnitsByPackage) {
                 listeners = getStartupListeners(packageName);
             }
             for (StartupListener listener : listeners) {
-                DebugLogger.info(TAG, "Notify listener %s with new startup error", listener);
+                DebugLogger.INSTANCE.info(TAG, "Notify listener %s with new startup error", listener);
                 listener.onStartupError(error, existingState);
             }
         }
@@ -60,10 +60,10 @@ public class StartupCenter {
         public List<StartupListener> getStartupListeners(@NonNull String packageName) {
             Collection<StartupListener> startupListeners = mStartupListenersByPackage.get(packageName);
             if (startupListeners == null) {
-                DebugLogger.info(TAG, "no listeners found");
+                DebugLogger.INSTANCE.info(TAG, "no listeners found");
                 return new ArrayList<StartupListener>();
             } else {
-                DebugLogger.info(TAG, "%d listeners found", startupListeners.size());
+                DebugLogger.INSTANCE.info(TAG, "%d listeners found", startupListeners.size());
                 return new ArrayList<StartupListener>(startupListeners);
             }
         }
@@ -74,7 +74,7 @@ public class StartupCenter {
                                               @NonNull StartupRequestConfig.Arguments arguments) {
         StartupUnit unit;
         boolean needToUpdateConfiguration = true;
-        DebugLogger.info(TAG, "getOrCreateStartupUnit for component %s", componentId);
+        DebugLogger.INSTANCE.info(TAG, "getOrCreateStartupUnit for component %s", componentId);
         unit = mStartupUnitsByPackage.get(componentId.getPackage());
         if (unit == null) {
             synchronized (mStartupUnitsByPackage) {
@@ -96,7 +96,7 @@ public class StartupCenter {
     StartupUnit createStartupUnit(@NonNull Context context,
                                   @NonNull ComponentId componentId,
                                   @NonNull StartupRequestConfig.Arguments arguments) {
-        DebugLogger.info(TAG, "createStartupUnit for component %s", componentId);
+        DebugLogger.INSTANCE.info(TAG, "createStartupUnit for component %s", componentId);
         StartupUnit startupUnit = new StartupUnit(
             new StartupUnitComponents(
                 context,
@@ -112,7 +112,7 @@ public class StartupCenter {
     public void registerStartupListener(@NonNull ComponentId componentId,
                                         @NonNull StartupListener startupListener) {
         synchronized (mStartupUnitsByPackage) {
-            DebugLogger.info(
+            DebugLogger.INSTANCE.info(
                 TAG,
                 "registerStartupListener: %s for component %s",
                 startupListener,
@@ -127,7 +127,7 @@ public class StartupCenter {
 
     public void unregisterStartupListener(@NonNull ComponentId componentId, StartupListener startupListener) {
         Collection<StartupListener> remainingUnits;
-        DebugLogger.info(
+        DebugLogger.INSTANCE.info(
             TAG,
             "unregisterStartupListeners %s for component %s",
             startupListener,

@@ -17,7 +17,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
 public class EventLimitationsProcessorTest extends CommonTest {
@@ -36,7 +35,6 @@ public class EventLimitationsProcessorTest extends CommonTest {
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        when(mPublicLogger.isEnabled()).thenReturn(true);
         mEventNameTrimmer = new StringTrimmer(REPORT_NAME_MAX_LENGTH, ARG_TAG, mPublicLogger);
         mRandomStringGenerator = new RandomStringGenerator(REPORT_NAME_MAX_LENGTH);
     }
@@ -70,8 +68,7 @@ public class EventLimitationsProcessorTest extends CommonTest {
         String trimmedString = new StringTrimmer(randomString.length() - 1, ARG_TAG, mPublicLogger).trim(randomString);
         assertThat(randomString).contains(trimmedString);
         assertThat(trimmedString.length()).isEqualTo(randomString.length() - 1);
-        verify(mPublicLogger).isEnabled();
-        verify(mPublicLogger).fw(anyString(), any(Object[].class));
+        verify(mPublicLogger).warning(anyString(), any(Object[].class));
     }
 
     @Test
@@ -92,8 +89,7 @@ public class EventLimitationsProcessorTest extends CommonTest {
         byte[] trimmed = new BytesTrimmer(MAX_SIZE, ARG_TAG, mPublicLogger).trim(src);
         assertThat(Arrays.equals(src, trimmed)).isFalse();
         assertThat(trimmed.length).isEqualTo(MAX_SIZE);
-        verify(mPublicLogger).isEnabled();
-        verify(mPublicLogger).fw(anyString(), any(Object[].class));
+        verify(mPublicLogger).warning(anyString(), any(Object[].class));
 
         byte[] srcCopy = new byte[trimmed.length];
         System.arraycopy(trimmed, 0, srcCopy, 0, trimmed.length);

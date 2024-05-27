@@ -5,7 +5,7 @@ import androidx.annotation.Nullable;
 import io.appmetrica.analytics.IReporter;
 import io.appmetrica.analytics.coreutils.internal.io.Base64Utils;
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -73,11 +73,16 @@ public final class IOUtils {
     public static byte[] readAll(@NonNull File file) {
         FileInputStream fis = null;
         try {
-            DebugLogger.info(TAG, "File with path: %s contains %d bytes", file.getAbsolutePath(), file.length());
+            DebugLogger.INSTANCE.info(
+                TAG,
+                "File with path: %s contains %d bytes",
+                file.getAbsolutePath(),
+                file.length()
+            );
             fis = new FileInputStream(file);
             return ByteStreamsKt.readBytes(fis);
         } catch (Throwable throwable) {
-            DebugLogger.error(TAG, throwable);
+            DebugLogger.INSTANCE.error(TAG, throwable);
         } finally {
             Utils.closeCloseable(fis);
         }
@@ -102,7 +107,7 @@ public final class IOUtils {
                 result = new String(buffer, UTF8_ENCODING);
             }
         } catch (UnsupportedEncodingException e) {
-            DebugLogger.error(TAG, e, e.getMessage());
+            DebugLogger.INSTANCE.error(TAG, e, e.getMessage());
             result = new String(buffer);
             final IReporter reporter = AppMetricaSelfReportFacade.getReporter();
             reporter.reportError("read_share_file_with_unsupported_encoding", e);
@@ -113,7 +118,7 @@ public final class IOUtils {
     @Nullable
     public static byte[] readFileLocked(@Nullable final File file) {
         if (file == null || !file.exists()) {
-            DebugLogger.info(TAG, "Cannot read file as it does not exist");
+            DebugLogger.INSTANCE.info(TAG, "Cannot read file as it does not exist");
             return null;
         }
         RandomAccessFile stream = null;
@@ -123,21 +128,21 @@ public final class IOUtils {
         try {
             stream = new RandomAccessFile(file, "r");
             channel = stream.getChannel();
-            DebugLogger.info(TAG, "Try to read file %s.", file.getAbsolutePath());
+            DebugLogger.INSTANCE.info(TAG, "Try to read file %s.", file.getAbsolutePath());
             lock = channel.lock(0, Long.MAX_VALUE, true);
-            DebugLogger.info(TAG, "Try to read file %s. Lock received. File length = %d",
+            DebugLogger.INSTANCE.info(TAG, "Try to read file %s. Lock received. File length = %d",
                 file.getAbsolutePath(), file.length());
             buffer = ByteBuffer.allocate((int) file.length());
             channel.read(buffer);
             buffer.flip();
             return buffer.array();
         } catch (IOException e) {
-            DebugLogger.error(TAG, e, "can't read file %s", file.getAbsolutePath());
+            DebugLogger.INSTANCE.error(TAG, e, "can't read file %s", file.getAbsolutePath());
         } catch (SecurityException se) {
-            DebugLogger.error(TAG, se, "Have no enough rights to read file %s. Reason %s",
+            DebugLogger.INSTANCE.error(TAG, se, "Have no enough rights to read file %s. Reason %s",
                 file.getAbsolutePath(), se.getMessage());
         } catch (Throwable u) {
-            DebugLogger.error(TAG, u, "Unknown exception during file reading");
+            DebugLogger.INSTANCE.error(TAG, u, "Unknown exception during file reading");
             AppMetricaSelfReportFacade.getReporter().reportError("error_during_file_reading", u);
         } finally {
             releaseFileLock(file.getAbsolutePath(), lock);
@@ -150,9 +155,9 @@ public final class IOUtils {
         if (lock != null && lock.isValid()) {
             try {
                 lock.release();
-                DebugLogger.info(TAG, "Lock released for %s.", fileName);
+                DebugLogger.INSTANCE.info(TAG, "Lock released for %s.", fileName);
             } catch (IOException e) {
-                DebugLogger.info(TAG, "Failed to release lock for %s.", fileName);
+                DebugLogger.INSTANCE.info(TAG, "Failed to release lock for %s.", fileName);
             }
         }
     }
@@ -163,9 +168,9 @@ public final class IOUtils {
         ByteBuffer buffer;
         try {
             channel = fileOutputStream.getChannel();
-            DebugLogger.info(TAG, "Try to write file: %s", fileName);
+            DebugLogger.INSTANCE.info(TAG, "Try to write file: %s", fileName);
             lock = channel.lock();
-            DebugLogger.info(TAG, "Try to write file: %s. Lock received.", fileName);
+            DebugLogger.INSTANCE.info(TAG, "Try to write file: %s. Lock received.", fileName);
             byte[] bytes = data.getBytes(UTF8_ENCODING);
             buffer = ByteBuffer.allocate(bytes.length);
             buffer.put(bytes);
@@ -173,7 +178,7 @@ public final class IOUtils {
             channel.write(buffer);
             channel.force(true);
         } catch (IOException e) {
-            DebugLogger.error(TAG, e, "can't update file: %s", fileName);
+            DebugLogger.INSTANCE.error(TAG, e, "can't update file: %s", fileName);
         } finally {
             releaseFileLock(fileName, lock);
             Utils.closeCloseable(fileOutputStream);

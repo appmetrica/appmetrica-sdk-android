@@ -5,7 +5,7 @@ import io.appmetrica.analytics.billinginterface.internal.BillingType
 import io.appmetrica.analytics.billinginterface.internal.monitor.BillingMonitor
 import io.appmetrica.analytics.billinginterface.internal.storage.BillingInfoSender
 import io.appmetrica.analytics.billinginterface.internal.storage.BillingInfoStorage
-import io.appmetrica.analytics.logger.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import java.util.concurrent.Executor
 import io.appmetrica.analytics.billingv6.internal.BillingLibraryMonitor as BillingV6LibraryMonitor
 

@@ -21,7 +21,7 @@ import io.appmetrica.analytics.impl.db.preferences.PreferencesClientDbStorage;
 import io.appmetrica.analytics.impl.utils.JsonHelper;
 import io.appmetrica.analytics.impl.utils.PublicLogger;
 import io.appmetrica.analytics.impl.utils.StartupUtils;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -120,8 +120,13 @@ public class StartupHelper implements StartupIdentifiersProvider, IServerTimeOff
                 DataResultReceiver.Receiver receiver = new DataResultReceiver.Receiver() {
                     @Override
                     public void onReceiveResult(int resultCode, Bundle resultData) {
-                        DebugLogger.info(TAG, "Received result %s with code %d for callback: %s",
-                                resultData, resultCode, callback);
+                        DebugLogger.INSTANCE.info(
+                            TAG,
+                            "Received result %s with code %d for callback: %s",
+                            resultData,
+                            resultCode,
+                            callback
+                        );
                         processResultFromResultReceiver(resultData, callback);
                     }
                 };
@@ -168,7 +173,7 @@ public class StartupHelper implements StartupIdentifiersProvider, IServerTimeOff
 
     @SuppressLint("VisibleForTests") //fixme https://nda.ya.ru/t/lvWXFf0t6Njj6X
     private void updateAllParamsByReceiver(@NonNull Bundle resultData) {
-        DebugLogger.info(TAG, "UpdateAllParamsByReceiver: %s", resultData);
+        DebugLogger.INSTANCE.info(TAG, "UpdateAllParamsByReceiver: %s", resultData);
         mStartupParams.updateAllParamsByReceiver(resultData);
         notifyCallbacksIfValid();
     }
@@ -176,7 +181,7 @@ public class StartupHelper implements StartupIdentifiersProvider, IServerTimeOff
     public void sendStartupIfNeeded() {
         synchronized (mStartupParamsLock) {
             if (mStartupParams.shouldSendStartup()) {
-                DebugLogger.info(TAG, "Send startup event");
+                DebugLogger.INSTANCE.info(TAG, "Send startup event");
                 sendStartupEvent(mClientClids);
             }
         }
@@ -231,7 +236,7 @@ public class StartupHelper implements StartupIdentifiersProvider, IServerTimeOff
         } else {
             result = mClientClids;
         }
-        DebugLogger.info(
+        DebugLogger.INSTANCE.info(
             TAG,
             "Get clids return %s (startupClids = %s; mClientClids = %s)",
             result,
@@ -247,20 +252,32 @@ public class StartupHelper implements StartupIdentifiersProvider, IServerTimeOff
 
     private void notifyCallbackIfNotYet(@NonNull StartupParamsCallback callback,
                                         @NonNull Bundle bundle) {
-        DebugLogger.info(TAG, "notifyCallbackIfNotYet. Callback: %s, bundle: %s", callback, bundle);
+        DebugLogger.INSTANCE.info(
+            TAG,
+            "notifyCallbackIfNotYet. Callback: %s, bundle: %s",
+            callback,
+            bundle
+        );
         if (mStartupParamsCallbacks.containsKey(callback)) {
             List<String> identifiers = mStartupParamsCallbacks.get(callback);
             if (mStartupParams.containsIdentifiers(identifiers)) {
                 notifyCallbackOnReceive(callback, identifiers);
             } else {
-                DebugLogger.info(TAG, "notify callback with error. Callback: %s, bundle: %s", callback, bundle);
+                DebugLogger.INSTANCE.info(
+                    TAG,
+                    "notify callback with error. Callback: %s, bundle: %s",
+                    callback,
+                    bundle
+                );
                 StartupError error = StartupError.fromBundle(bundle);
                 StartupParamsCallback.Reason reason = null;
                 if (error == null) {
                     if (mStartupParams.areResponseClidsConsistent() == false) {
                         if (mPublicLogger != null) {
-                            mPublicLogger.fw("Clids error. Passed clids: %s, and clids from server are empty.",
-                                    mClientClids);
+                            mPublicLogger.warning(
+                                "Clids error. Passed clids: %s, and clids from server are empty.",
+                                mClientClids
+                            );
                         }
                         reason = new StartupParamsCallback.Reason("INCONSISTENT_CLIDS");
                     } else {
@@ -282,29 +299,38 @@ public class StartupHelper implements StartupIdentifiersProvider, IServerTimeOff
 
     private void notifyCallbackOnReceive(@NonNull StartupParamsCallback callback,
                                          @NonNull List<String> identifiers) {
-        DebugLogger.info(TAG, "notifyCallbackOnReceive with identifiers: %s", identifiers);
+        DebugLogger.INSTANCE.info(TAG, "notifyCallbackOnReceive with identifiers: %s", identifiers);
         callback.onReceive(createMapWithRequestedIdentifiersOnly(identifiers));
     }
 
     private void notifyCallbackOnError(@NonNull StartupParamsCallback callback,
                                        @NonNull List<String> identifiers,
                                        @NonNull StartupParamsCallback.Reason reason) {
-        DebugLogger.info(TAG, "notifyCallbackOnError, reason :%s, identifiers: %s", reason, identifiers);
+        DebugLogger.INSTANCE.info(
+            TAG,
+            "notifyCallbackOnError, reason :%s, identifiers: %s",
+            reason,
+            identifiers
+        );
         callback.onRequestError(reason, createMapWithRequestedIdentifiersOnly(identifiers));
     }
 
     private void notifyCallbacksIfValid() {
-        DebugLogger.info(TAG, "NotifyCallbacksIfValid");
+        DebugLogger.INSTANCE.info(TAG, "NotifyCallbacksIfValid");
 
         final Map<StartupParamsCallback, List<String>> callbacksToNotify = new WeakHashMap<>();
 
-        DebugLogger.info(TAG, "Try to notify %d identifiers callbacks", mStartupParamsCallbacks.size());
+        DebugLogger.INSTANCE.info(
+            TAG,
+            "Try to notify %d identifiers callbacks",
+            mStartupParamsCallbacks.size()
+        );
         for (final Map.Entry<StartupParamsCallback, List<String>> entry : mStartupParamsCallbacks.entrySet()) {
             List<String> requestedIdentifiers = entry.getValue();
-            DebugLogger.info(TAG, "callback requested identifiers: %s", requestedIdentifiers);
+            DebugLogger.INSTANCE.info(TAG, "callback requested identifiers: %s", requestedIdentifiers);
             if (mStartupParams.containsIdentifiers(requestedIdentifiers)) {
                 callbacksToNotify.put(entry.getKey(), requestedIdentifiers);
-                DebugLogger.info(TAG, "add callback to notify");
+                DebugLogger.INSTANCE.info(TAG, "add callback to notify");
             }
         }
         for (final Map.Entry<StartupParamsCallback, List<String>> entry : callbacksToNotify.entrySet()) {
@@ -313,7 +339,7 @@ public class StartupHelper implements StartupIdentifiersProvider, IServerTimeOff
                 notifyCallbackWithLocalDataIfNotYet(callbackWrapper);
             }
         }
-        DebugLogger.info(
+        DebugLogger.INSTANCE.info(
             TAG,
             "Remove listeners for startup params, their identifiers are valid. Number of notices: %d",
             callbacksToNotify.size()
@@ -337,11 +363,11 @@ public class StartupHelper implements StartupIdentifiersProvider, IServerTimeOff
     private void registerIdentifiersCallback(final StartupParamsCallback callback, List<String> identifiers) {
         if (mStartupParamsCallbacks.isEmpty()) {
             mReportsHandler.onStartupRequestStarted();
-            DebugLogger.info(TAG, "Notify startup request started.");
+            DebugLogger.INSTANCE.info(TAG, "Notify startup request started.");
         }
         mStartupParamsCallbacks.put(callback, identifiers);
 
-        DebugLogger.info(
+        DebugLogger.INSTANCE.info(
             TAG,
             "Register callback. Total callbacks count = %d. Callback details: %s with identifiers mask %s",
             mStartupParamsCallbacks.size(),
@@ -353,7 +379,7 @@ public class StartupHelper implements StartupIdentifiersProvider, IServerTimeOff
     private void unregisterIdentifiersCallback(final StartupParamsCallback callback) {
         mStartupParamsCallbacks.remove(callback);
 
-        DebugLogger.info(
+        DebugLogger.INSTANCE.info(
             TAG,
             "Unregister callback. Total callbacks count = %d. Callback details: %s.",
             mStartupParamsCallbacks.size(),
@@ -362,7 +388,7 @@ public class StartupHelper implements StartupIdentifiersProvider, IServerTimeOff
 
         if (mStartupParamsCallbacks.isEmpty()) {
             mReportsHandler.onStartupRequestFinished();
-            DebugLogger.info(TAG, "Notify all startup requests finished.");
+            DebugLogger.INSTANCE.info(TAG, "Notify all startup requests finished.");
         }
     }
 

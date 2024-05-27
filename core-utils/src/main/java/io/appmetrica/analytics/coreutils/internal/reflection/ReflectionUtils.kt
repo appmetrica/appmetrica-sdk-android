@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.coreutils.internal.reflection
 
-import io.appmetrica.analytics.logger.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
 private const val TAG = "[ReflectionUtils]"
 
@@ -34,7 +34,10 @@ object ReflectionUtils {
                 @Suppress("UNCHECKED_CAST")
                 return clazz as Class<T>
             }
-            DebugLogger.error(TAG, "Loaded class = %s for name %s couldn't be cast to %s", clazz, className, targetType)
+            DebugLogger.error(
+                TAG,
+                "Loaded class = %s for name %s couldn't be cast to %s", clazz, className, targetType
+            )
         } catch (throwable: Throwable) {
             DebugLogger.error(
                 TAG, throwable, "Failed to load class for name = %s and targetType = %s", className, targetType

@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.impl.component.IComponent;
 import io.appmetrica.analytics.impl.startup.executor.StartupExecutor;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import io.appmetrica.analytics.networktasks.internal.NetworkTask;
 
 public class TaskProcessor<C extends IComponent> implements ServiceLifecycleObserver {
@@ -31,7 +31,7 @@ public class TaskProcessor<C extends IComponent> implements ServiceLifecycleObse
         synchronized (mSync) {
             if (mIsShuttingDown) {
                 mIsShuttingDown = false;
-                DebugLogger.info(TAG, "start");
+                DebugLogger.INSTANCE.info(TAG, "start");
             }
         }
     }
@@ -44,7 +44,7 @@ public class TaskProcessor<C extends IComponent> implements ServiceLifecycleObse
 
                 mIsShuttingDown = true;
 
-                DebugLogger.info(TAG, "stop");
+                DebugLogger.INSTANCE.info(TAG, "stop");
             }
         }
     }
@@ -54,7 +54,7 @@ public class TaskProcessor<C extends IComponent> implements ServiceLifecycleObse
     }
 
     public void flushAllTasks() {
-        DebugLogger.info(TAG, "flushAllTasks");
+        DebugLogger.INSTANCE.info(TAG, "flushAllTasks");
         synchronized (mSync) {
             if (!mIsShuttingDown) {
                 runAllTasks();
@@ -76,7 +76,7 @@ public class TaskProcessor<C extends IComponent> implements ServiceLifecycleObse
     }
 
     void runTasks() {
-        DebugLogger.info(TAG, "sendStartupIfRequired");
+        DebugLogger.INSTANCE.info(TAG, "sendStartupIfRequired");
         mStartupExecutor.sendStartupIfRequired();
     }
 

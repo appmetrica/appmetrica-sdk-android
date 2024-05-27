@@ -10,7 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
 import io.appmetrica.analytics.internal.IAppMetricaService;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
@@ -56,7 +56,7 @@ public class AppMetricaConnector {
     }
 
     public void bindService() {
-        DebugLogger.info(TAG, "Binding to service ... Application: %s", mContext.getPackageName());
+        DebugLogger.INSTANCE.info(TAG, "Binding to service ... Application: %s", mContext.getPackageName());
         synchronized (this) {
             if (mService != null) {
                 return;
@@ -66,12 +66,12 @@ public class AppMetricaConnector {
 
         Intent intent = ServiceUtils.getOwnMetricaServiceIntent(mContext);
         try {
-            DebugLogger.info(TAG, "May be delay");
+            DebugLogger.INSTANCE.info(TAG, "May be delay");
             appMetricaServiceDelayHandler.maybeDelay(mContext);
             boolean status = mContext.bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
-            DebugLogger.info(TAG, "bind to service with status: %b", status);
+            DebugLogger.INSTANCE.info(TAG, "bind to service with status: %b", status);
         } catch (Throwable exception) {
-            DebugLogger.error(TAG, "Exception while binding ...\n%s", exception);
+            DebugLogger.INSTANCE.error(TAG, "Exception while binding ...\n%s", exception);
         }
     }
 
@@ -82,10 +82,10 @@ public class AppMetricaConnector {
     @VisibleForTesting
     void scheduleDisconnect(@NonNull ICommonExecutor executor) {
         synchronized (disconnectLock) {
-            DebugLogger.info(TAG, "remove unbind runnable");
+            DebugLogger.INSTANCE.info(TAG, "remove unbind runnable");
             executor.remove(mUnbindRunnable);
             if (mShouldNeverDisconnect == false) {
-                DebugLogger.info(TAG, "plan unbind runnable in %d", SERVICE_UNBIND_DELAY_MILLIS);
+                DebugLogger.INSTANCE.info(TAG, "plan unbind runnable in %d", SERVICE_UNBIND_DELAY_MILLIS);
                 executor.executeDelayed(mUnbindRunnable, SERVICE_UNBIND_DELAY_MILLIS);
             }
         }
@@ -93,13 +93,13 @@ public class AppMetricaConnector {
 
     void removeScheduleDisconnect() {
         synchronized (disconnectLock) {
-            DebugLogger.info(TAG, "removeScheduleDisconnect");
+            DebugLogger.INSTANCE.info(TAG, "removeScheduleDisconnect");
             mUnbindExecutor.remove(mUnbindRunnable);
         }
     }
 
     public synchronized boolean isConnected() {
-        DebugLogger.info(TAG, "isConnected");
+        DebugLogger.INSTANCE.info(TAG, "isConnected");
         return null != mService;
     }
 
@@ -124,13 +124,17 @@ public class AppMetricaConnector {
 
     private synchronized void fullUnbind() {
         if (null != mContext && isConnected()) {
-            DebugLogger.info(TAG, "Unbinding from service ... Application: %s", mContext.getPackageName());
+            DebugLogger.INSTANCE.info(
+                TAG,
+                "Unbinding from service ... Application: %s",
+                mContext.getPackageName()
+            );
 
             try {
                 mService = null;
                 mContext.unbindService(mConnection);
             } catch (Throwable exception) {
-                DebugLogger.error(TAG, "Exception while unbinding ...\n%s", exception);
+                DebugLogger.INSTANCE.error(TAG, "Exception while unbinding ...\n%s", exception);
             }
         }
 
@@ -141,18 +145,18 @@ public class AppMetricaConnector {
 
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            DebugLogger.info(TAG, "Service connected. Component name: %s", name);
+            DebugLogger.INSTANCE.info(TAG, "Service connected. Component name: %s", name);
 
             synchronized (AppMetricaConnector.this) {
                 mService = IAppMetricaService.Stub.asInterface(service);
-                DebugLogger.info(TAG, "onServiceConnected - countDown");
+                DebugLogger.INSTANCE.info(TAG, "onServiceConnected - countDown");
                 bindCountDown.countDown();
             }
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-            DebugLogger.info(TAG, "Service disconnected. Component name: %s", name);
+            DebugLogger.INSTANCE.info(TAG, "Service disconnected. Component name: %s", name);
 
             synchronized (AppMetricaConnector.this) {
                 mService = null;
@@ -162,7 +166,7 @@ public class AppMetricaConnector {
     };
 
     public void forbidDisconnect() {
-        DebugLogger.info(TAG, "forbidDisconnect");
+        DebugLogger.INSTANCE.info(TAG, "forbidDisconnect");
         synchronized (disconnectLock) {
             mShouldNeverDisconnect = true;
             removeScheduleDisconnect();
@@ -170,7 +174,7 @@ public class AppMetricaConnector {
     }
 
     public void allowDisconnect() {
-        DebugLogger.info(TAG, "allowDisconnect");
+        DebugLogger.INSTANCE.info(TAG, "allowDisconnect");
         synchronized (disconnectLock) {
             mShouldNeverDisconnect = false;
             scheduleDisconnect();
@@ -178,17 +182,17 @@ public class AppMetricaConnector {
     }
 
     public boolean waitForConnect(@NonNull final Long timeout) {
-        DebugLogger.info(TAG, "waitForConnect with timeout = %s", timeout);
+        DebugLogger.INSTANCE.info(TAG, "waitForConnect with timeout = %s", timeout);
         try {
             synchronized (this) {
                 if (bindCountDown == null) {
-                    DebugLogger.info(TAG, "Bind to service has not started yet. Ignore waiting.");
+                    DebugLogger.INSTANCE.info(TAG, "Bind to service has not started yet. Ignore waiting.");
                     return false;
                 }
             }
             return bindCountDown.await(timeout, TimeUnit.MILLISECONDS);
         } catch (InterruptedException e) {
-            DebugLogger.error(TAG, e);
+            DebugLogger.INSTANCE.error(TAG, e);
         }
         return false;
     }

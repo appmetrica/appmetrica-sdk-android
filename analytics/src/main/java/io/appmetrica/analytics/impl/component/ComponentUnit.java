@@ -37,7 +37,7 @@ import io.appmetrica.analytics.impl.startup.StartupState;
 import io.appmetrica.analytics.impl.startup.executor.ComponentStartupExecutorFactory;
 import io.appmetrica.analytics.impl.utils.BooleanUtils;
 import io.appmetrica.analytics.impl.utils.PublicLogger;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -146,7 +146,7 @@ public class ComponentUnit implements IReportableComponent, IComponent, EventsFl
                   @NonNull AppEnvironmentProvider appEnvironmentProvider,
                   @NonNull TimePassedChecker timePassedChecker,
                   @NonNull ComponentUnitFieldsFactory fieldsFactory) {
-        DebugLogger.info(
+        DebugLogger.INSTANCE.info(
             TAG,
             "Start to create a new component with Id/APIkey: \"%s\"/%s",
             componentId,
@@ -168,7 +168,7 @@ public class ComponentUnit implements IReportableComponent, IComponent, EventsFl
         mReportsDbHelper = fieldsFactory.createDatabaseHelper(this);
         mTaskProcessor = fieldsFactory.createTaskProcessor(this);
 
-        DebugLogger.info(
+        DebugLogger.INSTANCE.info(
             TAG,
             "create holder for a new component with Id/APIkey: \"%s\"/%s",
             componentId,
@@ -194,10 +194,11 @@ public class ComponentUnit implements IReportableComponent, IComponent, EventsFl
                 }
         );
 
-        if (mPublicLogger.isEnabled()) {
-            mPublicLogger.fi("Read app environment for component %s. Value: %s", mComponentId.toString(),
-                mAppEnvironment.getLastRevision().value);
-        }
+        mPublicLogger.info(
+            "Read app environment for component %s. Value: %s",
+            mComponentId.toString(),
+            mAppEnvironment.getLastRevision().value
+        );
 
         sessionExtrasHolder = fieldsFactory.createSessionExtraHolder();
         mEventSaver = fieldsFactory.createReportSaver(
@@ -215,7 +216,7 @@ public class ComponentUnit implements IReportableComponent, IComponent, EventsFl
         mCertificatesFingerprintsProvider = fieldsFactory.createCertificateFingerprintProvider(mComponentPreferences);
 
         mReportsDbHelper.onComponentCreated();
-        DebugLogger.info(
+        DebugLogger.INSTANCE.info(
             TAG,
             "Create a new component with Id/APIkey: \"%s\"/%s",
             componentId,
@@ -235,15 +236,17 @@ public class ComponentUnit implements IReportableComponent, IComponent, EventsFl
 
     @Override
     public void handleReport(@NonNull CounterReport reportData) {
-        DebugLogger.info(TAG, "A new report for component \"%s\", data: %s", mComponentId, reportData);
-
-        if (mPublicLogger.isEnabled()) {
-            mPublicLogger.logEvent(reportData, "Event received on service");
-        }
+        DebugLogger.INSTANCE.info(
+            TAG,
+            "A new report for component \"%s\", data: %s",
+            mComponentId,
+            reportData
+        );
+        mPublicLogger.logEvent(reportData, "Event received on service");
 
         // Just to be sure. Don't report if API key isn't defined for some reasons
         if (!Utils.isApiKeyDefined(mComponentId.getApiKey())) {
-            DebugLogger.warning(TAG, "Attempt to send report when API key isn't defined correctly");
+            DebugLogger.INSTANCE.warning(TAG, "Attempt to send report when API key isn't defined correctly");
             return;
         }
 
@@ -258,7 +261,7 @@ public class ComponentUnit implements IReportableComponent, IComponent, EventsFl
 
     @Override
     public synchronized void flushEvents() {
-        DebugLogger.info(TAG, "Flushing has started for component with id \"%s\" ...", mComponentId);
+        DebugLogger.INSTANCE.info(TAG, "Flushing has started for component with id \"%s\" ...", mComponentId);
 
         mTaskProcessor.flushAllTasks();
     }
@@ -282,7 +285,7 @@ public class ComponentUnit implements IReportableComponent, IComponent, EventsFl
     @Override
     public synchronized void onStartupChanged(@NonNull StartupState newState) {
         mConfigHolder.updateStartupState(newState);
-        DebugLogger.info(TAG, "%s startup changed. new StartupState: %s", mComponentId, newState);
+        DebugLogger.INSTANCE.info(TAG, "%s startup changed. new StartupState: %s", mComponentId, newState);
         mEventTrigger.trigger();
     }
 
@@ -310,9 +313,7 @@ public class ComponentUnit implements IReportableComponent, IComponent, EventsFl
         mAppEnvironment.add(report.getAppEnvironment());
         AppEnvironment.EnvironmentRevision revision = mAppEnvironment.getLastRevision();
         if (mAppEnvironmentProvider.commitIfNeeded(revision, mComponentPreferences)) {
-            if (mPublicLogger.isEnabled()) {
-                mPublicLogger.fi("Save new app environment for %s. Value: %s", getComponentId(), revision.value);
-            }
+            mPublicLogger.info("Save new app environment for %s. Value: %s", getComponentId(), revision.value);
         }
     }
 

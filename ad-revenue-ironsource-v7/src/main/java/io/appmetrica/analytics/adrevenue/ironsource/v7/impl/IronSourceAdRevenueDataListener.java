@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.ironsource.mediationsdk.impressionData.ImpressionData;
 import com.ironsource.mediationsdk.impressionData.ImpressionDataListener;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import io.appmetrica.analytics.modulesapi.internal.client.ClientContext;
 
 public class IronSourceAdRevenueDataListener implements ImpressionDataListener {
@@ -23,10 +23,10 @@ public class IronSourceAdRevenueDataListener implements ImpressionDataListener {
     @Override
     public void onImpressionSuccess(@Nullable ImpressionData impressionData) {
         if (impressionData != null) {
-            DebugLogger.info(TAG, "impressionData is " + impressionData.getAllData().toString());
+            DebugLogger.INSTANCE.info(TAG, "impressionData is " + impressionData.getAllData().toString());
             clientContext.getAutoAdRevenueReporter().reportAutoAdRevenue(adRevenueConverter.convert(impressionData));
         } else {
-            DebugLogger.info(TAG, "impressionData is null");
+            DebugLogger.INSTANCE.info(TAG, "impressionData is null");
         }
     }
 }

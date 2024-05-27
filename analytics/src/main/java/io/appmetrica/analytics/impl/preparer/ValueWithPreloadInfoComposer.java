@@ -5,7 +5,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.impl.component.processor.event.ReportSaveInitHandler;
 import io.appmetrica.analytics.impl.request.ReportRequestConfig;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import org.json.JSONObject;
 
 public class ValueWithPreloadInfoComposer implements ValueComposer {
@@ -27,16 +27,16 @@ public class ValueWithPreloadInfoComposer implements ValueComposer {
     @NonNull
     @Override
     public byte[] getValue(@NonNull EventFromDbModel event, @NonNull ReportRequestConfig config) {
-        DebugLogger.info(TAG, "compose value from %s", event.getValue());
+        DebugLogger.INSTANCE.info(TAG, "compose value from %s", event.getValue());
         if (config.needToSendPreloadInfo() == false) {
-            DebugLogger.info(TAG, "removing preload info");
+            DebugLogger.INSTANCE.info(TAG, "removing preload info");
             if (TextUtils.isEmpty(event.getValue()) == false) {
                 try {
                     JSONObject valueJson = new JSONObject(event.getValue());
                     valueJson.remove(ReportSaveInitHandler.JsonKeys.PRELOAD_INFO);
                     event.updateValue(valueJson.toString());
                 } catch (Throwable ex) {
-                    DebugLogger.error(TAG, ex);
+                    DebugLogger.INSTANCE.error(TAG, ex);
                 }
             }
         }

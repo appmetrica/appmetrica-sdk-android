@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.component
 
 import androidx.annotation.VisibleForTesting
-import io.appmetrica.analytics.logger.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
 internal class ComponentMigrationHelper private constructor(componentUnit: ComponentUnit) {
 

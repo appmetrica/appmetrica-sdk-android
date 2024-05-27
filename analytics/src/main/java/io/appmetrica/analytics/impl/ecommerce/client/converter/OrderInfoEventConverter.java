@@ -12,7 +12,7 @@ import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedInfo;
 import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedProvider;
 import io.appmetrica.analytics.impl.utils.limitation.TrimmingResult;
 import io.appmetrica.analytics.impl.utils.limitation.hierarchical.HierarchicalStringTrimmer;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,7 +66,7 @@ public class OrderInfoEventConverter implements ECommerceEventConverter<OrderInf
 
         BytesTruncatedProvider totalTruncationInfo = BytesTruncatedInfo.total(identifierTrimmingResult, payloadResult);
 
-        DebugLogger.info(
+        DebugLogger.INSTANCE.info(
                 ECommerceConstants.FEATURE_TAG + TAG,
                 "Order template summary info: total cartItems = %d; order without items bytes truncated " +
                         "(orderId + payload) = %d(%d + %d)",
@@ -79,6 +79,7 @@ public class OrderInfoEventConverter implements ECommerceEventConverter<OrderInf
         return toProtoDependsOnSizeLimit(proto, totalTruncationInfo, orderWrapper.cartItems);
     }
 
+    @SuppressWarnings("checkstyle:methodLength")
     private List<Result<Ecommerce.ECommerceEvent, BytesTruncatedProvider>> toProtoDependsOnSizeLimit(
             @NonNull Ecommerce.ECommerceEvent template,
             BytesTruncatedProvider templateBytesTruncated,
@@ -87,7 +88,11 @@ public class OrderInfoEventConverter implements ECommerceEventConverter<OrderInf
         List<Result<Ecommerce.ECommerceEvent, BytesTruncatedProvider>> results =
                 new ArrayList<Result<Ecommerce.ECommerceEvent, BytesTruncatedProvider>>();
         int templateSize = protoMessageSizeCalculator.computeAdditionalNestedSize(template);
-        DebugLogger.info(ECommerceConstants.FEATURE_TAG + TAG, "Total order info template size = %d", templateSize);
+        DebugLogger.INSTANCE.info(
+            ECommerceConstants.FEATURE_TAG + TAG,
+            "Total order info template size = %d",
+            templateSize
+        );
         List<Ecommerce.ECommerceEvent.OrderCartItem> currentEventCartItemsList =
                 new ArrayList<Ecommerce.ECommerceEvent.OrderCartItem>();
         Ecommerce.ECommerceEvent currentEvent = copyFromTemplate(template);
@@ -100,7 +105,7 @@ public class OrderInfoEventConverter implements ECommerceEventConverter<OrderInf
             int itemSize = protoMessageSizeCalculator.computeAdditionalNestedSize(item.result);
             if (currentEventCartItemsList.size() != 0 && currentSize + itemSize > Limits.TOTAL_ECOMMERCE_PROTO) {
                 currentEvent.orderInfo.order.items = toArray(currentEventCartItemsList);
-                DebugLogger.info(
+                DebugLogger.INSTANCE.info(
                         ECommerceConstants.FEATURE_TAG + TAG,
                         "Current order event limit reached: currentEventSize + nextItemSize > TOTAL LIMIT: " +
                                 "(%d + %d > %d). Cart items count = %d; currentBytesTruncated = %d",
@@ -120,7 +125,7 @@ public class OrderInfoEventConverter implements ECommerceEventConverter<OrderInf
             currentBytesTruncated = BytesTruncatedInfo.total(currentBytesTruncated, item.metaInfo);
             currentSize += itemSize;
         }
-        DebugLogger.info(
+        DebugLogger.INSTANCE.info(
                 ECommerceConstants.FEATURE_TAG + TAG,
                 "Final part of orderEvent: cartItemsCount = %d; bytesTruncated = %d",
                 currentEventCartItemsList.size(), currentBytesTruncated.getBytesTruncated()
@@ -147,7 +152,7 @@ public class OrderInfoEventConverter implements ECommerceEventConverter<OrderInf
         orderCartItemProto.item = cartItemConvertingResult.result;
 
         if (cartItemConvertingResult.getBytesTruncated() > 0) {
-            DebugLogger.info(
+            DebugLogger.INSTANCE.info(
                     ECommerceConstants.FEATURE_TAG + TAG,
                     "Cart item #%d has bytes_truncated = %d",
                     numberInCart, cartItemConvertingResult.getBytesTruncated()

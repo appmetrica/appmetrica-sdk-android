@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 import io.appmetrica.analytics.coreapi.internal.io.Compressor;
 import io.appmetrica.analytics.coreutils.internal.time.SystemTimeProvider;
 import io.appmetrica.analytics.coreutils.internal.time.TimeProvider;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import io.appmetrica.analytics.networktasks.impl.Constants;
 import java.io.IOException;
 
@@ -55,14 +55,14 @@ public class SendingDataTaskHelper {
     }
 
     public void onPerformRequest() {
-        DebugLogger.info(TAG, "onPerformRequest");
+        DebugLogger.INSTANCE.info(TAG, "onPerformRequest");
         requestDataHolder.applySendTime(timeProvider.currentTimeMillis());
     }
 
     public boolean isResponseValid() {
         DefaultResponseParser.Response response = responseHandler.handle(responseDataHolder);
         boolean result = response != null && Constants.STATUS_ACCEPTED.equals(response.mStatus);
-        DebugLogger.info(TAG, "is response valid? %b. Response: %s", result, response);
+        DebugLogger.INSTANCE.info(TAG, "is response valid? %b. Response: %s", result, response);
         return result;
     }
 
@@ -73,10 +73,13 @@ public class SendingDataTaskHelper {
             if (compressedBytes != null) {
 
                 byte[] encryptedBytes = requestBodyEncrypter.encrypt(compressedBytes);
-                DebugLogger.info(TAG, "Request raw data length: %d; after GZIP: %d; after encoding: %d",
-                        postData.length,
-                        compressedBytes == null ? null : compressedBytes.length,
-                        encryptedBytes == null ? null : encryptedBytes.length);
+                DebugLogger.INSTANCE.info(
+                    TAG,
+                    "Request raw data length: %d; after GZIP: %d; after encoding: %d",
+                    postData.length,
+                    compressedBytes == null ? null : compressedBytes.length,
+                    encryptedBytes == null ? null : encryptedBytes.length
+                );
                 if (encryptedBytes != null) {
                     requestDataHolder.setPostData(encryptedBytes);
                     processingPostDataStatus = true;
@@ -84,7 +87,7 @@ public class SendingDataTaskHelper {
             }
             return processingPostDataStatus;
         } catch (IOException e) {
-            DebugLogger.error(TAG, e);
+            DebugLogger.INSTANCE.error(TAG, e);
             return false;
         }
     }

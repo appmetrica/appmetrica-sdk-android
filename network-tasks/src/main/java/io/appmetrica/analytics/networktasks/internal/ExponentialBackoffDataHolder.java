@@ -6,7 +6,7 @@ import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreutils.internal.time.SystemTimeProvider;
 import io.appmetrica.analytics.coreutils.internal.time.TimePassedChecker;
 import io.appmetrica.analytics.coreutils.internal.time.TimeProvider;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 
 public class ExponentialBackoffDataHolder {
 
@@ -34,12 +34,16 @@ public class ExponentialBackoffDataHolder {
         this.timePassedChecker = timePassedChecker;
         lastAttemptTimestampSeconds = retryInfoProvider.getLastAttemptTimeSeconds();
         nextAttemptNumber = retryInfoProvider.getNextSendAttemptNumber();
-        DebugLogger.info(TAG, "Created object with lastAttemptTimestampSeconds = %d, nextAttemptNumber = %d",
-                lastAttemptTimestampSeconds, nextAttemptNumber);
+        DebugLogger.INSTANCE.info(
+            TAG,
+            "Created object with lastAttemptTimestampSeconds = %d, nextAttemptNumber = %d",
+            lastAttemptTimestampSeconds,
+            nextAttemptNumber
+        );
     }
 
     public void reset() {
-        DebugLogger.info(TAG, "reset");
+        DebugLogger.INSTANCE.info(TAG, "reset");
         nextAttemptNumber = 1;
         lastAttemptTimestampSeconds = 0;
         retryInfoProvider.saveNextSendAttemptNumber(nextAttemptNumber);
@@ -49,19 +53,23 @@ public class ExponentialBackoffDataHolder {
     public void updateLastAttemptInfo() {
         lastAttemptTimestampSeconds = timeProvider.currentTimeSeconds();
         nextAttemptNumber++;
-        DebugLogger.info(TAG, "Updated info: lastAttemptTimestampSeconds = %d, nextAttemptNumber = %d",
-                lastAttemptTimestampSeconds, nextAttemptNumber);
+        DebugLogger.INSTANCE.info(
+            TAG,
+            "Updated info: lastAttemptTimestampSeconds = %d, nextAttemptNumber = %d",
+            lastAttemptTimestampSeconds,
+            nextAttemptNumber
+        );
         retryInfoProvider.saveLastAttemptTimeSeconds(lastAttemptTimestampSeconds);
         retryInfoProvider.saveNextSendAttemptNumber(nextAttemptNumber);
     }
 
     public boolean wasLastAttemptLongAgoEnough(@Nullable RetryPolicyConfig retryPolicyConfig) {
         if (retryPolicyConfig == null || lastAttemptTimestampSeconds == 0L) {
-            DebugLogger.info(TAG,
-                    "Last attempt was long ago enough: retryPolicyConfig = %s, " +
-                            "lastAttemptTimestampSeconds = %d",
-                    retryPolicyConfig,
-                    lastAttemptTimestampSeconds
+            DebugLogger.INSTANCE.info(
+                TAG,
+                "Last attempt was long ago enough: retryPolicyConfig = %s, lastAttemptTimestampSeconds = %d",
+                retryPolicyConfig,
+                lastAttemptTimestampSeconds
             );
             return true;
         } else {
@@ -70,7 +78,7 @@ public class ExponentialBackoffDataHolder {
                     getNextSeconds(retryPolicyConfig),
                     "last send attempt"
             );
-            DebugLogger.info(TAG, "wasLastAttemptLongAgoEnough? %b", result);
+            DebugLogger.INSTANCE.info(TAG, "wasLastAttemptLongAgoEnough? %b", result);
             return result;
         }
     }

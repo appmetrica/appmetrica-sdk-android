@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl;
 import android.content.Context;
 import android.util.SparseArray;
 import io.appmetrica.analytics.AppMetrica;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 
 public abstract class MigrationManager {
 
@@ -18,10 +18,15 @@ public abstract class MigrationManager {
     public synchronized void checkMigration(final Context context) {
         final int apiLevelFrom = getLastApiLevel();
         final int apiLevelTo = getCurrentApiLevel();
-        DebugLogger.info(TAG, "Try to migrate from api level %d to %d", apiLevelFrom, apiLevelTo);
+        DebugLogger.INSTANCE.info(TAG, "Try to migrate from api level %d to %d", apiLevelFrom, apiLevelTo);
         if (apiLevelFrom != apiLevelTo) {
             if (apiLevelFrom < apiLevelTo) {
-                DebugLogger.info(TAG, "Need to migrate from api level %d to %d", apiLevelFrom, apiLevelTo);
+                DebugLogger.INSTANCE.info(
+                    TAG,
+                    "Need to migrate from api level %d to %d",
+                    apiLevelFrom,
+                    apiLevelTo
+                );
                 migrate(context, apiLevelFrom, apiLevelTo);
             }
             putLastApiLevel(apiLevelTo);
@@ -41,7 +46,12 @@ public abstract class MigrationManager {
         for (int i = fromApiLevel + 1; i <= toApiLevel; i++) {
             MigrationScript script = migrationScripts.get(i);
             if (script != null) {
-                DebugLogger.info(TAG, "Run script to migrate to api level %d:%s", i, script.getClass().getName());
+                DebugLogger.INSTANCE.info(
+                    TAG,
+                    "Run script to migrate to api level %d:%s",
+                    i,
+                    script.getClass().getName()
+                );
                 script.run(context);
             }
         }

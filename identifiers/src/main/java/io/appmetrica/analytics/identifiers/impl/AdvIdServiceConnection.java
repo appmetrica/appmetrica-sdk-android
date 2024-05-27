@@ -8,7 +8,7 @@ import android.os.IBinder;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 
 public class AdvIdServiceConnection implements ServiceConnection {
 
@@ -28,7 +28,7 @@ public class AdvIdServiceConnection implements ServiceConnection {
     }
 
     public boolean bindService(@NonNull Context context) {
-        DebugLogger.info(tag, "Bind service with intent = %s", intent);
+        DebugLogger.INSTANCE.info(tag, "Bind service with intent = %s", intent);
         return context.bindService(intent, this, Context.BIND_AUTO_CREATE);
     }
 
@@ -47,7 +47,7 @@ public class AdvIdServiceConnection implements ServiceConnection {
                     try {
                         monitor.wait(timeout);
                     } catch (InterruptedException e) {
-                        DebugLogger.error(tag, e);
+                        DebugLogger.INSTANCE.error(tag, e);
                     }
                 }
             }
@@ -57,7 +57,7 @@ public class AdvIdServiceConnection implements ServiceConnection {
 
     @Override
     public void onServiceConnected(ComponentName name, IBinder service) {
-        DebugLogger.info(tag, "onServiceConnected for name = %s; service = %s", name, service);
+        DebugLogger.INSTANCE.info(tag, "onServiceConnected for name = %s; service = %s", name, service);
         synchronized (monitor) {
             this.service = service;
             monitor.notifyAll();
@@ -66,7 +66,7 @@ public class AdvIdServiceConnection implements ServiceConnection {
 
     @Override
     public void onServiceDisconnected(ComponentName name) {
-        DebugLogger.info(tag, "onServiceDisconnected for name = %s", name);
+        DebugLogger.INSTANCE.info(tag, "onServiceDisconnected for name = %s", name);
         synchronized (monitor) {
             this.service = null;
             monitor.notifyAll();
@@ -75,7 +75,7 @@ public class AdvIdServiceConnection implements ServiceConnection {
 
     @Override
     public void onBindingDied(ComponentName name) {
-        DebugLogger.info(tag, "onBindingDied for name = %s", name);
+        DebugLogger.INSTANCE.info(tag, "onBindingDied for name = %s", name);
         synchronized (monitor) {
             this.service = null;
             monitor.notifyAll();
@@ -84,7 +84,7 @@ public class AdvIdServiceConnection implements ServiceConnection {
 
     @Override
     public void onNullBinding(ComponentName name) {
-        DebugLogger.info(tag, "onNullBinding for name = %s", name);
+        DebugLogger.INSTANCE.info(tag, "onNullBinding for name = %s", name);
         synchronized (monitor) {
             monitor.notifyAll();
         }

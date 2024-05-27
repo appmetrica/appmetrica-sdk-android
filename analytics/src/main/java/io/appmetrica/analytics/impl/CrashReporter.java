@@ -17,7 +17,7 @@ import io.appmetrica.analytics.impl.reporter.CrashReporterContext;
 import io.appmetrica.analytics.impl.reporter.ReporterLifecycleListener;
 import io.appmetrica.analytics.impl.utils.ProcessDetector;
 import io.appmetrica.analytics.internal.CounterConfiguration;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 
 public class CrashReporter extends BaseReporter {
 
@@ -97,9 +97,9 @@ public class CrashReporter extends BaseReporter {
 
     @Override
     public void reportUnhandledException(@NonNull UnhandledException unhandledException) {
-        DebugLogger.info(TAG, "reportUnhandledException: %s", unhandledException.exception);
+        DebugLogger.INSTANCE.info(TAG, "reportUnhandledException: %s", unhandledException.exception);
         mCrashToFileWriter.writeToFile(mEventFormer.formEvent(unhandledException, mReporterEnvironment));
-        logUnhandledException(unhandledException);
+        mPublicLogger.info("Unhandled exception received: " + unhandledException);
     }
 
     public void updateConfig(@NonNull AppMetricaConfig config) {

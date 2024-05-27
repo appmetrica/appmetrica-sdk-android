@@ -11,7 +11,7 @@ import io.appmetrica.analytics.impl.client.ProcessConfiguration;
 import io.appmetrica.analytics.impl.crash.jvm.JvmCrash;
 import io.appmetrica.analytics.impl.utils.concurrency.ExclusiveMultiProcessFileLock;
 import io.appmetrica.analytics.impl.utils.concurrency.FileLocksHolder;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -69,17 +69,21 @@ public class CrashToFileWriter {
                         toSend.getEnvironment(),
                         toSend.getTrimmedFields()
                 ).toJSONString());
-                DebugLogger.info(TAG, "Crash saved: %s.", crash.getName());
+                DebugLogger.INSTANCE.info(TAG, "Crash saved: %s.", crash.getName());
             } catch (IOException ioe) {
-                DebugLogger.error(TAG, ioe, "Can't write crash to file.");
+                DebugLogger.INSTANCE.error(TAG, ioe, "Can't write crash to file.");
             } catch (Throwable e) {
-                DebugLogger.error(TAG, e, "Can't write crash to file. Wrong json.");
+                DebugLogger.INSTANCE.error(TAG, e, "Can't write crash to file. Wrong json.");
             } finally {
                 Utils.closeCloseable(printWriter);
                 fileLocker.unlockAndClear();
             }
         } else {
-            DebugLogger.error(TAG, "Failed to prepare crash folder %s", crashFolder.getAbsolutePath());
+            DebugLogger.INSTANCE.error(
+                TAG,
+                "Failed to prepare crash folder %s",
+                crashFolder.getAbsolutePath()
+            );
         }
     }
 }

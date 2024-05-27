@@ -2,7 +2,7 @@ package io.appmetrica.analytics.coreutils.internal.services.frequency
 
 import io.appmetrica.analytics.coreutils.internal.time.SystemTimeProvider
 import io.appmetrica.analytics.coreutils.internal.time.TimeProvider
-import io.appmetrica.analytics.logger.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
 class EventFrequencyOverWindowLimitDetector(
     private var window: Long,

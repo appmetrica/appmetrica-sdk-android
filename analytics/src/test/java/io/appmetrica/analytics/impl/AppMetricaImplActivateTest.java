@@ -31,7 +31,6 @@ import org.robolectric.RuntimeEnvironment;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Mockito.mock;
@@ -140,20 +139,11 @@ public class AppMetricaImplActivateTest extends CommonTest {
 
     @Test
     public void activateTwice() {
-        when(mPublicLogger.isEnabled()).thenReturn(true);
         mAppMetrica.activate(originalConfig, mConfig);
         verify(mReporterFactory).buildMainReporter(same(mConfig), anyBoolean());
         mAppMetrica.activate(originalConfig, mConfig);
         verify(mReporterFactory, times(1)).buildMainReporter(same(mConfig), anyBoolean());
-        verify(mPublicLogger).w("Appmetrica already has been activated!");
-    }
-
-    @Test
-    public void activateTwiceNoLogs() {
-        when(mPublicLogger.isEnabled()).thenReturn(false);
-        mAppMetrica.activate(originalConfig, mConfig);
-        mAppMetrica.activate(originalConfig, mConfig);
-        verify(mPublicLogger, never()).w(anyString());
+        verify(mPublicLogger).warning("Appmetrica already has been activated!");
     }
 
     @Test

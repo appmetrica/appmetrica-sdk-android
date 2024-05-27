@@ -4,7 +4,7 @@ import android.content.Context
 import io.appmetrica.analytics.IReporter
 import io.appmetrica.analytics.impl.ActivityLifecycleManager.ActivityEvent
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade
-import io.appmetrica.analytics.logger.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
 class ContextAppearedListener
 @JvmOverloads constructor(

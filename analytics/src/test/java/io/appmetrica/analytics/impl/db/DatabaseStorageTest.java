@@ -67,14 +67,14 @@ public class DatabaseStorageTest extends CommonTest {
     @Test
     public void testGetReadableDatabaseThrows() {
         assertThat(new DatabaseStorage(null, mDbName, mTablesManager, mPublicLogger).getReadableDatabase()).isNull();
-        verify(mPublicLogger).fe(any(Throwable.class), anyString(), eq(mDbName));
+        verify(mPublicLogger).error(any(Throwable.class), anyString(), eq(mDbName));
         verify(mAppmetricaReporter).reportError(eq("db_read_error"), any(Throwable.class));
     }
 
     @Test
     public void testGetWritableDatabaseThrows() {
         assertThat(new DatabaseStorage(null, mDbName, mTablesManager, mPublicLogger).getWritableDatabase()).isNull();
-        verify(mPublicLogger).fe(any(Throwable.class), anyString(), eq(mDbName));
+        verify(mPublicLogger).error(any(Throwable.class), anyString(), eq(mDbName));
         verify(mAppmetricaReporter).reportError(eq("db_write_error"), any(Throwable.class));
     }
 

@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.permissions
 import android.Manifest
 import io.appmetrica.analytics.coreapi.internal.permission.PermissionStrategy
 import io.appmetrica.analytics.locationapi.internal.LocationControllerObserver
-import io.appmetrica.analytics.logger.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
 internal class LocationFlagStrategy : PermissionStrategy, LocationControllerObserver {
 

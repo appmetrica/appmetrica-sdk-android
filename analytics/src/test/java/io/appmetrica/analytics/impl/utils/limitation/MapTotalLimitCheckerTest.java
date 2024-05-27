@@ -14,7 +14,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
@@ -91,16 +90,7 @@ public class MapTotalLimitCheckerTest extends CommonTest {
 
     @Test
     public void testLogTotalLimitReachedLoggerEnabled() {
-        when(mPublicLogger.isEnabled()).thenReturn(true);
         mChecker.logTotalLimitReached(mKey);
-        verify(mPublicLogger).fw(anyString(), eq(mTag), eq(mTotalMaxSize), eq(mKey));
-    }
-
-    @Test
-    public void testLogTotalLimitReachedLoggerDisabled() {
-        when(mPublicLogger.isEnabled()).thenReturn(false);
-        mChecker.logTotalLimitReached(mKey);
-        verify(mPublicLogger).isEnabled();
-        verifyNoMoreInteractions(mPublicLogger);
+        verify(mPublicLogger).warning(anyString(), eq(mTag), eq(mTotalMaxSize), eq(mKey));
     }
 }

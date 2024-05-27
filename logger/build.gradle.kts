@@ -8,23 +8,9 @@ publishingInfo {
 }
 
 android {
-    namespace = "io.appmetrica.analytics.logger"
-    lint {
-        disable += "GradleDependency"
-    }
+    namespace = "io.appmetrica.analytics.logger.appmetrica"
+}
 
-    sourceSets {
-        getByName("debug") {
-            java.srcDir("src/impl/java")
-        }
-        getByName("snapshot") {
-            java.srcDir("src/impl/java")
-        }
-        getByName("testDebug") {
-            java.srcDir("src/testImpl/java")
-        }
-        getByName("testSnapshot") {
-            java.srcDir("src/testImpl/java")
-        }
-    }
+dependencies {
+    api(project(":common-logger"))
 }

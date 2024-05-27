@@ -37,6 +37,7 @@ io.appmetrica.analytics:ad-revenue:unspecified
 io.appmetrica.analytics:appsetid:unspecified
 io.appmetrica.analytics:billing-interface:unspecified
 io.appmetrica.analytics:billing-v6:unspecified
+io.appmetrica.analytics:common-logger:unspecified
 io.appmetrica.analytics:core-api:unspecified
 io.appmetrica.analytics:core-utils:unspecified
 io.appmetrica.analytics:gpllibrary:unspecified

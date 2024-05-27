@@ -7,7 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.impl.utils.ApiProxyThread;
 import io.appmetrica.analytics.impl.utils.ConditionalExecutor;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 
 public class SessionsTrackingManager {
 
@@ -50,7 +50,7 @@ public class SessionsTrackingManager {
             @MainThread
             public void onEvent(@NonNull final Activity activity,
                                 @NonNull ActivityLifecycleManager.ActivityEvent event) {
-                DebugLogger.info(TAG, "on resume callback");
+                DebugLogger.INSTANCE.info(TAG, "on resume callback");
                 SessionsTrackingManager.this.conditionalExecutor.addCommand(new NonNullConsumer<MainReporter>() {
                     @ApiProxyThread
                     @Override
@@ -65,7 +65,7 @@ public class SessionsTrackingManager {
             @MainThread
             public void onEvent(@NonNull final Activity activity,
                                 @NonNull ActivityLifecycleManager.ActivityEvent event) {
-                DebugLogger.info(TAG, "on pause callback");
+                DebugLogger.INSTANCE.info(TAG, "on pause callback");
                 SessionsTrackingManager.this.conditionalExecutor.addCommand(new NonNullConsumer<MainReporter>() {
                     @ApiProxyThread
                     @Override
@@ -86,7 +86,7 @@ public class SessionsTrackingManager {
 
     @ApiProxyThread
     public void resumeActivityManually(@Nullable Activity activity, @NonNull IMainReporter reporter) {
-        DebugLogger.info(TAG, "resume %s manually", activity);
+        DebugLogger.INSTANCE.info(TAG, "resume %s manually", activity);
         if (activity != null) {
             activityAppearedListener.onActivityAppeared(activity);
         }
@@ -95,7 +95,7 @@ public class SessionsTrackingManager {
 
     @ApiProxyThread
     public void pauseActivityManually(@Nullable Activity activity, @NonNull IMainReporter reporter) {
-        DebugLogger.info(TAG, "pause %s manually", activity);
+        DebugLogger.INSTANCE.info(TAG, "pause %s manually", activity);
         if (activity != null) {
             activityAppearedListener.onActivityAppeared(activity);
         }
@@ -103,14 +103,14 @@ public class SessionsTrackingManager {
     }
 
     public void setReporter(@NonNull MainReporter reporter) {
-        DebugLogger.info(TAG, "set reporter");
+        DebugLogger.INSTANCE.info(TAG, "set reporter");
         conditionalExecutor.setResource(reporter);
     }
 
     @ApiProxyThread
     private void resumeActivityInternal(@Nullable Activity activity, @NonNull IMainReporter reporter) {
         if (activityStateManager.didStateChange(activity, ActivityStateManager.ActivityState.RESUMED)) {
-            DebugLogger.info(TAG, "State changed. Proxying resume to reporter");
+            DebugLogger.INSTANCE.info(TAG, "State changed. Proxying resume to reporter");
             reporter.resumeSession(activity);
         }
     }
@@ -118,7 +118,7 @@ public class SessionsTrackingManager {
     @ApiProxyThread
     private void pauseActivityInternal(@Nullable Activity activity, @NonNull IMainReporter reporter) {
         if (activityStateManager.didStateChange(activity, ActivityStateManager.ActivityState.PAUSED)) {
-            DebugLogger.info(TAG, "State changed. Proxying pause to reporter");
+            DebugLogger.INSTANCE.info(TAG, "State changed. Proxying pause to reporter");
             reporter.pauseSession(activity);
         }
     }

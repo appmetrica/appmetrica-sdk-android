@@ -9,7 +9,7 @@ import io.appmetrica.analytics.impl.id.AdvertisingIdGetter
 import io.appmetrica.analytics.impl.id.AppSetIdGetter
 import io.appmetrica.analytics.impl.id.Constants
 import io.appmetrica.analytics.impl.id.TimesBasedRetryStrategy
-import io.appmetrica.analytics.logger.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import java.util.Locale
 import java.util.UUID
 

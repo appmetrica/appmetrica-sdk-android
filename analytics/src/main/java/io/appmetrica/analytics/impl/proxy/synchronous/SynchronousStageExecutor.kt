@@ -112,14 +112,10 @@ class SynchronousStageExecutor @VisibleForTesting constructor(
                 DefaultValues.DEFAULT_SESSIONS_AUTO_TRACKING_ENABLED
             )
         if (sessionsAutoTrackingEnabled) {
-            if (logger.isEnabled) {
-                logger.i("Session auto tracking enabled")
-            }
+            logger.info("Session auto tracking enabled")
             sessionsTrackingManager.startWatching(true)
         } else {
-            if (logger.isEnabled) {
-                logger.i("Session auto tracking disabled")
-            }
+            logger.info("Session auto tracking disabled")
         }
         provider.getInitializedImpl(context, true).activateCore(config)
     }

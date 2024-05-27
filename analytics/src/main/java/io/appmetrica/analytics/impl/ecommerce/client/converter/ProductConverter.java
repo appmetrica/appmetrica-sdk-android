@@ -11,7 +11,7 @@ import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedInfo;
 import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedProvider;
 import io.appmetrica.analytics.impl.utils.limitation.TrimmingResult;
 import io.appmetrica.analytics.impl.utils.limitation.hierarchical.HierarchicalStringTrimmer;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 
 public class ProductConverter
         implements Converter<ProductWrapper, Result<Ecommerce.ECommerceEvent.Product, BytesTruncatedProvider>> {
@@ -89,7 +89,7 @@ public class ProductConverter
                 originalPriceResult, promocodesResult);
 
         if (totalTruncationInfo.getBytesTruncated() > 0) {
-            DebugLogger.info(
+            DebugLogger.INSTANCE.info(
                     ECommerceConstants.FEATURE_TAG + TAG,
                     "Total bytes truncated (sku (%d) + name (%d) + categoriesPath (%d) + payload (%d) + " +
                             "originalPrice (%d) + actualPrice (%d) + promocodes (%d)) = %d",

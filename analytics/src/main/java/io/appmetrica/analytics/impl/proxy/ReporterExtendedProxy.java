@@ -19,7 +19,7 @@ import io.appmetrica.analytics.impl.crash.client.AllThreads;
 import io.appmetrica.analytics.impl.crash.client.UnhandledException;
 import io.appmetrica.analytics.impl.proxy.synchronous.ReporterSynchronousStageExecutor;
 import io.appmetrica.analytics.impl.proxy.validation.ReporterBarrier;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import io.appmetrica.analytics.plugins.IPluginReporter;
 import io.appmetrica.analytics.profile.UserProfile;
 import java.util.List;
@@ -377,11 +377,11 @@ public class ReporterExtendedProxy implements IReporterExtended {
     public void activate(@NonNull final ReporterConfig config) {
         barrier.activate(config);
         synchronousStageExecutor.activate(config);
-        DebugLogger.info(TAG, "activate with apiKey: %s", config.apiKey);
+        DebugLogger.INSTANCE.info(TAG, "activate with apiKey: %s", config.apiKey);
         mExecutor.execute(new Runnable() {
             @Override
             public void run() {
-                DebugLogger.info(TAG, "activate internal with apiKey = %s", config.apiKey);
+                DebugLogger.INSTANCE.info(TAG, "activate internal with apiKey = %s", config.apiKey);
                 activateInternal(config);
             }
         });

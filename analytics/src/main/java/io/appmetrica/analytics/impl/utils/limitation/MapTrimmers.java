@@ -59,10 +59,11 @@ public class MapTrimmers {
     }
 
     public void logContainerLimitReached(@NonNull String key) {
-        if (mPublicLogger.isEnabled()) {
-            mPublicLogger.fw(
-                    "The %s has reached the limit of %d items. Item with key %s will be " +
-                    "ignored", mTag, mCollectionLimitation.getMaxSize(), key);
-        }
+        mPublicLogger.warning(
+            "The %s has reached the limit of %d items. Item with key %s will be ignored",
+            mTag,
+            mCollectionLimitation.getMaxSize(),
+            key
+        );
     }
 }

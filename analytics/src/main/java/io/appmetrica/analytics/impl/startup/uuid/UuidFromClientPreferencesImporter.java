@@ -7,7 +7,7 @@ import androidx.annotation.Nullable;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesClientDbStorage;
 import io.appmetrica.analytics.impl.db.storage.DatabaseStorageFactory;
 import io.appmetrica.analytics.internal.IdentifiersResult;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 
 public class UuidFromClientPreferencesImporter implements IOuterSourceUuidImporter {
 
@@ -23,7 +23,7 @@ public class UuidFromClientPreferencesImporter implements IOuterSourceUuidImport
         IdentifiersResult identifiersResult = preferencesClientDbStorage.getUuidResult();
         if (!TextUtils.isEmpty(identifiersResult.id)) {
             uuid = identifiersResult.id;
-            DebugLogger.info(TAG, "Uuid from preference client db storage = %s", uuid);
+            DebugLogger.INSTANCE.info(TAG, "Uuid from preference client db storage = %s", uuid);
         }
         return uuid;
     }

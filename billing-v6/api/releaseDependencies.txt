@@ -1,4 +1,5 @@
 io.appmetrica.analytics:billing-interface:unspecified
+io.appmetrica.analytics:common-logger:unspecified
 io.appmetrica.analytics:core-api:unspecified
 io.appmetrica.analytics:core-utils:unspecified
 io.appmetrica.analytics:location-api:unspecified

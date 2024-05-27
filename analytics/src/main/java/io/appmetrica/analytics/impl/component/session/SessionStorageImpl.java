@@ -5,7 +5,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesComponentDbStorage;
 import io.appmetrica.analytics.impl.utils.JsonHelper;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 
 public class SessionStorageImpl implements SessionStorage {
 
@@ -38,7 +38,7 @@ public class SessionStorageImpl implements SessionStorage {
                 jsonObject = new JsonHelper.OptJSONObject(session);
             }
         } catch (Throwable e) {
-            DebugLogger.error(TAG, e, "can't read %s session description", mSessionTag);
+            DebugLogger.INSTANCE.error(TAG, e, "can't read %s session description", mSessionTag);
         }
         mJSONObject = jsonObject;
     }

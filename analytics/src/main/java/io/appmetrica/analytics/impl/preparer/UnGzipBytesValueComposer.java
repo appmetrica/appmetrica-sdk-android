@@ -6,7 +6,7 @@ import io.appmetrica.analytics.coreutils.internal.io.Base64Utils;
 import io.appmetrica.analytics.impl.request.ReportRequestConfig;
 import io.appmetrica.analytics.impl.utils.encryption.EventEncrypter;
 import io.appmetrica.analytics.impl.utils.encryption.EventEncrypterProvider;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 
 public class UnGzipBytesValueComposer implements ValueComposer {
 
@@ -26,7 +26,7 @@ public class UnGzipBytesValueComposer implements ValueComposer {
         try {
             value = Base64Utils.decompressBase64GzipAsBytes(event.getValue());
         } catch (Throwable e) {
-            DebugLogger.error(TAG, e);
+            DebugLogger.INSTANCE.error(TAG, e);
         }
         EventEncrypter eventEncrypter = eventEncrypterProvider.getEventEncrypter(event.getEventEncryptionMode());
         value = eventEncrypter.decrypt(value);

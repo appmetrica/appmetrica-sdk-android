@@ -7,7 +7,7 @@ import io.appmetrica.analytics.coreapi.internal.control.DataSendingRestrictionCo
 import io.appmetrica.analytics.coreutils.internal.WrapUtils;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesServiceDbStorage;
 import io.appmetrica.analytics.impl.utils.BooleanUtils;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.util.HashSet;
 
 public class DataSendingRestrictionControllerImpl implements DataSendingRestrictionController {
@@ -58,7 +58,7 @@ public class DataSendingRestrictionControllerImpl implements DataSendingRestrict
 
     public synchronized void setEnabledFromMainReporter(@Nullable Boolean dataSendingEnabled) {
         if (Utils.isFieldSet(dataSendingEnabled) || mRestrictedInMainReporter == null) {
-            DebugLogger.info(
+            DebugLogger.INSTANCE.info(
                 TAG,
                 "setEnabledFromMainReporter: %s",
                 dataSendingEnabled == null ? "null" : String.valueOf(dataSendingEnabled)
@@ -72,7 +72,7 @@ public class DataSendingRestrictionControllerImpl implements DataSendingRestrict
                                                           @Nullable Boolean dataSendingEnabled) {
         if (Utils.isFieldSet(dataSendingEnabled) ||
                 (mEnabledReporters.contains(apiKey) == false && mRestrictedReporters.contains(apiKey) == false)) {
-            DebugLogger.info(
+            DebugLogger.INSTANCE.info(
                 TAG,
                 "setEnabledForReporter with API_KEY=%s: %s",
                 apiKey,
@@ -95,7 +95,7 @@ public class DataSendingRestrictionControllerImpl implements DataSendingRestrict
                 ? mEnabledReporters.isEmpty() && mRestrictedReporters.isEmpty()
                 : mRestrictedInMainReporter;
 
-        DebugLogger.info(
+        DebugLogger.INSTANCE.info(
             TAG,
             "isRestrictedForReporter = %b (mRestrictedInMainReporter = %s; mEnabledReportersCount = %d); " +
                 "mRestrictedReportersCount = %d",
@@ -113,7 +113,7 @@ public class DataSendingRestrictionControllerImpl implements DataSendingRestrict
 
         boolean result = mRestrictedInMainReporter == null ? mEnabledReporters.isEmpty() : mRestrictedInMainReporter;
 
-        DebugLogger.info(
+        DebugLogger.INSTANCE.info(
             TAG,
             "isRestrictedForAppMetrica = %b (mRestrictedInMainReporter = %s); mEnabledReportersCount = %d",
             result,
@@ -130,7 +130,7 @@ public class DataSendingRestrictionControllerImpl implements DataSendingRestrict
                 ? !mRestrictedReporters.isEmpty() || mEnabledReporters.isEmpty()
                 : mRestrictedInMainReporter;
 
-        DebugLogger.info(
+        DebugLogger.INSTANCE.info(
             TAG,
             "isRestrictedForBackgroundDataCollection = %b (mRestrictedInMainReporter = %s; " +
                 "mRestrictedReporters = %s; mEnabledReporters = %s)",

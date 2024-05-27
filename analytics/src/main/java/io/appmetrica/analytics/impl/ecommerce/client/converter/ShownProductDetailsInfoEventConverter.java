@@ -7,7 +7,7 @@ import io.appmetrica.analytics.impl.ecommerce.client.model.ShownProductDetailInf
 import io.appmetrica.analytics.impl.protobuf.backend.Ecommerce;
 import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedInfo;
 import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedProvider;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.util.Collections;
 import java.util.List;
 
@@ -46,7 +46,7 @@ public class ShownProductDetailsInfoEventConverter implements ECommerceEventConv
         BytesTruncatedProvider totalTruncationInfo = BytesTruncatedInfo.total(productResult, referrerResult);
 
         if (totalTruncationInfo.getBytesTruncated() > 0) {
-            DebugLogger.info(
+            DebugLogger.INSTANCE.info(
                     ECommerceConstants.FEATURE_TAG + TAG,
                     "Total bytes truncated (product + referrer) = %d (%d + %d)",
                     totalTruncationInfo.getBytesTruncated(), productResult.getBytesTruncated(),

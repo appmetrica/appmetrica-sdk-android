@@ -11,7 +11,7 @@ import io.appmetrica.analytics.impl.modules.ModuleRemoteConfigController
 import io.appmetrica.analytics.impl.permissions.DefaultAskForPermissionStrategyProvider
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade
 import io.appmetrica.analytics.impl.startup.StartupState
-import io.appmetrica.analytics.logger.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import io.appmetrica.analytics.modulesapi.internal.common.AskForPermissionStrategyModuleProvider
 import io.appmetrica.analytics.modulesapi.internal.service.ModuleLocationSourcesServiceController
 import io.appmetrica.analytics.modulesapi.internal.service.ModuleServiceEntryPoint
@@ -95,7 +95,10 @@ internal class ServiceModulesController :
                 reportSelfErrorEvent(module.identifier, "db", e)
             }
         }
-        DebugLogger.warning(tag, "Disabling defective modules: ${wrongModules.joinToString(", ") { it.identifier }}")
+        DebugLogger.warning(
+            tag,
+            "Disabling defective modules: ${wrongModules.joinToString(", ") { it.identifier }}"
+        )
         modules.removeAll(wrongModules)
 
         return result

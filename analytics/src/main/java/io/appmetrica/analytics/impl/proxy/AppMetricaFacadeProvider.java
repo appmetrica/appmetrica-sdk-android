@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.WorkerThread;
 import io.appmetrica.analytics.impl.AppMetricaFacade;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 
 public class AppMetricaFacadeProvider {
 
@@ -15,7 +15,7 @@ public class AppMetricaFacadeProvider {
 
     @AnyThread
     public AppMetricaFacade getInitializedImpl(@NonNull Context context, boolean asyncInit) {
-        DebugLogger.info(TAG, "getInitializedImpl");
+        DebugLogger.INSTANCE.info(TAG, "getInitializedImpl");
         return AppMetricaFacade.getInstance(context, asyncInit);
     }
 

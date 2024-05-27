@@ -1,1 +1,1 @@
--keep class io.appmetrica.analytics.logger.** { *; }
+-keep class io.appmetrica.analytics.logger.appmetrica.** { *; }

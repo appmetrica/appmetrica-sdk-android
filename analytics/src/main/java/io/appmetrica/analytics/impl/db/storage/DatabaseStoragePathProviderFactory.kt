@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.db.storage
 
-import io.appmetrica.analytics.logger.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import java.io.File
 
 internal class DatabaseStoragePathProviderFactory(

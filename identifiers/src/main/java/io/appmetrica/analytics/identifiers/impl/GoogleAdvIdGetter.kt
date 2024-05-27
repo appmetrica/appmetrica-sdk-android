@@ -4,7 +4,7 @@ import android.content.Context
 import com.google.android.gms.ads.identifier.AdvertisingIdClient
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException
 import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus
-import io.appmetrica.analytics.logger.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
 private const val TAG = "[GoogleAdvIdGetter]"
 

@@ -7,7 +7,7 @@ import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.identifiers.AdTrackingInfo;
 import io.appmetrica.analytics.coreapi.internal.identifiers.AdvertisingIdsHolder;
 import io.appmetrica.analytics.coreutils.internal.StringUtils;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 
 public class AdvIdWithLimitedAppender implements IParamsAppender<AdvertisingIdsHolder> {
 
@@ -18,7 +18,7 @@ public class AdvIdWithLimitedAppender implements IParamsAppender<AdvertisingIdsH
             @NonNull Uri.Builder uriBuilder,
             @Nullable AdvertisingIdsHolder advertisingIdsHolder
     ) {
-        DebugLogger.info(TAG, "append adv id params with holder: %s", advertisingIdsHolder);
+        DebugLogger.INSTANCE.info(TAG, "append adv id params with holder: %s", advertisingIdsHolder);
         appendAdvIdInfo(
                 uriBuilder,
                 CommonUrlParts.ADV_ID,

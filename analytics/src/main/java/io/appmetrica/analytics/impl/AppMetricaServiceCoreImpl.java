@@ -34,7 +34,7 @@ import io.appmetrica.analytics.impl.startup.StartupState;
 import io.appmetrica.analytics.impl.utils.JsonHelper;
 import io.appmetrica.analytics.impl.utils.ServerTime;
 import io.appmetrica.analytics.internal.CounterConfiguration;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.io.File;
 
 public class AppMetricaServiceCoreImpl implements AppMetricaServiceCore, AppMetricaCoreReporter {
@@ -130,13 +130,13 @@ public class AppMetricaServiceCoreImpl implements AppMetricaServiceCore, AppMetr
     @WorkerThread
     @Override
     public void onCreate() {
-        DebugLogger.info(TAG, "onCreate");
+        DebugLogger.INSTANCE.info(TAG, "onCreate");
         if (!created) {
-            DebugLogger.info(TAG, "onFirstCreate()");
+            DebugLogger.INSTANCE.info(TAG, "onFirstCreate()");
             onFirstCreate();
             created = true;
         } else {
-            DebugLogger.info(TAG, "onNonFirstCreate()");
+            DebugLogger.INSTANCE.info(TAG, "onNonFirstCreate()");
             loadLocaleFromConfiguration(mContext.getResources().getConfiguration());
         }
         GlobalServiceLocator.getInstance().getLifecycleDependentComponentManager().onCreate();
@@ -145,7 +145,7 @@ public class AppMetricaServiceCoreImpl implements AppMetricaServiceCore, AppMetr
     @SuppressLint("NewApi")
     @WorkerThread
     private void onFirstCreate() {
-        DebugLogger.info(TAG, "onFirstCreate... discover modules");
+        DebugLogger.INSTANCE.info(TAG, "onFirstCreate... discover modules");
         firstServiceEntryPointManager.onPossibleFirstEntry(mContext);
 
         GlobalServiceLocator.getInstance().initAsync();
@@ -158,9 +158,9 @@ public class AppMetricaServiceCoreImpl implements AppMetricaServiceCore, AppMetr
         GlobalServiceLocator.getInstance().getSslSocketFactoryProvider().onStartupStateChanged(startupState);
         initMetricaServiceLifecycleObservers();
 
-        DebugLogger.info(TAG, "Init location service API");
+        DebugLogger.INSTANCE.info(TAG, "Init location service API");
         GlobalServiceLocator.getInstance().getLocationClientApi().init();
-        DebugLogger.info(TAG, "Init serviceInternalAdvertisingIdGetter");
+        DebugLogger.INSTANCE.info(TAG, "Init serviceInternalAdvertisingIdGetter");
         GlobalServiceLocator.getInstance().getServiceInternalAdvertisingIdGetter().init(mContext, startupState);
 
         mReportConsumer = fieldsFactory.createReportConsumer(mContext, mClientRepository);
@@ -168,13 +168,13 @@ public class AppMetricaServiceCoreImpl implements AppMetricaServiceCore, AppMetr
         AppMetricaSelfReportFacade.warmupForMetricaProcess(mContext);
         initJvmCrashWatcher();
         initNativeCrashReporting();
-        DebugLogger.info(TAG, "Run scheduler on first create additional tasks");
+        DebugLogger.INSTANCE.info(TAG, "Run scheduler on first create additional tasks");
         new CoreImplFirstCreateTaskLauncherProvider().getLauncher().run();
-        DebugLogger.info(TAG, "Finish onFirstCreate");
+        DebugLogger.INSTANCE.info(TAG, "Finish onFirstCreate");
     }
 
     private void initModules(@NonNull StartupStateHolder startupStateHolder) {
-        DebugLogger.info(TAG, "Load and init modules");
+        DebugLogger.INSTANCE.info(TAG, "Load and init modules");
         StartupState startupState = startupStateHolder.getStartupState();
         ServiceModulesController modulesController = GlobalServiceLocator.getInstance().getModulesController();
         modulesController.initServiceSide(
@@ -190,12 +190,16 @@ public class AppMetricaServiceCoreImpl implements AppMetricaServiceCore, AppMetr
         File crashDirectory = FileUtils.getCrashesDirectory(mContext);
         if (crashDirectory != null) {
             crashDirectoryWatcher = fieldsFactory.createCrashDirectoryWatcher(crashDirectory, crashesListener);
-            DebugLogger.info(TAG, "readOldCrashes for directory: %s", crashDirectory.getAbsolutePath());
+            DebugLogger.INSTANCE.info(
+                TAG,
+                "readOldCrashes for directory: %s",
+                crashDirectory.getAbsolutePath()
+            );
 
             reportExecutor.execute(new ReadOldCrashesRunnable(mContext, crashDirectory, crashesListener));
             crashDirectoryWatcher.startWatching();
         } else {
-            DebugLogger.info(TAG, "Do not init JVM crash watcher as crashes directory is null");
+            DebugLogger.INSTANCE.info(TAG, "Do not init JVM crash watcher as crashes directory is null");
         }
     }
 
@@ -205,11 +209,11 @@ public class AppMetricaServiceCoreImpl implements AppMetricaServiceCore, AppMetr
 
     @WorkerThread
     private void initMetricaServiceLifecycleObservers() {
-        DebugLogger.info(TAG, "initMetricaServiceLifecycleObservers");
+        DebugLogger.INSTANCE.info(TAG, "initMetricaServiceLifecycleObservers");
         mAppMetricaServiceLifecycle.addNewClientConnectObserver(new AppMetricaServiceLifecycle.LifecycleObserver() {
             @Override
             public void onEvent(@NonNull Intent intent) {
-                DebugLogger.info(TAG, "onNewClientConnect");
+                DebugLogger.INSTANCE.info(TAG, "onNewClientConnect");
                 onNewClientConnected(intent);
             }
         });
@@ -218,41 +222,41 @@ public class AppMetricaServiceCoreImpl implements AppMetricaServiceCore, AppMetr
     @WorkerThread
     @Override
     public void onStart(Intent intent, int startId) {
-        DebugLogger.info(TAG, "onStart");
+        DebugLogger.INSTANCE.info(TAG, "onStart");
         handleStart(intent, startId);
     }
 
     @WorkerThread
     @Override
     public void onStartCommand(Intent intent, int flags, int startId) {
-        DebugLogger.info(TAG, "onStartCommand");
+        DebugLogger.INSTANCE.info(TAG, "onStartCommand");
         handleStart(intent, startId);
     }
 
     @WorkerThread
     @Override
     public void onBind(Intent intent) {
-        DebugLogger.info(TAG, "onBind with intent:%s", intent);
+        DebugLogger.INSTANCE.info(TAG, "onBind with intent:%s", intent);
         mAppMetricaServiceLifecycle.onBind(intent);
     }
 
     @WorkerThread
     @Override
     public void onRebind(Intent intent) {
-        DebugLogger.info(TAG, "onRebind()");
+        DebugLogger.INSTANCE.info(TAG, "onRebind()");
         mAppMetricaServiceLifecycle.onRebind(intent);
     }
 
     @WorkerThread
     @Override
     public void onUnbind(Intent intent) {
-        DebugLogger.info(TAG, "onUnbind()");
+        DebugLogger.INSTANCE.info(TAG, "onUnbind()");
         mAppMetricaServiceLifecycle.onUnbind(intent);
         if (intent != null) {
             String action = intent.getAction();
             Uri intentData = intent.getData();
             String packageName = intentData == null ? null : intentData.getEncodedAuthority();
-            DebugLogger.info(
+            DebugLogger.INSTANCE.info(
                 TAG,
                 "Unbind from the service with data: %s and action: %s and package: %s",
                 intent,
@@ -268,7 +272,7 @@ public class AppMetricaServiceCoreImpl implements AppMetricaServiceCore, AppMetr
 
     @WorkerThread
     private void onNewClientConnected(@NonNull Intent intent) {
-        DebugLogger.info(TAG, "remove scheduled disconnect from onBind()");
+        DebugLogger.INSTANCE.info(TAG, "remove scheduled disconnect from onBind()");
         updateScreenInfo(intent);
     }
 
@@ -284,9 +288,13 @@ public class AppMetricaServiceCoreImpl implements AppMetricaServiceCore, AppMetr
         if (intentData != null && intentData.getPath().equals("/" + ServiceUtils.PATH_CLIENT)) {
             int pid = Integer.parseInt(intentData.getQueryParameter(ServiceUtils.PARAMETER_PID));
             String psid = intentData.getQueryParameter(ServiceUtils.PARAMETER_PSID);
-            DebugLogger.info(TAG, "unbounded client pid %d and psid %s", pid, psid);
+            DebugLogger.INSTANCE.info(TAG, "unbounded client pid %d and psid %s", pid, psid);
             mClientRepository.remove(packageName, pid, psid);
-            DebugLogger.info(TAG, "Remains clients after unbind: %d", mClientRepository.getClientsCount());
+            DebugLogger.INSTANCE.info(
+                TAG,
+                "Remains clients after unbind: %d",
+                mClientRepository.getClientsCount()
+            );
             applicationStateProvider.notifyProcessDisconnected(pid);
         }
     }
@@ -294,7 +302,7 @@ public class AppMetricaServiceCoreImpl implements AppMetricaServiceCore, AppMetr
     @WorkerThread
     @Override
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
-        DebugLogger.info(TAG, "onConfigurationChanged()");
+        DebugLogger.INSTANCE.info(TAG, "onConfigurationChanged()");
         loadLocaleFromConfiguration(newConfig);
     }
 
@@ -305,7 +313,7 @@ public class AppMetricaServiceCoreImpl implements AppMetricaServiceCore, AppMetr
     @MainThread
     @Override
     public void onDestroy() {
-        DebugLogger.info(TAG, "onDestroy()");
+        DebugLogger.INSTANCE.info(TAG, "onDestroy()");
         GlobalServiceLocator.getInstance().getLifecycleDependentComponentManager().onDestroy();
     }
 
@@ -315,7 +323,7 @@ public class AppMetricaServiceCoreImpl implements AppMetricaServiceCore, AppMetr
         // Set class loader for unmarshalling
         data.setClassLoader(CounterConfiguration.class.getClassLoader());
         CounterReport counterReport = CounterReport.fromBundle(data);
-        DebugLogger.info(
+        DebugLogger.INSTANCE.info(
             TAG,
             "reportData: type = %s; customType = %s; name = %s",
             counterReport.getType(), counterReport.getCustomType(), counterReport.getName()
@@ -333,11 +341,11 @@ public class AppMetricaServiceCoreImpl implements AppMetricaServiceCore, AppMetr
     @Override
     public void resumeUserSession(@NonNull Bundle data) {
         Integer processId = extractProcessId(data);
-        DebugLogger.info(TAG, "resumeUserSession for pid = %s", processId);
+        DebugLogger.INSTANCE.info(TAG, "resumeUserSession for pid = %s", processId);
         if (processId != null) {
             applicationStateProvider.resumeUserSessionForPid(processId);
         } else {
-            DebugLogger.error(TAG, "Process configuration or processId is null");
+            DebugLogger.INSTANCE.error(TAG, "Process configuration or processId is null");
         }
     }
 
@@ -345,11 +353,11 @@ public class AppMetricaServiceCoreImpl implements AppMetricaServiceCore, AppMetr
     @Override
     public void pauseUserSession(@NonNull Bundle data) {
         Integer processId = extractProcessId(data);
-        DebugLogger.info(TAG, "pauseUserSession for pid = %s", processId);
+        DebugLogger.INSTANCE.info(TAG, "pauseUserSession for pid = %s", processId);
         if (processId != null) {
             applicationStateProvider.pauseUserSessionForPid(processId);
         } else {
-            DebugLogger.error(TAG, "Process configuration or processId is null");
+            DebugLogger.INSTANCE.error(TAG, "Process configuration or processId is null");
         }
     }
 
@@ -367,12 +375,17 @@ public class AppMetricaServiceCoreImpl implements AppMetricaServiceCore, AppMetr
 
     @WorkerThread
     public void handleNewCrashFromFile(@NonNull File crashFile) {
-        DebugLogger.info(TAG, "handleNewCrashFromFile %s", crashFile.getName());
+        DebugLogger.INSTANCE.info(TAG, "handleNewCrashFromFile %s", crashFile.getName());
         mReportConsumer.consumeCrashFromFile(crashFile);
     }
 
     private void handleStart(Intent intent, int startId) {
-        DebugLogger.info(TAG, "Handle start of service with data: %s and startId: %d", intent, startId);
+        DebugLogger.INSTANCE.info(
+            TAG,
+            "Handle start of service with data: %s and startId: %d",
+            intent,
+            startId
+        );
 
         if (null != intent) {
             // Set class loader for unmarshalling
@@ -417,7 +430,7 @@ public class AppMetricaServiceCoreImpl implements AppMetricaServiceCore, AppMetr
                 new CommonArguments(clientConfiguration)
             );
         } catch (Throwable exception) {
-            DebugLogger.error(TAG, "Something was wrong while handling event.\n%s", exception);
+            DebugLogger.INSTANCE.error(TAG, "Something was wrong while handling event.\n%s", exception);
         }
     }
 

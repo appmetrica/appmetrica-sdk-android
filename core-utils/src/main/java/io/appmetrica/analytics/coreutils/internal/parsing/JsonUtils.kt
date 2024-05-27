@@ -2,7 +2,7 @@
 
 package io.appmetrica.analytics.coreutils.internal.parsing
 
-import io.appmetrica.analytics.logger.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import org.json.JSONArray
 import org.json.JSONObject
 

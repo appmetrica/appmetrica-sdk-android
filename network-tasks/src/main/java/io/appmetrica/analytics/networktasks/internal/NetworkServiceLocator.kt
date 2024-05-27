@@ -2,7 +2,7 @@ package io.appmetrica.analytics.networktasks.internal
 
 import androidx.annotation.AnyThread
 import androidx.annotation.VisibleForTesting
-import io.appmetrica.analytics.logger.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
 class NetworkServiceLocator @AnyThread @VisibleForTesting constructor() : NetworkServiceLifecycleObserver {
 

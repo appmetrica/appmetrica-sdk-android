@@ -1,0 +1,33 @@
+public final class io.appmetrica.analytics.logger.common.BuildConfig {
+    public static final String BUILD_TYPE
+    public static final boolean DEBUG
+    public static final String LIBRARY_PACKAGE_NAME
+
+    public <init>()
+}
+
+public abstract class io.appmetrica.analytics.logger.common.internal.BaseDebugLogger {
+    public <init>([NonNull] String)
+    public void error([NonNull] String, [Nullable] String, [Nullable] Object...)
+    public void error([NonNull] String, [Nullable] Throwable)
+    public void error([NonNull] String, [Nullable] Throwable, [Nullable] String, [Nullable] Object...)
+    public void info([NonNull] String, [Nullable] String, [Nullable] Object...)
+    public void warning([NonNull] String, [Nullable] String, [Nullable] Object...)
+}
+
+public abstract class io.appmetrica.analytics.logger.common.internal.BaseImportantLogger {
+    public <init>([NonNull] String)
+    public void info([NonNull] String, [Nullable] String, [Nullable] Object...)
+}
+
+public abstract class io.appmetrica.analytics.logger.common.internal.BaseReleaseLogger {
+    public <init>([NonNull] String, [NonNull] String)
+    public void error([Nullable] String, [Nullable] Object...)
+    public void error([Nullable] Throwable, [Nullable] String, [Nullable] Object...)
+    public [NonNull] String getPrefix()
+    public void info([Nullable] String, [Nullable] Object...)
+    public static void init([NonNull] android.content.Context)
+    public void setEnabled(boolean)
+    public void warning([Nullable] String, [Nullable] Object...)
+}
+

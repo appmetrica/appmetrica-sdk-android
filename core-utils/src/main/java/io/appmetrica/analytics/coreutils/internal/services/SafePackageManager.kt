@@ -12,7 +12,7 @@ import android.content.pm.ResolveInfo
 import android.content.pm.ServiceInfo
 import android.os.Build
 import io.appmetrica.analytics.coreutils.internal.AndroidUtils.isApiAchieved
-import io.appmetrica.analytics.logger.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
 class SafePackageManager {
 

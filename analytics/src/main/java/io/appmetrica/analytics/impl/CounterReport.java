@@ -14,7 +14,7 @@ import io.appmetrica.analytics.coreutils.internal.StringUtils;
 import io.appmetrica.analytics.coreutils.internal.collection.CollectionUtils;
 import io.appmetrica.analytics.coreutils.internal.time.SystemTimeProvider;
 import io.appmetrica.analytics.impl.billing.ProductInfoWrapper;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import io.appmetrica.analytics.protobuf.nano.MessageNano;
 import java.util.Collection;
 import java.util.HashMap;
@@ -468,7 +468,7 @@ public class CounterReport implements CounterReportApi, Parcelable {
                 .put("available_providers", new JSONArray(availableProviders))
                 .toString();
         } catch (Throwable e) {
-            DebugLogger.error(TAG, e, "error while forming permissions value");
+            DebugLogger.INSTANCE.error(TAG, e, "error while forming permissions value");
         }
         resultData.setType(EVENT_TYPE_PERMISSIONS.getTypeId());
         resultData.setValue(value);

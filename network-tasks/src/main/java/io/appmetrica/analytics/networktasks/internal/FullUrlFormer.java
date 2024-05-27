@@ -3,7 +3,7 @@ package io.appmetrica.analytics.networktasks.internal;
 import android.net.Uri;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import io.appmetrica.analytics.networktasks.impl.ForcedHttpsUrlProvider;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,13 +34,13 @@ public class FullUrlFormer<T> {
     }
 
     public void setHosts(@Nullable List<String> hosts) {
-        DebugLogger.info(TAG, "set hosts to %s", hosts);
+        DebugLogger.INSTANCE.info(TAG, "set hosts to %s", hosts);
         this.hosts = hosts == null ? new ArrayList<String>() : hosts;
     }
 
     public void incrementAttemptNumber() {
         attemptNumber++;
-        DebugLogger.info(TAG, "increment attempt number to %d", attemptNumber);
+        DebugLogger.INSTANCE.info(TAG, "increment attempt number to %d", attemptNumber);
     }
 
     @NonNull
@@ -57,8 +57,8 @@ public class FullUrlFormer<T> {
         T config = configProvider.getConfig();
         paramsAppender.appendParams(uriBuilder, config);
         String url = uriBuilder.build().toString();
-        DebugLogger.info(TAG, "Full url list: %s, attemptNumber: %d", hosts, attemptNumber);
-        DebugLogger.info(TAG, "Request full url: %s", url);
+        DebugLogger.INSTANCE.info(TAG, "Full url list: %s, attemptNumber: %d", hosts, attemptNumber);
+        DebugLogger.INSTANCE.info(TAG, "Request full url: %s", url);
         this.url = url;
     }
 

@@ -10,11 +10,8 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
 
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
 public class PreloadInfoWrapperGeneralTest extends CommonTest {
@@ -28,7 +25,6 @@ public class PreloadInfoWrapperGeneralTest extends CommonTest {
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        when(mPublicLogger.isEnabled()).thenReturn(true);
     }
 
     @Test
@@ -46,26 +42,12 @@ public class PreloadInfoWrapperGeneralTest extends CommonTest {
     @Test
     public void nullTrackingId() {
         new PreloadInfoWrapper(PreloadInfo.newBuilder(null).build(), mPublicLogger, true);
-        verify(mPublicLogger).e(sErrorMessage);
+        verify(mPublicLogger).error(sErrorMessage);
     }
 
     @Test
     public void emptyTrackingId() {
         new PreloadInfoWrapper(PreloadInfo.newBuilder("").build(), mPublicLogger, true);
-        verify(mPublicLogger).e(sErrorMessage);
-    }
-
-    @Test
-    public void nullTrackingIdLoggerDisabled() {
-        when(mPublicLogger.isEnabled()).thenReturn(false);
-        new PreloadInfoWrapper(PreloadInfo.newBuilder(null).build(), mPublicLogger, true);
-        verify(mPublicLogger, never()).e(anyString());
-    }
-
-    @Test
-    public void emptyTrackingIdLoggerDisabled() {
-        when(mPublicLogger.isEnabled()).thenReturn(false);
-        new PreloadInfoWrapper(PreloadInfo.newBuilder("").build(), mPublicLogger, true);
-        verify(mPublicLogger, never()).e(anyString());
+        verify(mPublicLogger).error(sErrorMessage);
     }
 }

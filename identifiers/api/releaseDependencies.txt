@@ -27,6 +27,7 @@ androidx.versionedparcelable:versionedparcelable:1.1.0
 androidx.viewpager:viewpager:1.0.0
 com.google.android.gms:play-services-ads-identifier:18.0.1
 com.google.android.gms:play-services-basement:18.0.0
+io.appmetrica.analytics:common-logger:unspecified
 io.appmetrica.analytics:core-api:unspecified
 io.appmetrica.analytics:core-utils:unspecified
 io.appmetrica.analytics:location-api:unspecified

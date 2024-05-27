@@ -4,7 +4,7 @@ import androidx.annotation.WorkerThread
 import io.appmetrica.analytics.coreutils.internal.parsing.optJsonObjectOrNull
 import io.appmetrica.analytics.coreutils.internal.parsing.optJsonObjectOrNullable
 import io.appmetrica.analytics.impl.utils.JsonHelper
-import io.appmetrica.analytics.logger.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import org.json.JSONObject
 
 private const val FIRST_EVENT_DONE = "first_event_done"

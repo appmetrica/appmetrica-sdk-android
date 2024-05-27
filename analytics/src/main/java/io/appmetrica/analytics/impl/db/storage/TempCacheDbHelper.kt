@@ -8,7 +8,7 @@ import io.appmetrica.analytics.coreutils.internal.time.SystemTimeProvider
 import io.appmetrica.analytics.impl.Utils
 import io.appmetrica.analytics.impl.db.connectors.DBConnector
 import io.appmetrica.analytics.impl.db.constants.TempCacheTable
-import io.appmetrica.analytics.logger.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
 class TempCacheDbHelper(
     private val dbConnector: DBConnector,

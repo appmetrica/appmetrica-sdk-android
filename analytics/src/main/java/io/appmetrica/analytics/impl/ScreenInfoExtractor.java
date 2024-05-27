@@ -14,7 +14,7 @@ import io.appmetrica.analytics.coreapi.internal.backport.FunctionWithThrowable;
 import io.appmetrica.analytics.coreapi.internal.model.ScreenInfo;
 import io.appmetrica.analytics.coreutils.internal.AndroidUtils;
 import io.appmetrica.analytics.coreutils.internal.system.SystemServiceUtils;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 
 public class ScreenInfoExtractor {
 
@@ -35,7 +35,7 @@ public class ScreenInfoExtractor {
             dpi = displayMetrics.densityDpi;
             scaleFactor = displayMetrics.density;
         } catch (Throwable ex) {
-            DebugLogger.error(TAG, ex);
+            DebugLogger.INSTANCE.error(TAG, ex);
         }
         return new ScreenInfo(width, height, dpi, scaleFactor);
     }
@@ -50,7 +50,7 @@ public class ScreenInfoExtractor {
                 try {
                     display = context.getDisplay();
                 } catch (Throwable ex) {
-                    DebugLogger.error(TAG, ex);
+                    DebugLogger.INSTANCE.error(TAG, ex);
                 }
             }
             if (display == null) {
@@ -61,7 +61,7 @@ public class ScreenInfoExtractor {
                 result = extractScreenSizeFromDisplay(display);
             }
         } catch (Throwable ex) {
-            DebugLogger.error(TAG, ex);
+            DebugLogger.INSTANCE.error(TAG, ex);
         }
         return result;
     }

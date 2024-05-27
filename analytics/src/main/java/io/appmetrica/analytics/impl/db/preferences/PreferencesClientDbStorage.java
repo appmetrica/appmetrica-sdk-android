@@ -9,7 +9,7 @@ import io.appmetrica.analytics.impl.db.IKeyValueTableDbHelper;
 import io.appmetrica.analytics.impl.startup.FeaturesInternal;
 import io.appmetrica.analytics.impl.utils.JsonHelper;
 import io.appmetrica.analytics.internal.IdentifiersResult;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.util.List;
 import org.json.JSONObject;
 
@@ -248,7 +248,7 @@ public class PreferencesClientDbStorage extends PreferencesDbStorage {
                 result = JsonHelper.advIdentifiersResultFromJson(new JSONObject(savedValue));
             }
         } catch (Throwable e) {
-            DebugLogger.error(TAG, e, e.getMessage());
+            DebugLogger.INSTANCE.error(TAG, e, e.getMessage());
         }
         return result == null ? new IdentifiersResult(
                 null,
@@ -266,7 +266,7 @@ public class PreferencesClientDbStorage extends PreferencesDbStorage {
             try {
                 valueToSave = JsonHelper.advIdentifiersResultToJson(identifiersResult).toString();
             } catch (Throwable e) {
-                DebugLogger.error(TAG, e, e.getMessage());
+                DebugLogger.INSTANCE.error(TAG, e, e.getMessage());
             }
         }
 

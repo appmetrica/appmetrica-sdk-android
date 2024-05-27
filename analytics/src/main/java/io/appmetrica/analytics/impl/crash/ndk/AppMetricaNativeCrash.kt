@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.crash.ndk
 
-import io.appmetrica.analytics.logger.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrash
 import io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrashSource
 

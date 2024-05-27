@@ -6,7 +6,7 @@ import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreutils.internal.encryption.AESEncrypter;
 import io.appmetrica.analytics.coreutils.internal.io.GZIPCompressor;
 import io.appmetrica.analytics.impl.Utils;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.util.Arrays;
 
 public class BodyDecoder {
@@ -50,7 +50,7 @@ public class BodyDecoder {
                 result = mGzipCompressor.uncompress(decryptedData);
             }
         } catch (Throwable e) {
-            DebugLogger.error(TAG, e, e.getMessage());
+            DebugLogger.INSTANCE.error(TAG, e, e.getMessage());
             result = null;
         }
         return result;

@@ -10,7 +10,7 @@ import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedProvider;
 import io.appmetrica.analytics.impl.utils.limitation.CollectionTrimInfo;
 import io.appmetrica.analytics.impl.utils.limitation.TrimmingResult;
 import io.appmetrica.analytics.impl.utils.limitation.hierarchical.HierarchicalValueSizeOrderBasedWithBytesLimitStringMapTrimmer;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.util.Map;
 
 public class PayloadConverter implements
@@ -52,7 +52,7 @@ public class PayloadConverter implements
         }
 
         if (truncatedPayload.metaInfo.bytesTruncated > 0) {
-            DebugLogger.info(
+            DebugLogger.INSTANCE.info(
                     ECommerceConstants.FEATURE_TAG + TAG,
                     "Truncate payload %s -> %s with dropped %d pairs and bytesTruncated = %d",
                     value, truncatedPayload.value, truncatedPayload.metaInfo.itemsDropped,

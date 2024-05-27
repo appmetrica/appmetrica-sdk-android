@@ -42,10 +42,10 @@ import org.robolectric.RobolectricTestRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Mockito.atLeast;
+import static org.mockito.Mockito.clearInvocations;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
@@ -123,16 +123,9 @@ public class MainReporterTest extends BaseReporterTest {
 
     @Test
     public void testDefaultSessionTimeoutIsLoggedInConstructor() {
-        when(mPublicLogger.isEnabled()).thenReturn(true);
+        clearInvocations(mPublicLogger);
         final MainReporter reporter = getReporter();
-        verify(mPublicLogger).i("Actual sessions timeout is 10000");
-    }
-
-    @Test
-    public void testDefaultSessionTimeoutIsLoggedInConstructorIfLoggerIsDisabled() {
-        when(mPublicLogger.isEnabled()).thenReturn(false);
-        final MainReporter reporter = getReporter();
-        verify(mPublicLogger, never()).i(anyString());
+        verify(mPublicLogger).info("Actual sessions timeout is 10000");
     }
 
     @Test
@@ -205,7 +198,6 @@ public class MainReporterTest extends BaseReporterTest {
     }
 
     private MainReporter createWithProfileID(String userProfileID) {
-        when(mPublicLogger.isEnabled()).thenReturn(false);
         AppMetricaConfig config = AppMetricaConfig.newConfigBuilder(apiKey)
                 .withUserProfileID(userProfileID)
                 .build();
@@ -272,25 +264,15 @@ public class MainReporterTest extends BaseReporterTest {
 
     @Test
     public void onEnableAutoTrackingAttemptOccurredWatching() {
-        when(mPublicLogger.isEnabled()).thenReturn(true);
         mMainReporter.onEnableAutoTrackingAttemptOccurred(ActivityLifecycleManager.WatchingStatus.WATCHING);
-        verify(mPublicLogger).i("Enable activity auto tracking");
+        verify(mPublicLogger).info("Enable activity auto tracking");
     }
 
     @Test
     public void testOnResumeSessionIsLogged() {
         when(activityStateManager.didStateChange(activity, ActivityStateManager.ActivityState.RESUMED)).thenReturn(true);
-        when(mPublicLogger.isEnabled()).thenReturn(true);
         mMainReporter.resumeSession(activity);
-        verify(mPublicLogger).i("Resume session");
-    }
-
-    @Test
-    public void testOnResumeSessionIsNotLoggedIfLoggerIsDisabled() {
-        when(activityStateManager.didStateChange(activity, ActivityStateManager.ActivityState.RESUMED)).thenReturn(true);
-        when(mPublicLogger.isEnabled()).thenReturn(false);
-        mMainReporter.resumeSession(activity);
-        verify(mPublicLogger, never()).i(anyString());
+        verify(mPublicLogger).info("Resume session");
     }
 
     @Test
@@ -343,17 +325,8 @@ public class MainReporterTest extends BaseReporterTest {
     @Test
     public void testOnPauseSessionIsLogged() {
         when(activityStateManager.didStateChange(activity, ActivityStateManager.ActivityState.PAUSED)).thenReturn(true);
-        when(mPublicLogger.isEnabled()).thenReturn(true);
         mMainReporter.pauseSession(activity);
-        verify(mPublicLogger).i("Pause session");
-    }
-
-    @Test
-    public void testOnPauseSessionIsNotLoggedIfLoggerIsDisabled() {
-        when(activityStateManager.didStateChange(activity, ActivityStateManager.ActivityState.PAUSED)).thenReturn(true);
-        when(mPublicLogger.isEnabled()).thenReturn(false);
-        mMainReporter.pauseSession(activity);
-        verify(mPublicLogger, never()).i(anyString());
+        verify(mPublicLogger).info("Pause session");
     }
 
     @Test
@@ -478,8 +451,6 @@ public class MainReporterTest extends BaseReporterTest {
 
     @Test
     public void reportExternalAttribution() {
-        when(mPublicLogger.isEnabled()).thenReturn(true);
-
         byte[] bytes = new byte[]{1, 4, 7};
         ExternalAttribution attribution = mock(ExternalAttribution.class);
         when(attribution.toBytes()).thenReturn(bytes);
@@ -491,7 +462,7 @@ public class MainReporterTest extends BaseReporterTest {
             mockedEvent,
             mReporterEnvironment
         );
-        verify(mPublicLogger).fi("External attribution received: %s", attribution);
+        verify(mPublicLogger).info("External attribution received: %s", attribution);
     }
 
     @Test
@@ -574,12 +545,11 @@ public class MainReporterTest extends BaseReporterTest {
 
     @Test
     public void testReportAppOpen() throws Exception {
-        when(mPublicLogger.isEnabled()).thenReturn(true);
         String link = "some://uri";
         when(EventsManager.openAppReportEntry(link, true, mPublicLogger)).thenReturn(mockedEvent);
         mMainReporter.reportAppOpen(link, true);
         verify(mReportsHandler).reportEvent(mockedEvent, mReporterEnvironment);
-        verify(mPublicLogger).i("App opened via deeplink: " + link);
+        verify(mPublicLogger).info("App opened via deeplink: " + link);
     }
 
     //region MainReporter#reportReferralUrl(String)
@@ -681,19 +651,17 @@ public class MainReporterTest extends BaseReporterTest {
     @Test
     public void setNonNullLocation() {
         Location location = mock(Location.class);
-        when(mPublicLogger.isEnabled()).thenReturn(true);
         mMainReporter.setLocation(location);
         verify(mCounterConfiguration).setManualLocation(location);
-        verify(mPublicLogger).fi("Set location: %s", location);
+        verify(mPublicLogger).info("Set location: %s", location);
     }
 
     @Test
     public void setNullLocation() {
         Location location = null;
-        when(mPublicLogger.isEnabled()).thenReturn(true);
         mMainReporter.setLocation(location);
         verify(mCounterConfiguration).setManualLocation(location);
-        verify(mPublicLogger).fi("Set location: %s", location);
+        verify(mPublicLogger).info("Set location: %s", location);
     }
 
     @RunWith(ParameterizedRobolectricTestRunner.class)

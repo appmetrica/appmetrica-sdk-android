@@ -41,7 +41,6 @@ public class WebViewJsInterfaceHandlerTest extends CommonTest {
     public void setUp() {
         MockitoAnnotations.openMocks(this);
         when(webView.getSettings()).thenReturn(webSettings);
-        when(logger.isEnabled()).thenReturn(true);
         webViewJsInterfaceHandler = new WebViewJsInterfaceHandler();
     }
 
@@ -51,7 +50,7 @@ public class WebViewJsInterfaceHandlerTest extends CommonTest {
         webViewJsInterfaceHandler.initWebViewReporting(webView, proxy);
         verify(webView, never()).addJavascriptInterface(any(Object.class), anyString());
         webViewJsInterfaceHandler.setLogger(logger);
-        verify(logger).w("WebView interface setup failed because javascript is disabled for the WebView.");
+        verify(logger).warning("WebView interface setup failed because javascript is disabled for the WebView.");
     }
 
     @Test
@@ -60,7 +59,7 @@ public class WebViewJsInterfaceHandlerTest extends CommonTest {
         webViewJsInterfaceHandler.setLogger(logger);
         webViewJsInterfaceHandler.initWebViewReporting(webView, proxy);
         verify(webView, never()).addJavascriptInterface(any(Object.class), anyString());
-        verify(logger).w("WebView interface setup failed because javascript is disabled for the WebView.");
+        verify(logger).warning("WebView interface setup failed because javascript is disabled for the WebView.");
     }
 
     @Test
@@ -71,7 +70,7 @@ public class WebViewJsInterfaceHandlerTest extends CommonTest {
         webViewJsInterfaceHandler.initWebViewReporting(webView, proxy);
         verify(webView).addJavascriptInterface(any(Object.class), anyString());
         webViewJsInterfaceHandler.setLogger(logger);
-        verify(logger).e(exception, "WebView interface setup failed because of an exception.");
+        verify(logger).error(exception, "WebView interface setup failed because of an exception.");
     }
 
     @Test
@@ -82,7 +81,7 @@ public class WebViewJsInterfaceHandlerTest extends CommonTest {
         webViewJsInterfaceHandler.setLogger(logger);
         webViewJsInterfaceHandler.initWebViewReporting(webView, proxy);
         verify(webView).addJavascriptInterface(any(Object.class), anyString());
-        verify(logger).e(exception, "WebView interface setup failed because of an exception.");
+        verify(logger).error(exception, "WebView interface setup failed because of an exception.");
     }
 
     @Test
@@ -92,7 +91,7 @@ public class WebViewJsInterfaceHandlerTest extends CommonTest {
         verify(webView).addJavascriptInterface(any(AppMetricaJsInterface.class), eq("AppMetrica"));
         verify(webView).addJavascriptInterface(any(AppMetricaInitializerJsInterface.class), eq("AppMetricaInitializer"));
         webViewJsInterfaceHandler.setLogger(logger);
-        verify(logger).i("WebView interface setup is successful.");
+        verify(logger).info("WebView interface setup is successful.");
     }
 
     @Test
@@ -102,7 +101,7 @@ public class WebViewJsInterfaceHandlerTest extends CommonTest {
         webViewJsInterfaceHandler.initWebViewReporting(webView, proxy);
         verify(webView).addJavascriptInterface(any(AppMetricaJsInterface.class), eq("AppMetrica"));
         verify(webView).addJavascriptInterface(any(AppMetricaInitializerJsInterface.class), eq("AppMetricaInitializer"));
-        verify(logger).i("WebView interface setup is successful.");
+        verify(logger).info("WebView interface setup is successful.");
     }
 
     @Test
@@ -112,14 +111,14 @@ public class WebViewJsInterfaceHandlerTest extends CommonTest {
         webViewJsInterfaceHandler.initWebViewReporting(webView, proxy);
         verify(webView).addJavascriptInterface(any(AppMetricaJsInterface.class), eq("AppMetrica"));
         verify(webView).addJavascriptInterface(any(AppMetricaInitializerJsInterface.class), eq("AppMetricaInitializer"));
-        verify(logger).i("WebView interface setup is successful.");
+        verify(logger).info("WebView interface setup is successful.");
         clearInvocations(webView, logger);
         webViewJsInterfaceHandler.setLogger(logger);
         verifyNoMoreInteractions(logger);
         webViewJsInterfaceHandler.initWebViewReporting(webView, proxy);
         verify(webView).addJavascriptInterface(any(AppMetricaJsInterface.class), eq("AppMetrica"));
         verify(webView).addJavascriptInterface(any(AppMetricaInitializerJsInterface.class), eq("AppMetricaInitializer"));
-        verify(logger).i("WebView interface setup is successful.");
+        verify(logger).info("WebView interface setup is successful.");
         clearInvocations(webView, logger);
         webViewJsInterfaceHandler.setLogger(logger);
         verifyNoMoreInteractions(logger);

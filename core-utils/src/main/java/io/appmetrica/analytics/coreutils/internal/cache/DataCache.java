@@ -5,7 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.cache.CacheUpdateScheduler;
 import io.appmetrica.analytics.coreapi.internal.cache.UpdateConditionsChecker;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 
 public abstract class DataCache<T> implements UpdateConditionsChecker {
 
@@ -25,7 +25,7 @@ public abstract class DataCache<T> implements UpdateConditionsChecker {
 
     public void updateData(@NonNull T newData) {
         if (shouldUpdate(newData)) {
-            DebugLogger.info(tag, "Update cachedData with value %s", newData);
+            DebugLogger.INSTANCE.info(tag, "Update cachedData with value %s", newData);
             mCachedData.setData(newData);
             if (cacheUpdateScheduler != null) {
                 cacheUpdateScheduler.onStateUpdated();
@@ -36,7 +36,7 @@ public abstract class DataCache<T> implements UpdateConditionsChecker {
     @Nullable
     public T getData() {
         if (shouldUpdate() && cacheUpdateScheduler != null) {
-            DebugLogger.info(
+            DebugLogger.INSTANCE.info(
                     tag,
                     "Cache outdated, so update cached data: cached data = %s",
                     mCachedData

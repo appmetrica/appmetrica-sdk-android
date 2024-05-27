@@ -7,7 +7,7 @@ import io.appmetrica.analytics.impl.utils.JsonHelper;
 import io.appmetrica.analytics.impl.utils.MeasuredJsonMap;
 import io.appmetrica.analytics.impl.utils.PublicLogger;
 import io.appmetrica.analytics.impl.utils.limitation.SimpleMapLimitation;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 
 /**
  * Accumulate event's environment changes on service side. After adding or removing value
@@ -73,7 +73,7 @@ public class AppEnvironment {
         try {
             mValues = new MeasuredJsonMap(value);
         } catch (Throwable e) {
-            DebugLogger.error(TAG, e, "Some problems during parse %s", value);
+            DebugLogger.INSTANCE.error(TAG, e, "Some problems during parse %s", value);
             mValues = new MeasuredJsonMap();
         }
         mSimpleMapLimitation = mapLimitation;

@@ -4,7 +4,7 @@ import android.content.ContentValues;
 import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.util.List;
 import java.util.Locale;
 
@@ -66,7 +66,7 @@ public final class StringUtils {
             try {
                 return value.getBytes("UTF-8");
             } catch (Throwable e) {
-                DebugLogger.error(TAG, e, e.getMessage());
+                DebugLogger.INSTANCE.error(TAG, e, e.getMessage());
             }
         }
         return new byte[0];

@@ -9,7 +9,7 @@ import io.appmetrica.analytics.impl.component.CommonArguments;
 import io.appmetrica.analytics.impl.component.CommutationDispatcherComponent;
 import io.appmetrica.analytics.impl.component.clients.CommutationClientUnit;
 import io.appmetrica.analytics.impl.utils.BooleanUtils;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 
 public class UpdatePreActivationConfigHandler extends CommutationHandler {
 
@@ -34,7 +34,7 @@ public class UpdatePreActivationConfigHandler extends CommutationHandler {
     }
 
     private void updateTrackingLocationStatus(@Nullable Boolean trackingEnabled) {
-        DebugLogger.info(
+        DebugLogger.INSTANCE.info(
             TAG,
             "Update location status for %s: enabled = %s",
             getComponent().getComponentId().toString(),

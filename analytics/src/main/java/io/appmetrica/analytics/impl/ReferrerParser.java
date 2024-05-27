@@ -4,7 +4,7 @@ import android.net.Uri;
 import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,7 +15,7 @@ public class ReferrerParser {
 
     @NonNull
     public DeferredDeeplinkState parseDeferredDeeplinkState(@Nullable String referrer) {
-        DebugLogger.info(TAG, "parse deeplink from referrer: %s", referrer);
+        DebugLogger.INSTANCE.info(TAG, "parse deeplink from referrer: %s", referrer);
         Map<String, String> parameters = splitQuery(referrer);
         String deeplink = Uri.decode(parameters.get(DEFERRED_DEEPLINK_KEY));
         Map<String, String> deeplinkParameters = null;

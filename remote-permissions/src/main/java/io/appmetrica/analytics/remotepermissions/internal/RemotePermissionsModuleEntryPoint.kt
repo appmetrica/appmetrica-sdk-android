@@ -3,7 +3,7 @@ package io.appmetrica.analytics.remotepermissions.internal
 import io.appmetrica.analytics.coreapi.internal.data.Converter
 import io.appmetrica.analytics.coreapi.internal.data.JsonParser
 import io.appmetrica.analytics.coreapi.internal.permission.PermissionStrategy
-import io.appmetrica.analytics.logger.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import io.appmetrica.analytics.modulesapi.internal.common.AskForPermissionStrategyModuleProvider
 import io.appmetrica.analytics.modulesapi.internal.service.LocationServiceExtension
 import io.appmetrica.analytics.modulesapi.internal.service.ModuleRemoteConfig

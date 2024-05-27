@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.db.storage
 import android.content.Context
 import io.appmetrica.analytics.coreutils.internal.io.FileUtils.copyToNullable
 import io.appmetrica.analytics.coreutils.internal.io.FileUtils.move
-import io.appmetrica.analytics.logger.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import java.io.File
 
 internal class DatabaseStoragePathProvider(
@@ -32,7 +32,10 @@ internal class DatabaseStoragePathProvider(
                 } else {
                     var shouldMigrate = true
                     if (!dbParentDir.exists()) {
-                        DebugLogger.info(tag, "Parent directory $dbParentDir does not exist. Trying to create...")
+                        DebugLogger.info(
+                            tag,
+                            "Parent directory $dbParentDir does not exist. Trying to create..."
+                        )
                         val status = dbParentDir.mkdirs()
                         DebugLogger.info(tag, "Parent directory $dbParentDir creating status: $status")
                         if (!status) {

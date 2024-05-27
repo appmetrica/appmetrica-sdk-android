@@ -13,7 +13,7 @@ import io.appmetrica.analytics.impl.db.preferences.PreferencesClientDbStorage;
 import io.appmetrica.analytics.impl.referrer.common.ReferrerChosenListener;
 import io.appmetrica.analytics.impl.referrer.common.ReferrerInfo;
 import io.appmetrica.analytics.impl.referrer.common.ReferrerResultReceiver;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 
 public class ReferrerHelper implements ReferrerChosenListener {
 
@@ -80,14 +80,19 @@ public class ReferrerHelper implements ReferrerChosenListener {
 
     @Override
     public void onReferrerChosen(@Nullable ReferrerInfo referrerInfo) {
-        DebugLogger.info(TAG, "onReferrerChosen: %s", referrerInfo);
+        DebugLogger.INSTANCE.info(TAG, "onReferrerChosen: %s", referrerInfo);
         saveReferrerAndParse(referrerInfo == null ? null : referrerInfo.installReferrer);
     }
 
     private void saveReferrerAndParse(@Nullable String referrer) {
         boolean shouldHandle = !mDeferredDeeplinkWasChecked;
-        DebugLogger.info(TAG, "Should handle referrer %s? %b, because mDeferredDeeplinkWasChecked = %b",
-                referrer, shouldHandle, mDeferredDeeplinkWasChecked);
+        DebugLogger.INSTANCE.info(
+            TAG,
+            "Should handle referrer %s? %b, because mDeferredDeeplinkWasChecked = %b",
+            referrer,
+            shouldHandle,
+            mDeferredDeeplinkWasChecked
+        );
         if (shouldHandle) {
             synchronized (this) {
                 mDeferredDeeplinkStateManager.onDeeplinkLoaded(mReferrerParser.parseDeferredDeeplinkState(referrer));
@@ -96,7 +101,7 @@ public class ReferrerHelper implements ReferrerChosenListener {
     }
 
     public synchronized void requestDeferredDeeplinkParameters(@NonNull DeferredDeeplinkParametersListener listener) {
-        DebugLogger.info(TAG, "requestDeferredDeeplinkParameters for listener: %s", listener);
+        DebugLogger.INSTANCE.info(TAG, "requestDeferredDeeplinkParameters for listener: %s", listener);
         try {
             mDeferredDeeplinkStateManager.requestDeferredDeeplinkParameters(listener);
         } finally {
@@ -105,7 +110,7 @@ public class ReferrerHelper implements ReferrerChosenListener {
     }
 
     public synchronized void requestDeferredDeeplink(@NonNull DeferredDeeplinkListener listener) {
-        DebugLogger.info(TAG, "requestDeferredDeeplink for listener: %s", listener);
+        DebugLogger.INSTANCE.info(TAG, "requestDeferredDeeplink for listener: %s", listener);
         try {
             mDeferredDeeplinkStateManager.requestDeferredDeeplink(listener);
         } finally {

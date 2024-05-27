@@ -34,6 +34,12 @@
   </scm>
   <dependencies>
     <dependency>
+      <groupId>io.appmetrica.analytics</groupId>
+      <artifactId>analytics-common-logger</artifactId>
+      <version>6.6.0</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
       <groupId>org.jetbrains.kotlin</groupId>
       <artifactId>kotlin-stdlib</artifactId>
       <version>1.6.21</version>

@@ -6,7 +6,7 @@ import io.appmetrica.analytics.coreapi.internal.annotations.GeoThread
 import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor
 import io.appmetrica.analytics.coreapi.internal.permission.PermissionResolutionStrategy
 import io.appmetrica.analytics.locationapi.internal.LastKnownLocationExtractor
-import io.appmetrica.analytics.logger.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
 private const val TAG = "[GplLastKnownLocationExtractor]"
 

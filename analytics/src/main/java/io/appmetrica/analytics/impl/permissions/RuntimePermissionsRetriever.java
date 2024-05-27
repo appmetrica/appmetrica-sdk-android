@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.permission.PermissionState;
 import io.appmetrica.analytics.coreutils.internal.services.SafePackageManager;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,10 +48,10 @@ class RuntimePermissionsRetriever implements PermissionRetriever {
             String permissionName = permissions[i];
             if (permissionFlags != null && permissionFlags.length > i &&
                     (permissionFlags[i] & PackageInfo.REQUESTED_PERMISSION_GRANTED) != 0) {
-                DebugLogger.info(TAG, "Permission %s is granted", permissionName);
+                DebugLogger.INSTANCE.info(TAG, "Permission %s is granted", permissionName);
                 stateList.add(new PermissionState(permissionName, true));
             } else {
-                DebugLogger.info(TAG, "Permission %s is not granted", permissionName);
+                DebugLogger.INSTANCE.info(TAG, "Permission %s is not granted", permissionName);
                 stateList.add(new PermissionState(permissionName, false));
             }
         }

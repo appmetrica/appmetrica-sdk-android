@@ -3,7 +3,7 @@ package io.appmetrica.analytics.networktasks.internal;
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.executors.InterruptionSafeThread;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import io.appmetrica.analytics.networktasks.impl.NetworkTaskRunnable;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +32,7 @@ public class NetworkCore extends InterruptionSafeThread {
     }
 
     public void startTask(final NetworkTask networkTask) {
-        DebugLogger.info(TAG, "Try to start task %s", networkTask.description());
+        DebugLogger.INSTANCE.info(TAG, "Try to start task %s", networkTask.description());
         synchronized (mAddTaskLock) {
             final QueueTaskEntry taskEntry = new QueueTaskEntry(networkTask);
 
@@ -41,18 +41,25 @@ public class NetworkCore extends InterruptionSafeThread {
             if (isRunning() && !containsTaskEntry(taskEntry)) {
                 if (taskEntry.networkTask.onTaskAdded()) {
                     final boolean isOfferOK = mTasksQueue.offer(taskEntry);
-                    DebugLogger.info(TAG, "Task was added: %s, desc: %s", isOfferOK, networkTask.description());
+                    DebugLogger.INSTANCE.info(
+                        TAG,
+                        "Task was added: %s, desc: %s",
+                        isOfferOK,
+                        networkTask.description()
+                    );
                 } else {
-                    DebugLogger.info(TAG, "Task %s was not added because its state is inconsistent",
-                            networkTask.description());
+                    DebugLogger.INSTANCE.info(
+                        TAG,
+                        "Task %s was not added because its state is inconsistent",
+                        networkTask.description());
                 }
             } else {
-                DebugLogger.info(TAG,
-                        "Task %s was not added because there is another entry. " +
-                                "Current task: %s, queue size: %d",
-                        networkTask.description(),
-                        mCurrentTask,
-                        mTasksQueue.size()
+                DebugLogger.INSTANCE.info(
+                    TAG,
+                    "Task %s was not added because there is another entry. Current task: %s, queue size: %d",
+                    networkTask.description(),
+                    mCurrentTask,
+                    mTasksQueue.size()
                 );
             }
         }
@@ -60,14 +67,14 @@ public class NetworkCore extends InterruptionSafeThread {
 
     public void stopTasks() {
         synchronized (mStopTasksLock) {
-            DebugLogger.info(TAG, "NetworkCore shall stop");
+            DebugLogger.INSTANCE.info(TAG, "NetworkCore shall stop");
             QueueTaskEntry entry = mCurrentTask;
             if (entry != null) {
                 entry.networkTask.onTaskRemoved();
             }
             List<QueueTaskEntry> queueTaskEntries = new ArrayList<QueueTaskEntry>(mTasksQueue.size());
             mTasksQueue.drainTo(queueTaskEntries);
-            DebugLogger.info(TAG, "Remove %d tasks from queue", queueTaskEntries.size());
+            DebugLogger.INSTANCE.info(TAG, "Remove %d tasks from queue", queueTaskEntries.size());
             for (QueueTaskEntry queueTaskEntry : queueTaskEntries) {
                 queueTaskEntry.networkTask.onTaskRemoved();
             }
@@ -76,12 +83,12 @@ public class NetworkCore extends InterruptionSafeThread {
 
     @Override
     public void run() {
-        DebugLogger.info(TAG, "Starting tasks processing ...");
+        DebugLogger.INSTANCE.info(TAG, "Starting tasks processing ...");
 
         NetworkTask networkTask = null;
         while (isRunning()) {
             try {
-                DebugLogger.info(TAG, "Getting task ...");
+                DebugLogger.INSTANCE.info(TAG, "Getting task ...");
                 synchronized (mStopTasksLock) {}
                 mCurrentTask = mTasksQueue.take();
 
@@ -90,7 +97,7 @@ public class NetworkCore extends InterruptionSafeThread {
                 networkTask.getExecutor().execute(runnableProvider.create(networkTask, this));
 
             } catch (InterruptedException ex) {
-                DebugLogger.error(TAG, ex);
+                DebugLogger.INSTANCE.error(TAG, ex);
             } finally {
                 synchronized (mStopTasksLock) {
                     mCurrentTask = null;
@@ -98,13 +105,13 @@ public class NetworkCore extends InterruptionSafeThread {
                         networkTask.onTaskFinished();
                         networkTask.onTaskRemoved();
                     } else {
-                        DebugLogger.warning(TAG, "Network task is null");
+                        DebugLogger.INSTANCE.warning(TAG, "Network task is null");
                     }
                 }
             }
         }
 
-        DebugLogger.info(TAG, "Stopping tasks processing ...");
+        DebugLogger.INSTANCE.info(TAG, "Stopping tasks processing ...");
     }
 
     private boolean containsTaskEntry(QueueTaskEntry entry) {

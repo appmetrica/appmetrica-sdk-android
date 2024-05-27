@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import io.appmetrica.analytics.impl.CounterConfigurationReporterType;
 import io.appmetrica.analytics.impl.client.ClientConfiguration;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 
 public class ClientDescription {
 
@@ -28,7 +28,7 @@ public class ClientDescription {
         mProcessID = processID;
         mProcessSessionID = processSessionID;
         mReporterType = reporterType;
-        DebugLogger.info(
+        DebugLogger.INSTANCE.info(
             TAG,
             "create ClientDescription for next arguments: " +
                 "package %s, apiKey %s, processId %d, psid %s, reporter_type: %s",

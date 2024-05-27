@@ -3,7 +3,7 @@ package io.appmetrica.analytics.internal.js;
 import android.webkit.JavascriptInterface;
 import androidx.annotation.NonNull;
 import io.appmetrica.analytics.impl.proxy.AppMetricaProxy;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 
 /**
  * This class is used as a bridge between JavaScript and native code.
@@ -28,7 +28,7 @@ public class AppMetricaInitializerJsInterface {
      */
     @JavascriptInterface
     public void init(final String value) {
-        DebugLogger.info(TAG, "init");
+        DebugLogger.INSTANCE.info(TAG, "init");
         proxy.reportJsInitEvent(value);
     }
 }

@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.coreutils.internal.parsing;
 
 import androidx.annotation.Nullable;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 
 public class ParseUtils {
 
@@ -31,7 +31,7 @@ public class ParseUtils {
         try {
             return Long.parseLong(longString);
         } catch (NumberFormatException e) {
-            DebugLogger.error(TAG, e, e.getMessage());
+            DebugLogger.INSTANCE.error(TAG, e, e.getMessage());
         }
         return null;
     }
@@ -41,7 +41,7 @@ public class ParseUtils {
         try {
             return Float.parseFloat(floatString);
         } catch (NumberFormatException e) {
-            DebugLogger.error(TAG, e, e.getMessage());
+            DebugLogger.INSTANCE.error(TAG, e, e.getMessage());
         }
         return null;
     }
@@ -51,7 +51,7 @@ public class ParseUtils {
         try {
             return Integer.parseInt(intString);
         } catch (NumberFormatException e) {
-            DebugLogger.error(TAG, e, e.getMessage());
+            DebugLogger.INSTANCE.error(TAG, e, e.getMessage());
         }
         return null;
     }
@@ -62,7 +62,7 @@ public class ParseUtils {
             try {
                 return Integer.valueOf(intString);
             } catch (NumberFormatException e) {
-                DebugLogger.error(TAG, e);
+                DebugLogger.INSTANCE.error(TAG, e);
             }
         }
         return null;

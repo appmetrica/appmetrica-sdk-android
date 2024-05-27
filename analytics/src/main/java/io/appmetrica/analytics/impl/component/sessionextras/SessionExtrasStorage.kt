@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.component.sessionextras
 import android.content.Context
 import io.appmetrica.analytics.impl.component.ComponentId
 import io.appmetrica.analytics.impl.db.storage.DatabaseStorageFactory
-import io.appmetrica.analytics.logger.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
 class SessionExtrasStorage(context: Context, componentId: ComponentId) {
 

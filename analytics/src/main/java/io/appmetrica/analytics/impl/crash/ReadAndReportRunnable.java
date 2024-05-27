@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.crash;
 import androidx.annotation.NonNull;
 import io.appmetrica.analytics.coreapi.internal.backport.Consumer;
 import io.appmetrica.analytics.coreapi.internal.backport.Function;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.io.File;
 
 public class ReadAndReportRunnable<Output> implements Runnable {
@@ -37,13 +37,13 @@ public class ReadAndReportRunnable<Output> implements Runnable {
             try {
                 Output result = fileReader.apply(crashFile);
                 if (result != null) {
-                    DebugLogger.info(TAG, "for file %s result is %s", crashFile.getName(), result);
+                    DebugLogger.INSTANCE.info(TAG, "for file %s result is %s", crashFile.getName(), result);
                     crashConsumer.consume(result);
                 } else {
-                    DebugLogger.info(TAG, "for file %s result is null", crashFile.getName());
+                    DebugLogger.INSTANCE.info(TAG, "for file %s result is null", crashFile.getName());
                 }
             } catch (Throwable exception) {
-                DebugLogger.error(
+                DebugLogger.INSTANCE.error(
                     TAG,
                     exception,
                     "can't handle crash in file %s due to Exception",

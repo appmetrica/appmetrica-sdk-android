@@ -6,7 +6,7 @@ import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor
 import io.appmetrica.analytics.coreutils.internal.reflection.ReflectionUtils
 import io.appmetrica.analytics.gpllibrary.internal.GplLibraryWrapper
 import io.appmetrica.analytics.gpllibrary.internal.IGplLibraryWrapper
-import io.appmetrica.analytics.logger.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import java.util.concurrent.TimeUnit
 
 private const val TAG = "[GplWrapperFactory]"

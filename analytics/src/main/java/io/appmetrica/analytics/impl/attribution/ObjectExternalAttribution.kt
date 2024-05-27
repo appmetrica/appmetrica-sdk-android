@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.attribution
 
 import io.appmetrica.analytics.impl.protobuf.backend.ExternalAttribution.ClientExternalAttribution
-import io.appmetrica.analytics.logger.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import org.json.JSONObject
 
 class ObjectExternalAttribution(

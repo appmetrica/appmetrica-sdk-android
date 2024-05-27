@@ -8,8 +8,7 @@ import io.appmetrica.analytics.coreapi.internal.clientcomponents.ClientComponent
 import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor;
 import io.appmetrica.analytics.impl.clientcomponents.ClientComponentsInitializerProvider;
 import io.appmetrica.analytics.impl.crash.client.ICrashProcessor;
-import io.appmetrica.analytics.impl.utils.LoggerWithApiKey;
-import io.appmetrica.analytics.impl.utils.PublicLogger;
+import io.appmetrica.analytics.logger.common.internal.BaseReleaseLogger;
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.MockedConstructionRule;
@@ -57,9 +56,7 @@ public class AppMetricaServiceCoreTest extends CommonTest {
     public final ClientServiceLocatorRule mClientServiceLocatorRule = new ClientServiceLocatorRule();
 
     @Rule
-    public final MockedStaticRule<PublicLogger> sPublicLogger = new MockedStaticRule<>(PublicLogger.class);
-    @Rule
-    public final MockedStaticRule<LoggerWithApiKey> sLoggerWithApiKey = new MockedStaticRule<>(LoggerWithApiKey.class);
+    public final MockedStaticRule<BaseReleaseLogger> releaseLoggerRule = new MockedStaticRule<>(BaseReleaseLogger.class);
     @Rule
     public final MockedStaticRule<SdkUtils> sSdkUtils = new MockedStaticRule<>(SdkUtils.class);
     @Rule
@@ -97,10 +94,10 @@ public class AppMetricaServiceCoreTest extends CommonTest {
     @Test
     public void constructor() {
         verify(mClientTimeTracker).trackCoreCreation();
-        sLoggerWithApiKey.getStaticMock().verify(new MockedStatic.Verification() {
+        releaseLoggerRule.getStaticMock().verify(new MockedStatic.Verification() {
             @Override
             public void apply() {
-                LoggerWithApiKey.init(mContext);
+                BaseReleaseLogger.init(mContext);
             }
         });
         sSdkUtils.getStaticMock().verify(

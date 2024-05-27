@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.startup.uuid
 
-import io.appmetrica.analytics.logger.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import java.util.UUID
 
 class UuidValidator {

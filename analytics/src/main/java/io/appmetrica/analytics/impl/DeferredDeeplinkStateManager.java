@@ -6,7 +6,7 @@ import io.appmetrica.analytics.DeferredDeeplinkListener;
 import io.appmetrica.analytics.DeferredDeeplinkParametersListener;
 import io.appmetrica.analytics.coreutils.internal.StringUtils;
 import io.appmetrica.analytics.coreutils.internal.WrapUtils;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.util.Map;
 
 public class DeferredDeeplinkStateManager {
@@ -30,14 +30,14 @@ public class DeferredDeeplinkStateManager {
     }
 
     public void onDeeplinkLoaded(@Nullable DeferredDeeplinkState deferredDeeplinkState) {
-        DebugLogger.info(TAG, "onDeeplinkLoaded: %s", deferredDeeplinkState);
+        DebugLogger.INSTANCE.info(TAG, "onDeeplinkLoaded: %s", deferredDeeplinkState);
         mDeferredDeeplinkState = deferredDeeplinkState;
         notifyListenerIfNeeded();
     }
 
     private void notifyListenersOnError(@NonNull Error error) {
         String referrer = mDeferredDeeplinkState == null ? null : mDeferredDeeplinkState.mUnparsedReferrer;
-        DebugLogger.info(TAG, "onError: %s, referrer: %s.", error, referrer);
+        DebugLogger.INSTANCE.info(TAG, "onError: %s, referrer: %s.", error, referrer);
         notifyDeeplinkListenerOnError(error, referrer);
         notifyParametersListenerOnError(error, referrer);
     }
@@ -53,7 +53,7 @@ public class DeferredDeeplinkStateManager {
     }
 
     private void requestSomeDeferredDeeplinkInfo() {
-        DebugLogger.info(
+        DebugLogger.INSTANCE.info(
             TAG,
             "requestSomeDeferredDeeplinkInfo. mDeferredDeeplinkWasChecked: %b, state: %s",
             mDeferredDeeplinkWasChecked,
@@ -67,7 +67,7 @@ public class DeferredDeeplinkStateManager {
     }
 
     private void notifyListenerIfNeeded() {
-        DebugLogger.info(TAG, "notifyListenerIfNeeded: %s", mDeferredDeeplinkState);
+        DebugLogger.INSTANCE.info(TAG, "notifyListenerIfNeeded: %s", mDeferredDeeplinkState);
         if (mDeferredDeeplinkState != null) {
             if (mDeferredDeeplinkState.mDeeplink != null) {
                 notifyDeeplinkListener(mDeferredDeeplinkState.mDeeplink);
@@ -85,7 +85,7 @@ public class DeferredDeeplinkStateManager {
     }
 
     private void notifyDeeplinkListener(@NonNull String deeplink) {
-        DebugLogger.info(
+        DebugLogger.INSTANCE.info(
             TAG,
             "notifyDeeplinkListener. Deeplink: %s, listener: %s",
             deeplink,
@@ -98,7 +98,7 @@ public class DeferredDeeplinkStateManager {
     }
 
     private void notifyParametersListener(@NonNull Map<String, String> parameters) {
-        DebugLogger.info(
+        DebugLogger.INSTANCE.info(
             TAG,
             "notifyParametersListener. Parameters: %s, listener: %s",
             parameters,
@@ -111,7 +111,7 @@ public class DeferredDeeplinkStateManager {
     }
 
     private void notifyDeeplinkListenerOnError(@NonNull Error error, @Nullable String unparsedReferrer) {
-        DebugLogger.info(
+        DebugLogger.INSTANCE.info(
             TAG,
             "notifyDeeplinkListenerOnError. Error: %s, unparsed referrer: %s, listener: %s",
             error,
@@ -128,7 +128,7 @@ public class DeferredDeeplinkStateManager {
     }
 
     private void notifyParametersListenerOnError(@NonNull Error error, @Nullable String unparsedReferrer) {
-        DebugLogger.info(
+        DebugLogger.INSTANCE.info(
             TAG,
             "notifyDeeplinkLParameterListenerOnError. Error: %s, unparsed referrer: %s, listener: %s",
             error,

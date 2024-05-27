@@ -2,7 +2,7 @@ package io.appmetrica.analytics.coreutils.internal.system;
 
 import android.os.Build;
 import io.appmetrica.analytics.coreutils.internal.AndroidUtils;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.io.File;
 
 @SuppressWarnings("checkstyle:rawFileCreation")
@@ -27,7 +27,7 @@ public final class RootChecker {
         try {
             final File file = new File(SYSTEM_APP_SUPERUSER_APK_LOLLIPOP);
             if (file.exists()) {
-                DebugLogger.info(TAG, "Detected ROOT_STATUS via superuser APK");
+                DebugLogger.INSTANCE.info(TAG, "Detected ROOT_STATUS via superuser APK");
                 return true;
             }
         } catch (Throwable error) {
@@ -45,7 +45,7 @@ public final class RootChecker {
                     hasRoot = new File(path + "su").exists();
                 }
                 if (hasRoot) {
-                    DebugLogger.info(TAG, "Detected ROOT_STATUS via native lib");
+                    DebugLogger.INSTANCE.info(TAG, "Detected ROOT_STATUS via native lib");
                     return true;
                 }
             } catch (Throwable thr) {

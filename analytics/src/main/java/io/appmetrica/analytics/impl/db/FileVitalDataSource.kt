@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.db
 import android.content.Context
 import io.appmetrica.analytics.coreutils.internal.io.FileUtils
 import io.appmetrica.analytics.coreutils.internal.io.FileUtils.copyToNullable
-import io.appmetrica.analytics.logger.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
 private const val TAG = "[FileVitalDataSource]"
 

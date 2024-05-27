@@ -17,14 +17,12 @@ public class BytesTrimmer extends BaseTrimmer<byte[]> {
         if (data != null && data.length > getMaxSize()) {
             result = new byte[getMaxSize()];
             System.arraycopy(data, 0, result, 0, getMaxSize());
-            if (mPublicLogger.isEnabled()) {
-                mPublicLogger.fw(
-                        "\"%s\" %s exceeded limit of %d bytes",
-                        getLogName(),
-                        data,
-                        getMaxSize()
-                );
-            }
+            mPublicLogger.warning(
+                "\"%s\" %s exceeded limit of %d bytes",
+                getLogName(),
+                data,
+                getMaxSize()
+            );
         }
         return result;
     }

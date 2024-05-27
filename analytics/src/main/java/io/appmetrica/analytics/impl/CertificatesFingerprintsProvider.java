@@ -14,7 +14,7 @@ import io.appmetrica.analytics.coreutils.internal.AndroidUtils;
 import io.appmetrica.analytics.coreutils.internal.StringUtils;
 import io.appmetrica.analytics.coreutils.internal.services.SafePackageManager;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesComponentDbStorage;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -88,7 +88,7 @@ public class CertificatesFingerprintsProvider {
                 }
             }
         } catch (Throwable th) {
-            DebugLogger.error(TAG, th);
+            DebugLogger.INSTANCE.error(TAG, th);
         }
         Collections.sort(fingerprints);
         return fingerprints;
@@ -114,7 +114,7 @@ public class CertificatesFingerprintsProvider {
                     MessageDigest.getInstance(SHA1).digest(signature.toByteArray())
             );
         } catch (Throwable th) {
-            DebugLogger.error(TAG, th);
+            DebugLogger.INSTANCE.error(TAG, th);
             return null;
         }
     }

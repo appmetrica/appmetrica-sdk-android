@@ -2,7 +2,7 @@ package io.appmetrica.analytics.networktasks.impl
 
 import android.text.TextUtils
 import io.appmetrica.analytics.coreutils.internal.collection.CollectionUtils
-import io.appmetrica.analytics.logger.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import io.appmetrica.analytics.network.internal.NetworkClient
 import io.appmetrica.analytics.network.internal.Request
 import io.appmetrica.analytics.networktasks.internal.NetworkTask

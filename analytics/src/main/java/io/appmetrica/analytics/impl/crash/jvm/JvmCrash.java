@@ -12,7 +12,7 @@ import io.appmetrica.analytics.impl.client.ProcessConfiguration;
 import io.appmetrica.analytics.impl.utils.JSONable;
 import io.appmetrica.analytics.impl.utils.JsonHelper;
 import io.appmetrica.analytics.internal.CounterConfiguration;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.util.HashMap;
 import java.util.Map;
 import org.json.JSONException;
@@ -73,7 +73,7 @@ public class JvmCrash implements JSONable {
                     }
                 }
             } catch (Throwable th) {
-                DebugLogger.error(TAG, th);
+                DebugLogger.INSTANCE.error(TAG, th);
             }
         }
         JSONObject processConfiguration = jsonObject.getJSONObject(PROCESS_CONFIGURATION);

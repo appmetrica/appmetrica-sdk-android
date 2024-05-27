@@ -5,7 +5,7 @@ import androidx.annotation.VisibleForTesting
 import androidx.annotation.WorkerThread
 import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.referrer.common.ReferrerInfo
-import io.appmetrica.analytics.logger.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
 class ReferrerAggregator @VisibleForTesting internal constructor(
     private val referrerHolder: ReferrerHolder,

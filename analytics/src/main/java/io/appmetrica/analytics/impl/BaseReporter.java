@@ -39,7 +39,7 @@ import io.appmetrica.analytics.impl.utils.limitation.SimpleMapLimitation;
 import io.appmetrica.analytics.impl.utils.validation.ValidationResult;
 import io.appmetrica.analytics.impl.utils.validation.Validator;
 import io.appmetrica.analytics.impl.utils.validation.revenue.RevenueValidator;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import io.appmetrica.analytics.plugins.IPluginReporter;
 import io.appmetrica.analytics.plugins.PluginErrorDetails;
 import io.appmetrica.analytics.profile.UserProfile;
@@ -153,9 +153,7 @@ public abstract class BaseReporter implements IBaseReporter {
 
     public void putErrorEnvironmentValue(String key, String value) {
         if (TextUtils.isEmpty(key)) {
-            if (mPublicLogger.isEnabled()) {
-                mPublicLogger.fw("Invalid Error Environment (key,value) pair: (%s,%s).", key, value);
-            }
+            mPublicLogger.warning("Invalid Error Environment (key,value) pair: (%s,%s).", key, value);
         } else {
             mReporterEnvironment.putErrorEnvironmentValue(key, value);
         }
@@ -180,9 +178,7 @@ public abstract class BaseReporter implements IBaseReporter {
     @Override
     public void putAppEnvironmentValue(String key, String value) {
         if (TextUtils.isEmpty(key)) {
-            if (mPublicLogger.isEnabled()) {
-                mPublicLogger.fw("Invalid App Environment (key,value) pair: (%s,%s).", key, value);
-            }
+            mPublicLogger.warning("Invalid App Environment (key,value) pair: (%s,%s).", key, value);
         } else {
             mReportsHandler.sendAppEnvironmentValue(key, value, mReporterEnvironment);
         }
@@ -196,9 +192,7 @@ public abstract class BaseReporter implements IBaseReporter {
     @Override
     public void resumeSession() {
         onResumeForegroundSession(null);
-        if (mPublicLogger.isEnabled()) {
-            mPublicLogger.i("Resume session");
-        }
+        mPublicLogger.info("Resume session");
     }
 
     void onResumeForegroundSession(String name) {
@@ -219,9 +213,7 @@ public abstract class BaseReporter implements IBaseReporter {
 
     @Override
     public void pauseSession() {
-        if (mPublicLogger.isEnabled()) {
-            mPublicLogger.i("Pause session");
-        }
+        mPublicLogger.info("Pause session");
         onPauseForegroundSession(null);
     }
 
@@ -245,9 +237,7 @@ public abstract class BaseReporter implements IBaseReporter {
 
     @Override
     public void reportEvent(@NonNull String eventName) {
-        if (mPublicLogger.isEnabled()) {
-            logEvent(eventName);
-        }
+        mPublicLogger.info("Event received: " + WrapUtils.wrapToTag(eventName));
         mReportsHandler.reportEvent(
             EventsManager.regularEventReportEntry(eventName, mPublicLogger),
             mReporterEnvironment
@@ -256,9 +246,10 @@ public abstract class BaseReporter implements IBaseReporter {
 
     @Override
     public void reportEvent(@NonNull String eventName, final String jsonValue) {
-        if (mPublicLogger.isEnabled()) {
-            logEvent(eventName, jsonValue);
-        }
+        mPublicLogger.info(
+            "Event received: " + WrapUtils.wrapToTag(eventName) +
+                ". With value: " + WrapUtils.wrapToTag(jsonValue)
+        );
         mReportsHandler.reportEvent(
             EventsManager.regularEventReportEntry(eventName, jsonValue, mPublicLogger),
             mReporterEnvironment
@@ -273,27 +264,10 @@ public abstract class BaseReporter implements IBaseReporter {
             getEnvironment(),
             attributesCopy
         );
-        if (mPublicLogger.isEnabled()) {
-            logEvent(eventName, attributesCopy == null ? null : attributesCopy.toString());
-        }
-    }
-
-    private void logEvent(String name) {
-        if (mPublicLogger.isEnabled()) {
-            StringBuilder builder = new StringBuilder("Event received: ");
-            builder.append(WrapUtils.wrapToTag(name));
-            mPublicLogger.i(builder.toString());
-        }
-    }
-
-    private void logEvent(String name, String value) {
-        if (mPublicLogger.isEnabled()) {
-            StringBuilder builder = new StringBuilder("Event received: ");
-            builder.append(WrapUtils.wrapToTag(name));
-            builder.append(". With value: ");
-            builder.append(WrapUtils.wrapToTag(value));
-            mPublicLogger.i(builder.toString());
-        }
+        mPublicLogger.info(
+            "Event received: " + WrapUtils.wrapToTag(eventName) +
+                ". With value: " + WrapUtils.wrapToTag(attributesCopy == null ? null : attributesCopy.toString())
+        );
     }
 
     @Override
@@ -301,7 +275,7 @@ public abstract class BaseReporter implements IBaseReporter {
         @NonNull final ModuleEvent moduleEvent
     ) {
         if (reservedEventType(moduleEvent.getType())) {
-            DebugLogger.warning(
+            DebugLogger.INSTANCE.warning(
                 TAG,
                 "Try to send custom event with event type = %s, reserved for metrica usage only",
                 String.valueOf(moduleEvent.getType())
@@ -344,9 +318,7 @@ public abstract class BaseReporter implements IBaseReporter {
                 MessageNano.toByteArray(regularErrorConverter.fromModel(regularError)),
                 mPublicLogger
         ), mReporterEnvironment);
-        if (mPublicLogger.isEnabled()) {
-            mPublicLogger.fi("Error received: %s", WrapUtils.wrapToTag(message));
-        }
+        mPublicLogger.info("Error received: %s", WrapUtils.wrapToTag(message));
     }
 
     @Override
@@ -372,12 +344,10 @@ public abstract class BaseReporter implements IBaseReporter {
             ),
             mReporterEnvironment
         );
-        if (mPublicLogger.isEnabled()) {
-            mPublicLogger.fi("Error received: id: %s, message: %s",
-                WrapUtils.wrapToTag(identifier),
-                WrapUtils.wrapToTag(message)
-            );
-        }
+        mPublicLogger.info("Error received: id: %s, message: %s",
+            WrapUtils.wrapToTag(identifier),
+            WrapUtils.wrapToTag(message)
+        );
     }
 
     @NonNull
@@ -405,7 +375,7 @@ public abstract class BaseReporter implements IBaseReporter {
 
     @Override
     public void sendEventsBuffer() {
-        DebugLogger.info(
+        DebugLogger.INSTANCE.info(
             TAG,
             "Send event buffer for %s.",
             mReporterEnvironment.getReporterConfiguration().getApiKey()
@@ -441,22 +411,14 @@ public abstract class BaseReporter implements IBaseReporter {
                 mExtraMetaInfoRetriever.isOffline()
         );
         mReportsHandler.reportUnhandledException(unhandledException, mReporterEnvironment);
-        logUnhandledException(unhandledException);
+        mPublicLogger.info("Unhandled exception received: " + unhandledException);
     }
 
     @Override
     // crash: send synchronously
     public void reportUnhandledException(@NonNull UnhandledException unhandledException) {
         mReportsHandler.reportCrash(unhandledException, mReporterEnvironment);
-        logUnhandledException(unhandledException);
-    }
-
-    protected void logUnhandledException(@NonNull UnhandledException unhandledException) {
-        if (mPublicLogger.isEnabled()) {
-            StringBuilder builder = new StringBuilder("Unhandled exception received: ");
-            builder.append(unhandledException.toString());
-            mPublicLogger.i(builder.toString());
-        }
+        mPublicLogger.info("Unhandled exception received: " + unhandledException);
     }
 
     @Override
@@ -468,27 +430,13 @@ public abstract class BaseReporter implements IBaseReporter {
         ValidationResult revenueValidation = ValidatorProvider.getRevenueValidator().validate(revenue);
         if (revenueValidation.isValid()) {
             mReportsHandler.sendRevenue(new RevenueWrapper(revenue, mPublicLogger), mReporterEnvironment);
-            logRevenue(revenue);
+            mPublicLogger.info("Revenue received " +
+                "for productID: " + WrapUtils.wrapToTag(revenue.productID) +
+                " of quantity: " + WrapUtils.wrapToTag(revenue.quantity) +
+                " with price (in micros): " + revenue.priceMicros + " " + revenue.currency
+            );
         } else {
-            if (mPublicLogger.isEnabled()) {
-                mPublicLogger.w("Passed revenue is not valid. Reason: "
-                        + revenueValidation.getDescription());
-            }
-        }
-    }
-
-    private void logRevenue(@NonNull Revenue revenue) {
-        if (mPublicLogger.isEnabled()) {
-            StringBuilder builder = new StringBuilder("Revenue received ");
-            builder.append("for productID: ");
-            builder.append(WrapUtils.wrapToTag(revenue.productID));
-            builder.append(" of quantity: ");
-            builder.append(WrapUtils.wrapToTag(revenue.quantity));
-            builder.append(" with price (in micros): ");
-            builder.append(revenue.priceMicros);
-            builder.append(" ");
-            builder.append(revenue.currency);
-            mPublicLogger.i(builder.toString());
+            mPublicLogger.warning("Passed revenue is not valid. Reason: " + revenueValidation.getDescription());
         }
     }
 
@@ -503,39 +451,31 @@ public abstract class BaseReporter implements IBaseReporter {
             new AdRevenueWrapper(adRevenue, autoCollected, mPublicLogger),
             mReporterEnvironment
         );
-        logAdRevenue(adRevenue, autoCollected);
-    }
-
-    private void logAdRevenue(@NonNull AdRevenue adRevenue, boolean autoCollected) {
-        if (mPublicLogger.isEnabled()) {
-            mPublicLogger.i(
-                    "AdRevenue Received: AdRevenue{" +
-                            "adRevenue=" + adRevenue.adRevenue +
-                            ", currency='" + WrapUtils.wrapToTag(adRevenue.currency.getCurrencyCode()) + '\'' +
-                            ", adType=" + WrapUtils.wrapToTag(adRevenue.adType) +
-                            ", adNetwork='" + WrapUtils.wrapToTag(adRevenue.adNetwork) + '\'' +
-                            ", adUnitId='" + WrapUtils.wrapToTag(adRevenue.adUnitId) + '\'' +
-                            ", adUnitName='" + WrapUtils.wrapToTag(adRevenue.adUnitName) + '\'' +
-                            ", adPlacementId='" + WrapUtils.wrapToTag(adRevenue.adPlacementId) + '\'' +
-                            ", adPlacementName='" + WrapUtils.wrapToTag(adRevenue.adPlacementName) + '\'' +
-                            ", precision='" + WrapUtils.wrapToTag(adRevenue.precision) + '\'' +
-                            ", payload=" +  JsonHelper.mapToJsonString(adRevenue.payload) +
-                            ", autoCollected=" + autoCollected +
-                            '}'
-            );
-        }
+        mPublicLogger.info(
+            "AdRevenue Received: AdRevenue{" +
+                "adRevenue=" + adRevenue.adRevenue +
+                ", currency='" + WrapUtils.wrapToTag(adRevenue.currency.getCurrencyCode()) + '\'' +
+                ", adType=" + WrapUtils.wrapToTag(adRevenue.adType) +
+                ", adNetwork='" + WrapUtils.wrapToTag(adRevenue.adNetwork) + '\'' +
+                ", adUnitId='" + WrapUtils.wrapToTag(adRevenue.adUnitId) + '\'' +
+                ", adUnitName='" + WrapUtils.wrapToTag(adRevenue.adUnitName) + '\'' +
+                ", adPlacementId='" + WrapUtils.wrapToTag(adRevenue.adPlacementId) + '\'' +
+                ", adPlacementName='" + WrapUtils.wrapToTag(adRevenue.adPlacementName) + '\'' +
+                ", precision='" + WrapUtils.wrapToTag(adRevenue.precision) + '\'' +
+                ", payload=" +  JsonHelper.mapToJsonString(adRevenue.payload) +
+                ", autoCollected=" + autoCollected +
+                "}"
+        );
     }
 
     @Override
     public void reportECommerce(@NonNull ECommerceEvent event) {
-        DebugLogger.info(
+        DebugLogger.INSTANCE.info(
             ECommerceConstants.FEATURE_TAG + getTag(),
             "receive e-commerce event: %s",
             event
         );
-        if (mPublicLogger.isEnabled()) {
-            mPublicLogger.i("E-commerce event received: " + event.getPublicDescription());
-        }
+        mPublicLogger.info("E-commerce event received: " + event.getPublicDescription());
         mReportsHandler.sendECommerce(event, mReporterEnvironment);
     }
 
@@ -556,30 +496,16 @@ public abstract class BaseReporter implements IBaseReporter {
         ValidationResult result = sUserProfileNonEmptyValidator.validate(protobuf);
         if (result.isValid()) {
             mReportsHandler.sendUserProfile(protobuf, mReporterEnvironment);
-            logUserProfile();
+            mPublicLogger.info("User profile received"); //todo https://nda.ya.ru/t/uF3haggP6Njj6h
         } else {
-            if (mPublicLogger.isEnabled()) {
-                mPublicLogger.w("UserInfo wasn't sent because " + result.getDescription());
-            }
-        }
-    }
-
-    private void logUserProfile() {
-        if (mPublicLogger.isEnabled()) {
-            StringBuilder builder = new StringBuilder("User profile received");
-            mPublicLogger.i(builder.toString());
-            //todo (ddzina) https://nda.ya.ru/t/uF3haggP6Njj6h
+            mPublicLogger.warning("UserInfo wasn't sent because " + result.getDescription());
         }
     }
 
     @Override
     public void setUserProfileID(@Nullable String userProfileID) {
         mReportsHandler.setUserProfileID(userProfileID, mReporterEnvironment);
-        if (mPublicLogger.isEnabled()) {
-            StringBuilder builder = new StringBuilder("Set user profile ID: ");
-            builder.append(WrapUtils.wrapToTag(userProfileID));
-            mPublicLogger.i(builder.toString());
-        }
+        mPublicLogger.info("Set user profile ID: " + WrapUtils.wrapToTag(userProfileID));
     }
 
     @Override
@@ -601,7 +527,10 @@ public abstract class BaseReporter implements IBaseReporter {
 
     @Override
     public void reportJsEvent(@NonNull String eventName, @Nullable String eventValue) {
-        logEvent(eventName, eventValue);
+        mPublicLogger.info(
+            "Event received: " + WrapUtils.wrapToTag(eventName) +
+            ". With value: " + WrapUtils.wrapToTag(eventValue)
+        );
         mReportsHandler.reportEvent(
             ClientCounterReport.formJsEvent(eventName, eventValue, mPublicLogger),
             mReporterEnvironment
@@ -618,7 +547,7 @@ public abstract class BaseReporter implements IBaseReporter {
 
     @Override
     public void reportUnhandledException(@NonNull PluginErrorDetails errorDetails) {
-        DebugLogger.info(TAG, "report unhandled exception from plugin %s",
+        DebugLogger.INSTANCE.info(TAG, "report unhandled exception from plugin %s",
                 PluginErrorDetailsExtensionKt.toLogString(errorDetails));
         UnhandledException unhandledException = pluginErrorDetailsConverter.toUnhandledException(errorDetails);
         mReportsHandler.reportEvent(
@@ -629,14 +558,12 @@ public abstract class BaseReporter implements IBaseReporter {
             ),
             mReporterEnvironment
         );
-        if (mPublicLogger.isEnabled()) {
-            mPublicLogger.fi("Crash from plugin received: %s", WrapUtils.wrapToTag(errorDetails.getMessage()));
-        }
+        mPublicLogger.info("Crash from plugin received: %s", WrapUtils.wrapToTag(errorDetails.getMessage()));
     }
 
     @Override
     public void reportError(@NonNull PluginErrorDetails errorDetails, @Nullable String message) {
-        DebugLogger.info(TAG, "report error from plugin. Message: %s, error %s",
+        DebugLogger.INSTANCE.info(TAG, "report error from plugin. Message: %s, error %s",
                 message, PluginErrorDetailsExtensionKt.toLogString(errorDetails));
         RegularError error = pluginErrorDetailsConverter.toRegularError(message, errorDetails);
         mReportsHandler.reportEvent(
@@ -647,16 +574,14 @@ public abstract class BaseReporter implements IBaseReporter {
             ),
             mReporterEnvironment
         );
-        if (mPublicLogger.isEnabled()) {
-            mPublicLogger.fi("Error from plugin received: %s", WrapUtils.wrapToTag(message));
-        }
+        mPublicLogger.info("Error from plugin received: %s", WrapUtils.wrapToTag(message));
     }
 
     @Override
     public void reportError(@NonNull String identifier,
                             @Nullable String message,
                             @Nullable PluginErrorDetails errorDetails) {
-        DebugLogger.info(
+        DebugLogger.INSTANCE.info(
             TAG,
             "report error from plugin. Message: %s, identifier: %s, error %s",
             message,
@@ -674,10 +599,11 @@ public abstract class BaseReporter implements IBaseReporter {
             ),
             mReporterEnvironment
         );
-        if (mPublicLogger.isEnabled()) {
-            mPublicLogger.fi("Error with identifier: %s from plugin received: %s",
-                    identifier, WrapUtils.wrapToTag(message));
-        }
+        mPublicLogger.info(
+            "Error with identifier: %s from plugin received: %s",
+            identifier,
+            WrapUtils.wrapToTag(message)
+        );
     }
 
     @NonNull

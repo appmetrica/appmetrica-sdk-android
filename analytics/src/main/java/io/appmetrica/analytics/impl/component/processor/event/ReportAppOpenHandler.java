@@ -10,7 +10,7 @@ import io.appmetrica.analytics.impl.EventsManager;
 import io.appmetrica.analytics.impl.Utils;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.impl.startup.AttributionConfig;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import org.json.JSONObject;
 
 public class ReportAppOpenHandler extends ReportComponentHandler {
@@ -37,14 +37,14 @@ public class ReportAppOpenHandler extends ReportComponentHandler {
                     }
                 }
             } catch (Throwable e) {
-                DebugLogger.error(TAG, e, e.getMessage());
+                DebugLogger.INSTANCE.error(TAG, e, e.getMessage());
             }
         }
         return false;
     }
 
     private void handleReattributionParameter() {
-        DebugLogger.info(TAG, "Handle re-attribution");
+        DebugLogger.INSTANCE.info(TAG, "Handle re-attribution");
         getComponent().getVitalComponentDataProvider().incrementAttributionId();
         getComponent().resetConfigHolder();
         getComponent().getEventFirstOccurrenceService().reset();
@@ -57,7 +57,7 @@ public class ReportAppOpenHandler extends ReportComponentHandler {
                 String referrer = deeplinkUri.getQueryParameter("referrer");
                 if (TextUtils.isEmpty(referrer) == false) {
                     AttributionConfig attributionConfig = getComponent().getStartupState().getAttributionConfig();
-                    DebugLogger.info(
+                    DebugLogger.INSTANCE.info(
                         TAG,
                         "Checking if %s is reattribution with config %s",
                         deeplink,
@@ -76,7 +76,7 @@ public class ReportAppOpenHandler extends ReportComponentHandler {
                     }
                 }
             } catch (Throwable e) {
-                DebugLogger.error(TAG, e);
+                DebugLogger.INSTANCE.error(TAG, e);
             }
         }
         return false;

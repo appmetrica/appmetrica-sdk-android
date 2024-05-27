@@ -15,7 +15,7 @@ import io.appmetrica.analytics.impl.DefaultValues;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.StartupStateObserver;
 import io.appmetrica.analytics.impl.startup.StartupState;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.util.concurrent.Executor;
 
 public class BillingMonitorWrapper implements StartupStateObserver {
@@ -114,7 +114,7 @@ public class BillingMonitorWrapper implements StartupStateObserver {
     }
 
     private void checkStateAndCollectAutoInapp(@NonNull final ApplicationState state) {
-        DebugLogger.info(TAG, "checkStateAndCollectAutoInapp " + state.getStringValue());
+        DebugLogger.INSTANCE.info(TAG, "checkStateAndCollectAutoInapp " + state.getStringValue());
         if (state == ApplicationState.VISIBLE) {
             try {
                 final BillingMonitor billingMonitorCopy = billingMonitor;
@@ -122,7 +122,7 @@ public class BillingMonitorWrapper implements StartupStateObserver {
                     billingMonitorCopy.onSessionResumed();
                 }
             } catch (Throwable e) {
-                DebugLogger.error(TAG, "Error occurred during billing library call " + e);
+                DebugLogger.INSTANCE.error(TAG, "Error occurred during billing library call " + e);
             }
         }
     }

@@ -7,7 +7,7 @@ import android.os.Looper
 import io.appmetrica.analytics.coreapi.internal.permission.PermissionResolutionStrategy
 import io.appmetrica.analytics.coreutils.internal.system.SystemServiceUtils
 import io.appmetrica.analytics.locationapi.internal.LocationReceiver
-import io.appmetrica.analytics.logger.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import java.util.concurrent.TimeUnit
 
 private const val TAG = "[PassiveProviderLocationReceiver]"

@@ -8,7 +8,7 @@ import io.appmetrica.analytics.coreutils.internal.executors.SafeRunnable;
 import io.appmetrica.analytics.impl.CounterReport;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.component.IReportableComponent;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.util.List;
 
 public class BillingInfoSenderImpl implements BillingInfoSender {
@@ -35,9 +35,9 @@ public class BillingInfoSenderImpl implements BillingInfoSender {
 
     @Override
     public void sendInfo(@NonNull final List<ProductInfo> productInfos) {
-        DebugLogger.info(TAG, "sendInfo");
+        DebugLogger.INSTANCE.info(TAG, "sendInfo");
         for (final ProductInfo productInfo: productInfos) {
-            DebugLogger.info(TAG, "info " + productInfo.sku);
+            DebugLogger.INSTANCE.info(TAG, "info " + productInfo.sku);
             reportExecutor.execute(new SafeRunnable() {
                 @Override
                 public void runSafety() throws Exception {

@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.preloadinfo
 
 import io.appmetrica.analytics.impl.DistributionSource
 import io.appmetrica.analytics.impl.UpdatedCandidatesProvider
-import io.appmetrica.analytics.logger.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
 private const val TAG = "[PreloadInfoCandidatesHelper]"
 

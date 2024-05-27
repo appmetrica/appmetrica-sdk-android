@@ -73,11 +73,11 @@ public abstract class NamedUserProfileUpdatePatcher implements UserProfileUpdate
         if (result.isValid()) {
             return true;
         } else {
-            if (mPublicLogger.isEnabled()) {
-                mPublicLogger.w("Attribute " + getKey() + " of type "
-                        + TypesToNameMapping.getTypeName(getType()) + " is skipped because "
-                        + result.getDescription());
-            }
+            mPublicLogger.warning(
+                "Attribute " + getKey() + " of type "
+                + TypesToNameMapping.getTypeName(getType()) + " is skipped because "
+                + result.getDescription()
+            );
             return false;
         }
     }

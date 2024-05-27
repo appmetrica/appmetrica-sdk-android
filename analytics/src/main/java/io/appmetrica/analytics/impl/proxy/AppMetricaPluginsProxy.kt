@@ -1,12 +1,12 @@
 package io.appmetrica.analytics.impl.proxy
 
-import android.util.Log
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor
 import io.appmetrica.analytics.impl.ClientServiceLocator
 import io.appmetrica.analytics.impl.IMainReporter
 import io.appmetrica.analytics.impl.SdkUtils
 import io.appmetrica.analytics.impl.proxy.synchronous.PluginsSynchronousStageExecutor
 import io.appmetrica.analytics.impl.proxy.validation.PluginsBarrier
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import io.appmetrica.analytics.plugins.PluginErrorDetails
 
 internal class AppMetricaPluginsProxy {
@@ -27,7 +27,7 @@ internal class AppMetricaPluginsProxy {
 
     fun reportError(errorDetails: PluginErrorDetails?, message: String?) {
         if (!barrier.reportErrorWithFilledStacktrace(errorDetails, message)) {
-            Log.w(SdkUtils.APPMETRICA_TAG, "Error stacktrace must be non empty")
+            DebugLogger.warning(SdkUtils.APPMETRICA_TAG, "Error stacktrace must be non empty")
             return
         }
         // objects are non-null because otherwise validation would have failed

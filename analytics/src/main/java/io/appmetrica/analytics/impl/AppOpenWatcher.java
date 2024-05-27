@@ -9,7 +9,7 @@ import androidx.annotation.Nullable;
 import io.appmetrica.analytics.coreapi.internal.backport.FunctionWithThrowable;
 import io.appmetrica.analytics.coreutils.internal.system.SystemServiceUtils;
 import io.appmetrica.analytics.impl.utils.ApiProxyThread;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +24,7 @@ public class AppOpenWatcher implements ActivityLifecycleManager.Listener {
     private volatile DeeplinkConsumer deeplinkConsumer = null;
 
     public void startWatching() {
-        DebugLogger.info(TAG, "Start watching app opens");
+        DebugLogger.INSTANCE.info(TAG, "Start watching app opens");
         ClientServiceLocator.getInstance().getActivityLifecycleManager().registerListener(
             this,
             ActivityLifecycleManager.ActivityEvent.CREATED
@@ -33,7 +33,7 @@ public class AppOpenWatcher implements ActivityLifecycleManager.Listener {
 
     @ApiProxyThread
     public void setDeeplinkConsumer(@NonNull DeeplinkConsumer deeplinkConsumer) {
-        DebugLogger.info(TAG, "setReporter to %s", deeplinkConsumer);
+        DebugLogger.INSTANCE.info(TAG, "setReporter to %s", deeplinkConsumer);
         List<NonNullConsumer<DeeplinkConsumer>> commandsToExecute;
         synchronized (this) {
             this.deeplinkConsumer = deeplinkConsumer;
@@ -55,7 +55,7 @@ public class AppOpenWatcher implements ActivityLifecycleManager.Listener {
     @MainThread
     private synchronized void addOrExecuteCommand(@NonNull final NonNullConsumer<DeeplinkConsumer> command) {
         final DeeplinkConsumer deeplinkConsumerCopy = deeplinkConsumer;
-        DebugLogger.info(TAG, "addOrExecuteCommand. Deeplink consumer: %s", deeplinkConsumerCopy);
+        DebugLogger.INSTANCE.info(TAG, "addOrExecuteCommand. Deeplink consumer: %s", deeplinkConsumerCopy);
         if (deeplinkConsumerCopy == null) {
             savedCommands.add(command);
         } else {
@@ -71,7 +71,7 @@ public class AppOpenWatcher implements ActivityLifecycleManager.Listener {
     @Override
     @MainThread
     public void onEvent(@NonNull Activity activity, @NonNull ActivityLifecycleManager.ActivityEvent event) {
-        DebugLogger.info(TAG, "onEvent %s for activity %s", event, activity);
+        DebugLogger.INSTANCE.info(TAG, "onEvent %s for activity %s", event, activity);
         final Intent intent = SystemServiceUtils.accessSystemServiceSafely(
             activity,
             "getting intent",
@@ -89,7 +89,7 @@ public class AppOpenWatcher implements ActivityLifecycleManager.Listener {
                 @Override
                 @ApiProxyThread
                 public void consume(@NonNull DeeplinkConsumer deeplinkConsumer) {
-                    DebugLogger.info(TAG, "Reporting app open: %s", deeplink);
+                    DebugLogger.INSTANCE.info(TAG, "Reporting app open: %s", deeplink);
                     deeplinkConsumer.reportAutoAppOpen(deeplink);
                 }
             });

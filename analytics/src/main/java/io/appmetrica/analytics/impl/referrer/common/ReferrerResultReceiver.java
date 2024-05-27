@@ -5,7 +5,7 @@ import android.os.Handler;
 import android.os.ResultReceiver;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 
 public class ReferrerResultReceiver extends ResultReceiver {
 
@@ -26,20 +26,20 @@ public class ReferrerResultReceiver extends ResultReceiver {
 
     @Override
     protected void onReceiveResult(int resultCode, Bundle resultData) {
-        DebugLogger.info(TAG, "Received result with code %d and bundle %s", resultCode, resultData);
+        DebugLogger.INSTANCE.info(TAG, "Received result with code %d and bundle %s", resultCode, resultData);
         if (resultCode == CODE_OK) {
             ReferrerInfo referrerInfo = null;
             try {
                 referrerInfo = ReferrerInfo.parseFrom(resultData.getByteArray(KEY_REFERRER));
             } catch (Throwable e) {
-                DebugLogger.error(TAG, e);
+                DebugLogger.INSTANCE.error(TAG, e);
             }
             listener.onReferrerChosen(referrerInfo);
         }
     }
 
     public static void sendReferrer(@Nullable ResultReceiver receiver, @Nullable ReferrerInfo referrerInfo) {
-        DebugLogger.info(TAG, "Send referrer %s to receiver %s", receiver, receiver);
+        DebugLogger.INSTANCE.info(TAG, "Send referrer %s to receiver %s", receiver, receiver);
         if (receiver != null) {
             Bundle bundle = new Bundle();
             bundle.putByteArray(KEY_REFERRER, referrerInfo == null ? null : referrerInfo.toProto());

@@ -16,7 +16,7 @@ class ExternalAttributionHandler(
 
     override fun process(reportData: CounterReport): Boolean {
         if (!externalAttributionHelper.isInAttributionCollectingWindow()) {
-            component.publicLogger.i("Ignoring attribution since out of collecting interval")
+            component.publicLogger.info("Ignoring attribution since out of collecting interval")
             return true
         }
 
@@ -25,7 +25,7 @@ class ExternalAttributionHandler(
         val attributionJson = String(attribution.value)
 
         if (!externalAttributionHelper.isNewAttribution(attributionType, attributionJson)) {
-            component.publicLogger.i(
+            component.publicLogger.info(
                 "Ignoring attribution " +
                     "of type `${ExternalAttributionTypeConverter.toString(attributionType)}` " +
                     "with value `$attributionJson` " +
@@ -35,7 +35,7 @@ class ExternalAttributionHandler(
         }
 
         externalAttributionHelper.saveAttribution(attributionType, attributionJson)
-        component.publicLogger.i(
+        component.publicLogger.info(
             "Handling attribution " +
                 "of type `${ExternalAttributionTypeConverter.toString(attributionType)}`"
         )

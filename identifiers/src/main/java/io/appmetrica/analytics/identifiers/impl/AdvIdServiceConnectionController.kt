@@ -5,7 +5,7 @@ import android.content.Intent
 import android.os.IBinder
 import androidx.annotation.VisibleForTesting
 import io.appmetrica.analytics.coreutils.internal.services.SafePackageManager
-import io.appmetrica.analytics.logger.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
 internal const val ATTEMPT_TIMEOUT = 3000L
 

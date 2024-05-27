@@ -5,7 +5,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.AppMetricaConfig;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -44,7 +44,7 @@ public class DefaultOneShotMetricaConfig implements MetricaConfigurator {
 
     @Override
     public void setLocationTracking(final boolean enabled) {
-        DebugLogger.info(TAG, "setLocationTracking: %b", enabled);
+        DebugLogger.INSTANCE.info(TAG, "setLocationTracking: %b", enabled);
         mLocationTracking = enabled;
         tryToUpdatePreActivationConfig();
     }
@@ -55,26 +55,26 @@ public class DefaultOneShotMetricaConfig implements MetricaConfigurator {
 
     @Override
     public void setDataSendingEnabled(boolean value) {
-        DebugLogger.info(TAG, "setDataSendingEnabled: %b", value);
+        DebugLogger.INSTANCE.info(TAG, "setDataSendingEnabled: %b", value);
         dataSendingEnabled = value;
         tryToUpdatePreActivationConfig();
     }
 
     @Override
     public void setLocation(@Nullable final Location location) {
-        DebugLogger.info(TAG, "setLocation: %s", location);
+        DebugLogger.INSTANCE.info(TAG, "setLocation: %s", location);
         mLocation = location;
     }
 
     @Override
     public void putAppEnvironmentValue(final String key, final String value) {
-        DebugLogger.info(TAG, "putAppEnvironmentValue: {%s: %s}", key, value);
+        DebugLogger.INSTANCE.info(TAG, "putAppEnvironmentValue: {%s: %s}", key, value);
         mAppEnvironment.put(key, value);
     }
 
     @Override
     public void clearAppEnvironment() {
-        DebugLogger.info(TAG, "clearAppEnvironment");
+        DebugLogger.INSTANCE.info(TAG, "clearAppEnvironment");
         mAppEnvironmentWasCleared = true;
         mAppEnvironment.clear();
     }
@@ -85,13 +85,13 @@ public class DefaultOneShotMetricaConfig implements MetricaConfigurator {
 
     @Override
     public void putErrorEnvironmentValue(final String key, final String value) {
-        DebugLogger.info(TAG, "putErrorEnvironmentValue: {%s: %s}", key, value);
+        DebugLogger.INSTANCE.info(TAG, "putErrorEnvironmentValue: {%s: %s}", key, value);
         mErrorEnvironment.put(key, value);
     }
 
     @Override
     public void setUserProfileID(@Nullable String userProfileID) {
-        DebugLogger.info(TAG, "setUserProfileID: %s", userProfileID);
+        DebugLogger.INSTANCE.info(TAG, "setUserProfileID: %s", userProfileID);
         this.userProfileID = userProfileID;
     }
 
@@ -107,7 +107,7 @@ public class DefaultOneShotMetricaConfig implements MetricaConfigurator {
     }
 
     public AppMetricaConfig mergeWithUserConfig(final AppMetricaConfig config) {
-        DebugLogger.info(TAG, "mergeWithUserConfig. used? %b", mUsed);
+        DebugLogger.INSTANCE.info(TAG, "mergeWithUserConfig. used? %b", mUsed);
         if (mUsed) {
             return config;
         } else {
@@ -225,7 +225,7 @@ public class DefaultOneShotMetricaConfig implements MetricaConfigurator {
 
     private void mergeCommonPart(final AppMetricaConfig useConfig,
                                  final AppMetricaConfig.Builder builder) {
-        DebugLogger.info(
+        DebugLogger.INSTANCE.info(
             TAG,
             "mergeCommonPart. Config = {locationTracking: %s, location: %s, dataSendingEnabled: %s}, " +
                 "defaultConfig = {locationTracking: %s, location: %s, dataSendingEnabled: %s}",

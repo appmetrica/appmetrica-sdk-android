@@ -1,6 +1,5 @@
 package io.appmetrica.analytics.impl.proxy;
 
-import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.WorkerThread;
@@ -11,6 +10,7 @@ import io.appmetrica.analytics.impl.IReporterExtended;
 import io.appmetrica.analytics.impl.SdkUtils;
 import io.appmetrica.analytics.impl.proxy.synchronous.PluginsReporterSynchronousStageExecutor;
 import io.appmetrica.analytics.impl.proxy.validation.PluginsReporterBarrier;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import io.appmetrica.analytics.plugins.IPluginReporter;
 import io.appmetrica.analytics.plugins.PluginErrorDetails;
 
@@ -49,7 +49,7 @@ public class PluginReporterProxy implements IPluginReporter {
     @Override
     public void reportError(@NonNull final PluginErrorDetails errorDetails, @Nullable final String message) {
         if (!barrier.reportErrorWithFilledStacktrace(errorDetails, message)) {
-            Log.w(SdkUtils.APPMETRICA_TAG, "Error stacktrace must be non empty");
+            DebugLogger.INSTANCE.warning(SdkUtils.APPMETRICA_TAG, "Error stacktrace must be non empty");
             return;
         }
         synchronousStageExecutor.reportPluginError(errorDetails, message);

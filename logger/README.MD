@@ -19,7 +19,7 @@ Maven: `io.appmetrica.analytics:analytics-logger:${VERSION}`.
 
 ### Code style
 
-`./gradlew :logger:lint :core-utils:ktlint :logger:checkstyleRelease`
+`./gradlew :logger:lint :logger:ktlint :logger:checkstyleRelease`
 
 ### Check AAR API
 

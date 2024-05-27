@@ -7,7 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 
 public class ContextReceiverSafeWrapper {
 
@@ -38,7 +38,7 @@ public class ContextReceiverSafeWrapper {
             result = context.registerReceiver(receiver, filter);
             receiverRegistered = true;
         } catch (Throwable ex) {
-            DebugLogger.error(TAG, ex);
+            DebugLogger.INSTANCE.error(TAG, ex);
         }
         return result;
     }
@@ -49,7 +49,7 @@ public class ContextReceiverSafeWrapper {
                 context.unregisterReceiver(receiver);
                 receiverRegistered = false;
             } catch (Throwable ex) {
-                DebugLogger.error(TAG, ex);
+                DebugLogger.INSTANCE.error(TAG, ex);
             }
         }
     }

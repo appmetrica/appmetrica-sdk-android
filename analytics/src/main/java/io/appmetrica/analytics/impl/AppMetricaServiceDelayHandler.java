@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.impl.utils.MainProcessDetector;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.io.File;
 import java.io.FileOutputStream;
 import org.json.JSONObject;
@@ -52,10 +52,10 @@ public class AppMetricaServiceDelayHandler {
                     );
                 }
             } catch (Throwable ex) {
-                DebugLogger.error(TAG, ex);
+                DebugLogger.INSTANCE.error(TAG, ex);
             }
         } else {
-            DebugLogger.info(TAG, "not setting Metrica service delay from non-main process");
+            DebugLogger.INSTANCE.info(TAG, "not setting Metrica service delay from non-main process");
         }
     }
 
@@ -67,12 +67,12 @@ public class AppMetricaServiceDelayHandler {
                 File metricaServiceSettingsFile = fileProvider
                         .getFileFromStorage(context, METRICA_SERVICE_SETTING_FILENAME);
                 boolean deleted = metricaServiceSettingsFile != null && metricaServiceSettingsFile.delete();
-                DebugLogger.info(TAG, "Removing Metrics service delay. Success? %b", deleted);
+                DebugLogger.INSTANCE.info(TAG, "Removing Metrics service delay. Success? %b", deleted);
             } catch (Throwable ex) {
-                DebugLogger.error(TAG, ex);
+                DebugLogger.INSTANCE.error(TAG, ex);
             }
         } else {
-            DebugLogger.info(TAG, "not removing Metrica service delay from non-main process");
+            DebugLogger.INSTANCE.info(TAG, "not removing Metrica service delay from non-main process");
         }
     }
 
@@ -81,17 +81,17 @@ public class AppMetricaServiceDelayHandler {
         synchronized (this) {}
         if (!delayHappened) {
             long timeout = getTimeout(context);
-            DebugLogger.info(TAG, "delay connection for %d milliseconds", timeout);
+            DebugLogger.INSTANCE.info(TAG, "delay connection for %d milliseconds", timeout);
             if (timeout > 0) {
                 try {
                     Thread.sleep(timeout);
                 } catch (Throwable ex) {
-                    DebugLogger.error(TAG, ex);
+                    DebugLogger.INSTANCE.error(TAG, ex);
                 }
             }
             delayHappened = true;
         } else {
-            DebugLogger.info(TAG, "not delaying connection because it is not the first one");
+            DebugLogger.INSTANCE.info(TAG, "not delaying connection because it is not the first one");
         }
     }
 
@@ -109,7 +109,7 @@ public class AppMetricaServiceDelayHandler {
                 result = json.optLong(KEY_DELAY);
             }
         } catch (Throwable ex) {
-            DebugLogger.error(TAG, ex);
+            DebugLogger.INSTANCE.error(TAG, ex);
         }
         return result;
     }

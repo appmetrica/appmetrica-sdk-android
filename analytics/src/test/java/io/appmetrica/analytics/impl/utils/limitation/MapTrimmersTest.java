@@ -13,7 +13,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
@@ -56,17 +55,8 @@ public class MapTrimmersTest extends CommonTest {
     public void testLogContainerLimitReachedLoggerEnabled() {
         final String key = "key";
         final int maxSize = 30;
-        when(mPublicLogger.isEnabled()).thenReturn(true);
         when(mLimitation.getMaxSize()).thenReturn(maxSize);
         mMapTrimmers.logContainerLimitReached(key);
-        verify(mPublicLogger).fw(anyString(), eq(mTag), eq(maxSize), eq(key));
-    }
-
-    @Test
-    public void testLogContainerLimitReachedLoggerDisabled() {
-        when(mPublicLogger.isEnabled()).thenReturn(false);
-        mMapTrimmers.logContainerLimitReached("key");
-        verify(mPublicLogger).isEnabled();
-        verifyNoMoreInteractions(mPublicLogger);
+        verify(mPublicLogger).warning(anyString(), eq(mTag), eq(maxSize), eq(key));
     }
 }

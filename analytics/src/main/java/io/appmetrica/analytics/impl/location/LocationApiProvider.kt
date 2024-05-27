@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.location
 
 import android.content.Context
 import io.appmetrica.analytics.impl.location.stub.LocationApiStub
-import io.appmetrica.analytics.logger.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
 private const val TAG = "[LocationApiProvider]"
 

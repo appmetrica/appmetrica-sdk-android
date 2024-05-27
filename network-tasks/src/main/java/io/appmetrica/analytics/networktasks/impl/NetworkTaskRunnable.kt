@@ -2,7 +2,7 @@ package io.appmetrica.analytics.networktasks.impl
 
 import androidx.annotation.VisibleForTesting
 import io.appmetrica.analytics.coreapi.internal.executors.InterruptionSafeThread
-import io.appmetrica.analytics.logger.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import io.appmetrica.analytics.networktasks.internal.NetworkTask
 
 private const val TAG = "[NetworkTaskRunnable]"

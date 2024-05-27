@@ -12,7 +12,7 @@ import io.appmetrica.analytics.impl.startup.StartupError
 import io.appmetrica.analytics.impl.startup.StartupListener
 import io.appmetrica.analytics.impl.startup.StartupState
 import io.appmetrica.analytics.impl.startup.StartupUnit
-import io.appmetrica.analytics.logger.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
 internal class RegularDispatcherComponent<COMPONENT>(
     @get:VisibleForTesting val context: Context,

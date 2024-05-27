@@ -20,14 +20,12 @@ public class StringTrimmer extends BaseTrimmer<String> {
     public String trim(@Nullable String data) {
         if (data != null && data.length() > getMaxSize()) {
             String newValue = data.substring(0, getMaxSize());
-            if (mPublicLogger.isEnabled()) {
-                mPublicLogger.fw(
-                        "\"%s\" %s size exceeded limit of %d characters",
-                        getLogName(),
-                        data,
-                        getMaxSize()
-                );
-            }
+            mPublicLogger.warning(
+                "\"%s\" %s size exceeded limit of %d characters",
+                getLogName(),
+                data,
+                getMaxSize()
+            );
             return newValue;
         } else {
             return data;

@@ -13,7 +13,7 @@ import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedInfo;
 import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedProvider;
 import io.appmetrica.analytics.impl.utils.limitation.CollectionTrimInfo;
 import io.appmetrica.analytics.impl.utils.limitation.TrimmingResult;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.util.List;
 
 public class PriceConverter
@@ -59,7 +59,7 @@ public class PriceConverter
                 internalComponentAmountsTruncationInfo);
 
         if (totalTruncationInfo.getBytesTruncated() > 0) {
-            DebugLogger.info(
+            DebugLogger.INSTANCE.info(
                     ECommerceConstants.FEATURE_TAG + TAG,
                     "TotalBytesTruncated (fiat + droppedInternalComponents + truncatedInternalComponents) = " +
                             "%d (%d + %d + %d)",

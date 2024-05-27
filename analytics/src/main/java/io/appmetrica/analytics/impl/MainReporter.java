@@ -32,7 +32,7 @@ import io.appmetrica.analytics.impl.utils.validation.NonEmptyStringValidator;
 import io.appmetrica.analytics.impl.utils.validation.ThrowIfFailedValidator;
 import io.appmetrica.analytics.impl.utils.validation.Validator;
 import io.appmetrica.analytics.internal.CounterConfiguration;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -184,9 +184,7 @@ public class MainReporter extends BaseReporter implements IMainReporter {
             );
             listener.onCreateMainReporter(mainReporterContext, this);
         }
-        if (mPublicLogger.isEnabled()) {
-            mPublicLogger.i("Actual sessions timeout is " + getSessionTimeout(config));
-        }
+        mPublicLogger.info("Actual sessions timeout is " + getSessionTimeout(config));
     }
 
     @Override
@@ -202,18 +200,9 @@ public class MainReporter extends BaseReporter implements IMainReporter {
         }
     }
 
-    private void logAppOpen(@Nullable final String deeplink) {
-        if (mPublicLogger.isEnabled()) {
-            StringBuilder builder = new StringBuilder("App opened via deeplink: ");
-            builder.append(WrapUtils.wrapToTag(deeplink));
-            mPublicLogger.i(builder.toString());
-        }
-
-    }
-
     @Override
     public void reportAppOpen(@NonNull String deeplink, boolean auto) {
-        logAppOpen(deeplink);
+        mPublicLogger.info("App opened via deeplink: " + WrapUtils.wrapToTag(deeplink));
         mReportsHandler.reportEvent(
                 EventsManager.openAppReportEntry(deeplink, auto, mPublicLogger),
                 mReporterEnvironment
@@ -225,27 +214,15 @@ public class MainReporter extends BaseReporter implements IMainReporter {
         sReferralUrlValidator.validate(referralUrl);
         mReportsHandler.reportEvent(EventsManager.referralUrlReportEntry(referralUrl, mPublicLogger),
                 mReporterEnvironment);
-        logReferralUrl(referralUrl);
-    }
-
-    private void logReferralUrl(@Nullable final String referralUrl) {
-        if (mPublicLogger.isEnabled()) {
-            StringBuilder builder = new StringBuilder("Referral URL received: ");
-            builder.append(WrapUtils.wrapToTag(referralUrl));
-            mPublicLogger.i(builder.toString());
-        }
+        mPublicLogger.info("Referral URL received: " + WrapUtils.wrapToTag(referralUrl));
     }
 
     @Override
     public void onEnableAutoTrackingAttemptOccurred(@NonNull ActivityLifecycleManager.WatchingStatus status) {
         if (status == ActivityLifecycleManager.WatchingStatus.WATCHING) {
-            if (mPublicLogger.isEnabled()) {
-                mPublicLogger.i("Enable activity auto tracking");
-            }
+            mPublicLogger.info("Enable activity auto tracking");
         } else {
-            if (mPublicLogger.isEnabled()) {
-                mPublicLogger.w("Could not enable activity auto tracking. " + status.error);
-            }
+            mPublicLogger.warning("Could not enable activity auto tracking. " + status.error);
         }
     }
 
@@ -253,9 +230,7 @@ public class MainReporter extends BaseReporter implements IMainReporter {
     @ApiProxyThread
     public void resumeSession(@Nullable final Activity activity) {
         if (activityStateManager.didStateChange(activity, ActivityStateManager.ActivityState.RESUMED)) {
-            if (mPublicLogger.isEnabled()) {
-                mPublicLogger.i("Resume session");
-            }
+            mPublicLogger.info("Resume session");
             onResumeForegroundSession(getActivityTag(activity));
             mAppStatusMonitor.resume();
         }
@@ -265,9 +240,7 @@ public class MainReporter extends BaseReporter implements IMainReporter {
     @ApiProxyThread
     public void pauseSession(@Nullable final Activity activity) {
         if (activityStateManager.didStateChange(activity, ActivityStateManager.ActivityState.PAUSED)) {
-            if (mPublicLogger.isEnabled()) {
-                mPublicLogger.i("Pause session");
-            }
+            mPublicLogger.info("Pause session");
             onPauseForegroundSession(getActivityTag(activity));
             mAppStatusMonitor.pause();
         }
@@ -292,9 +265,7 @@ public class MainReporter extends BaseReporter implements IMainReporter {
     @Override
     public void setLocation(@Nullable final Location location) {
         mReporterEnvironment.getReporterConfiguration().setManualLocation(location);
-        if (mPublicLogger.isEnabled()) {
-            mPublicLogger.fi("Set location: %s", location);
-        }
+        mPublicLogger.info("Set location: %s", location);
     }
 
     @Override
@@ -327,7 +298,7 @@ public class MainReporter extends BaseReporter implements IMainReporter {
                         if (libraryAnrDetector.isPushAnr(allThreads.affectedThread.stacktrace)) {
                             pushReporterProvider.getReporter().reportAnr(allThreads);
                         }
-                        DebugLogger.info(TAG, "anr registered %s", allThreads);
+                        DebugLogger.INSTANCE.info(TAG, "anr registered %s", allThreads);
                     }
                 });
             }
@@ -382,9 +353,7 @@ public class MainReporter extends BaseReporter implements IMainReporter {
 
     @Override
     public void reportExternalAttribution(@NonNull ExternalAttribution value) {
-        if (mPublicLogger.isEnabled()) {
-            mPublicLogger.fi("External attribution received: %s", value);
-        }
+        mPublicLogger.info("External attribution received: %s", value);
         mReportsHandler.reportEvent(
             EventsManager.clientExternalAttributionEntry(value.toBytes(), mPublicLogger),
             mReporterEnvironment
@@ -397,9 +366,7 @@ public class MainReporter extends BaseReporter implements IMainReporter {
             enabledFromConfig,
             DefaultValuesForCrashReporting.DEFAULT_REPORTS_NATIVE_CRASHES_ENABLED
         );
-        if (mPublicLogger.isEnabled()) {
-            mPublicLogger.fi("native crash reporting enabled: %b", enabled);
-        }
+        mPublicLogger.info("native crash reporting enabled: %b", enabled);
         if (enabled) {
             nativeCrashClient.initHandling(
                 mContext,

@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.coreutils.internal.executors;
 
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 
 public abstract class SafeRunnable implements Runnable {
 
@@ -10,7 +10,7 @@ public abstract class SafeRunnable implements Runnable {
         try {
             runSafety();
         } catch (Throwable e) {
-            DebugLogger.error(TAG, e, e.getMessage());
+            DebugLogger.INSTANCE.error(TAG, e, e.getMessage());
         }
     }
 

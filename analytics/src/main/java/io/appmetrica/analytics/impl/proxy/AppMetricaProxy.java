@@ -5,7 +5,6 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
-import android.util.Log;
 import android.webkit.WebView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -36,7 +35,7 @@ import io.appmetrica.analytics.impl.proxy.validation.Barrier;
 import io.appmetrica.analytics.impl.proxy.validation.SilentActivationValidator;
 import io.appmetrica.analytics.impl.utils.ApiProxyThread;
 import io.appmetrica.analytics.internal.IdentifiersResult;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import io.appmetrica.analytics.profile.UserProfile;
 import java.util.List;
 import java.util.Map;
@@ -396,7 +395,7 @@ public final class AppMetricaProxy extends BaseAppMetricaProxy {
     }
 
     public void activateReporter(@NonNull Context context, @NonNull ReporterConfig config) {
-        DebugLogger.info(TAG, "activate reporter with apiKey = %s", config.apiKey);
+        DebugLogger.INSTANCE.info(TAG, "activate reporter with apiKey = %s", config.apiKey);
         barrier.activateReporter(context, config);
         synchronousStageExecutor.activateReporter(context.getApplicationContext(), config);
         getReporterProxyStorage().getOrCreate(context.getApplicationContext(), config);
@@ -426,7 +425,10 @@ public final class AppMetricaProxy extends BaseAppMetricaProxy {
 
     public void reportJsEvent(@NonNull final String eventName, @Nullable final String eventValue) {
         if (!barrier.reportJsEvent(eventName, eventValue)) {
-            Log.w(SdkUtils.APPMETRICA_TAG, "Impossible to report event because parameters are invalid.");
+            DebugLogger.INSTANCE.warning(
+                SdkUtils.APPMETRICA_TAG,
+                "Impossible to report event because parameters are invalid."
+            );
             return;
         }
         synchronousStageExecutor.reportJsEvent(eventName, eventValue);
@@ -440,14 +442,14 @@ public final class AppMetricaProxy extends BaseAppMetricaProxy {
 
     public void reportJsInitEvent(@NonNull final String value) {
         if (!silentActivationValidator.validate().isValid()) {
-            DebugLogger.warning(
+            DebugLogger.INSTANCE.warning(
                 TAG,
                 "Impossible to report JS init event because AppMetrica has not been activated yet"
             );
             return;
         }
         if (!barrier.reportJsInitEvent(value)) {
-            DebugLogger.warning(TAG, "Impossible to report JS init event because value is invalid");
+            DebugLogger.INSTANCE.warning(TAG, "Impossible to report JS init event because value is invalid");
             return;
         }
         synchronousStageExecutor.reportJsInitEvent(value);

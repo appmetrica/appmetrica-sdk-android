@@ -4,7 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 
 public abstract class ResourceRetriever<T> {
 
@@ -34,10 +34,10 @@ public abstract class ResourceRetriever<T> {
             try {
                 return callAppropriateMethod(resourceId);
             } catch (Throwable ex) {
-                DebugLogger.error(TAG, ex, "Error while parsing " + mResourceName);
+                DebugLogger.INSTANCE.error(TAG, ex, "Error while parsing " + mResourceName);
             }
         } else {
-            DebugLogger.info(TAG, "no " + mResourceName + " resource found.");
+            DebugLogger.INSTANCE.info(TAG, "no " + mResourceName + " resource found.");
         }
         return null;
     }

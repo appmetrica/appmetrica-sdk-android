@@ -5,7 +5,7 @@ import androidx.annotation.Nullable;
 import io.appmetrica.analytics.impl.CounterReport;
 import io.appmetrica.analytics.impl.component.CommonArguments;
 import io.appmetrica.analytics.impl.component.RegularDispatcherComponent;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 
 public class SelfDiagnosticClientUnit implements ClientUnit {
 
@@ -21,10 +21,10 @@ public class SelfDiagnosticClientUnit implements ClientUnit {
     @Override
     public void handle(@NonNull CounterReport report, @NonNull CommonArguments sdkConfig) {
         if (mComponentUnit != null) {
-            DebugLogger.info(TAG, "handle report %s with sdkConfig %s", report, sdkConfig);
+            DebugLogger.INSTANCE.info(TAG, "handle report %s with sdkConfig %s", report, sdkConfig);
             mComponentUnit.handleReport(report, sdkConfig);
         } else {
-            DebugLogger.info(
+            DebugLogger.INSTANCE.info(
                 TAG,
                 "ComponentUnit is null. Will not handle report %s with sdkConfig",
                 report,

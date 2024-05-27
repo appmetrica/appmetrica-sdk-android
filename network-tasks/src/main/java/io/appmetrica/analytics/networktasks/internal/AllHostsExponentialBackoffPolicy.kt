@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.networktasks.internal
 
-import io.appmetrica.analytics.logger.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
 private const val TAG = "[AllHostsExponentialBackoffPolicy]"
 

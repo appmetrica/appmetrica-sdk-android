@@ -5,7 +5,7 @@ import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.impl.CounterReport;
 import io.appmetrica.analytics.impl.InternalEvents;
 import io.appmetrica.analytics.impl.component.IComponent;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.util.List;
 
 public class BaseReportProcessor<T, C extends IComponent> {
@@ -31,13 +31,21 @@ public class BaseReportProcessor<T, C extends IComponent> {
                               @NonNull ProcessItem<T> processItem) {
         List<? extends  T> handlers = getStrategy(report).getEventHandlers();
         for (T handler : handlers) {
-            DebugLogger.info(TAG, "For component %s processing report (of type %s) %s with handler: %s",
-                    mComponent.getComponentId(), InternalEvents.valueOf(report.getType()).getInfo(),
-                    report, handler.getClass().getSimpleName()
+            DebugLogger.INSTANCE.info(
+                TAG,
+                "For component %s processing report (of type %s) %s with handler: %s",
+                mComponent.getComponentId(),
+                InternalEvents.valueOf(report.getType()).getInfo(),
+                report,
+                handler.getClass().getSimpleName()
             );
             if (processItem.process(handler, report)) {
-                DebugLogger.info(TAG, "Stop processing report %s because %s returned true",
-                        report, handler.getClass().getSimpleName());
+                DebugLogger.INSTANCE.info(
+                    TAG,
+                    "Stop processing report %s because %s returned true",
+                    report,
+                    handler.getClass().getSimpleName()
+                );
                 return true;
             }
         }

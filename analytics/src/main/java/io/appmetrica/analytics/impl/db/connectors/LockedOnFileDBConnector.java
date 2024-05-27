@@ -10,7 +10,7 @@ import io.appmetrica.analytics.impl.Utils;
 import io.appmetrica.analytics.impl.db.DatabaseStorage;
 import io.appmetrica.analytics.impl.db.TablesManager;
 import io.appmetrica.analytics.impl.utils.concurrency.FileLocker;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 
 public class LockedOnFileDBConnector implements DBConnector {
 
@@ -48,10 +48,10 @@ public class LockedOnFileDBConnector implements DBConnector {
         try {
             mDbFileLock.lock();
             mStorage = new DatabaseStorage(mContext, mDbName, tablesManager);
-            DebugLogger.info(TAG, this + mDbName);
+            DebugLogger.INSTANCE.info(TAG, this + mDbName);
             return mStorage.getWritableDatabase();
         } catch (Throwable e) {
-            DebugLogger.error(TAG, e, "Exception while opening DatabaseStorage for %s", mDbName);
+            DebugLogger.INSTANCE.error(TAG, e, "Exception while opening DatabaseStorage for %s", mDbName);
         }
         return null;
     }

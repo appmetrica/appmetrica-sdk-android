@@ -21,7 +21,7 @@ import io.appmetrica.analytics.impl.crash.ndk.NativeCrashDumpReader;
 import io.appmetrica.analytics.impl.crash.ndk.NativeCrashHandlerDescription;
 import io.appmetrica.analytics.impl.request.StartupRequestConfig;
 import io.appmetrica.analytics.impl.utils.LoggerStorage;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.io.File;
 
 public class ReportConsumer {
@@ -59,7 +59,7 @@ public class ReportConsumer {
     }
 
     public void consumeReport(final CounterReport reportData, final Bundle extras) {
-        DebugLogger.info(
+        DebugLogger.INSTANCE.info(
             TAG,
             "reportData: type = %s; customType = %s; name = %s",
             reportData.getType(), reportData.getCustomType(), reportData.getName()
@@ -68,7 +68,7 @@ public class ReportConsumer {
             final Runnable reportTask = new ReportRunnable(mContext, reportData, extras, mClientRepository);
             mTasksExecutor.execute(reportTask);
         } else {
-            DebugLogger.warning(TAG, "Undefined report type: %d", reportData.getType());
+            DebugLogger.INSTANCE.warning(TAG, "Undefined report type: %d", reportData.getType());
         }
     }
 

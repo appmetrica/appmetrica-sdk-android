@@ -4,7 +4,7 @@ import io.appmetrica.analytics.coreapi.internal.control.Toggle
 import io.appmetrica.analytics.coreapi.internal.control.ToggleObserver
 import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.locationapi.internal.LocationControllerObserver
-import io.appmetrica.analytics.logger.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
 private const val TAG = "[LocationControllerImpl]"
 

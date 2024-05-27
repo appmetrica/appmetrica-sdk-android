@@ -15,7 +15,7 @@ import io.appmetrica.analytics.billingv6.impl.ProductTypeParser
 import io.appmetrica.analytics.billingv6.impl.TAG
 import io.appmetrica.analytics.billingv6.impl.storage.StorageUpdater
 import io.appmetrica.analytics.coreutils.internal.executors.SafeRunnable
-import io.appmetrica.analytics.logger.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
 internal class PurchaseHistoryResponseListenerImpl(
     private val config: BillingConfig,

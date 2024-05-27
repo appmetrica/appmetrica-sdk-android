@@ -1,12 +1,13 @@
 package io.appmetrica.analytics.impl;
 
 import android.text.TextUtils;
-import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import io.appmetrica.analytics.AppMetrica;
 import io.appmetrica.analytics.BuildConfig;
 import io.appmetrica.analytics.coreutils.internal.StringUtils;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.ImportantLogger;
 import java.util.regex.Pattern;
 
 public class SdkUtils {
@@ -24,23 +25,26 @@ public class SdkUtils {
                 ", Version " + BuildConfig.VERSION_NAME +
                 ", API Level " + AppMetrica.getLibraryApiLevel() +
                 ", Dated " + BuildConfig.BUILD_DATE + ".";
-        Log.i(APPMETRICA_TAG, logInfo);
+        ImportantLogger.INSTANCE.info(APPMETRICA_TAG, logInfo);
     }
 
     public static void logAttribution(@NonNull String message, Object... arguments) {
-        Log.i(APPMETRICA_ATTRIBUTION_TAG, String.format(message, arguments));
+        DebugLogger.INSTANCE.info(APPMETRICA_ATTRIBUTION_TAG, String.format(message, arguments));
     }
 
     public static void logAttributionW(@NonNull String message, Object... arguments) {
-        Log.w(APPMETRICA_ATTRIBUTION_TAG, String.format(message, arguments));
+        DebugLogger.INSTANCE.warning(APPMETRICA_ATTRIBUTION_TAG, String.format(message, arguments));
     }
 
     public static void logAttributionE(@NonNull Throwable ex, @NonNull String message, Object... arguments) {
-        Log.e(APPMETRICA_ATTRIBUTION_TAG, String.format(message, arguments), ex);
+        DebugLogger.INSTANCE.error(APPMETRICA_ATTRIBUTION_TAG, String.format(message, arguments), ex);
     }
 
     public static void logStubUsage() {
-        Log.i(APPMETRICA_TAG, "User is locked. So use stubs. Events will not be sent.");
+        ImportantLogger.INSTANCE.info(
+            APPMETRICA_TAG,
+            "User is locked. So use stubs. Events will not be sent."
+        );
     }
 
     public static boolean isExceptionFromMetrica(@Nullable Throwable exception) {

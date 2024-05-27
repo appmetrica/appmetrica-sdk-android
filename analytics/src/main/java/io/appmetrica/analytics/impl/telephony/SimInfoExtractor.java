@@ -13,7 +13,7 @@ import io.appmetrica.analytics.coreutils.internal.AndroidUtils;
 import io.appmetrica.analytics.coreutils.internal.cache.CachedDataProvider;
 import io.appmetrica.analytics.coreutils.internal.system.SystemServiceUtils;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -43,7 +43,7 @@ public class SimInfoExtractor implements TelephonyInfoExtractor<List<SimInfo>> {
             simInfos = extractInternal();
             cachedData.setData(simInfos);
         }
-        DebugLogger.info(TAG, "Extract simInfo returns %s", simInfos);
+        DebugLogger.INSTANCE.info(TAG, "Extract simInfo returns %s", simInfos);
         return simInfos;
     }
 
@@ -56,7 +56,7 @@ public class SimInfoExtractor implements TelephonyInfoExtractor<List<SimInfo>> {
                         SimInfoExtractorForM.extractSimInfosFromSubscriptionManager(context)
                     );
                 } else {
-                    DebugLogger.info(TAG, "No READ_PHONE_STATE permission");
+                    DebugLogger.INSTANCE.info(TAG, "No READ_PHONE_STATE permission");
                 }
                 if (simInfos.size() == 0) {
                     simInfos.add(createSimInfo());
@@ -65,7 +65,7 @@ public class SimInfoExtractor implements TelephonyInfoExtractor<List<SimInfo>> {
                 simInfos.add(createSimInfo());
             }
         } else {
-            DebugLogger.info(TAG, "Sim info collecting forbidden by startup.");
+            DebugLogger.INSTANCE.info(TAG, "Sim info collecting forbidden by startup.");
         }
         return simInfos;
     }

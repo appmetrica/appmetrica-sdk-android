@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.impl
 
-import android.util.Log
+import io.appmetrica.analytics.logger.appmetrica.internal.ImportantLogger
+import io.appmetrica.analytics.logger.common.internal.BaseImportantLogger
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.TestUtils
 import io.appmetrica.analytics.testutils.staticRule
@@ -14,7 +15,7 @@ import org.robolectric.RobolectricTestRunner
 class SdkUtilsTest : CommonTest() {
 
     @get:Rule
-    val logMockedStaticRule = staticRule<Log>()
+    val logMockedStaticRule = staticRule<BaseImportantLogger>()
 
     @Test
     fun onlyMetricaCrash() {
@@ -65,7 +66,7 @@ class SdkUtilsTest : CommonTest() {
     fun logStubUsage() {
         SdkUtils.logStubUsage()
         logMockedStaticRule.staticMock.verify {
-            Log.i(SdkUtils.APPMETRICA_TAG, "User is locked. So use stubs. Events will not be sent.")
+            ImportantLogger.info(SdkUtils.APPMETRICA_TAG, "User is locked. So use stubs. Events will not be sent.")
         }
     }
 }

@@ -27,7 +27,6 @@ import org.robolectric.RuntimeEnvironment;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
@@ -68,7 +67,6 @@ public class SessionManagerStateMachineTest extends CommonTest {
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        when(publicLogger.isEnabled()).thenReturn(true);
         when(mComponentUnit.getContext()).thenReturn(RuntimeEnvironment.getApplication());
         when(mComponentUnit.getVitalComponentDataProvider()).thenReturn(vitalComponentDataProvider);
         when(mComponentUnit.getEventTrigger()).thenReturn(mock(EventTrigger.class));
@@ -93,30 +91,26 @@ public class SessionManagerStateMachineTest extends CommonTest {
     public void testCreateBackgroundSession() {
         mManager.getSomeSession(mCounterReport);
         assertThat(mManager.getState()).isEqualTo(SessionManagerStateMachine.State.BACKGROUND);
-        verify(mComponentUnit.getPublicLogger()).i("Start background session");
+        verify(mComponentUnit.getPublicLogger()).info("Start background session");
     }
 
     @Test
     public void testCreateForeground() {
         mManager.heartbeat(mCounterReport);
         assertThat(mManager.getState()).isEqualTo(SessionManagerStateMachine.State.FOREGROUND);
-        verify(mComponentUnit.getPublicLogger()).i("Start foreground session");
+        verify(mComponentUnit.getPublicLogger()).info("Start foreground session");
     }
 
     @Test
     public void testCreateBackgroundSessionIfLoggerDisabled() {
-        when(publicLogger.isEnabled()).thenReturn(false);
         mManager.getSomeSession(mCounterReport);
         assertThat(mManager.getState()).isEqualTo(SessionManagerStateMachine.State.BACKGROUND);
-        verify(mComponentUnit.getPublicLogger(), never()).i(anyString());
     }
 
     @Test
     public void testCreateForegroundIfLoggerDisabled() {
-        when(publicLogger.isEnabled()).thenReturn(false);
         mManager.heartbeat(mCounterReport);
         assertThat(mManager.getState()).isEqualTo(SessionManagerStateMachine.State.FOREGROUND);
-        verify(mComponentUnit.getPublicLogger(), never()).i(anyString());
     }
 
     @Test
@@ -171,7 +165,7 @@ public class SessionManagerStateMachineTest extends CommonTest {
         mManager.stopCurrentSessionDueToCrash(mCounterReport);
         assertThat(mManager.getState()).isEqualTo(SessionManagerStateMachine.State.EMPTY);
         verify(session).updateAliveReportNeeded(false);
-        verify(mComponentUnit.getPublicLogger()).i("Start background session");
+        verify(mComponentUnit.getPublicLogger()).info("Start background session");
     }
 
     @Test
@@ -181,28 +175,24 @@ public class SessionManagerStateMachineTest extends CommonTest {
         mManager.stopCurrentSessionDueToCrash(mCounterReport);
         assertThat(mManager.getState()).isEqualTo(SessionManagerStateMachine.State.EMPTY);
         verify(session).updateAliveReportNeeded(false);
-        verify(mComponentUnit.getPublicLogger()).i("Start foreground session");
+        verify(mComponentUnit.getPublicLogger()).info("Start foreground session");
     }
 
     @Test
     public void testCrashInBackgroundIfLoggerIsDisabled() {
-        when(publicLogger.isEnabled()).thenReturn(false);
         Session session = mManager.getSomeSession(mCounterReport);
         mManager.stopCurrentSessionDueToCrash(mCounterReport);
         assertThat(mManager.getState()).isEqualTo(SessionManagerStateMachine.State.EMPTY);
         verify(session).updateAliveReportNeeded(false);
-        verify(mComponentUnit.getPublicLogger(), never()).i(anyString());
     }
 
     @Test
     public void testCrashInForegroundIfLoggerIsDisabled() {
-        when(publicLogger.isEnabled()).thenReturn(false);
         mManager.heartbeat(mCounterReport);
         Session session = mManager.getSomeSession(mCounterReport);
         mManager.stopCurrentSessionDueToCrash(mCounterReport);
         assertThat(mManager.getState()).isEqualTo(SessionManagerStateMachine.State.EMPTY);
         verify(session).updateAliveReportNeeded(false);
-        verify(mComponentUnit.getPublicLogger(), never()).i(anyString());
     }
 
     @Test

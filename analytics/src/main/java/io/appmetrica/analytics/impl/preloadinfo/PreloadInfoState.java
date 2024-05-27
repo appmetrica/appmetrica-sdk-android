@@ -5,7 +5,7 @@ import androidx.annotation.Nullable;
 import io.appmetrica.analytics.coreutils.internal.parsing.JsonUtils;
 import io.appmetrica.analytics.impl.DistributionSource;
 import io.appmetrica.analytics.impl.DistributionSourceProvider;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import org.json.JSONObject;
 
 public class PreloadInfoState implements DistributionSourceProvider {
@@ -58,7 +58,7 @@ public class PreloadInfoState implements DistributionSourceProvider {
             preloadInfoJson.put(JsonKeys.AUTO_TRACKING, autoTrackingEnabled);
             preloadInfoJson.put(JsonKeys.SOURCE, source.getDescription());
         } catch (Throwable e) {
-            DebugLogger.error(TAG, e);
+            DebugLogger.INSTANCE.error(TAG, e);
         }
         return preloadInfoJson;
     }
@@ -74,7 +74,7 @@ public class PreloadInfoState implements DistributionSourceProvider {
                     preloadInfoJson.put(JsonKeys.ADDITIONAL_PARAMS, additionalParameters);
                 }
             } catch (Throwable e) {
-                DebugLogger.error(TAG, e);
+                DebugLogger.INSTANCE.error(TAG, e);
             }
         }
         return preloadInfoJson;

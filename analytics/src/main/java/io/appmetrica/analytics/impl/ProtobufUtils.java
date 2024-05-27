@@ -26,7 +26,7 @@ import io.appmetrica.analytics.impl.referrer.common.ReferrerInfo;
 import io.appmetrica.analytics.impl.request.ReportRequestConfig;
 import io.appmetrica.analytics.impl.telephony.SimInfo;
 import io.appmetrica.analytics.impl.utils.TimeUtils;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import io.appmetrica.analytics.protobuf.nano.MessageNano;
 import java.util.Collections;
 import java.util.HashMap;
@@ -202,7 +202,11 @@ public final class ProtobufUtils {
                                 referrer.source = sourceToProto(info.source);
                                 return MessageNano.toByteArray(referrer);
                             } catch (Throwable e) {
-                                DebugLogger.error(TAG, e, "Something went wrong while serializing referrer event.");
+                                DebugLogger.INSTANCE.error(
+                                    TAG,
+                                    e,
+                                    "Something went wrong while serializing referrer event."
+                                );
                             }
                         }
                         return new byte[0];
@@ -353,7 +357,7 @@ public final class ProtobufUtils {
             }
         }
 
-        DebugLogger.info(TAG, eventsIds.toString());
+        DebugLogger.INSTANCE.info(TAG, eventsIds.toString());
     }
 
     @NonNull

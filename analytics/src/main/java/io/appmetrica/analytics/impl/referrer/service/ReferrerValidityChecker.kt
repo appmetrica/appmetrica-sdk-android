@@ -8,7 +8,7 @@ import io.appmetrica.analytics.impl.referrer.common.ReferrerInfo
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade
 import io.appmetrica.analytics.impl.utils.JsonHelper
 import io.appmetrica.analytics.impl.utils.MapWithDefault
-import io.appmetrica.analytics.logger.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import org.json.JSONObject
 import java.util.concurrent.TimeUnit
 import kotlin.math.abs

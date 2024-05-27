@@ -5,7 +5,7 @@ import androidx.annotation.Nullable;
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.applicationstate.ApplicationState;
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.applicationstate.ApplicationStateObserver;
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.applicationstate.ApplicationStateProvider;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -24,7 +24,7 @@ public class ApplicationStateProviderImpl implements ServiceLifecycleObserver, A
     @Override
     public void onCreate() {
         updateApplicationState();
-        DebugLogger.info(TAG, "Init finished. Inital application state = %s", mCurrentState.name());
+        DebugLogger.INSTANCE.info(TAG, "Init finished. Inital application state = %s", mCurrentState.name());
     }
 
     @Override
@@ -32,7 +32,7 @@ public class ApplicationStateProviderImpl implements ServiceLifecycleObserver, A
         if (mCurrentState == ApplicationState.VISIBLE) {
             mCurrentState = ApplicationState.BACKGROUND;
         }
-        DebugLogger.info(TAG, "Destroy. Actual application state = %s", mCurrentState.name());
+        DebugLogger.INSTANCE.info(TAG, "Destroy. Actual application state = %s", mCurrentState.name());
     }
 
     @Override
@@ -40,7 +40,12 @@ public class ApplicationStateProviderImpl implements ServiceLifecycleObserver, A
     public ApplicationState registerStickyObserver(@Nullable ApplicationStateObserver observer) {
         if (observer != null) {
             mObservers.add(observer);
-            DebugLogger.info(TAG, "Register observer(%s). Actual observers count = %d", observer, mObservers.size());
+            DebugLogger.INSTANCE.info(
+                TAG,
+                "Register observer(%s). Actual observers count = %d",
+                observer,
+                mObservers.size()
+            );
         }
         return mCurrentState;
     }
@@ -54,7 +59,7 @@ public class ApplicationStateProviderImpl implements ServiceLifecycleObserver, A
     public void resumeUserSessionForPid(int pid) {
         mVisibleProcessesPids.add(pid);
         mPausedProcessesPids.remove(pid);
-        DebugLogger.info(
+        DebugLogger.INSTANCE.info(
             TAG,
             "ResumeUserSessionForPid = %d. Visible processes count = %d; paused processes count = %d",
             pid,
@@ -67,7 +72,7 @@ public class ApplicationStateProviderImpl implements ServiceLifecycleObserver, A
     public void pauseUserSessionForPid(int pid) {
         mPausedProcessesPids.add(pid);
         mVisibleProcessesPids.remove(pid);
-        DebugLogger.info(
+        DebugLogger.INSTANCE.info(
             TAG,
             "PauseUserSessionForPid = %d. Visible processes count = %d; paused processes count = %d",
             pid,
@@ -79,7 +84,7 @@ public class ApplicationStateProviderImpl implements ServiceLifecycleObserver, A
 
     public void notifyProcessDisconnected(int pid) {
         mVisibleProcessesPids.remove(pid);
-        DebugLogger.info(
+        DebugLogger.INSTANCE.info(
             TAG,
             "NotifyProcessDisconnected for pid = %d. Visible processes count = %d; paused processes count = %d ",
             pid,
@@ -92,7 +97,7 @@ public class ApplicationStateProviderImpl implements ServiceLifecycleObserver, A
     private void updateApplicationState() {
         ApplicationState incomingState = calculateApplicationState();
         if (mCurrentState != incomingState) {
-            DebugLogger.info(
+            DebugLogger.INSTANCE.info(
                 TAG,
                 "Change application state: %s -> %s; Actual details: visible processes pids = %d; " +
                     "paused processes pids = %d",
@@ -118,7 +123,11 @@ public class ApplicationStateProviderImpl implements ServiceLifecycleObserver, A
     }
 
     private void notifyApplicationStateChanged() {
-        DebugLogger.info(TAG, "NotifyApplicationStateChanged. Total observers = %d", mObservers.size());
+        DebugLogger.INSTANCE.info(
+            TAG,
+            "NotifyApplicationStateChanged. Total observers = %d",
+            mObservers.size()
+        );
         for (ApplicationStateObserver observer : mObservers) {
             observer.onApplicationStateChanged(mCurrentState);
         }

@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.modules.client
 
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade
-import io.appmetrica.analytics.logger.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import io.appmetrica.analytics.modulesapi.internal.client.ClientContext
 import io.appmetrica.analytics.modulesapi.internal.client.ModuleClientEntryPoint
 import java.util.concurrent.CopyOnWriteArrayList

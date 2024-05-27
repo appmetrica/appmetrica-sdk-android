@@ -16,7 +16,7 @@ import io.appmetrica.analytics.impl.db.connectors.LockedOnFileDBConnector;
 import io.appmetrica.analytics.impl.db.connectors.SimpleDBConnector;
 import io.appmetrica.analytics.impl.db.constants.Constants;
 import io.appmetrica.analytics.impl.db.constants.TempCacheTable;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
@@ -34,7 +34,7 @@ public class DatabaseStorageFactory {
         if (sStorageFactory == null) {
             synchronized (DatabaseStorageFactory.class) {
                 if (sStorageFactory == null) {
-                    DebugLogger.info(TAG, "Create default instance.");
+                    DebugLogger.INSTANCE.info(TAG, "Create default instance.");
                     sStorageFactory = new DatabaseStorageFactory(context.getApplicationContext(), null);
                 }
             }
@@ -46,7 +46,7 @@ public class DatabaseStorageFactory {
         if (sStorageFactory == null) {
             synchronized (DatabaseStorageFactory.class) {
                 if (sStorageFactory == null) {
-                    DebugLogger.info(TAG, "Create instance with overwrittenDbStoragePath");
+                    DebugLogger.INSTANCE.info(TAG, "Create instance with overwrittenDbStoragePath");
                     sStorageFactory = new DatabaseStorageFactory(context.getApplicationContext(), file);
                 }
             }
@@ -103,9 +103,17 @@ public class DatabaseStorageFactory {
         DatabaseStorage storage = databaseStorages.get(componentDatabaseSimpleNameProvider.getDatabaseName());
 
         if (null != storage) {
-            DebugLogger.info(TAG, "Database instance IN USE, we will just return for %s", componentId);
+            DebugLogger.INSTANCE.info(
+                TAG,
+                "Database instance IN USE, we will just return for %s",
+                componentId
+            );
         } else {
-            DebugLogger.info(TAG, "Database instance IS NULL, we will create a new one for %s", componentId);
+            DebugLogger.INSTANCE.info(
+                TAG,
+                "Database instance IS NULL, we will create a new one for %s",
+                componentId
+            );
             storage = new DatabaseStorage(
                 context,
                 databaseStoragePathProviderFactory.create(componentDatabaseSimpleNameProvider.getDatabaseName(), false)

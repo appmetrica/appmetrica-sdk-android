@@ -6,7 +6,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.impl.protobuf.backend.ExternalAttribution;
 import io.appmetrica.analytics.impl.proxy.ModulesProxy;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 
 /**
  * Class with methods for communication of different AppMetrica modules.
@@ -49,7 +49,7 @@ public final class ModulesFacade {
      * @param moduleEvent Description of event to send.
      */
     public static void reportEvent(@NonNull final ModuleEvent moduleEvent) {
-        DebugLogger.info(TAG, "reportEvent: %s", moduleEvent);
+        DebugLogger.INSTANCE.info(TAG, "reportEvent: %s", moduleEvent);
         proxy.reportEvent(moduleEvent);
     }
 
@@ -64,7 +64,7 @@ public final class ModulesFacade {
         @NonNull final String key,
         @Nullable final byte[] value
     ) {
-        DebugLogger.info(
+        DebugLogger.INSTANCE.info(
             TAG,
             "setSessionExtra with key = `%s` and value size: %s",
             key,

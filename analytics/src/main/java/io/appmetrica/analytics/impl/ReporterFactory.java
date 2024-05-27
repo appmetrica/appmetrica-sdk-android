@@ -2,13 +2,6 @@ package io.appmetrica.analytics.impl;
 
 import android.content.Context;
 import android.os.Handler;
-import android.util.Log;
-
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.WorkerThread;
 import io.appmetrica.analytics.AppMetricaConfig;
@@ -20,7 +13,12 @@ import io.appmetrica.analytics.impl.utils.PublicLogger;
 import io.appmetrica.analytics.impl.utils.validation.ThrowIfFailedValidator;
 import io.appmetrica.analytics.impl.utils.validation.Validator;
 import io.appmetrica.analytics.impl.utils.validation.api.ReporterKeyIsUsedValidator;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.ImportantLogger;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ReporterFactory implements IReporterFactory {
 
@@ -100,12 +98,10 @@ public class ReporterFactory implements IReporterFactory {
     public synchronized void activateReporter(@NonNull ReporterConfig config) {
         if (reporters.containsKey(config.apiKey)) {
             PublicLogger logger = LoggerStorage.getOrCreatePublicLogger(config.apiKey);
-            if (logger.isEnabled()) {
-                logger.fw("Reporter with apiKey=%s already exists.", config.apiKey);
-            }
+            logger.warning("Reporter with apiKey=%s already exists.", config.apiKey);
         } else {
             getOrCreateReporter(config);
-            Log.i(
+            ImportantLogger.INSTANCE.info(
                 SdkUtils.APPMETRICA_TAG,
                 "Activate reporter with APIKey " + Utils.createPartialApiKey(config.apiKey)
             );
@@ -141,7 +137,7 @@ public class ReporterFactory implements IReporterFactory {
     public synchronized IUnhandledSituationReporter getMainOrCrashReporter(@NonNull AppMetricaConfig config) {
         IReporterExtended reporter = reporters.get(config.apiKey);
         if (reporter == null) {
-            DebugLogger.info(TAG, "No main reporter - will create crash reporter");
+            DebugLogger.INSTANCE.info(TAG, "No main reporter - will create crash reporter");
             CrashReporter crashReporter = new CrashReporter(
                 context,
                 processConfiguration,

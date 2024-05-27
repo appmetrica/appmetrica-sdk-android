@@ -6,7 +6,7 @@ import io.appmetrica.analytics.coreapi.internal.io.IExecutionPolicy;
 import io.appmetrica.analytics.impl.PhoneUtils;
 import io.appmetrica.analytics.impl.utils.ConnectionTypeProviderImpl;
 import io.appmetrica.analytics.impl.utils.IConnectionTypeProvider;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.util.EnumSet;
 
 public class ExecutionPolicyBasedOnConnection implements IExecutionPolicy {
@@ -28,7 +28,7 @@ public class ExecutionPolicyBasedOnConnection implements IExecutionPolicy {
     public boolean canBeExecuted() {
         PhoneUtils.NetworkType connectionType = mConnectionTypeProvider.getConnectionType(mContext);
         boolean canBeExecuted = FORBIDDEN_NETWORK_TYPES.contains(connectionType) == false;
-        DebugLogger.info(
+        DebugLogger.INSTANCE.info(
             TAG,
             "can request executed on network with type %s? %b",
             connectionType.toString(),

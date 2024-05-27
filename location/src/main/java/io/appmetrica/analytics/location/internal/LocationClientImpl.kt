@@ -18,7 +18,7 @@ import io.appmetrica.analytics.locationapi.internal.LocationClient
 import io.appmetrica.analytics.locationapi.internal.LocationFilter
 import io.appmetrica.analytics.locationapi.internal.LocationReceiverProvider
 import io.appmetrica.analytics.locationapi.internal.LocationReceiverProviderFactory
-import io.appmetrica.analytics.logger.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
 class LocationClientImpl : LocationClient {
 

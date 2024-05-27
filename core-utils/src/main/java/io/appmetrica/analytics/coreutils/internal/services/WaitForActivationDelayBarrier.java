@@ -6,7 +6,7 @@ import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.ActivationBarrier;
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.ActivationBarrierCallback;
 import io.appmetrica.analytics.coreutils.internal.time.SystemTimeProvider;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 
 public class WaitForActivationDelayBarrier implements ActivationBarrier {
 
@@ -24,7 +24,7 @@ public class WaitForActivationDelayBarrier implements ActivationBarrier {
             activationCallback = new ActivationBarrierCallback() {
                 @Override
                 public void onWaitFinished() {
-                    DebugLogger.info(TAG, "Wait finished. Execute callback");
+                    DebugLogger.INSTANCE.info(TAG, "Wait finished. Execute callback");
                     activated = true;
                     runnable.run();
                 }
@@ -34,14 +34,14 @@ public class WaitForActivationDelayBarrier implements ActivationBarrier {
 
         public void subscribeIfNeeded(final long delay, @NonNull ICommonExecutor executor) {
             if (!activated) {
-                DebugLogger.info(TAG, "Has not been activated yet. Subscribe with delay %d.", delay);
+                DebugLogger.INSTANCE.info(TAG, "Has not been activated yet. Subscribe with delay %d.", delay);
                 activationBarrier.subscribe(
                         delay,
                         executor,
                     activationCallback
                 );
             } else {
-                DebugLogger.info(TAG, "Already has been activated. Execute now.");
+                DebugLogger.INSTANCE.info(TAG, "Already has been activated. Execute now.");
                 executor.execute(new Runnable() {
                     @Override
                     public void run() {
@@ -81,7 +81,7 @@ public class WaitForActivationDelayBarrier implements ActivationBarrier {
         executor.executeDelayed(new Runnable() {
             @Override
             public void run() {
-                DebugLogger.info(TAG, "Activation finished");
+                DebugLogger.INSTANCE.info(TAG, "Activation finished");
                 callback.onWaitFinished();
             }
         }, timeToWait);

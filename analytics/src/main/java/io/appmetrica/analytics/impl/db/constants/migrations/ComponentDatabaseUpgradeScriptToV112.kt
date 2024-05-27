@@ -14,7 +14,7 @@ import io.appmetrica.analytics.impl.db.protobuf.converter.DbEventModelConverter
 import io.appmetrica.analytics.impl.db.protobuf.converter.DbSessionModelConverter
 import io.appmetrica.analytics.impl.db.session.DbSessionModel
 import io.appmetrica.analytics.impl.utils.encryption.EventEncryptionMode
-import io.appmetrica.analytics.logger.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
 internal class ComponentDatabaseUpgradeScriptToV112 : DatabaseScript() {
 
@@ -210,7 +210,10 @@ internal class ComponentDatabaseUpgradeScriptToV112 : DatabaseScript() {
                         )
                     }
                 }
-                DebugLogger.info(tag, "Read $readRecordsCount records; imported $importedRecordsCount records")
+                DebugLogger.info(
+                    tag,
+                    "Read $readRecordsCount records; imported $importedRecordsCount records"
+                )
             } catch (e: Throwable) {
                 DebugLogger.error(tag, e)
             } finally {

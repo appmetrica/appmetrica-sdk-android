@@ -31,7 +31,6 @@ import org.robolectric.RobolectricTestRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyBoolean;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -118,37 +117,23 @@ public class SynchronousStageExecutorTest extends CommonTest {
 
     @Test
     public void activateIsLoggingIsSessionAutoTrackingEnabled() {
-        when(publicLogger.isEnabled()).thenReturn(true);
         AppMetricaConfig config = AppMetricaConfig.newConfigBuilder(apiKey)
             .withSessionsAutoTrackingEnabled(true)
             .build();
 
         synchronousStageExecutor.activate(mContext, config);
 
-        verify(publicLogger).i("Session auto tracking enabled");
+        verify(publicLogger).info("Session auto tracking enabled");
         verify(contextAppearedListener).onProbablyAppeared(mContext);
     }
 
     @Test
-    public void activateIsLoggingIsSessionAutoTrackingEnabledIfLoggerDisabled() {
-        when(publicLogger.isEnabled()).thenReturn(false);
-        AppMetricaConfig config = AppMetricaConfig.newConfigBuilder(apiKey)
-            .withSessionsAutoTrackingEnabled(true)
-            .build();
-
-        synchronousStageExecutor.activate(mContext, config);
-
-        verify(publicLogger, never()).i(anyString());
-    }
-
-    @Test
     public void activateIsLoggingIsSessionAutoTrackingDisabled() {
-        when(publicLogger.isEnabled()).thenReturn(true);
         AppMetricaConfig config = AppMetricaConfig.newConfigBuilder(apiKey)
             .withSessionsAutoTrackingEnabled(false)
             .build();
         synchronousStageExecutor.activate(mContext, config);
-        verify(publicLogger).i("Session auto tracking disabled");
+        verify(publicLogger).info("Session auto tracking disabled");
     }
 
     @Test

@@ -11,7 +11,7 @@ import androidx.annotation.WorkerThread;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.Utils;
 import io.appmetrica.analytics.impl.referrer.common.ReferrerInfo;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.util.concurrent.Callable;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
@@ -43,7 +43,7 @@ public class HuaweiReferrerRetriever {
                     .getHmsReferrerThread(referrerInfoFuture).start();
             resultReferrerInfo = referrerInfoFuture.get(FUTURE_TIMEOUT_SECONDS, TimeUnit.SECONDS);
         } catch (Throwable ex) {
-            DebugLogger.error(TAG, ex, "Could not retrieve Huawei referrer");
+            DebugLogger.INSTANCE.error(TAG, ex, "Could not retrieve Huawei referrer");
             referrerListener.onReferrerRetrieveError(ex);
             return;
         } finally {
@@ -73,15 +73,15 @@ public class HuaweiReferrerRetriever {
                                     installTimestamp,
                                     ReferrerInfo.Source.HMS
                             );
-                            DebugLogger.info(TAG, "Parsed referrer: %s", referrerInfo);
+                            DebugLogger.INSTANCE.info(TAG, "Parsed referrer: %s", referrerInfo);
                         } else {
-                            DebugLogger.info(TAG, "Referrer is empty");
+                            DebugLogger.INSTANCE.info(TAG, "Referrer is empty");
                         }
                     } else {
-                        DebugLogger.info(TAG, "Empty cursor");
+                        DebugLogger.INSTANCE.info(TAG, "Empty cursor");
                     }
                 } else {
-                    DebugLogger.info(TAG, "No content provider found");
+                    DebugLogger.INSTANCE.info(TAG, "No content provider found");
                 }
                 return referrerInfo;
             }

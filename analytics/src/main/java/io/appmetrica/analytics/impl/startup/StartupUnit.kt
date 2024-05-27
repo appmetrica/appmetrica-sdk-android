@@ -13,7 +13,7 @@ import io.appmetrica.analytics.impl.startup.parsing.StartupParser
 import io.appmetrica.analytics.impl.startup.parsing.StartupResult
 import io.appmetrica.analytics.impl.utils.ServerTime
 import io.appmetrica.analytics.impl.utils.StartupUtils
-import io.appmetrica.analytics.logger.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import io.appmetrica.analytics.networktasks.internal.NetworkTask
 
 internal class StartupUnit(

@@ -16,7 +16,7 @@ import io.appmetrica.analytics.ReporterConfig;
 import io.appmetrica.analytics.StartupParamsCallback;
 import io.appmetrica.analytics.coreutils.internal.executors.BlockingExecutor;
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -50,7 +50,7 @@ public class AppMetricaFacade implements IReporterFactoryProvider {
         mFullInitFuture = new FutureTask<>(new Callable<IAppMetricaImpl>() {
             @Override
             public IAppMetricaImpl call() {
-                DebugLogger.info(TAG, "createImpl");
+                DebugLogger.INSTANCE.info(TAG, "createImpl");
                 return createImpl();
             }
         });
@@ -64,13 +64,13 @@ public class AppMetricaFacade implements IReporterFactoryProvider {
         executorForInit.execute(new Runnable() {
             @Override
             public void run() {
-                DebugLogger.info(TAG, "Check client migration");
+                DebugLogger.INSTANCE.info(TAG, "Check client migration");
                 new ClientMigrationManager(mContext).checkMigration(mContext);
-                DebugLogger.info(TAG, "Warm up uuid");
+                DebugLogger.INSTANCE.info(TAG, "Warm up uuid");
                 ClientServiceLocator.getInstance().getMultiProcessSafeUuidProvider(mContext).readUuid();
             }
         });
-        DebugLogger.info(TAG, "schedule createImpl");
+        DebugLogger.INSTANCE.info(TAG, "schedule createImpl");
         executorForInit.execute(mFullInitFuture);
     }
 
@@ -86,13 +86,17 @@ public class AppMetricaFacade implements IReporterFactoryProvider {
         @NonNull final Context context,
         boolean asyncInit // For calls from non default executor
     ) {
-        DebugLogger.info(TAG, "getInstance: %s", Arrays.toString(Thread.currentThread().getStackTrace()));
+        DebugLogger.INSTANCE.info(
+            TAG,
+            "getInstance: %s",
+            Arrays.toString(Thread.currentThread().getStackTrace())
+        );
         AppMetricaFacade localCopy = sInstance;
         if (localCopy == null) {
             synchronized (AppMetricaFacade.class) {
                 localCopy = sInstance;
                 if (localCopy == null) {
-                    DebugLogger.info(TAG, "needs create facade");
+                    DebugLogger.INSTANCE.info(TAG, "needs create facade");
                     localCopy = new AppMetricaFacade(context);
                     localCopy.init(asyncInit);
                     localCopy.onInstanceCreated();
@@ -104,11 +108,11 @@ public class AppMetricaFacade implements IReporterFactoryProvider {
     }
 
     private void onInstanceCreated() {
-        DebugLogger.info(TAG, "onInstanceCreated");
+        DebugLogger.INSTANCE.info(TAG, "onInstanceCreated");
         ClientServiceLocator.getInstance().getClientExecutorProvider().getDefaultExecutor().execute(new Runnable() {
             @Override
             public void run() {
-                DebugLogger.info(TAG, "onInitializationFinished");
+                DebugLogger.INSTANCE.info(TAG, "onInitializationFinished");
                 AppMetricaSelfReportFacade.onInitializationFinished(mContext);
             }
         });
@@ -254,10 +258,14 @@ public class AppMetricaFacade implements IReporterFactoryProvider {
     @NonNull
     private IAppMetricaImpl getImpl() {
         try {
-            DebugLogger.info(TAG, "getImpl: %s", Arrays.toString(Thread.currentThread().getStackTrace()));
+            DebugLogger.INSTANCE.info(
+                TAG,
+                "getImpl: %s",
+                Arrays.toString(Thread.currentThread().getStackTrace())
+            );
             return mFullInitFuture.get();
         } catch (Exception e) {
-            DebugLogger.error(TAG, e);
+            DebugLogger.INSTANCE.error(TAG, e);
             throw new RuntimeException(e);
         }
     }

@@ -230,16 +230,8 @@ public abstract class ComponentUnitBaseTest extends CommonTest {
 
     @Test
     public void testEventLoggedIfLoggerEnabled() {
-        when(mPublicLogger.isEnabled()).thenReturn(true);
         mComponentUnit.handleReport(mCounterReport);
         verify(mPublicLogger).logEvent(mCounterReport, "Event received on service");
-    }
-
-    @Test
-    public void testEventNotLoggedIfLoggerDisabled() {
-        when(mPublicLogger.isEnabled()).thenReturn(false);
-        mComponentUnit.handleReport(mCounterReport);
-        verify(mPublicLogger, never()).logEvent(any(CounterReport.class), anyString());
     }
 
     @Test

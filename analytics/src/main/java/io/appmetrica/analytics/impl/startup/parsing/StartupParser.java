@@ -10,7 +10,7 @@ import io.appmetrica.analytics.impl.db.state.converter.StatSendingConverter;
 import io.appmetrica.analytics.impl.protobuf.client.StartupStateProtobuf;
 import io.appmetrica.analytics.impl.utils.JsonHelper;
 import io.appmetrica.analytics.impl.utils.StartupUtils;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
@@ -107,13 +107,18 @@ public class StartupParser {
         try {
             final JsonHelper.OptJSONObject response = jsonResponseProvider.jsonFromBytes(rawResponse);
 
-            DebugLogger.info(TAG, "Full response: " + response);
-            DebugLogger.dumpJson(TAG, response);
+            DebugLogger.INSTANCE.info(TAG, "Full response: " + response);
+            DebugLogger.INSTANCE.dumpJson(TAG, response);
 
             parseDeviceId(result, response);
             parseComplexBlocks(result, response);
         } catch (Throwable exception) {
-            DebugLogger.error(TAG, exception, "Smth was wrong while parsing startup answer.\n%s", exception);
+            DebugLogger.INSTANCE.error(
+                TAG,
+                exception,
+                "Smth was wrong while parsing startup answer.\n%s",
+                exception
+            );
             result = new StartupResult();
             result.setResult(StartupResult.Result.BAD);
             return result;
@@ -158,10 +163,14 @@ public class StartupParser {
         JSONObject locale = response.optJSONObject(JsonResponseKey.LOCALE);
         String countryInit = "";
         if (locale != null) {
-            DebugLogger.info(TAG, "locale %s", locale.toString());
+            DebugLogger.INSTANCE.info(TAG, "locale %s", locale.toString());
             JSONObject country = locale.optJSONObject(JsonResponseKey.COUNTRY);
             if (country != null) {
-                DebugLogger.info(TAG, "reliable %b", country.optBoolean(JsonResponseKey.RELIABLE, false));
+                DebugLogger.INSTANCE.info(
+                    TAG,
+                    "reliable %b",
+                    country.optBoolean(JsonResponseKey.RELIABLE, false)
+                );
                 if (country.optBoolean(JsonResponseKey.RELIABLE, false)) {
                     countryInit = country.optString(JsonResponseKey.VALUE, "");
                 }
@@ -173,7 +182,7 @@ public class StartupParser {
     private void parseQueries(@NonNull StartupResult result, @NonNull JsonHelper.OptJSONObject response) {
         JSONObject queries = response.optJSONObject(JsonResponseKey.QUERIES);
         if (queries != null) {
-            DebugLogger.info(TAG, "queries %s", queries);
+            DebugLogger.INSTANCE.info(TAG, "queries %s", queries);
             JSONObject list = queries.optJSONObject(JsonResponseKey.LIST);
             if (list != null) {
                 JSONObject certificate = list.optJSONObject(JsonResponseKey.CERTIFICATE);
@@ -230,7 +239,7 @@ public class StartupParser {
                 long validTimeDifference = timeJson.getLong(JsonResponseKey.MAX_VALID_DIFFERENCE_SECONDS);
                 startupResult.setValidTimeDifference(validTimeDifference);
             } catch (Throwable e) {
-                DebugLogger.error(
+                DebugLogger.INSTANCE.error(
                     TAG,
                     e,
                     "Couldn't parse %s from startup response",
@@ -252,9 +261,13 @@ public class StartupParser {
                     DateFormat dt = new SimpleDateFormat(SERVER_TIME_FORMAT, Locale.US);
 
                     serverTime = dt.parse(headerValue).getTime();
-                    DebugLogger.info(TAG, "ParserServerTime = %s", String.valueOf(serverTime));
+                    DebugLogger.INSTANCE.info(TAG, "ParserServerTime = %s", String.valueOf(serverTime));
                 } catch (Throwable e) {
-                    DebugLogger.error(TAG, "Smth was wrong while parsing startup response header.\n%s", e);
+                    DebugLogger.INSTANCE.error(
+                        TAG,
+                        "Smth was wrong while parsing startup response header.\n%s",
+                        e
+                    );
                 }
             }
         }

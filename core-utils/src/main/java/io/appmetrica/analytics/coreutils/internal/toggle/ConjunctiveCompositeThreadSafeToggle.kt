@@ -2,7 +2,7 @@ package io.appmetrica.analytics.coreutils.internal.toggle
 
 import io.appmetrica.analytics.coreapi.internal.control.Toggle
 import io.appmetrica.analytics.coreapi.internal.control.ToggleObserver
-import io.appmetrica.analytics.logger.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.locks.ReentrantLock
 
@@ -76,7 +76,10 @@ class ConjunctiveCompositeThreadSafeToggle(
     }
 
     private fun notifyObservers(incomingState: Boolean) {
-        DebugLogger.info(tag, "Notify observers with status = $incomingState. Current count = ${observers.size}")
+        DebugLogger.info(
+            tag,
+            "Notify observers with status = $incomingState. Current count = ${observers.size}"
+        )
         observers.forEach {
             it.onStateChanged(incomingState)
         }

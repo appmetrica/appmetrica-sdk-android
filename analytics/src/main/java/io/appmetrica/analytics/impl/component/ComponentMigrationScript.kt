@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.component
 
-import io.appmetrica.analytics.logger.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
 internal abstract class ComponentMigrationScript(
     val componentUnit: ComponentUnit,

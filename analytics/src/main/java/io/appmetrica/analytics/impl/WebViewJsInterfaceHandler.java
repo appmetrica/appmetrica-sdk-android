@@ -9,7 +9,7 @@ import io.appmetrica.analytics.impl.proxy.AppMetricaProxy;
 import io.appmetrica.analytics.impl.utils.PublicLogger;
 import io.appmetrica.analytics.internal.js.AppMetricaInitializerJsInterface;
 import io.appmetrica.analytics.internal.js.AppMetricaJsInterface;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +38,7 @@ public class WebViewJsInterfaceHandler {
                 logWOrQueue("WebView interface setup failed because javascript is disabled for the WebView.");
             }
         } catch (Throwable ex) {
-            DebugLogger.error(TAG, ex);
+            DebugLogger.INSTANCE.error(TAG, ex);
             logEOrQueue("WebView interface setup failed because of an exception.", ex);
         }
     }
@@ -57,9 +57,7 @@ public class WebViewJsInterfaceHandler {
         logOrQueue(new Consumer<PublicLogger>() {
             @Override
             public void consume(PublicLogger input) {
-                if (input.isEnabled()) {
-                    input.i(message);
-                }
+                input.info(message);
             }
         });
     }
@@ -68,9 +66,7 @@ public class WebViewJsInterfaceHandler {
         logOrQueue(new Consumer<PublicLogger>() {
             @Override
             public void consume(PublicLogger input) {
-                if (input.isEnabled()) {
-                    input.w(message);
-                }
+                input.warning(message);
             }
         });
     }
@@ -79,9 +75,7 @@ public class WebViewJsInterfaceHandler {
         logOrQueue(new Consumer<PublicLogger>() {
             @Override
             public void consume(PublicLogger input) {
-                if (input.isEnabled()) {
-                    input.e(ex, message);
-                }
+                input.error(ex, message);
             }
         });
     }

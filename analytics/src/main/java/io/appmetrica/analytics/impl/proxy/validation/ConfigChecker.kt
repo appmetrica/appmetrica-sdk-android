@@ -11,7 +11,7 @@ class ConfigChecker(
 
     fun getCheckedMaxReportsInDatabaseCount(value: Int): Int {
         if (value < DefaultValues.DEFAULT_MAX_REPORTS_COUNT_LOWER_BOUND) {
-            logger.fw(
+            logger.warning(
                 "Value passed as maxReportsInDatabaseCount is invalid. " +
                     "Should be greater than or equal to ${DefaultValues.DEFAULT_MAX_REPORTS_COUNT_LOWER_BOUND}, " +
                     "but was: $value. " +
@@ -20,7 +20,7 @@ class ConfigChecker(
             return DefaultValues.DEFAULT_MAX_REPORTS_COUNT_LOWER_BOUND
         }
         if (value > DefaultValues.DEFAULT_MAX_REPORTS_COUNT_UPPER_BOUND) {
-            logger.fw(
+            logger.warning(
                 "Value passed as maxReportsInDatabaseCount is invalid. " +
                     "Should be less than or equal to ${DefaultValues.DEFAULT_MAX_REPORTS_COUNT_UPPER_BOUND}, " +
                     "but was: $value. " +

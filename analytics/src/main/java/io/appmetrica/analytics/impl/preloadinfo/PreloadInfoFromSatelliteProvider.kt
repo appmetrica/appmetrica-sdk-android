@@ -10,7 +10,7 @@ import io.appmetrica.analytics.impl.DistributionSource
 import io.appmetrica.analytics.impl.SatelliteDataProvider
 import io.appmetrica.analytics.impl.SdkUtils
 import io.appmetrica.analytics.impl.Utils
-import io.appmetrica.analytics.logger.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import org.json.JSONObject
 
 class PreloadInfoFromSatelliteProvider(private val context: Context) : SatelliteDataProvider<PreloadInfoState?> {
@@ -35,7 +35,10 @@ class PreloadInfoFromSatelliteProvider(private val context: Context) : Satellite
                     val additionalParamsColumn = cursor.getColumnIndexOrThrow(columnNameAdditionalParameters)
                     val additionalParams = parseAdditionalParams(cursor.getString(additionalParamsColumn))
 
-                    DebugLogger.info(tag, "Parsed tracking id: $trackingId, additional parameters: $additionalParams")
+                    DebugLogger.info(
+                        tag,
+                        "Parsed tracking id: $trackingId, additional parameters: $additionalParams"
+                    )
 
                     if (TextUtils.isEmpty(trackingId) || ParseUtils.parseLong(trackingId) != null) {
                         SdkUtils.logAttribution(

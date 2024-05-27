@@ -12,7 +12,7 @@ import io.appmetrica.analytics.impl.SdkData;
 import io.appmetrica.analytics.impl.crash.client.AllThreads;
 import io.appmetrica.analytics.impl.crash.client.UnhandledException;
 import io.appmetrica.analytics.impl.proxy.ReporterProxyStorage;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import io.appmetrica.analytics.plugins.IPluginReporter;
 import io.appmetrica.analytics.plugins.PluginErrorDetails;
 import io.appmetrica.analytics.profile.UserProfile;
@@ -31,7 +31,7 @@ public class SelfReporterWrapper implements IReporterExtended, IPluginReporter {
     private volatile IReporterExtended mReporter;
 
     synchronized void onInitializationFinished(@NonNull Context context) {
-        DebugLogger.info(TAG, "core initialization finished. Initializing SelfReporter");
+        DebugLogger.INSTANCE.info(TAG, "core initialization finished. Initializing SelfReporter");
         mReporter = ReporterProxyStorage.getInstance().getOrCreate(context, SdkData.SDK_API_KEY_UUID);
         for (IReporterCommandPerformer performer : mBufferedEvents) {
             performer.perform(mReporter);

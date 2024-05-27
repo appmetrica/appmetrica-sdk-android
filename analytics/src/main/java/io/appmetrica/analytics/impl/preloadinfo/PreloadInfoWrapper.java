@@ -6,7 +6,7 @@ import androidx.annotation.Nullable;
 import io.appmetrica.analytics.PreloadInfo;
 import io.appmetrica.analytics.impl.DistributionSource;
 import io.appmetrica.analytics.impl.utils.PublicLogger;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import org.json.JSONObject;
 
 public class PreloadInfoWrapper {
@@ -21,10 +21,8 @@ public class PreloadInfoWrapper {
                               final boolean autoTracking) {
         if (preloadInfo != null) {
             if (TextUtils.isEmpty(preloadInfo.getTrackingId())) {
-                if (logger.isEnabled()) {
-                    logger.e("Required field \"PreloadInfo.trackingId\" is empty!\n" +
-                            "This preload info will be skipped.");
-                }
+                logger.error("Required field \"PreloadInfo.trackingId\" is empty!\n" +
+                    "This preload info will be skipped.");
             } else {
                 mPreloadInfoState = new PreloadInfoState(
                         preloadInfo.getTrackingId(),
@@ -43,7 +41,7 @@ public class PreloadInfoWrapper {
             try {
                 eventValue.put(PreloadInfoState.JsonKeys.PRELOAD_INFO, mPreloadInfoState.toInternalJson());
             } catch (Throwable e) {
-                DebugLogger.error(TAG, e, e.getMessage());
+                DebugLogger.INSTANCE.error(TAG, e, e.getMessage());
             }
         }
         return eventValue;

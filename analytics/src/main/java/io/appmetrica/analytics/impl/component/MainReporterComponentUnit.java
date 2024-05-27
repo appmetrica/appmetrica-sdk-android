@@ -21,7 +21,7 @@ import io.appmetrica.analytics.impl.referrer.service.ReferrerHolder;
 import io.appmetrica.analytics.impl.referrer.service.ReferrerListenerNotifier;
 import io.appmetrica.analytics.impl.startup.StartupState;
 import io.appmetrica.analytics.impl.startup.executor.ComponentStartupExecutorFactory;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_REGULAR;
 
@@ -113,7 +113,7 @@ public class MainReporterComponentUnit extends ComponentUnit
         public void handleReferrer(@Nullable ReferrerInfo referrer) {
             // referrer is NonNull due to used filter
             if (referrer == null) {
-                DebugLogger.error(TAG, "Unexpected null referrer");
+                DebugLogger.INSTANCE.error(TAG, "Unexpected null referrer");
                 return;
             }
             final CounterReport referrerReport = new CounterReport();

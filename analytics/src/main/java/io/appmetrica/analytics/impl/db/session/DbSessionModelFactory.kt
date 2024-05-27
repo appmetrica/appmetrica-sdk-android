@@ -5,7 +5,7 @@ import io.appmetrica.analytics.impl.db.constants.Constants
 import io.appmetrica.analytics.impl.request.ReportRequestConfig
 import io.appmetrica.analytics.impl.utils.ServerTime
 import io.appmetrica.analytics.impl.utils.TimeUtils
-import io.appmetrica.analytics.logger.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import org.json.JSONObject
 
 class DbSessionModelFactory(

@@ -11,7 +11,7 @@ import io.appmetrica.analytics.identifiers.impl.AdvIdServiceConnectionController
 import io.appmetrica.analytics.identifiers.impl.ConnectionException
 import io.appmetrica.analytics.identifiers.impl.Constants
 import io.appmetrica.analytics.identifiers.impl.getProviderUnavailableResult
-import io.appmetrica.analytics.logger.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
 private const val TAG = "[Huawei OAID] "
 private val HMS_ADV_ID_INTENT =

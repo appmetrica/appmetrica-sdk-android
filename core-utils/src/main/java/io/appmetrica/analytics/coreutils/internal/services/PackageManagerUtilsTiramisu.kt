@@ -5,7 +5,7 @@ import android.content.pm.PackageManager
 import android.content.pm.ProviderInfo
 import android.os.Build
 import io.appmetrica.analytics.coreapi.internal.annotations.DoNotInline
-import io.appmetrica.analytics.logger.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
 @DoNotInline
 @TargetApi(Build.VERSION_CODES.TIRAMISU)

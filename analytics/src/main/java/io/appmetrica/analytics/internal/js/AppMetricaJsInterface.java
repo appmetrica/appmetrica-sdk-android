@@ -3,7 +3,7 @@ package io.appmetrica.analytics.internal.js;
 import android.webkit.JavascriptInterface;
 import androidx.annotation.NonNull;
 import io.appmetrica.analytics.impl.proxy.AppMetricaProxy;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 
 /**
  * This class is used as a bridge between JavaScript and native code.
@@ -40,7 +40,7 @@ public class AppMetricaJsInterface {
      */
     @JavascriptInterface
     public void reportEvent(final String name, final String value) {
-        DebugLogger.info(TAG, "report event with name: %s", name);
+        DebugLogger.INSTANCE.info(TAG, "report event with name: %s", name);
         proxy.reportJsEvent(name, value);
     }
 }

@@ -5,7 +5,7 @@ import io.appmetrica.analytics.coreapi.internal.data.ProtobufStateStorage
 import io.appmetrica.analytics.impl.clids.ClidsInfo
 import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoData
 import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoState
-import io.appmetrica.analytics.logger.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
 internal class ClidsInfoStorage(
     context: Context,
@@ -97,7 +97,10 @@ internal open class DistributionDataStorage<CANDIDATE, CHOSEN, STORAGE> (
             updatedChosen = false
             newChosen = data.chosen
         }
-        DebugLogger.info(tag, "New chosen data is $newChosen. Was chosen updated: $updatedChosen. New state is: $data")
+        DebugLogger.info(
+            tag,
+            "New chosen data is $newChosen. Was chosen updated: $updatedChosen. New state is: $data"
+        )
         if (updatedChosen || updatedCandidates) {
             val oldData = data
             data = stateProvider(newChosen, newCandidates)

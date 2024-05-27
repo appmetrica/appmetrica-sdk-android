@@ -7,7 +7,7 @@ import io.appmetrica.analytics.impl.ecommerce.client.model.ShownScreenInfoEvent;
 import io.appmetrica.analytics.impl.protobuf.backend.Ecommerce;
 import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedInfo;
 import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedProvider;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.util.Collections;
 import java.util.List;
 
@@ -37,7 +37,7 @@ public class ShownScreenInfoEventConverter implements ECommerceEventConverter<Sh
         BytesTruncatedProvider totalTruncationInfo = BytesTruncatedInfo.total(screenConvertingResult);
 
         if (screenConvertingResult.getBytesTruncated() > 0) {
-            DebugLogger.info(
+            DebugLogger.INSTANCE.info(
                     ECommerceConstants.FEATURE_TAG + TAG,
                     "Bytes truncated (screen) = %d (%d)",
                     screenConvertingResult.getBytesTruncated(), screenConvertingResult.getBytesTruncated()

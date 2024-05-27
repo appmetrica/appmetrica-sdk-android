@@ -9,7 +9,7 @@ import io.appmetrica.analytics.impl.DistributionSource
 import io.appmetrica.analytics.impl.SatelliteDataProvider
 import io.appmetrica.analytics.impl.SdkUtils
 import io.appmetrica.analytics.impl.Utils
-import io.appmetrica.analytics.logger.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
 internal class SatelliteClidsInfoProvider(
     private val context: Context

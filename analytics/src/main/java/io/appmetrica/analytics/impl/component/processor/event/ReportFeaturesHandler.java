@@ -15,7 +15,7 @@ import io.appmetrica.analytics.impl.db.VitalComponentDataProvider;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesComponentDbStorage;
 import io.appmetrica.analytics.impl.features.FeatureAdapter;
 import io.appmetrica.analytics.impl.features.FeatureDescription;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.util.ArrayList;
 import java.util.HashSet;
 import org.json.JSONArray;
@@ -60,7 +60,7 @@ public class ReportFeaturesHandler extends ReportComponentHandler {
                     componentPreferences.putApplicationFeatures(newFeatures.toString());
                 }
             } catch (Throwable e) {
-                DebugLogger.error(TAG, e, "can't write features");
+                DebugLogger.INSTANCE.error(TAG, e, "can't write features");
             }
         }
         return false;
@@ -82,7 +82,7 @@ public class ReportFeaturesHandler extends ReportComponentHandler {
                 }
                 return fromDB;
             } catch (Throwable e) {
-                DebugLogger.error(TAG, e, "can't parse features");
+                DebugLogger.INSTANCE.error(TAG, e, "can't parse features");
                 return null;
             }
         }
@@ -108,7 +108,7 @@ public class ReportFeaturesHandler extends ReportComponentHandler {
             }
             return fromSystem;
         } catch (Throwable e) {
-            DebugLogger.error(TAG, e, "can't get features from system");
+            DebugLogger.INSTANCE.error(TAG, e, "can't get features from system");
             return null;
         }
     }

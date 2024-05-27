@@ -23,7 +23,7 @@ import io.appmetrica.analytics.impl.utils.JsonHelper;
 import io.appmetrica.analytics.impl.utils.LoggerStorage;
 import io.appmetrica.analytics.impl.utils.PublicLogger;
 import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedProvider;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.util.List;
 import java.util.Map;
 
@@ -116,8 +116,12 @@ public class ReportsHandler {
      */
     void updatePreActivationConfig(@Nullable Boolean locationTracking,
                                    @Nullable Boolean dataSendingEnabled) {
-        DebugLogger.info(TAG, "updatePreActivationConfig. locationTracking = %b, dataSendingEnabled = %b",
-            locationTracking, dataSendingEnabled);
+        DebugLogger.INSTANCE.info(
+            TAG,
+            "updatePreActivationConfig. locationTracking = %b, dataSendingEnabled = %b",
+            locationTracking,
+            dataSendingEnabled
+        );
         if (Utils.isFieldSet(locationTracking)) {
             mCommutationReportEnvironment.getReporterConfiguration().setLocationTracking(locationTracking);
         }
@@ -162,7 +166,7 @@ public class ReportsHandler {
         final Map<String, Object> attributes
     ) {
         if (report.getType() == InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_PROTOBUF.getTypeId()) {
-            DebugLogger.info(
+            DebugLogger.INSTANCE.info(
                 TAG,
                 "Report event %s, value size: %d apiKey %s",
                 InternalEvents.valueOf(report.getType()).toString(),
@@ -182,12 +186,12 @@ public class ReportsHandler {
     }
 
     public void reportResumeUserSession(@NonNull ProcessConfiguration processConfiguration) {
-        DebugLogger.info(TAG, "Report resume user session");
+        DebugLogger.INSTANCE.info(TAG, "Report resume user session");
         mReportsSender.queueResumeUserSession(processConfiguration);
     }
 
     public void reportPauseUserSession(@NonNull ProcessConfiguration processConfiguration) {
-        DebugLogger.info(TAG, "Report pause user session");
+        DebugLogger.INSTANCE.info(TAG, "Report pause user session");
         mReportsSender.queuePauseUserSession(processConfiguration);
     }
 
@@ -253,20 +257,20 @@ public class ReportsHandler {
     private ReportToSend prepareUnhandledExceptionReport(
         @NonNull UnhandledException unhandledException,
         @NonNull ReporterEnvironment reporterEnvironment) {
-        DebugLogger.info(TAG, "Unhandled exception was captured");
+        DebugLogger.INSTANCE.info(TAG, "Unhandled exception was captured");
         mConnector.removeScheduleDisconnect();
         return mEventFormer.formEvent(unhandledException, reporterEnvironment);
     }
 
     void onResumeForegroundSession() {
         // Don't unbind, App became alive
-        DebugLogger.info(TAG, "onResumeForegroundSession");
+        DebugLogger.INSTANCE.info(TAG, "onResumeForegroundSession");
         mConnector.removeScheduleDisconnect();
     }
 
     void onPauseForegroundSession() {
         // Unbind, App became lifeless
-        DebugLogger.info(TAG, "onPauseForegroundSession");
+        DebugLogger.INSTANCE.info(TAG, "onPauseForegroundSession");
         mConnector.scheduleDisconnect();
     }
 

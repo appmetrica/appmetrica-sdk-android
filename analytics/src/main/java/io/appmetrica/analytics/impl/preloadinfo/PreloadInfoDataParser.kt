@@ -6,7 +6,7 @@ import io.appmetrica.analytics.coreutils.internal.parsing.ParseUtils
 import io.appmetrica.analytics.impl.ContentProviderDataParser
 import io.appmetrica.analytics.impl.DistributionSource
 import io.appmetrica.analytics.impl.SdkUtils
-import io.appmetrica.analytics.logger.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import org.json.JSONObject
 
 private const val TAG = "[PreloadInfoDataParser]"

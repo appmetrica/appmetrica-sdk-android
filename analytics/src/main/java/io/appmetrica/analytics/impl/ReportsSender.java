@@ -8,7 +8,7 @@ import io.appmetrica.analytics.impl.client.ProcessConfiguration;
 import io.appmetrica.analytics.impl.service.ServiceDataReporter;
 import io.appmetrica.analytics.impl.service.commands.ReportToServiceCallable;
 import io.appmetrica.analytics.impl.service.commands.ServiceCallableFactory;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.util.concurrent.TimeUnit;
 
 public class ReportsSender implements ServiceDataReporter {
@@ -55,7 +55,7 @@ public class ReportsSender implements ServiceDataReporter {
             try {
                 mExecutor.submit(callable).get(4, TimeUnit.SECONDS);
             } catch (Throwable e) {
-                DebugLogger.error(TAG, e);
+                DebugLogger.INSTANCE.error(TAG, e);
             }
         }
         // flag will be false if it is still executing but check inside CrashCallable will prevent duplicates
@@ -63,7 +63,7 @@ public class ReportsSender implements ServiceDataReporter {
             try {
                 callable.call();
             } catch (Throwable ex) {
-                DebugLogger.error(TAG, ex);
+                DebugLogger.INSTANCE.error(TAG, ex);
             }
         }
     }

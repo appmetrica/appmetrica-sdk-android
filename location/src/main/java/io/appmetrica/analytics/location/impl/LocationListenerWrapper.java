@@ -6,7 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import io.appmetrica.analytics.coreapi.internal.annotations.GeoThread;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 
 public class LocationListenerWrapper implements LocationListener {
 
@@ -22,7 +22,7 @@ public class LocationListenerWrapper implements LocationListener {
     @GeoThread
     @Override
     public void onLocationChanged(@Nullable Location location) {
-        DebugLogger.info(TAG, "Location changed: %s", location);
+        DebugLogger.INSTANCE.info(TAG, "Location changed: %s", location);
         if (location != null) {
             mLocationStreamDispatcher.onLocationChanged(location);
         }

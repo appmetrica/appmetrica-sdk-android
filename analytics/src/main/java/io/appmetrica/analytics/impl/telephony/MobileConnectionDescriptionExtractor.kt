@@ -10,7 +10,7 @@ import io.appmetrica.analytics.coreutils.internal.permission.AlwaysAllowPermissi
 import io.appmetrica.analytics.coreutils.internal.permission.SinglePermissionStrategy
 import io.appmetrica.analytics.coreutils.internal.services.telephony.CellularNetworkTypeExtractor
 import io.appmetrica.analytics.impl.GlobalServiceLocator
-import io.appmetrica.analytics.logger.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import java.util.concurrent.TimeUnit
 
 private const val TAG = "[MobileConnectionDescriptionExtractor]"

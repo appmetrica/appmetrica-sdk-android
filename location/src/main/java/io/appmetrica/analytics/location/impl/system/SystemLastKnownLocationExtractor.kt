@@ -9,7 +9,7 @@ import io.appmetrica.analytics.coreapi.internal.annotations.GeoThread
 import io.appmetrica.analytics.coreapi.internal.permission.PermissionResolutionStrategy
 import io.appmetrica.analytics.coreutils.internal.system.SystemServiceUtils
 import io.appmetrica.analytics.locationapi.internal.LastKnownLocationExtractor
-import io.appmetrica.analytics.logger.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
 internal open class SystemLastKnownLocationExtractor(
     protected val context: Context,

@@ -5,7 +5,7 @@ import io.appmetrica.analytics.impl.AppMetricaConnector
 import io.appmetrica.analytics.impl.AppMetricaUncaughtExceptionHandler
 import io.appmetrica.analytics.impl.ShouldDisconnectFromServiceChecker
 import io.appmetrica.analytics.internal.IAppMetricaService
-import io.appmetrica.analytics.logger.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import java.util.concurrent.Callable
 
 abstract class ReportToServiceCallable(
@@ -44,7 +44,10 @@ abstract class ReportToServiceCallable(
                         )
                     }
                 }
-                DebugLogger.info(tag, "[${javaClass.name}]There is no connected service. Try number $triesCount")
+                DebugLogger.info(
+                    tag,
+                    "[${javaClass.name}]There is no connected service. Try number $triesCount"
+                )
                 retry = handleAbsentService()
                 triesCount++
             } while (
@@ -58,7 +61,11 @@ abstract class ReportToServiceCallable(
     }
 
     open fun onReportToServiceError(throwable: Throwable?) {
-        DebugLogger.error(tag, throwable, "[${javaClass.name}] Exception during reporting to service.")
+        DebugLogger.error(
+            tag,
+            throwable,
+            "[${javaClass.name}] Exception during reporting to service."
+        )
     }
 
     abstract fun reportToService(service: IAppMetricaService)

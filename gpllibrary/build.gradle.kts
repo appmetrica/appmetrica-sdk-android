@@ -15,6 +15,7 @@ android {
 
 dependencies {
     compileOnly("com.google.android.gms:play-services-location:${Deps.gmsLocationVersion}")
-
     testImplementation("com.google.android.gms:play-services-location:${Deps.gmsLocationVersion}")
+
+    implementation(project(":logger"))
 }

@@ -9,7 +9,7 @@ import androidx.annotation.VisibleForTesting;
 import androidx.annotation.WorkerThread;
 import io.appmetrica.analytics.AppMetricaDefaultValues;
 import io.appmetrica.analytics.impl.utils.executors.NamedThreadFactory;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
@@ -43,7 +43,7 @@ public class ANRMonitor {
         @NonNull final Listener listener,
         @Nullable final Integer anrMonitoringTimeout
     ) {
-        DebugLogger.info(TAG, "Create ANRMonitor with listener %s", listener);
+        DebugLogger.INSTANCE.info(TAG, "Create ANRMonitor with listener %s", listener);
         mListeners.add(listener);
         this.anrTicksCount = getAnrTicksCount(anrMonitoringTimeout);
     }
@@ -58,14 +58,14 @@ public class ANRMonitor {
 
     public void subscribe(@NonNull Listener listener) {
         mListeners.add(listener);
-        DebugLogger.info(TAG, "Subscribe listener %s. Actual listeners: %s", listener, mListeners);
+        DebugLogger.INSTANCE.info(TAG, "Subscribe listener %s. Actual listeners: %s", listener, mListeners);
     }
 
     @VisibleForTesting
     public void handleAppNotResponding() {
-        DebugLogger.info(TAG, "Notify %d listeners about ANR", mListeners.size());
+        DebugLogger.INSTANCE.info(TAG, "Notify %d listeners about ANR", mListeners.size());
         for (Listener listener : mListeners) {
-            DebugLogger.info(TAG, "Notify listener %s about ANR", listener);
+            DebugLogger.INSTANCE.info(TAG, "Notify listener %s about ANR", listener);
             listener.onAppNotResponding();
         }
     }

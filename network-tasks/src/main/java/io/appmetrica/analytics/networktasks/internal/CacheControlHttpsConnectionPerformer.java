@@ -5,7 +5,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreutils.internal.collection.CollectionUtils;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import io.appmetrica.analytics.network.internal.NetworkClient;
 import io.appmetrica.analytics.network.internal.Request;
 import io.appmetrica.analytics.network.internal.Response;
@@ -46,7 +46,7 @@ public class CacheControlHttpsConnectionPerformer {
                     .withConnectTimeout(Constants.Config.REQUEST_TIMEOUT)
                     .withReadTimeout(Constants.Config.REQUEST_TIMEOUT)
                     .build();
-            DebugLogger.info(TAG, "Connecting to %s", url);
+            DebugLogger.INSTANCE.info(TAG, "Connecting to %s", url);
             return client.newCall(requestBuilder.build()).execute();
         }
     }
@@ -72,7 +72,7 @@ public class CacheControlHttpsConnectionPerformer {
             Response response = requestExecutor.execute(client.getOldETag(), url, sslSocketFactory);
             success = handleResponse(response, client);
         } catch (Throwable e) {
-            DebugLogger.error(TAG, e, "Failed request with url = %s with reason = %s",
+            DebugLogger.INSTANCE.error(TAG, e, "Failed request with url = %s with reason = %s",
                     url, e.getMessage());
         }
         if (!success) {
@@ -82,7 +82,7 @@ public class CacheControlHttpsConnectionPerformer {
 
     private boolean handleResponse(@NonNull Response response, @NonNull Client client) {
         int responseCode = response.getCode();
-        DebugLogger.info(TAG, "handleResponse with code %d", responseCode);
+        DebugLogger.INSTANCE.info(TAG, "handleResponse with code %d", responseCode);
         switch (responseCode) {
             case HttpsURLConnection.HTTP_OK:
                 List<String> etagValues = CollectionUtils.getFromMapIgnoreCase(response.getHeaders(), "ETag");
@@ -99,7 +99,7 @@ public class CacheControlHttpsConnectionPerformer {
                 client.onNotModified();
                 return true;
             default:
-                DebugLogger.warning(TAG, "%s Http request finished with code %d", responseCode);
+                DebugLogger.INSTANCE.warning(TAG, "%s Http request finished with code %d", responseCode);
                 return false;
         }
     }

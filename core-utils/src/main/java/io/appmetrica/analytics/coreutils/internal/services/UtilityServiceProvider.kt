@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.coreutils.internal.services
 
-import io.appmetrica.analytics.logger.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
 class UtilityServiceProvider {
 

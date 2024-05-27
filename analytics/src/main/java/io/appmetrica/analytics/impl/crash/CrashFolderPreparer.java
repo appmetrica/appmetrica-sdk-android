@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.crash;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.io.File;
 
 public class CrashFolderPreparer {
@@ -20,7 +20,10 @@ public class CrashFolderPreparer {
                 if (crashFolder.delete()) {
                     return makeCrashesFolder(crashFolder);
                 } else {
-                    DebugLogger.info(TAG, "Can't delete non-directory file with crash directory path.");
+                    DebugLogger.INSTANCE.info(
+                        TAG,
+                        "Can't delete non-directory file with crash directory path."
+                    );
                     return false;
                 }
             }
@@ -33,7 +36,7 @@ public class CrashFolderPreparer {
         if (crashFolder.mkdir()) {
             return true;
         } else {
-            DebugLogger.info(TAG, "Can't make crash directory.");
+            DebugLogger.INSTANCE.info(TAG, "Can't make crash directory.");
             return false;
         }
     }

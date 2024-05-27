@@ -574,7 +574,7 @@ public class StartupHelperTest extends CommonTest {
         verify(callback).onRequestError(
                 eq(new StartupParamsCallback.Reason("INCONSISTENT_CLIDS")),
                 any(StartupParamsCallback.Result.class));
-        verify(publicLogger).fw(anyString(), any());
+        verify(publicLogger).warning(anyString(), any());
     }
 
     @Test

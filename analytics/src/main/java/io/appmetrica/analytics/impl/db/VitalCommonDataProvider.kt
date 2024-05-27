@@ -5,7 +5,7 @@ import androidx.annotation.WorkerThread
 import io.appmetrica.analytics.coreutils.internal.parsing.optStringOrNull
 import io.appmetrica.analytics.impl.referrer.common.ReferrerInfo
 import io.appmetrica.analytics.impl.utils.JsonHelper
-import io.appmetrica.analytics.logger.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import org.json.JSONObject
 
 private const val KEY_DEVICE_ID = "device_id"

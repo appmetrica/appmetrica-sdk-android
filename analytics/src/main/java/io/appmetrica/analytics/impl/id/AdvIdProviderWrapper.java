@@ -5,7 +5,7 @@ import androidx.annotation.NonNull;
 import io.appmetrica.analytics.coreapi.internal.backport.Provider;
 import io.appmetrica.analytics.coreapi.internal.identifiers.AdTrackingInfoResult;
 import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 
 public class AdvIdProviderWrapper implements AdvIdProvider {
 
@@ -42,9 +42,9 @@ public class AdvIdProviderWrapper implements AdvIdProvider {
     @NonNull
     private AdTrackingInfoResult getCorrectedAdTrackingInfo(@NonNull Provider<AdTrackingInfoResult> provider) {
         AdTrackingInfoResult result = provider.get();
-        DebugLogger.info(TAG, "Original result: %s", result);
+        DebugLogger.INSTANCE.info(TAG, "Original result: %s", result);
         if (result.mAdTrackingInfo != null && Constants.INVALID_ADV_ID.equals(result.mAdTrackingInfo.advId)) {
-            DebugLogger.info(TAG, "AdvId is invalid");
+            DebugLogger.INSTANCE.info(TAG, "AdvId is invalid");
             result = new AdTrackingInfoResult(
                     null,
                     IdentifierStatus.INVALID_ADV_ID,

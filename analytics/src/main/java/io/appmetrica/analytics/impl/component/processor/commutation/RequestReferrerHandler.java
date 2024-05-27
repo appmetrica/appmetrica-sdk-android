@@ -7,7 +7,7 @@ import io.appmetrica.analytics.impl.CounterReport;
 import io.appmetrica.analytics.impl.component.CommutationDispatcherComponent;
 import io.appmetrica.analytics.impl.component.clients.CommutationClientUnit;
 import io.appmetrica.analytics.impl.referrer.common.ReferrerResultReceiver;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 
 public class RequestReferrerHandler extends CommutationHandler {
 
@@ -20,7 +20,7 @@ public class RequestReferrerHandler extends CommutationHandler {
     @Override
     public boolean process(@NonNull CounterReport reportData, @NonNull CommutationClientUnit clientUnit) {
         Bundle payload = reportData.getPayload();
-        DebugLogger.info(TAG, "process report with payload: %s", payload);
+        DebugLogger.INSTANCE.info(TAG, "process report with payload: %s", payload);
         ResultReceiver receiver = null;
         if (payload != null) {
             receiver = payload.getParcelable(ReferrerResultReceiver.BUNDLE_KEY);

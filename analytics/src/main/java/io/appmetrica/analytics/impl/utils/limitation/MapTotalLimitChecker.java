@@ -37,10 +37,11 @@ public class MapTotalLimitChecker {
     }
 
     public void logTotalLimitReached(@NonNull String key) {
-        if (mPublicLogger.isEnabled()) {
-            mPublicLogger.fw(
-                    "The %s has reached the total size limit that equals %d symbols. Item with key %s will be " +
-                            "ignored", mTag, mMaxTotalSize, key);
-        }
+        mPublicLogger.warning(
+            "The %s has reached the total size limit that equals %d symbols. Item with key %s will be ignored",
+            mTag,
+            mMaxTotalSize,
+            key
+        );
     }
 }

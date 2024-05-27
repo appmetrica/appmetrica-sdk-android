@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.clids
 import io.appmetrica.analytics.impl.DistributionPriorityProvider
 import io.appmetrica.analytics.impl.DistributionSource
 import io.appmetrica.analytics.impl.Utils
-import io.appmetrica.analytics.logger.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
 private const val TAG = "[ClidsPriorityProvider]"
 

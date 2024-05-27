@@ -12,7 +12,7 @@ import io.appmetrica.analytics.coreapi.internal.model.ScreenInfo;
 import io.appmetrica.analytics.coreutils.internal.AndroidUtils;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesClientDbStorage;
 import io.appmetrica.analytics.impl.db.storage.DatabaseStorageFactory;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.lang.ref.WeakReference;
 
 public class ScreenInfoRetriever implements ActivityAppearedListener.Listener {
@@ -75,8 +75,11 @@ public class ScreenInfoRetriever implements ActivityAppearedListener.Listener {
         tryToUpdateScreenInfo(activityHolder.get());
         if (screenInfo == null) {
             if (AndroidUtils.isApiAchieved(Build.VERSION_CODES.R)) {
-                DebugLogger.info(TAG, "Screen info not found. Maybe update by deprecated method. " +
-                        "checkedByDeprecated = %b", checkedByDeprecated);
+                DebugLogger.INSTANCE.info(
+                    TAG,
+                    "Screen info not found. Maybe update by deprecated method. checkedByDeprecated = %b",
+                    checkedByDeprecated
+                );
                 if (!checkedByDeprecated) {
                     tryToUpdateScreenInfo(context);
                     checkedByDeprecated = true;
@@ -92,7 +95,7 @@ public class ScreenInfoRetriever implements ActivityAppearedListener.Listener {
     @Override
     @WorkerThread
     public synchronized void onActivityAppeared(@NonNull Activity activity) {
-        DebugLogger.info(TAG, "Activity appeared: %s", activity);
+        DebugLogger.INSTANCE.info(TAG, "Activity appeared: %s", activity);
         activityHolder = new WeakReference<>(activity);
         if (screenInfo == null) {
             tryToUpdateScreenInfo(activity);
@@ -100,10 +103,15 @@ public class ScreenInfoRetriever implements ActivityAppearedListener.Listener {
     }
 
     private void tryToUpdateScreenInfo(@Nullable Context context) {
-        DebugLogger.info(TAG, "try to update screen info for context: %s", context);
+        DebugLogger.INSTANCE.info(TAG, "try to update screen info for context: %s", context);
         if (context != null) {
             ScreenInfo newScreenInfo = screenInfoExtractor.extractScreenInfo(context);
-            DebugLogger.info(TAG, "Extracted screen info: %s, old screen info: %s", newScreenInfo, screenInfo);
+            DebugLogger.INSTANCE.info(
+                TAG,
+                "Extracted screen info: %s, old screen info: %s",
+                newScreenInfo,
+                screenInfo
+            );
             if (newScreenInfo != null && !newScreenInfo.equals(screenInfo)) {
                 screenInfo = newScreenInfo;
                 clientPreferences.saveScreenInfo(screenInfo);

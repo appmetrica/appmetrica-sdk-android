@@ -3,7 +3,7 @@ package io.appmetrica.analytics.networktasks.internal;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import javax.net.ssl.HttpsURLConnection;
 
 public class DefaultNetworkResponseHandler implements NetworkResponseHandler<DefaultResponseParser.Response> {
@@ -29,7 +29,7 @@ public class DefaultNetworkResponseHandler implements NetworkResponseHandler<Def
         if (HttpsURLConnection.HTTP_OK == responseDataHolder.getResponseCode()) {
             defaultResponse = mDefaultResponseParser.parse(responseDataHolder.getResponseData());
         }
-        DebugLogger.info(
+        DebugLogger.INSTANCE.info(
             TAG,
             "Response result for code %d is %s",
             responseDataHolder.getResponseCode(),

@@ -11,7 +11,7 @@ import io.appmetrica.analytics.coreapi.internal.servicecomponents.batteryinfo.Ch
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.batteryinfo.ChargeTypeChangeListener;
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.batteryinfo.ChargeTypeProvider;
 import io.appmetrica.analytics.coreutils.internal.executors.SafeRunnable;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,13 +32,13 @@ public class BatteryInfoProvider implements ChargeTypeProvider {
     private final Consumer<Intent> batteryChargeTypeRootListener = new Consumer<Intent>() {
         @Override
         public void consume(@Nullable Intent intent) {
-            DebugLogger.info(TAG, "onReceive power state update with intent: %s", intent);
+            DebugLogger.INSTANCE.info(TAG, "onReceive power state update with intent: %s", intent);
             final BatteryInfo oldBatteryInfo = mBatteryInfo;
             ChargeType oldChargeType = oldBatteryInfo == null ? null : oldBatteryInfo.chargeType;
             final BatteryInfo newBatteryInfo = extractBatteryInfo(intent);
             mBatteryInfo = newBatteryInfo;
             if (oldChargeType != newBatteryInfo.chargeType) {
-                DebugLogger.info(
+                DebugLogger.INSTANCE.info(
                     TAG,
                     "Post update charge type: %s -> %s",
                     oldChargeType == null ? null : oldChargeType.name(),
@@ -73,14 +73,18 @@ public class BatteryInfoProvider implements ChargeTypeProvider {
         final BatteryInfo batteryInfo = mBatteryInfo;
         ChargeType chargeType =
                 batteryInfo == null ? ChargeType.UNKNOWN : batteryInfo.chargeType;
-        DebugLogger.info(TAG, "Return charge type = %s", chargeType);
+        DebugLogger.INSTANCE.info(TAG, "Return charge type = %s", chargeType);
         return chargeType;
     }
 
     @Override
     public synchronized void registerChargeTypeListener(@NonNull ChargeTypeChangeListener listener) {
         mChargeTypeChangeListeners.add(listener);
-        DebugLogger.info(TAG, "Register charge type listener. Total count: %d", mChargeTypeChangeListeners.size());
+        DebugLogger.INSTANCE.info(
+            TAG,
+            "Register charge type listener. Total count: %d",
+            mChargeTypeChangeListeners.size()
+        );
         listener.onChargeTypeChanged(getChargeType());
     }
 
@@ -99,7 +103,7 @@ public class BatteryInfoProvider implements ChargeTypeProvider {
             batteryLevel = extractBatteryLevel(batteryStatus);
             chargeType = extractChargeType(batteryStatus);
         } else {
-            DebugLogger.info(TAG, "Could not get battery status from sticky broadcast");
+            DebugLogger.INSTANCE.info(TAG, "Could not get battery status from sticky broadcast");
         }
 
         return new BatteryInfo(batteryLevel, chargeType);
@@ -115,7 +119,7 @@ public class BatteryInfoProvider implements ChargeTypeProvider {
     @NonNull
     private ChargeType extractChargeType(@NonNull Intent batteryStatus) {
         int chargePlugType = batteryStatus.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);
-        DebugLogger.info(TAG, "Extracted chargeType: %d", chargePlugType);
+        DebugLogger.INSTANCE.info(TAG, "Extracted chargeType: %d", chargePlugType);
         ChargeType chargeType = ChargeType.NONE;
 
         switch (chargePlugType) {

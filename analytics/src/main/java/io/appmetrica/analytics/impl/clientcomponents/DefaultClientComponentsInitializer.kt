@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.clientcomponents
 import io.appmetrica.analytics.coreapi.internal.clientcomponents.ClientComponentsInitializer
 import io.appmetrica.analytics.impl.ClientServiceLocator
 import io.appmetrica.analytics.impl.modules.ConstantModuleEntryPointProvider
-import io.appmetrica.analytics.logger.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
 class DefaultClientComponentsInitializer : ClientComponentsInitializer {
 

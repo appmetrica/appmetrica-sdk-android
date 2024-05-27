@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.db.constants;
 import android.database.sqlite.SQLiteDatabase;
 import io.appmetrica.analytics.coreapi.internal.db.DatabaseScript;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import io.appmetrica.analytics.modulesapi.internal.common.TableDescription;
 import io.appmetrica.analytics.modulesapi.internal.service.ModuleServicesDatabase;
 import java.sql.SQLException;
@@ -72,7 +72,11 @@ public class DatabaseScriptsHolder {
             for (ModuleServicesDatabase moduleServicesDatabase :
                 GlobalServiceLocator.getInstance().getModulesController().collectModuleServiceDatabases()) {
                 for (TableDescription tableDescription : moduleServicesDatabase.getTables()) {
-                    DebugLogger.info(TAG, "Exec SQL for module: %s", tableDescription.getCreateTableScript());
+                    DebugLogger.INSTANCE.info(
+                        TAG,
+                        "Exec SQL for module: %s",
+                        tableDescription.getCreateTableScript()
+                    );
                     database.execSQL(tableDescription.getCreateTableScript());
                 }
             }

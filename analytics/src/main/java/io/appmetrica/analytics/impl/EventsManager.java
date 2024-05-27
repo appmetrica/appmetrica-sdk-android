@@ -6,6 +6,7 @@ import androidx.annotation.Nullable;
 import io.appmetrica.analytics.coreutils.internal.StringUtils;
 import io.appmetrica.analytics.coreutils.internal.collection.CollectionUtils;
 import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoWrapper;
+import io.appmetrica.analytics.impl.protobuf.backend.EventProto;
 import io.appmetrica.analytics.impl.utils.JsonHelper;
 import io.appmetrica.analytics.impl.utils.PublicLogger;
 import java.util.Arrays;
@@ -58,6 +59,11 @@ public final class EventsManager {
         InternalEvents.EVENT_TYPE_PREV_SESSION_NATIVE_CRASH_PROTOBUF,
         InternalEvents.EVENT_TYPE_REGULAR,
         InternalEvents.EVENT_CLIENT_EXTERNAL_ATTRIBUTION
+    );
+    private static final List<Integer> EVENTS_SUITABLE_FOR_LOGS = Arrays.asList(
+        EventProto.ReportMessage.Session.Event.EVENT_CRASH,
+        EventProto.ReportMessage.Session.Event.EVENT_ERROR,
+        EventProto.ReportMessage.Session.Event.EVENT_CLIENT
     );
 
     private static final EnumSet<InternalEvents> LOG_EVENT_VALUE = EnumSet.of(InternalEvents.EVENT_TYPE_REGULAR);
@@ -336,5 +342,14 @@ public final class EventsManager {
             InternalEvents.EVENT_CLIENT_EXTERNAL_ATTRIBUTION.getTypeId(),
             publicLogger
         );
+    }
+
+    public static boolean isSuitableForLogs(EventProto.ReportMessage.Session.Event event) {
+        for (Integer type : EVENTS_SUITABLE_FOR_LOGS) {
+            if (event.type == type) {
+                return true;
+            }
+        }
+        return false;
     }
 }

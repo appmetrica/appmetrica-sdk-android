@@ -11,7 +11,7 @@ import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedInfo;
 import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedProvider;
 import io.appmetrica.analytics.impl.utils.limitation.TrimmingResult;
 import io.appmetrica.analytics.impl.utils.limitation.hierarchical.HierarchicalStringTrimmer;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 
 public class AmountConverter
         implements Converter<AmountWrapper, Result<Ecommerce.ECommerceEvent.Amount, BytesTruncatedProvider>> {
@@ -39,7 +39,7 @@ public class AmountConverter
 
         BytesTruncatedProvider totalTruncationInfo = BytesTruncatedInfo.total(unitTypeTruncationTrimmingResult);
         if (totalTruncationInfo.getBytesTruncated() > 0) {
-            DebugLogger.info(
+            DebugLogger.INSTANCE.info(
                     ECommerceConstants.FEATURE_TAG + TAG,
                     "Truncate amount. Total bytes truncated = %d",
                     totalTruncationInfo.getBytesTruncated()

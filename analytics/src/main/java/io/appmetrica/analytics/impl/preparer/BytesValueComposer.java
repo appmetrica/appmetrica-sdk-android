@@ -6,7 +6,7 @@ import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.impl.request.ReportRequestConfig;
 import io.appmetrica.analytics.impl.utils.encryption.EventEncrypter;
 import io.appmetrica.analytics.impl.utils.encryption.EventEncrypterProvider;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 
 public class BytesValueComposer implements ValueComposer {
 
@@ -32,7 +32,11 @@ public class BytesValueComposer implements ValueComposer {
             try {
                 value = Base64.decode(event.getValue(), Base64.DEFAULT);
             } catch (Throwable e) {
-                DebugLogger.error(TAG, e, "Something went wrong while decoding base 64 event value.");
+                DebugLogger.INSTANCE.error(
+                    TAG,
+                    e,
+                    "Something went wrong while decoding base 64 event value."
+                );
             }
         }
         EventEncrypter eventEncrypter = mEventEncrypterProvider.getEventEncrypter(event.getEventEncryptionMode());

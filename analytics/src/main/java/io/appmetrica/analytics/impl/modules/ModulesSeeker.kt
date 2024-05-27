@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.modules
 
 import io.appmetrica.analytics.impl.ClientServiceLocator
 import io.appmetrica.analytics.impl.GlobalServiceLocator
-import io.appmetrica.analytics.logger.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import io.appmetrica.analytics.modulesapi.internal.client.ModuleClientEntryPoint
 import io.appmetrica.analytics.modulesapi.internal.service.ModuleServiceEntryPoint
 

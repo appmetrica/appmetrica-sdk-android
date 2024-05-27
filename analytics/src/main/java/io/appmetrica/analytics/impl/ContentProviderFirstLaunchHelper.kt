@@ -4,7 +4,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.pm.PackageManager
 import io.appmetrica.analytics.internal.PreloadInfoContentProvider
-import io.appmetrica.analytics.logger.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 

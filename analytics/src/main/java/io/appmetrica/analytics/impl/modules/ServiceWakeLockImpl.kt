@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.modules
 
 import android.content.Context
 import android.content.ServiceConnection
-import io.appmetrica.analytics.logger.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import io.appmetrica.analytics.modulesapi.internal.service.ServiceWakeLock
 
 private const val ACTION_PREFIX = "io.appmetrica.analytics.ACTION_SERVICE_WAKELOCK"

@@ -6,7 +6,7 @@ import io.appmetrica.analytics.impl.CounterReport;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.impl.db.VitalComponentDataProvider;
 import io.appmetrica.analytics.impl.utils.ServerTime;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 
 public class ApplySettingsFromActivationConfigHandler extends ReportComponentHandler {
 
@@ -38,7 +38,7 @@ public class ApplySettingsFromActivationConfigHandler extends ReportComponentHan
     public boolean process(@NonNull CounterReport reportData) {
         ComponentUnit component = getComponent();
         if (!vitalComponentDataProvider.isFirstEventDone() && !vitalComponentDataProvider.isInitEventDone()) {
-            DebugLogger.info(
+            DebugLogger.INSTANCE.info(
                 TAG,
                 "For componentId = %s: first and init events do not exist",
                 component.getComponentId()

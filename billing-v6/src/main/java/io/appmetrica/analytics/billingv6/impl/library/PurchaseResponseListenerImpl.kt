@@ -12,7 +12,7 @@ import io.appmetrica.analytics.billingv6.impl.BillingUtils
 import io.appmetrica.analytics.billingv6.impl.ProductInfoCreator
 import io.appmetrica.analytics.billingv6.impl.TAG
 import io.appmetrica.analytics.coreutils.internal.executors.SafeRunnable
-import io.appmetrica.analytics.logger.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
 internal class PurchaseResponseListenerImpl(
     private val type: String,

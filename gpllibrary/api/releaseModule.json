@@ -50,6 +50,13 @@
                     "version": {
                         "requires": "1.6.21"
                     }
+                },
+                {
+                    "group": "io.appmetrica.analytics",
+                    "module": "analytics-logger",
+                    "version": {
+                        "requires": "6.6.0"
+                    }
                 }
             ],
             "files": [

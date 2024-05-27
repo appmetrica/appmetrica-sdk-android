@@ -9,7 +9,7 @@ import io.appmetrica.analytics.impl.ReportToSend
 import io.appmetrica.analytics.impl.ServiceUtils
 import io.appmetrica.analytics.impl.ShouldDisconnectFromServiceChecker
 import io.appmetrica.analytics.impl.crash.CrashToFileWriter
-import io.appmetrica.analytics.logger.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
 internal class CrashCallable(
     private val context: Context,

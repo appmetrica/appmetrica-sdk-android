@@ -5,13 +5,13 @@ import android.content.Context;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Looper;
-import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.tasks.Task;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.util.concurrent.Executor;
 
 public class GplLibraryWrapper implements IGplLibraryWrapper {
@@ -76,7 +76,7 @@ public class GplLibraryWrapper implements IGplLibraryWrapper {
     @Override
     @SuppressLint("MissingPermission")
     public void updateLastKnownLocation() throws Throwable {
-        Log.d(TAG, "updateLastKnownLocation");
+        DebugLogger.INSTANCE.info(TAG, "updateLastKnownLocation");
         Task<Location> locationTask = mFusedLocationProviderClient.getLastLocation();
         locationTask.addOnSuccessListener(mLastKnownExecutor, new GplOnSuccessListener(mLocationListener));
     }
@@ -84,7 +84,7 @@ public class GplLibraryWrapper implements IGplLibraryWrapper {
     @Override
     @SuppressLint("MissingPermission")
     public void startLocationUpdates(@NonNull Priority priority) throws Throwable {
-        Log.d(TAG, "startLocationUpdates");
+        DebugLogger.INSTANCE.info(TAG, "startLocationUpdates");
         mFusedLocationProviderClient.requestLocationUpdates(
                 LocationRequest.create()
                         .setInterval(mInterval)
@@ -96,7 +96,7 @@ public class GplLibraryWrapper implements IGplLibraryWrapper {
 
     @Override
     public void stopLocationUpdates() throws Throwable {
-        Log.d(TAG, "stopLocationUpdates");
+        DebugLogger.INSTANCE.info(TAG, "stopLocationUpdates");
         mFusedLocationProviderClient.removeLocationUpdates(mLocationCallback);
     }
 

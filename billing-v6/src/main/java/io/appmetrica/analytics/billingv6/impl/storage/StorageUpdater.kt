@@ -6,7 +6,7 @@ import io.appmetrica.analytics.billinginterface.internal.BillingInfo
 import io.appmetrica.analytics.billinginterface.internal.storage.BillingInfoManager
 import io.appmetrica.analytics.billingv6.impl.TAG
 import io.appmetrica.analytics.coreutils.internal.time.SystemTimeProvider
-import io.appmetrica.analytics.logger.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
 object StorageUpdater {
 

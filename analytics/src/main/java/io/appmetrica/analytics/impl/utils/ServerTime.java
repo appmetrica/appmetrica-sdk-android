@@ -7,7 +7,7 @@ import io.appmetrica.analytics.coreutils.internal.time.TimeProvider;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.IServerTimeOffsetProvider;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesServiceDbStorage;
-import io.appmetrica.analytics.logger.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.util.concurrent.TimeUnit;
 
 public class ServerTime implements IServerTimeOffsetProvider {
@@ -52,7 +52,7 @@ public class ServerTime implements IServerTimeOffsetProvider {
         mPreferences.putServerTimeOffset(mServerTimeOffsetSeconds);
         mPreferences.commit();
 
-        DebugLogger.info(TAG, "Server time updated, offset = " + mServerTimeOffsetSeconds);
+        DebugLogger.INSTANCE.info(TAG, "Server time updated, offset = " + mServerTimeOffsetSeconds);
     }
 
     public synchronized void disableTimeDifferenceChecking() {
@@ -74,6 +74,6 @@ public class ServerTime implements IServerTimeOffsetProvider {
         mServerTimeOffsetSeconds = mPreferences.getServerTimeOffset(0);
         mTimeProvider = timeProvider;
 
-        DebugLogger.info(TAG, "Server time initialized, offset = " + mServerTimeOffsetSeconds);
+        DebugLogger.INSTANCE.info(TAG, "Server time initialized, offset = " + mServerTimeOffsetSeconds);
     }
 }

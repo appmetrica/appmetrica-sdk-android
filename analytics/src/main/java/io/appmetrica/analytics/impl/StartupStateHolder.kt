@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl
 
 import android.content.Context
 import io.appmetrica.analytics.impl.startup.StartupState
-import io.appmetrica.analytics.logger.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import java.util.concurrent.CopyOnWriteArrayList
 
 private const val TAG = "[StartupStateHolder]"

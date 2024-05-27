@@ -17,7 +17,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
 public class BytesTrimmerTest extends CommonTest {
@@ -37,7 +36,6 @@ public class BytesTrimmerTest extends CommonTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.openMocks(this);
-        when(mLogger.isEnabled()).thenReturn(true);
 
         mBytesTrimmer = new BytesTrimmer(LIMIT, LOG_NAME, mLogger);
         mRandom = new Random();
@@ -80,20 +78,19 @@ public class BytesTrimmerTest extends CommonTest {
     @Test
     public void testPrintLogForLongBytes() {
         mBytesTrimmer.trim(mLongBytes);
-        verify(mLogger).fw(anyString(), any(Object[].class));
+        verify(mLogger).warning(anyString(), any(Object[].class));
     }
 
     @Test
     public void testDoesNotPrintLogForShortBytes() {
         mBytesTrimmer.trim(mShortBytes);
-        verify(mLogger, never()).fw(anyString(), any());
+        verify(mLogger, never()).warning(anyString(), any());
     }
 
     @Test
     public void testDoesNotPrintLogIfLoggerDisabled() {
-        when(mLogger.isEnabled()).thenReturn(false);
         mBytesTrimmer.trim(mLongBytes);
-        verify(mLogger, never()).fw(anyString(), any());
+        verify(mLogger, never()).warning(anyString(), any());
     }
 
 }
