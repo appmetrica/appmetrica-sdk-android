@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.logger.appmetrica.internal
 
-import io.appmetrica.analytics.logger.common.internal.BaseDebugLogger
+import io.appmetrica.analytics.logger.common.BaseDebugLogger
 import org.json.JSONObject
 
 object DebugLogger : BaseDebugLogger("AppMetricaDebug") {

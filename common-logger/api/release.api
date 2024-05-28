@@ -1,12 +1,4 @@
-public final class io.appmetrica.analytics.logger.common.BuildConfig {
-    public static final String BUILD_TYPE
-    public static final boolean DEBUG
-    public static final String LIBRARY_PACKAGE_NAME
-
-    public <init>()
-}
-
-public abstract class io.appmetrica.analytics.logger.common.internal.BaseDebugLogger {
+public abstract class io.appmetrica.analytics.logger.common.BaseDebugLogger {
     public <init>([NonNull] String)
     public void error([NonNull] String, [Nullable] String, [Nullable] Object...)
     public void error([NonNull] String, [Nullable] Throwable)
@@ -15,12 +7,12 @@ public abstract class io.appmetrica.analytics.logger.common.internal.BaseDebugLo
     public void warning([NonNull] String, [Nullable] String, [Nullable] Object...)
 }
 
-public abstract class io.appmetrica.analytics.logger.common.internal.BaseImportantLogger {
+public abstract class io.appmetrica.analytics.logger.common.BaseImportantLogger {
     public <init>([NonNull] String)
     public void info([NonNull] String, [Nullable] String, [Nullable] Object...)
 }
 
-public abstract class io.appmetrica.analytics.logger.common.internal.BaseReleaseLogger {
+public abstract class io.appmetrica.analytics.logger.common.BaseReleaseLogger {
     public <init>([NonNull] String, [NonNull] String)
     public void error([Nullable] String, [Nullable] Object...)
     public void error([Nullable] Throwable, [Nullable] String, [Nullable] Object...)
@@ -29,5 +21,13 @@ public abstract class io.appmetrica.analytics.logger.common.internal.BaseRelease
     public static void init([NonNull] android.content.Context)
     public void setEnabled(boolean)
     public void warning([Nullable] String, [Nullable] Object...)
+}
+
+public final class io.appmetrica.analytics.logger.common.BuildConfig {
+    public static final String BUILD_TYPE
+    public static final boolean DEBUG
+    public static final String LIBRARY_PACKAGE_NAME
+
+    public <init>()
 }
 

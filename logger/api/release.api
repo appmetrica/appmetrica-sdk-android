@@ -6,13 +6,13 @@ public final class io.appmetrica.analytics.logger.appmetrica.BuildConfig {
     public <init>()
 }
 
-public final class io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger extends io.appmetrica.analytics.logger.common.internal.BaseDebugLogger {
+public final class io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger extends io.appmetrica.analytics.logger.common.BaseDebugLogger {
     public static final [NonNull] io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger INSTANCE
 
     public final void dumpJson([NonNull] String, [NonNull] org.json.JSONObject)
 }
 
-public final class io.appmetrica.analytics.logger.appmetrica.internal.ImportantLogger extends io.appmetrica.analytics.logger.common.internal.BaseImportantLogger {
+public final class io.appmetrica.analytics.logger.appmetrica.internal.ImportantLogger extends io.appmetrica.analytics.logger.common.BaseImportantLogger {
     public static final [NonNull] io.appmetrica.analytics.logger.appmetrica.internal.ImportantLogger INSTANCE
 }
 

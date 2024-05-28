@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl
 
 import io.appmetrica.analytics.logger.appmetrica.internal.ImportantLogger
-import io.appmetrica.analytics.logger.common.internal.BaseImportantLogger
+import io.appmetrica.analytics.logger.common.BaseImportantLogger
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.TestUtils
 import io.appmetrica.analytics.testutils.staticRule

@@ -2,7 +2,6 @@ package io.appmetrica.analytics.logger.common;
 
 import android.content.Context;
 import io.appmetrica.analytics.logger.common.impl.MultilineLogger;
-import io.appmetrica.analytics.logger.common.internal.BaseReleaseLogger;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.MockedConstructionRule;
 import org.junit.Before;

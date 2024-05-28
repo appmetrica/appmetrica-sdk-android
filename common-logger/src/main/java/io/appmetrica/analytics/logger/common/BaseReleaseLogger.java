@@ -1,4 +1,4 @@
-package io.appmetrica.analytics.logger.common.internal;
+package io.appmetrica.analytics.logger.common;
 
 import android.content.Context;
 import androidx.annotation.NonNull;

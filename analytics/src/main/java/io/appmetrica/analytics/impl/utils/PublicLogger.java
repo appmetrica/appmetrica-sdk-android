@@ -7,7 +7,7 @@ import io.appmetrica.analytics.impl.CounterReport;
 import io.appmetrica.analytics.impl.SdkUtils;
 import io.appmetrica.analytics.impl.Utils;
 import io.appmetrica.analytics.impl.protobuf.backend.EventProto;
-import io.appmetrica.analytics.logger.common.internal.BaseReleaseLogger;
+import io.appmetrica.analytics.logger.common.BaseReleaseLogger;
 
 import static io.appmetrica.analytics.impl.protobuf.backend.EventProto.ReportMessage.Session.Event;
 
