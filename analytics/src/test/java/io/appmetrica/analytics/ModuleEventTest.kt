@@ -1,6 +1,7 @@
 package io.appmetrica.analytics
 
 import io.appmetrica.analytics.impl.service.AppMetricaServiceDataReporter
+import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.SoftAssertions
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -142,5 +143,41 @@ class ModuleEventTest {
             assertThat(moduleEvent.extras).isNull()
             assertThat(moduleEvent.attributes).isEqualTo(attributes)
         }.assertAll()
+    }
+
+    @Test
+    fun `build copy attributes`() {
+        val initialMap = mapOf("first" to "second")
+        val moduleEvent = ModuleEvent.newBuilder(type)
+            .withAttributes(initialMap)
+            .build()
+
+        assertThat(moduleEvent.attributes)
+            .isNotSameAs(initialMap)
+            .isEqualTo(initialMap)
+    }
+
+    @Test
+    fun `build copy environment`() {
+        val initialMap = mapOf("first" to "second")
+        val moduleEvent = ModuleEvent.newBuilder(type)
+            .withEnvironment(initialMap)
+            .build()
+
+        assertThat(moduleEvent.environment)
+            .isNotSameAs(initialMap)
+            .isEqualTo(initialMap)
+    }
+
+    @Test
+    fun `build copy extras`() {
+        val initialMap = mapOf("first" to "seconds".toByteArray())
+        val moduleEvent = ModuleEvent.newBuilder(type)
+            .withExtras(initialMap)
+            .build()
+
+        assertThat(moduleEvent.extras)
+            .isNotSameAs(initialMap)
+            .isEqualTo(initialMap)
     }
 }

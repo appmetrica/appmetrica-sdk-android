@@ -2,9 +2,11 @@ package io.appmetrica.analytics;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import io.appmetrica.analytics.coreutils.internal.collection.CollectionUtils;
 import io.appmetrica.analytics.impl.service.AppMetricaServiceDataReporter;
 import io.appmetrica.analytics.impl.service.ServiceDataReporter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -19,11 +21,11 @@ public final class ModuleEvent {
     private final String value;
     private final int serviceDataReporterType;
     @Nullable
-    private final Map<String, Object> environment;
+    private final List<Map.Entry<String, Object>> environment;
     @Nullable
-    private final Map<String, byte[]> extras;
+    private final List<Map.Entry<String, byte[]>> extras;
     @Nullable
-    private final Map<String, Object> attributes;
+    private final List<Map.Entry<String, Object>> attributes;
 
     /**
      * @return event type
@@ -60,7 +62,7 @@ public final class ModuleEvent {
      */
     @Nullable
     public Map<String, Object> getEnvironment() {
-        return environment;
+        return CollectionUtils.getMapFromListOrNull(environment);
     }
 
     /**
@@ -68,7 +70,7 @@ public final class ModuleEvent {
      */
     @Nullable
     public Map<String, byte[]> getExtras() {
-        return extras;
+        return CollectionUtils.getMapFromListOrNull(extras);
     }
 
     /**
@@ -76,7 +78,7 @@ public final class ModuleEvent {
      */
     @Nullable
     public Map<String, Object> getAttributes() {
-        return attributes;
+        return CollectionUtils.getMapFromListOrNull(attributes);
     }
 
     private ModuleEvent(@NonNull final Builder builder) {
@@ -84,9 +86,9 @@ public final class ModuleEvent {
         this.name = builder.name;
         this.value = builder.value;
         this.serviceDataReporterType = builder.serviceDataReporterType;
-        this.environment = builder.environment;
-        this.extras = builder.extras;
-        this.attributes = builder.attributes;
+        this.environment = CollectionUtils.getListFromMap(builder.environment);
+        this.extras = CollectionUtils.getListFromMap(builder.extras);
+        this.attributes = CollectionUtils.getListFromMap(builder.attributes);
     }
 
     /**

@@ -123,6 +123,7 @@ public final class io.appmetrica.analytics.coreutils.internal.collection.Collect
     public static final <T> [Nullable] T getFromMapIgnoreCase([NonNull] java.util.Map<String, ? extends T>, [NonNull] String)
     public static final <K, V> [Nullable] java.util.List<java.util.Map$Entry<K, V>> getListFromMap([Nullable] java.util.Map<K, ? extends V>)
     public static final <K, V> [NonNull] java.util.Map<K, V> getMapFromList([Nullable] java.util.List<? extends java.util.Map$Entry<? extends K, ? extends V>>)
+    public static final <K, V> [Nullable] java.util.Map<K, V> getMapFromListOrNull([Nullable] java.util.List<? extends java.util.Map$Entry<? extends K, ? extends V>>)
     public static final <K, V> V getOrDefault([NonNull] java.util.Map<K, ? extends V>, K, V)
     public static final [NonNull] java.util.Set<Integer> hashSetFromIntArray([NonNull] int[])
     public static final boolean isNullOrEmpty([Nullable] java.util.Collection<?>)

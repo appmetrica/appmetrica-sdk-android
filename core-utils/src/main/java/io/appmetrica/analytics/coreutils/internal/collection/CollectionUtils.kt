@@ -93,6 +93,10 @@ object CollectionUtils {
         ?: LinkedHashMap()
 
     @JvmStatic
+    fun <K, V> getMapFromListOrNull(list: List<Map.Entry<K, V>>?): Map<K, V>? =
+        list?.associateBy({ it.key }, { it.value })
+
+    @JvmStatic
     fun <T> arrayListCopyOfNullableCollection(input: Collection<T>?): List<T>? = input?.toList()
 
     @JvmStatic
