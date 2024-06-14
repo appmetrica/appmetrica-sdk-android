@@ -8,7 +8,6 @@ import io.appmetrica.analytics.AdRevenue;
 import io.appmetrica.analytics.ModuleEvent;
 import io.appmetrica.analytics.Revenue;
 import io.appmetrica.analytics.coreutils.internal.WrapUtils;
-import io.appmetrica.analytics.coreutils.internal.collection.CollectionUtils;
 import io.appmetrica.analytics.ecommerce.ECommerceEvent;
 import io.appmetrica.analytics.impl.crash.AppMetricaThrowable;
 import io.appmetrica.analytics.impl.crash.PluginErrorDetailsConverter;
@@ -258,15 +257,14 @@ public abstract class BaseReporter implements IBaseReporter {
 
     @Override
     public void reportEvent(@NonNull String eventName, @Nullable final Map<String, Object> attributes) {
-        Map<String, Object> attributesCopy = CollectionUtils.copyOf(attributes);
         mReportsHandler.reportEvent(
             EventsManager.regularEventReportEntry(eventName, mPublicLogger),
             getEnvironment(),
-            attributesCopy
+            attributes
         );
         mPublicLogger.info(
             "Event received: " + WrapUtils.wrapToTag(eventName) +
-                ". With value: " + WrapUtils.wrapToTag(attributesCopy == null ? null : attributesCopy.toString())
+                ". With value: " + WrapUtils.wrapToTag(attributes == null ? null : attributes.toString())
         );
     }
 

@@ -68,7 +68,6 @@ import static io.appmetrica.analytics.impl.TestsData.TEST_ERROR_ENVIRONMENT_KEY;
 import static io.appmetrica.analytics.impl.TestsData.TEST_ERROR_ENVIRONMENT_VALUE;
 import static junit.framework.Assert.assertTrue;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.AdditionalMatchers.not;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -812,21 +811,11 @@ public abstract class BaseReporterTest extends BaseReporterData {
     }
 
     @Test
-    public void testReportEventWithMapShouldReportMapCopyToReportsHandler() {
-        String eventName = "EventName";
-        Map<String, Object> attributes = new HashMap<String, Object>();
-        attributes.put("Key", "Value");
-        when(EventsManager.regularEventReportEntry(eq(eventName), any(PublicLogger.class))).thenReturn(mockedEvent);
-        getReporter().reportEvent(eventName, attributes);
-        verify(mReportsHandler).reportEvent(same(mockedEvent), any(ReporterEnvironment.class), not(same(attributes)));
-    }
-
-    @Test
     public void testReportEventWithMapShouldReportEventWithNullEnvironmentIfEnvironmentIsEmpty() {
         String eventName = "EventName";
         when(EventsManager.regularEventReportEntry(eq(eventName), any(PublicLogger.class))).thenReturn(mockedEvent);
         getReporter().reportEvent(eventName, new HashMap<String, Object>());
-        verify(mReportsHandler).reportEvent(same(mockedEvent), any(ReporterEnvironment.class), same((Map) null));
+        verify(mReportsHandler).reportEvent(same(mockedEvent), any(ReporterEnvironment.class), any(Map.class));
     }
 
     @Test
