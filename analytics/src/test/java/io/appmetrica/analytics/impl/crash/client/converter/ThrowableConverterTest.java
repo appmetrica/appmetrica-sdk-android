@@ -7,6 +7,7 @@ import io.appmetrica.analytics.coreutils.internal.AndroidUtils;
 import io.appmetrica.analytics.impl.crash.client.StackTraceItemInternal;
 import io.appmetrica.analytics.impl.crash.client.ThrowableModel;
 import io.appmetrica.analytics.impl.protobuf.backend.CrashAndroid;
+import io.appmetrica.analytics.protobuf.nano.MessageNano;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.MockedStaticRule;
 import java.lang.reflect.InvocationTargetException;
@@ -210,4 +211,19 @@ public class ThrowableConverterTest extends CommonTest {
         throwableConverter.toModel(new CrashAndroid.Throwable());
     }
 
+    @Test
+    public void messageWithInvalidEncoding() throws Throwable {
+        String prefix = "identifier";
+        String invalidFormattedStringWithUnpairedSurrogate = "\uD83D";
+        ThrowableModel throwableModel = new ThrowableModel(
+            "some class",
+            prefix + invalidFormattedStringWithUnpairedSurrogate,
+            null,
+            null,
+            null
+        );
+        CrashAndroid.Throwable proto = throwableConverter.fromModel(throwableModel);
+        byte[] protoBytes = MessageNano.toByteArray(proto);
+        assertThat(CrashAndroid.Throwable.parseFrom(protoBytes).message).contains(prefix);
+    }
 }

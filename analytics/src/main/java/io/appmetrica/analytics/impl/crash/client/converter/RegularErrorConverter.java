@@ -4,6 +4,7 @@ import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.data.ProtobufConverter;
+import io.appmetrica.analytics.coreutils.internal.StringUtils;
 import io.appmetrica.analytics.coreutils.internal.WrapUtils;
 import io.appmetrica.analytics.impl.Utils;
 import io.appmetrica.analytics.impl.crash.client.RegularError;
@@ -55,7 +56,7 @@ public class RegularErrorConverter implements ProtobufConverter<RegularError, Cr
     @Override
     public CrashAndroid.Error fromModel(@NonNull RegularError value) {
         CrashAndroid.Error error = new CrashAndroid.Error();
-        error.message = WrapUtils.getOrDefault(value.message, error.message);
+        error.message = StringUtils.correctIllFormedString(WrapUtils.getOrDefault(value.message, error.message));
         UnhandledException unhandledException = value.exception;
         if (unhandledException != null) {
             if (unhandledException.exception != null) {

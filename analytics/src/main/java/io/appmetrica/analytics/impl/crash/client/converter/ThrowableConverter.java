@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.data.ProtobufConverter;
+import io.appmetrica.analytics.coreutils.internal.StringUtils;
 import io.appmetrica.analytics.coreutils.internal.WrapUtils;
 import io.appmetrica.analytics.impl.crash.client.ThrowableModel;
 import io.appmetrica.analytics.impl.protobuf.backend.CrashAndroid;
@@ -28,7 +29,7 @@ public class ThrowableConverter implements ProtobufConverter<ThrowableModel, Cra
     public CrashAndroid.Throwable fromModel(@NonNull ThrowableModel value) {
         CrashAndroid.Throwable outState = new CrashAndroid.Throwable();
         outState.exceptionClass = WrapUtils.getOrDefault(value.getExceptionClass(), "");
-        outState.message = WrapUtils.getOrDefault(value.getMessage(), "");
+        outState.message = StringUtils.correctIllFormedString(WrapUtils.getOrDefault(value.getMessage(), ""));
         if (value.getStacktrace() != null) {
             outState.backtrace = backtraceConverter.fromModel(value.getStacktrace());
         }

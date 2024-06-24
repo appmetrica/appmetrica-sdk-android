@@ -3,6 +3,7 @@ package io.appmetrica.analytics.impl.crash.client.converter;
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.data.ProtobufConverter;
+import io.appmetrica.analytics.coreutils.internal.StringUtils;
 import io.appmetrica.analytics.impl.crash.client.CustomError;
 import io.appmetrica.analytics.impl.protobuf.backend.CrashAndroid;
 
@@ -26,7 +27,7 @@ public class CustomErrorConverter implements ProtobufConverter<CustomError, Cras
         CrashAndroid.Error error = regularErrorConverter.fromModel(value.regularError);
         error.type = CrashAndroid.Error.CUSTOM;
         error.custom = new CrashAndroid.Error.Custom();
-        error.custom.identifier = value.identifier;
+        error.custom.identifier = StringUtils.correctIllFormedString(value.identifier);
         return error;
     }
 

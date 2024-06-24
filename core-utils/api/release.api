@@ -37,6 +37,7 @@ public final class io.appmetrica.analytics.coreutils.internal.StringUtils {
     public static String capitalize(String)
     public static int compare([Nullable] String, [Nullable] String)
     public static [NonNull] String contentValuesToString([Nullable] android.content.ContentValues)
+    public static [NonNull] String correctIllFormedString([NonNull] String)
     public static String emptyIfNull(String)
     public static boolean equalsNullSafety([Nullable] String, [Nullable] String)
     public static String formatSha1([NonNull] byte[])

@@ -3,6 +3,7 @@ package io.appmetrica.analytics.impl.crash.client.converter;
 import io.appmetrica.analytics.impl.crash.client.CustomError;
 import io.appmetrica.analytics.impl.crash.client.RegularError;
 import io.appmetrica.analytics.impl.protobuf.backend.CrashAndroid;
+import io.appmetrica.analytics.protobuf.nano.MessageNano;
 import io.appmetrica.analytics.testutils.CommonTest;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,7 +35,7 @@ public class CustomErrorConverterTest extends CommonTest {
     @Test
     public void regularConverterCalled() {
         assertThat(
-                customErrorConverter.fromModel(new CustomError(regularError, "id"))
+            customErrorConverter.fromModel(new CustomError(regularError, "id"))
         ).isSameAs(error);
 
         verify(regularErrorConverter).fromModel(regularError);
@@ -50,16 +51,28 @@ public class CustomErrorConverterTest extends CommonTest {
         verify(regularErrorConverter).fromModel(regularError);
 
         ObjectPropertyAssertions(customErrorProto)
-                .withFinalFieldOnly(false)
-                .withIgnoredFields("throwable", "threads", "methodCallStacktrace", "buildId", "isOffline", "message", "custom",
-                        "pluginEnvironment", "virtualMachine", "virtualMachineVersion")
-                .checkField("type", CrashAndroid.Error.CUSTOM)
-                .checkAll();
+            .withFinalFieldOnly(false)
+            .withIgnoredFields("throwable", "threads", "methodCallStacktrace", "buildId", "isOffline", "message", "custom",
+                "pluginEnvironment", "virtualMachine", "virtualMachineVersion")
+            .checkField("type", CrashAndroid.Error.CUSTOM)
+            .checkAll();
 
         ObjectPropertyAssertions(customErrorProto.custom)
-                .withFinalFieldOnly(false)
-                .checkField("identifier", id)
-                .checkAll();
+            .withFinalFieldOnly(false)
+            .checkField("identifier", id)
+            .checkAll();
     }
 
+    @Test
+    public void identifierWithInvalidEncoding() throws Exception {
+        String prefix = "identifier";
+        String invalidFormattedStringWithUnpairedSurrogate = "\uD83D";
+        CustomError customError = new CustomError(
+            regularError,
+            prefix + invalidFormattedStringWithUnpairedSurrogate // Invalid formatted string with unpaired surrogate
+        );
+        CrashAndroid.Error errorProto = customErrorConverter.fromModel(customError);
+        byte[] protoBytes = MessageNano.toByteArray(errorProto);
+        assertThat(CrashAndroid.Error.parseFrom(protoBytes).custom.identifier).contains(prefix);
+    }
 }

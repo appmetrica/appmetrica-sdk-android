@@ -7,6 +7,7 @@ import io.appmetrica.analytics.impl.crash.client.StackTraceItemInternal;
 import io.appmetrica.analytics.impl.crash.client.ThrowableModel;
 import io.appmetrica.analytics.impl.crash.client.UnhandledException;
 import io.appmetrica.analytics.impl.protobuf.backend.CrashAndroid;
+import io.appmetrica.analytics.protobuf.nano.MessageNano;
 import io.appmetrica.analytics.testutils.CommonTest;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -24,6 +25,7 @@ import org.robolectric.RobolectricTestRunner;
 import static io.appmetrica.analytics.impl.protobuf.backend.CrashAndroid.Error.DEFAULT;
 import static io.appmetrica.analytics.impl.protobuf.backend.CrashAndroid.OPTIONAL_BOOL_TRUE;
 import static io.appmetrica.analytics.impl.protobuf.backend.CrashAndroid.OPTIONAL_BOOL_UNDEFINED;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -128,5 +130,18 @@ public class RegularErrorConverterTest extends CommonTest {
     @Test(expected = UnsupportedOperationException.class)
     public void testToModel() {
         regularErrorConverter.toModel(new CrashAndroid.Error());
+    }
+
+    @Test
+    public void messageWithInvalidEncoding() throws Throwable {
+        String prefix = "identifier";
+        String invalidFormattedStringWithUnpairedSurrogate = "\uD83D";
+        RegularError regularError = new RegularError(
+            prefix + invalidFormattedStringWithUnpairedSurrogate,
+            null
+        );
+        CrashAndroid.Error protoError = regularErrorConverter.fromModel(regularError);
+        byte[] protoBytes = MessageNano.toByteArray(protoError);
+        assertThat(CrashAndroid.Error.parseFrom(protoBytes).message).contains(prefix);
     }
 }
