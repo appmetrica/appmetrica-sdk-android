@@ -5,7 +5,7 @@ import androidx.annotation.NonNull;
 import io.appmetrica.analytics.Revenue;
 import io.appmetrica.analytics.coreutils.internal.StringUtils;
 import io.appmetrica.analytics.coreutils.internal.WrapUtils;
-import io.appmetrica.analytics.impl.utils.PublicLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.impl.utils.limitation.EventLimitationProcessor;
 import io.appmetrica.analytics.impl.utils.limitation.StringByBytesTrimmer;
 import io.appmetrica.analytics.impl.utils.limitation.StringTrimmer;

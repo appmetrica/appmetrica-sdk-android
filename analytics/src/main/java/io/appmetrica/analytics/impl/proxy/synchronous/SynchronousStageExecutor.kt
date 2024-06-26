@@ -18,6 +18,7 @@ import io.appmetrica.analytics.Revenue
 import io.appmetrica.analytics.StartupParamsCallback
 import io.appmetrica.analytics.coreapi.internal.backport.FunctionWithThrowable
 import io.appmetrica.analytics.coreutils.internal.WrapUtils
+import io.appmetrica.analytics.coreutils.internal.logger.LoggerStorage
 import io.appmetrica.analytics.coreutils.internal.system.SystemServiceUtils.accessSystemServiceSafely
 import io.appmetrica.analytics.ecommerce.ECommerceEvent
 import io.appmetrica.analytics.impl.ActivityLifecycleManager
@@ -30,7 +31,6 @@ import io.appmetrica.analytics.impl.WebViewJsInterfaceHandler
 import io.appmetrica.analytics.impl.crash.AppMetricaThrowable
 import io.appmetrica.analytics.impl.proxy.AppMetricaFacadeProvider
 import io.appmetrica.analytics.impl.proxy.AppMetricaProxy
-import io.appmetrica.analytics.impl.utils.LoggerStorage
 import io.appmetrica.analytics.profile.UserProfile
 
 class SynchronousStageExecutor @VisibleForTesting constructor(

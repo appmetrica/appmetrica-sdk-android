@@ -16,3 +16,14 @@ public final class io.appmetrica.analytics.logger.appmetrica.internal.ImportantL
     public static final [NonNull] io.appmetrica.analytics.logger.appmetrica.internal.ImportantLogger INSTANCE
 }
 
+public final class io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger extends io.appmetrica.analytics.logger.common.BaseReleaseLogger {
+    public static final [NonNull] io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger$Companion Companion
+
+    public <init>([NonNull] String)
+    public static final [NonNull] io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger getAnonymousInstance()
+}
+
+public static final class io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger$Companion {
+    public final [NonNull] io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger getAnonymousInstance()
+}
+

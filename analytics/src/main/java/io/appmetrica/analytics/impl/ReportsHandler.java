@@ -6,6 +6,8 @@ import android.os.ResultReceiver;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
+import java.util.List;
+import java.util.Map;
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
 import io.appmetrica.analytics.impl.client.ProcessConfiguration;
 import io.appmetrica.analytics.impl.crash.UnhandledExceptionEventFormer;
@@ -20,12 +22,10 @@ import io.appmetrica.analytics.impl.service.AppMetricaServiceDataReporter;
 import io.appmetrica.analytics.impl.service.commands.ServiceCallableFactory;
 import io.appmetrica.analytics.impl.startup.StartupIdentifiersProvider;
 import io.appmetrica.analytics.impl.utils.JsonHelper;
-import io.appmetrica.analytics.impl.utils.LoggerStorage;
-import io.appmetrica.analytics.impl.utils.PublicLogger;
+import io.appmetrica.analytics.coreutils.internal.logger.LoggerStorage;
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedProvider;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
-import java.util.List;
-import java.util.Map;
 
 public class ReportsHandler {
 
@@ -200,8 +200,10 @@ public class ReportsHandler {
                                    @Nullable Map<String, String> freshClientClids) {
         Bundle payload = new Bundle();
         payload.putParcelable(IdentifiersData.BUNDLE_KEY, new IdentifiersData(identifiers, freshClientClids, receiver));
-        CounterReport counterReport = EventsManager.reportEntry(InternalEvents.EVENT_TYPE_STARTUP,
-            LoggerStorage.getAnonymousPublicLogger());
+        CounterReport counterReport = EventsManager.reportEntry(
+            InternalEvents.EVENT_TYPE_STARTUP,
+            PublicLogger.getAnonymousInstance()
+        );
         counterReport.setPayload(payload);
         reportEvent(counterReport, mCommutationReportEnvironment);
     }
@@ -209,7 +211,7 @@ public class ReportsHandler {
     public void reportRequestReferrerEvent(@NonNull ReferrerResultReceiver receiver) {
         Bundle payload = new Bundle();
         payload.putParcelable(ReferrerResultReceiver.BUNDLE_KEY, receiver);
-        CounterReport counterReport = EventsManager.requestReferrerEntry(LoggerStorage.getAnonymousPublicLogger());
+        CounterReport counterReport = EventsManager.requestReferrerEntry(PublicLogger.getAnonymousInstance());
         counterReport.setPayload(payload);
         reportEvent(counterReport, mCommutationReportEnvironment);
     }

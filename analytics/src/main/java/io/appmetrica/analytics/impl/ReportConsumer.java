@@ -20,7 +20,7 @@ import io.appmetrica.analytics.impl.crash.ndk.AppMetricaNativeCrashMetadata;
 import io.appmetrica.analytics.impl.crash.ndk.NativeCrashDumpReader;
 import io.appmetrica.analytics.impl.crash.ndk.NativeCrashHandlerDescription;
 import io.appmetrica.analytics.impl.request.StartupRequestConfig;
-import io.appmetrica.analytics.impl.utils.LoggerStorage;
+import io.appmetrica.analytics.coreutils.internal.logger.LoggerStorage;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.io.File;
 

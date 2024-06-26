@@ -6,10 +6,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.WorkerThread;
 import io.appmetrica.analytics.AppMetricaConfig;
 import io.appmetrica.analytics.ReporterConfig;
+import io.appmetrica.analytics.coreutils.internal.ApiKeyUtils;
 import io.appmetrica.analytics.impl.client.ProcessConfiguration;
 import io.appmetrica.analytics.impl.startup.StartupHelper;
-import io.appmetrica.analytics.impl.utils.LoggerStorage;
-import io.appmetrica.analytics.impl.utils.PublicLogger;
+import io.appmetrica.analytics.coreutils.internal.logger.LoggerStorage;
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.impl.utils.validation.ThrowIfFailedValidator;
 import io.appmetrica.analytics.impl.utils.validation.Validator;
 import io.appmetrica.analytics.impl.utils.validation.api.ReporterKeyIsUsedValidator;
@@ -103,7 +104,7 @@ public class ReporterFactory implements IReporterFactory {
             getOrCreateReporter(config);
             ImportantLogger.INSTANCE.info(
                 SdkUtils.APPMETRICA_TAG,
-                "Activate reporter with APIKey " + Utils.createPartialApiKey(config.apiKey)
+                "Activate reporter with APIKey " + ApiKeyUtils.createPartialApiKey(config.apiKey)
             );
         }
     }

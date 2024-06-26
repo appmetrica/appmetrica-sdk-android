@@ -16,7 +16,7 @@ import io.appmetrica.analytics.impl.db.protobuf.converter.DbEventModelConverter;
 import io.appmetrica.analytics.impl.events.EventListener;
 import io.appmetrica.analytics.impl.events.EventTrigger;
 import io.appmetrica.analytics.impl.request.ReportRequestConfig;
-import io.appmetrica.analytics.impl.utils.PublicLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.impl.utils.TimeUtils;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;

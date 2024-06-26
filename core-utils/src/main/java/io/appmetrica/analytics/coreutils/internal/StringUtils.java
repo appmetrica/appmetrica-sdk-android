@@ -19,6 +19,7 @@ public final class StringUtils {
     public static final String EMPTY = "";
     public static final String COMMA = ",";
     public static final String PROCESS_POSTFIX_DELIMITER = ":";
+    public static final String UNDEFINED = "undefined";
 
     private static final String HEX_SYMBOLS = "0123456789abcdef";
 

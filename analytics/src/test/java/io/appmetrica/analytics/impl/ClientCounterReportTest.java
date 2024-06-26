@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl;
 import android.os.SystemClock;
 import android.util.Base64;
 import io.appmetrica.analytics.impl.revenue.ad.AdRevenueWrapper;
-import io.appmetrica.analytics.impl.utils.PublicLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.impl.utils.limitation.EventLimitationProcessor;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.RandomStringGenerator;

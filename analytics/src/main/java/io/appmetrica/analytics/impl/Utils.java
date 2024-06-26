@@ -177,23 +177,6 @@ public final class Utils {
             && !CounterConfigurationValues.DEFAULT_UNDEFINED_API_KEY.equals(apiKey);
     }
 
-    @NonNull
-    public static String createPartialApiKey(@Nullable String fullApiKey) {
-        String ret = StringUtils.EMPTY;
-        if (TextUtils.isEmpty(fullApiKey) == false) {
-            final int apiKeyPrefixLength = 8;
-            final int apiKeySuffixLength = 4;
-            final String apiKeyMiddleMask = "-xxxx-xxxx-xxxx-xxxxxxxx";
-            final int apiKeyRequiredLength = 36;
-            if (fullApiKey.length() == apiKeyRequiredLength) {
-                StringBuilder builder = new StringBuilder(fullApiKey);
-                builder.replace(apiKeyPrefixLength, fullApiKey.length() - apiKeySuffixLength, apiKeyMiddleMask);
-                ret = builder.toString();
-            }
-        }
-        return ret;
-    }
-
     public static boolean isFieldSet(Object field) {
         return field != null;
     }

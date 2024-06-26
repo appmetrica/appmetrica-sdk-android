@@ -8,8 +8,8 @@ import io.appmetrica.analytics.impl.client.ProcessConfiguration;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesClientDbStorage;
 import io.appmetrica.analytics.impl.referrer.client.ReferrerHelper;
 import io.appmetrica.analytics.impl.startup.StartupHelper;
-import io.appmetrica.analytics.impl.utils.LoggerStorage;
-import io.appmetrica.analytics.impl.utils.PublicLogger;
+import io.appmetrica.analytics.coreutils.internal.logger.LoggerStorage;
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.impl.utils.executors.ClientExecutorProvider;
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule;
 import io.appmetrica.analytics.testutils.CommonTest;
@@ -87,6 +87,8 @@ public class AppMetricaImplActivateTest extends CommonTest {
 
     @Rule
     public final MockedStaticRule<LoggerStorage> sLoggerStorage = new MockedStaticRule<>(LoggerStorage.class);
+    @Rule
+    public final MockedStaticRule<PublicLogger> publicLoggerRule = new MockedStaticRule<>(PublicLogger.class);
 
     @Before
     public void setUp() {
@@ -110,7 +112,8 @@ public class AppMetricaImplActivateTest extends CommonTest {
         when(mClientServiceLocatorRule.instance.getClientExecutorProvider()).thenReturn(clientExecutorProvider);
         when(mReporterFactory.buildMainReporter(any(AppMetricaConfig.class), anyBoolean())).thenReturn(mMainReporter);
 
-        when(LoggerStorage.getAnonymousPublicLogger()).thenReturn(mPublicAnonymousLogger);
+        when(PublicLogger.getAnonymousInstance()).thenReturn(mPublicAnonymousLogger);
+        when(LoggerStorage.getOrCreateMainPublicLogger(mApiKey)).thenReturn(mPublicLogger);
         when(LoggerStorage.getOrCreatePublicLogger(mApiKey)).thenReturn(mPublicLogger);
 
         mAppMetrica = new AppMetricaImpl(

@@ -16,7 +16,7 @@ import io.appmetrica.analytics.impl.SelfDiagnosticReporterStorage;
 import io.appmetrica.analytics.impl.db.constants.Constants;
 import io.appmetrica.analytics.impl.protobuf.backend.EventProto;
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade;
-import io.appmetrica.analytics.impl.utils.PublicLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import io.appmetrica.analytics.testutils.LogRule;

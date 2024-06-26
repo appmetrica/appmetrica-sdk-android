@@ -12,7 +12,7 @@ import io.appmetrica.analytics.impl.db.preferences.PreferencesComponentDbStorage
 import io.appmetrica.analytics.impl.db.preferences.PreferencesServiceDbStorage;
 import io.appmetrica.analytics.impl.events.EventTrigger;
 import io.appmetrica.analytics.impl.request.ReportRequestConfig;
-import io.appmetrica.analytics.impl.utils.PublicLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.impl.utils.ServerTime;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;

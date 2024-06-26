@@ -11,7 +11,7 @@ import io.appmetrica.analytics.impl.ecommerce.client.converter.Result;
 import io.appmetrica.analytics.impl.protobuf.backend.Ecommerce;
 import io.appmetrica.analytics.impl.protobuf.backend.Userprofile;
 import io.appmetrica.analytics.impl.revenue.ad.AdRevenueWrapper;
-import io.appmetrica.analytics.impl.utils.PublicLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.impl.utils.limitation.BytesTrimmer;
 import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedProvider;
 import io.appmetrica.analytics.impl.utils.limitation.EventLimitationProcessor;

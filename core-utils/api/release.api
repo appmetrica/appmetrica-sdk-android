@@ -12,6 +12,12 @@ public final class io.appmetrica.analytics.coreutils.internal.AndroidUtils {
     public static final boolean isApiAchieved(int)
 }
 
+public final class io.appmetrica.analytics.coreutils.internal.ApiKeyUtils {
+    public static final [NonNull] io.appmetrica.analytics.coreutils.internal.ApiKeyUtils INSTANCE
+
+    public static final [NonNull] String createPartialApiKey([Nullable] String)
+}
+
 public final class io.appmetrica.analytics.coreutils.internal.DebugProvider {
     public static final boolean DEBUG
     public static final [NonNull] io.appmetrica.analytics.coreutils.internal.DebugProvider INSTANCE
@@ -33,6 +39,7 @@ public final class io.appmetrica.analytics.coreutils.internal.StringUtils {
     public static final String COMMA
     public static final String EMPTY
     public static final String PROCESS_POSTFIX_DELIMITER
+    public static final String UNDEFINED
 
     public static String capitalize(String)
     public static int compare([Nullable] String, [Nullable] String)
@@ -233,6 +240,14 @@ public final class io.appmetrica.analytics.coreutils.internal.io.GZIPUtils {
 
     public static final [Nullable] byte[] gzipBytes([Nullable] byte[])
     public static final [Nullable] byte[] unGzipBytes([Nullable] byte[])
+}
+
+public abstract class io.appmetrica.analytics.coreutils.internal.logger.LoggerStorage {
+    public <init>()
+    public static [NonNull] io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger getMainPublicOrAnonymousLogger()
+    public static [NonNull] io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger getOrCreateMainPublicLogger([NonNull] String)
+    public static [NonNull] io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger getOrCreatePublicLogger([Nullable] String)
+    public static void unsetPublicLoggers()
 }
 
 public final class io.appmetrica.analytics.coreutils.internal.network.UserAgent {

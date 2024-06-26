@@ -8,7 +8,7 @@ import io.appmetrica.analytics.impl.client.ProcessConfiguration;
 import io.appmetrica.analytics.impl.crash.client.ThrowableModel;
 import io.appmetrica.analytics.impl.crash.client.UnhandledException;
 import io.appmetrica.analytics.impl.crash.client.converter.JvmCrashConverter;
-import io.appmetrica.analytics.impl.utils.PublicLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.internal.CounterConfiguration;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.MockedStaticRule;

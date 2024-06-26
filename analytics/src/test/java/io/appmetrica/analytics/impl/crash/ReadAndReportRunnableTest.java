@@ -7,7 +7,7 @@ import io.appmetrica.analytics.impl.TestsData;
 import io.appmetrica.analytics.impl.client.ClientConfiguration;
 import io.appmetrica.analytics.impl.client.ClientConfigurationTestUtils;
 import io.appmetrica.analytics.impl.crash.jvm.JvmCrash;
-import io.appmetrica.analytics.impl.utils.PublicLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.testutils.CommonTest;
 import java.io.File;
 import java.util.HashMap;

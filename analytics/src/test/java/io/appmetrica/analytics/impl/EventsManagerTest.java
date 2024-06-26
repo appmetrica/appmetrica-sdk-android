@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl;
 import android.util.Base64;
 import io.appmetrica.analytics.PreloadInfo;
 import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoWrapper;
-import io.appmetrica.analytics.impl.utils.PublicLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.RandomStringGenerator;
 import java.util.ArrayList;

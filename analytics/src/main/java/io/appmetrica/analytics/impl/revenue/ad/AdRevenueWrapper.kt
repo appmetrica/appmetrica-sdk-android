@@ -6,11 +6,11 @@ import io.appmetrica.analytics.coreutils.internal.StringUtils
 import io.appmetrica.analytics.impl.adrevenue.AdRevenueDataSource
 import io.appmetrica.analytics.impl.utils.DecimalProtoModel
 import io.appmetrica.analytics.impl.utils.JsonHelper
-import io.appmetrica.analytics.impl.utils.PublicLogger
 import io.appmetrica.analytics.impl.utils.limitation.EventLimitationProcessor
 import io.appmetrica.analytics.impl.utils.limitation.StringByBytesTrimmer
 import io.appmetrica.analytics.impl.utils.limitation.StringTrimmer
 import io.appmetrica.analytics.impl.utils.limitation.Trimmer
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger
 import io.appmetrica.analytics.protobuf.nano.MessageNano
 import io.appmetrica.analytics.impl.protobuf.backend.AdRevenue as AdRevenueProto
 import io.appmetrica.analytics.impl.protobuf.backend.AdRevenue.Decimal as DecimalProto

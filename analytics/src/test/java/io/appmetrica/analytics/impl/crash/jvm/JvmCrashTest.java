@@ -9,7 +9,7 @@ import io.appmetrica.analytics.impl.EventsManager;
 import io.appmetrica.analytics.impl.TestsData;
 import io.appmetrica.analytics.impl.client.ClientConfiguration;
 import io.appmetrica.analytics.impl.client.ProcessConfiguration;
-import io.appmetrica.analytics.impl.utils.PublicLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.internal.CounterConfiguration;
 import io.appmetrica.analytics.testutils.CommonTest;
 import java.util.AbstractMap;

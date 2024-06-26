@@ -18,7 +18,7 @@ import io.appmetrica.analytics.impl.db.IKeyValueTableDbHelper;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesClientDbStorage;
 import io.appmetrica.analytics.impl.db.storage.MockedKeyValueTableDbHelper;
 import io.appmetrica.analytics.impl.utils.JsonHelper;
-import io.appmetrica.analytics.impl.utils.PublicLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.internal.IdentifiersResult;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.TestUtils;

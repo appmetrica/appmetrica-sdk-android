@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.utils.limitation;
 
 import io.appmetrica.analytics.impl.utils.MeasuredJsonMap;
-import io.appmetrica.analytics.impl.utils.PublicLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.testutils.CommonTest;
 import org.junit.Before;
 import org.junit.Test;

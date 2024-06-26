@@ -8,7 +8,7 @@ import io.appmetrica.analytics.impl.ReportToSend;
 import io.appmetrica.analytics.impl.ReporterEnvironment;
 import io.appmetrica.analytics.impl.crash.client.UnhandledException;
 import io.appmetrica.analytics.impl.crash.client.converter.JvmCrashConverter;
-import io.appmetrica.analytics.impl.utils.LoggerStorage;
+import io.appmetrica.analytics.coreutils.internal.logger.LoggerStorage;
 
 public class UnhandledExceptionEventFormer {
 

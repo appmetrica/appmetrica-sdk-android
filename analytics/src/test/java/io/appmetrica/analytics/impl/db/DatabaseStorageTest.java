@@ -4,7 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import io.appmetrica.analytics.impl.IReporterExtended;
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade;
-import io.appmetrica.analytics.impl.utils.PublicLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.MockedStaticRule;
 import org.junit.Before;

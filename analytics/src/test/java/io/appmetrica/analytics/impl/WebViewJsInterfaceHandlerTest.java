@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import io.appmetrica.analytics.impl.proxy.AppMetricaProxy;
-import io.appmetrica.analytics.impl.utils.PublicLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.internal.js.AppMetricaInitializerJsInterface;
 import io.appmetrica.analytics.internal.js.AppMetricaJsInterface;
 import io.appmetrica.analytics.testutils.CommonTest;

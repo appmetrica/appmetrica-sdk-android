@@ -8,7 +8,7 @@ import io.appmetrica.analytics.coreutils.internal.collection.CollectionUtils;
 import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoWrapper;
 import io.appmetrica.analytics.impl.protobuf.backend.EventProto;
 import io.appmetrica.analytics.impl.utils.JsonHelper;
-import io.appmetrica.analytics.impl.utils.PublicLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumSet;

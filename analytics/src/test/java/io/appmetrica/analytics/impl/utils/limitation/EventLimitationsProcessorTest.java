@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.utils.limitation;
 
 import io.appmetrica.analytics.coreutils.internal.StringUtils;
-import io.appmetrica.analytics.impl.utils.PublicLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.RandomStringGenerator;
 import java.util.Arrays;

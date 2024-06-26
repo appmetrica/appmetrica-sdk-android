@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.component;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import io.appmetrica.analytics.impl.Utils;
+import io.appmetrica.analytics.coreutils.internal.ApiKeyUtils;
 
 public class ComponentId {
 
@@ -25,6 +25,11 @@ public class ComponentId {
         return mApiKey;
     }
 
+    @NonNull
+    public String getAnonymizedApiKey() {
+        return ApiKeyUtils.createPartialApiKey(mApiKey);
+    }
+
     public boolean isMain() {
         return false;
     }
@@ -39,7 +44,7 @@ public class ComponentId {
     }
 
     public String toStringAnonymized() {
-        return mPackageName + DELIMITER + Utils.createPartialApiKey(mApiKey);
+        return mPackageName + DELIMITER + ApiKeyUtils.createPartialApiKey(mApiKey);
     }
 
     @Override

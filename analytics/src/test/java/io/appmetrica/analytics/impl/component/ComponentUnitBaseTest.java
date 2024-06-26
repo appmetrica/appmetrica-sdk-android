@@ -28,12 +28,15 @@ import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoState;
 import io.appmetrica.analytics.impl.request.ReportRequestConfig;
 import io.appmetrica.analytics.impl.request.StartupRequestConfig;
 import io.appmetrica.analytics.impl.startup.StartupState;
-import io.appmetrica.analytics.impl.utils.PublicLogger;
+import io.appmetrica.analytics.impl.utils.PublicLogConstructor;
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.analytics.testutils.MockedStaticRule;
 import io.appmetrica.analytics.testutils.TestUtils;
 import java.util.List;
 import java.util.UUID;
 import org.json.JSONObject;
+import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
@@ -112,6 +115,11 @@ public abstract class ComponentUnitBaseTest extends CommonTest {
     VitalComponentDataProvider vitalComponentDataProvider;
     @Mock
     SessionExtrasHolder sessionExtrasHolder;
+
+    @Rule
+    public MockedStaticRule<PublicLogConstructor> publicLogConstructorRule =
+        new MockedStaticRule<>(PublicLogConstructor.class);
+
     private AppEnvironment.EnvironmentRevision mRevision;
 
     final String mApiKey = UUID.randomUUID().toString();
@@ -230,8 +238,11 @@ public abstract class ComponentUnitBaseTest extends CommonTest {
 
     @Test
     public void testEventLoggedIfLoggerEnabled() {
+        String message = "Some messahe";
+        when(PublicLogConstructor.constructCounterReportLog(mCounterReport, "Event received on service"))
+            .thenReturn(message);
         mComponentUnit.handleReport(mCounterReport);
-        verify(mPublicLogger).logEvent(mCounterReport, "Event received on service");
+        verify(mPublicLogger).info(message);
     }
 
     @Test

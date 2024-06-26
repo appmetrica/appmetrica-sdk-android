@@ -5,13 +5,11 @@ import android.content.Context;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import io.appmetrica.analytics.TestData;
 import io.appmetrica.analytics.coreutils.internal.StringUtils;
 import io.appmetrica.analytics.impl.crash.client.StackTraceItemInternal;
 import io.appmetrica.analytics.impl.utils.JsonHelper;
-import io.appmetrica.analytics.impl.utils.PublicLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.impl.utils.StartupUtils;
 import io.appmetrica.analytics.impl.utils.limitation.StringByBytesTrimmer;
 import io.appmetrica.analytics.networktasks.internal.NetworkTask;
@@ -234,36 +232,6 @@ public class UtilsTest extends CommonTest {
     @Test
     public void testValidateClidsForNull() {
         assertThat(StartupUtils.validateClids(null)).isNotNull();
-    }
-
-    @RunWith(ParameterizedRobolectricTestRunner.class)
-    public static class CreatePartialApiKeyTest {
-
-        @Nullable
-        private final String mFullApiKey;
-        private final String mExpectedPartialApiKey;
-        private static final String NULL_STRING = null;
-        private static final String EMPTY_STRING = "";
-
-        @ParameterizedRobolectricTestRunner.Parameters
-        public static Collection<Object[]> data() {
-            return Arrays.asList(
-                    new Object[]{"5052c3cc-39a4-4dbc-92d1-89ebc17c0fa9", "5052c3cc-xxxx-xxxx-xxxx-xxxxxxxx0fa9"},
-                    new Object[]{"123456", EMPTY_STRING},
-                    new Object[]{EMPTY_STRING, EMPTY_STRING},
-                    new Object[]{NULL_STRING, EMPTY_STRING}
-            );
-        }
-
-        public CreatePartialApiKeyTest(@Nullable String fullApiKey, @NonNull String partialApiKey) {
-            mFullApiKey = fullApiKey;
-            mExpectedPartialApiKey = partialApiKey;
-        }
-
-        @Test
-        public void testCreatePartialApiKey() {
-            assertThat(Utils.createPartialApiKey(mFullApiKey)).isEqualTo(mExpectedPartialApiKey);
-        }
     }
 
     @RunWith(RobolectricTestRunner.class)

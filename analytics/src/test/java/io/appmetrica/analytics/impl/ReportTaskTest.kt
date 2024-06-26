@@ -20,11 +20,11 @@ import io.appmetrica.analytics.impl.protobuf.backend.EventProto
 import io.appmetrica.analytics.impl.request.ReportRequestConfig
 import io.appmetrica.analytics.impl.request.appenders.ReportParamsAppender
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade
-import io.appmetrica.analytics.impl.utils.PublicLogger
 import io.appmetrica.analytics.impl.utils.TimeUtils
 import io.appmetrica.analytics.impl.utils.encryption.EventEncryptionMode
 import io.appmetrica.analytics.impl.utils.limitation.BytesTrimmer
 import io.appmetrica.analytics.impl.utils.limitation.EventLimitationProcessor
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger
 import io.appmetrica.analytics.networktasks.internal.DefaultNetworkResponseHandler
 import io.appmetrica.analytics.networktasks.internal.FullUrlFormer
 import io.appmetrica.analytics.networktasks.internal.RequestBodyEncrypter
@@ -163,9 +163,11 @@ internal class ReportTaskTest : CommonTest() {
     }
 
     private val apiKey = UUID.randomUUID().toString()
+    private val anonymizedApiKey = UUID.randomUUID().toString()
 
     private val componentId = mock<ComponentId> {
         on { apiKey } doReturn apiKey
+        on { anonymizedApiKey } doReturn anonymizedApiKey
     }
 
     private val sessionRemovingThreshold = 5L
@@ -478,7 +480,7 @@ internal class ReportTaskTest : CommonTest() {
 
     @Test
     fun description() {
-        assertThat(reportTask.description()).contains(apiKey)
+        assertThat(reportTask.description()).contains(anonymizedApiKey)
     }
 
     @Test

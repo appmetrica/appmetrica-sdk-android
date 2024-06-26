@@ -6,9 +6,9 @@ import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
 import io.appmetrica.analytics.assertions.ProtoObjectPropertyAssertions
 import io.appmetrica.analytics.coreutils.internal.StringUtils
 import io.appmetrica.analytics.impl.utils.JsonHelper
-import io.appmetrica.analytics.impl.utils.PublicLogger
 import io.appmetrica.analytics.impl.utils.limitation.StringByBytesTrimmer
 import io.appmetrica.analytics.impl.utils.limitation.StringTrimmer
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.MockedConstructionRule
 import io.appmetrica.analytics.testutils.MockedStaticRule

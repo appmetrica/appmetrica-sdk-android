@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.utils.limitation;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import io.appmetrica.analytics.impl.utils.MeasuredJsonMap;
-import io.appmetrica.analytics.impl.utils.PublicLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 
 public class MapTotalLimitChecker {
 

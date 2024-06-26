@@ -29,7 +29,8 @@ import io.appmetrica.analytics.impl.telephony.SimInfo;
 import io.appmetrica.analytics.impl.telephony.TelephonyDataProvider;
 import io.appmetrica.analytics.impl.telephony.TelephonyInfoAdapter;
 import io.appmetrica.analytics.impl.utils.JsonHelper;
-import io.appmetrica.analytics.impl.utils.PublicLogger;
+import io.appmetrica.analytics.impl.utils.PublicLogConstructor;
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.impl.utils.limitation.BytesTrimmer;
 import io.appmetrica.analytics.impl.utils.limitation.EventLimitationProcessor;
 import io.appmetrica.analytics.impl.utils.limitation.Trimmer;
@@ -426,7 +427,14 @@ public class ReportTask implements UnderlyingNetworkTask {
     private void logSentEvents() {
         // mMessageToSend is NonNull because logSentEvents is called only after its initialization
         for (int i = 0; i < mMessageToSend.sessions.size(); i++) {
-            mPublicLogger.logSessionEvents(mMessageToSend.sessions.get(i), "Event sent");
+            for (Session.Event event : mMessageToSend.sessions.get(i).events) {
+                if (event != null) {
+                    String log = PublicLogConstructor.constructEventLog(event, "Event sent");
+                    if (log != null) {
+                        mPublicLogger.info(log);
+                    }
+                }
+            }
         }
     }
 
@@ -724,7 +732,7 @@ public class ReportTask implements UnderlyingNetworkTask {
     @NonNull
     @Override
     public String description() {
-        return "ReportTask_" + mComponent.getComponentId().getApiKey();
+        return "ReportTask_" + mComponent.getComponentId().getAnonymizedApiKey();
     }
 
     // Stores list of {@code Metrica.ReportMessage.Session} objects and internal IDs of the sessions (in the database)

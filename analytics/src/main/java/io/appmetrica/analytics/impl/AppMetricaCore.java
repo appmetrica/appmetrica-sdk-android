@@ -11,7 +11,7 @@ import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
 import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor;
 import io.appmetrica.analytics.coreutils.internal.WrapUtils;
 import io.appmetrica.analytics.impl.clientcomponents.ClientComponentsInitializerProvider;
-import io.appmetrica.analytics.impl.utils.PublicLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.impl.utils.executors.ClientExecutorProvider;
 
 @AnyThread

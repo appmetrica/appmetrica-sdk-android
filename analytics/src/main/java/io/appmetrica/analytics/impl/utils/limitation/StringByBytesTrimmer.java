@@ -4,8 +4,7 @@ import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import io.appmetrica.analytics.impl.IOUtils;
-import io.appmetrica.analytics.impl.utils.LoggerStorage;
-import io.appmetrica.analytics.impl.utils.PublicLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.io.UnsupportedEncodingException;
 
@@ -14,7 +13,7 @@ public class StringByBytesTrimmer extends BaseTrimmer<String> {
     private static final String TAG = "[StringByBytesTrimmer]";
 
     public StringByBytesTrimmer(int maxSize, @NonNull String tag) {
-        this(maxSize, tag, LoggerStorage.getAnonymousPublicLogger());
+        this(maxSize, tag, PublicLogger.getAnonymousInstance());
     }
 
     public StringByBytesTrimmer(int maxSize, @NonNull String tag, @NonNull PublicLogger logger) {

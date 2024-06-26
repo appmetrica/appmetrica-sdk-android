@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl;
 
 import android.util.Pair;
 import io.appmetrica.analytics.impl.utils.MeasuredJsonMap;
-import io.appmetrica.analytics.impl.utils.PublicLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.impl.utils.limitation.SimpleMapLimitation;
 import io.appmetrica.analytics.testutils.CommonTest;
 import org.assertj.core.api.SoftAssertions;

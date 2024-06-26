@@ -7,7 +7,7 @@ import io.appmetrica.analytics.impl.CounterReport;
 import io.appmetrica.analytics.impl.ExtraMetaInfoRetriever;
 import io.appmetrica.analytics.impl.InternalEvents;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
-import io.appmetrica.analytics.impl.utils.PublicLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 
 public class SessionManagerStateMachine {

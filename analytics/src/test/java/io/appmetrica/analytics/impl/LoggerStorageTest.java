@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl;
 
-import io.appmetrica.analytics.impl.utils.LoggerStorage;
-import io.appmetrica.analytics.impl.utils.PublicLogger;
+import io.appmetrica.analytics.coreutils.internal.logger.LoggerStorage;
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.testutils.CommonTest;
 import org.junit.After;
 import org.junit.Before;
@@ -46,7 +46,21 @@ public class LoggerStorageTest extends CommonTest {
     }
 
     @Test
-    public void testGetAnonymousPublicLogger() {
-        assertThat(LoggerStorage.getAnonymousPublicLogger()).isEqualTo(PublicLogger.getAnonymousInstance());
+    public void getOrCreateMainPublicLogger() {
+        PublicLogger logger = LoggerStorage.getOrCreateMainPublicLogger(mApiKey);
+        assertThat(logger).isNotNull();
+        assertThat(LoggerStorage.getOrCreateMainPublicLogger(mApiKey)).isSameAs(logger);
+        assertThat(LoggerStorage.getOrCreatePublicLogger(mApiKey)).isSameAs(logger);
+    }
+
+    @Test
+    public void getMainPublicOrAnonymousLogger() {
+        PublicLogger logger = LoggerStorage.getOrCreateMainPublicLogger(mApiKey);
+        assertThat(LoggerStorage.getMainPublicOrAnonymousLogger()).isSameAs(logger);
+    }
+
+    @Test
+    public void getMainPublicOrAnonymousLoggerIfNotCreated() {
+        assertThat(LoggerStorage.getMainPublicOrAnonymousLogger()).isSameAs(PublicLogger.getAnonymousInstance());
     }
 }

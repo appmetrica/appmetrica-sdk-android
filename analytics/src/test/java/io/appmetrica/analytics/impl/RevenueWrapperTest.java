@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl;
 
 import android.util.Pair;
 import io.appmetrica.analytics.Revenue;
-import io.appmetrica.analytics.impl.utils.PublicLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.impl.utils.limitation.EventLimitationProcessor;
 import io.appmetrica.analytics.impl.utils.limitation.StringByBytesTrimmer;
 import io.appmetrica.analytics.protobuf.nano.InvalidProtocolBufferNanoException;

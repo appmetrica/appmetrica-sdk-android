@@ -3,8 +3,7 @@ package io.appmetrica.analytics.impl.profile;
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.impl.protobuf.backend.Userprofile;
-import io.appmetrica.analytics.impl.utils.LoggerStorage;
-import io.appmetrica.analytics.impl.utils.PublicLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.impl.utils.validation.ValidationResult;
 import io.appmetrica.analytics.impl.utils.validation.Validator;
 
@@ -30,7 +29,7 @@ public abstract class NamedUserProfileUpdatePatcher implements UserProfileUpdate
         mKey = key;
         mKeyValidator = keyValidator;
         mAttributeSavingStrategy = attributeSavingStrategy;
-        mPublicLogger = LoggerStorage.getAnonymousPublicLogger();
+        mPublicLogger = PublicLogger.getAnonymousInstance();
     }
 
     @NonNull

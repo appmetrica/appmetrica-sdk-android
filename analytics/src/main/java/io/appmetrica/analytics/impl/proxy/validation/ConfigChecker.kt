@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.proxy.validation
 
+import io.appmetrica.analytics.coreutils.internal.logger.LoggerStorage
 import io.appmetrica.analytics.impl.DefaultValues
-import io.appmetrica.analytics.impl.utils.LoggerStorage
 
 class ConfigChecker(
     apiKey: String

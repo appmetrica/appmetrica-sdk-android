@@ -24,7 +24,7 @@ import io.appmetrica.analytics.impl.events.EventsFlusher;
 import io.appmetrica.analytics.impl.request.ReportRequestConfig;
 import io.appmetrica.analytics.impl.startup.StartupState;
 import io.appmetrica.analytics.impl.startup.executor.ComponentStartupExecutorFactory;
-import io.appmetrica.analytics.impl.utils.PublicLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import io.appmetrica.analytics.testutils.MockedConstructionRule;

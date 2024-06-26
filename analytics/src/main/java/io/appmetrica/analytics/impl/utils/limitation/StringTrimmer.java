@@ -2,13 +2,12 @@ package io.appmetrica.analytics.impl.utils.limitation;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import io.appmetrica.analytics.impl.utils.LoggerStorage;
-import io.appmetrica.analytics.impl.utils.PublicLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 
 public class StringTrimmer extends BaseTrimmer<String> {
 
     public StringTrimmer(int maxSize, @NonNull String logName) {
-        this(maxSize, logName, LoggerStorage.getAnonymousPublicLogger());
+        this(maxSize, logName, PublicLogger.getAnonymousInstance());
     }
 
     public StringTrimmer(int maxSize, @NonNull String logName, @NonNull PublicLogger logger) {

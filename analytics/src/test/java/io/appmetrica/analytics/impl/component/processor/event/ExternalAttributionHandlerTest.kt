@@ -5,7 +5,7 @@ import io.appmetrica.analytics.impl.CounterReport
 import io.appmetrica.analytics.impl.attribution.ExternalAttributionHelper
 import io.appmetrica.analytics.impl.component.ComponentUnit
 import io.appmetrica.analytics.impl.protobuf.backend.ExternalAttribution.ClientExternalAttribution
-import io.appmetrica.analytics.impl.utils.PublicLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.MockedConstructionRule
 import io.appmetrica.analytics.testutils.MockedStaticRule

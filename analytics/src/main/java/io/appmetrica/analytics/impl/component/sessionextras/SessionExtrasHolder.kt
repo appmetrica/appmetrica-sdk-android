@@ -1,13 +1,12 @@
 package io.appmetrica.analytics.impl.component.sessionextras
 
 import android.content.Context
-import io.appmetrica.analytics.impl.Utils
 import io.appmetrica.analytics.impl.component.ComponentId
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
 internal class SessionExtrasHolder(context: Context, componentId: ComponentId) {
 
-    private val tag = "[SessionExtrasHolder-${componentId.apiKey?.let { Utils.createPartialApiKey(it) }}]"
+    private val tag = "[SessionExtrasHolder-${componentId.anonymizedApiKey}]"
 
     private val storage = SessionExtrasStorage(context, componentId)
 

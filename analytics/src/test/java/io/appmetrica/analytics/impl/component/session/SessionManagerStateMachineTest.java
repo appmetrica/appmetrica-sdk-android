@@ -9,7 +9,7 @@ import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.impl.db.DatabaseHelper;
 import io.appmetrica.analytics.impl.db.VitalComponentDataProvider;
 import io.appmetrica.analytics.impl.events.EventTrigger;
-import io.appmetrica.analytics.impl.utils.PublicLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.impl.utils.ServerTime;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;

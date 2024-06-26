@@ -7,7 +7,7 @@ import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
 class SessionExtrasStorage(context: Context, componentId: ComponentId) {
 
-    private val tag = "[SessionExtrasStorage-${componentId.apiKey}]"
+    private val tag = "[SessionExtrasStorage-${componentId.anonymizedApiKey}]"
     private val dbKey = "session_extras"
 
     private val converter = SessionExtrasConverter()

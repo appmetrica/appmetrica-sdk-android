@@ -15,6 +15,7 @@ import io.appmetrica.analytics.DeferredDeeplinkListener;
 import io.appmetrica.analytics.DeferredDeeplinkParametersListener;
 import io.appmetrica.analytics.ReporterConfig;
 import io.appmetrica.analytics.StartupParamsCallback;
+import io.appmetrica.analytics.coreutils.internal.ApiKeyUtils;
 import io.appmetrica.analytics.impl.adrevenue.AppMetricaAutoAdRevenueReporter;
 import io.appmetrica.analytics.impl.client.ProcessConfiguration;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesClientDbStorage;
@@ -25,8 +26,8 @@ import io.appmetrica.analytics.impl.referrer.client.ReferrerHelper;
 import io.appmetrica.analytics.impl.referrer.common.Constants;
 import io.appmetrica.analytics.impl.startup.StartupHelper;
 import io.appmetrica.analytics.impl.utils.BooleanUtils;
-import io.appmetrica.analytics.impl.utils.LoggerStorage;
-import io.appmetrica.analytics.impl.utils.PublicLogger;
+import io.appmetrica.analytics.coreutils.internal.logger.LoggerStorage;
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import io.appmetrica.analytics.logger.appmetrica.internal.ImportantLogger;
 import java.util.List;
@@ -130,7 +131,7 @@ public class AppMetricaImpl implements IAppMetricaImpl {
     @WorkerThread
     public void activate(@NonNull AppMetricaConfig originalConfig,
                          @NonNull final AppMetricaConfig config) {
-        PublicLogger publicLogger = LoggerStorage.getOrCreatePublicLogger(config.apiKey);
+        PublicLogger publicLogger = LoggerStorage.getOrCreateMainPublicLogger(config.apiKey);
         boolean needToClearEnvironment = mDefaultOneShotMetricaConfig.wasAppEnvironmentCleared();
         if (null == mainReporterApiConsumerProvider) {
             mReferrerHelper.maybeRequestReferrer();
@@ -140,14 +141,14 @@ public class AppMetricaImpl implements IAppMetricaImpl {
             initMainReporterForApiKey(config, needToClearEnvironment);
             ImportantLogger.INSTANCE.info(
                 SdkUtils.APPMETRICA_TAG,
-                "Activate AppMetrica with APIKey " + Utils.createPartialApiKey(config.apiKey)
+                "Activate AppMetrica with APIKey " + ApiKeyUtils.createPartialApiKey(config.apiKey)
             );
             if (BooleanUtils.isTrue(config.logs)) {
                 publicLogger.setEnabled(true);
-                LoggerStorage.getAnonymousPublicLogger().setEnabled(true);
+                PublicLogger.getAnonymousInstance().setEnabled(true);
             } else {
                 publicLogger.setEnabled(false);
-                LoggerStorage.getAnonymousPublicLogger().setEnabled(false);
+                PublicLogger.getAnonymousInstance().setEnabled(false);
             }
         } else {
             publicLogger.warning("Appmetrica already has been activated!");

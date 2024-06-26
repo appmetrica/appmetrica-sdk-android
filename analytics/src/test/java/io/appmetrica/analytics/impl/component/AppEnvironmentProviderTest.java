@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.component;
 import io.appmetrica.analytics.impl.AppEnvironment;
 import io.appmetrica.analytics.impl.TestsData;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesComponentDbStorage;
-import io.appmetrica.analytics.impl.utils.PublicLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.testutils.CommonTest;
 import java.util.Random;
 import org.junit.Test;

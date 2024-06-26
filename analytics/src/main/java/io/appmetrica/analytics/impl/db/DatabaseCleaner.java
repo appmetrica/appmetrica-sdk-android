@@ -18,8 +18,8 @@ import io.appmetrica.analytics.impl.SelfDiagnosticReporterStorage;
 import io.appmetrica.analytics.impl.Utils;
 import io.appmetrica.analytics.impl.db.constants.Constants;
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade;
-import io.appmetrica.analytics.impl.utils.LoggerStorage;
-import io.appmetrica.analytics.impl.utils.PublicLogger;
+import io.appmetrica.analytics.coreutils.internal.logger.LoggerStorage;
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.util.ArrayList;
 import java.util.List;
@@ -188,10 +188,7 @@ public class DatabaseCleaner {
                     .put("cleared", cleared)
                     .put("actual_deleted_number", actualDeletedNumber);
             JSONObject value = new JSONObject().put("details", details);
-            PublicLogger logger =
-                    apiKey == null ?
-                    LoggerStorage.getAnonymousPublicLogger() :
-                    LoggerStorage.getOrCreatePublicLogger(apiKey);
+            PublicLogger logger = LoggerStorage.getOrCreatePublicLogger(apiKey);
             return EventsManager.cleanupEventReportEntry(value.toString(), logger);
         } catch (Throwable ex) {
             DebugLogger.INSTANCE.error(TAG, ex, "Something went wrong while forming cleanup event");

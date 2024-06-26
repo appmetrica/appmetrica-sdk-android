@@ -36,7 +36,8 @@ import io.appmetrica.analytics.impl.startup.StartupError;
 import io.appmetrica.analytics.impl.startup.StartupState;
 import io.appmetrica.analytics.impl.startup.executor.ComponentStartupExecutorFactory;
 import io.appmetrica.analytics.impl.utils.BooleanUtils;
-import io.appmetrica.analytics.impl.utils.PublicLogger;
+import io.appmetrica.analytics.impl.utils.PublicLogConstructor;
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.util.ArrayList;
 import java.util.List;
@@ -150,7 +151,7 @@ public class ComponentUnit implements IReportableComponent, IComponent, EventsFl
             TAG,
             "Start to create a new component with Id/APIkey: \"%s\"/%s",
             componentId,
-            componentId.getApiKey()
+            componentId.getAnonymizedApiKey()
         );
 
         mContext = context.getApplicationContext();
@@ -172,7 +173,7 @@ public class ComponentUnit implements IReportableComponent, IComponent, EventsFl
             TAG,
             "create holder for a new component with Id/APIkey: \"%s\"/%s",
             componentId,
-            componentId.getApiKey()
+            componentId.getAnonymizedApiKey()
         );
         mComponentMigrationHelperCreator = fieldsFactory.createMigrationHelperCreator(this);
         mMaxReportsCondition = fieldsFactory.createMaxReportsCondition(mReportsDbHelper, mConfigHolder);
@@ -220,7 +221,7 @@ public class ComponentUnit implements IReportableComponent, IComponent, EventsFl
             TAG,
             "Create a new component with Id/APIkey: \"%s\"/%s",
             componentId,
-            componentId.getApiKey()
+            componentId.getAnonymizedApiKey()
         );
     }
 
@@ -242,7 +243,7 @@ public class ComponentUnit implements IReportableComponent, IComponent, EventsFl
             mComponentId,
             reportData
         );
-        mPublicLogger.logEvent(reportData, "Event received on service");
+        logEvent(reportData, "Event received on service");
 
         // Just to be sure. Don't report if API key isn't defined for some reasons
         if (!Utils.isApiKeyDefined(mComponentId.getApiKey())) {
@@ -435,5 +436,12 @@ public class ComponentUnit implements IReportableComponent, IComponent, EventsFl
     @NonNull
     public SessionExtrasHolder getSessionExtrasHolder() {
         return sessionExtrasHolder;
+    }
+
+    private void logEvent(final CounterReport reportData, String msg) {
+        String log = PublicLogConstructor.constructCounterReportLog(reportData, msg);
+        if (log != null) {
+            mPublicLogger.info(log);
+        }
     }
 }

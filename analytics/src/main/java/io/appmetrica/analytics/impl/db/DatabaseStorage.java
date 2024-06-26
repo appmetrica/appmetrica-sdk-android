@@ -8,8 +8,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.impl.db.constants.Constants;
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade;
-import io.appmetrica.analytics.impl.utils.LoggerStorage;
-import io.appmetrica.analytics.impl.utils.PublicLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import java.io.Closeable;
 
 public class DatabaseStorage extends SQLiteOpenHelper implements Closeable {
@@ -20,7 +19,7 @@ public class DatabaseStorage extends SQLiteOpenHelper implements Closeable {
     protected final TablesManager mManager;
 
     public DatabaseStorage(final Context context, @NonNull String dbName, final TablesManager tablesManager) {
-        this(context, dbName, tablesManager, LoggerStorage.getAnonymousPublicLogger());
+        this(context, dbName, tablesManager, PublicLogger.getAnonymousInstance());
     }
 
     @VisibleForTesting

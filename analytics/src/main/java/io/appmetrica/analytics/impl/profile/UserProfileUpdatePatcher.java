@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.profile;
 
 import androidx.annotation.NonNull;
-import io.appmetrica.analytics.impl.utils.PublicLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 
 public interface UserProfileUpdatePatcher {
 

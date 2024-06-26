@@ -4,7 +4,7 @@ import android.content.Context
 import io.appmetrica.analytics.AppMetricaConfig
 import io.appmetrica.analytics.impl.AppStatusMonitor
 import io.appmetrica.analytics.impl.ReportsHandler
-import io.appmetrica.analytics.impl.utils.PublicLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger
 
 internal class MainReporterContext(
     val applicationContext: Context,

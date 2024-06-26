@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.component;
 import androidx.annotation.NonNull;
 import io.appmetrica.analytics.impl.AppEnvironment;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesComponentDbStorage;
-import io.appmetrica.analytics.impl.utils.PublicLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.util.HashMap;
 
