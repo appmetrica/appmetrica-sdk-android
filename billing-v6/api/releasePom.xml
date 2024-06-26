@@ -9,7 +9,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.appmetrica.analytics</groupId>
   <artifactId>analytics-billing-v6</artifactId>
-  <version>6.6.0</version>
+  <version>7.0.0</version>
   <packaging>aar</packaging>
   <name>AppMetrica SDK Google Play Services Billing v6 library wrapper</name>
   <description>AppMetrica SDK Module</description>
@@ -42,19 +42,19 @@
     <dependency>
       <groupId>io.appmetrica.analytics</groupId>
       <artifactId>analytics-billing-interface</artifactId>
-      <version>6.6.0</version>
+      <version>7.0.0</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>io.appmetrica.analytics</groupId>
       <artifactId>analytics-core-utils</artifactId>
-      <version>6.6.0</version>
+      <version>7.0.0</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>io.appmetrica.analytics</groupId>
       <artifactId>analytics-logger</artifactId>
-      <version>6.6.0</version>
+      <version>7.0.0</version>
       <scope>runtime</scope>
     </dependency>
   </dependencies>
