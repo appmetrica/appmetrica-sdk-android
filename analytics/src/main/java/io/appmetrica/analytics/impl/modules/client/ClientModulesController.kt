@@ -1,9 +1,10 @@
 package io.appmetrica.analytics.impl.modules.client
 
+import io.appmetrica.analytics.impl.modules.client.context.CoreClientContext
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
-import io.appmetrica.analytics.modulesapi.internal.client.ClientContext
 import io.appmetrica.analytics.modulesapi.internal.client.ModuleClientEntryPoint
+import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdRevenueProcessor
 import java.util.concurrent.CopyOnWriteArrayList
 
 internal class ClientModulesController :
@@ -14,14 +15,16 @@ internal class ClientModulesController :
     private val tag = "[ClientModulesController]"
 
     private val modules = CopyOnWriteArrayList<ModuleClientEntryPoint<Any>>()
+    private var clientContext: CoreClientContext? = null
 
     override fun registerModule(moduleClientEntryPoint: ModuleClientEntryPoint<Any>) {
         DebugLogger.info(tag, "Register new module with identifier = ${moduleClientEntryPoint.identifier}")
         modules.add(moduleClientEntryPoint)
     }
 
-    override fun initClientSide(clientContext: ClientContext) {
+    override fun initClientSide(clientContext: CoreClientContext) {
         DebugLogger.info(tag, "Init client side. Total modules count = ${modules.size}")
+        this.clientContext = clientContext
         val modulesWithProblems = hashSetOf<ModuleClientEntryPoint<Any>>()
         modules.forEach { module ->
             try {
@@ -57,6 +60,10 @@ internal class ClientModulesController :
                 reportSelfErrorEvent(module.identifier, "onActivated", e)
             }
         }
+    }
+
+    fun getModuleAdRevenueProcessor(): ModuleAdRevenueProcessor? {
+        return clientContext?.moduleAdRevenueContext?.adRevenueProcessorsHolder
     }
 
     private fun reportSelfErrorEvent(moduleIdentifier: String, tag: String, throwable: Throwable) {

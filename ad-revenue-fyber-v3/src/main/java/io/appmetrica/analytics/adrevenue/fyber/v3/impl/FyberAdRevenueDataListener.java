@@ -33,7 +33,8 @@ public class FyberAdRevenueDataListener implements InterstitialListener {
     public void onShow(@NonNull String s, @NonNull ImpressionData impressionData) {
         if (impressionData != null) {
             DebugLogger.INSTANCE.info(TAG, "impressionData is " + impressionData.getJsonString());
-            clientContext.getAutoAdRevenueReporter().reportAutoAdRevenue(adRevenueConverter.convert(impressionData));
+            clientContext.getModuleAdRevenueContext().getAdRevenueReporter()
+                .reportAutoAdRevenue(adRevenueConverter.convert(impressionData));
         } else {
             DebugLogger.INSTANCE.info(TAG, "impressionData is null");
         }

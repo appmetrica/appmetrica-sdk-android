@@ -2,8 +2,9 @@ package io.appmetrica.analytics.adrevenue.fyber.v3.impl;
 
 import com.fyber.fairbid.ads.ImpressionData;
 import io.appmetrica.analytics.modulesapi.internal.client.ClientContext;
-import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.AutoAdRevenue;
-import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.AutoAdRevenueReporter;
+import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdRevenue;
+import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdRevenueContext;
+import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdRevenueReporter;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.MockedConstructionRule;
 import org.junit.Before;
@@ -23,9 +24,10 @@ public class FyberAdRevenueDataListenerTest extends CommonTest {
         new MockedConstructionRule<>(AdRevenueConverter.class);
 
     public final ClientContext clientContext = mock(ClientContext.class);
+    public final ModuleAdRevenueContext moduleAdRevenueContext = mock(ModuleAdRevenueContext.class);
     public final ImpressionData impressionData = mock(ImpressionData.class);
-    public final AutoAdRevenueReporter autoAdRevenueReporter = mock(AutoAdRevenueReporter.class);
-    public final AutoAdRevenue autoAdRevenue = mock(AutoAdRevenue.class);
+    public final ModuleAdRevenueReporter adRevenueReporter = mock(ModuleAdRevenueReporter.class);
+    public final ModuleAdRevenue adRevenue = mock(ModuleAdRevenue.class);
 
     public AdRevenueConverter converter;
     public FyberAdRevenueDataListener listener;
@@ -36,14 +38,15 @@ public class FyberAdRevenueDataListenerTest extends CommonTest {
         assertThat(converterRule.getConstructionMock().constructed()).hasSize(1);
         converter = converterRule.getConstructionMock().constructed().get(0);
 
-        when(clientContext.getAutoAdRevenueReporter()).thenReturn(autoAdRevenueReporter);
-        when(converter.convert(impressionData)).thenReturn(autoAdRevenue);
+        when(clientContext.getModuleAdRevenueContext()).thenReturn(moduleAdRevenueContext);
+        when(moduleAdRevenueContext.getAdRevenueReporter()).thenReturn(adRevenueReporter);
+        when(converter.convert(impressionData)).thenReturn(adRevenue);
     }
 
     @Test
     public void onShow() {
         listener.onShow("some string", impressionData);
-        verify(autoAdRevenueReporter).reportAutoAdRevenue(autoAdRevenue);
+        verify(adRevenueReporter).reportAutoAdRevenue(adRevenue);
     }
 
     @Test

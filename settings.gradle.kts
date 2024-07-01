@@ -13,6 +13,7 @@ includeBuild("build-logic") {
 
 // modules
 include("ad-revenue")
+include("ad-revenue-applovin-v12")
 include("ad-revenue-fyber-v3")
 include("ad-revenue-ironsource-v7")
 include("analytics")

@@ -174,11 +174,11 @@ class ModulesProxyTest : CommonTest() {
     @Test
     fun reportAdRevenue() {
         val adRevenue: AdRevenue = mock()
-        proxy.reportAdRevenue(adRevenue)
+        proxy.reportAdRevenue(adRevenue, true)
 
         val inOrder = inOrder(modulesBarrier, synchronousStageExecutor, executor)
-        inOrder.verify(modulesBarrier).reportAdRevenue(adRevenue)
-        inOrder.verify(synchronousStageExecutor).reportAdRevenue(adRevenue)
+        inOrder.verify(modulesBarrier).reportAdRevenue(adRevenue, true)
+        inOrder.verify(synchronousStageExecutor).reportAdRevenue(adRevenue, true)
         inOrder.verify(executor, times(1)).execute(runnableArgumentCaptor.capture())
         verifyNoMoreInteractions(mainReporter)
 

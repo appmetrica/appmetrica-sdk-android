@@ -88,7 +88,31 @@ class ModulesFacadeTest {
     fun reportAdRevenue() {
         val adRevenue: AdRevenue = mock()
         ModulesFacade.reportAdRevenue(adRevenue)
-        verify(proxy).reportAdRevenue(adRevenue)
+        verify(proxy).reportAdRevenue(adRevenue, true)
+        verifyNoMoreInteractions(proxy)
+    }
+
+    @Test
+    fun reportAdRevenueIfAutoCollectedIsTrue() {
+        val adRevenue: AdRevenue = mock()
+        ModulesFacade.reportAdRevenue(adRevenue, true)
+        verify(proxy).reportAdRevenue(adRevenue, true)
+        verifyNoMoreInteractions(proxy)
+    }
+
+    @Test
+    fun reportAdRevenueIfAutoCollectedIsFalse() {
+        val adRevenue: AdRevenue = mock()
+        ModulesFacade.reportAdRevenue(adRevenue, false)
+        verify(proxy).reportAdRevenue(adRevenue, false)
+        verifyNoMoreInteractions(proxy)
+    }
+
+    @Test
+    fun reportAdRevenueWithAutoCollectedFlag() {
+        val adRevenue: AdRevenue = mock()
+        ModulesFacade.reportAdRevenue(adRevenue, false)
+        verify(proxy).reportAdRevenue(adRevenue, false)
         verifyNoMoreInteractions(proxy)
     }
 

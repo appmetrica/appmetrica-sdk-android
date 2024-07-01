@@ -609,4 +609,14 @@ public final class AppMetrica {
     public static void reportExternalAttribution(@NonNull ExternalAttribution value) {
         AppMetricaProxyProvider.getProxy().reportExternalAttribution(value);
     }
+
+    /**
+     * Sends information about ad revenue from third-party libraries.
+     * See documentation for more information.
+     *
+     * @param values Objects that are required to build ad revenue event
+     */
+    public static void reportExternalAdRevenue(@NonNull Object... values) {
+        AppMetricaProxyProvider.getProxy().reportExternalAdRevenue(values);
+    }
 }

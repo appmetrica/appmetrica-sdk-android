@@ -46,6 +46,13 @@
             "dependencies": [
                 {
                     "group": "io.appmetrica.analytics",
+                    "module": "analytics-ad-revenue-applovin-v12",
+                    "version": {
+                        "requires": "7.0.0"
+                    }
+                },
+                {
+                    "group": "io.appmetrica.analytics",
                     "module": "analytics-ad-revenue-fyber-v3",
                     "version": {
                         "requires": "7.1.0"

@@ -24,7 +24,8 @@ public class IronSourceAdRevenueDataListener implements ImpressionDataListener {
     public void onImpressionSuccess(@Nullable ImpressionData impressionData) {
         if (impressionData != null) {
             DebugLogger.INSTANCE.info(TAG, "impressionData is " + impressionData.getAllData().toString());
-            clientContext.getAutoAdRevenueReporter().reportAutoAdRevenue(adRevenueConverter.convert(impressionData));
+            clientContext.getModuleAdRevenueContext().getAdRevenueReporter()
+                .reportAutoAdRevenue(adRevenueConverter.convert(impressionData));
         } else {
             DebugLogger.INSTANCE.info(TAG, "impressionData is null");
         }

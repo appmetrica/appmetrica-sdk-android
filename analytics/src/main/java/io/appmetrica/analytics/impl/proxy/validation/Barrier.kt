@@ -296,4 +296,8 @@ class Barrier(
     fun sendEventsBuffer() {
         activationValidator.validate()
     }
+
+    fun reportExternalAdRevenue(vararg values: Any) {
+        activationValidator.validate()
+    }
 }

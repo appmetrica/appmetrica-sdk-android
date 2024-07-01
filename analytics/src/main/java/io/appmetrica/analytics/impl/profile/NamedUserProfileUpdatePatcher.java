@@ -3,9 +3,9 @@ package io.appmetrica.analytics.impl.profile;
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.impl.protobuf.backend.Userprofile;
-import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.impl.utils.validation.ValidationResult;
 import io.appmetrica.analytics.impl.utils.validation.Validator;
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 
 public abstract class NamedUserProfileUpdatePatcher implements UserProfileUpdatePatcher, AttributeFactory {
 

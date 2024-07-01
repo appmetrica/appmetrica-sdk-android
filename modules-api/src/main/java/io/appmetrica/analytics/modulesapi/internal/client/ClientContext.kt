@@ -1,8 +1,8 @@
 package io.appmetrica.analytics.modulesapi.internal.client
 
-import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.AutoAdRevenueReporter
+import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdRevenueContext
 
 interface ClientContext {
 
-    val autoAdRevenueReporter: AutoAdRevenueReporter
+    val moduleAdRevenueContext: ModuleAdRevenueContext
 }

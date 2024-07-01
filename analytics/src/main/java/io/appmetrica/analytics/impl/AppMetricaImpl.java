@@ -16,20 +16,19 @@ import io.appmetrica.analytics.DeferredDeeplinkParametersListener;
 import io.appmetrica.analytics.ReporterConfig;
 import io.appmetrica.analytics.StartupParamsCallback;
 import io.appmetrica.analytics.coreutils.internal.ApiKeyUtils;
-import io.appmetrica.analytics.impl.adrevenue.AppMetricaAutoAdRevenueReporter;
+import io.appmetrica.analytics.coreutils.internal.logger.LoggerStorage;
 import io.appmetrica.analytics.impl.client.ProcessConfiguration;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesClientDbStorage;
 import io.appmetrica.analytics.impl.db.storage.DatabaseStorageFactory;
 import io.appmetrica.analytics.impl.modules.ModulesSeeker;
-import io.appmetrica.analytics.impl.modules.client.ClientContextFacade;
+import io.appmetrica.analytics.impl.modules.client.context.ClientContextImpl;
 import io.appmetrica.analytics.impl.referrer.client.ReferrerHelper;
 import io.appmetrica.analytics.impl.referrer.common.Constants;
 import io.appmetrica.analytics.impl.startup.StartupHelper;
 import io.appmetrica.analytics.impl.utils.BooleanUtils;
-import io.appmetrica.analytics.coreutils.internal.logger.LoggerStorage;
-import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import io.appmetrica.analytics.logger.appmetrica.internal.ImportantLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import java.util.List;
 import java.util.Map;
 
@@ -95,11 +94,7 @@ public class AppMetricaImpl implements IAppMetricaImpl {
                       @NonNull ClientServiceLocator clientServiceLocator) {
         mContext = context;
         modulesSeeker.discoverClientModules();
-        ClientServiceLocator.getInstance().getModulesController().initClientSide(
-            new ClientContextFacade(
-                new AppMetricaAutoAdRevenueReporter()
-            )
-        );
+        ClientServiceLocator.getInstance().getModulesController().initClientSide(new ClientContextImpl());
         mClientPreferences = preferences;
         final Handler metricaHandler = appMetricaCore.getMetricaHandler();
         final DataResultReceiver dataResultReceiver = fieldsProvider.createDataResultReceiver(metricaHandler, this);

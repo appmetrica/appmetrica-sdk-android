@@ -4,7 +4,7 @@ plugins {
 
 publishingInfo {
     baseArtifactId.set("analytics-ad-revenue-fyber-v3")
-    name.set("AppMetrica SDK Ad Revenue Auto Collection Adaptet for Fyber v3")
+    name.set("AppMetrica SDK Ad Revenue Auto Collection Adapter for Fyber v3")
     withJavadoc.set(false)
 }
 

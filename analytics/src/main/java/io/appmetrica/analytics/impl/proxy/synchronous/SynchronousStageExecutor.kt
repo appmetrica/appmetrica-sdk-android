@@ -198,4 +198,6 @@ class SynchronousStageExecutor @VisibleForTesting constructor(
     fun registerAnrListener(listener: AnrListener) {}
 
     fun reportExternalAttribution(value: ExternalAttribution) {}
+
+    fun reportExternalAdRevenue(vararg values: Any) {}
 }

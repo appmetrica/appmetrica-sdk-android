@@ -609,4 +609,15 @@ class BarrierTest : CommonTest() {
         whenever(appMetricaFacadeProvider.isActivated).thenReturn(false)
         mBarrier.sendEventsBuffer()
     }
+
+    @Test
+    fun reportExternalAdRevenue() {
+        mBarrier.reportExternalAdRevenue("string")
+    }
+
+    @Test(expected = ValidationException::class)
+    fun reportExternalAdRevenueIfNotActivated() {
+        whenever(appMetricaFacadeProvider.isActivated).thenReturn(false)
+        mBarrier.reportExternalAdRevenue("string")
+    }
 }

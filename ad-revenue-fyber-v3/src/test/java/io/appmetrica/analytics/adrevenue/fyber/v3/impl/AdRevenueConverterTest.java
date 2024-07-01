@@ -2,8 +2,8 @@ package io.appmetrica.analytics.adrevenue.fyber.v3.impl;
 
 import com.fyber.fairbid.ads.ImpressionData;
 import com.fyber.fairbid.ads.PlacementType;
-import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.AutoAdRevenue;
-import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.AutoAdType;
+import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdRevenue;
+import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdType;
 import io.appmetrica.analytics.testutils.CommonTest;
 import java.math.BigDecimal;
 import java.util.Currency;
@@ -40,12 +40,12 @@ public class AdRevenueConverterTest extends CommonTest {
 
     @Test
     public void convert() {
-        final AutoAdRevenue autoAdRevenue = converter.convert(data);
+        final ModuleAdRevenue adRevenue = converter.convert(data);
 
-        ObjectPropertyAssertions(autoAdRevenue)
+        ObjectPropertyAssertions(adRevenue)
             .checkField("adRevenue", BigDecimal.valueOf(netPayout))
             .checkField("currency", Currency.getInstance(currency))
-            .checkField("adType", AutoAdType.REWARDED)
+            .checkField("adType", ModuleAdType.REWARDED)
             .checkField("adNetwork", demandSource)
             .checkField("adUnitId", creativeId)
             .checkFieldIsNull("adUnitName")
@@ -53,18 +53,19 @@ public class AdRevenueConverterTest extends CommonTest {
             .checkFieldIsNull("adPlacementName")
             .checkField("precision", priceAccuracy.toString())
             .checkFieldIsNull("payload")
+            .checkField("autoCollected", true)
             .checkAll();
     }
 
     @Test
     public void convertIfNetPayoutIsIllegal() {
         when(data.getNetPayout()).thenReturn(Double.NaN);
-        final AutoAdRevenue autoAdRevenue = converter.convert(data);
+        final ModuleAdRevenue adRevenue = converter.convert(data);
 
-        ObjectPropertyAssertions(autoAdRevenue)
+        ObjectPropertyAssertions(adRevenue)
             .checkField("adRevenue", BigDecimal.valueOf(0.0))
             .checkField("currency", Currency.getInstance(currency))
-            .checkField("adType", AutoAdType.REWARDED)
+            .checkField("adType", ModuleAdType.REWARDED)
             .checkField("adNetwork", demandSource)
             .checkField("adUnitId", creativeId)
             .checkFieldIsNull("adUnitName")
@@ -72,25 +73,26 @@ public class AdRevenueConverterTest extends CommonTest {
             .checkFieldIsNull("adPlacementName")
             .checkField("precision", priceAccuracy.toString())
             .checkFieldIsNull("payload")
+            .checkField("autoCollected", true)
             .checkAll();
     }
 
     @Test
     public void convertAndCheckAutoAdType() {
         when(data.getPlacementType()).thenReturn(null);
-        final AutoAdRevenue autoAdRevenueNull = converter.convert(data);
-        assertThat(autoAdRevenueNull.getAdType()).isNull();
+        final ModuleAdRevenue adRevenueNull = converter.convert(data);
+        assertThat(adRevenueNull.getAdType()).isNull();
 
         when(data.getPlacementType()).thenReturn(PlacementType.REWARDED);
-        final AutoAdRevenue autoAdRevenueRewarded = converter.convert(data);
-        assertThat(autoAdRevenueRewarded.getAdType()).isEqualTo(AutoAdType.REWARDED);
+        final ModuleAdRevenue adRevenueRewarded = converter.convert(data);
+        assertThat(adRevenueRewarded.getAdType()).isEqualTo(ModuleAdType.REWARDED);
 
         when(data.getPlacementType()).thenReturn(PlacementType.INTERSTITIAL);
-        final AutoAdRevenue autoAdRevenueInterstitial = converter.convert(data);
-        assertThat(autoAdRevenueInterstitial.getAdType()).isEqualTo(AutoAdType.INTERSTITIAL);
+        final ModuleAdRevenue adRevenueInterstitial = converter.convert(data);
+        assertThat(adRevenueInterstitial.getAdType()).isEqualTo(ModuleAdType.INTERSTITIAL);
 
         when(data.getPlacementType()).thenReturn(PlacementType.BANNER);
-        final AutoAdRevenue autoAdRevenueBanner = converter.convert(data);
-        assertThat(autoAdRevenueBanner.getAdType()).isEqualTo(AutoAdType.BANNER);
+        final ModuleAdRevenue adRevenueBanner = converter.convert(data);
+        assertThat(adRevenueBanner.getAdType()).isEqualTo(ModuleAdType.BANNER);
     }
 }

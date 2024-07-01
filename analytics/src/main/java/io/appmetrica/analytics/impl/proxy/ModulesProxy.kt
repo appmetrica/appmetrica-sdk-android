@@ -85,13 +85,13 @@ class ModulesProxy @VisibleForTesting constructor(
         return ReporterProxyStorage.getInstance().getOrCreate(context.applicationContext, apiKey)
     }
 
-    fun reportAdRevenue(adRevenue: AdRevenue) {
-        modulesBarrier.reportAdRevenue(adRevenue)
-        synchronousStageExecutor.reportAdRevenue(adRevenue)
+    fun reportAdRevenue(adRevenue: AdRevenue, autoCollected: Boolean) {
+        modulesBarrier.reportAdRevenue(adRevenue, autoCollected)
+        synchronousStageExecutor.reportAdRevenue(adRevenue, autoCollected)
 
         executor.execute(object : SafeRunnable() {
             override fun runSafety() {
-                getMainReporter().reportAdRevenue(adRevenue, true)
+                getMainReporter().reportAdRevenue(adRevenue, autoCollected)
             }
         })
     }

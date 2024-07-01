@@ -54,4 +54,8 @@ public class WrapUtils {
             return value.toString();
         }
     }
+
+    public static double getFiniteDoubleOrDefault(double input, double fallback) {
+        return Double.isFinite(input) ? input : fallback;
+    }
 }

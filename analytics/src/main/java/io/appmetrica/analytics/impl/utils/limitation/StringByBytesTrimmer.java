@@ -4,8 +4,8 @@ import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import io.appmetrica.analytics.impl.IOUtils;
-import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import java.io.UnsupportedEncodingException;
 
 public class StringByBytesTrimmer extends BaseTrimmer<String> {

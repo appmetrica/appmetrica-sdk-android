@@ -14,11 +14,11 @@ import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
 import io.appmetrica.analytics.impl.client.ProcessConfiguration;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesClientDbStorage;
 import io.appmetrica.analytics.impl.modules.ModulesSeeker;
+import io.appmetrica.analytics.impl.modules.client.context.ClientContextImpl;
 import io.appmetrica.analytics.impl.referrer.client.ReferrerHelper;
 import io.appmetrica.analytics.impl.startup.Constants;
 import io.appmetrica.analytics.impl.startup.StartupHelper;
 import io.appmetrica.analytics.impl.utils.executors.ClientExecutorProvider;
-import io.appmetrica.analytics.modulesapi.internal.client.ClientContext;
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.MockedConstructionRule;
@@ -96,6 +96,9 @@ public class AppMetricaImplTest extends CommonTest {
                 modulesSeeker = mock;
             }
         });
+    @Rule
+    public final MockedConstructionRule<ClientContextImpl> clientContextRule =
+        new MockedConstructionRule<>(ClientContextImpl.class);
 
     @Before
     public void setUp() {
@@ -130,11 +133,12 @@ public class AppMetricaImplTest extends CommonTest {
     public void constructor() {
         verify(mFieldsProvider).createDataResultReceiver(mHandler, mAppMetrica);
         verify(mClientServiceLocatorRule.mDefaultOneShotMetricaConfig).setReportsHandler(mReportsHandler);
-        verify(mClientServiceLocatorRule.modulesController).initClientSide(ArgumentMatchers.<ClientContext>any());
+        verify(mClientServiceLocatorRule.modulesController)
+            .initClientSide(clientContextRule.getConstructionMock().constructed().get(0));
         InOrder inOrder = inOrder(modulesSeeker, ClientServiceLocator.getInstance().getModulesController());
         inOrder.verify(modulesSeeker).discoverClientModules();
         inOrder.verify(ClientServiceLocator.getInstance().getModulesController())
-            .initClientSide(ArgumentMatchers.<ClientContext>any());
+            .initClientSide(ArgumentMatchers.any());
     }
 
     @Test

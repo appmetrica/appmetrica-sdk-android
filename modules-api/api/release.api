@@ -7,7 +7,7 @@ public final class io.appmetrica.analytics.modulesapi.BuildConfig {
 }
 
 public interface io.appmetrica.analytics.modulesapi.internal.client.ClientContext {
-    public abstract [NonNull] io.appmetrica.analytics.modulesapi.internal.client.adrevenue.AutoAdRevenueReporter getAutoAdRevenueReporter()
+    public abstract [NonNull] io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdRevenueContext getModuleAdRevenueContext()
 }
 
 public interface io.appmetrica.analytics.modulesapi.internal.client.ModuleClientEntryPoint<T> {
@@ -16,29 +16,44 @@ public interface io.appmetrica.analytics.modulesapi.internal.client.ModuleClient
     public abstract void onActivated()
 }
 
-public final class io.appmetrica.analytics.modulesapi.internal.client.adrevenue.AutoAdRevenue {
-    public <init>([NonNull] java.math.BigDecimal, [NonNull] java.util.Currency, [Nullable] io.appmetrica.analytics.modulesapi.internal.client.adrevenue.AutoAdType, [Nullable] String, [Nullable] String, [Nullable] String, [Nullable] String, [Nullable] String, [Nullable] String, [Nullable] java.util.Map<String, String>)
+public final class io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdRevenue {
+    public <init>([NonNull] java.math.BigDecimal, [NonNull] java.util.Currency, [Nullable] io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdType, [Nullable] String, [Nullable] String, [Nullable] String, [Nullable] String, [Nullable] String, [Nullable] String, [Nullable] java.util.Map<String, String>, boolean)
     public final [Nullable] String getAdNetwork()
     public final [Nullable] String getAdPlacementId()
     public final [Nullable] String getAdPlacementName()
     public final [NonNull] java.math.BigDecimal getAdRevenue()
-    public final [Nullable] io.appmetrica.analytics.modulesapi.internal.client.adrevenue.AutoAdType getAdType()
+    public final [Nullable] io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdType getAdType()
     public final [Nullable] String getAdUnitId()
     public final [Nullable] String getAdUnitName()
+    public final boolean getAutoCollected()
     public final [NonNull] java.util.Currency getCurrency()
     public final [Nullable] java.util.Map<String, String> getPayload()
     public final [Nullable] String getPrecision()
 }
 
-public interface io.appmetrica.analytics.modulesapi.internal.client.adrevenue.AutoAdRevenueReporter {
-    public abstract void reportAutoAdRevenue([NonNull] io.appmetrica.analytics.modulesapi.internal.client.adrevenue.AutoAdRevenue)
+public interface io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdRevenueContext {
+    public abstract [NonNull] io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdRevenueProcessorsHolder getAdRevenueProcessorsHolder()
+    public abstract [NonNull] io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdRevenueReporter getAdRevenueReporter()
 }
 
-public enum io.appmetrica.analytics.modulesapi.internal.client.adrevenue.AutoAdType {
+public interface io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdRevenueProcessor {
+    public abstract [NonNull] String getDescription()
+    public abstract boolean process([NonNull] Object...)
+}
+
+public interface io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdRevenueProcessorsHolder {
+    public abstract void register([NonNull] io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdRevenueProcessor)
+}
+
+public interface io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdRevenueReporter {
+    public abstract void reportAutoAdRevenue([NonNull] io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdRevenue)
+}
+
+public enum io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdType {
     BANNER, INTERSTITIAL, MREC, NATIVE, OTHER, REWARDED
 
-    public static io.appmetrica.analytics.modulesapi.internal.client.adrevenue.AutoAdType valueOf(String)
-    public static io.appmetrica.analytics.modulesapi.internal.client.adrevenue.AutoAdType[] values()
+    public static io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdType valueOf(String)
+    public static io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdType[] values()
 }
 
 public interface io.appmetrica.analytics.modulesapi.internal.common.AskForPermissionStrategyModuleProvider {

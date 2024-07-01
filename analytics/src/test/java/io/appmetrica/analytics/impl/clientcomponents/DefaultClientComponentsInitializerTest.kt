@@ -13,6 +13,7 @@ import org.mockito.kotlin.whenever
 class DefaultClientComponentsInitializerTest : CommonTest() {
 
     val expectedModules = listOf(
+        "io.appmetrica.analytics.adrevenue.applovin.v12.internal.AppLovinClientModuleEntryPoint",
         "io.appmetrica.analytics.adrevenue.fyber.v3.internal.FyberClientModuleEntryPoint",
         "io.appmetrica.analytics.adrevenue.ironsource.v7.internal.IronSourceClientModuleEntryPoint"
     )

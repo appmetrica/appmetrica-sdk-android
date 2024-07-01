@@ -125,7 +125,17 @@ public final class ModulesFacade {
      * @param adRevenue AdRevenue
      */
     public static void reportAdRevenue(@NonNull AdRevenue adRevenue) {
-        proxy.reportAdRevenue(adRevenue);
+        reportAdRevenue(adRevenue, true);
+    }
+
+    /**
+     * Reports adRevenue to AppMetrica
+     *
+     * @param adRevenue AdRevenue
+     * @param autoCollected whether AdRevenue collected automatically
+     */
+    public static void reportAdRevenue(@NonNull AdRevenue adRevenue, @NonNull Boolean autoCollected) {
+        proxy.reportAdRevenue(adRevenue, autoCollected);
     }
 
     /**

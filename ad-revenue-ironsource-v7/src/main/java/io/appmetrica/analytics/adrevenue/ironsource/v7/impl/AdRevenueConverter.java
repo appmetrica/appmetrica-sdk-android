@@ -3,8 +3,9 @@ package io.appmetrica.analytics.adrevenue.ironsource.v7.impl;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.ironsource.mediationsdk.impressionData.ImpressionData;
-import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.AutoAdRevenue;
-import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.AutoAdType;
+import io.appmetrica.analytics.coreutils.internal.WrapUtils;
+import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdRevenue;
+import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdType;
 import java.math.BigDecimal;
 import java.util.Currency;
 
@@ -14,9 +15,9 @@ public class AdRevenueConverter {
     private static final String INTERSTITIAL = "Interstitial";
     private static final String BANNER = "Banner";
 
-    public AutoAdRevenue convert(@NonNull final ImpressionData data) {
-        return new AutoAdRevenue(
-            BigDecimal.valueOf(getFiniteDoubleOrDefault(data.getRevenue(), 0)), // adRevenue
+    public ModuleAdRevenue convert(@NonNull final ImpressionData data) {
+        return new ModuleAdRevenue(
+            BigDecimal.valueOf(WrapUtils.getFiniteDoubleOrDefault(data.getRevenue(), 0)), // adRevenue
             Currency.getInstance("USD"), // currency
             convert(data.getAdUnit()), // adType
             data.getAdNetwork(), // adNetwork
@@ -25,24 +26,21 @@ public class AdRevenueConverter {
             null, // adPlacementId
             data.getPlacement(), // adPlacementName
             data.getPrecision(), // precision
-            null // payload
+            null, // payload
+            true // autoCollected
         );
     }
 
     @Nullable
-    private AutoAdType convert(@Nullable final String type) {
+    private ModuleAdType convert(@Nullable final String type) {
         if (type == null) {
             return null;
         }
         switch (type) {
-            case REWARDED: return AutoAdType.REWARDED;
-            case INTERSTITIAL: return AutoAdType.INTERSTITIAL;
-            case BANNER: return AutoAdType.BANNER;
-            default: return AutoAdType.OTHER;
+            case REWARDED: return ModuleAdType.REWARDED;
+            case INTERSTITIAL: return ModuleAdType.INTERSTITIAL;
+            case BANNER: return ModuleAdType.BANNER;
+            default: return ModuleAdType.OTHER;
         }
-    }
-
-    private double getFiniteDoubleOrDefault(double input, double fallback) {
-        return Double.isNaN(input) || Double.isInfinite(input) ? fallback : input;
     }
 }

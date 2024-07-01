@@ -2,24 +2,24 @@ package io.appmetrica.analytics.impl.adrevenue
 
 import io.appmetrica.analytics.AdType
 import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
-import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.AutoAdRevenue
-import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.AutoAdType
+import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdRevenue
+import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdType
 import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.SoftAssertions
 import org.junit.Test
 import java.math.BigDecimal
 import java.util.Currency
 
-class AutoAdRevenueConverterTest : CommonTest() {
+class ModuleAdRevenueConverterTest : CommonTest() {
 
-    private val converter = AutoAdRevenueConverter()
+    private val converter = ModuleAdRevenueConverter()
 
     @Test
     fun convert() {
-        val autoAdRevenue = AutoAdRevenue(
+        val autoAdRevenue = ModuleAdRevenue(
             adRevenue = BigDecimal.valueOf(1213.32312),
             currency = Currency.getInstance("RUB"),
-            adType = AutoAdType.INTERSTITIAL,
+            adType = ModuleAdType.INTERSTITIAL,
             adNetwork = "adNetwork",
             adUnitId = "adUnitId",
             adUnitName = "adUnitName",
@@ -46,7 +46,7 @@ class AutoAdRevenueConverterTest : CommonTest() {
 
     @Test
     fun convertIfFieldsAreNull() {
-        val autoAdRevenue = AutoAdRevenue(
+        val autoAdRevenue = ModuleAdRevenue(
             adRevenue = BigDecimal.valueOf(1213.32312),
             currency = Currency.getInstance("RUB"),
             adType = null,
@@ -80,15 +80,15 @@ class AutoAdRevenueConverterTest : CommonTest() {
     fun convertAndCheckAdType() {
         val softly = SoftAssertions()
         mapOf(
-            AutoAdType.NATIVE to AdType.NATIVE,
-            AutoAdType.BANNER to AdType.BANNER,
-            AutoAdType.REWARDED to AdType.REWARDED,
-            AutoAdType.INTERSTITIAL to AdType.INTERSTITIAL,
-            AutoAdType.MREC to AdType.MREC,
-            AutoAdType.OTHER to AdType.OTHER,
+            ModuleAdType.NATIVE to AdType.NATIVE,
+            ModuleAdType.BANNER to AdType.BANNER,
+            ModuleAdType.REWARDED to AdType.REWARDED,
+            ModuleAdType.INTERSTITIAL to AdType.INTERSTITIAL,
+            ModuleAdType.MREC to AdType.MREC,
+            ModuleAdType.OTHER to AdType.OTHER,
             null to null,
         ).forEach { autoAdType, adType ->
-            val autoAdRevenue = AutoAdRevenue(
+            val autoAdRevenue = ModuleAdRevenue(
                 adRevenue = BigDecimal.valueOf(1213.32312),
                 currency = Currency.getInstance("RUB"),
                 adType = autoAdType,

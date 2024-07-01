@@ -33,6 +33,7 @@ import io.appmetrica.analytics.impl.proxy.validation.SilentActivationValidator;
 import io.appmetrica.analytics.impl.utils.validation.ValidationResult;
 import io.appmetrica.analytics.impl.utils.validation.Validator;
 import io.appmetrica.analytics.internal.IdentifiersResult;
+import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdRevenueProcessor;
 import io.appmetrica.analytics.profile.UserProfile;
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule;
 import io.appmetrica.analytics.testutils.CommonTest;
@@ -661,6 +662,21 @@ public class AppMetricaProxyTest extends CommonTest {
         order.verify(mBarrier).reportExternalAttribution(eq(attribution));
         order.verify(mSynchronousStageExecutor).reportExternalAttribution(eq(attribution));
         order.verify(mMainReporter).reportExternalAttribution(eq(attribution));
+    }
+
+    @Test
+    public void reportExternalAdRevenue() {
+        ModuleAdRevenueProcessor moduleAdRevenueProcessor = mock(ModuleAdRevenueProcessor.class);
+        when(ClientServiceLocator.getInstance().getModulesController().getModuleAdRevenueProcessor())
+            .thenReturn(moduleAdRevenueProcessor);
+
+        String value = "string";
+        mProxy.reportExternalAdRevenue(value);
+
+        InOrder order = inOrder(mBarrier, mSynchronousStageExecutor, moduleAdRevenueProcessor);
+        order.verify(mBarrier).reportExternalAdRevenue(value);
+        order.verify(mSynchronousStageExecutor).reportExternalAdRevenue(value);
+        order.verify(moduleAdRevenueProcessor).process(value);
     }
 
     private void checkSetDataSendingEnabled(boolean value) {

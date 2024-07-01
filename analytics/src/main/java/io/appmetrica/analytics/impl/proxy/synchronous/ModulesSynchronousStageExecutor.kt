@@ -29,6 +29,6 @@ class ModulesSynchronousStageExecutor @VisibleForTesting constructor(
         contextAppearedListener.onProbablyAppeared(context.applicationContext)
     }
 
-    fun reportAdRevenue(adRevenue: AdRevenue) {
+    fun reportAdRevenue(adRevenue: AdRevenue, autoCollected: Boolean) {
     }
 }

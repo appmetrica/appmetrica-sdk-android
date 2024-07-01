@@ -61,6 +61,7 @@ public final class io.appmetrica.analytics.coreutils.internal.StringUtils {
 
 public class io.appmetrica.analytics.coreutils.internal.WrapUtils {
     public <init>()
+    public static double getFiniteDoubleOrDefault(double, double)
     public static long getMillisOrDefault([Nullable] Long, [NonNull] java.util.concurrent.TimeUnit, long)
     public static <T> [NonNull] T getOrDefault([Nullable] T, [NonNull] T)
     public static [NonNull] String getOrDefaultIfEmpty([Nullable] String, [NonNull] String)

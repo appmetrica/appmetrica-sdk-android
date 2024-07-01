@@ -14,7 +14,7 @@ import io.appmetrica.analytics.impl.IReporterExtended
 import io.appmetrica.analytics.impl.TestsData
 import io.appmetrica.analytics.impl.proxy.AppMetricaProxy
 import io.appmetrica.analytics.impl.proxy.AppMetricaProxyProvider
-import io.appmetrica.analytics.internal.IdentifiersResult;
+import io.appmetrica.analytics.internal.IdentifiersResult
 import io.appmetrica.analytics.plugins.AppMetricaPlugins
 import io.appmetrica.analytics.profile.UserProfile
 import io.appmetrica.analytics.testutils.CommonTest
@@ -319,5 +319,12 @@ internal class AppMetricaTests : CommonTest() {
         val attribution = mock<ExternalAttribution>()
         AppMetrica.reportExternalAttribution(attribution)
         verify(proxy).reportExternalAttribution(eq(attribution))
+    }
+
+    @Test
+    fun reportExternalAdRevenue() {
+        val value = "string"
+        AppMetrica.reportExternalAdRevenue(value)
+        verify(proxy).reportExternalAdRevenue(value)
     }
 }

@@ -4,16 +4,17 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.fyber.fairbid.ads.ImpressionData;
 import com.fyber.fairbid.ads.PlacementType;
-import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.AutoAdRevenue;
-import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.AutoAdType;
+import io.appmetrica.analytics.coreutils.internal.WrapUtils;
+import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdRevenue;
+import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdType;
 import java.math.BigDecimal;
 import java.util.Currency;
 
 public class AdRevenueConverter {
 
-    public AutoAdRevenue convert(@NonNull final ImpressionData data) {
-        return new AutoAdRevenue(
-            BigDecimal.valueOf(getFiniteDoubleOrDefault(data.getNetPayout(), 0)), // adRevenue
+    public ModuleAdRevenue convert(@NonNull final ImpressionData data) {
+        return new ModuleAdRevenue(
+            BigDecimal.valueOf(WrapUtils.getFiniteDoubleOrDefault(data.getNetPayout(), 0)), // adRevenue
             Currency.getInstance(data.getCurrency()), // currency
             convert(data.getPlacementType()), // adType
             data.getDemandSource(), // adNetwork
@@ -22,24 +23,21 @@ public class AdRevenueConverter {
             null, // adPlacementId
             null, // adPlacementName
             data.getPriceAccuracy().toString(), // precision
-            null // payload
+            null, // payload
+            true // autoCollected
         );
     }
 
     @Nullable
-    private AutoAdType convert(@Nullable final PlacementType type) {
+    private ModuleAdType convert(@Nullable final PlacementType type) {
         if (type == null) {
             return null;
         }
         switch (type) {
-            case BANNER: return AutoAdType.BANNER;
-            case REWARDED: return AutoAdType.REWARDED;
-            case INTERSTITIAL: return AutoAdType.INTERSTITIAL;
-            default: return AutoAdType.OTHER;
+            case BANNER: return ModuleAdType.BANNER;
+            case REWARDED: return ModuleAdType.REWARDED;
+            case INTERSTITIAL: return ModuleAdType.INTERSTITIAL;
+            default: return ModuleAdType.OTHER;
         }
-    }
-
-    private double getFiniteDoubleOrDefault(double input, double fallback) {
-        return Double.isNaN(input) || Double.isInfinite(input) ? fallback : input;
     }
 }

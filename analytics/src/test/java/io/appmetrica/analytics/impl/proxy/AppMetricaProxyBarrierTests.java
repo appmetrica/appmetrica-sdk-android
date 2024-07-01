@@ -29,7 +29,8 @@ import static org.mockito.Mockito.when;
 public class AppMetricaProxyBarrierTests extends BaseAppMetricaProxyBarrierTests {
 
     private static final List<String> methodsNotToCheck = Arrays.asList(
-        "getDeviceId"
+        "getDeviceId",
+        "reportExternalAdRevenue" // since cannot mock/spy class Object
     );
 
     private static final List<String> methodsWithNoArguments = Arrays.asList(

@@ -49,6 +49,6 @@ class ModulesBarrier(
         apiKeyValidator.validate(apiKey)
     }
 
-    fun reportAdRevenue(adRevenue: AdRevenue) {
+    fun reportAdRevenue(adRevenue: AdRevenue, autoCollected: Boolean) {
     }
 }

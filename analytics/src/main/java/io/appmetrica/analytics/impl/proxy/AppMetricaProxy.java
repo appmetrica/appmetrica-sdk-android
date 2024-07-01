@@ -36,6 +36,7 @@ import io.appmetrica.analytics.impl.proxy.validation.SilentActivationValidator;
 import io.appmetrica.analytics.impl.utils.ApiProxyThread;
 import io.appmetrica.analytics.internal.IdentifiersResult;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
+import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdRevenueProcessor;
 import io.appmetrica.analytics.profile.UserProfile;
 import java.util.List;
 import java.util.Map;
@@ -531,6 +532,18 @@ public final class AppMetricaProxy extends BaseAppMetricaProxy {
             @Override
             public void run() {
                 getMainReporter().reportExternalAttribution(value);
+            }
+        });
+    }
+
+    public void reportExternalAdRevenue(@NonNull Object... values) {
+        barrier.reportExternalAdRevenue(values);
+        synchronousStageExecutor.reportExternalAdRevenue(values);
+        getExecutor().execute(() -> {
+            ModuleAdRevenueProcessor processor =
+                ClientServiceLocator.getInstance().getModulesController().getModuleAdRevenueProcessor();
+            if (processor != null) {
+                processor.process(values);
             }
         });
     }
