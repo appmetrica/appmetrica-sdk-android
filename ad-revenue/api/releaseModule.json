@@ -48,7 +48,7 @@
                     "group": "io.appmetrica.analytics",
                     "module": "analytics-ad-revenue-applovin-v12",
                     "version": {
-                        "requires": "7.0.0"
+                        "requires": "7.1.0"
                     }
                 },
                 {

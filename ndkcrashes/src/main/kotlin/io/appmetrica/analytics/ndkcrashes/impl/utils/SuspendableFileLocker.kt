@@ -1,7 +1,6 @@
 package io.appmetrica.analytics.ndkcrashes.impl.utils
 
 import android.content.Context
-import io.appmetrica.analytics.ndkcrashes.impl.NativeCrashLogger
 import java.io.Closeable
 import java.io.File
 import java.io.IOException
@@ -28,9 +27,9 @@ class SuspendableFileLocker private constructor(context: Context, simpleFileName
             if (lock != null && lock.isValid) {
                 try {
                     lock.release()
-                    NativeCrashLogger.debug(tag, "Lock released for $fileName.")
+                    DebugLogger.info(tag, "Lock released for $fileName.")
                 } catch (e: IOException) {
-                    NativeCrashLogger.error(tag, "Failed to release lock for $fileName.", e)
+                    DebugLogger.error(tag, "Failed to release lock for $fileName.", e)
                 }
             }
         }

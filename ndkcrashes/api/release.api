@@ -1,5 +1,4 @@
 public final class io.appmetrica.analytics.ndkcrashes.BuildConfig {
-    public static final boolean APPMETRICA_DEBUG
     public static final String BUILD_TYPE
     public static final boolean DEBUG
     public static final String LIBRARY_PACKAGE_NAME

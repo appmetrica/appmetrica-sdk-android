@@ -2,6 +2,7 @@ package io.appmetrica.analytics.ndkcrashes.impl
 
 import android.content.Context
 import android.net.LocalServerSocket
+import io.appmetrica.analytics.ndkcrashes.impl.utils.DebugLogger
 import java.util.LinkedList
 
 class NativeCrashWatcher(private val socketName: String) {
@@ -30,26 +31,26 @@ class NativeCrashWatcher(private val socketName: String) {
                     System.arraycopy(buff, 0, stringData, 0, bytes)
                     onNewCrash(String(stringData))
                 } catch (e: Throwable) {
-                    NativeCrashLogger.error(tag, "error reading data", e)
+                    DebugLogger.error(tag, "error reading data", e)
                 }
             }
         }
     }
 
     fun subscribe(crashConsumer: Listener) {
-        NativeCrashLogger.debug(tag, "start watcher")
+        DebugLogger.info(tag, "start watcher")
         synchronized(this) { subscribers.add(crashConsumer) }
         if (!isRunning) {
             synchronized(this) {
                 // close() does not interrupt accept() and this name become "forever in use"
                 if (!isRunning) {
                     try {
-                        NativeCrashLogger.debug(tag, "open socket")
+                        DebugLogger.info(tag, "open socket")
                         socket = LocalServerSocket(socketName)
                         isRunning = true
                         watcherThread.start()
                     } catch (exception: Throwable) {
-                        NativeCrashLogger.error(tag, "can't start crashpad socket", exception)
+                        DebugLogger.error(tag, "can't start crashpad socket", exception)
                     }
                 }
             }
@@ -65,7 +66,7 @@ class NativeCrashWatcher(private val socketName: String) {
     // pause ComonentUnits destroying and send crash to the current session or just skip it.
     @Synchronized
     private fun onNewCrash(uuid: String) {
-        NativeCrashLogger.debug(tag, "deliver new native crash from crashpad $uuid to ${subscribers.size} subscribers")
+        DebugLogger.info(tag, "deliver new native crash from crashpad $uuid to ${subscribers.size} subscribers")
         for (consumer in subscribers) {
             consumer.onNewCrash(uuid)
         }

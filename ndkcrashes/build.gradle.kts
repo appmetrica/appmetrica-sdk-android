@@ -33,15 +33,12 @@ android {
     buildTypes {
         debug {
             enableLogs = true
-            buildConfigField("boolean", "APPMETRICA_DEBUG", "true")
         }
         release {
             enableLogs = false
-            buildConfigField("boolean", "APPMETRICA_DEBUG", "false")
         }
         named("snapshot") {
             enableLogs = true
-            buildConfigField("boolean", "APPMETRICA_DEBUG", "true")
         }
     }
 
@@ -70,4 +67,6 @@ if (project.property("ndkcrashes.native.enabled").toString().toBoolean()) {
 dependencies {
     compileOnly(project(":ndkcrashes-api"))
     testImplementation(project(":ndkcrashes-api"))
+
+    implementation("io.appmetrica.analytics:analytics-common-logger:7.0.0")
 }

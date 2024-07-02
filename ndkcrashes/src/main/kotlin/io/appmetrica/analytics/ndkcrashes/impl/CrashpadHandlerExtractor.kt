@@ -2,6 +2,7 @@ package io.appmetrica.analytics.ndkcrashes.impl
 
 import android.annotation.SuppressLint
 import android.content.Context
+import io.appmetrica.analytics.ndkcrashes.impl.utils.DebugLogger
 import io.appmetrica.analytics.ndkcrashes.impl.utils.SuspendableFileLocker
 import java.io.File
 import java.io.FileOutputStream
@@ -22,12 +23,12 @@ internal class CrashpadHandlerExtractor(
         val apkPath = context.applicationInfo.sourceDir
         val libraryFile = File(extractedBinariesDir, extractedExecutableName)
         if (libraryFile.exists()) {
-            NativeCrashLogger.debug(tag, "crashpad handler is already extracted")
+            DebugLogger.info(tag, "crashpad handler is already extracted")
             return libraryFile.absolutePath
         }
         return withFileLock(fileName = "crpad_ext", workDescription = "copy handler") {
             if (libraryFile.exists()) {
-                NativeCrashLogger.debug(tag, "crashpad handler is already extracted - under lock")
+                DebugLogger.info(tag, "crashpad handler is already extracted - under lock")
                 return@withFileLock libraryFile.absolutePath
             }
             ZipFile(apkPath).use { zipFile ->
@@ -36,11 +37,11 @@ internal class CrashpadHandlerExtractor(
                 val inputStream = zipFile.getInputStream(zipEntry)
                 copyChars(inputStream, FileOutputStream(libraryFile))
                 if (!libraryFile.setReadable(true, false)) {
-                    NativeCrashLogger.debug(tag, "can't make crashpad executable readable")
+                    DebugLogger.info(tag, "can't make crashpad executable readable")
                     return@use null
                 }
                 if (!libraryFile.setExecutable(true, false)) {
-                    NativeCrashLogger.debug(tag, "can't make crashpad executable executable")
+                    DebugLogger.info(tag, "can't make crashpad executable executable")
                     return@use null
                 }
                 libraryFile.absolutePath
@@ -54,7 +55,7 @@ internal class CrashpadHandlerExtractor(
             fileLocker.lock()
             block()
         } catch (e: Throwable) {
-            NativeCrashLogger.error(tag, "Failed to $workDescription", e)
+            DebugLogger.error(tag, "Failed to $workDescription", e)
             null
         } finally {
             fileLocker.unlock()

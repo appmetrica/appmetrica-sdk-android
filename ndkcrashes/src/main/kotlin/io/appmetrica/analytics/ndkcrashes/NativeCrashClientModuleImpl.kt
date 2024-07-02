@@ -7,10 +7,10 @@ import android.os.Process
 import androidx.annotation.RequiresApi
 import io.appmetrica.analytics.ndkcrashes.impl.AppMetricaNativeLibraryLoader
 import io.appmetrica.analytics.ndkcrashes.impl.CrashpadHandlerFinder
-import io.appmetrica.analytics.ndkcrashes.impl.NativeCrashLogger
 import io.appmetrica.analytics.ndkcrashes.impl.NativeCrashWatcher
 import io.appmetrica.analytics.ndkcrashes.impl.utils.AbiResolver
 import io.appmetrica.analytics.ndkcrashes.impl.utils.AndroidUtils
+import io.appmetrica.analytics.ndkcrashes.impl.utils.DebugLogger
 import io.appmetrica.analytics.ndkcrashes.impl.utils.PackagePaths
 import io.appmetrica.analytics.ndkcrashes.jni.core.NativeCrashCoreJniWrapper
 import io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrashClientConfig
@@ -22,11 +22,11 @@ class NativeCrashClientModuleImpl : NativeCrashClientModule() {
 
     override fun initHandling(context: Context, config: NativeCrashClientConfig) {
         if (!loadAppMetricaNativeLibrary()) {
-            NativeCrashLogger.error(tag, "Failed to load native library. Handling native crashes are disabled")
+            DebugLogger.error(tag, "Failed to load native library. Handling native crashes are disabled")
             return
         }
         if (!startHandler(context, config)) {
-            NativeCrashLogger.error(tag, "Failed to start native crash handler. Handling native crashes are disabled")
+            DebugLogger.error(tag, "Failed to start native crash handler. Handling native crashes are disabled")
         }
     }
 
@@ -47,13 +47,13 @@ class NativeCrashClientModuleImpl : NativeCrashClientModule() {
             startHandlerAtCrash(context, config)
         }
     } catch (t: Throwable) {
-        NativeCrashLogger.error(tag, "Failed to start native crash handler", t)
+        DebugLogger.error(tag, "Failed to start native crash handler", t)
         false
     }
 
     @RequiresApi(Build.VERSION_CODES.Q)
     private fun startHandlerWithLinkerAtCrash(context: Context, config: NativeCrashClientConfig): Boolean {
-        NativeCrashLogger.debug(tag, "Start handler with linker at crash")
+        DebugLogger.info(tag, "Start handler with linker at crash")
         return NativeCrashCoreJniWrapper.startHandlerWithLinkerAtCrash(
             handlerPath = getHandlerPath(context),
             crashFolder = config.nativeCrashFolder,
@@ -65,10 +65,10 @@ class NativeCrashClientModuleImpl : NativeCrashClientModule() {
 
     @RequiresApi(Build.VERSION_CODES.M)
     private fun startJavaHandlerAtCrash(context: Context, config: NativeCrashClientConfig): Boolean {
-        NativeCrashLogger.debug(tag, "Start java handler at crash")
+        DebugLogger.info(tag, "Start java handler at crash")
         val abi = AbiResolver.getAbi()
         if (abi == null) {
-            NativeCrashLogger.debug(tag, "Failed to detekt abi")
+            DebugLogger.info(tag, "Failed to detekt abi")
             return false
         }
         val (apkPath, libPath) = PackagePaths.makePackagePaths(context, abi)
@@ -85,7 +85,7 @@ class NativeCrashClientModuleImpl : NativeCrashClientModule() {
     }
 
     private fun startHandlerAtCrash(context: Context, config: NativeCrashClientConfig): Boolean {
-        NativeCrashLogger.debug(tag, "Start handler at crash")
+        DebugLogger.info(tag, "Start handler at crash")
         return NativeCrashCoreJniWrapper.startHandlerAtCrash(
             handlerPath = getHandlerPath(context),
             crashFolder = config.nativeCrashFolder,
@@ -98,7 +98,7 @@ class NativeCrashClientModuleImpl : NativeCrashClientModule() {
         val path = checkNotNull(CrashpadHandlerFinder(AbiResolver).find(context)?.absolutePath) {
             "Not found native crash handler library"
         }
-        NativeCrashLogger.debug(tag, "Found crashpad handler by path $path")
+        DebugLogger.info(tag, "Found crashpad handler by path $path")
         return path
     }
 

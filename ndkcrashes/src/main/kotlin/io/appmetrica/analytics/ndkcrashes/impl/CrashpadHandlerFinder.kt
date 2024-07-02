@@ -6,6 +6,7 @@ import android.os.SystemClock
 import io.appmetrica.analytics.ndkcrashes.BuildConfig
 import io.appmetrica.analytics.ndkcrashes.impl.utils.AbiResolver
 import io.appmetrica.analytics.ndkcrashes.impl.utils.AndroidUtils
+import io.appmetrica.analytics.ndkcrashes.impl.utils.DebugLogger
 import io.appmetrica.analytics.ndkcrashes.jni.core.NativeCrashUtilsJni
 import java.io.File
 
@@ -20,7 +21,7 @@ class CrashpadHandlerFinder(private val abiResolver: AbiResolver) {
             ?: extractLibToDataDir(context)
         handlerFile?.absoluteFile
     } catch (t: Throwable) {
-        NativeCrashLogger.error(tag, "Failed to find handler", t)
+        DebugLogger.error(tag, "Failed to find handler", t)
         null
     }
 
@@ -31,35 +32,35 @@ class CrashpadHandlerFinder(private val abiResolver: AbiResolver) {
     }
 
     private fun extractLibToDataDir(context: Context): File? {
-        NativeCrashLogger.debug(tag, "Handler not found. Try to extract")
+        DebugLogger.info(tag, "Handler not found. Try to extract")
         val startTime = SystemClock.elapsedRealtime()
         val suffix = "-${BuildConfig.VERSION_NAME}"
 
         val abi: String? = abiResolver.getAbi()
-        NativeCrashLogger.debug(tag, "current ABI is $abi")
+        DebugLogger.info(tag, "current ABI is $abi")
         if (abi == null) return null
 
         val cacheDir = context.cacheDir
         val extractedBinariesDir = cacheDir?.let { File(it, "appmetrica_crashpad_handler_extracted") }
         if (extractedBinariesDir == null) {
-            NativeCrashLogger.debug(tag, "Extracted binaries dir is null")
+            DebugLogger.info(tag, "Extracted binaries dir is null")
             return null
         }
 
         if (!makeCrashpadDirAndSetPermission(cacheDir, extractedBinariesDir)) {
-            NativeCrashLogger.debug(tag, "can't make tmp dir")
+            DebugLogger.info(tag, "can't make tmp dir")
         }
         val extractedFile = CrashpadHandlerExtractor(context, extractedBinariesDir).extractFileIfStale(
             "lib/$abi/$libName", "$libName$suffix"
         )
         val duration = SystemClock.elapsedRealtime() - startTime
-        NativeCrashLogger.debug(tag, "Time to extract crashpad binary: $duration ms")
+        DebugLogger.info(tag, "Time to extract crashpad binary: $duration ms")
         return extractedFile?.let { File(it) }
     }
 
     private fun makeCrashpadDirAndSetPermission(cacheDir: File, extractedBinariesDir: File): Boolean {
         if (!extractedBinariesDir.exists()) {
-            NativeCrashLogger.debug(tag, "make crashpad dir ${extractedBinariesDir.absolutePath}")
+            DebugLogger.info(tag, "make crashpad dir ${extractedBinariesDir.absolutePath}")
             return extractedBinariesDir.mkdirs() &&
                 cacheDir.setExecutable(true, false) &&
                 extractedBinariesDir.setExecutable(true, false)

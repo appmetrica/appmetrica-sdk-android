@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.ndkcrashes.jni.core
 
-import io.appmetrica.analytics.ndkcrashes.impl.NativeCrashLogger
+import io.appmetrica.analytics.ndkcrashes.impl.utils.DebugLogger
 
 internal object NativeCrashCoreJni {
     external fun startHandlerWithLinkerAtCrash(config: AppMetricaCrashpadConfig): Boolean
@@ -74,6 +74,6 @@ internal object NativeCrashCoreJniWrapper {
     }
 
     private fun logConfig(config: AppMetricaCrashpadConfig) {
-        NativeCrashLogger.debug(tag, "Start crashpad handler with config: $config")
+        DebugLogger.info(tag, "Start crashpad handler with config: $config")
     }
 }

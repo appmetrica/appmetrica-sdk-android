@@ -3,8 +3,8 @@ package io.appmetrica.analytics.ndkcrashes
 import android.annotation.SuppressLint
 import android.util.Log
 import dalvik.system.PathClassLoader
-import io.appmetrica.analytics.ndkcrashes.impl.NativeCrashLogger
 import io.appmetrica.analytics.ndkcrashes.impl.utils.AndroidUtils
+import io.appmetrica.analytics.ndkcrashes.impl.utils.DebugLogger
 import io.appmetrica.analytics.ndkcrashes.jni.runner.NativeCrashHandlerRunnerJni
 
 object JavaHandlerRunner {
@@ -18,7 +18,7 @@ object JavaHandlerRunner {
         } else {
             loadViaFallbackClassloader(TRAMPOLINE_LIBRARY)
         }
-        NativeCrashLogger.debug(TAG, "run native crash handler from java runner")
+        DebugLogger.info(TAG, "run native crash handler from java runner")
         NativeCrashHandlerRunnerJni.runHandler(args)
     }
 

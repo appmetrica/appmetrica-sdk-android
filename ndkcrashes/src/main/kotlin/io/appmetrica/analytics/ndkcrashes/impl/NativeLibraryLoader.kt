@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.ndkcrashes.impl
 
 import androidx.annotation.VisibleForTesting
+import io.appmetrica.analytics.ndkcrashes.impl.utils.DebugLogger
 
 // use class, mockito can not mock object
 class AppMetricaNativeLibraryLoader : NativeLibraryLoader("appmetrica-native")
@@ -24,20 +25,20 @@ abstract class NativeLibraryLoader(private val name: String) {
     @Synchronized
     fun loadIfNeeded(): Boolean {
         return if (state == State.LOADED) {
-            NativeCrashLogger.debug(tag, "native library $name has been already loaded")
+            DebugLogger.info(tag, "native library $name has been already loaded")
             true
         } else {
             if (state == State.LOADING_ERROR) {
-                NativeCrashLogger.debug(tag, "there was unsuccessful attempt to load library $name")
+                DebugLogger.info(tag, "there was unsuccessful attempt to load library $name")
                 false
             } else {
                 try {
                     libraryLoader.load(name)
                     state = State.LOADED
-                    NativeCrashLogger.debug(tag, "native library $name is loaded")
+                    DebugLogger.info(tag, "native library $name is loaded")
                     true
                 } catch (e: Throwable) {
-                    NativeCrashLogger.error(tag, "can't load native library $name", e)
+                    DebugLogger.error(tag, "can't load native library $name", e)
                     state = State.LOADING_ERROR
                     false
                 }

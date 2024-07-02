@@ -2,8 +2,8 @@ package io.appmetrica.analytics.ndkcrashes
 
 import android.content.Context
 import io.appmetrica.analytics.ndkcrashes.impl.AppMetricaServiceNativeLibraryLoader
-import io.appmetrica.analytics.ndkcrashes.impl.NativeCrashLogger
 import io.appmetrica.analytics.ndkcrashes.impl.NativeCrashWatcher
+import io.appmetrica.analytics.ndkcrashes.impl.utils.DebugLogger
 import io.appmetrica.analytics.ndkcrashes.jni.service.CrashpadCrash
 import io.appmetrica.analytics.ndkcrashes.jni.service.NativeCrashServiceJniWrapper
 import io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrash
@@ -27,10 +27,10 @@ class NativeCrashServiceModuleImpl : NativeCrashServiceModule() {
                 try {
                     localNativeCrashHandler.newCrash(NativeCrashServiceJniWrapper.readCrash(uuid)!!.toNativeCrash())
                 } catch (t: Throwable) {
-                    NativeCrashLogger.error(tag, "Failed to read native crash $uuid", t)
+                    DebugLogger.error(tag, "Failed to read native crash $uuid", t)
                 }
             } else {
-                NativeCrashLogger.warning(tag, "NativeCrashHandler is not set. Failed to process crash $uuid")
+                DebugLogger.warning(tag, "NativeCrashHandler is not set. Failed to process crash $uuid")
             }
         }
     }
@@ -51,7 +51,7 @@ class NativeCrashServiceModuleImpl : NativeCrashServiceModule() {
         return if (libraryLoader.loadIfNeeded()) {
             NativeCrashServiceJniWrapper.readAllCrashes().map { it.toNativeCrash() }
         } else {
-            NativeCrashLogger.warning(tag, "Failed to read native crashes. Native library is not loaded")
+            DebugLogger.warning(tag, "Failed to read native crashes. Native library is not loaded")
             emptyList()
         }
     }
@@ -60,7 +60,7 @@ class NativeCrashServiceModuleImpl : NativeCrashServiceModule() {
         if (libraryLoader.loadIfNeeded()) {
             NativeCrashServiceJniWrapper.markCrashCompleted(uuid)
         } else {
-            NativeCrashLogger.warning(tag, "Failed to mark native crash completed. Native library is not loaded")
+            DebugLogger.warning(tag, "Failed to mark native crash completed. Native library is not loaded")
         }
     }
 
@@ -68,7 +68,7 @@ class NativeCrashServiceModuleImpl : NativeCrashServiceModule() {
         if (libraryLoader.loadIfNeeded()) {
             NativeCrashServiceJniWrapper.deleteCompletedCrashes()
         } else {
-            NativeCrashLogger.warning(tag, "Failed to delete completed crashes. Native library is not loaded")
+            DebugLogger.warning(tag, "Failed to delete completed crashes. Native library is not loaded")
         }
     }
 
