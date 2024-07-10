@@ -1030,6 +1030,7 @@
   "analytics/src/main/java/io/appmetrica/analytics/impl/utils/MeasuredJsonMap.java":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/main/java/io/appmetrica/analytics/impl/utils/MeasuredJsonMap.java",
   "analytics/src/main/java/io/appmetrica/analytics/impl/utils/PluginErrorDetailsExtension.kt":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/main/java/io/appmetrica/analytics/impl/utils/PluginErrorDetailsExtension.kt",
   "analytics/src/main/java/io/appmetrica/analytics/impl/utils/ProcessDetector.java":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/main/java/io/appmetrica/analytics/impl/utils/ProcessDetector.java",
+  "analytics/src/main/java/io/appmetrica/analytics/impl/utils/ProtobufUtils.kt":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/main/java/io/appmetrica/analytics/impl/utils/ProtobufUtils.kt",
   "analytics/src/main/java/io/appmetrica/analytics/impl/utils/PublicLogConstructor.kt":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/main/java/io/appmetrica/analytics/impl/utils/PublicLogConstructor.kt",
   "analytics/src/main/java/io/appmetrica/analytics/impl/utils/SafeCallable.java":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/main/java/io/appmetrica/analytics/impl/utils/SafeCallable.java",
   "analytics/src/main/java/io/appmetrica/analytics/impl/utils/SecurityUtils.java":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/main/java/io/appmetrica/analytics/impl/utils/SecurityUtils.java",

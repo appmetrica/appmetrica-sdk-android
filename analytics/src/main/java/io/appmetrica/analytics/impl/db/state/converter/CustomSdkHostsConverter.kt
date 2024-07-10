@@ -2,6 +2,7 @@ package io.appmetrica.analytics.impl.db.state.converter
 
 import io.appmetrica.analytics.coreapi.internal.data.Converter
 import io.appmetrica.analytics.impl.protobuf.client.StartupStateProtobuf
+import io.appmetrica.analytics.impl.utils.ProtobufUtils.toArray
 
 internal class CustomSdkHostsConverter :
     Converter<Map<String, List<String>>, Array<StartupStateProtobuf.StartupState.CustomSdkHostsPair>> {
@@ -9,12 +10,12 @@ internal class CustomSdkHostsConverter :
     override fun fromModel(
         value: Map<String, List<String>>
     ): Array<StartupStateProtobuf.StartupState.CustomSdkHostsPair> {
-        val result = Array(value.size) { StartupStateProtobuf.StartupState.CustomSdkHostsPair() }
-        value.onEachIndexed { index, entry ->
-            result[index].key = entry.key
-            result[index].hosts = entry.value.toTypedArray()
+        return value.toArray { entry ->
+            StartupStateProtobuf.StartupState.CustomSdkHostsPair().apply {
+                key = entry.key
+                hosts = entry.value.toTypedArray()
+            }
         }
-        return result
     }
 
     override fun toModel(
