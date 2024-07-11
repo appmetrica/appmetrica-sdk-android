@@ -15,6 +15,7 @@ class ProtobufPlugin : Plugin<Project> {
         val extension = project.extensions.create<ProtobufExtension>("protobuf")
         extension.protoPath.convention("protobuf")
 
+        val protoc = project.properties["protoc.path"] ?: "protoc"
         val outDir = project.layout.buildDirectory.dir("generated")
 
         project.tasks.register<Exec>("generateProtocol") {
@@ -27,7 +28,7 @@ class ProtobufPlugin : Plugin<Project> {
 
             workingDir(project.layout.projectDirectory)
             commandLine(
-                "protoc",
+                protoc,
                 *extension.protoConfigs.get().map {
                     "${extension.protoPath.get()}/${it.srcPath.get()}"
                 }.toTypedArray(),
