@@ -10,6 +10,7 @@ class DefaultClientComponentsInitializer : ClientComponentsInitializer {
     private val tag = "[DefaultClientComponentsInitializer]"
 
     private val moduleEntryPoints = listOf(
+        "io.appmetrica.analytics.adrevenue.admob.v23.internal.AdMobClientModuleEntryPoint",
         "io.appmetrica.analytics.adrevenue.applovin.v12.internal.AppLovinClientModuleEntryPoint",
         "io.appmetrica.analytics.adrevenue.fyber.v3.internal.FyberClientModuleEntryPoint",
         "io.appmetrica.analytics.adrevenue.ironsource.v7.internal.IronSourceClientModuleEntryPoint",

@@ -2,17 +2,21 @@ package io.appmetrica.analytics.adrevenue.applovin.v12.impl
 
 import com.applovin.mediation.MaxAd
 import com.applovin.sdk.AppLovinSdk
+import io.appmetrica.analytics.coreutils.internal.reflection.ReflectionUtils
 import io.appmetrica.analytics.modulesapi.internal.client.ClientContext
 import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdRevenue
 import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdRevenueContext
 import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdRevenueReporter
 import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.analytics.testutils.MockedStaticRule
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.Rule
 import org.junit.Test
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoInteractions
+import org.mockito.kotlin.whenever
 
 class AppLovinAdRevenueProcessorTest : CommonTest() {
 
@@ -28,6 +32,17 @@ class AppLovinAdRevenueProcessorTest : CommonTest() {
     }
     private val clientContext: ClientContext = mock {
         on { moduleAdRevenueContext } doReturn moduleAdRevenueContext
+    }
+
+    @get:Rule
+    var reflectionUtilsRule = MockedStaticRule(
+        ReflectionUtils::class.java
+    ) {
+        whenever(ReflectionUtils.isArgumentsOfClasses(
+            arrayOf(maxAd, appLovinSdk),
+            MaxAd::class.java,
+            AppLovinSdk::class.java
+        )).thenReturn(true)
     }
 
     private val processor = AppLovinAdRevenueProcessor(
@@ -48,14 +63,14 @@ class AppLovinAdRevenueProcessorTest : CommonTest() {
     }
 
     @Test
-    fun processWithWrongTypeOfFirstParameters() {
-        assertThat(processor.process("string", appLovinSdk)).isFalse()
-        verifyNoInteractions(adRevenueReporter)
-    }
+    fun processWithWrongParameters() {
+        whenever(ReflectionUtils.isArgumentsOfClasses(
+            arrayOf(maxAd, appLovinSdk),
+            MaxAd::class.java,
+            AppLovinSdk::class.java
+        )).thenReturn(false)
 
-    @Test
-    fun processWithWrongTypeOfSecondParameters() {
-        assertThat(processor.process(maxAd, "string")).isFalse()
+        assertThat(processor.process(maxAd, appLovinSdk)).isFalse()
         verifyNoInteractions(adRevenueReporter)
     }
 }

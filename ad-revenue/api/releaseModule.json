@@ -46,6 +46,13 @@
             "dependencies": [
                 {
                     "group": "io.appmetrica.analytics",
+                    "module": "analytics-ad-revenue-admob-v23",
+                    "version": {
+                        "requires": "7.1.0"
+                    }
+                },
+                {
+                    "group": "io.appmetrica.analytics",
                     "module": "analytics-ad-revenue-applovin-v12",
                     "version": {
                         "requires": "7.1.0"

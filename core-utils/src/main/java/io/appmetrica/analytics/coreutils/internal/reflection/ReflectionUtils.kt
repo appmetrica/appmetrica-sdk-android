@@ -55,4 +55,15 @@ object ReflectionUtils {
 
     @JvmStatic
     fun detectClassExists(className: String): Boolean = findClass(className) != null
+
+    @JvmStatic
+    fun isArgumentsOfClasses(args: Array<out Any?>, vararg expected: Class<*>): Boolean {
+        if (args.size != expected.size) return false
+        args.forEachIndexed { index, arg ->
+            if (arg == null || !expected[index].isAssignableFrom(arg.javaClass)) {
+                return false
+            }
+        }
+        return true
+    }
 }

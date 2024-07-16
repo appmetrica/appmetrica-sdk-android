@@ -10,9 +10,26 @@ class CompositeModuleAdRevenueProcessor :
 
     private val processors = mutableListOf<ModuleAdRevenueProcessor>()
 
-    override fun process(vararg values: Any): Boolean {
-        val foundProcessor = processors.firstOrNull {
-            it.process(*values)
+    override fun process(vararg values: Any?): Boolean {
+        LoggerStorage.getMainPublicOrAnonymousLogger().info(
+            "Processing Ad Revenue for ${values.contentToString()}"
+        )
+        val foundProcessor = processors.firstOrNull { processor ->
+            try {
+                processor.process(*values).also { processed ->
+                    if (!processed) {
+                        LoggerStorage.getMainPublicOrAnonymousLogger().info(
+                            "Ad Revenue was not processed by ${processor.getDescription()}"
+                        )
+                    }
+                }
+            } catch (e: Throwable) {
+                LoggerStorage.getMainPublicOrAnonymousLogger().error(
+                    e,
+                    "Got exception from processor ${processor.getDescription()}"
+                )
+                false
+            }
         }
         val processed = foundProcessor != null
         if (!processed) {

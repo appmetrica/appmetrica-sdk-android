@@ -12,6 +12,7 @@ import org.junit.Test
 import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.same
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.whenever
@@ -45,7 +46,21 @@ class CompositeModuleAdRevenueProcessorTest : CommonTest() {
         assertThat(processor.process("string")).isTrue()
 
         verify(firstProcessor).process("string")
-        verifyNoInteractions(secondProcessor, logger)
+        verifyNoInteractions(secondProcessor)
+    }
+
+    @Test
+    fun processIfFirstThrowsException() {
+        val exception = IllegalStateException()
+        whenever(firstProcessor.process("string")).thenThrow(exception)
+        processor.register(firstProcessor)
+        processor.register(secondProcessor)
+
+        assertThat(processor.process("string")).isTrue()
+
+        verify(firstProcessor).process("string")
+        verify(secondProcessor).process("string")
+        verify(logger).error(same(exception), any())
     }
 
     @Test
@@ -59,7 +74,6 @@ class CompositeModuleAdRevenueProcessorTest : CommonTest() {
 
         verify(firstProcessor).process("string", "string")
         verify(secondProcessor).process("string", "string")
-        verifyNoInteractions(logger)
     }
 
     @Test
@@ -71,6 +85,5 @@ class CompositeModuleAdRevenueProcessorTest : CommonTest() {
 
         verify(firstProcessor).process("string", "string")
         verify(secondProcessor).process("string", "string")
-        verify(logger).info(any())
     }
 }

@@ -1,0 +1,15 @@
+public final class io.appmetrica.analytics.adrevenue.admob.v23.BuildConfig {
+    public static final String BUILD_TYPE
+    public static final boolean DEBUG
+    public static final String LIBRARY_PACKAGE_NAME
+
+    public <init>()
+}
+
+public class io.appmetrica.analytics.adrevenue.admob.v23.internal.AdMobClientModuleEntryPoint implementation io.appmetrica.analytics.modulesapi.internal.client.ModuleClientEntryPoint<Object> {
+    public <init>()
+    public [NonNull] String getIdentifier()
+    public void initClientSide([NonNull] io.appmetrica.analytics.modulesapi.internal.client.ClientContext)
+    public void onActivated()
+}
+

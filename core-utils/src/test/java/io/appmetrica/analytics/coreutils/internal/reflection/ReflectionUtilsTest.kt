@@ -59,4 +59,69 @@ class ReflectionUtilsTest {
             TestClassNotImplementTestInterface::class.java.name, TestInterface::class.java
         )).isNull()
     }
+
+    @Test
+    fun isArgumentsOfClasses() {
+        assertThat((ReflectionUtils.isArgumentsOfClasses(
+            arrayOf(
+                "some String",
+                object : TestInterface {}
+            ),
+            String::class.java,
+            TestInterface::class.java
+        ))).isTrue()
+    }
+
+    @Test
+    fun isArgumentsOfClassesIfWrongNumberOfArguments() {
+        assertThat((ReflectionUtils.isArgumentsOfClasses(
+            arrayOf(
+                "some String",
+                object : TestInterface {}
+            ),
+            String::class.java,
+            TestInterface::class.java,
+            String::class.java
+        ))).isFalse()
+    }
+
+    @Test
+    fun isArgumentsOfClassesIfWrongTypesOfArguments() {
+        assertThat((ReflectionUtils.isArgumentsOfClasses(
+            arrayOf(
+                "some String",
+                object : TestInterface {}
+            ),
+            String::class.java,
+            String::class.java
+        ))).isFalse()
+    }
+
+    @Test
+    fun isArgumentsOfClassesIfArgumentsAreNull() {
+        val nullString: String? = null
+        val nullClass: TestInterface? = null
+        assertThat((ReflectionUtils.isArgumentsOfClasses(
+            arrayOf(
+                nullString,
+                nullClass
+            ),
+            String::class.java,
+            TestInterface::class.java
+        ))).isFalse()
+    }
+
+    @Test
+    fun isArgumentsOfClassesIfArgumentsAreNullWithWrongType() {
+        val nullString: String? = null
+        val nullClass: TestInterface? = null
+        assertThat((ReflectionUtils.isArgumentsOfClasses(
+            arrayOf(
+                nullString,
+                nullClass
+            ),
+            String::class.java,
+            String::class.java
+        ))).isFalse()
+    }
 }

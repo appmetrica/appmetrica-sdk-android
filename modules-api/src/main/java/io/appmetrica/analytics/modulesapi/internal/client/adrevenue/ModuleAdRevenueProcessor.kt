@@ -6,7 +6,7 @@ interface ModuleAdRevenueProcessor {
      * Processes AdRevenue values from AppMetrica with modules.
      * Returns true if processed successfully and false otherwise.
      */
-    fun process(vararg values: Any): Boolean
+    fun process(vararg values: Any?): Boolean
 
     /**
      * Returns the description of the processor

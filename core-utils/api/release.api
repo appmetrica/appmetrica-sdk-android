@@ -332,6 +332,7 @@ public final class io.appmetrica.analytics.coreutils.internal.reflection.Reflect
 
     public static final boolean detectClassExists([NonNull] String)
     public static final [Nullable] Class<?> findClass([NonNull] String)
+    public static final boolean isArgumentsOfClasses([NonNull] Object[], [NonNull] Class<?>...)
     public static final <T> [Nullable] T loadAndInstantiateClassWithDefaultConstructor([NonNull] String, [NonNull] Class<T>)
     public static final <T> [Nullable] Class<T> loadClass([NonNull] String, [NonNull] Class<T>)
 }

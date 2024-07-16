@@ -1,4 +1,4 @@
-# AppMetrica SDK Ad Revenue Auto Collection Adapter for Applogin MAX v3
+# AppMetrica SDK Ad Revenue Auto Collection Adapter for Applovin MAX v12
 
 **Optional module**.
 Maven: `io.appmetrica.analytics:analytics-ad-revenue-applovin-v12:${VERSION}`.
