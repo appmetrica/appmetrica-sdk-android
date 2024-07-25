@@ -5,8 +5,9 @@ import io.appmetrica.analytics.impl.startup.StartupState
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import java.util.concurrent.CopyOnWriteArrayList
 
-private const val TAG = "[StartupStateHolder]"
 internal class StartupStateHolder : StartupStateObserver {
+
+    private val tag = "[StartupStateHolder]"
 
     @Volatile
     private lateinit var startupState: StartupState
@@ -14,12 +15,12 @@ internal class StartupStateHolder : StartupStateObserver {
     private val observers = CopyOnWriteArrayList<StartupStateObserver>()
 
     fun init(context: Context) {
-        DebugLogger.info(TAG, "Init")
+        DebugLogger.info(tag, "Init")
         onStartupStateChanged(StartupState.Storage(context).read())
     }
 
     override fun onStartupStateChanged(startupState: StartupState) {
-        DebugLogger.info(TAG, "onStartupStateChanged. Observers count = ${observers.size}")
+        DebugLogger.info(tag, "onStartupStateChanged. Observers count = ${observers.size}")
         this.startupState = startupState
         observers.forEach { it.onStartupStateChanged(startupState) }
     }
@@ -28,7 +29,7 @@ internal class StartupStateHolder : StartupStateObserver {
 
     fun registerObserver(observer: StartupStateObserver) {
         observers.add(observer)
-        DebugLogger.info(TAG, "Register observer $observer. Total count = ${observers.size}")
+        DebugLogger.info(tag, "Register observer $observer. Total count = ${observers.size}")
         if (this::startupState.isInitialized) {
             observer.onStartupStateChanged(startupState)
         }
@@ -36,6 +37,6 @@ internal class StartupStateHolder : StartupStateObserver {
 
     fun removeObserver(observer: StartupStateObserver) {
         observers.remove(observer)
-        DebugLogger.info(TAG, "Remove observer $observer. Total count = ${observers.size}")
+        DebugLogger.info(tag, "Remove observer $observer. Total count = ${observers.size}")
     }
 }

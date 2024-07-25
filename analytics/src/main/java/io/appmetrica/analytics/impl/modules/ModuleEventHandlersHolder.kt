@@ -3,9 +3,9 @@ package io.appmetrica.analytics.impl.modules
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import io.appmetrica.analytics.modulesapi.internal.service.event.ModuleEventServiceHandlerFactory
 
-private const val TAG = "[ModuleEventHandlersHolder]"
-
 class ModuleEventHandlersHolder {
+
+    private val tag = "[ModuleEventHandlersHolder]"
 
     private val _handlers = LinkedHashMap<String, ModuleEventServiceHandlerFactory>()
 
@@ -13,7 +13,7 @@ class ModuleEventHandlersHolder {
 
     @Synchronized
     fun register(identifier: String, handler: ModuleEventServiceHandlerFactory) {
-        DebugLogger.info(TAG, "Register new handler factory with identifier = $identifier")
+        DebugLogger.info(tag, "Register new handler factory with identifier = $identifier")
         _handlers[identifier] = handler
     }
 }

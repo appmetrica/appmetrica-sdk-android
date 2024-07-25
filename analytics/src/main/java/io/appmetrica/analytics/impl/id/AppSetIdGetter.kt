@@ -16,12 +16,13 @@ import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
 private const val APP_SET_ID_LIB_CLASS = "com.google.android.gms.appset.AppSet"
-private const val TAG = "[AppSetIdGetter]"
 
 internal class AppSetIdGetter @VisibleForTesting constructor(
     private val context: Context,
     private val appSetIdRetriever: IAppSetIdRetriever
 ) : AppSetIdProvider {
+
+    private val tag = "[AppSetIdGetter]"
 
     constructor(context: Context) : this(context, createAppSetIdRetriever())
 
@@ -33,14 +34,14 @@ internal class AppSetIdGetter @VisibleForTesting constructor(
     private val appSetIdListener: AppSetIdListener = object : AppSetIdListener {
         @MainThread
         override fun onAppSetIdRetrieved(id: String?, scope: AppSetIdScope) {
-            DebugLogger.info(TAG, "Received id: $id, scope: $scope")
+            DebugLogger.info(tag, "Received id: $id, scope: $scope")
             appSetId = AppSetId(id, scope)
             countDownLatch.countDown()
         }
 
         @MainThread
         override fun onFailure(ex: Throwable?) {
-            DebugLogger.error(TAG, ex)
+            DebugLogger.error(tag, ex)
             countDownLatch.countDown()
         }
     }
@@ -48,14 +49,14 @@ internal class AppSetIdGetter @VisibleForTesting constructor(
     @Synchronized
     @WorkerThread
     override fun getAppSetId(): AppSetId {
-        DebugLogger.info(TAG, "Retrieve app set id. Current: $appSetId")
+        DebugLogger.info(tag, "Retrieve app set id. Current: $appSetId")
         if (appSetId == null) {
             try {
                 countDownLatch = CountDownLatch(1)
                 appSetIdRetriever.retrieveAppSetId(context, appSetIdListener)
                 countDownLatch.await(timeoutSeconds, TimeUnit.SECONDS)
             } catch (ex: Throwable) {
-                DebugLogger.error(TAG, ex)
+                DebugLogger.error(tag, ex)
             }
         }
         return appSetId ?: AppSetId(null, AppSetIdScope.UNKNOWN).also { appSetId = it }

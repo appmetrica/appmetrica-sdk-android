@@ -8,9 +8,9 @@ import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
-private const val TAG = "[ContentProviderFirstLaunchHelper]"
-
 internal object ContentProviderFirstLaunchHelper {
+
+    private const val TAG = "[ContentProviderFirstLaunchHelper]"
 
     @Volatile
     private var countDownLatch: CountDownLatch? = null

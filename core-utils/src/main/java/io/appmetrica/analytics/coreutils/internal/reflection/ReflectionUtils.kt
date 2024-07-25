@@ -2,9 +2,9 @@ package io.appmetrica.analytics.coreutils.internal.reflection
 
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
-private const val TAG = "[ReflectionUtils]"
-
 object ReflectionUtils {
+
+    private const val TAG = "[ReflectionUtils]"
 
     @JvmStatic
     inline fun <reified T> loadAndInstantiateClassWithDefaultConstructor(className: String): T? {

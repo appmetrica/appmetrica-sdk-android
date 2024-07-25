@@ -1,8 +1,8 @@
 package io.appmetrica.analytics.impl.db
 
 import androidx.annotation.WorkerThread
-import io.appmetrica.analytics.coreutils.internal.parsing.optJsonObjectOrNull
-import io.appmetrica.analytics.coreutils.internal.parsing.optJsonObjectOrNullable
+import io.appmetrica.analytics.coreutils.internal.parsing.JsonUtils.optJsonObjectOrNull
+import io.appmetrica.analytics.coreutils.internal.parsing.JsonUtils.optJsonObjectOrNullable
 import io.appmetrica.analytics.impl.utils.JsonHelper
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import org.json.JSONObject

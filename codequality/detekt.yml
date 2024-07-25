@@ -1,0 +1,34 @@
+build:
+  maxIssues: 0
+  excludeCorrectable: false
+
+config:
+  validation: true
+  warningsAsErrors: false
+  checkExhaustiveness: false
+  excludes: ''
+
+processors:
+  active: true
+  exclude:
+    - 'DetektProgressListener'
+
+console-reports:
+  active: true
+  exclude:
+     - 'ProjectStatisticsReport'
+     - 'ComplexityReport'
+     - 'NotificationReport'
+     - 'FindingsReport'
+     - 'FileBasedFindingsReport'
+
+output-reports:
+  active: true
+
+naming:
+  active: true
+  TopLevelPropertyNaming:
+    active: true
+    constantPattern: '(?!TAG\b).+'
+    propertyPattern: '(?!TAG\b).+'
+    privatePropertyPattern: '(?!TAG\b).+'

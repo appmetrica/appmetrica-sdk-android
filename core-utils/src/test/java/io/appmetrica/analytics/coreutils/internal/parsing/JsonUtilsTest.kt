@@ -1,5 +1,17 @@
 package io.appmetrica.analytics.coreutils.internal.parsing
 
+import io.appmetrica.analytics.coreutils.internal.parsing.JsonUtils.isEqualTo
+import io.appmetrica.analytics.coreutils.internal.parsing.JsonUtils.optBooleanOrDefault
+import io.appmetrica.analytics.coreutils.internal.parsing.JsonUtils.optBooleanOrNull
+import io.appmetrica.analytics.coreutils.internal.parsing.JsonUtils.optBooleanOrNullable
+import io.appmetrica.analytics.coreutils.internal.parsing.JsonUtils.optFloatOrDefault
+import io.appmetrica.analytics.coreutils.internal.parsing.JsonUtils.optFloatOrNull
+import io.appmetrica.analytics.coreutils.internal.parsing.JsonUtils.optJsonObjectOrDefault
+import io.appmetrica.analytics.coreutils.internal.parsing.JsonUtils.optJsonObjectOrNull
+import io.appmetrica.analytics.coreutils.internal.parsing.JsonUtils.optLongOrDefault
+import io.appmetrica.analytics.coreutils.internal.parsing.JsonUtils.optLongOrNull
+import io.appmetrica.analytics.coreutils.internal.parsing.JsonUtils.optStringOrNull
+import io.appmetrica.analytics.coreutils.internal.parsing.JsonUtils.optStringOrNullable
 import org.assertj.core.api.Assertions.assertThat
 import org.json.JSONArray
 import org.json.JSONObject

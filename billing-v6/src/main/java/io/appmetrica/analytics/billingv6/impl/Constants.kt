@@ -1,3 +1,3 @@
 package io.appmetrica.analytics.billingv6.impl
 
-const val TAG = "[AppMetricaBillingV6]"
+const val MODULE_TAG = "[AppMetricaBillingV6]"

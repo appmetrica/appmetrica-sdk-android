@@ -19,7 +19,7 @@ object ProductInfoCreator {
             ProductType.SUBS -> createFromSubs(purchasesHistoryRecord, skuDetails, purchase)
             else -> {
                 DebugLogger.info(
-                    TAG,
+                    MODULE_TAG,
                     "createFrom unknown product type=${skuDetails.productType}, " +
                         "productId=${skuDetails.productId}"
                 )

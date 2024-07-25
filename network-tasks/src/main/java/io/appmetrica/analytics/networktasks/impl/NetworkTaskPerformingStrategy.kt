@@ -8,14 +8,14 @@ import io.appmetrica.analytics.network.internal.Request
 import io.appmetrica.analytics.networktasks.internal.NetworkTask
 import java.util.concurrent.TimeUnit
 
-private const val TAG = "[NetworkTaskPerformingStrategy]"
-
 internal class NetworkTaskPerformingStrategy {
+
+    private val tag = "[NetworkTaskPerformingStrategy]"
 
     fun performRequest(task: NetworkTask): Boolean {
         if (task.onPerformRequest()) {
             val url = task.url
-            DebugLogger.info(TAG, "Task %s perform request: %s", task.description(), url)
+            DebugLogger.info(tag, "Task %s perform request: %s", task.description(), url)
             if (url == null || TextUtils.isEmpty(url.trim())) {
                 val errorMessage = "Task ${task.description()} url is `$url`. " +
                     "All hosts = ${task.underlyingTask.fullUrlFormer.allHosts?.toString()}"
@@ -57,7 +57,7 @@ internal class NetworkTaskPerformingStrategy {
             responseDataHolder.responseHeaders = CollectionUtils.convertMapKeysToLowerCase(response.headers)
             if (responseDataHolder.isValidResponse) {
                 DebugLogger.info(
-                    TAG,
+                    tag,
                     "Task response: %d, desc: %s, url: %s, responseHeaders: %s",
                     responseCode,
                     task.description(),
@@ -67,7 +67,7 @@ internal class NetworkTaskPerformingStrategy {
                 responseDataHolder.responseData = response.responseData
             } else {
                 DebugLogger.warning(
-                    TAG,
+                    tag,
                     "Task error response: %d, desc: %s; errorStream: %s; url = %s",
                     responseCode,
                     task.description(),
@@ -81,7 +81,7 @@ internal class NetworkTaskPerformingStrategy {
                 task.onRequestError(response.exception)
             }
         } else {
-            DebugLogger.info(TAG, "Will not perform task %s", task.description())
+            DebugLogger.info(tag, "Will not perform task %s", task.description())
             task.onRequestError(null)
         }
         return false

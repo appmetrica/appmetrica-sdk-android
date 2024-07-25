@@ -13,13 +13,14 @@ import io.appmetrica.analytics.identifiers.impl.Constants
 import io.appmetrica.analytics.identifiers.impl.getProviderUnavailableResult
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
-private const val TAG = "[Huawei OAID] "
 private val HMS_ADV_ID_INTENT =
     Intent("com.uodis.opendevice.OPENIDS_SERVICE").setPackage("com.huawei.hwid")
 
 internal class HuaweiAdvIdGetter @VisibleForTesting internal constructor(
     private val connectionController: AdvIdServiceConnectionController<OpenDeviceIdentifierService>
 ) : AdvIdProvider {
+
+    private val tag = "[Huawei OAID]"
 
     constructor() : this(
         AdvIdServiceConnectionController<OpenDeviceIdentifierService>(
@@ -30,25 +31,25 @@ internal class HuaweiAdvIdGetter @VisibleForTesting internal constructor(
     )
 
     override fun getAdTrackingInfo(context: Context): AdvIdResult {
-        DebugLogger.info(TAG, "getAdTrackingInfo. Connecting to service...")
+        DebugLogger.info(tag, "getAdTrackingInfo. Connecting to service...")
         return try {
             val service: OpenDeviceIdentifierService = connectionController.connect(context)
             val oaid = service.oaid
-            DebugLogger.info(TAG, "id fetched successfully: %s", oaid)
+            DebugLogger.info(tag, "id fetched successfully: %s", oaid)
             val isDisabled = service.isOaidTrackLimited
-            DebugLogger.info(TAG, "mLimitedAdvertisingTracking flag fetched successfully: %b", isDisabled)
+            DebugLogger.info(tag, "mLimitedAdvertisingTracking flag fetched successfully: %b", isDisabled)
             AdvIdResult(IdentifierStatus.OK, AdvIdInfo(Constants.Providers.HUAWEI, oaid, isDisabled))
         } catch (connectionException: ConnectionException) {
             val message = connectionException.message ?: "unknown exception during binding huawei services"
             getProviderUnavailableResult(message)
         } catch (e: Throwable) {
-            DebugLogger.error(TAG, e, "can't fetch adv id.")
+            DebugLogger.error(tag, e, "can't fetch adv id.")
             getProviderUnavailableResult("exception while fetching hoaid: " + e.message)
         } finally {
             try {
                 connectionController.disconnect(context)
             } catch (ex: Throwable) {
-                DebugLogger.error(TAG, ex, "could not unbind from service")
+                DebugLogger.error(tag, ex, "could not unbind from service")
             }
         }
     }

@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.attribution
 
-import io.appmetrica.analytics.coreutils.internal.parsing.isEqualTo
+import io.appmetrica.analytics.coreutils.internal.parsing.JsonUtils.isEqualTo
 import io.appmetrica.analytics.coreutils.internal.time.TimeProvider
 import io.appmetrica.analytics.impl.component.ComponentUnit
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger

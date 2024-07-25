@@ -44,19 +44,17 @@ public class HuaweiAdvIdGetterTest {
     public void constructor() throws Exception {
         mHuaweiAdvIdGetter = new HuaweiAdvIdGetter();
         ObjectPropertyAssertions(mHuaweiAdvIdGetter)
-                .withPrivateFields(true)
-                .checkFieldMatchPredicate(
-                        "connectionController",
-                        new Predicate<AdvIdServiceConnectionController<OpenDeviceIdentifierService>>() {
-                    @Override
-                    public boolean test(AdvIdServiceConnectionController<OpenDeviceIdentifierService> controller) {
-                       Intent intent = controller.getConnection().getIntent();
-                        return "com.uodis.opendevice.OPENIDS_SERVICE".equals(intent.getAction())
-                                && "com.huawei.hwid".equals(intent.getPackage());
-                    }
+            .withPrivateFields(true)
+            .withIgnoredFields("tag")
+            .checkFieldMatchPredicate(
+                "connectionController",
+                (Predicate<AdvIdServiceConnectionController<OpenDeviceIdentifierService>>) controller -> {
+                   Intent intent = controller.getConnection().getIntent();
+                    return "com.uodis.opendevice.OPENIDS_SERVICE".equals(intent.getAction())
+                            && "com.huawei.hwid".equals(intent.getPackage());
                 }
-                )
-                .checkAll();
+            )
+            .checkAll();
     }
 
     @Test

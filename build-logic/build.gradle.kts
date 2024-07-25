@@ -32,6 +32,8 @@ dependencies {
     implementation("com.android.tools.build:gradle:${agpVersion}")
     // https://kotlinlang.org/docs/gradle.html
     implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.21")
+    // https://detekt.dev/docs/gettingstarted/gradle/
+    implementation("io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.23.3")
     // by source
     implementation(libs.appMetricaAarCheck)
     implementation(libs.appMetricaAndroid)

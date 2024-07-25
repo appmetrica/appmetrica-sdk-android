@@ -26,8 +26,6 @@ public final class io.appmetrica.analytics.networktasks.internal.AllHostsExponen
     public void onHostAttemptFinished(boolean)
 }
 
-public final class io.appmetrica.analytics.networktasks.internal.AllHostsExponentialBackoffPolicyKt
-
 public interface io.appmetrica.analytics.networktasks.internal.ArgumentsMerger<I, O> {
     public abstract boolean compareWithOtherArguments([NonNull] I)
     public abstract [NonNull] O mergeFrom([NonNull] I)
@@ -184,8 +182,6 @@ public final class io.appmetrica.analytics.networktasks.internal.DefaultResponse
     public <init>()
     public boolean isResponseValid(int)
 }
-
-public final class io.appmetrica.analytics.networktasks.internal.DefaultResponseValidityCheckerKt
 
 public class io.appmetrica.analytics.networktasks.internal.ExponentialBackoffDataHolder {
     public <init>([NonNull] io.appmetrica.analytics.networktasks.internal.HostRetryInfoProvider)

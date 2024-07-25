@@ -10,8 +10,6 @@ import io.appmetrica.analytics.locationapi.internal.LocationReceiver
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import java.util.concurrent.TimeUnit
 
-private const val TAG = "[PassiveProviderLocationReceiver]"
-
 internal class PassiveProviderLocationReceiver(
     context: Context,
     private val looper: Looper,
@@ -24,6 +22,8 @@ internal class PassiveProviderLocationReceiver(
     LocationManager.PASSIVE_PROVIDER,
 ),
     LocationReceiver {
+
+    private val tag = "[PassiveProviderLocationReceiver]"
 
     private val passiveProviderTimeInterval = TimeUnit.SECONDS.toMillis(1)
     private val passiveProviderDistanceInterval = 0f
@@ -45,15 +45,15 @@ internal class PassiveProviderLocationReceiver(
                     looper
                 )
             }
-            DebugLogger.info(TAG, "Request location updates for passive provider")
+            DebugLogger.info(tag, "Request location updates for passive provider")
         } else {
-            DebugLogger.info(TAG, "Permission resolution strategy forbid location updates")
+            DebugLogger.info(tag, "Permission resolution strategy forbid location updates")
         }
     }
 
     @SuppressWarnings("MissingPermission")
     override fun stopLocationUpdates() {
-        DebugLogger.info(TAG, "Stop location updates for passive provider")
+        DebugLogger.info(tag, "Stop location updates for passive provider")
         SystemServiceUtils.accessSystemServiceByNameSafely<LocationManager, Unit>(
             context,
             Context.LOCATION_SERVICE,

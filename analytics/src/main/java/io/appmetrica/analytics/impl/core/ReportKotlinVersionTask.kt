@@ -6,9 +6,9 @@ import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade
 import java.util.concurrent.TimeUnit
 
-private const val TAG = "[ReportKotlinVersionTask]"
-
 class ReportKotlinVersionTask : Runnable {
+
+    private val tag = "[ReportKotlinVersionTask]"
 
     override fun run() {
         val timePassedChecker = TimePassedChecker()
@@ -17,7 +17,7 @@ class ReportKotlinVersionTask : Runnable {
         val shouldSend = timePassedChecker.didTimePassMillis(
             preferences.lastKotlinVersionSendTime(),
             TimeUnit.DAYS.toMillis(1),
-            TAG
+            tag
         )
         if (shouldSend) {
             val version = KotlinVersion.CURRENT

@@ -2149,6 +2149,7 @@
   "codequality/checkstyle-imports.xml":"mobile/metrika/android/appmetrica/appmetrica-sdk/codequality/checkstyle-imports.xml",
   "codequality/checkstyle-suppressions.xml":"mobile/metrika/android/appmetrica/appmetrica-sdk/codequality/checkstyle-suppressions.xml",
   "codequality/checkstyle.xml":"mobile/metrika/android/appmetrica/appmetrica-sdk/codequality/checkstyle.xml",
+  "codequality/detekt.yml":"mobile/metrika/android/appmetrica/appmetrica-sdk/codequality/detekt.yml",
   "codequality/pmd.xml":"mobile/metrika/android/appmetrica/appmetrica-sdk/codequality/pmd.xml",
   "common-logger/README.MD":"mobile/metrika/android/appmetrica/appmetrica-sdk/common-logger/README.MD",
   "common-logger/api/release.api":"mobile/metrika/android/appmetrica/appmetrica-sdk/common-logger/api/release.api",

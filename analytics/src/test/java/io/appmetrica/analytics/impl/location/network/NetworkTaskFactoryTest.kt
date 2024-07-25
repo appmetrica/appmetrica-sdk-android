@@ -100,6 +100,7 @@ internal class NetworkTaskFactoryTest : CommonTest() {
             .checkFieldRecursively<ExponentialBackoffPolicy>("exponentialBackoffPolicy") {
                 it
                     .withPrivateFields(true)
+                    .withIgnoredFields("tag")
                     .checkField(
                         "exponentialBackoffDataHolder",
                         exponentialBackoffDataHolderMockedRule.constructionMock.constructed()[0]
@@ -167,6 +168,7 @@ internal class NetworkTaskFactoryTest : CommonTest() {
                 .checkFieldRecursively<ExponentialBackoffPolicy>("exponentialBackoffPolicy") { policyAssertions ->
                     policyAssertions
                         .withPrivateFields(true)
+                        .withIgnoredFields("tag")
                         .checkField(
                             "exponentialBackoffDataHolder",
                             exponentialBackoffDataHolderMockedRule.constructionMock.constructed()[0]

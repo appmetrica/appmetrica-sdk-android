@@ -5,9 +5,9 @@ import io.appmetrica.analytics.impl.DistributionSource
 import io.appmetrica.analytics.impl.Utils
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
-private const val TAG = "[ClidsPriorityProvider]"
-
 internal class ClidsPriorityProvider : DistributionPriorityProvider<ClidsInfo.Candidate>() {
+
+    private val tag = "[ClidsPriorityProvider]"
 
     override fun isNewDataMoreImportant(newData: ClidsInfo.Candidate, oldData: ClidsInfo.Candidate): Boolean {
         return if (Utils.isNullOrEmpty(oldData.clids)) {
@@ -20,7 +20,7 @@ internal class ClidsPriorityProvider : DistributionPriorityProvider<ClidsInfo.Ca
             priorities[newData.source] > priorities[oldData.source]
         }.also {
             DebugLogger.info(
-                TAG,
+                tag,
                 "Choosing the most important data from new data: $newData and old data: $oldData, result: $it"
             )
         }

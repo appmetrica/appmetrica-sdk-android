@@ -9,8 +9,8 @@ import com.android.billingclient.api.PurchaseHistoryRecord
 import com.android.billingclient.api.PurchasesResponseListener
 import io.appmetrica.analytics.billinginterface.internal.library.UtilsProvider
 import io.appmetrica.analytics.billingv6.impl.BillingUtils
+import io.appmetrica.analytics.billingv6.impl.MODULE_TAG
 import io.appmetrica.analytics.billingv6.impl.ProductInfoCreator
-import io.appmetrica.analytics.billingv6.impl.TAG
 import io.appmetrica.analytics.coreutils.internal.executors.SafeRunnable
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
@@ -41,7 +41,7 @@ internal class PurchaseResponseListenerImpl(
         purchases: List<Purchase>
     ) {
         DebugLogger.info(
-            TAG,
+            MODULE_TAG,
             "onQueryPurchasesResponse type=$type, " +
                 "result=${BillingUtils.toString(billingResult)}, " +
                 "list=$purchases"
@@ -56,7 +56,7 @@ internal class PurchaseResponseListenerImpl(
                 ProductInfoCreator.createFrom(purchasesHistoryRecord, record, purchasesMap[record.productId])
             }
         }
-        DebugLogger.info(TAG, "Product info to send $productInfos")
+        DebugLogger.info(MODULE_TAG, "Product info to send $productInfos")
         utilsProvider.billingInfoSender.sendInfo(productInfos)
         billingInfoSentListener()
     }

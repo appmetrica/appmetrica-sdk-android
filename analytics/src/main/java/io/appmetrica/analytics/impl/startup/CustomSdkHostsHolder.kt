@@ -6,9 +6,9 @@ import io.appmetrica.analytics.impl.utils.JsonHelper
 import io.appmetrica.analytics.internal.IdentifiersResult
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
-private const val TAG = "[CustomSdkHostsHolder]"
-
 internal class CustomSdkHostsHolder {
+
+    private val tag = "[CustomSdkHostsHolder]"
 
     private val startupParamItemStatusAdapter = StartupParamItemAdapter()
     private var listMap: Map<String, List<String>> = emptyMap()
@@ -19,7 +19,7 @@ internal class CustomSdkHostsHolder {
 
     @Synchronized
     fun update(result: IdentifiersResult) {
-        DebugLogger.info(TAG, "Update with $result")
+        DebugLogger.info(tag, "Update with $result")
         if (commonResult?.id.isNullOrEmpty() || !result.id.isNullOrEmpty()) {
             commonResult = result
             resultMap = JsonHelper.customSdkHostsFromString(result.id)?.mapValues {
@@ -51,6 +51,6 @@ internal class CustomSdkHostsHolder {
                     commonResult?.errorExplanation
                 )
             )
-        DebugLogger.info(TAG, "Fill map with identifiers: $identifiers, result: $mapWithRequestedIdentifiers")
+        DebugLogger.info(tag, "Fill map with identifiers: $identifiers, result: $mapWithRequestedIdentifiers")
     }
 }

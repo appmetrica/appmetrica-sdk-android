@@ -6,9 +6,9 @@ import io.appmetrica.analytics.coreutils.internal.time.TimeProvider
 import io.appmetrica.analytics.impl.ClidsInfoStorage
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
-private const val TAG = "[StartupRequiredUtils]"
-
 internal object StartupRequiredUtils {
+
+    private const val TAG = "[StartupRequiredUtils]"
 
     private val STARTUP_TRIGGER_IDENTIFIERS = setOf(
         Constants.StartupParamsCallbackKeys.CLIDS,

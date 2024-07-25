@@ -258,6 +258,8 @@ public final class io.appmetrica.analytics.coreutils.internal.network.UserAgent 
 }
 
 public final class io.appmetrica.analytics.coreutils.internal.parsing.JsonUtils {
+    public static final [NonNull] io.appmetrica.analytics.coreutils.internal.parsing.JsonUtils INSTANCE
+
     public static final boolean isEqualTo([NonNull] org.json.JSONArray, [NonNull] org.json.JSONArray)
     public static final boolean isEqualTo([NonNull] org.json.JSONObject, [NonNull] org.json.JSONObject)
     public static final boolean optBooleanOrDefault([Nullable] org.json.JSONObject, [NonNull] String, boolean)
@@ -336,8 +338,6 @@ public final class io.appmetrica.analytics.coreutils.internal.reflection.Reflect
     public static final <T> [Nullable] T loadAndInstantiateClassWithDefaultConstructor([NonNull] String, [NonNull] Class<T>)
     public static final <T> [Nullable] Class<T> loadClass([NonNull] String, [NonNull] Class<T>)
 }
-
-public final class io.appmetrica.analytics.coreutils.internal.reflection.ReflectionUtilsKt
 
 public class io.appmetrica.analytics.coreutils.internal.services.FirstExecutionConditionServiceImpl implementation io.appmetrica.analytics.coreapi.internal.servicecomponents.FirstExecutionConditionService {
     public <init>([NonNull] io.appmetrica.analytics.coreutils.internal.services.UtilityServiceProvider)

@@ -11,8 +11,8 @@ import io.appmetrica.analytics.billinginterface.internal.BillingInfo
 import io.appmetrica.analytics.billinginterface.internal.config.BillingConfig
 import io.appmetrica.analytics.billinginterface.internal.library.UtilsProvider
 import io.appmetrica.analytics.billingv6.impl.BillingUtils
+import io.appmetrica.analytics.billingv6.impl.MODULE_TAG
 import io.appmetrica.analytics.billingv6.impl.ProductTypeParser
-import io.appmetrica.analytics.billingv6.impl.TAG
 import io.appmetrica.analytics.billingv6.impl.storage.StorageUpdater
 import io.appmetrica.analytics.coreutils.internal.executors.SafeRunnable
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
@@ -44,7 +44,7 @@ internal class PurchaseHistoryResponseListenerImpl(
         purchaseHistoryRecords: List<PurchaseHistoryRecord>?
     ) {
         DebugLogger.info(
-            TAG,
+            MODULE_TAG,
             "onPurchaseHistoryResponse type=$type, " +
                 "result=${BillingUtils.toString(billingResult)}, " +
                 "list=$purchaseHistoryRecords"
@@ -83,7 +83,7 @@ internal class PurchaseHistoryResponseListenerImpl(
                 result[info.productId] = info
             }
         }
-        DebugLogger.info(TAG, "Billing info from history $result")
+        DebugLogger.info(MODULE_TAG, "Billing info from history $result")
         return result
     }
 

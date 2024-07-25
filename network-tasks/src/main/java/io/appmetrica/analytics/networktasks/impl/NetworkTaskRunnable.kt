@@ -5,13 +5,13 @@ import io.appmetrica.analytics.coreapi.internal.executors.InterruptionSafeThread
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import io.appmetrica.analytics.networktasks.internal.NetworkTask
 
-private const val TAG = "[NetworkTaskRunnable]"
-
 internal class NetworkTaskRunnable @VisibleForTesting constructor(
     private val networkTask: NetworkTask,
     private val rootThreadStateSource: InterruptionSafeThread,
     private val taskPerformingStrategy: NetworkTaskPerformingStrategy
 ) : Runnable {
+
+    private val tag = "[NetworkTaskRunnable]"
 
     class Provider {
 
@@ -42,7 +42,7 @@ internal class NetworkTaskRunnable @VisibleForTesting constructor(
                 var countRequest = 0
                 shouldExecuteTask = networkTask.onCreateNetworkTask()
                 if (!shouldExecuteTask) {
-                    DebugLogger.info(TAG, "Skipping task, desc: ${networkTask.description()}")
+                    DebugLogger.info(tag, "Skipping task, desc: ${networkTask.description()}")
                 }
                 var requestSuccessful: Boolean? = null
                 while (
@@ -51,7 +51,7 @@ internal class NetworkTaskRunnable @VisibleForTesting constructor(
                 ) {
                     ++countRequest
                     DebugLogger.info(
-                        TAG,
+                        tag,
                         "Executing task .. attempt: $countRequest, desc: ${networkTask.description()}",
                     )
                     requestSuccessful = taskPerformingStrategy.performRequest(networkTask)
@@ -71,7 +71,7 @@ internal class NetworkTaskRunnable @VisibleForTesting constructor(
 
     private fun handleIncompatibleNetworkType() {
         DebugLogger.info(
-            TAG,
+            tag,
             "Task: ${networkTask.description()} didn't finished because of incompatible network type",
         )
         networkTask.onShouldNotExecute()

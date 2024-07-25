@@ -1,6 +1,8 @@
 package io.appmetrica.analytics.gradle.codequality
 
 import com.android.build.gradle.LibraryExtension
+import io.gitlab.arturbosch.detekt.DetektPlugin
+import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Task
@@ -32,13 +34,15 @@ class CodeQualityPlugin : Plugin<Project> {
 
     override fun apply(project: Project) {
         project.apply<CheckstylePlugin>() // id("checkstyle")
+        project.apply<DetektPlugin>() // id("io.gitlab.arturbosch.detekt")
 
         val extension = project.extensions.create<CodeQualityExtension>("codequality")
         extension.configDir.convention(project.rootProject.layout.projectDirectory.dir("codequality"))
 
         val codequalityTasks = mutableListOf(
             configureCheckstyleAndGetRootTask(project, extension),
-            configureLintTaskAndGetRootTask(project)
+            configureLintTaskAndGetRootTask(project),
+            configureDetektAndGetRootTask(project, extension),
         )
         project.plugins.withType<KotlinBasePluginWrapper> {
             codequalityTasks += configureKtLintTaskAndGetRootTask(project)
@@ -47,6 +51,20 @@ class CodeQualityPlugin : Plugin<Project> {
         project.tasks.named("check").configure {
             dependsOn(codequalityTasks)
         }
+    }
+
+    private fun configureDetektAndGetRootTask(
+        project: Project,
+        extension: CodeQualityExtension
+    ): TaskProvider<out Task> {
+        project.extensions.getByType(DetektExtension::class.java).apply {
+            this.buildUponDefaultConfig = false
+            this.config.setFrom(
+                extension.configDir.file("detekt.yml")
+            )
+        }
+
+        return project.tasks.named("detekt")
     }
 
     private fun configureCheckstyleAndGetRootTask(

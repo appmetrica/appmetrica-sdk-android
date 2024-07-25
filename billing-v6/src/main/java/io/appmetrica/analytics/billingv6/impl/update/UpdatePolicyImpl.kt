@@ -6,7 +6,7 @@ import io.appmetrica.analytics.billinginterface.internal.ProductType
 import io.appmetrica.analytics.billinginterface.internal.config.BillingConfig
 import io.appmetrica.analytics.billinginterface.internal.storage.BillingInfoManager
 import io.appmetrica.analytics.billinginterface.internal.update.UpdatePolicy
-import io.appmetrica.analytics.billingv6.impl.TAG
+import io.appmetrica.analytics.billingv6.impl.MODULE_TAG
 import io.appmetrica.analytics.coreutils.internal.time.SystemTimeProvider
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import java.util.concurrent.TimeUnit
@@ -24,7 +24,7 @@ class UpdatePolicyImpl(
         val productsToUpdate = history.filterValues {
             shouldUpdateBillingInfo(config, it, storage)
         }
-        DebugLogger.info(TAG, "Products ${productsToUpdate.values.map { it.productId }} should be updated")
+        DebugLogger.info(MODULE_TAG, "Products ${productsToUpdate.values.map { it.productId }} should be updated")
         return productsToUpdate
     }
 
@@ -35,15 +35,15 @@ class UpdatePolicyImpl(
         storage: BillingInfoManager
     ): Boolean {
         val now = systemTimeProvider.currentTimeMillis()
-        DebugLogger.info(TAG, "Product from history $historyEntry now=$now $config")
+        DebugLogger.info(MODULE_TAG, "Product from history $historyEntry now=$now $config")
         if (historyEntry.type == ProductType.INAPP && !storage.isFirstInappCheckOccurred) {
             return now - historyEntry.purchaseTime <=
                 TimeUnit.SECONDS.toMillis(config.firstCollectingInappMaxAgeSeconds.toLong())
         }
         val storageEntry = storage[historyEntry.productId] ?: return true
-        DebugLogger.info(TAG, "Found product in storage $storageEntry")
+        DebugLogger.info(MODULE_TAG, "Found product in storage $storageEntry")
         if (storageEntry.purchaseToken != historyEntry.purchaseToken) {
-            DebugLogger.info(TAG, "Found product in storage has same purchaseToken")
+            DebugLogger.info(MODULE_TAG, "Found product in storage has same purchaseToken")
             return true
         }
         return if (historyEntry.type == ProductType.SUBS) {

@@ -48,19 +48,17 @@ public class YandexAdvIdGetterTest {
     public void constuctor() throws Exception {
         yandexAdvIdGetter = new YandexAdvIdGetter();
         ObjectPropertyAssertions(yandexAdvIdGetter)
-                .withPrivateFields(true)
-                .checkFieldMatchPredicate(
-                        "connectionController",
-                        new Predicate<AdvIdServiceConnectionController<YandexAdvIdInterface>>() {
-                            @Override
-                            public boolean test(AdvIdServiceConnectionController<YandexAdvIdInterface> controller) {
-                                Intent intent = controller.getConnection().getIntent();
-                                return "com.yandex.android.advid.IDENTIFIER_SERVICE".equals(intent.getAction())
-                                        && "com.yandex.android.advid".equals(intent.getPackage());
-                            }
-                        }
-                )
-                .checkAll();
+            .withPrivateFields(true)
+            .withIgnoredFields("tag")
+            .checkFieldMatchPredicate(
+                "connectionController",
+                (Predicate<AdvIdServiceConnectionController<YandexAdvIdInterface>>) controller -> {
+                    Intent intent = controller.getConnection().getIntent();
+                    return "com.yandex.android.advid.IDENTIFIER_SERVICE".equals(intent.getAction())
+                        && "com.yandex.android.advid".equals(intent.getPackage());
+                }
+            )
+            .checkAll();
     }
 
     @Test

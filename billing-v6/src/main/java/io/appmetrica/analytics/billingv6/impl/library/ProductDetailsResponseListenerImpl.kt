@@ -10,7 +10,7 @@ import com.android.billingclient.api.PurchaseHistoryRecord
 import com.android.billingclient.api.QueryPurchasesParams
 import io.appmetrica.analytics.billinginterface.internal.library.UtilsProvider
 import io.appmetrica.analytics.billingv6.impl.BillingUtils
-import io.appmetrica.analytics.billingv6.impl.TAG
+import io.appmetrica.analytics.billingv6.impl.MODULE_TAG
 import io.appmetrica.analytics.coreutils.internal.executors.SafeRunnable
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
@@ -42,7 +42,7 @@ internal class ProductDetailsResponseListenerImpl(
         productDetails: List<ProductDetails>
     ) {
         DebugLogger.info(
-            TAG,
+            MODULE_TAG,
             "onSkuDetailsResponse type=$type, " +
                 "result=${BillingUtils.toString(billingResult)}, " +
                 "list=$productDetails"

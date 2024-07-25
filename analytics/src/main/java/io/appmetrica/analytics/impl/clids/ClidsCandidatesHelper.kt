@@ -4,9 +4,9 @@ import io.appmetrica.analytics.impl.DistributionSource
 import io.appmetrica.analytics.impl.UpdatedCandidatesProvider
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
-private const val TAG = "[ClidsCandidatesHelper]"
-
 internal class ClidsCandidatesHelper : UpdatedCandidatesProvider<ClidsInfo.Candidate, ClidsInfo.Candidate> {
+
+    private val tag = "[ClidsCandidatesHelper]"
 
     override fun invoke(
         oldCandidates: List<ClidsInfo.Candidate>,
@@ -22,7 +22,7 @@ internal class ClidsCandidatesHelper : UpdatedCandidatesProvider<ClidsInfo.Candi
             oldCandidates + newCandidate
         }.also {
             DebugLogger.info(
-                TAG,
+                tag,
                 "Get updated candidates from $oldCandidates  and $newCandidate. Result is $it"
             )
         }

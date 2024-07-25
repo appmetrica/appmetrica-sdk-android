@@ -9,11 +9,12 @@ import io.appmetrica.analytics.impl.SdkUtils
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import org.json.JSONObject
 
-private const val TAG = "[PreloadInfoDataParser]"
 const val KEY_TRACKING_ID = "tracking_id"
 const val KEY_ADDITIONAL_PARAMS = "additional_params"
 
 internal class PreloadInfoDataParser : ContentProviderDataParser<PreloadInfoState> {
+
+    private val tag = "[PreloadInfoDataParser]"
 
     override fun invoke(values: ContentValues): PreloadInfoState? {
         val trackingId = values.getAsString(KEY_TRACKING_ID)
@@ -48,7 +49,7 @@ internal class PreloadInfoDataParser : ContentProviderDataParser<PreloadInfoStat
                 DistributionSource.RETAIL
             )
         } catch (ex: Throwable) {
-            DebugLogger.error(TAG, ex)
+            DebugLogger.error(tag, ex)
             SdkUtils.logAttributionE(ex, "Could not parse additional parameters")
         }
         return null

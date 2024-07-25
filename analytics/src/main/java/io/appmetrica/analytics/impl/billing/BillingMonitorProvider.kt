@@ -9,9 +9,9 @@ import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import java.util.concurrent.Executor
 import io.appmetrica.analytics.billingv6.internal.BillingLibraryMonitor as BillingV6LibraryMonitor
 
-private const val TAG = "[BillingMonitorProvider]"
-
 internal class BillingMonitorProvider {
+
+    private val tag = "[BillingMonitorProvider]"
 
     operator fun get(
         context: Context,
@@ -23,7 +23,7 @@ internal class BillingMonitorProvider {
     ): BillingMonitor {
         return when (type) {
             BillingType.LIBRARY_V6 -> {
-                DebugLogger.info(TAG, "Tracking purchases using Billing Library 6")
+                DebugLogger.info(tag, "Tracking purchases using Billing Library 6")
                 BillingV6LibraryMonitor(
                     context,
                     workerExecutor,
@@ -33,7 +33,7 @@ internal class BillingMonitorProvider {
                 )
             }
             else -> {
-                DebugLogger.info(TAG, "Do not track purchases")
+                DebugLogger.info(tag, "Do not track purchases")
                 DummyBillingMonitor()
             }
         }

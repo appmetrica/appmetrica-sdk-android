@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.coreutils.internal.parsing
 
 import io.appmetrica.analytics.coreutils.internal.WrapUtils
+import io.appmetrica.analytics.coreutils.internal.parsing.JsonUtils.optLongOrNull
 import org.json.JSONObject
 import java.util.concurrent.TimeUnit
 

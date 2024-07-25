@@ -3,7 +3,7 @@ package io.appmetrica.analytics.billingv6.impl.library
 import androidx.annotation.WorkerThread
 import com.android.billingclient.api.BillingClient
 import io.appmetrica.analytics.billinginterface.internal.library.UtilsProvider
-import io.appmetrica.analytics.billingv6.impl.TAG
+import io.appmetrica.analytics.billingv6.impl.MODULE_TAG
 import io.appmetrica.analytics.coreutils.internal.executors.SafeRunnable
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
@@ -28,14 +28,14 @@ internal class BillingLibraryConnectionHolder(
     @WorkerThread
     private fun endConnectionIfNeeded() {
         if (waitingListeners.size == 0) {
-            DebugLogger.info(TAG, "endConnection")
+            DebugLogger.info(MODULE_TAG, "endConnection")
             utilsProvider.uiExecutor.execute(object : SafeRunnable() {
                 override fun runSafety() {
                     billingClient.endConnection()
                 }
             })
         } else {
-            DebugLogger.info(TAG, "Listeners remaining: %d", waitingListeners.size)
+            DebugLogger.info(MODULE_TAG, "Listeners remaining: %d", waitingListeners.size)
         }
     }
 }

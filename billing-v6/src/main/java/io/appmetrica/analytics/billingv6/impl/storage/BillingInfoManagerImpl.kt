@@ -4,7 +4,7 @@ import androidx.annotation.WorkerThread
 import io.appmetrica.analytics.billinginterface.internal.BillingInfo
 import io.appmetrica.analytics.billinginterface.internal.storage.BillingInfoManager
 import io.appmetrica.analytics.billinginterface.internal.storage.BillingInfoStorage
-import io.appmetrica.analytics.billingv6.impl.TAG
+import io.appmetrica.analytics.billingv6.impl.MODULE_TAG
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
 class BillingInfoManagerImpl(
@@ -20,7 +20,7 @@ class BillingInfoManagerImpl(
         for (billingInfo in history.values) {
             billingInfos[billingInfo.productId] = billingInfo
         }
-        DebugLogger.info(TAG, "updating $billingInfos")
+        DebugLogger.info(MODULE_TAG, "updating $billingInfos")
         storage.saveInfo(billingInfos.values.toList(), firstInappCheckOccurred)
     }
 

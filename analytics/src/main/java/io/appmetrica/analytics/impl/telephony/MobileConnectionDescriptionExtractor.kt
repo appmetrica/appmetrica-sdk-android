@@ -13,11 +13,11 @@ import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import java.util.concurrent.TimeUnit
 
-private const val TAG = "[MobileConnectionDescriptionExtractor]"
-
 internal class MobileConnectionDescriptionExtractor(
     private val context: Context
 ) : TelephonyInfoExtractor<MobileConnectionDescription> {
+
+    private val tag = "[MobileConnectionDescriptionExtractor]"
 
     private val networkTypePermissionStrategy = if (AndroidUtils.isApiAchieved(Build.VERSION_CODES.Q)) {
         SinglePermissionStrategy(
@@ -45,7 +45,7 @@ internal class MobileConnectionDescriptionExtractor(
             data = extractInternal()
             cachedData.data = data
         }
-        DebugLogger.info(TAG, "Extract returns $data")
+        DebugLogger.info(tag, "Extract returns $data")
         return data
     }
 

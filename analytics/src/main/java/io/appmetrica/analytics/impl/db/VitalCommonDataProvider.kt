@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.db
 
 import android.util.Base64
 import androidx.annotation.WorkerThread
-import io.appmetrica.analytics.coreutils.internal.parsing.optStringOrNull
+import io.appmetrica.analytics.coreutils.internal.parsing.JsonUtils.optStringOrNull
 import io.appmetrica.analytics.impl.referrer.common.ReferrerInfo
 import io.appmetrica.analytics.impl.utils.JsonHelper
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
