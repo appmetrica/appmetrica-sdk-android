@@ -14,6 +14,7 @@ import java.util.Map;
 /**
  * Contains configuration of analytic processing in {@link IReporter}.
  * Configuration created by {@link ReporterConfig.Builder}.
+ * Default values can be found in {@link AppMetricaDefaultValues}.
  */
 public class ReporterConfig {
 
@@ -27,6 +28,7 @@ public class ReporterConfig {
 
     /**
      * Duration of AppMetrica foreground session timeout.
+     * Default value is {@value AppMetricaDefaultValues#DEFAULT_SESSION_TIMEOUT_SECONDS}.
      *
      * @see Builder#withSessionTimeout(int)
      */
@@ -35,6 +37,7 @@ public class ReporterConfig {
 
     /**
      * Indicates whether data should be sent to the AppMetrica server.
+     * Default value is {@value AppMetricaDefaultValues#DEFAULT_REPORTER_DATA_SENDING_ENABLED}.
      *
      * @see Builder#withDataSendingEnabled(boolean)
      */
@@ -53,9 +56,9 @@ public class ReporterConfig {
      */
     @Nullable
     public final Integer maxReportsInDatabaseCount;
+
     /**
      * The ID of the user profile.
-     *
      * <b>NOTE:</b> The string value can contain up to 200 characters.
      *
      * @see Builder#withUserProfileID(String)
@@ -64,9 +67,7 @@ public class ReporterConfig {
     public final String userProfileID;
 
     /**
-     * <p>Indicates whether logging for appropriate {@link IReporter} enabled</p>
-     *
-     * <p>{@code true} if enabled, {@code false} if not</p>
+     * Indicates whether logging for appropriate {@link IReporter} enabled.
      *
      * @see Builder#withLogs()
      */
@@ -74,7 +75,8 @@ public class ReporterConfig {
     public final Boolean logs;
 
     /**
-     * Timeout for sending reports
+     * Timeout for sending reports.
+     * Default value is {@value AppMetricaDefaultValues#DEFAULT_DISPATCH_PERIOD_SECONDS}.
      *
      * @see Builder#withDispatchPeriodSeconds(int)
      */
@@ -82,7 +84,8 @@ public class ReporterConfig {
     public final Integer dispatchPeriodSeconds;
 
     /**
-     * Maximum buffer size for reports
+     * Maximum buffer size for reports.
+     * Default value is {@value AppMetricaDefaultValues#DEFAULT_MAX_REPORTS_COUNT}.
      *
      * @see Builder#withMaxReportsCount(int)
      */
@@ -90,14 +93,14 @@ public class ReporterConfig {
     public final Integer maxReportsCount;
 
     /**
-     * Application environment to be set after initialization
+     * Application environment to be set after initialization.
      *
      * @see Builder#withAppEnvironmentValue(String, String)
      */
     public final Map<String, String> appEnvironment;
 
     /**
-     * Additional configs
+     * Additional configs.
      *
      * @see Builder#withAdditionalConfig(String, Object)
      */
@@ -131,16 +134,13 @@ public class ReporterConfig {
     }
 
     /**
-     * Creates the new instance of {@link Builder}
+     * Creates the new instance of {@link Builder}.
      *
-     * @param apiKey API_KEY - unique identifier of app in AppMetrica.
-     *
-     * @see <a href="https://appmetrica.io/docs/mobile-sdk-dg/android/about/android-initialize.html">
-     * AppMetrica SDK documentation </a>
-     *
+     * @param apiKey API_KEY - unique identifier of app in AppMetrica
      * @return builder of {@link ReporterConfig}
-     *
-     * @throws IllegalArgumentException if {@code apiKey} is null, empty or has invalid format.
+     * @throws IllegalArgumentException if {@code apiKey} is null, empty or has invalid format
+     * @see <a href="https://appmetrica.io/docs/mobile-sdk-dg/android/about/android-initialize.html">
+     * AppMetrica SDK documentation</a>
      */
     @NonNull
     public static Builder newConfigBuilder(@NonNull String apiKey) {
@@ -202,9 +202,9 @@ public class ReporterConfig {
          * after 2 minutes of inactivity with the application,
          * then a new session will be created,
          * otherwise the session will continue.
-         * @param sessionTimeout Timeout in seconds.
          *
-         * @return the same {@link Builder} object.
+         * @param sessionTimeout Timeout in seconds
+         * @return the same {@link Builder} object
          */
         @NonNull
         public Builder withSessionTimeout(int sessionTimeout) {
@@ -216,7 +216,7 @@ public class ReporterConfig {
          * Enable logging for appropriate {@link IReporter}.
          * Should be called before {@link AppMetrica#getReporter(Context, String)}.
          *
-         * @return the same {@link Builder} object.
+         * @return the same {@link Builder} object
          */
         @NonNull
         public Builder withLogs() {
@@ -225,13 +225,13 @@ public class ReporterConfig {
         }
 
         /**
-         * Enables/disables data sending to the AppMetrica server. By default, the sending is enabled.
+         * Enables/disables data sending to the AppMetrica server.
          *
          * <p><b>NOTE:</b> Disabling this option doesn't affect data sending from the main apiKey and other
          * reporters.
          *
-         * @param enabled {@code true} to allow AppMetrica sending data, otherwise {@code false}.
-         * @return the same {@link Builder} object.
+         * @param enabled {@code true} to allow AppMetrica sending data, otherwise {@code false}
+         * @return the same {@link Builder} object
          */
         @NonNull
         public Builder withDataSendingEnabled(boolean enabled) {
@@ -240,19 +240,16 @@ public class ReporterConfig {
         }
 
         /**
-         *
          * Sets maximum number of reports to store in database.
          * If this number is exceeded, some reports will be removed.
-         * <p> <b>NOTE:</b>
-         * Default value is {@value AppMetricaDefaultValues#DEFAULT_MAX_REPORTS_IN_DATABASE_COUNT}
+         * Default value is {@value AppMetricaDefaultValues#DEFAULT_MAX_REPORTS_IN_DATABASE_COUNT}.
+         * This value must be in range
+         * [{@value AppMetricaDefaultValues#DEFAULT_MAX_REPORTS_COUNT_LOWER_BOUND};
+         * {@value AppMetricaDefaultValues#DEFAULT_MAX_REPORTS_COUNT_UPPER_BOUND}].
+         * If not, closest possible value will be used.
          *
-         * @param maxReportsInDatabaseCount Max number of reports to store in database.
-         *                                  Must be in range
-         *                                  [{@value AppMetricaDefaultValues#DEFAULT_MAX_REPORTS_COUNT_LOWER_BOUND};
-         *                                  {@value AppMetricaDefaultValues#DEFAULT_MAX_REPORTS_COUNT_UPPER_BOUND}].
-         *                                  If not, closest possible value will be used.
-         *
-         * @return the same {@link Builder} object.
+         * @param maxReportsInDatabaseCount Max number of reports to store in database
+         * @return the same {@link Builder} object
          */
         @NonNull
         public Builder withMaxReportsInDatabaseCount(int maxReportsInDatabaseCount) {
@@ -262,10 +259,9 @@ public class ReporterConfig {
 
         /**
          * Sets the ID of the user profile.
-         *
          * <b>NOTE:</b> The string value can contain up to 200 characters.
          *
-         * @param userProfileID The custom user profile ID.
+         * @param userProfileID The custom user profile ID
          * @return the same {@link Builder} object
          * @see AppMetrica#setUserProfileID(String)
          */
@@ -277,17 +273,14 @@ public class ReporterConfig {
 
         /**
          * Sets maximum buffer size for reports.
-         * <p> <b>NOTE:</b> Default value is
-         * {@value AppMetricaDefaultValues#DEFAULT_MAX_REPORTS_COUNT}.
+         * Default value is {@value AppMetricaDefaultValues#DEFAULT_MAX_REPORTS_COUNT}.
          * If you set a non-positive value,
          * then automatic sending will be disabled
          * for the situation when the events buffer is full.
          *
-         * @param maxReportsCount Max number of items/reports to automatically send reports.
-         *
+         * @param maxReportsCount Max number of items/reports to automatically send reports
          * @see Builder#withDispatchPeriodSeconds(int)
-         *
-         * @return the same {@link Builder} object.
+         * @return the same {@link Builder} object
          */
         @NonNull
         public Builder withMaxReportsCount(int maxReportsCount) {
@@ -297,16 +290,13 @@ public class ReporterConfig {
 
         /**
          * Timeout of events sending if the number of events is less than {@link ReporterConfig#maxReportsCount}.
-         * <p> <b>NOTE:</b> Default value is
-         * {@value AppMetricaDefaultValues#DEFAULT_DISPATCH_PERIOD_SECONDS}.
+         * Default value is {@value AppMetricaDefaultValues#DEFAULT_DISPATCH_PERIOD_SECONDS}.
          * If you set a non-positive value,
          * then automatic sending by timer will be disabled.
          *
-         * @param dispatchPeriodSeconds Timeout in seconds to automatically send reports.
-         *
+         * @param dispatchPeriodSeconds Timeout in seconds to automatically send reports
          * @see Builder#withMaxReportsCount(int)
-         *
-         * @return the same {@link Builder} object.
+         * @return the same {@link Builder} object
          */
         @NonNull
         public Builder withDispatchPeriodSeconds(int dispatchPeriodSeconds) {
@@ -322,8 +312,9 @@ public class ReporterConfig {
          * Pairs added to config builder, will be set right after metrica initialization.
          * <p> <b>WARNING:</b> Application's environment is a global permanent state and
          * can't be changed too often. For frequently changed parameters use extended reportMessage methods.
-         * @param key the environment key.
-         * @param value the environment value. To remove pair from environment pass {@code null} value.
+         *
+         * @param key the environment key
+         * @param value the environment value. To remove pair from environment pass {@code null} value
          * @return the same object
          */
         @NonNull
@@ -333,10 +324,11 @@ public class ReporterConfig {
         }
 
         /**
-         * Sets key - config data
-         * @param key the config key.
-         * @param config the config value.
-         * @return the same {@link Builder} object.
+         * Sets key - config data.
+         *
+         * @param key the config key
+         * @param config the config value
+         * @return the same {@link Builder} object
          */
         @NonNull
         public Builder withAdditionalConfig(
@@ -348,7 +340,7 @@ public class ReporterConfig {
         }
 
         /**
-         * Creates instance of {@link ReporterConfig}
+         * Creates instance of {@link ReporterConfig}.
          *
          * @return {@link ReporterConfig} object
          */

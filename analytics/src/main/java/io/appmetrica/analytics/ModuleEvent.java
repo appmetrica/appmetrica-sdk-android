@@ -149,7 +149,8 @@ public final class ModuleEvent {
         }
 
         /**
-         * Sets event value.
+         * Sets event value. Can be replaced with {@link ModuleEvent#attributes}
+         * if {@link ModuleEvent#attributes} is not null or empty.
          *
          * @param value {@link String} value of event value
          * @return same {@link Builder} object
@@ -197,7 +198,7 @@ public final class ModuleEvent {
         }
 
         /**
-         * Sets event attributes.
+         * Sets event attributes. It will replace {@link ModuleEvent#value} if not null or empty.
          *
          * @param attributes map with attributes keys and values
          * @return same {@link Builder} object
@@ -210,7 +211,7 @@ public final class ModuleEvent {
         }
 
         /**
-         * Creates instance of {@link ModuleEvent}
+         * Creates instance of {@link ModuleEvent}.
          *
          * @return {@link ModuleEvent} object
          */
