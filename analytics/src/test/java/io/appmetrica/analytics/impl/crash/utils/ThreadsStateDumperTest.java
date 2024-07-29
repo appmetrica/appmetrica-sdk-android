@@ -1,8 +1,8 @@
 package io.appmetrica.analytics.impl.crash.utils;
 
 import io.appmetrica.analytics.coreapi.internal.backport.BiFunction;
-import io.appmetrica.analytics.impl.crash.client.AllThreads;
-import io.appmetrica.analytics.impl.crash.client.ThreadState;
+import io.appmetrica.analytics.impl.crash.jvm.client.AllThreads;
+import io.appmetrica.analytics.impl.crash.jvm.client.ThreadState;
 import io.appmetrica.analytics.impl.utils.ProcessDetector;
 import io.appmetrica.analytics.testutils.CommonTest;
 import java.util.ArrayList;

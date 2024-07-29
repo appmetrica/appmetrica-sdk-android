@@ -18,7 +18,7 @@ public class ReporterEnvironment extends ClientConfiguration {
     protected PreloadInfoWrapper mPreloadInfoWrapper;
     private boolean misSessionPaused = true;
     @Nullable
-    private final String initialUserProfileID;
+    private String initialUserProfileID;
 
     protected ReporterEnvironment(@NonNull ProcessConfiguration processConfiguration,
                                   @NonNull CounterConfiguration counterConfiguration) {
@@ -87,8 +87,12 @@ public class ReporterEnvironment extends ClientConfiguration {
         mErrorEnvironment = errorEnvironment;
     }
 
+    synchronized void setInitialUserProfileID(@Nullable String initialUserProfileId) {
+        this.initialUserProfileID = initialUserProfileId;
+    }
+
     @Nullable
-    public String getInitialUserProfileID() {
+    public synchronized String getInitialUserProfileID() {
         return initialUserProfileID;
     }
 

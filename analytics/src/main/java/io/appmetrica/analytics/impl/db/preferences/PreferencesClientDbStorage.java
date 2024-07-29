@@ -3,6 +3,7 @@ package io.appmetrica.analytics.impl.db.preferences;
 import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import io.appmetrica.analytics.AppMetricaConfig;
 import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus;
 import io.appmetrica.analytics.coreapi.internal.model.ScreenInfo;
 import io.appmetrica.analytics.impl.db.IKeyValueTableDbHelper;
@@ -39,6 +40,7 @@ public class PreferencesClientDbStorage extends PreferencesDbStorage {
     static final PreferencesItem SCREEN_SIZE_CHECKED_BY_DEPRECATED =
             new PreferencesItem("SCREEN_SIZE_CHECKED_BY_DEPRECATED");
     static final PreferencesItem FEATURES = new PreferencesItem("FEATURES");
+    static final PreferencesItem APPMETRICA_CLIENT_CONFIG = new PreferencesItem("APPMETRICA_CLIENT_CONFIG");
 
     public PreferencesClientDbStorage(final IKeyValueTableDbHelper dbHelper) {
         super(dbHelper);
@@ -229,6 +231,16 @@ public class PreferencesClientDbStorage extends PreferencesDbStorage {
 
     public void saveScreenInfo(@Nullable ScreenInfo screenInfo) {
         writeString(SCREEN_INFO.fullKey(), JsonHelper.screenInfoToJsonString(screenInfo));
+    }
+
+    @Nullable
+    public AppMetricaConfig getAppMetricaConfig() {
+        String value = readString(APPMETRICA_CLIENT_CONFIG.fullKey());
+        return value == null ? null : AppMetricaConfig.fromJson(value);
+    }
+
+    public void saveAppMetricaConfig(@NonNull AppMetricaConfig appMetricaConfig) {
+        writeString(APPMETRICA_CLIENT_CONFIG.fullKey(), appMetricaConfig.toJson());
     }
 
     public boolean isScreenSizeCheckedByDeprecated() {

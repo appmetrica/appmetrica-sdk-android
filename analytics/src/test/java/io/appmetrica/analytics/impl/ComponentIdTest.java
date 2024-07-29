@@ -7,6 +7,7 @@ import io.appmetrica.analytics.impl.component.ComponentId;
 import io.appmetrica.analytics.impl.component.MainReporterComponentId;
 import io.appmetrica.analytics.impl.component.clients.ClientDescription;
 import io.appmetrica.analytics.internal.CounterConfiguration;
+import io.appmetrica.analytics.internal.CounterConfigurationReporterType;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.MockedStaticRule;
 import java.util.UUID;

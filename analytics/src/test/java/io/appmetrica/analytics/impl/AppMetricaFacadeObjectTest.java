@@ -129,10 +129,16 @@ public class AppMetricaFacadeObjectTest extends CommonTest {
     @Test
     public void activateFull() {
         mFacade.init(false);
-        AppMetricaConfig originalConfig = mock(AppMetricaConfig.class);
         AppMetricaConfig config = mock(AppMetricaConfig.class);
-        mFacade.activateFull(originalConfig, config);
-        verify(mImpl).activate(originalConfig, config);
+        mFacade.activateFull(config);
+        verify(mImpl).activate(config);
+    }
+
+    @Test
+    public void activateFullWithoutConfig() {
+        mFacade.init(false);
+        mFacade.activateFull();
+        verify(mImpl).activateAnonymously();
     }
 
     @Test

@@ -2,6 +2,8 @@ package io.appmetrica.analytics.impl;
 
 import android.content.Context;
 import androidx.annotation.NonNull;
+import io.appmetrica.analytics.internal.CounterConfigurationReporterType;
+
 import java.util.HashMap;
 import java.util.Map;
 

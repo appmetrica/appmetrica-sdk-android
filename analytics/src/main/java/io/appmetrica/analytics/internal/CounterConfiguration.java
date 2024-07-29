@@ -13,8 +13,6 @@ import io.appmetrica.analytics.AppMetricaConfig;
 import io.appmetrica.analytics.ReporterConfig;
 import io.appmetrica.analytics.coreutils.internal.LocationUtils;
 import io.appmetrica.analytics.impl.CounterConfigurationKeys;
-import io.appmetrica.analytics.impl.CounterConfigurationReporterType;
-import io.appmetrica.analytics.impl.CounterConfigurationValues;
 import io.appmetrica.analytics.impl.DataResultReceiver;
 import io.appmetrica.analytics.impl.SdkData;
 import io.appmetrica.analytics.impl.Utils;
@@ -50,27 +48,20 @@ public class CounterConfiguration implements Parcelable {
         }
     }
 
+    public CounterConfiguration(@NonNull CounterConfigurationReporterType reporterType) {
+        this();
+        synchronized (this) {
+            setReporterType(reporterType);
+        }
+    }
+
     public CounterConfiguration(
             AppMetricaConfig config,
             @NonNull CounterConfigurationReporterType reporterType
     ) {
         this();
         synchronized (this) {
-            applyApiKeyFromConfig(config.apiKey);
-            applySessionTimeoutFromConfig(config.sessionTimeout);
-            applyManualLocationFromConfig(config);
-            applyLocationTrackingFromConfig(config);
-            applyDeviceTypeFromConfig(config);
-            applyDispatchPeriodFromConfig(config.dispatchPeriodSeconds);
-            applyMaxReportsCountFromConfig(config.maxReportsCount);
-            applyLogsFromConfig(config.logs);
-            applyAppVersionFromConfig(config);
-            applyAppBuildNumberFromConfig(config);
-            applyFirstActivationAsUpdateFromConfig(config);
-            applyDataSendingEnabledFromConfig(config.dataSendingEnabled);
-            applyMaxReportsInDbCount(config.maxReportsInDatabaseCount);
-            applyNativeCrashesFromConfig(config.nativeCrashReporting);
-            applyRevenueAutoTrackingEnabledFromConfig(config);
+            applyFromConfig(config);
             setReporterType(reporterType);
         }
     }
@@ -87,6 +78,24 @@ public class CounterConfiguration implements Parcelable {
             applyMaxReportsInDbCount(config.maxReportsInDatabaseCount);
             setManualReporterType(config.apiKey);
         }
+    }
+
+    public synchronized void applyFromConfig(@NonNull AppMetricaConfig config) {
+        applyApiKeyFromConfig(config.apiKey);
+        applySessionTimeoutFromConfig(config.sessionTimeout);
+        applyManualLocationFromConfig(config);
+        applyLocationTrackingFromConfig(config);
+        applyDeviceTypeFromConfig(config);
+        applyDispatchPeriodFromConfig(config.dispatchPeriodSeconds);
+        applyMaxReportsCountFromConfig(config.maxReportsCount);
+        applyLogsFromConfig(config.logs);
+        applyAppVersionFromConfig(config);
+        applyAppBuildNumberFromConfig(config);
+        applyFirstActivationAsUpdateFromConfig(config);
+        applyDataSendingEnabledFromConfig(config.dataSendingEnabled);
+        applyMaxReportsInDbCount(config.maxReportsInDatabaseCount);
+        applyNativeCrashesFromConfig(config.nativeCrashReporting);
+        applyRevenueAutoTrackingEnabledFromConfig(config);
     }
 
     private void setManualReporterType(@Nullable String apiKey) {
@@ -377,35 +386,6 @@ public class CounterConfiguration implements Parcelable {
         result.putParcelable(CounterConfigurationKeys.METRICA_CONFIG_EXTRA, this);
     }
 
-    /**
-     * Overlaps configuration by {@link Bundle} object.
-     * NOTE: for backward compatibility.
-     *
-     * @param cfg {@link Bundle} object.
-     */
-    public synchronized void overlapByBundle(final Bundle cfg) {
-        if (null == cfg) {
-            return;
-        }
-
-        if (0 != cfg.getInt(CounterConfigurationKeys.DISPATCH_PERIOD)) {
-            this.setDispatchPeriod(cfg.getInt(CounterConfigurationKeys.DISPATCH_PERIOD));
-        }
-
-        if (0 != cfg.getInt(CounterConfigurationKeys.SESSION_TIMEOUT)) {
-            this.setSessionTimeout(cfg.getInt(CounterConfigurationKeys.SESSION_TIMEOUT));
-        }
-
-        if (0 != cfg.getInt(CounterConfigurationKeys.MAX_REPORTS_COUNT)) {
-            this.setMaxReportsCount(cfg.getInt(CounterConfigurationKeys.MAX_REPORTS_COUNT));
-        }
-
-        final String apiKey = cfg.getString(CounterConfigurationKeys.API_KEY);
-        if (null != apiKey && !CounterConfigurationValues.DEFAULT_UNDEFINED_API_KEY.equals(apiKey)) {
-            this.setApiKey(cfg.getString(CounterConfigurationKeys.API_KEY));
-        }
-    }
-
     public static CounterConfiguration fromBundle(final Bundle extras) {
         CounterConfiguration sdkConfig = null;
 
@@ -416,13 +396,6 @@ public class CounterConfiguration implements Parcelable {
                 return null;
             }
         }
-
-        // For App with the Metrica API-level less than 2
-        if (null == sdkConfig) {
-            sdkConfig = new CounterConfiguration();
-        }
-
-        sdkConfig.overlapByBundle(extras);
 
         return sdkConfig;
     }

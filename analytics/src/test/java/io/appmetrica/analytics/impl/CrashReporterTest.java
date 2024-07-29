@@ -4,9 +4,11 @@ import io.appmetrica.analytics.AppMetricaConfig;
 import io.appmetrica.analytics.impl.client.ProcessConfiguration;
 import io.appmetrica.analytics.impl.crash.CrashToFileWriter;
 import io.appmetrica.analytics.impl.crash.UnhandledExceptionEventFormer;
-import io.appmetrica.analytics.impl.crash.client.UnhandledException;
+import io.appmetrica.analytics.impl.crash.jvm.client.UnhandledException;
 import io.appmetrica.analytics.impl.reporter.CrashReporterContext;
 import io.appmetrica.analytics.impl.reporter.ReporterLifecycleListener;
+import io.appmetrica.analytics.internal.CounterConfigurationReporterType;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -39,12 +39,13 @@ public class DatabaseManagerProvider {
     }
 
     public TablesManager buildComponentDatabaseManager(ComponentId componentId) {
+        String tag = String.format(DB_TAG_MAIN, componentId.getApiKey() == null ? "main" : componentId.getApiKey());
         return mTablesManagerCreator.createTablesManager(
-                String.format(DB_TAG_MAIN, componentId.getApiKey() == null ? "main" : componentId.getApiKey()),
+                tag,
                 mDatabaseScriptsProvider.getComponentDatabaseCreateScript(),
                 mDatabaseScriptsProvider.getComponentDatabaseDropScript(),
                 mDatabaseScriptsProvider.getComponentDatabaseUpgradeDbScripts(),
-                new TablesValidatorImpl(DB_TAG_MAIN, mDbTablesColumnsProvider.getDbTablesColumns())
+                new TablesValidatorImpl(tag, mDbTablesColumnsProvider.getDbTablesColumns())
         );
     }
 

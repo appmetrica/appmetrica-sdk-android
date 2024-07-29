@@ -1,7 +1,6 @@
 package io.appmetrica.analytics.impl;
 
 import android.app.Activity;
-import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
@@ -11,7 +10,7 @@ import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 
 public class SessionsTrackingManager {
 
-    private static final String TAG = "[SessionsAutoTrackingManager]";
+    private static final String TAG = "[SessionsTrackingManager]";
 
     @NonNull
     private final ActivityLifecycleManager activityLifecycleManager;
@@ -26,13 +25,15 @@ public class SessionsTrackingManager {
     @NonNull
     private final ActivityAppearedListener activityAppearedListener;
 
+    private boolean sessionAutotrackingStarted = false;
+
     public SessionsTrackingManager(@NonNull ActivityLifecycleManager activityLifecycleManager,
                                    @NonNull ActivityAppearedListener activityAppearedListener) {
         this(
-                activityLifecycleManager,
-                activityAppearedListener,
-                new ConditionalExecutor<MainReporter>(),
-                new ActivityStateManager()
+            activityLifecycleManager,
+            activityAppearedListener,
+            new ConditionalExecutor<>(),
+            new ActivityStateManager()
         );
     }
 
@@ -45,43 +46,64 @@ public class SessionsTrackingManager {
         this.activityAppearedListener = activityAppearedListener;
         this.conditionalExecutor = conditionalExecutor;
         this.activityStateManager = activityStateManager;
-        onResumedCallback = new ActivityLifecycleManager.Listener() {
-            @Override
-            @MainThread
-            public void onEvent(@NonNull final Activity activity,
-                                @NonNull ActivityLifecycleManager.ActivityEvent event) {
+        onResumedCallback = (activity, event) -> {
+            synchronized (SessionsTrackingManager.this) {
                 DebugLogger.INSTANCE.info(TAG, "on resume callback");
-                SessionsTrackingManager.this.conditionalExecutor.addCommand(new NonNullConsumer<MainReporter>() {
-                    @ApiProxyThread
-                    @Override
-                    public void consume(@NonNull MainReporter data) {
-                        resumeActivityInternal(activity, data);
-                    }
-                });
+                if (sessionAutotrackingStarted) {
+                    DebugLogger.INSTANCE.info(TAG, "resume session");
+                    SessionsTrackingManager.this.conditionalExecutor.addCommand(data ->
+                        resumeActivityInternal(activity, data)
+                    );
+                }
             }
         };
-        onPausedCallback = new ActivityLifecycleManager.Listener() {
-            @Override
-            @MainThread
-            public void onEvent(@NonNull final Activity activity,
-                                @NonNull ActivityLifecycleManager.ActivityEvent event) {
-                DebugLogger.INSTANCE.info(TAG, "on pause callback");
-                SessionsTrackingManager.this.conditionalExecutor.addCommand(new NonNullConsumer<MainReporter>() {
-                    @ApiProxyThread
-                    @Override
-                    public void consume(@NonNull MainReporter data) {
-                        pauseActivityInternal(activity, data);
-                    }
-                });
+        onPausedCallback = (activity, event) -> {
+            DebugLogger.INSTANCE.info(TAG, "on pause callback");
+            synchronized (SessionsTrackingManager.this) {
+                if (sessionAutotrackingStarted) {
+                    DebugLogger.INSTANCE.info(TAG, "pause session");
+                    SessionsTrackingManager.this.conditionalExecutor.addCommand(data ->
+                        pauseActivityInternal(activity, data)
+                    );
+                }
             }
         };
     }
 
     @NonNull
-    public ActivityLifecycleManager.WatchingStatus startWatching(boolean auto) {
-        activityLifecycleManager.registerListener(onResumedCallback, ActivityLifecycleManager.ActivityEvent.RESUMED);
-        activityLifecycleManager.registerListener(onPausedCallback, ActivityLifecycleManager.ActivityEvent.PAUSED);
+    public synchronized ActivityLifecycleManager.WatchingStatus startWatchingIfNotYet() {
+        if (!sessionAutotrackingStarted) {
+            DebugLogger.INSTANCE.info(TAG, "Start watching");
+            activityLifecycleManager.registerListener(
+                onResumedCallback,
+                ActivityLifecycleManager.ActivityEvent.RESUMED
+            );
+            activityLifecycleManager.registerListener(onPausedCallback, ActivityLifecycleManager.ActivityEvent.PAUSED);
+            sessionAutotrackingStarted = true;
+        } else {
+            DebugLogger.INSTANCE.info(TAG, "Ignore start watching if not yet as already has been started");
+        }
         return activityLifecycleManager.getWatchingStatus();
+    }
+
+    public synchronized void stopWatchingIfHasAlreadyBeenStarted() {
+        if (sessionAutotrackingStarted) {
+            DebugLogger.INSTANCE.info(TAG, "Stop watching");
+            activityLifecycleManager.unregisterListener(
+                onResumedCallback,
+                ActivityLifecycleManager.ActivityEvent.RESUMED
+            );
+            activityLifecycleManager.unregisterListener(
+                onPausedCallback,
+                ActivityLifecycleManager.ActivityEvent.PAUSED
+            );
+            sessionAutotrackingStarted = false;
+        } else {
+            DebugLogger.INSTANCE.info(
+                TAG,
+                "Ignore stop watching if not yet as already has been stopped or not started"
+            );
+        }
     }
 
     @ApiProxyThread

@@ -113,9 +113,14 @@ public class DefaultOneShotMetricaConfig implements MetricaConfigurator {
         } else {
             AppMetricaConfig.Builder builder = createBuilderFromConfig(config);
             mergeCommonPart(config, builder);
-
             mUsed = true;
             reset();
+            DebugLogger.INSTANCE.info(
+                TAG,
+                "merge configs - input: %s -> result: %s",
+                config.toJson(),
+                builder.build().toJson()
+            );
             return builder.build();
         }
     }
@@ -154,6 +159,9 @@ public class DefaultOneShotMetricaConfig implements MetricaConfigurator {
         }
         if (isFieldSet(config.sessionTimeout)) {
             builder.withSessionTimeout(config.sessionTimeout);
+        }
+        if (isFieldSet(config.sessionsAutoTrackingEnabled)) {
+            builder.withSessionsAutoTrackingEnabled(config.sessionsAutoTrackingEnabled);
         }
         if (isFieldSet(config.crashReporting)) {
             builder.withCrashReporting(config.crashReporting);

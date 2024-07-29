@@ -56,6 +56,13 @@ public class AppOpenWatcherTest extends CommonTest {
     }
 
     @Test
+    public void stopWatching() {
+        appOpenWatcher.stopWatching();
+        verify(ClientServiceLocator.getInstance().getActivityLifecycleManager())
+            .unregisterListener(appOpenWatcher, ActivityLifecycleManager.ActivityEvent.CREATED);
+    }
+
+    @Test
     public void hasCallbacksNoDeeplinkConsumer() {
         appOpenWatcher.startWatching();
         appOpenWatcher.onEvent(activity, ActivityLifecycleManager.ActivityEvent.CREATED);

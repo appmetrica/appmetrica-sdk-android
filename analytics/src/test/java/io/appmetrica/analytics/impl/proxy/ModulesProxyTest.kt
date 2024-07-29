@@ -37,13 +37,14 @@ import java.util.UUID
 @RunWith(RobolectricTestRunner::class)
 class ModulesProxyTest : CommonTest() {
 
-    private val provider: AppMetricaFacadeProvider = mock()
-    private val modulesBarrier: ModulesBarrier = mock()
+    private val applicationContext: Context = mock()
+    private val context: Context = mock {
+        on { applicationContext } doReturn applicationContext
+    }
     private val mainReporter: MainReporter = mock()
     private val mainReporterApiConsumerProvider: MainReporterApiConsumerProvider = mock()
     private val facade: AppMetricaFacade = mock()
     private val reporterProxyStorageImpl: ReporterProxyStorage = mock()
-    private val synchronousStageExecutor: ModulesSynchronousStageExecutor = mock()
     private val executor: IHandlerExecutor = mock()
 
     private val runnableArgumentCaptor: KArgumentCaptor<Runnable> = argumentCaptor()
@@ -60,20 +61,55 @@ class ModulesProxyTest : CommonTest() {
     @get:Rule
     val clientServiceLocatorRule = ClientServiceLocatorRule()
 
+    @get:Rule
+    val modulesBarrierConstructionRule = constructionRule<ModulesBarrier>()
+    private val modulesBarrier: ModulesBarrier by modulesBarrierConstructionRule
+
+    @get:Rule
+    val synchronousStageExecutorConstructionRule = constructionRule<ModulesSynchronousStageExecutor>()
+    private val synchronousStageExecutor: ModulesSynchronousStageExecutor by synchronousStageExecutorConstructionRule
+
     private lateinit var proxy: ModulesProxy
 
     @Before
     fun setUp() {
-        whenever(provider.peekInitializedImpl()).thenReturn(facade)
+        whenever(ClientServiceLocator.getInstance().appMetricaFacadeProvider.peekInitializedImpl()).thenReturn(facade)
+        whenever(ClientServiceLocator.getInstance().appMetricaFacadeProvider.getInitializedImpl(applicationContext))
+            .thenReturn(facade)
         whenever(facade.mainReporterApiConsumerProvider).thenReturn(mainReporterApiConsumerProvider)
         whenever(mainReporterApiConsumerProvider.mainReporter).thenReturn(mainReporter)
         whenever(ClientServiceLocator.getInstance().clientExecutorProvider.defaultExecutor).thenReturn(executor)
 
-        proxy = ModulesProxy(
-            provider,
-            modulesBarrier,
-            synchronousStageExecutor
-        )
+        proxy = ModulesProxy()
+    }
+
+    @Test
+    fun modulesBarrier() {
+        assertThat(modulesBarrierConstructionRule.constructionMock.constructed()).hasSize(1)
+        assertThat(modulesBarrierConstructionRule.argumentInterceptor.flatArguments())
+            .containsExactly(ClientServiceLocator.getInstance().appMetricaFacadeProvider)
+    }
+
+    @Test
+    fun synchronousStageExecutor() {
+        assertThat(synchronousStageExecutorConstructionRule.constructionMock.constructed()).hasSize(1)
+        assertThat(synchronousStageExecutorConstructionRule.argumentInterceptor.flatArguments())
+            .containsExactly(ClientServiceLocator.getInstance().appMetricaFacadeProvider)
+    }
+
+    @Test
+    fun activate() {
+        proxy.activate(context)
+        inOrder(modulesBarrier, synchronousStageExecutor, executor) {
+            verify(modulesBarrier).activate(context)
+            verify(synchronousStageExecutor).activate(applicationContext)
+            verify(executor).execute(runnableArgumentCaptor.capture())
+            verifyNoMoreInteractions()
+        }
+
+        runnableArgumentCaptor.firstValue.run()
+
+        verify(facade).activateFull()
     }
 
     @Test
@@ -189,7 +225,7 @@ class ModulesProxyTest : CommonTest() {
     }
 
     private fun testIsActivated(value: Boolean) {
-        whenever(provider.isActivated).thenReturn(value)
+        whenever(ClientServiceLocator.getInstance().appMetricaFacadeProvider.isActivated).thenReturn(value)
         assertThat(proxy.isActivatedForApp()).isEqualTo(value)
         verify(modulesBarrier).isActivatedForApp()
         verify(synchronousStageExecutor).isActivatedForApp()

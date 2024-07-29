@@ -5,7 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import io.appmetrica.analytics.impl.CounterConfigurationReporterType;
+import io.appmetrica.analytics.internal.CounterConfigurationReporterType;
 import io.appmetrica.analytics.impl.CounterReport;
 import io.appmetrica.analytics.impl.EventsManager;
 import io.appmetrica.analytics.impl.IReporterExtended;

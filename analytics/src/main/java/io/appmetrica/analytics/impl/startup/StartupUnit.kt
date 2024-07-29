@@ -47,6 +47,9 @@ internal class StartupUnit(
                 .withDeviceId(deviceIdCandidate)
                 .withDeviceIdHash(StringUtils.EMPTY)
         }
+        startupStateBuilder.withHostUrlsFromClient(
+            startupUnitComponents.requestConfigArguments.newCustomHosts?.takeIf { it.isNotEmpty() }
+        )
         val updatedStartupState = startupStateBuilder.build()
         DebugLogger.info(
             tag,
@@ -213,7 +216,12 @@ internal class StartupUnit(
         startupUnitComponents.startupConfigurationHolder.updateStartupState(state)
         startupUnitComponents.startupStateStorage.save(state)
         startupUnitComponents.startupStateHolder.onStartupStateChanged(state)
-        DebugLogger.info(tag, "Startup was updated for package: %s", startupUnitComponents.packageName)
+        DebugLogger.info(
+            tag,
+            "Startup was updated for package: %s; startupState: %s",
+            startupUnitComponents.packageName,
+            state
+        )
     }
 
     private fun notifyListener(state: StartupState) {
@@ -242,12 +250,14 @@ internal class StartupUnit(
             val customHostUrls = config.newCustomHosts
             if (customHostUrls.isNullOrEmpty()) {
                 if (config.startupHostsFromClient?.isNotEmpty() == true) {
+                    DebugLogger.info(tag, "Reset custom hosts")
                     updateCurrentStartupDataAndNotifyListener(
                         startupState.buildUpon().withHostUrlsFromClient(null).build()
                     )
                 }
             } else {
                 if (!Utils.areEqual(customHostUrls, config.startupHostsFromClient)) {
+                    DebugLogger.info(tag, "Update custom hosts to $customHostUrls")
                     updateCurrentStartupDataAndNotifyListener(
                         startupState.buildUpon().withHostUrlsFromClient(customHostUrls).build()
                     )

@@ -23,9 +23,13 @@ public class AppMetricaImplStub implements IAppMetricaImpl {
     private static final String DEVICE_USER_IN_LOCKED_STATE = "Device user is in locked state";
 
     @Override
-    public void activate(@NonNull AppMetricaConfig originalConfig,
-                         @NonNull AppMetricaConfig config) {
-        //Do nothing
+    public void activate(@NonNull AppMetricaConfig config) {
+        // Do nothing
+    }
+
+    @Override
+    public void activateAnonymously() {
+        // Do nothing
     }
 
     @Nullable
@@ -36,17 +40,17 @@ public class AppMetricaImplStub implements IAppMetricaImpl {
 
     @Override
     public void requestDeferredDeeplinkParameters(DeferredDeeplinkParametersListener listener) {
-        //Do nothing
+        // Do nothing
     }
 
     @Override
     public void requestDeferredDeeplink(DeferredDeeplinkListener listener) {
-        //Do nothing
+        // Do nothing
     }
 
     @Override
     public void activateReporter(@NonNull ReporterConfig config) {
-        //Do nothing
+        // Do nothing
     }
 
     @NonNull
@@ -91,50 +95,50 @@ public class AppMetricaImplStub implements IAppMetricaImpl {
 
     @Override
     public void requestStartupParams(
-            @NonNull final StartupParamsCallback callback,
-            @NonNull final List<String> params
+        @NonNull final StartupParamsCallback callback,
+        @NonNull final List<String> params
     ) {
         callback.onRequestError(StartupParamsCallback.Reason.UNKNOWN, null);
     }
 
     @Override
     public void onReceiveResult(int resultCode, @NonNull Bundle resultData) {
-        //Do nothing
+        // Do nothing
     }
 
     @Override
     public void setLocation(@Nullable Location location) {
-        //Do nothing
+        // Do nothing
     }
 
     @Override
     public void setLocationTracking(boolean enabled) {
-        //Do nothing
+        // Do nothing
     }
 
     @Override
     public void setDataSendingEnabled(boolean value) {
-        //Do nothing
+        // Do nothing
     }
 
     @Override
     public void putAppEnvironmentValue(String key, String value) {
-        //Do nothing
+        // Do nothing
     }
 
     @Override
     public void clearAppEnvironment() {
-        //Do nothing
+        // Do nothing
     }
 
     @Override
     public void putErrorEnvironmentValue(String key, String value) {
-        //Do nothing
+        // Do nothing
     }
 
     @Override
     public void setUserProfileID(@Nullable String userProfileID) {
-        //Do nothing
+        // Do nothing
     }
 
     @NonNull

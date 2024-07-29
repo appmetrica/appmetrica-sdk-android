@@ -4,10 +4,10 @@ import android.content.Context
 import io.appmetrica.analytics.AppMetricaConfig
 import io.appmetrica.analytics.impl.IReporterFactoryProvider
 import io.appmetrica.analytics.impl.MainOrCrashReporterProvider
-import io.appmetrica.analytics.impl.crash.client.ICrashProcessor
-import io.appmetrica.analytics.impl.crash.client.ReporterBasedCrashProcessor
+import io.appmetrica.analytics.impl.crash.jvm.client.ICrashProcessor
+import io.appmetrica.analytics.impl.crash.jvm.client.ReporterBasedCrashProcessor
 
-class ApplicationCrashProcessorCreator : CrashProcessorCreator {
+class ApplicationCrashProcessorCreator : AppCrashProcessorCreator {
 
     override fun createCrashProcessor(
         context: Context,

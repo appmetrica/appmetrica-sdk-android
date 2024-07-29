@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.component;
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.applicationstate.ApplicationState;
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.applicationstate.ApplicationStateObserver;
 import io.appmetrica.analytics.impl.ApplicationStateProviderImpl;
-import io.appmetrica.analytics.impl.CounterConfigurationReporterType;
+import io.appmetrica.analytics.internal.CounterConfigurationReporterType;
 import io.appmetrica.analytics.impl.DataSendingRestrictionControllerImpl;
 import io.appmetrica.analytics.impl.billing.BillingMonitorWrapper;
 import io.appmetrica.analytics.impl.component.processor.factory.HandlersFactory;

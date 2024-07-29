@@ -122,7 +122,7 @@ class ClientConfigSerializerTest : CommonTest() {
             .checkField("customHosts", customHosts)
             .checkField("additionalConfig", additionalConfigMap)
             .checkAll()
-        assertThat(deserialized.location).isEqualToComparingOnlyGivenFields(
+        assertThat(deserialized?.location).isEqualToComparingOnlyGivenFields(
             location,
             "provider",
             "latitude",
@@ -131,7 +131,7 @@ class ClientConfigSerializerTest : CommonTest() {
             "accuracy",
             "altitude"
         )
-        assertThat(deserialized.preloadInfo).isEqualToComparingFieldByField(preloadInfo)
+        assertThat(deserialized?.preloadInfo).isEqualToComparingFieldByField(preloadInfo)
     }
 
     @Test

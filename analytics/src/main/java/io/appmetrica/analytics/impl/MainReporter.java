@@ -1,41 +1,22 @@
 package io.appmetrica.analytics.impl;
 
 import android.app.Activity;
-import android.content.Context;
 import android.location.Location;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.VisibleForTesting;
 import androidx.annotation.WorkerThread;
 import io.appmetrica.analytics.AnrListener;
 import io.appmetrica.analytics.AppMetricaConfig;
 import io.appmetrica.analytics.ExternalAttribution;
 import io.appmetrica.analytics.coreutils.internal.WrapUtils;
-import io.appmetrica.analytics.impl.client.ProcessConfiguration;
-import io.appmetrica.analytics.impl.crash.ANRMonitor;
-import io.appmetrica.analytics.impl.crash.PluginErrorDetailsConverter;
-import io.appmetrica.analytics.impl.crash.client.AllThreads;
-import io.appmetrica.analytics.impl.crash.client.converter.AnrConverter;
-import io.appmetrica.analytics.impl.crash.client.converter.CustomErrorConverter;
-import io.appmetrica.analytics.impl.crash.client.converter.RegularErrorConverter;
-import io.appmetrica.analytics.impl.crash.client.converter.UnhandledExceptionConverter;
-import io.appmetrica.analytics.impl.crash.ndk.NativeCrashClient;
-import io.appmetrica.analytics.impl.crash.utils.ThreadsStateDumper;
-import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoWrapper;
-import io.appmetrica.analytics.impl.reporter.MainReporterContext;
-import io.appmetrica.analytics.impl.reporter.ReporterLifecycleListener;
-import io.appmetrica.analytics.impl.startup.StartupHelper;
+import io.appmetrica.analytics.impl.crash.jvm.client.MainReporterAnrController;
 import io.appmetrica.analytics.impl.utils.ApiProxyThread;
-import io.appmetrica.analytics.impl.utils.BooleanUtils;
-import io.appmetrica.analytics.impl.utils.ProcessDetector;
 import io.appmetrica.analytics.impl.utils.validation.NonEmptyStringValidator;
 import io.appmetrica.analytics.impl.utils.validation.ThrowIfFailedValidator;
 import io.appmetrica.analytics.impl.utils.validation.Validator;
-import io.appmetrica.analytics.internal.CounterConfiguration;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MainReporter extends BaseReporter implements IMainReporter {
 
@@ -46,158 +27,41 @@ public class MainReporter extends BaseReporter implements IMainReporter {
     );
 
     private static final Long USER_SESSION_TIMEOUT = TimeUnit.SECONDS.toMillis(5);
-
     @NonNull
-    private final AppStatusMonitor mAppStatusMonitor;
+    private final MainReporterComponents mainReporterComponents;
     @NonNull
-    private final AppMetricaConfig mConfig;
-    @NonNull
-    private ANRMonitor anrMonitor;
-    @NonNull
-    private final ActivityStateManager activityStateManager;
-    private final AtomicBoolean anrMonitorBarrier = new AtomicBoolean(false);
-    private final ThreadsStateDumper threadsStateDumper = new ThreadsStateDumper();
-    @NonNull
-    private final NativeCrashClient nativeCrashClient;
+    private final MainReporterAnrController mainReporterAnrController;
 
     @WorkerThread
-    public MainReporter(@NonNull Context context,
-                        @NonNull ProcessConfiguration processConfiguration,
-                        @NonNull AppMetricaConfig config,
-                        @NonNull ReportsHandler reportsHandler,
-                        @NonNull StartupHelper startupHelper,
-                        @NonNull UnhandledSituationReporterProvider appmetricaReporterProvider,
-                        @NonNull UnhandledSituationReporterProvider pushReporterProvider) {
-        this(
-                context,
-                processConfiguration,
-                config,
-                reportsHandler,
-                new NativeCrashClient(processConfiguration),
-                startupHelper,
-                appmetricaReporterProvider,
-                pushReporterProvider,
-                ClientServiceLocator.getInstance(),
-                new ExtraMetaInfoRetriever(context)
-        );
-    }
-
-    @VisibleForTesting
-    @WorkerThread
-    MainReporter(@NonNull Context context,
-                 @NonNull ProcessConfiguration processConfiguration,
-                 @NonNull AppMetricaConfig config,
-                 @NonNull ReportsHandler reportsHandler,
-                 @NonNull NativeCrashClient nativeCrashClient,
-                 @NonNull StartupHelper startupHelper,
-                 @NonNull UnhandledSituationReporterProvider appmetricaReporterProvider,
-                 @NonNull UnhandledSituationReporterProvider pushReporterProvider,
-                 @NonNull ClientServiceLocator clientServiceLocator,
-                 @NonNull ExtraMetaInfoRetriever extraMetaInfoRetriever) {
-        this(
-                context,
-                config,
-                reportsHandler,
-                nativeCrashClient,
-                new ReporterEnvironment(
-                        processConfiguration,
-                        new CounterConfiguration(config, CounterConfigurationReporterType.MAIN),
-                        config.userProfileID
-                ),
-                new AppStatusMonitor(getSessionTimeout(config)),
-                startupHelper,
-                new LibraryAnrDetector(),
-                clientServiceLocator.getProcessDetector(),
-                appmetricaReporterProvider,
-                pushReporterProvider,
-                extraMetaInfoRetriever,
-                new ActivityStateManager(),
-                new PluginErrorDetailsConverter(extraMetaInfoRetriever),
-                new UnhandledExceptionConverter(),
-                new RegularErrorConverter(),
-                new CustomErrorConverter(),
-                new AnrConverter()
-        );
-    }
-
-    @SuppressWarnings("checkstyle:methodlength")
-    @VisibleForTesting
-    @WorkerThread
-    MainReporter(@NonNull Context context,
-                 @NonNull AppMetricaConfig config,
-                 @NonNull ReportsHandler reportsHandler,
-                 @NonNull NativeCrashClient nativeCrashClient,
-                 @NonNull ReporterEnvironment reporterEnvironment,
-                 @NonNull AppStatusMonitor appStatusMonitor,
-                 @NonNull StartupHelper startupHelper,
-                 @NonNull final LibraryAnrDetector libraryAnrDetector,
-                 @NonNull ProcessDetector processDetector,
-                 @NonNull final UnhandledSituationReporterProvider appmetricaReporterProvider,
-                 @NonNull final UnhandledSituationReporterProvider pushReporterProvider,
-                 @NonNull ExtraMetaInfoRetriever extraMetaInfoRetriever,
-                 @NonNull ActivityStateManager activityStateManager,
-                 @NonNull PluginErrorDetailsConverter pluginErrorDetailsConverter,
-                 @NonNull UnhandledExceptionConverter unhandledExceptionConverter,
-                 @NonNull RegularErrorConverter regularErrorConverter,
-                 @NonNull CustomErrorConverter customErrorConverter,
-                 @NonNull AnrConverter anrConverter) {
+    MainReporter(@NonNull MainReporterComponents mainReporterComponents) {
         super(
-                context,
-                reportsHandler,
-                reporterEnvironment,
-                extraMetaInfoRetriever,
-                processDetector,
-                unhandledExceptionConverter,
-                regularErrorConverter,
-                customErrorConverter,
-                anrConverter,
-                pluginErrorDetailsConverter
+            mainReporterComponents.getContext(),
+            mainReporterComponents.getReportsHandler(),
+            mainReporterComponents.getReporterEnvironment(),
+            mainReporterComponents.getExtraMetaInfoRetriever(),
+            mainReporterComponents.getProcessDetector(),
+            mainReporterComponents.getUnhandledExceptionConverter(),
+            mainReporterComponents.getRegularErrorConverter(),
+            mainReporterComponents.getCustomErrorConverter(),
+            mainReporterComponents.getAnrConverter(),
+            mainReporterComponents.getPluginErrorDetailsConverter()
         );
-        //todo (avitenko) create CounterConfiguration from config METRIKALIB-4520
-        // Create environment for SDK's crashes to be able to send to the separate API-key
-        mReporterEnvironment.setPreloadInfoWrapper(createPreloadInfoWrapper(config));
-        mAppStatusMonitor = appStatusMonitor;
-        this.nativeCrashClient = nativeCrashClient;
-        mConfig = config;
-        this.activityStateManager = activityStateManager;
-        enableNativeCrashHandling(config.nativeCrashReporting);
-        anrMonitor = createAnrMonitor(
-            libraryAnrDetector,
-            appmetricaReporterProvider,
-            pushReporterProvider,
-            config.anrMonitoringTimeout
-        );
-        if (BooleanUtils.isTrue(config.anrMonitoring)) {
-            enableAnrMonitoring();
-        }
+
+        this.mainReporterComponents = mainReporterComponents;
+        mainReporterAnrController = new MainReporterAnrController(mainReporterComponents, this);
         initUserSessionObserver();
-        final ReporterLifecycleListener listener =
-                ClientServiceLocator.getInstance().getReporterLifecycleListener();
-        if (listener != null) {
-            final MainReporterContext mainReporterContext = new MainReporterContext(
-                    context.getApplicationContext(),
-                    appStatusMonitor,
-                    mConfig,
-                    startupHelper.getDeviceId(),
-                    mPublicLogger,
-                    reportsHandler
-            );
-            listener.onCreateMainReporter(mainReporterContext, this);
-        }
-        mPublicLogger.info("Actual sessions timeout is " + getSessionTimeout(config));
     }
 
     @Override
     public void start() {
         super.start();
+        DebugLogger.INSTANCE.info(getTag(), "Start");
         ClientServiceLocator.getInstance().getModulesController().onActivated();
     }
 
     @Override
-    public final void enableAnrMonitoring() {
-        if (anrMonitorBarrier.compareAndSet(false, true)) {
-            anrMonitor.startMonitoring();
-        }
+    public void enableAnrMonitoring() {
+        mainReporterAnrController.enableAnrMonitoring();
     }
 
     @Override
@@ -229,20 +93,26 @@ public class MainReporter extends BaseReporter implements IMainReporter {
     @Override
     @ApiProxyThread
     public void resumeSession(@Nullable final Activity activity) {
-        if (activityStateManager.didStateChange(activity, ActivityStateManager.ActivityState.RESUMED)) {
+        if (mainReporterComponents.getActivityStateManager().didStateChange(
+            activity,
+            ActivityStateManager.ActivityState.RESUMED
+        )) {
             mPublicLogger.info("Resume session");
             onResumeForegroundSession(getActivityTag(activity));
-            mAppStatusMonitor.resume();
+            mainReporterComponents.getAppStatusMonitor().resume();
         }
     }
 
     @Override
     @ApiProxyThread
     public void pauseSession(@Nullable final Activity activity) {
-        if (activityStateManager.didStateChange(activity, ActivityStateManager.ActivityState.PAUSED)) {
+        if (mainReporterComponents.getActivityStateManager().didStateChange(
+            activity,
+            ActivityStateManager.ActivityState.PAUSED
+        )) {
             mPublicLogger.info("Pause session");
             onPauseForegroundSession(getActivityTag(activity));
-            mAppStatusMonitor.pause();
+            mainReporterComponents.getAppStatusMonitor().pause();
         }
     }
 
@@ -255,11 +125,16 @@ public class MainReporter extends BaseReporter implements IMainReporter {
     }
 
     void updateConfig(AppMetricaConfig config, final boolean needToClearEnvironment) {
+        DebugLogger.INSTANCE.info(getTag(), "Update config: %s", config);
+
         if (needToClearEnvironment) {
             clearAppEnvironment();
         }
         putAllToAppEnvironment(config.appEnvironment);
         putAllToErrorEnvironment(config.errorEnvironment);
+
+        enableNativeCrashHandling(config.nativeCrashReporting);
+        mainReporterAnrController.updateConfig(config);
     }
 
     @Override
@@ -278,37 +153,9 @@ public class MainReporter extends BaseReporter implements IMainReporter {
         return mReporterEnvironment.getProcessConfiguration().getCustomHosts();
     }
 
-    @NonNull
-    private ANRMonitor createAnrMonitor(@NonNull final LibraryAnrDetector libraryAnrDetector,
-                                        @NonNull final UnhandledSituationReporterProvider appmetricaReporterProvider,
-                                        @NonNull final UnhandledSituationReporterProvider pushReporterProvider,
-                                        @Nullable final Integer anrMonitoringTimeout) {
-        final ANRMonitor.Listener anrMonitoringListener = new ANRMonitor.Listener() {
-            @Override
-            public void onAppNotResponding() {
-                final AllThreads allThreads = threadsStateDumper.getThreadsDumpForAnr();
-                ClientServiceLocator.getInstance().getClientExecutorProvider().getDefaultExecutor()
-                    .execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        reportAnr(allThreads);
-                        if (libraryAnrDetector.isAppmetricaAnr(allThreads.affectedThread.stacktrace)) {
-                            appmetricaReporterProvider.getReporter().reportAnr(allThreads);
-                        }
-                        if (libraryAnrDetector.isPushAnr(allThreads.affectedThread.stacktrace)) {
-                            pushReporterProvider.getReporter().reportAnr(allThreads);
-                        }
-                        DebugLogger.INSTANCE.info(TAG, "anr registered %s", allThreads);
-                    }
-                });
-            }
-        };
-        return new ANRMonitor(anrMonitoringListener, anrMonitoringTimeout);
-    }
-
     private void initUserSessionObserver() {
         mReportsHandler.reportPauseUserSession(mReporterEnvironment.getProcessConfiguration());
-        mAppStatusMonitor.registerObserver(
+        mainReporterComponents.getAppStatusMonitor().registerObserver(
                 new AppStatusMonitor.Observer() {
                     @Override
                     public void onResume() {
@@ -324,17 +171,6 @@ public class MainReporter extends BaseReporter implements IMainReporter {
         );
     }
 
-    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
-    void setAnrMonitor(@NonNull ANRMonitor anrMonitor) {
-        this.anrMonitor = anrMonitor;
-    }
-
-    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
-    @NonNull
-    ANRMonitor getAnrMonitor() {
-        return anrMonitor;
-    }
-
     @Override
     public void onWebViewReportingInit(@NonNull WebViewJsInterfaceHandler webViewJsInterfaceHandler) {
         webViewJsInterfaceHandler.setLogger(mPublicLogger);
@@ -342,13 +178,7 @@ public class MainReporter extends BaseReporter implements IMainReporter {
 
     @Override
     public void registerAnrListener(@NonNull final AnrListener listener) {
-        final ANRMonitor.Listener anrListener = new ANRMonitor.Listener() {
-            @Override
-            public void onAppNotResponding() {
-                listener.onAppNotResponding();
-            }
-        };
-        anrMonitor.subscribe(anrListener);
+        mainReporterAnrController.registerListener(listener);
     }
 
     @Override
@@ -368,7 +198,7 @@ public class MainReporter extends BaseReporter implements IMainReporter {
         );
         mPublicLogger.info("native crash reporting enabled: %b", enabled);
         if (enabled) {
-            nativeCrashClient.initHandling(
+            mainReporterComponents.getNativeCrashClient().initHandling(
                 mContext,
                 mReporterEnvironment.getReporterConfiguration().getApiKey(),
                 mReporterEnvironment.getErrorEnvironment()
@@ -379,18 +209,8 @@ public class MainReporter extends BaseReporter implements IMainReporter {
     @Override
     public void putErrorEnvironmentValue(String key, String value) {
         super.putErrorEnvironmentValue(key, value);
-        nativeCrashClient.updateErrorEnvironment(mReporterEnvironment.getErrorEnvironment());
-    }
-
-    @NonNull
-    private PreloadInfoWrapper createPreloadInfoWrapper(@NonNull AppMetricaConfig config) {
-        return new PreloadInfoWrapper(
-                config.preloadInfo,
-                mPublicLogger,
-                WrapUtils.getOrDefault(
-                    AppMetricaInternalConfigExtractor.getPreloadInfoAutoTracking(config),
-                    DefaultValues.DEFAULT_AUTO_PRELOAD_INFO_DETECTION
-                )
+        mainReporterComponents.getNativeCrashClient().updateErrorEnvironment(
+            mReporterEnvironment.getErrorEnvironment()
         );
     }
 
@@ -399,9 +219,4 @@ public class MainReporter extends BaseReporter implements IMainReporter {
         return TAG;
     }
 
-    private static long getSessionTimeout(@NonNull final AppMetricaConfig config) {
-        return config.sessionTimeout == null ?
-            TimeUnit.SECONDS.toMillis(DefaultValues.DEFAULT_SESSION_TIMEOUT_SECONDS) :
-            config.sessionTimeout;
-    }
 }

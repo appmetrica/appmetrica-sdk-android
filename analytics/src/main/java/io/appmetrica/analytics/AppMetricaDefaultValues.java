@@ -71,4 +71,8 @@ public final class AppMetricaDefaultValues {
      * Default ANR ticks count.
      */
     public static final int DEFAULT_ANR_TICKS_COUNT = DefaultValues.DEFAULT_ANR_TICKS_COUNT;
+    /**
+     * Default ANR collecting enabled flag
+     */
+    public static final boolean DEFAULT_ANR_COLLECTING_ENABLED = DefaultValues.DEFAULT_ANR_COLLECTING_ENABLED;
 }

@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.ResultReceiver
 import io.appmetrica.analytics.impl.AppMetricaConnector
-import io.appmetrica.analytics.impl.AppMetricaUncaughtExceptionHandler
+import io.appmetrica.analytics.impl.crash.jvm.client.AppMetricaUncaughtExceptionHandler
 import io.appmetrica.analytics.impl.CounterReport
 import io.appmetrica.analytics.impl.ReportToSend
 import io.appmetrica.analytics.impl.ReporterEnvironment
@@ -44,8 +44,6 @@ internal class CrashCallableTest : CommonTest() {
     @get:Rule
     val serviceUtilsRule = MockedStaticRule(ServiceUtils::class.java)
     @get:Rule
-    val uncaughtExceptionHandlerMockedRule = MockedStaticRule(AppMetricaUncaughtExceptionHandler::class.java)
-    @get:Rule
     val clientServiceLocatorRule = ClientServiceLocatorRule()
     @get:Rule
     val mockedRule = MockedConstructionRule(CrashToFileWriter::class.java) { mock, mockContext ->
@@ -73,7 +71,7 @@ internal class CrashCallableTest : CommonTest() {
         whenever(reportToSend.environment).thenReturn(reporterEnvironment)
 
         whenever(ServiceUtils.getOwnMetricaServiceIntent(context)).thenReturn(intent)
-        whenever(AppMetricaUncaughtExceptionHandler.isProcessDying()).thenReturn(false)
+        AppMetricaUncaughtExceptionHandler.reset()
     }
 
     @Test

@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.component.clients;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import io.appmetrica.analytics.impl.CounterConfigurationReporterType;
+import io.appmetrica.analytics.internal.CounterConfigurationReporterType;
 import io.appmetrica.analytics.impl.component.CommonArguments;
 import io.appmetrica.analytics.impl.component.ComponentId;
 import io.appmetrica.analytics.impl.component.ComponentUnit;

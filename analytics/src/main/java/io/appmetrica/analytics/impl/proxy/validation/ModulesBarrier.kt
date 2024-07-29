@@ -24,6 +24,10 @@ class ModulesBarrier(
     )
     private val apiKeyValidator = ThrowIfFailedValidator(ApiKeyValidator())
 
+    fun activate(context: Context?) {
+        contextValidator.validate(context)
+    }
+
     @Suppress("UNUSED_PARAMETER")
     fun reportEvent(
         event: ModuleEvent

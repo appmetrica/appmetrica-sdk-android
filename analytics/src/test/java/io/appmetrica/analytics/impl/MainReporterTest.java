@@ -3,30 +3,17 @@ package io.appmetrica.analytics.impl;
 import android.app.Activity;
 import android.content.Context;
 import android.location.Location;
-import androidx.annotation.NonNull;
-import io.appmetrica.analytics.AnrListener;
 import io.appmetrica.analytics.AppMetricaConfig;
 import io.appmetrica.analytics.ExternalAttribution;
-import io.appmetrica.analytics.PreloadInfo;
 import io.appmetrica.analytics.ValidationException;
-import io.appmetrica.analytics.impl.crash.ANRMonitor;
-import io.appmetrica.analytics.impl.crash.PluginErrorDetailsConverter;
-import io.appmetrica.analytics.impl.crash.client.AllThreads;
-import io.appmetrica.analytics.impl.crash.client.UnhandledException;
-import io.appmetrica.analytics.impl.crash.client.converter.AnrConverter;
-import io.appmetrica.analytics.impl.crash.client.converter.CustomErrorConverter;
-import io.appmetrica.analytics.impl.crash.client.converter.RegularErrorConverter;
-import io.appmetrica.analytics.impl.crash.client.converter.UnhandledExceptionConverter;
+import io.appmetrica.analytics.impl.crash.jvm.client.LibraryAnrDetector;
+import io.appmetrica.analytics.impl.crash.jvm.client.UnhandledException;
 import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoWrapper;
-import io.appmetrica.analytics.impl.reporter.MainReporterContext;
 import io.appmetrica.analytics.impl.reporter.ReporterLifecycleListener;
 import io.appmetrica.analytics.impl.startup.StartupHelper;
-import io.appmetrica.analytics.coreutils.internal.logger.LoggerStorage;
 import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule;
 import io.appmetrica.analytics.testutils.StubbedBlockingExecutor;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import org.junit.Before;
 import org.junit.Rule;
@@ -45,13 +32,11 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Mockito.atLeast;
-import static org.mockito.Mockito.clearInvocations;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
@@ -60,6 +45,8 @@ import static org.mockito.Mockito.when;
 public class MainReporterTest extends BaseReporterTest {
 
     private StartupHelper mStartupHelper;
+    @Mock
+    private MainReporterComponents mainReporterComponents;
     @Mock
     private IReporterExtended mAppmetricaReporter;
     @Mock
@@ -114,97 +101,16 @@ public class MainReporterTest extends BaseReporterTest {
     }
 
     @Test
-    public void testMainReporterListenerIsCalledInConstructor() {
-        when(ClientServiceLocator.getInstance().getReporterLifecycleListener())
-                .thenReturn(reporterLifecycleListener);
-        final MainReporter reporter = getReporter();
-        verify(reporterLifecycleListener).onCreateMainReporter(any(MainReporterContext.class), eq(reporter));
-    }
-
-    @Test
-    public void testDefaultSessionTimeoutIsLoggedInConstructor() {
-        clearInvocations(mPublicLogger);
-        final MainReporter reporter = getReporter();
-        verify(mPublicLogger).info("Actual sessions timeout is 10000");
-    }
-
-    @Test
-    public void testPreloadInfoWrapperSet() {
-        PreloadInfo preloadInfo = mock(PreloadInfo.class);
-        mMainReporter = getReporter(
-                AppMetricaConfig.newConfigBuilder(apiKey)
-                        .withPreloadInfo(preloadInfo)
-                        .withAdditionalConfig("YMM_clids", new HashMap<String, String>())
-                        .withAdditionalConfig("YMM_preloadInfoAutoTracking", true)
-                        .build(),
-                mAnotherReporterEnvironment
-        );
-        verify(mAnotherReporterEnvironment).setPreloadInfoWrapper(mPreloadInfoWrapperCaptor.capture());
-        assertThat(mPreloadInfoWrapperCaptor.getValue()).isEqualToComparingFieldByField(new PreloadInfoWrapper(preloadInfo, mPublicLogger, true));
-    }
-
-    @Test
-    public void testPreloadInfoWrapperSetAutoTrackingIsFalse() {
-        PreloadInfo preloadInfo = mock(PreloadInfo.class);
-        mMainReporter = getReporter(
-                AppMetricaConfig.newConfigBuilder(apiKey)
-                        .withPreloadInfo(preloadInfo)
-                        .withAdditionalConfig("YMM_clids", new HashMap<String, String>())
-                        .withAdditionalConfig("YMM_preloadInfoAutoTracking", false)
-                        .build(),
-                mAnotherReporterEnvironment
-        );
-        verify(mAnotherReporterEnvironment).setPreloadInfoWrapper(mPreloadInfoWrapperCaptor.capture());
-        assertThat(mPreloadInfoWrapperCaptor.getValue()).isEqualToComparingFieldByField(new PreloadInfoWrapper(preloadInfo, mPublicLogger, false));
-    }
-
-    @Test
-    public void testPreloadInfoWrapperSetAutoTrackingIsNull() {
-        PreloadInfo preloadInfo = mock(PreloadInfo.class);
-        mMainReporter = getReporter(
-                AppMetricaConfig.newConfigBuilder(apiKey)
-                        .withPreloadInfo(preloadInfo)
-                        .build(),
-                mAnotherReporterEnvironment
-        );
-        verify(mAnotherReporterEnvironment).setPreloadInfoWrapper(mPreloadInfoWrapperCaptor.capture());
-        assertThat(mPreloadInfoWrapperCaptor.getValue()).isEqualToComparingFieldByField(new PreloadInfoWrapper(preloadInfo, mPublicLogger, false));
-    }
-
-    @Test
-    public void testPreloadInfoWrapperSetPreloadInfoIsNull() {
-        mMainReporter = getReporter(
-                AppMetricaConfig.newConfigBuilder(apiKey)
-                        .withAdditionalConfig("YMM_clids", new HashMap<String, String>())
-                        .withAdditionalConfig("YMM_preloadInfoAutoTracking", true)
-                        .build(),
-                mAnotherReporterEnvironment
-        );
-        verify(mAnotherReporterEnvironment).setPreloadInfoWrapper(mPreloadInfoWrapperCaptor.capture());
-        assertThat(mPreloadInfoWrapperCaptor.getValue()).isEqualToComparingFieldByField(new PreloadInfoWrapper(null, mPublicLogger, false));
-    }
-
-    @Test
     public void userProfileIDIfNotSet() {
         mMainReporter = createWithProfileID(null);
         assertThat(mMainReporter.getEnvironment().getInitialUserProfileID()).isNull();
     }
 
-    @Test
-    public void userProfileID() {
-        String userProfileID = "user_profile_id";
-        mMainReporter = createWithProfileID(userProfileID);
-        assertThat(mMainReporter.getEnvironment().getInitialUserProfileID()).isEqualTo(userProfileID);
-    }
-
     private MainReporter createWithProfileID(String userProfileID) {
         AppMetricaConfig config = AppMetricaConfig.newConfigBuilder(apiKey)
-                .withUserProfileID(userProfileID)
-                .build();
-        return new MainReporter(
-                mContext, mProcessConfiguration, config, mReportsHandler, nativeCrashClient, mStartupHelper,
-                mAppmetricaReporterProvider, mPushReporterProvider, clientServiceLocator, mExtraMetaInfoRetriever
-        );
+            .withUserProfileID(userProfileID)
+            .build();
+        return new MainReporter(mainReporterComponents);
     }
 
     @Test
@@ -214,6 +120,7 @@ public class MainReporterTest extends BaseReporterTest {
         String errorEnv = "erroorrenen";
         doReturn(errorEnv).when(mReporterEnvironment).getErrorEnvironment();
         mMainReporter = getReporter();
+        mMainReporter.updateConfig(mConfig, true);
         verify(nativeCrashClient).initHandling(eq(mContext), eq(apiKey), eq(errorEnv));
     }
 
@@ -222,6 +129,7 @@ public class MainReporterTest extends BaseReporterTest {
         Mockito.reset(nativeCrashClient);
         mConfig = AppMetricaConfig.newConfigBuilder(apiKey).build();
         mMainReporter = getReporter();
+        mMainReporter.updateConfig(mConfig, true);
         verify(nativeCrashClient).initHandling(eq(mContext), eq(apiKey), eq((String) null));
     }
 
@@ -229,6 +137,7 @@ public class MainReporterTest extends BaseReporterTest {
     public void testNativeCrashReportingDisabled() {
         mConfig = AppMetricaConfig.newConfigBuilder(apiKey).withNativeCrashReporting(false).build();
         mMainReporter = getReporter();
+        mMainReporter.updateConfig(mConfig, true);
         verify(nativeCrashClient, never()).initHandling(any(Context.class), any(String.class), any(String.class));
     }
 
@@ -380,73 +289,21 @@ public class MainReporterTest extends BaseReporterTest {
 
     @Override
     protected MainReporter getReporter() {
-        return getReporter(mConfig, mReporterEnvironment);
-    }
-
-    private MainReporter getReporter(@NonNull AppMetricaConfig config, @NonNull ReporterEnvironment environment) {
-        mMainReporter = new MainReporter(
-                mContext,
-                config,
-                mReportsHandler,
-                nativeCrashClient,
-                environment,
-                mAppStatusMonitor,
-                mStartupHelper,
-                mLibraryAnrDetector,
-                processDetector,
-                mAppmetricaReporterProvider,
-                mPushReporterProvider,
-                mExtraMetaInfoRetriever,
-                activityStateManager,
-                pluginErrorDetailsConverter,
-                unhandledExceptionConverter,
-                regularErrorConverter,
-                customErrorConverter,
-                anrConverter
-        );
+        when(mainReporterComponents.getContext()).thenReturn(mContext);
+        when(mainReporterComponents.getReportsHandler()).thenReturn(mReportsHandler);
+        when(mainReporterComponents.getReporterEnvironment()).thenReturn(mReporterEnvironment);
+        when(mainReporterComponents.getExtraMetaInfoRetriever()).thenReturn(mExtraMetaInfoRetriever);
+        when(mainReporterComponents.getProcessDetector()).thenReturn(processDetector);
+        when(mainReporterComponents.getUnhandledExceptionConverter()).thenReturn(unhandledExceptionConverter);
+        when(mainReporterComponents.getRegularErrorConverter()).thenReturn(regularErrorConverter);
+        when(mainReporterComponents.getCustomErrorConverter()).thenReturn(customErrorConverter);
+        when(mainReporterComponents.getAnrConverter()).thenReturn(anrConverter);
+        when(mainReporterComponents.getPluginErrorDetailsConverter()).thenReturn(pluginErrorDetailsConverter);
+        when(mainReporterComponents.getAppStatusMonitor()).thenReturn(mAppStatusMonitor);
+        when(mainReporterComponents.getActivityStateManager()).thenReturn(activityStateManager);
+        when(mainReporterComponents.getNativeCrashClient()).thenReturn(nativeCrashClient);
+        mMainReporter = new MainReporter(mainReporterComponents);
         return mMainReporter;
-    }
-
-    @Test
-    public void testAnrMonitoring() {
-        ANRMonitor anrMonitor = mock(ANRMonitor.class);
-        mMainReporter.setAnrMonitor(anrMonitor);
-        mMainReporter.enableAnrMonitoring();
-        verify(anrMonitor).startMonitoring();
-    }
-
-    @Test
-    public void testAnrMonitoringCalledOnlyOnce() {
-        ANRMonitor anrMonitor = mock(ANRMonitor.class);
-        mMainReporter.setAnrMonitor(anrMonitor);
-        mMainReporter.enableAnrMonitoring();
-        mMainReporter.enableAnrMonitoring();
-        verify(anrMonitor, times(1)).startMonitoring();
-        verifyNoMoreInteractions(anrMonitor);
-    }
-
-    @Test
-    public void testRegisterAnrListener() {
-        AnrListener listener1 = mock(AnrListener.class);
-        AnrListener listener2 = mock(AnrListener.class);
-        ANRMonitor anrMonitor = mock(ANRMonitor.class);
-        mMainReporter.setAnrMonitor(anrMonitor);
-        mMainReporter.registerAnrListener(listener1);
-        mMainReporter.registerAnrListener(listener2);
-
-        ArgumentCaptor<ANRMonitor.Listener> anrListenerCaptor = ArgumentCaptor.forClass(ANRMonitor.Listener.class);
-        verify(anrMonitor, times(2)).subscribe(anrListenerCaptor.capture());
-
-        ANRMonitor.Listener anrListener1 = anrListenerCaptor.getAllValues().get(0);
-        ANRMonitor.Listener anrListener2 = anrListenerCaptor.getAllValues().get(1);
-
-        anrListener1.onAppNotResponding();
-        verify(listener1).onAppNotResponding();
-        verifyNoMoreInteractions(listener2);
-
-        anrListener2.onAppNotResponding();
-        verify(listener2).onAppNotResponding();
-        verifyNoMoreInteractions(listener1);
     }
 
     @Test
@@ -469,9 +326,9 @@ public class MainReporterTest extends BaseReporterTest {
     public void testActivationAddErrorEnvironmentFromConfig() throws Exception {
         MainReporter mainReporter = spy(mMainReporter);
         AppMetricaConfig config = AppMetricaConfig.newConfigBuilder(apiKey)
-                .withErrorEnvironmentValue("memory", "2mb")
-                .withErrorEnvironmentValue("money", "-100")
-                .build();
+            .withErrorEnvironmentValue("memory", "2mb")
+            .withErrorEnvironmentValue("money", "-100")
+            .build();
 
         ArgumentCaptor<Map> argMap = ArgumentCaptor.forClass(Map.class);
 
@@ -490,9 +347,9 @@ public class MainReporterTest extends BaseReporterTest {
     public void testActivationAddAppEnvironmentFromConfig() throws Exception {
         MainReporter mainReporter = spy(mMainReporter);
         AppMetricaConfig config = AppMetricaConfig.newConfigBuilder(apiKey)
-                .withAppEnvironmentValue("memory", "2mb")
-                .withAppEnvironmentValue("money", "-100")
-                .build();
+            .withAppEnvironmentValue("memory", "2mb")
+            .withAppEnvironmentValue("money", "-100")
+            .build();
 
         ArgumentCaptor<Map> argMap = ArgumentCaptor.forClass(Map.class);
 
@@ -505,42 +362,6 @@ public class MainReporterTest extends BaseReporterTest {
         assertThat(map.keySet().contains("money")).isTrue();
         assertThat(map.values().contains("2mb")).isTrue();
         assertThat(map.values().contains("-100")).isTrue();
-    }
-
-    @Test
-    public void testReportOnlyAppmetricaAnr() {
-        when(mLibraryAnrDetector.isAppmetricaAnr(any(List.class))).thenReturn(true);
-        when(mLibraryAnrDetector.isPushAnr(any(List.class))).thenReturn(false);
-        mMainReporter.getAnrMonitor().handleAppNotResponding();
-        verify(mAppmetricaReporter).reportAnr(any(AllThreads.class));
-        verify(mPushReporter, never()).reportAnr(any(AllThreads.class));
-    }
-
-    @Test
-    public void testReportOnlyPushAnr() {
-        when(mLibraryAnrDetector.isAppmetricaAnr(any(List.class))).thenReturn(false);
-        when(mLibraryAnrDetector.isPushAnr(any(List.class))).thenReturn(true);
-        mMainReporter.getAnrMonitor().handleAppNotResponding();
-        verify(mAppmetricaReporter, never()).reportAnr(any(AllThreads.class));
-        verify(mPushReporter).reportAnr(any(AllThreads.class));
-    }
-
-    @Test
-    public void testReportAppmetricaAndPushAnr() {
-        when(mLibraryAnrDetector.isAppmetricaAnr(any(List.class))).thenReturn(true);
-        when(mLibraryAnrDetector.isPushAnr(any(List.class))).thenReturn(true);
-        mMainReporter.getAnrMonitor().handleAppNotResponding();
-        verify(mAppmetricaReporter).reportAnr(any(AllThreads.class));
-        verify(mPushReporter).reportAnr(any(AllThreads.class));
-    }
-
-    @Test
-    public void testReportNeitherAppmetricaNorPushAnr() {
-        when(mLibraryAnrDetector.isAppmetricaAnr(any(List.class))).thenReturn(false);
-        when(mLibraryAnrDetector.isPushAnr(any(List.class))).thenReturn(false);
-        mMainReporter.getAnrMonitor().handleAppNotResponding();
-        verify(mAppmetricaReporter, never()).reportAnr(any(AllThreads.class));
-        verify(mPushReporter, never()).reportAnr(any(AllThreads.class));
     }
 
     @Test
@@ -616,25 +437,6 @@ public class MainReporterTest extends BaseReporterTest {
     }
 
     @Test
-    public void testReporterType() {
-        AppMetricaConfig config = AppMetricaConfig.newConfigBuilder(apiKey).build();
-        when(LoggerStorage.getOrCreatePublicLogger(TestsData.UUID_API_KEY)).thenReturn(mPublicLogger);
-        mReporter = new MainReporter(
-                mContext,
-                mProcessConfiguration,
-                config,
-                mReportsHandler,
-                nativeCrashClient,
-                mStartupHelper,
-                mAppmetricaReporterProvider,
-                mPushReporterProvider,
-                clientServiceLocatorRule.instance,
-                mExtraMetaInfoRetriever
-        );
-        assertThat(mReporter.getEnvironment().getReporterConfiguration().getReporterType()).isEqualTo(CounterConfigurationReporterType.MAIN);
-    }
-
-    @Test
     public void onWebViewReportingInit() {
         WebViewJsInterfaceHandler webViewJsInterfaceHandler = mock(WebViewJsInterfaceHandler.class);
         mMainReporter.onWebViewReportingInit(webViewJsInterfaceHandler);
@@ -667,31 +469,23 @@ public class MainReporterTest extends BaseReporterTest {
     @RunWith(ParameterizedRobolectricTestRunner.class)
     public static class ReporterReportCustomEventEventTypeTests extends BaseReporterTest.ReporterReportCustomEventEventTypeTests {
 
+        @Mock
+        private MainReporterComponents mainReporterComponents;
+
         public ReporterReportCustomEventEventTypeTests(int eventType, int wantedNumberOfInvocations) {
             super(eventType, wantedNumberOfInvocations);
         }
 
         @Override
         public BaseReporter getReporter() {
+            when(mainReporterComponents.getContext()).thenReturn(mContext);
+            when(mainReporterComponents.getReportsHandler()).thenReturn(mReportsHandler);
+            when(mainReporterComponents.getReporterEnvironment()).thenReturn(mReporterEnvironment);
+            when(mainReporterComponents.getProcessDetector()).thenReturn(processDetector);
+            when(mainReporterComponents.getAppStatusMonitor()).thenReturn(mAppStatusMonitor);
+            when(mainReporterComponents.getNativeCrashClient()).thenReturn(nativeCrashClient);
             return new MainReporter(
-                    mContext,
-                    mConfig,
-                    mReportsHandler,
-                    nativeCrashClient,
-                    mReporterEnvironment,
-                    mAppStatusMonitor,
-                    mStartupHelper,
-                    mock(LibraryAnrDetector.class),
-                    processDetector,
-                    mock(UnhandledSituationReporterProvider.class),
-                    mock(UnhandledSituationReporterProvider.class),
-                    mock(ExtraMetaInfoRetriever.class),
-                    mock(ActivityStateManager.class),
-                    mock(PluginErrorDetailsConverter.class),
-                    mock(UnhandledExceptionConverter.class),
-                    mock(RegularErrorConverter.class),
-                    mock(CustomErrorConverter.class),
-                    mock(AnrConverter.class)
+                mainReporterComponents
             );
         }
     }

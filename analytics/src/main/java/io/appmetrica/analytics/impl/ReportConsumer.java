@@ -12,7 +12,7 @@ import io.appmetrica.analytics.impl.component.clients.ClientDescription;
 import io.appmetrica.analytics.impl.component.clients.ClientRepository;
 import io.appmetrica.analytics.impl.component.clients.ClientUnit;
 import io.appmetrica.analytics.impl.crash.ReadAndReportRunnable;
-import io.appmetrica.analytics.impl.crash.client.converter.NativeCrashConverter;
+import io.appmetrica.analytics.impl.crash.jvm.converter.NativeCrashConverter;
 import io.appmetrica.analytics.impl.crash.jvm.JvmCrash;
 import io.appmetrica.analytics.impl.crash.jvm.JvmCrashReader;
 import io.appmetrica.analytics.impl.crash.ndk.AppMetricaNativeCrash;

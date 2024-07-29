@@ -281,6 +281,7 @@ public class AppMetricaConfig {
      * @param json {@link String} representing AppMetricaConfig
      * @return {@link AppMetricaConfig} parsed from giver json
      */
+    @Nullable
     public static AppMetricaConfig fromJson(String json) {
         return new ClientConfigSerializer().fromJson(json);
     }
@@ -799,7 +800,7 @@ public class AppMetricaConfig {
 
         /**
          * Whether to capture and send reports about ANRs automatically.
-         * <p> <b>NOTE:</b> Default value is false.
+         * <p> <b>NOTE:</b> Default value is {@value AppMetricaDefaultValues#DEFAULT_ANR_COLLECTING_ENABLED}.
          *
          * @param enabled {@code true} if we need to send reports about ANRs,
          * otherwise {@code false}.

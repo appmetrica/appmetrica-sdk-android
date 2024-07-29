@@ -2,6 +2,7 @@ package io.appmetrica.analytics.impl.stub;
 
 import io.appmetrica.analytics.AppMetricaConfig;
 import io.appmetrica.analytics.ReporterConfig;
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.testutils.CommonTest;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,6 +12,7 @@ import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 @RunWith(RobolectricTestRunner.class)
@@ -20,6 +22,8 @@ public class ReporterFactoryStubTest extends CommonTest {
     private AppMetricaConfig appMetricaConfig;
     @Mock
     private ReporterConfig reporterInternalConfig;
+    @Mock
+    private PublicLogger publicLogger;
 
     private ReporterFactoryStub reporterFactoryStub;
 
@@ -31,11 +35,19 @@ public class ReporterFactoryStubTest extends CommonTest {
     }
 
     @Test
-    public void buildMainReporter() {
-        assertThat(reporterFactoryStub.buildMainReporter(appMetricaConfig, true))
+    public void buildAnonymousMainReporter() {
+        assertThat(reporterFactoryStub.buildOrUpdateAnonymousMainReporter(appMetricaConfig, publicLogger, true))
             .isNotNull()
             .isInstanceOf(MainReporterStub.class);
-        verifyNoMoreInteractions(appMetricaConfig);
+        verifyNoInteractions(appMetricaConfig, publicLogger);
+    }
+
+    @Test
+    public void buildMainReporter() {
+        assertThat(reporterFactoryStub.buildOrUpdateMainReporter(appMetricaConfig, publicLogger, true))
+            .isNotNull()
+            .isInstanceOf(MainReporterStub.class);
+        verifyNoInteractions(appMetricaConfig, publicLogger);
     }
 
     @Test

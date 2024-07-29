@@ -2,8 +2,8 @@ package io.appmetrica.analytics.impl.crash
 
 import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
 import io.appmetrica.analytics.impl.ExtraMetaInfoRetriever
-import io.appmetrica.analytics.impl.crash.client.UnhandledException
-import io.appmetrica.analytics.impl.crash.client.UnhandledExceptionFactory
+import io.appmetrica.analytics.impl.crash.jvm.client.UnhandledException
+import io.appmetrica.analytics.impl.crash.jvm.client.UnhandledExceptionFactory
 import io.appmetrica.analytics.plugins.PluginErrorDetails
 import io.appmetrica.analytics.plugins.StackTraceItem
 import io.appmetrica.analytics.testutils.CommonTest

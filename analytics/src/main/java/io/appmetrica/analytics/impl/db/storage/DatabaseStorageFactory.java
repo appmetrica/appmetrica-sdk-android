@@ -152,6 +152,10 @@ public class DatabaseStorageFactory {
 
     public synchronized IKeyValueTableDbHelper getPreferencesDbHelper(ComponentId componentId) {
         String key = new ComponentDatabaseSimpleNameProvider(componentId).getDatabaseName();
+        DebugLogger.INSTANCE.info(
+            TAG,
+            "getPreferencesDbHelper: component = %s; db key = %s", componentId, key
+        );
         IKeyValueTableDbHelper dbHelper = mDbHelpers.get(key);
         if (dbHelper == null) {
             DatabaseStorage storage = getStorageForComponent(componentId);

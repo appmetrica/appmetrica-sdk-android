@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.impl.FirstOccurrenceStatus;
-import io.appmetrica.analytics.impl.crash.client.converter.CrashOptionalBoolConverter;
+import io.appmetrica.analytics.impl.crash.jvm.converter.CrashOptionalBoolConverter;
 import io.appmetrica.analytics.impl.db.event.DbLocationModel;
 import io.appmetrica.analytics.impl.protobuf.backend.EventProto;
 import io.appmetrica.analytics.impl.request.ReportRequestConfig;

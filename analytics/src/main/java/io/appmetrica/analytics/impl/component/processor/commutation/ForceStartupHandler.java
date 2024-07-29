@@ -6,8 +6,11 @@ import io.appmetrica.analytics.impl.CounterReport;
 import io.appmetrica.analytics.impl.IdentifiersData;
 import io.appmetrica.analytics.impl.component.CommutationDispatcherComponent;
 import io.appmetrica.analytics.impl.component.clients.CommutationClientUnit;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 
 public class ForceStartupHandler extends CommutationHandler {
+
+    private static final String TAG = "[ForceStartupHandler]";
 
     public ForceStartupHandler(CommutationDispatcherComponent component) {
         super(component);
@@ -15,6 +18,7 @@ public class ForceStartupHandler extends CommutationHandler {
 
     @Override
     public boolean process(@NonNull CounterReport reportData, @NonNull CommutationClientUnit clientUnit) {
+        DebugLogger.INSTANCE.info(TAG, "process: %s", reportData);
         Bundle payload = reportData.getPayload();
         IdentifiersData identifiersData = null;
         if (payload != null) {

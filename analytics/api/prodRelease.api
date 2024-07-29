@@ -135,7 +135,7 @@ public class io.appmetrica.analytics.AppMetricaConfig {
     public final [Nullable] String userProfileID
 
     protected <init>([NonNull] io.appmetrica.analytics.AppMetricaConfig)
-    public static io.appmetrica.analytics.AppMetricaConfig fromJson(String)
+    public static [Nullable] io.appmetrica.analytics.AppMetricaConfig fromJson(String)
     public static [NonNull] io.appmetrica.analytics.AppMetricaConfig$Builder newConfigBuilder([NonNull] String)
     public String toJson()
 }
@@ -171,6 +171,7 @@ public static class io.appmetrica.analytics.AppMetricaConfig$Builder {
 }
 
 public final class io.appmetrica.analytics.AppMetricaDefaultValues {
+    public static final boolean DEFAULT_ANR_COLLECTING_ENABLED
     public static final int DEFAULT_ANR_TICKS_COUNT
     public static final boolean DEFAULT_APP_OPEN_TRACKING_ENABLED
     public static final int DEFAULT_DISPATCH_PERIOD_SECONDS
@@ -310,6 +311,7 @@ public final class io.appmetrica.analytics.ModulesFacade {
     public static final int EXTERNAL_ATTRIBUTION_TENJIN
 
     public <init>()
+    public static void activate([NonNull] android.content.Context)
     public static [NonNull] io.appmetrica.analytics.IModuleReporter getModuleReporter([NonNull] android.content.Context, [NonNull] String)
     public static boolean isActivatedForApp()
     public static void reportAdRevenue([NonNull] io.appmetrica.analytics.AdRevenue)
@@ -559,10 +561,12 @@ public class io.appmetrica.analytics.internal.CounterConfiguration implementatio
     public static final android.os.Parcelable$Creator<io.appmetrica.analytics.internal.CounterConfiguration> CREATOR
 
     public <init>()
-    public <init>(io.appmetrica.analytics.AppMetricaConfig, [NonNull] OBFUSCATED[io.appmetrica.analytics.impl.CounterConfigurationReporterType])
+    public <init>(io.appmetrica.analytics.AppMetricaConfig, [NonNull] io.appmetrica.analytics.internal.CounterConfigurationReporterType)
     public <init>([NonNull] io.appmetrica.analytics.ReporterConfig)
     public <init>([NonNull] io.appmetrica.analytics.internal.CounterConfiguration)
+    public <init>([NonNull] io.appmetrica.analytics.internal.CounterConfigurationReporterType)
     public <init>([NonNull] String)
+    public void applyFromConfig([NonNull] io.appmetrica.analytics.AppMetricaConfig)
     public int describeContents()
     public static io.appmetrica.analytics.internal.CounterConfiguration fromBundle(android.os.Bundle)
     public String getApiKey()
@@ -575,14 +579,13 @@ public class io.appmetrica.analytics.internal.CounterConfiguration implementatio
     public [Nullable] Integer getMaxReportsCount()
     public [Nullable] Integer getMaxReportsInDbCount()
     public [Nullable] Boolean getReportNativeCrashesEnabled()
-    public [NonNull] OBFUSCATED[io.appmetrica.analytics.impl.CounterConfigurationReporterType] getReporterType()
+    public [NonNull] io.appmetrica.analytics.internal.CounterConfigurationReporterType getReporterType()
     public [Nullable] Integer getSessionTimeout()
     public String getUuid()
     public [Nullable] Boolean isFirstActivationAsUpdate()
     public [Nullable] Boolean isLocationTrackingEnabled()
     public [Nullable] Boolean isLogEnabled()
     public [Nullable] Boolean isRevenueAutoTrackingEnabled()
-    public void overlapByBundle(android.os.Bundle)
     public void setApiKey(String)
     public void setAppBuildNumber(int)
     public final void setCustomAppVersion(String)
@@ -595,13 +598,28 @@ public class io.appmetrica.analytics.internal.CounterConfiguration implementatio
     public final void setManualLocation([Nullable] android.location.Location)
     public void setMaxReportsCount(int)
     public void setMaxReportsInDbCount(int)
-    public void setReporterType([NonNull] OBFUSCATED[io.appmetrica.analytics.impl.CounterConfigurationReporterType])
+    public void setReporterType([NonNull] io.appmetrica.analytics.internal.CounterConfigurationReporterType)
     public void setRevenueAutoTrackingEnabled(boolean)
     public void setSessionTimeout(int)
     public void setUuid(String)
     public void toBundle(android.os.Bundle)
     public String toString()
     public void writeToParcel(android.os.Parcel, int)
+}
+
+public enum io.appmetrica.analytics.internal.CounterConfigurationReporterType {
+    COMMUTATION, CRASH, MAIN, MANUAL, SELF_DIAGNOSTIC_MAIN, SELF_DIAGNOSTIC_MANUAL, SELF_SDK
+
+    public static final [NonNull] io.appmetrica.analytics.internal.CounterConfigurationReporterType$Companion Companion
+
+    public static final [NonNull] io.appmetrica.analytics.internal.CounterConfigurationReporterType fromStringValue([Nullable] String)
+    public final [NonNull] String getStringValue()
+    public static io.appmetrica.analytics.internal.CounterConfigurationReporterType valueOf(String)
+    public static io.appmetrica.analytics.internal.CounterConfigurationReporterType[] values()
+}
+
+public static final class io.appmetrica.analytics.internal.CounterConfigurationReporterType$Companion {
+    public final [NonNull] io.appmetrica.analytics.internal.CounterConfigurationReporterType fromStringValue([Nullable] String)
 }
 
 public interface io.appmetrica.analytics.internal.IAppMetricaService extends android.os.IInterface {

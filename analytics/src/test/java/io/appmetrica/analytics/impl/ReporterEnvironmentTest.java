@@ -94,4 +94,11 @@ public class ReporterEnvironmentTest extends CommonTest {
         mReporterEnvironment.onPauseForegroundSession();
         assertThat(mReporterEnvironment.isForegroundSessionPaused()).isTrue();
     }
+
+    @Test
+    public void setInitialUserProfileId() {
+        String userProfileId = "User profile id";
+        mReporterEnvironment.setInitialUserProfileID(userProfileId);
+        assertThat(mReporterEnvironment.getInitialUserProfileID()).isEqualTo(userProfileId);
+    }
 }

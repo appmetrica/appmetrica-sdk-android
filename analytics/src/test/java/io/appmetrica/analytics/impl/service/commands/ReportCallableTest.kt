@@ -5,7 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.ResultReceiver
 import io.appmetrica.analytics.impl.AppMetricaConnector
-import io.appmetrica.analytics.impl.AppMetricaUncaughtExceptionHandler
+import io.appmetrica.analytics.impl.crash.jvm.client.AppMetricaUncaughtExceptionHandler
 import io.appmetrica.analytics.impl.CounterReport
 import io.appmetrica.analytics.impl.ReportToSend
 import io.appmetrica.analytics.impl.ReporterEnvironment
@@ -54,8 +54,6 @@ internal class ReportCallableTest : CommonTest() {
 
     @get:Rule
     val serviceUtils = MockedStaticRule(ServiceUtils::class.java)
-    @get:Rule
-    val uncaughtExceptionHandlerMockedRule = MockedStaticRule(AppMetricaUncaughtExceptionHandler::class.java)
 
     @Before
     fun setUp() {
@@ -71,7 +69,7 @@ internal class ReportCallableTest : CommonTest() {
         whenever(reportData.toBundle(any())).thenReturn(reportBundle)
 
         whenever(ServiceUtils.getOwnMetricaServiceIntent(context)).thenReturn(intent)
-        whenever(AppMetricaUncaughtExceptionHandler.isProcessDying()).thenReturn(false)
+        AppMetricaUncaughtExceptionHandler.reset()
     }
 
     @Test

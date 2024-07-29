@@ -17,8 +17,10 @@ public interface IAppMetricaImpl
         extends MetricaConfigurator, DataResultReceiver.Receiver, IReporterFactoryProvider {
 
     @WorkerThread
-    void activate(@NonNull AppMetricaConfig originalConfig,
-                  @NonNull final AppMetricaConfig config);
+    void activate(@NonNull final AppMetricaConfig config);
+
+    @WorkerThread
+    void activateAnonymously();
 
     @AnyThread
     @Nullable

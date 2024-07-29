@@ -56,7 +56,7 @@ public final class AppMetricaProxy extends BaseAppMetricaProxy {
 
     public AppMetricaProxy() {
         this(
-            new AppMetricaFacadeProvider(),
+            ClientServiceLocator.getInstance().getAppMetricaFacadeProvider(),
             new WebViewJsInterfaceHandler()
         );
     }
@@ -103,15 +103,9 @@ public final class AppMetricaProxy extends BaseAppMetricaProxy {
     public void activate(@NonNull final Context context, @NonNull final AppMetricaConfig config) {
         barrier.activate(context, config);
         synchronousStageExecutor.activate(context.getApplicationContext(), config);
-        getExecutor().execute(new Runnable() {
-            @Override
-            public void run() {
-                getProvider().getInitializedImpl(context.getApplicationContext()).activateFull(
-                        config,
-                        getDefaultOneShotConfig().mergeWithUserConfig(config)
-                );
-            }
-        });
+        getExecutor().execute(() -> getProvider().getInitializedImpl(context.getApplicationContext()).activateFull(
+                getDefaultOneShotConfig().mergeWithUserConfig(config)
+        ));
 
         getProvider().markActivated();
     }
@@ -153,13 +147,10 @@ public final class AppMetricaProxy extends BaseAppMetricaProxy {
 
     public void enableActivityAutoTracking(@NonNull final Application application) {
         barrier.enableActivityAutoTracking(application);
-        final ActivityLifecycleManager.WatchingStatus status = synchronousStageExecutor
-                .enableActivityAutoTracking(application);
-        getExecutor().execute(new Runnable() {
-            @Override
-            public void run() {
-                getMainReporter().onEnableAutoTrackingAttemptOccurred(status);
-            }
+        synchronousStageExecutor.enableActivityAutoTracking(application);
+        getExecutor().execute(() -> {
+            final ActivityLifecycleManager.WatchingStatus status = sessionsTrackingManager.startWatchingIfNotYet();
+            getMainReporter().onEnableAutoTrackingAttemptOccurred(status);
         });
     }
 

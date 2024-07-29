@@ -148,7 +148,7 @@ public class AppMetricaProxyTest extends CommonTest {
         order.verify(mBarrier).activate(context, config);
         order.verify(mSynchronousStageExecutor).activate(applicationContext, config);
         order.verify(mProvider).markActivated();
-        verify(mImpl).activateFull(config, mergedConfig);
+        verify(mImpl).activateFull(mergedConfig);
     }
 
     @Test
@@ -176,7 +176,7 @@ public class AppMetricaProxyTest extends CommonTest {
     public void testEnableActivityAutoTracking() {
         Application application = mock(Application.class);
         ActivityLifecycleManager.WatchingStatus status = ActivityLifecycleManager.WatchingStatus.WATCHING;
-        when(mSynchronousStageExecutor.enableActivityAutoTracking(application)).thenReturn(status);
+        when(sessionsTrackingManager.startWatchingIfNotYet()).thenReturn(status);
         mProxy.enableActivityAutoTracking(application);
         InOrder order = inOrder(mBarrier, mSynchronousStageExecutor, mMainReporter);
         order.verify(mBarrier).enableActivityAutoTracking(application);

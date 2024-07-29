@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.component.clients;
 
 import androidx.annotation.NonNull;
-import io.appmetrica.analytics.impl.CounterConfigurationReporterType;
+import io.appmetrica.analytics.internal.CounterConfigurationReporterType;
 import io.appmetrica.analytics.testutils.CommonTest;
 import java.util.Arrays;
 import java.util.Collection;

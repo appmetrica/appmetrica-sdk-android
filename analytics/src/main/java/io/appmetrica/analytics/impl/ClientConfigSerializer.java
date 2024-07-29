@@ -3,6 +3,7 @@ package io.appmetrica.analytics.impl;
 import android.location.Location;
 import android.text.TextUtils;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import io.appmetrica.analytics.AppMetricaConfig;
 import io.appmetrica.analytics.PreloadInfo;
 import io.appmetrica.analytics.impl.utils.JsonHelper;
@@ -91,6 +92,7 @@ public class ClientConfigSerializer {
     }
 
     @SuppressWarnings("checkstyle:methodlength")
+    @Nullable
     public AppMetricaConfig fromJson(final String json) {
         AppMetricaConfig config = null;
         if (TextUtils.isEmpty(json) == false) {

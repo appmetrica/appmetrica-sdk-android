@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.crash.ndk
 
 import android.util.Base64
-import io.appmetrica.analytics.impl.CounterConfigurationReporterType
+import io.appmetrica.analytics.internal.CounterConfigurationReporterType
 import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.json.JSONObject

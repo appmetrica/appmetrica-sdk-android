@@ -6,6 +6,7 @@ import androidx.annotation.Nullable;
 import io.appmetrica.analytics.impl.client.ProcessConfiguration;
 import io.appmetrica.analytics.impl.service.AppMetricaServiceDataReporter;
 import io.appmetrica.analytics.internal.CounterConfiguration;
+import io.appmetrica.analytics.internal.CounterConfigurationReporterType;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 
 public class SelfDiagnosticReporter {

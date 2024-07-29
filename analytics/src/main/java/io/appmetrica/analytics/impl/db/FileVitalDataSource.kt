@@ -10,7 +10,7 @@ class FileVitalDataSource(
     private val fileName: String
 ) : VitalDataSource {
 
-    private val tag = "[FileVitalDataSource]"
+    private val tag = "[FileVitalDataSource-$fileName]"
 
     override fun getVitalData(): String? = try {
         val file = FileUtils.getFileFromSdkStorage(context, fileName)

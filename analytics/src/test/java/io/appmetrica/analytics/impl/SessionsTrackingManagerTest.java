@@ -15,8 +15,10 @@ import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.nullable;
+import static org.mockito.Mockito.clearInvocations;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -58,25 +60,25 @@ public class SessionsTrackingManagerTest extends CommonTest {
     @Test
     public void startWatchingAutoStartedReportsEvent() {
         when(activityLifecycleManager.getWatchingStatus()).thenReturn(ActivityLifecycleManager.WatchingStatus.WATCHING);
-        assertThat(sessionsTrackingManager.startWatching(true)).isEqualTo(ActivityLifecycleManager.WatchingStatus.WATCHING);
+        assertThat(sessionsTrackingManager.startWatchingIfNotYet()).isEqualTo(ActivityLifecycleManager.WatchingStatus.WATCHING);
     }
 
     @Test
     public void startWatchingManualStartedReportsEvent() {
         when(activityLifecycleManager.getWatchingStatus()).thenReturn(ActivityLifecycleManager.WatchingStatus.WATCHING);
-        assertThat(sessionsTrackingManager.startWatching(false)).isEqualTo(ActivityLifecycleManager.WatchingStatus.WATCHING);
+        assertThat(sessionsTrackingManager.startWatchingIfNotYet()).isEqualTo(ActivityLifecycleManager.WatchingStatus.WATCHING);
     }
 
     @Test
     public void startWatchingAutoNotStartedDoesNotReportEvent() {
         when(activityLifecycleManager.getWatchingStatus()).thenReturn(ActivityLifecycleManager.WatchingStatus.NO_APPLICATION);
-        assertThat(sessionsTrackingManager.startWatching(true)).isEqualTo(ActivityLifecycleManager.WatchingStatus.NO_APPLICATION);
+        assertThat(sessionsTrackingManager.startWatchingIfNotYet()).isEqualTo(ActivityLifecycleManager.WatchingStatus.NO_APPLICATION);
     }
 
     @Test
     public void startWatchingManualNotStartedDoesNotReportEvent() {
         when(activityLifecycleManager.getWatchingStatus()).thenReturn(ActivityLifecycleManager.WatchingStatus.NO_APPLICATION);
-        assertThat(sessionsTrackingManager.startWatching(false)).isEqualTo(ActivityLifecycleManager.WatchingStatus.NO_APPLICATION);
+        assertThat(sessionsTrackingManager.startWatchingIfNotYet()).isEqualTo(ActivityLifecycleManager.WatchingStatus.NO_APPLICATION);
     }
 
     @Test
@@ -144,7 +146,7 @@ public class SessionsTrackingManagerTest extends CommonTest {
     @Test
     public void sessionResumedStateChanged() {
         when(activityStateManager.didStateChange(activity, ActivityStateManager.ActivityState.RESUMED)).thenReturn(true);
-        sessionsTrackingManager.startWatching(true);
+        sessionsTrackingManager.startWatchingIfNotYet();
         verify(activityLifecycleManager).registerListener(listenerCaptor.capture(), eq(ActivityLifecycleManager.ActivityEvent.RESUMED));
         listenerCaptor.getValue().onEvent(activity, ActivityLifecycleManager.ActivityEvent.RESUMED);
         verify(conditionalExecutor).addCommand(commandCaptor.capture());
@@ -156,7 +158,7 @@ public class SessionsTrackingManagerTest extends CommonTest {
     @Test
     public void sessionResumedStateDidNotChange() {
         when(activityStateManager.didStateChange(activity, ActivityStateManager.ActivityState.RESUMED)).thenReturn(false);
-        sessionsTrackingManager.startWatching(true);
+        sessionsTrackingManager.startWatchingIfNotYet();
         verify(activityLifecycleManager).registerListener(listenerCaptor.capture(), eq(ActivityLifecycleManager.ActivityEvent.RESUMED));
         listenerCaptor.getValue().onEvent(activity, ActivityLifecycleManager.ActivityEvent.RESUMED);
         verify(conditionalExecutor).addCommand(commandCaptor.capture());
@@ -168,7 +170,7 @@ public class SessionsTrackingManagerTest extends CommonTest {
     @Test
     public void sessionPausedStateChanged() {
         when(activityStateManager.didStateChange(activity, ActivityStateManager.ActivityState.PAUSED)).thenReturn(true);
-        sessionsTrackingManager.startWatching(true);
+        sessionsTrackingManager.startWatchingIfNotYet();
         verify(activityLifecycleManager).registerListener(listenerCaptor.capture(), eq(ActivityLifecycleManager.ActivityEvent.PAUSED));
         listenerCaptor.getValue().onEvent(activity, ActivityLifecycleManager.ActivityEvent.PAUSED);
         verify(conditionalExecutor).addCommand(commandCaptor.capture());
@@ -180,12 +182,64 @@ public class SessionsTrackingManagerTest extends CommonTest {
     @Test
     public void sessionPausedStateDidNotChange() {
         when(activityStateManager.didStateChange(activity, ActivityStateManager.ActivityState.PAUSED)).thenReturn(false);
-        sessionsTrackingManager.startWatching(true);
+        sessionsTrackingManager.startWatchingIfNotYet();
         verify(activityLifecycleManager).registerListener(listenerCaptor.capture(), eq(ActivityLifecycleManager.ActivityEvent.PAUSED));
         listenerCaptor.getValue().onEvent(activity, ActivityLifecycleManager.ActivityEvent.PAUSED);
         verify(conditionalExecutor).addCommand(commandCaptor.capture());
         commandCaptor.getValue().consume(mainReporter);
         verifyNoMoreInteractions(mainReporter);
         verifyNoInteractions(activityAppearedListener);
+    }
+
+    @Test
+    public void startWatchingIfNotYetTwice() {
+        sessionsTrackingManager.startWatchingIfNotYet();
+        clearInvocations(activityLifecycleManager);
+        sessionsTrackingManager.startWatchingIfNotYet();
+        verify(activityLifecycleManager, never()).registerListener(any(), any());
+    }
+
+    @Test
+    public void startWatchingIfNotYetAfterStop() {
+        sessionsTrackingManager.startWatchingIfNotYet();
+        sessionsTrackingManager.stopWatchingIfHasAlreadyBeenStarted();
+        clearInvocations(activityLifecycleManager);
+        sessionsTrackingManager.startWatchingIfNotYet();
+        verify(activityLifecycleManager)
+            .registerListener(listenerCaptor.capture(), eq(ActivityLifecycleManager.ActivityEvent.RESUMED));
+        verify(activityLifecycleManager)
+            .registerListener(listenerCaptor.capture(), eq(ActivityLifecycleManager.ActivityEvent.PAUSED));
+    }
+
+    @Test
+    public void stopWatchingIfHasAlreadyBeenStartedBeforeStart() {
+        sessionsTrackingManager.stopWatchingIfHasAlreadyBeenStarted();
+        verifyNoInteractions(activityLifecycleManager);
+    }
+
+    @Test
+    public void stopWatchingIfHasAlreadyBeenStartedAfterStart() {
+        sessionsTrackingManager.startWatchingIfNotYet();
+        verify(activityLifecycleManager)
+            .registerListener(listenerCaptor.capture(), eq(ActivityLifecycleManager.ActivityEvent.RESUMED));
+        verify(activityLifecycleManager)
+            .registerListener(listenerCaptor.capture(), eq(ActivityLifecycleManager.ActivityEvent.PAUSED));
+        sessionsTrackingManager.stopWatchingIfHasAlreadyBeenStarted();
+        verify(activityLifecycleManager)
+            .unregisterListener(listenerCaptor.getAllValues().get(0), ActivityLifecycleManager.ActivityEvent.RESUMED);
+        verify(activityLifecycleManager)
+            .unregisterListener(listenerCaptor.getAllValues().get(1), ActivityLifecycleManager.ActivityEvent.PAUSED);
+    }
+
+    @Test
+    public void stopWatchingDuringNotification() {
+        sessionsTrackingManager.startWatchingIfNotYet();
+        verify(activityLifecycleManager)
+            .registerListener(listenerCaptor.capture(), eq(ActivityLifecycleManager.ActivityEvent.RESUMED));
+        verify(activityLifecycleManager)
+            .registerListener(listenerCaptor.capture(), eq(ActivityLifecycleManager.ActivityEvent.PAUSED));
+        clearInvocations(conditionalExecutor);
+        listenerCaptor.getAllValues().get(0).onEvent(activity, ActivityLifecycleManager.ActivityEvent.RESUMED);
+        listenerCaptor.getAllValues().get(1).onEvent(activity, ActivityLifecycleManager.ActivityEvent.PAUSED);
     }
 }

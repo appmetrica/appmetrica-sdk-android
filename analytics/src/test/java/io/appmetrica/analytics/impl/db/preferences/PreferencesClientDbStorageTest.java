@@ -2,6 +2,7 @@ package io.appmetrica.analytics.impl.db.preferences;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import io.appmetrica.analytics.AppMetricaConfig;
 import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus;
 import io.appmetrica.analytics.coreapi.internal.model.ScreenInfo;
 import io.appmetrica.analytics.impl.db.IKeyValueTableDbHelper;
@@ -10,6 +11,7 @@ import io.appmetrica.analytics.impl.utils.JsonHelper;
 import io.appmetrica.analytics.internal.IdentifiersResult;
 import io.appmetrica.analytics.testutils.CommonTest;
 import java.util.Iterator;
+import java.util.UUID;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Before;
@@ -547,5 +549,25 @@ public class PreferencesClientDbStorageTest extends CommonTest {
         final long nextStartupTime = 50;
         clientDbStorage.putNextStartupTime(nextStartupTime);
         verify(mDbStorage).put(PreferencesClientDbStorage.NEXT_STARTUP_TIME.fullKey(), nextStartupTime);
+    }
+
+    @Test
+    public void saveAppMetricaConfig() {
+        AppMetricaConfig config = AppMetricaConfig.newConfigBuilder(UUID.randomUUID().toString()).build();
+        clientDbStorage.saveAppMetricaConfig(config);
+        verify(mDbStorage).put(PreferencesClientDbStorage.APPMETRICA_CLIENT_CONFIG.fullKey(), config.toJson());
+    }
+
+    @Test
+    public void getAppMetricaConfig() {
+        AppMetricaConfig expected = AppMetricaConfig.newConfigBuilder(UUID.randomUUID().toString()).build();
+        when(mDbStorage.getString(PreferencesClientDbStorage.APPMETRICA_CLIENT_CONFIG.fullKey(), null))
+            .thenReturn(expected.toJson());
+        assertThat(clientDbStorage.getAppMetricaConfig()).usingRecursiveComparison().isEqualTo(expected);
+    }
+
+    @Test
+    public void getAppMetricaConfigIfMissing() {
+        assertThat(clientDbStorage.getAppMetricaConfig()).isNull();
     }
 }

@@ -6,8 +6,8 @@ import io.appmetrica.analytics.ICrashTransformer
 import io.appmetrica.analytics.impl.IReporterFactoryProvider
 import io.appmetrica.analytics.impl.MainOrCrashReporterProvider
 import io.appmetrica.analytics.impl.TestsData
-import io.appmetrica.analytics.impl.crash.client.CrashProcessor
-import io.appmetrica.analytics.impl.crash.client.ReporterBasedCrashProcessor
+import io.appmetrica.analytics.impl.crash.jvm.client.CrashProcessor
+import io.appmetrica.analytics.impl.crash.jvm.client.ReporterBasedCrashProcessor
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.MockedConstructionRule
 import org.assertj.core.api.SoftAssertions

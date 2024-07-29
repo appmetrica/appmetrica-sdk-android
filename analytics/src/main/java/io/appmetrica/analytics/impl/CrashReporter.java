@@ -8,15 +8,16 @@ import io.appmetrica.analytics.impl.client.ProcessConfiguration;
 import io.appmetrica.analytics.impl.crash.CrashToFileWriter;
 import io.appmetrica.analytics.impl.crash.PluginErrorDetailsConverter;
 import io.appmetrica.analytics.impl.crash.UnhandledExceptionEventFormer;
-import io.appmetrica.analytics.impl.crash.client.UnhandledException;
-import io.appmetrica.analytics.impl.crash.client.converter.AnrConverter;
-import io.appmetrica.analytics.impl.crash.client.converter.CustomErrorConverter;
-import io.appmetrica.analytics.impl.crash.client.converter.RegularErrorConverter;
-import io.appmetrica.analytics.impl.crash.client.converter.UnhandledExceptionConverter;
+import io.appmetrica.analytics.impl.crash.jvm.client.UnhandledException;
+import io.appmetrica.analytics.impl.crash.jvm.converter.AnrConverter;
+import io.appmetrica.analytics.impl.crash.jvm.converter.CustomErrorConverter;
+import io.appmetrica.analytics.impl.crash.jvm.converter.RegularErrorConverter;
+import io.appmetrica.analytics.impl.crash.jvm.converter.UnhandledExceptionConverter;
 import io.appmetrica.analytics.impl.reporter.CrashReporterContext;
 import io.appmetrica.analytics.impl.reporter.ReporterLifecycleListener;
 import io.appmetrica.analytics.impl.utils.ProcessDetector;
 import io.appmetrica.analytics.internal.CounterConfiguration;
+import io.appmetrica.analytics.internal.CounterConfigurationReporterType;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 
 public class CrashReporter extends BaseReporter {

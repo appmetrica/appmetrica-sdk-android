@@ -1,6 +1,8 @@
 package io.appmetrica.analytics.impl;
 
 import io.appmetrica.analytics.impl.client.ProcessConfiguration;
+import io.appmetrica.analytics.internal.CounterConfigurationReporterType;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;

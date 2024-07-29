@@ -14,6 +14,7 @@ import io.appmetrica.analytics.impl.clids.ClidsInfo;
 import io.appmetrica.analytics.impl.client.ClientConfiguration;
 import io.appmetrica.analytics.impl.referrer.service.ReferrerHolder;
 import io.appmetrica.analytics.impl.startup.StartupState;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import io.appmetrica.analytics.networktasks.internal.ArgumentsMerger;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -260,9 +261,22 @@ public class StartupRequestConfig extends CoreRequestConfig {
         public boolean compareWithOtherArguments(@NonNull Arguments other) {
             return false;
         }
+
+        @Override
+        public String toString() {
+            return "Arguments{" +
+                "distributionReferrer='" + distributionReferrer + '\'' +
+                ", installReferrerSource='" + installReferrerSource + '\'' +
+                ", clientClids=" + clientClids +
+                ", hasNewCustomHosts=" + hasNewCustomHosts +
+                ", newCustomHosts=" + newCustomHosts +
+                '}';
+        }
     }
 
     public static class Loader extends CoreLoader<StartupRequestConfig, Arguments> {
+
+        private static final String TAG = "[StartupRequestConfig.Loader]";
 
         @NonNull
         private final ClidsInfoStorage clidsStorage;
@@ -308,6 +322,7 @@ public class StartupRequestConfig extends CoreRequestConfig {
 
         void loadHosts(@NonNull StartupRequestConfig config,
                        @NonNull StartupState startupState) {
+            DebugLogger.INSTANCE.info(TAG, "setStartupHostsFromClient: %s", startupState.getHostUrlsFromClient());
             config.setStartupHostsFromStartup(startupState.getHostUrlsFromStartup());
             config.setStartupHostsFromClient(startupState.getHostUrlsFromClient());
         }

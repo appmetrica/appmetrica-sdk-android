@@ -1,12 +1,12 @@
 package io.appmetrica.analytics.impl.proxy.synchronous;
 
 import android.app.Activity;
-import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.webkit.WebView;
 import io.appmetrica.analytics.AppMetricaConfig;
 import io.appmetrica.analytics.ReporterConfig;
+import io.appmetrica.analytics.coreutils.internal.logger.LoggerStorage;
 import io.appmetrica.analytics.impl.ActivityLifecycleManager;
 import io.appmetrica.analytics.impl.AppMetricaFacade;
 import io.appmetrica.analytics.impl.ContextAppearedListener;
@@ -15,7 +15,6 @@ import io.appmetrica.analytics.impl.WebViewJsInterfaceHandler;
 import io.appmetrica.analytics.impl.crash.AppMetricaThrowable;
 import io.appmetrica.analytics.impl.proxy.AppMetricaFacadeProvider;
 import io.appmetrica.analytics.impl.proxy.AppMetricaProxy;
-import io.appmetrica.analytics.coreutils.internal.logger.LoggerStorage;
 import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule;
 import io.appmetrica.analytics.testutils.CommonTest;
@@ -144,7 +143,7 @@ public class SynchronousStageExecutorTest extends CommonTest {
 
         synchronousStageExecutor.activate(mContext, config);
 
-        verify(sessionsTrackingManager).startWatching(true);
+        verify(sessionsTrackingManager).startWatchingIfNotYet();
     }
 
     @Test
@@ -155,7 +154,7 @@ public class SynchronousStageExecutorTest extends CommonTest {
 
         synchronousStageExecutor.activate(mContext, config);
 
-        verify(sessionsTrackingManager, never()).startWatching(anyBoolean());
+        verify(sessionsTrackingManager, never()).startWatchingIfNotYet();
     }
 
     @Test
@@ -164,18 +163,7 @@ public class SynchronousStageExecutorTest extends CommonTest {
 
         synchronousStageExecutor.activate(mContext, config);
 
-        verify(sessionsTrackingManager).startWatching(true);
-    }
-
-    @Test
-    public void enableActivityAutoTracking() {
-        Application application = mock(Application.class);
-        when(sessionsTrackingManager.startWatching(false)).thenReturn(ActivityLifecycleManager.WatchingStatus.WATCHING);
-
-        final ActivityLifecycleManager.WatchingStatus status =
-            synchronousStageExecutor.enableActivityAutoTracking(application);
-
-        assertThat(status).isEqualTo(ActivityLifecycleManager.WatchingStatus.WATCHING);
+        verify(sessionsTrackingManager).startWatchingIfNotYet();
     }
 
     @Test

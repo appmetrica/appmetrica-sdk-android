@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.crash.ndk
 
 import io.appmetrica.analytics.coreutils.internal.io.Base64Utils
 import io.appmetrica.analytics.impl.IOUtils
-import io.appmetrica.analytics.impl.crash.client.converter.NativeCrashConverter
+import io.appmetrica.analytics.impl.crash.jvm.converter.NativeCrashConverter
 import io.appmetrica.analytics.impl.protobuf.backend.CrashAndroid.Crash
 import io.appmetrica.analytics.protobuf.nano.MessageNano
 import io.appmetrica.analytics.testutils.CommonTest

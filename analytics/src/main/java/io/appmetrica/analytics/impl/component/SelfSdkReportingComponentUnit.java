@@ -5,7 +5,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreutils.internal.services.PackageManagerUtils;
 import io.appmetrica.analytics.coreutils.internal.time.TimePassedChecker;
-import io.appmetrica.analytics.impl.CounterConfigurationReporterType;
+import io.appmetrica.analytics.internal.CounterConfigurationReporterType;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.request.ReportRequestConfig;
 import io.appmetrica.analytics.impl.startup.StartupState;

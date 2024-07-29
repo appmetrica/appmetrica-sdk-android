@@ -8,8 +8,8 @@ import io.appmetrica.analytics.impl.SdkData
 import io.appmetrica.analytics.impl.SdkUtils
 import io.appmetrica.analytics.impl.TestsData
 import io.appmetrica.analytics.impl.UnhandledSituationReporterProvider
-import io.appmetrica.analytics.impl.crash.client.CrashProcessor
-import io.appmetrica.analytics.impl.crash.client.ReporterBasedCrashProcessor
+import io.appmetrica.analytics.impl.crash.jvm.client.CrashProcessor
+import io.appmetrica.analytics.impl.crash.jvm.client.ReporterBasedCrashProcessor
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.MockedConstructionRule
 import io.appmetrica.analytics.testutils.MockedStaticRule
@@ -38,7 +38,7 @@ internal class SdkCrashProcessorCreatorTest : CommonTest() {
     @Test
     fun createCrashProcessor() {
         val processor = SdkCrashProcessorCreator()
-            .createCrashProcessor(context, config, reporterFactoryProvider) as ReporterBasedCrashProcessor
+            .createCrashProcessor(context, reporterFactoryProvider) as ReporterBasedCrashProcessor
 
         val softly = SoftAssertions()
         softly.assertThat(reporterBasedCrashProcessorMockedRule.constructionMock.constructed()).hasSize(1)

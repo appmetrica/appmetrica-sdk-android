@@ -35,11 +35,6 @@ internal class VitalComponentDataProvider(
     backupDataSource: VitalDataSource,
     apiKey: String?
 ) {
-
-    companion object {
-        fun composeFileName(apiKey: String?) = "appmetrica_vital_$apiKey.dat"
-    }
-
     private val vitalDataProvider: VitalDataProvider = VitalDataProvider(
         primaryDataSource,
         backupDataSource,
@@ -179,7 +174,6 @@ internal class VitalComponentDataProvider(
     @Synchronized
     @WorkerThread
     fun incrementAttributionId() {
-        DebugLogger.info("[VitalComponentDataProvider]", "increment attributionId")
         attributionId += 1
     }
 

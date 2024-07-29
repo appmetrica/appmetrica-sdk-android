@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.crash.utils;
 
 import androidx.annotation.NonNull;
 import io.appmetrica.analytics.coreapi.internal.backport.Function;
-import io.appmetrica.analytics.impl.crash.client.ThreadState;
+import io.appmetrica.analytics.impl.crash.jvm.client.ThreadState;
 
 public class CrashedThreadConverter implements Function<Thread, ThreadState> {
 

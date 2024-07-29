@@ -6,12 +6,13 @@ import android.os.ResultReceiver;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
 import io.appmetrica.analytics.impl.client.ProcessConfiguration;
 import io.appmetrica.analytics.impl.crash.UnhandledExceptionEventFormer;
-import io.appmetrica.analytics.impl.crash.client.UnhandledException;
+import io.appmetrica.analytics.impl.crash.jvm.client.UnhandledException;
 import io.appmetrica.analytics.impl.ecommerce.client.converter.Result;
 import io.appmetrica.analytics.impl.ecommerce.client.model.ProtoSerializable;
 import io.appmetrica.analytics.impl.protobuf.backend.Ecommerce;
@@ -198,6 +199,12 @@ public class ReportsHandler {
     public void reportStartupEvent(@NonNull List<String> identifiers,
                                    @NonNull ResultReceiver receiver,
                                    @Nullable Map<String, String> freshClientClids) {
+        DebugLogger.INSTANCE.info(
+            TAG,
+            "reportStartupEvent: indentifiers: %s; freshClientClids: %s",
+            Arrays.toString(identifiers.toArray()),
+            freshClientClids
+        );
         Bundle payload = new Bundle();
         payload.putParcelable(IdentifiersData.BUNDLE_KEY, new IdentifiersData(identifiers, freshClientClids, receiver));
         CounterReport counterReport = EventsManager.reportEntry(
@@ -228,18 +235,22 @@ public class ReportsHandler {
     }
 
     public void setCustomHosts(final List<String> customHosts) {
+        DebugLogger.INSTANCE.info(TAG, "setCustomHosts: %s", customHosts);
         mCommutationReportEnvironment.getProcessConfiguration().setCustomHosts(customHosts);
     }
 
     public void setClids(final Map<String, String> clids) {
+        DebugLogger.INSTANCE.info(TAG, "setClientClids: %s", clids);
         mCommutationReportEnvironment.getProcessConfiguration().setClientClids(clids);
     }
 
     public void setDistributionReferrer(String referrer) {
+        DebugLogger.INSTANCE.info(TAG, "setDistributionReferrer: %s", referrer);
         mCommutationReportEnvironment.getProcessConfiguration().setDistributionReferrer(referrer);
     }
 
     public void setInstallReferrerSource(String source) {
+        DebugLogger.INSTANCE.info(TAG, "setInstallReferrerSource: %s", source);
         mCommutationReportEnvironment.getProcessConfiguration().setInstallReferrerSource(source);
     }
 

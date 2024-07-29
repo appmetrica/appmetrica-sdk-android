@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.component;
 
-import io.appmetrica.analytics.impl.CounterConfigurationReporterType;
+import io.appmetrica.analytics.internal.CounterConfigurationReporterType;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import org.junit.Before;
 import org.junit.Rule;

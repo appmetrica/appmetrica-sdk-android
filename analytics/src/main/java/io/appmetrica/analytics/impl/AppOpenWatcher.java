@@ -31,6 +31,14 @@ public class AppOpenWatcher implements ActivityLifecycleManager.Listener {
         );
     }
 
+    public void stopWatching() {
+        DebugLogger.INSTANCE.info(TAG, "Stop watching app opens");
+        ClientServiceLocator.getInstance().getActivityLifecycleManager().unregisterListener(
+            this,
+            ActivityLifecycleManager.ActivityEvent.CREATED
+        );
+    }
+
     @ApiProxyThread
     public void setDeeplinkConsumer(@NonNull DeeplinkConsumer deeplinkConsumer) {
         DebugLogger.INSTANCE.info(TAG, "setReporter to %s", deeplinkConsumer);

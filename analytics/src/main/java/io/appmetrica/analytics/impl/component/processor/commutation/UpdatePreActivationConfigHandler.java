@@ -25,6 +25,7 @@ public class UpdatePreActivationConfigHandler extends CommutationHandler {
 
     @Override
     public boolean process(@NonNull CounterReport reportData, @NonNull CommutationClientUnit clientUnit) {
+        DebugLogger.INSTANCE.info(TAG, "process: %s", reportData);
         CommonArguments.ReporterArguments counterConfiguration = clientUnit.getComponent().getConfiguration();
         mRestrictionController.setEnabledFromMainReporter(counterConfiguration.dataSendingEnabled);
         updateTrackingLocationStatus(

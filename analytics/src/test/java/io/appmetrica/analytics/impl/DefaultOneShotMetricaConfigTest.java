@@ -61,7 +61,7 @@ public class DefaultOneShotMetricaConfigTest extends CommonTest {
     private void assertMergedValuesEqualsForConfigs(final AppMetricaConfig userConfig,
                                                     final AppMetricaConfig merged)
             throws Exception {
-        ObjectPropertyAssertions(userConfig)
+        ObjectPropertyAssertions(merged)
                 .withIgnoredFields("anrMonitoring", "anrMonitoringTimeout", "apiKey", "appBuildNumber", "clids", "crashTransformer",
                         "customHosts", "deviceType", "dispatchPeriodSeconds", "distributionReferrer",
                         "firstActivationAsUpdate", "logs", "permissionsCollection", "preloadInfo",

@@ -123,7 +123,7 @@ class AppMetricaConfigTest : CommonTest() {
     @Test
     fun jsonSerialization() {
         assertThat(
-            AppMetricaConfig.fromJson(AppMetricaConfig.newConfigBuilder(apiKey).build().toJson()).apiKey
+            AppMetricaConfig.fromJson(AppMetricaConfig.newConfigBuilder(apiKey).build().toJson())?.apiKey
         ).isEqualTo(apiKey)
     }
 

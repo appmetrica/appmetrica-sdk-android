@@ -2,13 +2,13 @@ package io.appmetrica.analytics.impl.crash;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
+import io.appmetrica.analytics.coreutils.internal.logger.LoggerStorage;
 import io.appmetrica.analytics.impl.ClientCounterReport;
 import io.appmetrica.analytics.impl.EventsManager;
 import io.appmetrica.analytics.impl.ReportToSend;
 import io.appmetrica.analytics.impl.ReporterEnvironment;
-import io.appmetrica.analytics.impl.crash.client.UnhandledException;
-import io.appmetrica.analytics.impl.crash.client.converter.JvmCrashConverter;
-import io.appmetrica.analytics.coreutils.internal.logger.LoggerStorage;
+import io.appmetrica.analytics.impl.crash.jvm.client.UnhandledException;
+import io.appmetrica.analytics.impl.crash.jvm.converter.JvmCrashConverter;
 
 public class UnhandledExceptionEventFormer {
 

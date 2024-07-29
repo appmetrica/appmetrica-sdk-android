@@ -1,13 +1,17 @@
 package io.appmetrica.analytics.impl.proxy.validation
 
+import android.content.Context
 import io.appmetrica.analytics.ValidationException
 import io.appmetrica.analytics.impl.proxy.AppMetricaFacadeProvider
 import io.appmetrica.analytics.testutils.CommonTest
 import org.junit.Before
 import org.junit.Test
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
 
 class ModuleBarrierTest : CommonTest() {
+
+    private val context: Context = mock()
     private val appMetricaFacadeProvider: AppMetricaFacadeProvider = mock<AppMetricaFacadeProvider>()
 
     private lateinit var modulesBarrier: ModulesBarrier
@@ -15,6 +19,16 @@ class ModuleBarrierTest : CommonTest() {
     @Before
     fun setUp() {
         modulesBarrier = ModulesBarrier(appMetricaFacadeProvider)
+    }
+
+    @Test
+    fun activate() {
+        modulesBarrier.activate(context)
+    }
+
+    @Test(expected = ValidationException::class)
+    fun `activate for null context`() {
+        modulesBarrier.activate(null)
     }
 
     @Test

@@ -17,10 +17,8 @@ import io.appmetrica.analytics.StartupParamsCallback;
 import io.appmetrica.analytics.coreutils.internal.executors.BlockingExecutor;
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Callable;
 import java.util.concurrent.Executor;
 import java.util.concurrent.FutureTask;
 
@@ -45,14 +43,14 @@ public class AppMetricaFacade implements IReporterFactoryProvider {
     public AppMetricaFacade(@NonNull final Context context) {
         mContext = context;
         coreComponentsProvider = new AppMetricaCoreComponentsProvider();
-        mCore = coreComponentsProvider.getCore(context, ClientServiceLocator.getInstance().getClientExecutorProvider());
+        mCore = coreComponentsProvider.getCore(
+            context,
+            ClientServiceLocator.getInstance().getClientExecutorProvider()
+        );
 
-        mFullInitFuture = new FutureTask<>(new Callable<IAppMetricaImpl>() {
-            @Override
-            public IAppMetricaImpl call() {
-                DebugLogger.INSTANCE.info(TAG, "createImpl");
-                return createImpl();
-            }
+        mFullInitFuture = new FutureTask<>(() -> {
+            DebugLogger.INSTANCE.info(TAG, "createImpl");
+            return createImpl();
         });
     }
 
@@ -61,14 +59,11 @@ public class AppMetricaFacade implements IReporterFactoryProvider {
             ? ClientServiceLocator.getInstance().getClientExecutorProvider().getDefaultExecutor()
             : new BlockingExecutor();
 
-        executorForInit.execute(new Runnable() {
-            @Override
-            public void run() {
-                DebugLogger.INSTANCE.info(TAG, "Check client migration");
-                new ClientMigrationManager(mContext).checkMigration(mContext);
-                DebugLogger.INSTANCE.info(TAG, "Warm up uuid");
-                ClientServiceLocator.getInstance().getMultiProcessSafeUuidProvider(mContext).readUuid();
-            }
+        executorForInit.execute(() -> {
+            DebugLogger.INSTANCE.info(TAG, "Check client migration");
+            new ClientMigrationManager(mContext).checkMigration(mContext);
+            DebugLogger.INSTANCE.info(TAG, "Warm up uuid");
+            ClientServiceLocator.getInstance().getMultiProcessSafeUuidProvider(mContext).readUuid();
         });
         DebugLogger.INSTANCE.info(TAG, "schedule createImpl");
         executorForInit.execute(mFullInitFuture);
@@ -86,11 +81,6 @@ public class AppMetricaFacade implements IReporterFactoryProvider {
         @NonNull final Context context,
         boolean asyncInit // For calls from non default executor
     ) {
-        DebugLogger.INSTANCE.info(
-            TAG,
-            "getInstance: %s",
-            Arrays.toString(Thread.currentThread().getStackTrace())
-        );
         AppMetricaFacade localCopy = sInstance;
         if (localCopy == null) {
             synchronized (AppMetricaFacade.class) {
@@ -171,14 +161,18 @@ public class AppMetricaFacade implements IReporterFactoryProvider {
     }
 
     @AnyThread
-    public void activateCore(@NonNull AppMetricaConfig from) {
+    public void activateCore(@Nullable AppMetricaConfig from) {
         mCore.activate(from, this);
     }
 
     @WorkerThread
-    public void activateFull(@NonNull AppMetricaConfig originalConfig,
-                             @NonNull AppMetricaConfig from) {
-        getImpl().activate(originalConfig, from);
+    public void activateFull(@NonNull AppMetricaConfig config) {
+        getImpl().activate(config);
+    }
+
+    @WorkerThread
+    public void activateFull() {
+        getImpl().activateAnonymously();
     }
 
     @WorkerThread
@@ -258,11 +252,6 @@ public class AppMetricaFacade implements IReporterFactoryProvider {
     @NonNull
     private IAppMetricaImpl getImpl() {
         try {
-            DebugLogger.INSTANCE.info(
-                TAG,
-                "getImpl: %s",
-                Arrays.toString(Thread.currentThread().getStackTrace())
-            );
             return mFullInitFuture.get();
         } catch (Exception e) {
             DebugLogger.INSTANCE.error(TAG, e);

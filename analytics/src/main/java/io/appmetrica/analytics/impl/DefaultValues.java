@@ -11,13 +11,16 @@ public class DefaultValues {
     public static final boolean DEFAULT_LOG_ENABLED = false;
     public static final boolean DEFAULT_DATA_SENDING_ENABLED = true;
     public static final boolean DEFAULT_SESSIONS_AUTO_TRACKING_ENABLED = true;
+    public static final boolean DEFAULT_SESSIONS_AUTO_TRACKING_ENABLED_FOR_ANONYMOUS_ACTIVATION = true;
     public static final boolean DEFAULT_REVENUE_AUTO_TRACKING_ENABLED = true;
     public static final boolean DEFAULT_APP_OPEN_TRACKING_ENABLED = true;
+    public static final boolean DEFAULT_APP_OPEN_TRACKING_ENABLED_FOR_ANONYMOUS_ACTIVATION = true;
     public static final int DEFAULT_DISPATCH_PERIOD_SECONDS = 90;
     public static final int DEFAULT_MAX_REPORTS_COUNT = 7;
     public static final int MAX_REPORTS_IN_DB_COUNT_DEFAULT = 1000;
     public static final int DEFAULT_MAX_REPORTS_COUNT_LOWER_BOUND = 100;
     public static final int DEFAULT_MAX_REPORTS_COUNT_UPPER_BOUND = 10000;
+    public static final boolean DEFAULT_ANR_COLLECTING_ENABLED = false;
     public static final int DEFAULT_ANR_TICKS_COUNT = 5;
 
     public static final StartupStateProtobuf.StartupState.StartupUpdateConfig STARTUP_UPDATE_CONFIG =

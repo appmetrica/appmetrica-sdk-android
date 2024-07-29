@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.crash.utils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import io.appmetrica.analytics.coreapi.internal.backport.BiFunction;
-import io.appmetrica.analytics.impl.crash.client.ThreadState;
+import io.appmetrica.analytics.impl.crash.jvm.client.ThreadState;
 import java.util.Arrays;
 
 public class FullStateConverter implements BiFunction<Thread, StackTraceElement[], ThreadState> {

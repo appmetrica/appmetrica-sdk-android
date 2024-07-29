@@ -19,7 +19,7 @@ public class MainReporterStub extends ReporterExtendedStub implements IMainRepor
 
     @Override
     public void enableAnrMonitoring() {
-        //Do nothing
+        // Do nothing
     }
 
     @Override

@@ -12,6 +12,7 @@ import io.appmetrica.analytics.impl.crash.ReadAndReportRunnable;
 import io.appmetrica.analytics.impl.crash.ndk.AppMetricaNativeCrash;
 import io.appmetrica.analytics.impl.crash.ndk.AppMetricaNativeCrashMetadata;
 import io.appmetrica.analytics.impl.crash.ndk.NativeCrashDumpReader;
+import io.appmetrica.analytics.internal.CounterConfigurationReporterType;
 import io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrashSource;
 import io.appmetrica.analytics.testutils.CommonTest;
 import java.io.File;

@@ -9,7 +9,7 @@ import io.appmetrica.analytics.impl.ClientIdentifiersChangedListener;
 import io.appmetrica.analytics.impl.ClientIdentifiersHolder;
 import io.appmetrica.analytics.impl.ClientIdentifiersProvider;
 import io.appmetrica.analytics.impl.ClientIdentifiersProviderFactory;
-import io.appmetrica.analytics.impl.CounterConfigurationReporterType;
+import io.appmetrica.analytics.internal.CounterConfigurationReporterType;
 import io.appmetrica.analytics.impl.CounterReport;
 import io.appmetrica.analytics.impl.DataResultReceiver;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
@@ -157,7 +157,7 @@ public class CommutationDispatcherComponent implements IComponent, StartupListen
         mLifecycleManager.connectClient(clientUnit);
         DebugLogger.INSTANCE.info(
             TAG,
-            "add client. Clients count %d",
+            "add client: %s. Clients count %d",
             mComponentId,
             mLifecycleManager.getConnectedClients().size()
         );
@@ -171,7 +171,7 @@ public class CommutationDispatcherComponent implements IComponent, StartupListen
         mLifecycleManager.disconnectClient(clientUnit);
         DebugLogger.INSTANCE.info(
             TAG,
-            "remove client. Clients count %d",
+            "remove client: %s. Clients count %d",
             mComponentId,
             mLifecycleManager.getConnectedClients().size()
         );

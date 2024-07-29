@@ -11,6 +11,7 @@ import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
 import io.appmetrica.analytics.testutils.MockedConstructionRule
 import io.appmetrica.analytics.testutils.MockedStaticRule
 import io.appmetrica.analytics.testutils.TestUtils
+import io.appmetrica.analytics.testutils.constructionRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Rule
@@ -38,14 +39,18 @@ internal class VitalDataProviderStorageTest : CommonTest() {
     val databaseStorageFactoryMockedRule = MockedStaticRule(DatabaseStorageFactory::class.java)
     @get:Rule
     val prefereceServiceDbStorageMockedRule = MockedConstructionRule(PreferencesServiceDbStorage::class.java)
+    @get:Rule
+    val compositeFileVitalDataSourceMockedConstructionRule = constructionRule<CompositeFileVitalDataSource>()
 
     private val firstApiKey = "first"
     private val secondApiKey = "second"
     private val firstComponentId = mock<ComponentId> {
         on { apiKey } doReturn firstApiKey
+        on { isMain } doReturn true
     }
     private val secondComponentId = mock<ComponentId> {
         on { apiKey } doReturn secondApiKey
+        on { isMain } doReturn false
     }
     private val firstKeyValueTableDbHelper = mock<IKeyValueTableDbHelper>()
     private val secondKeyValueTableDbHelper = mock<IKeyValueTableDbHelper>()
@@ -107,21 +112,32 @@ internal class VitalDataProviderStorageTest : CommonTest() {
         //Check vital components data provider creation arguments
         assertThat(vitalComponentDataProviderMockedRule.argumentInterceptor.flatArguments())
             .containsExactly(
-                //First instance
+                //First instance for first main api key
                 preferenceComponentDbStorageMockedRule.constructionMock.constructed()[0],
-                fileVitalDataSourceMockedRule.constructionMock.constructed()[1],
-                firstApiKey,
-                //Second instance
+                compositeFileVitalDataSourceMockedConstructionRule.constructionMock.constructed()[0],
+                "$firstComponentId",
+                //Second instance for second non main api key
                 preferenceComponentDbStorageMockedRule.constructionMock.constructed()[1],
-                fileVitalDataSourceMockedRule.constructionMock.constructed()[2],
-                secondApiKey,
+                // First for common; two next for first main api key
+                fileVitalDataSourceMockedRule.constructionMock.constructed()[3],
+                "$secondComponentId",
             )
+
         assertThat(preferenceComponentDbStorageMockedRule.argumentInterceptor.flatArguments())
             .containsExactly(firstKeyValueTableDbHelper, secondKeyValueTableDbHelper)
+
+        assertThat(compositeFileVitalDataSourceMockedConstructionRule.constructionMock.constructed()).hasSize(1)
+        assertThat(compositeFileVitalDataSourceMockedConstructionRule.argumentInterceptor.flatArguments())
+            .containsExactly(listOf(
+                "appmetrica_vital_$firstApiKey.dat" to fileVitalDataSourceMockedRule.constructionMock.constructed()[1],
+                "appmetrica_vital_main.dat" to fileVitalDataSourceMockedRule.constructionMock.constructed()[2]
+            ))
+
         assertThat(fileVitalDataSourceMockedRule.argumentInterceptor.flatArguments())
             .containsExactly(
                 context, "appmetrica_vital.dat",
                 context, "appmetrica_vital_$firstApiKey.dat",
+                context, "appmetrica_vital_main.dat",
                 context, "appmetrica_vital_$secondApiKey.dat",
             )
     }

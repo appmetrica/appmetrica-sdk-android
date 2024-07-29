@@ -54,7 +54,7 @@ public class AppMetricaImplStubTest extends CommonTest {
 
     @Test
     public void activate() {
-        stub.activate(appMetricaConfig, appMetricaConfig);
+        stub.activate(appMetricaConfig);
         verifyNoMoreInteractions(appMetricaConfig, appMetricaConfig);
     }
 

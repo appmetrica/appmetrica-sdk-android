@@ -7,7 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 import io.appmetrica.analytics.TestData;
 import io.appmetrica.analytics.coreutils.internal.StringUtils;
-import io.appmetrica.analytics.impl.crash.client.StackTraceItemInternal;
+import io.appmetrica.analytics.impl.crash.jvm.client.StackTraceItemInternal;
 import io.appmetrica.analytics.impl.utils.JsonHelper;
 import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.impl.utils.StartupUtils;

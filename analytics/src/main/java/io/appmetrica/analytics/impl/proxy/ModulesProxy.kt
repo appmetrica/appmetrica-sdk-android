@@ -1,7 +1,6 @@
 package io.appmetrica.analytics.impl.proxy
 
 import android.content.Context
-import androidx.annotation.VisibleForTesting
 import io.appmetrica.analytics.AdRevenue
 import io.appmetrica.analytics.AppMetrica
 import io.appmetrica.analytics.IModuleReporter
@@ -14,57 +13,65 @@ import io.appmetrica.analytics.impl.attribution.ExternalAttributionFromModule
 import io.appmetrica.analytics.impl.proxy.synchronous.ModulesSynchronousStageExecutor
 import io.appmetrica.analytics.impl.proxy.validation.ModulesBarrier
 
-class ModulesProxy @VisibleForTesting constructor(
-    private val provider: AppMetricaFacadeProvider,
-    private val modulesBarrier: ModulesBarrier,
-    private val synchronousStageExecutor: ModulesSynchronousStageExecutor,
-) {
-
+class ModulesProxy {
+    private val provider: AppMetricaFacadeProvider = ClientServiceLocator.getInstance().appMetricaFacadeProvider
+    private val modulesBarrier = ModulesBarrier(provider)
+    private val synchronousStageExecutor = ModulesSynchronousStageExecutor(provider)
     private val executor: ICommonExecutor = ClientServiceLocator.getInstance().clientExecutorProvider.defaultExecutor
 
-    constructor() : this(
-        AppMetricaFacadeProvider()
-    )
+    fun activate(context: Context) {
+        modulesBarrier.activate(context)
+        val applicationContext = context.applicationContext
+        synchronousStageExecutor.activate(applicationContext)
+        executor.execute {
+            provider.getInitializedImpl(applicationContext).activateFull()
+        }
+        provider.markActivated()
+    }
 
-    private constructor(provider: AppMetricaFacadeProvider) : this(
-        provider,
-        ModulesBarrier(provider),
-        ModulesSynchronousStageExecutor()
-    )
-
-    fun reportEvent(
-        moduleEvent: ModuleEvent
-    ) {
+    fun reportEvent(moduleEvent: ModuleEvent) {
         modulesBarrier.reportEvent(moduleEvent)
         synchronousStageExecutor.reportEvent(moduleEvent)
 
-        executor.execute(object : SafeRunnable() {
-            override fun runSafety() {
-                getMainReporter().reportEvent(moduleEvent)
+        executor.execute(
+            object : SafeRunnable() {
+                override fun runSafety() {
+                    getMainReporter().reportEvent(moduleEvent)
+                }
             }
-        })
+        )
     }
 
-    fun setSessionExtra(key: String, value: ByteArray?) {
+    fun setSessionExtra(
+        key: String,
+        value: ByteArray?
+    ) {
         modulesBarrier.setSessionExtra(key, value)
         synchronousStageExecutor.setSessionExtra(key, value)
 
-        executor.execute(object : SafeRunnable() {
-            override fun runSafety() {
-                getMainReporter().setSessionExtra(key, value)
+        executor.execute(
+            object : SafeRunnable() {
+                override fun runSafety() {
+                    getMainReporter().setSessionExtra(key, value)
+                }
             }
-        })
+        )
     }
 
-    fun reportExternalAttribution(source: Int, value: String?) {
+    fun reportExternalAttribution(
+        source: Int,
+        value: String?
+    ) {
         modulesBarrier.reportExternalAttribution(source, value)
         synchronousStageExecutor.reportExternalAttribution(source, value)
 
-        executor.execute(object : SafeRunnable() {
-            override fun runSafety() {
-                getMainReporter().reportExternalAttribution(ExternalAttributionFromModule(source, value))
+        executor.execute(
+            object : SafeRunnable() {
+                override fun runSafety() {
+                    getMainReporter().reportExternalAttribution(ExternalAttributionFromModule(source, value))
+                }
             }
-        })
+        )
     }
 
     fun isActivatedForApp(): Boolean {
@@ -79,21 +86,29 @@ class ModulesProxy @VisibleForTesting constructor(
         AppMetrica.sendEventsBuffer()
     }
 
-    fun getReporter(context: Context, apiKey: String): IModuleReporter {
+    fun getReporter(
+        context: Context,
+        apiKey: String
+    ): IModuleReporter {
         modulesBarrier.getReporter(context, apiKey)
         synchronousStageExecutor.getReporter(context.applicationContext, apiKey)
         return ReporterProxyStorage.getInstance().getOrCreate(context.applicationContext, apiKey)
     }
 
-    fun reportAdRevenue(adRevenue: AdRevenue, autoCollected: Boolean) {
+    fun reportAdRevenue(
+        adRevenue: AdRevenue,
+        autoCollected: Boolean
+    ) {
         modulesBarrier.reportAdRevenue(adRevenue, autoCollected)
         synchronousStageExecutor.reportAdRevenue(adRevenue, autoCollected)
 
-        executor.execute(object : SafeRunnable() {
-            override fun runSafety() {
-                getMainReporter().reportAdRevenue(adRevenue, autoCollected)
+        executor.execute(
+            object : SafeRunnable() {
+                override fun runSafety() {
+                    getMainReporter().reportAdRevenue(adRevenue, autoCollected)
+                }
             }
-        })
+        )
     }
 
     /*

@@ -5,6 +5,7 @@ import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus
 import io.appmetrica.analytics.impl.ClidsInfoStorage
 import io.appmetrica.analytics.impl.StartupStateHolder
 import io.appmetrica.analytics.impl.component.ComponentId
+import io.appmetrica.analytics.impl.request.StartupRequestConfig
 import io.appmetrica.analytics.impl.startup.uuid.MultiProcessSafeUuidProvider
 import io.appmetrica.analytics.impl.startup.uuid.UuidValidator
 import io.appmetrica.analytics.impl.utils.DeviceIdGenerator
@@ -54,6 +55,8 @@ class StartupUnitIdentifiersGeneratingTest : CommonTest() {
 
     private val startupStateHolder: StartupStateHolder = mock()
 
+    private val requestConfigArguments: StartupRequestConfig.Arguments = mock()
+
     private val startupUnitComponents: StartupUnitComponents = mock {
         on { context } doReturn context
         on { packageName } doReturn packageName
@@ -68,6 +71,7 @@ class StartupUnitIdentifiersGeneratingTest : CommonTest() {
         on { componentId } doReturn componentId
         on { resultListener } doReturn startupResultListener
         on { startupStateHolder } doReturn startupStateHolder
+        on { requestConfigArguments } doReturn requestConfigArguments
     }
 
     private val startupStateCaptor = argumentCaptor<StartupState>()

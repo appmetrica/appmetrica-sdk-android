@@ -6,8 +6,8 @@ import io.appmetrica.analytics.ReporterConfig
 import io.appmetrica.analytics.Revenue
 import io.appmetrica.analytics.ValidationException
 import io.appmetrica.analytics.ecommerce.ECommerceEvent
-import io.appmetrica.analytics.impl.crash.client.AllThreads
-import io.appmetrica.analytics.impl.crash.client.UnhandledException
+import io.appmetrica.analytics.impl.crash.jvm.client.AllThreads
+import io.appmetrica.analytics.impl.crash.jvm.client.UnhandledException
 import io.appmetrica.analytics.profile.UserProfile
 import io.appmetrica.analytics.testutils.CommonTest
 import org.junit.Test

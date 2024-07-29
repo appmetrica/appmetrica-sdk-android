@@ -2,9 +2,13 @@ package io.appmetrica.analytics.impl;
 
 import android.content.Context;
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
-import io.appmetrica.analytics.impl.crash.CrashProcessorFactory;
+import io.appmetrica.analytics.impl.crash.jvm.client.TechnicalCrashProcessorFactory;
+import io.appmetrica.analytics.impl.db.IKeyValueTableDbHelper;
+import io.appmetrica.analytics.impl.db.preferences.PreferencesClientDbStorage;
+import io.appmetrica.analytics.impl.db.storage.DatabaseStorageFactory;
 import io.appmetrica.analytics.impl.modules.ModuleEntryPointsRegister;
 import io.appmetrica.analytics.impl.modules.client.ClientModulesController;
+import io.appmetrica.analytics.impl.proxy.AppMetricaFacadeProvider;
 import io.appmetrica.analytics.impl.reporter.ReporterLifecycleListener;
 import io.appmetrica.analytics.impl.startup.uuid.MultiProcessSafeUuidProvider;
 import io.appmetrica.analytics.impl.startup.uuid.UuidFromClientPreferencesImporter;
@@ -12,6 +16,7 @@ import io.appmetrica.analytics.impl.utils.MainProcessDetector;
 import io.appmetrica.analytics.impl.utils.executors.ClientExecutorProvider;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.MockedConstructionRule;
+import io.appmetrica.analytics.testutils.MockedStaticRule;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -23,6 +28,7 @@ import org.robolectric.RobolectricTestRunner;
 
 import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
 public class ClientServiceLocatorTest extends CommonTest {
@@ -50,7 +56,7 @@ public class ClientServiceLocatorTest extends CommonTest {
     @Mock
     private ReporterLifecycleListener reporterLifecycleListener;
     @Mock
-    private CrashProcessorFactory crashProcessorFactory;
+    private TechnicalCrashProcessorFactory crashProcessorFactory;
     @Mock
     private AppMetricaCoreComponentsProvider coreComponentsProvider;
 
@@ -63,11 +69,30 @@ public class ClientServiceLocatorTest extends CommonTest {
         uuidFromClientPreferencesImporterMockedConstructionRule =
         new MockedConstructionRule<>(UuidFromClientPreferencesImporter.class);
 
+    @Rule
+    public MockedConstructionRule<PreferencesClientDbStorage> preferencesClientDbStorageMockedConstructionRule =
+        new MockedConstructionRule<>(PreferencesClientDbStorage.class);
+
+    @Rule
+    public MockedStaticRule<DatabaseStorageFactory> databaseStorageFactoryMockedStaticRule =
+        new MockedStaticRule<>(DatabaseStorageFactory.class);
+
+    @Rule
+    public MockedConstructionRule<AppMetricaFacadeProvider> appMetricaFacadeProviderMockedConstructionRule =
+        new MockedConstructionRule<>(AppMetricaFacadeProvider.class);
+
+    @Mock
+    private DatabaseStorageFactory databaseStorage;
+    @Mock
+    private IKeyValueTableDbHelper keyValueTableDbHelper;
+
     private ClientServiceLocator mClientServiceLocator;
 
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
+        when(DatabaseStorageFactory.getInstance(context)).thenReturn(databaseStorage);
+        when(databaseStorage.getClientDbHelper()).thenReturn(keyValueTableDbHelper);
         mClientServiceLocator = new ClientServiceLocator(
             mMainProcessDetector,
             mDefaultOneShotMetricaConfig,
@@ -128,7 +153,7 @@ public class ClientServiceLocatorTest extends CommonTest {
     public void allFieldsFilled() throws Exception {
         ObjectPropertyAssertions(mClientServiceLocator)
             .withDeclaredAccessibleFields(true)
-            .withIgnoredFields("moduleEntryPointsRegister")
+            .withIgnoredFields("moduleEntryPointsRegister", "appMetricaFacadeProvider")
             .checkField("mainProcessDetector", "getMainProcessDetector", mMainProcessDetector)
             .checkField("defaultOneShotConfig", "getDefaultOneShotConfig", mDefaultOneShotMetricaConfig)
             .checkField("clientExecutorProvider", "getClientExecutorProvider", mClientExecutorProvider)
@@ -180,5 +205,25 @@ public class ClientServiceLocatorTest extends CommonTest {
 
         assertThat(uuidFromClientPreferencesImporterMockedConstructionRule.getArgumentInterceptor().flatArguments())
             .isEmpty();
+    }
+
+    @Test
+    public void getPreferencesClientDbStorage() {
+        assertThat(mClientServiceLocator.getPreferencesClientDbStorage(context))
+            .isSameAs(mClientServiceLocator.getPreferencesClientDbStorage(context))
+            .isSameAs(preferencesClientDbStorageMockedConstructionRule.getConstructionMock().constructed().get(0));
+
+        assertThat(preferencesClientDbStorageMockedConstructionRule.getConstructionMock().constructed())
+            .hasSize(1);
+        assertThat(preferencesClientDbStorageMockedConstructionRule.getArgumentInterceptor().flatArguments())
+            .containsExactly(keyValueTableDbHelper);
+    }
+
+    @Test
+    public void getAppMetricaFacadeProvider() {
+        assertThat(mClientServiceLocator.getAppMetricaFacadeProvider())
+            .isEqualTo(appMetricaFacadeProviderMockedConstructionRule.getConstructionMock().constructed().get(0));
+        assertThat(appMetricaFacadeProviderMockedConstructionRule.getConstructionMock().constructed()).hasSize(1);
+        assertThat(appMetricaFacadeProviderMockedConstructionRule.getArgumentInterceptor().flatArguments()).isEmpty();
     }
 }

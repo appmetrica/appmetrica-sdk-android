@@ -1,9 +1,9 @@
 package io.appmetrica.analytics.impl.crash
 
 import io.appmetrica.analytics.impl.ExtraMetaInfoRetriever
-import io.appmetrica.analytics.impl.crash.client.RegularError
-import io.appmetrica.analytics.impl.crash.client.UnhandledException
-import io.appmetrica.analytics.impl.crash.client.UnhandledExceptionFactory
+import io.appmetrica.analytics.impl.crash.jvm.client.RegularError
+import io.appmetrica.analytics.impl.crash.jvm.client.UnhandledException
+import io.appmetrica.analytics.impl.crash.jvm.client.UnhandledExceptionFactory
 import io.appmetrica.analytics.plugins.PluginErrorDetails
 
 class PluginErrorDetailsConverter(

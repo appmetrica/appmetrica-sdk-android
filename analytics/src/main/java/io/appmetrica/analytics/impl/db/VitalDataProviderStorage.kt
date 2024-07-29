@@ -30,18 +30,32 @@ internal class VitalDataProviderStorage(private val context: Context) {
 
     @Synchronized
     fun getComponentDataProvider(componentId: ComponentId): VitalComponentDataProvider {
-        val key = "${componentId.apiKey}"
+        val key = "$componentId"
         return componentProviders.getOrPut(key) {
             VitalComponentDataProvider(
                 PreferencesComponentDbStorage(
                     DatabaseStorageFactory.getInstance(context).getPreferencesDbHelper(componentId),
                 ),
-                FileVitalDataSource(
-                    context,
-                    VitalComponentDataProvider.composeFileName(componentId.apiKey)
-                ),
+                getComponentBackupVitalDataSource(componentId),
                 key
             )
         }
     }
+
+    private fun getComponentBackupVitalDataSource(componentId: ComponentId): VitalDataSource =
+        if (componentId.isMain) {
+            val actual = "appmetrica_vital_main.dat"
+            val legacy = composeFileNameForNonMain(componentId)
+            CompositeFileVitalDataSource(
+                listOf(
+                    legacy to FileVitalDataSource(context, legacy),
+                    actual to FileVitalDataSource(context, actual)
+                )
+            )
+        } else {
+            FileVitalDataSource(context, composeFileNameForNonMain(componentId))
+        }
+
+    private fun composeFileNameForNonMain(componentId: ComponentId): String =
+        "appmetrica_vital_${componentId.apiKey}.dat"
 }

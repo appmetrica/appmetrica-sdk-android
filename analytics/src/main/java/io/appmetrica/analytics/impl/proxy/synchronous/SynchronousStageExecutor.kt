@@ -22,7 +22,6 @@ import io.appmetrica.analytics.coreutils.internal.logger.LoggerStorage
 import io.appmetrica.analytics.coreutils.internal.system.SystemServiceUtils.accessSystemServiceSafely
 import io.appmetrica.analytics.ecommerce.ECommerceEvent
 import io.appmetrica.analytics.impl.ActivityLifecycleManager
-import io.appmetrica.analytics.impl.ActivityLifecycleManager.WatchingStatus
 import io.appmetrica.analytics.impl.ClientServiceLocator
 import io.appmetrica.analytics.impl.ContextAppearedListener
 import io.appmetrica.analytics.impl.DefaultValues
@@ -55,7 +54,8 @@ class SynchronousStageExecutor @VisibleForTesting constructor(
     fun putAppEnvironmentValue(
         key: String,
         value: String?
-    ) {}
+    ) {
+    }
 
     fun clearAppEnvironment() {}
 
@@ -66,12 +66,14 @@ class SynchronousStageExecutor @VisibleForTesting constructor(
     fun reportEvent(
         eventName: String,
         jsonValue: String?
-    ) {}
+    ) {
+    }
 
     fun reportEvent(
         eventName: String,
         attributes: Map<String?, Any?>?
-    ) {}
+    ) {
+    }
 
     fun reportError(
         message: String,
@@ -113,16 +115,15 @@ class SynchronousStageExecutor @VisibleForTesting constructor(
             )
         if (sessionsAutoTrackingEnabled) {
             logger.info("Session auto tracking enabled")
-            sessionsTrackingManager.startWatching(true)
+            sessionsTrackingManager.startWatchingIfNotYet()
         } else {
             logger.info("Session auto tracking disabled")
         }
         provider.getInitializedImpl(context, true).activateCore(config)
     }
 
-    fun enableActivityAutoTracking(application: Application): WatchingStatus {
+    fun enableActivityAutoTracking(application: Application) {
         activityLifecycleManager.maybeInit(application)
-        return sessionsTrackingManager.startWatching(false)
     }
 
     fun reportAppOpen(activity: Activity?): Intent? {
@@ -160,7 +161,8 @@ class SynchronousStageExecutor @VisibleForTesting constructor(
     fun putErrorEnvironmentValue(
         key: String,
         value: String?
-    ) {}
+    ) {
+    }
 
     fun activateReporter(
         context: Context,
@@ -187,7 +189,8 @@ class SynchronousStageExecutor @VisibleForTesting constructor(
     fun reportJsEvent(
         eventName: String,
         eventValue: String?
-    ) {}
+    ) {
+    }
 
     fun reportJsInitEvent(value: String) {}
 

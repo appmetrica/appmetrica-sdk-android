@@ -53,6 +53,7 @@ class StartupUnitListenerNotificationTest : CommonTest() {
     private val uuidValidator: UuidValidator = mock()
     private val timeProvider: TimeProvider = mock()
     private val startupStateHolder: StartupStateHolder = mock()
+    private val requestConfigArguments: StartupRequestConfig.Arguments = mock()
     
     private val startupUnitComponents: StartupUnitComponents = mock {
         on { startupConfigurationHolder } doReturn startupConfigurationHolder 
@@ -67,6 +68,7 @@ class StartupUnitListenerNotificationTest : CommonTest() {
         on { timeProvider } doReturn timeProvider
         on { packageName } doReturn packageName
         on { startupStateHolder } doReturn startupStateHolder
+        on { requestConfigArguments } doReturn requestConfigArguments
     }
     
     private lateinit var startupUnit: StartupUnit

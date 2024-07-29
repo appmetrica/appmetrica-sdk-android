@@ -5,9 +5,12 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
-import io.appmetrica.analytics.impl.crash.CrashProcessorFactory;
+import io.appmetrica.analytics.impl.crash.jvm.client.TechnicalCrashProcessorFactory;
+import io.appmetrica.analytics.impl.db.preferences.PreferencesClientDbStorage;
+import io.appmetrica.analytics.impl.db.storage.DatabaseStorageFactory;
 import io.appmetrica.analytics.impl.modules.ModuleEntryPointsRegister;
 import io.appmetrica.analytics.impl.modules.client.ClientModulesController;
+import io.appmetrica.analytics.impl.proxy.AppMetricaFacadeProvider;
 import io.appmetrica.analytics.impl.reporter.ReporterLifecycleListener;
 import io.appmetrica.analytics.impl.startup.uuid.MultiProcessSafeUuidProvider;
 import io.appmetrica.analytics.impl.startup.uuid.UuidFromClientPreferencesImporter;
@@ -54,7 +57,7 @@ public class ClientServiceLocator {
     @Nullable
     private ReporterLifecycleListener reporterLifecycleListener;
     @NonNull
-    private final CrashProcessorFactory crashProcessorFactory;
+    private final TechnicalCrashProcessorFactory crashProcessorFactory;
     @Nullable
     private MultiProcessSafeUuidProvider multiProcessSafeUuidProvider;
     @NonNull
@@ -63,6 +66,12 @@ public class ClientServiceLocator {
     private volatile ClientModulesController modulesController;
     @NonNull
     private final ModuleEntryPointsRegister moduleEntryPointsRegister = new ModuleEntryPointsRegister();
+
+    @Nullable
+    private volatile PreferencesClientDbStorage preferencesClientDbStorage;
+
+    @NonNull
+    private final AppMetricaFacadeProvider appMetricaFacadeProvider = new AppMetricaFacadeProvider();
 
     private ClientServiceLocator() {
         this(new MainProcessDetector(), new ActivityLifecycleManager(), new ClientExecutorProvider());
@@ -95,7 +104,7 @@ public class ClientServiceLocator {
                 activityAppearedListener
             ),
             new ContextAppearedListener(activityLifecycleManager),
-            new CrashProcessorFactory(),
+            new TechnicalCrashProcessorFactory(),
             new AppMetricaCoreComponentsProvider()
         );
     }
@@ -109,7 +118,7 @@ public class ClientServiceLocator {
                          @NonNull ActivityLifecycleManager activityLifecycleManager,
                          @NonNull SessionsTrackingManager sessionsTrackingManager,
                          @NonNull ContextAppearedListener contextAppearedListener,
-                         @NonNull CrashProcessorFactory crashProcessorFactory,
+                         @NonNull TechnicalCrashProcessorFactory crashProcessorFactory,
                          @NonNull AppMetricaCoreComponentsProvider appMetricaCoreComponentsProvider) {
         this.mainProcessDetector = mainProcessDetector;
         this.defaultOneShotConfig = defaultOneShotMetricaConfig;
@@ -180,7 +189,7 @@ public class ClientServiceLocator {
     }
 
     @NonNull
-    public CrashProcessorFactory getCrashProcessorFactory() {
+    public TechnicalCrashProcessorFactory getCrashProcessorFactory() {
         return crashProcessorFactory;
     }
 
@@ -216,6 +225,28 @@ public class ClientServiceLocator {
             }
         }
         return local;
+    }
+
+    @NonNull
+    public PreferencesClientDbStorage getPreferencesClientDbStorage(@NonNull Context context) {
+        PreferencesClientDbStorage local = preferencesClientDbStorage;
+        if (local == null) {
+            synchronized (this) {
+                local = preferencesClientDbStorage;
+                if (local == null) {
+                    local = new PreferencesClientDbStorage(
+                        DatabaseStorageFactory.getInstance(context).getClientDbHelper()
+                    );
+                    preferencesClientDbStorage = local;
+                }
+            }
+        }
+        return local;
+    }
+
+    @NonNull
+    public AppMetricaFacadeProvider getAppMetricaFacadeProvider() {
+        return appMetricaFacadeProvider;
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)

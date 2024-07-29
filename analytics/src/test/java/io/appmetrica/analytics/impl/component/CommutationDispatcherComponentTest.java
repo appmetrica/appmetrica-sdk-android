@@ -8,7 +8,7 @@ import androidx.annotation.Nullable;
 import io.appmetrica.analytics.impl.ClientIdentifiersHolder;
 import io.appmetrica.analytics.impl.ClientIdentifiersProvider;
 import io.appmetrica.analytics.impl.ClientIdentifiersProviderFactory;
-import io.appmetrica.analytics.impl.CounterConfigurationReporterType;
+import io.appmetrica.analytics.internal.CounterConfigurationReporterType;
 import io.appmetrica.analytics.impl.CounterReport;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.IdentifiersData;

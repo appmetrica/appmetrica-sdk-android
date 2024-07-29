@@ -7,13 +7,23 @@ import io.appmetrica.analytics.impl.IMainReporter;
 import io.appmetrica.analytics.impl.IReporterExtended;
 import io.appmetrica.analytics.impl.IReporterFactory;
 import io.appmetrica.analytics.impl.IUnhandledSituationReporter;
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 
 public class ReporterFactoryStub implements IReporterFactory {
 
     @NonNull
     @Override
-    public IMainReporter buildMainReporter(@NonNull AppMetricaConfig config,
-                                           boolean needToClearEnvironment) {
+    public IMainReporter buildOrUpdateAnonymousMainReporter(@NonNull AppMetricaConfig config,
+                                                            @NonNull PublicLogger logger,
+                                                            boolean needToClearEnvironment) {
+        return new MainReporterStub();
+    }
+
+    @NonNull
+    @Override
+    public IMainReporter buildOrUpdateMainReporter(@NonNull AppMetricaConfig config,
+                                                   @NonNull PublicLogger logger,
+                                                   boolean needToClearEnvironment) {
         return new MainReporterStub();
     }
 

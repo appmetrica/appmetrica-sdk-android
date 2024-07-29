@@ -206,5 +206,24 @@ public class CommonArguments {
             result = 31 * result + (revenueAutoTrackingEnabled != null ? revenueAutoTrackingEnabled.hashCode() : 0);
             return result;
         }
+
+        @Override
+        public String toString() {
+            return "ReporterArguments{" +
+                "apiKey='" + apiKey + '\'' +
+                ", locationTracking=" + locationTracking +
+                ", manualLocation=" + manualLocation +
+                ", firstActivationAsUpdate=" + firstActivationAsUpdate +
+                ", sessionTimeout=" + sessionTimeout +
+                ", maxReportsCount=" + maxReportsCount +
+                ", dispatchPeriod=" + dispatchPeriod +
+                ", logEnabled=" + logEnabled +
+                ", dataSendingEnabled=" + dataSendingEnabled +
+                ", clidsFromClient=" + clidsFromClient +
+                ", maxReportsInDbCount=" + maxReportsInDbCount +
+                ", nativeCrashesEnabled=" + nativeCrashesEnabled +
+                ", revenueAutoTrackingEnabled=" + revenueAutoTrackingEnabled +
+                '}';
+        }
     }
 }

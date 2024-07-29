@@ -16,7 +16,7 @@ import io.appmetrica.analytics.ReporterConfig
 import io.appmetrica.analytics.Revenue
 import io.appmetrica.analytics.StartupParamsCallback
 import io.appmetrica.analytics.ecommerce.ECommerceEvent
-import io.appmetrica.analytics.impl.crash.client.UnhandledException
+import io.appmetrica.analytics.impl.crash.jvm.client.UnhandledException
 import io.appmetrica.analytics.impl.proxy.AppMetricaFacadeProvider
 import io.appmetrica.analytics.impl.utils.validation.NonEmptyStringValidator
 import io.appmetrica.analytics.impl.utils.validation.NonNullValidator

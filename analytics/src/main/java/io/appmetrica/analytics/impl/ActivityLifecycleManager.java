@@ -105,7 +105,9 @@ public class ActivityLifecycleManager extends DefaultActivityLifecycleCallbacks 
         if (watchingStatus == WatchingStatus.WATCHING && listeners.isEmpty()) {
             watchingStatus = WatchingStatus.NOT_WATCHING_YET;
             DebugLogger.INSTANCE.info(TAG, "unregister activity lifecycle callbacks");
-            application.unregisterActivityLifecycleCallbacks(this);
+            if (application != null) {
+                application.unregisterActivityLifecycleCallbacks(this);
+            }
         }
     }
 

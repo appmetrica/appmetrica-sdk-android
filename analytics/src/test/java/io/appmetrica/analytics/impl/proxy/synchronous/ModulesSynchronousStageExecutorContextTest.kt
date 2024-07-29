@@ -1,9 +1,14 @@
 package io.appmetrica.analytics.impl.proxy.synchronous
 
 import android.content.Context
+import io.appmetrica.analytics.impl.AppMetricaFacade
+import io.appmetrica.analytics.impl.ClientServiceLocator
 import io.appmetrica.analytics.impl.ContextAppearedListener
+import io.appmetrica.analytics.impl.proxy.AppMetricaFacadeProvider
+import io.appmetrica.analytics.testutils.ClientServiceLocatorRule
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.ContextCoverageUtils
+import org.junit.Rule
 import org.junit.Test
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
@@ -15,11 +20,29 @@ class ModulesSynchronousStageExecutorContextTest : CommonTest() {
     private val context: Context = mock {
         on { applicationContext } doReturn applicationContext
     }
-    private val contextAppearedListener: ContextAppearedListener = mock()
 
-    private val synchronousStageExecutor = ModulesSynchronousStageExecutor(
-        contextAppearedListener
-    )
+    private val appmetricaFacade: AppMetricaFacade = mock()
+
+    private val appMetricaFacadeProvider: AppMetricaFacadeProvider = mock {
+        on { getInitializedImpl(context, true) } doReturn appmetricaFacade
+    }
+
+    private val contextAppearedListener: ContextAppearedListener by setUp {
+        ClientServiceLocator.getInstance().contextAppearedListener
+    }
+
+    @get:Rule
+    val clientServiceLocatorRule = ClientServiceLocatorRule()
+
+    private val synchronousStageExecutor by setUp {
+        ModulesSynchronousStageExecutor(appMetricaFacadeProvider)
+    }
+
+    @Test
+    fun activate() {
+        synchronousStageExecutor.activate(context)
+        verify(contextAppearedListener).onProbablyAppeared(context)
+    }
 
     @Test
     fun getReporter() {

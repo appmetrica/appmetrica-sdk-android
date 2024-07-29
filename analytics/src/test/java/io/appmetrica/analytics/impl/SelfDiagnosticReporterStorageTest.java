@@ -1,6 +1,8 @@
 package io.appmetrica.analytics.impl;
 
 import android.content.Context;
+
+import io.appmetrica.analytics.internal.CounterConfigurationReporterType;
 import io.appmetrica.analytics.testutils.CommonTest;
 import java.util.UUID;
 import org.junit.Before;

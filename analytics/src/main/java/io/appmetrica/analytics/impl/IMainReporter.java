@@ -10,7 +10,7 @@ import java.util.List;
 public interface IMainReporter extends IBaseReporter, MetricaConfigurator {
 
     void enableAnrMonitoring();
-
+    
     void reportAppOpen(@NonNull String deeplink, boolean auto);
 
     void reportReferralUrl(@NonNull String referralUrl);
