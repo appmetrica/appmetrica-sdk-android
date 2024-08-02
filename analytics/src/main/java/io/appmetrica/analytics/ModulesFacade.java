@@ -44,15 +44,6 @@ public final class ModulesFacade {
     private static ModulesProxy proxy = new ModulesProxy();
 
     /**
-     * Activate AppMetrica without API_KEY in anonymous mode
-     * @param context Context object
-     */
-    public static void activate(@NonNull Context context) {
-        DebugLogger.INSTANCE.info(TAG, "Activate anonymously");
-        proxy.activate(context);
-    }
-
-    /**
      * Reports custom event with various parameters.
      *
      * @param moduleEvent Description of event to send.

@@ -16,18 +16,8 @@ import io.appmetrica.analytics.impl.proxy.validation.ModulesBarrier
 class ModulesProxy {
     private val provider: AppMetricaFacadeProvider = ClientServiceLocator.getInstance().appMetricaFacadeProvider
     private val modulesBarrier = ModulesBarrier(provider)
-    private val synchronousStageExecutor = ModulesSynchronousStageExecutor(provider)
+    private val synchronousStageExecutor = ModulesSynchronousStageExecutor()
     private val executor: ICommonExecutor = ClientServiceLocator.getInstance().clientExecutorProvider.defaultExecutor
-
-    fun activate(context: Context) {
-        modulesBarrier.activate(context)
-        val applicationContext = context.applicationContext
-        synchronousStageExecutor.activate(applicationContext)
-        executor.execute {
-            provider.getInitializedImpl(applicationContext).activateFull()
-        }
-        provider.markActivated()
-    }
 
     fun reportEvent(moduleEvent: ModuleEvent) {
         modulesBarrier.reportEvent(moduleEvent)

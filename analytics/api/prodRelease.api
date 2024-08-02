@@ -188,6 +188,12 @@ public final class io.appmetrica.analytics.AppMetricaDefaultValues {
     public static final int DEFAULT_SESSION_TIMEOUT_SECONDS
 }
 
+public class io.appmetrica.analytics.AppMetricaLibraryAdapter {
+    public static void activate([NonNull] android.content.Context)
+    public static void reportEvent([NonNull] String, [NonNull] String, [NonNull] String)
+    public static void setProxy([NonNull] OBFUSCATED[io.appmetrica.analytics.impl.proxy.AppMetricaLibraryAdapterProxy])
+}
+
 public final class io.appmetrica.analytics.BuildConfig {
     public static final int API_LEVEL
     public static final String BUILD_DATE
@@ -311,7 +317,6 @@ public final class io.appmetrica.analytics.ModulesFacade {
     public static final int EXTERNAL_ATTRIBUTION_TENJIN
 
     public <init>()
-    public static void activate([NonNull] android.content.Context)
     public static [NonNull] io.appmetrica.analytics.IModuleReporter getModuleReporter([NonNull] android.content.Context, [NonNull] String)
     public static boolean isActivatedForApp()
     public static void reportAdRevenue([NonNull] io.appmetrica.analytics.AdRevenue)

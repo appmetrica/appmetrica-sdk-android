@@ -37,10 +37,6 @@ import java.util.UUID
 @RunWith(RobolectricTestRunner::class)
 class ModulesProxyTest : CommonTest() {
 
-    private val applicationContext: Context = mock()
-    private val context: Context = mock {
-        on { applicationContext } doReturn applicationContext
-    }
     private val mainReporter: MainReporter = mock()
     private val mainReporterApiConsumerProvider: MainReporterApiConsumerProvider = mock()
     private val facade: AppMetricaFacade = mock()
@@ -74,8 +70,6 @@ class ModulesProxyTest : CommonTest() {
     @Before
     fun setUp() {
         whenever(ClientServiceLocator.getInstance().appMetricaFacadeProvider.peekInitializedImpl()).thenReturn(facade)
-        whenever(ClientServiceLocator.getInstance().appMetricaFacadeProvider.getInitializedImpl(applicationContext))
-            .thenReturn(facade)
         whenever(facade.mainReporterApiConsumerProvider).thenReturn(mainReporterApiConsumerProvider)
         whenever(mainReporterApiConsumerProvider.mainReporter).thenReturn(mainReporter)
         whenever(ClientServiceLocator.getInstance().clientExecutorProvider.defaultExecutor).thenReturn(executor)
@@ -93,23 +87,7 @@ class ModulesProxyTest : CommonTest() {
     @Test
     fun synchronousStageExecutor() {
         assertThat(synchronousStageExecutorConstructionRule.constructionMock.constructed()).hasSize(1)
-        assertThat(synchronousStageExecutorConstructionRule.argumentInterceptor.flatArguments())
-            .containsExactly(ClientServiceLocator.getInstance().appMetricaFacadeProvider)
-    }
-
-    @Test
-    fun activate() {
-        proxy.activate(context)
-        inOrder(modulesBarrier, synchronousStageExecutor, executor) {
-            verify(modulesBarrier).activate(context)
-            verify(synchronousStageExecutor).activate(applicationContext)
-            verify(executor).execute(runnableArgumentCaptor.capture())
-            verifyNoMoreInteractions()
-        }
-
-        runnableArgumentCaptor.firstValue.run()
-
-        verify(facade).activateFull()
+        assertThat(synchronousStageExecutorConstructionRule.argumentInterceptor.flatArguments()).isEmpty()
     }
 
     @Test

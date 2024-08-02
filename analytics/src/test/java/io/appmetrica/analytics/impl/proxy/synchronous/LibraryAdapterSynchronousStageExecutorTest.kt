@@ -16,7 +16,7 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.inOrder
 import org.mockito.kotlin.mock
 
-class ModulesSynchronousStageExecutorTest : CommonTest() {
+class LibraryAdapterSynchronousStageExecutorTest : CommonTest() {
 
     private val context: Context = mock()
 
@@ -36,13 +36,13 @@ class ModulesSynchronousStageExecutorTest : CommonTest() {
         on { LoggerStorage.getMainPublicOrAnonymousLogger() } doReturn logger
     }
 
-    private val modulesSynchronousStageExecutor: ModulesSynchronousStageExecutor by setUp {
-        ModulesSynchronousStageExecutor(appMetricaFacadeProvider)
+    private val synchronousStageExecutor: LibraryAdapterSynchronousStageExecutor by setUp {
+        LibraryAdapterSynchronousStageExecutor(appMetricaFacadeProvider)
     }
 
     @Test
     fun activate() {
-        modulesSynchronousStageExecutor.activate(context)
+        synchronousStageExecutor.activate(context)
         inOrder(
             ClientServiceLocator.getInstance().contextAppearedListener,
             logger,

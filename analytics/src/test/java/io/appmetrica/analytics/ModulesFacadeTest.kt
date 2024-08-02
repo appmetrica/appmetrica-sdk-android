@@ -18,7 +18,6 @@ import org.robolectric.RobolectricTestRunner
 @RunWith(RobolectricTestRunner::class)
 class ModulesFacadeTest {
 
-    private val context: Context = mock()
     private val proxy: ModulesProxy = mock()
     private val moduleEvent: ModuleEvent = mock()
 
@@ -28,12 +27,6 @@ class ModulesFacadeTest {
     @Before
     fun setUp() {
         ModulesFacade.setProxy(proxy)
-    }
-
-    @Test
-    fun activate() {
-        ModulesFacade.activate(context)
-        verify(proxy).activate(context)
     }
 
     @Test
