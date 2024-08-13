@@ -11,9 +11,7 @@
         <property name="file" value="${config_loc}/checkstyle-suppressions.xml"/>
     </module>
 
-    <module name="FileLength">
-        <property name="max" value="1000"/>
-    </module>
+    <module name="FileLength"/>
     <module name="SuppressWarningsFilter" />
 
     <module name="TreeWalker">
@@ -24,35 +22,15 @@
         <module name="UnusedImports"/>
         <module name="AvoidNestedBlocks"/>
         <module name="OneStatementPerLine"/>
-        <module name="PackageName">
-            <property name="format" value="^[a-z]+(\.[a-z][a-z0-9]*)*$"/>
-            <message key="name.invalidPattern"
-                     value="Package name ''{0}'' must match pattern ''{1}''."/>
-        </module>
-        <module name="MemberName">
-            <property name="format" value="^[a-z][a-zA-Z0-9]*$"/>
-            <message key="name.invalidPattern"
-                     value="Member name ''{0}'' must match pattern ''{1}''."/>
-        </module>
-        <module name="ParameterName">
-            <property name="format" value="^[a-z][a-zA-Z0-9]*$"/>
-            <message key="name.invalidPattern"
-                     value="Parameter name ''{0}'' must match pattern ''{1}''."/>
-        </module>
-        <module name="LocalVariableName">
-            <property name="tokens" value="VARIABLE_DEF"/>
-            <property name="format" value="^[a-z][a-zA-Z0-9]*$"/>
-            <property name="allowOneCharVarInForLoop" value="true"/>
-            <message key="name.invalidPattern"
-                     value="Local variable name ''{0}'' must match pattern ''{1}''."/>
-        </module>
+        <module name="PackageName"/>
+        <module name="MemberName"/>
+        <module name="ParameterName"/>
+        <module name="LocalVariableName"/>
         <module name="LineLength">
-            <property name="ignorePattern" value="^\s* *\/*\*+"/>
+            <property name="ignorePattern" value="^\s*(\/\*\*|\*).*"/> <!-- javadoc comments are ignored -->
             <property name="max" value="120"/>
         </module>
-        <module name="MethodLength">
-            <property name="max" value="50"/>
-        </module>
+        <module name="MethodLength"/>
 
         <module name="ImportControl">
             <property name="file" value="${config_loc}/checkstyle-imports.xml"/>

@@ -10,20 +10,7 @@
     <suppress checks=".*" files="generated/.*" />
     <suppress checks=".*" files="OpenDeviceIdentifierService.java" /> <!-- AIDL generated file -->
 
-    <suppress checks="ImportControl" files="ANRMonitor.java" />
-
-    <suppress checks="FileLength" files="AppMetricaConfig\.java" />
-    <suppress checks="FileLength" files="AppMetricaProxy\.java" />
-    <suppress checks="FileLength" files="AppMetricaYandexConfig\.java" />
-    <suppress checks="FileLength" files="AppMetricaYandex\.java" />
-    <suppress checks="FileLength" files="AppMetrica\.java" />
-    <suppress checks="FileLength" files="BaseReporter\.java" />
-    <suppress checks="FileLength" files="CounterReport\.java" />
-    <suppress checks="FileLength" files="DatabaseHelper\.java" />
-    <suppress checks="FileLength" files="JsonHelper\.java"/>
-    <suppress checks="FileLength" files="ReportRequestConfig\.java" />
-    <suppress checks="FileLength" files="ReportTask\.java" />
-    <suppress checks="FileLength" files="GlobalServiceLocator\.java"/>
+    <suppress checks="ImportControl" files="ANRMonitor.java" /> <!-- allow android.os.Debug -->
 
     <!-- Tests -->
     <suppress checks="FileLength" files="test.*\/.*\.java" />
