@@ -66,10 +66,10 @@ public class ClientServiceLocator {
     private volatile ClientModulesController modulesController;
     @NonNull
     private final ModuleEntryPointsRegister moduleEntryPointsRegister = new ModuleEntryPointsRegister();
-
     @Nullable
     private volatile PreferencesClientDbStorage preferencesClientDbStorage;
-
+    @Nullable
+    private ScreenInfoRetriever screenInfoRetriever;
     @NonNull
     private final AppMetricaFacadeProvider appMetricaFacadeProvider = new AppMetricaFacadeProvider();
 
@@ -77,9 +77,11 @@ public class ClientServiceLocator {
         this(new MainProcessDetector(), new ActivityLifecycleManager(), new ClientExecutorProvider());
     }
 
-    private ClientServiceLocator(@NonNull MainProcessDetector mainProcessDetector,
-                                 @NonNull ActivityLifecycleManager activityLifecycleManager,
-                                 @NonNull ClientExecutorProvider clientExecutorProvider) {
+    private ClientServiceLocator(
+        @NonNull MainProcessDetector mainProcessDetector,
+        @NonNull ActivityLifecycleManager activityLifecycleManager,
+        @NonNull ClientExecutorProvider clientExecutorProvider
+    ) {
         this(
             mainProcessDetector,
             activityLifecycleManager,
@@ -88,10 +90,12 @@ public class ClientServiceLocator {
         );
     }
 
-    private ClientServiceLocator(@NonNull MainProcessDetector mainProcessDetector,
-                                 @NonNull ActivityLifecycleManager activityLifecycleManager,
-                                 @NonNull ClientExecutorProvider clientExecutorProvider,
-                                 @NonNull ActivityAppearedListener activityAppearedListener) {
+    private ClientServiceLocator(
+        @NonNull MainProcessDetector mainProcessDetector,
+        @NonNull ActivityLifecycleManager activityLifecycleManager,
+        @NonNull ClientExecutorProvider clientExecutorProvider,
+        @NonNull ActivityAppearedListener activityAppearedListener
+    ) {
         this(
             mainProcessDetector,
             new DefaultOneShotMetricaConfig(),
@@ -110,16 +114,18 @@ public class ClientServiceLocator {
     }
 
     @VisibleForTesting
-    ClientServiceLocator(@NonNull MainProcessDetector mainProcessDetector,
-                         @NonNull DefaultOneShotMetricaConfig defaultOneShotMetricaConfig,
-                         @NonNull ClientExecutorProvider clientExecutorProvider,
-                         @NonNull ActivityAppearedListener activityAppearedListener,
-                         @NonNull AppMetricaServiceDelayHandler appMetricaServiceDelayHandler,
-                         @NonNull ActivityLifecycleManager activityLifecycleManager,
-                         @NonNull SessionsTrackingManager sessionsTrackingManager,
-                         @NonNull ContextAppearedListener contextAppearedListener,
-                         @NonNull TechnicalCrashProcessorFactory crashProcessorFactory,
-                         @NonNull AppMetricaCoreComponentsProvider appMetricaCoreComponentsProvider) {
+    ClientServiceLocator(
+        @NonNull MainProcessDetector mainProcessDetector,
+        @NonNull DefaultOneShotMetricaConfig defaultOneShotMetricaConfig,
+        @NonNull ClientExecutorProvider clientExecutorProvider,
+        @NonNull ActivityAppearedListener activityAppearedListener,
+        @NonNull AppMetricaServiceDelayHandler appMetricaServiceDelayHandler,
+        @NonNull ActivityLifecycleManager activityLifecycleManager,
+        @NonNull SessionsTrackingManager sessionsTrackingManager,
+        @NonNull ContextAppearedListener contextAppearedListener,
+        @NonNull TechnicalCrashProcessorFactory crashProcessorFactory,
+        @NonNull AppMetricaCoreComponentsProvider appMetricaCoreComponentsProvider
+    ) {
         this.mainProcessDetector = mainProcessDetector;
         this.defaultOneShotConfig = defaultOneShotMetricaConfig;
         this.clientExecutorProvider = clientExecutorProvider;
@@ -175,6 +181,15 @@ public class ClientServiceLocator {
     @NonNull
     public ActivityAppearedListener getActivityAppearedListener() {
         return activityAppearedListener;
+    }
+
+    @NonNull
+    public synchronized ScreenInfoRetriever getScreenInfoRetriever() {
+        if (screenInfoRetriever == null) {
+            screenInfoRetriever = new ScreenInfoRetriever();
+            activityAppearedListener.registerListener(this.screenInfoRetriever);
+        }
+        return screenInfoRetriever;
     }
 
     @Nullable

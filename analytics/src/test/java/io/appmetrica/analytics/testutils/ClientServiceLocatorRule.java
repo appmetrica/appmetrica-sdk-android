@@ -8,6 +8,7 @@ import io.appmetrica.analytics.impl.AppMetricaServiceDelayHandler;
 import io.appmetrica.analytics.impl.ClientServiceLocator;
 import io.appmetrica.analytics.impl.ContextAppearedListener;
 import io.appmetrica.analytics.impl.DefaultOneShotMetricaConfig;
+import io.appmetrica.analytics.impl.ScreenInfoRetriever;
 import io.appmetrica.analytics.impl.SessionsTrackingManager;
 import io.appmetrica.analytics.impl.crash.jvm.client.TechnicalCrashProcessorFactory;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesClientDbStorage;
@@ -36,6 +37,7 @@ public class ClientServiceLocatorRule extends ExternalResource {
     public ActivityLifecycleManager activityLifecycleManager;
     public ContextAppearedListener contextAppearedListener;
     public ActivityAppearedListener activityAppearedListener;
+    public ScreenInfoRetriever screenInfoRetriever;
     public TechnicalCrashProcessorFactory crashProcessorFactory;
     public MultiProcessSafeUuidProvider defaultMultiProcessSafeUuidProvider;
     public MultiProcessSafeUuidProvider multiProcessSafeUuidProviderWithOuterSourceImporter;
@@ -57,6 +59,7 @@ public class ClientServiceLocatorRule extends ExternalResource {
         activityLifecycleManager = mock(ActivityLifecycleManager.class);
         contextAppearedListener = mock(ContextAppearedListener.class);
         activityAppearedListener = mock(ActivityAppearedListener.class);
+        screenInfoRetriever = mock(ScreenInfoRetriever.class);
         crashProcessorFactory = mock(TechnicalCrashProcessorFactory.class);
         defaultMultiProcessSafeUuidProvider = mock(MultiProcessSafeUuidProvider.class);
         multiProcessSafeUuidProviderWithOuterSourceImporter = mock(MultiProcessSafeUuidProvider.class);
@@ -73,6 +76,7 @@ public class ClientServiceLocatorRule extends ExternalResource {
         when(instance.getSessionsTrackingManager()).thenReturn(sessionsTrackingManager);
         when(instance.getContextAppearedListener()).thenReturn(contextAppearedListener);
         when(instance.getActivityAppearedListener()).thenReturn(activityAppearedListener);
+        when(instance.getScreenInfoRetriever()).thenReturn(screenInfoRetriever);
         when(instance.getCrashProcessorFactory()).thenReturn(crashProcessorFactory);
         when(instance.getMultiProcessSafeUuidProvider(ArgumentMatchers.<Context>any()))
             .thenReturn(defaultMultiProcessSafeUuidProvider);

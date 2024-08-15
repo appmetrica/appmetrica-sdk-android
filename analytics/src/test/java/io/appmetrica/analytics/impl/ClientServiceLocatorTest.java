@@ -28,6 +28,7 @@ import org.robolectric.RobolectricTestRunner;
 
 import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
@@ -59,6 +60,10 @@ public class ClientServiceLocatorTest extends CommonTest {
     private TechnicalCrashProcessorFactory crashProcessorFactory;
     @Mock
     private AppMetricaCoreComponentsProvider coreComponentsProvider;
+
+    @Rule
+    public MockedConstructionRule<ScreenInfoRetriever> screenInfoRetrieverRule =
+        new MockedConstructionRule<>(ScreenInfoRetriever.class);
 
     @Rule
     public MockedConstructionRule<MultiProcessSafeUuidProvider> multiProcessSafeUuidProviderMockedConstructionRule =
@@ -135,6 +140,22 @@ public class ClientServiceLocatorTest extends CommonTest {
     @Test
     public void getActivityListener() {
         assertThat(mClientServiceLocator.getActivityAppearedListener()).isSameAs(activityAppearedListener);
+    }
+
+    @Test
+    public void getScreenInfoRetriever() {
+        ScreenInfoRetriever first = mClientServiceLocator.getScreenInfoRetriever();
+        ScreenInfoRetriever second = mClientServiceLocator.getScreenInfoRetriever();
+
+        assertThat(screenInfoRetrieverRule.getConstructionMock().constructed())
+            .hasSize(1)
+            .first()
+            .isEqualTo(first)
+            .isEqualTo(second);
+
+        assertThat(screenInfoRetrieverRule.getArgumentInterceptor().flatArguments())
+            .isEmpty();
+        verify(activityAppearedListener).registerListener(first);
     }
 
     @Test

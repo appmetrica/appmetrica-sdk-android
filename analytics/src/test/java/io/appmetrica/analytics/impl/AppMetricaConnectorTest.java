@@ -2,9 +2,9 @@ package io.appmetrica.analytics.impl;
 
 import android.content.Context;
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
+import io.appmetrica.analytics.testutils.ClientServiceLocatorRule;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.MockedConstructionRule;
-import io.appmetrica.analytics.testutils.MockedStaticRule;
 import io.appmetrica.analytics.testutils.TestUtils;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -17,10 +17,8 @@ import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.same;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -39,8 +37,7 @@ public class AppMetricaConnectorTest extends CommonTest {
     private AppMetricaConnector mConnector;
 
     @Rule
-    public final MockedStaticRule<ScreenInfoRetriever> sScreenInfoRetriever =
-        new MockedStaticRule<>(ScreenInfoRetriever.class);
+    public final ClientServiceLocatorRule clientServiceLocatorRule = new ClientServiceLocatorRule();
 
     @Rule
     public final MockedConstructionRule<CountDownLatch> countDownLatchMockedConstructionRule =
@@ -50,7 +47,6 @@ public class AppMetricaConnectorTest extends CommonTest {
     public void setUp() {
         MockitoAnnotations.openMocks(this);
         mContext = TestUtils.createMockedContext();
-        when(ScreenInfoRetriever.getInstance(any(Context.class))).thenReturn(mock(ScreenInfoRetriever.class));
         mConnector = new AppMetricaConnector(mContext, mExecutor, appMetricaServiceDelayHandler);
     }
 

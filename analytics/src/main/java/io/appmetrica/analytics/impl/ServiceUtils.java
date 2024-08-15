@@ -69,7 +69,7 @@ public final class ServiceUtils {
 
     @Nullable
     private static String getScreenSize(@NonNull Context context) {
-        ScreenInfo screenInfo = ScreenInfoRetriever.getInstance(context).retrieveScreenInfo();
+        ScreenInfo screenInfo = ClientServiceLocator.getInstance().getScreenInfoRetriever().retrieveScreenInfo(context);
         return  screenInfo == null ? null : JsonHelper.screenInfoToJsonString(screenInfo);
     }
 

@@ -309,7 +309,7 @@
   "analytics/src/main/java/io/appmetrica/analytics/impl/SatelliteCheckedProvider.kt":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/main/java/io/appmetrica/analytics/impl/SatelliteCheckedProvider.kt",
   "analytics/src/main/java/io/appmetrica/analytics/impl/SatelliteDataProvider.kt":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/main/java/io/appmetrica/analytics/impl/SatelliteDataProvider.kt",
   "analytics/src/main/java/io/appmetrica/analytics/impl/ScreenInfoExtractor.java":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/main/java/io/appmetrica/analytics/impl/ScreenInfoExtractor.java",
-  "analytics/src/main/java/io/appmetrica/analytics/impl/ScreenInfoRetriever.java":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/main/java/io/appmetrica/analytics/impl/ScreenInfoRetriever.java",
+  "analytics/src/main/java/io/appmetrica/analytics/impl/ScreenInfoRetriever.kt":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/main/java/io/appmetrica/analytics/impl/ScreenInfoRetriever.kt",
   "analytics/src/main/java/io/appmetrica/analytics/impl/SdkData.java":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/main/java/io/appmetrica/analytics/impl/SdkData.java",
   "analytics/src/main/java/io/appmetrica/analytics/impl/SdkEnvironmentHolder.kt":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/main/java/io/appmetrica/analytics/impl/SdkEnvironmentHolder.kt",
   "analytics/src/main/java/io/appmetrica/analytics/impl/SdkUtils.java":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/main/java/io/appmetrica/analytics/impl/SdkUtils.java",

@@ -8,13 +8,12 @@ import io.appmetrica.analytics.coreapi.internal.model.ScreenInfo;
 import io.appmetrica.analytics.impl.client.ProcessConfiguration;
 import io.appmetrica.analytics.impl.utils.JsonHelper;
 import io.appmetrica.analytics.internal.AppMetricaService;
+import io.appmetrica.analytics.testutils.ClientServiceLocatorRule;
 import io.appmetrica.analytics.testutils.CommonTest;
-import io.appmetrica.analytics.testutils.MockedStaticRule;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
@@ -26,19 +25,17 @@ import static org.mockito.Mockito.when;
 @RunWith(RobolectricTestRunner.class)
 public class ServiceUtilsTest extends CommonTest {
 
-    @Rule
-    public final MockedStaticRule<ScreenInfoRetriever> sRetriever = new MockedStaticRule<>(ScreenInfoRetriever.class);
-    @Mock
-    private ScreenInfoRetriever retriever;
     private Context context;
     private final ScreenInfo screenInfo = new ScreenInfo(777, 888, 999, 66.6f);
+    @Rule
+    public final ClientServiceLocatorRule clientServiceLocatorRule = new ClientServiceLocatorRule();
 
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
         context = RuntimeEnvironment.getApplication();
-        when(ScreenInfoRetriever.getInstance(context)).thenReturn(retriever);
-        when(retriever.retrieveScreenInfo()).thenReturn(screenInfo);
+        when(ClientServiceLocator.getInstance().getScreenInfoRetriever().retrieveScreenInfo(context))
+            .thenReturn(screenInfo);
     }
 
     @Test
@@ -66,7 +63,8 @@ public class ServiceUtilsTest extends CommonTest {
 
     @Test
     public void ownIntentNoScreenSize() {
-        when(retriever.retrieveScreenInfo()).thenReturn(null);
+        when(ClientServiceLocator.getInstance().getScreenInfoRetriever().retrieveScreenInfo(context))
+            .thenReturn(null);
         Intent intent = ServiceUtils.getOwnMetricaServiceIntent(context);
         assertThat(intent.getBundleExtra(ServiceUtils.EXTRA_SCREEN_SIZE)).isNull();
     }
