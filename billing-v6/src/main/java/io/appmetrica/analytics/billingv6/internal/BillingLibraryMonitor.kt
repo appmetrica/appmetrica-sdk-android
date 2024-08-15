@@ -34,7 +34,22 @@ class BillingLibraryMonitor(
     @WorkerThread
     override fun onSessionResumed() {
         DebugLogger.info(MODULE_TAG, "onSessionResumed with billingConfig=$billingConfig")
-        val localBillingConfig = billingConfig ?: return
+        updateBilling(billingConfig)
+    }
+
+    @Synchronized
+    override fun onBillingConfigChanged(billingConfig: BillingConfig?) {
+        DebugLogger.info(MODULE_TAG, "onBillingConfigChanged: $billingConfig")
+        if (this.billingConfig == billingConfig) {
+            return
+        }
+        this.billingConfig = billingConfig
+        updateBilling(billingConfig)
+    }
+
+    private fun updateBilling(billingConfig: BillingConfig?) {
+        DebugLogger.info(MODULE_TAG, "updateBilling with billingConfig=$billingConfig")
+        billingConfig ?: return
         uiExecutor.execute(object : SafeRunnable() {
             override fun runSafety() {
                 val billingClient = BillingClient
@@ -44,7 +59,7 @@ class BillingLibraryMonitor(
                     .build()
                 billingClient.startConnection(
                     BillingClientStateListenerImpl(
-                        localBillingConfig,
+                        billingConfig,
                         billingClient,
                         object : UtilsProvider {
                             override fun getBillingInfoManager() = this@BillingLibraryMonitor.billingInfoManager
@@ -61,11 +76,5 @@ class BillingLibraryMonitor(
                 )
             }
         })
-    }
-
-    @Synchronized
-    override fun onBillingConfigChanged(billingConfig: BillingConfig?) {
-        DebugLogger.info(MODULE_TAG, "onBillingConfigChanged: $billingConfig")
-        this.billingConfig = billingConfig
     }
 }

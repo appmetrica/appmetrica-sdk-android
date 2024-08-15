@@ -18,6 +18,7 @@ import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.mock
 import org.robolectric.RobolectricTestRunner
 import java.util.concurrent.Executor
+import org.mockito.kotlin.times
 
 @RunWith(RobolectricTestRunner::class)
 class BillingLibraryMonitorTest : CommonTest() {
@@ -62,14 +63,14 @@ class BillingLibraryMonitorTest : CommonTest() {
         billingLibraryMonitor.onBillingConfigChanged(billingConfig)
         billingLibraryMonitor.onBillingConfigChanged(null)
         billingLibraryMonitor.onSessionResumed()
-        verify(uiExecutor, never()).execute(any())
+        verify(uiExecutor, times(1)).execute(any())
     }
 
     @Test
     fun onSessionResumedIfHasConfig() {
         billingLibraryMonitor.onBillingConfigChanged(billingConfig)
         billingLibraryMonitor.onSessionResumed()
-        verify(uiExecutor).execute(any())
+        verify(uiExecutor, times(2)).execute(any())
     }
 
     @Test
@@ -86,7 +87,7 @@ class BillingLibraryMonitorTest : CommonTest() {
 
         billingLibraryMonitor.onBillingConfigChanged(billingConfig)
         billingLibraryMonitor.onSessionResumed()
-        verify(uiExecutor).execute(any())
+        verify(uiExecutor, times(2)).execute(any())
 
         Mockito.clearInvocations(uiExecutor)
         billingLibraryMonitor.onBillingConfigChanged(null)
