@@ -1,5 +1,6 @@
 package io.appmetrica.analytics.impl
 
+import android.content.Context
 import io.appmetrica.analytics.AppMetricaConfig
 import io.appmetrica.analytics.impl.db.preferences.PreferencesClientDbStorage
 import io.appmetrica.analytics.testutils.CommonTest
@@ -13,6 +14,7 @@ import org.mockito.kotlin.whenever
 
 class AppMetricaConfigForAnonymousActivationProviderTest : CommonTest() {
 
+    private val context: Context = mock()
     private val configFromPreferences: AppMetricaConfig = mock()
     private val defaultConfig: AppMetricaConfig = mock()
     private val preferences: PreferencesClientDbStorage = mock()
@@ -20,11 +22,11 @@ class AppMetricaConfigForAnonymousActivationProviderTest : CommonTest() {
     @get:Rule
     val defaultAnonymousConfigProviderMockedConstructionRule =
         constructionRule<AppMetricaDefaultAnonymousConfigProvider> {
-            on { config } doReturn defaultConfig
+            on { getConfig(context) } doReturn defaultConfig
         }
 
     private val configProvider: AppMetricaConfigForAnonymousActivationProvider by setUp {
-        AppMetricaConfigForAnonymousActivationProvider(preferences)
+        AppMetricaConfigForAnonymousActivationProvider(context, preferences)
     }
 
     @Test

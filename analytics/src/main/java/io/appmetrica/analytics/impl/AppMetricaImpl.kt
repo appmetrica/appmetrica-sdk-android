@@ -86,7 +86,7 @@ internal class AppMetricaImpl @WorkerThread internal constructor(
             startupHelper
         )
         sessionsTrackingManager = clientServiceLocator.sessionsTrackingManager
-        anonymousConfigProvider = AppMetricaConfigForAnonymousActivationProvider(clientPreferences)
+        anonymousConfigProvider = AppMetricaConfigForAnonymousActivationProvider(context, clientPreferences)
     }
 
     @WorkerThread
