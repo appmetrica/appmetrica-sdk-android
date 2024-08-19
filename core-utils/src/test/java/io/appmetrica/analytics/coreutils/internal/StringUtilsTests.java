@@ -39,7 +39,7 @@ public class StringUtilsTests extends CommonTest {
     @Test
     public void testToHexString() {
         assertThat(StringUtils.toHexString(new byte[]{
-                -125, 15, -89
+            -125, 15, -89
         })).isEqualTo("830fa7");
     }
 
@@ -71,7 +71,7 @@ public class StringUtilsTests extends CommonTest {
 
     @Test
     public void testGetUtf8BytesNull() {
-        assertThat(StringUtils.getUTF8Bytes((String)null)).isNotNull().isEmpty();
+        assertThat(StringUtils.getUTF8Bytes((String) null)).isNotNull().isEmpty();
     }
 
     @Test
@@ -103,13 +103,13 @@ public class StringUtilsTests extends CommonTest {
         cv.put("key7", "value7".getBytes());
         SoftAssertions softly = new SoftAssertions();
         softly.assertThat(StringUtils.contentValuesToString(cv))
-                .contains("key1=value1")
-                .contains("key2=2")
-                .contains("key3=3")
-                .contains("key4=true")
-                .contains("key5=1.2")
-                .contains("key6=3.4")
-                .contains("key7=");
+            .contains("key1=value1")
+            .contains("key2=2")
+            .contains("key3=3")
+            .contains("key4=true")
+            .contains("key5=1.2")
+            .contains("key6=3.4")
+            .contains("key7=");
         softly.assertAll();
     }
 
@@ -125,10 +125,24 @@ public class StringUtilsTests extends CommonTest {
 
         SoftAssertions softly = new SoftAssertions();
         softly.assertThat(StringUtils.contentValuesToString(cv))
-                .contains("key1="+fittingPart1)
-                .contains("key2=value2")
-                .contains("key3="+fittingPart2);
+            .contains("key1=" + fittingPart1)
+            .contains("key2=value2")
+            .contains("key3=" + fittingPart2);
         softly.assertAll();
+    }
+
+    @Test
+    public void throwableToString() {
+        Throwable throwable = new RuntimeException("Some");
+        assertThat(StringUtils.throwableToString(throwable))
+            .contains(throwable.getClass().getName())
+            .contains(throwable.getMessage())
+            .matches(s -> {
+                for (StackTraceElement stackTraceElement : throwable.getStackTrace()) {
+                    assertThat(s).contains(stackTraceElement.toString());
+                }
+                return true;
+            });
     }
 
     @RunWith(ParameterizedRobolectricTestRunner.class)
@@ -137,12 +151,12 @@ public class StringUtilsTests extends CommonTest {
         @ParameterizedRobolectricTestRunner.Parameters(name = "for \"{0}\" and \"{1}\" will be {2}")
         public static Collection<Object[]> data() {
             return Arrays.asList(new Object[][]{
-                    {null, null, 0},
-                    {null, "", -1},
-                    {"", null, 1},
-                    {"a", "a", 0},
-                    {"a", "b", -1},
-                    {"b", "a", 1}
+                {null, null, 0},
+                {null, "", -1},
+                {"", null, 1},
+                {"a", "a", 0},
+                {"a", "b", -1},
+                {"b", "a", 1}
             });
         }
 

@@ -16,7 +16,7 @@ internal class ClidsDataParser : ContentProviderDataParser<Map<String, String>> 
         return if (StartupUtils.isValidClids(parsedData)) {
             parsedData
         } else {
-            SdkUtils.logAttributionW("Passed clids ($rawData) are invalid.")
+            SdkUtils.logAttribution("Passed clids ($rawData) are invalid.")
             null
         }
     }

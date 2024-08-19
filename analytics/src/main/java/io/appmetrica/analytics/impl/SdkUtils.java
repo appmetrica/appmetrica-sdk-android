@@ -6,7 +6,6 @@ import androidx.annotation.Nullable;
 import io.appmetrica.analytics.AppMetrica;
 import io.appmetrica.analytics.BuildConfig;
 import io.appmetrica.analytics.coreutils.internal.StringUtils;
-import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import io.appmetrica.analytics.logger.appmetrica.internal.ImportantLogger;
 import java.util.regex.Pattern;
 
@@ -29,15 +28,14 @@ public class SdkUtils {
     }
 
     public static void logAttribution(@NonNull String message, Object... arguments) {
-        DebugLogger.INSTANCE.info(APPMETRICA_ATTRIBUTION_TAG, String.format(message, arguments));
-    }
-
-    public static void logAttributionW(@NonNull String message, Object... arguments) {
-        DebugLogger.INSTANCE.warning(APPMETRICA_ATTRIBUTION_TAG, String.format(message, arguments));
+        ImportantLogger.INSTANCE.info(APPMETRICA_ATTRIBUTION_TAG, String.format(message, arguments));
     }
 
     public static void logAttributionE(@NonNull Throwable ex, @NonNull String message, Object... arguments) {
-        DebugLogger.INSTANCE.error(APPMETRICA_ATTRIBUTION_TAG, String.format(message, arguments), ex);
+        ImportantLogger.INSTANCE.info(
+            APPMETRICA_ATTRIBUTION_TAG,
+            String.format(message, arguments) + "\n" + StringUtils.throwableToString(ex)
+        );
     }
 
     public static void logStubUsage() {

@@ -32,7 +32,7 @@ internal class ContentProviderHelper<T> @VisibleForTesting constructor(
                 if (result) {
                     SdkUtils.logAttribution("Successfully saved $description")
                 } else {
-                    SdkUtils.logAttributionW("Did not save $description because data is already present")
+                    SdkUtils.logAttribution("Did not save $description because data is already present")
                 }
             }
         } catch (ex: Throwable) {

@@ -55,6 +55,7 @@ public final class io.appmetrica.analytics.coreutils.internal.StringUtils {
     public static String ifIsEmptyToDef(String, String)
     public static String ifIsNullToDef(String, String)
     public static [NonNull] byte[] stringToBytesForProtobuf([Nullable] String)
+    public static [NonNull] String throwableToString([NonNull] Throwable)
     public static String toHexString([NonNull] byte[])
     public static final String wrapFeatures(String...)
 }

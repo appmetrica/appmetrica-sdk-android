@@ -69,7 +69,7 @@ public class PreloadInfoContentProvider extends ContentProvider {
                     );
                     break;
                 default:
-                    SdkUtils.logAttributionW("Bad content provider uri.");
+                    SdkUtils.logAttribution("Bad content provider uri.");
                     DebugLogger.INSTANCE.info(TAG, "Bad uri: " + uri);
                     break;
             }
@@ -80,7 +80,7 @@ public class PreloadInfoContentProvider extends ContentProvider {
 
     @Override
     public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
-        SdkUtils.logAttributionW("Deleting is not supported");
+        SdkUtils.logAttribution("Deleting is not supported");
         return -1;
     }
 
@@ -89,7 +89,7 @@ public class PreloadInfoContentProvider extends ContentProvider {
                       @Nullable ContentValues values,
                       @Nullable String selection,
                       @Nullable String[] selectionArgs) {
-        SdkUtils.logAttributionW("Updating is not supported");
+        SdkUtils.logAttribution("Updating is not supported");
         return -1;
     }
 
@@ -100,7 +100,7 @@ public class PreloadInfoContentProvider extends ContentProvider {
                         @Nullable String selection,
                         @Nullable String[] selectionArgs,
                         @Nullable String sortOrder) {
-        SdkUtils.logAttributionW("Query is not supported");
+        SdkUtils.logAttribution("Query is not supported");
         return null;
     }
 

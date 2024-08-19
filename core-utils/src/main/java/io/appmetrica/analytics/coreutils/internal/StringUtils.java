@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
+import kotlin.collections.ArraysKt;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Locale;
@@ -142,5 +143,19 @@ public final class StringUtils {
     @NonNull
     public static String correctIllFormedString(@NonNull String value) {
         return new String(value.getBytes(StandardCharsets.UTF_8));
+    }
+
+    @NonNull
+    public static String throwableToString(@NonNull Throwable throwable) {
+        return throwable.getClass().getName() + ": " + throwable.getMessage() + "\n"
+            + ArraysKt.joinToString(
+            throwable.getStackTrace(),
+            "\n",
+            "",
+            "",
+            -1,
+            "...",
+            null
+        );
     }
 }

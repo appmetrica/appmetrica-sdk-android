@@ -19,22 +19,22 @@ internal class PreloadInfoDataParser : ContentProviderDataParser<PreloadInfoStat
     override fun invoke(values: ContentValues): PreloadInfoState? {
         val trackingId = values.getAsString(KEY_TRACKING_ID)
         if (TextUtils.isEmpty(trackingId)) {
-            SdkUtils.logAttributionW("Tracking id is empty")
+            SdkUtils.logAttribution("Tracking id is empty")
             return null
         }
         if (ParseUtils.parseLong(trackingId) == null) {
-            SdkUtils.logAttributionW("Tracking id from preload info content provider is not a number")
+            SdkUtils.logAttribution("Tracking id from preload info content provider is not a number")
             return null
         }
         try {
             val additionalParamsString = values.getAsString(KEY_ADDITIONAL_PARAMS)
             if (TextUtils.isEmpty(additionalParamsString)) {
-                SdkUtils.logAttributionW("No additional params")
+                SdkUtils.logAttribution("No additional params")
                 return null
             }
             val additionalParams = JSONObject(additionalParamsString)
             if (additionalParams.length() == 0) {
-                SdkUtils.logAttributionW("Additional params are empty")
+                SdkUtils.logAttribution("Additional params are empty")
                 return null
             }
             SdkUtils.logAttribution(

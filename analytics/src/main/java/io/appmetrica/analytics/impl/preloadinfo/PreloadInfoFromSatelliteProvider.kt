@@ -55,7 +55,7 @@ class PreloadInfoFromSatelliteProvider(private val context: Context) : Satellite
                             DistributionSource.SATELLITE
                         )
                     } else {
-                        SdkUtils.logAttributionW("Tracking id from Satellite is not a number.")
+                        SdkUtils.logAttribution("Tracking id from Satellite is not a number.")
                     }
                 } else {
                     SdkUtils.logAttribution("No Preload Info data in Satellite content provider")
