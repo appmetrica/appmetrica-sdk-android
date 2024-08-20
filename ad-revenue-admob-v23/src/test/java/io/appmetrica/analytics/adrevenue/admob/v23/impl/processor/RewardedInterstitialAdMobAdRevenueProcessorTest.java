@@ -1,7 +1,6 @@
 package io.appmetrica.analytics.adrevenue.admob.v23.impl.processor;
 
 import com.google.android.gms.ads.AdValue;
-import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAd;
 import io.appmetrica.analytics.adrevenue.admob.v23.impl.AdRevenueConverter;
 import io.appmetrica.analytics.coreutils.internal.logger.LoggerStorage;
@@ -38,13 +37,11 @@ public class RewardedInterstitialAdMobAdRevenueProcessorTest extends CommonTest 
     private PublicLogger publicLogger;
     @Mock
     private ModuleAdRevenue adRevenue;
-    @Mock
-    private RewardedInterstitialAd rewardedInterstitialAd;
 
     @Mock
     private AdValue adValue;
     @Mock
-    private AdView adView;
+    private RewardedInterstitialAd rewardedInterstitialAd;
 
     @Rule
     public MockedStaticRule<LoggerStorage> loggerStorageRule =
@@ -64,20 +61,19 @@ public class RewardedInterstitialAdMobAdRevenueProcessorTest extends CommonTest 
         when(LoggerStorage.getMainPublicOrAnonymousLogger()).thenReturn(publicLogger);
         when(clientContext.getModuleAdRevenueContext()).thenReturn(adRevenueContext);
         when(adRevenueContext.getAdRevenueReporter()).thenReturn(adRevenueReporter);
-        when(converter.convertRewardedInterstitialAd(adValue, adView)).thenReturn(adRevenue);
+        when(converter.convertRewardedInterstitialAd(adValue, rewardedInterstitialAd)).thenReturn(adRevenue);
 
         when(ReflectionUtils.isArgumentsOfClasses(
-            new Object[]{adValue, adView, rewardedInterstitialAd},
+            new Object[]{adValue, rewardedInterstitialAd},
             AdValue.class,
-            AdView.class,
             RewardedInterstitialAd.class
         )).thenReturn(true);
     }
 
     @Test
     public void process() {
-        assertThat(processor.process(adValue, adView, rewardedInterstitialAd)).isTrue();
-        verify(converter).convertRewardedInterstitialAd(adValue, adView);
+        assertThat(processor.process(adValue, rewardedInterstitialAd)).isTrue();
+        verify(converter).convertRewardedInterstitialAd(adValue, rewardedInterstitialAd);
         verify(adRevenueReporter).reportAutoAdRevenue(adRevenue);
         verify(publicLogger).info("Ad Revenue from AdMob was reported");
     }
@@ -85,13 +81,12 @@ public class RewardedInterstitialAdMobAdRevenueProcessorTest extends CommonTest 
     @Test
     public void processWithWrongValues() {
         when(ReflectionUtils.isArgumentsOfClasses(
-            new Object[]{adValue, adView, rewardedInterstitialAd},
+            new Object[]{adValue, rewardedInterstitialAd},
             AdValue.class,
-            AdView.class,
             RewardedInterstitialAd.class
         )).thenReturn(false);
 
-        assertThat(processor.process(adValue, adView, rewardedInterstitialAd)).isFalse();
+        assertThat(processor.process(adValue, rewardedInterstitialAd)).isFalse();
         verifyNoInteractions(converter, adRevenueReporter, publicLogger);
     }
 }

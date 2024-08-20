@@ -1,7 +1,6 @@
 package io.appmetrica.analytics.adrevenue.admob.v23.impl.processor;
 
 import com.google.android.gms.ads.AdValue;
-import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.rewarded.RewardedAd;
 import io.appmetrica.analytics.adrevenue.admob.v23.impl.AdRevenueConverter;
 import io.appmetrica.analytics.coreutils.internal.logger.LoggerStorage;
@@ -38,13 +37,11 @@ public class RewardedAdMobAdRevenueProcessorTest extends CommonTest {
     private PublicLogger publicLogger;
     @Mock
     private ModuleAdRevenue adRevenue;
-    @Mock
-    private RewardedAd rewardedAd;
 
     @Mock
     private AdValue adValue;
     @Mock
-    private AdView adView;
+    private RewardedAd rewardedAd;
 
     @Rule
     public MockedStaticRule<LoggerStorage> loggerStorageRule =
@@ -64,20 +61,19 @@ public class RewardedAdMobAdRevenueProcessorTest extends CommonTest {
         when(LoggerStorage.getMainPublicOrAnonymousLogger()).thenReturn(publicLogger);
         when(clientContext.getModuleAdRevenueContext()).thenReturn(adRevenueContext);
         when(adRevenueContext.getAdRevenueReporter()).thenReturn(adRevenueReporter);
-        when(converter.convertRewardedAd(adValue, adView)).thenReturn(adRevenue);
+        when(converter.convertRewardedAd(adValue, rewardedAd)).thenReturn(adRevenue);
 
         when(ReflectionUtils.isArgumentsOfClasses(
-            new Object[]{adValue, adView, rewardedAd},
+            new Object[]{adValue, rewardedAd},
             AdValue.class,
-            AdView.class,
             RewardedAd.class
         )).thenReturn(true);
     }
 
     @Test
     public void process() {
-        assertThat(processor.process(adValue, adView, rewardedAd)).isTrue();
-        verify(converter).convertRewardedAd(adValue, adView);
+        assertThat(processor.process(adValue, rewardedAd)).isTrue();
+        verify(converter).convertRewardedAd(adValue, rewardedAd);
         verify(adRevenueReporter).reportAutoAdRevenue(adRevenue);
         verify(publicLogger).info("Ad Revenue from AdMob was reported");
     }
@@ -85,13 +81,12 @@ public class RewardedAdMobAdRevenueProcessorTest extends CommonTest {
     @Test
     public void processWithWrongNumberOfValues() {
         when(ReflectionUtils.isArgumentsOfClasses(
-            new Object[]{adValue, adView, rewardedAd},
+            new Object[]{adValue, rewardedAd},
             AdValue.class,
-            AdView.class,
             RewardedAd.class
         )).thenReturn(false);
 
-        assertThat(processor.process(adValue, adView, rewardedAd)).isFalse();
+        assertThat(processor.process(adValue, rewardedAd)).isFalse();
         verifyNoInteractions(converter, adRevenueReporter, publicLogger);
     }
 }

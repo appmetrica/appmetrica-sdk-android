@@ -4,7 +4,10 @@ import com.google.android.gms.ads.AdValue;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.AdapterResponseInfo;
 import com.google.android.gms.ads.ResponseInfo;
+import com.google.android.gms.ads.interstitial.InterstitialAd;
 import com.google.android.gms.ads.nativead.NativeAd;
+import com.google.android.gms.ads.rewarded.RewardedAd;
+import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAd;
 import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdRevenue;
 import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdType;
 import io.appmetrica.analytics.testutils.CommonTest;
@@ -37,6 +40,12 @@ public class AdRevenueConverterTest extends CommonTest {
     @Mock
     private NativeAd nativeAd;
     @Mock
+    private InterstitialAd interstitialAd;
+    @Mock
+    private RewardedAd rewardedAd;
+    @Mock
+    private RewardedInterstitialAd rewardedInterstitialAd;
+    @Mock
     private ResponseInfo responseInfo;
     @Mock
     private AdapterResponseInfo adapterResponseInfo;
@@ -57,6 +66,15 @@ public class AdRevenueConverterTest extends CommonTest {
         when(adView.getResponseInfo()).thenReturn(responseInfo);
 
         when(nativeAd.getResponseInfo()).thenReturn(responseInfo);
+
+        when(interstitialAd.getAdUnitId()).thenReturn(adUnitId);
+        when(interstitialAd.getResponseInfo()).thenReturn(responseInfo);
+
+        when(rewardedAd.getAdUnitId()).thenReturn(adUnitId);
+        when(rewardedAd.getResponseInfo()).thenReturn(responseInfo);
+
+        when(rewardedInterstitialAd.getAdUnitId()).thenReturn(adUnitId);
+        when(rewardedInterstitialAd.getResponseInfo()).thenReturn(responseInfo);
 
         when(adapterResponseInfo.getAdapterClassName()).thenReturn(adNetwork);
         when(adapterResponseInfo.getAdSourceInstanceId()).thenReturn(adPlacementId);
@@ -123,7 +141,7 @@ public class AdRevenueConverterTest extends CommonTest {
 
     @Test
     public void convertInterstitialAd() {
-        ModuleAdRevenue adRevenue = adRevenueConverter.convertInterstitialAd(adValue, adView);
+        ModuleAdRevenue adRevenue = adRevenueConverter.convertInterstitialAd(adValue, interstitialAd);
         ObjectPropertyAssertions(adRevenue)
             .checkField("adRevenue", BigDecimal.valueOf(value))
             .checkField("currency", Currency.getInstance(currencyCode))
@@ -141,9 +159,9 @@ public class AdRevenueConverterTest extends CommonTest {
 
     @Test
     public void convertInterstitialAdIfResponseInfoIsNull() {
-        when(adView.getResponseInfo()).thenReturn(null);
+        when(interstitialAd.getResponseInfo()).thenReturn(null);
 
-        ModuleAdRevenue adRevenue = adRevenueConverter.convertInterstitialAd(adValue, adView);
+        ModuleAdRevenue adRevenue = adRevenueConverter.convertInterstitialAd(adValue, interstitialAd);
         ObjectPropertyAssertions(adRevenue)
             .checkField("adRevenue", BigDecimal.valueOf(value))
             .checkField("currency", Currency.getInstance(currencyCode))
@@ -163,7 +181,7 @@ public class AdRevenueConverterTest extends CommonTest {
     public void convertInterstitialAdIfLoadedAdapterResponseInfoIsNull() {
         when(responseInfo.getLoadedAdapterResponseInfo()).thenReturn(null);
 
-        ModuleAdRevenue adRevenue = adRevenueConverter.convertInterstitialAd(adValue, adView);
+        ModuleAdRevenue adRevenue = adRevenueConverter.convertInterstitialAd(adValue, interstitialAd);
         ObjectPropertyAssertions(adRevenue)
             .checkField("adRevenue", BigDecimal.valueOf(value))
             .checkField("currency", Currency.getInstance(currencyCode))
@@ -181,7 +199,7 @@ public class AdRevenueConverterTest extends CommonTest {
 
     @Test
     public void convertRewardedAd() {
-        ModuleAdRevenue adRevenue = adRevenueConverter.convertRewardedAd(adValue, adView);
+        ModuleAdRevenue adRevenue = adRevenueConverter.convertRewardedAd(adValue, rewardedAd);
         ObjectPropertyAssertions(adRevenue)
             .checkField("adRevenue", BigDecimal.valueOf(value))
             .checkField("currency", Currency.getInstance(currencyCode))
@@ -199,9 +217,9 @@ public class AdRevenueConverterTest extends CommonTest {
 
     @Test
     public void convertRewardedAdIfResponseInfoIsNull() {
-        when(adView.getResponseInfo()).thenReturn(null);
+        when(rewardedAd.getResponseInfo()).thenReturn(null);
 
-        ModuleAdRevenue adRevenue = adRevenueConverter.convertRewardedAd(adValue, adView);
+        ModuleAdRevenue adRevenue = adRevenueConverter.convertRewardedAd(adValue, rewardedAd);
         ObjectPropertyAssertions(adRevenue)
             .checkField("adRevenue", BigDecimal.valueOf(value))
             .checkField("currency", Currency.getInstance(currencyCode))
@@ -221,7 +239,7 @@ public class AdRevenueConverterTest extends CommonTest {
     public void convertRewardedAdIfLoadedAdapterResponseInfoIsNull() {
         when(responseInfo.getLoadedAdapterResponseInfo()).thenReturn(null);
 
-        ModuleAdRevenue adRevenue = adRevenueConverter.convertRewardedAd(adValue, adView);
+        ModuleAdRevenue adRevenue = adRevenueConverter.convertRewardedAd(adValue, rewardedAd);
         ObjectPropertyAssertions(adRevenue)
             .checkField("adRevenue", BigDecimal.valueOf(value))
             .checkField("currency", Currency.getInstance(currencyCode))
@@ -239,7 +257,7 @@ public class AdRevenueConverterTest extends CommonTest {
 
     @Test
     public void convertRewardedInterstitialAd() {
-        ModuleAdRevenue adRevenue = adRevenueConverter.convertRewardedInterstitialAd(adValue, adView);
+        ModuleAdRevenue adRevenue = adRevenueConverter.convertRewardedInterstitialAd(adValue, rewardedInterstitialAd);
         ObjectPropertyAssertions(adRevenue)
             .checkField("adRevenue", BigDecimal.valueOf(value))
             .checkField("currency", Currency.getInstance(currencyCode))
@@ -257,9 +275,9 @@ public class AdRevenueConverterTest extends CommonTest {
 
     @Test
     public void convertRewardedInterstitialAdIfResponseInfoIsNull() {
-        when(adView.getResponseInfo()).thenReturn(null);
+        when(rewardedInterstitialAd.getResponseInfo()).thenReturn(null);
 
-        ModuleAdRevenue adRevenue = adRevenueConverter.convertRewardedInterstitialAd(adValue, adView);
+        ModuleAdRevenue adRevenue = adRevenueConverter.convertRewardedInterstitialAd(adValue, rewardedInterstitialAd);
         ObjectPropertyAssertions(adRevenue)
             .checkField("adRevenue", BigDecimal.valueOf(value))
             .checkField("currency", Currency.getInstance(currencyCode))
@@ -279,7 +297,7 @@ public class AdRevenueConverterTest extends CommonTest {
     public void convertRewardedInterstitialAdIfLoadedAdapterResponseInfoIsNull() {
         when(responseInfo.getLoadedAdapterResponseInfo()).thenReturn(null);
 
-        ModuleAdRevenue adRevenue = adRevenueConverter.convertRewardedInterstitialAd(adValue, adView);
+        ModuleAdRevenue adRevenue = adRevenueConverter.convertRewardedInterstitialAd(adValue, rewardedInterstitialAd);
         ObjectPropertyAssertions(adRevenue)
             .checkField("adRevenue", BigDecimal.valueOf(value))
             .checkField("currency", Currency.getInstance(currencyCode))

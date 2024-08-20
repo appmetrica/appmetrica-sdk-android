@@ -2,7 +2,6 @@ package io.appmetrica.analytics.adrevenue.admob.v23.impl.processor;
 
 import androidx.annotation.NonNull;
 import com.google.android.gms.ads.AdValue;
-import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.rewarded.RewardedAd;
 import io.appmetrica.analytics.adrevenue.admob.v23.impl.AdRevenueConverter;
 import io.appmetrica.analytics.coreutils.internal.reflection.ReflectionUtils;
@@ -25,7 +24,6 @@ public class RewardedAdMobAdRevenueProcessor extends BaseAdMobAdRevenueProcessor
         boolean isArgumentsHasClasses = ReflectionUtils.isArgumentsOfClasses(
             values,
             AdValue.class,
-            AdView.class,
             RewardedAd.class
         );
         if (!isArgumentsHasClasses) {
@@ -33,9 +31,9 @@ public class RewardedAdMobAdRevenueProcessor extends BaseAdMobAdRevenueProcessor
         }
 
         AdValue adValue = (AdValue) values[0];
-        AdView adView = (AdView) values[1];
+        RewardedAd ad = (RewardedAd) values[1];
 
-        report(adRevenueConverter.convertRewardedAd(adValue, adView));
+        report(adRevenueConverter.convertRewardedAd(adValue, ad));
         DebugLogger.INSTANCE.info(TAG, "AdRevenue was reported");
         return true;
     }

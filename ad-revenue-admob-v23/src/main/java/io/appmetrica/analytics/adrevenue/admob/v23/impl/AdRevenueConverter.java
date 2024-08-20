@@ -6,7 +6,10 @@ import com.google.android.gms.ads.AdValue;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.AdapterResponseInfo;
 import com.google.android.gms.ads.ResponseInfo;
+import com.google.android.gms.ads.interstitial.InterstitialAd;
 import com.google.android.gms.ads.nativead.NativeAd;
+import com.google.android.gms.ads.rewarded.RewardedAd;
+import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAd;
 import io.appmetrica.analytics.coreutils.internal.WrapUtils;
 import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdRevenue;
 import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdType;
@@ -24,33 +27,33 @@ public class AdRevenueConverter {
         );
     }
 
-    public ModuleAdRevenue convertInterstitialAd(@NonNull AdValue adValue, @NonNull AdView adView) {
+    public ModuleAdRevenue convertInterstitialAd(@NonNull AdValue adValue, @NonNull InterstitialAd ad) {
         return constructModuleAdRevenue(
             adValue,
             ModuleAdType.INTERSTITIAL,
-            adView.getResponseInfo(),
-            adView.getAdUnitId()
+            ad.getResponseInfo(),
+            ad.getAdUnitId()
         );
     }
 
-    public ModuleAdRevenue convertRewardedAd(@NonNull AdValue adValue, @NonNull AdView adView) {
+    public ModuleAdRevenue convertRewardedAd(@NonNull AdValue adValue, @NonNull RewardedAd ad) {
         return constructModuleAdRevenue(
             adValue,
             ModuleAdType.REWARDED,
-            adView.getResponseInfo(),
-            adView.getAdUnitId()
+            ad.getResponseInfo(),
+            ad.getAdUnitId()
         );
     }
 
     public ModuleAdRevenue convertRewardedInterstitialAd(
         @NonNull AdValue adValue,
-        @NonNull AdView adView
+        @NonNull RewardedInterstitialAd ad
     ) {
         return constructModuleAdRevenue(
             adValue,
             ModuleAdType.OTHER,
-            adView.getResponseInfo(),
-            adView.getAdUnitId()
+            ad.getResponseInfo(),
+            ad.getAdUnitId()
         );
     }
 
