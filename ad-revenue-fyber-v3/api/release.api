@@ -6,10 +6,9 @@ public final class io.appmetrica.analytics.adrevenue.fyber.v3.BuildConfig {
     public <init>()
 }
 
-public class io.appmetrica.analytics.adrevenue.fyber.v3.internal.FyberClientModuleEntryPoint implementation io.appmetrica.analytics.modulesapi.internal.client.ModuleClientEntryPoint<Object> {
+public class io.appmetrica.analytics.adrevenue.fyber.v3.internal.FyberClientModuleEntryPoint extends io.appmetrica.analytics.modulesapi.internal.client.ModuleClientEntryPoint<Object> {
     public <init>()
     public [NonNull] String getIdentifier()
     public void initClientSide([NonNull] io.appmetrica.analytics.modulesapi.internal.client.ClientContext)
-    public void onActivated()
 }
 

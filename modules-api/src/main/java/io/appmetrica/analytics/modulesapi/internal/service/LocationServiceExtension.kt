@@ -4,11 +4,11 @@ import android.location.Location
 import io.appmetrica.analytics.coreapi.internal.backport.Consumer
 import io.appmetrica.analytics.coreapi.internal.control.Toggle
 
-interface LocationServiceExtension {
+abstract class LocationServiceExtension {
 
-    val locationConsumer: Consumer<Location?>?
+    abstract val locationConsumer: Consumer<Location?>?
 
-    val locationSourcesController: ModuleLocationSourcesServiceController?
+    abstract val locationSourcesController: ModuleLocationSourcesServiceController?
 
-    val locationControllerAppStateToggle: Toggle?
+    abstract val locationControllerAppStateToggle: Toggle?
 }

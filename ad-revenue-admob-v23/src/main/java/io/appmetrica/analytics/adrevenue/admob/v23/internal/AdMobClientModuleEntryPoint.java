@@ -11,7 +11,7 @@ import io.appmetrica.analytics.modulesapi.internal.client.ModuleClientEntryPoint
 import static io.appmetrica.analytics.adrevenue.admob.v23.impl.Constants.LIBRARY_MAIN_CLASS;
 import static io.appmetrica.analytics.adrevenue.admob.v23.impl.Constants.MODULE_ID;
 
-public class AdMobClientModuleEntryPoint implements ModuleClientEntryPoint<Object> {
+public class AdMobClientModuleEntryPoint extends ModuleClientEntryPoint<Object> {
 
     private static final String TAG = "[AdMobClientModuleEntryPoint]";
 
@@ -34,10 +34,5 @@ public class AdMobClientModuleEntryPoint implements ModuleClientEntryPoint<Objec
         } else {
             DebugLogger.INSTANCE.info(TAG, LIBRARY_MAIN_CLASS + " not found");
         }
-    }
-
-    @Override
-    public void onActivated() {
-        DebugLogger.INSTANCE.info(TAG, "onActivated");
     }
 }

@@ -11,7 +11,7 @@ import io.appmetrica.analytics.modulesapi.internal.client.ModuleClientEntryPoint
 import static io.appmetrica.analytics.adrevenue.fyber.v3.impl.Constants.LIBRARY_MAIN_CLASS;
 import static io.appmetrica.analytics.adrevenue.fyber.v3.impl.Constants.MODULE_ID;
 
-public class FyberClientModuleEntryPoint implements ModuleClientEntryPoint<Object> {
+public class FyberClientModuleEntryPoint extends ModuleClientEntryPoint<Object> {
 
     private static final String TAG = "[FyberClientModuleEntryPoint]";
 
@@ -34,10 +34,5 @@ public class FyberClientModuleEntryPoint implements ModuleClientEntryPoint<Objec
         } else {
             DebugLogger.INSTANCE.info(TAG, LIBRARY_MAIN_CLASS + " not found");
         }
-    }
-
-    @Override
-    public void onActivated() {
-        DebugLogger.INSTANCE.info(TAG, "onActivated");
     }
 }

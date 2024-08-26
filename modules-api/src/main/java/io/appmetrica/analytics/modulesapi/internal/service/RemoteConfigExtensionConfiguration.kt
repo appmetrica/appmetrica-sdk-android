@@ -3,15 +3,15 @@ package io.appmetrica.analytics.modulesapi.internal.service
 import io.appmetrica.analytics.coreapi.internal.data.Converter
 import io.appmetrica.analytics.coreapi.internal.data.JsonParser
 
-interface RemoteConfigExtensionConfiguration<S : Any> {
+abstract class RemoteConfigExtensionConfiguration<S : Any> {
 
-    fun getFeatures(): List<String>
+    abstract fun getFeatures(): List<String>
 
-    fun getBlocks(): Map<String, Int>
+    abstract fun getBlocks(): Map<String, Int>
 
-    fun getJsonParser(): JsonParser<S>
+    abstract fun getJsonParser(): JsonParser<S>
 
-    fun getProtobufConverter(): Converter<S, ByteArray>
+    abstract fun getProtobufConverter(): Converter<S, ByteArray>
 
-    fun getRemoteConfigUpdateListener(): RemoteConfigUpdateListener<S>
+    abstract fun getRemoteConfigUpdateListener(): RemoteConfigUpdateListener<S>
 }

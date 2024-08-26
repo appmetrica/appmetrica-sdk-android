@@ -1,10 +1,10 @@
 package io.appmetrica.analytics.modulesapi.internal.client
 
-interface ModuleClientEntryPoint<T : Any> {
+abstract class ModuleClientEntryPoint<T : Any> {
 
-    val identifier: String
+    abstract val identifier: String
 
-    fun initClientSide(clientContext: ClientContext)
+    open fun initClientSide(clientContext: ClientContext) {}
 
-    fun onActivated()
+    open fun onActivated() {}
 }

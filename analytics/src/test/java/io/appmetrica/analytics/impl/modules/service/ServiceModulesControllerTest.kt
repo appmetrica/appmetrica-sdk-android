@@ -531,5 +531,7 @@ internal class ServiceModulesControllerTest : CommonTest() {
         return neverForbidPermissionStrategyMockedConstructionRule.constructionMock.constructed().first()
     }
 
-    interface AskForPermissionStrategyModule : ModuleServiceEntryPoint<Any>, AskForPermissionStrategyModuleProvider
+    abstract class AskForPermissionStrategyModule :
+        ModuleServiceEntryPoint<Any>(),
+        AskForPermissionStrategyModuleProvider
 }

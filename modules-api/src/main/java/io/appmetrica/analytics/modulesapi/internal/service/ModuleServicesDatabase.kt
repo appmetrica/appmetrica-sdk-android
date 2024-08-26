@@ -2,7 +2,7 @@ package io.appmetrica.analytics.modulesapi.internal.service
 
 import io.appmetrica.analytics.modulesapi.internal.common.TableDescription
 
-interface ModuleServicesDatabase {
+abstract class ModuleServicesDatabase {
 
-    val tables: List<TableDescription>
+    abstract val tables: List<TableDescription>
 }

@@ -6,13 +6,10 @@ public final class io.appmetrica.analytics.remotepermissions.BuildConfig {
     public <init>()
 }
 
-public final class io.appmetrica.analytics.remotepermissions.internal.RemotePermissionsModuleEntryPoint implementation io.appmetrica.analytics.modulesapi.internal.service.ModuleServiceEntryPoint<OBFUSCATED[io.appmetrica.analytics.remotepermissions.impl.FeatureConfig]>, io.appmetrica.analytics.modulesapi.internal.common.AskForPermissionStrategyModuleProvider, io.appmetrica.analytics.modulesapi.internal.service.RemoteConfigUpdateListener<OBFUSCATED[io.appmetrica.analytics.remotepermissions.impl.FeatureConfig]> {
+public final class io.appmetrica.analytics.remotepermissions.internal.RemotePermissionsModuleEntryPoint extends io.appmetrica.analytics.modulesapi.internal.service.ModuleServiceEntryPoint<OBFUSCATED[io.appmetrica.analytics.remotepermissions.impl.FeatureConfig]> implementation io.appmetrica.analytics.modulesapi.internal.common.AskForPermissionStrategyModuleProvider, io.appmetrica.analytics.modulesapi.internal.service.RemoteConfigUpdateListener<OBFUSCATED[io.appmetrica.analytics.remotepermissions.impl.FeatureConfig]> {
     public <init>()
     public [NonNull] io.appmetrica.analytics.coreapi.internal.permission.PermissionStrategy getAskForPermissionStrategy()
     public [NonNull] String getIdentifier()
-    public [Nullable] io.appmetrica.analytics.modulesapi.internal.service.LocationServiceExtension getLocationServiceExtension()
-    public [Nullable] io.appmetrica.analytics.modulesapi.internal.service.event.ModuleEventServiceHandlerFactory getModuleEventServiceHandlerFactory()
-    public [Nullable] io.appmetrica.analytics.modulesapi.internal.service.ModuleServicesDatabase getModuleServicesDatabase()
     public [NonNull] io.appmetrica.analytics.modulesapi.internal.service.RemoteConfigExtensionConfiguration<OBFUSCATED[io.appmetrica.analytics.remotepermissions.impl.FeatureConfig]> getRemoteConfigExtensionConfiguration()
     public void initServiceSide([NonNull] io.appmetrica.analytics.modulesapi.internal.service.ServiceContext, [NonNull] io.appmetrica.analytics.modulesapi.internal.service.ModuleRemoteConfig<OBFUSCATED[io.appmetrica.analytics.remotepermissions.impl.FeatureConfig]>)
     public void onRemoteConfigUpdated([NonNull] io.appmetrica.analytics.modulesapi.internal.service.ModuleRemoteConfig<OBFUSCATED[io.appmetrica.analytics.remotepermissions.impl.FeatureConfig]>)

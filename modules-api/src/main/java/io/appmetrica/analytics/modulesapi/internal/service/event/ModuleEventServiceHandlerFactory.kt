@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.modulesapi.internal.service.event
 
-fun interface ModuleEventServiceHandlerFactory {
+abstract class ModuleEventServiceHandlerFactory {
 
-    fun createEventHandler(tag: String): ModuleServiceEventHandler
+    abstract fun createEventHandler(tag: String): ModuleServiceEventHandler
 }

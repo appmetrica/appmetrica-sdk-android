@@ -5,21 +5,18 @@ import io.appmetrica.analytics.coreapi.internal.data.JsonParser
 import io.appmetrica.analytics.coreapi.internal.permission.PermissionStrategy
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import io.appmetrica.analytics.modulesapi.internal.common.AskForPermissionStrategyModuleProvider
-import io.appmetrica.analytics.modulesapi.internal.service.LocationServiceExtension
 import io.appmetrica.analytics.modulesapi.internal.service.ModuleRemoteConfig
 import io.appmetrica.analytics.modulesapi.internal.service.ModuleServiceEntryPoint
-import io.appmetrica.analytics.modulesapi.internal.service.ModuleServicesDatabase
 import io.appmetrica.analytics.modulesapi.internal.service.RemoteConfigExtensionConfiguration
 import io.appmetrica.analytics.modulesapi.internal.service.RemoteConfigUpdateListener
 import io.appmetrica.analytics.modulesapi.internal.service.ServiceContext
-import io.appmetrica.analytics.modulesapi.internal.service.event.ModuleEventServiceHandlerFactory
 import io.appmetrica.analytics.remotepermissions.impl.FeatureConfig
 import io.appmetrica.analytics.remotepermissions.impl.FeatureConfigToProtoBytesConverter
 import io.appmetrica.analytics.remotepermissions.impl.FeatureParser
 import io.appmetrica.analytics.remotepermissions.impl.RemoteConfigPermissionStrategy
 
 class RemotePermissionsModuleEntryPoint :
-    ModuleServiceEntryPoint<FeatureConfig>,
+    ModuleServiceEntryPoint<FeatureConfig>(),
     AskForPermissionStrategyModuleProvider,
     RemoteConfigUpdateListener<FeatureConfig> {
 
@@ -37,7 +34,7 @@ class RemotePermissionsModuleEntryPoint :
     override val identifier: String = "rp"
 
     override val remoteConfigExtensionConfiguration: RemoteConfigExtensionConfiguration<FeatureConfig> =
-        object : RemoteConfigExtensionConfiguration<FeatureConfig> {
+        object : RemoteConfigExtensionConfiguration<FeatureConfig>() {
 
             override fun getFeatures(): List<String> = emptyList()
 
@@ -49,12 +46,6 @@ class RemotePermissionsModuleEntryPoint :
 
             override fun getRemoteConfigUpdateListener(): RemoteConfigUpdateListener<FeatureConfig> = listener
         }
-
-    override val moduleEventServiceHandlerFactory: ModuleEventServiceHandlerFactory? = null
-
-    override val locationServiceExtension: LocationServiceExtension? = null
-
-    override val moduleServicesDatabase: ModuleServicesDatabase? = null
 
     override fun onRemoteConfigUpdated(config: ModuleRemoteConfig<FeatureConfig?>) {
         DebugLogger.info(

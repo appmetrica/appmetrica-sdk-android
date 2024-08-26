@@ -9,7 +9,7 @@ import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import io.appmetrica.analytics.modulesapi.internal.client.ClientContext
 import io.appmetrica.analytics.modulesapi.internal.client.ModuleClientEntryPoint
 
-class AppLovinClientModuleEntryPoint : ModuleClientEntryPoint<Any> {
+class AppLovinClientModuleEntryPoint : ModuleClientEntryPoint<Any>() {
 
     private val tag = "[AppLovinClientModuleEntryPoint]"
     override val identifier: String = MODULE_ID
@@ -26,9 +26,5 @@ class AppLovinClientModuleEntryPoint : ModuleClientEntryPoint<Any> {
         } else {
             DebugLogger.info(tag, "$LIBRARY_MAIN_CLASS not found")
         }
-    }
-
-    override fun onActivated() {
-        DebugLogger.info(tag, "onActivated")
     }
 }

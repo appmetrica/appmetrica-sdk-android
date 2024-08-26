@@ -2,17 +2,17 @@ package io.appmetrica.analytics.modulesapi.internal.service
 
 import io.appmetrica.analytics.modulesapi.internal.service.event.ModuleEventServiceHandlerFactory
 
-interface ModuleServiceEntryPoint<T : Any> {
+abstract class ModuleServiceEntryPoint<T : Any> {
 
-    val identifier: String
+    abstract val identifier: String
 
-    val remoteConfigExtensionConfiguration: RemoteConfigExtensionConfiguration<T>?
+    open val remoteConfigExtensionConfiguration: RemoteConfigExtensionConfiguration<T>? = null
 
-    val moduleEventServiceHandlerFactory: ModuleEventServiceHandlerFactory?
+    open val moduleEventServiceHandlerFactory: ModuleEventServiceHandlerFactory? = null
 
-    val locationServiceExtension: LocationServiceExtension?
+    open val locationServiceExtension: LocationServiceExtension? = null
 
-    val moduleServicesDatabase: ModuleServicesDatabase?
+    open val moduleServicesDatabase: ModuleServicesDatabase? = null
 
-    fun initServiceSide(serviceContext: ServiceContext, initialConfig: ModuleRemoteConfig<T?>)
+    open fun initServiceSide(serviceContext: ServiceContext, initialConfig: ModuleRemoteConfig<T?>) {}
 }

@@ -11,7 +11,7 @@ import io.appmetrica.analytics.modulesapi.internal.client.ModuleClientEntryPoint
 
 import static io.appmetrica.analytics.adrevenue.ironsource.v7.impl.Constants.LIBRARY_MAIN_CLASS;
 
-public class IronSourceClientModuleEntryPoint implements ModuleClientEntryPoint<Object> {
+public class IronSourceClientModuleEntryPoint extends ModuleClientEntryPoint<Object> {
 
     private static final String TAG = "[IronSourceClientModuleEntryPoint]";
 

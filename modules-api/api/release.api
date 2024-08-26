@@ -10,10 +10,11 @@ public interface io.appmetrica.analytics.modulesapi.internal.client.ClientContex
     public abstract [NonNull] io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdRevenueContext getModuleAdRevenueContext()
 }
 
-public interface io.appmetrica.analytics.modulesapi.internal.client.ModuleClientEntryPoint<T> {
+public abstract class io.appmetrica.analytics.modulesapi.internal.client.ModuleClientEntryPoint<T> {
+    public <init>()
     public abstract [NonNull] String getIdentifier()
-    public abstract void initClientSide([NonNull] io.appmetrica.analytics.modulesapi.internal.client.ClientContext)
-    public abstract void onActivated()
+    public void initClientSide([NonNull] io.appmetrica.analytics.modulesapi.internal.client.ClientContext)
+    public void onActivated()
 }
 
 public final class io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdRevenue {
@@ -124,7 +125,8 @@ public interface io.appmetrica.analytics.modulesapi.internal.service.LocationSer
     public abstract void updateLocationFilter([NonNull] io.appmetrica.analytics.locationapi.internal.LocationFilter)
 }
 
-public interface io.appmetrica.analytics.modulesapi.internal.service.LocationServiceExtension {
+public abstract class io.appmetrica.analytics.modulesapi.internal.service.LocationServiceExtension {
+    public <init>()
     public abstract [Nullable] io.appmetrica.analytics.coreapi.internal.backport.Consumer<android.location.Location> getLocationConsumer()
     public abstract [Nullable] io.appmetrica.analytics.coreapi.internal.control.Toggle getLocationControllerAppStateToggle()
     public abstract [Nullable] io.appmetrica.analytics.modulesapi.internal.service.ModuleLocationSourcesServiceController getLocationSourcesController()
@@ -140,13 +142,14 @@ public interface io.appmetrica.analytics.modulesapi.internal.service.ModuleRemot
     public abstract [NonNull] io.appmetrica.analytics.modulesapi.internal.service.RemoteConfigMetaInfo getRemoteConfigMetaInfo()
 }
 
-public interface io.appmetrica.analytics.modulesapi.internal.service.ModuleServiceEntryPoint<T> {
+public abstract class io.appmetrica.analytics.modulesapi.internal.service.ModuleServiceEntryPoint<T> {
+    public <init>()
     public abstract [NonNull] String getIdentifier()
-    public abstract [Nullable] io.appmetrica.analytics.modulesapi.internal.service.LocationServiceExtension getLocationServiceExtension()
-    public abstract [Nullable] io.appmetrica.analytics.modulesapi.internal.service.event.ModuleEventServiceHandlerFactory getModuleEventServiceHandlerFactory()
-    public abstract [Nullable] io.appmetrica.analytics.modulesapi.internal.service.ModuleServicesDatabase getModuleServicesDatabase()
-    public abstract [Nullable] io.appmetrica.analytics.modulesapi.internal.service.RemoteConfigExtensionConfiguration<T> getRemoteConfigExtensionConfiguration()
-    public abstract void initServiceSide([NonNull] io.appmetrica.analytics.modulesapi.internal.service.ServiceContext, [NonNull] io.appmetrica.analytics.modulesapi.internal.service.ModuleRemoteConfig<T>)
+    public [Nullable] io.appmetrica.analytics.modulesapi.internal.service.LocationServiceExtension getLocationServiceExtension()
+    public [Nullable] io.appmetrica.analytics.modulesapi.internal.service.event.ModuleEventServiceHandlerFactory getModuleEventServiceHandlerFactory()
+    public [Nullable] io.appmetrica.analytics.modulesapi.internal.service.ModuleServicesDatabase getModuleServicesDatabase()
+    public [Nullable] io.appmetrica.analytics.modulesapi.internal.service.RemoteConfigExtensionConfiguration<T> getRemoteConfigExtensionConfiguration()
+    public void initServiceSide([NonNull] io.appmetrica.analytics.modulesapi.internal.service.ServiceContext, [NonNull] io.appmetrica.analytics.modulesapi.internal.service.ModuleRemoteConfig<T>)
 }
 
 public interface io.appmetrica.analytics.modulesapi.internal.service.ModuleServiceLifecycleController {
@@ -158,11 +161,13 @@ public interface io.appmetrica.analytics.modulesapi.internal.service.ModuleServi
     public abstract void onFirstClientConnected()
 }
 
-public interface io.appmetrica.analytics.modulesapi.internal.service.ModuleServicesDatabase {
+public abstract class io.appmetrica.analytics.modulesapi.internal.service.ModuleServicesDatabase {
+    public <init>()
     public abstract [NonNull] java.util.List<io.appmetrica.analytics.modulesapi.internal.common.TableDescription> getTables()
 }
 
-public interface io.appmetrica.analytics.modulesapi.internal.service.RemoteConfigExtensionConfiguration<S> {
+public abstract class io.appmetrica.analytics.modulesapi.internal.service.RemoteConfigExtensionConfiguration<S> {
+    public <init>()
     public abstract [NonNull] java.util.Map<String, Integer> getBlocks()
     public abstract [NonNull] java.util.List<String> getFeatures()
     public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.data.JsonParser<S> getJsonParser()
@@ -226,7 +231,8 @@ public interface io.appmetrica.analytics.modulesapi.internal.service.event.Modul
     public abstract [NonNull] io.appmetrica.analytics.modulesapi.internal.common.ModulePreferences getModulePreferences()
 }
 
-public interface io.appmetrica.analytics.modulesapi.internal.service.event.ModuleEventServiceHandlerFactory {
+public abstract class io.appmetrica.analytics.modulesapi.internal.service.event.ModuleEventServiceHandlerFactory {
+    public <init>()
     public abstract [NonNull] io.appmetrica.analytics.modulesapi.internal.service.event.ModuleServiceEventHandler createEventHandler([NonNull] String)
 }
 

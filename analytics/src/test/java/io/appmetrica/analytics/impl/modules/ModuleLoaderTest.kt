@@ -41,7 +41,7 @@ class ModuleLoaderTest : CommonTest() {
 
 }
 
-class TestClass1 : ModuleServiceEntryPoint<Any> {
+class TestClass1 : ModuleServiceEntryPoint<Any>() {
     override val identifier: String
         get() = "Some string"
 
@@ -60,8 +60,9 @@ class TestClass1 : ModuleServiceEntryPoint<Any> {
         get() = null
 }
 
-class TestClass2 : ModuleServiceEntryPoint<Any> {
-    constructor(arg1: Any)
+class TestClass2 private constructor(): ModuleServiceEntryPoint<Any>() {
+
+    constructor(arg1: Any): this()
 
     override val identifier: String
         get() = "some identifier"
