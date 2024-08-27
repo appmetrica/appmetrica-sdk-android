@@ -11,7 +11,7 @@ public final class SdkData {
 
 
     //Also change in build-logic/src/main/kotlin/io/appmetrica/analytics/gradle/Constants.kt
-    public static final int CURRENT = 114;
+    public static final int CURRENT = 115;
 
     //This version used for creation merge conflicts for parallel version or api level updating
     public static final String CURRENT_VERSION_NAME_FOR_MAPPING = "7.2.0";
@@ -19,4 +19,5 @@ public final class SdkData {
     public static final int INITIAL_API_LEVEL = 112;
     public static final int MIGRATE_SESSION_SLEEP_START_TIME_TO_MILLISECONDS = 113;
     public static final int TEMP_CACHE_ADDED = 114;
+    public static final int MODULE_CONFIGS_ADDED = 115;
 }

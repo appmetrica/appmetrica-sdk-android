@@ -17,6 +17,7 @@ class DefaultClientComponentsInitializerTest : CommonTest() {
         "io.appmetrica.analytics.adrevenue.applovin.v12.internal.AppLovinClientModuleEntryPoint",
         "io.appmetrica.analytics.adrevenue.fyber.v3.internal.FyberClientModuleEntryPoint",
         "io.appmetrica.analytics.adrevenue.ironsource.v7.internal.IronSourceClientModuleEntryPoint",
+        "io.appmetrica.analytics.apphud.internal.ApphudClientModuleEntryPoint",
     )
 
     @get:Rule

@@ -1,5 +1,6 @@
 package io.appmetrica.analytics.impl.modules.client
 
+import android.os.Bundle
 import io.appmetrica.analytics.impl.modules.client.context.CoreClientContext
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
@@ -64,6 +65,22 @@ internal class ClientModulesController :
 
     fun getModuleAdRevenueProcessor(): ModuleAdRevenueProcessor? {
         return clientContext?.moduleAdRevenueContext?.adRevenueProcessorsHolder
+    }
+
+    fun notifyModulesWithConfig(bundle: Bundle?) {
+        modules.forEach { module ->
+            module.clientConfigExtension?.clientConfigListener?.let { listener ->
+                bundle?.getBundle(module.identifier)?.let { config ->
+                    listener.onConfigReceived(config)
+                }
+            }
+        }
+    }
+
+    fun doModulesNeedConfig(): Boolean {
+        return modules.any { module ->
+            module.clientConfigExtension?.doesModuleNeedConfig() ?: false
+        }
     }
 
     private fun reportSelfErrorEvent(moduleIdentifier: String, tag: String, throwable: Throwable) {

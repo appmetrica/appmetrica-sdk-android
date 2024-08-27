@@ -43,6 +43,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.robolectric.RobolectricTestRunner;
 
+import static com.ibm.icu.impl.locale.KeyTypeData.ValueType.any;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -87,6 +88,8 @@ public class StartupHelperTest extends CommonTest {
     private StartupParams mStartupParams;
     @Mock
     private Bundle mBundle;
+    @Mock
+    private ClientIdentifiersHolder clientIdentifiersHolder;
     private Context context;
     @Captor
     private ArgumentCaptor<ResultReceiver> mReceiverArgumentCaptor;
@@ -228,7 +231,7 @@ public class StartupHelperTest extends CommonTest {
         when(mStartupParams.shouldSendStartup(mAllIdentifiers)).thenReturn(true);
         mStartupHelper.requestStartupParams(mCallback, mAllIdentifiers, mClientClids);
         interceptReceiver().send(DataResultReceiver.RESULT_CODE_STARTUP_PARAMS_UPDATED, mBundle);
-        verify(mStartupParams).updateAllParamsByReceiver(mBundle);
+        verify(mStartupParams).updateAllParamsByReceiver(any());
     }
 
     @Test
@@ -249,7 +252,7 @@ public class StartupHelperTest extends CommonTest {
         when(mStartupParams.containsIdentifiers(mAllIdentifiers)).thenReturn(true);
         mStartupHelper.requestStartupParams(mCallback, mAllIdentifiers, mClientClids);
         interceptReceiver().send(DataResultReceiver.RESULT_CODE_STARTUP_ERROR, mBundle);
-        verify(mStartupParams).updateAllParamsByReceiver(mBundle);
+        verify(mStartupParams).updateAllParamsByReceiver(any());
         verify(mCallback).onReceive(any(StartupParamsCallback.Result.class));
         verify(mReportsHandler).onStartupRequestFinished();
     }
@@ -512,7 +515,7 @@ public class StartupHelperTest extends CommonTest {
                 argThat(new ArgumentMatcher<ResultReceiver>() {
                     @Override
                     public boolean matches(ResultReceiver argument) {
-                        return ((DataResultReceiver) argument).getReceiver() == startupHelper.getStubReceiver();
+                        return ((DataResultReceiver) argument).getReceiver() == startupHelper.getDefaultReceiver();
                     }
                 }),
                 eq(mClientClids)

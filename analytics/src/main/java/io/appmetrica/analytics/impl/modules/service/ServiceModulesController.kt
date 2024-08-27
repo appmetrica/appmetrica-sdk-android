@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.impl.modules.service
 
 import android.location.Location
+import android.os.Bundle
 import io.appmetrica.analytics.coreapi.internal.backport.Consumer
 import io.appmetrica.analytics.coreapi.internal.control.Toggle
 import io.appmetrica.analytics.coreapi.internal.permission.PermissionStrategy
@@ -54,6 +55,20 @@ internal class ServiceModulesController :
         }.toMap()
 
         DebugLogger.info(tag, "Collected blocks from modules: $result")
+
+        return result
+    }
+
+    fun getModulesConfigsBundleForClient(): Bundle {
+        val result = Bundle()
+        modules.forEach { module ->
+            val bundle = module.clientConfigProvider?.getConfigBundleForClient()
+            bundle?.let {
+                result.putBundle(module.identifier, it)
+            }
+        }
+
+        DebugLogger.info(tag, "Collected config bundles from modules: $result")
 
         return result
     }

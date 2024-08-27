@@ -12,6 +12,8 @@ import io.appmetrica.analytics.AdvIdentifiersResult;
 import io.appmetrica.analytics.StartupParamsCallback;
 import io.appmetrica.analytics.StartupParamsItem;
 import io.appmetrica.analytics.coreutils.internal.collection.CollectionUtils;
+import io.appmetrica.analytics.impl.ClientIdentifiersHolder;
+import io.appmetrica.analytics.impl.ClientServiceLocator;
 import io.appmetrica.analytics.impl.DataResultReceiver;
 import io.appmetrica.analytics.impl.FeaturesResult;
 import io.appmetrica.analytics.impl.IServerTimeOffsetProvider;
@@ -60,7 +62,7 @@ public class StartupHelper implements StartupIdentifiersProvider, IServerTimeOff
     @Nullable
     private PublicLogger mPublicLogger;
 
-    private final DataResultReceiver.Receiver mStubReceiver;
+    private final DataResultReceiver.Receiver defaultReceiver;
 
     private final Object mStartupParamsLock = new Object();
     private final Map<StartupParamsCallback, List<String>> mStartupParamsCallbacks = new WeakHashMap<>();
@@ -85,10 +87,10 @@ public class StartupHelper implements StartupIdentifiersProvider, IServerTimeOff
         mReportsHandler = reportsHandler;
         mStartupParams = startupParams;
         mHandler = handler;
-        mStubReceiver = new DataResultReceiver.Receiver() {
+        defaultReceiver = new DataResultReceiver.Receiver() {
             @Override
             public void onReceiveResult(int resultCode, @NonNull Bundle resultData) {
-                //stub
+                updateAllParamsByReceiver(resultData);
             }
         };
     }
@@ -161,7 +163,7 @@ public class StartupHelper implements StartupIdentifiersProvider, IServerTimeOff
     }
 
     private void sendStartupEvent(@NonNull List<String> identifiers, @Nullable Map<String, String> freshClientClids) {
-        sendStartupEvent(identifiers, mStubReceiver, freshClientClids);
+        sendStartupEvent(identifiers, defaultReceiver, freshClientClids);
     }
 
     private void sendStartupEvent(@NonNull List<String> identifiers,
@@ -174,7 +176,9 @@ public class StartupHelper implements StartupIdentifiersProvider, IServerTimeOff
     @SuppressLint("VisibleForTests") //fixme https://nda.ya.ru/t/lvWXFf0t6Njj6X
     private void updateAllParamsByReceiver(@NonNull Bundle resultData) {
         DebugLogger.INSTANCE.info(TAG, "UpdateAllParamsByReceiver: %s", resultData);
-        mStartupParams.updateAllParamsByReceiver(resultData);
+        ClientIdentifiersHolder clientIdentifiersHolder = new ClientIdentifiersHolder(resultData);
+        mStartupParams.updateAllParamsByReceiver(clientIdentifiersHolder);
+        notifyModulesWithConfig(clientIdentifiersHolder.getModulesConfig());
         notifyCallbacksIfValid();
     }
 
@@ -392,6 +396,10 @@ public class StartupHelper implements StartupIdentifiersProvider, IServerTimeOff
         }
     }
 
+    private void notifyModulesWithConfig(@Nullable Bundle bundle) {
+        ClientServiceLocator.getInstance().getModulesController().notifyModulesWithConfig(bundle);
+    }
+
     @VisibleForTesting
     @NonNull
     Map<StartupParamsCallback, List<String>> getStartupAllParamsCallbacks() {
@@ -400,8 +408,8 @@ public class StartupHelper implements StartupIdentifiersProvider, IServerTimeOff
 
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)
     @NonNull
-    public DataResultReceiver.Receiver getStubReceiver() {
-        return mStubReceiver;
+    public DataResultReceiver.Receiver getDefaultReceiver() {
+        return defaultReceiver;
     }
 
     @NonNull

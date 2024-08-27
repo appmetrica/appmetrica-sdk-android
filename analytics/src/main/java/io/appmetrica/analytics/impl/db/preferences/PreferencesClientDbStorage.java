@@ -14,7 +14,7 @@ import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.util.List;
 import org.json.JSONObject;
 
-public class PreferencesClientDbStorage extends PreferencesDbStorage {
+public class PreferencesClientDbStorage extends NameSpacedPreferenceDbStorage {
     private static final String TAG = "[PreferencesClientDbStorage]";
 
     static final PreferencesItem UUID_RESULT = new PreferencesItem("UUID_RESULT");
@@ -286,5 +286,11 @@ public class PreferencesClientDbStorage extends PreferencesDbStorage {
             writeString(key, valueToSave);
         }
         return this;
+    }
+
+    @NonNull
+    @Override
+    protected String prepareKey(@NonNull String key) {
+        return new PreferencesItem(key).fullKey();
     }
 }

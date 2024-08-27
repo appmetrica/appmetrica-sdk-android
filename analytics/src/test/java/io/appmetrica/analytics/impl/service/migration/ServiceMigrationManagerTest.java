@@ -87,6 +87,7 @@ public class ServiceMigrationManagerTest extends CommonTest {
     public void getScripts() {
         Map<Integer, Class<?>> expectedScriptClassesByVersion = new HashMap<>();
         expectedScriptClassesByVersion.put(112, ServiceMigrationScriptToV112.class);
+        expectedScriptClassesByVersion.put(115, ServiceMigrationScriptToV115.class);
         SparseArray<MigrationManager.MigrationScript> scripts = mMigrationManager.getScripts();
         assertThat(extractVersionsAndClasses(scripts)).containsExactlyEntriesOf(expectedScriptClassesByVersion);
     }

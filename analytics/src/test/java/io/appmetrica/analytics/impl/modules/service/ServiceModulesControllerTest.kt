@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.impl.modules.service
 
 import android.location.Location
+import android.os.Bundle
 import io.appmetrica.analytics.coreapi.internal.backport.Consumer
 import io.appmetrica.analytics.coreapi.internal.control.Toggle
 import io.appmetrica.analytics.coreapi.internal.data.Converter
@@ -14,6 +15,7 @@ import io.appmetrica.analytics.impl.permissions.NeverForbidPermissionStrategy
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade
 import io.appmetrica.analytics.impl.startup.StartupState
 import io.appmetrica.analytics.modulesapi.internal.common.AskForPermissionStrategyModuleProvider
+import io.appmetrica.analytics.modulesapi.internal.service.ClientConfigProvider
 import io.appmetrica.analytics.modulesapi.internal.service.LocationServiceExtension
 import io.appmetrica.analytics.modulesapi.internal.service.ModuleLocationSourcesServiceController
 import io.appmetrica.analytics.modulesapi.internal.service.ModuleServiceEntryPoint
@@ -74,6 +76,7 @@ internal class ServiceModulesControllerTest : CommonTest() {
     }
 
     private val firstModuleServiceDatabase = mock<ModuleServicesDatabase>()
+    private val firstClientConfigProvider: ClientConfigProvider = mock()
 
     private val firstModule = mock<ModuleServiceEntryPoint<Any>> {
         on { identifier } doReturn firstModuleIdentifier
@@ -81,6 +84,7 @@ internal class ServiceModulesControllerTest : CommonTest() {
         on { moduleEventServiceHandlerFactory } doReturn firstModuleEventHandlerFactory
         on { locationServiceExtension } doReturn firstLocationExtension
         on { moduleServicesDatabase } doReturn firstModuleServiceDatabase
+        on { clientConfigProvider } doReturn firstClientConfigProvider
     }
 
     private val secondModuleFeatures = listOf("Second module feature #1", "Second module feature #2")
@@ -110,6 +114,7 @@ internal class ServiceModulesControllerTest : CommonTest() {
     }
 
     private val secondModuleServicesDatabase = mock<ModuleServicesDatabase>()
+    private val secondClientConfigProvider: ClientConfigProvider = mock()
 
     private val secondModule = mock<ModuleServiceEntryPoint<Any>> {
         on { identifier } doReturn secondModuleIdentifier
@@ -117,6 +122,7 @@ internal class ServiceModulesControllerTest : CommonTest() {
         on { moduleEventServiceHandlerFactory } doReturn secondModuleEventHandlerFactory
         on { locationServiceExtension } doReturn secondLocationExtension
         on { moduleServicesDatabase } doReturn secondModuleServicesDatabase
+        on { clientConfigProvider } doReturn secondClientConfigProvider
     }
 
     private val moduleWithoutRemoteConfigIdentifier = "Module without remote config identifier"
@@ -522,6 +528,23 @@ internal class ServiceModulesControllerTest : CommonTest() {
         modulesController.registerModule(firstModule)
         modulesController.initServiceSide(serviceContext, startupState)
         assertThat(modulesController.askForPermissionStrategy).isEqualTo(neverForbidPermissionStrategy)
+    }
+
+    @Test
+    fun getModulesConfigsBundleForClient() {
+        val firstBundle = Bundle()
+        whenever(firstClientConfigProvider.getConfigBundleForClient()).thenReturn(firstBundle)
+        whenever(secondClientConfigProvider.getConfigBundleForClient()).thenReturn(null)
+
+        modulesController.registerModule(firstModule)
+        modulesController.registerModule(secondModule)
+        modulesController.registerModule(lightModule)
+
+        val modulesConfig = modulesController.getModulesConfigsBundleForClient()
+        assertThat(modulesConfig.keySet()).containsExactlyInAnyOrder(
+            firstModuleIdentifier
+        )
+        assertThat(modulesConfig.getBundle(firstModuleIdentifier)).isEqualTo(firstBundle)
     }
 
     private fun alwaysAskForPermissionStrategy(): NeverForbidPermissionStrategy {

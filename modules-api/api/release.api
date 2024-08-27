@@ -6,12 +6,27 @@ public final class io.appmetrica.analytics.modulesapi.BuildConfig {
     public <init>()
 }
 
+public interface io.appmetrica.analytics.modulesapi.internal.client.ClientConfigExtension {
+    public abstract boolean doesModuleNeedConfig()
+    public abstract [NonNull] io.appmetrica.analytics.modulesapi.internal.client.ClientConfigListener getClientConfigListener()
+}
+
+public interface io.appmetrica.analytics.modulesapi.internal.client.ClientConfigListener {
+    public abstract void onConfigReceived([NonNull] android.os.Bundle)
+}
+
 public interface io.appmetrica.analytics.modulesapi.internal.client.ClientContext {
+    public abstract [NonNull] io.appmetrica.analytics.modulesapi.internal.client.ClientStorageProvider getClientStorageProvider()
     public abstract [NonNull] io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdRevenueContext getModuleAdRevenueContext()
+}
+
+public interface io.appmetrica.analytics.modulesapi.internal.client.ClientStorageProvider {
+    public abstract [NonNull] io.appmetrica.analytics.modulesapi.internal.common.ModulePreferences modulePreferences([NonNull] String)
 }
 
 public abstract class io.appmetrica.analytics.modulesapi.internal.client.ModuleClientEntryPoint<T> {
     public <init>()
+    public [Nullable] io.appmetrica.analytics.modulesapi.internal.client.ClientConfigExtension getClientConfigExtension()
     public abstract [NonNull] String getIdentifier()
     public void initClientSide([NonNull] io.appmetrica.analytics.modulesapi.internal.client.ClientContext)
     public void onActivated()
@@ -112,6 +127,10 @@ public interface io.appmetrica.analytics.modulesapi.internal.network.SimpleNetwo
     public abstract void performRequestWithCacheControl([NonNull] String, [NonNull] io.appmetrica.analytics.modulesapi.internal.network.NetworkClientWithCacheControl)
 }
 
+public interface io.appmetrica.analytics.modulesapi.internal.service.ClientConfigProvider {
+    public abstract [Nullable] android.os.Bundle getConfigBundleForClient()
+}
+
 public interface io.appmetrica.analytics.modulesapi.internal.service.LocationServiceApi {
     public abstract [NonNull] io.appmetrica.analytics.locationapi.internal.LastKnownLocationExtractorProviderFactory getLastKnownExtractorProviderFactory()
     public abstract [Nullable] android.location.Location getLocation()
@@ -144,6 +163,7 @@ public interface io.appmetrica.analytics.modulesapi.internal.service.ModuleRemot
 
 public abstract class io.appmetrica.analytics.modulesapi.internal.service.ModuleServiceEntryPoint<T> {
     public <init>()
+    public [Nullable] io.appmetrica.analytics.modulesapi.internal.service.ClientConfigProvider getClientConfigProvider()
     public abstract [NonNull] String getIdentifier()
     public [Nullable] io.appmetrica.analytics.modulesapi.internal.service.LocationServiceExtension getLocationServiceExtension()
     public [Nullable] io.appmetrica.analytics.modulesapi.internal.service.event.ModuleEventServiceHandlerFactory getModuleEventServiceHandlerFactory()

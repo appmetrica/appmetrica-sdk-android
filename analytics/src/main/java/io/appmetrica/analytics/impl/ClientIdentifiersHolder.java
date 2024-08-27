@@ -32,6 +32,7 @@ public class ClientIdentifiersHolder {
     private static final String EXTRA_CUSTOM_SDK_HOSTS = "CUSTOM_SDK_HOSTS";
     private static final String EXTRA_NEXT_STARTUP_TIME = "NextStartupTime";
     private static final String EXTRA_FEATURES = "features";
+    private static final String EXTRA_MODULE_CONFIGS = "module_configs";
     private static final String NO_IDENTIFIER_IN_STARTUP_STATE = "no identifier in startup state";
     private static final String BUNDLE_SREIALIZATION_ERROR = "bundle serialization error";
 
@@ -61,81 +62,88 @@ public class ClientIdentifiersHolder {
     private final long nextStartupTime;
     @NonNull
     private final FeaturesInternal features;
+    @Nullable
+    private final Bundle modulesConfig;
 
     ClientIdentifiersHolder(@NonNull StartupState startupState,
                             @NonNull AdvertisingIdsHolder advertisingIdsHolder,
                             @Nullable Map<String, String> clientClids) {
         this(
-                createIdentifierData(startupState.getUuid()),
-                createIdentifierData(startupState.getDeviceId()),
-                createIdentifierData(startupState.getDeviceIdHash()),
-                createIdentifierData(startupState.getReportAdUrl()),
-                createIdentifierData(startupState.getGetAdUrl()),
-                createIdentifierData(JsonHelper.clidsToString(
-                        StartupUtils.decodeClids(startupState.getEncodedClidsFromResponse())
-                )),
-                createIdentifierData(JsonHelper.clidsToString(clientClids)),
-                new IdentifiersResult(
-                        advertisingIdsHolder.getGoogle().mAdTrackingInfo == null ?
-                                null :
-                                advertisingIdsHolder.getGoogle().mAdTrackingInfo.advId,
-                        advertisingIdsHolder.getGoogle().mStatus,
-                        advertisingIdsHolder.getGoogle().mErrorExplanation
-                ),
-                new IdentifiersResult(
-                        advertisingIdsHolder.getHuawei().mAdTrackingInfo == null ?
-                                null :
-                                advertisingIdsHolder.getHuawei().mAdTrackingInfo.advId,
-                        advertisingIdsHolder.getHuawei().mStatus,
-                        advertisingIdsHolder.getHuawei().mErrorExplanation
-                ),
-                new IdentifiersResult(
-                        advertisingIdsHolder.getYandex().mAdTrackingInfo == null ?
-                                null :
-                                advertisingIdsHolder.getYandex().mAdTrackingInfo.advId,
-                        advertisingIdsHolder.getYandex().mStatus,
-                        advertisingIdsHolder.getYandex().mErrorExplanation
-                ),
-                createIdentifierData(JsonHelper.customSdkHostsToString(startupState.getCustomSdkHosts())),
-                TimeUtils.getServerTimeOffset(),
-                startupState.getObtainTime() + startupState.getStartupUpdateConfig().getIntervalSeconds(),
-                createFeaturesInternal(startupState.getCollectingFlags().sslPinning)
+            createIdentifierData(startupState.getUuid()),
+            createIdentifierData(startupState.getDeviceId()),
+            createIdentifierData(startupState.getDeviceIdHash()),
+            createIdentifierData(startupState.getReportAdUrl()),
+            createIdentifierData(startupState.getGetAdUrl()),
+            createIdentifierData(JsonHelper.clidsToString(
+                StartupUtils.decodeClids(startupState.getEncodedClidsFromResponse())
+            )),
+            createIdentifierData(JsonHelper.clidsToString(clientClids)),
+            new IdentifiersResult(
+                advertisingIdsHolder.getGoogle().mAdTrackingInfo == null ?
+                    null :
+                    advertisingIdsHolder.getGoogle().mAdTrackingInfo.advId,
+                advertisingIdsHolder.getGoogle().mStatus,
+                advertisingIdsHolder.getGoogle().mErrorExplanation
+            ),
+            new IdentifiersResult(
+                advertisingIdsHolder.getHuawei().mAdTrackingInfo == null ?
+                    null :
+                    advertisingIdsHolder.getHuawei().mAdTrackingInfo.advId,
+                advertisingIdsHolder.getHuawei().mStatus,
+                advertisingIdsHolder.getHuawei().mErrorExplanation
+            ),
+            new IdentifiersResult(
+                advertisingIdsHolder.getYandex().mAdTrackingInfo == null ?
+                    null :
+                    advertisingIdsHolder.getYandex().mAdTrackingInfo.advId,
+                advertisingIdsHolder.getYandex().mStatus,
+                advertisingIdsHolder.getYandex().mErrorExplanation
+            ),
+            createIdentifierData(JsonHelper.customSdkHostsToString(startupState.getCustomSdkHosts())),
+            TimeUtils.getServerTimeOffset(),
+            startupState.getObtainTime() + startupState.getStartupUpdateConfig().getIntervalSeconds(),
+            createFeaturesInternal(startupState.getCollectingFlags().sslPinning),
+            new Bundle()
         );
     }
 
     public ClientIdentifiersHolder(@NonNull Bundle bundle) {
         this(
-                parseIdentifiersData(bundle, EXTRA_UUID),
-                parseIdentifiersData(bundle, EXTRA_DEVICE_ID),
-                parseIdentifiersData(bundle, EXTRA_DEVICE_ID_HASH),
-                parseIdentifiersData(bundle, EXTRA_AD_URL_REPORT),
-                parseIdentifiersData(bundle, EXTRA_AD_URL_GET),
-                parseIdentifiersData(bundle, EXTRA_RESPONSE_CLIDS),
-                parseIdentifiersData(bundle, EXTRA_REQUEST_CLIDS),
-                parseIdentifiersData(bundle, EXTRA_GAID),
-                parseIdentifiersData(bundle, EXTRA_HOAID),
-                parseIdentifiersData(bundle, EXTRA_YANDEX_ADV_ID),
-                parseIdentifiersData(bundle, EXTRA_CUSTOM_SDK_HOSTS),
-                bundle.getLong(EXTRA_SERVER_TIME_OFFSET),
-                bundle.getLong(EXTRA_NEXT_STARTUP_TIME),
-                parseFeaturesInternal(bundle, EXTRA_FEATURES)
+            parseIdentifiersData(bundle, EXTRA_UUID),
+            parseIdentifiersData(bundle, EXTRA_DEVICE_ID),
+            parseIdentifiersData(bundle, EXTRA_DEVICE_ID_HASH),
+            parseIdentifiersData(bundle, EXTRA_AD_URL_REPORT),
+            parseIdentifiersData(bundle, EXTRA_AD_URL_GET),
+            parseIdentifiersData(bundle, EXTRA_RESPONSE_CLIDS),
+            parseIdentifiersData(bundle, EXTRA_REQUEST_CLIDS),
+            parseIdentifiersData(bundle, EXTRA_GAID),
+            parseIdentifiersData(bundle, EXTRA_HOAID),
+            parseIdentifiersData(bundle, EXTRA_YANDEX_ADV_ID),
+            parseIdentifiersData(bundle, EXTRA_CUSTOM_SDK_HOSTS),
+            bundle.getLong(EXTRA_SERVER_TIME_OFFSET),
+            bundle.getLong(EXTRA_NEXT_STARTUP_TIME),
+            parseFeaturesInternal(bundle, EXTRA_FEATURES),
+            bundle.getBundle(EXTRA_MODULE_CONFIGS)
         );
     }
 
-    public ClientIdentifiersHolder(@NonNull IdentifiersResult uuidData,
-                                   @NonNull IdentifiersResult deviceIdData,
-                                   @NonNull IdentifiersResult deviceIdHashData,
-                                   @NonNull IdentifiersResult reportAdUrlData,
-                                   @NonNull IdentifiersResult getAdUrlData,
-                                   @NonNull IdentifiersResult responseClidsData,
-                                   @NonNull IdentifiersResult clientClidsForRequestData,
-                                   @NonNull IdentifiersResult gaidData,
-                                   @NonNull IdentifiersResult hoaidData,
-                                   @NonNull IdentifiersResult yandexAdvIdData,
-                                   @NonNull IdentifiersResult customSdkHostsData,
-                                   final long serverTimeOffset,
-                                   final long nextStartupTime,
-                                   @NonNull FeaturesInternal features) {
+    public ClientIdentifiersHolder(
+        @NonNull IdentifiersResult uuidData,
+        @NonNull IdentifiersResult deviceIdData,
+        @NonNull IdentifiersResult deviceIdHashData,
+        @NonNull IdentifiersResult reportAdUrlData,
+        @NonNull IdentifiersResult getAdUrlData,
+        @NonNull IdentifiersResult responseClidsData,
+        @NonNull IdentifiersResult clientClidsForRequestData,
+        @NonNull IdentifiersResult gaidData,
+        @NonNull IdentifiersResult hoaidData,
+        @NonNull IdentifiersResult yandexAdvIdData,
+        @NonNull IdentifiersResult customSdkHostsData,
+        final long serverTimeOffset,
+        final long nextStartupTime,
+        @NonNull FeaturesInternal features,
+        @Nullable Bundle modulesConfig
+    ) {
         mUuidData = uuidData;
         mDeviceIdData = deviceIdData;
         mDeviceIdHashData = deviceIdHashData;
@@ -150,6 +158,7 @@ public class ClientIdentifiersHolder {
         mServerTimeOffset = serverTimeOffset;
         this.nextStartupTime = nextStartupTime;
         this.features = features;
+        this.modulesConfig = modulesConfig;
     }
 
     @NonNull
@@ -220,6 +229,11 @@ public class ClientIdentifiersHolder {
         return nextStartupTime;
     }
 
+    @Nullable
+    public Bundle getModulesConfig() {
+        return modulesConfig;
+    }
+
     public void toBundle(@NonNull Bundle bundle) {
         bundle.putBundle(EXTRA_UUID, getBundleWithParcelable(mUuidData));
         bundle.putBundle(EXTRA_DEVICE_ID, getBundleWithParcelable(mDeviceIdData));
@@ -235,6 +249,10 @@ public class ClientIdentifiersHolder {
         bundle.putLong(EXTRA_SERVER_TIME_OFFSET, mServerTimeOffset);
         bundle.putLong(EXTRA_NEXT_STARTUP_TIME, nextStartupTime);
         bundle.putBundle(EXTRA_FEATURES, getBundleWithParcelable(features));
+        bundle.putBundle(
+            EXTRA_MODULE_CONFIGS,
+            GlobalServiceLocator.getInstance().getModulesController().getModulesConfigsBundleForClient()
+        );
     }
 
     @NonNull
@@ -302,21 +320,21 @@ public class ClientIdentifiersHolder {
     @Override
     public String toString() {
         return "ClientIdentifiersHolder{" +
-                "mUuidData=" + mUuidData +
-                ", mDeviceIdData=" + mDeviceIdData +
-                ", mDeviceIdHashData=" + mDeviceIdHashData +
-                ", mReportAdUrlData=" + mReportAdUrlData +
-                ", mGetAdUrlData=" + mGetAdUrlData +
-                ", mResponseClidsData=" + mResponseClidsData +
-                ", mClientClidsForRequestData=" + mClientClidsForRequestData +
-                ", mGaidData=" + mGaidData +
-                ", mHoaidData=" + mHoaidData +
-                ", yandexAdvIdData=" + yandexAdvIdData +
-                ", customSdkHostsData=" + customSdkHostsData +
-                ", customSdkHosts=" + customSdkHostsData +
-                ", mServerTimeOffset=" + mServerTimeOffset +
-                ", nextStartupTime=" + nextStartupTime +
-                ", features=" + features +
-                '}';
+            "mUuidData=" + mUuidData +
+            ", mDeviceIdData=" + mDeviceIdData +
+            ", mDeviceIdHashData=" + mDeviceIdHashData +
+            ", mReportAdUrlData=" + mReportAdUrlData +
+            ", mGetAdUrlData=" + mGetAdUrlData +
+            ", mResponseClidsData=" + mResponseClidsData +
+            ", mClientClidsForRequestData=" + mClientClidsForRequestData +
+            ", mGaidData=" + mGaidData +
+            ", mHoaidData=" + mHoaidData +
+            ", yandexAdvIdData=" + yandexAdvIdData +
+            ", customSdkHostsData=" + customSdkHostsData +
+            ", mServerTimeOffset=" + mServerTimeOffset +
+            ", nextStartupTime=" + nextStartupTime +
+            ", features=" + features +
+            ", modulesConfig=" + modulesConfig +
+            '}';
     }
 }

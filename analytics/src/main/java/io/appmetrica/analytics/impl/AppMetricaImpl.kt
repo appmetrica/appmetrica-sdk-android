@@ -54,7 +54,7 @@ internal class AppMetricaImpl @WorkerThread internal constructor(
     init {
         modulesSeeker.discoverClientModules()
         val clientServiceLocator = ClientServiceLocator.getInstance()
-        clientServiceLocator.modulesController.initClientSide(ClientContextImpl())
+        clientServiceLocator.modulesController.initClientSide(ClientContextImpl(context))
         val fieldsProvider = AppMetricaImplFieldsProvider()
         val dataResultReceiver = fieldsProvider.createDataResultReceiver(core.defaultHandler, this)
         processConfiguration =

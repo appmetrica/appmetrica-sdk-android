@@ -1,7 +1,6 @@
 package io.appmetrica.analytics.impl.startup;
 
 import android.content.Context;
-import android.os.Bundle;
 import androidx.annotation.NonNull;
 import io.appmetrica.analytics.AdvIdentifiersResult;
 import io.appmetrica.analytics.StartupParamsItem;
@@ -17,7 +16,6 @@ import io.appmetrica.analytics.impl.utils.JsonHelper;
 import io.appmetrica.analytics.impl.utils.StartupUtils;
 import io.appmetrica.analytics.internal.IdentifiersResult;
 import io.appmetrica.analytics.testutils.CommonTest;
-import io.appmetrica.analytics.testutils.MockedConstructionRule;
 import io.appmetrica.analytics.testutils.MockedStaticRule;
 import io.appmetrica.analytics.testutils.TestUtils;
 import java.util.AbstractMap;
@@ -35,7 +33,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InOrder;
 import org.mockito.Mock;
-import org.mockito.MockedConstruction;
 import org.mockito.MockedStatic;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
@@ -68,7 +65,7 @@ public class StartupParamsTest extends CommonTest {
     @Mock
     private PreferencesClientDbStorage mPreferences;
     @Mock
-    private Bundle mBundle;
+    private ClientIdentifiersHolder clientIdentifiersHolder;
     @Mock
     private AdvIdentifiersFromIdentifierResultConverter advIdentifiersConverter;
     @Mock
@@ -137,26 +134,11 @@ public class StartupParamsTest extends CommonTest {
     private final IdentifiersResult initialCustomSdkHost = new IdentifiersResult(null, IdentifierStatus.OK, null);
     private final StartupParamsItem initialCustomSdkHostStartupParam = new StartupParamsItem(null, StartupParamsItemStatus.OK, null);
 
-    private MockedConstruction.MockInitializer<ClientIdentifiersHolder> additionalInitializer;
-
-    @Rule
-    public MockedConstructionRule<ClientIdentifiersHolder> cHolder = new MockedConstructionRule<>(ClientIdentifiersHolder.class,
-            new MockedConstruction.MockInitializer<ClientIdentifiersHolder>() {
-                @Override
-                public void prepare(ClientIdentifiersHolder mock, MockedConstruction.Context context) throws Throwable {
-                    if (context.arguments().size() == 1 && context.arguments().contains(mBundle)) {
-                        mockClientIdentifiersHolder(mock);
-                        if (additionalInitializer != null) {
-                            additionalInitializer.prepare(mock, context);
-                        }
-                    }
-                }
-            });
     @Rule
     public final MockedStaticRule<StartupRequiredUtils> startupRequiredUtils = new MockedStaticRule<>(StartupRequiredUtils.class);
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() throws Throwable {
         MockitoAnnotations.openMocks(this);
         customSdkHosts.put(customKey1, Arrays.asList("host1", "host2"));
         customSdkHosts.put(customKey2, Arrays.asList("host3"));
@@ -184,6 +166,8 @@ public class StartupParamsTest extends CommonTest {
         });
 
         when(uuidValidator.isValid(mUuid)).thenReturn(true);
+
+        mockClientIdentifiersHolder(clientIdentifiersHolder);
 
         mStartupParams = new StartupParams(
             mPreferences,
@@ -227,13 +211,8 @@ public class StartupParamsTest extends CommonTest {
         when(uuidProvider.readUuid()).thenReturn(initialUuid);
         StartupParams startupParams = createStartupParams();
 
-        additionalInitializer = new MockedConstruction.MockInitializer<ClientIdentifiersHolder>() {
-            @Override
-            public void prepare(ClientIdentifiersHolder mock, MockedConstruction.Context context) throws Throwable {
-                when(mock.getUuid()).thenReturn(new IdentifiersResult(anotherUuidString, IdentifierStatus.OK, null));
-            }
-        };
-        startupParams.updateAllParamsByReceiver(mBundle);
+        when(clientIdentifiersHolder.getUuid()).thenReturn(new IdentifiersResult(anotherUuidString, IdentifierStatus.OK, null));
+        startupParams.updateAllParamsByReceiver(clientIdentifiersHolder);
 
         assertThat(startupParams.getUuid()).isEqualTo(initialUuidString);
     }
@@ -243,25 +222,15 @@ public class StartupParamsTest extends CommonTest {
         String deviceId = UUID.randomUUID().toString();
         StartupParams startupParams = new StartupParams(context, mPreferences);
         startupParams.setDeviceId(new IdentifiersResult(deviceId, IdentifierStatus.OK, null));
-        additionalInitializer = new MockedConstruction.MockInitializer<ClientIdentifiersHolder>() {
-            @Override
-            public void prepare(ClientIdentifiersHolder mock, MockedConstruction.Context context) {
-                when(mock.getDeviceId()).thenReturn(null);
-            }
-        };
-        startupParams.updateAllParamsByReceiver(mBundle);
+        when(clientIdentifiersHolder.getDeviceId()).thenReturn(null);
+        startupParams.updateAllParamsByReceiver(clientIdentifiersHolder);
 
         InOrder inOrder = inOrder(mPreferences);
         inOrder.verify(mPreferences).putDeviceIdResult(any(IdentifiersResult.class));
         assertThat(startupParams.getDeviceId()).isNotEmpty();
 
-        additionalInitializer = new MockedConstruction.MockInitializer<ClientIdentifiersHolder>() {
-            @Override
-            public void prepare(ClientIdentifiersHolder mock, MockedConstruction.Context context) {
-                when(mock.getDeviceId()).thenReturn(mEmptyIdentifierResult);
-            }
-        };
-        startupParams.updateAllParamsByReceiver(mBundle);
+        when(clientIdentifiersHolder.getDeviceId()).thenReturn(mEmptyIdentifierResult);
+        startupParams.updateAllParamsByReceiver(clientIdentifiersHolder);
 
         inOrder.verify(mPreferences).putDeviceIdResult(any(IdentifiersResult.class));
         assertThat(startupParams.getDeviceId()).isNotEmpty();
@@ -272,27 +241,17 @@ public class StartupParamsTest extends CommonTest {
         defineTestHostsFromPreferences();
 
         StartupParams startupParams = new StartupParams(context, mPreferences);
-        additionalInitializer = new MockedConstruction.MockInitializer<ClientIdentifiersHolder>() {
-            @Override
-            public void prepare(ClientIdentifiersHolder mock, MockedConstruction.Context context) {
-                when(mock.getGetAdUrl()).thenReturn(null);
-                when(mock.getReportAdUrl()).thenReturn(null);
-            }
-        };
-        startupParams.updateAllParamsByReceiver(mBundle);
+        when(clientIdentifiersHolder.getGetAdUrl()).thenReturn(null);
+        when(clientIdentifiersHolder.getReportAdUrl()).thenReturn(null);
+        startupParams.updateAllParamsByReceiver(clientIdentifiersHolder);
 
         InOrder inOrder = inOrder(mPreferences);
         inOrder.verify(mPreferences).putAdUrlGetResult(any(IdentifiersResult.class));
         inOrder.verify(mPreferences).putAdUrlReportResult(any(IdentifiersResult.class));
 
-        additionalInitializer = new MockedConstruction.MockInitializer<ClientIdentifiersHolder>() {
-            @Override
-            public void prepare(ClientIdentifiersHolder mock, MockedConstruction.Context context) {
-                when(mock.getGetAdUrl()).thenReturn(mEmptyIdentifierResult);
-                when(mock.getReportAdUrl()).thenReturn(mEmptyIdentifierResult);
-            }
-        };
-        startupParams.updateAllParamsByReceiver(mBundle);
+        when(clientIdentifiersHolder.getGetAdUrl()).thenReturn(mEmptyIdentifierResult);
+        when(clientIdentifiersHolder.getReportAdUrl()).thenReturn(mEmptyIdentifierResult);
+        startupParams.updateAllParamsByReceiver(clientIdentifiersHolder);
 
         inOrder.verify(mPreferences).putAdUrlGetResult(any(IdentifiersResult.class));
         inOrder.verify(mPreferences).putAdUrlReportResult(any(IdentifiersResult.class));
@@ -783,7 +742,7 @@ public class StartupParamsTest extends CommonTest {
             }
         }).when(customSdkHostsHolder).putToMap(eq(identifierKeys), any(Map.class));
         clearInvocations(customSdkHostsHolder, featuresHolder);
-        mStartupParams.updateAllParamsByReceiver(mBundle);
+        mStartupParams.updateAllParamsByReceiver(clientIdentifiersHolder);
         Map<String, StartupParamsItem> identifiers = new HashMap<String, StartupParamsItem>();
         mStartupParams.putToMap(identifierKeys, identifiers);
         verify(customSdkHostsHolder).update(customSdkHostsResult);
@@ -819,19 +778,14 @@ public class StartupParamsTest extends CommonTest {
             }
         };
         when(mPreferences.getClientClids(nullable(String.class))).thenReturn(StartupUtils.encodeClids(TestData.TEST_CLIDS));
-        additionalInitializer = new MockedConstruction.MockInitializer<ClientIdentifiersHolder>() {
-            @Override
-            public void prepare(ClientIdentifiersHolder mock, MockedConstruction.Context context) {
-                when(mock.getResponseClids())
-                        .thenReturn(new IdentifiersResult(JsonHelper.clidsToString(startupClids), IdentifierStatus.OK, null));
-                when(mock.getClientClidsForRequest())
-                        .thenReturn(new IdentifiersResult(JsonHelper.clidsToString(TestData.TEST_CLIDS), IdentifierStatus.OK, null));
-            }
-        };
+        when(clientIdentifiersHolder.getResponseClids())
+            .thenReturn(new IdentifiersResult(JsonHelper.clidsToString(startupClids), IdentifierStatus.OK, null));
+        when(clientIdentifiersHolder.getClientClidsForRequest())
+            .thenReturn(new IdentifiersResult(JsonHelper.clidsToString(TestData.TEST_CLIDS), IdentifierStatus.OK, null));
 
         mStartupParams = new StartupParams(context, mPreferences);
         when(clidsStateChecker.doClientClidsMatchClientClidsForRequest(TestData.TEST_CLIDS, TestData.TEST_CLIDS)).thenReturn(true);
-        mStartupParams.updateAllParamsByReceiver(mBundle);
+        mStartupParams.updateAllParamsByReceiver(clientIdentifiersHolder);
 
         assertThat(mStartupParams.getClids()).isEqualTo(JsonHelper.clidsToString(startupClids));
     }
@@ -845,19 +799,14 @@ public class StartupParamsTest extends CommonTest {
         };
         when(mPreferences.getClientClids(nullable(String.class))).thenReturn(StartupUtils.encodeClids(TestData.TEST_CLIDS));
 
-        additionalInitializer = new MockedConstruction.MockInitializer<ClientIdentifiersHolder>() {
-            @Override
-            public void prepare(ClientIdentifiersHolder mock, MockedConstruction.Context context) {
-                when(mock.getResponseClids())
-                        .thenReturn(new IdentifiersResult(JsonHelper.clidsToString(startupClids), IdentifierStatus.OK, null));
-                when(mock.getClientClidsForRequest())
-                        .thenReturn(new IdentifiersResult(JsonHelper.clidsToString(TestData.TEST_CLIDS), IdentifierStatus.OK, null));
-            }
-        };
+        when(clientIdentifiersHolder.getResponseClids())
+            .thenReturn(new IdentifiersResult(JsonHelper.clidsToString(startupClids), IdentifierStatus.OK, null));
+        when(clientIdentifiersHolder.getClientClidsForRequest())
+            .thenReturn(new IdentifiersResult(JsonHelper.clidsToString(TestData.TEST_CLIDS), IdentifierStatus.OK, null));
 
         mStartupParams = createStartupParams();
         when(clidsStateChecker.doClientClidsMatchClientClidsForRequest(TestData.TEST_CLIDS, TestData.TEST_CLIDS)).thenReturn(false);
-        mStartupParams.updateAllParamsByReceiver(mBundle);
+        mStartupParams.updateAllParamsByReceiver(clientIdentifiersHolder);
 
         assertThat(mStartupParams.getClids()).isNotEqualTo(JsonHelper.clidsToString(startupClids));
     }
@@ -867,15 +816,10 @@ public class StartupParamsTest extends CommonTest {
         StartupParamsTestUtils.mockPreferencesClientDbStoragePutResponses(mPreferences);
         mockPreferencesWithValidValues();
         mStartupParams = new StartupParams(context, mPreferences);
-        additionalInitializer = new MockedConstruction.MockInitializer<ClientIdentifiersHolder>() {
-            @Override
-            public void prepare(ClientIdentifiersHolder mock, MockedConstruction.Context context) {
-                when(mock.getGaid()).thenReturn(mNullIdentifierResult);
-                when(mock.getHoaid()).thenReturn(mNullIdentifierResult);
-                when(mock.getYandexAdvId()).thenReturn(mNullIdentifierResult);
-            }
-        };
-        mStartupParams.updateAllParamsByReceiver(mBundle);
+        when(clientIdentifiersHolder.getGaid()).thenReturn(mNullIdentifierResult);
+        when(clientIdentifiersHolder.getHoaid()).thenReturn(mNullIdentifierResult);
+        when(clientIdentifiersHolder.getYandexAdvId()).thenReturn(mNullIdentifierResult);
+        mStartupParams.updateAllParamsByReceiver(clientIdentifiersHolder);
         verify(mPreferences).putGaid(mNullIdentifierResult);
         verify(mPreferences).putHoaid(mNullIdentifierResult);
         verify(mPreferences).putYandexAdvId(mNullIdentifierResult);
@@ -1111,7 +1055,7 @@ public class StartupParamsTest extends CommonTest {
         clearInvocations(mPreferences);
         when(customSdkHostsHolder.getCommonResult()).thenReturn(customSdkHostsResult);
         when(clidsStateChecker.doClientClidsMatchClientClidsForRequest(nullable(Map.class), nullable(Map.class))).thenReturn(true);
-        mStartupParams.updateAllParamsByReceiver(mBundle);
+        mStartupParams.updateAllParamsByReceiver(clientIdentifiersHolder);
         verify(mPreferences).putUuidResult(mUuidResult);
         verify(mPreferences).putDeviceIdResult(mDeviceIdResult);
         verify(mPreferences).putDeviceIdHashResult(deviceIdHashResult);

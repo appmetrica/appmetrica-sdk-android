@@ -14,5 +14,7 @@ abstract class ModuleServiceEntryPoint<T : Any> {
 
     open val moduleServicesDatabase: ModuleServicesDatabase? = null
 
+    open val clientConfigProvider: ClientConfigProvider? = null
+
     open fun initServiceSide(serviceContext: ServiceContext, initialConfig: ModuleRemoteConfig<T?>) {}
 }

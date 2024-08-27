@@ -5,4 +5,6 @@ import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdReve
 interface ClientContext {
 
     val moduleAdRevenueContext: ModuleAdRevenueContext
+
+    val clientStorageProvider: ClientStorageProvider
 }

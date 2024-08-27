@@ -1,9 +1,12 @@
 package io.appmetrica.analytics.impl.modules.client
 
+import android.os.Bundle
 import io.appmetrica.analytics.impl.IReporterExtended
 import io.appmetrica.analytics.impl.modules.client.context.CoreClientContext
 import io.appmetrica.analytics.impl.modules.client.context.CoreModuleAdRevenueContext
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade
+import io.appmetrica.analytics.modulesapi.internal.client.ClientConfigExtension
+import io.appmetrica.analytics.modulesapi.internal.client.ClientConfigListener
 import io.appmetrica.analytics.modulesapi.internal.client.ModuleClientEntryPoint
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.on
@@ -16,21 +19,33 @@ import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.doThrow
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.never
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 internal class ClientModulesControllerTest : CommonTest() {
 
     private val firstModuleIdentifier = "firstModuleIdentifier"
+    private val firstClientConfigListener: ClientConfigListener = mock()
+    private val firstClientConfigExtension: ClientConfigExtension = mock {
+        on { clientConfigListener } doReturn firstClientConfigListener
+    }
     private val firstModule = mock<ModuleClientEntryPoint<Any>> {
         on { identifier } doReturn firstModuleIdentifier
+        on { clientConfigExtension } doReturn firstClientConfigExtension
     }
 
     private val secondModuleIdentifier = "secondModuleIdentifier"
+    private val secondClientConfigListener: ClientConfigListener = mock()
+    private val secondClientConfigExtension: ClientConfigExtension = mock {
+        on { clientConfigListener } doReturn secondClientConfigListener
+    }
     private val secondModule = mock<ModuleClientEntryPoint<Any>> {
         on { identifier } doReturn secondModuleIdentifier
+        on { clientConfigExtension } doReturn secondClientConfigExtension
     }
 
     private val initException = RuntimeException("initException")
@@ -111,5 +126,31 @@ internal class ClientModulesControllerTest : CommonTest() {
     @Test
     fun getModuleAdRevenueProcessorIfContextIsNull() {
         assertThat(modulesController.getModuleAdRevenueProcessor()).isNull()
+    }
+
+    @Test
+    fun notifyModulesWithConfig() {
+        val secondBundle = Bundle()
+        val bundle = Bundle().also {
+            it.putBundle(secondModuleIdentifier, secondBundle)
+        }
+        modulesController.registerModule(firstModule)
+        modulesController.registerModule(secondModule)
+
+        modulesController.notifyModulesWithConfig(bundle)
+
+        verify(firstModule.clientConfigExtension!!.clientConfigListener, never()).onConfigReceived(any())
+        verify(secondModule.clientConfigExtension!!.clientConfigListener).onConfigReceived(secondBundle)
+    }
+
+    @Test
+    fun doModulesNeedConfig() {
+        whenever(firstModule.clientConfigExtension!!.doesModuleNeedConfig()).thenReturn(false)
+        whenever(secondModule.clientConfigExtension!!.doesModuleNeedConfig()).thenReturn(true)
+
+        modulesController.registerModule(firstModule)
+        modulesController.registerModule(secondModule)
+
+        assertThat(modulesController.doModulesNeedConfig()).isTrue()
     }
 }

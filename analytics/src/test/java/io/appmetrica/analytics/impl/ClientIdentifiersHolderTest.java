@@ -16,6 +16,7 @@ import io.appmetrica.analytics.impl.utils.StartupUtils;
 import io.appmetrica.analytics.impl.utils.TimeUtils;
 import io.appmetrica.analytics.internal.IdentifiersResult;
 import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import io.appmetrica.analytics.testutils.MockedStaticRule;
 import io.appmetrica.analytics.testutils.TestUtils;
 import java.util.Arrays;
@@ -55,6 +56,7 @@ public class ClientIdentifiersHolderTest extends CommonTest {
     @Mock
     private FeaturesInternal features;
     private BillingConfig autoInappCollectingConfig;
+    private final Bundle modulesConfig = new Bundle();
 
     private final IdentifiersResult mUuidData = new IdentifiersResult(mUuid, IdentifierStatus.OK, null);
     private final IdentifiersResult mDeviceIdData = new IdentifiersResult(mDeviceId, IdentifierStatus.OK, null);
@@ -79,6 +81,8 @@ public class ClientIdentifiersHolderTest extends CommonTest {
 
     @Rule
     public final MockedStaticRule<TimeUtils> sTimeUtils = new MockedStaticRule<>(TimeUtils.class);
+    @Rule
+    public final GlobalServiceLocatorRule globalServiceLocatorRule = new GlobalServiceLocatorRule();
 
     @Before
     public void setUp() {
@@ -97,25 +101,27 @@ public class ClientIdentifiersHolderTest extends CommonTest {
         mResponseClidsData = new IdentifiersResult(JsonHelper.clidsToString(mResponseClids), IdentifierStatus.OK, null);
         customSdkHostsData = new IdentifiersResult(JsonHelper.customSdkHostsToString(customSdkHosts), IdentifierStatus.OK, null);
         when(TimeUtils.getServerTimeOffset()).thenReturn(mServerTimeOffset);
+        when(GlobalServiceLocator.getInstance().getModulesController().getModulesConfigsBundleForClient()).thenReturn(modulesConfig);
     }
 
     @Test
     public void testByFieldConstructor() throws Exception {
         ClientIdentifiersHolder clientIdentifiersHolder = new ClientIdentifiersHolder(
-                mUuidData,
-                mDeviceIdData,
-                mDeviceIdHashData,
-                mReportAdUrlData,
-                mGetAdUrlData,
-                mResponseClidsData,
-                mClientClidsForRequestData,
-                mGaidData,
-                mHoaidData,
-                yandexAdvIdData,
-                customSdkHostsData,
-                mServerTimeOffset,
-                nextStartupTime,
-                features
+            mUuidData,
+            mDeviceIdData,
+            mDeviceIdHashData,
+            mReportAdUrlData,
+            mGetAdUrlData,
+            mResponseClidsData,
+            mClientClidsForRequestData,
+            mGaidData,
+            mHoaidData,
+            yandexAdvIdData,
+            customSdkHostsData,
+            mServerTimeOffset,
+            nextStartupTime,
+            features,
+            modulesConfig
         );
 
         ObjectPropertyAssertions<ClientIdentifiersHolder> assertions = ObjectPropertyAssertions(clientIdentifiersHolder).withPrivateFields(true);
@@ -133,6 +139,7 @@ public class ClientIdentifiersHolderTest extends CommonTest {
         assertions.checkField("mServerTimeOffset", "getServerTimeOffset", mServerTimeOffset);
         assertions.checkField("nextStartupTime", "getNextStartupTime", nextStartupTime);
         assertions.checkField("features", "getFeatures", features);
+        assertions.checkField("modulesConfig", "getModulesConfig", modulesConfig);
         assertions.checkAll();
     }
 
@@ -192,7 +199,9 @@ public class ClientIdentifiersHolderTest extends CommonTest {
                         yandexError
                 ));
         ClientIdentifiersHolder clientIdentifiersHolder = new ClientIdentifiersHolder(startupState, advertisingIdsHolder, clientClids);
-        ObjectPropertyAssertions<ClientIdentifiersHolder> assertions = ObjectPropertyAssertions(clientIdentifiersHolder).withPrivateFields(true);
+        ObjectPropertyAssertions<ClientIdentifiersHolder> assertions = ObjectPropertyAssertions(clientIdentifiersHolder)
+            .withPrivateFields(true)
+            .withIgnoredFields("modulesConfig");
         assertions.checkField("mUuidData", "getUuid", mUuidData);
         assertions.checkField("mDeviceIdData", "getDeviceId", mDeviceIdData);
         assertions.checkField("mDeviceIdHashData", "getDeviceIdHash", mDeviceIdHashData);
@@ -245,18 +254,19 @@ public class ClientIdentifiersHolderTest extends CommonTest {
     @Test
     public void testBundleSerializationFilled() throws Exception {
         ClientIdentifiersHolder clientIdentifiersHolder = new ClientIdentifiersHolder(
-                mUuidData,
-                mDeviceIdData,
-                mDeviceIdHashData,
-                mReportAdUrlData,
-                mGetAdUrlData,
-                mResponseClidsData,
-                mClientClidsForRequestData,
-                mGaidData, mHoaidData, yandexAdvIdData,
-                customSdkHostsData,
-                mServerTimeOffset,
-                nextStartupTime,
-                features
+            mUuidData,
+            mDeviceIdData,
+            mDeviceIdHashData,
+            mReportAdUrlData,
+            mGetAdUrlData,
+            mResponseClidsData,
+            mClientClidsForRequestData,
+            mGaidData, mHoaidData, yandexAdvIdData,
+            customSdkHostsData,
+            mServerTimeOffset,
+            nextStartupTime,
+            features,
+            null
         );
         Bundle bundle = new Bundle();
         clientIdentifiersHolder.toBundle(bundle);
@@ -296,6 +306,7 @@ public class ClientIdentifiersHolderTest extends CommonTest {
         assertions.checkField("mServerTimeOffset", "getServerTimeOffset", mServerTimeOffset);
         assertions.checkField("nextStartupTime", "getNextStartupTime", nextStartupTime);
         assertions.checkField("features", "getFeatures", features);
+        assertions.checkField("modulesConfig", "getModulesConfig", modulesConfig);
         assertions.checkAll();
     }
 }

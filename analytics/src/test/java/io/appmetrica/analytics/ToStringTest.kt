@@ -227,7 +227,8 @@ class ToStringTest(
                         MockUtils.mockForToString(),
                         200L,
                         300L,
-                        MockUtils.mockForToString()
+                        MockUtils.mockForToString(),
+                        null
                     ),
                     0,
                     "check existence only"

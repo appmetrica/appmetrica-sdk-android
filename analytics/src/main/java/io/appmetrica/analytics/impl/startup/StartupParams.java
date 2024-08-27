@@ -1,7 +1,6 @@
 package io.appmetrica.analytics.impl.startup;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -213,18 +212,20 @@ public class StartupParams {
         );
         boolean advIdentifiersRequested = listContainsAdvIdentifiers(identifiers);
         boolean outdated = StartupRequiredUtils.isOutdated(nextStartupTime);
+        boolean modulesNeedConfig = ClientServiceLocator.getInstance().getModulesController().doModulesNeedConfig();
         boolean result = notAllIdentifiers || advIdentifiersRequested || outdated ||
-                mClientClidsChangedAfterLastIdentifiersUpdate;
+                mClientClidsChangedAfterLastIdentifiersUpdate || modulesNeedConfig;
 
         DebugLogger.INSTANCE.info(
             TAG,
             "shouldSendStartup = %b:  notAllIdentifiers = %b; advIdentifiersRequested = %b, outdated = %b; " +
-                "mClientClidsChanged = %b; identifiers = %s",
+                "mClientClidsChanged = %b; modulesNeedConfig = %b, identifiers = %s",
             result,
             notAllIdentifiers,
             advIdentifiersRequested,
             outdated,
             mClientClidsChangedAfterLastIdentifiersUpdate,
+            modulesNeedConfig,
             identifiers
         );
 
@@ -276,12 +277,7 @@ public class StartupParams {
         return true;
     }
 
-    synchronized void updateAllParamsByReceiver(@NonNull Bundle data) {
-        updateAllParamsByReceiver(new ClientIdentifiersHolder(data));
-    }
-
-    @VisibleForTesting
-    void updateAllParamsByReceiver(@NonNull ClientIdentifiersHolder clientIdentifiersHolder) {
+    synchronized void updateAllParamsByReceiver(@NonNull ClientIdentifiersHolder clientIdentifiersHolder) {
         updateIdentifiersByReceiver(clientIdentifiersHolder);
         customSdkHostsHolder.update(clientIdentifiersHolder.getCustomSdkHosts());
         featuresHolder.setFeatures(clientIdentifiersHolder.getFeatures());
