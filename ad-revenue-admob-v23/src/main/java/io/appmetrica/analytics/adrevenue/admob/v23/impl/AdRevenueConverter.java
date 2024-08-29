@@ -6,6 +6,7 @@ import com.google.android.gms.ads.AdValue;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.AdapterResponseInfo;
 import com.google.android.gms.ads.ResponseInfo;
+import com.google.android.gms.ads.appopen.AppOpenAd;
 import com.google.android.gms.ads.interstitial.InterstitialAd;
 import com.google.android.gms.ads.nativead.NativeAd;
 import com.google.android.gms.ads.rewarded.RewardedAd;
@@ -66,6 +67,15 @@ public class AdRevenueConverter {
             ModuleAdType.NATIVE,
             nativeAd.getResponseInfo(),
             null
+        );
+    }
+
+    public ModuleAdRevenue convertAppOpenAd(@NonNull AdValue adValue, @NonNull AppOpenAd ad) {
+        return constructModuleAdRevenue(
+            adValue,
+            ModuleAdType.OTHER,
+            ad.getResponseInfo(),
+            ad.getAdUnitId()
         );
     }
 

@@ -38,6 +38,9 @@ public class AdMobAdRevenueProcessorTest extends CommonTest {
     @Rule
     public MockedConstructionRule<RewardedInterstitialAdMobAdRevenueProcessor> rewardedIntRule =
         new MockedConstructionRule<>(RewardedInterstitialAdMobAdRevenueProcessor.class);
+    @Rule
+    public MockedConstructionRule<AppOpenAdMobAdRevenueProcessor> appOpenRule =
+        new MockedConstructionRule<>(AppOpenAdMobAdRevenueProcessor.class);
 
     @Before
     public void setUp() {
@@ -57,6 +60,8 @@ public class AdMobAdRevenueProcessorTest extends CommonTest {
         assertThat(rewardedRule.getArgumentInterceptor().flatArguments())
             .containsExactly(converter, clientContext);
         assertThat(rewardedIntRule.getArgumentInterceptor().flatArguments())
+            .containsExactly(converter, clientContext);
+        assertThat(appOpenRule.getArgumentInterceptor().flatArguments())
             .containsExactly(converter, clientContext);
     }
 
@@ -123,6 +128,16 @@ public class AdMobAdRevenueProcessorTest extends CommonTest {
         AdMobAdRevenueProcessor processor = new AdMobAdRevenueProcessor(converter, clientContext);
 
         when(rewardedIntRule.getConstructionMock().constructed().get(0).process(value))
+            .thenReturn(true);
+
+        assertThat(processor.process(value)).isTrue();
+    }
+
+    @Test
+    public void processIfAppOpenAdMobAdRevenueProcessor() {
+        AdMobAdRevenueProcessor processor = new AdMobAdRevenueProcessor(converter, clientContext);
+
+        when(appOpenRule.getConstructionMock().constructed().get(0).process(value))
             .thenReturn(true);
 
         assertThat(processor.process(value)).isTrue();

@@ -22,6 +22,7 @@ public class AdMobAdRevenueProcessor implements ModuleAdRevenueProcessor {
         processors.add(new NativeAdMobAdRevenueProcessor(converter, clientContext));
         processors.add(new RewardedAdMobAdRevenueProcessor(converter, clientContext));
         processors.add(new RewardedInterstitialAdMobAdRevenueProcessor(converter, clientContext));
+        processors.add(new AppOpenAdMobAdRevenueProcessor(converter, clientContext));
     }
 
     @Override
