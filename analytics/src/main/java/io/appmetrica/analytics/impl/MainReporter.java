@@ -26,7 +26,7 @@ public class MainReporter extends BaseReporter implements IMainReporter {
             new NonEmptyStringValidator("Referral url")
     );
 
-    private static final Long USER_SESSION_TIMEOUT = TimeUnit.SECONDS.toMillis(5);
+    private static final Long USER_SESSION_TIMEOUT = TimeUnit.SECONDS.toMillis(1);
     @NonNull
     private final MainReporterComponents mainReporterComponents;
     @NonNull

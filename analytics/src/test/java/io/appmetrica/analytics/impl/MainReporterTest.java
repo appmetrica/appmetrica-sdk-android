@@ -157,7 +157,7 @@ public class MainReporterTest extends BaseReporterTest {
 
         InOrder inOrder = inOrder(mAppStatusMonitor, mReportsHandler);
         inOrder.verify(mReportsHandler).reportPauseUserSession(mProcessConfiguration);
-        inOrder.verify(mAppStatusMonitor).registerObserver(mObserverArgumentCaptor.capture(), eq(5000L));
+        inOrder.verify(mAppStatusMonitor).registerObserver(mObserverArgumentCaptor.capture(), eq(1000L));
 
         AppStatusMonitor.Observer observer = mObserverArgumentCaptor.getValue();
         observer.onResume();
