@@ -16,4 +16,5 @@ internal class MainReporterContext(
     val appStatusMonitor: AppStatusMonitor = mainReporterComponents.appStatusMonitor
     val deviceId: String? = mainReporterComponents.startupHelper.deviceId
     val reportsHandler: ReportsHandler = mainReporterComponents.reportsHandler
+    val uuid: String? = mainReporterComponents.startupHelper.uuid
 }
