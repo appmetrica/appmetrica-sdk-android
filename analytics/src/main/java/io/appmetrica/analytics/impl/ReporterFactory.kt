@@ -141,11 +141,11 @@ internal class ReporterFactory(
         needToClearEnvironment: Boolean
     ): MainReporter {
         reporterApiKeyUsedValidator.validate(config.apiKey)
+        mainReporterComponents.updateConfig(config, logger)
         val reporter = MainReporter(mainReporterComponents)
         DebugLogger.info(tag, "performCommonInitialization for main reporter with api key = %s", config.apiKey)
         performCommonInitialization(reporter)
         DebugLogger.info(tag, "updateConfig for apiKey = %s", config.apiKey)
-        mainReporterComponents.updateConfig(config, logger)
         reporter.updateConfig(config, needToClearEnvironment)
         reporter.start()
         reportsHandler.setShouldDisconnectFromServiceChecker(
