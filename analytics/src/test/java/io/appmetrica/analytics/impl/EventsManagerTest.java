@@ -324,7 +324,8 @@ public class EventsManagerTest extends CommonTest {
             InternalEvents.EVENT_TYPE_SEND_ECOMMERCE_EVENT,
             InternalEvents.EVENT_TYPE_WEBVIEW_SYNC,
             InternalEvents.EVENT_TYPE_SET_SESSION_EXTRA,
-            InternalEvents.EVENT_CLIENT_EXTERNAL_ATTRIBUTION
+            InternalEvents.EVENT_CLIENT_EXTERNAL_ATTRIBUTION,
+            InternalEvents.EVENT_TYPE_ANR
         );
         assertThat(InternalEvents.values()).filteredOn(new Predicate<InternalEvents>() {
             @Override
@@ -349,46 +350,41 @@ public class EventsManagerTest extends CommonTest {
             InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_PROTOBUF,
             InternalEvents.EVENT_TYPE_EXCEPTION_USER_PROTOBUF,
             InternalEvents.EVENT_TYPE_EXCEPTION_USER_CUSTOM_PROTOBUF,
-            InternalEvents.EVENT_TYPE_PREV_SESSION_NATIVE_CRASH_PROTOBUF,
             InternalEvents.EVENT_TYPE_CURRENT_SESSION_NATIVE_CRASH_PROTOBUF,
+            InternalEvents.EVENT_TYPE_PREV_SESSION_NATIVE_CRASH_PROTOBUF,
             InternalEvents.EVENT_TYPE_REGULAR,
-            InternalEvents.EVENT_CLIENT_EXTERNAL_ATTRIBUTION
-        );
-
-        assertThat(InternalEvents.values()).filteredOn(new Predicate<InternalEvents>() {
-            @Override
-            public boolean test(InternalEvents internalEvents) {
-                return !EventsManager.isPublicForLogs(internalEvents.getTypeId());
-            }
-        }).containsOnly(
-            InternalEvents.EVENT_TYPE_UNDEFINED,
-            InternalEvents.EVENT_TYPE_INIT,
-            InternalEvents.EVENT_TYPE_UPDATE_FOREGROUND_TIME,
-            InternalEvents.EVENT_TYPE_ALIVE,
-            InternalEvents.EVENT_TYPE_SEND_USER_PROFILE,
-            InternalEvents.EVENT_TYPE_SET_USER_PROFILE_ID,
+            InternalEvents.EVENT_CLIENT_EXTERNAL_ATTRIBUTION,
+            InternalEvents.EVENT_TYPE_SEND_ECOMMERCE_EVENT,
             InternalEvents.EVENT_TYPE_SEND_REVENUE_EVENT,
             InternalEvents.EVENT_TYPE_SEND_AD_REVENUE_EVENT,
             InternalEvents.EVENT_TYPE_PURGE_BUFFER,
-            InternalEvents.EVENT_TYPE_STARTUP,
+            InternalEvents.EVENT_TYPE_INIT,
+            InternalEvents.EVENT_TYPE_SEND_USER_PROFILE,
+            InternalEvents.EVENT_TYPE_SET_USER_PROFILE_ID,
             InternalEvents.EVENT_TYPE_SEND_REFERRER,
-            InternalEvents.EVENT_TYPE_REQUEST_REFERRER,
             InternalEvents.EVENT_TYPE_APP_ENVIRONMENT_UPDATED,
             InternalEvents.EVENT_TYPE_APP_ENVIRONMENT_CLEARED,
-            InternalEvents.EVENT_TYPE_ANR,
-            InternalEvents.EVENT_TYPE_ACTIVATION,
             InternalEvents.EVENT_TYPE_FIRST_ACTIVATION,
             InternalEvents.EVENT_TYPE_START,
-            InternalEvents.EVENT_TYPE_CUSTOM_EVENT,
             InternalEvents.EVENT_TYPE_APP_OPEN,
             InternalEvents.EVENT_TYPE_APP_UPDATE,
+            InternalEvents.EVENT_TYPE_ANR
+        );
+
+        assertThat(InternalEvents.values()).filteredOn(internalEvents -> !EventsManager.isPublicForLogs(internalEvents.getTypeId())).containsOnly(
+            InternalEvents.EVENT_TYPE_UNDEFINED,
+            InternalEvents.EVENT_TYPE_UPDATE_FOREGROUND_TIME,
+            InternalEvents.EVENT_TYPE_STARTUP,
+            InternalEvents.EVENT_TYPE_REQUEST_REFERRER,
+            InternalEvents.EVENT_TYPE_CUSTOM_EVENT,
             InternalEvents.EVENT_TYPE_PERMISSIONS,
             InternalEvents.EVENT_TYPE_APP_FEATURES,
             InternalEvents.EVENT_TYPE_UPDATE_PRE_ACTIVATION_CONFIG,
             InternalEvents.EVENT_TYPE_CLEANUP,
-            InternalEvents.EVENT_TYPE_SEND_ECOMMERCE_EVENT,
             InternalEvents.EVENT_TYPE_WEBVIEW_SYNC,
-            InternalEvents.EVENT_TYPE_SET_SESSION_EXTRA
+            InternalEvents.EVENT_TYPE_SET_SESSION_EXTRA,
+            InternalEvents.EVENT_TYPE_ALIVE,
+            InternalEvents.EVENT_TYPE_ACTIVATION
         );
     }
 

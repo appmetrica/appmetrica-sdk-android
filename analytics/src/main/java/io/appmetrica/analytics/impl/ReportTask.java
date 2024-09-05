@@ -429,7 +429,7 @@ public class ReportTask implements UnderlyingNetworkTask {
         for (int i = 0; i < mMessageToSend.sessions.size(); i++) {
             for (Session.Event event : mMessageToSend.sessions.get(i).events) {
                 if (event != null) {
-                    String log = PublicLogConstructor.constructEventLog(event, "Event sent");
+                    String log = PublicLogConstructor.constructEventLogForProtoEvent(event, "Event sent");
                     if (log != null) {
                         mPublicLogger.info(log);
                     }

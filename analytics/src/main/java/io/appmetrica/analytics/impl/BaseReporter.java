@@ -8,6 +8,7 @@ import io.appmetrica.analytics.AdRevenue;
 import io.appmetrica.analytics.ModuleEvent;
 import io.appmetrica.analytics.Revenue;
 import io.appmetrica.analytics.coreutils.internal.WrapUtils;
+import io.appmetrica.analytics.coreutils.internal.logger.LoggerStorage;
 import io.appmetrica.analytics.ecommerce.ECommerceEvent;
 import io.appmetrica.analytics.impl.crash.AppMetricaThrowable;
 import io.appmetrica.analytics.impl.crash.PluginErrorDetailsConverter;
@@ -30,15 +31,14 @@ import io.appmetrica.analytics.impl.revenue.ad.AdRevenueWrapper;
 import io.appmetrica.analytics.impl.startup.StartupIdentifiersProvider;
 import io.appmetrica.analytics.impl.utils.BooleanUtils;
 import io.appmetrica.analytics.impl.utils.JsonHelper;
-import io.appmetrica.analytics.coreutils.internal.logger.LoggerStorage;
 import io.appmetrica.analytics.impl.utils.PluginErrorDetailsExtensionKt;
 import io.appmetrica.analytics.impl.utils.ProcessDetector;
-import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.impl.utils.limitation.SimpleMapLimitation;
 import io.appmetrica.analytics.impl.utils.validation.ValidationResult;
 import io.appmetrica.analytics.impl.utils.validation.Validator;
 import io.appmetrica.analytics.impl.utils.validation.revenue.RevenueValidator;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.plugins.IPluginReporter;
 import io.appmetrica.analytics.plugins.PluginErrorDetails;
 import io.appmetrica.analytics.profile.UserProfile;
@@ -154,6 +154,7 @@ public abstract class BaseReporter implements IBaseReporter {
         if (TextUtils.isEmpty(key)) {
             mPublicLogger.warning("Invalid Error Environment (key,value) pair: (%s,%s).", key, value);
         } else {
+            mPublicLogger.info("Put error environment pair <%s, %s>", key, value);
             mReporterEnvironment.putErrorEnvironmentValue(key, value);
         }
     }
@@ -179,12 +180,14 @@ public abstract class BaseReporter implements IBaseReporter {
         if (TextUtils.isEmpty(key)) {
             mPublicLogger.warning("Invalid App Environment (key,value) pair: (%s,%s).", key, value);
         } else {
+            mPublicLogger.info("Put app environment: <%s, %s>", key, value);
             mReportsHandler.sendAppEnvironmentValue(key, value, mReporterEnvironment);
         }
     }
 
     @Override
     public void clearAppEnvironment() {
+        mPublicLogger.info("Clear app environment");
         mReportsHandler.sendClearAppEnvironment(mReporterEnvironment);
     }
 
@@ -373,6 +376,7 @@ public abstract class BaseReporter implements IBaseReporter {
 
     @Override
     public void sendEventsBuffer() {
+        mPublicLogger.info("Send event buffer");
         DebugLogger.INSTANCE.info(
             TAG,
             "Send event buffer for %s.",
@@ -509,6 +513,7 @@ public abstract class BaseReporter implements IBaseReporter {
     @Override
     public void setDataSendingEnabled(boolean value) {
         mReporterEnvironment.getReporterConfiguration().setDataSendingEnabled(value);
+        mPublicLogger.info("Updated data sending enabled: %s", value);
     }
 
     @Override
@@ -521,6 +526,7 @@ public abstract class BaseReporter implements IBaseReporter {
             ),
             mReporterEnvironment
         );
+        mPublicLogger.info("Received ANR");
     }
 
     @Override

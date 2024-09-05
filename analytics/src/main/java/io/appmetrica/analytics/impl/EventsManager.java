@@ -6,7 +6,6 @@ import androidx.annotation.Nullable;
 import io.appmetrica.analytics.coreutils.internal.StringUtils;
 import io.appmetrica.analytics.coreutils.internal.collection.CollectionUtils;
 import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoWrapper;
-import io.appmetrica.analytics.impl.protobuf.backend.EventProto;
 import io.appmetrica.analytics.impl.utils.JsonHelper;
 import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import java.util.Arrays;
@@ -58,15 +57,29 @@ public final class EventsManager {
         InternalEvents.EVENT_TYPE_CURRENT_SESSION_NATIVE_CRASH_PROTOBUF,
         InternalEvents.EVENT_TYPE_PREV_SESSION_NATIVE_CRASH_PROTOBUF,
         InternalEvents.EVENT_TYPE_REGULAR,
-        InternalEvents.EVENT_CLIENT_EXTERNAL_ATTRIBUTION
-    );
-    private static final List<Integer> EVENTS_SUITABLE_FOR_LOGS = Arrays.asList(
-        EventProto.ReportMessage.Session.Event.EVENT_CRASH,
-        EventProto.ReportMessage.Session.Event.EVENT_ERROR,
-        EventProto.ReportMessage.Session.Event.EVENT_CLIENT
+        InternalEvents.EVENT_CLIENT_EXTERNAL_ATTRIBUTION,
+        InternalEvents.EVENT_TYPE_SEND_ECOMMERCE_EVENT,
+        InternalEvents.EVENT_TYPE_SEND_REVENUE_EVENT,
+        InternalEvents.EVENT_TYPE_SEND_AD_REVENUE_EVENT,
+        InternalEvents.EVENT_TYPE_PURGE_BUFFER,
+        InternalEvents.EVENT_TYPE_INIT,
+        InternalEvents.EVENT_TYPE_SEND_USER_PROFILE,
+        InternalEvents.EVENT_TYPE_SET_USER_PROFILE_ID,
+        InternalEvents.EVENT_TYPE_SEND_REFERRER,
+        InternalEvents.EVENT_TYPE_APP_ENVIRONMENT_UPDATED,
+        InternalEvents.EVENT_TYPE_APP_ENVIRONMENT_CLEARED,
+        InternalEvents.EVENT_TYPE_FIRST_ACTIVATION,
+        InternalEvents.EVENT_TYPE_START,
+        InternalEvents.EVENT_TYPE_APP_OPEN,
+        InternalEvents.EVENT_TYPE_APP_UPDATE,
+        InternalEvents.EVENT_TYPE_ANR
     );
 
     private static final EnumSet<InternalEvents> LOG_EVENT_VALUE = EnumSet.of(InternalEvents.EVENT_TYPE_REGULAR);
+
+    private static final EnumSet<InternalEvents> LOG_EVENT_NAME = EnumSet.of(
+        InternalEvents.EVENT_TYPE_REGULAR
+    );
 
     private static final EnumSet<InternalEvents> EVENTS_WITHOUT_GLOBAL_NUMBER = EnumSet.of(
         InternalEvents.EVENT_TYPE_PREV_SESSION_NATIVE_CRASH_PROTOBUF
@@ -119,8 +132,12 @@ public final class EventsManager {
         return PUBLIC_FOR_LOGS.contains(InternalEvents.valueOf(event));
     }
 
-    public static boolean shouldLogValue(int event) {
-        return LOG_EVENT_VALUE.contains(InternalEvents.valueOf(event));
+    public static boolean shouldLogName(InternalEvents eventType) {
+        return LOG_EVENT_NAME.contains(eventType);
+    }
+
+    public static boolean shouldLogValue(InternalEvents event) {
+        return LOG_EVENT_VALUE.contains(event);
     }
 
     public static boolean shouldGenerateGlobalNumber(int eventType) {
@@ -342,14 +359,5 @@ public final class EventsManager {
             InternalEvents.EVENT_CLIENT_EXTERNAL_ATTRIBUTION.getTypeId(),
             publicLogger
         );
-    }
-
-    public static boolean isSuitableForLogs(EventProto.ReportMessage.Session.Event event) {
-        for (Integer type : EVENTS_SUITABLE_FOR_LOGS) {
-            if (event.type == type) {
-                return true;
-            }
-        }
-        return false;
     }
 }

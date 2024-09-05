@@ -30,6 +30,7 @@ import io.appmetrica.analytics.impl.db.protobuf.converter.DbSessionModelConverte
 import io.appmetrica.analytics.impl.db.session.DbSessionModelFactory;
 import io.appmetrica.analytics.impl.events.EventListener;
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade;
+import io.appmetrica.analytics.impl.utils.PublicLogConstructor;
 import io.appmetrica.analytics.impl.utils.encryption.EncryptedCounterReport;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.util.ArrayList;
@@ -563,15 +564,14 @@ public class DatabaseHelper {
     private void logEvent(final ContentValues reportItem, final String msg) {
         if (EventsManager.isPublicForLogs(getReportTypeFromContentValues(reportItem))) {
             final DbEventModel dbEventModel = new DbEventModelConverter().toModel(reportItem);
-            StringBuilder logMessage = new StringBuilder(msg);
-            logMessage.append(": ");
-            logMessage.append(dbEventModel.getDescription().getName());
-            String value = dbEventModel.getDescription().getValue();
-            if (EventsManager.shouldLogValue(getReportType(reportItem)) && TextUtils.isEmpty(value) == false) {
-                logMessage.append(" with value ");
-                logMessage.append(value);
-            }
-            mComponent.getPublicLogger().info(logMessage.toString());
+            mComponent.getPublicLogger().info(
+                PublicLogConstructor.constructLogValueForInternalEvent(
+                    msg,
+                    dbEventModel.getType(),
+                    dbEventModel.getDescription().getName(),
+                    dbEventModel.getDescription().getValue()
+                )
+            );
         }
     }
 
