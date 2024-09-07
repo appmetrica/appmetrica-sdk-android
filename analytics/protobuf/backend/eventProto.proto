@@ -72,10 +72,8 @@ message ReportMessage {
             enum EventType {
                 EVENT_INIT = 1;
                 EVENT_START = 2;
-                EVENT_CRASH = 3;
                 EVENT_CLIENT = 4;
                 EVENT_REFERRER = 5;
-                EVENT_ERROR = 6;
                 EVENT_ALIVE = 7;
                 // reserved 8 to 12;
                 EVENT_FIRST = 13;

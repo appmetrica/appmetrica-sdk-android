@@ -491,10 +491,8 @@ public interface EventProto {
         // enum EventType
         public static final int EVENT_INIT = 1;
         public static final int EVENT_START = 2;
-        public static final int EVENT_CRASH = 3;
         public static final int EVENT_CLIENT = 4;
         public static final int EVENT_REFERRER = 5;
-        public static final int EVENT_ERROR = 6;
         public static final int EVENT_ALIVE = 7;
         public static final int EVENT_FIRST = 13;
         public static final int EVENT_OPEN = 16;
