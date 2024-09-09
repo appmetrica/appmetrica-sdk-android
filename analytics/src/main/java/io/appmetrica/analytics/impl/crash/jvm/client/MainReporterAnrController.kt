@@ -16,7 +16,7 @@ internal class MainReporterAnrController(
 
     private var anrMonitoringTimeout: Int = DefaultValues.DEFAULT_ANR_TICKS_COUNT
 
-    private val listener = LibraryAnrListener(mainReporterComponents, mainReporterConsumer)
+    private val listener = LibraryAnrListener(mainReporterConsumer)
     private val anrMonitor = ANRMonitor(listener)
 
     @Synchronized

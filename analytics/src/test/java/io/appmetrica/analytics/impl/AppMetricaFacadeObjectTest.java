@@ -24,7 +24,6 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
-import org.mockito.MockedConstruction;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
@@ -58,30 +57,20 @@ public class AppMetricaFacadeObjectTest extends CommonTest {
     public final MockedConstructionRule<ClientMigrationManager> clientMigrationManagerMockedConstructionRule =
         new MockedConstructionRule<>(ClientMigrationManager.class);
 
-    @Rule
-    public final MockedConstructionRule<AppMetricaCoreComponentsProvider> coreComponentsProviderConstructionRule =
-        new MockedConstructionRule<>(
-            AppMetricaCoreComponentsProvider.class,
-            new MockedConstruction.MockInitializer<AppMetricaCoreComponentsProvider>() {
-                @Override
-                public void prepare(AppMetricaCoreComponentsProvider mock,
-                                    MockedConstruction.Context context) throws Throwable {
-                    when(mock.getImpl(mContext, mCore)).thenReturn(mImpl);
-                    when(mock.getCore(mContext, clientExecutorProvider)).thenReturn(mCore);
-                }
-            }
-        );
-    private AppMetricaCoreComponentsProvider coreComponentsProvider;
-
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.openMocks(this);
         mContext = RuntimeEnvironment.getApplication();
+        when(ClientServiceLocator.getInstance().getAppMetricaCoreComponentsProvider().getCore(
+            mContext, clientExecutorProvider
+        )).thenReturn(mCore);
+        when(ClientServiceLocator.getInstance().getAppMetricaCoreComponentsProvider().getImpl(
+            mContext, mCore
+        )).thenReturn(mImpl);
         when(ClientServiceLocator.getInstance().getClientExecutorProvider()).thenReturn(clientExecutorProvider);
         when(clientExecutorProvider.getDefaultExecutor()).thenReturn(executor);
         AppMetricaFacade.killInstance();
         mFacade = new AppMetricaFacade(mContext);
-        coreComponentsProvider = coreComponentsProviderConstructionRule.getConstructionMock().constructed().get(0);
     }
 
     @Test

@@ -44,7 +44,7 @@ internal class MainReporterAnrControllerTest : CommonTest() {
     fun anrListener() {
         assertThat(libraryAnrListenerMockedConstructionRule.constructionMock.constructed()).hasSize(1)
         assertThat(libraryAnrListenerMockedConstructionRule.argumentInterceptor.flatArguments())
-            .containsExactly(mainReporterComponents, mainReporterConsumer)
+            .containsExactly(mainReporterConsumer)
     }
 
     @Test

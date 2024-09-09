@@ -42,7 +42,7 @@ public class AppMetricaFacade implements IReporterFactoryProvider {
     @AnyThread
     public AppMetricaFacade(@NonNull final Context context) {
         mContext = context;
-        coreComponentsProvider = new AppMetricaCoreComponentsProvider();
+        coreComponentsProvider = ClientServiceLocator.getInstance().getAppMetricaCoreComponentsProvider();
         mCore = coreComponentsProvider.getCore(
             context,
             ClientServiceLocator.getInstance().getClientExecutorProvider()
@@ -272,12 +272,12 @@ public class AppMetricaFacade implements IReporterFactoryProvider {
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)
-    public static void setInstance(@Nullable AppMetricaFacade instance) {
+    public static synchronized void setInstance(@Nullable AppMetricaFacade instance) {
         sInstance = instance;
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)
-    public static void killInstance() {
+    public static synchronized void killInstance() {
         sInstance = null;
         sActivated = false;
     }

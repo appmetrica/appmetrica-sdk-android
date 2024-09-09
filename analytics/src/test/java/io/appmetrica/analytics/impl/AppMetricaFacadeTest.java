@@ -2,6 +2,7 @@ package io.appmetrica.analytics.impl;
 
 import android.content.Context;
 import io.appmetrica.analytics.ReporterConfig;
+import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor;
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade;
 import io.appmetrica.analytics.impl.utils.executors.ClientExecutorProvider;
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule;
@@ -13,7 +14,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.MockedConstruction;
 import org.mockito.MockedStatic;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
@@ -37,30 +37,30 @@ public class AppMetricaFacadeTest extends CommonTest {
     private IAppMetricaImpl metricaImpl;
     @Mock
     private IReporterExtended reporterExtended;
+    @Mock
+    private IHandlerExecutor executor;
     @Rule
     public final ClientServiceLocatorRule mClientServiceLocatorRule = new ClientServiceLocatorRule();
-    @Rule
-    public final MockedConstructionRule<AppMetricaCoreComponentsProvider> coreMockedRule =
-            new MockedConstructionRule<>(
-                    AppMetricaCoreComponentsProvider.class,
-                    new MockedConstruction.MockInitializer<AppMetricaCoreComponentsProvider>() {
-                        @Override
-                        public void prepare(AppMetricaCoreComponentsProvider mock,
-                                            MockedConstruction.Context context) throws Throwable {
-                            when(mock.getCore(any(Context.class), any(ClientExecutorProvider.class)))
-                                    .thenReturn(metricaCore);
-                            when(mock.getImpl(any(Context.class), any(IAppMetricaCore.class)))
-                                    .thenReturn(metricaImpl);
-                        }
-                    }
-            );
+
     @Rule
     public final MockedStaticRule<AppMetricaSelfReportFacade> selfReporterFacadeRule =
             new MockedStaticRule<>(AppMetricaSelfReportFacade.class);
 
+    @Rule
+    public final MockedConstructionRule<ClientMigrationManager> clientMigrationManagerMockedConstructionRule =
+        new MockedConstructionRule<>(ClientMigrationManager.class);
+
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
+        when(ClientServiceLocator.getInstance().getAppMetricaCoreComponentsProvider().getCore(
+            any(Context.class),
+            any(ClientExecutorProvider.class)
+            )).thenReturn(metricaCore);
+        when(ClientServiceLocator.getInstance().getAppMetricaCoreComponentsProvider().getImpl(
+            any(Context.class),
+            any(IAppMetricaCore.class)
+        )).thenReturn(metricaImpl);
         when(metricaImpl.getReporter(any(ReporterConfig.class)))
                 .thenReturn(reporterExtended);
         mContext = RuntimeEnvironment.getApplication();

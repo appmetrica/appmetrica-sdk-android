@@ -6,7 +6,6 @@ import android.location.Location;
 import io.appmetrica.analytics.AppMetricaConfig;
 import io.appmetrica.analytics.ExternalAttribution;
 import io.appmetrica.analytics.ValidationException;
-import io.appmetrica.analytics.impl.crash.jvm.client.LibraryAnrDetector;
 import io.appmetrica.analytics.impl.crash.jvm.client.UnhandledException;
 import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoWrapper;
 import io.appmetrica.analytics.impl.reporter.ReporterLifecycleListener;
@@ -51,8 +50,6 @@ public class MainReporterTest extends BaseReporterTest {
     private IReporterExtended mAppmetricaReporter;
     @Mock
     private IReporterExtended mPushReporter;
-    @Mock
-    private LibraryAnrDetector mLibraryAnrDetector;
     @Mock
     private UnhandledSituationReporterProvider mAppmetricaReporterProvider;
     @Mock

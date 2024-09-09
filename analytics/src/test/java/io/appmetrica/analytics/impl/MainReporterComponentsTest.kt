@@ -5,7 +5,6 @@ import io.appmetrica.analytics.AppMetricaConfig
 import io.appmetrica.analytics.PreloadInfo
 import io.appmetrica.analytics.impl.client.ProcessConfiguration
 import io.appmetrica.analytics.impl.crash.PluginErrorDetailsConverter
-import io.appmetrica.analytics.impl.crash.jvm.client.LibraryAnrDetector
 import io.appmetrica.analytics.impl.crash.jvm.converter.AnrConverter
 import io.appmetrica.analytics.impl.crash.jvm.converter.CustomErrorConverter
 import io.appmetrica.analytics.impl.crash.jvm.converter.RegularErrorConverter
@@ -59,9 +58,6 @@ internal class MainReporterComponentsTest : CommonTest() {
     val appStatusMonitorMockedConstructionRule = constructionRule<AppStatusMonitor>()
 
     @get:Rule
-    val libraryAnrDetectorMockedConstructionRule = constructionRule<LibraryAnrDetector>()
-
-    @get:Rule
     val clientServiceLocatorRule = ClientServiceLocatorRule()
 
     @get:Rule
@@ -89,24 +85,6 @@ internal class MainReporterComponentsTest : CommonTest() {
 
     private val mainReporterComponents: MainReporterComponents by setUp {
         MainReporterComponents(context, reporterFactoryProvider, processConfiguration, reportsHandler, startupHelper)
-    }
-
-    @Test
-    fun selfSdkCrashReporterProvider() {
-        assertThat(unhandledSituationReporterProviderMockedConstructionRule.constructionMock.constructed()).hasSize(2)
-        assertThat(mainReporterComponents.selfSdkCrashReporterProvider)
-            .isEqualTo(unhandledSituationReporterProviderMockedConstructionRule.constructionMock.constructed().first())
-        assertThat(unhandledSituationReporterProviderMockedConstructionRule.argumentInterceptor.arguments.first())
-            .containsExactly(reporterFactoryProvider, SdkData.SDK_API_KEY_UUID)
-    }
-
-    @Test
-    fun pushSdkCrashReporterProvider() {
-        assertThat(unhandledSituationReporterProviderMockedConstructionRule.constructionMock.constructed()).hasSize(2)
-        assertThat(mainReporterComponents.pushSdkCrashReporterProvider)
-            .isEqualTo(unhandledSituationReporterProviderMockedConstructionRule.constructionMock.constructed()[1])
-        assertThat(unhandledSituationReporterProviderMockedConstructionRule.argumentInterceptor.arguments[1])
-            .containsExactly(reporterFactoryProvider, SdkData.SDK_API_KEY_PUSH_SDK)
     }
 
     @Test
@@ -148,14 +126,6 @@ internal class MainReporterComponentsTest : CommonTest() {
             .isEqualTo(appStatusMonitorMockedConstructionRule.constructionMock.constructed().first())
         assertThat(appStatusMonitorMockedConstructionRule.constructionMock.constructed()).hasSize(1)
         assertThat(appStatusMonitorMockedConstructionRule.argumentInterceptor.flatArguments()).isEmpty()
-    }
-
-    @Test
-    fun libraryAnrDetector() {
-        assertThat(mainReporterComponents.libraryAnrDetector)
-            .isEqualTo(libraryAnrDetectorMockedConstructionRule.constructionMock.constructed().first())
-        assertThat(libraryAnrDetectorMockedConstructionRule.constructionMock.constructed()).hasSize(1)
-        assertThat(libraryAnrDetectorMockedConstructionRule.argumentInterceptor.flatArguments()).isEmpty()
     }
 
     @Test

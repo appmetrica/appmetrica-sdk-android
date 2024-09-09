@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Handler;
 import io.appmetrica.analytics.impl.ActivityAppearedListener;
 import io.appmetrica.analytics.impl.ActivityLifecycleManager;
+import io.appmetrica.analytics.impl.AppMetricaCoreComponentsProvider;
 import io.appmetrica.analytics.impl.AppMetricaServiceDelayHandler;
 import io.appmetrica.analytics.impl.ClientServiceLocator;
 import io.appmetrica.analytics.impl.ContextAppearedListener;
@@ -45,6 +46,7 @@ public class ClientServiceLocatorRule extends ExternalResource {
     public ModuleEntryPointsRegister moduleEntryPointsRegister;
     public PreferencesClientDbStorage preferencesClientDbStorage;
     public AppMetricaFacadeProvider appMetricaFacadeProvider;
+    public AppMetricaCoreComponentsProvider appMetricaCoreComponentsProvider;
     public ClientServiceLocator instance;
 
     @Override
@@ -67,6 +69,7 @@ public class ClientServiceLocatorRule extends ExternalResource {
         moduleEntryPointsRegister = mock(ModuleEntryPointsRegister.class);
         preferencesClientDbStorage = mock(PreferencesClientDbStorage.class);
         appMetricaFacadeProvider = mock(AppMetricaFacadeProvider.class);
+        appMetricaCoreComponentsProvider = mock(AppMetricaCoreComponentsProvider.class);
         when(instance.getClientExecutorProvider()).thenReturn(clientExecutorProvider);
         when(instance.getDefaultOneShotConfig()).thenReturn(mDefaultOneShotMetricaConfig);
         when(instance.getMainProcessDetector()).thenReturn(mainProcessDetector);
@@ -84,6 +87,7 @@ public class ClientServiceLocatorRule extends ExternalResource {
         when(instance.getModuleEntryPointsRegister()).thenReturn(moduleEntryPointsRegister);
         when(instance.getPreferencesClientDbStorage(any())).thenReturn(preferencesClientDbStorage);
         when(instance.getAppMetricaFacadeProvider()).thenReturn(appMetricaFacadeProvider);
+        when(instance.getAppMetricaCoreComponentsProvider()).thenReturn(appMetricaCoreComponentsProvider);
         when(clientExecutorProvider.getDefaultExecutor()).thenReturn(new StubbedBlockingExecutor());
         when(clientExecutorProvider.getReportSenderExecutor()).thenReturn(new StubbedBlockingExecutor());
         Handler mainHandler = TestUtils.createBlockingExecutionHandlerStub();

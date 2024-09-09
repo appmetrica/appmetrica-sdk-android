@@ -16,7 +16,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
-import org.mockito.MockedConstruction;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
 
@@ -35,38 +34,34 @@ public class AppMetricaFacadeStaticSettersTest extends CommonTest {
     @Mock
     private AppMetricaCore core;
     @Mock
-    private AppMetricaImpl mImpl;
+    private AppMetricaImpl impl;
     @Mock
     private IReporterExtended someReporter;
     @Mock
     private IHandlerExecutor executor;
 
-    private Context mContext;
+    private Context context;
 
     @Rule
-    public final ClientServiceLocatorRule mClientServiceLocatorRule = new ClientServiceLocatorRule();
+    public final ClientServiceLocatorRule clientServiceLocatorRule = new ClientServiceLocatorRule();
 
     @Rule
-    public final MockedConstructionRule<AppMetricaCoreComponentsProvider> mockedCoreProvider =
-            new MockedConstructionRule<>(AppMetricaCoreComponentsProvider.class, new MockedConstruction.MockInitializer<AppMetricaCoreComponentsProvider>() {
-
-                @Override
-                public void prepare(AppMetricaCoreComponentsProvider mock, MockedConstruction.Context context) {
-                    if (context.arguments().isEmpty()) {
-                        when(mock.getCore(same(mContext), any(ClientExecutorProvider.class)))
-                                .thenReturn(core);
-                        when(mock.getImpl(mContext, core)).thenReturn(mImpl);
-                    }
-                }
-            });
+    public MockedConstructionRule<ClientMigrationManager> clientMigrationManagerMockedConstructionRule =
+        new MockedConstructionRule<>(ClientMigrationManager.class);
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.openMocks(this);
-        mContext = TestUtils.createMockedContext();
+        context = TestUtils.createMockedContext();
         AppMetricaFacade.killInstance();
+        when(ClientServiceLocator.getInstance().getAppMetricaCoreComponentsProvider().getCore(
+            same(context), any(ClientExecutorProvider.class)
+        )).thenReturn(core);
+        when(ClientServiceLocator.getInstance().getAppMetricaCoreComponentsProvider().getImpl(
+            context, core
+        )).thenReturn(impl);
         when(ClientServiceLocator.getInstance().getClientExecutorProvider().getDefaultExecutor()).thenReturn(executor);
-        doReturn(someReporter).when(mImpl).getReporter(ArgumentMatchers.<ReporterConfig>any());
+        doReturn(someReporter).when(impl).getReporter(ArgumentMatchers.<ReporterConfig>any());
     }
 
     @Test
@@ -74,7 +69,7 @@ public class AppMetricaFacadeStaticSettersTest extends CommonTest {
         Location location = mock(Location.class);
         setUpNoInstance();
         AppMetricaFacade.setLocation(location);
-        verify(mClientServiceLocatorRule.mDefaultOneShotMetricaConfig).setLocation(location);
+        verify(clientServiceLocatorRule.mDefaultOneShotMetricaConfig).setLocation(location);
     }
 
     @Test
@@ -82,7 +77,7 @@ public class AppMetricaFacadeStaticSettersTest extends CommonTest {
         Location location = mock(Location.class);
         setUpFutureNotDone();
         AppMetricaFacade.setLocation(location);
-        verify(mClientServiceLocatorRule.mDefaultOneShotMetricaConfig).setLocation(location);
+        verify(clientServiceLocatorRule.mDefaultOneShotMetricaConfig).setLocation(location);
     }
 
     @Test
@@ -90,7 +85,7 @@ public class AppMetricaFacadeStaticSettersTest extends CommonTest {
         Location location = mock(Location.class);
         setUpNoMainReporter();
         AppMetricaFacade.setLocation(location);
-        verify(mClientServiceLocatorRule.mDefaultOneShotMetricaConfig).setLocation(location);
+        verify(clientServiceLocatorRule.mDefaultOneShotMetricaConfig).setLocation(location);
     }
 
     @Test
@@ -98,7 +93,7 @@ public class AppMetricaFacadeStaticSettersTest extends CommonTest {
         Location location = mock(Location.class);
         setUpInitialized();
         AppMetricaFacade.setLocation(location);
-        verify(mImpl).setLocation(location);
+        verify(impl).setLocation(location);
     }
 
     @Test
@@ -106,7 +101,7 @@ public class AppMetricaFacadeStaticSettersTest extends CommonTest {
         boolean value = new Random().nextBoolean();
         setUpNoInstance();
         AppMetricaFacade.setLocationTracking(value);
-        verify(mClientServiceLocatorRule.mDefaultOneShotMetricaConfig).setLocationTracking(value);
+        verify(clientServiceLocatorRule.mDefaultOneShotMetricaConfig).setLocationTracking(value);
     }
 
     @Test
@@ -114,7 +109,7 @@ public class AppMetricaFacadeStaticSettersTest extends CommonTest {
         boolean value = new Random().nextBoolean();
         setUpFutureNotDone();
         AppMetricaFacade.setLocationTracking(value);
-        verify(mClientServiceLocatorRule.mDefaultOneShotMetricaConfig).setLocationTracking(value);
+        verify(clientServiceLocatorRule.mDefaultOneShotMetricaConfig).setLocationTracking(value);
     }
 
     @Test
@@ -122,7 +117,7 @@ public class AppMetricaFacadeStaticSettersTest extends CommonTest {
         boolean value = new Random().nextBoolean();
         setUpNoMainReporter();
         AppMetricaFacade.setLocationTracking(value);
-        verify(mClientServiceLocatorRule.mDefaultOneShotMetricaConfig).setLocationTracking(value);
+        verify(clientServiceLocatorRule.mDefaultOneShotMetricaConfig).setLocationTracking(value);
     }
 
     @Test
@@ -130,7 +125,7 @@ public class AppMetricaFacadeStaticSettersTest extends CommonTest {
         boolean value = new Random().nextBoolean();
         setUpInitialized();
         AppMetricaFacade.setLocationTracking(value);
-        verify(mImpl).setLocationTracking(value);
+        verify(impl).setLocationTracking(value);
     }
 
     @Test
@@ -138,7 +133,7 @@ public class AppMetricaFacadeStaticSettersTest extends CommonTest {
         boolean value = new Random().nextBoolean();
         setUpNoInstance();
         AppMetricaFacade.setDataSendingEnabled(value);
-        verify(mClientServiceLocatorRule.mDefaultOneShotMetricaConfig).setDataSendingEnabled(value);
+        verify(clientServiceLocatorRule.mDefaultOneShotMetricaConfig).setDataSendingEnabled(value);
     }
 
     @Test
@@ -146,7 +141,7 @@ public class AppMetricaFacadeStaticSettersTest extends CommonTest {
         boolean value = new Random().nextBoolean();
         setUpFutureNotDone();
         AppMetricaFacade.setDataSendingEnabled(value);
-        verify(mClientServiceLocatorRule.mDefaultOneShotMetricaConfig).setDataSendingEnabled(value);
+        verify(clientServiceLocatorRule.mDefaultOneShotMetricaConfig).setDataSendingEnabled(value);
     }
 
     @Test
@@ -154,7 +149,7 @@ public class AppMetricaFacadeStaticSettersTest extends CommonTest {
         boolean value = new Random().nextBoolean();
         setUpNoMainReporter();
         AppMetricaFacade.setDataSendingEnabled(value);
-        verify(mClientServiceLocatorRule.mDefaultOneShotMetricaConfig).setDataSendingEnabled(value);
+        verify(clientServiceLocatorRule.mDefaultOneShotMetricaConfig).setDataSendingEnabled(value);
     }
 
     @Test
@@ -162,7 +157,7 @@ public class AppMetricaFacadeStaticSettersTest extends CommonTest {
         boolean value = new Random().nextBoolean();
         setUpInitialized();
         AppMetricaFacade.setDataSendingEnabled(value);
-        verify(mImpl).setDataSendingEnabled(value);
+        verify(impl).setDataSendingEnabled(value);
     }
 
     @Test
@@ -171,7 +166,7 @@ public class AppMetricaFacadeStaticSettersTest extends CommonTest {
         final String value = "value";
         setUpNoInstance();
         AppMetricaFacade.putErrorEnvironmentValue(key, value);
-        verify(mClientServiceLocatorRule.mDefaultOneShotMetricaConfig).putErrorEnvironmentValue(key, value);
+        verify(clientServiceLocatorRule.mDefaultOneShotMetricaConfig).putErrorEnvironmentValue(key, value);
     }
 
     @Test
@@ -180,7 +175,7 @@ public class AppMetricaFacadeStaticSettersTest extends CommonTest {
         final String value = "value";
         setUpFutureNotDone();
         AppMetricaFacade.putErrorEnvironmentValue(key, value);
-        verify(mClientServiceLocatorRule.mDefaultOneShotMetricaConfig).putErrorEnvironmentValue(key, value);
+        verify(clientServiceLocatorRule.mDefaultOneShotMetricaConfig).putErrorEnvironmentValue(key, value);
     }
 
     @Test
@@ -189,7 +184,7 @@ public class AppMetricaFacadeStaticSettersTest extends CommonTest {
         final String value = "value";
         setUpNoMainReporter();
         AppMetricaFacade.putErrorEnvironmentValue(key, value);
-        verify(mClientServiceLocatorRule.mDefaultOneShotMetricaConfig).putErrorEnvironmentValue(key, value);
+        verify(clientServiceLocatorRule.mDefaultOneShotMetricaConfig).putErrorEnvironmentValue(key, value);
     }
 
     @Test
@@ -198,7 +193,7 @@ public class AppMetricaFacadeStaticSettersTest extends CommonTest {
         final String value = "value";
         setUpInitialized();
         AppMetricaFacade.putErrorEnvironmentValue(key, value);
-        verify(mImpl).putErrorEnvironmentValue(key, value);
+        verify(impl).putErrorEnvironmentValue(key, value);
     }
 
     @Test
@@ -207,7 +202,7 @@ public class AppMetricaFacadeStaticSettersTest extends CommonTest {
         final String value = "value";
         setUpNoInstance();
         AppMetricaFacade.putAppEnvironmentValue(key, value);
-        verify(mClientServiceLocatorRule.mDefaultOneShotMetricaConfig).putAppEnvironmentValue(key, value);
+        verify(clientServiceLocatorRule.mDefaultOneShotMetricaConfig).putAppEnvironmentValue(key, value);
     }
 
     @Test
@@ -216,7 +211,7 @@ public class AppMetricaFacadeStaticSettersTest extends CommonTest {
         final String value = "value";
         setUpFutureNotDone();
         AppMetricaFacade.putAppEnvironmentValue(key, value);
-        verify(mClientServiceLocatorRule.mDefaultOneShotMetricaConfig).putAppEnvironmentValue(key, value);
+        verify(clientServiceLocatorRule.mDefaultOneShotMetricaConfig).putAppEnvironmentValue(key, value);
     }
 
     @Test
@@ -225,7 +220,7 @@ public class AppMetricaFacadeStaticSettersTest extends CommonTest {
         final String value = "value";
         setUpNoMainReporter();
         AppMetricaFacade.putAppEnvironmentValue(key, value);
-        verify(mClientServiceLocatorRule.mDefaultOneShotMetricaConfig).putAppEnvironmentValue(key, value);
+        verify(clientServiceLocatorRule.mDefaultOneShotMetricaConfig).putAppEnvironmentValue(key, value);
     }
 
     @Test
@@ -234,35 +229,35 @@ public class AppMetricaFacadeStaticSettersTest extends CommonTest {
         final String value = "value";
         setUpInitialized();
         AppMetricaFacade.putAppEnvironmentValue(key, value);
-        verify(mImpl).putAppEnvironmentValue(key, value);
+        verify(impl).putAppEnvironmentValue(key, value);
     }
 
     @Test
     public void clearAppEnvironmentNoInstance() {
         setUpNoInstance();
         AppMetricaFacade.clearAppEnvironment();
-        verify(mClientServiceLocatorRule.mDefaultOneShotMetricaConfig).clearAppEnvironment();
+        verify(clientServiceLocatorRule.mDefaultOneShotMetricaConfig).clearAppEnvironment();
     }
 
     @Test
     public void clearAppEnvironmentFutureNotDone() {
         setUpFutureNotDone();
         AppMetricaFacade.clearAppEnvironment();
-        verify(mClientServiceLocatorRule.mDefaultOneShotMetricaConfig).clearAppEnvironment();
+        verify(clientServiceLocatorRule.mDefaultOneShotMetricaConfig).clearAppEnvironment();
     }
 
     @Test
     public void clearAppEnvironmentNoMainReporter() {
         setUpNoMainReporter();
         AppMetricaFacade.clearAppEnvironment();
-        verify(mClientServiceLocatorRule.mDefaultOneShotMetricaConfig).clearAppEnvironment();
+        verify(clientServiceLocatorRule.mDefaultOneShotMetricaConfig).clearAppEnvironment();
     }
 
     @Test
     public void clearAppEnvironmentInitialized() {
         setUpInitialized();
         AppMetricaFacade.clearAppEnvironment();
-        verify(mImpl).clearAppEnvironment();
+        verify(impl).clearAppEnvironment();
     }
 
     @Test
@@ -270,7 +265,7 @@ public class AppMetricaFacadeStaticSettersTest extends CommonTest {
         String userProfileID = "user_profile_id";
         setUpNoInstance();
         AppMetricaFacade.setUserProfileID(userProfileID);
-        verify(mClientServiceLocatorRule.mDefaultOneShotMetricaConfig).setUserProfileID(userProfileID);
+        verify(clientServiceLocatorRule.mDefaultOneShotMetricaConfig).setUserProfileID(userProfileID);
     }
 
     @Test
@@ -278,7 +273,7 @@ public class AppMetricaFacadeStaticSettersTest extends CommonTest {
         String userProfileID = "user_profile_id";
         setUpFutureNotDone();
         AppMetricaFacade.setUserProfileID(userProfileID);
-        verify(mClientServiceLocatorRule.mDefaultOneShotMetricaConfig).setUserProfileID(userProfileID);
+        verify(clientServiceLocatorRule.mDefaultOneShotMetricaConfig).setUserProfileID(userProfileID);
     }
 
     @Test
@@ -286,7 +281,7 @@ public class AppMetricaFacadeStaticSettersTest extends CommonTest {
         String userProfileID = "user_profile_id";
         setUpNoMainReporter();
         AppMetricaFacade.setUserProfileID(userProfileID);
-        verify(mClientServiceLocatorRule.mDefaultOneShotMetricaConfig).setUserProfileID(userProfileID);
+        verify(clientServiceLocatorRule.mDefaultOneShotMetricaConfig).setUserProfileID(userProfileID);
     }
 
     @Test
@@ -294,7 +289,7 @@ public class AppMetricaFacadeStaticSettersTest extends CommonTest {
         String userProfileID = "user_profile_id";
         setUpInitialized();
         AppMetricaFacade.setUserProfileID(userProfileID);
-        verify(mImpl).setUserProfileID(userProfileID);
+        verify(impl).setUserProfileID(userProfileID);
     }
 
     private void setUpNoInstance() {
@@ -304,16 +299,16 @@ public class AppMetricaFacadeStaticSettersTest extends CommonTest {
     private void setUpFutureNotDone() {
         ClientExecutorProvider clientExecutorProvider = mock(ClientExecutorProvider.class);
         when(clientExecutorProvider.getDefaultExecutor()).thenReturn(mock(IHandlerExecutor.class));
-        when(mClientServiceLocatorRule.instance.getClientExecutorProvider()).thenReturn(clientExecutorProvider);
-        AppMetricaFacade.getInstance(mContext, true);
+        when(clientServiceLocatorRule.instance.getClientExecutorProvider()).thenReturn(clientExecutorProvider);
+        AppMetricaFacade.getInstance(context, true);
     }
 
     private void setUpNoMainReporter() {
-        AppMetricaFacade.getInstance(mContext, false);
+        AppMetricaFacade.getInstance(context, false);
     }
 
     private void setUpInitialized() {
-        when(mImpl.getMainReporterApiConsumerProvider()).thenReturn(mainReporterApiConsumerProvider);
-        AppMetricaFacade.getInstance(mContext, false);
+        when(impl.getMainReporterApiConsumerProvider()).thenReturn(mainReporterApiConsumerProvider);
+        AppMetricaFacade.getInstance(context, false);
     }
 }

@@ -26,24 +26,9 @@ internal class TechnicalCrashProcessorFactoryTest : CommonTest() {
     @get:Rule
     val sdkUtils = MockedStaticRule(SdkUtils::class.java)
 
-    private val sdkCrashProcessor = mock<ICrashProcessor>()
-
-    @get:Rule
-    val sdkCrashProcessorCreatorMockedRule = MockedConstructionRule(
-        SdkCrashProcessorCreator::class.java
-    ) { mock, _ ->
-        whenever(mock.createCrashProcessor(context, reporterFactoryProvider)).thenReturn(sdkCrashProcessor)
-    }
-
-    private val pushCrashProcessor = mock<ICrashProcessor>()
-    @get:Rule
-    val pushCrashProcessorCreatorMockedRule = MockedConstructionRule(
-        PushCrashProcessorCreator::class.java
-    ) { mock, _ ->
-        whenever(mock.createCrashProcessor(context, reporterFactoryProvider)).thenReturn(pushCrashProcessor)
-    }
 
     private val appCrashProcessor = mock<ICrashProcessor>()
+
     @get:Rule
     val appCrashProcessorCreatorMockedRule = MockedConstructionRule(
         ApplicationCrashProcessorCreator::class.java
@@ -63,9 +48,7 @@ internal class TechnicalCrashProcessorFactoryTest : CommonTest() {
 
         assertThat(factory.createCrashProcessors(context, reporterFactoryProvider))
             .containsExactlyInAnyOrder(
-                sdkCrashProcessor,
-                pushCrashProcessor,
-                crashProcessor,
+                crashProcessor
             )
     }
 
@@ -75,8 +58,6 @@ internal class TechnicalCrashProcessorFactoryTest : CommonTest() {
 
         assertThat(factory.createCrashProcessors(context, reporterFactoryProvider))
             .containsExactlyInAnyOrder(
-                sdkCrashProcessor,
-                pushCrashProcessor,
             )
     }
 }

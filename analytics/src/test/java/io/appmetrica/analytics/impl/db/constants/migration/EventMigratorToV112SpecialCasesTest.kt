@@ -3,11 +3,13 @@ package io.appmetrica.analytics.impl.db.constants.migration
 import android.database.Cursor
 import android.database.MatrixCursor
 import android.database.sqlite.SQLiteDatabase
+import io.appmetrica.analytics.coreutils.internal.io.closeSafely
 import io.appmetrica.analytics.impl.db.constants.Constants
 import io.appmetrica.analytics.impl.db.constants.migrations.ComponentDatabaseUpgradeScriptToV112
 import io.appmetrica.analytics.impl.db.protobuf.converter.DbEventModelConverter
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.MockedConstructionRule
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -53,6 +55,11 @@ internal class EventMigratorToV112SpecialCasesTest : CommonTest() {
         eventsMigrator = ComponentDatabaseUpgradeScriptToV112.EventsMigrator()
         dbEventModelConverter = dbEventModelConverterMockedConstructionRule.constructionMock.constructed().first()
         whenever(dbEventModelConverter.fromModel(any())).thenReturn(mock())
+    }
+
+    @After
+    fun tearDown() {
+        cursor.closeSafely()
     }
 
     @Test

@@ -4,7 +4,6 @@ import android.content.Context
 import io.appmetrica.analytics.AppMetricaConfig
 import io.appmetrica.analytics.impl.client.ProcessConfiguration
 import io.appmetrica.analytics.impl.crash.PluginErrorDetailsConverter
-import io.appmetrica.analytics.impl.crash.jvm.client.LibraryAnrDetector
 import io.appmetrica.analytics.impl.crash.jvm.converter.AnrConverter
 import io.appmetrica.analytics.impl.crash.jvm.converter.CustomErrorConverter
 import io.appmetrica.analytics.impl.crash.jvm.converter.RegularErrorConverter
@@ -24,16 +23,6 @@ internal class MainReporterComponents(
     val startupHelper: StartupHelper
 ) {
 
-    val selfSdkCrashReporterProvider = UnhandledSituationReporterProvider(
-        reporterFactoryProvider,
-        SdkData.SDK_API_KEY_UUID
-    )
-
-    val pushSdkCrashReporterProvider = UnhandledSituationReporterProvider(
-        reporterFactoryProvider,
-        SdkData.SDK_API_KEY_PUSH_SDK
-    )
-
     val nativeCrashClient = NativeCrashClient(processConfiguration)
 
     val extraMetaInfoRetriever = ExtraMetaInfoRetriever(context)
@@ -44,8 +33,6 @@ internal class MainReporterComponents(
     )
 
     val appStatusMonitor = AppStatusMonitor()
-
-    val libraryAnrDetector = LibraryAnrDetector()
 
     val processDetector = ClientServiceLocator.getInstance().processDetector
 
