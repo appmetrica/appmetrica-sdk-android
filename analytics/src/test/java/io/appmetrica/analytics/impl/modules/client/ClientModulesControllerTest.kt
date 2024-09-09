@@ -1,14 +1,17 @@
 package io.appmetrica.analytics.impl.modules.client
 
 import android.os.Bundle
+import io.appmetrica.analytics.coreapi.internal.identifiers.SdkIdentifiers
 import io.appmetrica.analytics.impl.IReporterExtended
 import io.appmetrica.analytics.impl.modules.client.context.CoreClientContext
 import io.appmetrica.analytics.impl.modules.client.context.CoreModuleAdRevenueContext
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade
-import io.appmetrica.analytics.modulesapi.internal.client.ClientConfigExtension
-import io.appmetrica.analytics.modulesapi.internal.client.ClientConfigListener
+import io.appmetrica.analytics.modulesapi.internal.client.BundleToServiceConfigConverter
 import io.appmetrica.analytics.modulesapi.internal.client.ModuleClientEntryPoint
+import io.appmetrica.analytics.modulesapi.internal.client.ServiceConfigExtensionConfiguration
+import io.appmetrica.analytics.modulesapi.internal.client.ServiceConfigUpdateListener
 import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.analytics.testutils.constructionRule
 import io.appmetrica.analytics.testutils.on
 import io.appmetrica.analytics.testutils.staticRule
 import org.assertj.core.api.Assertions.assertThat
@@ -29,23 +32,27 @@ import org.robolectric.RobolectricTestRunner
 internal class ClientModulesControllerTest : CommonTest() {
 
     private val firstModuleIdentifier = "firstModuleIdentifier"
-    private val firstClientConfigListener: ClientConfigListener = mock()
-    private val firstClientConfigExtension: ClientConfigExtension = mock {
-        on { clientConfigListener } doReturn firstClientConfigListener
+    private val firstBundleParser: BundleToServiceConfigConverter<Any> = mock()
+    private val firstServiceConfigUpdateListener: ServiceConfigUpdateListener<Any> = mock()
+    private val firstServiceConfigExtensionConfiguration: ServiceConfigExtensionConfiguration<Any> = mock {
+        on { getServiceConfigUpdateListener() } doReturn firstServiceConfigUpdateListener
+        on { getBundleConverter() } doReturn firstBundleParser
     }
     private val firstModule = mock<ModuleClientEntryPoint<Any>> {
         on { identifier } doReturn firstModuleIdentifier
-        on { clientConfigExtension } doReturn firstClientConfigExtension
+        on { serviceConfigExtensionConfiguration } doReturn firstServiceConfigExtensionConfiguration
     }
 
     private val secondModuleIdentifier = "secondModuleIdentifier"
-    private val secondClientConfigListener: ClientConfigListener = mock()
-    private val secondClientConfigExtension: ClientConfigExtension = mock {
-        on { clientConfigListener } doReturn secondClientConfigListener
+    private val secondBundleParser: BundleToServiceConfigConverter<Any> = mock()
+    private val secondServiceConfigUpdateListener: ServiceConfigUpdateListener<Any> = mock()
+    private val secondServiceConfigExtensionConfiguration: ServiceConfigExtensionConfiguration<Any> = mock {
+        on { getServiceConfigUpdateListener() } doReturn secondServiceConfigUpdateListener
+        on { getBundleConverter() } doReturn secondBundleParser
     }
     private val secondModule = mock<ModuleClientEntryPoint<Any>> {
         on { identifier } doReturn secondModuleIdentifier
-        on { clientConfigExtension } doReturn secondClientConfigExtension
+        on { serviceConfigExtensionConfiguration } doReturn secondServiceConfigExtensionConfiguration
     }
 
     private val initException = RuntimeException("initException")
@@ -62,6 +69,8 @@ internal class ClientModulesControllerTest : CommonTest() {
     val selfReporterFacadeMockedStaticRule = staticRule<AppMetricaSelfReportFacade> {
         on { AppMetricaSelfReportFacade.getReporter() } doReturn selfReporter
     }
+    @get:Rule
+    val clientModuleServiceConfigModelFactoryRule = constructionRule<ClientModuleServiceConfigModelFactory>()
 
     private val modulesController: ClientModulesController by setUp { ClientModulesController() }
 
@@ -130,27 +139,36 @@ internal class ClientModulesControllerTest : CommonTest() {
 
     @Test
     fun notifyModulesWithConfig() {
-        val secondBundle = Bundle()
-        val bundle = Bundle().also {
-            it.putBundle(secondModuleIdentifier, secondBundle)
-        }
+        val bundle = Bundle()
+        val identifiers: SdkIdentifiers = mock()
+        whenever(clientModuleServiceConfigModelFactory().createClientModuleServiceConfigModel(
+            bundle,
+            firstModuleIdentifier,
+            identifiers,
+            firstServiceConfigExtensionConfiguration
+        )).thenReturn(null)
+        val secondConfig: ClientModuleServiceConfigModel<Any?> = mock()
+        whenever(clientModuleServiceConfigModelFactory().createClientModuleServiceConfigModel(
+            bundle,
+            secondModuleIdentifier,
+            identifiers,
+            secondServiceConfigExtensionConfiguration
+        )).thenReturn(secondConfig)
+
         modulesController.registerModule(firstModule)
         modulesController.registerModule(secondModule)
 
-        modulesController.notifyModulesWithConfig(bundle)
+        modulesController.notifyModulesWithConfig(bundle, identifiers)
 
-        verify(firstModule.clientConfigExtension!!.clientConfigListener, never()).onConfigReceived(any())
-        verify(secondModule.clientConfigExtension!!.clientConfigListener).onConfigReceived(secondBundle)
+        verify(firstModule.serviceConfigExtensionConfiguration!!.getServiceConfigUpdateListener(), never())
+            .onServiceConfigUpdated(any())
+        verify(secondModule.serviceConfigExtensionConfiguration!!.getServiceConfigUpdateListener())
+            .onServiceConfigUpdated(secondConfig)
     }
 
-    @Test
-    fun doModulesNeedConfig() {
-        whenever(firstModule.clientConfigExtension!!.doesModuleNeedConfig()).thenReturn(false)
-        whenever(secondModule.clientConfigExtension!!.doesModuleNeedConfig()).thenReturn(true)
-
-        modulesController.registerModule(firstModule)
-        modulesController.registerModule(secondModule)
-
-        assertThat(modulesController.doModulesNeedConfig()).isTrue()
+    private fun clientModuleServiceConfigModelFactory(): ClientModuleServiceConfigModelFactory {
+        assertThat(clientModuleServiceConfigModelFactoryRule.constructionMock.constructed()).hasSize(1)
+        assertThat(clientModuleServiceConfigModelFactoryRule.argumentInterceptor.flatArguments()).isEmpty()
+        return clientModuleServiceConfigModelFactoryRule.constructionMock.constructed().first()
     }
 }

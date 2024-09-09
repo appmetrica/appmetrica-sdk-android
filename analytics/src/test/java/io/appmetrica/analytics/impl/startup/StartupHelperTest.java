@@ -43,7 +43,6 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.robolectric.RobolectricTestRunner;
 
-import static com.ibm.icu.impl.locale.KeyTypeData.ValueType.any;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -187,6 +186,7 @@ public class StartupHelperTest extends CommonTest {
     @Test
     public void testSendStartupIfNeededDoesNotProvokeStartup() {
         when(mStartupParams.shouldSendStartup()).thenReturn(false);
+        mStartupHelper.initialStartupSent = true;
         mStartupHelper.setClids(mClientClids);
         mStartupHelper.sendStartupIfNeeded();
         verify(mReportsHandler, never())
@@ -678,8 +678,17 @@ public class StartupHelperTest extends CommonTest {
     }
 
     @Test
+    public void testSendStartupIfNeededShouldIfInitialStartupNotSent() {
+        when(mStartupParams.shouldSendStartup()).thenReturn(false);
+        mStartupHelper.initialStartupSent = false;
+        mStartupHelper.sendStartupIfNeeded();
+        verifyReportingStartupEvent(1);
+    }
+
+    @Test
     public void testSendStartupIfNeededShouldNot() {
         when(mStartupParams.shouldSendStartup()).thenReturn(false);
+        mStartupHelper.initialStartupSent = true;
         mStartupHelper.sendStartupIfNeeded();
         verifyReportingStartupEvent(0);
     }
@@ -687,6 +696,7 @@ public class StartupHelperTest extends CommonTest {
     @Test
     public void testSendStartupIfNeededShould() {
         when(mStartupParams.shouldSendStartup()).thenReturn(true);
+        mStartupHelper.initialStartupSent = true;
         mStartupHelper.sendStartupIfNeeded();
         verifyReportingStartupEvent(1);
     }

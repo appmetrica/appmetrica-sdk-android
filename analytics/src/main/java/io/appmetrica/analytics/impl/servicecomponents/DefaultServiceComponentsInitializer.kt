@@ -8,11 +8,17 @@ import io.appmetrica.analytics.impl.modules.PreferencesBasedModuleEntryPoint
 
 class DefaultServiceComponentsInitializer : ServiceComponentsInitializer {
 
+    // order may be important
+    private val moduleEntryPoints = listOf(
+        "io.appmetrica.analytics.remotepermissions.internal.RemotePermissionsModuleEntryPoint",
+        "io.appmetrica.analytics.apphud.internal.ApphudServiceModuleEntryPoint",
+    )
+
     override fun onCreate(context: Context) {
         GlobalServiceLocator.getInstance().moduleEntryPointsRegister.register(
-            ConstantModuleEntryPointProvider(
-                "io.appmetrica.analytics.remotepermissions.internal.RemotePermissionsModuleEntryPoint"
-            ),
+            *moduleEntryPoints.map { ConstantModuleEntryPointProvider(it) }.toTypedArray()
+        )
+        GlobalServiceLocator.getInstance().moduleEntryPointsRegister.register(
             PreferencesBasedModuleEntryPoint(
                 context,
                 "io.appmetrica.analytics.modules.ads",

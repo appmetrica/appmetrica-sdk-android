@@ -32,13 +32,19 @@ class DefaultServiceComponentInitializerTest : CommonTest() {
 
     @Test
     fun onCreate() {
+        val expectedModules = listOf(
+            "io.appmetrica.analytics.remotepermissions.internal.RemotePermissionsModuleEntryPoint",
+            "io.appmetrica.analytics.apphud.internal.ApphudServiceModuleEntryPoint",
+        )
         serviceComponentsInitializer.onCreate(context)
 
         val moduleEntryPointsRegister = GlobalServiceLocator.getInstance().moduleEntryPointsRegister
 
         inOrder(moduleEntryPointsRegister) {
             verify(moduleEntryPointsRegister).register(
-                ConstantModuleEntryPointProvider("io.appmetrica.analytics.remotepermissions.internal.RemotePermissionsModuleEntryPoint"),
+                *expectedModules.map { ConstantModuleEntryPointProvider(it) }.toTypedArray()
+            )
+            verify(moduleEntryPointsRegister).register(
                 PreferencesBasedModuleEntryPoint(context, "io.appmetrica.analytics.modules.ads", "lsm")
             )
             verifyNoMoreInteractions()

@@ -4,12 +4,13 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import io.appmetrica.analytics.apphud.impl.Constants;
-import io.appmetrica.analytics.apphud.impl.config.ModuleConfig;
-import io.appmetrica.analytics.apphud.impl.config.ModuleConfigConverter;
-import io.appmetrica.analytics.apphud.impl.config.ModuleConfigParser;
-import io.appmetrica.analytics.apphud.impl.config.ModuleConfigToProtoConverter;
+import io.appmetrica.analytics.apphud.impl.config.remote.RemoteApphudConfig;
+import io.appmetrica.analytics.apphud.impl.config.remote.RemoteApphudConfigBundleConverter;
+import io.appmetrica.analytics.apphud.impl.config.remote.RemoteApphudConfigConverter;
+import io.appmetrica.analytics.apphud.impl.config.remote.RemoteApphudConfigParser;
 import io.appmetrica.analytics.coreapi.internal.data.Converter;
 import io.appmetrica.analytics.coreapi.internal.data.JsonParser;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import io.appmetrica.analytics.modulesapi.internal.service.ClientConfigProvider;
 import io.appmetrica.analytics.modulesapi.internal.service.ModuleRemoteConfig;
 import io.appmetrica.analytics.modulesapi.internal.service.ModuleServiceEntryPoint;
@@ -20,21 +21,24 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-public class ApphudServiceModuleEntryPoint extends ModuleServiceEntryPoint<ModuleConfig> {
+public class ApphudServiceModuleEntryPoint extends ModuleServiceEntryPoint<RemoteApphudConfig> {
+
+    private static final String TAG = "[ApphudServiceModuleEntryPoint]";
 
     @Nullable
-    private ModuleRemoteConfig<ModuleConfig> config;
+    private RemoteApphudConfig config;
 
     @NonNull
-    private final ModuleConfigToProtoConverter configToProtoConverter = new ModuleConfigToProtoConverter();
+    private final RemoteApphudConfigBundleConverter bundleConverter = new RemoteApphudConfigBundleConverter();
     @NonNull
-    private final ModuleConfigParser configParser = new ModuleConfigParser(configToProtoConverter);
+    private final RemoteApphudConfigParser configParser = new RemoteApphudConfigParser();
     @NonNull
-    private final ModuleConfigConverter configConverter = new ModuleConfigConverter(configToProtoConverter);
+    private final RemoteApphudConfigConverter configConverter = new RemoteApphudConfigConverter();
     @NonNull
-    private final RemoteConfigUpdateListener<ModuleConfig> configUpdateListener = config -> {
+    private final RemoteConfigUpdateListener<RemoteApphudConfig> configUpdateListener = config -> {
         synchronized(ApphudServiceModuleEntryPoint.this) {
-            ApphudServiceModuleEntryPoint.this.config = config;
+            DebugLogger.INSTANCE.info(TAG, "received config " + config.getFeaturesConfig());
+            ApphudServiceModuleEntryPoint.this.config = config.getFeaturesConfig();
         }
     };
 
@@ -46,23 +50,23 @@ public class ApphudServiceModuleEntryPoint extends ModuleServiceEntryPoint<Modul
 
     @Nullable
     @Override
-    public RemoteConfigExtensionConfiguration<ModuleConfig> getRemoteConfigExtensionConfiguration() {
-        return new RemoteConfigExtensionConfiguration<ModuleConfig>() {
+    public RemoteConfigExtensionConfiguration<RemoteApphudConfig> getRemoteConfigExtensionConfiguration() {
+        return new RemoteConfigExtensionConfiguration<RemoteApphudConfig>() {
             @NonNull
             @Override
-            public RemoteConfigUpdateListener<ModuleConfig> getRemoteConfigUpdateListener() {
+            public RemoteConfigUpdateListener<RemoteApphudConfig> getRemoteConfigUpdateListener() {
                 return configUpdateListener;
             }
 
             @NonNull
             @Override
-            public Converter<ModuleConfig, byte[]> getProtobufConverter() {
+            public Converter<RemoteApphudConfig, byte[]> getProtobufConverter() {
                 return configConverter;
             }
 
             @NonNull
             @Override
-            public JsonParser<ModuleConfig> getJsonParser() {
+            public JsonParser<RemoteApphudConfig> getJsonParser() {
                 return configParser;
             }
 
@@ -70,14 +74,16 @@ public class ApphudServiceModuleEntryPoint extends ModuleServiceEntryPoint<Modul
             @Override
             public Map<String, Integer> getBlocks() {
                 return Map.of(
-                    Constants.Startup.BLOCK_NAME_OBFUSCATED, Constants.Startup.BLOCK_VERSION
+                    Constants.RemoteConfig.BLOCK_NAME_OBFUSCATED, Constants.RemoteConfig.BLOCK_VERSION
                 );
             }
 
             @NonNull
             @Override
             public List<String> getFeatures() {
-                return Collections.emptyList();
+                return Collections.singletonList(
+                    Constants.RemoteConfig.FEATURE_NAME_OBFUSCATED
+                );
             }
         };
     }
@@ -85,9 +91,9 @@ public class ApphudServiceModuleEntryPoint extends ModuleServiceEntryPoint<Modul
     @Override
     public void initServiceSide(
         @NonNull ServiceContext serviceContext,
-        @NonNull ModuleRemoteConfig<ModuleConfig> initialConfig
+        @NonNull ModuleRemoteConfig<RemoteApphudConfig> initialConfig
     ) {
-        config = initialConfig;
+        config = initialConfig.getFeaturesConfig();
     }
 
     @Nullable
@@ -97,12 +103,8 @@ public class ApphudServiceModuleEntryPoint extends ModuleServiceEntryPoint<Modul
             @Nullable
             @Override
             public Bundle getConfigBundleForClient() {
-                if (config == null) {
-                    return null;
-                }
-                Bundle bundle = new Bundle();
-                bundle.putString(Constants.Config.API_KEY_KEY, config.getFeaturesConfig().getApiKey());
-                return bundle;
+                DebugLogger.INSTANCE.info(TAG, "Converting config '" + config + "' to bundle");
+                return bundleConverter.convert(config);
             }
         };
     }

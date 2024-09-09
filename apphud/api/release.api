@@ -6,19 +6,19 @@ public final class io.appmetrica.analytics.apphud.BuildConfig {
     public <init>()
 }
 
-public class io.appmetrica.analytics.apphud.internal.ApphudClientModuleEntryPoint extends io.appmetrica.analytics.modulesapi.internal.client.ModuleClientEntryPoint<Object> {
+public class io.appmetrica.analytics.apphud.internal.ApphudClientModuleEntryPoint extends io.appmetrica.analytics.modulesapi.internal.client.ModuleClientEntryPoint<OBFUSCATED[io.appmetrica.analytics.apphud.impl.config.service.ServiceApphudConfig]> {
     public <init>()
-    public [Nullable] io.appmetrica.analytics.modulesapi.internal.client.ClientConfigExtension getClientConfigExtension()
     public [NonNull] String getIdentifier()
+    public [Nullable] io.appmetrica.analytics.modulesapi.internal.client.ServiceConfigExtensionConfiguration<OBFUSCATED[io.appmetrica.analytics.apphud.impl.config.service.ServiceApphudConfig]> getServiceConfigExtensionConfiguration()
     public void initClientSide([NonNull] io.appmetrica.analytics.modulesapi.internal.client.ClientContext)
     public void onActivated()
 }
 
-public class io.appmetrica.analytics.apphud.internal.ApphudServiceModuleEntryPoint extends io.appmetrica.analytics.modulesapi.internal.service.ModuleServiceEntryPoint<OBFUSCATED[io.appmetrica.analytics.apphud.impl.config.ModuleConfig]> {
+public class io.appmetrica.analytics.apphud.internal.ApphudServiceModuleEntryPoint extends io.appmetrica.analytics.modulesapi.internal.service.ModuleServiceEntryPoint<OBFUSCATED[io.appmetrica.analytics.apphud.impl.config.remote.RemoteApphudConfig]> {
     public <init>()
     public [Nullable] io.appmetrica.analytics.modulesapi.internal.service.ClientConfigProvider getClientConfigProvider()
     public [NonNull] String getIdentifier()
-    public [Nullable] io.appmetrica.analytics.modulesapi.internal.service.RemoteConfigExtensionConfiguration<OBFUSCATED[io.appmetrica.analytics.apphud.impl.config.ModuleConfig]> getRemoteConfigExtensionConfiguration()
-    public void initServiceSide([NonNull] io.appmetrica.analytics.modulesapi.internal.service.ServiceContext, [NonNull] io.appmetrica.analytics.modulesapi.internal.service.ModuleRemoteConfig<OBFUSCATED[io.appmetrica.analytics.apphud.impl.config.ModuleConfig]>)
+    public [Nullable] io.appmetrica.analytics.modulesapi.internal.service.RemoteConfigExtensionConfiguration<OBFUSCATED[io.appmetrica.analytics.apphud.impl.config.remote.RemoteApphudConfig]> getRemoteConfigExtensionConfiguration()
+    public void initServiceSide([NonNull] io.appmetrica.analytics.modulesapi.internal.service.ServiceContext, [NonNull] io.appmetrica.analytics.modulesapi.internal.service.ModuleRemoteConfig<OBFUSCATED[io.appmetrica.analytics.apphud.impl.config.remote.RemoteApphudConfig]>)
 }
 

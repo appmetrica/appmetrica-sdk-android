@@ -212,20 +212,18 @@ public class StartupParams {
         );
         boolean advIdentifiersRequested = listContainsAdvIdentifiers(identifiers);
         boolean outdated = StartupRequiredUtils.isOutdated(nextStartupTime);
-        boolean modulesNeedConfig = ClientServiceLocator.getInstance().getModulesController().doModulesNeedConfig();
         boolean result = notAllIdentifiers || advIdentifiersRequested || outdated ||
-                mClientClidsChangedAfterLastIdentifiersUpdate || modulesNeedConfig;
+                mClientClidsChangedAfterLastIdentifiersUpdate;
 
         DebugLogger.INSTANCE.info(
             TAG,
             "shouldSendStartup = %b:  notAllIdentifiers = %b; advIdentifiersRequested = %b, outdated = %b; " +
-                "mClientClidsChanged = %b; modulesNeedConfig = %b, identifiers = %s",
+                "mClientClidsChanged = %b; identifiers = %s",
             result,
             notAllIdentifiers,
             advIdentifiersRequested,
             outdated,
             mClientClidsChangedAfterLastIdentifiersUpdate,
-            modulesNeedConfig,
             identifiers
         );
 

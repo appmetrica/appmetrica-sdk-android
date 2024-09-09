@@ -1,6 +1,0 @@
-syntax = "proto2";
-
-message ModuleConfig {
-
-  required string apiKey = 1 [default = ""];
-}

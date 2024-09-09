@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.impl.modules.client
 
 import android.os.Bundle
+import io.appmetrica.analytics.coreapi.internal.identifiers.SdkIdentifiers
 import io.appmetrica.analytics.impl.modules.client.context.CoreClientContext
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
@@ -15,6 +16,7 @@ internal class ClientModulesController :
 
     private val tag = "[ClientModulesController]"
 
+    private val clientModuleServiceConfigModelFactory = ClientModuleServiceConfigModelFactory()
     private val modules = CopyOnWriteArrayList<ModuleClientEntryPoint<Any>>()
     private var clientContext: CoreClientContext? = null
 
@@ -67,19 +69,32 @@ internal class ClientModulesController :
         return clientContext?.moduleAdRevenueContext?.adRevenueProcessorsHolder
     }
 
-    fun notifyModulesWithConfig(bundle: Bundle?) {
-        modules.forEach { module ->
-            module.clientConfigExtension?.clientConfigListener?.let { listener ->
-                bundle?.getBundle(module.identifier)?.let { config ->
-                    listener.onConfigReceived(config)
-                }
-            }
+    fun notifyModulesWithConfig(bundle: Bundle?, identifiers: SdkIdentifiers) {
+        if (bundle == null) {
+            return
         }
-    }
-
-    fun doModulesNeedConfig(): Boolean {
-        return modules.any { module ->
-            module.clientConfigExtension?.doesModuleNeedConfig() ?: false
+        modules.forEach { module ->
+            try {
+                module.serviceConfigExtensionConfiguration?.let { extension ->
+                    val listener = extension.getServiceConfigUpdateListener()
+                    clientModuleServiceConfigModelFactory.createClientModuleServiceConfigModel(
+                        bundle = bundle,
+                        moduleIdentifier = module.identifier,
+                        identifiers = identifiers,
+                        extensionConfiguration = extension
+                    )?.let { config ->
+                        DebugLogger.info(tag, "Notify module ${module.identifier} with config $config")
+                        listener.onServiceConfigUpdated(config)
+                    }
+                }
+            } catch (e: Throwable) {
+                DebugLogger.error(
+                    "$tag [${module.identifier}]",
+                    e,
+                    "unhandled exception when notifying with config"
+                )
+                reportSelfErrorEvent(module.identifier, "notifyModulesWithConfig", e)
+            }
         }
     }
 

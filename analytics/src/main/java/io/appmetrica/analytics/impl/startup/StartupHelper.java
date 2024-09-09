@@ -11,6 +11,7 @@ import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.AdvIdentifiersResult;
 import io.appmetrica.analytics.StartupParamsCallback;
 import io.appmetrica.analytics.StartupParamsItem;
+import io.appmetrica.analytics.coreapi.internal.identifiers.SdkIdentifiers;
 import io.appmetrica.analytics.coreutils.internal.collection.CollectionUtils;
 import io.appmetrica.analytics.impl.ClientIdentifiersHolder;
 import io.appmetrica.analytics.impl.ClientServiceLocator;
@@ -68,6 +69,8 @@ public class StartupHelper implements StartupIdentifiersProvider, IServerTimeOff
     private final Map<StartupParamsCallback, List<String>> mStartupParamsCallbacks = new WeakHashMap<>();
 
     private Map<String, String> mClientClids;
+    @VisibleForTesting
+    boolean initialStartupSent = false;
 
     public StartupHelper(@NonNull Context context,
                          final ReportsHandler reportsHandler,
@@ -178,13 +181,21 @@ public class StartupHelper implements StartupIdentifiersProvider, IServerTimeOff
         DebugLogger.INSTANCE.info(TAG, "UpdateAllParamsByReceiver: %s", resultData);
         ClientIdentifiersHolder clientIdentifiersHolder = new ClientIdentifiersHolder(resultData);
         mStartupParams.updateAllParamsByReceiver(clientIdentifiersHolder);
-        notifyModulesWithConfig(clientIdentifiersHolder.getModulesConfig());
+        notifyModulesWithConfig(
+            clientIdentifiersHolder.getModulesConfig(),
+            new SdkIdentifiers(
+                clientIdentifiersHolder.getUuid().id,
+                clientIdentifiersHolder.getDeviceId().id,
+                clientIdentifiersHolder.getDeviceIdHash().id
+            )
+        );
         notifyCallbacksIfValid();
     }
 
     public void sendStartupIfNeeded() {
         synchronized (mStartupParamsLock) {
-            if (mStartupParams.shouldSendStartup()) {
+            if (!initialStartupSent || mStartupParams.shouldSendStartup()) {
+                initialStartupSent = true;
                 DebugLogger.INSTANCE.info(TAG, "Send startup event");
                 sendStartupEvent(mClientClids);
             }
@@ -396,8 +407,8 @@ public class StartupHelper implements StartupIdentifiersProvider, IServerTimeOff
         }
     }
 
-    private void notifyModulesWithConfig(@Nullable Bundle bundle) {
-        ClientServiceLocator.getInstance().getModulesController().notifyModulesWithConfig(bundle);
+    private void notifyModulesWithConfig(@Nullable Bundle bundle, @NonNull SdkIdentifiers identifiers) {
+        ClientServiceLocator.getInstance().getModulesController().notifyModulesWithConfig(bundle, identifiers);
     }
 
     @VisibleForTesting

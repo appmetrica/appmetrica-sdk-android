@@ -8,7 +8,7 @@ import io.appmetrica.analytics.impl.modules.client.CompositeModuleAdRevenueProce
 import io.appmetrica.analytics.modulesapi.internal.client.ClientStorageProvider
 
 class ClientContextImpl(
-    context: Context
+    override val context: Context
 ) : CoreClientContext {
 
     override val moduleAdRevenueContext: CoreModuleAdRevenueContext =

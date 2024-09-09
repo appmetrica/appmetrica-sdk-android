@@ -19,7 +19,7 @@ android {
 
 protobuf {
     packageName.set("io.appmetrica.analytics.apphud.impl.protobuf")
-    protoFile(srcPath = "client/moduleConfigProtobuf.proto", years = "2024")
+    protoFile(srcPath = "client/remoteApphudConfigProtobuf.proto", years = "2024")
 }
 
 dependencies {

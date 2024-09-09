@@ -3,33 +3,37 @@
 package io.appmetrica.analytics.apphud.impl.protobuf.client;
 
 @SuppressWarnings("hiding")
-public interface ModuleConfigProtobuf {
+public interface RemoteApphudConfigProtobuf {
 
-  public static final class ModuleConfig extends
+  public static final class RemoteApphudConfig extends
       io.appmetrica.analytics.protobuf.nano.MessageNano {
 
-    private static volatile ModuleConfig[] _emptyArray;
-    public static ModuleConfig[] emptyArray() {
+    private static volatile RemoteApphudConfig[] _emptyArray;
+    public static RemoteApphudConfig[] emptyArray() {
       // Lazily initializes the empty array
       if (_emptyArray == null) {
         synchronized (
             io.appmetrica.analytics.protobuf.nano.InternalNano.LAZY_INIT_LOCK) {
           if (_emptyArray == null) {
-            _emptyArray = new ModuleConfig[0];
+            _emptyArray = new RemoteApphudConfig[0];
           }
         }
       }
       return _emptyArray;
     }
 
-    // required string apiKey = 1 [default = ""];
+    // optional bool enabled = 1 [default = false];
+    public boolean enabled;
+
+    // optional string apiKey = 2 [default = ""];
     public java.lang.String apiKey;
 
-    public ModuleConfig() {
+    public RemoteApphudConfig() {
       clear();
     }
 
-    public ModuleConfig clear() {
+    public RemoteApphudConfig clear() {
+      enabled = false;
       apiKey = "";
       cachedSize = -1;
       return this;
@@ -38,20 +42,31 @@ public interface ModuleConfigProtobuf {
     @Override
     public void writeTo(io.appmetrica.analytics.protobuf.nano.CodedOutputByteBufferNano output)
         throws java.io.IOException {
-      output.writeString(1, this.apiKey);
+      if (this.enabled != false) {
+        output.writeBool(1, this.enabled);
+      }
+      if (!this.apiKey.equals("")) {
+        output.writeString(2, this.apiKey);
+      }
       super.writeTo(output);
     }
 
     @Override
     protected int computeSerializedSize() {
       int size = super.computeSerializedSize();
-      size += io.appmetrica.analytics.protobuf.nano.CodedOutputByteBufferNano
-          .computeStringSize(1, this.apiKey);
+      if (this.enabled != false) {
+        size += io.appmetrica.analytics.protobuf.nano.CodedOutputByteBufferNano
+            .computeBoolSize(1, this.enabled);
+      }
+      if (!this.apiKey.equals("")) {
+        size += io.appmetrica.analytics.protobuf.nano.CodedOutputByteBufferNano
+            .computeStringSize(2, this.apiKey);
+      }
       return size;
     }
 
     @Override
-    public ModuleConfig mergeFrom(
+    public RemoteApphudConfig mergeFrom(
             io.appmetrica.analytics.protobuf.nano.CodedInputByteBufferNano input)
         throws java.io.IOException {
       while (true) {
@@ -65,7 +80,11 @@ public interface ModuleConfigProtobuf {
             }
             break;
           }
-          case 10: {
+          case 8: {
+            this.enabled = input.readBool();
+            break;
+          }
+          case 18: {
             this.apiKey = input.readString();
             break;
           }
@@ -73,15 +92,15 @@ public interface ModuleConfigProtobuf {
       }
     }
 
-    public static ModuleConfig parseFrom(byte[] data)
+    public static RemoteApphudConfig parseFrom(byte[] data)
         throws io.appmetrica.analytics.protobuf.nano.InvalidProtocolBufferNanoException {
-      return io.appmetrica.analytics.protobuf.nano.MessageNano.mergeFrom(new ModuleConfig(), data);
+      return io.appmetrica.analytics.protobuf.nano.MessageNano.mergeFrom(new RemoteApphudConfig(), data);
     }
 
-    public static ModuleConfig parseFrom(
+    public static RemoteApphudConfig parseFrom(
             io.appmetrica.analytics.protobuf.nano.CodedInputByteBufferNano input)
         throws java.io.IOException {
-      return new ModuleConfig().mergeFrom(input);
+      return new RemoteApphudConfig().mergeFrom(input);
     }
   }
 }

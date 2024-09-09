@@ -6,17 +6,13 @@ public final class io.appmetrica.analytics.modulesapi.BuildConfig {
     public <init>()
 }
 
-public interface io.appmetrica.analytics.modulesapi.internal.client.ClientConfigExtension {
-    public abstract boolean doesModuleNeedConfig()
-    public abstract [NonNull] io.appmetrica.analytics.modulesapi.internal.client.ClientConfigListener getClientConfigListener()
-}
-
-public interface io.appmetrica.analytics.modulesapi.internal.client.ClientConfigListener {
-    public abstract void onConfigReceived([NonNull] android.os.Bundle)
+public interface io.appmetrica.analytics.modulesapi.internal.client.BundleToServiceConfigConverter<T> {
+    public abstract T fromBundle([NonNull] android.os.Bundle)
 }
 
 public interface io.appmetrica.analytics.modulesapi.internal.client.ClientContext {
     public abstract [NonNull] io.appmetrica.analytics.modulesapi.internal.client.ClientStorageProvider getClientStorageProvider()
+    public abstract [NonNull] android.content.Context getContext()
     public abstract [NonNull] io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdRevenueContext getModuleAdRevenueContext()
 }
 
@@ -26,10 +22,25 @@ public interface io.appmetrica.analytics.modulesapi.internal.client.ClientStorag
 
 public abstract class io.appmetrica.analytics.modulesapi.internal.client.ModuleClientEntryPoint<T> {
     public <init>()
-    public [Nullable] io.appmetrica.analytics.modulesapi.internal.client.ClientConfigExtension getClientConfigExtension()
     public abstract [NonNull] String getIdentifier()
+    public [Nullable] io.appmetrica.analytics.modulesapi.internal.client.ServiceConfigExtensionConfiguration<T> getServiceConfigExtensionConfiguration()
     public void initClientSide([NonNull] io.appmetrica.analytics.modulesapi.internal.client.ClientContext)
     public void onActivated()
+}
+
+public interface io.appmetrica.analytics.modulesapi.internal.client.ModuleServiceConfig<T> {
+    public abstract T getFeaturesConfig()
+    public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.SdkIdentifiers getIdentifiers()
+}
+
+public abstract class io.appmetrica.analytics.modulesapi.internal.client.ServiceConfigExtensionConfiguration<T> {
+    public <init>()
+    public abstract [NonNull] io.appmetrica.analytics.modulesapi.internal.client.BundleToServiceConfigConverter<T> getBundleConverter()
+    public abstract [NonNull] io.appmetrica.analytics.modulesapi.internal.client.ServiceConfigUpdateListener<T> getServiceConfigUpdateListener()
+}
+
+public interface io.appmetrica.analytics.modulesapi.internal.client.ServiceConfigUpdateListener<T> {
+    public abstract void onServiceConfigUpdated([NonNull] io.appmetrica.analytics.modulesapi.internal.client.ModuleServiceConfig<T>)
 }
 
 public final class io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdRevenue {
