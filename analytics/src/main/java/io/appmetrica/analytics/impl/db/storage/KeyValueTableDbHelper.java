@@ -32,7 +32,7 @@ class KeyValueTableDbHelper implements IKeyValueTableDbHelper, Closeable {
 
     private static final boolean DEBUG_MODE = BuildConfig.METRICA_DEBUG;
 
-    public static final String TAG = KeyValueTableDbHelper.class.getSimpleName();
+    public static final String TAG = "[KeyValueTableDbHelper]";
 
     private final Map<String, Object> mValues = new HashMap<String, Object>();
     private final Map<String, Object> mModified = new HashMap<String, Object>();
