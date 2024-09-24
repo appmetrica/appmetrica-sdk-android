@@ -48,7 +48,7 @@ public class MainReporter extends BaseReporter implements IMainReporter {
         );
 
         this.mainReporterComponents = mainReporterComponents;
-        mainReporterAnrController = new MainReporterAnrController(mainReporterComponents, this);
+        mainReporterAnrController = new MainReporterAnrController(this);
         initUserSessionObserver();
     }
 

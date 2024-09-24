@@ -21,7 +21,7 @@ class LibraryAnrListenerTest : CommonTest() {
         "process name"
     )
 
-    private val mainReporterConsumer: IUnhandledSituationReporter = mock()
+    private val anrReporter: AnrReporter = mock()
 
     @get:Rule
     val threadsStateDumperMockedConstructionRule = constructionRule<ThreadsStateDumper> {
@@ -32,12 +32,12 @@ class LibraryAnrListenerTest : CommonTest() {
     val clientServiceLocatorRule = ClientServiceLocatorRule()
 
     private val listener: LibraryAnrListener by setUp {
-        LibraryAnrListener(mainReporterConsumer)
+        LibraryAnrListener(anrReporter)
     }
 
     @Test
     fun onAppNotResponding() {
         listener.onAppNotResponding()
-        verify(mainReporterConsumer).reportAnr(allThreads)
+        verify(anrReporter).reportAnr(allThreads)
     }
 }

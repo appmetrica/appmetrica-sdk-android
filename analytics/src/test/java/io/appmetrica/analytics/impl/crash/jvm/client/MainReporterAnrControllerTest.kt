@@ -18,8 +18,7 @@ import java.util.UUID
 internal class MainReporterAnrControllerTest : CommonTest() {
 
     private val apiKey = UUID.randomUUID().toString()
-    private val mainReporterComponents: MainReporterComponents = mock()
-    private val mainReporterConsumer: IUnhandledSituationReporter = mock()
+    private val anrReporter: AnrReporter = mock()
 
     @get:Rule
     val libraryAnrListenerMockedConstructionRule = constructionRule<LibraryAnrListener>()
@@ -30,7 +29,7 @@ internal class MainReporterAnrControllerTest : CommonTest() {
     private val anrMonitor: ANRMonitor by anrMonitorMockedConstructionRule
 
     private val mainReporterAnrController: MainReporterAnrController by setUp {
-        MainReporterAnrController(mainReporterComponents, mainReporterConsumer)
+        MainReporterAnrController(anrReporter)
     }
 
     @Test
@@ -44,7 +43,7 @@ internal class MainReporterAnrControllerTest : CommonTest() {
     fun anrListener() {
         assertThat(libraryAnrListenerMockedConstructionRule.constructionMock.constructed()).hasSize(1)
         assertThat(libraryAnrListenerMockedConstructionRule.argumentInterceptor.flatArguments())
-            .containsExactly(mainReporterConsumer)
+            .containsExactly(anrReporter)
     }
 
     @Test

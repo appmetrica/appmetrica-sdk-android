@@ -33,6 +33,7 @@ import io.appmetrica.analytics.impl.utils.BooleanUtils;
 import io.appmetrica.analytics.impl.utils.JsonHelper;
 import io.appmetrica.analytics.impl.utils.PluginErrorDetailsExtensionKt;
 import io.appmetrica.analytics.impl.utils.ProcessDetector;
+import io.appmetrica.analytics.impl.utils.PublicLogConstructor;
 import io.appmetrica.analytics.impl.utils.limitation.SimpleMapLimitation;
 import io.appmetrica.analytics.impl.utils.validation.ValidationResult;
 import io.appmetrica.analytics.impl.utils.validation.Validator;
@@ -517,8 +518,8 @@ public abstract class BaseReporter implements IBaseReporter {
     }
 
     @Override
-    public void reportAnr(@NonNull AllThreads value) {
-        Anr anr = new Anr(value, mExtraMetaInfoRetriever.getBuildId(), mExtraMetaInfoRetriever.isOffline());
+    public void reportAnr(@NonNull AllThreads allThreads) {
+        Anr anr = new Anr(allThreads, mExtraMetaInfoRetriever.getBuildId(), mExtraMetaInfoRetriever.isOffline());
         mReportsHandler.reportEvent(
             EventsManager.anrEntry(
                 MessageNano.toByteArray(anrConverter.fromModel(anr)),
@@ -526,7 +527,7 @@ public abstract class BaseReporter implements IBaseReporter {
             ),
             mReporterEnvironment
         );
-        mPublicLogger.info("Received ANR");
+        mPublicLogger.info(PublicLogConstructor.constructAnrLog("ANR was reported ", allThreads));
     }
 
     @Override

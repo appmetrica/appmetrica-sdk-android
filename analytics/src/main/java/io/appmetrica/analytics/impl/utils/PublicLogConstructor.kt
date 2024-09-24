@@ -4,9 +4,22 @@ import android.text.TextUtils
 import io.appmetrica.analytics.impl.CounterReport
 import io.appmetrica.analytics.impl.EventsManager
 import io.appmetrica.analytics.impl.InternalEvents
+import io.appmetrica.analytics.impl.crash.jvm.client.AllThreads
 import io.appmetrica.analytics.impl.protobuf.backend.EventProto
 
 object PublicLogConstructor {
+
+    @JvmStatic
+    fun constructAnrLog(message: String, allThreads: AllThreads): String {
+        return message + allThreads.affectedThread?.let { affectedThread ->
+            "Thread[" +
+                "name=${affectedThread.name}," +
+                "tid={${affectedThread.tid}, " +
+                "priority=${affectedThread.priority}, " +
+                "group=${affectedThread.group}}" +
+                "] at " + affectedThread.stacktrace.joinToString("\n")
+        }
+    }
 
     @JvmStatic
     fun constructCounterReportLog(reportData: CounterReport, message: String): String? =
