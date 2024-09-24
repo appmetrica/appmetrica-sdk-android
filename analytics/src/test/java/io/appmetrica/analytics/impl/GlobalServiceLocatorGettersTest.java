@@ -29,6 +29,7 @@ import io.appmetrica.analytics.modulesapi.internal.service.LocationServiceApi;
 import io.appmetrica.analytics.networktasks.internal.NetworkCore;
 import io.appmetrica.analytics.networktasks.internal.NetworkServiceLocator;
 import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.analytics.testutils.MockedConstructionRule;
 import io.appmetrica.analytics.testutils.MockedStaticRule;
 import io.appmetrica.analytics.testutils.TestUtils;
 import java.util.Arrays;
@@ -365,6 +366,10 @@ public class GlobalServiceLocatorGettersTest extends CommonTest {
     @Rule
     public final MockedStaticRule<NetworkServiceLocator> networkServiceLocatorMockedStaticRule =
         new MockedStaticRule<>(NetworkServiceLocator.class);
+
+    @Rule
+    public final MockedConstructionRule<StartupStateHolder> startupStateHolderMockedConstructionRule =
+        new MockedConstructionRule<>(StartupStateHolder.class);
 
     private GlobalServiceLocator mGlobalServiceLocator;
 

@@ -127,6 +127,13 @@ public class KeyValueTableDbHelperTest extends CommonTest {
                 nullable(String[].class), nullable(String.class), nullable(String.class), nullable(String.class));
     }
 
+    @After
+    public void tearDown() {
+        if (mPrefsCursor != null) {
+            mPrefsCursor.close();
+        }
+    }
+
     @Test
     public void testReadValuesOnStart() throws Exception {
         mPrefsCursor.newRow().add(KEY_LONG).add(TEST_LONG).add(LONG);
