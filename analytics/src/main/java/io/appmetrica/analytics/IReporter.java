@@ -29,6 +29,9 @@ public interface IReporter {
      *
      * <p> <b>WARNING:</b> Frequent use of the method can lead to increasing outgoing internet traffic and
      * energy consumption.
+     * 
+     * @see ReporterConfig.Builder#withMaxReportsCount(int) 
+     * @see ReporterConfig.Builder#withDispatchPeriodSeconds(int) 
      */
     void sendEventsBuffer();
 

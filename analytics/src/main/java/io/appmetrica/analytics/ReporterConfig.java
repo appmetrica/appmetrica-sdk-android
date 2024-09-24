@@ -280,6 +280,7 @@ public class ReporterConfig {
          *
          * @param maxReportsCount Max number of items/reports to automatically send reports
          * @see Builder#withDispatchPeriodSeconds(int)
+         * @see IReporter#sendEventsBuffer()
          * @return the same {@link Builder} object
          */
         @NonNull
@@ -296,6 +297,7 @@ public class ReporterConfig {
          *
          * @param dispatchPeriodSeconds Timeout in seconds to automatically send reports
          * @see Builder#withMaxReportsCount(int)
+         * @see IReporter#sendEventsBuffer()
          * @return the same {@link Builder} object
          */
         @NonNull

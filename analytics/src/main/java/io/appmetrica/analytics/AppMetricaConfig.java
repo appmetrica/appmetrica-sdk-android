@@ -736,6 +736,7 @@ public class AppMetricaConfig {
          * @param dispatchPeriodSeconds Timeout in seconds to automatically send reports.
          *
          * @see AppMetricaConfig.Builder#withMaxReportsCount(int)
+         * @see AppMetrica#sendEventsBuffer()
          *
          * @return the same {@link AppMetricaConfig.Builder} object.
          */
@@ -757,6 +758,7 @@ public class AppMetricaConfig {
          * @param maxReportsCount Max number of items/reports to automatically send reports.
          *
          * @see AppMetricaConfig.Builder#withDispatchPeriodSeconds(int)
+         * @see AppMetrica#sendEventsBuffer()
          *
          * @return the same {@link AppMetricaConfig.Builder} object.
          */

@@ -47,6 +47,9 @@ public final class AppMetrica {
      *
      * <p> <b>WARNING:</b> Frequent use of the method can lead to increasing outgoing internet traffic and
      * energy consumption.
+     *
+     * @see AppMetricaConfig.Builder#withMaxReportsCount(int)
+     * @see AppMetricaConfig.Builder#withDispatchPeriodSeconds(int)
      */
     public static void sendEventsBuffer() {
         AppMetricaProxyProvider.getProxy().sendEventsBuffer();
