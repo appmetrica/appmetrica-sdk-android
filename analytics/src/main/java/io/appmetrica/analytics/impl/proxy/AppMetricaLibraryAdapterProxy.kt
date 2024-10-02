@@ -8,6 +8,8 @@ import io.appmetrica.analytics.impl.events.LibraryEventConstructor
 import io.appmetrica.analytics.impl.proxy.synchronous.LibraryAdapterSynchronousStageExecutor
 import io.appmetrica.analytics.impl.proxy.validation.LibraryAdapterBarrier
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.ImportantLogger
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger
 
 class AppMetricaLibraryAdapterProxy {
 
@@ -22,24 +24,31 @@ class AppMetricaLibraryAdapterProxy {
         ClientServiceLocator.getInstance().clientExecutorProvider.defaultExecutor
 
     fun activate(context: Context) {
-        DebugLogger.info(tag, "Activate")
-        barrier.activate(context)
-        val applicationContext = context.applicationContext
-        synchronousStageExecutor.activate(applicationContext)
-        executor.execute {
-            DebugLogger.info(tag, "Activate full")
-            provider.getInitializedImpl(applicationContext).activateFull()
+        if (barrier.activate(context)) {
+            DebugLogger.info(tag, "Activate")
+            val applicationContext = context.applicationContext
+            synchronousStageExecutor.activate(applicationContext)
+            executor.execute {
+                provider.getInitializedImpl(applicationContext).activateFull()
+            }
+            provider.markActivated()
+        } else {
+            ImportantLogger.info(tag, "Activation failed due to context is null")
         }
-        provider.markActivated()
     }
 
     fun reportEvent(
-        sender: String,
-        event: String,
-        payload: String
+        sender: String?,
+        event: String?,
+        payload: String?
     ) {
-        barrier.reportEvent(sender, event, payload)
-        synchronousStageExecutor.reportEvent(sender, event, payload)
-        ModulesFacade.reportEvent(libraryEventConstructor.constructEvent(sender, event, payload))
+        if (barrier.reportEvent(sender, event, payload)) {
+            synchronousStageExecutor.reportEvent(sender, event, payload)
+            ModulesFacade.reportEvent(libraryEventConstructor.constructEvent(sender, event, payload))
+        } else {
+            val message = "Failed report event from sender: $sender with name = $event and payload = $payload"
+            PublicLogger.getAnonymousInstance().warning("$tag$message")
+            DebugLogger.warning(tag, message)
+        }
     }
 }

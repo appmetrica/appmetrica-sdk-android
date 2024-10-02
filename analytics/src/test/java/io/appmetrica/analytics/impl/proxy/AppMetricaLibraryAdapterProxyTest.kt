@@ -16,10 +16,14 @@ import io.appmetrica.analytics.testutils.staticRule
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.mockito.MockedStatic
+import org.mockito.kotlin.any
 import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
+import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.whenever
 
 class AppMetricaLibraryAdapterProxyTest : CommonTest() {
@@ -64,6 +68,8 @@ class AppMetricaLibraryAdapterProxyTest : CommonTest() {
         proxy = AppMetricaLibraryAdapterProxy()
 
         barrier = barrierRule.constructionMock.constructed().first()
+        whenever(barrier.activate(any())).thenReturn(true)
+        whenever(barrier.reportEvent(any(), any(), any())).thenReturn(true)
         synchronousStageExecutor =
             synchronousStageExecutorRule.constructionMock.constructed().first()
         libraryEventConstructor =
@@ -83,6 +89,13 @@ class AppMetricaLibraryAdapterProxyTest : CommonTest() {
     }
 
     @Test
+    fun `activate if not valid`() {
+        whenever(barrier.activate(context)).thenReturn(false)
+        proxy.activate(context)
+        verifyNoInteractions(synchronousStageExecutor, executor)
+    }
+
+    @Test
     fun reportEvent() {
         val sender = "sender_value"
         val event = "event_value"
@@ -98,5 +111,17 @@ class AppMetricaLibraryAdapterProxyTest : CommonTest() {
         modulesFacadeRule.staticMock.verify {
             ModulesFacade.reportEvent(moduleEvent)
         }
+    }
+
+    @Test
+    fun `reportEvent if not valid`() {
+        val sender = "sender_value"
+        val event = "event_value"
+        val payload = "payload_value"
+
+        whenever(barrier.reportEvent(sender, event, payload)).thenReturn(false)
+        proxy.reportEvent(sender, event, payload)
+        verifyNoInteractions(synchronousStageExecutor)
+        modulesFacadeRule.staticMock.verify({ ModulesFacade.reportEvent(any()) }, never())
     }
 }

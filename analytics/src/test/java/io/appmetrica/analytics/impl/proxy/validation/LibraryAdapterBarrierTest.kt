@@ -4,6 +4,7 @@ import android.content.Context
 import io.appmetrica.analytics.ValidationException
 import io.appmetrica.analytics.impl.proxy.AppMetricaFacadeProvider
 import io.appmetrica.analytics.testutils.CommonTest
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.mockito.kotlin.mock
@@ -24,37 +25,36 @@ class LibraryAdapterBarrierTest : CommonTest() {
 
     @Test
     fun activate() {
-        barrier.activate(context)
+        assertThat(barrier.activate(context)).isTrue()
     }
 
-    @Test(expected = ValidationException::class)
+    @Test
     fun `activate for null context`() {
-        barrier.activate(null)
+        assertThat(barrier.activate(null)).isFalse()
     }
 
     @Test
     fun reportEvent() {
-        barrier.reportEvent("sender", "event", "payload")
+        assertThat(barrier.reportEvent("sender", "event", "payload")).isTrue()
     }
 
-    @Test(expected = ValidationException::class)
+    @Test
     fun `reportEvent for null sender`() {
-        barrier.reportEvent(null, "event", "payload")
+        assertThat(barrier.reportEvent(null, "event", "payload")).isFalse()
     }
 
-    @Test(expected = ValidationException::class)
+    @Test
     fun `reportEvent for null event`() {
-        barrier.reportEvent("sender", null, "payload")
+        assertThat(barrier.reportEvent("sender", null, "payload")).isFalse()
     }
 
-    @Test(expected = ValidationException::class)
     fun `reportEvent for null payload`() {
-        barrier.reportEvent("sender", "event", null)
+        assertThat(barrier.reportEvent("sender", "event", null)).isFalse()
     }
 
-    @Test(expected = ValidationException::class)
+    @Test
     fun `reportEvent if not activated`() {
         whenever(appMetricaFacadeProvider.isActivated).thenReturn(false)
-        barrier.reportEvent("sender", "event", "payload")
+        assertThat(barrier.reportEvent("sender", "event", "payload")).isFalse()
     }
 }
