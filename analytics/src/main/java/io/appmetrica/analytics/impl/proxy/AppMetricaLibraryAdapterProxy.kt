@@ -7,8 +7,11 @@ import io.appmetrica.analytics.impl.ClientServiceLocator
 import io.appmetrica.analytics.impl.events.LibraryEventConstructor
 import io.appmetrica.analytics.impl.proxy.synchronous.LibraryAdapterSynchronousStageExecutor
 import io.appmetrica.analytics.impl.proxy.validation.LibraryAdapterBarrier
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
 class AppMetricaLibraryAdapterProxy {
+
+    private val tag = "[AppMetricaLibraryAdapterProxy]"
 
     private val provider: AppMetricaFacadeProvider =
         ClientServiceLocator.getInstance().appMetricaFacadeProvider
@@ -19,10 +22,12 @@ class AppMetricaLibraryAdapterProxy {
         ClientServiceLocator.getInstance().clientExecutorProvider.defaultExecutor
 
     fun activate(context: Context) {
+        DebugLogger.info(tag, "Activate")
         barrier.activate(context)
         val applicationContext = context.applicationContext
         synchronousStageExecutor.activate(applicationContext)
         executor.execute {
+            DebugLogger.info(tag, "Activate full")
             provider.getInitializedImpl(applicationContext).activateFull()
         }
         provider.markActivated()

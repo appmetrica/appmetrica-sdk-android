@@ -6,6 +6,7 @@ import io.appmetrica.analytics.impl.db.FileConstants
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.staticRule
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -47,8 +48,8 @@ class FirstLaunchDetectorTest(
 
     private val firstLaunchDetector: FirstLaunchDetector by setUp { FirstLaunchDetector() }
 
-    @Test
-    fun detectNotFirstLaunch() {
+    @Before
+    fun setUp() {
         if (uuidFileExists != null) {
             whenever(actualFile.exists()).thenReturn(uuidFileExists)
             whenever(FileUtils.getFileFromSdkStorage(context, FileConstants.UUID_FILE_NAME)).thenReturn(actualFile)
@@ -57,7 +58,21 @@ class FirstLaunchDetectorTest(
             whenever(legacyFile.exists()).thenReturn(legacyUuidFileExists)
             whenever(FileUtils.getFileFromAppStorage(context, FileConstants.UUID_FILE_NAME)).thenReturn(legacyFile)
         }
+    }
 
-        assertThat(firstLaunchDetector.detectNotFirstLaunch(context)).isEqualTo(expectedValue)
+    @Test
+    fun isNotFirstLaunch() {
+        // Before init
+        assertThat(firstLaunchDetector.isNotFirstLaunch()).isEqualTo(false)
+
+        // Init
+        firstLaunchDetector.init(context)
+        assertThat(firstLaunchDetector.isNotFirstLaunch()).isEqualTo(expectedValue)
+
+        // Second init
+        whenever(FileUtils.getFileFromSdkStorage(context, FileConstants.UUID_FILE_NAME)).thenReturn(null)
+        whenever(FileUtils.getFileFromAppStorage(context, FileConstants.UUID_FILE_NAME)).thenReturn(null)
+        firstLaunchDetector.init(context)
+        assertThat(firstLaunchDetector.isNotFirstLaunch()).isEqualTo(expectedValue)
     }
 }

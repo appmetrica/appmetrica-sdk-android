@@ -12,6 +12,7 @@ import io.appmetrica.analytics.impl.proxy.AppMetricaFacadeProvider;
 import io.appmetrica.analytics.impl.reporter.ReporterLifecycleListener;
 import io.appmetrica.analytics.impl.startup.uuid.MultiProcessSafeUuidProvider;
 import io.appmetrica.analytics.impl.startup.uuid.UuidFromClientPreferencesImporter;
+import io.appmetrica.analytics.impl.utils.FirstLaunchDetector;
 import io.appmetrica.analytics.impl.utils.MainProcessDetector;
 import io.appmetrica.analytics.impl.utils.executors.ClientExecutorProvider;
 import io.appmetrica.analytics.testutils.CommonTest;
@@ -85,6 +86,10 @@ public class ClientServiceLocatorTest extends CommonTest {
     @Rule
     public MockedConstructionRule<AppMetricaFacadeProvider> appMetricaFacadeProviderMockedConstructionRule =
         new MockedConstructionRule<>(AppMetricaFacadeProvider.class);
+
+    @Rule
+    public MockedConstructionRule<FirstLaunchDetector> firstLaunchDetectorMockedConstructionRule =
+        new MockedConstructionRule<>(FirstLaunchDetector.class);
 
     @Mock
     private DatabaseStorageFactory databaseStorage;
@@ -174,7 +179,7 @@ public class ClientServiceLocatorTest extends CommonTest {
     public void allFieldsFilled() throws Exception {
         ObjectPropertyAssertions(mClientServiceLocator)
             .withDeclaredAccessibleFields(true)
-            .withIgnoredFields("moduleEntryPointsRegister", "appMetricaFacadeProvider")
+            .withIgnoredFields("moduleEntryPointsRegister", "appMetricaFacadeProvider", "firstLaunchDetector")
             .checkField("mainProcessDetector", "getMainProcessDetector", mMainProcessDetector)
             .checkField("defaultOneShotConfig", "getDefaultOneShotConfig", mDefaultOneShotMetricaConfig)
             .checkField("clientExecutorProvider", "getClientExecutorProvider", mClientExecutorProvider)
@@ -246,5 +251,13 @@ public class ClientServiceLocatorTest extends CommonTest {
             .isEqualTo(appMetricaFacadeProviderMockedConstructionRule.getConstructionMock().constructed().get(0));
         assertThat(appMetricaFacadeProviderMockedConstructionRule.getConstructionMock().constructed()).hasSize(1);
         assertThat(appMetricaFacadeProviderMockedConstructionRule.getArgumentInterceptor().flatArguments()).isEmpty();
+    }
+
+    @Test
+    public void getFirstLaunchDetector() {
+        assertThat(mClientServiceLocator.getFirstLaunchDetector())
+            .isEqualTo(firstLaunchDetectorMockedConstructionRule.getConstructionMock().constructed().get(0));
+        assertThat(firstLaunchDetectorMockedConstructionRule.getConstructionMock().constructed()).hasSize(1);
+        assertThat(firstLaunchDetectorMockedConstructionRule.getArgumentInterceptor().flatArguments()).isEmpty();
     }
 }

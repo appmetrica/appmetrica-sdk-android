@@ -10,6 +10,7 @@ import io.appmetrica.analytics.impl.ContextAppearedListener
 import io.appmetrica.analytics.impl.SessionsTrackingManager
 import io.appmetrica.analytics.impl.WebViewJsInterfaceHandler
 import io.appmetrica.analytics.impl.proxy.AppMetricaFacadeProvider
+import io.appmetrica.analytics.impl.utils.FirstLaunchDetector
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.ContextCoverageUtils
@@ -35,13 +36,15 @@ class SynchronousStageExecutorContextTest : CommonTest() {
     private val sessionsTrackingManager: SessionsTrackingManager = mock()
     private val activityLifecycleManager: ActivityLifecycleManager = mock()
     private val contextAppearedListener: ContextAppearedListener = mock()
+    private val firstLaunchDetector: FirstLaunchDetector = mock()
 
     private val synchronousStageExecutor = SynchronousStageExecutor(
         provider,
         webViewJsInterfaceHandler,
         activityLifecycleManager,
         sessionsTrackingManager,
-        contextAppearedListener
+        contextAppearedListener,
+        firstLaunchDetector
     )
     private val apiKey = UUID.randomUUID().toString()
 

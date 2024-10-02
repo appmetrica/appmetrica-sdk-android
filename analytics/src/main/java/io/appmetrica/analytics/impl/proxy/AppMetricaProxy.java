@@ -494,6 +494,7 @@ public final class AppMetricaProxy extends BaseAppMetricaProxy {
             @NonNull final StartupParamsCallback callback,
             @NonNull final List<String> params
     ) {
+        DebugLogger.INSTANCE.info(TAG, "requestStartupParams for keys: %s", params);
         barrier.requestStartupParams(context, callback, params);
         synchronousStageExecutor.requestStartupParams(context.getApplicationContext(), callback, params);
         getExecutor().execute(new Runnable() {

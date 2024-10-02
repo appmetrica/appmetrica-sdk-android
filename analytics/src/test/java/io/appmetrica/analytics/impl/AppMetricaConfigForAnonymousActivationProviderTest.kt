@@ -14,7 +14,6 @@ import org.mockito.kotlin.whenever
 
 class AppMetricaConfigForAnonymousActivationProviderTest : CommonTest() {
 
-    private val context: Context = mock()
     private val configFromPreferences: AppMetricaConfig = mock()
     private val defaultConfig: AppMetricaConfig = mock()
     private val preferences: PreferencesClientDbStorage = mock()
@@ -22,11 +21,11 @@ class AppMetricaConfigForAnonymousActivationProviderTest : CommonTest() {
     @get:Rule
     val defaultAnonymousConfigProviderMockedConstructionRule =
         constructionRule<AppMetricaDefaultAnonymousConfigProvider> {
-            on { getConfig(context) } doReturn defaultConfig
+            on { getConfig() } doReturn defaultConfig
         }
 
     private val configProvider: AppMetricaConfigForAnonymousActivationProvider by setUp {
-        AppMetricaConfigForAnonymousActivationProvider(context, preferences)
+        AppMetricaConfigForAnonymousActivationProvider(preferences)
     }
 
     @Test

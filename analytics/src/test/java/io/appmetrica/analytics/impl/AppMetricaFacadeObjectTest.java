@@ -9,6 +9,8 @@ import io.appmetrica.analytics.ReporterConfig;
 import io.appmetrica.analytics.StartupParamsCallback;
 import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor;
 import io.appmetrica.analytics.impl.startup.Constants;
+import io.appmetrica.analytics.impl.startup.uuid.MultiProcessSafeUuidProvider;
+import io.appmetrica.analytics.impl.utils.FirstLaunchDetector;
 import io.appmetrica.analytics.impl.utils.executors.ClientExecutorProvider;
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule;
 import io.appmetrica.analytics.testutils.CommonTest;
@@ -23,12 +25,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
+import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -104,7 +108,13 @@ public class AppMetricaFacadeObjectTest extends CommonTest {
         assertThat(clientMigrationManagerMockedConstructionRule.getConstructionMock().constructed()).hasSize(1);
         assertThat(clientMigrationManagerMockedConstructionRule.getArgumentInterceptor().flatArguments())
             .containsOnly(mContext);
-        verify(ClientServiceLocator.getInstance().getMultiProcessSafeUuidProvider(mContext), times(1)).readUuid();
+        FirstLaunchDetector firstLaunchDetector = ClientServiceLocator.getInstance().getFirstLaunchDetector();
+        MultiProcessSafeUuidProvider multiProcessSafeUuidProvider =
+            ClientServiceLocator.getInstance().getMultiProcessSafeUuidProvider(mContext);
+        InOrder inOrder = inOrder(firstLaunchDetector, multiProcessSafeUuidProvider);
+        inOrder.verify(firstLaunchDetector).init(mContext);
+        inOrder.verify(multiProcessSafeUuidProvider).readUuid();
+        inOrder.verifyNoMoreInteractions();
     }
 
     @Test
