@@ -1,5 +1,6 @@
 package io.appmetrica.analytics.coreutils.internal.parsing
 
+import io.appmetrica.analytics.coreutils.internal.StringUtils
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import org.json.JSONArray
 import org.json.JSONObject
@@ -141,5 +142,20 @@ object JsonUtils {
                 else -> first.equals(second)
             }
         }
+    }
+
+    @JvmStatic
+    fun JSONObject?.optHexByteArray(
+        key: String,
+        fallback: ByteArray? = null
+    ): ByteArray? {
+        return this?.optStringOrNull(key)?.let {
+            try {
+                StringUtils.hexToBytes(it)
+            } catch (e: Throwable) {
+                DebugLogger.error(TAG, e, "Fail to decode hex string: $it")
+                null
+            }
+        } ?: fallback
     }
 }

@@ -6,6 +6,7 @@ import io.appmetrica.analytics.coreutils.internal.parsing.JsonUtils.optBooleanOr
 import io.appmetrica.analytics.coreutils.internal.parsing.JsonUtils.optBooleanOrNullable
 import io.appmetrica.analytics.coreutils.internal.parsing.JsonUtils.optFloatOrDefault
 import io.appmetrica.analytics.coreutils.internal.parsing.JsonUtils.optFloatOrNull
+import io.appmetrica.analytics.coreutils.internal.parsing.JsonUtils.optHexByteArray
 import io.appmetrica.analytics.coreutils.internal.parsing.JsonUtils.optJsonObjectOrDefault
 import io.appmetrica.analytics.coreutils.internal.parsing.JsonUtils.optJsonObjectOrNull
 import io.appmetrica.analytics.coreutils.internal.parsing.JsonUtils.optLongOrDefault
@@ -380,5 +381,40 @@ class JsonUtilsTest {
                 if (p0!!.isEqualTo(p1!!)) 0 else 1
             }
             .isNotEqualTo(secondJSONObject)
+    }
+
+    @Test
+    fun testOptHexByteArray() {
+        val jsonObject = JSONObject()
+        jsonObject.put("key", "1116aa")
+        assertThat(jsonObject.optHexByteArray("key", null)).isEqualTo(byteArrayOf(17, 22, -86))
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun testOptHexByteArrayIfNotExists() {
+        val jsonObject = JSONObject()
+        assertThat(jsonObject.optHexByteArray("key", null)).isNull()
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun testOnHexByteArrayIfContainsEmptyString() {
+        val jsonObject = JSONObject().put("key", "")
+        assertThat(jsonObject.optHexByteArray("key", null)).isEmpty()
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun testOptHexByteArrayForInvalidHexString() {
+        val jsonObject = JSONObject().put("key", "1a5")
+        assertThat(jsonObject.optHexByteArray("key", null)).isNull()
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun testOptHexByteArrayForNonNullFallback() {
+        assertThat(JSONObject().optHexByteArray("key", byteArrayOf(1, 2, 3)))
+            .isEqualTo(byteArrayOf(1, 2, 3))
     }
 }

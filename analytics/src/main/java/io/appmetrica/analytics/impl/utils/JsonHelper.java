@@ -259,23 +259,6 @@ public class JsonHelper {
     }
 
     @Nullable
-    public static byte[] optHexByteArray(@NonNull JSONObject jsonObject,
-                                         @NonNull String key,
-                                         byte[] fallback) {
-        byte[] result = fallback;
-        String stringToDecode = JsonUtils.optStringOrNull(jsonObject, key);
-        if (stringToDecode != null) {
-            try {
-                result = StringUtils.hexToBytes(stringToDecode);
-            } catch (Throwable e) {
-                DebugLogger.INSTANCE.error(TAG, e, "Fail to decode hex string: %s", stringToDecode);
-            }
-        }
-
-        return result;
-    }
-
-    @Nullable
     public static List<String> toStringList(@Nullable JSONArray jsonArray) throws JSONException {
         List<String> items = null;
         if (jsonArray != null && jsonArray.length() > 0) {

@@ -268,6 +268,7 @@ public final class io.appmetrica.analytics.coreutils.internal.parsing.JsonUtils 
     public static final [Nullable] Boolean optBooleanOrNullable([Nullable] org.json.JSONObject, [NonNull] String, [Nullable] Boolean)
     public static final float optFloatOrDefault([Nullable] org.json.JSONObject, [NonNull] String, float)
     public static final [Nullable] Float optFloatOrNull([Nullable] org.json.JSONObject, [NonNull] String)
+    public static final [Nullable] byte[] optHexByteArray([Nullable] org.json.JSONObject, [NonNull] String, [Nullable] byte[])
     public static final [NonNull] org.json.JSONObject optJsonObjectOrDefault([Nullable] org.json.JSONObject, [NonNull] String, [NonNull] org.json.JSONObject)
     public static final [Nullable] org.json.JSONObject optJsonObjectOrNull([Nullable] org.json.JSONObject, [NonNull] String)
     public static final [Nullable] org.json.JSONObject optJsonObjectOrNullable([Nullable] org.json.JSONObject, [NonNull] String, [Nullable] org.json.JSONObject)

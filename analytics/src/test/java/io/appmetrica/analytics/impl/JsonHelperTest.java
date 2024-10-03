@@ -27,37 +27,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class JsonHelperTest extends CommonTest {
 
     @Test
-    public void testOptHexByteArray() throws Exception {
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("key", "1116aa");
-        assertThat(JsonHelper.optHexByteArray(jsonObject, "key", null)).isEqualTo(new byte[]{17, 22, -86});
-    }
-
-    @Test
-    public void testOptHexByteArrayIfNotExists() throws Exception {
-        JSONObject jsonObject = new JSONObject();
-        assertThat(JsonHelper.optHexByteArray(jsonObject, "key", null)).isNull();
-    }
-
-    @Test
-    public void testOnHexByteArrayIfContainsEmptyString() throws Exception {
-        JSONObject jsonObject = new JSONObject().put("key", "");
-        assertThat(JsonHelper.optHexByteArray(jsonObject, "key", null)).isEmpty();
-    }
-
-    @Test
-    public void testOptHexByteArrayForInvalidHexString() throws Exception {
-        JSONObject jsonObject = new JSONObject().put("key", "1a5");
-        assertThat(JsonHelper.optHexByteArray(jsonObject, "key", null)).isNull();
-    }
-
-    @Test
-    public void testOptHexByteArrayForNonNullFallback() throws Exception {
-        assertThat(JsonHelper.optHexByteArray(new JSONObject(), "key", new byte[]{1, 2, 3}))
-            .isEqualTo(new byte[]{1, 2, 3});
-    }
-
-    @Test
     public void testClidsToStringNull() {
         assertThat(JsonHelper.clidsToString(null)).isNull();
     }
