@@ -30,6 +30,7 @@ import io.appmetrica.analytics.impl.WebViewJsInterfaceHandler
 import io.appmetrica.analytics.impl.crash.AppMetricaThrowable
 import io.appmetrica.analytics.impl.proxy.AppMetricaFacadeProvider
 import io.appmetrica.analytics.impl.proxy.AppMetricaProxy
+import io.appmetrica.analytics.impl.utils.FirstLaunchDetector
 import io.appmetrica.analytics.profile.UserProfile
 
 class SynchronousStageExecutor @VisibleForTesting constructor(
@@ -37,7 +38,8 @@ class SynchronousStageExecutor @VisibleForTesting constructor(
     private val webViewJsInterfaceHandler: WebViewJsInterfaceHandler,
     private val activityLifecycleManager: ActivityLifecycleManager,
     private val sessionsTrackingManager: SessionsTrackingManager,
-    private val contextAppearedListener: ContextAppearedListener
+    private val contextAppearedListener: ContextAppearedListener,
+    private val firstLaunchDetector: FirstLaunchDetector
 ) {
 
     constructor(
@@ -48,7 +50,8 @@ class SynchronousStageExecutor @VisibleForTesting constructor(
         webViewJsInterfaceHandler,
         ClientServiceLocator.getInstance().activityLifecycleManager,
         ClientServiceLocator.getInstance().sessionsTrackingManager,
-        ClientServiceLocator.getInstance().contextAppearedListener
+        ClientServiceLocator.getInstance().contextAppearedListener,
+        ClientServiceLocator.getInstance().firstLaunchDetector
     )
 
     fun putAppEnvironmentValue(
@@ -196,6 +199,7 @@ class SynchronousStageExecutor @VisibleForTesting constructor(
 
     fun getUuid(context: Context) {
         contextAppearedListener.onProbablyAppeared(context)
+        firstLaunchDetector.init(context)
     }
 
     fun registerAnrListener(listener: AnrListener) {}

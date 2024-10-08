@@ -15,6 +15,7 @@ import io.appmetrica.analytics.impl.WebViewJsInterfaceHandler;
 import io.appmetrica.analytics.impl.crash.AppMetricaThrowable;
 import io.appmetrica.analytics.impl.proxy.AppMetricaFacadeProvider;
 import io.appmetrica.analytics.impl.proxy.AppMetricaProxy;
+import io.appmetrica.analytics.impl.utils.FirstLaunchDetector;
 import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule;
 import io.appmetrica.analytics.testutils.CommonTest;
@@ -55,6 +56,8 @@ public class SynchronousStageExecutorTest extends CommonTest {
     private ActivityLifecycleManager activityLifecycleManager;
     @Mock
     private ContextAppearedListener contextAppearedListener;
+    @Mock
+    private FirstLaunchDetector firstLaunchDetector;
 
     private SynchronousStageExecutor synchronousStageExecutor;
     private final String mEventName = "EVENT_NAME";
@@ -77,7 +80,8 @@ public class SynchronousStageExecutorTest extends CommonTest {
             webViewJsInterfaceHandler,
             activityLifecycleManager,
             sessionsTrackingManager,
-            contextAppearedListener
+            contextAppearedListener,
+            firstLaunchDetector
         );
     }
 
@@ -233,6 +237,7 @@ public class SynchronousStageExecutorTest extends CommonTest {
     public void getUuid() {
         synchronousStageExecutor.getUuid(mContext);
 
+        verify(firstLaunchDetector).init(mContext);
         verify(contextAppearedListener).onProbablyAppeared(mContext);
     }
 }

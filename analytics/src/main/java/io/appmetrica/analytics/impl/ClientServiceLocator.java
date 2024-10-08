@@ -14,6 +14,7 @@ import io.appmetrica.analytics.impl.proxy.AppMetricaFacadeProvider;
 import io.appmetrica.analytics.impl.reporter.ReporterLifecycleListener;
 import io.appmetrica.analytics.impl.startup.uuid.MultiProcessSafeUuidProvider;
 import io.appmetrica.analytics.impl.startup.uuid.UuidFromClientPreferencesImporter;
+import io.appmetrica.analytics.impl.utils.FirstLaunchDetector;
 import io.appmetrica.analytics.impl.utils.MainProcessDetector;
 import io.appmetrica.analytics.impl.utils.ProcessDetector;
 import io.appmetrica.analytics.impl.utils.executors.ClientExecutorProvider;
@@ -72,6 +73,8 @@ public class ClientServiceLocator {
     private ScreenInfoRetriever screenInfoRetriever;
     @NonNull
     private final AppMetricaFacadeProvider appMetricaFacadeProvider = new AppMetricaFacadeProvider();
+    @NonNull
+    private final FirstLaunchDetector firstLaunchDetector = new FirstLaunchDetector();
 
     private ClientServiceLocator() {
         this(new MainProcessDetector(), new ActivityLifecycleManager(), new ClientExecutorProvider());
@@ -262,6 +265,11 @@ public class ClientServiceLocator {
     @NonNull
     public AppMetricaFacadeProvider getAppMetricaFacadeProvider() {
         return appMetricaFacadeProvider;
+    }
+
+    @NonNull
+    public FirstLaunchDetector getFirstLaunchDetector() {
+        return firstLaunchDetector;
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)

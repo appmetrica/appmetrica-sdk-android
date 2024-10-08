@@ -24,7 +24,7 @@ import java.util.concurrent.FutureTask;
 
 public class AppMetricaFacade implements IReporterFactoryProvider {
 
-    private static final String TAG = "[AppMetricaImpl]";
+    private static final String TAG = "[AppMetricaFacade]";
 
     @NonNull
     private final Context mContext;
@@ -55,11 +55,14 @@ public class AppMetricaFacade implements IReporterFactoryProvider {
     }
 
     public void init(boolean async) {
+        ClientServiceLocator clientServiceLocator = ClientServiceLocator.getInstance();
         Executor executorForInit = async
-            ? ClientServiceLocator.getInstance().getClientExecutorProvider().getDefaultExecutor()
+            ? clientServiceLocator.getClientExecutorProvider().getDefaultExecutor()
             : new BlockingExecutor();
 
         executorForInit.execute(() -> {
+            DebugLogger.INSTANCE.info(TAG, "Init first launch detector");
+            clientServiceLocator.getFirstLaunchDetector().init(mContext);
             DebugLogger.INSTANCE.info(TAG, "Check client migration");
             new ClientMigrationManager(mContext).checkMigration(mContext);
             DebugLogger.INSTANCE.info(TAG, "Warm up uuid");
@@ -239,6 +242,7 @@ public class AppMetricaFacade implements IReporterFactoryProvider {
             @NonNull final StartupParamsCallback callback,
             @NonNull final List<String> params
     ) {
+        DebugLogger.INSTANCE.info(TAG, "requestStartupParams");
         getImpl().requestStartupParams(callback, params);
     }
 

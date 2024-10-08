@@ -17,6 +17,7 @@ import io.appmetrica.analytics.impl.modules.ModuleEntryPointsRegister;
 import io.appmetrica.analytics.impl.modules.client.ClientModulesController;
 import io.appmetrica.analytics.impl.proxy.AppMetricaFacadeProvider;
 import io.appmetrica.analytics.impl.startup.uuid.MultiProcessSafeUuidProvider;
+import io.appmetrica.analytics.impl.utils.FirstLaunchDetector;
 import io.appmetrica.analytics.impl.utils.MainProcessDetector;
 import io.appmetrica.analytics.impl.utils.ProcessDetector;
 import io.appmetrica.analytics.impl.utils.executors.ClientExecutorProvider;
@@ -47,6 +48,7 @@ public class ClientServiceLocatorRule extends ExternalResource {
     public PreferencesClientDbStorage preferencesClientDbStorage;
     public AppMetricaFacadeProvider appMetricaFacadeProvider;
     public AppMetricaCoreComponentsProvider appMetricaCoreComponentsProvider;
+    public FirstLaunchDetector firstLaunchDetector;
     public ClientServiceLocator instance;
 
     @Override
@@ -70,6 +72,7 @@ public class ClientServiceLocatorRule extends ExternalResource {
         preferencesClientDbStorage = mock(PreferencesClientDbStorage.class);
         appMetricaFacadeProvider = mock(AppMetricaFacadeProvider.class);
         appMetricaCoreComponentsProvider = mock(AppMetricaCoreComponentsProvider.class);
+        firstLaunchDetector = mock(FirstLaunchDetector.class);
         when(instance.getClientExecutorProvider()).thenReturn(clientExecutorProvider);
         when(instance.getDefaultOneShotConfig()).thenReturn(mDefaultOneShotMetricaConfig);
         when(instance.getMainProcessDetector()).thenReturn(mainProcessDetector);
@@ -92,6 +95,7 @@ public class ClientServiceLocatorRule extends ExternalResource {
         when(clientExecutorProvider.getReportSenderExecutor()).thenReturn(new StubbedBlockingExecutor());
         Handler mainHandler = TestUtils.createBlockingExecutionHandlerStub();
         when(clientExecutorProvider.getMainHandler()).thenReturn(mainHandler);
+        when(instance.getFirstLaunchDetector()).thenReturn(firstLaunchDetector);
         ClientServiceLocator.setInstance(instance);
     }
 
