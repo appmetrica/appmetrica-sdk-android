@@ -35,4 +35,26 @@ class LibraryEventConstructorTest : CommonTest() {
             }
             .checkAll()
     }
+
+    @Test
+    fun `constructEvent for null values`() {
+        val moduleEvent = constructor.constructEvent(null, null, null)
+
+        ObjectPropertyAssertions(moduleEvent)
+            .withPrivateFields(true)
+            .checkField("type", EventProto.ReportMessage.Session.Event.EVENT_CLIENT)
+            .checkField("name", "appmetrica_system_event_42")
+            .checkFieldIsNull("value")
+            .checkField("serviceDataReporterType", 1)
+            .checkFieldIsNull("environment")
+            .checkFieldIsNull("extras")
+            .checkFieldRecursively<List<Map.Entry<String, Any>>>("attributes") {
+                assertThat(it.actual).containsExactlyInAnyOrderElementsOf(mapOf(
+                    "sender" to "null",
+                    "event" to "null",
+                    "payload" to "null",
+                ).entries.toList())
+            }
+            .checkAll()
+    }
 }

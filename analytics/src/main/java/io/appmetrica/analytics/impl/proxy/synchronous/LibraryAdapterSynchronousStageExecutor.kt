@@ -27,8 +27,8 @@ class LibraryAdapterSynchronousStageExecutor(
     }
 
     fun reportEvent(
-        sender: String,
-        event: String,
-        payload: String
+        sender: String?,
+        event: String?,
+        payload: String?
     ) {}
 }
