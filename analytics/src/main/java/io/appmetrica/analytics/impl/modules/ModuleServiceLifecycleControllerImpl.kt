@@ -4,7 +4,7 @@ import io.appmetrica.analytics.impl.AppMetricaServiceLifecycle
 import io.appmetrica.analytics.modulesapi.internal.service.ModuleServiceLifecycleController
 import io.appmetrica.analytics.modulesapi.internal.service.ModuleServiceLifecycleObserver
 
-class ModuleServiceLifecycleControllerImpl(
+internal class ModuleServiceLifecycleControllerImpl(
     private val serviceLifecycle: AppMetricaServiceLifecycle
 ) : ModuleServiceLifecycleController {
 
