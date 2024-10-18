@@ -124,14 +124,14 @@ public class AppMetricaFacadeTest extends CommonTest {
     @Test
     public void isInitializedForAppFutureIsNotDone() {
         AppMetricaFacade.setInstance(mInstance);
-        when(mInstance.isFullyInitialized()).thenReturn(false);
+        when(mInstance.isFullInitFutureDone()).thenReturn(false);
         assertThat(AppMetricaFacade.isInitializedForApp()).isFalse();
     }
 
     @Test
     public void isInitializedForAppNoMainReporterApiConsumerProvider() {
         AppMetricaFacade.setInstance(mInstance);
-        when(mInstance.isFullyInitialized()).thenReturn(true);
+        when(mInstance.isFullInitFutureDone()).thenReturn(true);
         when(mInstance.peekMainReporterApiConsumerProvider()).thenReturn(null);
         assertThat(AppMetricaFacade.isInitializedForApp()).isFalse();
     }
@@ -139,8 +139,18 @@ public class AppMetricaFacadeTest extends CommonTest {
     @Test
     public void isInitializedForAppInitialized() {
         AppMetricaFacade.setInstance(mInstance);
-        when(mInstance.isFullyInitialized()).thenReturn(true);
+        when(mInstance.isFullInitFutureDone()).thenReturn(true);
         when(mInstance.peekMainReporterApiConsumerProvider()).thenReturn(mock(MainReporterApiConsumerProvider.class));
         assertThat(AppMetricaFacade.isInitializedForApp()).isTrue();
+    }
+
+    @Test
+    public void isFullyInitialized() {
+        AppMetricaFacade.killInstance();
+        assertThat(AppMetricaFacade.isFullyInitialized()).isFalse();
+        AppMetricaFacade.markFullyInitialized();
+        assertThat(AppMetricaFacade.isFullyInitialized()).isTrue();
+        AppMetricaFacade.markFullyInitialized();
+        assertThat(AppMetricaFacade.isFullyInitialized()).isTrue();
     }
 }

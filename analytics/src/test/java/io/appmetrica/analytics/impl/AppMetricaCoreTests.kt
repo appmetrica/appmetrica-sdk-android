@@ -11,6 +11,7 @@ import io.appmetrica.analytics.impl.utils.executors.ClientExecutorProvider
 import io.appmetrica.analytics.logger.common.BaseReleaseLogger
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.constructionRule
+import io.appmetrica.analytics.testutils.on
 import io.appmetrica.analytics.testutils.staticRule
 import org.junit.Rule
 import org.junit.Test
@@ -20,9 +21,11 @@ import org.mockito.kotlin.clearInvocations
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.inOrder
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.verifyNoMoreInteractions
+import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 import java.util.UUID
 
@@ -67,6 +70,11 @@ internal class AppMetricaCoreTests : CommonTest() {
     @get:Rule
     val sdkUtilsMockedStaticRule = staticRule<SdkUtils>()
 
+    @get:Rule
+    val appMetricaFacadeStaticRule = staticRule<AppMetricaFacade> {
+        on { AppMetricaFacade.isFullyInitialized() } doReturn false
+    }
+
     private val runnableCaptor = argumentCaptor<Runnable>()
 
     private val reporterFactoryProvider: IReporterFactoryProvider = mock()
@@ -110,6 +118,7 @@ internal class AppMetricaCoreTests : CommonTest() {
     @Test
     fun `activate setUp crash collecting twice`() {
         core.activate(null, reporterFactoryProvider)
+        appMetricaFacadeStaticRule.staticMock.verify({ AppMetricaFacade.markFullyInitialized() }, never())
         clearInvocations(jvmCrashClientController)
         core.activate(null, reporterFactoryProvider)
         inOrder(jvmCrashClientController) {
@@ -117,6 +126,7 @@ internal class AppMetricaCoreTests : CommonTest() {
             verify(jvmCrashClientController)
                 .registerTechnicalCrashConsumers(context, reporterFactoryProvider)
         }
+        appMetricaFacadeStaticRule.staticMock.verify({ AppMetricaFacade.markFullyInitialized() }, never())
     }
 
     @Test
@@ -143,6 +153,7 @@ internal class AppMetricaCoreTests : CommonTest() {
         val config = AppMetricaConfig.newConfigBuilder(apiKey).withCrashReporting(true).build()
         core.activate(config, reporterFactoryProvider)
         clearInvocations(jvmCrashClientController)
+        whenever(AppMetricaFacade.isFullyInitialized()).thenReturn(true)
         core.activate(config, reporterFactoryProvider)
         verifyNoInteractions(jvmCrashClientController)
     }
@@ -178,6 +189,7 @@ internal class AppMetricaCoreTests : CommonTest() {
             AppMetricaConfig.newConfigBuilder(apiKey).withCrashReporting(true).build(),
             reporterFactoryProvider
         )
+        whenever(AppMetricaFacade.isFullyInitialized()).thenReturn(true)
         clearInvocations(jvmCrashClientController)
         core.activate(null, reporterFactoryProvider)
         verifyNoInteractions(jvmCrashClientController)
@@ -227,12 +239,16 @@ internal class AppMetricaCoreTests : CommonTest() {
             AppMetricaConfig.newConfigBuilder(apiKey).withAppOpenTrackingEnabled(true).build(),
             reporterFactoryProvider
         )
+        appMetricaFacadeStaticRule.staticMock.verify { AppMetricaFacade.markFullyInitialized() }
+        whenever(AppMetricaFacade.isFullyInitialized()).thenReturn(true)
         clearInvocations(appOpenWatcher)
+        appMetricaFacadeStaticRule.staticMock.clearInvocations()
         core.activate(
             AppMetricaConfig.newConfigBuilder(apiKey).withCrashReporting(false).build(),
             reporterFactoryProvider
         )
         verifyNoInteractions(appOpenWatcher)
+        appMetricaFacadeStaticRule.staticMock.verify({ AppMetricaFacade.markFullyInitialized() }, never())
     }
 
     @Test
@@ -241,6 +257,7 @@ internal class AppMetricaCoreTests : CommonTest() {
             AppMetricaConfig.newConfigBuilder(apiKey).withAppOpenTrackingEnabled(true).build(),
             reporterFactoryProvider
         )
+        whenever(AppMetricaFacade.isFullyInitialized()).thenReturn(true)
         clearInvocations(appOpenWatcher)
         core.activate(null, reporterFactoryProvider)
         verifyNoInteractions(appOpenWatcher)

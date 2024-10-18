@@ -25,8 +25,6 @@ internal class AppMetricaCore(
     override val appOpenWatcher = AppOpenWatcher()
     override val jvmCrashClientController = JvmCrashClientController()
 
-    private var fullActivationCompleted = false
-
     init {
         BaseReleaseLogger.init(context)
         defaultExecutor.execute { SdkUtils.logSdkInfo() }
@@ -42,7 +40,7 @@ internal class AppMetricaCore(
         reporterFactoryProvider: IReporterFactoryProvider
     ) {
         DebugLogger.info(tag, "activate with config: ${config?.toJson()?.toString()}")
-        if (!fullActivationCompleted) {
+        if (!AppMetricaFacade.isFullyInitialized()) {
             if (config.shouldCollectCrashes()) {
                 jvmCrashClientController.setUpCrashHandler()
                 jvmCrashClientController.registerTechnicalCrashConsumers(context, reporterFactoryProvider)
@@ -59,7 +57,7 @@ internal class AppMetricaCore(
             }
             // Config is null means anonymous activation
             if (config != null) {
-                fullActivationCompleted = true
+                AppMetricaFacade.markFullyInitialized()
             }
         } else {
             DebugLogger.info(tag, "Full activation already has been completed")
