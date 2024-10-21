@@ -80,18 +80,18 @@ public class AppMetricaFacadeObjectTest extends CommonTest {
     @Test
     public void futureIsInited() {
         mFacade.init(false);
-        assertThat(mFacade.isFullyInitialized()).isTrue();
+        assertThat(mFacade.isFullInitFutureDone()).isTrue();
     }
 
     @Test
     public void futureIsInitedAsynchronously() {
         mFacade.init(true);
-        assertThat(mFacade.isFullyInitialized()).isFalse();
+        assertThat(mFacade.isFullInitFutureDone()).isFalse();
         verify(executor, times(2)).execute(runnableArgumentCaptor.capture());
         for (Runnable runnable : runnableArgumentCaptor.getAllValues()) {
             runnable.run();
         }
-        assertThat(mFacade.isFullyInitialized()).isTrue();
+        assertThat(mFacade.isFullInitFutureDone()).isTrue();
     }
 
     @Test
@@ -99,7 +99,7 @@ public class AppMetricaFacadeObjectTest extends CommonTest {
         mFacade.init(true);
         // One for warm up uuid and one more for full init future
         verify(executor, times(2)).execute(runnableArgumentCaptor.capture());
-        assertThat(mFacade.isFullyInitialized()).isFalse();
+        assertThat(mFacade.isFullInitFutureDone()).isFalse();
         runnableArgumentCaptor.getAllValues().get(0).run();
 
         //One from setUp and one more - at this test

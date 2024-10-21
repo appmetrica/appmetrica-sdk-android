@@ -56,7 +56,7 @@ public class ClientServiceLocator {
     @NonNull
     private final ActivityAppearedListener activityAppearedListener;
     @Nullable
-    private ReporterLifecycleListener reporterLifecycleListener;
+    private volatile ReporterLifecycleListener reporterLifecycleListener;
     @NonNull
     private final TechnicalCrashProcessorFactory crashProcessorFactory;
     @Nullable

@@ -38,6 +38,7 @@ public class AppMetricaFacade implements IReporterFactoryProvider {
     @NonNull
     private final IAppMetricaCore mCore;
     private static volatile boolean sActivated = false;
+    private static volatile boolean fullyInitialized;
 
     @AnyThread
     public AppMetricaFacade(@NonNull final Context context) {
@@ -122,9 +123,19 @@ public class AppMetricaFacade implements IReporterFactoryProvider {
     }
 
     @AnyThread
+    public static void markFullyInitialized() {
+        fullyInitialized = true;
+    }
+
+    @AnyThread
+    public static boolean isFullyInitialized() {
+        return fullyInitialized;
+    }
+
+    @AnyThread
     public synchronized static boolean isInitializedForApp() {
         AppMetricaFacade localCopy = sInstance;
-        return localCopy != null && localCopy.isFullyInitialized() &&
+        return localCopy != null && localCopy.isFullInitFutureDone() &&
             localCopy.peekMainReporterApiConsumerProvider() != null;
     }
 
@@ -271,7 +282,7 @@ public class AppMetricaFacade implements IReporterFactoryProvider {
     }
 
     @VisibleForTesting
-    boolean isFullyInitialized() {
+    boolean isFullInitFutureDone() {
         return mFullInitFuture.isDone();
     }
 
@@ -284,6 +295,7 @@ public class AppMetricaFacade implements IReporterFactoryProvider {
     public static synchronized void killInstance() {
         sInstance = null;
         sActivated = false;
+        fullyInitialized = false;
     }
 
     @NonNull
