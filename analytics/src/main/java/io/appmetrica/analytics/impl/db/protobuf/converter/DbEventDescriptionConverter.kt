@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.impl.db.protobuf.converter
 
 import io.appmetrica.analytics.coreapi.internal.data.ProtobufConverter
+import io.appmetrica.analytics.coreutils.internal.StringUtils
 import io.appmetrica.analytics.impl.EventSource
 import io.appmetrica.analytics.impl.FirstOccurrenceStatus
 import io.appmetrica.analytics.impl.db.event.DbEventModel
@@ -17,10 +18,10 @@ class DbEventDescriptionConverter(
             proto.customType = it
         }
         value.name?.let {
-            proto.name = it
+            proto.name = StringUtils.correctIllFormedString(it)
         }
         value.value?.let {
-            proto.value = it
+            proto.value = StringUtils.correctIllFormedString(it)
         }
         value.numberOfType?.let {
             proto.numberOfType = it

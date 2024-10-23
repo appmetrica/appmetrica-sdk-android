@@ -9,6 +9,7 @@ import io.appmetrica.analytics.impl.db.event.DbLocationModel
 import io.appmetrica.analytics.impl.protobuf.client.DbProto
 import io.appmetrica.analytics.impl.utils.encryption.EventEncryptionMode
 import io.appmetrica.analytics.testutils.CommonTest
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
@@ -242,6 +243,64 @@ class DbEventDescriptionConverterTest : CommonTest() {
                 "openId",
                 "extras"
             ).checkAll()
+    }
+
+    @Test
+    fun fromModelForIllFormedValue() {
+        val invalidFormattedStringWithUnpairedSurrogate = "\uD83D"
+        val validValuePart = "Value with ill-formed part"
+        val proto = converter.fromModel(
+            DbEventModel.Description(
+                customType,
+                name,
+                validValuePart + invalidFormattedStringWithUnpairedSurrogate,
+                numberOfType,
+                locationInfo,
+                errorEnvironment,
+                appEnvironment,
+                appEnvironmentRevision,
+                truncated,
+                connectionType,
+                cellularConnectionType,
+                encryptingMode,
+                profileId,
+                firstOccurrenceStatus,
+                source,
+                attributionIdChanged,
+                openId,
+                extras
+            )
+        )
+        assertThat(proto.value).contains(validValuePart)
+    }
+
+    @Test
+    fun fromModelForIllFormedName() {
+        val invalidFormattedStringWithUnpairedSurrogate = "\uD83D"
+        val validValuePart = "Value with ill-formed part"
+        val proto = converter.fromModel(
+            DbEventModel.Description(
+                customType,
+                validValuePart + invalidFormattedStringWithUnpairedSurrogate,
+                value,
+                numberOfType,
+                locationInfo,
+                errorEnvironment,
+                appEnvironment,
+                appEnvironmentRevision,
+                truncated,
+                connectionType,
+                cellularConnectionType,
+                encryptingMode,
+                profileId,
+                firstOccurrenceStatus,
+                source,
+                attributionIdChanged,
+                openId,
+                extras
+            )
+        )
+        assertThat(proto.name).contains(validValuePart)
     }
 }
 
