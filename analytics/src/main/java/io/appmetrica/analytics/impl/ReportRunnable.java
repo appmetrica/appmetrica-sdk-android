@@ -8,6 +8,7 @@ import io.appmetrica.analytics.impl.component.CommonArguments;
 import io.appmetrica.analytics.impl.component.clients.ClientDescription;
 import io.appmetrica.analytics.impl.component.clients.ClientRepository;
 import io.appmetrica.analytics.impl.component.clients.ClientUnit;
+import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 
 class ReportRunnable implements Runnable {
@@ -33,30 +34,38 @@ class ReportRunnable implements Runnable {
 
     @Override
     public void run() {
-        final ClientConfiguration sdkConfig = ClientConfiguration.fromBundle(mContext, mExtras);
-        DebugLogger.INSTANCE.info(
-            TAG,
-            "Handle new report with sdkConfig: %s; report = %s",
-            sdkConfig,
-            mReport
-        );
-        if (sdkConfig == null) {
-            return;
+        try {
+            final ClientConfiguration sdkConfig = ClientConfiguration.fromBundle(mContext, mExtras);
+            DebugLogger.INSTANCE.info(
+                TAG,
+                "Handle new report with sdkConfig: %s; report = %s",
+                sdkConfig,
+                mReport
+            );
+            if (sdkConfig == null) {
+                return;
+            }
+
+            ClientDescription clientDescription = ClientDescription.fromClientConfiguration(sdkConfig);
+
+            SdkEnvironmentHolder sdkEnvironmentHolder = GlobalServiceLocator.getInstance().getSdkEnvironmentHolder();
+
+            sdkEnvironmentHolder.mayBeUpdateAppVersion(
+                sdkConfig.getReporterConfiguration().getAppVersion(),
+                sdkConfig.getReporterConfiguration().getAppBuildNumber()
+            );
+            sdkEnvironmentHolder.mayBeUpdateDeviceTypeFromClient(sdkConfig.getReporterConfiguration().getDeviceType());
+
+            CommonArguments arguments = new CommonArguments(sdkConfig);
+            ClientUnit clientUnit = mClientRepository.getOrCreateClient(clientDescription, arguments);
+
+            clientUnit.handle(mReport, arguments);
+        } catch (Throwable e) {
+            AppMetricaSelfReportFacade.getReporter().reportError(
+                "Exception during processing event with type: " + mReport.getType() +
+                    " (" + mReport.getCustomType() + "): " + e.getMessage(),
+                e
+            );
         }
-
-        ClientDescription clientDescription = ClientDescription.fromClientConfiguration(sdkConfig);
-
-        SdkEnvironmentHolder sdkEnvironmentHolder = GlobalServiceLocator.getInstance().getSdkEnvironmentHolder();
-
-        sdkEnvironmentHolder.mayBeUpdateAppVersion(
-            sdkConfig.getReporterConfiguration().getAppVersion(),
-            sdkConfig.getReporterConfiguration().getAppBuildNumber()
-        );
-        sdkEnvironmentHolder.mayBeUpdateDeviceTypeFromClient(sdkConfig.getReporterConfiguration().getDeviceType());
-
-        CommonArguments arguments = new CommonArguments(sdkConfig);
-        ClientUnit clientUnit = mClientRepository.getOrCreateClient(clientDescription, arguments);
-
-        clientUnit.handle(mReport, arguments);
     }
 }
