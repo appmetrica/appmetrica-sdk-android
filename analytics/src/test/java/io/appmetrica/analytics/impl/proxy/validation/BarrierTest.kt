@@ -620,4 +620,14 @@ class BarrierTest : CommonTest() {
         whenever(appMetricaFacadeProvider.isActivated).thenReturn(false)
         mBarrier.reportExternalAdRevenue("string")
     }
+
+    @Test
+    fun `reportAnr for valid values`() {
+        mBarrier.reportAnr(mapOf(mock<Thread>() to arrayOf(mock<StackTraceElement>())))
+    }
+
+    @Test(expected = ValidationException::class)
+    fun `reportAnr for null all threads`() {
+        mBarrier.reportAnr(null)
+    }
 }

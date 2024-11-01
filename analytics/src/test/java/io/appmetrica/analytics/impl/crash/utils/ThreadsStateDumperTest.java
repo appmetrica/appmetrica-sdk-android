@@ -58,7 +58,7 @@ public class ThreadsStateDumperTest extends CommonTest {
         }
         doReturn(mainThreadState).when(threadConverter).apply(same(mainThread), any(StackTraceElement[].class));
         doReturn(mainThread).when(threadProvider).getMainThread();
-        doReturn(otherThreads).when(threadProvider).getAllOtherThreads();
+        doReturn(otherThreads).when(threadProvider).getAllThreadsStacktraces();
     }
 
     @Test

@@ -126,6 +126,11 @@ public class ReporterExtendedStub implements IReporterExtended {
     }
 
     @Override
+    public void reportAnr(@NonNull Map<Thread, StackTraceElement[]> allThreads) {
+        // Do nothing
+    }
+
+    @Override
     public void reportAnr(@NonNull AllThreads allThreads) {
         //Do nothing
     }

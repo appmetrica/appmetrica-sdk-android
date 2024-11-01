@@ -115,6 +115,23 @@ public class SelfReporterWrapperTest extends CommonTest {
     }
 
     @Test
+    public void reportAnrFromApiInitialized() {
+        Map<Thread, StackTraceElement[]> allThread = mock();
+        mSelfReporterWrapper.onInitializationFinished(mContext);
+        mSelfReporterWrapper.reportAnr(allThread);
+        verify(mReporter).reportAnr(allThread);
+    }
+
+    @Test
+    public void reportAnrFromApiNotInitialized() {
+        Map<Thread, StackTraceElement[]> allThread = mock();
+        mSelfReporterWrapper.reportAnr(allThread);
+        verify(mReporter, never()).reportAnr(allThread);
+        mSelfReporterWrapper.onInitializationFinished(mContext);
+        verify(mReporter).reportAnr(allThread);
+    }
+
+    @Test
     public void testPutAppEnvironmentValueInitialized() {
         final String key = "aaa";
         final String value = "bbb";

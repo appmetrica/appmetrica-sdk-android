@@ -108,6 +108,27 @@ public class ReporterExtendedProxyTest extends CommonTest {
     }
 
     @Test
+    public void reportAnrFromApi() {
+        Thread thread = mock(Thread.class);
+        StackTraceElement[] stackTraceElements = new StackTraceElement[]{mock(StackTraceElement.class)};
+        Map<Thread, StackTraceElement[]> allThreads = new HashMap<>();
+        allThreads.put(thread, stackTraceElements);
+        //noinspection unchecked
+        ArgumentCaptor<Map<Thread, StackTraceElement[]>> allThreadsCaptor = ArgumentCaptor.forClass(Map.class);
+        mReporterExtendedProxy.reportAnr(allThreads);
+
+        InOrder inOrder = Mockito.inOrder(reporterBarrier, mSynchronousStageExecutor, mReporter);
+        inOrder.verify(reporterBarrier).reportAnr(allThreads);
+        inOrder.verify(mSynchronousStageExecutor).reportAnr(allThreads);
+        inOrder.verify(mReporter).reportAnr(allThreadsCaptor.capture());
+        inOrder.verifyNoMoreInteractions();
+
+        assertThat(allThreadsCaptor.getValue())
+            .isNotSameAs(allThreads)
+            .containsExactlyEntriesOf(allThreads);
+    }
+
+    @Test
     public void testSendEventsBuffer() {
         mReporterExtendedProxy.sendEventsBuffer();
         InOrder inOrder = Mockito.inOrder(reporterBarrier, mSynchronousStageExecutor, mReporter);

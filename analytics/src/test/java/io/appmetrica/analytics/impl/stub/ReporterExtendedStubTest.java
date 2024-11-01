@@ -16,6 +16,7 @@ import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verifyNoInteractions;
 
 @RunWith(RobolectricTestRunner.class)
@@ -135,6 +136,12 @@ public class ReporterExtendedStubTest extends CommonTest {
     public void reportAnr() {
         getStub().reportAnr(allThreads);
         verifyNoInteractions(allThreads);
+    }
+
+    @Test
+    public void reportAnrFromApi() {
+        //noinspection unchecked
+        getStub().reportAnr(mock(HashMap.class));
     }
 
     @Test

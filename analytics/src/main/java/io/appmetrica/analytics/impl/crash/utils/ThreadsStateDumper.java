@@ -3,7 +3,6 @@ package io.appmetrica.analytics.impl.crash.utils;
 import android.os.Looper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.backport.BiFunction;
 import io.appmetrica.analytics.coreutils.internal.StringUtils;
 import io.appmetrica.analytics.impl.ClientServiceLocator;
@@ -18,11 +17,16 @@ import java.util.TreeMap;
 
 public class ThreadsStateDumper {
 
-    interface ThreadProvider {
+    public interface ThreadProvider {
 
+        @NonNull
         Thread getMainThread();
 
-        Map<Thread, StackTraceElement[]> getAllOtherThreads();
+        @Nullable
+        StackTraceElement[] getMainThreadStacktrace();
+
+        @NonNull
+        Map<Thread, StackTraceElement[]> getAllThreadsStacktraces();
 
     }
 
@@ -32,24 +36,34 @@ public class ThreadsStateDumper {
 
     public ThreadsStateDumper() {
         this(new ThreadProvider() {
-            @Override
-            public Thread getMainThread() {
-                return Looper.getMainLooper().getThread();
-            }
 
-            @Override
-            public Map<Thread, StackTraceElement[]> getAllOtherThreads() {
-                return Thread.getAllStackTraces();
-            }
-        }, new FullStateConverter(),
+                 @Override
+                 @NonNull
+                 public Thread getMainThread() {
+                     return Looper.getMainLooper().getThread();
+                 }
+
+                 @Nullable
+                 @Override
+                 public StackTraceElement[] getMainThreadStacktrace() {
+                     return null;
+                 }
+
+                 @Override
+                 @NonNull
+                 public Map<Thread, StackTraceElement[]> getAllThreadsStacktraces() {
+                     return Thread.getAllStackTraces();
+                 }
+             }, new FullStateConverter(),
             ClientServiceLocator.getInstance().getProcessDetector()
         );
     }
 
-    @VisibleForTesting()
-    ThreadsStateDumper(@NonNull ThreadProvider threadProvider,
-                       @NonNull BiFunction<Thread, StackTraceElement[], ThreadState> converter,
-                       @NonNull ProcessDetector processDetector) {
+    public ThreadsStateDumper(
+        @NonNull ThreadProvider threadProvider,
+        @NonNull BiFunction<Thread, StackTraceElement[], ThreadState> converter,
+        @NonNull ProcessDetector processDetector
+    ) {
         this.threadProvider = threadProvider;
         this.threadConverter = converter;
         this.processDetector = processDetector;
@@ -58,13 +72,12 @@ public class ThreadsStateDumper {
     /**
      * @return String dump of all a thread details and stacktraces.
      */
-    //region changed code
     public AllThreads getThreadsDumpForAnr() {
         Thread mainThread = threadProvider.getMainThread();
         return new AllThreads(
-                getMainThreadState(mainThread),
-                getAllThreadsDump(mainThread, null),
-                processDetector.getProcessName()
+            getMainThreadState(mainThread),
+            getAllThreadsDump(mainThread, null),
+            processDetector.getProcessName()
         );
     }
 
@@ -80,7 +93,10 @@ public class ThreadsStateDumper {
     private ThreadState getMainThreadState(@NonNull Thread mainThread) {
         StackTraceElement[] mainStackTrace = null;
         try {
-            mainStackTrace = mainThread.getStackTrace();
+            mainStackTrace = threadProvider.getMainThreadStacktrace();
+            if (mainStackTrace == null) {
+                mainStackTrace = mainThread.getStackTrace();
+            }
         } catch (SecurityException e) { /* do nothing */ }
 
         return threadConverter.apply(mainThread, mainStackTrace);
@@ -96,9 +112,7 @@ public class ThreadsStateDumper {
                 if (first == second) {
                     return 0;
                 }
-                //region changed code
                 return StringUtils.compare(first.getName(), second.getName());
-                //endregion
             }
         };
 
@@ -108,18 +122,16 @@ public class ThreadsStateDumper {
         Map<Thread, StackTraceElement[]> allStackTraces = null;
 
         try {
-            allStackTraces = threadProvider.getAllOtherThreads();
+            allStackTraces = threadProvider.getAllThreadsStacktraces();
         } catch (SecurityException e) { /* do nothing */ }
 
         if (allStackTraces != null) {
             stackTraces.putAll(allStackTraces);
         }
 
-        //region changed code
         if (excludedThread != null) {
             stackTraces.remove(excludedThread);
         }
-        //endregion
 
         for (Map.Entry<Thread, StackTraceElement[]> entry : stackTraces.entrySet()) {
             final Thread thread = entry.getKey();
@@ -129,14 +141,9 @@ public class ThreadsStateDumper {
 
             final StackTraceElement[] stackTrace = entry.getValue();
 
-            //region changed code
             threads.add(threadConverter.apply(thread, stackTrace));
-            //endregion
         }
 
-        //region changed code
         return threads;
     }
-    //endregion
-
 }

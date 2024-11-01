@@ -207,4 +207,6 @@ class SynchronousStageExecutor @VisibleForTesting constructor(
     fun reportExternalAttribution(value: ExternalAttribution) {}
 
     fun reportExternalAdRevenue(vararg values: Any) {}
+
+    fun reportAnr(allThreads: Map<Thread, Array<StackTraceElement>>) {}
 }

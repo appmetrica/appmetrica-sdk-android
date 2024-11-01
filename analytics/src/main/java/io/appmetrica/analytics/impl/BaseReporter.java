@@ -14,6 +14,7 @@ import io.appmetrica.analytics.impl.crash.AppMetricaThrowable;
 import io.appmetrica.analytics.impl.crash.PluginErrorDetailsConverter;
 import io.appmetrica.analytics.impl.crash.jvm.client.AllThreads;
 import io.appmetrica.analytics.impl.crash.jvm.client.Anr;
+import io.appmetrica.analytics.impl.crash.jvm.client.AnrFromApiReportingTask;
 import io.appmetrica.analytics.impl.crash.jvm.client.CustomError;
 import io.appmetrica.analytics.impl.crash.jvm.client.RegularError;
 import io.appmetrica.analytics.impl.crash.jvm.client.UnhandledException;
@@ -515,6 +516,11 @@ public abstract class BaseReporter implements IBaseReporter {
     public void setDataSendingEnabled(boolean value) {
         mReporterEnvironment.getReporterConfiguration().setDataSendingEnabled(value);
         mPublicLogger.info("Updated data sending enabled: %s", value);
+    }
+
+    @Override
+    public void reportAnr(@NonNull Map<Thread, StackTraceElement[]> allThreads) {
+        new AnrFromApiReportingTask(this, allThreads).execute();
     }
 
     @Override

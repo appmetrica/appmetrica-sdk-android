@@ -9,6 +9,7 @@ import io.appmetrica.analytics.impl.crash.AppMetricaThrowable;
 import io.appmetrica.analytics.impl.crash.PluginErrorDetailsConverter;
 import io.appmetrica.analytics.impl.crash.jvm.client.AllThreads;
 import io.appmetrica.analytics.impl.crash.jvm.client.Anr;
+import io.appmetrica.analytics.impl.crash.jvm.client.AnrFromApiReportingTask;
 import io.appmetrica.analytics.impl.crash.jvm.client.CustomError;
 import io.appmetrica.analytics.impl.crash.jvm.client.RegularError;
 import io.appmetrica.analytics.impl.crash.jvm.client.ThreadState;
@@ -111,6 +112,9 @@ public abstract class BaseReporterTest extends BaseReporterData {
     @Rule
     public final MockedConstructionRule<AdRevenueWrapper> adRevenueWrapperConstructor =
             new MockedConstructionRule<>(AdRevenueWrapper.class);
+    @Rule
+    public final MockedConstructionRule<AnrFromApiReportingTask> anrFromApiReportingTaskMockedConstructionRule =
+        new MockedConstructionRule<>(AnrFromApiReportingTask.class);
 
     @Rule
     public final GlobalServiceLocatorRule globalServiceLocatorRule = new GlobalServiceLocatorRule();
@@ -191,6 +195,17 @@ public abstract class BaseReporterTest extends BaseReporterData {
                 .checkField("mBuildId", buildId)
                 .checkField("mIsOffline", isOffline)
                 .checkAll();
+    }
+
+    @Test
+    public void reportAnrFromApi() {
+        //noinspection unchecked
+        Map<Thread, StackTraceElement[]> allThread = mock(HashMap.class);
+        mReporter.reportAnr(allThread);
+        assertThat(anrFromApiReportingTaskMockedConstructionRule.getConstructionMock().constructed()).hasSize(1);
+        assertThat(anrFromApiReportingTaskMockedConstructionRule.getArgumentInterceptor().flatArguments())
+            .containsExactly(mReporter, allThread);
+        verify(anrFromApiReportingTaskMockedConstructionRule.getConstructionMock().constructed().get(0)).execute();
     }
 
     @Test

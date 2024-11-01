@@ -265,4 +265,12 @@ public interface IReporter {
      * <p>If called before metrica initialization, app environment will be cleared right after init
      */
     void clearAppEnvironment();
+
+    /**
+     * Sends an ANR event (the application is not responding) manually.
+     *
+     * @param allThreads A snapshot of all streams with stack traces.
+     *                   Can be received by calling {@link Thread#getAllStackTraces()}.
+     */
+    void reportAnr(@NonNull Map<Thread, StackTraceElement[]> allThreads);
 }

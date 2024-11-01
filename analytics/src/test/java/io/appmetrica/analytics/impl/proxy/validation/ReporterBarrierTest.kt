@@ -196,6 +196,16 @@ class ReporterBarrierTest : CommonTest() {
     }
 
     @Test
+    fun `reportAnr from api for valid values`() {
+        mBarrier.reportAnr(mock<Map<Thread, Array<StackTraceElement>>>())
+    }
+
+    @Test(expected = ValidationException::class)
+    fun `reportAnr from api for null all threads`() {
+        mBarrier.reportAnr(null as Map<Thread, Array<StackTraceElement>>?)
+    }
+
+    @Test
     fun activate() {
         mBarrier.activate(mock<ReporterConfig>())
     }

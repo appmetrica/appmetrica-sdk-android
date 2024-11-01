@@ -131,6 +131,19 @@ public class ReporterExtendedProxy implements IReporterExtended {
     }
 
     @Override
+    public void reportAnr(@NonNull Map<Thread, StackTraceElement[]> allThreads) {
+        barrier.reportAnr(allThreads);
+        synchronousStageExecutor.reportAnr(allThreads);
+        List<Map.Entry<Thread, StackTraceElement[]>> entries = CollectionUtils.getListFromMap(allThreads);
+        mExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+                getReporter().reportAnr(CollectionUtils.getMapFromList(entries));
+            }
+        });
+    }
+
+    @Override
     public void reportAnr(@NonNull final AllThreads allThreads) {
         barrier.reportAnr(allThreads);
         synchronousStageExecutor.reportAnr(allThreads);

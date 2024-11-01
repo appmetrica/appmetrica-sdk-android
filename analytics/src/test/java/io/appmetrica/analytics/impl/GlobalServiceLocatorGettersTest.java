@@ -371,6 +371,10 @@ public class GlobalServiceLocatorGettersTest extends CommonTest {
     public final MockedConstructionRule<StartupStateHolder> startupStateHolderMockedConstructionRule =
         new MockedConstructionRule<>(StartupStateHolder.class);
 
+    @Rule
+    public final MockedConstructionRule<ReferrerHolder> referrerHolderMockedConstructionRule =
+        new MockedConstructionRule<>(ReferrerHolder.class);
+
     private GlobalServiceLocator mGlobalServiceLocator;
 
     @Before

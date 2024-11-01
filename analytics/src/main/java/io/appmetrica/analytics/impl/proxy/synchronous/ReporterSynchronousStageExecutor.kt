@@ -60,5 +60,7 @@ class ReporterSynchronousStageExecutor {
 
     fun reportAnr(allThreads: AllThreads) {}
 
+    fun reportAnr(allThread: Map<Thread, Array<StackTraceElement>>) {}
+
     fun setSessionExtra(key: String, value: ByteArray?) {}
 }

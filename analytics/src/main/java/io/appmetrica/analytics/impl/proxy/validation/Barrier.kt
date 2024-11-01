@@ -102,6 +102,10 @@ class Barrier(
         NonNullValidator<ECommerceEvent>("ECommerceEvent")
     )
 
+    private val anrAllThreadValidator = ThrowIfFailedValidator(
+        NonNullValidator<Map<Thread, Array<StackTraceElement>>>("Anr all threads")
+    )
+
     fun enableActivityAutoTracking(application: Application?) {
         applicationValidator.validate(application)
     }
@@ -299,5 +303,9 @@ class Barrier(
 
     fun reportExternalAdRevenue(vararg values: Any) {
         activationValidator.validate()
+    }
+
+    fun reportAnr(allThread: Map<Thread, Array<StackTraceElement>>?) {
+        anrAllThreadValidator.validate(allThread)
     }
 }

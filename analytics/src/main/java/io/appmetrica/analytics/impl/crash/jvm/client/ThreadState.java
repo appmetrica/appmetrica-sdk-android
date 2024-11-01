@@ -20,7 +20,8 @@ public class ThreadState {
     public final List<StackTraceElement> stacktrace;
 
     public ThreadState(@NonNull String name,
-                       int priority, long tid,
+                       int priority,
+                       long tid,
                        @NonNull String group,
                        @Nullable Integer state,
                        @Nullable List<StackTraceElement> stacktrace) {

@@ -50,6 +50,16 @@ public class SelfReporterWrapper implements IReporterExtended, IPluginReporter {
     }
 
     @Override
+    public void reportAnr(@NonNull Map<Thread, StackTraceElement[]> allThreads) {
+        processCommand(new IReporterCommandPerformer() {
+            @Override
+            public void perform(@NonNull IReporterExtended reporter) {
+                reporter.reportAnr(allThreads);
+            }
+        });
+    }
+
+    @Override
     public void reportAnr(@NonNull final AllThreads allThreads) {
         processCommand(new IReporterCommandPerformer() {
             @Override

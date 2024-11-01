@@ -540,6 +540,18 @@ public final class AppMetricaProxy extends BaseAppMetricaProxy {
         });
     }
 
+    public void reportAnr(@NonNull Map<Thread, StackTraceElement[]> allThreads) {
+        barrier.reportAnr(allThreads);
+        synchronousStageExecutor.reportAnr(allThreads);
+        List<Map.Entry<Thread, StackTraceElement[]>> entries = CollectionUtils.getListFromMap(allThreads);
+        getExecutor().execute(new Runnable() {
+            @Override
+            public void run() {
+                getMainReporter().reportAnr(CollectionUtils.getMapFromList(entries));
+            }
+        });
+    }
+
     @VisibleForTesting
     Barrier getMainFacadeBarrier() {
         return barrier;

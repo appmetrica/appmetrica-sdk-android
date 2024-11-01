@@ -622,4 +622,20 @@ public final class AppMetrica {
     public static void reportExternalAdRevenue(@NonNull Object... values) {
         AppMetricaProxyProvider.getProxy().reportExternalAdRevenue(values);
     }
+
+    /**
+     * Sends an ANR event (the application is not responding) manually. 
+     * It is an alternative for automatic ANR tracking, which is enabled in the ${@link AppMetricaConfig} configuration
+     * during SDK activation.
+     *
+     * @param allThreads A snapshot of all streams with stack traces.
+     *                   Can be received by calling {@link Thread#getAllStackTraces()}.
+     *
+     * @see AppMetricaConfig.Builder#withAnrMonitoring(boolean)
+     * @see AppMetricaConfig.Builder#withAnrMonitoringTimeout(int)
+     * @see AppMetrica#activate(Context, AppMetricaConfig) 
+     */
+    public static void reportAnr(@NonNull Map<Thread, StackTraceElement[]> allThreads) {
+        AppMetricaProxyProvider.getProxy().reportAnr(allThreads);
+    }
 }

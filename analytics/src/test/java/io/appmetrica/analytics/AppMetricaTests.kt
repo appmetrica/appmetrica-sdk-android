@@ -327,4 +327,12 @@ internal class AppMetricaTests : CommonTest() {
         AppMetrica.reportExternalAdRevenue(value)
         verify(proxy).reportExternalAdRevenue(value)
     }
+
+    @Test
+    fun reportAnr() {
+        val mainThread: Thread = mock()
+        val allThreads = mapOf(mainThread to arrayOf(mock<StackTraceElement>()))
+        AppMetrica.reportAnr(allThreads)
+        verify(proxy).reportAnr(allThreads)
+    }
 }

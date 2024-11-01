@@ -42,6 +42,10 @@ class ReporterBarrier {
         NonNullValidator<ECommerceEvent>("ECommerceEvent")
     )
 
+    private val anrAllThreadValidator = ThrowIfFailedValidator(
+        NonNullValidator<Map<Thread, Array<StackTraceElement>>>("ANR all threads")
+    )
+
     fun reportEvent(eventName: String?) {
         eventNameValidator.validate(eventName)
     }
@@ -119,6 +123,10 @@ class ReporterBarrier {
     fun clearAppEnvironment() {}
 
     fun sendEventsBuffer() {}
+
+    fun reportAnr(allThreads: Map<Thread, Array<StackTraceElement>>?) {
+        anrAllThreadValidator.validate(allThreads)
+    }
 
     fun reportAnr(allThreads: AllThreads?) {}
 

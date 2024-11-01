@@ -679,6 +679,28 @@ public class AppMetricaProxyTest extends CommonTest {
         order.verify(moduleAdRevenueProcessor).process(value);
     }
 
+    @Test
+    public void reportAnr() {
+        Thread thread = mock(Thread.class);
+        StackTraceElement[] stackTraceElements = new StackTraceElement[]{mock(StackTraceElement.class)};
+        Map<Thread, StackTraceElement[]> allThreads = new HashMap<>();
+        allThreads.put(thread, stackTraceElements);
+        //noinspection unchecked
+        ArgumentCaptor<Map<Thread, StackTraceElement[]>> allThreadsCaptor = ArgumentCaptor.forClass(Map.class);
+
+        mProxy.reportAnr(allThreads);
+
+        InOrder inOrder = inOrder(mBarrier, mSynchronousStageExecutor, mMainReporter);
+        inOrder.verify(mBarrier).reportAnr(allThreads);
+        inOrder.verify(mSynchronousStageExecutor).reportAnr(allThreads);
+        inOrder.verify(mMainReporter).reportAnr(allThreadsCaptor.capture());
+        inOrder.verifyNoMoreInteractions();
+
+        assertThat(allThreadsCaptor.getValue())
+            .isNotSameAs(allThreads)
+            .containsExactlyEntriesOf(allThreads);
+    }
+
     private void checkSetDataSendingEnabled(boolean value) {
         mProxy.setDataSendingEnabled(value);
         InOrder order = inOrder(mBarrier, mSynchronousStageExecutor, mProvider);
