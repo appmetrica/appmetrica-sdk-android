@@ -9,7 +9,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.appmetrica.analytics</groupId>
   <artifactId>analytics-modules-api</artifactId>
-  <version>7.3.0</version>
+  <version>7.4.0</version>
   <packaging>aar</packaging>
   <name>AppMetrica SDK Modules API</name>
   <description>AppMetrica SDK Module</description>
@@ -42,25 +42,25 @@
     <dependency>
       <groupId>io.appmetrica.analytics</groupId>
       <artifactId>analytics-core-api</artifactId>
-      <version>7.3.0</version>
+      <version>7.4.0</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>io.appmetrica.analytics</groupId>
       <artifactId>analytics-core-utils</artifactId>
-      <version>7.3.0</version>
+      <version>7.4.0</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>io.appmetrica.analytics</groupId>
       <artifactId>analytics-location-api</artifactId>
-      <version>7.3.0</version>
+      <version>7.4.0</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>io.appmetrica.analytics</groupId>
       <artifactId>analytics-proto</artifactId>
-      <version>7.3.0</version>
+      <version>7.4.0</version>
       <scope>runtime</scope>
     </dependency>
   </dependencies>
