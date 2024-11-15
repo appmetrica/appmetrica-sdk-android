@@ -57,7 +57,7 @@ class AdRevenueConverterTest : CommonTest() {
             .checkField("adPlacementName", "some_placement")
             .checkField("precision", "some_revenuePrecision")
             .checkField("payload", mapOf("countryCode" to "RU"))
-            .checkField("autoCollected", false)
+            .checkField("autoCollected", true)
             .checkAll()
     }
 
@@ -76,7 +76,7 @@ class AdRevenueConverterTest : CommonTest() {
             .checkField("adPlacementName", "some_placement")
             .checkField("precision", "some_revenuePrecision")
             .checkField("payload", mapOf("countryCode" to "RU"))
-            .checkField("autoCollected", false)
+            .checkField("autoCollected", true)
             .checkAll()
     }
 

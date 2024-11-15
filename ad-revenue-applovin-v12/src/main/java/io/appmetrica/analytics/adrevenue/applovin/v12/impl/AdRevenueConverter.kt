@@ -30,7 +30,7 @@ class AdRevenueConverter {
             adPlacementId = maxAd.networkPlacement,
             precision = maxAd.revenuePrecision,
             payload = payload,
-            autoCollected = false
+            autoCollected = true
         )
     }
 

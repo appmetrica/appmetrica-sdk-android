@@ -95,7 +95,7 @@ public class AdRevenueConverterTest extends CommonTest {
             .checkField("adPlacementName", adPlacementName)
             .checkField("precision", "PUBLISHER_PROVIDED")
             .checkFieldIsNull("payload")
-            .checkField("autoCollected", false)
+            .checkField("autoCollected", true)
             .checkAll();
     }
 
@@ -115,7 +115,7 @@ public class AdRevenueConverterTest extends CommonTest {
             .checkFieldIsNull("adPlacementName")
             .checkField("precision", "PUBLISHER_PROVIDED")
             .checkFieldIsNull("payload")
-            .checkField("autoCollected", false)
+            .checkField("autoCollected", true)
             .checkAll();
     }
 
@@ -135,7 +135,7 @@ public class AdRevenueConverterTest extends CommonTest {
             .checkFieldIsNull("adPlacementName")
             .checkField("precision", "PUBLISHER_PROVIDED")
             .checkFieldIsNull("payload")
-            .checkField("autoCollected", false)
+            .checkField("autoCollected", true)
             .checkAll();
     }
 
@@ -153,7 +153,7 @@ public class AdRevenueConverterTest extends CommonTest {
             .checkField("adPlacementName", adPlacementName)
             .checkField("precision", "PUBLISHER_PROVIDED")
             .checkFieldIsNull("payload")
-            .checkField("autoCollected", false)
+            .checkField("autoCollected", true)
             .checkAll();
     }
 
@@ -173,7 +173,7 @@ public class AdRevenueConverterTest extends CommonTest {
             .checkFieldIsNull("adPlacementName")
             .checkField("precision", "PUBLISHER_PROVIDED")
             .checkFieldIsNull("payload")
-            .checkField("autoCollected", false)
+            .checkField("autoCollected", true)
             .checkAll();
     }
 
@@ -193,7 +193,7 @@ public class AdRevenueConverterTest extends CommonTest {
             .checkFieldIsNull("adPlacementName")
             .checkField("precision", "PUBLISHER_PROVIDED")
             .checkFieldIsNull("payload")
-            .checkField("autoCollected", false)
+            .checkField("autoCollected", true)
             .checkAll();
     }
 
@@ -211,7 +211,7 @@ public class AdRevenueConverterTest extends CommonTest {
             .checkField("adPlacementName", adPlacementName)
             .checkField("precision", "PUBLISHER_PROVIDED")
             .checkFieldIsNull("payload")
-            .checkField("autoCollected", false)
+            .checkField("autoCollected", true)
             .checkAll();
     }
 
@@ -231,7 +231,7 @@ public class AdRevenueConverterTest extends CommonTest {
             .checkFieldIsNull("adPlacementName")
             .checkField("precision", "PUBLISHER_PROVIDED")
             .checkFieldIsNull("payload")
-            .checkField("autoCollected", false)
+            .checkField("autoCollected", true)
             .checkAll();
     }
 
@@ -251,7 +251,7 @@ public class AdRevenueConverterTest extends CommonTest {
             .checkFieldIsNull("adPlacementName")
             .checkField("precision", "PUBLISHER_PROVIDED")
             .checkFieldIsNull("payload")
-            .checkField("autoCollected", false)
+            .checkField("autoCollected", true)
             .checkAll();
     }
 
@@ -269,7 +269,7 @@ public class AdRevenueConverterTest extends CommonTest {
             .checkField("adPlacementName", adPlacementName)
             .checkField("precision", "PUBLISHER_PROVIDED")
             .checkFieldIsNull("payload")
-            .checkField("autoCollected", false)
+            .checkField("autoCollected", true)
             .checkAll();
     }
 
@@ -289,7 +289,7 @@ public class AdRevenueConverterTest extends CommonTest {
             .checkFieldIsNull("adPlacementName")
             .checkField("precision", "PUBLISHER_PROVIDED")
             .checkFieldIsNull("payload")
-            .checkField("autoCollected", false)
+            .checkField("autoCollected", true)
             .checkAll();
     }
 
@@ -309,7 +309,7 @@ public class AdRevenueConverterTest extends CommonTest {
             .checkFieldIsNull("adPlacementName")
             .checkField("precision", "PUBLISHER_PROVIDED")
             .checkFieldIsNull("payload")
-            .checkField("autoCollected", false)
+            .checkField("autoCollected", true)
             .checkAll();
     }
 
@@ -327,7 +327,7 @@ public class AdRevenueConverterTest extends CommonTest {
             .checkField("adPlacementName", adPlacementName)
             .checkField("precision", "PUBLISHER_PROVIDED")
             .checkFieldIsNull("payload")
-            .checkField("autoCollected", false)
+            .checkField("autoCollected", true)
             .checkAll();
     }
 
@@ -347,7 +347,7 @@ public class AdRevenueConverterTest extends CommonTest {
             .checkFieldIsNull("adPlacementName")
             .checkField("precision", "PUBLISHER_PROVIDED")
             .checkFieldIsNull("payload")
-            .checkField("autoCollected", false)
+            .checkField("autoCollected", true)
             .checkAll();
     }
 
@@ -367,7 +367,7 @@ public class AdRevenueConverterTest extends CommonTest {
             .checkFieldIsNull("adPlacementName")
             .checkField("precision", "PUBLISHER_PROVIDED")
             .checkFieldIsNull("payload")
-            .checkField("autoCollected", false)
+            .checkField("autoCollected", true)
             .checkAll();
     }
 

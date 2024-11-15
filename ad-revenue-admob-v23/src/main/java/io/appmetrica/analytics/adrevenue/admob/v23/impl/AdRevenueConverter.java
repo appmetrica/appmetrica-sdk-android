@@ -103,7 +103,7 @@ public class AdRevenueConverter {
                     /* adPlacementName = */ adapterResponseInfo.getAdSourceInstanceName(),
                     /* precision = */ convertPrecision(adValue.getPrecisionType()),
                     /* payload = */ null,
-                    /* autoCollected = */ false
+                    /* autoCollected = */ true
                 );
             }
         }
@@ -118,7 +118,7 @@ public class AdRevenueConverter {
             /* adPlacementName = */ null,
             /* precision = */ convertPrecision(adValue.getPrecisionType()),
             /* payload = */ null,
-            /* autoCollected = */ false
+            /* autoCollected = */ true
         );
     }
 
