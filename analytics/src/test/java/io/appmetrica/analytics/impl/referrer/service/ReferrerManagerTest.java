@@ -1,34 +1,53 @@
 package io.appmetrica.analytics.impl.referrer.service;
 
+import io.appmetrica.analytics.coreutils.internal.logger.LoggerStorage;
 import io.appmetrica.analytics.impl.referrer.common.ReferrerChosenListener;
 import io.appmetrica.analytics.impl.referrer.common.ReferrerInfo;
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.analytics.testutils.MockedStaticRule;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
+import org.mockito.ArgumentMatcher;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
+import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
 public class ReferrerManagerTest extends CommonTest {
 
     @Mock
     private ReferrerHolder referrerHolder;
+    private final String referrer = "Referrer from GP";
+    private final ReferrerInfo.Source sourceGp = ReferrerInfo.Source.GP;
+    private ReferrerInfo referrerInfo;
     @Mock
     private ReferrerChosenListener firstReferrerChosenListener;
     @Mock
     private ReferrerChosenListener secondReferrerChosenListener;
     private ReferrerManager referrerManager;
 
+    @Mock
+    private PublicLogger logger;
+
+    @Rule
+    public MockedStaticRule<LoggerStorage> loggerStorageMockedStatic = new MockedStaticRule<>(LoggerStorage.class);
+
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
+        when(LoggerStorage.getMainPublicOrAnonymousLogger()).thenReturn(logger);
+        referrerInfo = new ReferrerInfo(referrer, 100500L, 200500L, sourceGp);
         referrerManager = new ReferrerManager(referrerHolder);
     }
 
@@ -48,7 +67,6 @@ public class ReferrerManagerTest extends CommonTest {
 
     @Test
     public void handleReferrerThenAddTwoListeners() {
-        ReferrerInfo referrerInfo = mock(ReferrerInfo.class);
         referrerManager.handleReferrer(referrerInfo);
         referrerManager.addOneShotListener(firstReferrerChosenListener);
         referrerManager.addOneShotListener(secondReferrerChosenListener);
@@ -58,7 +76,6 @@ public class ReferrerManagerTest extends CommonTest {
 
     @Test
     public void handleNullReferrerThenAddTwoListeners() {
-        ReferrerInfo referrerInfo = mock(ReferrerInfo.class);
         referrerManager.handleReferrer(null);
         referrerManager.addOneShotListener(firstReferrerChosenListener);
         referrerManager.addOneShotListener(secondReferrerChosenListener);
@@ -68,7 +85,6 @@ public class ReferrerManagerTest extends CommonTest {
 
     @Test
     public void addTwoListenersThenHandleReferrer() {
-        ReferrerInfo referrerInfo = mock(ReferrerInfo.class);
         referrerManager.addOneShotListener(firstReferrerChosenListener);
         referrerManager.addOneShotListener(secondReferrerChosenListener);
         verifyNoMoreInteractions(firstReferrerChosenListener, secondReferrerChosenListener);
@@ -89,7 +105,6 @@ public class ReferrerManagerTest extends CommonTest {
 
     @Test
     public void addOneListenerHandleReferrerAndAddAnother() {
-        ReferrerInfo referrerInfo = mock(ReferrerInfo.class);
         referrerManager.addOneShotListener(firstReferrerChosenListener);
         verifyNoMoreInteractions(firstReferrerChosenListener);
         referrerManager.handleReferrer(referrerInfo);
@@ -100,7 +115,6 @@ public class ReferrerManagerTest extends CommonTest {
 
     @Test
     public void handleReferrerTwice() {
-        ReferrerInfo referrerInfo = mock(ReferrerInfo.class);
         referrerManager.addOneShotListener(firstReferrerChosenListener);
         verifyNoMoreInteractions(firstReferrerChosenListener);
         referrerManager.handleReferrer(referrerInfo);
@@ -110,12 +124,32 @@ public class ReferrerManagerTest extends CommonTest {
 
     @Test
     public void handleReferrerTwiceFirstIsNull() {
-        ReferrerInfo referrerInfo = mock(ReferrerInfo.class);
         referrerManager.addOneShotListener(firstReferrerChosenListener);
         verifyNoMoreInteractions(firstReferrerChosenListener);
         referrerManager.handleReferrer(null);
         referrerManager.handleReferrer(referrerInfo);
         verify(firstReferrerChosenListener, times(1)).onReferrerChosen(null);
         verify(firstReferrerChosenListener, never()).onReferrerChosen(referrerInfo);
+    }
+
+    @Test
+    public void handleReferrerWritePublicLog() {
+        referrerManager.handleReferrer(referrerInfo);
+        verify(logger).info(
+            argThat(new ArgumentMatcher<String>() {
+                @Override
+                public boolean matches(String argument) {
+                    return argument.contains("Received referrer from source");
+                }
+            }),
+            eq(sourceGp.value),
+            eq(referrer)
+        );
+    }
+
+    @Test
+    public void handleReferrerWritePublicLogIfReferrerIsNull() {
+        referrerManager.handleReferrer(null);
+        verifyNoInteractions(logger);
     }
 }

@@ -3,6 +3,7 @@ package io.appmetrica.analytics.impl.referrer.service;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
+import io.appmetrica.analytics.coreutils.internal.logger.LoggerStorage;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.referrer.common.ReferrerChosenListener;
 import io.appmetrica.analytics.impl.referrer.common.ReferrerInfo;
@@ -35,6 +36,13 @@ public class ReferrerManager implements ReferrerHolder.Listener {
 
     @Override
     public synchronized void handleReferrer(@Nullable ReferrerInfo referrer) {
+        if (referrer != null) {
+            LoggerStorage.getMainPublicOrAnonymousLogger().info(
+                "Received referrer from source %s: %s",
+                referrer.source.value,
+                referrer.installReferrer
+            );
+        }
         DebugLogger.INSTANCE.info(TAG, "handle referrer %s", referrer);
         chosenReferrer = referrer;
         referrerChosen = true;

@@ -16,7 +16,13 @@ public class ReferrerParser {
     @NonNull
     public DeferredDeeplinkState parseDeferredDeeplinkState(@Nullable String referrer) {
         DebugLogger.INSTANCE.info(TAG, "parse deeplink from referrer: %s", referrer);
+
+        // Referrer can be encoded or not, so try both variants
         Map<String, String> parameters = splitQuery(referrer);
+        if (parameters.isEmpty()) {
+            parameters = splitQuery(Uri.decode(referrer));
+        }
+
         String deeplink = Uri.decode(parameters.get(DEFERRED_DEEPLINK_KEY));
         Map<String, String> deeplinkParameters = null;
         if (TextUtils.isEmpty(deeplink) == false) {
