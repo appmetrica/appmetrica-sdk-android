@@ -75,6 +75,8 @@ public class ClientServiceLocator {
     private final AppMetricaFacadeProvider appMetricaFacadeProvider = new AppMetricaFacadeProvider();
     @NonNull
     private final FirstLaunchDetector firstLaunchDetector = new FirstLaunchDetector();
+    @NonNull
+    private final ClientConfigSerializer clientConfigSerializer = new ClientConfigSerializer();
 
     private ClientServiceLocator() {
         this(new MainProcessDetector(), new ActivityLifecycleManager(), new ClientExecutorProvider());
@@ -270,6 +272,11 @@ public class ClientServiceLocator {
     @NonNull
     public FirstLaunchDetector getFirstLaunchDetector() {
         return firstLaunchDetector;
+    }
+
+    @NonNull
+    public ClientConfigSerializer getClientConfigSerializer() {
+        return clientConfigSerializer;
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)

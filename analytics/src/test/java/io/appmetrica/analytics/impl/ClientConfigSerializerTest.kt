@@ -7,16 +7,24 @@ import io.appmetrica.analytics.PredefinedDeviceTypes
 import io.appmetrica.analytics.PreloadInfo
 import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
 import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.analytics.testutils.constructionRule
 import org.assertj.core.api.Assertions.assertThat
+import org.json.JSONObject
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.any
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.verifyNoInteractions
+import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
+import org.skyscreamer.jsonassert.JSONAssert
 import java.util.Random
 
 @RunWith(RobolectricTestRunner::class)
 class ClientConfigSerializerTest : CommonTest() {
     private val apiKey = "5012c3cc-20a4-4dac-92d1-83ebc27c0fa9"
-    private val clientConfigSerializer = ClientConfigSerializer()
     private val deviceType = PredefinedDeviceTypes.PHONE
     private val appBuildNumber = 42
     private val dispatchPeriodSeconds = 953242
@@ -26,6 +34,14 @@ class ClientConfigSerializerTest : CommonTest() {
     private val appEnvKeySecond = "key2"
     private val appEnvValueSecond = "value2"
     private val appEnvironmentMap = mapOf(appEnvKeyFirst to appEnvValueFirst, appEnvKeySecond to appEnvValueSecond)
+
+    @get:Rule
+    val additionalFieldsSerializerMockedConstructionRule =
+        constructionRule<DefaultClientConfigAdditionalFieldsSerializer>()
+    private val additionalFieldsSerializer by additionalFieldsSerializerMockedConstructionRule
+    private val newAdditionalFieldsSerializer: ClientConfigAdditionalFieldsSerializer = mock()
+
+    private val clientConfigSerializer by setUp { ClientConfigSerializer() }
 
     @Test
     fun filledConfig() {
@@ -63,6 +79,15 @@ class ClientConfigSerializerTest : CommonTest() {
             additionalConfigKeyFirst to additionalConfigValueFirst,
             additionalConfigKeySecond to additionalConfigValueSecond
         )
+        val additionalFieldsJson = JSONObject(additionalConfigMap)
+        whenever(additionalFieldsSerializer.toJson(additionalConfigMap)).thenReturn(additionalFieldsJson)
+        whenever(additionalFieldsSerializer.parseJson(any(), any())).then { invocation ->
+            val builder = invocation.arguments[1] as AppMetricaConfig.Builder
+            JSONAssert.assertEquals(additionalFieldsJson, invocation.arguments.first() as JSONObject, true)
+            builder.withAdditionalConfig(additionalConfigKeyFirst, additionalConfigValueFirst)
+            builder.withAdditionalConfig(additionalConfigKeySecond, additionalConfigValueSecond)
+            null
+        }
         val customHosts = listOf("customHost1", "customHost2")
         val config = AppMetricaConfig.newConfigBuilder(apiKey)
             .withErrorEnvironmentValue(errorEnvKeyFirst, errorEnvValueFirst)
@@ -143,33 +168,45 @@ class ClientConfigSerializerTest : CommonTest() {
         val nullBoolean: Boolean? = null
         val nullInt: Int? = null
         ObjectPropertyAssertions(deserialized)
-        .checkField("apiKey", apiKey)
-        .checkField("appVersion", nullString)
-        .checkField("sessionTimeout", nullInt)
-        .checkField("crashReporting", nullBoolean)
-        .checkField("nativeCrashReporting", nullBoolean)
-        .checkField("locationTracking", nullBoolean)
-        .checkField("logs", nullBoolean)
-        .checkField("firstActivationAsUpdate", nullBoolean)
-        .checkField("dataSendingEnabled", nullBoolean)
-        .checkField("maxReportsInDatabaseCount", nullInt)
-        .checkField("errorEnvironment", emptyMap<Any, Any>())
-        .checkField("location", null as Location?)
-        .checkField("preloadInfo", null as PreloadInfo?)
-        .checkField<Any>("userProfileID", null)
-        .checkField("deviceType", nullString)
-        .checkField("appBuildNumber", nullInt)
-        .checkField("dispatchPeriodSeconds", nullInt)
-        .checkField("maxReportsCount", nullInt)
-        .checkField("appEnvironment", emptyMap<Any, Any>())
-        .checkField("crashTransformer", null as ICrashTransformer?)
-        .checkFieldIsNull("revenueAutoTrackingEnabled")
-        .checkFieldIsNull("sessionsAutoTrackingEnabled")
-        .checkFieldIsNull("appOpenTrackingEnabled")
-        .checkField("anrMonitoring", nullBoolean)
-        .checkField("anrMonitoringTimeout", nullInt)
-        .checkField("customHosts", null as List<String?>?)
-        .checkField("additionalConfig", emptyMap<Any, Any>())
-        .checkAll()
+            .checkField("apiKey", apiKey)
+            .checkField("appVersion", nullString)
+            .checkField("sessionTimeout", nullInt)
+            .checkField("crashReporting", nullBoolean)
+            .checkField("nativeCrashReporting", nullBoolean)
+            .checkField("locationTracking", nullBoolean)
+            .checkField("logs", nullBoolean)
+            .checkField("firstActivationAsUpdate", nullBoolean)
+            .checkField("dataSendingEnabled", nullBoolean)
+            .checkField("maxReportsInDatabaseCount", nullInt)
+            .checkField("errorEnvironment", emptyMap<Any, Any>())
+            .checkField("location", null as Location?)
+            .checkField("preloadInfo", null as PreloadInfo?)
+            .checkField<Any>("userProfileID", null)
+            .checkField("deviceType", nullString)
+            .checkField("appBuildNumber", nullInt)
+            .checkField("dispatchPeriodSeconds", nullInt)
+            .checkField("maxReportsCount", nullInt)
+            .checkField("appEnvironment", emptyMap<Any, Any>())
+            .checkField("crashTransformer", null as ICrashTransformer?)
+            .checkFieldIsNull("revenueAutoTrackingEnabled")
+            .checkFieldIsNull("sessionsAutoTrackingEnabled")
+            .checkFieldIsNull("appOpenTrackingEnabled")
+            .checkField("anrMonitoring", nullBoolean)
+            .checkField("anrMonitoringTimeout", nullInt)
+            .checkField("customHosts", null as List<String?>?)
+            .checkField("additionalConfig", emptyMap<Any, Any>())
+            .checkAll()
+    }
+
+    @Test
+    fun updateAdditionalConfigFieldsSerializer() {
+        clientConfigSerializer.setAdditionalConfigSerializer(newAdditionalFieldsSerializer)
+        clientConfigSerializer.toJson(
+            AppMetricaConfig.newConfigBuilder(apiKey)
+                .withAdditionalConfig("first", "second")
+                .build()
+        )
+        verify(newAdditionalFieldsSerializer).toJson(any())
+        verifyNoInteractions(additionalFieldsSerializer)
     }
 }

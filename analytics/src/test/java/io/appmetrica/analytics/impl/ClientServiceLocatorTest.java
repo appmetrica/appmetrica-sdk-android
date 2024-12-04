@@ -91,6 +91,10 @@ public class ClientServiceLocatorTest extends CommonTest {
     public MockedConstructionRule<FirstLaunchDetector> firstLaunchDetectorMockedConstructionRule =
         new MockedConstructionRule<>(FirstLaunchDetector.class);
 
+    @Rule
+    public MockedConstructionRule<ClientConfigSerializer> clientConfigSerializerMockedConstructionRule =
+        new MockedConstructionRule<>(ClientConfigSerializer.class);
+
     @Mock
     private DatabaseStorageFactory databaseStorage;
     @Mock
@@ -179,7 +183,7 @@ public class ClientServiceLocatorTest extends CommonTest {
     public void allFieldsFilled() throws Exception {
         ObjectPropertyAssertions(mClientServiceLocator)
             .withDeclaredAccessibleFields(true)
-            .withIgnoredFields("moduleEntryPointsRegister", "appMetricaFacadeProvider", "firstLaunchDetector")
+            .withIgnoredFields("moduleEntryPointsRegister", "appMetricaFacadeProvider", "firstLaunchDetector", "clientConfigSerializer")
             .checkField("mainProcessDetector", "getMainProcessDetector", mMainProcessDetector)
             .checkField("defaultOneShotConfig", "getDefaultOneShotConfig", mDefaultOneShotMetricaConfig)
             .checkField("clientExecutorProvider", "getClientExecutorProvider", mClientExecutorProvider)
@@ -259,5 +263,14 @@ public class ClientServiceLocatorTest extends CommonTest {
             .isEqualTo(firstLaunchDetectorMockedConstructionRule.getConstructionMock().constructed().get(0));
         assertThat(firstLaunchDetectorMockedConstructionRule.getConstructionMock().constructed()).hasSize(1);
         assertThat(firstLaunchDetectorMockedConstructionRule.getArgumentInterceptor().flatArguments()).isEmpty();
+    }
+
+    @Test
+    public void getClientConfigSerializer() {
+        assertThat(mClientServiceLocator.getClientConfigSerializer())
+            .isEqualTo(mClientServiceLocator.getClientConfigSerializer())
+            .isEqualTo(clientConfigSerializerMockedConstructionRule.getConstructionMock().constructed().get(0));
+        assertThat(clientConfigSerializerMockedConstructionRule.getConstructionMock().constructed()).hasSize(1);
+        assertThat(clientConfigSerializerMockedConstructionRule.getArgumentInterceptor().flatArguments()).isEmpty();
     }
 }

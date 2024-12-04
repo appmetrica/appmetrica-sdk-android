@@ -6,6 +6,7 @@ import io.appmetrica.analytics.impl.ActivityAppearedListener;
 import io.appmetrica.analytics.impl.ActivityLifecycleManager;
 import io.appmetrica.analytics.impl.AppMetricaCoreComponentsProvider;
 import io.appmetrica.analytics.impl.AppMetricaServiceDelayHandler;
+import io.appmetrica.analytics.impl.ClientConfigSerializer;
 import io.appmetrica.analytics.impl.ClientServiceLocator;
 import io.appmetrica.analytics.impl.ContextAppearedListener;
 import io.appmetrica.analytics.impl.DefaultOneShotMetricaConfig;
@@ -49,6 +50,7 @@ public class ClientServiceLocatorRule extends ExternalResource {
     public AppMetricaFacadeProvider appMetricaFacadeProvider;
     public AppMetricaCoreComponentsProvider appMetricaCoreComponentsProvider;
     public FirstLaunchDetector firstLaunchDetector;
+    public ClientConfigSerializer clientConfigSerializer;
     public ClientServiceLocator instance;
 
     @Override
@@ -73,6 +75,7 @@ public class ClientServiceLocatorRule extends ExternalResource {
         appMetricaFacadeProvider = mock(AppMetricaFacadeProvider.class);
         appMetricaCoreComponentsProvider = mock(AppMetricaCoreComponentsProvider.class);
         firstLaunchDetector = mock(FirstLaunchDetector.class);
+        clientConfigSerializer = mock(ClientConfigSerializer.class);
         when(instance.getClientExecutorProvider()).thenReturn(clientExecutorProvider);
         when(instance.getDefaultOneShotConfig()).thenReturn(mDefaultOneShotMetricaConfig);
         when(instance.getMainProcessDetector()).thenReturn(mainProcessDetector);

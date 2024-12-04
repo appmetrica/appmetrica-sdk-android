@@ -52,7 +52,9 @@ public class ClientConfigSerializer {
     private static final String KEY_CUSTOM_HOSTS = "customHosts";
     private static final String KEY_ADDITIONAL_CONFIG = "additional_config";
 
-    public ClientConfigSerializer() {}
+    @NonNull
+    private volatile ClientConfigAdditionalFieldsSerializer additionalConfigSerializer =
+        new DefaultClientConfigAdditionalFieldsSerializer();
 
     public String toJson(final AppMetricaConfig config) {
         try {
@@ -84,7 +86,7 @@ public class ClientConfigSerializer {
             if (config.customHosts != null) {
                 jsonConfig.put(KEY_CUSTOM_HOSTS, JsonHelper.listToJson(config.customHosts));
             }
-            jsonConfig.put(KEY_ADDITIONAL_CONFIG, JsonHelper.mapToJson(config.additionalConfig));
+            jsonConfig.put(KEY_ADDITIONAL_CONFIG, additionalConfigSerializer.toJson(config.additionalConfig));
 
             return jsonConfig.toString();
         } catch (Throwable e) {}
@@ -170,7 +172,7 @@ public class ClientConfigSerializer {
                     builder.withCustomHosts(JsonHelper.toStringList(jsonConfig.optJSONArray(KEY_CUSTOM_HOSTS)));
                 }
                 if (jsonConfig.has(KEY_ADDITIONAL_CONFIG)) {
-                    withAdditionalConfigValues(jsonConfig.optString(KEY_ADDITIONAL_CONFIG), builder);
+                    additionalConfigSerializer.parseJson(jsonConfig.optJSONObject(KEY_ADDITIONAL_CONFIG), builder);
                 }
                 config = builder.build();
             } catch (Throwable e) {
@@ -194,15 +196,6 @@ public class ClientConfigSerializer {
         if (environmentMap != null) {
             for (Map.Entry<String, String> entry : environmentMap.entrySet()) {
                 builder.withAppEnvironmentValue(entry.getKey(), entry.getValue());
-            }
-        }
-    }
-
-    private void withAdditionalConfigValues(@NonNull String json, @NonNull AppMetricaConfig.Builder builder) {
-        Map<String, String> map = JsonHelper.jsonToMap(json);
-        if (map != null) {
-            for (Map.Entry<String, String> entry : map.entrySet()) {
-                builder.withAdditionalConfig(entry.getKey(), entry.getValue());
             }
         }
     }
@@ -279,4 +272,7 @@ public class ClientConfigSerializer {
         return null;
     }
 
+    public void setAdditionalConfigSerializer(@NonNull ClientConfigAdditionalFieldsSerializer serializer) {
+        this.additionalConfigSerializer = serializer;
+    }
 }
