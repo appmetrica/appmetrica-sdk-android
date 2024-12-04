@@ -5,7 +5,7 @@ import android.os.Handler
 import androidx.annotation.WorkerThread
 import io.appmetrica.analytics.AppMetricaConfig
 import io.appmetrica.analytics.ReporterConfig
-import io.appmetrica.analytics.coreutils.internal.ApiKeyUtils.createPartialApiKey
+import io.appmetrica.analytics.coreutils.internal.ApiKeyUtils
 import io.appmetrica.analytics.coreutils.internal.logger.LoggerStorage
 import io.appmetrica.analytics.impl.client.ProcessConfiguration
 import io.appmetrica.analytics.impl.reporter.MainReporterContext
@@ -83,12 +83,12 @@ internal class ReporterFactory(
     override fun activateReporter(config: ReporterConfig) {
         if (reporters.containsKey(config.apiKey)) {
             val logger = LoggerStorage.getOrCreatePublicLogger(config.apiKey)
-            logger.warning("Reporter with apiKey=%s already exists.", config.apiKey)
+            logger.warning("Reporter with apiKey=%s already exists.", ApiKeyUtils.createPartialApiKey(config.apiKey))
         } else {
             getOrCreateReporter(config)
             ImportantLogger.info(
                 SdkUtils.APPMETRICA_TAG,
-                "Activate reporter with APIKey " + createPartialApiKey(config.apiKey)
+                "Activate reporter with APIKey " + ApiKeyUtils.createPartialApiKey(config.apiKey)
             )
         }
     }

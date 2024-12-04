@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Handler
 import io.appmetrica.analytics.AppMetricaConfig
 import io.appmetrica.analytics.ReporterConfig
+import io.appmetrica.analytics.coreutils.internal.ApiKeyUtils
 import io.appmetrica.analytics.coreutils.internal.logger.LoggerStorage
 import io.appmetrica.analytics.impl.client.ProcessConfiguration
 import io.appmetrica.analytics.impl.reporter.MainReporterContext
@@ -84,6 +85,13 @@ internal class ReporterFactoryTest : CommonTest() {
     val clientServiceLocatorRule = ClientServiceLocatorRule()
 
     private val apiKey = UUID.randomUUID().toString()
+    private val obfuscatedApiKey = UUID.randomUUID().toString()
+
+    @get:Rule
+    val apiKeyUtilsMockedStaticRule = staticRule<ApiKeyUtils> {
+        on { ApiKeyUtils.createPartialApiKey(apiKey) } doReturn obfuscatedApiKey
+    }
+
     private val config = AppMetricaConfig.newConfigBuilder(apiKey).build()
 
     private val firstReporterApiKey = UUID.randomUUID().toString()
@@ -376,6 +384,7 @@ internal class ReporterFactoryTest : CommonTest() {
         reporterFactory.buildOrUpdateMainReporter(config, logger, needToClearEnvironment)
         reporterFactory.activateReporter(ReporterConfig.newConfigBuilder(apiKey).build())
         assertThat(manualReporterConstructionRule.constructionMock.constructed()).isEmpty()
+        verify(logger).warning("Reporter with apiKey=%s already exists.", obfuscatedApiKey)
     }
 
     @Test
