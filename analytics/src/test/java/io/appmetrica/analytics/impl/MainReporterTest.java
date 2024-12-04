@@ -463,6 +463,13 @@ public class MainReporterTest extends BaseReporterTest {
         verify(mPublicLogger).info("Set location: %s", location);
     }
 
+    @Test
+    public void setAdvIdentifiersTracking() {
+        mMainReporter.setAdvIdentifiersTracking(true);
+        verify(mCounterConfiguration).setAdvIdentifiersTracking(true);
+        verify(mPublicLogger).info("Set advIdentifiersTracking to %s", true);
+    }
+
     @RunWith(ParameterizedRobolectricTestRunner.class)
     public static class ReporterReportCustomEventEventTypeTests extends BaseReporterTest.ReporterReportCustomEventEventTypeTests {
 

@@ -125,6 +125,11 @@ public interface io.appmetrica.analytics.coreapi.internal.data.ProtobufStateStor
     public abstract void save([NonNull] T)
 }
 
+public interface io.appmetrica.analytics.coreapi.internal.data.Savable<T> {
+    public abstract T getValue()
+    public abstract void setValue(T)
+}
+
 public interface io.appmetrica.analytics.coreapi.internal.data.StateSerializer<T> {
     public abstract [NonNull] T defaultValue()
     public abstract [NonNull] byte[] toByteArray([NonNull] T)
@@ -144,6 +149,10 @@ public interface io.appmetrica.analytics.coreapi.internal.data.TempCacheStorage$
     public abstract long getId()
     public abstract [NonNull] String getScope()
     public abstract long getTimestamp()
+}
+
+public interface io.appmetrica.analytics.coreapi.internal.data.Updatable<T> {
+    public abstract void update(T)
 }
 
 public abstract class io.appmetrica.analytics.coreapi.internal.db.DatabaseScript {
@@ -258,7 +267,7 @@ public enum io.appmetrica.analytics.coreapi.internal.identifiers.AppSetIdScope {
 }
 
 public enum io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus {
-    FEATURE_DISABLED, IDENTIFIER_PROVIDER_UNAVAILABLE, INVALID_ADV_ID, NO_STARTUP, OK, UNKNOWN
+    FEATURE_DISABLED, FORBIDDEN_BY_CLIENT_CONFIG, IDENTIFIER_PROVIDER_UNAVAILABLE, INVALID_ADV_ID, NO_STARTUP, OK, UNKNOWN
 
     public static final [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus$Companion Companion
 

@@ -80,6 +80,11 @@ public class MainReporterStub extends ReporterExtendedStub implements IMainRepor
     }
 
     @Override
+    public void setAdvIdentifiersTracking(boolean enabled) {
+        // Do nothing
+    }
+
+    @Override
     public void putErrorEnvironmentValue(String key, String value) {
         //Do nothing
     }

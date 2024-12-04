@@ -23,12 +23,12 @@ internal class DeviceIdGenerator @VisibleForTesting constructor(
 
     constructor(context: Context) : this(
         context,
-        GlobalServiceLocator.getInstance().serviceInternalAdvertisingIdGetter,
+        GlobalServiceLocator.getInstance().advertisingIdGetter,
         GlobalServiceLocator.getInstance().appSetIdGetter
     )
 
     fun generateDeviceId(): String {
-        val yandexAdvId = advertisingIdGetter.getIdentifiersForced(context, TimesBasedRetryStrategy(5, 500)).yandex
+        val yandexAdvId = advertisingIdGetter.getIdentifiersForced(TimesBasedRetryStrategy(5, 500)).yandex
         DebugLogger.info(tag, "Yandex Adv ID: $yandexAdvId")
         return if (yandexAdvId.isValid) {
             // !! is safe because of isValid check

@@ -22,17 +22,28 @@ class AdvIdentifiersFromStartupParamsItemStatusTest(
 
         @JvmStatic
         @Parameters(name = "{0} -> {1}")
-        fun data(): Collection<Array<Any?>> = listOf(
-            arrayOf(StartupParamsItemStatus.OK, AdvIdentifiersResult.Details.OK),
-            arrayOf(StartupParamsItemStatus.NETWORK_ERROR, AdvIdentifiersResult.Details.NO_STARTUP),
-            arrayOf(StartupParamsItemStatus.FEATURE_DISABLED, AdvIdentifiersResult.Details.FEATURE_DISABLED),
-            arrayOf(
-                StartupParamsItemStatus.PROVIDER_UNAVAILABLE,
-                AdvIdentifiersResult.Details.IDENTIFIER_PROVIDER_UNAVAILABLE
-            ),
-            arrayOf(StartupParamsItemStatus.INVALID_VALUE_FROM_PROVIDER, AdvIdentifiersResult.Details.INVALID_ADV_ID),
-            arrayOf(StartupParamsItemStatus.UNKNOWN_ERROR, AdvIdentifiersResult.Details.INTERNAL_ERROR)
-        )
+        fun data(): Collection<Array<Any?>> {
+            val data: Collection<Array<Any?>> = listOf(
+                arrayOf(StartupParamsItemStatus.OK, AdvIdentifiersResult.Details.OK),
+                arrayOf(StartupParamsItemStatus.NETWORK_ERROR, AdvIdentifiersResult.Details.NO_STARTUP),
+                arrayOf(StartupParamsItemStatus.FEATURE_DISABLED, AdvIdentifiersResult.Details.FEATURE_DISABLED),
+                arrayOf(
+                    StartupParamsItemStatus.PROVIDER_UNAVAILABLE,
+                    AdvIdentifiersResult.Details.IDENTIFIER_PROVIDER_UNAVAILABLE
+                ),
+                arrayOf(StartupParamsItemStatus.INVALID_VALUE_FROM_PROVIDER, AdvIdentifiersResult.Details.INVALID_ADV_ID),
+                arrayOf(StartupParamsItemStatus.UNKNOWN_ERROR, AdvIdentifiersResult.Details.INTERNAL_ERROR),
+                arrayOf(
+                    StartupParamsItemStatus.FORBIDDEN_BY_CLIENT_CONFIG,
+                    AdvIdentifiersResult.Details.FORBIDDEN_BY_CLIENT_CONFIG
+                ),
+            )
+
+            assertThat(data.size).isEqualTo(StartupParamsItemStatus.values().size)
+            assertThat(data.size).isEqualTo(AdvIdentifiersResult.Details.values().size)
+
+            return data
+        }
     }
 
     private val startupParamsItem = mock<StartupParamsItem> {

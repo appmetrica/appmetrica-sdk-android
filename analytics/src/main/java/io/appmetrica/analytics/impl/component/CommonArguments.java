@@ -21,12 +21,12 @@ public class CommonArguments {
 
     public CommonArguments(@NonNull ClientConfiguration clientConfiguration) {
         this(
-                new StartupRequestConfig.Arguments(clientConfiguration),
-                new ReporterArguments(
-                        clientConfiguration.getReporterConfiguration(),
-                        clientConfiguration.getProcessConfiguration().getClientClids()
-                ),
-                clientConfiguration.getProcessConfiguration().getDataResultReceiver()
+            new StartupRequestConfig.Arguments(clientConfiguration),
+            new ReporterArguments(
+                clientConfiguration.getReporterConfiguration(),
+                clientConfiguration.getProcessConfiguration().getClientClids()
+            ),
+            clientConfiguration.getProcessConfiguration().getDataResultReceiver()
         );
     }
 
@@ -38,7 +38,7 @@ public class CommonArguments {
         this.dataResultReceiver = dataReceiver;
     }
 
-    public static class ReporterArguments implements ArgumentsMerger<ReporterArguments, ReporterArguments>  {
+    public static class ReporterArguments implements ArgumentsMerger<ReporterArguments, ReporterArguments> {
 
         @Nullable
         public final String apiKey;
@@ -66,6 +66,8 @@ public class CommonArguments {
         public final Boolean nativeCrashesEnabled;
         @Nullable
         public final Boolean revenueAutoTrackingEnabled;
+        @Nullable
+        public final Boolean advIdentifiersTrackingEnabled;
 
         ReporterArguments(@Nullable String apiKey,
                           @Nullable Boolean locationTracking,
@@ -79,7 +81,8 @@ public class CommonArguments {
                           @Nullable Map<String, String> clidsFromClient,
                           @Nullable Integer maxReportsInDbCount,
                           @Nullable Boolean nativeCrashesEnabled,
-                          @Nullable Boolean revenueAutoTrackingEnabled) {
+                          @Nullable Boolean revenueAutoTrackingEnabled,
+                          @Nullable Boolean advIdentifiersTrackingEnabled) {
             this.apiKey = apiKey;
             this.locationTracking = locationTracking;
             this.manualLocation = manualLocation;
@@ -93,42 +96,45 @@ public class CommonArguments {
             this.maxReportsInDbCount = maxReportsInDbCount;
             this.nativeCrashesEnabled = nativeCrashesEnabled;
             this.revenueAutoTrackingEnabled = revenueAutoTrackingEnabled;
+            this.advIdentifiersTrackingEnabled = advIdentifiersTrackingEnabled;
         }
 
         public ReporterArguments(@NonNull CounterConfiguration reporterConfiguration,
                                  @Nullable Map<String, String> clidsFromClient) {
             this(
-                    reporterConfiguration.getApiKey(),
-                    reporterConfiguration.isLocationTrackingEnabled(),
-                    reporterConfiguration.getManualLocation(),
-                    reporterConfiguration.isFirstActivationAsUpdate(),
-                    reporterConfiguration.getSessionTimeout(),
-                    reporterConfiguration.getMaxReportsCount(),
-                    reporterConfiguration.getDispatchPeriod(),
-                    reporterConfiguration.isLogEnabled(),
-                    reporterConfiguration.getDataSendingEnabled(),
-                    clidsFromClient,
-                    reporterConfiguration.getMaxReportsInDbCount(),
-                    reporterConfiguration.getReportNativeCrashesEnabled(),
-                    reporterConfiguration.isRevenueAutoTrackingEnabled()
+                reporterConfiguration.getApiKey(),
+                reporterConfiguration.isLocationTrackingEnabled(),
+                reporterConfiguration.getManualLocation(),
+                reporterConfiguration.isFirstActivationAsUpdate(),
+                reporterConfiguration.getSessionTimeout(),
+                reporterConfiguration.getMaxReportsCount(),
+                reporterConfiguration.getDispatchPeriod(),
+                reporterConfiguration.isLogEnabled(),
+                reporterConfiguration.getDataSendingEnabled(),
+                clidsFromClient,
+                reporterConfiguration.getMaxReportsInDbCount(),
+                reporterConfiguration.getReportNativeCrashesEnabled(),
+                reporterConfiguration.isRevenueAutoTrackingEnabled(),
+                reporterConfiguration.isAdvIdentifiersTrackingEnabled()
             );
         }
 
         public ReporterArguments() {
             this(
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
             );
         }
 
@@ -136,19 +142,20 @@ public class CommonArguments {
         @Override
         public ReporterArguments mergeFrom(@NonNull ReporterArguments other) {
             return new ReporterArguments(
-                    WrapUtils.getOrDefaultNullable(apiKey, other.apiKey),
-                    WrapUtils.getOrDefaultNullable(locationTracking, other.locationTracking),
-                    WrapUtils.getOrDefaultNullable(manualLocation, other.manualLocation),
-                    WrapUtils.getOrDefaultNullable(firstActivationAsUpdate, other.firstActivationAsUpdate),
-                    WrapUtils.getOrDefaultNullable(sessionTimeout, other.sessionTimeout),
-                    WrapUtils.getOrDefaultNullable(maxReportsCount, other.maxReportsCount),
-                    WrapUtils.getOrDefaultNullable(dispatchPeriod, other.dispatchPeriod),
-                    WrapUtils.getOrDefaultNullable(logEnabled, other.logEnabled),
-                    WrapUtils.getOrDefaultNullable(dataSendingEnabled, other.dataSendingEnabled),
-                    WrapUtils.getOrDefaultNullable(clidsFromClient, other.clidsFromClient),
-                    WrapUtils.getOrDefaultNullable(maxReportsInDbCount, other.maxReportsInDbCount),
-                    WrapUtils.getOrDefaultNullable(nativeCrashesEnabled, other.nativeCrashesEnabled),
-                    WrapUtils.getOrDefaultNullable(revenueAutoTrackingEnabled, other.revenueAutoTrackingEnabled)
+                WrapUtils.getOrDefaultNullable(apiKey, other.apiKey),
+                WrapUtils.getOrDefaultNullable(locationTracking, other.locationTracking),
+                WrapUtils.getOrDefaultNullable(manualLocation, other.manualLocation),
+                WrapUtils.getOrDefaultNullable(firstActivationAsUpdate, other.firstActivationAsUpdate),
+                WrapUtils.getOrDefaultNullable(sessionTimeout, other.sessionTimeout),
+                WrapUtils.getOrDefaultNullable(maxReportsCount, other.maxReportsCount),
+                WrapUtils.getOrDefaultNullable(dispatchPeriod, other.dispatchPeriod),
+                WrapUtils.getOrDefaultNullable(logEnabled, other.logEnabled),
+                WrapUtils.getOrDefaultNullable(dataSendingEnabled, other.dataSendingEnabled),
+                WrapUtils.getOrDefaultNullable(clidsFromClient, other.clidsFromClient),
+                WrapUtils.getOrDefaultNullable(maxReportsInDbCount, other.maxReportsInDbCount),
+                WrapUtils.getOrDefaultNullable(nativeCrashesEnabled, other.nativeCrashesEnabled),
+                WrapUtils.getOrDefaultNullable(revenueAutoTrackingEnabled, other.revenueAutoTrackingEnabled),
+                WrapUtils.getOrDefaultNullable(advIdentifiersTrackingEnabled, other.advIdentifiersTrackingEnabled)
             );
         }
 
@@ -163,47 +170,38 @@ public class CommonArguments {
             if (o == null || getClass() != o.getClass()) return false;
 
             final ReporterArguments that = (ReporterArguments) o;
-
-            if (!Objects.equals(apiKey, that.apiKey)) return false;
-            if (!Objects.equals(locationTracking, that.locationTracking))
-                return false;
-            if (!Objects.equals(manualLocation, that.manualLocation))
-                return false;
-            if (!Objects.equals(firstActivationAsUpdate, that.firstActivationAsUpdate))
-                return false;
-            if (!Objects.equals(sessionTimeout, that.sessionTimeout))
-                return false;
-            if (!Objects.equals(maxReportsCount, that.maxReportsCount))
-                return false;
-            if (!Objects.equals(dispatchPeriod, that.dispatchPeriod))
-                return false;
-            if (!Objects.equals(logEnabled, that.logEnabled)) return false;
-            if (!Objects.equals(dataSendingEnabled, that.dataSendingEnabled))
-                return false;
-            if (!Objects.equals(clidsFromClient, that.clidsFromClient))
-                return false;
-            if (!Objects.equals(maxReportsInDbCount, that.maxReportsInDbCount))
-                return false;
-            if (!Objects.equals(nativeCrashesEnabled, that.nativeCrashesEnabled))
-                return false;
-            return Objects.equals(revenueAutoTrackingEnabled, that.revenueAutoTrackingEnabled);
+            return Objects.equals(apiKey, that.apiKey) &&
+                Objects.equals(locationTracking, that.locationTracking) &&
+                Objects.equals(manualLocation, that.manualLocation) &&
+                Objects.equals(firstActivationAsUpdate, that.firstActivationAsUpdate) &&
+                Objects.equals(sessionTimeout, that.sessionTimeout) &&
+                Objects.equals(maxReportsCount, that.maxReportsCount) &&
+                Objects.equals(dispatchPeriod, that.dispatchPeriod) &&
+                Objects.equals(logEnabled, that.logEnabled) &&
+                Objects.equals(dataSendingEnabled, that.dataSendingEnabled) &&
+                Objects.equals(clidsFromClient, that.clidsFromClient) &&
+                Objects.equals(maxReportsInDbCount, that.maxReportsInDbCount) &&
+                Objects.equals(nativeCrashesEnabled, that.nativeCrashesEnabled) &&
+                Objects.equals(revenueAutoTrackingEnabled, that.revenueAutoTrackingEnabled) &&
+                Objects.equals(advIdentifiersTrackingEnabled, that.advIdentifiersTrackingEnabled);
         }
 
         @Override
         public int hashCode() {
-            int result = apiKey != null ? apiKey.hashCode() : 0;
-            result = 31 * result + (locationTracking != null ? locationTracking.hashCode() : 0);
-            result = 31 * result + (manualLocation != null ? manualLocation.hashCode() : 0);
-            result = 31 * result + (firstActivationAsUpdate != null ? firstActivationAsUpdate.hashCode() : 0);
-            result = 31 * result + (sessionTimeout != null ? sessionTimeout.hashCode() : 0);
-            result = 31 * result + (maxReportsCount != null ? maxReportsCount.hashCode() : 0);
-            result = 31 * result + (dispatchPeriod != null ? dispatchPeriod.hashCode() : 0);
-            result = 31 * result + (logEnabled != null ? logEnabled.hashCode() : 0);
-            result = 31 * result + (dataSendingEnabled != null ? dataSendingEnabled.hashCode() : 0);
-            result = 31 * result + (clidsFromClient != null ? clidsFromClient.hashCode() : 0);
-            result = 31 * result + (maxReportsInDbCount != null ? maxReportsInDbCount.hashCode() : 0);
-            result = 31 * result + (nativeCrashesEnabled != null ? nativeCrashesEnabled.hashCode() : 0);
-            result = 31 * result + (revenueAutoTrackingEnabled != null ? revenueAutoTrackingEnabled.hashCode() : 0);
+            int result = Objects.hashCode(apiKey);
+            result = 31 * result + Objects.hashCode(locationTracking);
+            result = 31 * result + Objects.hashCode(manualLocation);
+            result = 31 * result + Objects.hashCode(firstActivationAsUpdate);
+            result = 31 * result + Objects.hashCode(sessionTimeout);
+            result = 31 * result + Objects.hashCode(maxReportsCount);
+            result = 31 * result + Objects.hashCode(dispatchPeriod);
+            result = 31 * result + Objects.hashCode(logEnabled);
+            result = 31 * result + Objects.hashCode(dataSendingEnabled);
+            result = 31 * result + Objects.hashCode(clidsFromClient);
+            result = 31 * result + Objects.hashCode(maxReportsInDbCount);
+            result = 31 * result + Objects.hashCode(nativeCrashesEnabled);
+            result = 31 * result + Objects.hashCode(revenueAutoTrackingEnabled);
+            result = 31 * result + Objects.hashCode(advIdentifiersTrackingEnabled);
             return result;
         }
 
@@ -223,6 +221,7 @@ public class CommonArguments {
                 ", maxReportsInDbCount=" + maxReportsInDbCount +
                 ", nativeCrashesEnabled=" + nativeCrashesEnabled +
                 ", revenueAutoTrackingEnabled=" + revenueAutoTrackingEnabled +
+                ", advIdentifiersTrackingEnabled=" + advIdentifiersTrackingEnabled +
                 '}';
         }
     }

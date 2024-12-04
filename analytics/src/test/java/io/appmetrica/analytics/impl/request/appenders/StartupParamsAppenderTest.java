@@ -20,6 +20,7 @@ import io.appmetrica.analytics.impl.request.StartupRequestConfig;
 import io.appmetrica.analytics.networktasks.internal.CommonUrlParts;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
+import io.appmetrica.analytics.testutils.MockedConstructionRule;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -81,14 +82,15 @@ public class StartupParamsAppenderTest extends CommonTest {
         MockitoAnnotations.openMocks(this);
         globalServiceLocator = GlobalServiceLocator.getInstance();
         context = globalServiceLocator.getContext();
-        when(globalServiceLocator.getServiceInternalAdvertisingIdGetter()).thenReturn(advertisingIdGetter);
+        when(globalServiceLocator.getAdvertisingIdGetter()).thenReturn(advertisingIdGetter);
         when(advertisingIdGetter.getIdentifiers(context)).thenReturn(advertisingIdsHolder);
         when(advertisingIdsHolder.getGoogle()).thenReturn(google);
         when(advertisingIdsHolder.getHuawei()).thenReturn(huawei);
         when(advertisingIdsHolder.getYandex()).thenReturn(yandex);
         when(startupRequestConfig.getChosenClids()).thenReturn(noClidsInfo);
         when(startupRequestConfig.getReferrerHolder()).thenReturn(referrerHolder);
-        when(startupRequestConfig.getAdvertisingIdsHolder()).thenReturn(advertisingIdsHolder);
+        when(GlobalServiceLocator.getInstance().getAdvertisingIdGetter().getIdentifiers())
+            .thenReturn(advertisingIdsHolder);
         startupParamsAppender = new StartupParamsAppender(obfuscator, modulesArgumentsCollector);
     }
 
@@ -406,7 +408,7 @@ public class StartupParamsAppenderTest extends CommonTest {
             MockitoAnnotations.openMocks(this);
             GlobalServiceLocator.init(RuntimeEnvironment.getApplication());
             when(mStartupRequestConfig.getChosenClids()).thenReturn(new ClidsInfo.Candidate(null, DistributionSource.APP));
-            when(mStartupRequestConfig.getAdvertisingIdsHolder()).thenReturn(advertisingIdsHolder);
+            when(GlobalServiceLocator.getInstance().getAdvertisingIdGetter().getIdentifiers()).thenReturn(advertisingIdsHolder);
             when(advertisingIdsHolder.getGoogle())
                 .thenReturn(new AdTrackingInfoResult(null, IdentifierStatus.IDENTIFIER_PROVIDER_UNAVAILABLE, null));
             when(advertisingIdsHolder.getHuawei())
@@ -475,7 +477,7 @@ public class StartupParamsAppenderTest extends CommonTest {
         public void setUp() {
             MockitoAnnotations.openMocks(this);
             when(mStartupRequestConfig.getChosenClids()).thenReturn(new ClidsInfo.Candidate(null, DistributionSource.APP));
-            when(mStartupRequestConfig.getAdvertisingIdsHolder()).thenReturn(advertisingIdsHolder);
+            when(GlobalServiceLocator.getInstance().getAdvertisingIdGetter().getIdentifiers()).thenReturn(advertisingIdsHolder);
             when(advertisingIdsHolder.getGoogle())
                 .thenReturn(new AdTrackingInfoResult(null, IdentifierStatus.IDENTIFIER_PROVIDER_UNAVAILABLE, null));
             when(advertisingIdsHolder.getHuawei())
@@ -518,6 +520,13 @@ public class StartupParamsAppenderTest extends CommonTest {
         AdvertisingIdsHolder mAdvertisingIdsHolder;
         @Mock
         ModulesRemoteConfigArgumentsCollector modulesArgumentsCollector;
+
+        @Rule
+        public MockedConstructionRule<LiveConfigProvider> liveConfigProviderMockedConstructionRule =
+        new MockedConstructionRule<>(LiveConfigProvider.class);
+
+        private LiveConfigProvider liveConfigProvider;
+
         StartupParamsAppender startupParamsAppender;
 
         private final String gaidParameterName;
@@ -563,9 +572,12 @@ public class StartupParamsAppenderTest extends CommonTest {
             when(mAdvertisingIdsHolder.getGoogle()).thenReturn(new AdTrackingInfoResult(null, IdentifierStatus.IDENTIFIER_PROVIDER_UNAVAILABLE, null));
             when(mAdvertisingIdsHolder.getHuawei()).thenReturn(new AdTrackingInfoResult(null, IdentifierStatus.IDENTIFIER_PROVIDER_UNAVAILABLE, null));
             when(mAdvertisingIdsHolder.getYandex()).thenReturn(new AdTrackingInfoResult(null, IdentifierStatus.IDENTIFIER_PROVIDER_UNAVAILABLE, null));
-            when(requestConfig.getAdvertisingIdsHolder()).thenReturn(mAdvertisingIdsHolder);
             when(requestConfig.getChosenClids()).thenReturn(new ClidsInfo.Candidate(null, DistributionSource.APP));
+
             startupParamsAppender = new StartupParamsAppender(obfuscator, modulesArgumentsCollector);
+
+            liveConfigProvider = liveConfigProviderMockedConstructionRule.getConstructionMock().constructed().get(0);
+            when(liveConfigProvider.getAdvertisingIdentifiers()).thenReturn(mAdvertisingIdsHolder);
         }
 
         @Test
@@ -576,7 +588,7 @@ public class StartupParamsAppenderTest extends CommonTest {
                     IdentifierStatus.OK,
                     null
             ));
-            startupParamsAppender.appendAdvIdIfAllowed(builder, restrictionController, requestConfig);
+            startupParamsAppender.appendAdvIdIfAllowed(builder, restrictionController, liveConfigProvider);
             checkQueryParameter(builder, obfuscatedGaidParametedName, googleAdvInfo.advId);
         }
 
@@ -588,7 +600,7 @@ public class StartupParamsAppenderTest extends CommonTest {
                     IdentifierStatus.OK,
                     null
             ));
-            startupParamsAppender.appendAdvIdIfAllowed(builder, restrictionController, requestConfig);
+            startupParamsAppender.appendAdvIdIfAllowed(builder, restrictionController, liveConfigProvider);
             checkQueryParameter(builder, obfuscatedOaidParametedName, huaweiAdvInfo.advId);
         }
 
@@ -600,49 +612,49 @@ public class StartupParamsAppenderTest extends CommonTest {
                     IdentifierStatus.OK,
                     null
             ));
-            startupParamsAppender.appendAdvIdIfAllowed(builder, restrictionController, requestConfig);
+            startupParamsAppender.appendAdvIdIfAllowed(builder, restrictionController, liveConfigProvider);
             checkQueryParameter(builder, obfuscatedYandexAdvIdParametedName, yandexAdvIdInfo.advId);
         }
 
         @Test
         public void testNoGaid() {
             doReturn(false).when(restrictionController).isRestrictedForReporter();
-            startupParamsAppender.appendAdvIdIfAllowed(builder, restrictionController, requestConfig);
+            startupParamsAppender.appendAdvIdIfAllowed(builder, restrictionController, liveConfigProvider);
             checkQueryParameter(builder, obfuscatedGaidParametedName, "");
         }
 
         @Test
         public void noGaidIfMissingAdvIdsHolder() {
-            when(requestConfig.getAdvertisingIdsHolder()).thenReturn(null);
-            startupParamsAppender.appendAdvIdIfAllowed(builder, restrictionController, requestConfig);
+            when(liveConfigProvider.getAdvertisingIdentifiers()).thenReturn(null);
+            startupParamsAppender.appendAdvIdIfAllowed(builder, restrictionController, liveConfigProvider);
             checkQueryParameter(builder, obfuscatedGaidParametedName, "");
         }
 
         @Test
         public void noHoaid() {
             doReturn(false).when(restrictionController).isRestrictedForReporter();
-            startupParamsAppender.appendAdvIdIfAllowed(builder, restrictionController, requestConfig);
+            startupParamsAppender.appendAdvIdIfAllowed(builder, restrictionController, liveConfigProvider);
             checkQueryParameter(builder, obfuscatedOaidParametedName, "");
         }
 
         @Test
         public void noHoaidIfMissingAdvIdsHolder() {
-            when(requestConfig.getAdvertisingIdsHolder()).thenReturn(null);
-            startupParamsAppender.appendAdvIdIfAllowed(builder, restrictionController, requestConfig);
+            when(liveConfigProvider.getAdvertisingIdentifiers()).thenReturn(null);
+            startupParamsAppender.appendAdvIdIfAllowed(builder, restrictionController, liveConfigProvider);
             checkQueryParameter(builder, obfuscatedOaidParametedName, "");
         }
 
         @Test
         public void noYandexAdvId() {
             doReturn(false).when(restrictionController).isRestrictedForReporter();
-            startupParamsAppender.appendAdvIdIfAllowed(builder, restrictionController, requestConfig);
+            startupParamsAppender.appendAdvIdIfAllowed(builder, restrictionController, liveConfigProvider);
             checkQueryParameter(builder, obfuscatedYandexAdvIdParametedName, "");
         }
 
         @Test
         public void noYandexAdvIdIfMissingAdbIdsHolder() {
-            when(requestConfig.getAdvertisingIdsHolder()).thenReturn(null);
-            startupParamsAppender.appendAdvIdIfAllowed(builder, restrictionController, requestConfig);
+            when(liveConfigProvider.getAdvertisingIdentifiers()).thenReturn(null);
+            startupParamsAppender.appendAdvIdIfAllowed(builder, restrictionController, liveConfigProvider);
             checkQueryParameter(builder, obfuscatedYandexAdvIdParametedName, "");
         }
 
@@ -664,7 +676,7 @@ public class StartupParamsAppenderTest extends CommonTest {
                     IdentifierStatus.OK,
                     null
             ));
-            startupParamsAppender.appendAdvIdIfAllowed(builder, restrictionController, requestConfig);
+            startupParamsAppender.appendAdvIdIfAllowed(builder, restrictionController, liveConfigProvider);
             checkQueryParameter(builder, obfuscatedGaidParametedName, "");
             checkQueryParameter(builder, obfuscatedOaidParametedName, "");
             checkQueryParameter(builder, obfuscatedYandexAdvIdParametedName, "");
@@ -678,7 +690,7 @@ public class StartupParamsAppenderTest extends CommonTest {
                     IdentifierStatus.OK,
                     null
             ));
-            startupParamsAppender.appendAdvIdIfAllowed(builder, restrictionController, requestConfig);
+            startupParamsAppender.appendAdvIdIfAllowed(builder, restrictionController, liveConfigProvider);
             checkQueryParameter(builder, obfuscatedGaidParametedName, "");
         }
 
@@ -690,7 +702,7 @@ public class StartupParamsAppenderTest extends CommonTest {
                     IdentifierStatus.OK,
                     null
             ));
-            startupParamsAppender.appendAdvIdIfAllowed(builder, restrictionController, requestConfig);
+            startupParamsAppender.appendAdvIdIfAllowed(builder, restrictionController, liveConfigProvider);
             checkQueryParameter(builder, obfuscatedOaidParametedName, "");
         }
 
@@ -702,7 +714,7 @@ public class StartupParamsAppenderTest extends CommonTest {
                     IdentifierStatus.OK,
                     null
             ));
-            startupParamsAppender.appendAdvIdIfAllowed(builder, restrictionController, requestConfig);
+            startupParamsAppender.appendAdvIdIfAllowed(builder, restrictionController, liveConfigProvider);
             checkQueryParameter(builder, obfuscatedYandexAdvIdParametedName, "");
         }
 

@@ -38,11 +38,8 @@ import io.appmetrica.analytics.testutils.ConstructionArgumentCaptor;
 import io.appmetrica.analytics.testutils.MockedConstructionRule;
 import io.appmetrica.analytics.testutils.MockedStaticRule;
 import io.appmetrica.analytics.testutils.TestUtils;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.function.Function;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.After;
 import org.junit.Before;
@@ -141,6 +138,10 @@ public class GlobalServiceLocatorTest extends CommonTest {
     public final MockedStaticRule<StorageFactory.Provider> storageFactoryProviderMockedStaticRule =
         new MockedStaticRule<>(StorageFactory.Provider.class);
 
+    @Rule
+    public final MockedConstructionRule<AdvertisingIdGetter> advertisingIdGetterMockedConstructionRule =
+        new MockedConstructionRule<>(AdvertisingIdGetter.class);
+
     @Mock
     private StorageFactory<ClidsInfo> clidsStorageFactory;
     @Mock
@@ -224,23 +225,16 @@ public class GlobalServiceLocatorTest extends CommonTest {
 
     @Test
     public void testAdvertisingIdGetterCreation() {
-        ConstructionArgumentCaptor<AdvertisingIdGetter> captor = new ConstructionArgumentCaptor<>();
-        try (MockedConstruction<AdvertisingIdGetter> construction = Mockito.mockConstruction(AdvertisingIdGetter.class, captor)) {
-            GlobalServiceLocator.init(mContext);
-            mGlobalServiceLocator = GlobalServiceLocator.getInstance();
-            mGlobalServiceLocator.getServiceInternalAdvertisingIdGetter();
-            assertThat(captor.getArguments()).flatExtracting(
-                new Function<List<Object>, Object>() {
-                    @Override
-                    public Collection<? extends Object> apply(List<Object> input) {
-                        return Arrays.asList(input.get(3), input.get(4));
-                    }
-                }
-            ).containsExactly(
-                Arrays.asList(GlobalServiceLocator.getInstance().getServiceExecutorProvider().getDefaultExecutor(),
-                    "ServiceInternal")
+        GlobalServiceLocator.init(mContext);
+        mGlobalServiceLocator = GlobalServiceLocator.getInstance();
+        mGlobalServiceLocator.getAdvertisingIdGetter();
+        assertThat(advertisingIdGetterMockedConstructionRule.getConstructionMock().constructed()).hasSize(1);
+        assertThat(advertisingIdGetterMockedConstructionRule.getArgumentInterceptor().flatArguments())
+            .containsExactly(
+                mContext,
+                GlobalServiceLocator.getInstance().getServiceExecutorProvider().getDefaultExecutor(),
+                startupState
             );
-        }
     }
 
     @Test
@@ -319,10 +313,10 @@ public class GlobalServiceLocatorTest extends CommonTest {
     }
 
     @Test
-    public void getServiceInternalAdvertisingIdGetterSubscribeStartupObserver() {
+    public void getAdvertisingIdGetterSubscribeStartupObserver() {
         GlobalServiceLocator.init(mContext);
         AdvertisingIdGetter advertisingIdGetter =
-            GlobalServiceLocator.getInstance().getServiceInternalAdvertisingIdGetter();
+            GlobalServiceLocator.getInstance().getAdvertisingIdGetter();
         verify(startupStateHolder()).registerObserver(advertisingIdGetter);
     }
 
@@ -403,7 +397,7 @@ public class GlobalServiceLocatorTest extends CommonTest {
 
         assertThat(platformIdentifiersMockedConstructionRule.getArgumentInterceptor().flatArguments())
             .containsExactly(
-                GlobalServiceLocator.getInstance().getServiceInternalAdvertisingIdGetter(),
+                GlobalServiceLocator.getInstance().getAdvertisingIdGetter(),
                 GlobalServiceLocator.getInstance().getAppSetIdGetter()
             );
     }

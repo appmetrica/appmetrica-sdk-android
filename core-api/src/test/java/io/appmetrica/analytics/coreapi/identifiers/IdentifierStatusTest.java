@@ -18,12 +18,13 @@ public class IdentifierStatusTest extends CommonTest {
     @ParameterizedRobolectricTestRunner.Parameters(name = "For {0} is {1}")
     public static Collection<Object[]> data() {
         List<Object[]> data = Arrays.asList(new Object[][]{
-                {IdentifierStatus.FEATURE_DISABLED, "FEATURE_DISABLED"},
-                {IdentifierStatus.IDENTIFIER_PROVIDER_UNAVAILABLE, "IDENTIFIER_PROVIDER_UNAVAILABLE"},
-                {IdentifierStatus.INVALID_ADV_ID, "INVALID_ADV_ID"},
-                {IdentifierStatus.NO_STARTUP, "NO_STARTUP"},
-                {IdentifierStatus.OK, "OK"},
-                {IdentifierStatus.UNKNOWN, "UNKNOWN"}
+            {IdentifierStatus.FEATURE_DISABLED, "FEATURE_DISABLED"},
+            {IdentifierStatus.IDENTIFIER_PROVIDER_UNAVAILABLE, "IDENTIFIER_PROVIDER_UNAVAILABLE"},
+            {IdentifierStatus.INVALID_ADV_ID, "INVALID_ADV_ID"},
+            {IdentifierStatus.NO_STARTUP, "NO_STARTUP"},
+            {IdentifierStatus.OK, "OK"},
+            {IdentifierStatus.UNKNOWN, "UNKNOWN"},
+            {IdentifierStatus.FORBIDDEN_BY_CLIENT_CONFIG, "FORBIDDEN_BY_CLIENT_CONFIG"}
         });
         assert data.size() == IdentifierStatus.values().length;
         return data;

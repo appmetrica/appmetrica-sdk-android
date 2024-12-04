@@ -19,14 +19,22 @@ class StartupParamsItemStatusAdapterTest(
 
         @JvmStatic
         @Parameterized.Parameters(name = "{0} -> {1}")
-        fun data(): Collection<Array<Any?>> = listOf(
-            arrayOf(IdentifierStatus.OK, StartupParamsItemStatus.OK),
-            arrayOf(IdentifierStatus.NO_STARTUP, StartupParamsItemStatus.NETWORK_ERROR),
-            arrayOf(IdentifierStatus.FEATURE_DISABLED, StartupParamsItemStatus.FEATURE_DISABLED),
-            arrayOf(IdentifierStatus.IDENTIFIER_PROVIDER_UNAVAILABLE, StartupParamsItemStatus.PROVIDER_UNAVAILABLE),
-            arrayOf(IdentifierStatus.INVALID_ADV_ID, StartupParamsItemStatus.INVALID_VALUE_FROM_PROVIDER),
-            arrayOf(IdentifierStatus.UNKNOWN, StartupParamsItemStatus.UNKNOWN_ERROR)
-        )
+        fun data(): Collection<Array<Any?>> {
+            val data: Collection<Array<Any?>> = listOf(
+                arrayOf(IdentifierStatus.OK, StartupParamsItemStatus.OK),
+                arrayOf(IdentifierStatus.NO_STARTUP, StartupParamsItemStatus.NETWORK_ERROR),
+                arrayOf(IdentifierStatus.FEATURE_DISABLED, StartupParamsItemStatus.FEATURE_DISABLED),
+                arrayOf(IdentifierStatus.IDENTIFIER_PROVIDER_UNAVAILABLE, StartupParamsItemStatus.PROVIDER_UNAVAILABLE),
+                arrayOf(IdentifierStatus.INVALID_ADV_ID, StartupParamsItemStatus.INVALID_VALUE_FROM_PROVIDER),
+                arrayOf(IdentifierStatus.UNKNOWN, StartupParamsItemStatus.UNKNOWN_ERROR),
+                arrayOf(IdentifierStatus.FORBIDDEN_BY_CLIENT_CONFIG, StartupParamsItemStatus.FORBIDDEN_BY_CLIENT_CONFIG)
+            )
+
+            assertThat(data.size).isEqualTo(IdentifierStatus.values().size)
+            assertThat(data.size).isEqualTo(StartupParamsItemStatus.values().size)
+
+            return data
+        }
     }
 
     private lateinit var startupParamItemStatusAdapter: StartupParamItemStatusAdapter

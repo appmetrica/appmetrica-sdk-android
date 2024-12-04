@@ -24,6 +24,7 @@ class AdvIdentifiersFromStartupParamsItemConverter {
         StartupParamsItemStatus.FEATURE_DISABLED -> AdvIdentifiersResult.Details.FEATURE_DISABLED
         StartupParamsItemStatus.PROVIDER_UNAVAILABLE -> AdvIdentifiersResult.Details.IDENTIFIER_PROVIDER_UNAVAILABLE
         StartupParamsItemStatus.INVALID_VALUE_FROM_PROVIDER -> AdvIdentifiersResult.Details.INVALID_ADV_ID
+        StartupParamsItemStatus.FORBIDDEN_BY_CLIENT_CONFIG -> AdvIdentifiersResult.Details.FORBIDDEN_BY_CLIENT_CONFIG
         else -> AdvIdentifiersResult.Details.INTERNAL_ERROR
     }
 }

@@ -134,7 +134,7 @@ public class GlobalServiceLocatorGettersTest extends CommonTest {
                 new ServiceExtractor<AdvertisingIdGetter>() {
                     @Override
                     public AdvertisingIdGetter getService(GlobalServiceLocator globalServiceLocator) {
-                        return globalServiceLocator.getServiceInternalAdvertisingIdGetter();
+                        return globalServiceLocator.getAdvertisingIdGetter();
                     }
                 }
             },
@@ -374,6 +374,14 @@ public class GlobalServiceLocatorGettersTest extends CommonTest {
     @Rule
     public final MockedConstructionRule<ReferrerHolder> referrerHolderMockedConstructionRule =
         new MockedConstructionRule<>(ReferrerHolder.class);
+
+    @Rule
+    public final MockedConstructionRule<AdvertisingIdGetter> advertisingIdGetterMockedConstructionRule =
+        new MockedConstructionRule<>(AdvertisingIdGetter.class);
+
+    @Rule
+    public final MockedConstructionRule<PlatformIdentifiers> platformIdentifiersMockedConstructionRule =
+        new MockedConstructionRule<>(PlatformIdentifiers.class);
 
     private GlobalServiceLocator mGlobalServiceLocator;
 

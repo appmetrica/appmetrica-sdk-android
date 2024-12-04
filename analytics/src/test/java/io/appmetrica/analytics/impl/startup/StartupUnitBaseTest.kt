@@ -5,6 +5,7 @@ import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus
 import io.appmetrica.analytics.coreutils.internal.time.TimeProvider
 import io.appmetrica.analytics.impl.ClidsInfoStorage
 import io.appmetrica.analytics.impl.DataResultReceiver
+import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.StartupStateHolder
 import io.appmetrica.analytics.impl.clids.ClidsInfo
 import io.appmetrica.analytics.impl.client.ClientConfiguration
@@ -116,7 +117,7 @@ internal open class StartupUnitBaseTest : CommonTest() {
         startupUnit = StartupUnit(startupUnitComponents)
         startupConfigurationHolder.updateArguments(sdkConfig)
         doReturn(startupRequestConfig).whenever(startupConfigurationHolder).get()
-        whenever(startupRequestConfig.advertisingIdsHolder).thenReturn(advertisingIdsHolder)
+        whenever(GlobalServiceLocator.getInstance().advertisingIdGetter.identifiers).thenReturn(advertisingIdsHolder)
     }
 
     companion object {

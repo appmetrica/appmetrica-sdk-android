@@ -133,6 +133,11 @@ class BarrierTest : CommonTest() {
     }
 
     @Test
+    fun setAdvIdentifiersTracking() {
+        mBarrier.setAdvIdentifiersTracking(true)
+    }
+
+    @Test
     fun requestDeferredDeeplinkParameters() {
         mBarrier.requestDeferredDeeplinkParameters(mock<DeferredDeeplinkParametersListener>())
     }

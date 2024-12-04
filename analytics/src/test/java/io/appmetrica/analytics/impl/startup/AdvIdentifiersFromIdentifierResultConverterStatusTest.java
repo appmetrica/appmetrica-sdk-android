@@ -19,15 +19,16 @@ public class AdvIdentifiersFromIdentifierResultConverterStatusTest extends Commo
     @ParameterizedRobolectricTestRunner.Parameters(name = "For {0} is {1}")
     public static Collection<Object[]> data() {
         List<Object[]> data = Arrays.asList(new Object[][]{
-                {IdentifierStatus.FEATURE_DISABLED, AdvIdentifiersResult.Details.FEATURE_DISABLED},
-                {IdentifierStatus.IDENTIFIER_PROVIDER_UNAVAILABLE, AdvIdentifiersResult.Details.IDENTIFIER_PROVIDER_UNAVAILABLE},
-                {IdentifierStatus.INVALID_ADV_ID, AdvIdentifiersResult.Details.INVALID_ADV_ID},
-                {IdentifierStatus.NO_STARTUP, AdvIdentifiersResult.Details.NO_STARTUP},
-                {IdentifierStatus.OK, AdvIdentifiersResult.Details.OK},
-                {IdentifierStatus.UNKNOWN, AdvIdentifiersResult.Details.INTERNAL_ERROR}
+            {IdentifierStatus.FEATURE_DISABLED, AdvIdentifiersResult.Details.FEATURE_DISABLED},
+            {IdentifierStatus.IDENTIFIER_PROVIDER_UNAVAILABLE, AdvIdentifiersResult.Details.IDENTIFIER_PROVIDER_UNAVAILABLE},
+            {IdentifierStatus.INVALID_ADV_ID, AdvIdentifiersResult.Details.INVALID_ADV_ID},
+            {IdentifierStatus.NO_STARTUP, AdvIdentifiersResult.Details.NO_STARTUP},
+            {IdentifierStatus.OK, AdvIdentifiersResult.Details.OK},
+            {IdentifierStatus.UNKNOWN, AdvIdentifiersResult.Details.INTERNAL_ERROR},
+            {IdentifierStatus.INVALID_ADV_ID, AdvIdentifiersResult.Details.INVALID_ADV_ID}
         });
         assert data.size() == IdentifierStatus.values().length;
-        assert data.size() ==  AdvIdentifiersResult.Details.values().length;
+        assert data.size() == AdvIdentifiersResult.Details.values().length;
         return data;
     }
 
@@ -42,8 +43,8 @@ public class AdvIdentifiersFromIdentifierResultConverterStatusTest extends Commo
     @Test
     public void testConvertStatus() {
         assertThat(new AdvIdentifiersFromIdentifierResultConverter()
-                .convert(null, new IdentifiersResult(null, mInternalStatus, null), null)
-                .huaweiAdvId.details
+            .convert(null, new IdentifiersResult(null, mInternalStatus, null), null)
+            .huaweiAdvId.details
         ).isEqualTo(mExpected);
     }
 }

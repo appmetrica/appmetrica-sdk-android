@@ -85,6 +85,7 @@ public class CounterConfiguration implements Parcelable {
         applySessionTimeoutFromConfig(config.sessionTimeout);
         applyManualLocationFromConfig(config);
         applyLocationTrackingFromConfig(config);
+        applyAdvIdentifiersTrackingFromConfig(config);
         applyDeviceTypeFromConfig(config);
         applyDispatchPeriodFromConfig(config.dispatchPeriodSeconds);
         applyMaxReportsCountFromConfig(config.maxReportsCount);
@@ -127,6 +128,12 @@ public class CounterConfiguration implements Parcelable {
     private void applyLocationTrackingFromConfig(AppMetricaConfig config) {
         if (Utils.isFieldSet(config.locationTracking)) {
             setLocationTracking(config.locationTracking);
+        }
+    }
+
+    private void applyAdvIdentifiersTrackingFromConfig(@NonNull AppMetricaConfig config) {
+        if (Utils.isFieldSet(config.advIdentifiersTracking)) {
+            setAdvIdentifiersTracking(config.advIdentifiersTracking);
         }
     }
 
@@ -263,6 +270,10 @@ public class CounterConfiguration implements Parcelable {
         mParamsMapping.put(CounterConfigurationKeys.LOCATION_TRACKING_ENABLED, enabled);
     }
 
+    public synchronized void setAdvIdentifiersTracking(final boolean enabled) {
+        mParamsMapping.put(CounterConfigurationKeys.ADV_IDENTIFIERS_TRACKING_ENABLED, enabled);
+    }
+
     public synchronized void setRevenueAutoTrackingEnabled(final boolean enabled) {
         mParamsMapping.put(CounterConfigurationKeys.REVENUE_AUTO_TRACKING_ENABLED, enabled);
     }
@@ -275,6 +286,11 @@ public class CounterConfiguration implements Parcelable {
     @Nullable
     public Boolean isLocationTrackingEnabled() {
         return mParamsMapping.getAsBoolean(CounterConfigurationKeys.LOCATION_TRACKING_ENABLED);
+    }
+
+    @Nullable
+    public Boolean isAdvIdentifiersTrackingEnabled() {
+        return mParamsMapping.getAsBoolean(CounterConfigurationKeys.ADV_IDENTIFIERS_TRACKING_ENABLED);
     }
 
     public final synchronized void setCustomAppVersion(final String appVersion) {

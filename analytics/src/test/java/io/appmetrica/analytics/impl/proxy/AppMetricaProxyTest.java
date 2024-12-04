@@ -366,6 +366,16 @@ public class AppMetricaProxyTest extends CommonTest {
     }
 
     @Test
+    public void setAdvIdentifiersTracking() {
+        mProxy.setAdvIdentifiersTracking(true);
+        InOrder inOrder = inOrder(mBarrier, mSynchronousStageExecutor, mProvider);
+        inOrder.verify(mBarrier).setAdvIdentifiersTracking(true);
+        inOrder.verify(mSynchronousStageExecutor).setAdvIdentifiersTracking(true);
+        inOrder.verify(mProvider).setAdvIdentifiersTracking(true);
+        inOrder.verifyNoMoreInteractions();
+    }
+
+    @Test
     public void testRequestDeferredDeeplinkParameters() {
         DeferredDeeplinkParametersListener listener = mock(DeferredDeeplinkParametersListener.class);
         mProxy.requestDeferredDeeplinkParameters(listener);

@@ -28,6 +28,11 @@ public final class AppMetricaDefaultValues {
      */
     public static final boolean DEFAULT_REPORT_LOCATION_ENABLED = DefaultValues.DEFAULT_REPORT_LOCATION_ENABLED;
     /**
+     * Default report ADV identifiers enabled flag.
+     */
+    public static final boolean DEFAULT_REPORT_ADV_IDENTIFIERS_ENABLED =
+        DefaultValues.DEFAULT_REPORT_ADV_IDENTIFIERS_ENABLED;
+    /**
      * Default data sending enabled flag.
      */
     public static final boolean DEFAULT_REPORTER_DATA_SENDING_ENABLED = true;

@@ -249,7 +249,11 @@ internal class AppMetricaImpl @WorkerThread internal constructor(
         processConfiguration.update(config)
         startupHelper.setPublicLogger(logger)
         initStartup(config)
-        reportsHandler.updatePreActivationConfig(config.locationTracking, config.dataSendingEnabled)
+        reportsHandler.updatePreActivationConfig(
+            config.locationTracking,
+            config.dataSendingEnabled,
+            config.advIdentifiersTracking
+        )
         startupHelper.sendStartupIfNeeded()
     }
 
@@ -328,6 +332,11 @@ internal class AppMetricaImpl @WorkerThread internal constructor(
     @WorkerThread
     override fun setLocationTracking(enabled: Boolean) {
         mainReporter.setLocationTracking(enabled)
+    }
+
+    @WorkerThread
+    override fun setAdvIdentifiersTracking(enabled: Boolean) {
+        mainReporter.setAdvIdentifiersTracking(enabled)
     }
 
     @WorkerThread

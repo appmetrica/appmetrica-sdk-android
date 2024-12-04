@@ -166,6 +166,27 @@ class CounterConfigurationTest : CommonTest() {
     }
 
     @Test
+    fun writeFalseToAdvIdentifiersTrackingEnabled() {
+        counterConfiguration.setAdvIdentifiersTracking(false)
+        assertThat(counterConfiguration.isAdvIdentifiersTrackingEnabled).isFalse()
+    }
+
+    @Test
+    fun writeTrueToAdvIdentifiersTrackingEnabled() {
+        counterConfiguration.setAdvIdentifiersTracking(true)
+        assertThat(counterConfiguration.isAdvIdentifiersTrackingEnabled).isTrue()
+    }
+
+    @Test
+    fun rewriteAdvIdentifierTracking() {
+        counterConfiguration.setAdvIdentifiersTracking(true)
+        counterConfiguration.setAdvIdentifiersTracking(false)
+        assertThat(counterConfiguration.isAdvIdentifiersTrackingEnabled).isFalse()
+        counterConfiguration.setAdvIdentifiersTracking(true)
+        assertThat(counterConfiguration.isAdvIdentifiersTrackingEnabled).isTrue()
+    }
+
+    @Test
     fun defaultManualLocation() {
         assertThat(counterConfiguration.manualLocation).isNull()
     }
@@ -473,6 +494,7 @@ class CounterConfigurationTest : CommonTest() {
             .withMaxReportsInDatabaseCount(5000)
             .withNativeCrashReporting(true)
             .withRevenueAutoTrackingEnabled(true)
+            .withAdvIdentifiersTracking(true)
             .build()
 
         val actual = CounterConfiguration(reporterType)
@@ -496,6 +518,7 @@ class CounterConfigurationTest : CommonTest() {
             assertThat(actual.reportNativeCrashesEnabled).isEqualTo(inputConfig.nativeCrashReporting)
             assertThat(actual.isRevenueAutoTrackingEnabled).isEqualTo(inputConfig.revenueAutoTrackingEnabled)
             assertThat(actual.reporterType).isEqualTo(reporterType)
+            assertThat(actual.isAdvIdentifiersTrackingEnabled).isEqualTo(inputConfig.advIdentifiersTracking)
             assertAll()
         }
     }
@@ -528,6 +551,7 @@ class CounterConfigurationTest : CommonTest() {
             assertThat(actual.reportNativeCrashesEnabled).isNull()
             assertThat(actual.isRevenueAutoTrackingEnabled).isNull()
             assertThat(actual.reporterType).isEqualTo(reporterType)
+            assertThat(actual.isAdvIdentifiersTrackingEnabled).isNull()
             assertAll()
 
         }

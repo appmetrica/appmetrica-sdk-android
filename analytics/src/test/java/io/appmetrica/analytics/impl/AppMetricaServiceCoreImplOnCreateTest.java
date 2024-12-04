@@ -154,10 +154,10 @@ public class AppMetricaServiceCoreImplOnCreateTest extends CommonTest {
     @Test
     public void testAdvertisingIdGetterIsInited() {
         AdvertisingIdGetter advertisingIdGetter = mock(AdvertisingIdGetter.class);
-        when(GlobalServiceLocator.getInstance().getServiceInternalAdvertisingIdGetter()).thenReturn(advertisingIdGetter);
+        when(GlobalServiceLocator.getInstance().getAdvertisingIdGetter()).thenReturn(advertisingIdGetter);
         initMetricaCoreImpl();
         mMetricaCore.onCreate();
-        verify(advertisingIdGetter).init(same(mContext), any(StartupState.class));
+        verify(advertisingIdGetter).init();
     }
 
     @Test
@@ -232,11 +232,11 @@ public class AppMetricaServiceCoreImplOnCreateTest extends CommonTest {
             initMetricaCoreImpl();
             mMetricaCore.onCreate();
             GlobalServiceLocator globalServiceLocator = GlobalServiceLocator.getInstance();
-            AdvertisingIdGetter advertisingIdGetter = globalServiceLocator.getServiceInternalAdvertisingIdGetter();
+            AdvertisingIdGetter advertisingIdGetter = globalServiceLocator.getAdvertisingIdGetter();
             verify(firstServiceEntryPointManager).onPossibleFirstEntry(mContext);
             verify(globalServiceLocator).initAsync();
             verify(mAppMetricaServiceLifecycle).addNewClientConnectObserver(any(AppMetricaServiceLifecycle.LifecycleObserver.class));
-            verify(advertisingIdGetter).init(same(mContext), any(StartupState.class));
+            verify(advertisingIdGetter).init();
             verify(GlobalServiceLocator.getInstance().getStartupStateHolder()).registerObserver(GlobalServiceLocator.getInstance().getModulesController());
             verify(GlobalServiceLocator.getInstance().getStartupStateHolder()).registerObserver(any(StartupStateObserver.class));
             verify(fieldsFactory).createReportConsumer(same(mContext), any(ClientRepository.class));
@@ -256,7 +256,7 @@ public class AppMetricaServiceCoreImplOnCreateTest extends CommonTest {
             verify(firstServiceEntryPointManager, never()).onPossibleFirstEntry(mContext);
             verify(globalServiceLocator, never()).initAsync();
             verifyNoMoreInteractions(mAppMetricaServiceLifecycle);
-            verify(advertisingIdGetter, never()).init(same(mContext), any(StartupState.class));
+            verify(advertisingIdGetter, never()).init();
             verify(fieldsFactory, never()).createReportConsumer(same(mContext), any(ClientRepository.class));
             verify(AppMetricaSelfReportFacade.class, times(1));
             AppMetricaSelfReportFacade.warmupForMetricaProcess(mContext);

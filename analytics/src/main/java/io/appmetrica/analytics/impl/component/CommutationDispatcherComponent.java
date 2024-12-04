@@ -9,6 +9,7 @@ import io.appmetrica.analytics.impl.ClientIdentifiersChangedListener;
 import io.appmetrica.analytics.impl.ClientIdentifiersHolder;
 import io.appmetrica.analytics.impl.ClientIdentifiersProvider;
 import io.appmetrica.analytics.impl.ClientIdentifiersProviderFactory;
+import io.appmetrica.analytics.impl.utils.BooleanUtils;
 import io.appmetrica.analytics.internal.CounterConfigurationReporterType;
 import io.appmetrica.analytics.impl.CounterReport;
 import io.appmetrica.analytics.impl.DataResultReceiver;
@@ -90,13 +91,6 @@ public class CommutationDispatcherComponent implements IComponent, StartupListen
                 new ComponentLifecycleManager<CommutationClientUnit>(),
                 new CommutationDispatcherComponentFieldsFactory(),
                 new ClientIdentifiersProviderFactory(),
-                new AdvertisingIdGetter(
-                        new AdvertisingIdGetter.ServicePublicGaidRestrictionProvider(),
-                        new AdvertisingIdGetter.PublicHoaidRestrictionProvider(),
-                        new AdvertisingIdGetter.AlwaysAllowedRestrictionsProvider(),
-                        GlobalServiceLocator.getInstance().getServiceExecutorProvider().getDefaultExecutor(),
-                        "ServicePublic"
-                ),
                 new ReferrerManager()
         );
     }
@@ -111,7 +105,6 @@ public class CommutationDispatcherComponent implements IComponent, StartupListen
                                    @NonNull ComponentLifecycleManager<CommutationClientUnit> componentLifecycleManager,
                                    @NonNull CommutationDispatcherComponentFieldsFactory fieldsFactory,
                                    @NonNull ClientIdentifiersProviderFactory clientIdentifiersProviderFactory,
-                                   @NonNull AdvertisingIdGetter advertisingIdGetter,
                                    @NonNull ReferrerManager referrerManager) {
         mContext = context.getApplicationContext();
         mComponentId = componentId;
@@ -119,13 +112,13 @@ public class CommutationDispatcherComponent implements IComponent, StartupListen
         mReporterArgumentsHolder = reporterArgumentsHolder;
         mLifecycleManager = componentLifecycleManager;
         mReportProcessor = fieldsFactory.createCommutationReportProcessor(this);
+        updateAdvIdentifiersTracking(clientConfiguration);
         mStartupUnit = mStartupCenter.getOrCreateStartupUnit(
                 mContext,
                 mComponentId,
                 clientConfiguration.startupArguments
         );
-        mAdvertisingIdGetter = advertisingIdGetter;
-        mAdvertisingIdGetter.init(mContext, mStartupUnit.getStartupState());
+        mAdvertisingIdGetter = GlobalServiceLocator.getInstance().getAdvertisingIdGetter();
         mClientIdentifiersProvider = clientIdentifiersProviderFactory
                 .createClientIdentifiersProvider(mStartupUnit, mAdvertisingIdGetter, mContext);
         mTaskProcessor = fieldsFactory.createTaskProcessor(this, mStartupUnit);
@@ -140,6 +133,20 @@ public class CommutationDispatcherComponent implements IComponent, StartupListen
         this.referrerManager = referrerManager;
         DebugLogger.INSTANCE.info(TAG, "Subscribe on referrer updates from commutation dispatcher component");
         mStartupCenter.registerStartupListener(mComponentId, this);
+    }
+
+    private void updateAdvIdentifiersTracking(@NonNull CommonArguments clientConfiguration) {
+        boolean advIdentifiersTrackingStatus =
+            !BooleanUtils.isFalse(clientConfiguration.componentArguments.advIdentifiersTrackingEnabled);
+        DebugLogger.INSTANCE.info(
+            TAG,
+            "Update adv identifiers tracking status: %s (value from arguments: %s)",
+            advIdentifiersTrackingStatus,
+            clientConfiguration.componentArguments.advIdentifiersTrackingEnabled
+        );
+        GlobalServiceLocator.getInstance().getAdvertisingIdGetter().updateStateFromClientConfig(
+            advIdentifiersTrackingStatus
+        );
     }
 
     @Override
@@ -200,7 +207,6 @@ public class CommutationDispatcherComponent implements IComponent, StartupListen
 
     @Override
     public void onStartupChanged(@NonNull StartupState newState) {
-        mAdvertisingIdGetter.onStartupStateChanged(newState);
         notifyStartupUpdated(newState);
     }
 
@@ -332,12 +338,6 @@ public class CommutationDispatcherComponent implements IComponent, StartupListen
                 resultReceiver,
                 mClientIdentifiersProvider.createClientIdentifiersHolder(clientClids)
         );
-    }
-
-    @VisibleForTesting
-    @NonNull
-    AdvertisingIdGetter getAdvertisingIdGetter() {
-        return mAdvertisingIdGetter;
     }
 }
 

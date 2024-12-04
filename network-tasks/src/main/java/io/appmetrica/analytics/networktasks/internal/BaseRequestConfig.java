@@ -4,7 +4,6 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import io.appmetrica.analytics.coreapi.internal.constants.DeviceTypeValues;
-import io.appmetrica.analytics.coreapi.internal.identifiers.AdvertisingIdsHolder;
 import io.appmetrica.analytics.coreapi.internal.identifiers.AppSetId;
 import io.appmetrica.analytics.coreapi.internal.identifiers.PlatformIdentifiers;
 import io.appmetrica.analytics.coreapi.internal.identifiers.SdkIdentifiers;
@@ -56,9 +55,6 @@ public class BaseRequestConfig {
 
     @Nullable
     private SdkIdentifiers sdkIdentifiers;
-
-    @Nullable
-    private AdvertisingIdsHolder advertisingIdsHolder;
 
     @Nullable
     private AppSetId appSetId;
@@ -216,15 +212,6 @@ public class BaseRequestConfig {
         return sdkEnvironment != null ? sdkEnvironment.getDeviceType() : DeviceTypeValues.PHONE;
     }
 
-    protected void setAdvertisingIdsHolder(@NonNull AdvertisingIdsHolder advertisingIdsHolder) {
-        this.advertisingIdsHolder = advertisingIdsHolder;
-    }
-
-    @Nullable
-    public AdvertisingIdsHolder getAdvertisingIdsHolder() {
-        return advertisingIdsHolder;
-    }
-
     protected void setSdkEnvironment(@NonNull SdkEnvironment sdkEnvironment) {
         this.sdkEnvironment = sdkEnvironment;
     }
@@ -280,7 +267,6 @@ public class BaseRequestConfig {
             config.setSdkEnvironment(sdkEnvironmentProvider.getSdkEnvironment());
             PlatformIdentifiers platformIdentifiers = dataSource.platformIdentifiers;
             config.setAppSetId(platformIdentifiers.getAppSetIdProvider().getAppSetId());
-            config.setAdvertisingIdsHolder(platformIdentifiers.getAdvIdentifiersProvider().getIdentifiers(mContext));
 
             config.setPackageName(mPackageName);
 

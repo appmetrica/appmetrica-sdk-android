@@ -377,6 +377,25 @@ public class PreferencesServiceDbStorageTest extends CommonTest {
         assertThat(mServiceDbStorage.lastKotlinVersionSendTime()).isZero();
     }
 
+    @Test
+    public void saveAdvIdentifiersTrackingEnabledForTrue() {
+        mServiceDbStorage.saveAdvIdentifiersTrackingEnabled(true);
+        verify(mDbStorage).put(PreferencesServiceDbStorage.ADV_IDENTIFIERS_TRACKING_ENABLED.fullKey(), true);
+    }
+
+    @Test
+    public void saveAdvIdentifiersTrackingEnabledForFalse() {
+        mServiceDbStorage.saveAdvIdentifiersTrackingEnabled(false);
+        verify(mDbStorage).put(PreferencesServiceDbStorage.ADV_IDENTIFIERS_TRACKING_ENABLED.fullKey(), false);
+    }
+
+    @Test
+    public void isAdvIdentifiersTrackingStatusEnabled() {
+        when(mDbStorage.getBoolean(PreferencesServiceDbStorage.ADV_IDENTIFIERS_TRACKING_ENABLED.fullKey(), false))
+            .thenReturn(true);
+        assertThat(mServiceDbStorage.isAdvIdentifiersTrackingStatusEnabled(false)).isTrue();
+    }
+
     //just add new put methods when needed
     public static PreferencesServiceDbStorage createMock() {
         PreferencesServiceDbStorage mock = mock(PreferencesServiceDbStorage.class);

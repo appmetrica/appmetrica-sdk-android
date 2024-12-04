@@ -63,6 +63,32 @@ public class UpdatePreActivationConfigHandlerTest extends CommonTest {
         verify(mRestrictionController).setEnabledFromMainReporter(null);
     }
 
+    @Test
+    public void advIdentifiersTrackingStatusForNull() {
+        when(mCounterConfiguration.isAdvIdentifiersTrackingEnabled()).thenReturn(null);
+        doReturn(new CommonArguments.ReporterArguments(mCounterConfiguration, null)).when(mRegularDispatcherComponent).getConfiguration();
+        mHandler.process(mCounterReport, mClientUnit);
+        verify(GlobalServiceLocator.getInstance().getAdvertisingIdGetter()).updateStateFromClientConfig(true);
+    }
+
+    @Test
+    public void advIdentifiersTrackingStatusForTrue() {
+        when(mCounterConfiguration.isAdvIdentifiersTrackingEnabled()).thenReturn(true);
+        doReturn(new CommonArguments.ReporterArguments(mCounterConfiguration, null)).when(mRegularDispatcherComponent).getConfiguration();
+        mHandler.process(mCounterReport, mClientUnit);
+        verify(GlobalServiceLocator.getInstance().getAdvertisingIdGetter())
+            .updateStateFromClientConfig(true);
+    }
+
+    @Test
+    public void advIdentifiersTrackingStatusForFalse() {
+        when(mCounterConfiguration.isAdvIdentifiersTrackingEnabled()).thenReturn(false);
+        doReturn(new CommonArguments.ReporterArguments(mCounterConfiguration, null)).when(mRegularDispatcherComponent).getConfiguration();
+        mHandler.process(mCounterReport, mClientUnit);
+        verify(GlobalServiceLocator.getInstance().getAdvertisingIdGetter())
+            .updateStateFromClientConfig(false);
+    }
+
     @RunWith(ParameterizedRobolectricTestRunner.class)
     public static class LocationTest {
 

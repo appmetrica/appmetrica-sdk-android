@@ -48,6 +48,7 @@ class AppMetricaConfigTest : CommonTest() {
     private val userProfileID = "user_profile_id"
     private val oldMaxReportsInDatabaseCount = 10
     private val newMaxReportsInDatabaseCount = 100
+    private val advIdentifierTracking = true
 
     @get:Rule
     val configCheckerMockedConstructionRule = constructionRule<ConfigChecker> {
@@ -117,6 +118,7 @@ class AppMetricaConfigTest : CommonTest() {
             .checkField("anrMonitoring", anrMonitoring)
             .checkField("anrMonitoringTimeout", anrMonitoringTimeout)
             .checkField("customHosts", customHosts)
+            .checkField("advIdentifiersTracking", advIdentifierTracking)
             .checkAll()
     }
 
@@ -142,41 +144,43 @@ class AppMetricaConfigTest : CommonTest() {
                 "maxReportsInDatabaseCount", "userProfileID", "revenueAutoTrackingEnabled",
                 "sessionsAutoTrackingEnabled", "appOpenTrackingEnabled", "deviceType", "appBuildNumber",
                 "dispatchPeriodSeconds", "maxReportsCount", "crashTransformer", "anrMonitoring",
-                "anrMonitoringTimeout", "customHosts"
+                "anrMonitoringTimeout", "customHosts", "advIdentifiersTracking"
             )
             .checkAll()
     }
+
     private fun createFilledConfig(): AppMetricaConfig = AppMetricaConfig.newConfigBuilder(apiKey)
-            .handleFirstActivationAsUpdate(handleFirstActivationAsUpdate)
-            .withAppVersion(appVersion)
-            .withCrashReporting(crashReporting)
-            .withLocation(location)
-            .withLocationTracking(locationTracking)
-            .withLogs()
-            .withMaxReportsInDatabaseCount(maxReportsInDbCount)
-            .withNativeCrashReporting(nativeCrashReporting)
-            .withPreloadInfo(preloadInfo)
-            .withSessionTimeout(sessionTimeout)
-            .withDataSendingEnabled(dataSendingEnabled)
-            .withErrorEnvironmentValue(errorEnvKeyFirst, errorEnvValueFirst)
-            .withErrorEnvironmentValue(errorEnvKeySecond, errorEnvValueSecond)
-            .withUserProfileID(userProfileID)
-            .withRevenueAutoTrackingEnabled(revenueAutoTrackingEnabled)
-            .withSessionsAutoTrackingEnabled(sessionsAutoTrackingEnabled)
-            .withAppOpenTrackingEnabled(appOpenTrackingEnabled)
-            .withDeviceType(deviceType)
-            .withAppBuildNumber(appBuildNumber)
-            .withDispatchPeriodSeconds(dispatchPeriodSeconds)
-            .withMaxReportsCount(maxReportsCount)
-            .withAppEnvironmentValue(appEnvKeyFirst, appEnvValueFirst)
-            .withAppEnvironmentValue(appEnvKeySecond, appEnvValueSecond)
-            .withCrashTransformer(crashTransformer)
-            .withAnrMonitoring(anrMonitoring)
-            .withAnrMonitoringTimeout(anrMonitoringTimeout)
-            .withCustomHosts(customHosts)
-            .withAdditionalConfig(additionalConfigKeyFirst, additionalConfigValueFirst)
-            .withAdditionalConfig(additionalConfigKeySecond, additionalConfigValueSecond)
-            .build()
+        .handleFirstActivationAsUpdate(handleFirstActivationAsUpdate)
+        .withAppVersion(appVersion)
+        .withCrashReporting(crashReporting)
+        .withLocation(location)
+        .withLocationTracking(locationTracking)
+        .withLogs()
+        .withMaxReportsInDatabaseCount(maxReportsInDbCount)
+        .withNativeCrashReporting(nativeCrashReporting)
+        .withPreloadInfo(preloadInfo)
+        .withSessionTimeout(sessionTimeout)
+        .withDataSendingEnabled(dataSendingEnabled)
+        .withErrorEnvironmentValue(errorEnvKeyFirst, errorEnvValueFirst)
+        .withErrorEnvironmentValue(errorEnvKeySecond, errorEnvValueSecond)
+        .withUserProfileID(userProfileID)
+        .withRevenueAutoTrackingEnabled(revenueAutoTrackingEnabled)
+        .withSessionsAutoTrackingEnabled(sessionsAutoTrackingEnabled)
+        .withAppOpenTrackingEnabled(appOpenTrackingEnabled)
+        .withDeviceType(deviceType)
+        .withAppBuildNumber(appBuildNumber)
+        .withDispatchPeriodSeconds(dispatchPeriodSeconds)
+        .withMaxReportsCount(maxReportsCount)
+        .withAppEnvironmentValue(appEnvKeyFirst, appEnvValueFirst)
+        .withAppEnvironmentValue(appEnvKeySecond, appEnvValueSecond)
+        .withCrashTransformer(crashTransformer)
+        .withAnrMonitoring(anrMonitoring)
+        .withAnrMonitoringTimeout(anrMonitoringTimeout)
+        .withCustomHosts(customHosts)
+        .withAdvIdentifiersTracking(advIdentifierTracking)
+        .withAdditionalConfig(additionalConfigKeyFirst, additionalConfigValueFirst)
+        .withAdditionalConfig(additionalConfigKeySecond, additionalConfigValueSecond)
+        .build()
 
     @Test
     fun apiKey() {
@@ -244,6 +248,12 @@ class AppMetricaConfigTest : CommonTest() {
     fun trackLocationEnabled() {
         val config = defaultConfigBuilder.withLocationTracking(TestData.TEST_TRACK_LOCATION_ENABLED).build()
         assertThat(config.locationTracking).isEqualTo(TestData.TEST_TRACK_LOCATION_ENABLED)
+    }
+
+    @Test
+    fun advIdentifierTracking() {
+        val config = defaultConfigBuilder.withAdvIdentifiersTracking(advIdentifierTracking).build()
+        assertThat(config.advIdentifiersTracking).isEqualTo(advIdentifierTracking)
     }
 
     @Test

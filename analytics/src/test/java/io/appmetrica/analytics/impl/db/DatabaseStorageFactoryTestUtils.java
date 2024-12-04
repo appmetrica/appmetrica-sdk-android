@@ -23,7 +23,7 @@ public class DatabaseStorageFactoryTestUtils {
     }
 
     private static void clearStorages(final Context context) throws NoSuchFieldException, IllegalAccessException {
-        Field field = DatabaseStorageFactory.class.getDeclaredField("mDatabaseStorages");
+        Field field = DatabaseStorageFactory.class.getDeclaredField("databaseStorages");
         field.setAccessible(true);
         DatabaseStorageFactory instance = DatabaseStorageFactory.getInstance(context);
         ((Map) field.get(instance)).clear();

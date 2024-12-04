@@ -51,7 +51,7 @@ public static class io.appmetrica.analytics.AdvIdentifiersResult$AdvId {
 }
 
 public enum io.appmetrica.analytics.AdvIdentifiersResult$Details {
-    FEATURE_DISABLED, IDENTIFIER_PROVIDER_UNAVAILABLE, INTERNAL_ERROR, INVALID_ADV_ID, NO_STARTUP, OK
+    FEATURE_DISABLED, FORBIDDEN_BY_CLIENT_CONFIG, IDENTIFIER_PROVIDER_UNAVAILABLE, INTERNAL_ERROR, INVALID_ADV_ID, NO_STARTUP, OK
 
     public static io.appmetrica.analytics.AdvIdentifiersResult$Details valueOf(String)
     public static io.appmetrica.analytics.AdvIdentifiersResult$Details[] values()
@@ -100,6 +100,7 @@ public final class io.appmetrica.analytics.AppMetrica {
     public static void requestStartupParams([NonNull] android.content.Context, [NonNull] io.appmetrica.analytics.StartupParamsCallback, [NonNull] java.util.List<String>)
     public static void resumeSession([Nullable] android.app.Activity)
     public static void sendEventsBuffer()
+    public static void setAdvIdentifiersTracking(boolean)
     public static void setDataSendingEnabled(boolean)
     public static void setLocation([Nullable] android.location.Location)
     public static void setLocationTracking(boolean)
@@ -108,6 +109,7 @@ public final class io.appmetrica.analytics.AppMetrica {
 
 public class io.appmetrica.analytics.AppMetricaConfig {
     public final [NonNull] java.util.Map<String, Object> additionalConfig
+    public final [Nullable] Boolean advIdentifiersTracking
     public final [Nullable] Boolean anrMonitoring
     public final [Nullable] Integer anrMonitoringTimeout
     public final [NonNull] String apiKey
@@ -145,6 +147,7 @@ public static class io.appmetrica.analytics.AppMetricaConfig$Builder {
     public [NonNull] io.appmetrica.analytics.AppMetricaConfig build()
     public [NonNull] io.appmetrica.analytics.AppMetricaConfig$Builder handleFirstActivationAsUpdate(boolean)
     public [NonNull] io.appmetrica.analytics.AppMetricaConfig$Builder withAdditionalConfig([NonNull] String, [Nullable] Object)
+    public [NonNull] io.appmetrica.analytics.AppMetricaConfig$Builder withAdvIdentifiersTracking(boolean)
     public [NonNull] io.appmetrica.analytics.AppMetricaConfig$Builder withAnrMonitoring(boolean)
     public [NonNull] io.appmetrica.analytics.AppMetricaConfig$Builder withAnrMonitoringTimeout(int)
     public [NonNull] io.appmetrica.analytics.AppMetricaConfig$Builder withAppBuildNumber(int)
@@ -183,6 +186,7 @@ public final class io.appmetrica.analytics.AppMetricaDefaultValues {
     public static final boolean DEFAULT_REPORTER_DATA_SENDING_ENABLED
     public static final boolean DEFAULT_REPORTS_CRASHES_ENABLED
     public static final boolean DEFAULT_REPORTS_NATIVE_CRASHES_ENABLED
+    public static final boolean DEFAULT_REPORT_ADV_IDENTIFIERS_ENABLED
     public static final boolean DEFAULT_REPORT_LOCATION_ENABLED
     public static final boolean DEFAULT_REVENUE_AUTO_TRACKING_ENABLED
     public static final boolean DEFAULT_SESSIONS_AUTO_TRACKING_ENABLED
@@ -450,7 +454,7 @@ public final class io.appmetrica.analytics.StartupParamsItem {
 }
 
 public enum io.appmetrica.analytics.StartupParamsItemStatus {
-    FEATURE_DISABLED, INVALID_VALUE_FROM_PROVIDER, NETWORK_ERROR, OK, PROVIDER_UNAVAILABLE, UNKNOWN_ERROR
+    FEATURE_DISABLED, FORBIDDEN_BY_CLIENT_CONFIG, INVALID_VALUE_FROM_PROVIDER, NETWORK_ERROR, OK, PROVIDER_UNAVAILABLE, UNKNOWN_ERROR
 
     public static io.appmetrica.analytics.StartupParamsItemStatus valueOf(String)
     public static io.appmetrica.analytics.StartupParamsItemStatus[] values()
@@ -589,10 +593,12 @@ public class io.appmetrica.analytics.internal.CounterConfiguration implementatio
     public [NonNull] io.appmetrica.analytics.internal.CounterConfigurationReporterType getReporterType()
     public [Nullable] Integer getSessionTimeout()
     public String getUuid()
+    public [Nullable] Boolean isAdvIdentifiersTrackingEnabled()
     public [Nullable] Boolean isFirstActivationAsUpdate()
     public [Nullable] Boolean isLocationTrackingEnabled()
     public [Nullable] Boolean isLogEnabled()
     public [Nullable] Boolean isRevenueAutoTrackingEnabled()
+    public void setAdvIdentifiersTracking(boolean)
     public void setApiKey(String)
     public void setAppBuildNumber(int)
     public final void setCustomAppVersion(String)

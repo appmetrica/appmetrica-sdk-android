@@ -12,6 +12,7 @@ import io.appmetrica.analytics.impl.request.StartupArgumentsTest;
 import io.appmetrica.analytics.internal.IdentifiersResult;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
+import io.appmetrica.analytics.testutils.MockedConstructionRule;
 import io.appmetrica.analytics.testutils.ServiceMigrationCheckedRule;
 import java.util.UUID;
 import org.junit.Before;
@@ -44,12 +45,20 @@ public class StartupCenterTest extends CommonTest {
             .around(new ServiceMigrationCheckedRule()
     );
 
+    @Rule
+    public MockedConstructionRule<StartupUnit> startupUnitMockedConstructionRule =
+        new MockedConstructionRule<>(StartupUnit.class);
+
+    @Rule
+    public MockedConstructionRule<StartupUnitComponents> startupUnitComponentsMockedConstructionRule =
+        new MockedConstructionRule<>(StartupUnitComponents.class);
+
     @Before
     public void setUp() {
         context = RuntimeEnvironment.getApplication();
         when(GlobalServiceLocator.getInstance().getAppSetIdGetter().getAppSetId()).thenReturn(new AppSetId(null, AppSetIdScope.UNKNOWN));
-        when(GlobalServiceLocator.getInstance().getServiceInternalAdvertisingIdGetter()
-                .getIdentifiersForced(any(Context.class), any(RetryStrategy.class)))
+        when(GlobalServiceLocator.getInstance().getAdvertisingIdGetter()
+                .getIdentifiersForced(any(RetryStrategy.class)))
                 .thenReturn(new AdvertisingIdsHolder());
         when(GlobalServiceLocator.getInstance().getMultiProcessSafeUuidProvider().readUuid())
             .thenReturn(new IdentifiersResult(UUID.randomUUID().toString(), IdentifierStatus.OK, null));

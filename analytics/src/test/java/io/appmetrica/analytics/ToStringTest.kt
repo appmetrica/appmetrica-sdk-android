@@ -38,6 +38,7 @@ import io.appmetrica.analytics.impl.ecommerce.client.model.ScreenWrapper
 import io.appmetrica.analytics.impl.ecommerce.client.model.ShownProductCardInfoEvent
 import io.appmetrica.analytics.impl.ecommerce.client.model.ShownProductDetailInfoEvent
 import io.appmetrica.analytics.impl.ecommerce.client.model.ShownScreenInfoEvent
+import io.appmetrica.analytics.impl.id.AdvIdGetterController
 import io.appmetrica.analytics.impl.permissions.LocationFlagStrategy
 import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoData
 import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoState
@@ -625,6 +626,16 @@ class ToStringTest(
                     StartupParamsItem(null, StartupParamsItemStatus.FEATURE_DISABLED, null),
                     0,
                     "value with nulls"
+                ),
+                arrayOf(
+                    AdvIdGetterController.CanTrackIdentifiers::class.java,
+                    AdvIdGetterController.CanTrackIdentifiers(
+                        AdvIdGetterController.State.ALLOWED,
+                        AdvIdGetterController.State.FORBIDDEN_BY_REMOTE_CONFIG,
+                        AdvIdGetterController.State.FORBIDDEN_BY_CLIENT_CONFIG
+                    ),
+                    0,
+                    "filled value"
                 )
             )
         }

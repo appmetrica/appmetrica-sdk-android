@@ -692,6 +692,6 @@ public abstract class ComponentUnitBaseTest extends CommonTest {
     public abstract void testGetReporterType();
 
     private CommonArguments.ReporterArguments createReporterArgumentsWithLogsEnabled(@Nullable Boolean enabled) {
-        return new CommonArguments.ReporterArguments(null, null, null, null, null, null, null, enabled, null, null, null, null, null);
+        return new CommonArguments.ReporterArguments(null, null, null, null, null, null, null, enabled, null, null, null, null, null, null);
     }
 }

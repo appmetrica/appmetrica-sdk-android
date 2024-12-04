@@ -30,11 +30,14 @@ public class StartupParamsAppender implements IParamsAppender<StartupRequestConf
     private final Obfuscator mObfuscator;
     @NonNull
     private final ModulesRemoteConfigArgumentsCollector modulesArgumentsCollector;
+    @NonNull
+    private final LiveConfigProvider liveConfigProvider;
 
     public StartupParamsAppender(@NonNull Obfuscator obfuscator,
                                  @NonNull ModulesRemoteConfigArgumentsCollector modulesArgumentsCollector) {
         mObfuscator = obfuscator;
         this.modulesArgumentsCollector = modulesArgumentsCollector;
+        this.liveConfigProvider = new LiveConfigProvider();
     }
 
     @SuppressWarnings("checkstyle:methodLength")
@@ -48,9 +51,9 @@ public class StartupParamsAppender implements IParamsAppender<StartupRequestConf
             requestConfig.getDeviceId());
 
         appendAdvIdIfAllowed(
-                uriBuilder,
-                GlobalServiceLocator.getInstance().getDataSendingRestrictionController(),
-                requestConfig
+            uriBuilder,
+            GlobalServiceLocator.getInstance().getDataSendingRestrictionController(),
+            liveConfigProvider
         );
         uriBuilder.appendQueryParameter(mObfuscator.obfuscate(CommonUrlParts.APP_SET_ID),
             requestConfig.getAppSetId());
@@ -168,8 +171,8 @@ public class StartupParamsAppender implements IParamsAppender<StartupRequestConf
 
     protected void appendAdvIdIfAllowed(@NonNull Uri.Builder uriBuilder,
                                         @NonNull DataSendingRestrictionController controller,
-                                        @NonNull StartupRequestConfig requestConfig) {
-        AdvertisingIdsHolder advertisingIdsHolder = requestConfig.getAdvertisingIdsHolder();
+                                        @NonNull LiveConfigProvider liveConfigProvider) {
+        AdvertisingIdsHolder advertisingIdsHolder = liveConfigProvider.getAdvertisingIdentifiers();
         if (advertisingIdsHolder == null || controller.isRestrictedForReporter()) {
             uriBuilder.appendQueryParameter(
                 mObfuscator.obfuscate(CommonUrlParts.ADV_ID), "");

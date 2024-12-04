@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import io.appmetrica.analytics.coreapi.internal.identifiers.AdTrackingInfoResult;
 import io.appmetrica.analytics.coreapi.internal.identifiers.AdvertisingIdsHolder;
 import io.appmetrica.analytics.impl.DistributionSource;
+import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.clids.ClidsInfo;
 import io.appmetrica.analytics.impl.db.state.converter.StatSendingConverter;
 import io.appmetrica.analytics.impl.modules.ModulesRemoteConfigArgumentsCollector;
@@ -76,7 +77,8 @@ public class AllParsedParametersAreRequestedTest extends CommonTest {
         when(advertisingIdsHolder.getGoogle()).thenReturn(new AdTrackingInfoResult());
         when(advertisingIdsHolder.getHuawei()).thenReturn(new AdTrackingInfoResult());
         when(advertisingIdsHolder.getYandex()).thenReturn(new AdTrackingInfoResult());
-        when(startupRequestConfig.getAdvertisingIdsHolder()).thenReturn(advertisingIdsHolder);
+        when(GlobalServiceLocator.getInstance().getAdvertisingIdGetter().getIdentifiers())
+            .thenReturn(advertisingIdsHolder);
         when(startupRequestConfig.getDeviceId()).thenReturn("");
         startupParamsAppender = new StartupParamsAppender(obfuscator, modulesArgumentsCollector);
     }

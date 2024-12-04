@@ -60,6 +60,7 @@ class ClientConfigSerializerTest : CommonTest() {
         location.latitude = random.nextDouble()
         location.longitude = random.nextDouble()
         val locationTracking = random.nextBoolean()
+        val advIdentifiersTracking = true
         val maxReportsInDbCount = 800
         val nativeCrashReporting = random.nextBoolean()
         val preloadInfo = PreloadInfo.newBuilder("888999").setAdditionalParams("key", "value").build()
@@ -97,6 +98,7 @@ class ClientConfigSerializerTest : CommonTest() {
             .withCrashReporting(crashReporting)
             .withLocation(location)
             .withLocationTracking(locationTracking)
+            .withAdvIdentifiersTracking(true)
             .withLogs()
             .withMaxReportsInDatabaseCount(maxReportsInDbCount)
             .withNativeCrashReporting(nativeCrashReporting)
@@ -128,6 +130,7 @@ class ClientConfigSerializerTest : CommonTest() {
             .checkField("crashReporting", crashReporting)
             .checkField("nativeCrashReporting", nativeCrashReporting)
             .checkField("locationTracking", locationTracking)
+            .checkField("advIdentifiersTracking", advIdentifiersTracking)
             .checkField("logs", true)
             .checkField("firstActivationAsUpdate", handleFirstActivationAsUpdate)
             .checkField("dataSendingEnabled", dataSendingEnabled)
@@ -174,6 +177,7 @@ class ClientConfigSerializerTest : CommonTest() {
             .checkField("crashReporting", nullBoolean)
             .checkField("nativeCrashReporting", nullBoolean)
             .checkField("locationTracking", nullBoolean)
+            .checkField("advIdentifiersTracking", nullBoolean)
             .checkField("logs", nullBoolean)
             .checkField("firstActivationAsUpdate", nullBoolean)
             .checkField("dataSendingEnabled", nullBoolean)

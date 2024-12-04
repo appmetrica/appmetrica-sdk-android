@@ -71,7 +71,16 @@ public class AdvIdentifiersResult {
         /**
          * Identifier could not be retrieved due to some unknown error.
          */
-        INTERNAL_ERROR
+        INTERNAL_ERROR,
+        /**
+         * Identifier could not be retrieved because advertising identifier tracking is forbidden
+         * by client configuration
+         *
+         * @see AppMetricaConfig#advIdentifiersTracking
+         * @see AppMetricaConfig.Builder#withAdvIdentifiersTracking(boolean)
+         * @see AppMetrica#setAdvIdentifiersTracking(boolean)
+         */
+        FORBIDDEN_BY_CLIENT_CONFIG,
     }
 
     /**

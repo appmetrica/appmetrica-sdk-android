@@ -22,6 +22,7 @@ public class DefaultOneShotMetricaConfig implements MetricaConfigurator {
 
     private Location mLocation;
     private Boolean mLocationTracking;
+    private Boolean advIdentifiersTracking;
     private Boolean dataSendingEnabled;
     private Map<String, String> mAppEnvironment = new LinkedHashMap<String, String>();
     private Map<String, String> mErrorEnvironment = new LinkedHashMap<String, String>();
@@ -47,6 +48,17 @@ public class DefaultOneShotMetricaConfig implements MetricaConfigurator {
         DebugLogger.INSTANCE.info(TAG, "setLocationTracking: %b", enabled);
         mLocationTracking = enabled;
         tryToUpdatePreActivationConfig();
+    }
+
+    @Override
+    public void setAdvIdentifiersTracking(final boolean enabled) {
+        DebugLogger.INSTANCE.info(TAG, "setAdvIdentifiersTracking: %b", enabled);
+        advIdentifiersTracking = enabled;
+        tryToUpdatePreActivationConfig();
+    }
+
+    public Boolean isAdvIdentifiersTrackingEnabled() {
+        return advIdentifiersTracking;
     }
 
     public Boolean isDataSendingEnabled() {
@@ -98,6 +110,7 @@ public class DefaultOneShotMetricaConfig implements MetricaConfigurator {
     private void reset() {
         mLocation = null;
         mLocationTracking = null;
+        advIdentifiersTracking = null;
         dataSendingEnabled = null;
         mAppEnvironment.clear();
         mErrorEnvironment.clear();
@@ -172,6 +185,9 @@ public class DefaultOneShotMetricaConfig implements MetricaConfigurator {
         if (isFieldSet(config.locationTracking)) {
             builder.withLocationTracking(config.locationTracking);
         }
+        if (isFieldSet(config.advIdentifiersTracking)) {
+            builder.withAdvIdentifiersTracking(config.advIdentifiersTracking);
+        }
         if (isFieldSet(config.firstActivationAsUpdate)) {
             builder.handleFirstActivationAsUpdate(config.firstActivationAsUpdate);
         }
@@ -236,13 +252,15 @@ public class DefaultOneShotMetricaConfig implements MetricaConfigurator {
         DebugLogger.INSTANCE.info(
             TAG,
             "mergeCommonPart. Config = {locationTracking: %s, location: %s, dataSendingEnabled: %s}, " +
-                "defaultConfig = {locationTracking: %s, location: %s, dataSendingEnabled: %s}",
+                "defaultConfig = {locationTracking: %s, location: %s, dataSendingEnabled: %s, " +
+                "advIdentifierTrackingEnabled}: %s",
             useConfig.locationTracking,
             useConfig.location,
             useConfig.dataSendingEnabled,
             mLocationTracking,
             mLocation,
-            dataSendingEnabled
+            dataSendingEnabled,
+            advIdentifiersTracking
         );
         Boolean trackLocationEnabled = isLocationTrackingEnabled();
         if (isNull(useConfig.locationTracking) && isFieldSet(trackLocationEnabled)) {
@@ -258,6 +276,10 @@ public class DefaultOneShotMetricaConfig implements MetricaConfigurator {
         }
         if (!isFieldSet(useConfig.userProfileID) && isFieldSet(userProfileID)) {
             builder.withUserProfileID(userProfileID);
+        }
+        Boolean advIdentifiersTrackingEnabled = isAdvIdentifiersTrackingEnabled();
+        if (isNull(useConfig.advIdentifiersTracking) && isFieldSet(advIdentifiersTrackingEnabled)) {
+            builder.withAdvIdentifiersTracking(advIdentifiersTrackingEnabled);
         }
     }
 
@@ -281,7 +303,7 @@ public class DefaultOneShotMetricaConfig implements MetricaConfigurator {
 
     private void tryToUpdatePreActivationConfig() {
         if (mReportsHandler != null) {
-            mReportsHandler.updatePreActivationConfig(mLocationTracking, dataSendingEnabled);
+            mReportsHandler.updatePreActivationConfig(mLocationTracking, dataSendingEnabled, advIdentifiersTracking);
         }
     }
 }

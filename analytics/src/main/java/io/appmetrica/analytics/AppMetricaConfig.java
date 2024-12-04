@@ -87,6 +87,15 @@ public class AppMetricaConfig {
     public final Boolean locationTracking;
 
     /**
+     * <p>Indicates whether AppMetrica should include advertising identifiers withing its reports</p>
+     *
+     * <p>@{code true} if allow AppMetrica to record advertising identifiers in reports, otherwise {@code false}</p>
+     */
+
+    @Nullable
+    public final Boolean advIdentifiersTracking;
+
+    /**
      * <p>Indicates whether AppMetrica logging enabled</p>
      *
      * <p>{@code true} if enabled, {@code false} if not</p>
@@ -327,6 +336,9 @@ public class AppMetricaConfig {
         private Boolean mLocationTracking;
 
         @Nullable
+        private Boolean advIdentifiersTracking;
+
+        @Nullable
         private Boolean mLogs;
 
         @Nullable
@@ -530,6 +542,25 @@ public class AppMetricaConfig {
         @NonNull
         public Builder withLocationTracking(boolean enabled) {
             mLocationTracking = enabled;
+            return this;
+        }
+
+        /**
+         * Enables/disables including advertising identifiers like GAID, Huawei OAID within its reports. <p>
+         * <b>NOTE:</b> Default value is {@value AppMetricaDefaultValues#DEFAULT_REPORT_ADV_IDENTIFIERS_ENABLED}.
+         *
+         * @param enabled {@code true} to allow AppMetrica to record advertising identifiers information in reports,
+         *                            otherwise {@code false}.
+         *
+         * @return the same {@link Builder} object.
+         *
+         * @see AppMetrica#setAdvIdentifiersTracking(boolean)
+         * @see AppMetricaConfig#advIdentifiersTracking
+         *
+         */
+        @NonNull
+        public Builder withAdvIdentifiersTracking(boolean enabled) {
+            advIdentifiersTracking = enabled;
             return this;
         }
 
@@ -862,6 +893,7 @@ public class AppMetricaConfig {
         nativeCrashReporting = builder.mNativeCrashReporting;
         location = builder.mLocation;
         locationTracking = builder.mLocationTracking;
+        advIdentifiersTracking = builder.advIdentifiersTracking;
         logs = builder.mLogs;
         preloadInfo = builder.mPreloadInfo;
         firstActivationAsUpdate = builder.mFirstActivationAsUpdate;
@@ -897,6 +929,7 @@ public class AppMetricaConfig {
         nativeCrashReporting = source.nativeCrashReporting;
         location = source.location;
         locationTracking = source.locationTracking;
+        advIdentifiersTracking = source.advIdentifiersTracking;
         logs = source.logs;
         preloadInfo = source.preloadInfo;
         firstActivationAsUpdate = source.firstActivationAsUpdate;

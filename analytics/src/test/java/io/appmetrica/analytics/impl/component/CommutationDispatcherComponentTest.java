@@ -8,7 +8,6 @@ import androidx.annotation.Nullable;
 import io.appmetrica.analytics.impl.ClientIdentifiersHolder;
 import io.appmetrica.analytics.impl.ClientIdentifiersProvider;
 import io.appmetrica.analytics.impl.ClientIdentifiersProviderFactory;
-import io.appmetrica.analytics.internal.CounterConfigurationReporterType;
 import io.appmetrica.analytics.impl.CounterReport;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.IdentifiersData;
@@ -16,7 +15,6 @@ import io.appmetrica.analytics.impl.TaskProcessor;
 import io.appmetrica.analytics.impl.component.clients.CommutationClientUnit;
 import io.appmetrica.analytics.impl.component.processor.commutation.CommutationHandler;
 import io.appmetrica.analytics.impl.component.processor.commutation.CommutationReportProcessor;
-import io.appmetrica.analytics.impl.id.AdvertisingIdGetter;
 import io.appmetrica.analytics.impl.referrer.common.ReferrerChosenListener;
 import io.appmetrica.analytics.impl.referrer.common.ReferrerInfo;
 import io.appmetrica.analytics.impl.referrer.service.ReferrerHolder;
@@ -28,6 +26,7 @@ import io.appmetrica.analytics.impl.startup.StartupError;
 import io.appmetrica.analytics.impl.startup.StartupState;
 import io.appmetrica.analytics.impl.startup.StartupUnit;
 import io.appmetrica.analytics.impl.utils.StartupUtils;
+import io.appmetrica.analytics.internal.CounterConfigurationReporterType;
 import io.appmetrica.analytics.protobuf.nano.InvalidProtocolBufferNanoException;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
@@ -36,7 +35,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.assertj.core.api.SoftAssertions;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -98,8 +96,6 @@ public class CommutationDispatcherComponentTest extends CommonTest {
     private ClientIdentifiersHolder mClientIdentifiersHolder;
     private StartupState mStartupState;
     @Mock
-    private AdvertisingIdGetter mAdvertisingIdGetter;
-    @Mock
     private ReferrerManager referrerManager;
     private ComponentId mComponentId;
     private CommonArguments mCommonArguments;
@@ -123,7 +119,11 @@ public class CommutationDispatcherComponentTest extends CommonTest {
         lastClientClidsForRequest.put("clid3", "3");
         mStartupState = createStartupWithClientClids(lastClientClidsForRequest);
         when(mStartupUnit.getStartupState()).thenReturn(mStartupState);
-        when(mClientIdentifiersProviderFactory.createClientIdentifiersProvider(mStartupUnit, mAdvertisingIdGetter, mContext)).thenReturn(mClientIdentifiersProvider);
+        when(mClientIdentifiersProviderFactory.createClientIdentifiersProvider(
+            mStartupUnit,
+            GlobalServiceLocator.getInstance().getAdvertisingIdGetter(),
+            mContext
+        )).thenReturn(mClientIdentifiersProvider);
         mClidsForVerification = new HashMap<String, String>();
         mClidsForVerification.put("clid0", "0");
         mClidsForVerification.put("clid1", "1");
@@ -146,32 +146,8 @@ public class CommutationDispatcherComponentTest extends CommonTest {
                 mLifecycleManager,
                 mFieldsFactory,
                 mClientIdentifiersProviderFactory,
-                mAdvertisingIdGetter,
                 referrerManager
         );
-    }
-
-    @Test
-    public void testPublicConstructorAdvertisingIdGetterCreation() {
-        mComponentUnit = new CommutationDispatcherComponent(
-                mContext,
-                mStartupCenter,
-                mComponentId,
-                mCommonArguments,
-                mReferrerHolder
-        );
-        AdvertisingIdGetter advertisingIdGetter = mComponentUnit.getAdvertisingIdGetter();
-        SoftAssertions softly = new SoftAssertions();
-        softly.assertThat(advertisingIdGetter.getExecutor())
-                .isSameAs(GlobalServiceLocator.getInstance().getServiceExecutorProvider().getDefaultExecutor());
-        softly.assertThat(advertisingIdGetter.getGaidRestrictionsProvider())
-                .isInstanceOf(AdvertisingIdGetter.ServicePublicGaidRestrictionProvider.class);
-        softly.assertThat(advertisingIdGetter.getHoaidRestrictionsProvider())
-                .isInstanceOf(AdvertisingIdGetter.PublicHoaidRestrictionProvider.class);
-        softly.assertThat(advertisingIdGetter.getYandexRestrictionsProvider())
-                .isInstanceOf(AdvertisingIdGetter.AlwaysAllowedRestrictionsProvider.class);
-        softly.assertThat(advertisingIdGetter.getLogTag()).contains("ServicePublic");
-        softly.assertAll();
     }
 
     @Test
@@ -182,7 +158,7 @@ public class CommutationDispatcherComponentTest extends CommonTest {
         for (CommutationDispatcherComponent component : componentCaptor.getAllValues()) {
             assertThat(component).isSameAs(mComponentUnit);
         }
-        verify(mAdvertisingIdGetter).init(mContext, mStartupState);
+        verify(GlobalServiceLocator.getInstance().getAdvertisingIdGetter()).updateStateFromClientConfig(true);
         verify(mStartupCenter).registerStartupListener(mComponentId, mComponentUnit);
     }
 
@@ -237,13 +213,6 @@ public class CommutationDispatcherComponentTest extends CommonTest {
     @Test
     public void testGetComponentId() {
         assertThat(mComponentUnit.getComponentId()).isEqualTo(mComponentId);
-    }
-
-    @Test
-    public void testOnStartupChangedNotifiesAdvertisingIdGetter() {
-        StartupState startupState = createStartupWithClientClids(null);
-        mComponentUnit.onStartupChanged(startupState);
-        verify(mAdvertisingIdGetter).onStartupStateChanged(startupState);
     }
 
     @Test

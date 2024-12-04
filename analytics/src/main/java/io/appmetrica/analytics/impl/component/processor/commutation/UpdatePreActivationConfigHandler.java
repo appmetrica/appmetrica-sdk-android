@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import io.appmetrica.analytics.impl.CounterReport;
 import io.appmetrica.analytics.impl.DataSendingRestrictionControllerImpl;
+import io.appmetrica.analytics.impl.DefaultValues;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.component.CommonArguments;
 import io.appmetrica.analytics.impl.component.CommutationDispatcherComponent;
@@ -28,10 +29,21 @@ public class UpdatePreActivationConfigHandler extends CommutationHandler {
         DebugLogger.INSTANCE.info(TAG, "process: %s", reportData);
         CommonArguments.ReporterArguments counterConfiguration = clientUnit.getComponent().getConfiguration();
         mRestrictionController.setEnabledFromMainReporter(counterConfiguration.dataSendingEnabled);
-        updateTrackingLocationStatus(
-                counterConfiguration.locationTracking
-        );
+        updateTrackingLocationStatus(counterConfiguration.locationTracking);
+        updateTrackingAdvIdentifiersStatus(counterConfiguration.advIdentifiersTrackingEnabled);
         return false;
+    }
+
+    private void updateTrackingAdvIdentifiersStatus(@Nullable Boolean trackingEnabled) {
+        DebugLogger.INSTANCE.info(
+            TAG,
+            "Update adv identifiers tracking status for %s: enabled = %s",
+            getComponent().getComponentId().toString(),
+            trackingEnabled
+        );
+        GlobalServiceLocator.getInstance().getAdvertisingIdGetter().updateStateFromClientConfig(
+            trackingEnabled == null ? DefaultValues.DEFAULT_REPORT_ADV_IDENTIFIERS_ENABLED : trackingEnabled
+        );
     }
 
     private void updateTrackingLocationStatus(@Nullable Boolean trackingEnabled) {

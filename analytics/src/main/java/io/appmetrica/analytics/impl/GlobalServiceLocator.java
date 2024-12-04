@@ -85,7 +85,7 @@ public final class GlobalServiceLocator {
     @Nullable
     private volatile SelfDiagnosticReporterStorage mSelfDiagnosticReporterStorage;
     @Nullable
-    private volatile AdvertisingIdGetter serviceInternalAdvertisingIdGetter;
+    private volatile AdvertisingIdGetter advertisingIdGetter;
     @Nullable
     private volatile AppSetIdGetter appSetIdGetter;
     @Nullable
@@ -206,21 +206,19 @@ public final class GlobalServiceLocator {
     }
 
     @NonNull
-    public AdvertisingIdGetter getServiceInternalAdvertisingIdGetter() {
-        AdvertisingIdGetter local = serviceInternalAdvertisingIdGetter;
+    public AdvertisingIdGetter getAdvertisingIdGetter() {
+        AdvertisingIdGetter local = advertisingIdGetter;
         if (local == null) {
             synchronized (this) {
-                local = serviceInternalAdvertisingIdGetter;
+                local = advertisingIdGetter;
                 if (local == null) {
                     local = new AdvertisingIdGetter(
-                        new AdvertisingIdGetter.ServiceInternalGaidRestrictionProvider(),
-                        new AdvertisingIdGetter.InternalHoaidRestrictionProvider(),
-                        new AdvertisingIdGetter.AlwaysAllowedRestrictionsProvider(),
+                        mContext,
                         getServiceExecutorProvider().getDefaultExecutor(),
-                        "ServiceInternal"
+                        startupStateHolder.getStartupState()
                     );
                     startupStateHolder.registerObserver(local);
-                    serviceInternalAdvertisingIdGetter = local;
+                    advertisingIdGetter = local;
                 }
             }
         }
@@ -234,7 +232,7 @@ public final class GlobalServiceLocator {
             synchronized (this) {
                 local = platformIdentifiers;
                 if (local == null) {
-                    local = new PlatformIdentifiers(getServiceInternalAdvertisingIdGetter(), getAppSetIdGetter());
+                    local = new PlatformIdentifiers(getAdvertisingIdGetter(), getAppSetIdGetter());
                     platformIdentifiers = local;
                 }
             }

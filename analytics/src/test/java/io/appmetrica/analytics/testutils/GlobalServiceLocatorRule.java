@@ -133,7 +133,7 @@ public class GlobalServiceLocatorRule extends ExternalResource {
         when(platformIdentifiers.getAdvIdentifiersProvider()).thenReturn(advertisingIdGetter);
         when(platformIdentifiers.getAppSetIdProvider()).thenReturn(appSetIdGetter);
         when(globalServiceLocator.getAppSetIdGetter()).thenReturn(appSetIdGetter);
-        when(globalServiceLocator.getServiceInternalAdvertisingIdGetter()).thenReturn(advertisingIdGetter);
+        when(globalServiceLocator.getAdvertisingIdGetter()).thenReturn(advertisingIdGetter);
         when(globalServiceLocator.getPlatformIdentifiers()).thenReturn(platformIdentifiers);
         when(globalServiceLocator.getActivationBarrier()).thenReturn(mock(WaitForActivationDelayBarrier.class));
         when(globalServiceLocator.getFirstExecutionConditionService())

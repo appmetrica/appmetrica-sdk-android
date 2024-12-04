@@ -2,6 +2,7 @@ package io.appmetrica.analytics.impl.component.clients;
 
 import android.content.Context;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreutils.internal.WrapUtils;
 import io.appmetrica.analytics.impl.CounterReport;
@@ -26,11 +27,12 @@ public class MainReporterClientUnit extends AbstractClientUnit {
         updateLocationTracking(WrapUtils.getOrDefault(
                 sdkConfig.componentArguments.locationTracking,
                 DefaultValues.DEFAULT_REPORT_LOCATION_ENABLED));
+        Boolean advIdentifiersTracking = sdkConfig.componentArguments.advIdentifiersTrackingEnabled;
+        updateAdvIdentifiersTracking(advIdentifiersTracking);
         getComponentUnit().handleReport(report, sdkConfig);
     }
 
-    @VisibleForTesting
-    void updateLocationTracking(boolean enabled) {
+    private void updateLocationTracking(boolean enabled) {
         DebugLogger.INSTANCE.info(
             TAG,
             "Update location status for %s: enabled = %b",
@@ -38,5 +40,18 @@ public class MainReporterClientUnit extends AbstractClientUnit {
             enabled
         );
         GlobalServiceLocator.getInstance().getLocationClientApi().updateTrackingStatusFromClient(enabled);
+    }
+
+    @VisibleForTesting
+    void updateAdvIdentifiersTracking(@Nullable Boolean enabled) {
+        if (enabled != null) {
+            DebugLogger.INSTANCE.info(
+                TAG,
+                "Update advIdentifiersTracking for %s to enabled %s",
+                getComponentUnit().toString(),
+                enabled
+            );
+            GlobalServiceLocator.getInstance().getAdvertisingIdGetter().updateStateFromClientConfig(enabled);
+        }
     }
 }

@@ -41,6 +41,7 @@ public class CommonArgumentsTest extends CommonTest {
         assertions.checkField("maxReportsInDbCount", nullVariable);
         assertions.checkField("nativeCrashesEnabled", nullVariable);
         assertions.checkField("revenueAutoTrackingEnabled", nullVariable);
+        assertions.checkField("advIdentifiersTrackingEnabled", nullVariable);
         assertions.checkAll();
     }
 
@@ -58,25 +59,27 @@ public class CommonArgumentsTest extends CommonTest {
         int maxReportsInDbCount = 2000;
         boolean nativeCrashesEnabled = true;
         boolean revenueAutoTrackingEnabled = false;
+        boolean advIdentifiersTrackingEnabled = false;
         Map<String, String> clids = new HashMap<String, String>();
         clids.put("clid0", "0");
         clids.put("clid1", "1");
         ObjectPropertyAssertions<CommonArguments.ReporterArguments> assertions =
-                ObjectPropertyAssertions(new CommonArguments.ReporterArguments(
-                        apiKey,
-                        locationTracking,
-                        manualLocation,
-                        firstActivationAsUpdate,
-                        sessionTimeout,
-                        maxReportsCount,
-                        dispatchPeriod,
-                        logEnabled,
-                        dataSendingEnabled,
-                        clids,
-                        maxReportsInDbCount,
-                        nativeCrashesEnabled,
-                        revenueAutoTrackingEnabled
-                ));
+            ObjectPropertyAssertions(new CommonArguments.ReporterArguments(
+                apiKey,
+                locationTracking,
+                manualLocation,
+                firstActivationAsUpdate,
+                sessionTimeout,
+                maxReportsCount,
+                dispatchPeriod,
+                logEnabled,
+                dataSendingEnabled,
+                clids,
+                maxReportsInDbCount,
+                nativeCrashesEnabled,
+                revenueAutoTrackingEnabled,
+                advIdentifiersTrackingEnabled
+            ));
         assertions.checkField("apiKey", apiKey);
         assertions.checkField("dispatchPeriod", dispatchPeriod);
         assertions.checkField("manualLocation", manualLocation);
@@ -90,6 +93,7 @@ public class CommonArgumentsTest extends CommonTest {
         assertions.checkField("maxReportsInDbCount", maxReportsInDbCount);
         assertions.checkField("nativeCrashesEnabled", nativeCrashesEnabled);
         assertions.checkField("revenueAutoTrackingEnabled", revenueAutoTrackingEnabled);
+        assertions.checkField("advIdentifiersTrackingEnabled", advIdentifiersTrackingEnabled);
         assertions.checkAll();
     }
 
@@ -97,6 +101,7 @@ public class CommonArgumentsTest extends CommonTest {
     public void testCommonArgumentsConstructor() throws IllegalAccessException {
         String apiKey = "apiKey";
         boolean locationTracking = false;
+        boolean advIdentifiersTrackingEnabled = false;
         Location manualLocation = null;
         boolean firstActivationAsUpdate = true;
         int sessionTimeout = 122;
@@ -122,6 +127,7 @@ public class CommonArgumentsTest extends CommonTest {
         doReturn(apiKey).when(counterConfiguration).getApiKey();
         doReturn(locationTracking).when(counterConfiguration).isLocationTrackingEnabled();
         doReturn(manualLocation).when(counterConfiguration).getManualLocation();
+        doReturn(advIdentifiersTrackingEnabled).when(counterConfiguration).isAdvIdentifiersTrackingEnabled();
         doReturn(firstActivationAsUpdate).when(counterConfiguration).isFirstActivationAsUpdate();
         doReturn(sessionTimeout).when(counterConfiguration).getSessionTimeout();
         doReturn(maxReportsCount).when(counterConfiguration).getMaxReportsCount();
@@ -162,6 +168,7 @@ public class CommonArgumentsTest extends CommonTest {
         assertions.checkField("maxReportsInDbCount", maxReportsInDbCount);
         assertions.checkField("nativeCrashesEnabled", nativeCrashesEnabled);
         assertions.checkField("revenueAutoTrackingEnabled", revenueAutoTrackingEnabled);
+        assertions.checkField("advIdentifiersTrackingEnabled", advIdentifiersTrackingEnabled);
         assertions.checkAll();
 
         ObjectPropertyAssertions<StartupRequestConfig.Arguments> startupAssertions =

@@ -150,6 +150,11 @@ public class AppMetricaFacade implements IReporterFactoryProvider {
     }
 
     @WorkerThread
+    public static void setAdvIdentifiersTracking(final boolean enabled) {
+        getConfigurator().setAdvIdentifiersTracking(enabled);
+    }
+
+    @WorkerThread
     public static void setDataSendingEnabled(final boolean enabled) {
         getConfigurator().setDataSendingEnabled(enabled);
     }

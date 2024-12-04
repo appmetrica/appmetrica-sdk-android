@@ -42,7 +42,7 @@ class DeviceIdGeneratorTest : CommonTest() {
     fun correctStrategyIsUsed() {
         val captor = argumentCaptor<RetryStrategy>()
         stubbing(advertisingIdGetter) {
-            on { getIdentifiersForced(same(context), captor.capture()) } doReturn advertisingIdsHolder
+            on { getIdentifiersForced(captor.capture()) } doReturn advertisingIdsHolder
         }
         stubbing(advertisingIdsHolder) {
             on { yandex } doReturn AdTrackingInfoResult(
@@ -64,7 +64,7 @@ class DeviceIdGeneratorTest : CommonTest() {
     fun validYandexAdvId() {
         val yandexAdvId = "yandex adv id"
         stubbing(advertisingIdGetter) {
-            on { getIdentifiersForced(same(context), any()) } doReturn advertisingIdsHolder
+            on { getIdentifiersForced(any()) } doReturn advertisingIdsHolder
         }
         stubbing(advertisingIdsHolder) {
             on { yandex } doReturn AdTrackingInfoResult(
@@ -157,7 +157,7 @@ class DeviceIdGeneratorTest : CommonTest() {
 
     private fun mockInvalidYandexAdvId() {
         stubbing(advertisingIdGetter) {
-            on { getIdentifiersForced(same(context), any()) } doReturn advertisingIdsHolder
+            on { getIdentifiersForced(any()) } doReturn advertisingIdsHolder
         }
         stubbing(advertisingIdsHolder) {
             on { yandex } doReturn AdTrackingInfoResult(

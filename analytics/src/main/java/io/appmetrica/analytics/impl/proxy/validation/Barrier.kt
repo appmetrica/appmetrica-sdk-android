@@ -134,6 +134,8 @@ class Barrier(
 
     fun setLocationTracking(enabled: Boolean) {}
 
+    fun setAdvIdentifiersTracking(enabled: Boolean) {}
+
     fun requestDeferredDeeplinkParameters(listener: DeferredDeeplinkParametersListener?) {
         activationValidator.validate()
         deeplinkListenerValidator.validate(listener)

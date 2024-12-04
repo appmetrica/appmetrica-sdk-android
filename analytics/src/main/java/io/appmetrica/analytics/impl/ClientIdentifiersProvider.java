@@ -27,7 +27,7 @@ public class ClientIdentifiersProvider {
     public ClientIdentifiersHolder createClientIdentifiersHolder(@Nullable Map<String, String> clientClids) {
         return new ClientIdentifiersHolder(
                 mStartupUnit.getStartupState(),
-                mAdvertisingIdGetter.getIdentifiersForced(mContext),
+                mAdvertisingIdGetter.getIdentifiersForced(),
                 clientClids
         );
     }

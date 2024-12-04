@@ -2,10 +2,8 @@ package io.appmetrica.analytics.impl.component.clients;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import io.appmetrica.analytics.internal.CounterConfigurationReporterType;
 import io.appmetrica.analytics.impl.component.CommonArguments;
 import io.appmetrica.analytics.impl.component.ComponentId;
-import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.impl.component.IReportableComponent;
 import io.appmetrica.analytics.impl.component.MainReporterComponentUnit;
 import io.appmetrica.analytics.impl.component.ReporterComponentUnit;
@@ -13,13 +11,14 @@ import io.appmetrica.analytics.impl.component.SelfSdkReportingComponentUnit;
 import io.appmetrica.analytics.impl.startup.StartupState;
 import io.appmetrica.analytics.impl.startup.StartupUnit;
 import io.appmetrica.analytics.impl.utils.ServerTime;
+import io.appmetrica.analytics.internal.CounterConfigurationReporterType;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
+import io.appmetrica.analytics.testutils.MockedConstructionRule;
 import io.appmetrica.analytics.testutils.TestUtils;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.UUID;
-import org.assertj.core.api.SoftAssertions;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -51,6 +50,18 @@ public class ComponentUnitFactoryTest extends CommonTest {
     private SharedPreferences mSharedPreferences;
     @Mock
     private SharedPreferences.Editor mEditor;
+
+    @Rule
+    public final MockedConstructionRule<SelfSdkReportingComponentUnit> selfSdkReportingComponentUnitRule =
+        new MockedConstructionRule<>(SelfSdkReportingComponentUnit.class);
+
+    @Rule
+    public final MockedConstructionRule<ReporterComponentUnit> reporterComponentUnitMockedConstructionRule =
+        new MockedConstructionRule<>(ReporterComponentUnit.class);
+
+    @Rule
+    public final MockedConstructionRule<MainReporterComponentUnit> mainReporterComponentUnitMockedConstructionRule =
+        new MockedConstructionRule<>(MainReporterComponentUnit.class);
 
     private StartupState startupState = TestUtils.createDefaultStartupState();
 
@@ -112,17 +123,6 @@ public class ComponentUnitFactoryTest extends CommonTest {
         IReportableComponent componentUnit = createComponent();
 
         assertThat(componentUnit).isExactlyInstanceOf(mComponentUnitClass);
-    }
-
-    @Test
-    public void testComponentUnitArgumentsDispatching() {
-        ComponentUnit componentUnit = (ComponentUnit) createComponent();
-
-        SoftAssertions softAssertions = new SoftAssertions();
-        softAssertions.assertThat(componentUnit.getContext()).isEqualTo(mContext);
-        softAssertions.assertThat(componentUnit.getComponentId()).isEqualTo(mComponentId);
-
-        softAssertions.assertAll();
     }
 
     private IReportableComponent createComponent() {

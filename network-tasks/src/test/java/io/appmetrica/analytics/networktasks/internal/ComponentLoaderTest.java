@@ -197,9 +197,6 @@ public class ComponentLoaderTest extends CommonTest {
         softAssertion.assertThat(config.getScaleFactor())
             .as("screen scale factor")
             .isEqualTo(screenInfo.getScaleFactor());
-        softAssertion.assertThat(config.getAdvertisingIdsHolder())
-            .as("advertising ids holder")
-            .isEqualTo(advertisingIdsHolder);
         softAssertion.assertAll();
     }
 }

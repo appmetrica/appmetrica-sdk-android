@@ -495,15 +495,16 @@ public class ReportsHandlerTest extends CommonTest {
 
     @Test
     public void testUpdatePreActivationWithoutValues() {
-        mReportsHandler.updatePreActivationConfig(null, null);
+        mReportsHandler.updatePreActivationConfig(null, null, null);
         verify(mReportsSender).queueReport(argThat(new ArgumentMatcher<ReportToSend>() {
             @Override
             public boolean matches(ReportToSend argument) {
                 CounterConfiguration configuration = argument.getEnvironment().getReporterConfiguration();
 
                 return configuration.getDataSendingEnabled() == null
-                        && configuration.isLocationTrackingEnabled() == null
-                        && configuration.getManualLocation() == null;
+                    && configuration.isLocationTrackingEnabled() == null
+                    && configuration.getManualLocation() == null
+                    && configuration.isAdvIdentifiersTrackingEnabled() == null;
             }
         }));
     }
@@ -511,7 +512,7 @@ public class ReportsHandlerTest extends CommonTest {
     @Test
     public void testUpdatePreActivationWithLocation() {
         final boolean locationTracking = false;
-        mReportsHandler.updatePreActivationConfig(locationTracking, null);
+        mReportsHandler.updatePreActivationConfig(locationTracking, null, null);
         verify(mReportsSender).queueReport(argThat(new ArgumentMatcher<ReportToSend>() {
             @Override
             public boolean matches(ReportToSend argument) {
@@ -525,7 +526,7 @@ public class ReportsHandlerTest extends CommonTest {
     @Test
     public void testUpdatePreActivationWithDataSendingEnabled() {
         final boolean dataSendingEnabled = true;
-        mReportsHandler.updatePreActivationConfig(null, dataSendingEnabled);
+        mReportsHandler.updatePreActivationConfig(null, dataSendingEnabled, null);
 
         verify(mReportsSender).queueReport(argThat(new ArgumentMatcher<ReportToSend>() {
             @Override
@@ -533,6 +534,21 @@ public class ReportsHandlerTest extends CommonTest {
                 CounterConfiguration configuration = argument.getEnvironment().getReporterConfiguration();
 
                 return configuration.getDataSendingEnabled() == dataSendingEnabled;
+            }
+        }));
+    }
+
+    @Test
+    public void updatePreActivationWithAdvIdentifiersTrackingEnabled() {
+        boolean advIdentifiersTrackingEnabled = true;
+        mReportsHandler.updatePreActivationConfig(null, null, advIdentifiersTrackingEnabled);
+
+        verify(mReportsSender).queueReport(argThat(new ArgumentMatcher<ReportToSend>() {
+            @Override
+            public boolean matches(ReportToSend argument) {
+                CounterConfiguration configuration = argument.getEnvironment().getReporterConfiguration();
+
+                return configuration.isAdvIdentifiersTrackingEnabled() == advIdentifiersTrackingEnabled;
             }
         }));
     }

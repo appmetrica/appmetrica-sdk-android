@@ -148,6 +148,8 @@ class SynchronousStageExecutor @VisibleForTesting constructor(
 
     fun setLocationTracking(enabled: Boolean) {}
 
+    fun setAdvIdentifiersTracking(enabled: Boolean) {}
+
     fun setDataSendingEnabled(enabled: Boolean) {}
 
     fun requestDeferredDeeplinkParameters(listener: DeferredDeeplinkParametersListener) {}

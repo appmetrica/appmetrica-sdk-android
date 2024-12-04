@@ -102,6 +102,7 @@ internal class AppMetricaImplTest : CommonTest() {
 
     private val config = AppMetricaConfig.newConfigBuilder(apiKey)
         .withLocationTracking(true)
+        .withAdvIdentifiersTracking(true)
         .withDataSendingEnabled(true)
         .withSessionsAutoTrackingEnabled(true)
         .withLogs()
@@ -112,6 +113,7 @@ internal class AppMetricaImplTest : CommonTest() {
         .withCrashReporting(false)
         .withDataSendingEnabled(false)
         .withLocationTracking(false)
+        .withAdvIdentifiersTracking(false)
         .withSessionsAutoTrackingEnabled(false)
         .build()
 
@@ -566,13 +568,13 @@ internal class AppMetricaImplTest : CommonTest() {
     @Test
     fun `activate - update pre activation settings`() {
         impl.activate(config)
-        verify(reportsHandler).updatePreActivationConfig(true, true)
+        verify(reportsHandler).updatePreActivationConfig(true, true, true)
     }
 
     @Test
     fun `activate - update pre activation settings if disabled`() {
         impl.activate(configWithDisabled)
-        verify(reportsHandler).updatePreActivationConfig(false, false)
+        verify(reportsHandler).updatePreActivationConfig(false, false, false)
     }
 
     @Test
@@ -580,20 +582,20 @@ internal class AppMetricaImplTest : CommonTest() {
         impl.activate(config)
         clearInvocations(reportsHandler)
         impl.activate(config)
-        verify(reportsHandler, never()).updatePreActivationConfig(any(), any())
+        verify(reportsHandler, never()).updatePreActivationConfig(any(), any(), any())
     }
 
     @Test
     fun `activate anonymously - update pre activate settings`() {
         impl.activateAnonymously()
-        verify(reportsHandler).updatePreActivationConfig(null, null)
+        verify(reportsHandler).updatePreActivationConfig(null, null, null)
     }
 
     @Test
     fun `activate anonymously twice - update pre activation settings`() {
         impl.activateAnonymously()
         clearInvocations(reportsHandler)
-        verify(reportsHandler, never()).updatePreActivationConfig(any(), any())
+        verify(reportsHandler, never()).updatePreActivationConfig(any(), any(), any())
     }
 
     @Test
@@ -601,7 +603,7 @@ internal class AppMetricaImplTest : CommonTest() {
         impl.activateAnonymously()
         clearInvocations(reportsHandler)
         impl.activate(config)
-        verify(reportsHandler).updatePreActivationConfig(true, true)
+        verify(reportsHandler).updatePreActivationConfig(true, true, true)
     }
 
     @Test
@@ -609,7 +611,7 @@ internal class AppMetricaImplTest : CommonTest() {
         impl.activate(config)
         clearInvocations(reportsHandler)
         impl.activateAnonymously()
-        verify(reportsHandler, never()).updatePreActivationConfig(any(), any())
+        verify(reportsHandler, never()).updatePreActivationConfig(any(), any(), any())
     }
 
     @Test
@@ -800,6 +802,20 @@ internal class AppMetricaImplTest : CommonTest() {
         impl.activateAnonymously()
         impl.setLocationTracking(true)
         verify(reporterFromConsumerProvider).setLocationTracking(true)
+    }
+
+    @Test
+    fun `setAdvIdentifiersTracking after activation`() {
+        impl.activate(config)
+        impl.setAdvIdentifiersTracking(true)
+        verify(reporterFromConsumerProvider).setAdvIdentifiersTracking(true)
+    }
+
+    @Test
+    fun `setAdvIdentifiersTracking after anonymous activation`() {
+        impl.activateAnonymously()
+        impl.setAdvIdentifiersTracking(true)
+        verify(reporterFromConsumerProvider).setAdvIdentifiersTracking(true)
     }
 
     @Test

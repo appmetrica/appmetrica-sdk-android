@@ -33,6 +33,8 @@ public class PreferencesServiceDbStorage extends NameSpacedPreferenceDbStorage
 
     static final PreferencesItem VITAL_DATA = new PreferencesItem("VITAL_DATA");
     static final PreferencesItem LAST_KOTLIN_VERSION_SEND_TIME = new PreferencesItem("LAST_KOTLIN_VERSION_SEND_TIME");
+    static final PreferencesItem ADV_IDENTIFIERS_TRACKING_ENABLED =
+        new PreferencesItem("ADV_IDENTIFIERS_TRACKING_ENABLED");
 
     public PreferencesServiceDbStorage(final IKeyValueTableDbHelper dbStorage) {
         super(dbStorage);
@@ -142,6 +144,14 @@ public class PreferencesServiceDbStorage extends NameSpacedPreferenceDbStorage
     @Override
     public void putVitalData(@NonNull String data) {
         writeString(VITAL_DATA.fullKey(), data).commit();
+    }
+
+    public void saveAdvIdentifiersTrackingEnabled(boolean value) {
+        writeBoolean(ADV_IDENTIFIERS_TRACKING_ENABLED.fullKey(), value).commit();
+    }
+
+    public boolean isAdvIdentifiersTrackingStatusEnabled(boolean defaultValue) {
+        return readBoolean(ADV_IDENTIFIERS_TRACKING_ENABLED.fullKey(), defaultValue);
     }
 
     @NonNull

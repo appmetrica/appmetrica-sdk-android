@@ -291,6 +291,17 @@ public final class AppMetricaProxy extends BaseAppMetricaProxy {
         });
     }
 
+    public void setAdvIdentifiersTracking(final boolean enabled) {
+        barrier.setAdvIdentifiersTracking(enabled);
+        synchronousStageExecutor.setAdvIdentifiersTracking(enabled);
+        getExecutor().execute(new Runnable() {
+            @Override
+            public void run() {
+                getProvider().setAdvIdentifiersTracking(enabled);
+            }
+        });
+    }
+
     public void setDataSendingEnabled(final boolean enabled) {
         barrier.setDataSendingEnabled(enabled);
         synchronousStageExecutor.setDataSendingEnabled(enabled);

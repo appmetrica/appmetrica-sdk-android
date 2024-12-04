@@ -62,27 +62,28 @@ public class DefaultOneShotMetricaConfigTest extends CommonTest {
                                                     final AppMetricaConfig merged)
             throws Exception {
         ObjectPropertyAssertions(merged)
-                .withIgnoredFields("anrMonitoring", "anrMonitoringTimeout", "apiKey", "appBuildNumber", "clids", "crashTransformer",
-                        "customHosts", "deviceType", "dispatchPeriodSeconds", "distributionReferrer",
-                        "firstActivationAsUpdate", "logs", "permissionsCollection", "preloadInfo",
-                        "preloadInfoAutoTracking", "pulseConfig", "rtmConfig")
-                .checkField("appVersion", userConfig.appVersion)
-                .checkField("location", userConfig.location)
-                .checkField("sessionTimeout", userConfig.sessionTimeout)
-                .checkField("crashReporting", userConfig.crashReporting)
-                .checkField("nativeCrashReporting", userConfig.nativeCrashReporting)
-                .checkField("locationTracking", userConfig.locationTracking)
-                .checkField("dataSendingEnabled", userConfig.dataSendingEnabled)
-                .checkField("maxReportsCount", userConfig.maxReportsCount)
-                .checkField("maxReportsInDatabaseCount", userConfig.maxReportsInDatabaseCount)
-                .checkField("appEnvironment", userConfig.appEnvironment)
-                .checkField("errorEnvironment", userConfig.errorEnvironment)
-                .checkField("userProfileID", userConfig.userProfileID)
-                .checkField("sessionsAutoTrackingEnabled", userConfig.sessionsAutoTrackingEnabled)
-                .checkField("revenueAutoTrackingEnabled", userConfig.revenueAutoTrackingEnabled)
-                .checkField("appOpenTrackingEnabled", userConfig.appOpenTrackingEnabled)
-                .checkField("additionalConfig", userConfig.additionalConfig)
-                .checkAll();
+            .withIgnoredFields("anrMonitoring", "anrMonitoringTimeout", "apiKey", "appBuildNumber", "clids", "crashTransformer",
+                "customHosts", "deviceType", "dispatchPeriodSeconds", "distributionReferrer",
+                "firstActivationAsUpdate", "logs", "permissionsCollection", "preloadInfo",
+                "preloadInfoAutoTracking", "pulseConfig", "rtmConfig")
+            .checkField("appVersion", userConfig.appVersion)
+            .checkField("location", userConfig.location)
+            .checkField("sessionTimeout", userConfig.sessionTimeout)
+            .checkField("crashReporting", userConfig.crashReporting)
+            .checkField("nativeCrashReporting", userConfig.nativeCrashReporting)
+            .checkField("locationTracking", userConfig.locationTracking)
+            .checkField("advIdentifiersTracking", userConfig.advIdentifiersTracking)
+            .checkField("dataSendingEnabled", userConfig.dataSendingEnabled)
+            .checkField("maxReportsCount", userConfig.maxReportsCount)
+            .checkField("maxReportsInDatabaseCount", userConfig.maxReportsInDatabaseCount)
+            .checkField("appEnvironment", userConfig.appEnvironment)
+            .checkField("errorEnvironment", userConfig.errorEnvironment)
+            .checkField("userProfileID", userConfig.userProfileID)
+            .checkField("sessionsAutoTrackingEnabled", userConfig.sessionsAutoTrackingEnabled)
+            .checkField("revenueAutoTrackingEnabled", userConfig.revenueAutoTrackingEnabled)
+            .checkField("appOpenTrackingEnabled", userConfig.appOpenTrackingEnabled)
+            .checkField("additionalConfig", userConfig.additionalConfig)
+            .checkAll();
     }
 
     @Test
@@ -93,6 +94,7 @@ public class DefaultOneShotMetricaConfigTest extends CommonTest {
 
         Location location = defaultOneShotMetricaConfig.getLocation();
         Boolean trackLocationEnabled = defaultOneShotMetricaConfig.isLocationTrackingEnabled();
+        Boolean advIdentifierTrackingEnabled = defaultOneShotMetricaConfig.isAdvIdentifiersTrackingEnabled();
 
         AppMetricaConfig userConfig = AppMetricaConfig.newConfigBuilder(TestsData.UUID_API_KEY)
                 .withLogs()
@@ -113,6 +115,7 @@ public class DefaultOneShotMetricaConfigTest extends CommonTest {
 
         assertThat(merged.location).isEqualTo(location);
         assertThat(merged.locationTracking).isEqualTo(trackLocationEnabled);
+        assertThat(merged.advIdentifiersTracking).isEqualTo(advIdentifierTrackingEnabled);
         assertThat(merged.appEnvironment.size()).isEqualTo(1);
         assertThat(merged.appEnvironment.containsKey("a")).isTrue();
         assertThat(merged.errorEnvironment.size()).isEqualTo(1);
@@ -162,7 +165,7 @@ public class DefaultOneShotMetricaConfigTest extends CommonTest {
         AppMetricaConfig merged = defaultOneShotMetricaConfig.mergeWithUserConfig(userConfig);
 
         assertThat(merged.appEnvironment.size()).isEqualTo(1);
-        assertThat(merged.appEnvironment.containsKey("b"));
+        assertThat(merged.appEnvironment).containsKey("b");
     }
 
     @Test
@@ -194,9 +197,9 @@ public class DefaultOneShotMetricaConfigTest extends CommonTest {
         AppMetricaConfig merged = defaultOneShotMetricaConfig.mergeWithUserConfig(userConfig);
 
         assertThat(merged.appEnvironment.size()).isEqualTo(1);
-        assertThat(merged.appEnvironment.containsKey("c"));
+        assertThat(merged.appEnvironment).containsKey("c");
         assertThat(merged.errorEnvironment.size()).isEqualTo(1);
-        assertThat(merged.errorEnvironment.containsKey("b"));
+        assertThat(merged.errorEnvironment).containsKey("b");
     }
 
     @Test
@@ -229,6 +232,7 @@ public class DefaultOneShotMetricaConfigTest extends CommonTest {
 
         defaultOneShotMetricaConfig.setLocation(LocationUtils.INSTANCE.createFakeLocation(1.0, 2.0));
         defaultOneShotMetricaConfig.setLocationTracking(false);
+        defaultOneShotMetricaConfig.setAdvIdentifiersTracking(false);
         defaultOneShotMetricaConfig.setUserProfileID("User profile ID");
         return defaultOneShotMetricaConfig;
     }
@@ -236,32 +240,33 @@ public class DefaultOneShotMetricaConfigTest extends CommonTest {
     @NonNull
     private AppMetricaConfig.Builder createTestUserConfig() {
         return AppMetricaConfig.newConfigBuilder(TestsData.UUID_API_KEY)
-                .withLogs()
-                .withPreloadInfo(PreloadInfo.newBuilder("test").build())
-                .withAppBuildNumber(11)
-                .withAppVersion("1.1.1")
-                .withDispatchPeriodSeconds(111)
-                .withMaxReportsCount(77)
-                .withDeviceType(PredefinedDeviceTypes.TABLET)
-                .withAdditionalConfig("YMM_clids", Collections.EMPTY_MAP)
-                .withAdditionalConfig("YMM_preloadInfoAutoTracking", false)
-                .withAdditionalConfig("YMM_customHosts", Collections.singletonList(TestData.TEST_CUSTOM_HOST_URL))
-                .withLocationTracking(true)
-                .withSessionTimeout(111)
-                .withAppEnvironmentValue("a", "1")
-                .withErrorEnvironmentValue("error", "1")
-                .withNativeCrashReporting(true)
-                .withCrashReporting(true)
-                .withLocation(TestData.TEST_LOCATION)
-                .withAdditionalConfig("YMM_customHosts", Collections.singletonList(TestData.TEST_CUSTOM_HOST_URL))
-                .withAnrMonitoring(true)
-                .withAnrMonitoringTimeout(42)
-                .withDataSendingEnabled(true)
-                .withMaxReportsInDatabaseCount(500)
-                .withUserProfileID("user_profile_id")
-                .withSessionsAutoTrackingEnabled(true)
-                .withRevenueAutoTrackingEnabled(false)
-                .withAppOpenTrackingEnabled(false);
+            .withLogs()
+            .withPreloadInfo(PreloadInfo.newBuilder("test").build())
+            .withAppBuildNumber(11)
+            .withAppVersion("1.1.1")
+            .withDispatchPeriodSeconds(111)
+            .withMaxReportsCount(77)
+            .withDeviceType(PredefinedDeviceTypes.TABLET)
+            .withAdditionalConfig("YMM_clids", Collections.EMPTY_MAP)
+            .withAdditionalConfig("YMM_preloadInfoAutoTracking", false)
+            .withAdditionalConfig("YMM_customHosts", Collections.singletonList(TestData.TEST_CUSTOM_HOST_URL))
+            .withLocationTracking(true)
+            .withAdvIdentifiersTracking(true)
+            .withSessionTimeout(111)
+            .withAppEnvironmentValue("a", "1")
+            .withErrorEnvironmentValue("error", "1")
+            .withNativeCrashReporting(true)
+            .withCrashReporting(true)
+            .withLocation(TestData.TEST_LOCATION)
+            .withAdditionalConfig("YMM_customHosts", Collections.singletonList(TestData.TEST_CUSTOM_HOST_URL))
+            .withAnrMonitoring(true)
+            .withAnrMonitoringTimeout(42)
+            .withDataSendingEnabled(true)
+            .withMaxReportsInDatabaseCount(500)
+            .withUserProfileID("user_profile_id")
+            .withSessionsAutoTrackingEnabled(true)
+            .withRevenueAutoTrackingEnabled(false)
+            .withAppOpenTrackingEnabled(false);
     }
 
     @Test
@@ -351,7 +356,7 @@ public class DefaultOneShotMetricaConfigTest extends CommonTest {
         DefaultOneShotMetricaConfig config = new DefaultOneShotMetricaConfig();
         config.setReportsHandler(mReportsHandler);
         config.setLocationTracking(true);
-        verify(mReportsHandler).updatePreActivationConfig(true, null);
+        verify(mReportsHandler).updatePreActivationConfig(true, null, null);
     }
 
     @Test
@@ -359,6 +364,14 @@ public class DefaultOneShotMetricaConfigTest extends CommonTest {
         DefaultOneShotMetricaConfig config = new DefaultOneShotMetricaConfig();
         config.setReportsHandler(mReportsHandler);
         config.setDataSendingEnabled(true);
-        verify(mReportsHandler).updatePreActivationConfig(null, true);
+        verify(mReportsHandler).updatePreActivationConfig(null, true, null);
+    }
+
+    @Test
+    public void proxyAdvIdentifiersTracking() {
+        DefaultOneShotMetricaConfig config = new DefaultOneShotMetricaConfig();
+        config.setReportsHandler(mReportsHandler);
+        config.setAdvIdentifiersTracking(true);
+        verify(mReportsHandler).updatePreActivationConfig(null, null, true);
     }
 }

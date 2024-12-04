@@ -26,17 +26,25 @@ public class ReportParamsAppender implements IParamsAppender<ReportRequestConfig
     private final NetworkTaskForSendingDataParamsAppender sendingDataParamsAppender;
     @Nullable
     private DbNetworkTaskConfig mDbReportRequestConfig;
+    @NonNull
+    private final LiveConfigProvider liveConfigProvider;
     private long mRequestId;
 
     public ReportParamsAppender(@NonNull RequestBodyEncrypter requestBodyEncrypter) {
-        this(new AdvIdWithLimitedAppender(), new NetworkTaskForSendingDataParamsAppender(requestBodyEncrypter));
+        this(
+            new AdvIdWithLimitedAppender(),
+            new NetworkTaskForSendingDataParamsAppender(requestBodyEncrypter),
+            new LiveConfigProvider()
+        );
     }
 
     @VisibleForTesting
     ReportParamsAppender(@NonNull AdvIdWithLimitedAppender advIdAppender,
-                         @NonNull NetworkTaskForSendingDataParamsAppender sendingDataParamsAppender) {
+                         @NonNull NetworkTaskForSendingDataParamsAppender sendingDataParamsAppender,
+                         @NonNull LiveConfigProvider liveConfigProvider) {
         this.advIdAppender = advIdAppender;
         this.sendingDataParamsAppender = sendingDataParamsAppender;
+        this.liveConfigProvider = liveConfigProvider;
     }
 
     public void setDbReportRequestConfig(@NonNull DbNetworkTaskConfig config) {
@@ -124,7 +132,7 @@ public class ReportParamsAppender implements IParamsAppender<ReportRequestConfig
             requestConfig.getAppSetId());
         uriBuilder.appendQueryParameter(CommonUrlParts.APP_SET_ID_SCOPE,
             requestConfig.getAppSetIdScope());
-        advIdAppender.appendParams(uriBuilder, requestConfig.getAdvertisingIdsHolder());
+        advIdAppender.appendParams(uriBuilder, liveConfigProvider.getAdvertisingIdentifiers());
     }
 
     private void appendIfEmptyToDef(Uri.Builder builder, String key, String value, String fallbackValue) {

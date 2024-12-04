@@ -43,6 +43,8 @@ public class AdvIdentifiersFromIdentifierResultConverter {
                 return AdvIdentifiersResult.Details.IDENTIFIER_PROVIDER_UNAVAILABLE;
             case INVALID_ADV_ID:
                 return AdvIdentifiersResult.Details.INVALID_ADV_ID;
+            case FORBIDDEN_BY_CLIENT_CONFIG:
+                return AdvIdentifiersResult.Details.FORBIDDEN_BY_CLIENT_CONFIG;
             default:
                 return AdvIdentifiersResult.Details.INTERNAL_ERROR;
         }

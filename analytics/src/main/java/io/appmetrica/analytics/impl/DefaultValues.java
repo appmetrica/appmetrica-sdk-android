@@ -6,6 +6,7 @@ import io.appmetrica.analytics.impl.protobuf.client.StartupStateProtobuf;
 public class DefaultValues {
     public static final int DEFAULT_SESSION_TIMEOUT_SECONDS = 10;
     public static final boolean DEFAULT_REPORT_LOCATION_ENABLED = BuildConfig.DEFAULT_LOCATION_COLLECTING;
+    public static final boolean DEFAULT_REPORT_ADV_IDENTIFIERS_ENABLED = true;
     public static final boolean DEFAULT_FIRST_ACTIVATION_AS_UPDATE = false;
     public static final boolean DEFAULT_AUTO_PRELOAD_INFO_DETECTION = false;
     public static final boolean DEFAULT_LOG_ENABLED = false;

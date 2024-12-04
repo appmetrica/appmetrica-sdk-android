@@ -56,6 +56,11 @@ public class AppMetricaFacadeProvider {
     }
 
     @WorkerThread
+    public void setAdvIdentifiersTracking(final boolean enabled) {
+        AppMetricaFacade.setAdvIdentifiersTracking(enabled);
+    }
+
+    @WorkerThread
     public void setDataSendingEnabled(final boolean enabled) {
         AppMetricaFacade.setDataSendingEnabled(enabled);
     }

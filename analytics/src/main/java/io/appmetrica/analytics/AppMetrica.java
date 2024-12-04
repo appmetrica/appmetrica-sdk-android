@@ -318,6 +318,20 @@ public final class AppMetrica {
     }
 
     /**
+     * Enables/disables including advertising identifiers like GAID, Huawei OAID within its reports. <p>
+     * <b>NOTE:</b> Default value is {@value AppMetricaDefaultValues#DEFAULT_REPORT_ADV_IDENTIFIERS_ENABLED}.
+     *
+     * @param enabled {@code true} to allow AppMetrica to record advertising identifiers information in reports,
+     *                            otherwise {@code false}.
+     *
+     * @see AppMetricaConfig.Builder#withAdvIdentifiersTracking(boolean)
+     * @see AppMetricaConfig#advIdentifiersTracking
+     */
+    public static void setAdvIdentifiersTracking(boolean enabled) {
+        AppMetricaProxyProvider.getProxy().setAdvIdentifiersTracking(enabled);
+    }
+
+    /**
      * Enables/disables data sending to the AppMetrica server. By default, the sending is enabled.
      *
      * <p><b>NOTE:</b> Disabling this option also turns off data sending from the reporters that initialized

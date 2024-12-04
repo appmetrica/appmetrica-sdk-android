@@ -27,5 +27,9 @@ public enum StartupParamsItemStatus {
     /**
      * Value is absent because some unknown error happened.
      */
-    UNKNOWN_ERROR
+    UNKNOWN_ERROR,
+    /**
+     * Value is absent because forbidden by client config.
+     */
+    FORBIDDEN_BY_CLIENT_CONFIG,
 }

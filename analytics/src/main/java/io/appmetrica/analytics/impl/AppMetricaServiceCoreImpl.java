@@ -161,7 +161,7 @@ public class AppMetricaServiceCoreImpl implements AppMetricaServiceCore, AppMetr
         DebugLogger.INSTANCE.info(TAG, "Init location service API");
         GlobalServiceLocator.getInstance().getLocationClientApi().init();
         DebugLogger.INSTANCE.info(TAG, "Init serviceInternalAdvertisingIdGetter");
-        GlobalServiceLocator.getInstance().getServiceInternalAdvertisingIdGetter().init(mContext, startupState);
+        GlobalServiceLocator.getInstance().getAdvertisingIdGetter().init();
 
         mReportConsumer = fieldsFactory.createReportConsumer(mContext, mClientRepository);
 

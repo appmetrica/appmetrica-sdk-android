@@ -564,6 +564,16 @@ public final class io.appmetrica.analytics.coreutils.internal.toggle.Conjunctive
     public [NonNull] String toString()
 }
 
+public final class io.appmetrica.analytics.coreutils.internal.toggle.OuterStateToggle extends io.appmetrica.analytics.coreutils.internal.toggle.SimpleThreadSafeToggle {
+    public <init>(boolean, [NonNull] String)
+    public final void update(boolean)
+}
+
+public final class io.appmetrica.analytics.coreutils.internal.toggle.SavableToggle extends io.appmetrica.analytics.coreutils.internal.toggle.SimpleThreadSafeToggle implementation io.appmetrica.analytics.coreapi.internal.data.Updatable<Boolean> {
+    public <init>([NonNull] String, [NonNull] io.appmetrica.analytics.coreapi.internal.data.Savable<Boolean>)
+    public void update(boolean)
+}
+
 public abstract class io.appmetrica.analytics.coreutils.internal.toggle.SimpleThreadSafeToggle implementation io.appmetrica.analytics.coreapi.internal.control.Toggle {
     public <init>(boolean, [NonNull] String)
     public boolean getActualState()

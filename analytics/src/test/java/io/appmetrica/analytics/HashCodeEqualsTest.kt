@@ -12,6 +12,7 @@ import io.appmetrica.analytics.impl.component.ComponentId
 import io.appmetrica.analytics.impl.component.clients.ClientDescription
 import io.appmetrica.analytics.impl.db.storage.TempCacheEntry
 import io.appmetrica.analytics.impl.features.FeatureDescription
+import io.appmetrica.analytics.impl.id.AdvIdGetterController
 import io.appmetrica.analytics.impl.referrer.common.ReferrerInfo
 import io.appmetrica.analytics.impl.startup.CacheControl
 import io.appmetrica.analytics.impl.startup.CollectingFlags
@@ -49,7 +50,8 @@ class AllFieldsTest(private val clazz: Class<*>) : CommonTest() {
             arrayOf(Period::class.java),
             arrayOf(ProductInfo::class.java),
             arrayOf(StartupParamsItem::class.java),
-            arrayOf(TempCacheEntry::class.java)
+            arrayOf(TempCacheEntry::class.java),
+            arrayOf(AdvIdGetterController.CanTrackIdentifiers::class.java)
         )
     }
 

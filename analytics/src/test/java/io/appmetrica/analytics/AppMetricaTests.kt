@@ -335,4 +335,10 @@ internal class AppMetricaTests : CommonTest() {
         AppMetrica.reportAnr(allThreads)
         verify(proxy).reportAnr(allThreads)
     }
+
+    @Test
+    fun setAdvIdentifiersTracking() {
+        AppMetrica.setAdvIdentifiersTracking(true)
+        verify(proxy).setAdvIdentifiersTracking(true)
+    }
 }

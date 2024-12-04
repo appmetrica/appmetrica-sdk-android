@@ -49,6 +49,8 @@ public class ReportParamsAppenderTest extends CommonTest {
     private AdvIdWithLimitedAppender mAdvIdWithLimitedAppender;
     @Mock
     private NetworkTaskForSendingDataParamsAppender sendingDataParamsAppender;
+    @Mock
+    private LiveConfigProvider liveConfigProvider;
 
     private ReportParamsAppender mParamsAppender;
 
@@ -61,8 +63,12 @@ public class ReportParamsAppenderTest extends CommonTest {
         when(mAdvertisingIdsHolder.getGoogle()).thenReturn(new AdTrackingInfoResult(null, IdentifierStatus.IDENTIFIER_PROVIDER_UNAVAILABLE, null));
         when(mAdvertisingIdsHolder.getHuawei()).thenReturn(new AdTrackingInfoResult(null, IdentifierStatus.IDENTIFIER_PROVIDER_UNAVAILABLE, null));
         when(mAdvertisingIdsHolder.getYandex()).thenReturn(new AdTrackingInfoResult(null, IdentifierStatus.IDENTIFIER_PROVIDER_UNAVAILABLE, null));
-        when(mReportRequestConfig.getAdvertisingIdsHolder()).thenReturn(mAdvertisingIdsHolder);
-        mParamsAppender = new ReportParamsAppender(mAdvIdWithLimitedAppender, sendingDataParamsAppender);
+        when(liveConfigProvider.getAdvertisingIdentifiers()).thenReturn(mAdvertisingIdsHolder);
+        mParamsAppender = new ReportParamsAppender(
+            mAdvIdWithLimitedAppender,
+            sendingDataParamsAppender,
+            liveConfigProvider
+        );
         when(mJson.getStringOrEmpty("kitBuildType")).thenReturn("internal_snapshot");
         mDbNetworkTaskConfig = new DbNetworkTaskConfig(mJson);
         ((ReportParamsAppender) mParamsAppender).setDbReportRequestConfig(mDbNetworkTaskConfig);
@@ -109,8 +115,9 @@ public class ReportParamsAppenderTest extends CommonTest {
             MockitoAnnotations.openMocks(this);
             GlobalServiceLocator.init(RuntimeEnvironment.getApplication());
             mParamsAppender = new ReportParamsAppender(
-                    mock(AdvIdWithLimitedAppender.class),
-                    mock(NetworkTaskForSendingDataParamsAppender.class)
+                mock(AdvIdWithLimitedAppender.class),
+                mock(NetworkTaskForSendingDataParamsAppender.class),
+                mock(LiveConfigProvider.class)
             );
             when(mJson.getStringOrEmpty("kitBuildType")).thenReturn("internal_snapshot");
             when(mJson.getStringOrEmpty(mJsonKey)).thenReturn(mValue);
@@ -252,7 +259,11 @@ public class ReportParamsAppenderTest extends CommonTest {
     @Test
     public void testApiKey() {
         when(mReportRequestConfig.getApiKey()).thenReturn("52345-hgjhgjh");
-        mParamsAppender = new ReportParamsAppender(mAdvIdWithLimitedAppender, sendingDataParamsAppender);
+        mParamsAppender = new ReportParamsAppender(
+            mAdvIdWithLimitedAppender,
+            sendingDataParamsAppender,
+            liveConfigProvider
+        );
         mParamsAppender.appendParams(mBuilder, mReportRequestConfig);
         assertThat(mBuilder.toString()).contains("api_key_128=52345-hgjhgjh");
     }
@@ -260,7 +271,11 @@ public class ReportParamsAppenderTest extends CommonTest {
     @Test
     public void testAppId() {
         when(mReportRequestConfig.getPackageName()).thenReturn("mypackage");
-        mParamsAppender = new ReportParamsAppender(mAdvIdWithLimitedAppender, sendingDataParamsAppender);
+        mParamsAppender = new ReportParamsAppender(
+            mAdvIdWithLimitedAppender,
+            sendingDataParamsAppender,
+            liveConfigProvider
+        );
         mParamsAppender.appendParams(mBuilder, mReportRequestConfig);
         assertThat(mBuilder.toString()).contains("app_id=mypackage");
     }
@@ -268,7 +283,11 @@ public class ReportParamsAppenderTest extends CommonTest {
     @Test
     public void testAppPlatform() {
         when(mReportRequestConfig.getAppPlatform()).thenReturn("android");
-        mParamsAppender = new ReportParamsAppender(mAdvIdWithLimitedAppender, sendingDataParamsAppender);
+        mParamsAppender = new ReportParamsAppender(
+            mAdvIdWithLimitedAppender,
+            sendingDataParamsAppender,
+            liveConfigProvider
+        );
         mParamsAppender.appendParams(mBuilder, mReportRequestConfig);
         assertThat(mBuilder.toString()).contains("app_platform=android");
     }
@@ -276,7 +295,11 @@ public class ReportParamsAppenderTest extends CommonTest {
     @Test
     public void testModel() {
         when(mReportRequestConfig.getModel()).thenReturn("mymodel");
-        mParamsAppender = new ReportParamsAppender(mAdvIdWithLimitedAppender, sendingDataParamsAppender);
+        mParamsAppender = new ReportParamsAppender(
+            mAdvIdWithLimitedAppender,
+            sendingDataParamsAppender,
+            liveConfigProvider
+        );
         mParamsAppender.appendParams(mBuilder, mReportRequestConfig);
         assertThat(mBuilder.toString()).contains("model=mymodel");
     }
@@ -284,7 +307,11 @@ public class ReportParamsAppenderTest extends CommonTest {
     @Test
     public void testManufacturer() {
         when(mReportRequestConfig.getManufacturer()).thenReturn("mymanufacturer");
-        mParamsAppender = new ReportParamsAppender(mAdvIdWithLimitedAppender, sendingDataParamsAppender);
+        mParamsAppender = new ReportParamsAppender(
+            mAdvIdWithLimitedAppender,
+            sendingDataParamsAppender,
+            liveConfigProvider
+        );
         mParamsAppender.appendParams(mBuilder, mReportRequestConfig);
         assertThat(mBuilder.toString()).contains("manufacturer=mymanufacturer");
     }
@@ -292,7 +319,11 @@ public class ReportParamsAppenderTest extends CommonTest {
     @Test
     public void testScreenWidth() {
         when(mReportRequestConfig.getScreenWidth()).thenReturn(1500);
-        mParamsAppender = new ReportParamsAppender(mAdvIdWithLimitedAppender, sendingDataParamsAppender);
+        mParamsAppender = new ReportParamsAppender(
+            mAdvIdWithLimitedAppender,
+            sendingDataParamsAppender,
+            liveConfigProvider
+        );
         mParamsAppender.appendParams(mBuilder, mReportRequestConfig);
         assertThat(mBuilder.toString()).contains("screen_width=1500");
     }
@@ -300,7 +331,11 @@ public class ReportParamsAppenderTest extends CommonTest {
     @Test
     public void testScreenHeight() {
         when(mReportRequestConfig.getScreenHeight()).thenReturn(1200);
-        mParamsAppender = new ReportParamsAppender(mAdvIdWithLimitedAppender, sendingDataParamsAppender);
+        mParamsAppender = new ReportParamsAppender(
+            mAdvIdWithLimitedAppender,
+            sendingDataParamsAppender,
+            liveConfigProvider
+        );
         mParamsAppender.appendParams(mBuilder, mReportRequestConfig);
         assertThat(mBuilder.toString()).contains("screen_height=1200");
     }
@@ -308,7 +343,11 @@ public class ReportParamsAppenderTest extends CommonTest {
     @Test
     public void testScreenDpi() {
         when(mReportRequestConfig.getScreenDpi()).thenReturn(80);
-        mParamsAppender = new ReportParamsAppender(mAdvIdWithLimitedAppender, sendingDataParamsAppender);
+        mParamsAppender = new ReportParamsAppender(
+            mAdvIdWithLimitedAppender,
+            sendingDataParamsAppender,
+            liveConfigProvider
+        );
         mParamsAppender.appendParams(mBuilder, mReportRequestConfig);
         assertThat(mBuilder.toString()).contains("screen_dpi=80");
     }
@@ -316,7 +355,11 @@ public class ReportParamsAppenderTest extends CommonTest {
     @Test
     public void testScaleFactor() {
         when(mReportRequestConfig.getScaleFactor()).thenReturn(1.5f);
-        mParamsAppender = new ReportParamsAppender(mAdvIdWithLimitedAppender, sendingDataParamsAppender);
+        mParamsAppender = new ReportParamsAppender(
+            mAdvIdWithLimitedAppender,
+            sendingDataParamsAppender,
+            liveConfigProvider
+        );
         mParamsAppender.appendParams(mBuilder, mReportRequestConfig);
         assertThat(mBuilder.toString()).contains("scalefactor=1.5");
     }
@@ -324,14 +367,22 @@ public class ReportParamsAppenderTest extends CommonTest {
     @Test
     public void testDeviceType() {
         when(mReportRequestConfig.getDeviceType()).thenReturn("phone");
-        mParamsAppender = new ReportParamsAppender(mAdvIdWithLimitedAppender, sendingDataParamsAppender);
+        mParamsAppender = new ReportParamsAppender(
+            mAdvIdWithLimitedAppender,
+            sendingDataParamsAppender,
+            liveConfigProvider
+        );
         mParamsAppender.appendParams(mBuilder, mReportRequestConfig);
         assertThat(mBuilder.toString()).contains("device_type=phone");
     }
 
     @Test
     public void testRequestId() {
-        mParamsAppender = new ReportParamsAppender(mAdvIdWithLimitedAppender, sendingDataParamsAppender);
+        mParamsAppender = new ReportParamsAppender(
+            mAdvIdWithLimitedAppender,
+            sendingDataParamsAppender,
+            liveConfigProvider
+        );
         ((ReportParamsAppender) mParamsAppender).setRequestId(3333);
         mParamsAppender.appendParams(mBuilder, mReportRequestConfig);
         assertThat(mBuilder.toString()).contains("request_id=3333");

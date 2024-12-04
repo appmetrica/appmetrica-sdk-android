@@ -149,6 +149,12 @@ public class MainReporter extends BaseReporter implements IMainReporter {
     }
 
     @Override
+    public void setAdvIdentifiersTracking(boolean enabled) {
+        mPublicLogger.info("Set advIdentifiersTracking to %s", enabled);
+        mReporterEnvironment.getReporterConfiguration().setAdvIdentifiersTracking(enabled);
+    }
+
+    @Override
     public List<String> getCustomHosts() {
         return mReporterEnvironment.getProcessConfiguration().getCustomHosts();
     }

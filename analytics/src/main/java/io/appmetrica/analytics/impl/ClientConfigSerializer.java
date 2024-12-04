@@ -26,6 +26,7 @@ public class ClientConfigSerializer {
     private static final String KEY_CRASH_ENABLED = "crash_enabled";
     private static final String KEY_CRASH_NATIVE_ENABLED = "crash_native_enabled";
     private static final String KEY_LOCATION_ENABLED = "location_enabled";
+    private static final String KEY_ADV_IDENTIFIERS_TRACKING = "adv_identifiers_tracking";
     private static final String KEY_PRELOAD_INFO_TRACKID = "trackid";
     private static final String KEY_PRELOAD_INFO_PARAMS = "params";
     private static final String KEY_LOCATION_PROVIDER = "provider";
@@ -68,6 +69,7 @@ public class ClientConfigSerializer {
             jsonConfig.put(KEY_CRASH_ENABLED, config.crashReporting);
             jsonConfig.put(KEY_CRASH_NATIVE_ENABLED, config.nativeCrashReporting);
             jsonConfig.put(KEY_LOCATION_ENABLED, config.locationTracking);
+            jsonConfig.put(KEY_ADV_IDENTIFIERS_TRACKING, config.advIdentifiersTracking);
             jsonConfig.put(KEY_MAX_REPORTS_IN_DB_COUNT, config.maxReportsInDatabaseCount);
             jsonConfig.put(KEY_ERROR_ENVIRONMENT, JsonHelper.mapToJson(config.errorEnvironment));
             jsonConfig.put(KEY_FIRST_ACTIVATION_AS_UPDATE, config.firstActivationAsUpdate);
@@ -122,6 +124,14 @@ public class ClientConfigSerializer {
                 }
                 if (jsonConfig.has(KEY_LOCATION_ENABLED)) {
                     builder.withLocationTracking(jsonConfig.optBoolean(KEY_LOCATION_ENABLED));
+                }
+                if (jsonConfig.has(KEY_ADV_IDENTIFIERS_TRACKING)) {
+                    builder.withAdvIdentifiersTracking(
+                        jsonConfig.optBoolean(
+                            KEY_ADV_IDENTIFIERS_TRACKING,
+                            DefaultValues.DEFAULT_REPORT_ADV_IDENTIFIERS_ENABLED
+                        )
+                    );
                 }
                 if (jsonConfig.has(KEY_MAX_REPORTS_IN_DB_COUNT)) {
                     builder.withMaxReportsInDatabaseCount(jsonConfig.optInt(KEY_MAX_REPORTS_IN_DB_COUNT));
