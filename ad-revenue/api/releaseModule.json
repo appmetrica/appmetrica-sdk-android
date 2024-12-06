@@ -3,7 +3,7 @@
     "component": {
         "group": "io.appmetrica.analytics",
         "module": "analytics-ad-revenue",
-        "version": "7.5.0",
+        "version": "7.6.0",
         "attributes": {
             "org.gradle.status": "release"
         }
@@ -25,8 +25,8 @@
             },
             "files": [
                 {
-                    "name": "analytics-ad-revenue-7.5.0.aar",
-                    "url": "analytics-ad-revenue-7.5.0.aar",
+                    "name": "analytics-ad-revenue-7.6.0.aar",
+                    "url": "analytics-ad-revenue-7.6.0.aar",
                     "size": -1,
                     "sha512": "<sha512>",
                     "sha256": "<sha256>",
@@ -48,28 +48,28 @@
                     "group": "io.appmetrica.analytics",
                     "module": "analytics-ad-revenue-admob-v23",
                     "version": {
-                        "requires": "7.5.0"
+                        "requires": "7.6.0"
                     }
                 },
                 {
                     "group": "io.appmetrica.analytics",
                     "module": "analytics-ad-revenue-applovin-v12",
                     "version": {
-                        "requires": "7.5.0"
+                        "requires": "7.6.0"
                     }
                 },
                 {
                     "group": "io.appmetrica.analytics",
                     "module": "analytics-ad-revenue-fyber-v3",
                     "version": {
-                        "requires": "7.5.0"
+                        "requires": "7.6.0"
                     }
                 },
                 {
                     "group": "io.appmetrica.analytics",
                     "module": "analytics-ad-revenue-ironsource-v7",
                     "version": {
-                        "requires": "7.5.0"
+                        "requires": "7.6.0"
                     }
                 },
                 {
@@ -82,8 +82,8 @@
             ],
             "files": [
                 {
-                    "name": "analytics-ad-revenue-7.5.0.aar",
-                    "url": "analytics-ad-revenue-7.5.0.aar",
+                    "name": "analytics-ad-revenue-7.6.0.aar",
+                    "url": "analytics-ad-revenue-7.6.0.aar",
                     "size": -1,
                     "sha512": "<sha512>",
                     "sha256": "<sha256>",

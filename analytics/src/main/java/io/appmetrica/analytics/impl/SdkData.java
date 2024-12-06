@@ -14,7 +14,7 @@ public final class SdkData {
     public static final int CURRENT = 115;
 
     //This version used for creation merge conflicts for parallel version or api level updating
-    public static final String CURRENT_VERSION_NAME_FOR_MAPPING = "7.5.0";
+    public static final String CURRENT_VERSION_NAME_FOR_MAPPING = "7.6.0";
 
     public static final int INITIAL_API_LEVEL = 112;
     public static final int MIGRATE_SESSION_SLEEP_START_TIME_TO_MILLISECONDS = 113;
