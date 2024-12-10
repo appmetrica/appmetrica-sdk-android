@@ -10,7 +10,7 @@
     },
     "createdBy": {
         "gradle": {
-            "version": "8.2.1",
+            "version": "8.10.2",
             "buildId": "<random-string>"
         }
     },
