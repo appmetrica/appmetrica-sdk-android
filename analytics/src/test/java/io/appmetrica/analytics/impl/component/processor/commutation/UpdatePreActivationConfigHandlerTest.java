@@ -1,5 +1,6 @@
 package io.appmetrica.analytics.impl.component.processor.commutation;
 
+import android.location.Location;
 import androidx.annotation.Nullable;
 import io.appmetrica.analytics.impl.CounterReport;
 import io.appmetrica.analytics.impl.DataSendingRestrictionControllerImpl;
@@ -25,6 +26,7 @@ import org.robolectric.RuntimeEnvironment;
 
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -87,6 +89,23 @@ public class UpdatePreActivationConfigHandlerTest extends CommonTest {
         mHandler.process(mCounterReport, mClientUnit);
         verify(GlobalServiceLocator.getInstance().getAdvertisingIdGetter())
             .updateStateFromClientConfig(false);
+    }
+
+    @Test
+    public void updateLocation() {
+        Location location = mock(Location.class);
+        when(mCounterConfiguration.getManualLocation()).thenReturn(location);
+        doReturn(new CommonArguments.ReporterArguments(mCounterConfiguration, null)).when(mRegularDispatcherComponent).getConfiguration();
+        mHandler.process(mCounterReport, mClientUnit);
+        verify(GlobalServiceLocator.getInstance().getLocationClientApi()).updateLocationFromClient(location);
+    }
+
+    @Test
+    public void updateLocationForNull() {
+        when(mCounterConfiguration.getManualLocation()).thenReturn(null);
+        doReturn(new CommonArguments.ReporterArguments(mCounterConfiguration, null)).when(mRegularDispatcherComponent).getConfiguration();
+        mHandler.process(mCounterReport, mClientUnit);
+        verify(GlobalServiceLocator.getInstance().getLocationClientApi()).updateLocationFromClient(null);
     }
 
     @RunWith(ParameterizedRobolectricTestRunner.class)

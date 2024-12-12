@@ -89,7 +89,6 @@ public class ReportRequestConfigLoaderClidsTest extends CommonTest {
                 null,
                 null,
                 null,
-                null,
                 null
         )
         );
@@ -132,7 +131,6 @@ public class ReportRequestConfigLoaderClidsTest extends CommonTest {
                 sdkEnvironmentProvider,
                 platformIdentifiers,
                 new ReportRequestConfig.Arguments(
-                        null,
                         null,
                         null,
                         null,

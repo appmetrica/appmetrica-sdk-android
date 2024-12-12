@@ -110,7 +110,6 @@ public class ReportArgumentsTest extends CommonTest {
         ReportRequestConfig.Arguments oldArguments = new ReportRequestConfig.Arguments(
                 "oldApiKey",
                 false,
-                new Location("oldProvider"),
                 false,
                 100,
                 200,
@@ -193,7 +192,6 @@ public class ReportArgumentsTest extends CommonTest {
     @NonNull
     public static ReportRequestConfig.Arguments createEmptyArguments() {
         return new ReportRequestConfig.Arguments(
-                null,
                 null,
                 null,
                 null,

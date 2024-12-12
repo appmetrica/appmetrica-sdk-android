@@ -374,13 +374,49 @@ internal class LocationCoreTests : CommonTest() {
     @Test
     fun `getCachedLocation for null`() {
         whenever(locationStreamDispatcher.cachedLocation).thenReturn(null)
-        assertThat(locationCore.cachedLocation).isNull()
+        assertThat(locationCore.cachedSystemLocation).isNull()
     }
 
     @Test
     fun `getCachedLocation for non-null`() {
         whenever(locationStreamDispatcher.cachedLocation).thenReturn(location)
-        assertThat(locationCore.cachedLocation).isEqualTo(location)
+        assertThat(locationCore.cachedSystemLocation).isEqualTo(location)
+    }
+
+    @Test
+    fun `getUserLocation before set`() {
+        assertThat(locationCore.userLocation).isNull()
+    }
+
+    @Test
+    fun `getUserLocation after set`() {
+        locationCore.userLocation = location
+        assertThat(locationCore.userLocation).isEqualTo(location)
+    }
+
+    @Test
+    fun `getUserOrSystemLocation without any`() {
+        assertThat(locationCore.userOrCachedSystemLocation).isNull()
+    }
+
+    @Test
+    fun `getUserOrSystemLocation with cached only`() {
+        whenever(locationStreamDispatcher.cachedLocation).thenReturn(location)
+        assertThat(locationCore.userOrCachedSystemLocation).isEqualTo(location)
+    }
+
+    @Test
+    fun `getUserOrSystemLocation with user only`() {
+        locationCore.userLocation = location
+        assertThat(locationCore.userOrCachedSystemLocation).isEqualTo(location)
+    }
+
+    @Test
+    fun `getUserOrSystemLocation with cached and user locations`() {
+        whenever(locationStreamDispatcher.cachedLocation).thenReturn(location)
+        val userLocation: Location = mock()
+        locationCore.userLocation = userLocation
+        assertThat(locationCore.userOrCachedSystemLocation).isEqualTo(userLocation)
     }
 
     @Test

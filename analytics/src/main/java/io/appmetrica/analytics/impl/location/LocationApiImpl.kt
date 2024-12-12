@@ -14,6 +14,7 @@ import io.appmetrica.analytics.locationapi.internal.LastKnownLocationExtractorPr
 import io.appmetrica.analytics.locationapi.internal.LocationClient
 import io.appmetrica.analytics.locationapi.internal.LocationControllerObserver
 import io.appmetrica.analytics.locationapi.internal.LocationFilter
+import io.appmetrica.analytics.locationapi.internal.LocationProvider
 import io.appmetrica.analytics.locationapi.internal.LocationReceiverProvider
 import io.appmetrica.analytics.locationapi.internal.LocationReceiverProviderFactory
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
@@ -22,7 +23,9 @@ internal class LocationApiImpl(
     private val context: Context,
     private val locationController: LocationController,
     private val locationClient: LocationClient
-) : LocationApi, StartupStateObserver {
+) : LocationApi,
+    StartupStateObserver,
+    LocationProvider by locationClient {
 
     private val tag = "[LocationServiceApiImpl]"
 
@@ -41,8 +44,6 @@ internal class LocationApiImpl(
         locationController.registerObserver(locationClient)
     }
 
-    override fun getLocation(): Location? = locationClient.location
-
     override fun registerWakelock(wakelock: Any) {
         DebugLogger.info(tag, "Register wakelock: $wakelock")
         locationController.registerWakelock(wakelock)
@@ -56,6 +57,11 @@ internal class LocationApiImpl(
     override fun updateTrackingStatusFromClient(value: Boolean) {
         DebugLogger.info(tag, "Update tracking status from client with $value")
         locationController.updateTrackingStatusFromClient(value)
+    }
+
+    override fun updateLocationFromClient(location: Location?) {
+        DebugLogger.info(tag, "Update location from client: $location")
+        locationClient.updateUserLocation(location)
     }
 
     override fun init() {
@@ -73,10 +79,10 @@ internal class LocationApiImpl(
             locationSourcesController.init()
         } else {
             DebugLogger.info(tag, "Init...register default location sources")
-            locationClient.registerLocationSource(
+            locationClient.registerSystemLocationSource(
                 locationClient.lastKnownExtractorProviderFactory.gplLastKnownLocationExtractorProvider
             )
-            locationClient.registerLocationSource(
+            locationClient.registerSystemLocationSource(
                 locationClient.lastKnownExtractorProviderFactory.networkLastKnownLocationExtractorProvider
             )
         }
@@ -93,22 +99,22 @@ internal class LocationApiImpl(
 
     override fun registerSource(lastKnownLocationExtractorProvider: LastKnownLocationExtractorProvider) {
         DebugLogger.info(tag, "registerSource: $lastKnownLocationExtractorProvider")
-        locationClient.registerLocationSource(lastKnownLocationExtractorProvider)
+        locationClient.registerSystemLocationSource(lastKnownLocationExtractorProvider)
     }
 
     override fun unregisterSource(lastKnownLocationExtractorProvider: LastKnownLocationExtractorProvider) {
         DebugLogger.info(tag, "unregisterSource: $lastKnownLocationExtractorProvider")
-        locationClient.unregisterLocationSource(lastKnownLocationExtractorProvider)
+        locationClient.unregisterSystemLocationSource(lastKnownLocationExtractorProvider)
     }
 
     override fun registerSource(locationReceiverProvider: LocationReceiverProvider) {
         DebugLogger.info(tag, "registerSource: $locationReceiverProvider")
-        locationClient.registerLocationSource(locationReceiverProvider)
+        locationClient.registerSystemLocationSource(locationReceiverProvider)
     }
 
     override fun unregisterSource(locationReceiverProvider: LocationReceiverProvider) {
         DebugLogger.info(tag, "unregisterSource: $locationReceiverProvider")
-        locationClient.unregisterLocationSource(locationReceiverProvider)
+        locationClient.unregisterSystemLocationSource(locationReceiverProvider)
     }
 
     override val lastKnownExtractorProviderFactory: LastKnownLocationExtractorProviderFactory =

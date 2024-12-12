@@ -12,11 +12,25 @@ import io.appmetrica.analytics.locationapi.internal.LocationReceiverProviderFact
 
 internal class LocationApiStub : LocationApi {
 
+    override val systemLocation: Location? = null
+
+    override val userLocation: Location? = null
+
+    override val permissionExtractor: PermissionExtractor = PermissionExtractorStub()
+
+    override val lastKnownExtractorProviderFactory: LastKnownLocationExtractorProviderFactory =
+        LastKnownExtractorProviderFactoryStub()
+
+    override val locationReceiverProviderFactory: LocationReceiverProviderFactory =
+        LocationReceiverProviderFactoryStub()
+
     override fun init() {
         // Do nothing
     }
 
-    override fun getLocation(): Location? = null
+    override fun updateLocationFromClient(location: Location?) {
+        // Do nothing
+    }
 
     override fun registerWakelock(wakelock: Any) {
         // Do nothing
@@ -49,14 +63,6 @@ internal class LocationApiStub : LocationApi {
     override fun unregisterSource(locationReceiverProvider: LocationReceiverProvider) {
         // Do nothing
     }
-
-    override val permissionExtractor: PermissionExtractor = PermissionExtractorStub()
-
-    override val lastKnownExtractorProviderFactory: LastKnownLocationExtractorProviderFactory =
-        LastKnownExtractorProviderFactoryStub()
-
-    override val locationReceiverProviderFactory: LocationReceiverProviderFactory =
-        LocationReceiverProviderFactoryStub()
 
     override fun updateLocationFilter(locationFilter: LocationFilter) {
         // Do nothing

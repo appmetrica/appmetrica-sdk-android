@@ -24,13 +24,13 @@ class DbLocationModelFactory(
         )
     }
 
-    private fun getReportLocation(): YLocation? = if (reportRequestConfig.manualLocation != null) {
-        YLocation.createWithOriginalProvider(reportRequestConfig.manualLocation)
-    } else if (reportRequestConfig.isLocationTracking) {
-        GlobalServiceLocator.getInstance().locationClientApi.getLocation()?.let {
+    private fun getReportLocation(): YLocation? {
+        val locationApi = GlobalServiceLocator.getInstance().locationClientApi
+        val location = locationApi.userLocation?.let {
+            YLocation.createWithOriginalProvider(it)
+        } ?: locationApi.systemLocation?.let {
             YLocation.createWithoutOriginalProvider(it)
         }
-    } else {
-        null
+        return location
     }
 }

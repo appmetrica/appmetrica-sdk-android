@@ -1,5 +1,6 @@
 package io.appmetrica.analytics.impl.location.stub
 
+import android.location.Location
 import io.appmetrica.analytics.locationapi.internal.LocationControllerObserver
 import io.appmetrica.analytics.locationapi.internal.LocationFilter
 import io.appmetrica.analytics.testutils.CommonTest
@@ -43,8 +44,19 @@ class LocationApiStubTest : CommonTest() {
     }
 
     @Test
-    fun getLocation() {
-        assertThat(locationApiStub.getLocation()).isNull()
+    fun updateLocationFromClient() {
+        val location: Location = mock()
+        locationApiStub.updateLocationFromClient(location)
+    }
+
+    @Test
+    fun systemLocation() {
+        assertThat(locationApiStub.systemLocation).isNull()
+    }
+
+    @Test
+    fun userLocation() {
+        assertThat(locationApiStub.userLocation).isNull()
     }
 
     @Test

@@ -9,16 +9,18 @@ public final class io.appmetrica.analytics.location.BuildConfig {
 public final class io.appmetrica.analytics.location.internal.LocationClientImpl implementation io.appmetrica.analytics.locationapi.internal.LocationClient {
     public <init>()
     public [NonNull] io.appmetrica.analytics.locationapi.internal.LastKnownLocationExtractorProviderFactory getLastKnownExtractorProviderFactory()
-    public [Nullable] android.location.Location getLocation()
     public [NonNull] io.appmetrica.analytics.locationapi.internal.LocationReceiverProviderFactory getLocationReceiverProviderFactory()
+    public [Nullable] android.location.Location getSystemLocation()
+    public [Nullable] android.location.Location getUserLocation()
     public void init([NonNull] android.content.Context, [NonNull] io.appmetrica.analytics.coreapi.internal.system.PermissionExtractor, [NonNull] io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor, [NonNull] java.util.List<? extends io.appmetrica.analytics.coreapi.internal.backport.Consumer<android.location.Location>>)
-    public void registerLocationSource([NonNull] io.appmetrica.analytics.locationapi.internal.LastKnownLocationExtractorProvider)
-    public void registerLocationSource([NonNull] io.appmetrica.analytics.locationapi.internal.LocationReceiverProvider)
+    public void registerSystemLocationSource([NonNull] io.appmetrica.analytics.locationapi.internal.LastKnownLocationExtractorProvider)
+    public void registerSystemLocationSource([NonNull] io.appmetrica.analytics.locationapi.internal.LocationReceiverProvider)
     public void startLocationTracking()
     public void stopLocationTracking()
-    public void unregisterLocationSource([NonNull] io.appmetrica.analytics.locationapi.internal.LastKnownLocationExtractorProvider)
-    public void unregisterLocationSource([NonNull] io.appmetrica.analytics.locationapi.internal.LocationReceiverProvider)
+    public void unregisterSystemLocationSource([NonNull] io.appmetrica.analytics.locationapi.internal.LastKnownLocationExtractorProvider)
+    public void unregisterSystemLocationSource([NonNull] io.appmetrica.analytics.locationapi.internal.LocationReceiverProvider)
     public void updateCacheArguments([NonNull] io.appmetrica.analytics.locationapi.internal.CacheArguments)
     public void updateLocationFilter([NonNull] io.appmetrica.analytics.locationapi.internal.LocationFilter)
+    public void updateUserLocation([Nullable] android.location.Location)
 }
 

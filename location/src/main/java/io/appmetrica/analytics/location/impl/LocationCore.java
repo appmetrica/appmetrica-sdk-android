@@ -40,6 +40,8 @@ public class LocationCore implements ILastKnownUpdater, LocationControllerObserv
     private final Map<String, LastKnownLocationExtractor> lastKnownLocationExtractors = new HashMap<>();
     @NonNull
     private final Map<String, LocationReceiver> locationReceivers = new HashMap<>();
+    @Nullable
+    private Location userLocation;
 
     public LocationCore(@NonNull Context context,
                         @NonNull PermissionExtractor permissionExtractor,
@@ -68,7 +70,7 @@ public class LocationCore implements ILastKnownUpdater, LocationControllerObserv
     }
 
     @Nullable
-    public Location getCachedLocation() {
+    public synchronized Location getCachedSystemLocation() {
         Location location = locationStreamDispatcher.getCachedLocation();
         DebugLogger.INSTANCE.info(TAG, "getCachedLocation: %s", location);
         return location;
@@ -198,5 +200,21 @@ public class LocationCore implements ILastKnownUpdater, LocationControllerObserv
                 receiver.stopLocationUpdates();
             }
         }
+    }
+
+    @Nullable
+    public synchronized Location getUserLocation() {
+        return userLocation;
+    }
+
+    public synchronized void setUserLocation(@Nullable Location userLocation) {
+        if (userLocation != null) {
+            this.userLocation = userLocation;
+        }
+    }
+
+    @Nullable
+    public synchronized Location getUserOrCachedSystemLocation() {
+        return userLocation == null ? getCachedSystemLocation() : userLocation;
     }
 }

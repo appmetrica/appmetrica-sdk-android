@@ -127,15 +127,39 @@ internal class LocationApiImplTest : CommonTest() {
     }
 
     @Test
-    fun getLocation() {
-        whenever(locationClient.location).thenReturn(location)
-        assertThat(locationApiImpl.getLocation()).isEqualTo(location)
+    fun updateLocationFromClient() {
+        locationApiImpl.updateLocationFromClient(location)
+        verify(locationClient).updateUserLocation(location)
     }
 
     @Test
-    fun `getLocation for null`() {
-        whenever(locationClient.location).thenReturn(null)
-        assertThat(locationApiImpl.getLocation()).isNull()
+    fun `updateLocationFromClient for null`() {
+        locationApiImpl.updateLocationFromClient(null)
+        verify(locationClient).updateUserLocation(null)
+    }
+
+    @Test
+    fun systemLocation() {
+        whenever(locationClient.systemLocation).thenReturn(location)
+        assertThat(locationApiImpl.systemLocation).isEqualTo(location)
+    }
+
+    @Test
+    fun `systemLocation if null`() {
+        whenever(locationClient.systemLocation).thenReturn(null)
+        assertThat(locationApiImpl.systemLocation).isNull()
+    }
+
+    @Test
+    fun userLocation() {
+        whenever(locationClient.userLocation).thenReturn(location)
+        assertThat(locationApiImpl.userLocation).isEqualTo(location)
+    }
+
+    @Test
+    fun `userLocation if null`() {
+        whenever(locationClient.userLocation).thenReturn(null)
+        assertThat(locationApiImpl.userLocation).isNull()
     }
 
     @Test
@@ -184,8 +208,8 @@ internal class LocationApiImplTest : CommonTest() {
         whenever(modulesController.chooseLocationSourceController()).thenReturn(null)
         locationApiImpl.init()
 
-        verify(locationClient).registerLocationSource(gplLastKnownLocationExtractorProvider)
-        verify(locationClient).registerLocationSource(networkLastKnownLocationExtractorProvider)
+        verify(locationClient).registerSystemLocationSource(gplLastKnownLocationExtractorProvider)
+        verify(locationClient).registerSystemLocationSource(networkLastKnownLocationExtractorProvider)
     }
 
     @Test
@@ -209,25 +233,25 @@ internal class LocationApiImplTest : CommonTest() {
     @Test
     fun `registerSource for lastKnownLocationExtractor`() {
         locationApiImpl.registerSource(lastKnownLocationExtractorProvider)
-        verify(locationClient).registerLocationSource(lastKnownLocationExtractorProvider)
+        verify(locationClient).registerSystemLocationSource(lastKnownLocationExtractorProvider)
     }
 
     @Test
     fun `registerSource for locationReceiver`() {
         locationApiImpl.registerSource(locationReceiverProvider)
-        verify(locationClient).registerLocationSource(locationReceiverProvider)
+        verify(locationClient).registerSystemLocationSource(locationReceiverProvider)
     }
 
     @Test
     fun `unregisterSource for lastKnownLocationExtractor`() {
         locationApiImpl.unregisterSource(lastKnownLocationExtractorProvider)
-        verify(locationClient).unregisterLocationSource(lastKnownLocationExtractorProvider)
+        verify(locationClient).unregisterSystemLocationSource(lastKnownLocationExtractorProvider)
     }
 
     @Test
     fun `unregisterSource for locationReceiver`() {
         locationApiImpl.unregisterSource(locationReceiverProvider)
-        verify(locationClient).unregisterLocationSource(locationReceiverProvider)
+        verify(locationClient).unregisterSystemLocationSource(locationReceiverProvider)
     }
 
     @Test

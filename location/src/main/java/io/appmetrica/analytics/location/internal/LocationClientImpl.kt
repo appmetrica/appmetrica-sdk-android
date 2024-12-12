@@ -71,27 +71,34 @@ class LocationClientImpl : LocationClient {
     }
 
     @Synchronized
-    override fun registerLocationSource(lastKnownLocationExtractorProvider: LastKnownLocationExtractorProvider) {
+    override fun registerSystemLocationSource(lastKnownLocationExtractorProvider: LastKnownLocationExtractorProvider) {
         DebugLogger.info(tag, "registerLocationSource: $lastKnownLocationExtractorProvider")
         locationCore?.registerLastKnownSource(lastKnownLocationExtractorProvider)
     }
 
     @Synchronized
-    override fun unregisterLocationSource(lastKnownLocationExtractorProvider: LastKnownLocationExtractorProvider) {
+    override fun unregisterSystemLocationSource(
+        lastKnownLocationExtractorProvider: LastKnownLocationExtractorProvider
+    ) {
         DebugLogger.info(tag, "unregisterLocationSource: $lastKnownLocationExtractorProvider")
         locationCore?.unregisterLastKnownSource(lastKnownLocationExtractorProvider)
     }
 
     @Synchronized
-    override fun registerLocationSource(locationReceiverProvider: LocationReceiverProvider) {
+    override fun registerSystemLocationSource(locationReceiverProvider: LocationReceiverProvider) {
         DebugLogger.info(tag, "registerLocationSource: $locationReceiverProvider")
         locationCore?.registerLocationReceiver(locationReceiverProvider)
     }
 
     @Synchronized
-    override fun unregisterLocationSource(locationReceiverProvider: LocationReceiverProvider) {
+    override fun unregisterSystemLocationSource(locationReceiverProvider: LocationReceiverProvider) {
         DebugLogger.info(tag, "unregisterLocationSource: $locationReceiverProvider")
         locationCore?.unregisterLocationReceiver(locationReceiverProvider)
+    }
+
+    @Synchronized
+    override fun updateUserLocation(location: Location?) {
+        locationCore?.userLocation = location
     }
 
     @Synchronized
@@ -106,7 +113,11 @@ class LocationClientImpl : LocationClient {
         locationCore?.stopLocationTracking()
     }
 
-    override val location: Location?
+    override val systemLocation: Location?
         @Synchronized
-        get() = locationCore?.cachedLocation
+        get() = locationCore?.cachedSystemLocation
+
+    override val userLocation: Location?
+        @Synchronized
+        get() = locationCore?.userLocation
 }

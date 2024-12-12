@@ -142,9 +142,8 @@ public interface io.appmetrica.analytics.modulesapi.internal.service.ClientConfi
     public abstract [Nullable] android.os.Bundle getConfigBundleForClient()
 }
 
-public interface io.appmetrica.analytics.modulesapi.internal.service.LocationServiceApi {
+public interface io.appmetrica.analytics.modulesapi.internal.service.LocationServiceApi extends io.appmetrica.analytics.locationapi.internal.LocationProvider {
     public abstract [NonNull] io.appmetrica.analytics.locationapi.internal.LastKnownLocationExtractorProviderFactory getLastKnownExtractorProviderFactory()
-    public abstract [Nullable] android.location.Location getLocation()
     public abstract [NonNull] io.appmetrica.analytics.locationapi.internal.LocationReceiverProviderFactory getLocationReceiverProviderFactory()
     public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.system.PermissionExtractor getPermissionExtractor()
     public abstract void registerControllerObserver([NonNull] io.appmetrica.analytics.locationapi.internal.LocationControllerObserver)

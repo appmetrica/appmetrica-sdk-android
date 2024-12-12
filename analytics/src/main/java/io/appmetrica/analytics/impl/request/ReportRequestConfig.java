@@ -1,14 +1,10 @@
 package io.appmetrica.analytics.impl.request;
 
-import android.annotation.SuppressLint;
-import android.location.Location;
-import android.os.Build;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.AppMetricaDefaultValues;
 import io.appmetrica.analytics.coreapi.internal.control.DataSendingRestrictionController;
-import io.appmetrica.analytics.coreutils.internal.AndroidUtils;
 import io.appmetrica.analytics.coreutils.internal.StringUtils;
 import io.appmetrica.analytics.coreutils.internal.WrapUtils;
 import io.appmetrica.analytics.impl.DefaultValues;
@@ -27,7 +23,6 @@ public class ReportRequestConfig extends CoreRequestConfig {
     public String toString() {
         return "ReportRequestConfig{" +
             "mLocationTracking=" + locationTracking +
-            ", mManualLocation=" + manualLocation +
             ", mFirstActivationAsUpdate=" + firstActivationAsUpdate +
             ", mSessionTimeout=" + sessionTimeout +
             ", mDispatchPeriod=" + dispatchPeriod +
@@ -81,7 +76,6 @@ public class ReportRequestConfig extends CoreRequestConfig {
     }
 
     private boolean locationTracking;
-    private Location manualLocation;
     private boolean firstActivationAsUpdate;
     private int sessionTimeout;
     private int dispatchPeriod;
@@ -191,14 +185,6 @@ public class ReportRequestConfig extends CoreRequestConfig {
         this.locationTracking = locationTracking;
     }
 
-    public Location getManualLocation() {
-        return manualLocation;
-    }
-
-    public void setManualLocation(Location manualLocation) {
-        this.manualLocation = manualLocation;
-    }
-
     public boolean isFirstActivationAsUpdate() {
         return firstActivationAsUpdate;
     }
@@ -279,49 +265,9 @@ public class ReportRequestConfig extends CoreRequestConfig {
     }
 
     public static final class Arguments extends BaseRequestArguments<CommonArguments.ReporterArguments, Arguments> {
-        @SuppressLint("NewApi")
-        boolean compareLocations(@Nullable Location thisLocation, @Nullable Location thatLocation) {
-            if (thisLocation == thatLocation) {
-                return true;
-            }
-            if (thisLocation == null || thatLocation == null) {
-                return false;
-            }
-
-            if (thisLocation.getTime() != thatLocation.getTime()) return false;
-            if (thisLocation.getElapsedRealtimeNanos() != thatLocation.getElapsedRealtimeNanos()) return false;
-            if (Double.compare(thatLocation.getLatitude(), thisLocation.getLatitude()) != 0) return false;
-            if (Double.compare(thatLocation.getLongitude(), thisLocation.getLongitude()) != 0) return false;
-            if (Double.compare(thatLocation.getAltitude(), thisLocation.getAltitude()) != 0) return false;
-            if (Float.compare(thatLocation.getSpeed(), thisLocation.getSpeed()) != 0) return false;
-            if (Float.compare(thatLocation.getBearing(), thisLocation.getBearing()) != 0) return false;
-            if (Float.compare(thatLocation.getAccuracy(), thisLocation.getAccuracy()) != 0) return false;
-            if (AndroidUtils.isApiAchieved(Build.VERSION_CODES.O)) {
-                if (Float.compare(thatLocation.getVerticalAccuracyMeters(),
-                    thisLocation.getVerticalAccuracyMeters()) != 0) {
-                    return false;
-                }
-                if (Float.compare(thatLocation.getSpeedAccuracyMetersPerSecond(),
-                    thisLocation.getSpeedAccuracyMetersPerSecond()) != 0) {
-                    return false;
-                }
-                if (Float.compare(thatLocation.getBearingAccuracyDegrees(),
-                    thisLocation.getBearingAccuracyDegrees()) != 0) {
-                    return false;
-                }
-            }
-            if (thisLocation.getProvider() != null ?
-                !thisLocation.getProvider().equals(thatLocation.getProvider()) :
-                thatLocation.getProvider() != null) return false;
-            return thisLocation.getExtras() != null ?
-                thisLocation.getExtras().equals(thatLocation.getExtras()) :
-                thatLocation.getExtras() == null;
-        }
 
         @Nullable
         public final String apiKey;
-        @Nullable
-        public final Location manualLocation;
         public final boolean locationTracking;
         public final boolean firstActivationAsUpdate;
         public final int sessionTimeout;
@@ -339,7 +285,6 @@ public class ReportRequestConfig extends CoreRequestConfig {
             this(
                 reporterArguments.apiKey,
                 reporterArguments.locationTracking,
-                reporterArguments.manualLocation,
                 reporterArguments.firstActivationAsUpdate,
                 reporterArguments.sessionTimeout,
                 reporterArguments.maxReportsCount,
@@ -353,7 +298,6 @@ public class ReportRequestConfig extends CoreRequestConfig {
 
         Arguments(@Nullable String apiKey,
                   @Nullable Boolean locationTracking,
-                  @Nullable Location manualLocation,
                   @Nullable Boolean firstActivationAsUpdate,
                   @Nullable Integer sessionTimeout,
                   @Nullable Integer maxReportsCount,
@@ -366,7 +310,6 @@ public class ReportRequestConfig extends CoreRequestConfig {
             this.apiKey = apiKey;
             this.locationTracking = WrapUtils.getOrDefault(locationTracking,
                 DefaultValues.DEFAULT_REPORT_LOCATION_ENABLED);
-            this.manualLocation = manualLocation;
             this.firstActivationAsUpdate = WrapUtils.getOrDefault(firstActivationAsUpdate,
                 DefaultValues.DEFAULT_FIRST_ACTIVATION_AS_UPDATE);
             this.sessionTimeout = Math.max(DefaultValues.DEFAULT_SESSION_TIMEOUT_SECONDS,
@@ -394,7 +337,6 @@ public class ReportRequestConfig extends CoreRequestConfig {
                 null,
                 null,
                 null,
-                null,
                 null
             );
         }
@@ -406,8 +348,6 @@ public class ReportRequestConfig extends CoreRequestConfig {
                 WrapUtils.getOrDefaultNullable(other.apiKey, apiKey),
                 WrapUtils.getOrDefaultNullable(
                     other.locationTracking, locationTracking),
-                WrapUtils.getOrDefaultNullable(
-                    other.manualLocation, manualLocation),
                 WrapUtils.getOrDefaultNullable(
                     other.firstActivationAsUpdate, firstActivationAsUpdate),
                 WrapUtils.getOrDefaultNullable(
@@ -476,7 +416,7 @@ public class ReportRequestConfig extends CoreRequestConfig {
                     return false;
                 }
             }
-            return arguments.manualLocation == null || compareLocations(manualLocation, arguments.manualLocation);
+            return true;
         }
 
     }
@@ -522,7 +462,6 @@ public class ReportRequestConfig extends CoreRequestConfig {
             config.setCertificates(mComponentUnit.getCertificatesFingerprintsProvider().getSha1());
 
             config.setLocationTracking(dataSource.componentArguments.locationTracking);
-            config.setManualLocation(dataSource.componentArguments.manualLocation);
             config.setFirstActivationAsUpdate(dataSource.componentArguments.firstActivationAsUpdate);
             config.setSessionTimeout(dataSource.componentArguments.sessionTimeout);
             config.setMaxReportsCount(dataSource.componentArguments.maxReportsCount);

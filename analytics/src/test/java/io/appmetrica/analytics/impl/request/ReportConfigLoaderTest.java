@@ -1,6 +1,5 @@
 package io.appmetrica.analytics.impl.request;
 
-import android.location.Location;
 import io.appmetrica.analytics.coreapi.internal.identifiers.AppSetId;
 import io.appmetrica.analytics.coreapi.internal.identifiers.AppSetIdScope;
 import io.appmetrica.analytics.coreapi.internal.identifiers.PlatformIdentifiers;
@@ -100,7 +99,6 @@ public class ReportConfigLoaderTest extends CommonTest {
                 null,
                 null,
                 null,
-                null,
                 5,
                 null,
                 null,
@@ -126,41 +124,36 @@ public class ReportConfigLoaderTest extends CommonTest {
         when(vitalComponentDataProvider.getAttributionId()).thenReturn(attributionId);
         doReturn(fingerprints).when(certificatesFingerprintsProvider).getSha1();
 
-        Location location = new Location("provider");
-
         ReportRequestConfig reportRequestConfig =
             new ReportRequestConfig.Loader(componentUnit, mock(ReportRequestConfig.DataSendingStrategy.class)).load(
-            new CoreRequestConfig.CoreDataSource<ReportRequestConfig.Arguments>(
-                new StartupState.Builder(new CollectingFlags.CollectingFlagsBuilder()
-                    .withPermissionsCollectingEnabled(true)
-                    .withFeaturesCollectingEnabled(true).build()
+                new CoreRequestConfig.CoreDataSource<ReportRequestConfig.Arguments>(
+                    new StartupState.Builder(new CollectingFlags.CollectingFlagsBuilder()
+                        .withPermissionsCollectingEnabled(true)
+                        .withFeaturesCollectingEnabled(true).build()
+                    )
+                        .withReportUrls(Arrays.asList("url1", "url2"))
+                        .withEncodedClidsFromResponse("clidsFromRepsonse")
+                        .build(),
+                    sdkEnvironmentProvider,
+                    platformIdentifiers,
+                    new ReportRequestConfig.Arguments(
+                        "apiKey",
+                        true,
+                        true,
+                        100,
+                        200,
+                        300,
+                        true,
+                        false,
+                        clids,
+                        250)
                 )
-                    .withReportUrls(Arrays.asList("url1", "url2"))
-                    .withEncodedClidsFromResponse("clidsFromRepsonse")
-                    .build(),
-                sdkEnvironmentProvider,
-                platformIdentifiers,
-                new ReportRequestConfig.Arguments(
-                    "apiKey",
-                    true,
-                    location,
-                    true,
-                    100,
-                    200,
-                    300,
-                    true,
-                    false,
-                    clids,
-                    250)
-            )
-        );
+            );
         SoftAssertions softAssertion = new SoftAssertions();
         softAssertion.assertThat(reportRequestConfig.getApiKey()).as("apiKey")
             .isEqualTo("apiKey");
         softAssertion.assertThat(reportRequestConfig.isLocationTracking()).as("isLocationTracking")
             .isTrue();
-        softAssertion.assertThat(reportRequestConfig.getManualLocation()).as("ManualLocation")
-            .isSameAs(location);
         softAssertion.assertThat(reportRequestConfig.isFirstActivationAsUpdate()).as("isFirstActivationAsUpdate")
             .isTrue();
         softAssertion.assertThat(reportRequestConfig.getSessionTimeout()).as("sessionTimeout")

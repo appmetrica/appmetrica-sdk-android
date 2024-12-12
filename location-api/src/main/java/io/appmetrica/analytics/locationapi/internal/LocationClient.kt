@@ -6,7 +6,7 @@ import io.appmetrica.analytics.coreapi.internal.backport.Consumer
 import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor
 import io.appmetrica.analytics.coreapi.internal.system.PermissionExtractor
 
-interface LocationClient : LocationControllerObserver {
+interface LocationClient : LocationControllerObserver, LocationProvider {
 
     val lastKnownExtractorProviderFactory: LastKnownLocationExtractorProviderFactory
 
@@ -23,13 +23,13 @@ interface LocationClient : LocationControllerObserver {
 
     fun updateLocationFilter(locationFilter: LocationFilter)
 
-    fun registerLocationSource(lastKnownLocationExtractorProvider: LastKnownLocationExtractorProvider)
+    fun registerSystemLocationSource(lastKnownLocationExtractorProvider: LastKnownLocationExtractorProvider)
 
-    fun unregisterLocationSource(lastKnownLocationExtractorProvider: LastKnownLocationExtractorProvider)
+    fun unregisterSystemLocationSource(lastKnownLocationExtractorProvider: LastKnownLocationExtractorProvider)
 
-    fun registerLocationSource(locationReceiverProvider: LocationReceiverProvider)
+    fun registerSystemLocationSource(locationReceiverProvider: LocationReceiverProvider)
 
-    fun unregisterLocationSource(locationReceiverProvider: LocationReceiverProvider)
+    fun unregisterSystemLocationSource(locationReceiverProvider: LocationReceiverProvider)
 
-    val location: Location?
+    fun updateUserLocation(location: Location?)
 }

@@ -141,53 +141,53 @@ internal class LocationClientImplTest {
 
     @Test
     fun `registerLocationSource with last known extractor provider without init`() {
-        locationClientImpl.registerLocationSource(lastKnownLocationExtractorProvider)
+        locationClientImpl.registerSystemLocationSource(lastKnownLocationExtractorProvider)
         verifyNoMoreInteractions(lastKnownLocationExtractorProvider)
     }
 
     @Test
     fun `registerLocationSource with last known extractor provider after init`() {
         locationClientImpl.init(context, permissionExtractor, executor, filledConsumers)
-        locationClientImpl.registerLocationSource(lastKnownLocationExtractorProvider)
+        locationClientImpl.registerSystemLocationSource(lastKnownLocationExtractorProvider)
         verify(defaultLocationCore()).registerLastKnownSource(lastKnownLocationExtractorProvider)
     }
 
     @Test
     fun `unregisterLocationSource with last known extractor provider without init`() {
-        locationClientImpl.unregisterLocationSource(lastKnownLocationExtractorProvider)
+        locationClientImpl.unregisterSystemLocationSource(lastKnownLocationExtractorProvider)
         verifyNoMoreInteractions(lastKnownLocationExtractorProvider)
     }
 
     @Test
     fun `unregisterLocationSource with last known extractor provider after init`() {
         locationClientImpl.init(context, permissionExtractor, executor, filledConsumers)
-        locationClientImpl.unregisterLocationSource(lastKnownLocationExtractorProvider)
+        locationClientImpl.unregisterSystemLocationSource(lastKnownLocationExtractorProvider)
         verify(defaultLocationCore()).unregisterLastKnownSource(lastKnownLocationExtractorProvider)
     }
 
     @Test
     fun `registerLocationSource with location receiver before init`() {
-        locationClientImpl.registerLocationSource(locationReceiverProvider)
+        locationClientImpl.registerSystemLocationSource(locationReceiverProvider)
         verifyNoMoreInteractions(locationReceiverProvider)
     }
 
     @Test
     fun `registerLocationSource with location receiver after init`() {
         locationClientImpl.init(context, permissionExtractor, executor, filledConsumers)
-        locationClientImpl.registerLocationSource(locationReceiverProvider)
+        locationClientImpl.registerSystemLocationSource(locationReceiverProvider)
         verify(defaultLocationCore()).registerLocationReceiver(locationReceiverProvider)
     }
 
     @Test
     fun `unregisterLocationSource with location receiver before init`() {
-        locationClientImpl.unregisterLocationSource(locationReceiverProvider)
+        locationClientImpl.unregisterSystemLocationSource(locationReceiverProvider)
         verifyNoMoreInteractions(locationReceiverProvider)
     }
 
     @Test
     fun `unregisterLocationSource with location receiver after init`() {
         locationClientImpl.init(context, permissionExtractor, executor, filledConsumers)
-        locationClientImpl.unregisterLocationSource(locationReceiverProvider)
+        locationClientImpl.unregisterSystemLocationSource(locationReceiverProvider)
         verify(defaultLocationCore()).unregisterLocationReceiver(locationReceiverProvider)
     }
 
@@ -216,22 +216,40 @@ internal class LocationClientImplTest {
     }
 
     @Test
-    fun `location before init`() {
-        assertThat(locationClientImpl.location).isNull()
+    fun `systemLocation before init`() {
+        assertThat(locationClientImpl.systemLocation).isNull()
     }
 
     @Test
-    fun `location after init if return null`() {
+    fun `systemLocation after init if return null`() {
         locationClientImpl.init(context, permissionExtractor, executor, filledConsumers)
-        whenever(defaultLocationCore().cachedLocation).thenReturn(null)
-        assertThat(locationClientImpl.location).isNull()
+        whenever(defaultLocationCore().cachedSystemLocation).thenReturn(null)
+        assertThat(locationClientImpl.systemLocation).isNull()
     }
 
     @Test
-    fun `location after init`() {
+    fun `systemLocation after init`() {
         locationClientImpl.init(context, permissionExtractor, executor, filledConsumers)
-        whenever(defaultLocationCore().cachedLocation).thenReturn(location)
-        assertThat(locationClientImpl.location).isEqualTo(location)
+        whenever(defaultLocationCore().cachedSystemLocation).thenReturn(location)
+        assertThat(locationClientImpl.systemLocation).isEqualTo(location)
+    }
+
+    @Test
+    fun `userLocation before init`() {
+        assertThat(locationClientImpl.userLocation).isNull()
+    }
+
+    @Test
+    fun `userLocation after init`() {
+        locationClientImpl.init(context, permissionExtractor, executor, filledConsumers)
+        whenever(defaultLocationCore().userLocation).thenReturn(location)
+        assertThat(locationClientImpl.userLocation).isEqualTo(location)
+    }
+
+    @Test
+    fun `userLocation after init if null`() {
+        locationClientImpl.init(context, permissionExtractor, executor, filledConsumers)
+        assertThat(locationClientImpl.userLocation).isNull()
     }
 
     private fun defaultLocationCore(): LocationCore =

@@ -84,7 +84,6 @@ class ReportLoaderDefaultValuesTest(
                 null,
                 null,
                 null,
-                null,
                 null
             )
         )

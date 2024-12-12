@@ -9,6 +9,8 @@ import io.appmetrica.analytics.impl.request.ReportRequestConfig
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
 import io.appmetrica.analytics.testutils.MockedStaticRule
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -46,27 +48,30 @@ class DbLocationModelFactoryTest : CommonTest() {
 
     private val reportRequestConfig: ReportRequestConfig = mock {
         on { isLocationTracking } doReturn isLocationTracking
-        on { manualLocation } doReturn location
     }
 
     @get:Rule
     val globalServiceLocatorRule = GlobalServiceLocatorRule()
+
     @get:Rule
     val yLocationRule = MockedStaticRule(YLocation::class.java)
 
-    private val factory = DbLocationModelFactory(
-        reportRequestConfig
-    )
+    private val factory by setUp { DbLocationModelFactory(reportRequestConfig) }
+
+    @Before
+    fun setUp() {
+        whenever(GlobalServiceLocator.getInstance().locationClientApi.userLocation).thenReturn(location)
+    }
 
     @Test
-    fun buildIfLocationDisabledAndManualLocationIsPresent() {
-        whenever(reportRequestConfig.isLocationTracking).thenReturn(false)
+    fun buildIfUserLocationIsPresent() {
         whenever(YLocation.createWithOriginalProvider(location)).thenReturn(yLocation)
+        whenever(GlobalServiceLocator.getInstance().locationClientApi.systemLocation).thenReturn(mock<Location>())
 
         val model = factory.create()
 
         ObjectPropertyAssertions(model)
-            .checkField("enabled", false)
+            .checkField("enabled", true)
             .checkField("latitude", latitude)
             .checkField("longitude", longitude)
             .checkField("timestamp", timestamp)
@@ -80,54 +85,15 @@ class DbLocationModelFactoryTest : CommonTest() {
     }
 
     @Test
-    fun buildIfLocationDisabledAndManualLocationIsNotPresent() {
-        whenever(reportRequestConfig.isLocationTracking).thenReturn(false)
-        whenever(reportRequestConfig.manualLocation).thenReturn(null)
-        whenever(YLocation.createWithOriginalProvider(location)).thenReturn(yLocation)
-
-        val model = factory.create()
-
-        yLocationRule.staticMock.verifyNoInteractions()
-
-        ObjectPropertyAssertions(model)
-            .checkField("enabled", false)
-            .checkFieldsAreNull(
-                "latitude", "longitude", "timestamp", "precision", "direction", "speed", "altitude",
-                "provider", "originalProvider"
-            )
-            .checkAll()
-    }
-
-    @Test
-    fun buildIfLocationIsManual() {
-        whenever(YLocation.createWithOriginalProvider(location)).thenReturn(yLocation)
-
-        val model = factory.create()
-
-        ObjectPropertyAssertions(model)
-            .checkField("enabled", isLocationTracking)
-            .checkField("latitude", latitude)
-            .checkField("longitude", longitude)
-            .checkField("timestamp", timestamp)
-            .checkField("precision", precision)
-            .checkField("direction", direction)
-            .checkField("speed", speed)
-            .checkField("altitude", altitude)
-            .checkField("provider", provider)
-            .checkField("originalProvider", originalProvider)
-            .checkAll()
-    }
-
-    @Test
-    fun buildIfLocationIsCached() {
-        whenever(reportRequestConfig.manualLocation).thenReturn(null)
-        whenever(GlobalServiceLocator.getInstance().locationClientApi.getLocation()).thenReturn(location)
+    fun buildIfOnlySystemLocationIsPresent() {
         whenever(YLocation.createWithoutOriginalProvider(location)).thenReturn(yLocation)
+        whenever(GlobalServiceLocator.getInstance().locationClientApi.userLocation).thenReturn(null)
+        whenever(GlobalServiceLocator.getInstance().locationClientApi.systemLocation).thenReturn(location)
 
         val model = factory.create()
 
         ObjectPropertyAssertions(model)
-            .checkField("enabled", isLocationTracking)
+            .checkField("enabled", true)
             .checkField("latitude", latitude)
             .checkField("longitude", longitude)
             .checkField("timestamp", timestamp)
@@ -142,11 +108,9 @@ class DbLocationModelFactoryTest : CommonTest() {
 
     @Test
     fun buildIfLocationIsNull() {
-        whenever(reportRequestConfig.manualLocation).thenReturn(null)
-        whenever(GlobalServiceLocator.getInstance().locationClientApi.getLocation()).thenReturn(null)
-
+        whenever(GlobalServiceLocator.getInstance().locationClientApi.userLocation).thenReturn(null)
+        whenever(GlobalServiceLocator.getInstance().locationClientApi.systemLocation).thenReturn(null);
         val model = factory.create()
-
         yLocationRule.staticMock.verifyNoInteractions()
 
         ObjectPropertyAssertions(model)
@@ -156,5 +120,18 @@ class DbLocationModelFactoryTest : CommonTest() {
                 "provider", "originalProvider"
             )
             .checkAll()
+    }
+
+    @Test
+    fun buildIfLocationTrackingEnabled() {
+        val model = factory.create()
+        assertThat(model.enabled).isTrue()
+    }
+
+    @Test
+    fun buildIfLocationTrackingDisabled() {
+        whenever(reportRequestConfig.isLocationTracking).thenReturn(false)
+        val model = factory.create()
+        assertThat(model.enabled).isFalse()
     }
 }

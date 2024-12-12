@@ -9,6 +9,7 @@ import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.component.CommonArguments;
 import io.appmetrica.analytics.impl.component.CommutationDispatcherComponent;
 import io.appmetrica.analytics.impl.component.clients.CommutationClientUnit;
+import io.appmetrica.analytics.impl.location.LocationClientApi;
 import io.appmetrica.analytics.impl.utils.BooleanUtils;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 
@@ -29,7 +30,7 @@ public class UpdatePreActivationConfigHandler extends CommutationHandler {
         DebugLogger.INSTANCE.info(TAG, "process: %s", reportData);
         CommonArguments.ReporterArguments counterConfiguration = clientUnit.getComponent().getConfiguration();
         mRestrictionController.setEnabledFromMainReporter(counterConfiguration.dataSendingEnabled);
-        updateTrackingLocationStatus(counterConfiguration.locationTracking);
+        updateLocationStatus(counterConfiguration);
         updateTrackingAdvIdentifiersStatus(counterConfiguration.advIdentifiersTrackingEnabled);
         return false;
     }
@@ -46,18 +47,22 @@ public class UpdatePreActivationConfigHandler extends CommutationHandler {
         );
     }
 
-    private void updateTrackingLocationStatus(@Nullable Boolean trackingEnabled) {
+    private void updateLocationStatus(@NonNull CommonArguments.ReporterArguments arguments) {
         DebugLogger.INSTANCE.info(
             TAG,
-            "Update location status for %s: enabled = %s",
+            "Update location status for %s: enabled = %s; location = %s",
             getComponent().getComponentId().toString(),
-            String.valueOf(trackingEnabled)
+            String.valueOf(arguments.locationTracking),
+            String.valueOf(arguments.manualLocation)
         );
 
-        if (BooleanUtils.isTrue(trackingEnabled)) {
-            GlobalServiceLocator.getInstance().getLocationClientApi().updateTrackingStatusFromClient(true);
-        } else if (BooleanUtils.isFalse(trackingEnabled)) {
-            GlobalServiceLocator.getInstance().getLocationClientApi().updateTrackingStatusFromClient(false);
+        LocationClientApi locationClientApi = GlobalServiceLocator.getInstance().getLocationClientApi();
+
+        if (BooleanUtils.isTrue(arguments.locationTracking)) {
+            locationClientApi.updateTrackingStatusFromClient(true);
+        } else if (BooleanUtils.isFalse(arguments.locationTracking)) {
+            locationClientApi.updateTrackingStatusFromClient(false);
         }
+        locationClientApi.updateLocationFromClient(arguments.manualLocation);
     }
 }

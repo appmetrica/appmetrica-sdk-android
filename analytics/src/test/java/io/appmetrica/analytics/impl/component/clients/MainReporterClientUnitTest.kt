@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.impl.component.clients
 
 import android.content.Context
+import android.location.Location
 import io.appmetrica.analytics.impl.CounterReport
 import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.InternalEvents
@@ -16,7 +17,9 @@ import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.any
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.never
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoInteractions
@@ -58,6 +61,20 @@ class MainReporterClientUnitTest : CommonTest() {
         whenever(counterConfiguration.isLocationTrackingEnabled()).thenReturn(value)
         mainReporterClientUnit.handleReport(CounterReport(), clientConfiguration)
         verify(GlobalServiceLocator.getInstance().locationClientApi).updateTrackingStatusFromClient(value)
+    }
+
+    @Test
+    fun updateLocation() {
+        val location: Location = mock()
+        whenever(counterConfiguration.manualLocation).thenReturn(location)
+        mainReporterClientUnit.handleReport(CounterReport(), clientConfiguration)
+        verify(GlobalServiceLocator.getInstance().locationClientApi).updateLocationFromClient(location)
+    }
+
+    @Test
+    fun `updateLocation if null`() {
+        mainReporterClientUnit.handleReport(CounterReport(), clientConfiguration)
+        verify(GlobalServiceLocator.getInstance().locationClientApi).updateLocationFromClient(null)
     }
 
     @Test
