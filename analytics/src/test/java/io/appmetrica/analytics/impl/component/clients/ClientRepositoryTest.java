@@ -30,7 +30,7 @@ public class ClientRepositoryTest extends CommonTest {
     @Mock
     private ComponentsRepository mComponentsRepository;
     @Mock
-    private ClientUnitFactoryHolder mClientUnitFactoryHolder;
+    private ClientUnitFactoryProvider mClientUnitFactoryProvider;
     @Mock
     private ClientUnitFactory mFactory;
     @Mock
@@ -43,8 +43,8 @@ public class ClientRepositoryTest extends CommonTest {
     public void setUp() {
         MockitoAnnotations.openMocks(this);
         mContext = RuntimeEnvironment.getApplication();
-        when(mClientUnitFactoryHolder.getClientUnitFactory(any(ClientDescription.class))).thenReturn(mFactory);
-        mClientRepository = new ClientRepository(mContext, mComponentsRepository, mClientUnitFactoryHolder);
+        when(mClientUnitFactoryProvider.getClientUnitFactory(any(ClientDescription.class))).thenReturn(mFactory);
+        mClientRepository = new ClientRepository(mContext, mComponentsRepository, mClientUnitFactoryProvider);
     }
 
     @Test

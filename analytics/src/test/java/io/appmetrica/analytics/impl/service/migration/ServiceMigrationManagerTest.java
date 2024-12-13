@@ -5,11 +5,12 @@ import android.util.SparseArray;
 import io.appmetrica.analytics.AppMetrica;
 import io.appmetrica.analytics.BuildConfig;
 import io.appmetrica.analytics.coreutils.internal.io.FileUtils;
-import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.MigrationManager;
 import io.appmetrica.analytics.impl.SdkData;
+import io.appmetrica.analytics.impl.db.DatabaseStorage;
 import io.appmetrica.analytics.impl.db.VitalCommonDataProvider;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesServiceDbStorage;
+import io.appmetrica.analytics.impl.db.storage.DatabaseStorageFactory;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import io.appmetrica.analytics.testutils.MockedConstructionRule;
@@ -58,6 +59,24 @@ public class ServiceMigrationManagerTest extends CommonTest {
     public MockedConstructionRule<VitalCommonDataProvider> vitalCommonDataProviderMockedRule =
         new MockedConstructionRule<>(VitalCommonDataProvider.class);
 
+    @Mock
+    private DatabaseStorage databaseStorage;
+
+    @Mock
+    private DatabaseStorageFactory databaseStorageFactory;
+
+    @Rule
+    public MockedStaticRule<DatabaseStorageFactory> databaseStorageFactoryMockedStaticRule =
+        new MockedStaticRule<>(DatabaseStorageFactory.class);
+
+    @Rule
+    public MockedConstructionRule<ServiceMigrationScriptToV112> serviceMigrationScriptToV112MockedConstructionRule =
+        new MockedConstructionRule<>(ServiceMigrationScriptToV112.class);
+
+    @Rule
+    public MockedConstructionRule<ServiceMigrationScriptToV115> serviceMigrationScriptToV115MockedConstructionRule =
+        new MockedConstructionRule<>(ServiceMigrationScriptToV115.class);
+
     @Rule
     public GlobalServiceLocatorRule globalServiceLocatorRule = new GlobalServiceLocatorRule();
 
@@ -66,7 +85,8 @@ public class ServiceMigrationManagerTest extends CommonTest {
     @Before
     public void setup() {
         MockitoAnnotations.openMocks(this);
-        GlobalServiceLocator.init(RuntimeEnvironment.getApplication());
+        when(DatabaseStorageFactory.getInstance(mContext)).thenReturn(databaseStorageFactory);
+        when(databaseStorageFactory.getStorageForService()).thenReturn(databaseStorage);
         when(mPreferencesServiceDbStorage.putUncheckedTime(anyBoolean())).thenReturn(mPreferencesServiceDbStorage);
         when(mPreferencesServiceDbStorage.remove(anyString())).thenReturn(mPreferencesServiceDbStorage);
 

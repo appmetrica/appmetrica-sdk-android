@@ -22,8 +22,8 @@ public class MainReporter extends BaseReporter implements IMainReporter {
 
     private static final String TAG = "[MainReporter]";
 
-    private static final Validator<String> sReferralUrlValidator = new ThrowIfFailedValidator<String>(
-            new NonEmptyStringValidator("Referral url")
+    private final Validator<String> referralUrlValidator = new ThrowIfFailedValidator<>(
+        new NonEmptyStringValidator("Referral url")
     );
 
     private static final Long USER_SESSION_TIMEOUT = TimeUnit.SECONDS.toMillis(1);
@@ -75,7 +75,7 @@ public class MainReporter extends BaseReporter implements IMainReporter {
 
     @Override
     public void reportReferralUrl(@NonNull String referralUrl) {
-        sReferralUrlValidator.validate(referralUrl);
+        referralUrlValidator.validate(referralUrl);
         mReportsHandler.reportEvent(EventsManager.referralUrlReportEntry(referralUrl, mPublicLogger),
                 mReporterEnvironment);
         mPublicLogger.info("Referral URL received: " + WrapUtils.wrapToTag(referralUrl));

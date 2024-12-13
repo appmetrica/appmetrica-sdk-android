@@ -26,19 +26,19 @@ public class ClientRepository {
     @NonNull private final Context mContext;
     private volatile int mClientsCount = 0;
     @NonNull
-    private final ClientUnitFactoryHolder mClientUnitFactoryHolder;
+    private final ClientUnitFactoryProvider mClientUnitFactoryProvider;
 
     public ClientRepository(@NonNull Context context, @NonNull ComponentsRepository componentsRepository) {
-        this(context, componentsRepository, new ClientUnitFactoryHolder());
+        this(context, componentsRepository, new ClientUnitFactoryProvider());
     }
 
     @VisibleForTesting
     ClientRepository(@NonNull Context context,
                      @NonNull ComponentsRepository componentsRepository,
-                     @NonNull ClientUnitFactoryHolder clientUnitFactoryHolder) {
+                     @NonNull ClientUnitFactoryProvider clientUnitFactoryProvider) {
         mContext = context.getApplicationContext();
         mComponentsRepository = componentsRepository;
-        mClientUnitFactoryHolder = clientUnitFactoryHolder;
+        mClientUnitFactoryProvider = clientUnitFactoryProvider;
     }
 
     public ClientUnit getOrCreateClient(@NonNull ClientDescription clientDescription,
@@ -48,7 +48,7 @@ public class ClientRepository {
             ClientUnit unit = mConnectedClients.get(clientDescription);
             if (unit == null) {
                 DebugLogger.INSTANCE.info(TAG, "no client found for %s. Create new.", clientDescription);
-                unit = mClientUnitFactoryHolder.getClientUnitFactory(clientDescription)
+                unit = mClientUnitFactoryProvider.getClientUnitFactory(clientDescription)
                         .createClientUnit(mContext, mComponentsRepository, clientDescription, sdkConfig);
                 mConnectedClients.put(clientDescription, unit);
                 mTaggedClients.put(new Tag(clientDescription), clientDescription);

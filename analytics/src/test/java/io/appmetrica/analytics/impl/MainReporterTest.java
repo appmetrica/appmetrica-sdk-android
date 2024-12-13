@@ -6,14 +6,15 @@ import android.location.Location;
 import io.appmetrica.analytics.AppMetricaConfig;
 import io.appmetrica.analytics.ExternalAttribution;
 import io.appmetrica.analytics.ValidationException;
+import io.appmetrica.analytics.impl.crash.jvm.client.MainReporterAnrController;
 import io.appmetrica.analytics.impl.crash.jvm.client.UnhandledException;
-import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoWrapper;
-import io.appmetrica.analytics.impl.reporter.ReporterLifecycleListener;
 import io.appmetrica.analytics.impl.startup.StartupHelper;
 import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule;
+import io.appmetrica.analytics.testutils.MockedConstructionRule;
 import io.appmetrica.analytics.testutils.StubbedBlockingExecutor;
 import java.util.Map;
+import org.assertj.core.api.ThrowableAssert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -27,10 +28,12 @@ import org.robolectric.ParameterizedRobolectricTestRunner;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Mockito.atLeast;
+import static org.mockito.Mockito.clearInvocations;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
@@ -59,17 +62,15 @@ public class MainReporterTest extends BaseReporterTest {
     @Mock
     private ReporterEnvironment mAnotherReporterEnvironment;
     @Mock
-    private ClientServiceLocator clientServiceLocator;
-    @Mock
     private ActivityStateManager activityStateManager;
     @Mock
     private Activity activity;
-    @Mock
-    private ReporterLifecycleListener reporterLifecycleListener;
-    @Captor
-    private ArgumentCaptor<PreloadInfoWrapper> mPreloadInfoWrapperCaptor;
     @Rule
     public final ClientServiceLocatorRule clientServiceLocatorRule = new ClientServiceLocatorRule();
+
+    @Rule
+    public MockedConstructionRule<MainReporterAnrController> mainReporterAnrControllerRule =
+        new MockedConstructionRule<>(MainReporterAnrController.class);
 
     private MainReporter mMainReporter;
 
@@ -380,15 +381,26 @@ public class MainReporterTest extends BaseReporterTest {
         verify(mReportsHandler).reportEvent(same(mockedEvent), any(ReporterEnvironment.class));
     }
 
-    @Test(expected = ValidationException.class)
+    @Test
     public void testReportReferralUrlForNull() throws Exception {
-        mMainReporter.reportReferralUrl(null);
+        clearInvocations(mReportsHandler);
+        assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
+            @Override
+            public void call() throws Throwable {
+                mMainReporter.reportReferralUrl(null);
+            }
+        }).isExactlyInstanceOf(ValidationException.class);
         verifyNoMoreInteractions(mReportsHandler);
     }
 
-    @Test(expected = ValidationException.class)
     public void testReportReferralUrlForEmptyString() throws Exception {
-        mMainReporter.reportReferralUrl("");
+        clearInvocations(mReportsHandler);
+        assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
+            @Override
+            public void call() throws Throwable {
+                mMainReporter.reportReferralUrl("");
+            }
+        }).isExactlyInstanceOf(ValidationException.class);
         verifyNoMoreInteractions(mReportsHandler);
     }
     //endregion

@@ -5,12 +5,31 @@ import android.content.SharedPreferences;
 import io.appmetrica.analytics.impl.InternalEvents;
 import io.appmetrica.analytics.impl.component.ComponentId;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
+import io.appmetrica.analytics.impl.component.processor.event.ApplySettingsFromActivationConfigHandler;
+import io.appmetrica.analytics.impl.component.processor.event.ExternalAttributionHandler;
+import io.appmetrica.analytics.impl.component.processor.event.ReportAppEnvironmentClearedHandler;
+import io.appmetrica.analytics.impl.component.processor.event.ReportAppEnvironmentUpdatedHandler;
+import io.appmetrica.analytics.impl.component.processor.event.ReportAppOpenHandler;
+import io.appmetrica.analytics.impl.component.processor.event.ReportCrashMetaInformation;
+import io.appmetrica.analytics.impl.component.processor.event.ReportFeaturesHandler;
+import io.appmetrica.analytics.impl.component.processor.event.ReportFirstHandler;
 import io.appmetrica.analytics.impl.component.processor.event.ReportFirstOccurrenceStatusHandler;
+import io.appmetrica.analytics.impl.component.processor.event.ReportPermissionHandler;
+import io.appmetrica.analytics.impl.component.processor.event.ReportPrevSessionNativeCrashHandler;
+import io.appmetrica.analytics.impl.component.processor.event.ReportPurgeBufferHandler;
 import io.appmetrica.analytics.impl.component.processor.event.ReportSaveToDatabaseHandler;
 import io.appmetrica.analytics.impl.component.processor.event.ReportSessionHandler;
+import io.appmetrica.analytics.impl.component.processor.event.SaveInitialUserProfileIDHandler;
+import io.appmetrica.analytics.impl.component.processor.event.SavePreloadInfoHandler;
+import io.appmetrica.analytics.impl.component.processor.event.SaveSessionExtrasHandler;
+import io.appmetrica.analytics.impl.component.processor.event.SubscribeForReferrerHandler;
+import io.appmetrica.analytics.impl.component.processor.event.UpdateUserProfileIDHandler;
 import io.appmetrica.analytics.impl.component.processor.event.modules.ModulesEventHandler;
+import io.appmetrica.analytics.impl.component.processor.factory.ReportingHandlerProvider;
+import io.appmetrica.analytics.impl.component.processor.session.ReportSessionStopHandler;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
+import io.appmetrica.analytics.testutils.MockedConstructionRule;
 import io.appmetrica.analytics.testutils.TestUtils;
 import java.util.List;
 import java.util.UUID;
@@ -58,6 +77,33 @@ public class EventProcessorStrategyFactoryTest extends CommonTest {
 
     @Rule
     public final GlobalServiceLocatorRule mGlobalServiceLocatorRule = new GlobalServiceLocatorRule();
+
+    @Rule
+    public MockedConstructionRule<ReportingHandlerProvider> reportingHandlerProviderMockedConstructionRule =
+        new MockedConstructionRule<>(ReportingHandlerProvider.class, (mock, context) -> {
+            when(mock.getReportPurgeBufferHandler()).thenReturn(mock(ReportPurgeBufferHandler.class));
+            when(mock.getReportSaveToDatabaseHandler()).thenReturn(mock(ReportSaveToDatabaseHandler.class));
+            when(mock.getReportSessionHandler()).thenReturn(mock(ReportSessionHandler.class));
+            when(mock.getReportSessionStopHandler()).thenReturn(mock(ReportSessionStopHandler.class));
+            when(mock.getReportAppEnvironmentUpdated()).thenReturn(mock(ReportAppEnvironmentUpdatedHandler.class));
+            when(mock.getReportAppEnvironmentCleared()).thenReturn(mock(ReportAppEnvironmentClearedHandler.class));
+            when(mock.getReportFirstHandler()).thenReturn(mock(ReportFirstHandler.class));
+            when(mock.getReportPrevSessionNativeCrashHandler()).thenReturn(mock(ReportPrevSessionNativeCrashHandler.class));
+            when(mock.getReportPermissionsHandler()).thenReturn(mock(ReportPermissionHandler.class));
+            when(mock.getReportFeaturesHandler()).thenReturn(mock(ReportFeaturesHandler.class));
+            when(mock.getUpdateUserProfileIDHandler()).thenReturn(mock(UpdateUserProfileIDHandler.class));
+            when(mock.getReportAppOpenHandler()).thenReturn(mock(ReportAppOpenHandler.class));
+            when(mock.getReportFirstOccurrenceStatusHandler()).thenReturn(mock(ReportFirstOccurrenceStatusHandler.class));
+            when(mock.getReportCrashMetaInformation()).thenReturn(mock(ReportCrashMetaInformation.class));
+            when(mock.getSavePreloadInfoHandler()).thenReturn(mock(SavePreloadInfoHandler.class));
+            when(mock.getApplySettingsFromActivationConfigHandler())
+                .thenReturn(mock(ApplySettingsFromActivationConfigHandler.class));
+            when(mock.getSubscribeForReferrerHandler()).thenReturn(mock(SubscribeForReferrerHandler.class));
+            when(mock.getSaveInitialUserProfileIDHandler()).thenReturn(mock(SaveInitialUserProfileIDHandler.class));
+            when(mock.getModulesEventHandler()).thenReturn(mock(ModulesEventHandler.class));
+            when(mock.getSaveSessionExtrasHandler()).thenReturn(mock(SaveSessionExtrasHandler.class));
+            when(mock.getExternalAttributionHandler()).thenReturn(mock(ExternalAttributionHandler.class));
+        });
 
     @Before
     public void setUp() {
