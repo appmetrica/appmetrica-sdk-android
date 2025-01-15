@@ -14,12 +14,10 @@ import io.appmetrica.analytics.DeferredDeeplinkListener;
 import io.appmetrica.analytics.DeferredDeeplinkParametersListener;
 import io.appmetrica.analytics.ReporterConfig;
 import io.appmetrica.analytics.StartupParamsCallback;
-import io.appmetrica.analytics.coreutils.internal.executors.BlockingExecutor;
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Executor;
 import java.util.concurrent.FutureTask;
 
 public class AppMetricaFacade implements IReporterFactoryProvider {
@@ -55,22 +53,18 @@ public class AppMetricaFacade implements IReporterFactoryProvider {
         });
     }
 
-    public void init(boolean async) {
-        ClientServiceLocator clientServiceLocator = ClientServiceLocator.getInstance();
-        Executor executorForInit = async
-            ? clientServiceLocator.getClientExecutorProvider().getDefaultExecutor()
-            : new BlockingExecutor();
-
-        executorForInit.execute(() -> {
-            DebugLogger.INSTANCE.info(TAG, "Init first launch detector");
-            clientServiceLocator.getFirstLaunchDetector().init(mContext);
-            DebugLogger.INSTANCE.info(TAG, "Check client migration");
-            new ClientMigrationManager(mContext).checkMigration(mContext);
-            DebugLogger.INSTANCE.info(TAG, "Warm up uuid");
-            ClientServiceLocator.getInstance().getMultiProcessSafeUuidProvider(mContext).readUuid();
-        });
-        DebugLogger.INSTANCE.info(TAG, "schedule createImpl");
-        executorForInit.execute(mFullInitFuture);
+    public void init() {
+        ClientServiceLocator.getInstance().getClientExecutorProvider().getCoreInitThread(
+            () -> {
+                DebugLogger.INSTANCE.info(TAG, "Init first launch detector");
+                ClientServiceLocator.getInstance().getFirstLaunchDetector().init(mContext);
+                DebugLogger.INSTANCE.info(TAG, "Check client migration");
+                new ClientMigrationManager(mContext).checkMigration(mContext);
+                DebugLogger.INSTANCE.info(TAG, "Warm up uuid");
+                ClientServiceLocator.getInstance().getMultiProcessSafeUuidProvider(mContext).readUuid();
+                mFullInitFuture.run();
+            }
+        ).start();
     }
 
     @AnyThread
@@ -81,10 +75,7 @@ public class AppMetricaFacade implements IReporterFactoryProvider {
 
     @AnyThread
     @NonNull
-    public static AppMetricaFacade getInstance(
-        @NonNull final Context context,
-        boolean asyncInit // For calls from non default executor
-    ) {
+    public static AppMetricaFacade getInstance(@NonNull final Context context) {
         AppMetricaFacade localCopy = sInstance;
         if (localCopy == null) {
             synchronized (AppMetricaFacade.class) {
@@ -92,7 +83,7 @@ public class AppMetricaFacade implements IReporterFactoryProvider {
                 if (localCopy == null) {
                     DebugLogger.INSTANCE.info(TAG, "needs create facade");
                     localCopy = new AppMetricaFacade(context);
-                    localCopy.init(asyncInit);
+                    localCopy.init();
                     localCopy.onInstanceCreated();
                     sInstance = localCopy;
                 }
@@ -187,11 +178,13 @@ public class AppMetricaFacade implements IReporterFactoryProvider {
     @WorkerThread
     public void activateFull(@NonNull AppMetricaConfig config) {
         getImpl().activate(config);
+        AppMetricaSelfReportFacade.onFullyInitializationFinished(mContext);
     }
 
     @WorkerThread
     public void activateFull() {
         getImpl().activateAnonymously();
+        AppMetricaSelfReportFacade.onFullyInitializationFinished(mContext);
     }
 
     @WorkerThread

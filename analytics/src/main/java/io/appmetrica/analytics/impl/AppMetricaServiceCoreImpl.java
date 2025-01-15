@@ -165,7 +165,8 @@ public class AppMetricaServiceCoreImpl implements AppMetricaServiceCore, AppMetr
 
         mReportConsumer = fieldsFactory.createReportConsumer(mContext, mClientRepository);
 
-        AppMetricaSelfReportFacade.warmupForMetricaProcess(mContext);
+        DebugLogger.INSTANCE.info(TAG, "Warm up self reporter");
+        AppMetricaSelfReportFacade.warmupForSelfProcess(mContext);
         initJvmCrashWatcher();
         initNativeCrashReporting();
         DebugLogger.INSTANCE.info(TAG, "Run scheduler on first create additional tasks");

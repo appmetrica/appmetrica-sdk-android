@@ -23,7 +23,7 @@ class LibraryAdapterSynchronousStageExecutor(
         } else {
             logger.info("Session autotracking disabled")
         }
-        appMetricaFacadeProvider.getInitializedImpl(context, true).activateCore(null)
+        appMetricaFacadeProvider.getInitializedImpl(context).activateCore(null)
     }
 
     fun reportEvent(

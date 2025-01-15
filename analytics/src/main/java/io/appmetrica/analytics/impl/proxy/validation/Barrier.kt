@@ -206,7 +206,11 @@ class Barrier(
     }
 
     fun getUuid(context: Context?) {
-        callbackValidator.validate(context)
+        contextValidator.validate(context)
+    }
+
+    fun getDeviceId(context: Context?) {
+        contextValidator.validate(context)
     }
 
     fun registerAnrListener(listener: AnrListener?) {
@@ -309,5 +313,9 @@ class Barrier(
 
     fun reportAnr(allThread: Map<Thread, Array<StackTraceElement>>?) {
         anrAllThreadValidator.validate(allThread)
+    }
+
+    fun warmUpForSelfProcess(context: Context?) {
+        contextValidator.validate(context)
     }
 }

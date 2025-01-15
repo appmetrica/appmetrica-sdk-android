@@ -563,6 +563,12 @@ public final class AppMetricaProxy extends BaseAppMetricaProxy {
         });
     }
 
+    public void warmUpForSelfProcess(@NonNull Context context) {
+        barrier.warmUpForSelfProcess(context);
+        synchronousStageExecutor.warmUpForSelfReporter(context);
+        getProvider().getInitializedImpl(context);
+    }
+
     @VisibleForTesting
     Barrier getMainFacadeBarrier() {
         return barrier;

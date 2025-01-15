@@ -122,7 +122,7 @@ class SynchronousStageExecutor @VisibleForTesting constructor(
         } else {
             logger.info("Session auto tracking disabled")
         }
-        provider.getInitializedImpl(context, true).activateCore(config)
+        provider.getInitializedImpl(context).activateCore(config)
     }
 
     fun enableActivityAutoTracking(application: Application) {
@@ -211,4 +211,8 @@ class SynchronousStageExecutor @VisibleForTesting constructor(
     fun reportExternalAdRevenue(vararg values: Any) {}
 
     fun reportAnr(allThreads: Map<Thread, Array<StackTraceElement>>) {}
+
+    fun warmUpForSelfReporter(context: Context) {
+        contextAppearedListener.onProbablyAppeared(context)
+    }
 }

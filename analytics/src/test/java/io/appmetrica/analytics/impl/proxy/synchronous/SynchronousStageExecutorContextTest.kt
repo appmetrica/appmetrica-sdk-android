@@ -29,7 +29,7 @@ class SynchronousStageExecutorContextTest : CommonTest() {
     private val context: Context = mock()
     private val appMetricaFacade: AppMetricaFacade = mock()
     private val provider: AppMetricaFacadeProvider = mock {
-        on { getInitializedImpl(eq(context), any()) } doReturn appMetricaFacade
+        on { getInitializedImpl(eq(context)) } doReturn appMetricaFacade
         on { peekInitializedImpl() } doReturn appMetricaFacade
     }
     private val webViewJsInterfaceHandler: WebViewJsInterfaceHandler = mock()
@@ -78,6 +78,12 @@ class SynchronousStageExecutorContextTest : CommonTest() {
     @Test
     fun getUuid() {
         synchronousStageExecutor.getUuid(context)
+        verify(contextAppearedListener).onProbablyAppeared(context)
+    }
+
+    @Test
+    fun warmUpForSelfReporter() {
+        synchronousStageExecutor.warmUpForSelfReporter(context)
         verify(contextAppearedListener).onProbablyAppeared(context)
     }
 

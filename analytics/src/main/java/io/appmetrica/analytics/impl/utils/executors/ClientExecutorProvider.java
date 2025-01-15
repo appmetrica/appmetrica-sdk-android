@@ -58,14 +58,12 @@ public class ClientExecutorProvider {
         return mMainHandler;
     }
 
+    public Thread getCoreInitThread(@NonNull Runnable runnable) {
+        return mThreadFactory.createInitCoreThread(runnable);
+    }
+
     @VisibleForTesting
     ClientExecutorProvider(@NonNull ClientExecutorFactory threadFactory) {
         mThreadFactory = threadFactory;
-    }
-
-    @NonNull
-    @VisibleForTesting
-    ClientExecutorFactory getThreadFactory() {
-        return mThreadFactory;
     }
 }

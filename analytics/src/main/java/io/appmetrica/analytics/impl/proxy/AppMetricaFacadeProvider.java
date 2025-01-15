@@ -14,14 +14,10 @@ public class AppMetricaFacadeProvider {
     private static final String TAG = "[AppMetricaFacadeProvider]";
 
     @AnyThread
-    public AppMetricaFacade getInitializedImpl(@NonNull Context context, boolean asyncInit) {
-        DebugLogger.INSTANCE.info(TAG, "getInitializedImpl");
-        return AppMetricaFacade.getInstance(context, asyncInit);
-    }
-
-    @AnyThread
+    @NonNull
     public AppMetricaFacade getInitializedImpl(@NonNull Context context) {
-        return getInitializedImpl(context, false);
+        DebugLogger.INSTANCE.info(TAG, "getInitializedImpl");
+        return AppMetricaFacade.getInstance(context);
     }
 
     @AnyThread

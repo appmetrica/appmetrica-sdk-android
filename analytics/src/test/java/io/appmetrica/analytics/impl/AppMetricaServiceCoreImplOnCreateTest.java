@@ -44,7 +44,6 @@ import static org.mockito.Mockito.clearInvocations;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -119,21 +118,6 @@ public class AppMetricaServiceCoreImplOnCreateTest extends CommonTest {
             any(Consumer.class)
         );
         doReturn(reportConsumer).when(fieldsFactory).createReportConsumer(same(mContext), any(ClientRepository.class));
-    }
-
-    @Test
-    public void testOnInitializationFinished() {
-        initMetricaCoreImpl();
-        try (MockedStatic<AppMetricaSelfReportFacade> staticMock = Mockito.mockStatic(AppMetricaSelfReportFacade.class)) {
-            when(AppMetricaSelfReportFacade.getReporter()).thenReturn(mock(IReporterExtended.class));
-            mMetricaCore.onCreate();
-            staticMock.verify(new MockedStatic.Verification() {
-                @Override
-                public void apply() throws Throwable {
-                    AppMetricaSelfReportFacade.warmupForMetricaProcess(mContext);
-                }
-            });
-        }
     }
 
     @Test
@@ -240,8 +224,6 @@ public class AppMetricaServiceCoreImplOnCreateTest extends CommonTest {
             verify(GlobalServiceLocator.getInstance().getStartupStateHolder()).registerObserver(GlobalServiceLocator.getInstance().getModulesController());
             verify(GlobalServiceLocator.getInstance().getStartupStateHolder()).registerObserver(any(StartupStateObserver.class));
             verify(fieldsFactory).createReportConsumer(same(mContext), any(ClientRepository.class));
-            verify(AppMetricaSelfReportFacade.class);
-            AppMetricaSelfReportFacade.warmupForMetricaProcess(mContext);
             verify(reportExecutor).execute(any(Runnable.class));
             verify(crashDirectoryWatcher).startWatching();
             verify(globalServiceLocator.getNativeCrashService()).initNativeCrashReporting(mContext, reportConsumer);
@@ -258,8 +240,6 @@ public class AppMetricaServiceCoreImplOnCreateTest extends CommonTest {
             verifyNoMoreInteractions(mAppMetricaServiceLifecycle);
             verify(advertisingIdGetter, never()).init();
             verify(fieldsFactory, never()).createReportConsumer(same(mContext), any(ClientRepository.class));
-            verify(AppMetricaSelfReportFacade.class, times(1));
-            AppMetricaSelfReportFacade.warmupForMetricaProcess(mContext);
             verify(reportExecutor, never()).execute(any(Runnable.class));
             verify(crashDirectoryWatcher, never()).startWatching();
             verify(globalServiceLocator.getNativeCrashService(), never()).initNativeCrashReporting(any(Context.class), any(ReportConsumer.class));

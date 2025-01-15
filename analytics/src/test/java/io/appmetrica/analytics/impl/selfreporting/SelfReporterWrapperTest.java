@@ -25,9 +25,11 @@ import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 
+import static org.mockito.Mockito.clearInvocations;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
@@ -530,5 +532,13 @@ public class SelfReporterWrapperTest extends CommonTest {
 
         mSelfReporterWrapper.onInitializationFinished(mContext);
         verify(mReporter).reportAdRevenue(adRevenue, true);
+    }
+
+    @Test
+    public void onInitializationFinishedTwice() {
+        mSelfReporterWrapper.onInitializationFinished(mContext);
+        clearInvocations(mReporterProxyStorage);
+        mSelfReporterWrapper.onInitializationFinished(mContext);
+        verifyNoInteractions(mReporterProxyStorage);
     }
 }

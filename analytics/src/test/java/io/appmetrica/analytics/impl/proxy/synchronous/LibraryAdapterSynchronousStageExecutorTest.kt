@@ -23,7 +23,7 @@ class LibraryAdapterSynchronousStageExecutorTest : CommonTest() {
     private val appMetricaFacade: AppMetricaFacade = mock()
 
     private val appMetricaFacadeProvider: AppMetricaFacadeProvider = mock {
-        on { getInitializedImpl(context, true) } doReturn appMetricaFacade
+        on { getInitializedImpl(context) } doReturn appMetricaFacade
     }
 
     @get:Rule

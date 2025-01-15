@@ -98,7 +98,6 @@ internal class ReporterFactory(
         var reporter = reporters[config.apiKey]
         if (reporter == null) {
             DebugLogger.info(tag, "Create reporter for API_KEY = %s", config.apiKey)
-            DebugLogger.info(tag, "Temp: ${Thread.currentThread().stackTrace.contentToString()}")
             if (!apiKeysToIgnoreStartup.contains(config.apiKey)) {
                 startupHelper.sendStartupIfNeeded()
             }

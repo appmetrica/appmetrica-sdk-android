@@ -24,7 +24,7 @@ class LibraryAdapterSynchronousStageExecutorContextTest : CommonTest() {
     private val appmetricaFacade: AppMetricaFacade = mock()
 
     private val appMetricaFacadeProvider: AppMetricaFacadeProvider = mock {
-        on { getInitializedImpl(context, true) } doReturn appmetricaFacade
+        on { getInitializedImpl(context) } doReturn appmetricaFacade
     }
 
     private val contextAppearedListener: ContextAppearedListener by setUp {

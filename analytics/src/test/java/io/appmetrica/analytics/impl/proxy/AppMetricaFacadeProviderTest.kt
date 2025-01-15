@@ -37,7 +37,7 @@ class AppMetricaFacadeProviderTest : CommonTest() {
 
     @Test
     fun getInitializedImpl() {
-        whenever(AppMetricaFacade.getInstance(context, false)).thenReturn(appMetricaFacade)
+        whenever(AppMetricaFacade.getInstance(context)).thenReturn(appMetricaFacade)
         assertThat(provider.getInitializedImpl(context)).isEqualTo(appMetricaFacade)
     }
 

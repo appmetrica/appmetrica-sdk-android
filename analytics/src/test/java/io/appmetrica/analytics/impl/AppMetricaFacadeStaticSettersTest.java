@@ -14,6 +14,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -39,6 +40,8 @@ public class AppMetricaFacadeStaticSettersTest extends CommonTest {
     private IReporterExtended someReporter;
     @Mock
     private IHandlerExecutor executor;
+    @Mock
+    private Thread initCoreThread;
 
     private Context context;
 
@@ -61,6 +64,8 @@ public class AppMetricaFacadeStaticSettersTest extends CommonTest {
             context, core
         )).thenReturn(impl);
         when(ClientServiceLocator.getInstance().getClientExecutorProvider().getDefaultExecutor()).thenReturn(executor);
+        when(ClientServiceLocator.getInstance().getClientExecutorProvider().getCoreInitThread(any()))
+            .thenReturn(initCoreThread);
         doReturn(someReporter).when(impl).getReporter(ArgumentMatchers.<ReporterConfig>any());
     }
 
@@ -327,16 +332,21 @@ public class AppMetricaFacadeStaticSettersTest extends CommonTest {
     private void setUpFutureNotDone() {
         ClientExecutorProvider clientExecutorProvider = mock(ClientExecutorProvider.class);
         when(clientExecutorProvider.getDefaultExecutor()).thenReturn(mock(IHandlerExecutor.class));
+        when(clientExecutorProvider.getCoreInitThread(any())).thenReturn(mock(Thread.class));
         when(clientServiceLocatorRule.instance.getClientExecutorProvider()).thenReturn(clientExecutorProvider);
-        AppMetricaFacade.getInstance(context, true);
+        AppMetricaFacade.getInstance(context);
     }
 
     private void setUpNoMainReporter() {
-        AppMetricaFacade.getInstance(context, false);
+        AppMetricaFacade.getInstance(context);
     }
 
     private void setUpInitialized() {
+        ArgumentCaptor<Runnable> runnableArgumentCaptor = ArgumentCaptor.forClass(Runnable.class);
         when(impl.getMainReporterApiConsumerProvider()).thenReturn(mainReporterApiConsumerProvider);
-        AppMetricaFacade.getInstance(context, false);
+        AppMetricaFacade.getInstance(context);
+        verify(ClientServiceLocator.getInstance().getClientExecutorProvider())
+            .getCoreInitThread(runnableArgumentCaptor.capture());
+        runnableArgumentCaptor.getValue().run();
     }
 }

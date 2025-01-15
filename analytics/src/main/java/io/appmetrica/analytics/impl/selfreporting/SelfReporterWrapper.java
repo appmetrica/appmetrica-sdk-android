@@ -31,12 +31,14 @@ public class SelfReporterWrapper implements IReporterExtended, IPluginReporter {
     private volatile IReporterExtended mReporter;
 
     synchronized void onInitializationFinished(@NonNull Context context) {
-        DebugLogger.INSTANCE.info(TAG, "core initialization finished. Initializing SelfReporter");
-        mReporter = ReporterProxyStorage.getInstance().getOrCreate(context, SdkData.SDK_API_KEY_UUID);
-        for (IReporterCommandPerformer performer : mBufferedEvents) {
-            performer.perform(mReporter);
+        if (mReporter == null) {
+            DebugLogger.INSTANCE.info(TAG, "core initialization finished. Initializing SelfReporter");
+            mReporter = ReporterProxyStorage.getInstance().getOrCreate(context, SdkData.SDK_API_KEY_UUID);
+            for (IReporterCommandPerformer performer : mBufferedEvents) {
+                performer.perform(mReporter);
+            }
+            mBufferedEvents.clear();
         }
-        mBufferedEvents.clear();
     }
 
     @Override

@@ -30,7 +30,6 @@ import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -72,7 +71,7 @@ public class SynchronousStageExecutorTest extends CommonTest {
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        when(mProvider.getInitializedImpl(eq(mContext), anyBoolean())).thenReturn(mAppMetricaFacade);
+        when(mProvider.getInitializedImpl(eq(mContext))).thenReturn(mAppMetricaFacade);
         when(mProvider.peekInitializedImpl()).thenReturn(mAppMetricaFacade);
         when(LoggerStorage.getOrCreatePublicLogger(apiKey)).thenReturn(publicLogger);
         synchronousStageExecutor = new SynchronousStageExecutor(
@@ -238,6 +237,12 @@ public class SynchronousStageExecutorTest extends CommonTest {
         synchronousStageExecutor.getUuid(mContext);
 
         verify(firstLaunchDetector).init(mContext);
+        verify(contextAppearedListener).onProbablyAppeared(mContext);
+    }
+
+    @Test
+    public void warmUpForSelfReporter() {
+        synchronousStageExecutor.warmUpForSelfReporter(mContext);
         verify(contextAppearedListener).onProbablyAppeared(mContext);
     }
 }

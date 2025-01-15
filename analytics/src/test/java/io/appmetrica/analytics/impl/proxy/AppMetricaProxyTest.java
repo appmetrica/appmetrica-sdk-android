@@ -711,6 +711,16 @@ public class AppMetricaProxyTest extends CommonTest {
             .containsExactlyEntriesOf(allThreads);
     }
 
+    @Test
+    public void warmUpForSelfProcess() {
+        mProxy.warmUpForSelfProcess(context);
+        InOrder inOrder = inOrder(mBarrier, mSynchronousStageExecutor, mProvider, mMainReporter);
+        inOrder.verify(mBarrier).warmUpForSelfProcess(context);
+        inOrder.verify(mSynchronousStageExecutor).warmUpForSelfReporter(context);
+        inOrder.verify(mProvider).getInitializedImpl(context);
+        inOrder.verifyNoMoreInteractions();
+    }
+
     private void checkSetDataSendingEnabled(boolean value) {
         mProxy.setDataSendingEnabled(value);
         InOrder order = inOrder(mBarrier, mSynchronousStageExecutor, mProvider);

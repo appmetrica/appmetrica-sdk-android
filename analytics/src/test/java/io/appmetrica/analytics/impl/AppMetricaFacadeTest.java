@@ -2,7 +2,6 @@ package io.appmetrica.analytics.impl;
 
 import android.content.Context;
 import io.appmetrica.analytics.ReporterConfig;
-import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor;
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade;
 import io.appmetrica.analytics.impl.utils.executors.ClientExecutorProvider;
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule;
@@ -38,7 +37,7 @@ public class AppMetricaFacadeTest extends CommonTest {
     @Mock
     private IReporterExtended reporterExtended;
     @Mock
-    private IHandlerExecutor executor;
+    private Thread coreInitThread;
     @Rule
     public final ClientServiceLocatorRule mClientServiceLocatorRule = new ClientServiceLocatorRule();
 
@@ -61,6 +60,8 @@ public class AppMetricaFacadeTest extends CommonTest {
             any(Context.class),
             any(IAppMetricaCore.class)
         )).thenReturn(metricaImpl);
+        when(ClientServiceLocator.getInstance().getClientExecutorProvider().getCoreInitThread(any()))
+            .thenReturn(coreInitThread);
         when(metricaImpl.getReporter(any(ReporterConfig.class)))
                 .thenReturn(reporterExtended);
         mContext = RuntimeEnvironment.getApplication();
@@ -81,7 +82,7 @@ public class AppMetricaFacadeTest extends CommonTest {
     @Test
     public void getInstanceCreate() {
         AppMetricaFacade.killInstance();
-        assertThat(AppMetricaFacade.getInstance(mContext, true)).isNotNull();
+        assertThat(AppMetricaFacade.getInstance(mContext)).isNotNull();
         selfReporterFacadeRule.getStaticMock().verify(new MockedStatic.Verification() {
             @Override
             public void apply() throws Throwable {
@@ -93,16 +94,16 @@ public class AppMetricaFacadeTest extends CommonTest {
     @Test
     public void getInstanceCreatedOnlyOnce() {
         AppMetricaFacade.killInstance();
-        AppMetricaFacade instance = AppMetricaFacade.getInstance(mContext, true);
+        AppMetricaFacade instance = AppMetricaFacade.getInstance(mContext);
         assertThat(instance).isNotNull();
-        assertThat(AppMetricaFacade.getInstance(mContext, true)).isSameAs(instance);
+        assertThat(AppMetricaFacade.getInstance(mContext)).isSameAs(instance);
         assertThat(AppMetricaFacade.peekInstance()).isSameAs(instance);
     }
 
     @Test
     public void getInstanceAlreadyCreated() {
         AppMetricaFacade.setInstance(mInstance);
-        assertThat(AppMetricaFacade.getInstance(mContext, true)).isSameAs(mInstance);
+        assertThat(AppMetricaFacade.getInstance(mContext)).isSameAs(mInstance);
     }
 
     @Test

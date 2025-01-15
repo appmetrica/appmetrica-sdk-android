@@ -10,6 +10,7 @@ public class NamedThreadFactory implements ThreadFactory {
 
     public static final String CLIENT_DEFAULT_THREAD = PREFIX + "CDE";
     public static final String CLIENT_REPORTS_SENDER_THREAD = PREFIX + "CRS";
+    public static final String CLIENT_INIT_CORE_THREAD = PREFIX + "INIT_CORE";
 
     public static final String SERVICE_CORE = PREFIX + "SC";
     public static final String SERVICE_TASKS_EXECUTOR = PREFIX + "STE";

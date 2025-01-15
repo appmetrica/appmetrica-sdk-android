@@ -116,6 +116,13 @@ class AppMetricaProxyContextTest : CommonTest() {
     }
 
     @Test
+    fun warmUpForSelfProcess() {
+        proxy.warmUpForSelfProcess(context)
+        verify(barrier).warmUpForSelfProcess(context)
+        verify(synchronousStageExecutor).warmUpForSelfReporter(context)
+    }
+
+    @Test
     fun coverage() {
         ContextCoverageUtils.checkCoverage(AppMetricaProxy::class.java, AppMetricaProxyContextTest::class.java)
     }

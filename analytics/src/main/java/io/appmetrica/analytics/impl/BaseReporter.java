@@ -141,6 +141,11 @@ public abstract class BaseReporter implements IBaseReporter {
     }
 
     public void start() {
+        DebugLogger.INSTANCE.info(
+            TAG,
+            "Start reporter with apiKey = %s",
+            mReporterEnvironment.getReporterConfiguration().getApiKey()
+        );
         mReportsHandler.reportActivationEvent(mReporterEnvironment);
     }
 
