@@ -3,6 +3,7 @@ package io.appmetrica.analytics.impl.component.clients
 import android.content.Context
 import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.component.CommonArguments
+import io.appmetrica.analytics.impl.component.ComponentEventTriggerProviderCreator
 import io.appmetrica.analytics.impl.component.ComponentId
 import io.appmetrica.analytics.impl.component.ReporterComponentUnit
 import io.appmetrica.analytics.impl.startup.StartupState
@@ -20,7 +21,7 @@ import org.mockito.kotlin.mock
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class ReporterComponentUnitFactoryTest : CommonTest() {
+internal class ReporterComponentUnitFactoryTest : CommonTest() {
 
     private val context: Context = mock()
     private val componentId: ComponentId = mock()
@@ -41,6 +42,10 @@ class ReporterComponentUnitFactoryTest : CommonTest() {
     @get:Rule
     val reporterComponentUnitRule = constructionRule<ReporterComponentUnit>()
 
+    @get:Rule
+    val componentEventTriggerProviderCreatorRule = constructionRule<ComponentEventTriggerProviderCreator>()
+    private val componentEventTriggerProviderCreator by componentEventTriggerProviderCreatorRule
+
     private val factory by setUp { ReporterComponentUnitFactory() }
 
     @Test
@@ -55,7 +60,8 @@ class ReporterComponentUnitFactoryTest : CommonTest() {
                 sdkConfig,
                 GlobalServiceLocator.getInstance().dataSendingRestrictionController,
                 startupState,
-                regularExecutorFactory
+                regularExecutorFactory,
+                componentEventTriggerProviderCreator
             )
 
         assertThat(regularExecutorFactoryRule.constructionMock.constructed()).hasSize(1)

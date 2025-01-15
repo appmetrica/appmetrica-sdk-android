@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.component.processor.session;
 import io.appmetrica.analytics.impl.CounterReport;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.impl.component.session.SessionManagerStateMachine;
-import io.appmetrica.analytics.impl.events.EventTrigger;
+import io.appmetrica.analytics.impl.events.ConditionalEventTrigger;
 import io.appmetrica.analytics.testutils.CommonTest;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,14 +25,14 @@ public class ReportSessionStopHandlerTest extends CommonTest {
     @Mock
     private SessionManagerStateMachine sessionManager;
     @Mock
-    private EventTrigger eventTrigger;
+    private ConditionalEventTrigger conditionalEventTrigger;
     private ReportSessionStopHandler reportSessionStopHandler;
 
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
         when(componentUnit.getSessionManager()).thenReturn(sessionManager);
-        when(componentUnit.getEventTrigger()).thenReturn(eventTrigger);
+        when(componentUnit.getEventTrigger()).thenReturn(conditionalEventTrigger);
         reportSessionStopHandler = new ReportSessionStopHandler(componentUnit);
     }
 
@@ -47,7 +47,7 @@ public class ReportSessionStopHandlerTest extends CommonTest {
     @Test
     public void testProcessShouldTrigger() {
         reportSessionStopHandler.process(new CounterReport());
-        verify(eventTrigger).trigger();
+        verify(conditionalEventTrigger).trigger();
     }
 
     @Test

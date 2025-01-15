@@ -8,7 +8,7 @@ import io.appmetrica.analytics.impl.InternalEvents;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.impl.db.DatabaseHelper;
 import io.appmetrica.analytics.impl.db.VitalComponentDataProvider;
-import io.appmetrica.analytics.impl.events.EventTrigger;
+import io.appmetrica.analytics.impl.events.ConditionalEventTrigger;
 import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.impl.utils.ServerTime;
 import io.appmetrica.analytics.testutils.CommonTest;
@@ -69,7 +69,7 @@ public class SessionManagerStateMachineTest extends CommonTest {
         MockitoAnnotations.openMocks(this);
         when(mComponentUnit.getContext()).thenReturn(RuntimeEnvironment.getApplication());
         when(mComponentUnit.getVitalComponentDataProvider()).thenReturn(vitalComponentDataProvider);
-        when(mComponentUnit.getEventTrigger()).thenReturn(mock(EventTrigger.class));
+        when(mComponentUnit.getEventTrigger()).thenReturn(mock(ConditionalEventTrigger.class));
         when(mComponentUnit.getDbHelper()).thenReturn(mock(DatabaseHelper.class));
         when(mComponentUnit.getPublicLogger()).thenReturn(publicLogger);
         when(mFgSessionFactory.load()).thenReturn(mFgSession);
@@ -81,8 +81,7 @@ public class SessionManagerStateMachineTest extends CommonTest {
                 mSessionIDProvider,
                 mock(SessionManagerStateMachine.EventSaver.class),
                 new MockSessionFactory(SessionType.FOREGROUND),
-                new MockSessionFactory(SessionType.BACKGROUND),
-                mExtraMetaInfoRetriever
+                new MockSessionFactory(SessionType.BACKGROUND)
         );
         ServerTime.getInstance().init();
     }
@@ -265,8 +264,7 @@ public class SessionManagerStateMachineTest extends CommonTest {
                 mSessionIDProvider,
                 mock(SessionManagerStateMachine.EventSaver.class),
                 mFgSessionFactory,
-                mBgSessionFactory,
-                mExtraMetaInfoRetriever
+                mBgSessionFactory
         );
         SessionState currentSessionState = mManager.peekCurrentSessionState(mCounterReport);
         assertThat(currentSessionState.getSessionId()).isEqualTo(nextSessionId);
@@ -289,8 +287,7 @@ public class SessionManagerStateMachineTest extends CommonTest {
                 mSessionIDProvider,
                 mock(SessionManagerStateMachine.EventSaver.class),
                 mFgSessionFactory,
-                mBgSessionFactory,
-                mExtraMetaInfoRetriever
+                mBgSessionFactory
         );
         SessionState currentSessionState = mManager.peekCurrentSessionState(mCounterReport);
         assertThat(currentSessionState.getSessionId()).isEqualTo(sessionId);
@@ -314,8 +311,7 @@ public class SessionManagerStateMachineTest extends CommonTest {
                 mSessionIDProvider,
                 mock(SessionManagerStateMachine.EventSaver.class),
                 mFgSessionFactory,
-                mBgSessionFactory,
-                mExtraMetaInfoRetriever
+                mBgSessionFactory
         );
         SessionState currentSessionState = mManager.peekCurrentSessionState(mCounterReport);
         assertThat(currentSessionState.getSessionId()).isEqualTo(sessionId);
@@ -340,8 +336,7 @@ public class SessionManagerStateMachineTest extends CommonTest {
                 mSessionIDProvider,
                 mock(SessionManagerStateMachine.EventSaver.class),
                 mFgSessionFactory,
-                mBgSessionFactory,
-                mExtraMetaInfoRetriever
+                mBgSessionFactory
         );
         mManager.heartbeat(new CounterReport());
         SessionState currentSessionState = mManager.peekCurrentSessionState(mCounterReport);

@@ -27,6 +27,7 @@ import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoState;
 import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoStateProvider;
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade;
 import io.appmetrica.analytics.impl.service.ServiceDataReporterHolder;
+import io.appmetrica.analytics.impl.servicecomponents.ServiceLifecycleTimeTracker;
 import io.appmetrica.analytics.impl.startup.StartupState;
 import io.appmetrica.analytics.impl.startup.uuid.MultiProcessSafeUuidProvider;
 import io.appmetrica.analytics.impl.startup.uuid.UuidFromStartupStateImporter;
@@ -141,6 +142,14 @@ public class GlobalServiceLocatorTest extends CommonTest {
     @Rule
     public final MockedConstructionRule<AdvertisingIdGetter> advertisingIdGetterMockedConstructionRule =
         new MockedConstructionRule<>(AdvertisingIdGetter.class);
+
+    @Rule
+    public final MockedConstructionRule<ExtraMetaInfoRetriever> extraMetaInfoRetrieverMockedConstructionRule =
+        new MockedConstructionRule<>(ExtraMetaInfoRetriever.class);
+
+    @Rule
+    public final MockedConstructionRule<ServiceLifecycleTimeTracker> serviceLifecycleTimeTrackerMockedConstructionRule =
+        new MockedConstructionRule<>(ServiceLifecycleTimeTracker.class);
 
     @Mock
     private StorageFactory<ClidsInfo> clidsStorageFactory;
@@ -440,6 +449,26 @@ public class GlobalServiceLocatorTest extends CommonTest {
         GlobalServiceLocator.init(mContext);
         assertThat(GlobalServiceLocator.getInstance().getActivationBarrier())
             .isEqualTo(activationBarrierCallback);
+    }
+
+    @Test
+    public void getExtraMetaInfoRetriever() {
+        GlobalServiceLocator.init(mContext);
+        assertThat(GlobalServiceLocator.getInstance().getExtraMetaInfoRetriever())
+            .isEqualTo(extraMetaInfoRetrieverMockedConstructionRule.getConstructionMock().constructed().get(0));
+        assertThat(extraMetaInfoRetrieverMockedConstructionRule.getConstructionMock().constructed()).hasSize(1);
+        assertThat(extraMetaInfoRetrieverMockedConstructionRule.getArgumentInterceptor().flatArguments())
+            .containsExactly(mContext);
+    }
+
+    @Test
+    public void getServiceLifecycleTimeTracker() {
+        GlobalServiceLocator.init(mContext);
+        assertThat(GlobalServiceLocator.getInstance().getServiceLifecycleTimeTracker())
+            .isEqualTo(serviceLifecycleTimeTrackerMockedConstructionRule.getConstructionMock().constructed().get(0));
+        assertThat(serviceLifecycleTimeTrackerMockedConstructionRule.getConstructionMock().constructed()).hasSize(1);
+        assertThat(serviceLifecycleTimeTrackerMockedConstructionRule.getArgumentInterceptor().flatArguments())
+            .isEmpty();
     }
 
     private StartupStateHolder startupStateHolder() {

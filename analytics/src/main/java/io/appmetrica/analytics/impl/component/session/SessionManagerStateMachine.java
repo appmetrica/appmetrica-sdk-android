@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.impl.CounterReport;
-import io.appmetrica.analytics.impl.ExtraMetaInfoRetriever;
+import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.InternalEvents;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
@@ -25,7 +25,6 @@ public class SessionManagerStateMachine {
     @NonNull private final ComponentUnit mComponent;
     @NonNull private final SessionIDProvider sessionIDProvider;
     @NonNull private final EventSaver mSaver;
-    @NonNull private final ExtraMetaInfoRetriever mExtraMetaInfoRetriever;
 
     @NonNull private final ISessionFactory<SessionArguments> mForegroundSessionFactory;
     @NonNull private final ISessionFactory<SessionArguments> mBackgroundSessionFactory;
@@ -41,8 +40,7 @@ public class SessionManagerStateMachine {
                 sessionIDProvider,
                 saver,
                 new ForegroundSessionFactory(component, sessionIDProvider),
-                new BackgroundSessionFactory(component, sessionIDProvider),
-                new ExtraMetaInfoRetriever(component.getContext())
+                new BackgroundSessionFactory(component, sessionIDProvider)
         );
     }
 
@@ -52,15 +50,13 @@ public class SessionManagerStateMachine {
                                       @NonNull SessionIDProvider sessionIDProvider,
                                       @NonNull EventSaver saver,
                                       @NonNull ISessionFactory<SessionArguments> foregroundSessionFactory,
-                                      @NonNull ISessionFactory<SessionArguments> backgroundSessionFactory,
-                                      @NonNull ExtraMetaInfoRetriever extraMetaInfoRetriever) {
+                                      @NonNull ISessionFactory<SessionArguments> backgroundSessionFactory) {
         mComponent = component;
         mSaver = saver;
 
         mForegroundSessionFactory = foregroundSessionFactory;
         mBackgroundSessionFactory = backgroundSessionFactory;
         this.sessionIDProvider = sessionIDProvider;
-        mExtraMetaInfoRetriever = extraMetaInfoRetriever;
     }
 
     public synchronized void heartbeat(@NonNull CounterReport reportData) {
@@ -151,14 +147,19 @@ public class SessionManagerStateMachine {
         logger.info("Start foreground session");
         long eventCreationElapsedRealtime = reportData.getCreationElapsedRealtime();
         Session session = mForegroundSessionFactory.create(
-                new SessionArguments(eventCreationElapsedRealtime,
-                    reportData.getCreationTimestamp())
+            new SessionArguments(eventCreationElapsedRealtime,
+                reportData.getCreationTimestamp())
         );
         mState = State.FOREGROUND;
 
         mComponent.getEventTrigger().trigger();
-        mSaver.saveEvent(CounterReport.formSessionStartReportData(reportData, mExtraMetaInfoRetriever),
-                getStateFromSession(session, eventCreationElapsedRealtime));
+        mSaver.saveEvent(
+            CounterReport.formSessionStartReportData(
+                reportData,
+                GlobalServiceLocator.getInstance().getExtraMetaInfoRetriever()
+            ),
+            getStateFromSession(session, eventCreationElapsedRealtime)
+        );
         return session;
     }
 
@@ -257,13 +258,19 @@ public class SessionManagerStateMachine {
         //non-elegant solution for first event
         if (mComponent.getVitalComponentDataProvider().isFirstEventDone()) {
             mSaver.saveEvent(
-                    CounterReport.formSessionStartReportData(reportData, mExtraMetaInfoRetriever),
+                    CounterReport.formSessionStartReportData(
+                        reportData,
+                        GlobalServiceLocator.getInstance().getExtraMetaInfoRetriever()
+                    ),
                     getStateFromSession(session, reportData.getCreationElapsedRealtime())
             );
         } else if (reportData.getType() == InternalEvents.EVENT_TYPE_FIRST_ACTIVATION.getTypeId()) {
             mSaver.saveEvent(reportData, getStateFromSession(session, eventCreationElapsedRealtime));
             mSaver.saveEvent(
-                    CounterReport.formSessionStartReportData(reportData, mExtraMetaInfoRetriever),
+                    CounterReport.formSessionStartReportData(
+                        reportData,
+                        GlobalServiceLocator.getInstance().getExtraMetaInfoRetriever()
+                    ),
                     getStateFromSession(session, eventCreationElapsedRealtime)
             );
         }

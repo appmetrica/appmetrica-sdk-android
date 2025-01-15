@@ -19,7 +19,8 @@ import io.appmetrica.analytics.impl.db.IKeyValueTableDbHelper;
 import io.appmetrica.analytics.impl.db.VitalComponentDataProvider;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesComponentDbStorage;
 import io.appmetrica.analytics.impl.db.storage.DatabaseStorageFactory;
-import io.appmetrica.analytics.impl.events.ContainsUrgentEventsCondition;
+import io.appmetrica.analytics.impl.events.EventTrigger;
+import io.appmetrica.analytics.impl.events.EventTriggerProvider;
 import io.appmetrica.analytics.impl.events.EventsFlusher;
 import io.appmetrica.analytics.impl.request.ReportRequestConfig;
 import io.appmetrica.analytics.impl.startup.StartupState;
@@ -29,7 +30,6 @@ import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import io.appmetrica.analytics.testutils.MockedConstructionRule;
 import io.appmetrica.analytics.testutils.TestUtils;
-import java.util.List;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -68,6 +68,24 @@ public class ComponentUnitFieldsFactoryTest extends CommonTest {
     LifecycleDependentComponentManager lifecycleDependentComponentManager;
     @Mock
     private VitalComponentDataProvider vitalComponentDataProvider;
+    @Mock
+    private EventTriggerProviderCreator eventTriggerProviderCreator;
+    @Mock
+    private EventsFlusher eventsFlusher;
+    @Mock
+    private DatabaseHelper databaseHelper;
+    @Mock
+    private ReportComponentConfigurationHolder configurationHolder;
+    @Mock
+    private CommonArguments.ReporterArguments initialConfig;
+    @Mock
+    private ComponentId componentId;
+    @Mock
+    private PreferencesComponentDbStorage preferencesComponentDbStorage;
+    @Mock
+    private EventTriggerProvider eventTriggerProvider;
+    @Mock
+    private EventTrigger eventTrigger;
     int mCurrentAppVersion = 12;
     private final String apiKey = "some key";
 
@@ -88,16 +106,26 @@ public class ComponentUnitFieldsFactoryTest extends CommonTest {
         when(mComponentUnit.getStartupState()).thenReturn(TestUtils.createDefaultStartupState());
         when(mComponentId.getApiKey()).thenReturn(apiKey);
         mSdkConfig = CommonArgumentsTestUtils.emptyReporterArguments();
+        when(eventTriggerProviderCreator.createEventTriggerProvider(
+            eventsFlusher,
+            databaseHelper,
+            configurationHolder,
+            initialConfig,
+            componentId,
+            preferencesComponentDbStorage
+        )).thenReturn(eventTriggerProvider);
+        when(eventTriggerProvider.getEventTrigger()).thenReturn(eventTrigger);
         mFieldsFactory = new ComponentUnitFieldsFactory(
-                mContext,
-                mComponentId,
-                mSdkConfig,
-                mStartupExecutorFactory,
-                mStartupState,
+            mContext,
+            mComponentId,
+            mSdkConfig,
+            mStartupExecutorFactory,
+            mStartupState,
             dataSendingStrategy,
-                mExecutor,
-                mCurrentAppVersion,
-                lifecycleDependentComponentManager
+            mExecutor,
+            mCurrentAppVersion,
+            lifecycleDependentComponentManager,
+            eventTriggerProviderCreator
         );
     }
 
@@ -132,7 +160,7 @@ public class ComponentUnitFieldsFactoryTest extends CommonTest {
     @Test
     public void testCreateConfigHolder() {
         assertThat(mFieldsFactory.createConfigHolder(mComponentUnit)).isNotNull()
-                .isExactlyInstanceOf(ReportComponentConfigurationHolder.class);
+            .isExactlyInstanceOf(ReportComponentConfigurationHolder.class);
     }
 
     @Test
@@ -165,7 +193,7 @@ public class ComponentUnitFieldsFactoryTest extends CommonTest {
     @Test
     public void testCreateReportProcessor() {
         assertThat(mFieldsFactory.createReportProcessor(mComponentUnit, mock(EventProcessingStrategyFactory.class)))
-                .isNotNull().isExactlyInstanceOf(ReportingReportProcessor.class);
+            .isNotNull().isExactlyInstanceOf(ReportingReportProcessor.class);
     }
 
     @Test
@@ -174,21 +202,15 @@ public class ComponentUnitFieldsFactoryTest extends CommonTest {
     }
 
     @Test
-    public void testCreateUrgentEventsCondition() {
-        DatabaseHelper databaseHelper = mock(DatabaseHelper.class);
-        ContainsUrgentEventsCondition condition = mFieldsFactory.createUrgentEventsCondition(databaseHelper);
-        assertThat(condition).isNotNull();
-        verify(databaseHelper).addEventListener(condition);
-    }
-
-    @Test
-    public void testCreateMaxReportsCountReachedCondition() {
-        assertThat(mFieldsFactory.createMaxReportsCondition(mock(DatabaseHelper.class), mock(ReportComponentConfigurationHolder.class))).isNotNull();
-    }
-
-    @Test
     public void testCreateEventTrigger() {
-        assertThat(mFieldsFactory.createEventTrigger(mock(List.class), mock(EventsFlusher.class))).isNotNull();
+        assertThat(mFieldsFactory.createEventTrigger(
+            eventsFlusher,
+            databaseHelper,
+            configurationHolder,
+            initialConfig,
+            componentId,
+            preferencesComponentDbStorage
+        )).isEqualTo(eventTrigger);
     }
 
     @Test
@@ -199,7 +221,7 @@ public class ComponentUnitFieldsFactoryTest extends CommonTest {
     @Test
     public void getVitalComponentDataProvider() {
         when(GlobalServiceLocator.getInstance().getVitalDataProviderStorage().getComponentDataProvider(mComponentId))
-                .thenReturn(vitalComponentDataProvider);
+            .thenReturn(vitalComponentDataProvider);
         assertThat(mFieldsFactory.getVitalComponentDataProvider()).isSameAs(vitalComponentDataProvider);
     }
 

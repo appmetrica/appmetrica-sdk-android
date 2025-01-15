@@ -61,6 +61,7 @@ class ReportRunnable implements Runnable {
 
             clientUnit.handle(mReport, arguments);
         } catch (Throwable e) {
+            DebugLogger.INSTANCE.error(TAG, e);
             AppMetricaSelfReportFacade.getReporter().reportError(
                 "Exception during processing event with type: " + mReport.getType() +
                     " (" + mReport.getCustomType() + "): " + e.getMessage(),

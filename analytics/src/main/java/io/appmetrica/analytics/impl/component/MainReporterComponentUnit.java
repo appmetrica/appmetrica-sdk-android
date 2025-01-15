@@ -6,7 +6,6 @@ import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreutils.internal.services.PackageManagerUtils;
 import io.appmetrica.analytics.coreutils.internal.time.TimePassedChecker;
-import io.appmetrica.analytics.internal.CounterConfigurationReporterType;
 import io.appmetrica.analytics.impl.CounterReport;
 import io.appmetrica.analytics.impl.DataSendingRestrictionControllerImpl;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
@@ -21,6 +20,7 @@ import io.appmetrica.analytics.impl.referrer.service.ReferrerHolder;
 import io.appmetrica.analytics.impl.referrer.service.ReferrerListenerNotifier;
 import io.appmetrica.analytics.impl.startup.StartupState;
 import io.appmetrica.analytics.impl.startup.executor.ComponentStartupExecutorFactory;
+import io.appmetrica.analytics.internal.CounterConfigurationReporterType;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_REGULAR;
@@ -64,7 +64,8 @@ public class MainReporterComponentUnit extends ComponentUnit
                     .getNetworkTaskProcessorExecutor(),
                 PackageManagerUtils.getAppVersionCodeInt(context),
                 GlobalServiceLocator.getInstance().getServiceExecutorProvider(),
-                GlobalServiceLocator.getInstance().getLifecycleDependentComponentManager()
+                GlobalServiceLocator.getInstance().getLifecycleDependentComponentManager(),
+                new MainComponentEventTriggerProviderCreator()
             ),
             referrerHolder,
             controller
@@ -86,7 +87,8 @@ public class MainReporterComponentUnit extends ComponentUnit
             componentId,
             appEnvironmentProvider,
             timePassedChecker,
-            fieldsFactory
+            fieldsFactory,
+            sdkConfig
         );
         mReferrerHolder = referrerHolder;
         EventProcessingStrategyFactory factory = getEventProcessingStrategyFactory();

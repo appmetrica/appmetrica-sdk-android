@@ -3,6 +3,7 @@ package io.appmetrica.analytics.impl.component.clients
 import android.content.Context
 import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.component.CommonArguments
+import io.appmetrica.analytics.impl.component.ComponentEventTriggerProviderCreator
 import io.appmetrica.analytics.impl.component.ComponentId
 import io.appmetrica.analytics.impl.component.ReporterComponentUnit
 import io.appmetrica.analytics.impl.startup.StartupUnit
@@ -21,6 +22,7 @@ internal class ReporterComponentUnitFactory : ComponentUnitFactory<ReporterCompo
         sdkConfig,
         GlobalServiceLocator.getInstance().dataSendingRestrictionController,
         startupUnit.startupState,
-        RegularExecutorFactory(startupUnit)
+        RegularExecutorFactory(startupUnit),
+        ComponentEventTriggerProviderCreator()
     )
 }

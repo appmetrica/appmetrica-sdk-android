@@ -5,7 +5,6 @@ import io.appmetrica.analytics.impl.InternalEvents;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.impl.component.EventSaver;
 import io.appmetrica.analytics.impl.db.VitalComponentDataProvider;
-import io.appmetrica.analytics.impl.events.EventListener;
 import io.appmetrica.analytics.impl.request.ReportRequestConfig;
 import io.appmetrica.analytics.testutils.CommonTest;
 import org.json.JSONException;
@@ -37,8 +36,6 @@ public class ReportFirstHandlerTest extends CommonTest {
     private ReportRequestConfig mConfig;
     @Mock
     private EventSaver mEventSaver;
-    @Mock
-    private EventListener mEventListener;
 
     @Before
     public void setUp() throws JSONException {
@@ -48,7 +45,6 @@ public class ReportFirstHandlerTest extends CommonTest {
         mReportFirstHandler = new ReportFirstHandler(mComponent, vitalComponentDataProvider);
         when(mComponent.getFreshReportRequestConfig()).thenReturn(mConfig);
         when(mComponent.getEventSaver()).thenReturn(mEventSaver);
-        when(mComponent.getReportsListener()).thenReturn(mEventListener);
     }
 
     @Test

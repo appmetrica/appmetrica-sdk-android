@@ -17,30 +17,33 @@ import io.appmetrica.analytics.impl.utils.executors.ServiceExecutorProvider;
 
 public class MainReporterComponentUnitFieldsFactory extends ComponentUnitFieldsFactory {
 
+    @NonNull
     private final ServiceExecutorProvider serviceExecutorProvider;
 
     public MainReporterComponentUnitFieldsFactory(
-            @NonNull Context context,
-            @NonNull ComponentId componentId,
-            @NonNull CommonArguments.ReporterArguments sdkConfig,
-            @NonNull ComponentStartupExecutorFactory startupExecutorFactory,
-            @NonNull StartupState startupState,
-            @NonNull ReportRequestConfig.DataSendingStrategy strategy,
-            @NonNull ICommonExecutor taskExecutor,
-            final int currentAppVersion,
-            @NonNull final ServiceExecutorProvider serviceExecutorProvider,
-            @NonNull LifecycleDependentComponentManager lifecycleDependentComponentManager
+        @NonNull Context context,
+        @NonNull ComponentId componentId,
+        @NonNull CommonArguments.ReporterArguments sdkConfig,
+        @NonNull ComponentStartupExecutorFactory startupExecutorFactory,
+        @NonNull StartupState startupState,
+        @NonNull ReportRequestConfig.DataSendingStrategy strategy,
+        @NonNull ICommonExecutor taskExecutor,
+        final int currentAppVersion,
+        @NonNull final ServiceExecutorProvider serviceExecutorProvider,
+        @NonNull LifecycleDependentComponentManager lifecycleDependentComponentManager,
+        @NonNull EventTriggerProviderCreator eventTriggerProviderCreator
     ) {
         super(
-                context,
-                componentId,
-                sdkConfig,
-                startupExecutorFactory,
-                startupState,
-                strategy,
-                taskExecutor,
-                currentAppVersion,
-                lifecycleDependentComponentManager
+            context,
+            componentId,
+            sdkConfig,
+            startupExecutorFactory,
+            startupState,
+            strategy,
+            taskExecutor,
+            currentAppVersion,
+            lifecycleDependentComponentManager,
+            eventTriggerProviderCreator
         );
         this.serviceExecutorProvider = serviceExecutorProvider;
     }
@@ -48,21 +51,21 @@ public class MainReporterComponentUnitFieldsFactory extends ComponentUnitFieldsF
     @NonNull
     public ReferrerListenerNotifier createReferrerListener(@NonNull MainReporterComponentUnit unit) {
         return new ReferrerListenerNotifier(
-                new OnlyOnceReferrerNotificationFilter(unit),
-                unit.new MainReporterListener(),
-                unit
+            new OnlyOnceReferrerNotificationFilter(unit),
+            unit.new MainReporterListener(),
+            unit
         );
     }
 
     @NonNull
     public BillingMonitorWrapper createBillingMonitorWrapper(@NonNull final MainReporterComponentUnit unit) {
         return new BillingMonitorWrapper(
-                mContext,
-                serviceExecutorProvider.getDefaultExecutor(),
-                serviceExecutorProvider.getUiExecutor(),
-                BillingTypeDetector.getBillingType(),
-                new BillingInfoStorageImpl(mContext),
-                new BillingInfoSenderImpl(unit)
+            mContext,
+            serviceExecutorProvider.getDefaultExecutor(),
+            serviceExecutorProvider.getUiExecutor(),
+            BillingTypeDetector.getBillingType(),
+            new BillingInfoStorageImpl(mContext),
+            new BillingInfoSenderImpl(unit)
         );
     }
 }

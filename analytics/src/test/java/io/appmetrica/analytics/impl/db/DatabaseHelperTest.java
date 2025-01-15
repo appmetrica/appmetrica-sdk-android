@@ -14,7 +14,7 @@ import io.appmetrica.analytics.impl.component.EventSaver;
 import io.appmetrica.analytics.impl.db.constants.Constants;
 import io.appmetrica.analytics.impl.db.protobuf.converter.DbEventModelConverter;
 import io.appmetrica.analytics.impl.events.EventListener;
-import io.appmetrica.analytics.impl.events.EventTrigger;
+import io.appmetrica.analytics.impl.events.ConditionalEventTrigger;
 import io.appmetrica.analytics.impl.request.ReportRequestConfig;
 import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.impl.utils.TimeUtils;
@@ -119,7 +119,7 @@ public class DatabaseHelperTest extends CommonTest {
         when(componentId.getApiKey()).thenReturn("apiKey");
         when(componentUnit.getFreshReportRequestConfig()).thenReturn(config);
         when(componentUnit.getPublicLogger()).thenReturn(mock(PublicLogger.class));
-        when(componentUnit.getEventTrigger()).thenReturn(mock(EventTrigger.class));
+        when(componentUnit.getEventTrigger()).thenReturn(mock(ConditionalEventTrigger.class));
         when(config.getMaxEventsInDbCount()).thenReturn(maxEventsInDbCount);
         when(databaseCleaner.cleanEvents(same(db), anyString(), anyString(), any(DatabaseCleaner.Reason.class), nullable(String.class), anyBoolean()))
                 .thenReturn(new DatabaseCleaner.DeletionInfo(Collections.<ContentValues>emptyList(), 0));

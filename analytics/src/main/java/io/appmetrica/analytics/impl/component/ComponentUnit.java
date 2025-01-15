@@ -9,7 +9,6 @@ import io.appmetrica.analytics.coreutils.internal.services.PackageManagerUtils;
 import io.appmetrica.analytics.coreutils.internal.time.TimePassedChecker;
 import io.appmetrica.analytics.impl.AppEnvironment;
 import io.appmetrica.analytics.impl.CertificatesFingerprintsProvider;
-import io.appmetrica.analytics.internal.CounterConfigurationReporterType;
 import io.appmetrica.analytics.impl.CounterReport;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.PreloadInfoStorage;
@@ -25,28 +24,22 @@ import io.appmetrica.analytics.impl.db.DatabaseHelper;
 import io.appmetrica.analytics.impl.db.VitalComponentDataProvider;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesComponentDbStorage;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesServiceDbStorage;
-import io.appmetrica.analytics.impl.events.ContainsUrgentEventsCondition;
-import io.appmetrica.analytics.impl.events.EventCondition;
-import io.appmetrica.analytics.impl.events.EventListener;
 import io.appmetrica.analytics.impl.events.EventTrigger;
-import io.appmetrica.analytics.impl.events.EventsFlusher;
-import io.appmetrica.analytics.impl.events.MaxReportsCountReachedCondition;
 import io.appmetrica.analytics.impl.request.ReportRequestConfig;
 import io.appmetrica.analytics.impl.startup.StartupError;
 import io.appmetrica.analytics.impl.startup.StartupState;
 import io.appmetrica.analytics.impl.startup.executor.ComponentStartupExecutorFactory;
 import io.appmetrica.analytics.impl.utils.BooleanUtils;
 import io.appmetrica.analytics.impl.utils.PublicLogConstructor;
-import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
+import io.appmetrica.analytics.internal.CounterConfigurationReporterType;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
-import java.util.ArrayList;
-import java.util.List;
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 
 /**
  * Represents bound component (application, library) with API key.
  */
-public class ComponentUnit implements IReportableComponent, IComponent, EventsFlusher,
-        ReportRequestConfig.PreloadInfoSendingStrategy {
+public class ComponentUnit implements IReportableComponent, IComponent,
+    ReportRequestConfig.PreloadInfoSendingStrategy {
 
     private static final String TAG = "[ComponentUnit]";
 
@@ -88,11 +81,7 @@ public class ComponentUnit implements IReportableComponent, IComponent, EventsFl
     @NonNull
     private final ComponentMigrationHelper.Creator mComponentMigrationHelperCreator;
     @NonNull
-    private final EventTrigger mEventTrigger;
-    @NonNull
-    private final ContainsUrgentEventsCondition mUrgentEventsCondition;
-    @NonNull
-    private final MaxReportsCountReachedCondition mMaxReportsCondition;
+    private final EventTrigger conditionalEventTrigger;
     @NonNull
     private final CertificatesFingerprintsProvider mCertificatesFingerprintsProvider;
     @NonNull
@@ -121,22 +110,24 @@ public class ComponentUnit implements IReportableComponent, IComponent, EventsFl
                          @NonNull ReportRequestConfig.DataSendingStrategy dataSendingStrategy,
                          @NonNull ComponentStartupExecutorFactory startupExecutorFactory) {
         this(
+            context,
+            componentId,
+            new AppEnvironmentProvider(),
+            new TimePassedChecker(),
+            new ComponentUnitFieldsFactory(
                 context,
                 componentId,
-                new AppEnvironmentProvider(),
-                new TimePassedChecker(),
-                new ComponentUnitFieldsFactory(
-                        context,
-                        componentId,
-                        sdkConfig,
-                        startupExecutorFactory,
-                        startupState,
-                        dataSendingStrategy,
-                        GlobalServiceLocator.getInstance().getServiceExecutorProvider()
-                                .getNetworkTaskProcessorExecutor(),
-                        PackageManagerUtils.getAppVersionCodeInt(context),
-                        GlobalServiceLocator.getInstance().getLifecycleDependentComponentManager()
-                )
+                sdkConfig,
+                startupExecutorFactory,
+                startupState,
+                dataSendingStrategy,
+                GlobalServiceLocator.getInstance().getServiceExecutorProvider()
+                    .getNetworkTaskProcessorExecutor(),
+                PackageManagerUtils.getAppVersionCodeInt(context),
+                GlobalServiceLocator.getInstance().getLifecycleDependentComponentManager(),
+                new ComponentEventTriggerProviderCreator()
+            ),
+            sdkConfig
         );
     }
 
@@ -146,7 +137,8 @@ public class ComponentUnit implements IReportableComponent, IComponent, EventsFl
                   @NonNull ComponentId componentId,
                   @NonNull AppEnvironmentProvider appEnvironmentProvider,
                   @NonNull TimePassedChecker timePassedChecker,
-                  @NonNull ComponentUnitFieldsFactory fieldsFactory) {
+                  @NonNull ComponentUnitFieldsFactory fieldsFactory,
+                  @NonNull CommonArguments.ReporterArguments sdkConfig) {
         DebugLogger.INSTANCE.info(
             TAG,
             "Start to create a new component with Id/APIkey: \"%s\"/%s",
@@ -176,23 +168,17 @@ public class ComponentUnit implements IReportableComponent, IComponent, EventsFl
             componentId.getAnonymizedApiKey()
         );
         mComponentMigrationHelperCreator = fieldsFactory.createMigrationHelperCreator(this);
-        mMaxReportsCondition = fieldsFactory.createMaxReportsCondition(mReportsDbHelper, mConfigHolder);
-        mUrgentEventsCondition = fieldsFactory.createUrgentEventsCondition(mReportsDbHelper);
-        List<EventCondition> conditions = new ArrayList<EventCondition>();
-        conditions.add(mMaxReportsCondition);
-        conditions.add(mUrgentEventsCondition);
-        mEventTrigger = fieldsFactory.createEventTrigger(conditions, this);
 
         migratePreferencesIfNeeded();
 
         mSessionManager = fieldsFactory.createSessionManager(
-                this,
-                vitalComponentDataProvider,
-                new SessionManagerStateMachine.EventSaver() {
-                    public void saveEvent(@NonNull CounterReport reportData, @NonNull SessionState sessionState) {
-                        mEventSaver.saveReport(reportData, sessionState);
-                    }
+            this,
+            vitalComponentDataProvider,
+            new SessionManagerStateMachine.EventSaver() {
+                public void saveEvent(@NonNull CounterReport reportData, @NonNull SessionState sessionState) {
+                    mEventSaver.saveReport(reportData, sessionState);
                 }
+            }
         );
 
         mPublicLogger.info(
@@ -203,18 +189,26 @@ public class ComponentUnit implements IReportableComponent, IComponent, EventsFl
 
         sessionExtrasHolder = fieldsFactory.createSessionExtraHolder();
         mEventSaver = fieldsFactory.createReportSaver(
-                mComponentPreferences,
-                vitalComponentDataProvider,
-                mSessionManager,
-                mReportsDbHelper,
-                mAppEnvironment,
-                sessionExtrasHolder,
-                mTaskProcessor
+            mComponentPreferences,
+            vitalComponentDataProvider,
+            mSessionManager,
+            mReportsDbHelper,
+            mAppEnvironment,
+            sessionExtrasHolder,
+            mTaskProcessor
         );
 
         mEventProcessingStrategyFactory = fieldsFactory.createEventProcessingStrategyFactory(this);
         mReportProcessor = fieldsFactory.createReportProcessor(this, mEventProcessingStrategyFactory);
         mCertificatesFingerprintsProvider = fieldsFactory.createCertificateFingerprintProvider(mComponentPreferences);
+        conditionalEventTrigger = fieldsFactory.createEventTrigger(
+            mTaskProcessor,
+            mReportsDbHelper,
+            mConfigHolder,
+            sdkConfig,
+            componentId,
+            mComponentPreferences
+        );
 
         mReportsDbHelper.onComponentCreated();
         DebugLogger.INSTANCE.info(
@@ -260,11 +254,9 @@ public class ComponentUnit implements IReportableComponent, IComponent, EventsFl
         updateLoggerEnabledState(sdkConfig);
     }
 
-    @Override
     public synchronized void flushEvents() {
         DebugLogger.INSTANCE.info(TAG, "Flushing has started for component with id \"%s\" ...", mComponentId);
-
-        mTaskProcessor.flushAllTasks();
+        conditionalEventTrigger.forceTrigger();
     }
 
     @NonNull
@@ -287,7 +279,7 @@ public class ComponentUnit implements IReportableComponent, IComponent, EventsFl
     public synchronized void onStartupChanged(@NonNull StartupState newState) {
         mConfigHolder.updateStartupState(newState);
         DebugLogger.INSTANCE.info(TAG, "%s startup changed. new StartupState: %s", mComponentId, newState);
-        mEventTrigger.trigger();
+        conditionalEventTrigger.trigger();
     }
 
     @Override
@@ -330,28 +322,28 @@ public class ComponentUnit implements IReportableComponent, IComponent, EventsFl
     public boolean needToCheckPermissions() {
         final ReportRequestConfig reportRequestConfig = getFreshReportRequestConfig();
         return reportRequestConfig.isPermissionsCollectingEnabled() &&
-                reportRequestConfig.isIdentifiersValid() &&
-                mTimePassedChecker.didTimePassSeconds(
-                        mEventSaver.getPermissionsCheckTime(),
-                        reportRequestConfig.getPermissionsCollectingIntervalSeconds(),
-                        "need to check permissions"
-                );
+            reportRequestConfig.isIdentifiersValid() &&
+            mTimePassedChecker.didTimePassSeconds(
+                mEventSaver.getPermissionsCheckTime(),
+                reportRequestConfig.getPermissionsCollectingIntervalSeconds(),
+                "need to check permissions"
+            );
     }
 
     public boolean shouldForceSendPermissions() {
         final ReportRequestConfig reportRequestConfig = getFreshReportRequestConfig();
         return reportRequestConfig.isPermissionsCollectingEnabled() &&
-                mTimePassedChecker.didTimePassSeconds(
-                        mEventSaver.getPermissionsCheckTime(),
-                        reportRequestConfig.getPermissionsForceSendIntervalSeconds(),
-                        "should force send permissions"
-                );
+            mTimePassedChecker.didTimePassSeconds(
+                mEventSaver.getPermissionsCheckTime(),
+                reportRequestConfig.getPermissionsForceSendIntervalSeconds(),
+                "should force send permissions"
+            );
     }
 
     public boolean needToCollectFeatures() {
         return mEventSaver.wasLastFeaturesEventLongAgo()
-                && getFreshReportRequestConfig().isFeaturesCollectingEnabled()
-                && getFreshReportRequestConfig().isIdentifiersValid();
+            && getFreshReportRequestConfig().isFeaturesCollectingEnabled()
+            && getFreshReportRequestConfig().isIdentifiersValid();
     }
 
     @Override
@@ -414,12 +406,7 @@ public class ComponentUnit implements IReportableComponent, IComponent, EventsFl
 
     @NonNull
     public EventTrigger getEventTrigger() {
-        return mEventTrigger;
-    }
-
-    @NonNull
-    public EventListener getReportsListener() {
-        return mUrgentEventsCondition;
+        return conditionalEventTrigger;
     }
 
     @NonNull

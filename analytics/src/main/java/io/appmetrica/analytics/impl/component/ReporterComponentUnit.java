@@ -20,25 +20,28 @@ public class ReporterComponentUnit extends ComponentUnit {
                                  @NonNull CommonArguments.ReporterArguments sdkConfig,
                                  @NonNull DataSendingRestrictionControllerImpl controller,
                                  @NonNull StartupState startupState,
-                                 @NonNull ComponentStartupExecutorFactory factory) {
+                                 @NonNull ComponentStartupExecutorFactory factory,
+                                 @NonNull EventTriggerProviderCreator eventTriggerProviderCreator) {
         this(
+            context,
+            componentId,
+            new AppEnvironmentProvider(),
+            new TimePassedChecker(),
+            new ComponentUnitFieldsFactory(
                 context,
                 componentId,
-                new AppEnvironmentProvider(),
-                new TimePassedChecker(),
-                new ComponentUnitFieldsFactory(
-                        context,
-                        componentId,
-                        sdkConfig,
-                        factory,
-                        startupState,
-                        new ReporterArgumentsFactory(controller),
-                        GlobalServiceLocator.getInstance().getServiceExecutorProvider()
-                                .getNetworkTaskProcessorExecutor(),
-                        PackageManagerUtils.getAppVersionCodeInt(context),
-                        GlobalServiceLocator.getInstance().getLifecycleDependentComponentManager()
-                ),
-                controller
+                sdkConfig,
+                factory,
+                startupState,
+                new ReporterArgumentsFactory(controller),
+                GlobalServiceLocator.getInstance().getServiceExecutorProvider()
+                    .getNetworkTaskProcessorExecutor(),
+                PackageManagerUtils.getAppVersionCodeInt(context),
+                GlobalServiceLocator.getInstance().getLifecycleDependentComponentManager(),
+                eventTriggerProviderCreator
+            ),
+            controller,
+            sdkConfig
         );
     }
 
@@ -48,13 +51,15 @@ public class ReporterComponentUnit extends ComponentUnit {
                           @NonNull AppEnvironmentProvider appEnvironmentProvider,
                           @NonNull TimePassedChecker timePassedChecker,
                           @NonNull ComponentUnitFieldsFactory fieldsFactory,
-                          @NonNull DataSendingRestrictionControllerImpl controller) {
+                          @NonNull DataSendingRestrictionControllerImpl controller,
+                          @NonNull CommonArguments.ReporterArguments sdkConfig) {
         super(
-                context,
-                componentId,
-                appEnvironmentProvider,
-                timePassedChecker,
-                fieldsFactory
+            context,
+            componentId,
+            appEnvironmentProvider,
+            timePassedChecker,
+            fieldsFactory,
+            sdkConfig
         );
         mApiKey = componentId.getApiKey();
         dataSendingRestrictionController = controller;
@@ -64,9 +69,9 @@ public class ReporterComponentUnit extends ComponentUnit {
     public synchronized void updateSdkConfig(@NonNull CommonArguments.ReporterArguments sdkConfig) {
         super.updateSdkConfig(sdkConfig);
         dataSendingRestrictionController
-                .setEnabledFromSharedReporter(
-                        mApiKey,
-                        sdkConfig.dataSendingEnabled
-                );
+            .setEnabledFromSharedReporter(
+                mApiKey,
+                sdkConfig.dataSendingEnabled
+            );
     }
 }

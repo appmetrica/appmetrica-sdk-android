@@ -3,8 +3,11 @@ package io.appmetrica.analytics.coreutils.internal.services;
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreutils.internal.reflection.ReflectionUtils;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 
 public class FrameworkDetector {
+
+    private static final String TAG = "[FrameworkDetector]";
 
     private static final String UNITY_CLASS = "com.unity3d.player.UnityPlayer";
     private static final String XAMARIN_CLASS = "mono.MonoPackageManager";
@@ -33,6 +36,11 @@ public class FrameworkDetector {
         return FRAMEWORK;
     }
 
+    public static boolean isNative() {
+        DebugLogger.INSTANCE.info(TAG, "isNative = %s", FRAMEWORK_DEFAULT.equals(FRAMEWORK));
+        return FRAMEWORK_DEFAULT.equals(FRAMEWORK);
+    }
+
     @VisibleForTesting
     @NonNull
     public String detectFramework() {
@@ -49,6 +57,7 @@ public class FrameworkDetector {
         } else if (ReflectionUtils.detectClassExists(FLUTTER_CLASS)) {
             framework = FRAMEWORK_FLUTTER;
         }
+        DebugLogger.INSTANCE.info(TAG, "Detected framework: %s", framework);
         return framework;
     }
 }

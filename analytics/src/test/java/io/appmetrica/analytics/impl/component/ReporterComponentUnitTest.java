@@ -72,12 +72,13 @@ public class ReporterComponentUnitTest extends ComponentUnitBaseTest {
     @Override
     protected ComponentUnit createComponentUnit() {
         return new ReporterComponentUnit(
-                mContext,
-                mComponentId,
-                mAppEnvironmentProvider,
-                mTimePassedChecker,
-                mFieldsFactory,
-            dataSendingRestrictionController
+            mContext,
+            mComponentId,
+            mAppEnvironmentProvider,
+            mTimePassedChecker,
+            mFieldsFactory,
+            dataSendingRestrictionController,
+            mReporterArguments
         );
     }
 

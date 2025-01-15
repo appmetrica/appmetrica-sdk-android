@@ -43,6 +43,7 @@ import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoSatelliteCheckedProvi
 import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoStateProvider;
 import io.appmetrica.analytics.impl.referrer.service.ReferrerHolder;
 import io.appmetrica.analytics.impl.service.ServiceDataReporterHolder;
+import io.appmetrica.analytics.impl.servicecomponents.ServiceLifecycleTimeTracker;
 import io.appmetrica.analytics.impl.startup.uuid.MultiProcessSafeUuidProvider;
 import io.appmetrica.analytics.impl.startup.uuid.UuidFromStartupStateImporter;
 import io.appmetrica.analytics.impl.telephony.TelephonyDataProvider;
@@ -138,6 +139,10 @@ public final class GlobalServiceLocator {
     private final NativeCrashService nativeCrashService = new NativeCrashService();
     @NonNull
     private final UtilityServiceProvider utilityServiceProvider = new UtilityServiceProvider();
+    @Nullable
+    private volatile ExtraMetaInfoRetriever extraMetaInfoRetriever;
+    @NonNull
+    private final ServiceLifecycleTimeTracker serviceLifecycleTimeTracker = new ServiceLifecycleTimeTracker();
 
     private GlobalServiceLocator(@NonNull Context applicationContext) {
         mContext = applicationContext;
@@ -527,6 +532,26 @@ public final class GlobalServiceLocator {
     @NonNull
     public WaitForActivationDelayBarrier getActivationBarrier() {
         return utilityServiceProvider.getActivationBarrier();
+    }
+
+    @NonNull
+    public ExtraMetaInfoRetriever getExtraMetaInfoRetriever() {
+        ExtraMetaInfoRetriever local = extraMetaInfoRetriever;
+        if (local == null) {
+            synchronized (this) {
+                local = extraMetaInfoRetriever;
+                if (local == null) {
+                    local = new ExtraMetaInfoRetriever(mContext);
+                    extraMetaInfoRetriever = local;
+                }
+            }
+        }
+        return local;
+    }
+
+    @NonNull
+    public ServiceLifecycleTimeTracker getServiceLifecycleTimeTracker() {
+        return serviceLifecycleTimeTracker;
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)

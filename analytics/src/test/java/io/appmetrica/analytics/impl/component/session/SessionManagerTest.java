@@ -10,7 +10,7 @@ import io.appmetrica.analytics.impl.db.DatabaseHelper;
 import io.appmetrica.analytics.impl.db.VitalComponentDataProvider;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesComponentDbStorage;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesServiceDbStorage;
-import io.appmetrica.analytics.impl.events.EventTrigger;
+import io.appmetrica.analytics.impl.events.ConditionalEventTrigger;
 import io.appmetrica.analytics.impl.request.ReportRequestConfig;
 import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.impl.utils.ServerTime;
@@ -72,7 +72,7 @@ public class SessionManagerTest extends CommonTest {
         when(mComponentUnit.getContext()).thenReturn(mContext);
         when(mComponentUnit.getDbHelper()).thenReturn(mDbHelper);
         when(mComponentUnit.getFreshReportRequestConfig()).thenReturn(mock(ReportRequestConfig.class));
-        when(mComponentUnit.getEventTrigger()).thenReturn(mock(EventTrigger.class));
+        when(mComponentUnit.getEventTrigger()).thenReturn(mock(ConditionalEventTrigger.class));
         when(mComponentUnit.getVitalComponentDataProvider()).thenReturn(mock(VitalComponentDataProvider.class));
         when(mComponentUnit.getComponentPreferences()).thenReturn(mock(PreferencesComponentDbStorage.class));
         when(mComponentUnit.getPublicLogger()).thenReturn(publicLogger);
@@ -84,8 +84,7 @@ public class SessionManagerTest extends CommonTest {
                 sessionIDProvider,
                 mock(SessionManagerStateMachine.EventSaver.class),
                 mForegroundSessionFactory,
-                mBackgroundSessionFactory,
-                mExtraMetaInfoRetriever
+                mBackgroundSessionFactory
         );
     }
 
@@ -128,8 +127,13 @@ public class SessionManagerTest extends CommonTest {
         ISessionFactory backgroundSessionFactory = spy(new MockSessionFactory(SessionType.BACKGROUND));
         SessionManagerStateMachine.EventSaver saver = mock(SessionManagerStateMachine.EventSaver.class);
 
-        SessionManagerStateMachine sessionManager = new SessionManagerStateMachine(mComponentUnit, sessionIDProvider, saver,
-                foregroundSessionFactory, backgroundSessionFactory, mExtraMetaInfoRetriever);
+        SessionManagerStateMachine sessionManager = new SessionManagerStateMachine(
+            mComponentUnit,
+            sessionIDProvider,
+            saver,
+            foregroundSessionFactory,
+            backgroundSessionFactory
+        );
 
         sessionManager.heartbeat(new CounterReport());
         sessionManager.heartbeat(new CounterReport());

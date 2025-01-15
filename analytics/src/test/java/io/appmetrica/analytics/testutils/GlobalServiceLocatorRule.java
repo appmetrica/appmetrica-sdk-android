@@ -18,6 +18,7 @@ import io.appmetrica.analytics.impl.ApplicationStateProviderImpl;
 import io.appmetrica.analytics.impl.BatteryInfoProvider;
 import io.appmetrica.analytics.impl.ClidsInfoStorage;
 import io.appmetrica.analytics.impl.DataSendingRestrictionControllerImpl;
+import io.appmetrica.analytics.impl.ExtraMetaInfoRetriever;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.LifecycleDependentComponentManager;
 import io.appmetrica.analytics.impl.PreloadInfoStorage;
@@ -39,6 +40,7 @@ import io.appmetrica.analytics.impl.modules.service.ServiceModulesController;
 import io.appmetrica.analytics.impl.network.http.SslSocketFactoryProviderImpl;
 import io.appmetrica.analytics.impl.referrer.service.ReferrerHolder;
 import io.appmetrica.analytics.impl.service.ServiceDataReporterHolder;
+import io.appmetrica.analytics.impl.servicecomponents.ServiceLifecycleTimeTracker;
 import io.appmetrica.analytics.impl.startup.CollectingFlags;
 import io.appmetrica.analytics.impl.startup.StartupState;
 import io.appmetrica.analytics.impl.startup.uuid.MultiProcessSafeUuidProvider;
@@ -138,6 +140,8 @@ public class GlobalServiceLocatorRule extends ExternalResource {
         when(globalServiceLocator.getActivationBarrier()).thenReturn(mock(WaitForActivationDelayBarrier.class));
         when(globalServiceLocator.getFirstExecutionConditionService())
             .thenReturn(mock(FirstExecutionConditionServiceImpl.class));
+        when(globalServiceLocator.getExtraMetaInfoRetriever()).thenReturn(mock(ExtraMetaInfoRetriever.class));
+        when(globalServiceLocator.getServiceLifecycleTimeTracker()).thenReturn(mock(ServiceLifecycleTimeTracker.class));
         GlobalServiceLocator.setInstance(globalServiceLocator);
     }
 

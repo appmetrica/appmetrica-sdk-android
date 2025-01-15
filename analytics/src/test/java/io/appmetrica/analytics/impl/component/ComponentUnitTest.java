@@ -37,11 +37,12 @@ public class ComponentUnitTest extends ComponentUnitBaseTest {
     @Override
     protected ComponentUnit createComponentUnit() {
         return new ComponentUnit(
-                mContext,
-                mComponentId,
-                mAppEnvironmentProvider,
-                mTimePassedChecker,
-                mFieldsFactory
+            mContext,
+            mComponentId,
+            mAppEnvironmentProvider,
+            mTimePassedChecker,
+            mFieldsFactory,
+            mReporterArguments
         );
     }
 

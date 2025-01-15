@@ -3,11 +3,12 @@ package io.appmetrica.analytics.impl;
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.impl.component.IComponent;
+import io.appmetrica.analytics.impl.events.EventsFlusher;
 import io.appmetrica.analytics.impl.startup.executor.StartupExecutor;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import io.appmetrica.analytics.networktasks.internal.NetworkTask;
 
-public class TaskProcessor<C extends IComponent> implements ServiceLifecycleObserver {
+public class TaskProcessor<C extends IComponent> implements ServiceLifecycleObserver, EventsFlusher {
 
     private static final String TAG = "[TaskProcessor]";
 
@@ -53,6 +54,7 @@ public class TaskProcessor<C extends IComponent> implements ServiceLifecycleObse
 
     }
 
+    @Override
     public void flushAllTasks() {
         DebugLogger.INSTANCE.info(TAG, "flushAllTasks");
         synchronized (mSync) {

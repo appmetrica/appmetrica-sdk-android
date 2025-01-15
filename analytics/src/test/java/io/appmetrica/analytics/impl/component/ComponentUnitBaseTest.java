@@ -21,9 +21,8 @@ import io.appmetrica.analytics.impl.db.DatabaseHelper;
 import io.appmetrica.analytics.impl.db.VitalComponentDataProvider;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesComponentDbStorage;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesServiceDbStorage;
+import io.appmetrica.analytics.impl.events.ConditionalEventTrigger;
 import io.appmetrica.analytics.impl.events.ContainsUrgentEventsCondition;
-import io.appmetrica.analytics.impl.events.EventTrigger;
-import io.appmetrica.analytics.impl.events.EventsFlusher;
 import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoState;
 import io.appmetrica.analytics.impl.request.ReportRequestConfig;
 import io.appmetrica.analytics.impl.request.StartupRequestConfig;
@@ -33,7 +32,6 @@ import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.MockedStaticRule;
 import io.appmetrica.analytics.testutils.TestUtils;
-import java.util.List;
 import java.util.UUID;
 import org.json.JSONObject;
 import org.junit.Rule;
@@ -62,7 +60,7 @@ public abstract class ComponentUnitBaseTest extends CommonTest {
     @Mock
     ComponentId mComponentId;
     @Mock
-    private CommonArguments.ReporterArguments mReporterArguments;
+    CommonArguments.ReporterArguments mReporterArguments;
     @Mock
     AppEnvironmentProvider mAppEnvironmentProvider;
     @Mock
@@ -102,7 +100,7 @@ public abstract class ComponentUnitBaseTest extends CommonTest {
     @Mock
     private ReportRequestConfig mReportRequestConfig;
     @Mock
-    private EventTrigger mEventTrigger;
+    private ConditionalEventTrigger mConditionalEventTrigger;
     @Mock
     private ContainsUrgentEventsCondition mUrgentEventsCondition;
     @Mock
@@ -154,8 +152,7 @@ public abstract class ComponentUnitBaseTest extends CommonTest {
         when(mFieldsFactory.createEventProcessingStrategyFactory(any(ComponentUnit.class))).thenReturn(mEventProcessingStrategyFactory);
         when(mFieldsFactory.createReportProcessor(any(ComponentUnit.class), same(mEventProcessingStrategyFactory))).thenReturn(mReportProcessor);
         when(mFieldsFactory.createMigrationHelperCreator(any(ComponentUnit.class))).thenReturn(mMigrationHelperCreator);
-        when(mFieldsFactory.createUrgentEventsCondition(mDatabaseHelper)).thenReturn(mUrgentEventsCondition);
-        when(mFieldsFactory.createEventTrigger(any(List.class), any(EventsFlusher.class))).thenReturn(mEventTrigger);
+        when(mFieldsFactory.createEventTrigger(any(), any(), any(), any(), any(), any())).thenReturn(mConditionalEventTrigger);
         when(mFieldsFactory.createCertificateFingerprintProvider(mComponentPreferences)).thenReturn(mCertificatesFingerprintsProvider);
         when(mFieldsFactory.getVitalComponentDataProvider()).thenReturn(vitalComponentDataProvider);
         when(mFieldsFactory.createSessionExtraHolder()).thenReturn(sessionExtrasHolder);
@@ -314,7 +311,7 @@ public abstract class ComponentUnitBaseTest extends CommonTest {
     @Test
     public void testFlushEvents() {
         mComponentUnit.flushEvents();
-        verify(mTaskProcessor).flushAllTasks();
+        verify(mConditionalEventTrigger).forceTrigger();
     }
 
     @Test
@@ -336,12 +333,7 @@ public abstract class ComponentUnitBaseTest extends CommonTest {
 
     @Test
     public void testGetEventsTrigger() {
-        assertThat(mComponentUnit.getEventTrigger()).isEqualTo(mEventTrigger);
-    }
-
-    @Test
-    public void testGetReportsListener() {
-        assertThat(mComponentUnit.getReportsListener()).isEqualTo(mUrgentEventsCondition);
+        assertThat(mComponentUnit.getEventTrigger()).isEqualTo(mConditionalEventTrigger);
     }
 
     @Test
@@ -354,7 +346,7 @@ public abstract class ComponentUnitBaseTest extends CommonTest {
         StartupState startupState = TestUtils.createDefaultStartupStateBuilder().build();
         mComponentUnit.onStartupChanged(startupState);
         verify(mConfigHolder).updateStartupState(startupState);
-        verify(mEventTrigger).trigger();
+        verify(mConditionalEventTrigger).trigger();
     }
 
     @Test

@@ -8,7 +8,7 @@ class AppMetricaDefaultAnonymousConfigProvider {
 
     private val tag = "[AppMetricaDefaultAnonymousConfigProvider]"
 
-    private val anonymousApiKey: String = "629a824d-c717-4ba5-bc0f-3f3968554d01"
+    private val anonymousApiKey: String = DefaultValues.ANONYMOUS_API_KEY
     private val mainProcessDetector: MainProcessDetector = ClientServiceLocator.getInstance().mainProcessDetector
     private val firstLaunchDetector = ClientServiceLocator.getInstance().firstLaunchDetector
 

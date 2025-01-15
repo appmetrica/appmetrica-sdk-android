@@ -3,6 +3,7 @@ package io.appmetrica.analytics.impl.component.clients
 import android.content.Context
 import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.component.CommonArguments
+import io.appmetrica.analytics.impl.component.ComponentEventTriggerProviderCreator
 import io.appmetrica.analytics.impl.component.ComponentId
 import io.appmetrica.analytics.impl.component.SelfReportingArgumentsFactory
 import io.appmetrica.analytics.impl.component.SelfSdkReportingComponentUnit
@@ -24,6 +25,7 @@ internal class SelfSdkReporterComponentUnitFactory : ComponentUnitFactory<SelfSd
         SelfReportingArgumentsFactory(
             GlobalServiceLocator.getInstance().dataSendingRestrictionController
         ),
-        StubbedExecutorFactory()
+        StubbedExecutorFactory(),
+        ComponentEventTriggerProviderCreator()
     )
 }

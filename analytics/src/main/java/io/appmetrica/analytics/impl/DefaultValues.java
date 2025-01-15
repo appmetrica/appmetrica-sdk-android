@@ -23,6 +23,8 @@ public class DefaultValues {
     public static final int DEFAULT_MAX_REPORTS_COUNT_UPPER_BOUND = 10000;
     public static final boolean DEFAULT_ANR_COLLECTING_ENABLED = false;
     public static final int DEFAULT_ANR_TICKS_COUNT = 5;
+    public static final String ANONYMOUS_API_KEY = "629a824d-c717-4ba5-bc0f-3f3968554d01";
+    public static final Long ANONYMOUS_API_KEY_EVENT_SENDING_DELAY_SECONDS = 30L;
 
     public static final StartupStateProtobuf.StartupState.StartupUpdateConfig STARTUP_UPDATE_CONFIG =
         new StartupStateProtobuf.StartupState.StartupUpdateConfig();

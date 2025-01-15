@@ -3,6 +3,7 @@ package io.appmetrica.analytics.impl.component.clients
 import android.content.Context
 import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.component.CommonArguments
+import io.appmetrica.analytics.impl.component.ComponentEventTriggerProviderCreator
 import io.appmetrica.analytics.impl.component.ComponentId
 import io.appmetrica.analytics.impl.component.SelfReportingArgumentsFactory
 import io.appmetrica.analytics.impl.component.SelfSdkReportingComponentUnit
@@ -21,7 +22,7 @@ import org.mockito.kotlin.mock
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class SelfSdkReporterComponentUnitFactoryTest : CommonTest() {
+internal class SelfSdkReporterComponentUnitFactoryTest : CommonTest() {
 
     private val context: Context = mock()
     private val componentId: ComponentId = mock()
@@ -44,6 +45,10 @@ class SelfSdkReporterComponentUnitFactoryTest : CommonTest() {
     @get:Rule
     val stubbedExecutorFactoryRule = constructionRule<StubbedExecutorFactory>()
 
+    @get:Rule
+    val componentEventTriggerProviderCreatorRule = constructionRule<ComponentEventTriggerProviderCreator>()
+    private val componentEventTriggerProviderCreator by componentEventTriggerProviderCreatorRule
+
     private val factory by setUp { SelfSdkReporterComponentUnitFactory() }
 
     @Test
@@ -58,7 +63,8 @@ class SelfSdkReporterComponentUnitFactoryTest : CommonTest() {
                 componentId,
                 sdkConfig,
                 selfReportingArgumentsFactoryRule.constructionMock.constructed().first(),
-                stubbedExecutorFactoryRule.constructionMock.constructed().first()
+                stubbedExecutorFactoryRule.constructionMock.constructed().first(),
+                componentEventTriggerProviderCreator
             )
 
         assertThat(selfReportingArgumentsFactoryRule.constructionMock.constructed()).hasSize(1)

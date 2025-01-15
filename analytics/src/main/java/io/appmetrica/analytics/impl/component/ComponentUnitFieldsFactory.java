@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
+import io.appmetrica.analytics.coreutils.internal.logger.LoggerStorage;
 import io.appmetrica.analytics.impl.AppEnvironment;
 import io.appmetrica.analytics.impl.CertificatesFingerprintsProvider;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
@@ -21,18 +22,13 @@ import io.appmetrica.analytics.impl.db.DatabaseHelper;
 import io.appmetrica.analytics.impl.db.VitalComponentDataProvider;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesComponentDbStorage;
 import io.appmetrica.analytics.impl.db.storage.DatabaseStorageFactory;
-import io.appmetrica.analytics.impl.events.ContainsUrgentEventsCondition;
-import io.appmetrica.analytics.impl.events.EventCondition;
 import io.appmetrica.analytics.impl.events.EventTrigger;
 import io.appmetrica.analytics.impl.events.EventsFlusher;
-import io.appmetrica.analytics.impl.events.MaxReportsCountReachedCondition;
 import io.appmetrica.analytics.impl.request.ReportRequestConfig;
 import io.appmetrica.analytics.impl.startup.StartupState;
 import io.appmetrica.analytics.impl.startup.executor.ComponentStartupExecutorFactory;
-import io.appmetrica.analytics.coreutils.internal.logger.LoggerStorage;
-import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.impl.utils.encryption.EventEncrypterProvider;
-import java.util.List;
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 
 class ComponentUnitFieldsFactory {
 
@@ -97,6 +93,8 @@ class ComponentUnitFieldsFactory {
     private final ICommonExecutor mTaskExecutor;
     @NonNull
     private final LifecycleDependentComponentManager lifecycleDependentComponentManager;
+    @NonNull
+    private final EventTriggerProviderCreator eventTriggerProviderCreator;
     private final int mCurrentAppVersion;
 
     ComponentUnitFieldsFactory(@NonNull Context context,
@@ -107,20 +105,22 @@ class ComponentUnitFieldsFactory {
                                @NonNull ReportRequestConfig.DataSendingStrategy statSendingStrategy,
                                @NonNull ICommonExecutor taskExecutor,
                                final int currentAppVersion,
-                               @NonNull LifecycleDependentComponentManager lifecycleDependentComponentManager) {
+                               @NonNull LifecycleDependentComponentManager lifecycleDependentComponentManager,
+                               @NonNull EventTriggerProviderCreator eventTriggerProviderCreator) {
         this(
-                context,
-                componentId,
-                sdkConfig,
-                startupExecutorFactory,
-                startupState,
-                statSendingStrategy,
-                taskExecutor,
-                new EventEncrypterProvider(),
-                currentAppVersion,
-                new LoggerProvider(sdkConfig.apiKey),
-                new PreferencesProvider(context, componentId),
-                lifecycleDependentComponentManager
+            context,
+            componentId,
+            sdkConfig,
+            startupExecutorFactory,
+            startupState,
+            statSendingStrategy,
+            taskExecutor,
+            new EventEncrypterProvider(),
+            currentAppVersion,
+            new LoggerProvider(sdkConfig.apiKey),
+            new PreferencesProvider(context, componentId),
+            lifecycleDependentComponentManager,
+            eventTriggerProviderCreator
         );
     }
 
@@ -136,7 +136,8 @@ class ComponentUnitFieldsFactory {
                                final int currentAppVersion,
                                @NonNull LoggerProvider loggerProvider,
                                @NonNull PreferencesProvider preferencesProvider,
-                               @NonNull LifecycleDependentComponentManager lifecycleDependentComponentManager) {
+                               @NonNull LifecycleDependentComponentManager lifecycleDependentComponentManager,
+                               @NonNull EventTriggerProviderCreator eventTriggerProviderCreator) {
         mContext = context;
         mComponentId = componentId;
         mSdkConfig = sdkConfig;
@@ -149,6 +150,7 @@ class ComponentUnitFieldsFactory {
         mLoggerProvider = loggerProvider;
         mPreferencesProvider = preferencesProvider;
         this.lifecycleDependentComponentManager = lifecycleDependentComponentManager;
+        this.eventTriggerProviderCreator = eventTriggerProviderCreator;
     }
 
     @NonNull
@@ -250,21 +252,22 @@ class ComponentUnitFieldsFactory {
     }
 
     @NonNull
-    ContainsUrgentEventsCondition createUrgentEventsCondition(@NonNull DatabaseHelper databaseHelper) {
-        return new ContainsUrgentEventsCondition(databaseHelper);
-    }
-
-    @NonNull
-    MaxReportsCountReachedCondition createMaxReportsCondition(
-            @NonNull DatabaseHelper databaseHelper,
-            @NonNull ReportComponentConfigurationHolder configHolder) {
-        return new MaxReportsCountReachedCondition(databaseHelper, configHolder);
-    }
-
-    @NonNull
-    EventTrigger createEventTrigger(@NonNull List<EventCondition> conditions,
-                                    @NonNull EventsFlusher eventsFlusher) {
-        return new EventTrigger(conditions, eventsFlusher);
+    public EventTrigger createEventTrigger(
+        @NonNull EventsFlusher eventsFlusher,
+        @NonNull DatabaseHelper databaseHelper,
+        @NonNull ReportComponentConfigurationHolder configurationHolder,
+        @NonNull CommonArguments.ReporterArguments initialConfig,
+        @NonNull ComponentId componentId,
+        @NonNull PreferencesComponentDbStorage preferences
+    ) {
+        return eventTriggerProviderCreator.createEventTriggerProvider(
+            eventsFlusher,
+            databaseHelper,
+            configurationHolder,
+            initialConfig,
+            componentId,
+            preferences
+        ).getEventTrigger();
     }
 
     @NonNull

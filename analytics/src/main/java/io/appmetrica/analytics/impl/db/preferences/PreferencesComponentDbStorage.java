@@ -37,6 +37,8 @@ public class PreferencesComponentDbStorage extends NameSpacedPreferenceDbStorage
     private static final PreferencesItem SENT_EXTERNAL_ATTRIBUTIONS = new PreferencesItem("SENT_EXTERNAL_ATTRIBUTIONS");
 
     public static final String SESSION_KEY = "SESSION_";
+    private static final PreferencesItem MAIN_REPORTER_EVENTS_TRIGGER_CONDITION_MET_KEY =
+        new PreferencesItem("MAIN_REPORTER_EVENTS_TRIGGER_CONDITION_MET");
 
     public PreferencesComponentDbStorage(final IKeyValueTableDbHelper dbStorage) {
         super(dbStorage);
@@ -107,6 +109,14 @@ public class PreferencesComponentDbStorage extends NameSpacedPreferenceDbStorage
 
     public PreferencesComponentDbStorage putCertificatesSha1Fingerprints(List<String> sha1s) {
         return writeStringList(CERTIFICATES_SHA1_FINGERPRINTS.fullKey(), sha1s);
+    }
+
+    public void putMainReporterEventsTriggerConditionMet(boolean value) {
+        writeBoolean(MAIN_REPORTER_EVENTS_TRIGGER_CONDITION_MET_KEY.fullKey(), value);
+    }
+
+    public boolean getMainReporterEventsTriggerConditionMet(boolean defValue) {
+        return readBoolean(MAIN_REPORTER_EVENTS_TRIGGER_CONDITION_MET_KEY.fullKey(), defValue);
     }
 
     @Nullable

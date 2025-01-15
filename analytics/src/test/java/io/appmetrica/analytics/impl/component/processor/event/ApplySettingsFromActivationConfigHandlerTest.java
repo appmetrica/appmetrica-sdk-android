@@ -5,7 +5,6 @@ import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.impl.component.EventSaver;
 import io.appmetrica.analytics.impl.component.remarketing.EventFirstOccurrenceService;
 import io.appmetrica.analytics.impl.db.VitalComponentDataProvider;
-import io.appmetrica.analytics.impl.events.EventListener;
 import io.appmetrica.analytics.impl.request.ReportRequestConfig;
 import io.appmetrica.analytics.impl.utils.ServerTime;
 import io.appmetrica.analytics.testutils.CommonTest;
@@ -40,8 +39,6 @@ public class ApplySettingsFromActivationConfigHandlerTest extends CommonTest {
     private EventFirstOccurrenceService mEventFirstOccurrenceService;
     @Mock
     private EventSaver mEventSaver;
-    @Mock
-    private EventListener mEventListener;
 
     @Before
     public void setUp() throws JSONException {
@@ -52,7 +49,6 @@ public class ApplySettingsFromActivationConfigHandlerTest extends CommonTest {
         when(mComponent.getFreshReportRequestConfig()).thenReturn(mConfig);
         when(mComponent.getEventFirstOccurrenceService()).thenReturn(mEventFirstOccurrenceService);
         when(mComponent.getEventSaver()).thenReturn(mEventSaver);
-        when(mComponent.getReportsListener()).thenReturn(mEventListener);
     }
 
     @Test

@@ -369,6 +369,7 @@ public class io.appmetrica.analytics.coreutils.internal.services.FrameworkDetect
     public <init>()
     public [NonNull] String detectFramework()
     public static [NonNull] String framework()
+    public static boolean isNative()
 }
 
 public final class io.appmetrica.analytics.coreutils.internal.services.PackageManagerUtils {
@@ -392,6 +393,7 @@ public final class io.appmetrica.analytics.coreutils.internal.services.SafePacka
     public <init>()
     public final [Nullable] android.content.pm.ActivityInfo getActivityInfo([NonNull] android.content.Context, [NonNull] android.content.ComponentName, int)
     public final [Nullable] android.content.pm.ApplicationInfo getApplicationInfo([NonNull] android.content.Context, [NonNull] String, int)
+    public final [Nullable] android.os.Bundle getApplicationMetaData([NonNull] android.content.Context)
     public final [Nullable] String getInstallerPackageName([NonNull] android.content.Context, [NonNull] String)
     public final [Nullable] android.content.pm.PackageInfo getPackageInfo([NonNull] android.content.Context, [NonNull] String)
     public final [Nullable] android.content.pm.PackageInfo getPackageInfo([NonNull] android.content.Context, [NonNull] String, int)

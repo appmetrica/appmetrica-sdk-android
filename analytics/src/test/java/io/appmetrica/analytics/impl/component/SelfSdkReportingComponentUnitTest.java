@@ -40,11 +40,12 @@ public class SelfSdkReportingComponentUnitTest extends ComponentUnitBaseTest {
     @Override
     protected ComponentUnit createComponentUnit() {
         return new SelfSdkReportingComponentUnit(
-                mContext,
-                mComponentId,
-                mAppEnvironmentProvider,
-                mTimePassedChecker,
-                mFieldsFactory
+            mContext,
+            mComponentId,
+            mAppEnvironmentProvider,
+            mTimePassedChecker,
+            mFieldsFactory,
+            mReporterArguments
         );
     }
 

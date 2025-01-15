@@ -162,4 +162,11 @@ public class PreferencesComponentDbStorageTest extends CommonTest {
 
         assertThat(mComponentDbStorage.getSentExternalAttributions()).isEqualTo(attributions);
     }
+
+    @Test
+    public void mainReporterEventsTriggerConditionMet() {
+        assertThat(mComponentDbStorage.getMainReporterEventsTriggerConditionMet(false)).isFalse();
+        mComponentDbStorage.putMainReporterEventsTriggerConditionMet(true);
+        assertThat(mComponentDbStorage.getMainReporterEventsTriggerConditionMet(false)).isTrue();
+    }
 }

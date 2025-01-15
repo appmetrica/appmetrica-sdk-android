@@ -19,6 +19,7 @@ import io.appmetrica.analytics.impl.referrer.service.ReferrerHolder;
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade;
 import io.appmetrica.analytics.impl.selfreporting.SelfReporterWrapper;
 import io.appmetrica.analytics.impl.service.ServiceDataReporterHolder;
+import io.appmetrica.analytics.impl.servicecomponents.ServiceLifecycleTimeTracker;
 import io.appmetrica.analytics.impl.startup.CollectingFlags;
 import io.appmetrica.analytics.impl.startup.StartupState;
 import io.appmetrica.analytics.impl.startup.uuid.MultiProcessSafeUuidProvider;
@@ -335,6 +336,24 @@ public class GlobalServiceLocatorGettersTest extends CommonTest {
                         return globalServiceLocator.getActivationBarrier();
                     }
                 }
+            },
+            {
+                "getExtraMetaInfoRetriever",
+                new ServiceExtractor<ExtraMetaInfoRetriever>() {
+                    @Override
+                    public ExtraMetaInfoRetriever getService(GlobalServiceLocator globalServiceLocator) {
+                        return globalServiceLocator.getExtraMetaInfoRetriever();
+                    }
+                }
+            },
+            {
+                "getServiceLifecycleTimeTracker",
+                new ServiceExtractor<ServiceLifecycleTimeTracker>() {
+                    @Override
+                    public ServiceLifecycleTimeTracker getService(GlobalServiceLocator globalServiceLocator) {
+                        return globalServiceLocator.getServiceLifecycleTimeTracker();
+                    }
+                }
             }
         });
     }
@@ -382,6 +401,14 @@ public class GlobalServiceLocatorGettersTest extends CommonTest {
     @Rule
     public final MockedConstructionRule<PlatformIdentifiers> platformIdentifiersMockedConstructionRule =
         new MockedConstructionRule<>(PlatformIdentifiers.class);
+
+    @Rule
+    public final MockedConstructionRule<ExtraMetaInfoRetriever> extraMetaInfoRetrieverMockedConstructionRule =
+        new MockedConstructionRule<>(ExtraMetaInfoRetriever.class);
+
+    @Rule
+    public final MockedConstructionRule<ServiceLifecycleTimeTracker> serviceLifecycleTimeTrackerMockedConstructionRule =
+        new MockedConstructionRule<>(ServiceLifecycleTimeTracker.class);
 
     private GlobalServiceLocator mGlobalServiceLocator;
 

@@ -11,6 +11,7 @@ import android.content.pm.ProviderInfo
 import android.content.pm.ResolveInfo
 import android.content.pm.ServiceInfo
 import android.os.Build
+import android.os.Bundle
 import io.appmetrica.analytics.coreutils.internal.AndroidUtils.isApiAchieved
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
@@ -47,6 +48,10 @@ class SafePackageManager {
 
     fun getApplicationInfo(context: Context, packageName: String, flags: Int): ApplicationInfo? = runSafely {
         context.packageManager.getApplicationInfo(packageName, flags)
+    }
+
+    fun getApplicationMetaData(context: Context): Bundle? = runSafely {
+        getApplicationInfo(context, context.packageName, PackageManager.GET_META_DATA)?.metaData
     }
 
     fun getActivityInfo(context: Context, componentName: ComponentName, flags: Int): ActivityInfo? = runSafely {

@@ -11,7 +11,6 @@ import io.appmetrica.analytics.impl.component.ComponentId;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.impl.component.EventSaver;
 import io.appmetrica.analytics.impl.db.VitalComponentDataProvider;
-import io.appmetrica.analytics.impl.events.EventListener;
 import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoState;
 import io.appmetrica.analytics.impl.request.ReportRequestConfig;
 import io.appmetrica.analytics.testutils.CommonTest;
@@ -53,8 +52,6 @@ public class ReportSaveInitHandlerTest extends CommonTest {
     @Mock
     private EventSaver mEventSaver;
     @Mock
-    private EventListener mEventListener;
-    @Mock
     private PreloadInfoStorage mPreloadInfoStorage;
     private PreloadInfoState mPreloadInfoState;
     @Mock
@@ -77,7 +74,6 @@ public class ReportSaveInitHandlerTest extends CommonTest {
         when(mComponent.getEventSaver()).thenReturn(mEventSaver);
         when(vitalComponentDataProvider.isInitEventDone()).thenReturn(false);
         when(mComponent.getFreshReportRequestConfig()).thenReturn(mReportRequestConfig);
-        when(mComponent.getReportsListener()).thenReturn(mEventListener);
         ComponentId componentId = mock(ComponentId.class);
         when(componentId.getPackage()).thenReturn(mPackage);
         when(mComponent.getComponentId()).thenReturn(componentId);

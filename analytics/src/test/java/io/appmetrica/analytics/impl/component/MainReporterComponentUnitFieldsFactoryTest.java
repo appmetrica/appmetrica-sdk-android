@@ -26,6 +26,8 @@ public class MainReporterComponentUnitFieldsFactoryTest extends ComponentUnitFie
     private IHandlerExecutor defaultExecutor;
     @Mock
     private ICommonExecutor uiExecutor;
+    @Mock
+    private EventTriggerProviderCreator eventTriggerProviderCreator;
     private MainReporterComponentUnitFieldsFactory mainReporterComponentUnitFieldsFactory;
 
     @Before
@@ -44,7 +46,8 @@ public class MainReporterComponentUnitFieldsFactoryTest extends ComponentUnitFie
             mExecutor,
             mCurrentAppVersion,
             serviceExecutorProvider,
-            lifecycleDependentComponentManager
+            lifecycleDependentComponentManager,
+            eventTriggerProviderCreator
         );
     }
 

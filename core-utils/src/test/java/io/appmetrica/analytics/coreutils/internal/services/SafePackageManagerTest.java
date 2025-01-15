@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.pm.ServiceInfo;
 import android.os.Build;
+import android.os.Bundle;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.MockedStaticRule;
 import java.util.ArrayList;
@@ -55,12 +56,13 @@ public class SafePackageManagerTest extends CommonTest {
 
     @Rule
     public final MockedStaticRule<SafePackageManagerHelperForR> sSafePackageManagerHelperForR =
-            new MockedStaticRule<>(SafePackageManagerHelperForR.class);
+        new MockedStaticRule<>(SafePackageManagerHelperForR.class);
 
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
         when(mContext.getPackageManager()).thenReturn(mPackageManager);
+        when(mContext.getPackageName()).thenReturn(mPackageName);
         mResolveInfoList = new ArrayList<ResolveInfo>();
         mPackageInfoList = new ArrayList<PackageInfo>();
         mResolveInfoList.add(mock(ResolveInfo.class));
@@ -141,6 +143,39 @@ public class SafePackageManagerTest extends CommonTest {
     public void testGetApplicationInfoException() throws PackageManager.NameNotFoundException {
         when(mPackageManager.getApplicationInfo(anyString(), anyInt())).thenThrow(new RuntimeException());
         assertThat(mSafePackageManager.getApplicationInfo(mContext, mPackageName, 0)).isNull();
+    }
+
+    @Test
+    public void getApplicationMetaData() throws Exception {
+        Bundle metaData = new Bundle();
+        ApplicationInfo applicationInfo = new ApplicationInfo();
+        applicationInfo.metaData = metaData;
+        when(mPackageManager.getApplicationInfo(mPackageName, PackageManager.GET_META_DATA))
+            .thenReturn(applicationInfo);
+        assertThat(mSafePackageManager.getApplicationMetaData(mContext)).isEqualTo(metaData);
+    }
+
+    @Test
+    public void getApplicationMetaDataThrowsException() throws Exception {
+        when(mPackageManager.getApplicationInfo(mPackageName, PackageManager.GET_META_DATA))
+            .thenThrow(new RuntimeException());
+        assertThat(mSafePackageManager.getApplicationMetaData(mContext)).isNull();
+    }
+
+    @Test
+    public void getApplicationMetaDataIfPackageManagerReturnNull() throws Exception {
+        when(mPackageManager.getApplicationInfo(mPackageName, PackageManager.GET_META_DATA))
+            .thenReturn(null);
+        assertThat(mSafePackageManager.getApplicationMetaData(mContext)).isNull();
+    }
+
+    @Test
+    public void getApplicationMetaDataIfNull() throws Exception {
+        ApplicationInfo applicationInfo = new ApplicationInfo();
+        applicationInfo.metaData = null;
+        when(mPackageManager.getApplicationInfo(mPackageName, PackageManager.GET_META_DATA))
+            .thenReturn(applicationInfo);
+        assertThat(mSafePackageManager.getApplicationMetaData(mContext)).isNull();
     }
 
     @Test
@@ -232,7 +267,7 @@ public class SafePackageManagerTest extends CommonTest {
     @Config(sdk = Build.VERSION_CODES.R)
     public void testGetInstallerPackageNameAndroid11Exception() {
         when(SafePackageManagerHelperForR.extractPackageInstaller(mPackageManager, mPackageName))
-                .thenThrow(new RuntimeException());
+            .thenThrow(new RuntimeException());
         assertThat(mSafePackageManager.getInstallerPackageName(mContext, mPackageName)).isNull();
     }
 }
