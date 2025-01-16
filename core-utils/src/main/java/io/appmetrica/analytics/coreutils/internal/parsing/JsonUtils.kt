@@ -26,6 +26,22 @@ object JsonUtils {
     }
 
     @JvmStatic
+    fun JSONObject?.optIntOrDefault(key: String, fallback: Int?): Int? =
+        optIntOrNull(key) ?: fallback
+
+    @JvmStatic
+    fun JSONObject?.optIntOrNull(key: String): Int? {
+        if (this?.has(key) == true) {
+            try {
+                return this.getInt(key)
+            } catch (e: Throwable) {
+                DebugLogger.error(TAG, e, e.message)
+            }
+        }
+        return null
+    }
+
+    @JvmStatic
     fun JSONObject?.optFloatOrDefault(key: String, fallback: Float): Float =
         this.optFloatOrNull(key) ?: fallback
 

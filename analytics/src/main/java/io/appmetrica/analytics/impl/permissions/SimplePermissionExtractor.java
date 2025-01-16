@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.permission.PermissionStrategy;
 import io.appmetrica.analytics.coreapi.internal.system.PermissionExtractor;
+import io.appmetrica.analytics.coreutils.internal.services.ContextPermissionChecker;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 
 public class SimplePermissionExtractor implements PermissionExtractor {

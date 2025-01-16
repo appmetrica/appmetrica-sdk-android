@@ -8,6 +8,7 @@ import io.appmetrica.analytics.coreapi.internal.servicecomponents.FirstExecution
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.SdkEnvironmentProvider
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.applicationstate.ApplicationStateProvider
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.batteryinfo.ChargeTypeProvider
+import io.appmetrica.analytics.coreapi.internal.system.PermissionExtractor
 import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.db.storage.DatabaseStorageFactory
 import io.appmetrica.analytics.modulesapi.internal.common.ExecutorProvider
@@ -64,4 +65,7 @@ internal class ServiceContextFacade(
         get() = GlobalServiceLocator.getInstance().activationBarrier
 
     override val cryptoProvider: CryptoProvider = CryptoProviderImpl()
+
+    override val permissionExtractor: PermissionExtractor
+        get() = GlobalServiceLocator.getInstance().generalPermissionExtractor
 }

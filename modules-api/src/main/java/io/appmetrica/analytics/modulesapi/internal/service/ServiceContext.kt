@@ -9,6 +9,7 @@ import io.appmetrica.analytics.coreapi.internal.servicecomponents.FirstExecution
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.SdkEnvironmentProvider
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.applicationstate.ApplicationStateProvider
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.batteryinfo.ChargeTypeProvider
+import io.appmetrica.analytics.coreapi.internal.system.PermissionExtractor
 import io.appmetrica.analytics.modulesapi.internal.common.ExecutorProvider
 import io.appmetrica.analytics.modulesapi.internal.common.ModuleSelfReporter
 
@@ -45,4 +46,6 @@ interface ServiceContext {
     val activationBarrier: ActivationBarrier
 
     val cryptoProvider: CryptoProvider
+
+    val permissionExtractor: PermissionExtractor
 }

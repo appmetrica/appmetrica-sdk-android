@@ -269,6 +269,8 @@ public final class io.appmetrica.analytics.coreutils.internal.parsing.JsonUtils 
     public static final float optFloatOrDefault([Nullable] org.json.JSONObject, [NonNull] String, float)
     public static final [Nullable] Float optFloatOrNull([Nullable] org.json.JSONObject, [NonNull] String)
     public static final [Nullable] byte[] optHexByteArray([Nullable] org.json.JSONObject, [NonNull] String, [Nullable] byte[])
+    public static final [Nullable] Integer optIntOrDefault([Nullable] org.json.JSONObject, [NonNull] String, [Nullable] Integer)
+    public static final [Nullable] Integer optIntOrNull([Nullable] org.json.JSONObject, [NonNull] String)
     public static final [NonNull] org.json.JSONObject optJsonObjectOrDefault([Nullable] org.json.JSONObject, [NonNull] String, [NonNull] org.json.JSONObject)
     public static final [Nullable] org.json.JSONObject optJsonObjectOrNull([Nullable] org.json.JSONObject, [NonNull] String)
     public static final [Nullable] org.json.JSONObject optJsonObjectOrNullable([Nullable] org.json.JSONObject, [NonNull] String, [Nullable] org.json.JSONObject)
@@ -339,6 +341,12 @@ public final class io.appmetrica.analytics.coreutils.internal.reflection.Reflect
     public static final boolean isArgumentsOfClasses([NonNull] Object[], [NonNull] Class<?>...)
     public static final <T> [Nullable] T loadAndInstantiateClassWithDefaultConstructor([NonNull] String, [NonNull] Class<T>)
     public static final <T> [Nullable] Class<T> loadClass([NonNull] String, [NonNull] Class<T>)
+}
+
+public final class io.appmetrica.analytics.coreutils.internal.services.ContextPermissionChecker {
+    public static final [NonNull] io.appmetrica.analytics.coreutils.internal.services.ContextPermissionChecker INSTANCE
+
+    public static final boolean hasPermission([NonNull] android.content.Context, [NonNull] String)
 }
 
 public class io.appmetrica.analytics.coreutils.internal.services.FirstExecutionConditionServiceImpl implementation io.appmetrica.analytics.coreapi.internal.servicecomponents.FirstExecutionConditionService {

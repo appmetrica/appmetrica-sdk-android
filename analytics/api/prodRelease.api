@@ -266,6 +266,7 @@ public interface io.appmetrica.analytics.ICrashTransformer {
 public interface io.appmetrica.analytics.IModuleReporter {
     public abstract void reportAdRevenue([NonNull] io.appmetrica.analytics.AdRevenue, boolean)
     public abstract void reportEvent([NonNull] io.appmetrica.analytics.ModuleEvent)
+    public abstract void sendEventsBuffer()
     public abstract void setSessionExtra([NonNull] String, [Nullable] byte[])
 }
 

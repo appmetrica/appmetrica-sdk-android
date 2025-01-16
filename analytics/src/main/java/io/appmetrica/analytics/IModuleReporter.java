@@ -38,4 +38,15 @@ public interface IModuleReporter {
      * @param autoCollected true if data is auto collected and false otherwise
      */
     void reportAdRevenue(@NonNull final AdRevenue adRevenue, final boolean autoCollected);
+
+    /**
+     * Initiates forced sending of all stored events from the buffer.<p>
+     * AppMetrica SDK doesn't send events immediately after they occurred. It stores events data in the buffer.
+     * This method forcibly initiates sending all the data from the buffer and flushes it.<p>
+     * Use the method after important checkpoints of user scenarios.
+     *
+     * <p> <b>WARNING:</b> Frequent use of the method can lead to increasing outgoing internet traffic and
+     * energy consumption.
+     */
+    void sendEventsBuffer();
 }

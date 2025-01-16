@@ -1,9 +1,9 @@
-package io.appmetrica.analytics.impl.permissions
+package io.appmetrica.analytics.coreutils.internal.services
 
 import android.content.Context
 import android.content.pm.PackageManager
 
-internal object ContextPermissionChecker {
+object ContextPermissionChecker {
     @JvmStatic
     fun hasPermission(context: Context, permission: String): Boolean = try {
         PackageManager.PERMISSION_GRANTED == context.checkCallingOrSelfPermission(permission)

@@ -1,4 +1,4 @@
-package io.appmetrica.analytics.impl.permissions
+package io.appmetrica.analytics.coreutils.internal.services
 
 import android.content.Context
 import android.content.pm.PackageManager

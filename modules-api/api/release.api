@@ -226,6 +226,7 @@ public interface io.appmetrica.analytics.modulesapi.internal.service.ServiceCont
     public abstract [NonNull] io.appmetrica.analytics.modulesapi.internal.service.LocationServiceApi getLocationServiceApi()
     public abstract [NonNull] io.appmetrica.analytics.modulesapi.internal.service.ModuleServiceLifecycleController getModuleServiceLifecycleController()
     public abstract [NonNull] io.appmetrica.analytics.modulesapi.internal.service.ServiceNetworkContext getNetworkContext()
+    public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.system.PermissionExtractor getPermissionExtractor()
     public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.PlatformIdentifiers getPlatformIdentifiers()
     public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.servicecomponents.SdkEnvironmentProvider getSdkEnvironmentProvider()
     public abstract [NonNull] io.appmetrica.analytics.modulesapi.internal.common.ModuleSelfReporter getSelfReporter()
