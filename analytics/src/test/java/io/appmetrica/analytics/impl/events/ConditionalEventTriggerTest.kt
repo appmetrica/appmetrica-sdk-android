@@ -4,9 +4,11 @@ import io.appmetrica.analytics.impl.component.ComponentId
 import io.appmetrica.analytics.testutils.CommonTest
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.clearInvocations
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
+import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import org.robolectric.RobolectricTestRunner
 
@@ -45,6 +47,7 @@ class ConditionalEventTriggerTest : CommonTest() {
             componentId
         )
         trigger.enableTrigger()
+        clearInvocations(eventsFlusher)
         trigger.trigger()
         verify(eventsFlusher).flushAllTasks()
     }
@@ -83,6 +86,7 @@ class ConditionalEventTriggerTest : CommonTest() {
             componentId
         )
         trigger.enableTrigger()
+        clearInvocations(eventsFlusher)
         trigger.forceTrigger()
         verify(eventsFlusher).flushAllTasks()
     }
@@ -313,6 +317,36 @@ class ConditionalEventTriggerTest : CommonTest() {
             componentId
         )
         trigger.forceTrigger()
+        verify(eventsFlusher, never()).flushAllTasks()
+    }
+
+    @Test
+    fun `enable trigger flush all if conditions met`() {
+        val trigger = ConditionalEventTrigger(
+            eventsFlusher,
+            listOf(firstEnabledCondition, secondEnabledCondition),
+            listOf(firstEnabledCondition, secondEnabledCondition),
+            componentId
+        )
+
+        trigger.disableTrigger()
+        trigger.enableTrigger()
+
+        verify(eventsFlusher).flushAllTasks()
+    }
+
+    @Test
+    fun `enable trigger don't flush all if only force conditions met`() {
+        val trigger = ConditionalEventTrigger(
+            eventsFlusher,
+            listOf(firstDisabledCondition, secondDisabledCondition),
+            listOf(firstEnabledCondition, secondEnabledCondition),
+            componentId
+        )
+
+        trigger.disableTrigger()
+        trigger.enableTrigger()
+
         verify(eventsFlusher, never()).flushAllTasks()
     }
 }

@@ -66,7 +66,7 @@ internal class ReportTaskTest : CommonTest() {
     @get:Rule
     val selfReporterFacadeMockedRule = MockedStaticRule(AppMetricaSelfReportFacade::class.java)
 
-    val sendingTaskHelperConstructorCaptor = ConstructionArgumentCaptor<SendingDataTaskHelper>()
+    private val sendingTaskHelperConstructorCaptor = ConstructionArgumentCaptor<SendingDataTaskHelper>()
 
     @get:Rule
     val sendingTaskHelperMockedRule = MockedConstructionRule(
@@ -475,7 +475,6 @@ internal class ReportTaskTest : CommonTest() {
     @Test
     fun onSuccessfulTaskFinished() {
         reportTask.onSuccessfulTaskFinished()
-        verify(eventTrigger).trigger()
     }
 
     @Test

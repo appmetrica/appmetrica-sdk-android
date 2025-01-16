@@ -726,7 +726,6 @@ public class ReportTask implements UnderlyingNetworkTask {
     @Override
     public void onSuccessfulTaskFinished() {
         DebugLogger.INSTANCE.info(TAG, "onSuccessfulTaskFinished: %s", description());
-        mComponent.getEventTrigger().trigger();
     }
 
     @NonNull

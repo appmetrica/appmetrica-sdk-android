@@ -18,38 +18,45 @@ class ConditionalEventTrigger(
     override fun trigger() {
         if (triggerEnabled.get()) {
             sendEventsIfNeeded()
+        } else {
+            DebugLogger.info(tag, "Trigger is disabled. So ignore trigger")
         }
     }
 
     override fun forceTrigger() {
         if (triggerEnabled.get()) {
             forceSendEvents()
+        } else {
+            DebugLogger.info(tag, "Trigger is disabled. So ignore force trigger")
         }
     }
 
     override fun enableTrigger() {
+        DebugLogger.info(tag, "Enable trigger and send events if need")
         triggerEnabled.set(true)
+        sendEventsIfNeeded()
     }
 
     override fun disableTrigger() {
+        DebugLogger.info(tag, "Disable trigger")
         triggerEnabled.set(false)
     }
 
     private fun sendEventsIfNeeded() {
         if (forceSendConditions.allAreMet() && conditions.anyAreMet()) {
-            DebugLogger.info(tag, "sendEventsIfNeeded: conditions are met - send")
+            DebugLogger.info(tag, "SendEventsIfNeeded: conditions are met - send")
             sendEvents()
         } else {
-            DebugLogger.info(tag, "sendEventsIfNeeded: conditions aren't met - ignore")
+            DebugLogger.info(tag, "SendEventsIfNeeded: conditions aren't met - ignore")
         }
     }
 
     private fun forceSendEvents() {
         if (forceSendConditions.allAreMet()) {
-            DebugLogger.info(tag, "forceSendEvents: conditions are met - send")
+            DebugLogger.info(tag, "ForceSendEvents: conditions are met - send")
             sendEvents()
         } else {
-            DebugLogger.info(tag, "forceSendEvents: conditions aren't met - ignore")
+            DebugLogger.info(tag, "ForceSendEvents: conditions aren't met - ignore")
         }
     }
 
