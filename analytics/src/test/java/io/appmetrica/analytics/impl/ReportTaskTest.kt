@@ -470,6 +470,15 @@ internal class ReportTaskTest : CommonTest() {
     fun onTaskRemoved() {
         reportTask.onTaskRemoved()
         verify(eventTrigger).enableTrigger()
+        verify(eventTrigger).trigger()
+    }
+
+    @Test
+    fun onTaskRemovedAfterShouldNotExecute() {
+        reportTask.onShouldNotExecute()
+        reportTask.onTaskRemoved()
+        verify(eventTrigger).enableTrigger()
+        verify(eventTrigger, never()).trigger()
     }
 
     @Test

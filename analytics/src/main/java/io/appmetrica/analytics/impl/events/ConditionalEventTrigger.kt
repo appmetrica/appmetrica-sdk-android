@@ -34,7 +34,6 @@ class ConditionalEventTrigger(
     override fun enableTrigger() {
         DebugLogger.info(tag, "Enable trigger and send events if need")
         triggerEnabled.set(true)
-        sendEventsIfNeeded()
     }
 
     override fun disableTrigger() {

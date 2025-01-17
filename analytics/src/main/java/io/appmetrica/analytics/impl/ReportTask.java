@@ -114,6 +114,7 @@ public class ReportTask implements UnderlyingNetworkTask {
     private final ResponseDataHolder responseDataHolder;
     @NonNull
     private final SendingDataTaskHelper sendingDataTaskHelper;
+    private boolean wasExecuted = true;
 
     private int mRequestId;
 
@@ -721,11 +722,19 @@ public class ReportTask implements UnderlyingNetworkTask {
     public void onTaskRemoved() {
         DebugLogger.INSTANCE.info(TAG, "onTaskRemoved: %s", description());
         mComponent.getEventTrigger().enableTrigger();
+        if (wasExecuted) {
+            mComponent.getEventTrigger().trigger();
+        }
     }
 
     @Override
     public void onSuccessfulTaskFinished() {
         DebugLogger.INSTANCE.info(TAG, "onSuccessfulTaskFinished: %s", description());
+    }
+
+    @Override
+    public void onShouldNotExecute() {
+        wasExecuted = false;
     }
 
     @NonNull
@@ -802,11 +811,6 @@ public class ReportTask implements UnderlyingNetworkTask {
 
     @Override
     public void onRequestError(@Nullable Throwable error) {
-        // do nothing
-    }
-
-    @Override
-    public void onShouldNotExecute() {
         // do nothing
     }
 
