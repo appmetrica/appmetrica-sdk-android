@@ -26,6 +26,10 @@ public enum AdType {
      */
     MREC,
     /**
+     * APP_OPEN Ad Type.
+     */
+    APP_OPEN,
+    /**
      * OTHER Ad Type.
      */
     OTHER

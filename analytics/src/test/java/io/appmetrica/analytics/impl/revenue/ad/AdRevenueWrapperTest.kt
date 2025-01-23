@@ -12,14 +12,14 @@ import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.MockedConstructionRule
 import io.appmetrica.analytics.testutils.MockedStaticRule
+import java.math.BigDecimal
+import java.util.Currency
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mockito.`when`
 import org.mockito.kotlin.any
 import org.mockito.kotlin.mock
-import java.math.BigDecimal
-import java.util.Currency
 import io.appmetrica.analytics.impl.protobuf.backend.AdRevenue as AdRevenueProto
 
 private const val adNetwork = "someAdNetwork"
@@ -204,6 +204,34 @@ class AdRevenueWrapperTest : CommonTest() {
             sizeDiff(bigCurrency.currencyCode, bigCurrencyTrimmed) +
             sizeDiff(bigPayloadJson, bigPayloadJsonTrimmed)
         )
+    }
+
+    @Test
+    fun adTypesForSimpleData() {
+        val expectedMapping = mapOf(
+            AdType.NATIVE to AdRevenueProto.NATIVE,
+            AdType.BANNER to AdRevenueProto.BANNER,
+            AdType.REWARDED to AdRevenueProto.REWARDED,
+            AdType.INTERSTITIAL to AdRevenueProto.INTERSTITIAL,
+            AdType.MREC to AdRevenueProto.MREC,
+            AdType.APP_OPEN to AdRevenueProto.APP_OPEN,
+            AdType.OTHER to AdRevenueProto.OTHER,
+            null to AdRevenueProto.UNKNOWN,
+        )
+
+        assertThat(expectedMapping.keys).containsAll(AdType.values().toList())
+
+        expectedMapping.forEach { (adType, expectedProtoAdType) ->
+            val adRevenue = AdRevenue.newBuilder(BigDecimal("123.456789"), currency)
+                .withAdType(adType)
+                .build()
+
+            val protoAdType = AdRevenueWrapper(adRevenue, autoCollected, publicLogger)
+                .getDataToSend()
+                .let { AdRevenueProto.parseFrom(it.first) }
+                .adType
+            assertThat(protoAdType).isEqualTo(expectedProtoAdType)
+        }
     }
 
     private fun sizeDiff(big: String, small: String) = big.toProtobufBytes().size - small.toProtobufBytes().size

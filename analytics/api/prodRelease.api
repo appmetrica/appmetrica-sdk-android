@@ -28,7 +28,7 @@ public static class io.appmetrica.analytics.AdRevenue$Builder {
 }
 
 public enum io.appmetrica.analytics.AdType {
-    BANNER, INTERSTITIAL, MREC, NATIVE, OTHER, REWARDED
+    APP_OPEN, BANNER, INTERSTITIAL, MREC, NATIVE, OTHER, REWARDED
 
     public static io.appmetrica.analytics.AdType valueOf(String)
     public static io.appmetrica.analytics.AdType[] values()

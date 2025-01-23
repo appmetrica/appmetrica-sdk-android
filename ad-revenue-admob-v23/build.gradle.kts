@@ -21,6 +21,6 @@ dependencies {
     implementation(project(":logger"))
     implementation(project(":modules-api"))
 
-    compileOnly("com.google.android.gms:play-services-ads:23.1.0")
-    testImplementation("com.google.android.gms:play-services-ads:23.1.0")
+    compileOnly("com.google.android.gms:play-services-ads:23.6.0")
+    testImplementation("com.google.android.gms:play-services-ads:23.6.0")
 }

@@ -73,7 +73,7 @@ public class AdRevenueConverter {
     public ModuleAdRevenue convertAppOpenAd(@NonNull AdValue adValue, @NonNull AppOpenAd ad) {
         return constructModuleAdRevenue(
             adValue,
-            ModuleAdType.OTHER,
+            ModuleAdType.APP_OPEN,
             ad.getResponseInfo(),
             ad.getAdUnitId()
         );

@@ -21,6 +21,7 @@ private val adTypeMapping = mapOf(
     AdType.REWARDED to AdRevenueProto.REWARDED,
     AdType.INTERSTITIAL to AdRevenueProto.INTERSTITIAL,
     AdType.MREC to AdRevenueProto.MREC,
+    AdType.APP_OPEN to AdRevenueProto.APP_OPEN,
     AdType.OTHER to AdRevenueProto.OTHER,
 )
 

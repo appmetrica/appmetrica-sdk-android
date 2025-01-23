@@ -4,6 +4,7 @@ import com.google.android.gms.ads.AdValue;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.AdapterResponseInfo;
 import com.google.android.gms.ads.ResponseInfo;
+import com.google.android.gms.ads.appopen.AppOpenAd;
 import com.google.android.gms.ads.interstitial.InterstitialAd;
 import com.google.android.gms.ads.nativead.NativeAd;
 import com.google.android.gms.ads.rewarded.RewardedAd;
@@ -46,6 +47,8 @@ public class AdRevenueConverterTest extends CommonTest {
     @Mock
     private RewardedInterstitialAd rewardedInterstitialAd;
     @Mock
+    private AppOpenAd appOpenAd;
+    @Mock
     private ResponseInfo responseInfo;
     @Mock
     private AdapterResponseInfo adapterResponseInfo;
@@ -75,6 +78,9 @@ public class AdRevenueConverterTest extends CommonTest {
 
         when(rewardedInterstitialAd.getAdUnitId()).thenReturn(adUnitId);
         when(rewardedInterstitialAd.getResponseInfo()).thenReturn(responseInfo);
+
+        when(appOpenAd.getAdUnitId()).thenReturn(adUnitId);
+        when(appOpenAd.getResponseInfo()).thenReturn(responseInfo);
 
         when(adapterResponseInfo.getAdapterClassName()).thenReturn(adNetwork);
         when(adapterResponseInfo.getAdSourceInstanceId()).thenReturn(adPlacementId);
@@ -362,6 +368,64 @@ public class AdRevenueConverterTest extends CommonTest {
             .checkField("adType", ModuleAdType.NATIVE)
             .checkFieldIsNull("adNetwork")
             .checkFieldIsNull("adUnitId")
+            .checkFieldIsNull("adUnitName")
+            .checkFieldIsNull("adPlacementId")
+            .checkFieldIsNull("adPlacementName")
+            .checkField("precision", "PUBLISHER_PROVIDED")
+            .checkFieldIsNull("payload")
+            .checkField("autoCollected", true)
+            .checkAll();
+    }
+
+    @Test
+    public void convertAppOpenAd() {
+        ModuleAdRevenue adRevenue = adRevenueConverter.convertAppOpenAd(adValue, appOpenAd);
+        ObjectPropertyAssertions(adRevenue)
+            .checkField("adRevenue", BigDecimal.valueOf(value))
+            .checkField("currency", Currency.getInstance(currencyCode))
+            .checkField("adType", ModuleAdType.APP_OPEN)
+            .checkField("adNetwork", adNetwork)
+            .checkField("adUnitId", adUnitId)
+            .checkFieldIsNull("adUnitName")
+            .checkField("adPlacementId", adPlacementId)
+            .checkField("adPlacementName", adPlacementName)
+            .checkField("precision", "PUBLISHER_PROVIDED")
+            .checkFieldIsNull("payload")
+            .checkField("autoCollected", true)
+            .checkAll();
+    }
+
+    @Test
+    public void convertAppOpenAdIfResponseInfoIsNull() {
+        when(appOpenAd.getResponseInfo()).thenReturn(null);
+
+        ModuleAdRevenue adRevenue = adRevenueConverter.convertAppOpenAd(adValue, appOpenAd);
+        ObjectPropertyAssertions(adRevenue)
+            .checkField("adRevenue", BigDecimal.valueOf(value))
+            .checkField("currency", Currency.getInstance(currencyCode))
+            .checkField("adType", ModuleAdType.APP_OPEN)
+            .checkFieldIsNull("adNetwork")
+            .checkField("adUnitId", adUnitId)
+            .checkFieldIsNull("adUnitName")
+            .checkFieldIsNull("adPlacementId")
+            .checkFieldIsNull("adPlacementName")
+            .checkField("precision", "PUBLISHER_PROVIDED")
+            .checkFieldIsNull("payload")
+            .checkField("autoCollected", true)
+            .checkAll();
+    }
+
+    @Test
+    public void convertAppOpenAdIfLoadedAdapterResponseInfoIsNull() {
+        when(responseInfo.getLoadedAdapterResponseInfo()).thenReturn(null);
+
+        ModuleAdRevenue adRevenue = adRevenueConverter.convertAppOpenAd(adValue, appOpenAd);
+        ObjectPropertyAssertions(adRevenue)
+            .checkField("adRevenue", BigDecimal.valueOf(value))
+            .checkField("currency", Currency.getInstance(currencyCode))
+            .checkField("adType", ModuleAdType.APP_OPEN)
+            .checkFieldIsNull("adNetwork")
+            .checkField("adUnitId", adUnitId)
             .checkFieldIsNull("adUnitName")
             .checkFieldIsNull("adPlacementId")
             .checkFieldIsNull("adPlacementName")

@@ -6,5 +6,6 @@ enum class ModuleAdType {
     REWARDED,
     INTERSTITIAL,
     MREC,
+    APP_OPEN,
     OTHER
 }

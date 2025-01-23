@@ -77,7 +77,7 @@ public interface io.appmetrica.analytics.modulesapi.internal.client.adrevenue.Mo
 }
 
 public enum io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdType {
-    BANNER, INTERSTITIAL, MREC, NATIVE, OTHER, REWARDED
+    APP_OPEN, BANNER, INTERSTITIAL, MREC, NATIVE, OTHER, REWARDED
 
     public static io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdType valueOf(String)
     public static io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdType[] values()

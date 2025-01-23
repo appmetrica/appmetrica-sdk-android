@@ -9,6 +9,7 @@ import org.assertj.core.api.SoftAssertions
 import org.junit.Test
 import java.math.BigDecimal
 import java.util.Currency
+import org.assertj.core.api.Assertions.assertThat
 
 class ModuleAdRevenueConverterTest : CommonTest() {
 
@@ -79,15 +80,20 @@ class ModuleAdRevenueConverterTest : CommonTest() {
     @Test
     fun convertAndCheckAdType() {
         val softly = SoftAssertions()
-        mapOf(
+        val expectedMapping = mapOf(
             ModuleAdType.NATIVE to AdType.NATIVE,
             ModuleAdType.BANNER to AdType.BANNER,
             ModuleAdType.REWARDED to AdType.REWARDED,
             ModuleAdType.INTERSTITIAL to AdType.INTERSTITIAL,
             ModuleAdType.MREC to AdType.MREC,
+            ModuleAdType.APP_OPEN to AdType.APP_OPEN,
             ModuleAdType.OTHER to AdType.OTHER,
             null to null,
-        ).forEach { autoAdType, adType ->
+        )
+
+        assertThat(expectedMapping.keys).containsAll(ModuleAdType.values().toList())
+
+        expectedMapping.forEach { (autoAdType, adType) ->
             val autoAdRevenue = ModuleAdRevenue(
                 adRevenue = BigDecimal.valueOf(1213.32312),
                 currency = Currency.getInstance("RUB"),
@@ -98,5 +104,4 @@ class ModuleAdRevenueConverterTest : CommonTest() {
         }
         softly.assertAll()
     }
-
 }

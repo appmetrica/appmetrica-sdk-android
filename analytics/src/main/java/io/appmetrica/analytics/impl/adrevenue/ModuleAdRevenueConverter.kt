@@ -20,7 +20,8 @@ class ModuleAdRevenueConverter {
             .build()
     }
 
-    fun convert(adType: ModuleAdType?): AdType? {
+    private fun convert(adType: ModuleAdType?): AdType? {
+        ModuleAdType.values()
         return when (adType) {
             null -> null
             ModuleAdType.NATIVE -> AdType.NATIVE
@@ -28,6 +29,7 @@ class ModuleAdRevenueConverter {
             ModuleAdType.REWARDED -> AdType.REWARDED
             ModuleAdType.INTERSTITIAL -> AdType.INTERSTITIAL
             ModuleAdType.MREC -> AdType.MREC
+            ModuleAdType.APP_OPEN -> AdType.APP_OPEN
             ModuleAdType.OTHER -> AdType.OTHER
         }
     }

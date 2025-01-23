@@ -14,6 +14,7 @@ public final class AdRevenue extends
   public static final int INTERSTITIAL = 4;
   public static final int MREC = 5;
   public static final int OTHER = 6;
+  public static final int APP_OPEN = 7;
 
   public static final class Decimal extends
       io.appmetrica.analytics.protobuf.nano.MessageNano {
@@ -323,6 +324,7 @@ public final class AdRevenue extends
             case AdRevenue.INTERSTITIAL:
             case AdRevenue.MREC:
             case AdRevenue.OTHER:
+            case AdRevenue.APP_OPEN:
               this.adType = value;
               break;
           }
