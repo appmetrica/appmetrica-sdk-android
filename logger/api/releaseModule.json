@@ -3,7 +3,7 @@
     "component": {
         "group": "io.appmetrica.analytics",
         "module": "analytics-logger",
-        "version": "7.6.0",
+        "version": "7.7.0",
         "attributes": {
             "org.gradle.status": "release"
         }
@@ -28,14 +28,14 @@
                     "group": "io.appmetrica.analytics",
                     "module": "analytics-common-logger",
                     "version": {
-                        "requires": "7.6.0"
+                        "requires": "7.7.0"
                     }
                 }
             ],
             "files": [
                 {
-                    "name": "analytics-logger-7.6.0.aar",
-                    "url": "analytics-logger-7.6.0.aar",
+                    "name": "analytics-logger-7.7.0.aar",
+                    "url": "analytics-logger-7.7.0.aar",
                     "size": -1,
                     "sha512": "<sha512>",
                     "sha256": "<sha256>",
@@ -57,7 +57,7 @@
                     "group": "io.appmetrica.analytics",
                     "module": "analytics-common-logger",
                     "version": {
-                        "requires": "7.6.0"
+                        "requires": "7.7.0"
                     }
                 },
                 {
@@ -70,8 +70,8 @@
             ],
             "files": [
                 {
-                    "name": "analytics-logger-7.6.0.aar",
-                    "url": "analytics-logger-7.6.0.aar",
+                    "name": "analytics-logger-7.7.0.aar",
+                    "url": "analytics-logger-7.7.0.aar",
                     "size": -1,
                     "sha512": "<sha512>",
                     "sha256": "<sha256>",
