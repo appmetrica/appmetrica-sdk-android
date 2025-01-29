@@ -1,11 +1,13 @@
 package io.appmetrica.analytics.adrevenue.ironsource.v7.impl;
 
 import com.ironsource.mediationsdk.impressionData.ImpressionData;
+import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.AdRevenueConstants;
 import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdRevenue;
 import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdType;
 import io.appmetrica.analytics.testutils.CommonTest;
 import java.math.BigDecimal;
 import java.util.Currency;
+import java.util.HashMap;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -49,7 +51,10 @@ public class AdRevenueConverterTest extends CommonTest {
             .checkFieldIsNull("adPlacementId")
             .checkField("adPlacementName", placement)
             .checkField("precision", precision)
-            .checkFieldIsNull("payload")
+            .checkField("payload", new HashMap<String, String>() {{
+                put(AdRevenueConstants.ORIGINAL_SOURCE_KEY, "ad-revenue-ironsource-v7");
+                put(AdRevenueConstants.ORIGINAL_AD_TYPE_KEY, "Interstitial");
+            }})
             .checkField("autoCollected", true)
             .checkAll();
     }
@@ -69,7 +74,10 @@ public class AdRevenueConverterTest extends CommonTest {
             .checkFieldIsNull("adPlacementId")
             .checkField("adPlacementName", placement)
             .checkField("precision", precision)
-            .checkFieldIsNull("payload")
+            .checkField("payload", new HashMap<String, String>() {{
+                put(AdRevenueConstants.ORIGINAL_SOURCE_KEY, "ad-revenue-ironsource-v7");
+                put(AdRevenueConstants.ORIGINAL_AD_TYPE_KEY, "Interstitial");
+            }})
             .checkField("autoCollected", true)
             .checkAll();
     }
@@ -79,21 +87,51 @@ public class AdRevenueConverterTest extends CommonTest {
         when(data.getAdUnit()).thenReturn(null);
         final ModuleAdRevenue adRevenueNull = converter.convert(data);
         assertThat(adRevenueNull.getAdType()).isNull();
+        assertThat(adRevenueNull.getPayload()).isEqualTo(
+            new HashMap<String, String>() {{
+                put(AdRevenueConstants.ORIGINAL_SOURCE_KEY, "ad-revenue-ironsource-v7");
+                put(AdRevenueConstants.ORIGINAL_AD_TYPE_KEY, "null");
+            }}
+        );
 
         when(data.getAdUnit()).thenReturn("Rewarded Video");
         final ModuleAdRevenue adRevenueRewarded = converter.convert(data);
         assertThat(adRevenueRewarded.getAdType()).isEqualTo(ModuleAdType.REWARDED);
+        assertThat(adRevenueRewarded.getPayload()).isEqualTo(
+            new HashMap<String, String>() {{
+                put(AdRevenueConstants.ORIGINAL_SOURCE_KEY, "ad-revenue-ironsource-v7");
+                put(AdRevenueConstants.ORIGINAL_AD_TYPE_KEY, "Rewarded Video");
+            }}
+        );
 
         when(data.getAdUnit()).thenReturn("Interstitial");
         final ModuleAdRevenue adRevenueInterstitial = converter.convert(data);
         assertThat(adRevenueInterstitial.getAdType()).isEqualTo(ModuleAdType.INTERSTITIAL);
+        assertThat(adRevenueInterstitial.getPayload()).isEqualTo(
+            new HashMap<String, String>() {{
+                put(AdRevenueConstants.ORIGINAL_SOURCE_KEY, "ad-revenue-ironsource-v7");
+                put(AdRevenueConstants.ORIGINAL_AD_TYPE_KEY, "Interstitial");
+            }}
+        );
 
         when(data.getAdUnit()).thenReturn("Banner");
         final ModuleAdRevenue adRevenueBanner = converter.convert(data);
         assertThat(adRevenueBanner.getAdType()).isEqualTo(ModuleAdType.BANNER);
+        assertThat(adRevenueBanner.getPayload()).isEqualTo(
+            new HashMap<String, String>() {{
+                put(AdRevenueConstants.ORIGINAL_SOURCE_KEY, "ad-revenue-ironsource-v7");
+                put(AdRevenueConstants.ORIGINAL_AD_TYPE_KEY, "Banner");
+            }}
+        );
 
         when(data.getAdUnit()).thenReturn("Some string");
         final ModuleAdRevenue adRevenueOther = converter.convert(data);
         assertThat(adRevenueOther.getAdType()).isEqualTo(ModuleAdType.OTHER);
+        assertThat(adRevenueOther.getPayload()).isEqualTo(
+            new HashMap<String, String>() {{
+                put(AdRevenueConstants.ORIGINAL_SOURCE_KEY, "ad-revenue-ironsource-v7");
+                put(AdRevenueConstants.ORIGINAL_AD_TYPE_KEY, "Some string");
+            }}
+        );
     }
 }

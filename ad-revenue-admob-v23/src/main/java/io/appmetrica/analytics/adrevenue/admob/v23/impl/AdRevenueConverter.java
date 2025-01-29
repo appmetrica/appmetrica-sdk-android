@@ -12,10 +12,12 @@ import com.google.android.gms.ads.nativead.NativeAd;
 import com.google.android.gms.ads.rewarded.RewardedAd;
 import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAd;
 import io.appmetrica.analytics.coreutils.internal.WrapUtils;
+import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.AdRevenueConstants;
 import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdRevenue;
 import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdType;
 import java.math.BigDecimal;
 import java.util.Currency;
+import java.util.HashMap;
 
 public class AdRevenueConverter {
 
@@ -23,6 +25,7 @@ public class AdRevenueConverter {
         return constructModuleAdRevenue(
             adValue,
             ModuleAdType.BANNER,
+            /* originalType */ "bannerAd",
             adView.getResponseInfo(),
             adView.getAdUnitId()
         );
@@ -32,6 +35,7 @@ public class AdRevenueConverter {
         return constructModuleAdRevenue(
             adValue,
             ModuleAdType.INTERSTITIAL,
+            /* originalType */ "interstitialAd",
             ad.getResponseInfo(),
             ad.getAdUnitId()
         );
@@ -41,6 +45,7 @@ public class AdRevenueConverter {
         return constructModuleAdRevenue(
             adValue,
             ModuleAdType.REWARDED,
+            /* originalType */ "rewardedAd",
             ad.getResponseInfo(),
             ad.getAdUnitId()
         );
@@ -53,6 +58,7 @@ public class AdRevenueConverter {
         return constructModuleAdRevenue(
             adValue,
             ModuleAdType.OTHER,
+            /* originalType */ "rewardedInterstitialAd",
             ad.getResponseInfo(),
             ad.getAdUnitId()
         );
@@ -65,6 +71,7 @@ public class AdRevenueConverter {
         return constructModuleAdRevenue(
             adValue,
             ModuleAdType.NATIVE,
+            /* originalType */ "nativeAd",
             nativeAd.getResponseInfo(),
             null
         );
@@ -74,6 +81,7 @@ public class AdRevenueConverter {
         return constructModuleAdRevenue(
             adValue,
             ModuleAdType.APP_OPEN,
+            /* originalType */ "appOpenAd",
             ad.getResponseInfo(),
             ad.getAdUnitId()
         );
@@ -82,6 +90,7 @@ public class AdRevenueConverter {
     private ModuleAdRevenue constructModuleAdRevenue(
         @NonNull AdValue adValue,
         @NonNull ModuleAdType type,
+        @NonNull String originalType,
         @Nullable ResponseInfo responseInfo,
         @Nullable String adUnitId
     ) {
@@ -102,7 +111,10 @@ public class AdRevenueConverter {
                     /* adPlacementId = */ adapterResponseInfo.getAdSourceInstanceId(),
                     /* adPlacementName = */ adapterResponseInfo.getAdSourceInstanceName(),
                     /* precision = */ convertPrecision(adValue.getPrecisionType()),
-                    /* payload = */ null,
+                    /* payload = */ new HashMap<String, String>() {{
+                        put(AdRevenueConstants.ORIGINAL_SOURCE_KEY, Constants.MODULE_ID);
+                        put(AdRevenueConstants.ORIGINAL_AD_TYPE_KEY, originalType);
+                    }},
                     /* autoCollected = */ true
                 );
             }
@@ -117,7 +129,10 @@ public class AdRevenueConverter {
             /* adPlacementId = */ null,
             /* adPlacementName = */ null,
             /* precision = */ convertPrecision(adValue.getPrecisionType()),
-            /* payload = */ null,
+            /* payload = */ new HashMap<String, String>() {{
+                put(AdRevenueConstants.ORIGINAL_SOURCE_KEY, Constants.MODULE_ID);
+                put(AdRevenueConstants.ORIGINAL_AD_TYPE_KEY, originalType);
+            }},
             /* autoCollected = */ true
         );
     }

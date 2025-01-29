@@ -56,7 +56,14 @@ class AdRevenueConverterTest : CommonTest() {
             .checkField("adPlacementId", "some_networkPlacement")
             .checkField("adPlacementName", "some_placement")
             .checkField("precision", "some_revenuePrecision")
-            .checkField("payload", mapOf("countryCode" to "RU"))
+            .checkField(
+                "payload",
+                mapOf(
+                    "countryCode" to "RU",
+                    "original_ad_type" to "REWARDED",
+                    "original_source" to "ad-revenue-applovin-v12",
+                )
+            )
             .checkField("autoCollected", true)
             .checkAll()
     }
@@ -75,7 +82,14 @@ class AdRevenueConverterTest : CommonTest() {
             .checkField("adPlacementId", "some_networkPlacement")
             .checkField("adPlacementName", "some_placement")
             .checkField("precision", "some_revenuePrecision")
-            .checkField("payload", mapOf("countryCode" to "RU"))
+            .checkField(
+                "payload",
+                mapOf(
+                    "countryCode" to "RU",
+                    "original_ad_type" to "REWARDED",
+                    "original_source" to "ad-revenue-applovin-v12",
+                )
+            )
             .checkField("autoCollected", true)
             .checkAll()
     }
@@ -83,40 +97,93 @@ class AdRevenueConverterTest : CommonTest() {
     @Test
     fun convertAndCheckAutoAdType() {
         whenever(maxAd.format).thenReturn(null)
-        assertThat(converter.convert(maxAd, appLovinSdk).adType).isNull()
+        converter.convert(maxAd, appLovinSdk).also { adRevenue ->
+            assertThat(adRevenue.adType).isNull()
+            assertThat(adRevenue.payload).isEqualTo(mapOf(
+                "countryCode" to "RU",
+                "original_ad_type" to "null",
+                "original_source" to "ad-revenue-applovin-v12",
+            ))
+        }
 
         whenever(maxAd.format).thenReturn(MaxAdFormat.BANNER)
-        assertThat(converter.convert(maxAd, appLovinSdk).adType).isEqualTo(ModuleAdType.BANNER)
+        converter.convert(maxAd, appLovinSdk).also { adRevenue ->
+            assertThat(adRevenue.adType).isEqualTo(ModuleAdType.BANNER)
+            assertThat(adRevenue.payload).isEqualTo(mapOf(
+                "countryCode" to "RU",
+                "original_ad_type" to "BANNER",
+                "original_source" to "ad-revenue-applovin-v12",
+            ))
+        }
 
         whenever(maxAd.format).thenReturn(MaxAdFormat.MREC)
-        assertThat(converter.convert(maxAd, appLovinSdk).adType).isEqualTo(ModuleAdType.MREC)
+        converter.convert(maxAd, appLovinSdk).also { adRevenue ->
+            assertThat(adRevenue.adType).isEqualTo(ModuleAdType.MREC)
+            assertThat(adRevenue.payload).isEqualTo(mapOf(
+                "countryCode" to "RU",
+                "original_ad_type" to "MREC",
+                "original_source" to "ad-revenue-applovin-v12",
+            ))
+        }
 
         whenever(maxAd.format).thenReturn(MaxAdFormat.LEADER)
-        converter.convert(maxAd, appLovinSdk).let {
-            assertThat(it.adType).isEqualTo(ModuleAdType.OTHER)
-            assertThat(it.payload?.get("adType")).isEqualTo("LEADER")
+        converter.convert(maxAd, appLovinSdk).also { adRevenue ->
+            assertThat(adRevenue.adType).isEqualTo(ModuleAdType.OTHER)
+            assertThat(adRevenue.payload).isEqualTo(mapOf(
+                "countryCode" to "RU",
+                "original_ad_type" to "LEADER",
+                "original_source" to "ad-revenue-applovin-v12",
+            ))
         }
 
         whenever(maxAd.format).thenReturn(MaxAdFormat.INTERSTITIAL)
-        assertThat(converter.convert(maxAd, appLovinSdk).adType).isEqualTo(ModuleAdType.INTERSTITIAL)
+        converter.convert(maxAd, appLovinSdk).also { adRevenue ->
+            assertThat(adRevenue.adType).isEqualTo(ModuleAdType.INTERSTITIAL)
+            assertThat(adRevenue.payload).isEqualTo(mapOf(
+                "countryCode" to "RU",
+                "original_ad_type" to "INTER",
+                "original_source" to "ad-revenue-applovin-v12",
+            ))
+        }
 
         whenever(maxAd.format).thenReturn(MaxAdFormat.APP_OPEN)
-        converter.convert(maxAd, appLovinSdk).let {
-            assertThat(it.adType).isEqualTo(ModuleAdType.OTHER)
-            assertThat(it.payload?.get("adType")).isEqualTo("APPOPEN")
+        converter.convert(maxAd, appLovinSdk).also { adRevenue ->
+            assertThat(adRevenue.adType).isEqualTo(ModuleAdType.OTHER)
+            assertThat(adRevenue.payload).isEqualTo(mapOf(
+                "countryCode" to "RU",
+                "original_ad_type" to "APPOPEN",
+                "original_source" to "ad-revenue-applovin-v12",
+            ))
         }
 
         whenever(maxAd.format).thenReturn(MaxAdFormat.REWARDED)
-        assertThat(converter.convert(maxAd, appLovinSdk).adType).isEqualTo(ModuleAdType.REWARDED)
+        converter.convert(maxAd, appLovinSdk).also { adRevenue ->
+            assertThat(adRevenue.adType).isEqualTo(ModuleAdType.REWARDED)
+            assertThat(adRevenue.payload).isEqualTo(mapOf(
+                "countryCode" to "RU",
+                "original_ad_type" to "REWARDED",
+                "original_source" to "ad-revenue-applovin-v12",
+            ))
+        }
 
         whenever(maxAd.format).thenReturn(MaxAdFormat.REWARDED_INTERSTITIAL)
-
-        converter.convert(maxAd, appLovinSdk).let {
-            assertThat(it.adType).isEqualTo(ModuleAdType.OTHER)
-            assertThat(it.payload?.get("adType")).isEqualTo("REWARDED_INTER")
+        converter.convert(maxAd, appLovinSdk).also { adRevenue ->
+            assertThat(adRevenue.adType).isEqualTo(ModuleAdType.OTHER)
+            assertThat(adRevenue.payload).isEqualTo(mapOf(
+                "countryCode" to "RU",
+                "original_ad_type" to "REWARDED_INTER",
+                "original_source" to "ad-revenue-applovin-v12",
+            ))
         }
 
         whenever(maxAd.format).thenReturn(MaxAdFormat.NATIVE)
-        assertThat(converter.convert(maxAd, appLovinSdk).adType).isEqualTo(ModuleAdType.NATIVE)
+        converter.convert(maxAd, appLovinSdk).also { adRevenue ->
+            assertThat(adRevenue.adType).isEqualTo(ModuleAdType.NATIVE)
+            assertThat(adRevenue.payload).isEqualTo(mapOf(
+                "countryCode" to "RU",
+                "original_ad_type" to "NATIVE",
+                "original_source" to "ad-revenue-applovin-v12",
+            ))
+        }
     }
 }

@@ -2,11 +2,13 @@ package io.appmetrica.analytics.adrevenue.fyber.v3.impl;
 
 import com.fyber.fairbid.ads.ImpressionData;
 import com.fyber.fairbid.ads.PlacementType;
+import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.AdRevenueConstants;
 import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdRevenue;
 import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdType;
 import io.appmetrica.analytics.testutils.CommonTest;
 import java.math.BigDecimal;
 import java.util.Currency;
+import java.util.HashMap;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -52,7 +54,10 @@ public class AdRevenueConverterTest extends CommonTest {
             .checkFieldIsNull("adPlacementId")
             .checkFieldIsNull("adPlacementName")
             .checkField("precision", priceAccuracy.toString())
-            .checkFieldIsNull("payload")
+            .checkField("payload", new HashMap<String, String>() {{
+                put(AdRevenueConstants.ORIGINAL_SOURCE_KEY, "ad-revenue-fyber-v3");
+                put(AdRevenueConstants.ORIGINAL_AD_TYPE_KEY, "REWARDED");
+            }})
             .checkField("autoCollected", true)
             .checkAll();
     }
@@ -72,7 +77,10 @@ public class AdRevenueConverterTest extends CommonTest {
             .checkFieldIsNull("adPlacementId")
             .checkFieldIsNull("adPlacementName")
             .checkField("precision", priceAccuracy.toString())
-            .checkFieldIsNull("payload")
+            .checkField("payload", new HashMap<String, String>() {{
+                put(AdRevenueConstants.ORIGINAL_SOURCE_KEY, "ad-revenue-fyber-v3");
+                put(AdRevenueConstants.ORIGINAL_AD_TYPE_KEY, "REWARDED");
+            }})
             .checkField("autoCollected", true)
             .checkAll();
     }
@@ -82,17 +90,41 @@ public class AdRevenueConverterTest extends CommonTest {
         when(data.getPlacementType()).thenReturn(null);
         final ModuleAdRevenue adRevenueNull = converter.convert(data);
         assertThat(adRevenueNull.getAdType()).isNull();
+        assertThat(adRevenueNull.getPayload()).isEqualTo(
+            new HashMap<String, String>() {{
+                put(AdRevenueConstants.ORIGINAL_SOURCE_KEY, "ad-revenue-fyber-v3");
+                put(AdRevenueConstants.ORIGINAL_AD_TYPE_KEY, "null");
+            }}
+        );
 
         when(data.getPlacementType()).thenReturn(PlacementType.REWARDED);
         final ModuleAdRevenue adRevenueRewarded = converter.convert(data);
         assertThat(adRevenueRewarded.getAdType()).isEqualTo(ModuleAdType.REWARDED);
+        assertThat(adRevenueRewarded.getPayload()).isEqualTo(
+            new HashMap<String, String>() {{
+                put(AdRevenueConstants.ORIGINAL_SOURCE_KEY, "ad-revenue-fyber-v3");
+                put(AdRevenueConstants.ORIGINAL_AD_TYPE_KEY, "REWARDED");
+            }}
+        );
 
         when(data.getPlacementType()).thenReturn(PlacementType.INTERSTITIAL);
         final ModuleAdRevenue adRevenueInterstitial = converter.convert(data);
         assertThat(adRevenueInterstitial.getAdType()).isEqualTo(ModuleAdType.INTERSTITIAL);
+        assertThat(adRevenueInterstitial.getPayload()).isEqualTo(
+            new HashMap<String, String>() {{
+                put(AdRevenueConstants.ORIGINAL_SOURCE_KEY, "ad-revenue-fyber-v3");
+                put(AdRevenueConstants.ORIGINAL_AD_TYPE_KEY, "INTERSTITIAL");
+            }}
+        );
 
         when(data.getPlacementType()).thenReturn(PlacementType.BANNER);
         final ModuleAdRevenue adRevenueBanner = converter.convert(data);
         assertThat(adRevenueBanner.getAdType()).isEqualTo(ModuleAdType.BANNER);
+        assertThat(adRevenueBanner.getPayload()).isEqualTo(
+            new HashMap<String, String>() {{
+                put(AdRevenueConstants.ORIGINAL_SOURCE_KEY, "ad-revenue-fyber-v3");
+                put(AdRevenueConstants.ORIGINAL_AD_TYPE_KEY, "BANNER");
+            }}
+        );
     }
 }

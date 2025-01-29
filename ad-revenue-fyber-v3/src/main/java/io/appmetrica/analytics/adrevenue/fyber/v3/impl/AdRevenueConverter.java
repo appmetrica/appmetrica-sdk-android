@@ -5,25 +5,31 @@ import androidx.annotation.Nullable;
 import com.fyber.fairbid.ads.ImpressionData;
 import com.fyber.fairbid.ads.PlacementType;
 import io.appmetrica.analytics.coreutils.internal.WrapUtils;
+import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.AdRevenueConstants;
 import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdRevenue;
 import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdType;
 import java.math.BigDecimal;
 import java.util.Currency;
+import java.util.HashMap;
 
 public class AdRevenueConverter {
 
     public ModuleAdRevenue convert(@NonNull final ImpressionData data) {
+        PlacementType type = data.getPlacementType();
         return new ModuleAdRevenue(
             BigDecimal.valueOf(WrapUtils.getFiniteDoubleOrDefault(data.getNetPayout(), 0)), // adRevenue
             Currency.getInstance(data.getCurrency()), // currency
-            convert(data.getPlacementType()), // adType
+            convert(type), // adType
             data.getDemandSource(), // adNetwork
             data.getCreativeId(), // adUnitId
             null, // adUnitName
             null, // adPlacementId
             null, // adPlacementName
             data.getPriceAccuracy().toString(), // precision
-            null, // payload
+            new HashMap<String, String>() {{
+                put(AdRevenueConstants.ORIGINAL_SOURCE_KEY, Constants.MODULE_ID);
+                put(AdRevenueConstants.ORIGINAL_AD_TYPE_KEY, type == null ? "null" : type.name());
+            }}, // payload
             true // autoCollected
         );
     }

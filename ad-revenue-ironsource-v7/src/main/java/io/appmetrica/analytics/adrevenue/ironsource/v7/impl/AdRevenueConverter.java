@@ -4,10 +4,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.ironsource.mediationsdk.impressionData.ImpressionData;
 import io.appmetrica.analytics.coreutils.internal.WrapUtils;
+import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.AdRevenueConstants;
 import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdRevenue;
 import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdType;
 import java.math.BigDecimal;
 import java.util.Currency;
+import java.util.HashMap;
 
 public class AdRevenueConverter {
 
@@ -16,17 +18,21 @@ public class AdRevenueConverter {
     private static final String BANNER = "Banner";
 
     public ModuleAdRevenue convert(@NonNull final ImpressionData data) {
+        String type = data.getAdUnit();
         return new ModuleAdRevenue(
             BigDecimal.valueOf(WrapUtils.getFiniteDoubleOrDefault(data.getRevenue(), 0)), // adRevenue
             Currency.getInstance("USD"), // currency
-            convert(data.getAdUnit()), // adType
+            convert(type), // adType
             data.getAdNetwork(), // adNetwork
             null, // adUnitId
             null, // adUnitName
             null, // adPlacementId
             data.getPlacement(), // adPlacementName
             data.getPrecision(), // precision
-            null, // payload
+            new HashMap<String, String>() {{
+                put(AdRevenueConstants.ORIGINAL_SOURCE_KEY, Constants.MODULE_ID);
+                put(AdRevenueConstants.ORIGINAL_AD_TYPE_KEY, type == null ? "null" : type);
+            }}, // payload
             true // autoCollected
         );
     }

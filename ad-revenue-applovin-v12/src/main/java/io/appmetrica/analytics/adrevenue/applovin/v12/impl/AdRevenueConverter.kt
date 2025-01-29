@@ -4,6 +4,7 @@ import com.applovin.mediation.MaxAd
 import com.applovin.mediation.MaxAdFormat
 import com.applovin.sdk.AppLovinSdk
 import io.appmetrica.analytics.coreutils.internal.WrapUtils
+import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.AdRevenueConstants
 import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdRevenue
 import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdType
 import java.math.BigDecimal
@@ -13,12 +14,11 @@ class AdRevenueConverter {
 
     fun convert(maxAd: MaxAd, appLovinSdk: AppLovinSdk): ModuleAdRevenue {
         val adType = convert(maxAd.format)
-        val payload = mutableMapOf(
+        val payload = mapOf(
             "countryCode" to appLovinSdk.configuration.countryCode,
+            AdRevenueConstants.ORIGINAL_SOURCE_KEY to Constants.MODULE_ID,
+            AdRevenueConstants.ORIGINAL_AD_TYPE_KEY to (maxAd.format?.label ?: "null"),
         )
-        if (adType == ModuleAdType.OTHER) {
-            payload["adType"] = maxAd.format.label
-        }
 
         return ModuleAdRevenue(
             adRevenue = BigDecimal.valueOf(WrapUtils.getFiniteDoubleOrDefault(maxAd.revenue, 0.0)),

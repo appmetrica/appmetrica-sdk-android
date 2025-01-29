@@ -43,6 +43,12 @@ public interface io.appmetrica.analytics.modulesapi.internal.client.ServiceConfi
     public abstract void onServiceConfigUpdated([NonNull] io.appmetrica.analytics.modulesapi.internal.client.ModuleServiceConfig<T>)
 }
 
+public final class io.appmetrica.analytics.modulesapi.internal.client.adrevenue.AdRevenueConstants {
+    public static final [NonNull] io.appmetrica.analytics.modulesapi.internal.client.adrevenue.AdRevenueConstants INSTANCE
+    public static final [NonNull] String ORIGINAL_AD_TYPE_KEY
+    public static final [NonNull] String ORIGINAL_SOURCE_KEY
+}
+
 public final class io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdRevenue {
     public <init>([NonNull] java.math.BigDecimal, [NonNull] java.util.Currency, [Nullable] io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdType, [Nullable] String, [Nullable] String, [Nullable] String, [Nullable] String, [Nullable] String, [Nullable] String, [Nullable] java.util.Map<String, String>, boolean)
     public final [Nullable] String getAdNetwork()
