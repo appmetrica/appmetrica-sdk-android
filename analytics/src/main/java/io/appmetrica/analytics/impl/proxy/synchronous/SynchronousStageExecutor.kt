@@ -87,13 +87,13 @@ class SynchronousStageExecutor @VisibleForTesting constructor(
         }
     }
 
-    fun reportError(identifier: String, message: String, error: Throwable) {}
+    fun reportError(identifier: String, message: String?, error: Throwable?) {}
 
     fun reportUnhandledException(exception: Throwable) {}
 
     fun resumeSession(activity: Activity?) {}
 
-    fun pauseSession(activity: Activity) {}
+    fun pauseSession(activity: Activity?) {}
 
     fun setUserProfileID(profileID: String?) {}
 
