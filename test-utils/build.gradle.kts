@@ -11,7 +11,7 @@ tasks.withType<KotlinCompile> {
 
 dependencies {
     api("junit:junit:4.13.2")
-    api("org.assertj:assertj-core:3.24.2")
+    api("org.assertj:assertj-core:3.26.3")
     api("org.mockito:mockito-inline:5.2.0")
     api("org.mockito.kotlin:mockito-kotlin:4.1.0")
     // https://github.com/robolectric/robolectric
