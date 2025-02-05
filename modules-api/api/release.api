@@ -13,6 +13,7 @@ public interface io.appmetrica.analytics.modulesapi.internal.client.BundleToServ
 public interface io.appmetrica.analytics.modulesapi.internal.client.ClientContext {
     public abstract [NonNull] io.appmetrica.analytics.modulesapi.internal.client.ClientStorageProvider getClientStorageProvider()
     public abstract [NonNull] android.content.Context getContext()
+    public abstract [NonNull] io.appmetrica.analytics.modulesapi.internal.common.InternalClientModuleFacade getInternalClientModuleFacade()
     public abstract [NonNull] io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdRevenueContext getModuleAdRevenueContext()
 }
 
@@ -99,6 +100,52 @@ public interface io.appmetrica.analytics.modulesapi.internal.common.ExecutorProv
     public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor getModuleExecutor()
     public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor getSupportIOExecutor()
     public abstract [NonNull] java.util.concurrent.Executor getUiExecutor()
+}
+
+public interface io.appmetrica.analytics.modulesapi.internal.common.InternalClientModuleFacade {
+    public abstract void reportEvent([NonNull] io.appmetrica.analytics.modulesapi.internal.common.InternalModuleEvent)
+}
+
+public final class io.appmetrica.analytics.modulesapi.internal.common.InternalModuleEvent {
+    public static final [NonNull] io.appmetrica.analytics.modulesapi.internal.common.InternalModuleEvent$Companion Companion
+
+    public final [Nullable] java.util.Map<String, Object> getAttributes()
+    public final [Nullable] java.util.Map<String, Object> getEnvironment()
+    public final [Nullable] java.util.Map<String, byte[]> getExtras()
+    public final [Nullable] String getName()
+    public final [Nullable] Integer getServiceDataReporterType()
+    public final int getType()
+    public final [Nullable] String getValue()
+    public static final [NonNull] io.appmetrica.analytics.modulesapi.internal.common.InternalModuleEvent$Builder newBuilder(int)
+    public [NonNull] String toString()
+}
+
+public static final class io.appmetrica.analytics.modulesapi.internal.common.InternalModuleEvent$Builder {
+    public <init>(int)
+    public [NonNull] io.appmetrica.analytics.modulesapi.internal.common.InternalModuleEvent build()
+    public final [Nullable] java.util.Map<String, Object> getAttributes()
+    public final [Nullable] java.util.Map<String, Object> getEnvironment()
+    public final [Nullable] java.util.Map<String, byte[]> getExtras()
+    public final [Nullable] String getName()
+    public final [Nullable] Integer getServiceDataReporterType()
+    public final int getType$modules_api_release()
+    public final [Nullable] String getValue()
+    public final void setAttributes([Nullable] java.util.Map<String, ? extends Object>)
+    public final void setEnvironment([Nullable] java.util.Map<String, ? extends Object>)
+    public final void setExtras([Nullable] java.util.Map<String, byte[]>)
+    public final void setName([Nullable] String)
+    public final void setServiceDataReporterType([Nullable] Integer)
+    public final void setValue([Nullable] String)
+    public final [NonNull] io.appmetrica.analytics.modulesapi.internal.common.InternalModuleEvent$Builder withAttributes([Nullable] java.util.Map<String, ? extends Object>)
+    public final [NonNull] io.appmetrica.analytics.modulesapi.internal.common.InternalModuleEvent$Builder withEnvironment([Nullable] java.util.Map<String, ? extends Object>)
+    public final [NonNull] io.appmetrica.analytics.modulesapi.internal.common.InternalModuleEvent$Builder withExtras([Nullable] java.util.Map<String, byte[]>)
+    public final [NonNull] io.appmetrica.analytics.modulesapi.internal.common.InternalModuleEvent$Builder withName([Nullable] String)
+    public final [NonNull] io.appmetrica.analytics.modulesapi.internal.common.InternalModuleEvent$Builder withServiceDataReporterType(int)
+    public final [NonNull] io.appmetrica.analytics.modulesapi.internal.common.InternalModuleEvent$Builder withValue([Nullable] String)
+}
+
+public static final class io.appmetrica.analytics.modulesapi.internal.common.InternalModuleEvent$Companion {
+    public final [NonNull] io.appmetrica.analytics.modulesapi.internal.common.InternalModuleEvent$Builder newBuilder(int)
 }
 
 public interface io.appmetrica.analytics.modulesapi.internal.common.ModulePreferences {
