@@ -99,14 +99,16 @@ public class NetworkCore extends InterruptionSafeThread {
             } catch (InterruptedException ex) {
                 DebugLogger.INSTANCE.error(TAG, ex);
             } finally {
-                synchronized (mStopTasksLock) {
-                    mCurrentTask = null;
-                    if (networkTask != null) {
-                        networkTask.onTaskFinished();
-                        networkTask.onTaskRemoved();
-                    } else {
-                        DebugLogger.INSTANCE.warning(TAG, "Network task is null");
+                if (networkTask != null) {
+                    networkTask.onTaskFinished();
+                    synchronized (mStopTasksLock) {
+                        if (mCurrentTask != null) {
+                            mCurrentTask = null;
+                            networkTask.onTaskRemoved();
+                        }
                     }
+                } else {
+                    DebugLogger.INSTANCE.warning(TAG, "Network task is null");
                 }
             }
         }
