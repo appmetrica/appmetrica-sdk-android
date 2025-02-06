@@ -332,7 +332,7 @@
   "analytics/src/main/java/io/appmetrica/analytics/impl/StateProvider.kt":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/main/java/io/appmetrica/analytics/impl/StateProvider.kt",
   "analytics/src/main/java/io/appmetrica/analytics/impl/StringArrayResourceRetriever.kt":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/main/java/io/appmetrica/analytics/impl/StringArrayResourceRetriever.kt",
   "analytics/src/main/java/io/appmetrica/analytics/impl/StringResourceRetriever.java":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/main/java/io/appmetrica/analytics/impl/StringResourceRetriever.java",
-  "analytics/src/main/java/io/appmetrica/analytics/impl/TaskProcessor.java":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/main/java/io/appmetrica/analytics/impl/TaskProcessor.java",
+  "analytics/src/main/java/io/appmetrica/analytics/impl/TaskProcessor.kt":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/main/java/io/appmetrica/analytics/impl/TaskProcessor.kt",
   "analytics/src/main/java/io/appmetrica/analytics/impl/UnhandledSituationReporterProvider.java":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/main/java/io/appmetrica/analytics/impl/UnhandledSituationReporterProvider.java",
   "analytics/src/main/java/io/appmetrica/analytics/impl/UpdatedCandidatesProvider.kt":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/main/java/io/appmetrica/analytics/impl/UpdatedCandidatesProvider.kt",
   "analytics/src/main/java/io/appmetrica/analytics/impl/UtilityServiceStartupStateObserver.kt":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/main/java/io/appmetrica/analytics/impl/UtilityServiceStartupStateObserver.kt",

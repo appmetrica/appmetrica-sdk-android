@@ -6,7 +6,6 @@ import io.appmetrica.analytics.impl.component.processor.CommutationProcessingStr
 import io.appmetrica.analytics.impl.component.processor.commutation.CommutationHandler;
 import io.appmetrica.analytics.impl.component.processor.commutation.CommutationReportProcessor;
 import io.appmetrica.analytics.impl.startup.StartupUnit;
-import io.appmetrica.analytics.impl.startup.executor.RegularStartupExecutor;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import org.assertj.core.api.SoftAssertions;
@@ -49,7 +48,6 @@ public class CommutationDispatcherComponentFieldsFactoryTest extends CommonTest 
         TaskProcessor<CommutationDispatcherComponent> taskProcessor = mFieldsFactory.createTaskProcessor(mComponent, mStartupUnit);
         SoftAssertions softly = new SoftAssertions();
         softly.assertThat(taskProcessor.getComponent()).isSameAs(mComponent);
-        softly.assertThat(taskProcessor.getStartupExecutor()).isInstanceOf(RegularStartupExecutor.class);
         softly.assertAll();
         verify(lifecycleDependentComponentManager).addLifecycleObserver(taskProcessor);
     }

@@ -25,6 +25,7 @@ import io.appmetrica.analytics.impl.events.EventsFlusher;
 import io.appmetrica.analytics.impl.request.ReportRequestConfig;
 import io.appmetrica.analytics.impl.startup.StartupState;
 import io.appmetrica.analytics.impl.startup.executor.ComponentStartupExecutorFactory;
+import io.appmetrica.analytics.impl.startup.executor.StartupExecutor;
 import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
@@ -86,6 +87,8 @@ public class ComponentUnitFieldsFactoryTest extends CommonTest {
     private EventTriggerProvider eventTriggerProvider;
     @Mock
     private EventTrigger eventTrigger;
+    @Mock
+    private StartupExecutor mStartupExecutor;
     int mCurrentAppVersion = 12;
     private final String apiKey = "some key";
 
@@ -100,6 +103,7 @@ public class ComponentUnitFieldsFactoryTest extends CommonTest {
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
+        when(mStartupExecutorFactory.create()).thenReturn(mStartupExecutor);
         when(mComponentUnit.getContext()).thenReturn(mContext);
         when(mComponentUnit.getComponentId()).thenReturn(mComponentId);
         when(mComponentUnit.getComponentPreferences()).thenReturn(mComponentPreferences);

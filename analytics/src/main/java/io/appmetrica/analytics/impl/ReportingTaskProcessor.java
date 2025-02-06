@@ -30,20 +30,20 @@ public class ReportingTaskProcessor<C extends ComponentUnit> extends TaskProcess
         this.commonTaskExecutor = commonTaskExecutor;
     }
 
-    void cancelFlushTask() {
+    @Override
+    public void cancelFlushTask() {
         commonTaskExecutor.remove(mFlushRunnable);
     }
 
     public void restartFlushTask() {
-        synchronized (mSync) {
-            if (!mIsShuttingDown) {
-                cancelFlushTask();
-                scheduleFlushTask();
-            }
+        if (!isShuttingDown()) {
+            cancelFlushTask();
+            scheduleFlushTask();
         }
     }
 
-    void runTasks() {
+    @Override
+    public void runTasks() {
         super.runTasks();
         ReportRequestConfig config = getComponent().getFreshReportRequestConfig();
         DebugLogger.INSTANCE.info(
