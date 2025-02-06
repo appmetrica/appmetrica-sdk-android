@@ -267,6 +267,7 @@ public class io.appmetrica.analytics.networktasks.internal.NetworkTask {
     public [NonNull] io.appmetrica.analytics.networktasks.internal.UnderlyingNetworkTask getUnderlyingTask()
     public [Nullable] String getUrl()
     public [NonNull] String getUserAgent()
+    public boolean isRemoved()
     public boolean onCreateNetworkTask()
     public boolean onPerformRequest()
     public boolean onRequestComplete()

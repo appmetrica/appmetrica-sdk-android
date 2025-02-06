@@ -316,4 +316,8 @@ public class NetworkTask {
     public String getUserAgent() {
         return userAgent;
     }
+
+    public boolean isRemoved() {
+        return state == State.REMOVED;
+    }
 }

@@ -199,4 +199,17 @@ class NetworkTaskTest {
         networkTask.onTaskFinished()
         assertThat(networkTask.shouldTryNextHost()).isFalse
     }
+
+    @Test
+    fun `isRemoved before onRemove`() {
+        assertThat(networkTask.isRemoved).isFalse()
+    }
+
+    @Test
+    fun `isRemoved after onRemove`() {
+        networkTask.onTaskAdded()
+        networkTask.onCreateNetworkTask()
+        networkTask.onTaskRemoved()
+        assertThat(networkTask.isRemoved).isTrue()
+    }
 }

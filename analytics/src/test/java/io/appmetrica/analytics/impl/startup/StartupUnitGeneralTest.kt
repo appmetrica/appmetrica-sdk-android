@@ -4,6 +4,7 @@ import io.appmetrica.analytics.AppMetricaConfig
 import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
 import io.appmetrica.analytics.billinginterface.internal.config.BillingConfig
 import io.appmetrica.analytics.impl.DistributionSource
+import io.appmetrica.analytics.impl.StartupTask
 import io.appmetrica.analytics.impl.clids.ClidsInfo
 import io.appmetrica.analytics.impl.client.ClientConfiguration
 import io.appmetrica.analytics.impl.client.ProcessConfiguration
@@ -12,11 +13,14 @@ import io.appmetrica.analytics.impl.startup.parsing.StartupParser
 import io.appmetrica.analytics.impl.startup.parsing.StartupResult
 import io.appmetrica.analytics.impl.utils.StartupUtils
 import io.appmetrica.analytics.internal.CounterConfiguration
+import io.appmetrica.analytics.networktasks.internal.NetworkTask
 import io.appmetrica.analytics.networktasks.internal.RetryPolicyConfig
+import io.appmetrica.analytics.testutils.constructionRule
 import net.bytebuddy.utility.RandomString
 import org.assertj.core.api.Assertions.assertThat
 import org.json.JSONObject
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
@@ -32,9 +36,28 @@ import java.util.UUID
 @RunWith(RobolectricTestRunner::class)
 internal class StartupUnitGeneralTest : StartupUnitBaseTest() {
 
+    @get:Rule
+    val startupTaskMockedConstructionRule = constructionRule<NetworkTask>()
+
     @Before
     override fun setup() {
         super.setup()
+    }
+
+    @Test
+    fun `getOrCreateStartupTaskIfRequired twice`() {
+        val first = startupUnit.getOrCreateStartupTaskIfRequired()!!
+        whenever(first.isRemoved).thenReturn(false)
+        val second = startupUnit.getOrCreateStartupTaskIfRequired()
+        assertThat(first).isSameAs(second)
+    }
+
+    @Test
+    fun `getOrCreateStartupTaskIfRequired twice if first in removed state`() {
+        val first = startupUnit.getOrCreateStartupTaskIfRequired()!!
+        whenever(first.isRemoved).thenReturn(true)
+        val second = startupUnit.getOrCreateStartupTaskIfRequired()
+        assertThat(first).isNotSameAs(second)
     }
 
     @Test

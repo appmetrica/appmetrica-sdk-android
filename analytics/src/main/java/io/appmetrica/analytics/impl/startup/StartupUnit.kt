@@ -70,11 +70,13 @@ internal class StartupUnit(
     @Synchronized
     fun getOrCreateStartupTaskIfRequired(): NetworkTask? = if (isStartupRequired()) {
         DebugLogger.info(tag, "getOrCreateStartupTaskIfRequired - startupRequired")
-        if (currentTask == null) {
+        var task = currentTask
+        if (task == null || task.isRemoved) {
             DebugLogger.info(tag, "getOrCreateStartupTaskIfRequired - create startup task")
-            currentTask = createStartupTask(this, requestConfig)
+            task = createStartupTask(this, requestConfig)
+            currentTask = task
         }
-        currentTask
+        task
     } else {
         null
     }
