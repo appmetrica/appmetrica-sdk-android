@@ -139,6 +139,7 @@ public class StartupParserTests extends CommonTest {
         response.setDeviceId("", response.testDeviceHash);
         StartupResult parseResult = mStartupParser.parseStartupResponse(jsonToBytes(response));
         assertThat(parseResult.getDeviceId()).isEmpty();
+        assertThat(parseResult.getResult()).isEqualTo(Result.OK);
     }
 
     @Test
@@ -147,6 +148,7 @@ public class StartupParserTests extends CommonTest {
         response.setDeviceId(null, response.testDeviceHash);
         StartupResult parseResult = mStartupParser.parseStartupResponse(jsonToBytes(response));
         assertThat(parseResult.getDeviceId()).isEmpty();
+        assertThat(parseResult.getResult()).isEqualTo(Result.OK);
     }
 
     @Test
@@ -155,6 +157,7 @@ public class StartupParserTests extends CommonTest {
         response.removeDeviceIdBlock();
         StartupResult parseResult = mStartupParser.parseStartupResponse(jsonToBytes(response));
         assertThat(parseResult.getDeviceId()).isEmpty();
+        assertThat(parseResult.getResult()).isEqualTo(Result.BAD);
     }
 
     @Test
@@ -163,6 +166,7 @@ public class StartupParserTests extends CommonTest {
         response.setDeviceId(response.testDeviceId, "");
         StartupResult parseResult = mStartupParser.parseStartupResponse(jsonToBytes(response));
         assertThat(parseResult.getDeviceIDHash()).isEmpty();
+        assertThat(parseResult.getResult()).isEqualTo(Result.BAD);
     }
 
     @Test
@@ -171,6 +175,7 @@ public class StartupParserTests extends CommonTest {
         response.setDeviceId(response.testDeviceId, null);
         StartupResult parseResult = mStartupParser.parseStartupResponse(jsonToBytes(response));
         assertThat(parseResult.getDeviceIDHash()).isEmpty();
+        assertThat(parseResult.getResult()).isEqualTo(Result.BAD);
     }
 
     @Test
@@ -179,6 +184,14 @@ public class StartupParserTests extends CommonTest {
         response.removeDeviceIdBlock();
         StartupResult parseResult = mStartupParser.parseStartupResponse(jsonToBytes(response));
         assertThat(parseResult.getDeviceIDHash()).isEmpty();
+        assertThat(parseResult.getResult()).isEqualTo(Result.BAD);
+    }
+
+    @Test
+    public void onlyDeviceIdAndDeviceIdHashIsFilled() throws Exception {
+        StartupJsonMock response = new StartupJsonMock();
+        response.setDeviceId(response.testDeviceId, response.testDeviceHash);
+        assertThat(mStartupParser.parseStartupResponse(jsonToBytes(response)).getResult()).isEqualTo(Result.OK);
     }
 
     @Test

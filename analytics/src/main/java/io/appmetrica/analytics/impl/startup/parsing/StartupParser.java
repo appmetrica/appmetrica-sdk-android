@@ -1,5 +1,6 @@
 package io.appmetrica.analytics.impl.startup.parsing;
 
+import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
@@ -123,8 +124,13 @@ public class StartupParser {
             result.setResult(StartupResult.Result.BAD);
             return result;
         }
-        result.setResult(StartupResult.Result.OK);
+        result.setResult(calculateResult(result));
         return result;
+    }
+
+    private StartupResult.Result calculateResult(@NonNull StartupResult result) {
+        return (TextUtils.isEmpty(result.getDeviceIDHash())) ?
+            StartupResult.Result.BAD : StartupResult.Result.OK;
     }
 
     private void parseComplexBlocks(StartupResult result, JsonHelper.OptJSONObject response) throws JSONException {
