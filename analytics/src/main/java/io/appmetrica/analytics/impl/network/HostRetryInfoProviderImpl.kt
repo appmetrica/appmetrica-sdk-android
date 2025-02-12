@@ -5,7 +5,7 @@ import io.appmetrica.analytics.networktasks.internal.HostRetryInfoProvider
 
 internal class HostRetryInfoProviderImpl(
     private val servicePreferences: PreferencesServiceDbStorage,
-    private val host: NetworkHost
+    val host: NetworkHost
 ) : HostRetryInfoProvider {
 
     override fun getNextSendAttemptNumber(): Int {

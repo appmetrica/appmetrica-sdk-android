@@ -35,7 +35,8 @@ internal object NetworkTaskFactory {
                 HostRetryInfoProviderImpl(
                     GlobalServiceLocator.getInstance().servicePreferences,
                     host
-                )
+                ),
+                host.name
             )
         }
     }

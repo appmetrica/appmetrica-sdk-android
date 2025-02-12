@@ -182,7 +182,7 @@ public final class io.appmetrica.analytics.networktasks.internal.DefaultResponse
 }
 
 public class io.appmetrica.analytics.networktasks.internal.ExponentialBackoffDataHolder {
-    public <init>([NonNull] io.appmetrica.analytics.networktasks.internal.HostRetryInfoProvider)
+    public <init>([NonNull] io.appmetrica.analytics.networktasks.internal.HostRetryInfoProvider, [NonNull] String)
     public void reset()
     public void updateLastAttemptInfo()
     public boolean wasLastAttemptLongAgoEnough([Nullable] io.appmetrica.analytics.networktasks.internal.RetryPolicyConfig)

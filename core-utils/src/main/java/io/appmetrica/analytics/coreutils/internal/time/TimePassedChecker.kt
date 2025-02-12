@@ -17,7 +17,8 @@ class TimePassedChecker @VisibleForTesting internal constructor(private val mTim
     private fun didTimePass(currentTime: Long, lastTime: Long, interval: Long, tag: String): Boolean {
         DebugLogger.info(
             tag,
-            "didTimePass? current time: $currentTime, last time: $lastTime, interval $interval."
+            "didTimePass?: ${currentTime - lastTime >= interval} current time: $currentTime, " +
+                "last time: $lastTime, interval $interval."
         )
         if (currentTime < lastTime) {
             DebugLogger.warning(tag, "current time is less than last.")

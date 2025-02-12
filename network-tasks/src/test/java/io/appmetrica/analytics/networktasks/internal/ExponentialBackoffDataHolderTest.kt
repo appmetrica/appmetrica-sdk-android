@@ -31,11 +31,15 @@ class ExponentialBackoffDataHolderTest {
     private val timeProvider = mock<TimeProvider> {
         on { this.currentTimeSeconds() } doReturn currentTimeSeconds
     }
+
+    private val tag = "tag"
+
     private var exponentialBackoffDataHolder =
         ExponentialBackoffDataHolder(
             retryInfoProvider,
             timeProvider,
-            timePassedChecker
+            timePassedChecker,
+            tag
         )
 
     @Test
@@ -52,7 +56,8 @@ class ExponentialBackoffDataHolderTest {
             ExponentialBackoffDataHolder(
                 retryInfoProvider,
                 timeProvider,
-                timePassedChecker
+                timePassedChecker,
+                tag
             )
         assertThat(exponentialBackoffDataHolder.wasLastAttemptLongAgoEnough(retryPolicyConfig)).isTrue
     }
@@ -82,11 +87,12 @@ class ExponentialBackoffDataHolderTest {
             ExponentialBackoffDataHolder(
                 retryInfoProvider,
                 timeProvider,
-                timePassedChecker
+                timePassedChecker,
+                tag
             )
         exponentialBackoffDataHolder.wasLastAttemptLongAgoEnough(retryPolicyConfig)
         // 3 * (2^4 - 1) = 45
-        verify(timePassedChecker).didTimePassSeconds(lastAttemptSeconds, 45, "last send attempt")
+        verify(timePassedChecker).didTimePassSeconds(lastAttemptSeconds, 45, "[ExponentialBackoffDataHolder-$tag]")
     }
 
     @Test
@@ -100,11 +106,12 @@ class ExponentialBackoffDataHolderTest {
             ExponentialBackoffDataHolder(
                 retryInfoProvider,
                 timeProvider,
-                timePassedChecker
+                timePassedChecker,
+                tag
             )
         exponentialBackoffDataHolder.wasLastAttemptLongAgoEnough(retryPolicyConfig)
         // 3 * (2^8 - 1) = 765 > 500
-        verify(timePassedChecker).didTimePassSeconds(lastAttemptSeconds, 500, "last send attempt")
+        verify(timePassedChecker).didTimePassSeconds(lastAttemptSeconds, 500, "[ExponentialBackoffDataHolder-$tag]")
     }
 
     @Test
@@ -116,7 +123,8 @@ class ExponentialBackoffDataHolderTest {
             ExponentialBackoffDataHolder(
                 retryInfoProvider,
                 timeProvider,
-                timePassedChecker
+                timePassedChecker,
+                tag
             )
         exponentialBackoffDataHolder.updateLastAttemptInfo()
         verify(retryInfoProvider).saveLastAttemptTimeSeconds(currentTimeSeconds)
@@ -133,7 +141,8 @@ class ExponentialBackoffDataHolderTest {
             ExponentialBackoffDataHolder(
                 retryInfoProvider,
                 timeProvider,
-                timePassedChecker
+                timePassedChecker,
+                tag
             )
         exponentialBackoffDataHolder.updateLastAttemptInfo()
         exponentialBackoffDataHolder.reset()

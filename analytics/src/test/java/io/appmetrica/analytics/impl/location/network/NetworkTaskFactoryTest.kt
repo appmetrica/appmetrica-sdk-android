@@ -207,7 +207,10 @@ internal class NetworkTaskFactoryTest : CommonTest() {
 
     private fun checkExponentialBackoffDataHolder(networkHost: NetworkHost) {
         val holderArguments = exponentialBackoffDataHolderMockedRule.argumentInterceptor.flatArguments()
-        assertThat(holderArguments).containsExactly(hostRetryProviderImplMockedRule.constructionMock.constructed()[0])
+        assertThat(holderArguments).containsExactly(
+            hostRetryProviderImplMockedRule.constructionMock.constructed()[0],
+            networkHost.name
+        )
         val hostRetryInfoProviderImplArguments = hostRetryProviderImplMockedRule.argumentInterceptor.flatArguments()
         assertThat(hostRetryInfoProviderImplArguments).containsExactly(
             GlobalServiceLocator.getInstance().servicePreferences,
