@@ -9,7 +9,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.appmetrica.analytics</groupId>
   <artifactId>analytics-ad-revenue</artifactId>
-  <version>7.7.0</version>
+  <version>7.8.0</version>
   <packaging>aar</packaging>
   <name>AppMetrica SDK Ad Revenue Auto Collection</name>
   <description>AppMetrica SDK Module</description>
@@ -36,25 +36,25 @@
     <dependency>
       <groupId>io.appmetrica.analytics</groupId>
       <artifactId>analytics-ad-revenue-admob-v23</artifactId>
-      <version>7.7.0</version>
+      <version>7.8.0</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>io.appmetrica.analytics</groupId>
       <artifactId>analytics-ad-revenue-applovin-v12</artifactId>
-      <version>7.7.0</version>
+      <version>7.8.0</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>io.appmetrica.analytics</groupId>
       <artifactId>analytics-ad-revenue-fyber-v3</artifactId>
-      <version>7.7.0</version>
+      <version>7.8.0</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>io.appmetrica.analytics</groupId>
       <artifactId>analytics-ad-revenue-ironsource-v7</artifactId>
-      <version>7.7.0</version>
+      <version>7.8.0</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
