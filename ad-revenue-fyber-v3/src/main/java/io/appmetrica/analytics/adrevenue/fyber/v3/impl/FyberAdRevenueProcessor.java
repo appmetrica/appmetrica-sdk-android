@@ -34,9 +34,8 @@ public class FyberAdRevenueProcessor implements ModuleAdRevenueProcessor {
 
         ImpressionData impressionData = (ImpressionData) values[0];
 
-        clientContext.getModuleAdRevenueContext()
-            .getAdRevenueReporter()
-            .reportAutoAdRevenue(converter.convert(impressionData));
+        clientContext.getInternalClientModuleFacade()
+            .reportAdRevenue(converter.convert(impressionData));
         LoggerStorage.getMainPublicOrAnonymousLogger().info(
             "Ad Revenue from Fyber was reported"
         );

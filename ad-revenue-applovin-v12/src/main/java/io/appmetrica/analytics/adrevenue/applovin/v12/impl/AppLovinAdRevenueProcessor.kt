@@ -23,7 +23,7 @@ class AppLovinAdRevenueProcessor(
         val appLovinSdk = values.getOrNull(1) as AppLovinSdk
 
         val adRevenue = converter.convert(maxAd, appLovinSdk)
-        clientContext.moduleAdRevenueContext.adRevenueReporter.reportAutoAdRevenue(adRevenue)
+        clientContext.internalClientModuleFacade.reportAdRevenue(adRevenue)
         LoggerStorage.getMainPublicOrAnonymousLogger().info(
             "Ad Revenue from AppLovin with values ${values.contentToString()} was reported"
         )

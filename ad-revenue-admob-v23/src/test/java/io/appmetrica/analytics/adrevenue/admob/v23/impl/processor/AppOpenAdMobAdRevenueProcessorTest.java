@@ -8,8 +8,7 @@ import io.appmetrica.analytics.coreutils.internal.reflection.ReflectionUtils;
 import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.modulesapi.internal.client.ClientContext;
 import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdRevenue;
-import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdRevenueContext;
-import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdRevenueReporter;
+import io.appmetrica.analytics.modulesapi.internal.common.InternalClientModuleFacade;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.MockedStaticRule;
 import org.junit.Before;
@@ -30,9 +29,7 @@ public class AppOpenAdMobAdRevenueProcessorTest extends CommonTest {
     @Mock
     private ClientContext clientContext;
     @Mock
-    private ModuleAdRevenueContext adRevenueContext;
-    @Mock
-    private ModuleAdRevenueReporter adRevenueReporter;
+    private InternalClientModuleFacade internalClientModuleFacade;
     @Mock
     private PublicLogger publicLogger;
     @Mock
@@ -59,8 +56,7 @@ public class AppOpenAdMobAdRevenueProcessorTest extends CommonTest {
         processor = new AppOpenAdMobAdRevenueProcessor(converter, clientContext);
 
         when(LoggerStorage.getMainPublicOrAnonymousLogger()).thenReturn(publicLogger);
-        when(clientContext.getModuleAdRevenueContext()).thenReturn(adRevenueContext);
-        when(adRevenueContext.getAdRevenueReporter()).thenReturn(adRevenueReporter);
+        when(clientContext.getInternalClientModuleFacade()).thenReturn(internalClientModuleFacade);
         when(converter.convertAppOpenAd(adValue, appOpenAd)).thenReturn(adRevenue);
 
         when(ReflectionUtils.isArgumentsOfClasses(
@@ -74,7 +70,7 @@ public class AppOpenAdMobAdRevenueProcessorTest extends CommonTest {
     public void process() {
         assertThat(processor.process(adValue, appOpenAd)).isTrue();
         verify(converter).convertAppOpenAd(adValue, appOpenAd);
-        verify(adRevenueReporter).reportAutoAdRevenue(adRevenue);
+        verify(internalClientModuleFacade).reportAdRevenue(adRevenue);
         verify(publicLogger).info("Ad Revenue from AdMob was reported");
     }
 
@@ -87,6 +83,6 @@ public class AppOpenAdMobAdRevenueProcessorTest extends CommonTest {
         )).thenReturn(false);
 
         assertThat(processor.process(adValue, appOpenAd)).isFalse();
-        verifyNoInteractions(converter, adRevenueReporter, publicLogger);
+        verifyNoInteractions(converter, internalClientModuleFacade, publicLogger);
     }
 }

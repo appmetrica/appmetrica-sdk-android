@@ -4,8 +4,7 @@ import com.fyber.fairbid.ads.ImpressionData;
 import io.appmetrica.analytics.coreutils.internal.reflection.ReflectionUtils;
 import io.appmetrica.analytics.modulesapi.internal.client.ClientContext;
 import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdRevenue;
-import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdRevenueContext;
-import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdRevenueReporter;
+import io.appmetrica.analytics.modulesapi.internal.common.InternalClientModuleFacade;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.MockedStaticRule;
 import org.junit.Before;
@@ -22,10 +21,8 @@ public class FyberAdRevenueProcessorTest extends CommonTest {
 
     private final ImpressionData impressionData = mock(ImpressionData.class);
     private final ModuleAdRevenue moduleAdRevenue = mock(ModuleAdRevenue.class);
-    private final ModuleAdRevenueReporter moduleAdRevenueReporter =
-        mock(ModuleAdRevenueReporter.class);
-    private final ModuleAdRevenueContext moduleAdRevenueContext =
-        mock(ModuleAdRevenueContext.class);
+    private final InternalClientModuleFacade internalClientModuleFacade =
+        mock(InternalClientModuleFacade.class);
     private final AdRevenueConverter converter = mock(AdRevenueConverter.class);
     private final ClientContext clientContext = mock(ClientContext.class);
 
@@ -40,8 +37,7 @@ public class FyberAdRevenueProcessorTest extends CommonTest {
 
     @Before
     public void setUp() {
-        when(clientContext.getModuleAdRevenueContext()).thenReturn(moduleAdRevenueContext);
-        when(moduleAdRevenueContext.getAdRevenueReporter()).thenReturn(moduleAdRevenueReporter);
+        when(clientContext.getInternalClientModuleFacade()).thenReturn(internalClientModuleFacade);
         when(converter.convert(impressionData)).thenReturn(moduleAdRevenue);
         when(ReflectionUtils.isArgumentsOfClasses(
             new Object[] { impressionData },
@@ -52,7 +48,7 @@ public class FyberAdRevenueProcessorTest extends CommonTest {
     @Test
     public void process() {
         assertThat(processor.process(impressionData)).isTrue();
-        verify(moduleAdRevenueReporter).reportAutoAdRevenue(moduleAdRevenue);
+        verify(internalClientModuleFacade).reportAdRevenue(moduleAdRevenue);
     }
 
     @Test

@@ -5,8 +5,7 @@ import com.applovin.sdk.AppLovinSdk
 import io.appmetrica.analytics.coreutils.internal.reflection.ReflectionUtils
 import io.appmetrica.analytics.modulesapi.internal.client.ClientContext
 import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdRevenue
-import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdRevenueContext
-import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdRevenueReporter
+import io.appmetrica.analytics.modulesapi.internal.common.InternalClientModuleFacade
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.MockedStaticRule
 import org.assertj.core.api.Assertions.assertThat
@@ -23,15 +22,12 @@ class AppLovinAdRevenueProcessorTest : CommonTest() {
     private val maxAd: MaxAd = mock()
     private val appLovinSdk: AppLovinSdk = mock()
     private val moduleAdRevenue: ModuleAdRevenue = mock()
-    private val adRevenueReporter: ModuleAdRevenueReporter = mock()
-    private val moduleAdRevenueContext: ModuleAdRevenueContext = mock {
-        on { adRevenueReporter } doReturn adRevenueReporter
-    }
+    private val internalClientModuleFacade: InternalClientModuleFacade = mock()
     private val converter: AdRevenueConverter = mock {
         on { convert(maxAd, appLovinSdk) } doReturn moduleAdRevenue
     }
     private val clientContext: ClientContext = mock {
-        on { moduleAdRevenueContext } doReturn moduleAdRevenueContext
+        on { internalClientModuleFacade } doReturn internalClientModuleFacade
     }
 
     @get:Rule
@@ -53,13 +49,13 @@ class AppLovinAdRevenueProcessorTest : CommonTest() {
     @Test
     fun process() {
         assertThat(processor.process(maxAd, appLovinSdk)).isTrue()
-        verify(adRevenueReporter).reportAutoAdRevenue(moduleAdRevenue)
+        verify(internalClientModuleFacade).reportAdRevenue(moduleAdRevenue)
     }
 
     @Test
     fun processWithWrongNumberOfParameters() {
         assertThat(processor.process(maxAd)).isFalse()
-        verifyNoInteractions(adRevenueReporter)
+        verifyNoInteractions(internalClientModuleFacade)
     }
 
     @Test
@@ -71,6 +67,6 @@ class AppLovinAdRevenueProcessorTest : CommonTest() {
         )).thenReturn(false)
 
         assertThat(processor.process(maxAd, appLovinSdk)).isFalse()
-        verifyNoInteractions(adRevenueReporter)
+        verifyNoInteractions(internalClientModuleFacade)
     }
 }

@@ -23,9 +23,7 @@ public abstract class BaseAdMobAdRevenueProcessor implements ModuleAdRevenueProc
     }
 
     protected void report(@NonNull ModuleAdRevenue adRevenue) {
-        clientContext.getModuleAdRevenueContext()
-            .getAdRevenueReporter()
-            .reportAutoAdRevenue(adRevenue);
+        clientContext.getInternalClientModuleFacade().reportAdRevenue(adRevenue);
         LoggerStorage.getMainPublicOrAnonymousLogger().info(
             "Ad Revenue from AdMob was reported"
         );

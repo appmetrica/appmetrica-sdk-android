@@ -67,7 +67,6 @@ public final class io.appmetrica.analytics.modulesapi.internal.client.adrevenue.
 
 public interface io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdRevenueContext {
     public abstract [NonNull] io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdRevenueProcessorsHolder getAdRevenueProcessorsHolder()
-    public abstract [NonNull] io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdRevenueReporter getAdRevenueReporter()
 }
 
 public interface io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdRevenueProcessor {
@@ -77,10 +76,6 @@ public interface io.appmetrica.analytics.modulesapi.internal.client.adrevenue.Mo
 
 public interface io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdRevenueProcessorsHolder {
     public abstract void register([NonNull] io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdRevenueProcessor)
-}
-
-public interface io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdRevenueReporter {
-    public abstract void reportAutoAdRevenue([NonNull] io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdRevenue)
 }
 
 public enum io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdType {
@@ -103,6 +98,7 @@ public interface io.appmetrica.analytics.modulesapi.internal.common.ExecutorProv
 }
 
 public interface io.appmetrica.analytics.modulesapi.internal.common.InternalClientModuleFacade {
+    public abstract void reportAdRevenue([NonNull] io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdRevenue)
     public abstract void reportEvent([NonNull] io.appmetrica.analytics.modulesapi.internal.common.InternalModuleEvent)
 }
 
