@@ -3,7 +3,7 @@
     "component": {
         "group": "io.appmetrica.analytics",
         "module": "analytics-identifiers",
-        "version": "7.7.0",
+        "version": "7.7.1",
         "attributes": {
             "org.gradle.status": "release"
         }
@@ -25,8 +25,8 @@
             },
             "files": [
                 {
-                    "name": "analytics-identifiers-7.7.0.aar",
-                    "url": "analytics-identifiers-7.7.0.aar",
+                    "name": "analytics-identifiers-7.7.1.aar",
+                    "url": "analytics-identifiers-7.7.1.aar",
                     "size": -1,
                     "sha512": "<sha512>",
                     "sha256": "<sha256>",
@@ -55,21 +55,21 @@
                     "group": "io.appmetrica.analytics",
                     "module": "analytics-core-api",
                     "version": {
-                        "requires": "7.7.0"
+                        "requires": "7.7.1"
                     }
                 },
                 {
                     "group": "io.appmetrica.analytics",
                     "module": "analytics-core-utils",
                     "version": {
-                        "requires": "7.7.0"
+                        "requires": "7.7.1"
                     }
                 },
                 {
                     "group": "io.appmetrica.analytics",
                     "module": "analytics-logger",
                     "version": {
-                        "requires": "7.7.0"
+                        "requires": "7.7.1"
                     }
                 },
                 {
@@ -82,8 +82,8 @@
             ],
             "files": [
                 {
-                    "name": "analytics-identifiers-7.7.0.aar",
-                    "url": "analytics-identifiers-7.7.0.aar",
+                    "name": "analytics-identifiers-7.7.1.aar",
+                    "url": "analytics-identifiers-7.7.1.aar",
                     "size": -1,
                     "sha512": "<sha512>",
                     "sha256": "<sha256>",
