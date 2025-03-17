@@ -9,8 +9,8 @@ object Constants {
     const val robolectricSdk = 34 // after change run task `updateRobolectricSdk`
 
     object Android {
-        const val buildToolsVersion = "34.0.0"
-        const val sdkVersion = 34
+        const val buildToolsVersion = "35.0.0"
+        const val sdkVersion = 35
         const val minSdkVersion = 21
         const val minSdkVersionNative = 21
     }

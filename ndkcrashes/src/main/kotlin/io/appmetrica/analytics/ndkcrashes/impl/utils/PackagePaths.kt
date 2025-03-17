@@ -35,12 +35,12 @@ object PackagePaths {
             )
             //endregion
             val zipPaths = ArrayList<String>(10)
-            zipPaths.add(pi.applicationInfo.sourceDir)
-            pi.applicationInfo.splitSourceDirs?.let { zipPaths.addAll(it) }
-            pi.applicationInfo.sharedLibraryFiles?.let { zipPaths.addAll(it) }
+            pi.applicationInfo?.sourceDir?.let { zipPaths.add(it) }
+            pi.applicationInfo?.splitSourceDirs?.let { zipPaths.addAll(it) }
+            pi.applicationInfo?.sharedLibraryFiles?.let { zipPaths.addAll(it) }
 
             val libPaths = ArrayList<String>(10)
-            val parent: File? = pi.applicationInfo.nativeLibraryDir?.takeIf { it.isNotEmpty() }?.let {
+            val parent: File? = pi.applicationInfo?.nativeLibraryDir?.takeIf { it.isNotEmpty() }?.let {
                 File(it).parentFile
             }
             if (parent != null) {
@@ -63,7 +63,7 @@ object PackagePaths {
                 }
             }
             System.getProperty("java.library.path")?.let { libPaths.add(it) }
-            pi.applicationInfo.nativeLibraryDir?.let { libPaths.add(it) }
+            pi.applicationInfo?.nativeLibraryDir?.let { libPaths.add(it) }
 
             arrayOf(
                 TextUtils.join(File.pathSeparator, zipPaths),
