@@ -3,6 +3,7 @@ package io.appmetrica.analytics.impl;
 import android.app.Activity;
 import android.content.Intent;
 import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor;
+import io.appmetrica.analytics.coreapi.internal.lifecycle.ActivityEvent;
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule;
 import io.appmetrica.analytics.testutils.CommonTest;
 import org.junit.Before;
@@ -52,20 +53,20 @@ public class AppOpenWatcherTest extends CommonTest {
     public void startWatching() {
         appOpenWatcher.startWatching();
         verify(ClientServiceLocator.getInstance().getActivityLifecycleManager())
-            .registerListener(appOpenWatcher, ActivityLifecycleManager.ActivityEvent.CREATED);
+            .registerListener(appOpenWatcher, ActivityEvent.CREATED);
     }
 
     @Test
     public void stopWatching() {
         appOpenWatcher.stopWatching();
         verify(ClientServiceLocator.getInstance().getActivityLifecycleManager())
-            .unregisterListener(appOpenWatcher, ActivityLifecycleManager.ActivityEvent.CREATED);
+            .unregisterListener(appOpenWatcher, ActivityEvent.CREATED);
     }
 
     @Test
     public void hasCallbacksNoDeeplinkConsumer() {
         appOpenWatcher.startWatching();
-        appOpenWatcher.onEvent(activity, ActivityLifecycleManager.ActivityEvent.CREATED);
+        appOpenWatcher.onEvent(activity, ActivityEvent.CREATED);
         verifyNoMoreInteractions(executor, deeplinkConsumer);
         appOpenWatcher.setDeeplinkConsumer(deeplinkConsumer);
         verifyNoMoreInteractions(executor);
@@ -77,7 +78,7 @@ public class AppOpenWatcherTest extends CommonTest {
         appOpenWatcher.startWatching();
         appOpenWatcher.setDeeplinkConsumer(deeplinkConsumer);
         clearInvocations(executor);
-        appOpenWatcher.onEvent(activity, ActivityLifecycleManager.ActivityEvent.CREATED);
+        appOpenWatcher.onEvent(activity, ActivityEvent.CREATED);
         verify(executor).execute(runnableCaptor.capture());
         runnableCaptor.getValue().run();
         verify(deeplinkConsumer).reportAutoAppOpen(deeplink);
@@ -88,7 +89,7 @@ public class AppOpenWatcherTest extends CommonTest {
         when(activity.getIntent()).thenReturn(null);
         appOpenWatcher.startWatching();
         appOpenWatcher.setDeeplinkConsumer(deeplinkConsumer);
-        appOpenWatcher.onEvent(activity, ActivityLifecycleManager.ActivityEvent.CREATED);
+        appOpenWatcher.onEvent(activity, ActivityEvent.CREATED);
         verifyNoMoreInteractions(executor, deeplinkConsumer);
     }
 
@@ -97,7 +98,7 @@ public class AppOpenWatcherTest extends CommonTest {
         when(activity.getIntent()).thenThrow(new RuntimeException());
         appOpenWatcher.startWatching();
         appOpenWatcher.setDeeplinkConsumer(deeplinkConsumer);
-        appOpenWatcher.onEvent(activity, ActivityLifecycleManager.ActivityEvent.CREATED);
+        appOpenWatcher.onEvent(activity, ActivityEvent.CREATED);
         verifyNoMoreInteractions(executor, deeplinkConsumer);
     }
 
@@ -106,7 +107,7 @@ public class AppOpenWatcherTest extends CommonTest {
         when(activity.getIntent()).thenReturn(null);
         appOpenWatcher.startWatching();
         appOpenWatcher.setDeeplinkConsumer(deeplinkConsumer);
-        appOpenWatcher.onEvent(activity, ActivityLifecycleManager.ActivityEvent.CREATED);
+        appOpenWatcher.onEvent(activity, ActivityEvent.CREATED);
         verifyNoMoreInteractions(executor, deeplinkConsumer);
     }
 
@@ -115,7 +116,7 @@ public class AppOpenWatcherTest extends CommonTest {
         when(intent.getDataString()).thenReturn(null);
         appOpenWatcher.startWatching();
         appOpenWatcher.setDeeplinkConsumer(deeplinkConsumer);
-        appOpenWatcher.onEvent(activity, ActivityLifecycleManager.ActivityEvent.CREATED);
+        appOpenWatcher.onEvent(activity, ActivityEvent.CREATED);
         verifyNoMoreInteractions(executor, deeplinkConsumer);
     }
 
@@ -124,7 +125,7 @@ public class AppOpenWatcherTest extends CommonTest {
         when(intent.getDataString()).thenReturn("");
         appOpenWatcher.startWatching();
         appOpenWatcher.setDeeplinkConsumer(deeplinkConsumer);
-        appOpenWatcher.onEvent(activity, ActivityLifecycleManager.ActivityEvent.CREATED);
+        appOpenWatcher.onEvent(activity, ActivityEvent.CREATED);
         verifyNoMoreInteractions(executor, deeplinkConsumer);
     }
 

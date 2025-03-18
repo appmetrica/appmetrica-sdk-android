@@ -1,0 +1,31 @@
+syntax = "proto2";
+
+message RemoteScreenshotConfig {
+
+  message ScreenshotConfig {
+
+    message ApiCaptorConfig {
+      optional bool enabled = 1 [default = true];
+    }
+
+    optional ApiCaptorConfig apiCaptorConfig = 1;
+
+    message ServiceCaptorConfig {
+      optional bool enabled = 1 [default = true];
+      optional int64 delaySeconds = 2 [default = 1];
+    }
+
+    optional ServiceCaptorConfig serviceCaptorConfig = 2;
+
+    message ContentObserverCaptorConfig {
+      optional bool enabled = 1 [default = true];
+      optional int64 detectWindowSeconds = 2 [default = 5];
+      repeated string mediaStoreColumnNames = 3;
+    }
+
+    optional ContentObserverCaptorConfig contentObserverCaptorConfig = 3;
+  }
+
+  optional bool enabled = 1 [default = true];
+  optional ScreenshotConfig config = 2;
+}

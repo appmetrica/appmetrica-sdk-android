@@ -178,6 +178,7 @@ dependencies {
     runtimeOnly(project(":identifiers"))
     runtimeOnly(project(":location"))
     runtimeOnly(project(":remote-permissions"))
+    runtimeOnly(project(":screenshot"))
 
     testImplementation(project(":identifiers"))
     testImplementation("com.google.android.gms:play-services-location:${Deps.gmsLocationVersion}")

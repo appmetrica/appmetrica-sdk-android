@@ -1,8 +1,10 @@
 package io.appmetrica.analytics.impl
 
+import android.app.Activity
 import android.content.Context
 import io.appmetrica.analytics.IReporter
-import io.appmetrica.analytics.impl.ActivityLifecycleManager.ActivityEvent
+import io.appmetrica.analytics.coreapi.internal.lifecycle.ActivityEvent
+import io.appmetrica.analytics.coreapi.internal.lifecycle.ActivityLifecycleListener
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
@@ -14,12 +16,14 @@ class ContextAppearedListener
 
     private val tag = "[ContextAppearedListener]"
     private var context: Context? = null
-    private val selfReporterListener = ActivityLifecycleManager.Listener { _, event ->
-        DebugLogger.info(tag, "Event received: $event")
-        when (event) {
-            ActivityEvent.RESUMED -> selfReporter.resumeSession()
-            ActivityEvent.PAUSED -> selfReporter.pauseSession()
-            else -> {}
+    private val selfReporterListener = object : ActivityLifecycleListener {
+        override fun onEvent(activity: Activity, event: ActivityEvent) {
+            DebugLogger.info(tag, "Event received: $event")
+            when (event) {
+                ActivityEvent.RESUMED -> selfReporter.resumeSession()
+                ActivityEvent.PAUSED -> selfReporter.pauseSession()
+                else -> {}
+            }
         }
     }
 

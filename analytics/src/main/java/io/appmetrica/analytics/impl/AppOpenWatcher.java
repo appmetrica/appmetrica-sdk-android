@@ -7,13 +7,15 @@ import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import io.appmetrica.analytics.coreapi.internal.backport.FunctionWithThrowable;
+import io.appmetrica.analytics.coreapi.internal.lifecycle.ActivityEvent;
+import io.appmetrica.analytics.coreapi.internal.lifecycle.ActivityLifecycleListener;
 import io.appmetrica.analytics.coreutils.internal.system.SystemServiceUtils;
 import io.appmetrica.analytics.impl.utils.ApiProxyThread;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AppOpenWatcher implements ActivityLifecycleManager.Listener {
+public class AppOpenWatcher implements ActivityLifecycleListener {
 
     private static final String TAG = "[AppOpenWatcher]";
 
@@ -27,7 +29,7 @@ public class AppOpenWatcher implements ActivityLifecycleManager.Listener {
         DebugLogger.INSTANCE.info(TAG, "Start watching app opens");
         ClientServiceLocator.getInstance().getActivityLifecycleManager().registerListener(
             this,
-            ActivityLifecycleManager.ActivityEvent.CREATED
+            ActivityEvent.CREATED
         );
     }
 
@@ -35,7 +37,7 @@ public class AppOpenWatcher implements ActivityLifecycleManager.Listener {
         DebugLogger.INSTANCE.info(TAG, "Stop watching app opens");
         ClientServiceLocator.getInstance().getActivityLifecycleManager().unregisterListener(
             this,
-            ActivityLifecycleManager.ActivityEvent.CREATED
+            ActivityEvent.CREATED
         );
     }
 
@@ -78,7 +80,7 @@ public class AppOpenWatcher implements ActivityLifecycleManager.Listener {
 
     @Override
     @MainThread
-    public void onEvent(@NonNull Activity activity, @NonNull ActivityLifecycleManager.ActivityEvent event) {
+    public void onEvent(@NonNull Activity activity, @NonNull ActivityEvent event) {
         DebugLogger.INSTANCE.info(TAG, "onEvent %s for activity %s", event, activity);
         final Intent intent = SystemServiceUtils.accessSystemServiceSafely(
             activity,

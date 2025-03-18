@@ -36,6 +36,7 @@ include("network")
 include("network-tasks")
 include("proto")
 include("remote-permissions")
+include("screenshot")
 
 // native crashes
 include("ndkcrashes")

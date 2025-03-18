@@ -8,11 +8,16 @@ import androidx.annotation.AnyThread;
 import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import io.appmetrica.analytics.coreapi.internal.lifecycle.ActivityEvent;
+import io.appmetrica.analytics.coreapi.internal.lifecycle.ActivityLifecycleListener;
+import io.appmetrica.analytics.coreapi.internal.lifecycle.ActivityLifecycleRegistry;
 import io.appmetrica.analytics.impl.utils.collection.HashMultimap;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.util.Collection;
 
-public class ActivityLifecycleManager extends DefaultActivityLifecycleCallbacks {
+public class ActivityLifecycleManager extends DefaultActivityLifecycleCallbacks implements ActivityLifecycleRegistry {
+
+    public ActivityLifecycleManager() {}
 
     private static final String TAG = "[ActivityLifecycleManager]";
 
@@ -28,39 +33,36 @@ public class ActivityLifecycleManager extends DefaultActivityLifecycleCallbacks 
         }
     }
 
-    public enum ActivityEvent {
-        CREATED, RESUMED, PAUSED, STARTED, STOPPED, DESTROYED
-    }
-
-    interface Listener {
-        @MainThread
-        void onEvent(@NonNull Activity activity, @NonNull ActivityEvent event);
-    }
-
     @Nullable
     private Application application;
     @NonNull
     private volatile WatchingStatus watchingStatus = WatchingStatus.NOT_WATCHING_YET;
 
     @NonNull
-    private final HashMultimap<ActivityLifecycleManager.ActivityEvent, ActivityLifecycleManager.Listener> listeners =
-            new HashMultimap<ActivityLifecycleManager.ActivityEvent, ActivityLifecycleManager.Listener>(true);
+    private final HashMultimap<ActivityEvent, ActivityLifecycleListener> listeners =
+        new HashMultimap<>(true);
 
     @AnyThread
-    public synchronized void registerListener(@NonNull ActivityLifecycleManager.Listener listener,
-                                              @Nullable ActivityLifecycleManager.ActivityEvent... events) {
+    @Override
+    public synchronized void registerListener(
+        @NonNull ActivityLifecycleListener listener,
+        @NonNull ActivityEvent... events
+    ) {
         DebugLogger.INSTANCE.info(TAG, "register listener %s", listener);
-        for (ActivityLifecycleManager.ActivityEvent event : eventsOrAll(events)) {
+        for (ActivityEvent event : eventsOrAll(events)) {
             listeners.put(event, listener);
         }
         maybeInitInternal();
     }
 
     @AnyThread
-    public synchronized void unregisterListener(@NonNull ActivityLifecycleManager.Listener listener,
-                                                ActivityLifecycleManager.ActivityEvent... events) {
+    @Override
+    public synchronized void unregisterListener(
+        @NonNull ActivityLifecycleListener listener,
+        @NonNull ActivityEvent... events
+    ) {
         DebugLogger.INSTANCE.info(TAG, "unregister listener %s", listener);
-        for (ActivityLifecycleManager.ActivityEvent event : eventsOrAll(events)) {
+        for (ActivityEvent event : eventsOrAll(events)) {
             listeners.remove(event, listener);
         }
         maybeUnregister();
@@ -114,7 +116,7 @@ public class ActivityLifecycleManager extends DefaultActivityLifecycleCallbacks 
     @Override
     @MainThread
     public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
-        notifyListeners(ActivityLifecycleManager.ActivityEvent.CREATED, activity);
+        notifyListeners(ActivityEvent.CREATED, activity);
     }
 
     @Override
@@ -135,13 +137,13 @@ public class ActivityLifecycleManager extends DefaultActivityLifecycleCallbacks 
     @Override
     @MainThread
     public void onActivityResumed(@NonNull final Activity activity) {
-        notifyListeners(ActivityLifecycleManager.ActivityEvent.RESUMED, activity);
+        notifyListeners(ActivityEvent.RESUMED, activity);
     }
 
     @Override
     @MainThread
     public void onActivityPaused(@NonNull final Activity activity) {
-        notifyListeners(ActivityLifecycleManager.ActivityEvent.PAUSED, activity);
+        notifyListeners(ActivityEvent.PAUSED, activity);
     }
 
     @NonNull
@@ -150,13 +152,13 @@ public class ActivityLifecycleManager extends DefaultActivityLifecycleCallbacks 
         return watchingStatus;
     }
 
-    private void notifyListeners(@NonNull ActivityLifecycleManager.ActivityEvent state, @NonNull Activity activity) {
-        Collection<ActivityLifecycleManager.Listener> eventListeners;
+    private void notifyListeners(@NonNull ActivityEvent state, @NonNull Activity activity) {
+        Collection<ActivityLifecycleListener> eventListeners;
         synchronized (this) {
             eventListeners = listeners.get(state);
         }
         if (eventListeners != null) {
-            for (ActivityLifecycleManager.Listener listener : eventListeners) {
+            for (ActivityLifecycleListener listener : eventListeners) {
                 listener.onEvent(activity, state);
             }
         }

@@ -324,6 +324,22 @@ public interface io.appmetrica.analytics.coreapi.internal.io.SslSocketFactoryPro
     public abstract [Nullable] javax.net.ssl.SSLSocketFactory getSslSocketFactory()
 }
 
+public enum io.appmetrica.analytics.coreapi.internal.lifecycle.ActivityEvent {
+    CREATED, DESTROYED, PAUSED, RESUMED, STARTED, STOPPED
+
+    public static io.appmetrica.analytics.coreapi.internal.lifecycle.ActivityEvent valueOf(String)
+    public static io.appmetrica.analytics.coreapi.internal.lifecycle.ActivityEvent[] values()
+}
+
+public interface io.appmetrica.analytics.coreapi.internal.lifecycle.ActivityLifecycleListener {
+    public abstract void onEvent([NonNull] android.app.Activity, [NonNull] io.appmetrica.analytics.coreapi.internal.lifecycle.ActivityEvent)
+}
+
+public interface io.appmetrica.analytics.coreapi.internal.lifecycle.ActivityLifecycleRegistry {
+    public abstract void registerListener([NonNull] io.appmetrica.analytics.coreapi.internal.lifecycle.ActivityLifecycleListener, [NonNull] io.appmetrica.analytics.coreapi.internal.lifecycle.ActivityEvent...)
+    public abstract void unregisterListener([NonNull] io.appmetrica.analytics.coreapi.internal.lifecycle.ActivityLifecycleListener, [NonNull] io.appmetrica.analytics.coreapi.internal.lifecycle.ActivityEvent...)
+}
+
 public final class io.appmetrica.analytics.coreapi.internal.model.AppVersionInfo {
     public <init>([NonNull] String, [NonNull] String)
     public final [NonNull] String component1()

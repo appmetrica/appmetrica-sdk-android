@@ -4,6 +4,8 @@ import android.app.Activity;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
+import io.appmetrica.analytics.coreapi.internal.lifecycle.ActivityEvent;
+import io.appmetrica.analytics.coreapi.internal.lifecycle.ActivityLifecycleListener;
 import io.appmetrica.analytics.impl.utils.ApiProxyThread;
 import io.appmetrica.analytics.impl.utils.ConditionalExecutor;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
@@ -17,9 +19,9 @@ public class SessionsTrackingManager {
     @NonNull
     private final ConditionalExecutor<MainReporter> conditionalExecutor;
     @NonNull
-    private final ActivityLifecycleManager.Listener onResumedCallback;
+    private final ActivityLifecycleListener onResumedCallback;
     @NonNull
-    private final ActivityLifecycleManager.Listener onPausedCallback;
+    private final ActivityLifecycleListener onPausedCallback;
     @NonNull
     private final ActivityStateManager activityStateManager;
     @NonNull
@@ -76,9 +78,9 @@ public class SessionsTrackingManager {
             DebugLogger.INSTANCE.info(TAG, "Start watching");
             activityLifecycleManager.registerListener(
                 onResumedCallback,
-                ActivityLifecycleManager.ActivityEvent.RESUMED
+                ActivityEvent.RESUMED
             );
-            activityLifecycleManager.registerListener(onPausedCallback, ActivityLifecycleManager.ActivityEvent.PAUSED);
+            activityLifecycleManager.registerListener(onPausedCallback, ActivityEvent.PAUSED);
             sessionAutotrackingStarted = true;
         } else {
             DebugLogger.INSTANCE.info(TAG, "Ignore start watching if not yet as already has been started");
@@ -91,11 +93,11 @@ public class SessionsTrackingManager {
             DebugLogger.INSTANCE.info(TAG, "Stop watching");
             activityLifecycleManager.unregisterListener(
                 onResumedCallback,
-                ActivityLifecycleManager.ActivityEvent.RESUMED
+                ActivityEvent.RESUMED
             );
             activityLifecycleManager.unregisterListener(
                 onPausedCallback,
-                ActivityLifecycleManager.ActivityEvent.PAUSED
+                ActivityEvent.PAUSED
             );
             sessionAutotrackingStarted = false;
         } else {

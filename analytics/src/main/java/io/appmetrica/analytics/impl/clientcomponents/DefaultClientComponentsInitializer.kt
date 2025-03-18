@@ -15,6 +15,7 @@ class DefaultClientComponentsInitializer : ClientComponentsInitializer {
         "io.appmetrica.analytics.adrevenue.fyber.v3.internal.FyberClientModuleEntryPoint",
         "io.appmetrica.analytics.adrevenue.ironsource.v7.internal.IronSourceClientModuleEntryPoint",
         "io.appmetrica.analytics.apphud.internal.ApphudClientModuleEntryPoint",
+        "io.appmetrica.analytics.screenshot.internal.ScreenshotClientModuleEntryPoint",
     )
 
     override fun onCreate() {

@@ -1,0 +1,16 @@
+package io.appmetrica.analytics.screenshot.impl
+
+import io.appmetrica.analytics.screenshot.impl.protobuf.client.RemoteScreenshotConfigProtobuf
+
+internal typealias ApiCaptorConfigProto =
+    RemoteScreenshotConfigProtobuf.RemoteScreenshotConfig.ScreenshotConfig.ApiCaptorConfig
+
+internal typealias ContentObserverCaptorConfigProto =
+    RemoteScreenshotConfigProtobuf.RemoteScreenshotConfig.ScreenshotConfig.ContentObserverCaptorConfig
+
+internal typealias RemoteScreenshotConfigProto = RemoteScreenshotConfigProtobuf.RemoteScreenshotConfig
+
+internal typealias ScreenshotConfigProto = RemoteScreenshotConfigProtobuf.RemoteScreenshotConfig.ScreenshotConfig
+
+internal typealias ServiceCaptorConfigProto =
+    RemoteScreenshotConfigProtobuf.RemoteScreenshotConfig.ScreenshotConfig.ServiceCaptorConfig

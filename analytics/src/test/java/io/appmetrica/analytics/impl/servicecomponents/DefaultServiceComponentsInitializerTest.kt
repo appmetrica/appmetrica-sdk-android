@@ -16,7 +16,7 @@ import org.mockito.kotlin.mock
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class DefaultServiceComponentInitializerTest : CommonTest() {
+class DefaultServiceComponentsInitializerTest : CommonTest() {
 
     private val context = mock<Context>()
 
@@ -35,6 +35,7 @@ class DefaultServiceComponentInitializerTest : CommonTest() {
         val expectedModules = listOf(
             "io.appmetrica.analytics.remotepermissions.internal.RemotePermissionsModuleEntryPoint",
             "io.appmetrica.analytics.apphud.internal.ApphudServiceModuleEntryPoint",
+            "io.appmetrica.analytics.screenshot.internal.ScreenshotServiceModuleEntryPoint",
         )
         serviceComponentsInitializer.onCreate(context)
 

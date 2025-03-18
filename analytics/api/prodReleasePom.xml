@@ -64,6 +64,12 @@
       <scope>runtime</scope>
     </dependency>
     <dependency>
+      <groupId>io.appmetrica.analytics</groupId>
+      <artifactId>analytics-screenshot</artifactId>
+      <version>7.8.0</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
       <groupId>org.jetbrains.kotlin</groupId>
       <artifactId>kotlin-stdlib</artifactId>
       <version>1.6.21</version>

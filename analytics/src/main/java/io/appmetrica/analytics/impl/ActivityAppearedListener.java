@@ -4,11 +4,13 @@ import android.app.Activity;
 import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.WorkerThread;
+import io.appmetrica.analytics.coreapi.internal.lifecycle.ActivityEvent;
+import io.appmetrica.analytics.coreapi.internal.lifecycle.ActivityLifecycleListener;
 import io.appmetrica.analytics.impl.utils.ApiProxyThread;
 import java.util.HashSet;
 import java.util.Set;
 
-public class ActivityAppearedListener implements ActivityLifecycleManager.Listener {
+public class ActivityAppearedListener implements ActivityLifecycleListener {
 
     public interface Listener {
 
@@ -40,7 +42,7 @@ public class ActivityAppearedListener implements ActivityLifecycleManager.Listen
 
     @Override
     @MainThread
-    public void onEvent(@NonNull final Activity activity, @NonNull ActivityLifecycleManager.ActivityEvent event) {
+    public void onEvent(@NonNull final Activity activity, @NonNull ActivityEvent event) {
         ClientServiceLocator.getInstance().getClientExecutorProvider().getDefaultExecutor().execute(new Runnable() {
             @Override
             @ApiProxyThread

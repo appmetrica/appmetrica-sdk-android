@@ -12,6 +12,7 @@ class DefaultServiceComponentsInitializer : ServiceComponentsInitializer {
     private val moduleEntryPoints = listOf(
         "io.appmetrica.analytics.remotepermissions.internal.RemotePermissionsModuleEntryPoint",
         "io.appmetrica.analytics.apphud.internal.ApphudServiceModuleEntryPoint",
+        "io.appmetrica.analytics.screenshot.internal.ScreenshotServiceModuleEntryPoint",
     )
 
     override fun onCreate(context: Context) {
