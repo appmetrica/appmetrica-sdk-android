@@ -13,6 +13,7 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
+import java.util.concurrent.TimeUnit
 
 @RunWith(RobolectricTestRunner::class)
 class UpdatePolicyImplTest : CommonTest() {
@@ -22,7 +23,7 @@ class UpdatePolicyImplTest : CommonTest() {
         ProductType.INAPP,
         "stored_inapp",
         "stored_inapp_token",
-        1,
+        10,
         2
     )
     private val storedSubs = BillingInfo(
@@ -42,7 +43,7 @@ class UpdatePolicyImplTest : CommonTest() {
         on { currentTimeMillis() } doReturn now
     }
 
-    private val billingConfig = BillingConfig(10000, 10000)
+    private val billingConfig = BillingConfig(10000, 24 * 3600)
     private val updatePolicy = UpdatePolicyImpl(systemTimeProvider)
 
     @Test
@@ -67,7 +68,7 @@ class UpdatePolicyImplTest : CommonTest() {
                 storedInapp.type,
                 storedInapp.productId,
                 "other_token",
-                3,
+                now - TimeUnit.HOURS.toMillis(23),
                 4
             )
         )
@@ -82,7 +83,7 @@ class UpdatePolicyImplTest : CommonTest() {
                 ProductType.INAPP,
                 "sku",
                 "token",
-                3,
+                now - TimeUnit.HOURS.toMillis(23),
                 4
             )
         )
@@ -91,7 +92,7 @@ class UpdatePolicyImplTest : CommonTest() {
     }
 
     @Test
-    fun ignoreOldSku() {
+    fun ignoreOldInapp() {
         whenever(billingInfoManager.isFirstInappCheckOccurred).thenReturn(false)
         val history = mapOf(
             "sku" to BillingInfo(
@@ -199,5 +200,37 @@ class UpdatePolicyImplTest : CommonTest() {
         val history = goodHistory + badHistory
         val result = updatePolicy.getBillingInfoToUpdate(billingConfig, history, billingInfoManager)
         assertThat(result).isEqualTo(goodHistory)
+    }
+
+    @Test
+    fun ignoreOldInappAfterFirstWrite() {
+        whenever(billingInfoManager.isFirstInappCheckOccurred).thenReturn(true)
+        val history = mapOf(
+            "sku" to BillingInfo(
+                ProductType.INAPP,
+                "sku",
+                "token",
+                now - TimeUnit.HOURS.toMillis(25),
+                4
+            )
+        )
+        val result = updatePolicy.getBillingInfoToUpdate(billingConfig, history, billingInfoManager)
+        assertThat(result).isEmpty()
+    }
+
+    @Test
+    fun doNotIgnoreOldSubsAfterFirstWrite() {
+        whenever(billingInfoManager.isFirstInappCheckOccurred).thenReturn(true)
+        val history = mapOf(
+            "sku" to BillingInfo(
+                ProductType.SUBS,
+                "sku",
+                "token",
+                now - TimeUnit.HOURS.toMillis(25),
+                4
+            )
+        )
+        val result = updatePolicy.getBillingInfoToUpdate(billingConfig, history, billingInfoManager)
+        assertThat(result).isEqualTo(history)
     }
 }

@@ -34,20 +34,42 @@ class UpdatePolicyImpl(
         historyEntry: BillingInfo,
         storage: BillingInfoManager
     ): Boolean {
-        val now = systemTimeProvider.currentTimeMillis()
-        DebugLogger.info(MODULE_TAG, "Product from history $historyEntry now=$now $config")
+        DebugLogger.info(
+            MODULE_TAG,
+            "Product from history $historyEntry now=${systemTimeProvider.currentTimeMillis()} $config"
+        )
         if (historyEntry.type == ProductType.INAPP && !storage.isFirstInappCheckOccurred) {
-            return now - historyEntry.purchaseTime <=
-                TimeUnit.SECONDS.toMillis(config.firstCollectingInappMaxAgeSeconds.toLong())
+            return historyEntry.isNotTooOld(config)
         }
-        val storageEntry = storage[historyEntry.productId] ?: return true
-        DebugLogger.info(MODULE_TAG, "Found product in storage $storageEntry")
-        if (storageEntry.purchaseToken != historyEntry.purchaseToken) {
-            DebugLogger.info(MODULE_TAG, "Found product in storage has same purchaseToken")
-            return true
+        val storageEntry = storage[historyEntry.productId]
+        DebugLogger.info(MODULE_TAG, "Product for $historyEntry from storage $storageEntry")
+        if (storageEntry == null || storageEntry.purchaseToken != historyEntry.purchaseToken) {
+            DebugLogger.info(
+                MODULE_TAG,
+                "Product from storage for $historyEntry is null or has different purchaseToken"
+            )
+            if (historyEntry.isNotTooOld(config) || historyEntry.isSubscription()) {
+                DebugLogger.info(MODULE_TAG, "Product $historyEntry is actually not too old or is subscription")
+                return true
+            } else {
+                DebugLogger.info(MODULE_TAG, "Product $historyEntry is inapp purchase and too old. Ignore it")
+            }
         }
-        return if (historyEntry.type == ProductType.SUBS) {
-            now - storageEntry.sendTime >= TimeUnit.SECONDS.toMillis(config.sendFrequencySeconds.toLong())
+        return if (storageEntry != null && historyEntry.isSubscription()) {
+            storageEntry.shouldResendSubscription(config)
         } else false
+    }
+
+    private fun BillingInfo.isSubscription(): Boolean = type == ProductType.SUBS
+
+    private fun BillingInfo.isNotTooOld(config: BillingConfig): Boolean {
+        val delta = systemTimeProvider.currentTimeMillis() - purchaseTime
+        val threshold = TimeUnit.SECONDS.toMillis(config.firstCollectingInappMaxAgeSeconds.toLong())
+        return delta <= threshold
+    }
+
+    private fun BillingInfo.shouldResendSubscription(config: BillingConfig): Boolean {
+        val delta = systemTimeProvider.currentTimeMillis() - sendTime
+        return delta >= TimeUnit.SECONDS.toMillis(config.sendFrequencySeconds.toLong())
     }
 }
