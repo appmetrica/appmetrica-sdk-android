@@ -7,6 +7,7 @@ import com.android.billingclient.api.PurchaseHistoryRecord
 import com.android.billingclient.api.QueryPurchasesParams
 import io.appmetrica.analytics.billinginterface.internal.library.UtilsProvider
 import io.appmetrica.analytics.billinginterface.internal.storage.BillingInfoSender
+import io.appmetrica.analytics.billingv6.impl.UpdateBillingProgressCallback
 import io.appmetrica.analytics.coreutils.internal.executors.SafeRunnable
 import io.appmetrica.analytics.testutils.CommonTest
 import org.junit.Test
@@ -18,6 +19,7 @@ import org.mockito.kotlin.any
 import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.times
 import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 import java.util.concurrent.Executor
@@ -57,14 +59,19 @@ class ProductDetailsResponseListenerImplTest : CommonTest() {
         productDetails
     )
 
-    private val skuDetailsResponseListener = ProductDetailsResponseListenerImpl(
-        BillingClient.ProductType.INAPP,
-        billingClient,
-        utilsProvider,
-        billingInfoSentListener,
-        purchaseHistoryRecords,
-        billingLibraryConnectionHolder
-    )
+    private val updateBillingProgressCallback: UpdateBillingProgressCallback = mock()
+
+    private val skuDetailsResponseListener by setUp {
+        ProductDetailsResponseListenerImpl(
+            BillingClient.ProductType.INAPP,
+            billingClient,
+            utilsProvider,
+            billingInfoSentListener,
+            purchaseHistoryRecords,
+            billingLibraryConnectionHolder,
+            updateBillingProgressCallback
+        )
+    }
 
     @Test
     fun onSkuDetailsResponseIfError() {
@@ -78,6 +85,20 @@ class ProductDetailsResponseListenerImplTest : CommonTest() {
         verifyNoInteractions(billingInfoSender)
         verifyNoInteractions(billingInfoSentListener)
         verify(billingLibraryConnectionHolder).removeListener(skuDetailsResponseListener)
+        verify(updateBillingProgressCallback).onUpdateFinished()
+    }
+
+    @Test
+    fun onSkuDetailsIfNotReady() {
+        whenever(billingClient.isReady).thenReturn(false)
+        skuDetailsResponseListener.onProductDetailsResponse(
+            BillingResult.newBuilder()
+                .setResponseCode(BillingClient.BillingResponseCode.OK)
+                .build(),
+            productDetailsList
+        )
+        verify(billingLibraryConnectionHolder, times(2)).removeListener(any())
+        verify(updateBillingProgressCallback).onUpdateFinished()
     }
 
     @Test
@@ -113,5 +134,6 @@ class ProductDetailsResponseListenerImplTest : CommonTest() {
         verifyNoInteractions(billingInfoSender)
         verifyNoInteractions(billingInfoSentListener)
         verify(billingLibraryConnectionHolder).removeListener(skuDetailsResponseListener)
+        verify(updateBillingProgressCallback).onUpdateFinished()
     }
 }

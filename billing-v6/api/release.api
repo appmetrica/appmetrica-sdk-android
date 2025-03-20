@@ -6,9 +6,10 @@ public final class io.appmetrica.analytics.billingv6.BuildConfig {
     public <init>()
 }
 
-public final class io.appmetrica.analytics.billingv6.internal.BillingLibraryMonitor implementation io.appmetrica.analytics.billinginterface.internal.monitor.BillingMonitor {
+public final class io.appmetrica.analytics.billingv6.internal.BillingLibraryMonitor implementation io.appmetrica.analytics.billinginterface.internal.monitor.BillingMonitor, OBFUSCATED[io.appmetrica.analytics.billingv6.impl.UpdateBillingProgressCallback] {
     public <init>([NonNull] android.content.Context, [NonNull] java.util.concurrent.Executor, [NonNull] java.util.concurrent.Executor, [NonNull] io.appmetrica.analytics.billinginterface.internal.storage.BillingInfoStorage, [NonNull] io.appmetrica.analytics.billinginterface.internal.storage.BillingInfoSender, [NonNull] io.appmetrica.analytics.billinginterface.internal.storage.BillingInfoManager, [NonNull] io.appmetrica.analytics.billinginterface.internal.update.UpdatePolicy)
     public void onBillingConfigChanged([Nullable] io.appmetrica.analytics.billinginterface.internal.config.BillingConfig)
     public void onSessionResumed()
+    public void onUpdateFinished()
 }
 

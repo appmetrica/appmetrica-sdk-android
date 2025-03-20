@@ -5,6 +5,7 @@ import com.android.billingclient.api.BillingResult
 import com.android.billingclient.api.QueryPurchaseHistoryParams
 import io.appmetrica.analytics.billinginterface.internal.config.BillingConfig
 import io.appmetrica.analytics.billinginterface.internal.library.UtilsProvider
+import io.appmetrica.analytics.billingv6.impl.UpdateBillingProgressCallback
 import io.appmetrica.analytics.coreutils.internal.executors.SafeRunnable
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.MockedConstructionRule
@@ -46,6 +47,7 @@ class BillingClientStateListenerImplTest : CommonTest() {
     }
     private val billingLibraryConnectionHolder: BillingLibraryConnectionHolder = mock()
     private val queryPurchaseHistoryParams: QueryPurchaseHistoryParams = mock()
+    private val updateBillingProgressCallback: UpdateBillingProgressCallback = mock()
 
     @get:Rule
     val queryPurchaseHistoryParamsBuilderRule = MockedConstructionRule(
@@ -56,12 +58,15 @@ class BillingClientStateListenerImplTest : CommonTest() {
     }
 
     private val billingConfig = BillingConfig(41, 42)
-    private val billingClientStateListener = BillingClientStateListenerImpl(
-        billingConfig,
-        billingClient,
-        utilsProvider,
-        billingLibraryConnectionHolder
-    )
+    private val billingClientStateListener by setUp {
+        BillingClientStateListenerImpl(
+            billingConfig,
+            billingClient,
+            utilsProvider,
+            billingLibraryConnectionHolder,
+            updateBillingProgressCallback
+        )
+    }
 
     @Test
     fun onBillingSetupFinishedIfError() {
@@ -74,6 +79,7 @@ class BillingClientStateListenerImplTest : CommonTest() {
         verify(uiExecutor, never()).execute(any())
         verifyNoInteractions(billingClient)
         verifyNoInteractions(billingLibraryConnectionHolder)
+        verify(updateBillingProgressCallback).onUpdateFinished()
     }
 
     @Test
@@ -93,6 +99,7 @@ class BillingClientStateListenerImplTest : CommonTest() {
         val builders = queryPurchaseHistoryParamsBuilderRule.constructionMock.constructed()
         verify(builders[0]).setProductType(BillingClient.ProductType.INAPP)
         verify(builders[1]).setProductType(BillingClient.ProductType.SUBS)
+        verifyNoInteractions(updateBillingProgressCallback)
     }
 
     @Test
@@ -106,5 +113,6 @@ class BillingClientStateListenerImplTest : CommonTest() {
         verify(billingLibraryConnectionHolder, times(2)).addListener(any())
         verify(billingLibraryConnectionHolder, times(2)).removeListener(any())
         verify(billingClient, never()).queryPurchaseHistoryAsync(any<QueryPurchaseHistoryParams>(), any())
+        verify(updateBillingProgressCallback, times(2)).onUpdateFinished()
     }
 }

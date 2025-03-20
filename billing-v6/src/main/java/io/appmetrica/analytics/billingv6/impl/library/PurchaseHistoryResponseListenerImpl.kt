@@ -13,6 +13,7 @@ import io.appmetrica.analytics.billinginterface.internal.library.UtilsProvider
 import io.appmetrica.analytics.billingv6.impl.BillingUtils
 import io.appmetrica.analytics.billingv6.impl.MODULE_TAG
 import io.appmetrica.analytics.billingv6.impl.ProductTypeParser
+import io.appmetrica.analytics.billingv6.impl.UpdateBillingProgressCallback
 import io.appmetrica.analytics.billingv6.impl.storage.StorageUpdater
 import io.appmetrica.analytics.coreutils.internal.executors.SafeRunnable
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
@@ -22,7 +23,8 @@ internal class PurchaseHistoryResponseListenerImpl(
     private val billingClient: BillingClient,
     private val utilsProvider: UtilsProvider,
     private val type: String,
-    private val billingLibraryConnectionHolder: BillingLibraryConnectionHolder
+    private val billingLibraryConnectionHolder: BillingLibraryConnectionHolder,
+    private val updateBillingProgressCallback: UpdateBillingProgressCallback,
 ) : PurchaseHistoryResponseListener {
 
     @UiThread
@@ -50,6 +52,7 @@ internal class PurchaseHistoryResponseListenerImpl(
                 "list=$purchaseHistoryRecords"
         )
         if (billingResult.responseCode != BillingClient.BillingResponseCode.OK || purchaseHistoryRecords == null) {
+            updateBillingProgressCallback.onUpdateFinished()
             return
         }
         val history = extractBillingInfo(purchaseHistoryRecords)
@@ -58,10 +61,12 @@ internal class PurchaseHistoryResponseListenerImpl(
         )
         if (newBillingInfo.isEmpty()) {
             StorageUpdater.updateStorage(history, newBillingInfo, type, utilsProvider.billingInfoManager)
+            updateBillingProgressCallback.onUpdateFinished()
         } else {
             querySkuDetails(
                 purchaseHistoryRecords,
-                newBillingInfo.keys.toList()
+                newBillingInfo.keys.toList(),
+                updateBillingProgressCallback
             ) {
                 StorageUpdater.updateStorage(history, newBillingInfo, type, utilsProvider.billingInfoManager)
             }
@@ -91,6 +96,7 @@ internal class PurchaseHistoryResponseListenerImpl(
     private fun querySkuDetails(
         purchaseHistoryRecords: List<PurchaseHistoryRecord>,
         newSkus: List<String>,
+        updateBillingProgressCallback: UpdateBillingProgressCallback,
         billingInfoSentListener: () -> Unit
     ) {
         val listener = ProductDetailsResponseListenerImpl(
@@ -99,7 +105,8 @@ internal class PurchaseHistoryResponseListenerImpl(
             utilsProvider,
             billingInfoSentListener,
             purchaseHistoryRecords,
-            billingLibraryConnectionHolder
+            billingLibraryConnectionHolder,
+            updateBillingProgressCallback
         )
         billingLibraryConnectionHolder.addListener(listener)
         utilsProvider.uiExecutor.execute(object : SafeRunnable() {
@@ -124,6 +131,7 @@ internal class PurchaseHistoryResponseListenerImpl(
                             billingLibraryConnectionHolder.removeListener(listener)
                         }
                     })
+                    updateBillingProgressCallback.onUpdateFinished()
                 }
             }
         })

@@ -11,6 +11,7 @@ import com.android.billingclient.api.QueryPurchasesParams
 import io.appmetrica.analytics.billinginterface.internal.library.UtilsProvider
 import io.appmetrica.analytics.billingv6.impl.BillingUtils
 import io.appmetrica.analytics.billingv6.impl.MODULE_TAG
+import io.appmetrica.analytics.billingv6.impl.UpdateBillingProgressCallback
 import io.appmetrica.analytics.coreutils.internal.executors.SafeRunnable
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
@@ -20,7 +21,8 @@ internal class ProductDetailsResponseListenerImpl(
     private val utilsProvider: UtilsProvider,
     private val billingInfoSentListener: () -> Unit,
     private val purchaseHistoryRecords: List<PurchaseHistoryRecord>,
-    private val billingLibraryConnectionHolder: BillingLibraryConnectionHolder
+    private val billingLibraryConnectionHolder: BillingLibraryConnectionHolder,
+    private val updateBillingProgressCallback: UpdateBillingProgressCallback,
 ) : ProductDetailsResponseListener {
 
     @UiThread
@@ -48,6 +50,7 @@ internal class ProductDetailsResponseListenerImpl(
                 "list=$productDetails"
         )
         if (billingResult.responseCode != BillingClient.BillingResponseCode.OK || productDetails.isEmpty()) {
+            updateBillingProgressCallback.onUpdateFinished()
             return
         }
         val listener = PurchaseResponseListenerImpl(
@@ -56,7 +59,8 @@ internal class ProductDetailsResponseListenerImpl(
             billingInfoSentListener,
             purchaseHistoryRecords,
             productDetails,
-            billingLibraryConnectionHolder
+            billingLibraryConnectionHolder,
+            updateBillingProgressCallback
         )
         billingLibraryConnectionHolder.addListener(listener)
         utilsProvider.uiExecutor.execute(object : SafeRunnable() {
@@ -74,6 +78,7 @@ internal class ProductDetailsResponseListenerImpl(
                             billingLibraryConnectionHolder.removeListener(listener)
                         }
                     })
+                    updateBillingProgressCallback.onUpdateFinished()
                 }
             }
         })

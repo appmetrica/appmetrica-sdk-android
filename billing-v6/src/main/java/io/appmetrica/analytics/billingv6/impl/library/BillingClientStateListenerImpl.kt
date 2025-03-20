@@ -11,6 +11,7 @@ import io.appmetrica.analytics.billinginterface.internal.config.BillingConfig
 import io.appmetrica.analytics.billinginterface.internal.library.UtilsProvider
 import io.appmetrica.analytics.billingv6.impl.BillingUtils
 import io.appmetrica.analytics.billingv6.impl.MODULE_TAG
+import io.appmetrica.analytics.billingv6.impl.UpdateBillingProgressCallback
 import io.appmetrica.analytics.coreutils.internal.executors.SafeRunnable
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
@@ -18,12 +19,14 @@ internal class BillingClientStateListenerImpl @VisibleForTesting constructor(
     private val config: BillingConfig,
     private val billingClient: BillingClient,
     private val utilsProvider: UtilsProvider,
-    private val billingLibraryConnectionHolder: BillingLibraryConnectionHolder
+    private val billingLibraryConnectionHolder: BillingLibraryConnectionHolder,
+    private val updateBillingProgressCallback: UpdateBillingProgressCallback,
 ) : BillingClientStateListener {
 
     constructor(
         config: BillingConfig,
         billingClient: BillingClient,
+        callback: UpdateBillingProgressCallback,
         utilsProvider: UtilsProvider,
     ) : this(
         config,
@@ -32,7 +35,8 @@ internal class BillingClientStateListenerImpl @VisibleForTesting constructor(
         BillingLibraryConnectionHolder(
             billingClient,
             utilsProvider
-        )
+        ),
+        callback
     )
 
     @UiThread
@@ -48,6 +52,7 @@ internal class BillingClientStateListenerImpl @VisibleForTesting constructor(
     private fun processResult(billingResult: BillingResult) {
         DebugLogger.info(MODULE_TAG, "onBillingSetupFinished result=${BillingUtils.toString(billingResult)}")
         if (billingResult.responseCode != BillingClient.BillingResponseCode.OK) {
+            updateBillingProgressCallback.onUpdateFinished()
             return
         }
         listOf(BillingClient.ProductType.INAPP, BillingClient.ProductType.SUBS).forEach { type ->
@@ -56,7 +61,8 @@ internal class BillingClientStateListenerImpl @VisibleForTesting constructor(
                 billingClient,
                 utilsProvider,
                 type,
-                billingLibraryConnectionHolder
+                billingLibraryConnectionHolder,
+                updateBillingProgressCallback
             )
             billingLibraryConnectionHolder.addListener(listener)
             utilsProvider.uiExecutor.execute(object : SafeRunnable() {
@@ -74,6 +80,7 @@ internal class BillingClientStateListenerImpl @VisibleForTesting constructor(
                                 billingLibraryConnectionHolder.removeListener(listener)
                             }
                         })
+                        updateBillingProgressCallback.onUpdateFinished()
                     }
                 }
             })

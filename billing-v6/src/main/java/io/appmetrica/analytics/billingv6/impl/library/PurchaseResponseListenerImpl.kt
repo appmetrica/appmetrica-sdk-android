@@ -11,6 +11,7 @@ import io.appmetrica.analytics.billinginterface.internal.library.UtilsProvider
 import io.appmetrica.analytics.billingv6.impl.BillingUtils
 import io.appmetrica.analytics.billingv6.impl.MODULE_TAG
 import io.appmetrica.analytics.billingv6.impl.ProductInfoCreator
+import io.appmetrica.analytics.billingv6.impl.UpdateBillingProgressCallback
 import io.appmetrica.analytics.coreutils.internal.executors.SafeRunnable
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
@@ -20,7 +21,8 @@ internal class PurchaseResponseListenerImpl(
     private val billingInfoSentListener: () -> Unit,
     private val purchaseHistoryRecords: List<PurchaseHistoryRecord>,
     private val productDetails: List<ProductDetails>,
-    private val billingLibraryConnectionHolder: BillingLibraryConnectionHolder
+    private val billingLibraryConnectionHolder: BillingLibraryConnectionHolder,
+    private val updateBillingProgressCallback: UpdateBillingProgressCallback,
 ) : PurchasesResponseListener {
 
     override fun onQueryPurchasesResponse(
@@ -47,6 +49,7 @@ internal class PurchaseResponseListenerImpl(
                 "list=$purchases"
         )
         if (billingResult.responseCode != BillingClient.BillingResponseCode.OK) {
+            updateBillingProgressCallback.onUpdateFinished()
             return
         }
         val purchasesMap = createPurchasesMap(purchases)
@@ -59,6 +62,7 @@ internal class PurchaseResponseListenerImpl(
         DebugLogger.info(MODULE_TAG, "Product info to send $productInfos")
         utilsProvider.billingInfoSender.sendInfo(productInfos)
         billingInfoSentListener()
+        updateBillingProgressCallback.onUpdateFinished()
     }
 
     @WorkerThread

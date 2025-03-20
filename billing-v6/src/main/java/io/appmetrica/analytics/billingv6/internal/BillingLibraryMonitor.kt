@@ -11,6 +11,7 @@ import io.appmetrica.analytics.billinginterface.internal.storage.BillingInfoSend
 import io.appmetrica.analytics.billinginterface.internal.storage.BillingInfoStorage
 import io.appmetrica.analytics.billinginterface.internal.update.UpdatePolicy
 import io.appmetrica.analytics.billingv6.impl.MODULE_TAG
+import io.appmetrica.analytics.billingv6.impl.UpdateBillingProgressCallback
 import io.appmetrica.analytics.billingv6.impl.library.BillingClientStateListenerImpl
 import io.appmetrica.analytics.billingv6.impl.library.PurchasesUpdatedListenerImpl
 import io.appmetrica.analytics.billingv6.impl.storage.BillingInfoManagerImpl
@@ -27,9 +28,10 @@ class BillingLibraryMonitor(
     private val billingInfoSender: BillingInfoSender,
     private val billingInfoManager: BillingInfoManager = BillingInfoManagerImpl(billingInfoStorage),
     private val updatePolicy: UpdatePolicy = UpdatePolicyImpl()
-) : BillingMonitor {
+) : BillingMonitor, UpdateBillingProgressCallback {
 
     private var billingConfig: BillingConfig? = null
+    private var refreshInProgress = false
 
     @WorkerThread
     override fun onSessionResumed() {
@@ -50,6 +52,11 @@ class BillingLibraryMonitor(
     private fun updateBilling(billingConfig: BillingConfig?) {
         DebugLogger.info(MODULE_TAG, "updateBilling with billingConfig=$billingConfig")
         billingConfig ?: return
+        if (refreshInProgress) {
+            DebugLogger.info(MODULE_TAG, "updateBilling is already in progress")
+            return
+        }
+        refreshInProgress = true
         uiExecutor.execute(object : SafeRunnable() {
             override fun runSafety() {
                 val billingClient = BillingClient
@@ -61,6 +68,7 @@ class BillingLibraryMonitor(
                     BillingClientStateListenerImpl(
                         billingConfig,
                         billingClient,
+                        this@BillingLibraryMonitor,
                         object : UtilsProvider {
                             override fun getBillingInfoManager() = this@BillingLibraryMonitor.billingInfoManager
 
@@ -76,5 +84,10 @@ class BillingLibraryMonitor(
                 )
             }
         })
+    }
+
+    @Synchronized
+    override fun onUpdateFinished() {
+        refreshInProgress = false
     }
 }

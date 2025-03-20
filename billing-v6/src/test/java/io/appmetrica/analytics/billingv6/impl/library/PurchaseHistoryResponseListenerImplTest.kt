@@ -9,9 +9,13 @@ import io.appmetrica.analytics.billinginterface.internal.config.BillingConfig
 import io.appmetrica.analytics.billinginterface.internal.library.UtilsProvider
 import io.appmetrica.analytics.billinginterface.internal.storage.BillingInfoManager
 import io.appmetrica.analytics.billinginterface.internal.update.UpdatePolicy
+import io.appmetrica.analytics.billingv6.impl.UpdateBillingProgressCallback
+import io.appmetrica.analytics.billingv6.impl.storage.StorageUpdater
 import io.appmetrica.analytics.coreutils.internal.executors.SafeRunnable
 import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.analytics.testutils.constructionRule
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers.anyMap
@@ -64,14 +68,34 @@ class PurchaseHistoryResponseListenerImplTest : CommonTest() {
         purchaseHistoryRecord
     )
 
+    private val updateBillingProgressCallback: UpdateBillingProgressCallback = mock()
+
     private val billingConfig = BillingConfig(41, 42)
-    private val purchaseHistoryResponseListener = PurchaseHistoryResponseListenerImpl(
-        billingConfig,
-        billingClient,
-        utilsProvider,
-        BillingClient.ProductType.SUBS,
-        billingLibraryConnectionHolder
-    )
+    private val purchaseHistoryResponseListener by setUp {
+        PurchaseHistoryResponseListenerImpl(
+            billingConfig,
+            billingClient,
+            utilsProvider,
+            BillingClient.ProductType.SUBS,
+            billingLibraryConnectionHolder,
+            updateBillingProgressCallback
+        )
+    }
+
+    @Test
+    fun onPurchaseHistoryResponseIfBillingLibraryNotReady() {
+        whenever(billingClient.isReady).thenReturn(false)
+        whenever(updatePolicy.getBillingInfoToUpdate(any(), anyMap(), any()))
+            .thenReturn(getBillingInfoToUpdate(ProductType.SUBS))
+        purchaseHistoryResponseListener.onPurchaseHistoryResponse(
+            BillingResult.newBuilder()
+                .setResponseCode(BillingClient.BillingResponseCode.OK)
+                .build(),
+            purchaseHistoryRecords
+        )
+        verify(billingLibraryConnectionHolder).removeListener(purchaseHistoryResponseListener)
+        verify(updateBillingProgressCallback).onUpdateFinished()
+    }
 
     @Test
     fun onPurchaseHistoryResponseIfError() {
@@ -84,6 +108,7 @@ class PurchaseHistoryResponseListenerImplTest : CommonTest() {
         verifyNoInteractions(billingClient)
         verifyNoInteractions(billingInfoManager)
         verify(billingLibraryConnectionHolder).removeListener(purchaseHistoryResponseListener)
+        verify(updateBillingProgressCallback).onUpdateFinished()
     }
 
     @Test
@@ -97,6 +122,7 @@ class PurchaseHistoryResponseListenerImplTest : CommonTest() {
         verifyNoInteractions(billingClient)
         verifyNoInteractions(billingInfoManager)
         verify(billingLibraryConnectionHolder).removeListener(purchaseHistoryResponseListener)
+        verify(updateBillingProgressCallback).onUpdateFinished()
     }
 
     @Test
@@ -134,6 +160,7 @@ class PurchaseHistoryResponseListenerImplTest : CommonTest() {
             any(),
             any()
         )
+        verify(updateBillingProgressCallback, never()).onUpdateFinished()
     }
 
     @Test
@@ -153,6 +180,7 @@ class PurchaseHistoryResponseListenerImplTest : CommonTest() {
             getBillingInfoToUpdate(ProductType.SUBS)
         )
         verify(billingInfoManager, never()).markFirstInappCheckOccurred()
+        verify(updateBillingProgressCallback).onUpdateFinished()
     }
 
     @Test
@@ -162,7 +190,8 @@ class PurchaseHistoryResponseListenerImplTest : CommonTest() {
             billingClient,
             utilsProvider,
             BillingClient.ProductType.INAPP,
-            billingLibraryConnectionHolder
+            billingLibraryConnectionHolder,
+            updateBillingProgressCallback
         )
         whenever(billingClient.isReady).thenReturn(true)
         whenever(updatePolicy.getBillingInfoToUpdate(any(), anyMap(), any())).thenReturn(mapOf())
@@ -179,6 +208,7 @@ class PurchaseHistoryResponseListenerImplTest : CommonTest() {
             getBillingInfoToUpdate(ProductType.INAPP)
         )
         verify(billingInfoManager).markFirstInappCheckOccurred()
+        verify(updateBillingProgressCallback).onUpdateFinished()
     }
 
     @Test
@@ -188,7 +218,8 @@ class PurchaseHistoryResponseListenerImplTest : CommonTest() {
             billingClient,
             utilsProvider,
             BillingClient.ProductType.SUBS,
-            billingLibraryConnectionHolder
+            billingLibraryConnectionHolder,
+            updateBillingProgressCallback
         )
         whenever(billingClient.isReady).thenReturn(true)
         whenever(updatePolicy.getBillingInfoToUpdate(any(), anyMap(), any())).thenReturn(mapOf())
@@ -205,6 +236,7 @@ class PurchaseHistoryResponseListenerImplTest : CommonTest() {
             getBillingInfoToUpdate(ProductType.SUBS)
         )
         verify(billingInfoManager, never()).markFirstInappCheckOccurred()
+        verify(updateBillingProgressCallback).onUpdateFinished()
     }
 
     private fun getBillingInfoToUpdate(type: ProductType): Map<String, BillingInfo> {

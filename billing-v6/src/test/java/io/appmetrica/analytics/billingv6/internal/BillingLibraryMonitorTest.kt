@@ -69,8 +69,16 @@ class BillingLibraryMonitorTest : CommonTest() {
     @Test
     fun onSessionResumedIfHasConfig() {
         billingLibraryMonitor.onBillingConfigChanged(billingConfig)
+        billingLibraryMonitor.onUpdateFinished()
         billingLibraryMonitor.onSessionResumed()
         verify(uiExecutor, times(2)).execute(any())
+    }
+
+    @Test
+    fun onSessionResumedIfHasConfigAndUnfinishedUpdate() {
+        billingLibraryMonitor.onBillingConfigChanged(billingConfig)
+        billingLibraryMonitor.onSessionResumed()
+        verify(uiExecutor).execute(any())
     }
 
     @Test
@@ -87,7 +95,7 @@ class BillingLibraryMonitorTest : CommonTest() {
 
         billingLibraryMonitor.onBillingConfigChanged(billingConfig)
         billingLibraryMonitor.onSessionResumed()
-        verify(uiExecutor, times(2)).execute(any())
+        verify(uiExecutor).execute(any())
 
         Mockito.clearInvocations(uiExecutor)
         billingLibraryMonitor.onBillingConfigChanged(null)

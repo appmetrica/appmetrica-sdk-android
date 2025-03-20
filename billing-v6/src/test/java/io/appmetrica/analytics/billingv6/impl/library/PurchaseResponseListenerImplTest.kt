@@ -9,6 +9,7 @@ import io.appmetrica.analytics.billinginterface.internal.ProductInfo
 import io.appmetrica.analytics.billinginterface.internal.ProductType
 import io.appmetrica.analytics.billinginterface.internal.library.UtilsProvider
 import io.appmetrica.analytics.billinginterface.internal.storage.BillingInfoSender
+import io.appmetrica.analytics.billingv6.impl.UpdateBillingProgressCallback
 import io.appmetrica.analytics.coreutils.internal.executors.SafeRunnable
 import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
@@ -139,14 +140,19 @@ class PurchaseResponseListenerImplTest : CommonTest() {
         Purchase("{\"productId\":\"sku1\", \"autoRenewing\":\"true\"}", "purchasesSignature")
     )
 
-    private val purchaseResponseListener = PurchaseResponseListenerImpl(
-        BillingClient.ProductType.INAPP,
-        utilsProvider,
-        billingInfoSentListener,
-        purchaseHistoryRecords,
-        skuDetails,
-        billingLibraryConnectionHolder
-    )
+    private val updateBillingProgressCallback: UpdateBillingProgressCallback = mock()
+
+    private val purchaseResponseListener by setUp {
+        PurchaseResponseListenerImpl(
+            BillingClient.ProductType.INAPP,
+            utilsProvider,
+            billingInfoSentListener,
+            purchaseHistoryRecords,
+            skuDetails,
+            billingLibraryConnectionHolder,
+            updateBillingProgressCallback
+        )
+    }
 
     @Test
     fun onSkuDetailsResponseIfError() {
@@ -161,6 +167,7 @@ class PurchaseResponseListenerImplTest : CommonTest() {
         )
         verifyNoInteractions(billingInfoSender)
         verifyNoInteractions(billingInfoSentListener)
+        verify(updateBillingProgressCallback).onUpdateFinished()
     }
 
     @Test
@@ -178,5 +185,6 @@ class PurchaseResponseListenerImplTest : CommonTest() {
         verify(billingInfoSender).sendInfo(argument.capture())
         assertThat(argument.firstValue).isEqualTo(productInfos)
         verify(billingInfoSentListener).invoke()
+        verify(updateBillingProgressCallback).onUpdateFinished()
     }
 }
