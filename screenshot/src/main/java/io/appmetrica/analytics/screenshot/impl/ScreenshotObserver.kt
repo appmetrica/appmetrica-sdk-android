@@ -11,7 +11,7 @@ import io.appmetrica.analytics.screenshot.impl.config.client.model.ClientSideCon
 class ScreenshotObserver(
     private val clientContext: ClientContext,
     private val screenshotCapturedCallback: () -> Unit,
-) : ContentObserver(clientContext.defaultExecutor.handler) {
+) : ContentObserver(clientContext.clientExecutorProvider.defaultExecutor.handler) {
 
     private val tag = "[ScreenshotObserver]"
 

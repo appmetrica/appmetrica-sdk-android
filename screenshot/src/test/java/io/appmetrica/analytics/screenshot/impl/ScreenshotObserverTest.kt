@@ -9,6 +9,7 @@ import android.provider.MediaStore
 import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor
 import io.appmetrica.analytics.coreutils.internal.time.SystemTimeProvider
 import io.appmetrica.analytics.modulesapi.internal.client.ClientContext
+import io.appmetrica.analytics.modulesapi.internal.client.ModuleClientExecutorProvider
 import io.appmetrica.analytics.screenshot.impl.config.client.model.ClientSideContentObserverCaptorConfig
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.constructionRule
@@ -57,10 +58,16 @@ class ScreenshotObserverTest : CommonTest() {
     private val defaultExecutor: IHandlerExecutor = mock {
         on { handler } doReturn handler
     }
-    private val clientContext: ClientContext = mock {
-        on { context } doReturn context
+
+    private val clientExecutorProvider: ModuleClientExecutorProvider = mock {
         on { defaultExecutor } doReturn defaultExecutor
     }
+
+    private val clientContext: ClientContext = mock {
+        on { context } doReturn context
+        on { clientExecutorProvider } doReturn clientExecutorProvider
+    }
+
     private val screenshotCapturedCallback: () -> Unit = mock()
 
     private val uri: Uri = mock {

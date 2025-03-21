@@ -35,8 +35,6 @@ class AppMetricaLibraryAdapterProxyTest : CommonTest() {
     private val facade: AppMetricaFacade = mock()
     private val executor: IHandlerExecutor = mock()
 
-    private val runnableArgumentCaptor = argumentCaptor<Runnable>()
-
     @get:Rule
     var clientServiceLocatorRule: ClientServiceLocatorRule = ClientServiceLocatorRule()
     @get:Rule
@@ -81,18 +79,13 @@ class AppMetricaLibraryAdapterProxyTest : CommonTest() {
         proxy.activate(context)
         verify(barrier).activate(context)
         verify(synchronousStageExecutor).activate(applicationContext)
-        verify(executor).execute(runnableArgumentCaptor.capture())
-
-        runnableArgumentCaptor.firstValue.run()
-
-        verify(facade).activateFull()
     }
 
     @Test
     fun `activate if not valid`() {
         whenever(barrier.activate(context)).thenReturn(false)
         proxy.activate(context)
-        verifyNoInteractions(synchronousStageExecutor, executor)
+        verifyNoInteractions(synchronousStageExecutor)
     }
 
     @Test

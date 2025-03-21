@@ -16,32 +16,19 @@ import org.mockito.kotlin.verify
 
 class LibraryAdapterSynchronousStageExecutorContextTest : CommonTest() {
 
-    private val applicationContext: Context = mock()
-    private val context: Context = mock {
-        on { applicationContext } doReturn applicationContext
-    }
-
-    private val appmetricaFacade: AppMetricaFacade = mock()
-
-    private val appMetricaFacadeProvider: AppMetricaFacadeProvider = mock {
-        on { getInitializedImpl(context) } doReturn appmetricaFacade
-    }
-
-    private val contextAppearedListener: ContextAppearedListener by setUp {
-        ClientServiceLocator.getInstance().contextAppearedListener
-    }
+    private val context: Context = mock()
 
     @get:Rule
     val clientServiceLocatorRule = ClientServiceLocatorRule()
 
     private val synchronousStageExecutor by setUp {
-        LibraryAdapterSynchronousStageExecutor(appMetricaFacadeProvider)
+        LibraryAdapterSynchronousStageExecutor()
     }
 
     @Test
     fun activate() {
         synchronousStageExecutor.activate(context)
-        verify(contextAppearedListener).onProbablyAppeared(context)
+        verify(ClientServiceLocator.getInstance().contextAppearedListener).onProbablyAppeared(context)
     }
 
     @Test

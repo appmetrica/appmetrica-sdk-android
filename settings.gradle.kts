@@ -36,6 +36,7 @@ include("network")
 include("network-tasks")
 include("proto")
 include("remote-permissions")
+include("reporter-extension")
 include("screenshot")
 
 // native crashes

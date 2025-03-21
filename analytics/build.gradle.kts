@@ -178,6 +178,7 @@ dependencies {
     runtimeOnly(project(":identifiers"))
     runtimeOnly(project(":location"))
     runtimeOnly(project(":remote-permissions"))
+    runtimeOnly(project(":reporter-extension"))
     runtimeOnly(project(":screenshot"))
 
     testImplementation(project(":identifiers"))

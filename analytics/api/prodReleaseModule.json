@@ -83,6 +83,13 @@
                 },
                 {
                     "group": "io.appmetrica.analytics",
+                    "module": "analytics-reporter-extension",
+                    "version": {
+                        "requires": "7.8.0"
+                    }
+                },
+                {
+                    "group": "io.appmetrica.analytics",
                     "module": "analytics-screenshot",
                     "version": {
                         "requires": "7.8.0"

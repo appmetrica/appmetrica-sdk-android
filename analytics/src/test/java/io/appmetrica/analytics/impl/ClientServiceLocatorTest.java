@@ -1,7 +1,6 @@
 package io.appmetrica.analytics.impl;
 
 import android.content.Context;
-import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
 import io.appmetrica.analytics.impl.crash.jvm.client.TechnicalCrashProcessorFactory;
 import io.appmetrica.analytics.impl.db.IKeyValueTableDbHelper;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesClientDbStorage;
@@ -41,8 +40,6 @@ public class ClientServiceLocatorTest extends CommonTest {
     private ClientExecutorProvider mClientExecutorProvider;
     @Mock
     private DefaultOneShotMetricaConfig mDefaultOneShotMetricaConfig;
-    @Mock
-    private ICommonExecutor mApiProxyExecutor;
     @Mock
     private MainProcessDetector mMainProcessDetector;
     @Mock
@@ -94,6 +91,10 @@ public class ClientServiceLocatorTest extends CommonTest {
     @Rule
     public MockedConstructionRule<ClientConfigSerializer> clientConfigSerializerMockedConstructionRule =
         new MockedConstructionRule<>(ClientConfigSerializer.class);
+
+    @Rule
+    public MockedConstructionRule<AnonymousClientActivator> anonymousClientActivatorMockedConstructionRule =
+        new MockedConstructionRule<>(AnonymousClientActivator.class);
 
     @Mock
     private DatabaseStorageFactory databaseStorage;
@@ -272,5 +273,19 @@ public class ClientServiceLocatorTest extends CommonTest {
             .isEqualTo(clientConfigSerializerMockedConstructionRule.getConstructionMock().constructed().get(0));
         assertThat(clientConfigSerializerMockedConstructionRule.getConstructionMock().constructed()).hasSize(1);
         assertThat(clientConfigSerializerMockedConstructionRule.getArgumentInterceptor().flatArguments()).isEmpty();
+    }
+
+    @Test
+    public void getAnonymousClientActivator() {
+        assertThat(mClientServiceLocator.getAnonymousClientActivator())
+            .isSameAs(mClientServiceLocator.getAnonymousClientActivator())
+            .isEqualTo(anonymousClientActivatorMockedConstructionRule.getConstructionMock().constructed().get(0));
+        assertThat(anonymousClientActivatorMockedConstructionRule.getConstructionMock().constructed()).hasSize(1);
+        assertThat(anonymousClientActivatorMockedConstructionRule.getArgumentInterceptor().flatArguments())
+            .containsExactly(
+                mClientServiceLocator.getAppMetricaFacadeProvider(),
+                mClientServiceLocator.getSessionsTrackingManager(),
+                mClientServiceLocator.getClientExecutorProvider()
+            );
     }
 }

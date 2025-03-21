@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Handler;
 import io.appmetrica.analytics.impl.ActivityAppearedListener;
 import io.appmetrica.analytics.impl.ActivityLifecycleManager;
+import io.appmetrica.analytics.impl.AnonymousClientActivator;
 import io.appmetrica.analytics.impl.AppMetricaCoreComponentsProvider;
 import io.appmetrica.analytics.impl.AppMetricaServiceDelayHandler;
 import io.appmetrica.analytics.impl.ClientConfigSerializer;
@@ -51,6 +52,7 @@ public class ClientServiceLocatorRule extends ExternalResource {
     public AppMetricaCoreComponentsProvider appMetricaCoreComponentsProvider;
     public FirstLaunchDetector firstLaunchDetector;
     public ClientConfigSerializer clientConfigSerializer;
+    public AnonymousClientActivator anonymousClientActivator;
     public ClientServiceLocator instance;
 
     @Override
@@ -76,6 +78,7 @@ public class ClientServiceLocatorRule extends ExternalResource {
         appMetricaCoreComponentsProvider = mock(AppMetricaCoreComponentsProvider.class);
         firstLaunchDetector = mock(FirstLaunchDetector.class);
         clientConfigSerializer = mock(ClientConfigSerializer.class);
+        anonymousClientActivator = mock(AnonymousClientActivator.class);
         when(instance.getClientExecutorProvider()).thenReturn(clientExecutorProvider);
         when(instance.getDefaultOneShotConfig()).thenReturn(mDefaultOneShotMetricaConfig);
         when(instance.getMainProcessDetector()).thenReturn(mainProcessDetector);
@@ -99,6 +102,7 @@ public class ClientServiceLocatorRule extends ExternalResource {
         Handler mainHandler = TestUtils.createBlockingExecutionHandlerStub();
         when(clientExecutorProvider.getMainHandler()).thenReturn(mainHandler);
         when(instance.getFirstLaunchDetector()).thenReturn(firstLaunchDetector);
+        when(instance.getAnonymousClientActivator()).thenReturn(anonymousClientActivator);
         ClientServiceLocator.setInstance(instance);
     }
 

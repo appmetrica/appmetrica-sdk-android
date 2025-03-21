@@ -53,6 +53,7 @@ io.appmetrica.analytics:network-tasks:unspecified
 io.appmetrica.analytics:network:unspecified
 io.appmetrica.analytics:proto:unspecified
 io.appmetrica.analytics:remote-permissions:unspecified
+io.appmetrica.analytics:reporter-extension:unspecified
 io.appmetrica.analytics:screenshot:unspecified
 org.jetbrains.kotlin:kotlin-stdlib-common:1.6.21
 org.jetbrains.kotlin:kotlin-stdlib:1.6.21

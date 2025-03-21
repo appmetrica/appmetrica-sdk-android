@@ -1,13 +1,14 @@
 package io.appmetrica.analytics.impl.modules.client.context
 
 import android.content.Context
-import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor
 import io.appmetrica.analytics.coreapi.internal.lifecycle.ActivityLifecycleRegistry
 import io.appmetrica.analytics.impl.ClientServiceLocator
 import io.appmetrica.analytics.impl.modules.client.ClientStorageProviderImpl
 import io.appmetrica.analytics.impl.modules.client.CompositeModuleAdRevenueProcessor
 import io.appmetrica.analytics.impl.proxy.InternalClientModuleProxy
 import io.appmetrica.analytics.modulesapi.internal.client.ClientStorageProvider
+import io.appmetrica.analytics.modulesapi.internal.client.ModuleClientActivator
+import io.appmetrica.analytics.modulesapi.internal.client.ModuleClientExecutorProvider
 import io.appmetrica.analytics.modulesapi.internal.common.InternalClientModuleFacade
 
 class ClientContextImpl(
@@ -28,6 +29,11 @@ class ClientContextImpl(
     override val activityLifecycleRegistry: ActivityLifecycleRegistry =
         ClientServiceLocator.getInstance().activityLifecycleManager
 
-    override val defaultExecutor: IHandlerExecutor =
-        ClientServiceLocator.getInstance().clientExecutorProvider.defaultExecutor
+    override val clientActivator: ModuleClientActivator = object : ModuleClientActivator {
+        override fun activate(context: Context) {
+            ClientServiceLocator.getInstance().anonymousClientActivator.activate(context)
+        }
+    }
+
+    override val clientExecutorProvider: ModuleClientExecutorProvider = ModuleClientExecutorProviderImpl()
 }

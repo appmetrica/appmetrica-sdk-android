@@ -77,6 +77,8 @@ public class ClientServiceLocator {
     private final FirstLaunchDetector firstLaunchDetector = new FirstLaunchDetector();
     @NonNull
     private final ClientConfigSerializer clientConfigSerializer = new ClientConfigSerializer();
+    @Nullable
+    private volatile AnonymousClientActivator anonymousClientActivator;
 
     private ClientServiceLocator() {
         this(new MainProcessDetector(), new ActivityLifecycleManager(), new ClientExecutorProvider());
@@ -277,6 +279,25 @@ public class ClientServiceLocator {
     @NonNull
     public ClientConfigSerializer getClientConfigSerializer() {
         return clientConfigSerializer;
+    }
+
+    @NonNull
+    public AnonymousClientActivator getAnonymousClientActivator() {
+        AnonymousClientActivator local = anonymousClientActivator;
+        if (local == null) {
+            synchronized (this) {
+                local = anonymousClientActivator;
+                if (local == null) {
+                    local = new AnonymousClientActivator(
+                        appMetricaFacadeProvider,
+                        sessionsTrackingManager,
+                        clientExecutorProvider
+                    );
+                    anonymousClientActivator = local;
+                }
+            }
+        }
+        return local;
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)

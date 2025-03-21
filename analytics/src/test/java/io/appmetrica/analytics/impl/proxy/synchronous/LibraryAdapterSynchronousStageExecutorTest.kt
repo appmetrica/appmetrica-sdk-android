@@ -20,24 +20,11 @@ class LibraryAdapterSynchronousStageExecutorTest : CommonTest() {
 
     private val context: Context = mock()
 
-    private val appMetricaFacade: AppMetricaFacade = mock()
-
-    private val appMetricaFacadeProvider: AppMetricaFacadeProvider = mock {
-        on { getInitializedImpl(context) } doReturn appMetricaFacade
-    }
-
     @get:Rule
     val clientServiceLocatorRule = ClientServiceLocatorRule()
 
-    private val logger: PublicLogger = mock()
-
-    @get:Rule
-    val loggerStorageMockedStaticRule = staticRule<LoggerStorage> {
-        on { LoggerStorage.getMainPublicOrAnonymousLogger() } doReturn logger
-    }
-
     private val synchronousStageExecutor: LibraryAdapterSynchronousStageExecutor by setUp {
-        LibraryAdapterSynchronousStageExecutor(appMetricaFacadeProvider)
+        LibraryAdapterSynchronousStageExecutor()
     }
 
     @Test
@@ -45,14 +32,10 @@ class LibraryAdapterSynchronousStageExecutorTest : CommonTest() {
         synchronousStageExecutor.activate(context)
         inOrder(
             ClientServiceLocator.getInstance().contextAppearedListener,
-            logger,
-            ClientServiceLocator.getInstance().sessionsTrackingManager,
-            appMetricaFacade
+            ClientServiceLocator.getInstance().anonymousClientActivator
         ) {
             verify(ClientServiceLocator.getInstance().contextAppearedListener).onProbablyAppeared(context)
-            verify(logger).info("Session autotracking enabled")
-            verify(ClientServiceLocator.getInstance().sessionsTrackingManager).startWatchingIfNotYet()
-            verify(appMetricaFacade).activateCore(null)
+            verify(ClientServiceLocator.getInstance().anonymousClientActivator).activate(context)
         }
     }
 }

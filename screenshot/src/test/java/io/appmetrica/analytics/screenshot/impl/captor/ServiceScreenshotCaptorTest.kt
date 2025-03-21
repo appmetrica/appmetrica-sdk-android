@@ -11,6 +11,7 @@ import io.appmetrica.analytics.coreapi.internal.lifecycle.ActivityLifecycleListe
 import io.appmetrica.analytics.coreapi.internal.lifecycle.ActivityLifecycleRegistry
 import io.appmetrica.analytics.coreutils.internal.system.SystemServiceUtils
 import io.appmetrica.analytics.modulesapi.internal.client.ClientContext
+import io.appmetrica.analytics.modulesapi.internal.client.ModuleClientExecutorProvider
 import io.appmetrica.analytics.screenshot.impl.callback.ScreenshotCaptorCallback
 import io.appmetrica.analytics.screenshot.impl.config.client.model.ClientSideScreenshotConfig
 import io.appmetrica.analytics.screenshot.impl.config.client.model.ClientSideServiceCaptorConfig
@@ -48,10 +49,13 @@ class ServiceScreenshotCaptorTest : CommonTest() {
     private val defaultExecutor: IHandlerExecutor = mock {
         on { handler } doReturn handler
     }
+    private val clientExecutorProvider: ModuleClientExecutorProvider = mock {
+        on { defaultExecutor } doReturn defaultExecutor
+    }
     private val clientContext: ClientContext = mock {
         on { activityLifecycleRegistry } doReturn activityLifecycleRegistry
         on { context } doReturn context
-        on { defaultExecutor } doReturn defaultExecutor
+        on { clientExecutorProvider } doReturn clientExecutorProvider
     }
     private val callback: ScreenshotCaptorCallback = mock()
 

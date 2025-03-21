@@ -12,7 +12,7 @@ import org.mockito.kotlin.verifyNoMoreInteractions
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class ClientExecutorProviderTest : CommonTest() {
+class ModuleClientExecutorProviderTest : CommonTest() {
 
     private val reportsSenderExecutor: ExecutorWrapper = mock()
     private val defaultExecutor: ExecutorWrapper = mock()

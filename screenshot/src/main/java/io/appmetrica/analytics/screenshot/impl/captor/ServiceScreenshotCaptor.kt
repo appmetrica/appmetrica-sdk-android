@@ -3,6 +3,7 @@ package io.appmetrica.analytics.screenshot.impl.captor
 import android.app.Activity
 import android.app.ActivityManager
 import android.content.Context
+import android.os.Handler
 import io.appmetrica.analytics.coreapi.internal.lifecycle.ActivityEvent
 import io.appmetrica.analytics.coreapi.internal.lifecycle.ActivityLifecycleListener
 import io.appmetrica.analytics.coreutils.internal.system.SystemServiceUtils
@@ -20,6 +21,7 @@ class ServiceScreenshotCaptor(
 
     private val tag = "[ServiceScreenshotCaptor]"
 
+    private val handler: Handler = clientContext.clientExecutorProvider.defaultExecutor.handler
     @Volatile
     private var stoped = false
     @Volatile
@@ -46,10 +48,7 @@ class ServiceScreenshotCaptor(
                 }?.let {
                     callback.screenshotCaptured(getType())
                 }
-                clientContext.defaultExecutor.handler.postDelayed(
-                    this,
-                    TimeUnit.SECONDS.toMillis(localConfig.delaySeconds)
-                )
+                handler.postDelayed(this, TimeUnit.SECONDS.toMillis(localConfig.delaySeconds))
             }
         }
     }
@@ -72,7 +71,7 @@ class ServiceScreenshotCaptor(
                             }
                             try {
                                 stoped = false
-                                clientContext.defaultExecutor.handler.postDelayed(serviceSearcher, 0)
+                                handler.postDelayed(serviceSearcher, 0)
                             } catch (e: Throwable) {
                                 DebugLogger.error(tag, e)
                             }

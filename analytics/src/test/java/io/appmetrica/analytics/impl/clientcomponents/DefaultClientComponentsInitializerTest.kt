@@ -12,13 +12,14 @@ import org.mockito.kotlin.whenever
 
 class DefaultClientComponentsInitializerTest : CommonTest() {
 
-    val expectedModules = listOf(
+    private val expectedModules = listOf(
         "io.appmetrica.analytics.adrevenue.admob.v23.internal.AdMobClientModuleEntryPoint",
         "io.appmetrica.analytics.adrevenue.applovin.v12.internal.AppLovinClientModuleEntryPoint",
         "io.appmetrica.analytics.adrevenue.fyber.v3.internal.FyberClientModuleEntryPoint",
         "io.appmetrica.analytics.adrevenue.ironsource.v7.internal.IronSourceClientModuleEntryPoint",
         "io.appmetrica.analytics.apphud.internal.ApphudClientModuleEntryPoint",
         "io.appmetrica.analytics.screenshot.internal.ScreenshotClientModuleEntryPoint",
+        "io.appmetrica.analytics.reporterextension.internal.ReporterExtensionClientModuleEntryPoint"
     )
 
     @get:Rule
