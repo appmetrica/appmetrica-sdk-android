@@ -20,4 +20,6 @@ interface ClientContext {
     val clientActivator: ModuleClientActivator
 
     val clientExecutorProvider: ModuleClientExecutorProvider
+
+    val processDetector: ProcessDetector
 }

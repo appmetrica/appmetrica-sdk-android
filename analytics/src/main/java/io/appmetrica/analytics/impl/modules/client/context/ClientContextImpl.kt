@@ -9,6 +9,7 @@ import io.appmetrica.analytics.impl.proxy.InternalClientModuleProxy
 import io.appmetrica.analytics.modulesapi.internal.client.ClientStorageProvider
 import io.appmetrica.analytics.modulesapi.internal.client.ModuleClientActivator
 import io.appmetrica.analytics.modulesapi.internal.client.ModuleClientExecutorProvider
+import io.appmetrica.analytics.modulesapi.internal.client.ProcessDetector
 import io.appmetrica.analytics.modulesapi.internal.common.InternalClientModuleFacade
 
 class ClientContextImpl(
@@ -36,4 +37,9 @@ class ClientContextImpl(
     }
 
     override val clientExecutorProvider: ModuleClientExecutorProvider = ModuleClientExecutorProviderImpl()
+
+    override val processDetector: ProcessDetector = object : ProcessDetector {
+        override fun isMainProcess(): Boolean =
+            ClientServiceLocator.getInstance().mainProcessDetector.isMainProcess
+    }
 }

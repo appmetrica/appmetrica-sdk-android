@@ -13,6 +13,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
 
 class ClientContextImplTest : CommonTest() {
 
@@ -78,5 +79,17 @@ class ClientContextImplTest : CommonTest() {
     @Test
     fun clientExecutorProvider() {
         assertThat(clientContext.clientExecutorProvider).isEqualTo(clientExecutorProvider)
+    }
+
+    @Test
+    fun `processDetector for true`() {
+        whenever(ClientServiceLocator.getInstance().mainProcessDetector.isMainProcess).thenReturn(true)
+        assertThat(clientContext.processDetector.isMainProcess()).isTrue()
+    }
+
+    @Test
+    fun `processDetector for false`() {
+        whenever(ClientServiceLocator.getInstance().mainProcessDetector.isMainProcess).thenReturn(false)
+        assertThat(clientContext.processDetector.isMainProcess()).isFalse()
     }
 }

@@ -18,6 +18,7 @@ public interface io.appmetrica.analytics.modulesapi.internal.client.ClientContex
     public abstract [NonNull] android.content.Context getContext()
     public abstract [NonNull] io.appmetrica.analytics.modulesapi.internal.common.InternalClientModuleFacade getInternalClientModuleFacade()
     public abstract [NonNull] io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdRevenueContext getModuleAdRevenueContext()
+    public abstract [NonNull] io.appmetrica.analytics.modulesapi.internal.client.ProcessDetector getProcessDetector()
 }
 
 public interface io.appmetrica.analytics.modulesapi.internal.client.ClientStorageProvider {
@@ -43,6 +44,10 @@ public interface io.appmetrica.analytics.modulesapi.internal.client.ModuleClient
 public interface io.appmetrica.analytics.modulesapi.internal.client.ModuleServiceConfig<T> {
     public abstract T getFeaturesConfig()
     public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.SdkIdentifiers getIdentifiers()
+}
+
+public interface io.appmetrica.analytics.modulesapi.internal.client.ProcessDetector {
+    public abstract boolean isMainProcess()
 }
 
 public abstract class io.appmetrica.analytics.modulesapi.internal.client.ServiceConfigExtensionConfiguration<T> {
