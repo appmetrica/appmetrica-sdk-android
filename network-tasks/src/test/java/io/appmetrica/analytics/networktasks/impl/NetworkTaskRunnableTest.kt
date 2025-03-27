@@ -81,17 +81,6 @@ class NetworkTaskRunnableTest {
     }
 
     @Test
-    fun testShouldNotExecute() {
-        stubbing(networkTask) {
-            on { this.onCreateNetworkTask() } doReturn false
-        }
-        networkTaskRunnable.run()
-        verify(performingStrategy, never()).performRequest(networkTask)
-        verify(exponentialBackoffPolicy, never()).onHostAttemptFinished(any())
-        verify(exponentialBackoffPolicy, never()).onAllHostsAttemptsFinished(any())
-    }
-
-    @Test
     fun testRequestUnsuccessfulShouldNotTryNextHost() {
         stubbing(performingStrategy) {
             on { this.performRequest(networkTask) } doReturn false
@@ -161,7 +150,6 @@ class NetworkTaskRunnableTest {
             on { this.isRunning } doReturn false
         }
         networkTaskRunnable.run()
-        verify(connectionBasedExecutionPolicy, never()).canBeExecuted()
         verify(exponentialBackoffPolicy, never()).onHostAttemptFinished(any())
         verify(exponentialBackoffPolicy, never()).onAllHostsAttemptsFinished(any())
     }
@@ -194,7 +182,7 @@ class NetworkTaskRunnableTest {
         networkTaskRunnable.run()
         verify(performingStrategy, never()).performRequest(networkTask)
         verify(exponentialBackoffPolicy, never()).onHostAttemptFinished(any())
-        verify(exponentialBackoffPolicy, never()).onAllHostsAttemptsFinished(any())
+        verify(exponentialBackoffPolicy).onAllHostsAttemptsFinished(any())
     }
 
     @Test

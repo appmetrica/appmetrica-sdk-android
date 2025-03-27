@@ -33,5 +33,6 @@ class MainComponentEventConditionsProvider(
         return componentEventConditionsProvider.getCommonEventConditions()
     }
 
-    override fun getForceSendEventConditions(): List<EventCondition> = listOf(mainReporterPolicyCondition)
+    override fun getForceSendEventConditions(): List<EventCondition> =
+        componentEventConditionsProvider.getForceSendEventConditions() + listOf(mainReporterPolicyCondition)
 }

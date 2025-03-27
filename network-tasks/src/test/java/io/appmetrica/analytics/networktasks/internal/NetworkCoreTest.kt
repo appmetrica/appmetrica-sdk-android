@@ -11,6 +11,7 @@ import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.inOrder
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.never
 import org.mockito.kotlin.stubbing
 import org.mockito.kotlin.timeout
 import org.mockito.kotlin.verify
@@ -113,7 +114,7 @@ internal class NetworkCoreTest {
         networkCore.startTask(networkTask)
         verify(executor, timeout(500).times(1)).execute(networkTaskRunnable)
         networkCore.stopTasks()
-        verify(networkTask).onTaskRemoved()
+        verify(networkTask, never()).onTaskRemoved()
     }
 
     @Test
@@ -138,7 +139,6 @@ internal class NetworkCoreTest {
         networkCore.startTask(task1)
         networkCore.startTask(task2)
         networkCore.stopTasks()
-        verify(networkTask).onTaskRemoved()
         verify(task1).onTaskRemoved()
         verify(task2).onTaskRemoved()
     }

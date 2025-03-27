@@ -23,6 +23,14 @@ class ConditionalEventTrigger(
         }
     }
 
+    override fun triggerAsync() {
+        if (triggerEnabled.get() && allConditionsMet()) {
+            eventsFlusher.flushAllTaskAsync()
+        } else {
+            DebugLogger.info(tag, "Trigger is disabled. So ignore trigger async")
+        }
+    }
+
     override fun forceTrigger() {
         if (triggerEnabled.get()) {
             forceSendEvents()
@@ -42,13 +50,15 @@ class ConditionalEventTrigger(
     }
 
     private fun sendEventsIfNeeded() {
-        if (forceSendConditions.allAreMet() && conditions.anyAreMet()) {
+        if (allConditionsMet()) {
             DebugLogger.info(tag, "SendEventsIfNeeded: conditions are met - send")
             sendEvents()
         } else {
             DebugLogger.info(tag, "SendEventsIfNeeded: conditions aren't met - ignore")
         }
     }
+
+    private fun allConditionsMet(): Boolean = forceSendConditions.allAreMet() && conditions.anyAreMet()
 
     private fun forceSendEvents() {
         if (forceSendConditions.allAreMet()) {

@@ -463,14 +463,29 @@ internal class ReportTaskTest : CommonTest() {
     fun onTaskFinished() {
         reportTask.onTaskFinished()
         verify(databaseHelper).clearIfTooManyEvents()
-        verify(eventTrigger).enableTrigger()
     }
 
     @Test
     fun onTaskRemoved() {
         reportTask.onTaskRemoved()
         verify(eventTrigger).enableTrigger()
-        verify(eventTrigger).trigger()
+        verify(eventTrigger, never()).triggerAsync()
+    }
+
+    @Test
+    fun onTaskRemovedAfterOnSuccessfulTaskFinished() {
+        reportTask.onSuccessfulTaskFinished()
+        reportTask.onTaskRemoved()
+        verify(eventTrigger).enableTrigger()
+        verify(eventTrigger).triggerAsync()
+    }
+
+    @Test
+    fun onTaskRemovedAfterOnShouldNotExecute() {
+        reportTask.onShouldNotExecute()
+        reportTask.onTaskRemoved()
+        verify(eventTrigger).enableTrigger()
+        verify(eventTrigger).triggerAsync()
     }
 
     @Test
@@ -484,6 +499,12 @@ internal class ReportTaskTest : CommonTest() {
     @Test
     fun onSuccessfulTaskFinished() {
         reportTask.onSuccessfulTaskFinished()
+    }
+
+    @Test
+    fun onShouldNotExecute() {
+        reportTask.onShouldNotExecute()
+        verify(databaseHelper).clearIfTooManyEvents()
     }
 
     @Test

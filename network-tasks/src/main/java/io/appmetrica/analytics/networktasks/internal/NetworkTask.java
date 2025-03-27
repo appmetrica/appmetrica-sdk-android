@@ -236,6 +236,7 @@ public class NetworkTask {
         final State oldState = state;
         for (State newState : newStates) {
             Boolean canSwitch = canSwitch(oldState, newState);
+            DebugLogger.INSTANCE.info(TAG, "canSwitchState: %s -> %s: %b", oldState, newState, canSwitch);
             if (!Boolean.TRUE.equals(canSwitch)) {
                 result = canSwitch;
                 break;
@@ -257,12 +258,16 @@ public class NetworkTask {
 
     @Nullable
     private Boolean canSwitch(@NonNull State from, @NonNull State to) {
+        DebugLogger.INSTANCE.info(TAG, "canSwitchState: %s -> %s", from, to);
         switch (to) {
             case EMPTY:
                 return null;
             case PENDING:
                 return from == State.EMPTY;
             case SHOULD_NOT_EXECUTE:
+                if (from == State.PREPARING) {
+                    return true;
+                }
             case PREPARING:
                 if (from == State.PENDING) {
                     return true;

@@ -23,9 +23,13 @@ class MainComponentEventConditionsProviderTest : CommonTest() {
     private val secondCommonCondition: EventCondition = mock()
     private val commonConditions = listOf(firstCommonCondition, secondCommonCondition)
 
+    private val forceSendCommonCondition: EventCondition = mock()
+    private val forceSendCommonConditions = listOf(forceSendCommonCondition)
+
     @get:Rule
     val componentEventConditionsProviderRule = constructionRule<ComponentEventConditionsProvider> {
         on { getCommonEventConditions() } doReturn commonConditions
+        on { getForceSendEventConditions() } doReturn forceSendCommonConditions
     }
 
     private val mainReporterPolicyCondition: EventCondition = mock()
@@ -71,6 +75,6 @@ class MainComponentEventConditionsProviderTest : CommonTest() {
     @Test
     fun getForceSendEventConditions() {
         assertThat(mainComponentEventConditionProvider.getForceSendEventConditions())
-            .containsExactly(mainReporterPolicyCondition)
+            .containsExactly(forceSendCommonCondition, mainReporterPolicyCondition)
     }
 }

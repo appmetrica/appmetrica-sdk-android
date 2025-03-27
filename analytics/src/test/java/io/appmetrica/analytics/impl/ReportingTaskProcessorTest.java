@@ -61,4 +61,9 @@ public class ReportingTaskProcessorTest extends CommonTest {
         verify(mCommonExecutor).remove(reportingTaskProcessor.getFlushRunnable());
     }
 
+    @Test
+    public void scheduleFlushTaskNow() {
+        reportingTaskProcessor.scheduleFlushTaskNow();
+        verify(mCommonExecutor).executeDelayed(reportingTaskProcessor.getFlushRunnable(), TimeUnit.SECONDS.toMillis(1));
+    }
 }

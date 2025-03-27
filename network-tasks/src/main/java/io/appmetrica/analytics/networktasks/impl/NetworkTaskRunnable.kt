@@ -33,12 +33,10 @@ internal class NetworkTaskRunnable @VisibleForTesting constructor(
         var taskFinished = false
         var shouldExecuteTask: Boolean
         val exponentialBackoffPolicy = networkTask.exponentialBackoffPolicy
-        val connectionBasedPolicy = networkTask.connectionExecutionPolicy
+        val canBeExecutedByConnectionPolicy = networkTask.connectionExecutionPolicy.canBeExecuted()
+        val canBeExecuted = networkTask.exponentialBackoffPolicy.canBeExecuted(networkTask.retryPolicyConfig)
         if (rootThreadStateSource.isRunning) {
-            if (
-                connectionBasedPolicy.canBeExecuted() &&
-                exponentialBackoffPolicy.canBeExecuted(networkTask.retryPolicyConfig)
-            ) {
+            if (canBeExecutedByConnectionPolicy && canBeExecuted) {
                 var countRequest = 0
                 shouldExecuteTask = networkTask.onCreateNetworkTask()
                 if (!shouldExecuteTask) {
@@ -58,9 +56,11 @@ internal class NetworkTaskRunnable @VisibleForTesting constructor(
                     shouldExecuteTask = !requestSuccessful && networkTask.shouldTryNextHost()
                     exponentialBackoffPolicy.onHostAttemptFinished(requestSuccessful)
                 }
-                if (requestSuccessful != null) {
-                    exponentialBackoffPolicy.onAllHostsAttemptsFinished(requestSuccessful)
-                }
+                DebugLogger.info(
+                    tag,
+                    "All attempts finished for task ${networkTask.description()}, success: $requestSuccessful",
+                )
+                exponentialBackoffPolicy.onAllHostsAttemptsFinished(requestSuccessful == true)
                 taskFinished = true
             }
         }

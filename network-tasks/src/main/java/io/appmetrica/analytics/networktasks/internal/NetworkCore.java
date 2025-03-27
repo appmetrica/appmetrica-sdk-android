@@ -68,10 +68,6 @@ public class NetworkCore extends InterruptionSafeThread {
     public void stopTasks() {
         synchronized (mStopTasksLock) {
             DebugLogger.INSTANCE.info(TAG, "NetworkCore shall stop");
-            QueueTaskEntry entry = mCurrentTask;
-            if (entry != null) {
-                entry.networkTask.onTaskRemoved();
-            }
             List<QueueTaskEntry> queueTaskEntries = new ArrayList<QueueTaskEntry>(mTasksQueue.size());
             mTasksQueue.drainTo(queueTaskEntries);
             DebugLogger.INSTANCE.info(TAG, "Remove %d tasks from queue", queueTaskEntries.size());
@@ -102,11 +98,9 @@ public class NetworkCore extends InterruptionSafeThread {
                 if (networkTask != null) {
                     networkTask.onTaskFinished();
                     synchronized (mStopTasksLock) {
-                        if (mCurrentTask != null) {
-                            mCurrentTask = null;
-                            networkTask.onTaskRemoved();
-                        }
+                        mCurrentTask = null;
                     }
+                    networkTask.onTaskRemoved();
                 } else {
                     DebugLogger.INSTANCE.warning(TAG, "Network task is null");
                 }

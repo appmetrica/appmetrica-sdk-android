@@ -82,7 +82,6 @@ class NetworkTaskRunnableTaskLifecycleTest {
         inOrder.verify(networkTask).onCreateNetworkTask()
         inOrder.verify(performingStrategy).performRequest(networkTask)
         inOrder.verify(networkTask).shouldTryNextHost()
-        inOrder.verifyNoMoreInteractions()
     }
 
     @Test
@@ -95,6 +94,5 @@ class NetworkTaskRunnableTaskLifecycleTest {
         inOrder.verify(networkTask).shouldTryNextHost()
         inOrder.verify(performingStrategy).performRequest(networkTask)
         inOrder.verify(networkTask).shouldTryNextHost()
-        inOrder.verifyNoMoreInteractions()
     }
 }

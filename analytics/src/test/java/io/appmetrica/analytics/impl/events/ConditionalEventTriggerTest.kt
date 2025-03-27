@@ -37,6 +37,18 @@ class ConditionalEventTriggerTest : CommonTest() {
     }
 
     @Test
+    fun `trigger async for all allowed with initial enabled state `() {
+        val trigger = ConditionalEventTrigger(
+            eventsFlusher,
+            listOf(firstEnabledCondition, secondEnabledCondition),
+            listOf(firstEnabledCondition, secondEnabledCondition),
+            componentId
+        )
+        trigger.triggerAsync()
+        verify(eventsFlusher).flushAllTaskAsync()
+    }
+
+    @Test
     fun `trigger for all allowed with enabled trigger`() {
         val trigger = ConditionalEventTrigger(
             eventsFlusher,
@@ -50,6 +62,19 @@ class ConditionalEventTriggerTest : CommonTest() {
     }
 
     @Test
+    fun `trigger async for all allowed with enabled trigger`() {
+        val trigger = ConditionalEventTrigger(
+            eventsFlusher,
+            listOf(firstEnabledCondition, secondEnabledCondition),
+            listOf(firstEnabledCondition, secondEnabledCondition),
+            componentId
+        )
+        trigger.enableTrigger()
+        trigger.triggerAsync()
+        verify(eventsFlusher).flushAllTaskAsync()
+    }
+
+    @Test
     fun `trigger for all allowed with disabled trigger`() {
         val trigger = ConditionalEventTrigger(
             eventsFlusher,
@@ -60,6 +85,21 @@ class ConditionalEventTriggerTest : CommonTest() {
         trigger.disableTrigger()
         trigger.trigger()
         verify(eventsFlusher, never()).flushAllTasks()
+        verify(eventsFlusher, never()).flushAllTaskAsync()
+    }
+
+    @Test
+    fun `trigger async for all allowed with disabled trigger`() {
+        val trigger = ConditionalEventTrigger(
+            eventsFlusher,
+            listOf(firstEnabledCondition, secondEnabledCondition),
+            listOf(firstEnabledCondition, secondEnabledCondition),
+            componentId
+        )
+        trigger.disableTrigger()
+        trigger.triggerAsync()
+        verify(eventsFlusher, never()).flushAllTasks()
+        verify(eventsFlusher, never()).flushAllTaskAsync()
     }
 
     @Test
@@ -98,6 +138,7 @@ class ConditionalEventTriggerTest : CommonTest() {
         trigger.disableTrigger()
         trigger.forceTrigger()
         verify(eventsFlusher, never()).flushAllTasks()
+        verify(eventsFlusher, never()).flushAllTaskAsync()
     }
 
     @Test
@@ -110,6 +151,20 @@ class ConditionalEventTriggerTest : CommonTest() {
         )
         trigger.trigger()
         verify(eventsFlusher, never()).flushAllTasks()
+        verify(eventsFlusher, never()).flushAllTaskAsync()
+    }
+
+    @Test
+    fun `trigger async for empty conditions`() {
+        val trigger = ConditionalEventTrigger(
+            eventsFlusher,
+            emptyList(),
+            listOf(firstEnabledCondition, secondEnabledCondition),
+            componentId
+        )
+        trigger.triggerAsync()
+        verify(eventsFlusher, never()).flushAllTasks()
+        verify(eventsFlusher, never()).flushAllTaskAsync()
     }
 
     @Test
@@ -125,6 +180,18 @@ class ConditionalEventTriggerTest : CommonTest() {
     }
 
     @Test
+    fun `trigger async for empty force conditions`() {
+        val trigger = ConditionalEventTrigger(
+            eventsFlusher,
+            listOf(firstEnabledCondition, secondEnabledCondition),
+            emptyList(),
+            componentId
+        )
+        trigger.triggerAsync()
+        verify(eventsFlusher).flushAllTaskAsync()
+    }
+
+    @Test
     fun `trigger for empty both condition lists`() {
         val trigger = ConditionalEventTrigger(
             eventsFlusher,
@@ -134,6 +201,20 @@ class ConditionalEventTriggerTest : CommonTest() {
         )
         trigger.trigger()
         verify(eventsFlusher, never()).flushAllTasks()
+        verify(eventsFlusher, never()).flushAllTaskAsync()
+    }
+
+    @Test
+    fun `trigger async for empty both condition lists`() {
+        val trigger = ConditionalEventTrigger(
+            eventsFlusher,
+            emptyList(),
+            emptyList(),
+            componentId
+        )
+        trigger.triggerAsync()
+        verify(eventsFlusher, never()).flushAllTasks()
+        verify(eventsFlusher, never()).flushAllTaskAsync()
     }
 
     @Test
@@ -185,6 +266,18 @@ class ConditionalEventTriggerTest : CommonTest() {
     }
 
     @Test
+    fun `trigger async for second disabled condition`() {
+        val trigger = ConditionalEventTrigger(
+            eventsFlusher,
+            listOf(firstEnabledCondition, secondDisabledCondition),
+            listOf(firstEnabledCondition, secondEnabledCondition),
+            componentId
+        )
+        trigger.triggerAsync()
+        verify(eventsFlusher).flushAllTaskAsync()
+    }
+
+    @Test
     fun `trigger for first disabled condition`() {
         val trigger = ConditionalEventTrigger(
             eventsFlusher,
@@ -197,6 +290,18 @@ class ConditionalEventTriggerTest : CommonTest() {
     }
 
     @Test
+    fun `trigger async for first disabled condition`() {
+        val trigger = ConditionalEventTrigger(
+            eventsFlusher,
+            listOf(firstDisabledCondition, secondEnabledCondition),
+            listOf(firstEnabledCondition, secondEnabledCondition),
+            componentId
+        )
+        trigger.triggerAsync()
+        verify(eventsFlusher).flushAllTaskAsync()
+    }
+
+    @Test
     fun `trigger for both disabled conditions`() {
         val trigger = ConditionalEventTrigger(
             eventsFlusher,
@@ -206,6 +311,20 @@ class ConditionalEventTriggerTest : CommonTest() {
         )
         trigger.trigger()
         verify(eventsFlusher, never()).flushAllTasks()
+        verify(eventsFlusher, never()).flushAllTaskAsync()
+    }
+
+    @Test
+    fun `trigger async for both disabled conditions`() {
+        val trigger = ConditionalEventTrigger(
+            eventsFlusher,
+            listOf(firstDisabledCondition, secondDisabledCondition),
+            listOf(firstEnabledCondition, secondEnabledCondition),
+            componentId
+        )
+        trigger.triggerAsync()
+        verify(eventsFlusher, never()).flushAllTasks()
+        verify(eventsFlusher, never()).flushAllTaskAsync()
     }
 
     @Test
@@ -218,6 +337,20 @@ class ConditionalEventTriggerTest : CommonTest() {
         )
         trigger.trigger()
         verify(eventsFlusher, never()).flushAllTasks()
+        verify(eventsFlusher, never()).flushAllTaskAsync()
+    }
+
+    @Test
+    fun `trigger async for first disabled force condition`() {
+        val trigger = ConditionalEventTrigger(
+            eventsFlusher,
+            listOf(firstEnabledCondition, secondEnabledCondition),
+            listOf(firstDisabledCondition, secondEnabledCondition),
+            componentId
+        )
+        trigger.triggerAsync()
+        verify(eventsFlusher, never()).flushAllTasks()
+        verify(eventsFlusher, never()).flushAllTaskAsync()
     }
 
     @Test
@@ -230,6 +363,20 @@ class ConditionalEventTriggerTest : CommonTest() {
         )
         trigger.trigger()
         verify(eventsFlusher, never()).flushAllTasks()
+        verify(eventsFlusher, never()).flushAllTaskAsync()
+    }
+
+    @Test
+    fun `trigger async for second disabled force condition`() {
+        val trigger = ConditionalEventTrigger(
+            eventsFlusher,
+            listOf(firstEnabledCondition, secondEnabledCondition),
+            listOf(firstEnabledCondition, secondDisabledCondition),
+            componentId
+        )
+        trigger.triggerAsync()
+        verify(eventsFlusher, never()).flushAllTasks()
+        verify(eventsFlusher, never()).flushAllTaskAsync()
     }
 
     @Test
@@ -242,6 +389,20 @@ class ConditionalEventTriggerTest : CommonTest() {
         )
         trigger.trigger()
         verify(eventsFlusher, never()).flushAllTasks()
+        verify(eventsFlusher, never()).flushAllTaskAsync()
+    }
+
+    @Test
+    fun `trigger async for both disabled force conditions`() {
+        val trigger = ConditionalEventTrigger(
+            eventsFlusher,
+            listOf(firstEnabledCondition, secondEnabledCondition),
+            listOf(firstDisabledCondition, secondDisabledCondition),
+            componentId
+        )
+        trigger.triggerAsync()
+        verify(eventsFlusher, never()).flushAllTasks()
+        verify(eventsFlusher, never()).flushAllTaskAsync()
     }
 
     @Test
@@ -290,6 +451,7 @@ class ConditionalEventTriggerTest : CommonTest() {
         )
         trigger.forceTrigger()
         verify(eventsFlusher, never()).flushAllTasks()
+        verify(eventsFlusher, never()).flushAllTaskAsync()
     }
 
     @Test
@@ -302,6 +464,7 @@ class ConditionalEventTriggerTest : CommonTest() {
         )
         trigger.forceTrigger()
         verify(eventsFlusher, never()).flushAllTasks()
+        verify(eventsFlusher, never()).flushAllTaskAsync()
     }
 
     @Test
@@ -314,5 +477,6 @@ class ConditionalEventTriggerTest : CommonTest() {
         )
         trigger.forceTrigger()
         verify(eventsFlusher, never()).flushAllTasks()
+        verify(eventsFlusher, never()).flushAllTaskAsync()
     }
 }

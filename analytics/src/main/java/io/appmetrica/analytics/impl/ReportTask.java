@@ -114,9 +114,10 @@ public class ReportTask implements UnderlyingNetworkTask {
     private final ResponseDataHolder responseDataHolder;
     @NonNull
     private final SendingDataTaskHelper sendingDataTaskHelper;
-    private boolean wasExecuted = true;
 
     private int mRequestId;
+
+    private boolean shouldTriggerSendingEvents = false;
 
     public ReportTask(@NonNull final ComponentUnit component,
                       @NonNull final ReportParamsAppender paramsAppender,
@@ -314,6 +315,7 @@ public class ReportTask implements UnderlyingNetworkTask {
         fullUrlFormer.setHosts(requestConfig.getReportHosts());
         if (!requestConfig.isReadyForSending() || Utils.isNullOrEmpty(fullUrlFormer.getAllHosts())) {
             DebugLogger.INSTANCE.info(TAG, "Could not create task %s: not ready for sending", description());
+            shouldTriggerSendingEvents = true;
             return false;
         }
 
@@ -715,26 +717,33 @@ public class ReportTask implements UnderlyingNetworkTask {
     public void onTaskFinished() {
         DebugLogger.INSTANCE.info(TAG, "onTaskFinished: %s", description());
         mComponent.getDbHelper().clearIfTooManyEvents();
-        mComponent.getEventTrigger().enableTrigger();
     }
 
     @Override
     public void onTaskRemoved() {
-        DebugLogger.INSTANCE.info(TAG, "onTaskRemoved: %s", description());
+        DebugLogger.INSTANCE.info(
+            TAG,
+            "onTaskRemoved: %s - should trigger events sending = %s",
+            description(),
+            shouldTriggerSendingEvents
+        );
         mComponent.getEventTrigger().enableTrigger();
-        if (wasExecuted) {
-            mComponent.getEventTrigger().trigger();
+        if (shouldTriggerSendingEvents) {
+            mComponent.getEventTrigger().triggerAsync();
         }
     }
 
     @Override
     public void onSuccessfulTaskFinished() {
         DebugLogger.INSTANCE.info(TAG, "onSuccessfulTaskFinished: %s", description());
+        shouldTriggerSendingEvents = true;
     }
 
     @Override
     public void onShouldNotExecute() {
-        wasExecuted = false;
+        DebugLogger.INSTANCE.info(TAG, "onShouldNotExecute: %s", description());
+        shouldTriggerSendingEvents = true;
+        mComponent.getDbHelper().clearIfTooManyEvents();
     }
 
     @NonNull

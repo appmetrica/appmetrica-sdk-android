@@ -2,6 +2,7 @@ package io.appmetrica.analytics.networktasks.internal
 
 import io.appmetrica.analytics.coreapi.internal.io.IExecutionPolicy
 import io.appmetrica.analytics.coreutils.internal.asserts.DebugAssert
+import io.appmetrica.analytics.testutils.LogRule
 import io.appmetrica.analytics.testutils.MockedStaticRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Rule
@@ -536,6 +537,14 @@ class NetworkTaskStatesTest {
         networkTask.onShouldNotExecute()
         networkTask.onTaskAdded()
         verify(underlyingTask).onTaskAdded()
+    }
+
+    @Test
+    fun onShouldNotExecutePreparingTask() {
+        networkTask.onTaskAdded()
+        networkTask.onCreateNetworkTask()
+        networkTask.onShouldNotExecute()
+        verify(underlyingTask).onShouldNotExecute()
     }
 
     // end region

@@ -31,6 +31,16 @@ open class TaskProcessor<C : IComponent>(
     open fun cancelFlushTask() {
     }
 
+    override fun flushAllTaskAsync() {
+        if (shuttingDown.get().not()) {
+            DebugLogger.info(tag, "scheduleFlushTask")
+            scheduleFlushTaskNow()
+        }
+    }
+
+    open fun scheduleFlushTaskNow() {
+    }
+
     override fun flushAllTasks() {
         DebugLogger.info(tag, "flushAllTasks")
         if (shuttingDown.get().not()) {
