@@ -5,7 +5,7 @@ import androidx.annotation.Nullable;
 public class BackgroundRestrictionsState {
 
     public enum AppStandByBucket {
-        ACTIVE, WORKING_SET, FREQUENT, RARE, RESTRICTED
+        EXEMPTED, ACTIVE, WORKING_SET, FREQUENT, RARE, RESTRICTED, UNKNOWN
     }
 
     @Nullable
@@ -17,6 +17,14 @@ public class BackgroundRestrictionsState {
                                        @Nullable Boolean backgroundRestricted) {
         mAppStandByBucket = appStandByBucket;
         mBackgroundRestricted = backgroundRestricted;
+    }
+
+    @Override
+    public String toString() {
+        return "BackgroundRestrictionsState{" +
+            "mAppStandByBucket=" + mAppStandByBucket +
+            ", mBackgroundRestricted=" + mBackgroundRestricted +
+            '}';
     }
 
     @Override

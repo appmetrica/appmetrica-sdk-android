@@ -22,4 +22,13 @@ public class AppPermissionsState {
         mBackgroundRestrictionsState = backgroundRestrictionsState;
         mAvailableProviders = availableProviders;
     }
+
+    @Override
+    public String toString() {
+        return "AppPermissionsState{" +
+            "mPermissionStateList=" + mPermissionStateList +
+            ", mBackgroundRestrictionsState=" + mBackgroundRestrictionsState +
+            ", mAvailableProviders=" + mAvailableProviders +
+            '}';
+    }
 }

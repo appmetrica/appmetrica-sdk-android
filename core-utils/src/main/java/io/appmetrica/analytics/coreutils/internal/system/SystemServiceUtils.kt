@@ -15,6 +15,7 @@ object SystemServiceUtils {
         whatIsNull: String,
         tryBlock: FunctionWithThrowable<T, S?>
     ): S? {
+        DebugLogger.info(TAG, "Access $whatIsNull")
         if (systemService != null) {
             try {
                 return tryBlock.apply(systemService)

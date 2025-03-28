@@ -37,14 +37,14 @@ public class ReportPermissionHandler extends ReportComponentHandler {
     public ReportPermissionHandler(ComponentUnit component,
                                    PermissionsChecker permissionsChecker) {
         this(
-                component,
-                permissionsChecker,
-                StorageFactory.Provider
-                        .get(AppPermissionsState.class)
-                        .create(component.getContext()),
-                new BackgroundRestrictionsStateProvider(component.getContext()),
-                new AppStandbyBucketConverter(),
-                new AvailableProvidersRetriever(component.getContext())
+            component,
+            permissionsChecker,
+            StorageFactory.Provider
+                .get(AppPermissionsState.class)
+                .create(component.getContext()),
+            new BackgroundRestrictionsStateProvider(component.getContext()),
+            new AppStandbyBucketConverter(),
+            new AvailableProvidersRetriever(component.getContext())
         );
     }
 
@@ -72,19 +72,29 @@ public class ReportPermissionHandler extends ReportComponentHandler {
 
             AppPermissionsState oldAppPermissionsState = mPermissionsStorage.read();
             AppPermissionsState newAppPermissionsState = getNewAppPermissionsStateOrNull(oldAppPermissionsState);
+
+            DebugLogger.INSTANCE.info(
+                TAG,
+                "Old permissions state: %s -> new permissions state: %s",
+                oldAppPermissionsState,
+                newAppPermissionsState
+            );
+
             if (newAppPermissionsState == null) {
                 if (component.shouldForceSendPermissions()) {
+                    DebugLogger.INSTANCE.info(TAG, "Resend all permissions");
                     reportPermissions(
-                            oldAppPermissionsState,
-                            reportData,
-                            component.getEventSaver()
+                        oldAppPermissionsState,
+                        reportData,
+                        component.getEventSaver()
                     );
                 }
             } else {
+                DebugLogger.INSTANCE.info(TAG, "Send permissions diff: %s", newAppPermissionsState);
                 reportPermissions(
-                        newAppPermissionsState,
-                        reportData,
-                        component.getEventSaver()
+                    newAppPermissionsState,
+                    reportData,
+                    component.getEventSaver()
                 );
                 mPermissionsStorage.save(newAppPermissionsState);
             }
@@ -96,23 +106,27 @@ public class ReportPermissionHandler extends ReportComponentHandler {
     private AppPermissionsState getNewAppPermissionsStateOrNull(@NonNull AppPermissionsState oldAppPermissionsState) {
         List<PermissionState> permissionsFromDb = oldAppPermissionsState.mPermissionStateList;
         BackgroundRestrictionsState oldBackgroundRestrictionsState =
-                oldAppPermissionsState.mBackgroundRestrictionsState;
+            oldAppPermissionsState.mBackgroundRestrictionsState;
         BackgroundRestrictionsState newBackgroundRestrictionsState = mBackgroundRestrictionsStateProvider
-                .getBackgroundRestrictionsState();
+            .getBackgroundRestrictionsState();
+        DebugLogger.INSTANCE.info(
+            TAG,
+            "Incoming background restriction state: %s", newBackgroundRestrictionsState
+        );
         List<String> oldProviders = oldAppPermissionsState.mAvailableProviders;
         List<String> newProviders = mAvailableProvidersRetriever.getAvailableProviders();
         List<PermissionState> newPermissions =
-                mPermissionsChecker.check(getComponent().getContext(), permissionsFromDb);
+            mPermissionsChecker.check(getComponent().getContext(), permissionsFromDb);
         if (newPermissions == null &&
-                Utils.areEqual(oldBackgroundRestrictionsState, newBackgroundRestrictionsState) &&
-                CollectionUtils.areCollectionsEqual(oldProviders, newProviders)) {
+            Utils.areEqual(oldBackgroundRestrictionsState, newBackgroundRestrictionsState) &&
+            CollectionUtils.areCollectionsEqual(oldProviders, newProviders)) {
             return null;
         } else {
 
             return new AppPermissionsState(
-                    newPermissions == null ? permissionsFromDb : newPermissions,
-                    newBackgroundRestrictionsState,
-                    newProviders
+                newPermissions == null ? permissionsFromDb : newPermissions,
+                newBackgroundRestrictionsState,
+                newProviders
             );
         }
 
@@ -122,11 +136,11 @@ public class ReportPermissionHandler extends ReportComponentHandler {
                                    @NonNull CounterReport reportData,
                                    @NonNull EventSaver eventSaver) {
         CounterReport permissionsReport = CounterReport.formPermissionsReportData(
-                reportData,
-                appPermissionsState.mPermissionStateList,
-                appPermissionsState.mBackgroundRestrictionsState,
-                mAppStandbyBucketConverter,
-                appPermissionsState.mAvailableProviders
+            reportData,
+            appPermissionsState.mPermissionStateList,
+            appPermissionsState.mBackgroundRestrictionsState,
+            mAppStandbyBucketConverter,
+            appPermissionsState.mAvailableProviders
         );
         eventSaver.savePermissionsReport(permissionsReport);
     }
