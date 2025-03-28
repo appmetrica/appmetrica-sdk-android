@@ -15,6 +15,9 @@ import org.junit.runner.RunWith
 import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.inOrder
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.verifyNoInteractions
+import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
@@ -64,5 +67,12 @@ class AnonymousClientActivatorTest : CommonTest() {
             runnableCaptor.firstValue.run()
             verify(appMetricaFacade).activateFull()
         }
+    }
+
+    @Test
+    fun `activate if activated`() {
+        whenever(provider.isActivated).thenReturn(true)
+        anonymousClientActivator.activate(context)
+        verifyNoInteractions(sessionsTrackingManager)
     }
 }

@@ -17,7 +17,7 @@ class AnonymousClientActivator(
     fun activate(context: Context) {
         DebugLogger.info(tag, "Activating anonymous client")
         val logger = LoggerStorage.getMainPublicOrAnonymousLogger()
-        if (DefaultValues.DEFAULT_SESSIONS_AUTO_TRACKING_ENABLED_FOR_ANONYMOUS_ACTIVATION) {
+        if (!provider.isActivated && DefaultValues.DEFAULT_SESSIONS_AUTO_TRACKING_ENABLED_FOR_ANONYMOUS_ACTIVATION) {
             logger.info("Session autotracking enabled")
             sessionsTrackingManager.startWatchingIfNotYet()
         } else {
