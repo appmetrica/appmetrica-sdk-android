@@ -29,5 +29,5 @@ dependencies {
     implementation(project(":modules-api"))
     implementation(project(":proto"))
 
-    implementation("com.apphud:ApphudSDK-Android:2.8.4")
+    implementation("com.apphud:ApphudSDK-Android:2.9.1")
 }
