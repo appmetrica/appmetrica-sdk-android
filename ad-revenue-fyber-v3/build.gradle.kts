@@ -21,6 +21,6 @@ dependencies {
     implementation(project(":logger"))
     implementation(project(":modules-api"))
 
-    compileOnly("com.fyber:fairbid-sdk:3.48.0")
-    testImplementation("com.fyber:fairbid-sdk:3.48.0")
+    compileOnly("com.fyber:fairbid-sdk:3.59.0")
+    testImplementation("com.fyber:fairbid-sdk:3.59.0")
 }
