@@ -62,7 +62,7 @@
                     "group": "com.google.android.gms",
                     "module": "play-services-appset",
                     "version": {
-                        "requires": "16.0.2"
+                        "requires": "16.1.0"
                     }
                 }
             ],

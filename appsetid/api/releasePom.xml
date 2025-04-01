@@ -48,7 +48,7 @@
     <dependency>
       <groupId>com.google.android.gms</groupId>
       <artifactId>play-services-appset</artifactId>
-      <version>16.0.2</version>
+      <version>16.1.0</version>
       <scope>runtime</scope>
     </dependency>
   </dependencies>
