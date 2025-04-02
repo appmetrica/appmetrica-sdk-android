@@ -16,7 +16,7 @@ dependencies {
     implementation(project(":core-utils"))
     implementation(project(":logger"))
 
-    compileOnly("com.android.billingclient:billing:6.0.1")
+    compileOnly("com.android.billingclient:billing:7.1.1")
 
-    testImplementation("com.android.billingclient:billing:6.0.1")
+    testImplementation("com.android.billingclient:billing:7.1.1")
 }
