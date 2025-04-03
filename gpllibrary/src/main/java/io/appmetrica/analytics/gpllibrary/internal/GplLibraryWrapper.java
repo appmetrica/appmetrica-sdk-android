@@ -10,6 +10,7 @@ import androidx.annotation.VisibleForTesting;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.Task;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.util.concurrent.Executor;
@@ -29,7 +30,7 @@ public class GplLibraryWrapper implements IGplLibraryWrapper {
 
         @NonNull
         FusedLocationProviderClient createClient() throws Throwable {
-            return new FusedLocationProviderClient(mContext);
+            return LocationServices.getFusedLocationProviderClient(mContext);
         }
     }
 

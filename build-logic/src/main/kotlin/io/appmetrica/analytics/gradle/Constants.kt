@@ -33,7 +33,7 @@ object Constants {
 object Deps {
     const val androidX = "1.0.0"
     const val appSetIdVersion = "16.1.0"
-    const val gmsLocationVersion = "19.0.1"
+    const val gmsLocationVersion = "21.0.1"
     const val referrerVersion = "2.2"
 }
 
