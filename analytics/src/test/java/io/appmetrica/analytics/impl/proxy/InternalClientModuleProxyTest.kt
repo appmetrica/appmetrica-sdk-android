@@ -2,6 +2,7 @@ package io.appmetrica.analytics.impl.proxy
 
 import io.appmetrica.analytics.AdRevenue
 import io.appmetrica.analytics.ModuleEvent
+import io.appmetrica.analytics.ModuleEvent.Category
 import io.appmetrica.analytics.ModulesFacade
 import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
 import io.appmetrica.analytics.coreutils.internal.collection.CollectionUtils
@@ -66,6 +67,7 @@ class InternalClientModuleProxyTest : CommonTest() {
             .checkField("name", name)
             .checkField("value", value)
             .checkField("serviceDataReporterType", serviceDataReporterType)
+            .checkField("category", Category.GENERAL)
             .checkField("extras", CollectionUtils.getListFromMap(extras))
             .checkField("attributes", CollectionUtils.getListFromMap(attributes))
             .checkField("environment", CollectionUtils.getListFromMap(environment))
@@ -92,6 +94,7 @@ class InternalClientModuleProxyTest : CommonTest() {
             .checkField("name", name)
             .checkField("value", value)
             .checkField("serviceDataReporterType", 1)
+            .checkField("category", Category.GENERAL)
             .checkField("extras", CollectionUtils.getListFromMap(extras))
             .checkField("attributes", CollectionUtils.getListFromMap(attributes))
             .checkField("environment", CollectionUtils.getListFromMap(environment))

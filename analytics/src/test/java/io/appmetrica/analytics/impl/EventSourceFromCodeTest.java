@@ -16,10 +16,11 @@ public class EventSourceFromCodeTest extends CommonTest {
 
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
-        List<Object[]> data =  Arrays.asList(new Object[][]{
-                {0, EventSource.NATIVE},
-                {1, EventSource.JS},
-                {2, EventSource.NATIVE}
+        List<Object[]> data = Arrays.asList(new Object[][]{
+            {0, EventSource.NATIVE},
+            {1, EventSource.JS},
+            {2, EventSource.SYSTEM},
+            {3, EventSource.NATIVE}
         });
         assert data.size() == EventSource.values().length + 1;
         return data;

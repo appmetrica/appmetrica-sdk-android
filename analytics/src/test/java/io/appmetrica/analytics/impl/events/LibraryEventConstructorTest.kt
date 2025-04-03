@@ -1,5 +1,6 @@
 package io.appmetrica.analytics.impl.events
 
+import io.appmetrica.analytics.ModuleEvent.Category
 import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
 import io.appmetrica.analytics.impl.protobuf.backend.EventProto
 import io.appmetrica.analytics.testutils.CommonTest
@@ -24,6 +25,7 @@ class LibraryEventConstructorTest : CommonTest() {
             .checkField("name", "appmetrica_system_event_42")
             .checkFieldIsNull("value")
             .checkField("serviceDataReporterType", 1)
+            .checkField("category", Category.GENERAL)
             .checkFieldIsNull("environment")
             .checkFieldIsNull("extras")
             .checkFieldRecursively<List<Map.Entry<String, Any>>>("attributes") {
@@ -46,6 +48,7 @@ class LibraryEventConstructorTest : CommonTest() {
             .checkField("name", "appmetrica_system_event_42")
             .checkFieldIsNull("value")
             .checkField("serviceDataReporterType", 1)
+            .checkField("category", Category.GENERAL)
             .checkFieldIsNull("environment")
             .checkFieldIsNull("extras")
             .checkFieldRecursively<List<Map.Entry<String, Any>>>("attributes") {

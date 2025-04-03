@@ -3,6 +3,7 @@ package io.appmetrica.analytics.impl;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import io.appmetrica.analytics.ModuleEvent;
 import io.appmetrica.analytics.coreutils.internal.StringUtils;
 import io.appmetrica.analytics.coreutils.internal.collection.CollectionUtils;
 import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoWrapper;
@@ -13,7 +14,6 @@ import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import org.json.JSONObject;
 
@@ -322,19 +322,19 @@ public final class EventsManager {
         return new ClientCounterReport(value, "", InternalEvents.EVENT_TYPE_CLEANUP.getTypeId(), logger);
     }
 
-    static CounterReport customEventReportEntry(int type,
-                                                @Nullable String name,
-                                                @Nullable String value,
-                                                @Nullable final Map<String, Object> environment,
-                                                @Nullable Map<String, byte[]> extras,
-                                                @NonNull PublicLogger logger) {
-        CounterReport report =
-            new ClientCounterReport(value, name, InternalEvents.EVENT_TYPE_CUSTOM_EVENT.getTypeId(), type, logger);
-        report.setEventEnvironment(JsonHelper.mapToJsonString(environment));
-        if (extras != null) {
-            report.setExtras(extras);
+    static CounterReport customEventReportEntry(@NonNull ModuleEvent moduleEvent, @NonNull PublicLogger logger) {
+        CounterReport report = new ClientCounterReport(
+            moduleEvent.getValue(),
+            moduleEvent.getName(),
+            InternalEvents.EVENT_TYPE_CUSTOM_EVENT.getTypeId(),
+            moduleEvent.getType(),
+            logger
+        );
+        report.setSource(new EventCategoryToSourceConverter().convert(moduleEvent.getCategory()));
+        report.setEventEnvironment(JsonHelper.mapToJsonString(moduleEvent.getEnvironment()));
+        if (moduleEvent.getExtras() != null) {
+            report.setExtras(moduleEvent.getExtras());
         }
-
         return report;
     }
 

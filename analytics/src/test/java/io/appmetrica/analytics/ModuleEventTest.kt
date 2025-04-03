@@ -1,5 +1,6 @@
 package io.appmetrica.analytics
 
+import io.appmetrica.analytics.ModuleEvent.Category
 import io.appmetrica.analytics.impl.service.AppMetricaServiceDataReporter
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.SoftAssertions
@@ -14,6 +15,7 @@ class ModuleEventTest {
     private val name = "some name"
     private val value = "some value"
     private val serviceDataReporterType = 4242
+    private val category = Category.SYSTEM
     private val environment = mapOf(
         "first environment key" to "first enviroment value",
         "second environment key" to "second environment value"
@@ -92,6 +94,15 @@ class ModuleEventTest {
             assertThat(moduleEvent.extras).isNull()
             assertThat(moduleEvent.attributes).isNull()
         }.assertAll()
+    }
+
+    @Test
+    fun withCategory() {
+        val moduleEvent = ModuleEvent.newBuilder(type)
+            .withCategory(category)
+            .build()
+
+        assertThat(moduleEvent.category).isEqualTo(category)
     }
 
     @Test

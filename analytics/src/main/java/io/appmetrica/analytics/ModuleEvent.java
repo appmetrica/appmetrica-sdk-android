@@ -14,12 +14,27 @@ import java.util.Map;
  */
 public final class ModuleEvent {
 
+    /**
+     * Describes module event categories
+     */
+    public enum Category {
+        /**
+         * General category
+         */
+        GENERAL, 
+        /**
+         * Category for sdk generated events
+         */
+        SYSTEM,
+    }
+
     private final int type;
     @Nullable
     private final String name;
     @Nullable
     private final String value;
     private final int serviceDataReporterType;
+    private final Category category;
     @Nullable
     private final List<Map.Entry<String, Object>> environment;
     @Nullable
@@ -58,6 +73,13 @@ public final class ModuleEvent {
     }
 
     /**
+     * @return event category
+     */
+    public Category getCategory() {
+        return category;
+    }
+
+    /**
      * @return event environment
      */
     @Nullable
@@ -86,6 +108,7 @@ public final class ModuleEvent {
         this.name = builder.name;
         this.value = builder.value;
         this.serviceDataReporterType = builder.serviceDataReporterType;
+        this.category = builder.category;
         this.environment = CollectionUtils.getListFromMap(builder.environment);
         this.extras = CollectionUtils.getListFromMap(builder.extras);
         this.attributes = CollectionUtils.getListFromMap(builder.attributes);
@@ -109,6 +132,7 @@ public final class ModuleEvent {
             ", name='" + name + '\'' +
             ", value='" + value + '\'' +
             ", serviceDataReporterType=" + serviceDataReporterType +
+            ", category=" + category +
             ", environment=" + environment +
             ", extras=" + extras +
             ", attributes=" + attributes +
@@ -126,6 +150,8 @@ public final class ModuleEvent {
         @Nullable
         private String value;
         private int serviceDataReporterType = AppMetricaServiceDataReporter.TYPE_CORE;
+        @NonNull
+        private Category category = Category.GENERAL;
         @Nullable
         private Map<String, Object> environment;
         @Nullable
@@ -168,6 +194,16 @@ public final class ModuleEvent {
          */
         public Builder withServiceDataReporterType(final int serviceDataReporterType) {
             this.serviceDataReporterType = serviceDataReporterType;
+            return this;
+        }
+
+        /**
+         * Sets the source of the event.
+         * @param category the event category
+         * @return same {@link Builder} object
+         */
+        public Builder withCategory(final Category category) {
+            this.category = category;
             return this;
         }
 

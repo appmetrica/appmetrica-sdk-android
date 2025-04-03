@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 
 public enum EventSource {
 
-    NATIVE(0), JS(1);
+    NATIVE(0), JS(1), SYSTEM(2);
 
     public final int code;
 

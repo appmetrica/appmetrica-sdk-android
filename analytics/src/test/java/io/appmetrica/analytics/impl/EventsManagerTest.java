@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.impl;
 
 import android.util.Base64;
+import io.appmetrica.analytics.ModuleEvent;
 import io.appmetrica.analytics.PreloadInfo;
 import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoWrapper;
 import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
@@ -46,28 +47,38 @@ public class EventsManagerTest extends CommonTest {
 
     @Test
     public void testCustomEventReportEntryShouldContainsCustomReportType() {
-        assertThat(EventsManager.customEventReportEntry(new Random().nextInt(), null, null, null, null, mPublicLogger).getType())
+        ModuleEvent moduleEvent = ModuleEvent.newBuilder(new Random().nextInt()).build();
+        assertThat(EventsManager.customEventReportEntry(moduleEvent, mPublicLogger).getType())
             .isEqualTo(InternalEvents.EVENT_TYPE_CUSTOM_EVENT.getTypeId());
     }
 
     @Test
     public void testCustomEventReportEntryShouldContainsExpectedSubtype() {
         int type = new Random().nextInt();
-        CounterReport report = EventsManager.customEventReportEntry(type, null, null, null, null, mPublicLogger);
+        CounterReport report = EventsManager.customEventReportEntry(
+            ModuleEvent.newBuilder(type).build(),
+            mPublicLogger
+        );
         assertThat(report.getCustomType()).isEqualTo(type);
     }
 
     @Test
     public void testCustomEventReportEntryShouldContainsExpectedName() {
         String name = new RandomStringGenerator(20).nextString();
-        CounterReport report = EventsManager.customEventReportEntry(new Random().nextInt(), name, null, null, null, mPublicLogger);
+        CounterReport report = EventsManager.customEventReportEntry(
+            ModuleEvent.newBuilder(new Random().nextInt()).withName(name).build(),
+            mPublicLogger
+        );
         assertThat(report.getName()).isEqualTo(name);
     }
 
     @Test
     public void testCustomEventReportEntryShouldContainsExpectedValue() {
         String value = new RandomStringGenerator(1000).nextString();
-        CounterReport report = EventsManager.customEventReportEntry(new Random().nextInt(), null, value, null, null, mPublicLogger);
+        CounterReport report = EventsManager.customEventReportEntry(
+            ModuleEvent.newBuilder(new Random().nextInt()).withValue(value).build(),
+            mPublicLogger
+        );
         assertThat(report.getValue()).isEqualTo(value);
     }
 
@@ -77,7 +88,10 @@ public class EventsManagerTest extends CommonTest {
         String envValue = new RandomStringGenerator(100).nextString();
         Map<String, Object> environment = new HashMap<String, Object>();
         environment.put(envKey, envValue);
-        CounterReport report = EventsManager.customEventReportEntry(new Random().nextInt(), null, null, environment, null, mPublicLogger);
+        CounterReport report = EventsManager.customEventReportEntry(
+            ModuleEvent.newBuilder(new Random().nextInt()).withEnvironment(environment).build(),
+            mPublicLogger
+        );
         JSONObject jsonObject = new JSONObject(report.getEventEnvironment());
         assertThat(jsonObject.keys().next()).isEqualTo(envKey);
         assertThat(jsonObject.get(envKey)).isEqualTo(envValue);
@@ -86,7 +100,10 @@ public class EventsManagerTest extends CommonTest {
     @Test
     public void customEventReportEntryExtras() throws Exception {
         Map<String, byte[]> extras = Collections.singletonMap("key", new byte[]{2, 6, 8});
-        CounterReport report = EventsManager.customEventReportEntry(123, null, null, null, extras, mPublicLogger);
+        CounterReport report = EventsManager.customEventReportEntry(
+            ModuleEvent.newBuilder(new Random().nextInt()).withExtras(extras).build(),
+            mPublicLogger
+        );
         assertThat(report.getExtras()).isEqualTo(extras);
     }
 

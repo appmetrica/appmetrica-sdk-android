@@ -636,6 +636,25 @@ class ToStringTest(
                     ),
                     0,
                     "filled value"
+                ),
+                arrayOf(
+                    ModuleEvent::class.java,
+                    ModuleEvent.newBuilder(10).build(),
+                    0,
+                    "empty value"
+                ),
+                arrayOf(
+                    ModuleEvent::class.java,
+                    ModuleEvent.newBuilder(10)
+                        .withCategory(ModuleEvent.Category.SYSTEM)
+                        .withName("Event name")
+                        .withValue("Event value")
+                        .withAttributes(mapOf("key" to "value"))
+                        .withExtras(mapOf("key" to "value".toByteArray()))
+                        .withEnvironment(mapOf("key" to "value"))
+                        .build(),
+                    0,
+                    "filled value"
                 )
             )
         }

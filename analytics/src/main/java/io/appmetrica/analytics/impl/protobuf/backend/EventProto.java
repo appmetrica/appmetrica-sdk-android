@@ -518,6 +518,7 @@ public interface EventProto {
         // enum EventSource
         public static final int NATIVE = 0;
         public static final int JS = 1;
+        public static final int SDK_SYSTEM = 2;
 
         public static final class NetworkInfo extends
             io.appmetrica.analytics.protobuf.nano.MessageNano {
@@ -1083,6 +1084,7 @@ public interface EventProto {
                 switch (value) {
                   case EventProto.ReportMessage.Session.Event.NATIVE:
                   case EventProto.ReportMessage.Session.Event.JS:
+                  case EventProto.ReportMessage.Session.Event.SDK_SYSTEM:
                     this.source = value;
                     break;
                 }

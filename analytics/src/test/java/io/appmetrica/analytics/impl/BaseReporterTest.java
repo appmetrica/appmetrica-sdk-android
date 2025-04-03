@@ -4,6 +4,7 @@ import io.appmetrica.analytics.AdRevenue;
 import io.appmetrica.analytics.ModuleEvent;
 import io.appmetrica.analytics.Revenue;
 import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
+import io.appmetrica.analytics.coreutils.internal.logger.LoggerStorage;
 import io.appmetrica.analytics.ecommerce.ECommerceEvent;
 import io.appmetrica.analytics.impl.crash.AppMetricaThrowable;
 import io.appmetrica.analytics.impl.crash.PluginErrorDetailsConverter;
@@ -23,12 +24,11 @@ import io.appmetrica.analytics.impl.protobuf.backend.CrashAndroid;
 import io.appmetrica.analytics.impl.protobuf.backend.Userprofile;
 import io.appmetrica.analytics.impl.revenue.ad.AdRevenueWrapper;
 import io.appmetrica.analytics.impl.service.AppMetricaServiceDataReporter;
-import io.appmetrica.analytics.coreutils.internal.logger.LoggerStorage;
-import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.impl.utils.limitation.SimpleMapLimitation;
 import io.appmetrica.analytics.impl.utils.validation.ValidationResult;
 import io.appmetrica.analytics.impl.utils.validation.Validator;
 import io.appmetrica.analytics.impl.utils.validation.revenue.RevenueValidator;
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.plugins.PluginErrorDetails;
 import io.appmetrica.analytics.profile.Attribute;
 import io.appmetrica.analytics.profile.UserProfile;
@@ -70,11 +70,9 @@ import static io.appmetrica.analytics.impl.TestsData.TEST_ERROR_ENVIRONMENT_VALU
 import static junit.framework.Assert.assertTrue;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
@@ -650,8 +648,7 @@ public abstract class BaseReporterTest extends BaseReporterData {
             .withAttributes(attributes)
             .build();
 
-        when(EventsManager.customEventReportEntry(eventType,
-                eventName, eventValue, expectedEnvironment, extras, mPublicLogger)).thenReturn(mockedEvent);
+        when(EventsManager.customEventReportEntry(moduleEvent, mPublicLogger)).thenReturn(mockedEvent);
         getReporter().reportEvent(moduleEvent);
         verify(mReportsHandler).reportEvent(
             same(mockedEvent),
@@ -676,8 +673,7 @@ public abstract class BaseReporterTest extends BaseReporterData {
             .withAttributes(attributes)
             .build();
 
-        when(EventsManager.customEventReportEntry(eventType,
-                eventName, eventValue, null, null, mPublicLogger)).thenReturn(mockedEvent);
+        when(EventsManager.customEventReportEntry(moduleEvent, mPublicLogger)).thenReturn(mockedEvent);
         getReporter().reportEvent(moduleEvent);
         verify(mReportsHandler).reportEvent(
             same(mockedEvent),
@@ -761,9 +757,7 @@ public abstract class BaseReporterTest extends BaseReporterData {
                 .withAttributes(new HashMap<String, Object>())
                 .build();
 
-            when(EventsManager.customEventReportEntry(anyInt(), anyString(), anyString(), nullable(Map.class),
-                nullable(Map.class), any(PublicLogger.class)))
-                .thenReturn(mockedEvent);
+            when(EventsManager.customEventReportEntry(any(), any(PublicLogger.class))).thenReturn(mockedEvent);
             mReporter.reportEvent(moduleEvent);
             verify(mReportsHandler, times(mWantedNumbersOfInvocation))
                 .reportEvent(

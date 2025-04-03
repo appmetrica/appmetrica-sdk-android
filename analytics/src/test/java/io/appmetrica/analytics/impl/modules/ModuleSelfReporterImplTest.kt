@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.impl.modules
 
 import io.appmetrica.analytics.ModuleEvent
+import io.appmetrica.analytics.ModuleEvent.Category
 import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
 import io.appmetrica.analytics.impl.IReporterExtended
 import io.appmetrica.analytics.impl.protobuf.backend.EventProto
@@ -54,6 +55,7 @@ class ModuleSelfReporterImplTest : CommonTest() {
             .withPrivateFields(true)
             .checkField("type", "getType", clientEventType)
             .checkField("serviceDataReporterType", AppMetricaServiceDataReporter.TYPE_CORE)
+            .checkField("category", "getCategory", Category.GENERAL)
             .checkField("name", "getName", eventName)
             .checkField("value", "getValue", null)
             .checkField("environment", "getEnvironment", null)
@@ -73,6 +75,7 @@ class ModuleSelfReporterImplTest : CommonTest() {
             .withPrivateFields(true)
             .checkField("type", "getType", clientEventType)
             .checkField("serviceDataReporterType", AppMetricaServiceDataReporter.TYPE_CORE)
+            .checkField("category", "getCategory", Category.GENERAL)
             .checkField("name", "getName", eventName)
             .checkField("value", "getValue", null)
             .checkField("environment", "getEnvironment", null)
@@ -94,6 +97,7 @@ class ModuleSelfReporterImplTest : CommonTest() {
             .checkField("name", eventName)
             .checkField("value", stringValue)
             .checkField("serviceDataReporterType", AppMetricaServiceDataReporter.TYPE_CORE)
+            .checkField("category", "getCategory", Category.GENERAL)
             .checkFieldsAreNull("environment", "extras", "attributes")
             .checkAll()
     }
@@ -111,6 +115,7 @@ class ModuleSelfReporterImplTest : CommonTest() {
             .checkField("name", eventName)
             .checkField("value", stringValue)
             .checkField("serviceDataReporterType", AppMetricaServiceDataReporter.TYPE_CORE)
+            .checkField("category", "getCategory", Category.GENERAL)
             .checkFieldsAreNull("environment", "extras", "attributes")
             .checkAll()
     }

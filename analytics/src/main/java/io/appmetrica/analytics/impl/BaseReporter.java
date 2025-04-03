@@ -290,11 +290,7 @@ public abstract class BaseReporter implements IBaseReporter {
             );
         } else {
             final CounterReport event = EventsManager.customEventReportEntry(
-                moduleEvent.getType(),
-                moduleEvent.getName(),
-                moduleEvent.getValue(),
-                moduleEvent.getEnvironment(),
-                moduleEvent.getExtras(),
+                moduleEvent,
                 mPublicLogger
             );
             mReportsHandler.reportEvent(

@@ -92,14 +92,14 @@ public class EventPreparer {
 
     static {
         HashMap<FirstOccurrenceStatus, Integer> uniquenessStatusToProtobufMapping =
-                new HashMap<FirstOccurrenceStatus, Integer>();
+            new HashMap<FirstOccurrenceStatus, Integer>();
         uniquenessStatusToProtobufMapping.put(FirstOccurrenceStatus.FIRST_OCCURRENCE,
-                EventProto.ReportMessage.OPTIONAL_BOOL_TRUE);
+            EventProto.ReportMessage.OPTIONAL_BOOL_TRUE);
         uniquenessStatusToProtobufMapping.put(FirstOccurrenceStatus.NON_FIRST_OCCURENCE,
-                EventProto.ReportMessage.OPTIONAL_BOOL_FALSE);
+            EventProto.ReportMessage.OPTIONAL_BOOL_FALSE);
         uniquenessStatusToProtobufMapping.put(
-                FirstOccurrenceStatus.UNKNOWN,
-                EventProto.ReportMessage.OPTIONAL_BOOL_UNDEFINED
+            FirstOccurrenceStatus.UNKNOWN,
+            EventProto.ReportMessage.OPTIONAL_BOOL_UNDEFINED
         );
         UNIQUENESS_STATUS_TO_PROTOBUF_MAPPING = Collections.unmodifiableMap(uniquenessStatusToProtobufMapping);
     }
@@ -164,8 +164,8 @@ public class EventPreparer {
         final EventProto.ReportMessage.Session.Event eventBuilder = new EventProto.ReportMessage.Session.Event();
 
         final EventProto.ReportMessage.Session.Event.NetworkInfo networkInfo = networkInfoComposer.getNetworkInfo(
-                value.getConnectionType(),
-                value.getCellularConnectionType()
+            value.getConnectionType(),
+            value.getCellularConnectionType()
         );
         final EventProto.ReportMessage.Location locationInfo =
             locationInfoComposer.getLocation(value.getLocationData());
@@ -218,7 +218,17 @@ public class EventPreparer {
         }
 
         if (value.getSource() != null) {
-            eventBuilder.source = value.getSource().code;
+            switch (value.getSource()) {
+                case NATIVE:
+                    eventBuilder.source = EventProto.ReportMessage.Session.Event.NATIVE;
+                    break;
+                case JS:
+                    eventBuilder.source = EventProto.ReportMessage.Session.Event.JS;
+                    break;
+                case SYSTEM:
+                    eventBuilder.source = EventProto.ReportMessage.Session.Event.SDK_SYSTEM;
+                    break;
+            }
         }
         if (value.getAttributionIdChanged() != null) {
             eventBuilder.attributionIdChanged = value.getAttributionIdChanged();
