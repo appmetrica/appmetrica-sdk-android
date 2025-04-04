@@ -21,6 +21,7 @@ class DefaultScreenshotCaptorCallback(
                         Constants.Events.CAPTOR_TYPE_KEY to captorType
                     )
                 )
+                .withCategory(InternalModuleEvent.Category.SYSTEM)
                 .build()
         )
     }

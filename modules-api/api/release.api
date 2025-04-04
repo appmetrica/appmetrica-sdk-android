@@ -122,6 +122,7 @@ public final class io.appmetrica.analytics.modulesapi.internal.common.InternalMo
     public static final [NonNull] io.appmetrica.analytics.modulesapi.internal.common.InternalModuleEvent$Companion Companion
 
     public final [Nullable] java.util.Map<String, Object> getAttributes()
+    public final [Nullable] io.appmetrica.analytics.modulesapi.internal.common.InternalModuleEvent$Category getCategory()
     public final [Nullable] java.util.Map<String, Object> getEnvironment()
     public final [Nullable] java.util.Map<String, byte[]> getExtras()
     public final [Nullable] String getName()
@@ -136,6 +137,7 @@ public static final class io.appmetrica.analytics.modulesapi.internal.common.Int
     public <init>(int)
     public [NonNull] io.appmetrica.analytics.modulesapi.internal.common.InternalModuleEvent build()
     public final [Nullable] java.util.Map<String, Object> getAttributes()
+    public final [Nullable] io.appmetrica.analytics.modulesapi.internal.common.InternalModuleEvent$Category getCategory()
     public final [Nullable] java.util.Map<String, Object> getEnvironment()
     public final [Nullable] java.util.Map<String, byte[]> getExtras()
     public final [Nullable] String getName()
@@ -143,17 +145,26 @@ public static final class io.appmetrica.analytics.modulesapi.internal.common.Int
     public final int getType$modules_api_release()
     public final [Nullable] String getValue()
     public final void setAttributes([Nullable] java.util.Map<String, ? extends Object>)
+    public final void setCategory([Nullable] io.appmetrica.analytics.modulesapi.internal.common.InternalModuleEvent$Category)
     public final void setEnvironment([Nullable] java.util.Map<String, ? extends Object>)
     public final void setExtras([Nullable] java.util.Map<String, byte[]>)
     public final void setName([Nullable] String)
     public final void setServiceDataReporterType([Nullable] Integer)
     public final void setValue([Nullable] String)
     public final [NonNull] io.appmetrica.analytics.modulesapi.internal.common.InternalModuleEvent$Builder withAttributes([Nullable] java.util.Map<String, ? extends Object>)
+    public final [NonNull] io.appmetrica.analytics.modulesapi.internal.common.InternalModuleEvent$Builder withCategory([NonNull] io.appmetrica.analytics.modulesapi.internal.common.InternalModuleEvent$Category)
     public final [NonNull] io.appmetrica.analytics.modulesapi.internal.common.InternalModuleEvent$Builder withEnvironment([Nullable] java.util.Map<String, ? extends Object>)
     public final [NonNull] io.appmetrica.analytics.modulesapi.internal.common.InternalModuleEvent$Builder withExtras([Nullable] java.util.Map<String, byte[]>)
     public final [NonNull] io.appmetrica.analytics.modulesapi.internal.common.InternalModuleEvent$Builder withName([Nullable] String)
     public final [NonNull] io.appmetrica.analytics.modulesapi.internal.common.InternalModuleEvent$Builder withServiceDataReporterType(int)
     public final [NonNull] io.appmetrica.analytics.modulesapi.internal.common.InternalModuleEvent$Builder withValue([Nullable] String)
+}
+
+public enum io.appmetrica.analytics.modulesapi.internal.common.InternalModuleEvent$Category {
+    GENERAL, SYSTEM
+
+    public static io.appmetrica.analytics.modulesapi.internal.common.InternalModuleEvent$Category valueOf(String)
+    public static io.appmetrica.analytics.modulesapi.internal.common.InternalModuleEvent$Category[] values()
 }
 
 public static final class io.appmetrica.analytics.modulesapi.internal.common.InternalModuleEvent$Companion {

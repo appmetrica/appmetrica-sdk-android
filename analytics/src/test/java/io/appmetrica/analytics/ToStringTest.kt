@@ -655,7 +655,7 @@ class ToStringTest(
                         .build(),
                     0,
                     "filled value"
-                )
+                ),
             )
         }
     }

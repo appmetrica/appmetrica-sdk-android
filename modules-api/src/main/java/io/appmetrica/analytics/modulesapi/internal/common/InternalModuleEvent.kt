@@ -7,6 +7,10 @@ import io.appmetrica.analytics.coreutils.internal.collection.CollectionUtils
  */
 class InternalModuleEvent private constructor(builder: Builder) {
 
+    public enum class Category {
+        GENERAL, SYSTEM
+    }
+
     /**
      * @return event type
      */
@@ -26,6 +30,11 @@ class InternalModuleEvent private constructor(builder: Builder) {
      * @return the way this event will be tracked
      */
     val serviceDataReporterType: Int? = builder.serviceDataReporterType
+
+    /**
+     * @return event category
+     */
+    val category: Category? = builder.category
 
     private val environment: List<Map.Entry<String, Any>>? = CollectionUtils.getListFromMap(builder.environment)
     private val extras: List<Map.Entry<String, ByteArray>>? = CollectionUtils.getListFromMap(builder.extras)
@@ -58,6 +67,7 @@ class InternalModuleEvent private constructor(builder: Builder) {
             ", name='" + name + '\'' +
             ", value='" + value + '\'' +
             ", serviceDataReporterType=" + serviceDataReporterType +
+            ", category=" + category +
             ", environment=" + environment +
             ", extras=" + extras +
             ", attributes=" + attributes +
@@ -71,6 +81,7 @@ class InternalModuleEvent private constructor(builder: Builder) {
         var name: String? = null
         var value: String? = null
         var serviceDataReporterType: Int? = null
+        var category: Category? = null
         var environment: Map<String, Any>? = null
         var extras: Map<String, ByteArray>? = null
         var attributes: Map<String, Any>? = null
@@ -106,6 +117,17 @@ class InternalModuleEvent private constructor(builder: Builder) {
          */
         fun withServiceDataReporterType(serviceDataReporterType: Int): Builder {
             this.serviceDataReporterType = serviceDataReporterType
+            return this
+        }
+
+        /**
+         * Sets event category.
+         *
+         * @param category [Category] value of event category
+         * @return same [Builder] object
+         */
+        fun withCategory(category: Category): Builder {
+            this.category = category
             return this
         }
 

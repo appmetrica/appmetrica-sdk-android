@@ -20,6 +20,11 @@ class InternalClientModuleProxy : InternalClientModuleFacade {
                     withServiceDataReporterType(it)
                 }
             }
+            .apply {
+                internalModuleEvent.category?.toModuleEventCategory()?.let {
+                    withCategory(it)
+                }
+            }
             .withExtras(internalModuleEvent.getExtras())
             .withAttributes(internalModuleEvent.getAttributes())
             .withEnvironment(internalModuleEvent.getEnvironment())
@@ -29,5 +34,11 @@ class InternalClientModuleProxy : InternalClientModuleFacade {
 
     override fun reportAdRevenue(moduleAdRevenue: ModuleAdRevenue) {
         ModulesFacade.reportAdRevenue(converter.convert(moduleAdRevenue), moduleAdRevenue.autoCollected)
+    }
+
+    private fun InternalModuleEvent.Category?.toModuleEventCategory(): ModuleEvent.Category? = when (this) {
+        InternalModuleEvent.Category.SYSTEM -> ModuleEvent.Category.SYSTEM
+        InternalModuleEvent.Category.GENERAL -> ModuleEvent.Category.GENERAL
+        else -> null
     }
 }
