@@ -75,35 +75,35 @@ class ServiceScreenshotCaptorTest : CommonTest() {
     @Test
     fun startCapture() {
         captor.startCapture()
-        verify(activityLifecycleRegistry).registerListener(any(), eq(ActivityEvent.STARTED), eq(ActivityEvent.STOPPED))
+        verify(activityLifecycleRegistry).registerListener(any(), eq(ActivityEvent.RESUMED), eq(ActivityEvent.PAUSED))
     }
 
     @Test
-    fun listenerOnActivityStartedIfConfigIsNull() {
+    fun listenerOnActivityResumedIfConfigIsNull() {
         val activityListener = getActivityListener()
-        activityListener.onEvent(mock(), ActivityEvent.STARTED)
+        activityListener.onEvent(mock(), ActivityEvent.RESUMED)
 
         verifyNoInteractions(handler)
     }
 
     @Test
-    fun listenerOnActivityStartedIfCaptorIsDisabled() {
+    fun listenerOnActivityPausedIfCaptorIsDisabled() {
         whenever(clientSideConfig.enabled).thenReturn(false)
 
         val activityListener = getActivityListener()
         captor.updateConfig(clientSideScreenshotConfig)
-        activityListener.onEvent(mock(), ActivityEvent.STARTED)
+        activityListener.onEvent(mock(), ActivityEvent.RESUMED)
 
         verifyNoInteractions(handler)
     }
 
     @Test
-    fun listenerOnActivityStarted() {
+    fun listenerOnActivityPaused() {
         whenever(clientSideConfig.enabled).thenReturn(true)
 
         val activityListener = getActivityListener()
         captor.updateConfig(clientSideScreenshotConfig)
-        activityListener.onEvent(mock(), ActivityEvent.STARTED)
+        activityListener.onEvent(mock(), ActivityEvent.RESUMED)
 
         verify(handler).postDelayed(
             any(),
@@ -112,13 +112,13 @@ class ServiceScreenshotCaptorTest : CommonTest() {
     }
 
     @Test
-    fun listenerOnActivityStartedIfExceptionThrown() {
+    fun listenerOnActivityPausedIfExceptionThrown() {
         whenever(clientSideConfig.enabled).thenReturn(true)
         whenever(handler.postDelayed(any(), anyLong())).thenThrow(RuntimeException())
 
         val activityListener = getActivityListener()
         captor.updateConfig(clientSideScreenshotConfig)
-        activityListener.onEvent(mock(), ActivityEvent.STARTED)
+        activityListener.onEvent(mock(), ActivityEvent.RESUMED)
 
         verify(handler).postDelayed(
             any(),
@@ -127,17 +127,17 @@ class ServiceScreenshotCaptorTest : CommonTest() {
     }
 
     @Test
-    fun listenerOnActivityStoppedIfConfigIsNull() {
+    fun listenerOnActivityPausedIfConfigIsNull() {
         val activityListener = getActivityListener()
-        activityListener.onEvent(mock(), ActivityEvent.STOPPED)
+        activityListener.onEvent(mock(), ActivityEvent.PAUSED)
     }
 
     @Test
-    fun serviceSearcherIfStopped() {
+    fun serviceSearcherIfPaused() {
         val activityListener = getActivityListener()
         val serviceSearcher = getServiceSearcher(activityListener)
 
-        activityListener.onEvent(mock(), ActivityEvent.STOPPED)
+        activityListener.onEvent(mock(), ActivityEvent.PAUSED)
         serviceSearcher.run()
 
         systemServiceUtilsRule.staticMock.verifyNoInteractions()
@@ -258,8 +258,8 @@ class ServiceScreenshotCaptorTest : CommonTest() {
         captor.startCapture()
         verify(activityLifecycleRegistry).registerListener(
             activityLifecycleListenerCaptor.capture(),
-            eq(ActivityEvent.STARTED),
-            eq(ActivityEvent.STOPPED)
+            eq(ActivityEvent.RESUMED),
+            eq(ActivityEvent.PAUSED)
         )
         return activityLifecycleListenerCaptor.firstValue
     }
@@ -268,7 +268,7 @@ class ServiceScreenshotCaptorTest : CommonTest() {
         whenever(clientSideConfig.enabled).thenReturn(true)
 
         captor.updateConfig(clientSideScreenshotConfig)
-        activityListener.onEvent(mock(), ActivityEvent.STARTED)
+        activityListener.onEvent(mock(), ActivityEvent.RESUMED)
 
         verify(handler).postDelayed(
             serviceSearcherCaptor.capture(),

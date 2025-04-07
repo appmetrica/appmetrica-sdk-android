@@ -153,11 +153,13 @@ public class ActivityLifecycleManager extends DefaultActivityLifecycleCallbacks 
     }
 
     private void notifyListeners(@NonNull ActivityEvent state, @NonNull Activity activity) {
+        DebugLogger.INSTANCE.info(TAG, "notify listeners for %s", state);
         Collection<ActivityLifecycleListener> eventListeners;
         synchronized (this) {
             eventListeners = listeners.get(state);
         }
         if (eventListeners != null) {
+            DebugLogger.INSTANCE.info(TAG, "notify %d listeners for %s", eventListeners.size(), state);
             for (ActivityLifecycleListener listener : eventListeners) {
                 listener.onEvent(activity, state);
             }

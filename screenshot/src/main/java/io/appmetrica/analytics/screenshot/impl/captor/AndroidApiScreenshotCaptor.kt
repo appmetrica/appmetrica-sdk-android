@@ -58,6 +58,7 @@ class AndroidApiScreenshotCaptor(
                                 DebugLogger.error(tag, e)
                             }
                         }
+
                         ActivityEvent.STOPPED -> {
                             DebugLogger.info(tag, "Activity stopped")
                             try {
@@ -66,6 +67,7 @@ class AndroidApiScreenshotCaptor(
                                 DebugLogger.error(tag, e)
                             }
                         }
+
                         else -> {
                             DebugLogger.info(tag, "Unknown event: $event")
                         }

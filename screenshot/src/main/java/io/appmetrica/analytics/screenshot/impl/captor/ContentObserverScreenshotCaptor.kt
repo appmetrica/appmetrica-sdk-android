@@ -34,9 +34,9 @@ class ContentObserverScreenshotCaptor(
                 override fun onEvent(activity: Activity, event: ActivityEvent) {
                     DebugLogger.info(tag, "onEvent $event")
                     when (event) {
-                        ActivityEvent.STARTED -> {
+                        ActivityEvent.RESUMED -> {
                             val localConfig = contentObserverCaptorConfig
-                            DebugLogger.info(tag, "Activity started $localConfig")
+                            DebugLogger.info(tag, "Activity resumed $localConfig")
                             if (localConfig?.enabled != true) {
                                 DebugLogger.info(tag, "Captor is disabled")
                                 return
@@ -51,8 +51,9 @@ class ContentObserverScreenshotCaptor(
                                 DebugLogger.error(tag, e)
                             }
                         }
-                        ActivityEvent.STOPPED -> {
-                            DebugLogger.info(tag, "Activity stopped")
+
+                        ActivityEvent.PAUSED -> {
+                            DebugLogger.info(tag, "Activity paused")
                             try {
                                 clientContext.context.contentResolver.unregisterContentObserver(
                                     screenshotObserver
@@ -61,14 +62,15 @@ class ContentObserverScreenshotCaptor(
                                 DebugLogger.error(tag, e)
                             }
                         }
+
                         else -> {
                             DebugLogger.info(tag, "Unknown event: $event")
                         }
                     }
                 }
             },
-            ActivityEvent.STARTED,
-            ActivityEvent.STOPPED
+            ActivityEvent.RESUMED,
+            ActivityEvent.PAUSED
         )
     }
 

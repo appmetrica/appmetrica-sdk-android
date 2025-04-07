@@ -12,7 +12,6 @@ import io.appmetrica.analytics.modulesapi.internal.client.ClientContext
 import io.appmetrica.analytics.modulesapi.internal.client.ModuleClientExecutorProvider
 import io.appmetrica.analytics.screenshot.impl.ScreenshotObserver
 import io.appmetrica.analytics.screenshot.impl.callback.ScreenshotCaptorCallback
-import io.appmetrica.analytics.screenshot.impl.config.client.model.ClientSideApiCaptorConfig
 import io.appmetrica.analytics.screenshot.impl.config.client.model.ClientSideContentObserverCaptorConfig
 import io.appmetrica.analytics.screenshot.impl.config.client.model.ClientSideScreenshotConfig
 import io.appmetrica.analytics.testutils.CommonTest
@@ -74,35 +73,35 @@ class ContentObserverScreenshotCaptorTest : CommonTest() {
     @Test
     fun startCapture() {
         captor.startCapture()
-        verify(activityLifecycleRegistry).registerListener(any(), eq(ActivityEvent.STARTED), eq(ActivityEvent.STOPPED))
+        verify(activityLifecycleRegistry).registerListener(any(), eq(ActivityEvent.RESUMED), eq(ActivityEvent.PAUSED))
     }
 
     @Test
-    fun listenerOnActivityStartedIfConfigIsNull() {
+    fun listenerOnActivityResumedIfConfigIsNull() {
         val activityListener = getActivityListener()
-        activityListener.onEvent(mock(), ActivityEvent.STARTED)
+        activityListener.onEvent(mock(), ActivityEvent.RESUMED)
 
         verifyNoInteractions(contentResolver)
     }
 
     @Test
-    fun listenerOnActivityStartedIfCaptorIsDisabled() {
+    fun listenerOnActivityResumedIfCaptorIsDisabled() {
         whenever(clientSideConfig.enabled).thenReturn(false)
 
         val activityListener = getActivityListener()
         captor.updateConfig(clientSideScreenshotConfig)
-        activityListener.onEvent(mock(), ActivityEvent.STARTED)
+        activityListener.onEvent(mock(), ActivityEvent.RESUMED)
 
         verifyNoInteractions(contentResolver)
     }
 
     @Test
-    fun listenerOnActivityStarted() {
+    fun listenerOnActivityResumed() {
         whenever(clientSideConfig.enabled).thenReturn(true)
 
         val activityListener = getActivityListener()
         captor.updateConfig(clientSideScreenshotConfig)
-        activityListener.onEvent(mock(), ActivityEvent.STARTED)
+        activityListener.onEvent(mock(), ActivityEvent.RESUMED)
 
         verify(contentResolver).registerContentObserver(
             eq(MediaStore.Images.Media.EXTERNAL_CONTENT_URI),
@@ -112,13 +111,13 @@ class ContentObserverScreenshotCaptorTest : CommonTest() {
     }
 
     @Test
-    fun listenerOnActivityStartedIfExceptionThrown() {
+    fun listenerOnActivityResumedIfExceptionThrown() {
         whenever(clientSideConfig.enabled).thenReturn(true)
         whenever(contentResolver.registerContentObserver(any(), anyBoolean(), any())).thenThrow(RuntimeException())
 
         val activityListener = getActivityListener()
         captor.updateConfig(clientSideScreenshotConfig)
-        activityListener.onEvent(mock(), ActivityEvent.STARTED)
+        activityListener.onEvent(mock(), ActivityEvent.RESUMED)
 
         verify(contentResolver).registerContentObserver(
             eq(MediaStore.Images.Media.EXTERNAL_CONTENT_URI),
@@ -128,9 +127,9 @@ class ContentObserverScreenshotCaptorTest : CommonTest() {
     }
 
     @Test
-    fun listenerOnActivityStoppedIfConfigIsNull() {
+    fun listenerOnActivityPausedIfConfigIsNull() {
         val activityListener = getActivityListener()
-        activityListener.onEvent(mock(), ActivityEvent.STOPPED)
+        activityListener.onEvent(mock(), ActivityEvent.PAUSED)
 
         verify(contentResolver).unregisterContentObserver(
             screenshotObserverRule.constructionMock.constructed().first()
@@ -138,11 +137,11 @@ class ContentObserverScreenshotCaptorTest : CommonTest() {
     }
 
     @Test
-    fun listenerOnActivityStoppedIfExceptionThrown() {
+    fun listenerOnActivityPausedIfExceptionThrown() {
         whenever(contentResolver.unregisterContentObserver(any())).thenThrow(RuntimeException())
 
         val activityListener = getActivityListener()
-        activityListener.onEvent(mock(), ActivityEvent.STOPPED)
+        activityListener.onEvent(mock(), ActivityEvent.PAUSED)
 
         verify(contentResolver).unregisterContentObserver(any())
     }
@@ -150,7 +149,7 @@ class ContentObserverScreenshotCaptorTest : CommonTest() {
     @Test
     fun listenerOnActivityOtherEventIfConfigIsNull() {
         val activityListener = getActivityListener()
-        activityListener.onEvent(mock(), ActivityEvent.PAUSED)
+        activityListener.onEvent(mock(), ActivityEvent.CREATED)
 
         verifyNoInteractions(contentResolver)
     }
@@ -159,8 +158,8 @@ class ContentObserverScreenshotCaptorTest : CommonTest() {
         captor.startCapture()
         verify(activityLifecycleRegistry).registerListener(
             activityLifecycleListenerCaptor.capture(),
-            eq(ActivityEvent.STARTED),
-            eq(ActivityEvent.STOPPED)
+            eq(ActivityEvent.RESUMED),
+            eq(ActivityEvent.PAUSED)
         )
         return activityLifecycleListenerCaptor.firstValue
     }
