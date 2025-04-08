@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.impl.proxy
 
 import android.content.Context
+import io.appmetrica.analytics.AppMetricaLibraryAdapterConfig
 import io.appmetrica.analytics.ModulesFacade
 import io.appmetrica.analytics.impl.ClientServiceLocator
 import io.appmetrica.analytics.impl.events.LibraryEventConstructor
@@ -23,10 +24,26 @@ class AppMetricaLibraryAdapterProxy {
     fun activate(context: Context) {
         if (barrier.activate(context)) {
             DebugLogger.info(tag, "Activate")
-            val applicationContext = context.applicationContext
-            synchronousStageExecutor.activate(applicationContext)
+            synchronousStageExecutor.activate(context.applicationContext)
         } else {
             ImportantLogger.info(tag, "Activation failed due to context is null")
+        }
+    }
+
+    fun activate(context: Context, config: AppMetricaLibraryAdapterConfig) {
+        if (barrier.activate(context, config)) {
+            DebugLogger.info(tag, "Activate with config: $config")
+            synchronousStageExecutor.activate(context.applicationContext, config)
+        } else {
+            ImportantLogger.info(tag, "Activation failed due to context is null or invalid config")
+        }
+    }
+
+    fun setAdvIdentifiersTracking(enabled: Boolean) {
+        if (barrier.setAdvIdentifiersTracking(enabled)) {
+            DebugLogger.info(tag, "SetAdvIdentifiersTracking with enabled: $enabled")
+            synchronousStageExecutor.setAdvIdentifiersTracking(enabled)
+            ModulesFacade.setAdvIdentifiersTracking(enabled)
         }
     }
 

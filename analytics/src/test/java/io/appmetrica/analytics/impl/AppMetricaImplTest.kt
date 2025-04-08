@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.os.Handler
 import io.appmetrica.analytics.AdvIdentifiersResult
 import io.appmetrica.analytics.AppMetricaConfig
+import io.appmetrica.analytics.AppMetricaLibraryAdapterConfig
 import io.appmetrica.analytics.DeferredDeeplinkListener
 import io.appmetrica.analytics.DeferredDeeplinkParametersListener
 import io.appmetrica.analytics.ReporterConfig
@@ -92,10 +93,12 @@ internal class AppMetricaImplTest : CommonTest() {
     private val anonymousConfig: AppMetricaConfig =
         AppMetricaConfig.newConfigBuilder(UUID.randomUUID().toString()).build()
 
+    private val appMetricaLibraryAdapterConfig: AppMetricaLibraryAdapterConfig = mock()
+
     @get:Rule
     val anonymousConfigProviderMockedConstructionRule =
         constructionRule<AppMetricaConfigForAnonymousActivationProvider> {
-            on { config } doReturn anonymousConfig
+            on { getConfig(appMetricaLibraryAdapterConfig) } doReturn anonymousConfig
         }
 
     private val apiKey = UUID.randomUUID().toString()
@@ -203,20 +206,20 @@ internal class AppMetricaImplTest : CommonTest() {
 
     @Test
     fun `activate anonymously - request referrer`() {
-        impl.activateAnonymously()
+        impl.activateAnonymously(appMetricaLibraryAdapterConfig)
         verify(referrerHelper).maybeRequestReferrer()
     }
 
     @Test
     fun `activate anonymously twice - request referrer`() {
-        impl.activateAnonymously()
+        impl.activateAnonymously(appMetricaLibraryAdapterConfig)
         clearInvocations(referrerHelper)
         verifyNoInteractions(referrerHelper)
     }
 
     @Test
     fun `activate after activate anonymously - request referrer`() {
-        impl.activateAnonymously()
+        impl.activateAnonymously(appMetricaLibraryAdapterConfig)
         clearInvocations(referrerHelper)
         impl.activate(config)
         verifyNoInteractions(referrerHelper)
@@ -226,7 +229,7 @@ internal class AppMetricaImplTest : CommonTest() {
     fun `activate anonymously after activate - request referrer`() {
         impl.activate(config)
         clearInvocations(referrerHelper)
-        impl.activateAnonymously()
+        impl.activateAnonymously(appMetricaLibraryAdapterConfig)
         verifyNoInteractions(referrerHelper)
     }
 
@@ -251,7 +254,7 @@ internal class AppMetricaImplTest : CommonTest() {
 
     @Test
     fun `activate anonymously - setup startup helper`() {
-        impl.activateAnonymously()
+        impl.activateAnonymously(appMetricaLibraryAdapterConfig)
         verify(startupHelper).setPublicLogger(publicOrAnonymousLogger)
         verify(startupHelper).setCustomHosts(null)
         verify(startupHelper).clids = null
@@ -262,9 +265,9 @@ internal class AppMetricaImplTest : CommonTest() {
 
     @Test
     fun `activate anonymously twice - setup startup helper`() {
-        impl.activateAnonymously()
+        impl.activateAnonymously(appMetricaLibraryAdapterConfig)
         clearInvocations(startupHelper)
-        impl.activateAnonymously()
+        impl.activateAnonymously(appMetricaLibraryAdapterConfig)
         verifyNoInteractions(startupHelper)
     }
 
@@ -272,13 +275,13 @@ internal class AppMetricaImplTest : CommonTest() {
     fun `activate anonymously after activate - setup startup helper`() {
         impl.activate(config)
         clearInvocations(startupHelper)
-        impl.activateAnonymously()
+        impl.activateAnonymously(appMetricaLibraryAdapterConfig)
         verifyNoInteractions(startupHelper)
     }
 
     @Test
     fun `activate after activate anonymously - setup startup helper`() {
-        impl.activateAnonymously()
+        impl.activateAnonymously(appMetricaLibraryAdapterConfig)
         clearInvocations(startupHelper)
         impl.activate(config)
         verify(startupHelper).setPublicLogger(publicLogger)
@@ -305,15 +308,15 @@ internal class AppMetricaImplTest : CommonTest() {
 
     @Test
     fun `activate anonymously - update process configuration`() {
-        impl.activateAnonymously()
+        impl.activateAnonymously(appMetricaLibraryAdapterConfig)
         verify(processConfiguration).update(anonymousConfig)
     }
 
     @Test
     fun `activate anonymously twice - update process configuration`() {
-        impl.activateAnonymously()
+        impl.activateAnonymously(appMetricaLibraryAdapterConfig)
         clearInvocations(processConfiguration)
-        impl.activateAnonymously()
+        impl.activateAnonymously(appMetricaLibraryAdapterConfig)
         verifyNoInteractions(processConfiguration)
     }
 
@@ -321,13 +324,13 @@ internal class AppMetricaImplTest : CommonTest() {
     fun `activate anonymously after activate - update process configuration`() {
         impl.activate(config)
         clearInvocations(processConfiguration)
-        impl.activateAnonymously()
+        impl.activateAnonymously(appMetricaLibraryAdapterConfig)
         verifyNoInteractions(processConfiguration)
     }
 
     @Test
     fun `activate after activate anonymously - update process configuration`() {
-        impl.activateAnonymously()
+        impl.activateAnonymously(appMetricaLibraryAdapterConfig)
         clearInvocations(processConfiguration)
         impl.activate(config)
         verify(processConfiguration).update(config)
@@ -349,7 +352,7 @@ internal class AppMetricaImplTest : CommonTest() {
 
     @Test
     fun `activate anonymously - setup logger`() {
-        impl.activateAnonymously()
+        impl.activateAnonymously(appMetricaLibraryAdapterConfig)
         verifyNoInteractions(publicLogger)
         verify(publicOrAnonymousLogger).setEnabled(false)
         verify(publicLogger, never()).setEnabled(any())
@@ -366,16 +369,16 @@ internal class AppMetricaImplTest : CommonTest() {
 
     @Test
     fun `activate anonymously twice - setup logger`() {
-        impl.activateAnonymously()
+        impl.activateAnonymously(appMetricaLibraryAdapterConfig)
         clearInvocations(publicOrAnonymousLogger)
-        impl.activateAnonymously()
+        impl.activateAnonymously(appMetricaLibraryAdapterConfig)
         verify(publicLogger, never()).setEnabled(any())
         verify(publicOrAnonymousLogger, never()).setEnabled(any())
     }
 
     @Test
     fun `activate after activate anonymously - setup logger`() {
-        impl.activateAnonymously()
+        impl.activateAnonymously(appMetricaLibraryAdapterConfig)
         clearInvocations(publicLogger, publicOrAnonymousLogger)
         impl.activate(config)
         verify(publicLogger).setEnabled(true)
@@ -384,7 +387,7 @@ internal class AppMetricaImplTest : CommonTest() {
 
     @Test
     fun `activate after activate anonymously - setup logger if disabled`() {
-        impl.activateAnonymously()
+        impl.activateAnonymously(appMetricaLibraryAdapterConfig)
         clearInvocations(publicLogger, publicOrAnonymousLogger)
         impl.activate(config)
         verify(publicLogger).setEnabled(true)
@@ -395,7 +398,7 @@ internal class AppMetricaImplTest : CommonTest() {
     fun `activate anonymously after activate - setup logger`() {
         impl.activate(config)
         clearInvocations(publicLogger, publicOrAnonymousLogger)
-        impl.activateAnonymously()
+        impl.activateAnonymously(appMetricaLibraryAdapterConfig)
         verify(publicLogger, never()).setEnabled(any())
         verify(publicOrAnonymousLogger, never()).setEnabled(any())
     }
@@ -415,20 +418,20 @@ internal class AppMetricaImplTest : CommonTest() {
 
     @Test
     fun `activate anonymously - save config`() {
-        impl.activateAnonymously()
+        impl.activateAnonymously(appMetricaLibraryAdapterConfig)
         verify(clientPreferences, never()).saveAppMetricaConfig(any())
     }
 
     @Test
     fun `activate anonymously twice - save config`() {
-        impl.activateAnonymously()
-        impl.activateAnonymously()
+        impl.activateAnonymously(appMetricaLibraryAdapterConfig)
+        impl.activateAnonymously(appMetricaLibraryAdapterConfig)
         verify(clientPreferences, never()).saveAppMetricaConfig(any())
     }
 
     @Test
     fun `activate after activate anonymously - save config`() {
-        impl.activateAnonymously()
+        impl.activateAnonymously(appMetricaLibraryAdapterConfig)
         clearInvocations(clientPreferences)
         impl.activate(config)
         verify(clientPreferences).saveAppMetricaConfig(config)
@@ -438,7 +441,7 @@ internal class AppMetricaImplTest : CommonTest() {
     fun `activate anonymously after activate - save config`() {
         impl.activate(config)
         clearInvocations(clientPreferences)
-        impl.activateAnonymously()
+        impl.activateAnonymously(appMetricaLibraryAdapterConfig)
         verify(clientPreferences, never()).saveAppMetricaConfig(any())
     }
 
@@ -466,7 +469,7 @@ internal class AppMetricaImplTest : CommonTest() {
 
     @Test
     fun `activate anonymously - jvm crash controller`() {
-        impl.activateAnonymously()
+        impl.activateAnonymously(appMetricaLibraryAdapterConfig)
         verify(jvmCrashClientController).registerApplicationCrashConsumer(context, impl, anonymousConfig)
         verify(jvmCrashClientController).registerTechnicalCrashConsumers(context, impl)
         verifyNoMoreInteractions(jvmCrashClientController)
@@ -474,15 +477,15 @@ internal class AppMetricaImplTest : CommonTest() {
 
     @Test
     fun `activate anonymously twice - jvm crash controller`() {
-        impl.activateAnonymously()
+        impl.activateAnonymously(appMetricaLibraryAdapterConfig)
         clearInvocations(jvmCrashClientController)
-        impl.activateAnonymously()
+        impl.activateAnonymously(appMetricaLibraryAdapterConfig)
         verifyNoInteractions(jvmCrashClientController)
     }
 
     @Test
     fun `activate after activate anonymously`() {
-        impl.activateAnonymously()
+        impl.activateAnonymously(appMetricaLibraryAdapterConfig)
         clearInvocations(jvmCrashClientController)
         impl.activate(config)
         verify(jvmCrashClientController).registerApplicationCrashConsumer(context, impl, config)
@@ -492,7 +495,7 @@ internal class AppMetricaImplTest : CommonTest() {
 
     @Test
     fun `activate after activate anonymously - jvm crash controller if disabled`() {
-        impl.activateAnonymously()
+        impl.activateAnonymously(appMetricaLibraryAdapterConfig)
         clearInvocations(jvmCrashClientController)
         impl.activate(configWithDisabled)
         verify(jvmCrashClientController).clearCrashConsumers()
@@ -503,21 +506,21 @@ internal class AppMetricaImplTest : CommonTest() {
     fun `activate anonymously after activate - jvm crash controller`() {
         impl.activate(config)
         clearInvocations(jvmCrashClientController)
-        impl.activateAnonymously()
+        impl.activateAnonymously(appMetricaLibraryAdapterConfig)
         verifyNoInteractions(jvmCrashClientController)
     }
 
     @Test
     fun `activate anonymously - session auto tracking`() {
-        impl.activateAnonymously()
+        impl.activateAnonymously(appMetricaLibraryAdapterConfig)
         verify(sessionsTrackingManager).startWatchingIfNotYet()
     }
 
     @Test
     fun `activate anonymously twice - session auto tracking`() {
-        impl.activateAnonymously()
+        impl.activateAnonymously(appMetricaLibraryAdapterConfig)
         clearInvocations(sessionsTrackingManager)
-        impl.activateAnonymously()
+        impl.activateAnonymously(appMetricaLibraryAdapterConfig)
         verifyNoInteractions(sessionsTrackingManager)
     }
 
@@ -545,13 +548,13 @@ internal class AppMetricaImplTest : CommonTest() {
     fun `activate anonymously after activate - session auto tracking`() {
         impl.activate(config)
         clearInvocations(sessionsTrackingManager)
-        impl.activateAnonymously()
+        impl.activateAnonymously(appMetricaLibraryAdapterConfig)
         verifyNoInteractions(sessionsTrackingManager)
     }
 
     @Test
     fun `activate after activate anonymously - session auto tracking enabled`() {
-        impl.activateAnonymously()
+        impl.activateAnonymously(appMetricaLibraryAdapterConfig)
         clearInvocations(sessionsTrackingManager)
         impl.activate(config)
         verify(sessionsTrackingManager).startWatchingIfNotYet()
@@ -559,7 +562,7 @@ internal class AppMetricaImplTest : CommonTest() {
 
     @Test
     fun `activate after activate anonymously - session auto tracking disabled`() {
-        impl.activateAnonymously()
+        impl.activateAnonymously(appMetricaLibraryAdapterConfig)
         clearInvocations(sessionsTrackingManager)
         impl.activate(configWithDisabled)
         verify(sessionsTrackingManager).stopWatchingIfHasAlreadyBeenStarted()
@@ -587,20 +590,20 @@ internal class AppMetricaImplTest : CommonTest() {
 
     @Test
     fun `activate anonymously - update pre activate settings`() {
-        impl.activateAnonymously()
+        impl.activateAnonymously(appMetricaLibraryAdapterConfig)
         verify(reportsHandler).updatePreActivationConfig(null, null, null)
     }
 
     @Test
     fun `activate anonymously twice - update pre activation settings`() {
-        impl.activateAnonymously()
+        impl.activateAnonymously(appMetricaLibraryAdapterConfig)
         clearInvocations(reportsHandler)
         verify(reportsHandler, never()).updatePreActivationConfig(any(), any(), any())
     }
 
     @Test
     fun `activate after activate anonymously - update pre activation settings`() {
-        impl.activateAnonymously()
+        impl.activateAnonymously(appMetricaLibraryAdapterConfig)
         clearInvocations(reportsHandler)
         impl.activate(config)
         verify(reportsHandler).updatePreActivationConfig(true, true, true)
@@ -610,7 +613,7 @@ internal class AppMetricaImplTest : CommonTest() {
     fun `activate anonymously after activate - update pre activation settings`() {
         impl.activate(config)
         clearInvocations(reportsHandler)
-        impl.activateAnonymously()
+        impl.activateAnonymously(appMetricaLibraryAdapterConfig)
         verify(reportsHandler, never()).updatePreActivationConfig(any(), any(), any())
     }
 
@@ -636,7 +639,7 @@ internal class AppMetricaImplTest : CommonTest() {
 
     @Test
     fun `activate anonymously - build main reporter`() {
-        impl.activateAnonymously()
+        impl.activateAnonymously(appMetricaLibraryAdapterConfig)
         verify(reporterFactory)
             .buildOrUpdateAnonymousMainReporter(anonymousConfig, publicOrAnonymousLogger, wasAppEnvironmentCleared)
         verify(appOpenWatcher).setDeeplinkConsumer(deeplinkConsumer)
@@ -648,9 +651,9 @@ internal class AppMetricaImplTest : CommonTest() {
 
     @Test
     fun `activate anonymously twice - build main reporter`() {
-        impl.activateAnonymously()
+        impl.activateAnonymously(appMetricaLibraryAdapterConfig)
         clearInvocations(reporterFactory, appOpenWatcher, sessionsTrackingManager)
-        impl.activateAnonymously()
+        impl.activateAnonymously(appMetricaLibraryAdapterConfig)
         verify(reporterFactory)
             .buildOrUpdateAnonymousMainReporter(anonymousConfig, publicOrAnonymousLogger, wasAppEnvironmentCleared)
         verifyNoInteractions(appOpenWatcher, sessionsTrackingManager)
@@ -658,7 +661,7 @@ internal class AppMetricaImplTest : CommonTest() {
 
     @Test
     fun `activate after activate anonymously - build main reporter`() {
-        impl.activateAnonymously()
+        impl.activateAnonymously(appMetricaLibraryAdapterConfig)
         clearInvocations(reporterFactory, appOpenWatcher, sessionsTrackingManager)
         impl.activate(config)
         verify(reporterFactory).buildOrUpdateMainReporter(config, publicLogger, wasAppEnvironmentCleared)
@@ -670,7 +673,7 @@ internal class AppMetricaImplTest : CommonTest() {
     fun `activate anonymously after activate - build main reporter`() {
         impl.activate(config)
         clearInvocations(reporterFactory, appOpenWatcher, sessionsTrackingManager)
-        impl.activateAnonymously()
+        impl.activateAnonymously(appMetricaLibraryAdapterConfig)
         verify(reporterFactory)
             .buildOrUpdateAnonymousMainReporter(anonymousConfig, publicOrAnonymousLogger, wasAppEnvironmentCleared)
         verifyNoInteractions(appOpenWatcher, sessionsTrackingManager)
@@ -692,7 +695,7 @@ internal class AppMetricaImplTest : CommonTest() {
 
     @Test
     fun `getMainReporterApiConsumerProvider after activate anonymously`() {
-        impl.activateAnonymously()
+        impl.activateAnonymously(appMetricaLibraryAdapterConfig)
         assertThat(impl.mainReporterApiConsumerProvider)
             .isEqualTo(mainReporterApiConsumerProviderMockedConstructionRule.constructionMock.constructed().first())
         assertThat(mainReporterApiConsumerProviderMockedConstructionRule.argumentInterceptor.flatArguments())
@@ -785,7 +788,7 @@ internal class AppMetricaImplTest : CommonTest() {
     @Test
     fun `setLocation after activate anonymously`() {
         val location: Location = mock()
-        impl.activateAnonymously()
+        impl.activateAnonymously(appMetricaLibraryAdapterConfig)
         impl.setLocation(location)
         verify(reporterFromConsumerProvider).setLocation(location)
     }
@@ -799,7 +802,7 @@ internal class AppMetricaImplTest : CommonTest() {
 
     @Test
     fun `setLocationTracking after activate anonymously`() {
-        impl.activateAnonymously()
+        impl.activateAnonymously(appMetricaLibraryAdapterConfig)
         impl.setLocationTracking(true)
         verify(reporterFromConsumerProvider).setLocationTracking(true)
     }
@@ -813,7 +816,7 @@ internal class AppMetricaImplTest : CommonTest() {
 
     @Test
     fun `setAdvIdentifiersTracking after anonymous activation`() {
-        impl.activateAnonymously()
+        impl.activateAnonymously(appMetricaLibraryAdapterConfig)
         impl.setAdvIdentifiersTracking(true)
         verify(reporterFromConsumerProvider).setAdvIdentifiersTracking(true)
     }
@@ -827,7 +830,7 @@ internal class AppMetricaImplTest : CommonTest() {
 
     @Test
     fun `setDataSendingEnabled after activate anonymously`() {
-        impl.activateAnonymously()
+        impl.activateAnonymously(appMetricaLibraryAdapterConfig)
         impl.setDataSendingEnabled(true)
         verify(reporterFromConsumerProvider).setDataSendingEnabled(true)
     }
@@ -841,7 +844,7 @@ internal class AppMetricaImplTest : CommonTest() {
 
     @Test
     fun `putAppEnvironmentValue after activate anonymously`() {
-        impl.activateAnonymously()
+        impl.activateAnonymously(appMetricaLibraryAdapterConfig)
         impl.putAppEnvironmentValue("key", "value")
         verify(reporterFromConsumerProvider).putAppEnvironmentValue("key", "value")
     }
@@ -855,7 +858,7 @@ internal class AppMetricaImplTest : CommonTest() {
 
     @Test
     fun `clearAppEnvironment after activate anonymously`() {
-        impl.activateAnonymously()
+        impl.activateAnonymously(appMetricaLibraryAdapterConfig)
         impl.clearAppEnvironment()
         verify(reporterFromConsumerProvider).clearAppEnvironment()
     }
@@ -869,7 +872,7 @@ internal class AppMetricaImplTest : CommonTest() {
 
     @Test
     fun `putErrorEnvironmentValue after activate anonymously`() {
-        impl.activateAnonymously()
+        impl.activateAnonymously(appMetricaLibraryAdapterConfig)
         impl.putErrorEnvironmentValue("key", "value")
         verify(reporterFromConsumerProvider).putErrorEnvironmentValue("key", "value")
     }
@@ -883,7 +886,7 @@ internal class AppMetricaImplTest : CommonTest() {
 
     @Test
     fun `setUserProfileId after activate anonymously`() {
-        impl.activateAnonymously()
+        impl.activateAnonymously(appMetricaLibraryAdapterConfig)
         impl.setUserProfileID("profileId")
         verify(reporterFromConsumerProvider).setUserProfileID("profileId")
     }

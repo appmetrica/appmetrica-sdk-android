@@ -26,6 +26,25 @@ public class AppMetricaLibraryAdapter {
     }
 
     /**
+     * Activate AppMetrica without API_KEY in anonymous mode.
+     *
+     * @param context {@link Context} object. Any application context.
+     * @param config {@link AppMetricaLibraryAdapterConfig} object.
+     */
+    public static void activate(@NonNull Context context, @NonNull AppMetricaLibraryAdapterConfig config) {
+        proxy.activate(context, config);
+    }
+
+    /**
+     * Enables or disables advertising identifiers tracking.
+     *
+     * @param enabled {@code true} to enable advanced identifiers tracking, {@code false} to disable it.
+     */
+    public static void setAdvIdentifiersTracking(boolean enabled) {
+        proxy.setAdvIdentifiersTracking(enabled);
+    }
+
+    /**
      * Sends system report with provided data.
      *
      * @param sender {@link String} representation of sender.

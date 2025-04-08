@@ -1,6 +1,8 @@
 package io.appmetrica.analytics.impl
 
 import android.content.Context
+import io.appmetrica.analytics.AppMetricaLibraryAdapterConfig
+import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
 import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor
 import io.appmetrica.analytics.coreutils.internal.logger.LoggerStorage
 import io.appmetrica.analytics.impl.proxy.AppMetricaFacadeProvider
@@ -42,6 +44,9 @@ class AnonymousClientActivatorTest : CommonTest() {
 
     private val runnableCaptor = argumentCaptor<Runnable>()
 
+    private val config: AppMetricaLibraryAdapterConfig = mock()
+    private val configCaptor = argumentCaptor<AppMetricaLibraryAdapterConfig>()
+
     @get:Rule
     val loggerStorageRule = staticRule<LoggerStorage> {
         on { LoggerStorage.getMainPublicOrAnonymousLogger() }.thenReturn(logger)
@@ -65,7 +70,24 @@ class AnonymousClientActivatorTest : CommonTest() {
             verify(executor).execute(runnableCaptor.capture())
             verify(provider).markActivated()
             runnableCaptor.firstValue.run()
-            verify(appMetricaFacade).activateFull()
+            verify(appMetricaFacade).activateFull(configCaptor.capture())
+            ObjectPropertyAssertions(configCaptor.firstValue)
+                .checkFieldsAreNull("advIdentifiersTracking")
+                .checkAll()
+        }
+    }
+
+    @Test
+    fun `activate with config`() {
+        anonymousClientActivator.activate(context, config)
+        inOrder(logger, sessionsTrackingManager, appMetricaFacade, executor, provider) {
+            verify(logger).info("Session autotracking enabled")
+            verify(sessionsTrackingManager).startWatchingIfNotYet()
+            verify(appMetricaFacade).activateCore(null)
+            verify(executor).execute(runnableCaptor.capture())
+            verify(provider).markActivated()
+            runnableCaptor.firstValue.run()
+            verify(appMetricaFacade).activateFull(config)
         }
     }
 
@@ -73,6 +95,26 @@ class AnonymousClientActivatorTest : CommonTest() {
     fun `activate if activated`() {
         whenever(provider.isActivated).thenReturn(true)
         anonymousClientActivator.activate(context)
+        verify(appMetricaFacade).activateCore(null)
+        verify(executor).execute(runnableCaptor.capture())
+        verify(provider).markActivated()
+        runnableCaptor.firstValue.run()
+        verify(appMetricaFacade).activateFull(configCaptor.capture())
+        ObjectPropertyAssertions(configCaptor.firstValue)
+            .checkFieldsAreNull("advIdentifiersTracking")
+            .checkAll()
+        verifyNoInteractions(sessionsTrackingManager)
+    }
+
+    @Test
+    fun `activate with config if activated`() {
+        whenever(provider.isActivated).thenReturn(true)
+        anonymousClientActivator.activate(context, config)
+        verify(appMetricaFacade).activateCore(null)
+        verify(executor).execute(runnableCaptor.capture())
+        verify(provider).markActivated()
+        runnableCaptor.firstValue.run()
+        verify(appMetricaFacade).activateFull(config)
         verifyNoInteractions(sessionsTrackingManager)
     }
 }

@@ -91,6 +91,22 @@ class ModulesProxyTest : CommonTest() {
     }
 
     @Test
+    fun setAdvIdentifiersTracking() {
+        proxy.setAdvIdentifiersTracking(true)
+
+        val inOrder = inOrder(modulesBarrier, synchronousStageExecutor, executor)
+        inOrder.verify(modulesBarrier).setAdvIdentifiersTracking(true)
+        inOrder.verify(synchronousStageExecutor).setAdvIdentifiersTracking(true)
+        inOrder.verify(executor, times(1)).execute(runnableArgumentCaptor.capture())
+        verifyNoMoreInteractions(mainReporter)
+
+        runnableArgumentCaptor.firstValue.run()
+
+        verify(mainReporter).setAdvIdentifiersTracking(true)
+        verifyNoMoreInteractions(mainReporter)
+    }
+
+    @Test
     fun testReportEvent() {
         val moduleEvent: ModuleEvent = mock()
         proxy.reportEvent(moduleEvent)

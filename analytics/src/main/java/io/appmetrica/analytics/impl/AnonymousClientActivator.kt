@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.impl
 
 import android.content.Context
+import io.appmetrica.analytics.AppMetricaLibraryAdapterConfig
 import io.appmetrica.analytics.coreutils.internal.logger.LoggerStorage
 import io.appmetrica.analytics.impl.proxy.AppMetricaFacadeProvider
 import io.appmetrica.analytics.impl.utils.executors.ClientExecutorProvider
@@ -15,6 +16,10 @@ class AnonymousClientActivator(
     private val tag = "[AnonymousClientActivator]"
 
     fun activate(context: Context) {
+        activate(context, AppMetricaLibraryAdapterConfig.newConfigBuilder().build())
+    }
+
+    fun activate(context: Context, config: AppMetricaLibraryAdapterConfig) {
         DebugLogger.info(tag, "Activating anonymous client")
         val logger = LoggerStorage.getMainPublicOrAnonymousLogger()
         if (!provider.isActivated) {
@@ -27,7 +32,7 @@ class AnonymousClientActivator(
         }
         provider.getInitializedImpl(context).activateCore(null)
         clientExecutorProvider.defaultExecutor.execute {
-            provider.getInitializedImpl(context).activateFull()
+            provider.getInitializedImpl(context).activateFull(config)
         }
         provider.markActivated()
     }

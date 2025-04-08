@@ -10,6 +10,7 @@ import androidx.annotation.VisibleForTesting;
 import androidx.annotation.WorkerThread;
 import io.appmetrica.analytics.AdvIdentifiersResult;
 import io.appmetrica.analytics.AppMetricaConfig;
+import io.appmetrica.analytics.AppMetricaLibraryAdapterConfig;
 import io.appmetrica.analytics.DeferredDeeplinkListener;
 import io.appmetrica.analytics.DeferredDeeplinkParametersListener;
 import io.appmetrica.analytics.ReporterConfig;
@@ -182,8 +183,8 @@ public class AppMetricaFacade implements IReporterFactoryProvider {
     }
 
     @WorkerThread
-    public void activateFull() {
-        getImpl().activateAnonymously();
+    public void activateFull(@NonNull AppMetricaLibraryAdapterConfig config) {
+        getImpl().activateAnonymously(config);
         AppMetricaSelfReportFacade.onFullyInitializationFinished(mContext);
     }
 

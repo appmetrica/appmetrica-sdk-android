@@ -30,6 +30,13 @@ class ModulesFacadeTest {
     }
 
     @Test
+    fun setAdvIdentifiersTracking() {
+        ModulesFacade.setAdvIdentifiersTracking(true)
+        verify(proxy).setAdvIdentifiersTracking(true)
+        verifyNoMoreInteractions(proxy)
+    }
+
+    @Test
     fun reportEvent() {
         ModulesFacade.reportEvent(moduleEvent)
         verify(proxy).reportEvent(moduleEvent)

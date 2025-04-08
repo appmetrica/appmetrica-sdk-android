@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.impl.proxy.synchronous
 
 import android.content.Context
+import io.appmetrica.analytics.AppMetricaLibraryAdapterConfig
 import io.appmetrica.analytics.impl.AppMetricaFacade
 import io.appmetrica.analytics.impl.ClientServiceLocator
 import io.appmetrica.analytics.impl.ContextAppearedListener
@@ -28,6 +29,12 @@ class LibraryAdapterSynchronousStageExecutorContextTest : CommonTest() {
     @Test
     fun activate() {
         synchronousStageExecutor.activate(context)
+        verify(ClientServiceLocator.getInstance().contextAppearedListener).onProbablyAppeared(context)
+    }
+
+    @Test
+    fun `activate with configuration`() {
+        synchronousStageExecutor.activate(context, mock<AppMetricaLibraryAdapterConfig>())
         verify(ClientServiceLocator.getInstance().contextAppearedListener).onProbablyAppeared(context)
     }
 

@@ -19,6 +19,19 @@ class ModulesProxy {
     private val synchronousStageExecutor = ModulesSynchronousStageExecutor()
     private val executor: ICommonExecutor = ClientServiceLocator.getInstance().clientExecutorProvider.defaultExecutor
 
+    fun setAdvIdentifiersTracking(enabled: Boolean) {
+        modulesBarrier.setAdvIdentifiersTracking(enabled)
+        synchronousStageExecutor.setAdvIdentifiersTracking(enabled)
+
+        executor.execute(
+            object : SafeRunnable() {
+                override fun runSafety() {
+                    getMainReporter().setAdvIdentifiersTracking(enabled)
+                }
+            }
+        )
+    }
+
     fun reportEvent(moduleEvent: ModuleEvent) {
         modulesBarrier.reportEvent(moduleEvent)
         synchronousStageExecutor.reportEvent(moduleEvent)

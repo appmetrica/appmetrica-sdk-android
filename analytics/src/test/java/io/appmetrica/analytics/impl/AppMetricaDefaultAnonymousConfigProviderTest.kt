@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl
 
-import android.content.Context
 import io.appmetrica.analytics.AppMetricaConfig
+import io.appmetrica.analytics.AppMetricaLibraryAdapterConfig
 import io.appmetrica.analytics.impl.utils.FirstLaunchDetector
 import io.appmetrica.analytics.impl.utils.MainProcessDetector
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule
@@ -10,7 +10,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.Mockito.mock
 import org.mockito.kotlin.whenever
 
 class AppMetricaDefaultAnonymousConfigProviderTest : CommonTest() {
@@ -35,26 +34,64 @@ class AppMetricaDefaultAnonymousConfigProviderTest : CommonTest() {
     }
 
     @Test
-    fun getConfig() {
-        assertThat(appMetricaDefaultAnonymousConfigProvider.getConfig())
+    fun getConfigForDefaultConfig() {
+        val config = appMetricaDefaultAnonymousConfigProvider.getConfig(
+            AppMetricaLibraryAdapterConfig.newConfigBuilder().build()
+        )
+        assertThat(config)
             .usingRecursiveComparison()
-            .isEqualTo(AppMetricaConfig.newConfigBuilder(apiKey).build())
+            .isEqualTo(
+                AppMetricaConfig.newConfigBuilder(apiKey)
+                    .withAdvIdentifiersTracking(false)
+                    .build()
+            )
+    }
+
+    @Test
+    fun getConfigForDefaultConfigForEnabledAdvIdTracking() {
+        val config = appMetricaDefaultAnonymousConfigProvider.getConfig(
+            AppMetricaLibraryAdapterConfig.newConfigBuilder()
+                .withAdvIdentifiersTracking(true)
+                .build()
+        )
+        assertThat(config)
+            .usingRecursiveComparison()
+            .isEqualTo(
+                AppMetricaConfig.newConfigBuilder(apiKey)
+                    .withAdvIdentifiersTracking(true)
+                    .build()
+            )
     }
 
     @Test
     fun `getConfig for main process and not first launch`() {
         whenever(firstLaunchDetector.isNotFirstLaunch()).thenReturn(true)
-        assertThat(appMetricaDefaultAnonymousConfigProvider.getConfig())
+        val config = appMetricaDefaultAnonymousConfigProvider.getConfig(
+            AppMetricaLibraryAdapterConfig.newConfigBuilder().build()
+        )
+        assertThat(config)
             .usingRecursiveComparison()
-            .isEqualTo(AppMetricaConfig.newConfigBuilder(apiKey).handleFirstActivationAsUpdate(true).build())
+            .isEqualTo(
+                AppMetricaConfig.newConfigBuilder(apiKey)
+                    .handleFirstActivationAsUpdate(true)
+                    .withAdvIdentifiersTracking(false)
+                    .build()
+            )
     }
 
     @Test
     fun `getConfig for non main process and not first launch`() {
         whenever(firstLaunchDetector.isNotFirstLaunch()).thenReturn(true)
         whenever(mainProcessDetector.isMainProcess).thenReturn(false)
-        assertThat(appMetricaDefaultAnonymousConfigProvider.getConfig())
+        val config = appMetricaDefaultAnonymousConfigProvider.getConfig(
+            AppMetricaLibraryAdapterConfig.newConfigBuilder().build()
+        )
+        assertThat(config)
             .usingRecursiveComparison()
-            .isEqualTo(AppMetricaConfig.newConfigBuilder(apiKey).build())
+            .isEqualTo(
+                AppMetricaConfig.newConfigBuilder(apiKey)
+                    .withAdvIdentifiersTracking(false)
+                    .build()
+            )
     }
 }

@@ -44,6 +44,20 @@ public final class ModulesFacade {
     private static ModulesProxy proxy = new ModulesProxy();
 
     /**
+     * Enables/disables including advertising identifiers like GAID, Huawei OAID within its reports.
+     *
+     * @param enabled {@code true} to allow AppMetrica to record advertising identifiers information in reports,
+     *                            otherwise {@code false}.
+     *
+     * @see AppMetricaConfig.Builder#withAdvIdentifiersTracking(boolean)
+     * @see AppMetricaConfig#advIdentifiersTracking
+     */
+    public static void setAdvIdentifiersTracking(boolean enabled) {
+        DebugLogger.INSTANCE.info(TAG, "setAdvIdentifiersTracking: %s", enabled);
+        proxy.setAdvIdentifiersTracking(enabled);
+    }
+
+    /**
      * Reports custom event with various parameters.
      *
      * @param moduleEvent Description of event to send.

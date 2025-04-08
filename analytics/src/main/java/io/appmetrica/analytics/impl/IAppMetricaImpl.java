@@ -6,6 +6,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.WorkerThread;
 import io.appmetrica.analytics.AdvIdentifiersResult;
 import io.appmetrica.analytics.AppMetricaConfig;
+import io.appmetrica.analytics.AppMetricaLibraryAdapterConfig;
 import io.appmetrica.analytics.DeferredDeeplinkListener;
 import io.appmetrica.analytics.DeferredDeeplinkParametersListener;
 import io.appmetrica.analytics.ReporterConfig;
@@ -20,7 +21,7 @@ public interface IAppMetricaImpl
     void activate(@NonNull final AppMetricaConfig config);
 
     @WorkerThread
-    void activateAnonymously();
+    void activateAnonymously(@NonNull AppMetricaLibraryAdapterConfig libraryAdapterConfig);
 
     @AnyThread
     @Nullable

@@ -3,6 +3,7 @@ package io.appmetrica.analytics.impl;
 import android.content.Context;
 import io.appmetrica.analytics.AdvIdentifiersResult;
 import io.appmetrica.analytics.AppMetricaConfig;
+import io.appmetrica.analytics.AppMetricaLibraryAdapterConfig;
 import io.appmetrica.analytics.DeferredDeeplinkListener;
 import io.appmetrica.analytics.DeferredDeeplinkParametersListener;
 import io.appmetrica.analytics.ReporterConfig;
@@ -51,6 +52,8 @@ public class AppMetricaFacadeObjectTest extends CommonTest {
     private Thread initCoreThread;
     @Mock
     private ClientExecutorProvider clientExecutorProvider;
+    @Mock
+    private AppMetricaLibraryAdapterConfig adapterConfig;
     @Captor
     private ArgumentCaptor<Runnable> runnableArgumentCaptor;
     private Context mContext;
@@ -137,8 +140,8 @@ public class AppMetricaFacadeObjectTest extends CommonTest {
     public void activateFullWithoutConfig() {
         mFacade.init();
         touchInitThread();
-        mFacade.activateFull();
-        verify(mImpl).activateAnonymously();
+        mFacade.activateFull(adapterConfig);
+        verify(mImpl).activateAnonymously(adapterConfig);
     }
 
     @Test

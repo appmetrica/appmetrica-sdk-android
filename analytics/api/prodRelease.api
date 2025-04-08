@@ -195,8 +195,23 @@ public final class io.appmetrica.analytics.AppMetricaDefaultValues {
 
 public class io.appmetrica.analytics.AppMetricaLibraryAdapter {
     public static void activate([NonNull] android.content.Context)
+    public static void activate([NonNull] android.content.Context, [NonNull] io.appmetrica.analytics.AppMetricaLibraryAdapterConfig)
     public static void reportEvent([NonNull] String, [NonNull] String, [NonNull] String)
+    public static void setAdvIdentifiersTracking(boolean)
     public static void setProxy([NonNull] OBFUSCATED[io.appmetrica.analytics.impl.proxy.AppMetricaLibraryAdapterProxy])
+}
+
+public class io.appmetrica.analytics.AppMetricaLibraryAdapterConfig {
+    public final [Nullable] Boolean advIdentifiersTracking
+
+    public static io.appmetrica.analytics.AppMetricaLibraryAdapterConfig$Builder newConfigBuilder()
+    public [NonNull] String toString()
+}
+
+public static class io.appmetrica.analytics.AppMetricaLibraryAdapterConfig$Builder {
+    public <init>()
+    public [NonNull] io.appmetrica.analytics.AppMetricaLibraryAdapterConfig build()
+    public [NonNull] io.appmetrica.analytics.AppMetricaLibraryAdapterConfig$Builder withAdvIdentifiersTracking(boolean)
 }
 
 public final class io.appmetrica.analytics.BuildConfig {
@@ -340,6 +355,7 @@ public final class io.appmetrica.analytics.ModulesFacade {
     public static void reportEvent([NonNull] io.appmetrica.analytics.ModuleEvent)
     public static void reportExternalAttribution(int, [NonNull] String)
     public static void sendEventsBuffer()
+    public static void setAdvIdentifiersTracking(boolean)
     public static void setProxy([NonNull] OBFUSCATED[io.appmetrica.analytics.impl.proxy.ModulesProxy])
     public static void setSessionExtra([NonNull] String, [Nullable] byte[])
 }

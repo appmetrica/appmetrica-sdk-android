@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import io.appmetrica.analytics.AdvIdentifiersResult;
 import io.appmetrica.analytics.AppMetricaConfig;
+import io.appmetrica.analytics.AppMetricaLibraryAdapterConfig;
 import io.appmetrica.analytics.DeferredDeeplinkListener;
 import io.appmetrica.analytics.DeferredDeeplinkParametersListener;
 import io.appmetrica.analytics.ReporterConfig;
@@ -28,7 +29,7 @@ public class AppMetricaImplStub implements IAppMetricaImpl {
     }
 
     @Override
-    public void activateAnonymously() {
+    public void activateAnonymously(@NonNull AppMetricaLibraryAdapterConfig libraryAdapterConfig) {
         // Do nothing
     }
 

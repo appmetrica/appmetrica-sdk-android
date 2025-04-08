@@ -11,6 +11,9 @@ class ModulesSynchronousStageExecutor {
     private val contextAppearedListener: ContextAppearedListener =
         ClientServiceLocator.getInstance().contextAppearedListener
 
+    @Suppress("UNUSED_PARAMETER")
+    fun setAdvIdentifiersTracking(enabled: Boolean) {}
+
     fun reportEvent(moduleEvent: ModuleEvent) {}
 
     fun setSessionExtra(key: String, value: ByteArray?) {}

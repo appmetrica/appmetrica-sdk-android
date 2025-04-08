@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.impl.proxy
 
 import android.content.Context
+import io.appmetrica.analytics.AppMetricaLibraryAdapterConfig
 import io.appmetrica.analytics.ModuleEvent
 import io.appmetrica.analytics.ModulesFacade
 import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor
@@ -16,9 +17,7 @@ import io.appmetrica.analytics.testutils.staticRule
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.MockedStatic
 import org.mockito.kotlin.any
-import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
@@ -35,14 +34,20 @@ class AppMetricaLibraryAdapterProxyTest : CommonTest() {
     private val facade: AppMetricaFacade = mock()
     private val executor: IHandlerExecutor = mock()
 
+    private val config: AppMetricaLibraryAdapterConfig = mock()
+
     @get:Rule
     var clientServiceLocatorRule: ClientServiceLocatorRule = ClientServiceLocatorRule()
+
     @get:Rule
     val barrierRule = constructionRule<LibraryAdapterBarrier>()
+
     @get:Rule
     val synchronousStageExecutorRule = constructionRule<LibraryAdapterSynchronousStageExecutor>()
+
     @get:Rule
     val libraryEventConstructorRule = constructionRule<LibraryEventConstructor>()
+
     @get:Rule
     val modulesFacadeRule = staticRule<ModulesFacade>()
 
@@ -67,7 +72,9 @@ class AppMetricaLibraryAdapterProxyTest : CommonTest() {
 
         barrier = barrierRule.constructionMock.constructed().first()
         whenever(barrier.activate(any())).thenReturn(true)
+        whenever(barrier.activate(any(), any())).thenReturn(true)
         whenever(barrier.reportEvent(any(), any(), any())).thenReturn(true)
+        whenever(barrier.setAdvIdentifiersTracking(any())).thenReturn(true)
         synchronousStageExecutor =
             synchronousStageExecutorRule.constructionMock.constructed().first()
         libraryEventConstructor =
@@ -82,10 +89,42 @@ class AppMetricaLibraryAdapterProxyTest : CommonTest() {
     }
 
     @Test
+    fun `activate with config`() {
+        proxy.activate(context, config)
+        verify(barrier).activate(context, config)
+        verify(synchronousStageExecutor).activate(applicationContext, config)
+    }
+
+    @Test
     fun `activate if not valid`() {
         whenever(barrier.activate(context)).thenReturn(false)
         proxy.activate(context)
         verifyNoInteractions(synchronousStageExecutor)
+    }
+
+    @Test
+    fun `activate with config if not valid`() {
+        whenever(barrier.activate(context, config)).thenReturn(false)
+        proxy.activate(context, config)
+        verifyNoInteractions(synchronousStageExecutor)
+    }
+
+    @Test
+    fun setAdvIdentifiersTracking() {
+        proxy.setAdvIdentifiersTracking(true)
+        verify(barrier).setAdvIdentifiersTracking(true)
+        verify(synchronousStageExecutor).setAdvIdentifiersTracking(true)
+        modulesFacadeRule.staticMock.verify {
+            ModulesFacade.setAdvIdentifiersTracking(true)
+        }
+    }
+
+    @Test
+    fun `setAdvIdentifiersTracking if not valid`() {
+        whenever(barrier.setAdvIdentifiersTracking(true)).thenReturn(false)
+        proxy.setAdvIdentifiersTracking(true)
+        verifyNoInteractions(synchronousStageExecutor, executor)
+        modulesFacadeRule.staticMock.verify({ ModulesFacade.setAdvIdentifiersTracking(any()) }, never())
     }
 
     @Test

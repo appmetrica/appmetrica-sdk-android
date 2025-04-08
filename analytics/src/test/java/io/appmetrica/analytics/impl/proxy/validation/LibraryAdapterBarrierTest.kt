@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.impl.proxy.validation
 
 import android.content.Context
+import io.appmetrica.analytics.AppMetricaLibraryAdapterConfig
 import io.appmetrica.analytics.ValidationException
 import io.appmetrica.analytics.impl.proxy.AppMetricaFacadeProvider
 import io.appmetrica.analytics.testutils.CommonTest
@@ -14,6 +15,7 @@ class LibraryAdapterBarrierTest : CommonTest() {
 
     private val context: Context = mock()
     private val appMetricaFacadeProvider: AppMetricaFacadeProvider = mock<AppMetricaFacadeProvider>()
+    private val config: AppMetricaLibraryAdapterConfig = mock()
 
     private lateinit var barrier: LibraryAdapterBarrier
 
@@ -25,12 +27,22 @@ class LibraryAdapterBarrierTest : CommonTest() {
 
     @Test
     fun activate() {
-        assertThat(barrier.activate(context)).isTrue()
+        assertThat(barrier.activate(context, config)).isTrue()
     }
 
     @Test
     fun `activate for null context`() {
-        assertThat(barrier.activate(null)).isFalse()
+        assertThat(barrier.activate(null, config)).isFalse()
+    }
+
+    @Test
+    fun `activate for null config`() {
+        assertThat(barrier.activate(context, null)).isFalse()
+    }
+
+    @Test
+    fun setAdvIdentifiersTracking() {
+        assertThat(barrier.setAdvIdentifiersTracking(true)).isTrue()
     }
 
     @Test

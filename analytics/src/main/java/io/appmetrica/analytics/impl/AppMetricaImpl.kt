@@ -7,6 +7,7 @@ import androidx.annotation.AnyThread
 import androidx.annotation.WorkerThread
 import io.appmetrica.analytics.AdvIdentifiersResult
 import io.appmetrica.analytics.AppMetricaConfig
+import io.appmetrica.analytics.AppMetricaLibraryAdapterConfig
 import io.appmetrica.analytics.DeferredDeeplinkListener
 import io.appmetrica.analytics.DeferredDeeplinkParametersListener
 import io.appmetrica.analytics.ReporterConfig
@@ -133,9 +134,9 @@ internal class AppMetricaImpl @WorkerThread internal constructor(
     }
 
     @WorkerThread
-    override fun activateAnonymously() {
+    override fun activateAnonymously(libraryAdapterConfig: AppMetricaLibraryAdapterConfig) {
         DebugLogger.info(tag, "Activate anonymously")
-        val config = anonymousConfigProvider.config
+        val config = anonymousConfigProvider.getConfig(libraryAdapterConfig)
         val publicLogger = LoggerStorage.getMainPublicOrAnonymousLogger()
         val mainReporterInitializer = object : MainReporterInitializer {
             override fun initialize(): MainReporter {

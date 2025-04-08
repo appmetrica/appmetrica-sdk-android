@@ -25,6 +25,9 @@ class ModulesBarrier(
     private val apiKeyValidator = ThrowIfFailedValidator(ApiKeyValidator())
 
     @Suppress("UNUSED_PARAMETER")
+    fun setAdvIdentifiersTracking(enabled: Boolean) {}
+
+    @Suppress("UNUSED_PARAMETER")
     fun reportEvent(
         event: ModuleEvent
     ) {

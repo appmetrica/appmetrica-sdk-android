@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl
 
-import android.content.Context
 import io.appmetrica.analytics.AppMetricaConfig
+import io.appmetrica.analytics.AppMetricaLibraryAdapterConfig
 import io.appmetrica.analytics.impl.db.preferences.PreferencesClientDbStorage
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.constructionRule
@@ -17,11 +17,12 @@ class AppMetricaConfigForAnonymousActivationProviderTest : CommonTest() {
     private val configFromPreferences: AppMetricaConfig = mock()
     private val defaultConfig: AppMetricaConfig = mock()
     private val preferences: PreferencesClientDbStorage = mock()
+    private val adapterConfig: AppMetricaLibraryAdapterConfig = mock()
 
     @get:Rule
     val defaultAnonymousConfigProviderMockedConstructionRule =
         constructionRule<AppMetricaDefaultAnonymousConfigProvider> {
-            on { getConfig() } doReturn defaultConfig
+            on { getConfig(adapterConfig) } doReturn defaultConfig
         }
 
     private val configProvider: AppMetricaConfigForAnonymousActivationProvider by setUp {
@@ -31,11 +32,11 @@ class AppMetricaConfigForAnonymousActivationProviderTest : CommonTest() {
     @Test
     fun `config if exists in preferences`() {
         whenever(preferences.appMetricaConfig).thenReturn(configFromPreferences)
-        assertThat(configProvider.config).isEqualTo(configFromPreferences)
+        assertThat(configProvider.getConfig(adapterConfig)).isEqualTo(configFromPreferences)
     }
 
     @Test
     fun `config if doesn't exist in preferences`() {
-        assertThat(configProvider.config).isEqualTo(defaultConfig)
+        assertThat(configProvider.getConfig(adapterConfig)).isEqualTo(defaultConfig)
     }
 }
