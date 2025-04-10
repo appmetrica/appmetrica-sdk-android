@@ -3,7 +3,7 @@
     "component": {
         "group": "io.appmetrica.analytics",
         "module": "analytics-gpllibrary",
-        "version": "7.8.0",
+        "version": "7.9.0",
         "attributes": {
             "org.gradle.status": "release"
         }
@@ -25,8 +25,8 @@
             },
             "files": [
                 {
-                    "name": "analytics-gpllibrary-7.8.0.aar",
-                    "url": "analytics-gpllibrary-7.8.0.aar",
+                    "name": "analytics-gpllibrary-7.9.0.aar",
+                    "url": "analytics-gpllibrary-7.9.0.aar",
                     "size": -1,
                     "sha512": "<sha512>",
                     "sha256": "<sha256>",
@@ -55,14 +55,14 @@
                     "group": "io.appmetrica.analytics",
                     "module": "analytics-logger",
                     "version": {
-                        "requires": "7.8.0"
+                        "requires": "7.9.0"
                     }
                 }
             ],
             "files": [
                 {
-                    "name": "analytics-gpllibrary-7.8.0.aar",
-                    "url": "analytics-gpllibrary-7.8.0.aar",
+                    "name": "analytics-gpllibrary-7.9.0.aar",
+                    "url": "analytics-gpllibrary-7.9.0.aar",
                     "size": -1,
                     "sha512": "<sha512>",
                     "sha256": "<sha256>",
