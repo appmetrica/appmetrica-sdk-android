@@ -25,7 +25,6 @@ import io.appmetrica.analytics.impl.service.commands.ServiceCallableFactory;
 import io.appmetrica.analytics.impl.startup.StartupHelper;
 import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedInfo;
 import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedProvider;
-import io.appmetrica.analytics.impl.utils.limitation.SimpleMapLimitation;
 import io.appmetrica.analytics.internal.CounterConfiguration;
 import io.appmetrica.analytics.internal.IAppMetricaService;
 import io.appmetrica.analytics.protobuf.nano.InvalidProtocolBufferNanoException;
@@ -84,8 +83,6 @@ public class ReportsHandlerTest extends CommonTest {
     @Mock
     private DataResultReceiver mDataResultReceiver;
     @Mock
-    private SimpleMapLimitation mMapLimitation;
-    @Mock
     private ProcessConfiguration mProcessConfiguration;
     @Mock
     private UnhandledExceptionEventFormer mEventFormer;
@@ -95,6 +92,10 @@ public class ReportsHandlerTest extends CommonTest {
     private CommutationReporterEnvironment commutationReporterEnvironment;
     @Mock
     private ReportsSender mReportsSender;
+    @Mock
+    private ErrorEnvironment mainErrorEnvironment;
+    @Mock
+    private ErrorEnvironment reporterErrorEnvironment;
 
     private ReporterEnvironment mMainReporterEnvironment;
     private ReporterEnvironment mArgReporterEnvironment;
@@ -118,15 +119,15 @@ public class ReportsHandlerTest extends CommonTest {
         mMainReporterEnvironment = spy(new ReporterEnvironment(
                 new ProcessConfiguration(RuntimeEnvironment.getApplication(), mDataResultReceiver),
                 new CounterConfiguration(),
+            mainErrorEnvironment,
                 userProfileID
                 ));
-        mMainReporterEnvironment.initialize(mMapLimitation);
         mArgReporterEnvironment = spy(new ReporterEnvironment(
                 new ProcessConfiguration(RuntimeEnvironment.getApplication(), mDataResultReceiver),
                 new CounterConfiguration(),
+                reporterErrorEnvironment,
                 userProfileID
         ));
-        mArgReporterEnvironment.initialize(mMapLimitation);
         when(mMainReporter.getEnvironment()).thenReturn(mMainReporterEnvironment);
 
         DatabaseStorageFactoryTestUtils.mockNonComponentDatabases(mContext);

@@ -1,10 +1,13 @@
 package io.appmetrica.analytics.impl.crash.jvm;
 
 import android.os.FileObserver;
+import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.crash.CrashFolderPreparer;
 import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import java.io.File;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -23,6 +26,9 @@ public class CrashDirectoryWatcherTest extends CommonTest {
     @Mock
     private CrashFolderPreparer crashFolderPreparer;
 
+    @Rule
+    public GlobalServiceLocatorRule globalServiceLocatorRule = new GlobalServiceLocatorRule();
+
     private CrashDirectoryWatcher watcher;
 
     @Before
@@ -40,6 +46,7 @@ public class CrashDirectoryWatcherTest extends CommonTest {
         watcher.startWatching();
         verify(crashFolderPreparer).prepareCrashFolder(crashDirectory);
         verify(observer).startWatching();
+        verify(GlobalServiceLocator.getInstance().getReferenceHolder()).storeReference(observer);
     }
 
     @Test

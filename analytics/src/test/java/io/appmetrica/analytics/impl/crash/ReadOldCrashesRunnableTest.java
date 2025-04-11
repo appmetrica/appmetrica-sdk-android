@@ -1,8 +1,7 @@
 package io.appmetrica.analytics.impl.crash;
 
+import android.content.Context;
 import io.appmetrica.analytics.coreapi.internal.backport.Consumer;
-import io.appmetrica.analytics.impl.utils.concurrency.ExclusiveMultiProcessFileLock;
-import io.appmetrica.analytics.impl.utils.concurrency.FileLocksHolder;
 import io.appmetrica.analytics.testutils.CommonTest;
 import java.io.File;
 import org.junit.Before;
@@ -23,11 +22,11 @@ import static org.mockito.Mockito.when;
 public class ReadOldCrashesRunnableTest extends CommonTest {
 
     @Mock
+    private Context context;
+    @Mock
     private File crashDirectory;
     @Mock
     private Consumer<File> newCrashListener;
-    @Mock
-    private FileLocksHolder fileLocksHolder;
 
     private ReadOldCrashesRunnable readOldCrashesRunnable;
 
@@ -35,9 +34,9 @@ public class ReadOldCrashesRunnableTest extends CommonTest {
     public void setUp() {
         MockitoAnnotations.openMocks(this);
         readOldCrashesRunnable = new ReadOldCrashesRunnable(
-                crashDirectory,
-                newCrashListener,
-                fileLocksHolder
+            context,
+            crashDirectory,
+            newCrashListener
         );
     }
 
@@ -58,12 +57,6 @@ public class ReadOldCrashesRunnableTest extends CommonTest {
 
     @Test
     public void testConsumeAllFiles() throws Throwable {
-        ExclusiveMultiProcessFileLock file1Lock = mock(ExclusiveMultiProcessFileLock.class);
-        ExclusiveMultiProcessFileLock file2Lock = mock(ExclusiveMultiProcessFileLock.class);
-        ExclusiveMultiProcessFileLock file3Lock = mock(ExclusiveMultiProcessFileLock.class);
-        when(fileLocksHolder.getOrCreate("file1")).thenReturn(file1Lock);
-        when(fileLocksHolder.getOrCreate("file2")).thenReturn(file2Lock);
-        when(fileLocksHolder.getOrCreate("file3")).thenReturn(file3Lock);
         doReturn(true).when(crashDirectory).exists();
         doReturn(true).when(crashDirectory).isDirectory();
         File file1 = mock(File.class);
@@ -74,16 +67,10 @@ public class ReadOldCrashesRunnableTest extends CommonTest {
         when(file3.getName()).thenReturn("file3");
         doReturn(new File[]{file1, file2, file3}).when(crashDirectory).listFiles();
         readOldCrashesRunnable.run();
-        InOrder inOrder = Mockito.inOrder(file1Lock, file2Lock, file3Lock, newCrashListener);
-        inOrder.verify(file1Lock).lock();
+        InOrder inOrder = Mockito.inOrder(newCrashListener);
         inOrder.verify(newCrashListener).consume(file1);
-        inOrder.verify(file1Lock).unlockAndClear();
-        inOrder.verify(file2Lock).lock();
         inOrder.verify(newCrashListener).consume(file2);
-        inOrder.verify(file2Lock).unlockAndClear();
-        inOrder.verify(file3Lock).lock();
         inOrder.verify(newCrashListener).consume(file3);
-        inOrder.verify(file3Lock).unlockAndClear();
     }
 
 }

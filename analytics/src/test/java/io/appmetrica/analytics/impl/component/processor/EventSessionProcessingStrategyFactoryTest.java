@@ -21,6 +21,7 @@ import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_EXCEPTION_U
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_EXCEPTION_USER_CUSTOM_PROTOBUF;
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_EXCEPTION_USER_PROTOBUF;
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_INIT;
+import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_PREV_SESSION_EXCEPTION_UNHANDLED_FROM_FILE;
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_PURGE_BUFFER;
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_REGULAR;
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_SEND_REFERRER;
@@ -98,6 +99,11 @@ public class EventSessionProcessingStrategyFactoryTest extends CommonTest {
     @Test
     public void testGetProcessingStrategyShouldReturnExpectedHandlers_EventType_UnhandledFromFile() {
         assertThat(getHandlers(EVENT_TYPE_EXCEPTION_UNHANDLED_FROM_FILE)).isEmpty();
+    }
+
+    @Test
+    public void getProcessingStrategyShouldReturnExpectedHandlers_EventType_PrevSessionUnhandledFromFile() {
+        assertThat(getHandlers(EVENT_TYPE_PREV_SESSION_EXCEPTION_UNHANDLED_FROM_FILE)).isEmpty();
     }
 
     @Test

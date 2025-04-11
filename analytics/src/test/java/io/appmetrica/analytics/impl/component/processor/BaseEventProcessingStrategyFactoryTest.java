@@ -14,7 +14,7 @@ import io.appmetrica.analytics.impl.component.processor.event.ReportFeaturesHand
 import io.appmetrica.analytics.impl.component.processor.event.ReportFirstHandler;
 import io.appmetrica.analytics.impl.component.processor.event.ReportFirstOccurrenceStatusHandler;
 import io.appmetrica.analytics.impl.component.processor.event.ReportPermissionHandler;
-import io.appmetrica.analytics.impl.component.processor.event.ReportPrevSessionNativeCrashHandler;
+import io.appmetrica.analytics.impl.component.processor.event.ReportPrevSessionEventHandler;
 import io.appmetrica.analytics.impl.component.processor.event.ReportPurgeBufferHandler;
 import io.appmetrica.analytics.impl.component.processor.event.ReportSaveToDatabaseHandler;
 import io.appmetrica.analytics.impl.component.processor.event.ReportSessionHandler;
@@ -30,6 +30,7 @@ import io.appmetrica.analytics.impl.component.processor.factory.CurrentSessionNa
 import io.appmetrica.analytics.impl.component.processor.factory.ExternalAttributionFactory;
 import io.appmetrica.analytics.impl.component.processor.factory.HandlersFactory;
 import io.appmetrica.analytics.impl.component.processor.factory.JustSaveToDataBaseFactory;
+import io.appmetrica.analytics.impl.component.processor.factory.PrevSessionUnhandledExceptionFromFileFactory;
 import io.appmetrica.analytics.impl.component.processor.factory.PurgeBufferFactory;
 import io.appmetrica.analytics.impl.component.processor.factory.RegularFactory;
 import io.appmetrica.analytics.impl.component.processor.factory.ReportAppOpenFactory;
@@ -65,10 +66,10 @@ import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_CLEANUP;
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_CURRENT_SESSION_NATIVE_CRASH_PROTOBUF;
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_CUSTOM_EVENT;
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_FROM_FILE;
-import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_FROM_INTENT;
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_PROTOBUF;
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_EXCEPTION_USER_CUSTOM_PROTOBUF;
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_EXCEPTION_USER_PROTOBUF;
+import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_PREV_SESSION_EXCEPTION_UNHANDLED_FROM_FILE;
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_PREV_SESSION_NATIVE_CRASH_PROTOBUF;
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_PURGE_BUFFER;
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_REGULAR;
@@ -107,7 +108,6 @@ public class BaseEventProcessingStrategyFactoryTest extends CommonTest {
         when(mock.getReportAppEnvironmentUpdated()).thenReturn(mock(ReportAppEnvironmentUpdatedHandler.class));
         when(mock.getReportAppEnvironmentCleared()).thenReturn(mock(ReportAppEnvironmentClearedHandler.class));
         when(mock.getReportFirstHandler()).thenReturn(mock(ReportFirstHandler.class));
-        when(mock.getReportPrevSessionNativeCrashHandler()).thenReturn(mock(ReportPrevSessionNativeCrashHandler.class));
         when(mock.getReportPermissionsHandler()).thenReturn(mock(ReportPermissionHandler.class));
         when(mock.getReportFeaturesHandler()).thenReturn(mock(ReportFeaturesHandler.class));
         when(mock.getUpdateUserProfileIDHandler()).thenReturn(mock(UpdateUserProfileIDHandler.class));
@@ -122,6 +122,7 @@ public class BaseEventProcessingStrategyFactoryTest extends CommonTest {
         when(mock.getModulesEventHandler()).thenReturn(mock(ModulesEventHandler.class));
         when(mock.getSaveSessionExtrasHandler()).thenReturn(mock(SaveSessionExtrasHandler.class));
         when(mock.getExternalAttributionHandler()).thenReturn(mock(ExternalAttributionHandler.class));
+        when(mock.getReportPrevSessionEventHandler()).thenReturn(mock(ReportPrevSessionEventHandler.class));
     });
 
     @Rule
@@ -160,7 +161,7 @@ public class BaseEventProcessingStrategyFactoryTest extends CommonTest {
             LISTED_EVENTS.add(EVENT_TYPE_CUSTOM_EVENT);
             LISTED_EVENTS.add(EVENT_TYPE_APP_OPEN);
             LISTED_EVENTS.add(EVENT_TYPE_PURGE_BUFFER);
-            LISTED_EVENTS.add(EVENT_TYPE_EXCEPTION_UNHANDLED_FROM_INTENT);
+            LISTED_EVENTS.add(EVENT_TYPE_PREV_SESSION_EXCEPTION_UNHANDLED_FROM_FILE);
             LISTED_EVENTS.add(EVENT_TYPE_EXCEPTION_UNHANDLED_FROM_FILE);
             LISTED_EVENTS.add(EVENT_TYPE_EXCEPTION_UNHANDLED_PROTOBUF);
             LISTED_EVENTS.add(EVENT_TYPE_ANR);
@@ -233,6 +234,8 @@ public class BaseEventProcessingStrategyFactoryTest extends CommonTest {
         public static Collection<Object[]> data() {
             Class<JustSaveToDataBaseFactory> justSaveFactory = JustSaveToDataBaseFactory.class;
             Class<UnhandledExceptionFactory> unhandledExceptionFactory = UnhandledExceptionFactory.class;
+            Class<PrevSessionUnhandledExceptionFromFileFactory> prevSessionUnhandledExceptionFromFileFactory =
+                PrevSessionUnhandledExceptionFromFileFactory.class;
             return Arrays.asList(new Object[][]{
                 {EVENT_TYPE_ACTIVATION, ActivationFactory.class},
                 {EVENT_TYPE_START, StartFactory.class},
@@ -245,7 +248,7 @@ public class BaseEventProcessingStrategyFactoryTest extends CommonTest {
                 {EVENT_TYPE_APP_OPEN, ReportAppOpenFactory.class},
                 {EVENT_TYPE_PURGE_BUFFER, PurgeBufferFactory.class},
                 {EVENT_TYPE_EXCEPTION_UNHANDLED_PROTOBUF, unhandledExceptionFactory},
-                {EVENT_TYPE_EXCEPTION_UNHANDLED_FROM_INTENT, unhandledExceptionFactory},
+                {EVENT_TYPE_PREV_SESSION_EXCEPTION_UNHANDLED_FROM_FILE, prevSessionUnhandledExceptionFromFileFactory},
                 {EVENT_TYPE_EXCEPTION_UNHANDLED_FROM_FILE, UnhandledExceptionFromFileFactory.class},
                 {EVENT_TYPE_CURRENT_SESSION_NATIVE_CRASH_PROTOBUF, CurrentSessionNativeCrashHandlerFactory.class},
                 {EVENT_TYPE_SEND_USER_PROFILE, justSaveFactory},

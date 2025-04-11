@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.ResultReceiver
 import io.appmetrica.analytics.impl.AppMetricaConnector
+import io.appmetrica.analytics.impl.ClientServiceLocator
 import io.appmetrica.analytics.impl.crash.jvm.client.AppMetricaUncaughtExceptionHandler
 import io.appmetrica.analytics.impl.CounterReport
 import io.appmetrica.analytics.impl.ReportToSend
@@ -13,6 +14,7 @@ import io.appmetrica.analytics.impl.ShouldDisconnectFromServiceChecker
 import io.appmetrica.analytics.impl.client.ProcessConfiguration
 import io.appmetrica.analytics.impl.crash.CrashToFileWriter
 import io.appmetrica.analytics.internal.CounterConfiguration
+import io.appmetrica.analytics.internal.IAppMetricaService
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.MockedConstructionRule
@@ -22,7 +24,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.kotlin.any
+import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
@@ -33,8 +35,13 @@ import org.robolectric.RobolectricTestRunner
 @RunWith(RobolectricTestRunner::class)
 internal class CrashCallableTest : CommonTest() {
 
+    private val appMetricaProcess = "AppMetrica process"
+    private val anotherProcess = "Another process"
     private val context: Context = mock()
-    private val appMetricaConnector: AppMetricaConnector = mock()
+    private val service: IAppMetricaService = mock()
+    private val appMetricaConnector: AppMetricaConnector = mock {
+        on { service } doReturn service
+    }
     private val shouldDisconnectFromServiceChecker: ShouldDisconnectFromServiceChecker = mock()
     private var reportToSend: ReportToSend = mock()
     private val intent: Intent = mock()
@@ -43,8 +50,10 @@ internal class CrashCallableTest : CommonTest() {
 
     @get:Rule
     val serviceUtilsRule = MockedStaticRule(ServiceUtils::class.java)
+
     @get:Rule
     val clientServiceLocatorRule = ClientServiceLocatorRule()
+
     @get:Rule
     val mockedRule = MockedConstructionRule(CrashToFileWriter::class.java) { mock, mockContext ->
         crashToFileWriter = mock
@@ -60,6 +69,9 @@ internal class CrashCallableTest : CommonTest() {
             shouldDisconnectFromServiceChecker,
             reportToSend
         )
+
+        whenever(ClientServiceLocator.getInstance().appMetricaServiceProcessDetector.processName(context))
+            .thenReturn(appMetricaProcess)
 
         val reporterEnvironment = mock<ReporterEnvironment>()
         val processConfiguration = ProcessConfiguration(context, mock<ResultReceiver>())
@@ -80,8 +92,9 @@ internal class CrashCallableTest : CommonTest() {
     }
 
     @Test
-    fun metricaProcess() {
-        whenever(clientServiceLocatorRule.mainProcessDetector.isNonMainProcess("AppMetrica")).thenReturn(true)
+    fun appMetricaProcess() {
+        whenever(ClientServiceLocator.getInstance().currentProcessDetector.processName)
+            .thenReturn(appMetricaProcess)
 
         crashCallable.call()
 
@@ -91,7 +104,8 @@ internal class CrashCallableTest : CommonTest() {
 
     @Test
     fun tryToExecuteTwice() {
-        whenever(clientServiceLocatorRule.mainProcessDetector.isNonMainProcess("AppMetrica")).thenReturn(true)
+        whenever(ClientServiceLocator.getInstance().currentProcessDetector.processName)
+            .thenReturn(appMetricaProcess)
 
         crashCallable.call()
 
@@ -104,29 +118,12 @@ internal class CrashCallableTest : CommonTest() {
 
     @Test
     fun nonAppMetricaProcess() {
-        whenever(clientServiceLocatorRule.mainProcessDetector.isNonMainProcess("AppMetrica")).thenReturn(false)
+        whenever(ClientServiceLocator.getInstance().currentProcessDetector.processName)
+            .thenReturn(anotherProcess)
 
         crashCallable.call()
 
         verify(appMetricaConnector).service
         verify(crashToFileWriter, never()).writeToFile(reportToSend)
-    }
-
-    @Test
-    fun truncatedEvent() {
-        val report = CounterReport()
-        report.bytesTruncated = 1
-        whenever(reportToSend.report).thenReturn(report)
-
-        crashCallable.tryToSendCrashIntent(reportToSend)
-
-        verify(context, never()).startService(any())
-    }
-
-    @Test
-    fun notTruncatedEvent() {
-        crashCallable.tryToSendCrashIntent(reportToSend)
-
-        verify(context).startService(intent)
     }
 }

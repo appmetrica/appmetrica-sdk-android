@@ -4,6 +4,7 @@ import android.content.Context
 import io.appmetrica.analytics.coreutils.internal.io.FileUtils
 import io.appmetrica.analytics.coreutils.internal.reflection.ReflectionUtils
 import io.appmetrica.analytics.impl.ReportConsumer
+import io.appmetrica.analytics.impl.crash.ndk.service.NativeCrashHandlerFactory
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrashServiceConfig
 import io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrashServiceModule
@@ -17,7 +18,7 @@ class NativeCrashService {
             "io.appmetrica.analytics.ndkcrashes.NativeCrashServiceModuleImpl"
         ) ?: NativeCrashServiceModuleDummy()
 
-    private lateinit var crashReporter: NativeCrashReporter
+    private val handlerFactory = NativeCrashHandlerFactory(this::markCrashCompletedAndDeleteCompletedCrashes)
 
     fun initNativeCrashReporting(context: Context, reportConsumer: ReportConsumer) {
         DebugLogger.info(tag, "Start native crash reporting")
@@ -33,9 +34,17 @@ class NativeCrashService {
             )
         )
 
-        crashReporter = NativeCrashReporter(reportConsumer, this::markCrashCompletedAndDeleteCompletedCrashes)
-        crashReporter.reportCrashesFromPrevSession(serviceModule.getAllCrashes())
-        serviceModule.setDefaultCrashHandler(crashReporter)
+        sendOldNativeCrashes(context, reportConsumer)
+        serviceModule.setDefaultCrashHandler(handlerFactory.createHandlerForActualSession(context, reportConsumer))
+    }
+
+    private fun sendOldNativeCrashes(context: Context, reportConsumer: ReportConsumer) {
+        val crashes = serviceModule.getAllCrashes()
+        if (crashes.isNotEmpty()) {
+            handlerFactory.createHandlerForPrevSession(context, reportConsumer).apply {
+                crashes.forEach { newCrash(it) }
+            }
+        }
     }
 
     private fun markCrashCompletedAndDeleteCompletedCrashes(uuid: String) {

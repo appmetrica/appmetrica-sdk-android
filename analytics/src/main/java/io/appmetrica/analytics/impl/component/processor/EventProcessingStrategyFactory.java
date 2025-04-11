@@ -13,6 +13,7 @@ import io.appmetrica.analytics.impl.component.processor.factory.ExternalAttribut
 import io.appmetrica.analytics.impl.component.processor.factory.HandlersFactory;
 import io.appmetrica.analytics.impl.component.processor.factory.JustSaveToDataBaseFactory;
 import io.appmetrica.analytics.impl.component.processor.factory.PrevSessionNativeCrashHandlerFactory;
+import io.appmetrica.analytics.impl.component.processor.factory.PrevSessionUnhandledExceptionFromFileFactory;
 import io.appmetrica.analytics.impl.component.processor.factory.PurgeBufferFactory;
 import io.appmetrica.analytics.impl.component.processor.factory.RegularFactory;
 import io.appmetrica.analytics.impl.component.processor.factory.ReportAppOpenFactory;
@@ -36,10 +37,10 @@ import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_CLEANUP;
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_CURRENT_SESSION_NATIVE_CRASH_PROTOBUF;
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_CUSTOM_EVENT;
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_FROM_FILE;
-import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_FROM_INTENT;
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_PROTOBUF;
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_EXCEPTION_USER_CUSTOM_PROTOBUF;
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_EXCEPTION_USER_PROTOBUF;
+import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_PREV_SESSION_EXCEPTION_UNHANDLED_FROM_FILE;
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_PREV_SESSION_NATIVE_CRASH_PROTOBUF;
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_PURGE_BUFFER;
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_REGULAR;
@@ -60,7 +61,7 @@ public class EventProcessingStrategyFactory extends ProcessingStrategyFactory<Re
     private final Map<InternalEvents, HandlersFactory<ReportComponentHandler>> mFactories;
 
     @Nullable
-    private CommonHandlersFactory<ReportComponentHandler> mPreMainFactory;
+    private final CommonHandlersFactory<ReportComponentHandler> mPreMainFactory;
 
     public EventProcessingStrategyFactory(ComponentUnit componentUnit) {
         mHandlersProvider = new ReportingHandlerProvider(componentUnit);
@@ -94,11 +95,15 @@ public class EventProcessingStrategyFactory extends ProcessingStrategyFactory<Re
             new CurrentSessionNativeCrashHandlerFactory(mHandlersProvider));
         map.put(EVENT_TYPE_PREV_SESSION_NATIVE_CRASH_PROTOBUF,
             new PrevSessionNativeCrashHandlerFactory(mHandlersProvider));
+
         map.put(EVENT_TYPE_EXCEPTION_UNHANDLED_FROM_FILE, new UnhandledExceptionFromFileFactory(mHandlersProvider));
+        map.put(
+            EVENT_TYPE_PREV_SESSION_EXCEPTION_UNHANDLED_FROM_FILE,
+            new PrevSessionUnhandledExceptionFromFileFactory(mHandlersProvider)
+        );
 
         UnhandledExceptionFactory unhandledExceptionFactory = new UnhandledExceptionFactory(mHandlersProvider);
         map.put(EVENT_TYPE_EXCEPTION_UNHANDLED_PROTOBUF, unhandledExceptionFactory);
-        map.put(EVENT_TYPE_EXCEPTION_UNHANDLED_FROM_INTENT, unhandledExceptionFactory);
 
         map.put(EVENT_TYPE_ANR, justSaveFactory);
         map.put(EVENT_TYPE_APP_ENVIRONMENT_UPDATED, new SingleHandlerFactory(
@@ -142,7 +147,7 @@ public class EventProcessingStrategyFactory extends ProcessingStrategyFactory<Re
         if (factory != null) {
             factory.addHandlers(reportHandlers);
         }
-        return new EventProcessingDefaultStrategy<ReportComponentHandler>(reportHandlers);
+        return new EventProcessingDefaultStrategy<>(reportHandlers);
     }
 
     @VisibleForTesting

@@ -186,16 +186,16 @@ public class SessionManagerStateMachine {
     private Session loadLastSession(@NonNull CounterReport report) {
         if (mState == null) {
             Session foregroundSession = mForegroundSessionFactory.load();
-            if (checkValidity(foregroundSession, report) == false) {
-                return foregroundSession;
-            } else {
-                Session backgroundSession = mBackgroundSessionFactory.load();
-                if (checkValidity(backgroundSession, report) == false) {
-                    return backgroundSession;
-                } else {
-                    return null;
-                }
-            }
+            Session backgroundSession = mBackgroundSessionFactory.load();
+            DebugLogger.INSTANCE.info(
+                TAG,
+                "loadLastSession: foregroundSession = %s; backgroundSession = %s;",
+                foregroundSession,
+                backgroundSession
+            );
+            long foregroundSessionId = foregroundSession == null ? -1 : foregroundSession.getId();
+            long backgroundSessionId = backgroundSession == null ? -1 : backgroundSession.getId();
+            return foregroundSessionId > backgroundSessionId ? foregroundSession : backgroundSession;
         } else {
             return mCurrentSession;
         }
@@ -211,14 +211,6 @@ public class SessionManagerStateMachine {
                 close(session, reportData);
                 return false;
             }
-        }
-    }
-
-    private boolean checkValidity(@Nullable Session session, @NonNull CounterReport reportData) {
-        if (session == null) {
-            return false;
-        } else {
-            return session.isValid(reportData.getCreationElapsedRealtime());
         }
     }
 

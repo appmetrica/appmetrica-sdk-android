@@ -270,8 +270,16 @@ public class ReportsHandler {
 
     void reportCrash(@NonNull UnhandledException unhandledException,
                      @NonNull ReporterEnvironment reporterEnvironment) {
+        DebugLogger.INSTANCE.info(
+            TAG, "report crash: %s",
+            unhandledException.exception == null ? "null" : unhandledException.exception.getExceptionClass()
+            );
         ReportToSend report = prepareUnhandledExceptionReport(unhandledException, reporterEnvironment);
         report.getEnvironment().updateStartupParams(mStartupParamsProvider);
+        DebugLogger.INSTANCE.info(
+            TAG, "send crash: %s",
+            unhandledException.exception == null ? "null" : unhandledException.exception.getExceptionClass()
+        );
         mReportsSender.sendCrash(report);
     }
 

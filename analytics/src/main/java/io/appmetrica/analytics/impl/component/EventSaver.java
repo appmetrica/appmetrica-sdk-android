@@ -120,7 +120,16 @@ public class EventSaver {
     }
 
     public void saveReportFromPrevSession(@NonNull CounterReport report) {
-        saveReport(report, mSessionManager.peekCurrentSessionState(report));
+        SessionState sessionState = mSessionManager.peekCurrentSessionState(report);
+        DebugLogger.INSTANCE.info(
+            TAG,
+            "saveReport: %s of type: %d to prev session: %d of type: %s",
+            report.getName(),
+            report.getType(),
+            sessionState.getSessionId(),
+            sessionState.getSessionType().name()
+        );
+        saveReport(report, sessionState);
     }
 
     @VisibleForTesting

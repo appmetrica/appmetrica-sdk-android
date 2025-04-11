@@ -1,16 +1,12 @@
 package io.appmetrica.analytics.impl;
 
 import android.content.Context;
-import io.appmetrica.analytics.coreapi.internal.backport.Consumer;
-import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
-import io.appmetrica.analytics.coreutils.internal.io.FileUtils;
 import io.appmetrica.analytics.coreutils.internal.services.UtilityServiceProvider;
 import io.appmetrica.analytics.coreutils.internal.services.WaitForActivationDelayBarrier;
 import io.appmetrica.analytics.impl.component.clients.ClientRepository;
 import io.appmetrica.analytics.impl.core.CoreImplFirstCreateTaskLauncher;
 import io.appmetrica.analytics.impl.core.CoreImplFirstCreateTaskLauncherProvider;
-import io.appmetrica.analytics.impl.crash.ReadOldCrashesRunnable;
-import io.appmetrica.analytics.impl.crash.jvm.CrashDirectoryWatcher;
+import io.appmetrica.analytics.impl.crash.service.ServiceCrashController;
 import io.appmetrica.analytics.impl.db.VitalCommonDataProvider;
 import io.appmetrica.analytics.impl.id.AdvertisingIdGetter;
 import io.appmetrica.analytics.impl.modules.ModuleServiceLifecycleControllerImpl;
@@ -21,16 +17,12 @@ import io.appmetrica.analytics.impl.startup.StartupState;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import io.appmetrica.analytics.testutils.MockedConstructionRule;
-import io.appmetrica.analytics.testutils.MockedStaticRule;
 import io.appmetrica.analytics.testutils.TestUtils;
-import java.io.File;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.mockito.MockedConstruction;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
@@ -60,17 +52,11 @@ public class AppMetricaServiceCoreImplOnCreateTest extends CommonTest {
     @Mock
     private AppMetricaServiceLifecycle mAppMetricaServiceLifecycle;
     @Mock
-    private File mCrashesDirectory;
-    @Mock
     private FirstServiceEntryPointManager firstServiceEntryPointManager;
     @Mock
     private ApplicationStateProviderImpl applicationStateProvider;
     @Mock
     private AppMetricaServiceCoreImplFieldsFactory fieldsFactory;
-    @Mock
-    private CrashDirectoryWatcher crashDirectoryWatcher;
-    @Mock
-    private ICommonExecutor reportExecutor;
     @Mock
     private ReportConsumer reportConsumer;
     @Mock
@@ -95,16 +81,11 @@ public class AppMetricaServiceCoreImplOnCreateTest extends CommonTest {
         firstCreateTaskLauncherProviderMockedConstructionRule =
         new MockedConstructionRule<>(
             CoreImplFirstCreateTaskLauncherProvider.class,
-            new MockedConstruction.MockInitializer<CoreImplFirstCreateTaskLauncherProvider>() {
-                @Override
-                public void prepare(CoreImplFirstCreateTaskLauncherProvider mock,
-                                    MockedConstruction.Context context) throws Throwable {
-                    when(mock.getLauncher()).thenReturn(mock(CoreImplFirstCreateTaskLauncher.class));
-                }
-            });
+            (mock, context) -> when(mock.getLauncher()).thenReturn(mock(CoreImplFirstCreateTaskLauncher.class)));
 
     @Rule
-    public MockedStaticRule<FileUtils> fileUtilsMockedRule = new MockedStaticRule<>(FileUtils.class);
+    public MockedConstructionRule<ServiceCrashController> serviceCrashControllerMockedConstructionRule =
+        new MockedConstructionRule<>(ServiceCrashController.class);
 
     @Before
     public void setUp() {
@@ -112,11 +93,6 @@ public class AppMetricaServiceCoreImplOnCreateTest extends CommonTest {
         MockitoAnnotations.openMocks(this);
         when(GlobalServiceLocator.getInstance().getVitalDataProviderStorage().getCommonDataProvider())
             .thenReturn(mock(VitalCommonDataProvider.class));
-        when(FileUtils.getCrashesDirectory(mContext)).thenReturn(mCrashesDirectory);
-        doReturn(crashDirectoryWatcher).when(fieldsFactory).createCrashDirectoryWatcher(
-            any(File.class),
-            any(Consumer.class)
-        );
         doReturn(reportConsumer).when(fieldsFactory).createReportConsumer(same(mContext), any(ClientRepository.class));
     }
 
@@ -145,47 +121,6 @@ public class AppMetricaServiceCoreImplOnCreateTest extends CommonTest {
     }
 
     @Test
-    public void doNotSubscribeToCrashesIfDirectoryIsNull() {
-        when(FileUtils.getCrashesDirectory(mContext)).thenReturn(null);
-        initMetricaCoreImpl();
-        mMetricaCore.onCreate();
-        verifyNoMoreInteractions(reportExecutor, crashDirectoryWatcher);
-    }
-
-    @Test
-    public void subscribeToCrashes() {
-        initMetricaCoreImpl();
-        mMetricaCore.onCreate();
-
-        ArgumentCaptor<Consumer<File>> listenerCaptor = ArgumentCaptor.forClass(Consumer.class);
-        verify(fieldsFactory).createCrashDirectoryWatcher(
-            same(mCrashesDirectory),
-            listenerCaptor.capture()
-        );
-        Consumer<File> listener = listenerCaptor.getValue();
-
-        File file = mock(File.class);
-        ReportConsumer reportConsumer = mock(ReportConsumer.class);
-        mMetricaCore.setReportConsumer(reportConsumer);
-        listener.consume(file);
-        verify(reportConsumer).consumeCrashFromFile(file);
-
-        ArgumentCaptor<ReadOldCrashesRunnable> captor = ArgumentCaptor.forClass(ReadOldCrashesRunnable.class);
-        verify(reportExecutor).execute(captor.capture());
-
-        assertThat(captor.getValue()).extracting("crashDirectory").isSameAs(mCrashesDirectory);
-        assertThat(captor.getValue()).extracting("newCrashListener").isSameAs(listener);
-
-        verify(crashDirectoryWatcher).startWatching();
-
-        mMetricaCore.onDestroy();
-        clearInvocations(fieldsFactory, crashDirectoryWatcher);
-        mMetricaCore.onCreate();
-        verify(fieldsFactory, never()).createCrashDirectoryWatcher(any(File.class), any(Consumer.class));
-        verifyNoMoreInteractions(crashDirectoryWatcher);
-    }
-
-    @Test
     public void onFirstCreateLaunchOnFirstCreateTasks() {
         initMetricaCoreImpl();
         mMetricaCore.onCreate();
@@ -204,14 +139,13 @@ public class AppMetricaServiceCoreImplOnCreateTest extends CommonTest {
             mAppMetricaServiceLifecycle,
             firstServiceEntryPointManager,
             applicationStateProvider,
-            reportExecutor,
             fieldsFactory
         );
     }
 
     @Test
     public void onCreateTwice() {
-        try (MockedStatic<AppMetricaSelfReportFacade> ignored = Mockito.mockStatic(AppMetricaSelfReportFacade.class)) {
+        try (MockedStatic<AppMetricaSelfReportFacade> appMetricaSelfFacadeStaticMock = Mockito.mockStatic(AppMetricaSelfReportFacade.class)) {
             when(AppMetricaSelfReportFacade.getReporter()).thenReturn(mock(IReporterExtended.class));
             initMetricaCoreImpl();
             mMetricaCore.onCreate();
@@ -224,14 +158,13 @@ public class AppMetricaServiceCoreImplOnCreateTest extends CommonTest {
             verify(GlobalServiceLocator.getInstance().getStartupStateHolder()).registerObserver(GlobalServiceLocator.getInstance().getModulesController());
             verify(GlobalServiceLocator.getInstance().getStartupStateHolder()).registerObserver(any(StartupStateObserver.class));
             verify(fieldsFactory).createReportConsumer(same(mContext), any(ClientRepository.class));
-            verify(reportExecutor).execute(any(Runnable.class));
-            verify(crashDirectoryWatcher).startWatching();
-            verify(globalServiceLocator.getNativeCrashService()).initNativeCrashReporting(mContext, reportConsumer);
+            appMetricaSelfFacadeStaticMock.verify(() -> AppMetricaSelfReportFacade.warmupForSelfProcess(mContext));
             verify(globalServiceLocator.getLifecycleDependentComponentManager()).onCreate();
+            verify(serviceCrashController()).init();
 
             mMetricaCore.onDestroy();
             clearInvocations(activationBarrier, firstServiceEntryPointManager, globalServiceLocator, mAppMetricaServiceLifecycle,
-                advertisingIdGetter, fieldsFactory, reportExecutor, crashDirectoryWatcher, globalServiceLocator.getNativeCrashService(),
+                advertisingIdGetter, fieldsFactory, globalServiceLocator.getNativeCrashService(),
                 globalServiceLocator.getLifecycleDependentComponentManager());
             mMetricaCore.onCreate();
 
@@ -240,10 +173,10 @@ public class AppMetricaServiceCoreImplOnCreateTest extends CommonTest {
             verifyNoMoreInteractions(mAppMetricaServiceLifecycle);
             verify(advertisingIdGetter, never()).init();
             verify(fieldsFactory, never()).createReportConsumer(same(mContext), any(ClientRepository.class));
-            verify(reportExecutor, never()).execute(any(Runnable.class));
-            verify(crashDirectoryWatcher, never()).startWatching();
+            appMetricaSelfFacadeStaticMock.verify(() -> AppMetricaSelfReportFacade.warmupForSelfProcess(mContext));
             verify(globalServiceLocator.getNativeCrashService(), never()).initNativeCrashReporting(any(Context.class), any(ReportConsumer.class));
             verify(globalServiceLocator.getLifecycleDependentComponentManager()).onCreate();
+            assertThat(serviceCrashControllerMockedConstructionRule.getConstructionMock().constructed()).hasSize(1);
         }
     }
 
@@ -270,5 +203,12 @@ public class AppMetricaServiceCoreImplOnCreateTest extends CommonTest {
         assertThat(firstCreateTaskLauncherProviderMockedConstructionRule.getArgumentInterceptor().flatArguments())
             .isEmpty();
         return firstCreateTaskLauncherProviderMockedConstructionRule.getConstructionMock().constructed().get(0);
+    }
+
+    private ServiceCrashController serviceCrashController() {
+        assertThat(serviceCrashControllerMockedConstructionRule.getConstructionMock().constructed()).hasSize(1);
+        assertThat(serviceCrashControllerMockedConstructionRule.getArgumentInterceptor().flatArguments())
+            .containsExactly(mContext, reportConsumer);
+        return serviceCrashControllerMockedConstructionRule.getConstructionMock().constructed().get(0);
     }
 }

@@ -58,11 +58,7 @@ public class ClientRepository {
         }
     }
 
-    public void remove(@NonNull String packageName, int pid, String psid) {
-        removeInternal(packageName, pid, psid);
-    }
-
-    private void removeInternal(@NonNull String packageName, @Nullable Integer pid, @Nullable String psid) {
+    public void remove(@NonNull String packageName, @Nullable Integer pid, @Nullable String psid) {
         DebugLogger.INSTANCE.info(
             TAG,
             "remove clients for (packageName, pid, psid) = (%s, %d, %s)",
@@ -72,7 +68,7 @@ public class ClientRepository {
         );
         synchronized (mMonitor) {
             Collection<ClientDescription> clientDescriptions =
-                    mTaggedClients.removeAll(new Tag(packageName, pid, psid));
+                mTaggedClients.removeAll(new Tag(packageName, pid, psid));
             if (Utils.isNullOrEmpty(clientDescriptions)) {
                 DebugLogger.INSTANCE.info(
                     TAG,
@@ -145,5 +141,4 @@ public class ClientRepository {
             return mPsid != null ? mPsid.equals(tag.mPsid) : tag.mPsid == null;
         }
     }
-
 }

@@ -4,6 +4,7 @@ import android.util.Base64;
 import androidx.annotation.NonNull;
 import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
 import io.appmetrica.analytics.impl.ClientCounterReport;
+import io.appmetrica.analytics.impl.InternalEvents;
 import io.appmetrica.analytics.internal.CounterConfigurationReporterType;
 import io.appmetrica.analytics.impl.EventsManager;
 import io.appmetrica.analytics.impl.TestsData;
@@ -82,12 +83,13 @@ public class JvmCrashTest extends CommonTest {
     @Test
     public void testToJSON() throws JSONException {
         JvmCrash crash = new JvmCrash(EventsManager.unhandledExceptionFromFileReportEntry(
-                mCrashName,
-                mCrashValue.getBytes(),
-                mBytesTruncated,
-                mTrimmedFields,
-                mErrorEnvironment,
-                mock(PublicLogger.class)
+            InternalEvents.EVENT_TYPE_PREV_SESSION_NATIVE_CRASH_PROTOBUF,
+            mCrashName,
+            mCrashValue.getBytes(),
+            mBytesTruncated,
+            mTrimmedFields,
+            mErrorEnvironment,
+            mock(PublicLogger.class)
         ), clientConfiguration, mTrimmedFields);
 
         JSONObject object = new JSONObject(crash.toJSONString());
@@ -115,12 +117,13 @@ public class JvmCrashTest extends CommonTest {
     @Test
     public void testAllFieldsFilled() throws Exception {
         JvmCrash crash = new JvmCrash(EventsManager.unhandledExceptionFromFileReportEntry(
-                mCrashName,
-                mCrashValue.getBytes(),
-                mBytesTruncated,
-                mTrimmedFields,
-                mErrorEnvironment,
-                mock(PublicLogger.class)
+            InternalEvents.EVENT_TYPE_PREV_SESSION_EXCEPTION_UNHANDLED_FROM_FILE,
+            mCrashName,
+            mCrashValue.getBytes(),
+            mBytesTruncated,
+            mTrimmedFields,
+            mErrorEnvironment,
+            mock(PublicLogger.class)
         ), clientConfiguration, mTrimmedFields);
         ObjectPropertyAssertions<JvmCrash> assertions = ObjectPropertyAssertions(crash).withDeclaredAccessibleFields(true)
                 .withIgnoredFields("trimmedFields");
@@ -209,12 +212,13 @@ public class JvmCrashTest extends CommonTest {
     @Test
     public void testSerializeAndDeserialize() throws JSONException {
         JvmCrash crash = new JvmCrash(EventsManager.unhandledExceptionFromFileReportEntry(
-                mCrashName,
-                mCrashValue.getBytes(),
-                mBytesTruncated,
-                mTrimmedFields,
-                mErrorEnvironment,
-                mock(PublicLogger.class)
+            InternalEvents.EVENT_TYPE_PREV_SESSION_EXCEPTION_UNHANDLED_FROM_FILE,
+            mCrashName,
+            mCrashValue.getBytes(),
+            mBytesTruncated,
+            mTrimmedFields,
+            mErrorEnvironment,
+            mock(PublicLogger.class)
         ), clientConfiguration, mTrimmedFields);
         assertThat(new JvmCrash(crash.toJSONString())).usingRecursiveComparison().isEqualTo(crash);
     }

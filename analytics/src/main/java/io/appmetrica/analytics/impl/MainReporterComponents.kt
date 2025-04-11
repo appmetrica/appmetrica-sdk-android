@@ -2,6 +2,7 @@ package io.appmetrica.analytics.impl
 
 import android.content.Context
 import io.appmetrica.analytics.AppMetricaConfig
+import io.appmetrica.analytics.coreutils.internal.logger.LoggerStorage
 import io.appmetrica.analytics.impl.client.ProcessConfiguration
 import io.appmetrica.analytics.impl.crash.PluginErrorDetailsConverter
 import io.appmetrica.analytics.impl.crash.jvm.converter.AnrConverter
@@ -11,6 +12,7 @@ import io.appmetrica.analytics.impl.crash.jvm.converter.UnhandledExceptionConver
 import io.appmetrica.analytics.impl.crash.ndk.NativeCrashClient
 import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoWrapper
 import io.appmetrica.analytics.impl.startup.StartupHelper
+import io.appmetrica.analytics.impl.utils.limitation.SimpleMapLimitation
 import io.appmetrica.analytics.internal.CounterConfiguration
 import io.appmetrica.analytics.internal.CounterConfigurationReporterType
 import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger
@@ -20,16 +22,21 @@ internal class MainReporterComponents(
     val reporterFactoryProvider: IReporterFactoryProvider,
     val processConfiguration: ProcessConfiguration,
     val reportsHandler: ReportsHandler,
-    val startupHelper: StartupHelper
+    val startupHelper: StartupHelper,
 ) {
 
     val nativeCrashClient = NativeCrashClient(processConfiguration)
 
     val extraMetaInfoRetriever = ExtraMetaInfoRetriever(context)
 
+    val errorEnvironment = ErrorEnvironment(
+        SimpleMapLimitation(LoggerStorage.getMainPublicOrAnonymousLogger(), ErrorEnvironment.TAG)
+    )
+
     val reporterEnvironment = ReporterEnvironment(
         processConfiguration,
-        CounterConfiguration(CounterConfigurationReporterType.MAIN)
+        CounterConfiguration(CounterConfigurationReporterType.MAIN),
+        errorEnvironment
     )
 
     val appStatusMonitor = AppStatusMonitor()

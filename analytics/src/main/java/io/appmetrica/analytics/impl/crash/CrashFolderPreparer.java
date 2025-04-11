@@ -10,13 +10,16 @@ public class CrashFolderPreparer {
     private static final String TAG = "[CrashFolderPreparer]";
 
     public boolean prepareCrashFolder(@Nullable File crashFolder) {
+        DebugLogger.INSTANCE.info(TAG, "prepare crash directory: %s", crashFolder);
         if (crashFolder == null) {
             return false;
         }
         if (crashFolder.exists()) {
             if (crashFolder.isDirectory()) {
+                DebugLogger.INSTANCE.info(TAG, "Crash directory: %s already exists", crashFolder);
                 return true;
             } else {
+                DebugLogger.INSTANCE.info(TAG, "Recreate crash directory: %s", crashFolder);
                 if (crashFolder.delete()) {
                     return makeCrashesFolder(crashFolder);
                 } else {
@@ -34,6 +37,7 @@ public class CrashFolderPreparer {
 
     boolean makeCrashesFolder(@NonNull File crashFolder) {
         if (crashFolder.mkdir()) {
+            DebugLogger.INSTANCE.info(TAG, "Crash directory: %s created successful", crashFolder);
             return true;
         } else {
             DebugLogger.INSTANCE.info(TAG, "Can't make crash directory.");

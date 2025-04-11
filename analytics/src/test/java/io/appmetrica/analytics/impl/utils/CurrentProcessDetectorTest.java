@@ -9,17 +9,17 @@ import org.robolectric.RobolectricTestRunner;
 import static org.assertj.core.api.Java6Assertions.assertThat;
 
 @RunWith(RobolectricTestRunner.class)
-public class MainProcessDetectorTest extends CommonTest {
+public class CurrentProcessDetectorTest extends CommonTest {
 
-    private MainProcessDetector mMainProcessDetector;
+    private CurrentProcessDetector mCurrentProcessDetector;
 
     @Before
     public void setUp() throws Exception {
-        mMainProcessDetector = new MainProcessDetector();
+        mCurrentProcessDetector = new CurrentProcessDetector();
     }
 
     @Test
     public void testIsMainProcess() {
-        assertThat(mMainProcessDetector.isMainProcess()).isTrue();
+        assertThat(mCurrentProcessDetector.isMainProcess()).isTrue();
     }
 }

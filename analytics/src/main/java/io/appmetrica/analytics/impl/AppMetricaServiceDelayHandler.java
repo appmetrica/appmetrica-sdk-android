@@ -6,7 +6,7 @@ import androidx.annotation.AnyThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
-import io.appmetrica.analytics.impl.utils.MainProcessDetector;
+import io.appmetrica.analytics.impl.utils.CurrentProcessDetector;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -19,19 +19,19 @@ public class AppMetricaServiceDelayHandler {
     private static final String METRICA_SERVICE_SETTING_FILENAME = "metrica_service_settings.dat";
 
     @NonNull
-    private final MainProcessDetector processDetector;
+    private final CurrentProcessDetector processDetector;
     @NonNull
     private final FileProvider fileProvider;
     private boolean delayHappened = false;
     @Nullable
     private Long cachedDelay;
 
-    public AppMetricaServiceDelayHandler(@NonNull MainProcessDetector processDetector) {
+    public AppMetricaServiceDelayHandler(@NonNull CurrentProcessDetector processDetector) {
         this(processDetector, new FileProvider());
     }
 
     @VisibleForTesting
-    AppMetricaServiceDelayHandler(@NonNull MainProcessDetector processDetector, @NonNull FileProvider fileProvider) {
+    AppMetricaServiceDelayHandler(@NonNull CurrentProcessDetector processDetector, @NonNull FileProvider fileProvider) {
         this.processDetector = processDetector;
         this.fileProvider = fileProvider;
     }

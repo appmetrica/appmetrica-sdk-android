@@ -40,6 +40,6 @@ class ClientContextImpl(
 
     override val processDetector: ProcessDetector = object : ProcessDetector {
         override fun isMainProcess(): Boolean =
-            ClientServiceLocator.getInstance().mainProcessDetector.isMainProcess
+            ClientServiceLocator.getInstance().currentProcessDetector.isMainProcess
     }
 }

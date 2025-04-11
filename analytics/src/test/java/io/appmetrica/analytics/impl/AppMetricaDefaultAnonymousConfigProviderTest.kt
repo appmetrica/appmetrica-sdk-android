@@ -2,8 +2,8 @@ package io.appmetrica.analytics.impl
 
 import io.appmetrica.analytics.AppMetricaConfig
 import io.appmetrica.analytics.AppMetricaLibraryAdapterConfig
+import io.appmetrica.analytics.impl.utils.CurrentProcessDetector
 import io.appmetrica.analytics.impl.utils.FirstLaunchDetector
-import io.appmetrica.analytics.impl.utils.MainProcessDetector
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule
 import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
@@ -17,7 +17,7 @@ class AppMetricaDefaultAnonymousConfigProviderTest : CommonTest() {
     @get:Rule
     val clientServiceLocatorRule = ClientServiceLocatorRule()
 
-    private lateinit var mainProcessDetector: MainProcessDetector
+    private lateinit var currentProcessDetector: CurrentProcessDetector
     private lateinit var firstLaunchDetector: FirstLaunchDetector
 
     private val apiKey = "629a824d-c717-4ba5-bc0f-3f3968554d01"
@@ -29,8 +29,8 @@ class AppMetricaDefaultAnonymousConfigProviderTest : CommonTest() {
     @Before
     fun setUp() {
         firstLaunchDetector = ClientServiceLocator.getInstance().firstLaunchDetector
-        mainProcessDetector = ClientServiceLocator.getInstance().mainProcessDetector
-        whenever(mainProcessDetector.isMainProcess).thenReturn(true)
+        currentProcessDetector = ClientServiceLocator.getInstance().currentProcessDetector
+        whenever(currentProcessDetector.isMainProcess).thenReturn(true)
     }
 
     @Test
@@ -82,7 +82,7 @@ class AppMetricaDefaultAnonymousConfigProviderTest : CommonTest() {
     @Test
     fun `getConfig for non main process and not first launch`() {
         whenever(firstLaunchDetector.isNotFirstLaunch()).thenReturn(true)
-        whenever(mainProcessDetector.isMainProcess).thenReturn(false)
+        whenever(currentProcessDetector.isMainProcess).thenReturn(false)
         val config = appMetricaDefaultAnonymousConfigProvider.getConfig(
             AppMetricaLibraryAdapterConfig.newConfigBuilder().build()
         )

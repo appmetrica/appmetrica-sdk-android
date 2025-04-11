@@ -52,6 +52,7 @@ public class CrashToFileWriter {
     }
 
     public void writeToFile(@NonNull ReportToSend toSend) {
+        DebugLogger.INSTANCE.info(TAG, "Write crash to file: %s", toSend.getReport().getName());
         File crashFolder = FileUtils.getCrashesDirectory(mContext);
         if (mCrashFolderPreparer.prepareCrashFolder(crashFolder)) {
             ProcessConfiguration configuration = toSend.getEnvironment().getProcessConfiguration();
@@ -77,6 +78,7 @@ public class CrashToFileWriter {
             } finally {
                 Utils.closeCloseable(printWriter);
                 fileLocker.unlockAndClear();
+                fileLocksHolder.clear(fileName);
             }
         } else {
             DebugLogger.INSTANCE.error(

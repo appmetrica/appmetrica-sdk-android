@@ -3,14 +3,13 @@ package io.appmetrica.analytics.impl.component.session;
 import io.appmetrica.analytics.coreutils.internal.time.SystemTimeProvider;
 import io.appmetrica.analytics.impl.CounterReport;
 import io.appmetrica.analytics.impl.CounterReportMatcher;
-import io.appmetrica.analytics.impl.ExtraMetaInfoRetriever;
 import io.appmetrica.analytics.impl.InternalEvents;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.impl.db.DatabaseHelper;
 import io.appmetrica.analytics.impl.db.VitalComponentDataProvider;
 import io.appmetrica.analytics.impl.events.ConditionalEventTrigger;
-import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.impl.utils.ServerTime;
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import java.util.concurrent.TimeUnit;
@@ -56,8 +55,6 @@ public class SessionManagerStateMachineTest extends CommonTest {
     private SessionIDProvider mSessionIDProvider;
     @Mock
     private CounterReport mCounterReport;
-    @Mock
-    private ExtraMetaInfoRetriever mExtraMetaInfoRetriever;
     @Mock
     private VitalComponentDataProvider vitalComponentDataProvider;
 
@@ -259,6 +256,7 @@ public class SessionManagerStateMachineTest extends CommonTest {
         when(mFgSession.isValid(anyLong())).thenReturn(true);
         when(mBgSession.isValid(anyLong())).thenReturn(true);
         when(mSessionIDProvider.getNextSessionId()).thenReturn(nextSessionId);
+        when(mFgSession.getId()).thenReturn(nextSessionId);
         mManager = new SessionManagerStateMachine(
                 mComponentUnit,
                 mSessionIDProvider,
@@ -268,7 +266,7 @@ public class SessionManagerStateMachineTest extends CommonTest {
         );
         SessionState currentSessionState = mManager.peekCurrentSessionState(mCounterReport);
         assertThat(currentSessionState.getSessionId()).isEqualTo(nextSessionId);
-        assertThat(currentSessionState.getSessionType()).isEqualTo(SessionType.BACKGROUND);
+        assertThat(currentSessionState.getSessionType()).isEqualTo(SessionType.FOREGROUND);
         assertThat(currentSessionState.getReportTime()).isEqualTo(0);
         assertThat(currentSessionState.getReportId()).isEqualTo(SessionDefaults.INITIAL_REPORT_ID);
     }

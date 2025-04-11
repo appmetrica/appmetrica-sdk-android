@@ -4,10 +4,7 @@ import android.annotation.SuppressLint;
 import android.text.TextUtils;
 import androidx.annotation.NonNull;
 
-/**
- * Main process detection strategy from <a href="https://cs.chromium.org/chromium/src/base/android/java/src/org/chromium/base/ContextUtils.java?q=ContextUtil&sq=package:chromium&g=0&l=172">Chromium</a>.
- */
-public class MainProcessDetector implements ProcessDetector {
+public class CurrentProcessDetector implements ProcessDetector {
 
     private volatile String mProcessName;
 

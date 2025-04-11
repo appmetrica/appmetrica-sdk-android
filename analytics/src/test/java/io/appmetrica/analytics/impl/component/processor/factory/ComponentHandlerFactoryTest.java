@@ -11,7 +11,7 @@ import io.appmetrica.analytics.impl.component.processor.event.ReportFeaturesHand
 import io.appmetrica.analytics.impl.component.processor.event.ReportFirstHandler;
 import io.appmetrica.analytics.impl.component.processor.event.ReportFirstOccurrenceStatusHandler;
 import io.appmetrica.analytics.impl.component.processor.event.ReportPermissionHandler;
-import io.appmetrica.analytics.impl.component.processor.event.ReportPrevSessionNativeCrashHandler;
+import io.appmetrica.analytics.impl.component.processor.event.ReportPrevSessionEventHandler;
 import io.appmetrica.analytics.impl.component.processor.event.ReportPurgeBufferHandler;
 import io.appmetrica.analytics.impl.component.processor.event.ReportSaveToDatabaseHandler;
 import io.appmetrica.analytics.impl.component.processor.event.ReportSessionHandler;
@@ -54,7 +54,7 @@ public class ComponentHandlerFactoryTest extends CommonTest {
     @Mock
     private ReportFirstHandler mReportFirstHandler;
     @Mock
-    private ReportPrevSessionNativeCrashHandler mReportPrevSessionNativeCrashHandler;
+    private ReportPrevSessionEventHandler mReportPrevSessionEventHandler;
     @Mock
     private ReportPermissionHandler mReportPermissionsHandler;
     @Mock
@@ -89,7 +89,7 @@ public class ComponentHandlerFactoryTest extends CommonTest {
         when(mProvider.getReportSessionHandler()).thenReturn(mReportSessionHandler);
         when(mProvider.getReportSessionStopHandler()).thenReturn(mReportSessionStopHandler);
         when(mProvider.getReportFirstHandler()).thenReturn(mReportFirstHandler);
-        when(mProvider.getReportPrevSessionNativeCrashHandler()).thenReturn(mReportPrevSessionNativeCrashHandler);
+        when(mProvider.getReportPrevSessionEventHandler()).thenReturn(mReportPrevSessionEventHandler);
         when(mProvider.getReportPermissionsHandler()).thenReturn(mReportPermissionsHandler);
         when(mProvider.getReportFeaturesHandler()).thenReturn(mReportFeaturesHandler);
         when(mProvider.getReportAppOpenHandler()).thenReturn(mReportAppOpenHandler);
@@ -240,7 +240,7 @@ public class ComponentHandlerFactoryTest extends CommonTest {
 
         factory.addHandlers(mHandlersList);
         assertThat(mHandlersList).containsExactly(
-            mReportPrevSessionNativeCrashHandler,
+            mReportPrevSessionEventHandler,
             mReportPurgeBufferHandler
         );
     }
@@ -251,7 +251,7 @@ public class ComponentHandlerFactoryTest extends CommonTest {
 
         factory.addHandlers(mHandlersList);
         assertThat(mHandlersList).containsExactly(
-            mReportPrevSessionNativeCrashHandler,
+            mReportPrevSessionEventHandler,
             reportCrashMetaInformation
         );
     }

@@ -31,7 +31,7 @@ public class InternalEventsToProtoMappingTest extends CommonTest {
             {InternalEvents.EVENT_TYPE_CUSTOM_EVENT, null},
             {InternalEvents.EVENT_TYPE_PREV_SESSION_NATIVE_CRASH_PROTOBUF, EventProto.ReportMessage.Session.Event.EVENT_PROTOBUF_CRASH},
             {InternalEvents.EVENT_TYPE_CURRENT_SESSION_NATIVE_CRASH_PROTOBUF, EventProto.ReportMessage.Session.Event.EVENT_PROTOBUF_CRASH},
-            {InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_FROM_INTENT, EventProto.ReportMessage.Session.Event.EVENT_PROTOBUF_CRASH},
+            {InternalEvents.EVENT_TYPE_PREV_SESSION_EXCEPTION_UNHANDLED_FROM_FILE, EventProto.ReportMessage.Session.Event.EVENT_PROTOBUF_CRASH},
             {InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_FROM_FILE, EventProto.ReportMessage.Session.Event.EVENT_PROTOBUF_CRASH},
             {InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_PROTOBUF, EventProto.ReportMessage.Session.Event.EVENT_PROTOBUF_CRASH},
             {InternalEvents.EVENT_TYPE_EXCEPTION_USER_PROTOBUF, EventProto.ReportMessage.Session.Event.EVENT_PROTOBUF_ERROR},

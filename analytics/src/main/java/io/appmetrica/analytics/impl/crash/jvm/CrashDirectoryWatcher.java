@@ -4,6 +4,7 @@ import android.os.FileObserver;
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.backport.Consumer;
+import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.crash.CrashFileObserver;
 import io.appmetrica.analytics.impl.crash.CrashFolderPreparer;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
@@ -45,7 +46,13 @@ public class CrashDirectoryWatcher {
             "startWatching for crashDirectory %s",
             crashDirectory.getAbsolutePath()
         );
+
         observer.startWatching();
+
+        // Attention! Do not convert to a local variable, as it will break CrashFileObserver.
+        // See the warning section in the description at
+        // https://developer.android.com/reference/android/os/FileObserver.
+        GlobalServiceLocator.getInstance().getReferenceHolder().storeReference(observer);
     }
 
     public void stopWatching() {

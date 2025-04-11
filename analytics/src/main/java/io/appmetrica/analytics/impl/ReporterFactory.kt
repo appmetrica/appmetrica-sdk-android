@@ -45,6 +45,8 @@ internal class ReporterFactory(
     )
     private var mainReporter: MainReporter? = null
 
+    private var unhandledSituationReporter: CrashReporter? = null
+
     @Synchronized
     override fun buildOrUpdateAnonymousMainReporter(
         config: AppMetricaConfig,
@@ -116,22 +118,20 @@ internal class ReporterFactory(
     }
 
     @Synchronized
-    override fun getMainOrCrashReporter(config: AppMetricaConfig): IUnhandledSituationReporter {
-        var reporter: IReporterExtended? = mainReporter
-        if (reporter == null) {
-            DebugLogger.info(tag, "No main reporter - will create crash reporter")
-            val crashReporter = CrashReporter(
-                context,
+    override fun getUnhandhedSituationReporter(config: AppMetricaConfig): IUnhandledSituationReporter {
+        return unhandledSituationReporter?.apply {
+            DebugLogger.info(tag, "Update config for crash reporter")
+            updateConfig(config)
+        } ?: let {
+            DebugLogger.info(tag, "Create new unhandled situation reporter")
+            val fieldsProvider = CrashReporterFieldsProvider(
                 processConfiguration,
-                config,
-                reportsHandler
+                mainReporterComponents.errorEnvironment,
+                reportsHandler,
+                config
             )
-            performCommonInitialization(crashReporter)
-            crashReporter.updateConfig(config)
-            crashReporter.start()
-            reporter = crashReporter
-        }
-        return reporter
+            CrashReporter(fieldsProvider)
+        }.also { unhandledSituationReporter = it }
     }
 
     private fun createMainReporter(

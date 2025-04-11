@@ -20,7 +20,7 @@ class DefaultClientComponentsInitializer : ClientComponentsInitializer {
     )
 
     override fun onCreate() {
-        if (ClientServiceLocator.getInstance().mainProcessDetector.isMainProcess) {
+        if (ClientServiceLocator.getInstance().currentProcessDetector.isMainProcess) {
             DebugLogger.info(tag, "Register public modules")
             ClientServiceLocator.getInstance().moduleEntryPointsRegister.register(
                 *moduleEntryPoints.map { ConstantModuleEntryPointProvider(it) }.toTypedArray()

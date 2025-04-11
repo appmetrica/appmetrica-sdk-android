@@ -4,8 +4,6 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.backport.Consumer;
-import io.appmetrica.analytics.impl.utils.concurrency.ExclusiveMultiProcessFileLock;
-import io.appmetrica.analytics.impl.utils.concurrency.FileLocksHolder;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.io.File;
 
@@ -16,23 +14,19 @@ public class ReadOldCrashesRunnable implements Runnable {
     @NonNull
     private final File crashDirectory;
     @NonNull
-    private final Consumer<File> newCrashListener;
-    @NonNull
-    private final FileLocksHolder fileLocksHolder;
+    private final Consumer<File> crashConsumer;
 
     public ReadOldCrashesRunnable(@NonNull Context context,
                                   @NonNull File crashDirectory,
-                                  @NonNull Consumer<File> newCrashListener) {
-        this(crashDirectory, newCrashListener, FileLocksHolder.getInstance(context));
+                                  @NonNull Consumer<File> crashConsumer) {
+        this(crashDirectory, crashConsumer);
     }
 
     @VisibleForTesting
     ReadOldCrashesRunnable(@NonNull File crashDirectory,
-                           @NonNull Consumer<File> newCrashListener,
-                           @NonNull FileLocksHolder fileLocksHolder) {
+                           @NonNull Consumer<File> crashConsumer) {
         this.crashDirectory = crashDirectory;
-        this.newCrashListener = newCrashListener;
-        this.fileLocksHolder = fileLocksHolder;
+        this.crashConsumer = crashConsumer;
     }
 
     @Override
@@ -40,17 +34,13 @@ public class ReadOldCrashesRunnable implements Runnable {
         DebugLogger.INSTANCE.info(TAG, "read crashes from directory %s", crashDirectory.getAbsolutePath());
         if (crashDirectory.exists() && crashDirectory.isDirectory()) {
             File[] files = crashDirectory.listFiles();
-            if (files != null) {
+            if (files != null && files.length != 0) {
                 for (File file : files) {
-                    final ExclusiveMultiProcessFileLock fileLocker = fileLocksHolder.getOrCreate(file.getName());
                     try {
-                        fileLocker.lock();
                         DebugLogger.INSTANCE.info(TAG, "handle file %s", file.getName());
-                        newCrashListener.consume(file);
+                        crashConsumer.consume(file);
                     } catch (Throwable ex) {
                         DebugLogger.INSTANCE.error(TAG, ex);
-                    } finally {
-                        fileLocker.unlockAndClear();
                     }
                 }
             } else {

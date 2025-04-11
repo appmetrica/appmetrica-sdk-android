@@ -15,7 +15,8 @@ import io.appmetrica.analytics.impl.reporter.ReporterLifecycleListener;
 import io.appmetrica.analytics.impl.startup.uuid.MultiProcessSafeUuidProvider;
 import io.appmetrica.analytics.impl.startup.uuid.UuidFromClientPreferencesImporter;
 import io.appmetrica.analytics.impl.utils.FirstLaunchDetector;
-import io.appmetrica.analytics.impl.utils.MainProcessDetector;
+import io.appmetrica.analytics.impl.utils.AppMetricaServiceProcessDetector;
+import io.appmetrica.analytics.impl.utils.CurrentProcessDetector;
 import io.appmetrica.analytics.impl.utils.ProcessDetector;
 import io.appmetrica.analytics.impl.utils.executors.ClientExecutorProvider;
 
@@ -40,7 +41,7 @@ public class ClientServiceLocator {
     }
 
     @NonNull
-    private final MainProcessDetector mainProcessDetector;
+    private final CurrentProcessDetector currentProcessDetector;
     @NonNull
     private final DefaultOneShotMetricaConfig defaultOneShotConfig;
     @NonNull
@@ -74,6 +75,9 @@ public class ClientServiceLocator {
     @NonNull
     private final AppMetricaFacadeProvider appMetricaFacadeProvider = new AppMetricaFacadeProvider();
     @NonNull
+    private final AppMetricaServiceProcessDetector appMetricaServiceProcessDetector =
+        new AppMetricaServiceProcessDetector();
+    @NonNull
     private final FirstLaunchDetector firstLaunchDetector = new FirstLaunchDetector();
     @NonNull
     private final ClientConfigSerializer clientConfigSerializer = new ClientConfigSerializer();
@@ -81,16 +85,16 @@ public class ClientServiceLocator {
     private volatile AnonymousClientActivator anonymousClientActivator;
 
     private ClientServiceLocator() {
-        this(new MainProcessDetector(), new ActivityLifecycleManager(), new ClientExecutorProvider());
+        this(new CurrentProcessDetector(), new ActivityLifecycleManager(), new ClientExecutorProvider());
     }
 
     private ClientServiceLocator(
-        @NonNull MainProcessDetector mainProcessDetector,
+        @NonNull CurrentProcessDetector currentProcessDetector,
         @NonNull ActivityLifecycleManager activityLifecycleManager,
         @NonNull ClientExecutorProvider clientExecutorProvider
     ) {
         this(
-            mainProcessDetector,
+            currentProcessDetector,
             activityLifecycleManager,
             clientExecutorProvider,
             new ActivityAppearedListener(activityLifecycleManager)
@@ -98,17 +102,17 @@ public class ClientServiceLocator {
     }
 
     private ClientServiceLocator(
-        @NonNull MainProcessDetector mainProcessDetector,
+        @NonNull CurrentProcessDetector currentProcessDetector,
         @NonNull ActivityLifecycleManager activityLifecycleManager,
         @NonNull ClientExecutorProvider clientExecutorProvider,
         @NonNull ActivityAppearedListener activityAppearedListener
     ) {
         this(
-            mainProcessDetector,
+            currentProcessDetector,
             new DefaultOneShotMetricaConfig(),
             clientExecutorProvider,
             activityAppearedListener,
-            new AppMetricaServiceDelayHandler(mainProcessDetector),
+            new AppMetricaServiceDelayHandler(currentProcessDetector),
             activityLifecycleManager,
             new SessionsTrackingManager(
                 activityLifecycleManager,
@@ -122,7 +126,7 @@ public class ClientServiceLocator {
 
     @VisibleForTesting
     ClientServiceLocator(
-        @NonNull MainProcessDetector mainProcessDetector,
+        @NonNull CurrentProcessDetector currentProcessDetector,
         @NonNull DefaultOneShotMetricaConfig defaultOneShotMetricaConfig,
         @NonNull ClientExecutorProvider clientExecutorProvider,
         @NonNull ActivityAppearedListener activityAppearedListener,
@@ -133,7 +137,7 @@ public class ClientServiceLocator {
         @NonNull TechnicalCrashProcessorFactory crashProcessorFactory,
         @NonNull AppMetricaCoreComponentsProvider appMetricaCoreComponentsProvider
     ) {
-        this.mainProcessDetector = mainProcessDetector;
+        this.currentProcessDetector = currentProcessDetector;
         this.defaultOneShotConfig = defaultOneShotMetricaConfig;
         this.clientExecutorProvider = clientExecutorProvider;
         this.activityAppearedListener = activityAppearedListener;
@@ -147,12 +151,12 @@ public class ClientServiceLocator {
 
     @NonNull
     public ProcessDetector getProcessDetector() {
-        return mainProcessDetector;
+        return currentProcessDetector;
     }
 
     @NonNull
-    public MainProcessDetector getMainProcessDetector() {
-        return mainProcessDetector;
+    public CurrentProcessDetector getCurrentProcessDetector() {
+        return currentProcessDetector;
     }
 
     @NonNull
@@ -269,6 +273,11 @@ public class ClientServiceLocator {
     @NonNull
     public AppMetricaFacadeProvider getAppMetricaFacadeProvider() {
         return appMetricaFacadeProvider;
+    }
+
+    @NonNull
+    public AppMetricaServiceProcessDetector getAppMetricaServiceProcessDetector() {
+        return appMetricaServiceProcessDetector;
     }
 
     @NonNull

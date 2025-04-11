@@ -2,12 +2,16 @@ package io.appmetrica.analytics.impl;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import io.appmetrica.analytics.coreapi.internal.data.ProtobufStateStorage;
 import io.appmetrica.analytics.coreapi.internal.identifiers.PlatformIdentifiers;
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.FirstExecutionConditionService;
+import io.appmetrica.analytics.coreutils.internal.ReferenceHolder;
 import io.appmetrica.analytics.coreutils.internal.services.WaitForActivationDelayBarrier;
+import io.appmetrica.analytics.impl.clids.ClidsInfo;
 import io.appmetrica.analytics.impl.crash.ndk.NativeCrashService;
 import io.appmetrica.analytics.impl.db.VitalDataProviderStorage;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesServiceDbStorage;
+import io.appmetrica.analytics.impl.db.state.factory.StorageFactory;
 import io.appmetrica.analytics.impl.id.AdvertisingIdGetter;
 import io.appmetrica.analytics.impl.id.AppSetIdGetter;
 import io.appmetrica.analytics.impl.location.LocationClientApi;
@@ -15,6 +19,8 @@ import io.appmetrica.analytics.impl.modules.ModuleEntryPointsRegister;
 import io.appmetrica.analytics.impl.modules.ModuleEventHandlersHolder;
 import io.appmetrica.analytics.impl.modules.service.ServiceModulesController;
 import io.appmetrica.analytics.impl.network.http.BaseSslSocketFactoryProvider;
+import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoCandidatesHelper;
+import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoData;
 import io.appmetrica.analytics.impl.referrer.service.ReferrerHolder;
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade;
 import io.appmetrica.analytics.impl.selfreporting.SelfReporterWrapper;
@@ -24,6 +30,7 @@ import io.appmetrica.analytics.impl.startup.CollectingFlags;
 import io.appmetrica.analytics.impl.startup.StartupState;
 import io.appmetrica.analytics.impl.startup.uuid.MultiProcessSafeUuidProvider;
 import io.appmetrica.analytics.impl.telephony.TelephonyDataProvider;
+import io.appmetrica.analytics.impl.utils.CurrentProcessDetector;
 import io.appmetrica.analytics.impl.utils.DebugAssert;
 import io.appmetrica.analytics.impl.utils.executors.ServiceExecutorProvider;
 import io.appmetrica.analytics.modulesapi.internal.service.LocationServiceApi;
@@ -293,13 +300,13 @@ public class GlobalServiceLocatorGettersTest extends CommonTest {
                 }
             },
             {
-               "platformIdentifier",
-               new ServiceExtractor<PlatformIdentifiers>() {
-                   @Override
-                   public PlatformIdentifiers getService(GlobalServiceLocator globalServiceLocator) {
-                       return globalServiceLocator.getPlatformIdentifiers();
-                   }
-               }
+                "platformIdentifier",
+                new ServiceExtractor<PlatformIdentifiers>() {
+                    @Override
+                    public PlatformIdentifiers getService(GlobalServiceLocator globalServiceLocator) {
+                        return globalServiceLocator.getPlatformIdentifiers();
+                    }
+                }
             },
             {
                 "sdlEnvironmenHolder",
@@ -354,6 +361,24 @@ public class GlobalServiceLocatorGettersTest extends CommonTest {
                         return globalServiceLocator.getServiceLifecycleTimeTracker();
                     }
                 }
+            },
+            {
+                "getCurrentProcessDetector",
+                new ServiceExtractor<CurrentProcessDetector>() {
+                    @Override
+                    public CurrentProcessDetector getService(GlobalServiceLocator globalServiceLocator) {
+                        return globalServiceLocator.getCurrentProcessDetector();
+                    }
+                }
+            },
+            {
+                "getReferenceHolder",
+                new ServiceExtractor<ReferenceHolder>() {
+                    @Override
+                    public ReferenceHolder getService(GlobalServiceLocator globalServiceLocator) {
+                        return globalServiceLocator.getReferenceHolder();
+                    }
+                }
             }
         });
     }
@@ -374,6 +399,18 @@ public class GlobalServiceLocatorGettersTest extends CommonTest {
     private NetworkServiceLocator networkServiceLocator;
     @Mock
     private NetworkCore networkCore;
+    @Mock
+    private StorageFactory preloadInfoStorageFactory;
+    @Mock
+    private StorageFactory clidsInfoStorageFactory;
+    @Mock
+    private ProtobufStateStorage preloadInfoProtobufStateStorage;
+    @Mock
+    private ProtobufStateStorage clidsInfoProtobufStateStorage;
+    @Mock
+    private PreloadInfoData preloadInfoData;
+    @Mock
+    private ClidsInfo clidsInfo;
 
     @Rule
     public final MockedStaticRule<DebugAssert> sDebugAssert = new MockedStaticRule<>(DebugAssert.class);
@@ -410,6 +447,27 @@ public class GlobalServiceLocatorGettersTest extends CommonTest {
     public final MockedConstructionRule<ServiceLifecycleTimeTracker> serviceLifecycleTimeTrackerMockedConstructionRule =
         new MockedConstructionRule<>(ServiceLifecycleTimeTracker.class);
 
+    @Rule
+    public final MockedConstructionRule<ReferenceHolder> referenceHolderMockedConstructionRule =
+        new MockedConstructionRule<>(ReferenceHolder.class);
+
+    @Rule
+    public final MockedStaticRule<StorageFactory.Provider> storageFactoryProviderMockedStaticRule =
+        new MockedStaticRule<>(StorageFactory.Provider.class);
+
+    @Rule
+    public final MockedConstructionRule<PreloadInfoStorage> preloadInfoStorageMockedConstructionRule =
+        new MockedConstructionRule<>(PreloadInfoStorage.class);
+
+    @Rule
+    public final MockedConstructionRule<PreloadInfoCandidatesHelper> preloadInfoCandidatesHelperMockedRule =
+        new MockedConstructionRule<>(PreloadInfoCandidatesHelper.class);
+
+    @Rule
+    public final MockedConstructionRule<DataSendingRestrictionControllerImpl>
+        dataSendingRestrictionControllerMockedConstructionRule =
+        new MockedConstructionRule<>(DataSendingRestrictionControllerImpl.class);
+
     private GlobalServiceLocator mGlobalServiceLocator;
 
     @Before
@@ -423,6 +481,12 @@ public class GlobalServiceLocatorGettersTest extends CommonTest {
         when(AppMetricaSelfReportFacade.getReporter()).thenReturn(selfReporterWrapper);
         when(NetworkServiceLocator.getInstance()).thenReturn(networkServiceLocator);
         when(networkServiceLocator.getNetworkCore()).thenReturn(networkCore);
+        when(StorageFactory.Provider.get(PreloadInfoData.class)).thenReturn(preloadInfoStorageFactory);
+        when(StorageFactory.Provider.get(ClidsInfo.class)).thenReturn(clidsInfoStorageFactory);
+        when(preloadInfoStorageFactory.create(mContext)).thenReturn(preloadInfoProtobufStateStorage);
+        when(clidsInfoStorageFactory.create(mContext)).thenReturn(clidsInfoProtobufStateStorage);
+        when(preloadInfoProtobufStateStorage.read()).thenReturn(preloadInfoData);
+        when(clidsInfoProtobufStateStorage.read()).thenReturn(clidsInfo);
 
         GlobalServiceLocator.init(mContext);
         GlobalServiceLocator.getInstance().getStartupStateHolder().onStartupStateChanged(startupState);

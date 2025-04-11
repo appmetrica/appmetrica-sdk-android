@@ -1,8 +1,11 @@
 package io.appmetrica.analytics.coreutils.internal.services
 
+import android.content.ComponentName
 import android.content.Context
 import android.content.pm.PackageInfo
+import android.content.pm.PackageManager
 import android.content.pm.ProviderInfo
+import android.content.pm.ServiceInfo
 
 object PackageManagerUtils {
 
@@ -21,6 +24,15 @@ object PackageManagerUtils {
      */
     @JvmStatic
     fun getAppVersionName(context: Context): String = getPackageInfo(context)?.versionName ?: "0.0"
+
+    @JvmStatic
+    fun getServiceInfo(context: Context, clazz: Class<*>): ServiceInfo? {
+        return safePackageManager.getServiceInfo(
+            context,
+            ComponentName(context, clazz),
+            PackageManager.GET_SERVICES
+        )
+    }
 
     @JvmStatic
     fun getPackageInfo(context: Context): PackageInfo? =

@@ -81,7 +81,7 @@ public final class ProtobufUtils {
                 EventProto.ReportMessage.Session.Event.EVENT_PROTOBUF_CRASH
         );
         typesMapping.put(
-                InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_FROM_INTENT,
+                InternalEvents.EVENT_TYPE_PREV_SESSION_EXCEPTION_UNHANDLED_FROM_FILE,
                 EventProto.ReportMessage.Session.Event.EVENT_PROTOBUF_CRASH
         );
         typesMapping.put(
@@ -237,7 +237,7 @@ public final class ProtobufUtils {
                 preparerWithBase64DecodedValue
         );
         eventsMapping.put(
-                InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_FROM_INTENT,
+                InternalEvents.EVENT_TYPE_PREV_SESSION_EXCEPTION_UNHANDLED_FROM_FILE,
                 preparerWithBase64DecodedValue
         );
         eventsMapping.put(

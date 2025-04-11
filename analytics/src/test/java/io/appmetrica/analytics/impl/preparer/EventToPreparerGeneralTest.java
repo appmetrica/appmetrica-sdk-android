@@ -141,7 +141,7 @@ public class EventToPreparerGeneralTest extends CommonTest {
             },
             {InternalEvents.EVENT_TYPE_CLEANUP, defaultComposers()},
             {
-                InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_FROM_INTENT,
+                InternalEvents.EVENT_TYPE_PREV_SESSION_EXCEPTION_UNHANDLED_FROM_FILE,
                 defaultComposers()
                     .withCustomValueComposerClass(BytesValueComposer.class)
             },

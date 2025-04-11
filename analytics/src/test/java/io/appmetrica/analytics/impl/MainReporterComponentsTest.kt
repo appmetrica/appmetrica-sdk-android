@@ -3,6 +3,7 @@ package io.appmetrica.analytics.impl
 import android.content.Context
 import io.appmetrica.analytics.AppMetricaConfig
 import io.appmetrica.analytics.PreloadInfo
+import io.appmetrica.analytics.coreutils.internal.logger.LoggerStorage
 import io.appmetrica.analytics.impl.client.ProcessConfiguration
 import io.appmetrica.analytics.impl.crash.PluginErrorDetailsConverter
 import io.appmetrica.analytics.impl.crash.jvm.converter.AnrConverter
@@ -12,12 +13,15 @@ import io.appmetrica.analytics.impl.crash.jvm.converter.UnhandledExceptionConver
 import io.appmetrica.analytics.impl.crash.ndk.NativeCrashClient
 import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoWrapper
 import io.appmetrica.analytics.impl.startup.StartupHelper
+import io.appmetrica.analytics.impl.utils.limitation.SimpleMapLimitation
 import io.appmetrica.analytics.internal.CounterConfiguration
 import io.appmetrica.analytics.internal.CounterConfigurationReporterType
 import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.constructionRule
+import io.appmetrica.analytics.testutils.on
+import io.appmetrica.analytics.testutils.staticRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Rule
 import org.junit.Test
@@ -33,6 +37,7 @@ internal class MainReporterComponentsTest : CommonTest() {
     private val processConfiguration: ProcessConfiguration = mock()
     private val reportsHandler: ReportsHandler = mock()
     private val startupHelper: StartupHelper = mock()
+    private val apiKey = UUID.randomUUID().toString()
 
     @get:Rule
     val unhandledSituationReporterProviderMockedConstructionRule =
@@ -81,7 +86,19 @@ internal class MainReporterComponentsTest : CommonTest() {
     @get:Rule
     val preloadInfoWrapperMockedConstructionRule = constructionRule<PreloadInfoWrapper>()
 
+    @get:Rule
+    val errorEnvironmentMockedConstructionRule = constructionRule<ErrorEnvironment>()
+
+    @get:Rule
+    val simpleMapLimitationMockedConstructionRule = constructionRule<SimpleMapLimitation>()
+
     private val logger: PublicLogger = mock()
+
+    @get:Rule
+    val loggerStorageMockedStaticRule = staticRule<LoggerStorage> {
+        on { LoggerStorage.getMainPublicOrAnonymousLogger() } doReturn logger
+        on { LoggerStorage.getOrCreatePublicLogger(apiKey) } doReturn logger
+    }
 
     private val mainReporterComponents: MainReporterComponents by setUp {
         MainReporterComponents(context, reporterFactoryProvider, processConfiguration, reportsHandler, startupHelper)
@@ -113,11 +130,20 @@ internal class MainReporterComponentsTest : CommonTest() {
         assertThat(reporterEnvironmentMockedConstructionRule.argumentInterceptor.flatArguments())
             .containsExactly(
                 processConfiguration,
-                counterConfigurationMockedConstructionRule.constructionMock.constructed().first()
+                counterConfigurationMockedConstructionRule.constructionMock.constructed().first(),
+                errorEnvironmentMockedConstructionRule.constructionMock.constructed().first()
             )
         assertThat(counterConfigurationMockedConstructionRule.constructionMock.constructed()).hasSize(1)
         assertThat(counterConfigurationMockedConstructionRule.argumentInterceptor.flatArguments())
             .containsExactly(CounterConfigurationReporterType.MAIN)
+
+        assertThat(errorEnvironmentMockedConstructionRule.constructionMock.constructed()).hasSize(1)
+        assertThat(errorEnvironmentMockedConstructionRule.argumentInterceptor.flatArguments())
+            .containsExactly(simpleMapLimitationMockedConstructionRule.constructionMock.constructed().first())
+
+        assertThat(simpleMapLimitationMockedConstructionRule.constructionMock.constructed()).hasSize(1)
+        assertThat(simpleMapLimitationMockedConstructionRule.argumentInterceptor.flatArguments())
+            .containsExactly(logger, ErrorEnvironment.TAG)
     }
 
     @Test
@@ -186,7 +212,7 @@ internal class MainReporterComponentsTest : CommonTest() {
     fun updateConfig() {
         val userProfileId = "User profile id"
         val preloadInfo = PreloadInfo.newBuilder("TrackingId").build()
-        val config = AppMetricaConfig.newConfigBuilder(UUID.randomUUID().toString())
+        val config = AppMetricaConfig.newConfigBuilder(apiKey)
             .withUserProfileID(userProfileId)
             .withPreloadInfo(preloadInfo)
             .build()

@@ -30,5 +30,5 @@ public interface IReporterFactory extends IReporterFactoryProvider {
     IReporterExtended getOrCreateReporter(@NonNull ReporterConfig config);
 
     @NonNull
-    IUnhandledSituationReporter getMainOrCrashReporter(@NonNull AppMetricaConfig config);
+    IUnhandledSituationReporter getUnhandhedSituationReporter(@NonNull AppMetricaConfig config);
 }

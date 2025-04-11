@@ -29,7 +29,7 @@ public enum InternalEvents {
     EVENT_TYPE_APP_ENVIRONMENT_UPDATED(5376, "App Environment Updated"),
     EVENT_TYPE_APP_ENVIRONMENT_CLEARED(5632, "App Environment Cleared"),
     EVENT_TYPE_EXCEPTION_UNHANDLED_FROM_FILE(5889, "Crash of App, read from file"),
-    EVENT_TYPE_EXCEPTION_UNHANDLED_FROM_INTENT(5890, "Crash of App, passed to server via intent"),
+    EVENT_TYPE_PREV_SESSION_EXCEPTION_UNHANDLED_FROM_FILE(5890, "Crash of App, read from file from prev session"),
     EVENT_TYPE_EXCEPTION_UNHANDLED_PROTOBUF(5891, "Crash of App"),
     EVENT_TYPE_EXCEPTION_USER_PROTOBUF(5892, "Error from developer"),
     EVENT_TYPE_EXCEPTION_USER_CUSTOM_PROTOBUF(5896, "Error from developer with payload"),

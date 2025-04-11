@@ -21,7 +21,6 @@ class NativeCrashServiceModuleImpl : NativeCrashServiceModule() {
 
     private val nativeCrashListener: NativeCrashWatcher.Listener = object : NativeCrashWatcher.Listener {
         override fun onNewCrash(uuid: String) {
-            println(nativeCrashHandler)
             val localNativeCrashHandler = nativeCrashHandler
             if (localNativeCrashHandler != null) {
                 try {

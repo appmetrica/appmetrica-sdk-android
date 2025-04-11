@@ -30,6 +30,13 @@ public final class io.appmetrica.analytics.coreutils.internal.LocationUtils {
     public static final [Nullable] byte[] locationToBytes([Nullable] android.location.Location)
 }
 
+public final class io.appmetrica.analytics.coreutils.internal.ReferenceHolder {
+    public <init>()
+    public final [NonNull] java.util.Set<Object> peekReferences()
+    public final void removeReference([NonNull] Object)
+    public final void storeReference([NonNull] Object)
+}
+
 public final class io.appmetrica.analytics.coreutils.internal.StringExtensionsKt {
     public static final [NonNull] String replaceFirstCharWithTitleCase([NonNull] String)
     public static final [NonNull] String replaceFirstCharWithTitleCase([NonNull] String, [NonNull] java.util.Locale)
@@ -387,6 +394,7 @@ public final class io.appmetrica.analytics.coreutils.internal.services.PackageMa
     public static final [NonNull] String getAppVersionCodeString([NonNull] android.content.Context)
     public static final [NonNull] String getAppVersionName([NonNull] android.content.Context)
     public static final [Nullable] android.content.pm.PackageInfo getPackageInfo([NonNull] android.content.Context)
+    public static final [Nullable] android.content.pm.ServiceInfo getServiceInfo([NonNull] android.content.Context, [NonNull] Class<?>)
     public static final boolean hasContentProvider([NonNull] android.content.Context, [NonNull] String)
     public static final [Nullable] android.content.pm.ProviderInfo resolveContentProvider([NonNull] android.content.Context, [NonNull] String)
 }

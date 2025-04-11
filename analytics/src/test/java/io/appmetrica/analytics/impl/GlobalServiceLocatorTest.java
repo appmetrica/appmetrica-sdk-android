@@ -3,6 +3,7 @@ package io.appmetrica.analytics.impl;
 import android.content.Context;
 import io.appmetrica.analytics.coreapi.internal.data.ProtobufStateStorage;
 import io.appmetrica.analytics.coreapi.internal.identifiers.PlatformIdentifiers;
+import io.appmetrica.analytics.coreutils.internal.ReferenceHolder;
 import io.appmetrica.analytics.coreutils.internal.services.FirstExecutionConditionServiceImpl;
 import io.appmetrica.analytics.coreutils.internal.services.UtilityServiceProvider;
 import io.appmetrica.analytics.coreutils.internal.services.WaitForActivationDelayBarrier;
@@ -31,6 +32,7 @@ import io.appmetrica.analytics.impl.servicecomponents.ServiceLifecycleTimeTracke
 import io.appmetrica.analytics.impl.startup.StartupState;
 import io.appmetrica.analytics.impl.startup.uuid.MultiProcessSafeUuidProvider;
 import io.appmetrica.analytics.impl.startup.uuid.UuidFromStartupStateImporter;
+import io.appmetrica.analytics.impl.utils.CurrentProcessDetector;
 import io.appmetrica.analytics.impl.utils.DebugAssert;
 import io.appmetrica.analytics.networktasks.internal.NetworkCore;
 import io.appmetrica.analytics.networktasks.internal.NetworkServiceLocator;
@@ -121,6 +123,10 @@ public class GlobalServiceLocatorTest extends CommonTest {
     public final MockedConstructionRule<SdkEnvironmentHolder> sdkEnvironmentHolderMockedConstructionRule =
         new MockedConstructionRule<>(SdkEnvironmentHolder.class);
 
+    @Rule
+    public final MockedConstructionRule<CurrentProcessDetector> currentProcessDetectorMockedConstructionRule =
+        new MockedConstructionRule<>(CurrentProcessDetector.class);
+
     private final FirstExecutionConditionServiceImpl firstExecutionConditionService =
         mock(FirstExecutionConditionServiceImpl.class);
     private final WaitForActivationDelayBarrier activationBarrierCallback = mock(WaitForActivationDelayBarrier.class);
@@ -150,6 +156,10 @@ public class GlobalServiceLocatorTest extends CommonTest {
     @Rule
     public final MockedConstructionRule<ServiceLifecycleTimeTracker> serviceLifecycleTimeTrackerMockedConstructionRule =
         new MockedConstructionRule<>(ServiceLifecycleTimeTracker.class);
+
+    @Rule
+    public final MockedConstructionRule<ReferenceHolder> referenceHolderMockedConstructionRule =
+        new MockedConstructionRule<>(ReferenceHolder.class);
 
     @Mock
     private StorageFactory<ClidsInfo> clidsStorageFactory;
@@ -469,6 +479,24 @@ public class GlobalServiceLocatorTest extends CommonTest {
         assertThat(serviceLifecycleTimeTrackerMockedConstructionRule.getConstructionMock().constructed()).hasSize(1);
         assertThat(serviceLifecycleTimeTrackerMockedConstructionRule.getArgumentInterceptor().flatArguments())
             .isEmpty();
+    }
+
+    @Test
+    public void getCurrentProcessDetector() {
+        GlobalServiceLocator.init(mContext);
+        assertThat(GlobalServiceLocator.getInstance().getCurrentProcessDetector())
+            .isEqualTo(currentProcessDetectorMockedConstructionRule.getConstructionMock().constructed().get(0));
+        assertThat(currentProcessDetectorMockedConstructionRule.getConstructionMock().constructed()).hasSize(1);
+        assertThat(currentProcessDetectorMockedConstructionRule.getArgumentInterceptor().flatArguments()).isEmpty();
+    }
+
+    @Test
+    public void getReferenceHolder() {
+        GlobalServiceLocator.init(mContext);
+        assertThat(GlobalServiceLocator.getInstance().getReferenceHolder())
+            .isEqualTo(referenceHolderMockedConstructionRule.getConstructionMock().constructed().get(0));
+        assertThat(referenceHolderMockedConstructionRule.getConstructionMock().constructed()).hasSize(1);
+        assertThat(referenceHolderMockedConstructionRule.getArgumentInterceptor().flatArguments()).isEmpty();
     }
 
     private StartupStateHolder startupStateHolder() {

@@ -24,7 +24,6 @@ import io.appmetrica.analytics.impl.protobuf.backend.CrashAndroid;
 import io.appmetrica.analytics.impl.protobuf.backend.Userprofile;
 import io.appmetrica.analytics.impl.revenue.ad.AdRevenueWrapper;
 import io.appmetrica.analytics.impl.service.AppMetricaServiceDataReporter;
-import io.appmetrica.analytics.impl.utils.limitation.SimpleMapLimitation;
 import io.appmetrica.analytics.impl.utils.validation.ValidationResult;
 import io.appmetrica.analytics.impl.utils.validation.Validator;
 import io.appmetrica.analytics.impl.utils.validation.revenue.RevenueValidator;
@@ -522,11 +521,6 @@ public abstract class BaseReporterTest extends BaseReporterData {
         verify(mReporterEnvironment, times(1)).putErrorEnvironmentValue(arg1.capture(), arg2.capture());
         assertThat(arg1.getValue()).isEqualTo(TestsData.TEST_ENVIRONMENT_KEY);
         assertThat(arg2.getValue()).isEqualTo(TestsData.TEST_ENVIRONMENT_VALUE);
-    }
-
-    @Test
-    public void testShouldInitializeReportEnvironmentAfterCreation() {
-        verify(mReporterEnvironment, times(1)).initialize(any(SimpleMapLimitation.class));
     }
 
     @Test

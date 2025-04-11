@@ -29,7 +29,7 @@ public class MainOrCrashReporterProviderTest extends CommonTest {
         MockitoAnnotations.openMocks(this);
         ReporterFactory reporterFactory = mock(ReporterFactory.class);
         when(mReporterFactoryProvider.getReporterFactory()).thenReturn(reporterFactory);
-        when(reporterFactory.getMainOrCrashReporter(mConfig)).thenReturn(mReporter);
+        when(reporterFactory.getUnhandhedSituationReporter(mConfig)).thenReturn(mReporter);
         mReporterProvider = new MainOrCrashReporterProvider(mReporterFactoryProvider, mConfig);
     }
 

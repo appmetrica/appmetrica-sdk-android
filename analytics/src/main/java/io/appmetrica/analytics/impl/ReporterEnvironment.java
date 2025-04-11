@@ -8,11 +8,11 @@ import io.appmetrica.analytics.impl.client.ClientConfiguration;
 import io.appmetrica.analytics.impl.client.ProcessConfiguration;
 import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoWrapper;
 import io.appmetrica.analytics.impl.startup.StartupIdentifiersProvider;
-import io.appmetrica.analytics.impl.utils.limitation.SimpleMapLimitation;
 import io.appmetrica.analytics.internal.CounterConfiguration;
 
 public class ReporterEnvironment extends ClientConfiguration {
 
+    @NonNull
     protected ErrorEnvironment mErrorEnvironment;
 
     protected PreloadInfoWrapper mPreloadInfoWrapper;
@@ -21,19 +21,18 @@ public class ReporterEnvironment extends ClientConfiguration {
     private String initialUserProfileID;
 
     protected ReporterEnvironment(@NonNull ProcessConfiguration processConfiguration,
-                                  @NonNull CounterConfiguration counterConfiguration) {
-        this(processConfiguration, counterConfiguration, null);
+                                  @NonNull CounterConfiguration counterConfiguration,
+                                  @NonNull ErrorEnvironment errorEnvironment) {
+        this(processConfiguration, counterConfiguration, errorEnvironment,null);
     }
 
     protected ReporterEnvironment(@NonNull ProcessConfiguration processConfiguration,
                                   @NonNull CounterConfiguration counterConfiguration,
+                                  @NonNull ErrorEnvironment errorEnvironment,
                                   @Nullable String initialUserProfileID) {
         super(processConfiguration, counterConfiguration);
         this.initialUserProfileID = initialUserProfileID;
-    }
-
-    void initialize(final SimpleMapLimitation crashEnvironmentLimitation) {
-        mErrorEnvironment = new ErrorEnvironment(crashEnvironmentLimitation);
+        mErrorEnvironment = errorEnvironment;
     }
 
     public Bundle getConfigBundle() {

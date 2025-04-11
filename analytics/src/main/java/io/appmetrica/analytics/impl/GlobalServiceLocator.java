@@ -9,6 +9,7 @@ import io.appmetrica.analytics.coreapi.internal.data.ProtobufStateStorage;
 import io.appmetrica.analytics.coreapi.internal.identifiers.PlatformIdentifiers;
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.FirstExecutionConditionService;
 import io.appmetrica.analytics.coreapi.internal.system.PermissionExtractor;
+import io.appmetrica.analytics.coreutils.internal.ReferenceHolder;
 import io.appmetrica.analytics.coreutils.internal.services.UtilityServiceProvider;
 import io.appmetrica.analytics.coreutils.internal.services.WaitForActivationDelayBarrier;
 import io.appmetrica.analytics.impl.clids.ClidsCandidatesHelper;
@@ -47,6 +48,7 @@ import io.appmetrica.analytics.impl.servicecomponents.ServiceLifecycleTimeTracke
 import io.appmetrica.analytics.impl.startup.uuid.MultiProcessSafeUuidProvider;
 import io.appmetrica.analytics.impl.startup.uuid.UuidFromStartupStateImporter;
 import io.appmetrica.analytics.impl.telephony.TelephonyDataProvider;
+import io.appmetrica.analytics.impl.utils.CurrentProcessDetector;
 import io.appmetrica.analytics.impl.utils.executors.ServiceExecutorProvider;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import io.appmetrica.analytics.modulesapi.internal.service.LocationServiceApi;
@@ -140,9 +142,13 @@ public final class GlobalServiceLocator {
     @NonNull
     private final UtilityServiceProvider utilityServiceProvider = new UtilityServiceProvider();
     @Nullable
+    private volatile CurrentProcessDetector currentProcessDetector;
+    @Nullable
     private volatile ExtraMetaInfoRetriever extraMetaInfoRetriever;
     @NonNull
     private final ServiceLifecycleTimeTracker serviceLifecycleTimeTracker = new ServiceLifecycleTimeTracker();
+    @NonNull
+    private final ReferenceHolder referenceHolder = new ReferenceHolder();
 
     private GlobalServiceLocator(@NonNull Context applicationContext) {
         mContext = applicationContext;
@@ -552,6 +558,26 @@ public final class GlobalServiceLocator {
     @NonNull
     public ServiceLifecycleTimeTracker getServiceLifecycleTimeTracker() {
         return serviceLifecycleTimeTracker;
+    }
+
+    @NonNull
+    public CurrentProcessDetector getCurrentProcessDetector() {
+        CurrentProcessDetector localCopy = currentProcessDetector;
+        if (localCopy == null) {
+            synchronized (this) {
+                localCopy = currentProcessDetector;
+                if (localCopy == null) {
+                    localCopy = new CurrentProcessDetector();
+                    currentProcessDetector = localCopy;
+                }
+            }
+        }
+        return localCopy;
+    }
+
+    @NonNull
+    public ReferenceHolder getReferenceHolder() {
+        return referenceHolder;
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)

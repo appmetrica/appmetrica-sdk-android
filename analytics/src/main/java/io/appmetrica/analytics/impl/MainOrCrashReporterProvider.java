@@ -17,6 +17,6 @@ public class MainOrCrashReporterProvider extends UnhandledSituationReporterProvi
     @Override
     @NonNull
     public IUnhandledSituationReporter getReporter() {
-        return mReporterFactoryProvider.getReporterFactory().getMainOrCrashReporter(mConfig);
+        return mReporterFactoryProvider.getReporterFactory().getUnhandhedSituationReporter(mConfig);
     }
 }

@@ -59,6 +59,7 @@ class ReportToSend(
             ReporterEnvironment(
                 ProcessConfiguration(environment.processConfiguration),
                 CounterConfiguration(environment.reporterConfiguration),
+                environment.mErrorEnvironment,
                 environment.initialUserProfileID
             )
         )

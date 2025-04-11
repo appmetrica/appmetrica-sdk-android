@@ -163,14 +163,22 @@ public class EventsManagerTest extends CommonTest {
         final HashMap<ClientCounterReport.TrimmedField, Integer> trimmedFields = new HashMap<ClientCounterReport.TrimmedField, Integer>();
         trimmedFields.put(ClientCounterReport.TrimmedField.VALUE, 200);
         ClientCounterReport clientCounterReport = (ClientCounterReport) EventsManager
-            .unhandledExceptionFromFileReportEntry(name, value.getBytes(), bytesTruncated, trimmedFields, errorEnvironment, mPublicLogger);
+            .unhandledExceptionFromFileReportEntry(
+                InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_FROM_FILE,
+                name,
+                value.getBytes(),
+                bytesTruncated,
+                trimmedFields,
+                errorEnvironment,
+                mPublicLogger
+            );
         SoftAssertions assertions = new SoftAssertions();
-        assertions.assertThat(clientCounterReport.getName()).isEqualTo(name);
-        assertions.assertThat(clientCounterReport.getValueBytes()).isEqualTo(value.getBytes());
-        assertions.assertThat(clientCounterReport.getType()).isEqualTo(InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_FROM_FILE.getTypeId());
-        assertions.assertThat(clientCounterReport.getBytesTruncated()).isEqualTo(bytesTruncated);
-        assertions.assertThat(clientCounterReport.getTrimmedFields()).isEqualTo(trimmedFields);
-        assertions.assertThat(clientCounterReport.getEventEnvironment()).isEqualTo(errorEnvironment);
+        assertions.assertThat(clientCounterReport.getName()).as("name").isEqualTo(name);
+        assertions.assertThat(clientCounterReport.getValueBytes()).as("value bytes").isEqualTo(value.getBytes());
+        assertions.assertThat(clientCounterReport.getType()).as("type").isEqualTo(InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_FROM_FILE.getTypeId());
+        assertions.assertThat(clientCounterReport.getBytesTruncated()).as("bytes truncated").isEqualTo(bytesTruncated);
+        assertions.assertThat(clientCounterReport.getTrimmedFields()).as("trimmed fields").isEqualTo(trimmedFields);
+        assertions.assertThat(clientCounterReport.getEventEnvironment()).as("event environment").isEqualTo(errorEnvironment);
         assertions.assertAll();
     }
 
@@ -322,7 +330,7 @@ public class EventsManagerTest extends CommonTest {
             InternalEvents.EVENT_TYPE_APP_ENVIRONMENT_UPDATED,
             InternalEvents.EVENT_TYPE_APP_ENVIRONMENT_CLEARED,
             InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_FROM_FILE,
-            InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_FROM_INTENT,
+            InternalEvents.EVENT_TYPE_PREV_SESSION_EXCEPTION_UNHANDLED_FROM_FILE,
             InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_PROTOBUF,
             InternalEvents.EVENT_TYPE_EXCEPTION_USER_PROTOBUF,
             InternalEvents.EVENT_TYPE_EXCEPTION_USER_CUSTOM_PROTOBUF,
@@ -363,7 +371,7 @@ public class EventsManagerTest extends CommonTest {
             }
         }).containsOnly(
             InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_FROM_FILE,
-            InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_FROM_INTENT,
+            InternalEvents.EVENT_TYPE_PREV_SESSION_EXCEPTION_UNHANDLED_FROM_FILE,
             InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_PROTOBUF,
             InternalEvents.EVENT_TYPE_EXCEPTION_USER_PROTOBUF,
             InternalEvents.EVENT_TYPE_EXCEPTION_USER_CUSTOM_PROTOBUF,
@@ -421,7 +429,6 @@ public class EventsManagerTest extends CommonTest {
             InternalEvents.EVENT_TYPE_SEND_AD_REVENUE_EVENT,
             InternalEvents.EVENT_TYPE_REQUEST_REFERRER,
             InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_FROM_FILE,
-            InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_FROM_INTENT,
             InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_PROTOBUF,
             InternalEvents.EVENT_TYPE_EXCEPTION_USER_PROTOBUF,
             InternalEvents.EVENT_TYPE_EXCEPTION_USER_CUSTOM_PROTOBUF,
@@ -456,6 +463,7 @@ public class EventsManagerTest extends CommonTest {
             InternalEvents.EVENT_TYPE_APP_ENVIRONMENT_UPDATED,
             InternalEvents.EVENT_TYPE_APP_ENVIRONMENT_CLEARED,
             InternalEvents.EVENT_TYPE_ACTIVATION,
+            InternalEvents.EVENT_TYPE_PREV_SESSION_EXCEPTION_UNHANDLED_FROM_FILE,
             InternalEvents.EVENT_TYPE_PREV_SESSION_NATIVE_CRASH_PROTOBUF,
             InternalEvents.EVENT_TYPE_SET_SESSION_EXTRA
         );

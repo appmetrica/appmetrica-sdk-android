@@ -13,7 +13,7 @@ import io.appmetrica.analytics.impl.component.processor.event.ReportFeaturesHand
 import io.appmetrica.analytics.impl.component.processor.event.ReportFirstHandler;
 import io.appmetrica.analytics.impl.component.processor.event.ReportFirstOccurrenceStatusHandler;
 import io.appmetrica.analytics.impl.component.processor.event.ReportPermissionHandler;
-import io.appmetrica.analytics.impl.component.processor.event.ReportPrevSessionNativeCrashHandler;
+import io.appmetrica.analytics.impl.component.processor.event.ReportPrevSessionEventHandler;
 import io.appmetrica.analytics.impl.component.processor.event.ReportPurgeBufferHandler;
 import io.appmetrica.analytics.impl.component.processor.event.ReportSaveToDatabaseHandler;
 import io.appmetrica.analytics.impl.component.processor.event.ReportSessionHandler;
@@ -36,7 +36,7 @@ public class ReportingHandlerProvider {
     private final ReportAppEnvironmentUpdatedHandler mReportAppEnvironmentUpdated;
     private final ReportAppEnvironmentClearedHandler mReportAppEnvironmentCleared;
     private final ReportFirstHandler mReportFirstHandler;
-    private final ReportPrevSessionNativeCrashHandler mReportPrevSessionNativeCrashHandler;
+    private final ReportPrevSessionEventHandler reportPrevSessionEventHandler;
     private final ReportPermissionHandler mReportPermissionsHandler;
     private final ReportFeaturesHandler mReportFeaturesHandler;
     private final UpdateUserProfileIDHandler updateUserProfileIDHandler;
@@ -59,7 +59,7 @@ public class ReportingHandlerProvider {
         mReportAppEnvironmentUpdated = new ReportAppEnvironmentUpdatedHandler(component);
         mReportAppEnvironmentCleared = new ReportAppEnvironmentClearedHandler(component);
         mReportFirstHandler = new ReportFirstHandler(component);
-        mReportPrevSessionNativeCrashHandler = new ReportPrevSessionNativeCrashHandler(component);
+        reportPrevSessionEventHandler = new ReportPrevSessionEventHandler(component);
         mReportPermissionsHandler = new ReportPermissionHandler(
                 component,
                 new PermissionsChecker()
@@ -109,8 +109,8 @@ public class ReportingHandlerProvider {
         return mReportFirstHandler;
     }
 
-    public ReportPrevSessionNativeCrashHandler getReportPrevSessionNativeCrashHandler() {
-        return mReportPrevSessionNativeCrashHandler;
+    public ReportPrevSessionEventHandler getReportPrevSessionEventHandler() {
+        return reportPrevSessionEventHandler;
     }
 
     public ReportPermissionHandler getReportPermissionsHandler() {

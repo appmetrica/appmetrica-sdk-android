@@ -27,7 +27,7 @@ public final class EventsManager {
         InternalEvents.EVENT_TYPE_EXCEPTION_USER_CUSTOM_PROTOBUF.getTypeId(),
         InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_PROTOBUF.getTypeId(),
         InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_FROM_FILE.getTypeId(),
-        InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_FROM_INTENT.getTypeId(),
+        InternalEvents.EVENT_TYPE_PREV_SESSION_EXCEPTION_UNHANDLED_FROM_FILE.getTypeId(),
         InternalEvents.EVENT_TYPE_ANR.getTypeId()
     );
     private static final EnumSet<InternalEvents> DO_NOT_AFFECT_SESSION_STATE = EnumSet.of
@@ -39,18 +39,22 @@ public final class EventsManager {
             InternalEvents.EVENT_TYPE_APP_ENVIRONMENT_CLEARED,
             InternalEvents.EVENT_TYPE_ACTIVATION,
             InternalEvents.EVENT_TYPE_PREV_SESSION_NATIVE_CRASH_PROTOBUF,
+            InternalEvents.EVENT_TYPE_PREV_SESSION_EXCEPTION_UNHANDLED_FROM_FILE,
             InternalEvents.EVENT_TYPE_SET_SESSION_EXTRA
         );
 
     private static final EnumSet<InternalEvents> SHOULD_NOT_UPDATE_APP_CONFIG = EnumSet.of
         (
             InternalEvents.EVENT_TYPE_UPDATE_FOREGROUND_TIME,
-            InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_FROM_FILE
+            InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_FROM_FILE,
+            InternalEvents.EVENT_TYPE_PREV_SESSION_EXCEPTION_UNHANDLED_FROM_FILE,
+            InternalEvents.EVENT_TYPE_PREV_SESSION_NATIVE_CRASH_PROTOBUF,
+            InternalEvents.EVENT_TYPE_CURRENT_SESSION_NATIVE_CRASH_PROTOBUF
         );
 
     private static final EnumSet<InternalEvents> PUBLIC_FOR_LOGS = EnumSet.of(
         InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_FROM_FILE,
-        InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_FROM_INTENT,
+        InternalEvents.EVENT_TYPE_PREV_SESSION_EXCEPTION_UNHANDLED_FROM_FILE,
         InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_PROTOBUF,
         InternalEvents.EVENT_TYPE_EXCEPTION_USER_PROTOBUF,
         InternalEvents.EVENT_TYPE_EXCEPTION_USER_CUSTOM_PROTOBUF,
@@ -89,7 +93,9 @@ public final class EventsManager {
         EnumSet.of(
             InternalEvents.EVENT_TYPE_ALIVE,
             InternalEvents.EVENT_TYPE_PURGE_BUFFER,
-            InternalEvents.EVENT_TYPE_SET_SESSION_EXTRA
+            InternalEvents.EVENT_TYPE_SET_SESSION_EXTRA,
+            InternalEvents.EVENT_TYPE_PREV_SESSION_EXCEPTION_UNHANDLED_FROM_FILE,
+            InternalEvents.EVENT_TYPE_PREV_SESSION_NATIVE_CRASH_PROTOBUF
         );
 
     public static final String EVENT_OPEN_LINK_KEY = "link";
@@ -166,7 +172,7 @@ public final class EventsManager {
         );
     }
 
-    private static CounterReport nativeCrashEntry(@NonNull InternalEvents eventType,
+    public static CounterReport nativeCrashEntry(@NonNull InternalEvents eventType,
                                                   @NonNull String nativeCrash,
                                                   @NonNull String uuid,
                                                   @NonNull PublicLogger logger) {
@@ -250,16 +256,18 @@ public final class EventsManager {
     }
 
     public static CounterReport unhandledExceptionFromFileReportEntry(
+        InternalEvents type,
         String eventName,
         byte[] value,
         int bytesTruncated,
         @NonNull HashMap<ClientCounterReport.TrimmedField, Integer> trimmedFields,
         @Nullable String errorEnvironment,
-        @NonNull PublicLogger logger) {
+        @NonNull PublicLogger logger
+    ) {
         ClientCounterReport result = unhandledExceptionReportEntry(
             value,
             eventName,
-            InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_FROM_FILE,
+            type,
             logger
         );
         result.withTrimmedFields(trimmedFields);

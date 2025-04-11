@@ -27,7 +27,7 @@ public class CrashFileObserver extends FileObserver {
     CrashFileObserver(@NonNull File crashDirectory,
                       @NonNull Consumer<File> newCrashListener,
                       @NonNull FileProvider fileProvider) {
-        super(crashDirectory.getAbsolutePath(), FileObserver.ALL_EVENTS);
+        super(crashDirectory.getAbsolutePath(), FileObserver.CLOSE_WRITE);
         DebugLogger.INSTANCE.info(
             TAG,
             "start watching directory %s for events with type %d",

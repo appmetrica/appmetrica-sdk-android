@@ -1,20 +1,13 @@
 package io.appmetrica.analytics.impl;
 
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import io.appmetrica.analytics.coreapi.internal.backport.Consumer;
-import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
-import io.appmetrica.analytics.coreutils.internal.io.FileUtils;
 import io.appmetrica.analytics.impl.client.ClientConfiguration;
 import io.appmetrica.analytics.impl.client.ProcessConfiguration;
-import io.appmetrica.analytics.impl.component.CommonArguments;
-import io.appmetrica.analytics.impl.component.clients.ClientDescription;
 import io.appmetrica.analytics.impl.component.clients.ClientRepository;
 import io.appmetrica.analytics.impl.core.CoreImplFirstCreateTaskLauncher;
 import io.appmetrica.analytics.impl.core.CoreImplFirstCreateTaskLauncherProvider;
-import io.appmetrica.analytics.impl.crash.jvm.CrashDirectoryWatcher;
+import io.appmetrica.analytics.impl.crash.service.ServiceCrashController;
 import io.appmetrica.analytics.impl.db.VitalCommonDataProvider;
 import io.appmetrica.analytics.impl.service.AppMetricaServiceCallback;
 import io.appmetrica.analytics.impl.startup.CollectingFlags;
@@ -24,7 +17,6 @@ import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import io.appmetrica.analytics.testutils.MockedConstructionRule;
 import io.appmetrica.analytics.testutils.MockedStaticRule;
-import java.io.File;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -40,7 +32,6 @@ import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
@@ -64,10 +55,6 @@ public class AppMetricaServiceCoreImplStaticTests extends CommonTest {
     @Mock
     private AppMetricaServiceCoreImplFieldsFactory fieldsFactory;
     @Mock
-    private CrashDirectoryWatcher crashDirectoryWatcher;
-    @Mock
-    private ICommonExecutor reportExecutor;
-    @Mock
     private ReportConsumer reportConsumer;
     @Mock
     private ClientConfiguration clientConfiguration;
@@ -87,8 +74,6 @@ public class AppMetricaServiceCoreImplStaticTests extends CommonTest {
     @Rule
     public final MockedStaticRule<ClientConfiguration> sClientConfiguration = new MockedStaticRule<>(ClientConfiguration.class);
     @Rule
-    public final MockedStaticRule<FileUtils> sFileUtils = new MockedStaticRule<>(FileUtils.class);
-    @Rule
     public MockedConstructionRule<CoreImplFirstCreateTaskLauncherProvider> firstCreateTaskLauncherProviderRule =
         new MockedConstructionRule<>(
             CoreImplFirstCreateTaskLauncherProvider.class,
@@ -100,19 +85,21 @@ public class AppMetricaServiceCoreImplStaticTests extends CommonTest {
                 }
             }
         );
+    @Rule
+    public MockedConstructionRule<ServiceCrashController> serviceCrashControllerMockedConstructionRule =
+        new MockedConstructionRule<>(ServiceCrashController.class);
+    @Rule
+    public MockedConstructionRule<AppMetricaServiceCoreImplFieldsFactory>
+        appMetricaServiceCoreImplFieldsFactoryMockedConstructionRule =
+        new MockedConstructionRule<>(AppMetricaServiceCoreImplFieldsFactory.class);
 
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
         mContext = RuntimeEnvironment.getApplication();
         when(GlobalServiceLocator.getInstance().getVitalDataProviderStorage().getCommonDataProvider())
-                .thenReturn(mock(VitalCommonDataProvider.class));
+            .thenReturn(mock(VitalCommonDataProvider.class));
 
-        when(FileUtils.getCrashesDirectory(mContext)).thenReturn(mock(File.class));
-        doReturn(crashDirectoryWatcher).when(fieldsFactory).createCrashDirectoryWatcher(
-                any(File.class),
-                any(Consumer.class)
-        );
         doReturn(reportConsumer).when(fieldsFactory).createReportConsumer(same(mContext), any(ClientRepository.class));
 
         mMetricaCore = new AppMetricaServiceCoreImpl(
@@ -122,7 +109,6 @@ public class AppMetricaServiceCoreImplStaticTests extends CommonTest {
             mAppMetricaServiceLifecycle,
             firstServiceEntryPointManager,
             mApplicationStateProvider,
-            reportExecutor,
             fieldsFactory
         );
 
@@ -140,69 +126,4 @@ public class AppMetricaServiceCoreImplStaticTests extends CommonTest {
         mMetricaCore.reportData(bundle);
         verify(mReportConsumer).consumeReport(counterReport, bundle);
     }
-
-    @Test
-    public void testOnStartWithCrashIntent() {
-        CounterReport counterReport = mock(CounterReport.class);
-        Intent intent = prepareCrashIntent(counterReport);
-        final int startId = 20;
-        mMetricaCore.onStart(intent, startId);
-        verify(mReportConsumer).consumeCrash(any(ClientDescription.class), same(counterReport), any(CommonArguments.class));
-        verify(mCallback).onStartFinished(startId);
-    }
-
-    @Test
-    public void testOnStartWithCrashIntentUpdatedCallback() {
-        AppMetricaServiceCallback secondCallback  = mock(AppMetricaServiceCallback.class);
-        mMetricaCore.updateCallback(secondCallback);
-        CounterReport counterReport = mock(CounterReport.class);
-        Intent intent = prepareCrashIntent(counterReport);
-        final int startId = 20;
-        mMetricaCore.onStart(intent, startId);
-        verify(mReportConsumer).consumeCrash(any(ClientDescription.class), same(counterReport), any(CommonArguments.class));
-        verify(secondCallback).onStartFinished(startId);
-        verifyNoMoreInteractions(mCallback);
-    }
-
-    @Test
-    public void testOnStartCommandWithCrashIntent() {
-        CounterReport counterReport = mock(CounterReport.class);
-        Intent intent = prepareCrashIntent(counterReport);
-        final int startId = 20;
-        mMetricaCore.onStartCommand(intent, 0, startId);
-        verify(mReportConsumer).consumeCrash(any(ClientDescription.class), same(counterReport), any(CommonArguments.class));
-        verify(mCallback).onStartFinished(startId);
-    }
-
-    @Test
-    public void testOnStartCommandWithCrashIntentUpdatedCallback() {
-        AppMetricaServiceCallback secondCallback  = mock(AppMetricaServiceCallback.class);
-        mMetricaCore.updateCallback(secondCallback);
-        CounterReport counterReport = mock(CounterReport.class);
-        Intent intent = prepareCrashIntent(counterReport);
-        final int startId = 20;
-        mMetricaCore.onStartCommand(intent, 0, startId);
-        verify(mReportConsumer).consumeCrash(any(ClientDescription.class), same(counterReport), any(CommonArguments.class));
-        verify(secondCallback).onStartFinished(startId);
-        verifyNoMoreInteractions(mCallback);
-    }
-
-    private Intent prepareCrashIntent(CounterReport counterReport) {
-        ProcessConfiguration processConfiguration = mock(ProcessConfiguration.class);
-        CounterConfiguration counterConfiguration = mock(CounterConfiguration.class);
-        Bundle bundle = mock(Bundle.class);
-        Intent intent = mock(Intent.class);
-        when(intent.getData()).thenReturn(mock(Uri.class));
-        when(intent.getExtras()).thenReturn(bundle);
-        when(ProcessConfiguration.fromBundle(bundle)).thenReturn(processConfiguration);
-        when(CounterConfiguration.fromBundle(bundle)).thenReturn(counterConfiguration);
-        when(CounterReport.fromBundle(bundle)).thenReturn(counterReport);
-        when(ClientConfiguration.fromBundle(mContext, bundle)).thenReturn(clientConfiguration);
-        when(clientConfiguration.getProcessConfiguration()).thenReturn(processConfiguration);
-        when(clientConfiguration.getReporterConfiguration()).thenReturn(counterConfiguration);
-        when(counterReport.isNoEvent()).thenReturn(false);
-        when(counterReport.isUndefinedType()).thenReturn(false);
-        return intent;
-    }
-
 }

@@ -2,6 +2,7 @@ package io.appmetrica.analytics.impl.crash;
 
 import android.content.Context;
 import io.appmetrica.analytics.coreutils.internal.io.FileUtils;
+import io.appmetrica.analytics.impl.CounterReport;
 import io.appmetrica.analytics.impl.FileProvider;
 import io.appmetrica.analytics.impl.ReportToSend;
 import io.appmetrica.analytics.impl.ReporterEnvironment;
@@ -23,7 +24,6 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
@@ -36,6 +36,8 @@ public class CrashToFileWriterTest extends CommonTest {
     private CrashFolderPreparer mCrashFolderPreparer;
     @Mock
     private File mCrashFolder;
+    @Mock
+    private CounterReport counterReport;
     @Mock
     private ReportToSend mReport;
     @Mock
@@ -55,17 +57,11 @@ public class CrashToFileWriterTest extends CommonTest {
         mContext = RuntimeEnvironment.getApplication();
         when(FileUtils.getCrashesDirectory(mContext)).thenReturn(mCrashFolder);
         when(mReport.getEnvironment()).thenReturn(mReporterEnvironment);
+        when(mReport.getReport()).thenReturn(counterReport);
         when(mReporterEnvironment.getProcessConfiguration()).thenReturn(mProcessConfiguration);
         when(mProcessConfiguration.getProcessID()).thenReturn(7766);
         when(mProcessConfiguration.getProcessSessionID()).thenReturn("112233");
         mCrashToFileWriter = new CrashToFileWriter(mContext, mFileProvider, mCrashFolderPreparer, fileLocksHolder);
-    }
-
-    @Test
-    public void writeToFileCouldNotPrepareCrashFolder() {
-        when(mCrashFolderPreparer.prepareCrashFolder(mCrashFolder)).thenReturn(false);
-        mCrashToFileWriter.writeToFile(mReport);
-        verifyNoMoreInteractions(mReport);
     }
 
     @Test
@@ -75,9 +71,10 @@ public class CrashToFileWriterTest extends CommonTest {
         when(fileLocksHolder.getOrCreate(fileName)).thenReturn(fileLock);
         when(mCrashFolderPreparer.prepareCrashFolder(mCrashFolder)).thenReturn(true);
         mCrashToFileWriter.writeToFile(mReport);
-        InOrder inOrder = Mockito.inOrder(fileLock, mFileProvider);
+        InOrder inOrder = Mockito.inOrder(fileLock, mFileProvider, fileLocksHolder);
         inOrder.verify(fileLock).lock();
         inOrder.verify(mFileProvider).getFileInNonNullDirectory(mCrashFolder, "7766-112233");
         inOrder.verify(fileLock).unlockAndClear();
+        inOrder.verify(fileLocksHolder).clear(fileName);
     }
 }

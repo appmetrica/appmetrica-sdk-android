@@ -12,6 +12,7 @@ import io.appmetrica.analytics.coreapi.internal.identifiers.PlatformIdentifiers;
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.applicationstate.ApplicationState;
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.applicationstate.ApplicationStateObserver;
 import io.appmetrica.analytics.coreapi.internal.system.PermissionExtractor;
+import io.appmetrica.analytics.coreutils.internal.ReferenceHolder;
 import io.appmetrica.analytics.coreutils.internal.services.FirstExecutionConditionServiceImpl;
 import io.appmetrica.analytics.coreutils.internal.services.WaitForActivationDelayBarrier;
 import io.appmetrica.analytics.impl.ApplicationStateProviderImpl;
@@ -45,6 +46,7 @@ import io.appmetrica.analytics.impl.startup.CollectingFlags;
 import io.appmetrica.analytics.impl.startup.StartupState;
 import io.appmetrica.analytics.impl.startup.uuid.MultiProcessSafeUuidProvider;
 import io.appmetrica.analytics.impl.telephony.TelephonyDataProvider;
+import io.appmetrica.analytics.impl.utils.CurrentProcessDetector;
 import io.appmetrica.analytics.impl.utils.executors.ExecutorWrapper;
 import io.appmetrica.analytics.impl.utils.executors.InterruptionSafeHandlerThread;
 import io.appmetrica.analytics.impl.utils.executors.ServiceExecutorProvider;
@@ -142,6 +144,8 @@ public class GlobalServiceLocatorRule extends ExternalResource {
             .thenReturn(mock(FirstExecutionConditionServiceImpl.class));
         when(globalServiceLocator.getExtraMetaInfoRetriever()).thenReturn(mock(ExtraMetaInfoRetriever.class));
         when(globalServiceLocator.getServiceLifecycleTimeTracker()).thenReturn(mock(ServiceLifecycleTimeTracker.class));
+        when(globalServiceLocator.getCurrentProcessDetector()).thenReturn(mock(CurrentProcessDetector.class));
+        when(globalServiceLocator.getReferenceHolder()).thenReturn(mock(ReferenceHolder.class));
         GlobalServiceLocator.setInstance(globalServiceLocator);
     }
 

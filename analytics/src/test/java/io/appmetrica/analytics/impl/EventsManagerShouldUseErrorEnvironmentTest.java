@@ -19,7 +19,7 @@ public class EventsManagerShouldUseErrorEnvironmentTest extends CommonTest {
             InternalEvents.EVENT_TYPE_EXCEPTION_USER_CUSTOM_PROTOBUF.getTypeId(),
             InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_PROTOBUF.getTypeId(),
             InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_FROM_FILE.getTypeId(),
-            InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_FROM_INTENT.getTypeId(),
+            InternalEvents.EVENT_TYPE_PREV_SESSION_EXCEPTION_UNHANDLED_FROM_FILE.getTypeId(),
             InternalEvents.EVENT_TYPE_ANR.getTypeId()
     );
 

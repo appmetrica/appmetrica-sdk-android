@@ -22,6 +22,7 @@ public final class ServiceUtils {
     public static final String PARAMETER_PSID = "psid";
     public static final String EXTRA_SCREEN_SIZE = "screen_size";
     public static final String KEY_VALUE = "value";
+    public static final String APP_METRICA_PROCESS = ":AppMetrica";
 
     private static final String APPMETRICA_SERVICE_SCHEME = "appmetrica";
 

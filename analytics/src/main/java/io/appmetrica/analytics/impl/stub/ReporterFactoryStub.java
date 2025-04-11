@@ -40,7 +40,7 @@ public class ReporterFactoryStub implements IReporterFactory {
 
     @NonNull
     @Override
-    public IUnhandledSituationReporter getMainOrCrashReporter(@NonNull AppMetricaConfig config) {
+    public IUnhandledSituationReporter getUnhandhedSituationReporter(@NonNull AppMetricaConfig config) {
         return new ReporterExtendedStub();
     }
 

@@ -7,7 +7,7 @@ class PrevSessionNativeCrashHandlerFactory(
 ) : HandlersFactory<ReportComponentHandler>(provider) {
 
     override fun addHandlers(reportHandlers: MutableList<ReportComponentHandler>) {
-        reportHandlers.add(provider.reportPrevSessionNativeCrashHandler)
+        reportHandlers.add(provider.reportPrevSessionEventHandler)
         reportHandlers.add(provider.reportPurgeBufferHandler)
     }
 }

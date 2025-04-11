@@ -15,7 +15,7 @@ import io.appmetrica.analytics.impl.component.processor.event.ReportFeaturesHand
 import io.appmetrica.analytics.impl.component.processor.event.ReportFirstHandler;
 import io.appmetrica.analytics.impl.component.processor.event.ReportFirstOccurrenceStatusHandler;
 import io.appmetrica.analytics.impl.component.processor.event.ReportPermissionHandler;
-import io.appmetrica.analytics.impl.component.processor.event.ReportPrevSessionNativeCrashHandler;
+import io.appmetrica.analytics.impl.component.processor.event.ReportPrevSessionEventHandler;
 import io.appmetrica.analytics.impl.component.processor.event.ReportPurgeBufferHandler;
 import io.appmetrica.analytics.impl.component.processor.event.ReportSaveToDatabaseHandler;
 import io.appmetrica.analytics.impl.component.processor.event.ReportSessionHandler;
@@ -88,7 +88,6 @@ public class EventProcessorStrategyFactoryTest extends CommonTest {
             when(mock.getReportAppEnvironmentUpdated()).thenReturn(mock(ReportAppEnvironmentUpdatedHandler.class));
             when(mock.getReportAppEnvironmentCleared()).thenReturn(mock(ReportAppEnvironmentClearedHandler.class));
             when(mock.getReportFirstHandler()).thenReturn(mock(ReportFirstHandler.class));
-            when(mock.getReportPrevSessionNativeCrashHandler()).thenReturn(mock(ReportPrevSessionNativeCrashHandler.class));
             when(mock.getReportPermissionsHandler()).thenReturn(mock(ReportPermissionHandler.class));
             when(mock.getReportFeaturesHandler()).thenReturn(mock(ReportFeaturesHandler.class));
             when(mock.getUpdateUserProfileIDHandler()).thenReturn(mock(UpdateUserProfileIDHandler.class));
@@ -103,6 +102,7 @@ public class EventProcessorStrategyFactoryTest extends CommonTest {
             when(mock.getModulesEventHandler()).thenReturn(mock(ModulesEventHandler.class));
             when(mock.getSaveSessionExtrasHandler()).thenReturn(mock(SaveSessionExtrasHandler.class));
             when(mock.getExternalAttributionHandler()).thenReturn(mock(ExternalAttributionHandler.class));
+            when(mock.getReportPrevSessionEventHandler()).thenReturn(mock(ReportPrevSessionEventHandler.class));
         });
 
     @Before
@@ -312,8 +312,7 @@ public class EventProcessorStrategyFactoryTest extends CommonTest {
     public void getProcessingStrategyHandlers_EventType_PrevSessionCrashpadCrash() {
         assertThat(getHandlers(EVENT_TYPE_PREV_SESSION_NATIVE_CRASH_PROTOBUF))
             .containsExactly(
-                mEventProcessingStrategyFactory.getHandlersProvider().getModulesEventHandler(),
-                mEventProcessingStrategyFactory.getHandlersProvider().getReportPrevSessionNativeCrashHandler(),
+                mEventProcessingStrategyFactory.getHandlersProvider().getReportPrevSessionEventHandler(),
                 mEventProcessingStrategyFactory.getHandlersProvider().getReportPurgeBufferHandler()
             );
     }

@@ -11,19 +11,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import androidx.annotation.WorkerThread;
-import io.appmetrica.analytics.coreapi.internal.backport.Consumer;
-import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
-import io.appmetrica.analytics.coreutils.internal.io.FileUtils;
-import io.appmetrica.analytics.impl.client.ClientConfiguration;
 import io.appmetrica.analytics.impl.client.ProcessConfiguration;
-import io.appmetrica.analytics.impl.component.CommonArguments;
-import io.appmetrica.analytics.impl.component.clients.ClientDescription;
 import io.appmetrica.analytics.impl.component.clients.ClientRepository;
 import io.appmetrica.analytics.impl.component.clients.ComponentsRepository;
 import io.appmetrica.analytics.impl.core.CoreImplFirstCreateTaskLauncherProvider;
-import io.appmetrica.analytics.impl.crash.ReadOldCrashesRunnable;
-import io.appmetrica.analytics.impl.crash.jvm.CrashDirectoryWatcher;
-import io.appmetrica.analytics.impl.crash.ndk.NativeCrashService;
+import io.appmetrica.analytics.impl.crash.service.ServiceCrashController;
 import io.appmetrica.analytics.impl.modules.ModuleServiceLifecycleControllerImpl;
 import io.appmetrica.analytics.impl.modules.ServiceContextFacade;
 import io.appmetrica.analytics.impl.modules.service.ServiceModulesController;
@@ -35,7 +27,7 @@ import io.appmetrica.analytics.impl.utils.JsonHelper;
 import io.appmetrica.analytics.impl.utils.ServerTime;
 import io.appmetrica.analytics.internal.CounterConfiguration;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
-import java.io.File;
+import java.util.Objects;
 
 public class AppMetricaServiceCoreImpl implements AppMetricaServiceCore, AppMetricaCoreReporter {
     private static final String TAG = "[AppMetricaServiceCoreImpl]";
@@ -50,33 +42,22 @@ public class AppMetricaServiceCoreImpl implements AppMetricaServiceCore, AppMetr
     private ClientRepository mClientRepository;
     @NonNull
     private final AppMetricaServiceLifecycle mAppMetricaServiceLifecycle;
-    @NonNull
+    @Nullable
     private ReportConsumer mReportConsumer;
     @NonNull
     private final FirstServiceEntryPointManager firstServiceEntryPointManager;
     @NonNull
-    private final NativeCrashService nativeCrashService;
-    @NonNull
     private final ApplicationStateProviderImpl applicationStateProvider;
-    @NonNull
-    private final ICommonExecutor reportExecutor;
     @NonNull
     private final AppMetricaServiceCoreImplFieldsFactory fieldsFactory;
     @NonNull
-    private final Consumer<File> crashesListener = new Consumer<File>() {
-        @WorkerThread // special FileObserver thread
-        @Override
-        public void consume(@NonNull File data) {
-            handleNewCrashFromFile(data);
-        }
-    };
-    @NonNull
-    private ReportProxy reportProxy;
+    private final ReportProxy reportProxy;
 
+    /** @noinspection FieldCanBeLocal*/
     // Attention!! Do not convert to local variable or it will broken CrashFileObserver.
     // See warning block from description of https://developer.android.com/reference/android/os/FileObserver
     @Nullable
-    private CrashDirectoryWatcher crashDirectoryWatcher;
+    private ServiceCrashController serviceCrashController;
 
     @MainThread
     public AppMetricaServiceCoreImpl(@NonNull Context context,
@@ -95,7 +76,6 @@ public class AppMetricaServiceCoreImpl implements AppMetricaServiceCore, AppMetr
             new AppMetricaServiceLifecycle(),
             FirstServiceEntryPointManager.INSTANCE,
             GlobalServiceLocator.getInstance().getApplicationStateProvider(),
-            GlobalServiceLocator.getInstance().getServiceExecutorProvider().getReportRunnableExecutor(),
             new AppMetricaServiceCoreImplFieldsFactory()
         );
     }
@@ -108,7 +88,6 @@ public class AppMetricaServiceCoreImpl implements AppMetricaServiceCore, AppMetr
                               @NonNull AppMetricaServiceLifecycle appMetricaServiceLifecycle,
                               @NonNull FirstServiceEntryPointManager firstServiceEntryPointManager,
                               @NonNull ApplicationStateProviderImpl applicationStateProvider,
-                              @NonNull ICommonExecutor reportExecutor,
                               @NonNull AppMetricaServiceCoreImplFieldsFactory fieldsFactory) {
         mContext = context;
         mCallback = callback;
@@ -116,9 +95,7 @@ public class AppMetricaServiceCoreImpl implements AppMetricaServiceCore, AppMetr
         mAppMetricaServiceLifecycle = appMetricaServiceLifecycle;
         this.firstServiceEntryPointManager = firstServiceEntryPointManager;
         this.applicationStateProvider = applicationStateProvider;
-        this.reportExecutor = reportExecutor;
         this.fieldsFactory = fieldsFactory;
-        this.nativeCrashService = GlobalServiceLocator.getInstance().getNativeCrashService();
         this.reportProxy = new ReportProxy();
     }
 
@@ -167,8 +144,9 @@ public class AppMetricaServiceCoreImpl implements AppMetricaServiceCore, AppMetr
 
         DebugLogger.INSTANCE.info(TAG, "Warm up self reporter");
         AppMetricaSelfReportFacade.warmupForSelfProcess(mContext);
-        initJvmCrashWatcher();
-        initNativeCrashReporting();
+        DebugLogger.INSTANCE.info(TAG, "Setup service crash controller");
+        serviceCrashController = new ServiceCrashController(mContext, mReportConsumer);
+        serviceCrashController.init();
         DebugLogger.INSTANCE.info(TAG, "Run scheduler on first create additional tasks");
         new CoreImplFirstCreateTaskLauncherProvider().getLauncher().run();
         DebugLogger.INSTANCE.info(TAG, "Finish onFirstCreate");
@@ -187,36 +165,12 @@ public class AppMetricaServiceCoreImpl implements AppMetricaServiceCore, AppMetr
         startupStateHolder.registerObserver(modulesController);
     }
 
-    private void initJvmCrashWatcher() {
-        File crashDirectory = FileUtils.getCrashesDirectory(mContext);
-        if (crashDirectory != null) {
-            crashDirectoryWatcher = fieldsFactory.createCrashDirectoryWatcher(crashDirectory, crashesListener);
-            DebugLogger.INSTANCE.info(
-                TAG,
-                "readOldCrashes for directory: %s",
-                crashDirectory.getAbsolutePath()
-            );
-
-            reportExecutor.execute(new ReadOldCrashesRunnable(mContext, crashDirectory, crashesListener));
-            crashDirectoryWatcher.startWatching();
-        } else {
-            DebugLogger.INSTANCE.info(TAG, "Do not init JVM crash watcher as crashes directory is null");
-        }
-    }
-
-    private void initNativeCrashReporting() {
-        nativeCrashService.initNativeCrashReporting(mContext, mReportConsumer);
-    }
-
     @WorkerThread
     private void initMetricaServiceLifecycleObservers() {
         DebugLogger.INSTANCE.info(TAG, "initMetricaServiceLifecycleObservers");
-        mAppMetricaServiceLifecycle.addNewClientConnectObserver(new AppMetricaServiceLifecycle.LifecycleObserver() {
-            @Override
-            public void onEvent(@NonNull Intent intent) {
-                DebugLogger.INSTANCE.info(TAG, "onNewClientConnect");
-                onNewClientConnected(intent);
-            }
+        mAppMetricaServiceLifecycle.addNewClientConnectObserver(intent -> {
+            DebugLogger.INSTANCE.info(TAG, "onNewClientConnect");
+            onNewClientConnected(intent);
         });
     }
 
@@ -266,7 +220,11 @@ public class AppMetricaServiceCoreImpl implements AppMetricaServiceCore, AppMetr
             );
 
             if (AppMetricaServiceAction.ACTION_CLIENT_CONNECTION.equals(action)) {
-                removeClients(intentData, packageName);
+                if (packageName == null) {
+                    DebugLogger.INSTANCE.warning(TAG, "Package name is null");
+                } else {
+                    removeClients(intentData, packageName);
+                }
             }
         }
     }
@@ -285,8 +243,8 @@ public class AppMetricaServiceCoreImpl implements AppMetricaServiceCore, AppMetr
 
     @WorkerThread
     @VisibleForTesting
-    void removeClients(@Nullable Uri intentData, @Nullable String packageName) {
-        if (intentData != null && intentData.getPath().equals("/" + ServiceUtils.PATH_CLIENT)) {
+    void removeClients(@Nullable Uri intentData, @NonNull String packageName) {
+        if (intentData != null && Objects.equals(intentData.getPath(), "/" + ServiceUtils.PATH_CLIENT)) {
             int pid = Integer.parseInt(intentData.getQueryParameter(ServiceUtils.PARAMETER_PID));
             String psid = intentData.getQueryParameter(ServiceUtils.PARAMETER_PSID);
             DebugLogger.INSTANCE.info(TAG, "unbounded client pid %d and psid %s", pid, psid);
@@ -329,7 +287,9 @@ public class AppMetricaServiceCoreImpl implements AppMetricaServiceCore, AppMetr
             "reportData: type = %s; customType = %s; name = %s",
             counterReport.getType(), counterReport.getCustomType(), counterReport.getName()
         );
-        mReportConsumer.consumeReport(CounterReport.fromBundle(data), data);
+        if (mReportConsumer != null) {
+            mReportConsumer.consumeReport(CounterReport.fromBundle(data), data);
+        }
     }
 
     @WorkerThread
@@ -374,12 +334,6 @@ public class AppMetricaServiceCoreImpl implements AppMetricaServiceCore, AppMetr
         return processConfiguration == null ? null : processConfiguration.getProcessID();
     }
 
-    @WorkerThread
-    public void handleNewCrashFromFile(@NonNull File crashFile) {
-        DebugLogger.INSTANCE.info(TAG, "handleNewCrashFromFile %s", crashFile.getName());
-        mReportConsumer.consumeCrashFromFile(crashFile);
-    }
-
     private void handleStart(Intent intent, int startId) {
         DebugLogger.INSTANCE.info(
             TAG,
@@ -388,51 +342,8 @@ public class AppMetricaServiceCoreImpl implements AppMetricaServiceCore, AppMetr
             startId
         );
 
-        if (null != intent) {
-            // Set class loader for unmarshalling
-            intent.getExtras().setClassLoader(CounterConfiguration.class.getClassLoader());
-
-            handleEventOnStart(intent);
-        }
-
         // We don't want the hanging service in running apps.
         mCallback.onStartFinished(startId);
-    }
-
-    @WorkerThread
-    private boolean isInvalidIntentData(final Intent intent) {
-        return (null == intent || null == intent.getData());
-    }
-
-    @WorkerThread
-    private void handleEventOnStart(final Intent intent) {
-        if (isInvalidIntentData(intent)) {
-            return;
-        }
-        final Bundle extras = intent.getExtras();
-        final ClientConfiguration clientConfiguration = ClientConfiguration.fromBundle(mContext, extras);
-        if (clientConfiguration == null) {
-            return;
-        }
-
-        final CounterReport reportData = CounterReport.fromBundle(extras);
-
-        boolean isInvalidData = reportData.isNoEvent();
-        isInvalidData |= reportData.isUndefinedType();
-        if (isInvalidData) {
-            return; // Skip invalid attempt to report data due to lack of data
-        }
-
-        try {
-            // Immediately create & send due to crash
-            mReportConsumer.consumeCrash(
-                ClientDescription.fromClientConfiguration(clientConfiguration),
-                reportData,
-                new CommonArguments(clientConfiguration)
-            );
-        } catch (Throwable exception) {
-            DebugLogger.INSTANCE.error(TAG, "Something was wrong while handling event.\n%s", exception);
-        }
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)

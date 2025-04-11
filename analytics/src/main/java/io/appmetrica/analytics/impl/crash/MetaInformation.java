@@ -16,7 +16,6 @@ public class MetaInformation {
     private interface DeliveryMethod {
 
         String FILE = "file";
-        String INTENT = "intent";
         String BINDER = "binder";
 
     }
@@ -33,8 +32,8 @@ public class MetaInformation {
                 new MetaInformation(CrashSource.JVM, DeliveryMethod.BINDER)
         );
         META_INFORMATION_MAPPING.put(
-                InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_FROM_INTENT.getTypeId(),
-                new MetaInformation(CrashSource.JVM, DeliveryMethod.INTENT)
+                InternalEvents.EVENT_TYPE_PREV_SESSION_EXCEPTION_UNHANDLED_FROM_FILE.getTypeId(),
+                new MetaInformation(CrashSource.JVM, DeliveryMethod.FILE)
         );
         META_INFORMATION_MAPPING.put(
                 InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_FROM_FILE.getTypeId(),

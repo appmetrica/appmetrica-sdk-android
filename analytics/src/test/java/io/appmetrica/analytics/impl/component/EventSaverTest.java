@@ -5,6 +5,7 @@ import io.appmetrica.analytics.impl.AppEnvironment;
 import io.appmetrica.analytics.impl.CounterReport;
 import io.appmetrica.analytics.impl.component.session.SessionManagerStateMachine;
 import io.appmetrica.analytics.impl.component.session.SessionState;
+import io.appmetrica.analytics.impl.component.session.SessionType;
 import io.appmetrica.analytics.impl.component.sessionextras.SessionExtrasHolder;
 import io.appmetrica.analytics.impl.db.DatabaseHelper;
 import io.appmetrica.analytics.impl.db.VitalComponentDataProvider;
@@ -249,6 +250,7 @@ public class EventSaverTest extends CommonTest {
         when(mCounterReport.getCreationTimestamp()).thenReturn(timestamp);
         prepareReportSaver(mCounterReport);
         SessionState sessionState = mock(SessionState.class);
+        when(sessionState.getSessionType()).thenReturn(SessionType.FOREGROUND);
         when(mSessionManager.peekCurrentSessionState(mCounterReport)).thenReturn(sessionState);
         mEventSaver.saveReportFromPrevSession(mCounterReport);
         verifyReportSaved(mCounterReport, sessionState);

@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.impl;
 
 import io.appmetrica.analytics.impl.client.ProcessConfiguration;
+import io.appmetrica.analytics.impl.utils.limitation.SimpleMapLimitation;
 import io.appmetrica.analytics.internal.CounterConfiguration;
 import io.appmetrica.analytics.testutils.CommonTest;
 import org.junit.Before;
@@ -27,6 +28,7 @@ public class ReporterEnvironmentTest extends CommonTest {
         return new ReporterEnvironment(
                 new ProcessConfiguration(RuntimeEnvironment.getApplication(), mock(DataResultReceiver.class)),
                 new CounterConfiguration(),
+                new ErrorEnvironment(mock(SimpleMapLimitation.class)),
                 USER_PROFILE_ID
         );
     }
@@ -37,6 +39,8 @@ public class ReporterEnvironmentTest extends CommonTest {
     private ProcessConfiguration processConfiguration;
     @Mock
     private CounterConfiguration counterConfiguration;
+    @Mock
+    private ErrorEnvironment errorEnvironment;
 
     @Before
     public void setUp() {
@@ -44,6 +48,7 @@ public class ReporterEnvironmentTest extends CommonTest {
         mReporterEnvironment = new ReporterEnvironment(
                 processConfiguration,
                 counterConfiguration,
+                errorEnvironment,
                 USER_PROFILE_ID
         );
         mErrorEnvironment = mock(ErrorEnvironment.class);
@@ -53,11 +58,11 @@ public class ReporterEnvironmentTest extends CommonTest {
     @Test
     public void constuctor() throws Exception {
         ObjectPropertyAssertions(
-                new ReporterEnvironment(processConfiguration, counterConfiguration, USER_PROFILE_ID)
+                new ReporterEnvironment(processConfiguration, counterConfiguration, errorEnvironment, USER_PROFILE_ID)
         )
                 .withPrivateFields(true)
                 .withFinalFieldOnly(false)
-                .checkField("mErrorEnvironment", (ErrorEnvironment) null)
+                .checkField("mErrorEnvironment", errorEnvironment)
                 .checkField("mPreloadInfoWrapper", null)
                 .checkField("initialUserProfileID", USER_PROFILE_ID)
                 .checkField("misSessionPaused", true)

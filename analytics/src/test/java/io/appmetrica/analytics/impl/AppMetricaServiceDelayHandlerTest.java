@@ -4,7 +4,7 @@ import android.app.ActivityManager;
 import android.content.ComponentName;
 import android.content.Context;
 import androidx.annotation.Nullable;
-import io.appmetrica.analytics.impl.utils.MainProcessDetector;
+import io.appmetrica.analytics.impl.utils.CurrentProcessDetector;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.TestUtils;
 import java.io.File;
@@ -33,7 +33,7 @@ public class AppMetricaServiceDelayHandlerTest extends CommonTest {
     private static final String METRICA_SERVICE_SETTING_FILENAME = "metrica_service_settings.dat";
 
     @Mock
-    private MainProcessDetector mainProcessDetector;
+    private CurrentProcessDetector currentProcessDetector;
     @Mock
     private FileProvider fileProvider;
     @Mock
@@ -50,10 +50,10 @@ public class AppMetricaServiceDelayHandlerTest extends CommonTest {
         metricaServiceInfo.service = new ComponentName(context.getPackageName(), "io.appmetrica.analytics.internal.AppMetricaService");
         delayFile = new File(RuntimeEnvironment.getApplication().getFilesDir(), METRICA_SERVICE_SETTING_FILENAME);
         when(fileProvider.getFileFromStorage(context, METRICA_SERVICE_SETTING_FILENAME)).thenReturn(delayFile);
-        when(mainProcessDetector.isMainProcess()).thenReturn(true);
+        when(currentProcessDetector.isMainProcess()).thenReturn(true);
         when(context.getSystemService(Context.ACTIVITY_SERVICE)).thenReturn(activityManager);
         when(fileProvider.getFileFromStorage(context, METRICA_SERVICE_SETTING_FILENAME)).thenReturn(delayFile);
-        appMetricaServiceDelayHandler = new AppMetricaServiceDelayHandler(mainProcessDetector, fileProvider);
+        appMetricaServiceDelayHandler = new AppMetricaServiceDelayHandler(currentProcessDetector, fileProvider);
     }
 
     @After
@@ -63,14 +63,14 @@ public class AppMetricaServiceDelayHandlerTest extends CommonTest {
 
     @Test
     public void setDelayNonMainProcess() {
-        when(mainProcessDetector.isMainProcess()).thenReturn(false);
+        when(currentProcessDetector.isMainProcess()).thenReturn(false);
         appMetricaServiceDelayHandler.setDelay(context, 1000);
         verifyNoMoreInteractions(fileProvider);
     }
 
     @Test
     public void setDelayMainProcess() throws JSONException {
-        when(mainProcessDetector.isMainProcess()).thenReturn(true);
+        when(currentProcessDetector.isMainProcess()).thenReturn(true);
         appMetricaServiceDelayHandler.setDelay(context, 1000);
         JSONAssert.assertEquals(
                 new JSONObject().put("delay", 1000).toString(),
@@ -82,21 +82,21 @@ public class AppMetricaServiceDelayHandlerTest extends CommonTest {
     @Test
     public void setDelayMainProcessNoDirectory() {
         when(fileProvider.getFileFromStorage(context, METRICA_SERVICE_SETTING_FILENAME)).thenReturn(null);
-        when(mainProcessDetector.isMainProcess()).thenReturn(true);
+        when(currentProcessDetector.isMainProcess()).thenReturn(true);
         appMetricaServiceDelayHandler.setDelay(context, 1000);
         assertThat(readDelayFile()).isNull();
     }
 
     @Test
     public void removeDelayNonMainProcess() {
-        when(mainProcessDetector.isMainProcess()).thenReturn(false);
+        when(currentProcessDetector.isMainProcess()).thenReturn(false);
         appMetricaServiceDelayHandler.removeDelay(context);
         verifyNoMoreInteractions(fileProvider);
     }
 
     @Test
     public void removeDelayMainProcess() {
-        when(mainProcessDetector.isMainProcess()).thenReturn(true);
+        when(currentProcessDetector.isMainProcess()).thenReturn(true);
         appMetricaServiceDelayHandler.setDelay(context, 1000);
         assertThat(delayFile.exists()).isTrue();
         appMetricaServiceDelayHandler.removeDelay(context);
@@ -105,7 +105,7 @@ public class AppMetricaServiceDelayHandlerTest extends CommonTest {
 
     @Test
     public void removeDelayMainProcessNullFile() {
-        when(mainProcessDetector.isMainProcess()).thenReturn(true);
+        when(currentProcessDetector.isMainProcess()).thenReturn(true);
         appMetricaServiceDelayHandler.setDelay(context, 1000);
         assertThat(delayFile.exists()).isTrue();
         when(fileProvider.getFileFromStorage(context, METRICA_SERVICE_SETTING_FILENAME)).thenReturn(null);

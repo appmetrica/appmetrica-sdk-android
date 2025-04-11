@@ -62,6 +62,7 @@ class RegularDispatcherComponentHandleReportTest(
         verify(reportingComponent).handleReport(counterReport)
         verify(reportingComponent, times(if (shouldUpdateConfig) 1 else 0)).updateSdkConfig(reportArguments)
     }
+
     companion object {
 
         @JvmStatic
@@ -70,7 +71,10 @@ class RegularDispatcherComponentHandleReportTest(
             arrayOf(
                 it.typeId,
                 it != InternalEvents.EVENT_TYPE_UPDATE_FOREGROUND_TIME &&
-                    it != InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_FROM_FILE
+                    it != InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_FROM_FILE &&
+                    it != InternalEvents.EVENT_TYPE_PREV_SESSION_EXCEPTION_UNHANDLED_FROM_FILE &&
+                    it != InternalEvents.EVENT_TYPE_PREV_SESSION_NATIVE_CRASH_PROTOBUF &&
+                    it != InternalEvents.EVENT_TYPE_CURRENT_SESSION_NATIVE_CRASH_PROTOBUF
             )
         }
     }

@@ -35,7 +35,6 @@ import io.appmetrica.analytics.impl.utils.JsonHelper;
 import io.appmetrica.analytics.impl.utils.PluginErrorDetailsExtensionKt;
 import io.appmetrica.analytics.impl.utils.ProcessDetector;
 import io.appmetrica.analytics.impl.utils.PublicLogConstructor;
-import io.appmetrica.analytics.impl.utils.limitation.SimpleMapLimitation;
 import io.appmetrica.analytics.impl.utils.validation.ValidationResult;
 import io.appmetrica.analytics.impl.utils.validation.Validator;
 import io.appmetrica.analytics.impl.utils.validation.revenue.RevenueValidator;
@@ -131,9 +130,6 @@ public abstract class BaseReporter implements IBaseReporter {
         mPublicLogger = LoggerStorage.getOrCreatePublicLogger(
                 mReporterEnvironment.getReporterConfiguration().getApiKey());
 
-        mReporterEnvironment.initialize(
-                new SimpleMapLimitation(mPublicLogger, ErrorEnvironment.TAG)
-        );
         if (BooleanUtils.isTrue(mReporterEnvironment.getReporterConfiguration().isLogEnabled())) {
             mPublicLogger.setEnabled(true);
         }

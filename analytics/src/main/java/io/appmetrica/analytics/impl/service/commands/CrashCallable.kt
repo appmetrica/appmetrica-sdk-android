@@ -1,12 +1,9 @@
 package io.appmetrica.analytics.impl.service.commands
 
 import android.content.Context
-import androidx.annotation.VisibleForTesting
 import io.appmetrica.analytics.impl.AppMetricaConnector
 import io.appmetrica.analytics.impl.ClientServiceLocator
-import io.appmetrica.analytics.impl.InternalEvents
 import io.appmetrica.analytics.impl.ReportToSend
-import io.appmetrica.analytics.impl.ServiceUtils
 import io.appmetrica.analytics.impl.ShouldDisconnectFromServiceChecker
 import io.appmetrica.analytics.impl.crash.CrashToFileWriter
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
@@ -24,7 +21,8 @@ internal class CrashCallable(
 
     private val tag = "[CrashCallable]"
 
-    private val mainProcessDetector = ClientServiceLocator.getInstance().mainProcessDetector
+    private val currentProcessDetector = ClientServiceLocator.getInstance().currentProcessDetector
+    private val appMetricaServiceProcessDetector = ClientServiceLocator.getInstance().appMetricaServiceProcessDetector
     private val crashToFileWriter = CrashToFileWriter(context)
 
     // since this method is synchronized, if crash tries to send itself for the second time synchronously
@@ -32,11 +30,12 @@ internal class CrashCallable(
     @Synchronized
     override fun call() {
         if (isExecuted) {
+            DebugLogger.info(tag, "Ignore callable as it has already been executed")
             return
         }
         isExecuted = true
-        if (mainProcessDetector.isNonMainProcess("AppMetrica")) {
-            writeToFile(reportToSend)
+        if (shouldProcessCrashViaFile()) {
+            crashToFileWriter.writeToFile(reportToSend)
         } else {
             serviceConnector.scheduleDisconnect() // Scheduled unbind, because the app is going to die
             isExecuted = false
@@ -44,30 +43,13 @@ internal class CrashCallable(
         }
     }
 
+    private fun shouldProcessCrashViaFile(): Boolean {
+        return currentProcessDetector.processName == appMetricaServiceProcessDetector.processName(context)
+    }
+
     override fun handleAbsentService(): Boolean {
-        DebugLogger.info(tag, "Send crash via intent.")
-        tryToSendCrashIntent(reportToSend)
+        DebugLogger.info(tag, "Handle absence service: write crash to file")
+        crashToFileWriter.writeToFile(reportToSend)
         return false
-    }
-
-    @VisibleForTesting
-    fun tryToSendCrashIntent(toSend: ReportToSend) {
-        if (toSend.report.bytesTruncated == 0) {
-            val intent = ServiceUtils.getOwnMetricaServiceIntent(context)
-            toSend.report.type = InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_FROM_INTENT.typeId
-            intent.putExtras(toSend.report.toBundle(toSend.environment.configBundle))
-            try {
-                context.startService(intent)
-            } catch (e: Throwable) {
-                writeToFile(toSend)
-                DebugLogger.error(tag, e, e.message)
-            }
-        } else {
-            writeToFile(toSend)
-        }
-    }
-
-    private fun writeToFile(toSend: ReportToSend) {
-        crashToFileWriter.writeToFile(toSend)
     }
 }

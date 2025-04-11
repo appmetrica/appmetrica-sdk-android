@@ -66,7 +66,7 @@ public class ReporterFactoryStubTest extends CommonTest {
 
     @Test
     public void getMainOrCrashReporter() {
-        assertThat(reporterFactoryStub.getMainOrCrashReporter(appMetricaConfig))
+        assertThat(reporterFactoryStub.getUnhandhedSituationReporter(appMetricaConfig))
                 .isNotNull()
                 .isInstanceOf(ReporterExtendedStub.class);
     }

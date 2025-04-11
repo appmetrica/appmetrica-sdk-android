@@ -3,8 +3,10 @@ package io.appmetrica.analytics.impl;
 import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import io.appmetrica.analytics.coreutils.internal.logger.LoggerStorage;
 import io.appmetrica.analytics.impl.client.ProcessConfiguration;
 import io.appmetrica.analytics.impl.service.AppMetricaServiceDataReporter;
+import io.appmetrica.analytics.impl.utils.limitation.SimpleMapLimitation;
 import io.appmetrica.analytics.internal.CounterConfiguration;
 import io.appmetrica.analytics.internal.CounterConfigurationReporterType;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
@@ -52,14 +54,20 @@ public class SelfDiagnosticReporter {
                 CounterConfiguration counterConfiguration = new CounterConfiguration(mApiKey);
                 counterConfiguration.setReporterType(mReporterType);
                 mSelfProcessReporter.reportData(
-                        AppMetricaServiceDataReporter.TYPE_CORE,
-                        report.toBundle(
-                                new ReporterEnvironment(
-                                        new ProcessConfiguration(mContext, null),
-                                        counterConfiguration,
-                                        null
-                                ).getConfigBundle()
-                        )
+                    AppMetricaServiceDataReporter.TYPE_CORE,
+                    report.toBundle(
+                        new ReporterEnvironment(
+                            new ProcessConfiguration(mContext, null),
+                            counterConfiguration,
+                            new ErrorEnvironment(
+                                new SimpleMapLimitation(
+                                    LoggerStorage.getOrCreatePublicLogger(mApiKey),
+                                    ErrorEnvironment.TAG
+                                )
+                            ),
+                            null
+                        ).getConfigBundle()
+                    )
                 );
             } catch (Throwable ex) {
                 DebugLogger.INSTANCE.error(TAG, ex);

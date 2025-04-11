@@ -11,8 +11,9 @@ import io.appmetrica.analytics.impl.proxy.AppMetricaFacadeProvider;
 import io.appmetrica.analytics.impl.reporter.ReporterLifecycleListener;
 import io.appmetrica.analytics.impl.startup.uuid.MultiProcessSafeUuidProvider;
 import io.appmetrica.analytics.impl.startup.uuid.UuidFromClientPreferencesImporter;
+import io.appmetrica.analytics.impl.utils.AppMetricaServiceProcessDetector;
+import io.appmetrica.analytics.impl.utils.CurrentProcessDetector;
 import io.appmetrica.analytics.impl.utils.FirstLaunchDetector;
-import io.appmetrica.analytics.impl.utils.MainProcessDetector;
 import io.appmetrica.analytics.impl.utils.executors.ClientExecutorProvider;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.MockedConstructionRule;
@@ -41,7 +42,7 @@ public class ClientServiceLocatorTest extends CommonTest {
     @Mock
     private DefaultOneShotMetricaConfig mDefaultOneShotMetricaConfig;
     @Mock
-    private MainProcessDetector mMainProcessDetector;
+    private CurrentProcessDetector mCurrentProcessDetector;
     @Mock
     private AppMetricaServiceDelayHandler appMetricaServiceDelayHandler;
     @Mock
@@ -89,6 +90,10 @@ public class ClientServiceLocatorTest extends CommonTest {
         new MockedConstructionRule<>(FirstLaunchDetector.class);
 
     @Rule
+    public MockedConstructionRule<AppMetricaServiceProcessDetector> appMetricaServiceProcessDetectorMockedConstructionRule =
+        new MockedConstructionRule<>(AppMetricaServiceProcessDetector.class);
+
+    @Rule
     public MockedConstructionRule<ClientConfigSerializer> clientConfigSerializerMockedConstructionRule =
         new MockedConstructionRule<>(ClientConfigSerializer.class);
 
@@ -109,7 +114,7 @@ public class ClientServiceLocatorTest extends CommonTest {
         when(DatabaseStorageFactory.getInstance(context)).thenReturn(databaseStorage);
         when(databaseStorage.getClientDbHelper()).thenReturn(keyValueTableDbHelper);
         mClientServiceLocator = new ClientServiceLocator(
-            mMainProcessDetector,
+            mCurrentProcessDetector,
             mDefaultOneShotMetricaConfig,
             mClientExecutorProvider,
             activityAppearedListener,
@@ -124,7 +129,7 @@ public class ClientServiceLocatorTest extends CommonTest {
 
     @Test
     public void getProcessDetector() {
-        assertThat(mClientServiceLocator.getProcessDetector()).isSameAs(mMainProcessDetector);
+        assertThat(mClientServiceLocator.getProcessDetector()).isSameAs(mCurrentProcessDetector);
     }
 
     @Test
@@ -184,8 +189,14 @@ public class ClientServiceLocatorTest extends CommonTest {
     public void allFieldsFilled() throws Exception {
         ObjectPropertyAssertions(mClientServiceLocator)
             .withDeclaredAccessibleFields(true)
-            .withIgnoredFields("moduleEntryPointsRegister", "appMetricaFacadeProvider", "firstLaunchDetector", "clientConfigSerializer")
-            .checkField("mainProcessDetector", "getMainProcessDetector", mMainProcessDetector)
+            .withIgnoredFields(
+                "moduleEntryPointsRegister",
+                "appMetricaFacadeProvider",
+                "firstLaunchDetector",
+                "appMetricaServiceProcessDetector",
+                "clientConfigSerializer"
+            )
+            .checkField("currentProcessDetector", "getCurrentProcessDetector", mCurrentProcessDetector)
             .checkField("defaultOneShotConfig", "getDefaultOneShotConfig", mDefaultOneShotMetricaConfig)
             .checkField("clientExecutorProvider", "getClientExecutorProvider", mClientExecutorProvider)
             .checkField("appMetricaServiceDelayHandler", "getAppMetricaServiceDelayHandler", appMetricaServiceDelayHandler)
@@ -287,5 +298,17 @@ public class ClientServiceLocatorTest extends CommonTest {
                 mClientServiceLocator.getSessionsTrackingManager(),
                 mClientServiceLocator.getClientExecutorProvider()
             );
+    }
+
+    @Test
+    public void getAppMetricaServiceProcessDetector() {
+        assertThat(mClientServiceLocator.getAppMetricaServiceProcessDetector())
+            .isEqualTo(
+                appMetricaServiceProcessDetectorMockedConstructionRule.getConstructionMock().constructed().get(0)
+            );
+        assertThat(appMetricaServiceProcessDetectorMockedConstructionRule.getConstructionMock().constructed())
+            .hasSize(1);
+        assertThat(appMetricaServiceProcessDetectorMockedConstructionRule.getArgumentInterceptor().flatArguments())
+            .isEmpty();
     }
 }

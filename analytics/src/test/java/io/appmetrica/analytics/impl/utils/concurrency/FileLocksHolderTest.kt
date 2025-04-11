@@ -37,11 +37,6 @@ class FileLocksHolderTest : CommonTest() {
         fileLocksHolder = FileLocksHolder(context)
     }
 
-    @After
-    fun tearDown() {
-        FileLocksHolder.clearInstance()
-    }
-
     @Test
     fun getInstance() {
         val instance = FileLocksHolder.getInstance(context)

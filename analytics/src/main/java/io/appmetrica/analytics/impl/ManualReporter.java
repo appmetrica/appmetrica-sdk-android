@@ -4,6 +4,7 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.ReporterConfig;
+import io.appmetrica.analytics.coreutils.internal.logger.LoggerStorage;
 import io.appmetrica.analytics.impl.client.ProcessConfiguration;
 import io.appmetrica.analytics.impl.crash.PluginErrorDetailsConverter;
 import io.appmetrica.analytics.impl.crash.jvm.converter.AnrConverter;
@@ -13,6 +14,7 @@ import io.appmetrica.analytics.impl.crash.jvm.converter.UnhandledExceptionConver
 import io.appmetrica.analytics.impl.reporter.ManualReporterContext;
 import io.appmetrica.analytics.impl.reporter.ReporterLifecycleListener;
 import io.appmetrica.analytics.impl.utils.ProcessDetector;
+import io.appmetrica.analytics.impl.utils.limitation.SimpleMapLimitation;
 import io.appmetrica.analytics.internal.CounterConfiguration;
 
 class ManualReporter extends BaseReporter {
@@ -35,7 +37,17 @@ class ManualReporter extends BaseReporter {
                 context,
                 reportsHandler,
                 config,
-                new ReporterEnvironment(processConfiguration, new CounterConfiguration(config), config.userProfileID),
+                new ReporterEnvironment(
+                    processConfiguration,
+                    new CounterConfiguration(config),
+                    new ErrorEnvironment(
+                        new SimpleMapLimitation(
+                            LoggerStorage.getOrCreatePublicLogger(config.apiKey),
+                            ErrorEnvironment.TAG
+                        )
+                    ),
+                    config.userProfileID
+                ),
                 extraMetaInfoRetriever,
                 ClientServiceLocator.getInstance().getProcessDetector(),
                 new UnhandledExceptionConverter(),

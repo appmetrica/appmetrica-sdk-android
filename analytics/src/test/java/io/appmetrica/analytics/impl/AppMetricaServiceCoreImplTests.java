@@ -8,15 +8,12 @@ import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.ResultReceiver;
-import io.appmetrica.analytics.coreapi.internal.backport.Consumer;
-import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
 import io.appmetrica.analytics.coreapi.internal.model.ScreenInfo;
-import io.appmetrica.analytics.coreutils.internal.io.FileUtils;
 import io.appmetrica.analytics.impl.client.ProcessConfiguration;
 import io.appmetrica.analytics.impl.component.clients.ClientRepository;
 import io.appmetrica.analytics.impl.core.CoreImplFirstCreateTaskLauncher;
 import io.appmetrica.analytics.impl.core.CoreImplFirstCreateTaskLauncherProvider;
-import io.appmetrica.analytics.impl.crash.jvm.CrashDirectoryWatcher;
+import io.appmetrica.analytics.impl.crash.service.ServiceCrashController;
 import io.appmetrica.analytics.impl.db.VitalCommonDataProvider;
 import io.appmetrica.analytics.impl.modules.ServiceContextFacade;
 import io.appmetrica.analytics.impl.service.AppMetricaServiceCallback;
@@ -28,7 +25,6 @@ import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import io.appmetrica.analytics.testutils.MockedConstructionRule;
 import io.appmetrica.analytics.testutils.MockedStaticRule;
 import io.appmetrica.analytics.testutils.TestUtils;
-import java.io.File;
 import java.util.UUID;
 import org.junit.Before;
 import org.junit.Rule;
@@ -47,7 +43,6 @@ import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
@@ -75,10 +70,6 @@ public class AppMetricaServiceCoreImplTests extends CommonTest {
     @Mock
     private AppMetricaServiceCoreImplFieldsFactory fieldsFactory;
     @Mock
-    private CrashDirectoryWatcher crashDirectoryWatcher;
-    @Mock
-    private ICommonExecutor reportExecutor;
-    @Mock
     private ReportConsumer reportConsumer;
     @Mock
     private Resources resources;
@@ -101,8 +92,6 @@ public class AppMetricaServiceCoreImplTests extends CommonTest {
     @Rule
     public MockedStaticRule<JsonHelper> mockedStaticRule = new MockedStaticRule<>(JsonHelper.class);
     @Rule
-    public MockedStaticRule<FileUtils> fileUtilsMockedStaticRule = new MockedStaticRule<>(FileUtils.class);
-    @Rule
     public MockedConstructionRule<ReportProxy> reportProxyMockedConstructionRule = new MockedConstructionRule<>(ReportProxy.class);
     @Rule
     public MockedConstructionRule<CoreImplFirstCreateTaskLauncherProvider> firstCreateTaskLauncherProviderRule =
@@ -120,6 +109,10 @@ public class AppMetricaServiceCoreImplTests extends CommonTest {
     public MockedConstructionRule<ServiceContextFacade> serviceContextFacadeMockedConstructionRule =
         new MockedConstructionRule<>(ServiceContextFacade.class);
 
+    @Rule
+    public MockedConstructionRule<ServiceCrashController> serviceCrashControllerMockedConstructionRule =
+        new MockedConstructionRule<>(ServiceCrashController.class);
+
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
@@ -128,11 +121,6 @@ public class AppMetricaServiceCoreImplTests extends CommonTest {
         intent = new Intent();
         mContext = TestUtils.createMockedContext();
 
-        when(FileUtils.getCrashesDirectory(mContext)).thenReturn(mock(File.class));
-        doReturn(crashDirectoryWatcher).when(fieldsFactory).createCrashDirectoryWatcher(
-                any(File.class),
-                any(Consumer.class)
-        );
         doReturn(reportConsumer).when(fieldsFactory).createReportConsumer(same(mContext), any(ClientRepository.class));
 
         when(mContext.getResources()).thenReturn(resources);
@@ -146,7 +134,6 @@ public class AppMetricaServiceCoreImplTests extends CommonTest {
             mAppMetricaServiceLifecycle,
             firstServiceEntryPointManager,
             mApplicationStateProvider,
-            reportExecutor,
             fieldsFactory
         );
 
@@ -375,6 +362,7 @@ public class AppMetricaServiceCoreImplTests extends CommonTest {
 
     private Intent prepareMetricaIntent(String action, String path, Integer pid, String psid) {
         Uri.Builder builder = new Uri.Builder();
+        builder.encodedAuthority("unit.test.com");
         if (path != null) {
             builder.appendPath(path);
         }
@@ -394,12 +382,6 @@ public class AppMetricaServiceCoreImplTests extends CommonTest {
 
     private void touchNewClientConnectedObserver() {
         verify(mAppMetricaServiceLifecycle).addNewClientConnectObserver(mLifecycleObserverCaptor.capture());
-        mLifecycleObserverCaptor.getValue().onEvent(intent);
-    }
-
-    private void touchFirstClientConnectObserver() {
-        verify(mAppMetricaServiceLifecycle, times(1))
-            .addFirstClientConnectObserver(mLifecycleObserverCaptor.capture());
         mLifecycleObserverCaptor.getValue().onEvent(intent);
     }
 }

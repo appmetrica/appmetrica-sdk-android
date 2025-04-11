@@ -27,6 +27,7 @@ import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.clearInvocations
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.whenever
@@ -48,8 +49,12 @@ internal class ReporterFactoryTest : CommonTest() {
     private val taskHandler: Handler = mock()
     private val startupHelper: StartupHelper = mock()
 
+    private val errorEnvironment: ErrorEnvironment = mock()
+
     @get:Rule
-    val mainReporterComponentsMockedConstructionRule = constructionRule<MainReporterComponents>()
+    val mainReporterComponentsMockedConstructionRule = constructionRule<MainReporterComponents> {
+        on { errorEnvironment } doReturn errorEnvironment
+    }
     private val mainReporterComponents: MainReporterComponents by mainReporterComponentsMockedConstructionRule
 
     @get:Rule
@@ -72,6 +77,9 @@ internal class ReporterFactoryTest : CommonTest() {
     @get:Rule
     val manualReporterConstructionRule = constructionRule<ManualReporter>()
     private val manualReporter: ManualReporter by manualReporterConstructionRule
+
+    @get:Rule
+    val crashReporterFieldsProviderMockedConstructionRule = constructionRule<CrashReporterFieldsProvider>()
 
     @get:Rule
     val crashReporterMockedConstructionRule = constructionRule<CrashReporter>()
@@ -311,7 +319,11 @@ internal class ReporterFactoryTest : CommonTest() {
             throwIfFailedValidator
         )
         verify(mainReporterComponents).updateConfig(config, logger)
-        verify(reporterLifecycleListener).onCreateMainReporter(mainReporterContext, mainReporter)
+        verify(reporterLifecycleListener)
+            .onCreateMainReporter(
+                mainReporterContextMockedConstructionRule.constructionMock.constructed()[1],
+                mainReporter
+            )
     }
 
     @Test
@@ -470,35 +482,25 @@ internal class ReporterFactoryTest : CommonTest() {
     }
 
     @Test
-    fun `getMainOrCrashReporter without build main reporter`() {
-        val config = AppMetricaConfig.newConfigBuilder(apiKey).build()
-        val reporter = reporterFactory.getMainOrCrashReporter(config)
-        assertThat(reporter).isSameAs(crashReporter)
+    fun getUnhandledSituationReporter() {
+        val firstConfig = AppMetricaConfig.newConfigBuilder(apiKey).build()
+        val secondConfig = AppMetricaConfig.newConfigBuilder(apiKey).withUserProfileID("Some").build()
+        val firstReporter = reporterFactory.getUnhandhedSituationReporter(firstConfig)
+        val secondReporter = reporterFactory.getUnhandhedSituationReporter(secondConfig)
+
+        assertThat(firstReporter)
+            .isSameAs(secondReporter)
+            .isSameAs(crashReporter)
         assertThat(crashReporterMockedConstructionRule.constructionMock.constructed()).hasSize(1)
         assertThat(crashReporterMockedConstructionRule.argumentInterceptor.flatArguments())
-            .containsExactly(context, processConfiguration, config, reportsHandler)
-        verify(crashReporter).setKeepAliveHandler(keepAliveHandler)
-        verify(crashReporter).setStartupParamsProvider(startupHelper)
-        verify(crashReporter).updateConfig(config)
-        verify(crashReporter).start()
-    }
+            .containsExactly(crashReporterFieldsProviderMockedConstructionRule.constructionMock.constructed().first())
 
-    @Test
-    fun `getMainOrCrashReporter after buildOrUpdateMainReporter`() {
-        val main = reporterFactory.buildOrUpdateMainReporter(config, logger, needToClearEnvironment)
-        clearInvocations(main)
-        val reporter = reporterFactory.getMainOrCrashReporter(config)
-        assertThat(reporter).isSameAs(main)
-        verifyNoInteractions(main)
-    }
+        assertThat(crashReporterFieldsProviderMockedConstructionRule.constructionMock.constructed()).hasSize(1)
+        assertThat(crashReporterFieldsProviderMockedConstructionRule.argumentInterceptor.flatArguments())
+            .containsExactly(processConfiguration, errorEnvironment, reportsHandler, firstConfig)
 
-    @Test
-    fun `getMainOrCrashReporter after buildMainAnonymousReporter`() {
-        val main = reporterFactory.buildOrUpdateAnonymousMainReporter(config, logger, needToClearEnvironment)
-        clearInvocations(main)
-        val reporter = reporterFactory.getMainOrCrashReporter(config)
-        assertThat(reporter).isSameAs(main)
-        verifyNoInteractions(main)
+        verify(crashReporter, never()).updateConfig(firstConfig)
+        verify(crashReporter).updateConfig(secondConfig)
     }
 
     @Test
