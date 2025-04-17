@@ -1,7 +1,7 @@
 # doc https://docs.gradle.org/current/userguide/platforms.html#sub:conventional-dependencies-toml
 
 [versions]
-selfGradlePlugins = "2.0.0-beta+95"
+selfGradlePlugins = "2.0.0-beta+101"
 
 [plugins]
 appMetricaCodequality = { id = "io.appmetrica.gradle.codequality", version.ref = "selfGradlePlugins" }
