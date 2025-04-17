@@ -5,6 +5,7 @@ import io.appmetrica.analytics.gradle.enableLogs
 
 plugins {
     id("appmetrica-common-module")
+    id("appmetrica-ndkcrashes-public-publish")
 }
 
 publishingInfo {

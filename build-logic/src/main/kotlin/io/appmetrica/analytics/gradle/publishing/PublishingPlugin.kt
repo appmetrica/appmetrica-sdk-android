@@ -3,8 +3,6 @@ package io.appmetrica.analytics.gradle.publishing
 import com.android.build.gradle.LibraryExtension
 import com.android.build.gradle.api.LibraryVariant
 import io.appmetrica.analytics.gradle.isCIBuild
-import io.appmetrica.gradle.repositories.SonatypeRepo
-import io.appmetrica.gradle.repositories.sonatypeRepository
 import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -72,8 +70,6 @@ class PublishingPlugin : Plugin<Project> {
 
         project.afterEvaluate {
             project.configure<PublishingExtension> {
-                sonatypeRepository("sonatypeRelease", repoType = SonatypeRepo.CENTRAL_STAGING)
-
                 publications {
                     project.the<LibraryExtension>().libraryVariants.configureEach {
                         val variant = this

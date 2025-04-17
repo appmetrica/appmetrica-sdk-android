@@ -23,6 +23,8 @@ gradlePlugin {
     plugin("appmetrica-module", "io.appmetrica.analytics.gradle.AppMetricaModulePlugin")
     plugin("appmetrica-proto", "io.appmetrica.analytics.gradle.protobuf.ProtobufPlugin")
     plugin("appmetrica-publish", "io.appmetrica.analytics.gradle.publishing.PublishingPlugin")
+    plugin("appmetrica-public-publish", "io.appmetrica.analytics.gradle.publishing.PublicPublishPlugin")
+    plugin("appmetrica-ndkcrashes-public-publish", "io.appmetrica.analytics.gradle.publishing.NdkCrashesPublicPublishPlugin")
     plugin("appmetrica-teamcity", "io.appmetrica.analytics.gradle.teamcity.TeamCityPlugin")
     plugin("appmetrica-update-version", "io.appmetrica.analytics.gradle.UpdateVersionPlugin")
 }
@@ -37,6 +39,6 @@ dependencies {
     // by source
     implementation(libs.appMetricaAarCheck)
     implementation(libs.appMetricaAndroid)
+    implementation(libs.appMetricaMavenCentralPublish)
     implementation(libs.appMetricaNoLogs)
-    implementation(libs.appMetricaRepositories)
 }

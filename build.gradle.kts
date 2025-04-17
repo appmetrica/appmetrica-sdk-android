@@ -1,8 +1,13 @@
 import io.appmetrica.analytics.gradle.AppMetricaModulePlugin
+import io.appmetrica.analytics.gradle.Constants
 
 plugins {
     id("appmetrica-update-version")
+    id("appmetrica-public-publish")
 }
+
+group = Constants.Library.group
+version = Constants.Library.versionName
 
 val modules by lazy { subprojects.filter { it.plugins.hasPlugin(AppMetricaModulePlugin::class.java) } }
 val buildTypes = listOf("release", "snapshot", "debug")
