@@ -1,0 +1,89 @@
+- group: io.appmetrica.analytics
+  name: analytics-ad-revenue-admob-v23
+  dependencies:
+    - group: com.google.android.gms
+      name: play-services-ads
+      repository: https://dl.google.com/android/maven2
+      from: 20.7.0
+      to: 23.6.0
+- group: io.appmetrica.analytics
+  name: analytics-ad-revenue-applovin-v12
+  dependencies:
+    - group: com.applovin
+      name: applovin-sdk
+      repository: https://repo.maven.apache.org/maven2
+      from: 12.5.0
+      to: 13.1.0
+- group: io.appmetrica.analytics
+  name: analytics-ad-revenue-fyber-v3
+  dependencies:
+    - group: com.fyber
+      name: fairbid-sdk
+      repository: https://repo.maven.apache.org/maven2
+      from: 1.0.0
+      to: 3.59.0
+- group: io.appmetrica.analytics
+  name: analytics-ad-revenue-ironsource-v7
+  dependencies:
+    - group: com.ironsource.sdk
+      name: mediationsdk
+      repository: https://android-sdk.is.com
+      from: 7.1.0
+      to: 7.4.0
+      namespace: com.ironsource
+- group: io.appmetrica.analytics
+  name: analytics
+  dependencies:
+    - group: com.android.installreferrer
+      name: installreferrer
+      repository: https://dl.google.com/android/maven2
+      from: 1.0
+      to: 2.2
+- group: io.appmetrica.analytics
+  name: analytics-apphud
+  dependencies:
+    - group: com.apphud
+      name: ApphudSDK-Android
+      repository: https://repo.maven.apache.org/maven2
+      from: 2.6.0
+      to: 2.9.1
+- group: io.appmetrica.analytics
+  name: analytics-appsetid
+  dependencies:
+    - group: com.google.android.gms
+      name: play-services-appset
+      repository: https://dl.google.com/android/maven2
+      from: 16.0.1
+      to: 16.1.0
+- group: io.appmetrica.analytics
+  name: analytics-billing-v6
+  dependencies:
+    - group: com.android.billingclient
+      name: billing
+      repository: https://dl.google.com/android/maven2
+      from: 6.0.0
+      to: 7.1.1
+- group: io.appmetrica.analytics
+  name: analytics-gpllibrary
+  dependencies:
+    - group: com.google.android.gms
+      name: play-services-location
+      repository: https://dl.google.com/android/maven2
+      from: 18.0.0
+      to: 21.0.1
+- group: io.appmetrica.analytics
+  name: analytics-identifiers
+  dependencies:
+    - group: com.google.android.gms
+      name: play-services-ads-identifier
+      repository: https://dl.google.com/android/maven2
+      from: 18.0.0
+      to: 18.2.0
+- group: io.appmetrica.analytics
+  name: analytics-location
+  dependencies:
+    - group: com.google.android.gms
+      name: play-services-location
+      repository: https://dl.google.com/android/maven2
+      from: 18.0.0
+      to: 21.0.1
