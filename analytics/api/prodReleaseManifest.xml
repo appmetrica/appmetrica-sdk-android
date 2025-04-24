@@ -15,8 +15,7 @@
         <service
             android:name="io.appmetrica.analytics.internal.AppMetricaService"
             android:enabled="true"
-            android:exported="false"
-            android:process=":AppMetrica" >
+            android:exported="false" >
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
 
@@ -32,7 +31,6 @@
             android:authorities="${applicationId}.appmetrica.preloadinfo.retail"
             android:enabled="true"
             android:exported="true"
-            android:process=":AppMetrica"
             tools:ignore="ExportedContentProvider" />
     </application>
 
