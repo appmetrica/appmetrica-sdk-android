@@ -151,6 +151,12 @@ public class ReportsHandler {
     private CounterReport prepareRegularReport(final CounterReport event,
                                                final ReporterEnvironment reporterEnvironment) {
         if (EventsManager.shouldUseErrorEnvironment(event.getType())) {
+            DebugLogger.INSTANCE.info(
+                TAG,
+                "Add error environments: %s to event with type: %s",
+                reporterEnvironment.mErrorEnvironment,
+                event.getType()
+            );
             event.setEventEnvironment(reporterEnvironment.getErrorEnvironment());
         }
         return event;

@@ -9,8 +9,11 @@ import io.appmetrica.analytics.impl.ReportToSend;
 import io.appmetrica.analytics.impl.ReporterEnvironment;
 import io.appmetrica.analytics.impl.crash.jvm.client.UnhandledException;
 import io.appmetrica.analytics.impl.crash.jvm.converter.JvmCrashConverter;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 
 public class UnhandledExceptionEventFormer {
+
+    private static final String TAG = "[UnhandledExceptionEventFormer]";
 
     @NonNull
     private final JvmCrashConverter mJvmCrashConverter;
@@ -26,6 +29,11 @@ public class UnhandledExceptionEventFormer {
 
     public ReportToSend formEvent(@NonNull UnhandledException unhandledException,
                                   @NonNull ReporterEnvironment reporterEnvironment) {
+        DebugLogger.INSTANCE.info(
+            TAG,
+            "Forming unhandled exception event with environment: %s",
+            reporterEnvironment.getErrorEnvironment()
+        );
         final ClientCounterReport reportData = EventsManager.unhandledExceptionReportEntry(
                 UnhandledException.getErrorName(unhandledException),
                 mJvmCrashConverter.fromModel(unhandledException),

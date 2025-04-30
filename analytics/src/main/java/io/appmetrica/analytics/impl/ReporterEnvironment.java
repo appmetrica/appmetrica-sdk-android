@@ -9,8 +9,11 @@ import io.appmetrica.analytics.impl.client.ProcessConfiguration;
 import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoWrapper;
 import io.appmetrica.analytics.impl.startup.StartupIdentifiersProvider;
 import io.appmetrica.analytics.internal.CounterConfiguration;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 
 public class ReporterEnvironment extends ClientConfiguration {
+
+    private static final String TAG = "[ReporterEnvironment]";
 
     @NonNull
     protected ErrorEnvironment mErrorEnvironment;
@@ -64,12 +67,13 @@ public class ReporterEnvironment extends ClientConfiguration {
         }
     }
 
-    void putErrorEnvironmentValue(String key, String value) {
+    synchronized void putErrorEnvironmentValue(String key, String value) {
+        DebugLogger.INSTANCE.info(TAG, "putErrorEnvironmentValue: key = %s, value = %s", key, value);
         mErrorEnvironment.put(key, value);
     }
 
     @Nullable
-    public String getErrorEnvironment() {
+    public synchronized String getErrorEnvironment() {
         return mErrorEnvironment.toJsonString();
     }
 
