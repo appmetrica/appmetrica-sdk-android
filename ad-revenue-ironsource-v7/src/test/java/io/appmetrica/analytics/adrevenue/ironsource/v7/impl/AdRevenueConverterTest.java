@@ -54,6 +54,7 @@ public class AdRevenueConverterTest extends CommonTest {
             .checkField("payload", new HashMap<String, String>() {{
                 put(AdRevenueConstants.ORIGINAL_SOURCE_KEY, "ad-revenue-ironsource-v7");
                 put(AdRevenueConstants.ORIGINAL_AD_TYPE_KEY, "Interstitial");
+                put(AdRevenueConstants.SOURCE_KEY, "ironsource");
             }})
             .checkField("autoCollected", true)
             .checkAll();
@@ -77,6 +78,7 @@ public class AdRevenueConverterTest extends CommonTest {
             .checkField("payload", new HashMap<String, String>() {{
                 put(AdRevenueConstants.ORIGINAL_SOURCE_KEY, "ad-revenue-ironsource-v7");
                 put(AdRevenueConstants.ORIGINAL_AD_TYPE_KEY, "Interstitial");
+                put(AdRevenueConstants.SOURCE_KEY, "ironsource");
             }})
             .checkField("autoCollected", true)
             .checkAll();
@@ -91,6 +93,7 @@ public class AdRevenueConverterTest extends CommonTest {
             new HashMap<String, String>() {{
                 put(AdRevenueConstants.ORIGINAL_SOURCE_KEY, "ad-revenue-ironsource-v7");
                 put(AdRevenueConstants.ORIGINAL_AD_TYPE_KEY, "null");
+                put(AdRevenueConstants.SOURCE_KEY, "ironsource");
             }}
         );
 
@@ -101,6 +104,7 @@ public class AdRevenueConverterTest extends CommonTest {
             new HashMap<String, String>() {{
                 put(AdRevenueConstants.ORIGINAL_SOURCE_KEY, "ad-revenue-ironsource-v7");
                 put(AdRevenueConstants.ORIGINAL_AD_TYPE_KEY, "Rewarded Video");
+                put(AdRevenueConstants.SOURCE_KEY, "ironsource");
             }}
         );
 
@@ -111,6 +115,7 @@ public class AdRevenueConverterTest extends CommonTest {
             new HashMap<String, String>() {{
                 put(AdRevenueConstants.ORIGINAL_SOURCE_KEY, "ad-revenue-ironsource-v7");
                 put(AdRevenueConstants.ORIGINAL_AD_TYPE_KEY, "Interstitial");
+                put(AdRevenueConstants.SOURCE_KEY, "ironsource");
             }}
         );
 
@@ -121,6 +126,7 @@ public class AdRevenueConverterTest extends CommonTest {
             new HashMap<String, String>() {{
                 put(AdRevenueConstants.ORIGINAL_SOURCE_KEY, "ad-revenue-ironsource-v7");
                 put(AdRevenueConstants.ORIGINAL_AD_TYPE_KEY, "Banner");
+                put(AdRevenueConstants.SOURCE_KEY, "ironsource");
             }}
         );
 
@@ -131,6 +137,7 @@ public class AdRevenueConverterTest extends CommonTest {
             new HashMap<String, String>() {{
                 put(AdRevenueConstants.ORIGINAL_SOURCE_KEY, "ad-revenue-ironsource-v7");
                 put(AdRevenueConstants.ORIGINAL_AD_TYPE_KEY, "Some string");
+                put(AdRevenueConstants.SOURCE_KEY, "ironsource");
             }}
         );
     }

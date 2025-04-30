@@ -10,6 +10,8 @@ import io.appmetrica.analytics.Revenue;
 import io.appmetrica.analytics.coreutils.internal.WrapUtils;
 import io.appmetrica.analytics.coreutils.internal.logger.LoggerStorage;
 import io.appmetrica.analytics.ecommerce.ECommerceEvent;
+import io.appmetrica.analytics.impl.adrevenue.AdRevenuePayloadEnricher;
+import io.appmetrica.analytics.impl.adrevenue.SupportedAdNetworksPayloadEnricher;
 import io.appmetrica.analytics.impl.crash.AppMetricaThrowable;
 import io.appmetrica.analytics.impl.crash.PluginErrorDetailsConverter;
 import io.appmetrica.analytics.impl.crash.jvm.client.AllThreads;
@@ -106,6 +108,8 @@ public abstract class BaseReporter implements IBaseReporter {
     private final ExtraMetaInfoRetriever mExtraMetaInfoRetriever;
     @NonNull
     private final PluginErrorDetailsConverter pluginErrorDetailsConverter;
+    @NonNull
+    private final AdRevenuePayloadEnricher adRevenuePayloadEnricher;
 
     BaseReporter(final Context context,
                  final ReportsHandler reportsHandler,
@@ -134,6 +138,7 @@ public abstract class BaseReporter implements IBaseReporter {
             mPublicLogger.setEnabled(true);
         }
         this.processDetector = processDetector;
+        this.adRevenuePayloadEnricher = new SupportedAdNetworksPayloadEnricher(mContext);
     }
 
     public void start() {
@@ -449,7 +454,7 @@ public abstract class BaseReporter implements IBaseReporter {
     @Override
     public void reportAdRevenue(@NonNull AdRevenue adRevenue, boolean autoCollected) {
         mReportsHandler.sendAdRevenue(
-            new AdRevenueWrapper(adRevenue, autoCollected, mPublicLogger),
+            new AdRevenueWrapper(adRevenue, autoCollected, adRevenuePayloadEnricher, mPublicLogger),
             mReporterEnvironment
         );
         mPublicLogger.info(

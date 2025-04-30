@@ -57,8 +57,9 @@ public class AdRevenueConverterTest extends CommonTest {
             .checkField("payload", new HashMap<String, String>() {{
                 put(AdRevenueConstants.ORIGINAL_SOURCE_KEY, "ad-revenue-fyber-v3");
                 put(AdRevenueConstants.ORIGINAL_AD_TYPE_KEY, "REWARDED");
+                put(AdRevenueConstants.SOURCE_KEY, "fyber");
             }})
-            .checkField("autoCollected", true)
+            .checkField("autoCollected", false)
             .checkAll();
     }
 
@@ -80,8 +81,9 @@ public class AdRevenueConverterTest extends CommonTest {
             .checkField("payload", new HashMap<String, String>() {{
                 put(AdRevenueConstants.ORIGINAL_SOURCE_KEY, "ad-revenue-fyber-v3");
                 put(AdRevenueConstants.ORIGINAL_AD_TYPE_KEY, "REWARDED");
+                put(AdRevenueConstants.SOURCE_KEY, "fyber");
             }})
-            .checkField("autoCollected", true)
+            .checkField("autoCollected", false)
             .checkAll();
     }
 
@@ -94,6 +96,7 @@ public class AdRevenueConverterTest extends CommonTest {
             new HashMap<String, String>() {{
                 put(AdRevenueConstants.ORIGINAL_SOURCE_KEY, "ad-revenue-fyber-v3");
                 put(AdRevenueConstants.ORIGINAL_AD_TYPE_KEY, "null");
+                put(AdRevenueConstants.SOURCE_KEY, "fyber");
             }}
         );
 
@@ -104,6 +107,7 @@ public class AdRevenueConverterTest extends CommonTest {
             new HashMap<String, String>() {{
                 put(AdRevenueConstants.ORIGINAL_SOURCE_KEY, "ad-revenue-fyber-v3");
                 put(AdRevenueConstants.ORIGINAL_AD_TYPE_KEY, "REWARDED");
+                put(AdRevenueConstants.SOURCE_KEY, "fyber");
             }}
         );
 
@@ -114,6 +118,7 @@ public class AdRevenueConverterTest extends CommonTest {
             new HashMap<String, String>() {{
                 put(AdRevenueConstants.ORIGINAL_SOURCE_KEY, "ad-revenue-fyber-v3");
                 put(AdRevenueConstants.ORIGINAL_AD_TYPE_KEY, "INTERSTITIAL");
+                put(AdRevenueConstants.SOURCE_KEY, "fyber");
             }}
         );
 
@@ -124,6 +129,7 @@ public class AdRevenueConverterTest extends CommonTest {
             new HashMap<String, String>() {{
                 put(AdRevenueConstants.ORIGINAL_SOURCE_KEY, "ad-revenue-fyber-v3");
                 put(AdRevenueConstants.ORIGINAL_AD_TYPE_KEY, "BANNER");
+                put(AdRevenueConstants.SOURCE_KEY, "fyber");
             }}
         );
     }

@@ -5,15 +5,30 @@ import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
 import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdRevenue
 import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdType
 import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.analytics.testutils.constructionRule
 import org.assertj.core.api.SoftAssertions
 import org.junit.Test
 import java.math.BigDecimal
 import java.util.Currency
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.Rule
+import org.mockito.kotlin.doReturn
 
 class ModuleAdRevenueConverterTest : CommonTest() {
 
-    private val converter = ModuleAdRevenueConverter()
+    private val payload = mutableMapOf("key" to "value")
+    private val emptyPayload = mutableMapOf<String, String>()
+
+    private val enrichedPaylaod = mutableMapOf("enriched payload key" to "enriched payload value")
+    private val enrichedEmptyPayload = mutableMapOf("enriched empty payload key" to "enriched empty payload value")
+
+    @get:Rule
+    val nativeLayerPayloadEnricherMockedConstructionRule = constructionRule<NativeLayerPayloadEnricher> {
+        on { enrich(payload) } doReturn enrichedPaylaod
+        on { enrich(emptyPayload) } doReturn enrichedEmptyPayload
+    }
+
+    private val converter by setUp { ModuleAdRevenueConverter() }
 
     @Test
     fun convert() {
@@ -27,7 +42,7 @@ class ModuleAdRevenueConverterTest : CommonTest() {
             adPlacementId = "adPlacementId",
             adPlacementName = "adPlacementName",
             precision = "precision",
-            payload = mapOf("key" to "value")
+            payload = payload
         )
         val adRevenue = converter.convert(autoAdRevenue)
 
@@ -41,7 +56,7 @@ class ModuleAdRevenueConverterTest : CommonTest() {
             .checkField("adPlacementId", autoAdRevenue.adPlacementId)
             .checkField("adPlacementName", autoAdRevenue.adPlacementName)
             .checkField("precision", autoAdRevenue.precision)
-            .checkField("payload", autoAdRevenue.payload)
+            .checkField("payload", enrichedPaylaod)
             .checkAll()
     }
 
@@ -64,6 +79,7 @@ class ModuleAdRevenueConverterTest : CommonTest() {
         ObjectPropertyAssertions(adRevenue)
             .checkField("adRevenue", autoAdRevenue.adRevenue)
             .checkField("currency", autoAdRevenue.currency)
+            .checkField("payload", enrichedEmptyPayload)
             .checkFieldsAreNull(
                 "adType",
                 "adNetwork",
@@ -71,8 +87,7 @@ class ModuleAdRevenueConverterTest : CommonTest() {
                 "adUnitName",
                 "adPlacementId",
                 "adPlacementName",
-                "precision",
-                "payload"
+                "precision"
             )
             .checkAll()
     }

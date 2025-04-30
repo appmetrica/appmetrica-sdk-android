@@ -39,4 +39,7 @@ class ContextAppearedListener
             this.context = applicationContext
         }
     }
+
+    @Synchronized
+    fun peekContext(): Context? = context
 }

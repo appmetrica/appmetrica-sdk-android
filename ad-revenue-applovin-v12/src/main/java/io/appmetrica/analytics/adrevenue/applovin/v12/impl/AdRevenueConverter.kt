@@ -18,6 +18,7 @@ class AdRevenueConverter {
             "countryCode" to appLovinSdk.configuration.countryCode,
             AdRevenueConstants.ORIGINAL_SOURCE_KEY to Constants.MODULE_ID,
             AdRevenueConstants.ORIGINAL_AD_TYPE_KEY to (maxAd.format?.label ?: "null"),
+            AdRevenueConstants.SOURCE_KEY to Constants.AD_REVENUE_SOURCE_IDENTIFIER
         )
 
         return ModuleAdRevenue(
@@ -30,7 +31,7 @@ class AdRevenueConverter {
             adPlacementId = maxAd.networkPlacement,
             precision = maxAd.revenuePrecision,
             payload = payload,
-            autoCollected = true
+            autoCollected = false
         )
     }
 

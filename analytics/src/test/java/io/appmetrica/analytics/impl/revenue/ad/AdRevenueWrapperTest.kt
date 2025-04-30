@@ -5,6 +5,7 @@ import io.appmetrica.analytics.AdType
 import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
 import io.appmetrica.analytics.assertions.ProtoObjectPropertyAssertions
 import io.appmetrica.analytics.coreutils.internal.StringUtils
+import io.appmetrica.analytics.impl.adrevenue.AdRevenuePayloadEnricher
 import io.appmetrica.analytics.impl.utils.JsonHelper
 import io.appmetrica.analytics.impl.utils.limitation.StringByBytesTrimmer
 import io.appmetrica.analytics.impl.utils.limitation.StringTrimmer
@@ -12,14 +13,16 @@ import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.MockedConstructionRule
 import io.appmetrica.analytics.testutils.MockedStaticRule
-import java.math.BigDecimal
-import java.util.Currency
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mockito.`when`
 import org.mockito.kotlin.any
+import org.mockito.kotlin.argumentCaptor
+import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
+import java.math.BigDecimal
+import java.util.Currency
 import io.appmetrica.analytics.impl.protobuf.backend.AdRevenue as AdRevenueProto
 
 private const val adNetwork = "someAdNetwork"
@@ -32,7 +35,7 @@ private val currency = Currency.getInstance("USD")
 private const val currencyAnswer = "USD"
 private const val autoCollected = true
 
-private const val bigAdNetwork = "bigAdNetworkbigAdNetwork"
+private const val bigAdNetwork = "bigAdNetworkingAdNetwork"
 private const val bigAdNetworkTrimmed = "bigAdNetwork"
 private const val bigAdPlacementId = "bigAdPlacementIdbigAdPlacementId"
 private const val bigAdPlacementIdTrimmed = "bigAdPlacementId"
@@ -49,7 +52,7 @@ private const val bigCurrencyTrimmed = "eur"
 
 private val adType = AdType.BANNER
 
-private val payload = mapOf("someKey" to "someValue")
+private val initialPayload = mapOf("someKey" to "someValue")
 private const val payloadJson = "somekey:someValue"
 private val bigPayload = mapOf("someKeyBig" to "someValueBig")
 private const val bigPayloadJson = "someKeyBig:someValueBig"
@@ -84,7 +87,7 @@ class AdRevenueWrapperTest : CommonTest() {
 
     @get:Rule
     val stringTrimmer = MockedConstructionRule(StringTrimmer::class.java
-    ) { mock, context ->
+    ) { mock, _ ->
         `when`(mock.trim(any())).thenAnswer {
             val input = it.arguments[0] as String
             stringTrimMap[input] ?: input
@@ -92,8 +95,7 @@ class AdRevenueWrapperTest : CommonTest() {
     }
 
     @get:Rule
-    val payloadTrimmer = MockedConstructionRule(StringByBytesTrimmer::class.java) {
-        mock, context ->
+    val payloadTrimmer = MockedConstructionRule(StringByBytesTrimmer::class.java) { mock, _ ->
         `when`(mock.trim(any())).thenAnswer {
             val input = it.arguments[0] as String
             stringByBytesTrimMap[input] ?: input
@@ -103,10 +105,19 @@ class AdRevenueWrapperTest : CommonTest() {
     @get:Rule
     val jsonHelperMock = MockedStaticRule(JsonHelper::class.java)
 
+    private val inputPayloadMapCaptor = argumentCaptor<MutableMap<String, String>>()
+
+    private val fullPayloadMap: MutableMap<String, String> =
+        mutableMapOf("full payload map key" to "full payload map value")
+
+    private val payloadEnricher: AdRevenuePayloadEnricher = mock {
+        on { enrich(inputPayloadMapCaptor.capture()) } doReturn fullPayloadMap
+    }
+
     @Test
     fun simpleData() {
         jsonHelperMock.staticMock.`when`<String> {
-            JsonHelper.mapToJsonString(payload)
+            JsonHelper.mapToJsonString(fullPayloadMap)
         }.thenReturn(payloadJson)
 
         val adRevenue = AdRevenue.newBuilder(BigDecimal("123.456789"), currency)
@@ -117,10 +128,10 @@ class AdRevenueWrapperTest : CommonTest() {
             .withAdUnitId(adUnitId)
             .withAdUnitName(adUnitName)
             .withPrecision(precision)
-            .withPayload(payload)
+            .withPayload(initialPayload)
             .build()
 
-        val pair = AdRevenueWrapper(adRevenue, autoCollected, publicLogger).getDataToSend()
+        val pair = AdRevenueWrapper(adRevenue, autoCollected, payloadEnricher, publicLogger).getDataToSend()
 
         val proto = AdRevenueProto.parseFrom(pair.first)
 
@@ -134,10 +145,11 @@ class AdRevenueWrapperTest : CommonTest() {
         assertions.checkField("precision", StringUtils.stringToBytesForProtobuf(precision))
         assertions.checkField("currency", StringUtils.stringToBytesForProtobuf(currencyAnswer))
         assertions.checkField("dataSource", StringUtils.stringToBytesForProtobuf("autocollected"))
-        assertions.checkField("payload", StringUtils.stringToBytesForProtobuf(JsonHelper.mapToJsonString(payload)))
+        assertions.checkField("payload", StringUtils.stringToBytesForProtobuf(payloadJson))
         assertions.checkField("adType", 2)
-        assertions.checkFieldRecursively("adRevenue") {
-                adRevenueAssertions: ObjectPropertyAssertions<AdRevenueProto.Decimal> ->
+        assertions.checkFieldRecursively(
+            "adRevenue"
+        ) { adRevenueAssertions: ObjectPropertyAssertions<AdRevenueProto.Decimal> ->
             adRevenueAssertions.checkField("mantissa", 123456789L)
             adRevenueAssertions.checkField("exponent", -6)
         }
@@ -145,12 +157,14 @@ class AdRevenueWrapperTest : CommonTest() {
         assertions.checkAll()
 
         assertThat(pair.second).isZero()
+
+        assertThat(inputPayloadMapCaptor.firstValue).isEqualTo(initialPayload)
     }
 
     @Test
     fun bigData() {
         jsonHelperMock.staticMock.`when`<String> {
-            JsonHelper.mapToJsonString(bigPayload)
+            JsonHelper.mapToJsonString(fullPayloadMap)
         }.thenReturn(bigPayloadJson)
 
         val adRevenue = AdRevenue.newBuilder(BigDecimal("123.456789"), bigCurrency)
@@ -164,7 +178,7 @@ class AdRevenueWrapperTest : CommonTest() {
             .withPayload(bigPayload)
             .build()
 
-        val pair = AdRevenueWrapper(adRevenue, false, publicLogger).getDataToSend()
+        val pair = AdRevenueWrapper(adRevenue, false, payloadEnricher, publicLogger).getDataToSend()
 
         val range = 0..10
         val mock = stringTrimmer.constructionMock.constructed().first()
@@ -186,8 +200,9 @@ class AdRevenueWrapperTest : CommonTest() {
         assertions.checkField("dataSource", StringUtils.stringToBytesForProtobuf("manual"))
         assertions.checkField("payload", bigPayloadJsonTrimmed.toProtobufBytes())
         assertions.checkField("adType", 2)
-        assertions.checkFieldRecursively("adRevenue") {
-                adRevenueAssertions: ObjectPropertyAssertions<AdRevenueProto.Decimal> ->
+        assertions.checkFieldRecursively(
+            "adRevenue"
+        ) { adRevenueAssertions: ObjectPropertyAssertions<AdRevenueProto.Decimal> ->
             adRevenueAssertions.checkField("mantissa", 123456789L)
             adRevenueAssertions.checkField("exponent", -6)
         }
@@ -196,14 +211,16 @@ class AdRevenueWrapperTest : CommonTest() {
 
         assertThat(pair.second).isEqualTo(
             sizeDiff(bigAdNetwork, bigAdNetworkTrimmed) +
-            sizeDiff(bigAdPlacementId, bigAdPlacementIdTrimmed) +
-            sizeDiff(bigAdPlacementName, bigAdPlacementNameTrimmed) +
-            sizeDiff(bigAdUnitId, bigAdUnitIdTrimmed) +
-            sizeDiff(bigAdUnitName, bigAdUnitNameTrimmed) +
-            sizeDiff(bigPrecision, bigPrecisionTrimmed) +
-            sizeDiff(bigCurrency.currencyCode, bigCurrencyTrimmed) +
-            sizeDiff(bigPayloadJson, bigPayloadJsonTrimmed)
+                sizeDiff(bigAdPlacementId, bigAdPlacementIdTrimmed) +
+                sizeDiff(bigAdPlacementName, bigAdPlacementNameTrimmed) +
+                sizeDiff(bigAdUnitId, bigAdUnitIdTrimmed) +
+                sizeDiff(bigAdUnitName, bigAdUnitNameTrimmed) +
+                sizeDiff(bigPrecision, bigPrecisionTrimmed) +
+                sizeDiff(bigCurrency.currencyCode, bigCurrencyTrimmed) +
+                sizeDiff(bigPayloadJson, bigPayloadJsonTrimmed)
         )
+
+        assertThat(inputPayloadMapCaptor.firstValue).isEqualTo(bigPayload)
     }
 
     @Test
@@ -226,7 +243,7 @@ class AdRevenueWrapperTest : CommonTest() {
                 .withAdType(adType)
                 .build()
 
-            val protoAdType = AdRevenueWrapper(adRevenue, autoCollected, publicLogger)
+            val protoAdType = AdRevenueWrapper(adRevenue, autoCollected, payloadEnricher, publicLogger)
                 .getDataToSend()
                 .let { AdRevenueProto.parseFrom(it.first) }
                 .adType

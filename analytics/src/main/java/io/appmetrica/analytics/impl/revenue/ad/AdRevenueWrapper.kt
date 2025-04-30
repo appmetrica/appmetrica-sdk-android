@@ -4,12 +4,14 @@ import io.appmetrica.analytics.AdRevenue
 import io.appmetrica.analytics.AdType
 import io.appmetrica.analytics.coreutils.internal.StringUtils
 import io.appmetrica.analytics.impl.adrevenue.AdRevenueDataSource
+import io.appmetrica.analytics.impl.adrevenue.AdRevenuePayloadEnricher
 import io.appmetrica.analytics.impl.utils.DecimalProtoModel
 import io.appmetrica.analytics.impl.utils.JsonHelper
 import io.appmetrica.analytics.impl.utils.limitation.EventLimitationProcessor
 import io.appmetrica.analytics.impl.utils.limitation.StringByBytesTrimmer
 import io.appmetrica.analytics.impl.utils.limitation.StringTrimmer
 import io.appmetrica.analytics.impl.utils.limitation.Trimmer
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger
 import io.appmetrica.analytics.protobuf.nano.MessageNano
 import io.appmetrica.analytics.impl.protobuf.backend.AdRevenue as AdRevenueProto
@@ -28,8 +30,11 @@ private val adTypeMapping = mapOf(
 internal class AdRevenueWrapper(
     private val revenue: AdRevenue,
     private val autoCollected: Boolean,
+    private val payloadEnricher: AdRevenuePayloadEnricher,
     logger: PublicLogger
 ) {
+
+    private val tag = "[AdRevenueWrapper]"
 
     private val genericStringTrimmer: Trimmer<String> = StringTrimmer(
         EventLimitationProcessor.AD_REVENUE_GENERIC_STRING_MAX_SIZE, "ad revenue strings", logger
@@ -62,18 +67,23 @@ internal class AdRevenueWrapper(
             exponent = model.exponent
         }
 
-        if (revenue.payload != null) {
-            val payload = JsonHelper.mapToJsonString(revenue.payload)
-            val payloadResult = StringUtils.stringToBytesForProtobuf(payloadTrimmer.trim(payload))
-            proto.payload = payloadResult
-            bytesTruncated += StringUtils.stringToBytesForProtobuf(payload).size - payloadResult.size
-        }
+        val payload = preparePayload(revenue.payload)
+        val payloadResult = StringUtils.stringToBytesForProtobuf(payloadTrimmer.trim(payload))
+        proto.payload = payloadResult
+        bytesTruncated += StringUtils.stringToBytesForProtobuf(payload).size - payloadResult.size
 
         if (autoCollected) {
             proto.dataSource = AdRevenueDataSource.AUTOCOLLECTED.value.toByteArray()
         }
 
         return MessageNano.toByteArray(proto) to bytesTruncated
+    }
+
+    private fun preparePayload(payload: Map<String, String>?): String? {
+        val enrichedPayload = payloadEnricher.enrich(payload?.toMutableMap() ?: mutableMapOf())
+        val resultPayload = JsonHelper.mapToJsonString(enrichedPayload)
+        DebugLogger.info(tag, "Result payload: $resultPayload")
+        return resultPayload
     }
 
     private fun convertStringField(value: String?, saveFunction: (value: ByteArray) -> Unit): Int {

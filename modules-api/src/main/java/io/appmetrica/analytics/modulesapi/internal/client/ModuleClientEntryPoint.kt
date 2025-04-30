@@ -1,5 +1,7 @@
 package io.appmetrica.analytics.modulesapi.internal.client
 
+import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.AdRevenueCollector
+
 abstract class ModuleClientEntryPoint<T : Any> {
 
     abstract val identifier: String
@@ -9,4 +11,6 @@ abstract class ModuleClientEntryPoint<T : Any> {
     open fun initClientSide(clientContext: ClientContext) {}
 
     open fun onActivated() {}
+
+    open val adRevenueCollector: AdRevenueCollector? = null
 }

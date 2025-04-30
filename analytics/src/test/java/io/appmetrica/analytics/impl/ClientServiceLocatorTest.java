@@ -101,6 +101,10 @@ public class ClientServiceLocatorTest extends CommonTest {
     public MockedConstructionRule<AnonymousClientActivator> anonymousClientActivatorMockedConstructionRule =
         new MockedConstructionRule<>(AnonymousClientActivator.class);
 
+    @Rule
+    public MockedConstructionRule<ExtraMetaInfoRetriever> extraMetaInfoRetrieverMockedConstructionRule =
+        new MockedConstructionRule<>(ExtraMetaInfoRetriever.class);
+
     @Mock
     private DatabaseStorageFactory databaseStorage;
     @Mock
@@ -310,5 +314,15 @@ public class ClientServiceLocatorTest extends CommonTest {
             .hasSize(1);
         assertThat(appMetricaServiceProcessDetectorMockedConstructionRule.getArgumentInterceptor().flatArguments())
             .isEmpty();
+    }
+
+    @Test
+    public void getExtraMetaInfoRetriever() {
+        assertThat(mClientServiceLocator.getExtraMetaInfoRetriever(context))
+            .isSameAs(mClientServiceLocator.getExtraMetaInfoRetriever(context))
+            .isEqualTo(extraMetaInfoRetrieverMockedConstructionRule.getConstructionMock().constructed().get(0));
+        assertThat(extraMetaInfoRetrieverMockedConstructionRule.getConstructionMock().constructed()).hasSize(1);
+        assertThat(extraMetaInfoRetrieverMockedConstructionRule.getArgumentInterceptor().flatArguments())
+            .containsExactly(context);
     }
 }

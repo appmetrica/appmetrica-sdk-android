@@ -11,6 +11,7 @@ import io.appmetrica.analytics.impl.ClientConfigSerializer;
 import io.appmetrica.analytics.impl.ClientServiceLocator;
 import io.appmetrica.analytics.impl.ContextAppearedListener;
 import io.appmetrica.analytics.impl.DefaultOneShotMetricaConfig;
+import io.appmetrica.analytics.impl.ExtraMetaInfoRetriever;
 import io.appmetrica.analytics.impl.ScreenInfoRetriever;
 import io.appmetrica.analytics.impl.SessionsTrackingManager;
 import io.appmetrica.analytics.impl.crash.jvm.client.TechnicalCrashProcessorFactory;
@@ -58,6 +59,7 @@ public class ClientServiceLocatorRule extends ExternalResource {
     public AnonymousClientActivator anonymousClientActivator;
     public ClientServiceLocator instance;
     public ReporterLifecycleListener reporterLifecycleListener;
+    public ExtraMetaInfoRetriever extraMetaInfoRetriever;
 
     @Override
     public void before() {
@@ -85,6 +87,7 @@ public class ClientServiceLocatorRule extends ExternalResource {
         reporterLifecycleListener = mock(ReporterLifecycleListener.class);
         clientConfigSerializer = mock(ClientConfigSerializer.class);
         anonymousClientActivator = mock(AnonymousClientActivator.class);
+        extraMetaInfoRetriever = mock(ExtraMetaInfoRetriever.class);
         when(instance.getClientExecutorProvider()).thenReturn(clientExecutorProvider);
         when(instance.getDefaultOneShotConfig()).thenReturn(mDefaultOneShotMetricaConfig);
         when(instance.getCurrentProcessDetector()).thenReturn(currentProcessDetector);
@@ -111,6 +114,7 @@ public class ClientServiceLocatorRule extends ExternalResource {
         when(instance.getFirstLaunchDetector()).thenReturn(firstLaunchDetector);
         when(instance.getAnonymousClientActivator()).thenReturn(anonymousClientActivator);
         when(instance.getReporterLifecycleListener()).thenReturn(reporterLifecycleListener);
+        when(instance.getExtraMetaInfoRetriever(any())).thenReturn(extraMetaInfoRetriever);
         ClientServiceLocator.setInstance(instance);
     }
 

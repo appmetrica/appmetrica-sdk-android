@@ -18,6 +18,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.kotlin.any
+import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
@@ -50,6 +51,8 @@ class AppMetricaLibraryAdapterProxyTest : CommonTest() {
 
     @get:Rule
     val modulesFacadeRule = staticRule<ModulesFacade>()
+
+    private val runnableCaptor = argumentCaptor<Runnable>()
 
     private lateinit var barrier: LibraryAdapterBarrier
     private lateinit var synchronousStageExecutor: LibraryAdapterSynchronousStageExecutor
@@ -140,6 +143,12 @@ class AppMetricaLibraryAdapterProxyTest : CommonTest() {
         proxy.reportEvent(sender, event, payload)
         verify(barrier).reportEvent(sender, event, payload)
         verify(synchronousStageExecutor).reportEvent(sender, event, payload)
+
+        verify(ClientServiceLocator.getInstance().clientExecutorProvider.defaultExecutor)
+            .execute(runnableCaptor.capture())
+
+        runnableCaptor.firstValue.run()
+
         modulesFacadeRule.staticMock.verify {
             ModulesFacade.reportEvent(moduleEvent)
         }

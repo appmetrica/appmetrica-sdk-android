@@ -7,6 +7,8 @@ import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdType
 
 class ModuleAdRevenueConverter {
 
+    private val enricher = NativeLayerPayloadEnricher()
+
     fun convert(adRevenue: ModuleAdRevenue): AdRevenue {
         return AdRevenue.newBuilder(adRevenue.adRevenue, adRevenue.currency)
             .withAdType(convert(adRevenue.adType))
@@ -16,8 +18,13 @@ class ModuleAdRevenueConverter {
             .withAdPlacementId(adRevenue.adPlacementId)
             .withAdPlacementName(adRevenue.adPlacementName)
             .withPrecision(adRevenue.precision)
-            .withPayload(adRevenue.payload)
+            .withPayload(enrichPayload(adRevenue.payload))
             .build()
+    }
+
+    private fun enrichPayload(payload: Map<String, String>?): Map<String, String> {
+        val mutatedPayload = payload?.toMutableMap() ?: mutableMapOf()
+        return enricher.enrich(mutatedPayload)
     }
 
     private fun convert(adType: ModuleAdType?): AdType? {

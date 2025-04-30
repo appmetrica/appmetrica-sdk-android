@@ -105,8 +105,9 @@ public class AdRevenueConverterTest extends CommonTest {
             .checkField("payload", new HashMap<String, String>() {{
                 put(AdRevenueConstants.ORIGINAL_SOURCE_KEY, "ad-revenue-admob-v23");
                 put(AdRevenueConstants.ORIGINAL_AD_TYPE_KEY, "bannerAd");
+                put(AdRevenueConstants.SOURCE_KEY, "admob");
             }})
-            .checkField("autoCollected", true)
+            .checkField("autoCollected", false)
             .checkAll();
     }
 
@@ -128,8 +129,9 @@ public class AdRevenueConverterTest extends CommonTest {
             .checkField("payload", new HashMap<String, String>() {{
                 put(AdRevenueConstants.ORIGINAL_SOURCE_KEY, "ad-revenue-admob-v23");
                 put(AdRevenueConstants.ORIGINAL_AD_TYPE_KEY, "bannerAd");
+                put(AdRevenueConstants.SOURCE_KEY, "admob");
             }})
-            .checkField("autoCollected", true)
+            .checkField("autoCollected", false)
             .checkAll();
     }
 
@@ -151,8 +153,9 @@ public class AdRevenueConverterTest extends CommonTest {
             .checkField("payload", new HashMap<String, String>() {{
                 put(AdRevenueConstants.ORIGINAL_SOURCE_KEY, "ad-revenue-admob-v23");
                 put(AdRevenueConstants.ORIGINAL_AD_TYPE_KEY, "bannerAd");
+                put(AdRevenueConstants.SOURCE_KEY, "admob");
             }})
-            .checkField("autoCollected", true)
+            .checkField("autoCollected", false)
             .checkAll();
     }
 
@@ -172,8 +175,9 @@ public class AdRevenueConverterTest extends CommonTest {
             .checkField("payload", new HashMap<String, String>() {{
                 put(AdRevenueConstants.ORIGINAL_SOURCE_KEY, "ad-revenue-admob-v23");
                 put(AdRevenueConstants.ORIGINAL_AD_TYPE_KEY, "interstitialAd");
+                put(AdRevenueConstants.SOURCE_KEY, "admob");
             }})
-            .checkField("autoCollected", true)
+            .checkField("autoCollected", false)
             .checkAll();
     }
 
@@ -195,8 +199,9 @@ public class AdRevenueConverterTest extends CommonTest {
             .checkField("payload", new HashMap<String, String>() {{
                 put(AdRevenueConstants.ORIGINAL_SOURCE_KEY, "ad-revenue-admob-v23");
                 put(AdRevenueConstants.ORIGINAL_AD_TYPE_KEY, "interstitialAd");
+                put(AdRevenueConstants.SOURCE_KEY, "admob");
             }})
-            .checkField("autoCollected", true)
+            .checkField("autoCollected", false)
             .checkAll();
     }
 
@@ -218,8 +223,9 @@ public class AdRevenueConverterTest extends CommonTest {
             .checkField("payload", new HashMap<String, String>() {{
                 put(AdRevenueConstants.ORIGINAL_SOURCE_KEY, "ad-revenue-admob-v23");
                 put(AdRevenueConstants.ORIGINAL_AD_TYPE_KEY, "interstitialAd");
+                put(AdRevenueConstants.SOURCE_KEY, "admob");
             }})
-            .checkField("autoCollected", true)
+            .checkField("autoCollected", false)
             .checkAll();
     }
 
@@ -239,8 +245,9 @@ public class AdRevenueConverterTest extends CommonTest {
             .checkField("payload", new HashMap<String, String>() {{
                 put(AdRevenueConstants.ORIGINAL_SOURCE_KEY, "ad-revenue-admob-v23");
                 put(AdRevenueConstants.ORIGINAL_AD_TYPE_KEY, "rewardedAd");
+                put(AdRevenueConstants.SOURCE_KEY, "admob");
             }})
-            .checkField("autoCollected", true)
+            .checkField("autoCollected", false)
             .checkAll();
     }
 
@@ -262,8 +269,9 @@ public class AdRevenueConverterTest extends CommonTest {
             .checkField("payload", new HashMap<String, String>() {{
                 put(AdRevenueConstants.ORIGINAL_SOURCE_KEY, "ad-revenue-admob-v23");
                 put(AdRevenueConstants.ORIGINAL_AD_TYPE_KEY, "rewardedAd");
+                put(AdRevenueConstants.SOURCE_KEY, "admob");
             }})
-            .checkField("autoCollected", true)
+            .checkField("autoCollected", false)
             .checkAll();
     }
 
@@ -285,8 +293,9 @@ public class AdRevenueConverterTest extends CommonTest {
             .checkField("payload", new HashMap<String, String>() {{
                 put(AdRevenueConstants.ORIGINAL_SOURCE_KEY, "ad-revenue-admob-v23");
                 put(AdRevenueConstants.ORIGINAL_AD_TYPE_KEY, "rewardedAd");
+                put(AdRevenueConstants.SOURCE_KEY, "admob");
             }})
-            .checkField("autoCollected", true)
+            .checkField("autoCollected", false)
             .checkAll();
     }
 
@@ -306,8 +315,9 @@ public class AdRevenueConverterTest extends CommonTest {
             .checkField("payload", new HashMap<String, String>() {{
                 put(AdRevenueConstants.ORIGINAL_SOURCE_KEY, "ad-revenue-admob-v23");
                 put(AdRevenueConstants.ORIGINAL_AD_TYPE_KEY, "rewardedInterstitialAd");
+                put(AdRevenueConstants.SOURCE_KEY, "admob");
             }})
-            .checkField("autoCollected", true)
+            .checkField("autoCollected", false)
             .checkAll();
     }
 
@@ -329,8 +339,9 @@ public class AdRevenueConverterTest extends CommonTest {
             .checkField("payload", new HashMap<String, String>() {{
                 put(AdRevenueConstants.ORIGINAL_SOURCE_KEY, "ad-revenue-admob-v23");
                 put(AdRevenueConstants.ORIGINAL_AD_TYPE_KEY, "rewardedInterstitialAd");
+                put(AdRevenueConstants.SOURCE_KEY, "admob");
             }})
-            .checkField("autoCollected", true)
+            .checkField("autoCollected", false)
             .checkAll();
     }
 
@@ -352,8 +363,9 @@ public class AdRevenueConverterTest extends CommonTest {
             .checkField("payload", new HashMap<String, String>() {{
                 put(AdRevenueConstants.ORIGINAL_SOURCE_KEY, "ad-revenue-admob-v23");
                 put(AdRevenueConstants.ORIGINAL_AD_TYPE_KEY, "rewardedInterstitialAd");
+                put(AdRevenueConstants.SOURCE_KEY, "admob");
             }})
-            .checkField("autoCollected", true)
+            .checkField("autoCollected", false)
             .checkAll();
     }
 
@@ -373,8 +385,9 @@ public class AdRevenueConverterTest extends CommonTest {
             .checkField("payload", new HashMap<String, String>() {{
                 put(AdRevenueConstants.ORIGINAL_SOURCE_KEY, "ad-revenue-admob-v23");
                 put(AdRevenueConstants.ORIGINAL_AD_TYPE_KEY, "nativeAd");
+                put(AdRevenueConstants.SOURCE_KEY, "admob");
             }})
-            .checkField("autoCollected", true)
+            .checkField("autoCollected", false)
             .checkAll();
     }
 
@@ -396,8 +409,9 @@ public class AdRevenueConverterTest extends CommonTest {
             .checkField("payload", new HashMap<String, String>() {{
                 put(AdRevenueConstants.ORIGINAL_SOURCE_KEY, "ad-revenue-admob-v23");
                 put(AdRevenueConstants.ORIGINAL_AD_TYPE_KEY, "nativeAd");
+                put(AdRevenueConstants.SOURCE_KEY, "admob");
             }})
-            .checkField("autoCollected", true)
+            .checkField("autoCollected", false)
             .checkAll();
     }
 
@@ -419,8 +433,9 @@ public class AdRevenueConverterTest extends CommonTest {
             .checkField("payload", new HashMap<String, String>() {{
                 put(AdRevenueConstants.ORIGINAL_SOURCE_KEY, "ad-revenue-admob-v23");
                 put(AdRevenueConstants.ORIGINAL_AD_TYPE_KEY, "nativeAd");
+                put(AdRevenueConstants.SOURCE_KEY, "admob");
             }})
-            .checkField("autoCollected", true)
+            .checkField("autoCollected", false)
             .checkAll();
     }
 
@@ -440,8 +455,9 @@ public class AdRevenueConverterTest extends CommonTest {
             .checkField("payload", new HashMap<String, String>() {{
                 put(AdRevenueConstants.ORIGINAL_SOURCE_KEY, "ad-revenue-admob-v23");
                 put(AdRevenueConstants.ORIGINAL_AD_TYPE_KEY, "appOpenAd");
+                put(AdRevenueConstants.SOURCE_KEY, "admob");
             }})
-            .checkField("autoCollected", true)
+            .checkField("autoCollected", false)
             .checkAll();
     }
 
@@ -463,8 +479,9 @@ public class AdRevenueConverterTest extends CommonTest {
             .checkField("payload", new HashMap<String, String>() {{
                 put(AdRevenueConstants.ORIGINAL_SOURCE_KEY, "ad-revenue-admob-v23");
                 put(AdRevenueConstants.ORIGINAL_AD_TYPE_KEY, "appOpenAd");
+                put(AdRevenueConstants.SOURCE_KEY, "admob");
             }})
-            .checkField("autoCollected", true)
+            .checkField("autoCollected", false)
             .checkAll();
     }
 
@@ -486,8 +503,9 @@ public class AdRevenueConverterTest extends CommonTest {
             .checkField("payload", new HashMap<String, String>() {{
                 put(AdRevenueConstants.ORIGINAL_SOURCE_KEY, "ad-revenue-admob-v23");
                 put(AdRevenueConstants.ORIGINAL_AD_TYPE_KEY, "appOpenAd");
+                put(AdRevenueConstants.SOURCE_KEY, "admob");
             }})
-            .checkField("autoCollected", true)
+            .checkField("autoCollected", false)
             .checkAll();
     }
 

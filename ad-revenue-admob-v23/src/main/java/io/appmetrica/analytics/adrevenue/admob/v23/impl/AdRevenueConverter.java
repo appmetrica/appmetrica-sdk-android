@@ -18,6 +18,7 @@ import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdType
 import java.math.BigDecimal;
 import java.util.Currency;
 import java.util.HashMap;
+import java.util.Map;
 
 public class AdRevenueConverter {
 
@@ -111,11 +112,8 @@ public class AdRevenueConverter {
                     /* adPlacementId = */ adapterResponseInfo.getAdSourceInstanceId(),
                     /* adPlacementName = */ adapterResponseInfo.getAdSourceInstanceName(),
                     /* precision = */ convertPrecision(adValue.getPrecisionType()),
-                    /* payload = */ new HashMap<String, String>() {{
-                        put(AdRevenueConstants.ORIGINAL_SOURCE_KEY, Constants.MODULE_ID);
-                        put(AdRevenueConstants.ORIGINAL_AD_TYPE_KEY, originalType);
-                    }},
-                    /* autoCollected = */ true
+                    /* payload = */ composePayload(originalType),
+                    /* autoCollected = */ false
                 );
             }
         }
@@ -129,12 +127,20 @@ public class AdRevenueConverter {
             /* adPlacementId = */ null,
             /* adPlacementName = */ null,
             /* precision = */ convertPrecision(adValue.getPrecisionType()),
-            /* payload = */ new HashMap<String, String>() {{
-                put(AdRevenueConstants.ORIGINAL_SOURCE_KEY, Constants.MODULE_ID);
-                put(AdRevenueConstants.ORIGINAL_AD_TYPE_KEY, originalType);
-            }},
-            /* autoCollected = */ true
+            /* payload = */ composePayload(originalType),
+            /* autoCollected = */ false
         );
+    }
+
+    private Map<String, String> composePayload(
+        @NonNull String originalType
+    ) {
+        Map<String, String> payload = new HashMap<>();
+        payload.put(AdRevenueConstants.ORIGINAL_AD_TYPE_KEY, originalType);
+        payload.put(AdRevenueConstants.ORIGINAL_SOURCE_KEY, Constants.MODULE_ID);
+        payload.put(AdRevenueConstants.SOURCE_KEY, Constants.AD_REVENUE_SOURCE_IDENTIFIER);
+
+        return payload;
     }
 
     private String convertPrecision(int precision) {

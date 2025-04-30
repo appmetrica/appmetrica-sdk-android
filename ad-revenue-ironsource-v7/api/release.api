@@ -8,6 +8,7 @@ public final class io.appmetrica.analytics.adrevenue.ironsource.v7.BuildConfig {
 
 public class io.appmetrica.analytics.adrevenue.ironsource.v7.internal.IronSourceClientModuleEntryPoint extends io.appmetrica.analytics.modulesapi.internal.client.ModuleClientEntryPoint<Object> {
     public <init>()
+    public [Nullable] io.appmetrica.analytics.modulesapi.internal.client.adrevenue.AdRevenueCollector getAdRevenueCollector()
     public [NonNull] String getIdentifier()
     public void initClientSide([NonNull] io.appmetrica.analytics.modulesapi.internal.client.ClientContext)
     public void onActivated()

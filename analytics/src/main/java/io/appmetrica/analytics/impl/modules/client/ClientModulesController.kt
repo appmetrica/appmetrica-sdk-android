@@ -20,6 +20,8 @@ internal class ClientModulesController :
     private val modules = CopyOnWriteArrayList<ModuleClientEntryPoint<Any>>()
     private var clientContext: CoreClientContext? = null
 
+    val adRevenueCollectorsSourceIds: MutableList<String> = CopyOnWriteArrayList<String>()
+
     override fun registerModule(moduleClientEntryPoint: ModuleClientEntryPoint<Any>) {
         DebugLogger.info(tag, "Register new module with identifier = ${moduleClientEntryPoint.identifier}")
         modules.add(moduleClientEntryPoint)
@@ -63,6 +65,10 @@ internal class ClientModulesController :
                 reportSelfErrorEvent(module.identifier, "onActivated", e)
             }
         }
+        adRevenueCollectorsSourceIds.addAll(
+            modules.mapNotNull { it.adRevenueCollector }.filter { it.enabled }.map { it.sourceIdentifier }
+        )
+        DebugLogger.info(tag, "adRevenueCollectorsSourceIds = $adRevenueCollectorsSourceIds")
     }
 
     fun getModuleAdRevenueProcessor(): ModuleAdRevenueProcessor? {

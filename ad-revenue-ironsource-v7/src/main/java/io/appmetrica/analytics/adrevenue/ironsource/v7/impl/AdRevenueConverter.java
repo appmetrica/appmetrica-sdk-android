@@ -32,6 +32,7 @@ public class AdRevenueConverter {
             new HashMap<String, String>() {{
                 put(AdRevenueConstants.ORIGINAL_SOURCE_KEY, Constants.MODULE_ID);
                 put(AdRevenueConstants.ORIGINAL_AD_TYPE_KEY, type == null ? "null" : type);
+                put(AdRevenueConstants.SOURCE_KEY, Constants.AD_REVENUE_SOURCE_IDENTIFIER);
             }}, // payload
             true // autoCollected
         );

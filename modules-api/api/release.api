@@ -31,6 +31,7 @@ public interface io.appmetrica.analytics.modulesapi.internal.client.ModuleClient
 
 public abstract class io.appmetrica.analytics.modulesapi.internal.client.ModuleClientEntryPoint<T> {
     public <init>()
+    public [Nullable] io.appmetrica.analytics.modulesapi.internal.client.adrevenue.AdRevenueCollector getAdRevenueCollector()
     public abstract [NonNull] String getIdentifier()
     public [Nullable] io.appmetrica.analytics.modulesapi.internal.client.ServiceConfigExtensionConfiguration<T> getServiceConfigExtensionConfiguration()
     public void initClientSide([NonNull] io.appmetrica.analytics.modulesapi.internal.client.ClientContext)
@@ -60,10 +61,20 @@ public interface io.appmetrica.analytics.modulesapi.internal.client.ServiceConfi
     public abstract void onServiceConfigUpdated([NonNull] io.appmetrica.analytics.modulesapi.internal.client.ModuleServiceConfig<T>)
 }
 
+public interface io.appmetrica.analytics.modulesapi.internal.client.adrevenue.AdRevenueCollector {
+    public abstract boolean getEnabled()
+    public abstract [NonNull] String getSourceIdentifier()
+}
+
 public final class io.appmetrica.analytics.modulesapi.internal.client.adrevenue.AdRevenueConstants {
     public static final [NonNull] io.appmetrica.analytics.modulesapi.internal.client.adrevenue.AdRevenueConstants INSTANCE
+    public static final [NonNull] String LAYER_KEY
+    public static final [NonNull] String NATIVE_LAYER
+    public static final [NonNull] String NATIVE_SUPPORTED_SOURCES_KEY
     public static final [NonNull] String ORIGINAL_AD_TYPE_KEY
     public static final [NonNull] String ORIGINAL_SOURCE_KEY
+    public static final [NonNull] String PLUGIN_SUPPORTED_SOURCES_KEY
+    public static final [NonNull] String SOURCE_KEY
 }
 
 public final class io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdRevenue {

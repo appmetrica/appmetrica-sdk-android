@@ -54,7 +54,9 @@ class AppMetricaLibraryAdapterProxy {
     ) {
         if (barrier.reportEvent(sender, event, payload)) {
             synchronousStageExecutor.reportEvent(sender, event, payload)
-            ModulesFacade.reportEvent(libraryEventConstructor.constructEvent(sender, event, payload))
+            ClientServiceLocator.getInstance().clientExecutorProvider.defaultExecutor.execute {
+                ModulesFacade.reportEvent(libraryEventConstructor.constructEvent(sender, event, payload))
+            }
         } else {
             val message = "Failed report event from sender: $sender with name = $event and payload = $payload"
             PublicLogger.getAnonymousInstance().warning("$tag$message")

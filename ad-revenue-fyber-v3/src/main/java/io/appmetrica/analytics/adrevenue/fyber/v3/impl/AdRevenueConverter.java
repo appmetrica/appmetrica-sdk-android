@@ -11,6 +11,7 @@ import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdType
 import java.math.BigDecimal;
 import java.util.Currency;
 import java.util.HashMap;
+import java.util.Map;
 
 public class AdRevenueConverter {
 
@@ -26,12 +27,17 @@ public class AdRevenueConverter {
             null, // adPlacementId
             null, // adPlacementName
             data.getPriceAccuracy().toString(), // precision
-            new HashMap<String, String>() {{
-                put(AdRevenueConstants.ORIGINAL_SOURCE_KEY, Constants.MODULE_ID);
-                put(AdRevenueConstants.ORIGINAL_AD_TYPE_KEY, type == null ? "null" : type.name());
-            }}, // payload
-            true // autoCollected
+            composePayload(type), // payload
+            false // autoCollected
         );
+    }
+
+    private Map<String, String> composePayload(@Nullable PlacementType type) {
+        Map<String, String> payload = new HashMap<>();
+        payload.put(AdRevenueConstants.SOURCE_KEY, Constants.AD_REVENUE_SOURCE_IDENTIFIER);
+        payload.put(AdRevenueConstants.ORIGINAL_SOURCE_KEY, Constants.MODULE_ID);
+        payload.put(AdRevenueConstants.ORIGINAL_AD_TYPE_KEY, type == null ? "null" : type.name());
+        return payload;
     }
 
     @Nullable

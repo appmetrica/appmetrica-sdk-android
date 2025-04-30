@@ -10,6 +10,7 @@ import io.appmetrica.analytics.modulesapi.internal.client.BundleToServiceConfigC
 import io.appmetrica.analytics.modulesapi.internal.client.ModuleClientEntryPoint
 import io.appmetrica.analytics.modulesapi.internal.client.ServiceConfigExtensionConfiguration
 import io.appmetrica.analytics.modulesapi.internal.client.ServiceConfigUpdateListener
+import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.AdRevenueCollector
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.constructionRule
 import io.appmetrica.analytics.testutils.on
@@ -38,9 +39,15 @@ internal class ClientModulesControllerTest : CommonTest() {
         on { getServiceConfigUpdateListener() } doReturn firstServiceConfigUpdateListener
         on { getBundleConverter() } doReturn firstBundleParser
     }
+    private val firstModuleAdSourceId = "First module ad source id with enabled auto collecting"
+    private val firstModuleAdRevenueCollector: AdRevenueCollector = mock {
+        on { sourceIdentifier } doReturn firstModuleAdSourceId
+        on { enabled } doReturn true
+    }
     private val firstModule = mock<ModuleClientEntryPoint<Any>> {
         on { identifier } doReturn firstModuleIdentifier
         on { serviceConfigExtensionConfiguration } doReturn firstServiceConfigExtensionConfiguration
+        on { adRevenueCollector } doReturn firstModuleAdRevenueCollector
     }
 
     private val secondModuleIdentifier = "secondModuleIdentifier"
@@ -50,9 +57,20 @@ internal class ClientModulesControllerTest : CommonTest() {
         on { getServiceConfigUpdateListener() } doReturn secondServiceConfigUpdateListener
         on { getBundleConverter() } doReturn secondBundleParser
     }
+    private val secondModuleAdSourceId = "Second module ad source id with disabled auto collecting"
+    private val secondModuleAdRevenueCollector: AdRevenueCollector = mock {
+        on { sourceIdentifier } doReturn secondModuleAdSourceId
+        on { enabled } doReturn false
+    }
     private val secondModule = mock<ModuleClientEntryPoint<Any>> {
         on { identifier } doReturn secondModuleIdentifier
         on { serviceConfigExtensionConfiguration } doReturn secondServiceConfigExtensionConfiguration
+        on { adRevenueCollector } doReturn secondModuleAdRevenueCollector
+    }
+
+    private val emptyModuleIdentifier = "empty module identifier"
+    private val emptyModule = mock<ModuleClientEntryPoint<Any>> {
+        on { identifier } doReturn emptyModuleIdentifier
     }
 
     private val initException = RuntimeException("initException")
@@ -65,10 +83,12 @@ internal class ClientModulesControllerTest : CommonTest() {
     }
 
     private val selfReporter = mock<IReporterExtended>()
+
     @get:Rule
     val selfReporterFacadeMockedStaticRule = staticRule<AppMetricaSelfReportFacade> {
         on { AppMetricaSelfReportFacade.getReporter() } doReturn selfReporter
     }
+
     @get:Rule
     val clientModuleServiceConfigModelFactoryRule = constructionRule<ClientModuleServiceConfigModelFactory>()
 
@@ -87,7 +107,7 @@ internal class ClientModulesControllerTest : CommonTest() {
         verify(secondModule).initClientSide(clientContext)
         verify(selfReporter).reportEvent(
             "client_module_errors",
-            mapOf(brokenModuleIdentifier to mapOf ("initClientSide" to initException.stackTraceToString()))
+            mapOf(brokenModuleIdentifier to mapOf("initClientSide" to initException.stackTraceToString()))
         )
     }
 
@@ -115,7 +135,7 @@ internal class ClientModulesControllerTest : CommonTest() {
         verify(secondModule).onActivated()
         verify(selfReporter).reportEvent(
             "client_module_errors",
-            mapOf(brokenModuleIdentifier to mapOf ("onActivated" to activatedException.stackTraceToString()))
+            mapOf(brokenModuleIdentifier to mapOf("onActivated" to activatedException.stackTraceToString()))
         )
     }
 
@@ -164,6 +184,19 @@ internal class ClientModulesControllerTest : CommonTest() {
             .onServiceConfigUpdated(any())
         verify(secondModule.serviceConfigExtensionConfiguration!!.getServiceConfigUpdateListener())
             .onServiceConfigUpdated(secondConfig)
+    }
+
+    @Test
+    fun adRevenueCollectorsSourceIds() {
+        modulesController.registerModule(firstModule)
+        modulesController.registerModule(secondModule)
+        modulesController.registerModule(emptyModule)
+        modulesController.registerModule(brokenModule)
+
+        modulesController.initClientSide(mock<CoreClientContext>())
+        modulesController.onActivated()
+
+        assertThat(modulesController.adRevenueCollectorsSourceIds).containsExactly(firstModuleAdSourceId)
     }
 
     private fun clientModuleServiceConfigModelFactory(): ClientModuleServiceConfigModelFactory {

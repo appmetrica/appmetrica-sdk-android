@@ -6,6 +6,8 @@ import io.appmetrica.analytics.Revenue;
 import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
 import io.appmetrica.analytics.coreutils.internal.logger.LoggerStorage;
 import io.appmetrica.analytics.ecommerce.ECommerceEvent;
+import io.appmetrica.analytics.impl.adrevenue.AdRevenuePayloadEnricher;
+import io.appmetrica.analytics.impl.adrevenue.SupportedAdNetworksPayloadEnricher;
 import io.appmetrica.analytics.impl.crash.AppMetricaThrowable;
 import io.appmetrica.analytics.impl.crash.PluginErrorDetailsConverter;
 import io.appmetrica.analytics.impl.crash.jvm.client.AllThreads;
@@ -112,6 +114,10 @@ public abstract class BaseReporterTest extends BaseReporterData {
     @Rule
     public final MockedConstructionRule<AnrFromApiReportingTask> anrFromApiReportingTaskMockedConstructionRule =
         new MockedConstructionRule<>(AnrFromApiReportingTask.class);
+
+    @Rule
+    public final MockedConstructionRule<SupportedAdNetworksPayloadEnricher> adRevenuePayloadEnricherMockedConstructionRule =
+        new MockedConstructionRule<>(SupportedAdNetworksPayloadEnricher.class);
 
     @Rule
     public final GlobalServiceLocatorRule globalServiceLocatorRule = new GlobalServiceLocatorRule();
@@ -850,9 +856,11 @@ public abstract class BaseReporterTest extends BaseReporterData {
     public void testAdRevenueSent() {
         final Currency currency = mock(Currency.class);
         final AdRevenue mock = AdRevenue.newBuilder(1, currency).build();
-        getReporter().reportAdRevenue(mock);
+        mReporter.reportAdRevenue(mock);
         assertThat(adRevenueWrapperConstructor.getArgumentInterceptor().getArguments().get(0).get(0)).isSameAs(mock);
         assertThat(adRevenueWrapperConstructor.getArgumentInterceptor().getArguments().get(0).get(1)).isEqualTo(false);
+        assertThat(adRevenueWrapperConstructor.getArgumentInterceptor().getArguments().get(0).get(2))
+            .isEqualTo(adRevenuePayloadEnricher());
         verify(mReportsHandler).sendAdRevenue(
                 same(adRevenueWrapperConstructor.getConstructionMock().constructed().get(0)),
                 any(ReporterEnvironment.class)
@@ -863,9 +871,11 @@ public abstract class BaseReporterTest extends BaseReporterData {
     public void testAdRevenueSentIfAutoCollected() {
         final Currency currency = mock(Currency.class);
         final AdRevenue mock = AdRevenue.newBuilder(1, currency).build();
-        getReporter().reportAdRevenue(mock, true);
+        mReporter.reportAdRevenue(mock, true);
         assertThat(adRevenueWrapperConstructor.getArgumentInterceptor().getArguments().get(0).get(0)).isSameAs(mock);
         assertThat(adRevenueWrapperConstructor.getArgumentInterceptor().getArguments().get(0).get(1)).isEqualTo(true);
+        assertThat(adRevenueWrapperConstructor.getArgumentInterceptor().getArguments().get(0).get(2))
+            .isEqualTo(adRevenuePayloadEnricher());
         verify(mReportsHandler).sendAdRevenue(
             same(adRevenueWrapperConstructor.getConstructionMock().constructed().get(0)),
             any(ReporterEnvironment.class)
@@ -1069,5 +1079,13 @@ public abstract class BaseReporterTest extends BaseReporterData {
     @Test
     public void getPluginExtension() {
         assertThat(mReporter.getPluginExtension()).isSameAs(mReporter);
+    }
+
+    private AdRevenuePayloadEnricher adRevenuePayloadEnricher() {
+        assertThat(adRevenuePayloadEnricherMockedConstructionRule.getConstructionMock().constructed())
+            .hasSize(1);
+        assertThat(adRevenuePayloadEnricherMockedConstructionRule.getArgumentInterceptor().flatArguments())
+            .containsExactly(mContext);
+        return adRevenuePayloadEnricherMockedConstructionRule.getConstructionMock().constructed().get(0);
     }
 }

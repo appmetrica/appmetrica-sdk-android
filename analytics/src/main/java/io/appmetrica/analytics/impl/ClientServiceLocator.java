@@ -83,6 +83,8 @@ public class ClientServiceLocator {
     private final ClientConfigSerializer clientConfigSerializer = new ClientConfigSerializer();
     @Nullable
     private volatile AnonymousClientActivator anonymousClientActivator;
+    @Nullable
+    private volatile ExtraMetaInfoRetriever extraMetaInfoRetriever;
 
     private ClientServiceLocator() {
         this(new CurrentProcessDetector(), new ActivityLifecycleManager(), new ClientExecutorProvider());
@@ -303,6 +305,21 @@ public class ClientServiceLocator {
                         clientExecutorProvider
                     );
                     anonymousClientActivator = local;
+                }
+            }
+        }
+        return local;
+    }
+
+    @NonNull
+    public ExtraMetaInfoRetriever getExtraMetaInfoRetriever(@NonNull Context context) {
+        ExtraMetaInfoRetriever local = extraMetaInfoRetriever;
+        if (local == null) {
+            synchronized (this) {
+                local = extraMetaInfoRetriever;
+                if (local == null) {
+                    local = new ExtraMetaInfoRetriever(context);
+                    extraMetaInfoRetriever = local;
                 }
             }
         }

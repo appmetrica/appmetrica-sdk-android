@@ -5,6 +5,7 @@ import com.applovin.mediation.MaxAdFormat
 import com.applovin.sdk.AppLovinSdk
 import com.applovin.sdk.AppLovinSdkConfiguration
 import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
+import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.AdRevenueConstants
 import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdRevenue
 import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdType
 import io.appmetrica.analytics.testutils.CommonTest
@@ -62,9 +63,10 @@ class AdRevenueConverterTest : CommonTest() {
                     "countryCode" to "RU",
                     "original_ad_type" to "REWARDED",
                     "original_source" to "ad-revenue-applovin-v12",
+                    AdRevenueConstants.SOURCE_KEY to "applovin"
                 )
             )
-            .checkField("autoCollected", true)
+            .checkField("autoCollected", false)
             .checkAll()
     }
 
@@ -88,9 +90,10 @@ class AdRevenueConverterTest : CommonTest() {
                     "countryCode" to "RU",
                     "original_ad_type" to "REWARDED",
                     "original_source" to "ad-revenue-applovin-v12",
+                    AdRevenueConstants.SOURCE_KEY to "applovin"
                 )
             )
-            .checkField("autoCollected", true)
+            .checkField("autoCollected", false)
             .checkAll()
     }
 
@@ -103,6 +106,7 @@ class AdRevenueConverterTest : CommonTest() {
                 "countryCode" to "RU",
                 "original_ad_type" to "null",
                 "original_source" to "ad-revenue-applovin-v12",
+                AdRevenueConstants.SOURCE_KEY to "applovin"
             ))
         }
 
@@ -113,6 +117,7 @@ class AdRevenueConverterTest : CommonTest() {
                 "countryCode" to "RU",
                 "original_ad_type" to "BANNER",
                 "original_source" to "ad-revenue-applovin-v12",
+                AdRevenueConstants.SOURCE_KEY to "applovin"
             ))
         }
 
@@ -123,6 +128,7 @@ class AdRevenueConverterTest : CommonTest() {
                 "countryCode" to "RU",
                 "original_ad_type" to "MREC",
                 "original_source" to "ad-revenue-applovin-v12",
+                AdRevenueConstants.SOURCE_KEY to "applovin"
             ))
         }
 
@@ -133,6 +139,7 @@ class AdRevenueConverterTest : CommonTest() {
                 "countryCode" to "RU",
                 "original_ad_type" to "LEADER",
                 "original_source" to "ad-revenue-applovin-v12",
+                AdRevenueConstants.SOURCE_KEY to "applovin"
             ))
         }
 
@@ -143,6 +150,7 @@ class AdRevenueConverterTest : CommonTest() {
                 "countryCode" to "RU",
                 "original_ad_type" to "INTER",
                 "original_source" to "ad-revenue-applovin-v12",
+                AdRevenueConstants.SOURCE_KEY to "applovin"
             ))
         }
 
@@ -153,6 +161,7 @@ class AdRevenueConverterTest : CommonTest() {
                 "countryCode" to "RU",
                 "original_ad_type" to "APPOPEN",
                 "original_source" to "ad-revenue-applovin-v12",
+                AdRevenueConstants.SOURCE_KEY to "applovin"
             ))
         }
 
@@ -163,6 +172,7 @@ class AdRevenueConverterTest : CommonTest() {
                 "countryCode" to "RU",
                 "original_ad_type" to "REWARDED",
                 "original_source" to "ad-revenue-applovin-v12",
+                AdRevenueConstants.SOURCE_KEY to "applovin"
             ))
         }
 
@@ -173,6 +183,7 @@ class AdRevenueConverterTest : CommonTest() {
                 "countryCode" to "RU",
                 "original_ad_type" to "REWARDED_INTER",
                 "original_source" to "ad-revenue-applovin-v12",
+                AdRevenueConstants.SOURCE_KEY to "applovin"
             ))
         }
 
@@ -183,6 +194,7 @@ class AdRevenueConverterTest : CommonTest() {
                 "countryCode" to "RU",
                 "original_ad_type" to "NATIVE",
                 "original_source" to "ad-revenue-applovin-v12",
+                AdRevenueConstants.SOURCE_KEY to "applovin"
             ))
         }
     }

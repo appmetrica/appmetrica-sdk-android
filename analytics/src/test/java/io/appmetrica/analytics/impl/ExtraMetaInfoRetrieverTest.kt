@@ -20,6 +20,7 @@ class ExtraMetaInfoRetrieverTest : CommonTest() {
     private val booleanResourceRetriever: BooleanResourceRetriever = mock()
 
     private val pluginIdKey = "io.appmetrica.analytics.plugin_id"
+    private val pluginAdRevenueMetaInfoSourcesApiKey = "io.appmetrica.analytics.plugin_supported_ad_revenue_sources"
 
     private val extraMetaInfoRetriever: ExtraMetaInfoRetriever by setUp {
         ExtraMetaInfoRetriever(context, stringResourceRetriever, booleanResourceRetriever, packageManager)
@@ -72,5 +73,35 @@ class ExtraMetaInfoRetrieverTest : CommonTest() {
         }
         whenever(packageManager.getApplicationMetaData(context)).thenReturn(bundle)
         assertThat(extraMetaInfoRetriever.pluginId).isEqualTo(pluginId)
+    }
+
+    @Test
+    fun `pluginAdRevenueMetaInfoSources for null meta data`() {
+        whenever(packageManager.getApplicationMetaData(context)).thenReturn(null)
+        assertThat(extraMetaInfoRetriever.pluginAdRevenueMetaInfoSources).isNull()
+    }
+
+    @Test
+    fun `pluginAdRevenueMetaInfoSources for empty meta data`() {
+        whenever(packageManager.getApplicationMetaData(context)).thenReturn(Bundle())
+        assertThat(extraMetaInfoRetriever.pluginAdRevenueMetaInfoSources).isNull()
+    }
+
+    @Test
+    fun `pluginAdRevenueMetaInfoSources for empty value`() {
+        val bundle = Bundle().apply {
+            putString(pluginAdRevenueMetaInfoSourcesApiKey, "")
+        }
+        whenever(packageManager.getApplicationMetaData(context)).thenReturn(bundle)
+    }
+
+    @Test
+    fun `pluginAdRevenueMetaInfoSources for valid value`() {
+        val pluginAdRevenueMetaInfoSources = "Some plugin ad revenue meta info sources"
+        val bundle = Bundle().apply {
+            putString(pluginAdRevenueMetaInfoSourcesApiKey, pluginAdRevenueMetaInfoSources)
+        }
+        whenever(packageManager.getApplicationMetaData(context)).thenReturn(bundle)
+        assertThat(extraMetaInfoRetriever.pluginAdRevenueMetaInfoSources).isEqualTo(pluginAdRevenueMetaInfoSources)
     }
 }
