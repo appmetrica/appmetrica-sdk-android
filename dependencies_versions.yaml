@@ -21,7 +21,7 @@
       name: fairbid-sdk
       repository: https://repo.maven.apache.org/maven2
       from: 1.0.0
-      to: 3.59.0
+      to: 3.60.0
 - group: io.appmetrica.analytics
   name: analytics-ad-revenue-ironsource-v7
   dependencies:
