@@ -10,12 +10,9 @@ import io.appmetrica.analytics.billinginterface.internal.library.UtilsProvider
 import io.appmetrica.analytics.billinginterface.internal.storage.BillingInfoManager
 import io.appmetrica.analytics.billinginterface.internal.update.UpdatePolicy
 import io.appmetrica.analytics.billingv6.impl.UpdateBillingProgressCallback
-import io.appmetrica.analytics.billingv6.impl.storage.StorageUpdater
 import io.appmetrica.analytics.coreutils.internal.executors.SafeRunnable
 import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.constructionRule
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers.anyMap
@@ -41,18 +38,11 @@ class PurchaseHistoryResponseListenerImplTest : CommonTest() {
             null
         }
     }
-    private val uiExecutor: Executor = mock {
-        on { execute(any<SafeRunnable>()) } doAnswer {
-            (it.getArgument<Any>(0) as Runnable).run()
-            null
-        }
-    }
     private val billingClient: BillingClient = mock()
     private val updatePolicy: UpdatePolicy = mock()
     private val billingInfoManager: BillingInfoManager = mock()
     private val utilsProvider: UtilsProvider = mock {
         on { billingInfoManager } doReturn billingInfoManager
-        on { uiExecutor } doReturn uiExecutor
         on { updatePolicy } doReturn updatePolicy
         on { workerExecutor } doReturn workerExecutor
     }

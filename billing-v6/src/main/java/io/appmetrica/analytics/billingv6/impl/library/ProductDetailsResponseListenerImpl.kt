@@ -63,24 +63,16 @@ internal class ProductDetailsResponseListenerImpl(
             updateBillingProgressCallback
         )
         billingLibraryConnectionHolder.addListener(listener)
-        utilsProvider.uiExecutor.execute(object : SafeRunnable() {
-            override fun runSafety() {
-                if (billingClient.isReady) {
-                    billingClient.queryPurchasesAsync(
-                        QueryPurchasesParams.newBuilder()
-                            .setProductType(type)
-                            .build(),
-                        listener
-                    )
-                } else {
-                    utilsProvider.workerExecutor.execute(object : SafeRunnable() {
-                        override fun runSafety() {
-                            billingLibraryConnectionHolder.removeListener(listener)
-                        }
-                    })
-                    updateBillingProgressCallback.onUpdateFinished()
-                }
-            }
-        })
+        if (billingClient.isReady) {
+            billingClient.queryPurchasesAsync(
+                QueryPurchasesParams.newBuilder()
+                    .setProductType(type)
+                    .build(),
+                listener
+            )
+        } else {
+            billingLibraryConnectionHolder.removeListener(listener)
+            updateBillingProgressCallback.onUpdateFinished()
+        }
     }
 }

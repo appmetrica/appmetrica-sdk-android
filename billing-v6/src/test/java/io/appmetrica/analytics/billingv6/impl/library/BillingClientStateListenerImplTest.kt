@@ -34,15 +34,8 @@ class BillingClientStateListenerImplTest : CommonTest() {
             null
         }
     }
-    private val uiExecutor: Executor = mock {
-        on { execute(any<SafeRunnable>()) } doAnswer {
-            (it.getArgument<Any>(0) as Runnable).run()
-            null
-        }
-    }
     private val billingClient: BillingClient = mock()
     private val utilsProvider: UtilsProvider = mock {
-        on { uiExecutor } doReturn uiExecutor
         on { workerExecutor } doReturn workerExecutor
     }
     private val billingLibraryConnectionHolder: BillingLibraryConnectionHolder = mock()
@@ -76,7 +69,6 @@ class BillingClientStateListenerImplTest : CommonTest() {
                 .build()
         )
         verify(workerExecutor).execute(any())
-        verify(uiExecutor, never()).execute(any())
         verifyNoInteractions(billingClient)
         verifyNoInteractions(billingLibraryConnectionHolder)
         verify(updateBillingProgressCallback).onUpdateFinished()

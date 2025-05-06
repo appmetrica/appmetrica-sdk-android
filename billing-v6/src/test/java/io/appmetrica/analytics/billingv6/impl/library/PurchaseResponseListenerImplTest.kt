@@ -34,16 +34,9 @@ class PurchaseResponseListenerImplTest : CommonTest() {
             null
         }
     }
-    private val uiExecutor: Executor = mock {
-        on { execute(any<SafeRunnable>()) } doAnswer {
-            (it.getArgument<Any>(0) as Runnable).run()
-            null
-        }
-    }
     private val billingInfoSender: BillingInfoSender = mock()
     private val utilsProvider: UtilsProvider = mock {
         on { billingInfoSender } doReturn billingInfoSender
-        on { uiExecutor } doReturn uiExecutor
         on { workerExecutor } doReturn workerExecutor
     }
     private val billingInfoSentListener: () -> Unit = mock()

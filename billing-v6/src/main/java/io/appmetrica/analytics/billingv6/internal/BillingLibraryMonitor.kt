@@ -16,7 +16,6 @@ import io.appmetrica.analytics.billingv6.impl.library.BillingClientStateListener
 import io.appmetrica.analytics.billingv6.impl.library.PurchasesUpdatedListenerImpl
 import io.appmetrica.analytics.billingv6.impl.storage.BillingInfoManagerImpl
 import io.appmetrica.analytics.billingv6.impl.update.UpdatePolicyImpl
-import io.appmetrica.analytics.coreutils.internal.executors.SafeRunnable
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import java.util.concurrent.Executor
 
@@ -57,33 +56,29 @@ class BillingLibraryMonitor(
             return
         }
         refreshInProgress = true
-        uiExecutor.execute(object : SafeRunnable() {
-            override fun runSafety() {
-                val billingClient = BillingClient
-                    .newBuilder(context)
-                    .setListener(PurchasesUpdatedListenerImpl())
-                    .enablePendingPurchases()
-                    .build()
-                billingClient.startConnection(
-                    BillingClientStateListenerImpl(
-                        billingConfig,
-                        billingClient,
-                        this@BillingLibraryMonitor,
-                        object : UtilsProvider {
-                            override fun getBillingInfoManager() = this@BillingLibraryMonitor.billingInfoManager
+        val billingClient = BillingClient
+            .newBuilder(context)
+            .setListener(PurchasesUpdatedListenerImpl())
+            .enablePendingPurchases()
+            .build()
+        billingClient.startConnection(
+            BillingClientStateListenerImpl(
+                billingConfig,
+                billingClient,
+                this@BillingLibraryMonitor,
+                object : UtilsProvider {
+                    override fun getBillingInfoManager() = this@BillingLibraryMonitor.billingInfoManager
 
-                            override fun getUpdatePolicy() = this@BillingLibraryMonitor.updatePolicy
+                    override fun getUpdatePolicy() = this@BillingLibraryMonitor.updatePolicy
 
-                            override fun getBillingInfoSender() = this@BillingLibraryMonitor.billingInfoSender
+                    override fun getBillingInfoSender() = this@BillingLibraryMonitor.billingInfoSender
 
-                            override fun getUiExecutor() = this@BillingLibraryMonitor.uiExecutor
+                    override fun getUiExecutor() = this@BillingLibraryMonitor.uiExecutor
 
-                            override fun getWorkerExecutor() = this@BillingLibraryMonitor.workerExecutor
-                        }
-                    )
-                )
-            }
-        })
+                    override fun getWorkerExecutor() = this@BillingLibraryMonitor.workerExecutor
+                }
+            )
+        )
     }
 
     @Synchronized

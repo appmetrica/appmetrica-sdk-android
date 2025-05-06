@@ -109,31 +109,23 @@ internal class PurchaseHistoryResponseListenerImpl(
             updateBillingProgressCallback
         )
         billingLibraryConnectionHolder.addListener(listener)
-        utilsProvider.uiExecutor.execute(object : SafeRunnable() {
-            override fun runSafety() {
-                if (billingClient.isReady) {
-                    billingClient.queryProductDetailsAsync(
-                        QueryProductDetailsParams.newBuilder()
-                            .setProductList(
-                                newSkus.map { productId ->
-                                    QueryProductDetailsParams.Product.newBuilder()
-                                        .setProductId(productId)
-                                        .setProductType(type)
-                                        .build()
-                                }
-                            )
-                            .build(),
-                        listener
-                    )
-                } else {
-                    utilsProvider.workerExecutor.execute(object : SafeRunnable() {
-                        override fun runSafety() {
-                            billingLibraryConnectionHolder.removeListener(listener)
+        if (billingClient.isReady) {
+            billingClient.queryProductDetailsAsync(
+                QueryProductDetailsParams.newBuilder()
+                    .setProductList(
+                        newSkus.map { productId ->
+                            QueryProductDetailsParams.Product.newBuilder()
+                                .setProductId(productId)
+                                .setProductType(type)
+                                .build()
                         }
-                    })
-                    updateBillingProgressCallback.onUpdateFinished()
-                }
-            }
-        })
+                    )
+                    .build(),
+                listener
+            )
+        } else {
+            billingLibraryConnectionHolder.removeListener(listener)
+            updateBillingProgressCallback.onUpdateFinished()
+        }
     }
 }

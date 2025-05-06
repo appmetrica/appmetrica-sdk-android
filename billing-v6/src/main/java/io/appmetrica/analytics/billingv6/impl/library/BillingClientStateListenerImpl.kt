@@ -33,8 +33,7 @@ internal class BillingClientStateListenerImpl @VisibleForTesting constructor(
         billingClient,
         utilsProvider,
         BillingLibraryConnectionHolder(
-            billingClient,
-            utilsProvider
+            billingClient
         ),
         callback
     )
@@ -65,25 +64,18 @@ internal class BillingClientStateListenerImpl @VisibleForTesting constructor(
                 updateBillingProgressCallback
             )
             billingLibraryConnectionHolder.addListener(listener)
-            utilsProvider.uiExecutor.execute(object : SafeRunnable() {
-                override fun runSafety() {
-                    if (billingClient.isReady) {
-                        billingClient.queryPurchaseHistoryAsync(
-                            QueryPurchaseHistoryParams.newBuilder()
-                                .setProductType(type)
-                                .build(),
-                            listener
-                        )
-                    } else {
-                        utilsProvider.workerExecutor.execute(object : SafeRunnable() {
-                            override fun runSafety() {
-                                billingLibraryConnectionHolder.removeListener(listener)
-                            }
-                        })
-                        updateBillingProgressCallback.onUpdateFinished()
-                    }
-                }
-            })
+
+            if (billingClient.isReady) {
+                billingClient.queryPurchaseHistoryAsync(
+                    QueryPurchaseHistoryParams.newBuilder()
+                        .setProductType(type)
+                        .build(),
+                    listener
+                )
+            } else {
+                billingLibraryConnectionHolder.removeListener(listener)
+                updateBillingProgressCallback.onUpdateFinished()
+            }
         }
     }
 
