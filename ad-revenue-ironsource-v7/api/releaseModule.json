@@ -3,7 +3,7 @@
     "component": {
         "group": "io.appmetrica.analytics",
         "module": "analytics-ad-revenue-ironsource-v7",
-        "version": "7.9.0",
+        "version": "7.10.0",
         "attributes": {
             "org.gradle.status": "release"
         }
@@ -25,8 +25,8 @@
             },
             "files": [
                 {
-                    "name": "analytics-ad-revenue-ironsource-v7-7.9.0.aar",
-                    "url": "analytics-ad-revenue-ironsource-v7-7.9.0.aar",
+                    "name": "analytics-ad-revenue-ironsource-v7-7.10.0.aar",
+                    "url": "analytics-ad-revenue-ironsource-v7-7.10.0.aar",
                     "size": -1,
                     "sha512": "<sha512>",
                     "sha256": "<sha256>",
@@ -55,28 +55,28 @@
                     "group": "io.appmetrica.analytics",
                     "module": "analytics-core-utils",
                     "version": {
-                        "requires": "7.9.0"
+                        "requires": "7.10.0"
                     }
                 },
                 {
                     "group": "io.appmetrica.analytics",
                     "module": "analytics-logger",
                     "version": {
-                        "requires": "7.9.0"
+                        "requires": "7.10.0"
                     }
                 },
                 {
                     "group": "io.appmetrica.analytics",
                     "module": "analytics-modules-api",
                     "version": {
-                        "requires": "7.9.0"
+                        "requires": "7.10.0"
                     }
                 }
             ],
             "files": [
                 {
-                    "name": "analytics-ad-revenue-ironsource-v7-7.9.0.aar",
-                    "url": "analytics-ad-revenue-ironsource-v7-7.9.0.aar",
+                    "name": "analytics-ad-revenue-ironsource-v7-7.10.0.aar",
+                    "url": "analytics-ad-revenue-ironsource-v7-7.10.0.aar",
                     "size": -1,
                     "sha512": "<sha512>",
                     "sha256": "<sha256>",
