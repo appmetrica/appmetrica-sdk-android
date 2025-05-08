@@ -20,7 +20,7 @@ public class AmountWrapperTest extends CommonTest {
         AmountWrapper amountWrapper = new AmountWrapper(new ECommerceAmount(amount, unit));
 
         ObjectPropertyAssertions<AmountWrapper> assertions =
-                ObjectPropertyAssertions(amountWrapper);
+            ObjectPropertyAssertions(amountWrapper);
 
         assertions.checkField("amount", amount);
         assertions.checkField("unit", unit);

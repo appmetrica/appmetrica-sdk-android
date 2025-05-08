@@ -45,7 +45,7 @@ public class PreloadInfoCandidateConverterTest extends CommonTest {
         PreloadInfoData.Candidate model = new PreloadInfoData.Candidate(trackingId, additionalParams, modelSource);
         PreloadInfoProto.PreloadInfoData.PreloadInfoCandidate protoCandidate = converter.fromModel(model);
         ObjectPropertyAssertions<PreloadInfoProto.PreloadInfoData.PreloadInfoCandidate> assertions =
-                new ProtoObjectPropertyAssertions<PreloadInfoProto.PreloadInfoData.PreloadInfoCandidate>(protoCandidate)
+            new ProtoObjectPropertyAssertions<PreloadInfoProto.PreloadInfoData.PreloadInfoCandidate>(protoCandidate)
                 .withIgnoredFields("additionalParameters");
         assertions.checkField("trackingId", trackingId);
         assertions.checkField("source", protoSource);
@@ -59,8 +59,8 @@ public class PreloadInfoCandidateConverterTest extends CommonTest {
         PreloadInfoData.Candidate model = new PreloadInfoData.Candidate("", new JSONObject(), modelSource);
         PreloadInfoProto.PreloadInfoData.PreloadInfoCandidate protoCandidate = converter.fromModel(model);
         ObjectPropertyAssertions<PreloadInfoProto.PreloadInfoData.PreloadInfoCandidate> assertions =
-                new ProtoObjectPropertyAssertions<PreloadInfoProto.PreloadInfoData.PreloadInfoCandidate>(protoCandidate)
-                        .withIgnoredFields("additionalParameters");
+            new ProtoObjectPropertyAssertions<PreloadInfoProto.PreloadInfoData.PreloadInfoCandidate>(protoCandidate)
+                .withIgnoredFields("additionalParameters");
         assertions.checkField("trackingId", "");
         assertions.checkField("source", protoSource);
         assertions.checkAll();
@@ -73,8 +73,8 @@ public class PreloadInfoCandidateConverterTest extends CommonTest {
         PreloadInfoData.Candidate model = new PreloadInfoData.Candidate(null, additionalParams, modelSource);
         PreloadInfoProto.PreloadInfoData.PreloadInfoCandidate protoCandidate = converter.fromModel(model);
         ObjectPropertyAssertions<PreloadInfoProto.PreloadInfoData.PreloadInfoCandidate> assertions =
-                new ProtoObjectPropertyAssertions<PreloadInfoProto.PreloadInfoData.PreloadInfoCandidate>(protoCandidate)
-                        .withIgnoredFields("additionalParameters");
+            new ProtoObjectPropertyAssertions<PreloadInfoProto.PreloadInfoData.PreloadInfoCandidate>(protoCandidate)
+                .withIgnoredFields("additionalParameters");
         assertions.checkField("trackingId", "");
         assertions.checkField("source", protoSource);
         assertions.checkAll();
@@ -91,7 +91,7 @@ public class PreloadInfoCandidateConverterTest extends CommonTest {
 
         PreloadInfoData.Candidate model = converter.toModel(proto);
         ObjectPropertyAssertions<PreloadInfoData.Candidate> assertions = ObjectPropertyAssertions(model)
-                .withIgnoredFields("additionalParams");
+            .withIgnoredFields("additionalParams");
         assertions.checkField("trackingId", trackingId);
         assertions.checkField("source", modelSource);
         assertions.checkAll();
@@ -104,7 +104,7 @@ public class PreloadInfoCandidateConverterTest extends CommonTest {
         PreloadInfoProto.PreloadInfoData.PreloadInfoCandidate proto = new PreloadInfoProto.PreloadInfoData.PreloadInfoCandidate();
         PreloadInfoData.Candidate model = converter.toModel(proto);
         ObjectPropertyAssertions<PreloadInfoData.Candidate> assertions = ObjectPropertyAssertions(model)
-                .withIgnoredFields("additionalParams");
+            .withIgnoredFields("additionalParams");
         assertions.checkField("trackingId", "");
         assertions.checkField("source", modelSource);
         assertions.checkAll();
@@ -121,7 +121,7 @@ public class PreloadInfoCandidateConverterTest extends CommonTest {
 
         PreloadInfoData.Candidate model = converter.toModel(proto);
         ObjectPropertyAssertions<PreloadInfoData.Candidate> assertions = ObjectPropertyAssertions(model)
-                .withIgnoredFields("additionalParams");
+            .withIgnoredFields("additionalParams");
         assertions.checkField("trackingId", trackingId);
         assertions.checkField("source", modelSource);
         assertions.checkAll();

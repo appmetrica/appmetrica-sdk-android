@@ -4,14 +4,14 @@ import android.util.Base64;
 import androidx.annotation.NonNull;
 import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
 import io.appmetrica.analytics.impl.ClientCounterReport;
-import io.appmetrica.analytics.impl.InternalEvents;
-import io.appmetrica.analytics.internal.CounterConfigurationReporterType;
 import io.appmetrica.analytics.impl.EventsManager;
+import io.appmetrica.analytics.impl.InternalEvents;
 import io.appmetrica.analytics.impl.TestsData;
 import io.appmetrica.analytics.impl.client.ClientConfiguration;
 import io.appmetrica.analytics.impl.client.ProcessConfiguration;
-import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.internal.CounterConfiguration;
+import io.appmetrica.analytics.internal.CounterConfigurationReporterType;
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.testutils.CommonTest;
 import java.util.AbstractMap;
 import java.util.Arrays;
@@ -126,7 +126,7 @@ public class JvmCrashTest extends CommonTest {
             mock(PublicLogger.class)
         ), clientConfiguration, mTrimmedFields);
         ObjectPropertyAssertions<JvmCrash> assertions = ObjectPropertyAssertions(crash).withDeclaredAccessibleFields(true)
-                .withIgnoredFields("trimmedFields");
+            .withIgnoredFields("trimmedFields");
         assertions.checkField("crash", "getCrashValue", mCrashValue.getBytes());
         assertions.checkField("name", "getName", mCrashName);
         assertions.checkField("bytesTruncated", "getBytesTruncated", mBytesTruncated);
@@ -144,25 +144,25 @@ public class JvmCrashTest extends CommonTest {
     @Test
     public void testFromJSON() throws Exception {
         JvmCrash crash = new JvmCrash(
-                new JSONObject().put(
-                        KEY_PROCESS_CONFIGURATION,
-                        new JSONObject().put(KEY_PID, mPid).put(KEY_PSID, mPsid).put(KEY_PACKAGE_NAME, mPackageName)
-                ).put(
-                        KEY_REPORTER_CONFIGURATION,
-                        new JSONObject().put(KEY_API_KEY, mApiKey).put(KEY_REPORTER_TYPE, "main")
-                ).put(
-                        KEY_EVENT,
-                        new JSONObject()
-                                .put(KEY_JVM_CRASH, Base64.encodeToString(mCrashValue.getBytes(), 0))
-                                .put(KEY_EVENT_NAME, mCrashName)
-                                .put(KEY_BYTES_TRUNCATED, mBytesTruncated)
-                                .put(KEY_ENVIRONMENT, mErrorEnvironment)
-                                .put(KEY_TRIMMED_FIELDS, new JSONObject().put("VALUE", 100))
-                ).toString()
+            new JSONObject().put(
+                KEY_PROCESS_CONFIGURATION,
+                new JSONObject().put(KEY_PID, mPid).put(KEY_PSID, mPsid).put(KEY_PACKAGE_NAME, mPackageName)
+            ).put(
+                KEY_REPORTER_CONFIGURATION,
+                new JSONObject().put(KEY_API_KEY, mApiKey).put(KEY_REPORTER_TYPE, "main")
+            ).put(
+                KEY_EVENT,
+                new JSONObject()
+                    .put(KEY_JVM_CRASH, Base64.encodeToString(mCrashValue.getBytes(), 0))
+                    .put(KEY_EVENT_NAME, mCrashName)
+                    .put(KEY_BYTES_TRUNCATED, mBytesTruncated)
+                    .put(KEY_ENVIRONMENT, mErrorEnvironment)
+                    .put(KEY_TRIMMED_FIELDS, new JSONObject().put("VALUE", 100))
+            ).toString()
         );
 
         ObjectPropertyAssertions<JvmCrash> assertions = ObjectPropertyAssertions(crash).withDeclaredAccessibleFields(true)
-                .withIgnoredFields("trimmedFields");
+            .withIgnoredFields("trimmedFields");
         assertions.checkField("crash", "getCrashValue", mCrashValue.getBytes());
         assertions.checkField("name", "getName", mCrashName);
         assertions.checkField("bytesTruncated", "getBytesTruncated", mBytesTruncated);
@@ -180,26 +180,26 @@ public class JvmCrashTest extends CommonTest {
     @Test
     public void testFromJsonNullable() throws Exception {
         JvmCrash crash = new JvmCrash(
-                new JSONObject().put(
-                        KEY_PROCESS_CONFIGURATION,
-                        new JSONObject().put(KEY_PID, mPid).put(KEY_PSID, mPsid).put(KEY_PACKAGE_NAME, mPackageName)
-                ).put(
-                        KEY_REPORTER_CONFIGURATION,
-                        new JSONObject().put(KEY_API_KEY, mApiKey).put(KEY_REPORTER_TYPE, mReporterType.getStringValue())
-                ).put(
-                        KEY_EVENT,
-                        new JSONObject()
-                                .put(KEY_JVM_CRASH, Base64.encodeToString(mCrashValue.getBytes(), 0))
-                                .put(KEY_EVENT_NAME, mCrashName)
-                                .put(KEY_BYTES_TRUNCATED, mBytesTruncated)
-                ).toString()
+            new JSONObject().put(
+                KEY_PROCESS_CONFIGURATION,
+                new JSONObject().put(KEY_PID, mPid).put(KEY_PSID, mPsid).put(KEY_PACKAGE_NAME, mPackageName)
+            ).put(
+                KEY_REPORTER_CONFIGURATION,
+                new JSONObject().put(KEY_API_KEY, mApiKey).put(KEY_REPORTER_TYPE, mReporterType.getStringValue())
+            ).put(
+                KEY_EVENT,
+                new JSONObject()
+                    .put(KEY_JVM_CRASH, Base64.encodeToString(mCrashValue.getBytes(), 0))
+                    .put(KEY_EVENT_NAME, mCrashName)
+                    .put(KEY_BYTES_TRUNCATED, mBytesTruncated)
+            ).toString()
         );
 
         ObjectPropertyAssertions<JvmCrash> assertions = ObjectPropertyAssertions(crash).withDeclaredAccessibleFields(true);
         assertions.checkField("crash", "getCrashValue", mCrashValue.getBytes());
         assertions.checkField("name", "getName", mCrashName);
         assertions.checkField("bytesTruncated", "getBytesTruncated", mBytesTruncated);
-        assertions.checkField("errorEnvironment", "getEnvironment", (String) null);
+        assertions.checkField("errorEnvironment", "getEnvironment", null);
         assertions.checkField("pid", "getPid", mPid);
         assertions.checkField("psid", "getPsid", mPsid);
         assertions.checkField("packageName", "getPackageName", mPackageName);
@@ -226,11 +226,11 @@ public class JvmCrashTest extends CommonTest {
     @Test
     public void testIsMain() throws JSONException {
         assertThat(
-                new JvmCrash(
-                        fillJson(
-                                new JSONObject().put(KEY_API_KEY, "api").put("is_main", true).put("is_commutation", false)
-                        ).toString()
-                ).getReporterType()
+            new JvmCrash(
+                fillJson(
+                    new JSONObject().put(KEY_API_KEY, "api").put("is_main", true).put("is_commutation", false)
+                ).toString()
+            ).getReporterType()
         ).isEqualTo(CounterConfigurationReporterType.MAIN);
     }
 
@@ -240,12 +240,12 @@ public class JvmCrashTest extends CommonTest {
         @ParameterizedRobolectricTestRunner.Parameters(name = "Report type: {0}")
         public static Collection<Object[]> data() {
             return Arrays.asList(new Object[][]{
-                    {"main", CounterConfigurationReporterType.MAIN},
-                    {"crash", CounterConfigurationReporterType.CRASH},
-                    {"manual", CounterConfigurationReporterType.MANUAL},
-                    {"commutation", CounterConfigurationReporterType.COMMUTATION},
-                    {"self_diagnostic_main", CounterConfigurationReporterType.SELF_DIAGNOSTIC_MAIN},
-                    {"self_diagnostic_manual", CounterConfigurationReporterType.SELF_DIAGNOSTIC_MANUAL}
+                {"main", CounterConfigurationReporterType.MAIN},
+                {"crash", CounterConfigurationReporterType.CRASH},
+                {"manual", CounterConfigurationReporterType.MANUAL},
+                {"commutation", CounterConfigurationReporterType.COMMUTATION},
+                {"self_diagnostic_main", CounterConfigurationReporterType.SELF_DIAGNOSTIC_MAIN},
+                {"self_diagnostic_manual", CounterConfigurationReporterType.SELF_DIAGNOSTIC_MANUAL}
             });
         }
 
@@ -265,18 +265,18 @@ public class JvmCrashTest extends CommonTest {
 
     private static JSONObject fillJson(@NonNull JSONObject reporterConfiguration) throws JSONException {
         return new JSONObject().put(
-                KEY_PROCESS_CONFIGURATION,
-                new JSONObject().put(KEY_PID, 123).put(KEY_PSID, "123").put(KEY_PACKAGE_NAME, "test")
+            KEY_PROCESS_CONFIGURATION,
+            new JSONObject().put(KEY_PID, 123).put(KEY_PSID, "123").put(KEY_PACKAGE_NAME, "test")
         ).put(
-                KEY_REPORTER_CONFIGURATION,
-                reporterConfiguration
+            KEY_REPORTER_CONFIGURATION,
+            reporterConfiguration
         ).put(
-                KEY_EVENT,
-                new JSONObject()
-                        .put(KEY_JVM_CRASH, Base64.encodeToString("crashValue".getBytes(), 0))
-                        .put(KEY_EVENT_NAME, "name")
-                        .put(KEY_BYTES_TRUNCATED, 0)
-                        .put(KEY_TRIMMED_FIELDS, new JSONObject().put("VALUE", 100))
+            KEY_EVENT,
+            new JSONObject()
+                .put(KEY_JVM_CRASH, Base64.encodeToString("crashValue".getBytes(), 0))
+                .put(KEY_EVENT_NAME, "name")
+                .put(KEY_BYTES_TRUNCATED, 0)
+                .put(KEY_TRIMMED_FIELDS, new JSONObject().put("VALUE", 100))
         );
     }
 

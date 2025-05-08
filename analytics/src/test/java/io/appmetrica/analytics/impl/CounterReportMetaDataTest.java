@@ -36,62 +36,62 @@ public class CounterReportMetaDataTest extends CommonTest {
     @ParameterizedRobolectricTestRunner.Parameters(name = "{1}")
     public static Collection<Object[]> getData() {
         return Arrays.asList(
-                new Object[]{ new Function<CounterReport, CounterReport>() {
+            new Object[]{new Function<CounterReport, CounterReport>() {
 
-                    @Override
-                    public CounterReport apply(CounterReport input) {
-                        return CounterReport.formAliveReportData(input);
-                    }
-                }, InternalEvents.EVENT_TYPE_ALIVE, "" },
-                new Object[]{ new Function<CounterReport, CounterReport>() {
+                @Override
+                public CounterReport apply(CounterReport input) {
+                    return CounterReport.formAliveReportData(input);
+                }
+            }, InternalEvents.EVENT_TYPE_ALIVE, ""},
+            new Object[]{new Function<CounterReport, CounterReport>() {
 
-                    @Override
-                    public CounterReport apply(CounterReport input) {
-                        return CounterReport.formFeaturesReportData(input, "some value");
-                    }
-                }, InternalEvents.EVENT_TYPE_APP_FEATURES, "" },
-                new Object[]{ new Function<CounterReport, CounterReport>() {
+                @Override
+                public CounterReport apply(CounterReport input) {
+                    return CounterReport.formFeaturesReportData(input, "some value");
+                }
+            }, InternalEvents.EVENT_TYPE_APP_FEATURES, ""},
+            new Object[]{new Function<CounterReport, CounterReport>() {
 
-                    @Override
-                    public CounterReport apply(CounterReport input) {
-                        return CounterReport.formFirstEventReportData(input);
-                    }
-                }, InternalEvents.EVENT_TYPE_FIRST_ACTIVATION, "" },
-                new Object[]{ new Function<CounterReport, CounterReport>() {
+                @Override
+                public CounterReport apply(CounterReport input) {
+                    return CounterReport.formFirstEventReportData(input);
+                }
+            }, InternalEvents.EVENT_TYPE_FIRST_ACTIVATION, ""},
+            new Object[]{new Function<CounterReport, CounterReport>() {
 
-                    @Override
-                    public CounterReport apply(CounterReport input) {
-                        return CounterReport.formInitReportData(input);
-                    }
-                }, InternalEvents.EVENT_TYPE_INIT, "" },
-                new Object[]{ new Function<CounterReport, CounterReport>() {
+                @Override
+                public CounterReport apply(CounterReport input) {
+                    return CounterReport.formInitReportData(input);
+                }
+            }, InternalEvents.EVENT_TYPE_INIT, ""},
+            new Object[]{new Function<CounterReport, CounterReport>() {
 
-                    @Override
-                    public CounterReport apply(CounterReport input) {
-                        return CounterReport.formPermissionsReportData(
-                                input,
-                                new ArrayList<PermissionState>(),
-                                null,
-                                mock(AppStandbyBucketConverter.class),
-                                new ArrayList<String>()
-                        );
-                    }
-                }, InternalEvents.EVENT_TYPE_PERMISSIONS, "" },
-                new Object[]{ new Function<CounterReport, CounterReport>() {
+                @Override
+                public CounterReport apply(CounterReport input) {
+                    return CounterReport.formPermissionsReportData(
+                        input,
+                        new ArrayList<PermissionState>(),
+                        null,
+                        mock(AppStandbyBucketConverter.class),
+                        new ArrayList<String>()
+                    );
+                }
+            }, InternalEvents.EVENT_TYPE_PERMISSIONS, ""},
+            new Object[]{new Function<CounterReport, CounterReport>() {
 
-                    @Override
-                    public CounterReport apply(CounterReport input) {
-                        return CounterReport.formSessionStartReportData(input, mock(ExtraMetaInfoRetriever.class));
-                    }
-                }, InternalEvents.EVENT_TYPE_START, "" },
-                new Object[]{ new Function<CounterReport, CounterReport>() {
+                @Override
+                public CounterReport apply(CounterReport input) {
+                    return CounterReport.formSessionStartReportData(input, mock(ExtraMetaInfoRetriever.class));
+                }
+            }, InternalEvents.EVENT_TYPE_START, ""},
+            new Object[]{new Function<CounterReport, CounterReport>() {
 
-                    @Override
-                    public CounterReport apply(CounterReport input) {
-                        return CounterReport.formUpdateReportData(input);
-                    }
-                }, InternalEvents.EVENT_TYPE_APP_UPDATE, "" }
-                );
+                @Override
+                public CounterReport apply(CounterReport input) {
+                    return CounterReport.formUpdateReportData(input);
+                }
+            }, InternalEvents.EVENT_TYPE_APP_UPDATE, ""}
+        );
     }
 
     @NonNull

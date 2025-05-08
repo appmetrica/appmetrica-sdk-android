@@ -3,9 +3,9 @@ package io.appmetrica.analytics.impl.component.clients;
 import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import io.appmetrica.analytics.internal.CounterConfigurationReporterType;
 import io.appmetrica.analytics.impl.component.CommonArguments;
 import io.appmetrica.analytics.impl.component.CommonArgumentsTestUtils;
+import io.appmetrica.analytics.internal.CounterConfigurationReporterType;
 import io.appmetrica.analytics.testutils.CommonTest;
 import java.util.Random;
 import java.util.UUID;
@@ -50,10 +50,10 @@ public class ClientRepositoryTest extends CommonTest {
     @Test
     public void testCreateNewClient() {
         ClientDescription description = createDefaultMockedDescription(
-                UUID.randomUUID().toString(), "com.test.package", CounterConfigurationReporterType.MAIN);
+            UUID.randomUUID().toString(), "com.test.package", CounterConfigurationReporterType.MAIN);
         CommonArguments counterConfiguration = CommonArgumentsTestUtils.createMockedArguments();
         when(mFactory.createClientUnit(
-                mContext, mComponentsRepository, description, counterConfiguration)
+            mContext, mComponentsRepository, description, counterConfiguration)
         ).thenReturn(mCreatedClientUnit);
         assertThat(mClientRepository.getOrCreateClient(description, counterConfiguration)).isEqualTo(mCreatedClientUnit);
         assertThat(mClientRepository.getClientsCount()).isEqualTo(1);
@@ -62,18 +62,18 @@ public class ClientRepositoryTest extends CommonTest {
     @Test
     public void testReturnOldUnitForOldProcess() {
         ClientDescription description = createMockedDescription(
-                UUID.randomUUID().toString(), "com.test.package",
-                1000, UUID.randomUUID().toString(), CounterConfigurationReporterType.MAIN);
+            UUID.randomUUID().toString(), "com.test.package",
+            1000, UUID.randomUUID().toString(), CounterConfigurationReporterType.MAIN);
         CommonArguments counterConfiguration = CommonArgumentsTestUtils.createMockedArguments();
         when(mFactory.createClientUnit(
-                mContext, mComponentsRepository, description, counterConfiguration)
+            mContext, mComponentsRepository, description, counterConfiguration)
         ).thenReturn(mock(ClientUnit.class));
 
         ClientUnit firstClientUnit = mClientRepository.getOrCreateClient(description, counterConfiguration);
         ClientDescription description2 = createMockedDescription(description.getApiKey(),
-                description.getPackageName(), description.getProcessID(), description.getProcessSessionID(), CounterConfigurationReporterType.MAIN);
+            description.getPackageName(), description.getProcessID(), description.getProcessSessionID(), CounterConfigurationReporterType.MAIN);
         when(mFactory.createClientUnit(
-                mContext, mComponentsRepository, description2, counterConfiguration)
+            mContext, mComponentsRepository, description2, counterConfiguration)
         ).thenReturn(mock(ClientUnit.class));
         assertThat(mClientRepository.getOrCreateClient(description2, counterConfiguration)).isEqualTo(firstClientUnit);
         assertThat(mClientRepository.getClientsCount()).isEqualTo(1);
@@ -82,19 +82,19 @@ public class ClientRepositoryTest extends CommonTest {
     @Test
     public void testReturnNewUnitForNewProcess() {
         ClientDescription description = createMockedDescription(
-                UUID.randomUUID().toString(), "com.test.package",
-                1000, UUID.randomUUID().toString(), CounterConfigurationReporterType.MAIN);
+            UUID.randomUUID().toString(), "com.test.package",
+            1000, UUID.randomUUID().toString(), CounterConfigurationReporterType.MAIN);
         CommonArguments counterConfiguration = CommonArgumentsTestUtils.createMockedArguments();
         when(mFactory.createClientUnit(
-                mContext, mComponentsRepository, description, counterConfiguration)
+            mContext, mComponentsRepository, description, counterConfiguration)
         ).thenReturn(mCreatedClientUnit);
 
         assertThat(mClientRepository.getOrCreateClient(description, counterConfiguration)).isEqualTo(mCreatedClientUnit);
         ClientDescription description2 = createMockedDescription(description.getApiKey(),
-                description.getPackageName(), 200, UUID.randomUUID().toString(), CounterConfigurationReporterType.MAIN);
+            description.getPackageName(), 200, UUID.randomUUID().toString(), CounterConfigurationReporterType.MAIN);
         ClientUnit secondMockedClientUnit = mock(ClientUnit.class);
         when(mFactory.createClientUnit(
-                mContext, mComponentsRepository, description2, counterConfiguration)
+            mContext, mComponentsRepository, description2, counterConfiguration)
         ).thenReturn(secondMockedClientUnit);
         assertThat(mClientRepository.getOrCreateClient(description2, counterConfiguration)).isEqualTo(secondMockedClientUnit);
         assertThat(mClientRepository.getClientsCount()).isEqualTo(2);
@@ -103,19 +103,19 @@ public class ClientRepositoryTest extends CommonTest {
     @Test
     public void testTwoDifferentClientsForOneProcess() {
         ClientDescription description = createMockedDescription(
-                UUID.randomUUID().toString(), "com.test.package",
-                1000, UUID.randomUUID().toString(), CounterConfigurationReporterType.MAIN);
+            UUID.randomUUID().toString(), "com.test.package",
+            1000, UUID.randomUUID().toString(), CounterConfigurationReporterType.MAIN);
         CommonArguments counterConfiguration = CommonArgumentsTestUtils.createMockedArguments();
         when(mFactory.createClientUnit(
-                mContext, mComponentsRepository, description, counterConfiguration)
+            mContext, mComponentsRepository, description, counterConfiguration)
         ).thenReturn(mCreatedClientUnit);
         assertThat(mClientRepository.getOrCreateClient(description, counterConfiguration)).isEqualTo(mCreatedClientUnit);
 
         ClientDescription description2 = createMockedDescription(UUID.randomUUID().toString(),
-                description.getPackageName(), description.getProcessID(), description.getProcessSessionID(), CounterConfigurationReporterType.MAIN);
+            description.getPackageName(), description.getProcessID(), description.getProcessSessionID(), CounterConfigurationReporterType.MAIN);
         ClientUnit secondMockedClientUnit = mock(ClientUnit.class);
         when(mFactory.createClientUnit(
-                mContext, mComponentsRepository, description2, counterConfiguration)
+            mContext, mComponentsRepository, description2, counterConfiguration)
         ).thenReturn(secondMockedClientUnit);
         assertThat(mClientRepository.getOrCreateClient(description2, counterConfiguration)).isEqualTo(secondMockedClientUnit);
         assertThat(mClientRepository.getClientsCount()).isEqualTo(2);
@@ -128,19 +128,19 @@ public class ClientRepositoryTest extends CommonTest {
     public void testTwoDifferentClientUnitTypesForOneProcess() {
         final String apiKey = UUID.randomUUID().toString();
         ClientDescription description = createMockedDescription(
-                apiKey, "com.test.package",
-                1000, UUID.randomUUID().toString(), CounterConfigurationReporterType.MAIN);
+            apiKey, "com.test.package",
+            1000, UUID.randomUUID().toString(), CounterConfigurationReporterType.MAIN);
         CommonArguments counterConfiguration = CommonArgumentsTestUtils.createMockedArguments();
         when(mFactory.createClientUnit(
-                mContext, mComponentsRepository, description, counterConfiguration)
+            mContext, mComponentsRepository, description, counterConfiguration)
         ).thenReturn(mCreatedClientUnit);
         assertThat(mClientRepository.getOrCreateClient(description, counterConfiguration)).isEqualTo(mCreatedClientUnit);
 
         ClientDescription description2 = createMockedDescription(apiKey,
-                description.getPackageName(), description.getProcessID(), description.getProcessSessionID(), CounterConfigurationReporterType.MANUAL);
+            description.getPackageName(), description.getProcessID(), description.getProcessSessionID(), CounterConfigurationReporterType.MANUAL);
         ClientUnit secondMockedClientUnit = mock(ClientUnit.class);
         when(mFactory.createClientUnit(
-                mContext, mComponentsRepository, description2, counterConfiguration)
+            mContext, mComponentsRepository, description2, counterConfiguration)
         ).thenReturn(secondMockedClientUnit);
         assertThat(mClientRepository.getOrCreateClient(description2, counterConfiguration)).isEqualTo(secondMockedClientUnit);
         assertThat(mClientRepository.getClientsCount()).isEqualTo(2);
@@ -152,19 +152,19 @@ public class ClientRepositoryTest extends CommonTest {
     @Test
     public void testRemoveForOneProcess() {
         ClientDescription description = createMockedDescription(
-                UUID.randomUUID().toString(), "com.test.package",
-                1000, UUID.randomUUID().toString(), CounterConfigurationReporterType.MAIN);
+            UUID.randomUUID().toString(), "com.test.package",
+            1000, UUID.randomUUID().toString(), CounterConfigurationReporterType.MAIN);
         CommonArguments counterConfiguration = CommonArgumentsTestUtils.createMockedArguments();
         when(mFactory.createClientUnit(
-                mContext, mComponentsRepository, description, counterConfiguration)
+            mContext, mComponentsRepository, description, counterConfiguration)
         ).thenReturn(mCreatedClientUnit);
         ClientUnit unit = mClientRepository.getOrCreateClient(description, counterConfiguration);
 
         ClientDescription description2 = createMockedDescription(description.getApiKey(),
-                description.getPackageName(), 200, UUID.randomUUID().toString(), CounterConfigurationReporterType.MAIN);
+            description.getPackageName(), 200, UUID.randomUUID().toString(), CounterConfigurationReporterType.MAIN);
         ClientUnit secondMockedClientUnit = mock(ClientUnit.class);
         when(mFactory.createClientUnit(
-                mContext, mComponentsRepository, description2, counterConfiguration)
+            mContext, mComponentsRepository, description2, counterConfiguration)
         ).thenReturn(secondMockedClientUnit);
         ClientUnit unit2 = mClientRepository.getOrCreateClient(description2, counterConfiguration);
         assertThat(mClientRepository.getClientsCount()).isEqualTo(2);
@@ -178,7 +178,7 @@ public class ClientRepositoryTest extends CommonTest {
                                                              @NonNull String packageName,
                                                              @NonNull CounterConfigurationReporterType reporterType) {
         return createMockedDescription(apiKey, packageName, new Random().nextInt(32000),
-                UUID.randomUUID().toString(), reporterType);
+            UUID.randomUUID().toString(), reporterType);
     }
 
     private ClientDescription createMockedDescription(@Nullable String apiKey,

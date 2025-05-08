@@ -12,7 +12,7 @@ import static org.mockito.Mockito.mock;
 @RunWith(JUnit4.class)
 public class ComponentLifecycleManagerTest extends CommonTest {
 
-    private ComponentLifecycleManager<ClientUnit> mLifecycleManager = new ComponentLifecycleManager<ClientUnit>();
+    private final ComponentLifecycleManager<ClientUnit> mLifecycleManager = new ComponentLifecycleManager<ClientUnit>();
 
     @Test
     public void testClientConnected() {

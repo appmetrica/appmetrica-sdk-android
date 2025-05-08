@@ -64,9 +64,9 @@ public class AESEventEncrypterTests extends CommonTest {
             AESEncrypter aesEncrypter = mAESEventEncrypter.getAESEncrypter();
             assertThat(aesEncrypter.getAlgorithm()).isEqualTo(AESEncrypter.DEFAULT_ALGORITHM);
             assertThat(aesEncrypter.getPassword())
-                    .isEqualTo(new byte[]{73, -106, -125, 31, 77, -66, 83, -33, -8, -96, 19, -68, 80, 109, -11, -47});
+                .isEqualTo(new byte[]{73, -106, -125, 31, 77, -66, 83, -33, -8, -96, 19, -68, 80, 109, -11, -47});
             assertThat(aesEncrypter.getIV())
-                    .isEqualTo(new byte[]{-108, -106, 25, 95, -44, -21, 17, -7, -116, -79, 104, -3, -45, 64, 24, -82});
+                .isEqualTo(new byte[]{-108, -106, 25, 95, -44, -21, 17, -7, -116, -79, 104, -3, -45, 64, 24, -82});
         }
 
         @Test
@@ -87,9 +87,9 @@ public class AESEventEncrypterTests extends CommonTest {
     @RunWith(ParameterizedRobolectricTestRunner.class)
     public static class AESEventEncrypterEncryptionParametrizedTests extends BaseAESEventEncrypterTests {
 
-        private String mInput;
-        private String mExpectedEncryptedData;
-        private byte[] mExpectedDecryptedData;
+        private final String mInput;
+        private final String mExpectedEncryptedData;
+        private final byte[] mExpectedDecryptedData;
 
         protected AESEncrypter mAESEncrypter;
 
@@ -103,14 +103,14 @@ public class AESEventEncrypterTests extends CommonTest {
         @ParameterizedRobolectricTestRunner.Parameters(name = "For input data = {3}")
         public static Collection<Object[]> data() {
             return Arrays.asList(new Object[][]{
-                    {null, null, new byte[0], "[0] null"},
-                    {"", null, new byte[0], "[1] empty array"},
+                {null, null, new byte[0], "[0] null"},
+                {"", null, new byte[0], "[1] empty array"},
 
-                    {SHORT_STRING, SHORT_STRING,
-                            SHORT_STRING.getBytes(), "[2] short string"},
+                {SHORT_STRING, SHORT_STRING,
+                    SHORT_STRING.getBytes(), "[2] short string"},
 
-                    {LONG_STRING, LONG_STRING,
-                            LONG_STRING.getBytes(), "[3] long string"}
+                {LONG_STRING, LONG_STRING,
+                    LONG_STRING.getBytes(), "[3] long string"}
             });
         }
 
@@ -139,21 +139,21 @@ public class AESEventEncrypterTests extends CommonTest {
         @Test
         public void testEncryptedValue() {
             String expectedEncryptedValue = TextUtils.isEmpty(mExpectedEncryptedData) ? mExpectedEncryptedData :
-                    Base64.encodeToString(mExpectedEncryptedData.getBytes(), Base64.DEFAULT);
+                Base64.encodeToString(mExpectedEncryptedData.getBytes(), Base64.DEFAULT);
             assertThat(mEncryptedValue).isEqualTo(expectedEncryptedValue);
         }
 
         @Test
         public void testDecryptedValue() {
             byte[] decryptedValue =
-                    mAESEventEncrypter.decrypt(mEncryptedValue == null ? null : mEncryptedValue.getBytes());
+                mAESEventEncrypter.decrypt(mEncryptedValue == null ? null : mEncryptedValue.getBytes());
             assertThat(decryptedValue).isEqualTo(mExpectedDecryptedData);
         }
 
         @Test
         public void testEncryptionMode() {
             assertThat(mEncryptedCounterReport.mEventEncryptionMode)
-                    .isEqualTo(EventEncryptionMode.AES_VALUE_ENCRYPTION);
+                .isEqualTo(EventEncryptionMode.AES_VALUE_ENCRYPTION);
         }
 
         private AESEncrypter createAESEncrypterMock() throws Throwable {

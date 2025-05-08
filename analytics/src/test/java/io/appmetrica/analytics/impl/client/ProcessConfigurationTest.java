@@ -27,10 +27,10 @@ import static org.mockito.Mockito.mock;
 @RunWith(RobolectricTestRunner.class)
 public class ProcessConfigurationTest extends CommonTest {
 
-    private ResultReceiver mResultReceiver = mock(ResultReceiver.class);
-    private ProcessConfiguration mProcessConfiguration = new ProcessConfiguration(RuntimeEnvironment.getApplication(), mResultReceiver);
-    private AppMetricaConfig.Builder configBuilder = AppMetricaConfig
-            .newConfigBuilder(TestsData.generateApiKey());
+    private final ResultReceiver mResultReceiver = mock(ResultReceiver.class);
+    private final ProcessConfiguration mProcessConfiguration = new ProcessConfiguration(RuntimeEnvironment.getApplication(), mResultReceiver);
+    private final AppMetricaConfig.Builder configBuilder = AppMetricaConfig
+        .newConfigBuilder(TestsData.generateApiKey());
 
     @Test
     public void testGetClidsShouldReturnWrittenValidClids() {
@@ -303,13 +303,13 @@ public class ProcessConfigurationTest extends CommonTest {
     @Test
     public void testPackageName() {
         assertThat(new ProcessConfiguration(RuntimeEnvironment.getApplication(), mResultReceiver).getPackageName()).
-                isEqualTo(RuntimeEnvironment.getApplication().getPackageName());
+            isEqualTo(RuntimeEnvironment.getApplication().getPackageName());
     }
 
     @Test
     public void testApiLevel() {
         assertThat(new ProcessConfiguration(RuntimeEnvironment.getApplication(), mResultReceiver).getSdkApiLevel()).
-                isEqualTo(BuildConfig.API_LEVEL);
+            isEqualTo(BuildConfig.API_LEVEL);
     }
 
     @Test

@@ -5,13 +5,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.ResultReceiver
 import io.appmetrica.analytics.impl.AppMetricaConnector
-import io.appmetrica.analytics.impl.crash.jvm.client.AppMetricaUncaughtExceptionHandler
 import io.appmetrica.analytics.impl.CounterReport
 import io.appmetrica.analytics.impl.ReportToSend
 import io.appmetrica.analytics.impl.ReporterEnvironment
 import io.appmetrica.analytics.impl.ServiceUtils
 import io.appmetrica.analytics.impl.ShouldDisconnectFromServiceChecker
 import io.appmetrica.analytics.impl.client.ProcessConfiguration
+import io.appmetrica.analytics.impl.crash.jvm.client.AppMetricaUncaughtExceptionHandler
 import io.appmetrica.analytics.internal.CounterConfiguration
 import io.appmetrica.analytics.internal.IAppMetricaService
 import io.appmetrica.analytics.testutils.CommonTest

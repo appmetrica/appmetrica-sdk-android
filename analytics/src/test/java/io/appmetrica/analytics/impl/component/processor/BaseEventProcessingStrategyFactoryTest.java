@@ -100,34 +100,34 @@ public class BaseEventProcessingStrategyFactoryTest extends CommonTest {
 
     @Rule
     public MockedConstructionRule<ReportingHandlerProvider> reportingHandlerProviderMockedConstructionRule =
-    new MockedConstructionRule<>(ReportingHandlerProvider.class, (mock, context) -> {
-        when(mock.getReportPurgeBufferHandler()).thenReturn(mock(ReportPurgeBufferHandler.class));
-        when(mock.getReportSaveToDatabaseHandler()).thenReturn(mock(ReportSaveToDatabaseHandler.class));
-        when(mock.getReportSessionHandler()).thenReturn(mock(ReportSessionHandler.class));
-        when(mock.getReportSessionStopHandler()).thenReturn(mock(ReportSessionStopHandler.class));
-        when(mock.getReportAppEnvironmentUpdated()).thenReturn(mock(ReportAppEnvironmentUpdatedHandler.class));
-        when(mock.getReportAppEnvironmentCleared()).thenReturn(mock(ReportAppEnvironmentClearedHandler.class));
-        when(mock.getReportFirstHandler()).thenReturn(mock(ReportFirstHandler.class));
-        when(mock.getReportPermissionsHandler()).thenReturn(mock(ReportPermissionHandler.class));
-        when(mock.getReportFeaturesHandler()).thenReturn(mock(ReportFeaturesHandler.class));
-        when(mock.getUpdateUserProfileIDHandler()).thenReturn(mock(UpdateUserProfileIDHandler.class));
-        when(mock.getReportAppOpenHandler()).thenReturn(mock(ReportAppOpenHandler.class));
-        when(mock.getReportFirstOccurrenceStatusHandler()).thenReturn(mock(ReportFirstOccurrenceStatusHandler.class));
-        when(mock.getReportCrashMetaInformation()).thenReturn(mock(ReportCrashMetaInformation.class));
-        when(mock.getSavePreloadInfoHandler()).thenReturn(mock(SavePreloadInfoHandler.class));
-        when(mock.getApplySettingsFromActivationConfigHandler())
-            .thenReturn(mock(ApplySettingsFromActivationConfigHandler.class));
-        when(mock.getSubscribeForReferrerHandler()).thenReturn(mock(SubscribeForReferrerHandler.class));
-        when(mock.getSaveInitialUserProfileIDHandler()).thenReturn(mock(SaveInitialUserProfileIDHandler.class));
-        when(mock.getModulesEventHandler()).thenReturn(mock(ModulesEventHandler.class));
-        when(mock.getSaveSessionExtrasHandler()).thenReturn(mock(SaveSessionExtrasHandler.class));
-        when(mock.getExternalAttributionHandler()).thenReturn(mock(ExternalAttributionHandler.class));
-        when(mock.getReportPrevSessionEventHandler()).thenReturn(mock(ReportPrevSessionEventHandler.class));
-    });
+        new MockedConstructionRule<>(ReportingHandlerProvider.class, (mock, context) -> {
+            when(mock.getReportPurgeBufferHandler()).thenReturn(mock(ReportPurgeBufferHandler.class));
+            when(mock.getReportSaveToDatabaseHandler()).thenReturn(mock(ReportSaveToDatabaseHandler.class));
+            when(mock.getReportSessionHandler()).thenReturn(mock(ReportSessionHandler.class));
+            when(mock.getReportSessionStopHandler()).thenReturn(mock(ReportSessionStopHandler.class));
+            when(mock.getReportAppEnvironmentUpdated()).thenReturn(mock(ReportAppEnvironmentUpdatedHandler.class));
+            when(mock.getReportAppEnvironmentCleared()).thenReturn(mock(ReportAppEnvironmentClearedHandler.class));
+            when(mock.getReportFirstHandler()).thenReturn(mock(ReportFirstHandler.class));
+            when(mock.getReportPermissionsHandler()).thenReturn(mock(ReportPermissionHandler.class));
+            when(mock.getReportFeaturesHandler()).thenReturn(mock(ReportFeaturesHandler.class));
+            when(mock.getUpdateUserProfileIDHandler()).thenReturn(mock(UpdateUserProfileIDHandler.class));
+            when(mock.getReportAppOpenHandler()).thenReturn(mock(ReportAppOpenHandler.class));
+            when(mock.getReportFirstOccurrenceStatusHandler()).thenReturn(mock(ReportFirstOccurrenceStatusHandler.class));
+            when(mock.getReportCrashMetaInformation()).thenReturn(mock(ReportCrashMetaInformation.class));
+            when(mock.getSavePreloadInfoHandler()).thenReturn(mock(SavePreloadInfoHandler.class));
+            when(mock.getApplySettingsFromActivationConfigHandler())
+                .thenReturn(mock(ApplySettingsFromActivationConfigHandler.class));
+            when(mock.getSubscribeForReferrerHandler()).thenReturn(mock(SubscribeForReferrerHandler.class));
+            when(mock.getSaveInitialUserProfileIDHandler()).thenReturn(mock(SaveInitialUserProfileIDHandler.class));
+            when(mock.getModulesEventHandler()).thenReturn(mock(ModulesEventHandler.class));
+            when(mock.getSaveSessionExtrasHandler()).thenReturn(mock(SaveSessionExtrasHandler.class));
+            when(mock.getExternalAttributionHandler()).thenReturn(mock(ExternalAttributionHandler.class));
+            when(mock.getReportPrevSessionEventHandler()).thenReturn(mock(ReportPrevSessionEventHandler.class));
+        });
 
     @Rule
     public MockedConstructionRule<CommonConditionalFactory> commonConditionalFactoryMockedConstructionRule =
-    new MockedConstructionRule<>(CommonConditionalFactory.class);
+        new MockedConstructionRule<>(CommonConditionalFactory.class);
 
     EventProcessingStrategyFactory mFactory;
     final InternalEvents mEventType;
@@ -150,7 +150,7 @@ public class BaseEventProcessingStrategyFactoryTest extends CommonTest {
     public static class GenericFactoriesTest extends BaseEventProcessingStrategyFactoryTest {
 
         private static final HashSet<InternalEvents> LISTED_EVENTS =
-                new HashSet<InternalEvents>();
+            new HashSet<InternalEvents>();
 
         static {
             LISTED_EVENTS.add(EVENT_TYPE_ACTIVATION);
@@ -204,10 +204,10 @@ public class BaseEventProcessingStrategyFactoryTest extends CommonTest {
         @Test
         public void testStrategyCreationForNotListedEvents() {
             EventProcessingStrategy<ReportComponentHandler> processingStrategy =
-                    mFactory.getProcessingStrategy(mEventType.getTypeId());
+                mFactory.getProcessingStrategy(mEventType.getTypeId());
             ArrayList<ReportComponentHandler> commonExpectedElements = new ArrayList<ReportComponentHandler>();
             ArrayList<Class<? extends ReportComponentHandler>> commonClasses =
-                    new ArrayList<Class<? extends ReportComponentHandler>>(commonExpectedElements.size());
+                new ArrayList<Class<? extends ReportComponentHandler>>(commonExpectedElements.size());
             new CommonConditionalFactory(mFactory.getHandlersProvider()).addHandlers(mEventType, commonExpectedElements);
             for (ReportComponentHandler handler : commonExpectedElements) {
                 commonClasses.add(handler.getClass());
@@ -215,11 +215,11 @@ public class BaseEventProcessingStrategyFactoryTest extends CommonTest {
             List<? extends ReportComponentHandler> eventHandlers = processingStrategy.getEventHandlers();
             if (LISTED_EVENTS.contains(mEventType)) {
                 assertThat(eventHandlers).extracting("class").
-                        containsAll(commonClasses);
+                    containsAll(commonClasses);
                 assertThat(eventHandlers.size()).isGreaterThan(commonClasses.size());
             } else {
                 assertThat(eventHandlers).extracting("class").
-                        containsExactlyElementsOf(commonClasses);
+                    containsExactlyElementsOf(commonClasses);
             }
         }
 
@@ -284,9 +284,9 @@ public class BaseEventProcessingStrategyFactoryTest extends CommonTest {
         @ParameterizedRobolectricTestRunner.Parameters(name = "Event with type {0} should have handler {1}")
         public static Collection<Object[]> data() {
             return Arrays.asList(new Object[][]{
-                    {EVENT_TYPE_APP_ENVIRONMENT_UPDATED, ReportAppEnvironmentUpdatedHandler.class},
-                    {EVENT_TYPE_APP_ENVIRONMENT_CLEARED, ReportAppEnvironmentClearedHandler.class},
-                    {EVENT_TYPE_SET_USER_PROFILE_ID, UpdateUserProfileIDHandler.class},
+                {EVENT_TYPE_APP_ENVIRONMENT_UPDATED, ReportAppEnvironmentUpdatedHandler.class},
+                {EVENT_TYPE_APP_ENVIRONMENT_CLEARED, ReportAppEnvironmentClearedHandler.class},
+                {EVENT_TYPE_SET_USER_PROFILE_ID, UpdateUserProfileIDHandler.class},
             });
         }
 

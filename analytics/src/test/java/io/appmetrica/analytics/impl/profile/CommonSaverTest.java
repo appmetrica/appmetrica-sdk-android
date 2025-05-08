@@ -16,20 +16,20 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 @RunWith(RobolectricTestRunner.class)
 public class CommonSaverTest extends CommonTest {
 
-    private AttributeSaver mInternalSaver = mock(AttributeSaver.class);
+    private final AttributeSaver mInternalSaver = mock(AttributeSaver.class);
 
     @Test
     public void testNonExisted() {
         AttributeFactory factory = mock(AttributeFactory.class);
         new CommonSavingStrategy(mInternalSaver).save(
-                mock(UserProfileStorage.class),
-                null,
-                factory
+            mock(UserProfileStorage.class),
+            null,
+            factory
         );
         verify(factory, times(1)).createAttribute();
         verify(mInternalSaver, times(1)).save(
-                any(UserProfileStorage.class),
-                nullable(Userprofile.Profile.Attribute.class)
+            any(UserProfileStorage.class),
+            nullable(Userprofile.Profile.Attribute.class)
         );
     }
 
@@ -37,9 +37,9 @@ public class CommonSaverTest extends CommonTest {
     public void testExisted() {
         AttributeFactory factory = mock(AttributeFactory.class);
         new CommonSavingStrategy(mInternalSaver).save(
-                mock(UserProfileStorage.class),
-                UserProfilesTestUtils.createEmpty(),
-                factory
+            mock(UserProfileStorage.class),
+            UserProfilesTestUtils.createEmpty(),
+            factory
         );
         verifyNoMoreInteractions(factory);
         verifyNoMoreInteractions(mInternalSaver);

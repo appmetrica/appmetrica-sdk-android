@@ -17,7 +17,7 @@ public class EventStartTest extends CommonTest {
         EventStart eventStart = new EventStart(buildId);
 
         ObjectPropertyAssertions<EventStart> assertions =
-                ObjectPropertyAssertions(eventStart);
+            ObjectPropertyAssertions(eventStart);
         assertions.checkField("buildId", buildId);
         assertions.checkAll();
     }
@@ -27,7 +27,7 @@ public class EventStartTest extends CommonTest {
         EventStart eventStart = new EventStart(null);
 
         ObjectPropertyAssertions<EventStart> assertions =
-                ObjectPropertyAssertions(eventStart);
+            ObjectPropertyAssertions(eventStart);
         assertions.checkField("buildId", (String) null);
         assertions.checkAll();
     }

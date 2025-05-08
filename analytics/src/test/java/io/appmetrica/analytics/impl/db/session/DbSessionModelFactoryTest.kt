@@ -99,12 +99,15 @@ class DbSessionModelFactoryTest : CommonTest() {
         ObjectPropertyAssertions(model)
             .checkField("id", id)
             .checkField("type", type)
-            .checkFieldRecursively("description", Consumer<ObjectPropertyAssertions<DbSessionModel.Description>> {
-                it
-                    .checkField("startTime", startTime)
-                    .checkField("serverTimeOffset", serverTimeOffset)
-                    .checkField("obtainedBeforeFirstSynchronization", ServerTime.getInstance().isUncheckedTime)
-            })
+            .checkFieldRecursively(
+                "description",
+                Consumer<ObjectPropertyAssertions<DbSessionModel.Description>> {
+                    it
+                        .checkField("startTime", startTime)
+                        .checkField("serverTimeOffset", serverTimeOffset)
+                        .checkField("obtainedBeforeFirstSynchronization", ServerTime.getInstance().isUncheckedTime)
+                }
+            )
             .checkField("reportRequestParameters", expectedJson)
             .checkAll()
     }

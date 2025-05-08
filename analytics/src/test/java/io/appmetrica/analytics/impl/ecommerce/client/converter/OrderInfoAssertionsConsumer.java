@@ -6,7 +6,7 @@ import java.util.function.Consumer;
 
 class OrderInfoAssertionsConsumer implements Consumer<ObjectPropertyAssertions<Ecommerce.ECommerceEvent.OrderInfo>> {
 
-    private OrderAssertionConsumer orderAssertionConsumer;
+    private final OrderAssertionConsumer orderAssertionConsumer;
 
     public OrderInfoAssertionsConsumer(OrderAssertionConsumer orderAssertionConsumer) {
         this.orderAssertionConsumer = orderAssertionConsumer;

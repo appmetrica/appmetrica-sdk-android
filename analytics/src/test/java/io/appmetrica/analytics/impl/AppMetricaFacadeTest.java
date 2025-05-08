@@ -43,7 +43,7 @@ public class AppMetricaFacadeTest extends CommonTest {
 
     @Rule
     public final MockedStaticRule<AppMetricaSelfReportFacade> selfReporterFacadeRule =
-            new MockedStaticRule<>(AppMetricaSelfReportFacade.class);
+        new MockedStaticRule<>(AppMetricaSelfReportFacade.class);
 
     @Rule
     public final MockedConstructionRule<ClientMigrationManager> clientMigrationManagerMockedConstructionRule =
@@ -55,7 +55,7 @@ public class AppMetricaFacadeTest extends CommonTest {
         when(ClientServiceLocator.getInstance().getAppMetricaCoreComponentsProvider().getCore(
             any(Context.class),
             any(ClientExecutorProvider.class)
-            )).thenReturn(metricaCore);
+        )).thenReturn(metricaCore);
         when(ClientServiceLocator.getInstance().getAppMetricaCoreComponentsProvider().getImpl(
             any(Context.class),
             any(IAppMetricaCore.class)
@@ -63,7 +63,7 @@ public class AppMetricaFacadeTest extends CommonTest {
         when(ClientServiceLocator.getInstance().getClientExecutorProvider().getCoreInitThread(any()))
             .thenReturn(coreInitThread);
         when(metricaImpl.getReporter(any(ReporterConfig.class)))
-                .thenReturn(reporterExtended);
+            .thenReturn(reporterExtended);
         mContext = RuntimeEnvironment.getApplication();
     }
 

@@ -20,7 +20,7 @@ public class StringValueComposerTest extends CommonTest {
 
     @Mock
     private ReportRequestConfig mConfig;
-    private StringValueComposer mStringValueComposer = new StringValueComposer();
+    private final StringValueComposer mStringValueComposer = new StringValueComposer();
 
     @Before
     public void setUp() {

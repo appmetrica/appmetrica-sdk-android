@@ -1,5 +1,6 @@
 package io.appmetrica.analytics.networktasks.internal
 
+import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.json.JSONArray
 import org.json.JSONObject
@@ -16,7 +17,7 @@ class DefaultNetworkResponseHandlerTest(
     parserResponseString: String?,
     responseHeadersString: String?,
     private val expectedResponse: DefaultResponseParser.Response?
-) {
+) : CommonTest() {
 
     companion object {
         private const val RESPONSE_STATUS_VALID = "accepted"
@@ -89,7 +90,7 @@ class DefaultNetworkResponseHandlerTest(
     }
 
     @Test
-    fun testHandleReturnExpectedResult() {
+    fun handleReturnExpectedResult() {
         val result = handler.handle(responseDataHolder)
         if (expectedResponse == null) {
             assertThat(result).isNull()

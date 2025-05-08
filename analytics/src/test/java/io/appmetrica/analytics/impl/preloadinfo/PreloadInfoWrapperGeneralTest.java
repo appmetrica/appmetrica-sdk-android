@@ -17,7 +17,7 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 public class PreloadInfoWrapperGeneralTest extends CommonTest {
 
     private static final String sErrorMessage = "Required field \"PreloadInfo.trackingId\" is empty!\n" +
-            "This preload info will be skipped.";
+        "This preload info will be skipped.";
 
     @Mock
     private PublicLogger mPublicLogger;

@@ -15,8 +15,8 @@ import static org.mockito.Mockito.spy;
 @RunWith(RobolectricTestRunner.class)
 public class FullStateConverterTest extends CommonTest {
 
-    private FullStateConverter converter = new FullStateConverter();
-    private Thread thread = spy(new Thread("name"));
+    private final FullStateConverter converter = new FullStateConverter();
+    private final Thread thread = spy(new Thread("name"));
 
     @Test
     public void testConvert() {
@@ -30,7 +30,7 @@ public class FullStateConverterTest extends CommonTest {
         doReturn(id).when(thread).getId();
 
         ThreadState state = converter.apply(thread, new StackTraceElement[]{new StackTraceElement(
-                "s", "a", "a", 1221
+            "s", "a", "a", 1221
         )});
 
         SoftAssertions soft = new SoftAssertions();
@@ -40,9 +40,9 @@ public class FullStateConverterTest extends CommonTest {
         soft.assertThat(state.tid).as("id").isEqualTo(id);
         soft.assertThat(state.group).as("group").isEqualTo(thread.getThreadGroup().getName());
         soft.assertThat(state.stacktrace).as("stacktrace")
-                .extracting("className", "methodName", "fileName", "lineNumber").containsExactly(
+            .extracting("className", "methodName", "fileName", "lineNumber").containsExactly(
                 tuple("s", "a", "a", 1221)
-        );
+            );
 
         soft.assertAll();
     }

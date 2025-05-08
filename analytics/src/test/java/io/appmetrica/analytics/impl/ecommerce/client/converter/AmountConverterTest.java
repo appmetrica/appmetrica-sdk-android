@@ -40,10 +40,10 @@ public class AmountConverterTest extends CommonTest {
     private final String truncatedUnit = "Truncated unit";
     private final int bytesTruncated = 20;
     private final TrimmingResult<String, BytesTruncatedProvider> unitTruncationTrimmingResult =
-            new TrimmingResult<String, BytesTruncatedProvider>(
-                    truncatedUnit,
-                    new BytesTruncatedInfo(bytesTruncated)
-            );
+        new TrimmingResult<String, BytesTruncatedProvider>(
+            truncatedUnit,
+            new BytesTruncatedInfo(bytesTruncated)
+        );
 
     @Before
     public void setUp() throws Exception {
@@ -57,8 +57,8 @@ public class AmountConverterTest extends CommonTest {
         amountConverter = new AmountConverter();
 
         ObjectPropertyAssertions<AmountConverter> assertions =
-                ObjectPropertyAssertions(amountConverter)
-                        .withPrivateFields(true);
+            ObjectPropertyAssertions(amountConverter)
+                .withPrivateFields(true);
 
         assertions.checkFieldNonNull("decimalConverter");
         assertions.checkFieldComparingFieldByField("currencyTrimmer", new HierarchicalStringTrimmer(20));
@@ -74,25 +74,25 @@ public class AmountConverterTest extends CommonTest {
         Result<Ecommerce.ECommerceEvent.Amount, BytesTruncatedProvider> result = amountConverter.fromModel(amountWrapper);
 
         ObjectPropertyAssertions<Result<Ecommerce.ECommerceEvent.Amount, BytesTruncatedProvider>> assertions =
-                ObjectPropertyAssertions(result);
+            ObjectPropertyAssertions(result);
 
         assertions.checkFieldRecursively("metaInfo", new TruncationInfoConsumer(bytesTruncated));
         assertions.checkFieldRecursively(
-                "result",
-                new Consumer<ObjectPropertyAssertions<Result<Ecommerce.ECommerceEvent.Amount,
-                        BytesTruncatedProvider>>>() {
-                    @Override
-                    public void accept(ObjectPropertyAssertions<Result<Ecommerce.ECommerceEvent.Amount,
-                            BytesTruncatedProvider>> innerAssertions) {
-                        try {
-                            innerAssertions.withFinalFieldOnly(false)
-                                    .checkField("value", protoAmountValue)
-                                    .checkField("unitType", truncatedUnit.getBytes());
-                        } catch (Exception e) {
-                            throw new RuntimeException(e);
-                        }
+            "result",
+            new Consumer<ObjectPropertyAssertions<Result<Ecommerce.ECommerceEvent.Amount,
+                BytesTruncatedProvider>>>() {
+                @Override
+                public void accept(ObjectPropertyAssertions<Result<Ecommerce.ECommerceEvent.Amount,
+                    BytesTruncatedProvider>> innerAssertions) {
+                    try {
+                        innerAssertions.withFinalFieldOnly(false)
+                            .checkField("value", protoAmountValue)
+                            .checkField("unitType", truncatedUnit.getBytes());
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
                     }
                 }
+            }
         );
 
         assertions.checkAll();
@@ -101,7 +101,7 @@ public class AmountConverterTest extends CommonTest {
     @Test
     public void toProtoWithoutTruncation() {
         when(internalStringTrimmer.trim(unit))
-                .thenReturn(new TrimmingResult<String, BytesTruncatedProvider>(unit, new BytesTruncatedInfo(0)));
+            .thenReturn(new TrimmingResult<String, BytesTruncatedProvider>(unit, new BytesTruncatedInfo(0)));
         AmountWrapper amountWrapper = new AmountWrapper(amount, unit);
         Result<Ecommerce.ECommerceEvent.Amount, BytesTruncatedProvider> result = amountConverter.fromModel(amountWrapper);
 
@@ -116,8 +116,8 @@ public class AmountConverterTest extends CommonTest {
     @Test(expected = UnsupportedOperationException.class)
     public void toModel() throws Exception {
         amountConverter.toModel(new Result<Ecommerce.ECommerceEvent.Amount, BytesTruncatedProvider>(
-                new Ecommerce.ECommerceEvent.Amount(),
-                new BytesTruncatedInfo(0)
+            new Ecommerce.ECommerceEvent.Amount(),
+            new BytesTruncatedInfo(0)
         ));
     }
 }

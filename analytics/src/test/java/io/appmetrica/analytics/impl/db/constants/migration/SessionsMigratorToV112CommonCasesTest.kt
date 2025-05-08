@@ -106,8 +106,8 @@ internal class SessionsMigratorToV112CommonCasesTest(
             ),
             arrayOf(
                 "invalid session type",
-            SessionCursorRecord(sessionType = "invalid"),
-            null
+                SessionCursorRecord(sessionType = "invalid"),
+                null
             ),
             // reportRequestParameters
             arrayOf(
@@ -266,16 +266,18 @@ internal class SessionsMigratorToV112CommonCasesTest(
     }
 
     private fun stubDatabase(cursorRecord: SessionCursorRecord) {
-        whenever(database.query(
-            "sessions",
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            "200"
-        )).thenReturn(prepareCursor(cursorRecord))
+        whenever(
+            database.query(
+                "sessions",
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                "200"
+            )
+        ).thenReturn(prepareCursor(cursorRecord))
     }
 
     private fun prepareCursor(cursorRecord: SessionCursorRecord): Cursor = MatrixCursor(

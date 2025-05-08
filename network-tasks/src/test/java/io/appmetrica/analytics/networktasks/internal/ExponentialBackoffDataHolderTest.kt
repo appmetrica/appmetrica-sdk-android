@@ -2,6 +2,7 @@ package io.appmetrica.analytics.networktasks.internal
 
 import io.appmetrica.analytics.coreutils.internal.time.TimePassedChecker
 import io.appmetrica.analytics.coreutils.internal.time.TimeProvider
+import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -13,7 +14,7 @@ import org.mockito.kotlin.verify
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class ExponentialBackoffDataHolderTest {
+class ExponentialBackoffDataHolderTest : CommonTest() {
 
     private val maxTimeoutSeconds = 500
     private val exponentialMultiplier = 3

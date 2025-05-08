@@ -10,7 +10,6 @@ import io.appmetrica.analytics.coreutils.internal.io.Base64Utils;
 import io.appmetrica.analytics.impl.client.ProcessConfiguration;
 import io.appmetrica.analytics.impl.crash.UnhandledExceptionEventFormer;
 import io.appmetrica.analytics.impl.crash.jvm.client.AllThreads;
-import io.appmetrica.analytics.impl.crash.jvm.client.ThreadState;
 import io.appmetrica.analytics.impl.crash.jvm.client.ThreadStateTest;
 import io.appmetrica.analytics.impl.crash.jvm.client.ThrowableModel;
 import io.appmetrica.analytics.impl.crash.jvm.client.UnhandledException;
@@ -117,16 +116,16 @@ public class ReportsHandlerTest extends CommonTest {
         when(mConnector.isConnected()).thenReturn(true);
         StartupHelper startupParamsProvider = mock(StartupHelper.class);
         mMainReporterEnvironment = spy(new ReporterEnvironment(
-                new ProcessConfiguration(RuntimeEnvironment.getApplication(), mDataResultReceiver),
-                new CounterConfiguration(),
+            new ProcessConfiguration(RuntimeEnvironment.getApplication(), mDataResultReceiver),
+            new CounterConfiguration(),
             mainErrorEnvironment,
-                userProfileID
-                ));
+            userProfileID
+        ));
         mArgReporterEnvironment = spy(new ReporterEnvironment(
-                new ProcessConfiguration(RuntimeEnvironment.getApplication(), mDataResultReceiver),
-                new CounterConfiguration(),
-                reporterErrorEnvironment,
-                userProfileID
+            new ProcessConfiguration(RuntimeEnvironment.getApplication(), mDataResultReceiver),
+            new CounterConfiguration(),
+            reporterErrorEnvironment,
+            userProfileID
         ));
         when(mMainReporter.getEnvironment()).thenReturn(mMainReporterEnvironment);
 
@@ -198,14 +197,14 @@ public class ReportsHandlerTest extends CommonTest {
     @Test
     public void testReportCrash() {
         UnhandledException unhandledException = new UnhandledException(
-                mock(ThrowableModel.class),
-                new AllThreads(ThreadStateTest.createEmpty(), Collections.<ThreadState>emptyList(), "process"),
-                null,
-                null,
-                null,
-                null,
-                null,
-                null
+            mock(ThrowableModel.class),
+            new AllThreads(ThreadStateTest.createEmpty(), Collections.emptyList(), "process"),
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
         );
         ReportToSend reportToSend = mock(ReportToSend.class);
         when(reportToSend.getEnvironment()).thenReturn(mock(ReporterEnvironment.class));
@@ -221,14 +220,14 @@ public class ReportsHandlerTest extends CommonTest {
     @Test
     public void testReportUnhandledException() {
         UnhandledException unhandledException = new UnhandledException(
-                mock(ThrowableModel.class),
-                new AllThreads(ThreadStateTest.createEmpty(), Collections.<ThreadState>emptyList(), "process"),
-                null,
-                null,
-                null,
-                null,
-                null,
-                null
+            mock(ThrowableModel.class),
+            new AllThreads(ThreadStateTest.createEmpty(), Collections.emptyList(), "process"),
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
         );
         ReportToSend reportToSend = mock(ReportToSend.class);
         when(reportToSend.getEnvironment()).thenReturn(mock(ReporterEnvironment.class));
@@ -302,8 +301,8 @@ public class ReportsHandlerTest extends CommonTest {
     public void testSendRevenue() {
         RevenueWrapper wrapper = mock(RevenueWrapper.class);
         Pair<byte[], Integer> result = new Pair<byte[], Integer>(
-                "teststring".getBytes(),
-                300
+            "teststring".getBytes(),
+            300
         );
         doReturn(result).when(wrapper).getDataToSend();
         mReportsHandlerSpy.sendRevenue(wrapper, mMainReporterEnvironment);
@@ -319,8 +318,8 @@ public class ReportsHandlerTest extends CommonTest {
     public void testSendAdRevenue() {
         AdRevenueWrapper wrapper = mock(AdRevenueWrapper.class);
         kotlin.Pair<byte[], Integer> result = new kotlin.Pair<>(
-                "teststring".getBytes(),
-                300
+            "teststring".getBytes(),
+            300
         );
         doReturn(result).when(wrapper).getDataToSend();
         mReportsHandlerSpy.sendAdRevenue(wrapper, mMainReporterEnvironment);
@@ -341,10 +340,10 @@ public class ReportsHandlerTest extends CommonTest {
 
             ProtoSerializable event = mock(ProtoSerializable.class);
             when(event.toProto())
-                    .thenReturn(Collections.singletonList(new Result<Ecommerce.ECommerceEvent, BytesTruncatedProvider>(
-                            singleEvent,
-                            new BytesTruncatedInfo(bytesTruncated)
-                    )));
+                .thenReturn(Collections.singletonList(new Result<Ecommerce.ECommerceEvent, BytesTruncatedProvider>(
+                    singleEvent,
+                    new BytesTruncatedInfo(bytesTruncated)
+                )));
             mReportsHandlerSpy.sendECommerce(event, mMainReporterEnvironment);
             ArgumentCaptor<ReportToSend> reportToSend = ArgumentCaptor.forClass(ReportToSend.class);
             verify(mReportsSender).queueReport(reportToSend.capture());
@@ -368,23 +367,23 @@ public class ReportsHandlerTest extends CommonTest {
 
             ProtoSerializable event = mock(ProtoSerializable.class);
             when(event.toProto())
-                    .thenReturn(Arrays.asList(
-                            new Result<Ecommerce.ECommerceEvent, BytesTruncatedProvider>(
-                                    firstProto,
-                                    new BytesTruncatedInfo(firstBytesTruncated)
-                            ),
-                            new Result<Ecommerce.ECommerceEvent, BytesTruncatedProvider>(
-                                    secondProto,
-                                    new BytesTruncatedInfo(secondBytesTruncated)
-                            ),
-                            new Result<Ecommerce.ECommerceEvent, BytesTruncatedProvider>(
-                                    thirdProto,
-                                    new BytesTruncatedInfo(thirdBytesTruncated)
-                            )
-                    ));
+                .thenReturn(Arrays.asList(
+                    new Result<Ecommerce.ECommerceEvent, BytesTruncatedProvider>(
+                        firstProto,
+                        new BytesTruncatedInfo(firstBytesTruncated)
+                    ),
+                    new Result<Ecommerce.ECommerceEvent, BytesTruncatedProvider>(
+                        secondProto,
+                        new BytesTruncatedInfo(secondBytesTruncated)
+                    ),
+                    new Result<Ecommerce.ECommerceEvent, BytesTruncatedProvider>(
+                        thirdProto,
+                        new BytesTruncatedInfo(thirdBytesTruncated)
+                    )
+                ));
             mReportsHandlerSpy.sendECommerce(event, mMainReporterEnvironment);
             ArgumentCaptor<ReportToSend> reportToSend =
-                    ArgumentCaptor.forClass(ReportToSend.class);
+                ArgumentCaptor.forClass(ReportToSend.class);
             verify(mReportsSender, times(3)).queueReport(reportToSend.capture());
             List<ReportToSend> capturedValues = reportToSend.getAllValues();
             assertThat(capturedValues).hasSize(3);

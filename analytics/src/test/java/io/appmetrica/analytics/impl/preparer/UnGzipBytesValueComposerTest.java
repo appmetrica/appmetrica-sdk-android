@@ -17,14 +17,14 @@ import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAsse
 public class UnGzipBytesValueComposerTest extends CommonTest {
 
     @Rule
-    public final GlobalServiceLocatorRule rule  = new GlobalServiceLocatorRule();
+    public final GlobalServiceLocatorRule rule = new GlobalServiceLocatorRule();
 
     @Test
     public void constructor() throws Exception {
         UnGzipBytesValueComposer composer = new UnGzipBytesValueComposer();
 
         ObjectPropertyAssertions<UnGzipBytesValueComposer> assertions =
-                ObjectPropertyAssertions(composer)
+            ObjectPropertyAssertions(composer)
                 .withDeclaredAccessibleFields(true);
 
         assertions.checkFieldNonNull("eventEncrypterProvider", "getEventEncrypterProvider");

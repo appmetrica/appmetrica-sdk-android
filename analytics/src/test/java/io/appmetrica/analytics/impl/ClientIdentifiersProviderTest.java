@@ -18,6 +18,7 @@ import io.appmetrica.analytics.impl.utils.StartupUtils;
 import io.appmetrica.analytics.internal.IdentifiersResult;
 import io.appmetrica.analytics.testutils.CommonTest;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,9 +64,9 @@ public class ClientIdentifiersProviderTest extends CommonTest {
     private final IdentifierStatus mGaidStatus = IdentifierStatus.IDENTIFIER_PROVIDER_UNAVAILABLE;
     private final IdentifierStatus mHoaidStatus = IdentifierStatus.FEATURE_DISABLED;
     private final IdentifierStatus yandexStatus = IdentifierStatus.INVALID_ADV_ID;
-    private String mGaidError = "gaid error";
-    private String mHoaidError = "hoaid error";
-    private String yandexError = "yandex error";
+    private final String mGaidError = "gaid error";
+    private final String mHoaidError = "hoaid error";
+    private final String yandexError = "yandex error";
     private Context mContext;
 
     @Before
@@ -83,27 +84,27 @@ public class ClientIdentifiersProviderTest extends CommonTest {
         responseClids.put("clid2", "2");
         responseClids.put("clid3", "3");
         customSdkHosts.put("ad", Arrays.asList("host1", "host2"));
-        customSdkHosts.put("am", Arrays.asList("host3"));
+        customSdkHosts.put("am", Collections.singletonList("host3"));
         StartupState startupState = new StartupState.Builder(
-                new CollectingFlags.CollectingFlagsBuilder()
-                        .withSslPinning(false)
-                        .build()
+            new CollectingFlags.CollectingFlagsBuilder()
+                .withSslPinning(false)
+                .build()
         )
-                .withUuid(uuid)
-                .withDeviceId(deviceId)
-                .withDeviceIdHash(deviceIdHash)
-                .withReportAdUrl(reportAdUrl)
-                .withGetAdUrl(getAdUrl)
-                .withCustomSdkHosts(customSdkHosts)
-                .withEncodedClidsFromResponse(StartupUtils.encodeClids(responseClids))
-                .withLastClientClidsForStartupRequest(StartupUtils.encodeClids(startupClientClidsForRequest))
-                .withAutoInappCollectingConfig(autoInappCollectingConfig)
-                .withObtainTime(obtainTime)
-                .withStartupUpdateConfig(new StartupUpdateConfig(updateInterval))
-                .build();
+            .withUuid(uuid)
+            .withDeviceId(deviceId)
+            .withDeviceIdHash(deviceIdHash)
+            .withReportAdUrl(reportAdUrl)
+            .withGetAdUrl(getAdUrl)
+            .withCustomSdkHosts(customSdkHosts)
+            .withEncodedClidsFromResponse(StartupUtils.encodeClids(responseClids))
+            .withLastClientClidsForStartupRequest(StartupUtils.encodeClids(startupClientClidsForRequest))
+            .withAutoInappCollectingConfig(autoInappCollectingConfig)
+            .withObtainTime(obtainTime)
+            .withStartupUpdateConfig(new StartupUpdateConfig(updateInterval))
+            .build();
         when(mStartupUnit.getStartupState()).thenReturn(startupState);
         when(mAdvertisingIdGetter.getIdentifiersForced())
-                .thenReturn(new AdvertisingIdsHolder(googleResult, huaweiResult, yandexResult));
+            .thenReturn(new AdvertisingIdsHolder(googleResult, huaweiResult, yandexResult));
         mClientIdentifiersProvider = new ClientIdentifiersProvider(mStartupUnit, mAdvertisingIdGetter, mContext);
     }
 
@@ -111,8 +112,8 @@ public class ClientIdentifiersProviderTest extends CommonTest {
     public void testCreateClientIdentifiersHolder() throws Exception {
         ClientIdentifiersHolder clientIdentifiersHolder = mClientIdentifiersProvider.createClientIdentifiersHolder(clientClidsForRequest);
         ObjectPropertyAssertions<ClientIdentifiersHolder> assertions = ObjectPropertyAssertions(clientIdentifiersHolder)
-                .withPrivateFields(true)
-                .withIgnoredFields("mServerTimeOffset", "modulesConfig");
+            .withPrivateFields(true)
+            .withIgnoredFields("mServerTimeOffset", "modulesConfig");
         assertions.checkField("mUuidData", "getUuid", new IdentifiersResult(uuid, IdentifierStatus.OK, null));
         assertions.checkField("mDeviceIdData", "getDeviceId", new IdentifiersResult(deviceId, IdentifierStatus.OK, null));
         assertions.checkField("mDeviceIdHashData", "getDeviceIdHash", new IdentifiersResult(deviceIdHash, IdentifierStatus.OK, null));
@@ -133,7 +134,8 @@ public class ClientIdentifiersProviderTest extends CommonTest {
                             try {
                                 JSONAssert.assertEquals(JsonHelper.customSdkHostsToString(customSdkHosts), s, true);
                                 return true;
-                            } catch (Throwable ignored) { }
+                            } catch (Throwable ignored) {
+                            }
                             return false;
                         }
                     });
@@ -180,25 +182,25 @@ public class ClientIdentifiersProviderTest extends CommonTest {
         final int newUpdateInterval = 5656;
 
         StartupState newState = new StartupState.Builder(new CollectingFlags.CollectingFlagsBuilder()
-                .withSslPinning(true)
-                .build()
+            .withSslPinning(true)
+            .build()
         )
-                .withUuid(newUuid)
-                .withDeviceId(newDeviceId)
-                .withDeviceIdHash(newDeviceIdHash)
-                .withReportAdUrl(newReportAdUrl)
-                .withGetAdUrl(newGetAdUrl)
-                .withCustomSdkHosts(newCustomSdkHosts)
-                .withEncodedClidsFromResponse(StartupUtils.encodeClids(newResponseClids))
-                .withLastClientClidsForStartupRequest(StartupUtils.encodeClids(newRequestClids))
-                .withObtainTime(newObtainTime)
-                .withStartupUpdateConfig(new StartupUpdateConfig(newUpdateInterval))
-                .build();
+            .withUuid(newUuid)
+            .withDeviceId(newDeviceId)
+            .withDeviceIdHash(newDeviceIdHash)
+            .withReportAdUrl(newReportAdUrl)
+            .withGetAdUrl(newGetAdUrl)
+            .withCustomSdkHosts(newCustomSdkHosts)
+            .withEncodedClidsFromResponse(StartupUtils.encodeClids(newResponseClids))
+            .withLastClientClidsForStartupRequest(StartupUtils.encodeClids(newRequestClids))
+            .withObtainTime(newObtainTime)
+            .withStartupUpdateConfig(new StartupUpdateConfig(newUpdateInterval))
+            .build();
         when(mStartupUnit.getStartupState()).thenReturn(newState);
         ClientIdentifiersHolder clientIdentifiersHolder = mClientIdentifiersProvider.createClientIdentifiersHolder(clientClidsForRequest);
         ObjectPropertyAssertions<ClientIdentifiersHolder> assertions = ObjectPropertyAssertions(clientIdentifiersHolder)
-                .withPrivateFields(true)
-                .withIgnoredFields("mServerTimeOffset", "modulesConfig");
+            .withPrivateFields(true)
+            .withIgnoredFields("mServerTimeOffset", "modulesConfig");
         assertions.checkField("mUuidData", "getUuid", new IdentifiersResult(newUuid, IdentifierStatus.OK, null));
         assertions.checkField("mDeviceIdData", "getDeviceId", new IdentifiersResult(newDeviceId, IdentifierStatus.OK, null));
         assertions.checkField("mDeviceIdHashData", "getDeviceIdHash", new IdentifiersResult(newDeviceIdHash, IdentifierStatus.OK, null));
@@ -210,9 +212,9 @@ public class ClientIdentifiersProviderTest extends CommonTest {
         assertions.checkField("mHoaidData", "getHoaid", new IdentifiersResult(mHoaid, mHoaidStatus, mHoaidError));
         assertions.checkField("yandexAdvIdData", "getYandexAdvId", new IdentifiersResult(yandexAdvId, yandexStatus, yandexError));
         assertions.checkField("customSdkHostsData", "getCustomSdkHosts", new IdentifiersResult(
-                JsonHelper.customSdkHostsToString(newCustomSdkHosts),
-                IdentifierStatus.OK,
-                null
+            JsonHelper.customSdkHostsToString(newCustomSdkHosts),
+            IdentifierStatus.OK,
+            null
         ));
         assertions.checkField("nextStartupTime", "getNextStartupTime", newObtainTime + newUpdateInterval);
         assertions.checkFieldRecursively("features", new Consumer<ObjectPropertyAssertions<FeaturesInternal>>() {
@@ -236,9 +238,9 @@ public class ClientIdentifiersProviderTest extends CommonTest {
         when(mStartupUnit.getStartupState()).thenReturn(new StartupState.Builder(new CollectingFlags.CollectingFlagsBuilder().build()).build());
         ClientIdentifiersHolder clientIdentifiersHolder = mClientIdentifiersProvider.createClientIdentifiersHolder(clientClidsForRequest);
         assertThat(clientIdentifiersHolder.getCustomSdkHosts()).isEqualToComparingFieldByField(new IdentifiersResult(
-                null,
-                IdentifierStatus.UNKNOWN,
-                "no identifier in startup state"
+            null,
+            IdentifierStatus.UNKNOWN,
+            "no identifier in startup state"
         ));
     }
 
@@ -247,9 +249,9 @@ public class ClientIdentifiersProviderTest extends CommonTest {
         when(mStartupUnit.getStartupState()).thenReturn(new StartupState.Builder(new CollectingFlags.CollectingFlagsBuilder().build()).build());
         ClientIdentifiersHolder clientIdentifiersHolder = mClientIdentifiersProvider.createClientIdentifiersHolder(clientClidsForRequest);
         assertThat(clientIdentifiersHolder.getFeatures()).isEqualToComparingFieldByField(new FeaturesInternal(
-                null,
-                IdentifierStatus.UNKNOWN,
-                "no identifier in startup state"
+            null,
+            IdentifierStatus.UNKNOWN,
+            "no identifier in startup state"
         ));
     }
 }

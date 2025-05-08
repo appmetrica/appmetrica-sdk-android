@@ -1,5 +1,6 @@
 package io.appmetrica.analytics.coreutils.internal.time
 
+import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -8,7 +9,7 @@ import org.mockito.kotlin.mock
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class TimePassedCheckerTest {
+class TimePassedCheckerTest : CommonTest() {
 
     private val tag = "tag"
 
@@ -21,42 +22,42 @@ class TimePassedCheckerTest {
     private val timePassedChecker = TimePassedChecker(timeProvider)
 
     @Test
-    fun testCurrentLessThanLastSeconds() {
+    fun currentLessThanLastSeconds() {
         assertThat(timePassedChecker.didTimePassSeconds(currentTimeSeconds + 1, 0, tag)).isTrue
     }
 
     @Test
-    fun testIntervalPassedSeconds() {
+    fun intervalPassedSeconds() {
         assertThat(timePassedChecker.didTimePassSeconds(currentTimeSeconds - 11, 10, tag)).isTrue
     }
 
     @Test
-    fun testIntervalNotPassedSeconds() {
+    fun intervalNotPassedSeconds() {
         assertThat(timePassedChecker.didTimePassSeconds(currentTimeSeconds - 9, 10, tag)).isFalse
     }
 
     @Test
-    fun testIntervalPassedExactlySeconds() {
+    fun intervalPassedExactlySeconds() {
         assertThat(timePassedChecker.didTimePassSeconds(currentTimeSeconds - 10, 10, tag)).isTrue
     }
 
     @Test
-    fun testCurrentLessThanLastMillis() {
+    fun currentLessThanLastMillis() {
         assertThat(timePassedChecker.didTimePassMillis(currentTimeMillis + 1, 0, tag)).isTrue
     }
 
     @Test
-    fun testIntervalPassedMillis() {
+    fun intervalPassedMillis() {
         assertThat(timePassedChecker.didTimePassMillis(currentTimeMillis - 11, 10, tag)).isTrue
     }
 
     @Test
-    fun testIntervalNotPassedMillis() {
+    fun intervalNotPassedMillis() {
         assertThat(timePassedChecker.didTimePassMillis(currentTimeMillis - 9, 10, tag)).isFalse
     }
 
     @Test
-    fun testIntervalPassedExactlyMillis() {
+    fun intervalPassedExactlyMillis() {
         assertThat(timePassedChecker.didTimePassMillis(currentTimeMillis - 10, 10, tag)).isTrue
     }
 }

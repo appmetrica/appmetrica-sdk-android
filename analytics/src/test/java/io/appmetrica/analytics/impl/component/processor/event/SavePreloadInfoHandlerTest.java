@@ -36,12 +36,12 @@ public class SavePreloadInfoHandlerTest extends CommonTest {
     private CounterReport mCounterReport;
     @Mock
     private ReportRequestConfig mConfig;
-    private boolean mAutoTracking = new Random().nextBoolean();
+    private final boolean mAutoTracking = new Random().nextBoolean();
     private SavePreloadInfoHandler mHandler;
     private final ArgumentMatcher<PreloadInfoState> mDefaultPreloadInfoStateMatcher = new ArgumentMatcher<PreloadInfoState>() {
         @Override
         public boolean matches(PreloadInfoState argument) {
-            return argument.wasSet == false;
+            return !argument.wasSet;
         }
     };
 

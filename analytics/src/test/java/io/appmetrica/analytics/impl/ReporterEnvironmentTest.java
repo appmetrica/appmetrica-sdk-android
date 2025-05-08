@@ -26,10 +26,10 @@ public class ReporterEnvironmentTest extends CommonTest {
 
     public static ReporterEnvironment createStubbedEnvironment() {
         return new ReporterEnvironment(
-                new ProcessConfiguration(RuntimeEnvironment.getApplication(), mock(DataResultReceiver.class)),
-                new CounterConfiguration(),
-                new ErrorEnvironment(mock(SimpleMapLimitation.class)),
-                USER_PROFILE_ID
+            new ProcessConfiguration(RuntimeEnvironment.getApplication(), mock(DataResultReceiver.class)),
+            new CounterConfiguration(),
+            new ErrorEnvironment(mock(SimpleMapLimitation.class)),
+            USER_PROFILE_ID
         );
     }
 
@@ -46,10 +46,10 @@ public class ReporterEnvironmentTest extends CommonTest {
     public void setUp() {
         MockitoAnnotations.openMocks(this);
         mReporterEnvironment = new ReporterEnvironment(
-                processConfiguration,
-                counterConfiguration,
-                errorEnvironment,
-                USER_PROFILE_ID
+            processConfiguration,
+            counterConfiguration,
+            errorEnvironment,
+            USER_PROFILE_ID
         );
         mErrorEnvironment = mock(ErrorEnvironment.class);
         mReporterEnvironment.setErrorEnvironment(mErrorEnvironment);
@@ -58,15 +58,15 @@ public class ReporterEnvironmentTest extends CommonTest {
     @Test
     public void constuctor() throws Exception {
         ObjectPropertyAssertions(
-                new ReporterEnvironment(processConfiguration, counterConfiguration, errorEnvironment, USER_PROFILE_ID)
+            new ReporterEnvironment(processConfiguration, counterConfiguration, errorEnvironment, USER_PROFILE_ID)
         )
-                .withPrivateFields(true)
-                .withFinalFieldOnly(false)
-                .checkField("mErrorEnvironment", errorEnvironment)
-                .checkField("mPreloadInfoWrapper", null)
-                .checkField("initialUserProfileID", USER_PROFILE_ID)
-                .checkField("misSessionPaused", true)
-                .checkAll();
+            .withPrivateFields(true)
+            .withFinalFieldOnly(false)
+            .checkField("mErrorEnvironment", errorEnvironment)
+            .checkField("mPreloadInfoWrapper", null)
+            .checkField("initialUserProfileID", USER_PROFILE_ID)
+            .checkField("misSessionPaused", true)
+            .checkAll();
     }
 
     @Test

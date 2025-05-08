@@ -18,12 +18,12 @@ public class DistributionSourceFromStringTest extends CommonTest {
     @ParameterizedRobolectricTestRunner.Parameters(name = "{1} to {0}")
     public static Collection<Object[]> data() {
         Collection<Object[]> result = Arrays.asList(new Object[][]{
-                {DistributionSource.UNDEFINED, "UNDEFINED"},
-                {DistributionSource.APP, "APP"},
-                {DistributionSource.RETAIL, "RETAIL"},
-                {DistributionSource.SATELLITE, "SATELLITE"},
-                {DistributionSource.UNDEFINED, "bad string"},
-                {DistributionSource.UNDEFINED, null}
+            {DistributionSource.UNDEFINED, "UNDEFINED"},
+            {DistributionSource.APP, "APP"},
+            {DistributionSource.RETAIL, "RETAIL"},
+            {DistributionSource.SATELLITE, "SATELLITE"},
+            {DistributionSource.UNDEFINED, "bad string"},
+            {DistributionSource.UNDEFINED, null}
         });
         assert result.size() == DistributionSource.values().length + 2;
         return result;

@@ -60,37 +60,37 @@ public class PreloadInfoDataSerializerTest extends CommonTest {
 
         PreloadInfoProto.PreloadInfoData protoData = new PreloadInfoProto.PreloadInfoData();
         protoData.chosenPreloadInfo = chosenState;
-        protoData.candidates = new PreloadInfoProto.PreloadInfoData.PreloadInfoCandidate[] { firstCandidate, secondCandidate };
+        protoData.candidates = new PreloadInfoProto.PreloadInfoData.PreloadInfoCandidate[]{firstCandidate, secondCandidate};
 
         byte[] rawData = serializer.toByteArray(protoData);
         assertThat(rawData).isNotEmpty();
         PreloadInfoProto.PreloadInfoData restored = serializer.toState(rawData);
         final ObjectPropertyAssertions<PreloadInfoProto.PreloadInfoData> assertions =
-                new ProtoObjectPropertyAssertions<PreloadInfoProto.PreloadInfoData>(restored)
+            new ProtoObjectPropertyAssertions<PreloadInfoProto.PreloadInfoData>(restored)
                 .withIgnoredFields("candidates");
         assertions.checkFieldRecursively(
-                "chosenPreloadInfo",
-                new Consumer<ObjectPropertyAssertions<PreloadInfoProto.PreloadInfoData.PreloadInfo>>() {
-                    @Override
-                    public void accept(ObjectPropertyAssertions<PreloadInfoProto.PreloadInfoData.PreloadInfo> innerAssertions) {
-                        try {
-                            innerAssertions.withIgnoredFields("additionalParameters");
-                            innerAssertions.checkField("trackingId", chosenTrackingId);
-                            innerAssertions.checkField("wasSet", wasSet);
-                            innerAssertions.checkField("preloadInfoAutoTracking", autoTracking);
-                            innerAssertions.checkField("source", PreloadInfoProto.PreloadInfoData.RETAIL);
-                            JSONAssert.assertEquals(chosenParams.toString(), assertions.getActual().chosenPreloadInfo.additionalParameters, true);
-                        } catch (Throwable ex) {
-                            throw new RuntimeException(ex);
-                        }
+            "chosenPreloadInfo",
+            new Consumer<ObjectPropertyAssertions<PreloadInfoProto.PreloadInfoData.PreloadInfo>>() {
+                @Override
+                public void accept(ObjectPropertyAssertions<PreloadInfoProto.PreloadInfoData.PreloadInfo> innerAssertions) {
+                    try {
+                        innerAssertions.withIgnoredFields("additionalParameters");
+                        innerAssertions.checkField("trackingId", chosenTrackingId);
+                        innerAssertions.checkField("wasSet", wasSet);
+                        innerAssertions.checkField("preloadInfoAutoTracking", autoTracking);
+                        innerAssertions.checkField("source", PreloadInfoProto.PreloadInfoData.RETAIL);
+                        JSONAssert.assertEquals(chosenParams.toString(), assertions.getActual().chosenPreloadInfo.additionalParameters, true);
+                    } catch (Throwable ex) {
+                        throw new RuntimeException(ex);
                     }
-                });
+                }
+            });
         assertions.checkAll();
 
         assertThat(restored.candidates).hasSize(2);
 
         ObjectPropertyAssertions<PreloadInfoProto.PreloadInfoData.PreloadInfoCandidate> firstCandidateAssertions =
-                new ProtoObjectPropertyAssertions<PreloadInfoProto.PreloadInfoData.PreloadInfoCandidate>(restored.candidates[0])
+            new ProtoObjectPropertyAssertions<PreloadInfoProto.PreloadInfoData.PreloadInfoCandidate>(restored.candidates[0])
                 .withIgnoredFields("additionalParameters");
         firstCandidateAssertions.checkField("trackingId", firstCandidateTrackingId);
         firstCandidateAssertions.checkField("source", firstCandidateSource);
@@ -98,8 +98,8 @@ public class PreloadInfoDataSerializerTest extends CommonTest {
         JSONAssert.assertEquals(firstCandidateParams.toString(), firstCandidateAssertions.getActual().additionalParameters, true);
 
         ObjectPropertyAssertions<PreloadInfoProto.PreloadInfoData.PreloadInfoCandidate> secondCandidateAssertions =
-                new ProtoObjectPropertyAssertions<PreloadInfoProto.PreloadInfoData.PreloadInfoCandidate>(restored.candidates[1])
-                        .withIgnoredFields("additionalParameters");
+            new ProtoObjectPropertyAssertions<PreloadInfoProto.PreloadInfoData.PreloadInfoCandidate>(restored.candidates[1])
+                .withIgnoredFields("additionalParameters");
         secondCandidateAssertions.checkField("trackingId", secondCandidateTrackingId);
         secondCandidateAssertions.checkField("source", secondCandidateSource);
         secondCandidateAssertions.checkAll();
@@ -114,7 +114,7 @@ public class PreloadInfoDataSerializerTest extends CommonTest {
     @Test
     public void testDefaultValue() {
         assertThat(serializer.defaultValue()).usingRecursiveComparison().isEqualTo(
-                new PreloadInfoProto.PreloadInfoData()
+            new PreloadInfoProto.PreloadInfoData()
         );
     }
 }

@@ -25,7 +25,7 @@ public class ExternallyEncryptedEventCrypterTests extends CommonTest {
     @Test
     public void testEncryptionMode() {
         assertThat(mEventEncrypter.getEncryptionMode())
-                .isEqualTo(EventEncryptionMode.EXTERNALLY_ENCRYPTED_EVENT_CRYPTER);
+            .isEqualTo(EventEncryptionMode.EXTERNALLY_ENCRYPTED_EVENT_CRYPTER);
     }
 
     @Test(expected = UnsupportedOperationException.class)

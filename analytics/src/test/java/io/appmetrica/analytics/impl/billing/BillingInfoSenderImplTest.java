@@ -54,8 +54,8 @@ public class BillingInfoSenderImplTest extends CommonTest {
 
     private List<ProductInfo> getProductInfos() {
         return Arrays.asList(
-                new ProductInfo(ProductType.INAPP, "sku1", 2, 1, "by", 3, new Period(1, Period.TimeUnit.DAY), 1, new Period(1, Period.TimeUnit.MONTH), "signature1", "token1", 10, true, "{\"productId\":\"sku1\", \"autoRenewing\":\"true\"}"),
-                new ProductInfo(ProductType.SUBS, "sku2", 2, 2, "by", 4, new Period(1, Period.TimeUnit.DAY), 1, new Period(1, Period.TimeUnit.MONTH), "signature2", "token2", 11, false, "")
+            new ProductInfo(ProductType.INAPP, "sku1", 2, 1, "by", 3, new Period(1, Period.TimeUnit.DAY), 1, new Period(1, Period.TimeUnit.MONTH), "signature1", "token1", 10, true, "{\"productId\":\"sku1\", \"autoRenewing\":\"true\"}"),
+            new ProductInfo(ProductType.SUBS, "sku2", 2, 2, "by", 4, new Period(1, Period.TimeUnit.DAY), 1, new Period(1, Period.TimeUnit.MONTH), "signature2", "token2", 11, false, "")
         );
     }
 }

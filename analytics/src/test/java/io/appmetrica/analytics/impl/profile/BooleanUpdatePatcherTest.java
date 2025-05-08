@@ -15,7 +15,7 @@ public class BooleanUpdatePatcherTest extends CommonTest {
 
     private static final String KEY = "boolKey";
 
-    private Userprofile.Profile.Attribute mAttribute = CommonUserProfileUpdatePatcherTest.createEmptyAttribute();
+    private final Userprofile.Profile.Attribute mAttribute = CommonUserProfileUpdatePatcherTest.createEmptyAttribute();
 
     @Test
     public void testValue() {

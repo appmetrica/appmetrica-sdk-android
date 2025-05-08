@@ -72,7 +72,8 @@ internal class VitalComponentDataProviderTest : CommonTest() {
         softly.assertThat(vitalComponentDataProvider.attributionId).isEqualTo(attributionId)
         softly.assertThat(vitalComponentDataProvider.globalNumber).isEqualTo(globalNumber)
         softly.assertThat(vitalComponentDataProvider.lastMigrationApiLevel).isEqualTo(lastMigrationApiLevel)
-        softly.assertThat(vitalComponentDataProvider.externalAttributionWindowStart).isEqualTo(externalAttributionWindowStart)
+        softly.assertThat(vitalComponentDataProvider.externalAttributionWindowStart)
+            .isEqualTo(externalAttributionWindowStart)
         JSONAssert.assertEquals(numbersOfType, vitalComponentDataProvider.numbersOfType, true)
         softly.assertAll()
     }
@@ -235,7 +236,7 @@ internal class VitalComponentDataProviderTest : CommonTest() {
 
     private fun vitalDataProvider() = vitalDataProviderMockedConstructionRule.constructionMock.constructed()[0]
 
-    private fun interceptSavedJson() : JSONObject {
+    private fun interceptSavedJson(): JSONObject {
         verify(vitalDataProvider()).save(jsonCaptor.capture())
         return jsonCaptor.firstValue
     }
@@ -256,5 +257,4 @@ internal class VitalComponentDataProviderTest : CommonTest() {
         softly.assertThat(vitalComponentDataProvider.externalAttributionWindowStart).isEqualTo(-1)
         softly.assertAll()
     }
-
 }

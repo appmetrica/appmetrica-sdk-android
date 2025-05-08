@@ -23,7 +23,7 @@ public class LockedOnFileDBConnectorTest extends CommonTest {
     @Mock
     private TablesManager tablesManager;
 
-    private String mDbName = "db_name";
+    private final String mDbName = "db_name";
     private Context mContext;
     private LockedOnFileDBConnector mConnector;
 

@@ -26,9 +26,9 @@ public class JsonUtilsCollectionToJsonTest extends CommonTest {
     @Test
     public void setToJsonEmpty() throws JSONException {
         JSONAssert.assertEquals(
-                new JSONArray(),
-                JsonHelper.setToJsonNullEmptyWise(new HashSet<String>()),
-                true
+            new JSONArray(),
+            JsonHelper.setToJsonNullEmptyWise(new HashSet<String>()),
+            true
         );
     }
 
@@ -38,9 +38,9 @@ public class JsonUtilsCollectionToJsonTest extends CommonTest {
         set.add("element 1");
         set.add("element 2");
         JSONAssert.assertEquals(
-                new JSONArray().put("element 1").put("element 2"),
-                JsonHelper.setToJsonNullEmptyWise(set),
-                JSONCompareMode.NON_EXTENSIBLE
+            new JSONArray().put("element 1").put("element 2"),
+            JsonHelper.setToJsonNullEmptyWise(set),
+            JSONCompareMode.NON_EXTENSIBLE
         );
     }
 
@@ -72,9 +72,9 @@ public class JsonUtilsCollectionToJsonTest extends CommonTest {
     @Test
     public void listToJsonNullEmptyWiseEmpty() throws JSONException {
         JSONAssert.assertEquals(
-                new JSONArray(),
-                JsonHelper.listToJsonNullEmptyWise(new ArrayList<String>()),
-                true
+            new JSONArray(),
+            JsonHelper.listToJsonNullEmptyWise(new ArrayList<String>()),
+            true
         );
     }
 

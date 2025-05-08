@@ -17,7 +17,6 @@ import io.appmetrica.analytics.screenshot.impl.config.client.model.ClientSideScr
 import io.appmetrica.analytics.screenshot.impl.config.client.model.ClientSideServiceCaptorConfig
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.staticRule
-import java.util.concurrent.Executor
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Rule
 import org.junit.Test
@@ -33,6 +32,7 @@ import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.whenever
+import java.util.concurrent.Executor
 
 class ServiceScreenshotCaptorTest : CommonTest() {
 

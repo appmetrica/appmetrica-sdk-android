@@ -26,10 +26,10 @@ public class ExecutionPolicyBasedOnConnectionTest extends CommonTest {
     @ParameterizedRobolectricTestRunner.Parameters(name = "Do not should start task in network {0}? - {1}")
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
-                {PhoneUtils.NetworkType.OFFLINE, false},
-                {PhoneUtils.NetworkType.UNDEFINED, true},
-                {PhoneUtils.NetworkType.CELL, true},
-                {PhoneUtils.NetworkType.WIFI, true},
+            {PhoneUtils.NetworkType.OFFLINE, false},
+            {PhoneUtils.NetworkType.UNDEFINED, true},
+            {PhoneUtils.NetworkType.CELL, true},
+            {PhoneUtils.NetworkType.WIFI, true},
         });
     }
 

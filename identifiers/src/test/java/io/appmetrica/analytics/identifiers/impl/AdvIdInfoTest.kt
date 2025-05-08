@@ -1,12 +1,13 @@
 package io.appmetrica.analytics.identifiers.impl
 
+import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.SoftAssertions
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class AdvIdInfoTest {
+class AdvIdInfoTest : CommonTest() {
 
     @Test
     fun fullInfo() {

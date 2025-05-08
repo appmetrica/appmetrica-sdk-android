@@ -1,5 +1,6 @@
 package io.appmetrica.analytics.coreutils.internal.io
 
+import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -9,7 +10,7 @@ import org.junit.runners.Parameterized
 class GzipUtilsTest(
     private val input: ByteArray?,
     private val expected: ByteArray?
-) {
+) : CommonTest() {
 
     companion object {
 

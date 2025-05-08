@@ -44,12 +44,12 @@ public class PromocodesConverterTest extends CommonTest {
         promocodesConverter = new PromocodesConverter();
 
         ObjectPropertyAssertions<PromocodesConverter> assertions =
-                ObjectPropertyAssertions(promocodesConverter)
-                        .withPrivateFields(true);
+            ObjectPropertyAssertions(promocodesConverter)
+                .withPrivateFields(true);
 
         assertions.checkFieldComparingFieldByFieldRecursively(
-                "promocodesTrimmer",
-                new HierarchicalStringListTrimmer(20, 100)
+            "promocodesTrimmer",
+            new HierarchicalStringListTrimmer(20, 100)
         );
 
         assertions.checkAll();
@@ -65,36 +65,36 @@ public class PromocodesConverterTest extends CommonTest {
         int bytesTruncated = 240;
 
         when(promocodesTrimmer.trim(inputPromocodes))
-                .thenReturn(new TrimmingResult<List<String>, CollectionTrimInfo>(
-                        promocodes,
-                        new CollectionTrimInfo(itemsDropped, bytesTruncated)
-                ));
+            .thenReturn(new TrimmingResult<List<String>, CollectionTrimInfo>(
+                promocodes,
+                new CollectionTrimInfo(itemsDropped, bytesTruncated)
+            ));
 
         Result<Ecommerce.ECommerceEvent.PromoCode[], BytesTruncatedProvider> promocodesResult =
-                promocodesConverter.fromModel(inputPromocodes);
+            promocodesConverter.fromModel(inputPromocodes);
 
         assertThatPromocodesResultViaObjectPropertyAssertion(
-                promocodesResult,
-                new Ecommerce.ECommerceEvent.PromoCode[]{
-                        promoCodeWithValue(first), promoCodeWithValue(second), promoCodeWithValue(third)
-                },
-                bytesTruncated,
-                itemsDropped
+            promocodesResult,
+            new Ecommerce.ECommerceEvent.PromoCode[]{
+                promoCodeWithValue(first), promoCodeWithValue(second), promoCodeWithValue(third)
+            },
+            bytesTruncated,
+            itemsDropped
         );
 
         ObjectPropertyAssertions(
-                promocodesResult)
-                .checkFieldComparingFieldByFieldRecursively(
-                        "result",
-                        new Ecommerce.ECommerceEvent.PromoCode[]{
-                                promoCodeWithValue(first), promoCodeWithValue(second), promoCodeWithValue(third)
-                        }
-                )
-                .checkFieldRecursively(
-                        "metaInfo",
-                        new CollectionTrimInfoConsumer(bytesTruncated, itemsDropped)
-                )
-                .checkAll();
+            promocodesResult)
+            .checkFieldComparingFieldByFieldRecursively(
+                "result",
+                new Ecommerce.ECommerceEvent.PromoCode[]{
+                    promoCodeWithValue(first), promoCodeWithValue(second), promoCodeWithValue(third)
+                }
+            )
+            .checkFieldRecursively(
+                "metaInfo",
+                new CollectionTrimInfoConsumer(bytesTruncated, itemsDropped)
+            )
+            .checkAll();
     }
 
     private Ecommerce.ECommerceEvent.PromoCode promoCodeWithValue(String value) {
@@ -106,58 +106,58 @@ public class PromocodesConverterTest extends CommonTest {
     @Test
     public void toProtoForNullPromocodes() throws Exception {
         when(promocodesTrimmer.trim(inputPromocodes))
-                .thenReturn(new TrimmingResult<List<String>, CollectionTrimInfo>(
-                        null,
-                        new CollectionTrimInfo(0, 0)
-                ));
+            .thenReturn(new TrimmingResult<List<String>, CollectionTrimInfo>(
+                null,
+                new CollectionTrimInfo(0, 0)
+            ));
 
         assertThatPromocodesResultViaObjectPropertyAssertion(
-                promocodesConverter.fromModel(inputPromocodes),
-                new Ecommerce.ECommerceEvent.PromoCode[0],
-                0,
-                0
+            promocodesConverter.fromModel(inputPromocodes),
+            new Ecommerce.ECommerceEvent.PromoCode[0],
+            0,
+            0
         );
     }
 
     @Test
     public void toProtoForEmptyPromocodes() throws Exception {
         when(promocodesTrimmer.trim(inputPromocodes))
-                .thenReturn(new TrimmingResult<List<String>, CollectionTrimInfo>(
-                        new ArrayList<String>(),
-                        new CollectionTrimInfo(0, 0)
-                ));
+            .thenReturn(new TrimmingResult<List<String>, CollectionTrimInfo>(
+                new ArrayList<String>(),
+                new CollectionTrimInfo(0, 0)
+            ));
 
         assertThatPromocodesResultViaObjectPropertyAssertion(
-                promocodesConverter.fromModel(inputPromocodes),
-                new Ecommerce.ECommerceEvent.PromoCode[0],
-                0,
-                0
+            promocodesConverter.fromModel(inputPromocodes),
+            new Ecommerce.ECommerceEvent.PromoCode[0],
+            0,
+            0
         );
     }
 
     private void assertThatPromocodesResultViaObjectPropertyAssertion(
-            Result<Ecommerce.ECommerceEvent.PromoCode[], BytesTruncatedProvider> result,
-            Ecommerce.ECommerceEvent.PromoCode[] expectedPromocodes,
-            int expectedBytesTruncated,
-            int expectedItemsDropped
+        Result<Ecommerce.ECommerceEvent.PromoCode[], BytesTruncatedProvider> result,
+        Ecommerce.ECommerceEvent.PromoCode[] expectedPromocodes,
+        int expectedBytesTruncated,
+        int expectedItemsDropped
     ) throws Exception {
         ObjectPropertyAssertions(
-                result)
-                .checkField("result", expectedPromocodes, true)
-                .checkFieldRecursively(
-                        "metaInfo",
-                        new CollectionTrimInfoConsumer(expectedBytesTruncated, expectedItemsDropped)
-                )
-                .checkAll();
+            result)
+            .checkField("result", expectedPromocodes, true)
+            .checkFieldRecursively(
+                "metaInfo",
+                new CollectionTrimInfoConsumer(expectedBytesTruncated, expectedItemsDropped)
+            )
+            .checkAll();
     }
 
     @Test(expected = UnsupportedOperationException.class)
     public void toModel() {
         promocodesConverter.toModel(
-                new Result<Ecommerce.ECommerceEvent.PromoCode[], BytesTruncatedProvider>(
-                        new Ecommerce.ECommerceEvent.PromoCode[0],
-                        new BytesTruncatedInfo(0)
-                )
+            new Result<Ecommerce.ECommerceEvent.PromoCode[], BytesTruncatedProvider>(
+                new Ecommerce.ECommerceEvent.PromoCode[0],
+                new BytesTruncatedInfo(0)
+            )
         );
     }
 }

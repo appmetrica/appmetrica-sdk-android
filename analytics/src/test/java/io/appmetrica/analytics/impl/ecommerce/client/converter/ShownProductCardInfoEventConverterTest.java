@@ -50,16 +50,16 @@ public class ShownProductCardInfoEventConverterTest extends CommonTest {
         MockitoAnnotations.openMocks(this);
 
         when(screenConverter.fromModel(screen))
-                .thenReturn(new Result<Ecommerce.ECommerceEvent.Screen, BytesTruncatedProvider>(
-                        screenProto,
-                        new BytesTruncatedInfo(screenBytesTruncated)
-                ));
+            .thenReturn(new Result<Ecommerce.ECommerceEvent.Screen, BytesTruncatedProvider>(
+                screenProto,
+                new BytesTruncatedInfo(screenBytesTruncated)
+            ));
 
         when(productConverter.fromModel(product))
-                .thenReturn(new Result<Ecommerce.ECommerceEvent.Product, BytesTruncatedProvider>(
-                        productProto,
-                        new BytesTruncatedInfo(productBytesTruncated)
-                ));
+            .thenReturn(new Result<Ecommerce.ECommerceEvent.Product, BytesTruncatedProvider>(
+                productProto,
+                new BytesTruncatedInfo(productBytesTruncated)
+            ));
 
         shownProductCardInfoEventConverter = new ShownProductCardInfoEventConverter(screenConverter, productConverter);
     }
@@ -69,8 +69,8 @@ public class ShownProductCardInfoEventConverterTest extends CommonTest {
         shownProductCardInfoEventConverter = new ShownProductCardInfoEventConverter();
 
         ObjectPropertyAssertions<ShownProductCardInfoEventConverter> assertions =
-                ObjectPropertyAssertions(shownProductCardInfoEventConverter)
-                        .withPrivateFields(true);
+            ObjectPropertyAssertions(shownProductCardInfoEventConverter)
+                .withPrivateFields(true);
 
         assertions.checkFieldNonNull("screenConverter");
         assertions.checkFieldNonNull("productConverter");
@@ -83,33 +83,33 @@ public class ShownProductCardInfoEventConverterTest extends CommonTest {
         ShownProductCardInfoEvent event = new ShownProductCardInfoEvent(product, screen, shownProductCardInfoEventConverter);
 
         List<Result<Ecommerce.ECommerceEvent, BytesTruncatedProvider>> protos =
-                shownProductCardInfoEventConverter.fromModel(event);
+            shownProductCardInfoEventConverter.fromModel(event);
 
         Ecommerce.ECommerceEvent.ShownProductCardInfo expectedShowProductCardInfo =
-                new Ecommerce.ECommerceEvent.ShownProductCardInfo();
+            new Ecommerce.ECommerceEvent.ShownProductCardInfo();
         expectedShowProductCardInfo.product = productProto;
         expectedShowProductCardInfo.screen = screenProto;
 
         assertThat(protos.size()).isEqualTo(1);
 
         ObjectPropertyAssertions(protos.get(0))
-                .checkFieldRecursively(
-                        "metaInfo",
-                        new TruncationInfoConsumer(totalBytesTruncated)
-                )
-                .checkFieldRecursively(
-                        "result",
-                        new ECommerceEventAssertionsConsumer(
-                                Ecommerce.ECommerceEvent.ECOMMERCE_EVENT_TYPE_SHOW_PRODUCT_CARD
-                        ).setExpectedShowProductCardInfo(expectedShowProductCardInfo)
-                )
-                .checkAll();
+            .checkFieldRecursively(
+                "metaInfo",
+                new TruncationInfoConsumer(totalBytesTruncated)
+            )
+            .checkFieldRecursively(
+                "result",
+                new ECommerceEventAssertionsConsumer(
+                    Ecommerce.ECommerceEvent.ECOMMERCE_EVENT_TYPE_SHOW_PRODUCT_CARD
+                ).setExpectedShowProductCardInfo(expectedShowProductCardInfo)
+            )
+            .checkAll();
     }
 
     @Test(expected = UnsupportedOperationException.class)
     public void toModel() {
         shownProductCardInfoEventConverter.toModel(
-                Collections.<Result<Ecommerce.ECommerceEvent, BytesTruncatedProvider>>emptyList()
+            Collections.emptyList()
         );
     }
 }

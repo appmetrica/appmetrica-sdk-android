@@ -29,7 +29,7 @@ public class FileProviderTest extends CommonTest {
     @Test
     public void testGetFileByNonNullPathWithName() {
         assertThat(mFileProvider.getFileByNonNullPath(mCurrentDirFile, "name").getAbsolutePath())
-                .isEqualTo(mCurrentDir + "/name");
+            .isEqualTo(mCurrentDir + "/name");
     }
 
     @Test

@@ -1,7 +1,5 @@
 package io.appmetrica.analytics.impl.crash.jvm.client;
 
-import io.appmetrica.analytics.impl.crash.jvm.client.AllThreads;
-import io.appmetrica.analytics.impl.crash.jvm.client.Anr;
 import io.appmetrica.analytics.testutils.CommonTest;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,8 +15,8 @@ public class AnrTest extends CommonTest {
 
     @Mock
     private AllThreads mAllThreads;
-    private String mBuildId = "buildId";
-    private Boolean mIsOffline = true;
+    private final String mBuildId = "buildId";
+    private final Boolean mIsOffline = true;
     private Anr mAnr;
 
     @Before

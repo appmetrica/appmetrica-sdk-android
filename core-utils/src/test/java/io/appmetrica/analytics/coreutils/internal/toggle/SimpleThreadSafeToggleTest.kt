@@ -1,13 +1,14 @@
 package io.appmetrica.analytics.coreutils.internal.toggle
 
 import io.appmetrica.analytics.coreapi.internal.control.ToggleObserver
+import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoMoreInteractions
 
-class SimpleThreadSafeToggleTest {
+class SimpleThreadSafeToggleTest : CommonTest() {
 
     private val firstObserver = mock<ToggleObserver>()
     private val secondObserver = mock<ToggleObserver>()

@@ -2,11 +2,12 @@ package io.appmetrica.analytics.network.impl
 
 import io.appmetrica.analytics.network.internal.Request
 import io.appmetrica.analytics.network.internal.Response
+import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import java.lang.reflect.Modifier
 
-class ToStringSpecialCasesTest {
+class ToStringSpecialCasesTest : CommonTest() {
 
     @Test
     fun requestToString() {

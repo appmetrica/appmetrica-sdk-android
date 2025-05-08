@@ -18,10 +18,10 @@ public class SelfReportingArgumentsFactoryTest extends CommonTest {
     @ParameterizedRobolectricTestRunner.Parameters(name = "{0}")
     public static Collection<Object[]> data() {
         return Arrays.asList(
-                new Object[]{"controller restrict sending and config allows", true, true, false},
-                new Object[]{"controller restrict sending", true, false, false},
-                new Object[]{"controller and config allows sending", false, true, true},
-                new Object[]{"controller allows sending, but config not", false, false, false}
+            new Object[]{"controller restrict sending and config allows", true, true, false},
+            new Object[]{"controller restrict sending", true, false, false},
+            new Object[]{"controller and config allows sending", false, true, true},
+            new Object[]{"controller allows sending, but config not", false, false, false}
         );
     }
 
@@ -43,9 +43,9 @@ public class SelfReportingArgumentsFactoryTest extends CommonTest {
     @Test
     public void test() {
         assertThat(
-                mFactory.shouldSend(
-                        mConfiguration
-                )
+            mFactory.shouldSend(
+                mConfiguration
+            )
         ).isEqualTo(mResult);
     }
 

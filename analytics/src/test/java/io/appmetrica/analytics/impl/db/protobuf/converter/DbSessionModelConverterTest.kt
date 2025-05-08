@@ -79,7 +79,10 @@ class DbSessionModelConverterTest : CommonTest() {
         val cv = ContentValues().apply {
             put(Constants.SessionTable.SessionTableEntry.FIELD_SESSION_ID, id)
             put(Constants.SessionTable.SessionTableEntry.FIELD_SESSION_TYPE, type.code)
-            put(Constants.SessionTable.SessionTableEntry.FIELD_SESSION_REPORT_REQUEST_PARAMETERS, reportRequestParameters)
+            put(
+                Constants.SessionTable.SessionTableEntry.FIELD_SESSION_REPORT_REQUEST_PARAMETERS,
+                reportRequestParameters
+            )
             put(Constants.SessionTable.SessionTableEntry.FIELD_SESSION_DESCRIPTION, descriptionBytes)
         }
         val model = converter.toModel(cv)

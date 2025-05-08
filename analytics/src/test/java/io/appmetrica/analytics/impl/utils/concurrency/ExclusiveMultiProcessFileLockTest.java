@@ -52,23 +52,23 @@ public class ExclusiveMultiProcessFileLockTest extends CommonTest {
     @Test
     public void constructor() throws Exception {
         ObjectPropertyAssertions(
-                new ExclusiveMultiProcessFileLock(context, simpleFileName)
+            new ExclusiveMultiProcessFileLock(context, simpleFileName)
         )
-                .withPrivateFields(true)
-                .checkFieldNonNull("reentrantLock")
-                .checkFieldRecursively("fileLocker", new Consumer<ObjectPropertyAssertions<FileLocker>>() {
-                    @Override
-                    public void accept(ObjectPropertyAssertions<FileLocker> assertions) {
-                        try {
-                            assertions.withPrivateFields(true)
-                                    .checkField("lockFile", file)
-                                    .checkAll();
-                        } catch (Exception e) {
-                            throw new IllegalArgumentException(e);
-                        }
+            .withPrivateFields(true)
+            .checkFieldNonNull("reentrantLock")
+            .checkFieldRecursively("fileLocker", new Consumer<ObjectPropertyAssertions<FileLocker>>() {
+                @Override
+                public void accept(ObjectPropertyAssertions<FileLocker> assertions) {
+                    try {
+                        assertions.withPrivateFields(true)
+                            .checkField("lockFile", file)
+                            .checkAll();
+                    } catch (Exception e) {
+                        throw new IllegalArgumentException(e);
                     }
-                })
-                .checkAll();
+                }
+            })
+            .checkAll();
     }
 
     @Test

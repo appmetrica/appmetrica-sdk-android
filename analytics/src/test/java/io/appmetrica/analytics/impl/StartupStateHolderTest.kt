@@ -2,6 +2,7 @@ package io.appmetrica.analytics.impl
 
 import android.content.Context
 import io.appmetrica.analytics.impl.startup.StartupState
+import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.MockedConstructionRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
@@ -13,7 +14,7 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
 
-internal class StartupStateHolderTest {
+internal class StartupStateHolderTest : CommonTest() {
 
     private val context = mock<Context>()
     private val startupStateFromStorage = mock<StartupState>()

@@ -13,7 +13,7 @@ class ClidsInfoStateSerializerTest : CommonTest() {
     private val serializer = ClidsInfoStateSerializer()
 
     @Test
-    fun testToByteArrayDefaultObject() {
+    fun toByteArrayDefaultObject() {
         val protoState = ClidsInfoProto.ClidsInfo()
         val rawData: ByteArray = serializer.toByteArray(protoState)
         val restored = serializer.toState(rawData)
@@ -25,7 +25,7 @@ class ClidsInfoStateSerializerTest : CommonTest() {
     }
 
     @Test
-    fun testToByteArrayFilledObject() {
+    fun toByteArrayFilledObject() {
         val protoState = ClidsInfoProto.ClidsInfo()
         protoState.chosenClids = ClidsInfoProto.ClidsInfo.ClidsCandidate().also {
             it.clids = ClidsInfoProto.ClidsInfo.NullableMap().also {
@@ -132,7 +132,7 @@ class ClidsInfoStateSerializerTest : CommonTest() {
     }
 
     @Test(expected = InvalidProtocolBufferNanoException::class)
-    fun testDeserializationInvalidByteArray() {
+    fun deserializationInvalidByteArray() {
         serializer.toState(byteArrayOf(1, 2, 3))
     }
 }

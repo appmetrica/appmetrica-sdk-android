@@ -7,39 +7,32 @@ import com.google.android.gms.appset.AppSetIdInfo
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import io.appmetrica.analytics.coreapi.internal.identifiers.AppSetIdScope
+import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.MockedStaticRule
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.ArgumentCaptor
-import org.mockito.Captor
-import org.mockito.Mock
+import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
-import org.mockito.Mockito.`when`
-import org.mockito.MockitoAnnotations
+import org.mockito.kotlin.argumentCaptor
+import org.mockito.kotlin.whenever
 import org.robolectric.ParameterizedRobolectricTestRunner
 
 @RunWith(ParameterizedRobolectricTestRunner::class)
 class AppSetIdRetrieverScopeConvertionTest(
     private val input: Int,
     private val expected: AppSetIdScope
-) {
+) : CommonTest() {
 
-    @Mock
-    private lateinit var context: Context
-    @Mock
-    private lateinit var appSetIdListener: AppSetIdListener
-    @Mock
-    private lateinit var appSetIdClient: AppSetIdClient
-    @Mock
-    private lateinit var task: Task<AppSetIdInfo>
-    @Captor
-    private lateinit var listenerCaptor: ArgumentCaptor<OnCompleteListener<AppSetIdInfo>>
+    private val context: Context = mock()
+    private val appSetIdListener: AppSetIdListener = mock()
+    private val appSetIdClient: AppSetIdClient = mock()
+    private val task: Task<AppSetIdInfo> = mock()
+
+    private val listenerCaptor = argumentCaptor<OnCompleteListener<AppSetIdInfo>>()
     private val appSetIdRetriever = AppSetIdRetriever()
 
-    @Rule
-    @JvmField
+    @get:Rule
     val sAppSet = MockedStaticRule(AppSet::class.java)
 
     companion object {
@@ -54,20 +47,15 @@ class AppSetIdRetrieverScopeConvertionTest(
         }
     }
 
-    @Before
-    fun setUp() {
-        MockitoAnnotations.openMocks(this)
-    }
-
     @Test
     fun scopeConvertion() {
-        `when`(AppSet.getClient(context)).thenReturn(appSetIdClient)
-        `when`(appSetIdClient.appSetIdInfo).thenReturn(task)
-        `when`(task.isSuccessful).thenReturn(true)
-        `when`(task.result).thenReturn(AppSetIdInfo("id", input))
+        whenever(AppSet.getClient(context)).thenReturn(appSetIdClient)
+        whenever(appSetIdClient.appSetIdInfo).thenReturn(task)
+        whenever(task.isSuccessful).thenReturn(true)
+        whenever(task.result).thenReturn(AppSetIdInfo("id", input))
         appSetIdRetriever.retrieveAppSetId(context, appSetIdListener)
         verify(task).addOnCompleteListener(listenerCaptor.capture())
-        listenerCaptor.value.onComplete(task)
+        listenerCaptor.firstValue.onComplete(task)
         verify(appSetIdListener).onAppSetIdRetrieved("id", expected)
     }
 }

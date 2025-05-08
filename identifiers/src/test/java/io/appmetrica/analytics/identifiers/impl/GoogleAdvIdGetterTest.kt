@@ -4,6 +4,7 @@ import android.content.Context
 import com.google.android.gms.ads.identifier.AdvertisingIdClient
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException
 import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus
+import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.MockedStaticRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Rule
@@ -16,7 +17,7 @@ import org.mockito.kotlin.stubbing
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class GoogleAdvIdGetterTest {
+class GoogleAdvIdGetterTest : CommonTest() {
 
     @get:Rule
     internal val staticMock = MockedStaticRule(AdvertisingIdClient::class.java)

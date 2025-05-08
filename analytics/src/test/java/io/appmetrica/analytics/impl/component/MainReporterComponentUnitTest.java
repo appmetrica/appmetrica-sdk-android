@@ -3,7 +3,6 @@ package io.appmetrica.analytics.impl.component;
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.applicationstate.ApplicationState;
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.applicationstate.ApplicationStateObserver;
 import io.appmetrica.analytics.impl.ApplicationStateProviderImpl;
-import io.appmetrica.analytics.internal.CounterConfigurationReporterType;
 import io.appmetrica.analytics.impl.DataSendingRestrictionControllerImpl;
 import io.appmetrica.analytics.impl.billing.BillingMonitorWrapper;
 import io.appmetrica.analytics.impl.component.processor.factory.HandlersFactory;
@@ -12,6 +11,7 @@ import io.appmetrica.analytics.impl.referrer.service.ReferrerHolder;
 import io.appmetrica.analytics.impl.referrer.service.ReferrerListenerNotifier;
 import io.appmetrica.analytics.impl.startup.StartupState;
 import io.appmetrica.analytics.internal.CounterConfiguration;
+import io.appmetrica.analytics.internal.CounterConfigurationReporterType;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import java.util.Random;
 import org.junit.Before;
@@ -52,8 +52,8 @@ public class MainReporterComponentUnitTest extends ComponentUnitBaseTest {
     @Mock
     private StartupState startupState;
     private MainReporterComponentUnit mMainReporterComponentUnit;
-    private CommonArguments.ReporterArguments sdkConfig = new CommonArguments.ReporterArguments(
-            null, null, null, null, null, null, null, null, null, null, null, null, false, null
+    private final CommonArguments.ReporterArguments sdkConfig = new CommonArguments.ReporterArguments(
+        null, null, null, null, null, null, null, null, null, null, null, null, false, null
     );
 
     @Rule
@@ -70,7 +70,7 @@ public class MainReporterComponentUnitTest extends ComponentUnitBaseTest {
         when(mFieldsFactory.createReferrerListener(any(MainReporterComponentUnit.class))).thenReturn(mListener);
         when(mFieldsFactory.createBillingMonitorWrapper(any(MainReporterComponentUnit.class))).thenReturn(billingMonitorWrapper);
         when(applicationStateProvider.registerStickyObserver(any(ApplicationStateObserver.class)))
-                .thenReturn(ApplicationState.UNKNOWN);
+            .thenReturn(ApplicationState.UNKNOWN);
     }
 
     @Override

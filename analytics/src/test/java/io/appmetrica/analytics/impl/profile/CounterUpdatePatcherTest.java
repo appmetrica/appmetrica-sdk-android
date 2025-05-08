@@ -12,7 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class CounterUpdatePatcherTest extends CommonTest {
 
     private static final String KEY = "counterKey";
-    private Userprofile.Profile.Attribute mAttribute = CommonUserProfileUpdatePatcherTest.createEmptyAttribute();
+    private final Userprofile.Profile.Attribute mAttribute = CommonUserProfileUpdatePatcherTest.createEmptyAttribute();
 
     @Test
     public void testValue() {

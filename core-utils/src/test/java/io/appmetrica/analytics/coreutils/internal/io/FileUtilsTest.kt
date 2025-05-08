@@ -2,6 +2,7 @@ package io.appmetrica.analytics.coreutils.internal.io
 
 import android.content.Context
 import android.os.Build
+import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.LogRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
@@ -16,7 +17,7 @@ import org.robolectric.annotation.Config
 import java.io.File
 
 @RunWith(RobolectricTestRunner::class)
-class FileUtilsTest {
+class FileUtilsTest : CommonTest() {
 
     private val filesParentDir = File("filesParentDir")
     private val filesDir = File(filesParentDir, "filesDir")

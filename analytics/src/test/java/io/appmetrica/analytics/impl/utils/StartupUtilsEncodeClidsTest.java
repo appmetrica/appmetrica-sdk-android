@@ -43,8 +43,8 @@ public class StartupUtilsEncodeClidsTest extends CommonTest {
     @Test
     public void encodeMultipleClids() {
         Map<String, String> clidsMap = TestUtils.mapOf(
-                TestUtils.pair("clid0", "0"),
-                TestUtils.pair("clid1", "1")
+            TestUtils.pair("clid0", "0"),
+            TestUtils.pair("clid1", "1")
         );
         String encodedClids = StartupUtils.encodeClids(clidsMap);
         assertThat(StartupUtils.decodeClids(encodedClids)).containsOnly(clidsMap.entrySet().toArray(new Map.Entry[0]));
@@ -53,9 +53,9 @@ public class StartupUtilsEncodeClidsTest extends CommonTest {
     @Test
     public void encodeMultipleClidsWithEmptyKey() {
         Map<String, String> clidsMap = TestUtils.mapOf(
-                TestUtils.pair("clid0", "0"),
-                TestUtils.pair("", "2"),
-                TestUtils.pair("clid1", "1")
+            TestUtils.pair("clid0", "0"),
+            TestUtils.pair("", "2"),
+            TestUtils.pair("clid1", "1")
         );
         String encodedClids = StartupUtils.encodeClids(clidsMap);
         assertThat(StartupUtils.decodeClids(encodedClids)).containsOnly(clidsMap.entrySet().toArray(new Map.Entry[0]));
@@ -74,38 +74,38 @@ public class StartupUtilsEncodeClidsTest extends CommonTest {
     @Test
     public void decodeStringWithSingleClid() {
         assertThat(StartupUtils.decodeClids("clid0:0")).containsOnly(
-                new AbstractMap.SimpleEntry<String, String>("clid0", "0")
+            new AbstractMap.SimpleEntry<String, String>("clid0", "0")
         );
     }
 
     @Test
     public void decodeStringWithSingleClidWithEmptyKey() {
         assertThat(StartupUtils.decodeClids(":0")).containsOnly(
-                new AbstractMap.SimpleEntry<String, String>("", "0")
+            new AbstractMap.SimpleEntry<String, String>("", "0")
         );
     }
 
     @Test
     public void decodeStringWithSingleClidWithInvalidKey() {
         assertThat(StartupUtils.decodeClids("bad_key:bad_value")).containsOnly(
-                new AbstractMap.SimpleEntry<String, String>("bad_key", "bad_value")
+            new AbstractMap.SimpleEntry<String, String>("bad_key", "bad_value")
         );
     }
 
     @Test
     public void decodeStringWithMultipleClids() {
         assertThat(StartupUtils.decodeClids("clid0:0,clid1:1")).containsOnly(
-                new AbstractMap.SimpleEntry<String, String>("clid0", "0"),
-                new AbstractMap.SimpleEntry<String, String>("clid1", "1")
+            new AbstractMap.SimpleEntry<String, String>("clid0", "0"),
+            new AbstractMap.SimpleEntry<String, String>("clid1", "1")
         );
     }
 
     @Test
     public void decodeStringWithMultipleClidsWithEmptyKey() {
         assertThat(StartupUtils.decodeClids("clid0:0,:2,clid1:1")).containsOnly(
-                new AbstractMap.SimpleEntry<String, String>("clid0", "0"),
-                new AbstractMap.SimpleEntry<String, String>("clid1", "1"),
-                new AbstractMap.SimpleEntry<String, String>("", "2")
+            new AbstractMap.SimpleEntry<String, String>("clid0", "0"),
+            new AbstractMap.SimpleEntry<String, String>("clid1", "1"),
+            new AbstractMap.SimpleEntry<String, String>("", "2")
         );
     }
 

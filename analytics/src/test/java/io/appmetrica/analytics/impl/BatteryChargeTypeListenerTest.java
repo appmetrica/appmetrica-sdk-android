@@ -53,8 +53,8 @@ public class BatteryChargeTypeListenerTest extends CommonTest {
         context = TestUtils.createMockedContext();
         when(contextReceiverSafeWrapperProvider.create(any(BackgroundBroadcastReceiver.class))).thenReturn(contextReceiverSafeWrapper);
         when(contextReceiverSafeWrapper.registerReceiver(
-                any(Context.class),
-                any(IntentFilter.class)
+            any(Context.class),
+            any(IntentFilter.class)
         )).thenReturn(initialIntent);
         batteryChargeTypeListener = new BatteryChargeTypeListener(context, executor, contextReceiverSafeWrapperProvider);
     }

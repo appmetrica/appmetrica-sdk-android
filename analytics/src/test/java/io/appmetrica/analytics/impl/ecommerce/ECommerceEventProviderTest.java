@@ -45,60 +45,60 @@ public class ECommerceEventProviderTest extends CommonTest {
         MockitoAnnotations.openMocks(this);
 
         eCommerceScreen = new ECommerceScreen()
-                .setName("E-commerce screen name")
-                .setSearchQuery("E-commerce screen search query")
-                .setCategoriesPath(Arrays.asList(
-                        "E-commerce screen path #1",
-                        "E-commerce screen path #2",
-                        "E-commerce screen path #3"
-                ))
-                .setPayload(createScreenPayload());
+            .setName("E-commerce screen name")
+            .setSearchQuery("E-commerce screen search query")
+            .setCategoriesPath(Arrays.asList(
+                "E-commerce screen path #1",
+                "E-commerce screen path #2",
+                "E-commerce screen path #3"
+            ))
+            .setPayload(createScreenPayload());
 
         eCommerceProduct = new ECommerceProduct("E-commerce product sku")
-                .setName("E-commerce product name")
-                .setActualPrice(
-                        new ECommercePrice(new ECommerceAmount(BigDecimal.TEN, "USD"))
-                                .setInternalComponents(Arrays.asList(
-                                        new ECommerceAmount(new BigDecimal("12313.432131"), "RUB"),
-                                        new ECommerceAmount(new BigDecimal("2313"), "BYN"),
-                                        new ECommerceAmount(new BigDecimal("42312.21"), "EUR")
-                                ))
-                )
-                .setOriginalPrice(
-                        new ECommercePrice(new ECommerceAmount(BigDecimal.ONE, "USD"))
-                                .setInternalComponents(Arrays.asList(
-                                        new ECommerceAmount(new BigDecimal("0.23123"), "RUB"),
-                                        new ECommerceAmount(new BigDecimal("1.23"), "BYN"),
-                                        new ECommerceAmount(new BigDecimal("7.4"), "EUR")
-                                ))
-                )
-                .setCategoriesPath(Arrays.asList("E-commerce product path #1", "E-commerce product path #2"))
-                .setPayload(createProductPayload())
-                .setPromocodes(Arrays.asList("E-commerce product promocode #1", "E-commerce product promocode #2"));
+            .setName("E-commerce product name")
+            .setActualPrice(
+                new ECommercePrice(new ECommerceAmount(BigDecimal.TEN, "USD"))
+                    .setInternalComponents(Arrays.asList(
+                        new ECommerceAmount(new BigDecimal("12313.432131"), "RUB"),
+                        new ECommerceAmount(new BigDecimal("2313"), "BYN"),
+                        new ECommerceAmount(new BigDecimal("42312.21"), "EUR")
+                    ))
+            )
+            .setOriginalPrice(
+                new ECommercePrice(new ECommerceAmount(BigDecimal.ONE, "USD"))
+                    .setInternalComponents(Arrays.asList(
+                        new ECommerceAmount(new BigDecimal("0.23123"), "RUB"),
+                        new ECommerceAmount(new BigDecimal("1.23"), "BYN"),
+                        new ECommerceAmount(new BigDecimal("7.4"), "EUR")
+                    ))
+            )
+            .setCategoriesPath(Arrays.asList("E-commerce product path #1", "E-commerce product path #2"))
+            .setPayload(createProductPayload())
+            .setPromocodes(Arrays.asList("E-commerce product promocode #1", "E-commerce product promocode #2"));
 
         eCommerceReferrer = new ECommerceReferrer()
-                .setType("E-commerce referrer type")
-                .setIdentifier("E-commerce referrer identifier")
-                .setScreen(eCommerceScreen);
+            .setType("E-commerce referrer type")
+            .setIdentifier("E-commerce referrer identifier")
+            .setScreen(eCommerceScreen);
 
         eCommerceCartItem = new ECommerceCartItem(
-                eCommerceProduct,
-                new ECommercePrice(
-                        new ECommerceAmount(BigDecimal.ZERO, "USD")
-                )
-                        .setInternalComponents(Arrays.asList(
-                                new ECommerceAmount(new BigDecimal("9.231"), "BYN"),
-                                new ECommerceAmount(new BigDecimal("199.99"), "EUR")
-                        )),
-                new BigDecimal("99.109")
+            eCommerceProduct,
+            new ECommercePrice(
+                new ECommerceAmount(BigDecimal.ZERO, "USD")
+            )
+                .setInternalComponents(Arrays.asList(
+                    new ECommerceAmount(new BigDecimal("9.231"), "BYN"),
+                    new ECommerceAmount(new BigDecimal("199.99"), "EUR")
+                )),
+            new BigDecimal("99.109")
         )
-                .setReferrer(eCommerceReferrer);
+            .setReferrer(eCommerceReferrer);
 
         eCommerceOrder = new ECommerceOrder(
-                "E-commerce order identifier",
-                Collections.singletonList(eCommerceCartItem)
+            "E-commerce order identifier",
+            Collections.singletonList(eCommerceCartItem)
         )
-                .setPayload(createOrderPayload());
+            .setPayload(createOrderPayload());
 
         eventProvider = new ECommerceEventProvider();
     }
@@ -135,15 +135,15 @@ public class ECommerceEventProviderTest extends CommonTest {
         ShownScreenInfoEvent shownScreenInfoEvent = (ShownScreenInfoEvent) event;
 
         ObjectPropertyAssertions<ShownScreenInfoEvent> assertions =
-                ObjectPropertyAssertions(shownScreenInfoEvent);
+            ObjectPropertyAssertions(shownScreenInfoEvent);
 
         assertions.checkFieldRecursively(
-                "screen",
-                new ScreenWrapperAssertionsConsumer()
-                        .setExpectedName(eCommerceScreen.getName())
-                        .setExpecredSearchQuery(eCommerceScreen.getSearchQuery())
-                        .setExpectedCategoriesPath(eCommerceScreen.getCategoriesPath())
-                        .setExpectedPayload(eCommerceScreen.getPayload())
+            "screen",
+            new ScreenWrapperAssertionsConsumer()
+                .setExpectedName(eCommerceScreen.getName())
+                .setExpecredSearchQuery(eCommerceScreen.getSearchQuery())
+                .setExpectedCategoriesPath(eCommerceScreen.getCategoriesPath())
+                .setExpectedPayload(eCommerceScreen.getPayload())
         );
 
         assertions.checkAll();
@@ -158,20 +158,20 @@ public class ECommerceEventProviderTest extends CommonTest {
         ShownProductCardInfoEvent shownProductCardInfoEvent = ((ShownProductCardInfoEvent) event);
 
         ObjectPropertyAssertions<ShownProductCardInfoEvent> assertions =
-                ObjectPropertyAssertions(shownProductCardInfoEvent);
+            ObjectPropertyAssertions(shownProductCardInfoEvent);
 
         assertions.checkFieldRecursively(
-                "screen",
-                new ScreenWrapperAssertionsConsumer()
-                        .setExpectedName(eCommerceScreen.getName())
-                        .setExpecredSearchQuery(eCommerceScreen.getSearchQuery())
-                        .setExpectedCategoriesPath(eCommerceScreen.getCategoriesPath())
-                        .setExpectedPayload(eCommerceScreen.getPayload())
+            "screen",
+            new ScreenWrapperAssertionsConsumer()
+                .setExpectedName(eCommerceScreen.getName())
+                .setExpecredSearchQuery(eCommerceScreen.getSearchQuery())
+                .setExpectedCategoriesPath(eCommerceScreen.getCategoriesPath())
+                .setExpectedPayload(eCommerceScreen.getPayload())
         );
 
         assertions.checkFieldRecursively(
-                "product",
-                new ProductWrapperAssertionsConsumer().setExpectedProduct(eCommerceProduct)
+            "product",
+            new ProductWrapperAssertionsConsumer().setExpectedProduct(eCommerceProduct)
         );
 
         assertions.checkAll();
@@ -191,32 +191,32 @@ public class ECommerceEventProviderTest extends CommonTest {
     }
 
     private void assertProductDetailsEvent(ECommerceEvent event, ECommerceReferrer expectedReferrer)
-            throws Exception {
+        throws Exception {
 
         assertThat(event).isInstanceOf(ShownProductDetailInfoEvent.class);
         ShownProductDetailInfoEvent shownProductDetailInfoEvent = ((ShownProductDetailInfoEvent) event);
 
         ObjectPropertyAssertions<ShownProductDetailInfoEvent> assertions =
-                ObjectPropertyAssertions(shownProductDetailInfoEvent);
+            ObjectPropertyAssertions(shownProductDetailInfoEvent);
 
         assertions.checkFieldRecursively(
-                "product",
-                new ProductWrapperAssertionsConsumer().setExpectedProduct(eCommerceProduct)
+            "product",
+            new ProductWrapperAssertionsConsumer().setExpectedProduct(eCommerceProduct)
         );
 
         assertions.checkFieldRecursively(
-                "referrer",
-                expectedReferrer == null ? null :
+            "referrer",
+            expectedReferrer == null ? null :
                 new ReferrerWrapperAssertionsConsumer()
-                        .setExpectedType(expectedReferrer.getType())
-                        .setExpectedId(expectedReferrer.getIdentifier())
-                        .setExpectedScreen(
-                                new ScreenWrapperAssertionsConsumer()
-                                        .setExpectedName(expectedReferrer.getScreen().getName())
-                                        .setExpecredSearchQuery(expectedReferrer.getScreen().getSearchQuery())
-                                        .setExpectedCategoriesPath(expectedReferrer.getScreen().getCategoriesPath())
-                                        .setExpectedPayload(expectedReferrer.getScreen().getPayload())
-                        )
+                    .setExpectedType(expectedReferrer.getType())
+                    .setExpectedId(expectedReferrer.getIdentifier())
+                    .setExpectedScreen(
+                        new ScreenWrapperAssertionsConsumer()
+                            .setExpectedName(expectedReferrer.getScreen().getName())
+                            .setExpecredSearchQuery(expectedReferrer.getScreen().getSearchQuery())
+                            .setExpectedCategoriesPath(expectedReferrer.getScreen().getCategoriesPath())
+                            .setExpectedPayload(expectedReferrer.getScreen().getPayload())
+                    )
         );
 
         assertions.checkAll();
@@ -225,16 +225,16 @@ public class ECommerceEventProviderTest extends CommonTest {
     @Test
     public void addCartItemEvent() throws Exception {
         assertCartItemEvent(
-                eventProvider.addCartItemEvent(eCommerceCartItem),
-                CartActionInfoEvent.EVENT_TYPE_ADD_TO_CART
+            eventProvider.addCartItemEvent(eCommerceCartItem),
+            CartActionInfoEvent.EVENT_TYPE_ADD_TO_CART
         );
     }
 
     @Test
     public void removeCartItemEvent() throws Exception {
         assertCartItemEvent(
-                eventProvider.removeCartItemEvent(eCommerceCartItem),
-                CartActionInfoEvent.EVENT_TYPE_REMOVE_FROM_CART
+            eventProvider.removeCartItemEvent(eCommerceCartItem),
+            CartActionInfoEvent.EVENT_TYPE_REMOVE_FROM_CART
         );
     }
 
@@ -243,13 +243,13 @@ public class ECommerceEventProviderTest extends CommonTest {
         CartActionInfoEvent cartActionInfoEvent = ((CartActionInfoEvent) event);
 
         ObjectPropertyAssertions<CartActionInfoEvent> assertions =
-                ObjectPropertyAssertions(cartActionInfoEvent);
+            ObjectPropertyAssertions(cartActionInfoEvent);
 
         assertions.checkField("eventType", expectedEventType);
 
         assertions.checkFieldRecursively(
-                "cartItem",
-                toAssertionsConsumer(eCommerceCartItem)
+            "cartItem",
+            toAssertionsConsumer(eCommerceCartItem)
         );
 
         assertions.checkAll();
@@ -258,8 +258,8 @@ public class ECommerceEventProviderTest extends CommonTest {
     @Test
     public void beginCheckoutEvent() throws Exception {
         assertOrderInfoEvent(
-                eventProvider.beginCheckoutEvent(eCommerceOrder),
-                OrderInfoEvent.EVENT_TYPE_BEGIN_CHECKOUT
+            eventProvider.beginCheckoutEvent(eCommerceOrder),
+            OrderInfoEvent.EVENT_TYPE_BEGIN_CHECKOUT
         );
     }
 
@@ -273,15 +273,15 @@ public class ECommerceEventProviderTest extends CommonTest {
         OrderInfoEvent orderInfoEvent = ((OrderInfoEvent) event);
 
         ObjectPropertyAssertions<OrderInfoEvent> assertions =
-                ObjectPropertyAssertions(orderInfoEvent);
+            ObjectPropertyAssertions(orderInfoEvent);
 
         assertions.checkField("eventType", expectedEventType);
         assertions.checkFieldRecursively(
-                "order",
-                new OrderWrapperAssertionsConsumer()
-                        .setExpectedIdentifier(eCommerceOrder.getIdentifier())
-                        .setExpectedPayload(eCommerceOrder.getPayload())
-                        .setExpectedCartItems(Collections.singletonList(toAssertionsConsumer(eCommerceCartItem)))
+            "order",
+            new OrderWrapperAssertionsConsumer()
+                .setExpectedIdentifier(eCommerceOrder.getIdentifier())
+                .setExpectedPayload(eCommerceOrder.getPayload())
+                .setExpectedCartItems(Collections.singletonList(toAssertionsConsumer(eCommerceCartItem)))
         );
 
         assertions.checkAll();
@@ -289,31 +289,31 @@ public class ECommerceEventProviderTest extends CommonTest {
 
     private CartItemWrapperAssertionsConsumer toAssertionsConsumer(ECommerceCartItem cartItem) {
         return new CartItemWrapperAssertionsConsumer()
-                .setExpectedProduct(
-                        new ProductWrapperAssertionsConsumer()
-                                .setExpectedProduct(cartItem.getProduct())
-                )
-                .setExpectedQuantity(cartItem.getQuantity())
-                .setExpectedReferrer(
-                        new ReferrerWrapperAssertionsConsumer()
-                                .setExpectedType(cartItem.getReferrer().getType())
-                                .setExpectedId(cartItem.getReferrer().getIdentifier())
-                                .setExpectedScreen(
-                                        new ScreenWrapperAssertionsConsumer()
-                                                .setExpectedName(cartItem.getReferrer().getScreen().getName())
-                                                .setExpecredSearchQuery(
-                                                        cartItem.getReferrer().getScreen().getSearchQuery()
-                                                )
-                                                .setExpectedCategoriesPath(
-                                                        cartItem.getReferrer().getScreen().getCategoriesPath()
-                                                )
-                                                .setExpectedPayload(cartItem.getReferrer().getScreen().getPayload())
-                                )
-                )
-                .setExpectedRevenue(
-                        new PriceWrapperAssertionConsumer()
-                                .setExpectedFiat(cartItem.getRevenue().getFiat())
-                                .setExpectedInternalComponents(cartItem.getRevenue().getInternalComponents())
-                );
+            .setExpectedProduct(
+                new ProductWrapperAssertionsConsumer()
+                    .setExpectedProduct(cartItem.getProduct())
+            )
+            .setExpectedQuantity(cartItem.getQuantity())
+            .setExpectedReferrer(
+                new ReferrerWrapperAssertionsConsumer()
+                    .setExpectedType(cartItem.getReferrer().getType())
+                    .setExpectedId(cartItem.getReferrer().getIdentifier())
+                    .setExpectedScreen(
+                        new ScreenWrapperAssertionsConsumer()
+                            .setExpectedName(cartItem.getReferrer().getScreen().getName())
+                            .setExpecredSearchQuery(
+                                cartItem.getReferrer().getScreen().getSearchQuery()
+                            )
+                            .setExpectedCategoriesPath(
+                                cartItem.getReferrer().getScreen().getCategoriesPath()
+                            )
+                            .setExpectedPayload(cartItem.getReferrer().getScreen().getPayload())
+                    )
+            )
+            .setExpectedRevenue(
+                new PriceWrapperAssertionConsumer()
+                    .setExpectedFiat(cartItem.getRevenue().getFiat())
+                    .setExpectedInternalComponents(cartItem.getRevenue().getInternalComponents())
+            );
     }
 }

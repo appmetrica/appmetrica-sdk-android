@@ -12,19 +12,19 @@ class ConfigCheckerTest : CommonTest() {
     private var configChecker = ConfigChecker("")
 
     @Test
-    fun testValidMaxReportsInDatabaseCount() {
+    fun validMaxReportsInDatabaseCount() {
         assertThat(configChecker.getCheckedMaxReportsInDatabaseCount(500))
             .isEqualTo(500)
     }
 
     @Test
-    fun testMaxReportsInDatabaseCountTooSmall() {
+    fun maxReportsInDatabaseCountTooSmall() {
         assertThat(configChecker.getCheckedMaxReportsInDatabaseCount(50))
             .isEqualTo(100)
     }
 
     @Test
-    fun testMaxReportsInDatabaseCountTooBig() {
+    fun maxReportsInDatabaseCountTooBig() {
         assertThat(configChecker.getCheckedMaxReportsInDatabaseCount(20000))
             .isEqualTo(10000)
     }

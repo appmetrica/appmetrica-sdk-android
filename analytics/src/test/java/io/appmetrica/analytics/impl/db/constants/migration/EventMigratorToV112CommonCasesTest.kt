@@ -115,7 +115,11 @@ internal class EventMigratorToV112CommonCasesTest(
             arrayOf("type = string value", EventCursorRecord(type = "string value"), null),
             // endregion
             // region global number
-            arrayOf("globalNumber = null", EventCursorRecord(globalNumber = null), EventCursorRecord(globalNumber = 0L)),
+            arrayOf(
+                "globalNumber = null",
+                EventCursorRecord(globalNumber = null),
+                EventCursorRecord(globalNumber = 0L)
+            ),
             arrayOf("globalNumber = negative", EventCursorRecord(globalNumber = -1L), null),
             arrayOf("globalNumber = 0", EventCursorRecord(globalNumber = 0L), EventCursorRecord(globalNumber = 0L)),
             arrayOf(

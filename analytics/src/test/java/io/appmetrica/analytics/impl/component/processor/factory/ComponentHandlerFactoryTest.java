@@ -110,11 +110,11 @@ public class ComponentHandlerFactoryTest extends CommonTest {
         factory.addHandlers(mHandlersList);
 
         assertThat(mHandlersList).containsExactly(
-                mApplySettingsFromActivationConfigHandler,
-                mSavePreloadInfoHandler,
-                saveInitialUserProfileIDHandler,
-                mReportFirstHandler,
-                mSubscribeForReferrerHandler
+            mApplySettingsFromActivationConfigHandler,
+            mSavePreloadInfoHandler,
+            saveInitialUserProfileIDHandler,
+            mReportFirstHandler,
+            mSubscribeForReferrerHandler
         );
     }
 
@@ -166,8 +166,8 @@ public class ComponentHandlerFactoryTest extends CommonTest {
         factory.addHandlers(mHandlersList);
 
         assertThat(mHandlersList).containsExactly(
-                mReportFirstOccurrenceStatusHandler,
-                mReportSaveToDatabaseHandler
+            mReportFirstOccurrenceStatusHandler,
+            mReportSaveToDatabaseHandler
         );
     }
 
@@ -177,10 +177,10 @@ public class ComponentHandlerFactoryTest extends CommonTest {
 
         factory.addHandlers(mHandlersList);
         assertThat(mHandlersList).containsExactly(
-                mReportPermissionsHandler,
-                mReportFeaturesHandler,
-                mReportFirstOccurrenceStatusHandler,
-                mReportSaveToDatabaseHandler
+            mReportPermissionsHandler,
+            mReportFeaturesHandler,
+            mReportFirstOccurrenceStatusHandler,
+            mReportSaveToDatabaseHandler
         );
     }
 
@@ -207,10 +207,10 @@ public class ComponentHandlerFactoryTest extends CommonTest {
 
         factory.addHandlers(mHandlersList);
         assertThat(mHandlersList).containsExactly(
-                mReportPurgeBufferHandler,
-                mReportSaveToDatabaseHandler,
-                mReportSessionStopHandler,
-                reportCrashMetaInformation
+            mReportPurgeBufferHandler,
+            mReportSaveToDatabaseHandler,
+            mReportSessionStopHandler,
+            reportCrashMetaInformation
         );
     }
 

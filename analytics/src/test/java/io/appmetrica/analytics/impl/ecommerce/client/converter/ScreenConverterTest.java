@@ -44,7 +44,7 @@ public class ScreenConverterTest extends CommonTest {
 
     private ScreenConverter screenConverter;
 
-    private List<String> categories = Collections.singletonList("category");
+    private final List<String> categories = Collections.singletonList("category");
 
     private final int nameBytesTruncated = 1;
     private final int searchQueryBytesTruncated = 10;
@@ -52,24 +52,24 @@ public class ScreenConverterTest extends CommonTest {
     private final int categoryBytesTruncated = 1000;
 
     private final int totalBytesTruncated = nameBytesTruncated + searchQueryBytesTruncated + payloadBytesTruncated +
-            categoryBytesTruncated;
+        categoryBytesTruncated;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.openMocks(this);
 
         when(payloadConverter.fromModel(payloadWrapper))
-                .thenReturn(new Result<Ecommerce.ECommerceEvent.Payload, BytesTruncatedProvider>(
-                        payloadProto,
-                        new BytesTruncatedInfo(payloadBytesTruncated)
-                ));
+            .thenReturn(new Result<Ecommerce.ECommerceEvent.Payload, BytesTruncatedProvider>(
+                payloadProto,
+                new BytesTruncatedInfo(payloadBytesTruncated)
+            ));
         when(categoryConverter.fromModel(categories))
-                .thenReturn(
-                        new Result<Ecommerce.ECommerceEvent.Category, BytesTruncatedProvider>(
-                                categoryProto,
-                                new BytesTruncatedInfo(categoryBytesTruncated)
-                        )
-                );
+            .thenReturn(
+                new Result<Ecommerce.ECommerceEvent.Category, BytesTruncatedProvider>(
+                    categoryProto,
+                    new BytesTruncatedInfo(categoryBytesTruncated)
+                )
+            );
 
         screenConverter = new ScreenConverter(payloadConverter, categoryConverter, nameTrimmer, searchQueryTrimmer);
     }
@@ -79,8 +79,8 @@ public class ScreenConverterTest extends CommonTest {
         screenConverter = new ScreenConverter();
 
         ObjectPropertyAssertions<ScreenConverter> assertions =
-                ObjectPropertyAssertions(screenConverter)
-                        .withPrivateFields(true);
+            ObjectPropertyAssertions(screenConverter)
+                .withPrivateFields(true);
 
         assertions.checkFieldNonNull("payloadConverter");
         assertions.checkFieldNonNull("categoryConverter");
@@ -95,33 +95,33 @@ public class ScreenConverterTest extends CommonTest {
         String inputName = "input name";
         String truncatedName = "truncated name";
         when(nameTrimmer.trim(inputName))
-                .thenReturn(new TrimmingResult<String, BytesTruncatedProvider>(
-                        truncatedName,
-                        new BytesTruncatedInfo(nameBytesTruncated)
-                ));
+            .thenReturn(new TrimmingResult<String, BytesTruncatedProvider>(
+                truncatedName,
+                new BytesTruncatedInfo(nameBytesTruncated)
+            ));
 
         String inputSearchQuery = "input search query";
         String truncatedSearchQuery = "search query";
         when(searchQueryTrimmer.trim(inputSearchQuery))
-                .thenReturn(new TrimmingResult<String, BytesTruncatedProvider>(
-                        truncatedSearchQuery,
-                        new BytesTruncatedInfo(searchQueryBytesTruncated)
-                ));
+            .thenReturn(new TrimmingResult<String, BytesTruncatedProvider>(
+                truncatedSearchQuery,
+                new BytesTruncatedInfo(searchQueryBytesTruncated)
+            ));
 
         ScreenWrapper screenWrapper = new ScreenWrapper(inputName, categories, inputSearchQuery, payloadWrapper);
         Result<Ecommerce.ECommerceEvent.Screen, BytesTruncatedProvider> screenResult =
-                screenConverter.fromModel(screenWrapper);
+            screenConverter.fromModel(screenWrapper);
 
         ObjectPropertyAssertions(screenResult)
-                .checkFieldRecursively(
-                        "metaInfo",
-                        new TruncationInfoConsumer(totalBytesTruncated)
-                )
-                .checkFieldRecursively(
-                        "result",
-                        screenAssertionsConsumer(truncatedName, categoryProto, truncatedSearchQuery, payloadProto)
-                )
-                .checkAll();
+            .checkFieldRecursively(
+                "metaInfo",
+                new TruncationInfoConsumer(totalBytesTruncated)
+            )
+            .checkFieldRecursively(
+                "result",
+                screenAssertionsConsumer(truncatedName, categoryProto, truncatedSearchQuery, payloadProto)
+            )
+            .checkAll();
     }
 
     @Test
@@ -129,52 +129,52 @@ public class ScreenConverterTest extends CommonTest {
         ScreenWrapper screenWrapper = new ScreenWrapper(null, null, null, null);
 
         when(nameTrimmer.trim(nullable(String.class)))
-                .thenReturn(new TrimmingResult<String, BytesTruncatedProvider>(
-                        null,
-                        new BytesTruncatedInfo(0)
-                ));
+            .thenReturn(new TrimmingResult<String, BytesTruncatedProvider>(
+                null,
+                new BytesTruncatedInfo(0)
+            ));
         when(searchQueryTrimmer.trim(nullable(String.class)))
-                .thenReturn(new TrimmingResult<String, BytesTruncatedProvider>(
-                        null,
-                        new BytesTruncatedInfo(0)
-                ));
+            .thenReturn(new TrimmingResult<String, BytesTruncatedProvider>(
+                null,
+                new BytesTruncatedInfo(0)
+            ));
 
         Result<Ecommerce.ECommerceEvent.Screen, BytesTruncatedProvider> result = screenConverter.fromModel(screenWrapper);
 
         ObjectPropertyAssertions(result)
-                .checkFieldRecursively(
-                        "metaInfo",
-                        new TruncationInfoConsumer(0)
-                )
-                .checkFieldRecursively("result", screenAssertionsConsumer("", null, "", null))
-                .checkAll();
+            .checkFieldRecursively(
+                "metaInfo",
+                new TruncationInfoConsumer(0)
+            )
+            .checkFieldRecursively("result", screenAssertionsConsumer("", null, "", null))
+            .checkAll();
     }
 
     @Test(expected = UnsupportedOperationException.class)
     public void toModel() {
         screenConverter.toModel(
-                new Result<Ecommerce.ECommerceEvent.Screen, BytesTruncatedProvider>(
-                        new Ecommerce.ECommerceEvent.Screen(),
-                        new BytesTruncatedInfo(0)
-                )
+            new Result<Ecommerce.ECommerceEvent.Screen, BytesTruncatedProvider>(
+                new Ecommerce.ECommerceEvent.Screen(),
+                new BytesTruncatedInfo(0)
+            )
         );
     }
 
     private Consumer<ObjectPropertyAssertions<Ecommerce.ECommerceEvent.Screen>> screenAssertionsConsumer(
-            final String name,
-            final Ecommerce.ECommerceEvent.Category category,
-            final String searchQuery,
-            final Ecommerce.ECommerceEvent.Payload payload
+        final String name,
+        final Ecommerce.ECommerceEvent.Category category,
+        final String searchQuery,
+        final Ecommerce.ECommerceEvent.Payload payload
     ) {
         return new Consumer<ObjectPropertyAssertions<Ecommerce.ECommerceEvent.Screen>>() {
             @Override
             public void accept(ObjectPropertyAssertions<Ecommerce.ECommerceEvent.Screen> assertions) {
                 try {
                     assertions.withFinalFieldOnly(false)
-                            .checkFieldComparingFieldByField("name", name.getBytes())
-                            .checkFieldComparingFieldByField("category", category)
-                            .checkFieldComparingFieldByField("searchQuery", searchQuery.getBytes())
-                            .checkFieldComparingFieldByField("payload", payload);
+                        .checkFieldComparingFieldByField("name", name.getBytes())
+                        .checkFieldComparingFieldByField("category", category)
+                        .checkFieldComparingFieldByField("searchQuery", searchQuery.getBytes())
+                        .checkFieldComparingFieldByField("payload", payload);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }

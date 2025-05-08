@@ -18,8 +18,8 @@ public class ExecutorFactoryTest extends CommonTest {
     @ParameterizedRobolectricTestRunner.Parameters(name = "{0} will produce {1}")
     public static Collection<Object[]> data() {
         return Arrays.asList(
-                new Object[]{StubbedExecutorFactory.class, StubbedStartupExecutor.class, null, null},
-                new Object[]{RegularExecutorFactory.class, RegularStartupExecutor.class, StartupUnit.class, mock(StartupUnit.class)}
+            new Object[]{StubbedExecutorFactory.class, StubbedStartupExecutor.class, null, null},
+            new Object[]{RegularExecutorFactory.class, RegularStartupExecutor.class, StartupUnit.class, mock(StartupUnit.class)}
         );
     }
 

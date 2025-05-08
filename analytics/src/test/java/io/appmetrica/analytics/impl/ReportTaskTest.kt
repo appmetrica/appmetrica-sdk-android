@@ -112,11 +112,15 @@ internal class ReportTaskTest : CommonTest() {
             .add(sessionId) // FIELD_SESSION_ID
             .add(type) // FIELD_SESSION_TYPE
             .add("") // FIELD_SESSION_REPORT_REQUEST_PARAMETERS
-            .add(DbSessionDescriptionToBytesConverter().fromModel(DbSessionModel.Description(
-                startTime = TimeUtils.currentDeviceTimeSec(),
-                serverTimeOffset = 10,
-                obtainedBeforeFirstSynchronization = true
-            ))) // FIELD_SESSION_DESCRIPTION
+            .add(
+                DbSessionDescriptionToBytesConverter().fromModel(
+                    DbSessionModel.Description(
+                        startTime = TimeUtils.currentDeviceTimeSec(),
+                        serverTimeOffset = 10,
+                        obtainedBeforeFirstSynchronization = true
+                    )
+                )
+            ) // FIELD_SESSION_DESCRIPTION
     }
     val reportCursor = MatrixCursor(columnReport).apply {
         newRow()
@@ -126,26 +130,30 @@ internal class ReportTaskTest : CommonTest() {
             .add(InternalEvents.EVENT_TYPE_REGULAR.typeId) // FIELD_REPORT_TYPE
             .add(10) // FIELD_REPORT_GLOBAL_NUMBER
             .add(0) // FIELD_REPORT_TIME
-            .add(DbEventDescriptionToBytesConverter().fromModel(DbEventModel.Description(
-                customType = null,
-                name = null,
-                value = eventValue,
-                numberOfType = 21L,
-                locationInfo = null,
-                errorEnvironment = null,
-                appEnvironment = "{}",
-                appEnvironmentRevision = 0,
-                truncated = 0,
-                connectionType = 0,
-                cellularConnectionType = "0",
-                encryptingMode = EventEncryptionMode.NONE,
-                profileId = profileId,
-                firstOccurrenceStatus = null,
-                source = null,
-                attributionIdChanged = null,
-                openId = null,
-                extras = null
-            ))) // FIELD_EVENT_DESCRIPTION
+            .add(
+                DbEventDescriptionToBytesConverter().fromModel(
+                    DbEventModel.Description(
+                        customType = null,
+                        name = null,
+                        value = eventValue,
+                        numberOfType = 21L,
+                        locationInfo = null,
+                        errorEnvironment = null,
+                        appEnvironment = "{}",
+                        appEnvironmentRevision = 0,
+                        truncated = 0,
+                        connectionType = 0,
+                        cellularConnectionType = "0",
+                        encryptingMode = EventEncryptionMode.NONE,
+                        profileId = profileId,
+                        firstOccurrenceStatus = null,
+                        source = null,
+                        attributionIdChanged = null,
+                        openId = null,
+                        extras = null
+                    )
+                )
+            ) // FIELD_EVENT_DESCRIPTION
     }
 
     private val databaseHelper = mock<DatabaseHelper> {
@@ -211,7 +219,7 @@ internal class ReportTaskTest : CommonTest() {
     private val lazyReportConfigProvider = mock<LazyReportConfigProvider> {
         on { config } doReturn reportRequestConfig
     }
-    private val fullUrlFormer = mock<FullUrlFormer<ReportRequestConfig>>() {
+    private val fullUrlFormer = mock<FullUrlFormer<ReportRequestConfig>> {
         on { allHosts } doReturn reportHosts
     }
     private val requestDataHolder = mock<RequestDataHolder>()
@@ -277,7 +285,7 @@ internal class ReportTaskTest : CommonTest() {
             .checkField("configProvider", lazyReportConfigProvider)
             .checkField("requestDataHolder", requestDataHolder)
             .checkField("responseDataHolder", responseDataHolder)
-            //One more sendingDataTaskHelper initialized in setUp()
+            // One more sendingDataTaskHelper initialized in setUp()
             .checkField(
                 "sendingDataTaskHelper",
                 sendingTaskHelperMockedRule.constructionMock.constructed()[1]
@@ -520,11 +528,15 @@ internal class ReportTaskTest : CommonTest() {
                     .add(it) // FIELD_SESSION_ID
                     .add(type) // FIELD_SESSION_TYPE
                     .add("") // FIELD_SESSION_REPORT_REQUEST_PARAMETERS
-                    .add(DbSessionDescriptionToBytesConverter().fromModel(DbSessionModel.Description(
-                        startTime = TimeUtils.currentDeviceTimeSec() + it,
-                        serverTimeOffset = 10L * it,
-                        obtainedBeforeFirstSynchronization = true
-                    ))) // FIELD_SESSION_DESCRIPTION
+                    .add(
+                        DbSessionDescriptionToBytesConverter().fromModel(
+                            DbSessionModel.Description(
+                                startTime = TimeUtils.currentDeviceTimeSec() + it,
+                                serverTimeOffset = 10L * it,
+                                obtainedBeforeFirstSynchronization = true
+                            )
+                        )
+                    ) // FIELD_SESSION_DESCRIPTION
             }
         }
         val reportCursorWithLargeAmountOfEvents = MatrixCursor(columnReport).apply {
@@ -536,26 +548,30 @@ internal class ReportTaskTest : CommonTest() {
                     .add(InternalEvents.EVENT_TYPE_REGULAR.typeId) // FIELD_REPORT_TYPE
                     .add(it) // FIELD_REPORT_GLOBAL_NUMBER
                     .add(it) // FIELD_REPORT_TIME
-                    .add(DbEventDescriptionToBytesConverter().fromModel(DbEventModel.Description(
-                        customType = null,
-                        name = null,
-                        value = eventValue,
-                        numberOfType = it.toLong(),
-                        locationInfo = null,
-                        errorEnvironment = null,
-                        appEnvironment = "{}",
-                        appEnvironmentRevision = 0,
-                        truncated = 0,
-                        connectionType = 0,
-                        cellularConnectionType = "0",
-                        encryptingMode = EventEncryptionMode.NONE,
-                        profileId = profileId,
-                        firstOccurrenceStatus = null,
-                        source = null,
-                        attributionIdChanged = null,
-                        openId = null,
-                        extras = null
-                    ))) // FIELD_EVENT_DESCRIPTION
+                    .add(
+                        DbEventDescriptionToBytesConverter().fromModel(
+                            DbEventModel.Description(
+                                customType = null,
+                                name = null,
+                                value = eventValue,
+                                numberOfType = it.toLong(),
+                                locationInfo = null,
+                                errorEnvironment = null,
+                                appEnvironment = "{}",
+                                appEnvironmentRevision = 0,
+                                truncated = 0,
+                                connectionType = 0,
+                                cellularConnectionType = "0",
+                                encryptingMode = EventEncryptionMode.NONE,
+                                profileId = profileId,
+                                firstOccurrenceStatus = null,
+                                source = null,
+                                attributionIdChanged = null,
+                                openId = null,
+                                extras = null
+                            )
+                        )
+                    ) // FIELD_EVENT_DESCRIPTION
             }
         }
         stubbing(databaseHelper) {

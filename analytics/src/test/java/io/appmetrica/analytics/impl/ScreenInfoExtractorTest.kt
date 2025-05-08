@@ -17,11 +17,9 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mock
+import org.mockito.Mockito.mock
 import org.mockito.Mockito.never
 import org.mockito.Mockito.verify
-import org.mockito.Mockito.`when`
-import org.mockito.MockitoAnnotations
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
@@ -31,45 +29,43 @@ import org.robolectric.annotation.Config
 class ScreenInfoExtractorTest : CommonTest() {
 
     private val screenInfoExtractor = ScreenInfoExtractor()
-    @Mock
-    private lateinit var windowManager: WindowManager
-    @Mock
-    private lateinit var display: Display
+
     private lateinit var context: Context
-    @Mock
-    private lateinit var resources: Resources
+
+    private val windowManager: WindowManager = mock()
+    private val display: Display = mock()
+    private val resources: Resources = mock()
+
     private lateinit var displayMetrics: DisplayMetrics
 
-    @Rule
-    @JvmField
+    @get:Rule
     val sPhoneUtils = MockedStaticRule(PhoneUtils::class.java)
 
     @Before
     fun setUp() {
-        MockitoAnnotations.openMocks(this)
         context = TestUtils.createMockedContext()
         displayMetrics = DisplayMetrics()
-        `when`(context.getSystemService(Context.WINDOW_SERVICE)).thenReturn(windowManager)
-        `when`(windowManager.defaultDisplay).thenReturn(display)
-        `when`(context.resources).thenReturn(resources)
-        `when`(resources.displayMetrics).thenReturn(displayMetrics)
+        whenever(context.getSystemService(Context.WINDOW_SERVICE)).thenReturn(windowManager)
+        whenever(windowManager.defaultDisplay).thenReturn(display)
+        whenever(context.resources).thenReturn(resources)
+        whenever(resources.displayMetrics).thenReturn(displayMetrics)
         whenever(PhoneUtils.getDeviceType(eq(context), any())).thenReturn(DeviceTypeValues.PHONE)
     }
 
     @Test
     fun nullWindowManager() {
-        `when`(context.getSystemService(Context.WINDOW_SERVICE)).thenReturn(null)
+        whenever(context.getSystemService(Context.WINDOW_SERVICE)).thenReturn(null)
         assertThat(screenInfoExtractor.extractScreenInfo(context)).isNull()
     }
 
     @Test
     @Config(sdk = [Build.VERSION_CODES.R])
     fun nonNullDisplayForR() {
-        `when`(context.display).thenReturn(display)
+        whenever(context.display).thenReturn(display)
 
         val width = 777
         val height = 666
-        `when`(display.getRealMetrics(any(DisplayMetrics::class.java))).thenAnswer {
+        whenever(display.getRealMetrics(any(DisplayMetrics::class.java))).thenAnswer {
             val displayMetrics = it.arguments[0] as DisplayMetrics
             displayMetrics.widthPixels = width
             displayMetrics.heightPixels = height
@@ -87,9 +83,9 @@ class ScreenInfoExtractorTest : CommonTest() {
     @Test
     @Config(sdk = [Build.VERSION_CODES.R])
     fun nonNullDisplayForRThrows() {
-        `when`(context.display).thenReturn(display)
+        whenever(context.display).thenReturn(display)
 
-        `when`(display.getRealMetrics(any(DisplayMetrics::class.java))).thenThrow(RuntimeException())
+        whenever(display.getRealMetrics(any(DisplayMetrics::class.java))).thenThrow(RuntimeException())
         assertThat(screenInfoExtractor.extractScreenInfo(context)).isNull()
 
         verify(context, never()).getSystemService(Context.WINDOW_SERVICE)
@@ -98,11 +94,11 @@ class ScreenInfoExtractorTest : CommonTest() {
     @Test
     @Config(sdk = [Build.VERSION_CODES.R])
     fun nullDisplayForR() {
-        `when`(context.display).thenReturn(null)
+        whenever(context.display).thenReturn(null)
 
         val width = 777
         val height = 666
-        `when`(display.getRealMetrics(any(DisplayMetrics::class.java))).thenAnswer {
+        whenever(display.getRealMetrics(any(DisplayMetrics::class.java))).thenAnswer {
             val displayMetrics = it.arguments[0] as DisplayMetrics
             displayMetrics.widthPixels = width
             displayMetrics.heightPixels = height
@@ -120,13 +116,13 @@ class ScreenInfoExtractorTest : CommonTest() {
 
     @Test
     fun nullDisplay() {
-        `when`(windowManager.defaultDisplay).thenReturn(null)
+        whenever(windowManager.defaultDisplay).thenReturn(null)
         assertThat(screenInfoExtractor.extractScreenInfo(context)).isNull()
     }
 
     @Test
     fun getRealMetricsThrows() {
-        `when`(display.getRealMetrics(any(DisplayMetrics::class.java))).thenThrow(RuntimeException())
+        whenever(display.getRealMetrics(any(DisplayMetrics::class.java))).thenThrow(RuntimeException())
         assertThat(screenInfoExtractor.extractScreenInfo(context)).isNull()
     }
 
@@ -134,7 +130,7 @@ class ScreenInfoExtractorTest : CommonTest() {
     fun getRealMetricsSuccessfulWithIsGreaterThanHeight() {
         val width = 777
         val height = 666
-        `when`(display.getRealMetrics(any(DisplayMetrics::class.java))).thenAnswer {
+        whenever(display.getRealMetrics(any(DisplayMetrics::class.java))).thenAnswer {
             val displayMetrics = it.arguments[0] as DisplayMetrics
             displayMetrics.widthPixels = width
             displayMetrics.heightPixels = height
@@ -151,7 +147,7 @@ class ScreenInfoExtractorTest : CommonTest() {
     fun getRealMetricsSuccessfulWithIsLessThanHeight() {
         val width = 666
         val height = 777
-        `when`(display.getRealMetrics(any(DisplayMetrics::class.java))).thenAnswer {
+        whenever(display.getRealMetrics(any(DisplayMetrics::class.java))).thenAnswer {
             val displayMetrics = it.arguments[0] as DisplayMetrics
             displayMetrics.widthPixels = width
             displayMetrics.heightPixels = height
@@ -167,7 +163,7 @@ class ScreenInfoExtractorTest : CommonTest() {
     @Test
     fun getRealMetricsSuccessfulWithIsEqualToHeight() {
         val width = 666
-        `when`(display.getRealMetrics(any(DisplayMetrics::class.java))).thenAnswer {
+        whenever(display.getRealMetrics(any(DisplayMetrics::class.java))).thenAnswer {
             val displayMetrics = it.arguments[0] as DisplayMetrics
             displayMetrics.widthPixels = width
             displayMetrics.heightPixels = width
@@ -182,7 +178,7 @@ class ScreenInfoExtractorTest : CommonTest() {
 
     @Test
     fun densityGetDisplayMetricsThrows() {
-        `when`(resources.displayMetrics).thenThrow(NullPointerException())
+        whenever(resources.displayMetrics).thenThrow(NullPointerException())
         val screenInfo = screenInfoExtractor.extractScreenInfo(context)
         val softly = SoftAssertions()
         softly.assertThat(screenInfo!!.dpi).isZero

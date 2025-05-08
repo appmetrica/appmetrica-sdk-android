@@ -13,21 +13,18 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mock
-import org.mockito.Mockito.`when`
-import org.mockito.MockitoAnnotations
+import org.mockito.Mockito.mock
 import org.mockito.kotlin.anyOrNull
+import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 class PluginErrorDetailsConverterTest : CommonTest() {
 
-    @Mock
-    private lateinit var extraMetaInfoRetriever: ExtraMetaInfoRetriever
-    @Mock
-    private lateinit var unhandledException: UnhandledException
-    @Rule
-    @JvmField
+    private val extraMetaInfoRetriever: ExtraMetaInfoRetriever = mock()
+    private val unhandledException: UnhandledException = mock()
+
+    @get:Rule
     internal val sUnhandledExceptionFactory = MockedStaticRule(UnhandledExceptionFactory::class.java)
     private lateinit var converter: PluginErrorDetailsConverter
 
@@ -50,7 +47,6 @@ class PluginErrorDetailsConverterTest : CommonTest() {
 
     @Before
     fun setUp() {
-        MockitoAnnotations.openMocks(this)
         ObjectPropertyAssertions(filledInput)
             .withPrivateFields(true)
             .checkField("exceptionClass", "getExceptionClass", exceptionClass)
@@ -61,9 +57,9 @@ class PluginErrorDetailsConverterTest : CommonTest() {
             .checkField("virtualMachineVersion", "getVirtualMachineVersion", virtualMachineVersion)
             .checkAll()
 
-        `when`(extraMetaInfoRetriever.buildId).thenReturn(buildId)
-        `when`(extraMetaInfoRetriever.isOffline).thenReturn(isOffline)
-        `when`(
+        whenever(extraMetaInfoRetriever.buildId).thenReturn(buildId)
+        whenever(extraMetaInfoRetriever.isOffline).thenReturn(isOffline)
+        whenever(
             UnhandledExceptionFactory.getUnhandledExceptionFromPlugin(
                 anyOrNull(),
                 anyOrNull(),

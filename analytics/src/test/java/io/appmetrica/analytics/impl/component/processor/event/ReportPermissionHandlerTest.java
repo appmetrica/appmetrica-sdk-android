@@ -74,8 +74,8 @@ public class ReportPermissionHandlerTest extends CommonTest {
     public void setUp() {
         MockitoAnnotations.openMocks(this);
         mOldPermissions = Arrays.asList(
-                new PermissionState("internet", true),
-                new PermissionState("wifi_state", false)
+            new PermissionState("internet", true),
+            new PermissionState("wifi_state", false)
         );
         mOldProviders = Arrays.asList("gps", "network");
         mOldProvidersCopy = Arrays.asList("gps", "network");
@@ -90,12 +90,12 @@ public class ReportPermissionHandlerTest extends CommonTest {
         doReturn(id).when(mComponent).getComponentId();
         doReturn(RuntimeEnvironment.getApplication()).when(mComponent).getContext();
         mReportPermissionsHandler = new ReportPermissionHandler(
-                mComponent,
-                mPermissionsChecker,
-                mPermissionsStorage,
-                mBackgroundRestrictionsStateProvider,
-                mAppStandbyBucketConverter,
-                mAvailableProvidersRetriever
+            mComponent,
+            mPermissionsChecker,
+            mPermissionsStorage,
+            mBackgroundRestrictionsStateProvider,
+            mAppStandbyBucketConverter,
+            mAvailableProvidersRetriever
         );
     }
 
@@ -115,7 +115,7 @@ public class ReportPermissionHandlerTest extends CommonTest {
 
     @Test
     public void testNullBgRestrictions() {
-        mocks = Arrays.asList(new PermissionState[]{new PermissionState("1", false), new PermissionState("2", true)});
+        mocks = Arrays.asList(new PermissionState("1", false), new PermissionState("2", true));
         doReturn(true).when(mComponent).needToCheckPermissions();
         doReturn(mocks).when(mPermissionsChecker).check(any(Context.class), any(List.class));
         doReturn(null).when(mBackgroundRestrictionsStateProvider).getBackgroundRestrictionsState();
@@ -130,7 +130,7 @@ public class ReportPermissionHandlerTest extends CommonTest {
 
     @Test
     public void testPermissionsChangedAndBgRestrictionsNot() {
-        mocks = Arrays.asList(new PermissionState[]{new PermissionState("1", false), new PermissionState("2", true)});
+        mocks = Arrays.asList(new PermissionState("1", false), new PermissionState("2", true));
         doReturn(true).when(mComponent).needToCheckPermissions();
         doReturn(mocks).when(mPermissionsChecker).check(any(Context.class), any(List.class));
         doReturn(mOldBgRestrictionStateCopy).when(mBackgroundRestrictionsStateProvider).getBackgroundRestrictionsState();
@@ -148,7 +148,7 @@ public class ReportPermissionHandlerTest extends CommonTest {
         doReturn(true).when(mComponent).needToCheckPermissions();
         doReturn(null).when(mPermissionsChecker).check(any(Context.class), any(List.class));
         final BackgroundRestrictionsState newBackgroundRestrictionsState =
-                new BackgroundRestrictionsState(BackgroundRestrictionsState.AppStandByBucket.FREQUENT, false);
+            new BackgroundRestrictionsState(BackgroundRestrictionsState.AppStandByBucket.FREQUENT, false);
         doReturn(newBackgroundRestrictionsState).when(mBackgroundRestrictionsStateProvider).getBackgroundRestrictionsState();
         doReturn(true).when(vitalComponentDataProvider).isFirstEventDone();
         CounterReport report = mock(CounterReport.class);
@@ -192,7 +192,7 @@ public class ReportPermissionHandlerTest extends CommonTest {
     @Test
     public void testBackgroundRestrictions() {
         doReturn(true).when(vitalComponentDataProvider).isFirstEventDone();
-        mocks = Arrays.asList(new PermissionState[]{new PermissionState("1", false), new PermissionState("2", true)});
+        mocks = Arrays.asList(new PermissionState("1", false), new PermissionState("2", true));
         doReturn(true).when(mComponent).needToCheckPermissions();
         doReturn(mocks).when(mPermissionsChecker).check(any(Context.class), any(List.class));
         doReturn(new BackgroundRestrictionsState(BackgroundRestrictionsState.AppStandByBucket.RARE, false)).when(mBackgroundRestrictionsStateProvider).getBackgroundRestrictionsState();
@@ -221,8 +221,8 @@ public class ReportPermissionHandlerTest extends CommonTest {
             @Override
             public boolean matches(AppPermissionsState argument) {
                 return CollectionUtils.areCollectionsEqual(argument.mAvailableProviders, providers) &&
-                        CollectionUtils.areCollectionsEqual(argument.mPermissionStateList, permissions) &&
-                        Utils.areEqual(argument.mBackgroundRestrictionsState, bgRestrictions);
+                    CollectionUtils.areCollectionsEqual(argument.mPermissionStateList, permissions) &&
+                    Utils.areEqual(argument.mBackgroundRestrictionsState, bgRestrictions);
             }
         };
     }

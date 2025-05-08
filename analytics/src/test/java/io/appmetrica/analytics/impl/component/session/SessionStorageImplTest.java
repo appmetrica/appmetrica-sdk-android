@@ -62,8 +62,8 @@ public class SessionStorageImplTest extends CommonTest {
     public void testWithSomeValues() {
         final int sleepStart = new Random().nextInt(100000);
         doReturn("{" +
-                SessionStorageImpl.SLEEP_START + ":" + String.valueOf(sleepStart) +
-                "}").when(mStorage).getSessionParameters(TAG);
+            SessionStorageImpl.SLEEP_START + ":" + sleepStart +
+            "}").when(mStorage).getSessionParameters(TAG);
         SessionStorageImpl sessionStorage = new SessionStorageImpl(mStorage, TAG);
         assertThat(sessionStorage.hasValues()).isTrue();
         assertThat(sessionStorage.getSleepStart()).isEqualTo(sleepStart);
@@ -73,12 +73,12 @@ public class SessionStorageImplTest extends CommonTest {
     public void testClear() {
         SessionStorageImpl sessionStorage = new SessionStorageImpl(mStorage, TAG);
         sessionStorage.putAliveReportNeeded(true)
-                .putSleepStart(1)
-                .putCreationTime(1)
-                .putReportId(1)
-                .putSessionId(1)
-                .putLastEventOffset(1)
-                .commit();
+            .putSleepStart(1)
+            .putCreationTime(1)
+            .putReportId(1)
+            .putSessionId(1)
+            .putLastEventOffset(1)
+            .commit();
         assertThat(sessionStorage.hasValues()).isTrue();
         sessionStorage.clear();
         assertThat(sessionStorage.hasValues()).isFalse();
@@ -95,12 +95,12 @@ public class SessionStorageImplTest extends CommonTest {
         int sessionId = random.nextInt(1000) + 3000;
         int lastEventOffset = random.nextInt(1000) + 4000;
         sessionStorage.putAliveReportNeeded(aliveNeeded)
-                .putSleepStart(sleepStart)
-                .putCreationTime(creationTime)
-                .putReportId(reportId)
-                .putSessionId(sessionId)
-                .putLastEventOffset(lastEventOffset)
-                .commit();
+            .putSleepStart(sleepStart)
+            .putCreationTime(creationTime)
+            .putReportId(reportId)
+            .putSessionId(sessionId)
+            .putLastEventOffset(lastEventOffset)
+            .commit();
         assertThat(sessionStorage.isAliveReportNeeded()).isTrue();
         assertThat(sessionStorage.getSleepStart()).isEqualTo(sleepStart);
         assertThat(sessionStorage.getCreationTime()).isEqualTo(creationTime);

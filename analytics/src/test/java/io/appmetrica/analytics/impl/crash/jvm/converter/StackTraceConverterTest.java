@@ -1,8 +1,6 @@
 package io.appmetrica.analytics.impl.crash.jvm.converter;
 
 import io.appmetrica.analytics.impl.crash.jvm.client.StackTraceItemInternal;
-import io.appmetrica.analytics.impl.crash.jvm.converter.StackTraceConverter;
-import io.appmetrica.analytics.impl.crash.jvm.converter.StackTraceElementConverter;
 import io.appmetrica.analytics.impl.protobuf.backend.CrashAndroid;
 import io.appmetrica.analytics.testutils.CommonTest;
 import java.util.Arrays;

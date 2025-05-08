@@ -48,7 +48,8 @@ internal class SessionsMigratorToV112SpecialCasesTest : CommonTest() {
                 null,
                 null,
                 null,
-                "200")
+                "200"
+            )
         ).thenReturn(cursor)
 
         sessionsMigrator = ComponentDatabaseUpgradeScriptToV112.SessionsMigrator()
@@ -80,15 +81,18 @@ internal class SessionsMigratorToV112SpecialCasesTest : CommonTest() {
 
     @Test
     fun `runScript if read throw`() {
-        whenever(database.query(
-            "sessions",
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            "200")).thenThrow(RuntimeException())
+        whenever(
+            database.query(
+                "sessions",
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                "200"
+            )
+        ).thenThrow(RuntimeException())
 
         sessionsMigrator.runScript(database)
 
@@ -112,20 +116,25 @@ internal class SessionsMigratorToV112SpecialCasesTest : CommonTest() {
 
     @Test
     fun `runScript if no old data`() {
-        whenever(database.query(
-            "sessions",
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            "200")).thenReturn(
-                MatrixCursor(arrayOf(
+        whenever(
+            database.query(
+                "sessions",
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                "200"
+            )
+        ).thenReturn(
+            MatrixCursor(
+                arrayOf(
                     "ID", "start_time", "report_request_parameters", "server_time_offset", "type",
                     "obtained_before_first_sync"
-                ))
+                )
             )
+        )
 
         sessionsMigrator.runScript(database)
 
@@ -179,5 +188,4 @@ internal class SessionsMigratorToV112SpecialCasesTest : CommonTest() {
             )
         )
     }
-
 }

@@ -25,10 +25,10 @@ import static org.mockito.Mockito.when;
 @RunWith(ParameterizedRobolectricTestRunner.class)
 public class HierarchicalStringListTrimmerTest extends CommonTest {
 
-    private List<String> input;
-    private List<String> expectedResultList;
-    private int expectedItemsDropped;
-    private int expectedBytesTruncated;
+    private final List<String> input;
+    private final List<String> expectedResultList;
+    private final int expectedItemsDropped;
+    private final int expectedBytesTruncated;
 
     public HierarchicalStringListTrimmerTest(List<String> input,
                                              List<String> expectedResultList,
@@ -44,69 +44,69 @@ public class HierarchicalStringListTrimmerTest extends CommonTest {
     @ParameterizedRobolectricTestRunner.Parameters(name = "#{index} - {4}")
     public static List<Object[]> data() {
         return Arrays.asList(new Object[][]{
-                {null, null, 0, 0, "null"},
-                {Collections.emptyList(), Collections.emptyList(), 0, 0, "empty list"},
-                {
-                        Collections.singletonList("aaaaa"),
-                        Collections.singletonList("aaaaa"),
-                        0,
-                        0,
-                        "list with single non-truncated item"
-                },
-                {
-                        Arrays.asList("aaaaa", "bbbbb", "ccccc", "ddddd", "eeeee"),
-                        Arrays.asList("aaaaa", "bbbbb", "ccccc", "ddddd", "eeeee"),
-                        0,
-                        0,
-                        "list with 5 non-truncated items within list size limitt"
-                },
-                {
-                        Arrays.asList(
-                                "aaaaaaaaaa", "aaaaaaaaaa" + "b", "aaaaaaaaaa" + "cc", "aaaaaaaaaa" + "ddd",
-                                "aaaaaaaaaa" + "eeee"
-                        ),
-                        Arrays.asList("aaaaaaaaaa", "aaaaaaaaaa", "aaaaaaaaaa", "aaaaaaaaaa", "aaaaaaaaaa"),
-                        0,
-                        10,
-                        "list with 5 truncated items within list size limit"
-                },
-                {
-                        Arrays.asList("aaaaa", "bbbbb", "ccccc", "ddddd", "eeeee", "fffff", "ggggg", "hhhhh", "iiiii"),
-                        Arrays.asList("aaaaa", "bbbbb", "ccccc", "ddddd", "eeeee"),
-                        4,
-                        20,
-                        "list with 4 non truncated items out of list size limit"
-                },
-                {
-                        Arrays.asList(
-                                "aaaaaaaaaa" + "bbbbb", "bbbbb", "cccccccccc" + "ddddd", "ddddd", "eeeee", "ffffffffff"
-                        ),
-                        Arrays.asList("aaaaaaaaaa", "bbbbb", "cccccccccc", "ddddd", "eeeee"),
-                        1,
-                        20,
-                        "list with single item out of list size limit and some truncated items"
-                },
-                {
-                        Collections.singletonList("фывапроцыыы"),
-                        Collections.singletonList("фывапроцыы"),
-                        0,
-                        2,
-                        "list with cyrillic chars string items"
-                },
-                {
-                        Arrays.asList(
-                                "aaaaaaa",
-                                "bbbbbbb",
-                                "ccccccc",
-                                "dddddddddd",
-                                "бббббббббб",
-                                "аааааааааа" + "ббббб" //cyrillic "а"
-                        ),
-                        Arrays.asList("aaaaaaa", "bbbbbbb", "ccccccc", "dddddddddd", "бббббббббб"),
-                        1,
-                        30,
-                        "list with single truncated item out of list size limit"
-                }
+            {null, null, 0, 0, "null"},
+            {Collections.emptyList(), Collections.emptyList(), 0, 0, "empty list"},
+            {
+                Collections.singletonList("aaaaa"),
+                Collections.singletonList("aaaaa"),
+                0,
+                0,
+                "list with single non-truncated item"
+            },
+            {
+                Arrays.asList("aaaaa", "bbbbb", "ccccc", "ddddd", "eeeee"),
+                Arrays.asList("aaaaa", "bbbbb", "ccccc", "ddddd", "eeeee"),
+                0,
+                0,
+                "list with 5 non-truncated items within list size limitt"
+            },
+            {
+                Arrays.asList(
+                    "aaaaaaaaaa", "aaaaaaaaaa" + "b", "aaaaaaaaaa" + "cc", "aaaaaaaaaa" + "ddd",
+                    "aaaaaaaaaa" + "eeee"
+                ),
+                Arrays.asList("aaaaaaaaaa", "aaaaaaaaaa", "aaaaaaaaaa", "aaaaaaaaaa", "aaaaaaaaaa"),
+                0,
+                10,
+                "list with 5 truncated items within list size limit"
+            },
+            {
+                Arrays.asList("aaaaa", "bbbbb", "ccccc", "ddddd", "eeeee", "fffff", "ggggg", "hhhhh", "iiiii"),
+                Arrays.asList("aaaaa", "bbbbb", "ccccc", "ddddd", "eeeee"),
+                4,
+                20,
+                "list with 4 non truncated items out of list size limit"
+            },
+            {
+                Arrays.asList(
+                    "aaaaaaaaaa" + "bbbbb", "bbbbb", "cccccccccc" + "ddddd", "ddddd", "eeeee", "ffffffffff"
+                ),
+                Arrays.asList("aaaaaaaaaa", "bbbbb", "cccccccccc", "ddddd", "eeeee"),
+                1,
+                20,
+                "list with single item out of list size limit and some truncated items"
+            },
+            {
+                Collections.singletonList("фывапроцыыы"),
+                Collections.singletonList("фывапроцыы"),
+                0,
+                2,
+                "list with cyrillic chars string items"
+            },
+            {
+                Arrays.asList(
+                    "aaaaaaa",
+                    "bbbbbbb",
+                    "ccccccc",
+                    "dddddddddd",
+                    "бббббббббб",
+                    "аааааааааа" + "ббббб" //cyrillic "а"
+                ),
+                Arrays.asList("aaaaaaa", "bbbbbbb", "ccccccc", "dddddddddd", "бббббббббб"),
+                1,
+                30,
+                "list with single truncated item out of list size limit"
+            }
         });
     }
 
@@ -125,7 +125,7 @@ public class HierarchicalStringListTrimmerTest extends CommonTest {
         when(stringTrimmer.trim(anyString())).then(new Answer<TrimmingResult<String, BytesTruncatedProvider>>() {
             @Override
             public TrimmingResult<String, BytesTruncatedProvider> answer(InvocationOnMock invocation)
-                    throws Throwable {
+                throws Throwable {
                 String inputString = invocation.getArgument(0);
                 String resultString = inputString;
                 int bytesTruncated = 0;
@@ -135,8 +135,8 @@ public class HierarchicalStringListTrimmerTest extends CommonTest {
                 }
 
                 return new TrimmingResult<String, BytesTruncatedProvider>(
-                        resultString,
-                        new BytesTruncatedInfo(bytesTruncated)
+                    resultString,
+                    new BytesTruncatedInfo(bytesTruncated)
                 );
             }
         });
@@ -147,14 +147,14 @@ public class HierarchicalStringListTrimmerTest extends CommonTest {
     @Test
     public void trim() throws Exception {
         TrimmingResult<List<String>, CollectionTrimInfo> trimmingResult =
-                stringListTrimmer.trim(input);
+            stringListTrimmer.trim(input);
 
         ObjectPropertyAssertions<TrimmingResult<List<String>, CollectionTrimInfo>>
-                assertions = ObjectPropertyAssertions(trimmingResult);
+            assertions = ObjectPropertyAssertions(trimmingResult);
 
         assertions.checkFieldComparingFieldByField(
-                "metaInfo",
-                new CollectionTrimInfo(expectedItemsDropped, expectedBytesTruncated)
+            "metaInfo",
+            new CollectionTrimInfo(expectedItemsDropped, expectedBytesTruncated)
         );
         assertions.checkField("value", expectedResultList, true);
 

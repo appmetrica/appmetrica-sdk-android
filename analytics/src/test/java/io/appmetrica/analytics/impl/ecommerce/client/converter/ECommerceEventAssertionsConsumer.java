@@ -21,44 +21,44 @@ public class ECommerceEventAssertionsConsumer implements Consumer<ObjectProperty
     public void accept(ObjectPropertyAssertions<Ecommerce.ECommerceEvent> assertions) {
         try {
             assertions.withFinalFieldOnly(false)
-                    .checkField("type", expectedEventType)
-                    .checkFieldRecursively("orderInfo", orderInfoAssertionConsumer)
-                    .checkFieldComparingFieldByField("cartActionInfo", expectedCartActionProto)
-                    .checkFieldComparingFieldByField("shownScreenInfo", expectedShowScreenInfo)
-                    .checkFieldComparingFieldByField("shownProductDetailsInfo", expectedShowProductDetailsInfo)
-                    .checkFieldComparingFieldByField("shownProductCardInfo", expectedShowProductCardInfo);
+                .checkField("type", expectedEventType)
+                .checkFieldRecursively("orderInfo", orderInfoAssertionConsumer)
+                .checkFieldComparingFieldByField("cartActionInfo", expectedCartActionProto)
+                .checkFieldComparingFieldByField("shownScreenInfo", expectedShowScreenInfo)
+                .checkFieldComparingFieldByField("shownProductDetailsInfo", expectedShowProductDetailsInfo)
+                .checkFieldComparingFieldByField("shownProductCardInfo", expectedShowProductCardInfo);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
     public ECommerceEventAssertionsConsumer setOrderInfoAssertionConsumer(
-            Consumer<ObjectPropertyAssertions<Ecommerce.ECommerceEvent.OrderInfo>> orderInfoAssertionConsumer
+        Consumer<ObjectPropertyAssertions<Ecommerce.ECommerceEvent.OrderInfo>> orderInfoAssertionConsumer
     ) {
         this.orderInfoAssertionConsumer = orderInfoAssertionConsumer;
         return this;
     }
 
     public ECommerceEventAssertionsConsumer setExpectedCartActionProto(
-            Ecommerce.ECommerceEvent.CartActionInfo expectedCartActionProto) {
+        Ecommerce.ECommerceEvent.CartActionInfo expectedCartActionProto) {
         this.expectedCartActionProto = expectedCartActionProto;
         return this;
     }
 
     public ECommerceEventAssertionsConsumer setExpectedShowScreenInfo(
-            Ecommerce.ECommerceEvent.ShownScreenInfo expectedShowScreenInfo) {
+        Ecommerce.ECommerceEvent.ShownScreenInfo expectedShowScreenInfo) {
         this.expectedShowScreenInfo = expectedShowScreenInfo;
         return this;
     }
 
     public ECommerceEventAssertionsConsumer setExpectedShowProductDetailsInfo(
-            Ecommerce.ECommerceEvent.ShownProductDetailsInfo expectedShowProductDetailsInfo) {
+        Ecommerce.ECommerceEvent.ShownProductDetailsInfo expectedShowProductDetailsInfo) {
         this.expectedShowProductDetailsInfo = expectedShowProductDetailsInfo;
         return this;
     }
 
     public ECommerceEventAssertionsConsumer setExpectedShowProductCardInfo(
-            Ecommerce.ECommerceEvent.ShownProductCardInfo expectedShowProductCardInfo) {
+        Ecommerce.ECommerceEvent.ShownProductCardInfo expectedShowProductCardInfo) {
         this.expectedShowProductCardInfo = expectedShowProductCardInfo;
         return this;
     }

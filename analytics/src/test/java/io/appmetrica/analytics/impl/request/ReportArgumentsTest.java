@@ -56,14 +56,14 @@ public class ReportArgumentsTest extends CommonTest {
     @Test
     public void testEqualToOtherArguments() {
         assertThat(
-                ReportRequestConfig.Arguments.empty().mergeFrom(fillConfiguration())
+            ReportRequestConfig.Arguments.empty().mergeFrom(fillConfiguration())
         ).isEqualToComparingFieldByField(fillConfiguration());
     }
 
     @Test
     public void testNotEqualToOtherArguments() {
         assertThat(
-                ReportRequestConfig.Arguments.empty().compareWithOtherArguments(fillConfiguration())
+            ReportRequestConfig.Arguments.empty().compareWithOtherArguments(fillConfiguration())
         ).isFalse();
     }
 
@@ -89,35 +89,35 @@ public class ReportArgumentsTest extends CommonTest {
     @Test
     public void testChooseFromConfiguration() {
         assertArguments(
-                ReportRequestConfig.Arguments.empty().mergeFrom(fillConfiguration()),
-                API_KEY,
-                REPORT_LOCATION_ENABLED,
-                new Location("provider"),
-                FIRST_ACTIVATION_AS_UPDATE,
-                SESSION_TIMEOUT,
-                MAX_REPORTS_COUNT,
-                DISPATCH_PERIOD_SECONDS,
-                LOG_ENABLED,
+            ReportRequestConfig.Arguments.empty().mergeFrom(fillConfiguration()),
+            API_KEY,
+            REPORT_LOCATION_ENABLED,
+            new Location("provider"),
+            FIRST_ACTIVATION_AS_UPDATE,
+            SESSION_TIMEOUT,
+            MAX_REPORTS_COUNT,
+            DISPATCH_PERIOD_SECONDS,
+            LOG_ENABLED,
             DATA_SENDING_ENABLED,
-                clids,
-                MAX_REPORTS_IN_DB_COUNT,
-                REVENUE_AUTO_TRACKING_ENABLED
+            clids,
+            MAX_REPORTS_IN_DB_COUNT,
+            REVENUE_AUTO_TRACKING_ENABLED
         );
     }
 
     @Test
     public void chooseFromOldAttributes() {
         ReportRequestConfig.Arguments oldArguments = new ReportRequestConfig.Arguments(
-                "oldApiKey",
-                false,
-                false,
-                100,
-                200,
-                300,
-                false,
-                true,
-                clids,
-                250
+            "oldApiKey",
+            false,
+            false,
+            100,
+            200,
+            300,
+            false,
+            true,
+            clids,
+            250
 
         );
         assertThat(oldArguments.compareWithOtherArguments(CommonArgumentsTestUtils.emptyReporterArguments())).isTrue();
@@ -192,16 +192,16 @@ public class ReportArgumentsTest extends CommonTest {
     @NonNull
     public static ReportRequestConfig.Arguments createEmptyArguments() {
         return new ReportRequestConfig.Arguments(
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null);
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null);
     }
 
 }

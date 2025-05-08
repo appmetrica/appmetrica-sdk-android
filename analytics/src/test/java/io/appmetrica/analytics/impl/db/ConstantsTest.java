@@ -18,24 +18,24 @@ public class ConstantsTest extends CommonTest {
     @Test
     public void testReportTableContainsAllColumns() {
         testColumns(
-                Pattern.compile("CREATE TABLE IF NOT EXISTS "
-                        + Constants.EventsTable.TABLE_NAME +
-                        " \\((id) INTEGER PRIMARY KEY,((([ ]*([a-zA-Z_]*) ((TEXT)|(INTEGER)|(BLOB)))(( DEFAULT (('')|(0)|(1)|(2)|(-1)|('\\{\\}')))*),*)*) \\)"
-                ),
-                Constants.EventsTable.CREATE_TABLE,
-                Constants.EventsTable.ACTUAL_COLUMNS
+            Pattern.compile("CREATE TABLE IF NOT EXISTS "
+                + Constants.EventsTable.TABLE_NAME +
+                " \\((id) INTEGER PRIMARY KEY,((([ ]*([a-zA-Z_]*) ((TEXT)|(INTEGER)|(BLOB)))(( DEFAULT (('')|(0)|(1)|(2)|(-1)|('\\{\\}')))*),*)*) \\)"
+            ),
+            Constants.EventsTable.CREATE_TABLE,
+            Constants.EventsTable.ACTUAL_COLUMNS
         );
     }
 
     @Test
     public void testSessionTableContainsAllColumns() {
         testColumns(
-                Pattern.compile("CREATE TABLE IF NOT EXISTS "
-                        + Constants.SessionTable.TABLE_NAME +
-                        " \\((id) INTEGER,((([ ]*([a-zA-Z_]*) ((TEXT)|(INTEGER)|(BLOB)))(( DEFAULT (('')|(0)|(2)|('\\{\\}')))*),*)*) \\)"
-                ),
-                Constants.SessionTable.CREATE_TABLE,
-                Constants.SessionTable.ACTUAL_COLUMNS
+            Pattern.compile("CREATE TABLE IF NOT EXISTS "
+                + Constants.SessionTable.TABLE_NAME +
+                " \\((id) INTEGER,((([ ]*([a-zA-Z_]*) ((TEXT)|(INTEGER)|(BLOB)))(( DEFAULT (('')|(0)|(2)|('\\{\\}')))*),*)*) \\)"
+            ),
+            Constants.SessionTable.CREATE_TABLE,
+            Constants.SessionTable.ACTUAL_COLUMNS
         );
     }
 
@@ -45,7 +45,7 @@ public class ConstantsTest extends CommonTest {
         matcher.find();
         HashSet<String> existedKeys = new HashSet<String>();
         for (String string : cutColumnDescription(matcher.group(2))
-                .split(",")) {
+            .split(",")) {
             existedKeys.add(string.trim());
         }
         existedKeys.add(cutColumnDescription(matcher.group(1)).trim());

@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.networktasks.internal
 
 import io.appmetrica.analytics.networktasks.impl.NetworkTaskRunnable
+import io.appmetrica.analytics.testutils.CommonTest
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -15,12 +16,13 @@ import org.mockito.kotlin.never
 import org.mockito.kotlin.stubbing
 import org.mockito.kotlin.timeout
 import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 import java.lang.Thread.sleep
 import java.util.concurrent.Executor
 
 @RunWith(RobolectricTestRunner::class)
-internal class NetworkCoreTest {
+internal class NetworkCoreTest : CommonTest() {
 
     private val description = "my task"
     private val executor = mock<Executor>()
@@ -67,7 +69,7 @@ internal class NetworkCoreTest {
 
     @Test
     fun addAlreadyAddedTask() {
-        doAnswer { sleep(1500) }.`when`(executor).execute(any())
+        whenever(executor.execute(any())).doAnswer { sleep(1500) }
         networkCore.startTask(networkTask)
         verify(executor, timeout(500).times(1)).execute(networkTaskRunnable)
         clearInvocations(executor)
@@ -95,7 +97,7 @@ internal class NetworkCoreTest {
 
     @Test
     fun addAndExecuteMultipleDifferentTasks() {
-        doAnswer { sleep(1000) }.`when`(executor).execute(any())
+        doAnswer { sleep(1000) }.whenever(executor).execute(any())
         networkCore.startTask(networkTask)
         verify(executor, timeout(500).times(1)).execute(networkTaskRunnable)
         clearInvocations(executor)
@@ -110,7 +112,7 @@ internal class NetworkCoreTest {
 
     @Test
     fun destroyWhileHasRunningTask() {
-        doAnswer { sleep(1000) }.`when`(executor).execute(any())
+        doAnswer { sleep(1000) }.whenever(executor).execute(any())
         networkCore.startTask(networkTask)
         verify(executor, timeout(500).times(1)).execute(networkTaskRunnable)
         networkCore.stopTasks()
@@ -134,7 +136,7 @@ internal class NetworkCoreTest {
             on { this.executor } doReturn executor
             on { this.description() } doReturn "task2"
         }
-        doAnswer { sleep(1000) }.`when`(executor).execute(any())
+        doAnswer { sleep(1000) }.whenever(executor).execute(any())
         networkCore.startTask(networkTask)
         networkCore.startTask(task1)
         networkCore.startTask(task2)

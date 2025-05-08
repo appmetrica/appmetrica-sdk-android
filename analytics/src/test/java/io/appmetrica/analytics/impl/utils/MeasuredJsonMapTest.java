@@ -19,8 +19,8 @@ public class MeasuredJsonMapTest extends CommonTest {
     @Before
     public void setUp() throws JSONException {
         final JSONObject json = new JSONObject()
-                .put("a", "bb")
-                .put("cc", "dddd");
+            .put("a", "bb")
+            .put("cc", "dddd");
         initialTotalSize = 9;
         mMeasuredJsonMap = new MeasuredJsonMap(json.toString());
     }

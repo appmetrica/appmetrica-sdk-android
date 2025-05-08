@@ -32,28 +32,28 @@ public class LongRandomTest extends CommonTest {
     @Test
     public void testNextValueForMinGreaterThanMax() {
         assertThatThrownBy(
-                new ThrowableAssert.ThrowingCallable() {
-                    @Override
-                    public void call() throws Throwable {
-                        mLongRandom.nextValue(100L, 10L);
-                    }
+            new ThrowableAssert.ThrowingCallable() {
+                @Override
+                public void call() throws Throwable {
+                    mLongRandom.nextValue(100L, 10L);
                 }
+            }
         )
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("min should be less than max");
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("min should be less than max");
     }
 
     @Test
     public void testNextValueForMinEqualMax() {
         assertThatThrownBy(
-                new ThrowableAssert.ThrowingCallable() {
-                    @Override
-                    public void call() throws Throwable {
-                        mLongRandom.nextValue(100L, 100L);
-                    }
+            new ThrowableAssert.ThrowingCallable() {
+                @Override
+                public void call() throws Throwable {
+                    mLongRandom.nextValue(100L, 100L);
                 }
+            }
         )
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("min should be less than max");
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("min should be less than max");
     }
 }

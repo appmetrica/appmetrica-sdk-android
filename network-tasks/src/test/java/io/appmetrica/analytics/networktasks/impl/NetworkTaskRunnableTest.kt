@@ -5,6 +5,7 @@ import io.appmetrica.analytics.coreapi.internal.io.IExecutionPolicy
 import io.appmetrica.analytics.networktasks.internal.ExponentialBackoffPolicy
 import io.appmetrica.analytics.networktasks.internal.NetworkTask
 import io.appmetrica.analytics.networktasks.internal.RetryPolicyConfig
+import io.appmetrica.analytics.testutils.CommonTest
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
@@ -18,7 +19,7 @@ import org.mockito.kotlin.verify
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class NetworkTaskRunnableTest {
+class NetworkTaskRunnableTest : CommonTest() {
 
     private val retryPolicyConfig = mock<RetryPolicyConfig>()
     private val connectionBasedExecutionPolicy = mock<IExecutionPolicy> {
@@ -45,7 +46,7 @@ class NetworkTaskRunnableTest {
     )
 
     @Test
-    fun testCannotBeExecuted() {
+    fun cannotBeExecuted() {
         stubbing(connectionBasedExecutionPolicy) {
             on { this.canBeExecuted() } doReturn false
         }
@@ -59,7 +60,7 @@ class NetworkTaskRunnableTest {
     }
 
     @Test
-    fun testNetworkPolicyForbidsExecution() {
+    fun networkPolicyForbidsExecution() {
         stubbing(connectionBasedExecutionPolicy) {
             on { this.canBeExecuted() } doReturn false
         }
@@ -70,7 +71,7 @@ class NetworkTaskRunnableTest {
     }
 
     @Test
-    fun testRetryPolicyForbidsExecution() {
+    fun retryPolicyForbidsExecution() {
         stubbing(exponentialBackoffPolicy) {
             on { this.canBeExecuted(retryPolicyConfig) } doReturn false
         }
@@ -81,7 +82,7 @@ class NetworkTaskRunnableTest {
     }
 
     @Test
-    fun testRequestUnsuccessfulShouldNotTryNextHost() {
+    fun requestUnsuccessfulShouldNotTryNextHost() {
         stubbing(performingStrategy) {
             on { this.performRequest(networkTask) } doReturn false
         }
@@ -97,7 +98,7 @@ class NetworkTaskRunnableTest {
     }
 
     @Test
-    fun testRequestUnsuccessfulShouldTryNextHost() {
+    fun requestUnsuccessfulShouldTryNextHost() {
         stubbing(performingStrategy) {
             on { this.performRequest(networkTask) } doReturn false
         }
@@ -113,7 +114,7 @@ class NetworkTaskRunnableTest {
     }
 
     @Test
-    fun testRequestSuccessful() {
+    fun requestSuccessful() {
         stubbing(networkTask) {
             on { this.shouldTryNextHost() } doReturn false
         }
@@ -129,7 +130,7 @@ class NetworkTaskRunnableTest {
     }
 
     @Test
-    fun testRequestSuccessfulShouldTryNextHost() {
+    fun requestSuccessfulShouldTryNextHost() {
         stubbing(networkTask) {
             on { this.shouldTryNextHost() } doReturn true
         }
@@ -145,7 +146,7 @@ class NetworkTaskRunnableTest {
     }
 
     @Test
-    fun testThreadIsNotRunning() {
+    fun threadIsNotRunning() {
         stubbing(rootThreadStateSource) {
             on { this.isRunning } doReturn false
         }
@@ -155,7 +156,7 @@ class NetworkTaskRunnableTest {
     }
 
     @Test
-    fun testThreadIsInterrupted() {
+    fun threadIsInterrupted() {
         stubbing(connectionBasedExecutionPolicy) {
             on { this.canBeExecuted() } doReturn true
         }
@@ -175,7 +176,7 @@ class NetworkTaskRunnableTest {
     }
 
     @Test
-    fun testThreadIsNotRunningWhenPerformingRequest() {
+    fun threadIsNotRunningWhenPerformingRequest() {
         stubbing(rootThreadStateSource) {
             on { this.isRunning } doReturnConsecutively listOf(true, false)
         }
@@ -186,7 +187,7 @@ class NetworkTaskRunnableTest {
     }
 
     @Test
-    fun testThreadIsInterruptedWhilePerformingRequest() {
+    fun threadIsInterruptedWhilePerformingRequest() {
         stubbing(rootThreadStateSource) {
             on { this.isRunning } doReturnConsecutively listOf(true, true, true, true, false)
         }
@@ -202,7 +203,7 @@ class NetworkTaskRunnableTest {
     }
 
     @Test
-    fun testShouldNotExecuteTaskStopsExecuting() {
+    fun shouldNotExecuteTaskStopsExecuting() {
         stubbing(rootThreadStateSource) {
             on { this.isRunning } doReturn true
         }

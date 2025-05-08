@@ -8,8 +8,8 @@ import io.appmetrica.analytics.impl.component.ComponentId;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.impl.db.constants.Constants;
 import io.appmetrica.analytics.impl.request.ReportRequestConfig;
-import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.impl.utils.TimeUtils;
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import io.appmetrica.analytics.testutils.TestUtils;
@@ -60,7 +60,8 @@ public abstract class DbCleanupBaseTest extends CommonTest {
     public void tearDown() {
         try {
             mDb.close();
-        } catch (Throwable ignored) {}
+        } catch (Throwable ignored) {
+        }
     }
 
     int execForSingleInt(final String query) {

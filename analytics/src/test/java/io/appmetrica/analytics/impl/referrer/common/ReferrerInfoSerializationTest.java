@@ -20,9 +20,9 @@ public class ReferrerInfoSerializationTest extends CommonTest {
     @ParameterizedRobolectricTestRunner.Parameters(name = "{0} to {1}")
     public static Collection<Object[]> data() {
         List<Object[]> data = Arrays.asList(
-                new Object[]{ ReferrerInfo.Source.UNKNOWN, ReferrerInfoClient.UNKNOWN },
-                new Object[]{ ReferrerInfo.Source.GP, ReferrerInfoClient.GP },
-                new Object[]{ ReferrerInfo.Source.HMS, ReferrerInfoClient.HMS }
+            new Object[]{ReferrerInfo.Source.UNKNOWN, ReferrerInfoClient.UNKNOWN},
+            new Object[]{ReferrerInfo.Source.GP, ReferrerInfoClient.GP},
+            new Object[]{ReferrerInfo.Source.HMS, ReferrerInfoClient.HMS}
         );
         assert data.size() == ReferrerInfo.Source.values().length;
         return data;
@@ -45,11 +45,11 @@ public class ReferrerInfoSerializationTest extends CommonTest {
     public void serialization() throws Exception {
         ReferrerInfo referrerInfo = new ReferrerInfo(referrer, clickTimestamp, installTimestamp, modelSource);
         new ProtoObjectPropertyAssertions<ReferrerInfoClient>(ReferrerInfoClient.parseFrom(referrerInfo.toProto()))
-                .checkField("value", referrer)
-                .checkField("clickTimeSeconds", clickTimestamp)
-                .checkField("installBeginTimeSeconds", installTimestamp)
-                .checkField("source", protoSource)
-                .checkAll();
+            .checkField("value", referrer)
+            .checkField("clickTimeSeconds", clickTimestamp)
+            .checkField("installBeginTimeSeconds", installTimestamp)
+            .checkField("source", protoSource)
+            .checkAll();
     }
 
     @Test
@@ -60,21 +60,21 @@ public class ReferrerInfoSerializationTest extends CommonTest {
         proto.installBeginTimeSeconds = installTimestamp;
         proto.source = protoSource;
         ObjectPropertyAssertions(ReferrerInfo.parseFrom(MessageNano.toByteArray(proto)))
-                .checkField("installReferrer", referrer)
-                .checkField("referrerClickTimestampSeconds", clickTimestamp)
-                .checkField("installBeginTimestampSeconds", installTimestamp)
-                .checkField("source", modelSource)
-                .checkAll();
+            .checkField("installReferrer", referrer)
+            .checkField("referrerClickTimestampSeconds", clickTimestamp)
+            .checkField("installBeginTimestampSeconds", installTimestamp)
+            .checkField("source", modelSource)
+            .checkAll();
     }
 
     @Test
     public void thereAndBackAgain() throws Exception {
         ReferrerInfo referrerInfo = new ReferrerInfo(referrer, clickTimestamp, installTimestamp, modelSource);
         ObjectPropertyAssertions(ReferrerInfo.parseFrom(referrerInfo.toProto()))
-                .checkField("installReferrer", referrer)
-                .checkField("referrerClickTimestampSeconds", clickTimestamp)
-                .checkField("installBeginTimestampSeconds", installTimestamp)
-                .checkField("source", modelSource)
-                .checkAll();
+            .checkField("installReferrer", referrer)
+            .checkField("referrerClickTimestampSeconds", clickTimestamp)
+            .checkField("installBeginTimestampSeconds", installTimestamp)
+            .checkField("source", modelSource)
+            .checkAll();
     }
 }

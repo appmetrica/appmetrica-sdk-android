@@ -49,8 +49,8 @@ class ProductWrapperAssertionsConsumer implements Consumer<ObjectPropertyAsserti
         PriceWrapperAssertionConsumer result = null;
         if (price != null) {
             result = new PriceWrapperAssertionConsumer()
-                    .setExpectedFiat(price.getFiat())
-                    .setExpectedInternalComponents(price.getInternalComponents());
+                .setExpectedFiat(price.getFiat())
+                .setExpectedInternalComponents(price.getInternalComponents());
         }
         return result;
     }

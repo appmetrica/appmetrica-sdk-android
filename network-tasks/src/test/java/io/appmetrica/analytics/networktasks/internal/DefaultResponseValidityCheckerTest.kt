@@ -25,5 +25,4 @@ internal class DefaultResponseValidityCheckerTest : CommonTest() {
         assertThat(responseValidityChecker.isResponseValid(HttpsURLConnection.HTTP_INTERNAL_ERROR))
             .isFalse()
     }
-
 }

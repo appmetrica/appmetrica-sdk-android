@@ -67,8 +67,8 @@ public class EventSaverTest extends CommonTest {
     private final String mProfileId = "profile id";
     private final int curAppVersion = 10;
     private EventSaver mEventSaver;
-    private long mIdentityEventSendTime = 5000;
-    private long mPermissionsCheckTime = 7000;
+    private final long mIdentityEventSendTime = 5000;
+    private final long mPermissionsCheckTime = 7000;
     private int mLastAppVersionWithCollectedFeatures = 5;
     private final int mReportType = 15;
     private final int openId = 6655;
@@ -142,7 +142,7 @@ public class EventSaverTest extends CommonTest {
 
     @Test
     public void saveReportWithoutExtrasAndSessionExtras() {
-        when(sessionExtrasHolder.getSnapshot()).thenReturn(Collections.<String, byte[]>emptyMap());
+        when(sessionExtrasHolder.getSnapshot()).thenReturn(Collections.emptyMap());
         when(mEventEncrypterProvider.getEventEncrypter(mCounterReport)).thenReturn(mEventEncrypter);
         when(mEventEncrypter.encrypt(mCounterReport)).thenReturn(mEncryptedCounterReport);
         mEventSaver.saveReport(mCounterReport, mSessionState);
@@ -156,9 +156,9 @@ public class EventSaverTest extends CommonTest {
     @Test
     public void saveReportWithExtrasWithoutSessionExtras() {
         String extraKey = "Event extra key";
-        byte[] extraValue = new byte[] {1, 5, 7, 1, 6};
+        byte[] extraValue = new byte[]{1, 5, 7, 1, 6};
         extras.put(extraKey, extraValue);
-        when(sessionExtrasHolder.getSnapshot()).thenReturn(Collections.<String, byte[]>emptyMap());
+        when(sessionExtrasHolder.getSnapshot()).thenReturn(Collections.emptyMap());
         when(mEventEncrypterProvider.getEventEncrypter(mCounterReport)).thenReturn(mEventEncrypter);
         when(mEventEncrypter.encrypt(mCounterReport)).thenReturn(mEncryptedCounterReport);
         mEventSaver.saveReport(mCounterReport, mSessionState);
@@ -277,17 +277,17 @@ public class EventSaverTest extends CommonTest {
         mLastAppVersionWithCollectedFeatures = lastAppVersionWithCollectedFeatures;
         when(mPreferences.getLastAppVersionWithFeatures()).thenReturn(mLastAppVersionWithCollectedFeatures);
         return new EventSaver(
-                mPreferences,
-                vitalComponentDataProvider,
-                mSessionManager,
-                mDbHelper,
-                mAppEnvironment,
-                mEventEncrypterProvider,
-                sessionExtrasHolder,
-                curAppVersion,
-                mReportSavedListener,
-                mEventNumberGenerator,
-                mTimeProvider
+            mPreferences,
+            vitalComponentDataProvider,
+            mSessionManager,
+            mDbHelper,
+            mAppEnvironment,
+            mEventEncrypterProvider,
+            sessionExtrasHolder,
+            curAppVersion,
+            mReportSavedListener,
+            mEventNumberGenerator,
+            mTimeProvider
         );
     }
 }

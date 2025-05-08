@@ -41,8 +41,8 @@ public class ProtobufUtilsTest extends CommonTest {
             );
 
             ObjectPropertyAssertions<EventProto.ReportMessage.Time> assertions =
-                    ObjectPropertyAssertions(time)
-                            .withFinalFieldOnly(false);
+                ObjectPropertyAssertions(time)
+                    .withFinalFieldOnly(false);
 
             assertions.checkField("timestamp", timestamp);
             assertions.checkField("timeZone", timezone);
@@ -64,8 +64,8 @@ public class ProtobufUtilsTest extends CommonTest {
         EventProto.ReportMessage.SimInfo proto = ProtobufUtils.buildSimInfo(simInfo);
 
         ObjectPropertyAssertions<EventProto.ReportMessage.SimInfo> assertions =
-                ObjectPropertyAssertions(proto)
-                        .withFinalFieldOnly(false);
+            ObjectPropertyAssertions(proto)
+                .withFinalFieldOnly(false);
 
         assertions.checkField("countryCode", simCountryCode);
         assertions.checkField("operatorId", simNetworkCode);
@@ -82,8 +82,8 @@ public class ProtobufUtilsTest extends CommonTest {
         EventProto.ReportMessage.SimInfo proto = ProtobufUtils.buildSimInfo(simInfo);
 
         ObjectPropertyAssertions<EventProto.ReportMessage.SimInfo> assertions =
-                ObjectPropertyAssertions(proto)
-                        .withFinalFieldOnly(false);
+            ObjectPropertyAssertions(proto)
+                .withFinalFieldOnly(false);
 
         assertions.checkField("countryCode", 0);
         assertions.checkField("operatorId", 0);
@@ -102,8 +102,8 @@ public class ProtobufUtilsTest extends CommonTest {
 
         EventProto.ReportMessage.Session.SessionDesc sessionDesc = ProtobufUtils.buildSessionDesc(locale, sessionType, time);
         ObjectPropertyAssertions<EventProto.ReportMessage.Session.SessionDesc> assertions =
-                ObjectPropertyAssertions(sessionDesc)
-                        .withFinalFieldOnly(false);
+            ObjectPropertyAssertions(sessionDesc)
+                .withFinalFieldOnly(false);
 
         assertions.checkField("startTime", time);
         assertions.checkField("locale", locale);

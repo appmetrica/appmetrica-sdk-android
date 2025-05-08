@@ -15,7 +15,7 @@ public class ObfuscatorTest extends CommonTest {
     private final String mFullValue;
     private final String mObfuscatedValue;
 
-    private Obfuscator mObfuscator = new Obfuscator();
+    private final Obfuscator mObfuscator = new Obfuscator();
 
     @ParameterizedRobolectricTestRunner.Parameters(name = "{0} is obfuscated into {1}")
     public static Collection<Object[]> data() {
@@ -27,12 +27,12 @@ public class ObfuscatorTest extends CommonTest {
             new Object[]{"permissions_collecting", "pc"},
             new Object[]{"retry_policy", "rp"},
             new Object[]{"not_to_be_obfuscated", "not_to_be_obfuscated"},
-            new Object[] {"cache_control", "cc"},
-            new Object[] {"auto_inapp_collecting", "aic"},
-            new Object[] {"attribution", "at"},
-            new Object[] {"startup_update", "su"},
-            new Object[] {"ssl_pinning", "sp"},
-            new Object[] {"external_attribution", "exta"}
+            new Object[]{"cache_control", "cc"},
+            new Object[]{"auto_inapp_collecting", "aic"},
+            new Object[]{"attribution", "at"},
+            new Object[]{"startup_update", "su"},
+            new Object[]{"ssl_pinning", "sp"},
+            new Object[]{"external_attribution", "exta"}
         );
     }
 

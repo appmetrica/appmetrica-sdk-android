@@ -29,9 +29,9 @@ public class StartupErrorTest extends CommonTest {
     @ParameterizedRobolectricTestRunner.Parameters(name = "for {0} should be {1}")
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
-                {0, StartupError.UNKNOWN},
-                {1, StartupError.NETWORK},
-                {2, StartupError.PARSE}
+            {0, StartupError.UNKNOWN},
+            {1, StartupError.NETWORK},
+            {2, StartupError.PARSE}
         });
     }
 

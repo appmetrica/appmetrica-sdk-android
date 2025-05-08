@@ -18,8 +18,8 @@ import io.appmetrica.analytics.impl.db.IKeyValueTableDbHelper;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesClientDbStorage;
 import io.appmetrica.analytics.impl.db.storage.MockedKeyValueTableDbHelper;
 import io.appmetrica.analytics.impl.utils.JsonHelper;
-import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.internal.IdentifiersResult;
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.TestUtils;
 import java.util.AbstractMap;
@@ -68,13 +68,13 @@ public class StartupHelperTest extends CommonTest {
     private static final IdentifiersResult TEST_DEVICE_ID_HASH = new IdentifiersResult("deviceid12345hash", IdentifierStatus.OK, null);
 
     private PreferencesClientDbStorage mPreferences;
-    private List<String> mAllIdentifiers = java.util.Arrays.asList(
-            Constants.StartupParamsCallbackKeys.UUID,
-            Constants.StartupParamsCallbackKeys.DEVICE_ID,
-            Constants.StartupParamsCallbackKeys.DEVICE_ID_HASH,
-            Constants.StartupParamsCallbackKeys.GET_AD_URL,
-            Constants.StartupParamsCallbackKeys.REPORT_AD_URL,
-            Constants.StartupParamsCallbackKeys.CLIDS
+    private final List<String> mAllIdentifiers = java.util.Arrays.asList(
+        Constants.StartupParamsCallbackKeys.UUID,
+        Constants.StartupParamsCallbackKeys.DEVICE_ID,
+        Constants.StartupParamsCallbackKeys.DEVICE_ID_HASH,
+        Constants.StartupParamsCallbackKeys.GET_AD_URL,
+        Constants.StartupParamsCallbackKeys.REPORT_AD_URL,
+        Constants.StartupParamsCallbackKeys.CLIDS
     );
 
     @Mock
@@ -116,9 +116,9 @@ public class StartupHelperTest extends CommonTest {
     @Test
     public void requestAdvIdentifiers() {
         List<String> advIdentifiers = Arrays.asList(
-                Constants.StartupParamsCallbackKeys.GOOGLE_ADV_ID,
-                Constants.StartupParamsCallbackKeys.HUAWEI_ADV_ID,
-                Constants.StartupParamsCallbackKeys.YANDEX_ADV_ID
+            Constants.StartupParamsCallbackKeys.GOOGLE_ADV_ID,
+            Constants.StartupParamsCallbackKeys.HUAWEI_ADV_ID,
+            Constants.StartupParamsCallbackKeys.YANDEX_ADV_ID
         );
         when(mStartupParams.shouldSendStartup(advIdentifiers)).thenReturn(true);
         when(mStartupParams.containsIdentifiers(advIdentifiers)).thenReturn(true);
@@ -168,11 +168,11 @@ public class StartupHelperTest extends CommonTest {
         when(mStartupParams.shouldSendStartup(mAllIdentifiers)).thenReturn(false);
         mStartupHelper.requestStartupParams(mCallback, mAllIdentifiers, mClientClids);
         verify(mReportsHandler, never())
-                .reportStartupEvent(
-                        ArgumentMatchers.<String>anyList(),
-                        any(ResultReceiver.class),
-                        ArgumentMatchers.<String, String>anyMap()
-                );
+            .reportStartupEvent(
+                ArgumentMatchers.anyList(),
+                any(ResultReceiver.class),
+                ArgumentMatchers.anyMap()
+            );
     }
 
     @Test
@@ -190,11 +190,11 @@ public class StartupHelperTest extends CommonTest {
         mStartupHelper.setClids(mClientClids);
         mStartupHelper.sendStartupIfNeeded();
         verify(mReportsHandler, never())
-                .reportStartupEvent(
-                        ArgumentMatchers.<String>anyList(),
-                        any(ResultReceiver.class),
-                        ArgumentMatchers.<String, String>anyMap()
-                );
+            .reportStartupEvent(
+                ArgumentMatchers.anyList(),
+                any(ResultReceiver.class),
+                ArgumentMatchers.anyMap()
+            );
     }
 
     @Test
@@ -206,7 +206,7 @@ public class StartupHelperTest extends CommonTest {
 
     @Test
     public void testRequestStartupParamsOnResult() {
-        when(mStartupParams.shouldSendStartup(ArgumentMatchers.<String>anyList())).thenReturn(true);
+        when(mStartupParams.shouldSendStartup(ArgumentMatchers.anyList())).thenReturn(true);
         when(mStartupParams.containsIdentifiers(mAllIdentifiers)).thenReturn(true);
         mStartupHelper.requestStartupParams(mCallback, mAllIdentifiers, mClientClids);
         interceptReceiver().send(DataResultReceiver.RESULT_CODE_STARTUP_PARAMS_UPDATED, mBundle);
@@ -217,9 +217,9 @@ public class StartupHelperTest extends CommonTest {
 
     @Test
     public void testRequestStartupParamsIfAllAvailable() {
-        when(mStartupParams.shouldSendStartup(ArgumentMatchers.<String>anyList())).thenReturn(true);
+        when(mStartupParams.shouldSendStartup(ArgumentMatchers.anyList())).thenReturn(true);
         mStartupHelper.requestStartupParams(mCallback, mAllIdentifiers, mClientClids);
-        when(mStartupParams.containsIdentifiers(ArgumentMatchers.<String>anyList())).thenReturn(true);
+        when(mStartupParams.containsIdentifiers(ArgumentMatchers.anyList())).thenReturn(true);
         interceptReceiver().send(DataResultReceiver.RESULT_CODE_STARTUP_PARAMS_UPDATED, mBundle);
         verify(mCallback).onReceive(any(StartupParamsCallback.Result.class));
         verify(mReportsHandler).onStartupRequestFinished();
@@ -240,8 +240,8 @@ public class StartupHelperTest extends CommonTest {
         mStartupHelper.requestStartupParams(mCallback, mAllIdentifiers, mClientClids);
         interceptReceiver().send(DataResultReceiver.RESULT_CODE_STARTUP_PARAMS_UPDATED, mBundle);
         verify(mCallback).onRequestError(
-                eq(new StartupParamsCallback.Reason("INCONSISTENT_CLIDS")),
-                any(StartupParamsCallback.Result.class)
+            eq(new StartupParamsCallback.Reason("INCONSISTENT_CLIDS")),
+            any(StartupParamsCallback.Result.class)
         );
         assertThat(mStartupHelper.getStartupAllParamsCallbacks().containsKey(mCallback)).isFalse();
     }
@@ -259,9 +259,9 @@ public class StartupHelperTest extends CommonTest {
 
     private ResultReceiver interceptReceiver() {
         verify(mReportsHandler).reportStartupEvent(
-                ArgumentMatchers.<String>anyList(),
-                mReceiverArgumentCaptor.capture(),
-                ArgumentMatchers.<String, String>anyMap()
+            ArgumentMatchers.anyList(),
+            mReceiverArgumentCaptor.capture(),
+            ArgumentMatchers.anyMap()
         );
 
         return mReceiverArgumentCaptor.getValue();
@@ -270,7 +270,7 @@ public class StartupHelperTest extends CommonTest {
     @Test
     public void testStartupRequestedIfNoIdentifiers() {
         new StartupHelper(context, mReportsHandler, mPreferences, mHandler)
-                .requestStartupParams(mCallback, mAllIdentifiers, mClientClids);
+            .requestStartupParams(mCallback, mAllIdentifiers, mClientClids);
 
         verify(mReportsHandler).reportStartupEvent(same(mAllIdentifiers), any(DataResultReceiver.class), same(mClientClids));
     }
@@ -281,7 +281,7 @@ public class StartupHelperTest extends CommonTest {
         mPreferences.putDeviceIdResult(TEST_DEVICE_ID).putDeviceIdHashResult(TEST_DEVICE_ID_HASH).commit();
 
         new StartupHelper(context, mReportsHandler, mPreferences, mHandler)
-                .requestStartupParams(mock(StartupParamsCallback.class), identifiers, mClientClids);
+            .requestStartupParams(mock(StartupParamsCallback.class), identifiers, mClientClids);
 
         verify(mReportsHandler).reportStartupEvent(same(identifiers), any(DataResultReceiver.class), same(mClientClids));
     }
@@ -291,7 +291,7 @@ public class StartupHelperTest extends CommonTest {
         mPreferences.putDeviceIdResult(TEST_DEVICE_ID).putDeviceIdHashResult(TEST_DEVICE_ID_HASH).commit();
 
         new StartupHelper(context, mReportsHandler, mPreferences, mHandler)
-                .requestStartupParams(mock(StartupParamsCallback.class), mAllIdentifiers, mClientClids);
+            .requestStartupParams(mock(StartupParamsCallback.class), mAllIdentifiers, mClientClids);
 
         verify(mReportsHandler).reportStartupEvent(same(mAllIdentifiers), any(DataResultReceiver.class), same(mClientClids));
     }
@@ -319,8 +319,8 @@ public class StartupHelperTest extends CommonTest {
     @Test
     public void testParametersNotClearedSome() {
         List<String> identifiers = Arrays.asList(
-                Constants.StartupParamsCallbackKeys.DEVICE_ID,
-                Constants.StartupParamsCallbackKeys.DEVICE_ID_HASH
+            Constants.StartupParamsCallbackKeys.DEVICE_ID,
+            Constants.StartupParamsCallbackKeys.DEVICE_ID_HASH
         );
 
         new StartupHelper(context, mReportsHandler, mPreferences, mHandler).requestStartupParams(mCallback, identifiers, mClientClids);
@@ -332,21 +332,21 @@ public class StartupHelperTest extends CommonTest {
 
         new StartupHelper(context, mReportsHandler, mPreferences, mHandler).requestStartupParams(mCallback, identifiers, mClientClids);
         ArgumentCaptor<StartupParamsCallback.Result> parameters =
-                ArgumentCaptor.forClass(StartupParamsCallback.Result.class);
+            ArgumentCaptor.forClass(StartupParamsCallback.Result.class);
         verify(mCallback).onReceive(parameters.capture());
         assertThat(parameters.getValue().parameters).containsOnly(
-                new AbstractMap.SimpleEntry(
-                    Constants.StartupParamsCallbackKeys.DEVICE_ID,
-                    new StartupParamsItem(TEST_DEVICE_ID.id, StartupParamsItemStatus.OK, null
-                    )),
-                new AbstractMap.SimpleEntry(
-                    Constants.StartupParamsCallbackKeys.DEVICE_ID_HASH,
-                    new StartupParamsItem(TEST_DEVICE_ID_HASH.id, StartupParamsItemStatus.OK, null)
-                    ),
-                new AbstractMap.SimpleEntry(
-                        Constants.StartupParamsCallbackKeys.CUSTOM_SDK_HOSTS,
-                        new StartupParamsItem("{}", StartupParamsItemStatus.UNKNOWN_ERROR, "no identifier in preferences")
-                )
+            new AbstractMap.SimpleEntry(
+                Constants.StartupParamsCallbackKeys.DEVICE_ID,
+                new StartupParamsItem(TEST_DEVICE_ID.id, StartupParamsItemStatus.OK, null
+                )),
+            new AbstractMap.SimpleEntry(
+                Constants.StartupParamsCallbackKeys.DEVICE_ID_HASH,
+                new StartupParamsItem(TEST_DEVICE_ID_HASH.id, StartupParamsItemStatus.OK, null)
+            ),
+            new AbstractMap.SimpleEntry(
+                Constants.StartupParamsCallbackKeys.CUSTOM_SDK_HOSTS,
+                new StartupParamsItem("{}", StartupParamsItemStatus.UNKNOWN_ERROR, "no identifier in preferences")
+            )
         );
     }
 
@@ -373,7 +373,7 @@ public class StartupHelperTest extends CommonTest {
     private void verifyCallbackCalledOnError(final StartupError error,
                                              final StartupParamsCallback.Reason reason) {
         StartupHelper startupHelper = new StartupHelper(mReportsHandler, mStartupParams, mHandler);
-        when(mStartupParams.shouldSendStartup(ArgumentMatchers.<String>anyList())).thenReturn(true);
+        when(mStartupParams.shouldSendStartup(ArgumentMatchers.anyList())).thenReturn(true);
 
         verify(mCallback, never()).onReceive(any(StartupParamsCallback.Result.class));
 
@@ -385,8 +385,8 @@ public class StartupHelperTest extends CommonTest {
         interceptReceiver().send(0, bundle);
 
         verify(mCallback, times(1)).onRequestError(
-                eq(reason),
-                any(StartupParamsCallback.Result.class)
+            eq(reason),
+            any(StartupParamsCallback.Result.class)
         );
     }
 
@@ -435,23 +435,23 @@ public class StartupHelperTest extends CommonTest {
         StartupParams startupParams = mock(StartupParams.class);
         StartupHelper startupHelper = new StartupHelper(mReportsHandler, startupParams, mHandler);
         StartupError startupError = StartupError.NETWORK;
-        when(startupParams.shouldSendStartup(ArgumentMatchers.<String>anyList())).thenReturn(true);
+        when(startupParams.shouldSendStartup(ArgumentMatchers.anyList())).thenReturn(true);
         startupHelper.requestStartupParams(mCallback, mAllIdentifiers, mClientClids);
         verify(mCallback, never()).onReceive(any(StartupParamsCallback.Result.class));
         Bundle bundle = new Bundle();
         startupError.toBundle(bundle);
         interceptReceiver().send(0, bundle);
         verify(mCallback).onRequestError(
-                eq(StartupParamsCallback.Reason.NETWORK),
-                any(StartupParamsCallback.Result.class)
+            eq(StartupParamsCallback.Reason.NETWORK),
+            any(StartupParamsCallback.Result.class)
         );
     }
 
     @Test
     public void testOnlyRequestedIdentifiersReturned() {
         List<String> identifiers = Arrays.asList(
-                Constants.StartupParamsCallbackKeys.UUID,
-                Constants.StartupParamsCallbackKeys.DEVICE_ID
+            Constants.StartupParamsCallbackKeys.UUID,
+            Constants.StartupParamsCallbackKeys.DEVICE_ID
         );
         StartupHelper startupHelper = new StartupHelper(mReportsHandler, mStartupParams, mHandler);
         when(mStartupParams.shouldSendStartup(identifiers)).thenReturn(true);
@@ -462,10 +462,10 @@ public class StartupHelperTest extends CommonTest {
         ArgumentCaptor<Map> mapCaptor = ArgumentCaptor.forClass(Map.class);
         verify(mStartupParams).putToMap(eq(identifiers), mapCaptor.capture());
         ArgumentCaptor<StartupParamsCallback.Result> resultCaptor =
-                ArgumentCaptor.forClass(StartupParamsCallback.Result.class);
+            ArgumentCaptor.forClass(StartupParamsCallback.Result.class);
         verify(mCallback).onReceive(resultCaptor.capture());
         assertThat(resultCaptor.getValue().parameters)
-                .containsExactlyInAnyOrderEntriesOf(mapCaptor.getValue());
+            .containsExactlyInAnyOrderEntriesOf(mapCaptor.getValue());
     }
 
     @Test
@@ -478,13 +478,13 @@ public class StartupHelperTest extends CommonTest {
         verify(mReportsHandler).reportStartupEvent(same(mAllIdentifiers), captor.capture(), same(mClientClids));
         DataResultReceiver receiver = captor.getValue();
         DataResultReceiver.notifyOnStartupError(
-                receiver,
-                StartupError.NETWORK,
-                mock(ClientIdentifiersHolder.class)
+            receiver,
+            StartupError.NETWORK,
+            mock(ClientIdentifiersHolder.class)
         );
         verify(mCallback).onRequestError(
-                eq(StartupParamsCallback.Reason.NETWORK),
-                any(StartupParamsCallback.Result.class)
+            eq(StartupParamsCallback.Reason.NETWORK),
+            any(StartupParamsCallback.Result.class)
         );
     }
 
@@ -512,13 +512,13 @@ public class StartupHelperTest extends CommonTest {
         startupHelper.setClids(mClientClids);
         startupHelper.sendStartupIfNeeded();
         verify(mReportsHandler).reportStartupEvent(eq(mAllIdentifiers),
-                argThat(new ArgumentMatcher<ResultReceiver>() {
-                    @Override
-                    public boolean matches(ResultReceiver argument) {
-                        return ((DataResultReceiver) argument).getReceiver() == startupHelper.getDefaultReceiver();
-                    }
-                }),
-                eq(mClientClids)
+            argThat(new ArgumentMatcher<ResultReceiver>() {
+                @Override
+                public boolean matches(ResultReceiver argument) {
+                    return ((DataResultReceiver) argument).getReceiver() == startupHelper.getDefaultReceiver();
+                }
+            }),
+            eq(mClientClids)
         );
     }
 
@@ -533,8 +533,8 @@ public class StartupHelperTest extends CommonTest {
 
         StartupParamsCallback callback = mock(StartupParamsCallback.class);
         final StartupHelper startupHelper = new StartupHelper(mReportsHandler, mStartupParams, mHandler);
-        when(mStartupParams.shouldSendStartup(ArgumentMatchers.<String>anyList())).thenReturn(true);
-        startupHelper.requestStartupParams(callback, Arrays.asList(Constants.StartupParamsCallbackKeys.DEVICE_ID_HASH), mClientClids);
+        when(mStartupParams.shouldSendStartup(ArgumentMatchers.anyList())).thenReturn(true);
+        startupHelper.requestStartupParams(callback, Collections.singletonList(Constants.StartupParamsCallbackKeys.DEVICE_ID_HASH), mClientClids);
         doAnswer(new Answer() {
             @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {
@@ -542,7 +542,7 @@ public class StartupHelperTest extends CommonTest {
                 targetMap.put(Constants.StartupParamsCallbackKeys.DEVICE_ID_HASH, new StartupParamsItem(deviceIdHash, StartupParamsItemStatus.OK, null));
                 return targetMap;
             }
-        }).when(mStartupParams).putToMap(ArgumentMatchers.<String>anyList(), ArgumentMatchers.<String, StartupParamsItem>anyMap());
+        }).when(mStartupParams).putToMap(ArgumentMatchers.anyList(), ArgumentMatchers.anyMap());
         when(mBundle.containsKey("startup_error_key_code")).thenReturn(true);
         when(mBundle.getInt("startup_error_key_code")).thenReturn(1); // stub network error code
         when(mStartupParams.areResponseClidsConsistent()).thenReturn(true);
@@ -570,13 +570,13 @@ public class StartupHelperTest extends CommonTest {
         PublicLogger publicLogger = mock(PublicLogger.class);
         final StartupHelper startupHelper = new StartupHelper(mReportsHandler, mStartupParams, mHandler);
         startupHelper.setPublicLogger(publicLogger);
-        when(mStartupParams.shouldSendStartup(ArgumentMatchers.<String>anyList())).thenReturn(true);
-        startupHelper.requestStartupParams(callback, Arrays.asList(Constants.StartupParamsCallbackKeys.CLIDS), mClientClids);
+        when(mStartupParams.shouldSendStartup(ArgumentMatchers.anyList())).thenReturn(true);
+        startupHelper.requestStartupParams(callback, Collections.singletonList(Constants.StartupParamsCallbackKeys.CLIDS), mClientClids);
         interceptReceiver().send(0, mBundle);
 
         verify(callback).onRequestError(
-                eq(new StartupParamsCallback.Reason("INCONSISTENT_CLIDS")),
-                any(StartupParamsCallback.Result.class));
+            eq(new StartupParamsCallback.Reason("INCONSISTENT_CLIDS")),
+            any(StartupParamsCallback.Result.class));
         verify(publicLogger).warning(anyString(), any());
     }
 
@@ -586,14 +586,14 @@ public class StartupHelperTest extends CommonTest {
         PublicLogger publicLogger = mock(PublicLogger.class);
         final StartupHelper startupHelper = new StartupHelper(mReportsHandler, mStartupParams, mHandler);
         startupHelper.setPublicLogger(publicLogger);
-        when(mStartupParams.shouldSendStartup(ArgumentMatchers.<String>anyList())).thenReturn(true);
+        when(mStartupParams.shouldSendStartup(ArgumentMatchers.anyList())).thenReturn(true);
         when(mStartupParams.areResponseClidsConsistent()).thenReturn(true);
-        startupHelper.requestStartupParams(callback, Arrays.asList(Constants.StartupParamsCallbackKeys.CLIDS), StartupParamsTestUtils.CLIDS_MAP_1);
+        startupHelper.requestStartupParams(callback, Collections.singletonList(Constants.StartupParamsCallbackKeys.CLIDS), StartupParamsTestUtils.CLIDS_MAP_1);
         interceptReceiver().send(0, mBundle);
 
         verify(callback).onRequestError(
-                eq(StartupParamsCallback.Reason.UNKNOWN),
-                any(StartupParamsCallback.Result.class)
+            eq(StartupParamsCallback.Reason.UNKNOWN),
+            any(StartupParamsCallback.Result.class)
         );
         verifyNoMoreInteractions(publicLogger);
     }
@@ -609,8 +609,8 @@ public class StartupHelperTest extends CommonTest {
 
         StartupParamsCallback callback = mock(StartupParamsCallback.class);
         final StartupHelper startupHelper = new StartupHelper(mReportsHandler, mStartupParams, mHandler);
-        when(mStartupParams.shouldSendStartup(ArgumentMatchers.<String>anyList())).thenReturn(true);
-        startupHelper.requestStartupParams(callback, Arrays.asList(Constants.StartupParamsCallbackKeys.DEVICE_ID_HASH), mClientClids);
+        when(mStartupParams.shouldSendStartup(ArgumentMatchers.anyList())).thenReturn(true);
+        startupHelper.requestStartupParams(callback, Collections.singletonList(Constants.StartupParamsCallbackKeys.DEVICE_ID_HASH), mClientClids);
         doAnswer(new Answer() {
             @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {
@@ -618,7 +618,7 @@ public class StartupHelperTest extends CommonTest {
                 targetMap.put(Constants.StartupParamsCallbackKeys.DEVICE_ID_HASH, new StartupParamsItem(deviceIdHash, StartupParamsItemStatus.OK, null));
                 return targetMap;
             }
-        }).when(mStartupParams).putToMap(ArgumentMatchers.<String>anyList(), ArgumentMatchers.<String, StartupParamsItem>anyMap());
+        }).when(mStartupParams).putToMap(ArgumentMatchers.anyList(), ArgumentMatchers.anyMap());
         when(mBundle.containsKey("startup_error_key_code")).thenReturn(true);
         when(mBundle.getInt("startup_error_key_code")).thenReturn(1); // stub network error code
         when(mStartupParams.areResponseClidsConsistent()).thenReturn(true);
@@ -646,9 +646,9 @@ public class StartupHelperTest extends CommonTest {
         PublicLogger publicLogger = mock(PublicLogger.class);
         final StartupHelper startupHelper = new StartupHelper(mReportsHandler, mStartupParams, mHandler);
         startupHelper.setPublicLogger(publicLogger);
-        when(mStartupParams.shouldSendStartup(ArgumentMatchers.<String>anyList())).thenReturn(true);
+        when(mStartupParams.shouldSendStartup(ArgumentMatchers.anyList())).thenReturn(true);
         when(mStartupParams.areResponseClidsConsistent()).thenReturn(true);
-        startupHelper.requestStartupParams(callback, Arrays.asList(Constants.StartupParamsCallbackKeys.CLIDS), StartupParamsTestUtils.CLIDS_MAP_1);
+        startupHelper.requestStartupParams(callback, Collections.singletonList(Constants.StartupParamsCallbackKeys.CLIDS), StartupParamsTestUtils.CLIDS_MAP_1);
         interceptReceiver().send(0, mBundle);
 
         verify(callback).onRequestError(eq(StartupParamsCallback.Reason.UNKNOWN), any(StartupParamsCallback.Result.class));
@@ -703,11 +703,11 @@ public class StartupHelperTest extends CommonTest {
 
     private void verifyReportingStartupEvent(int numOfTimes) {
         verify(mReportsHandler, times(numOfTimes))
-                .reportStartupEvent(
-                        ArgumentMatchers.nullable(List.class),
-                        nullable(ResultReceiver.class),
-                        nullable(Map.class)
-                );
+            .reportStartupEvent(
+                ArgumentMatchers.nullable(List.class),
+                nullable(ResultReceiver.class),
+                nullable(Map.class)
+            );
     }
 
     @Test

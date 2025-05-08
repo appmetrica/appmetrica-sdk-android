@@ -161,19 +161,23 @@ internal class ClientModulesControllerTest : CommonTest() {
     fun notifyModulesWithConfig() {
         val bundle = Bundle()
         val identifiers: SdkIdentifiers = mock()
-        whenever(clientModuleServiceConfigModelFactory().createClientModuleServiceConfigModel(
-            bundle,
-            firstModuleIdentifier,
-            identifiers,
-            firstServiceConfigExtensionConfiguration
-        )).thenReturn(null)
+        whenever(
+            clientModuleServiceConfigModelFactory().createClientModuleServiceConfigModel(
+                bundle,
+                firstModuleIdentifier,
+                identifiers,
+                firstServiceConfigExtensionConfiguration
+            )
+        ).thenReturn(null)
         val secondConfig: ClientModuleServiceConfigModel<Any?> = mock()
-        whenever(clientModuleServiceConfigModelFactory().createClientModuleServiceConfigModel(
-            bundle,
-            secondModuleIdentifier,
-            identifiers,
-            secondServiceConfigExtensionConfiguration
-        )).thenReturn(secondConfig)
+        whenever(
+            clientModuleServiceConfigModelFactory().createClientModuleServiceConfigModel(
+                bundle,
+                secondModuleIdentifier,
+                identifiers,
+                secondServiceConfigExtensionConfiguration
+            )
+        ).thenReturn(secondConfig)
 
         modulesController.registerModule(firstModule)
         modulesController.registerModule(secondModule)

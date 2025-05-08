@@ -90,7 +90,7 @@ class DbEventModelFactoryTest : CommonTest() {
     }
     private val encryptedCounterReport = EncryptedCounterReport(reportData, eventEncryptionMode)
     private val reportRequestConfig: ReportRequestConfig = mock()
-    private val environmentRevision = AppEnvironment.EnvironmentRevision(environmentRevisionValue,revisionNumber)
+    private val environmentRevision = AppEnvironment.EnvironmentRevision(environmentRevisionValue, revisionNumber)
     private val eventExtrasConverter: EventExtrasConverter = mock {
         on { fromModel(extras) } doReturn convertedExtras
     }
@@ -100,10 +100,13 @@ class DbEventModelFactoryTest : CommonTest() {
 
     @get:Rule
     val globalServiceLocatorRule = GlobalServiceLocatorRule()
+
     @get:Rule
     val phoneUtilsRule = MockedStaticRule(PhoneUtils::class.java)
+
     @get:Rule
     val eventsManagerRule = MockedStaticRule(EventsManager::class.java)
+
     @get:Rule
     val internalEventsRule = MockedStaticRule(InternalEvents::class.java)
 
@@ -137,27 +140,30 @@ class DbEventModelFactoryTest : CommonTest() {
             .checkField("type", internalEventsType)
             .checkField("globalNumber", globalNumber)
             .checkField("time", reportTime)
-            .checkFieldRecursively("description", Consumer<ObjectPropertyAssertions<DbEventModel.Description>> {
-                it
-                    .withIgnoredFields("cellularConnectionType")
-                    .checkField("customType", customType)
-                    .checkField("name", name)
-                    .checkField("value", value)
-                    .checkField("numberOfType", numberOfType)
-                    .checkField("locationInfo", locationInfo)
-                    .checkField("errorEnvironment", eventEnvironment)
-                    .checkField("appEnvironment", environmentRevisionValue)
-                    .checkField("appEnvironmentRevision", revisionNumber)
-                    .checkField("truncated", bytesTruncated)
-                    .checkField("connectionType", connectionTypeInServerFormat)
-                    .checkField("encryptingMode", eventEncryptionMode)
-                    .checkField("profileId", profileId)
-                    .checkField("firstOccurrenceStatus", firstOccurrenceStatus)
-                    .checkField("source", source)
-                    .checkField("attributionIdChanged", attributionIdChanged)
-                    .checkField("openId", openId)
-                    .checkField("extras", convertedExtras)
-            })
+            .checkFieldRecursively(
+                "description",
+                Consumer<ObjectPropertyAssertions<DbEventModel.Description>> {
+                    it
+                        .withIgnoredFields("cellularConnectionType")
+                        .checkField("customType", customType)
+                        .checkField("name", name)
+                        .checkField("value", value)
+                        .checkField("numberOfType", numberOfType)
+                        .checkField("locationInfo", locationInfo)
+                        .checkField("errorEnvironment", eventEnvironment)
+                        .checkField("appEnvironment", environmentRevisionValue)
+                        .checkField("appEnvironmentRevision", revisionNumber)
+                        .checkField("truncated", bytesTruncated)
+                        .checkField("connectionType", connectionTypeInServerFormat)
+                        .checkField("encryptingMode", eventEncryptionMode)
+                        .checkField("profileId", profileId)
+                        .checkField("firstOccurrenceStatus", firstOccurrenceStatus)
+                        .checkField("source", source)
+                        .checkField("attributionIdChanged", attributionIdChanged)
+                        .checkField("openId", openId)
+                        .checkField("extras", convertedExtras)
+                }
+            )
             .checkAll()
     }
 

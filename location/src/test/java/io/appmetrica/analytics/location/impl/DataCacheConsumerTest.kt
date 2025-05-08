@@ -24,13 +24,13 @@ class DataCacheConsumerTest : CommonTest() {
     }
 
     @Test
-    fun testNullLocation() {
+    fun nullLocation() {
         locationCacheConsumer.consume(null)
         verifyNoMoreInteractions(locationCache)
     }
 
     @Test
-    fun testNotNullLocation() {
+    fun notNullLocation() {
         locationCacheConsumer.consume(location)
         verify(locationCache).updateData(location)
     }

@@ -1,39 +1,25 @@
 package io.appmetrica.analytics.impl.crash.jvm.client
 
 import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
-import io.appmetrica.analytics.impl.crash.jvm.client.AllThreads
-import io.appmetrica.analytics.impl.crash.jvm.client.StackTraceItemInternal
-import io.appmetrica.analytics.impl.crash.jvm.client.ThrowableModel
-import io.appmetrica.analytics.impl.crash.jvm.client.ThrowableModelFactory
-import io.appmetrica.analytics.impl.crash.jvm.client.UnhandledExceptionFactory
 import io.appmetrica.analytics.plugins.StackTraceItem
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.MockedStaticRule
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.Mock
-import org.mockito.Mockito.`when`
-import org.mockito.MockitoAnnotations
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.whenever
 
 class UnhandledExceptionFactoryTest : CommonTest() {
 
-    @Mock
-    private lateinit var throwableModel: ThrowableModel
-    @Rule
-    @JvmField
-    internal val sThrowableModelFactory = MockedStaticRule(ThrowableModelFactory::class.java)
+    private val throwableModel: ThrowableModel = mock()
 
-    @Before
-    fun setUp() {
-        MockitoAnnotations.openMocks(this)
-    }
+    @get:Rule
+    internal val sThrowableModelFactory = MockedStaticRule(ThrowableModelFactory::class.java)
 
     @Test
     fun getUnhandledExceptionFromJavaFilled() {
         val exception = IllegalStateException("some message")
-        `when`(ThrowableModelFactory.createModel(exception)).thenReturn(throwableModel)
+        whenever(ThrowableModelFactory.createModel(exception)).thenReturn(throwableModel)
         val allThreads = mock<AllThreads>()
         val element1 = StackTraceElement("class name 1", "method name 1", "file name 1", 11)
         val element2 = StackTraceElement("class name 2", "method name 2", "file name 2", 22)
@@ -50,9 +36,12 @@ class UnhandledExceptionFactoryTest : CommonTest() {
         ObjectPropertyAssertions(result)
             .checkField("exception", throwableModel)
             .checkField("allThreads", allThreads)
-            .checkFieldComparingFieldByFieldRecursively("methodCallStacktrace", listOf(
-                StackTraceItemInternal(element1), StackTraceItemInternal(element2)
-            ))
+            .checkFieldComparingFieldByFieldRecursively(
+                "methodCallStacktrace",
+                listOf(
+                    StackTraceItemInternal(element1), StackTraceItemInternal(element2)
+                )
+            )
             .checkField("buildId", buildId)
             .checkField("isOffline", isOffline)
             .checkFieldsAreNull("platform", "virtualMachineVersion", "pluginEnvironment")
@@ -63,8 +52,10 @@ class UnhandledExceptionFactoryTest : CommonTest() {
     fun getUnhandledExceptionFromJavaNullable() {
         val result = UnhandledExceptionFactory.getUnhandledExceptionFromJava(null, null, null, null, null)
         ObjectPropertyAssertions(result)
-            .checkFieldsAreNull("exception", "allThreads", "methodCallStacktrace", "buildId", "isOffline",
-                "platform", "virtualMachineVersion", "pluginEnvironment")
+            .checkFieldsAreNull(
+                "exception", "allThreads", "methodCallStacktrace", "buildId", "isOffline",
+                "platform", "virtualMachineVersion", "pluginEnvironment"
+            )
             .checkAll()
     }
 
@@ -96,9 +87,12 @@ class UnhandledExceptionFactoryTest : CommonTest() {
                     .withPrivateFields(true)
                     .checkField("message", message)
                     .checkField("exceptionClass", exceptionClass)
-                    .checkFieldComparingFieldByFieldRecursively("stacktrace", listOf(
-                        StackTraceItemInternal(element1), StackTraceItemInternal(element2)
-                    ))
+                    .checkFieldComparingFieldByFieldRecursively(
+                        "stacktrace",
+                        listOf(
+                            StackTraceItemInternal(element1), StackTraceItemInternal(element2)
+                        )
+                    )
                     .checkFieldsAreNull("cause", "suppressed")
             }
             .checkField("platform", platform)
@@ -128,8 +122,10 @@ class UnhandledExceptionFactoryTest : CommonTest() {
                     .withPrivateFields(true)
                     .checkFieldsAreNull("exceptionClass", "message", "cause", "suppressed", "stacktrace")
             }
-            .checkFieldsAreNull("allThreads", "methodCallStacktrace", "buildId", "isOffline",
-                "platform", "virtualMachineVersion", "pluginEnvironment")
+            .checkFieldsAreNull(
+                "allThreads", "methodCallStacktrace", "buildId", "isOffline",
+                "platform", "virtualMachineVersion", "pluginEnvironment"
+            )
             .checkAll()
     }
 }

@@ -12,8 +12,8 @@ import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAsse
 @RunWith(RobolectricTestRunner.class)
 public class AutoInappCollectingConfigParserTest extends CommonTest {
 
-    private AutoInappCollectingConfigParser parser = new AutoInappCollectingConfigParser();
-    private StartupResult result = new StartupResult();
+    private final AutoInappCollectingConfigParser parser = new AutoInappCollectingConfigParser();
+    private final StartupResult result = new StartupResult();
 
     @Test
     public void testNoBlock() throws Exception {
@@ -21,7 +21,7 @@ public class AutoInappCollectingConfigParserTest extends CommonTest {
         parser.parse(result, startupJsonMock);
 
         ObjectPropertyAssertions<BillingConfig> assertions =
-                ObjectPropertyAssertions(result.getAutoInappCollectingConfig());
+            ObjectPropertyAssertions(result.getAutoInappCollectingConfig());
 
         assertions.checkField("sendFrequencySeconds", 86400);
         assertions.checkField("firstCollectingInappMaxAgeSeconds", 86400);
@@ -35,7 +35,7 @@ public class AutoInappCollectingConfigParserTest extends CommonTest {
         parser.parse(result, startupJsonMock);
 
         ObjectPropertyAssertions<BillingConfig> assertions =
-                ObjectPropertyAssertions(result.getAutoInappCollectingConfig());
+            ObjectPropertyAssertions(result.getAutoInappCollectingConfig());
 
         assertions.checkField("sendFrequencySeconds", 86400);
         assertions.checkField("firstCollectingInappMaxAgeSeconds", 86400);
@@ -52,7 +52,7 @@ public class AutoInappCollectingConfigParserTest extends CommonTest {
         parser.parse(result, startupJsonMock);
 
         ObjectPropertyAssertions<BillingConfig> assertions =
-                ObjectPropertyAssertions(result.getAutoInappCollectingConfig());
+            ObjectPropertyAssertions(result.getAutoInappCollectingConfig());
 
         assertions.checkField("sendFrequencySeconds", sendFrequencySeconds);
         assertions.checkField("firstCollectingInappMaxAgeSeconds", firstCollectingInappMaxAgeSeconds);

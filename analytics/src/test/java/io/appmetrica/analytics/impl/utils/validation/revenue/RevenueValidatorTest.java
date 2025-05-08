@@ -20,8 +20,8 @@ import static org.mockito.Mockito.verify;
 @RunWith(RobolectricTestRunner.class)
 public class RevenueValidatorTest extends CommonTest {
 
-    private Validator<List<ValidationResult>> mValidator = mock(Validator.class);
-    private RevenueValidator mRevenueValidator = new RevenueValidator(mValidator);
+    private final Validator<List<ValidationResult>> mValidator = mock(Validator.class);
+    private final RevenueValidator mRevenueValidator = new RevenueValidator(mValidator);
 
     @Test
     public void testValid() {

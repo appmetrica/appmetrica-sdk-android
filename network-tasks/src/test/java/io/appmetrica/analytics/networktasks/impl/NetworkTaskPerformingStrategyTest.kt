@@ -10,6 +10,7 @@ import io.appmetrica.analytics.networktasks.internal.NetworkTask
 import io.appmetrica.analytics.networktasks.internal.RequestDataHolder
 import io.appmetrica.analytics.networktasks.internal.ResponseDataHolder
 import io.appmetrica.analytics.networktasks.internal.UnderlyingNetworkTask
+import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.MockedConstructionRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Rule
@@ -18,7 +19,6 @@ import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers.anyBoolean
 import org.mockito.ArgumentMatchers.anyInt
 import org.mockito.ArgumentMatchers.nullable
-import org.mockito.Mockito.`when`
 import org.mockito.kotlin.anyOrNull
 import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.doReturn
@@ -32,7 +32,7 @@ import java.util.AbstractMap
 import javax.net.ssl.SSLSocketFactory
 
 @RunWith(RobolectricTestRunner::class)
-class NetworkTaskPerformingStrategyTest {
+class NetworkTaskPerformingStrategyTest : CommonTest() {
 
     private val url = "https://ya.ru"
     private val userAgent = "custom user agent"
@@ -78,13 +78,13 @@ class NetworkTaskPerformingStrategyTest {
 
     @get:Rule
     val newClientBuilder = MockedConstructionRule(NetworkClient.Builder::class.java) { mock, _ ->
-        `when`(mock.withConnectTimeout(anyInt())).thenReturn(mock)
-        `when`(mock.withReadTimeout(anyInt())).thenReturn(mock)
-        `when`(mock.withUseCaches(anyBoolean())).thenReturn(mock)
-        `when`(mock.withInstanceFollowRedirects(anyBoolean())).thenReturn(mock)
-        `when`(mock.withMaxResponseSize(anyInt())).thenReturn(mock)
-        `when`(mock.withSslSocketFactory(nullable(SSLSocketFactory::class.java))).thenReturn(mock)
-        `when`(mock.build()).thenReturn(networkClient)
+        whenever(mock.withConnectTimeout(anyInt())).thenReturn(mock)
+        whenever(mock.withReadTimeout(anyInt())).thenReturn(mock)
+        whenever(mock.withUseCaches(anyBoolean())).thenReturn(mock)
+        whenever(mock.withInstanceFollowRedirects(anyBoolean())).thenReturn(mock)
+        whenever(mock.withMaxResponseSize(anyInt())).thenReturn(mock)
+        whenever(mock.withSslSocketFactory(nullable(SSLSocketFactory::class.java))).thenReturn(mock)
+        whenever(mock.build()).thenReturn(networkClient)
     }
 
     @Test
@@ -103,7 +103,7 @@ class NetworkTaskPerformingStrategyTest {
     }
 
     @Test
-    fun testCommonRequestOperations() {
+    fun commonRequestOperations() {
         strategy.performRequest(networkTask)
         verify(networkTask).onPerformRequest()
         val expectedHeaders = mapOf(
@@ -126,7 +126,7 @@ class NetworkTaskPerformingStrategyTest {
     }
 
     @Test
-    fun testPostMethod() {
+    fun postMethod() {
         val sendTimestamp = 12345654321L
         val sendTimezone = 50000
         val postData = "data".toByteArray()
@@ -145,7 +145,7 @@ class NetworkTaskPerformingStrategyTest {
     }
 
     @Test
-    fun testGetMethod() {
+    fun getMethod() {
         val postData = "data".toByteArray()
         stubbing(requestDataHolder) {
             on { this.method } doReturn NetworkTask.Method.GET
@@ -160,7 +160,7 @@ class NetworkTaskPerformingStrategyTest {
     }
 
     @Test
-    fun testPostMethodNullTimes() {
+    fun postMethodNullTimes() {
         val postData = "data".toByteArray()
         stubbing(requestDataHolder) {
             on { this.method } doReturn NetworkTask.Method.POST
@@ -177,7 +177,7 @@ class NetworkTaskPerformingStrategyTest {
     }
 
     @Test
-    fun testNullPostData() {
+    fun nullPostData() {
         stubbing(requestDataHolder) {
             on { this.method } doReturn NetworkTask.Method.POST
             on { this.postData } doReturn null
@@ -191,7 +191,7 @@ class NetworkTaskPerformingStrategyTest {
     }
 
     @Test
-    fun testEmptyPostData() {
+    fun emptyPostData() {
         stubbing(requestDataHolder) {
             on { this.method } doReturn NetworkTask.Method.POST
             on { this.postData } doReturn ByteArray(0)
@@ -205,7 +205,7 @@ class NetworkTaskPerformingStrategyTest {
     }
 
     @Test
-    fun testValidResponse() {
+    fun validResponse() {
         val code = 555
         stubbing(response) {
             on { this.isCompleted } doReturn true
@@ -223,7 +223,7 @@ class NetworkTaskPerformingStrategyTest {
     }
 
     @Test
-    fun testInvalidResponse() {
+    fun invalidResponse() {
         val code = 555
         stubbing(response) {
             on { this.code } doReturn code

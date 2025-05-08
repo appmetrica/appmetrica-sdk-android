@@ -22,5 +22,3 @@ internal class ToStringTest(
         )
     }
 }
-
-

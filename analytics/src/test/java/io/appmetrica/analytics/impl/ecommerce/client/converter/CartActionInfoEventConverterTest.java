@@ -40,10 +40,10 @@ public class CartActionInfoEventConverterTest extends CommonTest {
         MockitoAnnotations.openMocks(this);
 
         when(cartItemConverter.fromModel(cartItem))
-                .thenReturn(new Result<Ecommerce.ECommerceEvent.CartItem, BytesTruncatedProvider>(
-                        cartItemProto,
-                        new BytesTruncatedInfo(cartItemBytesTruncated)
-                ));
+            .thenReturn(new Result<Ecommerce.ECommerceEvent.CartItem, BytesTruncatedProvider>(
+                cartItemProto,
+                new BytesTruncatedInfo(cartItemBytesTruncated)
+            ));
 
         cartActionInfoEventConverter = new CartActionInfoEventConverter(cartItemConverter);
     }
@@ -51,7 +51,7 @@ public class CartActionInfoEventConverterTest extends CommonTest {
     @Test
     public void constructor() throws Exception {
         ObjectPropertyAssertions<CartActionInfoEventConverter> assertions =
-                ObjectPropertyAssertions(new CartActionInfoEventConverter())
+            ObjectPropertyAssertions(new CartActionInfoEventConverter())
                 .withPrivateFields(true);
 
         assertions.checkFieldNonNull("cartItemConverter");
@@ -65,7 +65,7 @@ public class CartActionInfoEventConverterTest extends CommonTest {
         CartActionInfoEvent event = new CartActionInfoEvent(eventType, cartItem, cartActionInfoEventConverter);
 
         Ecommerce.ECommerceEvent.CartActionInfo expectedCartActionProto =
-                new Ecommerce.ECommerceEvent.CartActionInfo();
+            new Ecommerce.ECommerceEvent.CartActionInfo();
         expectedCartActionProto.item = cartItemProto;
 
         List<Result<Ecommerce.ECommerceEvent, BytesTruncatedProvider>> results = cartActionInfoEventConverter.fromModel(event);
@@ -74,12 +74,12 @@ public class CartActionInfoEventConverterTest extends CommonTest {
         Result<Ecommerce.ECommerceEvent, BytesTruncatedProvider> result = cartActionInfoEventConverter.fromModel(event).get(0);
 
         ObjectPropertyAssertions<Result<Ecommerce.ECommerceEvent, BytesTruncatedProvider>> assertions =
-                ObjectPropertyAssertions(result);
+            ObjectPropertyAssertions(result);
 
         assertions.checkFieldRecursively("metaInfo", new TruncationInfoConsumer(cartItemBytesTruncated));
         assertions.checkFieldRecursively(
-                "result",
-                new ECommerceEventAssertionsConsumer(eventType).setExpectedCartActionProto(expectedCartActionProto)
+            "result",
+            new ECommerceEventAssertionsConsumer(eventType).setExpectedCartActionProto(expectedCartActionProto)
         );
 
         assertions.checkAll();
@@ -88,7 +88,7 @@ public class CartActionInfoEventConverterTest extends CommonTest {
     @Test(expected = UnsupportedOperationException.class)
     public void toModel() {
         cartActionInfoEventConverter.toModel(
-                Collections.<Result<Ecommerce.ECommerceEvent, BytesTruncatedProvider>>emptyList()
+            Collections.emptyList()
         );
     }
 }

@@ -1,6 +1,5 @@
 package io.appmetrica.analytics.impl.crash.jvm.client
 
-import io.appmetrica.analytics.impl.IUnhandledSituationReporter
 import io.appmetrica.analytics.impl.crash.utils.ThreadsStateDumper
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule
 import io.appmetrica.analytics.testutils.CommonTest

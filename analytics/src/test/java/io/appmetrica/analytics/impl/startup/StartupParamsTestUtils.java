@@ -33,83 +33,83 @@ public class StartupParamsTestUtils {
     static final IdentifiersResult SSL_ENABLED_FEATURE = new IdentifiersResult("true", IdentifierStatus.OK, null);
 
     static {
-        CUSTOM_HOSTS_MAP.put(CUSTOM_IDENTIFIER1, Arrays.asList("host1"));
-        CUSTOM_HOSTS_MAP.put(CUSTOM_IDENTIFIER2, Arrays.asList("host2"));
+        CUSTOM_HOSTS_MAP.put(CUSTOM_IDENTIFIER1, Collections.singletonList("host1"));
+        CUSTOM_HOSTS_MAP.put(CUSTOM_IDENTIFIER2, Collections.singletonList("host2"));
     }
 
-    static final List<String> IDENTIFIERS_WITH_SSL_FEATURE = Arrays.asList(
-            Constants.StartupParamsCallbackKeys.FEATURE_LIB_SSL_ENABLED
+    static final List<String> IDENTIFIERS_WITH_SSL_FEATURE = Collections.singletonList(
+        Constants.StartupParamsCallbackKeys.FEATURE_LIB_SSL_ENABLED
     );
     static final List<String> CUSTOM_IDENTIFIERS = Arrays.asList(
-            CUSTOM_IDENTIFIER1,
-            CUSTOM_IDENTIFIER2
+        CUSTOM_IDENTIFIER1,
+        CUSTOM_IDENTIFIER2
     );
     static final List<String> ALL_IDENTIFIERS_WITH_CUSTOM = Arrays.asList(
-            IDENTIFIER_KEY_CLIDS,
-            IDENTIFIER_KEY_UUID,
-            IDENTIFIER_KEY_DEVICE_ID,
-            IDENTIFIER_KEY_DEVICE_ID_HASH,
-            IDENTIFIER_GET_AD_URL,
-            IDENTIFIER_REPORT_AD_URL,
-            IDENTIFIER_GOOGLE_ADV_ID,
-            IDENTIFIER_HUAWEI_ADV_ID,
-            IDENTIFIER_YANDEX_ADV_ID,
-            CUSTOM_IDENTIFIER1,
-            CUSTOM_IDENTIFIER2
+        IDENTIFIER_KEY_CLIDS,
+        IDENTIFIER_KEY_UUID,
+        IDENTIFIER_KEY_DEVICE_ID,
+        IDENTIFIER_KEY_DEVICE_ID_HASH,
+        IDENTIFIER_GET_AD_URL,
+        IDENTIFIER_REPORT_AD_URL,
+        IDENTIFIER_GOOGLE_ADV_ID,
+        IDENTIFIER_HUAWEI_ADV_ID,
+        IDENTIFIER_YANDEX_ADV_ID,
+        CUSTOM_IDENTIFIER1,
+        CUSTOM_IDENTIFIER2
     );
     static final List<String> ALL_IDENTIFIERS_WITH_CUSTOM_AND_FEATURE = Arrays.asList(
-            IDENTIFIER_KEY_CLIDS,
-            IDENTIFIER_KEY_UUID,
-            IDENTIFIER_KEY_DEVICE_ID,
-            IDENTIFIER_KEY_DEVICE_ID_HASH,
-            IDENTIFIER_GET_AD_URL,
-            IDENTIFIER_REPORT_AD_URL,
-            IDENTIFIER_GOOGLE_ADV_ID,
-            IDENTIFIER_HUAWEI_ADV_ID,
-            IDENTIFIER_YANDEX_ADV_ID,
-            CUSTOM_IDENTIFIER1,
-            CUSTOM_IDENTIFIER2,
-            Constants.StartupParamsCallbackKeys.FEATURE_LIB_SSL_ENABLED
+        IDENTIFIER_KEY_CLIDS,
+        IDENTIFIER_KEY_UUID,
+        IDENTIFIER_KEY_DEVICE_ID,
+        IDENTIFIER_KEY_DEVICE_ID_HASH,
+        IDENTIFIER_GET_AD_URL,
+        IDENTIFIER_REPORT_AD_URL,
+        IDENTIFIER_GOOGLE_ADV_ID,
+        IDENTIFIER_HUAWEI_ADV_ID,
+        IDENTIFIER_YANDEX_ADV_ID,
+        CUSTOM_IDENTIFIER1,
+        CUSTOM_IDENTIFIER2,
+        Constants.StartupParamsCallbackKeys.FEATURE_LIB_SSL_ENABLED
     );
     static final List<String> ALL_IDENTIFIERS = Arrays.asList(
-            IDENTIFIER_KEY_CLIDS,
-            IDENTIFIER_KEY_UUID,
-            IDENTIFIER_KEY_DEVICE_ID,
-            IDENTIFIER_KEY_DEVICE_ID_HASH,
-            IDENTIFIER_GET_AD_URL,
-            IDENTIFIER_REPORT_AD_URL,
-            IDENTIFIER_GOOGLE_ADV_ID,
-            IDENTIFIER_HUAWEI_ADV_ID,
-            IDENTIFIER_YANDEX_ADV_ID
+        IDENTIFIER_KEY_CLIDS,
+        IDENTIFIER_KEY_UUID,
+        IDENTIFIER_KEY_DEVICE_ID,
+        IDENTIFIER_KEY_DEVICE_ID_HASH,
+        IDENTIFIER_GET_AD_URL,
+        IDENTIFIER_REPORT_AD_URL,
+        IDENTIFIER_GOOGLE_ADV_ID,
+        IDENTIFIER_HUAWEI_ADV_ID,
+        IDENTIFIER_YANDEX_ADV_ID
     );
     static final List<String> ALL_IDENTIFIERS_EXCEPT_ADV = Arrays.asList(
-            IDENTIFIER_KEY_CLIDS,
-            IDENTIFIER_KEY_UUID,
-            IDENTIFIER_KEY_DEVICE_ID,
-            IDENTIFIER_KEY_DEVICE_ID_HASH,
-            IDENTIFIER_GET_AD_URL,
-            IDENTIFIER_REPORT_AD_URL
+        IDENTIFIER_KEY_CLIDS,
+        IDENTIFIER_KEY_UUID,
+        IDENTIFIER_KEY_DEVICE_ID,
+        IDENTIFIER_KEY_DEVICE_ID_HASH,
+        IDENTIFIER_GET_AD_URL,
+        IDENTIFIER_REPORT_AD_URL
     );
     static final List<String> ALL_IDENTIFIERS_WITH_CUSTOM_EXCEPT_ADS = Arrays.asList(
-            IDENTIFIER_KEY_CLIDS,
-            IDENTIFIER_KEY_UUID,
-            IDENTIFIER_KEY_DEVICE_ID,
-            IDENTIFIER_KEY_DEVICE_ID_HASH,
-            IDENTIFIER_GET_AD_URL,
-            IDENTIFIER_REPORT_AD_URL,
-            CUSTOM_IDENTIFIER1,
-            CUSTOM_IDENTIFIER2
+        IDENTIFIER_KEY_CLIDS,
+        IDENTIFIER_KEY_UUID,
+        IDENTIFIER_KEY_DEVICE_ID,
+        IDENTIFIER_KEY_DEVICE_ID_HASH,
+        IDENTIFIER_GET_AD_URL,
+        IDENTIFIER_REPORT_AD_URL,
+        CUSTOM_IDENTIFIER1,
+        CUSTOM_IDENTIFIER2
     );
     static final List<String> ALL_IDENTIFIERS_WITH_CUSTOM_AND_FEATURE_EXCEPT_ADV = Arrays.asList(
-            IDENTIFIER_KEY_CLIDS,
-            IDENTIFIER_KEY_UUID,
-            IDENTIFIER_KEY_DEVICE_ID,
-            IDENTIFIER_KEY_DEVICE_ID_HASH,
-            IDENTIFIER_GET_AD_URL,
-            IDENTIFIER_REPORT_AD_URL,
-            CUSTOM_IDENTIFIER1,
-            CUSTOM_IDENTIFIER2,
-            Constants.StartupParamsCallbackKeys.FEATURE_LIB_SSL_ENABLED
+        IDENTIFIER_KEY_CLIDS,
+        IDENTIFIER_KEY_UUID,
+        IDENTIFIER_KEY_DEVICE_ID,
+        IDENTIFIER_KEY_DEVICE_ID_HASH,
+        IDENTIFIER_GET_AD_URL,
+        IDENTIFIER_REPORT_AD_URL,
+        CUSTOM_IDENTIFIER1,
+        CUSTOM_IDENTIFIER2,
+        Constants.StartupParamsCallbackKeys.FEATURE_LIB_SSL_ENABLED
     );
 
     static final Map<String, String> CLIDS_MAP_1 = Collections.singletonMap("clid0", "0");

@@ -17,9 +17,11 @@ class NativeLayerPayloadEnricherTest : CommonTest() {
     fun enrich() {
         val outputPayload = enricher.enrich(inputPayload)
         assertThat(outputPayload).isSameAs(inputPayload)
-            .isEqualTo(mutableMapOf(
-                inputPayloadKey to inputPayloadValue,
-                AdRevenueConstants.LAYER_KEY to AdRevenueConstants.NATIVE_LAYER
-            ))
+            .isEqualTo(
+                mutableMapOf(
+                    inputPayloadKey to inputPayloadValue,
+                    AdRevenueConstants.LAYER_KEY to AdRevenueConstants.NATIVE_LAYER
+                )
+            )
     }
 }

@@ -27,10 +27,10 @@ import static org.mockito.Mockito.when;
 @RunWith(ParameterizedRobolectricTestRunner.class)
 public class HierarchicalValueSizeOrderBasedWithBytesLimitStringMapTrimmerTest extends CommonTest {
 
-    private Map<String, String> inputMap;
-    private Map<String, String> expectedMap;
-    private int pairsTruncated;
-    private int bytesTruncated;
+    private final Map<String, String> inputMap;
+    private final Map<String, String> expectedMap;
+    private final int pairsTruncated;
+    private final int bytesTruncated;
 
     private static final String KEY_WITH_5_BYTES_1 = "Key#1";
     private static final String KEY_WITH_5_BYTES_2 = "Key#2";
@@ -80,182 +80,182 @@ public class HierarchicalValueSizeOrderBasedWithBytesLimitStringMapTrimmerTest e
     @ParameterizedRobolectricTestRunner.Parameters(name = "#{index} - {4}")
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
-                {null, null, 0, 0, "null"},
-                {Collections.emptyMap(), Collections.emptyMap(), 0, 0, "empty map"},
-                {
-                        TestUtils.mapOf(TestUtils.pair(KEY_WITH_5_BYTES_1, VALUE_WITH_10_BYTES)),
-                        TestUtils.mapOf(TestUtils.pair(KEY_WITH_5_BYTES_1, VALUE_WITH_10_BYTES)),
-                        0,
-                        0,
-                        "map with single short pair"
-                },
-                {
-                        TestUtils.mapOf(
-                                TestUtils.pair(
-                                        KEY_WITH_15_BYTES_INCLUDING_CYRILLIC_CHARS,
-                                        VALUE_WITH_25_BYTES_INCLUDING_CYRILLIC_CHARS
-                                )
-                        ),
-                        TestUtils.mapOf(
-                                TestUtils.pair(
-                                        KEY_WITH_15_BYTES_INCLUDING_CYRILLIC_CHARS,
-                                        VALUE_WITH_25_BYTES_INCLUDING_CYRILLIC_CHARS
-                                )
-                        ),
-                        0,
-                        0,
-                        "map with single short pair with cyrillic chars"
-                },
-                {
-                        TestUtils.mapOf(TestUtils.pair(KEY_WITH_20_BYTES_1, VALUE_WITH_30_BYTES)),
-                        TestUtils.mapOf(TestUtils.pair(TRUNCATED_KEY_WITH_20_BYTES_1, TRUNCATED_VALUE_WITH_30_BYTES)),
-                        0,
-                        20,
-                        "map with single large pair"
-                },
-                {
-                        TestUtils.mapOf(
-                                TestUtils.pair(
-                                        KEY_WITH_25_BYTES_INCLUDING_CYRILLIC_CHARS,
-                                        VALUE_WITH_35_BYTES_INCLUDING_CYRILLIC_CHARS
-                                )
-                        ),
-                        TestUtils.mapOf(
-                                TestUtils.pair(
-                                        KEY_WITH_15_BYTES_INCLUDING_CYRILLIC_CHARS,
-                                        VALUE_WITH_25_BYTES_INCLUDING_CYRILLIC_CHARS
-                                )
-                        ),
-                        0,
-                        15,
-                        "map with single large pair with cyrillic chars"
-                },
-                {
-                        TestUtils.mapOf(
-                                TestUtils.pair(KEY_WITH_5_BYTES_1, VALUE_WITH_10_BYTES),
-                                TestUtils.pair(KEY_WITH_5_BYTES_2, VALUE_WITH_11_BYTES),
-                                TestUtils.pair(KEY_WITH_5_BYTES_3, VALUE_WITH_12_BYTES),
-                                TestUtils.pair(KEY_WITH_5_BYTES_4, VALUE_WITH_13_BYTES),
-                                TestUtils.pair(KEY_WITH_5_BYTES_5, VALUE_WITH_14_BYTES)
-                        ),
-                        TestUtils.mapOf(
-                                TestUtils.pair(KEY_WITH_5_BYTES_1, VALUE_WITH_10_BYTES),
-                                TestUtils.pair(KEY_WITH_5_BYTES_2, VALUE_WITH_11_BYTES),
-                                TestUtils.pair(KEY_WITH_5_BYTES_3, VALUE_WITH_12_BYTES)
-                        ),
-                        2,
-                        37,
-                        "map with 2 small items out of map size limit"
-                },
-                {
-                        TestUtils.mapOf(
-                                TestUtils.pair(KEY_WITH_5_BYTES_4, VALUE_WITH_13_BYTES),
-                                TestUtils.pair(KEY_WITH_5_BYTES_2, VALUE_WITH_11_BYTES),
-                                TestUtils.pair(KEY_WITH_5_BYTES_3, VALUE_WITH_12_BYTES),
-                                TestUtils.pair(KEY_WITH_5_BYTES_5, VALUE_WITH_14_BYTES),
-                                TestUtils.pair(KEY_WITH_5_BYTES_1, VALUE_WITH_10_BYTES)
-                        ),
-                        TestUtils.mapOf(
-                                TestUtils.pair(KEY_WITH_5_BYTES_1, VALUE_WITH_10_BYTES),
-                                TestUtils.pair(KEY_WITH_5_BYTES_2, VALUE_WITH_11_BYTES),
-                                TestUtils.pair(KEY_WITH_5_BYTES_3, VALUE_WITH_12_BYTES)
-                        ),
-                        2,
-                        37,
-                        "map with 2 small items out of map size limit in non sorted order"
-                },
-                {
-                        TestUtils.mapOf(
-                                TestUtils.pair(KEY_WITH_5_BYTES_4, VALUE_WITH_13_BYTES),
-                                TestUtils.pair(KEY_WITH_5_BYTES_2, VALUE_WITH_11_BYTES),
-                                TestUtils.pair(KEY_WITH_5_BYTES_3, VALUE_WITH_12_BYTES),
-                                TestUtils.pair(KEY_WITH_5_BYTES_5, VALUE_WITH_14_BYTES),
-                                TestUtils.pair(KEY_WITH_5_BYTES_1, VALUE_WITH_10_BYTES),
-                                TestUtils.pair(KEY_WITH_1_BYTE, null)
-                        ),
-                        TestUtils.mapOf(
-                                TestUtils.pair(KEY_WITH_1_BYTE, null),
-                                TestUtils.pair(KEY_WITH_5_BYTES_1, VALUE_WITH_10_BYTES),
-                                TestUtils.pair(KEY_WITH_5_BYTES_2, VALUE_WITH_11_BYTES),
-                                TestUtils.pair(KEY_WITH_5_BYTES_3, VALUE_WITH_12_BYTES)
-                        ),
-                        2,
-                        37,
-                        "map with null-value and some items out of map size limit"
-                },
-                {
-                        TestUtils.mapOf(
-                                TestUtils.pair(KEY_WITH_5_BYTES_4, VALUE_WITH_13_BYTES),
-                                TestUtils.pair(KEY_WITH_5_BYTES_2, VALUE_WITH_11_BYTES),
-                                TestUtils.pair(KEY_WITH_5_BYTES_3, VALUE_WITH_12_BYTES),
-                                TestUtils.pair(KEY_WITH_5_BYTES_5, VALUE_WITH_14_BYTES),
-                                TestUtils.pair(KEY_WITH_5_BYTES_1, VALUE_WITH_10_BYTES),
-                                TestUtils.pair(KEY_WITH_1_BYTE, "")
-                        ),
-                        TestUtils.mapOf(
-                                TestUtils.pair(KEY_WITH_1_BYTE, ""),
-                                TestUtils.pair(KEY_WITH_5_BYTES_1, VALUE_WITH_10_BYTES),
-                                TestUtils.pair(KEY_WITH_5_BYTES_2, VALUE_WITH_11_BYTES),
-                                TestUtils.pair(KEY_WITH_5_BYTES_3, VALUE_WITH_12_BYTES)
-                        ),
-                        2,
-                        37,
-                        "map with single empty value and some items out of map limit"
-                },
-                {
-                        TestUtils.mapOf(
-                                TestUtils.pair(KEY_WITH_20_BYTES_1, VALUE_WITH_30_BYTES),
-                                TestUtils.pair(KEY_WITH_20_BYTES_2, VALUE_WITH_31_BYTES),
-                                TestUtils.pair(KEY_WITH_20_BYTES_3, VALUE_WITH_32_BYTES),
-                                TestUtils.pair(KEY_WITH_5_BYTES_1, VALUE_WITH_10_BYTES),
-                                TestUtils.pair(KEY_WITH_1_BYTE, "")
-                        ),
-                        TestUtils.mapOf(
-                                TestUtils.pair(KEY_WITH_1_BYTE, ""),
-                                TestUtils.pair(KEY_WITH_5_BYTES_1, VALUE_WITH_10_BYTES),
-                                TestUtils.pair(TRUNCATED_KEY_WITH_20_BYTES_1, TRUNCATED_VALUE_WITH_30_BYTES)
-                        ),
-                        2,
-                        123,
-                        "map with some pairs out of limit"
-                },
-                {
-                        TestUtils.mapOf(
-                                TestUtils.pair(KEY_WITH_20_BYTES_1, VALUE_WITH_30_BYTES),
-                                TestUtils.pair(KEY_WITH_20_BYTES_2, VALUE_WITH_31_BYTES),
-                                TestUtils.pair(KEY_WITH_20_BYTES_3, VALUE_WITH_32_BYTES),
-                                TestUtils.pair(KEY_WITH_5_BYTES_1, VALUE_WITH_10_BYTES),
-                                TestUtils.pair(KEY_WITH_1_BYTE, ""),
-                                TestUtils.pair(
-                                        KEY_WITH_15_BYTES_INCLUDING_CYRILLIC_CHARS,
-                                        VALUE_WITH_25_BYTES_INCLUDING_CYRILLIC_CHARS
-                                ),
-                                TestUtils.pair(
-                                        KEY_WITH_25_BYTES_INCLUDING_CYRILLIC_CHARS,
-                                        VALUE_WITH_25_BYTES_INCLUDING_CYRILLIC_CHARS
-                                )
-                        ),
-                        TestUtils.mapOf(
-                                TestUtils.pair(KEY_WITH_1_BYTE, ""),
-                                TestUtils.pair(KEY_WITH_5_BYTES_1, VALUE_WITH_10_BYTES)
-                        ),
-                        5,
-                        243,
-                        "map with some pairs out of limit including cyrillic"
-                },
-                {
-                        TestUtils.mapOf(
-                                TestUtils.pair(KEY_WITH_COLLISION_1, VALUE_WITH_SINGLE_BYTE),
-                                TestUtils.pair(KEY_WITH_COLLISION_2, VALUE_WITH_SINGLE_BYTE),
-                                TestUtils.pair(KEY_WITH_COLLISION_3, VALUE_WITH_SINGLE_BYTE)
-                        ),
-                        TestUtils.mapOf(
-                                TestUtils.pair(TRUNCATED_KEY_WITH_COLLISION, VALUE_WITH_SINGLE_BYTE)
-                        ),
-                        0,
-                        3,
-                        "map with truncated key collision"
-                }
+            {null, null, 0, 0, "null"},
+            {Collections.emptyMap(), Collections.emptyMap(), 0, 0, "empty map"},
+            {
+                TestUtils.mapOf(TestUtils.pair(KEY_WITH_5_BYTES_1, VALUE_WITH_10_BYTES)),
+                TestUtils.mapOf(TestUtils.pair(KEY_WITH_5_BYTES_1, VALUE_WITH_10_BYTES)),
+                0,
+                0,
+                "map with single short pair"
+            },
+            {
+                TestUtils.mapOf(
+                    TestUtils.pair(
+                        KEY_WITH_15_BYTES_INCLUDING_CYRILLIC_CHARS,
+                        VALUE_WITH_25_BYTES_INCLUDING_CYRILLIC_CHARS
+                    )
+                ),
+                TestUtils.mapOf(
+                    TestUtils.pair(
+                        KEY_WITH_15_BYTES_INCLUDING_CYRILLIC_CHARS,
+                        VALUE_WITH_25_BYTES_INCLUDING_CYRILLIC_CHARS
+                    )
+                ),
+                0,
+                0,
+                "map with single short pair with cyrillic chars"
+            },
+            {
+                TestUtils.mapOf(TestUtils.pair(KEY_WITH_20_BYTES_1, VALUE_WITH_30_BYTES)),
+                TestUtils.mapOf(TestUtils.pair(TRUNCATED_KEY_WITH_20_BYTES_1, TRUNCATED_VALUE_WITH_30_BYTES)),
+                0,
+                20,
+                "map with single large pair"
+            },
+            {
+                TestUtils.mapOf(
+                    TestUtils.pair(
+                        KEY_WITH_25_BYTES_INCLUDING_CYRILLIC_CHARS,
+                        VALUE_WITH_35_BYTES_INCLUDING_CYRILLIC_CHARS
+                    )
+                ),
+                TestUtils.mapOf(
+                    TestUtils.pair(
+                        KEY_WITH_15_BYTES_INCLUDING_CYRILLIC_CHARS,
+                        VALUE_WITH_25_BYTES_INCLUDING_CYRILLIC_CHARS
+                    )
+                ),
+                0,
+                15,
+                "map with single large pair with cyrillic chars"
+            },
+            {
+                TestUtils.mapOf(
+                    TestUtils.pair(KEY_WITH_5_BYTES_1, VALUE_WITH_10_BYTES),
+                    TestUtils.pair(KEY_WITH_5_BYTES_2, VALUE_WITH_11_BYTES),
+                    TestUtils.pair(KEY_WITH_5_BYTES_3, VALUE_WITH_12_BYTES),
+                    TestUtils.pair(KEY_WITH_5_BYTES_4, VALUE_WITH_13_BYTES),
+                    TestUtils.pair(KEY_WITH_5_BYTES_5, VALUE_WITH_14_BYTES)
+                ),
+                TestUtils.mapOf(
+                    TestUtils.pair(KEY_WITH_5_BYTES_1, VALUE_WITH_10_BYTES),
+                    TestUtils.pair(KEY_WITH_5_BYTES_2, VALUE_WITH_11_BYTES),
+                    TestUtils.pair(KEY_WITH_5_BYTES_3, VALUE_WITH_12_BYTES)
+                ),
+                2,
+                37,
+                "map with 2 small items out of map size limit"
+            },
+            {
+                TestUtils.mapOf(
+                    TestUtils.pair(KEY_WITH_5_BYTES_4, VALUE_WITH_13_BYTES),
+                    TestUtils.pair(KEY_WITH_5_BYTES_2, VALUE_WITH_11_BYTES),
+                    TestUtils.pair(KEY_WITH_5_BYTES_3, VALUE_WITH_12_BYTES),
+                    TestUtils.pair(KEY_WITH_5_BYTES_5, VALUE_WITH_14_BYTES),
+                    TestUtils.pair(KEY_WITH_5_BYTES_1, VALUE_WITH_10_BYTES)
+                ),
+                TestUtils.mapOf(
+                    TestUtils.pair(KEY_WITH_5_BYTES_1, VALUE_WITH_10_BYTES),
+                    TestUtils.pair(KEY_WITH_5_BYTES_2, VALUE_WITH_11_BYTES),
+                    TestUtils.pair(KEY_WITH_5_BYTES_3, VALUE_WITH_12_BYTES)
+                ),
+                2,
+                37,
+                "map with 2 small items out of map size limit in non sorted order"
+            },
+            {
+                TestUtils.mapOf(
+                    TestUtils.pair(KEY_WITH_5_BYTES_4, VALUE_WITH_13_BYTES),
+                    TestUtils.pair(KEY_WITH_5_BYTES_2, VALUE_WITH_11_BYTES),
+                    TestUtils.pair(KEY_WITH_5_BYTES_3, VALUE_WITH_12_BYTES),
+                    TestUtils.pair(KEY_WITH_5_BYTES_5, VALUE_WITH_14_BYTES),
+                    TestUtils.pair(KEY_WITH_5_BYTES_1, VALUE_WITH_10_BYTES),
+                    TestUtils.pair(KEY_WITH_1_BYTE, null)
+                ),
+                TestUtils.mapOf(
+                    TestUtils.pair(KEY_WITH_1_BYTE, null),
+                    TestUtils.pair(KEY_WITH_5_BYTES_1, VALUE_WITH_10_BYTES),
+                    TestUtils.pair(KEY_WITH_5_BYTES_2, VALUE_WITH_11_BYTES),
+                    TestUtils.pair(KEY_WITH_5_BYTES_3, VALUE_WITH_12_BYTES)
+                ),
+                2,
+                37,
+                "map with null-value and some items out of map size limit"
+            },
+            {
+                TestUtils.mapOf(
+                    TestUtils.pair(KEY_WITH_5_BYTES_4, VALUE_WITH_13_BYTES),
+                    TestUtils.pair(KEY_WITH_5_BYTES_2, VALUE_WITH_11_BYTES),
+                    TestUtils.pair(KEY_WITH_5_BYTES_3, VALUE_WITH_12_BYTES),
+                    TestUtils.pair(KEY_WITH_5_BYTES_5, VALUE_WITH_14_BYTES),
+                    TestUtils.pair(KEY_WITH_5_BYTES_1, VALUE_WITH_10_BYTES),
+                    TestUtils.pair(KEY_WITH_1_BYTE, "")
+                ),
+                TestUtils.mapOf(
+                    TestUtils.pair(KEY_WITH_1_BYTE, ""),
+                    TestUtils.pair(KEY_WITH_5_BYTES_1, VALUE_WITH_10_BYTES),
+                    TestUtils.pair(KEY_WITH_5_BYTES_2, VALUE_WITH_11_BYTES),
+                    TestUtils.pair(KEY_WITH_5_BYTES_3, VALUE_WITH_12_BYTES)
+                ),
+                2,
+                37,
+                "map with single empty value and some items out of map limit"
+            },
+            {
+                TestUtils.mapOf(
+                    TestUtils.pair(KEY_WITH_20_BYTES_1, VALUE_WITH_30_BYTES),
+                    TestUtils.pair(KEY_WITH_20_BYTES_2, VALUE_WITH_31_BYTES),
+                    TestUtils.pair(KEY_WITH_20_BYTES_3, VALUE_WITH_32_BYTES),
+                    TestUtils.pair(KEY_WITH_5_BYTES_1, VALUE_WITH_10_BYTES),
+                    TestUtils.pair(KEY_WITH_1_BYTE, "")
+                ),
+                TestUtils.mapOf(
+                    TestUtils.pair(KEY_WITH_1_BYTE, ""),
+                    TestUtils.pair(KEY_WITH_5_BYTES_1, VALUE_WITH_10_BYTES),
+                    TestUtils.pair(TRUNCATED_KEY_WITH_20_BYTES_1, TRUNCATED_VALUE_WITH_30_BYTES)
+                ),
+                2,
+                123,
+                "map with some pairs out of limit"
+            },
+            {
+                TestUtils.mapOf(
+                    TestUtils.pair(KEY_WITH_20_BYTES_1, VALUE_WITH_30_BYTES),
+                    TestUtils.pair(KEY_WITH_20_BYTES_2, VALUE_WITH_31_BYTES),
+                    TestUtils.pair(KEY_WITH_20_BYTES_3, VALUE_WITH_32_BYTES),
+                    TestUtils.pair(KEY_WITH_5_BYTES_1, VALUE_WITH_10_BYTES),
+                    TestUtils.pair(KEY_WITH_1_BYTE, ""),
+                    TestUtils.pair(
+                        KEY_WITH_15_BYTES_INCLUDING_CYRILLIC_CHARS,
+                        VALUE_WITH_25_BYTES_INCLUDING_CYRILLIC_CHARS
+                    ),
+                    TestUtils.pair(
+                        KEY_WITH_25_BYTES_INCLUDING_CYRILLIC_CHARS,
+                        VALUE_WITH_25_BYTES_INCLUDING_CYRILLIC_CHARS
+                    )
+                ),
+                TestUtils.mapOf(
+                    TestUtils.pair(KEY_WITH_1_BYTE, ""),
+                    TestUtils.pair(KEY_WITH_5_BYTES_1, VALUE_WITH_10_BYTES)
+                ),
+                5,
+                243,
+                "map with some pairs out of limit including cyrillic"
+            },
+            {
+                TestUtils.mapOf(
+                    TestUtils.pair(KEY_WITH_COLLISION_1, VALUE_WITH_SINGLE_BYTE),
+                    TestUtils.pair(KEY_WITH_COLLISION_2, VALUE_WITH_SINGLE_BYTE),
+                    TestUtils.pair(KEY_WITH_COLLISION_3, VALUE_WITH_SINGLE_BYTE)
+                ),
+                TestUtils.mapOf(
+                    TestUtils.pair(TRUNCATED_KEY_WITH_COLLISION, VALUE_WITH_SINGLE_BYTE)
+                ),
+                0,
+                3,
+                "map with truncated key collision"
+            }
         });
     }
 
@@ -271,25 +271,25 @@ public class HierarchicalValueSizeOrderBasedWithBytesLimitStringMapTrimmerTest e
         MockitoAnnotations.openMocks(this);
 
         when(keyTrimmer.trim(nullable(String.class)))
-                .then(new Answer<TrimmingResult<String, BytesTruncatedProvider>>() {
-            @Override
-            public TrimmingResult<String, BytesTruncatedProvider> answer(InvocationOnMock invocation) throws Throwable {
-                return trimToLimit(invocation.getArgument(0).toString(), MAP_KEY_LIMIT);
-            }
-        });
+            .then(new Answer<TrimmingResult<String, BytesTruncatedProvider>>() {
+                @Override
+                public TrimmingResult<String, BytesTruncatedProvider> answer(InvocationOnMock invocation) throws Throwable {
+                    return trimToLimit(invocation.getArgument(0).toString(), MAP_KEY_LIMIT);
+                }
+            });
 
         when(valueTrimmer.trim(nullable(String.class)))
-                .then(new Answer<TrimmingResult<String, BytesTruncatedProvider>>() {
-            @Override
-            public TrimmingResult<String, BytesTruncatedProvider> answer(InvocationOnMock invocation) throws Throwable {
-                return trimToLimit((String) invocation.getArgument(0), MAP_VALUE_LIMIT);
-            }
-        });
+            .then(new Answer<TrimmingResult<String, BytesTruncatedProvider>>() {
+                @Override
+                public TrimmingResult<String, BytesTruncatedProvider> answer(InvocationOnMock invocation) throws Throwable {
+                    return trimToLimit(invocation.getArgument(0), MAP_VALUE_LIMIT);
+                }
+            });
 
         mMapTrimmer = new HierarchicalValueSizeOrderBasedWithBytesLimitStringMapTrimmer(
-                MAP_SIZE_LIMIT,
-                keyTrimmer,
-                valueTrimmer
+            MAP_SIZE_LIMIT,
+            keyTrimmer,
+            valueTrimmer
         );
     }
 
@@ -306,15 +306,15 @@ public class HierarchicalValueSizeOrderBasedWithBytesLimitStringMapTrimmerTest e
     @Test
     public void trim() throws Exception {
         TrimmingResult<Map<String, String>, CollectionTrimInfo> trimmingResult =
-                mMapTrimmer.trim(inputMap);
+            mMapTrimmer.trim(inputMap);
 
         ObjectPropertyAssertions<TrimmingResult<Map<String, String>, CollectionTrimInfo>> assertions =
-                ObjectPropertyAssertions(trimmingResult);
+            ObjectPropertyAssertions(trimmingResult);
 
         assertions.checkField("value", expectedMap);
         assertions.checkFieldComparingFieldByField(
-                "metaInfo",
-                new CollectionTrimInfo(pairsTruncated, bytesTruncated)
+            "metaInfo",
+            new CollectionTrimInfo(pairsTruncated, bytesTruncated)
         );
 
         assertions.checkAll();

@@ -50,9 +50,8 @@ class NativeCrashConsumerTest : CommonTest() {
     private val commonArguments: CommonArguments by commonArgumentsMockedConstructionRule
 
     @get:Rule
-    val startupRequestConfigArgumentsMockedConstructionRule = constructionRule<StartupRequestConfig.Arguments>()
-    private val startupRequestConfigArguments: StartupRequestConfig.Arguments
-        by startupRequestConfigArgumentsMockedConstructionRule
+    val startupRequestConfigArgumentsRule = constructionRule<StartupRequestConfig.Arguments>()
+    private val startupRequestConfigArguments: StartupRequestConfig.Arguments by startupRequestConfigArgumentsRule
 
     @get:Rule
     val reporterArgumentsMockedConstructionRule = constructionRule<ReporterArguments>()
@@ -84,8 +83,8 @@ class NativeCrashConsumerTest : CommonTest() {
         assertThat(commonArgumentsMockedConstructionRule.argumentInterceptor.flatArguments())
             .containsExactly(startupRequestConfigArguments, reporterArguments, null)
 
-        assertThat(startupRequestConfigArgumentsMockedConstructionRule.constructionMock.constructed()).hasSize(1)
-        assertThat(startupRequestConfigArgumentsMockedConstructionRule.argumentInterceptor.flatArguments()).isEmpty()
+        assertThat(startupRequestConfigArgumentsRule.constructionMock.constructed()).hasSize(1)
+        assertThat(startupRequestConfigArgumentsRule.argumentInterceptor.flatArguments()).isEmpty()
 
         assertThat(reporterArgumentsMockedConstructionRule.constructionMock.constructed()).hasSize(1)
         assertThat(reporterArgumentsMockedConstructionRule.argumentInterceptor.flatArguments()).isEmpty()

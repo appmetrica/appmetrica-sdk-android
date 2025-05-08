@@ -6,17 +6,9 @@ import io.appmetrica.analytics.impl.crash.jvm.client.StackTraceItemInternal;
 import io.appmetrica.analytics.impl.crash.jvm.client.ThreadState;
 import io.appmetrica.analytics.impl.crash.jvm.client.ThrowableModel;
 import io.appmetrica.analytics.impl.crash.jvm.client.UnhandledException;
-import io.appmetrica.analytics.impl.crash.jvm.converter.AllThreadsConverter;
-import io.appmetrica.analytics.impl.crash.jvm.converter.CrashOptionalBoolConverter;
-import io.appmetrica.analytics.impl.crash.jvm.converter.PlatformConverter;
-import io.appmetrica.analytics.impl.crash.jvm.converter.PluginEnvironmentConverter;
-import io.appmetrica.analytics.impl.crash.jvm.converter.StackTraceConverter;
-import io.appmetrica.analytics.impl.crash.jvm.converter.ThrowableConverter;
-import io.appmetrica.analytics.impl.crash.jvm.converter.UnhandledExceptionConverter;
 import io.appmetrica.analytics.impl.protobuf.backend.CrashAndroid;
 import io.appmetrica.analytics.protobuf.nano.InvalidProtocolBufferNanoException;
 import io.appmetrica.analytics.testutils.CommonTest;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -59,12 +51,12 @@ public class UnhandledExceptionConverterTest extends CommonTest {
     public void setUp() {
         MockitoAnnotations.openMocks(this);
         exceptionConverter = new UnhandledExceptionConverter(
-                throwableConverter,
-                allThreadsConverter,
-                optionalBoolConverter,
-                stackTraceConverter,
-                platformConverter,
-                pluginEnvironmentConverter
+            throwableConverter,
+            allThreadsConverter,
+            optionalBoolConverter,
+            stackTraceConverter,
+            platformConverter,
+            pluginEnvironmentConverter
         );
     }
 
@@ -76,20 +68,20 @@ public class UnhandledExceptionConverterTest extends CommonTest {
         environment.put("key1", "value1");
         environment.put("key2", "22");
         ThreadState crashedThread = mock(ThreadState.class);
-        AllThreads allThreads = new AllThreads(crashedThread, Arrays.asList(mock(ThreadState.class)), "process");
+        AllThreads allThreads = new AllThreads(crashedThread, Collections.singletonList(mock(ThreadState.class)), "process");
         List<StackTraceItemInternal> stacktrace = Collections.singletonList(mock(StackTraceItemInternal.class));
         String buildId = UUID.randomUUID().toString();
         Boolean isOffline = true;
         ThrowableModel rawException = mock(ThrowableModel.class);
         UnhandledException exception = new UnhandledException(
-                rawException,
-                allThreads,
-                stacktrace,
-                platform,
-                virtualMachineVersion,
-                environment,
-                buildId,
-                isOffline
+            rawException,
+            allThreads,
+            stacktrace,
+            platform,
+            virtualMachineVersion,
+            environment,
+            buildId,
+            isOffline
         );
 
         CrashAndroid.AllThreads threads = new CrashAndroid.AllThreads();
@@ -108,24 +100,24 @@ public class UnhandledExceptionConverterTest extends CommonTest {
         byte[] protoPlatform = "some platform".getBytes();
         doReturn(protoPlatform).when(platformConverter).fromModel(platform);
 
-        CrashAndroid.BytesPair[] protoEnv = new CrashAndroid.BytesPair[] { mock(CrashAndroid.BytesPair.class) };
+        CrashAndroid.BytesPair[] protoEnv = new CrashAndroid.BytesPair[]{mock(CrashAndroid.BytesPair.class)};
         doReturn(protoEnv).when(pluginEnvironmentConverter).fromModel(environment);
 
         ObjectPropertyAssertions<CrashAndroid.Crash> crashAssertions = ObjectPropertyAssertions(
-                exceptionConverter.fromModel(exception)
+            exceptionConverter.fromModel(exception)
         );
 
         crashAssertions.withFinalFieldOnly(false)
-                .withIgnoredFields("type", "native_")
-                .checkField("throwable", throwable)
-                .checkField("threads", threads)
-                .checkField("methodCallStacktrace", protoStacktrace)
-                .checkField("buildId", buildId)
-                .checkField("isOffline", protoIsOffline)
-                .checkField("virtualMachine", protoPlatform)
-                .checkField("virtualMachineVersion", virtualMachineVersion.getBytes())
-                .checkField("pluginEnvironment", protoEnv)
-                .checkAll();
+            .withIgnoredFields("type", "native_")
+            .checkField("throwable", throwable)
+            .checkField("threads", threads)
+            .checkField("methodCallStacktrace", protoStacktrace)
+            .checkField("buildId", buildId)
+            .checkField("isOffline", protoIsOffline)
+            .checkField("virtualMachine", protoPlatform)
+            .checkField("virtualMachineVersion", virtualMachineVersion.getBytes())
+            .checkField("pluginEnvironment", protoEnv)
+            .checkAll();
 
         verify(throwableConverter).fromModel(rawException);
         verify(allThreadsConverter).fromModel(allThreads);
@@ -138,36 +130,36 @@ public class UnhandledExceptionConverterTest extends CommonTest {
     @Test
     public void testToProtoWithNulls() throws IllegalAccessException {
         UnhandledException exception = new UnhandledException(
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
         );
 
         doReturn(null).when(allThreadsConverter).fromModel(nullable(AllThreads.class));
 
         int protoIsOffline = CrashAndroid.OPTIONAL_BOOL_UNDEFINED;
-        doReturn(protoIsOffline).when(optionalBoolConverter).toProto((Boolean) any());
+        doReturn(protoIsOffline).when(optionalBoolConverter).toProto(any());
 
         CrashAndroid.Crash crash = exceptionConverter.fromModel(exception);
         ObjectPropertyAssertions<CrashAndroid.Crash> crashAssertions = ObjectPropertyAssertions(
-                crash
+            crash
         );
         crashAssertions.withFinalFieldOnly(false)
-                .withIgnoredFields("type", "native_")
-                .checkFieldIsNull("throwable")
-                .checkFieldIsNull("threads")
-                .checkField("methodCallStacktrace", new CrashAndroid.StackTraceElement[0])
-                .checkField("virtualMachine", "JVM".getBytes())
-                .checkField("virtualMachineVersion", "".getBytes())
-                .checkField("pluginEnvironment", new CrashAndroid.BytesPair[0])
-                .checkField("buildId", "")
-                .checkField("isOffline", protoIsOffline)
-                .checkAll();
+            .withIgnoredFields("type", "native_")
+            .checkFieldIsNull("throwable")
+            .checkFieldIsNull("threads")
+            .checkField("methodCallStacktrace", new CrashAndroid.StackTraceElement[0])
+            .checkField("virtualMachine", "JVM".getBytes())
+            .checkField("virtualMachineVersion", "".getBytes())
+            .checkField("pluginEnvironment", new CrashAndroid.BytesPair[0])
+            .checkField("buildId", "")
+            .checkField("isOffline", protoIsOffline)
+            .checkAll();
 
         verifyNoInteractions(allThreadsConverter, throwableConverter, allThreadsConverter);
     }

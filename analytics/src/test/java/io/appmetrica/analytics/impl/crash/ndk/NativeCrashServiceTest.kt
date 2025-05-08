@@ -20,9 +20,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
-import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.doReturn
-import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
@@ -57,9 +55,8 @@ class NativeCrashServiceTest : CommonTest() {
     }
 
     @get:Rule
-    val nativeCrashServiceModuleDummyMockedConstructionRule = constructionRule<NativeCrashServiceModuleDummy>()
-    private val nativeCrashServiceModuleDummy: NativeCrashServiceModuleDummy
-        by nativeCrashServiceModuleDummyMockedConstructionRule
+    val nativeCrashServiceModuleDummyRule = constructionRule<NativeCrashServiceModuleDummy>()
+    private val nativeCrashServiceModuleDummy: NativeCrashServiceModuleDummy by nativeCrashServiceModuleDummyRule
 
     private val nativeCrashHandlerForActualSession: NativeCrashHandler = mock()
     private val nativeCrashHandlerForPrevSession: NativeCrashHandler = mock()
@@ -69,7 +66,6 @@ class NativeCrashServiceTest : CommonTest() {
         on { createHandlerForActualSession(context, reportConsumer) } doReturn nativeCrashHandlerForActualSession
         on { createHandlerForPrevSession(context, reportConsumer) } doReturn nativeCrashHandlerForPrevSession
     }
-    private val nativeCrashHandlerFactory: NativeCrashHandlerFactory by nativeCrashHandlerFactoryMockedConstructionRule
 
     @get:Rule
     val nativeCrashServiceConfigMockedConstructionRule = constructionRule<NativeCrashServiceConfig>()
@@ -82,8 +78,8 @@ class NativeCrashServiceTest : CommonTest() {
 
         createService().initNativeCrashReporting(context, reportConsumer)
 
-        assertThat(nativeCrashServiceModuleDummyMockedConstructionRule.constructionMock.constructed()).hasSize(1)
-        assertThat(nativeCrashServiceModuleDummyMockedConstructionRule.argumentInterceptor.flatArguments()).isEmpty()
+        assertThat(nativeCrashServiceModuleDummyRule.constructionMock.constructed()).hasSize(1)
+        assertThat(nativeCrashServiceModuleDummyRule.argumentInterceptor.flatArguments()).isEmpty()
         verify(nativeCrashServiceModuleDummy).init(context, nativeCrashServiceConfig)
         verify(nativeCrashServiceModuleDummy).setDefaultCrashHandler(nativeCrashHandlerForActualSession)
         verify(nativeCrashServiceModuleDummy).getAllCrashes()

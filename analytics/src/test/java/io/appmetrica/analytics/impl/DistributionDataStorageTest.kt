@@ -67,7 +67,7 @@ class DistributionDataStorageTest : CommonTest() {
 
     @Test
     fun updateIfNewCandidateTheSameAsCurrent() {
-       val storageData = ClidsInfo(diskChosen, diskCandidates)
+        val storageData = ClidsInfo(diskChosen, diskCandidates)
         storage = createDistributionStorage(storageData)
         clearInvocations(candidatesProvider, priorityProvider, stateProvider, diskStorage)
         storage.updateIfNeeded(diskChosen)
@@ -206,8 +206,15 @@ class DistributionDataStorageTest : CommonTest() {
 
     @Test
     fun updateAndRetrieveData() {
-        val newCandidates = listOf(mock<ClidsInfo.Candidate>(), mock<ClidsInfo.Candidate>())
-        val newSatelliteCandidates = listOf(mock<ClidsInfo.Candidate>(), mock<ClidsInfo.Candidate>(), mock<ClidsInfo.Candidate>())
+        val newCandidates = listOf(
+            mock<ClidsInfo.Candidate>(),
+            mock<ClidsInfo.Candidate>()
+        )
+        val newSatelliteCandidates = listOf(
+            mock<ClidsInfo.Candidate>(),
+            mock<ClidsInfo.Candidate>(),
+            mock<ClidsInfo.Candidate>()
+        )
         val candidate = ClidsInfo.Candidate(mapOf("clid9" to "9"), DistributionSource.RETAIL)
         val satelliteCandidate = ClidsInfo.Candidate(mapOf("clid8" to "8"), DistributionSource.SATELLITE)
         val state = ClidsInfo(candidate, newCandidates)
@@ -237,7 +244,9 @@ class DistributionDataStorageTest : CommonTest() {
         verify(satelliteCheckedProvider).markSatelliteChecked()
     }
 
-    private fun createDistributionStorage(storageData: ClidsInfo): DistributionDataStorage<ClidsInfo.Candidate, ClidsInfo.Candidate, ClidsInfo> {
+    private fun createDistributionStorage(
+        storageData: ClidsInfo
+    ): DistributionDataStorage<ClidsInfo.Candidate, ClidsInfo.Candidate, ClidsInfo> {
         return DistributionDataStorage(
             context,
             diskStorage,
@@ -251,5 +260,4 @@ class DistributionDataStorageTest : CommonTest() {
             "clids"
         )
     }
-
 }

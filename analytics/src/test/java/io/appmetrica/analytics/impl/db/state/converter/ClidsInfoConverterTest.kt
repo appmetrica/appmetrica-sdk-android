@@ -192,16 +192,22 @@ class ClidsInfoConverterTest : CommonTest() {
         checkModelCandidate(candidates[2], mapOf("clid6" to "6", "clid7" to "7"), DistributionSource.UNDEFINED)
     }
 
-    private fun checkModelCandidate(actual: ClidsInfo.Candidate, clids: Map<String, String>, source: DistributionSource) {
+    private fun checkModelCandidate(
+        actual: ClidsInfo.Candidate,
+        clids: Map<String, String>,
+        source: DistributionSource
+    ) {
         ObjectPropertyAssertions(actual)
             .checkField("clids", "getClids", clids)
             .checkField("source", "getSource", source)
             .checkAll()
     }
 
-    private fun checkProtoCandidate(actual: ClidsInfoProto.ClidsInfo.ClidsCandidate,
-                                    pairs: Array<ClidsInfoProto.ClidsInfo.NullableMap.Pair>,
-                                    source: Int) {
+    private fun checkProtoCandidate(
+        actual: ClidsInfoProto.ClidsInfo.ClidsCandidate,
+        pairs: Array<ClidsInfoProto.ClidsInfo.NullableMap.Pair>,
+        source: Int
+    ) {
         ProtoObjectPropertyAssertions(actual)
             .checkFieldRecursively<ClidsInfoProto.ClidsInfo.NullableMap>("clids") {
                 it.withIgnoredFields("pairs")
@@ -215,6 +221,5 @@ class ClidsInfoConverterTest : CommonTest() {
             }
             .checkField("source", source)
             .checkAll()
-
     }
 }

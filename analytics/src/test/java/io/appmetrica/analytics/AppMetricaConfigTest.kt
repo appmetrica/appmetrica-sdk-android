@@ -234,7 +234,7 @@ class AppMetricaConfigTest : CommonTest() {
     }
 
     @Test
-    fun testLocation() {
+    fun location() {
         val config = defaultConfigBuilder.withLocation(TestData.TEST_LOCATION).build()
         assertThat(config.location).isEqualTo(TestData.TEST_LOCATION)
     }

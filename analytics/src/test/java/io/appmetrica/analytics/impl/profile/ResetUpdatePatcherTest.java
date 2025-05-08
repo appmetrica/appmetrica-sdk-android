@@ -26,8 +26,8 @@ public class ResetUpdatePatcherTest extends CommonTest {
     private static final int TYPE = 100500;
     private static final String KEY = "key";
 
-    private AttributeSaver mAttributeSaver = mock(AttributeSaver.class);
-    private ResetUpdatePatcher mPatcher = new ResetUpdatePatcher(TYPE, KEY, new DummyValidator<String>(), mAttributeSaver);
+    private final AttributeSaver mAttributeSaver = mock(AttributeSaver.class);
+    private final ResetUpdatePatcher mPatcher = new ResetUpdatePatcher(TYPE, KEY, new DummyValidator<String>(), mAttributeSaver);
 
     @Test
     public void testNonExistedValue() {
@@ -36,9 +36,9 @@ public class ResetUpdatePatcherTest extends CommonTest {
         mPatcher.apply(storage);
 
         ArgumentCaptor<Userprofile.Profile.Attribute> captor =
-                ArgumentCaptor.forClass(Userprofile.Profile.Attribute.class);
+            ArgumentCaptor.forClass(Userprofile.Profile.Attribute.class);
         verify(mAttributeSaver, times(1))
-                .save(any(UserProfileStorage.class), captor.capture());
+            .save(any(UserProfileStorage.class), captor.capture());
         assertThat(captor.getValue().metaInfo.reset).isTrue();
     }
 
@@ -50,9 +50,9 @@ public class ResetUpdatePatcherTest extends CommonTest {
         mPatcher.apply(storage);
 
         ArgumentCaptor<Userprofile.Profile.Attribute> captor =
-                ArgumentCaptor.forClass(Userprofile.Profile.Attribute.class);
+            ArgumentCaptor.forClass(Userprofile.Profile.Attribute.class);
         verify(mAttributeSaver, times(1))
-                .save(any(UserProfileStorage.class), captor.capture());
+            .save(any(UserProfileStorage.class), captor.capture());
         assertThat(captor.getValue()).isNotSameAs(attribute);
         assertThat(captor.getValue().metaInfo.reset).isTrue();
     }
@@ -63,10 +63,10 @@ public class ResetUpdatePatcherTest extends CommonTest {
         doReturn(ValidationResult.successful(validator)).when(validator).validate(anyString());
 
         ArgumentCaptor<Userprofile.Profile.Attribute> captor =
-                ArgumentCaptor.forClass(Userprofile.Profile.Attribute.class);
+            ArgumentCaptor.forClass(Userprofile.Profile.Attribute.class);
         new ResetUpdatePatcher(100, "key", validator, mAttributeSaver).apply(mock(UserProfileStorage.class));
         Userprofile.Profile.Attribute attribute = verify(mAttributeSaver, times(1))
-                .save(any(UserProfileStorage.class), captor.capture());
+            .save(any(UserProfileStorage.class), captor.capture());
         assertThat(captor.getValue().name).isEqualTo("key".getBytes());
         assertThat(captor.getValue().type).isEqualTo(100);
     }

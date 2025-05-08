@@ -2,13 +2,14 @@ package io.appmetrica.analytics.coreutils.internal.permission
 
 import android.content.Context
 import io.appmetrica.analytics.coreapi.internal.system.PermissionExtractor
+import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 
-class SinglePermissionStrategyTest {
+class SinglePermissionStrategyTest : CommonTest() {
 
     private val permission = "Some permission"
 

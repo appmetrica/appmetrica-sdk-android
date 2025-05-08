@@ -50,7 +50,7 @@ public class SessionTests extends CommonTest {
         when(mSessionArguments.getId(anyLong())).thenReturn(0L);
         mDatabaseHelper = mock(DatabaseHelper.class);
         when(mDatabaseHelper.getSessionRequestParameters(anyLong(), any(SessionType.class)))
-                .thenReturn(getSessionRequestParameters());
+            .thenReturn(getSessionRequestParameters());
         when(mComponentUnit.getDbHelper()).thenReturn(mDatabaseHelper);
         doReturn(getRequestConfig()).when(mComponentUnit).getFreshReportRequestConfig();
 
@@ -132,11 +132,11 @@ public class SessionTests extends CommonTest {
     public void toStringContainsExpectedFields() {
         SoftAssertions assertions = new SoftAssertions();
         assertions.assertThat(mSession.toString())
-                .contains("id=0")
-                .contains("creationTime=" + SESSION_CREATION_TIME)
-                .contains("currentReportId=0")
-                .contains("sessionRequestParams=null")
-                .contains("sleepStart=0");
+            .contains("id=0")
+            .contains("creationTime=" + SESSION_CREATION_TIME)
+            .contains("currentReportId=0")
+            .contains("sessionRequestParams=null")
+            .contains("sleepStart=0");
         assertions.assertAll();
     }
 

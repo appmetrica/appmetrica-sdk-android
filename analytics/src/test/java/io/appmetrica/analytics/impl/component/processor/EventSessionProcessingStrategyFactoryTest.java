@@ -55,7 +55,7 @@ public class EventSessionProcessingStrategyFactoryTest extends CommonTest {
     @Test
     public void testGetProcessingStrategyShouldReturnExpectedHandlers_EventType_Init() {
         assertThat(getHandlers(EVENT_TYPE_INIT)).containsExactly(
-                mProcessingFactory.getReportSaveInitHandler()
+            mProcessingFactory.getReportSaveInitHandler()
         );
     }
 
@@ -67,7 +67,7 @@ public class EventSessionProcessingStrategyFactoryTest extends CommonTest {
     @Test
     public void testGetProcessingStrategyShouldReturnExpectedHandlers_EventType_ActivityEnd() {
         assertThat(getHandlers(EVENT_TYPE_UPDATE_FOREGROUND_TIME)).containsExactly(
-                mProcessingFactory.getReportPauseForegroundSessionHandler()
+            mProcessingFactory.getReportPauseForegroundSessionHandler()
         );
     }
 
@@ -134,14 +134,14 @@ public class EventSessionProcessingStrategyFactoryTest extends CommonTest {
     @Test
     public void testGetProcessingStrategyShouldReturnExpectedHandlers_EventType_ActivityStart() {
         assertThat(getHandlers(EVENT_TYPE_START)).containsExactly(
-                mProcessingFactory.getReportSessionActivityStartHandler(),
-                mProcessingFactory.getReportSaveInitHandler()
+            mProcessingFactory.getReportSessionActivityStartHandler(),
+            mProcessingFactory.getReportSaveInitHandler()
         );
     }
 
     private List getHandlers(final InternalEvents eventType) {
         EventProcessingStrategy<ReportComponentHandler> strategy = mProcessingFactory
-                .getProcessingStrategy(eventType.getTypeId());
+            .getProcessingStrategy(eventType.getTypeId());
 
         return strategy.getEventHandlers();
     }

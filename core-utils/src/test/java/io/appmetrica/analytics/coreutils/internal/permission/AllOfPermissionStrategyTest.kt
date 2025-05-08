@@ -3,6 +3,7 @@ package io.appmetrica.analytics.coreutils.internal.permission
 import android.Manifest
 import android.content.Context
 import io.appmetrica.analytics.coreapi.internal.system.PermissionExtractor
+import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions
 import org.junit.Before
 import org.junit.Test
@@ -16,7 +17,7 @@ class AllOfPermissionStrategyTest(
     private val inputPermissions: Array<String>,
     private val grantedPermissions: List<String>,
     private val expectedValue: Boolean
-) {
+) : CommonTest() {
 
     companion object {
         @Parameterized.Parameters

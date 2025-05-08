@@ -15,10 +15,10 @@ public class EventEncryptionModeValueOfTest extends CommonTest {
     @ParameterizedRobolectricTestRunner.Parameters(name = "{1} for {0}")
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
-                {0, EventEncryptionMode.NONE},
-                {1, EventEncryptionMode.EXTERNALLY_ENCRYPTED_EVENT_CRYPTER},
-                {2, EventEncryptionMode.AES_VALUE_ENCRYPTION},
-                {3, EventEncryptionMode.NONE}
+            {0, EventEncryptionMode.NONE},
+            {1, EventEncryptionMode.EXTERNALLY_ENCRYPTED_EVENT_CRYPTER},
+            {2, EventEncryptionMode.AES_VALUE_ENCRYPTION},
+            {3, EventEncryptionMode.NONE}
         });
     }
 

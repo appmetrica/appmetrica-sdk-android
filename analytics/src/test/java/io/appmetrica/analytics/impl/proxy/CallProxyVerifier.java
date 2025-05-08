@@ -94,13 +94,13 @@ class CallProxyVerifier {
             ArrayList<Object> argsList = new ArrayList<Object>(args.length);
             Collections.addAll(argsList, args);
             VerificationDataImpl data = new VerificationDataImpl((InvocationContainerImpl) invocations, new InvocationMatcher(
-                    new InterceptedInvocation(new MockWeakReference<Object>(mock), new DelegatingMethod(mock.getClass().getMethod(method, argsClasses)), args, null, null, 0),
-                    argsList.stream().map(new Function<Object, ArgumentMatcher>() {
-                        @Override
-                        public ArgumentMatcher apply(Object o) {
-                            return new Equals(o);
-                        }
-                    }).collect(Collectors.<ArgumentMatcher>toList())
+                new InterceptedInvocation(new MockWeakReference<Object>(mock), new DelegatingMethod(mock.getClass().getMethod(method, argsClasses)), args, null, null, 0),
+                argsList.stream().map(new Function<Object, ArgumentMatcher>() {
+                    @Override
+                    public ArgumentMatcher apply(Object o) {
+                        return new Equals(o);
+                    }
+                }).collect(Collectors.<ArgumentMatcher>toList())
             ));
             times(1).verify(data);
         } catch (NotAMockException e) {

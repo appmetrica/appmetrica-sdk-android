@@ -22,8 +22,8 @@ public class DbCleanupSecondHighestPriorityEventsAreNotRemovedTest extends DbCle
     public static Collection<Object[]> data() {
         final List<Object[]> unimportantTypes = new ArrayList<Object[]>();
         for (InternalEvents event : InternalEvents.values()) {
-            if (EventsManager.EVENTS_WITH_FIRST_HIGHEST_PRIORITY.contains(event.getTypeId()) == false &&
-                    EventsManager.EVENTS_WITH_SECOND_HIGHEST_PRIORITY.contains(event.getTypeId()) == false) {
+            if (!EventsManager.EVENTS_WITH_FIRST_HIGHEST_PRIORITY.contains(event.getTypeId()) &&
+                !EventsManager.EVENTS_WITH_SECOND_HIGHEST_PRIORITY.contains(event.getTypeId())) {
                 unimportantTypes.add(new Object[]{event.getTypeId()});
             }
         }

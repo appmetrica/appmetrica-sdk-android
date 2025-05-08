@@ -130,9 +130,9 @@ public class ActivityLifecycleManagerTest extends CommonTest {
     public void unregisterListenerHasThisListenerForAnotherEvent() {
         activityLifecycleManager.maybeInit(application);
         activityLifecycleManager.registerListener(
-                firstListener,
-                ActivityEvent.CREATED,
-                ActivityEvent.RESUMED
+            firstListener,
+            ActivityEvent.CREATED,
+            ActivityEvent.RESUMED
         );
         activityLifecycleManager.unregisterListener(firstListener, ActivityEvent.CREATED);
         verify(application, never()).unregisterActivityLifecycleCallbacks(any(Application.ActivityLifecycleCallbacks.class));
@@ -152,17 +152,17 @@ public class ActivityLifecycleManagerTest extends CommonTest {
     public void listenersNotification() {
         activityLifecycleManager.maybeInit(application);
         activityLifecycleManager.registerListener(
-                firstListener,
-                ActivityEvent.CREATED,
-                ActivityEvent.RESUMED
+            firstListener,
+            ActivityEvent.CREATED,
+            ActivityEvent.RESUMED
         );
         activityLifecycleManager.registerListener(secondListener, ActivityEvent.PAUSED);
         activityLifecycleManager.registerListener(thirdListener, ActivityEvent.RESUMED);
         activityLifecycleManager.registerListener(
-                fourthListener,
-                ActivityEvent.STARTED,
-                ActivityEvent.STOPPED,
-                ActivityEvent.DESTROYED
+            fourthListener,
+            ActivityEvent.STARTED,
+            ActivityEvent.STOPPED,
+            ActivityEvent.DESTROYED
         );
         activityLifecycleManager.registerListener(fifthListener);
 

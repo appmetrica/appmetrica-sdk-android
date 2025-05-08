@@ -43,9 +43,11 @@ class CustomSdkHostsConverterTest : CommonTest() {
         proto[1].key = "ads"
         proto[1].hosts = arrayOf("host3")
         val result = converter.toModel(proto)
-        assertThat(result).containsExactlyInAnyOrderEntriesOf(mapOf(
-            "am" to listOf("host1", "host2"),
-            "ads" to listOf("host3")
-        ))
+        assertThat(result).containsExactlyInAnyOrderEntriesOf(
+            mapOf(
+                "am" to listOf("host1", "host2"),
+                "ads" to listOf("host3")
+            )
+        )
     }
 }

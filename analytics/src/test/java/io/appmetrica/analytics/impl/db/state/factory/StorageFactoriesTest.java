@@ -56,25 +56,25 @@ public class StorageFactoriesTest extends CommonTest {
     public static Collection<Object[]> data() {
         //noinspection deprecation
         return Arrays.asList(new Object[][]{
-                {
-                        StartupStateModel.class, "startup_state", StartupStateSerializer.class, StartupStateConverter.class
-                },
-                {
-                        AppPermissionsState.class, "app_permissions_state", AppPermissionsStateSerializer.class,
-                        AppPermissionsStateConverter.class
-                },
-                {
-                        PreloadInfoData.class, "preload_info_data", PreloadInfoDataSerializer.class,
-                        PreloadInfoDataConverter.class
-                },
-                {
-                        AutoInappCollectingInfo.class, "auto_inapp_collecting_info_data", AutoInappCollectingInfoSerializer.class,
-                        AutoInappCollectingInfoConverter.class
-                },
-                {
-                        ClidsInfo.class, "clids_info", ClidsInfoStateSerializer.class,
-                        ClidsInfoConverter.class
-                },
+            {
+                StartupStateModel.class, "startup_state", StartupStateSerializer.class, StartupStateConverter.class
+            },
+            {
+                AppPermissionsState.class, "app_permissions_state", AppPermissionsStateSerializer.class,
+                AppPermissionsStateConverter.class
+            },
+            {
+                PreloadInfoData.class, "preload_info_data", PreloadInfoDataSerializer.class,
+                PreloadInfoDataConverter.class
+            },
+            {
+                AutoInappCollectingInfo.class, "auto_inapp_collecting_info_data", AutoInappCollectingInfoSerializer.class,
+                AutoInappCollectingInfoConverter.class
+            },
+            {
+                ClidsInfo.class, "clids_info", ClidsInfoStateSerializer.class,
+                ClidsInfoConverter.class
+            },
         });
     }
 

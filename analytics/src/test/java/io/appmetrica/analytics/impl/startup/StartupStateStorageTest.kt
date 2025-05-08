@@ -10,30 +10,22 @@ import io.appmetrica.analytics.testutils.CommonTest
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.ArgumentCaptor
-import org.mockito.Captor
-import org.mockito.Mock
-import org.mockito.Mockito.`when`
-import org.mockito.MockitoAnnotations
+import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 class StartupStateStorageTest : CommonTest() {
 
-    @Mock
-    private lateinit var modelStorage: ProtobufStateStorage<StartupStateModel>
+    private val modelStorage: ProtobufStateStorage<StartupStateModel> = mock()
+    private val vitalCommonDataProvider: VitalCommonDataProvider = mock()
 
-    @Mock
-    private lateinit var vitalCommonDataProvider: VitalCommonDataProvider
-
-    @Captor
-    private lateinit var startupStateModelCaptor: ArgumentCaptor<StartupStateModel>
+    private val startupStateModelCaptor = argumentCaptor<StartupStateModel>()
     private lateinit var startupStateStorage: StartupState.Storage
 
-    @Mock
-    private lateinit var collectingFlags: CollectingFlags
+    private val collectingFlags: CollectingFlags = mock()
     private val deviceId = "some device id"
     private val deviceIdHash = "some device id hash"
     private val uuid = "some uuid"
@@ -67,15 +59,15 @@ class StartupStateStorageTest : CommonTest() {
 
     @Before
     fun setUp() {
-        MockitoAnnotations.openMocks(this)
         startupStateStorage = StartupState.Storage(modelStorage, vitalCommonDataProvider)
     }
 
     @Test
     fun readEmptyValue() {
-        `when`(vitalCommonDataProvider.deviceId).thenReturn(null)
-        `when`(vitalCommonDataProvider.deviceIdHash).thenReturn(null)
-        `when`(modelStorage.read()).thenReturn(StartupStateModel.StartupStateBuilder(CollectingFlags.CollectingFlagsBuilder().build()).build())
+        whenever(vitalCommonDataProvider.deviceId).thenReturn(null)
+        whenever(vitalCommonDataProvider.deviceIdHash).thenReturn(null)
+        whenever(modelStorage.read())
+            .thenReturn(StartupStateBuilder(CollectingFlags.CollectingFlagsBuilder().build()).build())
         val startupState = startupStateStorage.read()
 
         ObjectPropertyAssertions(startupState)
@@ -103,7 +95,8 @@ class StartupStateStorageTest : CommonTest() {
             .checkFieldIsNull("countryInit")
             .checkFieldIsNull("statSending")
             .checkFieldIsNull("permissionsCollectingConfig")
-            .checkField("retryPolicyConfig",
+            .checkField(
+                "retryPolicyConfig",
                 RetryPolicyConfig(600, 1)
             )
             .checkFieldIsNull("autoInappCollectingConfig")
@@ -127,7 +120,7 @@ class StartupStateStorageTest : CommonTest() {
         verify(vitalCommonDataProvider).deviceIdHash = null
         verify(modelStorage).save(startupStateModelCaptor.capture())
 
-        val assertions = ObjectPropertyAssertions(startupStateModelCaptor.value)
+        val assertions = ObjectPropertyAssertions(startupStateModelCaptor.firstValue)
             .withFinalFieldOnly(false)
 
         assertions.checkFieldIsNull("uuid")
@@ -150,7 +143,8 @@ class StartupStateStorageTest : CommonTest() {
         assertions.checkField("obtainServerTime", 0L)
         assertions.checkField("firstStartupServerTime", 0L)
         assertions.checkField("outdated", false)
-        assertions.checkFieldComparingFieldByFieldRecursively("retryPolicyConfig",
+        assertions.checkFieldComparingFieldByFieldRecursively(
+            "retryPolicyConfig",
             RetryPolicyConfig(600, 1)
         )
         assertions.checkField("collectingFlags", CollectingFlags.CollectingFlagsBuilder().build())
@@ -170,8 +164,8 @@ class StartupStateStorageTest : CommonTest() {
 
     @Test
     fun readFilledValue() {
-        `when`(vitalCommonDataProvider.deviceId).thenReturn(deviceId)
-        `when`(vitalCommonDataProvider.deviceIdHash).thenReturn(deviceIdHash)
+        whenever(vitalCommonDataProvider.deviceId).thenReturn(deviceId)
+        whenever(vitalCommonDataProvider.deviceIdHash).thenReturn(deviceIdHash)
 
         val startupStateModel = StartupStateBuilder(collectingFlags)
             .withUuid(uuid)
@@ -203,7 +197,7 @@ class StartupStateStorageTest : CommonTest() {
             .withModulesRemoteConfigs(modulesRemoteConfigs)
             .withExternalAttributionConfig(externalAttributionConfig)
             .build()
-        `when`(modelStorage.read()).thenReturn(startupStateModel)
+        whenever(modelStorage.read()).thenReturn(startupStateModel)
 
         ObjectPropertyAssertions(startupStateStorage.read())
             .withIgnoredFields("startupStateModel")
@@ -281,7 +275,7 @@ class StartupStateStorageTest : CommonTest() {
         verify(vitalCommonDataProvider).deviceIdHash = deviceIdHash
         verify(modelStorage).save(startupStateModelCaptor.capture())
 
-        val assertions = ObjectPropertyAssertions(startupStateModelCaptor.value)
+        val assertions = ObjectPropertyAssertions(startupStateModelCaptor.firstValue)
             .withFinalFieldOnly(false)
 
         assertions.checkField("uuid", uuid)

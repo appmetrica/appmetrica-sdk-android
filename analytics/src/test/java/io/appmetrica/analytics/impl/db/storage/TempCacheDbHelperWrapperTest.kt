@@ -23,7 +23,7 @@ class TempCacheDbHelperWrapperTest : CommonTest() {
 
     private val scope = "scope"
     private val timestamp = 100500L
-    private val data = ByteArray(14) {it.toByte()}
+    private val data = ByteArray(14) { it.toByte() }
     private val id = 13L
     private val limit = 100
     private val interval = 240L

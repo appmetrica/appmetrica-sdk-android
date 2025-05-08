@@ -1,12 +1,13 @@
 package io.appmetrica.analytics.networktasks.internal
 
+import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.stubbing
 
-class ResponseDataHolderTest {
+class ResponseDataHolderTest : CommonTest() {
 
     private val validityChecker = mock<ResponseValidityChecker>()
     private val responseDataHolder =

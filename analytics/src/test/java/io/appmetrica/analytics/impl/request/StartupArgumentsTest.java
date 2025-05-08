@@ -56,7 +56,7 @@ public class StartupArgumentsTest extends CommonTest {
             "gpl",
             Collections.singletonMap("clid2", "55"),
             true,
-            Arrays.asList("newHost")
+            Collections.singletonList("newHost")
         );
 
         StartupRequestConfig.Arguments arguments = emptyArguments.mergeFrom(new StartupRequestConfig.Arguments(ClientConfigurationTestUtils.createStubbedConfiguration()));
@@ -66,7 +66,7 @@ public class StartupArgumentsTest extends CommonTest {
             "gpl",
             Collections.singletonMap("clid2", "55"),
             true,
-            Arrays.asList("newHost")
+            Collections.singletonList("newHost")
         );
     }
 

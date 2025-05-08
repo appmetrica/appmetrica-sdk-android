@@ -6,16 +6,12 @@ import io.appmetrica.analytics.impl.DefaultValues
 import io.appmetrica.analytics.networktasks.internal.RetryPolicyConfig
 import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Before
 import org.junit.Test
-import org.mockito.Mock
-import org.mockito.MockitoAnnotations
 import org.mockito.kotlin.mock
 
 class StartupStateTest : CommonTest() {
 
-    @Mock
-    private lateinit var collectingFlags: CollectingFlags
+    private val collectingFlags: CollectingFlags = mock()
     private val deviceId = "some device id"
     private val deviceIdHash = "some device id hash"
     private val uuid = "some uuid"
@@ -47,11 +43,6 @@ class StartupStateTest : CommonTest() {
     private val modulesRemoteConfigs = mapOf("first module" to mock<Any>())
     private val externalAttributionConfig = mock<ExternalAttributionConfig>()
 
-    @Before
-    fun setUp() {
-        MockitoAnnotations.openMocks(this)
-    }
-
     @Test
     fun emptyObject() {
         val startupState = StartupState.Builder(collectingFlags).build()
@@ -81,14 +72,17 @@ class StartupStateTest : CommonTest() {
             .checkFieldIsNull("countryInit")
             .checkFieldIsNull("statSending")
             .checkFieldIsNull("permissionsCollectingConfig")
-            .checkField("retryPolicyConfig",
+            .checkField(
+                "retryPolicyConfig",
                 RetryPolicyConfig(600, 1)
             )
             .checkFieldIsNull("autoInappCollectingConfig")
             .checkFieldIsNull("cacheControl")
             .checkFieldIsNull("attributionConfig")
-            .checkFieldComparingFieldByFieldRecursively("startupUpdateConfig",
-                StartupUpdateConfig(DefaultValues.STARTUP_UPDATE_CONFIG.interval))
+            .checkFieldComparingFieldByFieldRecursively(
+                "startupUpdateConfig",
+                StartupUpdateConfig(DefaultValues.STARTUP_UPDATE_CONFIG.interval)
+            )
             .checkField("modulesRemoteConfigs", emptyMap<String, Any>())
             .checkFieldIsNull("externalAttributionConfig")
             .checkAll()
@@ -243,7 +237,8 @@ class StartupStateTest : CommonTest() {
         val stateFields = StartupState::class.java.declaredFields
         val modelFields = StartupStateModel::class.java.declaredFields
         assertThat(stateFields.map { it.name }.filterNot { excludedStateFields.contains(it) })
-            .containsExactlyInAnyOrderElementsOf(modelFields.map { it.name }.filterNot { excludedModelFields.contains(it) })
+            .containsExactlyInAnyOrderElementsOf(
+                modelFields.map { it.name }.filterNot { excludedModelFields.contains(it) }
+            )
     }
-
 }

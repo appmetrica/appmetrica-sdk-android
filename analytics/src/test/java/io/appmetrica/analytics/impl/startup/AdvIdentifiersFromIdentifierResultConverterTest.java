@@ -13,18 +13,18 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(RobolectricTestRunner.class)
 public class AdvIdentifiersFromIdentifierResultConverterTest extends CommonTest {
 
-    private AdvIdentifiersFromIdentifierResultConverter advIdentifiersConverter =
+    private final AdvIdentifiersFromIdentifierResultConverter advIdentifiersConverter =
         new AdvIdentifiersFromIdentifierResultConverter();
 
     @Test
     public void testConvertNulls() {
         AdvIdentifiersResult result = advIdentifiersConverter.convert(null, null, null);
         assertThat(result).usingRecursiveComparison().isEqualTo(
-                new AdvIdentifiersResult(
-                        new AdvIdentifiersResult.AdvId(null, AdvIdentifiersResult.Details.INTERNAL_ERROR, null),
-                        new AdvIdentifiersResult.AdvId(null, AdvIdentifiersResult.Details.INTERNAL_ERROR, null),
-                        new AdvIdentifiersResult.AdvId(null, AdvIdentifiersResult.Details.INTERNAL_ERROR, null)
-                )
+            new AdvIdentifiersResult(
+                new AdvIdentifiersResult.AdvId(null, AdvIdentifiersResult.Details.INTERNAL_ERROR, null),
+                new AdvIdentifiersResult.AdvId(null, AdvIdentifiersResult.Details.INTERNAL_ERROR, null),
+                new AdvIdentifiersResult.AdvId(null, AdvIdentifiersResult.Details.INTERNAL_ERROR, null)
+            )
         );
     }
 
@@ -34,16 +34,16 @@ public class AdvIdentifiersFromIdentifierResultConverterTest extends CommonTest 
         final String yandex = "yandex";
         final String errorExplanation = "error";
         AdvIdentifiersResult result = advIdentifiersConverter.convert(
-                null,
-                new IdentifiersResult(hoaid, IdentifierStatus.OK, errorExplanation),
-                new IdentifiersResult(yandex, IdentifierStatus.OK, errorExplanation)
+            null,
+            new IdentifiersResult(hoaid, IdentifierStatus.OK, errorExplanation),
+            new IdentifiersResult(yandex, IdentifierStatus.OK, errorExplanation)
         );
         assertThat(result).usingRecursiveComparison().isEqualTo(
-                new AdvIdentifiersResult(
-                        new AdvIdentifiersResult.AdvId(null, AdvIdentifiersResult.Details.INTERNAL_ERROR, null),
-                        new AdvIdentifiersResult.AdvId(hoaid, AdvIdentifiersResult.Details.OK, errorExplanation),
-                        new AdvIdentifiersResult.AdvId(yandex, AdvIdentifiersResult.Details.OK, errorExplanation)
-                )
+            new AdvIdentifiersResult(
+                new AdvIdentifiersResult.AdvId(null, AdvIdentifiersResult.Details.INTERNAL_ERROR, null),
+                new AdvIdentifiersResult.AdvId(hoaid, AdvIdentifiersResult.Details.OK, errorExplanation),
+                new AdvIdentifiersResult.AdvId(yandex, AdvIdentifiersResult.Details.OK, errorExplanation)
+            )
         );
     }
 
@@ -53,16 +53,16 @@ public class AdvIdentifiersFromIdentifierResultConverterTest extends CommonTest 
         final String yandex = "yandex";
         final String errorExplanation = "error";
         AdvIdentifiersResult result = advIdentifiersConverter.convert(
-                new IdentifiersResult(gaid, IdentifierStatus.OK, errorExplanation),
-                null,
-                new IdentifiersResult(yandex, IdentifierStatus.OK, errorExplanation)
+            new IdentifiersResult(gaid, IdentifierStatus.OK, errorExplanation),
+            null,
+            new IdentifiersResult(yandex, IdentifierStatus.OK, errorExplanation)
         );
         assertThat(result).usingRecursiveComparison().isEqualTo(
-                new AdvIdentifiersResult(
-                        new AdvIdentifiersResult.AdvId(gaid, AdvIdentifiersResult.Details.OK, errorExplanation),
-                        new AdvIdentifiersResult.AdvId(null, AdvIdentifiersResult.Details.INTERNAL_ERROR, null),
-                        new AdvIdentifiersResult.AdvId(yandex, AdvIdentifiersResult.Details.OK, errorExplanation)
-                )
+            new AdvIdentifiersResult(
+                new AdvIdentifiersResult.AdvId(gaid, AdvIdentifiersResult.Details.OK, errorExplanation),
+                new AdvIdentifiersResult.AdvId(null, AdvIdentifiersResult.Details.INTERNAL_ERROR, null),
+                new AdvIdentifiersResult.AdvId(yandex, AdvIdentifiersResult.Details.OK, errorExplanation)
+            )
         );
     }
 
@@ -72,16 +72,16 @@ public class AdvIdentifiersFromIdentifierResultConverterTest extends CommonTest 
         final String hoaid = "hoaid";
         final String errorExplanation = "error";
         AdvIdentifiersResult result = advIdentifiersConverter.convert(
-                new IdentifiersResult(gaid, IdentifierStatus.OK, errorExplanation),
-                new IdentifiersResult(hoaid, IdentifierStatus.OK, errorExplanation),
-                null
+            new IdentifiersResult(gaid, IdentifierStatus.OK, errorExplanation),
+            new IdentifiersResult(hoaid, IdentifierStatus.OK, errorExplanation),
+            null
         );
         assertThat(result).usingRecursiveComparison().isEqualTo(
-                new AdvIdentifiersResult(
-                        new AdvIdentifiersResult.AdvId(gaid, AdvIdentifiersResult.Details.OK, errorExplanation),
-                        new AdvIdentifiersResult.AdvId(hoaid, AdvIdentifiersResult.Details.OK, errorExplanation),
-                        new AdvIdentifiersResult.AdvId(null, AdvIdentifiersResult.Details.INTERNAL_ERROR, null)
-                )
+            new AdvIdentifiersResult(
+                new AdvIdentifiersResult.AdvId(gaid, AdvIdentifiersResult.Details.OK, errorExplanation),
+                new AdvIdentifiersResult.AdvId(hoaid, AdvIdentifiersResult.Details.OK, errorExplanation),
+                new AdvIdentifiersResult.AdvId(null, AdvIdentifiersResult.Details.INTERNAL_ERROR, null)
+            )
         );
     }
 
@@ -94,16 +94,16 @@ public class AdvIdentifiersFromIdentifierResultConverterTest extends CommonTest 
         final String hoaidError = "hoaid error";
         final String yandexError = "yander error";
         AdvIdentifiersResult result = advIdentifiersConverter.convert(
-                new IdentifiersResult(gaid, IdentifierStatus.OK, gaidError),
-                new IdentifiersResult(hoaid, IdentifierStatus.FEATURE_DISABLED, hoaidError),
-                new IdentifiersResult(yandex, IdentifierStatus.INVALID_ADV_ID, yandexError)
+            new IdentifiersResult(gaid, IdentifierStatus.OK, gaidError),
+            new IdentifiersResult(hoaid, IdentifierStatus.FEATURE_DISABLED, hoaidError),
+            new IdentifiersResult(yandex, IdentifierStatus.INVALID_ADV_ID, yandexError)
         );
         assertThat(result).usingRecursiveComparison().isEqualTo(
-                new AdvIdentifiersResult(
-                        new AdvIdentifiersResult.AdvId(gaid, AdvIdentifiersResult.Details.OK, gaidError),
-                        new AdvIdentifiersResult.AdvId(hoaid, AdvIdentifiersResult.Details.FEATURE_DISABLED, hoaidError),
-                        new AdvIdentifiersResult.AdvId(yandex, AdvIdentifiersResult.Details.INVALID_ADV_ID, yandexError)
-                )
+            new AdvIdentifiersResult(
+                new AdvIdentifiersResult.AdvId(gaid, AdvIdentifiersResult.Details.OK, gaidError),
+                new AdvIdentifiersResult.AdvId(hoaid, AdvIdentifiersResult.Details.FEATURE_DISABLED, hoaidError),
+                new AdvIdentifiersResult.AdvId(yandex, AdvIdentifiersResult.Details.INVALID_ADV_ID, yandexError)
+            )
         );
     }
 }

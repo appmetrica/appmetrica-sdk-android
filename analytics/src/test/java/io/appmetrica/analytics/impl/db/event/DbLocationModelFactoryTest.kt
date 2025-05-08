@@ -109,7 +109,7 @@ class DbLocationModelFactoryTest : CommonTest() {
     @Test
     fun buildIfLocationIsNull() {
         whenever(GlobalServiceLocator.getInstance().locationClientApi.userLocation).thenReturn(null)
-        whenever(GlobalServiceLocator.getInstance().locationClientApi.systemLocation).thenReturn(null);
+        whenever(GlobalServiceLocator.getInstance().locationClientApi.systemLocation).thenReturn(null)
         val model = factory.create()
         yLocationRule.staticMock.verifyNoInteractions()
 

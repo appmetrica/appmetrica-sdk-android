@@ -29,7 +29,7 @@ class ApiKeyUtilsTest(
     }
 
     @Test
-    fun testCreatePartialApiKey() {
+    fun createPartialApiKey() {
         Assertions.assertThat(createPartialApiKey(fullApiKey)).isEqualTo(partialApiKey)
     }
 }

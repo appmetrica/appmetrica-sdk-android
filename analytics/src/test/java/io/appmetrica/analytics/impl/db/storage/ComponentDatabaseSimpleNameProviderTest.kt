@@ -72,14 +72,14 @@ internal class ComponentDatabaseSimpleNameProviderTest : CommonTest() {
     fun `legacyDatabaseName for main reporter componentId with apiKey`() {
         componentId = MainReporterComponentId(packageName, apiKey)
         simpleNameProvider = ComponentDatabaseSimpleNameProvider(componentId)
-        assertThat(simpleNameProvider.legacyDatabaseName).isEqualTo("db_metrica_${packageName}")
+        assertThat(simpleNameProvider.legacyDatabaseName).isEqualTo("db_metrica_$packageName")
     }
 
     @Test
     fun `legacyDatabaseName for main reporter componentId without apiKey`() {
         componentId = MainReporterComponentId(packageName, null)
         simpleNameProvider = ComponentDatabaseSimpleNameProvider(componentId)
-        assertThat(simpleNameProvider.legacyDatabaseName).isEqualTo("db_metrica_${packageName}")
+        assertThat(simpleNameProvider.legacyDatabaseName).isEqualTo("db_metrica_$packageName")
     }
 
     @Test

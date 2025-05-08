@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.coreutils.internal.collection
 
 import android.os.Bundle
+import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -8,7 +9,7 @@ import org.robolectric.RobolectricTestRunner
 import kotlin.random.Random
 
 @RunWith(RobolectricTestRunner::class)
-class CollectionUtilsTestKt {
+class CollectionUtilsTestKt : CommonTest() {
 
     @Test
     fun `getFirstOrNull for null`() {
@@ -69,11 +70,13 @@ class CollectionUtilsTestKt {
         val secondValue = random.nextBytes(2048)
         val thirdValue = random.nextBytes(4096)
 
-        val result = CollectionUtils.mapToBundle(mapOf(
-            firstKey to firstValue,
-            secondKey to secondValue,
-            thirdKey to thirdValue
-        ))
+        val result = CollectionUtils.mapToBundle(
+            mapOf(
+                firstKey to firstValue,
+                secondKey to secondValue,
+                thirdKey to thirdValue
+            )
+        )
 
         assertThat(result.size()).isEqualTo(3)
         assertThat(result.getByteArray(firstKey)).isEqualTo(firstValue)

@@ -1,7 +1,6 @@
 package io.appmetrica.analytics.impl.crash.jvm.converter;
 
 import io.appmetrica.analytics.coreapi.internal.data.ProtobufConverter;
-import io.appmetrica.analytics.impl.crash.jvm.converter.ModelToByteArraySerializer;
 import io.appmetrica.analytics.impl.protobuf.backend.CrashAndroid;
 import io.appmetrica.analytics.protobuf.nano.MessageNano;
 import io.appmetrica.analytics.testutils.CommonTest;

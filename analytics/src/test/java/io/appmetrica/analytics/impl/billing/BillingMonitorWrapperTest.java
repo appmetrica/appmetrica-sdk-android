@@ -60,21 +60,21 @@ public class BillingMonitorWrapperTest extends CommonTest {
     public void setUp() {
         MockitoAnnotations.openMocks(this);
         startupState = TestUtils.createDefaultStartupStateBuilder()
-                .withAutoInappCollectingConfig(config)
-                .build();
+            .withAutoInappCollectingConfig(config)
+            .build();
         when(billingMonitorProvider.get(context, workingExecutor, uiExecutor, billingType, storage, sender))
-                .thenReturn(billingMonitor);
+            .thenReturn(billingMonitor);
         when(applicationStateProvider.registerStickyObserver(any(ApplicationStateObserver.class)))
-                .thenReturn(ApplicationState.UNKNOWN);
+            .thenReturn(ApplicationState.UNKNOWN);
         wrapper = new BillingMonitorWrapper(
-                context,
-                workingExecutor,
-                uiExecutor,
-                billingType,
-                storage,
-                sender,
-                applicationStateProvider,
-                billingMonitorProvider
+            context,
+            workingExecutor,
+            uiExecutor,
+            billingType,
+            storage,
+            sender,
+            applicationStateProvider,
+            billingMonitorProvider
         );
     }
 
@@ -106,8 +106,8 @@ public class BillingMonitorWrapperTest extends CommonTest {
         wrapper.maybeStartWatching(startupState, null);
         BillingConfig newConfig = mock(BillingConfig.class);
         wrapper.onStartupStateChanged(TestUtils.createDefaultStartupStateBuilder()
-                .withAutoInappCollectingConfig(newConfig)
-                .build());
+            .withAutoInappCollectingConfig(newConfig)
+            .build());
         verify(billingMonitor).onBillingConfigChanged(newConfig);
     }
 
@@ -116,14 +116,14 @@ public class BillingMonitorWrapperTest extends CommonTest {
         wrapper.maybeStartWatching(startupState, false);
         BillingConfig newConfig = mock(BillingConfig.class);
         wrapper.onStartupStateChanged(TestUtils.createDefaultStartupStateBuilder()
-                .withAutoInappCollectingConfig(newConfig)
-                .build());
+            .withAutoInappCollectingConfig(newConfig)
+            .build());
     }
 
     @Test
     public void stateIsImmediatelyUnknownHasMonitor() throws Throwable {
         when(applicationStateProvider.registerStickyObserver(any(ApplicationStateObserver.class)))
-                .thenReturn(ApplicationState.UNKNOWN);
+            .thenReturn(ApplicationState.UNKNOWN);
         wrapper.maybeStartWatching(startupState, true);
         verify(billingMonitor, never()).onSessionResumed();
     }
@@ -131,7 +131,7 @@ public class BillingMonitorWrapperTest extends CommonTest {
     @Test
     public void stateIsImmediatelyVisibleHasMonitor() throws Throwable {
         when(applicationStateProvider.registerStickyObserver(any(ApplicationStateObserver.class)))
-                .thenReturn(ApplicationState.VISIBLE);
+            .thenReturn(ApplicationState.VISIBLE);
         wrapper.maybeStartWatching(startupState, true);
         verify(billingMonitor).onSessionResumed();
     }
@@ -139,7 +139,7 @@ public class BillingMonitorWrapperTest extends CommonTest {
     @Test
     public void stateIsImmediatelyBackgroundHasMonitor() throws Throwable {
         when(applicationStateProvider.registerStickyObserver(any(ApplicationStateObserver.class)))
-                .thenReturn(ApplicationState.BACKGROUND);
+            .thenReturn(ApplicationState.BACKGROUND);
         wrapper.maybeStartWatching(startupState, true);
         verify(billingMonitor, never()).onSessionResumed();
     }
@@ -147,21 +147,21 @@ public class BillingMonitorWrapperTest extends CommonTest {
     @Test
     public void stateIsImmediatelyUnknownNoMonitor() {
         when(applicationStateProvider.registerStickyObserver(any(ApplicationStateObserver.class)))
-                .thenReturn(ApplicationState.UNKNOWN);
+            .thenReturn(ApplicationState.UNKNOWN);
         wrapper.maybeStartWatching(startupState, false);
     }
 
     @Test
     public void stateIsImmediatelyVisibleNoMonitor() {
         when(applicationStateProvider.registerStickyObserver(any(ApplicationStateObserver.class)))
-                .thenReturn(ApplicationState.VISIBLE);
+            .thenReturn(ApplicationState.VISIBLE);
         wrapper.maybeStartWatching(startupState, false);
     }
 
     @Test
     public void stateIsImmediatelyBackgroundNoMonitor() {
         when(applicationStateProvider.registerStickyObserver(any(ApplicationStateObserver.class)))
-                .thenReturn(ApplicationState.BACKGROUND);
+            .thenReturn(ApplicationState.BACKGROUND);
         wrapper.maybeStartWatching(startupState, false);
     }
 

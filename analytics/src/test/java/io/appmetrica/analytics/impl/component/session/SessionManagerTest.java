@@ -12,8 +12,8 @@ import io.appmetrica.analytics.impl.db.preferences.PreferencesComponentDbStorage
 import io.appmetrica.analytics.impl.db.preferences.PreferencesServiceDbStorage;
 import io.appmetrica.analytics.impl.events.ConditionalEventTrigger;
 import io.appmetrica.analytics.impl.request.ReportRequestConfig;
-import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.impl.utils.ServerTime;
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import org.junit.Before;
@@ -80,11 +80,11 @@ public class SessionManagerTest extends CommonTest {
         ServerTime.getInstance().init(mock(PreferencesServiceDbStorage.class), mock(TimeProvider.class));
         doReturn(INITIAL_SESSION_ID).when(sessionIDProvider).getNextSessionId();
         mManager = new SessionManagerStateMachine(
-                mComponentUnit,
-                sessionIDProvider,
-                mock(SessionManagerStateMachine.EventSaver.class),
-                mForegroundSessionFactory,
-                mBackgroundSessionFactory
+            mComponentUnit,
+            sessionIDProvider,
+            mock(SessionManagerStateMachine.EventSaver.class),
+            mForegroundSessionFactory,
+            mBackgroundSessionFactory
         );
     }
 
@@ -99,7 +99,7 @@ public class SessionManagerTest extends CommonTest {
         SessionState sessionState = mManager.getCurrentSessionState(new CounterReport());
 
         assertThat(sessionState.getSessionId()).isEqualTo(
-                mManager.getSomeSession(new CounterReport()).getId()
+            mManager.getSomeSession(new CounterReport()).getId()
         );
         assertThat(sessionState.getSessionType()).isEqualTo(SessionType.FOREGROUND);
         assertThat(sessionState.getReportId()).isEqualTo(1);
@@ -166,7 +166,7 @@ public class SessionManagerTest extends CommonTest {
         DatabaseHelper dbHelper = mock(DatabaseHelper.class);
         when(mComponentUnit.getDbHelper()).thenReturn(dbHelper);
         SessionState session = new SessionManagerStateMachine(mComponentUnit, sessionIDProvider,
-                mock(SessionManagerStateMachine.EventSaver.class)
+            mock(SessionManagerStateMachine.EventSaver.class)
         ).createBackgroundSessionStub(timestamp);
 
         assertThat(session.getSessionId()).isEqualTo(INITIAL_SESSION_ID);
@@ -186,9 +186,9 @@ public class SessionManagerTest extends CommonTest {
     @Test
     public void testGetThresholdId() {
         SessionManagerStateMachine manager = new SessionManagerStateMachine(
-                mComponentUnit,
-                sessionIDProvider,
-                mock(SessionManagerStateMachine.EventSaver.class)
+            mComponentUnit,
+            sessionIDProvider,
+            mock(SessionManagerStateMachine.EventSaver.class)
         );
         manager.heartbeat(mock(CounterReport.class));
         doReturn(INITIAL_SESSION_ID + 10).when(sessionIDProvider).getNextSessionId();

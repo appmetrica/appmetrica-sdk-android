@@ -61,11 +61,12 @@ class FeaturesHolderTest : CommonTest() {
 
     @Test
     fun putToMapNoIdentifier() {
-        val map = mutableMapOf("key" to StartupParamsItem(
-            "id",
-            StartupParamsItemStatus.NETWORK_ERROR,
-            "error"
-        )
+        val map = mutableMapOf(
+            "key" to StartupParamsItem(
+                "id",
+                StartupParamsItemStatus.NETWORK_ERROR,
+                "error"
+            )
         )
         featuresHolder.putToMap(listOf(Constants.StartupParamsCallbackKeys.FEATURE_LIB_SSL_ENABLED), map)
         assertThat(map).containsExactlyInAnyOrderEntriesOf(map)
@@ -82,21 +83,26 @@ class FeaturesHolderTest : CommonTest() {
         val libSslStartupParamsItem = StartupParamsItem("false", StartupParamsItemStatus.OK, "some error")
         val map = mutableMapOf(firstEntry)
 
-        whenever(startupParamItemAdapter.adapt(eq(
-            IdentifiersResult(
-                "false",
-                IdentifierStatus.OK,
-                "some error"
+        whenever(
+            startupParamItemAdapter.adapt(
+                eq(
+                    IdentifiersResult(
+                        "false",
+                        IdentifierStatus.OK,
+                        "some error"
+                    )
+                )
             )
-        )))
-            .thenReturn(libSslStartupParamsItem)
+        ).thenReturn(libSslStartupParamsItem)
 
         featuresHolder.features = FeaturesInternal(false, IdentifierStatus.OK, "some error")
         featuresHolder.putToMap(listOf(Constants.StartupParamsCallbackKeys.FEATURE_LIB_SSL_ENABLED), map)
-        assertThat(map).containsExactlyInAnyOrderEntriesOf(mapOf(
-            firstEntry,
-            Constants.StartupParamsCallbackKeys.FEATURE_LIB_SSL_ENABLED to libSslStartupParamsItem,
-        ))
+        assertThat(map).containsExactlyInAnyOrderEntriesOf(
+            mapOf(
+                firstEntry,
+                Constants.StartupParamsCallbackKeys.FEATURE_LIB_SSL_ENABLED to libSslStartupParamsItem,
+            )
+        )
     }
 
     @Test
@@ -108,19 +114,24 @@ class FeaturesHolderTest : CommonTest() {
         )
         val libSslStartupParamsItem = StartupParamsItem("false", StartupParamsItemStatus.OK, "some error")
         val map = mutableMapOf(initialEntry)
-        featuresHolder.features= FeaturesInternal(false, IdentifierStatus.OK, "some error")
-        whenever(startupParamItemAdapter.adapt(eq(
-            IdentifiersResult(
-                "false",
-                IdentifierStatus.OK,
-                "some error"
+        featuresHolder.features = FeaturesInternal(false, IdentifierStatus.OK, "some error")
+        whenever(
+            startupParamItemAdapter.adapt(
+                eq(
+                    IdentifiersResult(
+                        "false",
+                        IdentifierStatus.OK,
+                        "some error"
+                    )
+                )
             )
-        )))
-            .thenReturn(libSslStartupParamsItem)
+        ).thenReturn(libSslStartupParamsItem)
         featuresHolder.putToMap(listOf(Constants.StartupParamsCallbackKeys.FEATURE_LIB_SSL_ENABLED, "unknown key"), map)
-        assertThat(map).containsExactlyInAnyOrderEntriesOf(mapOf(
-            initialEntry,
-            Constants.StartupParamsCallbackKeys.FEATURE_LIB_SSL_ENABLED to libSslStartupParamsItem,
-        ))
+        assertThat(map).containsExactlyInAnyOrderEntriesOf(
+            mapOf(
+                initialEntry,
+                Constants.StartupParamsCallbackKeys.FEATURE_LIB_SSL_ENABLED to libSslStartupParamsItem,
+            )
+        )
     }
 }

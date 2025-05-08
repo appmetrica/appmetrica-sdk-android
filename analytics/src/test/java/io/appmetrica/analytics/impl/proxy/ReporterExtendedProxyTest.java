@@ -67,7 +67,7 @@ public class ReporterExtendedProxyTest extends CommonTest {
     @Rule
     public ClientServiceLocatorRule clientServiceLocatorRule = new ClientServiceLocatorRule();
 
-    private String mApiKey = TestsData.generateApiKey();
+    private final String mApiKey = TestsData.generateApiKey();
     private ReporterExtendedProxy mReporterExtendedProxy;
 
     @Before
@@ -78,12 +78,12 @@ public class ReporterExtendedProxyTest extends CommonTest {
         when(mProvider.getInitializedImpl(any(Context.class))).thenReturn(mAppMetricaFacade);
         when(mAppMetricaFacade.getReporter(any(ReporterConfig.class))).thenReturn(mReporter);
         mReporterExtendedProxy = new ReporterExtendedProxy(
-                RuntimeEnvironment.getApplication(),
-                reporterBarrier,
-                mProvider,
-                mSynchronousStageExecutor,
-                ReporterConfig.newConfigBuilder(mApiKey).build(),
-                pluginReporterProxy
+            RuntimeEnvironment.getApplication(),
+            reporterBarrier,
+            mProvider,
+            mSynchronousStageExecutor,
+            ReporterConfig.newConfigBuilder(mApiKey).build(),
+            pluginReporterProxy
         );
     }
 
@@ -426,7 +426,7 @@ public class ReporterExtendedProxyTest extends CommonTest {
     @Test
     public void setSessionExtra() {
         String key = "Key";
-        byte[] value = new byte[] {2, 5, 7};
+        byte[] value = new byte[]{2, 5, 7};
         mReporterExtendedProxy.setSessionExtra(key, value);
 
         InOrder inOrder = Mockito.inOrder(mSynchronousStageExecutor, mReporter);
@@ -462,12 +462,12 @@ public class ReporterExtendedProxyTest extends CommonTest {
 
     private ReporterExtendedProxy createProxyWithMockedExecutor() {
         return new ReporterExtendedProxy(
-                RuntimeEnvironment.getApplication(),
-                reporterBarrier,
-                mProvider,
-                mSynchronousStageExecutor,
-                ReporterConfig.newConfigBuilder(mApiKey).build(),
-                pluginReporterProxy
+            RuntimeEnvironment.getApplication(),
+            reporterBarrier,
+            mProvider,
+            mSynchronousStageExecutor,
+            ReporterConfig.newConfigBuilder(mApiKey).build(),
+            pluginReporterProxy
         );
     }
 }

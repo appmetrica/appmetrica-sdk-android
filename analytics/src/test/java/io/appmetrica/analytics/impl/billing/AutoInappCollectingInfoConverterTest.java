@@ -21,47 +21,47 @@ public class AutoInappCollectingInfoConverterTest extends CommonTest {
     @Test
     public void testDefaultToProto() throws IllegalAccessException {
         AutoInappCollectingInfo autoInappCollectingInfo =
-                new AutoInappCollectingInfo(new ArrayList<BillingInfo>(), false);
+            new AutoInappCollectingInfo(new ArrayList<BillingInfo>(), false);
 
         new ProtoObjectPropertyAssertions<AutoInappCollectingInfoProto.AutoInappCollectingInfo>(mConverter.fromModel(autoInappCollectingInfo))
-                .checkField("firstInappCheckOccurred", false)
-                .checkField("entries", new AutoInappCollectingInfoProto.AutoInappCollectingInfo.BillingInfo[0])
-                .checkAll();
+            .checkField("firstInappCheckOccurred", false)
+            .checkField("entries", new AutoInappCollectingInfoProto.AutoInappCollectingInfo.BillingInfo[0])
+            .checkAll();
     }
 
     @Test
     public void testFilledToProto() throws IllegalAccessException {
         AutoInappCollectingInfo autoInappCollectingInfo =
-                new AutoInappCollectingInfo(getBillingInfoList(), true);
+            new AutoInappCollectingInfo(getBillingInfoList(), true);
 
         new ProtoObjectPropertyAssertions<AutoInappCollectingInfoProto.AutoInappCollectingInfo>(mConverter.fromModel(autoInappCollectingInfo))
-                .checkField("firstInappCheckOccurred", true)
-                .checkFieldComparingFieldByFieldRecursively("entries", getBillingInfoListProto())
-                .checkAll();
+            .checkField("firstInappCheckOccurred", true)
+            .checkFieldComparingFieldByFieldRecursively("entries", getBillingInfoListProto())
+            .checkAll();
     }
 
     @Test
     public void testDefaultToModel() throws IllegalAccessException {
         AutoInappCollectingInfoProto.AutoInappCollectingInfo protoAutoInappCollectingInfo =
-                new AutoInappCollectingInfoProto.AutoInappCollectingInfo();
+            new AutoInappCollectingInfoProto.AutoInappCollectingInfo();
 
         ObjectPropertyAssertions(mConverter.toModel(protoAutoInappCollectingInfo))
-                .checkField("firstInappCheckOccurred", false)
-                .checkField("billingInfos", new ArrayList<BillingInfo>())
-                .checkAll();
+            .checkField("firstInappCheckOccurred", false)
+            .checkField("billingInfos", new ArrayList<BillingInfo>())
+            .checkAll();
     }
 
     @Test
     public void testFilledToModel() throws IllegalAccessException {
         AutoInappCollectingInfoProto.AutoInappCollectingInfo protoAutoInappCollectingInfo =
-                new AutoInappCollectingInfoProto.AutoInappCollectingInfo();
+            new AutoInappCollectingInfoProto.AutoInappCollectingInfo();
         protoAutoInappCollectingInfo.firstInappCheckOccurred = true;
         protoAutoInappCollectingInfo.entries = getBillingInfoListProto();
 
         ObjectPropertyAssertions(mConverter.toModel(protoAutoInappCollectingInfo))
-                .checkField("firstInappCheckOccurred", true)
-                .checkFieldComparingFieldByFieldRecursively("billingInfos", getBillingInfoList())
-                .checkAll();
+            .checkField("firstInappCheckOccurred", true)
+            .checkFieldComparingFieldByFieldRecursively("billingInfos", getBillingInfoList())
+            .checkAll();
     }
 
     private List<BillingInfo> getBillingInfoList() {
@@ -72,12 +72,12 @@ public class AutoInappCollectingInfoConverterTest extends CommonTest {
 
     private AutoInappCollectingInfoProto.AutoInappCollectingInfo.BillingInfo[] getBillingInfoListProto() {
         AutoInappCollectingInfoProto.AutoInappCollectingInfo.BillingInfo info =
-                new AutoInappCollectingInfoProto.AutoInappCollectingInfo.BillingInfo();
+            new AutoInappCollectingInfoProto.AutoInappCollectingInfo.BillingInfo();
         info.type = AutoInappCollectingInfoProto.AutoInappCollectingInfo.PURCHASE;
         info.sku = "sku";
         info.purchaseToken = "purchaseToken";
         info.purchaseTime = 41L;
         info.sendTime = 42L;
-        return new AutoInappCollectingInfoProto.AutoInappCollectingInfo.BillingInfo[] { info };
+        return new AutoInappCollectingInfoProto.AutoInappCollectingInfo.BillingInfo[]{info};
     }
 }

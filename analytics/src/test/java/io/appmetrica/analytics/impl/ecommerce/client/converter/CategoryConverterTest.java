@@ -48,48 +48,48 @@ public class CategoryConverterTest extends CommonTest {
     @Test
     public void constructor() throws Exception {
         ObjectPropertyAssertions(new CategoryConverter())
-                .withPrivateFields(true)
-                .checkFieldComparingFieldByFieldRecursively("categoryTrimmer", new HierarchicalStringListTrimmer(20, 100))
-                .checkAll();
+            .withPrivateFields(true)
+            .checkFieldComparingFieldByFieldRecursively("categoryTrimmer", new HierarchicalStringListTrimmer(20, 100))
+            .checkAll();
     }
 
     @Test
     public void toProto() throws Exception {
         when(categoryTrimmer.trim(inputList))
-                .thenReturn(
-                        new TrimmingResult<List<String>, CollectionTrimInfo>(
-                                truncatedList,
-                                new CollectionTrimInfo(itemsDropped, bytesTruncated)
-                        )
-                );
-        when(categoryTrimmer.trim(Collections.<String>emptyList())).
-                thenReturn(
-                        new TrimmingResult<List<String>, CollectionTrimInfo>(
-                                Collections.<String>emptyList(),
-                                new CollectionTrimInfo(0, 0)
-                        )
-                );
+            .thenReturn(
+                new TrimmingResult<List<String>, CollectionTrimInfo>(
+                    truncatedList,
+                    new CollectionTrimInfo(itemsDropped, bytesTruncated)
+                )
+            );
+        when(categoryTrimmer.trim(Collections.emptyList())).
+            thenReturn(
+                new TrimmingResult<List<String>, CollectionTrimInfo>(
+                    Collections.emptyList(),
+                    new CollectionTrimInfo(0, 0)
+                )
+            );
 
         final ObjectPropertyAssertions<Result<Ecommerce.ECommerceEvent.Category, BytesTruncatedProvider>> assertions =
-                ObjectPropertyAssertions(
-                        categoryConverter.fromModel(inputList)
-                )
-                        .withFinalFieldOnly(false);
+            ObjectPropertyAssertions(
+                categoryConverter.fromModel(inputList)
+            )
+                .withFinalFieldOnly(false);
 
         assertions.checkFieldRecursively("metaInfo", new CollectionTrimInfoConsumer(bytesTruncated, itemsDropped));
         assertions.checkFieldRecursively(
-                "result",
-                new Consumer<ObjectPropertyAssertions<Ecommerce.ECommerceEvent.Category>>() {
-                    @Override
-                    public void accept(ObjectPropertyAssertions<Ecommerce.ECommerceEvent.Category> innerAssertions) {
-                        try {
-                            innerAssertions.withFinalFieldOnly(false)
-                                    .checkField("path", StringUtils.getUTF8Bytes(truncatedList));
-                        } catch (Exception e) {
-                            throw new RuntimeException(e);
-                        }
+            "result",
+            new Consumer<ObjectPropertyAssertions<Ecommerce.ECommerceEvent.Category>>() {
+                @Override
+                public void accept(ObjectPropertyAssertions<Ecommerce.ECommerceEvent.Category> innerAssertions) {
+                    try {
+                        innerAssertions.withFinalFieldOnly(false)
+                            .checkField("path", StringUtils.getUTF8Bytes(truncatedList));
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
                     }
                 }
+            }
         );
 
         assertions.checkAll();
@@ -98,33 +98,33 @@ public class CategoryConverterTest extends CommonTest {
     @Test
     public void toProtoWithoutTruncation() throws Exception {
         when(categoryTrimmer.trim(inputList))
-                .thenReturn(
-                        new TrimmingResult<List<String>, CollectionTrimInfo>(
-                                inputList,
-                                new CollectionTrimInfo(0, 0)
-                        )
-                );
+            .thenReturn(
+                new TrimmingResult<List<String>, CollectionTrimInfo>(
+                    inputList,
+                    new CollectionTrimInfo(0, 0)
+                )
+            );
 
         final ObjectPropertyAssertions<Result<Ecommerce.ECommerceEvent.Category, BytesTruncatedProvider>> assertions =
-                ObjectPropertyAssertions(
-                        categoryConverter.fromModel(inputList)
-                )
-                        .withFinalFieldOnly(false);
+            ObjectPropertyAssertions(
+                categoryConverter.fromModel(inputList)
+            )
+                .withFinalFieldOnly(false);
 
         assertions.checkFieldRecursively("metaInfo", new CollectionTrimInfoConsumer(0, 0));
         assertions.checkFieldRecursively(
-                "result",
-                new Consumer<ObjectPropertyAssertions<Ecommerce.ECommerceEvent.Category>>() {
-                    @Override
-                    public void accept(ObjectPropertyAssertions<Ecommerce.ECommerceEvent.Category> innerAssertions) {
-                        try {
-                            innerAssertions.withFinalFieldOnly(false)
-                                    .checkField("path", StringUtils.getUTF8Bytes(inputList));
-                        } catch (Exception e) {
-                            throw new RuntimeException(e);
-                        }
+            "result",
+            new Consumer<ObjectPropertyAssertions<Ecommerce.ECommerceEvent.Category>>() {
+                @Override
+                public void accept(ObjectPropertyAssertions<Ecommerce.ECommerceEvent.Category> innerAssertions) {
+                    try {
+                        innerAssertions.withFinalFieldOnly(false)
+                            .checkField("path", StringUtils.getUTF8Bytes(inputList));
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
                     }
                 }
+            }
         );
 
         assertions.checkAll();
@@ -132,35 +132,35 @@ public class CategoryConverterTest extends CommonTest {
 
     @Test
     public void toProtoForEmptyCategories() throws Exception {
-        when(categoryTrimmer.trim(Collections.<String>emptyList())).
-                thenReturn(
-                        new TrimmingResult<List<String>, CollectionTrimInfo>(
-                                Collections.<String>emptyList(),
-                                new CollectionTrimInfo(0, 0)
-                        )
-                );
+        when(categoryTrimmer.trim(Collections.emptyList())).
+            thenReturn(
+                new TrimmingResult<List<String>, CollectionTrimInfo>(
+                    Collections.emptyList(),
+                    new CollectionTrimInfo(0, 0)
+                )
+            );
 
         final ObjectPropertyAssertions<Result<Ecommerce.ECommerceEvent.Category, BytesTruncatedProvider>> assertions =
-                ObjectPropertyAssertions(
-                        categoryConverter.fromModel(Collections.<String>emptyList())
-                )
-                        .withFinalFieldOnly(false);
+            ObjectPropertyAssertions(
+                categoryConverter.fromModel(Collections.emptyList())
+            )
+                .withFinalFieldOnly(false);
 
         assertions.checkFieldRecursively("metaInfo", new CollectionTrimInfoConsumer(0, 0));
 
         assertions.checkFieldRecursively(
-                "result",
-                new Consumer<ObjectPropertyAssertions<Ecommerce.ECommerceEvent.Category>>() {
-                    @Override
-                    public void accept(ObjectPropertyAssertions<Ecommerce.ECommerceEvent.Category> innerAssertions) {
-                        try {
-                            innerAssertions.withFinalFieldOnly(false)
-                                    .checkField("path", new byte[0][]);
-                        } catch (Exception e) {
-                            throw new RuntimeException(e);
-                        }
+            "result",
+            new Consumer<ObjectPropertyAssertions<Ecommerce.ECommerceEvent.Category>>() {
+                @Override
+                public void accept(ObjectPropertyAssertions<Ecommerce.ECommerceEvent.Category> innerAssertions) {
+                    try {
+                        innerAssertions.withFinalFieldOnly(false)
+                            .checkField("path", new byte[0][]);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
                     }
                 }
+            }
         );
 
         assertions.checkAll();
@@ -169,7 +169,7 @@ public class CategoryConverterTest extends CommonTest {
     @Test(expected = UnsupportedOperationException.class)
     public void toModel() {
         categoryConverter.toModel(new Result<Ecommerce.ECommerceEvent.Category, BytesTruncatedProvider>(
-                new Ecommerce.ECommerceEvent.Category(), new BytesTruncatedInfo(0)
+            new Ecommerce.ECommerceEvent.Category(), new BytesTruncatedInfo(0)
         ));
     }
 }

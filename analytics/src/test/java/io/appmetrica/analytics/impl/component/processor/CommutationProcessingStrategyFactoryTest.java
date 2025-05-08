@@ -36,8 +36,8 @@ public class CommutationProcessingStrategyFactoryTest extends CommonTest {
     @Parameters(name = "For {0} should return {1}")
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
-                {EVENT_TYPE_STARTUP, Collections.singletonList(ForceStartupHandler.class)},
-                {EVENT_TYPE_UPDATE_PRE_ACTIVATION_CONFIG, Collections.singletonList(UpdatePreActivationConfigHandler.class)}
+            {EVENT_TYPE_STARTUP, Collections.singletonList(ForceStartupHandler.class)},
+            {EVENT_TYPE_UPDATE_PRE_ACTIVATION_CONFIG, Collections.singletonList(UpdatePreActivationConfigHandler.class)}
         });
     }
 
@@ -58,6 +58,6 @@ public class CommutationProcessingStrategyFactoryTest extends CommonTest {
     @Test
     public void testProperHandlerList() {
         assertThat(mFactory.getProcessingStrategy(mEvent.getTypeId()).getEventHandlers()).
-                extracting("class").containsExactlyInAnyOrderElementsOf(mHandlers);
+            extracting("class").containsExactlyInAnyOrderElementsOf(mHandlers);
     }
 }

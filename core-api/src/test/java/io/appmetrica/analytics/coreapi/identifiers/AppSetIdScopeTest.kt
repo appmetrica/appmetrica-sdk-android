@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.coreapi.identifiers
 
 import io.appmetrica.analytics.coreapi.internal.identifiers.AppSetIdScope
+import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -10,7 +11,7 @@ import org.robolectric.ParameterizedRobolectricTestRunner
 class AppSetIdScopeTest(
     private val scope: AppSetIdScope,
     private val expectedString: String
-) {
+) : CommonTest() {
 
     companion object {
         @JvmStatic

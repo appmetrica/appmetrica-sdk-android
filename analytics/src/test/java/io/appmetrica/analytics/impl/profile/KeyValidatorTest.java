@@ -22,7 +22,7 @@ public class KeyValidatorTest extends CommonTest {
     @Test
     public void testLongValue() {
         assertThat(mValidator.validate(
-                new RandomStringGenerator(EventLimitationProcessor.USER_PROFILE_CUSTOM_ATTRIBUTE_KEY_MAX_LENGTH + 1).nextString()
+            new RandomStringGenerator(EventLimitationProcessor.USER_PROFILE_CUSTOM_ATTRIBUTE_KEY_MAX_LENGTH + 1).nextString()
         ).isValid()).isFalse();
     }
 

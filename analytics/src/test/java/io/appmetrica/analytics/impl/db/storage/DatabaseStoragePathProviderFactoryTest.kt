@@ -96,7 +96,6 @@ internal class DatabaseStoragePathProviderFactoryTest : CommonTest() {
 
         assertThat(oldDatabaseRelativePathFormerMockedConstructionRule.constructionMock.constructed()).hasSize(2)
         assertThat(oldDatabaseRelativePathFormerMockedConstructionRule.argumentInterceptor.flatArguments()).isEmpty()
-
     }
 
     private fun checkDatabaseStoragePathProvider(

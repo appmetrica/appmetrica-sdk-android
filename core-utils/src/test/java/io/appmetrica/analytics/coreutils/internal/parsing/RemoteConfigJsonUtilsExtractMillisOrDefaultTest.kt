@@ -1,5 +1,6 @@
 package io.appmetrica.analytics.coreutils.internal.parsing
 
+import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.json.JSONObject
 import org.junit.Test
@@ -13,7 +14,7 @@ class RemoteConfigJsonUtilsExtractMillisOrDefaultTest(
     private val timeUnit: TimeUnit,
     private val default: Long,
     private val expected: Long
-) {
+) : CommonTest() {
 
     companion object {
         private const val inputLong = 100200L
@@ -33,7 +34,7 @@ class RemoteConfigJsonUtilsExtractMillisOrDefaultTest(
     }
 
     @Test
-    fun test() {
+    fun extractMillisOrDefault() {
         val key = "some key"
         val inputJson = JSONObject().put(key, input)
         assertThat(RemoteConfigJsonUtils.extractMillisOrDefault(inputJson, key, timeUnit, default))

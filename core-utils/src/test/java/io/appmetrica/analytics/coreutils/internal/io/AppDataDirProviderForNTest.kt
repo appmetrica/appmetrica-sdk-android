@@ -2,6 +2,7 @@ package io.appmetrica.analytics.coreutils.internal.io
 
 import android.content.Context
 import android.os.Build
+import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.mockito.kotlin.doReturn
@@ -10,7 +11,7 @@ import org.robolectric.annotation.Config
 import java.io.File
 
 @Config(sdk = [Build.VERSION_CODES.N])
-class AppDataDirProviderForNTest {
+class AppDataDirProviderForNTest : CommonTest() {
 
     private val dataDir = mock<File>()
 

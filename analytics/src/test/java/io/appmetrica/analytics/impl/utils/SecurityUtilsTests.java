@@ -18,17 +18,17 @@ public class SecurityUtilsTests extends CommonTest {
     public static class EncodingStringTests extends CommonTest {
         private Context mContext;
 
-        private String mInputString;
-        private boolean mShouldFail;
+        private final String mInputString;
+        private final boolean mShouldFail;
 
         @ParameterizedRobolectricTestRunner.Parameters(name = "Encode/decode input string = {0}; shouldFail = {1}")
         public static Collection<Object[]> data() {
             return Arrays.asList(new Object[][]{
-                    {"", false},
-                    {null, true},
-                    {"\"json_key\":\"json_value\"", false},
-                    {"Any random string", false},
-                    {"1@#$%^&*()_+::<?>?{L}", false}
+                {"", false},
+                {null, true},
+                {"\"json_key\":\"json_value\"", false},
+                {"Any random string", false},
+                {"1@#$%^&*()_+::<?>?{L}", false}
             });
         }
 

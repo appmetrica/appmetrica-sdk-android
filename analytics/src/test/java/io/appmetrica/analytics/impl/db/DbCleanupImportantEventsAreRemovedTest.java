@@ -15,11 +15,11 @@ public class DbCleanupImportantEventsAreRemovedTest extends DbCleanupBaseTest {
     @ParameterizedRobolectricTestRunner.Parameters(name = "Type {0}")
     public static Collection<Object[]> data() {
         return Arrays.asList(
-                new Object[]{InternalEvents.EVENT_TYPE_INIT.getTypeId()},
-                new Object[]{InternalEvents.EVENT_TYPE_FIRST_ACTIVATION.getTypeId()},
-                new Object[]{InternalEvents.EVENT_TYPE_SEND_REFERRER.getTypeId()},
-                new Object[]{InternalEvents.EVENT_TYPE_APP_UPDATE.getTypeId()},
-                new Object[]{InternalEvents.EVENT_TYPE_CLEANUP.getTypeId()}
+            new Object[]{InternalEvents.EVENT_TYPE_INIT.getTypeId()},
+            new Object[]{InternalEvents.EVENT_TYPE_FIRST_ACTIVATION.getTypeId()},
+            new Object[]{InternalEvents.EVENT_TYPE_SEND_REFERRER.getTypeId()},
+            new Object[]{InternalEvents.EVENT_TYPE_APP_UPDATE.getTypeId()},
+            new Object[]{InternalEvents.EVENT_TYPE_CLEANUP.getTypeId()}
         );
     }
 

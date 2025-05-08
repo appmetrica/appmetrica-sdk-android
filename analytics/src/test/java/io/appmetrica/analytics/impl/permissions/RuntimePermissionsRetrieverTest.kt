@@ -11,27 +11,26 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mock
-import org.mockito.Mockito.`when`
-import org.mockito.MockitoAnnotations
+import org.mockito.Mockito.mock
 import org.mockito.kotlin.any
 import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 class RuntimePermissionsRetrieverTest : CommonTest() {
 
     private lateinit var context: Context
-    @Mock
-    private lateinit var safePackageManager: SafePackageManager
+
+    private val safePackageManager: SafePackageManager = mock()
+
     private lateinit var retriever: RuntimePermissionsRetriever
     private val packageName = "test.package"
 
     @Before
     fun setUp() {
-        MockitoAnnotations.openMocks(this)
         context = TestUtils.createMockedContext()
-        `when`(context.packageName).thenReturn(packageName)
+        whenever(context.packageName).thenReturn(packageName)
         retriever = RuntimePermissionsRetriever(context, safePackageManager)
     }
 
@@ -43,7 +42,7 @@ class RuntimePermissionsRetrieverTest : CommonTest() {
 
     @Test
     fun getPermissionsStateNullPackageInfo() {
-        `when`(safePackageManager.getPackageInfo(any<Context>(), any<String>(), any<Int>())).thenReturn(null)
+        whenever(safePackageManager.getPackageInfo(any<Context>(), any<String>(), any<Int>())).thenReturn(null)
         assertThat(retriever.permissionsState).isNotNull.isEmpty()
     }
 
@@ -51,7 +50,7 @@ class RuntimePermissionsRetrieverTest : CommonTest() {
     fun getPermissionsStateNullPermissions() {
         val packageInfo = PackageInfo()
         packageInfo.requestedPermissions = null
-        `when`(safePackageManager.getPackageInfo(any<Context>(), any<String>(), any<Int>())).thenReturn(packageInfo)
+        whenever(safePackageManager.getPackageInfo(any<Context>(), any<String>(), any<Int>())).thenReturn(packageInfo)
         assertThat(retriever.permissionsState).isNotNull.isEmpty()
     }
 
@@ -59,7 +58,7 @@ class RuntimePermissionsRetrieverTest : CommonTest() {
     fun getPermissionsStateEmptyPermissions() {
         val packageInfo = PackageInfo()
         packageInfo.requestedPermissions = emptyArray()
-        `when`(safePackageManager.getPackageInfo(any<Context>(), any<String>(), any<Int>())).thenReturn(packageInfo)
+        whenever(safePackageManager.getPackageInfo(any<Context>(), any<String>(), any<Int>())).thenReturn(packageInfo)
         assertThat(retriever.permissionsState).isNotNull.isEmpty()
     }
 
@@ -69,7 +68,7 @@ class RuntimePermissionsRetrieverTest : CommonTest() {
         val packageInfo = PackageInfo()
         packageInfo.requestedPermissions = arrayOf(permission1)
         packageInfo.requestedPermissionsFlags = null
-        `when`(safePackageManager.getPackageInfo(any<Context>(), any<String>(), any<Int>())).thenReturn(packageInfo)
+        whenever(safePackageManager.getPackageInfo(any<Context>(), any<String>(), any<Int>())).thenReturn(packageInfo)
         assertThat(retriever.permissionsState).containsExactly(PermissionState(permission1, false))
     }
 
@@ -79,7 +78,7 @@ class RuntimePermissionsRetrieverTest : CommonTest() {
         val packageInfo = PackageInfo()
         packageInfo.requestedPermissions = arrayOf(permission1)
         packageInfo.requestedPermissionsFlags = IntArray(1) { 0 }
-        `when`(safePackageManager.getPackageInfo(any<Context>(), any<String>(), any<Int>())).thenReturn(packageInfo)
+        whenever(safePackageManager.getPackageInfo(any<Context>(), any<String>(), any<Int>())).thenReturn(packageInfo)
         assertThat(retriever.permissionsState).containsExactly(PermissionState(permission1, false))
     }
 
@@ -89,7 +88,7 @@ class RuntimePermissionsRetrieverTest : CommonTest() {
         val packageInfo = PackageInfo()
         packageInfo.requestedPermissions = arrayOf(permission1)
         packageInfo.requestedPermissionsFlags = IntArray(1) { PackageInfo.REQUESTED_PERMISSION_GRANTED }
-        `when`(safePackageManager.getPackageInfo(any<Context>(), any<String>(), any<Int>())).thenReturn(packageInfo)
+        whenever(safePackageManager.getPackageInfo(any<Context>(), any<String>(), any<Int>())).thenReturn(packageInfo)
         assertThat(retriever.permissionsState).containsExactly(PermissionState(permission1, true))
     }
 
@@ -100,8 +99,12 @@ class RuntimePermissionsRetrieverTest : CommonTest() {
         val permission3 = "permission.3"
         val packageInfo = PackageInfo()
         packageInfo.requestedPermissions = arrayOf(permission1, permission2, permission3)
-        packageInfo.requestedPermissionsFlags = intArrayOf(PackageInfo.REQUESTED_PERMISSION_GRANTED, 0, PackageInfo.REQUESTED_PERMISSION_GRANTED)
-        `when`(safePackageManager.getPackageInfo(any<Context>(), any<String>(), any<Int>())).thenReturn(packageInfo)
+        packageInfo.requestedPermissionsFlags = intArrayOf(
+            PackageInfo.REQUESTED_PERMISSION_GRANTED,
+            0,
+            PackageInfo.REQUESTED_PERMISSION_GRANTED
+        )
+        whenever(safePackageManager.getPackageInfo(any<Context>(), any<String>(), any<Int>())).thenReturn(packageInfo)
         assertThat(retriever.permissionsState).containsExactly(
             PermissionState(permission1, true),
             PermissionState(permission2, false),
@@ -117,7 +120,7 @@ class RuntimePermissionsRetrieverTest : CommonTest() {
         val packageInfo = PackageInfo()
         packageInfo.requestedPermissions = arrayOf(permission1, permission2, permission3)
         packageInfo.requestedPermissionsFlags = intArrayOf(PackageInfo.REQUESTED_PERMISSION_GRANTED)
-        `when`(safePackageManager.getPackageInfo(any<Context>(), any<String>(), any<Int>())).thenReturn(packageInfo)
+        whenever(safePackageManager.getPackageInfo(any<Context>(), any<String>(), any<Int>())).thenReturn(packageInfo)
         assertThat(retriever.permissionsState).containsExactly(
             PermissionState(permission1, true),
             PermissionState(permission2, false),

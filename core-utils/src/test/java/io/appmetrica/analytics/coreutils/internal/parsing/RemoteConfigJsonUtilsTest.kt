@@ -1,5 +1,6 @@
 package io.appmetrica.analytics.coreutils.internal.parsing
 
+import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.json.JSONArray
 import org.json.JSONObject
@@ -14,14 +15,14 @@ private const val URL = "url"
 private const val QUERY_HOSTS = "query_hosts"
 private const val URLS = "urls"
 
-class RemoteConfigJsonUtilsTest {
+class RemoteConfigJsonUtilsTest : CommonTest() {
 
     private val hostType = "Some host type"
     private val valueKey = "Some long key"
 
     @Test
     fun extractFeaturesIfFeaturesIsEmptyWithTrueFallback() {
-        assertThat(RemoteConfigJsonUtils.extractFeature(JSONObject(), "feature", true))
+        assertThat(RemoteConfigJsonUtils.extractFeature(JSONObject(), "feature", true)).isTrue()
     }
 
     @Test
@@ -64,13 +65,17 @@ class RemoteConfigJsonUtilsTest {
     @Test
     fun extractFeatureIfTrueWithFalseFallback() {
         val featureName = "some feature"
-        assertThat(RemoteConfigJsonUtils.extractFeature(jsonWithFeatureValue(featureName, true), featureName, false)).isTrue()
+        assertThat(
+            RemoteConfigJsonUtils.extractFeature(jsonWithFeatureValue(featureName, true), featureName, false)
+        ).isTrue()
     }
 
     @Test
     fun extractFeatureIfFalseWithTrueFallback() {
         val featureName = "some feature"
-        assertThat(RemoteConfigJsonUtils.extractFeature(jsonWithFeatureValue(featureName, false), featureName, true)).isFalse()
+        assertThat(
+            RemoteConfigJsonUtils.extractFeature(jsonWithFeatureValue(featureName, false), featureName, true)
+        ).isFalse()
     }
 
     @Test
@@ -165,9 +170,12 @@ class RemoteConfigJsonUtilsTest {
     @Test
     fun `extractHosts for json with empty query host list json`() {
         val input = JSONObject().apply {
-            put(QUERY_HOSTS, JSONObject().apply {
-                put(LIST, JSONObject())
-            })
+            put(
+                QUERY_HOSTS,
+                JSONObject().apply {
+                    put(LIST, JSONObject())
+                }
+            )
         }
         assertThat(RemoteConfigJsonUtils.extractHosts(input, hostType)).isEmpty()
     }
@@ -175,11 +183,17 @@ class RemoteConfigJsonUtilsTest {
     @Test
     fun `extractHosts for json with wrong host type`() {
         val input = JSONObject().apply {
-            put(QUERY_HOSTS, JSONObject().apply {
-                put(LIST, JSONObject().apply {
-                    put("wrong type", JSONObject())
-                })
-            })
+            put(
+                QUERY_HOSTS,
+                JSONObject().apply {
+                    put(
+                        LIST,
+                        JSONObject().apply {
+                            put("wrong type", JSONObject())
+                        }
+                    )
+                }
+            )
         }
         assertThat(RemoteConfigJsonUtils.extractHosts(input, hostType)).isEmpty()
     }
@@ -187,11 +201,17 @@ class RemoteConfigJsonUtilsTest {
     @Test
     fun `extractHosts for json with empty host type json`() {
         val input = JSONObject().apply {
-            put(QUERY_HOSTS, JSONObject().apply {
-                put(LIST, JSONObject().apply {
-                    put(hostType, JSONObject())
-                })
-            })
+            put(
+                QUERY_HOSTS,
+                JSONObject().apply {
+                    put(
+                        LIST,
+                        JSONObject().apply {
+                            put(hostType, JSONObject())
+                        }
+                    )
+                }
+            )
         }
         assertThat(RemoteConfigJsonUtils.extractHosts(input, hostType)).isEmpty()
     }
@@ -199,13 +219,22 @@ class RemoteConfigJsonUtilsTest {
     @Test
     fun `extract hosts for json with empty urls json array`() {
         val input = JSONObject().apply {
-            put(QUERY_HOSTS, JSONObject().apply {
-                put(LIST, JSONObject().apply {
-                    put(hostType, JSONObject().apply {
-                        put(URLS, JSONArray())
-                    })
-                })
-            })
+            put(
+                QUERY_HOSTS,
+                JSONObject().apply {
+                    put(
+                        LIST,
+                        JSONObject().apply {
+                            put(
+                                hostType,
+                                JSONObject().apply {
+                                    put(URLS, JSONArray())
+                                }
+                            )
+                        }
+                    )
+                }
+            )
         }
         assertThat(RemoteConfigJsonUtils.extractHosts(input, hostType)).isEmpty()
     }
@@ -214,15 +243,27 @@ class RemoteConfigJsonUtilsTest {
     fun `extractHosts for json with single host`() {
         val host = "Host #1"
         val input = JSONObject().apply {
-            put(QUERY_HOSTS, JSONObject().apply {
-                put(LIST, JSONObject().apply {
-                    put(hostType, JSONObject().apply {
-                        put(URLS, JSONArray().apply {
-                            put(host)
-                        })
-                    })
-                })
-            })
+            put(
+                QUERY_HOSTS,
+                JSONObject().apply {
+                    put(
+                        LIST,
+                        JSONObject().apply {
+                            put(
+                                hostType,
+                                JSONObject().apply {
+                                    put(
+                                        URLS,
+                                        JSONArray().apply {
+                                            put(host)
+                                        }
+                                    )
+                                }
+                            )
+                        }
+                    )
+                }
+            )
         }
         assertThat(RemoteConfigJsonUtils.extractHosts(input, hostType).toList())
             .containsExactly(host.toByteArray())
@@ -234,17 +275,29 @@ class RemoteConfigJsonUtilsTest {
         val secondHost = "Host #2"
         val thirdHost = "Host #3"
         val input = JSONObject().apply {
-            put(QUERY_HOSTS, JSONObject().apply {
-                put(LIST, JSONObject().apply {
-                    put(hostType, JSONObject().apply {
-                        put(URLS, JSONArray().apply {
-                            put(firstHost)
-                            put(secondHost)
-                            put(thirdHost)
-                        })
-                    })
-                })
-            })
+            put(
+                QUERY_HOSTS,
+                JSONObject().apply {
+                    put(
+                        LIST,
+                        JSONObject().apply {
+                            put(
+                                hostType,
+                                JSONObject().apply {
+                                    put(
+                                        URLS,
+                                        JSONArray().apply {
+                                            put(firstHost)
+                                            put(secondHost)
+                                            put(thirdHost)
+                                        }
+                                    )
+                                }
+                            )
+                        }
+                    )
+                }
+            )
         }
         assertThat(RemoteConfigJsonUtils.extractHosts(input, hostType).toList())
             .containsExactly(

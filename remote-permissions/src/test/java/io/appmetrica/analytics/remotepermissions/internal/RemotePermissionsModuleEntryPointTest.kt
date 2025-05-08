@@ -6,6 +6,7 @@ import io.appmetrica.analytics.remotepermissions.impl.FeatureConfig
 import io.appmetrica.analytics.remotepermissions.impl.FeatureConfigToProtoBytesConverter
 import io.appmetrica.analytics.remotepermissions.impl.FeatureParser
 import io.appmetrica.analytics.remotepermissions.impl.RemoteConfigPermissionStrategy
+import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.MockedConstructionRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
@@ -18,7 +19,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 
-internal class RemotePermissionsModuleEntryPointTest {
+internal class RemotePermissionsModuleEntryPointTest : CommonTest() {
 
     private val serviceContext = mock<ServiceContext>()
 

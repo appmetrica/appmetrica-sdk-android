@@ -43,8 +43,8 @@ public class AppPermissionsStateConverterTest extends CommonTest {
         boolean permissionEnabled1 = true;
         boolean permissionEnabled2 = false;
         PermissionState[] permissions = new PermissionState[]{
-                new PermissionState(permissionName1, permissionEnabled1),
-                new PermissionState(permissionName2, permissionEnabled2)
+            new PermissionState(permissionName1, permissionEnabled1),
+            new PermissionState(permissionName2, permissionEnabled2)
         };
         String[] providers = new String[]{"provider1", "provider2"};
         mEmptyModel = new AppPermissionsState(new ArrayList<PermissionState>(), null, new ArrayList<String>());

@@ -12,7 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(RobolectricTestRunner.class)
 public class NoneEncodingTypeProviderTest extends CommonTest {
 
-    private NoneEncodingTypeProvider mProvider = new NoneEncodingTypeProvider();
+    private final NoneEncodingTypeProvider mProvider = new NoneEncodingTypeProvider();
 
     @Test
     public void testGetEncryptionModeExternallyEncrypted() {

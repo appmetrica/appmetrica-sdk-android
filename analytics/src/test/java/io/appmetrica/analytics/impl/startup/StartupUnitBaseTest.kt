@@ -43,7 +43,8 @@ internal open class StartupUnitBaseTest : CommonTest() {
             ProcessConfiguration(
                 RuntimeEnvironment.getApplication(),
                 dataResultReceiver
-            ), CounterConfiguration()
+            ),
+            CounterConfiguration()
         )
     )
 

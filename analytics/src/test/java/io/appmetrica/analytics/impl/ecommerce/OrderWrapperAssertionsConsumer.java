@@ -32,9 +32,9 @@ class OrderWrapperAssertionsConsumer implements Consumer<ObjectPropertyAssertion
                         assertThat(cartItemWrappers).isEmpty();
                     } else {
                         assertThat(cartItemWrappers).hasSize(expectedCartItems.size());
-                        for (int i = 0; i < cartItemWrappers.size(); i ++) {
+                        for (int i = 0; i < cartItemWrappers.size(); i++) {
                             ObjectPropertyAssertions<CartItemWrapper> cartItemAssertions =
-                                    ObjectPropertyAssertions(cartItemWrappers.get(i));
+                                ObjectPropertyAssertions(cartItemWrappers.get(i));
                             expectedCartItems.get(i).accept(cartItemAssertions);
                             cartItemAssertions.checkAll();
                         }

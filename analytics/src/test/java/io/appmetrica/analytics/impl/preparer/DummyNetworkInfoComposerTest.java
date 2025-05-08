@@ -13,10 +13,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(ParameterizedRobolectricTestRunner.class)
 public class DummyNetworkInfoComposerTest extends CommonTest {
 
-    private Integer inputConnectionType;
-    private String inputCellularConnectionType;
-    private String inputWifiData;
-    private String inputCellData;
+    private final Integer inputConnectionType;
+    private final String inputCellularConnectionType;
+    private final String inputWifiData;
+    private final String inputCellData;
 
     public DummyNetworkInfoComposerTest(Integer inputConnectionType,
                                         String inputCellularConnectionType,
@@ -31,9 +31,9 @@ public class DummyNetworkInfoComposerTest extends CommonTest {
     @ParameterizedRobolectricTestRunner.Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
-                {4769, "some type", "[]", "{}"},
-                {0, "", "", ""},
-                {null, null, null, null}
+            {4769, "some type", "[]", "{}"},
+            {0, "", "", ""},
+            {null, null, null, null}
         });
     }
 
@@ -47,8 +47,8 @@ public class DummyNetworkInfoComposerTest extends CommonTest {
     @Test
     public void getNetworkInfo() {
         assertThat(composer.getNetworkInfo(
-                inputConnectionType,
-                inputCellularConnectionType
+            inputConnectionType,
+            inputCellularConnectionType
         )).isNull();
     }
 }

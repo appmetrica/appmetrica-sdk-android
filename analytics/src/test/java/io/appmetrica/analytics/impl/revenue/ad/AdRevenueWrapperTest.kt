@@ -13,14 +13,15 @@ import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.MockedConstructionRule
 import io.appmetrica.analytics.testutils.MockedStaticRule
+import io.appmetrica.analytics.testutils.on
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.Mockito.`when`
 import org.mockito.kotlin.any
 import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.whenever
 import java.math.BigDecimal
 import java.util.Currency
 import io.appmetrica.analytics.impl.protobuf.backend.AdRevenue as AdRevenueProto
@@ -86,9 +87,8 @@ class AdRevenueWrapperTest : CommonTest() {
     private val publicLogger = mock<PublicLogger>()
 
     @get:Rule
-    val stringTrimmer = MockedConstructionRule(StringTrimmer::class.java
-    ) { mock, _ ->
-        `when`(mock.trim(any())).thenAnswer {
+    val stringTrimmer = MockedConstructionRule(StringTrimmer::class.java) { mock, _ ->
+        whenever(mock.trim(any())).thenAnswer {
             val input = it.arguments[0] as String
             stringTrimMap[input] ?: input
         }
@@ -96,7 +96,7 @@ class AdRevenueWrapperTest : CommonTest() {
 
     @get:Rule
     val payloadTrimmer = MockedConstructionRule(StringByBytesTrimmer::class.java) { mock, _ ->
-        `when`(mock.trim(any())).thenAnswer {
+        whenever(mock.trim(any())).thenAnswer {
             val input = it.arguments[0] as String
             stringByBytesTrimMap[input] ?: input
         }
@@ -116,7 +116,7 @@ class AdRevenueWrapperTest : CommonTest() {
 
     @Test
     fun simpleData() {
-        jsonHelperMock.staticMock.`when`<String> {
+        jsonHelperMock.staticMock.on {
             JsonHelper.mapToJsonString(fullPayloadMap)
         }.thenReturn(payloadJson)
 
@@ -163,7 +163,7 @@ class AdRevenueWrapperTest : CommonTest() {
 
     @Test
     fun bigData() {
-        jsonHelperMock.staticMock.`when`<String> {
+        jsonHelperMock.staticMock.on {
             JsonHelper.mapToJsonString(fullPayloadMap)
         }.thenReturn(bigPayloadJson)
 
@@ -182,7 +182,7 @@ class AdRevenueWrapperTest : CommonTest() {
 
         val range = 0..10
         val mock = stringTrimmer.constructionMock.constructed().first()
-        `when`(mock.trim(any())).thenAnswer {
+        whenever(mock.trim(any())).thenAnswer {
             (it.arguments[0] as String).substring(range)
         }
 
@@ -252,7 +252,6 @@ class AdRevenueWrapperTest : CommonTest() {
     }
 
     private fun sizeDiff(big: String, small: String) = big.toProtobufBytes().size - small.toProtobufBytes().size
-
 }
 
 private fun String.toProtobufBytes() = StringUtils.stringToBytesForProtobuf(this)

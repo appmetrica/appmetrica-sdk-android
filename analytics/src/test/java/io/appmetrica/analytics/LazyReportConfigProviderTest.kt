@@ -23,5 +23,4 @@ class LazyReportConfigProviderTest : CommonTest() {
         verifyNoMoreInteractions(componentUnit)
         assertThat(configProvider.config).isEqualTo(reportRequestConfig)
     }
-
 }

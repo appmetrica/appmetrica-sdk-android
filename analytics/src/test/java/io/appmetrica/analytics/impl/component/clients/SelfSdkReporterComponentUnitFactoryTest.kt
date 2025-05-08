@@ -74,5 +74,4 @@ internal class SelfSdkReporterComponentUnitFactoryTest : CommonTest() {
         assertThat(stubbedExecutorFactoryRule.constructionMock.constructed()).hasSize(1)
         assertThat(stubbedExecutorFactoryRule.argumentInterceptor.flatArguments()).isEmpty()
     }
-
 }

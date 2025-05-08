@@ -29,14 +29,16 @@ internal class ComponentEventTriggerProviderCreatorTest : CommonTest() {
 
     @Test
     fun createEventTriggerProvider() {
-        assertThat(componentEventProviderCreator.createEventTriggerProvider(
-            eventsFlusher,
-            databaseHelper,
-            configurationHolder,
-            initialConfig,
-            componentId,
-            preferences
-        )).isEqualTo(componentEventTriggerProviderConstructionRule.constructionMock.constructed().first())
+        assertThat(
+            componentEventProviderCreator.createEventTriggerProvider(
+                eventsFlusher,
+                databaseHelper,
+                configurationHolder,
+                initialConfig,
+                componentId,
+                preferences
+            )
+        ).isEqualTo(componentEventTriggerProviderConstructionRule.constructionMock.constructed().first())
         assertThat(componentEventTriggerProviderConstructionRule.constructionMock.constructed()).hasSize(1)
         assertThat(componentEventTriggerProviderConstructionRule.argumentInterceptor.flatArguments())
             .containsExactly(eventsFlusher, databaseHelper, configurationHolder, componentId)

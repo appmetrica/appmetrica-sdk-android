@@ -1,9 +1,5 @@
 package io.appmetrica.analytics.impl.crash.jvm.client;
 
-import io.appmetrica.analytics.impl.crash.jvm.client.AllThreads;
-import io.appmetrica.analytics.impl.crash.jvm.client.StackTraceItemInternal;
-import io.appmetrica.analytics.impl.crash.jvm.client.ThrowableModel;
-import io.appmetrica.analytics.impl.crash.jvm.client.UnhandledException;
 import io.appmetrica.analytics.testutils.CommonTest;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
@@ -46,62 +42,62 @@ public class UnhandledExceptionTest extends CommonTest {
     public void testNulls() throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
         UnhandledException unhandledException = new UnhandledException(null, null, null, null, null, null, null, null);
         ObjectPropertyAssertions(unhandledException)
-                .checkFieldsAreNull("exception", "allThreads", "methodCallStacktrace", "buildId", "isOffline",
-                        "platform", "virtualMachineVersion", "pluginEnvironment")
-                .checkAll();
+            .checkFieldsAreNull("exception", "allThreads", "methodCallStacktrace", "buildId", "isOffline",
+                "platform", "virtualMachineVersion", "pluginEnvironment")
+            .checkAll();
     }
 
     @Test
     public void testFilled() throws IllegalAccessException {
         UnhandledException unhandledException = new UnhandledException(
-                mThrowable,
-                mAllThreads,
-                mMethodCallStacktrace,
-                platform,
-                virtualMachineVersion,
-                environment,
-                mBuildId,
-                mIsOffline
+            mThrowable,
+            mAllThreads,
+            mMethodCallStacktrace,
+            platform,
+            virtualMachineVersion,
+            environment,
+            mBuildId,
+            mIsOffline
         );
         ObjectPropertyAssertions(unhandledException)
-                .checkField("exception", mThrowable)
-                .checkField("allThreads", mAllThreads)
-                .checkField("methodCallStacktrace", mMethodCallStacktrace)
-                .checkField("platform", platform)
-                .checkField("virtualMachineVersion", virtualMachineVersion)
-                .checkField("pluginEnvironment", environment)
-                .checkField("buildId", mBuildId)
-                .checkField("isOffline", mIsOffline)
-                .checkAll();
+            .checkField("exception", mThrowable)
+            .checkField("allThreads", mAllThreads)
+            .checkField("methodCallStacktrace", mMethodCallStacktrace)
+            .checkField("platform", platform)
+            .checkField("virtualMachineVersion", virtualMachineVersion)
+            .checkField("pluginEnvironment", environment)
+            .checkField("buildId", mBuildId)
+            .checkField("isOffline", mIsOffline)
+            .checkAll();
     }
 
     @Test
     public void testToStringFilled() {
         String value = new UnhandledException(
-                mThrowable,
-                mAllThreads,
-                mMethodCallStacktrace,
-                platform,
-                virtualMachineVersion,
-                environment,
-                mBuildId,
-                mIsOffline
+            mThrowable,
+            mAllThreads,
+            mMethodCallStacktrace,
+            platform,
+            virtualMachineVersion,
+            environment,
+            mBuildId,
+            mIsOffline
         ).toString();
         SoftAssertions softly = new SoftAssertions();
         softly.assertThat(value).contains("errorName='java.lang.RuntimeException'", "exception=java.lang.RuntimeException");
         for (StackTraceItemInternal element : mThrowable.getStacktrace()) {
             softly.assertThat(value).contains(
-                    String.valueOf(element.getClassName()),
-                    String.valueOf(element.getMethodName()),
-                    String.valueOf(element.getFileName()),
-                    String.valueOf(element.getLine())
+                String.valueOf(element.getClassName()),
+                String.valueOf(element.getMethodName()),
+                String.valueOf(element.getFileName()),
+                String.valueOf(element.getLine())
             );
         }
     }
 
     @Test
     public void testToStringNulls() {
-        final String unhandledException = new UnhandledException(null, null, null, null, null, null,null, null).toString();
+        final String unhandledException = new UnhandledException(null, null, null, null, null, null, null, null).toString();
         assertThat(unhandledException).contains("exception=null");
     }
 

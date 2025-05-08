@@ -102,8 +102,10 @@ class DbEventDescriptionConverterTest : CommonTest() {
 
     @Test
     fun fromModelIfNullFields() {
-        val model = DbEventModel.Description(null, null, null, null, null, null, null, null, null, null, null,
-            null, null, null, null, null, null, null)
+        val model = DbEventModel.Description(
+            null, null, null, null, null, null, null, null, null, null, null,
+            null, null, null, null, null, null, null
+        )
         val proto = converter.fromModel(model)
         ProtoObjectPropertyAssertions(proto)
             .checkField("customType", -1)
@@ -303,4 +305,3 @@ class DbEventDescriptionConverterTest : CommonTest() {
         assertThat(proto.name).contains(validValuePart)
     }
 }
-

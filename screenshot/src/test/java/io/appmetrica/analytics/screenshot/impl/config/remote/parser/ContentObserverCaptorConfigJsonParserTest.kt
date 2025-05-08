@@ -14,13 +14,17 @@ class ContentObserverCaptorConfigJsonParserTest : CommonTest() {
     @Test
     fun parseIfEnabled() {
         val rawData = JSONObject()
-            .put("content_observer_captor_config", JSONObject()
-                .put("enabled", true)
-                .put("media_store_column_names", JSONArray()
-                    .put("first")
-                    .put("second")
-                )
-                .put("detect_window_seconds", 10)
+            .put(
+                "content_observer_captor_config",
+                JSONObject()
+                    .put("enabled", true)
+                    .put(
+                        "media_store_column_names",
+                        JSONArray()
+                            .put("first")
+                            .put("second")
+                    )
+                    .put("detect_window_seconds", 10)
             )
         ProtoObjectPropertyAssertions(parser.parse(rawData))
             .checkField("enabled", true)
@@ -32,13 +36,17 @@ class ContentObserverCaptorConfigJsonParserTest : CommonTest() {
     @Test
     fun parseIfDisabled() {
         val rawData = JSONObject()
-            .put("content_observer_captor_config", JSONObject()
-                .put("enabled", false)
-                .put("media_store_column_names", JSONArray()
-                    .put("first")
-                    .put("second")
-                )
-                .put("detect_window_seconds", 10)
+            .put(
+                "content_observer_captor_config",
+                JSONObject()
+                    .put("enabled", false)
+                    .put(
+                        "media_store_column_names",
+                        JSONArray()
+                            .put("first")
+                            .put("second")
+                    )
+                    .put("detect_window_seconds", 10)
             )
         ProtoObjectPropertyAssertions(parser.parse(rawData))
             .checkField("enabled", false)

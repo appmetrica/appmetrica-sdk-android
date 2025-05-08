@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.networktasks.internal
 
 import android.net.Uri
+import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -10,7 +11,7 @@ import org.mockito.kotlin.stubbing
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class NetworkTaskForSendingDataParamsAppenderTest {
+class NetworkTaskForSendingDataParamsAppenderTest : CommonTest() {
 
     private val uriBuilder = Uri.Builder().query("https://ya.ru")
     private val requestBodyEncrypter = mock<RequestBodyEncrypter>()

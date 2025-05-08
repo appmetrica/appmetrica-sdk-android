@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.coreutils.internal.services.telephony
 
 import android.telephony.TelephonyManager
+import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -8,7 +9,7 @@ import org.robolectric.ParameterizedRobolectricTestRunner
 import org.robolectric.ParameterizedRobolectricTestRunner.Parameters
 
 @RunWith(ParameterizedRobolectricTestRunner::class)
-class CellularNetworkTypeConverterTest(val input: Int?, val expected: String) {
+class CellularNetworkTypeConverterTest(val input: Int?, val expected: String) : CommonTest() {
 
     companion object {
 

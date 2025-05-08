@@ -14,7 +14,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.MockitoAnnotations
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
@@ -55,7 +54,6 @@ class PersistentUuidHolderTest : CommonTest() {
 
     @Before
     fun setUp() {
-        MockitoAnnotations.openMocks(this)
         resetSdkStorage()
         context = RuntimeEnvironment.getApplication()
         storageDir = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

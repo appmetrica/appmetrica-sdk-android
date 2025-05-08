@@ -15,8 +15,7 @@ import org.robolectric.RobolectricTestRunner
 @RunWith(RobolectricTestRunner::class)
 class ClidsDataSaverTest : CommonTest() {
 
-    @Rule
-    @JvmField
+    @get:Rule
     val globalServiceLocatorRule = GlobalServiceLocatorRule()
     private val candidateCaptor = argumentCaptor<ClidsInfo.Candidate>()
     private val dataSaver = ClidsDataSaver()

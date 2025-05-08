@@ -16,6 +16,7 @@ internal class ClidsCandidatesHelperTest(
 
     companion object {
 
+        /* ktlint-disable max-line-length */
         @JvmStatic
         @Parameterized.Parameters
         fun data(): Collection<Array<Any?>> {
@@ -47,6 +48,7 @@ internal class ClidsCandidatesHelperTest(
                 arrayOf(listOf(firstAppCandidate, firstRetailCandidate, firstSatelliteCandidate), secondSatelliteCandidate, null),
             )
         }
+        /* ktlint-enable  max-line-length */
     }
 
     private val candidatesHelper = ClidsCandidatesHelper()

@@ -23,7 +23,7 @@ import java.util.UUID
 
 class UuidFromStartupStateImporterTest : CommonTest() {
 
-    private val context: Context= mock()
+    private val context: Context = mock()
 
     private val protobufStateStorage: ProtobufStateStorage<StartupStateModel> = mock()
 

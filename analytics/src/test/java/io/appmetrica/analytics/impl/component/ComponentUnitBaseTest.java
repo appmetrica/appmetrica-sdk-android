@@ -278,9 +278,9 @@ public abstract class ComponentUnitBaseTest extends CommonTest {
     @Test
     public void testLoggerStateUpdatedTrue() {
         CommonArguments arguments = new CommonArguments(
-                mock(StartupRequestConfig.Arguments.class),
-                createReporterArgumentsWithLogsEnabled(true),
-                null
+            mock(StartupRequestConfig.Arguments.class),
+            createReporterArgumentsWithLogsEnabled(true),
+            null
         );
         mComponentUnit.updateSdkConfig(arguments.componentArguments);
         verify(mPublicLogger).setEnabled(true);
@@ -289,9 +289,9 @@ public abstract class ComponentUnitBaseTest extends CommonTest {
     @Test
     public void testLoggerStateUpdatedFalse() {
         CommonArguments arguments = new CommonArguments(
-                mock(StartupRequestConfig.Arguments.class),
-                createReporterArgumentsWithLogsEnabled(false),
-                null
+            mock(StartupRequestConfig.Arguments.class),
+            createReporterArgumentsWithLogsEnabled(false),
+            null
         );
         mComponentUnit.updateSdkConfig(arguments.componentArguments);
         verify(mPublicLogger).setEnabled(false);
@@ -300,9 +300,9 @@ public abstract class ComponentUnitBaseTest extends CommonTest {
     @Test
     public void testLoggerStateUpdatedNull() {
         CommonArguments arguments = new CommonArguments(
-                mock(StartupRequestConfig.Arguments.class),
-                createReporterArgumentsWithLogsEnabled(null),
-                null
+            mock(StartupRequestConfig.Arguments.class),
+            createReporterArgumentsWithLogsEnabled(null),
+            null
         );
         mComponentUnit.updateSdkConfig(arguments.componentArguments);
         verify(mPublicLogger, never()).setEnabled(ArgumentMatchers.nullable(Boolean.class));
@@ -602,9 +602,9 @@ public abstract class ComponentUnitBaseTest extends CommonTest {
     @Test
     public void testNeedToSendPreloadInfoTrackingDisabledClidsDoNotMatch() {
         final StartupState startupState =
-                TestUtils.createDefaultStartupStateBuilder().withStartupDidNotOverrideClids(false).build();
+            TestUtils.createDefaultStartupStateBuilder().withStartupDidNotOverrideClids(false).build();
         when(mPreloadInfoStorage.retrieveData())
-                .thenReturn(new PreloadInfoState("11", new JSONObject(), true, false, DistributionSource.APP));
+            .thenReturn(new PreloadInfoState("11", new JSONObject(), true, false, DistributionSource.APP));
         when(mConfigHolder.getStartupState()).thenReturn(startupState);
         assertThat(mComponentUnit.shouldSend()).isTrue();
     }
@@ -612,9 +612,9 @@ public abstract class ComponentUnitBaseTest extends CommonTest {
     @Test
     public void testNeedToSendPreloadInfoTrackingDisabledClidsMatch() {
         final StartupState startupState =
-                TestUtils.createDefaultStartupStateBuilder().withStartupDidNotOverrideClids(true).build();
+            TestUtils.createDefaultStartupStateBuilder().withStartupDidNotOverrideClids(true).build();
         when(mPreloadInfoStorage.retrieveData())
-                .thenReturn(new PreloadInfoState("11", new JSONObject(), true, false, DistributionSource.APP));
+            .thenReturn(new PreloadInfoState("11", new JSONObject(), true, false, DistributionSource.APP));
         when(mConfigHolder.getStartupState()).thenReturn(startupState);
         assertThat(mComponentUnit.shouldSend()).isTrue();
     }
@@ -622,9 +622,9 @@ public abstract class ComponentUnitBaseTest extends CommonTest {
     @Test
     public void testNeedToSendPreloadInfoTrackingEnabledClidsDoNotMatch() {
         final StartupState startupState =
-                TestUtils.createDefaultStartupStateBuilder().withStartupDidNotOverrideClids(false).build();
+            TestUtils.createDefaultStartupStateBuilder().withStartupDidNotOverrideClids(false).build();
         when(mPreloadInfoStorage.retrieveData())
-                .thenReturn(new PreloadInfoState("11", new JSONObject(), true, true, DistributionSource.APP));
+            .thenReturn(new PreloadInfoState("11", new JSONObject(), true, true, DistributionSource.APP));
         when(mConfigHolder.getStartupState()).thenReturn(startupState);
         assertThat(mComponentUnit.shouldSend()).isTrue();
     }
@@ -632,9 +632,9 @@ public abstract class ComponentUnitBaseTest extends CommonTest {
     @Test
     public void testNeedToSendPreloadInfoTrackingEnabledClidsMatch() {
         final StartupState startupState =
-                TestUtils.createDefaultStartupStateBuilder().withStartupDidNotOverrideClids(true).build();
+            TestUtils.createDefaultStartupStateBuilder().withStartupDidNotOverrideClids(true).build();
         when(mPreloadInfoStorage.retrieveData())
-                .thenReturn(new PreloadInfoState("11", new JSONObject(), true, true, DistributionSource.APP));
+            .thenReturn(new PreloadInfoState("11", new JSONObject(), true, true, DistributionSource.APP));
         when(mConfigHolder.getStartupState()).thenReturn(startupState);
         assertThat(mComponentUnit.shouldSend()).isFalse();
     }

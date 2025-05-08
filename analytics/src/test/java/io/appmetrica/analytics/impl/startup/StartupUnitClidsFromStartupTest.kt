@@ -15,7 +15,6 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.robolectric.ParameterizedRobolectricTestRunner
 
-
 @RunWith(ParameterizedRobolectricTestRunner::class)
 internal class StartupUnitClidsFromStartupTest(
     description: String,
@@ -67,7 +66,6 @@ internal class StartupUnitClidsFromStartupTest(
                     VALID_CLIDS_FROM_STARTUP
                 )
             )
-
     }
 
     @Before

@@ -25,7 +25,7 @@ public class DecimalConverterTest extends CommonTest {
 
     @Rule
     public final MockedStaticRule<DecimalProtoModel> staticProtoModelMock =
-            new MockedStaticRule<>(DecimalProtoModel.class);
+        new MockedStaticRule<>(DecimalProtoModel.class);
     @Rule
     public final MockitoRule mockitoRule = MockitoJUnit.rule();
     @Mock
@@ -60,7 +60,7 @@ public class DecimalConverterTest extends CommonTest {
         });
 
         ObjectPropertyAssertions<Ecommerce.ECommerceEvent.Decimal> adRevenueAssertions =
-                new ProtoObjectPropertyAssertions<>(proto);
+            new ProtoObjectPropertyAssertions<>(proto);
 
         adRevenueAssertions.checkField("mantissa", mantissa);
         adRevenueAssertions.checkField("exponent", exponent);

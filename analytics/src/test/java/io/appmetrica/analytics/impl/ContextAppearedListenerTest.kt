@@ -7,37 +7,29 @@ import io.appmetrica.analytics.coreapi.internal.lifecycle.ActivityLifecycleListe
 import io.appmetrica.analytics.testutils.CommonTest
 import org.junit.Before
 import org.junit.Test
-import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.ArgumentMatchers.eq
-import org.mockito.Captor
-import org.mockito.Mock
+import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
 import org.mockito.Mockito.verifyNoMoreInteractions
-import org.mockito.Mockito.`when`
-import org.mockito.MockitoAnnotations
+import org.mockito.kotlin.argumentCaptor
+import org.mockito.kotlin.whenever
 
 class ContextAppearedListenerTest : CommonTest() {
 
-    @Mock
-    private lateinit var activityLifecycleManager: ActivityLifecycleManager
-    @Mock
-    private lateinit var selfReporter: IReporterExtended
-    @Mock
-    private lateinit var context: Context
-    @Mock
-    private lateinit var applicationContext: Context
-    @Mock
-    private lateinit var activity: Activity
-    @Captor
-    private lateinit var listenerCaptor: ArgumentCaptor<ActivityLifecycleListener>
+    private val activityLifecycleManager: ActivityLifecycleManager = mock()
+    private val selfReporter: IReporterExtended = mock()
+    private val context: Context = mock()
+    private val applicationContext: Context = mock()
+    private val activity: Activity = mock()
+
+    private val listenerCaptor = argumentCaptor<ActivityLifecycleListener>()
     private lateinit var contextAppearedListener: ContextAppearedListener
 
     @Before
     fun setUp() {
-        MockitoAnnotations.openMocks(this)
-        `when`(context.applicationContext).thenReturn(applicationContext)
-        `when`(applicationContext.applicationContext).thenReturn(applicationContext)
+        whenever(context.applicationContext).thenReturn(applicationContext)
+        whenever(applicationContext.applicationContext).thenReturn(applicationContext)
         contextAppearedListener = ContextAppearedListener(activityLifecycleManager, selfReporter)
     }
 
@@ -63,7 +55,7 @@ class ContextAppearedListenerTest : CommonTest() {
             eq(ActivityEvent.RESUMED),
             eq(ActivityEvent.PAUSED)
         )
-        listenerCaptor.value.onEvent(activity, ActivityEvent.RESUMED)
+        listenerCaptor.firstValue.onEvent(activity, ActivityEvent.RESUMED)
         verify(selfReporter).resumeSession()
     }
 
@@ -75,7 +67,7 @@ class ContextAppearedListenerTest : CommonTest() {
             eq(ActivityEvent.RESUMED),
             eq(ActivityEvent.PAUSED)
         )
-        listenerCaptor.value.onEvent(activity, ActivityEvent.PAUSED)
+        listenerCaptor.firstValue.onEvent(activity, ActivityEvent.PAUSED)
         verify(selfReporter).pauseSession()
     }
 }

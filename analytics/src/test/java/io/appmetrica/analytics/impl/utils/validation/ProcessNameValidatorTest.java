@@ -19,8 +19,8 @@ public class ProcessNameValidatorTest extends CommonTest {
 
     private static final String PACKAGE_NAME = "com.test.package.name";
 
-    private String mInputProcessName;
-    private boolean mValid;
+    private final String mInputProcessName;
+    private final boolean mValid;
 
     public ProcessNameValidatorTest(String inputProcessName, boolean valid) {
         mInputProcessName = inputProcessName;
@@ -30,13 +30,13 @@ public class ProcessNameValidatorTest extends CommonTest {
     @ParameterizedRobolectricTestRunner.Parameters(name = "[{index}] Validation result is {1} for input = \"{0}\"")
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
-                {null, false},
-                {"", false},
-                {PACKAGE_NAME, true},
-                {PACKAGE_NAME + ":Metrica", true},
-                {PACKAGE_NAME + ":passport", true},
-                {PACKAGE_NAME + "_2", false},
-                {PACKAGE_NAME + "_2:Metrica", false}
+            {null, false},
+            {"", false},
+            {PACKAGE_NAME, true},
+            {PACKAGE_NAME + ":Metrica", true},
+            {PACKAGE_NAME + ":passport", true},
+            {PACKAGE_NAME + "_2", false},
+            {PACKAGE_NAME + "_2:Metrica", false}
         });
     }
 
@@ -56,7 +56,7 @@ public class ProcessNameValidatorTest extends CommonTest {
     public void testValidate() {
         ValidationResult result = mValidator.validate(mInputProcessName);
         assertThat(result.isValid()).isEqualTo(mValid);
-        if (mValid == false) {
+        if (!mValid) {
             assertThat(result.getDescription()).isNotEmpty();
         }
     }

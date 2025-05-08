@@ -28,7 +28,7 @@ public class SimplePermissionExtractorTest extends CommonTest {
     @Mock
     private PermissionStrategy mShouldAskSystemForPermissionStrategy;
 
-    private String mPermissionName;
+    private final String mPermissionName;
     private SimplePermissionExtractor mPermissionExtractor;
 
     @ParameterizedRobolectricTestRunner.Parameters

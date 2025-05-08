@@ -29,8 +29,8 @@ public class UuidFromClientPreferencesImporterTest extends CommonTest {
 
     @Mock
     private Context context;
-    private IdentifiersResult preferencesUuid;
-    private String expectedValue;
+    private final IdentifiersResult preferencesUuid;
+    private final String expectedValue;
 
     private static final String FIRST_UUID = UUID.randomUUID().toString();
 

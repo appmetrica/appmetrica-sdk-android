@@ -46,7 +46,7 @@ public class ServiceUtilsTest extends CommonTest {
         assertThat(intent.getComponent()).isEqualTo(new ComponentName(context.getPackageName(), "io.appmetrica.analytics.internal.AppMetricaService"));
         assertThat(intent.getFlags() & FLAG_INCLUDE_STOPPED_PACKAGES).isNotZero();
         assertThat(intent.getStringExtra(ServiceUtils.EXTRA_SCREEN_SIZE))
-                .isEqualTo(JsonHelper.screenInfoToJsonString(screenInfo));
+            .isEqualTo(JsonHelper.screenInfoToJsonString(screenInfo));
         Uri data = intent.getData();
         assertThat(data.getScheme()).isEqualTo("appmetrica");
         assertThat(data.getAuthority()).isEqualTo(context.getPackageName());

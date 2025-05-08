@@ -18,8 +18,8 @@ public class BinaryDataHelperWrapperCoverageTest extends CommonTest {
         List<String> actualCoveredMethods = CoverageUtils.getTestMethodNames(BinaryDataHelperWrapperTest.class);
         List<String> expectedCoveredMethods = getExpectedCoveredMethods();
         assertThat(actualCoveredMethods)
-                .as("Actual covered methods tested in BinaryDataHelperWrapperTest): ")
-                .containsExactlyInAnyOrderElementsOf(expectedCoveredMethods);
+            .as("Actual covered methods tested in BinaryDataHelperWrapperTest): ")
+            .containsExactlyInAnyOrderElementsOf(expectedCoveredMethods);
     }
 
     @NonNull

@@ -92,7 +92,7 @@ public class ReferrerResultReceiverTest extends CommonTest {
                 byte[] bytes = argument.getByteArray("referrer");
                 try {
                     return argument.keySet().size() == 1 &&
-                            (expected == null && bytes == null || expected.equals(ReferrerInfo.parseFrom(bytes)));
+                        (expected == null && bytes == null || expected.equals(ReferrerInfo.parseFrom(bytes)));
                 } catch (InvalidProtocolBufferNanoException e) {
                     throw new RuntimeException(e);
                 }

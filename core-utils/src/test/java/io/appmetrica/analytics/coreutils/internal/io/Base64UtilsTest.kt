@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.coreutils.internal.io
 
 import android.util.Base64
+import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -8,7 +9,7 @@ import org.robolectric.RobolectricTestRunner
 import java.io.IOException
 
 @RunWith(RobolectricTestRunner::class)
-class Base64UtilsTest {
+class Base64UtilsTest : CommonTest() {
 
     @Test
     @Throws(IOException::class)
@@ -22,7 +23,8 @@ class Base64UtilsTest {
     @Throws(IOException::class)
     fun byteCompressionToBase64() {
         val bytes = byteArrayOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
-        assertThat(Base64Utils.compressBase64(bytes)).isEqualTo(Base64.encodeToString(GZIPUtils.gzipBytes(bytes), Base64.DEFAULT))
+        assertThat(Base64Utils.compressBase64(bytes))
+            .isEqualTo(Base64.encodeToString(GZIPUtils.gzipBytes(bytes), Base64.DEFAULT))
     }
 
     @Test
@@ -31,6 +33,6 @@ class Base64UtilsTest {
         val bytes = byteArrayOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
         val gzippedBytes = GZIPUtils.gzipBytes(bytes)
         val encodedBytes = Base64.encodeToString(gzippedBytes, Base64.DEFAULT)
-        assertThat(Base64Utils.decompressBase64GzipAsBytes(encodedBytes)).isEqualTo(bytes);
+        assertThat(Base64Utils.decompressBase64GzipAsBytes(encodedBytes)).isEqualTo(bytes)
     }
 }

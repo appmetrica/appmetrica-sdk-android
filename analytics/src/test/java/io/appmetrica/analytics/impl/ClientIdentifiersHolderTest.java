@@ -20,6 +20,7 @@ import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import io.appmetrica.analytics.testutils.MockedStaticRule;
 import io.appmetrica.analytics.testutils.TestUtils;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -95,7 +96,7 @@ public class ClientIdentifiersHolderTest extends CommonTest {
         clientClids.put("clid4", "4");
         clientClids.put("clid5", "5");
         customSdkHosts.put("am", Arrays.asList("https://am.host1", "https://am.host2"));
-        customSdkHosts.put("ads", Arrays.asList("https://ads.host1"));
+        customSdkHosts.put("ads", Collections.singletonList("https://ads.host1"));
 
         mClientClidsForRequestData = new IdentifiersResult(JsonHelper.clidsToString(clientClids), IdentifierStatus.OK, null);
         mResponseClidsData = new IdentifiersResult(JsonHelper.clidsToString(mResponseClids), IdentifierStatus.OK, null);
@@ -150,9 +151,9 @@ public class ClientIdentifiersHolderTest extends CommonTest {
         when(advertisingIdsHolder.getHuawei()).thenReturn(new AdTrackingInfoResult(null, mHoaidStatus, mHoaidError));
         when(advertisingIdsHolder.getYandex()).thenReturn(new AdTrackingInfoResult(null, yandexStatus, yandexError));
         ClientIdentifiersHolder clientIdentifiersHolder = new ClientIdentifiersHolder(
-                TestUtils.createDefaultStartupState(),
-                advertisingIdsHolder,
-                clientClids
+            TestUtils.createDefaultStartupState(),
+            advertisingIdsHolder,
+            clientClids
         );
         SoftAssertions softly = new SoftAssertions();
         softly.assertThat(clientIdentifiersHolder.getGaid()).isEqualTo(new IdentifiersResult(null, mGaidStatus, mGaidError));
@@ -166,38 +167,38 @@ public class ClientIdentifiersHolderTest extends CommonTest {
         final long obtainTime = 3476576;
         final int updateInterval = 4343;
         StartupState startupState = new StartupState.Builder(
-                new CollectingFlags.CollectingFlagsBuilder()
-                        .withSslPinning(true)
-                        .build()
+            new CollectingFlags.CollectingFlagsBuilder()
+                .withSslPinning(true)
+                .build()
         )
-                .withUuid(mUuid)
-                .withDeviceId(mDeviceId)
-                .withDeviceIdHash(mDeviceIdHash)
-                .withReportAdUrl(mReportAdUrl)
-                .withGetAdUrl(mGetAdUrl)
-                .withCustomSdkHosts(customSdkHosts)
-                .withEncodedClidsFromResponse(StartupUtils.encodeClids(mResponseClids))
-                .withLastClientClidsForStartupRequest(StartupUtils.encodeClids(mRequestClids))
-                .withAutoInappCollectingConfig(autoInappCollectingConfig)
-                .withObtainTime(obtainTime)
-                .withStartupUpdateConfig(new StartupUpdateConfig(updateInterval))
-                .build();
+            .withUuid(mUuid)
+            .withDeviceId(mDeviceId)
+            .withDeviceIdHash(mDeviceIdHash)
+            .withReportAdUrl(mReportAdUrl)
+            .withGetAdUrl(mGetAdUrl)
+            .withCustomSdkHosts(customSdkHosts)
+            .withEncodedClidsFromResponse(StartupUtils.encodeClids(mResponseClids))
+            .withLastClientClidsForStartupRequest(StartupUtils.encodeClids(mRequestClids))
+            .withAutoInappCollectingConfig(autoInappCollectingConfig)
+            .withObtainTime(obtainTime)
+            .withStartupUpdateConfig(new StartupUpdateConfig(updateInterval))
+            .build();
         AdvertisingIdsHolder advertisingIdsHolder = mock(AdvertisingIdsHolder.class);
         when(advertisingIdsHolder.getGoogle()).thenReturn(new AdTrackingInfoResult(
-                new AdTrackingInfo(AdTrackingInfo.Provider.GOOGLE, mGaidAdvId, false),
-                mGaidStatus,
-                mGaidError
+            new AdTrackingInfo(AdTrackingInfo.Provider.GOOGLE, mGaidAdvId, false),
+            mGaidStatus,
+            mGaidError
         ));
         when(advertisingIdsHolder.getHuawei()).thenReturn(
-                new AdTrackingInfoResult(new AdTrackingInfo(AdTrackingInfo.Provider.HMS, mHoaidAdvId, false),
-                        mHoaidStatus,
-                        mHoaidError
-                ));
+            new AdTrackingInfoResult(new AdTrackingInfo(AdTrackingInfo.Provider.HMS, mHoaidAdvId, false),
+                mHoaidStatus,
+                mHoaidError
+            ));
         when(advertisingIdsHolder.getYandex()).thenReturn(
-                new AdTrackingInfoResult(new AdTrackingInfo(AdTrackingInfo.Provider.YANDEX, yandexAdvId, false),
-                        yandexStatus,
-                        yandexError
-                ));
+            new AdTrackingInfoResult(new AdTrackingInfo(AdTrackingInfo.Provider.YANDEX, yandexAdvId, false),
+                yandexStatus,
+                yandexError
+            ));
         ClientIdentifiersHolder clientIdentifiersHolder = new ClientIdentifiersHolder(startupState, advertisingIdsHolder, clientClids);
         ObjectPropertyAssertions<ClientIdentifiersHolder> assertions = ObjectPropertyAssertions(clientIdentifiersHolder)
             .withPrivateFields(true)
@@ -222,7 +223,8 @@ public class ClientIdentifiersHolderTest extends CommonTest {
                             try {
                                 JSONAssert.assertEquals(JsonHelper.customSdkHostsToString(customSdkHosts), s, true);
                                 return true;
-                            } catch (Throwable ignored) {}
+                            } catch (Throwable ignored) {
+                            }
                             return false;
                         }
                     });
@@ -235,7 +237,7 @@ public class ClientIdentifiersHolderTest extends CommonTest {
         });
         assertions.checkField("mServerTimeOffset", "getServerTimeOffset", mServerTimeOffset);
         assertions.checkField("nextStartupTime", "getNextStartupTime", obtainTime + updateInterval);
-        assertions.<FeaturesInternal>checkFieldRecursively("features", new Consumer<ObjectPropertyAssertions<FeaturesInternal>>() {
+        assertions.checkFieldRecursively("features", new Consumer<ObjectPropertyAssertions<FeaturesInternal>>() {
             @Override
             public void accept(ObjectPropertyAssertions<FeaturesInternal> innerAssertions) {
                 try {
@@ -292,7 +294,8 @@ public class ClientIdentifiersHolderTest extends CommonTest {
                             try {
                                 JSONAssert.assertEquals(JsonHelper.customSdkHostsToString(customSdkHosts), s, true);
                                 return true;
-                            } catch (Throwable ignored) {}
+                            } catch (Throwable ignored) {
+                            }
                             return false;
                         }
                     });

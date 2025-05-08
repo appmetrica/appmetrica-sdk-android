@@ -2,8 +2,8 @@ package io.appmetrica.analytics.impl;
 
 import android.util.Pair;
 import io.appmetrica.analytics.impl.utils.MeasuredJsonMap;
-import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.impl.utils.limitation.SimpleMapLimitation;
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.testutils.CommonTest;
 import org.assertj.core.api.SoftAssertions;
 import org.json.JSONObject;
@@ -63,16 +63,16 @@ public class AppEnvironmentTest extends CommonTest {
     public void testGetLastRevision() throws Exception {
         AppEnvironment environment = new AppEnvironment("", 0, mSimpleMapLimitation);
         when(mSimpleMapLimitation.tryToAddValue(any(MeasuredJsonMap.class), anyString(), anyString()))
-                .then(new Answer<Boolean>() {
-                    @Override
-                    public Boolean answer(InvocationOnMock invocation) throws Throwable {
-                        MeasuredJsonMap map = invocation.getArgument(0);
-                        String key = invocation.getArgument(1);
-                        String value = invocation.getArgument(2);
-                        map.put(key, value);
-                        return true;
-                    }
-                });
+            .then(new Answer<Boolean>() {
+                @Override
+                public Boolean answer(InvocationOnMock invocation) throws Throwable {
+                    MeasuredJsonMap map = invocation.getArgument(0);
+                    String key = invocation.getArgument(1);
+                    String value = invocation.getArgument(2);
+                    map.put(key, value);
+                    return true;
+                }
+            });
         String firstKey = "first key";
         String firstValue = "first value";
         String secondKey = "key1@#$%^&*<>~:";
@@ -83,9 +83,9 @@ public class AppEnvironmentTest extends CommonTest {
         assertThat(environmentRevision.revisionNumber).isEqualTo(1L);
         JSONObject expectedJson = new JSONObject().put(firstKey, firstValue).put(secondKey, secondValue);
         JSONAssert.assertEquals(
-                expectedJson,
-                new JSONObject(environmentRevision.value),
-                true
+            expectedJson,
+            new JSONObject(environmentRevision.value),
+            true
         );
     }
 
@@ -140,9 +140,9 @@ public class AppEnvironmentTest extends CommonTest {
 
         SoftAssertions assertions = new SoftAssertions();
         assertions.assertThat(environment.toString())
-                .contains("Map size 1.")
-                .contains("Is changed false.")
-                .contains("Current revision 10");
+            .contains("Map size 1.")
+            .contains("Is changed false.")
+            .contains("Current revision 10");
         assertions.assertAll();
     }
 }

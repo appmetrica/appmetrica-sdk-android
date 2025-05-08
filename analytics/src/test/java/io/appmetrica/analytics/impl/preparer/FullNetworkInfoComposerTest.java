@@ -18,7 +18,7 @@ import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAsse
 public class FullNetworkInfoComposerTest extends CommonTest {
 
     @Rule
-    public final GlobalServiceLocatorRule rule  = new GlobalServiceLocatorRule();
+    public final GlobalServiceLocatorRule rule = new GlobalServiceLocatorRule();
 
     private FullNetworkInfoComposer composer;
 
@@ -29,18 +29,18 @@ public class FullNetworkInfoComposerTest extends CommonTest {
 
     @Test
     public void buildNetworkInfoFilled() throws Exception {
-        final Random random = new Random() ;
+        final Random random = new Random();
 
         final int connectionType = 4769;
         final String cellularConnectionType = "some type";
 
         EventProto.ReportMessage.Session.Event.NetworkInfo proto = composer.getNetworkInfo(
-                connectionType,
-                cellularConnectionType
+            connectionType,
+            cellularConnectionType
         );
 
         ProtoObjectPropertyAssertions<EventProto.ReportMessage.Session.Event.NetworkInfo> assertions =
-                new ProtoObjectPropertyAssertions<EventProto.ReportMessage.Session.Event.NetworkInfo>(proto);
+            new ProtoObjectPropertyAssertions<EventProto.ReportMessage.Session.Event.NetworkInfo>(proto);
 
         assertions.checkField("connectionType", connectionType);
         assertions.checkField("cellularNetworkType", cellularConnectionType);
@@ -53,13 +53,13 @@ public class FullNetworkInfoComposerTest extends CommonTest {
         final String cellularConnectionType = "some type";
 
         EventProto.ReportMessage.Session.Event.NetworkInfo proto = composer.getNetworkInfo(
-                connectionType,
-                cellularConnectionType
+            connectionType,
+            cellularConnectionType
         );
 
         ObjectPropertyAssertions<EventProto.ReportMessage.Session.Event.NetworkInfo> assertions =
-                ObjectPropertyAssertions(proto)
-                        .withFinalFieldOnly(false);
+            ObjectPropertyAssertions(proto)
+                .withFinalFieldOnly(false);
 
         assertions.checkField("connectionType", connectionType);
         assertions.checkField("cellularNetworkType", cellularConnectionType);
@@ -71,11 +71,11 @@ public class FullNetworkInfoComposerTest extends CommonTest {
     @Test
     public void buildNetworkInfoNullables() throws Exception {
         EventProto.ReportMessage.Session.Event.NetworkInfo proto = composer
-                .getNetworkInfo(null, null);
+            .getNetworkInfo(null, null);
 
         ObjectPropertyAssertions<EventProto.ReportMessage.Session.Event.NetworkInfo> assertions =
-                ObjectPropertyAssertions(proto)
-                        .withFinalFieldOnly(false);
+            ObjectPropertyAssertions(proto)
+                .withFinalFieldOnly(false);
 
         assertions.checkField("connectionType", EventProto.ReportMessage.Session.CONNECTION_UNDEFINED);
         assertions.checkField("cellularNetworkType", "");

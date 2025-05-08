@@ -56,9 +56,9 @@ public class PreloadInfoDataConverterTest extends CommonTest {
         proto.candidates[1] = secondProtoCandidate;
 
         ObjectPropertyAssertions(converter.toModel(proto))
-                .checkField("chosenPreloadInfo", modelState)
-                .checkField("candidates", Arrays.asList(firstModelCandidate, secondModelCandidate), true)
-                .checkAll();
+            .checkField("chosenPreloadInfo", modelState)
+            .checkField("candidates", Arrays.asList(firstModelCandidate, secondModelCandidate), true)
+            .checkAll();
     }
 
     @Test
@@ -66,11 +66,11 @@ public class PreloadInfoDataConverterTest extends CommonTest {
         when(stateConverter.toModel(any(PreloadInfoProto.PreloadInfoData.PreloadInfo.class))).thenReturn(modelState);
         PreloadInfoProto.PreloadInfoData proto = new PreloadInfoProto.PreloadInfoData();
         ObjectPropertyAssertions(converter.toModel(proto))
-                .checkField("chosenPreloadInfo", modelState)
-                .checkField("candidates", new ArrayList<PreloadInfoData.Candidate>())
-                .checkAll();
+            .checkField("chosenPreloadInfo", modelState)
+            .checkField("candidates", new ArrayList<PreloadInfoData.Candidate>())
+            .checkAll();
         ArgumentCaptor<PreloadInfoProto.PreloadInfoData.PreloadInfo> captor = ArgumentCaptor
-                .forClass(PreloadInfoProto.PreloadInfoData.PreloadInfo.class);
+            .forClass(PreloadInfoProto.PreloadInfoData.PreloadInfo.class);
         verify(stateConverter).toModel(captor.capture());
         assertThat(captor.getValue()).usingRecursiveComparison().isEqualTo(new PreloadInfoProto.PreloadInfoData.PreloadInfo());
     }
@@ -84,8 +84,8 @@ public class PreloadInfoDataConverterTest extends CommonTest {
         PreloadInfoProto.PreloadInfoData proto = converter.fromModel(model);
 
         new ProtoObjectPropertyAssertions<PreloadInfoProto.PreloadInfoData>(proto)
-                .checkField("chosenPreloadInfo", protoState)
-                .checkField("candidates", new PreloadInfoProto.PreloadInfoData.PreloadInfoCandidate[] { firstProtoCandidate, secondProtoCandidate })
-                .checkAll();
+            .checkField("chosenPreloadInfo", protoState)
+            .checkField("candidates", new PreloadInfoProto.PreloadInfoData.PreloadInfoCandidate[]{firstProtoCandidate, secondProtoCandidate})
+            .checkAll();
     }
 }

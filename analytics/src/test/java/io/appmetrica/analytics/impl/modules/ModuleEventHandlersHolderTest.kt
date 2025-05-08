@@ -49,9 +49,11 @@ class ModuleEventHandlersHolderTest : CommonTest() {
     fun `handlers after register some handlers`() {
         holder.register(firstIdentifier, firstHandlerFactory)
         holder.register(secondIdentifier, secondHandlerFactory)
-        assertThat(holder.getHandlers(apiKey)).containsExactlyEntriesOf(mapOf(
-            firstIdentifier to firstHandler,
-            secondIdentifier to secondHandler
-        ))
+        assertThat(holder.getHandlers(apiKey)).containsExactlyEntriesOf(
+            mapOf(
+                firstIdentifier to firstHandler,
+                secondIdentifier to secondHandler
+            )
+        )
     }
 }

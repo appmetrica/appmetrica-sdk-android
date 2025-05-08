@@ -13,7 +13,7 @@ import static org.mockito.Mockito.mock;
 @RunWith(RobolectricTestRunner.class)
 public class ActivationValidatorTest extends CommonTest {
 
-    private AppMetricaFacadeProvider mProvider = mock(AppMetricaFacadeProvider.class);
+    private final AppMetricaFacadeProvider mProvider = mock(AppMetricaFacadeProvider.class);
 
     @Test(expected = ValidationException.class)
     public void testNonActivated() {

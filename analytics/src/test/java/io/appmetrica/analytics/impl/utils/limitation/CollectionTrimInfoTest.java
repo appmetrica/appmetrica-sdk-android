@@ -16,9 +16,9 @@ public class CollectionTrimInfoTest extends CommonTest {
         int bytesTruncated = 300;
 
         ObjectPropertyAssertions(new CollectionTrimInfo(itemsDropped, bytesTruncated))
-                .checkField("itemsDropped", itemsDropped)
-                .checkField("bytesTruncated", bytesTruncated)
-                .checkAll();
+            .checkField("itemsDropped", itemsDropped)
+            .checkField("bytesTruncated", bytesTruncated)
+            .checkAll();
     }
 
 }

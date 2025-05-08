@@ -118,5 +118,4 @@ class InternalClientModuleProxyTest : CommonTest() {
             ModulesFacade.reportAdRevenue(adRevenue, true)
         }
     }
-
 }

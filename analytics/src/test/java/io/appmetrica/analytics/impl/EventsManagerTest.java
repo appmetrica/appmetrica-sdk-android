@@ -8,7 +8,6 @@ import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.RandomStringGenerator;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -488,7 +487,7 @@ public class EventsManagerTest extends CommonTest {
     @RunWith(ParameterizedRobolectricTestRunner.class)
     public static class ShouldGenerateGlobalNumberTest {
 
-        private static final List<Integer> EVENT_TYPES_WITHOUT_GLOBAL_NUMBER = Arrays.asList(
+        private static final List<Integer> EVENT_TYPES_WITHOUT_GLOBAL_NUMBER = Collections.singletonList(
             InternalEvents.EVENT_TYPE_PREV_SESSION_NATIVE_CRASH_PROTOBUF.getTypeId()
         );
 
@@ -496,7 +495,7 @@ public class EventsManagerTest extends CommonTest {
         public static Collection<Object[]> data() {
             List<Object[]> data = new ArrayList<Object[]>();
             for (InternalEvents internalEvent : InternalEvents.values()) {
-                data.add(new Object[]{internalEvent.getTypeId(), EVENT_TYPES_WITHOUT_GLOBAL_NUMBER.contains(internalEvent.getTypeId()) == false});
+                data.add(new Object[]{internalEvent.getTypeId(), !EVENT_TYPES_WITHOUT_GLOBAL_NUMBER.contains(internalEvent.getTypeId())});
             }
             return data;
         }

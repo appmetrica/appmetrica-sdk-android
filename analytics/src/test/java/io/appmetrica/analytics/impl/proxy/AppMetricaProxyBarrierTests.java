@@ -49,9 +49,9 @@ public class AppMetricaProxyBarrierTests extends BaseAppMetricaProxyBarrierTests
     @ParameterizedRobolectricTestRunner.Parameters(name = "Test if {0} is called")
     public static Collection<Object[]> data() {
         return data(
-                methodsNotToCheck,
-                methodsWithNoArguments,
-                AppMetricaProxy.class
+            methodsNotToCheck,
+            methodsWithNoArguments,
+            AppMetricaProxy.class
         );
     }
 
@@ -63,14 +63,14 @@ public class AppMetricaProxyBarrierTests extends BaseAppMetricaProxyBarrierTests
         when(ClientServiceLocator.getInstance().getClientExecutorProvider().getDefaultExecutor())
             .thenReturn(new StubbedBlockingExecutor());
         mProxy = new AppMetricaProxy(
-                mProvider,
-                mBarrier,
-                silentActivationValidator,
-                mock(WebViewJsInterfaceHandler.class),
-                mock(SynchronousStageExecutor.class),
-                mReporterProxyStorage,
-                mock(DefaultOneShotMetricaConfig.class),
-                mock(SessionsTrackingManager.class)
+            mProvider,
+            mBarrier,
+            silentActivationValidator,
+            mock(WebViewJsInterfaceHandler.class),
+            mock(SynchronousStageExecutor.class),
+            mReporterProxyStorage,
+            mock(DefaultOneShotMetricaConfig.class),
+            mock(SessionsTrackingManager.class)
         );
     }
 

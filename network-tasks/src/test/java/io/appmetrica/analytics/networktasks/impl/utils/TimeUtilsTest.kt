@@ -1,5 +1,6 @@
 package io.appmetrica.analytics.networktasks.impl.utils
 
+import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -7,6 +8,7 @@ import org.mockito.Mockito
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.stubbing
+import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -14,7 +16,7 @@ import java.util.GregorianCalendar
 import java.util.TimeZone
 
 @RunWith(RobolectricTestRunner::class)
-class TimeUtilsTest {
+class TimeUtilsTest : CommonTest() {
 
     private val gregorianCalendar = mock<GregorianCalendar>()
 
@@ -24,7 +26,7 @@ class TimeUtilsTest {
         val date = parser.parse("2022-06-01 01:00:00").time / 1000
         val staticCalendar = Mockito.mockStatic(Calendar::class.java)
         try {
-            Mockito.`when`(Calendar.getInstance()).thenReturn(gregorianCalendar)
+            whenever(Calendar.getInstance()).thenReturn(gregorianCalendar)
             stubbing(gregorianCalendar) {
                 on { timeZone } doReturn TimeZone.getTimeZone("PST")
             }

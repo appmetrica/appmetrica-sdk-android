@@ -2,6 +2,7 @@ package io.appmetrica.analytics.coreutils.internal.services
 
 import android.content.Context
 import android.content.pm.PackageInfo
+import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.MockedConstructionRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Rule
@@ -15,7 +16,7 @@ import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class PackageManagerUtilsTest {
+class PackageManagerUtilsTest : CommonTest() {
 
     private val testPackageName = "test.package.name"
     private val wrongTestPackageName = "wrong.test.package.name"

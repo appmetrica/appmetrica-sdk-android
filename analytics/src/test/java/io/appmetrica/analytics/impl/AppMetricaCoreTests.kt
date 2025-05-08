@@ -32,7 +32,7 @@ import java.util.UUID
 @RunWith(RobolectricTestRunner::class)
 internal class AppMetricaCoreTests : CommonTest() {
 
-    private val apiKey = UUID.randomUUID().toString();
+    private val apiKey = UUID.randomUUID().toString()
     private val context: Context = mock()
     private val handler: Handler = mock()
 

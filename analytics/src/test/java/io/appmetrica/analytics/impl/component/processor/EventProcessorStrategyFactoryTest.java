@@ -67,7 +67,7 @@ public class EventProcessorStrategyFactoryTest extends CommonTest {
 
     @Mock
     private ComponentUnit mComponent;
-    private String apiKey = UUID.randomUUID().toString();
+    private final String apiKey = UUID.randomUUID().toString();
     private EventProcessingStrategyFactory mEventProcessingStrategyFactory;
 
     private static final String PACKAGE = "com.test.package";

@@ -10,7 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(RobolectricTestRunner.class)
 public class QuantityValidatorTest extends CommonTest {
 
-    private QuantityValidator mValidator = new QuantityValidator();
+    private final QuantityValidator mValidator = new QuantityValidator();
 
     @Test
     public void testValidQuantity() {

@@ -11,8 +11,7 @@ import org.junit.Test
 
 internal class ContentProviderHelperFactoryTest : CommonTest() {
 
-    @Rule
-    @JvmField
+    @get:Rule
     val sContentProviderHelper = MockedConstructionRule(ContentProviderHelper::class.java)
 
     @Test

@@ -28,7 +28,7 @@ public class AppEnvironmentProviderTest extends CommonTest {
         AppEnvironmentProvider provider = mock(AppEnvironmentProvider.class);
         AppEnvironment appEnvironment = new AppEnvironment("{}", 0, mock(PublicLogger.class));
         when(provider.getOrCreate(any(ComponentId.class), any(PublicLogger.class), any(PreferencesComponentDbStorage.class)))
-                .thenReturn(appEnvironment);
+            .thenReturn(appEnvironment);
         return provider;
     }
 
@@ -37,8 +37,8 @@ public class AppEnvironmentProviderTest extends CommonTest {
         AppEnvironment targetEnvironment = mock(AppEnvironment.class);
 
         final MainReporterComponentId targetComponentIdMock = new MainReporterComponentId(
-                TestsData.generatePackage(),
-                TestsData.generateApiKey()
+            TestsData.generatePackage(),
+            TestsData.generateApiKey()
         );
 
         ArgumentMatcher<ComponentId> targetComponentIdMatcher = new ArgumentMatcher<ComponentId>() {
@@ -61,13 +61,13 @@ public class AppEnvironmentProviderTest extends CommonTest {
             ComponentId componentId;
             if (random.nextBoolean()) {
                 componentId = new MainReporterComponentId(
-                        TestsData.generatePackage(),
-                        TestsData.generateApiKey()
+                    TestsData.generatePackage(),
+                    TestsData.generateApiKey()
                 );
             } else {
                 componentId = new ComponentId(
-                        TestsData.generatePackage(),
-                        TestsData.generateApiKey()
+                    TestsData.generatePackage(),
+                    TestsData.generateApiKey()
                 );
             }
             assertThat(provider.getOrCreate(componentId, mock(PublicLogger.class), preferences)).isNotEqualTo(targetEnvironment);

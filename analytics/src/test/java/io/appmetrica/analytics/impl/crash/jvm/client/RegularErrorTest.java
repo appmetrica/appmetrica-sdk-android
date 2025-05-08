@@ -1,8 +1,6 @@
 package io.appmetrica.analytics.impl.crash.jvm.client;
 
 import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
-import io.appmetrica.analytics.impl.crash.jvm.client.RegularError;
-import io.appmetrica.analytics.impl.crash.jvm.client.UnhandledException;
 import io.appmetrica.analytics.testutils.CommonTest;
 import java.lang.reflect.InvocationTargetException;
 import org.junit.Test;

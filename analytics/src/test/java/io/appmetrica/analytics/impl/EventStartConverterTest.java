@@ -13,7 +13,7 @@ import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAsse
 @RunWith(RobolectricTestRunner.class)
 public class EventStartConverterTest extends CommonTest {
 
-    private EventStartConverter mEventStartConverter = new EventStartConverter();
+    private final EventStartConverter mEventStartConverter = new EventStartConverter();
 
     @Test
     public void testToProto() {

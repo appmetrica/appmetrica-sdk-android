@@ -27,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 abstract class TablesMigrationTest extends CommonTest {
 
     @Rule
-    public LogRule logRule =  new LogRule();
+    public LogRule logRule = new LogRule();
 
     final DatabaseRevision mStartUpgradeFromRevision;
     protected final DatabaseManagerProvider mDatabaseManagerProvider;
@@ -90,7 +90,7 @@ abstract class TablesMigrationTest extends CommonTest {
 
     SQLiteDatabase getOldDb() {
         OldRevisionDatabaseHelper oldRevisionDatabaseHelper =
-                new OldRevisionDatabaseHelper(RuntimeEnvironment.getApplication(), mStartUpgradeFromRevision);
+            new OldRevisionDatabaseHelper(RuntimeEnvironment.getApplication(), mStartUpgradeFromRevision);
         oldRevisionDatabaseHelper.close();
         helpers.add(oldRevisionDatabaseHelper);
         SQLiteDatabase database = oldRevisionDatabaseHelper.getWritableDatabase();
@@ -100,7 +100,7 @@ abstract class TablesMigrationTest extends CommonTest {
 
     SQLiteDatabase getUpgradedDb() {
         UpgradeDatabaseHelper newHelper = new UpgradeDatabaseHelper(
-                RuntimeEnvironment.getApplication(), getTablesManager(), AppMetrica.getLibraryApiLevel());
+            RuntimeEnvironment.getApplication(), getTablesManager(), AppMetrica.getLibraryApiLevel());
         helpers.add(newHelper);
         SQLiteDatabase newDatabase = newHelper.getWritableDatabase();
         closeables.add(newDatabase);
@@ -109,14 +109,14 @@ abstract class TablesMigrationTest extends CommonTest {
 
     SQLiteDatabase getUpgradedDbWithStubDbValidator() {
         TablesManager tablesManager =
-                new TablesManager.Creator().createTablesManager(getDbTag(), getCreateDbScript(),
-                        getDropDbScript(), getUpgradeScripts(), new TablesValidator() {
+            new TablesManager.Creator().createTablesManager(getDbTag(), getCreateDbScript(),
+                getDropDbScript(), getUpgradeScripts(), new TablesValidator() {
                     public boolean isDbSchemeValid(SQLiteDatabase database) {
                         return true;
                     }
                 });
         UpgradeDatabaseHelper newHelper = new UpgradeDatabaseHelper(RuntimeEnvironment.getApplication(),
-                tablesManager, AppMetrica.getLibraryApiLevel());
+            tablesManager, AppMetrica.getLibraryApiLevel());
         helpers.add(newHelper);
         SQLiteDatabase newDatabase = newHelper.getWritableDatabase();
         closeables.add(newDatabase);

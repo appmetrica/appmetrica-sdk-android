@@ -128,7 +128,7 @@ class EventFromDbModelTest : CommonTest() {
     }
 
     @Test
-    fun testUpdateValue() {
+    fun updateValue() {
         val value = "new value"
         val event = EventFromDbModel(contentValues)
         event.updateValue(value)

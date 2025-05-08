@@ -23,6 +23,7 @@ class BaseExternalAttributionTest : CommonTest() {
 
     @get:Rule
     val messageNanoRule = MockedStaticRule(MessageNano::class.java)
+
     @get:Rule
     val attributionTypeConverterRule = MockedStaticRule(ExternalAttributionTypeConverter::class.java)
 

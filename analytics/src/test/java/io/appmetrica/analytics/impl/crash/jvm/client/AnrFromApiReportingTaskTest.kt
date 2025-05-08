@@ -28,6 +28,7 @@ class AnrFromApiReportingTaskTest : CommonTest() {
     private val mainLooper: Looper = mock {
         on { thread } doReturn mainThread
     }
+
     @get:Rule
     val looperMockedStaticRule = staticRule<Looper> {
         on { Looper.getMainLooper() } doReturn mainLooper

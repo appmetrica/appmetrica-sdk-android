@@ -52,7 +52,7 @@ public class EventEncrypterProviderTests extends CommonTest {
             mAesEncrypter = new AESEventEncrypter();
 
             mEventEncrypterProvider = new EventEncrypterProvider(mDummyEventEncrypter,
-                    mAesRsaWithDecryptionOnBackendEncrypter, mAesEncrypter);
+                mAesRsaWithDecryptionOnBackendEncrypter, mAesEncrypter);
         }
 
         @After
@@ -64,9 +64,9 @@ public class EventEncrypterProviderTests extends CommonTest {
     @RunWith(ParameterizedRobolectricTestRunner.class)
     public static class GetEventEncrypterByEncryptionModeTests extends BaseEventEncrypterProviderTests {
 
-        private Integer mEventEncryptionModeId;
-        private String mEventEncrypterClassName;
-        private Integer mExpectedEventEncryptionModeId;
+        private final Integer mEventEncryptionModeId;
+        private final String mEventEncrypterClassName;
+        private final Integer mExpectedEventEncryptionModeId;
 
         private EventEncryptionMode mEventEncryptionMode;
         private EventEncryptionMode mExpectedEventEncryptionMode;
@@ -75,21 +75,21 @@ public class EventEncrypterProviderTests extends CommonTest {
         public static Collection<Object[]> data() {
 
             return Arrays.asList(new Object[][]{
-                    {EventEncryptionMode.NONE.getModeId(),
-                            DummyEventEncrypter.class.getName(),
-                            EventEncryptionMode.NONE.getModeId(),
-                            EventEncryptionMode.NONE.name()},
+                {EventEncryptionMode.NONE.getModeId(),
+                    DummyEventEncrypter.class.getName(),
+                    EventEncryptionMode.NONE.getModeId(),
+                    EventEncryptionMode.NONE.name()},
 
-                    {EventEncryptionMode.EXTERNALLY_ENCRYPTED_EVENT_CRYPTER.getModeId(),
-                            ExternallyEncryptedEventCrypter.class.getName(),
-                            EventEncryptionMode.EXTERNALLY_ENCRYPTED_EVENT_CRYPTER.getModeId(),
-                            EventEncryptionMode.EXTERNALLY_ENCRYPTED_EVENT_CRYPTER.name()},
-                    {EventEncryptionMode.AES_VALUE_ENCRYPTION.getModeId(),
-                            AESEventEncrypter.class.getName(),
-                            EventEncryptionMode.AES_VALUE_ENCRYPTION.getModeId(),
-                            EventEncryptionMode.AES_VALUE_ENCRYPTION.name()},
+                {EventEncryptionMode.EXTERNALLY_ENCRYPTED_EVENT_CRYPTER.getModeId(),
+                    ExternallyEncryptedEventCrypter.class.getName(),
+                    EventEncryptionMode.EXTERNALLY_ENCRYPTED_EVENT_CRYPTER.getModeId(),
+                    EventEncryptionMode.EXTERNALLY_ENCRYPTED_EVENT_CRYPTER.name()},
+                {EventEncryptionMode.AES_VALUE_ENCRYPTION.getModeId(),
+                    AESEventEncrypter.class.getName(),
+                    EventEncryptionMode.AES_VALUE_ENCRYPTION.getModeId(),
+                    EventEncryptionMode.AES_VALUE_ENCRYPTION.name()},
 
-                    {null, DummyEventEncrypter.class.getName(), EventEncryptionMode.NONE.getModeId(), "null"}
+                {null, DummyEventEncrypter.class.getName(), EventEncryptionMode.NONE.getModeId(), "null"}
             });
         }
 
@@ -106,42 +106,42 @@ public class EventEncrypterProviderTests extends CommonTest {
         public void setUp() throws Exception {
             super.setUp();
             mEventEncryptionMode = mEventEncryptionModeId == null ? null :
-                    EventEncryptionMode.valueOf(mEventEncryptionModeId);
+                EventEncryptionMode.valueOf(mEventEncryptionModeId);
             mExpectedEventEncryptionMode = mExpectedEventEncryptionModeId == null ? null :
-                    EventEncryptionMode.valueOf(mExpectedEventEncryptionModeId);
+                EventEncryptionMode.valueOf(mExpectedEventEncryptionModeId);
         }
 
         @Test
         public void testReturnExpectedEncrypter() {
             assertThat(mEventEncrypterProvider.getEventEncrypter(mEventEncryptionMode).getClass().getName())
-                    .isEqualTo(mEventEncrypterClassName);
+                .isEqualTo(mEventEncrypterClassName);
         }
 
         @Test
         public void testReturnEncrypterWithExpectedMode() {
             assertThat(mEventEncrypterProvider.getEventEncrypter(mEventEncryptionMode).getEncryptionMode())
-                    .isEqualTo(mExpectedEventEncryptionMode);
+                .isEqualTo(mExpectedEventEncryptionMode);
         }
     }
 
     @RunWith(ParameterizedRobolectricTestRunner.class)
     public static class GetEventEncrypterByEventTypeTests extends BaseEventEncrypterProviderTests {
 
-        private int mEventTypeId;
-        private String mEventEncrypterClassName;
+        private final int mEventTypeId;
+        private final String mEventEncrypterClassName;
 
         @ParameterizedRobolectricTestRunner.Parameters(name = "Return {1} for eventType = {2}")
         public static Collection<Object[]> data() {
             Map<InternalEvents, String> eventTypeToEncrypterMapping =
-                    new HashMap<InternalEvents, String>();
+                new HashMap<InternalEvents, String>();
 
             Collection<Object[]> data = new ArrayList<Object[]>();
             for (InternalEvents eventType : InternalEvents.values()) {
                 String encrypterClassName = eventTypeToEncrypterMapping.get(eventType);
                 data.add(new Object[]{
-                        eventType.getTypeId(),
-                        encrypterClassName == null ? DummyEventEncrypter.class.getName() : encrypterClassName,
-                        eventType.name()
+                    eventType.getTypeId(),
+                    encrypterClassName == null ? DummyEventEncrypter.class.getName() : encrypterClassName,
+                    eventType.name()
                 });
             }
             return data;
@@ -158,7 +158,7 @@ public class EventEncrypterProviderTests extends CommonTest {
             CounterReport counterReport = new CounterReport();
             counterReport.setType(mEventTypeId);
             assertThat(mEventEncrypterProvider.getEventEncrypter(counterReport).getClass().getName())
-                    .isEqualTo(mEventEncrypterClassName);
+                .isEqualTo(mEventEncrypterClassName);
         }
     }
 }

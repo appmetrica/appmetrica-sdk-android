@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.networktasks.internal
 
 import android.net.Uri
+import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Assert.assertThrows
 import org.junit.Test
@@ -15,7 +16,7 @@ import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class FullUrlFormerTest {
+class FullUrlFormerTest : CommonTest() {
 
     private val paramsAppender = mock<IParamsAppender<Any>>()
     private val configProvider = mock<ConfigProvider<Any>>()

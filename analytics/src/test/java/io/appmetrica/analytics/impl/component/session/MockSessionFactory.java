@@ -19,8 +19,8 @@ import static org.mockito.Mockito.mock;
 public class MockSessionFactory implements ISessionFactory<SessionArguments> {
 
     private static final AtomicLong mSessionId = new AtomicLong(0);
-    private Map<Long, AtomicLong> mNextReportIdMap = new HashMap<Long, AtomicLong>();
-    private Map<Long, Boolean> aliveNeededMap = new HashMap<Long, Boolean>();
+    private final Map<Long, AtomicLong> mNextReportIdMap = new HashMap<Long, AtomicLong>();
+    private final Map<Long, Boolean> aliveNeededMap = new HashMap<Long, Boolean>();
 
     private final SessionType mType;
 
@@ -43,7 +43,7 @@ public class MockSessionFactory implements ISessionFactory<SessionArguments> {
         doReturn(mType).when(newSession).getType();
         doReturn(isValid).when(newSession).isValid(anyLong());
         final long sessionId = creationTimestamp == 0 ? mSessionId.incrementAndGet() :
-                TimeUnit.MILLISECONDS.toSeconds(creationTimestamp);
+            TimeUnit.MILLISECONDS.toSeconds(creationTimestamp);
         doReturn(sessionId).when(newSession).getId();
         doReturn(true).when(newSession).isAliveNeeded();
         mNextReportIdMap.put(sessionId, new AtomicLong(0));
@@ -75,7 +75,7 @@ public class MockSessionFactory implements ISessionFactory<SessionArguments> {
         doAnswer(new Answer() {
             @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {
-                return aliveNeededMap.put(sessionId, (Boolean) invocation.getArgument(0));
+                return aliveNeededMap.put(sessionId, invocation.getArgument(0));
             }
         }).when(newSession).updateAliveReportNeeded(anyBoolean());
 

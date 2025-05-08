@@ -13,8 +13,10 @@ class ApiCaptorConfigJsonParserTest : CommonTest() {
     @Test
     fun parseIfEnabled() {
         val rawData = JSONObject()
-            .put("api_captor_config", JSONObject()
-                .put("enabled", true)
+            .put(
+                "api_captor_config",
+                JSONObject()
+                    .put("enabled", true)
             )
         ProtoObjectPropertyAssertions(parser.parse(rawData))
             .checkField("enabled", true)
@@ -24,8 +26,10 @@ class ApiCaptorConfigJsonParserTest : CommonTest() {
     @Test
     fun parseIfDisabled() {
         val rawData = JSONObject()
-            .put("api_captor_config", JSONObject()
-                .put("enabled", false)
+            .put(
+                "api_captor_config",
+                JSONObject()
+                    .put("enabled", false)
             )
         ProtoObjectPropertyAssertions(parser.parse(rawData))
             .checkField("enabled", false)

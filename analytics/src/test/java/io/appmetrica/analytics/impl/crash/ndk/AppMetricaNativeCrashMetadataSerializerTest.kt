@@ -15,6 +15,7 @@ private typealias AppMetricaNativeCrashMetadataProperty<T> = KProperty1<AppMetri
 
 @RunWith(RobolectricTestRunner::class)
 class AppMetricaNativeCrashMetadataSerializerTest : CommonTest() {
+
     companion object {
         private const val DEFAULT_API_KEY = "apiKey"
         private const val DEFAULT_PACKAGE_NAME = "packageName"
@@ -107,8 +108,12 @@ class AppMetricaNativeCrashMetadataSerializerTest : CommonTest() {
                 entry(AppMetricaNativeCrashMetadata::apiKey, null),
                 entry(AppMetricaNativeCrashMetadata::packageName, null),
                 entry(AppMetricaNativeCrashMetadata::reporterType, null),
-                entry(AppMetricaNativeCrashMetadata::reporterType, "broken reporter type",
-                    broken = false, actualValue = CounterConfigurationReporterType.MAIN),
+                entry(
+                    AppMetricaNativeCrashMetadata::reporterType,
+                    "broken reporter type",
+                    broken = false,
+                    actualValue = CounterConfigurationReporterType.MAIN
+                ),
                 entry(AppMetricaNativeCrashMetadata::processID, null),
                 entry(AppMetricaNativeCrashMetadata::processID, "some string"),
                 entry(AppMetricaNativeCrashMetadata::processID, false),

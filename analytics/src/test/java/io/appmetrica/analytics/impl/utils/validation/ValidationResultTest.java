@@ -19,7 +19,7 @@ public class ValidationResultTest extends CommonTest {
         softAssertion.assertThat(result.isValid()).as("result").isTrue();
         softAssertion.assertThat(result.getDescription()).as("description").isEmpty();
         softAssertion.assertThat(result.getValidatorClass()).as("validatorClass")
-                .isSameAs(validator.getClass());
+            .isSameAs(validator.getClass());
         softAssertion.assertAll();
     }
 
@@ -31,7 +31,7 @@ public class ValidationResultTest extends CommonTest {
         softAssertion.assertThat(result.isValid()).as("result").isFalse();
         softAssertion.assertThat(result.getDescription()).as("description").isEqualTo("error");
         softAssertion.assertThat(result.getValidatorClass()).as("validatorClass")
-                .isSameAs(validator.getClass());
+            .isSameAs(validator.getClass());
         softAssertion.assertAll();
     }
 

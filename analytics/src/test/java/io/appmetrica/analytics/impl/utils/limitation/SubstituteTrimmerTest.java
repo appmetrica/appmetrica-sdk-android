@@ -27,13 +27,13 @@ public class SubstituteTrimmerTest extends CommonTest {
     public void testTrimmed() {
         Object substitute = new Object();
         assertThat(new SubstituteTrimmer<Object>(
-                new Trimmer<Object>() {
-                    @Nullable
-                    @Override
-                    public Object trim(@Nullable Object data) {
-                        return new Object();
-                    }
-                }, substitute
+            new Trimmer<Object>() {
+                @Nullable
+                @Override
+                public Object trim(@Nullable Object data) {
+                    return new Object();
+                }
+            }, substitute
         ).trim(new Object())).isSameAs(substitute);
     }
 

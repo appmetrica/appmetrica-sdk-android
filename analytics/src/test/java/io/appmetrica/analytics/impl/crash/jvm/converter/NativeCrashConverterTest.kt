@@ -1,7 +1,6 @@
 package io.appmetrica.analytics.impl.crash.jvm.converter
 
 import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
-import io.appmetrica.analytics.impl.crash.jvm.converter.NativeCrashConverter
 import io.appmetrica.analytics.impl.crash.ndk.NativeCrashHandlerDescription
 import io.appmetrica.analytics.impl.crash.ndk.NativeCrashModel
 import io.appmetrica.analytics.impl.protobuf.backend.CrashAndroid
@@ -58,7 +57,7 @@ class NativeCrashConverterTest : CommonTest() {
             )
         )
 
-        //check for nulls
+        // check for nulls
         MessageNano.toByteArray(crash)
         ObjectPropertyAssertions(crash)
             .withFinalFieldOnly(false)

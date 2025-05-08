@@ -1,12 +1,13 @@
 package io.appmetrica.analytics
 
+import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.SoftAssertions
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class StartupParamsCallbackResultTest {
+class StartupParamsCallbackResultTest : CommonTest() {
 
     @Test
     fun allFieldsAreNullIfEmptyParameters() {
@@ -21,12 +22,30 @@ class StartupParamsCallbackResultTest {
 
     @Test
     fun allFieldsAreNotNullIfFilledParameters() {
-        val result = StartupParamsCallback.Result(mapOf(
-            StartupParamsCallback.APPMETRICA_UUID to StartupParamsItem("some_uuid", StartupParamsItemStatus.OK, null),
-            StartupParamsCallback.APPMETRICA_DEVICE_ID to StartupParamsItem("some_deviceId", StartupParamsItemStatus.OK, null),
-            StartupParamsCallback.APPMETRICA_DEVICE_ID_HASH to StartupParamsItem("some_deviceIdHash", StartupParamsItemStatus.OK, null),
-            "some_startup_key" to StartupParamsItem("some_startupValue", StartupParamsItemStatus.OK, null),
-        ))
+        val result = StartupParamsCallback.Result(
+            mapOf(
+                StartupParamsCallback.APPMETRICA_UUID to StartupParamsItem(
+                    "some_uuid",
+                    StartupParamsItemStatus.OK,
+                    null
+                ),
+                StartupParamsCallback.APPMETRICA_DEVICE_ID to StartupParamsItem(
+                    "some_deviceId",
+                    StartupParamsItemStatus.OK,
+                    null
+                ),
+                StartupParamsCallback.APPMETRICA_DEVICE_ID_HASH to StartupParamsItem(
+                    "some_deviceIdHash",
+                    StartupParamsItemStatus.OK,
+                    null
+                ),
+                "some_startup_key" to StartupParamsItem(
+                    "some_startupValue",
+                    StartupParamsItemStatus.OK,
+                    null
+                ),
+            )
+        )
         SoftAssertions().apply {
             assertThat(result.uuid).isEqualTo("some_uuid")
             assertThat(result.deviceId).isEqualTo("some_deviceId")

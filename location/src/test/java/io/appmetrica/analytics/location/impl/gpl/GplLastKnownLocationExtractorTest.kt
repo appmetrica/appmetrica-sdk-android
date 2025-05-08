@@ -5,6 +5,7 @@ import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor
 import io.appmetrica.analytics.coreapi.internal.permission.PermissionResolutionStrategy
 import io.appmetrica.analytics.gpllibrary.internal.IGplLibraryWrapper
 import io.appmetrica.analytics.location.impl.LocationListenerWrapper
+import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.MockedConstructionRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
@@ -17,7 +18,7 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
 
-internal class GplLastKnownLocationExtractorTest {
+internal class GplLastKnownLocationExtractorTest : CommonTest() {
 
     @get:Rule
     val gplWrapperFactoryMockedRule = MockedConstructionRule(GplWrapperFactory::class.java) { mock, mockedContext ->

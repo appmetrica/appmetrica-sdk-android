@@ -44,7 +44,6 @@ class MultiProcessSafeUuidProviderTest : CommonTest() {
         on { get(context) } doReturn uuidFromOuterSource
     }
 
-
     private val lock: ExclusiveMultiProcessFileLock = mock()
 
     private val persistentUuidHolder: PersistentUuidHolder = mock {

@@ -50,7 +50,8 @@ internal class ComponentMigrationToV113Test : CommonTest() {
         assertThat(sessionStorageImplMockedConstructionRule.argumentInterceptor.flatArguments())
             .containsExactly(
                 componentPreferences, BackgroundSessionFactory.SESSION_TAG,
-                componentPreferences, ForegroundSessionFactory.SESSION_TAG)
+                componentPreferences, ForegroundSessionFactory.SESSION_TAG
+            )
     }
 
     @Test

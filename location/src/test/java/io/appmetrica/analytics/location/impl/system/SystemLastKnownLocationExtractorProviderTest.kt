@@ -5,6 +5,7 @@ import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor
 import io.appmetrica.analytics.coreapi.internal.permission.PermissionResolutionStrategy
 import io.appmetrica.analytics.coreapi.internal.system.PermissionExtractor
 import io.appmetrica.analytics.location.impl.LocationListenerWrapper
+import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.MockedConstructionRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
@@ -13,7 +14,7 @@ import org.junit.Test
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 
-internal class SystemLastKnownLocationExtractorProviderTest {
+internal class SystemLastKnownLocationExtractorProviderTest : CommonTest() {
 
     private val context = mock<Context>()
     private val executor = mock<IHandlerExecutor>()

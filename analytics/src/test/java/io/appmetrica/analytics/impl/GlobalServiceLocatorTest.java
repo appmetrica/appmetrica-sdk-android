@@ -187,7 +187,7 @@ public class GlobalServiceLocatorTest extends CommonTest {
         when(preloadInfoStorageFactory.create(mContext)).thenReturn(preloadInfoStorage);
         when(preloadInfoStorage.read())
             .thenReturn(
-                new PreloadInfoData(mock(PreloadInfoState.class), Collections.<PreloadInfoData.Candidate>emptyList())
+                new PreloadInfoData(mock(PreloadInfoState.class), Collections.emptyList())
             );
     }
 

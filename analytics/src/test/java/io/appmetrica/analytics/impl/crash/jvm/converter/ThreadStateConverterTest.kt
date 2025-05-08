@@ -5,36 +5,31 @@ import io.appmetrica.analytics.coreutils.internal.collection.CollectionUtils
 import io.appmetrica.analytics.impl.Utils
 import io.appmetrica.analytics.impl.crash.jvm.client.StackTraceItemInternal
 import io.appmetrica.analytics.impl.crash.jvm.client.ThreadState
-import io.appmetrica.analytics.impl.crash.jvm.converter.StackTraceConverter
-import io.appmetrica.analytics.impl.crash.jvm.converter.ThreadStateConverter
 import io.appmetrica.analytics.impl.protobuf.backend.CrashAndroid
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.MockedStaticRule
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.Mock
-import org.mockito.Mockito.`when`
-import org.mockito.MockitoAnnotations
 import org.mockito.kotlin.any
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.whenever
 
 class ThreadStateConverterTest : CommonTest() {
 
-    @Mock
-    private lateinit var stackTraceConverter: StackTraceConverter
-    @Rule
-    @JvmField
+    private val stackTraceConverter: StackTraceConverter = mock()
+
+    @get:Rule
     val sUtils = MockedStaticRule(Utils::class.java)
-    @Rule
-    @JvmField
+
+    @get:Rule
     val sCollectionUtils = MockedStaticRule(CollectionUtils::class.java)
+
     private lateinit var converter: ThreadStateConverter
 
     @Before
     fun setUp() {
-        MockitoAnnotations.openMocks(this)
-        `when`(CollectionUtils.unmodifiableListCopy(any<List<StackTraceItemInternal>>())).thenCallRealMethod()
+        whenever(CollectionUtils.unmodifiableListCopy(any<List<StackTraceItemInternal>>())).thenCallRealMethod()
         converter = ThreadStateConverter(stackTraceConverter)
     }
 
@@ -49,8 +44,8 @@ class ThreadStateConverterTest : CommonTest() {
         val inputStacktrace = listOf(mock<StackTraceElement>())
         val internalStacktrace = listOf(mock<StackTraceItemInternal>())
         val convertedStacktrace = arrayOf(mock<CrashAndroid.StackTraceElement>())
-        `when`(Utils.convertStackTraceToInternal(inputStacktrace)).thenReturn(internalStacktrace)
-        `when`(stackTraceConverter.fromModel(internalStacktrace)).thenReturn(convertedStacktrace)
+        whenever(Utils.convertStackTraceToInternal(inputStacktrace)).thenReturn(internalStacktrace)
+        whenever(stackTraceConverter.fromModel(internalStacktrace)).thenReturn(convertedStacktrace)
 
         val model = ThreadState(name, priority, tid, group, state, inputStacktrace)
 

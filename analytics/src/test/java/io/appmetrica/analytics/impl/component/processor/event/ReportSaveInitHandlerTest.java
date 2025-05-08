@@ -119,9 +119,9 @@ public class ReportSaveInitHandlerTest extends CommonTest {
 
         verify(mEventSaver, times(1)).identifyAndSaveReport(mReportCaptor.capture());
         JSONAssert.assertEquals(
-                mPreloadInfoState.toEventJson(),
-                new JSONObject(mReportCaptor.getValue().getValue()).getJSONObject(KEY_PRELOAD_INFO),
-                true
+            mPreloadInfoState.toEventJson(),
+            new JSONObject(mReportCaptor.getValue().getValue()).getJSONObject(KEY_PRELOAD_INFO),
+            true
         );
     }
 

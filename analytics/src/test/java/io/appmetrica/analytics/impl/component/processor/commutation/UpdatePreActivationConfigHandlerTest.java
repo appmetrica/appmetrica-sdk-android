@@ -124,7 +124,7 @@ public class UpdatePreActivationConfigHandlerTest extends CommonTest {
         private CounterConfiguration mCounterConfiguration;
         @Mock
         private DataSendingRestrictionControllerImpl mRestrictionController;
-        private UpdatePreActivationConfigHandler mHandler;
+        private final UpdatePreActivationConfigHandler mHandler;
 
         private final boolean mShouldSet;
         @Nullable
@@ -133,9 +133,9 @@ public class UpdatePreActivationConfigHandlerTest extends CommonTest {
         @ParameterizedRobolectricTestRunner.Parameters(name = "locationTracking = {0}, allowedByBridge = {1}")
         public static Collection<Object[]> getData() {
             return Arrays.asList(
-                    new Object[]{null, false, null},
-                    new Object[]{false, true, false},
-                    new Object[]{true, true, true}
+                new Object[]{null, false, null},
+                new Object[]{false, true, false},
+                new Object[]{true, true, true}
             );
         }
 

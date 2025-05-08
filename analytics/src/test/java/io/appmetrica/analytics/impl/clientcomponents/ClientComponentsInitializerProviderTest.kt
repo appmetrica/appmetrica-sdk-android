@@ -13,6 +13,7 @@ class ClientComponentsInitializerProviderTest : CommonTest() {
 
     @get:Rule
     val sdkUtilsMockedRule = MockedStaticRule(SdkUtils::class.java)
+
     @get:Rule
     val defaultClientComponentInitializerMockedRule =
         MockedConstructionRule(DefaultClientComponentsInitializer::class.java)

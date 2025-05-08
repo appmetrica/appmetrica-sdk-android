@@ -47,5 +47,4 @@ class ModuleRemoteConfigControllerTest : CommonTest() {
     fun parse() {
         assertThat(moduleRemoteConfigController.parseOrNull(json)).isEqualTo(model)
     }
-
 }

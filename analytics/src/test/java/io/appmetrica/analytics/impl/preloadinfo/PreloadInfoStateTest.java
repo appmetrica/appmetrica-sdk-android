@@ -69,38 +69,38 @@ public class PreloadInfoStateTest extends CommonTest {
     @Test
     public void toInternalJson() throws JSONException {
         JSONAssert.assertEquals(
-                new JSONObject()
-                        .put(KEY_TRACKING_ID, mTrackingId)
-                        .put(KEY_ADDITIONAL_PARAMS, mParams)
-                        .put(KEY_WAS_SET, mWasSet)
-                        .put(KEY_AUTO_TRACKING, mAutoTracking)
-                        .put(KEY_SOURCE, mSource.getDescription()),
-                mPreloadInfoState.toInternalJson(),
-                true
+            new JSONObject()
+                .put(KEY_TRACKING_ID, mTrackingId)
+                .put(KEY_ADDITIONAL_PARAMS, mParams)
+                .put(KEY_WAS_SET, mWasSet)
+                .put(KEY_AUTO_TRACKING, mAutoTracking)
+                .put(KEY_SOURCE, mSource.getDescription()),
+            mPreloadInfoState.toInternalJson(),
+            true
         );
     }
 
     @Test
     public void toInternalJsonDefault() throws JSONException {
         JSONAssert.assertEquals(
-                new JSONObject()
-                        .put(KEY_ADDITIONAL_PARAMS, new JSONObject())
-                        .put(KEY_WAS_SET, false)
-                        .put(KEY_AUTO_TRACKING, false)
-                        .put(KEY_SOURCE, DistributionSource.UNDEFINED.getDescription()),
-                mDefaultPreloadInfoState.toInternalJson(),
-                true
+            new JSONObject()
+                .put(KEY_ADDITIONAL_PARAMS, new JSONObject())
+                .put(KEY_WAS_SET, false)
+                .put(KEY_AUTO_TRACKING, false)
+                .put(KEY_SOURCE, DistributionSource.UNDEFINED.getDescription()),
+            mDefaultPreloadInfoState.toInternalJson(),
+            true
         );
     }
 
     @Test
     public void fromJson() throws Exception {
         PreloadInfoState preloadInfoState = PreloadInfoState.fromJson(new JSONObject()
-                .put(KEY_TRACKING_ID, mTrackingId)
-                .put(KEY_ADDITIONAL_PARAMS, mParams)
-                .put(KEY_WAS_SET, mWasSet)
-                .put(KEY_AUTO_TRACKING, mAutoTracking)
-                .put(KEY_SOURCE, mSource.getDescription())
+            .put(KEY_TRACKING_ID, mTrackingId)
+            .put(KEY_ADDITIONAL_PARAMS, mParams)
+            .put(KEY_WAS_SET, mWasSet)
+            .put(KEY_AUTO_TRACKING, mAutoTracking)
+            .put(KEY_SOURCE, mSource.getDescription())
         );
         ObjectPropertyAssertions<PreloadInfoState> assertions = ObjectPropertyAssertions(preloadInfoState);
         assertions.checkField("trackingId", mTrackingId);
@@ -115,7 +115,7 @@ public class PreloadInfoStateTest extends CommonTest {
     public void fromEmptyJson() throws Exception {
         PreloadInfoState preloadInfoState = PreloadInfoState.fromJson(new JSONObject());
         ObjectPropertyAssertions<PreloadInfoState> assertions = ObjectPropertyAssertions(preloadInfoState)
-                .withIgnoredFields("additionalParameters");
+            .withIgnoredFields("additionalParameters");
         assertions.checkField("trackingId", (String) null);
         assertions.checkField("wasSet", false);
         assertions.checkField("autoTrackingEnabled", false);
@@ -127,11 +127,11 @@ public class PreloadInfoStateTest extends CommonTest {
     @Test
     public void toEventJsonFilled() throws JSONException {
         JSONAssert.assertEquals(
-                new JSONObject()
-                        .put(KEY_TRACKING_ID, mTrackingId)
-                        .put(KEY_ADDITIONAL_PARAMS, mParams),
-                mPreloadInfoState.toEventJson(),
-                true
+            new JSONObject()
+                .put(KEY_TRACKING_ID, mTrackingId)
+                .put(KEY_ADDITIONAL_PARAMS, mParams),
+            mPreloadInfoState.toEventJson(),
+            true
         );
     }
 
@@ -139,9 +139,9 @@ public class PreloadInfoStateTest extends CommonTest {
     public void toEventJsonNoParameters() throws JSONException {
         PreloadInfoState preloadInfoState = new PreloadInfoState(mTrackingId, new JSONObject(), true, mAutoTracking, mSource);
         JSONAssert.assertEquals(
-                new JSONObject().put(KEY_TRACKING_ID, mTrackingId),
-                preloadInfoState.toEventJson(),
-                true
+            new JSONObject().put(KEY_TRACKING_ID, mTrackingId),
+            preloadInfoState.toEventJson(),
+            true
         );
     }
 
@@ -155,9 +155,9 @@ public class PreloadInfoStateTest extends CommonTest {
     public void toEventJsonNoTrackingIdButSet() throws JSONException {
         PreloadInfoState preloadInfoState = new PreloadInfoState(null, mParams, true, mAutoTracking, mSource);
         JSONAssert.assertEquals(
-                new JSONObject().put(KEY_ADDITIONAL_PARAMS, mParams),
-                preloadInfoState.toEventJson(),
-                true
+            new JSONObject().put(KEY_ADDITIONAL_PARAMS, mParams),
+            preloadInfoState.toEventJson(),
+            true
         );
     }
 
@@ -165,11 +165,11 @@ public class PreloadInfoStateTest extends CommonTest {
     public void toEventJsonEmptyTrackingIdButSet() throws JSONException {
         PreloadInfoState preloadInfoState = new PreloadInfoState("", mParams, true, mAutoTracking, mSource);
         JSONAssert.assertEquals(
-                new JSONObject()
-                        .put(KEY_TRACKING_ID, "")
-                        .put(KEY_ADDITIONAL_PARAMS, mParams),
-                preloadInfoState.toEventJson(),
-                true
+            new JSONObject()
+                .put(KEY_TRACKING_ID, "")
+                .put(KEY_ADDITIONAL_PARAMS, mParams),
+            preloadInfoState.toEventJson(),
+            true
         );
     }
 

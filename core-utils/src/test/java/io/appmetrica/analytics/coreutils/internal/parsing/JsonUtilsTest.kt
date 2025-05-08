@@ -13,12 +13,13 @@ import io.appmetrica.analytics.coreutils.internal.parsing.JsonUtils.optLongOrDef
 import io.appmetrica.analytics.coreutils.internal.parsing.JsonUtils.optLongOrNull
 import io.appmetrica.analytics.coreutils.internal.parsing.JsonUtils.optStringOrNull
 import io.appmetrica.analytics.coreutils.internal.parsing.JsonUtils.optStringOrNullable
+import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.json.JSONArray
 import org.json.JSONObject
 import org.junit.Test
 
-class JsonUtilsTest {
+class JsonUtilsTest : CommonTest() {
 
     private val valueKey = "Some value key"
 
@@ -268,36 +269,52 @@ class JsonUtilsTest {
     @Test
     fun `isEqualTo if equal`() {
         val firstJSONObject = JSONObject().apply {
-            put("jsonArray", JSONArray().apply {
-                put(1)
-                put("string")
-                put(JSONObject().apply {
-                    put("jsonArray-jsonObject-key-1", "jsonArray-jsonObject-value-1")
-                    put("jsonArray-jsonObject-key-2", "jsonArray-jsonObject-value-2")
-                })
-            })
+            put(
+                "jsonArray",
+                JSONArray().apply {
+                    put(1)
+                    put("string")
+                    put(
+                        JSONObject().apply {
+                            put("jsonArray-jsonObject-key-1", "jsonArray-jsonObject-value-1")
+                            put("jsonArray-jsonObject-key-2", "jsonArray-jsonObject-value-2")
+                        }
+                    )
+                }
+            )
             put("jsonObject-key-1", "jsonObject-value-1")
             put("jsonObject-key-2", 42)
-            put("jsonObject-key-3", JSONObject().apply {
-                put("jsonObject-jsonObject-key-1", "jsonObject-jsonObject-value-1")
-                put("jsonObject-jsonObject-key-2", "jsonObject-jsonObject-value-2")
-            })
+            put(
+                "jsonObject-key-3",
+                JSONObject().apply {
+                    put("jsonObject-jsonObject-key-1", "jsonObject-jsonObject-value-1")
+                    put("jsonObject-jsonObject-key-2", "jsonObject-jsonObject-value-2")
+                }
+            )
         }
         val secondJSONObject = JSONObject().apply {
             put("jsonObject-key-2", 42)
             put("jsonObject-key-1", "jsonObject-value-1")
-            put("jsonArray", JSONArray().apply {
-                put(1)
-                put("string")
-                put(JSONObject().apply {
-                    put("jsonArray-jsonObject-key-1", "jsonArray-jsonObject-value-1")
-                    put("jsonArray-jsonObject-key-2", "jsonArray-jsonObject-value-2")
-                })
-            })
-            put("jsonObject-key-3", JSONObject().apply {
-                put("jsonObject-jsonObject-key-2", "jsonObject-jsonObject-value-2")
-                put("jsonObject-jsonObject-key-1", "jsonObject-jsonObject-value-1")
-            })
+            put(
+                "jsonArray",
+                JSONArray().apply {
+                    put(1)
+                    put("string")
+                    put(
+                        JSONObject().apply {
+                            put("jsonArray-jsonObject-key-1", "jsonArray-jsonObject-value-1")
+                            put("jsonArray-jsonObject-key-2", "jsonArray-jsonObject-value-2")
+                        }
+                    )
+                }
+            )
+            put(
+                "jsonObject-key-3",
+                JSONObject().apply {
+                    put("jsonObject-jsonObject-key-2", "jsonObject-jsonObject-value-2")
+                    put("jsonObject-jsonObject-key-1", "jsonObject-jsonObject-value-1")
+                }
+            )
         }
 
         assertThat(firstJSONObject)
@@ -310,36 +327,52 @@ class JsonUtilsTest {
     @Test
     fun `isEqualTo if not equal since jsonArray items order differ`() {
         val firstJSONObject = JSONObject().apply {
-            put("jsonArray", JSONArray().apply {
-                put(1)
-                put("string")
-                put(JSONObject().apply {
-                    put("jsonArray-jsonObject-key-1", "jsonArray-jsonObject-value-1")
-                    put("jsonArray-jsonObject-key-2", "jsonArray-jsonObject-value-2")
-                })
-            })
+            put(
+                "jsonArray",
+                JSONArray().apply {
+                    put(1)
+                    put("string")
+                    put(
+                        JSONObject().apply {
+                            put("jsonArray-jsonObject-key-1", "jsonArray-jsonObject-value-1")
+                            put("jsonArray-jsonObject-key-2", "jsonArray-jsonObject-value-2")
+                        }
+                    )
+                }
+            )
             put("jsonObject-key-1", "jsonObject-value-1")
             put("jsonObject-key-2", 42)
-            put("jsonObject-key-3", JSONObject().apply {
-                put("jsonObject-jsonObject-key-1", "jsonObject-jsonObject-value-1")
-                put("jsonObject-jsonObject-key-2", "jsonObject-jsonObject-value-2")
-            })
+            put(
+                "jsonObject-key-3",
+                JSONObject().apply {
+                    put("jsonObject-jsonObject-key-1", "jsonObject-jsonObject-value-1")
+                    put("jsonObject-jsonObject-key-2", "jsonObject-jsonObject-value-2")
+                }
+            )
         }
         val secondJSONObject = JSONObject().apply {
-            put("jsonArray", JSONArray().apply {
-                put("string")
-                put(1)
-                put(JSONObject().apply {
-                    put("jsonArray-jsonObject-key-1", "jsonArray-jsonObject-value-1")
-                    put("jsonArray-jsonObject-key-2", "jsonArray-jsonObject-value-2")
-                })
-            })
+            put(
+                "jsonArray",
+                JSONArray().apply {
+                    put("string")
+                    put(1)
+                    put(
+                        JSONObject().apply {
+                            put("jsonArray-jsonObject-key-1", "jsonArray-jsonObject-value-1")
+                            put("jsonArray-jsonObject-key-2", "jsonArray-jsonObject-value-2")
+                        }
+                    )
+                }
+            )
             put("jsonObject-key-1", "jsonObject-value-1")
             put("jsonObject-key-2", 42)
-            put("jsonObject-key-3", JSONObject().apply {
-                put("jsonObject-jsonObject-key-1", "jsonObject-jsonObject-value-1")
-                put("jsonObject-jsonObject-key-2", "jsonObject-jsonObject-value-2")
-            })
+            put(
+                "jsonObject-key-3",
+                JSONObject().apply {
+                    put("jsonObject-jsonObject-key-1", "jsonObject-jsonObject-value-1")
+                    put("jsonObject-jsonObject-key-2", "jsonObject-jsonObject-value-2")
+                }
+            )
         }
 
         assertThat(firstJSONObject)
@@ -352,28 +385,39 @@ class JsonUtilsTest {
     @Test
     fun `isEqualTo if not equal since jsonObject keys differ`() {
         val firstJSONObject = JSONObject().apply {
-            put("jsonArray", JSONArray().apply {
-                put(1)
-                put("string")
-                put(JSONObject().apply {
-                    put("jsonArray-jsonObject-key-1", "jsonArray-jsonObject-value-1")
-                    put("jsonArray-jsonObject-key-2", "jsonArray-jsonObject-value-2")
-                })
-            })
+            put(
+                "jsonArray",
+                JSONArray().apply {
+                    put(1)
+                    put("string")
+                    put(
+                        JSONObject().apply {
+                            put("jsonArray-jsonObject-key-1", "jsonArray-jsonObject-value-1")
+                            put("jsonArray-jsonObject-key-2", "jsonArray-jsonObject-value-2")
+                        }
+                    )
+                }
+            )
             put("jsonObject-key-1", "jsonObject-value-1")
             put("jsonObject-key-2", 42)
-            put("jsonObject-key-3", JSONObject().apply {
-                put("jsonObject-jsonObject-key-1", "jsonObject-jsonObject-value-1")
-                put("jsonObject-jsonObject-key-2", "jsonObject-jsonObject-value-2")
-            })
+            put(
+                "jsonObject-key-3",
+                JSONObject().apply {
+                    put("jsonObject-jsonObject-key-1", "jsonObject-jsonObject-value-1")
+                    put("jsonObject-jsonObject-key-2", "jsonObject-jsonObject-value-2")
+                }
+            )
         }
         val secondJSONObject = JSONObject().apply {
             put("jsonObject-key-1", "jsonObject-value-1")
             put("jsonObject-key-2", 42)
-            put("jsonObject-key-3", JSONObject().apply {
-                put("jsonObject-jsonObject-key-1", "jsonObject-jsonObject-value-1")
-                put("jsonObject-jsonObject-key-2", "jsonObject-jsonObject-value-2")
-            })
+            put(
+                "jsonObject-key-3",
+                JSONObject().apply {
+                    put("jsonObject-jsonObject-key-1", "jsonObject-jsonObject-value-1")
+                    put("jsonObject-jsonObject-key-2", "jsonObject-jsonObject-value-2")
+                }
+            )
         }
 
         assertThat(firstJSONObject)
@@ -384,7 +428,7 @@ class JsonUtilsTest {
     }
 
     @Test
-    fun testOptHexByteArray() {
+    fun optHexByteArray() {
         val jsonObject = JSONObject()
         jsonObject.put("key", "1116aa")
         assertThat(jsonObject.optHexByteArray("key", null)).isEqualTo(byteArrayOf(17, 22, -86))
@@ -392,28 +436,28 @@ class JsonUtilsTest {
 
     @Test
     @Throws(Exception::class)
-    fun testOptHexByteArrayIfNotExists() {
+    fun optHexByteArrayIfNotExists() {
         val jsonObject = JSONObject()
         assertThat(jsonObject.optHexByteArray("key", null)).isNull()
     }
 
     @Test
     @Throws(Exception::class)
-    fun testOnHexByteArrayIfContainsEmptyString() {
+    fun onHexByteArrayIfContainsEmptyString() {
         val jsonObject = JSONObject().put("key", "")
         assertThat(jsonObject.optHexByteArray("key", null)).isEmpty()
     }
 
     @Test
     @Throws(Exception::class)
-    fun testOptHexByteArrayForInvalidHexString() {
+    fun optHexByteArrayForInvalidHexString() {
         val jsonObject = JSONObject().put("key", "1a5")
         assertThat(jsonObject.optHexByteArray("key", null)).isNull()
     }
 
     @Test
     @Throws(Exception::class)
-    fun testOptHexByteArrayForNonNullFallback() {
+    fun optHexByteArrayForNonNullFallback() {
         assertThat(JSONObject().optHexByteArray("key", byteArrayOf(1, 2, 3)))
             .isEqualTo(byteArrayOf(1, 2, 3))
     }

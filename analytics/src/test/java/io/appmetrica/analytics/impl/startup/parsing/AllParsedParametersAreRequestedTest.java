@@ -88,8 +88,8 @@ public class AllParsedParametersAreRequestedTest extends CommonTest {
         String[] requestedFeatures = getRequestedFeatures();
         List<String> parsedFeatures = getParsedFeatures();
         assertThat(requestedFeatures)
-                .doesNotHaveDuplicates()
-                .containsOnlyElementsOf(parsedFeatures);
+            .doesNotHaveDuplicates()
+            .containsOnlyElementsOf(parsedFeatures);
     }
 
     @Test

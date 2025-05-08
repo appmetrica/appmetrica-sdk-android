@@ -23,12 +23,12 @@ public class LocationFlagStrategyTest extends CommonTest {
     @ParameterizedRobolectricTestRunner.Parameters(name = "Permission {0} check is forbidden ({2}) when locationsTracking is {1}.")
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
-                {Manifest.permission.ACCESS_COARSE_LOCATION, false, true},
-                {Manifest.permission.ACCESS_FINE_LOCATION, false, true},
-                {Manifest.permission.READ_PHONE_STATE, false, false},
-                {Manifest.permission.ACCESS_COARSE_LOCATION, true, false},
-                {Manifest.permission.ACCESS_FINE_LOCATION, true, false},
-                {Manifest.permission.READ_PHONE_STATE, true, false}
+            {Manifest.permission.ACCESS_COARSE_LOCATION, false, true},
+            {Manifest.permission.ACCESS_FINE_LOCATION, false, true},
+            {Manifest.permission.READ_PHONE_STATE, false, false},
+            {Manifest.permission.ACCESS_COARSE_LOCATION, true, false},
+            {Manifest.permission.ACCESS_FINE_LOCATION, true, false},
+            {Manifest.permission.READ_PHONE_STATE, true, false}
         });
     }
 

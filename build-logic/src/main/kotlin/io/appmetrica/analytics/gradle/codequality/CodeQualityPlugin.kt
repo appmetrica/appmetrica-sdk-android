@@ -121,11 +121,12 @@ class CodeQualityPlugin : Plugin<Project> {
 
         project.dependencies {
             // https://github.com/pinterest/ktlint/releases
-            ktlint("com.pinterest:ktlint:0.43.0") {
+            ktlint("com.pinterest:ktlint:0.43.2") {
                 attributes {
                     attribute(Bundling.BUNDLING_ATTRIBUTE, project.objects.named<Bundling>(Bundling.EXTERNAL))
                 }
             }
+            ktlint(project.findProject(":test-utils") ?: "io.appmetrica.analytics:test-utils")
         }
 
         return project.tasks.register<JavaExec>("ktlint") {
@@ -135,7 +136,6 @@ class CodeQualityPlugin : Plugin<Project> {
             mainClass.set("com.pinterest.ktlint.Main")
             args(
                 "src/**/*.kt",
-                "!src/test*/**/*.kt",
                 "--reporter=html,output=${project.buildDir}/reports/ktlint-report.html"
             )
         }

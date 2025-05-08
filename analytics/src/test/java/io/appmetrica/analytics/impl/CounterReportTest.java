@@ -58,13 +58,13 @@ public class CounterReportTest extends CommonTest {
     @Mock
     private IHandlerExecutor commonExecutor;
 
-    private Context context = TestUtils.createMockedContext();
+    private final Context context = TestUtils.createMockedContext();
     private StartupState startupState;
 
     @Rule
     public GlobalServiceLocatorRule globalServiceLocatorRule = new GlobalServiceLocatorRule();
 
-    private List<String> mProviders = new ArrayList<String>();
+    private final List<String> mProviders = new ArrayList<String>();
 
     private final String encodedIdentity = "encoded identity";
 
@@ -86,7 +86,7 @@ public class CounterReportTest extends CommonTest {
         when(mAppStandbyBucketConverter.fromAppStandbyBucketToString(appStandByBucket)).thenReturn(appStandbyBucketString);
         CounterReport report = CounterReport.formPermissionsReportData(
             mock(CounterReport.class),
-            Arrays.asList(new PermissionState[]{new PermissionState("1", false), new PermissionState("2", true)}),
+            Arrays.asList(new PermissionState("1", false), new PermissionState("2", true)),
             new BackgroundRestrictionsState(appStandByBucket, true),
             mAppStandbyBucketConverter,
             Arrays.asList("gps", "passive")
@@ -513,7 +513,6 @@ public class CounterReportTest extends CommonTest {
         report.setType(type);
         report.setName(eventName);
         report.setValue(eventValue);
-        ;
 
         SoftAssertions assertions = new SoftAssertions();
         assertions.assertThat(report.toString())

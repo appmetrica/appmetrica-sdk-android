@@ -16,6 +16,7 @@ internal class ClidsPriorityProviderTest(
 
     companion object {
 
+        /* ktlint-disable max-line-length */
         @JvmStatic
         @Parameterized.Parameters
         fun data(): Collection<Array<Any?>> {
@@ -214,6 +215,7 @@ internal class ClidsPriorityProviderTest(
                 arrayOf(ClidsInfo.Candidate(filledClids, DistributionSource.RETAIL), ClidsInfo.Candidate(filledClids, DistributionSource.SATELLITE), false),
             )
         }
+        /* ktlint-enable  max-line-length */
     }
 
     private val priorityProvider = ClidsPriorityProvider()

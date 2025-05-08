@@ -18,9 +18,9 @@ public class KeyValueTableDbHelperWrapperCoverageTest extends CommonTest {
         List<String> actualCoveredMethods = CoverageUtils.getTestMethodNames(KeyValueTableDbHelperWrapperTest.class);
         List<String> expectedCoveredMethods = getExpectedCoveredMethods();
         assertThat(actualCoveredMethods)
-                .overridingErrorMessage("Methods of " + actualCoveredMethods +
-                        " do not cover the following cases: " + expectedCoveredMethods)
-                .hasSameSizeAs(expectedCoveredMethods);
+            .overridingErrorMessage("Methods of " + actualCoveredMethods +
+                " do not cover the following cases: " + expectedCoveredMethods)
+            .hasSameSizeAs(expectedCoveredMethods);
     }
 
     @NonNull

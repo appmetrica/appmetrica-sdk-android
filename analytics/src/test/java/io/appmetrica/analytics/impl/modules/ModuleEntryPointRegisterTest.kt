@@ -1,10 +1,11 @@
 package io.appmetrica.analytics.impl.modules
 
+import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
 
-class ModuleEntryPointRegisterTest {
+class ModuleEntryPointRegisterTest : CommonTest() {
 
     private lateinit var moduleEntryPointsRegister: ModuleEntryPointsRegister
 

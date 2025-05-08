@@ -86,16 +86,16 @@ public class MapWithDefaultTests extends CommonTest {
     @RunWith(ParameterizedRobolectricTestRunner.class)
     public static class MapWithDefaultPutTests extends MapWithDefaultBaseTests {
 
-        private Object mKey;
-        private Object mValue;
+        private final Object mKey;
+        private final Object mValue;
 
         @ParameterizedRobolectricTestRunner.Parameters
         public static Collection<Object[]> data() {
             return Arrays.asList(new Object[][]{
-                    {null, null},
-                    {null, new Object()},
-                    {new Object(), null},
-                    {new Object(), new Object()}
+                {null, null},
+                {null, new Object()},
+                {new Object(), null},
+                {new Object(), new Object()}
             });
         }
 
@@ -114,12 +114,12 @@ public class MapWithDefaultTests extends CommonTest {
     @RunWith(ParameterizedRobolectricTestRunner.class)
     public static class MapWithDefaultGetTests extends MapWithDefaultBaseTests {
 
-        private Object mKey;
+        private final Object mKey;
 
         @ParameterizedRobolectricTestRunner.Parameters
         public static Collection<Object[]> data() {
             return Arrays.asList(new Object[][]{
-                    {null}, {"ewffsdfd"}
+                {null}, {"ewffsdfd"}
             });
         }
 

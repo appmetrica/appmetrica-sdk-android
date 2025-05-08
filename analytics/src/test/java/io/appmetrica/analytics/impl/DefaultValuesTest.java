@@ -19,7 +19,7 @@ public class DefaultValuesTest extends CommonTest {
     @Test
     public void startupUpdateConfig() throws IllegalAccessException {
         new ProtoObjectPropertyAssertions<>(DefaultValues.STARTUP_UPDATE_CONFIG)
-                .checkField("interval", 86400)
-                .checkAll();
+            .checkField("interval", 86400)
+            .checkAll();
     }
 }

@@ -7,6 +7,7 @@ import io.appmetrica.analytics.coreapi.internal.backport.FunctionWithThrowable
 import io.appmetrica.analytics.coreapi.internal.permission.PermissionResolutionStrategy
 import io.appmetrica.analytics.coreutils.internal.system.SystemServiceUtils
 import io.appmetrica.analytics.location.impl.LocationListenerWrapper
+import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.MockedStaticRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
@@ -21,7 +22,7 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
 
-class SystemLocationLastKnownExtractorTest {
+class SystemLocationLastKnownExtractorTest : CommonTest() {
 
     @get:Rule
     val utilsMockedRule = MockedStaticRule(SystemServiceUtils::class.java)
@@ -44,12 +45,13 @@ class SystemLocationLastKnownExtractorTest {
     fun setUp() {
         whenever(
             SystemServiceUtils.accessSystemServiceByNameSafely(
-            eq(context),
-            eq(Context.LOCATION_SERVICE),
-            any(),
-            any(),
-            functionWithThrowableCaptor.capture()
-        )).thenReturn(location)
+                eq(context),
+                eq(Context.LOCATION_SERVICE),
+                any(),
+                any(),
+                functionWithThrowableCaptor.capture()
+            )
+        ).thenReturn(location)
         systemLastKnownLocationExtractor = SystemLastKnownLocationExtractor(
             context,
             permissionResolutionStrategy,
@@ -76,12 +78,13 @@ class SystemLocationLastKnownExtractorTest {
     fun `updateLastKnownLocation() if location is null`() {
         whenever(
             SystemServiceUtils.accessSystemServiceByNameSafely(
-            eq(context),
-            eq(Context.LOCATION_SERVICE),
-            any(),
-            any(),
-            functionWithThrowableCaptor.capture()
-        )).thenReturn(null)
+                eq(context),
+                eq(Context.LOCATION_SERVICE),
+                any(),
+                any(),
+                functionWithThrowableCaptor.capture()
+            )
+        ).thenReturn(null)
         systemLastKnownLocationExtractor.updateLastKnownLocation()
         touchFunctionWithThrowable()
         verifyNoMoreInteractions(locationListener)

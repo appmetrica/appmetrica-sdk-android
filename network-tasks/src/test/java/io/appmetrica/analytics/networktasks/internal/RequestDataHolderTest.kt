@@ -1,13 +1,14 @@
 package io.appmetrica.analytics.networktasks.internal
 
 import io.appmetrica.analytics.networktasks.impl.utils.TimeUtils
+import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.mockito.Mockito
-import org.mockito.Mockito.`when`
 import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.whenever
 
-class RequestDataHolderTest {
+class RequestDataHolderTest : CommonTest() {
 
     private val requestDataHolder =
         RequestDataHolder()
@@ -59,7 +60,7 @@ class RequestDataHolderTest {
         val offset = 6677
         val staticTimeUtils = Mockito.mockStatic(TimeUtils::class.java)
         try {
-            `when`(TimeUtils.getTimeZoneOffsetSec(timestamp / 1000)).doReturn(offset)
+            whenever(TimeUtils.getTimeZoneOffsetSec(timestamp / 1000)).doReturn(offset)
             requestDataHolder.applySendTime(timestamp)
             assertThat(requestDataHolder.sendTimestamp).isEqualTo(timestamp)
             assertThat(requestDataHolder.sendTimezoneSec).isEqualTo(offset)

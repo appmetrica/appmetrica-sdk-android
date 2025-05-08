@@ -1,12 +1,11 @@
 package io.appmetrica.analytics.impl.crash.jvm.client
 
 import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
-import io.appmetrica.analytics.impl.crash.jvm.client.StackTraceItemInternal
 import io.appmetrica.analytics.plugins.StackTraceItem
 import io.appmetrica.analytics.testutils.CommonTest
 import org.junit.Test
 import org.mockito.Mockito.mock
-import org.mockito.Mockito.`when`
+import org.mockito.kotlin.whenever
 
 class StackTraceItemInternalTest : CommonTest() {
 
@@ -52,11 +51,11 @@ class StackTraceItemInternalTest : CommonTest() {
         val line = 66
         val methodName = "some method"
         val stackTraceElement = mock(StackTraceElement::class.java)
-        `when`(stackTraceElement.className).thenReturn(className)
-        `when`(stackTraceElement.fileName).thenReturn(fileName)
-        `when`(stackTraceElement.methodName).thenReturn(methodName)
-        `when`(stackTraceElement.lineNumber).thenReturn(line)
-        `when`(stackTraceElement.isNativeMethod).thenReturn(true)
+        whenever(stackTraceElement.className).thenReturn(className)
+        whenever(stackTraceElement.fileName).thenReturn(fileName)
+        whenever(stackTraceElement.methodName).thenReturn(methodName)
+        whenever(stackTraceElement.lineNumber).thenReturn(line)
+        whenever(stackTraceElement.isNativeMethod).thenReturn(true)
 
         val result = StackTraceItemInternal(stackTraceElement)
         ObjectPropertyAssertions(result)

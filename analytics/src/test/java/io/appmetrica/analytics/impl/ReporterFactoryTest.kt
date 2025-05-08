@@ -58,9 +58,8 @@ internal class ReporterFactoryTest : CommonTest() {
     private val mainReporterComponents: MainReporterComponents by mainReporterComponentsMockedConstructionRule
 
     @get:Rule
-    val reporterApiKeyUsedValidatorMockedConstructionRule = constructionRule<ReporterKeyIsUsedValidator>()
-    private val reporterApiKeyIsUsedValidator: ReporterKeyIsUsedValidator
-        by reporterApiKeyUsedValidatorMockedConstructionRule
+    val reporterApiKeyUsedValidatorRule = constructionRule<ReporterKeyIsUsedValidator>()
+    private val reporterApiKeyIsUsedValidator: ReporterKeyIsUsedValidator by reporterApiKeyUsedValidatorRule
 
     @get:Rule
     val throwIfFailedValidatorMockedConstructionRule = constructionRule<ThrowIfFailedValidator<String>>()
@@ -512,10 +511,10 @@ internal class ReporterFactoryTest : CommonTest() {
         assertThat(throwIfFailedValidatorMockedConstructionRule.constructionMock.constructed()).hasSize(1)
         assertThat(throwIfFailedValidatorMockedConstructionRule.argumentInterceptor.flatArguments())
             .containsExactly(reporterApiKeyIsUsedValidator)
-        assertThat(reporterApiKeyUsedValidatorMockedConstructionRule.constructionMock.constructed()).hasSize(1)
-        assertThat(reporterApiKeyUsedValidatorMockedConstructionRule.argumentInterceptor.flatArguments())
-            .hasSize(1)
-        assertThat((reporterApiKeyUsedValidatorMockedConstructionRule.argumentInterceptor.flatArguments().first() as Map<String, Any?>).keys)
+        assertThat(reporterApiKeyUsedValidatorRule.constructionMock.constructed()).hasSize(1)
+        val arguments = reporterApiKeyUsedValidatorRule.argumentInterceptor.flatArguments()
+        assertThat(arguments).hasSize(1)
+        assertThat((arguments.first() as Map<String, Any?>).keys)
             .containsExactly(*apiKeys)
     }
 }

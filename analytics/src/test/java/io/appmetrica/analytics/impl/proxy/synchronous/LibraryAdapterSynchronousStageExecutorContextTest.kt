@@ -2,16 +2,12 @@ package io.appmetrica.analytics.impl.proxy.synchronous
 
 import android.content.Context
 import io.appmetrica.analytics.AppMetricaLibraryAdapterConfig
-import io.appmetrica.analytics.impl.AppMetricaFacade
 import io.appmetrica.analytics.impl.ClientServiceLocator
-import io.appmetrica.analytics.impl.ContextAppearedListener
-import io.appmetrica.analytics.impl.proxy.AppMetricaFacadeProvider
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.ContextCoverageUtils
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 

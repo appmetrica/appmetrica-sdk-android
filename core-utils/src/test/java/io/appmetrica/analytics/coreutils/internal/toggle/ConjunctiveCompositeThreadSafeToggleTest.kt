@@ -24,7 +24,7 @@ import java.util.concurrent.locks.ReentrantLock
 
 class ConjunctiveCompositeThreadSafeToggleTest : CommonTest() {
 
-    //Every third attempt to acquire lock will succeed and two other will fail
+    // Every third attempt to acquire lock will succeed and two other will fail
     private val defaultMockAcquireAttempts = 3
 
     private var actualMockInvocationCount = 0

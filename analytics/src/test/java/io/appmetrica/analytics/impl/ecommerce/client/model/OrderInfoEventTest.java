@@ -42,7 +42,7 @@ public class OrderInfoEventTest extends CommonTest {
     @Test
     public void converterFromDefaultConstructor() {
         assertThat(new OrderInfoEvent(0, eCommerceOrder).getConverter())
-                .isInstanceOf(OrderInfoEventConverter.class);
+            .isInstanceOf(OrderInfoEventConverter.class);
     }
 
     @Test

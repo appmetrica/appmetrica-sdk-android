@@ -58,11 +58,13 @@ internal class PassiveProviderLocationReceiverTest : CommonTest() {
         )
         whenever(
             SystemServiceUtils.accessSystemServiceByNameSafely(
-            eq(context),
-            eq(Context.LOCATION_SERVICE),
-            any(),
-            any(),
-            locationFunctionCaptor.capture())).thenReturn(location)
+                eq(context),
+                eq(Context.LOCATION_SERVICE),
+                any(),
+                any(),
+                locationFunctionCaptor.capture()
+            )
+        ).thenReturn(location)
     }
 
     @Test
@@ -85,11 +87,13 @@ internal class PassiveProviderLocationReceiverTest : CommonTest() {
         whenever(locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER)).thenReturn(null)
         whenever(
             SystemServiceUtils.accessSystemServiceByNameSafely(
-            eq(context),
-            eq(Context.LOCATION_SERVICE),
-            any(),
-            any(),
-            locationFunctionCaptor.capture())).thenReturn(null)
+                eq(context),
+                eq(Context.LOCATION_SERVICE),
+                any(),
+                any(),
+                locationFunctionCaptor.capture()
+            )
+        ).thenReturn(null)
         passiveProviderLocationReceiver.updateLastKnownLocation()
         val locationFromFunction = touchFunctionWithThrowable()
         verifyNoMoreInteractions(locationListener)
@@ -122,7 +126,6 @@ internal class PassiveProviderLocationReceiverTest : CommonTest() {
         touchConsumerWithThrowable()
         verify(locationManager).removeUpdates(locationListener)
     }
-
 
     private fun touchConsumerWithThrowable() {
         utilsMockedRule.staticMock.verify {

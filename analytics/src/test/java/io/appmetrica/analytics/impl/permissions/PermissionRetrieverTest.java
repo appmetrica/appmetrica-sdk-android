@@ -43,12 +43,12 @@ public class PermissionRetrieverTest extends CommonTest {
     public void testPermissionsCheckerWithEqualPermissions() {
         PermissionsChecker checker = new PermissionsChecker();
         mPackageInfo.requestedPermissions = new String[]{
-                "permissionA",
-                "permissionB"
+            "permissionA",
+            "permissionB"
         };
         mPackageInfo.requestedPermissionsFlags = new int[]{
-                PackageInfo.REQUESTED_PERMISSION_GRANTED,
-                0
+            PackageInfo.REQUESTED_PERMISSION_GRANTED,
+            0
         };
         List<PermissionState> result = checker.check(mContext, Arrays.asList(new PermissionState("permissionA", true), new PermissionState("permissionB", false)));
         assertThat(result).isNull();
@@ -58,17 +58,17 @@ public class PermissionRetrieverTest extends CommonTest {
     public void testPermissionsCheckerWithChangedState() {
         PermissionsChecker checker = new PermissionsChecker();
         mPackageInfo.requestedPermissions = new String[]{
-                "permissionA",
-                "permissionB"
+            "permissionA",
+            "permissionB"
         };
         mPackageInfo.requestedPermissionsFlags = new int[]{
-                PackageInfo.REQUESTED_PERMISSION_GRANTED,
-                0
+            PackageInfo.REQUESTED_PERMISSION_GRANTED,
+            0
         };
         List<PermissionState> result = checker.check(mContext, Arrays.asList(new PermissionState("permissionA", true), new PermissionState("permissionB", true)));
         assertThat(result).extracting("name", "granted").contains(
-                tuple("permissionA", true),
-                tuple("permissionB", false)
+            tuple("permissionA", true),
+            tuple("permissionB", false)
         );
     }
 
@@ -76,36 +76,36 @@ public class PermissionRetrieverTest extends CommonTest {
     public void testPermissionsCheckerWithChangedPermissionsList() {
         PermissionsChecker checker = new PermissionsChecker();
         mPackageInfo.requestedPermissions = new String[]{
-                "permissionA",
-                "permissionB",
-                "permissionC"
+            "permissionA",
+            "permissionB",
+            "permissionC"
         };
         mPackageInfo.requestedPermissionsFlags = new int[]{
-                PackageInfo.REQUESTED_PERMISSION_GRANTED,
-                PackageInfo.REQUESTED_PERMISSION_GRANTED,
-                0
+            PackageInfo.REQUESTED_PERMISSION_GRANTED,
+            PackageInfo.REQUESTED_PERMISSION_GRANTED,
+            0
         };
         List<PermissionState> result = checker.check(mContext, Arrays.asList(new PermissionState("permissionA", true), new PermissionState("permissionB", true)));
         assertThat(result).extracting("name", "granted").contains(
-                tuple("permissionA", true),
-                tuple("permissionB", true),
-                tuple("permissionC", false)
+            tuple("permissionA", true),
+            tuple("permissionB", true),
+            tuple("permissionC", false)
         );
     }
 
     @Test
     public void testRuntimePermissionRetriever() {
         mPackageInfo.requestedPermissions = new String[]{
-                "permissionA",
-                "permissionB",
-                "permissionC",
-                "permissionD"
+            "permissionA",
+            "permissionB",
+            "permissionC",
+            "permissionD"
         };
         mPackageInfo.requestedPermissionsFlags = new int[]{
-                PackageInfo.REQUESTED_PERMISSION_GRANTED,
-                0,
-                PackageInfo.REQUESTED_PERMISSION_GRANTED,
-                0
+            PackageInfo.REQUESTED_PERMISSION_GRANTED,
+            0,
+            PackageInfo.REQUESTED_PERMISSION_GRANTED,
+            0
         };
         PermissionRetriever retriever = new RuntimePermissionsRetriever(mContext);
         List<PermissionState> permissions = retriever.getPermissionsState();

@@ -50,7 +50,9 @@ internal class StartupRequiredUtilsContainsIdentifiersTest(
             .build()
 
         private fun basicStartupWith(block: (StartupState.Builder) -> Unit): StartupState {
-            val startupBuilder = StartupState.Builder(CollectingFlags.CollectingFlagsBuilder().withSslPinning(true).build())
+            val startupBuilder = StartupState.Builder(
+                CollectingFlags.CollectingFlagsBuilder().withSslPinning(true).build()
+            )
             startupBuilder
                 .withObtainTime(obtainTime)
                 .withStartupUpdateConfig(StartupUpdateConfig(updateInterval))
@@ -84,6 +86,7 @@ internal class StartupRequiredUtilsContainsIdentifiersTest(
             return startupBuilder.build()
         }
 
+        /* ktlint-disable max-line-length */
         @JvmStatic
         @Parameterized.Parameters
         fun data(): Collection<Array<Any>> = listOf(
@@ -97,12 +100,12 @@ internal class StartupRequiredUtilsContainsIdentifiersTest(
             arrayOf(basicStartup, listOf(Constants.StartupParamsCallbackKeys.GET_AD_URL), true, lessCurrentTime, false),
             arrayOf(basicStartup, listOf(Constants.StartupParamsCallbackKeys.CLIDS), true, greaterCurrentTime, true),
             arrayOf(basicStartup, listOf(Constants.StartupParamsCallbackKeys.CLIDS), false, lessCurrentTime, false),
-            arrayOf(startupWithEmptyFieldsWith {  }, listOf(Constants.StartupParamsCallbackKeys.UUID), true, lessCurrentTime, false),
-            arrayOf(startupWithEmptyFieldsWith {  }, listOf(Constants.StartupParamsCallbackKeys.DEVICE_ID), true, lessCurrentTime, false),
+            arrayOf(startupWithEmptyFieldsWith { }, listOf(Constants.StartupParamsCallbackKeys.UUID), true, lessCurrentTime, false),
+            arrayOf(startupWithEmptyFieldsWith { }, listOf(Constants.StartupParamsCallbackKeys.DEVICE_ID), true, lessCurrentTime, false),
             // #10
-            arrayOf(startupWithEmptyFieldsWith {  }, listOf(Constants.StartupParamsCallbackKeys.DEVICE_ID_HASH), true, lessCurrentTime, false),
-            arrayOf(startupWithEmptyFieldsWith {  }, listOf(Constants.StartupParamsCallbackKeys.REPORT_AD_URL), true, lessCurrentTime, false),
-            arrayOf(startupWithEmptyFieldsWith {  }, listOf(Constants.StartupParamsCallbackKeys.GET_AD_URL), true, lessCurrentTime, false),
+            arrayOf(startupWithEmptyFieldsWith { }, listOf(Constants.StartupParamsCallbackKeys.DEVICE_ID_HASH), true, lessCurrentTime, false),
+            arrayOf(startupWithEmptyFieldsWith { }, listOf(Constants.StartupParamsCallbackKeys.REPORT_AD_URL), true, lessCurrentTime, false),
+            arrayOf(startupWithEmptyFieldsWith { }, listOf(Constants.StartupParamsCallbackKeys.GET_AD_URL), true, lessCurrentTime, false),
             arrayOf(filledStartupWith { it.withUuid(null) }, listOf(Constants.StartupParamsCallbackKeys.UUID), true, lessCurrentTime, false),
             arrayOf(filledStartupWith { it.withDeviceId(null) }, listOf(Constants.StartupParamsCallbackKeys.DEVICE_ID), true, lessCurrentTime, false),
             // #15
@@ -127,8 +130,8 @@ internal class StartupRequiredUtilsContainsIdentifiersTest(
             arrayOf(basicStartup, customIdentifiers, true, lessCurrentTime, true),
             arrayOf(basicStartup, customIdentifiers, true, greaterCurrentTime, false),
             arrayOf(basicStartupWith { it.withOutdated(true) }, customIdentifiers, true, lessCurrentTime, false),
-            arrayOf(filledStartupWith {  }, allIdentifiers + customIdentifiers, true, greaterCurrentTime, false),
-            arrayOf(filledStartupWith {  }, allIdentifiers + customIdentifiers, false, lessCurrentTime, false),
+            arrayOf(filledStartupWith { }, allIdentifiers + customIdentifiers, true, greaterCurrentTime, false),
+            arrayOf(filledStartupWith { }, allIdentifiers + customIdentifiers, false, lessCurrentTime, false),
             // #35
             arrayOf(filledStartupWith { it.withOutdated(true) }, allIdentifiers + customIdentifiers, true, lessCurrentTime, false),
             arrayOf(filledStartupWith { it.withUuid(null) }, allIdentifiers + customIdentifiers, true, lessCurrentTime, false),
@@ -137,13 +140,13 @@ internal class StartupRequiredUtilsContainsIdentifiersTest(
             arrayOf(filledStartupWith { it.withReportAdUrl(null) }, allIdentifiers + customIdentifiers, true, lessCurrentTime, false),
             // #40
             arrayOf(filledStartupWith { it.withGetAdUrl(null) }, allIdentifiers + customIdentifiers, true, lessCurrentTime, false),
-            arrayOf(filledStartupWith {  }, allIdentifiers + customIdentifiers, true, lessCurrentTime, true),
+            arrayOf(filledStartupWith { }, allIdentifiers + customIdentifiers, true, lessCurrentTime, true),
             arrayOf(basicStartup, featureIdentifiers, true, lessCurrentTime, true),
             arrayOf(basicStartup, featureIdentifiers, true, greaterCurrentTime, false),
             arrayOf(basicStartupWith { it.withOutdated(true) }, featureIdentifiers, true, lessCurrentTime, false),
             // #45
-            arrayOf(filledStartupWith {  }, allIdentifiers + featureIdentifiers, true, greaterCurrentTime, false),
-            arrayOf(filledStartupWith {  }, allIdentifiers + featureIdentifiers, false, lessCurrentTime, false),
+            arrayOf(filledStartupWith { }, allIdentifiers + featureIdentifiers, true, greaterCurrentTime, false),
+            arrayOf(filledStartupWith { }, allIdentifiers + featureIdentifiers, false, lessCurrentTime, false),
             arrayOf(filledStartupWith { it.withOutdated(true) }, allIdentifiers + featureIdentifiers, true, lessCurrentTime, false),
             arrayOf(filledStartupWith { it.withUuid(null) }, allIdentifiers + featureIdentifiers, true, lessCurrentTime, false),
             arrayOf(filledStartupWith { it.withDeviceId(null) }, allIdentifiers + featureIdentifiers, true, lessCurrentTime, false),
@@ -151,7 +154,7 @@ internal class StartupRequiredUtilsContainsIdentifiersTest(
             arrayOf(filledStartupWith { it.withDeviceIdHash(null) }, allIdentifiers + featureIdentifiers, true, lessCurrentTime, false),
             arrayOf(filledStartupWith { it.withReportAdUrl(null) }, allIdentifiers + featureIdentifiers, true, lessCurrentTime, false),
             arrayOf(filledStartupWith { it.withGetAdUrl(null) }, allIdentifiers + featureIdentifiers, true, lessCurrentTime, false),
-            arrayOf(filledStartupWith {  }, allIdentifiers + featureIdentifiers, true, lessCurrentTime, true),
+            arrayOf(filledStartupWith { }, allIdentifiers + featureIdentifiers, true, lessCurrentTime, true),
             arrayOf(filledStartupWith { it.withOutdated(true) }, allIdentifiers + customIdentifiers + featureIdentifiers, true, lessCurrentTime, false),
             // #55
             arrayOf(filledStartupWith { it.withUuid(null) }, allIdentifiers + customIdentifiers + featureIdentifiers, true, lessCurrentTime, false),
@@ -160,8 +163,9 @@ internal class StartupRequiredUtilsContainsIdentifiersTest(
             arrayOf(filledStartupWith { it.withReportAdUrl(null) }, allIdentifiers + customIdentifiers + featureIdentifiers, true, lessCurrentTime, false),
             arrayOf(filledStartupWith { it.withGetAdUrl(null) }, allIdentifiers + customIdentifiers + featureIdentifiers, true, lessCurrentTime, false),
             // #60
-            arrayOf(filledStartupWith {  }, allIdentifiers + customIdentifiers + featureIdentifiers, true, lessCurrentTime, true),
+            arrayOf(filledStartupWith { }, allIdentifiers + customIdentifiers + featureIdentifiers, true, lessCurrentTime, true),
         )
+        /* ktlint-enable max-line-length */
     }
 
     @Before
@@ -172,7 +176,9 @@ internal class StartupRequiredUtilsContainsIdentifiersTest(
             on { currentTimeSeconds() } doReturn currentTimeSeconds
         }
         stubbing(clidsStateChecker) {
-            on { doChosenClidsForRequestMatchLastRequestClids(clientClids, startup, clidsInfoStorage) } doReturn doClidsMatch
+            on {
+                doChosenClidsForRequestMatchLastRequestClids(clientClids, startup, clidsInfoStorage)
+            } doReturn doClidsMatch
         }
     }
 

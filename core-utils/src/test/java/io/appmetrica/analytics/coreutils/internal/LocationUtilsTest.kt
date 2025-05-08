@@ -1,13 +1,14 @@
 package io.appmetrica.analytics.coreutils.internal
 
 import android.location.Location
+import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class LocationUtilsTest {
+class LocationUtilsTest : CommonTest() {
 
     @Test
     fun locationToBytesAndBackConversion() {
@@ -32,7 +33,7 @@ class LocationUtilsTest {
 
     @Test
     fun `bytesToLocation for wrong`() {
-        assertThat(LocationUtils.bytesToLocation(ByteArray(5) { index -> index.toByte()})).isNull()
+        assertThat(LocationUtils.bytesToLocation(ByteArray(5) { index -> index.toByte() })).isNull()
     }
 
     @Test

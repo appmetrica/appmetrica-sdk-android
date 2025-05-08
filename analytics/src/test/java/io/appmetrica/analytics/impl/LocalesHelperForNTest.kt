@@ -5,39 +5,31 @@ import android.os.LocaleList
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.MockedStaticRule
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mock
-import org.mockito.Mockito.`when`
-import org.mockito.MockitoAnnotations
+import org.mockito.Mockito.mock
+import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 import java.util.Locale
 
 @RunWith(RobolectricTestRunner::class)
 class LocalesHelperForNTest : CommonTest() {
 
-    @Rule
-    @JvmField
+    @get:Rule
     val sPhoneUtils = MockedStaticRule(PhoneUtils::class.java)
-    @Mock
-    private lateinit var configuration: Configuration
 
-    @Before
-    fun setUp() {
-        MockitoAnnotations.openMocks(this)
-    }
+    private val configuration: Configuration = mock()
 
     @Test
     fun nullLocales() {
-        `when`(configuration.locales).thenReturn(null)
+        whenever(configuration.locales).thenReturn(null)
         assertThat(LocalesHelperForN.getLocales(configuration)).isNotNull.isEmpty()
     }
 
     @Test
     fun emptyLocales() {
-        `when`(configuration.locales).thenReturn(LocaleList.getEmptyLocaleList())
+        whenever(configuration.locales).thenReturn(LocaleList.getEmptyLocaleList())
         assertThat(LocalesHelperForN.getLocales(configuration)).isNotNull.isEmpty()
     }
 
@@ -49,10 +41,10 @@ class LocalesHelperForNTest : CommonTest() {
         val firstNormalizedLocale = "first_normalized_locale"
         val secondNormalizedLocale = "second_normalized_locale"
         val thirdNormalizedLocale = "third_normalized_locale"
-        `when`(configuration.locales).thenReturn(LocaleList(firstLocale, secondLocale, thirdLocale))
-        `when`(PhoneUtils.normalizedLocale(firstLocale)).thenReturn(firstNormalizedLocale)
-        `when`(PhoneUtils.normalizedLocale(secondLocale)).thenReturn(secondNormalizedLocale)
-        `when`(PhoneUtils.normalizedLocale(thirdLocale)).thenReturn(thirdNormalizedLocale)
+        whenever(configuration.locales).thenReturn(LocaleList(firstLocale, secondLocale, thirdLocale))
+        whenever(PhoneUtils.normalizedLocale(firstLocale)).thenReturn(firstNormalizedLocale)
+        whenever(PhoneUtils.normalizedLocale(secondLocale)).thenReturn(secondNormalizedLocale)
+        whenever(PhoneUtils.normalizedLocale(thirdLocale)).thenReturn(thirdNormalizedLocale)
         assertThat(LocalesHelperForN.getLocales(configuration))
             .isEqualTo(listOf(firstNormalizedLocale, secondNormalizedLocale, thirdNormalizedLocale))
     }

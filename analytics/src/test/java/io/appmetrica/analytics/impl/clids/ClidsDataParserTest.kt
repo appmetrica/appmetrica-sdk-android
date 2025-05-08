@@ -10,7 +10,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito.anyMap
-import org.mockito.Mockito.`when`
+import org.mockito.kotlin.whenever
 import org.robolectric.ParameterizedRobolectricTestRunner
 
 private const val KEY_CLIDS = "clids"
@@ -38,7 +38,12 @@ class ClidsDataParserTest(
 
                 // #5
                 arrayOf(ContentValues().also { it.put(KEY_CLIDS, 4) }, null, false, null),
-                arrayOf(ContentValues().also { it.put(KEY_CLIDS, "{}") }, emptyMap<String, String>(), true, emptyMap<String, String>()),
+                arrayOf(
+                    ContentValues().also { it.put(KEY_CLIDS, "{}") },
+                    emptyMap<String, String>(),
+                    true,
+                    emptyMap<String, String>()
+                ),
                 arrayOf(ContentValues().also { it.put(KEY_CLIDS, "{}") }, emptyMap<String, String>(), false, null),
                 arrayOf(ContentValues().also { it.put(KEY_CLIDS, "bad_json") }, null, true, null),
                 arrayOf(ContentValues().also { it.put(KEY_CLIDS, "bad_json") }, null, false, null),
@@ -63,7 +68,12 @@ class ClidsDataParserTest(
                     mapOf("clid0" to "0")
                 ),
                 arrayOf(
-                    ContentValues().also { it.put(KEY_CLIDS, JSONObject().put("clid0", "0").put("clid1", "1").toString()) },
+                    ContentValues().also {
+                        it.put(
+                            KEY_CLIDS,
+                            JSONObject().put("clid0", "0").put("clid1", "1").toString()
+                        )
+                    },
                     mapOf("clid0" to "0", "clid1" to "1"),
                     true,
                     mapOf("clid0" to "0", "clid1" to "1")
@@ -91,14 +101,13 @@ class ClidsDataParserTest(
         }
     }
 
-    @Rule
-    @JvmField
+    @get:Rule
     val startupUtils = MockedStaticRule(StartupUtils::class.java)
     private val dataParser = ClidsDataParser()
 
     @Test
     fun parseClids() {
-        `when`(StartupUtils.isValidClids(anyMap())).thenReturn(validClids)
+        whenever(StartupUtils.isValidClids(anyMap())).thenReturn(validClids)
         assertThat(dataParser.invoke(values)).isEqualTo(expected)
         startupUtils.staticMock.verify { StartupUtils.isValidClids(inputMap) }
     }

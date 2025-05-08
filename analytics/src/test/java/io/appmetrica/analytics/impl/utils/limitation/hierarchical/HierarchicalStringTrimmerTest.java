@@ -16,9 +16,9 @@ import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAsse
 @RunWith(ParameterizedRobolectricTestRunner.class)
 public class HierarchicalStringTrimmerTest extends CommonTest {
 
-    private String input;
-    private String expected;
-    private int expectedTruncatedBytes;
+    private final String input;
+    private final String expected;
+    private final int expectedTruncatedBytes;
 
     public HierarchicalStringTrimmerTest(String input, String expected, int expectedTruncatedBytes) {
         this.input = input;
@@ -29,18 +29,18 @@ public class HierarchicalStringTrimmerTest extends CommonTest {
     @ParameterizedRobolectricTestRunner.Parameters(name = "\"{0}\" -> \"{1}\": {2} bytes")
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
-                {null, null, 0},
-                {"", "", 0},
-                {"q", "q", 0},
-                {"#`&*%", "#`&*%", 0},
-                {"ыфвы", "ыфвы", 0},
-                {"qwertyuioo", "qwertyuioo", 0},
-                {"qwertyuiooa", "qwertyuioo", 1},
-                {"qwertyuiooaф", "qwertyuioo", 3},
-                {"фыаперпвмп", "фыаперпвмп", 0},
-                {"выдылвдвлвцдвлв", "выдылвдвлв", 10},
-                {"!@#$%^&*()_+:>", "!@#$%^&*()", 4},
-                {"вqдakвkвлвцдlлf", "вqдakвkвлв", 8},
+            {null, null, 0},
+            {"", "", 0},
+            {"q", "q", 0},
+            {"#`&*%", "#`&*%", 0},
+            {"ыфвы", "ыфвы", 0},
+            {"qwertyuioo", "qwertyuioo", 0},
+            {"qwertyuiooa", "qwertyuioo", 1},
+            {"qwertyuiooaф", "qwertyuioo", 3},
+            {"фыаперпвмп", "фыаперпвмп", 0},
+            {"выдылвдвлвцдвлв", "выдылвдвлв", 10},
+            {"!@#$%^&*()_+:>", "!@#$%^&*()", 4},
+            {"вqдakвkвлвцдlлf", "вqдakвkвлв", 8},
         });
     }
 
@@ -56,11 +56,11 @@ public class HierarchicalStringTrimmerTest extends CommonTest {
         TrimmingResult<String, BytesTruncatedProvider> trimmingResult = hierarchicalStringTrimmer.trim(input);
 
         ObjectPropertyAssertions(trimmingResult)
-                .checkField("value", expected)
-                .checkFieldRecursively(
-                        "metaInfo",
-                        new TruncationInfoConsumer(expectedTruncatedBytes)
-                )
-                .checkAll();
+            .checkField("value", expected)
+            .checkFieldRecursively(
+                "metaInfo",
+                new TruncationInfoConsumer(expectedTruncatedBytes)
+            )
+            .checkAll();
     }
 }

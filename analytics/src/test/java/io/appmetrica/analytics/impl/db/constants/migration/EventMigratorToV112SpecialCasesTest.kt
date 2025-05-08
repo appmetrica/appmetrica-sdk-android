@@ -41,16 +41,18 @@ internal class EventMigratorToV112SpecialCasesTest : CommonTest() {
     @Before
     fun setUp() {
         cursor = prepareCursor()
-        whenever(database.query(
-            "reports",
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            "2000"
-        )).thenReturn(cursor)
+        whenever(
+            database.query(
+                "reports",
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                "2000"
+            )
+        ).thenReturn(cursor)
 
         eventsMigrator = ComponentDatabaseUpgradeScriptToV112.EventsMigrator()
         dbEventModelConverter = dbEventModelConverterMockedConstructionRule.constructionMock.constructed().first()
@@ -86,16 +88,18 @@ internal class EventMigratorToV112SpecialCasesTest : CommonTest() {
 
     @Test
     fun `runScript if read throw`() {
-        whenever(database.query(
-            "reports",
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            "2000"
-        )).thenThrow(RuntimeException())
+        whenever(
+            database.query(
+                "reports",
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                "2000"
+            )
+        ).thenThrow(RuntimeException())
 
         eventsMigrator.runScript(database)
 
@@ -119,16 +123,18 @@ internal class EventMigratorToV112SpecialCasesTest : CommonTest() {
 
     @Test
     fun `runScript if no old data`() {
-        whenever(database.query(
-            "reports",
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            "2000"
-        )).thenReturn(
+        whenever(
+            database.query(
+                "reports",
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                "2000"
+            )
+        ).thenReturn(
             MatrixCursor(
                 arrayOf(
                     "session_id", "session_type", "number", "type", "global_number",
@@ -187,13 +193,13 @@ internal class EventMigratorToV112SpecialCasesTest : CommonTest() {
         addRow(
             arrayOf(
                 10_000_000_020L, 0, 15, 1, 3421, 1234242L, 54, "Event name", "Event value", 343, "", "", 23,
-                13, 1, "ProfileId", 1, 0, 1, 22, ByteArray(12) {it.toByte()}
+                13, 1, "ProfileId", 1, 0, 1, 22, ByteArray(12) { it.toByte() }
             )
         )
         addRow(
             arrayOf(
                 10_000_000_030L, 1, 15, 1, 3421, 1234242L, 54, "Event name #2", "Event value #2", 343, "", "", 23,
-                13, 1, "ProfileId", 1, 0, 0, 22, ByteArray(12) {it.toByte()}
+                13, 1, "ProfileId", 1, 0, 0, 22, ByteArray(12) { it.toByte() }
             )
         )
     }

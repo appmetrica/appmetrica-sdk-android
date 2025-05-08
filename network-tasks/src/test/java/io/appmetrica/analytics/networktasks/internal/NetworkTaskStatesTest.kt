@@ -2,7 +2,7 @@ package io.appmetrica.analytics.networktasks.internal
 
 import io.appmetrica.analytics.coreapi.internal.io.IExecutionPolicy
 import io.appmetrica.analytics.coreutils.internal.asserts.DebugAssert
-import io.appmetrica.analytics.testutils.LogRule
+import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.MockedStaticRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Rule
@@ -23,7 +23,7 @@ import java.util.concurrent.Executor
 import javax.net.ssl.SSLSocketFactory
 
 @RunWith(RobolectricTestRunner::class)
-class NetworkTaskStatesTest {
+class NetworkTaskStatesTest : CommonTest() {
 
     private val executor = mock<Executor>()
     private val requestDataHolder = mock<RequestDataHolder>()

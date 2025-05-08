@@ -64,7 +64,7 @@ class AllFieldsTest(private val clazz: Class<*>) : CommonTest() {
 }
 
 @RunWith(RobolectricTestRunner::class)
-class AndroidClassFieldsTest {
+class AndroidClassFieldsTest : CommonTest() {
 
     @Test
     fun reporterArgumentsEqualsAndHashCode() {

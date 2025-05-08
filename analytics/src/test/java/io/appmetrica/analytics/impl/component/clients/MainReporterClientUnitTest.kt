@@ -17,9 +17,7 @@ import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.kotlin.any
 import org.mockito.kotlin.mock
-import org.mockito.kotlin.never
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoInteractions
@@ -48,16 +46,16 @@ class MainReporterClientUnitTest : CommonTest() {
     }
 
     @Test
-    fun testTrackingStatusUpdatingWithTrue() {
-        testTrackingStatusUpdating(true)
+    fun trackingStatusUpdatingWithTrue() {
+        verifyTrackingStatusUpdating(true)
     }
 
     @Test
-    fun testTrackingStatusUpdatingWithFalse() {
-        testTrackingStatusUpdating(false)
+    fun trackingStatusUpdatingWithFalse() {
+        verifyTrackingStatusUpdating(false)
     }
 
-    private fun testTrackingStatusUpdating(value: Boolean) {
+    private fun verifyTrackingStatusUpdating(value: Boolean) {
         whenever(counterConfiguration.isLocationTrackingEnabled()).thenReturn(value)
         mainReporterClientUnit.handleReport(CounterReport(), clientConfiguration)
         verify(GlobalServiceLocator.getInstance().locationClientApi).updateTrackingStatusFromClient(value)
@@ -78,7 +76,7 @@ class MainReporterClientUnitTest : CommonTest() {
     }
 
     @Test
-    fun testDispatchEvent() {
+    fun dispatchEvent() {
         val counterReport = CounterReport("Test event", InternalEvents.EVENT_TYPE_REGULAR.typeId)
         val mockedArguments = CommonArgumentsTestUtils.createMockedArguments()
         mainReporterClientUnit.handleReport(counterReport, mockedArguments)

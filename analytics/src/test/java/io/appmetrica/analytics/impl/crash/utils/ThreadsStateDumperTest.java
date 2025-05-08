@@ -30,20 +30,20 @@ public class ThreadsStateDumperTest extends CommonTest {
 
     @Mock
     private ThreadsStateDumper.ThreadProvider threadProvider;
-    private BiFunction<Thread, StackTraceElement[], ThreadState> threadConverter = mock(BiFunction.class);
+    private final BiFunction<Thread, StackTraceElement[], ThreadState> threadConverter = mock(BiFunction.class);
     @Mock
     private ProcessDetector processDetector;
 
     @InjectMocks
     private ThreadsStateDumper threadsStateDumper;
 
-    private Thread mainThread = spy(new Thread("main"));
+    private final Thread mainThread = spy(new Thread("main"));
     @Mock
     private ThreadState mainThreadState;// = mock(ThreadState.class);
 
-    private Map<Thread, StackTraceElement[]> otherThreads = new LinkedHashMap<Thread, StackTraceElement[]>();
+    private final Map<Thread, StackTraceElement[]> otherThreads = new LinkedHashMap<Thread, StackTraceElement[]>();
 
-    private List<ThreadState> otherThreadState = new ArrayList<ThreadState>();
+    private final List<ThreadState> otherThreadState = new ArrayList<ThreadState>();
 
     @Before
     public void setUp() {

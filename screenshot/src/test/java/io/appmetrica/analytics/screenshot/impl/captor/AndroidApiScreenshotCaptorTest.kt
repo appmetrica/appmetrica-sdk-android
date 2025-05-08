@@ -11,7 +11,6 @@ import io.appmetrica.analytics.screenshot.impl.callback.ScreenshotCaptorCallback
 import io.appmetrica.analytics.screenshot.impl.config.client.model.ClientSideApiCaptorConfig
 import io.appmetrica.analytics.screenshot.impl.config.client.model.ClientSideScreenshotConfig
 import io.appmetrica.analytics.testutils.CommonTest
-import java.util.concurrent.Executor
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -26,6 +25,7 @@ import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
+import java.util.concurrent.Executor
 
 @RunWith(RobolectricTestRunner::class)
 class AndroidApiScreenshotCaptorTest : CommonTest() {

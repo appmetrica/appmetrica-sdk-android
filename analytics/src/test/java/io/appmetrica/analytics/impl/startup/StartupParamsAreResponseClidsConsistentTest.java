@@ -26,9 +26,9 @@ import static org.mockito.Mockito.when;
 @RunWith(ParameterizedRobolectricTestRunner.class)
 public class StartupParamsAreResponseClidsConsistentTest extends CommonTest {
 
-    private IdentifiersResult mInputResponseClids;
-    private String mInputClientClids;
-    private boolean mExpectedResult;
+    private final IdentifiersResult mInputResponseClids;
+    private final String mInputClientClids;
+    private final boolean mExpectedResult;
 
     public StartupParamsAreResponseClidsConsistentTest(Map<String, String> inputResponseClids,
                                                        Map<String, String> inputClientClids,
@@ -39,18 +39,18 @@ public class StartupParamsAreResponseClidsConsistentTest extends CommonTest {
     }
 
     @ParameterizedRobolectricTestRunner.Parameters(name = "[{index}]Return {2} for responseClids = \"{0}\" and " +
-            "clientClids = \"{1}\"")
+        "clientClids = \"{1}\"")
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
-                {null, null, true},
-                {null, Collections.emptyMap(), true},
-                {null, StartupParamsTestUtils.CLIDS_MAP_2, true},
-                {Collections.emptyMap(), null, true},
-                {Collections.emptyMap(), Collections.emptyMap(), true},
-                {Collections.emptyMap(), StartupParamsTestUtils.CLIDS_MAP_2, false},
-                {StartupParamsTestUtils.CLIDS_MAP_1, null, true},
-                {StartupParamsTestUtils.CLIDS_MAP_1, Collections.emptyMap(), true},
-                {StartupParamsTestUtils.CLIDS_MAP_1, StartupParamsTestUtils.CLIDS_MAP_2, true}
+            {null, null, true},
+            {null, Collections.emptyMap(), true},
+            {null, StartupParamsTestUtils.CLIDS_MAP_2, true},
+            {Collections.emptyMap(), null, true},
+            {Collections.emptyMap(), Collections.emptyMap(), true},
+            {Collections.emptyMap(), StartupParamsTestUtils.CLIDS_MAP_2, false},
+            {StartupParamsTestUtils.CLIDS_MAP_1, null, true},
+            {StartupParamsTestUtils.CLIDS_MAP_1, Collections.emptyMap(), true},
+            {StartupParamsTestUtils.CLIDS_MAP_1, StartupParamsTestUtils.CLIDS_MAP_2, true}
         });
     }
 

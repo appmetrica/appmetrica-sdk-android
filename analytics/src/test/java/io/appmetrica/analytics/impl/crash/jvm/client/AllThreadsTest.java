@@ -1,7 +1,5 @@
 package io.appmetrica.analytics.impl.crash.jvm.client;
 
-import io.appmetrica.analytics.impl.crash.jvm.client.AllThreads;
-import io.appmetrica.analytics.impl.crash.jvm.client.ThreadState;
 import io.appmetrica.analytics.testutils.CommonTest;
 import java.util.Arrays;
 import java.util.List;

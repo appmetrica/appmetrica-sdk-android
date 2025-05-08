@@ -43,13 +43,13 @@ public class FlagsConverterTest extends CommonTest {
         when(optionalBoolConverter.toProto(sslPinningEnabled)).thenReturn(sslPinningEnabledProto);
         when(optionalBoolConverter.toModel(sslPinningEnabledProto)).thenReturn(sslPinningEnabled);
         mModelCollectingFlags = new CollectingFlags.CollectingFlagsBuilder()
-                .withSslPinning(sslPinningEnabled)
-                .withPermissionsCollectingEnabled(mPermissionsCollectingEnabled)
-                .withFeaturesCollectingEnabled(mFeaturesCollectingEnabled)
-                .withGoogleAid(mGoogleAid)
-                .withSimInfo(mSimInfo)
-                .withHuaweiOaid(huaweiOaid)
-                .build();
+            .withSslPinning(sslPinningEnabled)
+            .withPermissionsCollectingEnabled(mPermissionsCollectingEnabled)
+            .withFeaturesCollectingEnabled(mFeaturesCollectingEnabled)
+            .withGoogleAid(mGoogleAid)
+            .withSimInfo(mSimInfo)
+            .withHuaweiOaid(huaweiOaid)
+            .build();
         mProtoFlags = new StartupStateProtobuf.StartupState.Flags();
         mProtoFlags.permissionsCollectingEnabled = mPermissionsCollectingEnabled;
         mProtoFlags.featuresCollectingEnabled = mFeaturesCollectingEnabled;
@@ -63,8 +63,8 @@ public class FlagsConverterTest extends CommonTest {
     public void testToProto() throws Exception {
         StartupStateProtobuf.StartupState.Flags proto = mFlagsConverter.fromModel(mModelCollectingFlags);
         ObjectPropertyAssertions<StartupStateProtobuf.StartupState.Flags> assertions =
-                ObjectPropertyAssertions(proto)
-                        .withFinalFieldOnly(false);
+            ObjectPropertyAssertions(proto)
+                .withFinalFieldOnly(false);
 
         assertions.checkField("permissionsCollectingEnabled", mPermissionsCollectingEnabled);
         assertions.checkField("featuresCollectingEnabled", mFeaturesCollectingEnabled);
@@ -80,8 +80,8 @@ public class FlagsConverterTest extends CommonTest {
     public void testToModel() throws Exception {
         CollectingFlags model = mFlagsConverter.toModel(mProtoFlags);
         ObjectPropertyAssertions<CollectingFlags> assertions =
-                ObjectPropertyAssertions(model)
-                        .withFinalFieldOnly(false);
+            ObjectPropertyAssertions(model)
+                .withFinalFieldOnly(false);
 
         assertions.checkField("permissionsCollectingEnabled", mPermissionsCollectingEnabled);
         assertions.checkField("featuresCollectingEnabled", mFeaturesCollectingEnabled);
@@ -98,8 +98,8 @@ public class FlagsConverterTest extends CommonTest {
         when(optionalBoolConverter.toProto(null)).thenReturn(StartupStateProtobuf.StartupState.OPTIONAL_BOOL_UNDEFINED);
         StartupStateProtobuf.StartupState.Flags proto = mFlagsConverter.fromModel(new CollectingFlags.CollectingFlagsBuilder().build());
         ObjectPropertyAssertions<StartupStateProtobuf.StartupState.Flags> assertions =
-                ObjectPropertyAssertions(proto)
-                        .withFinalFieldOnly(false);
+            ObjectPropertyAssertions(proto)
+                .withFinalFieldOnly(false);
 
         assertions.checkField("permissionsCollectingEnabled", false);
         assertions.checkField("featuresCollectingEnabled", false);
@@ -116,8 +116,8 @@ public class FlagsConverterTest extends CommonTest {
         when(optionalBoolConverter.toModel(StartupStateProtobuf.StartupState.OPTIONAL_BOOL_UNDEFINED)).thenReturn(null);
         CollectingFlags model = mFlagsConverter.toModel(new StartupStateProtobuf.StartupState.Flags());
         ObjectPropertyAssertions<CollectingFlags> assertions =
-                ObjectPropertyAssertions(model)
-                        .withFinalFieldOnly(false);
+            ObjectPropertyAssertions(model)
+                .withFinalFieldOnly(false);
         assertions.checkField("permissionsCollectingEnabled", false);
         assertions.checkField("featuresCollectingEnabled", false);
         assertions.checkField("googleAid", false);

@@ -20,7 +20,7 @@ public class SaveInitialUserProfileIDHandlerTest extends CommonTest {
     @Mock
     private ComponentUnit componentUnit;
 
-    private CounterReport report = new CounterReport();
+    private final CounterReport report = new CounterReport();
 
     private SaveInitialUserProfileIDHandler handler;
 

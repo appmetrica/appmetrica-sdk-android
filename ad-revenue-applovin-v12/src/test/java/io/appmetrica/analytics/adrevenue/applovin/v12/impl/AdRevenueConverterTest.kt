@@ -102,100 +102,118 @@ class AdRevenueConverterTest : CommonTest() {
         whenever(maxAd.format).thenReturn(null)
         converter.convert(maxAd, appLovinSdk).also { adRevenue ->
             assertThat(adRevenue.adType).isNull()
-            assertThat(adRevenue.payload).isEqualTo(mapOf(
-                "countryCode" to "RU",
-                "original_ad_type" to "null",
-                "original_source" to "ad-revenue-applovin-v12",
-                AdRevenueConstants.SOURCE_KEY to "applovin"
-            ))
+            assertThat(adRevenue.payload).isEqualTo(
+                mapOf(
+                    "countryCode" to "RU",
+                    "original_ad_type" to "null",
+                    "original_source" to "ad-revenue-applovin-v12",
+                    AdRevenueConstants.SOURCE_KEY to "applovin"
+                )
+            )
         }
 
         whenever(maxAd.format).thenReturn(MaxAdFormat.BANNER)
         converter.convert(maxAd, appLovinSdk).also { adRevenue ->
             assertThat(adRevenue.adType).isEqualTo(ModuleAdType.BANNER)
-            assertThat(adRevenue.payload).isEqualTo(mapOf(
-                "countryCode" to "RU",
-                "original_ad_type" to "BANNER",
-                "original_source" to "ad-revenue-applovin-v12",
-                AdRevenueConstants.SOURCE_KEY to "applovin"
-            ))
+            assertThat(adRevenue.payload).isEqualTo(
+                mapOf(
+                    "countryCode" to "RU",
+                    "original_ad_type" to "BANNER",
+                    "original_source" to "ad-revenue-applovin-v12",
+                    AdRevenueConstants.SOURCE_KEY to "applovin"
+                )
+            )
         }
 
         whenever(maxAd.format).thenReturn(MaxAdFormat.MREC)
         converter.convert(maxAd, appLovinSdk).also { adRevenue ->
             assertThat(adRevenue.adType).isEqualTo(ModuleAdType.MREC)
-            assertThat(adRevenue.payload).isEqualTo(mapOf(
-                "countryCode" to "RU",
-                "original_ad_type" to "MREC",
-                "original_source" to "ad-revenue-applovin-v12",
-                AdRevenueConstants.SOURCE_KEY to "applovin"
-            ))
+            assertThat(adRevenue.payload).isEqualTo(
+                mapOf(
+                    "countryCode" to "RU",
+                    "original_ad_type" to "MREC",
+                    "original_source" to "ad-revenue-applovin-v12",
+                    AdRevenueConstants.SOURCE_KEY to "applovin"
+                )
+            )
         }
 
         whenever(maxAd.format).thenReturn(MaxAdFormat.LEADER)
         converter.convert(maxAd, appLovinSdk).also { adRevenue ->
             assertThat(adRevenue.adType).isEqualTo(ModuleAdType.OTHER)
-            assertThat(adRevenue.payload).isEqualTo(mapOf(
-                "countryCode" to "RU",
-                "original_ad_type" to "LEADER",
-                "original_source" to "ad-revenue-applovin-v12",
-                AdRevenueConstants.SOURCE_KEY to "applovin"
-            ))
+            assertThat(adRevenue.payload).isEqualTo(
+                mapOf(
+                    "countryCode" to "RU",
+                    "original_ad_type" to "LEADER",
+                    "original_source" to "ad-revenue-applovin-v12",
+                    AdRevenueConstants.SOURCE_KEY to "applovin"
+                )
+            )
         }
 
         whenever(maxAd.format).thenReturn(MaxAdFormat.INTERSTITIAL)
         converter.convert(maxAd, appLovinSdk).also { adRevenue ->
             assertThat(adRevenue.adType).isEqualTo(ModuleAdType.INTERSTITIAL)
-            assertThat(adRevenue.payload).isEqualTo(mapOf(
-                "countryCode" to "RU",
-                "original_ad_type" to "INTER",
-                "original_source" to "ad-revenue-applovin-v12",
-                AdRevenueConstants.SOURCE_KEY to "applovin"
-            ))
+            assertThat(adRevenue.payload).isEqualTo(
+                mapOf(
+                    "countryCode" to "RU",
+                    "original_ad_type" to "INTER",
+                    "original_source" to "ad-revenue-applovin-v12",
+                    AdRevenueConstants.SOURCE_KEY to "applovin"
+                )
+            )
         }
 
         whenever(maxAd.format).thenReturn(MaxAdFormat.APP_OPEN)
         converter.convert(maxAd, appLovinSdk).also { adRevenue ->
             assertThat(adRevenue.adType).isEqualTo(ModuleAdType.OTHER)
-            assertThat(adRevenue.payload).isEqualTo(mapOf(
-                "countryCode" to "RU",
-                "original_ad_type" to "APPOPEN",
-                "original_source" to "ad-revenue-applovin-v12",
-                AdRevenueConstants.SOURCE_KEY to "applovin"
-            ))
+            assertThat(adRevenue.payload).isEqualTo(
+                mapOf(
+                    "countryCode" to "RU",
+                    "original_ad_type" to "APPOPEN",
+                    "original_source" to "ad-revenue-applovin-v12",
+                    AdRevenueConstants.SOURCE_KEY to "applovin"
+                )
+            )
         }
 
         whenever(maxAd.format).thenReturn(MaxAdFormat.REWARDED)
         converter.convert(maxAd, appLovinSdk).also { adRevenue ->
             assertThat(adRevenue.adType).isEqualTo(ModuleAdType.REWARDED)
-            assertThat(adRevenue.payload).isEqualTo(mapOf(
-                "countryCode" to "RU",
-                "original_ad_type" to "REWARDED",
-                "original_source" to "ad-revenue-applovin-v12",
-                AdRevenueConstants.SOURCE_KEY to "applovin"
-            ))
+            assertThat(adRevenue.payload).isEqualTo(
+                mapOf(
+                    "countryCode" to "RU",
+                    "original_ad_type" to "REWARDED",
+                    "original_source" to "ad-revenue-applovin-v12",
+                    AdRevenueConstants.SOURCE_KEY to "applovin"
+                )
+            )
         }
 
         whenever(maxAd.format).thenReturn(MaxAdFormat.REWARDED_INTERSTITIAL)
         converter.convert(maxAd, appLovinSdk).also { adRevenue ->
             assertThat(adRevenue.adType).isEqualTo(ModuleAdType.OTHER)
-            assertThat(adRevenue.payload).isEqualTo(mapOf(
-                "countryCode" to "RU",
-                "original_ad_type" to "REWARDED_INTER",
-                "original_source" to "ad-revenue-applovin-v12",
-                AdRevenueConstants.SOURCE_KEY to "applovin"
-            ))
+            assertThat(adRevenue.payload).isEqualTo(
+                mapOf(
+                    "countryCode" to "RU",
+                    "original_ad_type" to "REWARDED_INTER",
+                    "original_source" to "ad-revenue-applovin-v12",
+                    AdRevenueConstants.SOURCE_KEY to "applovin"
+                )
+            )
         }
 
         whenever(maxAd.format).thenReturn(MaxAdFormat.NATIVE)
         converter.convert(maxAd, appLovinSdk).also { adRevenue ->
             assertThat(adRevenue.adType).isEqualTo(ModuleAdType.NATIVE)
-            assertThat(adRevenue.payload).isEqualTo(mapOf(
-                "countryCode" to "RU",
-                "original_ad_type" to "NATIVE",
-                "original_source" to "ad-revenue-applovin-v12",
-                AdRevenueConstants.SOURCE_KEY to "applovin"
-            ))
+            assertThat(adRevenue.payload).isEqualTo(
+                mapOf(
+                    "countryCode" to "RU",
+                    "original_ad_type" to "NATIVE",
+                    "original_source" to "ad-revenue-applovin-v12",
+                    AdRevenueConstants.SOURCE_KEY to "applovin"
+                )
+            )
         }
     }
 }

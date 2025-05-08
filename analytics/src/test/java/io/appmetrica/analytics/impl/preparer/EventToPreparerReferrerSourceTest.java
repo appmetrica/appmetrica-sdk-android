@@ -31,9 +31,9 @@ public class EventToPreparerReferrerSourceTest extends CommonTest {
     @ParameterizedRobolectricTestRunner.Parameters(name = "{0} to {1}")
     public static Collection<Object[]> data() {
         List<Object[]> data = Arrays.asList(
-                new Object[]{ ReferrerInfo.Source.UNKNOWN, Referrer.UNKNOWN },
-                new Object[]{ ReferrerInfo.Source.GP, Referrer.GP },
-                new Object[]{ ReferrerInfo.Source.HMS, Referrer.HMS }
+            new Object[]{ReferrerInfo.Source.UNKNOWN, Referrer.UNKNOWN},
+            new Object[]{ReferrerInfo.Source.GP, Referrer.GP},
+            new Object[]{ReferrerInfo.Source.HMS, Referrer.HMS}
         );
         assert data.size() == ReferrerInfo.Source.values().length;
         return data;
@@ -69,10 +69,10 @@ public class EventToPreparerReferrerSourceTest extends CommonTest {
         EventFromDbModel event = new EventFromDbModel(cv);
         Referrer referrer = Referrer.parseFrom(eventPreparer.getValueComposer().getValue(event, config));
         new ProtoObjectPropertyAssertions<Referrer>(referrer)
-                .checkField("referrer", "referrer".getBytes())
-                .checkField("clickTimestamp", 10L)
-                .checkField("installBeginTimestamp", 20L)
-                .checkField("source", protoSource)
-                .checkAll();
+            .checkField("referrer", "referrer".getBytes())
+            .checkField("clickTimestamp", 10L)
+            .checkField("installBeginTimestamp", 20L)
+            .checkField("source", protoSource)
+            .checkAll();
     }
 }

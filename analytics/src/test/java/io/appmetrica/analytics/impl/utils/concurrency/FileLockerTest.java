@@ -32,21 +32,21 @@ public class FileLockerTest extends CommonTest {
     @ParameterizedRobolectricTestRunner.Parameters(name = "For file name = {0}")
     public static Collection<Object[]> data() {
         return Arrays.asList(
-                new Object[]{Constants.OLD_COMPONENT_DATABASE_PREFIX + sPackage + sDelimeter + "null"},
-                new Object[]{Constants.OLD_COMPONENT_DATABASE_PREFIX + sPackage + sDelimeter + "null" + "-journal"},
-                new Object[]{Constants.OLD_COMPONENT_DATABASE_PREFIX + sPackage + sDelimeter + "null" + "-shm"},
-                new Object[]{Constants.OLD_COMPONENT_DATABASE_PREFIX + sPackage + sDelimeter + "null" + "-wal"},
-                new Object[]{Constants.OLD_COMPONENT_DATABASE_PREFIX + sPackage},
-                new Object[]{Constants.OLD_COMPONENT_DATABASE_PREFIX + sPackage + "-journal"},
-                new Object[]{Constants.OLD_COMPONENT_DATABASE_PREFIX + sPackage + "-shm"},
-                new Object[]{Constants.OLD_COMPONENT_DATABASE_PREFIX + sPackage + "-wal"},
-                new Object[]{Constants.OLD_COMPONENT_DATABASE_PREFIX + sPackage + sDelimeter + sApiKey},
-                new Object[]{Constants.OLD_COMPONENT_DATABASE_PREFIX + sPackage + sDelimeter + sApiKey + "-journal"},
-                new Object[]{Constants.OLD_COMPONENT_DATABASE_PREFIX + sPackage + sDelimeter + sApiKey + "-shm"},
-                new Object[]{Constants.OLD_COMPONENT_DATABASE_PREFIX + sPackage + sDelimeter + sApiKey + "-wal"},
-                new Object[]{Constants.OLD_CLIENT_DATABASE},
-                new Object[]{Constants.OLD_SERVICE_DATABASE},
-                new Object[]{"18883-61451b00-1102-4008-9e99-8247c7d2df8"}
+            new Object[]{Constants.OLD_COMPONENT_DATABASE_PREFIX + sPackage + sDelimeter + "null"},
+            new Object[]{Constants.OLD_COMPONENT_DATABASE_PREFIX + sPackage + sDelimeter + "null" + "-journal"},
+            new Object[]{Constants.OLD_COMPONENT_DATABASE_PREFIX + sPackage + sDelimeter + "null" + "-shm"},
+            new Object[]{Constants.OLD_COMPONENT_DATABASE_PREFIX + sPackage + sDelimeter + "null" + "-wal"},
+            new Object[]{Constants.OLD_COMPONENT_DATABASE_PREFIX + sPackage},
+            new Object[]{Constants.OLD_COMPONENT_DATABASE_PREFIX + sPackage + "-journal"},
+            new Object[]{Constants.OLD_COMPONENT_DATABASE_PREFIX + sPackage + "-shm"},
+            new Object[]{Constants.OLD_COMPONENT_DATABASE_PREFIX + sPackage + "-wal"},
+            new Object[]{Constants.OLD_COMPONENT_DATABASE_PREFIX + sPackage + sDelimeter + sApiKey},
+            new Object[]{Constants.OLD_COMPONENT_DATABASE_PREFIX + sPackage + sDelimeter + sApiKey + "-journal"},
+            new Object[]{Constants.OLD_COMPONENT_DATABASE_PREFIX + sPackage + sDelimeter + sApiKey + "-shm"},
+            new Object[]{Constants.OLD_COMPONENT_DATABASE_PREFIX + sPackage + sDelimeter + sApiKey + "-wal"},
+            new Object[]{Constants.OLD_CLIENT_DATABASE},
+            new Object[]{Constants.OLD_SERVICE_DATABASE},
+            new Object[]{"18883-61451b00-1102-4008-9e99-8247c7d2df8"}
         );
     }
 
@@ -109,7 +109,8 @@ public class FileLockerTest extends CommonTest {
         when(FileUtils.getFileFromSdkStorage(eq(context), anyString())).thenReturn(null);
         try {
             mDbFileLock.lock();
-        } catch (NullPointerException ignored) {}
+        } catch (NullPointerException ignored) {
+        }
         mDbFileLock.unlock();
     }
 

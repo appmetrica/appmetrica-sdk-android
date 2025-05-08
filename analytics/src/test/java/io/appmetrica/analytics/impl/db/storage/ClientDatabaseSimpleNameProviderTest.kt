@@ -23,5 +23,4 @@ internal class ClientDatabaseSimpleNameProviderTest : CommonTest() {
     fun legacyDatabaseName() {
         assertThat(simpleNameProvider.legacyDatabaseName).isEqualTo("metrica_client_data.db")
     }
-
 }

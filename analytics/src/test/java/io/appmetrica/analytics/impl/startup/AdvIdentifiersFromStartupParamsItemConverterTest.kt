@@ -9,9 +9,8 @@ import org.junit.Before
 import org.junit.Test
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
-import org.mockito.kotlin.whenever
 
-class AdvIdentifiersFromStartupParamsItemConverterTest: CommonTest() {
+class AdvIdentifiersFromStartupParamsItemConverterTest : CommonTest() {
 
     private val gaid = "gaid"
     private val hoaid = "hoaid"

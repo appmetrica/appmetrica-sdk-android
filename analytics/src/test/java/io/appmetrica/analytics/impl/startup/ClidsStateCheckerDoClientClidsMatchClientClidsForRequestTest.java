@@ -32,19 +32,19 @@ public class ClidsStateCheckerDoClientClidsMatchClientClidsForRequestTest extend
     @ParameterizedRobolectricTestRunner.Parameters(name = "{index}")
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
-                // #0
-                {null, null, true},
-                {null, EMPTY_MAP, true},
-                {null, MAP_WITH_VALID_ITEMS_1, false},
-                {EMPTY_MAP, null, true},
-                {EMPTY_MAP, EMPTY_MAP, true},
+            // #0
+            {null, null, true},
+            {null, EMPTY_MAP, true},
+            {null, MAP_WITH_VALID_ITEMS_1, false},
+            {EMPTY_MAP, null, true},
+            {EMPTY_MAP, EMPTY_MAP, true},
 
-                // #5
-                {EMPTY_MAP, MAP_WITH_VALID_ITEMS_1, false},
-                {MAP_WITH_VALID_ITEMS_1, null, false},
-                {MAP_WITH_VALID_ITEMS_1, EMPTY_MAP, false},
-                {MAP_WITH_VALID_ITEMS_1, MAP_WITH_VALID_ITEMS_1, true},
-                {MAP_WITH_VALID_ITEMS_1, MAP_WITH_VALID_ITEMS_2, false},
+            // #5
+            {EMPTY_MAP, MAP_WITH_VALID_ITEMS_1, false},
+            {MAP_WITH_VALID_ITEMS_1, null, false},
+            {MAP_WITH_VALID_ITEMS_1, EMPTY_MAP, false},
+            {MAP_WITH_VALID_ITEMS_1, MAP_WITH_VALID_ITEMS_1, true},
+            {MAP_WITH_VALID_ITEMS_1, MAP_WITH_VALID_ITEMS_2, false},
         });
     }
 
@@ -72,8 +72,8 @@ public class ClidsStateCheckerDoClientClidsMatchClientClidsForRequestTest extend
     @Test
     public void doRequestClidsMatchResponseClids() {
         assertThat(clidsStateChecker.doClientClidsMatchClientClidsForRequest(
-                clientClids,
-                clientClidsForRequest
+            clientClids,
+            clientClidsForRequest
         )).isEqualTo(doMatch);
     }
 }

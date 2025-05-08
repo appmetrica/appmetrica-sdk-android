@@ -47,7 +47,7 @@ public class StartupParamsAppenderClidsTest extends CommonTest {
     private final String obfuscatedClidsSetKey = "cs";
     private final String obfuscatedClidsSetSourceKey = "css";
     private final String obfuscatedDistributionCustomizationSetKey = "dc";
-    private Uri.Builder builder = new Uri.Builder();
+    private final Uri.Builder builder = new Uri.Builder();
     private StartupParamsAppender startupParamsAppender;
 
     @Rule
@@ -57,7 +57,7 @@ public class StartupParamsAppenderClidsTest extends CommonTest {
     public void setUp() {
         MockitoAnnotations.openMocks(this);
         when(GlobalServiceLocator.getInstance().getDataSendingRestrictionController())
-                .thenReturn(dataSendingRestrictionController);
+            .thenReturn(dataSendingRestrictionController);
         when(dataSendingRestrictionController.isRestrictedForSdk()).thenReturn(true);
         when(dataSendingRestrictionController.isRestrictedForReporter()).thenReturn(true);
         chosenClids = new HashMap<String, String>();

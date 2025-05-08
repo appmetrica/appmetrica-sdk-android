@@ -86,5 +86,4 @@ class JsonHelperFeaturesTest : CommonTest() {
             .checkField("errorExplanation", "getErrorExplanation", "some error")
             .checkAll()
     }
-
 }

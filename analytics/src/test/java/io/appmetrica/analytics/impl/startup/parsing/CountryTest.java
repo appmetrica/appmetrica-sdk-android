@@ -21,12 +21,12 @@ public class CountryTest extends CommonTest {
     @ParameterizedRobolectricTestRunner.Parameters(name = "Should be {1} for {0}")
     public static Collection<Object[]> data() throws JSONException {
         return Arrays.asList(new Object[][]{
-                {new JSONObject().toString(), ""},
-                {new JSONObject().put("locale", new JSONObject()).toString(), ""},
-                {new JSONObject().put("locale", new JSONObject().put("country", new JSONObject())).toString(), ""},
-                {new JSONObject().put("locale", new JSONObject().put("country", new JSONObject().put("reliable", false))).toString(), ""},
-                {new JSONObject().put("locale", new JSONObject().put("country", new JSONObject().put("reliable", true))).toString(), ""},
-                {new JSONObject().put("locale", new JSONObject().put("country", new JSONObject().put("reliable", true).put("value", "by"))).toString(), "by"},
+            {new JSONObject().toString(), ""},
+            {new JSONObject().put("locale", new JSONObject()).toString(), ""},
+            {new JSONObject().put("locale", new JSONObject().put("country", new JSONObject())).toString(), ""},
+            {new JSONObject().put("locale", new JSONObject().put("country", new JSONObject().put("reliable", false))).toString(), ""},
+            {new JSONObject().put("locale", new JSONObject().put("country", new JSONObject().put("reliable", true))).toString(), ""},
+            {new JSONObject().put("locale", new JSONObject().put("country", new JSONObject().put("reliable", true).put("value", "by"))).toString(), "by"},
         });
     }
 

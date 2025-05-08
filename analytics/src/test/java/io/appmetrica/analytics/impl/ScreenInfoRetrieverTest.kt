@@ -18,8 +18,8 @@ import org.mockito.ArgumentMatchers.nullable
 import org.mockito.Mockito.clearInvocations
 import org.mockito.Mockito.never
 import org.mockito.Mockito.verify
-import org.mockito.Mockito.`when`
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
@@ -33,6 +33,7 @@ class ScreenInfoRetrieverTest : CommonTest() {
 
     @get:Rule
     val clientServiceLocatorRule = ClientServiceLocatorRule()
+
     @get:Rule
     val screenInfoExtractorRule = constructionRule<ScreenInfoExtractor> {
         extractor = it
@@ -48,7 +49,7 @@ class ScreenInfoRetrieverTest : CommonTest() {
 
     @Test
     fun retrieveScreenInfoNoActivityNull() {
-        `when`(extractor.extractScreenInfo(context)).thenReturn(null)
+        whenever(extractor.extractScreenInfo(context)).thenReturn(null)
         assertThat(screenInfoRetriever.retrieveScreenInfo(context)).isNull()
         verify(extractor).extractScreenInfo(context)
         verify(clientPreferences, never()).saveScreenInfo(nullable(ScreenInfo::class.java))
@@ -57,7 +58,7 @@ class ScreenInfoRetrieverTest : CommonTest() {
     @Test
     fun retrieveScreenInfoNoActivityNonNull() {
         val screenInfo = ScreenInfo(555, 666, 777, 88.8f)
-        `when`(extractor.extractScreenInfo(context)).thenReturn(screenInfo)
+        whenever(extractor.extractScreenInfo(context)).thenReturn(screenInfo)
         assertThat(screenInfoRetriever.retrieveScreenInfo(context)).isEqualTo(screenInfo)
         verify(extractor).extractScreenInfo(context)
         verify(clientPreferences).saveScreenInfo(screenInfo)
@@ -68,7 +69,7 @@ class ScreenInfoRetrieverTest : CommonTest() {
         clearInvocations(extractor, clientPreferences)
 
         val initialScreenInfo = ScreenInfo(555, 666, 777, 88.8f)
-        `when`(clientPreferences.screenInfo).thenReturn(initialScreenInfo)
+        whenever(clientPreferences.screenInfo).thenReturn(initialScreenInfo)
         assertThat(screenInfoRetriever.retrieveScreenInfo(context)).isEqualTo(initialScreenInfo)
         verify(extractor, never()).extractScreenInfo(context)
         verify(clientPreferences, never()).saveScreenInfo(nullable(ScreenInfo::class.java))
@@ -79,8 +80,8 @@ class ScreenInfoRetrieverTest : CommonTest() {
         screenInfoRetriever.onActivityAppeared(activity)
 
         clearInvocations(extractor, clientPreferences)
-        `when`(extractor.extractScreenInfo(context)).thenReturn(null)
-        `when`(extractor.extractScreenInfo(activity)).thenReturn(null)
+        whenever(extractor.extractScreenInfo(context)).thenReturn(null)
+        whenever(extractor.extractScreenInfo(activity)).thenReturn(null)
         assertThat(screenInfoRetriever.retrieveScreenInfo(context)).isNull()
         verify(extractor).extractScreenInfo(activity)
         verify(extractor).extractScreenInfo(context)
@@ -93,8 +94,8 @@ class ScreenInfoRetrieverTest : CommonTest() {
         screenInfoRetriever.onActivityAppeared(activity)
 
         clearInvocations(extractor, clientPreferences)
-        `when`(extractor.extractScreenInfo(context)).thenReturn(screenInfo)
-        `when`(extractor.extractScreenInfo(activity)).thenReturn(null)
+        whenever(extractor.extractScreenInfo(context)).thenReturn(screenInfo)
+        whenever(extractor.extractScreenInfo(activity)).thenReturn(null)
         assertThat(screenInfoRetriever.retrieveScreenInfo(context)).isEqualTo(screenInfo)
         verify(extractor).extractScreenInfo(activity)
         verify(extractor).extractScreenInfo(context)
@@ -107,7 +108,7 @@ class ScreenInfoRetrieverTest : CommonTest() {
         screenInfoRetriever.onActivityAppeared(activity)
 
         clearInvocations(extractor, clientPreferences)
-        `when`(extractor.extractScreenInfo(activity)).thenReturn(screenInfo)
+        whenever(extractor.extractScreenInfo(activity)).thenReturn(screenInfo)
         assertThat(screenInfoRetriever.retrieveScreenInfo(context)).isEqualTo(screenInfo)
         verify(extractor).extractScreenInfo(activity)
         verify(extractor, never()).extractScreenInfo(context)
@@ -118,11 +119,11 @@ class ScreenInfoRetrieverTest : CommonTest() {
     fun retrieveScreenInfoHasActivityHasAnotherInitial() {
         val initialScreenInfo = ScreenInfo(666, 777, 888, 99.9f)
         val newScreenInfo = ScreenInfo(222, 333, 444, 55.5f)
-        `when`(clientPreferences.screenInfo).thenReturn(initialScreenInfo)
+        whenever(clientPreferences.screenInfo).thenReturn(initialScreenInfo)
         screenInfoRetriever.onActivityAppeared(activity)
 
         clearInvocations(extractor, clientPreferences)
-        `when`(extractor.extractScreenInfo(activity)).thenReturn(newScreenInfo)
+        whenever(extractor.extractScreenInfo(activity)).thenReturn(newScreenInfo)
         assertThat(screenInfoRetriever.retrieveScreenInfo(context)).isEqualTo(newScreenInfo)
         verify(extractor).extractScreenInfo(activity)
         verify(extractor, never()).extractScreenInfo(context)
@@ -132,11 +133,11 @@ class ScreenInfoRetrieverTest : CommonTest() {
     @Test
     fun retrieveScreenInfoHasActivityHasSameInitial() {
         val initialScreenInfo = ScreenInfo(222, 333, 444, 55.5f)
-        `when`(clientPreferences.screenInfo).thenReturn(initialScreenInfo)
+        whenever(clientPreferences.screenInfo).thenReturn(initialScreenInfo)
         screenInfoRetriever.onActivityAppeared(activity)
 
         clearInvocations(extractor, clientPreferences)
-        `when`(extractor.extractScreenInfo(activity)).thenReturn(initialScreenInfo)
+        whenever(extractor.extractScreenInfo(activity)).thenReturn(initialScreenInfo)
         assertThat(screenInfoRetriever.retrieveScreenInfo(context)).isEqualTo(initialScreenInfo)
         verify(extractor).extractScreenInfo(activity)
         verify(extractor, never()).extractScreenInfo(context)
@@ -146,11 +147,11 @@ class ScreenInfoRetrieverTest : CommonTest() {
     @Test
     fun retrieveScreenInfoHasActivityHasInitialNullForActivity() {
         val initialScreenInfo = ScreenInfo(222, 333, 444, 55.5f)
-        `when`(clientPreferences.screenInfo).thenReturn(initialScreenInfo)
+        whenever(clientPreferences.screenInfo).thenReturn(initialScreenInfo)
         screenInfoRetriever.onActivityAppeared(activity)
 
         clearInvocations(extractor, clientPreferences)
-        `when`(extractor.extractScreenInfo(activity)).thenReturn(null)
+        whenever(extractor.extractScreenInfo(activity)).thenReturn(null)
         assertThat(screenInfoRetriever.retrieveScreenInfo(context)).isEqualTo(initialScreenInfo)
         verify(extractor).extractScreenInfo(activity)
         verify(extractor, never()).extractScreenInfo(context)
@@ -160,7 +161,7 @@ class ScreenInfoRetrieverTest : CommonTest() {
     @Test
     fun onActivityAppearedHasCached() {
         val initialScreenInfo = ScreenInfo(222, 333, 444, 55.5f)
-        `when`(clientPreferences.screenInfo).thenReturn(initialScreenInfo)
+        whenever(clientPreferences.screenInfo).thenReturn(initialScreenInfo)
         clearInvocations(extractor, clientPreferences)
         screenInfoRetriever.onActivityAppeared(activity)
         verify(extractor, never()).extractScreenInfo(activity)
@@ -168,7 +169,7 @@ class ScreenInfoRetrieverTest : CommonTest() {
 
     @Test
     fun onActivityAppearedNoCachedNull() {
-        `when`(extractor.extractScreenInfo(activity)).thenReturn(null)
+        whenever(extractor.extractScreenInfo(activity)).thenReturn(null)
         screenInfoRetriever.onActivityAppeared(activity)
         verify(extractor).extractScreenInfo(activity)
         assertThat(screenInfoRetriever.retrieveScreenInfo(context)).isNull()
@@ -178,7 +179,7 @@ class ScreenInfoRetrieverTest : CommonTest() {
     @Test
     fun onActivityAppearedNoCachedNonNull() {
         val screenInfo = ScreenInfo(222, 333, 444, 55.5f)
-        `when`(extractor.extractScreenInfo(activity)).thenReturn(screenInfo)
+        whenever(extractor.extractScreenInfo(activity)).thenReturn(screenInfo)
         screenInfoRetriever.onActivityAppeared(activity)
         verify(extractor).extractScreenInfo(activity)
         assertThat(screenInfoRetriever.retrieveScreenInfo(context)).isEqualTo(screenInfo)
@@ -188,7 +189,7 @@ class ScreenInfoRetrieverTest : CommonTest() {
     @Test
     @Config(sdk = [Build.VERSION_CODES.R])
     fun retrieveScreenInfoRNoActivityCheckedForDeprecated() {
-        `when`(clientPreferences.isScreenSizeCheckedByDeprecated).thenReturn(true)
+        whenever(clientPreferences.isScreenSizeCheckedByDeprecated).thenReturn(true)
         clearInvocations(extractor, clientPreferences)
         assertThat(screenInfoRetriever.retrieveScreenInfo(context)).isNull()
         verify(extractor, never()).extractScreenInfo(context)
@@ -197,7 +198,7 @@ class ScreenInfoRetrieverTest : CommonTest() {
     @Test
     @Config(sdk = [Build.VERSION_CODES.R])
     fun retrieveScreenInfoRNoActivityNotCheckedForDeprecatedNullForContext() {
-        `when`(extractor.extractScreenInfo(context)).thenReturn(null)
+        whenever(extractor.extractScreenInfo(context)).thenReturn(null)
         assertThat(screenInfoRetriever.retrieveScreenInfo(context)).isNull()
         verify(extractor).extractScreenInfo(context)
         verify(clientPreferences, never()).saveScreenInfo(nullable(ScreenInfo::class.java))
@@ -207,7 +208,7 @@ class ScreenInfoRetrieverTest : CommonTest() {
     @Config(sdk = [Build.VERSION_CODES.R])
     fun retrieveScreenInfoRNullForActivityNotCheckedForDeprecatedNonNullForContext() {
         val screenInfo = ScreenInfo(222, 333, 444, 55.5f)
-        `when`(extractor.extractScreenInfo(context)).thenReturn(screenInfo)
+        whenever(extractor.extractScreenInfo(context)).thenReturn(screenInfo)
         assertThat(screenInfoRetriever.retrieveScreenInfo(context)).isEqualTo(screenInfo)
         verify(extractor).extractScreenInfo(context)
         verify(clientPreferences).saveScreenInfo(screenInfo)

@@ -42,17 +42,17 @@ class OrderAssertionConsumer implements Consumer<ObjectPropertyAssertions<Ecomme
     }
 
     public OrderAssertionConsumer setExpectedOrderCartItems(
-            Ecommerce.ECommerceEvent.OrderCartItem[] expectedOrderCartItems
+        Ecommerce.ECommerceEvent.OrderCartItem[] expectedOrderCartItems
     ) {
         return setExpectedOrderCartItems(
-                expectedOrderCartItems,
-                expectedOrderCartItems == null ? 0 : expectedOrderCartItems.length
+            expectedOrderCartItems,
+            expectedOrderCartItems == null ? 0 : expectedOrderCartItems.length
         );
     }
 
     public OrderAssertionConsumer setExpectedOrderCartItems(
-            Ecommerce.ECommerceEvent.OrderCartItem[] expectedOrderCartItems,
-            int expectedTotalItemsCount
+        Ecommerce.ECommerceEvent.OrderCartItem[] expectedOrderCartItems,
+        int expectedTotalItemsCount
     ) {
         this.expectedOrderCartItems = expectedOrderCartItems;
         this.expectedTotalItemsCount = expectedTotalItemsCount;
@@ -67,7 +67,7 @@ class OrderAssertionConsumer implements Consumer<ObjectPropertyAssertions<Ecomme
                                                             int numberInCartOffset) {
 
         Ecommerce.ECommerceEvent.OrderCartItem[] orderCartItems = expectedCartItems == null ? null :
-                new Ecommerce.ECommerceEvent.OrderCartItem[expectedCartItems.length];
+            new Ecommerce.ECommerceEvent.OrderCartItem[expectedCartItems.length];
 
         if (orderCartItems != null) {
             for (int i = 0; i < orderCartItems.length; i++) {

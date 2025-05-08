@@ -27,12 +27,12 @@ public class BillingInfoConverterTest extends CommonTest {
         BillingInfo model = new BillingInfo(ProductType.INAPP, "sku", "purchaseToken", 41, 42);
         AutoInappCollectingInfoProto.AutoInappCollectingInfo.BillingInfo proto = converter.fromModel(model);
         new ProtoObjectPropertyAssertions<AutoInappCollectingInfoProto.AutoInappCollectingInfo.BillingInfo>(proto)
-                .checkField("type", AutoInappCollectingInfoProto.AutoInappCollectingInfo.PURCHASE)
-                .checkField("sku", "sku")
-                .checkField("purchaseToken", "purchaseToken")
-                .checkField("purchaseTime", 41L)
-                .checkField("sendTime", 42L)
-                .checkAll();
+            .checkField("type", AutoInappCollectingInfoProto.AutoInappCollectingInfo.PURCHASE)
+            .checkField("sku", "sku")
+            .checkField("purchaseToken", "purchaseToken")
+            .checkField("purchaseTime", 41L)
+            .checkField("sendTime", 42L)
+            .checkAll();
     }
 
     @Test
@@ -40,12 +40,12 @@ public class BillingInfoConverterTest extends CommonTest {
         BillingInfo model = new BillingInfo(ProductType.SUBS, "sku", "purchaseToken", 41, 42);
         AutoInappCollectingInfoProto.AutoInappCollectingInfo.BillingInfo proto = converter.fromModel(model);
         new ProtoObjectPropertyAssertions<AutoInappCollectingInfoProto.AutoInappCollectingInfo.BillingInfo>(proto)
-                .checkField("type", AutoInappCollectingInfoProto.AutoInappCollectingInfo.SUBSCRIPTION)
-                .checkField("sku", "sku")
-                .checkField("purchaseToken", "purchaseToken")
-                .checkField("purchaseTime", 41L)
-                .checkField("sendTime", 42L)
-                .checkAll();
+            .checkField("type", AutoInappCollectingInfoProto.AutoInappCollectingInfo.SUBSCRIPTION)
+            .checkField("sku", "sku")
+            .checkField("purchaseToken", "purchaseToken")
+            .checkField("purchaseTime", 41L)
+            .checkField("sendTime", 42L)
+            .checkAll();
     }
 
     @Test
@@ -53,32 +53,32 @@ public class BillingInfoConverterTest extends CommonTest {
         BillingInfo model = new BillingInfo(ProductType.UNKNOWN, "sku", "purchaseToken", 41, 42);
         AutoInappCollectingInfoProto.AutoInappCollectingInfo.BillingInfo proto = converter.fromModel(model);
         new ProtoObjectPropertyAssertions<AutoInappCollectingInfoProto.AutoInappCollectingInfo.BillingInfo>(proto)
-                .checkField("type", AutoInappCollectingInfoProto.AutoInappCollectingInfo.UNKNOWN)
-                .checkField("sku", "sku")
-                .checkField("purchaseToken", "purchaseToken")
-                .checkField("purchaseTime", 41L)
-                .checkField("sendTime", 42L)
-                .checkAll();
+            .checkField("type", AutoInappCollectingInfoProto.AutoInappCollectingInfo.UNKNOWN)
+            .checkField("sku", "sku")
+            .checkField("purchaseToken", "purchaseToken")
+            .checkField("purchaseTime", 41L)
+            .checkField("sendTime", 42L)
+            .checkAll();
     }
 
     @Test
     public void testToModelEmpty() throws Exception {
         ObjectPropertyAssertions(
-                converter.toModel(new AutoInappCollectingInfoProto.AutoInappCollectingInfo.BillingInfo())
+            converter.toModel(new AutoInappCollectingInfoProto.AutoInappCollectingInfo.BillingInfo())
         )
-                .withFinalFieldOnly(false)
-                .checkField("type", ProductType.UNKNOWN)
-                .checkField("productId", "")
-                .checkField("purchaseToken", "")
-                .checkField("purchaseTime", 0L)
-                .checkField("sendTime", 0L)
-                .checkAll();
+            .withFinalFieldOnly(false)
+            .checkField("type", ProductType.UNKNOWN)
+            .checkField("productId", "")
+            .checkField("purchaseToken", "")
+            .checkField("purchaseTime", 0L)
+            .checkField("sendTime", 0L)
+            .checkAll();
     }
 
     @Test
     public void testToModelIfPurchase() throws Exception {
         final AutoInappCollectingInfoProto.AutoInappCollectingInfo.BillingInfo nano =
-                new AutoInappCollectingInfoProto.AutoInappCollectingInfo.BillingInfo();
+            new AutoInappCollectingInfoProto.AutoInappCollectingInfo.BillingInfo();
         nano.type = AutoInappCollectingInfoProto.AutoInappCollectingInfo.PURCHASE;
         nano.sku = "sku";
         nano.purchaseToken = "purchaseToken";
@@ -86,19 +86,19 @@ public class BillingInfoConverterTest extends CommonTest {
         nano.sendTime = 42;
 
         ObjectPropertyAssertions(converter.toModel(nano))
-                .withFinalFieldOnly(false)
-                .checkField("type", ProductType.INAPP)
-                .checkField("productId", "sku")
-                .checkField("purchaseToken", "purchaseToken")
-                .checkField("purchaseTime", 41L)
-                .checkField("sendTime", 42L)
-                .checkAll();
+            .withFinalFieldOnly(false)
+            .checkField("type", ProductType.INAPP)
+            .checkField("productId", "sku")
+            .checkField("purchaseToken", "purchaseToken")
+            .checkField("purchaseTime", 41L)
+            .checkField("sendTime", 42L)
+            .checkAll();
     }
 
     @Test
     public void testToModelIfSubscription() throws Exception {
         final AutoInappCollectingInfoProto.AutoInappCollectingInfo.BillingInfo nano =
-                new AutoInappCollectingInfoProto.AutoInappCollectingInfo.BillingInfo();
+            new AutoInappCollectingInfoProto.AutoInappCollectingInfo.BillingInfo();
         nano.type = AutoInappCollectingInfoProto.AutoInappCollectingInfo.SUBSCRIPTION;
         nano.sku = "sku";
         nano.purchaseToken = "purchaseToken";
@@ -106,19 +106,19 @@ public class BillingInfoConverterTest extends CommonTest {
         nano.sendTime = 42;
 
         ObjectPropertyAssertions(converter.toModel(nano))
-                .withFinalFieldOnly(false)
-                .checkField("type", ProductType.SUBS)
-                .checkField("productId", "sku")
-                .checkField("purchaseToken", "purchaseToken")
-                .checkField("purchaseTime", 41L)
-                .checkField("sendTime", 42L)
-                .checkAll();
+            .withFinalFieldOnly(false)
+            .checkField("type", ProductType.SUBS)
+            .checkField("productId", "sku")
+            .checkField("purchaseToken", "purchaseToken")
+            .checkField("purchaseTime", 41L)
+            .checkField("sendTime", 42L)
+            .checkAll();
     }
 
     @Test
     public void testToModelIfUnknown() throws Exception {
         final AutoInappCollectingInfoProto.AutoInappCollectingInfo.BillingInfo nano =
-                new AutoInappCollectingInfoProto.AutoInappCollectingInfo.BillingInfo();
+            new AutoInappCollectingInfoProto.AutoInappCollectingInfo.BillingInfo();
         nano.type = AutoInappCollectingInfoProto.AutoInappCollectingInfo.UNKNOWN;
         nano.sku = "sku";
         nano.purchaseToken = "purchaseToken";
@@ -126,19 +126,19 @@ public class BillingInfoConverterTest extends CommonTest {
         nano.sendTime = 42;
 
         ObjectPropertyAssertions(converter.toModel(nano))
-                .withFinalFieldOnly(false)
-                .checkField("type", ProductType.UNKNOWN)
-                .checkField("productId", "sku")
-                .checkField("purchaseToken", "purchaseToken")
-                .checkField("purchaseTime", 41L)
-                .checkField("sendTime", 42L)
-                .checkAll();
+            .withFinalFieldOnly(false)
+            .checkField("type", ProductType.UNKNOWN)
+            .checkField("productId", "sku")
+            .checkField("purchaseToken", "purchaseToken")
+            .checkField("purchaseTime", 41L)
+            .checkField("sendTime", 42L)
+            .checkAll();
     }
 
     @Test
     public void testToModelIfOtherType() throws Exception {
         final AutoInappCollectingInfoProto.AutoInappCollectingInfo.BillingInfo nano =
-                new AutoInappCollectingInfoProto.AutoInappCollectingInfo.BillingInfo();
+            new AutoInappCollectingInfoProto.AutoInappCollectingInfo.BillingInfo();
         nano.type = 42;
         nano.sku = "sku";
         nano.purchaseToken = "purchaseToken";
@@ -146,12 +146,12 @@ public class BillingInfoConverterTest extends CommonTest {
         nano.sendTime = 42;
 
         ObjectPropertyAssertions(converter.toModel(nano))
-                .withFinalFieldOnly(false)
-                .checkField("type", ProductType.UNKNOWN)
-                .checkField("productId", "sku")
-                .checkField("purchaseToken", "purchaseToken")
-                .checkField("purchaseTime", 41L)
-                .checkField("sendTime", 42L)
-                .checkAll();
+            .withFinalFieldOnly(false)
+            .checkField("type", ProductType.UNKNOWN)
+            .checkField("productId", "sku")
+            .checkField("purchaseToken", "purchaseToken")
+            .checkField("purchaseTime", 41L)
+            .checkField("sendTime", 42L)
+            .checkAll();
     }
 }

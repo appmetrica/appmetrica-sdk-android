@@ -159,7 +159,7 @@ public class AppMetricaProxyTest extends CommonTest {
         InOrder order = inOrder(mBarrier, mSynchronousStageExecutor, sessionsTrackingManager);
         order.verify(mBarrier).resumeSession();
         order.verify(mSynchronousStageExecutor).resumeSession(activity);
-        order.verify(sessionsTrackingManager).resumeActivityManually(activity,mMainReporter);
+        order.verify(sessionsTrackingManager).resumeActivityManually(activity, mMainReporter);
     }
 
     @Test
@@ -169,7 +169,7 @@ public class AppMetricaProxyTest extends CommonTest {
         InOrder order = inOrder(mBarrier, mSynchronousStageExecutor, sessionsTrackingManager);
         order.verify(mBarrier).pauseSession();
         order.verify(mSynchronousStageExecutor).pauseSession(activity);
-        order.verify(sessionsTrackingManager).pauseActivityManually(activity,mMainReporter);
+        order.verify(sessionsTrackingManager).pauseActivityManually(activity, mMainReporter);
     }
 
     @Test
@@ -731,14 +731,14 @@ public class AppMetricaProxyTest extends CommonTest {
 
     private AppMetricaProxy createProxy() {
         return new AppMetricaProxy(
-                mProvider,
-                mBarrier,
-                silentActivationValidator,
-                webViewJsInterfaceHandler,
-                mSynchronousStageExecutor,
-                mReporterProxyStorage,
-                mDefaultOneShotMetricaConfig,
-                sessionsTrackingManager
+            mProvider,
+            mBarrier,
+            silentActivationValidator,
+            webViewJsInterfaceHandler,
+            mSynchronousStageExecutor,
+            mReporterProxyStorage,
+            mDefaultOneShotMetricaConfig,
+            sessionsTrackingManager
         );
     }
 

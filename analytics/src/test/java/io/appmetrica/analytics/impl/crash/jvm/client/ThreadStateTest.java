@@ -1,7 +1,6 @@
 package io.appmetrica.analytics.impl.crash.jvm.client;
 
 import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
-import io.appmetrica.analytics.impl.crash.jvm.client.ThreadState;
 import io.appmetrica.analytics.testutils.CommonTest;
 import java.util.Collections;
 import java.util.List;
@@ -17,14 +16,14 @@ public class ThreadStateTest extends CommonTest {
 
     public static ThreadState createEmpty() {
         return new ThreadState(
-                "name", 1, 1, "group", 1, Collections.<StackTraceElement>emptyList()
+            "name", 1, 1, "group", 1, Collections.emptyList()
         );
     }
 
     @Test
     public void testNullStacktrace() {
         assertThat(
-                new ThreadState("name", 1, 1, "group", 1, null).stacktrace
+            new ThreadState("name", 1, 1, "group", 1, null).stacktrace
         ).isNotNull().isEmpty();
     }
 
@@ -41,11 +40,11 @@ public class ThreadStateTest extends CommonTest {
         ObjectPropertyAssertions<ThreadState> assertions = ObjectPropertyAssertions(threadState);
 
         assertions.checkField("stacktrace", stacktrace)
-                .checkField("name", name)
-                .checkField("priority", priority)
-                .checkField("tid", tid)
-                .checkField("group", group)
-                .checkField("state", state)
-                .checkAll();
+            .checkField("name", name)
+            .checkField("priority", priority)
+            .checkField("tid", tid)
+            .checkField("group", group)
+            .checkField("state", state)
+            .checkAll();
     }
 }

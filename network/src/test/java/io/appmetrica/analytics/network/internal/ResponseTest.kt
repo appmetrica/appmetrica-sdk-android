@@ -1,12 +1,13 @@
 package io.appmetrica.analytics.network.internal
 
 import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
+import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import java.util.AbstractMap
 import kotlin.random.Random
 
-class ResponseTest {
+class ResponseTest : CommonTest() {
 
     private val completed = Random.nextBoolean()
     private val code = 666

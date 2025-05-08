@@ -19,7 +19,6 @@ class UtilityServiceProviderGetterTest(
             arrayOf("First execution service", { service: UtilityServiceProvider -> service.firstExecutionService }),
             arrayOf("Activation barrier", { service: UtilityServiceProvider -> service.activationBarrier })
         )
-
     }
 
     private val utilityServiceProvider: UtilityServiceProvider by setUp { UtilityServiceProvider() }
@@ -32,5 +31,4 @@ class UtilityServiceProviderGetterTest(
             .isNotNull()
             .isSameAs(second)
     }
-
 }

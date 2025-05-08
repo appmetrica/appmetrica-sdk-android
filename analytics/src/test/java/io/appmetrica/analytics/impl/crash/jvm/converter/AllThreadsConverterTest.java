@@ -3,8 +3,6 @@ package io.appmetrica.analytics.impl.crash.jvm.converter;
 import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
 import io.appmetrica.analytics.impl.crash.jvm.client.AllThreads;
 import io.appmetrica.analytics.impl.crash.jvm.client.ThreadState;
-import io.appmetrica.analytics.impl.crash.jvm.converter.AllThreadsConverter;
-import io.appmetrica.analytics.impl.crash.jvm.converter.ThreadStateConverter;
 import io.appmetrica.analytics.impl.protobuf.backend.CrashAndroid;
 import io.appmetrica.analytics.testutils.CommonTest;
 import java.util.Arrays;
@@ -44,9 +42,9 @@ public class AllThreadsConverterTest extends CommonTest {
         List threads = Arrays.asList(threadState1, threadState2, threadState3);
         String process = "process";
         AllThreads allThreads = new AllThreads(
-                threadStateAffected,
-                threads,
-                process
+            threadStateAffected,
+            threads,
+            process
         );
         CrashAndroid.Thread threadAffected = new CrashAndroid.Thread();
         CrashAndroid.Thread thread1 = new CrashAndroid.Thread();
@@ -59,10 +57,10 @@ public class AllThreadsConverterTest extends CommonTest {
 
         ObjectPropertyAssertions<CrashAndroid.AllThreads> assertions = ObjectPropertyAssertions(allThreadsConverter.fromModel(allThreads));
         assertions.withFinalFieldOnly(false)
-                .checkField("affectedThread", threadAffected)
-                .checkField("threads", new CrashAndroid.Thread[]{thread1, thread2, thread3})
-                .checkField("processName", process)
-                .checkAll();
+            .checkField("affectedThread", threadAffected)
+            .checkField("threads", new CrashAndroid.Thread[]{thread1, thread2, thread3})
+            .checkField("processName", process)
+            .checkAll();
 
         verify(threadStateConverter).fromModel(threadState1);
         verify(threadStateConverter).fromModel(threadState2);
@@ -72,17 +70,17 @@ public class AllThreadsConverterTest extends CommonTest {
     @Test
     public void testNulls() throws IllegalAccessException {
         AllThreads allThreads = new AllThreads(
-                null,
-                null,
-                null
+            null,
+            null,
+            null
         );
 
         ObjectPropertyAssertions<CrashAndroid.AllThreads> assertions = ObjectPropertyAssertions(allThreadsConverter.fromModel(allThreads));
         assertions.withFinalFieldOnly(false)
-                .checkField("affectedThread", (Object) null)
-                .checkField("threads", new CrashAndroid.Thread[0])
-                .checkField("processName", "")
-                .checkAll();
+            .checkField("affectedThread", (Object) null)
+            .checkField("threads", new CrashAndroid.Thread[0])
+            .checkField("processName", "")
+            .checkAll();
     }
 
     @Test(expected = UnsupportedOperationException.class)

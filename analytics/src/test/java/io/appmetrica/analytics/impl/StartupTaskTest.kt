@@ -65,7 +65,7 @@ class StartupTaskTest : CommonTest() {
         on { toString() } doReturn componentIdToString
     }
 
-    private val startupUnit = mock<StartupUnit>() {
+    private val startupUnit = mock<StartupUnit> {
         on { componentId } doReturn componentId
     }
 
@@ -106,7 +106,7 @@ class StartupTaskTest : CommonTest() {
     @Test
     fun onCreateTaskIfNotRequired() = onCreateTask(false)
 
-    private fun onCreateTask(startupRequired:Boolean) {
+    private fun onCreateTask(startupRequired: Boolean) {
         whenever(startupUnit.isStartupRequired()).thenReturn(startupRequired)
         assertThat(startupTask.onCreateTask()).isEqualTo(startupRequired)
         verify(requestDataHolder)

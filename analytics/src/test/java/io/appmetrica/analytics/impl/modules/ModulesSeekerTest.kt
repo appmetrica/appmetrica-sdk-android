@@ -29,6 +29,7 @@ class ModulesSeekerTest : CommonTest() {
 
     @get:Rule
     val globalServiceLocatorRule = GlobalServiceLocatorRule()
+
     @get:Rule
     val clientServiceLocatorRule = ClientServiceLocatorRule()
 
@@ -64,33 +65,45 @@ class ModulesSeekerTest : CommonTest() {
 
         modulesSeeker = ModulesSeeker()
 
-        whenever(ReflectionUtils.loadAndInstantiateClassWithDefaultConstructor(
-            firstServiceModuleClass,
-            ModuleServiceEntryPoint::class.java
-        )).thenReturn(firstServiceModuleEntryPoint)
-        whenever(ReflectionUtils.loadAndInstantiateClassWithDefaultConstructor(
-            secondServiceModuleClass,
-            ModuleServiceEntryPoint::class.java
-        )).thenReturn(secondServiceModuleEntryPoint)
-        whenever(ReflectionUtils.loadAndInstantiateClassWithDefaultConstructor(
-            missingServiceModuleClass,
-            ModuleServiceEntryPoint::class.java
-        )).thenReturn(null)
+        whenever(
+            ReflectionUtils.loadAndInstantiateClassWithDefaultConstructor(
+                firstServiceModuleClass,
+                ModuleServiceEntryPoint::class.java
+            )
+        ).thenReturn(firstServiceModuleEntryPoint)
+        whenever(
+            ReflectionUtils.loadAndInstantiateClassWithDefaultConstructor(
+                secondServiceModuleClass,
+                ModuleServiceEntryPoint::class.java
+            )
+        ).thenReturn(secondServiceModuleEntryPoint)
+        whenever(
+            ReflectionUtils.loadAndInstantiateClassWithDefaultConstructor(
+                missingServiceModuleClass,
+                ModuleServiceEntryPoint::class.java
+            )
+        ).thenReturn(null)
         whenever(serviceModulesEntryPointsRegister.classNames)
             .thenReturn(hashSetOf(firstServiceModuleClass, secondServiceModuleClass, missingServiceModuleClass))
 
-        whenever(ReflectionUtils.loadAndInstantiateClassWithDefaultConstructor(
-            firstClientModuleClass,
-            ModuleClientEntryPoint::class.java
-        )).thenReturn(firstClientModuleEntryPoint)
-        whenever(ReflectionUtils.loadAndInstantiateClassWithDefaultConstructor(
-            secondClientModuleClass,
-            ModuleClientEntryPoint::class.java
-        )).thenReturn(secondClientModuleEntryPoint)
-        whenever(ReflectionUtils.loadAndInstantiateClassWithDefaultConstructor(
-            missingClientModuleClass,
-            ModuleClientEntryPoint::class.java
-        )).thenReturn(null)
+        whenever(
+            ReflectionUtils.loadAndInstantiateClassWithDefaultConstructor(
+                firstClientModuleClass,
+                ModuleClientEntryPoint::class.java
+            )
+        ).thenReturn(firstClientModuleEntryPoint)
+        whenever(
+            ReflectionUtils.loadAndInstantiateClassWithDefaultConstructor(
+                secondClientModuleClass,
+                ModuleClientEntryPoint::class.java
+            )
+        ).thenReturn(secondClientModuleEntryPoint)
+        whenever(
+            ReflectionUtils.loadAndInstantiateClassWithDefaultConstructor(
+                missingClientModuleClass,
+                ModuleClientEntryPoint::class.java
+            )
+        ).thenReturn(null)
         whenever(clientModulesEntryPointsRegister.classNames)
             .thenReturn(hashSetOf(firstClientModuleClass, secondClientModuleClass, missingClientModuleClass))
     }

@@ -35,7 +35,7 @@ class ReporterConfigTest : CommonTest() {
     private val additionalConfigValueFirst = "value1"
     private val additionalConfigKeySecond = "key2"
     private val additionalConfigValueSecond = "value2"
-    
+
     private val additionalConfigMap = mapOf(
         additionalConfigKeyFirst to additionalConfigValueFirst,
         additionalConfigKeySecond to additionalConfigValueSecond
@@ -46,7 +46,7 @@ class ReporterConfigTest : CommonTest() {
     private val appEnvironmentMapValueFirst = "appEnvironmentMap_value1"
     private val appEnvironmentMapKeySecond = "appEnvironmentMap_key2"
     private val appEnvironmentMapValueSecond = "appEnvironmentMap_value2"
-    
+
     private val appEnvironmentMap = mapOf(
         appEnvironmentMapKeyFirst to appEnvironmentMapValueFirst,
         appEnvironmentMapKeySecond to appEnvironmentMapValueSecond
@@ -103,13 +103,14 @@ class ReporterConfigTest : CommonTest() {
         ReporterConfig.newConfigBuilder("")
     }
 
-    @Test 
-    fun testInvalidMaxReportsInDatabaseCount() {
+    @Test
+    fun invalidMaxReportsInDatabaseCount() {
         val config = ReporterConfig.newConfigBuilder(mApiKey)
             .withMaxReportsInDatabaseCount(oldMaxReportsInDatabaseCount)
             .build()
         assertThat(config.maxReportsInDatabaseCount).isEqualTo(newMaxReportsInDatabaseCount)
     }
+
     companion object {
         private const val SESSION_TIMEOUT = 44
         private const val DATA_SENDING_ENABLED = true

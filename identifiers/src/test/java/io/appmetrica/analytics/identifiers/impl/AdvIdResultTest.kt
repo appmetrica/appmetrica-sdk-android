@@ -2,29 +2,27 @@ package io.appmetrica.analytics.identifiers.impl
 
 import android.os.Bundle
 import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus
+import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.SoftAssertions
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mock
 import org.mockito.Mockito.doReturn
+import org.mockito.Mockito.mock
 import org.mockito.junit.MockitoJUnit
 import org.mockito.junit.MockitoRule
 import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class AdvIdResultTest {
+class AdvIdResultTest : CommonTest() {
 
     @get:Rule
     val rule: MockitoRule = MockitoJUnit.rule()
 
-    @Mock
-    internal lateinit var info: AdvIdInfo
-
-    @Mock
-    internal lateinit var trackingBundle: Bundle
+    private val info: AdvIdInfo = mock()
+    private val trackingBundle: Bundle = mock()
 
     @Before
     fun setUp() {

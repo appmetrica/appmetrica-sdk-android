@@ -16,11 +16,11 @@ public class MetaInformationTest extends CommonTest {
     @ParameterizedRobolectricTestRunner.Parameters(name = "Event type: {0}. Values: \"{1}\"-\"{2}\"")
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
-                {InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_PROTOBUF.getTypeId(), "jvm", "binder"},
-                {InternalEvents.EVENT_TYPE_PREV_SESSION_EXCEPTION_UNHANDLED_FROM_FILE.getTypeId(), "jvm", "file"},
-                {InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_FROM_FILE.getTypeId(), "jvm", "file"},
-                {InternalEvents.EVENT_TYPE_PREV_SESSION_NATIVE_CRASH_PROTOBUF.getTypeId(), "jni_native", "file"},
-                {InternalEvents.EVENT_TYPE_CURRENT_SESSION_NATIVE_CRASH_PROTOBUF.getTypeId(), "jni_native", "file"},
+            {InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_PROTOBUF.getTypeId(), "jvm", "binder"},
+            {InternalEvents.EVENT_TYPE_PREV_SESSION_EXCEPTION_UNHANDLED_FROM_FILE.getTypeId(), "jvm", "file"},
+            {InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_FROM_FILE.getTypeId(), "jvm", "file"},
+            {InternalEvents.EVENT_TYPE_PREV_SESSION_NATIVE_CRASH_PROTOBUF.getTypeId(), "jni_native", "file"},
+            {InternalEvents.EVENT_TYPE_CURRENT_SESSION_NATIVE_CRASH_PROTOBUF.getTypeId(), "jni_native", "file"},
         });
     }
 

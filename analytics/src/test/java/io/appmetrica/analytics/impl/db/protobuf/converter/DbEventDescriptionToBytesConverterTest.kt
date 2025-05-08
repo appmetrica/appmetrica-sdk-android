@@ -18,6 +18,7 @@ class DbEventDescriptionToBytesConverterTest : CommonTest() {
 
     @get:Rule
     val messageNanoRule = MockedStaticRule(MessageNano::class.java)
+
     @get:Rule
     val eventDescriptionProtoRule = MockedStaticRule(DbProto.EventDescription::class.java)
 

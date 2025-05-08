@@ -36,6 +36,7 @@ internal class VitalComponentDataProviderMergerTest(
         private val firstJson = JSONObject().put("first", "value")
         private val secondJson = JSONObject().put("second", "value")
 
+        /* ktlint-disable max-line-length */
         @JvmStatic
         @ParameterizedRobolectricTestRunner.Parameters(name = "{index}-{4}")
         fun data(): Collection<Array<Any?>> = listOf(
@@ -100,6 +101,7 @@ internal class VitalComponentDataProviderMergerTest(
             arrayOf(KEY_LAST_MIGRATION_API_LEVEL, null, null, 0, "Missing \"last_migration_api_level\" in primary and backup"),
             //endregion
         )
+        /* ktlint-enable max-line-length */
     }
 
     private val primaryDataSource = mock<VitalDataSource>()

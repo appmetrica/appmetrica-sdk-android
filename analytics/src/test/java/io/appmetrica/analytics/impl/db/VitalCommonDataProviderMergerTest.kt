@@ -30,6 +30,7 @@ internal class VitalCommonDataProviderMergerTest(
 
     companion object {
 
+        /* ktlint-disable max-line-length */
         @JvmStatic
         @ParameterizedRobolectricTestRunner.Parameters(name = "{index}-{4}")
         fun data(): Collection<Array<Any?>> = listOf(
@@ -64,6 +65,7 @@ internal class VitalCommonDataProviderMergerTest(
             arrayOf(KEY_LAST_MIGRATION_API_LEVEL, null, null, -1, "Missing \"last_migration_api_level\" in primary and backup"),
             //endregion
         )
+        /* ktlint-enable max-line-length */
     }
 
     private val primaryDataSource = mock<VitalDataSource>()

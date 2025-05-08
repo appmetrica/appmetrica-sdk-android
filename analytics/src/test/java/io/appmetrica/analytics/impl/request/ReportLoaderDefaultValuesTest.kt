@@ -102,6 +102,7 @@ class ReportLoaderDefaultValuesTest(
     fun load() {
         assertThat(loader.load(dataSource)).extracting(fieldName).isEqualTo(value)
     }
+
     companion object {
 
         @ParameterizedRobolectricTestRunner.Parameters(name = "{0} should be equal {1}")

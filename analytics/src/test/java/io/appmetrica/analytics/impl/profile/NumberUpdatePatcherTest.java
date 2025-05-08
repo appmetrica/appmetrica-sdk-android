@@ -15,7 +15,7 @@ public class NumberUpdatePatcherTest extends CommonTest {
 
     private static final String KEY = "numberKey";
 
-    private Userprofile.Profile.Attribute mAttribute = CommonUserProfileUpdatePatcherTest.createEmptyAttribute();
+    private final Userprofile.Profile.Attribute mAttribute = CommonUserProfileUpdatePatcherTest.createEmptyAttribute();
 
     @Test
     public void testSetValue() {

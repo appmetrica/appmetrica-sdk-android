@@ -46,7 +46,7 @@ public class ReporterProxyReportErrorTest extends CommonTest {
     private AppMetricaFacade mImpl;
     @Mock
     private IReporterExtended mReporter;
-    private ReporterConfig mConfig = ReporterConfig.newConfigBuilder(API_KEY).build();
+    private final ReporterConfig mConfig = ReporterConfig.newConfigBuilder(API_KEY).build();
     final IHandlerExecutor mExecutor = new StubbedBlockingExecutor();
 
     private ReporterExtendedProxy mReporterProxy;
@@ -59,12 +59,12 @@ public class ReporterProxyReportErrorTest extends CommonTest {
         when(ClientServiceLocator.getInstance().getClientExecutorProvider().getDefaultExecutor())
             .thenReturn(mExecutor);
         mReporterProxy = new ReporterExtendedProxy(
-                RuntimeEnvironment.getApplication(),
-                mBarrier,
-                mProvider,
-                mSynchronousStageExecutor,
-                mConfig,
-                mock(PluginReporterProxy.class)
+            RuntimeEnvironment.getApplication(),
+            mBarrier,
+            mProvider,
+            mSynchronousStageExecutor,
+            mConfig,
+            mock(PluginReporterProxy.class)
         );
     }
 

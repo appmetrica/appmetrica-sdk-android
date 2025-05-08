@@ -17,10 +17,10 @@ import static org.mockito.Mockito.when;
 @RunWith(ParameterizedRobolectricTestRunner.class)
 public class LongRandomParametrizedTest extends CommonTest {
 
-    private long mSeed;
-    private long mMinValue;
-    private long mMaxValue;
-    private long mExpectedValue;
+    private final long mSeed;
+    private final long mMinValue;
+    private final long mMaxValue;
+    private final long mExpectedValue;
 
     @Mock
     private Random mRandom;
@@ -37,19 +37,19 @@ public class LongRandomParametrizedTest extends CommonTest {
     @ParameterizedRobolectricTestRunner.Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
-                {Long.MIN_VALUE, 1L, 1000L, 1L},
-                {0L, 1L, 1000L, 1L},
-                {998L, 1L, 1000L, 999L},
-                {-998L, 1L, 1000L, 999L},
-                {448L, 1L, 1000L, 449L},
-                {-448L, 1L, 1000L, 449L},
-                {0L, 1000L, 2000L, 1000L},
-                {998L, 1000L, 2000L, 1998L},
-                {-998L, 1000L, 2000L, 1998L},
-                {10450L, 1000L, 2000L, 1450L},
-                {-10450L, 1000L, 2000L, 1450L},
-                {500, -2000L, -1000L, -1500L},
-                {-500, -2000L, -1000L, -1500L}
+            {Long.MIN_VALUE, 1L, 1000L, 1L},
+            {0L, 1L, 1000L, 1L},
+            {998L, 1L, 1000L, 999L},
+            {-998L, 1L, 1000L, 999L},
+            {448L, 1L, 1000L, 449L},
+            {-448L, 1L, 1000L, 449L},
+            {0L, 1000L, 2000L, 1000L},
+            {998L, 1000L, 2000L, 1998L},
+            {-998L, 1000L, 2000L, 1998L},
+            {10450L, 1000L, 2000L, 1450L},
+            {-10450L, 1000L, 2000L, 1450L},
+            {500, -2000L, -1000L, -1500L},
+            {-500, -2000L, -1000L, -1500L}
         });
     }
 

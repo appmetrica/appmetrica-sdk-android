@@ -51,15 +51,15 @@ public class ShownProductDetailsInfoEventConverterTest extends CommonTest {
         MockitoAnnotations.openMocks(this);
 
         when(productConverter.fromModel(product))
-                .thenReturn(new Result<Ecommerce.ECommerceEvent.Product, BytesTruncatedProvider>(
-                        productProto,
-                        new BytesTruncatedInfo(productBytesTruncated)
-                ));
+            .thenReturn(new Result<Ecommerce.ECommerceEvent.Product, BytesTruncatedProvider>(
+                productProto,
+                new BytesTruncatedInfo(productBytesTruncated)
+            ));
         when(referrerConverter.fromModel(referrer))
-                .thenReturn(new Result<Ecommerce.ECommerceEvent.Referrer, BytesTruncatedProvider>(
-                        referrerProto,
-                        new BytesTruncatedInfo(referrerBytesTruncated)
-                ));
+            .thenReturn(new Result<Ecommerce.ECommerceEvent.Referrer, BytesTruncatedProvider>(
+                referrerProto,
+                new BytesTruncatedInfo(referrerBytesTruncated)
+            ));
 
         shownProductDetailsInfoEventConverter = new ShownProductDetailsInfoEventConverter(productConverter, referrerConverter);
     }
@@ -69,8 +69,8 @@ public class ShownProductDetailsInfoEventConverterTest extends CommonTest {
         shownProductDetailsInfoEventConverter = new ShownProductDetailsInfoEventConverter();
 
         ObjectPropertyAssertions<ShownProductDetailsInfoEventConverter> assertions =
-                ObjectPropertyAssertions(shownProductDetailsInfoEventConverter)
-                        .withPrivateFields(true);
+            ObjectPropertyAssertions(shownProductDetailsInfoEventConverter)
+                .withPrivateFields(true);
 
         assertions.checkFieldNonNull("referrerConverter");
         assertions.checkFieldNonNull("productConverter");
@@ -81,45 +81,45 @@ public class ShownProductDetailsInfoEventConverterTest extends CommonTest {
     @Test
     public void toProto() throws Exception {
         ShownProductDetailInfoEvent event =
-                new ShownProductDetailInfoEvent(product, referrer, shownProductDetailsInfoEventConverter);
+            new ShownProductDetailInfoEvent(product, referrer, shownProductDetailsInfoEventConverter);
         List<Result<Ecommerce.ECommerceEvent, BytesTruncatedProvider>> protos =
-                shownProductDetailsInfoEventConverter.fromModel(event);
+            shownProductDetailsInfoEventConverter.fromModel(event);
 
         Ecommerce.ECommerceEvent.ShownProductDetailsInfo expectedShownProductDetailsInfo =
-                new Ecommerce.ECommerceEvent.ShownProductDetailsInfo();
+            new Ecommerce.ECommerceEvent.ShownProductDetailsInfo();
         expectedShownProductDetailsInfo.product = productProto;
         expectedShownProductDetailsInfo.referrer = referrerProto;
 
         assertThat(protos.size()).isEqualTo(1);
 
         ObjectPropertyAssertions(protos.get(0))
-                .checkFieldRecursively(
-                        "metaInfo",
-                        new TruncationInfoConsumer(totalBytesTruncated)
-                )
-                .checkFieldRecursively(
-                        "result",
-                        new ECommerceEventAssertionsConsumer(
-                                Ecommerce.ECommerceEvent.ECOMMERCE_EVENT_TYPE_SHOW_PRODUCT_DETAILS
-                        ).setExpectedShowProductDetailsInfo(expectedShownProductDetailsInfo)
-                )
-                .checkAll();
+            .checkFieldRecursively(
+                "metaInfo",
+                new TruncationInfoConsumer(totalBytesTruncated)
+            )
+            .checkFieldRecursively(
+                "result",
+                new ECommerceEventAssertionsConsumer(
+                    Ecommerce.ECommerceEvent.ECOMMERCE_EVENT_TYPE_SHOW_PRODUCT_DETAILS
+                ).setExpectedShowProductDetailsInfo(expectedShownProductDetailsInfo)
+            )
+            .checkAll();
     }
 
     @Test
     public void toProtoWithNullReferrer() {
         ShownProductDetailInfoEvent event =
-                new ShownProductDetailInfoEvent(product, null, shownProductDetailsInfoEventConverter);
+            new ShownProductDetailInfoEvent(product, null, shownProductDetailsInfoEventConverter);
         List<Result<Ecommerce.ECommerceEvent, BytesTruncatedProvider>> protos =
-                shownProductDetailsInfoEventConverter.fromModel(event);
+            shownProductDetailsInfoEventConverter.fromModel(event);
 
         assertThat(protos.size()).isEqualTo(1);
 
         SoftAssertions assertions = new SoftAssertions();
 
         assertions.assertThat(protos.get(0).getBytesTruncated())
-                .as("Total bytes truncated")
-                .isEqualTo(productBytesTruncated);
+            .as("Total bytes truncated")
+            .isEqualTo(productBytesTruncated);
 
         assertions.assertThat(protos.get(0).result.shownProductDetailsInfo.referrer).as("Referrer").isNull();
 
@@ -129,7 +129,7 @@ public class ShownProductDetailsInfoEventConverterTest extends CommonTest {
     @Test(expected = UnsupportedOperationException.class)
     public void toModel() {
         shownProductDetailsInfoEventConverter.toModel(
-                Collections.<Result<Ecommerce.ECommerceEvent, BytesTruncatedProvider>>emptyList()
+            Collections.emptyList()
         );
     }
 }

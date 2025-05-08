@@ -6,6 +6,7 @@ import android.os.Looper
 import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor
 import io.appmetrica.analytics.coreutils.internal.reflection.ReflectionUtils
 import io.appmetrica.analytics.gpllibrary.internal.GplLibraryWrapper
+import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.MockedConstructionRule
 import io.appmetrica.analytics.testutils.MockedStaticRule
 import org.assertj.core.api.Assertions.assertThat
@@ -17,7 +18,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 import java.util.concurrent.TimeUnit
 
-class GplWrapperFactoryTest {
+class GplWrapperFactoryTest : CommonTest() {
 
     private val context = mock<Context>()
     private val brokenContext = mock<Context>()

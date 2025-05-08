@@ -1,5 +1,6 @@
 package io.appmetrica.analytics.networktasks.internal
 
+import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.json.JSONObject
 import org.junit.Test
@@ -12,7 +13,7 @@ class DefaultResponseParserTest(
     private val input: ByteArray?,
     expectedResponseString: String?,
     inputCaption: String?
-) {
+) : CommonTest() {
 
     companion object {
         private const val DEFAULT_RESPONSE_STATUS_JSON_KEY = "status"
@@ -96,7 +97,7 @@ class DefaultResponseParserTest(
         DefaultResponseParser()
 
     @Test
-    fun testParseReturnExpectedResponse() {
+    fun parseReturnExpectedResponse() {
         val parsedValue = parser.parse(input)
         if (expectedResponse == null) {
             assertThat(parsedValue).isNull()

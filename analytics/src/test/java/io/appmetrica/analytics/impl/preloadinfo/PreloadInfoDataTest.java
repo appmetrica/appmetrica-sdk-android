@@ -32,23 +32,23 @@ public class PreloadInfoDataTest extends CommonTest {
         List<PreloadInfoData.Candidate> candidates = Arrays.asList(firstCandidate, secondCandidate);
         PreloadInfoData data = new PreloadInfoData(chosenState, candidates);
         ObjectPropertyAssertions(data)
-                .checkField("chosenPreloadInfo", chosenState)
-                .checkField("candidates", candidates, true)
-                .checkAll();
+            .checkField("chosenPreloadInfo", chosenState)
+            .checkField("candidates", candidates, true)
+            .checkAll();
     }
 
     @Test
     public void constructorEmpty() throws Exception {
-        PreloadInfoData data = new PreloadInfoData(chosenState, Collections.<PreloadInfoData.Candidate>emptyList());
+        PreloadInfoData data = new PreloadInfoData(chosenState, Collections.emptyList());
         ObjectPropertyAssertions(data)
-                .checkField("chosenPreloadInfo", chosenState)
-                .checkField("candidates", new ArrayList<PreloadInfoData>())
-                .checkAll();
+            .checkField("chosenPreloadInfo", chosenState)
+            .checkField("candidates", new ArrayList<PreloadInfoData>())
+            .checkAll();
     }
 
     @Test
     public void getChosen() {
-        PreloadInfoData data = new PreloadInfoData(chosenState, Collections.<PreloadInfoData.Candidate>emptyList());
+        PreloadInfoData data = new PreloadInfoData(chosenState, Collections.emptyList());
         assertThat(data.getChosen()).isSameAs(chosenState);
     }
 

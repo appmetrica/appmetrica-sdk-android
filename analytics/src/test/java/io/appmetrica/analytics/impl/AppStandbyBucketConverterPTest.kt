@@ -1,6 +1,5 @@
 package io.appmetrica.analytics.impl
 
-import android.annotation.TargetApi
 import android.app.usage.UsageStatsManager
 import android.os.Build
 import io.appmetrica.analytics.impl.BackgroundRestrictionsState.AppStandByBucket

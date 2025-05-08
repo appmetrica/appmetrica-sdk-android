@@ -75,8 +75,10 @@ class AdRevenueTest : CommonTest() {
         ObjectPropertyAssertions(result)
             .checkField("adRevenue", revenue)
             .checkField("currency", currency)
-            .checkFieldsAreNull("adType", "adNetwork", "adUnitId", "adUnitName",
-                "adPlacementId", "adPlacementName", "precision", "payload")
+            .checkFieldsAreNull(
+                "adType", "adNetwork", "adUnitId", "adUnitName",
+                "adPlacementId", "adPlacementName", "precision", "payload"
+            )
             .checkAll()
     }
 

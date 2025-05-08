@@ -18,7 +18,7 @@ public class ProtoMessageSizeCalculatorForECommerceEventTest extends CommonTest 
 
     private static final RandomStringGenerator RANDOM_STRING_GENERATOR = new RandomStringGenerator(20);
 
-    private Ecommerce.ECommerceEvent input;
+    private final Ecommerce.ECommerceEvent input;
 
     public ProtoMessageSizeCalculatorForECommerceEventTest(Ecommerce.ECommerceEvent input, String descriptions) {
         this.input = input;
@@ -27,59 +27,59 @@ public class ProtoMessageSizeCalculatorForECommerceEventTest extends CommonTest 
     @ParameterizedRobolectricTestRunner.Parameters(name = "#{index} - {1}")
     public static List<Object[]> data() {
         return Arrays.asList(new Object[][]{
-                {new Ecommerce.ECommerceEvent(), "empty event"},
-                {
-                        ProtoMessageSizeCalculatorForECommerceEventTest.emptyOrderEvent(),
-                        "empty order event"
-                },
-                {
-                        ProtoMessageSizeCalculatorForECommerceEventTest.partiallyFilledOrderEvent(),
-                        "partially filled order event"
-                },
-                {
-                        ProtoMessageSizeCalculatorForECommerceEventTest.filledOrderEvent(),
-                        "filled order event"
-                },
-                {
-                        ProtoMessageSizeCalculatorForECommerceEventTest.emptyShowScreenEvent(),
-                        "empty show screen event"
-                },
-                {
-                        ProtoMessageSizeCalculatorForECommerceEventTest.filledShowScreenEvent(),
-                        "show screen event"
-                },
-                {
-                        ProtoMessageSizeCalculatorForECommerceEventTest.emptyShowProductCardEvent(),
-                        "empty show product card event"
-                },
-                {
-                        ProtoMessageSizeCalculatorForECommerceEventTest.filledShowProductCardEvent(),
-                        "filled show product card event"
-                },
-                {
-                        ProtoMessageSizeCalculatorForECommerceEventTest.emptyShowProductDetailsEvent(),
-                        "empty show product details event"
-                },
-                {
-                        ProtoMessageSizeCalculatorForECommerceEventTest.filledShowProductDetailsEvent(),
-                        "filled show product details event"
-                },
-                {
-                        ProtoMessageSizeCalculatorForECommerceEventTest.emptyAddCartActionEvent(),
-                        "empty add cart action event"
-                },
-                {
-                        ProtoMessageSizeCalculatorForECommerceEventTest.filledAddCartActionEvent(),
-                        "filled add cart action event"
-                },
-                {
-                        ProtoMessageSizeCalculatorForECommerceEventTest.emptyRemoveCartActionEvent(),
-                        "empty remove cart action event"
-                },
-                {
-                        ProtoMessageSizeCalculatorForECommerceEventTest.filledRemoveCartActionEvent(),
-                        "filled remove cart action event"
-                }
+            {new Ecommerce.ECommerceEvent(), "empty event"},
+            {
+                ProtoMessageSizeCalculatorForECommerceEventTest.emptyOrderEvent(),
+                "empty order event"
+            },
+            {
+                ProtoMessageSizeCalculatorForECommerceEventTest.partiallyFilledOrderEvent(),
+                "partially filled order event"
+            },
+            {
+                ProtoMessageSizeCalculatorForECommerceEventTest.filledOrderEvent(),
+                "filled order event"
+            },
+            {
+                ProtoMessageSizeCalculatorForECommerceEventTest.emptyShowScreenEvent(),
+                "empty show screen event"
+            },
+            {
+                ProtoMessageSizeCalculatorForECommerceEventTest.filledShowScreenEvent(),
+                "show screen event"
+            },
+            {
+                ProtoMessageSizeCalculatorForECommerceEventTest.emptyShowProductCardEvent(),
+                "empty show product card event"
+            },
+            {
+                ProtoMessageSizeCalculatorForECommerceEventTest.filledShowProductCardEvent(),
+                "filled show product card event"
+            },
+            {
+                ProtoMessageSizeCalculatorForECommerceEventTest.emptyShowProductDetailsEvent(),
+                "empty show product details event"
+            },
+            {
+                ProtoMessageSizeCalculatorForECommerceEventTest.filledShowProductDetailsEvent(),
+                "filled show product details event"
+            },
+            {
+                ProtoMessageSizeCalculatorForECommerceEventTest.emptyAddCartActionEvent(),
+                "empty add cart action event"
+            },
+            {
+                ProtoMessageSizeCalculatorForECommerceEventTest.filledAddCartActionEvent(),
+                "filled add cart action event"
+            },
+            {
+                ProtoMessageSizeCalculatorForECommerceEventTest.emptyRemoveCartActionEvent(),
+                "empty remove cart action event"
+            },
+            {
+                ProtoMessageSizeCalculatorForECommerceEventTest.filledRemoveCartActionEvent(),
+                "filled remove cart action event"
+            }
         });
     }
 

@@ -95,7 +95,7 @@ class EventPreparerTest : CommonTest() {
     }
 
     @Test
-    fun testDefaultPreparer() {
+    fun defaultPreparer() {
         ObjectPropertyAssertions(EventPreparer.defaultPreparer())
             .withPrivateFields(true)
             .checkFieldIsInstanceOf("mNameComposer", SameNameComposer::class.java)
@@ -109,7 +109,7 @@ class EventPreparerTest : CommonTest() {
     }
 
     @Test
-    fun testToProto() {
+    fun toProto() {
         val composedName = "composed name"
         val composedValue = "composed value"
         val composedType = 55
@@ -155,7 +155,7 @@ class EventPreparerTest : CommonTest() {
     }
 
     @Test
-    fun testToProtoNullables() {
+    fun toProtoNullables() {
         val event = EventFromDbModel(ContentValues())
         val composedType = 1
 
@@ -195,7 +195,7 @@ class EventPreparerTest : CommonTest() {
     }
 
     @Test
-    fun testToProtoFirstOccurrenceNonFirst() {
+    fun toProtoFirstOccurrenceNonFirst() {
         val cv = ContentValues()
         val proto = eventPreparer.toSessionEvent(EventFromDbModel(cv), mConfig)
 
@@ -204,7 +204,7 @@ class EventPreparerTest : CommonTest() {
     }
 
     @Test
-    fun testLocationEnabledInConfig() {
+    fun locationEnabledInConfig() {
         val location = DbLocationModel(
             enabled = true,
             latitude = 1.0,
@@ -222,7 +222,7 @@ class EventPreparerTest : CommonTest() {
     }
 
     @Test
-    fun testLocationDisabledInConfig() {
+    fun locationDisabledInConfig() {
         val location = DbLocationModel(
             enabled = false,
             latitude = 1.0,
@@ -240,7 +240,7 @@ class EventPreparerTest : CommonTest() {
     }
 
     @Test
-    fun testUnknownLocationEnabledState() {
+    fun unknownLocationEnabledState() {
         val location = DbLocationModel(
             enabled = null,
             latitude = 1.0,

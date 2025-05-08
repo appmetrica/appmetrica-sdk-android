@@ -47,7 +47,7 @@ public class StringResourceRetrieverTest extends CommonTest {
         final int resId = 10;
         final String buildId = UUID.randomUUID().toString();
         when(mResources.getIdentifier(eq(mResourceName), eq("string"), anyString())).thenReturn(resId);
-        when(mContext.getString(resId)).thenReturn(String.valueOf(buildId));
+        when(mContext.getString(resId)).thenReturn(buildId);
         assertThat(mStringResourceRetriever.getResource()).isEqualTo(buildId);
     }
 

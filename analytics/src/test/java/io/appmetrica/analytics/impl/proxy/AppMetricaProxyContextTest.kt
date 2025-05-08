@@ -23,7 +23,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mockito.verify
-import org.mockito.MockitoAnnotations
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
@@ -59,7 +58,6 @@ class AppMetricaProxyContextTest : CommonTest() {
 
     @Before
     fun setUp() {
-        MockitoAnnotations.openMocks(this)
         whenever(provider.peekInitializedImpl()).thenReturn(impl)
         whenever(provider.getInitializedImpl(context)).thenReturn(impl)
         whenever(ClientServiceLocator.getInstance().clientExecutorProvider.defaultExecutor).thenReturn(executor)

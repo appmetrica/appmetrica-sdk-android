@@ -67,8 +67,6 @@ internal class NativeCrashHandlerImplTest : CommonTest() {
     val nativeCrashRunnableProviderMockedConstructionRule = constructionRule<NativeCrashRunnableProvider> {
         on { get(eq(appMetricaNativeCrash), any()) } doReturn readAndReportRunnable
     }
-    private val nativeCrashRunnableProvider: NativeCrashRunnableProvider
-        by nativeCrashRunnableProviderMockedConstructionRule
 
     @get:Rule
     val appmetricaNativeCrashMockedStaticRule = staticRule<AppMetricaNativeCrashConverter> {
@@ -88,7 +86,14 @@ internal class NativeCrashHandlerImplTest : CommonTest() {
     fun setUp() {
         whenever(GlobalServiceLocator.getInstance().serviceExecutorProvider.reportRunnableExecutor)
             .thenReturn(executor)
-        nativeCrashHandlerImpl = NativeCrashHandlerImpl(context, reportConsumer, markCrashCompleted, predicateProvider, eventType, subtag)
+        nativeCrashHandlerImpl = NativeCrashHandlerImpl(
+            context,
+            reportConsumer,
+            markCrashCompleted,
+            predicateProvider,
+            eventType,
+            subtag
+        )
     }
 
     @Test

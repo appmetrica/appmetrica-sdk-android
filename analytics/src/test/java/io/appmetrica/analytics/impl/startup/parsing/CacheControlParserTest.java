@@ -42,7 +42,7 @@ public class CacheControlParserTest extends CommonTest {
         mPreparer = new Preparer();
 
         when(mConverter.toModel(any(StartupStateProtobuf.StartupState.CacheControl.class)))
-                .thenReturn(mCacheControl);
+            .thenReturn(mCacheControl);
 
         mCacheControlParser = new CacheControlParser(mConverter);
     }
@@ -62,7 +62,7 @@ public class CacheControlParserTest extends CommonTest {
         StartupStateProtobuf.StartupState.CacheControl proto = parseAndInterceptProtoConfig();
 
         ObjectPropertyAssertions<StartupStateProtobuf.StartupState.CacheControl> assertions =
-                ObjectPropertyAssertions(proto)
+            ObjectPropertyAssertions(proto)
                 .withFinalFieldOnly(false);
 
         assertions.checkField("lastKnownLocationTtl", 40000L);
@@ -92,8 +92,8 @@ public class CacheControlParserTest extends CommonTest {
         StartupStateProtobuf.StartupState.CacheControl proto = parseAndInterceptProtoConfig();
 
         ObjectPropertyAssertions<StartupStateProtobuf.StartupState.CacheControl> assertions =
-                ObjectPropertyAssertions(proto)
-                        .withFinalFieldOnly(false);
+            ObjectPropertyAssertions(proto)
+                .withFinalFieldOnly(false);
 
         assertions.checkField("lastKnownLocationTtl", 10000L);
 
@@ -109,11 +109,11 @@ public class CacheControlParserTest extends CommonTest {
     private static class Preparer {
 
         private static final String INITIAL_VALUE_STRING =
-                "{" +
-                        "\"cache_control\":{" +
-                        "\"last_known_location_ttl\":40" +
-                        "}" +
-                        "}";
+            "{" +
+                "\"cache_control\":{" +
+                "\"last_known_location_ttl\":40" +
+                "}" +
+                "}";
 
         private JSONObject mRootJson;
 

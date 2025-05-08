@@ -8,8 +8,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Mock
-import org.mockito.MockitoAnnotations
+import org.mockito.Mockito.mock
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.doThrow
 import org.mockito.kotlin.stubbing
@@ -17,17 +16,15 @@ import org.robolectric.annotation.Config
 
 @Config(sdk = [Build.VERSION_CODES.R])
 class SafePackageManagerForRTest : CommonTest() {
-    @Mock
-    private lateinit var packageManager: PackageManager
-    @Mock
-    private lateinit var installSourceInfo: InstallSourceInfo
+
+    private val packageManager: PackageManager = mock()
+    private val installSourceInfo: InstallSourceInfo = mock()
+
     private val packageName = "com.test.package.name"
     private val installingPackageName = "com.test.installing.package.name"
 
     @Before
     fun setUp() {
-        MockitoAnnotations.openMocks(this)
-
         stubbing(packageManager) {
             on { getInstallSourceInfo(packageName) } doReturn installSourceInfo
         }

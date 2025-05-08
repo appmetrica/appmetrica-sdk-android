@@ -74,11 +74,13 @@ class ModulesEventHandlerTest : CommonTest() {
     @Before
     fun setUp() {
         modulesEventHandlersHolder = GlobalServiceLocator.getInstance().moduleEventHandlersHolder
-        whenever(modulesEventHandlersHolder.getHandlers(apiKey)).thenReturn(linkedMapOf(
-            firstIdentifier to firstModuleEventHandler,
-            secondIdentifier to secondModuleEventHandler,
-            thirdIdentifier to thirdModuleEventHandler
-        ))
+        whenever(modulesEventHandlersHolder.getHandlers(apiKey)).thenReturn(
+            linkedMapOf(
+                firstIdentifier to firstModuleEventHandler,
+                secondIdentifier to secondModuleEventHandler,
+                thirdIdentifier to thirdModuleEventHandler
+            )
+        )
 
         modulesEventHandler = ModulesEventHandler(component)
 

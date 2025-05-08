@@ -35,9 +35,9 @@ public class FeatureDescriptionTest extends CommonTest {
     @Test
     public void testCreationFromJSON() throws JSONException {
         FeatureDescription description = new FeatureDescription(new JSONObject()
-                .put(NAME, mName)
-                .put(REQUIRED, mRequired)
-                .put(VERSION, mVersion)
+            .put(NAME, mName)
+            .put(REQUIRED, mRequired)
+            .put(VERSION, mVersion)
         );
 
         assertThat(description.getName()).isEqualTo(mName);

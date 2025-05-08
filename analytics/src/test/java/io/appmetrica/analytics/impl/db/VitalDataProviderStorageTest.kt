@@ -27,18 +27,25 @@ internal class VitalDataProviderStorageTest : CommonTest() {
 
     @get:Rule
     val vitalCommonDataProviderMockedRule = MockedConstructionRule(VitalCommonDataProvider::class.java)
+
     @get:Rule
     val globalServiceLocation = GlobalServiceLocatorRule()
+
     @get:Rule
     val fileVitalDataSourceMockedRule = MockedConstructionRule(FileVitalDataSource::class.java)
+
     @get:Rule
     val vitalComponentDataProviderMockedRule = MockedConstructionRule(VitalComponentDataProvider::class.java)
+
     @get:Rule
     val preferenceComponentDbStorageMockedRule = MockedConstructionRule(PreferencesComponentDbStorage::class.java)
+
     @get:Rule
     val databaseStorageFactoryMockedRule = MockedStaticRule(DatabaseStorageFactory::class.java)
+
     @get:Rule
     val prefereceServiceDbStorageMockedRule = MockedConstructionRule(PreferencesServiceDbStorage::class.java)
+
     @get:Rule
     val compositeFileVitalDataSourceMockedConstructionRule = constructionRule<CompositeFileVitalDataSource>()
 
@@ -102,21 +109,21 @@ internal class VitalDataProviderStorageTest : CommonTest() {
         assertThat(storage.getComponentDataProvider(firstComponentId)).isSameAs(firstComponentDataProvider)
         assertThat(storage.getComponentDataProvider(secondComponentId)).isSameAs(secondComponentDataProvider)
 
-        //Every component data provider creates once
+        // Every component data provider creates once
         assertThat(vitalComponentDataProviderMockedRule.constructionMock.constructed()).hasSize(2)
         assertThat(firstComponentDataProvider)
             .isEqualTo(vitalComponentDataProviderMockedRule.constructionMock.constructed()[0])
         assertThat(secondComponentDataProvider)
             .isEqualTo(vitalComponentDataProviderMockedRule.constructionMock.constructed()[1])
 
-        //Check vital components data provider creation arguments
+        // Check vital components data provider creation arguments
         assertThat(vitalComponentDataProviderMockedRule.argumentInterceptor.flatArguments())
             .containsExactly(
-                //First instance for first main api key
+                // First instance for first main api key
                 preferenceComponentDbStorageMockedRule.constructionMock.constructed()[0],
                 compositeFileVitalDataSourceMockedConstructionRule.constructionMock.constructed()[0],
                 "$firstComponentId",
-                //Second instance for second non main api key
+                // Second instance for second non main api key
                 preferenceComponentDbStorageMockedRule.constructionMock.constructed()[1],
                 // First for common; two next for first main api key
                 fileVitalDataSourceMockedRule.constructionMock.constructed()[3],
@@ -128,10 +135,13 @@ internal class VitalDataProviderStorageTest : CommonTest() {
 
         assertThat(compositeFileVitalDataSourceMockedConstructionRule.constructionMock.constructed()).hasSize(1)
         assertThat(compositeFileVitalDataSourceMockedConstructionRule.argumentInterceptor.flatArguments())
-            .containsExactly(listOf(
-                "appmetrica_vital_$firstApiKey.dat" to fileVitalDataSourceMockedRule.constructionMock.constructed()[1],
-                "appmetrica_vital_main.dat" to fileVitalDataSourceMockedRule.constructionMock.constructed()[2]
-            ))
+            .containsExactly(
+                listOf(
+                    "appmetrica_vital_$firstApiKey.dat" to fileVitalDataSourceMockedRule.constructionMock
+                        .constructed()[1],
+                    "appmetrica_vital_main.dat" to fileVitalDataSourceMockedRule.constructionMock.constructed()[2]
+                )
+            )
 
         assertThat(fileVitalDataSourceMockedRule.argumentInterceptor.flatArguments())
             .containsExactly(

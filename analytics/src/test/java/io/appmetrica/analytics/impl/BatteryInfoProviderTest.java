@@ -48,9 +48,9 @@ public class BatteryInfoProviderTest extends CommonTest {
         mExecutor = new StubbedBlockingExecutor();
 
         mockBatteryChangedBroadcastWithIntent(prepareIntentWithBatteryInfo(
-                100,
-                1000,
-                BatteryManager.BATTERY_PLUGGED_AC
+            100,
+            1000,
+            BatteryManager.BATTERY_PLUGGED_AC
         ));
         mBatteryInfoProvider = new BatteryInfoProvider(mExecutor, batteryChargeTypeListener);
     }
@@ -75,8 +75,8 @@ public class BatteryInfoProviderTest extends CommonTest {
     @Test
     public void testInitialChargeTypeForWireless() {
         testInitialChargeType(
-                BatteryManager.BATTERY_PLUGGED_WIRELESS,
-                ChargeType.WIRELESS
+            BatteryManager.BATTERY_PLUGGED_WIRELESS,
+            ChargeType.WIRELESS
         );
     }
 
@@ -162,40 +162,40 @@ public class BatteryInfoProviderTest extends CommonTest {
     @Test
     public void testDispatchPowerStateChangeToAllListenersForAc() {
         testDispatchPowerStateChangeToAllListeners(
-                BatteryManager.BATTERY_PLUGGED_AC,
-                ChargeType.AC
+            BatteryManager.BATTERY_PLUGGED_AC,
+            ChargeType.AC
         );
     }
 
     @Test
     public void testDispatchPowerStateChangeToAllListenersForUsb() {
         testDispatchPowerStateChangeToAllListeners(
-                BatteryManager.BATTERY_PLUGGED_USB,
-                ChargeType.USB
+            BatteryManager.BATTERY_PLUGGED_USB,
+            ChargeType.USB
         );
     }
 
     @Test
     public void testDispatchPowerStateChangeToAllListenersForWireless() {
         testDispatchPowerStateChangeToAllListeners(
-                BatteryManager.BATTERY_PLUGGED_WIRELESS,
-                ChargeType.WIRELESS
+            BatteryManager.BATTERY_PLUGGED_WIRELESS,
+            ChargeType.WIRELESS
         );
     }
 
     @Test
     public void testDispatchPowerStateChangeToAllListenersForMissing() {
         testDispatchPowerStateChangeToAllListeners(
-                null,
-                ChargeType.NONE
+            null,
+            ChargeType.NONE
         );
     }
 
     @Test
     public void testDispatchPowerStateChangeToAllListenersForUnknown() {
         testDispatchPowerStateChangeToAllListeners(
-                -1,
-                ChargeType.NONE
+            -1,
+            ChargeType.NONE
         );
     }
 
@@ -207,21 +207,21 @@ public class BatteryInfoProviderTest extends CommonTest {
         mBatteryInfoProvider.registerChargeTypeListener(mSecondChargeTypeChangeListener);
 
         inOrder.verify(mChargeTypeChangeListener)
-                .onChargeTypeChanged(ChargeType.AC);
+            .onChargeTypeChanged(ChargeType.AC);
         inOrder.verify(mSecondChargeTypeChangeListener)
-                .onChargeTypeChanged(ChargeType.AC);
+            .onChargeTypeChanged(ChargeType.AC);
 
         Intent intent = prepareIntentWithBatteryInfo(100, 1000, plugged);
         Consumer<Intent> listener = interceptBatteryChangedListener();
         listener.consume(intent);
 
         inOrder.verify(
-                mChargeTypeChangeListener,
-                times(chargeType == ChargeType.AC ? 0 : 1)
+            mChargeTypeChangeListener,
+            times(chargeType == ChargeType.AC ? 0 : 1)
         ).onChargeTypeChanged(chargeType);
         inOrder.verify(
-                mSecondChargeTypeChangeListener,
-                times(chargeType == ChargeType.AC ? 0 : 1)
+            mSecondChargeTypeChangeListener,
+            times(chargeType == ChargeType.AC ? 0 : 1)
         ).onChargeTypeChanged(chargeType);
         inOrder.verifyNoMoreInteractions();
     }

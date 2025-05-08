@@ -151,7 +151,9 @@ internal class AppMetricaImplTest : CommonTest() {
 
     private val reporterFactory: ReporterFactory = mock {
         on { buildOrUpdateMainReporter(config, publicLogger, wasAppEnvironmentCleared) } doReturn mainReporter
-        on { buildOrUpdateMainReporter(configWithDisabled, publicLogger, wasAppEnvironmentCleared) } doReturn mainReporter
+        on {
+            buildOrUpdateMainReporter(configWithDisabled, publicLogger, wasAppEnvironmentCleared)
+        } doReturn mainReporter
         on {
             buildOrUpdateAnonymousMainReporter(anonymousConfig, publicOrAnonymousLogger, wasAppEnvironmentCleared)
         } doReturn anonymousMainReporter

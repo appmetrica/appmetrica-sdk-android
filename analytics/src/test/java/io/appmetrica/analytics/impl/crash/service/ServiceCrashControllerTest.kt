@@ -39,16 +39,12 @@ internal class ServiceCrashControllerTest : CommonTest() {
     val crashFromFileConsumerMockedConstructionRule = constructionRule<CrashFromFileConsumer>()
 
     @get:Rule
-    val alwaysAllowSendCrashPredicateMockedConstructionRule =
-        constructionRule<AlwaysAllowSendCrashPredicate<File>>()
-    private val alwaysAllowSendCrashPredicate: AlwaysAllowSendCrashPredicate<File>
-        by alwaysAllowSendCrashPredicateMockedConstructionRule
+    val alwaysAllowSendCrashPredicateRule = constructionRule<AlwaysAllowSendCrashPredicate<File>>()
+    private val alwaysAllowSendCrashPredicate by alwaysAllowSendCrashPredicateRule
 
     @get:Rule
-    val jvmCrashFromCurrentSessionPredicateMockedConstructionRule =
-        constructionRule<JvmCrashFromCurrentSessionPredicate>()
-    private val jvmCrashFromCurrentSessionPredicate: JvmCrashFromCurrentSessionPredicate
-        by jvmCrashFromCurrentSessionPredicateMockedConstructionRule
+    val jvmCrashFromCurrentSessionPredicateRule = constructionRule<JvmCrashFromCurrentSessionPredicate>()
+    private val jvmCrashFromCurrentSessionPredicate by jvmCrashFromCurrentSessionPredicateRule
 
     @get:Rule
     val globalServiceLocatorRule = GlobalServiceLocatorRule()

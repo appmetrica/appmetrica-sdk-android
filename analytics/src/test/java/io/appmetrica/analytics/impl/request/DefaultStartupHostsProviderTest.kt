@@ -20,6 +20,7 @@ class DefaultStartupHostsProviderTest : CommonTest() {
 
     private val resourceRetriever = mock<StringArrayResourceRetriever>()
     private val provider = DefaultStartupHostsProvider(resourceRetriever)
+
     @get:Rule
     val globalServiceLocatorRule = GlobalServiceLocatorRule()
 
@@ -29,7 +30,10 @@ class DefaultStartupHostsProviderTest : CommonTest() {
         val newMock = Mockito.mockConstruction(StringArrayResourceRetriever::class.java, captor)
         try {
             DefaultStartupHostsProvider()
-            assertThat(captor.flatArguments()).containsExactly(GlobalServiceLocator.getInstance().context, "appmetrica_startup_hosts")
+            assertThat(captor.flatArguments()).containsExactly(
+                GlobalServiceLocator.getInstance().context,
+                "appmetrica_startup_hosts"
+            )
         } finally {
             newMock.close()
         }

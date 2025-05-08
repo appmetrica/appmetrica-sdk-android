@@ -25,9 +25,9 @@ public class ReferrerValidityCheckerDoesInstallerMatchReferrerTest extends Commo
     @ParameterizedRobolectricTestRunner.Parameters(name = "{0}")
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
-                { ReferrerInfo.Source.UNKNOWN, false, false },
-                { ReferrerInfo.Source.HMS, false, true },
-                { ReferrerInfo.Source.GP, true, false },
+            {ReferrerInfo.Source.UNKNOWN, false, false},
+            {ReferrerInfo.Source.HMS, false, true},
+            {ReferrerInfo.Source.GP, true, false},
         });
     }
 

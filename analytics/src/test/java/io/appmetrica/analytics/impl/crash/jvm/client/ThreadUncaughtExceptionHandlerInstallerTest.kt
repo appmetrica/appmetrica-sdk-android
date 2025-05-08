@@ -2,16 +2,13 @@ package io.appmetrica.analytics.impl.crash.jvm.client
 
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.constructionRule
-import io.appmetrica.analytics.testutils.on
-import io.appmetrica.analytics.testutils.staticRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.inOrder
 import org.mockito.kotlin.mock
 
-class ThreadUncaughtExceptionHandlerInstallerTest: CommonTest() {
+class ThreadUncaughtExceptionHandlerInstallerTest : CommonTest() {
 
     private val handler = mock<Thread.UncaughtExceptionHandler>()
 

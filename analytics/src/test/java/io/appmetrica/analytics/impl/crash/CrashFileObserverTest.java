@@ -26,7 +26,7 @@ public class CrashFileObserverTest extends CommonTest {
     private FileProvider fileProvider;
     @Mock
     private File file;
-    private File directory = new File("/");
+    private final File directory = new File("/");
 
     private CrashFileObserver observer;
 

@@ -45,7 +45,7 @@ class ReportKotlinVersionTaskTest : CommonTest() {
     }
 
     @get:Rule
-    val timePassedCheckerMockedConstructionRule = MockedConstructionRule(TimePassedChecker::class.java) {mock, _ ->
+    val timePassedCheckerMockedConstructionRule = MockedConstructionRule(TimePassedChecker::class.java) { mock, _ ->
         whenever(mock.didTimePassMillis(eq(0), eq(TimeUnit.DAYS.toMillis(1)), any()))
             .thenReturn(true)
         whenever(mock.didTimePassMillis(eq(longAgoSendTime), eq(TimeUnit.DAYS.toMillis(1)), any()))

@@ -6,6 +6,7 @@ import io.appmetrica.analytics.network.internal.NetworkClient
 import io.appmetrica.analytics.network.internal.Request
 import io.appmetrica.analytics.network.internal.Response
 import io.appmetrica.analytics.networktasks.impl.Constants
+import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.MockedConstructionRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Rule
@@ -23,7 +24,7 @@ import org.robolectric.RobolectricTestRunner
 import javax.net.ssl.SSLSocketFactory
 
 @RunWith(RobolectricTestRunner::class)
-class RequestExecutorTest {
+class RequestExecutorTest : CommonTest() {
 
     private val sslSocketFactory = mock<SSLSocketFactory>()
     private val response = mock<Response>()

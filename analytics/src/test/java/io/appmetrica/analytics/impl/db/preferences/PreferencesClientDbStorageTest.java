@@ -45,7 +45,7 @@ public class PreferencesClientDbStorageTest extends CommonTest {
     private PreferencesClientDbStorage clientDbStorage;
     @Mock
     private IKeyValueTableDbHelper mDbStorage;
-    private IdentifiersResult mDefaultIdentifiersResult = new IdentifiersResult(null, IdentifierStatus.UNKNOWN, "no identifier in preferences");
+    private final IdentifiersResult mDefaultIdentifiersResult = new IdentifiersResult(null, IdentifierStatus.UNKNOWN, "no identifier in preferences");
 
     static class JsonMatcher implements ArgumentMatcher<JSONObject> {
 
@@ -65,7 +65,7 @@ public class PreferencesClientDbStorageTest extends CommonTest {
             try {
                 while (keys.hasNext()) {
                     final String key = keys.next();
-                    if (mExpected.get(key).equals(argument.get(key)) == false) {
+                    if (!mExpected.get(key).equals(argument.get(key))) {
                         return false;
                     }
                     argument.remove(key);
@@ -73,10 +73,7 @@ public class PreferencesClientDbStorageTest extends CommonTest {
             } catch (JSONException ex) {
                 throw new RuntimeException(ex);
             }
-            if (argument.keys().hasNext()) {
-                return false;
-            }
-            return true;
+            return !argument.keys().hasNext();
         }
     }
 
@@ -95,7 +92,7 @@ public class PreferencesClientDbStorageTest extends CommonTest {
             final JSONObject json = new JSONObject().put("key", "value");
             when(JsonHelper.advIdentifiersResultFromJson(argThat(new JsonMatcher(json)))).thenReturn(responseClids);
             doReturn(json.toString()).when(mDbStorage)
-                    .getString(eq(PreferencesClientDbStorage.RESPONSE_CLIDS_RESULT.fullKey()), nullable(String.class));
+                .getString(eq(PreferencesClientDbStorage.RESPONSE_CLIDS_RESULT.fullKey()), nullable(String.class));
 
             assertThat(clientDbStorage.getResponseClidsResult()).isSameAs(responseClids);
         }
@@ -121,7 +118,7 @@ public class PreferencesClientDbStorageTest extends CommonTest {
 
         String clids = "test clids";
         doReturn(clids).when(mDbStorage)
-                .getString(eq(PreferencesClientDbStorage.CLIENT_CLIDS.fullKey()), nullable(String.class));
+            .getString(eq(PreferencesClientDbStorage.CLIENT_CLIDS.fullKey()), nullable(String.class));
 
         assertThat(clientDbStorage.getClientClids(null)).isEqualTo(clids);
     }
@@ -142,7 +139,7 @@ public class PreferencesClientDbStorageTest extends CommonTest {
             final JSONObject json = new JSONObject().put("key", "value");
             when(JsonHelper.advIdentifiersResultFromJson(argThat(new JsonMatcher(json)))).thenReturn(uuid);
             doReturn(json.toString()).when(mDbStorage)
-                    .getString(eq(PreferencesClientDbStorage.UUID_RESULT.fullKey()), nullable(String.class));
+                .getString(eq(PreferencesClientDbStorage.UUID_RESULT.fullKey()), nullable(String.class));
 
             assertThat(clientDbStorage.getUuidResult()).isSameAs(uuid);
         }
@@ -171,7 +168,7 @@ public class PreferencesClientDbStorageTest extends CommonTest {
             final JSONObject json = new JSONObject().put("key", "value");
             when(JsonHelper.advIdentifiersResultFromJson(argThat(new JsonMatcher(json)))).thenReturn(deviceId);
             doReturn(json.toString()).when(mDbStorage)
-                    .getString(eq(PreferencesClientDbStorage.DEVICE_ID_RESULT.fullKey()), nullable(String.class));
+                .getString(eq(PreferencesClientDbStorage.DEVICE_ID_RESULT.fullKey()), nullable(String.class));
 
             assertThat(clientDbStorage.getDeviceIdResult()).isSameAs(deviceId);
         }
@@ -200,7 +197,7 @@ public class PreferencesClientDbStorageTest extends CommonTest {
             final JSONObject json = new JSONObject().put("key", "value");
             when(JsonHelper.advIdentifiersResultFromJson(argThat(new JsonMatcher(json)))).thenReturn(deviceIdHash);
             doReturn(json.toString()).when(mDbStorage)
-                    .getString(eq(PreferencesClientDbStorage.DEVICE_ID_HASH_RESULT.fullKey()), nullable(String.class));
+                .getString(eq(PreferencesClientDbStorage.DEVICE_ID_HASH_RESULT.fullKey()), nullable(String.class));
 
             assertThat(clientDbStorage.getDeviceIdHashResult()).isSameAs(deviceIdHash);
         }
@@ -232,7 +229,7 @@ public class PreferencesClientDbStorageTest extends CommonTest {
 
         long value = 44;
         doReturn(value).when(mDbStorage)
-                .getLong(eq(PreferencesClientDbStorage.API_LEVEL.fullKey()), anyLong());
+            .getLong(eq(PreferencesClientDbStorage.API_LEVEL.fullKey()), anyLong());
 
         assertThat(clientDbStorage.getClientApiLevel(-1)).isEqualTo(value);
     }
@@ -264,7 +261,7 @@ public class PreferencesClientDbStorageTest extends CommonTest {
             final JSONObject json = new JSONObject().put("key", "value");
             when(JsonHelper.advIdentifiersResultFromJson(argThat(new JsonMatcher(json)))).thenReturn(adUrlGet);
             doReturn(json.toString()).when(mDbStorage)
-                    .getString(eq(PreferencesClientDbStorage.AD_URL_GET_RESULT.fullKey()), nullable(String.class));
+                .getString(eq(PreferencesClientDbStorage.AD_URL_GET_RESULT.fullKey()), nullable(String.class));
 
             assertThat(clientDbStorage.getAdUrlGetResult()).isSameAs(adUrlGet);
         }
@@ -293,7 +290,7 @@ public class PreferencesClientDbStorageTest extends CommonTest {
             final JSONObject json = new JSONObject().put("key", "value");
             when(JsonHelper.advIdentifiersResultFromJson(argThat(new JsonMatcher(json)))).thenReturn(adUrlReport);
             doReturn(json.toString()).when(mDbStorage)
-                    .getString(eq(PreferencesClientDbStorage.AD_URL_REPORT_RESULT.fullKey()), nullable(String.class));
+                .getString(eq(PreferencesClientDbStorage.AD_URL_REPORT_RESULT.fullKey()), nullable(String.class));
 
             assertThat(clientDbStorage.getAdUrlReportResult()).isSameAs(adUrlReport);
         }
@@ -322,7 +319,7 @@ public class PreferencesClientDbStorageTest extends CommonTest {
             final JSONObject json = new JSONObject().put("key", "value");
             when(JsonHelper.advIdentifiersResultFromJson(argThat(new JsonMatcher(json)))).thenReturn(gaid);
             doReturn(json.toString()).when(mDbStorage)
-                    .getString(eq(PreferencesClientDbStorage.GAID.fullKey()), nullable(String.class));
+                .getString(eq(PreferencesClientDbStorage.GAID.fullKey()), nullable(String.class));
 
             assertThat(clientDbStorage.getGaid()).isSameAs(gaid);
         }
@@ -351,7 +348,7 @@ public class PreferencesClientDbStorageTest extends CommonTest {
             final JSONObject json = new JSONObject().put("key", "value");
             when(JsonHelper.advIdentifiersResultFromJson(argThat(new JsonMatcher(json)))).thenReturn(hoaid);
             doReturn(json.toString()).when(mDbStorage)
-                    .getString(eq(PreferencesClientDbStorage.HOAID.fullKey()), nullable(String.class));
+                .getString(eq(PreferencesClientDbStorage.HOAID.fullKey()), nullable(String.class));
 
             assertThat(clientDbStorage.getHoaid()).isSameAs(hoaid);
         }
@@ -380,7 +377,7 @@ public class PreferencesClientDbStorageTest extends CommonTest {
             final JSONObject json = new JSONObject().put("key", "value");
             when(JsonHelper.advIdentifiersResultFromJson(argThat(new JsonMatcher(json)))).thenReturn(yandexAdvId);
             doReturn(json.toString()).when(mDbStorage)
-                    .getString(eq(PreferencesClientDbStorage.YANDEX_ADV_ID.fullKey()), nullable(String.class));
+                .getString(eq(PreferencesClientDbStorage.YANDEX_ADV_ID.fullKey()), nullable(String.class));
 
             assertThat(clientDbStorage.getYandexAdvId()).isSameAs(yandexAdvId);
         }
@@ -412,7 +409,7 @@ public class PreferencesClientDbStorageTest extends CommonTest {
         assertThat(clientDbStorage.getClientClidsChangedAfterLastIdentifiersUpdate(true)).isTrue();
 
         when(mDbStorage.getBoolean(eq(PreferencesClientDbStorage.CLIENT_CLIDS_CHANGED_AFTER_LAST_IDENTIFIERS_UPDATE.fullKey()), anyBoolean()))
-                .thenReturn(false);
+            .thenReturn(false);
         assertThat(clientDbStorage.getClientClidsChangedAfterLastIdentifiersUpdate(true)).isFalse();
     }
 
@@ -432,7 +429,7 @@ public class PreferencesClientDbStorageTest extends CommonTest {
         ScreenInfo screenInfo = mock(ScreenInfo.class);
         String screenInfoStringValue = "Screen info string value";
         when(mDbStorage.getString(PreferencesClientDbStorage.SCREEN_INFO.fullKey(), null))
-                .thenReturn(screenInfoStringValue);
+            .thenReturn(screenInfoStringValue);
         try (MockedStatic<JsonHelper> ignored = Mockito.mockStatic(JsonHelper.class)) {
             when(JsonHelper.screenInfoFromJsonString(screenInfoStringValue)).thenReturn(screenInfo);
             assertThat(clientDbStorage.getScreenInfo()).isSameAs(screenInfo);
@@ -466,7 +463,7 @@ public class PreferencesClientDbStorageTest extends CommonTest {
     @Test
     public void isScreenSizeCheckedByDeprecated() {
         when(mDbStorage.getBoolean(eq(PreferencesClientDbStorage.SCREEN_SIZE_CHECKED_BY_DEPRECATED.fullKey()), anyBoolean()))
-                .thenReturn(true);
+            .thenReturn(true);
         assertThat(clientDbStorage.isScreenSizeCheckedByDeprecated()).isTrue();
     }
 
@@ -485,7 +482,7 @@ public class PreferencesClientDbStorageTest extends CommonTest {
             final JSONObject json = new JSONObject().put("key", "value");
             when(JsonHelper.advIdentifiersResultFromJson(argThat(new JsonMatcher(json)))).thenReturn(customSdkHosts);
             doReturn(json.toString()).when(mDbStorage)
-                    .getString(eq(PreferencesClientDbStorage.CUSTOM_SDK_HOSTS.fullKey()), nullable(String.class));
+                .getString(eq(PreferencesClientDbStorage.CUSTOM_SDK_HOSTS.fullKey()), nullable(String.class));
 
             assertThat(clientDbStorage.getCustomSdkHosts()).isSameAs(customSdkHosts);
         }
@@ -508,7 +505,7 @@ public class PreferencesClientDbStorageTest extends CommonTest {
     @Test
     public void getFeatures() throws Exception {
         try (MockedStatic<JsonHelper> sJsonUtils = Mockito.mockStatic(JsonHelper.class)) {
-            FeaturesInternal defaultFeatures= new FeaturesInternal();
+            FeaturesInternal defaultFeatures = new FeaturesInternal();
             when(JsonHelper.featuresFromJson(null)).thenReturn(defaultFeatures);
             assertThat(clientDbStorage.getFeatures()).isEqualTo(defaultFeatures);
 
@@ -516,7 +513,7 @@ public class PreferencesClientDbStorageTest extends CommonTest {
             final JSONObject json = new JSONObject().put("key", "value");
             when(JsonHelper.featuresFromJson(eq(json.toString()))).thenReturn(features);
             doReturn(json.toString()).when(mDbStorage)
-                    .getString(eq(PreferencesClientDbStorage.FEATURES.fullKey()), nullable(String.class));
+                .getString(eq(PreferencesClientDbStorage.FEATURES.fullKey()), nullable(String.class));
 
             assertThat(clientDbStorage.getFeatures()).isSameAs(features);
         }

@@ -6,7 +6,7 @@ import io.appmetrica.analytics.impl.component.clients.CommutationClientUnit;
 import io.appmetrica.analytics.impl.component.processor.EventProcessingStrategy;
 import io.appmetrica.analytics.impl.component.processor.ProcessingStrategyFactory;
 import io.appmetrica.analytics.testutils.CommonTest;
-import java.util.Arrays;
+import java.util.Collections;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,7 +33,7 @@ public class CommutationReportProcessorTest extends CommonTest {
         mProcessor = new CommutationReportProcessor(mFactory, mComponent);
         EventProcessingStrategy strategy = mock(EventProcessingStrategy.class);
         mHandler = mock(CommutationHandler.class);
-        doReturn(Arrays.asList(mHandler)).when(strategy).getEventHandlers();
+        doReturn(Collections.singletonList(mHandler)).when(strategy).getEventHandlers();
         doReturn(strategy).when(mFactory).getProcessingStrategy(anyInt());
     }
 

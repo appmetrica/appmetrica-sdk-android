@@ -37,10 +37,12 @@ class ReflectionAdvIdParserTest : CommonTest() {
     @Test
     fun noTrackingData() {
         val errorMessage = "some message"
-        val data = parser.fromBundle(Bundle().apply {
-            putString(STATUS, "OK")
-            putString(ERROR_MESSAGE, errorMessage)
-        })
+        val data = parser.fromBundle(
+            Bundle().apply {
+                putString(STATUS, "OK")
+                putString(ERROR_MESSAGE, errorMessage)
+            }
+        )
 
         val assert = ObjectPropertyAssertions(data)
 
@@ -56,15 +58,20 @@ class ReflectionAdvIdParserTest : CommonTest() {
         val errorMessage = "some message"
         val id = "someID"
         val limited = true
-        val data = parser.fromBundle(Bundle().apply {
-            putString(STATUS, "OK")
-            putString(ERROR_MESSAGE, errorMessage)
-            putBundle(TRACKING_INFO, Bundle().apply {
-                putString(PROVIDER, YANDEX)
-                putString(ID, id)
-                putBoolean(LIMITED, limited)
-            })
-        })
+        val data = parser.fromBundle(
+            Bundle().apply {
+                putString(STATUS, "OK")
+                putString(ERROR_MESSAGE, errorMessage)
+                putBundle(
+                    TRACKING_INFO,
+                    Bundle().apply {
+                        putString(PROVIDER, YANDEX)
+                        putString(ID, id)
+                        putBoolean(LIMITED, limited)
+                    }
+                )
+            }
+        )
 
         val assert = ObjectPropertyAssertions(data)
 
@@ -84,13 +91,18 @@ class ReflectionAdvIdParserTest : CommonTest() {
     @Test
     fun limitedAdTrackingUnknown() {
         val id = "someID"
-        val data = parser.fromBundle(Bundle().apply {
-            putString(STATUS, "OK")
-            putBundle(TRACKING_INFO, Bundle().apply {
-                putString(PROVIDER, YANDEX)
-                putString(ID, id)
-            })
-        })
+        val data = parser.fromBundle(
+            Bundle().apply {
+                putString(STATUS, "OK")
+                putBundle(
+                    TRACKING_INFO,
+                    Bundle().apply {
+                        putString(PROVIDER, YANDEX)
+                        putString(ID, id)
+                    }
+                )
+            }
+        )
 
         val assert = ObjectPropertyAssertions(data)
 
@@ -110,13 +122,17 @@ class ReflectionAdvIdParserTest : CommonTest() {
     @Test(expected = IllegalArgumentException::class)
     fun unknownProvider() {
         val id = "someID"
-        parser.fromBundle(Bundle().apply {
-            putString(STATUS, "OK")
-            putBundle(TRACKING_INFO, Bundle().apply {
-                putString(PROVIDER, "test")
-                putString(ID, id)
-            })
-        })
+        parser.fromBundle(
+            Bundle().apply {
+                putString(STATUS, "OK")
+                putBundle(
+                    TRACKING_INFO,
+                    Bundle().apply {
+                        putString(PROVIDER, "test")
+                        putString(ID, id)
+                    }
+                )
+            }
+        )
     }
-
 }

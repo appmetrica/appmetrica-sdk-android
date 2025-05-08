@@ -26,5 +26,4 @@ class ToStringTest(
             arrayOf(PermissionState::class.java, PermissionState("permission.name", true), 0, "")
         )
     }
-
 }

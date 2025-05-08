@@ -52,7 +52,7 @@ public class ReportReferrerMainReporterClientUnitTest extends CommonTest {
             }
         });
         assertThat(argument.getValue().getType()).isEqualTo(InternalEvents.EVENT_TYPE_SEND_REFERRER
-                .getTypeId());
+            .getTypeId());
     }
 
     @Test

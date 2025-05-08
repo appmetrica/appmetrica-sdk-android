@@ -13,11 +13,11 @@ import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.impl.component.EventSaver;
 import io.appmetrica.analytics.impl.db.constants.Constants;
 import io.appmetrica.analytics.impl.db.protobuf.converter.DbEventModelConverter;
-import io.appmetrica.analytics.impl.events.EventListener;
 import io.appmetrica.analytics.impl.events.ConditionalEventTrigger;
+import io.appmetrica.analytics.impl.events.EventListener;
 import io.appmetrica.analytics.impl.request.ReportRequestConfig;
-import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.impl.utils.TimeUtils;
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import io.appmetrica.analytics.testutils.LogRule;
@@ -57,14 +57,14 @@ import static org.mockito.Mockito.when;
 public class DatabaseHelperTest extends CommonTest {
 
     private static final Function<ContentValues, String> QUERY_PARAMETERS_EXTRACTOR =
-            new Function<ContentValues, String>() {
-                @Override
-                public String apply(ContentValues contentValues) {
-                    return contentValues.getAsString(
-                            Constants.SessionTable.SessionTableEntry.FIELD_SESSION_REPORT_REQUEST_PARAMETERS
-                    );
-                }
-            };
+        new Function<ContentValues, String>() {
+            @Override
+            public String apply(ContentValues contentValues) {
+                return contentValues.getAsString(
+                    Constants.SessionTable.SessionTableEntry.FIELD_SESSION_REPORT_REQUEST_PARAMETERS
+                );
+            }
+        };
 
     private SQLiteDatabase db;
     private DatabaseHelper helper;
@@ -122,7 +122,7 @@ public class DatabaseHelperTest extends CommonTest {
         when(componentUnit.getEventTrigger()).thenReturn(mock(ConditionalEventTrigger.class));
         when(config.getMaxEventsInDbCount()).thenReturn(maxEventsInDbCount);
         when(databaseCleaner.cleanEvents(same(db), anyString(), anyString(), any(DatabaseCleaner.Reason.class), nullable(String.class), anyBoolean()))
-                .thenReturn(new DatabaseCleaner.DeletionInfo(Collections.<ContentValues>emptyList(), 0));
+            .thenReturn(new DatabaseCleaner.DeletionInfo(Collections.emptyList(), 0));
         helper = new DatabaseHelper(componentUnit, storage, databaseCleaner, dbEventModelConverter);
         helper.onComponentCreated();
 
@@ -318,7 +318,7 @@ public class DatabaseHelperTest extends CommonTest {
         cv1.put(Constants.EventsTable.EventTableEntry.FIELD_EVENT_TYPE, 10);
         cv2.put(Constants.EventsTable.EventTableEntry.FIELD_EVENT_TYPE, 20);
         when(databaseCleaner.cleanEvents(same(db), anyString(), anyString(), eq(DatabaseCleaner.Reason.BAD_REQUEST), anyString(), eq(true)))
-                .thenReturn(new DatabaseCleaner.DeletionInfo(Arrays.asList(cv1, cv2), 2));
+            .thenReturn(new DatabaseCleaner.DeletionInfo(Arrays.asList(cv1, cv2), 2));
         helper.removeTop(1000, 0, 2, true);
         ArgumentCaptor<List> reportTypesFirstListenerCaptor = ArgumentCaptor.forClass(List.class);
         ArgumentCaptor<List> reportTypesSecondListenerCaptor = ArgumentCaptor.forClass(List.class);
@@ -354,7 +354,7 @@ public class DatabaseHelperTest extends CommonTest {
         final int type = InternalEvents.EVENT_TYPE_FIRST_ACTIVATION.getTypeId();
         when(firstReport.getAsInteger(Constants.EventsTable.EventTableEntry.FIELD_EVENT_TYPE)).thenReturn(type);
         helper.addReportValues(firstReport);
-        verify(eventListener1, timeout(1000)).onEventsAdded(Arrays.asList(type));
+        verify(eventListener1, timeout(1000)).onEventsAdded(Collections.singletonList(type));
     }
 
     @Test
@@ -368,8 +368,8 @@ public class DatabaseHelperTest extends CommonTest {
     @Test
     public void testGetEventsCountUpdated() {
         helper.insertEvents(Arrays.asList(
-                getReportContentValues(0, 10, 1000, 0),
-                getReportContentValues(1, 20, 10001, 1)
+            getReportContentValues(0, 10, 1000, 0),
+            getReportContentValues(1, 20, 10001, 1)
         ));
         assertThat(helper.getEventsCount()).isEqualTo(2);
     }
@@ -381,8 +381,8 @@ public class DatabaseHelperTest extends CommonTest {
         addGeneralEvents(db, 1, 1002, 1, 30);
         DatabaseHelper helper = new DatabaseHelper(componentUnit, storage, databaseCleaner, dbEventModelConverter);
         helper.insertEvents(Arrays.asList(
-                getReportContentValues(0, 10, 1002, 0),
-                getReportContentValues(1, 30, 1002, 1)
+            getReportContentValues(0, 10, 1002, 0),
+            getReportContentValues(1, 30, 1002, 1)
         ));
         assertThat(helper.getEventsOfFollowingTypesCount(new HashSet<Integer>(Arrays.asList(10, 20)))).isEqualTo(4);
     }

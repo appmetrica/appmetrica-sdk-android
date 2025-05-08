@@ -3,6 +3,7 @@ package io.appmetrica.analytics.impl.startup.parsing;
 import io.appmetrica.analytics.testutils.CommonTest;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,16 +16,16 @@ import org.robolectric.RobolectricTestRunner;
 @RunWith(RobolectricTestRunner.class)
 public class HostsParserTest extends CommonTest {
 
-    private StartupResult mResult = new StartupResult();
-    private HostsParser mHostsParser = new HostsParser();
-    private List<String> mStartupHosts = Arrays.asList("startup.host.1.by", "startup.host.2.ru");
-    private List<String> mReportHosts = Arrays.asList("report.host.1.by", "report.host.2.ru");
-    private String mReportAdHost = "report.ad.host.by";
-    private String mGetAdHost = "get.ad.host.by";
+    private final StartupResult mResult = new StartupResult();
+    private final HostsParser mHostsParser = new HostsParser();
+    private final List<String> mStartupHosts = Arrays.asList("startup.host.1.by", "startup.host.2.ru");
+    private final List<String> mReportHosts = Arrays.asList("report.host.1.by", "report.host.2.ru");
+    private final String mReportAdHost = "report.ad.host.by";
+    private final String mGetAdHost = "get.ad.host.by";
     private final String customSdkHostKey1 = "am";
     private final String customSdkHostKey2 = "ads";
     private final List<String> customSdkHostsValue1 = Arrays.asList("host1", "host2");
-    private final List<String> customSdkHostsValue2 = Arrays.asList("host3");
+    private final List<String> customSdkHostsValue2 = Collections.singletonList("host3");
     private final Map<String, List<String>> customSdkHosts = new HashMap<>();
 
     @Before

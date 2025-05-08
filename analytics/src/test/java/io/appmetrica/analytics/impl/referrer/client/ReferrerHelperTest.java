@@ -178,12 +178,12 @@ public class ReferrerHelperTest extends CommonTest {
 
     private void initReferrerHelper(boolean wasDeeplinkChecked) {
         mReferrerHelper = new ReferrerHelper(
-                mReportsHandler,
-                mPreferencesClientDbStorage,
-                handler,
-                wasDeeplinkChecked,
-                mDeferredDeeplinkStateManager,
-                mReferrerParser
+            mReportsHandler,
+            mPreferencesClientDbStorage,
+            handler,
+            wasDeeplinkChecked,
+            mDeferredDeeplinkStateManager,
+            mReferrerParser
         );
     }
 }

@@ -64,8 +64,8 @@ public class ReporterProxyStorageTest extends CommonTest {
         assertThat(proxy).isNotNull();
         assertThat(storage.getOrCreate(mContext, config)).isEqualTo(proxy);
         assertThat(storage.getOrCreate(mContext, ReporterConfig.newConfigBuilder(TestsData.generateApiKey()).build()))
-                .isNotNull()
-                .isNotEqualTo(proxy);
+            .isNotNull()
+            .isNotEqualTo(proxy);
     }
 
     @Test

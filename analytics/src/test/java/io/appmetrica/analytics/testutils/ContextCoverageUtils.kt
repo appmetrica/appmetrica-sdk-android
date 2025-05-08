@@ -15,9 +15,10 @@ object ContextCoverageUtils {
             it.isAnnotationPresent(Test::class.java) && it.name != "coverage"
         }
         assertThat(tests)
-            .overridingErrorMessage("Actual:\n [${tests.joinToString("\n") { it.name }}],\n" +
-                "expected: [${methodsWithContext.joinToString("\n") { it.name }}]")
+            .overridingErrorMessage(
+                "Actual:\n [${tests.joinToString("\n") { it.name }}],\n" +
+                    "expected: [${methodsWithContext.joinToString("\n") { it.name }}]"
+            )
             .hasSameSizeAs(methodsWithContext)
-
     }
 }

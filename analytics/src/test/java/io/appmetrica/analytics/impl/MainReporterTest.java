@@ -128,7 +128,7 @@ public class MainReporterTest extends BaseReporterTest {
         mConfig = AppMetricaConfig.newConfigBuilder(apiKey).build();
         mMainReporter = getReporter();
         mMainReporter.updateConfig(mConfig, true);
-        verify(nativeCrashClient).initHandling(eq(mContext), eq(apiKey), eq((String) null));
+        verify(nativeCrashClient).initHandling(eq(mContext), eq(apiKey), eq(null));
     }
 
     @Test
@@ -335,10 +335,10 @@ public class MainReporterTest extends BaseReporterTest {
         verify(mainReporter, atLeast(1)).putAllToErrorEnvironment(argMap.capture());
         Map map = argMap.getValue();
         assertThat(map.size()).isEqualTo(2);
-        assertThat(map.keySet().contains("memory")).isTrue();
-        assertThat(map.keySet().contains("money")).isTrue();
-        assertThat(map.values().contains("2mb")).isTrue();
-        assertThat(map.values().contains("-100")).isTrue();
+        assertThat(map.containsKey("memory")).isTrue();
+        assertThat(map.containsKey("money")).isTrue();
+        assertThat(map.containsValue("2mb")).isTrue();
+        assertThat(map.containsValue("-100")).isTrue();
     }
 
     @Test
@@ -356,10 +356,10 @@ public class MainReporterTest extends BaseReporterTest {
         verify(mainReporter, atLeast(1)).putAllToAppEnvironment(argMap.capture());
         Map map = argMap.getValue();
         assertThat(map.size()).isEqualTo(2);
-        assertThat(map.keySet().contains("memory")).isTrue();
-        assertThat(map.keySet().contains("money")).isTrue();
-        assertThat(map.values().contains("2mb")).isTrue();
-        assertThat(map.values().contains("-100")).isTrue();
+        assertThat(map.containsKey("memory")).isTrue();
+        assertThat(map.containsKey("money")).isTrue();
+        assertThat(map.containsValue("2mb")).isTrue();
+        assertThat(map.containsValue("-100")).isTrue();
     }
 
     @Test

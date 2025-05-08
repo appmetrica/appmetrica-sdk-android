@@ -13,9 +13,9 @@ import org.robolectric.RobolectricTestRunner
 @RunWith(RobolectricTestRunner::class)
 class PreloadInfoDataSaverTest : CommonTest() {
 
-    @Rule
-    @JvmField
+    @get:Rule
     val globalServiceLocatorRule = GlobalServiceLocatorRule()
+
     private val dataSaver = PreloadInfoDataSaver()
 
     @Test

@@ -93,40 +93,50 @@ internal class LocationCoreTests : CommonTest() {
         locationListenerWrapper = locationListenerWrapper()
         locationDataCacheUpdateScheduler = locationDataCacheUpdateScheduler()
 
-        whenever(firstLastKnownExtractorProvider.getExtractor(
-            context,
-            permissionExtractor,
-            executor,
-            locationListenerWrapper
-        )).thenReturn(firstLastKnownExtractor)
+        whenever(
+            firstLastKnownExtractorProvider.getExtractor(
+                context,
+                permissionExtractor,
+                executor,
+                locationListenerWrapper
+            )
+        ).thenReturn(firstLastKnownExtractor)
 
-        whenever(secondLastKnownExtractorProvider.getExtractor(
-            context,
-            permissionExtractor,
-            executor,
-            locationListenerWrapper
-        )).thenReturn(secondLastKnownExtractor)
+        whenever(
+            secondLastKnownExtractorProvider.getExtractor(
+                context,
+                permissionExtractor,
+                executor,
+                locationListenerWrapper
+            )
+        ).thenReturn(secondLastKnownExtractor)
 
-        whenever(firstLocationReceiverProvider.getLocationReceiver(
-            context,
-            permissionExtractor,
-            executor,
-            locationListenerWrapper
-        )).thenReturn(firstLocationReceiver)
+        whenever(
+            firstLocationReceiverProvider.getLocationReceiver(
+                context,
+                permissionExtractor,
+                executor,
+                locationListenerWrapper
+            )
+        ).thenReturn(firstLocationReceiver)
 
-        whenever(firstLocationReceiverWithSameIdentifierProvider.getLocationReceiver(
-            context,
-            permissionExtractor,
-            executor,
-            locationListenerWrapper
-        )).thenReturn(firstLocationReceiverWithSameIdentifier)
+        whenever(
+            firstLocationReceiverWithSameIdentifierProvider.getLocationReceiver(
+                context,
+                permissionExtractor,
+                executor,
+                locationListenerWrapper
+            )
+        ).thenReturn(firstLocationReceiverWithSameIdentifier)
 
-        whenever(secondLocationReceiverProvider.getLocationReceiver(
-            context,
-            permissionExtractor,
-            executor,
-            locationListenerWrapper
-        )).thenReturn(secondLocationReceiver)
+        whenever(
+            secondLocationReceiverProvider.getLocationReceiver(
+                context,
+                permissionExtractor,
+                executor,
+                locationListenerWrapper
+            )
+        ).thenReturn(secondLocationReceiver)
     }
 
     @Test
@@ -171,7 +181,6 @@ internal class LocationCoreTests : CommonTest() {
 
         verify(firstLastKnownExtractor).updateLastKnownLocation()
         verify(secondLastKnownExtractor).updateLastKnownLocation()
-
     }
 
     @Test

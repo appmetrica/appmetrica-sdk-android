@@ -35,7 +35,7 @@ public class DummyEventEncrypterTests extends CommonTest {
     @Test
     public void testEncryptSetExpectedEncryptionMode() {
         assertThat(mDummyEventEncrypter.encrypt(mock(CounterReport.class)).mEventEncryptionMode)
-                .isEqualTo(EventEncryptionMode.NONE);
+            .isEqualTo(EventEncryptionMode.NONE);
     }
 
     @Test

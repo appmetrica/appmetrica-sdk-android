@@ -9,7 +9,7 @@ import org.json.JSONException;
 
 class RememberingJson extends JsonHelper.OptJSONObject {
 
-    private List<String> requestedKeys = new ArrayList<String>();
+    private final List<String> requestedKeys = new ArrayList<String>();
 
     @Nullable
     @Override

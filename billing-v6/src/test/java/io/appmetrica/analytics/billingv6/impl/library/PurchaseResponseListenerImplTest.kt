@@ -43,9 +43,32 @@ class PurchaseResponseListenerImplTest : CommonTest() {
     private val billingLibraryConnectionHolder: BillingLibraryConnectionHolder = mock()
 
     private val purchaseHistoryRecords = listOf(
-        PurchaseHistoryRecord("{\"productId\":\"sku1\", \"quantity\":\"2\", \"purchaseTime\":\"10\", \"purchaseToken\":\"token1\"}", "purchaseHistoryRecordsSignature1"),
-        PurchaseHistoryRecord("{\"productId\":\"sku2\", \"quantity\":\"4\", \"purchaseTime\":\"11\", \"purchaseToken\":\"token2\"}", "purchaseHistoryRecordsSignature2"),
-        PurchaseHistoryRecord("{\"productId\":\"sku4\", \"purchaseTime\":\"12\", \"purchaseToken\":\"token3\"}", "purchaseHistoryRecordsSignature3"),
+        PurchaseHistoryRecord(
+            "{" +
+                "\"productId\":\"sku1\", " +
+                "\"quantity\":\"2\", " +
+                "\"purchaseTime\":\"10\", " +
+                "\"purchaseToken\":\"token1\"" +
+                "}",
+            "purchaseHistoryRecordsSignature1"
+        ),
+        PurchaseHistoryRecord(
+            "{" +
+                "\"productId\":\"sku2\", " +
+                "\"quantity\":\"4\", " +
+                "\"purchaseTime\":\"11\", " +
+                "\"purchaseToken\":\"token2\"" +
+                "}",
+            "purchaseHistoryRecordsSignature2"
+        ),
+        PurchaseHistoryRecord(
+            "{" +
+                "\"productId\":\"sku4\", " +
+                "\"purchaseTime\":\"12\", " +
+                "\"purchaseToken\":\"token3\"" +
+                "}",
+            "purchaseHistoryRecordsSignature3"
+        ),
     )
     private val oneTimePurchaseOfferDetails1: ProductDetails.OneTimePurchaseOfferDetails = mock {
         on { priceAmountMicros } doReturn 1

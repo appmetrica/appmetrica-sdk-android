@@ -3,6 +3,7 @@ package io.appmetrica.analytics.impl.startup
 import io.appmetrica.analytics.AdvIdentifiersResult
 import io.appmetrica.analytics.StartupParamsItem
 import io.appmetrica.analytics.StartupParamsItemStatus
+import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
@@ -16,7 +17,7 @@ import org.mockito.kotlin.mock
 class AdvIdentifiersFromStartupParamsItemStatusTest(
     private val input: StartupParamsItemStatus,
     private val expected: AdvIdentifiersResult.Details
-) {
+) : CommonTest() {
 
     companion object {
 
@@ -31,7 +32,10 @@ class AdvIdentifiersFromStartupParamsItemStatusTest(
                     StartupParamsItemStatus.PROVIDER_UNAVAILABLE,
                     AdvIdentifiersResult.Details.IDENTIFIER_PROVIDER_UNAVAILABLE
                 ),
-                arrayOf(StartupParamsItemStatus.INVALID_VALUE_FROM_PROVIDER, AdvIdentifiersResult.Details.INVALID_ADV_ID),
+                arrayOf(
+                    StartupParamsItemStatus.INVALID_VALUE_FROM_PROVIDER,
+                    AdvIdentifiersResult.Details.INVALID_ADV_ID
+                ),
                 arrayOf(StartupParamsItemStatus.UNKNOWN_ERROR, AdvIdentifiersResult.Details.INTERNAL_ERROR),
                 arrayOf(
                     StartupParamsItemStatus.FORBIDDEN_BY_CLIENT_CONFIG,

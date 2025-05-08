@@ -11,27 +11,26 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mock
 import org.mockito.Mockito.clearInvocations
 import org.mockito.Mockito.doAnswer
+import org.mockito.Mockito.mock
 import org.mockito.Mockito.verifyNoInteractions
-import org.mockito.Mockito.`when`
-import org.mockito.MockitoAnnotations
 import org.mockito.kotlin.any
 import org.mockito.kotlin.same
+import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 class AppSetIdGetterTest : CommonTest() {
 
     private lateinit var context: Context
-    @Mock
-    private lateinit var appSetIdRetriever: IAppSetIdRetriever
+
+    private val appSetIdRetriever: IAppSetIdRetriever = mock()
+
     private lateinit var appSetIdGetter: AppSetIdGetter
 
     @Before
     fun setUp() {
-        MockitoAnnotations.openMocks(this)
         context = TestUtils.createMockedContext()
         appSetIdGetter = AppSetIdGetter(context, appSetIdRetriever)
     }
@@ -42,13 +41,13 @@ class AppSetIdGetterTest : CommonTest() {
         val scope = AppSetIdScope.APP
         doAnswer {
             (it.arguments[1] as AppSetIdListener).onAppSetIdRetrieved(id, scope)
-        }.`when`(appSetIdRetriever).retrieveAppSetId(any<Context>(), any<AppSetIdListener>())
+        }.whenever(appSetIdRetriever).retrieveAppSetId(any<Context>(), any<AppSetIdListener>())
         assertThat(appSetIdGetter.getAppSetId()).isEqualTo(AppSetId(id, scope))
     }
 
     @Test
     fun getAppSetIdFailure() {
-        `when`(appSetIdRetriever.retrieveAppSetId(same(context), any<AppSetIdListener>())).thenAnswer {
+        whenever(appSetIdRetriever.retrieveAppSetId(same(context), any<AppSetIdListener>())).thenAnswer {
             (it.arguments[1] as AppSetIdListener).onFailure(null)
         }
         assertThat(appSetIdGetter.getAppSetId()).isEqualTo(AppSetId(null, AppSetIdScope.UNKNOWN))
@@ -66,7 +65,7 @@ class AppSetIdGetterTest : CommonTest() {
     fun getAppSetIdTwice() {
         val id = "555-666"
         val scope = AppSetIdScope.APP
-        `when`(appSetIdRetriever.retrieveAppSetId(same(context), any<AppSetIdListener>())).thenAnswer {
+        whenever(appSetIdRetriever.retrieveAppSetId(same(context), any<AppSetIdListener>())).thenAnswer {
             (it.arguments[1] as AppSetIdListener).onAppSetIdRetrieved(id, scope)
         }
         val result = appSetIdGetter.getAppSetId()

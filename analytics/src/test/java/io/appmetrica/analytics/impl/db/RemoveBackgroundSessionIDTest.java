@@ -12,7 +12,7 @@ import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import io.appmetrica.analytics.testutils.TestUtils;
 import java.sql.SQLException;
-import java.util.Arrays;
+import java.util.Collections;
 import org.json.JSONException;
 import org.junit.Before;
 import org.junit.Rule;
@@ -67,7 +67,7 @@ public class RemoveBackgroundSessionIDTest extends CommonTest {
         reportValues.put(Constants.EventsTable.EventTableEntry.FIELD_EVENT_SESSION, SESSION_ID);
         reportValues.put(Constants.EventsTable.EventTableEntry.FIELD_EVENT_SESSION_TYPE, 0);
 
-        helper.insertEvents(Arrays.asList(reportValues));
+        helper.insertEvents(Collections.singletonList(reportValues));
 
         SQLiteDatabase db = testDB.getWritableDatabase();
 
@@ -88,21 +88,21 @@ public class RemoveBackgroundSessionIDTest extends CommonTest {
 
     private Cursor queryFromReports(SQLiteDatabase db) {
         return db.query(
-                Constants.EventsTable.TABLE_NAME,
-                new String[]{Constants.EventsTable.EventTableEntry.FIELD_EVENT_SESSION},
-                Constants.EventsTable.EventTableEntry.FIELD_EVENT_SESSION + " = ?",
-                new String[]{String.valueOf(SESSION_ID)},
-                null, null, null
+            Constants.EventsTable.TABLE_NAME,
+            new String[]{Constants.EventsTable.EventTableEntry.FIELD_EVENT_SESSION},
+            Constants.EventsTable.EventTableEntry.FIELD_EVENT_SESSION + " = ?",
+            new String[]{String.valueOf(SESSION_ID)},
+            null, null, null
         );
     }
 
     private Cursor queryFromSessions(SQLiteDatabase db) {
         return db.query(
-                Constants.SessionTable.TABLE_NAME,
-                new String[]{Constants.SessionTable.SessionTableEntry.FIELD_SESSION_ID},
-                Constants.SessionTable.SessionTableEntry.FIELD_SESSION_ID + " = ?",
-                new String[]{String.valueOf(SESSION_ID)},
-                null, null, null
+            Constants.SessionTable.TABLE_NAME,
+            new String[]{Constants.SessionTable.SessionTableEntry.FIELD_SESSION_ID},
+            Constants.SessionTable.SessionTableEntry.FIELD_SESSION_ID + " = ?",
+            new String[]{String.valueOf(SESSION_ID)},
+            null, null, null
         );
     }
 }

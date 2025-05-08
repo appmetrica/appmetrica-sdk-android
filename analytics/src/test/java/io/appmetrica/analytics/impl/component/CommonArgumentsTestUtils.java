@@ -8,17 +8,17 @@ public class CommonArgumentsTestUtils {
 
     public static CommonArguments createMockedArguments() {
         return new CommonArguments(
-                StartupArgumentsTest.empty(),
-                emptyReporterArguments(),
-                null
+            StartupArgumentsTest.empty(),
+            emptyReporterArguments(),
+            null
         );
     }
 
     public static CommonArguments createMockedArguments(@NonNull ResultReceiver resultReceiver) {
         return new CommonArguments(
-                StartupArgumentsTest.empty(),
-                emptyReporterArguments(),
-                resultReceiver
+            StartupArgumentsTest.empty(),
+            emptyReporterArguments(),
+            resultReceiver
         );
     }
 

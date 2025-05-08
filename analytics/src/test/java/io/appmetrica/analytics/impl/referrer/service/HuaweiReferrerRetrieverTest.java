@@ -55,15 +55,15 @@ public class HuaweiReferrerRetrieverTest extends CommonTest {
         context = TestUtils.createMockedContext();
         when(context.getContentResolver()).thenReturn(contentResolver);
         when(context.getPackageName()).thenReturn(packageName);
-        when(contentResolver.query(validUri, null, null, new String[]{ packageName }, null)).thenReturn(cursor);
+        when(contentResolver.query(validUri, null, null, new String[]{packageName}, null)).thenReturn(cursor);
         when(GlobalServiceLocator.getInstance().getServiceExecutorProvider().getHmsReferrerThread(any(Runnable.class)))
-                .thenAnswer(new Answer<Object>() {
-                    @Override
-                    public Object answer(InvocationOnMock invocation) throws Throwable {
-                        threadRunnable = invocation.getArgument(0);
-                        return hmsReferrerThread;
-                    }
-                });
+            .thenAnswer(new Answer<Object>() {
+                @Override
+                public Object answer(InvocationOnMock invocation) throws Throwable {
+                    threadRunnable = invocation.getArgument(0);
+                    return hmsReferrerThread;
+                }
+            });
         doAnswer(new Answer() {
             @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {
@@ -76,7 +76,7 @@ public class HuaweiReferrerRetrieverTest extends CommonTest {
 
     @Test
     public void noCursor() {
-        when(contentResolver.query(validUri, null, null, new String[]{ packageName }, null)).thenReturn(null);
+        when(contentResolver.query(validUri, null, null, new String[]{packageName}, null)).thenReturn(null);
         referrerRetriever.retrieveReferrer(listener);
         verify(listener).onReferrerReceived(null);
         verifyNoMoreInteractions(listener);
@@ -85,7 +85,7 @@ public class HuaweiReferrerRetrieverTest extends CommonTest {
     @Test
     public void getCursorThrowsException() {
         final Throwable exception = new RuntimeException();
-        when(contentResolver.query(validUri, null, null, new String[]{ packageName }, null)).thenThrow(exception);
+        when(contentResolver.query(validUri, null, null, new String[]{packageName}, null)).thenThrow(exception);
         referrerRetriever.retrieveReferrer(listener);
         verify(listener).onReferrerRetrieveError(any(ExecutionException.class));
         verifyNoMoreInteractions(listener);
@@ -131,14 +131,14 @@ public class HuaweiReferrerRetrieverTest extends CommonTest {
                 Thread.sleep(10000);
                 return cursor;
             }
-        }).when(contentResolver).query(validUri, null, null, new String[]{ packageName }, null);
+        }).when(contentResolver).query(validUri, null, null, new String[]{packageName}, null);
         when(GlobalServiceLocator.getInstance().getServiceExecutorProvider().getHmsReferrerThread(any(Runnable.class)))
-                .thenAnswer(new Answer<Object>() {
-                    @Override
-                    public Object answer(InvocationOnMock invocation) throws Throwable {
-                        return new InterruptionSafeThread((Runnable) invocation.getArgument(0));
-                    }
-                });
+            .thenAnswer(new Answer<Object>() {
+                @Override
+                public Object answer(InvocationOnMock invocation) throws Throwable {
+                    return new InterruptionSafeThread((Runnable) invocation.getArgument(0));
+                }
+            });
         long start = System.currentTimeMillis();
         referrerRetriever.retrieveReferrer(listener);
         long end = System.currentTimeMillis();

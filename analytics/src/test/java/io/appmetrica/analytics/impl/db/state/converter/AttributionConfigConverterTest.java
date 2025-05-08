@@ -23,8 +23,8 @@ public class AttributionConfigConverterTest extends CommonTest {
     public void toProtoEmptyConditions() throws IllegalAccessException {
         AttributionConfig model = new AttributionConfig(new ArrayList<Pair<String, AttributionConfig.Filter>>());
         new ProtoObjectPropertyAssertions<StartupStateProtobuf.StartupState.Attribution>(converter.fromModel(model))
-                .checkField("deeplinkConditions", new StartupStateProtobuf.StartupState.Attribution.StringPair[0])
-                .checkAll();
+            .checkField("deeplinkConditions", new StartupStateProtobuf.StartupState.Attribution.StringPair[0])
+            .checkAll();
     }
 
     @Test
@@ -35,8 +35,8 @@ public class AttributionConfigConverterTest extends CommonTest {
         nanoPair.filter.value = "some value";
         AttributionConfig model = new AttributionConfig(Collections.singletonList(new Pair<String, AttributionConfig.Filter>("some key", new AttributionConfig.Filter("some value"))));
         new ProtoObjectPropertyAssertions<StartupStateProtobuf.StartupState.Attribution>(converter.fromModel(model))
-                .checkFieldComparingFieldByFieldRecursively("deeplinkConditions", new StartupStateProtobuf.StartupState.Attribution.StringPair[] { nanoPair })
-                .checkAll();
+            .checkFieldComparingFieldByFieldRecursively("deeplinkConditions", new StartupStateProtobuf.StartupState.Attribution.StringPair[]{nanoPair})
+            .checkAll();
     }
 
     @Test
@@ -50,13 +50,13 @@ public class AttributionConfigConverterTest extends CommonTest {
         secondNanoPair.filter = new StartupStateProtobuf.StartupState.Attribution.Filter();
         secondNanoPair.filter.value = "some value 2";
         AttributionConfig model = new AttributionConfig(Arrays.asList(
-                new Pair<String, AttributionConfig.Filter>("some key 1", new AttributionConfig.Filter("some value 1")),
-                new Pair<String, AttributionConfig.Filter>("some key 2", new AttributionConfig.Filter("some value 2"))
+            new Pair<String, AttributionConfig.Filter>("some key 1", new AttributionConfig.Filter("some value 1")),
+            new Pair<String, AttributionConfig.Filter>("some key 2", new AttributionConfig.Filter("some value 2"))
         ));
         new ProtoObjectPropertyAssertions<StartupStateProtobuf.StartupState.Attribution>(converter.fromModel(model))
-                .checkFieldComparingFieldByFieldRecursively("deeplinkConditions",
-                        new StartupStateProtobuf.StartupState.Attribution.StringPair[] { firstNanoPair, secondNanoPair })
-                .checkAll();
+            .checkFieldComparingFieldByFieldRecursively("deeplinkConditions",
+                new StartupStateProtobuf.StartupState.Attribution.StringPair[]{firstNanoPair, secondNanoPair})
+            .checkAll();
     }
 
     @Test
@@ -66,16 +66,16 @@ public class AttributionConfigConverterTest extends CommonTest {
         nanoPair.filter = null;
         AttributionConfig model = new AttributionConfig(Collections.singletonList(new Pair<String, AttributionConfig.Filter>("some key", null)));
         new ProtoObjectPropertyAssertions<StartupStateProtobuf.StartupState.Attribution>(converter.fromModel(model))
-                .checkFieldComparingFieldByFieldRecursively("deeplinkConditions", new StartupStateProtobuf.StartupState.Attribution.StringPair[] { nanoPair })
-                .checkAll();
+            .checkFieldComparingFieldByFieldRecursively("deeplinkConditions", new StartupStateProtobuf.StartupState.Attribution.StringPair[]{nanoPair})
+            .checkAll();
     }
 
     @Test
     public void toModelEmptyConditions() throws IllegalAccessException {
         StartupStateProtobuf.StartupState.Attribution proto = new StartupStateProtobuf.StartupState.Attribution();
         ObjectPropertyAssertions(converter.toModel(proto))
-                .checkField("deeplinkConditions", new ArrayList<Pair<String, AttributionConfig.Filter>>())
-                .checkAll();
+            .checkField("deeplinkConditions", new ArrayList<Pair<String, AttributionConfig.Filter>>())
+            .checkAll();
     }
 
     @Test
@@ -85,12 +85,12 @@ public class AttributionConfigConverterTest extends CommonTest {
         nanoPair.key = "some key 1";
         nanoPair.filter = new StartupStateProtobuf.StartupState.Attribution.Filter();
         nanoPair.filter.value = "some value 1";
-        proto.deeplinkConditions = new StartupStateProtobuf.StartupState.Attribution.StringPair[] { nanoPair };
+        proto.deeplinkConditions = new StartupStateProtobuf.StartupState.Attribution.StringPair[]{nanoPair};
         ObjectPropertyAssertions(converter.toModel(proto))
-                .checkField("deeplinkConditions", Collections.singletonList(
-                        new Pair<String, AttributionConfig.Filter>("some key 1", new AttributionConfig.Filter("some value 1"))
-                ), true)
-                .checkAll();
+            .checkField("deeplinkConditions", Collections.singletonList(
+                new Pair<String, AttributionConfig.Filter>("some key 1", new AttributionConfig.Filter("some value 1"))
+            ), true)
+            .checkAll();
     }
 
     @Test
@@ -104,13 +104,13 @@ public class AttributionConfigConverterTest extends CommonTest {
         secondNanoPair.key = "some key 2";
         secondNanoPair.filter = new StartupStateProtobuf.StartupState.Attribution.Filter();
         secondNanoPair.filter.value = "some value 2";
-        proto.deeplinkConditions = new StartupStateProtobuf.StartupState.Attribution.StringPair[] { firstNanoPair, secondNanoPair };
+        proto.deeplinkConditions = new StartupStateProtobuf.StartupState.Attribution.StringPair[]{firstNanoPair, secondNanoPair};
         ObjectPropertyAssertions(converter.toModel(proto))
-                .checkField("deeplinkConditions", Arrays.asList(
-                        new Pair<String, AttributionConfig.Filter>("some key 1", new AttributionConfig.Filter("some value 1")),
-                        new Pair<String, AttributionConfig.Filter>("some key 2", new AttributionConfig.Filter("some value 2"))
-                ), true)
-                .checkAll();
+            .checkField("deeplinkConditions", Arrays.asList(
+                new Pair<String, AttributionConfig.Filter>("some key 1", new AttributionConfig.Filter("some value 1")),
+                new Pair<String, AttributionConfig.Filter>("some key 2", new AttributionConfig.Filter("some value 2"))
+            ), true)
+            .checkAll();
     }
 
     @Test
@@ -119,9 +119,9 @@ public class AttributionConfigConverterTest extends CommonTest {
         StartupStateProtobuf.StartupState.Attribution.StringPair nanoPair = new StartupStateProtobuf.StartupState.Attribution.StringPair();
         nanoPair.key = "some key 1";
         nanoPair.filter = null;
-        proto.deeplinkConditions = new StartupStateProtobuf.StartupState.Attribution.StringPair[] { nanoPair };
+        proto.deeplinkConditions = new StartupStateProtobuf.StartupState.Attribution.StringPair[]{nanoPair};
         ObjectPropertyAssertions(converter.toModel(proto))
-                .checkField("deeplinkConditions", Collections.singletonList(new Pair<String, AttributionConfig.Filter>("some key 1", null)))
-                .checkAll();
+            .checkField("deeplinkConditions", Collections.singletonList(new Pair<String, AttributionConfig.Filter>("some key 1", null)))
+            .checkAll();
     }
 }

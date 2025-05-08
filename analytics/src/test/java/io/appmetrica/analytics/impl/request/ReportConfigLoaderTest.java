@@ -62,7 +62,7 @@ public class ReportConfigLoaderTest extends CommonTest {
     @Mock
     private PlatformIdentifiers platformIdentifiers;
 
-    private AppSetId appSetId = new AppSetId(UUID.randomUUID().toString(), AppSetIdScope.DEVELOPER);
+    private final AppSetId appSetId = new AppSetId(UUID.randomUUID().toString(), AppSetIdScope.DEVELOPER);
 
     @Rule
     public GlobalServiceLocatorRule mRule = new GlobalServiceLocatorRule();
@@ -74,7 +74,7 @@ public class ReportConfigLoaderTest extends CommonTest {
         when(componentUnit.getContext()).thenReturn(RuntimeEnvironment.getApplication());
         when(componentUnit.getCertificatesFingerprintsProvider()).thenReturn(certificatesFingerprintsProvider);
         when(componentUnit.getVitalComponentDataProvider()).thenReturn(vitalComponentDataProvider);
-        when(certificatesFingerprintsProvider.getSha1()).thenReturn(Arrays.asList("cert1"));
+        when(certificatesFingerprintsProvider.getSha1()).thenReturn(Collections.singletonList("cert1"));
         doReturn(new ComponentId(RuntimeEnvironment.getApplication().getPackageName(), apiKey))
             .when(componentUnit).getComponentId();
 

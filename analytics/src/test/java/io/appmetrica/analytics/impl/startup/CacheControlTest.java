@@ -16,7 +16,7 @@ public class CacheControlTest extends CommonTest {
         long lastKnownLocationTtl = 6443L;
 
         CacheControl cacheControl =
-                new CacheControl(lastKnownLocationTtl);
+            new CacheControl(lastKnownLocationTtl);
 
         ObjectPropertyAssertions<CacheControl> assertions = ObjectPropertyAssertions(cacheControl);
         assertions.checkField("lastKnownLocationTtl", lastKnownLocationTtl);

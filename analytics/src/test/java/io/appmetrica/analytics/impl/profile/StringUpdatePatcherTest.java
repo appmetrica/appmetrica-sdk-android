@@ -22,7 +22,7 @@ public class StringUpdatePatcherTest extends CommonTest {
     private static final String KEY = "stringKey";
     private static final String VALUE = "value";
 
-    private Userprofile.Profile.Attribute mAttribute = CommonUserProfileUpdatePatcherTest.createEmptyAttribute();
+    private final Userprofile.Profile.Attribute mAttribute = CommonUserProfileUpdatePatcherTest.createEmptyAttribute();
 
     @Test
     public void testValue() {
@@ -42,11 +42,11 @@ public class StringUpdatePatcherTest extends CommonTest {
         Trimmer<String> trimmer = mock(Trimmer.class);
         doReturn("").when(trimmer).trim(anyString());
         new StringUpdatePatcher(
-                KEY,
-                VALUE,
-                trimmer,
-                new DummyValidator<String>(),
-                new CommonSavingStrategy(new SimpleSaver())
+            KEY,
+            VALUE,
+            trimmer,
+            new DummyValidator<String>(),
+            new CommonSavingStrategy(new SimpleSaver())
         ).apply(new UserProfileStorage());
         verify(trimmer, times(1)).trim(VALUE);
     }

@@ -13,9 +13,11 @@ class ServiceCaptorConfigJsonParserTest : CommonTest() {
     @Test
     fun parseIfEnabled() {
         val rawData = JSONObject()
-            .put("service_captor_config", JSONObject()
-                .put("enabled", true)
-                .put("delay_seconds", 10)
+            .put(
+                "service_captor_config",
+                JSONObject()
+                    .put("enabled", true)
+                    .put("delay_seconds", 10)
             )
         ProtoObjectPropertyAssertions(parser.parse(rawData))
             .checkField("enabled", true)
@@ -26,9 +28,11 @@ class ServiceCaptorConfigJsonParserTest : CommonTest() {
     @Test
     fun parseIfDisabled() {
         val rawData = JSONObject()
-            .put("service_captor_config", JSONObject()
-                .put("enabled", false)
-                .put("delay_seconds", 10)
+            .put(
+                "service_captor_config",
+                JSONObject()
+                    .put("enabled", false)
+                    .put("delay_seconds", 10)
             )
         ProtoObjectPropertyAssertions(parser.parse(rawData))
             .checkField("enabled", false)

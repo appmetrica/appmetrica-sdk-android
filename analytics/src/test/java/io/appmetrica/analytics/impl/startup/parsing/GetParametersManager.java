@@ -4,7 +4,7 @@ import android.net.Uri;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,7 +14,7 @@ public class GetParametersManager {
 
     private final Map<String, Condition<String>> keysToValue = new HashMap<String, Condition<String>>();
     private final Map<String, String> responseToParameter = new HashMap<String, String>();
-    private final List<String> notParameters = Arrays.asList("features");
+    private final List<String> notParameters = Collections.singletonList("features");
 
     public GetParametersManager() {
         keysToValue.put("deviceid", any());

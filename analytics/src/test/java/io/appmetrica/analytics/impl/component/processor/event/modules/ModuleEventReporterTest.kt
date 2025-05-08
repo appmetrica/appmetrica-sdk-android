@@ -32,7 +32,6 @@ class ModuleEventReporterTest : CommonTest() {
         on { value } doReturn reportValue
         on { valueBytes } doReturn valueBytesValue
         on { bytesTruncated } doReturn bytesTruncatedValue
-
     }
 
     private val newReport = mock<CounterReport>()

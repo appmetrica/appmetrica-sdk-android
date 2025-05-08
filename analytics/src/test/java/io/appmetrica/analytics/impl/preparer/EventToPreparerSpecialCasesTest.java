@@ -25,7 +25,7 @@ import org.robolectric.RobolectricTestRunner;
 public class EventToPreparerSpecialCasesTest extends CommonTest {
 
     @Rule
-    public final GlobalServiceLocatorRule rule  = new GlobalServiceLocatorRule();
+    public final GlobalServiceLocatorRule rule = new GlobalServiceLocatorRule();
 
     @Mock
     private ReportRequestConfig mConfig;

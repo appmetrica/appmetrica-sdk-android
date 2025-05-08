@@ -16,13 +16,13 @@ public class ApiKeyParameterizedValidatorTest extends CommonTest {
     @ParameterizedRobolectricTestRunner.Parameters(name = "Validation result for {0} is {1}")
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
-                {TestsData.SOME_STRING_API_KEY, false},
-                {TestsData.NULL_API_KEY, false},
-                {TestsData.EMPTY_API_KEY, false},
-                {TestsData.INT_API_KEY, false},
-                {TestsData.BIG_INT_API_KEY, false},
-                {TestsData.VERY_BIG_INT_API_KEY, false},
-                {TestsData.UUID_API_KEY, true}
+            {TestsData.SOME_STRING_API_KEY, false},
+            {TestsData.NULL_API_KEY, false},
+            {TestsData.EMPTY_API_KEY, false},
+            {TestsData.INT_API_KEY, false},
+            {TestsData.BIG_INT_API_KEY, false},
+            {TestsData.VERY_BIG_INT_API_KEY, false},
+            {TestsData.UUID_API_KEY, true}
         });
     }
 

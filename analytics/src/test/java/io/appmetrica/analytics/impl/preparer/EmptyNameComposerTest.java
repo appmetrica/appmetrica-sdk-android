@@ -10,7 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(RobolectricTestRunner.class)
 public class EmptyNameComposerTest extends CommonTest {
 
-    private EmptyNameComposer mEmptyNameComposer = new EmptyNameComposer();
+    private final EmptyNameComposer mEmptyNameComposer = new EmptyNameComposer();
 
     @Test
     public void testGetName() {

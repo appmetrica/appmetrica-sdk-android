@@ -4,16 +4,9 @@ import io.appmetrica.analytics.ICrashTransformer;
 import io.appmetrica.analytics.impl.ExtraMetaInfoRetriever;
 import io.appmetrica.analytics.impl.IReporterExtended;
 import io.appmetrica.analytics.impl.UnhandledSituationReporterProvider;
-import io.appmetrica.analytics.impl.crash.jvm.client.AllThreads;
-import io.appmetrica.analytics.impl.crash.jvm.client.CrashProcessor;
-import io.appmetrica.analytics.impl.crash.jvm.client.ReporterBasedCrashProcessor;
-import io.appmetrica.analytics.impl.crash.jvm.client.StackTraceItemInternal;
-import io.appmetrica.analytics.impl.crash.jvm.client.ThrowableModel;
-import io.appmetrica.analytics.impl.crash.jvm.client.UnhandledException;
-import io.appmetrica.analytics.impl.crash.jvm.client.UnhandledExceptionFactory;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.MockedStaticRule;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import org.junit.Before;
@@ -52,36 +45,36 @@ public class ReporterBasedCrashProcessorTest extends CommonTest {
     private ICrashTransformer mCustomCrashTransformer;
     @Rule
     public final MockedStaticRule<UnhandledExceptionFactory> sUnhandledExceptionFactory =
-            new MockedStaticRule<>(UnhandledExceptionFactory.class);
+        new MockedStaticRule<>(UnhandledExceptionFactory.class);
     @Mock
     private UnhandledException mUnhandledException;
     @Mock
     private AllThreads allThreads;
-    private String buildId = "333-444";
-    private boolean isOffline = true;
+    private final String buildId = "333-444";
+    private final boolean isOffline = true;
 
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
         mUnhandledException = new UnhandledException(
-                throwable,
-                mock(AllThreads.class),
-                Arrays.asList(mock(StackTraceItemInternal.class)),
-                "unity",
-                "1.2.3",
-                new HashMap<String, String>(),
-                "12345",
-                false
+            throwable,
+            mock(AllThreads.class),
+            Collections.singletonList(mock(StackTraceItemInternal.class)),
+            "unity",
+            "1.2.3",
+            new HashMap<String, String>(),
+            "12345",
+            false
         );
         when(mReporterProvider.getReporter()).thenReturn(reporter);
         when(extraMetaInfoRetriever.getBuildId()).thenReturn(buildId);
         when(extraMetaInfoRetriever.isOffline()).thenReturn(isOffline);
         when(UnhandledExceptionFactory.getUnhandledExceptionFromJava(
-                nullable(Throwable.class),
-                any(AllThreads.class),
-                nullable(List.class),
-                nullable(String.class),
-                nullable(Boolean.class)
+            nullable(Throwable.class),
+            any(AllThreads.class),
+            nullable(List.class),
+            nullable(String.class),
+            nullable(Boolean.class)
         )).thenReturn(mUnhandledException);
     }
 
@@ -90,17 +83,17 @@ public class ReporterBasedCrashProcessorTest extends CommonTest {
         when(mRule.shouldReportCrash(any(Throwable.class))).thenReturn(true);
 
         new ReporterBasedCrashProcessor(mReporterProvider, mRule, null, extraMetaInfoRetriever)
-                .processCrash(originalException, allThreads);
+            .processCrash(originalException, allThreads);
 
         sUnhandledExceptionFactory.getStaticMock().verify(new MockedStatic.Verification() {
             @Override
             public void apply() throws Throwable {
                 UnhandledExceptionFactory.getUnhandledExceptionFromJava(
-                        originalException,
-                        allThreads,
-                        null,
-                        buildId,
-                        isOffline
+                    originalException,
+                    allThreads,
+                    null,
+                    buildId,
+                    isOffline
                 );
             }
         });
@@ -112,27 +105,27 @@ public class ReporterBasedCrashProcessorTest extends CommonTest {
         when(mRule.shouldReportCrash(any(Throwable.class))).thenReturn(false);
 
         new ReporterBasedCrashProcessor(mReporterProvider, mRule, null, extraMetaInfoRetriever)
-                .processCrash(originalException, allThreads);
+            .processCrash(originalException, allThreads);
 
         verify(reporter, never()).reportUnhandledException(any(UnhandledException.class));
     }
 
     @Test
     public void testNullThrowable() {
-        when(mRule.shouldReportCrash((Throwable) any())).thenReturn(true);
+        when(mRule.shouldReportCrash(any())).thenReturn(true);
 
         new ReporterBasedCrashProcessor(mReporterProvider, mRule, mCustomCrashTransformer, extraMetaInfoRetriever)
-                .processCrash(null, allThreads);
-        verify(mCustomCrashTransformer, never()).process((Throwable) any());
+            .processCrash(null, allThreads);
+        verify(mCustomCrashTransformer, never()).process(any());
         sUnhandledExceptionFactory.getStaticMock().verify(new MockedStatic.Verification() {
             @Override
             public void apply() throws Throwable {
                 UnhandledExceptionFactory.getUnhandledExceptionFromJava(
-                        null,
-                        allThreads,
-                        null,
-                        buildId,
-                        isOffline
+                    null,
+                    allThreads,
+                    null,
+                    buildId,
+                    isOffline
                 );
             }
         });
@@ -146,18 +139,18 @@ public class ReporterBasedCrashProcessorTest extends CommonTest {
         when(mCustomCrashTransformer.process(originalException)).thenReturn(customThrowable);
 
         new ReporterBasedCrashProcessor(mReporterProvider, mRule, mCustomCrashTransformer, extraMetaInfoRetriever)
-                .processCrash(originalException, allThreads);
+            .processCrash(originalException, allThreads);
         verify(mCustomCrashTransformer).process(originalException);
         verify(reporter).reportUnhandledException(mUnhandledException);
         sUnhandledExceptionFactory.getStaticMock().verify(new MockedStatic.Verification() {
             @Override
             public void apply() throws Throwable {
                 UnhandledExceptionFactory.getUnhandledExceptionFromJava(
-                        customThrowable,
-                        allThreads,
-                        null,
-                        buildId,
-                        isOffline
+                    customThrowable,
+                    allThreads,
+                    null,
+                    buildId,
+                    isOffline
                 );
             }
         });
@@ -169,7 +162,7 @@ public class ReporterBasedCrashProcessorTest extends CommonTest {
         when(mCustomCrashTransformer.process(originalException)).thenReturn(null);
 
         new ReporterBasedCrashProcessor(mReporterProvider, mRule, mCustomCrashTransformer, extraMetaInfoRetriever)
-                .processCrash(originalException, allThreads);
+            .processCrash(originalException, allThreads);
         verify(mCustomCrashTransformer).process(originalException);
         verify(reporter, never()).reportUnhandledException(any(UnhandledException.class));
     }

@@ -15,6 +15,7 @@ import io.appmetrica.analytics.locationapi.internal.CacheArguments
 import io.appmetrica.analytics.locationapi.internal.LastKnownLocationExtractorProvider
 import io.appmetrica.analytics.locationapi.internal.LocationFilter
 import io.appmetrica.analytics.locationapi.internal.LocationReceiverProvider
+import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.MockedConstructionRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
@@ -25,7 +26,7 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
 
-internal class LocationClientImplTest {
+internal class LocationClientImplTest : CommonTest() {
 
     private val context = mock<Context>()
     private val permissionExtractor = mock<PermissionExtractor>()
@@ -108,8 +109,12 @@ internal class LocationClientImplTest {
         repeat(5) {
             locationClientImpl.init(mock(), mock(), mock(), emptyList())
         }
-        locationCore(context, permissionExtractor, executor,
-            locationStreamDispatcher(filledConsumers, locationConfigWithUpdatedCacheArguments))
+        locationCore(
+            context,
+            permissionExtractor,
+            executor,
+            locationStreamDispatcher(filledConsumers, locationConfigWithUpdatedCacheArguments)
+        )
     }
 
     @Test
@@ -121,8 +126,12 @@ internal class LocationClientImplTest {
         repeat(5) {
             locationClientImpl.init(mock(), mock(), mock(), emptyList())
         }
-        locationCore(context, permissionExtractor, executor,
-            locationStreamDispatcher(filledConsumers, locationWithUpdatedLocationFilter))
+        locationCore(
+            context,
+            permissionExtractor,
+            executor,
+            locationStreamDispatcher(filledConsumers, locationWithUpdatedLocationFilter)
+        )
     }
 
     @Test
@@ -254,7 +263,6 @@ internal class LocationClientImplTest {
 
     private fun defaultLocationCore(): LocationCore =
         locationCore(context, permissionExtractor, executor, locationStreamDispatcher(filledConsumers, defaultConfig))
-
 
     private fun locationCore(
         context: Context,

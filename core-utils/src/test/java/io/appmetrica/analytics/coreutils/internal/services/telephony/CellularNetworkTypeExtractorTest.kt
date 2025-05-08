@@ -44,18 +44,20 @@ internal class CellularNetworkTypeExtractorTest : CommonTest() {
 
     @get:Rule
     val systemServiceUtilsMockedStaticRule = staticRule<SystemServiceUtils> {
-        on { SystemServiceUtils.accessSystemServiceByNameSafely(
-            eq(context),
-            eq(Context.TELEPHONY_SERVICE),
-            any(),
-            any(),
-            any<FunctionWithThrowable<TelephonyManager, Int?>>()
-        ) } doAnswer {
+        on {
+            SystemServiceUtils.accessSystemServiceByNameSafely(
+                eq(context),
+                eq(Context.TELEPHONY_SERVICE),
+                any(),
+                any(),
+                any<FunctionWithThrowable<TelephonyManager, Int?>>()
+            )
+        } doAnswer {
             (it.arguments[4] as FunctionWithThrowable<TelephonyManager, Int?>).apply(telephonyManager)
         }
     }
 
-   private val networkTypeExtractor: CellularNetworkTypeExtractor by setUp { CellularNetworkTypeExtractor(context) }
+    private val networkTypeExtractor: CellularNetworkTypeExtractor by setUp { CellularNetworkTypeExtractor(context) }
 
     @Config(sdk = [Build.VERSION_CODES.LOLLIPOP])
     @Test
@@ -66,13 +68,15 @@ internal class CellularNetworkTypeExtractorTest : CommonTest() {
     @Config(sdk = [Build.VERSION_CODES.LOLLIPOP])
     @Test
     fun `getNetworkType pre N if returns null`() {
-        whenever(SystemServiceUtils.accessSystemServiceByNameSafely(
-            eq(context),
-            eq(Context.TELEPHONY_SERVICE),
-            any(),
-            any(),
-            any<FunctionWithThrowable<TelephonyManager, Int?>>()
-        )).thenReturn(null)
+        whenever(
+            SystemServiceUtils.accessSystemServiceByNameSafely(
+                eq(context),
+                eq(Context.TELEPHONY_SERVICE),
+                any(),
+                any(),
+                any<FunctionWithThrowable<TelephonyManager, Int?>>()
+            )
+        ).thenReturn(null)
         assertThat(networkTypeExtractor.getNetworkType()).isNull()
     }
 
@@ -85,13 +89,15 @@ internal class CellularNetworkTypeExtractorTest : CommonTest() {
     @Config(sdk = [Build.VERSION_CODES.N])
     @Test
     fun `getNetworkType for N if returns null`() {
-        whenever(SystemServiceUtils.accessSystemServiceByNameSafely(
-            eq(context),
-            eq(Context.TELEPHONY_SERVICE),
-            any(),
-            any(),
-            any<FunctionWithThrowable<TelephonyManager, Int?>>()
-        )).thenReturn(null)
+        whenever(
+            SystemServiceUtils.accessSystemServiceByNameSafely(
+                eq(context),
+                eq(Context.TELEPHONY_SERVICE),
+                any(),
+                any(),
+                any<FunctionWithThrowable<TelephonyManager, Int?>>()
+            )
+        ).thenReturn(null)
         assertThat(networkTypeExtractor.getNetworkType()).isNull()
     }
 }

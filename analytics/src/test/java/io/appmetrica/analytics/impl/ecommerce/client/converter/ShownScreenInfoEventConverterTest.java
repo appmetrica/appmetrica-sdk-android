@@ -40,10 +40,10 @@ public class ShownScreenInfoEventConverterTest extends CommonTest {
         MockitoAnnotations.openMocks(this);
 
         when(screenConverter.fromModel(screen))
-                .thenReturn(new Result<Ecommerce.ECommerceEvent.Screen, BytesTruncatedProvider>(
-                        screenProto,
-                        new BytesTruncatedInfo(screenBytesTruncated)
-                ));
+            .thenReturn(new Result<Ecommerce.ECommerceEvent.Screen, BytesTruncatedProvider>(
+                screenProto,
+                new BytesTruncatedInfo(screenBytesTruncated)
+            ));
 
         shownScreenInfoEventConverter = new ShownScreenInfoEventConverter(screenConverter);
     }
@@ -51,9 +51,9 @@ public class ShownScreenInfoEventConverterTest extends CommonTest {
     @Test
     public void constructor() throws Exception {
         ObjectPropertyAssertions(new ShownScreenInfoEventConverter())
-                .withPrivateFields(true)
-                .checkFieldNonNull("screenConverter")
-                .checkAll();
+            .withPrivateFields(true)
+            .checkFieldNonNull("screenConverter")
+            .checkAll();
     }
 
     @Test
@@ -63,28 +63,28 @@ public class ShownScreenInfoEventConverterTest extends CommonTest {
         List<Result<Ecommerce.ECommerceEvent, BytesTruncatedProvider>> protos = shownScreenInfoEventConverter.fromModel(event);
 
         Ecommerce.ECommerceEvent.ShownScreenInfo expectedShownScreenInfo =
-                new Ecommerce.ECommerceEvent.ShownScreenInfo();
+            new Ecommerce.ECommerceEvent.ShownScreenInfo();
         expectedShownScreenInfo.screen = screenProto;
 
         assertThat(protos.size()).isEqualTo(1);
 
         ObjectPropertyAssertions(protos.get(0))
-                .checkFieldRecursively(
-                        "metaInfo",
-                        new TruncationInfoConsumer(totalBytesTruncated)
-                )
-                .checkFieldRecursively(
-                        "result",
-                        new ECommerceEventAssertionsConsumer(Ecommerce.ECommerceEvent.ECOMMERCE_EVENT_TYPE_SHOW_SCREEN)
-                                .setExpectedShowScreenInfo(expectedShownScreenInfo)
-                )
-                .checkAll();
+            .checkFieldRecursively(
+                "metaInfo",
+                new TruncationInfoConsumer(totalBytesTruncated)
+            )
+            .checkFieldRecursively(
+                "result",
+                new ECommerceEventAssertionsConsumer(Ecommerce.ECommerceEvent.ECOMMERCE_EVENT_TYPE_SHOW_SCREEN)
+                    .setExpectedShowScreenInfo(expectedShownScreenInfo)
+            )
+            .checkAll();
     }
 
     @Test(expected = UnsupportedOperationException.class)
     public void toModel() {
         shownScreenInfoEventConverter.toModel(
-                Collections.<Result<Ecommerce.ECommerceEvent, BytesTruncatedProvider>>emptyList()
+            Collections.emptyList()
         );
     }
 }

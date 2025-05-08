@@ -5,6 +5,7 @@ import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -45,10 +46,10 @@ public class ReferrerAggregatorTest extends CommonTest {
     public void setUp() {
         MockitoAnnotations.openMocks(this);
         aggregator = new ReferrerAggregator(
-                referrerHolder,
-                googleReferrerRetriever,
-                huaweiReferrerRetriever,
-                referrerValidityChecker
+            referrerHolder,
+            googleReferrerRetriever,
+            huaweiReferrerRetriever,
+            referrerValidityChecker
         );
     }
 
@@ -96,13 +97,13 @@ public class ReferrerAggregatorTest extends CommonTest {
     public void installerIsEmptyOnlyGoogleIsFilled() {
         when(referrerValidityChecker.hasReferrer(googleReferrer)).thenReturn(true);
         when(referrerValidityChecker.hasReferrer(huaweiReferrer)).thenReturn(false);
-        when(referrerValidityChecker.chooseReferrerFromValid(Arrays.asList(googleReferrer))).thenReturn(googleReferrer);
+        when(referrerValidityChecker.chooseReferrerFromValid(Collections.singletonList(googleReferrer))).thenReturn(googleReferrer);
         aggregator.retrieveReferrer();
         verify(googleReferrerRetriever).retrieveReferrer(googleListenerCaptor.capture());
         googleListenerCaptor.getValue().onReferrerReceived(googleReferrer);
         verify(huaweiReferrerRetriever).retrieveReferrer(huaweiListenerCaptor.capture());
         huaweiListenerCaptor.getValue().onReferrerReceived(huaweiReferrer);
-        verify(referrerValidityChecker).chooseReferrerFromValid(Arrays.asList(googleReferrer));
+        verify(referrerValidityChecker).chooseReferrerFromValid(Collections.singletonList(googleReferrer));
         verify(referrerHolder).storeReferrer(googleReferrer);
     }
 
@@ -110,13 +111,13 @@ public class ReferrerAggregatorTest extends CommonTest {
     public void installerIsEmptyOnlyHmsIsFilled() {
         when(referrerValidityChecker.hasReferrer(googleReferrer)).thenReturn(false);
         when(referrerValidityChecker.hasReferrer(huaweiReferrer)).thenReturn(true);
-        when(referrerValidityChecker.chooseReferrerFromValid(Arrays.asList(huaweiReferrer))).thenReturn(huaweiReferrer);
+        when(referrerValidityChecker.chooseReferrerFromValid(Collections.singletonList(huaweiReferrer))).thenReturn(huaweiReferrer);
         aggregator.retrieveReferrer();
         verify(googleReferrerRetriever).retrieveReferrer(googleListenerCaptor.capture());
         googleListenerCaptor.getValue().onReferrerReceived(googleReferrer);
         verify(huaweiReferrerRetriever).retrieveReferrer(huaweiListenerCaptor.capture());
         huaweiListenerCaptor.getValue().onReferrerReceived(huaweiReferrer);
-        verify(referrerValidityChecker).chooseReferrerFromValid(Arrays.asList(huaweiReferrer));
+        verify(referrerValidityChecker).chooseReferrerFromValid(Collections.singletonList(huaweiReferrer));
         verify(referrerHolder).storeReferrer(huaweiReferrer);
     }
 
@@ -125,7 +126,7 @@ public class ReferrerAggregatorTest extends CommonTest {
         when(referrerValidityChecker.hasReferrer(googleReferrer)).thenReturn(true);
         when(referrerValidityChecker.hasReferrer(huaweiReferrer)).thenReturn(true);
         when(referrerValidityChecker.chooseReferrerFromValid(Arrays.asList(googleReferrer, huaweiReferrer)))
-                .thenReturn(googleReferrer);
+            .thenReturn(googleReferrer);
         aggregator.retrieveReferrer();
         verify(googleReferrerRetriever).retrieveReferrer(googleListenerCaptor.capture());
         googleListenerCaptor.getValue().onReferrerReceived(googleReferrer);
@@ -139,7 +140,7 @@ public class ReferrerAggregatorTest extends CommonTest {
         when(referrerValidityChecker.hasReferrer(googleReferrer)).thenReturn(true);
         when(referrerValidityChecker.hasReferrer(huaweiReferrer)).thenReturn(true);
         when(referrerValidityChecker.chooseReferrerFromValid(Arrays.asList(googleReferrer, huaweiReferrer)))
-                .thenReturn(huaweiReferrer);
+            .thenReturn(huaweiReferrer);
         aggregator.retrieveReferrer();
         verify(googleReferrerRetriever).retrieveReferrer(googleListenerCaptor.capture());
         googleListenerCaptor.getValue().onReferrerReceived(googleReferrer);

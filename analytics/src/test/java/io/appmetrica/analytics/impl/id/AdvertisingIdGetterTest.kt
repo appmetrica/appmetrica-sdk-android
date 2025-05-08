@@ -196,7 +196,9 @@ internal class AdvertisingIdGetterTest : CommonTest() {
 
     @Test
     fun `getIdentifiers if yandex forbid by client config`() {
-        whenever(canTrackIdentifiers.canTrackYandexAdvId).thenReturn(AdvIdGetterController.State.FORBIDDEN_BY_REMOTE_CONFIG)
+        whenever(canTrackIdentifiers.canTrackYandexAdvId).thenReturn(
+            AdvIdGetterController.State.FORBIDDEN_BY_REMOTE_CONFIG
+        )
         advertisingIdGetter.init()
         val identifiers = advertisingIdGetter.getIdentifiers(context)
 

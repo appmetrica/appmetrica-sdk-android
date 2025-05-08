@@ -53,12 +53,12 @@ public class BaseAppMetricaProxyBarrierTests extends CommonTest {
             if (Modifier.isPublic(method.getModifiers())) {
                 if (methodsWithNoArguments.contains(method.getName())) {
                     data.add(new Object[]{
-                                    method.getName(), true, method.getParameterTypes()
-                            }
+                            method.getName(), true, method.getParameterTypes()
+                        }
                     );
-                } else if (ignoredMethods.contains(method.getName()) == false) {
+                } else if (!ignoredMethods.contains(method.getName())) {
                     data.add(new Object[]{
-                            method.getName(), false, method.getParameterTypes()
+                        method.getName(), false, method.getParameterTypes()
                     });
                 }
             }
@@ -83,7 +83,7 @@ public class BaseAppMetricaProxyBarrierTests extends CommonTest {
     }
 
     public void testCallBarrier()
-            throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+        throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
         if (mIfNoArgs) {
             CallProxyVerifier.verifyNoArgsForMock(mProxy, mBarrier, mName, mArgs);
         } else {

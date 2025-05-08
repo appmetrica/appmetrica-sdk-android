@@ -50,7 +50,7 @@ public class ServiceMigrationManagerTest extends CommonTest {
     private PreferencesServiceDbStorage mPreferencesServiceDbStorage;
     @Mock
     private VitalCommonDataProvider vitalCommonDataProvider;
-    private Context mContext = RuntimeEnvironment.getApplication().getApplicationContext();
+    private final Context mContext = RuntimeEnvironment.getApplication().getApplicationContext();
 
     @Rule
     public MockedStaticRule<FileUtils> sFileUtilsRule = new MockedStaticRule<>(FileUtils.class);
@@ -174,7 +174,7 @@ public class ServiceMigrationManagerTest extends CommonTest {
         doAnswer(new Answer() {
             @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {
-                return new Long((Integer) invocation.getArgument(0));
+                return Long.valueOf((Integer) invocation.getArgument(0));
             }
         }).when(mPreferencesServiceDbStorage).getServerTimeOffset(anyInt());
 

@@ -17,7 +17,6 @@ import io.appmetrica.analytics.testutils.ContextCoverageUtils
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mockito
-import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
@@ -71,7 +70,11 @@ class SynchronousStageExecutorContextTest : CommonTest() {
 
     @Test
     fun requestStartupParams() {
-        synchronousStageExecutor.requestStartupParams(context, Mockito.mock(StartupParamsCallback::class.java), emptyList())
+        synchronousStageExecutor.requestStartupParams(
+            context,
+            Mockito.mock(StartupParamsCallback::class.java),
+            emptyList()
+        )
         verify(contextAppearedListener).onProbablyAppeared(context)
     }
 

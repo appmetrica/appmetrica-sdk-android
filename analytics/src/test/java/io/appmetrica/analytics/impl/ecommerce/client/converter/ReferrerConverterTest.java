@@ -53,22 +53,22 @@ public class ReferrerConverterTest extends CommonTest {
         MockitoAnnotations.openMocks(this);
 
         when(screenConverter.fromModel(screenWrapper))
-                .thenReturn(new Result<Ecommerce.ECommerceEvent.Screen, BytesTruncatedProvider>(
-                        screenProto,
-                        new BytesTruncatedInfo(screenBytesTruncated)
-                ));
+            .thenReturn(new Result<Ecommerce.ECommerceEvent.Screen, BytesTruncatedProvider>(
+                screenProto,
+                new BytesTruncatedInfo(screenBytesTruncated)
+            ));
 
         when(typeTrimmer.trim(inputType))
-                .thenReturn(new TrimmingResult<String, BytesTruncatedProvider>(
-                        truncatedType,
-                        new BytesTruncatedInfo(typeBytesTruncated)
-                ));
+            .thenReturn(new TrimmingResult<String, BytesTruncatedProvider>(
+                truncatedType,
+                new BytesTruncatedInfo(typeBytesTruncated)
+            ));
 
         when(identifierTrimmer.trim(inputIdentifier))
-                .thenReturn(new TrimmingResult<String, BytesTruncatedProvider>(
-                        truncatedIdentifier,
-                        new BytesTruncatedInfo(identifierBytesTruncated)
-                ));
+            .thenReturn(new TrimmingResult<String, BytesTruncatedProvider>(
+                truncatedIdentifier,
+                new BytesTruncatedInfo(identifierBytesTruncated)
+            ));
 
         referrerConverter = new ReferrerConverter(screenConverter, typeTrimmer, identifierTrimmer);
     }
@@ -78,8 +78,8 @@ public class ReferrerConverterTest extends CommonTest {
         referrerConverter = new ReferrerConverter();
 
         ObjectPropertyAssertions<ReferrerConverter> assertions =
-                ObjectPropertyAssertions(referrerConverter)
-                        .withPrivateFields(true);
+            ObjectPropertyAssertions(referrerConverter)
+                .withPrivateFields(true);
 
         assertions.checkFieldNonNull("screenConverter");
         assertions.checkFieldComparingFieldByField("typeTrimmer", new HierarchicalStringTrimmer(100));
@@ -93,7 +93,7 @@ public class ReferrerConverterTest extends CommonTest {
         ReferrerWrapper referrerWrapper = new ReferrerWrapper(inputType, inputIdentifier, screenWrapper);
 
         Result<Ecommerce.ECommerceEvent.Referrer, BytesTruncatedProvider> proto =
-                referrerConverter.fromModel(referrerWrapper);
+            referrerConverter.fromModel(referrerWrapper);
 
         Ecommerce.ECommerceEvent.Referrer expectedReferrer = new Ecommerce.ECommerceEvent.Referrer();
         expectedReferrer.screen = screenProto;
@@ -101,46 +101,46 @@ public class ReferrerConverterTest extends CommonTest {
         expectedReferrer.id = truncatedIdentifier.getBytes();
 
         ObjectPropertyAssertions(proto)
-                .checkFieldRecursively(
-                        "metaInfo",
-                        new TruncationInfoConsumer(totalBytesTruncated)
-                )
-                .checkFieldComparingFieldByField("result", expectedReferrer)
-                .checkAll();
+            .checkFieldRecursively(
+                "metaInfo",
+                new TruncationInfoConsumer(totalBytesTruncated)
+            )
+            .checkFieldComparingFieldByField("result", expectedReferrer)
+            .checkAll();
     }
 
     @Test
     public void toProtoForNull() throws Exception {
         when(typeTrimmer.trim(nullable(String.class)))
-                .thenReturn(new TrimmingResult<String, BytesTruncatedProvider>(
-                        null,
-                        new BytesTruncatedInfo(0)
-                ));
+            .thenReturn(new TrimmingResult<String, BytesTruncatedProvider>(
+                null,
+                new BytesTruncatedInfo(0)
+            ));
         when(identifierTrimmer.trim(nullable(String.class)))
-                .thenReturn(new TrimmingResult<String, BytesTruncatedProvider>(
-                        null,
-                        new BytesTruncatedInfo(0)
-                ));
+            .thenReturn(new TrimmingResult<String, BytesTruncatedProvider>(
+                null,
+                new BytesTruncatedInfo(0)
+            ));
 
         ReferrerWrapper referrerWrapper = new ReferrerWrapper(null, null, null);
 
         Result<Ecommerce.ECommerceEvent.Referrer, BytesTruncatedProvider> result =
-                referrerConverter.fromModel(referrerWrapper);
+            referrerConverter.fromModel(referrerWrapper);
 
         ObjectPropertyAssertions(result)
-                .checkFieldRecursively(
-                        "metaInfo",
-                        new TruncationInfoConsumer(0)
-                )
-                .checkFieldComparingFieldByField("result", new Ecommerce.ECommerceEvent.Referrer())
-                .checkAll();
+            .checkFieldRecursively(
+                "metaInfo",
+                new TruncationInfoConsumer(0)
+            )
+            .checkFieldComparingFieldByField("result", new Ecommerce.ECommerceEvent.Referrer())
+            .checkAll();
     }
 
     @Test(expected = UnsupportedOperationException.class)
     public void toModel() {
         referrerConverter.toModel(new Result<Ecommerce.ECommerceEvent.Referrer, BytesTruncatedProvider>(
-                new Ecommerce.ECommerceEvent.Referrer(),
-                new BytesTruncatedInfo(0)
+            new Ecommerce.ECommerceEvent.Referrer(),
+            new BytesTruncatedInfo(0)
         ));
     }
 }

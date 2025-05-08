@@ -26,7 +26,7 @@ public class CommonArgumentsTest extends CommonTest {
     @Test
     public void testReporterArgumentsDefaultConstructor() throws IllegalAccessException {
         ObjectPropertyAssertions<CommonArguments.ReporterArguments> assertions =
-                ObjectPropertyAssertions(new CommonArguments.ReporterArguments());
+            ObjectPropertyAssertions(new CommonArguments.ReporterArguments());
         Object nullVariable = null;
         assertions.checkField("apiKey", nullVariable);
         assertions.checkField("dispatchPeriod", nullVariable);
@@ -145,15 +145,15 @@ public class CommonArgumentsTest extends CommonTest {
         doReturn(clids).when(processConfiguration).getClientClids();
 
         CommonArguments commonArguments = new CommonArguments(
-                new ClientConfiguration(
-                        processConfiguration,
-                        counterConfiguration
-                )
+            new ClientConfiguration(
+                processConfiguration,
+                counterConfiguration
+            )
         );
         ObjectPropertyAssertions<CommonArguments.ReporterArguments> assertions =
-                ObjectPropertyAssertions(
-                        commonArguments.componentArguments
-                );
+            ObjectPropertyAssertions(
+                commonArguments.componentArguments
+            );
 
         assertions.checkField("apiKey", apiKey);
         assertions.checkField("dispatchPeriod", dispatchPeriod);
@@ -172,7 +172,7 @@ public class CommonArgumentsTest extends CommonTest {
         assertions.checkAll();
 
         ObjectPropertyAssertions<StartupRequestConfig.Arguments> startupAssertions =
-                ObjectPropertyAssertions(commonArguments.startupArguments);
+            ObjectPropertyAssertions(commonArguments.startupArguments);
         startupAssertions.checkField("hasNewCustomHosts", hasNewCustomHosts);
         startupAssertions.checkField("newCustomHosts", newCustomHosts);
         startupAssertions.checkField("clientClids", clids);
@@ -188,7 +188,7 @@ public class CommonArgumentsTest extends CommonTest {
         CommonArguments.ReporterArguments componentArguments = new CommonArguments.ReporterArguments();
         ResultReceiver dataReceiver = mock(ResultReceiver.class);
         CommonArguments commonArguments = new CommonArguments(
-                startupArguments, componentArguments, dataReceiver
+            startupArguments, componentArguments, dataReceiver
         );
 
         SoftAssertions softAssertions = new SoftAssertions();

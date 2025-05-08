@@ -21,7 +21,7 @@ public class MigrationManagerTest extends CommonTest {
     @Mock
     private MigrationManager.MigrationScript mMigrationScript;
 
-    private Context mContext = RuntimeEnvironment.getApplication().getApplicationContext();
+    private final Context mContext = RuntimeEnvironment.getApplication().getApplicationContext();
 
     private MigrationManager mMigrationManager;
 

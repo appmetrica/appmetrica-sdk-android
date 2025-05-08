@@ -26,9 +26,9 @@ public class EventHashesTest extends CommonTest {
         mEventHashes = new EventHashes();
         SoftAssertions softAssertions = new SoftAssertions();
         softAssertions.assertThat(mEventHashes.getEventNameHashes())
-                .isNotNull()
-                .isInstanceOf(HashSet.class)
-                .isEmpty();
+            .isNotNull()
+            .isInstanceOf(HashSet.class)
+            .isEmpty();
         softAssertions.assertThat(mEventHashes.getHashesCountFromLastVersion()).isEqualTo(0);
         softAssertions.assertThat(mEventHashes.getLastVersionCode()).isEqualTo(0);
         softAssertions.assertThat(mEventHashes.treatUnknownEventAsNew()).isFalse();
@@ -38,16 +38,16 @@ public class EventHashesTest extends CommonTest {
     @Test
     public void testConstructorWithHashesArray() {
         mEventHashes = new EventHashes(
-                TREAT_NEW_EVENT_AS_UPDATE,
-                LAST_VERSION_CODE,
-                HASHES_COUNT_FROM_LAST_VERSION,
-                HASHES_ARRAY
+            TREAT_NEW_EVENT_AS_UPDATE,
+            LAST_VERSION_CODE,
+            HASHES_COUNT_FROM_LAST_VERSION,
+            HASHES_ARRAY
         );
         SoftAssertions softAssertions = new SoftAssertions();
         softAssertions.assertThat(mEventHashes.treatUnknownEventAsNew()).isEqualTo(TREAT_NEW_EVENT_AS_UPDATE);
         softAssertions.assertThat(mEventHashes.getLastVersionCode()).isEqualTo(LAST_VERSION_CODE);
         softAssertions.assertThat(mEventHashes.getHashesCountFromLastVersion())
-                .isEqualTo(HASHES_COUNT_FROM_LAST_VERSION);
+            .isEqualTo(HASHES_COUNT_FROM_LAST_VERSION);
         softAssertions.assertThat(mEventHashes.getEventNameHashes()).containsOnly(HASHES_OBJECTS_ARRAY);
         softAssertions.assertAll();
     }
@@ -55,16 +55,16 @@ public class EventHashesTest extends CommonTest {
     @Test
     public void testConstructorWithHashesSet() {
         mEventHashes = new EventHashes(
-                TREAT_NEW_EVENT_AS_UPDATE,
-                LAST_VERSION_CODE,
-                HASHES_COUNT_FROM_LAST_VERSION,
-                HASHES_SET
+            TREAT_NEW_EVENT_AS_UPDATE,
+            LAST_VERSION_CODE,
+            HASHES_COUNT_FROM_LAST_VERSION,
+            HASHES_SET
         );
         SoftAssertions softAssertions = new SoftAssertions();
         softAssertions.assertThat(mEventHashes.treatUnknownEventAsNew()).isEqualTo(TREAT_NEW_EVENT_AS_UPDATE);
         softAssertions.assertThat(mEventHashes.getLastVersionCode()).isEqualTo(LAST_VERSION_CODE);
         softAssertions.assertThat(mEventHashes.getHashesCountFromLastVersion())
-                .isEqualTo(HASHES_COUNT_FROM_LAST_VERSION);
+            .isEqualTo(HASHES_COUNT_FROM_LAST_VERSION);
         softAssertions.assertThat(mEventHashes.getEventNameHashes()).containsOnly(HASHES_OBJECTS_ARRAY);
         softAssertions.assertAll();
     }
@@ -72,10 +72,10 @@ public class EventHashesTest extends CommonTest {
     @Test
     public void testClearEventHashes() {
         mEventHashes = new EventHashes(
-                false,
-                LAST_VERSION_CODE,
-                HASHES_COUNT_FROM_LAST_VERSION,
-                HASHES_SET
+            false,
+            LAST_VERSION_CODE,
+            HASHES_COUNT_FROM_LAST_VERSION,
+            HASHES_SET
         );
         mEventHashes.clearEventHashes();
         SoftAssertions softAssertions = new SoftAssertions();
@@ -89,10 +89,10 @@ public class EventHashesTest extends CommonTest {
     @Test
     public void testAddEventNameHash() {
         mEventHashes = new EventHashes(
-                TREAT_NEW_EVENT_AS_UPDATE,
-                LAST_VERSION_CODE,
-                HASHES_COUNT_FROM_LAST_VERSION,
-                HASHES_SET
+            TREAT_NEW_EVENT_AS_UPDATE,
+            LAST_VERSION_CODE,
+            HASHES_COUNT_FROM_LAST_VERSION,
+            HASHES_SET
         );
         int newEventHash = 999;
         mEventHashes.addEventNameHash(newEventHash);
@@ -100,7 +100,7 @@ public class EventHashesTest extends CommonTest {
         softAssertions.assertThat(mEventHashes.treatUnknownEventAsNew()).isTrue();
         softAssertions.assertThat(mEventHashes.getLastVersionCode()).isEqualTo(LAST_VERSION_CODE);
         softAssertions.assertThat(mEventHashes.getHashesCountFromLastVersion())
-                .isEqualTo(HASHES_COUNT_FROM_LAST_VERSION + 1);
+            .isEqualTo(HASHES_COUNT_FROM_LAST_VERSION + 1);
         Set<Integer> expectedHashes = new HashSet<Integer>(HASHES_SET);
         expectedHashes.add(newEventHash);
         Integer[] expectedHashesArray = expectedHashes.toArray(new Integer[expectedHashes.size()]);
@@ -111,10 +111,10 @@ public class EventHashesTest extends CommonTest {
     @Test
     public void testSetLastVersionCode() {
         mEventHashes = new EventHashes(
-                TREAT_NEW_EVENT_AS_UPDATE,
-                LAST_VERSION_CODE,
-                HASHES_COUNT_FROM_LAST_VERSION,
-                HASHES_SET
+            TREAT_NEW_EVENT_AS_UPDATE,
+            LAST_VERSION_CODE,
+            HASHES_COUNT_FROM_LAST_VERSION,
+            HASHES_SET
         );
         int newVersionCode = 111;
         mEventHashes.setLastVersionCode(newVersionCode);

@@ -7,10 +7,10 @@ import io.appmetrica.analytics.impl.client.ProcessConfiguration;
 import io.appmetrica.analytics.impl.crash.ndk.NativeCrashClient;
 import io.appmetrica.analytics.impl.startup.StartupHelper;
 import io.appmetrica.analytics.impl.utils.ProcessDetector;
-import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.impl.utils.limitation.EventLimitationProcessor;
 import io.appmetrica.analytics.impl.utils.limitation.MapTrimmers;
 import io.appmetrica.analytics.internal.CounterConfiguration;
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.TestUtils;
 import java.util.UUID;
@@ -61,7 +61,7 @@ public class BaseReporterData extends CommonTest {
         when(mReporterEnvironment.getReporterConfiguration()).thenReturn(mCounterConfiguration);
         when(mCounterConfiguration.getApiKey()).thenReturn(apiKey);
         mMapLimitation = new MapTrimmers(MapTrimmers.DEFAULT_MAP_MAX_SIZE,
-                MapTrimmers.DEFAULT_KEY_MAX_LENGTH, MapTrimmers.DEFAULT_VALUE_MAX_LENGTH, "", mPublicLogger);
+            MapTrimmers.DEFAULT_KEY_MAX_LENGTH, MapTrimmers.DEFAULT_VALUE_MAX_LENGTH, "", mPublicLogger);
         mEventLimitationProcessor = mock(EventLimitationProcessor.class);
         mApplication = spy(RuntimeEnvironment.getApplication());
     }

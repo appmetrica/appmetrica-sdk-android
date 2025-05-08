@@ -51,14 +51,14 @@ public class ClientConfigConverterTest extends CommonTest {
             add(config.withPreloadInfo(PreloadInfo.newBuilder("").build()).build());
             add(config.withPreloadInfo(PreloadInfo.newBuilder("id-112").build()).build());
             add(config.withPreloadInfo(
-                    PreloadInfo.newBuilder("id-112")
-                            .setAdditionalParams("param1", "value1")
-                            .build()
+                PreloadInfo.newBuilder("id-112")
+                    .setAdditionalParams("param1", "value1")
+                    .build()
             ).build());
             add(config.withPreloadInfo(
-                    PreloadInfo.newBuilder("")
-                            .setAdditionalParams("param1", "")
-                            .build()
+                PreloadInfo.newBuilder("")
+                    .setAdditionalParams("param1", "")
+                    .build()
             ).build());
 
             add(config.withLocation(getTestLocation()).build());

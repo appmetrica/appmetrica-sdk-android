@@ -1,12 +1,13 @@
 package io.appmetrica.analytics.network.internal
 
 import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
+import io.appmetrica.analytics.testutils.CommonTest
 import org.junit.Test
 import org.mockito.kotlin.mock
 import javax.net.ssl.SSLSocketFactory
 import kotlin.random.Random
 
-class NetworkClientTest {
+class NetworkClientTest : CommonTest() {
 
     @Test
     fun createFilledObject() {

@@ -24,7 +24,7 @@ public class PriceWrapperTest extends CommonTest {
     @Test
     public void constructorIfInternalComponentsIsNull() {
         PriceWrapper priceWrapper = new PriceWrapper(
-                new ECommercePrice(new ECommerceAmount(BigDecimal.TEN, "USD"))
+            new ECommercePrice(new ECommerceAmount(BigDecimal.TEN, "USD"))
         );
         assertThat(priceWrapper.internalComponents).isNull();
     }

@@ -2,6 +2,7 @@ package io.appmetrica.analytics.remotepermissions.impl
 
 import io.appmetrica.analytics.protobuf.nano.MessageNano
 import io.appmetrica.analytics.remotepermissions.impl.protobuf.client.RemotePermissionsProtobuf
+import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.MockedConstructionRule
 import io.appmetrica.analytics.testutils.MockedStaticRule
 import org.assertj.core.api.Assertions.assertThat
@@ -11,7 +12,7 @@ import org.junit.Test
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 
-class FeatureConfigToProtoBytesConverterTest {
+class FeatureConfigToProtoBytesConverterTest : CommonTest() {
 
     private val config = mock<FeatureConfig>()
     private val configProto = mock<RemotePermissionsProtobuf.RemotePermissions>()
@@ -19,7 +20,7 @@ class FeatureConfigToProtoBytesConverterTest {
 
     @get:Rule
     val featureConfigToProtoConverterMockedConstructionRule =
-        MockedConstructionRule(FeatureConfigToProtoConverter::class.java) {mock, _ ->
+        MockedConstructionRule(FeatureConfigToProtoConverter::class.java) { mock, _ ->
             whenever(mock.fromModel(config)).thenReturn(configProto)
             whenever(mock.toModel(configProto)).thenReturn(config)
         }

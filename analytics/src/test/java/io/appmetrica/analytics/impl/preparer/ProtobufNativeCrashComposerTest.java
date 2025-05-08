@@ -25,7 +25,7 @@ public class ProtobufNativeCrashComposerTest extends CommonTest {
 
     @Mock
     private ReportRequestConfig config;
-    private ProtobufNativeCrashComposer protobufNativeCrashComposer = new ProtobufNativeCrashComposer();
+    private final ProtobufNativeCrashComposer protobufNativeCrashComposer = new ProtobufNativeCrashComposer();
 
     @Before
     public void setUp() {
@@ -67,18 +67,18 @@ public class ProtobufNativeCrashComposerTest extends CommonTest {
     @Test
     public void encodingTypeForNonEncryption() {
         assertThat(protobufNativeCrashComposer.getEncodingType(EventEncryptionMode.NONE))
-                .isEqualTo(EventProto.ReportMessage.Session.Event.GZIP);
+            .isEqualTo(EventProto.ReportMessage.Session.Event.GZIP);
     }
 
     @Test
     public void encodingTypeForNonEncryptionForExternallyEventCrypter() {
         assertThat(protobufNativeCrashComposer.getEncodingType(EventEncryptionMode.EXTERNALLY_ENCRYPTED_EVENT_CRYPTER))
-                .isEqualTo(EventProto.ReportMessage.Session.Event.GZIP);
+            .isEqualTo(EventProto.ReportMessage.Session.Event.GZIP);
     }
 
     @Test
     public void encodingTypeForAesValueEncryption() {
         assertThat(protobufNativeCrashComposer.getEncodingType(EventEncryptionMode.AES_VALUE_ENCRYPTION))
-                .isEqualTo(EventProto.ReportMessage.Session.Event.GZIP);
+            .isEqualTo(EventProto.ReportMessage.Session.Event.GZIP);
     }
 }

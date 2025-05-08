@@ -12,8 +12,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(ParameterizedRobolectricTestRunner.class)
 public class UtilsIsAnyNullTest extends CommonTest {
 
-    private Object[] mInputValue;
-    private boolean mExpectedValue;
+    private final Object[] mInputValue;
+    private final boolean mExpectedValue;
 
     public UtilsIsAnyNullTest(Object[] inputValue, boolean expectedValue) {
         mInputValue = inputValue;
@@ -23,14 +23,14 @@ public class UtilsIsAnyNullTest extends CommonTest {
     @ParameterizedRobolectricTestRunner.Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
-                {null, false},
-                {new Object[]{}, false},
-                {new Object[]{null}, true},
-                {new Object[]{new Object()}, false},
-                {new Object[]{null, null}, true},
-                {new Object[]{null, new Object()}, true},
-                {new Object[]{new Object(), null}, true},
-                {new Object[]{new Object(), new Object()}, false}
+            {null, false},
+            {new Object[]{}, false},
+            {new Object[]{null}, true},
+            {new Object[]{new Object()}, false},
+            {new Object[]{null, null}, true},
+            {new Object[]{null, new Object()}, true},
+            {new Object[]{new Object(), null}, true},
+            {new Object[]{new Object(), new Object()}, false}
         });
     }
 

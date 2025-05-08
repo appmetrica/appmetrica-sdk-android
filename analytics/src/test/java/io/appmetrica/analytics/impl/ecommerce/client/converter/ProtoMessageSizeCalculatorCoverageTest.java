@@ -31,17 +31,17 @@ public class ProtoMessageSizeCalculatorCoverageTest extends CommonTest {
             event.type = Ecommerce.ECommerceEvent.ECOMMERCE_EVENT_TYPE_BEGIN_CHECKOUT;
 
             ProtoObjectPropertyAssertions<Ecommerce.ECommerceEvent> assertions =
-                    new ProtoObjectPropertyAssertions<Ecommerce.ECommerceEvent>(event);
+                new ProtoObjectPropertyAssertions<Ecommerce.ECommerceEvent>(event);
             int fieldsNumber = assertions.getUnverifiedFieldsCount();
 
             assertions
-                    .checkField("type", Ecommerce.ECommerceEvent.ECOMMERCE_EVENT_TYPE_BEGIN_CHECKOUT)
-                    .checkFieldNonNull("shownScreenInfo")
-                    .checkFieldNonNull("cartActionInfo")
-                    .checkFieldNonNull("orderInfo")
-                    .checkFieldNonNull("shownProductCardInfo")
-                    .checkFieldNonNull("shownProductDetailsInfo")
-                    .checkAll();
+                .checkField("type", Ecommerce.ECommerceEvent.ECOMMERCE_EVENT_TYPE_BEGIN_CHECKOUT)
+                .checkFieldNonNull("shownScreenInfo")
+                .checkFieldNonNull("cartActionInfo")
+                .checkFieldNonNull("orderInfo")
+                .checkFieldNonNull("shownProductCardInfo")
+                .checkFieldNonNull("shownProductDetailsInfo")
+                .checkAll();
 
             when(CodedOutputByteBufferNano.computeInt32Size(1, event.type)).thenReturn(1);
             when(CodedOutputByteBufferNano.computeMessageSize(2, event.shownScreenInfo)).thenReturn(10);

@@ -25,10 +25,10 @@ public class HierarchicalListTrimmerWithoutItemTrimmerTest extends CommonTest {
         }
     }
 
-    private List<Item> inputValue;
-    private List<Item> expectedValue;
-    private int expectedDroppedItems;
-    private int expectedBytesTruncated;
+    private final List<Item> inputValue;
+    private final List<Item> expectedValue;
+    private final int expectedDroppedItems;
+    private final int expectedBytesTruncated;
 
     public HierarchicalListTrimmerWithoutItemTrimmerTest(List<Item> inputValue,
                                                          List<Item> expectedValue,
@@ -55,64 +55,64 @@ public class HierarchicalListTrimmerWithoutItemTrimmerTest extends CommonTest {
     @ParameterizedRobolectricTestRunner.Parameters(name = "#{index} - {4}")
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
-                {null, null, 0, 0, "null"},
-                {Collections.emptyList(), Collections.emptyList(), 0, 0, "empty list"},
-                {
-                        Collections.singletonList(UP_TO_LIST_SIZE_LIMIT_ITEM_1),
-                        Collections.singletonList(UP_TO_LIST_SIZE_LIMIT_ITEM_1), 0, 0,
-                        "list with single item out of length limit"
-                },
-                {
-                        listOf(
-                                UP_TO_LIST_SIZE_LIMIT_ITEM_1, UP_TO_LIST_SIZE_LIMIT_ITEM_2,
-                                UP_TO_LIST_SIZE_LIMIT_ITEM_3, UP_TO_LIST_SIZE_LIMIT_ITEM_4,
-                                UP_TO_LIST_SIZE_LIMIT_ITEM_5
-                        ),
-                        listOf(
-                                UP_TO_LIST_SIZE_LIMIT_ITEM_1, UP_TO_LIST_SIZE_LIMIT_ITEM_2,
-                                UP_TO_LIST_SIZE_LIMIT_ITEM_3, UP_TO_LIST_SIZE_LIMIT_ITEM_4,
-                                UP_TO_LIST_SIZE_LIMIT_ITEM_5
-                        ),
-                        0,
-                        0,
-                        "list with items up to items count limit"
-                },
-                {
-                        listOf(
-                                UP_TO_LIST_SIZE_LIMIT_ITEM_1, UP_TO_LIST_SIZE_LIMIT_ITEM_2,
-                                UP_TO_LIST_SIZE_LIMIT_ITEM_3, UP_TO_LIST_SIZE_LIMIT_ITEM_4,
-                                UP_TO_LIST_SIZE_LIMIT_ITEM_5, OUT_OF_LIST_SIZE_LIMIT_ITEM_1
-                        ),
-                        listOf(
-                                UP_TO_LIST_SIZE_LIMIT_ITEM_1, UP_TO_LIST_SIZE_LIMIT_ITEM_2,
-                                UP_TO_LIST_SIZE_LIMIT_ITEM_3, UP_TO_LIST_SIZE_LIMIT_ITEM_4,
-                                UP_TO_LIST_SIZE_LIMIT_ITEM_5
-                        ),
-                        1,
-                        sizeOf(OUT_OF_LIST_SIZE_LIMIT_ITEM_1),
-                        "list with single item out of items count limit"
-                },
-                {
-                        listOf(
-                                UP_TO_LIST_SIZE_LIMIT_ITEM_1, UP_TO_LIST_SIZE_LIMIT_ITEM_2,
-                                UP_TO_LIST_SIZE_LIMIT_ITEM_3, UP_TO_LIST_SIZE_LIMIT_ITEM_4,
-                                UP_TO_LIST_SIZE_LIMIT_ITEM_5, OUT_OF_LIST_SIZE_LIMIT_ITEM_1,
-                                OUT_OF_LIST_SIZE_LIMIT_ITEM_2, OUT_OF_LIST_SIZE_LIMIT_ITEM_3,
-                                OUT_OF_LIST_SIZE_LIMIT_ITEM_4, OUT_OF_LIST_SIZE_LIMIT_ITEM_5
-                        ),
-                        listOf(
-                                UP_TO_LIST_SIZE_LIMIT_ITEM_1, UP_TO_LIST_SIZE_LIMIT_ITEM_2,
-                                UP_TO_LIST_SIZE_LIMIT_ITEM_3, UP_TO_LIST_SIZE_LIMIT_ITEM_4,
-                                UP_TO_LIST_SIZE_LIMIT_ITEM_5
-                        ),
-                        5,
-                        sizeOf(
-                                OUT_OF_LIST_SIZE_LIMIT_ITEM_1, OUT_OF_LIST_SIZE_LIMIT_ITEM_2,
-                                OUT_OF_LIST_SIZE_LIMIT_ITEM_3, OUT_OF_LIST_SIZE_LIMIT_ITEM_4,
-                                OUT_OF_LIST_SIZE_LIMIT_ITEM_5
-                        ),
-                        "list with 5 items out of items count limit"
-                },
+            {null, null, 0, 0, "null"},
+            {Collections.emptyList(), Collections.emptyList(), 0, 0, "empty list"},
+            {
+                Collections.singletonList(UP_TO_LIST_SIZE_LIMIT_ITEM_1),
+                Collections.singletonList(UP_TO_LIST_SIZE_LIMIT_ITEM_1), 0, 0,
+                "list with single item out of length limit"
+            },
+            {
+                listOf(
+                    UP_TO_LIST_SIZE_LIMIT_ITEM_1, UP_TO_LIST_SIZE_LIMIT_ITEM_2,
+                    UP_TO_LIST_SIZE_LIMIT_ITEM_3, UP_TO_LIST_SIZE_LIMIT_ITEM_4,
+                    UP_TO_LIST_SIZE_LIMIT_ITEM_5
+                ),
+                listOf(
+                    UP_TO_LIST_SIZE_LIMIT_ITEM_1, UP_TO_LIST_SIZE_LIMIT_ITEM_2,
+                    UP_TO_LIST_SIZE_LIMIT_ITEM_3, UP_TO_LIST_SIZE_LIMIT_ITEM_4,
+                    UP_TO_LIST_SIZE_LIMIT_ITEM_5
+                ),
+                0,
+                0,
+                "list with items up to items count limit"
+            },
+            {
+                listOf(
+                    UP_TO_LIST_SIZE_LIMIT_ITEM_1, UP_TO_LIST_SIZE_LIMIT_ITEM_2,
+                    UP_TO_LIST_SIZE_LIMIT_ITEM_3, UP_TO_LIST_SIZE_LIMIT_ITEM_4,
+                    UP_TO_LIST_SIZE_LIMIT_ITEM_5, OUT_OF_LIST_SIZE_LIMIT_ITEM_1
+                ),
+                listOf(
+                    UP_TO_LIST_SIZE_LIMIT_ITEM_1, UP_TO_LIST_SIZE_LIMIT_ITEM_2,
+                    UP_TO_LIST_SIZE_LIMIT_ITEM_3, UP_TO_LIST_SIZE_LIMIT_ITEM_4,
+                    UP_TO_LIST_SIZE_LIMIT_ITEM_5
+                ),
+                1,
+                sizeOf(OUT_OF_LIST_SIZE_LIMIT_ITEM_1),
+                "list with single item out of items count limit"
+            },
+            {
+                listOf(
+                    UP_TO_LIST_SIZE_LIMIT_ITEM_1, UP_TO_LIST_SIZE_LIMIT_ITEM_2,
+                    UP_TO_LIST_SIZE_LIMIT_ITEM_3, UP_TO_LIST_SIZE_LIMIT_ITEM_4,
+                    UP_TO_LIST_SIZE_LIMIT_ITEM_5, OUT_OF_LIST_SIZE_LIMIT_ITEM_1,
+                    OUT_OF_LIST_SIZE_LIMIT_ITEM_2, OUT_OF_LIST_SIZE_LIMIT_ITEM_3,
+                    OUT_OF_LIST_SIZE_LIMIT_ITEM_4, OUT_OF_LIST_SIZE_LIMIT_ITEM_5
+                ),
+                listOf(
+                    UP_TO_LIST_SIZE_LIMIT_ITEM_1, UP_TO_LIST_SIZE_LIMIT_ITEM_2,
+                    UP_TO_LIST_SIZE_LIMIT_ITEM_3, UP_TO_LIST_SIZE_LIMIT_ITEM_4,
+                    UP_TO_LIST_SIZE_LIMIT_ITEM_5
+                ),
+                5,
+                sizeOf(
+                    OUT_OF_LIST_SIZE_LIMIT_ITEM_1, OUT_OF_LIST_SIZE_LIMIT_ITEM_2,
+                    OUT_OF_LIST_SIZE_LIMIT_ITEM_3, OUT_OF_LIST_SIZE_LIMIT_ITEM_4,
+                    OUT_OF_LIST_SIZE_LIMIT_ITEM_5
+                ),
+                "list with 5 items out of items count limit"
+            },
         });
     }
 
@@ -151,17 +151,17 @@ public class HierarchicalListTrimmerWithoutItemTrimmerTest extends CommonTest {
                                                        int bytesTruncated) throws Exception {
 
         TrimmingResult<List<Item>, CollectionTrimInfo> trimmingResult =
-                trimmer.trim(inputValue);
+            trimmer.trim(inputValue);
 
         ObjectPropertyAssertions<TrimmingResult<List<Item>, CollectionTrimInfo>> assertions =
-                ObjectPropertyAssertions(
-                        trimmingResult
-                );
+            ObjectPropertyAssertions(
+                trimmingResult
+            );
 
         assertions.checkField("value", expectedValue, true);
         assertions.checkFieldComparingFieldByField(
-                "metaInfo",
-                new CollectionTrimInfo(expectedDroppedItems, bytesTruncated)
+            "metaInfo",
+            new CollectionTrimInfo(expectedDroppedItems, bytesTruncated)
         );
 
         assertions.checkAll();

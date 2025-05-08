@@ -35,10 +35,12 @@ class ModuleLoaderTest : CommonTest() {
 
     @Test
     fun loadModuleIfEntryPointClassNotPresent() {
-        assertThat(moduleLoader.loadModule<ModuleServiceEntryPoint<Any>>("io.appmetrica.analytics.impl.modules.TestClassNotPresent"))
-            .isNull()
+        assertThat(
+            moduleLoader.loadModule<ModuleServiceEntryPoint<Any>>(
+                "io.appmetrica.analytics.impl.modules.TestClassNotPresent"
+            )
+        ).isNull()
     }
-
 }
 
 class TestClass1 : ModuleServiceEntryPoint<Any>() {
@@ -60,9 +62,9 @@ class TestClass1 : ModuleServiceEntryPoint<Any>() {
         get() = null
 }
 
-class TestClass2 private constructor(): ModuleServiceEntryPoint<Any>() {
+class TestClass2 private constructor() : ModuleServiceEntryPoint<Any>() {
 
-    constructor(arg1: Any): this()
+    constructor(arg1: Any) : this()
 
     override val identifier: String
         get() = "some identifier"

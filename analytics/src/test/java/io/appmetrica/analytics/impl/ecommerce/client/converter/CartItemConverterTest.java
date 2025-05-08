@@ -63,24 +63,24 @@ public class CartItemConverterTest extends CommonTest {
         MockitoAnnotations.openMocks(this);
 
         when(productConverter.fromModel(productWrapper))
-                .thenReturn(new Result<Ecommerce.ECommerceEvent.Product, BytesTruncatedProvider>(
-                        productProto,
-                        new BytesTruncatedInfo(productBytesTruncated)
-                ));
+            .thenReturn(new Result<Ecommerce.ECommerceEvent.Product, BytesTruncatedProvider>(
+                productProto,
+                new BytesTruncatedInfo(productBytesTruncated)
+            ));
         when(decimalConverter.fromModel(quantity)).thenReturn(quantityProto);
         when(priceConverter.fromModel(revenue))
-                .thenReturn(new Result<Ecommerce.ECommerceEvent.Price, BytesTruncatedProvider>(
-                        revenueProto,
-                        new BytesTruncatedInfo(revenueBytesTruncated)
-                ));
+            .thenReturn(new Result<Ecommerce.ECommerceEvent.Price, BytesTruncatedProvider>(
+                revenueProto,
+                new BytesTruncatedInfo(revenueBytesTruncated)
+            ));
         when(referrerConverter.fromModel(referrerWrapper))
-                .thenReturn(new Result<Ecommerce.ECommerceEvent.Referrer, BytesTruncatedProvider>(
-                        referrerProto,
-                        new BytesTruncatedInfo(referrerBytesTruncated)
-                ));
+            .thenReturn(new Result<Ecommerce.ECommerceEvent.Referrer, BytesTruncatedProvider>(
+                referrerProto,
+                new BytesTruncatedInfo(referrerBytesTruncated)
+            ));
 
         cartItemConverter =
-                new CartItemConverter(productConverter, decimalConverter, priceConverter, referrerConverter);
+            new CartItemConverter(productConverter, decimalConverter, priceConverter, referrerConverter);
     }
 
     @Test
@@ -88,8 +88,8 @@ public class CartItemConverterTest extends CommonTest {
         cartItemConverter = new CartItemConverter();
 
         ObjectPropertyAssertions<CartItemConverter> assertions =
-                ObjectPropertyAssertions(cartItemConverter)
-                        .withPrivateFields(true);
+            ObjectPropertyAssertions(cartItemConverter)
+                .withPrivateFields(true);
 
         assertions.checkFieldNonNull("productConverter");
         assertions.checkFieldNonNull("decimalConverter");
@@ -102,43 +102,43 @@ public class CartItemConverterTest extends CommonTest {
     @Test
     public void toProto() throws Exception {
         CartItemWrapper cartItemWrapper =
-                new CartItemWrapper(productWrapper, quantity, revenue, referrerWrapper);
+            new CartItemWrapper(productWrapper, quantity, revenue, referrerWrapper);
 
         Result<Ecommerce.ECommerceEvent.CartItem, BytesTruncatedProvider> result =
-                cartItemConverter.fromModel(cartItemWrapper);
+            cartItemConverter.fromModel(cartItemWrapper);
 
         assertThatCartItemResultMatchExpectedValues(
-                result,
-                totalBytesTruncated,
-                productProto,
-                quantityProto,
-                revenueProto,
-                referrerProto
+            result,
+            totalBytesTruncated,
+            productProto,
+            quantityProto,
+            revenueProto,
+            referrerProto
         );
     }
 
     @Test
     public void toProtoForNullableReferrer() throws Exception {
         CartItemWrapper cartItemWrapper =
-                new CartItemWrapper(productWrapper, quantity, revenue, null);
+            new CartItemWrapper(productWrapper, quantity, revenue, null);
 
         assertThatCartItemResultMatchExpectedValues(
-                cartItemConverter.fromModel(cartItemWrapper),
-                totalBytesTruncated - referrerBytesTruncated,
-                productProto,
-                quantityProto,
-                revenueProto,
-                null
+            cartItemConverter.fromModel(cartItemWrapper),
+            totalBytesTruncated - referrerBytesTruncated,
+            productProto,
+            quantityProto,
+            revenueProto,
+            null
         );
     }
 
     private void assertThatCartItemResultMatchExpectedValues(
-            Result<Ecommerce.ECommerceEvent.CartItem, BytesTruncatedProvider> result,
-            int expectedBytesTruncated,
-            Ecommerce.ECommerceEvent.Product expectedProduct,
-            Ecommerce.ECommerceEvent.Decimal expectedQuantity,
-            Ecommerce.ECommerceEvent.Price expectedRevenue,
-            Ecommerce.ECommerceEvent.Referrer expectedReferrer
+        Result<Ecommerce.ECommerceEvent.CartItem, BytesTruncatedProvider> result,
+        int expectedBytesTruncated,
+        Ecommerce.ECommerceEvent.Product expectedProduct,
+        Ecommerce.ECommerceEvent.Decimal expectedQuantity,
+        Ecommerce.ECommerceEvent.Price expectedRevenue,
+        Ecommerce.ECommerceEvent.Referrer expectedReferrer
     ) throws Exception {
 
         Ecommerce.ECommerceEvent.CartItem expectedCartItem = new Ecommerce.ECommerceEvent.CartItem();
@@ -148,10 +148,10 @@ public class CartItemConverterTest extends CommonTest {
         expectedCartItem.referrer = expectedReferrer;
 
         ObjectPropertyAssertions<Result<Ecommerce.ECommerceEvent.CartItem, BytesTruncatedProvider>> assertions =
-                ObjectPropertyAssertions(result);
+            ObjectPropertyAssertions(result);
 
         assertions.checkFieldRecursively(
-                "metaInfo", new TruncationInfoConsumer(expectedBytesTruncated)
+            "metaInfo", new TruncationInfoConsumer(expectedBytesTruncated)
         );
         assertions.checkFieldComparingFieldByField("result", expectedCartItem);
 
@@ -161,7 +161,7 @@ public class CartItemConverterTest extends CommonTest {
     @Test(expected = UnsupportedOperationException.class)
     public void toModel() {
         cartItemConverter.toModel(new Result<Ecommerce.ECommerceEvent.CartItem, BytesTruncatedProvider>(
-                new Ecommerce.ECommerceEvent.CartItem(), new BytesTruncatedInfo(0)
+            new Ecommerce.ECommerceEvent.CartItem(), new BytesTruncatedInfo(0)
         ));
     }
 }

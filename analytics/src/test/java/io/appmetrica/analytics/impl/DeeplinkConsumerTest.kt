@@ -52,7 +52,6 @@ class DeeplinkConsumerTest : CommonTest() {
         verifyNoMoreInteractions(reporter)
     }
 
-
     @Test
     fun `reportAppOpen with null intent after non null`() {
         deeplinkConsumer.reportAppOpen(intent)

@@ -98,7 +98,8 @@ internal class VitalCommonDataProviderTest : CommonTest() {
         wheneverVitalDataProviderGetOrLoad().thenReturn(filledJson)
         val referrer = ReferrerInfo("referrer2", 99, 88, ReferrerInfo.Source.HMS)
         vitalCommonDataProvider.referrer = referrer
-        val expectedJson = JSONObject(filledJson.toString()).put("referrer", String(Base64.encode(referrer.toProto(), 0)))
+        val expectedJson = JSONObject(filledJson.toString())
+            .put("referrer", String(Base64.encode(referrer.toProto(), 0)))
         JSONAssert.assertEquals(expectedJson.toString(), interceptSavedJson(), true)
     }
 
@@ -167,7 +168,7 @@ internal class VitalCommonDataProviderTest : CommonTest() {
 
     private fun vitalDataProvider() = vitalDataProviderMockedConstructionRule.constructionMock.constructed()[0]
 
-    private fun interceptSavedJson() : JSONObject {
+    private fun interceptSavedJson(): JSONObject {
         verify(vitalDataProvider()).save(jsonCaptor.capture())
         return jsonCaptor.firstValue
     }

@@ -19,9 +19,9 @@ import static org.mockito.Mockito.verify;
 @RunWith(RobolectricTestRunner.class)
 public class SetIfUndefinedSaverTest extends CommonTest {
 
-    private UserProfileStorage mStorage = mock(UserProfileStorage.class);
-    private AttributeSaver mInternalSaver = mock(AttributeSaver.class);
-    private SetIfUndefinedSavingStrategy mIfUndefinedSaver = new SetIfUndefinedSavingStrategy(mInternalSaver);
+    private final UserProfileStorage mStorage = mock(UserProfileStorage.class);
+    private final AttributeSaver mInternalSaver = mock(AttributeSaver.class);
+    private final SetIfUndefinedSavingStrategy mIfUndefinedSaver = new SetIfUndefinedSavingStrategy(mInternalSaver);
 
     @Test
     public void testNonExisted() {
@@ -31,10 +31,10 @@ public class SetIfUndefinedSaverTest extends CommonTest {
         mIfUndefinedSaver.save(mStorage, null, factory);
 
         ArgumentCaptor<Userprofile.Profile.Attribute> captor =
-                ArgumentCaptor.forClass(Userprofile.Profile.Attribute.class);
+            ArgumentCaptor.forClass(Userprofile.Profile.Attribute.class);
         verify(mInternalSaver, times(1)).save(
-                same(mStorage),
-                captor.capture()
+            same(mStorage),
+            captor.capture()
         );
         assertThat(captor.getValue().metaInfo.setIfUndefined).isTrue();
     }
@@ -43,8 +43,8 @@ public class SetIfUndefinedSaverTest extends CommonTest {
     public void testExisted() {
         mIfUndefinedSaver.save(mStorage, UserProfilesTestUtils.createEmpty(), mock(AttributeFactory.class));
         verify(mInternalSaver, never()).save(
-                any(UserProfileStorage.class),
-                any(Userprofile.Profile.Attribute.class)
+            any(UserProfileStorage.class),
+            any(Userprofile.Profile.Attribute.class)
         );
     }
 

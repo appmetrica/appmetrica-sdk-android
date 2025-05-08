@@ -29,11 +29,11 @@ public class SelfDiagnosticReporterTest extends CommonTest {
     @ParameterizedRobolectricTestRunner.Parameters(name = "Report type: {0}")
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
-                {CounterConfigurationReporterType.COMMUTATION, null},
-                {CounterConfigurationReporterType.MAIN, CounterConfigurationReporterType.SELF_DIAGNOSTIC_MAIN},
-                {CounterConfigurationReporterType.MANUAL, CounterConfigurationReporterType.SELF_DIAGNOSTIC_MANUAL},
-                {CounterConfigurationReporterType.SELF_DIAGNOSTIC_MAIN, null},
-                {CounterConfigurationReporterType.SELF_DIAGNOSTIC_MANUAL, null}
+            {CounterConfigurationReporterType.COMMUTATION, null},
+            {CounterConfigurationReporterType.MAIN, CounterConfigurationReporterType.SELF_DIAGNOSTIC_MAIN},
+            {CounterConfigurationReporterType.MANUAL, CounterConfigurationReporterType.SELF_DIAGNOSTIC_MANUAL},
+            {CounterConfigurationReporterType.SELF_DIAGNOSTIC_MAIN, null},
+            {CounterConfigurationReporterType.SELF_DIAGNOSTIC_MANUAL, null}
         });
     }
 
@@ -58,8 +58,8 @@ public class SelfDiagnosticReporterTest extends CommonTest {
         selfDiagnosticReporter.reportEvent(new CounterReport());
         if (newReporterType != null) {
             verify(selfProcessReporter).reportData(
-                    eq(AppMetricaServiceDataReporter.TYPE_CORE),
-                    bundleCaptor.capture()
+                eq(AppMetricaServiceDataReporter.TYPE_CORE),
+                bundleCaptor.capture()
             );
             ClientConfiguration env = ClientConfiguration.fromBundle(context, bundleCaptor.getValue());
             assertThat(env.getReporterConfiguration().getReporterType()).isEqualTo(newReporterType);

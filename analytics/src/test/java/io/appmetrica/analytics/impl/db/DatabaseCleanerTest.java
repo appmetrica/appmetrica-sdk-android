@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import io.appmetrica.analytics.internal.CounterConfigurationReporterType;
 import io.appmetrica.analytics.impl.CounterReport;
 import io.appmetrica.analytics.impl.EventsManager;
 import io.appmetrica.analytics.impl.IReporterExtended;
@@ -16,6 +15,7 @@ import io.appmetrica.analytics.impl.SelfDiagnosticReporterStorage;
 import io.appmetrica.analytics.impl.db.constants.Constants;
 import io.appmetrica.analytics.impl.protobuf.backend.EventProto;
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade;
+import io.appmetrica.analytics.internal.CounterConfigurationReporterType;
 import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
@@ -53,8 +53,8 @@ public class DatabaseCleanerTest extends CommonTest {
     public final LogRule logRule = new LogRule();
 
     private SQLiteDatabase db;
-    private String tableName = "events";
-    private String apiKey = "apiKey";
+    private final String tableName = "events";
+    private final String apiKey = "apiKey";
     private Context context;
     @Mock
     private IReporterExtended selfReporter;
@@ -95,10 +95,10 @@ public class DatabaseCleanerTest extends CommonTest {
         DatabaseCleaner.DeletionInfo deletionInfo = databaseCleaner.cleanEvents(
             db,
             tableName,
-                Constants.EventsTable.EventTableEntry.FIELD_EVENT_GLOBAL_NUMBER + " < 4",
-                DatabaseCleaner.Reason.DB_OVERFLOW,
+            Constants.EventsTable.EventTableEntry.FIELD_EVENT_GLOBAL_NUMBER + " < 4",
+            DatabaseCleaner.Reason.DB_OVERFLOW,
             apiKey,
-                false
+            false
         );
         assertThat(deletionInfo.selectedEvents).extracting(new Function<ContentValues, Integer>() {
             @Override
@@ -115,10 +115,10 @@ public class DatabaseCleanerTest extends CommonTest {
         databaseCleaner.cleanEvents(
             db,
             tableName,
-                Constants.EventsTable.EventTableEntry.FIELD_EVENT_GLOBAL_NUMBER + " < 4",
-                DatabaseCleaner.Reason.DB_OVERFLOW,
+            Constants.EventsTable.EventTableEntry.FIELD_EVENT_GLOBAL_NUMBER + " < 4",
+            DatabaseCleaner.Reason.DB_OVERFLOW,
             apiKey,
-                false
+            false
         );
         Cursor cursor = db.rawQuery("SELECT * FROM \"events\"", null);
         cursor.moveToFirst();
@@ -131,10 +131,10 @@ public class DatabaseCleanerTest extends CommonTest {
         databaseCleaner.cleanEvents(
             db,
             tableName,
-                Constants.EventsTable.EventTableEntry.FIELD_EVENT_GLOBAL_NUMBER + " < 4",
-                DatabaseCleaner.Reason.DB_OVERFLOW,
+            Constants.EventsTable.EventTableEntry.FIELD_EVENT_GLOBAL_NUMBER + " < 4",
+            DatabaseCleaner.Reason.DB_OVERFLOW,
             apiKey,
-                true
+            true
         );
         ArgumentCaptor<CounterReport> reportCaptor = ArgumentCaptor.forClass(CounterReport.class);
         verify(selfDiagnosticReporter).reportEvent(reportCaptor.capture());
@@ -159,10 +159,10 @@ public class DatabaseCleanerTest extends CommonTest {
         databaseCleaner.cleanEvents(
             db,
             tableName,
-                Constants.EventsTable.EventTableEntry.FIELD_EVENT_GLOBAL_NUMBER + " < 4",
-                DatabaseCleaner.Reason.DB_OVERFLOW,
+            Constants.EventsTable.EventTableEntry.FIELD_EVENT_GLOBAL_NUMBER + " < 4",
+            DatabaseCleaner.Reason.DB_OVERFLOW,
             apiKey,
-                true
+            true
         );
     }
 
@@ -172,10 +172,10 @@ public class DatabaseCleanerTest extends CommonTest {
         databaseCleaner.cleanEvents(
             db,
             tableName,
-                Constants.EventsTable.EventTableEntry.FIELD_EVENT_GLOBAL_NUMBER + " < 4",
-                DatabaseCleaner.Reason.DB_OVERFLOW,
-                null,
-                true
+            Constants.EventsTable.EventTableEntry.FIELD_EVENT_GLOBAL_NUMBER + " < 4",
+            DatabaseCleaner.Reason.DB_OVERFLOW,
+            null,
+            true
         );
     }
 
@@ -187,10 +187,10 @@ public class DatabaseCleanerTest extends CommonTest {
             databaseCleaner.cleanEvents(
                 db,
                 tableName,
-                    Constants.EventsTable.EventTableEntry.FIELD_EVENT_GLOBAL_NUMBER + " < 4",
-                    DatabaseCleaner.Reason.DB_OVERFLOW,
+                Constants.EventsTable.EventTableEntry.FIELD_EVENT_GLOBAL_NUMBER + " < 4",
+                DatabaseCleaner.Reason.DB_OVERFLOW,
                 apiKey,
-                    true
+                true
             );
             verifyNoMoreInteractions(selfDiagnosticReporter);
         }
@@ -202,11 +202,11 @@ public class DatabaseCleanerTest extends CommonTest {
             when(AppMetricaSelfReportFacade.getReporter()).thenReturn(selfReporter);
             DatabaseCleaner.DeletionInfo deletionInfo = databaseCleaner.cleanEvents(
                 db,
-                    "bad_table",
-                    Constants.EventsTable.EventTableEntry.FIELD_EVENT_GLOBAL_NUMBER + " < 4",
-                    DatabaseCleaner.Reason.DB_OVERFLOW,
+                "bad_table",
+                Constants.EventsTable.EventTableEntry.FIELD_EVENT_GLOBAL_NUMBER + " < 4",
+                DatabaseCleaner.Reason.DB_OVERFLOW,
                 apiKey,
-                    false
+                false
             );
             assertThat(deletionInfo.selectedEvents).isNull();
             assertThat(deletionInfo.mDeletedRowsCount).isEqualTo(0);
@@ -222,10 +222,10 @@ public class DatabaseCleanerTest extends CommonTest {
             databaseCleaner.cleanEvents(
                 db,
                 tableName,
-                    Constants.EventsTable.EventTableEntry.FIELD_EVENT_GLOBAL_NUMBER + " < 4",
-                    DatabaseCleaner.Reason.DB_OVERFLOW,
+                Constants.EventsTable.EventTableEntry.FIELD_EVENT_GLOBAL_NUMBER + " < 4",
+                DatabaseCleaner.Reason.DB_OVERFLOW,
                 apiKey,
-                    true
+                true
             );
             ArgumentCaptor<CounterReport> reportCaptor = ArgumentCaptor.forClass(CounterReport.class);
             verify(selfDiagnosticReporter).reportEvent(reportCaptor.capture());
@@ -237,9 +237,9 @@ public class DatabaseCleanerTest extends CommonTest {
             });
             CounterReport report = reportCaptor.getValue();
             JSONAssert.assertEquals(
-                    new JSONArray().put(protoEvent),
-                    new JSONObject(report.getValue()).getJSONObject("details").getJSONObject("cleared").getJSONArray("event_type"),
-                    true
+                new JSONArray().put(protoEvent),
+                new JSONObject(report.getValue()).getJSONObject("details").getJSONObject("cleared").getJSONArray("event_type"),
+                true
             );
         }
     }
@@ -258,13 +258,13 @@ public class DatabaseCleanerTest extends CommonTest {
         values.put(Constants.EventsTable.EventTableEntry.FIELD_EVENT_NUMBER_IN_SESSION, number);
         values.put(Constants.EventsTable.EventTableEntry.FIELD_EVENT_GLOBAL_NUMBER, number + 1);
         values.put(
-                Constants.EventsTable.EventTableEntry.FIELD_EVENT_TYPE,
-                InternalEvents.EVENT_TYPE_REGULAR.getTypeId()
+            Constants.EventsTable.EventTableEntry.FIELD_EVENT_TYPE,
+            InternalEvents.EVENT_TYPE_REGULAR.getTypeId()
         );
         values.put(Constants.EventsTable.EventTableEntry.FIELD_EVENT_SESSION, 10);
         values.put(
-                Constants.EventsTable.EventTableEntry.FIELD_EVENT_SESSION_TYPE,
-                EventProto.ReportMessage.Session.SessionDesc.SESSION_FOREGROUND
+            Constants.EventsTable.EventTableEntry.FIELD_EVENT_SESSION_TYPE,
+            EventProto.ReportMessage.Session.SessionDesc.SESSION_FOREGROUND
         );
         values.put(
             Constants.EventsTable.EventTableEntry.FIELD_EVENT_DESCRIPTION,

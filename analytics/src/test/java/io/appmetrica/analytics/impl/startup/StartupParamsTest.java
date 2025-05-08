@@ -60,8 +60,8 @@ public class StartupParamsTest extends CommonTest {
     private static final IdentifiersResult TEST_AD_URL_REPORT = new IdentifiersResult("Test adUrlReport", IdentifierStatus.OK, null);
     private static final long TEST_SERVER_SIDE_OFFSET = -280;
 
-    private Map<String, String> mResponseClids = new HashMap<String, String>();
-    private Map<String, String> mRequestClids = new HashMap<String, String>();
+    private final Map<String, String> mResponseClids = new HashMap<String, String>();
+    private final Map<String, String> mRequestClids = new HashMap<String, String>();
     @Mock
     private PreferencesClientDbStorage mPreferences;
     @Mock
@@ -84,21 +84,21 @@ public class StartupParamsTest extends CommonTest {
 
     private StartupParams mStartupParams;
 
-    private List<String> mValidCustomHosts = StartupParamsTestUtils.CUSTOM_HOSTS;
-    private String mUuid = "Valid uuid";
-    private String mDeviceId = "Valid device id";
-    private String mDeviceIdHash = "Valid device id hash";
-    private String mAdUrlGet = "https://ad.url.get";
-    private String mAdUrlReport = "https://ad.url.report";
+    private final List<String> mValidCustomHosts = StartupParamsTestUtils.CUSTOM_HOSTS;
+    private final String mUuid = "Valid uuid";
+    private final String mDeviceId = "Valid device id";
+    private final String mDeviceIdHash = "Valid device id hash";
+    private final String mAdUrlGet = "https://ad.url.get";
+    private final String mAdUrlReport = "https://ad.url.report";
     private final String mGaid = "test gaid";
     private final String mHoaid = "test hoaid";
     private final String yandex = "test yandex adv_id";
     private final String customKey1 = "am";
     private final String customKey2 = "ads";
     private final Map<String, List<String>> customSdkHosts = new HashMap<>();
-    private String mClidsFromPrefs = JsonHelper.clidsToString(StartupParamsTestUtils.CLIDS_MAP_1);
-    private String mClientClidsFromPrefs = StartupParamsTestUtils.CLIDS_2;
-    private Map<String, String> clientClids = StartupParamsTestUtils.CLIDS_MAP_3;
+    private final String mClidsFromPrefs = JsonHelper.clidsToString(StartupParamsTestUtils.CLIDS_MAP_1);
+    private final String mClientClidsFromPrefs = StartupParamsTestUtils.CLIDS_2;
+    private final Map<String, String> clientClids = StartupParamsTestUtils.CLIDS_MAP_3;
     private final long mServerTimeOffset = 39787657;
     private final IdentifiersResult mUuidResult = new IdentifiersResult(mUuid, IdentifierStatus.OK, null);
     private final StartupParamsItem uuidStartupParam = new StartupParamsItem(mUuid, StartupParamsItemStatus.OK, null);
@@ -118,8 +118,8 @@ public class StartupParamsTest extends CommonTest {
     private final StartupParamsItem yandexStartupParamsItem = new StartupParamsItem(yandex, StartupParamsItemStatus.OK, null);
     private final IdentifiersResult customSdkHostsResult1 = new IdentifiersResult(JsonHelper.listToJsonString(Arrays.asList("host1", "host2")), IdentifierStatus.OK, null);
     private final StartupParamsItem customSdkHostsResult1StartupParamsItem = new StartupParamsItem(JsonHelper.listToJsonString(Arrays.asList("host1", "host2")), StartupParamsItemStatus.OK, null);
-    private final IdentifiersResult customSdkHostsResult2 = new IdentifiersResult(JsonHelper.listToJsonString(Arrays.asList("host3")), IdentifierStatus.OK, null);
-    private final StartupParamsItem customSdkHostsResult2StartupParamsItem = new StartupParamsItem(JsonHelper.listToJsonString(Arrays.asList("host3")), StartupParamsItemStatus.OK, null);
+    private final IdentifiersResult customSdkHostsResult2 = new IdentifiersResult(JsonHelper.listToJsonString(Collections.singletonList("host3")), IdentifierStatus.OK, null);
+    private final StartupParamsItem customSdkHostsResult2StartupParamsItem = new StartupParamsItem(JsonHelper.listToJsonString(Collections.singletonList("host3")), StartupParamsItemStatus.OK, null);
     private final IdentifiersResult customSdkHostsResult = new IdentifiersResult(JsonHelper.customSdkHostsToString(customSdkHosts), IdentifierStatus.OK, null);
     private final IdentifiersResult mClidsFromPrefsResult = new IdentifiersResult(mClidsFromPrefs, IdentifierStatus.OK, null);
     private final StartupParamsItem clidsFromPrefsStartupParamItems = new StartupParamsItem(mClidsFromPrefs, StartupParamsItemStatus.OK, null);
@@ -141,7 +141,7 @@ public class StartupParamsTest extends CommonTest {
     public void setUp() throws Throwable {
         MockitoAnnotations.openMocks(this);
         customSdkHosts.put(customKey1, Arrays.asList("host1", "host2"));
-        customSdkHosts.put(customKey2, Arrays.asList("host3"));
+        customSdkHosts.put(customKey2, Collections.singletonList("host3"));
         context = TestUtils.createMockedContext();
 
         when(uuidProvider.readUuid()).thenReturn(mUuidResult);
@@ -265,8 +265,8 @@ public class StartupParamsTest extends CommonTest {
         StartupParams startupParams = new StartupParams(context, mPreferences);
 
         assertThat(startupParams.containsIdentifiers(Arrays.asList(
-                Constants.StartupParamsCallbackKeys.DEVICE_ID,
-                Constants.StartupParamsCallbackKeys.DEVICE_ID_HASH
+            Constants.StartupParamsCallbackKeys.DEVICE_ID,
+            Constants.StartupParamsCallbackKeys.DEVICE_ID_HASH
         ))).isTrue();
     }
 
@@ -279,8 +279,8 @@ public class StartupParamsTest extends CommonTest {
         StartupParams startupParams = new StartupParams(context, mPreferences);
 
         assertThat(startupParams.containsIdentifiers(Arrays.asList(
-                Constants.StartupParamsCallbackKeys.DEVICE_ID,
-                Constants.StartupParamsCallbackKeys.DEVICE_ID_HASH
+            Constants.StartupParamsCallbackKeys.DEVICE_ID,
+            Constants.StartupParamsCallbackKeys.DEVICE_ID_HASH
         ))).isFalse();
     }
 
@@ -289,8 +289,8 @@ public class StartupParamsTest extends CommonTest {
         StartupParams startupParams = new StartupParams(context, mPreferences);
 
         assertThat(startupParams.containsIdentifiers(Arrays.asList(
-                Constants.StartupParamsCallbackKeys.DEVICE_ID,
-                Constants.StartupParamsCallbackKeys.DEVICE_ID_HASH
+            Constants.StartupParamsCallbackKeys.DEVICE_ID,
+            Constants.StartupParamsCallbackKeys.DEVICE_ID_HASH
         ))).isFalse();
     }
 
@@ -301,8 +301,8 @@ public class StartupParamsTest extends CommonTest {
         StartupParams startupParams = new StartupParams(context, mPreferences);
 
         assertThat(startupParams.containsIdentifiers(Arrays.asList(
-                Constants.StartupParamsCallbackKeys.DEVICE_ID,
-                Constants.StartupParamsCallbackKeys.DEVICE_ID_HASH
+            Constants.StartupParamsCallbackKeys.DEVICE_ID,
+            Constants.StartupParamsCallbackKeys.DEVICE_ID_HASH
         ))).isTrue();
     }
 
@@ -353,8 +353,8 @@ public class StartupParamsTest extends CommonTest {
 
         StartupParams startupParams = createStartupParams();
         List<String> params = Arrays.asList(
-                Constants.StartupParamsCallbackKeys.UUID,
-                Constants.StartupParamsCallbackKeys.GET_AD_URL
+            Constants.StartupParamsCallbackKeys.UUID,
+            Constants.StartupParamsCallbackKeys.GET_AD_URL
         );
         Map<String, StartupParamsItem> actual = new HashMap<String, StartupParamsItem>();
         startupParams.putToMap(params, actual);
@@ -373,16 +373,16 @@ public class StartupParamsTest extends CommonTest {
 
         StartupParams startupParams = createStartupParams();
         List<String> params = Arrays.asList(
-                Constants.StartupParamsCallbackKeys.UUID,
-                "invalid param"
+            Constants.StartupParamsCallbackKeys.UUID,
+            "invalid param"
         );
         Map<String, StartupParamsItem> actual = new HashMap<String, StartupParamsItem>();
         startupParams.putToMap(params, actual);
         assertThat(actual).containsOnly(
-                new AbstractMap.SimpleEntry<String, StartupParamsItem>(
-                        Constants.StartupParamsCallbackKeys.UUID,
-                        new StartupParamsItem(uuid, StartupParamsItemStatus.OK, null)
-                )
+            new AbstractMap.SimpleEntry<String, StartupParamsItem>(
+                Constants.StartupParamsCallbackKeys.UUID,
+                new StartupParamsItem(uuid, StartupParamsItemStatus.OK, null)
+            )
         );
     }
 
@@ -391,17 +391,17 @@ public class StartupParamsTest extends CommonTest {
         final String customIdentifier1 = "custom_id1";
         final String customIdentifier2 = "custom_id2";
         final List<String> identifierKeys = Arrays.asList(
-                Constants.StartupParamsCallbackKeys.UUID,
-                Constants.StartupParamsCallbackKeys.DEVICE_ID,
-                Constants.StartupParamsCallbackKeys.DEVICE_ID_HASH,
-                Constants.StartupParamsCallbackKeys.REPORT_AD_URL,
-                Constants.StartupParamsCallbackKeys.GET_AD_URL,
-                Constants.StartupParamsCallbackKeys.CLIDS,
-                Constants.StartupParamsCallbackKeys.GOOGLE_ADV_ID,
-                Constants.StartupParamsCallbackKeys.HUAWEI_ADV_ID,
-                Constants.StartupParamsCallbackKeys.YANDEX_ADV_ID,
-                customIdentifier1,
-                customIdentifier2
+            Constants.StartupParamsCallbackKeys.UUID,
+            Constants.StartupParamsCallbackKeys.DEVICE_ID,
+            Constants.StartupParamsCallbackKeys.DEVICE_ID_HASH,
+            Constants.StartupParamsCallbackKeys.REPORT_AD_URL,
+            Constants.StartupParamsCallbackKeys.GET_AD_URL,
+            Constants.StartupParamsCallbackKeys.CLIDS,
+            Constants.StartupParamsCallbackKeys.GOOGLE_ADV_ID,
+            Constants.StartupParamsCallbackKeys.HUAWEI_ADV_ID,
+            Constants.StartupParamsCallbackKeys.YANDEX_ADV_ID,
+            customIdentifier1,
+            customIdentifier2
         );
         mockPreferencesWithValidValues();
         StartupParams startupParams = createStartupParams();
@@ -411,7 +411,7 @@ public class StartupParamsTest extends CommonTest {
         doAnswer(new Answer() {
             @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {
-                Map<String, StartupParamsItem> map = ((Map<String, StartupParamsItem>) invocation.getArgument(1));
+                Map<String, StartupParamsItem> map = invocation.getArgument(1);
                 map.put(customIdentifier1, customResult1);
                 map.put(customIdentifier2, customResult2);
                 return null;
@@ -420,55 +420,55 @@ public class StartupParamsTest extends CommonTest {
         doAnswer(new Answer() {
             @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {
-                Map<String, StartupParamsItem> map = ((Map<String, StartupParamsItem>) invocation.getArgument(1));
+                Map<String, StartupParamsItem> map = invocation.getArgument(1);
                 map.put(Constants.StartupParamsCallbackKeys.FEATURE_LIB_SSL_ENABLED, sslFeatureStartupParam);
                 return null;
             }
         }).when(featuresHolder).putToMap(identifierKeys, actual);
         startupParams.putToMap(identifierKeys, actual);
         assertThat(actual).containsOnly(
-                new AbstractMap.SimpleEntry<String, StartupParamsItem>(
-                        Constants.StartupParamsCallbackKeys.UUID,
-                        uuidStartupParam
-                ),
-                new AbstractMap.SimpleEntry<String, StartupParamsItem>(
-                        Constants.StartupParamsCallbackKeys.DEVICE_ID,
-                        deviceIdStartupParam
-                ),
-                new AbstractMap.SimpleEntry<String, StartupParamsItem>(
-                        Constants.StartupParamsCallbackKeys.DEVICE_ID_HASH,
-                        deviceIdHashStartupParam
-                ),
-                new AbstractMap.SimpleEntry<String, StartupParamsItem>(
-                        Constants.StartupParamsCallbackKeys.REPORT_AD_URL,
-                        adUrlReportStartupParamsItem
-                ),
-                new AbstractMap.SimpleEntry<String, StartupParamsItem>(
-                        Constants.StartupParamsCallbackKeys.GET_AD_URL,
-                    adUrlGetStartupParamsItem
-                ),
-                new AbstractMap.SimpleEntry<String, StartupParamsItem>(
-                        Constants.StartupParamsCallbackKeys.CLIDS,
-                        clidsFromPrefsStartupParamItems
-                ),
-                new AbstractMap.SimpleEntry<String, StartupParamsItem>(
-                        Constants.StartupParamsCallbackKeys.GOOGLE_ADV_ID,
-                        gaidStartupParamsItem
-                ),
-                new AbstractMap.SimpleEntry<String, StartupParamsItem>(
-                        Constants.StartupParamsCallbackKeys.HUAWEI_ADV_ID,
-                        hoaidStartupParamsItem
-                ),
-                new AbstractMap.SimpleEntry<String, StartupParamsItem>(
-                        Constants.StartupParamsCallbackKeys.YANDEX_ADV_ID,
-                        yandexStartupParamsItem
-                ),
-                new AbstractMap.SimpleEntry<>(customIdentifier1, customResult1),
-                new AbstractMap.SimpleEntry<>(customIdentifier2, customResult2),
-                new AbstractMap.SimpleEntry<>(
-                        Constants.StartupParamsCallbackKeys.FEATURE_LIB_SSL_ENABLED,
-                        sslFeatureStartupParam
-                )
+            new AbstractMap.SimpleEntry<String, StartupParamsItem>(
+                Constants.StartupParamsCallbackKeys.UUID,
+                uuidStartupParam
+            ),
+            new AbstractMap.SimpleEntry<String, StartupParamsItem>(
+                Constants.StartupParamsCallbackKeys.DEVICE_ID,
+                deviceIdStartupParam
+            ),
+            new AbstractMap.SimpleEntry<String, StartupParamsItem>(
+                Constants.StartupParamsCallbackKeys.DEVICE_ID_HASH,
+                deviceIdHashStartupParam
+            ),
+            new AbstractMap.SimpleEntry<String, StartupParamsItem>(
+                Constants.StartupParamsCallbackKeys.REPORT_AD_URL,
+                adUrlReportStartupParamsItem
+            ),
+            new AbstractMap.SimpleEntry<String, StartupParamsItem>(
+                Constants.StartupParamsCallbackKeys.GET_AD_URL,
+                adUrlGetStartupParamsItem
+            ),
+            new AbstractMap.SimpleEntry<String, StartupParamsItem>(
+                Constants.StartupParamsCallbackKeys.CLIDS,
+                clidsFromPrefsStartupParamItems
+            ),
+            new AbstractMap.SimpleEntry<String, StartupParamsItem>(
+                Constants.StartupParamsCallbackKeys.GOOGLE_ADV_ID,
+                gaidStartupParamsItem
+            ),
+            new AbstractMap.SimpleEntry<String, StartupParamsItem>(
+                Constants.StartupParamsCallbackKeys.HUAWEI_ADV_ID,
+                hoaidStartupParamsItem
+            ),
+            new AbstractMap.SimpleEntry<String, StartupParamsItem>(
+                Constants.StartupParamsCallbackKeys.YANDEX_ADV_ID,
+                yandexStartupParamsItem
+            ),
+            new AbstractMap.SimpleEntry<>(customIdentifier1, customResult1),
+            new AbstractMap.SimpleEntry<>(customIdentifier2, customResult2),
+            new AbstractMap.SimpleEntry<>(
+                Constants.StartupParamsCallbackKeys.FEATURE_LIB_SSL_ENABLED,
+                sslFeatureStartupParam
+            )
         );
     }
 
@@ -601,8 +601,8 @@ public class StartupParamsTest extends CommonTest {
         StartupParamsTestUtils.mockPreferencesClientDbStoragePutResponses(mPreferences);
         mockPreferencesWithValidValues();
         mStartupParams = createStartupParams();
-        assertThat(mStartupParams.shouldSendStartup(Arrays.asList(
-                Constants.StartupParamsCallbackKeys.GOOGLE_ADV_ID
+        assertThat(mStartupParams.shouldSendStartup(Collections.singletonList(
+            Constants.StartupParamsCallbackKeys.GOOGLE_ADV_ID
         ))).isTrue();
     }
 
@@ -611,8 +611,8 @@ public class StartupParamsTest extends CommonTest {
         StartupParamsTestUtils.mockPreferencesClientDbStoragePutResponses(mPreferences);
         mockPreferencesWithValidValues();
         mStartupParams = createStartupParams();
-        assertThat(mStartupParams.shouldSendStartup(Arrays.asList(
-                Constants.StartupParamsCallbackKeys.HUAWEI_ADV_ID
+        assertThat(mStartupParams.shouldSendStartup(Collections.singletonList(
+            Constants.StartupParamsCallbackKeys.HUAWEI_ADV_ID
         ))).isTrue();
     }
 
@@ -621,8 +621,8 @@ public class StartupParamsTest extends CommonTest {
         StartupParamsTestUtils.mockPreferencesClientDbStoragePutResponses(mPreferences);
         mockPreferencesWithValidValues();
         mStartupParams = createStartupParams();
-        assertThat(mStartupParams.shouldSendStartup(Arrays.asList(
-                Constants.StartupParamsCallbackKeys.YANDEX_ADV_ID
+        assertThat(mStartupParams.shouldSendStartup(Collections.singletonList(
+            Constants.StartupParamsCallbackKeys.YANDEX_ADV_ID
         ))).isTrue();
     }
 
@@ -632,13 +632,13 @@ public class StartupParamsTest extends CommonTest {
         StartupParamsTestUtils.mockPreferencesClientDbStoragePutResponses(mPreferences);
         mockPreferencesWithValidValues();
         when(StartupRequiredUtils.isOutdated(nextStartupTime)).thenReturn(false);
-        when(StartupRequiredUtils.pickIdentifiersThatShouldTriggerStartup(Arrays.asList(customKey))).thenReturn(Collections.<String>emptyList());
+        when(StartupRequiredUtils.pickIdentifiersThatShouldTriggerStartup(Collections.singletonList(customKey))).thenReturn(Collections.emptyList());
         mStartupParams = createStartupParams();
-        assertThat(mStartupParams.shouldSendStartup(Arrays.asList(customKey))).isFalse();
+        assertThat(mStartupParams.shouldSendStartup(Collections.singletonList(customKey))).isFalse();
         startupRequiredUtils.getStaticMock().verify(new MockedStatic.Verification() {
             @Override
             public void apply() throws Throwable {
-                StartupRequiredUtils.pickIdentifiersThatShouldTriggerStartup(Arrays.asList(customKey));
+                StartupRequiredUtils.pickIdentifiersThatShouldTriggerStartup(Collections.singletonList(customKey));
             }
         });
     }
@@ -650,9 +650,9 @@ public class StartupParamsTest extends CommonTest {
         mockPreferencesWithValidValues();
         mockPreferencesWithValidValues();
         when(StartupRequiredUtils.isOutdated(nextStartupTime)).thenReturn(true);
-        when(StartupRequiredUtils.pickIdentifiersThatShouldTriggerStartup(Arrays.asList(customKey))).thenReturn(Collections.<String>emptyList());
+        when(StartupRequiredUtils.pickIdentifiersThatShouldTriggerStartup(Collections.singletonList(customKey))).thenReturn(Collections.emptyList());
         mStartupParams = createStartupParams();
-        assertThat(mStartupParams.shouldSendStartup(Arrays.asList(customKey))).isTrue();
+        assertThat(mStartupParams.shouldSendStartup(Collections.singletonList(customKey))).isTrue();
     }
 
     @Test
@@ -661,10 +661,10 @@ public class StartupParamsTest extends CommonTest {
         mockPreferencesWithValidValues();
         when(featuresHolder.getFeature(Constants.StartupParamsCallbackKeys.FEATURE_LIB_SSL_ENABLED)).thenReturn(sslFeatureResult);
         when(StartupRequiredUtils.isOutdated(nextStartupTime)).thenReturn(false);
-        when(StartupRequiredUtils.pickIdentifiersThatShouldTriggerStartup(Arrays.asList(Constants.StartupParamsCallbackKeys.FEATURE_LIB_SSL_ENABLED)))
-                .thenReturn(Collections.<String>emptyList());
+        when(StartupRequiredUtils.pickIdentifiersThatShouldTriggerStartup(Collections.singletonList(Constants.StartupParamsCallbackKeys.FEATURE_LIB_SSL_ENABLED)))
+            .thenReturn(Collections.emptyList());
         mStartupParams = createStartupParams();
-        assertThat(mStartupParams.shouldSendStartup(Arrays.asList(Constants.StartupParamsCallbackKeys.FEATURE_LIB_SSL_ENABLED))).isFalse();
+        assertThat(mStartupParams.shouldSendStartup(Collections.singletonList(Constants.StartupParamsCallbackKeys.FEATURE_LIB_SSL_ENABLED))).isFalse();
     }
 
     @Test
@@ -673,10 +673,10 @@ public class StartupParamsTest extends CommonTest {
         mockPreferencesWithValidValues();
         when(featuresHolder.getFeature(Constants.StartupParamsCallbackKeys.FEATURE_LIB_SSL_ENABLED)).thenReturn(sslFeatureResult);
         when(StartupRequiredUtils.isOutdated(nextStartupTime)).thenReturn(true);
-        when(StartupRequiredUtils.pickIdentifiersThatShouldTriggerStartup(Arrays.asList(Constants.StartupParamsCallbackKeys.FEATURE_LIB_SSL_ENABLED)))
-                .thenReturn(Collections.<String>emptyList());
+        when(StartupRequiredUtils.pickIdentifiersThatShouldTriggerStartup(Collections.singletonList(Constants.StartupParamsCallbackKeys.FEATURE_LIB_SSL_ENABLED)))
+            .thenReturn(Collections.emptyList());
         mStartupParams = createStartupParams();
-        assertThat(mStartupParams.shouldSendStartup(Arrays.asList(Constants.StartupParamsCallbackKeys.FEATURE_LIB_SSL_ENABLED))).isTrue();
+        assertThat(mStartupParams.shouldSendStartup(Collections.singletonList(Constants.StartupParamsCallbackKeys.FEATURE_LIB_SSL_ENABLED))).isTrue();
     }
 
     @Test
@@ -685,8 +685,8 @@ public class StartupParamsTest extends CommonTest {
         mockPreferencesWithValidValues();
         mStartupParams = createStartupParams();
         assertThat(mStartupParams.shouldSendStartup(Arrays.asList(
-                Constants.StartupParamsCallbackKeys.UUID,
-                Constants.StartupParamsCallbackKeys.DEVICE_ID
+            Constants.StartupParamsCallbackKeys.UUID,
+            Constants.StartupParamsCallbackKeys.DEVICE_ID
         ))).isFalse();
     }
 
@@ -697,8 +697,8 @@ public class StartupParamsTest extends CommonTest {
         when(StartupRequiredUtils.isOutdated(nextStartupTime)).thenReturn(true);
         mStartupParams = createStartupParams();
         assertThat(mStartupParams.shouldSendStartup(Arrays.asList(
-                Constants.StartupParamsCallbackKeys.UUID,
-                Constants.StartupParamsCallbackKeys.DEVICE_ID
+            Constants.StartupParamsCallbackKeys.UUID,
+            Constants.StartupParamsCallbackKeys.DEVICE_ID
         ))).isTrue();
     }
 
@@ -709,33 +709,33 @@ public class StartupParamsTest extends CommonTest {
         mStartupParams = createStartupParams();
         mStartupParams.setClientClids(StartupParamsTestUtils.CLIDS_MAP_3);
         assertThat(mStartupParams.shouldSendStartup(Arrays.asList(
-                Constants.StartupParamsCallbackKeys.UUID,
-                Constants.StartupParamsCallbackKeys.DEVICE_ID
+            Constants.StartupParamsCallbackKeys.UUID,
+            Constants.StartupParamsCallbackKeys.DEVICE_ID
         ))).isTrue();
     }
 
     @Test
     public void testUpdateAllParamsByReceiverEverythingFilled() {
         final List<String> identifierKeys = Arrays.asList(
-                Constants.StartupParamsCallbackKeys.GET_AD_URL,
-                Constants.StartupParamsCallbackKeys.REPORT_AD_URL,
-                Constants.StartupParamsCallbackKeys.GOOGLE_ADV_ID,
-                Constants.StartupParamsCallbackKeys.HUAWEI_ADV_ID,
-                Constants.StartupParamsCallbackKeys.YANDEX_ADV_ID,
-                Constants.StartupParamsCallbackKeys.FEATURE_LIB_SSL_ENABLED,
-                customKey1,
-                customKey2
+            Constants.StartupParamsCallbackKeys.GET_AD_URL,
+            Constants.StartupParamsCallbackKeys.REPORT_AD_URL,
+            Constants.StartupParamsCallbackKeys.GOOGLE_ADV_ID,
+            Constants.StartupParamsCallbackKeys.HUAWEI_ADV_ID,
+            Constants.StartupParamsCallbackKeys.YANDEX_ADV_ID,
+            Constants.StartupParamsCallbackKeys.FEATURE_LIB_SSL_ENABLED,
+            customKey1,
+            customKey2
         );
         mockPreferencesWithValidValues();
         mStartupParams = createStartupParams();
         when(clidsStateChecker.doClientClidsMatchClientClidsForRequest(
-                StartupUtils.decodeClids(mClientClidsFromPrefs),
-                mRequestClids
+            StartupUtils.decodeClids(mClientClidsFromPrefs),
+            mRequestClids
         )).thenReturn(true);
         doAnswer(new Answer() {
             @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {
-                Map<String, StartupParamsItem> map = ((Map<String, StartupParamsItem>) invocation.getArgument(1));
+                Map<String, StartupParamsItem> map = invocation.getArgument(1);
                 map.put(customKey1, customSdkHostsResult1StartupParamsItem);
                 map.put(customKey2, customSdkHostsResult2StartupParamsItem);
                 return null;
@@ -754,15 +754,15 @@ public class StartupParamsTest extends CommonTest {
         softly.assertThat(mStartupParams.getClids()).isEqualTo(JsonHelper.clidsToString(mResponseClids));
         softly.assertThat(mStartupParams.getServerTimeOffsetSeconds()).isEqualTo(mServerTimeOffset);
         softly.assertThat(identifiers.get(Constants.StartupParamsCallbackKeys.GET_AD_URL))
-                .isEqualToComparingFieldByField(adUrlGetStartupParamsItem);
+            .isEqualToComparingFieldByField(adUrlGetStartupParamsItem);
         softly.assertThat(identifiers.get(Constants.StartupParamsCallbackKeys.REPORT_AD_URL))
-                .isEqualToComparingFieldByField(adUrlReportStartupParamsItem);
+            .isEqualToComparingFieldByField(adUrlReportStartupParamsItem);
         softly.assertThat(identifiers.get(Constants.StartupParamsCallbackKeys.GOOGLE_ADV_ID))
-                .isEqualToComparingFieldByField(gaidStartupParamsItem);
+            .isEqualToComparingFieldByField(gaidStartupParamsItem);
         softly.assertThat(identifiers.get(Constants.StartupParamsCallbackKeys.HUAWEI_ADV_ID))
-                .isEqualToComparingFieldByField(hoaidStartupParamsItem);
+            .isEqualToComparingFieldByField(hoaidStartupParamsItem);
         softly.assertThat(identifiers.get(Constants.StartupParamsCallbackKeys.YANDEX_ADV_ID))
-                .isEqualToComparingFieldByField(yandexStartupParamsItem);
+            .isEqualToComparingFieldByField(yandexStartupParamsItem);
         softly.assertThat(identifiers.get(customKey1))
             .isEqualToComparingFieldByField(customSdkHostsResult1StartupParamsItem);
         softly.assertThat(identifiers.get(customKey2))
@@ -832,7 +832,7 @@ public class StartupParamsTest extends CommonTest {
         Map<String, String> newClids = new HashMap<String, String>();
         newClids.put("newclid0", "0");
         mStartupParams.setClientClids(newClids);
-        assertThat(mStartupParams.containsIdentifiers(Arrays.asList(Constants.StartupParamsCallbackKeys.CLIDS))).isFalse();
+        assertThat(mStartupParams.containsIdentifiers(Collections.singletonList(Constants.StartupParamsCallbackKeys.CLIDS))).isFalse();
     }
 
     @Test
@@ -840,7 +840,7 @@ public class StartupParamsTest extends CommonTest {
         mockPreferencesWithValidValues();
         mStartupParams = createStartupParams();
         mStartupParams.setClientClids(null);
-        assertThat(mStartupParams.containsIdentifiers(Arrays.asList(Constants.StartupParamsCallbackKeys.CLIDS))).isTrue();
+        assertThat(mStartupParams.containsIdentifiers(Collections.singletonList(Constants.StartupParamsCallbackKeys.CLIDS))).isTrue();
     }
 
     @Test
@@ -848,7 +848,7 @@ public class StartupParamsTest extends CommonTest {
         mockPreferencesWithValidValues();
         mStartupParams = createStartupParams();
         mStartupParams.setClientClids(new HashMap<String, String>());
-        assertThat(mStartupParams.containsIdentifiers(Arrays.asList(Constants.StartupParamsCallbackKeys.CLIDS))).isTrue();
+        assertThat(mStartupParams.containsIdentifiers(Collections.singletonList(Constants.StartupParamsCallbackKeys.CLIDS))).isTrue();
     }
 
     @Test
@@ -856,40 +856,40 @@ public class StartupParamsTest extends CommonTest {
         mockPreferencesWithValidValues();
         mStartupParams = createStartupParams();
         mStartupParams.setClientClids(StartupParamsTestUtils.CLIDS_MAP_2);
-        assertThat(mStartupParams.containsIdentifiers(Arrays.asList(Constants.StartupParamsCallbackKeys.CLIDS))).isTrue();
+        assertThat(mStartupParams.containsIdentifiers(Collections.singletonList(Constants.StartupParamsCallbackKeys.CLIDS))).isTrue();
     }
 
     @Test
     public void testContainsIdentifiersClidsDidNotChange() {
         mockPreferencesWithValidValues();
         mStartupParams = createStartupParams();
-        assertThat(mStartupParams.containsIdentifiers(Arrays.asList(Constants.StartupParamsCallbackKeys.CLIDS))).isTrue();
+        assertThat(mStartupParams.containsIdentifiers(Collections.singletonList(Constants.StartupParamsCallbackKeys.CLIDS))).isTrue();
     }
 
     @Test
     public void testListContainsIdentifiersGaid() {
-        assertThat(mStartupParams.listContainsAdvIdentifiers(Arrays.asList(Constants.StartupParamsCallbackKeys.GOOGLE_ADV_ID))).isTrue();
+        assertThat(mStartupParams.listContainsAdvIdentifiers(Collections.singletonList(Constants.StartupParamsCallbackKeys.GOOGLE_ADV_ID))).isTrue();
     }
 
     @Test
     public void testListContainsIdentifiersHoaid() {
-        assertThat(mStartupParams.listContainsAdvIdentifiers(Arrays.asList(Constants.StartupParamsCallbackKeys.HUAWEI_ADV_ID))).isTrue();
+        assertThat(mStartupParams.listContainsAdvIdentifiers(Collections.singletonList(Constants.StartupParamsCallbackKeys.HUAWEI_ADV_ID))).isTrue();
     }
 
     @Test
     public void testListContainsIdentifiersYandexAdvId() {
-        assertThat(mStartupParams.listContainsAdvIdentifiers(Arrays.asList(Constants.StartupParamsCallbackKeys.YANDEX_ADV_ID))).isTrue();
+        assertThat(mStartupParams.listContainsAdvIdentifiers(Collections.singletonList(Constants.StartupParamsCallbackKeys.YANDEX_ADV_ID))).isTrue();
     }
 
     @Test
     public void testListDoesNotContainIdentifiers() {
         assertThat(mStartupParams.listContainsAdvIdentifiers(Arrays.asList(
-                Constants.StartupParamsCallbackKeys.UUID,
-                Constants.StartupParamsCallbackKeys.DEVICE_ID,
-                Constants.StartupParamsCallbackKeys.DEVICE_ID_HASH,
-                Constants.StartupParamsCallbackKeys.REPORT_AD_URL,
-                Constants.StartupParamsCallbackKeys.GET_AD_URL,
-                Constants.StartupParamsCallbackKeys.CLIDS
+            Constants.StartupParamsCallbackKeys.UUID,
+            Constants.StartupParamsCallbackKeys.DEVICE_ID,
+            Constants.StartupParamsCallbackKeys.DEVICE_ID_HASH,
+            Constants.StartupParamsCallbackKeys.REPORT_AD_URL,
+            Constants.StartupParamsCallbackKeys.GET_AD_URL,
+            Constants.StartupParamsCallbackKeys.CLIDS
         ))).isFalse();
     }
 

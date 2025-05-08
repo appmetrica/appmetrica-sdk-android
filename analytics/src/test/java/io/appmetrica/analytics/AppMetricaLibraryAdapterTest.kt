@@ -1,13 +1,10 @@
 package io.appmetrica.analytics
 
 import android.content.Context
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
 import io.appmetrica.analytics.impl.proxy.AppMetricaLibraryAdapterProxy
 import io.appmetrica.analytics.testutils.CommonTest
 import org.junit.Before
 import org.junit.Test
-import org.mockito.kotlin.argumentCaptor
-import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 

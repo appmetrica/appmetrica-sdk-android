@@ -44,13 +44,17 @@ class CustomSdkHostsHolderTest : CommonTest() {
         assertThat(customSdkHostsHolder.resultMap).isEmpty()
         val map = mutableMapOf<String, StartupParamsItem>()
         val startupParamsItem = mock<StartupParamsItem>()
-        whenever(startupParamItemAdapter.adapt(eq(
-            IdentifiersResult(
-                JsonHelper.customSdkHostsToString(emptyMap()),
-                IdentifierStatus.UNKNOWN,
-                null
+        whenever(
+            startupParamItemAdapter.adapt(
+                eq(
+                    IdentifiersResult(
+                        JsonHelper.customSdkHostsToString(emptyMap()),
+                        IdentifierStatus.UNKNOWN,
+                        null
+                    )
+                )
             )
-        ))).thenReturn(startupParamsItem)
+        ).thenReturn(startupParamsItem)
         customSdkHostsHolder.putToMap(listOf("uuid", "device_id"), map)
         assertThat(map).isEqualTo(mapOf(Constants.StartupParamsCallbackKeys.CUSTOM_SDK_HOSTS to startupParamsItem))
     }
@@ -64,14 +68,16 @@ class CustomSdkHostsHolderTest : CommonTest() {
         )
         customSdkHostsHolder.update(result)
         val startupParamsItem = mock<StartupParamsItem>()
-        whenever(startupParamItemAdapter.adapt(
-            eq(
-                IdentifiersResult(
-                    JsonHelper.customSdkHostsToString(emptyMap()),
-                    IdentifierStatus.FEATURE_DISABLED,
-                    "feature disabled"
+        whenever(
+            startupParamItemAdapter.adapt(
+                eq(
+                    IdentifiersResult(
+                        JsonHelper.customSdkHostsToString(emptyMap()),
+                        IdentifierStatus.FEATURE_DISABLED,
+                        "feature disabled"
+                    )
                 )
-            ))
+            )
         ).thenReturn(startupParamsItem)
 
         assertThat(customSdkHostsHolder.commonResult).isEqualTo(result)
@@ -94,16 +100,21 @@ class CustomSdkHostsHolderTest : CommonTest() {
         assertThat(customSdkHostsHolder.resultMap).isEmpty()
         val map = mutableMapOf<String, StartupParamsItem>()
         val startupParamsItem = mock<StartupParamsItem>()
-        whenever(startupParamItemAdapter.adapt(
-            IdentifiersResult(
-                JsonHelper.customSdkHostsToString(emptyMap()),
-                IdentifierStatus.NO_STARTUP,
-                "no startup"
+        whenever(
+            startupParamItemAdapter.adapt(
+                IdentifiersResult(
+                    JsonHelper.customSdkHostsToString(emptyMap()),
+                    IdentifierStatus.NO_STARTUP,
+                    "no startup"
+                )
             )
-        )).thenReturn(startupParamsItem)
+        ).thenReturn(startupParamsItem)
         customSdkHostsHolder.putToMap(listOf("uuid", "device_id"), map)
-        assertThat(map).isEqualTo(mapOf(
-            Constants.StartupParamsCallbackKeys.CUSTOM_SDK_HOSTS to startupParamsItem))
+        assertThat(map).isEqualTo(
+            mapOf(
+                Constants.StartupParamsCallbackKeys.CUSTOM_SDK_HOSTS to startupParamsItem
+            )
+        )
     }
 
     @Test
@@ -118,15 +129,17 @@ class CustomSdkHostsHolderTest : CommonTest() {
 
         val map = mutableMapOf<String, StartupParamsItem>()
         val startupParamsItem = mock<StartupParamsItem>()
-        whenever(startupParamItemAdapter.adapt(
-            IdentifiersResult(
-                JsonHelper.customSdkHostsToString(
-                    mapOf("am" to listOf("host1", "host2"))
-                ),
-                IdentifierStatus.OK,
-                null
+        whenever(
+            startupParamItemAdapter.adapt(
+                IdentifiersResult(
+                    JsonHelper.customSdkHostsToString(
+                        mapOf("am" to listOf("host1", "host2"))
+                    ),
+                    IdentifierStatus.OK,
+                    null
+                )
             )
-        )).thenReturn(startupParamsItem)
+        ).thenReturn(startupParamsItem)
         customSdkHostsHolder.putToMap(listOf("am"), map)
         assertThat(map).isEqualTo(mapOf(Constants.StartupParamsCallbackKeys.CUSTOM_SDK_HOSTS to startupParamsItem))
     }
@@ -172,13 +185,15 @@ class CustomSdkHostsHolderTest : CommonTest() {
                 IdentifierStatus.OK,
                 null
             )
-        whenever(startupParamItemAdapter.adapt(
-            IdentifiersResult(
-                JsonHelper.customSdkHostsToString(otherCustomSdkHosts),
-                IdentifierStatus.OK,
-                null
+        whenever(
+            startupParamItemAdapter.adapt(
+                IdentifiersResult(
+                    JsonHelper.customSdkHostsToString(otherCustomSdkHosts),
+                    IdentifierStatus.OK,
+                    null
+                )
             )
-        )).thenReturn(startupParamsItem)
+        ).thenReturn(startupParamsItem)
         customSdkHostsHolder.update(result)
         assertThat(customSdkHostsHolder.commonResult).isEqualTo(result)
         assertThat(customSdkHostsHolder.resultMap).isEqualTo(mapOf("passport" to initialIdentifierResult))
@@ -189,37 +204,47 @@ class CustomSdkHostsHolderTest : CommonTest() {
 
     private fun checkFilled() {
         assertThat(customSdkHostsHolder.commonResult).isEqualTo(filledResult)
-        assertThat(customSdkHostsHolder.resultMap).isEqualTo(mapOf(
-            "am" to IdentifiersResult(
-                JsonHelper.listToJson(
-                    listOf("host1", "host2")
-                )!!.toString(), IdentifierStatus.OK, null
-            ),
-            "ads" to IdentifiersResult(
-                JsonHelper.listToJson(
-                    listOf("host3")
-                )!!.toString(), IdentifierStatus.OK, null
-            ),
-        ))
+        assertThat(customSdkHostsHolder.resultMap).isEqualTo(
+            mapOf(
+                "am" to IdentifiersResult(
+                    JsonHelper.listToJson(
+                        listOf("host1", "host2")
+                    )!!.toString(),
+                    IdentifierStatus.OK,
+                    null
+                ),
+                "ads" to IdentifiersResult(
+                    JsonHelper.listToJson(
+                        listOf("host3")
+                    )!!.toString(),
+                    IdentifierStatus.OK,
+                    null
+                ),
+            )
+        )
         val customSdkHostString = JsonHelper.customSdkHostsToString(filledHostsMap)
         val hostsStartupParamsItem = StartupParamsItem(
             customSdkHostString,
             StartupParamsItemStatus.OK,
             null
         )
-        whenever(startupParamItemAdapter.adapt(
-            eq(
-                IdentifiersResult(
-                    customSdkHostString,
-                    filledResult.status,
-                    filledResult.errorExplanation
+        whenever(
+            startupParamItemAdapter.adapt(
+                eq(
+                    IdentifiersResult(
+                        customSdkHostString,
+                        filledResult.status,
+                        filledResult.errorExplanation
+                    )
                 )
-            ))
+            )
         ).thenReturn(hostsStartupParamsItem)
         val map = mutableMapOf<String, StartupParamsItem>()
         customSdkHostsHolder.putToMap(listOf("am", "ads"), map)
-        assertThat(map).isEqualTo(mapOf(
-            Constants.StartupParamsCallbackKeys.CUSTOM_SDK_HOSTS to hostsStartupParamsItem
-        ))
+        assertThat(map).isEqualTo(
+            mapOf(
+                Constants.StartupParamsCallbackKeys.CUSTOM_SDK_HOSTS to hostsStartupParamsItem
+            )
+        )
     }
 }

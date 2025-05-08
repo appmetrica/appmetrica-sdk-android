@@ -6,13 +6,13 @@ import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdReve
 import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdType
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.constructionRule
+import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.SoftAssertions
+import org.junit.Rule
 import org.junit.Test
+import org.mockito.kotlin.doReturn
 import java.math.BigDecimal
 import java.util.Currency
-import org.assertj.core.api.Assertions.assertThat
-import org.junit.Rule
-import org.mockito.kotlin.doReturn
 
 class ModuleAdRevenueConverterTest : CommonTest() {
 

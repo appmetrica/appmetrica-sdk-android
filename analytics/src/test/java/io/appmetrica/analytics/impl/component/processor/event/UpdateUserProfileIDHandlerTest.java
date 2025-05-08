@@ -27,7 +27,7 @@ public class UpdateUserProfileIDHandlerTest extends CommonTest {
     @Captor
     private ArgumentCaptor<CounterReport> mReportArgumentCaptor;
     private UpdateUserProfileIDHandler mHandler;
-    private CounterReport mReport = new CounterReport();
+    private final CounterReport mReport = new CounterReport();
 
     @Before
     public void setUp() throws Exception {
@@ -161,7 +161,7 @@ public class UpdateUserProfileIDHandlerTest extends CommonTest {
     private void assertThatProfileEventIsValid(CounterReport counterReport) {
         SoftAssertions softAssertions = new SoftAssertions();
         softAssertions.assertThat(counterReport.getType())
-                .isEqualTo(InternalEvents.EVENT_TYPE_SEND_USER_PROFILE.getTypeId());
+            .isEqualTo(InternalEvents.EVENT_TYPE_SEND_USER_PROFILE.getTypeId());
         softAssertions.assertThat(counterReport.getValue()).isEmpty();
         softAssertions.assertAll();
     }

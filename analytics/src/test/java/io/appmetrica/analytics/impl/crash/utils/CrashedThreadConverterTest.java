@@ -26,7 +26,7 @@ public class CrashedThreadConverterTest extends CommonTest {
         thread.setPriority(priority);
         doReturn(id).when(thread).getId();
         doReturn(new StackTraceElement[]{new StackTraceElement(
-                "s", "a", "a", 1221
+            "s", "a", "a", 1221
         )}).when(thread).getStackTrace();
 
         ThreadState state = converter.apply(thread);

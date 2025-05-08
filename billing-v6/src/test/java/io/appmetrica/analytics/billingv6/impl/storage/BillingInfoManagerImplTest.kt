@@ -22,7 +22,7 @@ class BillingInfoManagerImplTest : CommonTest() {
     private lateinit var billingInfoManager: BillingInfoManagerImpl
 
     @Test
-    fun testUpdate() {
+    fun update() {
         billingInfoManager = BillingInfoManagerImpl(billingInfoStorage)
         val history = mapOf(
             "sku1" to BillingInfo(

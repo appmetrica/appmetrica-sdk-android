@@ -154,7 +154,6 @@ class StartupRequiredUtilsTest : CommonTest() {
             on { deviceIdHash } doReturn "device_id_hash"
         }
         assertThat(StartupRequiredUtils.areMainIdentifiersValid(startup)).isFalse
-
     }
 
     @Test
@@ -165,7 +164,6 @@ class StartupRequiredUtilsTest : CommonTest() {
             on { deviceIdHash } doReturn ""
         }
         assertThat(StartupRequiredUtils.areMainIdentifiersValid(startup)).isFalse
-
     }
 
     @Test

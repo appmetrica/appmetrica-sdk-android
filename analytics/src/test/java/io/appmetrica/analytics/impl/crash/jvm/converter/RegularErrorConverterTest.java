@@ -6,19 +6,12 @@ import io.appmetrica.analytics.impl.crash.jvm.client.RegularError;
 import io.appmetrica.analytics.impl.crash.jvm.client.StackTraceItemInternal;
 import io.appmetrica.analytics.impl.crash.jvm.client.ThrowableModel;
 import io.appmetrica.analytics.impl.crash.jvm.client.UnhandledException;
-import io.appmetrica.analytics.impl.crash.jvm.converter.AllThreadsConverter;
-import io.appmetrica.analytics.impl.crash.jvm.converter.CrashOptionalBoolConverter;
-import io.appmetrica.analytics.impl.crash.jvm.converter.PlatformConverter;
-import io.appmetrica.analytics.impl.crash.jvm.converter.PluginEnvironmentConverter;
-import io.appmetrica.analytics.impl.crash.jvm.converter.RegularErrorConverter;
-import io.appmetrica.analytics.impl.crash.jvm.converter.StackTraceConverter;
-import io.appmetrica.analytics.impl.crash.jvm.converter.ThrowableConverter;
 import io.appmetrica.analytics.impl.protobuf.backend.CrashAndroid;
 import io.appmetrica.analytics.protobuf.nano.MessageNano;
 import io.appmetrica.analytics.testutils.CommonTest;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -57,12 +50,12 @@ public class RegularErrorConverterTest extends CommonTest {
     public void setUp() throws IOException {
         MockitoAnnotations.openMocks(this);
         regularErrorConverter = new RegularErrorConverter(
-                throwableConverter,
-                allThreadsConverter,
-                optionalBoolConverter,
-                stackTraceConverter,
-                platformConverter,
-                pluginEnvironmentConverter
+            throwableConverter,
+            allThreadsConverter,
+            optionalBoolConverter,
+            stackTraceConverter,
+            platformConverter,
+            pluginEnvironmentConverter
         );
     }
 
@@ -75,8 +68,8 @@ public class RegularErrorConverterTest extends CommonTest {
         AllThreads allThreadsModel = mock(AllThreads.class);
         CrashAndroid.AllThreads protoAllThreads = mock(CrashAndroid.AllThreads.class);
         when(allThreadsConverter.fromModel(allThreadsModel)).thenReturn(protoAllThreads);
-        List<StackTraceItemInternal> stacktraceModel = Arrays.asList(mock(StackTraceItemInternal.class));
-        CrashAndroid.StackTraceElement[] protoStacktrace = new CrashAndroid.StackTraceElement[] { mock(CrashAndroid.StackTraceElement.class) };
+        List<StackTraceItemInternal> stacktraceModel = Collections.singletonList(mock(StackTraceItemInternal.class));
+        CrashAndroid.StackTraceElement[] protoStacktrace = new CrashAndroid.StackTraceElement[]{mock(CrashAndroid.StackTraceElement.class)};
         when(stackTraceConverter.fromModel(stacktraceModel)).thenReturn(protoStacktrace);
         String platform = "unity";
         byte[] protoPlatform = "proto platform".getBytes();
@@ -84,34 +77,34 @@ public class RegularErrorConverterTest extends CommonTest {
         String virtualMachineVersion = "33.22.44";
         Map<String, String> environmentModel = new HashMap<>();
         environmentModel.put("key", "value");
-        CrashAndroid.BytesPair[] protoEnvironment = new CrashAndroid.BytesPair[] { mock(CrashAndroid.BytesPair.class)};
+        CrashAndroid.BytesPair[] protoEnvironment = new CrashAndroid.BytesPair[]{mock(CrashAndroid.BytesPair.class)};
         when(pluginEnvironmentConverter.fromModel(environmentModel)).thenReturn(protoEnvironment);
         String buildId = "5555-6666";
         when(optionalBoolConverter.toProto(true)).thenReturn(OPTIONAL_BOOL_TRUE);
         RegularError error = new RegularError(message, new UnhandledException(
-                throwableModel,
-                allThreadsModel,
-                stacktraceModel,
-                platform,
-                virtualMachineVersion,
-                environmentModel,
-                buildId,
-                true
+            throwableModel,
+            allThreadsModel,
+            stacktraceModel,
+            platform,
+            virtualMachineVersion,
+            environmentModel,
+            buildId,
+            true
         ));
 
         new ProtoObjectPropertyAssertions<>(regularErrorConverter.fromModel(error))
-                .checkField("message", message)
-                .checkFieldIsNull("custom")
-                .checkField("throwable", protoThrowable)
-                .checkField("threads", protoAllThreads)
-                .checkField("virtualMachine", protoPlatform)
-                .checkField("virtualMachineVersion", virtualMachineVersion.getBytes())
-                .checkField("methodCallStacktrace", protoStacktrace)
-                .checkField("pluginEnvironment", protoEnvironment)
-                .checkField("buildId", buildId)
-                .checkField("isOffline", OPTIONAL_BOOL_TRUE)
-                .checkField("type", DEFAULT)
-                .checkAll();
+            .checkField("message", message)
+            .checkFieldIsNull("custom")
+            .checkField("throwable", protoThrowable)
+            .checkField("threads", protoAllThreads)
+            .checkField("virtualMachine", protoPlatform)
+            .checkField("virtualMachineVersion", virtualMachineVersion.getBytes())
+            .checkField("methodCallStacktrace", protoStacktrace)
+            .checkField("pluginEnvironment", protoEnvironment)
+            .checkField("buildId", buildId)
+            .checkField("isOffline", OPTIONAL_BOOL_TRUE)
+            .checkField("type", DEFAULT)
+            .checkAll();
     }
 
     @Test
@@ -120,17 +113,17 @@ public class RegularErrorConverterTest extends CommonTest {
         RegularError error = new RegularError(null, null);
 
         new ProtoObjectPropertyAssertions<>(regularErrorConverter.fromModel(error))
-                .checkField("message", "")
-                .checkFieldIsNull("throwable")
-                .checkFieldsAreNull("threads", "custom")
-                .checkField("virtualMachine", "JVM".getBytes())
-                .checkField("virtualMachineVersion", "".getBytes())
-                .checkField("methodCallStacktrace", new CrashAndroid.StackTraceElement[0])
-                .checkField("pluginEnvironment", new CrashAndroid.BytesPair[0])
-                .checkField("buildId", "")
-                .checkField("isOffline", OPTIONAL_BOOL_UNDEFINED)
-                .checkField("type", DEFAULT)
-                .checkAll();
+            .checkField("message", "")
+            .checkFieldIsNull("throwable")
+            .checkFieldsAreNull("threads", "custom")
+            .checkField("virtualMachine", "JVM".getBytes())
+            .checkField("virtualMachineVersion", "".getBytes())
+            .checkField("methodCallStacktrace", new CrashAndroid.StackTraceElement[0])
+            .checkField("pluginEnvironment", new CrashAndroid.BytesPair[0])
+            .checkField("buildId", "")
+            .checkField("isOffline", OPTIONAL_BOOL_UNDEFINED)
+            .checkField("type", DEFAULT)
+            .checkAll();
 
     }
 

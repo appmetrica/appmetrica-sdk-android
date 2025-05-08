@@ -52,7 +52,7 @@ public class PriceConverterTest extends CommonTest {
     @Mock
     private PriceHierarchicalComponentsTrimmer priceInternalComponentsTrimmer;
 
-    private List<AmountWrapper> inputInternalPriceComponents = Collections.singletonList(mock(AmountWrapper.class));
+    private final List<AmountWrapper> inputInternalPriceComponents = Collections.singletonList(mock(AmountWrapper.class));
 
     private List<AmountWrapper> internalPriceComponents;
     private Ecommerce.ECommerceEvent.Amount[] protoInternalComponents;
@@ -73,41 +73,41 @@ public class PriceConverterTest extends CommonTest {
         MockitoAnnotations.openMocks(this);
 
         when(amountConverter.fromModel(fiatAmount))
-                .thenReturn(new Result<Ecommerce.ECommerceEvent.Amount, BytesTruncatedProvider>(
-                        protoFiatAmount,
-                        new BytesTruncatedInfo(fiatBytesTruncated)
-                ));
+            .thenReturn(new Result<Ecommerce.ECommerceEvent.Amount, BytesTruncatedProvider>(
+                protoFiatAmount,
+                new BytesTruncatedInfo(fiatBytesTruncated)
+            ));
         when(amountConverter.fromModel(internalAmount1))
-                .thenReturn(new Result<Ecommerce.ECommerceEvent.Amount, BytesTruncatedProvider>(
-                        protoInternalAmount1,
-                        new BytesTruncatedInfo(internalAmount1BytesTruncated)
-                ));
+            .thenReturn(new Result<Ecommerce.ECommerceEvent.Amount, BytesTruncatedProvider>(
+                protoInternalAmount1,
+                new BytesTruncatedInfo(internalAmount1BytesTruncated)
+            ));
         when(amountConverter.fromModel(internalAmount2))
-                .thenReturn(new Result<Ecommerce.ECommerceEvent.Amount, BytesTruncatedProvider>(
-                        protoInternalAmount2,
-                        new BytesTruncatedInfo(internalAmount2BytesTruncated)
-                ));
+            .thenReturn(new Result<Ecommerce.ECommerceEvent.Amount, BytesTruncatedProvider>(
+                protoInternalAmount2,
+                new BytesTruncatedInfo(internalAmount2BytesTruncated)
+            ));
         when(amountConverter.fromModel(internalAmount3))
-                .thenReturn(new Result<Ecommerce.ECommerceEvent.Amount, BytesTruncatedProvider>(
-                        protoInternalAmount3,
-                        new BytesTruncatedInfo(internalAmount3BytesTruncated)
-                ));
+            .thenReturn(new Result<Ecommerce.ECommerceEvent.Amount, BytesTruncatedProvider>(
+                protoInternalAmount3,
+                new BytesTruncatedInfo(internalAmount3BytesTruncated)
+            ));
 
         internalPriceComponents = Arrays.asList(internalAmount1, internalAmount2, internalAmount3);
 
         when(priceInternalComponentsTrimmer.trim(inputInternalPriceComponents))
-                .thenReturn(new TrimmingResult<List<AmountWrapper>, CollectionTrimInfo>(
-                        internalPriceComponents,
-                        new CollectionTrimInfo(
-                                internalComponentsDropped,
-                                internalComponentsBytesTruncated
-                        )
-                ));
+            .thenReturn(new TrimmingResult<List<AmountWrapper>, CollectionTrimInfo>(
+                internalPriceComponents,
+                new CollectionTrimInfo(
+                    internalComponentsDropped,
+                    internalComponentsBytesTruncated
+                )
+            ));
 
         protoInternalComponents = new Ecommerce.ECommerceEvent.Amount[]{
-                protoInternalAmount1,
-                protoInternalAmount2,
-                protoInternalAmount3
+            protoInternalAmount1,
+            protoInternalAmount2,
+            protoInternalAmount3
         };
 
         priceConverter = new PriceConverter(amountConverter, priceInternalComponentsTrimmer);
@@ -118,13 +118,13 @@ public class PriceConverterTest extends CommonTest {
         priceConverter = new PriceConverter();
 
         ObjectPropertyAssertions<PriceConverter> assertions =
-                ObjectPropertyAssertions(priceConverter)
-                        .withPrivateFields(true);
+            ObjectPropertyAssertions(priceConverter)
+                .withPrivateFields(true);
 
         assertions.checkFieldNonNull("amountConverter");
         assertions.checkFieldComparingFieldByField(
-                "priceInternalComponentsTrimmer",
-                new PriceHierarchicalComponentsTrimmer(30)
+            "priceInternalComponentsTrimmer",
+            new PriceHierarchicalComponentsTrimmer(30)
         );
 
         assertions.checkAll();
@@ -134,24 +134,24 @@ public class PriceConverterTest extends CommonTest {
     public void toProto() throws Exception {
         priceWrapper = new PriceWrapper(fiatAmount, inputInternalPriceComponents);
         Result<Ecommerce.ECommerceEvent.Price, BytesTruncatedProvider> priceResult =
-                priceConverter.fromModel(priceWrapper);
+            priceConverter.fromModel(priceWrapper);
 
         Ecommerce.ECommerceEvent.Price expectedPrice = new Ecommerce.ECommerceEvent.Price();
         expectedPrice.fiat = protoFiatAmount;
         expectedPrice.internalComponents = protoInternalComponents;
 
         ObjectPropertyAssertions<Result<Ecommerce.ECommerceEvent.Price, BytesTruncatedProvider>> assertions =
-                ObjectPropertyAssertions(
-                        priceResult
-                ).checkFieldComparingFieldByFieldRecursively("result", expectedPrice)
-                        .checkFieldRecursively(
-                                "metaInfo",
-                                new TruncationInfoConsumer(
-                                        fiatBytesTruncated + internalComponentsBytesTruncated +
-                                                internalAmount1BytesTruncated +
-                                                internalAmount2BytesTruncated + internalAmount3BytesTruncated
-                                )
-                        );
+            ObjectPropertyAssertions(
+                priceResult
+            ).checkFieldComparingFieldByFieldRecursively("result", expectedPrice)
+                .checkFieldRecursively(
+                    "metaInfo",
+                    new TruncationInfoConsumer(
+                        fiatBytesTruncated + internalComponentsBytesTruncated +
+                            internalAmount1BytesTruncated +
+                            internalAmount2BytesTruncated + internalAmount3BytesTruncated
+                    )
+                );
 
         assertions.checkAll();
     }
@@ -160,10 +160,10 @@ public class PriceConverterTest extends CommonTest {
     public void toProtoWithoutInternalComponents() throws Exception {
         priceWrapper = new PriceWrapper(fiatAmount, null);
         when(priceInternalComponentsTrimmer.trim(nullable(List.class)))
-                .thenReturn(new TrimmingResult<List<AmountWrapper>, CollectionTrimInfo>(
-                        null,
-                        new CollectionTrimInfo(0, 0)
-                ));
+            .thenReturn(new TrimmingResult<List<AmountWrapper>, CollectionTrimInfo>(
+                null,
+                new CollectionTrimInfo(0, 0)
+            ));
         assertPriceWithoutInternalComponents(priceConverter.fromModel(priceWrapper));
 
     }
@@ -172,26 +172,26 @@ public class PriceConverterTest extends CommonTest {
     public void toProtoWithEmptyInternalComponents() throws Exception {
         priceWrapper = new PriceWrapper(fiatAmount, new ArrayList<AmountWrapper>());
         when(priceInternalComponentsTrimmer.trim(any(List.class)))
-                .thenReturn(new TrimmingResult<List<AmountWrapper>, CollectionTrimInfo>(
-                        new ArrayList<AmountWrapper>(),
-                        new CollectionTrimInfo(0, 0)
-                ));
+            .thenReturn(new TrimmingResult<List<AmountWrapper>, CollectionTrimInfo>(
+                new ArrayList<AmountWrapper>(),
+                new CollectionTrimInfo(0, 0)
+            ));
         assertPriceWithoutInternalComponents(priceConverter.fromModel(priceWrapper));
     }
 
     private void assertPriceWithoutInternalComponents(
-            Result<Ecommerce.ECommerceEvent.Price, BytesTruncatedProvider> priceResult
+        Result<Ecommerce.ECommerceEvent.Price, BytesTruncatedProvider> priceResult
     ) throws Exception {
         Ecommerce.ECommerceEvent.Price expectedPrice = new Ecommerce.ECommerceEvent.Price();
         expectedPrice.fiat = protoFiatAmount;
         expectedPrice.internalComponents = new Ecommerce.ECommerceEvent.Amount[0];
 
         ObjectPropertyAssertions<Result<Ecommerce.ECommerceEvent.Price, BytesTruncatedProvider>> assertions =
-                ObjectPropertyAssertions(
-                        priceResult
-                )
-                        .checkFieldComparingFieldByFieldRecursively("result", expectedPrice)
-                        .checkFieldRecursively("metaInfo", new TruncationInfoConsumer(0));
+            ObjectPropertyAssertions(
+                priceResult
+            )
+                .checkFieldComparingFieldByFieldRecursively("result", expectedPrice)
+                .checkFieldRecursively("metaInfo", new TruncationInfoConsumer(0));
 
         assertions.checkAll();
     }
@@ -199,10 +199,10 @@ public class PriceConverterTest extends CommonTest {
     @Test(expected = UnsupportedOperationException.class)
     public void toModel() throws Exception {
         priceConverter.toModel(
-                new Result<Ecommerce.ECommerceEvent.Price, BytesTruncatedProvider>(
-                        new Ecommerce.ECommerceEvent.Price(),
-                        new BytesTruncatedInfo(0)
-                )
+            new Result<Ecommerce.ECommerceEvent.Price, BytesTruncatedProvider>(
+                new Ecommerce.ECommerceEvent.Price(),
+                new BytesTruncatedInfo(0)
+            )
         );
     }
 }

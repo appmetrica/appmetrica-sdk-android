@@ -8,8 +8,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mockito.`when`
-import org.mockito.MockitoAnnotations
+import org.mockito.kotlin.whenever
 import org.robolectric.ParameterizedRobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
@@ -28,17 +27,23 @@ class FileProviderStorageDirectoryTest(
         fun data(): Collection<Array<Any>> {
             return listOf(
                 arrayOf(
-                    { fileProvider: FileProvider, context: Context -> fileProvider.getStorageSubDirectory(context, "dir") },
+                    { fileProvider: FileProvider, context: Context ->
+                        fileProvider.getStorageSubDirectory(context, "dir")
+                    },
                     { dir: File -> File(dir, "dir").absolutePath },
                     "getStorageSubDirectory"
                 ),
                 arrayOf(
-                    { fileProvider: FileProvider, context: Context -> fileProvider.getStorageSubDirectoryFile(context, "dir") },
+                    { fileProvider: FileProvider, context: Context ->
+                        fileProvider.getStorageSubDirectoryFile(context, "dir")
+                    },
                     { dir: File -> File(dir, "dir") },
                     "getStorageSubDirectoryFile"
                 ),
                 arrayOf(
-                    { fileProvider: FileProvider, context: Context -> fileProvider.getFileFromStorage(context, "file") },
+                    { fileProvider: FileProvider, context: Context ->
+                        fileProvider.getFileFromStorage(context, "file")
+                    },
                     { dir: File -> File(dir, "file") },
                     "getFileFromStorage"
                 ),
@@ -53,7 +58,6 @@ class FileProviderStorageDirectoryTest(
 
     @Before
     fun setUp() {
-        MockitoAnnotations.openMocks(this)
         context = TestUtils.createMockedContext()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             noBackupDir = RuntimeEnvironment.getApplication().noBackupFilesDir
@@ -65,14 +69,14 @@ class FileProviderStorageDirectoryTest(
     @Test
     @Config(sdk = [Build.VERSION_CODES.LOLLIPOP])
     fun lollipop() {
-        `when`(context.noBackupFilesDir).thenReturn(noBackupDir)
+        whenever(context.noBackupFilesDir).thenReturn(noBackupDir)
         assertThat(applier(fileProvider, context)).isEqualTo(expected(noBackupDir!!))
     }
 
     @Test
     @Config(sdk = [Build.VERSION_CODES.LOLLIPOP])
     fun lollipopNull() {
-        `when`(context.noBackupFilesDir).thenReturn(null)
+        whenever(context.noBackupFilesDir).thenReturn(null)
         assertThat(applier(fileProvider, context)).isNull()
     }
 }

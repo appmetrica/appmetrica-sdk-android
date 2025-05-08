@@ -62,9 +62,8 @@ class AppMetricaPluginsProxyTest : CommonTest() {
     private val barrier: PluginsBarrier by barrierMockedConstructionRule
 
     @get:Rule
-    val synchronousStageExecutorMockedConstructionRule = constructionRule<PluginsSynchronousStageExecutor>()
-    private val synchronousStageExecutor: PluginsSynchronousStageExecutor
-    by synchronousStageExecutorMockedConstructionRule
+    val synchronousStageExecutorRule = constructionRule<PluginsSynchronousStageExecutor>()
+    private val synchronousStageExecutor: PluginsSynchronousStageExecutor by synchronousStageExecutorRule
 
     private lateinit var proxy: AppMetricaPluginsProxy
 

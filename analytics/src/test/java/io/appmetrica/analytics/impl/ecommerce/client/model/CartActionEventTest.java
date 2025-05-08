@@ -55,7 +55,7 @@ public class CartActionEventTest extends CommonTest {
     @Test
     public void constructorFromDefaultConstructor() {
         assertThat(new CartActionInfoEvent(10, eCommerceCartItem).getConverter())
-                .isInstanceOf(CartActionInfoEventConverter.class);
+            .isInstanceOf(CartActionInfoEventConverter.class);
     }
 
     @Test
@@ -69,7 +69,7 @@ public class CartActionEventTest extends CommonTest {
     @Test
     public void getPublicDescriptionForAddCartItem() {
         CartActionInfoEvent event =
-                new CartActionInfoEvent(CartActionInfoEvent.EVENT_TYPE_ADD_TO_CART, cartItemWrapper, converter);
+            new CartActionInfoEvent(CartActionInfoEvent.EVENT_TYPE_ADD_TO_CART, cartItemWrapper, converter);
 
         assertThat(event.getPublicDescription()).isEqualTo("add cart item info");
     }
@@ -77,7 +77,7 @@ public class CartActionEventTest extends CommonTest {
     @Test
     public void getPublicDescriptionForRemoveCartItem() {
         CartActionInfoEvent event =
-                new CartActionInfoEvent(CartActionInfoEvent.EVENT_TYPE_REMOVE_FROM_CART, cartItemWrapper, converter);
+            new CartActionInfoEvent(CartActionInfoEvent.EVENT_TYPE_REMOVE_FROM_CART, cartItemWrapper, converter);
 
         assertThat(event.getPublicDescription()).isEqualTo("remove cart item info");
     }

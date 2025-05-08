@@ -13,43 +13,35 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.Mock
-import org.mockito.Mockito.`when`
-import org.mockito.MockitoAnnotations
+import org.mockito.Mockito.mock
 import org.mockito.kotlin.any
 import org.mockito.kotlin.eq
+import org.mockito.kotlin.whenever
 import org.robolectric.annotation.Config
 
 class SimInfoExtractorForMTest : CommonTest() {
 
-    @Mock
-    private lateinit var context: Context
-
-    @Mock
-    private lateinit var firstSubscriptionsInfo: SubscriptionInfo
-
-    @Mock
-    private lateinit var secondSubscriptionInfo: SubscriptionInfo
+    private val context: Context = mock()
+    private val firstSubscriptionsInfo: SubscriptionInfo = mock()
+    private val secondSubscriptionInfo: SubscriptionInfo = mock()
 
     private val firstDataRoaming = SubscriptionManager.DATA_ROAMING_ENABLE
     private val firstCarrierName = "First carrier name"
     private val secondDataRoaming = SubscriptionManager.DATA_ROAMING_DISABLE
     private val secondCarrierName = null
 
-    @Rule
-    @JvmField
+    @get:Rule
     val sSystemServiceUtils = MockedStaticRule(SystemServiceUtils::class.java)
-    @Rule
-    @JvmField
+
+    @get:Rule
     val sAndroidUtilsMockedRule = MockedStaticRule(AndroidUtils::class.java)
 
     @Before
     fun setUp() {
-        MockitoAnnotations.openMocks(this)
-        `when`(firstSubscriptionsInfo.dataRoaming).thenReturn(firstDataRoaming)
-        `when`(firstSubscriptionsInfo.carrierName).thenReturn(firstCarrierName)
-        `when`(secondSubscriptionInfo.dataRoaming).thenReturn(secondDataRoaming)
-        `when`(secondSubscriptionInfo.carrierName).thenReturn(secondCarrierName)
+        whenever(firstSubscriptionsInfo.dataRoaming).thenReturn(firstDataRoaming)
+        whenever(firstSubscriptionsInfo.carrierName).thenReturn(firstCarrierName)
+        whenever(secondSubscriptionInfo.dataRoaming).thenReturn(secondDataRoaming)
+        whenever(secondSubscriptionInfo.carrierName).thenReturn(secondCarrierName)
     }
 
     @Config(sdk = [Build.VERSION_CODES.P])
@@ -63,7 +55,7 @@ class SimInfoExtractorForMTest : CommonTest() {
     @Config(sdk = [Build.VERSION_CODES.Q])
     @Test
     fun extractSimInfosFromSubscriptionManagerForNullOnQ() {
-        `when`(AndroidUtils.isApiAchieved(Build.VERSION_CODES.Q)).thenReturn(true)
+        whenever(AndroidUtils.isApiAchieved(Build.VERSION_CODES.Q)).thenReturn(true)
         stubSubscriptionInfos(null)
         assertThat(SimInfoExtractorForM.extractSimInfosFromSubscriptionManager(context))
             .isEqualTo(emptyList<SimInfo>())
@@ -80,7 +72,7 @@ class SimInfoExtractorForMTest : CommonTest() {
     @Config(sdk = [Build.VERSION_CODES.Q])
     @Test
     fun extractSimInfosFromSubscriptionManagerForEmptyOnQ() {
-        `when`(AndroidUtils.isApiAchieved(Build.VERSION_CODES.Q)).thenReturn(true)
+        whenever(AndroidUtils.isApiAchieved(Build.VERSION_CODES.Q)).thenReturn(true)
         stubSubscriptionInfos(emptyList())
         assertThat(SimInfoExtractorForM.extractSimInfosFromSubscriptionManager(context))
             .isEqualTo(emptyList<SimInfo>())
@@ -91,8 +83,8 @@ class SimInfoExtractorForMTest : CommonTest() {
     fun extractSimInfosFromSubscriptionManagerOnP() {
         val firstDeprecatedMcc = 34223
         val firstDeprecatedMnc = 5432
-        `when`(firstSubscriptionsInfo.mcc).thenReturn(firstDeprecatedMcc)
-        `when`(firstSubscriptionsInfo.mnc).thenReturn(firstDeprecatedMnc)
+        whenever(firstSubscriptionsInfo.mcc).thenReturn(firstDeprecatedMcc)
+        whenever(firstSubscriptionsInfo.mnc).thenReturn(firstDeprecatedMnc)
 
         stubSubscriptionInfos(listOf(firstSubscriptionsInfo, secondSubscriptionInfo))
 
@@ -118,17 +110,17 @@ class SimInfoExtractorForMTest : CommonTest() {
     @Config(sdk = [Build.VERSION_CODES.Q])
     @Test
     fun extractSimInfosFromSubscriptionManagerOnQ() {
-        `when`(AndroidUtils.isApiAchieved(Build.VERSION_CODES.Q)).thenReturn(true)
+        whenever(AndroidUtils.isApiAchieved(Build.VERSION_CODES.Q)).thenReturn(true)
         val firstDeprecatedMcc = 34223
         val firstDeprecatedMnc = 5432
         val secondMcc = 24353
         val secondMnc = 567654
         val secondMccString = secondMcc.toString()
         val secondMncString = secondMnc.toString()
-        `when`(firstSubscriptionsInfo.mcc).thenReturn(firstDeprecatedMcc)
-        `when`(firstSubscriptionsInfo.mnc).thenReturn(firstDeprecatedMnc)
-        `when`(secondSubscriptionInfo.mccString).thenReturn(secondMccString)
-        `when`(secondSubscriptionInfo.mncString).thenReturn(secondMncString)
+        whenever(firstSubscriptionsInfo.mcc).thenReturn(firstDeprecatedMcc)
+        whenever(firstSubscriptionsInfo.mnc).thenReturn(firstDeprecatedMnc)
+        whenever(secondSubscriptionInfo.mccString).thenReturn(secondMccString)
+        whenever(secondSubscriptionInfo.mncString).thenReturn(secondMncString)
 
         stubSubscriptionInfos(listOf(firstSubscriptionsInfo, secondSubscriptionInfo))
 
@@ -151,7 +143,7 @@ class SimInfoExtractorForMTest : CommonTest() {
     }
 
     private fun stubSubscriptionInfos(value: List<SubscriptionInfo>?) {
-        `when`(
+        whenever(
             SystemServiceUtils.accessSystemServiceByNameSafely<SubscriptionManager, List<SubscriptionInfo>>(
                 eq(context),
                 eq(Context.TELEPHONY_SUBSCRIPTION_SERVICE),

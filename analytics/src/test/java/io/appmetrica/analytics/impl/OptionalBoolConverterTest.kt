@@ -46,5 +46,4 @@ class OptionalBoolConverterTest : CommonTest() {
     fun trueToModel() {
         assertThat(converter.toModel(trueValue)).isTrue
     }
-
 }

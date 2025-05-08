@@ -1,8 +1,6 @@
 package io.appmetrica.analytics.impl.crash.jvm.converter;
 
 import io.appmetrica.analytics.impl.crash.jvm.client.UnhandledException;
-import io.appmetrica.analytics.impl.crash.jvm.converter.JvmCrashConverter;
-import io.appmetrica.analytics.impl.crash.jvm.converter.ModelToByteArraySerializer;
 import io.appmetrica.analytics.impl.protobuf.backend.CrashAndroid;
 import io.appmetrica.analytics.protobuf.nano.InvalidProtocolBufferNanoException;
 import io.appmetrica.analytics.protobuf.nano.MessageNano;
@@ -32,7 +30,7 @@ public class JvmCrashConverterTest extends CommonTest {
     @Test
     public void testToProto() throws IllegalAccessException, InvalidProtocolBufferNanoException {
         UnhandledException exception = mock(UnhandledException.class);
-        byte[] bytes = new byte[] { 1, 3, 5, 7 };
+        byte[] bytes = new byte[]{1, 3, 5, 7};
         when(baseConverter.toProto(exception)).thenReturn(bytes);
         assertThat(jvmCrashConverter.fromModel(exception)).isEqualTo(bytes);
     }

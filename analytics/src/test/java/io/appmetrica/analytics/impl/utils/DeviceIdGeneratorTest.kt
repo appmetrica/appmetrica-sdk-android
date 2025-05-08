@@ -24,7 +24,6 @@ import org.mockito.kotlin.any
 import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
-import org.mockito.kotlin.same
 import org.mockito.kotlin.stubbing
 import org.robolectric.RobolectricTestRunner
 
@@ -73,7 +72,8 @@ class DeviceIdGeneratorTest : CommonTest() {
                 null
             )
         }
-        assertThat(deviceIdGenerator.generateDeviceId()).isEqualTo(StringUtils.toHexString(IOUtils.md5(yandexAdvId.toByteArray())))
+        assertThat(deviceIdGenerator.generateDeviceId())
+            .isEqualTo(StringUtils.toHexString(IOUtils.md5(yandexAdvId.toByteArray())))
         verifyNoInteractions(appSetIdGetter)
     }
 

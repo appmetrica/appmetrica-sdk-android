@@ -61,15 +61,15 @@ public class ProductConverterTest extends CommonTest {
     @Mock
     private HierarchicalStringTrimmer nameTrimmer;
 
-    private Ecommerce.ECommerceEvent.PromoCode[] promocodesProto =
-            new Ecommerce.ECommerceEvent.PromoCode[]{promocodeProto1, promocodeProto2, promocodeProto3};
+    private final Ecommerce.ECommerceEvent.PromoCode[] promocodesProto =
+        new Ecommerce.ECommerceEvent.PromoCode[]{promocodeProto1, promocodeProto2, promocodeProto3};
 
     private ProductConverter productConverter;
     private ProductWrapper productWrapper;
     private Ecommerce.ECommerceEvent.Product productProto;
 
-    private List<String> categories = Arrays.asList("First", "Second", "Third");
-    private List<String> promocodes = Arrays.asList("Promocode#1", "Promocode#2", "Promocode#3");
+    private final List<String> categories = Arrays.asList("First", "Second", "Third");
+    private final List<String> promocodes = Arrays.asList("Promocode#1", "Promocode#2", "Promocode#3");
 
     private final int skuBytesTruncated = 14;
     private final int nameBytesTruncated = 29;
@@ -80,49 +80,49 @@ public class ProductConverterTest extends CommonTest {
     private final int promocodesBytesTruncated = 35;
 
     private final int totalBytesTruncated = skuBytesTruncated + nameBytesTruncated + payloadBytesTruncated +
-            categoryBytesTruncated + originalPriceBytesTruncated + actualPriceBytesTruncated + promocodesBytesTruncated;
+        categoryBytesTruncated + originalPriceBytesTruncated + actualPriceBytesTruncated + promocodesBytesTruncated;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.openMocks(this);
 
         when(payloadConverter.fromModel(payload))
-                .thenReturn(new Result<Ecommerce.ECommerceEvent.Payload, BytesTruncatedProvider>(
-                        payloadProto,
-                        new BytesTruncatedInfo(payloadBytesTruncated)
-                ));
+            .thenReturn(new Result<Ecommerce.ECommerceEvent.Payload, BytesTruncatedProvider>(
+                payloadProto,
+                new BytesTruncatedInfo(payloadBytesTruncated)
+            ));
         when(priceConverter.fromModel(originalPrice))
-                .thenReturn(new Result<Ecommerce.ECommerceEvent.Price, BytesTruncatedProvider>(
-                        originalPriceProto,
-                        new BytesTruncatedInfo(originalPriceBytesTruncated)
-                ));
+            .thenReturn(new Result<Ecommerce.ECommerceEvent.Price, BytesTruncatedProvider>(
+                originalPriceProto,
+                new BytesTruncatedInfo(originalPriceBytesTruncated)
+            ));
         when(priceConverter.fromModel(actualPrice))
-                .thenReturn(new Result<Ecommerce.ECommerceEvent.Price, BytesTruncatedProvider>(
-                        actualPriceProto,
-                        new BytesTruncatedInfo(actualPriceBytesTruncated)
-                ));
+            .thenReturn(new Result<Ecommerce.ECommerceEvent.Price, BytesTruncatedProvider>(
+                actualPriceProto,
+                new BytesTruncatedInfo(actualPriceBytesTruncated)
+            ));
         when(categoryConverter.fromModel(categories))
-                .thenReturn(
-                        new Result<Ecommerce.ECommerceEvent.Category, BytesTruncatedProvider>(
-                                categoryProto,
-                                new BytesTruncatedInfo(categoryBytesTruncated)
-                        )
-                );
+            .thenReturn(
+                new Result<Ecommerce.ECommerceEvent.Category, BytesTruncatedProvider>(
+                    categoryProto,
+                    new BytesTruncatedInfo(categoryBytesTruncated)
+                )
+            );
         when(promocodesConverter.fromModel(promocodes))
-                .thenReturn(
-                        new Result<Ecommerce.ECommerceEvent.PromoCode[], BytesTruncatedProvider>(
-                                promocodesProto,
-                                new BytesTruncatedInfo(promocodesBytesTruncated)
-                        )
-                );
+            .thenReturn(
+                new Result<Ecommerce.ECommerceEvent.PromoCode[], BytesTruncatedProvider>(
+                    promocodesProto,
+                    new BytesTruncatedInfo(promocodesBytesTruncated)
+                )
+            );
 
         productConverter = new ProductConverter(
-                payloadConverter,
-                priceConverter,
-                categoryConverter,
-                promocodesConverter,
-                skuTrimmer,
-                nameTrimmer
+            payloadConverter,
+            priceConverter,
+            categoryConverter,
+            promocodesConverter,
+            skuTrimmer,
+            nameTrimmer
         );
     }
 
@@ -131,8 +131,8 @@ public class ProductConverterTest extends CommonTest {
         productConverter = new ProductConverter();
 
         ObjectPropertyAssertions<ProductConverter> assertions =
-                ObjectPropertyAssertions(productConverter)
-                        .withPrivateFields(true);
+            ObjectPropertyAssertions(productConverter)
+                .withPrivateFields(true);
 
         assertions.checkFieldNonNull("payloadConverter");
         assertions.checkFieldNonNull("priceConverter");
@@ -152,41 +152,41 @@ public class ProductConverterTest extends CommonTest {
         String truncatedName = "truncated name";
 
         when(skuTrimmer.trim(inputSku))
-                .thenReturn(new TrimmingResult<String, BytesTruncatedProvider>(
-                        truncatedSku,
-                        new BytesTruncatedInfo(skuBytesTruncated)
-                ));
+            .thenReturn(new TrimmingResult<String, BytesTruncatedProvider>(
+                truncatedSku,
+                new BytesTruncatedInfo(skuBytesTruncated)
+            ));
         when(nameTrimmer.trim(inputName))
-                .thenReturn(new TrimmingResult<String, BytesTruncatedProvider>(
-                        truncatedName,
-                        new BytesTruncatedInfo(nameBytesTruncated)
-                ));
+            .thenReturn(new TrimmingResult<String, BytesTruncatedProvider>(
+                truncatedName,
+                new BytesTruncatedInfo(nameBytesTruncated)
+            ));
 
         productWrapper = new ProductWrapper(
-                inputSku, inputName, categories, payload, actualPrice, originalPrice, promocodes
+            inputSku, inputName, categories, payload, actualPrice, originalPrice, promocodes
         );
 
         Result<Ecommerce.ECommerceEvent.Product, BytesTruncatedProvider> productResult =
-                productConverter.fromModel(productWrapper);
+            productConverter.fromModel(productWrapper);
 
         ObjectPropertyAssertions(
-                productResult)
-                .checkFieldRecursively(
-                        "metaInfo",
-                        new TruncationInfoConsumer(totalBytesTruncated)
-                )
-                .checkFieldRecursively(
-                        "result",
-                        productMatchAssertionsConsumer(
-                                truncatedSku,
-                                truncatedName,
-                                categoryProto,
-                                payloadProto,
-                                actualPriceProto,
-                                originalPriceProto,
-                                promocodesProto
-                        ))
-                .checkAll();
+            productResult)
+            .checkFieldRecursively(
+                "metaInfo",
+                new TruncationInfoConsumer(totalBytesTruncated)
+            )
+            .checkFieldRecursively(
+                "result",
+                productMatchAssertionsConsumer(
+                    truncatedSku,
+                    truncatedName,
+                    categoryProto,
+                    payloadProto,
+                    actualPriceProto,
+                    originalPriceProto,
+                    promocodesProto
+                ))
+            .checkAll();
     }
 
     @Test
@@ -195,113 +195,113 @@ public class ProductConverterTest extends CommonTest {
         String inputName = "input name";
 
         when(skuTrimmer.trim(inputSku))
-                .thenReturn(new TrimmingResult<String, BytesTruncatedProvider>(
-                        inputSku,
-                        new BytesTruncatedInfo(0)
-                ));
+            .thenReturn(new TrimmingResult<String, BytesTruncatedProvider>(
+                inputSku,
+                new BytesTruncatedInfo(0)
+            ));
         when(nameTrimmer.trim(inputName))
-                .thenReturn(new TrimmingResult<String, BytesTruncatedProvider>(
-                        inputName,
-                        new BytesTruncatedInfo(0)
-                ));
+            .thenReturn(new TrimmingResult<String, BytesTruncatedProvider>(
+                inputName,
+                new BytesTruncatedInfo(0)
+            ));
         when(payloadConverter.fromModel(payload))
-                .thenReturn(new Result<Ecommerce.ECommerceEvent.Payload, BytesTruncatedProvider>(
-                        payloadProto,
-                        new BytesTruncatedInfo(0)
-                ));
+            .thenReturn(new Result<Ecommerce.ECommerceEvent.Payload, BytesTruncatedProvider>(
+                payloadProto,
+                new BytesTruncatedInfo(0)
+            ));
         when(priceConverter.fromModel(originalPrice))
-                .thenReturn(new Result<Ecommerce.ECommerceEvent.Price, BytesTruncatedProvider>(
-                        originalPriceProto,
-                        new BytesTruncatedInfo(0)
-                ));
+            .thenReturn(new Result<Ecommerce.ECommerceEvent.Price, BytesTruncatedProvider>(
+                originalPriceProto,
+                new BytesTruncatedInfo(0)
+            ));
         when(priceConverter.fromModel(actualPrice))
-                .thenReturn(new Result<Ecommerce.ECommerceEvent.Price, BytesTruncatedProvider>(
-                        actualPriceProto,
-                        new BytesTruncatedInfo(0)
-                ));
+            .thenReturn(new Result<Ecommerce.ECommerceEvent.Price, BytesTruncatedProvider>(
+                actualPriceProto,
+                new BytesTruncatedInfo(0)
+            ));
         when(categoryConverter.fromModel(categories))
-                .thenReturn(
-                        new Result<Ecommerce.ECommerceEvent.Category, BytesTruncatedProvider>(
-                                categoryProto,
-                                new BytesTruncatedInfo(0)
-                        )
-                );
+            .thenReturn(
+                new Result<Ecommerce.ECommerceEvent.Category, BytesTruncatedProvider>(
+                    categoryProto,
+                    new BytesTruncatedInfo(0)
+                )
+            );
         when(promocodesConverter.fromModel(promocodes))
-                .thenReturn(
-                        new Result<Ecommerce.ECommerceEvent.PromoCode[], BytesTruncatedProvider>(
-                                promocodesProto,
-                                new BytesTruncatedInfo(0)
-                        )
-                );
+            .thenReturn(
+                new Result<Ecommerce.ECommerceEvent.PromoCode[], BytesTruncatedProvider>(
+                    promocodesProto,
+                    new BytesTruncatedInfo(0)
+                )
+            );
 
         productWrapper = new ProductWrapper(
-                inputSku, inputName, categories, payload, actualPrice, originalPrice, promocodes
+            inputSku, inputName, categories, payload, actualPrice, originalPrice, promocodes
         );
 
         Result<Ecommerce.ECommerceEvent.Product, BytesTruncatedProvider> productResult =
-                productConverter.fromModel(productWrapper);
+            productConverter.fromModel(productWrapper);
 
         ObjectPropertyAssertions(
-                productResult)
-                .checkFieldRecursively(
-                        "metaInfo",
-                        new TruncationInfoConsumer(0)
-                )
-                .checkFieldRecursively(
-                        "result",
-                        productMatchAssertionsConsumer(
-                                inputSku,
-                                inputName,
-                                categoryProto,
-                                payloadProto,
-                                actualPriceProto,
-                                originalPriceProto,
-                                promocodesProto
-                        ))
-                .checkAll();
+            productResult)
+            .checkFieldRecursively(
+                "metaInfo",
+                new TruncationInfoConsumer(0)
+            )
+            .checkFieldRecursively(
+                "result",
+                productMatchAssertionsConsumer(
+                    inputSku,
+                    inputName,
+                    categoryProto,
+                    payloadProto,
+                    actualPriceProto,
+                    originalPriceProto,
+                    promocodesProto
+                ))
+            .checkAll();
     }
 
     @Test
     public void toProtoWithPossibleNulls() throws Exception {
         String sku = "sku";
         when(skuTrimmer.trim("sku"))
-                .thenReturn(new TrimmingResult<String, BytesTruncatedProvider>(sku, new BytesTruncatedInfo(0)));
+            .thenReturn(new TrimmingResult<String, BytesTruncatedProvider>(sku, new BytesTruncatedInfo(0)));
         when(nameTrimmer.trim(nullable(String.class)))
-                .thenReturn(new TrimmingResult<String, BytesTruncatedProvider>(null, new BytesTruncatedInfo(0)));
+            .thenReturn(new TrimmingResult<String, BytesTruncatedProvider>(null, new BytesTruncatedInfo(0)));
 
         productWrapper = new ProductWrapper(sku, null, null, null, null, null, null);
 
         Result<Ecommerce.ECommerceEvent.Product, BytesTruncatedProvider> result =
-                productConverter.fromModel(productWrapper);
+            productConverter.fromModel(productWrapper);
 
 
         ObjectPropertyAssertions(result)
-                .checkFieldRecursively(
-                        "metaInfo",
-                        new TruncationInfoConsumer(0)
+            .checkFieldRecursively(
+                "metaInfo",
+                new TruncationInfoConsumer(0)
+            )
+            .checkFieldRecursively(
+                "result", productMatchAssertionsConsumer(
+                    sku,
+                    "",
+                    null,
+                    null,
+                    null,
+                    null,
+                    new Ecommerce.ECommerceEvent.PromoCode[0]
                 )
-                .checkFieldRecursively(
-                        "result", productMatchAssertionsConsumer(
-                                sku,
-                                "",
-                                null,
-                                null,
-                                null,
-                                null,
-                                new Ecommerce.ECommerceEvent.PromoCode[0]
-                        )
-                )
-                .checkAll();
+            )
+            .checkAll();
     }
 
     private Consumer<ObjectPropertyAssertions<Ecommerce.ECommerceEvent.Product>> productMatchAssertionsConsumer(
-            final String sku,
-            final String name,
-            final Ecommerce.ECommerceEvent.Category category,
-            final Ecommerce.ECommerceEvent.Payload payload,
-            final Ecommerce.ECommerceEvent.Price actualPrice,
-            final Ecommerce.ECommerceEvent.Price originalPrice,
-            final Ecommerce.ECommerceEvent.PromoCode[] promocodes
+        final String sku,
+        final String name,
+        final Ecommerce.ECommerceEvent.Category category,
+        final Ecommerce.ECommerceEvent.Payload payload,
+        final Ecommerce.ECommerceEvent.Price actualPrice,
+        final Ecommerce.ECommerceEvent.Price originalPrice,
+        final Ecommerce.ECommerceEvent.PromoCode[] promocodes
     ) {
 
         return new Consumer<ObjectPropertyAssertions<Ecommerce.ECommerceEvent.Product>>() {
@@ -310,13 +310,13 @@ public class ProductConverterTest extends CommonTest {
             public void accept(ObjectPropertyAssertions<Ecommerce.ECommerceEvent.Product> assertions) {
                 try {
                     assertions.withFinalFieldOnly(false)
-                            .checkField("sku", sku.getBytes())
-                            .checkField("name", name.getBytes())
-                            .checkField("category", category)
-                            .checkField("payload", payload)
-                            .checkField("actualPrice", actualPrice)
-                            .checkField("originalPrice", originalPrice)
-                            .checkField("promoCodes", promocodes);
+                        .checkField("sku", sku.getBytes())
+                        .checkField("name", name.getBytes())
+                        .checkField("category", category)
+                        .checkField("payload", payload)
+                        .checkField("actualPrice", actualPrice)
+                        .checkField("originalPrice", originalPrice)
+                        .checkField("promoCodes", promocodes);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -327,10 +327,10 @@ public class ProductConverterTest extends CommonTest {
     @Test(expected = UnsupportedOperationException.class)
     public void toModel() {
         productConverter.toModel(
-                new Result<Ecommerce.ECommerceEvent.Product, BytesTruncatedProvider>(
-                        new Ecommerce.ECommerceEvent.Product(),
-                        new BytesTruncatedInfo(0)
-                )
+            new Result<Ecommerce.ECommerceEvent.Product, BytesTruncatedProvider>(
+                new Ecommerce.ECommerceEvent.Product(),
+                new BytesTruncatedInfo(0)
+            )
         );
     }
 }

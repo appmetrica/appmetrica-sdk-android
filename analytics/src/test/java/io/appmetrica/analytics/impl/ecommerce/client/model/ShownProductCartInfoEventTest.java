@@ -47,7 +47,7 @@ public class ShownProductCartInfoEventTest extends CommonTest {
     @Test
     public void converterFromDefaultConstructor() {
         assertThat(new ShownProductCardInfoEvent(eCommerceProduct, eCommerceScreen).getConverter())
-                .isInstanceOf(ShownProductCardInfoEventConverter.class);
+            .isInstanceOf(ShownProductCardInfoEventConverter.class);
     }
 
     @Test

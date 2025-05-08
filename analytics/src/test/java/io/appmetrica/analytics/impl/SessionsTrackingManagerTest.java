@@ -52,10 +52,10 @@ public class SessionsTrackingManagerTest extends CommonTest {
     public void setUp() {
         MockitoAnnotations.openMocks(this);
         sessionsTrackingManager = new SessionsTrackingManager(
-                activityLifecycleManager,
-                activityAppearedListener,
-                conditionalExecutor,
-                activityStateManager
+            activityLifecycleManager,
+            activityAppearedListener,
+            conditionalExecutor,
+            activityStateManager
         );
     }
 
@@ -86,7 +86,7 @@ public class SessionsTrackingManagerTest extends CommonTest {
     @Test
     public void resumeActivityManuallyStateChanged() {
         when(activityStateManager.didStateChange(activity, ActivityStateManager.ActivityState.RESUMED))
-                .thenReturn(true);
+            .thenReturn(true);
         sessionsTrackingManager.resumeActivityManually(activity, mainReporter);
         InOrder inOrder = Mockito.inOrder(activityAppearedListener, mainReporter);
         inOrder.verify(activityAppearedListener).onActivityAppeared(activity);
@@ -96,7 +96,7 @@ public class SessionsTrackingManagerTest extends CommonTest {
     @Test
     public void resumeNullActivityManuallyStateChanged() {
         when(activityStateManager.didStateChange(null, ActivityStateManager.ActivityState.RESUMED))
-                .thenReturn(true);
+            .thenReturn(true);
         sessionsTrackingManager.resumeActivityManually(null, mainReporter);
         verify(mainReporter).resumeSession(null);
         verify(activityAppearedListener, never()).onActivityAppeared(nullable(Activity.class));
@@ -105,7 +105,7 @@ public class SessionsTrackingManagerTest extends CommonTest {
     @Test
     public void resumeActivityManuallyStateDidNotChange() {
         when(activityStateManager.didStateChange(activity, ActivityStateManager.ActivityState.RESUMED))
-                .thenReturn(false);
+            .thenReturn(false);
         sessionsTrackingManager.resumeActivityManually(activity, mainReporter);
         verify(activityAppearedListener).onActivityAppeared(activity);
         verifyNoMoreInteractions(mainReporter);
@@ -114,7 +114,7 @@ public class SessionsTrackingManagerTest extends CommonTest {
     @Test
     public void pauseActivityManuallyStateChanged() {
         when(activityStateManager.didStateChange(activity, ActivityStateManager.ActivityState.PAUSED))
-                .thenReturn(true);
+            .thenReturn(true);
         sessionsTrackingManager.pauseActivityManually(activity, mainReporter);
         InOrder inOrder = Mockito.inOrder(activityAppearedListener, mainReporter);
         inOrder.verify(activityAppearedListener).onActivityAppeared(activity);
@@ -124,7 +124,7 @@ public class SessionsTrackingManagerTest extends CommonTest {
     @Test
     public void pauseNullActivityManuallyStateChanged() {
         when(activityStateManager.didStateChange(null, ActivityStateManager.ActivityState.PAUSED))
-                .thenReturn(true);
+            .thenReturn(true);
         sessionsTrackingManager.pauseActivityManually(null, mainReporter);
         verify(mainReporter).pauseSession(null);
         verify(activityAppearedListener, never()).onActivityAppeared(nullable(Activity.class));
@@ -133,7 +133,7 @@ public class SessionsTrackingManagerTest extends CommonTest {
     @Test
     public void pauseActivityManuallyStateDidNotChange() {
         when(activityStateManager.didStateChange(activity, ActivityStateManager.ActivityState.PAUSED))
-                .thenReturn(false);
+            .thenReturn(false);
         sessionsTrackingManager.pauseActivityManually(activity, mainReporter);
         verifyNoMoreInteractions(mainReporter);
         verify(activityAppearedListener).onActivityAppeared(activity);

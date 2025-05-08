@@ -33,7 +33,7 @@ class ContentProviderFirstLaunchHelperTest : CommonTest() {
     fun createInsertAndWait() {
         ContentProviderFirstLaunchHelper.onCreate(contentProvider)
         ContentProviderFirstLaunchHelper.onInsertFinished()
-        checkTime( { it < timeout } ) {
+        checkTime({ it < timeout }) {
             ContentProviderFirstLaunchHelper.awaitContentProviderWarmUp(context)
         }
         verifyContentProviderDisabled()
@@ -42,7 +42,7 @@ class ContentProviderFirstLaunchHelperTest : CommonTest() {
     @Test
     fun createAndWait() {
         ContentProviderFirstLaunchHelper.onCreate(contentProvider)
-        checkTime( { it >= timeout } ) {
+        checkTime({ it >= timeout }) {
             ContentProviderFirstLaunchHelper.awaitContentProviderWarmUp(context)
         }
         verifyContentProviderDisabled()
@@ -51,7 +51,7 @@ class ContentProviderFirstLaunchHelperTest : CommonTest() {
     @Test
     fun insertAndWaitWithoutCreate() {
         ContentProviderFirstLaunchHelper.onInsertFinished()
-        checkTime( { it < timeout } ) {
+        checkTime({ it < timeout }) {
             ContentProviderFirstLaunchHelper.awaitContentProviderWarmUp(context)
         }
         verifyNoInteractions(packageManager)
@@ -61,13 +61,13 @@ class ContentProviderFirstLaunchHelperTest : CommonTest() {
     fun createInsertAndWaitAndAgainWait() {
         ContentProviderFirstLaunchHelper.onCreate(contentProvider)
         ContentProviderFirstLaunchHelper.onInsertFinished()
-        checkTime( { it < timeout } ) {
+        checkTime({ it < timeout }) {
             ContentProviderFirstLaunchHelper.awaitContentProviderWarmUp(context)
         }
         verifyContentProviderDisabled()
 
         clearInvocations(packageManager, contentProvider)
-        checkTime( { it < timeout } ) {
+        checkTime({ it < timeout }) {
             ContentProviderFirstLaunchHelper.awaitContentProviderWarmUp(context)
         }
         verifyNoInteractions(packageManager, contentProvider)
@@ -77,7 +77,7 @@ class ContentProviderFirstLaunchHelperTest : CommonTest() {
     fun createInsertAndWaitAndAgainInsert() {
         ContentProviderFirstLaunchHelper.onCreate(contentProvider)
         ContentProviderFirstLaunchHelper.onInsertFinished()
-        checkTime( { it < timeout } ) {
+        checkTime({ it < timeout }) {
             ContentProviderFirstLaunchHelper.awaitContentProviderWarmUp(context)
         }
         verifyContentProviderDisabled()

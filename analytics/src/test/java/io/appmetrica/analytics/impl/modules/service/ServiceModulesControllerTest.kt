@@ -409,7 +409,7 @@ internal class ServiceModulesControllerTest : CommonTest() {
 
         verify(selfReporter).reportEvent(
             "service_module_errors",
-            mapOf(firstModuleIdentifier to mapOf ("db" to exception.stackTraceToString()))
+            mapOf(firstModuleIdentifier to mapOf("db" to exception.stackTraceToString()))
         )
 
         clearInvocations(firstModule, secondModule)
@@ -485,7 +485,7 @@ internal class ServiceModulesControllerTest : CommonTest() {
 
         verify(selfReporter).reportEvent(
             "service_module_errors",
-            mapOf(firstModuleIdentifier to mapOf ("init" to exception.stackTraceToString()))
+            mapOf(firstModuleIdentifier to mapOf("init" to exception.stackTraceToString()))
         )
 
         clearInvocations(firstModule, secondModule)

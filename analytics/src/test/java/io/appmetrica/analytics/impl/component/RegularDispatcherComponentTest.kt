@@ -74,7 +74,7 @@ class RegularDispatcherComponentTest : CommonTest() {
     @get:Rule
     val globalServiceLocatorRule = GlobalServiceLocatorRule()
 
-    @Test 
+    @Test
     fun listenerRegistered() {
         verify(startupCenter).registerStartupListener(componentId, regularDispatcherComponent)
     }
@@ -139,6 +139,7 @@ class RegularDispatcherComponentTest : CommonTest() {
         verify(reportingComponent).updateSdkConfig(reporterArguments)
         verify(startupUnit).updateConfiguration(startupArguments)
     }
+
     private fun warmUpAllComponents() {
         val regularReport = CounterReport()
         regularReport.type = InternalEvents.EVENT_TYPE_REGULAR.typeId

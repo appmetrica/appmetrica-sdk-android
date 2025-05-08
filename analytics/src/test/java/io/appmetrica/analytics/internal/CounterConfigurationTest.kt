@@ -4,8 +4,8 @@ import android.location.Location
 import android.os.Build
 import io.appmetrica.analytics.AppMetricaConfig
 import io.appmetrica.analytics.ReporterConfig
-import io.appmetrica.analytics.internal.CounterConfigurationReporterType.Companion.fromStringValue
 import io.appmetrica.analytics.impl.SdkData
+import io.appmetrica.analytics.internal.CounterConfigurationReporterType.Companion.fromStringValue
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.DummyLocationProvider
 import org.assertj.core.api.Assertions.assertThat
@@ -27,7 +27,7 @@ class CounterConfigurationTest : CommonTest() {
     class ReporterTypeTest(
         private val mReporterType: CounterConfigurationReporterType,
         private val mStringValue: String
-    ) {
+    ) : CommonTest() {
 
         @Test
         fun stringValue() {
@@ -205,7 +205,7 @@ class CounterConfigurationTest : CommonTest() {
     }
 
     @Test
-    fun testRewriteManualLocation() {
+    fun rewriteManualLocation() {
         val location = Location("535")
         val lastLocation = DummyLocationProvider.getLocation()
         counterConfiguration.manualLocation = location
@@ -214,7 +214,7 @@ class CounterConfigurationTest : CommonTest() {
     }
 
     @Test
-    fun testDefaultAppVersion() {
+    fun defaultAppVersion() {
         assertThat(counterConfiguration.appVersion).isNull()
     }
 
@@ -553,7 +553,6 @@ class CounterConfigurationTest : CommonTest() {
             assertThat(actual.reporterType).isEqualTo(reporterType)
             assertThat(actual.isAdvIdentifiersTrackingEnabled).isNull()
             assertAll()
-
         }
     }
 }

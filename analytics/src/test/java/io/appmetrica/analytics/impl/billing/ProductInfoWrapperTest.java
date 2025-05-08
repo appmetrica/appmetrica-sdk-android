@@ -27,102 +27,102 @@ public class ProductInfoWrapperTest extends CommonTest {
         Revenue proto = Revenue.parseFrom(data);
 
         new ProtoObjectPropertyAssertions<Revenue>(proto)
-                .checkField("quantity", 2)
-                .checkField("priceMicros", 2L)
-                .checkField("currency", "EUR".getBytes())
-                .checkField("productId", "sku2".getBytes())
-                .checkFieldRecursively("receipt",
-                        new Consumer<ObjectPropertyAssertions<Revenue.Receipt>>() {
-                            @Override
-                            public void accept(ObjectPropertyAssertions<Revenue.Receipt> assertions) {
-                                try {
-                                    assertions
-                                            .checkField("data", "originalJson".getBytes())
-                                            .checkField("signature", "signature2".getBytes())
-                                            .checkAll();
-                                } catch (Exception e) {
-                                    throw new RuntimeException(e);
-                                }
-                            }
-                        })
-                .checkField("autoCollected", true)
-                .checkField("guessedBuyerDevice", Revenue.THIS)
-                .checkField("inAppType", Revenue.SUBSCRIPTION)
-                .checkFieldRecursively("transactionInfo",
-                        new Consumer<ObjectPropertyAssertions<Revenue.Receipt>>() {
-                            @Override
-                            public void accept(ObjectPropertyAssertions<Revenue.Receipt> assertions) {
-                                try {
-                                    assertions
-                                            .checkField("id", "token2".getBytes())
-                                            .checkField("time", 1214324L)
-                                            .checkField("secondaryId", "".getBytes())
-                                            .checkField("secondaryTime", 0L)
-                                            .checkField("state", 0)
-                                            .checkAll();
-                                } catch (Exception e) {
-                                    throw new RuntimeException(e);
-                                }
-                            }
-                        })
-                .checkFieldRecursively("subscriptionInfo",
-                        new Consumer<ObjectPropertyAssertions<Revenue.Receipt>>() {
-                            @Override
-                            public void accept(ObjectPropertyAssertions<Revenue.Receipt> assertions) {
-                                try {
-                                    assertions
-                                            .checkField("autoRenewing", false)
-                                            .checkFieldRecursively("subscriptionPeriod",
-                                                    new Consumer<ObjectPropertyAssertions<Revenue.Receipt>>() {
-                                                        @Override
-                                                        public void accept(ObjectPropertyAssertions<Revenue.Receipt> assertions) {
-                                                            try {
-                                                                assertions
+            .checkField("quantity", 2)
+            .checkField("priceMicros", 2L)
+            .checkField("currency", "EUR".getBytes())
+            .checkField("productId", "sku2".getBytes())
+            .checkFieldRecursively("receipt",
+                new Consumer<ObjectPropertyAssertions<Revenue.Receipt>>() {
+                    @Override
+                    public void accept(ObjectPropertyAssertions<Revenue.Receipt> assertions) {
+                        try {
+                            assertions
+                                .checkField("data", "originalJson".getBytes())
+                                .checkField("signature", "signature2".getBytes())
+                                .checkAll();
+                        } catch (Exception e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                })
+            .checkField("autoCollected", true)
+            .checkField("guessedBuyerDevice", Revenue.THIS)
+            .checkField("inAppType", Revenue.SUBSCRIPTION)
+            .checkFieldRecursively("transactionInfo",
+                new Consumer<ObjectPropertyAssertions<Revenue.Receipt>>() {
+                    @Override
+                    public void accept(ObjectPropertyAssertions<Revenue.Receipt> assertions) {
+                        try {
+                            assertions
+                                .checkField("id", "token2".getBytes())
+                                .checkField("time", 1214324L)
+                                .checkField("secondaryId", "".getBytes())
+                                .checkField("secondaryTime", 0L)
+                                .checkField("state", 0)
+                                .checkAll();
+                        } catch (Exception e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                })
+            .checkFieldRecursively("subscriptionInfo",
+                new Consumer<ObjectPropertyAssertions<Revenue.Receipt>>() {
+                    @Override
+                    public void accept(ObjectPropertyAssertions<Revenue.Receipt> assertions) {
+                        try {
+                            assertions
+                                .checkField("autoRenewing", false)
+                                .checkFieldRecursively("subscriptionPeriod",
+                                    new Consumer<ObjectPropertyAssertions<Revenue.Receipt>>() {
+                                        @Override
+                                        public void accept(ObjectPropertyAssertions<Revenue.Receipt> assertions) {
+                                            try {
+                                                assertions
+                                                    .checkField("number", 1)
+                                                    .checkField("timeUnit", Revenue.SubscriptionInfo.Period.MONTH)
+                                                    .checkAll();
+                                            } catch (Exception e) {
+                                                throw new RuntimeException(e);
+                                            }
+                                        }
+                                    })
+                                .checkFieldRecursively("introductoryInfo",
+                                    new Consumer<ObjectPropertyAssertions<Revenue.Receipt>>() {
+                                        @Override
+                                        public void accept(ObjectPropertyAssertions<Revenue.Receipt> assertions) {
+                                            try {
+                                                assertions
+                                                    .checkField("priceMicros", 4L)
+                                                    .checkFieldRecursively("period",
+                                                        new Consumer<ObjectPropertyAssertions<Revenue.Receipt>>() {
+                                                            @Override
+                                                            public void accept(ObjectPropertyAssertions<Revenue.Receipt> assertions) {
+                                                                try {
+                                                                    assertions
                                                                         .checkField("number", 1)
-                                                                        .checkField("timeUnit", Revenue.SubscriptionInfo.Period.MONTH)
+                                                                        .checkField("timeUnit", Revenue.SubscriptionInfo.Period.DAY)
                                                                         .checkAll();
-                                                            } catch (Exception e) {
-                                                                throw new RuntimeException(e);
+                                                                } catch (Exception e) {
+                                                                    throw new RuntimeException(e);
+                                                                }
                                                             }
-                                                        }
-                                                    })
-                                            .checkFieldRecursively("introductoryInfo",
-                                                    new Consumer<ObjectPropertyAssertions<Revenue.Receipt>>() {
-                                                        @Override
-                                                        public void accept(ObjectPropertyAssertions<Revenue.Receipt> assertions) {
-                                                            try {
-                                                                assertions
-                                                                        .checkField("priceMicros", 4L)
-                                                                        .checkFieldRecursively("period",
-                                                                                new Consumer<ObjectPropertyAssertions<Revenue.Receipt>>() {
-                                                                                    @Override
-                                                                                    public void accept(ObjectPropertyAssertions<Revenue.Receipt> assertions) {
-                                                                                        try {
-                                                                                            assertions
-                                                                                                    .checkField("number", 1)
-                                                                                                    .checkField("timeUnit", Revenue.SubscriptionInfo.Period.DAY)
-                                                                                                    .checkAll();
-                                                                                        } catch (Exception e) {
-                                                                                            throw new RuntimeException(e);
-                                                                                        }
-                                                                                    }
-                                                                                })
-                                                                        .checkField("numberOfPeriods", 1)
-                                                                        .checkField("id", "".getBytes())
-                                                                        .checkAll();
-                                                            } catch (Exception e) {
-                                                                throw new RuntimeException(e);
-                                                            }
-                                                        }
-                                                    })
-                                            .checkAll();
-                                } catch (Exception e) {
-                                    throw new RuntimeException(e);
-                                }
-                            }
-                        })
-                .checkField("payload", "".getBytes())
-                .checkAll();
+                                                        })
+                                                    .checkField("numberOfPeriods", 1)
+                                                    .checkField("id", "".getBytes())
+                                                    .checkAll();
+                                            } catch (Exception e) {
+                                                throw new RuntimeException(e);
+                                            }
+                                        }
+                                    })
+                                .checkAll();
+                        } catch (Exception e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                })
+            .checkField("payload", "".getBytes())
+            .checkAll();
     }
 
     @Test

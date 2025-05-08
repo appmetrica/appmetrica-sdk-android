@@ -5,6 +5,7 @@ import io.appmetrica.analytics.coreapi.internal.io.IExecutionPolicy
 import io.appmetrica.analytics.networktasks.internal.ExponentialBackoffPolicy
 import io.appmetrica.analytics.networktasks.internal.NetworkTask
 import io.appmetrica.analytics.networktasks.internal.RetryPolicyConfig
+import io.appmetrica.analytics.testutils.CommonTest
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito
@@ -14,10 +15,11 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.stubbing
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoMoreInteractions
+import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class NetworkTaskRunnableTaskLifecycleTest {
+class NetworkTaskRunnableTaskLifecycleTest : CommonTest() {
 
     private val retryPolicyConfig = mock<RetryPolicyConfig>()
     private val performingStrategy = mock<NetworkTaskPerformingStrategy>()
@@ -86,7 +88,7 @@ class NetworkTaskRunnableTaskLifecycleTest {
 
     @Test
     fun retriedNetworkTaskLifecycleTest() {
-        Mockito.`when`(networkTask.shouldTryNextHost()).thenReturn(true, false)
+        whenever(networkTask.shouldTryNextHost()).thenReturn(true, false)
         networkTaskRunnable.run()
         val inOrder = Mockito.inOrder(networkTask, performingStrategy)
         inOrder.verify(networkTask).onCreateNetworkTask()

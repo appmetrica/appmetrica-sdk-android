@@ -1,6 +1,5 @@
 package io.appmetrica.analytics.impl
 
-import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor
 import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule
 import io.appmetrica.analytics.testutils.CommonTest
@@ -138,14 +137,14 @@ class AppStatusMonitorTest : CommonTest() {
     @Test
     fun observerWithStickyWhenPaused() {
         appStatusMonitor.pause()
-        appStatusMonitor.registerObserver(observer, sessionTimeout,  /* sticky */true)
+        appStatusMonitor.registerObserver(observer, sessionTimeout, /* sticky */true)
         verifyNoMoreInteractions(observer)
     }
 
     @Test
     fun observerWithStickyWhenResumed() {
         appStatusMonitor.resume()
-        appStatusMonitor.registerObserver(observer,  sessionTimeout, /* sticky */true)
+        appStatusMonitor.registerObserver(observer, sessionTimeout, /* sticky */true)
         verify(observer).onResume()
     }
 

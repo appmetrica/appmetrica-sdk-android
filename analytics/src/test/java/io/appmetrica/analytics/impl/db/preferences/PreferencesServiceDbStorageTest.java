@@ -43,12 +43,12 @@ public class PreferencesServiceDbStorageTest extends CommonTest {
         @NonNull
         private PreferencesServiceDbStorage mServicePreferences;
         @NonNull
-        private NetworkHost networkHost;
+        private final NetworkHost networkHost;
 
         @ParameterizedRobolectricTestRunner.Parameters(name = "host {0}")
         public static Collection<Object[]> data() {
             return Arrays.asList(new Object[][]{
-                    {NetworkHost.DIAGNOSTIC}
+                {NetworkHost.DIAGNOSTIC}
             });
         }
 
@@ -110,10 +110,10 @@ public class PreferencesServiceDbStorageTest extends CommonTest {
         @ParameterizedRobolectricTestRunner.Parameters(name = "host {0}")
         public static Collection<Object[]> data() {
             return Arrays.asList(new Object[][]{
-                    {NetworkHost.DIAGNOSTIC, null, null},
-                    {NetworkHost.REPORT, PreferencesServiceDbStorage.NEXT_REPORT_SEND_ATTEMPT_NUMBER, PreferencesServiceDbStorage.LAST_REPORT_SEND_ATTEMPT_TIME},
-                    {NetworkHost.STARTUP, PreferencesServiceDbStorage.NEXT_STARTUP_SEND_ATTEMPT_NUMBER, PreferencesServiceDbStorage.LAST_STARTUP_SEND_ATTEMPT_TIME},
-                    {NetworkHost.LOCATION, PreferencesServiceDbStorage.NEXT_LOCATION_SEND_ATTEMPT_NUMBER, PreferencesServiceDbStorage.LAST_LOCATION_SEND_ATTEMPT_TIME}
+                {NetworkHost.DIAGNOSTIC, null, null},
+                {NetworkHost.REPORT, PreferencesServiceDbStorage.NEXT_REPORT_SEND_ATTEMPT_NUMBER, PreferencesServiceDbStorage.LAST_REPORT_SEND_ATTEMPT_TIME},
+                {NetworkHost.STARTUP, PreferencesServiceDbStorage.NEXT_STARTUP_SEND_ATTEMPT_NUMBER, PreferencesServiceDbStorage.LAST_STARTUP_SEND_ATTEMPT_TIME},
+                {NetworkHost.LOCATION, PreferencesServiceDbStorage.NEXT_LOCATION_SEND_ATTEMPT_NUMBER, PreferencesServiceDbStorage.LAST_LOCATION_SEND_ATTEMPT_TIME}
             });
         }
 
@@ -268,7 +268,7 @@ public class PreferencesServiceDbStorageTest extends CommonTest {
 
         when(mDbStorage.containsKey(PreferencesServiceDbStorage.DATA_SENDING_RESTRICTED_IN_MAIN.fullKey())).thenReturn(true);
         when(mDbStorage.getBoolean(eq(PreferencesServiceDbStorage.DATA_SENDING_RESTRICTED_IN_MAIN.fullKey()), anyBoolean()))
-                .thenReturn(false);
+            .thenReturn(false);
         assertThat(mServiceDbStorage.getDataSendingRestrictedFromMainReporter()).isFalse();
     }
 
@@ -288,7 +288,7 @@ public class PreferencesServiceDbStorageTest extends CommonTest {
     public void testGetIdentityLightSendTimeSeconds() {
         final long lastSendTime = 12345678;
         when(mDbStorage.getLong(eq(PreferencesServiceDbStorage.LAST_IDENTITY_LIGHT_SEND_TIME.fullKey()), anyLong()))
-                .thenReturn(lastSendTime);
+            .thenReturn(lastSendTime);
         assertThat(mServiceDbStorage.getLastIdentityLightSendTimeSeconds(0L)).isEqualTo(lastSendTime);
     }
 
@@ -307,7 +307,7 @@ public class PreferencesServiceDbStorageTest extends CommonTest {
     @Test
     public void wasSatellitePreloadInfoChecked() {
         when(mDbStorage.getBoolean(eq(PreferencesServiceDbStorage.SATELLITE_PRELOAD_INFO_CHECKED.fullKey()), anyBoolean()))
-                .thenReturn(true);
+            .thenReturn(true);
         assertThat(mServiceDbStorage.wasSatellitePreloadInfoChecked()).isTrue();
     }
 
@@ -323,7 +323,7 @@ public class PreferencesServiceDbStorageTest extends CommonTest {
 
         when(mDbStorage.containsKey(PreferencesServiceDbStorage.SATELLITE_CLIDS_CHECKED.fullKey())).thenReturn(true);
         when(mDbStorage.getBoolean(eq(PreferencesServiceDbStorage.SATELLITE_CLIDS_CHECKED.fullKey()), anyBoolean()))
-                .thenReturn(true);
+            .thenReturn(true);
         assertThat(mServiceDbStorage.wereSatelliteClidsChecked()).isTrue();
     }
 

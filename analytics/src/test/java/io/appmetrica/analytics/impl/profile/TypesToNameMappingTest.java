@@ -17,9 +17,9 @@ public class TypesToNameMappingTest extends CommonTest {
     @ParameterizedRobolectricTestRunner.Parameters(name = "for {0} should be {1}")
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
-                {Userprofile.Profile.Attribute.STRING, "String"},
-                {Userprofile.Profile.Attribute.NUMBER, "Number"},
-                {Userprofile.Profile.Attribute.COUNTER, "Counter"},
+            {Userprofile.Profile.Attribute.STRING, "String"},
+            {Userprofile.Profile.Attribute.NUMBER, "Number"},
+            {Userprofile.Profile.Attribute.COUNTER, "Counter"},
         });
     }
 

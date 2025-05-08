@@ -46,18 +46,19 @@ class JvmCrashClientControllerTest : CommonTest() {
     val crashProcessorComposite: CrashProcessorComposite by crashProcessorCompositeMockedConstructionRule
 
     @get:Rule
-    val crashProcessorInstallerMockedConstructionRule = constructionRule<ThreadUncaughtExceptionHandlerInstaller>()
-    private val crashProcessorInstaller: ThreadUncaughtExceptionHandlerInstaller
-        by crashProcessorInstallerMockedConstructionRule
+    val crashProcessorInstallerRule = constructionRule<ThreadUncaughtExceptionHandlerInstaller>()
+    private val crashProcessorInstaller: ThreadUncaughtExceptionHandlerInstaller by crashProcessorInstallerRule
 
     private val jvmCrashClientController: JvmCrashClientController by setUp { JvmCrashClientController() }
 
     @Before
     fun setUp() {
-        whenever(ClientServiceLocator.getInstance().crashProcessorFactory.createCrashProcessors(
-            context,
-            reporterFactoryProvider
-        )).thenReturn(listOf(firstTechnicalCrashProcessor, secondTechnicalCrashProcessor))
+        whenever(
+            ClientServiceLocator.getInstance().crashProcessorFactory.createCrashProcessors(
+                context,
+                reporterFactoryProvider
+            )
+        ).thenReturn(listOf(firstTechnicalCrashProcessor, secondTechnicalCrashProcessor))
     }
 
     @Test
@@ -65,8 +66,8 @@ class JvmCrashClientControllerTest : CommonTest() {
         jvmCrashClientController.setUpCrashHandler()
 
         verify(crashProcessorInstaller).install()
-        assertThat(crashProcessorInstallerMockedConstructionRule.constructionMock.constructed()).hasSize(1)
-        assertThat(crashProcessorInstallerMockedConstructionRule.argumentInterceptor.flatArguments())
+        assertThat(crashProcessorInstallerRule.constructionMock.constructed()).hasSize(1)
+        assertThat(crashProcessorInstallerRule.argumentInterceptor.flatArguments())
             .containsExactly(appMetricaUncaughtExceptionHandler)
         assertThat(appMetricaUncaughtExceptionHandlerMockedConstructionRule.argumentInterceptor.flatArguments())
             .containsExactly(crashProcessorComposite)
@@ -74,7 +75,7 @@ class JvmCrashClientControllerTest : CommonTest() {
         clearInvocations(crashProcessorInstaller)
         jvmCrashClientController.setUpCrashHandler()
         verifyNoInteractions(crashProcessorInstaller)
-        assertThat(crashProcessorInstallerMockedConstructionRule.constructionMock.constructed()).hasSize(1)
+        assertThat(crashProcessorInstallerRule.constructionMock.constructed()).hasSize(1)
     }
 
     @Test

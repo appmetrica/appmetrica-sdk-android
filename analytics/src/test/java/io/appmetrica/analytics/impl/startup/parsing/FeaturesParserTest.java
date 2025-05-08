@@ -13,8 +13,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class FeaturesParserTest extends CommonTest {
 
     private StartupJsonMock mStartupJsonMock;
-    private StartupResult mStartupResult = new StartupResult();
-    private FeaturesParser mFeaturesParser = new FeaturesParser();
+    private final StartupResult mStartupResult = new StartupResult();
+    private final FeaturesParser mFeaturesParser = new FeaturesParser();
 
     @Before
     public void setUp() throws Exception {

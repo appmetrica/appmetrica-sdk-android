@@ -17,8 +17,8 @@ public class BytesTruncationInfoTest extends CommonTest {
     public void constructor() throws Exception {
         int bytesTruncated = 4;
         ObjectPropertyAssertions(new BytesTruncatedInfo(bytesTruncated))
-                .checkField("bytesTruncated", bytesTruncated)
-                .checkAll();
+            .checkField("bytesTruncated", bytesTruncated)
+            .checkAll();
     }
 
 }

@@ -37,7 +37,7 @@ public class EventHashesStorageTest extends CommonTest {
 
     private final Eventhashes.EventHashes mProtoEventHashes = new Eventhashes.EventHashes();
 
-    private Context mContext = RuntimeEnvironment.getApplication();
+    private final Context mContext = RuntimeEnvironment.getApplication();
     private EventHashesStorage mStorage;
 
     private static final String DB_KEY = "Test db key";
@@ -54,13 +54,13 @@ public class EventHashesStorageTest extends CommonTest {
 
         SoftAssertions softAssertions = new SoftAssertions();
         softAssertions.assertThat(eventHashesStorage.getBinaryDataHelper())
-                .as("getBinaryDataHelper()")
-                .isNotNull();
+            .as("getBinaryDataHelper()")
+            .isNotNull();
         softAssertions.assertThat(eventHashesStorage.getDbKey()).as("getDbKey()")
-                .isEqualTo("event_hashes");
+            .isEqualTo("event_hashes");
         softAssertions.assertThat(eventHashesStorage.getEventHashesSerializer())
-                .as("getEventHashesSerializer()")
-                .isNotNull();
+            .as("getEventHashesSerializer()")
+            .isNotNull();
         softAssertions.assertAll();
     }
 
@@ -89,10 +89,10 @@ public class EventHashesStorageTest extends CommonTest {
     @Test
     public void testReadReturnObjectFromSerializer() throws IOException {
         EventHashes eventHashes = new EventHashes(
-                true,
-                200,
-                400,
-                new HashSet<Integer>(Arrays.asList(1, 2, 4, 8, 16, 32, 64))
+            true,
+            200,
+            400,
+            new HashSet<Integer>(Arrays.asList(1, 2, 4, 8, 16, 32, 64))
         );
 
         byte[] rawData = {1, 2, 3, 4, 5, 6, 7, 8, 9};
@@ -111,10 +111,10 @@ public class EventHashesStorageTest extends CommonTest {
     @Test
     public void testWriteSerializedObject() {
         EventHashes eventHashes = new EventHashes(
-                true,
-                120,
-                330,
-                new HashSet<Integer>(Arrays.asList(2, 4, 8, 16, 32, 64, 128, 256, 512))
+            true,
+            120,
+            330,
+            new HashSet<Integer>(Arrays.asList(2, 4, 8, 16, 32, 64, 128, 256, 512))
         );
 
         byte[] rawData = {1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21};

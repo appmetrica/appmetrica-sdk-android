@@ -37,7 +37,7 @@ public class BodyDecoderTest extends CommonTest {
     @Before
     public void setUp() throws Throwable {
         MockitoAnnotations.openMocks(this);
-        when(mEncryptedProvider.getEncrypter(eq(mKey.getBytes()), (byte[]) any())).thenReturn(mAesEncrypter);
+        when(mEncryptedProvider.getEncrypter(eq(mKey.getBytes()), any())).thenReturn(mAesEncrypter);
         when(mAesEncrypter.decrypt(eq(mEncoded), anyInt(), anyInt())).thenReturn(mCompressed);
         when(mGzipCompressor.uncompress(mCompressed)).thenReturn(mExpected);
         mBodyDecoder = new BodyDecoder(mEncryptedProvider, mGzipCompressor);

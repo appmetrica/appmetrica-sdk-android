@@ -30,7 +30,7 @@ public class StartupRequestConfigLoaderTest extends CoreRequestConfigLoaderTest 
     @Mock
     private ClidsInfoStorage clidsStorage;
     private StartupRequestConfig.Loader mLoader;
-    private String mPackageName = "another package name";
+    private final String mPackageName = "another package name";
 
     @Rule
     public final GlobalServiceLocatorRule mRule = new GlobalServiceLocatorRule();
@@ -54,27 +54,27 @@ public class StartupRequestConfigLoaderTest extends CoreRequestConfigLoaderTest 
         String countryInit = "by";
         long firstStartupServerTime = 495734685;
         StartupState startupState = TestUtils.createDefaultStartupStateBuilder()
-                .withHostUrlsFromStartup(hostUrlsFromStartup)
-                .withHostUrlsFromClient(hostUrlsFromClient)
-                .withHadFirstStartup(true)
-                .withCountryInit(countryInit)
-                .withFirstStartupServerTime(firstStartupServerTime)
-                .build();
+            .withHostUrlsFromStartup(hostUrlsFromStartup)
+            .withHostUrlsFromClient(hostUrlsFromClient)
+            .withHadFirstStartup(true)
+            .withCountryInit(countryInit)
+            .withFirstStartupServerTime(firstStartupServerTime)
+            .build();
         StartupRequestConfig.Arguments componentArguments = new StartupRequestConfig.Arguments(
-                referrer,
-                referrerSource,
-                clidsFromClient,
-                true,
-                newCustomHosts
+            referrer,
+            referrerSource,
+            clidsFromClient,
+            true,
+            newCustomHosts
         );
 
         CoreRequestConfig.CoreDataSource<StartupRequestConfig.Arguments> dataSource =
-                new CoreRequestConfig.CoreDataSource<>(
-                    startupState,
-                    sdkEnvironmentProvider,
-                    platformIdentifiers,
-                    componentArguments
-                );
+            new CoreRequestConfig.CoreDataSource<>(
+                startupState,
+                sdkEnvironmentProvider,
+                platformIdentifiers,
+                componentArguments
+            );
         StartupRequestConfig config = mLoader.load(dataSource);
 
         SoftAssertions softly = new SoftAssertions();
@@ -98,12 +98,12 @@ public class StartupRequestConfigLoaderTest extends CoreRequestConfigLoaderTest 
         StartupRequestConfig.Arguments componentArguments = new StartupRequestConfig.Arguments();
 
         CoreRequestConfig.CoreDataSource<StartupRequestConfig.Arguments> dataSource =
-                new CoreRequestConfig.CoreDataSource<>(
-                    startupState,
-                    sdkEnvironmentProvider,
-                    platformIdentifiers,
-                    componentArguments
-                );
+            new CoreRequestConfig.CoreDataSource<>(
+                startupState,
+                sdkEnvironmentProvider,
+                platformIdentifiers,
+                componentArguments
+            );
         StartupRequestConfig config = mLoader.load(dataSource);
         SoftAssertions softly = new SoftAssertions();
         softly.assertThat(config.getDistributionReferrer()).isNull();
@@ -117,20 +117,20 @@ public class StartupRequestConfigLoaderTest extends CoreRequestConfigLoaderTest 
         String argumentsReferrerSource = "broadcase";
         StartupState startupState = TestUtils.createDefaultStartupState();
         StartupRequestConfig.Arguments componentArguments = new StartupRequestConfig.Arguments(
-                argumentsReferrer,
-                argumentsReferrerSource,
-                null,
-                false,
-                null
+            argumentsReferrer,
+            argumentsReferrerSource,
+            null,
+            false,
+            null
         );
 
         CoreRequestConfig.CoreDataSource<StartupRequestConfig.Arguments> dataSource =
-                new CoreRequestConfig.CoreDataSource<>(
-                    startupState,
-                    sdkEnvironmentProvider,
-                    platformIdentifiers,
-                    componentArguments
-                );
+            new CoreRequestConfig.CoreDataSource<>(
+                startupState,
+                sdkEnvironmentProvider,
+                platformIdentifiers,
+                componentArguments
+            );
         StartupRequestConfig config = mLoader.load(dataSource);
         SoftAssertions softly = new SoftAssertions();
         softly.assertThat(config.getDistributionReferrer()).isEqualTo(argumentsReferrer);

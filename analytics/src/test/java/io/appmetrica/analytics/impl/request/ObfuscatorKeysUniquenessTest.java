@@ -24,8 +24,8 @@ public class ObfuscatorKeysUniquenessTest extends CommonTest {
             }
         }
         assertThat(duplicatedKeys)
-                .as("Detected obfuscated keys duplication")
-                .isEmpty();
+            .as("Detected obfuscated keys duplication")
+            .isEmpty();
     }
 
 }

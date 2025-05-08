@@ -1,11 +1,12 @@
 package io.appmetrica.analytics.networktasks.impl.utils
 
 import io.appmetrica.analytics.coreapi.internal.identifiers.SdkIdentifiers
+import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import java.util.UUID
 
-class ConfigUtilsTest {
+class ConfigUtilsTest : CommonTest() {
 
     private val uuid = UUID.randomUUID().toString()
     private val deviceId = UUID.randomUUID().toString()

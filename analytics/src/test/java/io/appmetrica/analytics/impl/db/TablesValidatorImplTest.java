@@ -24,37 +24,37 @@ public class TablesValidatorImplTest extends CommonTest {
     public void testIsDbSchemeValid() throws Exception {
         final String table1 = "table1";
         final String[] columns1 = new String[]{
-                "A", "C", "B"
+            "A", "C", "B"
         };
         final String table2 = "table2";
         final String[] columns2 = new String[]{
-                "1", "3", "2"
+            "1", "3", "2"
         };
         SQLiteDatabase database = mock(SQLiteDatabase.class);
         Cursor cursor1 = mock(Cursor.class);
         when(cursor1.getColumnNames()).thenReturn(new String[]{
-                "A", "B", "C"
+            "A", "B", "C"
         });
         Cursor cursor2 = mock(Cursor.class);
         when(cursor2.getColumnNames()).thenReturn(columns2);
         when(
             database.query(eq(table1),
-                ArgumentMatchers.<String[]>isNull(),
-                ArgumentMatchers.<String>isNull(),
-                ArgumentMatchers.<String[]>isNull(),
-                ArgumentMatchers.<String>isNull(),
-                ArgumentMatchers.<String>isNull(),
-                ArgumentMatchers.<String>isNull()
+                ArgumentMatchers.isNull(),
+                ArgumentMatchers.isNull(),
+                ArgumentMatchers.isNull(),
+                ArgumentMatchers.isNull(),
+                ArgumentMatchers.isNull(),
+                ArgumentMatchers.isNull()
             )
         ).thenReturn(cursor1);
         when(
             database.query(eq(table2),
-                ArgumentMatchers.<String[]>isNull(),
-                ArgumentMatchers.<String>isNull(),
-                ArgumentMatchers.<String[]>isNull(),
-                ArgumentMatchers.<String>isNull(),
-                ArgumentMatchers.<String>isNull(),
-                ArgumentMatchers.<String>isNull()
+                ArgumentMatchers.isNull(),
+                ArgumentMatchers.isNull(),
+                ArgumentMatchers.isNull(),
+                ArgumentMatchers.isNull(),
+                ArgumentMatchers.isNull(),
+                ArgumentMatchers.isNull()
             )
         ).thenReturn(cursor2);
         TablesValidatorImpl impl = new TablesValidatorImpl("test", new HashMap<String, List<String>>() {
@@ -70,37 +70,37 @@ public class TablesValidatorImplTest extends CommonTest {
     public void testIsDbSchemeInvalid() throws Exception {
         final String table1 = "table1";
         final String[] columns1 = new String[]{
-                "A", "C", "B"
+            "A", "C", "B"
         };
         final String table2 = "table2";
         final String[] columns2 = new String[]{
-                "1", "3", "2"
+            "1", "3", "2"
         };
         SQLiteDatabase database = mock(SQLiteDatabase.class);
         Cursor cursor1 = mock(Cursor.class);
         when(cursor1.getColumnNames()).thenReturn(new String[]{
-                "A", "2", "C"
+            "A", "2", "C"
         });
         Cursor cursor2 = mock(Cursor.class);
         when(cursor2.getColumnNames()).thenReturn(columns2);
         when(
             database.query(eq(table1),
-                ArgumentMatchers.<String[]>isNull(),
-                ArgumentMatchers.<String>isNull(),
-                ArgumentMatchers.<String[]>isNull(),
-                ArgumentMatchers.<String>isNull(),
-                ArgumentMatchers.<String>isNull(),
-                ArgumentMatchers.<String>isNull()
+                ArgumentMatchers.isNull(),
+                ArgumentMatchers.isNull(),
+                ArgumentMatchers.isNull(),
+                ArgumentMatchers.isNull(),
+                ArgumentMatchers.isNull(),
+                ArgumentMatchers.isNull()
             )
         ).thenReturn(cursor1);
         when(
             database.query(eq(table2),
-                ArgumentMatchers.<String[]>isNull(),
-                ArgumentMatchers.<String>isNull(),
-                ArgumentMatchers.<String[]>isNull(),
-                ArgumentMatchers.<String>isNull(),
-                ArgumentMatchers.<String>isNull(),
-                ArgumentMatchers.<String>isNull()
+                ArgumentMatchers.isNull(),
+                ArgumentMatchers.isNull(),
+                ArgumentMatchers.isNull(),
+                ArgumentMatchers.isNull(),
+                ArgumentMatchers.isNull(),
+                ArgumentMatchers.isNull()
             )
         ).thenReturn(cursor2);
         TablesValidatorImpl impl = new TablesValidatorImpl("test", new HashMap<String, List<String>>() {
@@ -116,25 +116,25 @@ public class TablesValidatorImplTest extends CommonTest {
     public void testDbWithoutTable() throws Exception {
         final String table1 = "table1";
         final String[] columns1 = new String[]{
-                "A", "C", "B"
+            "A", "C", "B"
         };
         final String table2 = "table2";
         final String[] columns2 = new String[]{
-                "1", "3", "2"
+            "1", "3", "2"
         };
         SQLiteDatabase database = mock(SQLiteDatabase.class);
         Cursor cursor1 = mock(Cursor.class);
         when(cursor1.getColumnNames()).thenReturn(new String[]{
-                "A", "B", "C"
+            "A", "B", "C"
         });
         when(
             database.query(eq(table1),
-                ArgumentMatchers.<String[]>isNull(),
-                ArgumentMatchers.<String>isNull(),
-                ArgumentMatchers.<String[]>isNull(),
-                ArgumentMatchers.<String>isNull(),
-                ArgumentMatchers.<String>isNull(),
-                ArgumentMatchers.<String>isNull()
+                ArgumentMatchers.isNull(),
+                ArgumentMatchers.isNull(),
+                ArgumentMatchers.isNull(),
+                ArgumentMatchers.isNull(),
+                ArgumentMatchers.isNull(),
+                ArgumentMatchers.isNull()
             )
         ).thenReturn(cursor1);
         TablesValidatorImpl impl = new TablesValidatorImpl("test", new HashMap<String, List<String>>() {
@@ -150,14 +150,14 @@ public class TablesValidatorImplTest extends CommonTest {
     public void testCheckValidCursorColumns() {
         Cursor cursor = mock(Cursor.class);
         when(cursor.getColumnNames()).thenReturn(new String[]{
-                "A",
-                "B"
+            "A",
+            "B"
         });
         TablesValidatorImpl validator = new TablesValidatorImpl("test", mock(HashMap.class));
         assertThat(validator.checkCursorColumns(
-                cursor,
-                "table_name",
-                CollectionUtils.createSortedListWithoutRepetitions("B", "A")
+            cursor,
+            "table_name",
+            CollectionUtils.createSortedListWithoutRepetitions("B", "A")
         )).isTrue();
     }
 
@@ -165,15 +165,15 @@ public class TablesValidatorImplTest extends CommonTest {
     public void testCheckInvalidCursorColumns() {
         Cursor cursor = mock(Cursor.class);
         when(cursor.getColumnNames()).thenReturn(new String[]{
-                "A",
-                "B"
+            "A",
+            "B"
         });
         if (BuildConfig.DEBUG == false) {
             TablesValidatorImpl validator = new TablesValidatorImpl("test", mock(HashMap.class));
             assertThat(validator.checkCursorColumns(
-                    cursor,
-                    "table_name",
-                    CollectionUtils.createSortedListWithoutRepetitions("B")
+                cursor,
+                "table_name",
+                CollectionUtils.createSortedListWithoutRepetitions("B")
             )).isFalse();
         }
     }

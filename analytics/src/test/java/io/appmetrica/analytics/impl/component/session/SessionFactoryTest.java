@@ -77,12 +77,12 @@ public class SessionFactoryTest extends CommonTest {
         when(mComponent.getDbHelper()).thenReturn(mDatabaseHelper);
 
         mFactory = new AbstractSessionFactory(
-                mComponent,
-                sessionIDProvider,
-                mSessionStorage,
-                SessionFactoryArguments.newBuilder(SessionType.FOREGROUND).build(),
-                mSelfReporter,
-                timeProvider
+            mComponent,
+            sessionIDProvider,
+            mSessionStorage,
+            SessionFactoryArguments.newBuilder(SessionType.FOREGROUND).build(),
+            mSelfReporter,
+            timeProvider
         ) {
         };
     }
@@ -151,18 +151,18 @@ public class SessionFactoryTest extends CommonTest {
         int sessionId = random.nextInt(1000) + 3000;
         int sessionTimeout = random.nextInt(1000) + 4000;
         sessionStorage.putAliveReportNeeded(aliveNeeded)
-                .putSleepStart(sleepStart)
-                .putCreationTime(creationTime)
-                .putReportId(reportId)
-                .putSessionId(sessionId)
-                .commit();
+            .putSleepStart(sleepStart)
+            .putCreationTime(creationTime)
+            .putReportId(reportId)
+            .putSessionId(sessionId)
+            .commit();
         SessionArgumentsInternal arguments = new AbstractSessionFactory(
-                mock(ComponentUnit.class),
-                sessionIDProvider,
-                sessionStorage,
-                SessionFactoryArguments.newBuilder(SessionType.FOREGROUND).withSessionTimeout(sessionTimeout).build(),
-                mSelfReporter,
-                timeProvider
+            mock(ComponentUnit.class),
+            sessionIDProvider,
+            sessionStorage,
+            SessionFactoryArguments.newBuilder(SessionType.FOREGROUND).withSessionTimeout(sessionTimeout).build(),
+            mSelfReporter,
+            timeProvider
         ) {
         }.fillFromStorage();
         assertThat(arguments.isAliveNeeded(false)).isTrue();
@@ -184,8 +184,8 @@ public class SessionFactoryTest extends CommonTest {
 
     private AbstractSessionFactory factoryWithValues(FactoryFactory factoryFactory, boolean hasValues) {
         SessionStorageImpl sessionStorage = spy(new SessionStorageImpl(
-                mock(PreferencesComponentDbStorage.class),
-                "tag"
+            mock(PreferencesComponentDbStorage.class),
+            "tag"
         ));
         ComponentUnit componentUnit = mock(ComponentUnit.class);
         ReportRequestConfig requestConfig = mock(ReportRequestConfig.class);
@@ -194,11 +194,11 @@ public class SessionFactoryTest extends CommonTest {
         doReturn(RuntimeEnvironment.getApplication()).when(componentUnit).getContext();
         doReturn(mock(DatabaseHelper.class)).when(componentUnit).getDbHelper();
         AbstractSessionFactory factory = factoryFactory.createFactory(
-                componentUnit,
-                sessionIDProvider,
-                sessionStorage,
-                SessionFactoryArguments.newBuilder(SessionType.FOREGROUND).build(),
-                mSelfReporter
+            componentUnit,
+            sessionIDProvider,
+            sessionStorage,
+            SessionFactoryArguments.newBuilder(SessionType.FOREGROUND).build(),
+            mSelfReporter
         );
         doReturn(hasValues).when(sessionStorage).hasValues();
         return factory;
@@ -212,12 +212,12 @@ public class SessionFactoryTest extends CommonTest {
                                                     SessionFactoryArguments arguments,
                                                     IReporterExtended selfReporter) {
             return new AbstractSessionFactory(
-                    componentUnit,
-                    sessionIDProvider,
-                    sessionStorage,
-                    arguments,
-                    selfReporter,
-                    mock(SystemTimeProvider.class)
+                componentUnit,
+                sessionIDProvider,
+                sessionStorage,
+                arguments,
+                selfReporter,
+                mock(SystemTimeProvider.class)
             ) {
             };
         }

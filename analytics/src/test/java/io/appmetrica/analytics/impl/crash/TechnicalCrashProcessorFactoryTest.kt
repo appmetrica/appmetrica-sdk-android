@@ -26,7 +26,6 @@ internal class TechnicalCrashProcessorFactoryTest : CommonTest() {
     @get:Rule
     val sdkUtils = MockedStaticRule(SdkUtils::class.java)
 
-
     private val appCrashProcessor = mock<ICrashProcessor>()
 
     @get:Rule
@@ -57,7 +56,6 @@ internal class TechnicalCrashProcessorFactoryTest : CommonTest() {
         val factory = TechnicalCrashProcessorFactory()
 
         assertThat(factory.createCrashProcessors(context, reporterFactoryProvider))
-            .containsExactlyInAnyOrder(
-            )
+            .containsExactlyInAnyOrder()
     }
 }

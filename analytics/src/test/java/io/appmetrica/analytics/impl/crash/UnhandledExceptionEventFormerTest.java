@@ -58,14 +58,14 @@ public class UnhandledExceptionEventFormerTest extends CommonTest {
             String environment = "environment";
             new Random().nextBytes(eventValueBytes);
             UnhandledException unhandledException = new UnhandledException(
-                    mock(ThrowableModel.class),
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null
+                mock(ThrowableModel.class),
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
             );
             when(UnhandledException.getErrorName(unhandledException)).thenReturn(errorName);
             when(mJvmCrashConverter.fromModel(unhandledException)).thenReturn(eventValueBytes);
@@ -75,11 +75,11 @@ public class UnhandledExceptionEventFormerTest extends CommonTest {
 
             ClientCounterReport clientCounterReport = mock(ClientCounterReport.class);
             when(
-                    EventsManager.unhandledExceptionReportEntry(
-                            eq(errorName),
-                            same(eventValueBytes),
-                            any(PublicLogger.class)
-                    )
+                EventsManager.unhandledExceptionReportEntry(
+                    eq(errorName),
+                    same(eventValueBytes),
+                    any(PublicLogger.class)
+                )
             ).thenReturn(clientCounterReport);
             HashMap<ClientCounterReport.TrimmedField, Integer> trimmedFields = new HashMap<ClientCounterReport.TrimmedField, Integer>();
             trimmedFields.put(ClientCounterReport.TrimmedField.VALUE, 20);
@@ -89,9 +89,9 @@ public class UnhandledExceptionEventFormerTest extends CommonTest {
             verify(clientCounterReport).setEventEnvironment(environment);
             SoftAssertions softly = new SoftAssertions();
             softly.assertThat(report.getEnvironment().getReporterConfiguration())
-                    .usingRecursiveComparison().isEqualTo(mReporterEnvironment.getReporterConfiguration());
+                .usingRecursiveComparison().isEqualTo(mReporterEnvironment.getReporterConfiguration());
             softly.assertThat(report.getEnvironment().getProcessConfiguration())
-                    .usingRecursiveComparison().isEqualTo(mReporterEnvironment.getProcessConfiguration());
+                .usingRecursiveComparison().isEqualTo(mReporterEnvironment.getProcessConfiguration());
             softly.assertThat(report.isCrashReport()).isTrue();
             softly.assertThat(report.getTrimmedFields()).isEqualTo(trimmedFields);
             softly.assertThat(report.getReport()).isSameAs(clientCounterReport);

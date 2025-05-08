@@ -33,24 +33,24 @@ public class ReportComponentConfigurationHolderTest extends CommonTest {
     public void setUp() {
         ComponentUnit componentUnit = mock(ComponentUnit.class);
         doReturn(new ComponentId(
-                RuntimeEnvironment.getApplication().getPackageName(),
-                UUID.randomUUID().toString())
+            RuntimeEnvironment.getApplication().getPackageName(),
+            UUID.randomUUID().toString())
         ).when(componentUnit).getComponentId();
         mHolder = new ReportComponentConfigurationHolder(
-                new ReportRequestConfig.Loader(componentUnit,
-                        new ReportRequestConfig.BaseDataSendingStrategy(
-                                new DataSendingRestrictionControllerImpl(mock(DataSendingRestrictionControllerImpl.Storage.class))
-                        ) {
-                        }
+            new ReportRequestConfig.Loader(componentUnit,
+                new ReportRequestConfig.BaseDataSendingStrategy(
+                    new DataSendingRestrictionControllerImpl(mock(DataSendingRestrictionControllerImpl.Storage.class))
                 ) {
-                    @NonNull
-                    @Override
-                    public ReportRequestConfig load(@NonNull CoreRequestConfig.CoreDataSource<ReportRequestConfig.Arguments> dataSource) {
-                        return mock(ReportRequestConfig.class);
-                    }
-                },
-                mock(StartupState.class),
-                ReportRequestConfig.Arguments.empty()
+                }
+            ) {
+                @NonNull
+                @Override
+                public ReportRequestConfig load(@NonNull CoreRequestConfig.CoreDataSource<ReportRequestConfig.Arguments> dataSource) {
+                    return mock(ReportRequestConfig.class);
+                }
+            },
+            mock(StartupState.class),
+            ReportRequestConfig.Arguments.empty()
         );
     }
 
@@ -74,7 +74,7 @@ public class ReportComponentConfigurationHolderTest extends CommonTest {
         ReportRequestConfig.Arguments arguments = mHolder.getArguments();
         newConfiguration.getReporterConfiguration().setApiKey(UUID.randomUUID().toString());
         newConfiguration.getReporterConfiguration().setCustomAppVersion(
-                newConfiguration.getReporterConfiguration().getAppVersion() + "_new"
+            newConfiguration.getReporterConfiguration().getAppVersion() + "_new"
         );
 
         mHolder.updateArguments(

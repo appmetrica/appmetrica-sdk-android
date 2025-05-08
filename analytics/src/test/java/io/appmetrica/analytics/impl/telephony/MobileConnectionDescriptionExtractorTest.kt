@@ -32,7 +32,7 @@ import java.util.concurrent.TimeUnit
 class MobileConnectionDescriptionExtractorTest : CommonTest() {
 
     private val networkTypeString = "GPRS"
-    private val context = mock<Context> ()
+    private val context = mock<Context>()
 
     private val cachedMobileConnectionDescription = mock<MobileConnectionDescription>()
 
@@ -173,7 +173,7 @@ class MobileConnectionDescriptionExtractorTest : CommonTest() {
         verify(cachedData).data = result
     }
 
-    private fun cachedData() : CachedDataProvider.CachedData<MobileConnectionDescription> {
+    private fun cachedData(): CachedDataProvider.CachedData<MobileConnectionDescription> {
         assertThat(cachedDataMockedConstructionRule.constructionMock.constructed()).hasSize(1)
         assertThat(cachedDataMockedConstructionRule.argumentInterceptor.flatArguments())
             .containsExactly(cacheExpiryTime, cacheExpiryTime * 2, "mobile-connection")

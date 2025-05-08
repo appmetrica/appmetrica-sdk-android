@@ -110,7 +110,7 @@ public abstract class BaseReporterTest extends BaseReporterData {
     public final MockedStaticRule<UnhandledException> sUnhandledException = new MockedStaticRule<>(UnhandledException.class);
     @Rule
     public final MockedConstructionRule<AdRevenueWrapper> adRevenueWrapperConstructor =
-            new MockedConstructionRule<>(AdRevenueWrapper.class);
+        new MockedConstructionRule<>(AdRevenueWrapper.class);
     @Rule
     public final MockedConstructionRule<AnrFromApiReportingTask> anrFromApiReportingTaskMockedConstructionRule =
         new MockedConstructionRule<>(AnrFromApiReportingTask.class);
@@ -127,7 +127,7 @@ public abstract class BaseReporterTest extends BaseReporterData {
     protected RegularErrorConverter regularErrorConverter = mock(RegularErrorConverter.class);
     protected CustomErrorConverter customErrorConverter = mock(CustomErrorConverter.class);
     protected PluginErrorDetailsConverter pluginErrorDetailsConverter = mock(PluginErrorDetailsConverter.class);
-    protected byte[] serializedBytes = new byte[] { 1, 3, 5, 7 };
+    protected byte[] serializedBytes = new byte[]{1, 3, 5, 7};
     protected CounterReport mockedEvent = mock(CounterReport.class);
 
     @Before
@@ -150,7 +150,7 @@ public abstract class BaseReporterTest extends BaseReporterData {
         when(anrConverter.fromModel(any(Anr.class))).thenReturn(anr);
         when(EventsManager.anrEntry(eq(serializedBytes), any(PublicLogger.class))).thenReturn(mockedEvent);
         final AllThreads allThreads = new AllThreads(new ThreadState(
-                "name", 1, 1, "group", 1, new ArrayList<StackTraceElement>()
+            "name", 1, 1, "group", 1, new ArrayList<StackTraceElement>()
         ), new ArrayList<ThreadState>(), "process");
 
         getReporter().reportAnr(allThreads);
@@ -165,9 +165,9 @@ public abstract class BaseReporterTest extends BaseReporterData {
         ArgumentCaptor<Anr> anrCaptor = ArgumentCaptor.forClass(Anr.class);
         verify(anrConverter).fromModel(anrCaptor.capture());
         ObjectPropertyAssertions(anrCaptor.getValue())
-                .checkField("mAllThreads", allThreads)
-                .checkFieldsAreNull("mBuildId", "mIsOffline")
-                .checkAll();
+            .checkField("mAllThreads", allThreads)
+            .checkFieldsAreNull("mBuildId", "mIsOffline")
+            .checkAll();
     }
 
     @Test
@@ -180,7 +180,7 @@ public abstract class BaseReporterTest extends BaseReporterData {
         when(anrConverter.fromModel(any(Anr.class))).thenReturn(anr);
         when(EventsManager.anrEntry(eq(serializedBytes), any(PublicLogger.class))).thenReturn(mockedEvent);
         final AllThreads allThreads = new AllThreads(new ThreadState(
-                "name", 1, 1, "group", 1, new ArrayList<StackTraceElement>()
+            "name", 1, 1, "group", 1, new ArrayList<StackTraceElement>()
         ), new ArrayList<ThreadState>(), "process");
         getReporter().reportAnr(allThreads);
 
@@ -194,10 +194,10 @@ public abstract class BaseReporterTest extends BaseReporterData {
         ArgumentCaptor<Anr> anrCaptor = ArgumentCaptor.forClass(Anr.class);
         verify(anrConverter).fromModel(anrCaptor.capture());
         ObjectPropertyAssertions(anrCaptor.getValue())
-                .checkField("mAllThreads", allThreads)
-                .checkField("mBuildId", buildId)
-                .checkField("mIsOffline", isOffline)
-                .checkAll();
+            .checkField("mAllThreads", allThreads)
+            .checkField("mBuildId", buildId)
+            .checkField("mIsOffline", isOffline)
+            .checkAll();
     }
 
     @Test
@@ -228,16 +228,16 @@ public abstract class BaseReporterTest extends BaseReporterData {
         when(regularErrorConverter.fromModel(any(RegularError.class))).thenReturn(mockedProtoError);
         UnhandledException unhandledException = mock(UnhandledException.class);
         when(UnhandledExceptionFactory.getUnhandledExceptionFromJava(
-                same((Throwable) null),
-                argThat(new ArgumentMatcher<AllThreads>() {
-                    @Override
-                    public boolean matches(AllThreads argument) {
-                        return Objects.equals(argument.processName, processName);
-                    }
-                }),
-                same((List) null),
-                eq(buildId),
-                eq(isOffline)
+            same(null),
+            argThat(new ArgumentMatcher<AllThreads>() {
+                @Override
+                public boolean matches(AllThreads argument) {
+                    return Objects.equals(argument.processName, processName);
+                }
+            }),
+            same((List) null),
+            eq(buildId),
+            eq(isOffline)
         )).thenReturn(unhandledException);
         when(EventsManager.regularErrorReportEntry(eq(message), eq(serializedBytes), any(PublicLogger.class))).thenReturn(mockedEvent);
 
@@ -253,9 +253,9 @@ public abstract class BaseReporterTest extends BaseReporterData {
         ArgumentCaptor<RegularError> captor = ArgumentCaptor.forClass(RegularError.class);
         verify(regularErrorConverter).fromModel(captor.capture());
         ObjectPropertyAssertions(captor.getValue())
-                .checkField("message", message)
-                .checkField("exception", unhandledException)
-                .checkAll();
+            .checkField("message", message)
+            .checkField("exception", unhandledException)
+            .checkAll();
     }
 
     @Test
@@ -266,22 +266,22 @@ public abstract class BaseReporterTest extends BaseReporterData {
         when(mExtraMetaInfoRetriever.isOffline()).thenReturn(isOffline);
         final String message = "message";
         Throwable throwable = mock(AppMetricaThrowable.class);
-        StackTraceElement[] stacktrace = new StackTraceElement[] { mock(StackTraceElement.class) };
+        StackTraceElement[] stacktrace = new StackTraceElement[]{mock(StackTraceElement.class)};
         when(throwable.getStackTrace()).thenReturn(stacktrace);
         when(regularErrorConverter.fromModel(any(RegularError.class))).thenReturn(mockedProtoError);
         when(EventsManager.regularErrorReportEntry(eq(message), eq(serializedBytes), any(PublicLogger.class))).thenReturn(mockedEvent);
         UnhandledException unhandledException = mock(UnhandledException.class);
         when(UnhandledExceptionFactory.getUnhandledExceptionFromJava(
-                same((Throwable) null),
-                argThat(new ArgumentMatcher<AllThreads>() {
-                    @Override
-                    public boolean matches(AllThreads argument) {
-                        return Objects.equals(argument.processName, processName);
-                    }
-                }),
-                eq(Arrays.asList(stacktrace)),
-                eq(buildId),
-                eq(isOffline)
+            same(null),
+            argThat(new ArgumentMatcher<AllThreads>() {
+                @Override
+                public boolean matches(AllThreads argument) {
+                    return Objects.equals(argument.processName, processName);
+                }
+            }),
+            eq(Arrays.asList(stacktrace)),
+            eq(buildId),
+            eq(isOffline)
         )).thenReturn(unhandledException);
 
         mReporter.reportError(message, throwable);
@@ -296,9 +296,9 @@ public abstract class BaseReporterTest extends BaseReporterData {
         ArgumentCaptor<RegularError> captor = ArgumentCaptor.forClass(RegularError.class);
         verify(regularErrorConverter).fromModel(captor.capture());
         ObjectPropertyAssertions(captor.getValue())
-                .checkField("message", message)
-                .checkField("exception", unhandledException)
-                .checkAll();
+            .checkField("message", message)
+            .checkField("exception", unhandledException)
+            .checkAll();
     }
 
     @Test
@@ -314,16 +314,16 @@ public abstract class BaseReporterTest extends BaseReporterData {
         when(EventsManager.regularErrorReportEntry(eq(message), eq(serializedBytes), any(PublicLogger.class))).thenReturn(mockedEvent);
         UnhandledException unhandledException = mock(UnhandledException.class);
         when(UnhandledExceptionFactory.getUnhandledExceptionFromJava(
-                same(exception),
-                argThat(new ArgumentMatcher<AllThreads>() {
-                    @Override
-                    public boolean matches(AllThreads argument) {
-                        return Objects.equals(argument.processName, processName);
-                    }
-                }),
-                same((List) null),
-                eq(buildId),
-                eq(isOffline)
+            same(exception),
+            argThat(new ArgumentMatcher<AllThreads>() {
+                @Override
+                public boolean matches(AllThreads argument) {
+                    return Objects.equals(argument.processName, processName);
+                }
+            }),
+            same((List) null),
+            eq(buildId),
+            eq(isOffline)
         )).thenReturn(unhandledException);
 
         mReporter.reportError(message, exception);
@@ -338,9 +338,9 @@ public abstract class BaseReporterTest extends BaseReporterData {
         ArgumentCaptor<RegularError> captor = ArgumentCaptor.forClass(RegularError.class);
         verify(regularErrorConverter).fromModel(captor.capture());
         ObjectPropertyAssertions(captor.getValue())
-                .checkField("message", message)
-                .checkField("exception", unhandledException)
-                .checkAll();
+            .checkField("message", message)
+            .checkField("exception", unhandledException)
+            .checkAll();
     }
 
     @Test
@@ -357,16 +357,16 @@ public abstract class BaseReporterTest extends BaseReporterData {
         when(EventsManager.customErrorReportEntry(eq(message), eq(serializedBytes), any(PublicLogger.class))).thenReturn(mockedEvent);
         final UnhandledException unhandledException = mock(UnhandledException.class);
         when(UnhandledExceptionFactory.getUnhandledExceptionFromJava(
-                same(exception),
-                argThat(new ArgumentMatcher<AllThreads>() {
-                    @Override
-                    public boolean matches(AllThreads argument) {
-                        return Objects.equals(argument.processName, processName);
-                    }
-                }),
-                same((List) null),
-                eq(buildId),
-                eq(isOffline)
+            same(exception),
+            argThat(new ArgumentMatcher<AllThreads>() {
+                @Override
+                public boolean matches(AllThreads argument) {
+                    return Objects.equals(argument.processName, processName);
+                }
+            }),
+            same((List) null),
+            eq(buildId),
+            eq(isOffline)
         )).thenReturn(unhandledException);
 
         mReporter.reportError(id, message, exception);
@@ -381,16 +381,16 @@ public abstract class BaseReporterTest extends BaseReporterData {
         ArgumentCaptor<CustomError> captor = ArgumentCaptor.forClass(CustomError.class);
         verify(customErrorConverter).fromModel(captor.capture());
         ObjectPropertyAssertions(captor.getValue())
-                .checkField("identifier", id)
-                .checkFieldRecursively("regularError", new Consumer<ObjectPropertyAssertions<RegularError>>() {
-                    @Override
-                    public void accept(ObjectPropertyAssertions<RegularError> assertions) {
-                        assertions
-                                .checkField("message", message)
-                                .checkField("exception", unhandledException);
-                    }
-                })
-                .checkAll();
+            .checkField("identifier", id)
+            .checkFieldRecursively("regularError", new Consumer<ObjectPropertyAssertions<RegularError>>() {
+                @Override
+                public void accept(ObjectPropertyAssertions<RegularError> assertions) {
+                    assertions
+                        .checkField("message", message)
+                        .checkField("exception", unhandledException);
+                }
+            })
+            .checkAll();
     }
 
     @Test
@@ -406,16 +406,16 @@ public abstract class BaseReporterTest extends BaseReporterData {
         when(EventsManager.customErrorReportEntry(eq(message), eq(serializedBytes), any(PublicLogger.class))).thenReturn(mockedEvent);
         final UnhandledException unhandledException = mock(UnhandledException.class);
         when(UnhandledExceptionFactory.getUnhandledExceptionFromJava(
-                same((Throwable) null),
-                argThat(new ArgumentMatcher<AllThreads>() {
-                    @Override
-                    public boolean matches(AllThreads argument) {
-                        return Objects.equals(argument.processName, processName);
-                    }
-                }),
-                same((List) null),
-                eq(buildId),
-                eq(isOffline)
+            same(null),
+            argThat(new ArgumentMatcher<AllThreads>() {
+                @Override
+                public boolean matches(AllThreads argument) {
+                    return Objects.equals(argument.processName, processName);
+                }
+            }),
+            same((List) null),
+            eq(buildId),
+            eq(isOffline)
         )).thenReturn(unhandledException);
         mReporter.reportError(id, message, (Throwable) null);
 
@@ -429,16 +429,16 @@ public abstract class BaseReporterTest extends BaseReporterData {
         ArgumentCaptor<CustomError> captor = ArgumentCaptor.forClass(CustomError.class);
         verify(customErrorConverter).fromModel(captor.capture());
         ObjectPropertyAssertions(captor.getValue())
-                .checkField("identifier", id)
-                .checkFieldRecursively("regularError", new Consumer<ObjectPropertyAssertions<RegularError>>() {
-                    @Override
-                    public void accept(ObjectPropertyAssertions<RegularError> assertions) {
-                        assertions
-                                .checkField("message", message)
-                                .checkField("exception", unhandledException);
-                    }
-                })
-                .checkAll();
+            .checkField("identifier", id)
+            .checkFieldRecursively("regularError", new Consumer<ObjectPropertyAssertions<RegularError>>() {
+                @Override
+                public void accept(ObjectPropertyAssertions<RegularError> assertions) {
+                    assertions
+                        .checkField("message", message)
+                        .checkField("exception", unhandledException);
+                }
+            })
+            .checkAll();
     }
 
     @Test
@@ -454,16 +454,16 @@ public abstract class BaseReporterTest extends BaseReporterData {
         when(EventsManager.customErrorReportEntry(eq(message), eq(serializedBytes), any(PublicLogger.class))).thenReturn(mockedEvent);
         final UnhandledException unhandledException = mock(UnhandledException.class);
         when(UnhandledExceptionFactory.getUnhandledExceptionFromJava(
-                same((Throwable) null),
-                argThat(new ArgumentMatcher<AllThreads>() {
-                    @Override
-                    public boolean matches(AllThreads argument) {
-                        return Objects.equals(argument.processName, processName);
-                    }
-                }),
-                same((List) null),
-                eq(buildId),
-                eq(isOffline)
+            same(null),
+            argThat(new ArgumentMatcher<AllThreads>() {
+                @Override
+                public boolean matches(AllThreads argument) {
+                    return Objects.equals(argument.processName, processName);
+                }
+            }),
+            same((List) null),
+            eq(buildId),
+            eq(isOffline)
         )).thenReturn(unhandledException);
         mReporter.reportError(id, message);
 
@@ -477,17 +477,17 @@ public abstract class BaseReporterTest extends BaseReporterData {
         ArgumentCaptor<CustomError> captor = ArgumentCaptor.forClass(CustomError.class);
         verify(customErrorConverter).fromModel(captor.capture());
         ObjectPropertyAssertions(captor.getValue())
-                .checkField("identifier", id)
-                .checkFieldRecursively("regularError", new Consumer<ObjectPropertyAssertions<RegularError>>() {
-                    @Override
-                    public void accept(ObjectPropertyAssertions<RegularError> assertions) {
-                        assertions
-                                .checkField("message", message)
-                                .checkField("exception", unhandledException);
+            .checkField("identifier", id)
+            .checkFieldRecursively("regularError", new Consumer<ObjectPropertyAssertions<RegularError>>() {
+                @Override
+                public void accept(ObjectPropertyAssertions<RegularError> assertions) {
+                    assertions
+                        .checkField("message", message)
+                        .checkField("exception", unhandledException);
 
-                    }
-                })
-                .checkAll();
+                }
+            })
+            .checkAll();
     }
 
     @Test
@@ -500,16 +500,16 @@ public abstract class BaseReporterTest extends BaseReporterData {
         final IllegalStateException exception = new IllegalStateException();
         UnhandledException unhandledException = mock(UnhandledException.class);
         when(UnhandledExceptionFactory.getUnhandledExceptionFromJava(
-                same(exception),
-                argThat(new ArgumentMatcher<AllThreads>() {
-                    @Override
-                    public boolean matches(AllThreads argument) {
-                        return Objects.equals(argument.processName, processName);
-                    }
-                }),
-                same((List) null),
-                eq(buildId),
-                eq(isOffline)
+            same(exception),
+            argThat(new ArgumentMatcher<AllThreads>() {
+                @Override
+                public boolean matches(AllThreads argument) {
+                    return Objects.equals(argument.processName, processName);
+                }
+            }),
+            same((List) null),
+            eq(buildId),
+            eq(isOffline)
         )).thenReturn(unhandledException);
 
         mReporter.reportUnhandledException(exception);
@@ -686,7 +686,7 @@ public abstract class BaseReporterTest extends BaseReporterData {
     @Test
     public void setSessionExtra() {
         String key = "Key";
-        byte[] value = new byte[] {2, 6, 11};
+        byte[] value = new byte[]{2, 6, 11};
         when(EventsManager.setSessionExtraReportEntry(key, value, mPublicLogger)).thenReturn(mockedEvent);
 
         getReporter().setSessionExtra(key, value);
@@ -727,7 +727,7 @@ public abstract class BaseReporterTest extends BaseReporterData {
 
         @Rule
         public final MockedStaticRule<EventsManager> sEventsManager = new MockedStaticRule<>(EventsManager.class);
-        private CounterReport mockedEvent = mock(CounterReport.class);
+        private final CounterReport mockedEvent = mock(CounterReport.class);
         protected BaseReporter mReporter;
 
         @Before
@@ -830,11 +830,11 @@ public abstract class BaseReporterTest extends BaseReporterData {
     @Test
     public void testUserProfileSent() {
         UserProfile profile = UserProfile.newBuilder().apply(
-                Attribute.customString("string").withValue("value")
+            Attribute.customString("string").withValue("value")
         ).build();
         getReporter().reportUserProfile(profile);
         verify(mReportsHandler, times(1))
-                .sendUserProfile(any(Userprofile.Profile.class), any(ReporterEnvironment.class));
+            .sendUserProfile(any(Userprofile.Profile.class), any(ReporterEnvironment.class));
     }
 
     @Test
@@ -849,7 +849,7 @@ public abstract class BaseReporterTest extends BaseReporterData {
         String profileID = "profileid";
         getReporter().setUserProfileID(profileID);
         verify(mReportsHandler, times(1))
-                .setUserProfileID(eq(profileID), any(ReporterEnvironment.class));
+            .setUserProfileID(eq(profileID), any(ReporterEnvironment.class));
     }
 
     @Test
@@ -862,8 +862,8 @@ public abstract class BaseReporterTest extends BaseReporterData {
         assertThat(adRevenueWrapperConstructor.getArgumentInterceptor().getArguments().get(0).get(2))
             .isEqualTo(adRevenuePayloadEnricher());
         verify(mReportsHandler).sendAdRevenue(
-                same(adRevenueWrapperConstructor.getConstructionMock().constructed().get(0)),
-                any(ReporterEnvironment.class)
+            same(adRevenueWrapperConstructor.getConstructionMock().constructed().get(0)),
+            any(ReporterEnvironment.class)
         );
     }
 
@@ -886,7 +886,7 @@ public abstract class BaseReporterTest extends BaseReporterData {
     public void testRevenueSent() {
         getReporter().reportRevenue(mock(Revenue.class));
         verify(mReportsHandler, times(1))
-                .sendRevenue(any(RevenueWrapper.class), any(ReporterEnvironment.class));
+            .sendRevenue(any(RevenueWrapper.class), any(ReporterEnvironment.class));
     }
 
     @Test
@@ -899,11 +899,11 @@ public abstract class BaseReporterTest extends BaseReporterData {
     @Test
     public void logRevenueFilled() {
         Revenue revenue = Revenue.newBuilder(12000000, Currency.getInstance("USD"))
-                .withProductID("12abc")
-                .withQuantity(3)
-                .withPayload("payload")
-                .withReceipt(Revenue.Receipt.newBuilder().withData("mydata").withSignature("mysignature").build())
-                .build();
+            .withProductID("12abc")
+            .withQuantity(3)
+            .withPayload("payload")
+            .withReceipt(Revenue.Receipt.newBuilder().withData("mydata").withSignature("mysignature").build())
+            .build();
         getReporter().reportRevenue(revenue);
         verify(mPublicLogger).info("Revenue received for productID: 12abc of quantity: 3 with price (in micros): 12000000 USD");
     }
@@ -1064,9 +1064,9 @@ public abstract class BaseReporterTest extends BaseReporterData {
         ArgumentCaptor<CustomError> customErrorCaptor = ArgumentCaptor.forClass(CustomError.class);
         verify(customErrorConverter).fromModel(customErrorCaptor.capture());
         ObjectPropertyAssertions(customErrorCaptor.getValue())
-                .checkField("identifier", identifier)
-                .checkField("regularError", regularError)
-                .checkAll();
+            .checkField("identifier", identifier)
+            .checkField("regularError", regularError)
+            .checkAll();
         sMessageNano.getStaticMock().verify(new MockedStatic.Verification() {
             @Override
             public void apply() throws Throwable {

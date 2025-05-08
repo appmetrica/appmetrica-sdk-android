@@ -11,8 +11,8 @@ import org.mockito.kotlin.mock
 internal class ClidsDataAwaiterTest : CommonTest() {
 
     private val context = mock<Context>()
-    @Rule
-    @JvmField
+
+    @get:Rule
     val contentProviderFirstLaunchHelper = MockedStaticRule(ContentProviderFirstLaunchHelper::class.java)
     private val dataWaiter = ClidsDataAwaiter()
 

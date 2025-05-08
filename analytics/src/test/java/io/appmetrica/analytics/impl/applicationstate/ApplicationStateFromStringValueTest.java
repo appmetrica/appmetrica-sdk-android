@@ -13,8 +13,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(ParameterizedRobolectricTestRunner.class)
 public class ApplicationStateFromStringValueTest extends CommonTest {
 
-    private String mInputValue;
-    private ApplicationState mExpectedValue;
+    private final String mInputValue;
+    private final ApplicationState mExpectedValue;
 
     public ApplicationStateFromStringValueTest(String inputValue,
                                                ApplicationState expectedValue) {
@@ -25,11 +25,11 @@ public class ApplicationStateFromStringValueTest extends CommonTest {
     @ParameterizedRobolectricTestRunner.Parameters(name = "for input \"{0}\"")
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
-                {"visible", ApplicationState.VISIBLE},
-                {"background", ApplicationState.BACKGROUND},
-                {"unknown", ApplicationState.UNKNOWN},
-                {"", ApplicationState.UNKNOWN},
-                {null, ApplicationState.UNKNOWN}
+            {"visible", ApplicationState.VISIBLE},
+            {"background", ApplicationState.BACKGROUND},
+            {"unknown", ApplicationState.UNKNOWN},
+            {"", ApplicationState.UNKNOWN},
+            {null, ApplicationState.UNKNOWN}
         });
     }
 

@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.network.impl.utils
 
 import io.appmetrica.analytics.network.impl.utils.Utils.unmodifiableMapCopy
+import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.mockito.kotlin.any
@@ -11,7 +12,7 @@ import java.io.BufferedInputStream
 import java.io.ByteArrayInputStream
 import java.io.InputStream
 
-class UtilsTest {
+class UtilsTest : CommonTest() {
 
     @Test
     fun readSafelySuccess() {

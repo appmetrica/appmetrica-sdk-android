@@ -1,13 +1,14 @@
 package io.appmetrica.analytics.networktasks.impl.utils
 
 import io.appmetrica.analytics.networktasks.internal.utils.Utils
+import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.SoftAssertions
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class UtilsTest {
+class UtilsTest : CommonTest() {
 
     @Test
     fun isBadRequest() {

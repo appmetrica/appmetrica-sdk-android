@@ -123,7 +123,8 @@ internal class NetworkTaskFactoryTest : CommonTest() {
                         val urlFormerArguments = fullUrlFormerMockedRule.argumentInterceptor.flatArguments()
                         assertThat(urlFormerArguments).hasSize(2)
                         assertThat(urlFormerArguments[0]).isNotNull
-                        assertThat(urlFormerArguments[1]).isEqualTo(reportConfigProviderMockRule.constructionMock.constructed()[0])
+                        assertThat(urlFormerArguments[1])
+                            .isEqualTo(reportConfigProviderMockRule.constructionMock.constructed()[0])
                         assertThat(reportConfigProviderMockRule.argumentInterceptor.flatArguments())
                             .containsExactly(componentUnit)
                     }
@@ -217,5 +218,4 @@ internal class NetworkTaskFactoryTest : CommonTest() {
             networkHost
         )
     }
-
 }

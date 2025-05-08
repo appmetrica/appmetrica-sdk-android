@@ -189,10 +189,10 @@ public class ReferrerParserTest extends CommonTest {
         parameters.put("utm_campaign", "spring_sale");
 
         String deeplink = "utm_source=google" +
-                "&utm_medium=cpc" +
-                "&utm_term=running&shoes" +
-                "&utm_content=logolink" +
-                "&utm_campaign=spring_sale";
+            "&utm_medium=cpc" +
+            "&utm_term=running&shoes" +
+            "&utm_content=logolink" +
+            "&utm_campaign=spring_sale";
         String referrerWithDeeplinkAndParameter = "referrer?appmetrica_deep_link=" + Uri.encode(deeplink);
         DeferredDeeplinkState state = mReferrerParser.parseDeferredDeeplinkState(referrerWithDeeplinkAndParameter);
         checkState(state, deeplink, parameters, referrerWithDeeplinkAndParameter);

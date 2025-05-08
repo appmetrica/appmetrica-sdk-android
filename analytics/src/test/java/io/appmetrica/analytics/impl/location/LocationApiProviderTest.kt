@@ -24,9 +24,9 @@ internal class LocationApiProviderTest : CommonTest() {
 
     @get:Rule
     val locationClientProviderMockedConstructionRule =
-        MockedConstructionRule(LocationClientProvider::class.java) {mock, _ ->
-        whenever(mock.getLocationClient()).thenReturn(locationClient)
-    }
+        MockedConstructionRule(LocationClientProvider::class.java) { mock, _ ->
+            whenever(mock.getLocationClient()).thenReturn(locationClient)
+        }
 
     private lateinit var locationApiProvider: LocationApiProvider
 

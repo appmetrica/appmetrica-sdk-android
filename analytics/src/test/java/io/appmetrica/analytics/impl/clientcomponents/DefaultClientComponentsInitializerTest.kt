@@ -39,6 +39,6 @@ class DefaultClientComponentsInitializerTest : CommonTest() {
     fun onCreateIfNotMainProcess() {
         whenever(ClientServiceLocator.getInstance().currentProcessDetector.isMainProcess).thenReturn(false)
         initializer.onCreate()
-        verifyNoInteractions( ClientServiceLocator.getInstance().moduleEntryPointsRegister)
+        verifyNoInteractions(ClientServiceLocator.getInstance().moduleEntryPointsRegister)
     }
 }

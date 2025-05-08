@@ -2,9 +2,9 @@ package io.appmetrica.analytics.impl;
 
 import android.util.Pair;
 import io.appmetrica.analytics.Revenue;
-import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.impl.utils.limitation.EventLimitationProcessor;
 import io.appmetrica.analytics.impl.utils.limitation.StringByBytesTrimmer;
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.protobuf.nano.InvalidProtocolBufferNanoException;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.RandomStringGenerator;
@@ -50,14 +50,14 @@ public class RevenueWrapperTest extends CommonTest {
     @Test
     public void testWithAll() throws InvalidProtocolBufferNanoException {
         Pair<byte[], Integer> data = new RevenueWrapper(Revenue.newBuilder(100, Currency.getInstance("USD"))
-                .withPayload("payload")
-                .withProductID("productID")
-                .withQuantity(300)
-                .withReceipt(Revenue.Receipt.newBuilder()
-                        .withSignature("signature")
-                        .withData("data")
-                        .build())
-                .build(), mPublicLogger).getDataToSend();
+            .withPayload("payload")
+            .withProductID("productID")
+            .withQuantity(300)
+            .withReceipt(Revenue.Receipt.newBuilder()
+                .withSignature("signature")
+                .withData("data")
+                .build())
+            .build(), mPublicLogger).getDataToSend();
 
         io.appmetrica.analytics.impl.protobuf.backend.Revenue proto = io.appmetrica.analytics.impl.protobuf.backend.Revenue.parseFrom(data.first);
 
@@ -77,11 +77,11 @@ public class RevenueWrapperTest extends CommonTest {
         String data = new RandomStringGenerator(EventLimitationProcessor.RECEIPT_DATA_MAX_SIZE + 1).nextString();
         String signature = new RandomStringGenerator(EventLimitationProcessor.RECEIPT_SIGNATURE_MAX_LENGTH + 1).nextString();
         Pair<byte[], Integer> pair = new RevenueWrapper(Revenue.newBuilder(100, Currency.getInstance("USD"))
-                .withReceipt(Revenue.Receipt.newBuilder()
-                        .withSignature(signature)
-                        .withData(data)
-                        .build())
-                .build(), mPublicLogger).getDataToSend();
+            .withReceipt(Revenue.Receipt.newBuilder()
+                .withSignature(signature)
+                .withData(data)
+                .build())
+            .build(), mPublicLogger).getDataToSend();
 
         io.appmetrica.analytics.impl.protobuf.backend.Revenue proto = io.appmetrica.analytics.impl.protobuf.backend.Revenue.parseFrom(pair.first);
         SoftAssertions assertion = new SoftAssertions();
@@ -100,16 +100,16 @@ public class RevenueWrapperTest extends CommonTest {
     public void testWithHugePayload() throws InvalidProtocolBufferNanoException {
         String payload = new RandomStringGenerator(EventLimitationProcessor.REVENUE_PAYLOAD_MAX_SIZE + 1).nextString();
         Pair<byte[], Integer> data = new RevenueWrapper(Revenue.newBuilder(100, Currency.getInstance("USD"))
-                .withPayload(payload)
-                .build(), mPublicLogger).getDataToSend();
+            .withPayload(payload)
+            .build(), mPublicLogger).getDataToSend();
 
         io.appmetrica.analytics.impl.protobuf.backend.Revenue proto = io.appmetrica.analytics.impl.protobuf.backend.Revenue.parseFrom(data.first);
 
         SoftAssertions assertion = new SoftAssertions();
         assertion.assertThat(proto.payload).as("payload")
-                .isEqualTo(new StringByBytesTrimmer(
-                        EventLimitationProcessor.REVENUE_PAYLOAD_MAX_SIZE, "test payload", mPublicLogger
-                ).trim(payload).getBytes());
+            .isEqualTo(new StringByBytesTrimmer(
+                EventLimitationProcessor.REVENUE_PAYLOAD_MAX_SIZE, "test payload", mPublicLogger
+            ).trim(payload).getBytes());
         assertion.assertThat(data.second).as("bytesTruncated").isZero();
         assertion.assertAll();
     }
@@ -136,10 +136,10 @@ public class RevenueWrapperTest extends CommonTest {
     public void testWithHugeSignature() throws InvalidProtocolBufferNanoException {
         String string = new RandomStringGenerator(EventLimitationProcessor.RECEIPT_SIGNATURE_MAX_LENGTH + 1).nextString();
         Pair<byte[], Integer> data = new RevenueWrapper(Revenue.newBuilder(100, Currency.getInstance("USD"))
-                .withReceipt(Revenue.Receipt.newBuilder()
-                        .withSignature(string)
-                        .build())
-                .build(), mPublicLogger).getDataToSend();
+            .withReceipt(Revenue.Receipt.newBuilder()
+                .withSignature(string)
+                .build())
+            .build(), mPublicLogger).getDataToSend();
 
         io.appmetrica.analytics.impl.protobuf.backend.Revenue proto = io.appmetrica.analytics.impl.protobuf.backend.Revenue.parseFrom(data.first);
 

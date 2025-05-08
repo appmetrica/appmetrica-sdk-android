@@ -451,7 +451,7 @@ class AppAppMetricaServiceLifecycleTests : CommonTest() {
     }
 
     @Test
-    fun testNewClientConnectObserverOnRebindMetricaClientActionTwice() {
+    fun newClientConnectObserverOnRebindMetricaClientActionTwice() {
         appMetricaServiceLifecycle.addNewClientConnectObserver(observer)
         val firstIntent = prepareIntentWithClientActionAndMetricaProcess()
         val secondIntent = prepareIntentWithClientActionAndMetricaProcess()

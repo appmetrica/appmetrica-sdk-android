@@ -76,7 +76,7 @@ public class OrderInfoEventConverterTest extends CommonTest {
     private final int emptyOrderInfoBytesTruncated = payloadBytesTruncated + orderIdentifierBytesTruncated;
 
     private final int totalBytesTruncated = emptyOrderInfoBytesTruncated +
-            firstCartItemBytesTruncated + secondCartItemBytesTruncated + thirdCartItemBytesTruncated;
+        firstCartItemBytesTruncated + secondCartItemBytesTruncated + thirdCartItemBytesTruncated;
 
     @Before
     public void setUp() throws Exception {
@@ -84,39 +84,39 @@ public class OrderInfoEventConverterTest extends CommonTest {
 
         cartItems = Arrays.asList(firstCartItem, secondCartItem, thirdCartItem);
         cartItemsProto =
-                new Ecommerce.ECommerceEvent.CartItem[]{firstCartItemProto, secondCartItemProto, thirdCartItemProto};
+            new Ecommerce.ECommerceEvent.CartItem[]{firstCartItemProto, secondCartItemProto, thirdCartItemProto};
 
         when(payloadConverter.fromModel(payload))
-                .thenReturn(new Result<Ecommerce.ECommerceEvent.Payload, BytesTruncatedProvider>(
-                        payloadProto,
-                        new BytesTruncatedInfo(payloadBytesTruncated)
-                ));
+            .thenReturn(new Result<Ecommerce.ECommerceEvent.Payload, BytesTruncatedProvider>(
+                payloadProto,
+                new BytesTruncatedInfo(payloadBytesTruncated)
+            ));
         when(cartItemConverter.fromModel(firstCartItem))
-                .thenReturn(new Result<Ecommerce.ECommerceEvent.CartItem, BytesTruncatedProvider>(
-                        firstCartItemProto,
-                        new BytesTruncatedInfo(firstCartItemBytesTruncated)
-                ));
+            .thenReturn(new Result<Ecommerce.ECommerceEvent.CartItem, BytesTruncatedProvider>(
+                firstCartItemProto,
+                new BytesTruncatedInfo(firstCartItemBytesTruncated)
+            ));
         when(cartItemConverter.fromModel(secondCartItem))
-                .thenReturn(new Result<Ecommerce.ECommerceEvent.CartItem, BytesTruncatedProvider>(
-                        secondCartItemProto,
-                        new BytesTruncatedInfo(secondCartItemBytesTruncated)
-                ));
+            .thenReturn(new Result<Ecommerce.ECommerceEvent.CartItem, BytesTruncatedProvider>(
+                secondCartItemProto,
+                new BytesTruncatedInfo(secondCartItemBytesTruncated)
+            ));
         when(cartItemConverter.fromModel(thirdCartItem))
-                .thenReturn(new Result<Ecommerce.ECommerceEvent.CartItem, BytesTruncatedProvider>(
-                        thirdCartItemProto,
-                        new BytesTruncatedInfo(thirdCartItemBytesTruncated)
-                ));
+            .thenReturn(new Result<Ecommerce.ECommerceEvent.CartItem, BytesTruncatedProvider>(
+                thirdCartItemProto,
+                new BytesTruncatedInfo(thirdCartItemBytesTruncated)
+            ));
         when(orderIdentifierTrimmer.trim(inputOrderIdentifier))
-                .thenReturn(new TrimmingResult<String, BytesTruncatedProvider>(
-                        truncatedOrderIdentifier,
-                        new BytesTruncatedInfo(orderIdentifierBytesTruncated)
-                ));
+            .thenReturn(new TrimmingResult<String, BytesTruncatedProvider>(
+                truncatedOrderIdentifier,
+                new BytesTruncatedInfo(orderIdentifierBytesTruncated)
+            ));
 
         orderInfoEventConverter = new OrderInfoEventConverter(
-                payloadConverter,
-                cartItemConverter,
-                orderIdentifierTrimmer,
-                protoMessageSizeCalculator
+            payloadConverter,
+            cartItemConverter,
+            orderIdentifierTrimmer,
+            protoMessageSizeCalculator
         );
     }
 
@@ -125,12 +125,12 @@ public class OrderInfoEventConverterTest extends CommonTest {
         orderInfoEventConverter = new OrderInfoEventConverter();
 
         ObjectPropertyAssertions(orderInfoEventConverter)
-                .withPrivateFields(true)
-                .checkFieldNonNull("payloadConverter")
-                .checkFieldNonNull("cartItemConverter")
-                .checkFieldComparingFieldByField("orderIdentifierTrimmer", new HierarchicalStringTrimmer(100))
-                .checkFieldNonNull("protoMessageSizeCalculator")
-                .checkAll();
+            .withPrivateFields(true)
+            .checkFieldNonNull("payloadConverter")
+            .checkFieldNonNull("cartItemConverter")
+            .checkFieldComparingFieldByField("orderIdentifierTrimmer", new HierarchicalStringTrimmer(100))
+            .checkFieldNonNull("protoMessageSizeCalculator")
+            .checkAll();
     }
 
     @Test
@@ -145,41 +145,41 @@ public class OrderInfoEventConverterTest extends CommonTest {
 
     private void toProtoForEventType(int eventType) throws Exception {
         when(orderIdentifierTrimmer.trim(null))
-                .thenReturn(new TrimmingResult<String, BytesTruncatedProvider>(
-                        null,
-                        new BytesTruncatedInfo(0)
-                ));
+            .thenReturn(new TrimmingResult<String, BytesTruncatedProvider>(
+                null,
+                new BytesTruncatedInfo(0)
+            ));
         OrderWrapper orderWrapper = new OrderWrapper(
-                orderUuid,
-                inputOrderIdentifier,
-                cartItems,
-                payload
+            orderUuid,
+            inputOrderIdentifier,
+            cartItems,
+            payload
         );
         OrderInfoEvent orderInfoEvent = new OrderInfoEvent(eventType, orderWrapper, orderInfoEventConverter);
         List<Result<Ecommerce.ECommerceEvent, BytesTruncatedProvider>> results =
-                orderInfoEventConverter.fromModel(orderInfoEvent);
+            orderInfoEventConverter.fromModel(orderInfoEvent);
 
         assertThat(results.size()).isEqualTo(1);
 
         ObjectPropertyAssertions<Result<Ecommerce.ECommerceEvent, BytesTruncatedProvider>> assertions =
-                ObjectPropertyAssertions(results.get(0));
+            ObjectPropertyAssertions(results.get(0));
 
         assertions.checkFieldRecursively(
-                "metaInfo",
-                new TruncationInfoConsumer(totalBytesTruncated)
+            "metaInfo",
+            new TruncationInfoConsumer(totalBytesTruncated)
         );
         assertions.checkFieldRecursively(
-                "result",
-                new ECommerceEventAssertionsConsumer(eventType)
-                        .setOrderInfoAssertionConsumer(
-                                new OrderInfoAssertionsConsumer(
-                                        new OrderAssertionConsumer()
-                                                .setExpectedOrderUuid(orderUuid)
-                                                .setExpectedOrderId(truncatedOrderIdentifier)
-                                                .setExpectedPayload(payloadProto)
-                                                .setExpectedOrderCartItems(cartItemsProto)
-                                )
-                        )
+            "result",
+            new ECommerceEventAssertionsConsumer(eventType)
+                .setOrderInfoAssertionConsumer(
+                    new OrderInfoAssertionsConsumer(
+                        new OrderAssertionConsumer()
+                            .setExpectedOrderUuid(orderUuid)
+                            .setExpectedOrderId(truncatedOrderIdentifier)
+                            .setExpectedPayload(payloadProto)
+                            .setExpectedOrderCartItems(cartItemsProto)
+                    )
+                )
         );
 
         assertions.checkAll();
@@ -188,14 +188,14 @@ public class OrderInfoEventConverterTest extends CommonTest {
     @Test
     public void toProtoForNullPayload() {
         OrderInfoEvent event = new OrderInfoEvent(
-                OrderInfoEvent.EVENT_TYPE_PURCHASE,
-                new OrderWrapper(
-                        orderUuid,
-                        inputOrderIdentifier,
-                        cartItems,
-                        null
-                ),
-                orderInfoEventConverter
+            OrderInfoEvent.EVENT_TYPE_PURCHASE,
+            new OrderWrapper(
+                orderUuid,
+                inputOrderIdentifier,
+                cartItems,
+                null
+            ),
+            orderInfoEventConverter
         );
 
         List<Result<Ecommerce.ECommerceEvent, BytesTruncatedProvider>> protos = orderInfoEventConverter.fromModel(event);
@@ -209,14 +209,14 @@ public class OrderInfoEventConverterTest extends CommonTest {
     @Test
     public void toProtoForEmptyCartItems() {
         OrderInfoEvent event = new OrderInfoEvent(
-                OrderInfoEvent.EVENT_TYPE_PURCHASE,
-                new OrderWrapper(
-                        orderUuid,
-                        inputOrderIdentifier,
-                        new ArrayList<CartItemWrapper>(),
-                        payload
-                ),
-                orderInfoEventConverter
+            OrderInfoEvent.EVENT_TYPE_PURCHASE,
+            new OrderWrapper(
+                orderUuid,
+                inputOrderIdentifier,
+                new ArrayList<CartItemWrapper>(),
+                payload
+            ),
+            orderInfoEventConverter
         );
         List<Result<Ecommerce.ECommerceEvent, BytesTruncatedProvider>> protos = orderInfoEventConverter.fromModel(event);
 
@@ -227,14 +227,14 @@ public class OrderInfoEventConverterTest extends CommonTest {
         SoftAssertions assertions = new SoftAssertions();
 
         assertions.assertThat(protos.get(0).getBytesTruncated())
-                .as("Total bytes truncated")
-                .isEqualTo(emptyOrderInfoBytesTruncated);
+            .as("Total bytes truncated")
+            .isEqualTo(emptyOrderInfoBytesTruncated);
         assertions.assertThat(order.totalItemsCount)
-                .as("Total order cart items count")
-                .isZero();
+            .as("Total order cart items count")
+            .isZero();
         assertions.assertThat(order.items)
-                .as("Order items")
-                .isEmpty();
+            .as("Order items")
+            .isEmpty();
 
         assertions.assertAll();
     }
@@ -242,7 +242,7 @@ public class OrderInfoEventConverterTest extends CommonTest {
     @Test
     public void toProtoForSplittableCartItems() {
         when(protoMessageSizeCalculator.computeAdditionalNestedSize(any(Ecommerce.ECommerceEvent.class)))
-                .thenReturn(100 * 1024);
+            .thenReturn(100 * 1024);
 
         int totalInputCount = 100;
         int singleCartItemSizeBytes = 10 * 1024;
@@ -254,28 +254,28 @@ public class OrderInfoEventConverterTest extends CommonTest {
             CartItemWrapper inputCartItem = mock(CartItemWrapper.class);
             Ecommerce.ECommerceEvent.CartItem cartItemProto = mock(Ecommerce.ECommerceEvent.CartItem.class);
             when(cartItemConverter.fromModel(inputCartItem))
-                    .thenReturn(new Result<Ecommerce.ECommerceEvent.CartItem, BytesTruncatedProvider>(
-                            cartItemProto,
-                            new BytesTruncatedInfo(i) //Use index as bytes truncated
-                    ));
+                .thenReturn(new Result<Ecommerce.ECommerceEvent.CartItem, BytesTruncatedProvider>(
+                    cartItemProto,
+                    new BytesTruncatedInfo(i) //Use index as bytes truncated
+                ));
             when(protoMessageSizeCalculator.computeAdditionalNestedSize(
-                    any(Ecommerce.ECommerceEvent.OrderCartItem.class))
+                any(Ecommerce.ECommerceEvent.OrderCartItem.class))
             )
-                    .thenReturn(singleCartItemSizeBytes);
+                .thenReturn(singleCartItemSizeBytes);
             inputCartItems.add(inputCartItem);
             protoCartItems[i] = cartItemProto;
         }
         OrderWrapper orderWrapper = new OrderWrapper(
-                orderUuid,
-                inputOrderIdentifier,
-                inputCartItems,
-                payload
+            orderUuid,
+            inputOrderIdentifier,
+            inputCartItems,
+            payload
         );
         OrderInfoEvent orderInfoEvent =
-                new OrderInfoEvent(OrderInfoEvent.EVENT_TYPE_PURCHASE, orderWrapper, orderInfoEventConverter);
+            new OrderInfoEvent(OrderInfoEvent.EVENT_TYPE_PURCHASE, orderWrapper, orderInfoEventConverter);
 
         List<Result<Ecommerce.ECommerceEvent, BytesTruncatedProvider>> result =
-                orderInfoEventConverter.fromModel(orderInfoEvent);
+            orderInfoEventConverter.fromModel(orderInfoEvent);
 
         assertThat(result).hasSize(eventsCount);
 
@@ -286,9 +286,7 @@ public class OrderInfoEventConverterTest extends CommonTest {
             final int expectedBytesTruncated = emptyOrderInfoBytesTruncated + expectedItemsBytesTruncated;
             Result<Ecommerce.ECommerceEvent, BytesTruncatedProvider> item = result.get(i);
             final Ecommerce.ECommerceEvent.CartItem[] expectedCartItems = new Ecommerce.ECommerceEvent.CartItem[10];
-            for (int j = 0; j < cartItemsCountInSingleEvent; j++) {
-                expectedCartItems[j] = protoCartItems[i * cartItemsCountInSingleEvent + j];
-            }
+            System.arraycopy(protoCartItems, i * cartItemsCountInSingleEvent + 0, expectedCartItems, 0, cartItemsCountInSingleEvent);
             assertThatEventMatchExpectedValues(softAssertions, i, item, expectedBytesTruncated, expectedCartItems);
         }
     }
@@ -299,38 +297,38 @@ public class OrderInfoEventConverterTest extends CommonTest {
                                                     final int expectedBytesTruncated,
                                                     final Ecommerce.ECommerceEvent.CartItem[] expectedCartItems) {
         softAssertions.assertThat(item)
-                .as("Result #%d", orderNumber)
-                .matches(new Predicate<Result<Ecommerce.ECommerceEvent, BytesTruncatedProvider>>() {
-                    @Override
-                    public boolean test(Result<Ecommerce.ECommerceEvent, BytesTruncatedProvider> result) {
-                        ObjectPropertyAssertions<Result<Ecommerce.ECommerceEvent, BytesTruncatedProvider>> assertions =
-                                ObjectPropertyAssertions(
-                                        result);
+            .as("Result #%d", orderNumber)
+            .matches(new Predicate<Result<Ecommerce.ECommerceEvent, BytesTruncatedProvider>>() {
+                @Override
+                public boolean test(Result<Ecommerce.ECommerceEvent, BytesTruncatedProvider> result) {
+                    ObjectPropertyAssertions<Result<Ecommerce.ECommerceEvent, BytesTruncatedProvider>> assertions =
+                        ObjectPropertyAssertions(
+                            result);
 
-                        try {
-                            assertions.checkField(
-                                    "metaInfo",
-                                    new TruncationInfoConsumer(expectedBytesTruncated)
-                            );
-                            assertions.checkFieldRecursively(
-                                    "result",
-                                    new ECommerceEventAssertionsConsumer(Ecommerce.ECommerceEvent.ECOMMERCE_EVENT_TYPE_PURCHASE)
-                                            .setOrderInfoAssertionConsumer(
-                                                    new OrderInfoAssertionsConsumer(
-                                                            new OrderAssertionConsumer()
-                                                                    .setExpectedOrderUuid(orderUuid)
-                                                                    .setExpectedOrderId(truncatedOrderIdentifier)
-                                                                    .setExpectedPayload(payloadProto)
-                                                                    .setExpectedOrderCartItems(expectedCartItems)
-                                                    )
-                                            )
-                            );
-                            return true;
-                        } catch (Exception e) {
-                            throw new RuntimeException(e);
-                        }
+                    try {
+                        assertions.checkField(
+                            "metaInfo",
+                            new TruncationInfoConsumer(expectedBytesTruncated)
+                        );
+                        assertions.checkFieldRecursively(
+                            "result",
+                            new ECommerceEventAssertionsConsumer(Ecommerce.ECommerceEvent.ECOMMERCE_EVENT_TYPE_PURCHASE)
+                                .setOrderInfoAssertionConsumer(
+                                    new OrderInfoAssertionsConsumer(
+                                        new OrderAssertionConsumer()
+                                            .setExpectedOrderUuid(orderUuid)
+                                            .setExpectedOrderId(truncatedOrderIdentifier)
+                                            .setExpectedPayload(payloadProto)
+                                            .setExpectedOrderCartItems(expectedCartItems)
+                                    )
+                                )
+                        );
+                        return true;
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
                     }
-                });
+                }
+            });
     }
 
     private int sumOfProgression(int initial, int last) {
@@ -339,6 +337,6 @@ public class OrderInfoEventConverterTest extends CommonTest {
 
     @Test(expected = UnsupportedOperationException.class)
     public void toModel() {
-        orderInfoEventConverter.toModel(Collections.<Result<Ecommerce.ECommerceEvent, BytesTruncatedProvider>>emptyList());
+        orderInfoEventConverter.toModel(Collections.emptyList());
     }
 }

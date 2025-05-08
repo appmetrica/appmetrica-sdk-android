@@ -47,7 +47,7 @@ public class StartupRequestConfigTest extends CommonTest {
     private PlatformIdentifiers platformIdentifiers;
     @NonNull
     private StartupState.Builder mStartupStateBuilder;
-    private AppSetId appSetId = new AppSetId(UUID.randomUUID().toString(), AppSetIdScope.DEVELOPER);
+    private final AppSetId appSetId = new AppSetId(UUID.randomUUID().toString(), AppSetIdScope.DEVELOPER);
 
     @Rule
     public GlobalServiceLocatorRule mRule = new GlobalServiceLocatorRule();
@@ -66,21 +66,21 @@ public class StartupRequestConfigTest extends CommonTest {
     public void testRetryPolicyConfig() {
         RetryPolicyConfig retryPolicyConfig = mock(RetryPolicyConfig.class);
         StartupRequestConfig requestConfig = createStartupRequestConfigWithNullArgs(
-                mStartupStateBuilder.withRetryPolicyConfig(retryPolicyConfig));
+            mStartupStateBuilder.withRetryPolicyConfig(retryPolicyConfig));
         assertThat(requestConfig.getRetryPolicyConfig()).isEqualTo(retryPolicyConfig);
     }
 
     @Test
     public void testHashSuccessfulStartups() {
         StartupRequestConfig requestConfig = createStartupRequestConfigWithNullArgs(
-                mStartupStateBuilder.withHadFirstStartup(true));
+            mStartupStateBuilder.withHadFirstStartup(true));
         assertThat(requestConfig.hasSuccessfulStartup()).isTrue();
     }
 
     @Test
     public void testHashNoSuccessfulStartups() {
         StartupRequestConfig requestConfig = createStartupRequestConfigWithNullArgs(
-                mStartupStateBuilder.withHadFirstStartup(false));
+            mStartupStateBuilder.withHadFirstStartup(false));
         assertThat(requestConfig.hasSuccessfulStartup()).isFalse();
     }
 
@@ -90,17 +90,17 @@ public class StartupRequestConfigTest extends CommonTest {
         final long firstStartupTime = 1000;
         requestConfig.setFirstStartupTimeIfNeeded(firstStartupTime);
         assertThat(requestConfig.getFirstStartupTime())
-                .isEqualTo(firstStartupTime);
+            .isEqualTo(firstStartupTime);
     }
 
     @Test
     public void testFirstStartupTimeSetIfNeededShouldNotSet() {
         final long firstStartupTime = 1000;
         StartupRequestConfig requestConfig = createStartupRequestConfigWithNullArgs(
-                mStartupStateBuilder.withFirstStartupServerTime(firstStartupTime));
+            mStartupStateBuilder.withFirstStartupServerTime(firstStartupTime));
         requestConfig.setFirstStartupTimeIfNeeded(firstStartupTime + 1);
         assertThat(requestConfig.getFirstStartupTime())
-                .isEqualTo(firstStartupTime);
+            .isEqualTo(firstStartupTime);
     }
 
     @Test
@@ -108,7 +108,7 @@ public class StartupRequestConfigTest extends CommonTest {
         StartupRequestConfig requestConfig = createStartupRequestConfigWithNullArgs(mStartupStateBuilder);
         final long firstStartupTime = 1000;
         assertThat(requestConfig.getOrSetFirstStartupTime(firstStartupTime))
-                .isEqualTo(firstStartupTime);
+            .isEqualTo(firstStartupTime);
 
     }
 
@@ -116,9 +116,9 @@ public class StartupRequestConfigTest extends CommonTest {
     public void testGetOrSetFirstStartupTimeShouldNotSetNew() {
         final long firstStartupTime = 1000;
         StartupRequestConfig requestConfig = createStartupRequestConfigWithNullArgs(
-                mStartupStateBuilder.withFirstStartupServerTime(firstStartupTime));
+            mStartupStateBuilder.withFirstStartupServerTime(firstStartupTime));
         assertThat(requestConfig.getOrSetFirstStartupTime(firstStartupTime + 1))
-                .isEqualTo(firstStartupTime);
+            .isEqualTo(firstStartupTime);
     }
 
     @Test
@@ -188,18 +188,18 @@ public class StartupRequestConfigTest extends CommonTest {
 
     private StartupRequestConfig createStartupRequestConfigWithNullArgs(@NonNull StartupState.Builder builder) {
         return new StartupRequestConfig.Loader(
-                RuntimeEnvironment.getApplication(), RuntimeEnvironment.getApplication().getPackageName()
+            RuntimeEnvironment.getApplication(), RuntimeEnvironment.getApplication().getPackageName()
         ).load(new CoreRequestConfig.CoreDataSource<StartupRequestConfig.Arguments>(
-                builder.build(),
-                sdkEnvironmentProvider,
-                platformIdentifiers,
-                new StartupRequestConfig.Arguments(
-                        null,
-                        null,
-                        null,
-                        false,
-                        null
-                )
+            builder.build(),
+            sdkEnvironmentProvider,
+            platformIdentifiers,
+            new StartupRequestConfig.Arguments(
+                null,
+                null,
+                null,
+                false,
+                null
+            )
         ));
     }
 }

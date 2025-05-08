@@ -17,4 +17,6 @@ dependencies {
     // https://github.com/robolectric/robolectric
     api("org.robolectric:robolectric:4.12.1")
     compileOnly("androidx.annotation:annotation:${Deps.androidX}")
+
+    implementation("com.pinterest.ktlint:ktlint-core:0.43.2")
 }

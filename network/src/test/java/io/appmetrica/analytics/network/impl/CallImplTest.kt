@@ -4,6 +4,7 @@ import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
 import io.appmetrica.analytics.network.internal.NetworkClient
 import io.appmetrica.analytics.network.internal.Request
 import io.appmetrica.analytics.network.internal.Response
+import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -28,7 +29,7 @@ import javax.net.ssl.SSLSocketFactory
 import kotlin.random.Random
 
 @RunWith(RobolectricTestRunner::class)
-class CallImplTest {
+class CallImplTest : CommonTest() {
 
     private val client = mock<NetworkClient>()
     private val request = mock<Request> {

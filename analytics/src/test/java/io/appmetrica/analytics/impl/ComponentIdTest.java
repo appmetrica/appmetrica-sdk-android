@@ -37,10 +37,10 @@ public class ComponentIdTest extends CommonTest {
     @Test
     public void testCustomReporterComponentId() {
         ClientDescription description = ClientDescription.fromClientConfiguration(
-                createMockedConfiguration(TestsData.UUID_API_KEY, CounterConfigurationReporterType.MANUAL)); //todo ClientDescription logic tested through ComponentID
+            createMockedConfiguration(TestsData.UUID_API_KEY, CounterConfigurationReporterType.MANUAL)); //todo ClientDescription logic tested through ComponentID
         final ComponentId componentId = new ComponentId(description.getPackageName(), description.getApiKey());
         assertThat(componentId.toString()).isEqualTo(
-                RuntimeEnvironment.getApplication().getPackageName() + "_" + TestsData.UUID_API_KEY);
+            RuntimeEnvironment.getApplication().getPackageName() + "_" + TestsData.UUID_API_KEY);
     }
 
     @Test
@@ -54,7 +54,7 @@ public class ComponentIdTest extends CommonTest {
         final String apiKey = "a3a0ed4a-f81a-4b87-966c-72500fd6c747";
         final String partialApiKey = "a3a0ed4a-xxxx-xxxx-xxxx-xxxxxxxxc747";
         ClientDescription description = ClientDescription.fromClientConfiguration(
-                createMockedConfiguration(apiKey, CounterConfigurationReporterType.MANUAL));
+            createMockedConfiguration(apiKey, CounterConfigurationReporterType.MANUAL));
         final ComponentId componentId = new ComponentId(description.getPackageName(), description.getApiKey());
         when(ApiKeyUtils.createPartialApiKey(apiKey)).thenReturn(partialApiKey);
         assertThat(componentId.toStringAnonymized()).isEqualTo(

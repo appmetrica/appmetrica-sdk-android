@@ -2,23 +2,15 @@ package io.appmetrica.analytics.impl.stub
 
 import io.appmetrica.analytics.plugins.PluginErrorDetails
 import io.appmetrica.analytics.testutils.CommonTest
-import org.junit.Before
 import org.junit.Test
-import org.mockito.Mock
 import org.mockito.Mockito
-import org.mockito.MockitoAnnotations
+import org.mockito.Mockito.mock
 
 class PluginReporterStubTest : CommonTest() {
 
-    @Mock
-    private lateinit var errorDetails: PluginErrorDetails
+    private val errorDetails: PluginErrorDetails = mock()
 
     private val pluginReporterStub = PluginReporterStub()
-
-    @Before
-    fun setUp() {
-        MockitoAnnotations.openMocks(this)
-    }
 
     @Test
     fun reportUnhandledException() {

@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(ParameterizedRobolectricTestRunner.class)
 public class ProtoMessageSizeCalculatorForNestedOrderCartItem extends CommonTest {
 
-    private Ecommerce.ECommerceEvent.OrderCartItem input;
+    private final Ecommerce.ECommerceEvent.OrderCartItem input;
 
     public ProtoMessageSizeCalculatorForNestedOrderCartItem(Ecommerce.ECommerceEvent.OrderCartItem input) {
         this.input = input;
@@ -24,8 +24,8 @@ public class ProtoMessageSizeCalculatorForNestedOrderCartItem extends CommonTest
     @ParameterizedRobolectricTestRunner.Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
-                {new Ecommerce.ECommerceEvent.OrderCartItem()},
-                {filledOrderCartItem()}
+            {new Ecommerce.ECommerceEvent.OrderCartItem()},
+            {filledOrderCartItem()}
         });
     }
 

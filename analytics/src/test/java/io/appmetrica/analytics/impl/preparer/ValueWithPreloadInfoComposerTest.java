@@ -33,7 +33,7 @@ public class ValueWithPreloadInfoComposerTest extends CommonTest {
     @Mock
     private EncryptedStringValueComposer mEncryptedStringValueComposer;
     private ValueWithPreloadInfoComposer mComposer;
-    private final byte[] mExpectedBytes = new byte[] { 12, 34, 56, 78, 90, 21, 43, 65 };
+    private final byte[] mExpectedBytes = new byte[]{12, 34, 56, 78, 90, 21, 43, 65};
     @Captor
     private ArgumentCaptor<EventFromDbModel> mEventCaptor;
 

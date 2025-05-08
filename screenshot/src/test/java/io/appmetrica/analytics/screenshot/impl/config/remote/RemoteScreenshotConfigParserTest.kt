@@ -2,7 +2,6 @@ package io.appmetrica.analytics.screenshot.impl.config.remote
 
 import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
 import io.appmetrica.analytics.coreutils.internal.parsing.RemoteConfigJsonUtils
-import io.appmetrica.analytics.screenshot.impl.Constants
 import io.appmetrica.analytics.screenshot.impl.ScreenshotConfigProto
 import io.appmetrica.analytics.screenshot.impl.config.remote.converter.ScreenshotConfigProtoConverter
 import io.appmetrica.analytics.screenshot.impl.config.remote.model.ScreenshotConfig
@@ -26,7 +25,7 @@ class RemoteScreenshotConfigParserTest : CommonTest() {
         on { toModel(screenshotConfigProto) } doReturn screenshotConfig
     }
     private val jsonParser: ScreenshotConfigJsonParser = mock {
-        on { parse(rawData) } doReturn  screenshotConfigProto
+        on { parse(rawData) } doReturn screenshotConfigProto
     }
 
     @get:Rule

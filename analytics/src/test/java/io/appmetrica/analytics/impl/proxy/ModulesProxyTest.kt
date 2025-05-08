@@ -107,7 +107,7 @@ class ModulesProxyTest : CommonTest() {
     }
 
     @Test
-    fun testReportEvent() {
+    fun reportEvent() {
         val moduleEvent: ModuleEvent = mock()
         proxy.reportEvent(moduleEvent)
 
@@ -169,7 +169,7 @@ class ModulesProxyTest : CommonTest() {
     }
 
     @Test
-    fun testSendEventsBuffer() {
+    fun sendEventsBuffer() {
         proxy.sendEventsBuffer()
         appMetrica.staticMock.verify { AppMetrica.sendEventsBuffer() }
         appMetrica.staticMock.verifyNoMoreInteractions()
@@ -192,13 +192,13 @@ class ModulesProxyTest : CommonTest() {
     }
 
     @Test
-    fun testIsActivatedForTrue() {
-        testIsActivated(true)
+    fun isActivatedForTrue() {
+        verifyIsActivated(true)
     }
 
     @Test
-    fun testIsActivatedForFalse() {
-        testIsActivated(false)
+    fun isActivatedForFalse() {
+        verifyIsActivated(false)
     }
 
     @Test
@@ -218,7 +218,7 @@ class ModulesProxyTest : CommonTest() {
         verifyNoMoreInteractions(mainReporter)
     }
 
-    private fun testIsActivated(value: Boolean) {
+    private fun verifyIsActivated(value: Boolean) {
         whenever(ClientServiceLocator.getInstance().appMetricaFacadeProvider.isActivated).thenReturn(value)
         assertThat(proxy.isActivatedForApp()).isEqualTo(value)
         verify(modulesBarrier).isActivatedForApp()

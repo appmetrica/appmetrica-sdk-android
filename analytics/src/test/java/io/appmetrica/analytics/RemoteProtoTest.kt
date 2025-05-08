@@ -18,7 +18,7 @@ import org.robolectric.RobolectricTestRunner
 class RemoteProtoTest : CommonTest() {
 
     @Test
-    fun test() {
+    fun parseFrom() {
         val stream = javaClass.classLoader.getResourceAsStream("proto.bin")
         val data = stream.readBytes()
         val message = CrashAndroid.Anr.parseFrom(data)

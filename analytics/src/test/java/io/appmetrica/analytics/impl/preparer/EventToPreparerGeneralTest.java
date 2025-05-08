@@ -260,7 +260,7 @@ public class EventToPreparerGeneralTest extends CommonTest {
 
     @Nullable
     private final InternalEvents mInternalEvents;
-    private Composers composers;
+    private final Composers composers;
 
     public EventToPreparerGeneralTest(@Nullable InternalEvents internalEvents,
                                       Composers composers) {

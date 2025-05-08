@@ -35,9 +35,9 @@ public class AppPermissionsStateSerializerTest extends CommonTest {
         protoState.availableProviders[1] = "provider2";
         protoState.backgroundRestrictionsState = new AppPermissionsStateProtobuf.AppPermissionsState.BackgroundRestrictionsState();
         protoState.backgroundRestrictionsState.appStandbyBucket =
-                AppPermissionsStateProtobuf.AppPermissionsState.BackgroundRestrictionsState.ACTIVE;
+            AppPermissionsStateProtobuf.AppPermissionsState.BackgroundRestrictionsState.ACTIVE;
         protoState.backgroundRestrictionsState.backgroundRestricted =
-                AppPermissionsStateProtobuf.AppPermissionsState.BackgroundRestrictionsState.OPTIONAL_BOOL_TRUE;
+            AppPermissionsStateProtobuf.AppPermissionsState.BackgroundRestrictionsState.OPTIONAL_BOOL_TRUE;
 
         byte[] rawData = mSerializer.toByteArray(protoState);
         assertThat(rawData).isNotEmpty();
@@ -53,13 +53,13 @@ public class AppPermissionsStateSerializerTest extends CommonTest {
     @Test
     public void testDefaultValue() {
         assertThat(mSerializer.defaultValue()).usingRecursiveComparison().isEqualTo(
-                new AppPermissionsStateProtobuf.AppPermissionsState()
+            new AppPermissionsStateProtobuf.AppPermissionsState()
         );
     }
 
     private AppPermissionsStateProtobuf.AppPermissionsState.PermissionState createProtoPermissionState(String name, boolean enabled) {
         AppPermissionsStateProtobuf.AppPermissionsState.PermissionState proto =
-                new AppPermissionsStateProtobuf.AppPermissionsState.PermissionState();
+            new AppPermissionsStateProtobuf.AppPermissionsState.PermissionState();
         proto.name = name;
         proto.enabled = enabled;
         return proto;

@@ -42,22 +42,24 @@ class VitalDataProviderTest : CommonTest() {
     @Test
     fun getOrLoadDataIfOnlyPrimaryDataSourceHasContent() {
         whenever(primaryDataSource.getVitalData()).thenReturn(primaryJson.toString())
-        whenever(vitalDataProviderStateMerger.merge(
-            argThat(primaryJsonArgumentMatcher),
-            argThat(emptyJsonArgumentMatcher))
-        )
-            .thenReturn(fromMergerJson)
+        whenever(
+            vitalDataProviderStateMerger.merge(
+                argThat(primaryJsonArgumentMatcher),
+                argThat(emptyJsonArgumentMatcher)
+            )
+        ).thenReturn(fromMergerJson)
         assertUsedJson(fromMergerJson)
     }
 
     @Test
     fun getOrLoadDataIfOnlyBackupDataSourceHasContent() {
         whenever(backupDataSource.getVitalData()).thenReturn(backupJson.toString())
-        whenever(vitalDataProviderStateMerger.merge(
-            argThat(emptyJsonArgumentMatcher),
-            argThat(backupJsonArgumentMatcher)
-        ))
-            .thenReturn(fromMergerJson)
+        whenever(
+            vitalDataProviderStateMerger.merge(
+                argThat(emptyJsonArgumentMatcher),
+                argThat(backupJsonArgumentMatcher)
+            )
+        ).thenReturn(fromMergerJson)
         assertUsedJson(fromMergerJson)
     }
 
@@ -65,11 +67,12 @@ class VitalDataProviderTest : CommonTest() {
     fun getOrLoadDataIfBothBackupSourcesHasContent() {
         whenever(primaryDataSource.getVitalData()).thenReturn(primaryJson.toString())
         whenever(backupDataSource.getVitalData()).thenReturn(backupJson.toString())
-        whenever(vitalDataProviderStateMerger.merge(
-            argThat(primaryJsonArgumentMatcher),
-            argThat(backupJsonArgumentMatcher)
-        ))
-            .thenReturn(fromMergerJson)
+        whenever(
+            vitalDataProviderStateMerger.merge(
+                argThat(primaryJsonArgumentMatcher),
+                argThat(backupJsonArgumentMatcher)
+            )
+        ).thenReturn(fromMergerJson)
         assertUsedJson(fromMergerJson)
     }
 
@@ -77,11 +80,12 @@ class VitalDataProviderTest : CommonTest() {
     fun getOrLoadDataMultipleTimes() {
         whenever(primaryDataSource.getVitalData()).thenReturn(primaryJson.toString())
         whenever(backupDataSource.getVitalData()).thenReturn(backupJson.toString())
-        whenever(vitalDataProviderStateMerger.merge(
-            argThat(primaryJsonArgumentMatcher),
-            argThat(backupJsonArgumentMatcher)
-        ))
-            .thenReturn(fromMergerJson)
+        whenever(
+            vitalDataProviderStateMerger.merge(
+                argThat(primaryJsonArgumentMatcher),
+                argThat(backupJsonArgumentMatcher)
+            )
+        ).thenReturn(fromMergerJson)
         repeat((0..10).count()) {
             vitalDataProvider.getOrLoadData()
         }
@@ -94,15 +98,20 @@ class VitalDataProviderTest : CommonTest() {
         whenever(vitalDataProviderStateMerger.merge(any(), any()))
             .thenReturn(fromMergerJson)
         vitalDataProvider.getOrLoadData()
-        verify(vitalDataProviderStateMerger).merge(argThat(emptyJsonArgumentMatcher), argThat(emptyJsonArgumentMatcher))
+        verify(vitalDataProviderStateMerger)
+            .merge(argThat(emptyJsonArgumentMatcher), argThat(emptyJsonArgumentMatcher))
     }
 
     @Test
     fun getOrLoadDataIfStoragesHaveEmptyContent() {
         whenever(primaryDataSource.getVitalData()).thenReturn("")
         whenever(backupDataSource.getVitalData()).thenReturn("")
-        whenever(vitalDataProviderStateMerger.merge(argThat(emptyJsonArgumentMatcher), argThat(emptyJsonArgumentMatcher)))
-            .thenReturn(fromMergerJson)
+        whenever(
+            vitalDataProviderStateMerger.merge(
+                argThat(emptyJsonArgumentMatcher),
+                argThat(emptyJsonArgumentMatcher)
+            )
+        ).thenReturn(fromMergerJson)
         assertUsedJson(fromMergerJson)
     }
 
@@ -110,8 +119,12 @@ class VitalDataProviderTest : CommonTest() {
     fun getOrLoadDataIfStoragesHaveInvalidJson() {
         whenever(primaryDataSource.getVitalData()).thenReturn("Invalid json")
         whenever(backupDataSource.getVitalData()).thenReturn("Invalid json")
-        whenever(vitalDataProviderStateMerger.merge(argThat(emptyJsonArgumentMatcher), argThat(emptyJsonArgumentMatcher)))
-            .thenReturn(fromMergerJson)
+        whenever(
+            vitalDataProviderStateMerger.merge(
+                argThat(emptyJsonArgumentMatcher),
+                argThat(emptyJsonArgumentMatcher)
+            )
+        ).thenReturn(fromMergerJson)
         assertUsedJson(fromMergerJson)
     }
 
@@ -119,8 +132,12 @@ class VitalDataProviderTest : CommonTest() {
     fun getOrLoadIfStoragesThrowException() {
         whenever(primaryDataSource.getVitalData()).thenThrow(RuntimeException())
         whenever(backupDataSource.getVitalData()).thenThrow(RuntimeException())
-        whenever(vitalDataProviderStateMerger.merge(argThat(emptyJsonArgumentMatcher), argThat(emptyJsonArgumentMatcher)))
-            .thenReturn(fromMergerJson)
+        whenever(
+            vitalDataProviderStateMerger.merge(
+                argThat(emptyJsonArgumentMatcher),
+                argThat(emptyJsonArgumentMatcher)
+            )
+        ).thenReturn(fromMergerJson)
         assertUsedJson(fromMergerJson)
     }
 

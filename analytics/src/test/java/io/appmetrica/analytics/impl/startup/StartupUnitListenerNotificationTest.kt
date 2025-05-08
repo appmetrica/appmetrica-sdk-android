@@ -27,7 +27,7 @@ import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 class StartupUnitListenerNotificationTest : CommonTest() {
-    
+
     @get:Rule
     var globalServiceLocatorRule = GlobalServiceLocatorRule()
 
@@ -39,13 +39,13 @@ class StartupUnitListenerNotificationTest : CommonTest() {
 
     private val deviceIdGenerator: DeviceIdGenerator = mock()
     private val startupResultListener: StartupResultListener = mock()
-    
+
     private val startupRequestConfig: StartupRequestConfig = mock()
 
     private val startupConfigurationHolder: StartupConfigurationHolder = mock {
         on { get() } doReturn startupRequestConfig
     }
-    
+
     private val startupStateStorage: StartupState.Storage = mock()
     private val clidsStorage: ClidsInfoStorage = mock()
     private val clidsStateChecker: ClidsStateChecker = mock()
@@ -54,9 +54,9 @@ class StartupUnitListenerNotificationTest : CommonTest() {
     private val timeProvider: TimeProvider = mock()
     private val startupStateHolder: StartupStateHolder = mock()
     private val requestConfigArguments: StartupRequestConfig.Arguments = mock()
-    
+
     private val startupUnitComponents: StartupUnitComponents = mock {
-        on { startupConfigurationHolder } doReturn startupConfigurationHolder 
+        on { startupConfigurationHolder } doReturn startupConfigurationHolder
         on { deviceIdGenerator } doReturn deviceIdGenerator
         on { componentId } doReturn componentId
         on { resultListener } doReturn startupResultListener
@@ -70,7 +70,7 @@ class StartupUnitListenerNotificationTest : CommonTest() {
         on { startupStateHolder } doReturn startupStateHolder
         on { requestConfigArguments } doReturn requestConfigArguments
     }
-    
+
     private lateinit var startupUnit: StartupUnit
     private lateinit var startupState: StartupState
 
@@ -105,7 +105,7 @@ class StartupUnitListenerNotificationTest : CommonTest() {
     }
 
     @Test
-    fun testUpdateConfigurationNotifiesListener() {
+    fun updateConfigurationNotifiesListener() {
         createStartupUnitToNotModifyStartup()
         checkListenersNotified(1)
         whenever(startupConfigurationHolder.startupState).thenReturn(startupState)

@@ -74,11 +74,11 @@ public class SessionManagerStateMachineTest extends CommonTest {
         when(mFgSession.getType()).thenReturn(SessionType.FOREGROUND);
         when(mBgSession.getType()).thenReturn(SessionType.BACKGROUND);
         mManager = new SessionManagerStateMachine(
-                mComponentUnit,
-                mSessionIDProvider,
-                mock(SessionManagerStateMachine.EventSaver.class),
-                new MockSessionFactory(SessionType.FOREGROUND),
-                new MockSessionFactory(SessionType.BACKGROUND)
+            mComponentUnit,
+            mSessionIDProvider,
+            mock(SessionManagerStateMachine.EventSaver.class),
+            new MockSessionFactory(SessionType.FOREGROUND),
+            new MockSessionFactory(SessionType.BACKGROUND)
         );
         ServerTime.getInstance().init();
     }
@@ -146,13 +146,13 @@ public class SessionManagerStateMachineTest extends CommonTest {
         assertThat(mManager.getState()).isEqualTo(SessionManagerStateMachine.State.FOREGROUND);
         assertThat(mManager.getSomeSession(mCounterReport).getType()).isEqualTo(SessionType.FOREGROUND);
         verify(mManager.getSaver(), times(1)).saveEvent(argThat(CounterReportMatcher.newMatcher().withType(InternalEvents.EVENT_TYPE_ALIVE)),
-                argThat(new ArgumentMatcher<SessionState>() {
-                    @Override
-                    public boolean matches(SessionState argument) {
-                        SessionState matchedState = argument;
-                        return matchedState.getSessionId() == current.getSessionId() && matchedState.getSessionType() == current.getSessionType();
-                    }
-                }));
+            argThat(new ArgumentMatcher<SessionState>() {
+                @Override
+                public boolean matches(SessionState argument) {
+                    SessionState matchedState = argument;
+                    return matchedState.getSessionId() == current.getSessionId() && matchedState.getSessionType() == current.getSessionType();
+                }
+            }));
     }
 
     @Test
@@ -222,7 +222,7 @@ public class SessionManagerStateMachineTest extends CommonTest {
         SystemTimeProvider systemTimeProvider = mock(SystemTimeProvider.class);
         when(systemTimeProvider.elapsedRealtime()).thenReturn(0L);
         CounterReport counterReport = new CounterReport("Test value", "Test event",
-                InternalEvents.EVENT_TYPE_REGULAR.getTypeId(), systemTimeProvider);
+            InternalEvents.EVENT_TYPE_REGULAR.getTypeId(), systemTimeProvider);
         assertThat(mManager.getCurrentSessionState(counterReport).getReportTime()).isLessThan(1000);
     }
 
@@ -232,7 +232,7 @@ public class SessionManagerStateMachineTest extends CommonTest {
         SystemTimeProvider systemTimeProvider = mock(SystemTimeProvider.class);
         when(systemTimeProvider.elapsedRealtime()).thenReturn(creationElapsedRealtime);
         CounterReport counterReport = new CounterReport("Test value", "Test event",
-                InternalEvents.EVENT_TYPE_REGULAR.getTypeId(), systemTimeProvider);
+            InternalEvents.EVENT_TYPE_REGULAR.getTypeId(), systemTimeProvider);
         SessionState sessionState = mManager.getCurrentSessionState(counterReport);
         long sessionStateTime = sessionState.getReportTime();
         assertThat(sessionStateTime).isEqualTo(61);
@@ -244,7 +244,7 @@ public class SessionManagerStateMachineTest extends CommonTest {
         SystemTimeProvider systemTimeProvider = mock(SystemTimeProvider.class);
         when(systemTimeProvider.currentTimeMillis()).thenReturn(currentTime);
         CounterReport counterReport = new CounterReport("Test value", "Test event",
-                InternalEvents.EVENT_TYPE_REGULAR.getTypeId(), systemTimeProvider);
+            InternalEvents.EVENT_TYPE_REGULAR.getTypeId(), systemTimeProvider);
         SessionState sessionState = mManager.getCurrentSessionState(counterReport);
         long sessionStateId = sessionState.getSessionId();
         assertThat(sessionStateId).isEqualTo(TimeUnit.MILLISECONDS.toSeconds(currentTime));
@@ -258,11 +258,11 @@ public class SessionManagerStateMachineTest extends CommonTest {
         when(mSessionIDProvider.getNextSessionId()).thenReturn(nextSessionId);
         when(mFgSession.getId()).thenReturn(nextSessionId);
         mManager = new SessionManagerStateMachine(
-                mComponentUnit,
-                mSessionIDProvider,
-                mock(SessionManagerStateMachine.EventSaver.class),
-                mFgSessionFactory,
-                mBgSessionFactory
+            mComponentUnit,
+            mSessionIDProvider,
+            mock(SessionManagerStateMachine.EventSaver.class),
+            mFgSessionFactory,
+            mBgSessionFactory
         );
         SessionState currentSessionState = mManager.peekCurrentSessionState(mCounterReport);
         assertThat(currentSessionState.getSessionId()).isEqualTo(nextSessionId);
@@ -281,11 +281,11 @@ public class SessionManagerStateMachineTest extends CommonTest {
         when(mFgSession.getLastEventTimeOffsetSeconds()).thenReturn(lastEventTimeOffset);
         when(mFgSession.getNextReportId()).thenReturn(reportId);
         mManager = new SessionManagerStateMachine(
-                mComponentUnit,
-                mSessionIDProvider,
-                mock(SessionManagerStateMachine.EventSaver.class),
-                mFgSessionFactory,
-                mBgSessionFactory
+            mComponentUnit,
+            mSessionIDProvider,
+            mock(SessionManagerStateMachine.EventSaver.class),
+            mFgSessionFactory,
+            mBgSessionFactory
         );
         SessionState currentSessionState = mManager.peekCurrentSessionState(mCounterReport);
         assertThat(currentSessionState.getSessionId()).isEqualTo(sessionId);
@@ -305,11 +305,11 @@ public class SessionManagerStateMachineTest extends CommonTest {
         when(mBgSession.getLastEventTimeOffsetSeconds()).thenReturn(lastEventTimeOffset);
         when(mBgSession.getNextReportId()).thenReturn(reportId);
         mManager = new SessionManagerStateMachine(
-                mComponentUnit,
-                mSessionIDProvider,
-                mock(SessionManagerStateMachine.EventSaver.class),
-                mFgSessionFactory,
-                mBgSessionFactory
+            mComponentUnit,
+            mSessionIDProvider,
+            mock(SessionManagerStateMachine.EventSaver.class),
+            mFgSessionFactory,
+            mBgSessionFactory
         );
         SessionState currentSessionState = mManager.peekCurrentSessionState(mCounterReport);
         assertThat(currentSessionState.getSessionId()).isEqualTo(sessionId);
@@ -330,11 +330,11 @@ public class SessionManagerStateMachineTest extends CommonTest {
         when(newSession.getType()).thenReturn(SessionType.FOREGROUND);
         when(mFgSessionFactory.create(any())).thenReturn(newSession);
         mManager = new SessionManagerStateMachine(
-                mComponentUnit,
-                mSessionIDProvider,
-                mock(SessionManagerStateMachine.EventSaver.class),
-                mFgSessionFactory,
-                mBgSessionFactory
+            mComponentUnit,
+            mSessionIDProvider,
+            mock(SessionManagerStateMachine.EventSaver.class),
+            mFgSessionFactory,
+            mBgSessionFactory
         );
         mManager.heartbeat(new CounterReport());
         SessionState currentSessionState = mManager.peekCurrentSessionState(mCounterReport);

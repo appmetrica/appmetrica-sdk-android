@@ -10,8 +10,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mock
-import org.mockito.MockitoAnnotations
+import org.mockito.Mockito.mock
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.doThrow
 import org.mockito.kotlin.stubbing
@@ -24,22 +23,15 @@ class BackgroundRestrictionStateProviderHelperForPTest : CommonTest() {
 
     private lateinit var context: Context
 
-    @Mock
-    private lateinit var converter: AppStandbyBucketConverter
+    private val converter: AppStandbyBucketConverter = mock()
+    private val appStandByBucket: BackgroundRestrictionsState.AppStandByBucket = mock()
+    private val activityStateManager: ActivityManager = mock()
+    private val usageStatManager: UsageStatsManager = mock()
 
-    @Mock
-    private lateinit var appStandByBucket: BackgroundRestrictionsState.AppStandByBucket
-
-    @Mock
-    private lateinit var activityStateManager: ActivityManager
-
-    @Mock
-    private lateinit var usageStatManager: UsageStatsManager
     private val appStandByState = UsageStatsManager.STANDBY_BUCKET_FREQUENT
 
     @Before
     fun setUp() {
-        MockitoAnnotations.openMocks(this)
         context = TestUtils.createMockedContext()
         stubbing(converter) {
             on { fromIntToAppStandbyBucket(appStandByState) } doReturn appStandByBucket

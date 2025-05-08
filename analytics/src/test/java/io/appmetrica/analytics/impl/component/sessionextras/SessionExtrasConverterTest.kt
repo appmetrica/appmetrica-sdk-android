@@ -80,9 +80,11 @@ class SessionExtrasConverterTest : CommonTest() {
 
         val result = sessionExtrasConverter.toModel(input)
 
-        assertThat(result).containsExactlyEntriesOf(mapOf(
-            firstSessionExtraKey to firstSessionExtraValue,
-            secondSessionExtraKey to secondSessionExtraValue
-        ))
+        assertThat(result).containsExactlyEntriesOf(
+            mapOf(
+                firstSessionExtraKey to firstSessionExtraValue,
+                secondSessionExtraKey to secondSessionExtraValue
+            )
+        )
     }
 }

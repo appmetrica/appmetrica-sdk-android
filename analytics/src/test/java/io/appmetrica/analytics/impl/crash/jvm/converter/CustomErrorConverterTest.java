@@ -2,8 +2,6 @@ package io.appmetrica.analytics.impl.crash.jvm.converter;
 
 import io.appmetrica.analytics.impl.crash.jvm.client.CustomError;
 import io.appmetrica.analytics.impl.crash.jvm.client.RegularError;
-import io.appmetrica.analytics.impl.crash.jvm.converter.CustomErrorConverter;
-import io.appmetrica.analytics.impl.crash.jvm.converter.RegularErrorConverter;
 import io.appmetrica.analytics.impl.protobuf.backend.CrashAndroid;
 import io.appmetrica.analytics.protobuf.nano.MessageNano;
 import io.appmetrica.analytics.testutils.CommonTest;
@@ -25,8 +23,8 @@ public class CustomErrorConverterTest extends CommonTest {
     private RegularErrorConverter regularErrorConverter;
     @InjectMocks
     private CustomErrorConverter customErrorConverter;
-    private CrashAndroid.Error error = new CrashAndroid.Error();
-    private RegularError regularError = mock(RegularError.class);
+    private final CrashAndroid.Error error = new CrashAndroid.Error();
+    private final RegularError regularError = mock(RegularError.class);
 
     @Before
     public void setUp() {

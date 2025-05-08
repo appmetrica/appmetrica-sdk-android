@@ -2,6 +2,7 @@ package io.appmetrica.analytics
 
 import io.appmetrica.analytics.ModuleEvent.Category
 import io.appmetrica.analytics.impl.service.AppMetricaServiceDataReporter
+import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.SoftAssertions
 import org.junit.Test
@@ -9,7 +10,7 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class ModuleEventTest {
+class ModuleEventTest : CommonTest() {
 
     private val type = 42
     private val name = "some name"

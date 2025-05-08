@@ -62,7 +62,7 @@ class PreloadInfoFromSatelliteProviderTest : CommonTest() {
         whenever(PackageManagerUtils.hasContentProvider(context, authorities)).thenReturn(false)
         assertThat(provider.invoke()).isNull()
     }
-    
+
     @Test
     fun retrievePreloadInfoNullContentResolver() {
         whenever(context.contentResolver).thenReturn(null)
@@ -179,5 +179,4 @@ class PreloadInfoFromSatelliteProviderTest : CommonTest() {
             .checkAll()
         JSONAssert.assertEquals(additionalParams, actual?.additionalParameters, true)
     }
-
 }

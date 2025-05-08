@@ -3,6 +3,7 @@ package io.appmetrica.analytics
 import android.content.Context
 import io.appmetrica.analytics.impl.proxy.ModulesProxy
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule
+import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Rule
@@ -16,7 +17,7 @@ import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class ModulesFacadeTest {
+class ModulesFacadeTest : CommonTest() {
 
     private val proxy: ModulesProxy = mock()
     private val moduleEvent: ModuleEvent = mock()
@@ -53,20 +54,20 @@ class ModulesFacadeTest {
     }
 
     @Test
-    fun testSendEventsBuffer() {
+    fun sendEventsBuffer() {
         ModulesFacade.sendEventsBuffer()
         verify(proxy).sendEventsBuffer()
         verifyNoMoreInteractions(proxy)
     }
 
     @Test
-    fun testIifaForTrue() {
-        testIifa(true)
+    fun iifaForTrue() {
+        verifyIifa(true)
     }
 
     @Test
-    fun testIifaForFalse() {
-        testIifa(false)
+    fun iifaForFalse() {
+        verifyIifa(false)
     }
 
     @Test
@@ -123,7 +124,7 @@ class ModulesFacadeTest {
         verifyNoMoreInteractions(proxy)
     }
 
-    private fun testIifa(returnValue: Boolean) {
+    private fun verifyIifa(returnValue: Boolean) {
         whenever(proxy.isActivatedForApp()).thenReturn(returnValue)
         assertThat(ModulesFacade.isActivatedForApp()).isEqualTo(returnValue)
         verify(proxy).isActivatedForApp()

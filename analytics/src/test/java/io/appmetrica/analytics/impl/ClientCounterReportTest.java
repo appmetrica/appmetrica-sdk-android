@@ -3,8 +3,8 @@ package io.appmetrica.analytics.impl;
 import android.os.SystemClock;
 import android.util.Base64;
 import io.appmetrica.analytics.impl.revenue.ad.AdRevenueWrapper;
-import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.impl.utils.limitation.EventLimitationProcessor;
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.RandomStringGenerator;
 import java.nio.charset.StandardCharsets;
@@ -239,8 +239,8 @@ public class ClientCounterReportTest extends CommonTest {
         String value = generateLongEventValue();
         ClientCounterReport report = new ClientCounterReport(value, name, 0, mPublicLogger);
         assertThat(report.getTrimmedFields()).containsOnly(
-                new AbstractMap.SimpleEntry(ClientCounterReport.TrimmedField.NAME, name.getBytes().length - report.getName().getBytes().length),
-                new AbstractMap.SimpleEntry(ClientCounterReport.TrimmedField.VALUE, value.getBytes().length - report.getValue().getBytes().length)
+            new AbstractMap.SimpleEntry(ClientCounterReport.TrimmedField.NAME, name.getBytes().length - report.getName().getBytes().length),
+            new AbstractMap.SimpleEntry(ClientCounterReport.TrimmedField.VALUE, value.getBytes().length - report.getValue().getBytes().length)
         );
     }
 
@@ -263,7 +263,7 @@ public class ClientCounterReportTest extends CommonTest {
         long elapsedRealtime = SystemClock.elapsedRealtime();
         ClientCounterReport clientCounterReport = new ClientCounterReport("Test value", 0, mPublicLogger);
         assertThat(clientCounterReport.getCreationElapsedRealtime()
-                - elapsedRealtime).isLessThan(1000);
+            - elapsedRealtime).isLessThan(1000);
     }
 
     @Test
@@ -299,8 +299,8 @@ public class ClientCounterReportTest extends CommonTest {
     public void testUserProfileIDWasNotTrimmed() {
         String original = generateString(EventLimitationProcessor.USER_PROFILE_ID_MAX_LENGTH - 1);
         assertThat(EventLimitationProcessor.valueWasTrimmed(
-                original,
-                ClientCounterReport.formSetUserProfileIDEvent(original, mPublicLogger).getProfileID()
+            original,
+            ClientCounterReport.formSetUserProfileIDEvent(original, mPublicLogger).getProfileID()
         )).isFalse();
     }
 
@@ -308,8 +308,8 @@ public class ClientCounterReportTest extends CommonTest {
     public void testUserProfileIDTrimmed() {
         String original = generateString(EventLimitationProcessor.USER_PROFILE_ID_MAX_LENGTH + 1);
         assertThat(EventLimitationProcessor.valueWasTrimmed(
-                original,
-                ClientCounterReport.formSetUserProfileIDEvent(original, mPublicLogger).getProfileID()
+            original,
+            ClientCounterReport.formSetUserProfileIDEvent(original, mPublicLogger).getProfileID()
         )).isTrue();
     }
 
@@ -321,7 +321,7 @@ public class ClientCounterReportTest extends CommonTest {
 
         SoftAssertions assertion = new SoftAssertions();
         assertion.assertThat(report.getValueBytes()).as("value").isEqualTo(generateByteArray(
-                EventLimitationProcessor.REPORT_VALUE_MAX_SIZE
+            EventLimitationProcessor.REPORT_VALUE_MAX_SIZE
         ));
         assertion.assertThat(report.getBytesTruncated()).as("bytes truncated").isEqualTo(10);
         assertion.assertAll();
@@ -333,7 +333,7 @@ public class ClientCounterReportTest extends CommonTest {
 
         SoftAssertions softAssertions = new SoftAssertions();
         softAssertions.assertThat(counterReport.getType())
-                .isEqualTo(InternalEvents.EVENT_TYPE_SEND_USER_PROFILE.getTypeId());
+            .isEqualTo(InternalEvents.EVENT_TYPE_SEND_USER_PROFILE.getTypeId());
         softAssertions.assertThat(counterReport.getName()).isEmpty();
         softAssertions.assertThat(counterReport.getValue()).isEmpty();
         softAssertions.assertAll();
@@ -372,7 +372,7 @@ public class ClientCounterReportTest extends CommonTest {
 
         SoftAssertions softAssertions = new SoftAssertions();
         softAssertions.assertThat(counterReport.getType())
-                .isEqualTo(InternalEvents.EVENT_TYPE_REGULAR.getTypeId());
+            .isEqualTo(InternalEvents.EVENT_TYPE_REGULAR.getTypeId());
         softAssertions.assertThat(counterReport.getName()).isEqualTo(eventName);
         softAssertions.assertThat(counterReport.getValue()).isEqualTo(eventValue);
         softAssertions.assertThat(counterReport.getSource()).isEqualTo(EventSource.JS);

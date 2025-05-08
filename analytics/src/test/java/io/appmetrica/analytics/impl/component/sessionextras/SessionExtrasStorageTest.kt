@@ -42,14 +42,14 @@ internal class SessionExtrasStorageTest : CommonTest() {
     }
 
     @get:Rule
-    val converterMockedConstructionRule = MockedConstructionRule(SessionExtrasConverter::class.java) {mock, _ ->
+    val converterMockedConstructionRule = MockedConstructionRule(SessionExtrasConverter::class.java) { mock, _ ->
         whenever(mock.toModel(sessionExtraProto)).thenReturn(sessionExtra)
         whenever(mock.fromModel(sessionExtra)).thenReturn(sessionExtraProto)
         whenever(mock.toModel(sessionExtraDefaultProto)).thenReturn(emptyMap)
     }
 
     @get:Rule
-    val serializerMockedConstructionRule = MockedConstructionRule(SessionExtrasSerializer::class.java) {mock, _ ->
+    val serializerMockedConstructionRule = MockedConstructionRule(SessionExtrasSerializer::class.java) { mock, _ ->
         whenever(mock.defaultValue()).thenReturn(sessionExtraDefaultProto)
         whenever(mock.toState(valueFromDb)).thenReturn(sessionExtraProto)
         whenever(mock.toByteArray(sessionExtraProto)).thenReturn(valueFromDb)
@@ -99,7 +99,7 @@ internal class SessionExtrasStorageTest : CommonTest() {
         verify(binaryDataHelper).insert(dbKey, valueFromDb)
     }
 
-    private fun converter() : SessionExtrasConverter {
+    private fun converter(): SessionExtrasConverter {
         assertThat(converterMockedConstructionRule.constructionMock.constructed()).hasSize(1)
         assertThat(converterMockedConstructionRule.argumentInterceptor.flatArguments()).isEmpty()
         return converterMockedConstructionRule.constructionMock.constructed().first()

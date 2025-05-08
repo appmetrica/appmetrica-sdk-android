@@ -17,8 +17,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(RobolectricTestRunner.class)
 public class PermissionsCollectingConfigParserTest extends CommonTest {
 
-    private PermissionsCollectingConfigParser mParser = new PermissionsCollectingConfigParser();
-    private StartupResult mResult = new StartupResult();
+    private final PermissionsCollectingConfigParser mParser = new PermissionsCollectingConfigParser();
+    private final StartupResult mResult = new StartupResult();
 
     @Test
     public void testConfigNotParsedIfNoFeature() throws JSONException {
@@ -48,8 +48,8 @@ public class PermissionsCollectingConfigParserTest extends CommonTest {
         mParser.parseIfEnabled(mResult, response);
 
         ObjectPropertyAssertions<PermissionsCollectingConfig> assertions =
-                ObjectPropertyAssertions(mResult.getPermissionsCollectingConfig())
-                        .withFinalFieldOnly(false);
+            ObjectPropertyAssertions(mResult.getPermissionsCollectingConfig())
+                .withFinalFieldOnly(false);
 
         assertions.checkField("mCheckIntervalSeconds", checkIntervalSeconds);
         assertions.checkField("mForceSendIntervalSeconds", forceSendIntervalSeconds);
@@ -63,8 +63,8 @@ public class PermissionsCollectingConfigParserTest extends CommonTest {
         mParser.parseIfEnabled(mResult, response);
 
         ObjectPropertyAssertions<PermissionsCollectingConfig> assertions =
-                ObjectPropertyAssertions(mResult.getPermissionsCollectingConfig())
-                        .withFinalFieldOnly(false);
+            ObjectPropertyAssertions(mResult.getPermissionsCollectingConfig())
+                .withFinalFieldOnly(false);
 
         assertions.checkField("mCheckIntervalSeconds", TimeUnit.DAYS.toSeconds(1));
         assertions.checkField("mForceSendIntervalSeconds", TimeUnit.DAYS.toSeconds(5));
@@ -78,8 +78,8 @@ public class PermissionsCollectingConfigParserTest extends CommonTest {
         response.put(JsonResponseKey.PERMISSIONS_COLLECTING_CONFIG, new JSONObject());
         mParser.parseIfEnabled(mResult, response);
         ObjectPropertyAssertions<PermissionsCollectingConfig> assertions =
-                ObjectPropertyAssertions(mResult.getPermissionsCollectingConfig())
-                        .withFinalFieldOnly(false);
+            ObjectPropertyAssertions(mResult.getPermissionsCollectingConfig())
+                .withFinalFieldOnly(false);
 
         assertions.checkField("mCheckIntervalSeconds", TimeUnit.DAYS.toSeconds(1));
         assertions.checkField("mForceSendIntervalSeconds", TimeUnit.DAYS.toSeconds(5));

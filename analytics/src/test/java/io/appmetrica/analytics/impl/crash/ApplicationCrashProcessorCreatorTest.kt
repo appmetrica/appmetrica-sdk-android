@@ -26,6 +26,7 @@ internal class ApplicationCrashProcessorCreatorTest : CommonTest() {
 
     @get:Rule
     val mainOrCrashReporterProviderMockedRule = MockedConstructionRule(MainOrCrashReporterProvider::class.java)
+
     @get:Rule
     val reporterBasedCrashProcessorMockedRule = MockedConstructionRule(ReporterBasedCrashProcessor::class.java)
 
@@ -41,7 +42,9 @@ internal class ApplicationCrashProcessorCreatorTest : CommonTest() {
             .isSameAs(context)
         softly.assertThat(reporterBasedCrashProcessorMockedRule.argumentInterceptor.flatArguments()[1])
             .isSameAs(mainOrCrashReporterProviderMockedRule.constructionMock.constructed().first())
-        softly.checkAppCrashRule(reporterBasedCrashProcessorMockedRule.argumentInterceptor.flatArguments()[2] as CrashProcessor.Rule)
+        softly.checkAppCrashRule(
+            reporterBasedCrashProcessorMockedRule.argumentInterceptor.flatArguments()[2] as CrashProcessor.Rule
+        )
         softly.assertThat(reporterBasedCrashProcessorMockedRule.argumentInterceptor.flatArguments()[3])
             .isSameAs(crashTransformer)
 

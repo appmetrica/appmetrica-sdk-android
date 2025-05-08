@@ -29,36 +29,36 @@ public class AdvIdProviderWrapperTest extends CommonTest {
         final Context context = mock(Context.class);
         final RetryStrategy retryStrategy = mock(RetryStrategy.class);
         return Arrays.asList(new Object[][]{
-                {
-                    new BiConsumer<AdvIdProvider, AdTrackingInfoResult>() {
-                        @Override
-                        public void consume(AdvIdProvider firstArg, AdTrackingInfoResult secondArg) {
-                            when(firstArg.getAdTrackingInfo(context)).thenReturn(secondArg);
-                        }
-                    },
-                    new Function<AdvIdProvider, AdTrackingInfoResult>() {
-                        @Override
-                        public AdTrackingInfoResult apply(AdvIdProvider input) {
-                            return input.getAdTrackingInfo(context);
-                        }
-                    },
-                    "Method only with context"
+            {
+                new BiConsumer<AdvIdProvider, AdTrackingInfoResult>() {
+                    @Override
+                    public void consume(AdvIdProvider firstArg, AdTrackingInfoResult secondArg) {
+                        when(firstArg.getAdTrackingInfo(context)).thenReturn(secondArg);
+                    }
                 },
-                {
-                        new BiConsumer<AdvIdProvider, AdTrackingInfoResult>() {
-                            @Override
-                            public void consume(AdvIdProvider firstArg, AdTrackingInfoResult secondArg) {
-                                when(firstArg.getAdTrackingInfo(context, retryStrategy)).thenReturn(secondArg);
-                            }
-                        },
-                        new Function<AdvIdProvider, AdTrackingInfoResult>() {
-                            @Override
-                            public AdTrackingInfoResult apply(AdvIdProvider input) {
-                                return input.getAdTrackingInfo(context, retryStrategy);
-                            }
-                        },
-                        "Method with context and retry strategy"
+                new Function<AdvIdProvider, AdTrackingInfoResult>() {
+                    @Override
+                    public AdTrackingInfoResult apply(AdvIdProvider input) {
+                        return input.getAdTrackingInfo(context);
+                    }
                 },
+                "Method only with context"
+            },
+            {
+                new BiConsumer<AdvIdProvider, AdTrackingInfoResult>() {
+                    @Override
+                    public void consume(AdvIdProvider firstArg, AdTrackingInfoResult secondArg) {
+                        when(firstArg.getAdTrackingInfo(context, retryStrategy)).thenReturn(secondArg);
+                    }
+                },
+                new Function<AdvIdProvider, AdTrackingInfoResult>() {
+                    @Override
+                    public AdTrackingInfoResult apply(AdvIdProvider input) {
+                        return input.getAdTrackingInfo(context, retryStrategy);
+                    }
+                },
+                "Method with context and retry strategy"
+            },
         });
     }
 
@@ -91,8 +91,8 @@ public class AdvIdProviderWrapperTest extends CommonTest {
     @Test
     public void getAdTrackingInfoValidAdvId() {
         AdTrackingInfoResult result = new AdTrackingInfoResult(
-                new AdTrackingInfo(AdTrackingInfo.Provider.GOOGLE, "666-777", false),
-                IdentifierStatus.OK, null);
+            new AdTrackingInfo(AdTrackingInfo.Provider.GOOGLE, "666-777", false),
+            IdentifierStatus.OK, null);
         originalProviderMocker.consume(originalProvider, result);
         assertThat(methodExecutor.apply(providerWrapper)).isSameAs(result);
     }
@@ -100,13 +100,13 @@ public class AdvIdProviderWrapperTest extends CommonTest {
     @Test
     public void getAdTrackingInfoInvalidAdvId() {
         AdTrackingInfoResult result = new AdTrackingInfoResult(
-                new AdTrackingInfo(AdTrackingInfo.Provider.GOOGLE, "00000000-0000-0000-0000-000000000000", false),
-                IdentifierStatus.OK, null);
+            new AdTrackingInfo(AdTrackingInfo.Provider.GOOGLE, "00000000-0000-0000-0000-000000000000", false),
+            IdentifierStatus.OK, null);
         originalProviderMocker.consume(originalProvider, result);
         assertThat(methodExecutor.apply(providerWrapper)).usingRecursiveComparison().isEqualTo(new AdTrackingInfoResult(
-                null,
-                IdentifierStatus.INVALID_ADV_ID,
-                "AdvId is invalid: 00000000-0000-0000-0000-000000000000"
+            null,
+            IdentifierStatus.INVALID_ADV_ID,
+            "AdvId is invalid: 00000000-0000-0000-0000-000000000000"
         ));
     }
 }

@@ -26,7 +26,7 @@ import static org.mockito.Mockito.verify;
 @RunWith(RobolectricTestRunner.class)
 public class ComponentsRepositoryTest extends CommonTest {
 
-    private ComponentsRepository mComponentsRepository = new ComponentsRepository(RuntimeEnvironment.getApplication());
+    private final ComponentsRepository mComponentsRepository = new ComponentsRepository(RuntimeEnvironment.getApplication());
     @Mock
     private RegularDispatcherComponentFactory mRegularFactory;
     @Mock
@@ -44,7 +44,7 @@ public class ComponentsRepositoryTest extends CommonTest {
     private RegularDispatcherComponent mRegularDispatcherComponent2;
     @Mock
     private CommutationDispatcherComponent mCommutationDispatcherComponent2;
-    private Context mContext = RuntimeEnvironment.getApplication();
+    private final Context mContext = RuntimeEnvironment.getApplication();
 
     @Rule
     public final GlobalServiceLocatorRule mRule = new GlobalServiceLocatorRule();
@@ -54,48 +54,48 @@ public class ComponentsRepositoryTest extends CommonTest {
         MockitoAnnotations.openMocks(this);
         mComponentId = new ComponentId("package", UUID.randomUUID().toString());
         doReturn(mRegularDispatcherComponent).when(mRegularFactory).createDispatcherComponent(
-                mContext,
-                mComponentId,
-                mConfiguration
+            mContext,
+            mComponentId,
+            mConfiguration
         );
         doReturn(mCommutationDispatcherComponent).when(mCommutationFactory).createDispatcherComponent(
-                mContext,
-                mComponentId,
-                mConfiguration
+            mContext,
+            mComponentId,
+            mConfiguration
         );
         doReturn(mRegularDispatcherComponent2).when(mRegularFactory).createDispatcherComponent(
-                mContext,
-                mComponentId,
-                mConfiguration2
+            mContext,
+            mComponentId,
+            mConfiguration2
         );
         doReturn(mCommutationDispatcherComponent2).when(mCommutationFactory).createDispatcherComponent(
-                mContext,
-                mComponentId,
-                mConfiguration2
+            mContext,
+            mComponentId,
+            mConfiguration2
         );
     }
 
     @Test
     public void testCreateNewRegularComponent() {
         assertThat(mComponentsRepository
-                .getOrCreateRegularComponent(mComponentId, mConfiguration, mRegularFactory)
+            .getOrCreateRegularComponent(mComponentId, mConfiguration, mRegularFactory)
         ).isEqualTo(mRegularDispatcherComponent);
     }
 
     @Test
     public void testCreateNewCommutationComponent() {
         assertThat(mComponentsRepository
-                .getOrCreateCommutationComponent(mComponentId, mConfiguration, mCommutationFactory)
+            .getOrCreateCommutationComponent(mComponentId, mConfiguration, mCommutationFactory)
         ).isEqualTo(mCommutationDispatcherComponent);
     }
 
     @Test
     public void testNoNewRegularComponentCreated() {
         RegularDispatcherComponent regularDispatcherComponent = mComponentsRepository
-                .getOrCreateRegularComponent(mComponentId, mConfiguration, mRegularFactory);
+            .getOrCreateRegularComponent(mComponentId, mConfiguration, mRegularFactory);
 
         assertThat(mComponentsRepository
-                .getOrCreateRegularComponent(mComponentId, mConfiguration2, mRegularFactory)
+            .getOrCreateRegularComponent(mComponentId, mConfiguration2, mRegularFactory)
         ).isEqualTo(regularDispatcherComponent);
         verify(mRegularDispatcherComponent).updateConfig(mConfiguration2);
     }
@@ -103,10 +103,10 @@ public class ComponentsRepositoryTest extends CommonTest {
     @Test
     public void testNoNewCommutationComponentCreated() {
         CommutationDispatcherComponent commutationDispatcherComponent = mComponentsRepository
-                .getOrCreateCommutationComponent(mComponentId, mConfiguration, mCommutationFactory);
+            .getOrCreateCommutationComponent(mComponentId, mConfiguration, mCommutationFactory);
 
         assertThat(mComponentsRepository
-                .getOrCreateCommutationComponent(mComponentId, mConfiguration2, mCommutationFactory)
+            .getOrCreateCommutationComponent(mComponentId, mConfiguration2, mCommutationFactory)
         ).isEqualTo(commutationDispatcherComponent);
         verify(mCommutationDispatcherComponent).updateConfig(mConfiguration2);
     }
@@ -115,7 +115,7 @@ public class ComponentsRepositoryTest extends CommonTest {
     public void testCommutationAfterRegular() {
         mComponentsRepository.getOrCreateRegularComponent(mComponentId, mConfiguration, mRegularFactory);
         assertThat(mComponentsRepository
-                .getOrCreateCommutationComponent(mComponentId, mConfiguration, mCommutationFactory)
+            .getOrCreateCommutationComponent(mComponentId, mConfiguration, mCommutationFactory)
         ).isEqualTo(mCommutationDispatcherComponent);
     }
 
@@ -123,7 +123,7 @@ public class ComponentsRepositoryTest extends CommonTest {
     public void testRegularAfterCommutation() {
         mComponentsRepository.getOrCreateCommutationComponent(mComponentId, mConfiguration, mCommutationFactory);
         assertThat(mComponentsRepository
-                .getOrCreateRegularComponent(mComponentId, mConfiguration, mRegularFactory)
+            .getOrCreateRegularComponent(mComponentId, mConfiguration, mRegularFactory)
         ).isEqualTo(mRegularDispatcherComponent);
     }
 

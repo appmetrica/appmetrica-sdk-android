@@ -45,7 +45,7 @@ public class ReportProxyTest extends CommonTest {
     public void proxyReport() {
         final int type = 1;
         when(serviceDataReporterHolder.getServiceDataReporters(type))
-                .thenReturn(Arrays.asList(firstReporter, secondReporter));
+            .thenReturn(Arrays.asList(firstReporter, secondReporter));
 
         reportProxy.proxyReport(type, bundle);
 

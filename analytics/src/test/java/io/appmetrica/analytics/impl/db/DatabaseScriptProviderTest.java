@@ -32,7 +32,7 @@ public class DatabaseScriptProviderTest extends CommonTest {
     @Rule
     public GlobalServiceLocatorRule globalServiceLocatorRule = new GlobalServiceLocatorRule();
 
-    private DatabaseScriptsProvider mDatabaseScriptsProvider = new DatabaseScriptsProvider();
+    private final DatabaseScriptsProvider mDatabaseScriptsProvider = new DatabaseScriptsProvider();
 
     @Test
     public void testGetUpgradeDbScripts() throws Exception {

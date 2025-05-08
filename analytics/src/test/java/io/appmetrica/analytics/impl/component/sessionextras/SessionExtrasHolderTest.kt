@@ -24,12 +24,12 @@ class SessionExtrasHolderTest : CommonTest() {
     private val firstKey = "First key"
     private val secondKey = "Second key"
     private val defaultKey = "Default key"
-    private val firstValue = ByteArray(4) {it.toByte()}
-    private val secondValue = ByteArray(6) {it.toByte()}
+    private val firstValue = ByteArray(4) { it.toByte() }
+    private val secondValue = ByteArray(6) { it.toByte() }
     private val defaultValue = "Default value".toByteArray()
 
     @get:Rule
-    val storageMockedConstructionRule = MockedConstructionRule(SessionExtrasStorage::class.java) {mock, _ ->
+    val storageMockedConstructionRule = MockedConstructionRule(SessionExtrasStorage::class.java) { mock, _ ->
         whenever(mock.extras).thenReturn(mapOf(defaultKey to defaultValue))
     }
 

@@ -37,56 +37,66 @@ class FeaturesUtilsTest : CommonTest() {
 
     @Test
     fun identifierResultToFeatureNullId() {
-        assertThat(FeatureUtils.identifierResultToFeature(
-            IdentifiersResult(
-                null,
-                status,
-                errorExplanation
+        assertThat(
+            FeatureUtils.identifierResultToFeature(
+                IdentifiersResult(
+                    null,
+                    status,
+                    errorExplanation
+                )
             )
-        )).isNull()
+        ).isNull()
     }
 
     @Test
     fun identifierResultToFeatureEmptyId() {
-        assertThat(FeatureUtils.identifierResultToFeature(
-            IdentifiersResult(
-                "",
-                status,
-                errorExplanation
+        assertThat(
+            FeatureUtils.identifierResultToFeature(
+                IdentifiersResult(
+                    "",
+                    status,
+                    errorExplanation
+                )
             )
-        )).isNull()
+        ).isNull()
     }
 
     @Test
     fun identifierResultToFeatureUnknownId() {
-        assertThat(FeatureUtils.identifierResultToFeature(
-            IdentifiersResult(
-                "unknown",
-                status,
-                errorExplanation
+        assertThat(
+            FeatureUtils.identifierResultToFeature(
+                IdentifiersResult(
+                    "unknown",
+                    status,
+                    errorExplanation
+                )
             )
-        )).isNull()
+        ).isNull()
     }
 
     @Test
     fun identifierResultToFeatureTrueId() {
-        assertThat(FeatureUtils.identifierResultToFeature(
-            IdentifiersResult(
-                "true",
-                status,
-                errorExplanation
+        assertThat(
+            FeatureUtils.identifierResultToFeature(
+                IdentifiersResult(
+                    "true",
+                    status,
+                    errorExplanation
+                )
             )
-        )).isTrue
+        ).isTrue
     }
 
     @Test
     fun identifierResultToFeatureFalseId() {
-        assertThat(FeatureUtils.identifierResultToFeature(
-            IdentifiersResult(
-                "false",
-                status,
-                errorExplanation
+        assertThat(
+            FeatureUtils.identifierResultToFeature(
+                IdentifiersResult(
+                    "false",
+                    status,
+                    errorExplanation
+                )
             )
-        )).isFalse
+        ).isFalse
     }
 }

@@ -61,7 +61,7 @@ public class AppMetricaImplStubTest extends CommonTest {
     @Test
     public void getMainReporterApiConsumerProvider() {
         assertThat(stub.getMainReporterApiConsumerProvider().getMainReporter())
-                .isInstanceOf(MainReporterStub.class);
+            .isInstanceOf(MainReporterStub.class);
     }
 
     @Test
@@ -85,8 +85,8 @@ public class AppMetricaImplStubTest extends CommonTest {
     @Test
     public void getReporter() {
         assertThat(stub.getReporter(reporterInternalConfig))
-                .isNotNull()
-                .isInstanceOf(ReporterExtendedStub.class);
+            .isNotNull()
+            .isInstanceOf(ReporterExtendedStub.class);
     }
 
     @Test
@@ -107,8 +107,8 @@ public class AppMetricaImplStubTest extends CommonTest {
     @Test
     public void requestStartupParamsWithStartupParamsCallback() {
         stub.requestStartupParams(
-                startupParamsCallback,
-                Collections.singletonList(Constants.StartupParamsCallbackKeys.UUID)
+            startupParamsCallback,
+            Collections.singletonList(Constants.StartupParamsCallbackKeys.UUID)
         );
         verify(startupParamsCallback).onRequestError(StartupParamsCallback.Reason.UNKNOWN, null);
     }
@@ -158,37 +158,37 @@ public class AppMetricaImplStubTest extends CommonTest {
     @Test
     public void getReporterFactory() {
         assertThat(stub.getReporterFactory())
-                .isNotNull()
-                .isInstanceOf(ReporterFactoryStub.class);
+            .isNotNull()
+            .isInstanceOf(ReporterFactoryStub.class);
     }
 
     @Test
     public void getFeatures() throws Exception {
         ObjectPropertyAssertions(stub.getFeatures())
-                .withPrivateFields(true)
-                .checkFieldIsNull("libSslEnabled", "getLibSslEnabled")
-                .checkAll();
+            .withPrivateFields(true)
+            .checkFieldIsNull("libSslEnabled", "getLibSslEnabled")
+            .checkAll();
     }
 
     private void assertAdvIdentifiersResult(AdvIdentifiersResult result) throws Exception {
         Consumer<ObjectPropertyAssertions<AdvIdentifiersResult.AdvId>> verifier =
-                new Consumer<ObjectPropertyAssertions<AdvIdentifiersResult.AdvId>>() {
-                    @Override
-                    public void accept(ObjectPropertyAssertions<AdvIdentifiersResult.AdvId> assertions) {
-                        try {
-                            assertions.checkFieldIsNull("advId")
-                                    .checkField("details", AdvIdentifiersResult.Details.INTERNAL_ERROR)
-                                    .checkField("errorExplanation", "Device user is in locked state")
-                                    .checkAll();
-                        } catch (Exception e) {
-                            throw new RuntimeException(e);
-                        }
+            new Consumer<ObjectPropertyAssertions<AdvIdentifiersResult.AdvId>>() {
+                @Override
+                public void accept(ObjectPropertyAssertions<AdvIdentifiersResult.AdvId> assertions) {
+                    try {
+                        assertions.checkFieldIsNull("advId")
+                            .checkField("details", AdvIdentifiersResult.Details.INTERNAL_ERROR)
+                            .checkField("errorExplanation", "Device user is in locked state")
+                            .checkAll();
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
                     }
-                };
+                }
+            };
         ObjectPropertyAssertions(result)
-                .checkFieldRecursively("googleAdvId", verifier)
-                .checkFieldRecursively("huaweiAdvId", verifier)
-                .checkFieldRecursively("yandexAdvId", verifier)
-                .checkAll();
+            .checkFieldRecursively("googleAdvId", verifier)
+            .checkFieldRecursively("huaweiAdvId", verifier)
+            .checkFieldRecursively("yandexAdvId", verifier)
+            .checkAll();
     }
 }

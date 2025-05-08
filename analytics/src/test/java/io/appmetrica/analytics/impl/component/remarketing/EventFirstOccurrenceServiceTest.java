@@ -26,7 +26,7 @@ import static org.mockito.Mockito.when;
 @RunWith(RobolectricTestRunner.class)
 public class EventFirstOccurrenceServiceTest extends CommonTest {
 
-    private int mVersionCode = 213;
+    private final int mVersionCode = 213;
     private static final String EVENT_NAME = "Event name";
     private static final String SECOND_EVENT_NAME = "Second event name";
 
@@ -103,7 +103,7 @@ public class EventFirstOccurrenceServiceTest extends CommonTest {
     public void testCheckFirstOccurrenceForExistingEventReturnExpectedValue() {
         when(mEventNameHashSetFromStorage.contains(anyInt())).thenReturn(true);
         assertThat(mEventFirstOccurrenceService.checkFirstOccurrence(EVENT_NAME))
-                .isEqualTo(FirstOccurrenceStatus.NON_FIRST_OCCURENCE);
+            .isEqualTo(FirstOccurrenceStatus.NON_FIRST_OCCURENCE);
     }
 
     @Test
@@ -111,7 +111,7 @@ public class EventFirstOccurrenceServiceTest extends CommonTest {
         when(mEventNameHashSetFromStorage.contains(anyInt())).thenReturn(false);
         when(mEventHashesFromStorage.treatUnknownEventAsNew()).thenReturn(true);
         assertThat(mEventFirstOccurrenceService.checkFirstOccurrence(EVENT_NAME))
-                .isEqualTo(FirstOccurrenceStatus.FIRST_OCCURRENCE);
+            .isEqualTo(FirstOccurrenceStatus.FIRST_OCCURRENCE);
     }
 
     @Test
@@ -119,7 +119,7 @@ public class EventFirstOccurrenceServiceTest extends CommonTest {
         when(mEventNameHashSetFromStorage.contains(anyInt())).thenReturn(false);
         when(mEventHashesFromStorage.treatUnknownEventAsNew()).thenReturn(false);
         assertThat(mEventFirstOccurrenceService.checkFirstOccurrence(EVENT_NAME))
-                .isEqualTo(FirstOccurrenceStatus.UNKNOWN);
+            .isEqualTo(FirstOccurrenceStatus.UNKNOWN);
     }
 
     @Test
@@ -127,7 +127,7 @@ public class EventFirstOccurrenceServiceTest extends CommonTest {
         when(mEventNameHashSetFromStorage.contains(anyInt())).thenReturn(false);
         when(mEventHashesFromStorage.getHashesCountFromLastVersion()).thenReturn(1000);
         assertThat(mEventFirstOccurrenceService.checkFirstOccurrence(EVENT_NAME))
-                .isEqualTo(FirstOccurrenceStatus.UNKNOWN);
+            .isEqualTo(FirstOccurrenceStatus.UNKNOWN);
         verify(mEventHashesFromStorage, times(1)).setTreatUnknownEventAsNew(false);
         verify(mEventHashesFromStorage, never()).addEventNameHash(anyInt());
         verify(mEventHashesStorage, times(1)).write(any(EventHashes.class));
@@ -142,14 +142,14 @@ public class EventFirstOccurrenceServiceTest extends CommonTest {
             @Override
             public Object answer(final InvocationOnMock invocation) throws Throwable {
                 when(mEventHashesFromStorage.treatUnknownEventAsNew())
-                        .thenReturn((Boolean) invocation.getArguments()[0]);
+                    .thenReturn((Boolean) invocation.getArguments()[0]);
                 return null;
             }
         }).when(mEventHashesFromStorage).setTreatUnknownEventAsNew(anyBoolean());
         assertThat(mEventFirstOccurrenceService.checkFirstOccurrence(EVENT_NAME))
-                .isEqualTo(FirstOccurrenceStatus.FIRST_OCCURRENCE);
+            .isEqualTo(FirstOccurrenceStatus.FIRST_OCCURRENCE);
         assertThat(mEventFirstOccurrenceService.checkFirstOccurrence(SECOND_EVENT_NAME))
-                .isEqualTo(FirstOccurrenceStatus.UNKNOWN);
+            .isEqualTo(FirstOccurrenceStatus.UNKNOWN);
     }
 
     @Test

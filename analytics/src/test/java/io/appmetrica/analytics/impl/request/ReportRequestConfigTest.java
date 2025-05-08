@@ -56,16 +56,16 @@ public class ReportRequestConfigTest extends CommonTest {
         @ParameterizedRobolectricTestRunner.Parameters
         public static Collection<Object[]> data() {
             return Arrays.asList(
-                    new Object[]{false, new ArrayList<String>(), "", "", "", false},
-                    new Object[]{false, null, null, null, null, false},
-                    new Object[]{false, Collections.singletonList("host"), "", "", "", false},
-                    new Object[]{false, null, "uuid", "deviceId", "deviceIdHash", false},
-                    new Object[]{true, new ArrayList<String>(), "uuid", "deviceId", "deviceIdHash", false},
-                    new Object[]{false, Collections.singletonList("host"), "uuid", "", "", false},
-                    new Object[]{false, Collections.singletonList("host"), "uuid", "deviceId", "", false},
-                    new Object[]{false, Collections.singletonList("host"), "uuid", "deviId", "deviceIdHash", false},
-                    new Object[]{true, Collections.singletonList("host"), "uuid", "deviId", "", false},
-                    new Object[]{true, Collections.singletonList("host"), "uuid", "deviceId", "deviceIdHash", true}
+                new Object[]{false, new ArrayList<String>(), "", "", "", false},
+                new Object[]{false, null, null, null, null, false},
+                new Object[]{false, Collections.singletonList("host"), "", "", "", false},
+                new Object[]{false, null, "uuid", "deviceId", "deviceIdHash", false},
+                new Object[]{true, new ArrayList<String>(), "uuid", "deviceId", "deviceIdHash", false},
+                new Object[]{false, Collections.singletonList("host"), "uuid", "", "", false},
+                new Object[]{false, Collections.singletonList("host"), "uuid", "deviceId", "", false},
+                new Object[]{false, Collections.singletonList("host"), "uuid", "deviId", "deviceIdHash", false},
+                new Object[]{true, Collections.singletonList("host"), "uuid", "deviId", "", false},
+                new Object[]{true, Collections.singletonList("host"), "uuid", "deviceId", "deviceIdHash", true}
             );
         }
 
@@ -115,7 +115,7 @@ public class ReportRequestConfigTest extends CommonTest {
         private SdkEnvironmentProvider sdkEnvironmentProvider;
         @Mock
         private AdvertisingIdGetter advertisingIdGetter;
-        private AppSetId appSetId = new AppSetId(UUID.randomUUID().toString(), AppSetIdScope.DEVELOPER);
+        private final AppSetId appSetId = new AppSetId(UUID.randomUUID().toString(), AppSetIdScope.DEVELOPER);
         @Mock
         private AppSetIdProvider appSetIdProvider;
         @Mock
@@ -218,8 +218,8 @@ public class ReportRequestConfigTest extends CommonTest {
     @Mock
     private PlatformIdentifiers platformIdentifiers;
 
-    private String appSetIdValue = "AppSetIdValue";
-    private AppSetIdScope appSetIdScope = AppSetIdScope.APP;
+    private final String appSetIdValue = "AppSetIdValue";
+    private final AppSetIdScope appSetIdScope = AppSetIdScope.APP;
     private final String packageName = "test.package.name";
     private final String appVersionName = "2.4.5";
     private final String appVersionCode = "245";

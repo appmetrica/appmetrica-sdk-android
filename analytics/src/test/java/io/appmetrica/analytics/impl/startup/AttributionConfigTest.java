@@ -19,8 +19,8 @@ public class AttributionConfigTest extends CommonTest {
         List<Pair<String, AttributionConfig.Filter>> list = mock(List.class);
         AttributionConfig config = new AttributionConfig(list);
         ObjectPropertyAssertions(config)
-                .checkField("deeplinkConditions", list)
-                .checkAll();
+            .checkField("deeplinkConditions", list)
+            .checkAll();
     }
 
     @Test

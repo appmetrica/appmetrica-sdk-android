@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(RobolectricTestRunner.class)
 public class SameEventTypeComposerTest extends CommonTest {
 
-    private SameEventTypeComposer mSameEventTypeComposer = new SameEventTypeComposer();
+    private final SameEventTypeComposer mSameEventTypeComposer = new SameEventTypeComposer();
 
     @Rule
     public GlobalServiceLocatorRule globalServiceLocatorRule = new GlobalServiceLocatorRule();

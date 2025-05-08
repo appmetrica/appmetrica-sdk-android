@@ -18,7 +18,7 @@ public class NeverForbidPermissionStrategyTest extends CommonTest {
     @Test
     public void toStringMatchExpectedValue() {
         assertThat(new NeverForbidPermissionStrategy().toString())
-                .isEqualTo("AlwaysAskForPermissionStrategy{always allow permission}");
+            .isEqualTo("AlwaysAskForPermissionStrategy{always allow permission}");
     }
 
 }

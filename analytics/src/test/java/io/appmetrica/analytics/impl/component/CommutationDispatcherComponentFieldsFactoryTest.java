@@ -55,7 +55,7 @@ public class CommutationDispatcherComponentFieldsFactoryTest extends CommonTest 
     @Test
     public void testCreateCommutationReportProcessor() {
         CommutationReportProcessor<CommutationHandler, CommutationDispatcherComponent> reportProcessor =
-                mFieldsFactory.createCommutationReportProcessor(mComponent);
+            mFieldsFactory.createCommutationReportProcessor(mComponent);
         assertThat(reportProcessor.getProcessingStrategyFactory()).isExactlyInstanceOf(CommutationProcessingStrategyFactory.class);
     }
 }

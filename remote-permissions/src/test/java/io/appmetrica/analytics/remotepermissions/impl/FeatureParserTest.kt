@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.remotepermissions.impl
 
 import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
+import io.appmetrica.analytics.testutils.CommonTest
 import org.json.JSONArray
 import org.json.JSONObject
 import org.junit.Before
@@ -9,7 +10,7 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class FeatureParserTest {
+class FeatureParserTest : CommonTest() {
 
     private val block = "permissions"
     private val permissionName = "name"

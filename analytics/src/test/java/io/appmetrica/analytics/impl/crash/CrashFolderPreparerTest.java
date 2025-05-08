@@ -20,7 +20,7 @@ public class CrashFolderPreparerTest extends CommonTest {
 
     @Mock
     private File crashesFolder;
-    private CrashFolderPreparer crashFolderPreparer = new CrashFolderPreparer();
+    private final CrashFolderPreparer crashFolderPreparer = new CrashFolderPreparer();
 
     @Before
     public void setUp() throws Exception {

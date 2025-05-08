@@ -1,9 +1,10 @@
 package io.appmetrica.analytics.remotepermissions.impl
 
+import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 
-class RemoteConfigPermissionStrategyTest {
+class RemoteConfigPermissionStrategyTest : CommonTest() {
 
     private lateinit var remoteConfigPermissionStrategy: RemoteConfigPermissionStrategy
 

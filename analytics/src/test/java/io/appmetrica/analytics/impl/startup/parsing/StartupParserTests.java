@@ -1,6 +1,5 @@
 package io.appmetrica.analytics.impl.startup.parsing;
 
-import io.appmetrica.analytics.impl.IOUtils;
 import io.appmetrica.analytics.impl.TestsData;
 import io.appmetrica.analytics.impl.db.state.converter.StatSendingConverter;
 import io.appmetrica.analytics.impl.startup.CollectingFlags;
@@ -9,6 +8,7 @@ import io.appmetrica.analytics.impl.utils.JsonHelper;
 import io.appmetrica.analytics.impl.utils.StartupUtils;
 import io.appmetrica.analytics.testutils.CommonTest;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -226,7 +226,7 @@ public class StartupParserTests extends CommonTest {
         headers.put("Date", generateDateHeader(obtainServerTime));
 
         // Parse
-        Long parsedTime = mStartupParser.parseServerTime(headers);
+        Long parsedTime = StartupParser.parseServerTime(headers);
 
         assertThat(parsedTime).isNotNull();
         assertThat(parsedTime / 1000).isEqualTo(obtainServerTime / 1000);
@@ -236,7 +236,7 @@ public class StartupParserTests extends CommonTest {
     public void testNonServerDateHeader() {
         Map<String, List<String>> headers = new HashMap<String, List<String>>();
 
-        Long parsedTime = mStartupParser.parseServerTime(headers);
+        Long parsedTime = StartupParser.parseServerTime(headers);
 
         assertThat(parsedTime).isNull();
     }
@@ -261,7 +261,7 @@ public class StartupParserTests extends CommonTest {
     }
 
     private static byte[] stringToBytes(final String string) throws UnsupportedEncodingException {
-        return string.getBytes(IOUtils.UTF8_ENCODING);
+        return string.getBytes(StandardCharsets.UTF_8);
     }
 
     private static List<String> generateDateHeader(long serverTime) {

@@ -19,10 +19,10 @@ public class PreloadInfoSourceConverterTest extends CommonTest {
     @ParameterizedRobolectricTestRunner.Parameters(name = "{0} to {1}")
     public static Collection<Object[]> data() {
         List<Object[]> result = Arrays.asList(new Object[][]{
-                {DistributionSource.UNDEFINED, PreloadInfoProto.PreloadInfoData.UNDEFINED},
-                {DistributionSource.APP, PreloadInfoProto.PreloadInfoData.APP},
-                {DistributionSource.RETAIL, PreloadInfoProto.PreloadInfoData.RETAIL},
-                {DistributionSource.SATELLITE, PreloadInfoProto.PreloadInfoData.SATELLITE}
+            {DistributionSource.UNDEFINED, PreloadInfoProto.PreloadInfoData.UNDEFINED},
+            {DistributionSource.APP, PreloadInfoProto.PreloadInfoData.APP},
+            {DistributionSource.RETAIL, PreloadInfoProto.PreloadInfoData.RETAIL},
+            {DistributionSource.SATELLITE, PreloadInfoProto.PreloadInfoData.SATELLITE}
         });
         assert result.size() == DistributionSource.values().length;
         return result;

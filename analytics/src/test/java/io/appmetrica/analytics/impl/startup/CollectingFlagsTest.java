@@ -24,17 +24,17 @@ public class CollectingFlagsTest extends CommonTest {
         final boolean sslPinning = true;
 
         CollectingFlags flags = new CollectingFlags.CollectingFlagsBuilder()
-                .withPermissionsCollectingEnabled(permissionsCollectingEnabled)
-                .withFeaturesCollectingEnabled(featuresCollectingEnabled)
-                .withGoogleAid(googleAid)
-                .withSimInfo(simInfo)
-                .withHuaweiOaid(huaweiOaid)
-                .withSslPinning(true)
-                .build();
+            .withPermissionsCollectingEnabled(permissionsCollectingEnabled)
+            .withFeaturesCollectingEnabled(featuresCollectingEnabled)
+            .withGoogleAid(googleAid)
+            .withSimInfo(simInfo)
+            .withHuaweiOaid(huaweiOaid)
+            .withSslPinning(true)
+            .build();
 
         ObjectPropertyAssertions<CollectingFlags> assertions =
-                ObjectPropertyAssertions(flags)
-                        .withFinalFieldOnly(false);
+            ObjectPropertyAssertions(flags)
+                .withFinalFieldOnly(false);
 
         assertions.checkField("permissionsCollectingEnabled", permissionsCollectingEnabled);
         assertions.checkField("featuresCollectingEnabled", featuresCollectingEnabled);
@@ -50,8 +50,8 @@ public class CollectingFlagsTest extends CommonTest {
     public void testCreateFromEmptyBuilder() throws Exception {
         CollectingFlags flags = new CollectingFlags.CollectingFlagsBuilder().build();
         ObjectPropertyAssertions<CollectingFlags> assertions =
-                ObjectPropertyAssertions(flags)
-                        .withFinalFieldOnly(false);
+            ObjectPropertyAssertions(flags)
+                .withFinalFieldOnly(false);
 
         assertions.checkField("permissionsCollectingEnabled", false);
         assertions.checkField("featuresCollectingEnabled", false);

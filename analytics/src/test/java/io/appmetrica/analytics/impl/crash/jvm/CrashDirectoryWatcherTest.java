@@ -35,9 +35,9 @@ public class CrashDirectoryWatcherTest extends CommonTest {
     public void setUp() {
         MockitoAnnotations.openMocks(this);
         watcher = new CrashDirectoryWatcher(
-                observer,
-                crashDirectory,
-                crashFolderPreparer
+            observer,
+            crashDirectory,
+            crashFolderPreparer
         );
     }
 

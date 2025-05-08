@@ -21,10 +21,10 @@ public class ReferrerInfoGeneralTest extends CommonTest {
         long click = 15509;
 
         ReferrerInfo info = new ReferrerInfo(
-                referrer,
-                click,
-                install,
-                ReferrerInfo.Source.HMS
+            referrer,
+            click,
+            install,
+            ReferrerInfo.Source.HMS
         );
 
         SoftAssertions assertions = new SoftAssertions();

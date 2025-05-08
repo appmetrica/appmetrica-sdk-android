@@ -40,11 +40,11 @@ public class ReportAppOpenHandlerTests extends CommonTest {
 
     private ReportAppOpenHandler mReportAppOpenHandler;
 
-    private String mInput;
+    private final String mInput;
     @Nullable
     private final AttributionConfig attributionConfig;
-    private boolean mShouldHandleDeeplink;
-    private boolean shouldIncrementOpenId;
+    private final boolean mShouldHandleDeeplink;
+    private final boolean shouldIncrementOpenId;
 
     @ParameterizedRobolectricTestRunner.Parameters
     public static Collection<Object[]> data() throws JSONException {

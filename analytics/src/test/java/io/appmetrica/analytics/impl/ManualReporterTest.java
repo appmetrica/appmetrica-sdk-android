@@ -11,7 +11,6 @@ import io.appmetrica.analytics.impl.crash.jvm.converter.UnhandledExceptionConver
 import io.appmetrica.analytics.impl.reporter.ManualReporterContext;
 import io.appmetrica.analytics.impl.reporter.ReporterLifecycleListener;
 import io.appmetrica.analytics.internal.CounterConfigurationReporterType;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -28,14 +27,14 @@ import static org.mockito.Mockito.when;
 @RunWith(RobolectricTestRunner.class)
 public class ManualReporterTest extends BaseReporterTest {
 
-    private ReporterConfig config = ReporterConfig.newConfigBuilder(apiKey).build();
+    private final ReporterConfig config = ReporterConfig.newConfigBuilder(apiKey).build();
     @Mock
     private ReporterLifecycleListener reporterLifecycleListener;
 
     @Test
     public void testMainReporterListenerIsCalledInConstructor() {
         when(ClientServiceLocator.getInstance().getReporterLifecycleListener())
-                .thenReturn(reporterLifecycleListener);
+            .thenReturn(reporterLifecycleListener);
         final BaseReporter reporter = getReporter();
         verify(reporterLifecycleListener).onCreateManualReporter(
             eq(apiKey),
@@ -47,29 +46,29 @@ public class ManualReporterTest extends BaseReporterTest {
     @Override
     protected BaseReporter getReporter() {
         return new ManualReporter(
-                mContext,
-                mReportsHandler,
-                config,
-                mReporterEnvironment,
-                mExtraMetaInfoRetriever,
-                processDetector,
-                unhandledExceptionConverter,
-                regularErrorConverter,
-                customErrorConverter,
-                anrConverter,
-                pluginErrorDetailsConverter
+            mContext,
+            mReportsHandler,
+            config,
+            mReporterEnvironment,
+            mExtraMetaInfoRetriever,
+            processDetector,
+            unhandledExceptionConverter,
+            regularErrorConverter,
+            customErrorConverter,
+            anrConverter,
+            pluginErrorDetailsConverter
         );
     }
 
     @Test
     public void testReporterType() {
         assertThat(
-                new ManualReporter(
-                        mContext,
-                        new ProcessConfiguration(mContext, null),
-                        ReporterConfig.newConfigBuilder(apiKey).build(),
-                        mReportsHandler
-                ).getEnvironment().getReporterConfiguration().getReporterType()
+            new ManualReporter(
+                mContext,
+                new ProcessConfiguration(mContext, null),
+                ReporterConfig.newConfigBuilder(apiKey).build(),
+                mReportsHandler
+            ).getEnvironment().getReporterConfiguration().getReporterType()
         ).isEqualTo(CounterConfigurationReporterType.MANUAL);
     }
 
@@ -77,7 +76,7 @@ public class ManualReporterTest extends BaseReporterTest {
     public void userProfileID() {
         String userProfileID = "user_profile_id";
         assertThat(createReporterWithProfileID(userProfileID).mReporterEnvironment.getInitialUserProfileID())
-                .isEqualTo(userProfileID);
+            .isEqualTo(userProfileID);
     }
 
     @Test
@@ -94,8 +93,8 @@ public class ManualReporterTest extends BaseReporterTest {
 
     private ManualReporter createReporterWithProfileID(String userProfileID) {
         ReporterConfig config = ReporterConfig.newConfigBuilder(apiKey)
-                .withUserProfileID(userProfileID)
-                .build();
+            .withUserProfileID(userProfileID)
+            .build();
         return new ManualReporter(mContext, mProcessConfiguration, config, mReportsHandler);
     }
 
@@ -111,17 +110,17 @@ public class ManualReporterTest extends BaseReporterTest {
         @Override
         public BaseReporter getReporter() {
             return new ManualReporter(
-                    mContext,
-                    mReportsHandler,
-                    config,
-                    mReporterEnvironment,
-                    mock(ExtraMetaInfoRetriever.class),
-                    processDetector,
-                    mock(UnhandledExceptionConverter.class),
-                    mock(RegularErrorConverter.class),
-                    mock(CustomErrorConverter.class),
-                    mock(AnrConverter.class),
-                    mock(PluginErrorDetailsConverter.class)
+                mContext,
+                mReportsHandler,
+                config,
+                mReporterEnvironment,
+                mock(ExtraMetaInfoRetriever.class),
+                processDetector,
+                mock(UnhandledExceptionConverter.class),
+                mock(RegularErrorConverter.class),
+                mock(CustomErrorConverter.class),
+                mock(AnrConverter.class),
+                mock(PluginErrorDetailsConverter.class)
             );
         }
     }

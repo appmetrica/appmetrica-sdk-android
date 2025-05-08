@@ -1,5 +1,6 @@
 package io.appmetrica.analytics.coreutils.internal
 
+import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -11,7 +12,7 @@ import java.util.Locale
 class StringExtensionReplaceFirstCharWithTitleCaseTest(
     val input: String,
     val expected: String
-) {
+) : CommonTest() {
 
     companion object {
 

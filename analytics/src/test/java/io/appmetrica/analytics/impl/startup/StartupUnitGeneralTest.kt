@@ -4,7 +4,6 @@ import io.appmetrica.analytics.AppMetricaConfig
 import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
 import io.appmetrica.analytics.billinginterface.internal.config.BillingConfig
 import io.appmetrica.analytics.impl.DistributionSource
-import io.appmetrica.analytics.impl.StartupTask
 import io.appmetrica.analytics.impl.clids.ClidsInfo
 import io.appmetrica.analytics.impl.client.ClientConfiguration
 import io.appmetrica.analytics.impl.client.ProcessConfiguration
@@ -95,7 +94,9 @@ internal class StartupUnitGeneralTest : StartupUnitBaseTest() {
         val startupState = startupUnit.parseStartupResult(
             StartupParser().parseStartupResponse(
                 TEST_RESPONSE.toByteArray()
-            ), startupRequestConfig, 0L
+            ),
+            startupRequestConfig,
+            0L
         )
         assertThat(startupState.retryPolicyConfig).isEqualTo(RetryPolicyConfig(1000, 2))
     }
@@ -165,7 +166,8 @@ internal class StartupUnitGeneralTest : StartupUnitBaseTest() {
         whenever(oldStartupRequestConfig.getOrSetFirstStartupTime(any())).thenReturn(firstStartupObtainTime)
         whenever(startupConfigurationHolder.get()).thenReturn(oldStartupRequestConfig)
         whenever(startupConfigurationHolder.startupState).thenReturn(
-            StartupState.Builder(mock<CollectingFlags>()).withUuid(uuid).build())
+            StartupState.Builder(mock<CollectingFlags>()).withUuid(uuid).build()
+        )
         whenever(result.reportHostUrls).thenReturn(reportUrls)
         whenever(result.getAdUrl).thenReturn(getAdUrl)
         whenever(result.reportAdUrl).thenReturn(reportAdUrl)
@@ -282,7 +284,8 @@ internal class StartupUnitGeneralTest : StartupUnitBaseTest() {
     fun emptyDeviceIDReplacedWithDefault() {
         val deviceID = "deviceID"
         whenever(startupConfigurationHolder.startupState)
-            .thenReturn(StartupState.Builder(mock<CollectingFlags>()).withDeviceId(deviceID).build()
+            .thenReturn(
+                StartupState.Builder(mock<CollectingFlags>()).withDeviceId(deviceID).build()
             )
         startupUnit.init()
         val result = mock<StartupResult>()

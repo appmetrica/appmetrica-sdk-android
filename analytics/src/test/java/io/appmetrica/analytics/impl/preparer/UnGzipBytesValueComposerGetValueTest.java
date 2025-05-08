@@ -29,11 +29,11 @@ import static org.mockito.Mockito.when;
 @RunWith(ParameterizedRobolectricTestRunner.class)
 public class UnGzipBytesValueComposerGetValueTest extends CommonTest {
 
-    private byte[] input;
-    private byte[] decrypted;
-    private byte[] expected;
+    private final byte[] input;
+    private final byte[] decrypted;
+    private final byte[] expected;
 
-    public UnGzipBytesValueComposerGetValueTest(byte[] input,  byte[] decrypted, byte[] expected) {
+    public UnGzipBytesValueComposerGetValueTest(byte[] input, byte[] decrypted, byte[] expected) {
         this.input = input;
         this.decrypted = decrypted;
         this.expected = expected;
@@ -51,20 +51,20 @@ public class UnGzipBytesValueComposerGetValueTest extends CommonTest {
         byte[] largeExpected = randomBytes(1024 * 1024);
 
         return Arrays.asList(new Object[][]{
-                //#0
-                {smallEncrypted, smallExpected, smallExpected},
-                //#1
-                {mediumEncrypted, mediumExpected, mediumExpected},
-                //#2
-                {largeEncrypted, largeExpected, largeExpected},
-                //#3
-                {null, smallEncrypted, new byte[0]},
-                //#4
-                {new byte[0], smallExpected, smallExpected},
-                //#5
-                {smallEncrypted, null, new byte[0]},
-                //#6
-                {smallEncrypted, new byte[0], new byte[0]}
+            //#0
+            {smallEncrypted, smallExpected, smallExpected},
+            //#1
+            {mediumEncrypted, mediumExpected, mediumExpected},
+            //#2
+            {largeEncrypted, largeExpected, largeExpected},
+            //#3
+            {null, smallEncrypted, new byte[0]},
+            //#4
+            {new byte[0], smallExpected, smallExpected},
+            //#5
+            {smallEncrypted, null, new byte[0]},
+            //#6
+            {smallEncrypted, new byte[0], new byte[0]}
         });
     }
 
@@ -81,7 +81,7 @@ public class UnGzipBytesValueComposerGetValueTest extends CommonTest {
     @Mock
     private ReportRequestConfig config;
 
-    private EventEncryptionMode encryptionMode = EventEncryptionMode.NONE;
+    private final EventEncryptionMode encryptionMode = EventEncryptionMode.NONE;
 
     private UnGzipBytesValueComposer composer;
     private String inputString;

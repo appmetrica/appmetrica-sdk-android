@@ -21,7 +21,7 @@ class PreloadInfoTest : CommonTest() {
 
     private val defaultPreloadInfoBuilder = PreloadInfo.newBuilder(TRACKING_ID)
     private val defaultPreloadInfo: PreloadInfo = defaultPreloadInfoBuilder.build()
-    
+
     private lateinit var preloadInfoBuilder: PreloadInfo.Builder
     private lateinit var preloadInfo: PreloadInfo
 

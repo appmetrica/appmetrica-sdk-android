@@ -19,10 +19,13 @@ class ObjectExternalAttributionTest : CommonTest() {
     private val value = object {
         @JvmField
         val stringField = "stringField"
+
         @JvmField
         val intField = 42
+
         @JvmField
         val doubleField = 3.14
+
         @JvmField
         val numberField = Double.NaN
     }

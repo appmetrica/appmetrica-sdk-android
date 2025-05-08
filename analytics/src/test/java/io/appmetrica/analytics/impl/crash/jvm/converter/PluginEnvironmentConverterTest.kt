@@ -1,6 +1,5 @@
 package io.appmetrica.analytics.impl.crash.jvm.converter
 
-import io.appmetrica.analytics.impl.crash.jvm.converter.PluginEnvironmentConverter
 import io.appmetrica.analytics.impl.protobuf.backend.CrashAndroid
 import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat

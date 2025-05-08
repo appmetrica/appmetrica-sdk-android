@@ -8,6 +8,7 @@ import io.appmetrica.analytics.testutils.CommonTest;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,27 +28,27 @@ public class BillingInfoStorageImplTest extends CommonTest {
     @ParameterizedRobolectricTestRunner.Parameters(name = "{index}")
     public static Collection<Object[]> getData() {
         List<BillingInfo> emptyList = new ArrayList<BillingInfo>();
-        List<BillingInfo> filledList = Arrays.asList(
-                new BillingInfo(ProductType.INAPP, "sku", "purchaseToken", 0, 0)
+        List<BillingInfo> filledList = Collections.singletonList(
+            new BillingInfo(ProductType.INAPP, "sku", "purchaseToken", 0, 0)
         );
         return Arrays.asList(
-                // #0
-                new Object[]{
-                        emptyList,
-                        true
-                },
-                new Object[]{
-                        emptyList,
-                        false
-                },
-                new Object[]{
-                        filledList,
-                        true
-                },
-                new Object[]{
-                        filledList,
-                        false
-                }
+            // #0
+            new Object[]{
+                emptyList,
+                true
+            },
+            new Object[]{
+                emptyList,
+                false
+            },
+            new Object[]{
+                filledList,
+                true
+            },
+            new Object[]{
+                filledList,
+                false
+            }
         );
     }
 

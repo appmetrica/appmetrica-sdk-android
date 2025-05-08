@@ -53,7 +53,7 @@ public class EventLimitationsProcessorTest extends CommonTest {
     public void testTrimToSizeShouldReturnUnchangedStringIfSourceStringLessThanLimit() {
         String randomString = mRandomStringGenerator.nextString();
         assertThat(new StringTrimmer(randomString.length() + 1, ARG_TAG, mPublicLogger).trim(randomString))
-                .isEqualTo(randomString);
+            .isEqualTo(randomString);
     }
 
     @Test

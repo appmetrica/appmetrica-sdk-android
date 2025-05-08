@@ -84,8 +84,9 @@ class TempCacheDbHelperTest : CommonTest() {
     private val stringArrayCaptor = argumentCaptor<Array<String>>()
 
     private val now = 300500L
+
     @get:Rule
-    val timeProviderMockedConstructionRule = constructionRule<SystemTimeProvider>{
+    val timeProviderMockedConstructionRule = constructionRule<SystemTimeProvider> {
         on { currentTimeMillis() } doReturn now
     }
 

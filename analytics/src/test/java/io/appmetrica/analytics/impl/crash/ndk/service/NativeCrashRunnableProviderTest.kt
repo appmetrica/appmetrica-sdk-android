@@ -63,9 +63,8 @@ internal class NativeCrashRunnableProviderTest : CommonTest() {
     private val nativeCrashConverter: NativeCrashConverter by nativeCrashConverterMockedConstructionRule
 
     @get:Rule
-    val nativeCrashHandlerDescriptionMockedConstructionRule = constructionRule<NativeCrashHandlerDescription>()
-    private val nativeCrashHandlerDescription: NativeCrashHandlerDescription
-        by nativeCrashHandlerDescriptionMockedConstructionRule
+    val nativeCrashHandlerDescriptionRule = constructionRule<NativeCrashHandlerDescription>()
+    private val nativeCrashHandlerDescription: NativeCrashHandlerDescription by nativeCrashHandlerDescriptionRule
 
     @get:Rule
     val nativeCrashDumpReaderMockedConstructionRule = constructionRule<NativeCrashDumpReader>()
@@ -141,8 +140,8 @@ internal class NativeCrashRunnableProviderTest : CommonTest() {
     fun `get check handler description`() {
         nativeCrashRunnableProvider.get(nativeCrash, finalizer)
 
-        assertThat(nativeCrashHandlerDescriptionMockedConstructionRule.constructionMock.constructed()).hasSize(1)
-        assertThat(nativeCrashHandlerDescriptionMockedConstructionRule.argumentInterceptor.flatArguments())
+        assertThat(nativeCrashHandlerDescriptionRule.constructionMock.constructed()).hasSize(1)
+        assertThat(nativeCrashHandlerDescriptionRule.argumentInterceptor.flatArguments())
             .containsExactly(nativeCrashSource, handlerVersion)
     }
 }

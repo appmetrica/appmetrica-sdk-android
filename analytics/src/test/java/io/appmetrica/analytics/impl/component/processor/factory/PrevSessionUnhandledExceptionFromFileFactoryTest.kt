@@ -30,5 +30,4 @@ class PrevSessionUnhandledExceptionFromFileFactoryTest : CommonTest() {
 
         assertThat(handlers).containsExactly(reportCrashMetaInfoHandler, reportPrevSessionHandler)
     }
-
 }

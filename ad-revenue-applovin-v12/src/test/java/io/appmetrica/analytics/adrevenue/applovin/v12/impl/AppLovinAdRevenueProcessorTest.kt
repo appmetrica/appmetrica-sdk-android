@@ -34,11 +34,13 @@ class AppLovinAdRevenueProcessorTest : CommonTest() {
     var reflectionUtilsRule = MockedStaticRule(
         ReflectionUtils::class.java
     ) {
-        whenever(ReflectionUtils.isArgumentsOfClasses(
-            arrayOf(maxAd, appLovinSdk),
-            MaxAd::class.java,
-            AppLovinSdk::class.java
-        )).thenReturn(true)
+        whenever(
+            ReflectionUtils.isArgumentsOfClasses(
+                arrayOf(maxAd, appLovinSdk),
+                MaxAd::class.java,
+                AppLovinSdk::class.java
+            )
+        ).thenReturn(true)
     }
 
     private val processor = AppLovinAdRevenueProcessor(
@@ -60,11 +62,13 @@ class AppLovinAdRevenueProcessorTest : CommonTest() {
 
     @Test
     fun processWithWrongParameters() {
-        whenever(ReflectionUtils.isArgumentsOfClasses(
-            arrayOf(maxAd, appLovinSdk),
-            MaxAd::class.java,
-            AppLovinSdk::class.java
-        )).thenReturn(false)
+        whenever(
+            ReflectionUtils.isArgumentsOfClasses(
+                arrayOf(maxAd, appLovinSdk),
+                MaxAd::class.java,
+                AppLovinSdk::class.java
+            )
+        ).thenReturn(false)
 
         assertThat(processor.process(maxAd, appLovinSdk)).isFalse()
         verifyNoInteractions(internalClientModuleFacade)

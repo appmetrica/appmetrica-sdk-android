@@ -12,7 +12,7 @@ import static org.mockito.Mockito.mock;
 @RunWith(RobolectricTestRunner.class)
 public class EmptyValueComposerTest extends CommonTest {
 
-    private EmptyValueComposer mEmptyValueComposer = new EmptyValueComposer();
+    private final EmptyValueComposer mEmptyValueComposer = new EmptyValueComposer();
 
     @Test
     public void testGetValue() {

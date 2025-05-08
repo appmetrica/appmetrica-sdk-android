@@ -13,8 +13,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(ParameterizedRobolectricTestRunner.class)
 public class ChargeTypeTest extends CommonTest {
 
-    private Integer mId;
-    private ChargeType mChargeType;
+    private final Integer mId;
+    private final ChargeType mChargeType;
 
     public ChargeTypeTest(Integer id, ChargeType chargeType) {
         mId = id;
@@ -24,13 +24,13 @@ public class ChargeTypeTest extends CommonTest {
     @ParameterizedRobolectricTestRunner.Parameters(name = "[{index}] id = {0}")
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
-                {-1, ChargeType.UNKNOWN},
-                {0, ChargeType.NONE},
-                {1, ChargeType.USB},
-                {2, ChargeType.WIRELESS},
-                {3, ChargeType.AC},
-                {Integer.MIN_VALUE, ChargeType.UNKNOWN},
-                {null, ChargeType.UNKNOWN}
+            {-1, ChargeType.UNKNOWN},
+            {0, ChargeType.NONE},
+            {1, ChargeType.USB},
+            {2, ChargeType.WIRELESS},
+            {3, ChargeType.AC},
+            {Integer.MIN_VALUE, ChargeType.UNKNOWN},
+            {null, ChargeType.UNKNOWN}
         });
     }
 

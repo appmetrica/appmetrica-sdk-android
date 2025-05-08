@@ -37,102 +37,102 @@ public class PreloadInfoWrapperJsonTest extends CommonTest {
     public static Collection<Object[]> data() throws JSONException {
         final JSONObject baseJson = new JSONObject().put("key", "value");
         return Arrays.asList(new Object[][]{
-                {null, false, baseJson},
-                {null, true, baseJson},
-                {PreloadInfo.newBuilder(null).setAdditionalParams(ADDITIONAL_INFO_KEY, ADDITIONAL_INFO_VALUE).build(), false, baseJson},
-                {PreloadInfo.newBuilder(null).setAdditionalParams(ADDITIONAL_INFO_KEY, ADDITIONAL_INFO_VALUE).build(), true, baseJson},
-                {PreloadInfo.newBuilder(null).build(), false, baseJson},
-                {PreloadInfo.newBuilder(null).build(), true, baseJson},
-                {PreloadInfo.newBuilder("").setAdditionalParams(ADDITIONAL_INFO_KEY, ADDITIONAL_INFO_VALUE).build(), false, baseJson},
-                {PreloadInfo.newBuilder("").setAdditionalParams(ADDITIONAL_INFO_KEY, ADDITIONAL_INFO_VALUE).build(), true, baseJson},
-                {PreloadInfo.newBuilder("").build(), false, baseJson},
-                {PreloadInfo.newBuilder("").build(), true, baseJson},
-                {
-                    PreloadInfo.newBuilder(TRACKING_ID).build(),
-                        false,
-                        new JSONObject(baseJson.toString()).put(KEY_PRELOAD_INFO, new JSONObject()
-                                .put(KEY_TRACKING_ID, TRACKING_ID)
-                                .put(KEY_ADDITIONAL_PARAMS, new JSONObject())
-                                .put(KEY_WAS_SET, true)
-                                .put(KEY_AUTO_TRACKING, false)
-                                .put(KEY_SOURCE, DistributionSource.APP.getDescription())
-                    )
-                },
-                {
-                        PreloadInfo.newBuilder(TRACKING_ID).build(),
-                        true,
-                        new JSONObject(baseJson.toString()).put(KEY_PRELOAD_INFO, new JSONObject()
-                                .put(KEY_TRACKING_ID, TRACKING_ID)
-                                .put(KEY_ADDITIONAL_PARAMS, new JSONObject())
-                                .put(KEY_WAS_SET, true)
-                                .put(KEY_AUTO_TRACKING, true)
-                                .put(KEY_SOURCE, DistributionSource.APP.getDescription())
+            {null, false, baseJson},
+            {null, true, baseJson},
+            {PreloadInfo.newBuilder(null).setAdditionalParams(ADDITIONAL_INFO_KEY, ADDITIONAL_INFO_VALUE).build(), false, baseJson},
+            {PreloadInfo.newBuilder(null).setAdditionalParams(ADDITIONAL_INFO_KEY, ADDITIONAL_INFO_VALUE).build(), true, baseJson},
+            {PreloadInfo.newBuilder(null).build(), false, baseJson},
+            {PreloadInfo.newBuilder(null).build(), true, baseJson},
+            {PreloadInfo.newBuilder("").setAdditionalParams(ADDITIONAL_INFO_KEY, ADDITIONAL_INFO_VALUE).build(), false, baseJson},
+            {PreloadInfo.newBuilder("").setAdditionalParams(ADDITIONAL_INFO_KEY, ADDITIONAL_INFO_VALUE).build(), true, baseJson},
+            {PreloadInfo.newBuilder("").build(), false, baseJson},
+            {PreloadInfo.newBuilder("").build(), true, baseJson},
+            {
+                PreloadInfo.newBuilder(TRACKING_ID).build(),
+                false,
+                new JSONObject(baseJson.toString()).put(KEY_PRELOAD_INFO, new JSONObject()
+                    .put(KEY_TRACKING_ID, TRACKING_ID)
+                    .put(KEY_ADDITIONAL_PARAMS, new JSONObject())
+                    .put(KEY_WAS_SET, true)
+                    .put(KEY_AUTO_TRACKING, false)
+                    .put(KEY_SOURCE, DistributionSource.APP.getDescription())
+                )
+            },
+            {
+                PreloadInfo.newBuilder(TRACKING_ID).build(),
+                true,
+                new JSONObject(baseJson.toString()).put(KEY_PRELOAD_INFO, new JSONObject()
+                    .put(KEY_TRACKING_ID, TRACKING_ID)
+                    .put(KEY_ADDITIONAL_PARAMS, new JSONObject())
+                    .put(KEY_WAS_SET, true)
+                    .put(KEY_AUTO_TRACKING, true)
+                    .put(KEY_SOURCE, DistributionSource.APP.getDescription())
+                )
+            },
+            {
+                PreloadInfo.newBuilder(TRACKING_ID).setAdditionalParams(ADDITIONAL_INFO_KEY, ADDITIONAL_INFO_VALUE).build(),
+                false,
+                new JSONObject(baseJson.toString()).put(
+                    KEY_PRELOAD_INFO,
+                    new JSONObject()
+                        .put(KEY_TRACKING_ID, TRACKING_ID)
+                        .put(KEY_WAS_SET, true)
+                        .put(KEY_AUTO_TRACKING, false)
+                        .put(KEY_ADDITIONAL_PARAMS, new JSONObject().put(ADDITIONAL_INFO_KEY, ADDITIONAL_INFO_VALUE))
+                        .put(KEY_SOURCE, DistributionSource.APP.getDescription())
+                )
+            },
+            {
+                PreloadInfo.newBuilder(TRACKING_ID).setAdditionalParams(ADDITIONAL_INFO_KEY, ADDITIONAL_INFO_VALUE).build(),
+                true,
+                new JSONObject(baseJson.toString()).put(
+                    KEY_PRELOAD_INFO,
+                    new JSONObject()
+                        .put(KEY_TRACKING_ID, TRACKING_ID)
+                        .put(KEY_WAS_SET, true)
+                        .put(KEY_AUTO_TRACKING, true)
+                        .put(KEY_ADDITIONAL_PARAMS, new JSONObject().put(ADDITIONAL_INFO_KEY, ADDITIONAL_INFO_VALUE))
+                        .put(KEY_SOURCE, DistributionSource.APP.getDescription())
+                )
+            },
+            {
+                PreloadInfo.newBuilder(TRACKING_ID)
+                    .setAdditionalParams(ADDITIONAL_INFO_KEY, ADDITIONAL_INFO_VALUE)
+                    .setAdditionalParams(ADDITIONAL_INFO_KEY_SECOND, ADDITIONAL_INFO_VALUE_SECOND)
+                    .build(),
+                false,
+                new JSONObject(baseJson.toString()).put(
+                    KEY_PRELOAD_INFO,
+                    new JSONObject()
+                        .put(KEY_TRACKING_ID, TRACKING_ID)
+                        .put(KEY_WAS_SET, true)
+                        .put(KEY_AUTO_TRACKING, false)
+                        .put(KEY_ADDITIONAL_PARAMS, new JSONObject()
+                            .put(ADDITIONAL_INFO_KEY, ADDITIONAL_INFO_VALUE)
+                            .put(ADDITIONAL_INFO_KEY_SECOND, ADDITIONAL_INFO_VALUE_SECOND)
                         )
-                },
-                {
-                    PreloadInfo.newBuilder(TRACKING_ID).setAdditionalParams(ADDITIONAL_INFO_KEY, ADDITIONAL_INFO_VALUE).build(),
-                        false,
-                        new JSONObject(baseJson.toString()).put(
-                                KEY_PRELOAD_INFO,
-                                new JSONObject()
-                                        .put(KEY_TRACKING_ID, TRACKING_ID)
-                                        .put(KEY_WAS_SET, true)
-                                        .put(KEY_AUTO_TRACKING, false)
-                                        .put(KEY_ADDITIONAL_PARAMS, new JSONObject().put(ADDITIONAL_INFO_KEY, ADDITIONAL_INFO_VALUE))
-                                        .put(KEY_SOURCE, DistributionSource.APP.getDescription())
+                        .put(KEY_SOURCE, DistributionSource.APP.getDescription())
+                )
+            },
+            {
+                PreloadInfo.newBuilder(TRACKING_ID)
+                    .setAdditionalParams(ADDITIONAL_INFO_KEY, ADDITIONAL_INFO_VALUE)
+                    .setAdditionalParams(ADDITIONAL_INFO_KEY_SECOND, ADDITIONAL_INFO_VALUE_SECOND)
+                    .build(),
+                true,
+                new JSONObject(baseJson.toString()).put(
+                    KEY_PRELOAD_INFO,
+                    new JSONObject()
+                        .put(KEY_TRACKING_ID, TRACKING_ID)
+                        .put(KEY_WAS_SET, true)
+                        .put(KEY_AUTO_TRACKING, true)
+                        .put(KEY_ADDITIONAL_PARAMS, new JSONObject()
+                            .put(ADDITIONAL_INFO_KEY, ADDITIONAL_INFO_VALUE)
+                            .put(ADDITIONAL_INFO_KEY_SECOND, ADDITIONAL_INFO_VALUE_SECOND)
                         )
-                },
-                {
-                        PreloadInfo.newBuilder(TRACKING_ID).setAdditionalParams(ADDITIONAL_INFO_KEY, ADDITIONAL_INFO_VALUE).build(),
-                        true,
-                        new JSONObject(baseJson.toString()).put(
-                                KEY_PRELOAD_INFO,
-                                new JSONObject()
-                                        .put(KEY_TRACKING_ID, TRACKING_ID)
-                                        .put(KEY_WAS_SET, true)
-                                        .put(KEY_AUTO_TRACKING, true)
-                                        .put(KEY_ADDITIONAL_PARAMS, new JSONObject().put(ADDITIONAL_INFO_KEY, ADDITIONAL_INFO_VALUE))
-                                        .put(KEY_SOURCE, DistributionSource.APP.getDescription())
-                        )
-                },
-                {
-                    PreloadInfo.newBuilder(TRACKING_ID)
-                        .setAdditionalParams(ADDITIONAL_INFO_KEY, ADDITIONAL_INFO_VALUE)
-                        .setAdditionalParams(ADDITIONAL_INFO_KEY_SECOND, ADDITIONAL_INFO_VALUE_SECOND)
-                        .build(),
-                        false,
-                        new JSONObject(baseJson.toString()).put(
-                                KEY_PRELOAD_INFO,
-                                new JSONObject()
-                                        .put(KEY_TRACKING_ID, TRACKING_ID)
-                                        .put(KEY_WAS_SET, true)
-                                        .put(KEY_AUTO_TRACKING, false)
-                                        .put(KEY_ADDITIONAL_PARAMS, new JSONObject()
-                                                .put(ADDITIONAL_INFO_KEY, ADDITIONAL_INFO_VALUE)
-                                                .put(ADDITIONAL_INFO_KEY_SECOND, ADDITIONAL_INFO_VALUE_SECOND)
-                                        )
-                                        .put(KEY_SOURCE, DistributionSource.APP.getDescription())
-                        )
-                },
-                {
-                        PreloadInfo.newBuilder(TRACKING_ID)
-                                .setAdditionalParams(ADDITIONAL_INFO_KEY, ADDITIONAL_INFO_VALUE)
-                                .setAdditionalParams(ADDITIONAL_INFO_KEY_SECOND, ADDITIONAL_INFO_VALUE_SECOND)
-                                .build(),
-                        true,
-                        new JSONObject(baseJson.toString()).put(
-                                KEY_PRELOAD_INFO,
-                                new JSONObject()
-                                        .put(KEY_TRACKING_ID, TRACKING_ID)
-                                        .put(KEY_WAS_SET, true)
-                                        .put(KEY_AUTO_TRACKING, true)
-                                        .put(KEY_ADDITIONAL_PARAMS, new JSONObject()
-                                                .put(ADDITIONAL_INFO_KEY, ADDITIONAL_INFO_VALUE)
-                                                .put(ADDITIONAL_INFO_KEY_SECOND, ADDITIONAL_INFO_VALUE_SECOND)
-                                        )
-                                        .put(KEY_SOURCE, DistributionSource.APP.getDescription())
-                        )
-                }
+                        .put(KEY_SOURCE, DistributionSource.APP.getDescription())
+                )
+            }
         });
     }
 

@@ -39,7 +39,7 @@ public class PreloadInfoStateConverterTest extends CommonTest {
         PreloadInfoState preloadInfoState = new PreloadInfoState(mTrackingId, mParams, true, true, DistributionSource.RETAIL);
         PreloadInfoProto.PreloadInfoData.PreloadInfo nano = mConverter.fromModel(preloadInfoState);
         ProtoObjectPropertyAssertions<PreloadInfoProto.PreloadInfoData.PreloadInfo> assertions =
-                new ProtoObjectPropertyAssertions<PreloadInfoProto.PreloadInfoData.PreloadInfo>(nano);
+            new ProtoObjectPropertyAssertions<PreloadInfoProto.PreloadInfoData.PreloadInfo>(nano);
         assertions.checkField("trackingId", mTrackingId);
         assertions.checkField("additionalParameters", mParams.toString());
         assertions.checkField("wasSet", true);
@@ -53,7 +53,7 @@ public class PreloadInfoStateConverterTest extends CommonTest {
         PreloadInfoState preloadInfoState = new PreloadInfoState(null, mParams, true, true, DistributionSource.RETAIL);
         PreloadInfoProto.PreloadInfoData.PreloadInfo nano = mConverter.fromModel(preloadInfoState);
         ProtoObjectPropertyAssertions<PreloadInfoProto.PreloadInfoData.PreloadInfo> assertions =
-                new ProtoObjectPropertyAssertions<PreloadInfoProto.PreloadInfoData.PreloadInfo>(nano);
+            new ProtoObjectPropertyAssertions<PreloadInfoProto.PreloadInfoData.PreloadInfo>(nano);
         assertions.checkField("trackingId", "");
         assertions.checkField("additionalParameters", mParams.toString());
         assertions.checkField("wasSet", true);
@@ -67,7 +67,7 @@ public class PreloadInfoStateConverterTest extends CommonTest {
         PreloadInfoState preloadInfoState = new PreloadInfoState("", mParams, true, true, DistributionSource.RETAIL);
         PreloadInfoProto.PreloadInfoData.PreloadInfo nano = mConverter.fromModel(preloadInfoState);
         ProtoObjectPropertyAssertions<PreloadInfoProto.PreloadInfoData.PreloadInfo> assertions =
-                new ProtoObjectPropertyAssertions<PreloadInfoProto.PreloadInfoData.PreloadInfo>(nano);
+            new ProtoObjectPropertyAssertions<PreloadInfoProto.PreloadInfoData.PreloadInfo>(nano);
         assertions.checkField("trackingId", "");
         assertions.checkField("additionalParameters", mParams.toString());
         assertions.checkField("wasSet", true);
@@ -86,7 +86,7 @@ public class PreloadInfoStateConverterTest extends CommonTest {
         nano.source = PreloadInfoProto.PreloadInfoData.RETAIL;
         PreloadInfoState state = mConverter.toModel(nano);
         ObjectPropertyAssertions<PreloadInfoState> assertions = ObjectPropertyAssertions(state)
-                .withIgnoredFields("additionalParameters");
+            .withIgnoredFields("additionalParameters");
         assertions.checkField("trackingId", mTrackingId);
         assertions.checkField("wasSet", true);
         assertions.checkField("autoTrackingEnabled", true);
@@ -100,7 +100,7 @@ public class PreloadInfoStateConverterTest extends CommonTest {
         PreloadInfoProto.PreloadInfoData.PreloadInfo nano = new PreloadInfoProto.PreloadInfoData.PreloadInfo();
         PreloadInfoState state = mConverter.toModel(nano);
         ObjectPropertyAssertions<PreloadInfoState> assertions = ObjectPropertyAssertions(state)
-                .withIgnoredFields("additionalParameters");
+            .withIgnoredFields("additionalParameters");
         assertions.checkField("trackingId", "");
         assertions.checkField("wasSet", false);
         assertions.checkField("autoTrackingEnabled", false);
@@ -119,7 +119,7 @@ public class PreloadInfoStateConverterTest extends CommonTest {
         nano.source = PreloadInfoProto.PreloadInfoData.RETAIL;
         PreloadInfoState state = mConverter.toModel(nano);
         ObjectPropertyAssertions<PreloadInfoState> assertions = ObjectPropertyAssertions(state)
-                .withIgnoredFields("additionalParameters");
+            .withIgnoredFields("additionalParameters");
         assertions.checkField("trackingId", mTrackingId);
         assertions.checkField("wasSet", true);
         assertions.checkField("autoTrackingEnabled", true);

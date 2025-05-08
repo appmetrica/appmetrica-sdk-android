@@ -157,21 +157,21 @@ public class PhoneUtilsTest extends CommonTest {
         private Network mNetwork;
         @Mock
         private NetworkCapabilities mNetworkCapabilities;
-        private Context mContext;
+        private final Context mContext;
 
         private final PhoneUtils.NetworkType mExpected;
 
         @ParameterizedRobolectricTestRunner.Parameters(name = "expected type {1}")
         public static Collection<Object[]> data() {
             return Arrays.asList(new Object[][]{
-                    {NetworkCapabilities.TRANSPORT_BLUETOOTH, PhoneUtils.NetworkType.BLUETOOTH},
-                    {NetworkCapabilities.TRANSPORT_ETHERNET, PhoneUtils.NetworkType.ETHERNET},
-                    {NetworkCapabilities.TRANSPORT_CELLULAR, PhoneUtils.NetworkType.CELL},
-                    {NetworkCapabilities.TRANSPORT_VPN, PhoneUtils.NetworkType.VPN},
-                    {NetworkCapabilities.TRANSPORT_WIFI, PhoneUtils.NetworkType.WIFI},
-                    {NetworkCapabilities.TRANSPORT_WIFI_AWARE, PhoneUtils.NetworkType.UNDEFINED},
-                    {NetworkCapabilities.TRANSPORT_LOWPAN, PhoneUtils.NetworkType.UNDEFINED},
-                    {99, PhoneUtils.NetworkType.UNDEFINED}
+                {NetworkCapabilities.TRANSPORT_BLUETOOTH, PhoneUtils.NetworkType.BLUETOOTH},
+                {NetworkCapabilities.TRANSPORT_ETHERNET, PhoneUtils.NetworkType.ETHERNET},
+                {NetworkCapabilities.TRANSPORT_CELLULAR, PhoneUtils.NetworkType.CELL},
+                {NetworkCapabilities.TRANSPORT_VPN, PhoneUtils.NetworkType.VPN},
+                {NetworkCapabilities.TRANSPORT_WIFI, PhoneUtils.NetworkType.WIFI},
+                {NetworkCapabilities.TRANSPORT_WIFI_AWARE, PhoneUtils.NetworkType.UNDEFINED},
+                {NetworkCapabilities.TRANSPORT_LOWPAN, PhoneUtils.NetworkType.UNDEFINED},
+                {99, PhoneUtils.NetworkType.UNDEFINED}
             });
         }
 
@@ -271,19 +271,19 @@ public class PhoneUtilsTest extends CommonTest {
         @ParameterizedRobolectricTestRunner.Parameters(name = "for type {0} server type is {1}")
         public static Collection<Object[]> data() {
             return Arrays.asList(new Object[][]{
-                    {PhoneUtils.NetworkType.CELL, EventProto.ReportMessage.Session.CONNECTION_CELL},
-                    {PhoneUtils.NetworkType.WIFI, EventProto.ReportMessage.Session.CONNECTION_WIFI},
-                    {PhoneUtils.NetworkType.BLUETOOTH, EventProto.ReportMessage.Session.CONNECTION_BLUETOOTH},
-                    {PhoneUtils.NetworkType.ETHERNET, EventProto.ReportMessage.Session.CONNECTION_ETHERNET},
-                    {PhoneUtils.NetworkType.MOBILE_DUN, EventProto.ReportMessage.Session.CONNECTION_MOBILE_DUN},
-                    {PhoneUtils.NetworkType.MOBILE_HIPRI, EventProto.ReportMessage.Session.CONNECTION_MOBILE_HIPRI},
-                    {PhoneUtils.NetworkType.MOBILE_MMS, EventProto.ReportMessage.Session.CONNECTION_MOBILE_MMS},
-                    {PhoneUtils.NetworkType.MOBILE_SUPL, EventProto.ReportMessage.Session.CONNECTION_MOBILE_SUPL},
-                    {PhoneUtils.NetworkType.VPN, EventProto.ReportMessage.Session.CONNECTION_VPN},
-                    {PhoneUtils.NetworkType.WIMAX, EventProto.ReportMessage.Session.CONNECTION_WIMAX},
-                    {PhoneUtils.NetworkType.LOWPAN, EventProto.ReportMessage.Session.CONNECTION_LOWPAN},
-                    {PhoneUtils.NetworkType.WIFI_AWARE, EventProto.ReportMessage.Session.CONNECTION_WIFI_AWARE},
-                    {null, EventProto.ReportMessage.Session.CONNECTION_UNDEFINED}
+                {PhoneUtils.NetworkType.CELL, EventProto.ReportMessage.Session.CONNECTION_CELL},
+                {PhoneUtils.NetworkType.WIFI, EventProto.ReportMessage.Session.CONNECTION_WIFI},
+                {PhoneUtils.NetworkType.BLUETOOTH, EventProto.ReportMessage.Session.CONNECTION_BLUETOOTH},
+                {PhoneUtils.NetworkType.ETHERNET, EventProto.ReportMessage.Session.CONNECTION_ETHERNET},
+                {PhoneUtils.NetworkType.MOBILE_DUN, EventProto.ReportMessage.Session.CONNECTION_MOBILE_DUN},
+                {PhoneUtils.NetworkType.MOBILE_HIPRI, EventProto.ReportMessage.Session.CONNECTION_MOBILE_HIPRI},
+                {PhoneUtils.NetworkType.MOBILE_MMS, EventProto.ReportMessage.Session.CONNECTION_MOBILE_MMS},
+                {PhoneUtils.NetworkType.MOBILE_SUPL, EventProto.ReportMessage.Session.CONNECTION_MOBILE_SUPL},
+                {PhoneUtils.NetworkType.VPN, EventProto.ReportMessage.Session.CONNECTION_VPN},
+                {PhoneUtils.NetworkType.WIMAX, EventProto.ReportMessage.Session.CONNECTION_WIMAX},
+                {PhoneUtils.NetworkType.LOWPAN, EventProto.ReportMessage.Session.CONNECTION_LOWPAN},
+                {PhoneUtils.NetworkType.WIFI_AWARE, EventProto.ReportMessage.Session.CONNECTION_WIFI_AWARE},
+                {null, EventProto.ReportMessage.Session.CONNECTION_UNDEFINED}
             });
         }
 

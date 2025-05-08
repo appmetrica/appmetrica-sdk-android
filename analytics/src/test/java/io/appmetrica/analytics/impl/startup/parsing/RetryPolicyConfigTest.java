@@ -12,8 +12,8 @@ import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAsse
 @RunWith(RobolectricTestRunner.class)
 public class RetryPolicyConfigTest extends CommonTest {
 
-    private RetryPolicyConfigParser mParser = new RetryPolicyConfigParser();
-    private StartupResult mResult = new StartupResult();
+    private final RetryPolicyConfigParser mParser = new RetryPolicyConfigParser();
+    private final StartupResult mResult = new StartupResult();
 
     @Test
     public void testNoBlock() throws Exception {
@@ -21,8 +21,8 @@ public class RetryPolicyConfigTest extends CommonTest {
         mParser.parse(mResult, startupJsonMock);
 
         ObjectPropertyAssertions<RetryPolicyConfig> assertions =
-                ObjectPropertyAssertions(mResult.getRetryPolicyConfig())
-                        .withFinalFieldOnly(false);
+            ObjectPropertyAssertions(mResult.getRetryPolicyConfig())
+                .withFinalFieldOnly(false);
 
         assertions.checkField("maxIntervalSeconds", 600);
         assertions.checkField("exponentialMultiplier", 1);
@@ -36,8 +36,8 @@ public class RetryPolicyConfigTest extends CommonTest {
         mParser.parse(mResult, startupJsonMock);
 
         ObjectPropertyAssertions<RetryPolicyConfig> assertions =
-                ObjectPropertyAssertions(mResult.getRetryPolicyConfig())
-                        .withFinalFieldOnly(false);
+            ObjectPropertyAssertions(mResult.getRetryPolicyConfig())
+                .withFinalFieldOnly(false);
 
         assertions.checkField("maxIntervalSeconds", 600);
         assertions.checkField("exponentialMultiplier", 1);
@@ -54,8 +54,8 @@ public class RetryPolicyConfigTest extends CommonTest {
         mParser.parse(mResult, startupJsonMock);
 
         ObjectPropertyAssertions<RetryPolicyConfig> assertions =
-                ObjectPropertyAssertions(mResult.getRetryPolicyConfig())
-                        .withFinalFieldOnly(false);
+            ObjectPropertyAssertions(mResult.getRetryPolicyConfig())
+                .withFinalFieldOnly(false);
 
         assertions.checkField("maxIntervalSeconds", maxInterval);
         assertions.checkField("exponentialMultiplier", exponentialMultiplier);

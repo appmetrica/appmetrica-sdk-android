@@ -247,7 +247,7 @@ public class ComponentUnitFieldsFactoryTest extends CommonTest {
     public static class LoggerProviderTest {
 
         private final String mApiKey = TestsData.generateApiKey();
-        private ComponentUnitFieldsFactory.LoggerProvider mLoggerProvdier = new ComponentUnitFieldsFactory.LoggerProvider(mApiKey);
+        private final ComponentUnitFieldsFactory.LoggerProvider mLoggerProvdier = new ComponentUnitFieldsFactory.LoggerProvider(mApiKey);
 
         @Test
         public void testGetPublicLogger() {

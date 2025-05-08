@@ -23,7 +23,7 @@ public class BinaryDataHelperTest extends CommonTest {
 
     private final DBConnector mDBConnector = mock(DBConnector.class);
     private BinaryDataHelper mDataHelper;
-    private SQLiteDatabase mDatabase = mock(SQLiteDatabase.class);
+    private final SQLiteDatabase mDatabase = mock(SQLiteDatabase.class);
 
     @Before
     public void setUp() {
@@ -52,9 +52,9 @@ public class BinaryDataHelperTest extends CommonTest {
         mDataHelper.get(key);
 
         verify(mDatabase).query(mTable,
-                null,
-                Constants.BinaryDataTable.DATA_KEY + " = ?",
-                new String[]{key}, null, null, null);
+            null,
+            Constants.BinaryDataTable.DATA_KEY + " = ?",
+            new String[]{key}, null, null, null);
     }
 
     @Test
@@ -68,9 +68,9 @@ public class BinaryDataHelperTest extends CommonTest {
         String key = "testKey";
         MatrixCursor cursor = new MatrixCursor(getActualColumnsArray());
         doReturn(cursor).when(mDatabase).query(mTable,
-                null,
-                Constants.BinaryDataTable.DATA_KEY + " = ?",
-                new String[]{key}, null, null, null);
+            null,
+            Constants.BinaryDataTable.DATA_KEY + " = ?",
+            new String[]{key}, null, null, null);
         assertThat(mDataHelper.get(key)).isNull();
     }
 
@@ -81,9 +81,9 @@ public class BinaryDataHelperTest extends CommonTest {
         MatrixCursor cursor = new MatrixCursor(getActualColumnsArray());
         cursor.addRow(new Object[]{key, value});
         doReturn(cursor).when(mDatabase).query(mTable,
-                null,
-                Constants.BinaryDataTable.DATA_KEY + " = ?",
-                new String[]{key}, null, null, null);
+            null,
+            Constants.BinaryDataTable.DATA_KEY + " = ?",
+            new String[]{key}, null, null, null);
         assertThat(mDataHelper.get(key)).isSameAs(value);
     }
 
@@ -95,9 +95,9 @@ public class BinaryDataHelperTest extends CommonTest {
         cursor.addRow(new Object[]{key, value});
         cursor.addRow(new Object[]{"anotherKey", new byte[]{1}});
         doReturn(cursor).when(mDatabase).query(mTable,
-                null,
-                Constants.BinaryDataTable.DATA_KEY + " = ?",
-                new String[]{key}, null, null, null);
+            null,
+            Constants.BinaryDataTable.DATA_KEY + " = ?",
+            new String[]{key}, null, null, null);
         assertThat(mDataHelper.get(key)).isNull();
     }
 
@@ -108,8 +108,8 @@ public class BinaryDataHelperTest extends CommonTest {
         mDataHelper.remove(key);
 
         verify(mDatabase).delete(mTable,
-                Constants.BinaryDataTable.DATA_KEY + " = ?",
-                new String[]{key});
+            Constants.BinaryDataTable.DATA_KEY + " = ?",
+            new String[]{key});
     }
 
     private String[] getActualColumnsArray() {

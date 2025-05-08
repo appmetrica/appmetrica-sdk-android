@@ -18,6 +18,7 @@ import io.appmetrica.analytics.impl.features.FeatureDescriptionTest;
 import io.appmetrica.analytics.testutils.CommonTest;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.UUID;
@@ -61,8 +62,8 @@ public class ReportFeaturesHandlerTest extends CommonTest {
     public void setUp() {
         MockitoAnnotations.openMocks(this);
         mComponentId = new MainReporterComponentId(
-                RuntimeEnvironment.getApplication().getPackageName(),
-                TestsData.generateApiKey()
+            RuntimeEnvironment.getApplication().getPackageName(),
+            TestsData.generateApiKey()
         );
         doReturn(mComponentId).when(mComponentUnit).getComponentId();
         doReturn(true).when(vitalComponentDataProvider).isFirstEventDone();
@@ -76,13 +77,13 @@ public class ReportFeaturesHandlerTest extends CommonTest {
     public void testNewFeatures() {
         ReportFeaturesHandler handler = spy(new ReportFeaturesHandler(mComponentUnit));
         CounterReport report = mock(CounterReport.class);
-        doReturn(new HashSet<FeatureDescription>(Arrays.asList(new FeatureDescription(
-                "feature_name",
-                false
+        doReturn(new HashSet<FeatureDescription>(Collections.singletonList(new FeatureDescription(
+            "feature_name",
+            false
         )))).when(handler).parseFeaturesFromStorage();
         doReturn(new ArrayList<FeatureDescription>(Arrays.asList(
-                new FeatureDescription("feature_name", false),
-                new FeatureDescription("feature_name_2", 2, true)
+            new FeatureDescription("feature_name", false),
+            new FeatureDescription("feature_name_2", 2, true)
         ))).when(handler).getFeaturesFromSystem();
         handler.process(report);
         verify(mEventSaver, times(1)).saveFeaturesReport(any(CounterReport.class));
@@ -93,12 +94,12 @@ public class ReportFeaturesHandlerTest extends CommonTest {
     public void testNoNewFeatures() {
         ReportFeaturesHandler handler = spy(new ReportFeaturesHandler(mComponentUnit));
         CounterReport report = mock(CounterReport.class);
-        doReturn(new HashSet<FeatureDescription>(Arrays.asList(new FeatureDescription(
-                "feature_name",
-                false
+        doReturn(new HashSet<FeatureDescription>(Collections.singletonList(new FeatureDescription(
+            "feature_name",
+            false
         )))).when(handler).parseFeaturesFromStorage();
-        doReturn(new ArrayList<FeatureDescription>(Arrays.asList(
-                new FeatureDescription("feature_name", false)
+        doReturn(new ArrayList<FeatureDescription>(Collections.singletonList(
+            new FeatureDescription("feature_name", false)
         ))).when(handler).getFeaturesFromSystem();
         handler.process(report);
         verify(mComponentUnit, times(1)).markFeaturesChecked();
@@ -130,14 +131,14 @@ public class ReportFeaturesHandlerTest extends CommonTest {
         int version = random.nextInt(100) + 10;
         boolean required = random.nextBoolean();
         doReturn(new JSONArray().put(new JSONObject()
-                .put(FeatureDescriptionTest.NAME, name)
-                .put(FeatureDescriptionTest.VERSION, version)
-                .put(FeatureDescriptionTest.REQUIRED, required)
+            .put(FeatureDescriptionTest.NAME, name)
+            .put(FeatureDescriptionTest.VERSION, version)
+            .put(FeatureDescriptionTest.REQUIRED, required)
         ).toString()).when(mPreferencesComponentDbStorage).getApplicationFeatures();
         assertThat(handler.parseFeaturesFromStorage()).extracting(
-                FeatureDescriptionTest.NAME,
-                FeatureDescriptionTest.VERSION,
-                FeatureDescriptionTest.REQUIRED
+            FeatureDescriptionTest.NAME,
+            FeatureDescriptionTest.VERSION,
+            FeatureDescriptionTest.REQUIRED
         ).containsOnly(Tuple.tuple(name, version, required));
     }
 
@@ -145,9 +146,9 @@ public class ReportFeaturesHandlerTest extends CommonTest {
     public void testIncorrectJSON() throws JSONException {
         ReportFeaturesHandler handler = new ReportFeaturesHandler(mComponentUnit);
         doReturn(new JSONArray().put(new JSONObject()
-                .put(FeatureDescriptionTest.NAME, "name")
-                .put(FeatureDescriptionTest.VERSION, 1)
-                .put(FeatureDescriptionTest.REQUIRED, 134)
+            .put(FeatureDescriptionTest.NAME, "name")
+            .put(FeatureDescriptionTest.VERSION, 1)
+            .put(FeatureDescriptionTest.REQUIRED, 134)
         ).toString()).when(mPreferencesComponentDbStorage).getApplicationFeatures();
         assertThat(handler.parseFeaturesFromStorage()).isNull();
     }
@@ -193,9 +194,9 @@ public class ReportFeaturesHandlerTest extends CommonTest {
             }
             mPackageInfo.reqFeatures = new FeatureInfo[]{feature};
             assertThat(handler.getFeaturesFromSystem()).extracting("name", "version", "required")
-                    .containsOnly(
-                            Tuple.tuple(name, version, required)
-                    );
+                .containsOnly(
+                    Tuple.tuple(name, version, required)
+                );
         }
 
     }

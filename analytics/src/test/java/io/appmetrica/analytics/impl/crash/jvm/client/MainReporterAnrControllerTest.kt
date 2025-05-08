@@ -3,8 +3,6 @@ package io.appmetrica.analytics.impl.crash.jvm.client
 import io.appmetrica.analytics.AnrListener
 import io.appmetrica.analytics.AppMetricaConfig
 import io.appmetrica.analytics.impl.DefaultValues
-import io.appmetrica.analytics.impl.IUnhandledSituationReporter
-import io.appmetrica.analytics.impl.MainReporterComponents
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.constructionRule
 import org.assertj.core.api.Assertions.assertThat

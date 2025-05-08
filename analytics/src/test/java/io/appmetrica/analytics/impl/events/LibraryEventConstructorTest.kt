@@ -36,8 +36,7 @@ class LibraryEventConstructorTest : CommonTest() {
     private val yandexSourcePayloadValue = "yandex source payload value"
 
     @get:Rule
-    val nativeLayerPayloadEnricherRule = constructionRule<NativeLayerPayloadEnricher>()
-    {
+    val nativeLayerPayloadEnricherRule = constructionRule<NativeLayerPayloadEnricher>() {
         on { enrich(any()) } doAnswer { invocation ->
             @Suppress("UNCHECKED_CAST")
             val inputPayload = invocation.arguments[0] as MutableMap<String, String>
@@ -90,14 +89,16 @@ class LibraryEventConstructorTest : CommonTest() {
             .checkFieldIsNull("environment")
             .checkFieldIsNull("extras")
             .checkFieldRecursively<List<Map.Entry<String, Any>>>("attributes") {
-                assertThat(it.actual).containsExactlyInAnyOrderElementsOf(mapOf(
-                    "sender" to sender,
-                    "event" to event,
-                    "payload" to payload,
-                    nativeEnricherPayloadKey to nativeEnricherPayloadValue,
-                    generalEnricherPayloadKey to generalEnricherPayloadValue,
-                    yandexSourcePayloadKey to yandexSourcePayloadValue
-                ).entries.toList())
+                assertThat(it.actual).containsExactlyInAnyOrderElementsOf(
+                    mapOf(
+                        "sender" to sender,
+                        "event" to event,
+                        "payload" to payload,
+                        nativeEnricherPayloadKey to nativeEnricherPayloadValue,
+                        generalEnricherPayloadKey to generalEnricherPayloadValue,
+                        yandexSourcePayloadKey to yandexSourcePayloadValue
+                    ).entries.toList()
+                )
             }
             .checkAll()
     }
@@ -116,14 +117,16 @@ class LibraryEventConstructorTest : CommonTest() {
             .checkFieldIsNull("environment")
             .checkFieldIsNull("extras")
             .checkFieldRecursively<List<Map.Entry<String, Any>>>("attributes") {
-                assertThat(it.actual).containsExactlyInAnyOrderElementsOf(mapOf(
-                    "sender" to "null",
-                    "event" to "null",
-                    "payload" to "null",
-                    nativeEnricherPayloadKey to nativeEnricherPayloadValue,
-                    generalEnricherPayloadKey to generalEnricherPayloadValue,
-                    yandexSourcePayloadKey to yandexSourcePayloadValue
-                ).entries.toList())
+                assertThat(it.actual).containsExactlyInAnyOrderElementsOf(
+                    mapOf(
+                        "sender" to "null",
+                        "event" to "null",
+                        "payload" to "null",
+                        nativeEnricherPayloadKey to nativeEnricherPayloadValue,
+                        generalEnricherPayloadKey to generalEnricherPayloadValue,
+                        yandexSourcePayloadKey to yandexSourcePayloadValue
+                    ).entries.toList()
+                )
             }
             .checkAll()
     }

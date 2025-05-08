@@ -12,9 +12,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(ParameterizedRobolectricTestRunner.class)
 public class BooleanUtilsTest extends CommonTest {
 
-    private Boolean mInputValue;
-    private boolean isTrue;
-    private boolean isFalse;
+    private final Boolean mInputValue;
+    private final boolean isTrue;
+    private final boolean isFalse;
 
     public BooleanUtilsTest(Boolean inputValue, boolean isTrue, boolean isFalse) {
         mInputValue = inputValue;
@@ -25,9 +25,9 @@ public class BooleanUtilsTest extends CommonTest {
     @ParameterizedRobolectricTestRunner.Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
-                {true, true, false},
-                {false, false, true},
-                {null, false, false}
+            {true, true, false},
+            {false, false, true},
+            {null, false, false}
         });
     }
 
@@ -38,7 +38,7 @@ public class BooleanUtilsTest extends CommonTest {
 
     @Test
     public void testIsNotTrue() {
-        assertThat(BooleanUtils.isNotTrue(mInputValue)).isEqualTo(isTrue == false);
+        assertThat(BooleanUtils.isNotTrue(mInputValue)).isEqualTo(!isTrue);
     }
 
     @Test
@@ -48,6 +48,6 @@ public class BooleanUtilsTest extends CommonTest {
 
     @Test
     public void testIsNotFalse() {
-        assertThat(BooleanUtils.isNotFalse(mInputValue)).isEqualTo(isFalse == false);
+        assertThat(BooleanUtils.isNotFalse(mInputValue)).isEqualTo(!isFalse);
     }
 }

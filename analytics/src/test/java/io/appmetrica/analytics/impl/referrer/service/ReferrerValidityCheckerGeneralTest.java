@@ -9,6 +9,7 @@ import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.TestUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -70,7 +71,7 @@ public class ReferrerValidityCheckerGeneralTest extends CommonTest {
     @Test
     public void hasReferrerFilledReferrer() {
         assertThat(referrerValidityChecker.hasReferrer(
-                new ReferrerInfo("referrer", 10, 20, ReferrerInfo.Source.HMS)
+            new ReferrerInfo("referrer", 10, 20, ReferrerInfo.Source.HMS)
         )).isTrue();
     }
 
@@ -126,30 +127,30 @@ public class ReferrerValidityCheckerGeneralTest extends CommonTest {
         ArgumentCaptor<String> eventValueCaptor = ArgumentCaptor.forClass(String.class);
         verify(selfReporter).reportEvent(eq("several_filled_referrers"), eventValueCaptor.capture());
         JSONAssert.assertEquals(
-                new JSONObject()
-                        .put("candidates", new JSONArray()
-                                .put(new JSONObject()
-                                        .put("referrer", "google_referrer")
-                                        .put("install_timestamp_seconds", 20)
-                                        .put("click_timestamp_seconds", 10)
-                                        .put("source", "gpl")
-                                )
-                                .put(new JSONObject()
-                                        .put("referrer", "huawei_referrer")
-                                        .put("install_timestamp_seconds", 20)
-                                        .put("click_timestamp_seconds", 11)
-                                        .put("source", "hms-content-provider")
-                                )
-                        )
-                        .put("chosen", new JSONObject()
-                                .put("referrer", "google_referrer")
-                                .put("install_timestamp_seconds", 20)
-                                .put("click_timestamp_seconds", 10)
-                                .put("source", "gpl")
-                        )
-                        .toString(),
-                eventValueCaptor.getValue(),
-                true
+            new JSONObject()
+                .put("candidates", new JSONArray()
+                    .put(new JSONObject()
+                        .put("referrer", "google_referrer")
+                        .put("install_timestamp_seconds", 20)
+                        .put("click_timestamp_seconds", 10)
+                        .put("source", "gpl")
+                    )
+                    .put(new JSONObject()
+                        .put("referrer", "huawei_referrer")
+                        .put("install_timestamp_seconds", 20)
+                        .put("click_timestamp_seconds", 11)
+                        .put("source", "hms-content-provider")
+                    )
+                )
+                .put("chosen", new JSONObject()
+                    .put("referrer", "google_referrer")
+                    .put("install_timestamp_seconds", 20)
+                    .put("click_timestamp_seconds", 10)
+                    .put("source", "gpl")
+                )
+                .toString(),
+            eventValueCaptor.getValue(),
+            true
         );
     }
 
@@ -189,7 +190,7 @@ public class ReferrerValidityCheckerGeneralTest extends CommonTest {
     public void chooseReferrerFromFilledBothDiffsAreValidAndGreaterHuaweiIsCloser() {
         when(packageManager.getPackageInfo(context, packageName, 0)).thenReturn(packageInfo);
         ReferrerInfo google = new ReferrerInfo("referrer", 0, installTimeSeconds + 20, ReferrerInfo.Source.GP);
-        ReferrerInfo huawei =new ReferrerInfo("referrer", 0, installTimeSeconds + 19, ReferrerInfo.Source.HMS);
+        ReferrerInfo huawei = new ReferrerInfo("referrer", 0, installTimeSeconds + 19, ReferrerInfo.Source.HMS);
         assertThat(referrerValidityChecker.chooseReferrerFromValid(Arrays.asList(google, huawei))).isSameAs(huawei);
     }
 
@@ -228,8 +229,8 @@ public class ReferrerValidityCheckerGeneralTest extends CommonTest {
     @Test
     public void chooseReferrerFromFilledSameInvalidDiffLessThanActual() {
         when(packageManager.getPackageInfo(context, packageName, 0)).thenReturn(packageInfo);
-        ReferrerInfo google = new ReferrerInfo("referrer", 0, installTimeSeconds - maxAllowedDeltaSeconds -20, ReferrerInfo.Source.GP);
-        ReferrerInfo huawei = new ReferrerInfo("referrer", 0, installTimeSeconds - maxAllowedDeltaSeconds -20, ReferrerInfo.Source.HMS);
+        ReferrerInfo google = new ReferrerInfo("referrer", 0, installTimeSeconds - maxAllowedDeltaSeconds - 20, ReferrerInfo.Source.GP);
+        ReferrerInfo huawei = new ReferrerInfo("referrer", 0, installTimeSeconds - maxAllowedDeltaSeconds - 20, ReferrerInfo.Source.HMS);
         assertThat(referrerValidityChecker.chooseReferrerFromValid(Arrays.asList(google, huawei))).isSameAs(google);
     }
 
@@ -268,7 +269,7 @@ public class ReferrerValidityCheckerGeneralTest extends CommonTest {
     public void chooseReferrerFromFilledSingleElementEventIsNotSent() {
         when(packageManager.getPackageInfo(context, packageName, 0)).thenReturn(packageInfo);
         ReferrerInfo google = new ReferrerInfo("google_referrer", 10, installTimeSeconds + maxAllowedDeltaSeconds + 20, ReferrerInfo.Source.GP);
-        referrerValidityChecker.chooseReferrerFromValid(Arrays.asList(google));
+        referrerValidityChecker.chooseReferrerFromValid(Collections.singletonList(google));
         verifyNoInteractions(selfReporter);
     }
 
@@ -281,31 +282,31 @@ public class ReferrerValidityCheckerGeneralTest extends CommonTest {
         ArgumentCaptor<String> eventValueCaptor = ArgumentCaptor.forClass(String.class);
         verify(selfReporter).reportEvent(eq("several_filled_referrers"), eventValueCaptor.capture());
         JSONAssert.assertEquals(
-                new JSONObject()
-                        .put("candidates", new JSONArray()
-                                .put(new JSONObject()
-                                        .put("referrer", "google_referrer")
-                                        .put("install_timestamp_seconds", installTimeSeconds + maxAllowedDeltaSeconds + 20)
-                                        .put("click_timestamp_seconds", 10)
-                                        .put("source", "gpl")
-                                )
-                                .put(new JSONObject()
-                                        .put("referrer", "huawei_referrer")
-                                        .put("install_timestamp_seconds", installTimeSeconds + maxAllowedDeltaSeconds + 21)
-                                        .put("click_timestamp_seconds", 11)
-                                        .put("source", "hms-content-provider")
-                                )
-                        )
-                        .put("chosen", new JSONObject()
-                                .put("referrer", "huawei_referrer")
-                                .put("install_timestamp_seconds", installTimeSeconds + maxAllowedDeltaSeconds + 21)
-                                .put("click_timestamp_seconds", 11)
-                                .put("source", "hms-content-provider")
-                        )
-                        .put("install_time", installTimeSeconds * 1000)
-                        .toString(),
-                eventValueCaptor.getValue(),
-                true
+            new JSONObject()
+                .put("candidates", new JSONArray()
+                    .put(new JSONObject()
+                        .put("referrer", "google_referrer")
+                        .put("install_timestamp_seconds", installTimeSeconds + maxAllowedDeltaSeconds + 20)
+                        .put("click_timestamp_seconds", 10)
+                        .put("source", "gpl")
+                    )
+                    .put(new JSONObject()
+                        .put("referrer", "huawei_referrer")
+                        .put("install_timestamp_seconds", installTimeSeconds + maxAllowedDeltaSeconds + 21)
+                        .put("click_timestamp_seconds", 11)
+                        .put("source", "hms-content-provider")
+                    )
+                )
+                .put("chosen", new JSONObject()
+                    .put("referrer", "huawei_referrer")
+                    .put("install_timestamp_seconds", installTimeSeconds + maxAllowedDeltaSeconds + 21)
+                    .put("click_timestamp_seconds", 11)
+                    .put("source", "hms-content-provider")
+                )
+                .put("install_time", installTimeSeconds * 1000)
+                .toString(),
+            eventValueCaptor.getValue(),
+            true
         );
     }
 
@@ -318,11 +319,11 @@ public class ReferrerValidityCheckerGeneralTest extends CommonTest {
         ReferrerInfo fourthReferrer = new ReferrerInfo("referrer", 0, installTimeSeconds + maxAllowedDeltaSeconds + 18, ReferrerInfo.Source.HMS);
         ReferrerInfo fifthReferrer = new ReferrerInfo("referrer", 0, installTimeSeconds + maxAllowedDeltaSeconds + 17, ReferrerInfo.Source.HMS);
         assertThat(referrerValidityChecker.chooseReferrerFromValid(Arrays.asList(
-                firstReferrer,
-                secondReferrer,
-                thirdReferrer,
-                fourthReferrer,
-                fifthReferrer
+            firstReferrer,
+            secondReferrer,
+            thirdReferrer,
+            fourthReferrer,
+            fifthReferrer
         ))).isSameAs(secondReferrer);
     }
 
@@ -336,12 +337,12 @@ public class ReferrerValidityCheckerGeneralTest extends CommonTest {
         ReferrerInfo fifthReferrer = new ReferrerInfo("referrer", 0, installTimeSeconds + 18, ReferrerInfo.Source.HMS);
         ReferrerInfo sixthReferrer = new ReferrerInfo("referrer", 0, installTimeSeconds + 19, ReferrerInfo.Source.GP);
         assertThat(referrerValidityChecker.chooseReferrerFromValid(Arrays.asList(
-                firstReferrer,
-                secondReferrer,
-                thirdReferrer,
-                fourthReferrer,
-                fifthReferrer,
-                sixthReferrer
+            firstReferrer,
+            secondReferrer,
+            thirdReferrer,
+            fourthReferrer,
+            fifthReferrer,
+            sixthReferrer
         ))).isSameAs(fourthReferrer);
     }
 }

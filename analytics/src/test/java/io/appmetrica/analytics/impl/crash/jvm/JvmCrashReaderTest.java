@@ -46,12 +46,12 @@ public class JvmCrashReaderTest extends CommonTest {
             CounterReport counterReport = new CounterReport();
             counterReport.setName("crash");
             String crashValue = new JvmCrash(
-                    counterReport,
-                    new ClientConfiguration(new ProcessConfiguration(
-                            RuntimeEnvironment.getApplication(),
-                            mock(ResultReceiver.class)
-                    ), new CounterConfiguration(TestData.TEST_UUID)),
-                    new HashMap<ClientCounterReport.TrimmedField, Integer>()
+                counterReport,
+                new ClientConfiguration(new ProcessConfiguration(
+                    RuntimeEnvironment.getApplication(),
+                    mock(ResultReceiver.class)
+                ), new CounterConfiguration(TestData.TEST_UUID)),
+                new HashMap<ClientCounterReport.TrimmedField, Integer>()
             ).toJSONString();
             when(IOUtils.getStringFileLocked(crashFile)).thenReturn(crashValue);
             assertThat(crashReader.apply(crashFile).toJSONString()).isEqualTo(crashValue);

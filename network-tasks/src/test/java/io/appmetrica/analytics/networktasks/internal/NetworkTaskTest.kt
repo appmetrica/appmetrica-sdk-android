@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.networktasks.internal
 
 import io.appmetrica.analytics.coreapi.internal.io.IExecutionPolicy
+import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.mockito.kotlin.doReturn
@@ -9,7 +10,7 @@ import org.mockito.kotlin.stubbing
 import java.util.concurrent.Executor
 import javax.net.ssl.SSLSocketFactory
 
-class NetworkTaskTest {
+class NetworkTaskTest : CommonTest() {
 
     private val executor = mock<Executor>()
     private val requestDataHolder = mock<RequestDataHolder>()

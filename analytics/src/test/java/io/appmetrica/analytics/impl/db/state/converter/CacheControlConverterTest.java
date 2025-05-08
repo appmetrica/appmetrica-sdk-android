@@ -30,7 +30,7 @@ public class CacheControlConverterTest extends CommonTest {
         StartupStateProtobuf.StartupState.CacheControl nano = mCacheControlConverter.fromModel(cacheControl);
 
         ObjectPropertyAssertions<StartupStateProtobuf.StartupState.CacheControl> assertions =
-                ObjectPropertyAssertions(nano)
+            ObjectPropertyAssertions(nano)
                 .withFinalFieldOnly(false);
 
         assertions.checkField("lastKnownLocationTtl", lastKnownLocationTtl);
@@ -44,7 +44,7 @@ public class CacheControlConverterTest extends CommonTest {
         nano.lastKnownLocationTtl = lastKnownLocationTtl;
 
         ObjectPropertyAssertions<CacheControl> assertions = ObjectPropertyAssertions(
-                mCacheControlConverter.toModel(nano)
+            mCacheControlConverter.toModel(nano)
         );
 
         assertions.checkField("lastKnownLocationTtl", lastKnownLocationTtl);
@@ -55,7 +55,7 @@ public class CacheControlConverterTest extends CommonTest {
     @Test
     public void testDefaultToModel() throws Exception {
         ObjectPropertyAssertions<CacheControl> assertions = ObjectPropertyAssertions(
-                mCacheControlConverter.toModel(new StartupStateProtobuf.StartupState.CacheControl())
+            mCacheControlConverter.toModel(new StartupStateProtobuf.StartupState.CacheControl())
         );
 
         assertions.checkField("lastKnownLocationTtl", TimeUnit.SECONDS.toMillis(10));

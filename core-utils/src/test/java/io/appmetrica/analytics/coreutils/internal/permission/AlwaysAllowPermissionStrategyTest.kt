@@ -1,13 +1,14 @@
 package io.appmetrica.analytics.coreutils.internal.permission
 
 import android.content.Context
+import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verifyNoMoreInteractions
 
-class AlwaysAllowPermissionStrategyTest {
+class AlwaysAllowPermissionStrategyTest : CommonTest() {
 
     private val context = mock<Context>()
 

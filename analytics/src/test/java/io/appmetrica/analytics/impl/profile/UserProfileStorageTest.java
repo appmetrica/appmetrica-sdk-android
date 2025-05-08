@@ -66,8 +66,8 @@ public class UserProfileStorageTest extends CommonTest {
 
         Userprofile.Profile profile = mStorage.toProtobuf();
         assertThat(profile.attributes).extracting("name", "type").containsExactly(
-                tuple("firstKey".getBytes(), ATTRIBUTE_ONE),
-                tuple("secondKey".getBytes(), ATTRIBUTE_TWO)
+            tuple("firstKey".getBytes(), ATTRIBUTE_ONE),
+            tuple("secondKey".getBytes(), ATTRIBUTE_TWO)
         );
     }
 
@@ -96,10 +96,10 @@ public class UserProfileStorageTest extends CommonTest {
             keys.add(namespaces.keyAt(i));
         }
         assertThat(keys).containsOnly(
-                Userprofile.Profile.Attribute.STRING,
-                Userprofile.Profile.Attribute.NUMBER,
-                Userprofile.Profile.Attribute.COUNTER,
-                Userprofile.Profile.Attribute.BOOL
+            Userprofile.Profile.Attribute.STRING,
+            Userprofile.Profile.Attribute.NUMBER,
+            Userprofile.Profile.Attribute.COUNTER,
+            Userprofile.Profile.Attribute.BOOL
         );
     }
 

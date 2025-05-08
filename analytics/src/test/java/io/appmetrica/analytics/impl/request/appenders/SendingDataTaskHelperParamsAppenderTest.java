@@ -20,7 +20,7 @@ public class SendingDataTaskHelperParamsAppenderTest extends CommonTest {
     static final String ENCRYPTED_REQUEST = "encrypted_request";
     static final String AES_RSA = "1";
 
-    private RequestBodyEncrypter mRequestBodyEncrypter = mock(RequestBodyEncrypter.class);
+    private final RequestBodyEncrypter mRequestBodyEncrypter = mock(RequestBodyEncrypter.class);
     protected Uri.Builder mBuilder;
     protected NetworkTaskForSendingDataParamsAppender mParamsAppender;
 

@@ -18,10 +18,10 @@ public class DistributionSourceDescriptionTest extends CommonTest {
     @ParameterizedRobolectricTestRunner.Parameters(name = "{0} to {1}")
     public static Collection<Object[]> data() {
         List<Object[]> result = Arrays.asList(new Object[][]{
-                {DistributionSource.UNDEFINED, "UNDEFINED"},
-                {DistributionSource.APP, "APP"},
-                {DistributionSource.RETAIL, "RETAIL"},
-                {DistributionSource.SATELLITE, "SATELLITE"}
+            {DistributionSource.UNDEFINED, "UNDEFINED"},
+            {DistributionSource.APP, "APP"},
+            {DistributionSource.RETAIL, "RETAIL"},
+            {DistributionSource.SATELLITE, "SATELLITE"}
         });
         assert result.size() == DistributionSource.values().length;
         return result;

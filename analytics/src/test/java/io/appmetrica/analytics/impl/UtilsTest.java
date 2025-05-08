@@ -9,9 +9,9 @@ import io.appmetrica.analytics.TestData;
 import io.appmetrica.analytics.coreutils.internal.StringUtils;
 import io.appmetrica.analytics.impl.crash.jvm.client.StackTraceItemInternal;
 import io.appmetrica.analytics.impl.utils.JsonHelper;
-import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.impl.utils.StartupUtils;
 import io.appmetrica.analytics.impl.utils.limitation.StringByBytesTrimmer;
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.networktasks.internal.NetworkTask;
 import io.appmetrica.analytics.testutils.CommonTest;
 import java.util.ArrayList;
@@ -264,17 +264,17 @@ public class UtilsTest extends CommonTest {
         @ParameterizedRobolectricTestRunner.Parameters(name = "Test convert long array {2} to string array")
         public static Collection<Object[]> data() {
             return Arrays.asList(new Object[][]{
-                    {new long[]{}, new String[]{}, "{}"},
-                    {new long[]{1}, new String[]{"1"}, "{1}"},
-                    {new long[]{1, 2, 3}, new String[]{"1", "2", "3"}, "{1,2,3}"},
-                    {new long[]{-1}, new String[]{"-1"}, "{-1}"},
-                    {new long[]{0}, new String[]{"0"}, "{0}"}
+                {new long[]{}, new String[]{}, "{}"},
+                {new long[]{1}, new String[]{"1"}, "{1}"},
+                {new long[]{1, 2, 3}, new String[]{"1", "2", "3"}, "{1,2,3}"},
+                {new long[]{-1}, new String[]{"-1"}, "{-1}"},
+                {new long[]{0}, new String[]{"0"}, "{0}"}
             });
         }
 
-        private long[] mInputArray;
-        private String[] mExpectedArray;
-        private String mStringPresentation;
+        private final long[] mInputArray;
+        private final String[] mExpectedArray;
+        private final String mStringPresentation;
 
         public ConvertLongArrayToStringArrayTests(Object inputArray, Object expectedArray, Object stringPresentation) {
             mInputArray = (long[]) inputArray;
@@ -310,7 +310,7 @@ public class UtilsTest extends CommonTest {
 
     @Test
     public void trimToSizeNull() {
-        assertThat(Utils.trimToSize((String) null, 0)).isNull();
+        assertThat(Utils.trimToSize(null, 0)).isNull();
     }
 
     @Test
@@ -427,9 +427,9 @@ public class UtilsTest extends CommonTest {
     public void convertStackTraceToInternalFilledArray() {
         StackTraceElement element1 = new StackTraceElement("cl1", "m1", "f1", 1);
         StackTraceElement element2 = new StackTraceElement("cl2", "m2", "f2", 2);
-        assertThat(Utils.convertStackTraceToInternal(new StackTraceElement[] {element1, element2}))
-                .usingRecursiveFieldByFieldElementComparator()
-                .containsExactly(new StackTraceItemInternal(element1), new StackTraceItemInternal(element2));
+        assertThat(Utils.convertStackTraceToInternal(new StackTraceElement[]{element1, element2}))
+            .usingRecursiveFieldByFieldElementComparator()
+            .containsExactly(new StackTraceItemInternal(element1), new StackTraceItemInternal(element2));
     }
 
     @Test
@@ -442,8 +442,8 @@ public class UtilsTest extends CommonTest {
         StackTraceElement element1 = new StackTraceElement("cl1", "m1", "f1", 1);
         StackTraceElement element2 = new StackTraceElement("cl2", "m2", "f2", 2);
         assertThat(Utils.convertStackTraceToInternal(Arrays.asList(element1, element2)))
-                .usingRecursiveFieldByFieldElementComparator()
-                .containsExactly(new StackTraceItemInternal(element1), new StackTraceItemInternal(element2));
+            .usingRecursiveFieldByFieldElementComparator()
+            .containsExactly(new StackTraceItemInternal(element1), new StackTraceItemInternal(element2));
     }
 
     @Test
@@ -470,24 +470,24 @@ public class UtilsTest extends CommonTest {
 
     @Test
     public void joinToArrayForEmpty() {
-        assertThat(Utils.joinToArray(Collections.<String>emptyList())).isEmpty();
+        assertThat(Utils.joinToArray(Collections.emptyList())).isEmpty();
     }
 
     @Test
     public void joinToArrayForListOnly() {
-        String[] value = new String[] {"first", "second", "third"};
+        String[] value = new String[]{"first", "second", "third"};
         assertThat(Utils.joinToArray(Arrays.asList(value))).isEqualTo(value);
     }
 
     @Test
     public void joinToArrayForNonListElements() {
-        assertThat(Utils.joinToArray(Collections.<String>emptyList(), "first", "second", "third"))
-                .containsExactly("first", "second", "third");
+        assertThat(Utils.joinToArray(Collections.emptyList(), "first", "second", "third"))
+            .containsExactly("first", "second", "third");
     }
 
     @Test
     public void joinToArray() {
         assertThat(Utils.joinToArray(Arrays.asList("first", "second"), "third"))
-                .containsExactly("first", "second", "third");
+            .containsExactly("first", "second", "third");
     }
 }

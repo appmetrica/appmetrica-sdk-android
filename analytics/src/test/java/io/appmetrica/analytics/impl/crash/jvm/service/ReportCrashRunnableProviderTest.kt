@@ -54,9 +54,8 @@ class ReportCrashRunnableProviderTest : CommonTest() {
     private val jvmCrashReader: JvmCrashReader by jvmCrashReaderMockedConstructionRule
 
     @get:Rule
-    val startupRequestConfigArgumentsMockedConstructionRule = constructionRule<StartupRequestConfig.Arguments>()
-    private val startupRequestConfigArguments: StartupRequestConfig.Arguments
-        by startupRequestConfigArgumentsMockedConstructionRule
+    val startupRequestConfigArgumentsRule = constructionRule<StartupRequestConfig.Arguments>()
+    private val startupRequestConfigArguments: StartupRequestConfig.Arguments by startupRequestConfigArgumentsRule
 
     @get:Rule
     val reporterArgumentsMockedConstructionRule = constructionRule<CommonArguments.ReporterArguments>()
@@ -121,7 +120,8 @@ class ReportCrashRunnableProviderTest : CommonTest() {
     fun setUp() {
         FileLocksHolder.stubInstance(fileLocksHolder)
 
-        reportCrashRunnableProvider = ReportCrashRunnableProvider(context, crashEventConsumer, eventType, crashPredicate)
+        reportCrashRunnableProvider =
+            ReportCrashRunnableProvider(context, crashEventConsumer, eventType, crashPredicate)
     }
 
     @Test
@@ -150,8 +150,8 @@ class ReportCrashRunnableProviderTest : CommonTest() {
         assertThat(commonArgumentsMockedConstructionRule.argumentInterceptor.flatArguments())
             .containsExactly(startupRequestConfigArguments, reporterArguments, null)
 
-        assertThat(startupRequestConfigArgumentsMockedConstructionRule.constructionMock.constructed()).hasSize(1)
-        assertThat(startupRequestConfigArgumentsMockedConstructionRule.argumentInterceptor.flatArguments()).isEmpty()
+        assertThat(startupRequestConfigArgumentsRule.constructionMock.constructed()).hasSize(1)
+        assertThat(startupRequestConfigArgumentsRule.argumentInterceptor.flatArguments()).isEmpty()
 
         assertThat(reporterArgumentsMockedConstructionRule.constructionMock.constructed()).hasSize(1)
         assertThat(reporterArgumentsMockedConstructionRule.argumentInterceptor.flatArguments()).isEmpty()

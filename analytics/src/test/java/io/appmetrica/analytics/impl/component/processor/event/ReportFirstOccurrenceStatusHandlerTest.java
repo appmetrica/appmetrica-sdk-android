@@ -39,7 +39,7 @@ public class ReportFirstOccurrenceStatusHandlerTest extends CommonTest {
         when(mComponentUnit.getEventFirstOccurrenceService()).thenReturn(mEventFirstOccurrenceService);
         mReportFirstOccurrenceStatusHandler = new ReportFirstOccurrenceStatusHandler(mComponentUnit);
         assertThat(mReportFirstOccurrenceStatusHandler.getEventFirstOccurrenceService())
-                .isEqualTo(mEventFirstOccurrenceService);
+            .isEqualTo(mEventFirstOccurrenceService);
     }
 
     @Test
@@ -56,7 +56,7 @@ public class ReportFirstOccurrenceStatusHandlerTest extends CommonTest {
     public void testProcessDoesNotUpdateFirstOccurrenceStatusForEventWithEmptyEvent() {
         CounterReport counterReport = new CounterReport();
         when(mEventFirstOccurrenceService.checkFirstOccurrence(anyString()))
-                .thenReturn(FirstOccurrenceStatus.FIRST_OCCURRENCE);
+            .thenReturn(FirstOccurrenceStatus.FIRST_OCCURRENCE);
         mReportFirstOccurrenceStatusHandler.process(counterReport);
         assertThat(counterReport.getFirstOccurrenceStatus()).isEqualTo(FirstOccurrenceStatus.UNKNOWN);
     }

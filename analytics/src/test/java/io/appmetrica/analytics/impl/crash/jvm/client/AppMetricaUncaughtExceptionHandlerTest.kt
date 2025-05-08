@@ -4,7 +4,6 @@ import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
 import io.appmetrica.analytics.impl.ClientServiceLocator
 import io.appmetrica.analytics.impl.crash.utils.CrashedThreadConverter
 import io.appmetrica.analytics.impl.crash.utils.ThreadsStateDumper
-import io.appmetrica.analytics.impl.utils.ProcessDetector
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.constructionRule
@@ -14,7 +13,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Captor
 import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.eq
@@ -47,8 +45,7 @@ class AppMetricaUncaughtExceptionHandlerTest : CommonTest() {
     @get:Rule
     val clientServiceLocatorRule = ClientServiceLocatorRule()
 
-    @Captor
-    val allThreadsArgumentCaptor = argumentCaptor<AllThreads>()
+    private val allThreadsArgumentCaptor = argumentCaptor<AllThreads>()
 
     private val crashProcessor: ICrashProcessor = mock()
 

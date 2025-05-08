@@ -41,10 +41,10 @@ public class ContentProviderHelperTest extends CommonTest {
         MockitoAnnotations.openMocks(this);
         context = TestUtils.createMockedContext();
         content = new ContentProviderHelper<>(
-                dataParser,
-                dataSaver,
-                firstServiceEntryPointManager,
-                "preload_info"
+            dataParser,
+            dataSaver,
+            firstServiceEntryPointManager,
+            "preload_info"
         );
     }
 

@@ -79,8 +79,8 @@ public class ServiceExecutorProviderTest extends CommonTest {
     public void testGetMetricaCoreExecutor() {
         for (int i = 0; i < CALLS_COUNT; i++) {
             assertThat(serviceExecutorProvider.getMetricaCoreExecutor())
-                    .as("Attempt #%d", i)
-                    .isEqualTo(coreExecutor);
+                .as("Attempt #%d", i)
+                .isEqualTo(coreExecutor);
         }
         verify(serviceExecutorFactory).createMetricaCoreExecutor();
         verifyNoMoreInteractions(serviceExecutorFactory);
@@ -90,8 +90,8 @@ public class ServiceExecutorProviderTest extends CommonTest {
     public void testGetReportRunnableExecutor() {
         for (int i = 0; i < CALLS_COUNT; i++) {
             assertThat(serviceExecutorProvider.getReportRunnableExecutor())
-                    .as("Attempt #%d", i)
-                    .isEqualTo(reportRunnableExecutor);
+                .as("Attempt #%d", i)
+                .isEqualTo(reportRunnableExecutor);
         }
         verify(serviceExecutorFactory).createReportRunnableExecutor();
         verifyNoMoreInteractions(serviceExecutorFactory);
@@ -101,8 +101,8 @@ public class ServiceExecutorProviderTest extends CommonTest {
     public void testGetModuleExecutor() {
         for (int i = 0; i < CALLS_COUNT; i++) {
             assertThat(serviceExecutorProvider.getModuleExecutor())
-                    .as("Attempt #%d", i)
-                    .isEqualTo(moduleExecutor);
+                .as("Attempt #%d", i)
+                .isEqualTo(moduleExecutor);
         }
         verify(serviceExecutorFactory).createModuleExecutor();
         verifyNoMoreInteractions(serviceExecutorFactory);
@@ -112,8 +112,8 @@ public class ServiceExecutorProviderTest extends CommonTest {
     public void testGetNetworkTaskProcessorExecutor() {
         for (int i = 0; i < CALLS_COUNT; i++) {
             assertThat(serviceExecutorProvider.getNetworkTaskProcessorExecutor())
-                    .as("Attempt #%d", i)
-                    .isEqualTo(networkTaskProcessorExecutor);
+                .as("Attempt #%d", i)
+                .isEqualTo(networkTaskProcessorExecutor);
         }
         verify(serviceExecutorFactory).createNetworkTaskProcessorExecutor();
         verifyNoMoreInteractions(serviceExecutorFactory);
@@ -123,8 +123,8 @@ public class ServiceExecutorProviderTest extends CommonTest {
     public void testSupportDataCollectingExecutor() {
         for (int i = 0; i < CALLS_COUNT; i++) {
             assertThat(serviceExecutorProvider.getSupportIOExecutor())
-                    .as("Attempt #%d", i)
-                    .isEqualTo(supportDataCollectingExecutor);
+                .as("Attempt #%d", i)
+                .isEqualTo(supportDataCollectingExecutor);
         }
         verify(serviceExecutorFactory).createSupportIOExecutor();
         verifyNoMoreInteractions(serviceExecutorFactory);
@@ -134,8 +134,8 @@ public class ServiceExecutorProviderTest extends CommonTest {
     public void testGetDefaultExecutor() {
         for (int i = 0; i < CALLS_COUNT; i++) {
             assertThat(serviceExecutorProvider.getDefaultExecutor())
-                    .as("Attempt #%d", i)
-                    .isEqualTo(defaultExecutor);
+                .as("Attempt #%d", i)
+                .isEqualTo(defaultExecutor);
         }
         verify(serviceExecutorFactory).createDefaultExecutor();
         verifyNoMoreInteractions(serviceExecutorFactory);
@@ -143,7 +143,7 @@ public class ServiceExecutorProviderTest extends CommonTest {
 
     @Test
     public void getCustomModuleExecutor() {
-        for (int i = 0; i < CALLS_COUNT; i ++) {
+        for (int i = 0; i < CALLS_COUNT; i++) {
             assertThat(serviceExecutorProvider.getCustomModuleExecutor(firstCustomExecutorTag))
                 .isEqualTo(firstCustomModuleExecutor);
             assertThat(serviceExecutorProvider.getCustomModuleExecutor(secondCustomModuleExecutorTag))

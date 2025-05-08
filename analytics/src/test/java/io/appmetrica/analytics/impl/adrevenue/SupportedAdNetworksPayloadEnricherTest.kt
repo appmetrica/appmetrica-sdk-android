@@ -37,10 +37,12 @@ class SupportedAdNetworksPayloadEnricherTest : CommonTest() {
         val outputPayload = enricher.enrich(inputPayload)
         assertThat(outputPayload)
             .isSameAs(inputPayload)
-            .isEqualTo(mutableMapOf(
-                inputPayloadKey to inputPayloadValue,
-                AdRevenueConstants.NATIVE_SUPPORTED_SOURCES_KEY to nativeSupportedSources,
-                AdRevenueConstants.PLUGIN_SUPPORTED_SOURCES_KEY to pluginSupportedSources
-            ))
+            .isEqualTo(
+                mutableMapOf(
+                    inputPayloadKey to inputPayloadValue,
+                    AdRevenueConstants.NATIVE_SUPPORTED_SOURCES_KEY to nativeSupportedSources,
+                    AdRevenueConstants.PLUGIN_SUPPORTED_SOURCES_KEY to pluginSupportedSources
+                )
+            )
     }
 }

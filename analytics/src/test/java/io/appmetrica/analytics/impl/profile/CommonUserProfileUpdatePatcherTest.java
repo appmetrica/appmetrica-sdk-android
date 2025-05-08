@@ -24,14 +24,14 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 @RunWith(RobolectricTestRunner.class)
 public class CommonUserProfileUpdatePatcherTest extends CommonTest {
 
-    private AttributeSaver mAttributeSaver = mock(AttributeSaver.class);
+    private final AttributeSaver mAttributeSaver = mock(AttributeSaver.class);
 
     @Test
     public void testType() {
         UserProfileStorage storage = mock(UserProfileStorage.class);
         doReturn(null).when(storage).get(anyInt(), anyString());
         ArgumentCaptor<Userprofile.Profile.Attribute> attribute =
-                ArgumentCaptor.forClass(Userprofile.Profile.Attribute.class);
+            ArgumentCaptor.forClass(Userprofile.Profile.Attribute.class);
         new CommonUserProfileUpdatePatcher(999, "key", 200, new DummyValidator<String>(), new CommonSavingStrategy(mAttributeSaver)) {
             @Override
             protected void setValue(@NonNull Userprofile.Profile.Attribute attribute) {
@@ -39,7 +39,7 @@ public class CommonUserProfileUpdatePatcherTest extends CommonTest {
             }
         }.apply(storage);
         verify(mAttributeSaver, times(1))
-                .save(any(UserProfileStorage.class), attribute.capture());
+            .save(any(UserProfileStorage.class), attribute.capture());
         assertThat(attribute.getValue().type).isEqualTo(999);
     }
 
@@ -70,7 +70,7 @@ public class CommonUserProfileUpdatePatcherTest extends CommonTest {
         ArgumentCaptor<Userprofile.Profile.Attribute> captor = ArgumentCaptor.forClass(Userprofile.Profile.Attribute.class);
         verify(storage, times(1)).get(999, "key");
         verify(mAttributeSaver, times(1))
-                .save(any(UserProfileStorage.class), captor.capture());
+            .save(any(UserProfileStorage.class), captor.capture());
         assertThat(captor.getValue().type).isEqualTo(999);
         assertThat(captor.getValue().name).isEqualTo("key".getBytes());
     }

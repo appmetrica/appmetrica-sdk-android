@@ -60,15 +60,15 @@ public class PayloadConverterTest extends CommonTest {
         payloadConverter = new PayloadConverter();
 
         HierarchicalValueSizeOrderBasedWithBytesLimitStringMapTrimmer expectedTrimmer =
-                new HierarchicalValueSizeOrderBasedWithBytesLimitStringMapTrimmer(20 * 1024, 100, 1000);
+            new HierarchicalValueSizeOrderBasedWithBytesLimitStringMapTrimmer(20 * 1024, 100, 1000);
 
         ObjectPropertyAssertions<PayloadConverter> assertions =
-                ObjectPropertyAssertions(payloadConverter)
-                        .withPrivateFields(true);
+            ObjectPropertyAssertions(payloadConverter)
+                .withPrivateFields(true);
 
         assertions.checkFieldComparingFieldByFieldRecursively(
-                "payloadTrimmer",
-                expectedTrimmer
+            "payloadTrimmer",
+            expectedTrimmer
         );
 
         assertions.checkAll();
@@ -84,10 +84,10 @@ public class PayloadConverterTest extends CommonTest {
         int bytesTruncated = 123;
 
         when(payloadTrimmer.trim(inputPayload))
-                .thenReturn(new TrimmingResult<Map<String, String>, CollectionTrimInfo>(
-                        payload,
-                        new CollectionTrimInfo(pairsTruncated, bytesTruncated)
-                ));
+            .thenReturn(new TrimmingResult<Map<String, String>, CollectionTrimInfo>(
+                payload,
+                new CollectionTrimInfo(pairsTruncated, bytesTruncated)
+            ));
 
         Ecommerce.ECommerceEvent.Payload.Pair[] expectedPairs = new Ecommerce.ECommerceEvent.Payload.Pair[3];
         expectedPairs[0] = new Ecommerce.ECommerceEvent.Payload.Pair();
@@ -104,28 +104,28 @@ public class PayloadConverterTest extends CommonTest {
         expectedPayload.pairs = expectedPairs;
 
         Result<Ecommerce.ECommerceEvent.Payload, BytesTruncatedProvider> payloadResult =
-                payloadConverter.fromModel(inputPayload);
+            payloadConverter.fromModel(inputPayload);
 
         ObjectPropertyAssertions(
-                payloadResult)
-                .checkFieldRecursively(
-                        "metaInfo",
-                        new CollectionTrimInfoConsumer(bytesTruncated, pairsTruncated)
-                )
-                .checkFieldComparingFieldByFieldRecursively("result", expectedPayload)
-                .checkAll();
+            payloadResult)
+            .checkFieldRecursively(
+                "metaInfo",
+                new CollectionTrimInfoConsumer(bytesTruncated, pairsTruncated)
+            )
+            .checkFieldComparingFieldByFieldRecursively("result", expectedPayload)
+            .checkAll();
     }
 
     @Test
     public void toProtoForEmpty() {
         when(payloadTrimmer.trim(inputPayload))
-                .thenReturn(
-                        new TrimmingResult<Map<String, String>, CollectionTrimInfo>(
-                                new HashMap<String, String>(),
-                                new CollectionTrimInfo(0, 0)
-                        ));
+            .thenReturn(
+                new TrimmingResult<Map<String, String>, CollectionTrimInfo>(
+                    new HashMap<String, String>(),
+                    new CollectionTrimInfo(0, 0)
+                ));
         Result<Ecommerce.ECommerceEvent.Payload, BytesTruncatedProvider> payloadResult =
-                payloadConverter.fromModel(inputPayload);
+            payloadConverter.fromModel(inputPayload);
 
         SoftAssertions assertions = new SoftAssertions();
 
@@ -139,14 +139,14 @@ public class PayloadConverterTest extends CommonTest {
     @Test
     public void toProtoForNullValueReturnedByTrimmer() {
         when(payloadTrimmer.trim(inputPayload))
-                .thenReturn(
-                        new TrimmingResult<Map<String, String>, CollectionTrimInfo>(
-                                null,
-                                new CollectionTrimInfo(0, 0)
-                        )
-                );
+            .thenReturn(
+                new TrimmingResult<Map<String, String>, CollectionTrimInfo>(
+                    null,
+                    new CollectionTrimInfo(0, 0)
+                )
+            );
         Result<Ecommerce.ECommerceEvent.Payload, BytesTruncatedProvider> payloadResult =
-                payloadConverter.fromModel(inputPayload);
+            payloadConverter.fromModel(inputPayload);
 
         SoftAssertions assertions = new SoftAssertions();
 
@@ -161,8 +161,8 @@ public class PayloadConverterTest extends CommonTest {
     @Test(expected = UnsupportedOperationException.class)
     public void toModel() {
         payloadConverter.toModel(new Result<Ecommerce.ECommerceEvent.Payload, BytesTruncatedProvider>(
-                new Ecommerce.ECommerceEvent.Payload(),
-                new BytesTruncatedInfo(0)
+            new Ecommerce.ECommerceEvent.Payload(),
+            new BytesTruncatedInfo(0)
         ));
     }
 

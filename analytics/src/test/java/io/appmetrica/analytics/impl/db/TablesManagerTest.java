@@ -35,28 +35,28 @@ import static org.mockito.Mockito.when;
 @RunWith(RobolectricTestRunner.class)
 public class TablesManagerTest extends CommonTest {
 
-    private static String TEST_TABLE_NAME = "test_table";
-    private String[] mTestTableColumns = {
-            "ID",
-            "TEST_COLUMN_1",
-            "TEST_COLUMN_2",
-            "TEST_COLUMN_4",
-            "TEST_COLUMN_3"
+    private static final String TEST_TABLE_NAME = "test_table";
+    private final String[] mTestTableColumns = {
+        "ID",
+        "TEST_COLUMN_1",
+        "TEST_COLUMN_2",
+        "TEST_COLUMN_4",
+        "TEST_COLUMN_3"
     };
     private SQLiteDatabase mDBMock;
     private TablesManager.Creator mCreator;
 
     private HashMultimap<Integer, DatabaseScript> createUpdateScriptsMap() {
         HashMultimap<Integer, DatabaseScript> scripts =
-                new HashMultimap<>();
+            new HashMultimap<>();
         DatabaseScript updateTo10 =
-                mock(DatabaseScript.class);
+            mock(DatabaseScript.class);
         DatabaseScript updateTo20 =
-                mock(DatabaseScript.class);
+            mock(DatabaseScript.class);
         DatabaseScript updateTo30 =
-                mock(DatabaseScript.class);
+            mock(DatabaseScript.class);
         DatabaseScript updateTo40 =
-                mock(DatabaseScript.class);
+            mock(DatabaseScript.class);
         scripts.put(10, updateTo10);
         scripts.put(20, updateTo20);
         scripts.put(30, updateTo30);
@@ -84,11 +84,11 @@ public class TablesManagerTest extends CommonTest {
 
     private TablesManager createTableManagerSpyWithMockedScripts(HashMultimap<Integer, DatabaseScript> scripts, TablesValidator validator) {
         return spy(mCreator.createTablesManager(
-                "test",
-                mock(DatabaseScript.class),
-                mock(DatabaseScript.class),
-                scripts,
-                validator
+            "test",
+            mock(DatabaseScript.class),
+            mock(DatabaseScript.class),
+            scripts,
+            validator
         ));
     }
 
@@ -120,13 +120,13 @@ public class TablesManagerTest extends CommonTest {
     @Test
     public void testCreateWithExceptionDoesntCrashService() throws SQLException, JSONException {
         DatabaseScript createMock =
-                mock(DatabaseScript.class);
+            mock(DatabaseScript.class);
         TablesManager manager = spy(mCreator.createTablesManager(
-                "test",
-                createMock,
-                mock(DatabaseScript.class),
-                new HashMultimap<Integer, DatabaseScript>(),
-                mock(TablesValidator.class)
+            "test",
+            createMock,
+            mock(DatabaseScript.class),
+            new HashMultimap<Integer, DatabaseScript>(),
+            mock(TablesValidator.class)
         ));
         doThrow(IllegalStateException.class).when(createMock).runScript(mDBMock);
         manager.onCreate(mDBMock);
@@ -135,15 +135,15 @@ public class TablesManagerTest extends CommonTest {
     @Test
     public void testDropExceptionDoesntCrashService() throws SQLException, JSONException {
         DatabaseScript createMock =
-                mock(DatabaseScript.class);
+            mock(DatabaseScript.class);
         DatabaseScript dropMock =
-                mock(DatabaseScript.class);
+            mock(DatabaseScript.class);
         TablesManager manager = spy(mCreator.createTablesManager(
-                "test",
-                createMock,
-                dropMock,
-                new HashMultimap<Integer, DatabaseScript>(),
-                mock(TablesValidator.class)
+            "test",
+            createMock,
+            dropMock,
+            new HashMultimap<Integer, DatabaseScript>(),
+            mock(TablesValidator.class)
         ));
         doThrow(IllegalStateException.class).when(dropMock).runScript(mDBMock);
         manager.recreateDatabase(mDBMock);
@@ -152,14 +152,14 @@ public class TablesManagerTest extends CommonTest {
     @Test
     public void testOpenWithExceptionDoesntCrashService() throws SQLException, JSONException {
         DatabaseScript createMock =
-                mock(DatabaseScript.class);
+            mock(DatabaseScript.class);
         TablesValidator validator = mock(TablesValidator.class);
         TablesManager manager = spy(mCreator.createTablesManager(
-                "test",
-                createMock,
-                mock(DatabaseScript.class),
-                new HashMultimap<Integer, DatabaseScript>(),
-                validator
+            "test",
+            createMock,
+            mock(DatabaseScript.class),
+            new HashMultimap<Integer, DatabaseScript>(),
+            validator
         ));
         doThrow(IllegalStateException.class).when(validator).isDbSchemeValid(mDBMock);
         manager.onOpen(mDBMock);
@@ -168,11 +168,11 @@ public class TablesManagerTest extends CommonTest {
     @Test
     public void testSuccessfulUpgrade() {
         TablesManager manager = spy(mCreator.createTablesManager(
-                "test",
-                mock(DatabaseScript.class),
-                mock(DatabaseScript.class),
-                new HashMultimap<Integer, DatabaseScript>(),
-                new ConfidingTablesValidator()
+            "test",
+            mock(DatabaseScript.class),
+            mock(DatabaseScript.class),
+            new HashMultimap<Integer, DatabaseScript>(),
+            new ConfidingTablesValidator()
         ));
         manager.onUpgrade(mDBMock, 10, BuildConfig.API_LEVEL);
         verify(manager, times(0)).recreateDatabase(any(SQLiteDatabase.class));
@@ -184,26 +184,26 @@ public class TablesManagerTest extends CommonTest {
         when(cursor.getColumnNames()).thenReturn(mTestTableColumns);
         when(mDBMock.query(
                 eq(TEST_TABLE_NAME),
-                ArgumentMatchers.<String[]>isNull(),
-                ArgumentMatchers.<String>isNull(),
-                ArgumentMatchers.<String[]>isNull(),
-                ArgumentMatchers.<String>isNull(),
-                ArgumentMatchers.<String>isNull(),
-                ArgumentMatchers.<String>isNull()
+                ArgumentMatchers.isNull(),
+                ArgumentMatchers.isNull(),
+                ArgumentMatchers.isNull(),
+                ArgumentMatchers.isNull(),
+                ArgumentMatchers.isNull(),
+                ArgumentMatchers.isNull()
             )
         ).thenReturn(cursor);
         TablesManager manager = spy(mCreator.createTablesManager(
-                "test",
-                mock(DatabaseScript.class),
-                mock(DatabaseScript.class),
-                new HashMultimap<Integer, DatabaseScript>(),
-                new TablesValidatorImpl("test",
-                        new HashMap<String, List<String>>() {
-                            {
-                                put(TEST_TABLE_NAME, CollectionUtils.createSortedListWithoutRepetitions(mTestTableColumns));
-                            }
-                        }
-                )
+            "test",
+            mock(DatabaseScript.class),
+            mock(DatabaseScript.class),
+            new HashMultimap<Integer, DatabaseScript>(),
+            new TablesValidatorImpl("test",
+                new HashMap<String, List<String>>() {
+                    {
+                        put(TEST_TABLE_NAME, CollectionUtils.createSortedListWithoutRepetitions(mTestTableColumns));
+                    }
+                }
+            )
         ));
         manager.onUpgrade(mDBMock, 10, BuildConfig.API_LEVEL);
         verify(manager, times(0)).recreateDatabase(any(SQLiteDatabase.class));
@@ -213,11 +213,11 @@ public class TablesManagerTest extends CommonTest {
     public void testUnsuccessfulUpgradeDueToSchemeError() {
         TablesValidator validator = mock(TablesValidator.class);
         TablesManager manager = spy(mCreator.createTablesManager(
-                "test",
-                mock(DatabaseScript.class),
-                mock(DatabaseScript.class),
-                new HashMultimap<Integer, DatabaseScript>(),
-                validator
+            "test",
+            mock(DatabaseScript.class),
+            mock(DatabaseScript.class),
+            new HashMultimap<Integer, DatabaseScript>(),
+            validator
         ));
         when(validator.isDbSchemeValid(any(SQLiteDatabase.class))).thenReturn(false);
         manager.onUpgrade(mDBMock, 10, BuildConfig.API_LEVEL);
@@ -238,11 +238,11 @@ public class TablesManagerTest extends CommonTest {
         DatabaseScript dropDbScript = mock(DatabaseScript.class);
         DatabaseScript createDbScript = mock(DatabaseScript.class);
         TablesManager manager = mCreator.createTablesManager(
-                "test",
-                createDbScript,
-                dropDbScript,
-                new HashMultimap<Integer, DatabaseScript>(),
-                new ConfidingTablesValidator()
+            "test",
+            createDbScript,
+            dropDbScript,
+            new HashMultimap<Integer, DatabaseScript>(),
+            new ConfidingTablesValidator()
         );
         manager.onDowngrade(mDBMock, 52, 51);
         InOrder inOrder = Mockito.inOrder(dropDbScript, createDbScript);
@@ -256,11 +256,11 @@ public class TablesManagerTest extends CommonTest {
         DatabaseScript createDbScript = mock(DatabaseScript.class);
         doThrow(new RuntimeException()).when(dropDbScript).runScript(mDBMock);
         TablesManager manager = mCreator.createTablesManager(
-                "test",
-                createDbScript,
-                dropDbScript,
-                new HashMultimap<Integer, DatabaseScript>(),
-                new ConfidingTablesValidator()
+            "test",
+            createDbScript,
+            dropDbScript,
+            new HashMultimap<Integer, DatabaseScript>(),
+            new ConfidingTablesValidator()
         );
         manager.onDowngrade(mDBMock, 52, 51);
         InOrder inOrder = Mockito.inOrder(dropDbScript, createDbScript);
@@ -274,11 +274,11 @@ public class TablesManagerTest extends CommonTest {
         DatabaseScript createDbScript = mock(DatabaseScript.class);
         doThrow(new RuntimeException()).when(createDbScript).runScript(mDBMock);
         TablesManager manager = mCreator.createTablesManager(
-                "test",
-                createDbScript,
-                dropDbScript,
-                new HashMultimap<Integer, DatabaseScript>(),
-                new ConfidingTablesValidator()
+            "test",
+            createDbScript,
+            dropDbScript,
+            new HashMultimap<Integer, DatabaseScript>(),
+            new ConfidingTablesValidator()
         );
         manager.onDowngrade(mDBMock, 52, 51);
         InOrder inOrder = Mockito.inOrder(dropDbScript, createDbScript);
@@ -291,11 +291,11 @@ public class TablesManagerTest extends CommonTest {
         DatabaseScript dropDbScript = mock(DatabaseScript.class);
         DatabaseScript createDbScript = mock(DatabaseScript.class);
         TablesManager manager = mCreator.createTablesManager(
-                "test",
-                createDbScript,
-                dropDbScript,
-                new HashMultimap<Integer, DatabaseScript>(),
-                new ConfidingTablesValidator()
+            "test",
+            createDbScript,
+            dropDbScript,
+            new HashMultimap<Integer, DatabaseScript>(),
+            new ConfidingTablesValidator()
         );
         manager.onDowngrade(mDBMock, 50, 51);
         verifyNoInteractions(createDbScript, dropDbScript);
@@ -306,11 +306,11 @@ public class TablesManagerTest extends CommonTest {
         DatabaseScript dropDbScript = mock(DatabaseScript.class);
         DatabaseScript createDbScript = mock(DatabaseScript.class);
         TablesManager manager = mCreator.createTablesManager(
-                "test",
-                createDbScript,
-                dropDbScript,
-                new HashMultimap<Integer, DatabaseScript>(),
-                new ConfidingTablesValidator()
+            "test",
+            createDbScript,
+            dropDbScript,
+            new HashMultimap<Integer, DatabaseScript>(),
+            new ConfidingTablesValidator()
         );
         manager.onDowngrade(mDBMock, 50, 50);
         verifyNoInteractions(createDbScript, dropDbScript);

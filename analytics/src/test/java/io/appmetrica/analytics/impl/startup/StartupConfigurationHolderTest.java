@@ -22,7 +22,7 @@ import static org.mockito.Mockito.when;
 @RunWith(RobolectricTestRunner.class)
 public class StartupConfigurationHolderTest extends CommonTest {
 
-    private StartupRequestConfig.Arguments mConfiguration = StartupArgumentsTest.empty();
+    private final StartupRequestConfig.Arguments mConfiguration = StartupArgumentsTest.empty();
     private StartupConfigurationHolder mHolder;
 
     @Rule
@@ -32,15 +32,15 @@ public class StartupConfigurationHolderTest extends CommonTest {
     public void setUp() {
         when(GlobalServiceLocator.getInstance().getClidsStorage()).thenReturn(mock(ClidsInfoStorage.class));
         mHolder = new StartupConfigurationHolder(
-                new StartupRequestConfig.Loader(RuntimeEnvironment.getApplication(), RuntimeEnvironment.getApplication().getPackageName()) {
+            new StartupRequestConfig.Loader(RuntimeEnvironment.getApplication(), RuntimeEnvironment.getApplication().getPackageName()) {
 
-                    @Override
-                    public StartupRequestConfig load(@NonNull CoreRequestConfig.CoreDataSource<StartupRequestConfig.Arguments> dataSource) {
-                        return mock(StartupRequestConfig.class);
-                    }
-                },
-                mock(StartupState.class),
-                mConfiguration
+                @Override
+                public StartupRequestConfig load(@NonNull CoreRequestConfig.CoreDataSource<StartupRequestConfig.Arguments> dataSource) {
+                    return mock(StartupRequestConfig.class);
+                }
+            },
+            mock(StartupState.class),
+            mConfiguration
         );
     }
 

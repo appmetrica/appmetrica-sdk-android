@@ -22,7 +22,7 @@ import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 class ReportsSenderTest : CommonTest() {
-    
+
     private val appMetricaConnector: AppMetricaConnector = mock()
     private val executor: ICommonExecutor = mock()
     private val crashCallable: ReportToServiceCallable = mock()
@@ -30,7 +30,7 @@ class ReportsSenderTest : CommonTest() {
     private val typedReportCallable: ReportToServiceCallable = mock()
     private val resumeUserSessionCallable: ReportToServiceCallable = mock()
     private val pauseUserSessionCallable: ReportToServiceCallable = mock()
-    
+
     private val serviceCallableFactory: ServiceCallableFactory = mock {
         on { createCrashCallable(any()) } doReturn crashCallable
         on { createReportCallable(any()) } doReturn reportCallable

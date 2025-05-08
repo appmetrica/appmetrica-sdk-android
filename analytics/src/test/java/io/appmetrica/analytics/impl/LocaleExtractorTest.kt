@@ -28,12 +28,14 @@ class LocaleExtractorTest : CommonTest() {
     val androidUtilsMockedStaticRule = staticRule<AndroidUtils>()
 
     private val localesForN = listOf("Locale for N #1", "Locale for N #2")
+
     @get:Rule
     val localeHelperForNMockedStaticRule = staticRule<LocalesHelperForN> {
         on { LocalesHelperForN.getLocales(configuration) } doReturn localesForN
     }
 
     private val deprecatedLocaleString = "Deprecated locale"
+
     @get:Rule
     val phoneUtilsMockedStaticRule = staticRule<PhoneUtils> {
         on { PhoneUtils.normalizedLocale(deprecatedLocale) } doReturn deprecatedLocaleString

@@ -17,14 +17,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class SessionTypeToInternalTest extends CommonTest {
 
     @Rule
-    public final GlobalServiceLocatorRule rule  = new GlobalServiceLocatorRule();
+    public final GlobalServiceLocatorRule rule = new GlobalServiceLocatorRule();
 
     @ParameterizedRobolectricTestRunner.Parameters(name = "{0} to {1}")
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
-                {EventProto.ReportMessage.Session.SessionDesc.SESSION_FOREGROUND, SessionType.FOREGROUND},
-                {EventProto.ReportMessage.Session.SessionDesc.SESSION_BACKGROUND, SessionType.BACKGROUND},
-                {42, SessionType.FOREGROUND},
+            {EventProto.ReportMessage.Session.SessionDesc.SESSION_FOREGROUND, SessionType.FOREGROUND},
+            {EventProto.ReportMessage.Session.SessionDesc.SESSION_BACKGROUND, SessionType.BACKGROUND},
+            {42, SessionType.FOREGROUND},
         });
     }
 

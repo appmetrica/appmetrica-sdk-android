@@ -56,13 +56,13 @@ public class ReferrerRetrieverWrapperPublicConstructorTest extends CommonTest {
     @Test(expected = IllegalStateException.class)
     public void testCreateReferrerRetrieverConstructorThrows() throws Throwable {
         try (MockedConstruction<ReferrerFromLibraryRetriever> ignored = Mockito.mockConstruction(
-                ReferrerFromLibraryRetriever.class,
-                new MockedConstruction.MockInitializer<ReferrerFromLibraryRetriever>() {
-                    @Override
-                    public void prepare(ReferrerFromLibraryRetriever mock, MockedConstruction.Context context) throws Throwable {
-                        throw new RuntimeException();
-                    }
+            ReferrerFromLibraryRetriever.class,
+            new MockedConstruction.MockInitializer<ReferrerFromLibraryRetriever>() {
+                @Override
+                public void prepare(ReferrerFromLibraryRetriever mock, MockedConstruction.Context context) throws Throwable {
+                    throw new RuntimeException();
                 }
+            }
         )) {
             when(ReflectionUtils.detectClassExists(REFERRER_CLIENT_CLASS)).thenReturn(true);
 

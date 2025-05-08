@@ -158,9 +158,11 @@ class ExternalAttributionHelperTest : CommonTest() {
 
         helper.saveAttribution(thirdType, thirdData)
 
-        verify(componentPreferences).putSentExternalAttributions(mapOf(
-            secondType to secondData,
-            thirdType to thirdData
-        ))
+        verify(componentPreferences).putSentExternalAttributions(
+            mapOf(
+                secondType to secondData,
+                thirdType to thirdData
+            )
+        )
     }
 }

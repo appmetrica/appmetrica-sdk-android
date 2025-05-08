@@ -3,6 +3,7 @@ package io.appmetrica.analytics.testutils
 import org.junit.rules.ExternalResource
 import org.mockito.MockedStatic
 import org.mockito.Mockito
+import org.mockito.kotlin.whenever
 import org.mockito.stubbing.OngoingStubbing
 import kotlin.reflect.KProperty
 
@@ -38,5 +39,5 @@ inline fun <reified T> staticRule(noinline initializer: MockedStatic<T>.() -> Un
     MockedStaticRule(T::class.java, initializer)
 
 fun <T, R> MockedStatic<T>.on(methodCall: () -> R): OngoingStubbing<R> {
-    return `when` { methodCall() }
+    return whenever(methodCall())
 }

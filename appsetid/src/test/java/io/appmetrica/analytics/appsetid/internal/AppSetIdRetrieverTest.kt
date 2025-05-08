@@ -7,45 +7,38 @@ import com.google.android.gms.appset.AppSetIdInfo
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import io.appmetrica.analytics.coreapi.internal.identifiers.AppSetIdScope
+import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.MockedStaticRule
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.ArgumentCaptor
-import org.mockito.Captor
-import org.mockito.Mock
+import org.mockito.Mockito.mock
 import org.mockito.Mockito.never
 import org.mockito.Mockito.verify
-import org.mockito.Mockito.`when`
-import org.mockito.MockitoAnnotations
 import org.mockito.kotlin.any
+import org.mockito.kotlin.argumentCaptor
+import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class AppSetIdRetrieverTest {
+class AppSetIdRetrieverTest : CommonTest() {
 
-    @Mock
-    private lateinit var context: Context
-    @Mock
-    private lateinit var appSetIdListener: AppSetIdListener
-    @Mock
-    private lateinit var appSetIdClient: AppSetIdClient
-    @Mock
-    private lateinit var task: Task<AppSetIdInfo>
-    @Captor
-    private lateinit var listenerCaptor: ArgumentCaptor<OnCompleteListener<AppSetIdInfo>>
+    private val context: Context = mock()
+    private val appSetIdListener: AppSetIdListener = mock()
+    private val appSetIdClient: AppSetIdClient = mock()
+    private val task: Task<AppSetIdInfo> = mock()
+
+    private val listenerCaptor = argumentCaptor<OnCompleteListener<AppSetIdInfo>>()
     private val appSetIdRetriever = AppSetIdRetriever()
 
-    @Rule
-    @JvmField
+    @get:Rule
     val sAppSet = MockedStaticRule(AppSet::class.java)
 
     @Before
     fun setUp() {
-        MockitoAnnotations.openMocks(this)
-        `when`(AppSet.getClient(context)).thenReturn(appSetIdClient)
-        `when`(appSetIdClient.appSetIdInfo).thenReturn(task)
+        whenever(AppSet.getClient(context)).thenReturn(appSetIdClient)
+        whenever(appSetIdClient.appSetIdInfo).thenReturn(task)
     }
 
     @Test
@@ -56,25 +49,24 @@ class AppSetIdRetrieverTest {
 
     @Test
     fun retrieveAppSetIdSuccess() {
-        val id ="666-555"
-        `when`(task.isSuccessful).thenReturn(true)
-        `when`(task.result).thenReturn(AppSetIdInfo(id, AppSetIdInfo.SCOPE_DEVELOPER))
+        val id = "666-555"
+        whenever(task.isSuccessful).thenReturn(true)
+        whenever(task.result).thenReturn(AppSetIdInfo(id, AppSetIdInfo.SCOPE_DEVELOPER))
         appSetIdRetriever.retrieveAppSetId(context, appSetIdListener)
         verify(task).addOnCompleteListener(listenerCaptor.capture())
-        listenerCaptor.value.onComplete(task)
+        listenerCaptor.firstValue.onComplete(task)
         verify(appSetIdListener).onAppSetIdRetrieved(id, AppSetIdScope.DEVELOPER)
     }
 
     @Test
     fun retrieveAppSetIdFailure() {
-        val ex= RuntimeException()
-        `when`(task.isSuccessful).thenReturn(false)
-        `when`(task.exception).thenReturn(ex)
+        val ex = RuntimeException()
+        whenever(task.isSuccessful).thenReturn(false)
+        whenever(task.exception).thenReturn(ex)
         appSetIdRetriever.retrieveAppSetId(context, appSetIdListener)
         verify(task).addOnCompleteListener(listenerCaptor.capture())
-        listenerCaptor.value.onComplete(task)
+        listenerCaptor.firstValue.onComplete(task)
         verify(appSetIdListener).onFailure(ex)
         verify(task, never()).result
     }
-
 }

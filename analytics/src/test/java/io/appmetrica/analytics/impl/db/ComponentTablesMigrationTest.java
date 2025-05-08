@@ -16,8 +16,8 @@ import io.appmetrica.analytics.impl.db.constants.DatabaseScriptsHolder;
 import io.appmetrica.analytics.impl.utils.collection.HashMultimap;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Random;
 import org.junit.Rule;
@@ -41,7 +41,7 @@ public class ComponentTablesMigrationTest extends TablesMigrationTest {
         return prepareListOfAllRevisions(112);
     }
 
-    public static final Collection<Integer> DROP_DATA_ON_UPGRADE_FROM_VERSION = Arrays.asList(new Integer[]{});
+    public static final Collection<Integer> DROP_DATA_ON_UPGRADE_FROM_VERSION = Collections.emptyList();
 
     @Rule
     public GlobalServiceLocatorRule mRule = new GlobalServiceLocatorRule();
@@ -75,16 +75,16 @@ public class ComponentTablesMigrationTest extends TablesMigrationTest {
         contentValues.put(BinaryDataTable.VALUE, data);
 
         assertThat(database.insertOrThrow(BinaryDataTable.TABLE_NAME, null, contentValues))
-                .isGreaterThan(0);
+            .isGreaterThan(0);
 
         Cursor cursor = database.query(
-                BinaryDataTable.TABLE_NAME,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null
+            BinaryDataTable.TABLE_NAME,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
         );
 
         closeables.add(cursor);
@@ -100,10 +100,10 @@ public class ComponentTablesMigrationTest extends TablesMigrationTest {
         SQLiteDatabase oldDb = getOldDb();
         oldDb.insertOrThrow(EventsTable.TABLE_NAME, null, createSimpleEventContentValues());
         Cursor cursor = upgradeDbFromOldToNewest(getOldDb())
-                .query(EventsTable.TABLE_NAME, null, null, null, null, null, null);
+            .query(EventsTable.TABLE_NAME, null, null, null, null, null, null);
         closeables.add(cursor);
         assertThat(cursor.getCount())
-                .isEqualTo(DROP_DATA_ON_UPGRADE_FROM_VERSION.contains(mStartUpgradeFromRevision.getVersion()) ? 0 : 1);
+            .isEqualTo(DROP_DATA_ON_UPGRADE_FROM_VERSION.contains(mStartUpgradeFromRevision.getVersion()) ? 0 : 1);
     }
 
     @Test
@@ -111,10 +111,10 @@ public class ComponentTablesMigrationTest extends TablesMigrationTest {
         SQLiteDatabase oldDb = getOldDb();
         oldDb.insertOrThrow(SessionTable.TABLE_NAME, null, createSimpleSessionContentValues());
         Cursor cursor = upgradeDbFromOldToNewest(getOldDb())
-                .query(SessionTable.TABLE_NAME, null, null, null, null, null, null);
+            .query(SessionTable.TABLE_NAME, null, null, null, null, null, null);
         closeables.add(cursor);
         assertThat(cursor.getCount())
-                .isEqualTo(DROP_DATA_ON_UPGRADE_FROM_VERSION.contains(mStartUpgradeFromRevision.getVersion()) ? 0 : 1);
+            .isEqualTo(DROP_DATA_ON_UPGRADE_FROM_VERSION.contains(mStartUpgradeFromRevision.getVersion()) ? 0 : 1);
     }
 
     @Test

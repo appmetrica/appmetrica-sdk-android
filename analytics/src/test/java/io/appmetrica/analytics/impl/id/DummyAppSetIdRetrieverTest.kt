@@ -3,25 +3,17 @@ package io.appmetrica.analytics.impl.id
 import android.content.Context
 import io.appmetrica.analytics.appsetid.internal.AppSetIdListener
 import io.appmetrica.analytics.testutils.CommonTest
-import org.junit.Before
 import org.junit.Test
-import org.mockito.Mock
-import org.mockito.MockitoAnnotations
+import org.mockito.Mockito.mock
 import org.mockito.kotlin.any
 import org.mockito.kotlin.verify
 
 class DummyAppSetIdRetrieverTest : CommonTest() {
 
-    @Mock
-    private lateinit var context: Context
-    @Mock
-    private lateinit var listener: AppSetIdListener
-    private val retriever = DummyAppSetIdRetriever()
+    private val context: Context = mock()
+    private val listener: AppSetIdListener = mock()
 
-    @Before
-    fun setUp() {
-        MockitoAnnotations.openMocks(this)
-    }
+    private val retriever = DummyAppSetIdRetriever()
 
     @Test
     fun retrieveAppSetId() {

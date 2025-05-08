@@ -152,10 +152,10 @@ public class StartupJsonMock extends JsonHelper.OptJSONObject {
 
     public void addRetryPolicyConfig(int maxInterval, int exponentialMultiplier) throws JSONException {
         put(
-                JsonResponseKey.RETRY_POLICY_CONFIG,
-                new JSONObject()
-                        .put(JsonResponseKey.RETRY_POLICY_MAX_INTERVAL, maxInterval)
-                        .put(JsonResponseKey.RETRY_POLICY_EXPONENTIAL_MULTIPLIER, exponentialMultiplier)
+            JsonResponseKey.RETRY_POLICY_CONFIG,
+            new JSONObject()
+                .put(JsonResponseKey.RETRY_POLICY_MAX_INTERVAL, maxInterval)
+                .put(JsonResponseKey.RETRY_POLICY_EXPONENTIAL_MULTIPLIER, exponentialMultiplier)
         );
     }
 
@@ -165,10 +165,10 @@ public class StartupJsonMock extends JsonHelper.OptJSONObject {
 
     public void addAutoInappCollectingConfig(int sendFrequencySeconds, int firstCollectingInappMaxAgeSeconds) throws JSONException {
         put(
-                JsonResponseKey.AUTO_INAPP_COLLECTING,
-                new JSONObject()
-                        .put(JsonResponseKey.SEND_FREQUENCY_SECONDS, sendFrequencySeconds)
-                        .put(JsonResponseKey.FIRST_COLLECTING_INAPP_MAX_AGE_SECONDS, firstCollectingInappMaxAgeSeconds)
+            JsonResponseKey.AUTO_INAPP_COLLECTING,
+            new JSONObject()
+                .put(JsonResponseKey.SEND_FREQUENCY_SECONDS, sendFrequencySeconds)
+                .put(JsonResponseKey.FIRST_COLLECTING_INAPP_MAX_AGE_SECONDS, firstCollectingInappMaxAgeSeconds)
         );
     }
 
@@ -243,7 +243,7 @@ public class StartupJsonMock extends JsonHelper.OptJSONObject {
 
     public void addStatSendingDisabledReportingInterval(Long intervalSeconds) throws JSONException {
         JSONObject jsonObject = new JSONObject()
-                .put(JsonResponseKey.DISABLED_REPORTING_INTERVAL_SECONDS, intervalSeconds);
+            .put(JsonResponseKey.DISABLED_REPORTING_INTERVAL_SECONDS, intervalSeconds);
         put(JsonResponseKey.STAT_SENDING, jsonObject);
     }
 

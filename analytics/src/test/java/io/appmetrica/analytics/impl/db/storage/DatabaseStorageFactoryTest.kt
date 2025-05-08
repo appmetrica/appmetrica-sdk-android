@@ -65,7 +65,7 @@ internal class DatabaseStorageFactoryTest : CommonTest() {
     @get:Rule
     val databaseStoragePathProviderFactoryMockedConstructionRule =
         constructionRule<DatabaseStoragePathProviderFactory> {
-            on { mock.create(any(), any())} doReturn databaseStoragePathProvider
+            on { mock.create(any(), any()) } doReturn databaseStoragePathProvider
         }
 
     @get:Rule

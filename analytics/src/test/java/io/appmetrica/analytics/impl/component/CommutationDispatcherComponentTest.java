@@ -101,9 +101,9 @@ public class CommutationDispatcherComponentTest extends CommonTest {
     private CommonArguments mCommonArguments;
     private Map<String, String> mClidsForVerification;
     private Map<String, String> lastClientClidsForRequest;
-    private List<String> mIdentifiers = Arrays.asList(
-            Constants.StartupParamsCallbackKeys.UUID,
-            Constants.StartupParamsCallbackKeys.DEVICE_ID
+    private final List<String> mIdentifiers = Arrays.asList(
+        Constants.StartupParamsCallbackKeys.UUID,
+        Constants.StartupParamsCallbackKeys.DEVICE_ID
     );
 
     @Rule
@@ -137,16 +137,16 @@ public class CommutationDispatcherComponentTest extends CommonTest {
         when(mFieldsFactory.createCommutationReportProcessor(any(CommutationDispatcherComponent.class))).thenReturn(mCommutationReportProcessor);
         when(mFieldsFactory.createTaskProcessor(any(CommutationDispatcherComponent.class), same(mStartupUnit))).thenReturn(mTaskProcessor);
         mComponentUnit = new CommutationDispatcherComponent(
-                mContext,
-                mStartupCenter,
-                mComponentId,
-                mCommonArguments,
-                mReporterArgumentsHolder,
-                mReferrerHolder,
-                mLifecycleManager,
-                mFieldsFactory,
-                mClientIdentifiersProviderFactory,
-                referrerManager
+            mContext,
+            mStartupCenter,
+            mComponentId,
+            mCommonArguments,
+            mReporterArgumentsHolder,
+            mReferrerHolder,
+            mLifecycleManager,
+            mFieldsFactory,
+            mClientIdentifiersProviderFactory,
+            referrerManager
         );
     }
 
@@ -355,7 +355,7 @@ public class CommutationDispatcherComponentTest extends CommonTest {
             public boolean matches(Bundle argument) {
                 try {
                     return argument.keySet().size() == 1 &&
-                            referrerInfo.equals(ReferrerInfo.parseFrom(argument.getByteArray("referrer")));
+                        referrerInfo.equals(ReferrerInfo.parseFrom(argument.getByteArray("referrer")));
                 } catch (InvalidProtocolBufferNanoException e) {
                     throw new RuntimeException(e);
                 }
@@ -381,7 +381,7 @@ public class CommutationDispatcherComponentTest extends CommonTest {
     @NonNull
     private StartupState createStartupWithClientClids(@Nullable Map<String, String> clids) {
         return TestUtils.createDefaultStartupStateBuilder()
-                .withLastClientClidsForStartupRequest(StartupUtils.encodeClids(clids))
-                .build();
+            .withLastClientClidsForStartupRequest(StartupUtils.encodeClids(clids))
+            .build();
     }
 }

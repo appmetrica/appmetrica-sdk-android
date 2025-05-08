@@ -64,7 +64,7 @@ internal class ServiceMigrationScriptToV112Test : CommonTest() {
         }
 
     @get:Rule
-    val aesEncrypterMockedConstructionRule = MockedConstructionRule(AESEncrypter::class.java) {mock, _ ->
+    val aesEncrypterMockedConstructionRule = MockedConstructionRule(AESEncrypter::class.java) { mock, _ ->
         whenever(mock.encrypt(any())).thenReturn(startupStateEncryptedValue)
     }
 
@@ -74,6 +74,7 @@ internal class ServiceMigrationScriptToV112Test : CommonTest() {
     private val databaseStorageFactory = mock<DatabaseStorageFactory> {
         on { storageForService } doReturn databaseStorage
     }
+
     @get:Rule
     val databaseMockedStaticRule = staticRule<DatabaseStorageFactory>()
 

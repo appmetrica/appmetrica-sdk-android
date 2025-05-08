@@ -27,7 +27,7 @@ class ExtraMetaInfoRetrieverTest : CommonTest() {
     }
 
     @Test
-    fun testNoResources() {
+    fun noResources() {
         whenever(stringResourceRetriever.resource).thenReturn(null)
         whenever(booleanResourceRetriever.resource).thenReturn(null)
         assertThat(extraMetaInfoRetriever.buildId).isNull()
@@ -35,7 +35,7 @@ class ExtraMetaInfoRetrieverTest : CommonTest() {
     }
 
     @Test
-    fun testHasResources() {
+    fun hasResources() {
         val buildId = "1234567890"
         val isOffline = false
         whenever(stringResourceRetriever.resource).thenReturn(buildId)

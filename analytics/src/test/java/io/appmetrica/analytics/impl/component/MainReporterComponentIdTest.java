@@ -14,6 +14,6 @@ public class MainReporterComponentIdTest extends CommonTest {
     public void toStringMatchExpectedValue() {
         String packageName = "test.package.name";
         assertThat(new MainReporterComponentId(packageName, null).toString())
-                .isEqualTo(packageName);
+            .isEqualTo(packageName);
     }
 }

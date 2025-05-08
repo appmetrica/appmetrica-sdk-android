@@ -64,11 +64,13 @@ class ReferrerFromLibraryRetrieverTest : CommonTest() {
             verify(executor).execute(runnableCaptor.capture())
             verifyNoMoreInteractions()
             runnableCaptor.firstValue.run()
-            verify(listener).onReferrerReceived(argThat {
-                this.installReferrer == installReferrer &&
-                    this.referrerClickTimestampSeconds == clickTimestamp &&
-                    this.installBeginTimestampSeconds == installTimestamp
-            })
+            verify(listener).onReferrerReceived(
+                argThat {
+                    this.installReferrer == installReferrer &&
+                        this.referrerClickTimestampSeconds == clickTimestamp &&
+                        this.installBeginTimestampSeconds == installTimestamp
+                }
+            )
             verify(client).endConnection()
             verifyNoMoreInteractions()
         }
@@ -102,9 +104,11 @@ class ReferrerFromLibraryRetrieverTest : CommonTest() {
             verify(executor).execute(runnableCaptor.capture())
             verifyNoMoreInteractions()
             runnableCaptor.firstValue.run()
-            verify(listener).onReferrerRetrieveError(argThat {
-                this is IllegalStateException && this.message == "Referrer check failed with error 1"
-            })
+            verify(listener).onReferrerRetrieveError(
+                argThat {
+                    this is IllegalStateException && this.message == "Referrer check failed with error 1"
+                }
+            )
             verifyNoMoreInteractions()
         }
     }

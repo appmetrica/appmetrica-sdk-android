@@ -14,54 +14,53 @@ private const val BUILD_CONFIG_CLASS = "com.android.billingclient.BuildConfig"
 
 class BillingTypeDetectorTest : CommonTest() {
 
-    @Rule
-    @JvmField
+    @get:Rule
     val sSdkUtils = MockedStaticRule(ReflectionUtils::class.java)
 
     @Test
-    fun testGetBillingTypeIfLibraryAndVersion3() {
+    fun getBillingTypeIfLibraryAndVersion3() {
         BuildConfig.VERSION_NAME = "3.0.3"
         whenever(ReflectionUtils.findClass(BUILD_CONFIG_CLASS)).thenReturn(BuildConfig::class.java)
         assertThat(BillingTypeDetector.getBillingType()).isEqualTo(BillingType.NONE)
     }
 
     @Test
-    fun testGetBillingTypeIfLibraryAndVersion4() {
+    fun getBillingTypeIfLibraryAndVersion4() {
         BuildConfig.VERSION_NAME = "4.0.0"
         whenever(ReflectionUtils.findClass(BUILD_CONFIG_CLASS)).thenReturn(BuildConfig::class.java)
         assertThat(BillingTypeDetector.getBillingType()).isEqualTo(BillingType.NONE)
     }
 
     @Test
-    fun testGetBillingTypeIfLibraryAndNoVersion() {
+    fun getBillingTypeIfLibraryAndNoVersion() {
         BuildConfig.VERSION_NAME = ""
         whenever(ReflectionUtils.findClass(BUILD_CONFIG_CLASS)).thenReturn(BuildConfig::class.java)
         assertThat(BillingTypeDetector.getBillingType()).isEqualTo(BillingType.NONE)
     }
 
     @Test
-    fun testGetBillingTypeIfLibraryAndVersion5() {
+    fun getBillingTypeIfLibraryAndVersion5() {
         BuildConfig.VERSION_NAME = "5.0.0"
         whenever(ReflectionUtils.findClass(BUILD_CONFIG_CLASS)).thenReturn(BuildConfig::class.java)
         assertThat(BillingTypeDetector.getBillingType()).isEqualTo(BillingType.LIBRARY_V6)
     }
 
     @Test
-    fun testGetBillingTypeIfLibraryAndVersion6() {
+    fun getBillingTypeIfLibraryAndVersion6() {
         BuildConfig.VERSION_NAME = "6.0.0"
         whenever(ReflectionUtils.findClass(BUILD_CONFIG_CLASS)).thenReturn(BuildConfig::class.java)
         assertThat(BillingTypeDetector.getBillingType()).isEqualTo(BillingType.LIBRARY_V6)
     }
 
     @Test
-    fun testGetBillingTypeIfLibraryAndWrongVersion() {
+    fun getBillingTypeIfLibraryAndWrongVersion() {
         BuildConfig.VERSION_NAME = "999.0.0"
         whenever(ReflectionUtils.findClass(BUILD_CONFIG_CLASS)).thenReturn(BuildConfig::class.java)
         assertThat(BillingTypeDetector.getBillingType()).isEqualTo(BillingType.LIBRARY_V6)
     }
 
     @Test
-    fun testGetBillingTypeIfNotLibrary() {
+    fun getBillingTypeIfNotLibrary() {
         whenever(ReflectionUtils.findClass(BUILD_CONFIG_CLASS)).thenReturn(null)
         assertThat(BillingTypeDetector.getBillingType()).isEqualTo(BillingType.NONE)
     }

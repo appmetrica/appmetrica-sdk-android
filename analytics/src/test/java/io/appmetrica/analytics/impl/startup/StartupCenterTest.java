@@ -36,14 +36,14 @@ import static org.mockito.Mockito.when;
 public class StartupCenterTest extends CommonTest {
 
     private Context context;
-    private StartupCenter mStartupCenter = new StartupCenter();
+    private final StartupCenter mStartupCenter = new StartupCenter();
     private static final String PACKAGE_NAME = "testPackage";
 
     @Rule
     public RuleChain mRuleChain = RuleChain.outerRule(
             new GlobalServiceLocatorRule())
-            .around(new ServiceMigrationCheckedRule()
-    );
+        .around(new ServiceMigrationCheckedRule()
+        );
 
     @Rule
     public MockedConstructionRule<StartupUnit> startupUnitMockedConstructionRule =
@@ -58,8 +58,8 @@ public class StartupCenterTest extends CommonTest {
         context = RuntimeEnvironment.getApplication();
         when(GlobalServiceLocator.getInstance().getAppSetIdGetter().getAppSetId()).thenReturn(new AppSetId(null, AppSetIdScope.UNKNOWN));
         when(GlobalServiceLocator.getInstance().getAdvertisingIdGetter()
-                .getIdentifiersForced(any(RetryStrategy.class)))
-                .thenReturn(new AdvertisingIdsHolder());
+            .getIdentifiersForced(any(RetryStrategy.class)))
+            .thenReturn(new AdvertisingIdsHolder());
         when(GlobalServiceLocator.getInstance().getMultiProcessSafeUuidProvider().readUuid())
             .thenReturn(new IdentifiersResult(UUID.randomUUID().toString(), IdentifierStatus.OK, null));
     }
@@ -76,7 +76,7 @@ public class StartupCenterTest extends CommonTest {
         ComponentId component = createStartupUserMock(PACKAGE_NAME);
         StartupUnit unit = mStartupCenter.getOrCreateStartupUnit(context, component, StartupArgumentsTest.empty());
         assertThat(mStartupCenter.getOrCreateStartupUnit(context, createStartupUserMock(PACKAGE_NAME), StartupArgumentsTest.empty()))
-                .isSameAs(unit);
+            .isSameAs(unit);
     }
 
     @Test

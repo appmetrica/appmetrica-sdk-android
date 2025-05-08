@@ -92,11 +92,11 @@ public class DatabaseManagerProviderTest extends CommonTest {
         String apiKey = "apiKey";
         mDatabaseManagerProvider.buildComponentDatabaseManager(new ComponentId("package", apiKey));
         verify(mTablesManagerCreator).createTablesManager(
-                eq("component-" + apiKey),
-                same(mDatabaseCreateScript),
-                same(mDatabaseDropScript),
-                same(mUpgradeScripts),
-                mTablesValidatorCaptor.capture()
+            eq("component-" + apiKey),
+            same(mDatabaseCreateScript),
+            same(mDatabaseDropScript),
+            same(mUpgradeScripts),
+            mTablesValidatorCaptor.capture()
         );
         assertThat(((TablesValidatorImpl) mTablesValidatorCaptor.getValue()).getTableColumnsToCheck()).isEqualTo(mDbTablesColumns);
     }
@@ -105,19 +105,19 @@ public class DatabaseManagerProviderTest extends CommonTest {
     public void buildAutoInappDatabaseManager() {
         mDatabaseManagerProvider.buildAutoInappDatabaseManager();
         verify(mTablesManagerCreator).createTablesManager(
-                eq("auto_inapp"),
-                same(databaseAutoInappCreateScript),
-                same(databaseAutoInappDropScript),
-                argThat(new ArgumentMatcher<HashMultimap<Integer, DatabaseScript>>() {
-                    @Override
-                    public boolean matches(HashMultimap<Integer, DatabaseScript> argument) {
-                        return argument.size() == 0;
-                    }
-                }),
-                mTablesValidatorCaptor.capture()
+            eq("auto_inapp"),
+            same(databaseAutoInappCreateScript),
+            same(databaseAutoInappDropScript),
+            argThat(new ArgumentMatcher<HashMultimap<Integer, DatabaseScript>>() {
+                @Override
+                public boolean matches(HashMultimap<Integer, DatabaseScript> argument) {
+                    return argument.size() == 0;
+                }
+            }),
+            mTablesValidatorCaptor.capture()
         );
         assertThat(((TablesValidatorImpl) mTablesValidatorCaptor.getValue()).getTableColumnsToCheck()).containsOnly(
-                new AbstractMap.SimpleEntry(Constants.BinaryDataTable.TABLE_NAME, Constants.BinaryDataTable.ACTUAL_COLUMNS)
+            new AbstractMap.SimpleEntry(Constants.BinaryDataTable.TABLE_NAME, Constants.BinaryDataTable.ACTUAL_COLUMNS)
         );
     }
 
@@ -125,14 +125,14 @@ public class DatabaseManagerProviderTest extends CommonTest {
     public void testBuildClientDatabaseManager() {
         mDatabaseManagerProvider.buildClientDatabaseManager();
         verify(mTablesManagerCreator).createTablesManager(
-                eq("client database"),
-                same(mDatabaseClientCreateScript),
-                same(mDatabaseClientDropScript),
-                same(clientDatabaseUpgradeScript),
-                mTablesValidatorCaptor.capture()
+            eq("client database"),
+            same(mDatabaseClientCreateScript),
+            same(mDatabaseClientDropScript),
+            same(clientDatabaseUpgradeScript),
+            mTablesValidatorCaptor.capture()
         );
         assertThat(((TablesValidatorImpl) mTablesValidatorCaptor.getValue()).getTableColumnsToCheck()).containsOnly(
-                new AbstractMap.SimpleEntry(Constants.PreferencesTable.TABLE_NAME, Constants.PreferencesTable.ACTUAL_COLUMNS)
+            new AbstractMap.SimpleEntry(Constants.PreferencesTable.TABLE_NAME, Constants.PreferencesTable.ACTUAL_COLUMNS)
         );
     }
 
@@ -140,11 +140,11 @@ public class DatabaseManagerProviderTest extends CommonTest {
     public void testBuildServiceDatabaseManager() {
         mDatabaseManagerProvider.buildServiceDatabaseManager();
         verify(mTablesManagerCreator).createTablesManager(
-                eq("service database"),
-                same(mDatabaseProviderCreateScript),
-                same(mDatabaseProviderDropScript),
-                same(mUpgradeProviderScripts),
-                mTablesValidatorCaptor.capture()
+            eq("service database"),
+            same(mDatabaseProviderCreateScript),
+            same(mDatabaseProviderDropScript),
+            same(mUpgradeProviderScripts),
+            mTablesValidatorCaptor.capture()
         );
         assertThat(((TablesValidatorImpl) mTablesValidatorCaptor.getValue()).getTableColumnsToCheck()).containsOnly(
             new AbstractMap.SimpleEntry(Constants.PreferencesTable.TABLE_NAME, Constants.PreferencesTable.ACTUAL_COLUMNS),

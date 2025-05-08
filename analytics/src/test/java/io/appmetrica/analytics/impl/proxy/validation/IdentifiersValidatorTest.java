@@ -46,8 +46,8 @@ public class IdentifiersValidatorTest extends CommonTest {
     @Test
     public void testValidateValidAndInvalidIdentifiers() {
         ValidationResult result = mIdentifiersValidator.validate(Arrays.asList(
-                Constants.StartupParamsCallbackKeys.DEVICE_ID,
-                "not_identifier"
+            Constants.StartupParamsCallbackKeys.DEVICE_ID,
+            "not_identifier"
         ));
         assertThat(result.isValid()).isFalse();
         assertThat(result.getDescription()).contains("invalid identifier");
@@ -56,12 +56,12 @@ public class IdentifiersValidatorTest extends CommonTest {
     @Test
     public void testValidateValidIdentifiers() {
         assertThat(mIdentifiersValidator.validate(Arrays.asList(
-                Constants.StartupParamsCallbackKeys.UUID,
-                Constants.StartupParamsCallbackKeys.DEVICE_ID,
-                Constants.StartupParamsCallbackKeys.DEVICE_ID_HASH,
-                Constants.StartupParamsCallbackKeys.GET_AD_URL,
-                Constants.StartupParamsCallbackKeys.REPORT_AD_URL,
-                Constants.StartupParamsCallbackKeys.CLIDS
+            Constants.StartupParamsCallbackKeys.UUID,
+            Constants.StartupParamsCallbackKeys.DEVICE_ID,
+            Constants.StartupParamsCallbackKeys.DEVICE_ID_HASH,
+            Constants.StartupParamsCallbackKeys.GET_AD_URL,
+            Constants.StartupParamsCallbackKeys.REPORT_AD_URL,
+            Constants.StartupParamsCallbackKeys.CLIDS
         )).isValid()).isTrue();
     }
 }

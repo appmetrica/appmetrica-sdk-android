@@ -54,7 +54,7 @@ public class ReportParamsAppenderTest extends CommonTest {
 
     private ReportParamsAppender mParamsAppender;
 
-    private Uri.Builder mBuilder = new Uri.Builder();
+    private final Uri.Builder mBuilder = new Uri.Builder();
 
     @Before
     public void setUp() throws Exception {
@@ -71,7 +71,7 @@ public class ReportParamsAppenderTest extends CommonTest {
         );
         when(mJson.getStringOrEmpty("kitBuildType")).thenReturn("internal_snapshot");
         mDbNetworkTaskConfig = new DbNetworkTaskConfig(mJson);
-        ((ReportParamsAppender) mParamsAppender).setDbReportRequestConfig(mDbNetworkTaskConfig);
+        mParamsAppender.setDbReportRequestConfig(mDbNetworkTaskConfig);
     }
 
     @RunWith(ParameterizedRobolectricTestRunner.class)
@@ -85,7 +85,7 @@ public class ReportParamsAppenderTest extends CommonTest {
         @Mock
         private JsonHelper.OptJSONObject mJson;
         private DbNetworkTaskConfig mDbNetworkTaskConfig;
-        private Uri.Builder mBuilder = new Uri.Builder();
+        private final Uri.Builder mBuilder = new Uri.Builder();
         private ReportParamsAppender mParamsAppender;
         private final String mJsonKey;
         private final String mRequestKey;
@@ -94,14 +94,14 @@ public class ReportParamsAppenderTest extends CommonTest {
         @ParameterizedRobolectricTestRunner.Parameters(name = "Contains {1}={2}")
         public static Collection<Object[]> data() {
             return Arrays.asList(
-                    new Object[]{"dId", "deviceid", "54323456"},
-                    new Object[]{"uId", "uuid", "87445579"},
-                    new Object[]{"analyticsSdkVersionName", "analytics_sdk_version_name", "v3.5.0"},
-                    new Object[]{"appVer", "app_version_name", "myapp"},
-                    new Object[]{"kitBuildNumber", "analytics_sdk_build_number", "1432"},
-                    new Object[]{"kitBuildType", "analytics_sdk_build_type", "snapshot"},
-                    new Object[]{"lang", "locale", "mylocale"},
-                    new Object[]{"root", "is_rooted", "1"});
+                new Object[]{"dId", "deviceid", "54323456"},
+                new Object[]{"uId", "uuid", "87445579"},
+                new Object[]{"analyticsSdkVersionName", "analytics_sdk_version_name", "v3.5.0"},
+                new Object[]{"appVer", "app_version_name", "myapp"},
+                new Object[]{"kitBuildNumber", "analytics_sdk_build_number", "1432"},
+                new Object[]{"kitBuildType", "analytics_sdk_build_type", "snapshot"},
+                new Object[]{"lang", "locale", "mylocale"},
+                new Object[]{"root", "is_rooted", "1"});
         }
 
         public DatabaseParamsTest(String jsonKey, String requestKey, String value) {
@@ -178,7 +178,7 @@ public class ReportParamsAppenderTest extends CommonTest {
     public void testAnalyticsSdkBuildTypeEmpty() {
         when(mJson.getStringOrEmpty("kitBuildType")).thenReturn(null);
         mDbNetworkTaskConfig = new DbNetworkTaskConfig(mJson);
-        ((ReportParamsAppender) mParamsAppender).setDbReportRequestConfig(mDbNetworkTaskConfig);
+        mParamsAppender.setDbReportRequestConfig(mDbNetworkTaskConfig);
         mParamsAppender.appendParams(mBuilder, mReportRequestConfig);
         String path = mBuilder.toString();
         assertThat(path).doesNotContain("analytics_sdk_build_type");
@@ -223,7 +223,7 @@ public class ReportParamsAppenderTest extends CommonTest {
     public void testDatabaseOsApiLevel() {
         when(mJson.optInt(eq("osApiLev"), anyInt())).thenReturn(28);
         mDbNetworkTaskConfig = new DbNetworkTaskConfig(mJson);
-        ((ReportParamsAppender) mParamsAppender).setDbReportRequestConfig(mDbNetworkTaskConfig);
+        mParamsAppender.setDbReportRequestConfig(mDbNetworkTaskConfig);
         mParamsAppender.appendParams(mBuilder, mReportRequestConfig);
         assertThat(mBuilder.toString()).contains("os_api_level=28");
     }
@@ -232,7 +232,7 @@ public class ReportParamsAppenderTest extends CommonTest {
     public void testDatabaseAppDebuggable() {
         when(mJson.optString(eq("app_debuggable"), anyString())).thenReturn("1");
         mDbNetworkTaskConfig = new DbNetworkTaskConfig(mJson);
-        ((ReportParamsAppender) mParamsAppender).setDbReportRequestConfig(mDbNetworkTaskConfig);
+        mParamsAppender.setDbReportRequestConfig(mDbNetworkTaskConfig);
         mParamsAppender.appendParams(mBuilder, mReportRequestConfig);
         assertThat(mBuilder.toString()).contains("app_debuggable=1");
     }
@@ -241,7 +241,7 @@ public class ReportParamsAppenderTest extends CommonTest {
     public void testDatabaseAppFramework() {
         when(mJson.optString(eq("app_framework"), anyString())).thenReturn("myframework");
         mDbNetworkTaskConfig = new DbNetworkTaskConfig(mJson);
-        ((ReportParamsAppender) mParamsAppender).setDbReportRequestConfig(mDbNetworkTaskConfig);
+        mParamsAppender.setDbReportRequestConfig(mDbNetworkTaskConfig);
         mParamsAppender.appendParams(mBuilder, mReportRequestConfig);
         assertThat(mBuilder.toString()).contains("app_framework=myframework");
     }
@@ -250,7 +250,7 @@ public class ReportParamsAppenderTest extends CommonTest {
     public void testDatabaseAttributionId() {
         when(mJson.optInt(eq("attribution_id"), anyInt())).thenReturn(15);
         mDbNetworkTaskConfig = new DbNetworkTaskConfig(mJson);
-        ((ReportParamsAppender) mParamsAppender).setDbReportRequestConfig(mDbNetworkTaskConfig);
+        mParamsAppender.setDbReportRequestConfig(mDbNetworkTaskConfig);
         mParamsAppender.appendParams(mBuilder, mReportRequestConfig);
         assertThat(mBuilder.toString()).contains("attribution_id=15");
     }
@@ -383,7 +383,7 @@ public class ReportParamsAppenderTest extends CommonTest {
             sendingDataParamsAppender,
             liveConfigProvider
         );
-        ((ReportParamsAppender) mParamsAppender).setRequestId(3333);
+        mParamsAppender.setRequestId(3333);
         mParamsAppender.appendParams(mBuilder, mReportRequestConfig);
         assertThat(mBuilder.toString()).contains("request_id=3333");
     }

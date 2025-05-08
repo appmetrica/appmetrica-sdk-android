@@ -3,25 +3,16 @@ package io.appmetrica.analytics.plugins
 import io.appmetrica.analytics.impl.AppMetricaPluginsImpl
 import io.appmetrica.analytics.impl.proxy.AppMetricaPluginsProxy
 import io.appmetrica.analytics.testutils.CommonTest
-import org.junit.Before
 import org.junit.Test
-import org.mockito.Mock
-import org.mockito.MockitoAnnotations
+import org.mockito.Mockito.mock
 import org.mockito.kotlin.verify
 
 class AppMetricaPluginsImplTest : CommonTest() {
 
-    @Mock
-    private lateinit var proxy: AppMetricaPluginsProxy
-    @Mock
-    private lateinit var errorDetails: PluginErrorDetails
-    private lateinit var impl: AppMetricaPluginsImpl
+    private val proxy: AppMetricaPluginsProxy = mock()
+    private val errorDetails: PluginErrorDetails = mock()
 
-    @Before
-    fun setUp() {
-        MockitoAnnotations.openMocks(this)
-        impl = AppMetricaPluginsImpl(proxy)
-    }
+    private val impl: AppMetricaPluginsImpl by setUp { AppMetricaPluginsImpl(proxy) }
 
     @Test
     fun reportUnhandledException() {

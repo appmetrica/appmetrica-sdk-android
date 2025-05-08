@@ -37,9 +37,9 @@ public class ReportingTaskProcessorTest extends CommonTest {
     public void setUp() {
         MockitoAnnotations.openMocks(this);
         reportingTaskProcessor = new ReportingTaskProcessor(
-                componentUnit,
-                mock(StartupExecutor.class),
-                mCommonExecutor
+            componentUnit,
+            mock(StartupExecutor.class),
+            mCommonExecutor
         );
         doReturn(requestConfig).when(componentUnit).getFreshReportRequestConfig();
     }
@@ -50,8 +50,8 @@ public class ReportingTaskProcessorTest extends CommonTest {
         doReturn(dispatchPeriod).when(requestConfig).getDispatchPeriod();
         reportingTaskProcessor.scheduleFlushTask();
         verify(mCommonExecutor).executeDelayed(
-                reportingTaskProcessor.getFlushRunnable(),
-                TimeUnit.SECONDS.toMillis(dispatchPeriod)
+            reportingTaskProcessor.getFlushRunnable(),
+            TimeUnit.SECONDS.toMillis(dispatchPeriod)
         );
     }
 

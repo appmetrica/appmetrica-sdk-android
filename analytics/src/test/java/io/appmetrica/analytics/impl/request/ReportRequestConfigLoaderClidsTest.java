@@ -48,7 +48,7 @@ public class ReportRequestConfigLoaderClidsTest extends CommonTest {
     private ClidsStateChecker clidsStateChecker;
     @Mock
     private SdkEnvironmentProvider sdkEnvironmentProvider;
-    private AppSetId appSetId = new AppSetId(UUID.randomUUID().toString(), AppSetIdScope.APP);
+    private final AppSetId appSetId = new AppSetId(UUID.randomUUID().toString(), AppSetIdScope.APP);
     @Mock
     private AppSetIdProvider appSetIdProvider;
     @Mock
@@ -76,7 +76,7 @@ public class ReportRequestConfigLoaderClidsTest extends CommonTest {
         when(platformIdentifiers.getAppSetIdProvider()).thenReturn(appSetIdProvider);
         loader = new ReportRequestConfig.Loader(componentUnit, dataSendingSendingStrategy, clidsStateChecker);
         dataSource = new CoreRequestConfig.CoreDataSource<>(
-                TestUtils.createDefaultStartupState(),
+            TestUtils.createDefaultStartupState(),
             sdkEnvironmentProvider,
             platformIdentifiers,
             new ReportRequestConfig.Arguments(
@@ -90,7 +90,7 @@ public class ReportRequestConfigLoaderClidsTest extends CommonTest {
                 null,
                 null,
                 null
-        )
+            )
         );
     }
 
@@ -101,9 +101,9 @@ public class ReportRequestConfigLoaderClidsTest extends CommonTest {
         StartupState startupState = TestUtils.createDefaultStartupState();
         dataSource = createDataSource(startupState, clidsFromClient);
         when(clidsStateChecker.doChosenClidsForRequestMatchLastRequestClids(
-                clidsFromClient,
-                startupState,
-                GlobalServiceLocator.getInstance().getClidsStorage()
+            clidsFromClient,
+            startupState,
+            GlobalServiceLocator.getInstance().getClidsStorage()
         )).thenReturn(true);
         ReportRequestConfig config = loader.load(dataSource);
         assertThat(config.getClidsFromClientMatchClidsFromStartupRequest()).isTrue();
@@ -116,9 +116,9 @@ public class ReportRequestConfigLoaderClidsTest extends CommonTest {
         StartupState startupState = TestUtils.createDefaultStartupState();
         dataSource = createDataSource(startupState, clidsFromClient);
         when(clidsStateChecker.doChosenClidsForRequestMatchLastRequestClids(
-                clidsFromClient,
-                startupState,
-                GlobalServiceLocator.getInstance().getClidsStorage()
+            clidsFromClient,
+            startupState,
+            GlobalServiceLocator.getInstance().getClidsStorage()
         )).thenReturn(false);
         ReportRequestConfig config = loader.load(dataSource);
         assertThat(config.getClidsFromClientMatchClidsFromStartupRequest()).isFalse();
@@ -127,21 +127,21 @@ public class ReportRequestConfigLoaderClidsTest extends CommonTest {
     private CoreRequestConfig.CoreDataSource createDataSource(@NonNull StartupState startupState,
                                                               @Nullable Map<String, String> clientClids) {
         return new CoreRequestConfig.CoreDataSource(
-                startupState,
-                sdkEnvironmentProvider,
-                platformIdentifiers,
-                new ReportRequestConfig.Arguments(
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        clientClids,
-                        null
-                )
+            startupState,
+            sdkEnvironmentProvider,
+            platformIdentifiers,
+            new ReportRequestConfig.Arguments(
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                clientClids,
+                null
+            )
         );
     }
 }

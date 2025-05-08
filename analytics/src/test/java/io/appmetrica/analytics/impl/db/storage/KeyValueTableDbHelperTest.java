@@ -40,9 +40,9 @@ import static org.mockito.Mockito.verify;
 public class KeyValueTableDbHelperTest extends CommonTest {
 
     public static final String[] COLUMNS = new String[]{
-            Constants.PreferencesTable.KeyValueTableEntry.FIELD_KEY,
-            Constants.PreferencesTable.KeyValueTableEntry.FIELD_VALUE,
-            Constants.PreferencesTable.KeyValueTableEntry.FIELD_TYPE
+        Constants.PreferencesTable.KeyValueTableEntry.FIELD_KEY,
+        Constants.PreferencesTable.KeyValueTableEntry.FIELD_VALUE,
+        Constants.PreferencesTable.KeyValueTableEntry.FIELD_TYPE
     };
     public static final String TEST_STRING = "String";
     public static final long TEST_LONG = Long.MAX_VALUE;
@@ -89,7 +89,7 @@ public class KeyValueTableDbHelperTest extends CommonTest {
 
             mPrefsCursor = new MatrixCursor(COLUMNS);
             doReturn(mPrefsCursor).when(mDatabase).query(nullable(String.class), nullable(String[].class), nullable(String.class),
-                    nullable(String[].class), nullable(String.class), nullable(String.class), nullable(String.class));
+                nullable(String[].class), nullable(String.class), nullable(String.class), nullable(String.class));
         }
 
         @After
@@ -124,7 +124,7 @@ public class KeyValueTableDbHelperTest extends CommonTest {
 
         mPrefsCursor = new MatrixCursor(COLUMNS);
         doReturn(mPrefsCursor).when(mDatabase).query(nullable(String.class), nullable(String[].class), nullable(String.class),
-                nullable(String[].class), nullable(String.class), nullable(String.class), nullable(String.class));
+            nullable(String[].class), nullable(String.class), nullable(String.class), nullable(String.class));
     }
 
     @After
@@ -156,27 +156,27 @@ public class KeyValueTableDbHelperTest extends CommonTest {
         @ParameterizedRobolectricTestRunner.Parameters(name = "Should return value = {3} for stored value = {1} with type = {2} ")
         public static Collection<Object[]> data() {
             return Arrays.asList(new Object[][]{
-                    {1f, "1f", FLOAT, 1f},
-                    {-1f, "-1f", FLOAT, -1f},
-                    {1.1f, "1.1f", FLOAT, 1.1f},
-                    {-1.1f, "-1.1f", FLOAT, -1.1f},
-                    {0f, "0f", FLOAT, 0f},
-                    {0, "0", FLOAT, 0f},
-                    {0L, "0L", FLOAT, 0f},
-                    {0f, "0f", INT, Float.NEGATIVE_INFINITY},
-                    {0f, "0f", BOOL, Float.NEGATIVE_INFINITY},
-                    {0f, "0f", LONG, Float.NEGATIVE_INFINITY},
-                    {0f, "0f", STRING, Float.NEGATIVE_INFINITY},
-                    {1L, "1L", LONG, Float.NEGATIVE_INFINITY},
-                    {1L, "1L", FLOAT, 1f},
-                    {"sads", "sads", STRING, Float.NEGATIVE_INFINITY},
-                    {"asdas", "asdas", FLOAT, Float.NEGATIVE_INFINITY},
-                    {true, "true", BOOL, Float.NEGATIVE_INFINITY},
-                    {true, "true", FLOAT, Float.NEGATIVE_INFINITY},
-                    {1, "1", INT, Float.NEGATIVE_INFINITY},
-                    {null, "null", FLOAT, Float.NEGATIVE_INFINITY},
-                    {null, "null", INT, Float.NEGATIVE_INFINITY},
-                    {null, "null", STRING, Float.NEGATIVE_INFINITY}
+                {1f, "1f", FLOAT, 1f},
+                {-1f, "-1f", FLOAT, -1f},
+                {1.1f, "1.1f", FLOAT, 1.1f},
+                {-1.1f, "-1.1f", FLOAT, -1.1f},
+                {0f, "0f", FLOAT, 0f},
+                {0, "0", FLOAT, 0f},
+                {0L, "0L", FLOAT, 0f},
+                {0f, "0f", INT, Float.NEGATIVE_INFINITY},
+                {0f, "0f", BOOL, Float.NEGATIVE_INFINITY},
+                {0f, "0f", LONG, Float.NEGATIVE_INFINITY},
+                {0f, "0f", STRING, Float.NEGATIVE_INFINITY},
+                {1L, "1L", LONG, Float.NEGATIVE_INFINITY},
+                {1L, "1L", FLOAT, 1f},
+                {"sads", "sads", STRING, Float.NEGATIVE_INFINITY},
+                {"asdas", "asdas", FLOAT, Float.NEGATIVE_INFINITY},
+                {true, "true", BOOL, Float.NEGATIVE_INFINITY},
+                {true, "true", FLOAT, Float.NEGATIVE_INFINITY},
+                {1, "1", INT, Float.NEGATIVE_INFINITY},
+                {null, "null", FLOAT, Float.NEGATIVE_INFINITY},
+                {null, "null", INT, Float.NEGATIVE_INFINITY},
+                {null, "null", STRING, Float.NEGATIVE_INFINITY}
             });
         }
 
@@ -255,11 +255,11 @@ public class KeyValueTableDbHelperTest extends CommonTest {
 
         mDbHelper = createHelper(mDbStorage);
         mDbHelper.remove(KEY_TO_REMOVE_LONG)
-                .remove(KEY_TO_REMOVE_BOOL)
-                .remove(KEY_TO_REMOVE_STRING)
-                .remove(KEY_TO_REMOVE_INT)
-                .remove(KEY_TO_REMOVE_FLOAT)
-                .commit();
+            .remove(KEY_TO_REMOVE_BOOL)
+            .remove(KEY_TO_REMOVE_STRING)
+            .remove(KEY_TO_REMOVE_INT)
+            .remove(KEY_TO_REMOVE_FLOAT)
+            .commit();
         Thread.sleep(200);
 
         ArgumentCaptor<String[]> whereArgsCaptor = ArgumentCaptor.forClass(String[].class);
@@ -298,9 +298,9 @@ public class KeyValueTableDbHelperTest extends CommonTest {
         mDbHelper = createHelper(mDbStorage);
 
         mDbHelper.put(KEY_LONG, TEST_LONG)
-                .put(KEY_STRING, TEST_STRING)
-                .put(KEY_BOOLEAN, TEST_BOOL_TRUE)
-                .put(KEY_INT, TEST_INT);
+            .put(KEY_STRING, TEST_STRING)
+            .put(KEY_BOOLEAN, TEST_BOOL_TRUE)
+            .put(KEY_INT, TEST_INT);
 
         assertThat(mDbHelper.getBoolean(KEY_BOOLEAN, false)).isTrue();
         assertThat(mDbHelper.getLong(KEY_LONG, -1)).isEqualTo(Long.MAX_VALUE);
@@ -314,25 +314,25 @@ public class KeyValueTableDbHelperTest extends CommonTest {
         @ParameterizedRobolectricTestRunner.Parameters(name = "Should return expected value = {2} for input value = {1}")
         public static Collection<Object[]> data() {
             return Arrays.asList(new Object[][]{
-                    {1f, "1f", 1f},
-                    {-1f, "-1f", -1f},
-                    {1.1f, "1.1f", 1.1f},
-                    {-1.1f, "-1.1f", -1.1f},
-                    {0f, "0f", 0.0f},
-                    {0, "0", Float.NEGATIVE_INFINITY},
-                    {0L, "0L", Float.NEGATIVE_INFINITY},
-                    {1L, "1L", Float.NEGATIVE_INFINITY},
-                    {"sads", "sads", Float.NEGATIVE_INFINITY},
-                    {"", "", Float.NEGATIVE_INFINITY},
-                    {true, "true", Float.NEGATIVE_INFINITY},
-                    {false, "false", Float.NEGATIVE_INFINITY},
-                    {1, "1", Float.NEGATIVE_INFINITY},
-                    {null, "null", Float.NEGATIVE_INFINITY}
+                {1f, "1f", 1f},
+                {-1f, "-1f", -1f},
+                {1.1f, "1.1f", 1.1f},
+                {-1.1f, "-1.1f", -1.1f},
+                {0f, "0f", 0.0f},
+                {0, "0", Float.NEGATIVE_INFINITY},
+                {0L, "0L", Float.NEGATIVE_INFINITY},
+                {1L, "1L", Float.NEGATIVE_INFINITY},
+                {"sads", "sads", Float.NEGATIVE_INFINITY},
+                {"", "", Float.NEGATIVE_INFINITY},
+                {true, "true", Float.NEGATIVE_INFINITY},
+                {false, "false", Float.NEGATIVE_INFINITY},
+                {1, "1", Float.NEGATIVE_INFINITY},
+                {null, "null", Float.NEGATIVE_INFINITY}
             });
         }
 
-        private Object mInputValue;
-        private float mExpectedValue;
+        private final Object mInputValue;
+        private final float mExpectedValue;
 
         public InsertFloatInMemoryTests(Object inputValue, String inputPresentation, float expectedValue) {
             mInputValue = inputValue;
@@ -412,25 +412,25 @@ public class KeyValueTableDbHelperTest extends CommonTest {
         @ParameterizedRobolectricTestRunner.Parameters(name = "Should return expected value = {2} for input value = {1}")
         public static Collection<Object[]> data() {
             return Arrays.asList(new Object[][]{
-                    {1f, "1f", 1f},
-                    {-1f, "-1f", -1f},
-                    {1.1f, "1.1f", 1.1f},
-                    {-1.1f, "-1.1f", -1.1f},
-                    {0f, "0f", 0.0f},
-                    {0, "0", Float.NEGATIVE_INFINITY},
-                    {0L, "0L", Float.NEGATIVE_INFINITY},
-                    {1L, "1L", Float.NEGATIVE_INFINITY},
-                    {"sads", "sads", Float.NEGATIVE_INFINITY},
-                    {"", "", Float.NEGATIVE_INFINITY},
-                    {true, "true", Float.NEGATIVE_INFINITY},
-                    {false, "false", Float.NEGATIVE_INFINITY},
-                    {1, "1", Float.NEGATIVE_INFINITY},
-                    {null, "null", Float.NEGATIVE_INFINITY}
+                {1f, "1f", 1f},
+                {-1f, "-1f", -1f},
+                {1.1f, "1.1f", 1.1f},
+                {-1.1f, "-1.1f", -1.1f},
+                {0f, "0f", 0.0f},
+                {0, "0", Float.NEGATIVE_INFINITY},
+                {0L, "0L", Float.NEGATIVE_INFINITY},
+                {1L, "1L", Float.NEGATIVE_INFINITY},
+                {"sads", "sads", Float.NEGATIVE_INFINITY},
+                {"", "", Float.NEGATIVE_INFINITY},
+                {true, "true", Float.NEGATIVE_INFINITY},
+                {false, "false", Float.NEGATIVE_INFINITY},
+                {1, "1", Float.NEGATIVE_INFINITY},
+                {null, "null", Float.NEGATIVE_INFINITY}
             });
         }
 
-        private Object mInputValue;
-        private float mExpectedValue;
+        private final Object mInputValue;
+        private final float mExpectedValue;
 
         public InsertFloatInDbTests(Object inputValue, String inputPresentation, float expectedValue) {
             mInputValue = inputValue;

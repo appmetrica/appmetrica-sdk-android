@@ -68,7 +68,7 @@ public class StartupParamsAppenderTest extends CommonTest {
     private ModulesRemoteConfigArgumentsCollector modulesArgumentsCollector;
     private final ClidsInfo.Candidate noClidsInfo = new ClidsInfo.Candidate(null, DistributionSource.APP);
     private final ClidsInfo.Candidate filledClidsInfo = new ClidsInfo.Candidate(Collections.singletonMap("clid0", "0"), DistributionSource.APP);
-    private Uri.Builder mBuilder = new Uri.Builder();
+    private final Uri.Builder mBuilder = new Uri.Builder();
 
     private Context context;
     private StartupParamsAppender startupParamsAppender;
@@ -302,7 +302,7 @@ public class StartupParamsAppenderTest extends CommonTest {
         doReturn(null).when(startupRequestConfig).getDistributionReferrer();
         doReturn(null).when(startupRequestConfig).getInstallReferrerSource();
         when(referrerHolder.getReferrerInfo()).thenReturn(
-                new ReferrerInfo("some_referrer", 10, 20, ReferrerInfo.Source.HMS)
+            new ReferrerInfo("some_referrer", 10, 20, ReferrerInfo.Source.HMS)
         );
         when(obfuscator.obfuscate("install_referrer")).thenReturn("obfuscated_referrer");
         when(obfuscator.obfuscate("install_referrer_source")).thenReturn("obfuscated_referrer_source");
@@ -371,7 +371,7 @@ public class StartupParamsAppenderTest extends CommonTest {
         private ModulesRemoteConfigArgumentsCollector modulesRemoteConfigArgumentsCollector;
         @Mock
         private AdvertisingIdsHolder advertisingIdsHolder;
-        private Uri.Builder mBuilder = new Uri.Builder();
+        private final Uri.Builder mBuilder = new Uri.Builder();
         private StartupParamsAppender mStartupParamsAppender;
         private final String mParameter;
         private final String mValue;
@@ -382,19 +382,19 @@ public class StartupParamsAppenderTest extends CommonTest {
         @ParameterizedRobolectricTestRunner.Parameters(name = "Contains {0}={1}")
         public static Collection<Object[]> data() {
             return Arrays.asList(
-                new Object[] {"queries", 1},
-                new Object[] {"query_hosts", 2},
-                new Object[] {"time", 1},
-                new Object[] {"stat_sending", 1},
-                new Object[] {"retry_policy", 1},
-                new Object[] {"cache_control", 1},
-                new Object[] {"permissions_collecting", 1},
-                new Object[] {"auto_inapp_collecting", 1},
-                new Object[] {"attribution", 1},
-                new Object[] {"startup_update", 1},
-                new Object[] {"external_attribution", 1},
-                new Object[] {FIRST_MODULE_BLOCK_ID, FIRST_MODULE_BLOCK_VALUE},
-                new Object[] {SECOND_MODULE_BLOCK_ID, SECOND_MODULE_BLOCK_VALUE}
+                new Object[]{"queries", 1},
+                new Object[]{"query_hosts", 2},
+                new Object[]{"time", 1},
+                new Object[]{"stat_sending", 1},
+                new Object[]{"retry_policy", 1},
+                new Object[]{"cache_control", 1},
+                new Object[]{"permissions_collecting", 1},
+                new Object[]{"auto_inapp_collecting", 1},
+                new Object[]{"attribution", 1},
+                new Object[]{"startup_update", 1},
+                new Object[]{"external_attribution", 1},
+                new Object[]{FIRST_MODULE_BLOCK_ID, FIRST_MODULE_BLOCK_VALUE},
+                new Object[]{SECOND_MODULE_BLOCK_ID, SECOND_MODULE_BLOCK_VALUE}
             );
         }
 
@@ -428,8 +428,8 @@ public class StartupParamsAppenderTest extends CommonTest {
             when(mObfuscator.obfuscate(mParameter)).thenReturn(obfuscatedParameter);
             mStartupParamsAppender.appendParams(mBuilder, mStartupRequestConfig);
             String expectedParameter =
-                    (mParameter.equals(FIRST_MODULE_BLOCK_ID) || mParameter.equals(SECOND_MODULE_BLOCK_ID)) ?
-                            mParameter : obfuscatedParameter;
+                (mParameter.equals(FIRST_MODULE_BLOCK_ID) || mParameter.equals(SECOND_MODULE_BLOCK_ID)) ?
+                    mParameter : obfuscatedParameter;
             assertThat(mBuilder.toString()).contains(expectedParameter + "=" + mValue);
         }
     }
@@ -448,7 +448,7 @@ public class StartupParamsAppenderTest extends CommonTest {
         private ModulesRemoteConfigArgumentsCollector modulesArgumentsCollector;
         @Mock
         private AdvertisingIdsHolder advertisingIdsHolder;
-        private Uri.Builder mBuilder = new Uri.Builder();
+        private final Uri.Builder mBuilder = new Uri.Builder();
         private StartupParamsAppender mStartupParamsAppender;
         private final String mFeature;
 
@@ -458,15 +458,15 @@ public class StartupParamsAppenderTest extends CommonTest {
         @ParameterizedRobolectricTestRunner.Parameters(name = "{0}")
         public static Collection<Object[]> data() {
             return Arrays.asList(
-                    new Object[]{"permissions_collecting"},
-                    new Object[]{"features_collecting"},
-                    new Object[]{"google_aid"},
-                    new Object[]{"huawei_oaid"},
-                    new Object[]{"sim_info"},
-                    new Object[] {"ssl_pinning"},
-                    new Object[]{FIRST_MODULE_FEATURE},
-                    new Object[]{SECOND_MODULE_FEATURE}
-                    );
+                new Object[]{"permissions_collecting"},
+                new Object[]{"features_collecting"},
+                new Object[]{"google_aid"},
+                new Object[]{"huawei_oaid"},
+                new Object[]{"sim_info"},
+                new Object[]{"ssl_pinning"},
+                new Object[]{FIRST_MODULE_FEATURE},
+                new Object[]{SECOND_MODULE_FEATURE}
+            );
         }
 
         public FeaturesTest(String feature) {
@@ -485,7 +485,7 @@ public class StartupParamsAppenderTest extends CommonTest {
             when(advertisingIdsHolder.getYandex())
                 .thenReturn(new AdTrackingInfoResult(null, IdentifierStatus.IDENTIFIER_PROVIDER_UNAVAILABLE, null));
             when(modulesArgumentsCollector.collectFeatures())
-                    .thenReturn(Arrays.asList(FIRST_MODULE_FEATURE, SECOND_MODULE_FEATURE));
+                .thenReturn(Arrays.asList(FIRST_MODULE_FEATURE, SECOND_MODULE_FEATURE));
             mStartupParamsAppender = new StartupParamsAppender(mObfuscator, modulesArgumentsCollector);
         }
 
@@ -499,8 +499,8 @@ public class StartupParamsAppenderTest extends CommonTest {
             when(mObfuscator.obfuscate(parameter)).thenReturn(obfuscatedParameter);
             mStartupParamsAppender.appendParams(mBuilder, mStartupRequestConfig);
             String expectedFeature =
-                    (parameter.equals(FIRST_MODULE_FEATURE) || parameter.equals(SECOND_MODULE_FEATURE)) ?
-                            parameter : obfuscatedParameter;
+                (parameter.equals(FIRST_MODULE_FEATURE) || parameter.equals(SECOND_MODULE_FEATURE)) ?
+                    parameter : obfuscatedParameter;
             assertThat(mBuilder.toString()).contains(expectedFeature);
         }
 
@@ -523,33 +523,33 @@ public class StartupParamsAppenderTest extends CommonTest {
 
         @Rule
         public MockedConstructionRule<LiveConfigProvider> liveConfigProviderMockedConstructionRule =
-        new MockedConstructionRule<>(LiveConfigProvider.class);
+            new MockedConstructionRule<>(LiveConfigProvider.class);
 
         private LiveConfigProvider liveConfigProvider;
 
         StartupParamsAppender startupParamsAppender;
 
         private final String gaidParameterName;
-        private String obfuscatedGaidParametedName;
+        private final String obfuscatedGaidParametedName;
         private final String oaidParameterName;
-        private String obfuscatedOaidParametedName;
+        private final String obfuscatedOaidParametedName;
         private final String yandexAdvIdParameterName;
-        private String obfuscatedYandexAdvIdParametedName;
+        private final String obfuscatedYandexAdvIdParametedName;
 
         AdTrackingInfo googleAdvInfo = new AdTrackingInfo(
-                AdTrackingInfo.Provider.GOOGLE,
-                "someGoogleAdvID",
-                false
+            AdTrackingInfo.Provider.GOOGLE,
+            "someGoogleAdvID",
+            false
         );
         AdTrackingInfo huaweiAdvInfo = new AdTrackingInfo(
-                AdTrackingInfo.Provider.HMS,
-                "someHmsAdvID",
-                false
+            AdTrackingInfo.Provider.HMS,
+            "someHmsAdvID",
+            false
         );
         AdTrackingInfo yandexAdvIdInfo = new AdTrackingInfo(
-                AdTrackingInfo.Provider.YANDEX,
-                "someYandexAdvID",
-                false
+            AdTrackingInfo.Provider.YANDEX,
+            "someYandexAdvID",
+            false
         );
 
         public GAIDTest() {
@@ -584,9 +584,9 @@ public class StartupParamsAppenderTest extends CommonTest {
         public void testGaid() {
             doReturn(false).when(restrictionController).isRestrictedForReporter();
             when(mAdvertisingIdsHolder.getGoogle()).thenReturn(new AdTrackingInfoResult(
-                    googleAdvInfo,
-                    IdentifierStatus.OK,
-                    null
+                googleAdvInfo,
+                IdentifierStatus.OK,
+                null
             ));
             startupParamsAppender.appendAdvIdIfAllowed(builder, restrictionController, liveConfigProvider);
             checkQueryParameter(builder, obfuscatedGaidParametedName, googleAdvInfo.advId);
@@ -596,9 +596,9 @@ public class StartupParamsAppenderTest extends CommonTest {
         public void testOaid() {
             doReturn(false).when(restrictionController).isRestrictedForReporter();
             when(mAdvertisingIdsHolder.getHuawei()).thenReturn(new AdTrackingInfoResult(
-                    huaweiAdvInfo,
-                    IdentifierStatus.OK,
-                    null
+                huaweiAdvInfo,
+                IdentifierStatus.OK,
+                null
             ));
             startupParamsAppender.appendAdvIdIfAllowed(builder, restrictionController, liveConfigProvider);
             checkQueryParameter(builder, obfuscatedOaidParametedName, huaweiAdvInfo.advId);
@@ -608,9 +608,9 @@ public class StartupParamsAppenderTest extends CommonTest {
         public void yandexAdvId() {
             doReturn(false).when(restrictionController).isRestrictedForReporter();
             when(mAdvertisingIdsHolder.getYandex()).thenReturn(new AdTrackingInfoResult(
-                    yandexAdvIdInfo,
-                    IdentifierStatus.OK,
-                    null
+                yandexAdvIdInfo,
+                IdentifierStatus.OK,
+                null
             ));
             startupParamsAppender.appendAdvIdIfAllowed(builder, restrictionController, liveConfigProvider);
             checkQueryParameter(builder, obfuscatedYandexAdvIdParametedName, yandexAdvIdInfo.advId);
@@ -662,19 +662,19 @@ public class StartupParamsAppenderTest extends CommonTest {
         public void dataSendingRestricted() {
             doReturn(true).when(restrictionController).isRestrictedForReporter();
             when(mAdvertisingIdsHolder.getGoogle()).thenReturn(new AdTrackingInfoResult(
-                    googleAdvInfo,
-                    IdentifierStatus.OK,
-                    null
+                googleAdvInfo,
+                IdentifierStatus.OK,
+                null
             ));
             when(mAdvertisingIdsHolder.getHuawei()).thenReturn(new AdTrackingInfoResult(
-                    huaweiAdvInfo,
-                    IdentifierStatus.OK,
-                    null
+                huaweiAdvInfo,
+                IdentifierStatus.OK,
+                null
             ));
             when(mAdvertisingIdsHolder.getYandex()).thenReturn(new AdTrackingInfoResult(
-                    yandexAdvIdInfo,
-                    IdentifierStatus.OK,
-                    null
+                yandexAdvIdInfo,
+                IdentifierStatus.OK,
+                null
             ));
             startupParamsAppender.appendAdvIdIfAllowed(builder, restrictionController, liveConfigProvider);
             checkQueryParameter(builder, obfuscatedGaidParametedName, "");
@@ -686,9 +686,9 @@ public class StartupParamsAppenderTest extends CommonTest {
         public void testEmptyGAID() {
             doReturn(false).when(restrictionController).isRestrictedForReporter();
             when(mAdvertisingIdsHolder.getGoogle()).thenReturn(new AdTrackingInfoResult(
-                    new AdTrackingInfo(AdTrackingInfo.Provider.GOOGLE, "", false),
-                    IdentifierStatus.OK,
-                    null
+                new AdTrackingInfo(AdTrackingInfo.Provider.GOOGLE, "", false),
+                IdentifierStatus.OK,
+                null
             ));
             startupParamsAppender.appendAdvIdIfAllowed(builder, restrictionController, liveConfigProvider);
             checkQueryParameter(builder, obfuscatedGaidParametedName, "");
@@ -698,9 +698,9 @@ public class StartupParamsAppenderTest extends CommonTest {
         public void emptyOaid() {
             doReturn(false).when(restrictionController).isRestrictedForReporter();
             when(mAdvertisingIdsHolder.getHuawei()).thenReturn(new AdTrackingInfoResult(
-                    new AdTrackingInfo(AdTrackingInfo.Provider.HMS, "", false),
-                    IdentifierStatus.OK,
-                    null
+                new AdTrackingInfo(AdTrackingInfo.Provider.HMS, "", false),
+                IdentifierStatus.OK,
+                null
             ));
             startupParamsAppender.appendAdvIdIfAllowed(builder, restrictionController, liveConfigProvider);
             checkQueryParameter(builder, obfuscatedOaidParametedName, "");
@@ -710,9 +710,9 @@ public class StartupParamsAppenderTest extends CommonTest {
         public void empyYandexAdvId() {
             doReturn(false).when(restrictionController).isRestrictedForReporter();
             when(mAdvertisingIdsHolder.getYandex()).thenReturn(new AdTrackingInfoResult(
-                    new AdTrackingInfo(AdTrackingInfo.Provider.YANDEX, "", false),
-                    IdentifierStatus.OK,
-                    null
+                new AdTrackingInfo(AdTrackingInfo.Provider.YANDEX, "", false),
+                IdentifierStatus.OK,
+                null
             ));
             startupParamsAppender.appendAdvIdIfAllowed(builder, restrictionController, liveConfigProvider);
             checkQueryParameter(builder, obfuscatedYandexAdvIdParametedName, "");

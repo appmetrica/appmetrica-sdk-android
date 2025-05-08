@@ -38,8 +38,10 @@ class PreloadInfoCandidatesHelperTest(
                     PreloadInfoData.Candidate("999", JSONObject(), DistributionSource.SATELLITE)
                 )
             )
-            val firstRetailCandidate = PreloadInfoData.Candidate("333", JSONObject().put("key3", "value3"), DistributionSource.RETAIL)
-            val secondRetailCandidate = PreloadInfoData.Candidate("3332", JSONObject().put("key32", "value32"), DistributionSource.RETAIL)
+            val firstRetailCandidate =
+                PreloadInfoData.Candidate("333", JSONObject().put("key3", "value3"), DistributionSource.RETAIL)
+            val secondRetailCandidate =
+                PreloadInfoData.Candidate("3332", JSONObject().put("key32", "value32"), DistributionSource.RETAIL)
             val secondRetailState = PreloadInfoState(
                 secondRetailCandidate.trackingId,
                 secondRetailCandidate.additionalParams,
@@ -47,8 +49,10 @@ class PreloadInfoCandidatesHelperTest(
                 false,
                 secondRetailCandidate.source
             )
-            val firstSatelliteCandidate = PreloadInfoData.Candidate("444", JSONObject().put("key4", "value4"), DistributionSource.SATELLITE)
-            val secondSatelliteCandidate = PreloadInfoData.Candidate("4442", JSONObject().put("key42", "value42"), DistributionSource.SATELLITE)
+            val firstSatelliteCandidate =
+                PreloadInfoData.Candidate("444", JSONObject().put("key4", "value4"), DistributionSource.SATELLITE)
+            val secondSatelliteCandidate =
+                PreloadInfoData.Candidate("4442", JSONObject().put("key42", "value42"), DistributionSource.SATELLITE)
             val secondSatelliteState = PreloadInfoState(
                 secondSatelliteCandidate.trackingId,
                 secondSatelliteCandidate.additionalParams,
@@ -56,7 +60,8 @@ class PreloadInfoCandidatesHelperTest(
                 false,
                 secondSatelliteCandidate.source
             )
-            val firstAppCandidate = PreloadInfoData.Candidate("111", JSONObject().put("key", "value"), DistributionSource.APP)
+            val firstAppCandidate =
+                PreloadInfoData.Candidate("111", JSONObject().put("key", "value"), DistributionSource.APP)
             val firstAppState = PreloadInfoState(
                 firstAppCandidate.trackingId,
                 firstAppCandidate.additionalParams,
@@ -64,7 +69,8 @@ class PreloadInfoCandidatesHelperTest(
                 false,
                 firstAppCandidate.source
             )
-            val secondAppCandidate = PreloadInfoData.Candidate("222", JSONObject().put("key2", "value2"), DistributionSource.APP)
+            val secondAppCandidate =
+                PreloadInfoData.Candidate("222", JSONObject().put("key2", "value2"), DistributionSource.APP)
             val secondAppState = PreloadInfoState(
                 secondAppCandidate.trackingId,
                 secondAppCandidate.additionalParams,

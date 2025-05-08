@@ -4,7 +4,7 @@ import io.appmetrica.analytics.impl.CounterReport;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.impl.component.processor.event.EventHandler;
 import io.appmetrica.analytics.testutils.CommonTest;
-import java.util.Arrays;
+import java.util.Collections;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,7 +31,7 @@ public class ReportingReportProcessorTest extends CommonTest {
         mProcessor = new ReportingReportProcessor(mFactory, mComponent);
         EventProcessingStrategy strategy = mock(EventProcessingStrategy.class);
         mHandler = mock(EventHandler.class);
-        doReturn(Arrays.asList(mHandler)).when(strategy).getEventHandlers();
+        doReturn(Collections.singletonList(mHandler)).when(strategy).getEventHandlers();
         doReturn(strategy).when(mFactory).getProcessingStrategy(anyInt());
     }
 

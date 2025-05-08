@@ -82,7 +82,7 @@ public abstract class BaseSessionTest extends CommonTest {
     public void testSessionInValidIfExpired() throws Exception {
         mConfig.setSessionTimeout(getSessionTimeout());
 
-        mSessionStorage.putSleepStart((long) -getSessionTimeout());
+        mSessionStorage.putSleepStart(-getSessionTimeout());
 
         Session session = getSessionFactory().load();
 

@@ -15,6 +15,7 @@ import io.appmetrica.analytics.networktasks.internal.RetryPolicyConfig;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -103,8 +104,8 @@ public class StartupStateConverterTest extends CommonTest {
     private final Map<String, List<String>> customSdkHostsModel = new HashMap<>();
     private final StartupStateProtobuf.StartupState.CustomSdkHostsPair[] customSdkHostsProto =
         new StartupStateProtobuf.StartupState.CustomSdkHostsPair[2];
-    private Map<String, Object> modulesModel = new HashMap<>();
-    private StartupStateProtobuf.StartupState.ModulesRemoteConfigsEntry[] modulesProto =
+    private final Map<String, Object> modulesModel = new HashMap<>();
+    private final StartupStateProtobuf.StartupState.ModulesRemoteConfigsEntry[] modulesProto =
         new StartupStateProtobuf.StartupState.ModulesRemoteConfigsEntry[2];
     private final ExternalAttributionConfig externalAttributionConfigModel = new ExternalAttributionConfig(1);
     private final StartupStateProtobuf.StartupState.ExternalAttributionConfig externalAttributionConfigProto =
@@ -118,7 +119,7 @@ public class StartupStateConverterTest extends CommonTest {
     @Before
     public void setUp() {
         customSdkHostsModel.put("am", Arrays.asList("host1", "host2"));
-        customSdkHostsModel.put("ads", Arrays.asList("ads.host1"));
+        customSdkHostsModel.put("ads", Collections.singletonList("ads.host1"));
         customSdkHostsProto[0] = mock(StartupStateProtobuf.StartupState.CustomSdkHostsPair.class);
         customSdkHostsProto[1] = mock(StartupStateProtobuf.StartupState.CustomSdkHostsPair.class);
         mConverter = new StartupStateConverter();

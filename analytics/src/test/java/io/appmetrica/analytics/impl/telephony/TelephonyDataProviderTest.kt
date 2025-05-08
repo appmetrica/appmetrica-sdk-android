@@ -7,11 +7,9 @@ import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
 import io.appmetrica.analytics.testutils.MockedConstructionRule
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.MockitoAnnotations
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
@@ -59,11 +57,6 @@ internal class TelephonyDataProviderTest : CommonTest() {
     private lateinit var simInfoDummyApplier: DummyTelephonyInfoAdapterApplier<List<SimInfo>>
     private lateinit var mobileConnectionDescriptionDummyApplier:
         DummyTelephonyInfoAdapterApplier<MobileConnectionDescription>
-
-    @Before
-    fun setUp() {
-        MockitoAnnotations.openMocks(this)
-    }
 
     @Test
     fun checkSafePackageManager() {
@@ -123,7 +116,6 @@ internal class TelephonyDataProviderTest : CommonTest() {
         simInfoDummyApplier = constructed[0] as DummyTelephonyInfoAdapterApplier<List<SimInfo>>
         mobileConnectionDescriptionDummyApplier =
             constructed[1] as DummyTelephonyInfoAdapterApplier<MobileConnectionDescription>
-
     }
 
     private fun simInfoExtractor(): SimInfoExtractor {

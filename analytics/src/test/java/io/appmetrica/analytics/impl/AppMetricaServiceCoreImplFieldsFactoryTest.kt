@@ -28,5 +28,4 @@ class AppMetricaServiceCoreImplFieldsFactoryTest : CommonTest() {
         assertThat(reportConsumerMockedConstructionRule.argumentInterceptor.flatArguments())
             .containsExactly(context, clientRepository)
     }
-
 }
