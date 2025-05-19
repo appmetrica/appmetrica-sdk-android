@@ -256,6 +256,38 @@ public class ReportAppOpenHandlerTests extends CommonTest {
             {new JSONObject().toString(), configWithConditions, false, false},
             {new JSONObject().put("Another key", "Another value").toString(), null, false, false},
             {new JSONObject().put("Another key", "Another value").toString(), configWithConditions, false, false},
+            {wrapDeeplink(
+                "ya-search-app-open://?uri=https%3A%2F%2Fcollections.yandex.ru%2Finterery%2F&referrer=" +
+                    "appmetrica_tracking_id%3D97066511625096571%26ym_tracking_id%3D8842404282613596" +
+                    "432%26reattribution%253D1"
+            ), configWithConditions, true, true},
+            {wrapDeeplink(
+                "ya-search-app-open://?uri=https%3A%2F%2Fcollections.yandex.ru%2Finterery%2F&referrer=" +
+                    "appmetrica_tracking_id%3D97066511625096571%26ym_tracking_id%3D8842404282613596" +
+                    "432%26reattribution%253D1"
+            ), configWithEmptyConditions, true, true},
+            // #50
+            {wrapDeeplink(
+                "appmetricaautotests://openpath?referrer=appmetrica_tracking_id%3D97066511625096571%2526" +
+                    "ym_tracking_id%3D8842404282613596432%2526reattribution%3D1"
+            ), configWithConditions, true, true
+            },
+            {wrapDeeplink(
+                "appmetricaautotests://openpath?referrer=appmetrica_tracking_id%3D97066511625096571%2526" +
+                    "ym_tracking_id%3D8842404282613596432%2526reattribution%3D1"
+            ), configWithEmptyConditions, true, true},
+            {wrapDeeplink(
+                "https://my.host.com/deal/103887099?appmetrica_tracking_id=28021836021325851&openAuth=true&" +
+                    "referrer=reattribution%253D1&utm_campaign=NEW_MESSAGE_RECEIVED_PUSH&" +
+                    "utm_content=transact&utm_medium=push&utm_source=notification&" +
+                    "utm_referrer=https%253A%252F%252Fmy.host.com%252F"
+            ), configWithConditions, true, true},
+            {wrapDeeplink(
+                "https://my.host.com/deal/103887099?appmetrica_tracking_id=28021836021325851&openAuth=true&" +
+                    "referrer=reattribution%253D1&utm_campaign=NEW_MESSAGE_RECEIVED_PUSH&" +
+                    "utm_content=transact&utm_medium=push&utm_source=notification&" +
+                    "utm_referrer=https%253A%252F%252Fmy.host.com%252F"
+            ), configWithEmptyConditions, true, true}
         });
     }
 

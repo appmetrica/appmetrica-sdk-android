@@ -63,12 +63,14 @@ public class ReportAppOpenHandler extends ReportComponentHandler {
                         deeplink,
                         attributionConfig
                     );
+                    referrer = Uri.decode(referrer);
                     String[] queryPairs = referrer.split("&");
                     for (String queryPair : queryPairs) {
-                        int idx = queryPair.indexOf("=");
+                        String pair = Uri.decode(queryPair);
+                        int idx = pair.indexOf("=");
                         if (idx >= 0) {
-                            String key = Uri.decode(queryPair.substring(0, idx));
-                            String value = Uri.decode(queryPair.substring(idx + 1));
+                            String key = Uri.decode(pair.substring(0, idx));
+                            String value = Uri.decode(pair.substring(idx + 1));
                             if (checkParameter(key, value, attributionConfig)) {
                                 return true;
                             }
