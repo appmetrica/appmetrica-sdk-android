@@ -1218,6 +1218,7 @@
   "analytics/src/main/java/io/appmetrica/analytics/profile/StringAttribute.java":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/main/java/io/appmetrica/analytics/profile/StringAttribute.java",
   "analytics/src/main/java/io/appmetrica/analytics/profile/UserProfile.java":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/main/java/io/appmetrica/analytics/profile/UserProfile.java",
   "analytics/src/main/java/io/appmetrica/analytics/profile/UserProfileUpdate.java":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/main/java/io/appmetrica/analytics/profile/UserProfileUpdate.java",
+  "analytics/src/main/resources/META-INF/io/appmetrica/analytics/analytics/verification.properties":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/main/resources/META-INF/io/appmetrica/analytics/analytics/verification.properties",
   "analytics/src/perf/java/io/appmetrica/analytics/impl/utils/ConnectionTypeProviderImpl.java":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/perf/java/io/appmetrica/analytics/impl/utils/ConnectionTypeProviderImpl.java",
   "analytics/src/prod/java/io/appmetrica/analytics/impl/utils/ConnectionTypeProviderImpl.java":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/prod/java/io/appmetrica/analytics/impl/utils/ConnectionTypeProviderImpl.java",
   "analytics/src/test/AndroidManifest.xml":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/test/AndroidManifest.xml",
