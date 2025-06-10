@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.impl.component.processor.event.modules
 
 import io.appmetrica.analytics.impl.CounterReport
+import io.appmetrica.analytics.impl.component.ComponentId
 import io.appmetrica.analytics.impl.component.ComponentUnit
 import io.appmetrica.analytics.impl.component.EventSaver
 import io.appmetrica.analytics.impl.db.preferences.PreferencesComponentDbStorage
@@ -20,9 +21,16 @@ internal class ModuleEventHandlerContextProviderTest : CommonTest() {
     private val preferences = mock<PreferencesComponentDbStorage>()
     private val saver = mock<EventSaver>()
 
+    private val isMain = true
+
+    private val componentId = mock<ComponentId> {
+        on { isMain } doReturn isMain
+    }
+
     private val component = mock<ComponentUnit> {
         on { componentPreferences } doReturn preferences
         on { eventSaver } doReturn saver
+        on { componentId } doReturn componentId
     }
 
     private val moduleIdentifier = "Module id"
@@ -89,7 +97,7 @@ internal class ModuleEventHandlerContextProviderTest : CommonTest() {
         val result = moduleEventReporterMockedConstructionRule.constructionMock.constructed()
         assertThat(result).hasSize(2)
         assertThat(moduleEventReporterMockedConstructionRule.argumentInterceptor.flatArguments())
-            .containsExactly(saver, firstReport, saver, secondReport)
+            .containsExactly(isMain, saver, firstReport, isMain, saver, secondReport)
         return result
     }
 }

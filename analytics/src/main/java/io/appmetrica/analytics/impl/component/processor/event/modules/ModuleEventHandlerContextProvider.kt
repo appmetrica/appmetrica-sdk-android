@@ -12,12 +12,13 @@ class ModuleEventHandlerContextProvider(component: ComponentUnit, moduleIdentifi
     private val legacyModulePreferenceAdapter = LegacyModulePreferenceAdapter(component.componentPreferences)
     private val modulePreferenceAdapter = ModulePreferencesAdapter(moduleIdentifier, component.componentPreferences)
     private val eventSaver: EventSaver = component.eventSaver
+    private val isMain: Boolean = component.componentId.isMain
 
     fun getContext(
         currentReport: CounterReport
     ): ModuleEventServiceHandlerContext = ModuleEventServiceHandlerContextImpl(
         modulePreferenceAdapter,
         legacyModulePreferenceAdapter,
-        ModuleEventReporter(eventSaver, currentReport)
+        ModuleEventReporter(isMain, eventSaver, currentReport)
     )
 }

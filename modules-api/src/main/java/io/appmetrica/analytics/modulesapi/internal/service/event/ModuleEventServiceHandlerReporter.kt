@@ -4,5 +4,7 @@ import io.appmetrica.analytics.coreapi.internal.event.CounterReportApi
 
 interface ModuleEventServiceHandlerReporter {
 
+    val isMain: Boolean
+
     fun report(report: CounterReportApi)
 }

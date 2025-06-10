@@ -5,6 +5,7 @@ import io.appmetrica.analytics.impl.CounterReport
 import io.appmetrica.analytics.impl.component.EventSaver
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.MockedStaticRule
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -35,6 +36,7 @@ class ModuleEventReporterTest : CommonTest() {
     }
 
     private val newReport = mock<CounterReport>()
+    private val isMain = true
 
     @get:Rule
     val counterReportMockedStaticRule = MockedStaticRule(CounterReport::class.java)
@@ -44,7 +46,7 @@ class ModuleEventReporterTest : CommonTest() {
     @Before
     fun setUp() {
         whenever(CounterReport.formReportCopyingMetadata(prototypeReport)).thenReturn(newReport)
-        moduleEventReporter = ModuleEventReporter(eventSaver, prototypeReport)
+        moduleEventReporter = ModuleEventReporter(isMain, eventSaver, prototypeReport)
     }
 
     @Test
@@ -59,5 +61,15 @@ class ModuleEventReporterTest : CommonTest() {
             verify(newReport).bytesTruncated = bytesTruncatedValue
             verify(eventSaver).identifyAndSaveReport(newReport)
         }
+    }
+
+    @Test
+    fun `main for true`() {
+        assertThat(ModuleEventReporter(true, eventSaver, prototypeReport).isMain).isTrue()
+    }
+
+    @Test
+    fun `main for false`() {
+        assertThat(ModuleEventReporter(false, eventSaver, prototypeReport).isMain).isFalse()
     }
 }
