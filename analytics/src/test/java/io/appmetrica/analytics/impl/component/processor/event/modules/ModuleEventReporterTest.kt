@@ -26,6 +26,7 @@ class ModuleEventReporterTest : CommonTest() {
     private val reportValue = "Some event value"
     private val valueBytesValue = ByteArray(128) { int -> int.toByte() }
     private val bytesTruncatedValue = 123
+
     private val moduleReport = mock<CounterReportApi> {
         on { type } doReturn typeValue
         on { customType } doReturn customTypeValue
@@ -58,6 +59,34 @@ class ModuleEventReporterTest : CommonTest() {
             verify(newReport).name = nameValue
             verify(newReport).value = reportValue
             verify(newReport).valueBytes = valueBytesValue
+            verify(newReport).bytesTruncated = bytesTruncatedValue
+            verify(eventSaver).identifyAndSaveReport(newReport)
+        }
+    }
+
+    @Test
+    fun `report without string value`() {
+        whenever(moduleReport.value).thenReturn(null)
+        moduleEventReporter.report(moduleReport)
+        inOrder(newReport, eventSaver) {
+            verify(newReport).type = typeValue
+            verify(newReport).customType = customTypeValue
+            verify(newReport).name = nameValue
+            verify(newReport).valueBytes = valueBytesValue
+            verify(newReport).bytesTruncated = bytesTruncatedValue
+            verify(eventSaver).identifyAndSaveReport(newReport)
+        }
+    }
+
+    @Test
+    fun `report without bytes value`() {
+        whenever(moduleReport.valueBytes).thenReturn(null)
+        moduleEventReporter.report(moduleReport)
+        inOrder(newReport, eventSaver) {
+            verify(newReport).type = typeValue
+            verify(newReport).customType = customTypeValue
+            verify(newReport).name = nameValue
+            verify(newReport).value = reportValue
             verify(newReport).bytesTruncated = bytesTruncatedValue
             verify(eventSaver).identifyAndSaveReport(newReport)
         }
