@@ -4,6 +4,7 @@ import io.appmetrica.analytics.impl.CounterReport
 import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.component.ComponentId
 import io.appmetrica.analytics.impl.component.ComponentUnit
+import io.appmetrica.analytics.impl.db.VitalComponentDataProvider
 import io.appmetrica.analytics.impl.modules.ModuleEventHandlersHolder
 import io.appmetrica.analytics.modulesapi.internal.service.event.ModuleEventServiceHandlerContext
 import io.appmetrica.analytics.modulesapi.internal.service.event.ModuleServiceEventHandler
@@ -19,6 +20,7 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.inOrder
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
+import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
@@ -29,12 +31,16 @@ class ModulesEventHandlerTest : CommonTest() {
 
     private val apiKey = UUID.randomUUID().toString()
 
+    private val vitalComponentDataProvider: VitalComponentDataProvider = mock {
+        on { isFirstEventDone } doReturn true
+    }
     private val componentId = mock<ComponentId> {
         on { apiKey } doReturn apiKey
     }
 
     private val component = mock<ComponentUnit> {
         on { componentId } doReturn componentId
+        on { vitalComponentDataProvider } doReturn vitalComponentDataProvider
     }
 
     private val currentReport = mock<CounterReport>()
@@ -95,6 +101,13 @@ class ModulesEventHandlerTest : CommonTest() {
             verify(secondModuleEventHandler).handle(secondModuleEventHandlerContext, currentReport)
             verify(thirdModuleEventHandler).handle(thirdModuleEventHandlerContext, currentReport)
         }
+    }
+
+    @Test
+    fun `process if first event hasn't happened yet`() {
+        whenever(vitalComponentDataProvider.isFirstEventDone).thenReturn(false)
+        assertThat(modulesEventHandler.process(currentReport)).isFalse()
+        verifyNoInteractions(firstModuleEventHandler, secondModuleEventHandler, thirdModuleEventHandler)
     }
 
     @Test

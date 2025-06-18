@@ -22,13 +22,18 @@ class ModulesEventHandler(component: ComponentUnit) : ReportComponentHandler(com
         }
 
     override fun process(reportData: CounterReport): Boolean {
-        DebugLogger.info(
-            tag,
-            "Apply ${processingChain.size} module handlers to report with type = " +
-                "${reportData.type}; customType = ${reportData.customType}; name = ${reportData.name}"
-        )
-        return processingChain.any { (handler, contextProvider) ->
-            handler.handle(contextProvider.getContext(reportData), reportData)
+        if (component.vitalComponentDataProvider.isFirstEventDone) {
+            DebugLogger.info(
+                tag,
+                "Apply ${processingChain.size} module handlers to report with type = " +
+                    "${reportData.type}; customType = ${reportData.customType}; name = ${reportData.name}"
+            )
+            return processingChain.any { (handler, contextProvider) ->
+                handler.handle(contextProvider.getContext(reportData), reportData)
+            }
+        } else {
+            DebugLogger.info(tag, "First event hasn't happened yet. Ignore.")
+            return false
         }
     }
 }
