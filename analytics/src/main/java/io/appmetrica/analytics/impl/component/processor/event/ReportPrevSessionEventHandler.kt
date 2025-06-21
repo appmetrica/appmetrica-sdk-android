@@ -13,6 +13,6 @@ class ReportPrevSessionEventHandler(
     override fun process(reportData: CounterReport): Boolean {
         DebugLogger.info(tag, "handle report: ${reportData.name}")
         component.eventSaver.saveReportFromPrevSession(reportData)
-        return true
+        return false
     }
 }

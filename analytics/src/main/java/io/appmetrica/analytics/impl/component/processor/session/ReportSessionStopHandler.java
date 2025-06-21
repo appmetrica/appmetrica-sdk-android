@@ -17,6 +17,6 @@ public class ReportSessionStopHandler extends ReportComponentHandler {
         getComponent().getSessionManager().stopCurrentSessionDueToCrash(
                 reportData
         );
-        return false;
+        return true;
     }
 }

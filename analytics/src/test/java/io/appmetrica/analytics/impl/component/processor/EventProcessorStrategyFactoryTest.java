@@ -170,8 +170,8 @@ public class EventProcessorStrategyFactoryTest extends CommonTest {
             mEventProcessingStrategyFactory.getHandlersProvider().getReportSessionHandler(),
             mEventProcessingStrategyFactory.getHandlersProvider().getReportPurgeBufferHandler(),
             mEventProcessingStrategyFactory.getHandlersProvider().getReportSaveToDatabaseHandler(),
-            mEventProcessingStrategyFactory.getHandlersProvider().getReportSessionStopHandler(),
-            mEventProcessingStrategyFactory.getHandlersProvider().getReportCrashMetaInformation()
+            mEventProcessingStrategyFactory.getHandlersProvider().getReportCrashMetaInformation(),
+            mEventProcessingStrategyFactory.getHandlersProvider().getReportSessionStopHandler()
         );
     }
 
@@ -313,7 +313,8 @@ public class EventProcessorStrategyFactoryTest extends CommonTest {
         assertThat(getHandlers(EVENT_TYPE_PREV_SESSION_NATIVE_CRASH_PROTOBUF))
             .containsExactly(
                 mEventProcessingStrategyFactory.getHandlersProvider().getReportPrevSessionEventHandler(),
-                mEventProcessingStrategyFactory.getHandlersProvider().getReportPurgeBufferHandler()
+                mEventProcessingStrategyFactory.getHandlersProvider().getReportPurgeBufferHandler(),
+                mEventProcessingStrategyFactory.getHandlersProvider().getReportSessionStopHandler()
             );
     }
 

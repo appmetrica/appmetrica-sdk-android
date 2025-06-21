@@ -51,8 +51,8 @@ public class ReportSessionStopHandlerTest extends CommonTest {
     }
 
     @Test
-    public void testProcessShouldNotBreakProcessing() {
-        assertThat(reportSessionStopHandler.process(new CounterReport())).isFalse();
+    public void testProcessShouldBreakProcessing() {
+        assertThat(reportSessionStopHandler.process(new CounterReport())).isTrue();
     }
 
 }

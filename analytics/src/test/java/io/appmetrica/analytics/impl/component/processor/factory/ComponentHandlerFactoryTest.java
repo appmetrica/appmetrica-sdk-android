@@ -209,8 +209,8 @@ public class ComponentHandlerFactoryTest extends CommonTest {
         assertThat(mHandlersList).containsExactly(
             mReportPurgeBufferHandler,
             mReportSaveToDatabaseHandler,
-            mReportSessionStopHandler,
-            reportCrashMetaInformation
+            reportCrashMetaInformation,
+            mReportSessionStopHandler
         );
     }
 
@@ -241,7 +241,8 @@ public class ComponentHandlerFactoryTest extends CommonTest {
         factory.addHandlers(mHandlersList);
         assertThat(mHandlersList).containsExactly(
             mReportPrevSessionEventHandler,
-            mReportPurgeBufferHandler
+            mReportPurgeBufferHandler,
+            mReportSessionStopHandler
         );
     }
 

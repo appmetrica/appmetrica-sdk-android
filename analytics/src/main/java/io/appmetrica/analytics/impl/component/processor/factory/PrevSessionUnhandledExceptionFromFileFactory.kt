@@ -9,5 +9,6 @@ class PrevSessionUnhandledExceptionFromFileFactory(
     override fun addHandlers(reportHandlers: MutableList<ReportComponentHandler>) {
         reportHandlers.add(provider.reportCrashMetaInformation)
         reportHandlers.add(provider.reportPrevSessionEventHandler)
+        reportHandlers.add(provider.reportSessionStopHandler)
     }
 }
