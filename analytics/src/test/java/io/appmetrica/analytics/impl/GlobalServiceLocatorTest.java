@@ -3,6 +3,7 @@ package io.appmetrica.analytics.impl;
 import android.content.Context;
 import io.appmetrica.analytics.coreapi.internal.data.ProtobufStateStorage;
 import io.appmetrica.analytics.coreapi.internal.identifiers.PlatformIdentifiers;
+import io.appmetrica.analytics.coreapi.internal.io.IExecutionPolicy;
 import io.appmetrica.analytics.coreutils.internal.ReferenceHolder;
 import io.appmetrica.analytics.coreutils.internal.services.FirstExecutionConditionServiceImpl;
 import io.appmetrica.analytics.coreutils.internal.services.UtilityServiceProvider;
@@ -16,6 +17,9 @@ import io.appmetrica.analytics.impl.clids.ClidsStateProvider;
 import io.appmetrica.analytics.impl.clids.SatelliteClidsInfoProvider;
 import io.appmetrica.analytics.impl.db.state.factory.StorageFactory;
 import io.appmetrica.analytics.impl.id.AdvertisingIdGetter;
+import io.appmetrica.analytics.impl.network.CompositeExecutionPolicy;
+import io.appmetrica.analytics.impl.network.ConnectionBasedExecutionPolicy;
+import io.appmetrica.analytics.impl.network.ReporterRestrictionBasedPolicy;
 import io.appmetrica.analytics.impl.network.http.BaseSslSocketFactoryProvider;
 import io.appmetrica.analytics.impl.network.http.SslSocketFactoryProviderImpl;
 import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoCandidatesHelper;
@@ -161,6 +165,22 @@ public class GlobalServiceLocatorTest extends CommonTest {
     public final MockedConstructionRule<ReferenceHolder> referenceHolderMockedConstructionRule =
         new MockedConstructionRule<>(ReferenceHolder.class);
 
+    @Rule
+    public final MockedConstructionRule<CompositeExecutionPolicy> compositeExecutionPolicyMockedConstructionRule =
+        new MockedConstructionRule<>(CompositeExecutionPolicy.class);
+
+    @Rule
+    public final MockedConstructionRule<DataSendingRestrictionControllerImpl> dataRestrictionControllerRule =
+        new MockedConstructionRule<>(DataSendingRestrictionControllerImpl.class);
+
+    @Rule
+    public final MockedConstructionRule<ReporterRestrictionBasedPolicy> dataRestrictionBasedPolicyRule =
+        new MockedConstructionRule<>(ReporterRestrictionBasedPolicy.class);
+
+    @Rule
+    public final MockedConstructionRule<ConnectionBasedExecutionPolicy> connectionBasedPolicyRule =
+        new MockedConstructionRule<>(ConnectionBasedExecutionPolicy.class);
+
     @Mock
     private StorageFactory<ClidsInfo> clidsStorageFactory;
     @Mock
@@ -219,10 +239,48 @@ public class GlobalServiceLocatorTest extends CommonTest {
         networkServiceLocatorMockedStaticRule.getStaticMock().verify(new MockedStatic.Verification() {
             @Override
             public void apply() throws Throwable {
-                NetworkServiceLocator.init();
+                NetworkServiceLocator.init(
+                    compositeExecutionPolicyMockedConstructionRule.getConstructionMock().constructed().get(0)
+                );
             }
         });
         inOrder.verifyNoMoreInteractions();
+    }
+
+    @Test
+    public void initAsyncPolicyCreation() {
+        GlobalServiceLocator.init(mContext);
+        mGlobalServiceLocator = GlobalServiceLocator.getInstance();
+        mGlobalServiceLocator.initAsync();
+
+        networkServiceLocatorMockedStaticRule.getStaticMock().verify(new MockedStatic.Verification() {
+            @Override
+            public void apply() throws Throwable {
+                NetworkServiceLocator.init(
+                    compositeExecutionPolicyMockedConstructionRule.getConstructionMock().constructed().get(0)
+                );
+            }
+        });
+
+        assertThat(compositeExecutionPolicyMockedConstructionRule.getConstructionMock().constructed()).hasSize(1);
+        assertThat(compositeExecutionPolicyMockedConstructionRule.getArgumentInterceptor().flatArguments())
+            .hasSize(1);
+        assertThat(
+            ((IExecutionPolicy[])
+                compositeExecutionPolicyMockedConstructionRule.getArgumentInterceptor().flatArguments().get(0))
+        )
+            .containsExactly(
+                dataRestrictionBasedPolicyRule.getConstructionMock().constructed().get(0),
+                connectionBasedPolicyRule.getConstructionMock().constructed().get(0)
+            );
+
+        assertThat(dataRestrictionBasedPolicyRule.getConstructionMock().constructed()).hasSize(1);
+        assertThat(dataRestrictionBasedPolicyRule.getArgumentInterceptor().flatArguments())
+            .containsExactly(dataRestrictionControllerRule.getConstructionMock().constructed().get(0));
+
+        assertThat(connectionBasedPolicyRule.getConstructionMock().constructed()).hasSize(1);
+        assertThat(connectionBasedPolicyRule.getArgumentInterceptor().flatArguments())
+            .containsExactly(mContext);
     }
 
     @Test

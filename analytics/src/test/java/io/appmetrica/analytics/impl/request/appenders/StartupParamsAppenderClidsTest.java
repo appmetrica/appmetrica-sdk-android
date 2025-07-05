@@ -59,7 +59,6 @@ public class StartupParamsAppenderClidsTest extends CommonTest {
         when(GlobalServiceLocator.getInstance().getDataSendingRestrictionController())
             .thenReturn(dataSendingRestrictionController);
         when(dataSendingRestrictionController.isRestrictedForSdk()).thenReturn(true);
-        when(dataSendingRestrictionController.isRestrictedForReporter()).thenReturn(true);
         chosenClids = new HashMap<String, String>();
         chosenClids.put("clid00", "0");
         chosenClids.put("clid11", "1");

@@ -32,6 +32,9 @@ import io.appmetrica.analytics.impl.location.LocationClientApi;
 import io.appmetrica.analytics.impl.modules.ModuleEntryPointsRegister;
 import io.appmetrica.analytics.impl.modules.ModuleEventHandlersHolder;
 import io.appmetrica.analytics.impl.modules.service.ServiceModulesController;
+import io.appmetrica.analytics.impl.network.CompositeExecutionPolicy;
+import io.appmetrica.analytics.impl.network.ConnectionBasedExecutionPolicy;
+import io.appmetrica.analytics.impl.network.ReporterRestrictionBasedPolicy;
 import io.appmetrica.analytics.impl.network.http.BaseSslSocketFactoryProvider;
 import io.appmetrica.analytics.impl.network.http.SslSocketFactoryProviderImpl;
 import io.appmetrica.analytics.impl.permissions.SimplePermissionExtractor;
@@ -160,7 +163,12 @@ public final class GlobalServiceLocator {
         utilityServiceProvider.initAsync();
         startupStateHolder.init(mContext);
         startupStateHolder.registerObserver(new UtilityServiceStartupStateObserver(utilityServiceProvider));
-        NetworkServiceLocator.init();
+        NetworkServiceLocator.init(
+            new CompositeExecutionPolicy(
+                new ReporterRestrictionBasedPolicy(getDataSendingRestrictionController()),
+                new ConnectionBasedExecutionPolicy(mContext)
+            )
+        );
         getLifecycleDependentComponentManager().addLifecycleObserver(networkServiceLifecycleObserver);
         initPreloadInfoStorage();
     }

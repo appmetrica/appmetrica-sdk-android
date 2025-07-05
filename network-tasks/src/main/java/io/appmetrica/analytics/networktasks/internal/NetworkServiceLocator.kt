@@ -2,13 +2,16 @@ package io.appmetrica.analytics.networktasks.internal
 
 import androidx.annotation.AnyThread
 import androidx.annotation.VisibleForTesting
+import io.appmetrica.analytics.coreapi.internal.io.IExecutionPolicy
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
-class NetworkServiceLocator @AnyThread @VisibleForTesting constructor() : NetworkServiceLifecycleObserver {
+class NetworkServiceLocator @AnyThread @VisibleForTesting constructor(
+    executionPolicy: IExecutionPolicy,
+) : NetworkServiceLifecycleObserver {
 
     private val tag = "[NetworkServiceLocator]"
 
-    val networkCore: NetworkCore = NetworkCore().apply {
+    val networkCore: NetworkCore = NetworkCore(executionPolicy).apply {
         name = "IAA-NC"
         start()
         DebugLogger.info(tag, "network core started")
@@ -35,11 +38,11 @@ class NetworkServiceLocator @AnyThread @VisibleForTesting constructor() : Networ
 
         @JvmStatic
         @AnyThread
-        fun init() {
+        fun init(executionPolicy: IExecutionPolicy) {
             if (!::instance.isInitialized) {
                 synchronized(NetworkServiceLocator::class.java) {
                     if (!::instance.isInitialized) {
-                        instance = NetworkServiceLocator()
+                        instance = NetworkServiceLocator(executionPolicy)
                     }
                 }
             }

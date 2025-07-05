@@ -129,6 +129,7 @@ public class MainReporterComponentUnit extends ComponentUnit
     @Override
     public synchronized void updateSdkConfig(@NonNull CommonArguments.ReporterArguments sdkConfig) {
         super.updateSdkConfig(sdkConfig);
+        DebugLogger.INSTANCE.info(TAG, "updateSdkConfig: %s", sdkConfig);
         dateSendingRestrictionController.setEnabledFromMainReporter(sdkConfig.dataSendingEnabled);
     }
 

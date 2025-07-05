@@ -90,55 +90,20 @@ public class DataSendingRestrictionControllerImpl implements DataSendingRestrict
     }
 
     @Override
-    public synchronized boolean isRestrictedForReporter() {
-        boolean result = mRestrictedInMainReporter == null
-                ? mEnabledReporters.isEmpty() && mRestrictedReporters.isEmpty()
-                : mRestrictedInMainReporter;
-
-        DebugLogger.INSTANCE.info(
-            TAG,
-            "isRestrictedForReporter = %b (mRestrictedInMainReporter = %s; mEnabledReportersCount = %d); " +
-                "mRestrictedReportersCount = %d",
-            result,
-            mRestrictedInMainReporter == null ? "null" : String.valueOf(mRestrictedInMainReporter),
-            mEnabledReporters.size(),
-            mRestrictedReporters.size()
-        );
-
-        return result;
-    }
-
-    @Override
     public synchronized boolean isRestrictedForSdk() {
 
         boolean result = mRestrictedInMainReporter == null ? mEnabledReporters.isEmpty() : mRestrictedInMainReporter;
 
         DebugLogger.INSTANCE.info(
             TAG,
-            "isRestrictedForAppMetrica = %b (mRestrictedInMainReporter = %s); mEnabledReportersCount = %d",
+            "isRestrictedForAppMetrica = %b (restrictedInMainReporter = %s); enabledReportersCount = %d; " +
+                "restrictedReportersCount = %d",
             result,
             mRestrictedInMainReporter == null ? "null" : String.valueOf(mRestrictedInMainReporter),
-            mEnabledReporters.size()
+            mEnabledReporters.size(),
+            mRestrictedReporters.size()
         );
 
-        return result;
-    }
-
-    @Override
-    public boolean isRestrictedForBackgroundDataCollection() {
-        boolean result = mRestrictedInMainReporter == null
-                ? !mRestrictedReporters.isEmpty() || mEnabledReporters.isEmpty()
-                : mRestrictedInMainReporter;
-
-        DebugLogger.INSTANCE.info(
-            TAG,
-            "isRestrictedForBackgroundDataCollection = %b (mRestrictedInMainReporter = %s; " +
-                "mRestrictedReporters = %s; mEnabledReporters = %s)",
-            result,
-            String.valueOf(mRestrictedInMainReporter),
-            mRestrictedReporters.size(),
-            mEnabledReporters.size()
-        );
         return result;
     }
 }

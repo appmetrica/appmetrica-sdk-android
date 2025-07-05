@@ -3,6 +3,7 @@ package io.appmetrica.analytics.networktasks.internal;
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.executors.InterruptionSafeThread;
+import io.appmetrica.analytics.coreapi.internal.io.IExecutionPolicy;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import io.appmetrica.analytics.networktasks.impl.NetworkTaskRunnable;
 import java.util.ArrayList;
@@ -21,18 +22,32 @@ public class NetworkCore extends InterruptionSafeThread {
     private volatile QueueTaskEntry mCurrentTask;
     @NonNull
     private final NetworkTaskRunnable.Provider runnableProvider;
+    @NonNull
+    private final IExecutionPolicy executionPolicy;
 
-    public NetworkCore() {
-        this(new NetworkTaskRunnable.Provider());
+    public NetworkCore(@NonNull IExecutionPolicy executionPolicy) {
+        this(executionPolicy, new NetworkTaskRunnable.Provider());
     }
 
     @VisibleForTesting
-    NetworkCore(@NonNull NetworkTaskRunnable.Provider runnableProvider) {
+    NetworkCore(
+        @NonNull IExecutionPolicy executionPolicy,
+        @NonNull NetworkTaskRunnable.Provider runnableProvider
+    ) {
+        this.executionPolicy = executionPolicy;
         this.runnableProvider = runnableProvider;
     }
 
     public void startTask(final NetworkTask networkTask) {
         DebugLogger.INSTANCE.info(TAG, "Try to start task %s", networkTask.description());
+        if (!executionPolicy.canBeExecuted()) {
+            DebugLogger.INSTANCE.info(
+                TAG,
+                "Task %s cannot be executed due to execution policy.",
+                networkTask.description()
+            );
+            return;
+        }
         synchronized (mAddTaskLock) {
             final QueueTaskEntry taskEntry = new QueueTaskEntry(networkTask);
 

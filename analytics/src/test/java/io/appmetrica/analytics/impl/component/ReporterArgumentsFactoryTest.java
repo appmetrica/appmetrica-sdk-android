@@ -36,7 +36,7 @@ public class ReporterArgumentsFactoryTest extends CommonTest {
                                         boolean configuration,
                                         boolean result
     ) {
-        doReturn(controller).when(mController).isRestrictedForReporter();
+        doReturn(controller).when(mController).isRestrictedForSdk();
         doReturn(configuration).when(mConfiguration).getDataSendingEnabled();
         mResult = result;
     }

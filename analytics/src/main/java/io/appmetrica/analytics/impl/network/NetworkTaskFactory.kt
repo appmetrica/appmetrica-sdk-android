@@ -48,7 +48,9 @@ internal object NetworkTaskFactory {
         val requestConfigProvider = LazyReportConfigProvider(component)
         return NetworkTask(
             BlockingExecutor(),
-            ExecutionPolicyBasedOnConnection(component.context),
+            ConnectionBasedExecutionPolicy(
+                component.context
+            ),
             AllHostsExponentialBackoffPolicy(getBackoffHolder(NetworkHost.REPORT)),
             ReportTask(
                 component,
@@ -72,7 +74,9 @@ internal object NetworkTaskFactory {
         val configProvider = FinalConfigProvider(requestConfig)
         return NetworkTask(
             SynchronizedBlockingExecutor(),
-            ExecutionPolicyBasedOnConnection(startupUnit.context),
+            ConnectionBasedExecutionPolicy(
+                startupUnit.context
+            ),
             AllHostsExponentialBackoffPolicy(getBackoffHolder(NetworkHost.STARTUP)),
             StartupTask(
                 startupUnit,

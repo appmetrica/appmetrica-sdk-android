@@ -2,13 +2,13 @@ package io.appmetrica.analytics.impl.modules
 
 import android.content.Context
 import io.appmetrica.analytics.impl.GlobalServiceLocator
-import io.appmetrica.analytics.impl.network.ExecutionPolicyBasedOnConnection
+import io.appmetrica.analytics.impl.network.CompositeExecutionPolicy
+import io.appmetrica.analytics.impl.network.ConnectionBasedExecutionPolicy
+import io.appmetrica.analytics.impl.network.ReporterRestrictionBasedPolicy
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
-import io.appmetrica.analytics.testutils.MockedConstructionRule
 import io.appmetrica.analytics.testutils.constructionRule
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -22,19 +22,20 @@ class NetworkContextImplTest : CommonTest() {
     val globalServiceLocatorRule = GlobalServiceLocatorRule()
 
     @get:Rule
-    val executionPolicyMockedRule = MockedConstructionRule(ExecutionPolicyBasedOnConnection::class.java)
+    val connectionBasePolicyRule = constructionRule<ConnectionBasedExecutionPolicy>()
+
+    @get:Rule
+    val reporterRestrictionBasedPolicyRule = constructionRule<ReporterRestrictionBasedPolicy>()
+
+    @get:Rule
+    val compositeExecutionPolicyRule = constructionRule<CompositeExecutionPolicy>()
 
     @get:Rule
     val networkApiMockedConstructionRule = constructionRule<SimpleNetworkApiImpl>()
 
     private val context = mock<Context>()
 
-    private lateinit var networkContextImpl: NetworkContextImpl
-
-    @Before
-    fun setUp() {
-        networkContextImpl = NetworkContextImpl(context)
-    }
+    private val networkContextImpl by setUp { NetworkContextImpl(context) }
 
     @Test
     fun sslSocketFactoryProvider() {
@@ -45,9 +46,22 @@ class NetworkContextImplTest : CommonTest() {
     @Test
     fun executionPolicy() {
         assertThat(networkContextImpl.executionPolicy)
-            .isEqualTo(executionPolicyMockedRule.constructionMock.constructed()[0])
-        assertThat(executionPolicyMockedRule.constructionMock.constructed()).hasSize(1)
-        assertThat(executionPolicyMockedRule.argumentInterceptor.flatArguments()).containsExactly(context)
+            .isEqualTo(compositeExecutionPolicyRule.constructionMock.constructed()[0])
+        assertThat(compositeExecutionPolicyRule.constructionMock.constructed()).hasSize(1)
+        assertThat(compositeExecutionPolicyRule.argumentInterceptor.flatArguments()).containsExactly(
+            arrayOf(
+                connectionBasePolicyRule.constructionMock.constructed().first(),
+                reporterRestrictionBasedPolicyRule.constructionMock.constructed().first()
+            )
+        )
+
+        assertThat(connectionBasePolicyRule.constructionMock.constructed()).hasSize(1)
+        assertThat(connectionBasePolicyRule.argumentInterceptor.flatArguments())
+            .containsExactly(context)
+
+        assertThat(reporterRestrictionBasedPolicyRule.constructionMock.constructed()).hasSize(1)
+        assertThat(reporterRestrictionBasedPolicyRule.argumentInterceptor.flatArguments())
+            .containsExactly(GlobalServiceLocator.getInstance().dataSendingRestrictionController)
     }
 
     @Test

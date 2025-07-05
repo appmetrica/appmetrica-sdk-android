@@ -352,6 +352,16 @@ public class DefaultOneShotMetricaConfigTest extends CommonTest {
     }
 
     @Test
+    public void setReportsHandler() {
+        DefaultOneShotMetricaConfig config = new DefaultOneShotMetricaConfig();
+        config.setAdvIdentifiersTracking(true);
+        config.setLocationTracking(false);
+        config.setDataSendingEnabled(false);
+        config.setReportsHandler(mReportsHandler);
+        verify(mReportsHandler).updatePreActivationConfig(false, false, true);
+    }
+
+    @Test
     public void testProxyLocationTracking() {
         DefaultOneShotMetricaConfig config = new DefaultOneShotMetricaConfig();
         config.setReportsHandler(mReportsHandler);

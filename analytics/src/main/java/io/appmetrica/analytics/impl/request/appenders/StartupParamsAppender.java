@@ -173,7 +173,7 @@ public class StartupParamsAppender implements IParamsAppender<StartupRequestConf
                                         @NonNull DataSendingRestrictionController controller,
                                         @NonNull LiveConfigProvider liveConfigProvider) {
         AdvertisingIdsHolder advertisingIdsHolder = liveConfigProvider.getAdvertisingIdentifiers();
-        if (advertisingIdsHolder == null || controller.isRestrictedForReporter()) {
+        if (advertisingIdsHolder == null || controller.isRestrictedForSdk()) {
             uriBuilder.appendQueryParameter(
                 mObfuscator.obfuscate(CommonUrlParts.ADV_ID), "");
             uriBuilder.appendQueryParameter(

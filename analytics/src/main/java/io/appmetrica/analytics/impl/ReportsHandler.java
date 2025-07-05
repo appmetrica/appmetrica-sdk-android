@@ -120,8 +120,8 @@ public class ReportsHandler {
                                    @Nullable Boolean advIdentifiersTrackingEnabled) {
         DebugLogger.INSTANCE.info(
             TAG,
-            "updatePreActivationConfig. locationTracking = %b, dataSendingEnabled = %b; " +
-                "advIdentifiersTrackingEnabled = %b",
+            "updatePreActivationConfig. locationTracking = %s, dataSendingEnabled = %s; " +
+                "advIdentifiersTrackingEnabled = %s",
             locationTracking,
             dataSendingEnabled,
             advIdentifiersTrackingEnabled

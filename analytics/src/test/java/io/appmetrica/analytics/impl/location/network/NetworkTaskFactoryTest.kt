@@ -13,8 +13,8 @@ import io.appmetrica.analytics.impl.StartupTask
 import io.appmetrica.analytics.impl.Utils
 import io.appmetrica.analytics.impl.component.ComponentUnit
 import io.appmetrica.analytics.impl.db.VitalComponentDataProvider
+import io.appmetrica.analytics.impl.network.ConnectionBasedExecutionPolicy
 import io.appmetrica.analytics.impl.network.Constants
-import io.appmetrica.analytics.impl.network.ExecutionPolicyBasedOnConnection
 import io.appmetrica.analytics.impl.network.HostRetryInfoProviderImpl
 import io.appmetrica.analytics.impl.network.NetworkHost
 import io.appmetrica.analytics.impl.network.NetworkTaskFactory
@@ -39,6 +39,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito
+import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
@@ -55,8 +56,14 @@ internal class NetworkTaskFactoryTest : CommonTest() {
     val counterReport = mock<CounterReport>()
     val vitalComponentDataProvider = mock<VitalComponentDataProvider>()
     val notIsBadRequestCondition = mock<NetworkTask.ShouldTryNextHostCondition>()
-    val componentUnit = mock<ComponentUnit>()
-    val startupUnit = mock<StartupUnit>()
+
+    val componentUnit = mock<ComponentUnit> {
+        on { context } doReturn context
+    }
+
+    val startupUnit = mock<StartupUnit> {
+        on { context } doReturn context
+    }
     val startupRequestConfig = mock<StartupRequestConfig>()
 
     @get:Rule
@@ -95,7 +102,7 @@ internal class NetworkTaskFactoryTest : CommonTest() {
             .withPrivateFields(true)
             .checkFieldIsInstanceOf("executor", BlockingExecutor::class.java)
             .checkFieldIsInstanceOf(
-                "connectionBasedExecutionPolicy", ExecutionPolicyBasedOnConnection::class.java
+                "connectionBasedExecutionPolicy", ConnectionBasedExecutionPolicy::class.java
             )
             .checkFieldRecursively<ExponentialBackoffPolicy>("exponentialBackoffPolicy") {
                 it
@@ -164,7 +171,7 @@ internal class NetworkTaskFactoryTest : CommonTest() {
                 .withPrivateFields(true)
                 .checkFieldIsInstanceOf("executor", BlockingExecutor::class.java)
                 .checkFieldIsInstanceOf(
-                    "connectionBasedExecutionPolicy", ExecutionPolicyBasedOnConnection::class.java
+                    "connectionBasedExecutionPolicy", ConnectionBasedExecutionPolicy::class.java
                 )
                 .checkFieldRecursively<ExponentialBackoffPolicy>("exponentialBackoffPolicy") { policyAssertions ->
                     policyAssertions

@@ -1,5 +1,6 @@
 package io.appmetrica.analytics.networktasks.internal
 
+import io.appmetrica.analytics.coreapi.internal.io.IExecutionPolicy
 import io.appmetrica.analytics.networktasks.impl.NetworkTaskRunnable
 import io.appmetrica.analytics.testutils.CommonTest
 import org.junit.After
@@ -35,8 +36,12 @@ internal class NetworkCoreTest : CommonTest() {
         on { this.onTaskAdded() } doReturn true
         on { this.description() } doReturn description
     }
+    private val executionPolicy: IExecutionPolicy = mock {
+        on { canBeExecuted() } doReturn true
+    }
+
     private val networkCore =
-        NetworkCore(runnableProvider)
+        NetworkCore(executionPolicy, runnableProvider)
 
     @Before
     fun setUp() {
@@ -49,6 +54,13 @@ internal class NetworkCoreTest : CommonTest() {
         try {
             networkCore.stopRunning()
         } catch (ignored: Throwable) { }
+    }
+
+    @Test
+    fun addTaskIfExecutionPolicyForbid() {
+        whenever(executionPolicy.canBeExecuted()).thenReturn(false)
+        networkCore.startTask(networkTask)
+        verify(executor, timeout(500).times(0)).execute(any())
     }
 
     @Test

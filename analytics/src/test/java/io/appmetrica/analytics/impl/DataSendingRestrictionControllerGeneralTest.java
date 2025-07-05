@@ -40,31 +40,31 @@ public class DataSendingRestrictionControllerGeneralTest extends CommonTest {
     @Test
     public void testEnabledFromMainReporterNull() {
         mController.setEnabledFromMainReporter(null);
-        assertThat(mController.isRestrictedForReporter()).isFalse();
+        assertThat(mController.isRestrictedForSdk()).isFalse();
     }
 
     @Test
     public void testEnabledFromMainReporterWasFalseThenNull() {
         mController.setEnabledFromMainReporter(false);
-        assertThat(mController.isRestrictedForReporter()).isTrue();
+        assertThat(mController.isRestrictedForSdk()).isTrue();
         mController.setEnabledFromMainReporter(null);
-        assertThat(mController.isRestrictedForReporter()).isTrue();
+        assertThat(mController.isRestrictedForSdk()).isTrue();
     }
 
     @Test
     public void testEnabledFromMainReporterWasFalseThenTrue() {
         mController.setEnabledFromMainReporter(false);
-        assertThat(mController.isRestrictedForReporter()).isTrue();
+        assertThat(mController.isRestrictedForSdk()).isTrue();
         mController.setEnabledFromMainReporter(true);
-        assertThat(mController.isRestrictedForReporter()).isFalse();
+        assertThat(mController.isRestrictedForSdk()).isFalse();
     }
 
     @Test
     public void testEnabledFromMainReporterWasTrueThenFalse() {
         mController.setEnabledFromMainReporter(true);
-        assertThat(mController.isRestrictedForReporter()).isFalse();
+        assertThat(mController.isRestrictedForSdk()).isFalse();
         mController.setEnabledFromMainReporter(false);
-        assertThat(mController.isRestrictedForReporter()).isTrue();
+        assertThat(mController.isRestrictedForSdk()).isTrue();
     }
 
     @RunWith(RobolectricTestRunner.class)

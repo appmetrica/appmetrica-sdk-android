@@ -1,5 +1,6 @@
 package io.appmetrica.analytics.impl.startup
 
+import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.testutils.staticRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
@@ -41,7 +42,6 @@ internal class StartupUnitIsStartupRequiredTest : StartupUnitBaseTest() {
         ).thenReturn(true)
         assertThat(startupUnit.isStartupRequired()).isFalse()
     }
-
     @Test
     fun startupIsRequiredBecauseClidsDoNotMatch() {
         val startupState = mock<StartupState>()
@@ -88,6 +88,24 @@ internal class StartupUnitIsStartupRequiredTest : StartupUnitBaseTest() {
             )
         ).thenReturn(true)
         assertThat(startupUnit.isStartupRequired()).isTrue()
+    }
+
+    @Test
+    fun startupIsRequiredIfIsOutdatedDataIsRestricted() {
+        val startupState = mock<StartupState>()
+        whenever(startupConfigurationHolder.startupState).thenReturn(startupState)
+        whenever(StartupRequiredUtils.isOutdated(startupState)).thenReturn(true)
+        whenever(StartupRequiredUtils.areMainIdentifiersValid(startupState)).thenReturn(true)
+        whenever(
+            clidsStateChecker.doChosenClidsForRequestMatchLastRequestClids(
+                clientClids,
+                startupState,
+                clidsStorage
+            )
+        ).thenReturn(true)
+        whenever(GlobalServiceLocator.getInstance().dataSendingRestrictionController.isRestrictedForSdk)
+            .thenReturn(true)
+        assertThat(startupUnit.isStartupRequired()).isFalse()
     }
 
     @Test

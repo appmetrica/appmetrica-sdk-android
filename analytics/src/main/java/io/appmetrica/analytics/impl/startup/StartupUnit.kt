@@ -3,6 +3,7 @@ package io.appmetrica.analytics.impl.startup
 import android.content.Context
 import androidx.annotation.VisibleForTesting
 import io.appmetrica.analytics.coreutils.internal.StringUtils
+import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.Utils
 import io.appmetrica.analytics.impl.component.ComponentId
 import io.appmetrica.analytics.impl.component.IBaseComponent
@@ -95,6 +96,10 @@ internal class StartupUnit(
 
     @Synchronized
     fun isStartupRequired(): Boolean {
+        if (GlobalServiceLocator.getInstance().dataSendingRestrictionController.isRestrictedForSdk) {
+            DebugLogger.info(tag, "Startup restricted by data sending restriction policy.")
+            return false
+        }
         val startupState = startupState
         var required = StartupRequiredUtils.isOutdated(startupState)
         DebugLogger.info(tag, "isStartupOutdated: $required")

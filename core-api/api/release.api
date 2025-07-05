@@ -64,8 +64,6 @@ public final class io.appmetrica.analytics.coreapi.internal.constants.DeviceType
 public static final class io.appmetrica.analytics.coreapi.internal.constants.DeviceTypeValues$Companion
 
 public interface io.appmetrica.analytics.coreapi.internal.control.DataSendingRestrictionController {
-    public abstract boolean isRestrictedForBackgroundDataCollection()
-    public abstract boolean isRestrictedForReporter()
     public abstract boolean isRestrictedForSdk()
 }
 
@@ -318,6 +316,7 @@ public interface io.appmetrica.analytics.coreapi.internal.io.Compressor {
 
 public interface io.appmetrica.analytics.coreapi.internal.io.IExecutionPolicy {
     public abstract boolean canBeExecuted()
+    public abstract String description()
 }
 
 public interface io.appmetrica.analytics.coreapi.internal.io.SslSocketFactoryProvider {

@@ -582,7 +582,7 @@ public class StartupParamsAppenderTest extends CommonTest {
 
         @Test
         public void testGaid() {
-            doReturn(false).when(restrictionController).isRestrictedForReporter();
+            doReturn(false).when(restrictionController).isRestrictedForSdk();
             when(mAdvertisingIdsHolder.getGoogle()).thenReturn(new AdTrackingInfoResult(
                 googleAdvInfo,
                 IdentifierStatus.OK,
@@ -594,7 +594,7 @@ public class StartupParamsAppenderTest extends CommonTest {
 
         @Test
         public void testOaid() {
-            doReturn(false).when(restrictionController).isRestrictedForReporter();
+            doReturn(false).when(restrictionController).isRestrictedForSdk();
             when(mAdvertisingIdsHolder.getHuawei()).thenReturn(new AdTrackingInfoResult(
                 huaweiAdvInfo,
                 IdentifierStatus.OK,
@@ -606,7 +606,7 @@ public class StartupParamsAppenderTest extends CommonTest {
 
         @Test
         public void yandexAdvId() {
-            doReturn(false).when(restrictionController).isRestrictedForReporter();
+            doReturn(false).when(restrictionController).isRestrictedForSdk();
             when(mAdvertisingIdsHolder.getYandex()).thenReturn(new AdTrackingInfoResult(
                 yandexAdvIdInfo,
                 IdentifierStatus.OK,
@@ -618,7 +618,7 @@ public class StartupParamsAppenderTest extends CommonTest {
 
         @Test
         public void testNoGaid() {
-            doReturn(false).when(restrictionController).isRestrictedForReporter();
+            doReturn(false).when(restrictionController).isRestrictedForSdk();
             startupParamsAppender.appendAdvIdIfAllowed(builder, restrictionController, liveConfigProvider);
             checkQueryParameter(builder, obfuscatedGaidParametedName, "");
         }
@@ -632,7 +632,7 @@ public class StartupParamsAppenderTest extends CommonTest {
 
         @Test
         public void noHoaid() {
-            doReturn(false).when(restrictionController).isRestrictedForReporter();
+            doReturn(false).when(restrictionController).isRestrictedForSdk();
             startupParamsAppender.appendAdvIdIfAllowed(builder, restrictionController, liveConfigProvider);
             checkQueryParameter(builder, obfuscatedOaidParametedName, "");
         }
@@ -646,7 +646,7 @@ public class StartupParamsAppenderTest extends CommonTest {
 
         @Test
         public void noYandexAdvId() {
-            doReturn(false).when(restrictionController).isRestrictedForReporter();
+            doReturn(false).when(restrictionController).isRestrictedForSdk();
             startupParamsAppender.appendAdvIdIfAllowed(builder, restrictionController, liveConfigProvider);
             checkQueryParameter(builder, obfuscatedYandexAdvIdParametedName, "");
         }
@@ -660,7 +660,7 @@ public class StartupParamsAppenderTest extends CommonTest {
 
         @Test
         public void dataSendingRestricted() {
-            doReturn(true).when(restrictionController).isRestrictedForReporter();
+            doReturn(true).when(restrictionController).isRestrictedForSdk();
             when(mAdvertisingIdsHolder.getGoogle()).thenReturn(new AdTrackingInfoResult(
                 googleAdvInfo,
                 IdentifierStatus.OK,
@@ -684,7 +684,7 @@ public class StartupParamsAppenderTest extends CommonTest {
 
         @Test
         public void testEmptyGAID() {
-            doReturn(false).when(restrictionController).isRestrictedForReporter();
+            doReturn(false).when(restrictionController).isRestrictedForSdk();
             when(mAdvertisingIdsHolder.getGoogle()).thenReturn(new AdTrackingInfoResult(
                 new AdTrackingInfo(AdTrackingInfo.Provider.GOOGLE, "", false),
                 IdentifierStatus.OK,
@@ -696,7 +696,7 @@ public class StartupParamsAppenderTest extends CommonTest {
 
         @Test
         public void emptyOaid() {
-            doReturn(false).when(restrictionController).isRestrictedForReporter();
+            doReturn(false).when(restrictionController).isRestrictedForSdk();
             when(mAdvertisingIdsHolder.getHuawei()).thenReturn(new AdTrackingInfoResult(
                 new AdTrackingInfo(AdTrackingInfo.Provider.HMS, "", false),
                 IdentifierStatus.OK,
@@ -708,7 +708,7 @@ public class StartupParamsAppenderTest extends CommonTest {
 
         @Test
         public void empyYandexAdvId() {
-            doReturn(false).when(restrictionController).isRestrictedForReporter();
+            doReturn(false).when(restrictionController).isRestrictedForSdk();
             when(mAdvertisingIdsHolder.getYandex()).thenReturn(new AdTrackingInfoResult(
                 new AdTrackingInfo(AdTrackingInfo.Provider.YANDEX, "", false),
                 IdentifierStatus.OK,

@@ -13,7 +13,7 @@ public class ReporterArgumentsFactory extends ReportRequestConfig.BaseDataSendin
 
     @Override
     public boolean shouldSend(@Nullable Boolean fromArguments) {
-        return !controller.isRestrictedForReporter()
+        return !controller.isRestrictedForSdk()
                 && super.shouldSend(fromArguments);
     }
 

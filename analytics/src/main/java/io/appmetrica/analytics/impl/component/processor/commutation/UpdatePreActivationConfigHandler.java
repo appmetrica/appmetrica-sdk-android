@@ -35,6 +35,18 @@ public class UpdatePreActivationConfigHandler extends CommutationHandler {
         return false;
     }
 
+    private void updateDataSendingStatus(@Nullable Boolean dataSendingEnabled) {
+        DebugLogger.INSTANCE.info(
+            TAG,
+            "Update data sending status for %s: enabled = %s",
+            getComponent().getComponentId().toString(),
+            dataSendingEnabled
+        );
+        if (dataSendingEnabled != null) {
+            mRestrictionController.setEnabledFromMainReporter(dataSendingEnabled);
+        }
+    }
+
     private void updateTrackingAdvIdentifiersStatus(@Nullable Boolean trackingEnabled) {
         DebugLogger.INSTANCE.info(
             TAG,
