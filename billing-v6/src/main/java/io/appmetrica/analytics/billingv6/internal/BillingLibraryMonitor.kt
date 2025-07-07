@@ -29,23 +29,32 @@ class BillingLibraryMonitor(
     private val updatePolicy: UpdatePolicy = UpdatePolicyImpl()
 ) : BillingMonitor, UpdateBillingProgressCallback {
 
+    private val tag = "[BillingLibraryMonitor V6]"
     private var billingConfig: BillingConfig? = null
     private var refreshInProgress = false
 
     @WorkerThread
     override fun onSessionResumed() {
-        DebugLogger.info(MODULE_TAG, "onSessionResumed with billingConfig=$billingConfig")
-        updateBilling(billingConfig)
+        try {
+            DebugLogger.info(MODULE_TAG, "onSessionResumed with billingConfig=$billingConfig")
+            updateBilling(billingConfig)
+        } catch (e: Throwable) {
+            DebugLogger.error(tag, "Error occurred during billing library call $e")
+        }
     }
 
     @Synchronized
     override fun onBillingConfigChanged(billingConfig: BillingConfig?) {
-        DebugLogger.info(MODULE_TAG, "onBillingConfigChanged: $billingConfig")
-        if (this.billingConfig == billingConfig) {
-            return
+        try {
+            DebugLogger.info(MODULE_TAG, "onBillingConfigChanged: $billingConfig")
+            if (this.billingConfig == billingConfig) {
+                return
+            }
+            this.billingConfig = billingConfig
+            updateBilling(billingConfig)
+        } catch (e: Throwable) {
+            DebugLogger.error(tag, "Error occurred during billing library call $e")
         }
-        this.billingConfig = billingConfig
-        updateBilling(billingConfig)
     }
 
     private fun updateBilling(billingConfig: BillingConfig?) {
