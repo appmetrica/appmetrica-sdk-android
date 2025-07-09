@@ -23,58 +23,69 @@ public class IdentifiersData implements Parcelable {
         "io.appmetrica.analytics.internal.CounterConfiguration.identifiersList";
     private static final String CLIDS_FOR_VERIFICATION =
         "io.appmetrica.analytics.internal.CounterConfiguration.clidsForVerification";
+    private static final String FORCE_REFRESH_CONFIGURATION =
+        "io.appmetrica.analytics.internal.CounterConfiguration.forceRefreshConfiguration";
 
     @Nullable
-    private ResultReceiver mDataReceiver;
-    @Nullable private List<String> mIdentifiers;
+    private ResultReceiver dataReceiver;
+    @Nullable
+    private List<String> identifiers;
     @NonNull
-    private Map<String, String> mClidsFromClientForVerification;
+    private Map<String, String> clidsFromClientForVerification;
+    private boolean forceRefreshConfiguration;
 
     public IdentifiersData(@Nullable List<String> identifiers,
                            @Nullable Map<String, String> clidsFromClientForVerification,
-                           @Nullable ResultReceiver receiver) {
-        mIdentifiers = identifiers;
-        mDataReceiver = receiver;
-        mClidsFromClientForVerification = clidsFromClientForVerification == null ? new HashMap<String, String>() :
-                new HashMap<String, String>(clidsFromClientForVerification);
+                           @Nullable ResultReceiver receiver,
+                           boolean forceRefreshConfiguration) {
+        this.identifiers = identifiers;
+        dataReceiver = receiver;
+        this.clidsFromClientForVerification = clidsFromClientForVerification == null ? new HashMap<String, String>() :
+            new HashMap<String, String>(clidsFromClientForVerification);
+        this.forceRefreshConfiguration = forceRefreshConfiguration;
     }
 
     public boolean isStartupConsistent(@NonNull StartupState startupState) {
         return StartupRequiredUtils.containsIdentifiers(
-                startupState,
-                mIdentifiers,
-                mClidsFromClientForVerification,
-                new Function0<ClidsInfoStorage>() {
-                    @Override
-                    public ClidsInfoStorage invoke() {
-                        return GlobalServiceLocator.getInstance().getClidsStorage();
-                    }
-                });
+            startupState,
+            identifiers,
+            clidsFromClientForVerification,
+            new Function0<ClidsInfoStorage>() {
+                @Override
+                public ClidsInfoStorage invoke() {
+                    return GlobalServiceLocator.getInstance().getClidsStorage();
+                }
+            });
     }
 
     @Nullable
     public List<String> getIdentifiersList() {
-        return mIdentifiers;
+        return identifiers;
     }
 
     @NonNull
     public Map<String, String> getClidsFromClientForVerification() {
-        return mClidsFromClientForVerification;
+        return clidsFromClientForVerification;
     }
 
     @Nullable
     public ResultReceiver getResultReceiver() {
-        return mDataReceiver;
+        return dataReceiver;
+    }
+
+    public boolean isForceRefreshConfiguration() {
+        return forceRefreshConfiguration;
     }
 
     protected IdentifiersData(Parcel in) {
         Bundle bundle = in.readBundle(DataResultReceiver.class.getClassLoader());
         if (bundle != null) {
-            mDataReceiver = bundle.getParcelable(RECEIVER);
-            mIdentifiers = bundle.getStringArrayList(IDENTIFIERS_LIST);
-            mClidsFromClientForVerification = StartupUtils.decodeClids(bundle.getString(CLIDS_FOR_VERIFICATION));
+            dataReceiver = bundle.getParcelable(RECEIVER);
+            identifiers = bundle.getStringArrayList(IDENTIFIERS_LIST);
+            clidsFromClientForVerification = StartupUtils.decodeClids(bundle.getString(CLIDS_FOR_VERIFICATION));
+            forceRefreshConfiguration = bundle.getBoolean(FORCE_REFRESH_CONFIGURATION);
         } else {
-            mClidsFromClientForVerification = new HashMap<String, String>();
+            clidsFromClientForVerification = new HashMap<String, String>();
         }
     }
 
@@ -98,13 +109,14 @@ public class IdentifiersData implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         Bundle bundle = new Bundle();
-        bundle.putParcelable(RECEIVER, mDataReceiver);
-        if (mIdentifiers != null) {
-            bundle.putStringArrayList(IDENTIFIERS_LIST, new ArrayList<String>(mIdentifiers));
+        bundle.putParcelable(RECEIVER, dataReceiver);
+        if (identifiers != null) {
+            bundle.putStringArrayList(IDENTIFIERS_LIST, new ArrayList<String>(identifiers));
         }
-        if (mClidsFromClientForVerification != null) {
-            bundle.putString(CLIDS_FOR_VERIFICATION, StartupUtils.encodeClids(mClidsFromClientForVerification));
+        if (clidsFromClientForVerification != null) {
+            bundle.putString(CLIDS_FOR_VERIFICATION, StartupUtils.encodeClids(clidsFromClientForVerification));
         }
+        bundle.putBoolean(FORCE_REFRESH_CONFIGURATION, forceRefreshConfiguration);
         dest.writeBundle(bundle);
     }
 }

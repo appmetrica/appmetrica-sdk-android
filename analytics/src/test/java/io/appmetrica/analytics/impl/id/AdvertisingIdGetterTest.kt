@@ -17,11 +17,13 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.kotlin.any
+import org.mockito.kotlin.clearInvocations
 import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
+import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.whenever
 
 internal class AdvertisingIdGetterTest : CommonTest() {
@@ -128,6 +130,28 @@ internal class AdvertisingIdGetterTest : CommonTest() {
         val updatedStartupState = StartupState.Builder(CollectingFlags.CollectingFlagsBuilder().build()).build()
         advertisingIdGetter.onStartupStateChanged(updatedStartupState)
         verify(controller).updateStartupState(updatedStartupState)
+    }
+
+    @Test
+    fun `setInitialStateFromClientConfigIfNotDefined if not defined`() {
+        advertisingIdGetter.setInitialStateFromClientConfigIfNotDefined(true)
+        verify(controller).updateStateFromClientConfig(true)
+    }
+
+    @Test
+    fun `setInitialStateFromClientConfigIfNotDefined second time`() {
+        advertisingIdGetter.setInitialStateFromClientConfigIfNotDefined(true)
+        clearInvocations(controller)
+        advertisingIdGetter.setInitialStateFromClientConfigIfNotDefined(true)
+        verifyNoInteractions(controller)
+    }
+
+    @Test
+    fun `setInitialStateFromClientConfigIfNotDefined after updateStateFromClientConfig`() {
+        advertisingIdGetter.updateStateFromClientConfig(true)
+        clearInvocations(controller)
+        advertisingIdGetter.setInitialStateFromClientConfigIfNotDefined(true)
+        verifyNoInteractions(controller)
     }
 
     @Test

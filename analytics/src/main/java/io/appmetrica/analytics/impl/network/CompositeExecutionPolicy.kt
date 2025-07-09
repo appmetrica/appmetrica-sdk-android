@@ -16,10 +16,13 @@ class CompositeExecutionPolicy(private vararg val policies: IExecutionPolicy) : 
             DebugLogger.warning(tag, "Policies are empty.")
             return false
         }
+
         val forbiddenPolicy = policies.find { !it.canBeExecuted() }
-        forbiddenPolicy?.let {
-            DebugLogger.info(tag, "forbid by policy: ${it.description()}}")
+        if (forbiddenPolicy != null) {
+            DebugLogger.info(tag, "forbid by policy: ${forbiddenPolicy.description()}}")
             return false
-        } ?: return true
+        }
+
+        return true
     }
 }

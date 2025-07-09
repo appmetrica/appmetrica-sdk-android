@@ -56,6 +56,13 @@ public class DataSendingRestrictionControllerImpl implements DataSendingRestrict
         mRestrictedInMainReporter = mPreferencesServiceDbStorage.readRestrictionFromMainReporter();
     }
 
+    public synchronized void setEnabledFromMainReporterIfNotYet(@Nullable Boolean dataSendingEnabled) {
+        if (mRestrictedInMainReporter == null) {
+            DebugLogger.INSTANCE.info(TAG, "setEnabledFromMainReporterIfNotYet: %s", dataSendingEnabled);
+            setEnabledFromMainReporter(dataSendingEnabled);
+        }
+    }
+
     public synchronized void setEnabledFromMainReporter(@Nullable Boolean dataSendingEnabled) {
         if (Utils.isFieldSet(dataSendingEnabled) || mRestrictedInMainReporter == null) {
             DebugLogger.INSTANCE.info(

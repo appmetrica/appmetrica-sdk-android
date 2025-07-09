@@ -150,7 +150,7 @@ public class ReportsHandlerTest extends CommonTest {
     @Test
     public void testReportStartupExecutorCalls() {
         // Call method
-        mReportsHandlerSpy.reportStartupEvent(Collections.EMPTY_LIST, mDataResultReceiver, null);
+        mReportsHandlerSpy.reportStartupEvent(Collections.EMPTY_LIST, mDataResultReceiver, null, true);
 
         // Verify calls for executor
         ArgumentCaptor<ReportToSend> captor = ArgumentCaptor.forClass(ReportToSend.class);
@@ -166,7 +166,7 @@ public class ReportsHandlerTest extends CommonTest {
     public void testReportStartupHasProcessReceiver() {
         final List<String> identifiers = Arrays.asList("uuid", "deviceid", "deviceid hash");
 
-        mReportsHandlerSpy.reportStartupEvent(identifiers, mock(DataResultReceiver.class), null);
+        mReportsHandlerSpy.reportStartupEvent(identifiers, mock(DataResultReceiver.class), null, true);
         verify(mReportsHandlerSpy).reportEvent(any(CounterReport.class), any(ReporterEnvironment.class));
     }
 
@@ -190,7 +190,7 @@ public class ReportsHandlerTest extends CommonTest {
             }
         }).when(mReportsHandlerSpy).reportEvent(any(CounterReport.class), any(ReporterEnvironment.class));
 
-        mReportsHandlerSpy.reportStartupEvent(identifiers, resultReceiver, clientClids);
+        mReportsHandlerSpy.reportStartupEvent(identifiers, resultReceiver, clientClids, true);
         verify(mReportsHandlerSpy).reportEvent(any(CounterReport.class), any(ReporterEnvironment.class));
     }
 
@@ -458,7 +458,7 @@ public class ReportsHandlerTest extends CommonTest {
     @Test
     public void testStartupConfigurationHasDistributionInfo() {
         mReportsHandlerSpy.setClids(TestData.TEST_CLIDS);
-        mReportsHandlerSpy.reportStartupEvent(Collections.EMPTY_LIST, mDataResultReceiver, null);
+        mReportsHandlerSpy.reportStartupEvent(Collections.EMPTY_LIST, mDataResultReceiver, null, true);
 
         doAnswer(new Answer() {
             public Object answer(final InvocationOnMock invocation) throws Throwable {
@@ -471,7 +471,7 @@ public class ReportsHandlerTest extends CommonTest {
 
     @Test
     public void testStartupConfigurationHasnotDistributionInfo() {
-        mReportsHandlerSpy.reportStartupEvent(Collections.EMPTY_LIST, mDataResultReceiver, null);
+        mReportsHandlerSpy.reportStartupEvent(Collections.EMPTY_LIST, mDataResultReceiver, null, true);
 
         doAnswer(new Answer() {
             public Object answer(final InvocationOnMock invocation) throws Throwable {

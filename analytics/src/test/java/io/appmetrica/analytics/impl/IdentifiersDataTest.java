@@ -44,7 +44,8 @@ public class IdentifiersDataTest extends CommonTest {
         ArrayList<String> identifiers = new ArrayList<String>(Arrays.asList("uuid", "deviceid"));
         Map<String, String> clientClids = new HashMap<String, String>();
         clientClids.put("clid0", "0");
-        IdentifiersData identifiersData = new IdentifiersData(identifiers, clientClids, receiver);
+        boolean forseRefreshConfiguration = true;
+        IdentifiersData identifiersData = new IdentifiersData(identifiers, clientClids, receiver, forseRefreshConfiguration);
         Parcel parcel = Parcel.obtain();
         identifiersData.writeToParcel(parcel, 0);
         parcel.setDataPosition(0);
@@ -52,11 +53,12 @@ public class IdentifiersDataTest extends CommonTest {
         assertThat(fromParcel.getIdentifiersList()).containsExactlyElementsOf(identifiers);
         assertThat(fromParcel.getResultReceiver()).isNotNull();
         assertThat(fromParcel.getClidsFromClientForVerification()).isEqualTo(clientClids);
+        assertThat(fromParcel.isForceRefreshConfiguration()).isTrue();
     }
 
     @Test
     public void testParcelNulls() {
-        IdentifiersData identifiersData = new IdentifiersData(null, new HashMap<String, String>(), null);
+        IdentifiersData identifiersData = new IdentifiersData(null, new HashMap<String, String>(), null, false);
         Parcel parcel = Parcel.obtain();
         identifiersData.writeToParcel(parcel, 0);
         parcel.setDataPosition(0);
@@ -64,6 +66,7 @@ public class IdentifiersDataTest extends CommonTest {
         assertThat(fromParcel.getIdentifiersList()).isNull();
         assertThat(fromParcel.getResultReceiver()).isNull();
         assertThat(fromParcel.getClidsFromClientForVerification()).isNotNull().isEmpty();
+        assertThat(fromParcel.isForceRefreshConfiguration()).isFalse();
     }
 
     @Test
@@ -71,7 +74,7 @@ public class IdentifiersDataTest extends CommonTest {
         final List<String> identifiers = Arrays.asList(Constants.StartupParamsCallbackKeys.DEVICE_ID, Constants.StartupParamsCallbackKeys.DEVICE_ID_HASH);
         final Map<String, String> clids = new HashMap<>();
         clids.put("clid0", "0");
-        IdentifiersData data = new IdentifiersData(identifiers, clids, null);
+        IdentifiersData data = new IdentifiersData(identifiers, clids, null, true);
         final StartupState startupState = mock(StartupState.class);
         when(StartupRequiredUtils.containsIdentifiers(eq(startupState), eq(identifiers), eq(clids), any(Function0.class))).thenReturn(true);
         assertThat(data.isStartupConsistent(startupState)).isTrue();
@@ -82,7 +85,7 @@ public class IdentifiersDataTest extends CommonTest {
         final List<String> identifiers = Arrays.asList(Constants.StartupParamsCallbackKeys.DEVICE_ID, Constants.StartupParamsCallbackKeys.DEVICE_ID_HASH);
         final Map<String, String> clids = new HashMap<>();
         clids.put("clid0", "0");
-        IdentifiersData data = new IdentifiersData(identifiers, clids, null);
+        IdentifiersData data = new IdentifiersData(identifiers, clids, null, true);
         final StartupState startupState = mock(StartupState.class);
         when(StartupRequiredUtils.containsIdentifiers(eq(startupState), eq(identifiers), eq(clids), any(Function0.class))).thenReturn(false);
         assertThat(data.isStartupConsistent(startupState)).isFalse();

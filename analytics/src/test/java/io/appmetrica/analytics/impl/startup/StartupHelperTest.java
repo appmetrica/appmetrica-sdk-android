@@ -45,6 +45,7 @@ import org.robolectric.RobolectricTestRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.ArgumentMatchers.eq;
@@ -63,9 +64,11 @@ import static org.mockito.Mockito.when;
 @RunWith(RobolectricTestRunner.class)
 public class StartupHelperTest extends CommonTest {
 
-    private static final IdentifiersResult TEST_DEVICE_ID = new IdentifiersResult("deviceid12345", IdentifierStatus.OK, null);
+    private static final IdentifiersResult TEST_DEVICE_ID =
+        new IdentifiersResult("deviceid12345", IdentifierStatus.OK, null);
     private static final IdentifiersResult TEST_UUID = new IdentifiersResult("uuid1235", IdentifierStatus.OK, null);
-    private static final IdentifiersResult TEST_DEVICE_ID_HASH = new IdentifiersResult("deviceid12345hash", IdentifierStatus.OK, null);
+    private static final IdentifiersResult TEST_DEVICE_ID_HASH =
+        new IdentifiersResult("deviceid12345hash", IdentifierStatus.OK, null);
 
     private PreferencesClientDbStorage mPreferences;
     private final List<String> mAllIdentifiers = java.util.Arrays.asList(
@@ -125,7 +128,12 @@ public class StartupHelperTest extends CommonTest {
         ArgumentCaptor<ResultReceiver> receiverCaptor = ArgumentCaptor.forClass(ResultReceiver.class);
 
         mStartupHelper.requestStartupParams(mCallback, advIdentifiers, mClientClids);
-        verify(mReportsHandler).reportStartupEvent(eq(advIdentifiers), receiverCaptor.capture(), eq(mClientClids));
+        verify(mReportsHandler).reportStartupEvent(
+            eq(advIdentifiers),
+            receiverCaptor.capture(),
+            eq(mClientClids),
+            eq(true)
+        );
         receiverCaptor.getValue().send(0, mBundle);
         verify(mCallback).onReceive(any(StartupParamsCallback.Result.class));
     }
@@ -160,7 +168,8 @@ public class StartupHelperTest extends CommonTest {
     public void testRequestStartupParamsProvokeStartup() {
         when(mStartupParams.shouldSendStartup(mAllIdentifiers)).thenReturn(true);
         mStartupHelper.requestStartupParams(mCallback, mAllIdentifiers, mClientClids);
-        verify(mReportsHandler).reportStartupEvent(eq(mAllIdentifiers), any(ResultReceiver.class), eq(mClientClids));
+        verify(mReportsHandler)
+            .reportStartupEvent(eq(mAllIdentifiers), any(ResultReceiver.class), eq(mClientClids), eq(true));
     }
 
     @Test
@@ -171,7 +180,8 @@ public class StartupHelperTest extends CommonTest {
             .reportStartupEvent(
                 ArgumentMatchers.anyList(),
                 any(ResultReceiver.class),
-                ArgumentMatchers.anyMap()
+                ArgumentMatchers.anyMap(),
+                anyBoolean()
             );
     }
 
@@ -180,7 +190,8 @@ public class StartupHelperTest extends CommonTest {
         when(mStartupParams.shouldSendStartup()).thenReturn(true);
         mStartupHelper.setClids(mClientClids);
         mStartupHelper.sendStartupIfNeeded();
-        verify(mReportsHandler).reportStartupEvent(eq(mAllIdentifiers), any(ResultReceiver.class), eq(mClientClids));
+        verify(mReportsHandler)
+            .reportStartupEvent(eq(mAllIdentifiers), any(ResultReceiver.class), eq(mClientClids), eq(false));
     }
 
     @Test
@@ -193,7 +204,8 @@ public class StartupHelperTest extends CommonTest {
             .reportStartupEvent(
                 ArgumentMatchers.anyList(),
                 any(ResultReceiver.class),
-                ArgumentMatchers.anyMap()
+                ArgumentMatchers.anyMap(),
+                anyBoolean()
             );
     }
 
@@ -201,7 +213,7 @@ public class StartupHelperTest extends CommonTest {
     public void testRequestStartupParamsProvokeStartupEventIfStartupOutdated() {
         when(mStartupParams.shouldSendStartup(mAllIdentifiers)).thenReturn(true);
         mStartupHelper.requestStartupParams(mCallback, mAllIdentifiers, mClientClids);
-        verify(mReportsHandler).reportStartupEvent(eq(mAllIdentifiers), any(ResultReceiver.class), eq(mClientClids));
+        verify(mReportsHandler).reportStartupEvent(eq(mAllIdentifiers), any(ResultReceiver.class), eq(mClientClids), anyBoolean());
     }
 
     @Test
@@ -261,7 +273,8 @@ public class StartupHelperTest extends CommonTest {
         verify(mReportsHandler).reportStartupEvent(
             ArgumentMatchers.anyList(),
             mReceiverArgumentCaptor.capture(),
-            ArgumentMatchers.anyMap()
+            ArgumentMatchers.anyMap(),
+            anyBoolean()
         );
 
         return mReceiverArgumentCaptor.getValue();
@@ -272,7 +285,7 @@ public class StartupHelperTest extends CommonTest {
         new StartupHelper(context, mReportsHandler, mPreferences, mHandler)
             .requestStartupParams(mCallback, mAllIdentifiers, mClientClids);
 
-        verify(mReportsHandler).reportStartupEvent(same(mAllIdentifiers), any(DataResultReceiver.class), same(mClientClids));
+        verify(mReportsHandler).reportStartupEvent(same(mAllIdentifiers), any(DataResultReceiver.class), same(mClientClids), eq(true));
     }
 
     @Test
@@ -283,7 +296,7 @@ public class StartupHelperTest extends CommonTest {
         new StartupHelper(context, mReportsHandler, mPreferences, mHandler)
             .requestStartupParams(mock(StartupParamsCallback.class), identifiers, mClientClids);
 
-        verify(mReportsHandler).reportStartupEvent(same(identifiers), any(DataResultReceiver.class), same(mClientClids));
+        verify(mReportsHandler).reportStartupEvent(same(identifiers), any(DataResultReceiver.class), same(mClientClids), eq(true));
     }
 
     @Test
@@ -293,7 +306,7 @@ public class StartupHelperTest extends CommonTest {
         new StartupHelper(context, mReportsHandler, mPreferences, mHandler)
             .requestStartupParams(mock(StartupParamsCallback.class), mAllIdentifiers, mClientClids);
 
-        verify(mReportsHandler).reportStartupEvent(same(mAllIdentifiers), any(DataResultReceiver.class), same(mClientClids));
+        verify(mReportsHandler).reportStartupEvent(same(mAllIdentifiers), any(DataResultReceiver.class), same(mClientClids), eq(true));
     }
 
     @Test
@@ -475,7 +488,7 @@ public class StartupHelperTest extends CommonTest {
         StartupHelper startupHelper = new StartupHelper(context, mReportsHandler, mPreferences, mHandler);
         startupHelper.requestStartupParams(mCallback, mAllIdentifiers, mClientClids);
         ArgumentCaptor<DataResultReceiver> captor = ArgumentCaptor.forClass(DataResultReceiver.class);
-        verify(mReportsHandler).reportStartupEvent(same(mAllIdentifiers), captor.capture(), same(mClientClids));
+        verify(mReportsHandler).reportStartupEvent(same(mAllIdentifiers), captor.capture(), same(mClientClids), eq(true));
         DataResultReceiver receiver = captor.getValue();
         DataResultReceiver.notifyOnStartupError(
             receiver,
@@ -497,7 +510,7 @@ public class StartupHelperTest extends CommonTest {
         StartupHelper startupHelper = new StartupHelper(mReportsHandler, startupParams, mHandler);
         startupHelper.requestStartupParams(callback1, mAllIdentifiers, mClientClids);
         ArgumentCaptor<DataResultReceiver> captor = ArgumentCaptor.forClass(DataResultReceiver.class);
-        verify(mReportsHandler).reportStartupEvent(same(mAllIdentifiers), captor.capture(), same(mClientClids));
+        verify(mReportsHandler).reportStartupEvent(same(mAllIdentifiers), captor.capture(), same(mClientClids), eq(true));
         DataResultReceiver receiver = captor.getValue();
         startupHelper.requestStartupParams(callback2, mAllIdentifiers, mClientClids);
         when(startupParams.containsIdentifiers(any(List.class))).thenReturn(true);
@@ -518,7 +531,8 @@ public class StartupHelperTest extends CommonTest {
                     return ((DataResultReceiver) argument).getReceiver() == startupHelper.getDefaultReceiver();
                 }
             }),
-            eq(mClientClids)
+            eq(mClientClids),
+            eq(false)
         );
     }
 
@@ -706,7 +720,8 @@ public class StartupHelperTest extends CommonTest {
             .reportStartupEvent(
                 ArgumentMatchers.nullable(List.class),
                 nullable(ResultReceiver.class),
-                nullable(Map.class)
+                nullable(Map.class),
+                eq(false)
             );
     }
 

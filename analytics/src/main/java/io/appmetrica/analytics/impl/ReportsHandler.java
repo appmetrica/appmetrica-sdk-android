@@ -212,15 +212,19 @@ public class ReportsHandler {
 
     public void reportStartupEvent(@NonNull List<String> identifiers,
                                    @NonNull ResultReceiver receiver,
-                                   @Nullable Map<String, String> freshClientClids) {
+                                   @Nullable Map<String, String> freshClientClids,
+                                   boolean forceRefreshConfiguration) {
         DebugLogger.INSTANCE.info(
             TAG,
-            "reportStartupEvent: indentifiers: %s; freshClientClids: %s",
+            "reportStartupEvent: indentifiers: %s; freshClientClids: %s; forceRefreshConfiguration: %s",
             Arrays.toString(identifiers.toArray()),
             freshClientClids
         );
         Bundle payload = new Bundle();
-        payload.putParcelable(IdentifiersData.BUNDLE_KEY, new IdentifiersData(identifiers, freshClientClids, receiver));
+        payload.putParcelable(
+            IdentifiersData.BUNDLE_KEY,
+            new IdentifiersData(identifiers, freshClientClids, receiver, forceRefreshConfiguration)
+        );
         CounterReport counterReport = EventsManager.reportEntry(
             InternalEvents.EVENT_TYPE_STARTUP,
             PublicLogger.getAnonymousInstance()

@@ -135,7 +135,15 @@ public class StartupHelper implements StartupIdentifiersProvider, IServerTimeOff
                         processResultFromResultReceiver(resultData, callback);
                     }
                 };
-                sendStartupEvent(identifiers, receiver, freshClientClids);
+                sendStartupEvent(
+                    identifiers,
+                    receiver,
+                    freshClientClids,
+                    // The parameters can also be requested before activation.
+                    // In this case, we must apply the current configuration based on the default parameter values.
+                    // Otherwise, you will not be able to send the startup request.
+                    true
+                );
             } else {
                 notifyCallbackWithLocalDataIfNotYet(callback);
             }
@@ -161,19 +169,22 @@ public class StartupHelper implements StartupIdentifiersProvider, IServerTimeOff
         mPublicLogger= publicLogger;
     }
 
-    private void sendStartupEvent(@Nullable Map<String, String> clids) {
-        sendStartupEvent(mAllIdentifiers, clids);
+    private void sendStartupEvent(@Nullable Map<String, String> clids, boolean forceRefreshConfiguration) {
+        sendStartupEvent(mAllIdentifiers, clids, forceRefreshConfiguration);
     }
 
-    private void sendStartupEvent(@NonNull List<String> identifiers, @Nullable Map<String, String> freshClientClids) {
-        sendStartupEvent(identifiers, defaultReceiver, freshClientClids);
+    private void sendStartupEvent(@NonNull List<String> identifiers,
+                                  @Nullable Map<String, String> freshClientClids,
+                                  boolean forceRefreshConfiguration) {
+        sendStartupEvent(identifiers, defaultReceiver, freshClientClids, forceRefreshConfiguration);
     }
 
     private void sendStartupEvent(@NonNull List<String> identifiers,
                                   @NonNull DataResultReceiver.Receiver receiver,
-                                  @Nullable Map<String, String> freshClientClids) {
+                                  @Nullable Map<String, String> freshClientClids,
+                                  boolean forceRefreshConfiguration) {
         DataResultReceiver resultReceiver = new DataResultReceiver(mHandler, receiver);
-        mReportsHandler.reportStartupEvent(identifiers, resultReceiver, freshClientClids);
+        mReportsHandler.reportStartupEvent(identifiers, resultReceiver, freshClientClids, forceRefreshConfiguration);
     }
 
     @SuppressLint("VisibleForTests") //fixme https://nda.ya.ru/t/lvWXFf0t6Njj6X
@@ -197,7 +208,9 @@ public class StartupHelper implements StartupIdentifiersProvider, IServerTimeOff
             if (!initialStartupSent || mStartupParams.shouldSendStartup()) {
                 initialStartupSent = true;
                 DebugLogger.INSTANCE.info(TAG, "Send startup event");
-                sendStartupEvent(mClientClids);
+                // Optional configuration update. If there was no initialization on the part of the application,
+                // the configuration based on default values must not be applied.
+                sendStartupEvent(mClientClids, false);
             }
         }
     }

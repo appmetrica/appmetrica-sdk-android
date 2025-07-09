@@ -12,6 +12,8 @@ interface IAdvertisingIdGetter : SimpleAdvertisingIdGetter, StartupStateObserver
 
     val identifiersForced: AdvertisingIdsHolder
 
+    fun setInitialStateFromClientConfigIfNotDefined(enabled: Boolean)
+
     fun updateStateFromClientConfig(enabled: Boolean)
 
     fun getIdentifiersForced(yandexRetryStrategy: RetryStrategy): AdvertisingIdsHolder

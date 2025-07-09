@@ -43,6 +43,8 @@ internal class AdvertisingIdGetter internal constructor(
             AdvIdGetterController.State.UNKNOWN
         )
 
+    private var hasInitialStateFromClient = false
+
     @Synchronized
     override fun init() {
         if (!this::refresh.isInitialized) {
@@ -73,8 +75,17 @@ internal class AdvertisingIdGetter internal constructor(
     }
 
     @Synchronized
+    override fun setInitialStateFromClientConfigIfNotDefined(enabled: Boolean) {
+        if (!hasInitialStateFromClient) {
+            DebugLogger.info(tag, "setInitialStateFromClientConfigIfNotDefined to $enabled")
+            updateStateFromClientConfig(enabled)
+        }
+    }
+
+    @Synchronized
     override fun updateStateFromClientConfig(enabled: Boolean) {
         DebugLogger.info(tag, "updateStateFromClientConfig to $enabled")
+        hasInitialStateFromClient = true
         controller.updateStateFromClientConfig(enabled)
         refreshIdentifiers()
     }

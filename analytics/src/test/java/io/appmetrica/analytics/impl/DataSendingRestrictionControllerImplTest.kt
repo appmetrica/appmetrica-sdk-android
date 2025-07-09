@@ -44,6 +44,17 @@ class DataSendingRestrictionControllerImplTest(
             controller = DataSendingRestrictionControllerImpl(EmptyStorage())
             data.add(arrayOf("test no data", controller, true))
 
+            controller = DataSendingRestrictionControllerImpl(EmptyStorage())
+            controller.setEnabledFromMainReporterIfNotYet(true)
+            data.add(arrayOf("enabled in main reporter if not yet", controller, false))
+
+            controller = DataSendingRestrictionControllerImpl(EmptyStorage())
+            controller.setEnabledFromMainReporterIfNotYet(false)
+            data.add(arrayOf("disabled in main reporter if not yet", controller, true))
+
+            controller = DataSendingRestrictionControllerImpl(EmptyStorage())
+            data.add(arrayOf("test no data", controller, true))
+
             return data
         }
     }

@@ -29,7 +29,7 @@ public class UpdatePreActivationConfigHandler extends CommutationHandler {
     public boolean process(@NonNull CounterReport reportData, @NonNull CommutationClientUnit clientUnit) {
         DebugLogger.INSTANCE.info(TAG, "process: %s", reportData);
         CommonArguments.ReporterArguments counterConfiguration = clientUnit.getComponent().getConfiguration();
-        mRestrictionController.setEnabledFromMainReporter(counterConfiguration.dataSendingEnabled);
+        updateDataSendingStatus(counterConfiguration.dataSendingEnabled);
         updateLocationStatus(counterConfiguration);
         updateTrackingAdvIdentifiersStatus(counterConfiguration.advIdentifiersTrackingEnabled);
         return false;
@@ -42,9 +42,7 @@ public class UpdatePreActivationConfigHandler extends CommutationHandler {
             getComponent().getComponentId().toString(),
             dataSendingEnabled
         );
-        if (dataSendingEnabled != null) {
-            mRestrictionController.setEnabledFromMainReporter(dataSendingEnabled);
-        }
+        mRestrictionController.setEnabledFromMainReporter(dataSendingEnabled);
     }
 
     private void updateTrackingAdvIdentifiersStatus(@Nullable Boolean trackingEnabled) {
