@@ -60,7 +60,7 @@
     <dependency>
       <groupId>com.google.android.gms</groupId>
       <artifactId>play-services-ads-identifier</artifactId>
-      <version>18.2.0</version>
+      <version>18.1.0</version>
       <scope>runtime</scope>
     </dependency>
   </dependencies>

@@ -15,10 +15,8 @@ androidx.loader:loader:1.0.0
 androidx.savedstate:savedstate:1.0.0
 androidx.versionedparcelable:versionedparcelable:1.1.0
 androidx.viewpager:viewpager:1.0.0
-com.google.android.gms:play-services-ads-identifier:18.2.0
-com.google.android.gms:play-services-base:18.5.0
+com.google.android.gms:play-services-ads-identifier:18.1.0
 com.google.android.gms:play-services-basement:18.4.0
-com.google.android.gms:play-services-tasks:18.2.0
 io.appmetrica.analytics:common-logger:unspecified
 io.appmetrica.analytics:core-api:unspecified
 io.appmetrica.analytics:core-utils:unspecified

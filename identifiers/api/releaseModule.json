@@ -76,7 +76,7 @@
                     "group": "com.google.android.gms",
                     "module": "play-services-ads-identifier",
                     "version": {
-                        "requires": "18.2.0"
+                        "requires": "18.1.0"
                     }
                 }
             ],
