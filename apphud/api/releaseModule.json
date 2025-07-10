@@ -90,7 +90,7 @@
                     "group": "com.apphud",
                     "module": "ApphudSDK-Android",
                     "version": {
-                        "requires": "2.9.1"
+                        "requires": "2.9.2"
                     }
                 }
             ],
