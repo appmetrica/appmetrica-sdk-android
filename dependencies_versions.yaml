@@ -5,7 +5,7 @@
       name: play-services-ads
       repository: https://dl.google.com/android/maven2
       from: 20.7.0
-      to: 24.2.0
+      to: 24.4.0
 - group: io.appmetrica.analytics
   name: analytics-ad-revenue-applovin-v12
   dependencies:
@@ -13,7 +13,7 @@
       name: applovin-sdk
       repository: https://repo.maven.apache.org/maven2
       from: 12.5.0
-      to: 13.2.0
+      to: 13.3.1
 - group: io.appmetrica.analytics
   name: analytics-ad-revenue-fyber-v3
   dependencies:
@@ -21,7 +21,7 @@
       name: fairbid-sdk
       repository: https://repo.maven.apache.org/maven2
       from: 1.0.0
-      to: 3.60.0
+      to: 3.61.0
 - group: io.appmetrica.analytics
   name: analytics-ad-revenue-ironsource-v7
   dependencies:
@@ -29,7 +29,7 @@
       name: mediationsdk
       repository: https://android-sdk.is.com
       from: 7.1.0
-      to: 8.8.0
+      to: 8.10.0
       namespace: com.ironsource
 - group: io.appmetrica.analytics
   name: analytics
@@ -63,6 +63,7 @@
       repository: https://dl.google.com/android/maven2
       from: 6.0.0
       to: 7.1.1
+      forcible: false # versions from 8.0.0 will have separate module for work
 - group: io.appmetrica.analytics
   name: analytics-gpllibrary
   dependencies:
