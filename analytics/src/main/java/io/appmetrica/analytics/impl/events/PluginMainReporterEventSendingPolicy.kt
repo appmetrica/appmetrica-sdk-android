@@ -1,5 +1,6 @@
 package io.appmetrica.analytics.impl.events
 
+import io.appmetrica.analytics.coreapi.internal.servicecomponents.ActivationBarrierCallback
 import io.appmetrica.analytics.impl.DefaultValues
 import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.component.CommonArguments
@@ -9,11 +10,11 @@ import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import java.util.concurrent.TimeUnit
 
 internal class PluginMainReporterEventSendingPolicy(
-    triggerProvider: EventTriggerProvider,
+    private val triggerProvider: EventTriggerProvider,
     configurationHolder: ReportComponentConfigurationHolder,
     initialConfig: CommonArguments.ReporterArguments,
     preferences: PreferencesComponentDbStorage
-) : MainReporterEventSendingPolicy {
+) : MainReporterEventSendingPolicy, ActivationBarrierCallback {
 
     private val tag = "[PluginMainReporterEventSendingPolicy]"
 
@@ -29,14 +30,17 @@ internal class PluginMainReporterEventSendingPolicy(
             )
             GlobalServiceLocator.getInstance().activationBarrier.subscribe(
                 TimeUnit.SECONDS.toMillis(DefaultValues.ANONYMOUS_API_KEY_EVENT_SENDING_DELAY_SECONDS),
-                GlobalServiceLocator.getInstance().serviceExecutorProvider.defaultExecutor
-            ) {
-                DebugLogger.info(tag, "Delay has been ended. Force set condition met.")
-                mainReporterEventCondition.setConditionMetByTimer()
-                triggerProvider.eventTrigger.trigger()
-            }
+                GlobalServiceLocator.getInstance().serviceExecutorProvider.defaultExecutor,
+                this
+            )
         } else {
             DebugLogger.info(tag, "Condition already met. ")
         }
+    }
+
+    override fun onWaitFinished() {
+        DebugLogger.info(tag, "Delay has been ended. Force set condition met.")
+        mainReporterEventCondition.setConditionMetByTimer()
+        triggerProvider.eventTrigger.trigger()
     }
 }
