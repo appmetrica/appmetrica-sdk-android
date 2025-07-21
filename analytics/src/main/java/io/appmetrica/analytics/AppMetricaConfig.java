@@ -193,7 +193,14 @@ public class AppMetricaConfig {
     public final Boolean appOpenTrackingEnabled;
 
     /**
-     * Device type based on screen size: phone, tablet, TV
+     * The device type based on screen size.
+     * <p>
+     * Allowed values are from {@link PredefinedDeviceTypes}.
+     * Using other values may cause events to not appear in AppMetrica reports.
+     * Other values are only allowed if explicitly supported by official documentation.
+     * </p>
+     *
+     * @see PredefinedDeviceTypes
      */
     @Nullable
     public final String deviceType;
@@ -719,11 +726,17 @@ public class AppMetricaConfig {
         }
 
         /**
-         * Sets size type of device based on screen size: phone, tablet, phablet, TV.
-         * @param deviceType type of device.
-         *                   Some common-used types are listed in {@link PredefinedDeviceTypes} class.
-         *                   One can find complete list in the official documentation.
+         * Sets the device type based on screen size.
+         * <p>
+         * Allowed values are from {@link PredefinedDeviceTypes}.
+         * Using other values may cause events to not appear in AppMetrica reports.
+         * Other values are only allowed if explicitly supported by official documentation.
+         * </p>
+         *
+         * @param deviceType predefined device type string.
          * @return the same {@link AppMetricaConfig.Builder} object.
+         *
+         * @see PredefinedDeviceTypes
          */
         @NonNull
         public Builder withDeviceType(@Nullable String deviceType) {
