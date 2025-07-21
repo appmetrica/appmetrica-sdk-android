@@ -20,6 +20,7 @@
 
 #include <algorithm>
 
+#include "base/check_op.h"
 #include "base/files/file_path.h"
 #include "base/logging.h"
 #include "base/notreached.h"
@@ -62,8 +63,8 @@ bool ReadCPUsOnline(uint32_t* first_cpu, uint8_t* cpu_count) {
     std::string left, right;
     if (SplitStringFirst(range, '-', &left, &right)) {
       unsigned int start, end;
-      if (!StringToUint(base::StringPiece(left), &start) ||
-          !StringToUint(base::StringPiece(right), &end) || end <= start) {
+      if (!base::StringToUint(base::StringPiece(left), &start) ||
+          !base::StringToUint(base::StringPiece(right), &end) || end <= start) {
         LOG(ERROR) << "format error: " << range;
         return false;
       }
@@ -78,7 +79,7 @@ bool ReadCPUsOnline(uint32_t* first_cpu, uint8_t* cpu_count) {
       }
     } else {
       unsigned int cpuno;
-      if (!StringToUint(base::StringPiece(range), &cpuno)) {
+      if (!base::StringToUint(base::StringPiece(range), &cpuno)) {
         LOG(ERROR) << "format error";
         return false;
       }
@@ -205,6 +206,8 @@ CPUArchitecture SystemSnapshotLinux::GetCPUArchitecture() const {
 #elif defined(ARCH_CPU_MIPS_FAMILY)
   return process_reader_->Is64Bit() ? kCPUArchitectureMIPS64EL
                                     : kCPUArchitectureMIPSEL;
+#elif defined(ARCH_CPU_RISCV64)
+  return kCPUArchitectureRISCV64;
 #else
 #error port to your architecture
 #endif
@@ -219,6 +222,9 @@ uint32_t SystemSnapshotLinux::CPURevision() const {
   return 0;
 #elif defined(ARCH_CPU_MIPS_FAMILY)
   // Not implementable on MIPS
+  return 0;
+#elif defined(ARCH_CPU_RISCV64)
+  // Not implemented
   return 0;
 #else
 #error port to your architecture
@@ -239,6 +245,9 @@ std::string SystemSnapshotLinux::CPUVendor() const {
   return std::string();
 #elif defined(ARCH_CPU_MIPS_FAMILY)
   // Not implementable on MIPS
+  return std::string();
+#elif defined(ARCH_CPU_RISCV64)
+  // Not implemented
   return std::string();
 #else
 #error port to your architecture
@@ -268,7 +277,6 @@ uint32_t SystemSnapshotLinux::CPUX86Signature() const {
   return cpuid_.Signature();
 #else
   NOTREACHED();
-  return 0;
 #endif
 }
 
@@ -278,7 +286,6 @@ uint64_t SystemSnapshotLinux::CPUX86Features() const {
   return cpuid_.Features();
 #else
   NOTREACHED();
-  return 0;
 #endif
 }
 
@@ -288,7 +295,6 @@ uint64_t SystemSnapshotLinux::CPUX86ExtendedFeatures() const {
   return cpuid_.ExtendedFeatures();
 #else
   NOTREACHED();
-  return 0;
 #endif
 }
 
@@ -298,7 +304,6 @@ uint32_t SystemSnapshotLinux::CPUX86Leaf7Features() const {
   return cpuid_.Leaf7Features();
 #else
   NOTREACHED();
-  return 0;
 #endif
 }
 
@@ -308,7 +313,6 @@ bool SystemSnapshotLinux::CPUX86SupportsDAZ() const {
   return cpuid_.SupportsDAZ();
 #else
   NOTREACHED();
-  return false;
 #endif  // ARCH_CPU_X86_FMAILY
 }
 
@@ -373,6 +377,9 @@ bool SystemSnapshotLinux::NXEnabled() const {
 #elif defined(ARCH_CPU_MIPS_FAMILY)
   // Not implementable on MIPS
   return false;
+#elif defined(ARCH_CPU_RISCV64)
+  // Not implemented
+  return false;
 #else
 #error Port.
 #endif  // ARCH_CPU_X86_FAMILY
@@ -399,13 +406,13 @@ void SystemSnapshotLinux::ReadKernelVersion(const std::string& version_string) {
     return;
   }
 
-  if (!StringToInt(base::StringPiece(versions[0]), &os_version_major_)) {
+  if (!base::StringToInt(base::StringPiece(versions[0]), &os_version_major_)) {
     LOG(WARNING) << "no kernel version";
     return;
   }
   DCHECK_GE(os_version_major_, 3);
 
-  if (!StringToInt(base::StringPiece(versions[1]), &os_version_minor_)) {
+  if (!base::StringToInt(base::StringPiece(versions[1]), &os_version_minor_)) {
     LOG(WARNING) << "no major revision";
     return;
   }
@@ -415,8 +422,8 @@ void SystemSnapshotLinux::ReadKernelVersion(const std::string& version_string) {
   if (minor_rev_end == std::string::npos) {
     minor_rev_end = versions[2].size();
   }
-  if (!StringToInt(base::StringPiece(versions[2].c_str(), minor_rev_end),
-                   &os_version_bugfix_)) {
+  if (!base::StringToInt(base::StringPiece(versions[2].c_str(), minor_rev_end),
+                         &os_version_bugfix_)) {
     LOG(WARNING) << "no minor revision";
     return;
   }

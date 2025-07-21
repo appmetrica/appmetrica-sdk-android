@@ -22,12 +22,16 @@
 #include <time.h>
 
 #include <iterator>
+#include <optional>
 
+#include "base/check_op.h"
 #include "build/build_config.h"
 #include "snapshot/snapshot_constants.h"
 #include "util/ios/ios_intermediate_dump_writer.h"
 #include "util/ios/raw_logging.h"
+#include "util/ios/scoped_vm_map.h"
 #include "util/ios/scoped_vm_read.h"
+#include "util/synchronization/scoped_spin_guard.h"
 
 namespace crashpad {
 namespace internal {
@@ -411,7 +415,7 @@ void MaybeCaptureMemoryAround(IOSIntermediateDumpWriter* writer,
 
   IOSIntermediateDumpWriter::ScopedArrayMap memory_region(writer);
   WriteProperty(
-      writer, IntermediateDumpKey::kThreadContextMemoryRegionAddress, &address);
+      writer, IntermediateDumpKey::kThreadContextMemoryRegionAddress, &target);
   // Don't use WritePropertyBytes, this one will fail regularly if |target|
   // cannot be read.
   writer->AddPropertyBytes(IntermediateDumpKey::kThreadContextMemoryRegionData,
@@ -442,7 +446,7 @@ void CaptureMemoryPointedToByThreadState(IOSIntermediateDumpWriter* writer,
   MaybeCaptureMemoryAround(writer, thread_state.__r15);
   MaybeCaptureMemoryAround(writer, thread_state.__rip);
 #elif defined(ARCH_CPU_ARM_FAMILY)
-  MaybeCaptureMemoryAround(writer, thread_state.__pc);
+  MaybeCaptureMemoryAround(writer, arm_thread_state64_get_pc(thread_state));
   for (size_t i = 0; i < std::size(thread_state.__x); ++i) {
     MaybeCaptureMemoryAround(writer, thread_state.__x[i]);
   }
@@ -612,7 +616,8 @@ void InProcessIntermediateDumpHandler::WriteProcessInfo(
 // static
 void InProcessIntermediateDumpHandler::WriteSystemInfo(
     IOSIntermediateDumpWriter* writer,
-    const IOSSystemDataCollector& system_data) {
+    const IOSSystemDataCollector& system_data,
+    uint64_t report_time_nanos) {
   IOSIntermediateDumpWriter::ScopedMap system_map(
       writer, IntermediateDumpKey::kSystemInfo);
 
@@ -698,6 +703,11 @@ void InProcessIntermediateDumpHandler::WriteSystemInfo(
   } else {
     CRASHPAD_RAW_LOG("host_statistics");
   }
+
+  uint64_t crashpad_uptime_nanos =
+      report_time_nanos - system_data.InitializationTime();
+  WriteProperty(
+      writer, IntermediateDumpKey::kCrashpadUptime, &crashpad_uptime_nanos);
 }
 
 // static
@@ -866,7 +876,7 @@ void InProcessIntermediateDumpHandler::WriteThreadInfo(
 #if defined(ARCH_CPU_X86_64)
     vm_address_t stack_pointer = thread_state.__rsp;
 #elif defined(ARCH_CPU_ARM64)
-    vm_address_t stack_pointer = thread_state.__sp;
+    vm_address_t stack_pointer = arm_thread_state64_get_sp(thread_state);
 #endif
 
     vm_size_t stack_region_size;
@@ -913,12 +923,12 @@ void InProcessIntermediateDumpHandler::WriteModuleInfo(
 
   uint32_t image_count = image_infos->infoArrayCount;
   const dyld_image_info* image_array = image_infos->infoArray;
-  for (uint32_t image_index = 0; image_index < image_count; ++image_index) {
+  for (int32_t image_index = image_count - 1; image_index >= 0; --image_index) {
     IOSIntermediateDumpWriter::ScopedArrayMap modules(writer);
     ScopedVMRead<dyld_image_info> image;
     if (!image.Read(&image_array[image_index])) {
       CRASHPAD_RAW_LOG("Unable to dyld_image_info");
-      return;
+      continue;
     }
 
     if (image->imageFilePath) {
@@ -957,19 +967,19 @@ void InProcessIntermediateDumpHandler::WriteExceptionFromSignal(
   WriteProperty(writer, IntermediateDumpKey::kSignalNumber, &siginfo->si_signo);
   WriteProperty(writer, IntermediateDumpKey::kSignalCode, &siginfo->si_code);
   WriteProperty(writer, IntermediateDumpKey::kSignalAddress, &siginfo->si_addr);
+
 #if defined(ARCH_CPU_X86_64)
-  WriteProperty(
-      writer, IntermediateDumpKey::kThreadState, &context->uc_mcontext->__ss);
-  WriteProperty(
-      writer, IntermediateDumpKey::kFloatState, &context->uc_mcontext->__fs);
+  x86_thread_state64_t thread_state = context->uc_mcontext->__ss;
+  x86_float_state64_t float_state = context->uc_mcontext->__fs;
 #elif defined(ARCH_CPU_ARM64)
-  WriteProperty(
-      writer, IntermediateDumpKey::kThreadState, &context->uc_mcontext->__ss);
-  WriteProperty(
-      writer, IntermediateDumpKey::kFloatState, &context->uc_mcontext->__ns);
+  arm_thread_state64_t thread_state = context->uc_mcontext->__ss;
+  arm_neon_state64_t float_state = context->uc_mcontext->__ns;
 #else
 #error Port to your CPU architecture
 #endif
+  WriteProperty(writer, IntermediateDumpKey::kThreadState, &thread_state);
+  WriteProperty(writer, IntermediateDumpKey::kFloatState, &float_state);
+  CaptureMemoryPointedToByThreadState(writer, thread_state);
 
   // Thread ID.
   thread_identifier_info identifier_info;
@@ -1134,6 +1144,9 @@ void InProcessIntermediateDumpHandler::WriteDataSegmentAnnotations(
           crashpad_info->version() == 1) {
         WriteCrashpadAnnotationsList(writer, crashpad_info.get());
         WriteCrashpadSimpleAnnotationsDictionary(writer, crashpad_info.get());
+        WriteCrashpadExtraMemoryRanges(writer, crashpad_info.get());
+        WriteCrashpadIntermediateDumpExtraMemoryRanges(writer,
+                                                       crashpad_info.get());
       }
     } else if (strcmp(section_vm_read_ptr->sectname, "__crash_info") == 0) {
       ScopedVMRead<crashreporter_annotations_t> crash_info;
@@ -1163,6 +1176,13 @@ void InProcessIntermediateDumpHandler::WriteCrashpadAnnotationsList(
   IOSIntermediateDumpWriter::ScopedArray annotations_array(
       writer, IntermediateDumpKey::kAnnotationObjects);
   ScopedVMRead<Annotation> current;
+
+  // Use vm_read() to ensure that the linked-list AnnotationList head (which is
+  // a dummy node of type kInvalid) is valid and copy its memory into a
+  // newly-allocated buffer.
+  //
+  // In the case where the pointer has been clobbered or the memory range is not
+  // readable, skip reading all the Annotations.
   if (!current.Read(annotation_list->head())) {
     CRASHPAD_RAW_LOG("Unable to read annotation");
     return;
@@ -1173,6 +1193,12 @@ void InProcessIntermediateDumpHandler::WriteCrashpadAnnotationsList(
        index < kMaxNumberOfAnnotations;
        ++index) {
     ScopedVMRead<Annotation> node;
+
+    // Like above, use vm_read() to ensure that the node in the linked list is
+    // valid and copy its memory into a newly-allocated buffer.
+    //
+    // In the case where the pointer has been clobbered or the memory range is
+    // not readable, skip reading this and all further Annotations.
     if (!node.Read(current->link_node())) {
       CRASHPAD_RAW_LOG("Unable to read annotation");
       return;
@@ -1185,6 +1211,36 @@ void InProcessIntermediateDumpHandler::WriteCrashpadAnnotationsList(
     if (node->size() > Annotation::kValueMaxSize) {
       CRASHPAD_RAW_LOG("Incorrect annotation length");
       continue;
+    }
+
+    // For Annotations which support guarding reads from concurrent writes, map
+    // their memory read-write using vm_remap(), then declare a ScopedSpinGuard
+    // which lives for the duration of the read.
+    ScopedVMMap<Annotation> mapped_node;
+    std::optional<ScopedSpinGuard> annotation_guard;
+    if (node->concurrent_access_guard_mode() ==
+        Annotation::ConcurrentAccessGuardMode::kScopedSpinGuard) {
+      constexpr vm_prot_t kDesiredProtection = VM_PROT_WRITE | VM_PROT_READ;
+      if (!mapped_node.Map(node.get()) ||
+          (mapped_node.CurrentProtection() & kDesiredProtection) !=
+              kDesiredProtection) {
+        CRASHPAD_RAW_LOG("Unable to map annotation");
+
+        // Skip this annotation rather than giving up entirely, since the linked
+        // node should still be valid.
+        continue;
+      }
+
+      // TODO(https://crbug.com/crashpad/438): Pass down a `params` object into
+      // this method to optionally enable a timeout here.
+      constexpr uint64_t kTimeoutNanoseconds = 0;
+      annotation_guard =
+          mapped_node->TryCreateScopedSpinGuard(kTimeoutNanoseconds);
+      if (!annotation_guard) {
+        // This is expected if the process is writing to the Annotation, so
+        // don't log here and skip the annotation.
+        continue;
+      }
     }
 
     IOSIntermediateDumpWriter::ScopedArrayMap annotation_map(writer);
@@ -1201,6 +1257,73 @@ void InProcessIntermediateDumpHandler::WriteCrashpadAnnotationsList(
                        IntermediateDumpKey::kAnnotationType,
                        reinterpret_cast<const void*>(&type),
                        sizeof(type));
+  }
+}
+
+void InProcessIntermediateDumpHandler::WriteCrashpadExtraMemoryRanges(
+    IOSIntermediateDumpWriter* writer,
+    CrashpadInfo* crashpad_info) {
+  if (!crashpad_info->extra_memory_ranges()) {
+    return;
+  }
+
+  ScopedVMRead<SimpleAddressRangeBag> extra_memory_ranges;
+  if (!extra_memory_ranges.Read(crashpad_info->extra_memory_ranges())) {
+    CRASHPAD_RAW_LOG("Unable to read extra memory ranges object");
+    return;
+  }
+
+  IOSIntermediateDumpWriter::ScopedArray module_extra_memory_regions_array(
+      writer, IntermediateDumpKey::kModuleExtraMemoryRegions);
+
+  SimpleAddressRangeBag::Iterator iterator(*(extra_memory_ranges.get()));
+  while (const SimpleAddressRangeBag::Entry* entry = iterator.Next()) {
+    const uint64_t& address = entry->base;
+    const uint64_t& size = entry->size;
+    IOSIntermediateDumpWriter::ScopedArrayMap memory_region_map(writer);
+    WriteProperty(
+        writer, IntermediateDumpKey::kModuleExtraMemoryRegionAddress, &address);
+    WritePropertyBytes(writer,
+                       IntermediateDumpKey::kModuleExtraMemoryRegionData,
+                       reinterpret_cast<const void*>(address),
+                       size);
+  }
+}
+
+void InProcessIntermediateDumpHandler::
+    WriteCrashpadIntermediateDumpExtraMemoryRanges(
+        IOSIntermediateDumpWriter* writer,
+        CrashpadInfo* crashpad_info) {
+  if (!crashpad_info->intermediate_dump_extra_memory_ranges()) {
+    return;
+  }
+
+  ScopedVMRead<SimpleAddressRangeBag> intermediate_dump_extra_memory;
+  if (!intermediate_dump_extra_memory.Read(
+          crashpad_info->intermediate_dump_extra_memory_ranges())) {
+    CRASHPAD_RAW_LOG(
+        "Unable to read intermediate dump extra memory ranges object");
+    return;
+  }
+
+  IOSIntermediateDumpWriter::ScopedArray module_extra_memory_regions_array(
+      writer, IntermediateDumpKey::kModuleIntermediateDumpExtraMemoryRegions);
+
+  SimpleAddressRangeBag::Iterator iterator(
+      *(intermediate_dump_extra_memory.get()));
+  while (const SimpleAddressRangeBag::Entry* entry = iterator.Next()) {
+    const uint64_t& address = entry->base;
+    const uint64_t& size = entry->size;
+    IOSIntermediateDumpWriter::ScopedArrayMap memory_region_map(writer);
+    WriteProperty(
+        writer,
+        IntermediateDumpKey::kModuleIntermediateDumpExtraMemoryRegionAddress,
+        &address);
+    WritePropertyBytes(
+        writer,
+        IntermediateDumpKey::kModuleIntermediateDumpExtraMemoryRegionData,
+        reinterpret_cast<const void*>(address),
+        size);
   }
 }
 

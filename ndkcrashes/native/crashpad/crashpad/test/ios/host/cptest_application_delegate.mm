@@ -38,8 +38,10 @@
 #include "client/crash_report_database.h"
 #include "client/crashpad_client.h"
 #include "client/crashpad_info.h"
+#include "client/ring_buffer_annotation.h"
 #include "client/simple_string_dictionary.h"
 #include "client/simulate_crash.h"
+#include "minidump/test/minidump_user_extension_stream_util.h"
 #include "snapshot/minidump/process_snapshot_minidump.h"
 #include "test/file.h"
 #import "test/ios/host/cptest_crash_view_controller.h"
@@ -49,14 +51,43 @@
 #include "util/ios/raw_logging.h"
 #include "util/thread/thread.h"
 
-#if !defined(__has_feature) || !__has_feature(objc_arc)
-#error "This file requires ARC support."
-#endif
-
 using OperationStatus = crashpad::CrashReportDatabase::OperationStatus;
 using Report = crashpad::CrashReportDatabase::Report;
 
 namespace {
+
+class ReadToString : public crashpad::MemorySnapshot::Delegate {
+ public:
+  std::string result;
+
+  bool MemorySnapshotDelegateRead(void* data, size_t size) override {
+    result = std::string(reinterpret_cast<const char*>(data), size);
+    return true;
+  }
+};
+
+static constexpr char kExpectedStreamData[] = "Injected extension stream!";
+
+class TestUserStreamDataSource : public crashpad::UserStreamDataSource {
+ public:
+  TestUserStreamDataSource() {}
+
+  TestUserStreamDataSource(const TestUserStreamDataSource&) = delete;
+  TestUserStreamDataSource& operator=(const TestUserStreamDataSource&) = delete;
+
+  std::unique_ptr<crashpad::MinidumpUserExtensionStreamDataSource>
+  ProduceStreamData(crashpad::ProcessSnapshot* process_snapshot) override;
+};
+
+std::unique_ptr<crashpad::MinidumpUserExtensionStreamDataSource>
+TestUserStreamDataSource::ProduceStreamData(
+    crashpad::ProcessSnapshot* process_snapshot) {
+  return std::make_unique<crashpad::test::BufferExtensionStreamDataSource>(
+      0xCAFEBABE, kExpectedStreamData, sizeof(kExpectedStreamData));
+}
+
+constexpr crashpad::Annotation::Type kRingBufferType =
+    crashpad::Annotation::UserDefinedType(42);
 
 base::FilePath GetDatabaseDir() {
   base::FilePath database_dir([NSFileManager.defaultManager
@@ -106,13 +137,17 @@ GetProcessSnapshotMinidumpFromSinglePending() {
 
 UIWindow* GetAnyWindow() {
 #if defined(__IPHONE_15_0) && __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_15_0
-  if (@available(iOS 15.0, *)) {
-    UIWindowScene* scene = reinterpret_cast<UIWindowScene*>(
-        [UIApplication sharedApplication].connectedScenes.anyObject);
+  UIWindowScene* scene = reinterpret_cast<UIWindowScene*>(
+      [UIApplication sharedApplication].connectedScenes.anyObject);
+  if (@available(iOS 15.0, tvOS 15.0, *)) {
     return scene.keyWindow;
+  } else {
+    return [scene.windows firstObject];
   }
-#endif
+
+#else
   return [UIApplication sharedApplication].windows[0];
+#endif
 }
 
 [[clang::optnone]] void recurse(int counter) {
@@ -134,6 +169,8 @@ UIWindow* GetAnyWindow() {
 @implementation CPTestApplicationDelegate {
   crashpad::CrashpadClient client_;
   crashpad::ScopedFileHandle raw_logging_file_;
+  crashpad::SimpleAddressRangeBag extra_ranges_;
+  std::unique_ptr<std::string> extra_memory_string_;
 }
 
 @synthesize window = _window;
@@ -169,7 +206,19 @@ UIWindow* GetAnyWindow() {
           annotations,
           crashpad::CrashpadClient::
               ProcessPendingReportsObservationCallback())) {
-    client_.ProcessIntermediateDumps();
+    crashpad::UserStreamDataSources user_stream_data_sources;
+    if ([arguments containsObject:@"--test-extension-streams"]) {
+      user_stream_data_sources.push_back(
+          std::make_unique<TestUserStreamDataSource>());
+    }
+    client_.ProcessIntermediateDumps({}, &user_stream_data_sources);
+  }
+
+  if ([arguments containsObject:@"--test-extra_memory"]) {
+    crashpad::CrashpadInfo::GetCrashpadInfo()->set_extra_memory_ranges(
+        &extra_ranges_);
+    extra_memory_string_ = std::make_unique<std::string>("hello world");
+    extra_ranges_.Insert((void*)extra_memory_string_->c_str(), 11);
   }
 
   self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
@@ -251,7 +300,8 @@ UIWindow* GetAnyWindow() {
   NSDictionary* dict = @{
     @"simplemap" : [@{} mutableCopy],
     @"vector" : [@[] mutableCopy],
-    @"objects" : [@[] mutableCopy]
+    @"objects" : [@[] mutableCopy],
+    @"ringbuffers" : [@[] mutableCopy],
   };
   for (const auto* module : process_snapshot->Modules()) {
     for (const auto& kv : module->AnnotationsSimpleMap()) {
@@ -262,17 +312,58 @@ UIWindow* GetAnyWindow() {
       [dict[@"vector"] addObject:@(annotation.c_str())];
     }
     for (const auto& annotation : module->AnnotationObjects()) {
-      if (annotation.type !=
+      if (annotation.type ==
           static_cast<uint16_t>(crashpad::Annotation::Type::kString)) {
-        continue;
+        std::string value(
+            reinterpret_cast<const char*>(annotation.value.data()),
+            annotation.value.size());
+        [dict[@"objects"]
+            addObject:@{@(annotation.name.c_str()) : @(value.c_str())}];
+      } else if (annotation.type == static_cast<uint16_t>(kRingBufferType)) {
+        NSData* data = [NSData dataWithBytes:annotation.value.data()
+                                      length:annotation.value.size()];
+        [dict[@"ringbuffers"] addObject:@{@(annotation.name.c_str()) : data}];
       }
-      std::string value(reinterpret_cast<const char*>(annotation.value.data()),
-                        annotation.value.size());
-      [dict[@"objects"]
-          addObject:@{@(annotation.name.c_str()) : @(value.c_str())}];
     }
   }
   return [dict passByValue];
+}
+
+- (NSDictionary*)getExtraMemory {
+  auto process_snapshot = GetProcessSnapshotMinidumpFromSinglePending();
+  if (!process_snapshot)
+    return @{};
+
+  NSDictionary* dict = [@{} mutableCopy];
+
+  for (auto memory : process_snapshot->ExtraMemory()) {
+    ReadToString delegate;
+    if (memory->Size() > 0 && memory->Read(&delegate) &&
+        !delegate.result.empty()) {
+      NSString* key = [@(memory->Address()) stringValue];
+      NSString* value = @(delegate.result.c_str());
+      if (value.length) {
+        [dict setValue:value forKey:key];
+      }
+    }
+  }
+  return [dict passByValue];
+}
+
+- (BOOL)hasExtensionStream {
+  auto process_snapshot = GetProcessSnapshotMinidumpFromSinglePending();
+  if (!process_snapshot)
+    return NO;
+
+  auto streams = process_snapshot->CustomMinidumpStreams();
+  for (const auto& stream : streams) {
+    if (stream->stream_type() == 0xCAFEBABE) {
+      return memcmp(kExpectedStreamData,
+                    stream->data().data(),
+                    sizeof(kExpectedStreamData)) == 0;
+    }
+  }
+  return NO;
 }
 
 - (NSDictionary*)getProcessAnnotations {
@@ -326,6 +417,10 @@ UIWindow* GetAnyWindow() {
                              reason:@"Intentionally throwing error."
                            userInfo:@{NSUnderlyingErrorKey : error}] raise];
   });
+}
+
+- (void)crashNotAnNSException {
+  @throw @"Boom";
 }
 
 - (void)crashUnhandledNSException {
@@ -418,12 +513,23 @@ UIWindow* GetAnyWindow() {
       "#TEST# same-name"};
   static crashpad::StringAnnotation<32> test_annotation_four{
       "#TEST# same-name"};
+  static crashpad::RingBufferAnnotation<32> test_ring_buffer_annotation(
+      kRingBufferType, "#TEST# ring_buffer");
+  static crashpad::RingBufferAnnotation<32> test_busy_ring_buffer_annotation(
+      kRingBufferType, "#TEST# busy_ring_buffer");
 
   test_annotation_one.Set("moocow");
   test_annotation_two.Set("this will be cleared");
   test_annotation_three.Set("same-name 3");
   test_annotation_four.Set("same-name 4");
   test_annotation_two.Clear();
+  test_ring_buffer_annotation.Push("hello", 5);
+  test_ring_buffer_annotation.Push("goodbye", 7);
+  test_busy_ring_buffer_annotation.Push("busy", 4);
+  // Take the scoped spin guard on `test_busy_ring_buffer_annotation` to mimic
+  // an in-flight `Push()` so its contents are not included in the dump.
+  auto guard = test_busy_ring_buffer_annotation.TryCreateScopedSpinGuard(
+      /*timeout_nanos=*/0);
   abort();
 }
 
@@ -480,11 +586,39 @@ class CrashThread : public crashpad::Thread {
   mach_thread.Join();
 }
 
+class ThrowNSExceptionThread : public crashpad::Thread {
+ public:
+  explicit ThrowNSExceptionThread() : Thread() {}
+
+ private:
+  void ThreadMain() override {
+    for (int i = 0; i < 300; ++i) {
+      @try {
+        NSArray* empty_array = @[];
+        [empty_array objectAtIndex:42];
+      } @catch (NSException* exception) {
+      } @finally {
+      }
+    }
+  }
+};
+
+- (void)catchConcurrentNSException {
+  std::vector<ThrowNSExceptionThread> race_threads(30);
+  for (ThrowNSExceptionThread& race_thread : race_threads) {
+    race_thread.Start();
+  }
+
+  for (ThrowNSExceptionThread& race_thread : race_threads) {
+    race_thread.Join();
+  }
+}
+
 - (void)crashInHandlerReentrant {
   crashpad::CrashpadClient client_;
-  client_.SetMachExceptionCallbackForTesting(abort);
+  client_.SetExceptionCallbackForTesting(abort);
 
-  // Trigger a Mach exception.
+  // Trigger an exception.
   [self crashTrap];
 }
 

@@ -43,10 +43,18 @@
 - (bool)pendingReportExceptionInfo:(NSNumber**)exception_info;
 
 // Return an NSDictionary with a dictionary named "simplemap", an array named
-// "vector" and an array named "objects", representing the combination of all
-// modules AnnotationsSimpleMap, AnnotationsVector and AnnotationObjects
-// (strings only) respectively.
+// "vector" an array named "objects", and an array named "ringbuffers",
+// representing the combination of all modules AnnotationsSimpleMap,
+// AnnotationsVector and AnnotationObjects (String and RingBuffer type)
+// respectively.
 - (NSDictionary*)getAnnotations;
+
+// Return an NSDictionary with a dictionary representing all key value pairs of
+// ExtraMemory MemorySnapshots where the data can be converted to an NSString.
+- (NSDictionary*)getExtraMemory;
+
+// Returns YES if a minidump contains the expected custom stream data.
+- (BOOL)hasExtensionStream;
 
 // Return an NSDictionary representing the ProcessSnapshotMinidump
 // AnnotationsSimpleMap.
@@ -72,6 +80,9 @@
 
 // Trigger a crash with an uncaught NSException.
 - (void)crashNSException;
+
+// Trigger a crash throwing something that isn't an NSException (an NSString).
+- (void)crashNotAnNSException;
 
 // Trigger a crash with an uncaught and unhandled NSException.
 - (void)crashUnhandledNSException;
@@ -102,6 +113,9 @@
 
 // Triggers a simulataneous Mach exception and signal in different threads.
 - (void)crashConcurrentSignalAndMach;
+
+// Triggers simultaneous caught NSExceptions
+- (void)catchConcurrentNSException;
 
 // Triggers a SIGABRT signal while handling an NSException to test reentrant
 // exceptions.

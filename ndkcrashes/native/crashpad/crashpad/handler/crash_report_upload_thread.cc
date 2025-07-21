@@ -132,8 +132,8 @@ void CrashReportUploadThread::ReportPending(const UUID& report_uuid) {
     if (connect(socketDesc, (const struct sockaddr *) &addr, addrLen) < 0) {
         LOG(WARNING) << "can't connect: " << strerror(errno);
     } else {
-      const char* data = report_uuid.ToString().data();
-      write(socketDesc, data, strlen(data));
+      const std::string uuid = report_uuid.ToString();
+      write(socketDesc, uuid.data(), uuid.size());
       close(socketDesc);
     }
   }
@@ -260,7 +260,6 @@ void CrashReportUploadThread::ProcessPendingReport(
 
     case CrashReportDatabase::kCannotRequestUpload:
       NOTREACHED();
-      return;
   }
 
   std::string response_body;

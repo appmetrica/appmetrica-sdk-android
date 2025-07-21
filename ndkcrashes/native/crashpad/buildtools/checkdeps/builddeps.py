@@ -1,5 +1,5 @@
-#!/usr/bin/env python
-# Copyright 2013 The Chromium Authors. All rights reserved.
+#!/usr/bin/env python3
+# Copyright 2013 The Chromium Authors
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -109,7 +109,9 @@ class DepsBuilder(object):
     self._ignore_specific_rules = ignore_specific_rules
     self._git_source_directories = None
 
-    if os.path.exists(os.path.join(base_directory, '.git')):
+    if os.getcwd().startswith('/google/cog/cloud'):
+      self.is_git = False
+    elif os.path.exists(os.path.join(base_directory, '.git')):
       self.is_git = True
     elif os.path.exists(os.path.join(base_directory, '.svn')):
       self.is_git = False
@@ -320,6 +322,8 @@ class DepsBuilder(object):
       if self.is_git:
         if NormalizePath(current_dir) not in self._git_source_directories:
           continue
+      elif os.getcwd().startswith('/google/cog/cloud'):
+        pass
       elif not os.path.exists(os.path.join(current_dir, '.svn')):
         continue
 

@@ -11,8 +11,8 @@ Maven: `io.appmetrica.analytics:analytics-ndk-crashes:${VERSION}`.
 
 ## Prerequisites
 
-- cmake version 3.10.2
-- NDK version 21.1.6352462
+- cmake version 3.31.6
+- NDK version 28.2.13676358
 - [Crashpad Prerequisites](https://chromium.googlesource.com/crashpad/crashpad/+/HEAD/doc/developing.md#prerequisites)
 
 ## Builds

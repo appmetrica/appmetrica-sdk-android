@@ -13,7 +13,7 @@ namespace appmetrica {
         crashpad::CrashReportDatabase::OperationStatus readResult = database->GetCompletedReports(&reports);
         bool noError = readResult == crashpad::CrashReportDatabase::OperationStatus::kNoError;
         if (noError) {
-            LOGD("Found %d completed reports for delete", reports.size());
+            LOGD("Found %zu completed reports for delete", reports.size());
             for (const auto &report: reports) {
                 LOGD("Delete completed report with uuid %s", report.uuid.ToString().c_str());
                 bool deleteResult = database->DeleteReport(report.uuid);
@@ -43,7 +43,7 @@ namespace appmetrica {
     bool NativeCrashDatabase::lookUpCrashReports(std::vector<CrashpadUploadReport> &reports) {
         std::vector<crashpad::CrashReportDatabase::Report> localReports;
         if (database->GetPendingReports(&localReports) == crashpad::CrashReportDatabase::OperationStatus::kNoError) {
-            LOGD("Found %d native crashes", localReports.size());
+            LOGD("Found %zu native crashes", localReports.size());
             for (const auto &report: localReports) {
                 CrashpadUploadReport uploadReport;
                 LOGD("Read native crash for %s", report.uuid.ToString().c_str());

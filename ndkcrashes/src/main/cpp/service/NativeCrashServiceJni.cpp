@@ -54,7 +54,7 @@ Java_io_appmetrica_analytics_ndkcrashes_jni_service_NativeCrashServiceJni_readAl
             crashes.add(crash.jObject);
         }
 
-        LOGD("NativeCrashServiceJni.readAllCrashes return %d crashes", reports.size());
+        LOGD("NativeCrashServiceJni.readAllCrashes return %zu crashes", reports.size());
         return crashes.jObject;
     } else {
         LOGD("NativeCrashServiceJni.readAllCrashes return 0 crashes. Database is not initialized");

@@ -2,11 +2,15 @@ package io.appmetrica.analytics.gradle
 
 import com.android.build.api.dsl.BuildType
 import com.android.build.gradle.LibraryExtension
+import org.apache.tools.ant.taskdefs.condition.Os
 import org.gradle.api.Project
+import org.gradle.api.Task
 import org.gradle.api.file.Directory
 import org.gradle.api.tasks.Copy
 import org.gradle.api.tasks.Exec
+import org.gradle.api.tasks.TaskProvider
 import org.gradle.configurationcache.extensions.capitalized
+import org.gradle.internal.os.OperatingSystem
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.extra
 import org.gradle.kotlin.dsl.register
@@ -49,11 +53,11 @@ private fun Project.crashpadOutDir(nativeBuildType: String): Directory =
 
 private fun Project.configureNative() {
     configure<LibraryExtension> {
-        ndkVersion = "21.1.6352462" // this default version from agp plugin, changes will have no effect
+        ndkVersion = "28.2.13676358"
         externalNativeBuild {
             // https://developer.android.com/ndk/guides/cmake
             cmake {
-                version = "3.10.2"
+                version = "3.31.6"
                 path = file("src/main/cpp/CMakeLists.txt")
             }
         }
@@ -97,6 +101,8 @@ private fun isPrimitive(obj: Any): Boolean {
 
 private fun Project.configureCrashpad() {
     val crashpadTaskGroup = "crashpad"
+    val prepareGn = prepareBin("gn", project.layout.projectDirectory.dir("native/crashpad/buildtools/linux64"))
+    val prepareNinja = prepareBin("ninja", project.layout.projectDirectory.dir("native/crashpad/crashpad/third_party/ninja/linux"))
     nativeBuildTypes.values.distinct().forEach { nativeBuildType ->
         val nativeBuildTypeCapitalized = nativeBuildType.capitalize(Locale.ROOT)
         val generateAllNinja = tasks.register("generate${nativeBuildTypeCapitalized}Ninja") {
@@ -128,6 +134,7 @@ private fun Project.configureCrashpad() {
                     "target_os" to "android",
                 ).map { "${it.key}=${if (isPrimitive(it.value)) it.value else "\"${it.value}\""}" }
                 commandLine("gn", "gen", ninjaDir, "--args=${args.joinToString(" ")}")
+                dependsOn(prepareGn)
             }
             generateAllNinja.configure { dependsOn(generateNinja) }
             val buildNinja = tasks.register<Exec>("build${variantNameCapitalized}Ninja") {
@@ -135,7 +142,7 @@ private fun Project.configureCrashpad() {
                 description = "Build ninja for ${nativeBuildType} with ${ndkArch} arch"
                 workingDir = crashpadSourceDir.asFile
                 commandLine("ninja", "-C", ninjaDir, "crashpad_handler_named_as_so")
-                dependsOn(generateNinja)
+                dependsOn(prepareNinja, generateNinja)
             }
             buildAllNinja.configure { dependsOn(buildNinja) }
             val buildCrashpad = tasks.register<Copy>("build${variantNameCapitalized}Crashpad") {
@@ -163,6 +170,23 @@ private fun Project.configureCrashpad() {
                     ))
                 }
             }
+        }
+    }
+}
+
+private fun Project.prepareBin(name: String, dir: Directory): TaskProvider<Copy> {
+    return tasks.register<Copy>("prepare${name.replaceFirstChar { it.uppercaseChar() }}") {
+        onlyIf { OperatingSystem.current().isLinux }
+        into(dir)
+        from(when {
+            Os.isArch("arm64") -> dir.file("$name-arm64")
+            Os.isArch("amd64") -> dir.file("$name-amd64")
+            else -> error("Unknown arch ${System.getProperty("os.arch")}")
+        })
+        rename { name }
+        doFirst {
+            logger.info("Detect os ${System.getProperty("os.name")}")
+            logger.info("Detect arc ${System.getProperty("os.arc")}")
         }
     }
 }
