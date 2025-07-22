@@ -10,6 +10,7 @@ import io.appmetrica.analytics.impl.proxy.validation.ConfigChecker;
 import io.appmetrica.analytics.impl.utils.validation.ThrowIfFailedValidator;
 import io.appmetrica.analytics.impl.utils.validation.Validator;
 import io.appmetrica.analytics.impl.utils.validation.api.ApiKeyValidator;
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -741,6 +742,13 @@ public class AppMetricaConfig {
         @NonNull
         public Builder withDeviceType(@Nullable String deviceType) {
             this.deviceType = deviceType;
+            if (!PredefinedDeviceTypes.ALL_VALUES.contains(deviceType)) {
+                PublicLogger.getAnonymousInstance().info(
+                    "PredefinedDeviceTypes does not contain value for `deviceType = %s`. " +
+                        "It may cause events to not appear in AppMetrica reports.",
+                    deviceType
+                );
+            }
             return this;
         }
 

@@ -1240,6 +1240,7 @@
   "analytics/src/test/java/io/appmetrica/analytics/MockUtils.kt":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/test/java/io/appmetrica/analytics/MockUtils.kt",
   "analytics/src/test/java/io/appmetrica/analytics/ModuleEventTest.kt":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/test/java/io/appmetrica/analytics/ModuleEventTest.kt",
   "analytics/src/test/java/io/appmetrica/analytics/ModulesFacadeTest.kt":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/test/java/io/appmetrica/analytics/ModulesFacadeTest.kt",
+  "analytics/src/test/java/io/appmetrica/analytics/PredefinedDeviceTypesTest.kt":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/test/java/io/appmetrica/analytics/PredefinedDeviceTypesTest.kt",
   "analytics/src/test/java/io/appmetrica/analytics/PreloadInfoTest.kt":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/test/java/io/appmetrica/analytics/PreloadInfoTest.kt",
   "analytics/src/test/java/io/appmetrica/analytics/ReceiptTest.kt":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/test/java/io/appmetrica/analytics/ReceiptTest.kt",
   "analytics/src/test/java/io/appmetrica/analytics/RemoteProtoTest.kt":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/test/java/io/appmetrica/analytics/RemoteProtoTest.kt",
