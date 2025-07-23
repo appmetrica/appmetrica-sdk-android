@@ -176,9 +176,9 @@ private fun Project.configureCrashpad() {
 
 private fun Project.prepareBin(name: String, dir: Directory): TaskProvider<Copy> {
     return tasks.register<Copy>("prepare${name.replaceFirstChar { it.uppercaseChar() }}") {
-        onlyIf { OperatingSystem.current().isLinux }
         into(dir)
         from(when {
+            !OperatingSystem.current().isLinux -> emptyList<String>()
             Os.isArch("arm64") -> dir.file("$name-arm64")
             Os.isArch("amd64") -> dir.file("$name-amd64")
             else -> error("Unknown arch ${System.getProperty("os.arch")}")
