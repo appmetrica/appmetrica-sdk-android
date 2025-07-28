@@ -65,6 +65,14 @@
       to: 7.1.1
       forcible: false # versions from 8.0.0 will have separate module for work
 - group: io.appmetrica.analytics
+  name: analytics-billing-v8
+  dependencies:
+    - group: com.android.billingclient
+      name: billing
+      repository: https://dl.google.com/android/maven2
+      from: 8.0.0
+      to: 8.0.0
+- group: io.appmetrica.analytics
   name: analytics-gpllibrary
   dependencies:
     - group: com.google.android.gms

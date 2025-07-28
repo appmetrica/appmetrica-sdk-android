@@ -28,7 +28,9 @@ internal object BillingTypeDetector {
             version.startsWith("4.") -> BillingType.NONE
             version.startsWith("5.") -> BillingType.LIBRARY_V6
             version.startsWith("6.") -> BillingType.LIBRARY_V6
-            else -> BillingType.LIBRARY_V6
+            version.startsWith("7.") -> BillingType.LIBRARY_V6
+            version.startsWith("8.") -> BillingType.LIBRARY_V8
+            else -> BillingType.LIBRARY_V8
         }
     }
 }

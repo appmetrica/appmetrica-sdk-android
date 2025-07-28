@@ -53,10 +53,24 @@ class BillingTypeDetectorTest : CommonTest() {
     }
 
     @Test
+    fun getBillingTypeIfLibraryAndVersion7() {
+        BuildConfig.VERSION_NAME = "7.0.0"
+        whenever(ReflectionUtils.findClass(BUILD_CONFIG_CLASS)).thenReturn(BuildConfig::class.java)
+        assertThat(BillingTypeDetector.getBillingType()).isEqualTo(BillingType.LIBRARY_V6)
+    }
+
+    @Test
+    fun getBillingTypeIfLibraryAndVersion8() {
+        BuildConfig.VERSION_NAME = "8.0.0"
+        whenever(ReflectionUtils.findClass(BUILD_CONFIG_CLASS)).thenReturn(BuildConfig::class.java)
+        assertThat(BillingTypeDetector.getBillingType()).isEqualTo(BillingType.LIBRARY_V8)
+    }
+
+    @Test
     fun getBillingTypeIfLibraryAndWrongVersion() {
         BuildConfig.VERSION_NAME = "999.0.0"
         whenever(ReflectionUtils.findClass(BUILD_CONFIG_CLASS)).thenReturn(BuildConfig::class.java)
-        assertThat(BillingTypeDetector.getBillingType()).isEqualTo(BillingType.LIBRARY_V6)
+        assertThat(BillingTypeDetector.getBillingType()).isEqualTo(BillingType.LIBRARY_V8)
     }
 
     @Test

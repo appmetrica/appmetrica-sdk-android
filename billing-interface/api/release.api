@@ -18,7 +18,7 @@ public class io.appmetrica.analytics.billinginterface.internal.BillingInfo {
 }
 
 public enum io.appmetrica.analytics.billinginterface.internal.BillingType {
-    LIBRARY_V6, NONE
+    LIBRARY_V6, LIBRARY_V8, NONE
 
     public static io.appmetrica.analytics.billinginterface.internal.BillingType valueOf(String)
     public static io.appmetrica.analytics.billinginterface.internal.BillingType[] values()

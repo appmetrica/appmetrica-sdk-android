@@ -166,6 +166,7 @@ dependencies {
     implementation(project(":appsetid"))
     implementation(project(":billing-interface"))
     implementation(project(":billing-v6"))
+    implementation(project(":billing-v8"))
     implementation(project(":core-api"))
     implementation(project(":core-utils"))
     implementation(project(":location-api"))

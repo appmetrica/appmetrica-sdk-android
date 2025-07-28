@@ -139,6 +139,13 @@
                 },
                 {
                     "group": "io.appmetrica.analytics",
+                    "module": "analytics-billing-v8",
+                    "version": {
+                        "requires": "7.11.0"
+                    }
+                },
+                {
+                    "group": "io.appmetrica.analytics",
                     "module": "analytics-core-api",
                     "version": {
                         "requires": "7.11.0"
