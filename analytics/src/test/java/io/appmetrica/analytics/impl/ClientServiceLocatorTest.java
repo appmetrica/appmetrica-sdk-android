@@ -12,7 +12,7 @@ import io.appmetrica.analytics.impl.reporter.ReporterLifecycleListener;
 import io.appmetrica.analytics.impl.startup.uuid.MultiProcessSafeUuidProvider;
 import io.appmetrica.analytics.impl.startup.uuid.UuidFromClientPreferencesImporter;
 import io.appmetrica.analytics.impl.utils.AppMetricaServiceProcessDetector;
-import io.appmetrica.analytics.impl.utils.CurrentProcessDetector;
+import io.appmetrica.analytics.impl.utils.process.CurrentProcessDetector;
 import io.appmetrica.analytics.impl.utils.FirstLaunchDetector;
 import io.appmetrica.analytics.impl.utils.executors.ClientExecutorProvider;
 import io.appmetrica.analytics.testutils.CommonTest;
@@ -132,8 +132,8 @@ public class ClientServiceLocatorTest extends CommonTest {
     }
 
     @Test
-    public void getProcessDetector() {
-        assertThat(mClientServiceLocator.getProcessDetector()).isSameAs(mCurrentProcessDetector);
+    public void getProcessNameProvider() {
+        assertThat(mClientServiceLocator.getProcessNameProvider()).isSameAs(mCurrentProcessDetector);
     }
 
     @Test

@@ -55,7 +55,7 @@ class AppMetricaUncaughtExceptionHandlerTest : CommonTest() {
 
     @Before
     fun setUp() {
-        whenever(ClientServiceLocator.getInstance().processDetector.processName).thenReturn(processName)
+        whenever(ClientServiceLocator.getInstance().processNameProvider.getProcessName()).thenReturn(processName)
         AppMetricaUncaughtExceptionHandler.reset()
     }
 

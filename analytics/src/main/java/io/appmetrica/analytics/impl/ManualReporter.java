@@ -13,8 +13,8 @@ import io.appmetrica.analytics.impl.crash.jvm.converter.RegularErrorConverter;
 import io.appmetrica.analytics.impl.crash.jvm.converter.UnhandledExceptionConverter;
 import io.appmetrica.analytics.impl.reporter.ManualReporterContext;
 import io.appmetrica.analytics.impl.reporter.ReporterLifecycleListener;
-import io.appmetrica.analytics.impl.utils.ProcessDetector;
 import io.appmetrica.analytics.impl.utils.limitation.SimpleMapLimitation;
+import io.appmetrica.analytics.impl.utils.process.ProcessNameProvider;
 import io.appmetrica.analytics.internal.CounterConfiguration;
 
 class ManualReporter extends BaseReporter {
@@ -49,7 +49,7 @@ class ManualReporter extends BaseReporter {
                     config.userProfileID
                 ),
                 extraMetaInfoRetriever,
-                ClientServiceLocator.getInstance().getProcessDetector(),
+                ClientServiceLocator.getInstance().getProcessNameProvider(),
                 new UnhandledExceptionConverter(),
                 new RegularErrorConverter(),
                 new CustomErrorConverter(),
@@ -64,7 +64,7 @@ class ManualReporter extends BaseReporter {
                    @NonNull ReporterConfig config,
                    ReporterEnvironment reporterEnvironment,
                    @NonNull ExtraMetaInfoRetriever extraMetaInfoRetriever,
-                   @NonNull ProcessDetector processDetector,
+                   @NonNull ProcessNameProvider processNameProvider,
                    @NonNull UnhandledExceptionConverter unhandledExceptionConverter,
                    @NonNull RegularErrorConverter regularErrorConverter,
                    @NonNull CustomErrorConverter customErrorConverter,
@@ -75,7 +75,7 @@ class ManualReporter extends BaseReporter {
                 reportsHandler,
                 reporterEnvironment,
                 extraMetaInfoRetriever,
-                processDetector,
+                processNameProvider,
                 unhandledExceptionConverter,
                 regularErrorConverter,
                 customErrorConverter,

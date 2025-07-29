@@ -41,7 +41,7 @@ internal class MainReporterComponents(
 
     val appStatusMonitor = AppStatusMonitor()
 
-    val processDetector = ClientServiceLocator.getInstance().processDetector
+    val processDetector = ClientServiceLocator.getInstance().processNameProvider
 
     val activityStateManager = ActivityStateManager()
 

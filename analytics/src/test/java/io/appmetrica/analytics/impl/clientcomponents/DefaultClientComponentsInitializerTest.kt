@@ -29,7 +29,7 @@ class DefaultClientComponentsInitializerTest : CommonTest() {
 
     @Test
     fun onCreate() {
-        whenever(ClientServiceLocator.getInstance().currentProcessDetector.isMainProcess).thenReturn(true)
+        whenever(ClientServiceLocator.getInstance().currentProcessDetector.isMainProcess()).thenReturn(true)
         initializer.onCreate()
         verify(ClientServiceLocator.getInstance().moduleEntryPointsRegister)
             .register(*expectedModules.map { ConstantModuleEntryPointProvider(it) }.toTypedArray())
@@ -37,7 +37,7 @@ class DefaultClientComponentsInitializerTest : CommonTest() {
 
     @Test
     fun onCreateIfNotMainProcess() {
-        whenever(ClientServiceLocator.getInstance().currentProcessDetector.isMainProcess).thenReturn(false)
+        whenever(ClientServiceLocator.getInstance().currentProcessDetector.isMainProcess()).thenReturn(false)
         initializer.onCreate()
         verifyNoInteractions(ClientServiceLocator.getInstance().moduleEntryPointsRegister)
     }

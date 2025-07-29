@@ -46,7 +46,7 @@ import io.appmetrica.analytics.impl.startup.CollectingFlags;
 import io.appmetrica.analytics.impl.startup.StartupState;
 import io.appmetrica.analytics.impl.startup.uuid.MultiProcessSafeUuidProvider;
 import io.appmetrica.analytics.impl.telephony.TelephonyDataProvider;
-import io.appmetrica.analytics.impl.utils.CurrentProcessDetector;
+import io.appmetrica.analytics.impl.utils.process.CurrentProcessDetector;
 import io.appmetrica.analytics.impl.utils.executors.ExecutorWrapper;
 import io.appmetrica.analytics.impl.utils.executors.InterruptionSafeHandlerThread;
 import io.appmetrica.analytics.impl.utils.executors.ServiceExecutorProvider;

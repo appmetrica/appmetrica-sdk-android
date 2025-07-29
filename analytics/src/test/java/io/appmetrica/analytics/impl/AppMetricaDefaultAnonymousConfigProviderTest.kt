@@ -2,8 +2,8 @@ package io.appmetrica.analytics.impl
 
 import io.appmetrica.analytics.AppMetricaConfig
 import io.appmetrica.analytics.AppMetricaLibraryAdapterConfig
-import io.appmetrica.analytics.impl.utils.CurrentProcessDetector
 import io.appmetrica.analytics.impl.utils.FirstLaunchDetector
+import io.appmetrica.analytics.impl.utils.process.CurrentProcessDetector
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule
 import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
@@ -30,7 +30,7 @@ class AppMetricaDefaultAnonymousConfigProviderTest : CommonTest() {
     fun setUp() {
         firstLaunchDetector = ClientServiceLocator.getInstance().firstLaunchDetector
         currentProcessDetector = ClientServiceLocator.getInstance().currentProcessDetector
-        whenever(currentProcessDetector.isMainProcess).thenReturn(true)
+        whenever(currentProcessDetector.isMainProcess()).thenReturn(true)
     }
 
     @Test
@@ -82,7 +82,7 @@ class AppMetricaDefaultAnonymousConfigProviderTest : CommonTest() {
     @Test
     fun `getConfig for non main process and not first launch`() {
         whenever(firstLaunchDetector.isNotFirstLaunch()).thenReturn(true)
-        whenever(currentProcessDetector.isMainProcess).thenReturn(false)
+        whenever(currentProcessDetector.isMainProcess()).thenReturn(false)
         val config = appMetricaDefaultAnonymousConfigProvider.getConfig(
             AppMetricaLibraryAdapterConfig.newConfigBuilder().build()
         )

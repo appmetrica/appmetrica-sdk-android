@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl
 
 import io.appmetrica.analytics.AppMetricaConfig
 import io.appmetrica.analytics.AppMetricaLibraryAdapterConfig
-import io.appmetrica.analytics.impl.utils.CurrentProcessDetector
+import io.appmetrica.analytics.impl.utils.process.CurrentProcessDetector
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
 class AppMetricaDefaultAnonymousConfigProvider {
@@ -18,7 +18,7 @@ class AppMetricaDefaultAnonymousConfigProvider {
 
     fun getConfig(libraryAdapterConfig: AppMetricaLibraryAdapterConfig): AppMetricaConfig {
         val builder = AppMetricaConfig.newConfigBuilder(anonymousApiKey)
-        if (currentProcessDetector.isMainProcess && firstLaunchDetector.isNotFirstLaunch()) {
+        if (currentProcessDetector.isMainProcess() && firstLaunchDetector.isNotFirstLaunch()) {
             DebugLogger.info(tag, "Add handleFirstActivationAsUpdate value to config")
             builder.handleFirstActivationAsUpdate(true)
         } else {

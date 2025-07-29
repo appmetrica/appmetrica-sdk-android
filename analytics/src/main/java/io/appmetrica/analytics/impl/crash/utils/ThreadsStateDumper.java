@@ -8,7 +8,7 @@ import io.appmetrica.analytics.coreutils.internal.StringUtils;
 import io.appmetrica.analytics.impl.ClientServiceLocator;
 import io.appmetrica.analytics.impl.crash.jvm.client.AllThreads;
 import io.appmetrica.analytics.impl.crash.jvm.client.ThreadState;
-import io.appmetrica.analytics.impl.utils.ProcessDetector;
+import io.appmetrica.analytics.impl.utils.process.ProcessNameProvider;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -32,7 +32,7 @@ public class ThreadsStateDumper {
 
     private final ThreadProvider threadProvider;
     private final BiFunction<Thread, StackTraceElement[], ThreadState> threadConverter;
-    private final ProcessDetector processDetector;
+    private final ProcessNameProvider processNameProvider;
 
     public ThreadsStateDumper() {
         this(new ThreadProvider() {
@@ -55,18 +55,18 @@ public class ThreadsStateDumper {
                      return Thread.getAllStackTraces();
                  }
              }, new FullStateConverter(),
-            ClientServiceLocator.getInstance().getProcessDetector()
+            ClientServiceLocator.getInstance().getProcessNameProvider()
         );
     }
 
     public ThreadsStateDumper(
         @NonNull ThreadProvider threadProvider,
         @NonNull BiFunction<Thread, StackTraceElement[], ThreadState> converter,
-        @NonNull ProcessDetector processDetector
+        @NonNull ProcessNameProvider processNameProvider
     ) {
         this.threadProvider = threadProvider;
         this.threadConverter = converter;
-        this.processDetector = processDetector;
+        this.processNameProvider = processNameProvider;
     }
 
     /**
@@ -77,7 +77,7 @@ public class ThreadsStateDumper {
         return new AllThreads(
             getMainThreadState(mainThread),
             getAllThreadsDump(mainThread, null),
-            processDetector.getProcessName()
+            processNameProvider.getProcessName()
         );
     }
 

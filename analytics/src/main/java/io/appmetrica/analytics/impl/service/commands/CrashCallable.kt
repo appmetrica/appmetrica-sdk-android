@@ -44,7 +44,7 @@ internal class CrashCallable(
     }
 
     private fun shouldProcessCrashViaFile(): Boolean {
-        return currentProcessDetector.processName == appMetricaServiceProcessDetector.processName(context)
+        return currentProcessDetector.getProcessName() == appMetricaServiceProcessDetector.processName(context)
     }
 
     override fun handleAbsentService(): Boolean {

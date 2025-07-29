@@ -63,7 +63,7 @@ class AnrFromApiReportingTaskTest : CommonTest() {
         assertThat(threadProvider.mainThread).isEqualTo(mainThread)
         assertThat(threadProvider.allThreadsStacktraces).isEqualTo(allThreads)
         assertThat(arguments[1]).isEqualTo(fullStateConverterConstructionRule.constructionMock.constructed().first())
-        assertThat(arguments[2]).isEqualTo(ClientServiceLocator.getInstance().processDetector)
+        assertThat(arguments[2]).isEqualTo(ClientServiceLocator.getInstance().processNameProvider)
 
         assertThat(fullStateConverterConstructionRule.constructionMock.constructed()).hasSize(1)
         assertThat(fullStateConverterConstructionRule.argumentInterceptor.flatArguments()).isEmpty()

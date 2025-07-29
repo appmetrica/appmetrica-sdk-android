@@ -139,7 +139,7 @@ public abstract class BaseReporterTest extends BaseReporterData {
         mReporter = getReporter();
         when(mReporterEnvironment.getReporterConfiguration()).thenReturn(mCounterConfiguration);
         mReporter.setKeepAliveHandler(mKeepAliveHandler);
-        doReturn(processName).when(processDetector).getProcessName();
+        doReturn(processName).when(processNameProvider).getProcessName();
     }
 
     @Test

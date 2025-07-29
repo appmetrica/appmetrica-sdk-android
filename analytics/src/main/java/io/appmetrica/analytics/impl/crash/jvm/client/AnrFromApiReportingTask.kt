@@ -20,7 +20,7 @@ class AnrFromApiReportingTask(
                 override fun getAllThreadsStacktraces(): Map<Thread, Array<StackTraceElement>> = allThreads
             },
             FullStateConverter(),
-            ClientServiceLocator.getInstance().processDetector
+            ClientServiceLocator.getInstance().processNameProvider
         )
 
         anrReporter.reportAnr(threadsStateDumper.threadsDumpForAnr)

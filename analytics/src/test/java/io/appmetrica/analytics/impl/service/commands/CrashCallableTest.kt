@@ -93,7 +93,7 @@ internal class CrashCallableTest : CommonTest() {
 
     @Test
     fun appMetricaProcess() {
-        whenever(ClientServiceLocator.getInstance().currentProcessDetector.processName)
+        whenever(ClientServiceLocator.getInstance().currentProcessDetector.getProcessName())
             .thenReturn(appMetricaProcess)
 
         crashCallable.call()
@@ -104,7 +104,7 @@ internal class CrashCallableTest : CommonTest() {
 
     @Test
     fun tryToExecuteTwice() {
-        whenever(ClientServiceLocator.getInstance().currentProcessDetector.processName)
+        whenever(ClientServiceLocator.getInstance().currentProcessDetector.getProcessName())
             .thenReturn(appMetricaProcess)
 
         crashCallable.call()
@@ -118,7 +118,7 @@ internal class CrashCallableTest : CommonTest() {
 
     @Test
     fun nonAppMetricaProcess() {
-        whenever(ClientServiceLocator.getInstance().currentProcessDetector.processName)
+        whenever(ClientServiceLocator.getInstance().currentProcessDetector.getProcessName())
             .thenReturn(anotherProcess)
 
         crashCallable.call()

@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.crash.utils;
 import io.appmetrica.analytics.coreapi.internal.backport.BiFunction;
 import io.appmetrica.analytics.impl.crash.jvm.client.AllThreads;
 import io.appmetrica.analytics.impl.crash.jvm.client.ThreadState;
-import io.appmetrica.analytics.impl.utils.ProcessDetector;
+import io.appmetrica.analytics.impl.utils.process.ProcessNameProvider;
 import io.appmetrica.analytics.testutils.CommonTest;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -32,7 +32,7 @@ public class ThreadsStateDumperTest extends CommonTest {
     private ThreadsStateDumper.ThreadProvider threadProvider;
     private final BiFunction<Thread, StackTraceElement[], ThreadState> threadConverter = mock(BiFunction.class);
     @Mock
-    private ProcessDetector processDetector;
+    private ProcessNameProvider processNameProvider;
 
     @InjectMocks
     private ThreadsStateDumper threadsStateDumper;
@@ -64,7 +64,7 @@ public class ThreadsStateDumperTest extends CommonTest {
     @Test
     public void testAnr() {
         String processName = "processName";
-        doReturn(processName).when(processDetector).getProcessName();
+        doReturn(processName).when(processNameProvider).getProcessName();
 
         AllThreads allThreads = threadsStateDumper.getThreadsDumpForAnr();
         SoftAssertions soft = new SoftAssertions();

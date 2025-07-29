@@ -14,7 +14,7 @@ class AppMetricaUncaughtExceptionHandler(
 
     private val tag = "[AppMetricaUncaughtExceptionHandler]"
 
-    private val processDetector = ClientServiceLocator.getInstance().processDetector
+    private val processNameProvider = ClientServiceLocator.getInstance().processNameProvider
     private val crashedThreadConverter = CrashedThreadConverter()
     private val threadsStateDumper = ThreadsStateDumper()
 
@@ -27,7 +27,7 @@ class AppMetricaUncaughtExceptionHandler(
                 AllThreads(
                     crashedThreadConverter.apply(thread),
                     threadsStateDumper.getThreadsDumpForCrash(thread),
-                    processDetector.processName
+                    processNameProvider.getProcessName()
                 )
             )
         } catch (e: Throwable) {

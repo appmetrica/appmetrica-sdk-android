@@ -156,7 +156,8 @@ internal class MainReporterComponentsTest : CommonTest() {
 
     @Test
     fun processDetector() {
-        assertThat(mainReporterComponents.processDetector).isEqualTo(ClientServiceLocator.getInstance().processDetector)
+        assertThat(mainReporterComponents.processDetector)
+            .isEqualTo(ClientServiceLocator.getInstance().processNameProvider)
     }
 
     @Test

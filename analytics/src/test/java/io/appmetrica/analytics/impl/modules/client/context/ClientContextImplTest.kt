@@ -83,13 +83,13 @@ class ClientContextImplTest : CommonTest() {
 
     @Test
     fun `processDetector for true`() {
-        whenever(ClientServiceLocator.getInstance().currentProcessDetector.isMainProcess).thenReturn(true)
+        whenever(ClientServiceLocator.getInstance().currentProcessDetector.isMainProcess()).thenReturn(true)
         assertThat(clientContext.processDetector.isMainProcess()).isTrue()
     }
 
     @Test
     fun `processDetector for false`() {
-        whenever(ClientServiceLocator.getInstance().currentProcessDetector.isMainProcess).thenReturn(false)
+        whenever(ClientServiceLocator.getInstance().currentProcessDetector.isMainProcess()).thenReturn(false)
         assertThat(clientContext.processDetector.isMainProcess()).isFalse()
     }
 }

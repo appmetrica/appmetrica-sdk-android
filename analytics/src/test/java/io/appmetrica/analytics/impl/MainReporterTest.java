@@ -291,7 +291,7 @@ public class MainReporterTest extends BaseReporterTest {
         when(mainReporterComponents.getReportsHandler()).thenReturn(mReportsHandler);
         when(mainReporterComponents.getReporterEnvironment()).thenReturn(mReporterEnvironment);
         when(mainReporterComponents.getExtraMetaInfoRetriever()).thenReturn(mExtraMetaInfoRetriever);
-        when(mainReporterComponents.getProcessDetector()).thenReturn(processDetector);
+        when(mainReporterComponents.getProcessDetector()).thenReturn(processNameProvider);
         when(mainReporterComponents.getUnhandledExceptionConverter()).thenReturn(unhandledExceptionConverter);
         when(mainReporterComponents.getRegularErrorConverter()).thenReturn(regularErrorConverter);
         when(mainReporterComponents.getCustomErrorConverter()).thenReturn(customErrorConverter);
@@ -497,7 +497,7 @@ public class MainReporterTest extends BaseReporterTest {
             when(mainReporterComponents.getContext()).thenReturn(mContext);
             when(mainReporterComponents.getReportsHandler()).thenReturn(mReportsHandler);
             when(mainReporterComponents.getReporterEnvironment()).thenReturn(mReporterEnvironment);
-            when(mainReporterComponents.getProcessDetector()).thenReturn(processDetector);
+            when(mainReporterComponents.getProcessDetector()).thenReturn(processNameProvider);
             when(mainReporterComponents.getAppStatusMonitor()).thenReturn(mAppStatusMonitor);
             when(mainReporterComponents.getNativeCrashClient()).thenReturn(nativeCrashClient);
             return new MainReporter(

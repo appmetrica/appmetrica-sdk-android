@@ -35,8 +35,8 @@ import io.appmetrica.analytics.impl.startup.StartupIdentifiersProvider;
 import io.appmetrica.analytics.impl.utils.BooleanUtils;
 import io.appmetrica.analytics.impl.utils.JsonHelper;
 import io.appmetrica.analytics.impl.utils.PluginErrorDetailsExtensionKt;
-import io.appmetrica.analytics.impl.utils.ProcessDetector;
 import io.appmetrica.analytics.impl.utils.PublicLogConstructor;
+import io.appmetrica.analytics.impl.utils.process.ProcessNameProvider;
 import io.appmetrica.analytics.impl.utils.validation.ValidationResult;
 import io.appmetrica.analytics.impl.utils.validation.Validator;
 import io.appmetrica.analytics.impl.utils.validation.revenue.RevenueValidator;
@@ -102,7 +102,7 @@ public abstract class BaseReporter implements IBaseReporter {
 
     protected final ReportsHandler mReportsHandler;
     private KeepAliveHandler mKeepAliveHandler;
-    private final ProcessDetector processDetector;
+    private final ProcessNameProvider processNameProvider;
 
     @NonNull
     private final ExtraMetaInfoRetriever mExtraMetaInfoRetriever;
@@ -115,7 +115,7 @@ public abstract class BaseReporter implements IBaseReporter {
                  final ReportsHandler reportsHandler,
                  @NonNull ReporterEnvironment reporterEnvironment,
                  @NonNull ExtraMetaInfoRetriever extraMetaInfoRetriever,
-                 @NonNull ProcessDetector processDetector,
+                 @NonNull ProcessNameProvider processNameProvider,
                  @NonNull UnhandledExceptionConverter unhandledExceptionConverter,
                  @NonNull RegularErrorConverter regularErrorConverter,
                  @NonNull CustomErrorConverter customErrorConverter,
@@ -137,7 +137,7 @@ public abstract class BaseReporter implements IBaseReporter {
         if (BooleanUtils.isTrue(mReporterEnvironment.getReporterConfiguration().isLogEnabled())) {
             mPublicLogger.setEnabled(true);
         }
-        this.processDetector = processDetector;
+        this.processNameProvider = processNameProvider;
         this.adRevenuePayloadEnricher = new SupportedAdNetworksPayloadEnricher(mContext);
     }
 
@@ -371,7 +371,7 @@ public abstract class BaseReporter implements IBaseReporter {
         }
         return UnhandledExceptionFactory.getUnhandledExceptionFromJava(
                 originalError,
-                new AllThreads(processDetector.getProcessName()),
+                new AllThreads(processNameProvider.getProcessName()),
                 methodCallStacktrace == null ? null : Arrays.asList(methodCallStacktrace),
                 mExtraMetaInfoRetriever.getBuildId(),
                 mExtraMetaInfoRetriever.isOffline()
@@ -411,7 +411,7 @@ public abstract class BaseReporter implements IBaseReporter {
     public void reportUnhandledException(@NonNull Throwable exception) {
         UnhandledException unhandledException = UnhandledExceptionFactory.getUnhandledExceptionFromJava(
                 exception,
-                new AllThreads(processDetector.getProcessName()),
+                new AllThreads(processNameProvider.getProcessName()),
                 null,
                 mExtraMetaInfoRetriever.getBuildId(),
                 mExtraMetaInfoRetriever.isOffline()

@@ -16,9 +16,9 @@ import io.appmetrica.analytics.impl.startup.uuid.MultiProcessSafeUuidProvider;
 import io.appmetrica.analytics.impl.startup.uuid.UuidFromClientPreferencesImporter;
 import io.appmetrica.analytics.impl.utils.FirstLaunchDetector;
 import io.appmetrica.analytics.impl.utils.AppMetricaServiceProcessDetector;
-import io.appmetrica.analytics.impl.utils.CurrentProcessDetector;
-import io.appmetrica.analytics.impl.utils.ProcessDetector;
+import io.appmetrica.analytics.impl.utils.process.CurrentProcessDetector;
 import io.appmetrica.analytics.impl.utils.executors.ClientExecutorProvider;
+import io.appmetrica.analytics.impl.utils.process.ProcessNameProvider;
 
 public class ClientServiceLocator {
 
@@ -152,7 +152,7 @@ public class ClientServiceLocator {
     }
 
     @NonNull
-    public ProcessDetector getProcessDetector() {
+    public ProcessNameProvider getProcessNameProvider() {
         return currentProcessDetector;
     }
 
