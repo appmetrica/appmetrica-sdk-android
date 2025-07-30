@@ -39,6 +39,36 @@
       repository: https://dl.google.com/android/maven2
       from: 1.0
       to: 2.2
+    - group: com.appsflyer # for new versions notification
+      name: af-android-sdk
+      repository: https://repo.maven.apache.org/maven2
+      from: 6.17.0
+      to: 6.17.0
+    - group: com.adjust.sdk # for new versions notification
+      name: adjust-android
+      repository: https://repo.maven.apache.org/maven2
+      from: 5.4.1
+      to: 5.4.1
+    - group: com.kochava.tracker # for new versions notification
+      name: tracker
+      repository: https://repo.maven.apache.org/maven2
+      from: 5.7.0
+      to: 5.7.0
+    - group: com.tenjin # for new versions notification
+      name: android-sdk
+      repository: https://repo.maven.apache.org/maven2
+      from: 1.16.7
+      to: 1.16.7
+    - group: io.airbridge # for new versions notification
+      name: sdk-android
+      repository: https://sdk-download.airbridge.io/maven
+      from: 4.7.0
+      to: 4.7.0
+    - group: com.singular.sdk # for new versions notification
+      name: singular_sdk
+      repository: https://maven.singular.net
+      from: 12.9.1
+      to: 12.9.1
 - group: io.appmetrica.analytics
   name: analytics-apphud
   dependencies:
