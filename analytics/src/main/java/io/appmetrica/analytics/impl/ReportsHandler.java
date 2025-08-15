@@ -218,7 +218,8 @@ public class ReportsHandler {
             TAG,
             "reportStartupEvent: indentifiers: %s; freshClientClids: %s; forceRefreshConfiguration: %s",
             Arrays.toString(identifiers.toArray()),
-            freshClientClids
+            freshClientClids,
+            forceRefreshConfiguration
         );
         Bundle payload = new Bundle();
         payload.putParcelable(
