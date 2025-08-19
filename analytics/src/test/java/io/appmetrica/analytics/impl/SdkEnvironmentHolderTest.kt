@@ -12,6 +12,7 @@ import io.appmetrica.analytics.coreapi.internal.model.ScreenInfo
 import io.appmetrica.analytics.coreapi.internal.model.SdkInfo
 import io.appmetrica.analytics.coreutils.internal.services.FrameworkDetector
 import io.appmetrica.analytics.coreutils.internal.services.PackageManagerUtils
+import io.appmetrica.analytics.impl.utils.DeviceTypeProvider
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.constructionRule
 import io.appmetrica.analytics.testutils.on
@@ -71,8 +72,8 @@ class SdkEnvironmentHolderTest : CommonTest() {
     }
 
     @get:Rule
-    val phoneUtilsMockedStaticRule = staticRule<PhoneUtils> {
-        on { PhoneUtils.getDeviceType(any(), any()) } doReturn DeviceTypeValues.PHONE
+    val deviceTypeProviderRule = staticRule<DeviceTypeProvider> {
+        on { DeviceTypeProvider.getDeviceType(any<Context>(), any<Point>()) } doReturn DeviceTypeValues.PHONE
     }
 
     private val sdkBuildType = "sdk_build_type"
@@ -131,7 +132,7 @@ class SdkEnvironmentHolderTest : CommonTest() {
     fun `mayBeUpdateScreenInfo if deviceType changed`() {
         val point = Point(100, 200)
         val newScreenInfo = ScreenInfo(point.x, point.y, 300, 400f)
-        whenever(PhoneUtils.getDeviceType(context, point)).thenReturn(DeviceTypeValues.TV)
+        whenever(DeviceTypeProvider.getDeviceType(context, point)).thenReturn(DeviceTypeValues.TV)
         sdkEnvironmentHolder.mayBeUpdateScreenInfo(newScreenInfo)
         assertThat(sdkEnvironmentHolder.sdkEnvironment.deviceType).isEqualTo(DeviceTypeValues.TV)
         verify(listener).onSdkEnvironmentChanged()
@@ -172,7 +173,7 @@ class SdkEnvironmentHolderTest : CommonTest() {
         sdkEnvironmentHolder.mayBeUpdateDeviceTypeFromClient(DeviceTypeValues.TV)
         val point = Point(100, 200)
         val newScreenInfo = ScreenInfo(point.x, point.y, 300, 400f)
-        whenever(PhoneUtils.getDeviceType(context, point)).thenReturn(DeviceTypeValues.CAR)
+        whenever(DeviceTypeProvider.getDeviceType(context, point)).thenReturn(DeviceTypeValues.CAR)
         sdkEnvironmentHolder.mayBeUpdateScreenInfo(newScreenInfo)
 
         assertThat(sdkEnvironmentHolder.sdkEnvironment.deviceType).isEqualTo(DeviceTypeValues.TV)

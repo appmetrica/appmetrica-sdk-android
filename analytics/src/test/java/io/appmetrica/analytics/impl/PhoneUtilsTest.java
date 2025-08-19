@@ -1,16 +1,12 @@
 package io.appmetrica.analytics.impl;
 
 import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.Point;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.os.Build;
-import android.util.DisplayMetrics;
 import androidx.annotation.Nullable;
-import io.appmetrica.analytics.coreapi.internal.constants.DeviceTypeValues;
 import io.appmetrica.analytics.impl.protobuf.backend.EventProto;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.TestUtils;
@@ -29,8 +25,6 @@ import org.robolectric.annotation.Config;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -53,47 +47,6 @@ public class PhoneUtilsTest extends CommonTest {
         mContext = TestUtils.createMockedContext();
         when(mContext.getSystemService(any(String.class))).thenReturn(mConnectivityManager);
         when(mConnectivityManager.getActiveNetworkInfo()).thenReturn(mNetworkInfo);
-    }
-
-    @Test
-    public void deviceTypeZeroDensity() {
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        displayMetrics.density = 0;
-        Resources resources = mock(Resources.class);
-        doReturn(displayMetrics).when(resources).getDisplayMetrics();
-        doReturn(resources).when(mContext).getResources();
-        assertThat(PhoneUtils.getDeviceType(mContext, new Point(0, 0))).isEqualTo(DeviceTypeValues.PHONE);
-    }
-
-    @Test
-    public void deviceTypeGetDisplayMetricsThrows() {
-        Resources resources = mock(Resources.class);
-        doThrow(new RuntimeException()).when(resources).getDisplayMetrics();
-        doReturn(resources).when(mContext).getResources();
-        assertThat(PhoneUtils.getDeviceType(mContext, new Point(0, 0))).isEqualTo(DeviceTypeValues.PHONE);
-    }
-
-    @Test
-    public void testDeviceTypeForPhone() {
-        assertDeviceTypeForPhoneParams(1080, 1920, 2, DeviceTypeValues.PHONE); //Hightscreen Boost3
-        assertDeviceTypeForPhoneParams(720, 1280, 2, DeviceTypeValues.PHONE); //Huawei ASCEND P6 U06
-        assertDeviceTypeForPhoneParams(1440, 2560, 4, DeviceTypeValues.PHONE); //LG G3 (LG-D855)
-        assertDeviceTypeForPhoneParams(800, 1280, 1, DeviceTypeValues.TABLET); //Galaxy Tab 2 (GT-P5110)
-        assertDeviceTypeForPhoneParams(1600, 2560, 2, DeviceTypeValues.TABLET);//Samsung Nexus 10
-        assertDeviceTypeForPhoneParams(600, 1024, 1, DeviceTypeValues.TABLET); //Galaxy Tab 3 (SM-T210)
-        assertDeviceTypeForPhoneParams(800, 1280, 1.33f, DeviceTypeValues.TABLET); //nexus 7
-    }
-
-    private void assertDeviceTypeForPhoneParams(final int width, final int height, final float density, final String phone) {
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        displayMetrics.density = density;
-        Resources resources = mock(Resources.class);
-        doReturn(displayMetrics).when(resources).getDisplayMetrics();
-        doReturn(resources).when(mContext).getResources();
-
-        String deviceType = PhoneUtils.getDeviceType(mContext, new Point(width, height));
-
-        assertThat(deviceType).isEqualTo(phone);
     }
 
     @Test

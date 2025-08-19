@@ -3,7 +3,6 @@ package io.appmetrica.analytics.impl;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.graphics.Point;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
@@ -14,13 +13,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.backport.FunctionWithThrowable;
-import io.appmetrica.analytics.coreapi.internal.constants.DeviceTypeValues;
 import io.appmetrica.analytics.coreutils.internal.AndroidUtils;
-import io.appmetrica.analytics.coreutils.internal.services.SafePackageManager;
 import io.appmetrica.analytics.coreutils.internal.system.SystemServiceUtils;
 import io.appmetrica.analytics.impl.protobuf.backend.EventProto;
 import io.appmetrica.analytics.impl.utils.MapWithDefault;
-import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.util.Locale;
 
 public final class PhoneUtils {
@@ -43,62 +39,9 @@ public final class PhoneUtils {
     }
 
     private static final String TAG = "[PhoneUtils]";
-    private static final SafePackageManager sSafePackageManager = new SafePackageManager();
 
     // Prevent instantiation
     private PhoneUtils() {}
-
-    private static final int MIN_SW_DP_FOR_TABLET = 600;
-    private static final int DIAGONAL_INCHES_TV = 15;
-    private static final int DIAGONAL_INCHES_TABLET = 7;
-
-    /**
-     * Determines if the device is a tablet (tablet, phone?).
-     *
-     * @param ctx {@link Context} object. The calling context.
-     */
-    @NonNull
-    public static String getDeviceType(@NonNull Context ctx, @NonNull Point realDeviceScreenSize) {
-        float density = 0;
-        try {
-            density = ctx.getResources().getDisplayMetrics().density;
-        } catch (Throwable ex) {
-            DebugLogger.INSTANCE.error(TAG, ex);
-        }
-        if (density == 0) {
-            return DeviceTypeValues.PHONE;
-        }
-
-        final int realDeviceWidth = realDeviceScreenSize.x;
-        final int realDeviceHeight = realDeviceScreenSize.y;
-
-        final float widthDp = realDeviceWidth / density;
-        final float heightDp = realDeviceHeight / density;
-        final float smallestWidthDp = Math.min(widthDp, heightDp);
-
-        float densityDpi = density * 160;
-        final float widthInchesApprox = realDeviceWidth / densityDpi;
-        final float heightInchesApprox = realDeviceHeight / densityDpi;
-        final double diagonalInchesApprox =
-            Math.sqrt((widthInchesApprox * widthInchesApprox) + (heightInchesApprox * heightInchesApprox));
-
-        if (isAndroidTV(ctx, diagonalInchesApprox)) {
-            return DeviceTypeValues.TV;
-        }
-
-        if (diagonalInchesApprox >= DIAGONAL_INCHES_TABLET || smallestWidthDp >= MIN_SW_DP_FOR_TABLET) {
-            return DeviceTypeValues.TABLET;
-        }
-
-        return DeviceTypeValues.PHONE;
-    }
-
-    // Based on information from Android Developers:
-    // http://developer.android.com/training/tv/unsupported-features-tv.html
-    private static boolean isAndroidTV(Context context, double diagonalInches) {
-        return diagonalInches >= DIAGONAL_INCHES_TV
-            && !sSafePackageManager.hasSystemFeature(context, "android.hardware.touchscreen");
-    }
 
     @NonNull
     public static String normalizedLocale(@NonNull Locale locale) {

@@ -12,6 +12,7 @@ import io.appmetrica.analytics.coreapi.internal.model.SdkInfo
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.SdkEnvironmentProvider
 import io.appmetrica.analytics.coreutils.internal.services.FrameworkDetector
 import io.appmetrica.analytics.coreutils.internal.services.PackageManagerUtils
+import io.appmetrica.analytics.impl.utils.DeviceTypeProvider
 import java.util.concurrent.CopyOnWriteArrayList
 
 class SdkEnvironmentHolder(private val context: Context) : SdkEnvironmentProvider {
@@ -50,7 +51,7 @@ class SdkEnvironmentHolder(private val context: Context) : SdkEnvironmentProvide
     @Synchronized
     fun mayBeUpdateScreenInfo(screenInfo: ScreenInfo?) {
         if (screenInfo != null && screenInfo != sdkEnvironment.screenInfo) {
-            val deviceType = deviceTypeFromClient ?: PhoneUtils.getDeviceType(
+            val deviceType = deviceTypeFromClient ?: DeviceTypeProvider.getDeviceType(
                 context,
                 Point(screenInfo.width, screenInfo.height)
             )
