@@ -5,7 +5,7 @@
       name: play-services-ads
       repository: https://dl.google.com/android/maven2
       from: 20.7.0
-      to: 24.4.0
+      to: 24.5.0
 - group: io.appmetrica.analytics
   name: analytics-ad-revenue-applovin-v12
   dependencies:
@@ -21,7 +21,7 @@
       name: fairbid-sdk
       repository: https://repo.maven.apache.org/maven2
       from: 1.0.0
-      to: 3.61.0
+      to: 3.62.0
 - group: io.appmetrica.analytics
   name: analytics-ad-revenue-ironsource-v7
   dependencies:
@@ -29,7 +29,7 @@
       name: mediationsdk
       repository: https://android-sdk.is.com
       from: 7.1.0
-      to: 8.10.0
+      to: 8.11.0
       namespace: com.ironsource
 - group: io.appmetrica.analytics
   name: analytics
@@ -42,13 +42,13 @@
     - group: com.appsflyer # for new versions notification
       name: af-android-sdk
       repository: https://repo.maven.apache.org/maven2
-      from: 6.17.0
-      to: 6.17.0
+      from: 6.17.3
+      to: 6.17.3
     - group: com.adjust.sdk # for new versions notification
       name: adjust-android
       repository: https://repo.maven.apache.org/maven2
-      from: 5.4.1
-      to: 5.4.1
+      from: 5.4.3
+      to: 5.4.3
     - group: com.kochava.tracker # for new versions notification
       name: tracker
       repository: https://repo.maven.apache.org/maven2
@@ -62,13 +62,13 @@
     - group: io.airbridge # for new versions notification
       name: sdk-android
       repository: https://sdk-download.airbridge.io/maven
-      from: 4.7.0
-      to: 4.7.0
+      from: 4.7.1
+      to: 4.7.1
     - group: com.singular.sdk # for new versions notification
       name: singular_sdk
       repository: https://maven.singular.net
-      from: 12.9.1
-      to: 12.9.1
+      from: 12.10.0
+      to: 12.10.0
 - group: io.appmetrica.analytics
   name: analytics-apphud
   dependencies:
