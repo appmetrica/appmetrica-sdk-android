@@ -5,6 +5,10 @@ Detailed information and instructions for integration are available in the [docu
 
 Classes in packages `${MODULE_NAMESPACE}.internal` are intended for interaction between modules and are not part of the public API. Also changing these classes does not correspond to [semver](https://semver.org/).
 
+## Requirements
+
+- JDK 17
+
 ## Builds
 
 ### Assemble
