@@ -31,6 +31,12 @@
       from: 7.1.0
       to: 8.11.0
       namespace: com.ironsource
+    - group: com.unity3d.ads-mediation
+      name: mediation-sdk
+      repository: https://repo.maven.apache.org/maven2
+      from: 7.9.0
+      to: 8.11.0
+      namespace: com.ironsource
 - group: io.appmetrica.analytics
   name: analytics
   dependencies:

@@ -21,6 +21,6 @@ dependencies {
     implementation(project(":logger"))
     implementation(project(":modules-api"))
 
-    compileOnly("com.ironsource.sdk:mediationsdk:7.4.0")
-    testImplementation("com.ironsource.sdk:mediationsdk:7.4.0")
+    compileOnly("com.unity3d.ads-mediation:mediation-sdk:8.10.0")
+    testImplementation("com.unity3d.ads-mediation:mediation-sdk:8.10.0")
 }
