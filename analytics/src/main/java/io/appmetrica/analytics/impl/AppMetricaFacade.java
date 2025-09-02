@@ -171,6 +171,11 @@ public class AppMetricaFacade implements IReporterFactoryProvider {
         getConfigurator().setUserProfileID(userProfileID);
     }
 
+    @WorkerThread
+    public static void addAutoCollectedDataSubscriber(@NonNull String subscriber) {
+        getConfigurator().addAutoCollectedDataSubscriber(subscriber);
+    }
+
     @AnyThread
     public void activateCore(@Nullable AppMetricaConfig from) {
         mCore.activate(from, this);

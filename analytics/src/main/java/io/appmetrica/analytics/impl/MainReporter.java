@@ -9,6 +9,7 @@ import io.appmetrica.analytics.AnrListener;
 import io.appmetrica.analytics.AppMetricaConfig;
 import io.appmetrica.analytics.ExternalAttribution;
 import io.appmetrica.analytics.coreutils.internal.WrapUtils;
+import io.appmetrica.analytics.coreutils.internal.collection.CollectionUtils;
 import io.appmetrica.analytics.impl.crash.jvm.client.MainReporterAnrController;
 import io.appmetrica.analytics.impl.utils.ApiProxyThread;
 import io.appmetrica.analytics.impl.utils.validation.NonEmptyStringValidator;
@@ -124,12 +125,20 @@ public class MainReporter extends BaseReporter implements IMainReporter {
         return tag;
     }
 
-    void updateConfig(AppMetricaConfig config, final boolean needToClearEnvironment) {
-        DebugLogger.INSTANCE.info(getTag(), "Update config: %s", config);
+    void updateConfig(@NonNull AppMetricaConfig config, @NonNull AppMetricaConfigExtension configExtension) {
+        DebugLogger.INSTANCE.info(getTag(), "Update config: %s; configExtension: $s", config, configExtension);
 
-        if (needToClearEnvironment) {
+        if (configExtension.getNeedClearEnvironment()) {
             clearAppEnvironment();
         }
+
+        List<String> autoCollectedDataSubscribers = configExtension.getAutoCollectedDataSubscribers();
+        if (!CollectionUtils.isNullOrEmpty(autoCollectedDataSubscribers)) {
+            DebugLogger.INSTANCE.info(getTag(), "Add auto collected subscribers: %s", autoCollectedDataSubscribers);
+            mReporterEnvironment.getReporterConfiguration()
+                .addAutoCollectedDataSubscribers(autoCollectedDataSubscribers);
+        }
+
         putAllToAppEnvironment(config.appEnvironment);
         putAllToErrorEnvironment(config.errorEnvironment);
 
@@ -218,6 +227,12 @@ public class MainReporter extends BaseReporter implements IMainReporter {
         mainReporterComponents.getNativeCrashClient().updateErrorEnvironment(
             mReporterEnvironment.getErrorEnvironment()
         );
+    }
+
+    @Override
+    public void addAutoCollectedDataSubscriber(@NonNull String subscriber) {
+        mPublicLogger.info("Add auto collected data subscriber: %s", subscriber);
+        mReporterEnvironment.getReporterConfiguration().addAutoCollectedDataSubscriber(subscriber);
     }
 
     @Override

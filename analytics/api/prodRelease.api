@@ -199,6 +199,7 @@ public class io.appmetrica.analytics.AppMetricaLibraryAdapter {
     public static void reportEvent([NonNull] String, [NonNull] String, [NonNull] String)
     public static void setAdvIdentifiersTracking(boolean)
     public static void setProxy([NonNull] OBFUSCATED[io.appmetrica.analytics.impl.proxy.AppMetricaLibraryAdapterProxy])
+    public static void subscribeForAutoCollectedData([NonNull] android.content.Context, [NonNull] String)
 }
 
 public class io.appmetrica.analytics.AppMetricaLibraryAdapterConfig {
@@ -358,6 +359,7 @@ public final class io.appmetrica.analytics.ModulesFacade {
     public static void setAdvIdentifiersTracking(boolean)
     public static void setProxy([NonNull] OBFUSCATED[io.appmetrica.analytics.impl.proxy.ModulesProxy])
     public static void setSessionExtra([NonNull] String, [Nullable] byte[])
+    public static void subscribeForAutoCollectedData([NonNull] android.content.Context, [NonNull] String)
 }
 
 public final class io.appmetrica.analytics.PredefinedDeviceTypes {
@@ -604,12 +606,15 @@ public class io.appmetrica.analytics.internal.CounterConfiguration implementatio
     public <init>([NonNull] io.appmetrica.analytics.internal.CounterConfiguration)
     public <init>([NonNull] io.appmetrica.analytics.internal.CounterConfigurationReporterType)
     public <init>([NonNull] String)
+    public final void addAutoCollectedDataSubscriber([NonNull] String)
+    public final void addAutoCollectedDataSubscribers([NonNull] java.util.List<String>)
     public void applyFromConfig([NonNull] io.appmetrica.analytics.AppMetricaConfig)
     public int describeContents()
     public static io.appmetrica.analytics.internal.CounterConfiguration fromBundle(android.os.Bundle)
     public String getApiKey()
     public String getAppBuildNumber()
     public String getAppVersion()
+    public [NonNull] java.util.List<String> getAutoCollectedDataSubscribers()
     public Boolean getDataSendingEnabled()
     public [Nullable] String getDeviceType()
     public [Nullable] Integer getDispatchPeriod()

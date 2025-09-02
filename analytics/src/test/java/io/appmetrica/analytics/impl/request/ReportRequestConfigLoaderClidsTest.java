@@ -7,6 +7,7 @@ import io.appmetrica.analytics.coreapi.internal.identifiers.AppSetIdProvider;
 import io.appmetrica.analytics.coreapi.internal.identifiers.AppSetIdScope;
 import io.appmetrica.analytics.coreapi.internal.identifiers.PlatformIdentifiers;
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.SdkEnvironmentProvider;
+import io.appmetrica.analytics.impl.AutoCollectedDataSubscribersHolder;
 import io.appmetrica.analytics.impl.CertificatesFingerprintsProvider;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.component.ComponentId;
@@ -43,6 +44,8 @@ public class ReportRequestConfigLoaderClidsTest extends CommonTest {
     @Mock
     private ComponentUnit componentUnit;
     @Mock
+    private AutoCollectedDataSubscribersHolder autoCollectedDataSubscribersHolder;
+    @Mock
     private ComponentId componentId;
     @Mock
     private ClidsStateChecker clidsStateChecker;
@@ -67,6 +70,7 @@ public class ReportRequestConfigLoaderClidsTest extends CommonTest {
         MockitoAnnotations.openMocks(this);
 
         doReturn(componentId).when(componentUnit).getComponentId();
+        doReturn(autoCollectedDataSubscribersHolder).when(componentUnit).getAutoCollectedDataSubscribersHolder();
         doReturn(RuntimeEnvironment.getApplication()).when(componentUnit).getContext();
         when(componentId.getPackage()).thenReturn(RuntimeEnvironment.getApplication().getPackageName());
         doReturn(mock(CertificatesFingerprintsProvider.class)).when(componentUnit).getCertificatesFingerprintsProvider();

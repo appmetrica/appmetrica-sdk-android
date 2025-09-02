@@ -35,6 +35,12 @@ class LibraryAdapterSynchronousStageExecutorContextTest : CommonTest() {
     }
 
     @Test
+    fun subscribeForAutoCollectedData() {
+        synchronousStageExecutor.subscribeForAutoCollectedData(context, "apiKey")
+        verify(ClientServiceLocator.getInstance().contextAppearedListener).onProbablyAppeared(context)
+    }
+
+    @Test
     fun coverage() {
         ContextCoverageUtils.checkCoverage(
             LibraryAdapterSynchronousStageExecutor::class.java,

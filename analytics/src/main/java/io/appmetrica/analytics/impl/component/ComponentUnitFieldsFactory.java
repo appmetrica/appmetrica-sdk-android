@@ -7,6 +7,7 @@ import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
 import io.appmetrica.analytics.coreutils.internal.logger.LoggerStorage;
 import io.appmetrica.analytics.impl.AppEnvironment;
+import io.appmetrica.analytics.impl.AutoCollectedDataSubscribersHolder;
 import io.appmetrica.analytics.impl.CertificatesFingerprintsProvider;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.LifecycleDependentComponentManager;
@@ -285,5 +286,12 @@ class ComponentUnitFieldsFactory {
     @NonNull
     SessionExtrasHolder createSessionExtraHolder() {
         return new SessionExtrasHolder(mContext, mComponentId);
+    }
+
+    @NonNull
+    AutoCollectedDataSubscribersHolder createAutoCollectedDataSubscribersHolder(
+        @NonNull PreferencesComponentDbStorage preferences
+    ) {
+        return new AutoCollectedDataSubscribersHolder(mComponentId, preferences);
     }
 }

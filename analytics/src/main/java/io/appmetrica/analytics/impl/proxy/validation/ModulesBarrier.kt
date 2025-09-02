@@ -47,11 +47,16 @@ class ModulesBarrier(
     fun sendEventsBuffer() {
     }
 
-    fun getReporter(context: Context, apiKey: String) {
+    fun getReporter(context: Context?, apiKey: String?) {
         contextValidator.validate(context)
         apiKeyValidator.validate(apiKey)
     }
 
     fun reportAdRevenue(adRevenue: AdRevenue, autoCollected: Boolean) {
+    }
+
+    fun subscribeForAutoCollectedData(context: Context?, apiKey: String?) {
+        contextValidator.validate(context)
+        apiKeyValidator.validate(apiKey)
     }
 }

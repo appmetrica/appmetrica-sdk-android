@@ -152,6 +152,15 @@ public final class ModulesFacade {
         proxy.reportAdRevenue(adRevenue, autoCollected);
     }
 
+    /** Subscribe for auto collected data.
+     *
+     * @param context Context object. Any application context.
+     * @param apiKey API key of the required reporter
+     */
+    public static void subscribeForAutoCollectedData(@NonNull Context context, @NonNull String apiKey) {
+        proxy.subscribeForAutoCollectedData(context, apiKey);
+    }
+
     /**
      * Internal method for unit-tests.
      *

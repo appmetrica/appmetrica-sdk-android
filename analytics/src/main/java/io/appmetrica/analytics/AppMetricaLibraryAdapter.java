@@ -60,6 +60,16 @@ public class AppMetricaLibraryAdapter {
     }
 
     /**
+     * Subscribes for auto-collected data flow.
+     *
+     * @param context {@link Context} object. Any application context.
+     * @param apiKey AppMetrica API_KEY.
+     */
+    public static void subscribeForAutoCollectedData(@NonNull Context context, @NonNull String apiKey) {
+        proxy.subscribeForAutoCollectedData(context, apiKey);
+    }
+
+    /**
      * Internal method for unit-tests.
      *
      * @param proxy Proxy object

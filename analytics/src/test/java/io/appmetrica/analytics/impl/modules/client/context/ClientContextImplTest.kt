@@ -73,7 +73,7 @@ class ClientContextImplTest : CommonTest() {
     @Test
     fun clientActivator() {
         clientContext.clientActivator.activate(context)
-        verify(ClientServiceLocator.getInstance().anonymousClientActivator).activate(context)
+        verify(ClientServiceLocator.getInstance().anonymousClientActivator).activateDelayed(context)
     }
 
     @Test

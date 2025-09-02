@@ -71,10 +71,10 @@ internal class AppMetricaImplTest : CommonTest() {
         ClientServiceLocator.getInstance().modulesController
     }
 
-    private val wasAppEnvironmentCleared = false
+    private val configExtension: AppMetricaConfigExtension = mock()
     private val defaultOneShotMetricaConfig: DefaultOneShotMetricaConfig by setUp {
-        whenever(ClientServiceLocator.getInstance().defaultOneShotConfig.wasAppEnvironmentCleared())
-            .thenReturn(wasAppEnvironmentCleared)
+        whenever(ClientServiceLocator.getInstance().defaultOneShotConfig.configExtension())
+            .thenReturn(configExtension)
         ClientServiceLocator.getInstance().defaultOneShotConfig
     }
 
@@ -150,12 +150,12 @@ internal class AppMetricaImplTest : CommonTest() {
     private val anonymousMainReporter: MainReporter = mock()
 
     private val reporterFactory: ReporterFactory = mock {
-        on { buildOrUpdateMainReporter(config, publicLogger, wasAppEnvironmentCleared) } doReturn mainReporter
+        on { buildOrUpdateMainReporter(config, publicLogger, configExtension) } doReturn mainReporter
         on {
-            buildOrUpdateMainReporter(configWithDisabled, publicLogger, wasAppEnvironmentCleared)
+            buildOrUpdateMainReporter(configWithDisabled, publicLogger, configExtension)
         } doReturn mainReporter
         on {
-            buildOrUpdateAnonymousMainReporter(anonymousConfig, publicOrAnonymousLogger, wasAppEnvironmentCleared)
+            buildOrUpdateAnonymousMainReporter(anonymousConfig, publicOrAnonymousLogger, configExtension)
         } doReturn anonymousMainReporter
     }
 
@@ -622,7 +622,7 @@ internal class AppMetricaImplTest : CommonTest() {
     @Test
     fun `activate - build main reporter`() {
         impl.activate(config)
-        verify(reporterFactory).buildOrUpdateMainReporter(config, publicLogger, wasAppEnvironmentCleared)
+        verify(reporterFactory).buildOrUpdateMainReporter(config, publicLogger, configExtension)
         verify(appOpenWatcher).setDeeplinkConsumer(deeplinkConsumer)
         assertThat(mainReporterApiConsumerProviderMockedConstructionRule.argumentInterceptor.flatArguments())
             .containsExactly(mainReporter)
@@ -635,7 +635,7 @@ internal class AppMetricaImplTest : CommonTest() {
         impl.activate(config)
         clearInvocations(reporterFactory, appOpenWatcher, sessionsTrackingManager)
         impl.activate(config)
-        verify(reporterFactory).buildOrUpdateMainReporter(config, publicLogger, wasAppEnvironmentCleared)
+        verify(reporterFactory).buildOrUpdateMainReporter(config, publicLogger, configExtension)
         verifyNoInteractions(appOpenWatcher, sessionsTrackingManager)
     }
 
@@ -643,7 +643,7 @@ internal class AppMetricaImplTest : CommonTest() {
     fun `activate anonymously - build main reporter`() {
         impl.activateAnonymously(appMetricaLibraryAdapterConfig)
         verify(reporterFactory)
-            .buildOrUpdateAnonymousMainReporter(anonymousConfig, publicOrAnonymousLogger, wasAppEnvironmentCleared)
+            .buildOrUpdateAnonymousMainReporter(anonymousConfig, publicOrAnonymousLogger, configExtension)
         verify(appOpenWatcher).setDeeplinkConsumer(deeplinkConsumer)
         assertThat(mainReporterApiConsumerProviderMockedConstructionRule.argumentInterceptor.flatArguments())
             .containsExactly(anonymousMainReporter)
@@ -657,7 +657,7 @@ internal class AppMetricaImplTest : CommonTest() {
         clearInvocations(reporterFactory, appOpenWatcher, sessionsTrackingManager)
         impl.activateAnonymously(appMetricaLibraryAdapterConfig)
         verify(reporterFactory)
-            .buildOrUpdateAnonymousMainReporter(anonymousConfig, publicOrAnonymousLogger, wasAppEnvironmentCleared)
+            .buildOrUpdateAnonymousMainReporter(anonymousConfig, publicOrAnonymousLogger, configExtension)
         verifyNoInteractions(appOpenWatcher, sessionsTrackingManager)
     }
 
@@ -666,7 +666,7 @@ internal class AppMetricaImplTest : CommonTest() {
         impl.activateAnonymously(appMetricaLibraryAdapterConfig)
         clearInvocations(reporterFactory, appOpenWatcher, sessionsTrackingManager)
         impl.activate(config)
-        verify(reporterFactory).buildOrUpdateMainReporter(config, publicLogger, wasAppEnvironmentCleared)
+        verify(reporterFactory).buildOrUpdateMainReporter(config, publicLogger, configExtension)
         verifyNoInteractions(appOpenWatcher)
         verify(sessionsTrackingManager, never()).setReporter(any())
     }
@@ -677,7 +677,7 @@ internal class AppMetricaImplTest : CommonTest() {
         clearInvocations(reporterFactory, appOpenWatcher, sessionsTrackingManager)
         impl.activateAnonymously(appMetricaLibraryAdapterConfig)
         verify(reporterFactory)
-            .buildOrUpdateAnonymousMainReporter(anonymousConfig, publicOrAnonymousLogger, wasAppEnvironmentCleared)
+            .buildOrUpdateAnonymousMainReporter(anonymousConfig, publicOrAnonymousLogger, configExtension)
         verifyNoInteractions(appOpenWatcher, sessionsTrackingManager)
     }
 

@@ -6,6 +6,7 @@ import androidx.annotation.Nullable;
 import io.appmetrica.analytics.AppMetrica;
 import io.appmetrica.analytics.coreutils.internal.time.TimePassedChecker;
 import io.appmetrica.analytics.impl.AppEnvironment;
+import io.appmetrica.analytics.impl.AutoCollectedDataSubscribersHolder;
 import io.appmetrica.analytics.impl.CertificatesFingerprintsProvider;
 import io.appmetrica.analytics.impl.CounterReport;
 import io.appmetrica.analytics.impl.DistributionSource;
@@ -22,7 +23,6 @@ import io.appmetrica.analytics.impl.db.VitalComponentDataProvider;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesComponentDbStorage;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesServiceDbStorage;
 import io.appmetrica.analytics.impl.events.ConditionalEventTrigger;
-import io.appmetrica.analytics.impl.events.ContainsUrgentEventsCondition;
 import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoState;
 import io.appmetrica.analytics.impl.request.ReportRequestConfig;
 import io.appmetrica.analytics.impl.request.StartupRequestConfig;
@@ -32,6 +32,8 @@ import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.MockedStaticRule;
 import io.appmetrica.analytics.testutils.TestUtils;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 import org.json.JSONObject;
 import org.junit.Rule;
@@ -59,8 +61,24 @@ public abstract class ComponentUnitBaseTest extends CommonTest {
     private StartupState mStartupState;
     @Mock
     ComponentId mComponentId;
-    @Mock
-    CommonArguments.ReporterArguments mReporterArguments;
+    private final Set<String> autoCollectedDataObservers = Set.of("First", "Second");
+    CommonArguments.ReporterArguments mReporterArguments = new CommonArguments.ReporterArguments(
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        autoCollectedDataObservers
+    );
     @Mock
     AppEnvironmentProvider mAppEnvironmentProvider;
     @Mock
@@ -102,8 +120,6 @@ public abstract class ComponentUnitBaseTest extends CommonTest {
     @Mock
     private ConditionalEventTrigger mConditionalEventTrigger;
     @Mock
-    private ContainsUrgentEventsCondition mUrgentEventsCondition;
-    @Mock
     private CertificatesFingerprintsProvider mCertificatesFingerprintsProvider;
     @Mock
     TimePassedChecker mTimePassedChecker;
@@ -113,6 +129,8 @@ public abstract class ComponentUnitBaseTest extends CommonTest {
     VitalComponentDataProvider vitalComponentDataProvider;
     @Mock
     SessionExtrasHolder sessionExtrasHolder;
+    @Mock
+    AutoCollectedDataSubscribersHolder autoCollectedDataSubscribersHolder;
 
     @Rule
     public MockedStaticRule<PublicLogConstructor> publicLogConstructorRule =
@@ -135,12 +153,19 @@ public abstract class ComponentUnitBaseTest extends CommonTest {
         when(mFieldsFactory.getPreferencesProvider()).thenReturn(mPreferencesProvider);
         when(mLoggerProvider.getPublicLogger()).thenReturn(mPublicLogger);
         when(mPreferencesProvider.createPreferencesComponentDbStorage()).thenReturn(mComponentPreferences);
-        when(mAppEnvironmentProvider.getOrCreate(mComponentId, mPublicLogger, mComponentPreferences)).thenReturn(mAppEnvironment);
+        when(mAppEnvironmentProvider.getOrCreate(mComponentId, mPublicLogger, mComponentPreferences))
+            .thenReturn(mAppEnvironment);
         when(mFieldsFactory.createEventFirstOccurrenceService()).thenReturn(mEventFirstOccurrenceService);
         when(mFieldsFactory.createDatabaseHelper(any(ComponentUnit.class))).thenReturn(mDatabaseHelper);
         when(mFieldsFactory.createTaskProcessor(any(ComponentUnit.class))).thenReturn(mTaskProcessor);
         when(mFieldsFactory.createConfigHolder(any(ComponentUnit.class))).thenReturn(mConfigHolder);
-        when(mFieldsFactory.createSessionManager(any(ComponentUnit.class), same(vitalComponentDataProvider), any(SessionManagerStateMachine.EventSaver.class))).thenReturn(mSessionManager);
+        when(mFieldsFactory.createSessionManager(
+            any(ComponentUnit.class),
+            same(vitalComponentDataProvider),
+            any(SessionManagerStateMachine.EventSaver.class))
+        ).thenReturn(mSessionManager);
+        when(mFieldsFactory.createAutoCollectedDataSubscribersHolder(mComponentPreferences))
+            .thenReturn(autoCollectedDataSubscribersHolder);
         when(createFieldsFactory().createReportSaver(
             mComponentPreferences,
             vitalComponentDataProvider,
@@ -149,11 +174,15 @@ public abstract class ComponentUnitBaseTest extends CommonTest {
             sessionExtrasHolder,
             mTaskProcessor
         )).thenReturn(mEventSaver);
-        when(mFieldsFactory.createEventProcessingStrategyFactory(any(ComponentUnit.class))).thenReturn(mEventProcessingStrategyFactory);
-        when(mFieldsFactory.createReportProcessor(any(ComponentUnit.class), same(mEventProcessingStrategyFactory))).thenReturn(mReportProcessor);
+        when(mFieldsFactory.createEventProcessingStrategyFactory(any(ComponentUnit.class)))
+            .thenReturn(mEventProcessingStrategyFactory);
+        when(mFieldsFactory.createReportProcessor(any(ComponentUnit.class), same(mEventProcessingStrategyFactory)))
+            .thenReturn(mReportProcessor);
         when(mFieldsFactory.createMigrationHelperCreator(any(ComponentUnit.class))).thenReturn(mMigrationHelperCreator);
-        when(mFieldsFactory.createEventTrigger(any(), any(), any(), any(), any(), any())).thenReturn(mConditionalEventTrigger);
-        when(mFieldsFactory.createCertificateFingerprintProvider(mComponentPreferences)).thenReturn(mCertificatesFingerprintsProvider);
+        when(mFieldsFactory.createEventTrigger(any(), any(), any(), any(), any(), any()))
+            .thenReturn(mConditionalEventTrigger);
+        when(mFieldsFactory.createCertificateFingerprintProvider(mComponentPreferences))
+            .thenReturn(mCertificatesFingerprintsProvider);
         when(mFieldsFactory.getVitalComponentDataProvider()).thenReturn(vitalComponentDataProvider);
         when(mFieldsFactory.createSessionExtraHolder()).thenReturn(sessionExtrasHolder);
         when(mMigrationHelperCreator.create(any(ComponentUnit.class))).thenReturn(mMigrationHelper);
@@ -162,6 +191,7 @@ public abstract class ComponentUnitBaseTest extends CommonTest {
         when(vitalComponentDataProvider.getLastMigrationApiLevel()).thenReturn(AppMetrica.getLibraryApiLevel());
         when(GlobalServiceLocator.getInstance().getPreloadInfoStorage()).thenReturn(mPreloadInfoStorage);
         when(GlobalServiceLocator.getInstance().getServicePreferences()).thenReturn(mServicePreferences);
+
         initCustomFields();
         mComponentUnit = createComponentUnit();
     }
@@ -273,6 +303,7 @@ public abstract class ComponentUnitBaseTest extends CommonTest {
     public void testUpdateSdkConfig() {
         mComponentUnit.updateSdkConfig(mReporterArguments);
         verify(mConfigHolder).updateArguments(mReporterArguments);
+        verify(autoCollectedDataSubscribersHolder).updateSubscribers(autoCollectedDataObservers);
     }
 
     @Test
@@ -684,6 +715,22 @@ public abstract class ComponentUnitBaseTest extends CommonTest {
     public abstract void testGetReporterType();
 
     private CommonArguments.ReporterArguments createReporterArgumentsWithLogsEnabled(@Nullable Boolean enabled) {
-        return new CommonArguments.ReporterArguments(null, null, null, null, null, null, null, enabled, null, null, null, null, null, null);
+        return new CommonArguments.ReporterArguments(
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            enabled,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            new HashSet<>()
+        );
     }
 }

@@ -60,7 +60,7 @@ public class DefaultOneShotMetricaConfigTest extends CommonTest {
 
     private void assertMergedValuesEqualsForConfigs(final AppMetricaConfig userConfig,
                                                     final AppMetricaConfig merged)
-            throws Exception {
+        throws Exception {
         ObjectPropertyAssertions(merged)
             .withIgnoredFields("anrMonitoring", "anrMonitoringTimeout", "apiKey", "appBuildNumber", "clids", "crashTransformer",
                 "customHosts", "deviceType", "dispatchPeriodSeconds", "distributionReferrer",
@@ -97,19 +97,19 @@ public class DefaultOneShotMetricaConfigTest extends CommonTest {
         Boolean advIdentifierTrackingEnabled = defaultOneShotMetricaConfig.isAdvIdentifiersTrackingEnabled();
 
         AppMetricaConfig userConfig = AppMetricaConfig.newConfigBuilder(TestsData.UUID_API_KEY)
-                .withLogs()
-                .withPreloadInfo(PreloadInfo.newBuilder("test").build())
-                .withAppBuildNumber(11)
-                .withDispatchPeriodSeconds(111)
-                .withMaxReportsCount(77)
-                .withDeviceType(PredefinedDeviceTypes.TABLET)
-                .withAdditionalConfig("YMM_clids", Collections.EMPTY_MAP)
-                .withAdditionalConfig("YMM_preloadInfoAutoTracking", false)
-                .withAdditionalConfig("YMM_preloadInfoAutoTracking", false)
-                .withAdditionalConfig("YMM_customHosts", Collections.singletonList(TestData.TEST_CUSTOM_HOST_URL))
-                .withUserProfileID("user_profile_id")
-                .withRevenueAutoTrackingEnabled(false)
-                .build();
+            .withLogs()
+            .withPreloadInfo(PreloadInfo.newBuilder("test").build())
+            .withAppBuildNumber(11)
+            .withDispatchPeriodSeconds(111)
+            .withMaxReportsCount(77)
+            .withDeviceType(PredefinedDeviceTypes.TABLET)
+            .withAdditionalConfig("YMM_clids", Collections.EMPTY_MAP)
+            .withAdditionalConfig("YMM_preloadInfoAutoTracking", false)
+            .withAdditionalConfig("YMM_preloadInfoAutoTracking", false)
+            .withAdditionalConfig("YMM_customHosts", Collections.singletonList(TestData.TEST_CUSTOM_HOST_URL))
+            .withUserProfileID("user_profile_id")
+            .withRevenueAutoTrackingEnabled(false)
+            .build();
 
         AppMetricaConfig merged = defaultOneShotMetricaConfig.mergeWithUserConfig(userConfig);
 
@@ -130,7 +130,7 @@ public class DefaultOneShotMetricaConfigTest extends CommonTest {
         defaultOneShotMetricaConfig.putAppEnvironmentValue("a", "1");
 
         AppMetricaConfig userConfig = AppMetricaConfig.newConfigBuilder(TestsData.UUID_API_KEY)
-                .withAppEnvironmentValue("b", "2").build();
+            .withAppEnvironmentValue("b", "2").build();
         AppMetricaConfig merged = defaultOneShotMetricaConfig.mergeWithUserConfig(userConfig);
         Map<String, String> appEnvironment = merged.appEnvironment;
 
@@ -174,7 +174,7 @@ public class DefaultOneShotMetricaConfigTest extends CommonTest {
         defaultOneShotMetricaConfig.putErrorEnvironmentValue("a", "1");
 
         AppMetricaConfig userConfig = AppMetricaConfig.newConfigBuilder(TestsData.UUID_API_KEY)
-                .withErrorEnvironmentValue("b", "2").build();
+            .withErrorEnvironmentValue("b", "2").build();
         AppMetricaConfig merged = defaultOneShotMetricaConfig.mergeWithUserConfig(userConfig);
         Map<String, String> errorEnvironment = merged.errorEnvironment;
 
@@ -273,14 +273,14 @@ public class DefaultOneShotMetricaConfigTest extends CommonTest {
     public void testHandleFirstActivationAsUpdateMerged() throws Exception {
         String apiKey = UUID.randomUUID().toString();
         AppMetricaConfig withUpdate = AppMetricaConfig.newConfigBuilder(apiKey)
-                .handleFirstActivationAsUpdate(true).build();
+            .handleFirstActivationAsUpdate(true).build();
 
         DefaultOneShotMetricaConfig defaultOneShotMetricaConfig = new DefaultOneShotMetricaConfig();
 
         assertThat(defaultOneShotMetricaConfig.mergeWithUserConfig(withUpdate).firstActivationAsUpdate).isTrue();
 
         withUpdate = AppMetricaConfig.newConfigBuilder(apiKey)
-                .handleFirstActivationAsUpdate(false).build();
+            .handleFirstActivationAsUpdate(false).build();
 
         assertThat(defaultOneShotMetricaConfig.mergeWithUserConfig(withUpdate).firstActivationAsUpdate).isFalse();
     }
@@ -383,5 +383,36 @@ public class DefaultOneShotMetricaConfigTest extends CommonTest {
         config.setReportsHandler(mReportsHandler);
         config.setAdvIdentifiersTracking(true);
         verify(mReportsHandler).updatePreActivationConfig(null, null, true);
+    }
+
+    @Test
+    public void addAutoCollectedDataSubscriber() {
+        String first = "first";
+        String second = "second";
+        DefaultOneShotMetricaConfig config = new DefaultOneShotMetricaConfig();
+        config.addAutoCollectedDataSubscriber(first);
+        config.addAutoCollectedDataSubscriber(second);
+        assertThat(config.autoCollectedDataSubscribers).containsExactly(first, second);
+        assertThat(config.configExtension().getAutoCollectedDataSubscribers()).containsExactly(first, second);
+    }
+
+    @Test
+    public void configExtension() {
+        DefaultOneShotMetricaConfig config = new DefaultOneShotMetricaConfig();
+        String subscriber = "subscriber";
+        config.addAutoCollectedDataSubscriber(subscriber);
+        config.clearAppEnvironment();
+        ObjectPropertyAssertions(config.configExtension())
+            .checkField("autoCollectedDataSubscribers", Collections.singletonList(subscriber))
+            .checkField("needClearEnvironment", true)
+            .checkAll();
+    }
+
+    @Test
+    public void configExtensionForDefault() {
+        ObjectPropertyAssertions(new DefaultOneShotMetricaConfig().configExtension())
+            .checkField("autoCollectedDataSubscribers", new ArrayList<String>())
+            .checkField("needClearEnvironment", false)
+            .checkAll();
     }
 }

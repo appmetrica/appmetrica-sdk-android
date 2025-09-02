@@ -2,10 +2,12 @@ package io.appmetrica.analytics.impl
 
 import android.content.Context
 import io.appmetrica.analytics.AppMetricaLibraryAdapterConfig
+import io.appmetrica.analytics.coreutils.internal.executors.SafeRunnable
 import io.appmetrica.analytics.coreutils.internal.logger.LoggerStorage
 import io.appmetrica.analytics.impl.proxy.AppMetricaFacadeProvider
 import io.appmetrica.analytics.impl.utils.executors.ClientExecutorProvider
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
+import java.util.concurrent.TimeUnit
 
 class AnonymousClientActivator(
     private val provider: AppMetricaFacadeProvider,
@@ -15,8 +17,21 @@ class AnonymousClientActivator(
 
     private val tag = "[AnonymousClientActivator]"
 
+    private val anonymousReporterActivationDelay = TimeUnit.SECONDS.toMillis(10)
+
     fun activate(context: Context) {
         activate(context, AppMetricaLibraryAdapterConfig.newConfigBuilder().build())
+    }
+
+    fun activateDelayed(context: Context) {
+        clientExecutorProvider.defaultExecutor.executeDelayed(
+            object : SafeRunnable() {
+                override fun runSafety() {
+                    activate(context)
+                }
+            },
+            anonymousReporterActivationDelay
+        )
     }
 
     fun activate(context: Context, config: AppMetricaLibraryAdapterConfig) {

@@ -169,4 +169,14 @@ public class PreferencesComponentDbStorageTest extends CommonTest {
         mComponentDbStorage.putMainReporterEventsTriggerConditionMet(true);
         assertThat(mComponentDbStorage.getMainReporterEventsTriggerConditionMet(false)).isTrue();
     }
+
+    @Test
+    public void autoCollectedDataObservers() {
+        assertThat(mComponentDbStorage.getAutoCollectedDataSubscribers())
+            .isEqualTo(new HashMap<String, Long>());
+        Map<String, Long> observers = new HashMap<>();
+        observers.put("observer", 123456789L);
+        mComponentDbStorage.putAutoCollectedDataSubscribers(observers);
+        assertThat(mComponentDbStorage.getAutoCollectedDataSubscribers()).isEqualTo(observers);
+    }
 }

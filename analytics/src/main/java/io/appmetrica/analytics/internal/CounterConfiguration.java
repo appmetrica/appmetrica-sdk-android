@@ -9,6 +9,8 @@ import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
+import java.util.Collections;
+import java.util.List;
 import io.appmetrica.analytics.AppMetricaConfig;
 import io.appmetrica.analytics.ReporterConfig;
 import io.appmetrica.analytics.coreutils.internal.LocationUtils;
@@ -358,6 +360,28 @@ public class CounterConfiguration implements Parcelable {
 
     public final synchronized void setDataSendingEnabled(boolean value) {
         mParamsMapping.put(CounterConfigurationKeys.DATA_SENDING_ENABLED, value);
+    }
+
+    public final synchronized void addAutoCollectedDataSubscriber(@NonNull final String subscriber) {
+        addAutoCollectedDataSubscribers(Collections.singletonList(subscriber));
+    }
+
+    public final synchronized void addAutoCollectedDataSubscribers(@NonNull List<String> subscribers) {
+        List<String> actualSubscribers = getAutoCollectedDataSubscribers();
+        actualSubscribers.addAll(subscribers);
+        Utils.writeStringArrayListToContentValues(
+            mParamsMapping,
+            CounterConfigurationKeys.AUTO_COLLECTED_DATA_SUBSCRIBERS,
+            subscribers
+        );
+    }
+
+    @NonNull
+    public List<String> getAutoCollectedDataSubscribers() {
+        return Utils.readStringArrayListFromContentValues(
+            mParamsMapping,
+            CounterConfigurationKeys.AUTO_COLLECTED_DATA_SUBSCRIBERS
+        );
     }
 
     @Override

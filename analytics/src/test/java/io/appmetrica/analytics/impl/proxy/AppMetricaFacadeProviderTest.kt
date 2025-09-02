@@ -135,4 +135,11 @@ class AppMetricaFacadeProviderTest : CommonTest() {
         provider.setUserProfileID(userProfileID)
         appMetricaFacadeStaticRule.staticMock.verify { AppMetricaFacade.setUserProfileID(userProfileID) }
     }
+
+    @Test
+    fun addAutoCollectedDataSubscriber() {
+        val subscriber = "Subscriber"
+        provider.addAutoCollectedDataSubscriber(subscriber)
+        appMetricaFacadeStaticRule.staticMock.verify { AppMetricaFacade.addAutoCollectedDataSubscriber(subscriber) }
+    }
 }

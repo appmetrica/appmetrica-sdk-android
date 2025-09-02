@@ -114,6 +114,19 @@ class ModulesProxy {
         )
     }
 
+    fun subscribeForAutoCollectedData(context: Context, apiKey: String) {
+        modulesBarrier.subscribeForAutoCollectedData(context, apiKey)
+        synchronousStageExecutor.subscribeForAutoCollectedData(context, apiKey)
+
+        executor.execute(
+            object : SafeRunnable() {
+                override fun runSafety() {
+                    ClientServiceLocator.getInstance().appMetricaFacadeProvider.addAutoCollectedDataSubscriber(apiKey)
+                }
+            }
+        )
+    }
+
     /*
     Use this method only after activationValidator.validate() to ensure mainReporter is not null
      */

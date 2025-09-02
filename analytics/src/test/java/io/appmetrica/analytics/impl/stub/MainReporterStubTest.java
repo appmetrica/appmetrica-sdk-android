@@ -131,6 +131,11 @@ public class MainReporterStubTest extends ReporterExtendedStubTest {
         verifyNoInteractions(pluginErrorDetails);
     }
 
+    @Test
+    public void addAutoCollectedDataSubscriber() {
+        getStub().addAutoCollectedDataSubscriber("Api key");
+    }
+
     @Override
     public MainReporterStub getStub() {
         return new MainReporterStub();

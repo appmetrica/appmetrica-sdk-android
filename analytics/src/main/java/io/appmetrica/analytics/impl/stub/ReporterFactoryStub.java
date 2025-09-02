@@ -3,6 +3,7 @@ package io.appmetrica.analytics.impl.stub;
 import androidx.annotation.NonNull;
 import io.appmetrica.analytics.AppMetricaConfig;
 import io.appmetrica.analytics.ReporterConfig;
+import io.appmetrica.analytics.impl.AppMetricaConfigExtension;
 import io.appmetrica.analytics.impl.IMainReporter;
 import io.appmetrica.analytics.impl.IReporterExtended;
 import io.appmetrica.analytics.impl.IReporterFactory;
@@ -13,17 +14,21 @@ public class ReporterFactoryStub implements IReporterFactory {
 
     @NonNull
     @Override
-    public IMainReporter buildOrUpdateAnonymousMainReporter(@NonNull AppMetricaConfig config,
-                                                            @NonNull PublicLogger logger,
-                                                            boolean needToClearEnvironment) {
+    public IMainReporter buildOrUpdateAnonymousMainReporter(
+        @NonNull AppMetricaConfig config,
+        @NonNull PublicLogger logger,
+        @NonNull AppMetricaConfigExtension configExtension
+    ) {
         return new MainReporterStub();
     }
 
     @NonNull
     @Override
-    public IMainReporter buildOrUpdateMainReporter(@NonNull AppMetricaConfig config,
-                                                   @NonNull PublicLogger logger,
-                                                   boolean needToClearEnvironment) {
+    public IMainReporter buildOrUpdateMainReporter(
+        @NonNull AppMetricaConfig config,
+        @NonNull PublicLogger logger,
+        @NonNull AppMetricaConfigExtension configExtension
+    ) {
         return new MainReporterStub();
     }
 

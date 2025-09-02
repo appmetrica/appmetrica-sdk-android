@@ -1900,6 +1900,9 @@ public interface EventProto {
     // repeated string certificates_sha1_fingerprints = 11;
     public java.lang.String[] certificatesSha1Fingerprints;
 
+    // repeated bytes additional_api_keys = 12;
+    public byte[][] additionalApiKeys;
+
     public ReportMessage() {
       clear();
     }
@@ -1910,6 +1913,7 @@ public interface EventProto {
       appEnvironment = EventProto.ReportMessage.EnvironmentVariable.emptyArray();
       simInfo = EventProto.ReportMessage.SimInfo.emptyArray();
       certificatesSha1Fingerprints = io.appmetrica.analytics.protobuf.nano.WireFormatNano.EMPTY_STRING_ARRAY;
+      additionalApiKeys = io.appmetrica.analytics.protobuf.nano.WireFormatNano.EMPTY_BYTES_ARRAY;
       cachedSize = -1;
       return this;
     }
@@ -1949,6 +1953,14 @@ public interface EventProto {
           java.lang.String element = this.certificatesSha1Fingerprints[i];
           if (element != null) {
             output.writeString(11, element);
+          }
+        }
+      }
+      if (this.additionalApiKeys != null && this.additionalApiKeys.length > 0) {
+        for (int i = 0; i < this.additionalApiKeys.length; i++) {
+          byte[] element = this.additionalApiKeys[i];
+          if (element != null) {
+            output.writeBytes(12, element);
           }
         }
       }
@@ -1998,6 +2010,20 @@ public interface EventProto {
             dataCount++;
             dataSize += io.appmetrica.analytics.protobuf.nano.CodedOutputByteBufferNano
                 .computeStringSizeNoTag(element);
+          }
+        }
+        size += dataSize;
+        size += 1 * dataCount;
+      }
+      if (this.additionalApiKeys != null && this.additionalApiKeys.length > 0) {
+        int dataCount = 0;
+        int dataSize = 0;
+        for (int i = 0; i < this.additionalApiKeys.length; i++) {
+          byte[] element = this.additionalApiKeys[i];
+          if (element != null) {
+            dataCount++;
+            dataSize += io.appmetrica.analytics.protobuf.nano.CodedOutputByteBufferNano
+                .computeBytesSizeNoTag(element);
           }
         }
         size += dataSize;
@@ -2103,6 +2129,23 @@ public interface EventProto {
             // Last one without readTag.
             newArray[i] = input.readString();
             this.certificatesSha1Fingerprints = newArray;
+            break;
+          }
+          case 98: {
+            int arrayLength = io.appmetrica.analytics.protobuf.nano.WireFormatNano
+                .getRepeatedFieldArrayLength(input, 98);
+            int i = this.additionalApiKeys == null ? 0 : this.additionalApiKeys.length;
+            byte[][] newArray = new byte[i + arrayLength][];
+            if (i != 0) {
+              java.lang.System.arraycopy(this.additionalApiKeys, 0, newArray, 0, i);
+            }
+            for (; i < newArray.length - 1; i++) {
+              newArray[i] = input.readBytes();
+              input.readTag();
+            }
+            // Last one without readTag.
+            newArray[i] = input.readBytes();
+            this.additionalApiKeys = newArray;
             break;
           }
         }

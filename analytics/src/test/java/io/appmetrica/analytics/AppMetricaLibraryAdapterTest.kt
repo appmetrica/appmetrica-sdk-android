@@ -46,4 +46,11 @@ class AppMetricaLibraryAdapterTest : CommonTest() {
         AppMetricaLibraryAdapter.reportEvent(sender, event, payload)
         verify(proxy).reportEvent(sender, event, payload)
     }
+
+    @Test
+    fun subscribeForAutoCollectedData() {
+        val apiKey = "apiKey"
+        AppMetricaLibraryAdapter.subscribeForAutoCollectedData(context, apiKey)
+        verify(proxy).subscribeForAutoCollectedData(context, apiKey)
+    }
 }

@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.impl;
 
 import android.app.Application;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -274,5 +275,45 @@ public final class Utils {
         List<String> list = new ArrayList<>(initial);
         list.addAll(Arrays.asList(additionalItems));
         return list.toArray(new String[0]);
+    }
+
+    public static void writeStringArrayListToContentValues(
+        @NonNull ContentValues contentValues,
+        @NonNull String key,
+        @Nullable List<String> values
+    ) {
+        if (values != null) {
+            Parcel parcel = Parcel.obtain();
+            try {
+                parcel.writeStringList(values);
+                contentValues.put(key, parcel.marshall());
+            } catch (Throwable exception) {
+                DebugLogger.INSTANCE.error(TAG, exception);
+            } finally {
+                parcel.recycle();
+            }
+        }
+    }
+
+    @NonNull
+    public static List<String> readStringArrayListFromContentValues(
+        @NonNull ContentValues values,
+        @NonNull String key
+    ) {
+        ArrayList<String> result = new ArrayList<>();
+        byte[] bytes = values.getAsByteArray(key);
+        if (bytes != null) {
+            Parcel parcel = Parcel.obtain();
+            try {
+                parcel.unmarshall(bytes, 0, bytes.length);
+                parcel.setDataPosition(0);
+                parcel.readStringList(result);
+            } catch (Throwable exception) {
+                DebugLogger.INSTANCE.error(TAG, exception);
+            } finally {
+                parcel.recycle();
+            }
+        }
+        return result;
     }
 }

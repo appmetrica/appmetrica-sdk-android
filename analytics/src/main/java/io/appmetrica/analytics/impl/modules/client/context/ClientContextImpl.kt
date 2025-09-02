@@ -32,7 +32,7 @@ class ClientContextImpl(
 
     override val clientActivator: ModuleClientActivator = object : ModuleClientActivator {
         override fun activate(context: Context) {
-            ClientServiceLocator.getInstance().anonymousClientActivator.activate(context)
+            ClientServiceLocator.getInstance().anonymousClientActivator.activateDelayed(context)
         }
     }
 

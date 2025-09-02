@@ -77,6 +77,11 @@ public class AppMetricaFacadeProvider {
     }
 
     @WorkerThread
+    public void addAutoCollectedDataSubscriber(@NonNull String subscriber) {
+        AppMetricaFacade.addAutoCollectedDataSubscriber(subscriber);
+    }
+
+    @WorkerThread
     public void setUserProfileID(@Nullable String userProfileID) {
         AppMetricaFacade.setUserProfileID(userProfileID);
     }

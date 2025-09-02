@@ -218,6 +218,29 @@ class ModulesProxyTest : CommonTest() {
         verifyNoMoreInteractions(mainReporter)
     }
 
+    @Test
+    fun subscribeForAutoCollectedData() {
+        val context: Context = mock()
+        val apiKey = UUID.randomUUID().toString()
+
+        proxy.subscribeForAutoCollectedData(context, apiKey)
+
+        inOrder(
+            modulesBarrier,
+            synchronousStageExecutor,
+            executor,
+            ClientServiceLocator.getInstance().appMetricaFacadeProvider
+        ) {
+            verify(modulesBarrier).subscribeForAutoCollectedData(context, apiKey)
+            verify(synchronousStageExecutor).subscribeForAutoCollectedData(context, apiKey)
+            verify(executor).execute(runnableArgumentCaptor.capture())
+            verifyNoInteractions(ClientServiceLocator.getInstance().appMetricaFacadeProvider)
+            runnableArgumentCaptor.firstValue.run()
+            verify(ClientServiceLocator.getInstance().appMetricaFacadeProvider)
+                .addAutoCollectedDataSubscriber(apiKey)
+        }
+    }
+
     private fun verifyIsActivated(value: Boolean) {
         whenever(ClientServiceLocator.getInstance().appMetricaFacadeProvider.isActivated).thenReturn(value)
         assertThat(proxy.isActivatedForApp()).isEqualTo(value)

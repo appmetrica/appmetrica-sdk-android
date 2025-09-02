@@ -8,11 +8,13 @@ import io.appmetrica.analytics.ExternalAttribution;
 import io.appmetrica.analytics.ValidationException;
 import io.appmetrica.analytics.impl.crash.jvm.client.MainReporterAnrController;
 import io.appmetrica.analytics.impl.crash.jvm.client.UnhandledException;
-import io.appmetrica.analytics.impl.startup.StartupHelper;
 import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule;
 import io.appmetrica.analytics.testutils.MockedConstructionRule;
 import io.appmetrica.analytics.testutils.StubbedBlockingExecutor;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import org.assertj.core.api.ThrowableAssert;
 import org.junit.Before;
@@ -46,7 +48,6 @@ import static org.mockito.Mockito.when;
 @RunWith(RobolectricTestRunner.class)
 public class MainReporterTest extends BaseReporterTest {
 
-    private StartupHelper mStartupHelper;
     @Mock
     private MainReporterComponents mainReporterComponents;
     @Mock
@@ -65,6 +66,8 @@ public class MainReporterTest extends BaseReporterTest {
     private ActivityStateManager activityStateManager;
     @Mock
     private Activity activity;
+    @Mock
+    private AppMetricaConfigExtension configExtension;
     @Rule
     public final ClientServiceLocatorRule clientServiceLocatorRule = new ClientServiceLocatorRule();
 
@@ -74,16 +77,12 @@ public class MainReporterTest extends BaseReporterTest {
 
     private MainReporter mMainReporter;
 
-    private static final String DEVICE_ID = "1pl123op1k23pok13p1";
-
     @Before
     @Override
     public void setUp() {
-        mStartupHelper = mock(StartupHelper.class);
         super.setUp();
         when(mAnotherReporterEnvironment.getProcessConfiguration()).thenReturn(mProcessConfiguration);
         when(mAnotherReporterEnvironment.getReporterConfiguration()).thenReturn(mCounterConfiguration);
-        when(mStartupHelper.getDeviceId()).thenReturn(DEVICE_ID);
         when(mAppmetricaReporterProvider.getReporter()).thenReturn(mAppmetricaReporter);
         when(mPushReporterProvider.getReporter()).thenReturn(mPushReporter);
         when(ClientServiceLocator.getInstance().getClientExecutorProvider().getDefaultExecutor())
@@ -100,15 +99,8 @@ public class MainReporterTest extends BaseReporterTest {
 
     @Test
     public void userProfileIDIfNotSet() {
-        mMainReporter = createWithProfileID(null);
+        mMainReporter = new MainReporter(mainReporterComponents);
         assertThat(mMainReporter.getEnvironment().getInitialUserProfileID()).isNull();
-    }
-
-    private MainReporter createWithProfileID(String userProfileID) {
-        AppMetricaConfig config = AppMetricaConfig.newConfigBuilder(apiKey)
-            .withUserProfileID(userProfileID)
-            .build();
-        return new MainReporter(mainReporterComponents);
     }
 
     @Test
@@ -118,7 +110,7 @@ public class MainReporterTest extends BaseReporterTest {
         String errorEnv = "erroorrenen";
         doReturn(errorEnv).when(mReporterEnvironment).getErrorEnvironment();
         mMainReporter = getReporter();
-        mMainReporter.updateConfig(mConfig, true);
+        mMainReporter.updateConfig(mConfig, configExtension);
         verify(nativeCrashClient).initHandling(eq(mContext), eq(apiKey), eq(errorEnv));
     }
 
@@ -127,7 +119,7 @@ public class MainReporterTest extends BaseReporterTest {
         Mockito.reset(nativeCrashClient);
         mConfig = AppMetricaConfig.newConfigBuilder(apiKey).build();
         mMainReporter = getReporter();
-        mMainReporter.updateConfig(mConfig, true);
+        mMainReporter.updateConfig(mConfig, configExtension);
         verify(nativeCrashClient).initHandling(eq(mContext), eq(apiKey), eq(null));
     }
 
@@ -135,7 +127,7 @@ public class MainReporterTest extends BaseReporterTest {
     public void testNativeCrashReportingDisabled() {
         mConfig = AppMetricaConfig.newConfigBuilder(apiKey).withNativeCrashReporting(false).build();
         mMainReporter = getReporter();
-        mMainReporter.updateConfig(mConfig, true);
+        mMainReporter.updateConfig(mConfig, configExtension);
         verify(nativeCrashClient, never()).initHandling(any(Context.class), any(String.class), any(String.class));
     }
 
@@ -177,7 +169,8 @@ public class MainReporterTest extends BaseReporterTest {
 
     @Test
     public void testOnResumeSessionIsLogged() {
-        when(activityStateManager.didStateChange(activity, ActivityStateManager.ActivityState.RESUMED)).thenReturn(true);
+        when(activityStateManager.didStateChange(activity, ActivityStateManager.ActivityState.RESUMED))
+            .thenReturn(true);
         mMainReporter.resumeSession(activity);
         verify(mPublicLogger).info("Resume session");
     }
@@ -192,9 +185,14 @@ public class MainReporterTest extends BaseReporterTest {
         testOnResumeActivityShouldDispatchEventWithExpectedEventName(null, null);
     }
 
-    private void testOnResumeActivityShouldDispatchEventWithExpectedEventName(Activity resumedActivity, String expectedEvent) {
-        when(activityStateManager.didStateChange(resumedActivity, ActivityStateManager.ActivityState.RESUMED)).thenReturn(true);
-        when(EventsManager.notifyServiceOnActivityStartReportEntry(expectedEvent, mPublicLogger)).thenReturn(mockedEvent);
+    private void testOnResumeActivityShouldDispatchEventWithExpectedEventName(
+        Activity resumedActivity,
+        String expectedEvent
+    ) {
+        when(activityStateManager.didStateChange(resumedActivity, ActivityStateManager.ActivityState.RESUMED))
+            .thenReturn(true);
+        when(EventsManager.notifyServiceOnActivityStartReportEntry(expectedEvent, mPublicLogger))
+            .thenReturn(mockedEvent);
         mMainReporter.resumeSession(resumedActivity);
         verify(mReportsHandler).reportEvent(mockedEvent, mReporterEnvironment);
     }
@@ -210,7 +208,8 @@ public class MainReporterTest extends BaseReporterTest {
     }
 
     private void testOnResumeActivityShouldNotDispatchEvent(Activity resumedActivity) {
-        when(activityStateManager.didStateChange(resumedActivity, ActivityStateManager.ActivityState.RESUMED)).thenReturn(false);
+        when(activityStateManager.didStateChange(resumedActivity, ActivityStateManager.ActivityState.RESUMED))
+            .thenReturn(false);
         mMainReporter.resumeSession(resumedActivity);
         verify(mReportsHandler, never()).reportEvent(any(CounterReport.class), any(ReporterEnvironment.class));
     }
@@ -246,8 +245,12 @@ public class MainReporterTest extends BaseReporterTest {
         testOnPauseActivityShouldDispatchEventWithExpectedEventName(null, null);
     }
 
-    private void testOnPauseActivityShouldDispatchEventWithExpectedEventName(Activity pausedActivity, String expectedEvent) {
-        when(activityStateManager.didStateChange(pausedActivity, ActivityStateManager.ActivityState.PAUSED)).thenReturn(true);
+    private void testOnPauseActivityShouldDispatchEventWithExpectedEventName(
+        Activity pausedActivity,
+        String expectedEvent
+    ) {
+        when(activityStateManager.didStateChange(pausedActivity, ActivityStateManager.ActivityState.PAUSED))
+            .thenReturn(true);
         when(mReporterEnvironment.isForegroundSessionPaused()).thenReturn(false);
         when(EventsManager.activityEndReportEntry(expectedEvent, mPublicLogger)).thenReturn(mockedEvent);
         mMainReporter.pauseSession(pausedActivity);
@@ -265,7 +268,8 @@ public class MainReporterTest extends BaseReporterTest {
     }
 
     private void testOnPauseActivityShouldNotDispatchEvent(Activity pausedActivity) {
-        when(activityStateManager.didStateChange(pausedActivity, ActivityStateManager.ActivityState.PAUSED)).thenReturn(false);
+        when(activityStateManager.didStateChange(pausedActivity, ActivityStateManager.ActivityState.PAUSED))
+            .thenReturn(false);
         when(mReporterEnvironment.isForegroundSessionPaused()).thenReturn(false);
         mMainReporter.pauseSession(pausedActivity);
         verify(mReportsHandler, never()).reportEvent(any(CounterReport.class), any(ReporterEnvironment.class));
@@ -321,7 +325,7 @@ public class MainReporterTest extends BaseReporterTest {
     }
 
     @Test
-    public void testActivationAddErrorEnvironmentFromConfig() throws Exception {
+    public void testActivationAddErrorEnvironmentFromConfig() {
         MainReporter mainReporter = spy(mMainReporter);
         AppMetricaConfig config = AppMetricaConfig.newConfigBuilder(apiKey)
             .withErrorEnvironmentValue("memory", "2mb")
@@ -330,7 +334,7 @@ public class MainReporterTest extends BaseReporterTest {
 
         ArgumentCaptor<Map> argMap = ArgumentCaptor.forClass(Map.class);
 
-        mainReporter.updateConfig(config, false);
+        mainReporter.updateConfig(config, configExtension);
 
         verify(mainReporter, atLeast(1)).putAllToErrorEnvironment(argMap.capture());
         Map map = argMap.getValue();
@@ -351,7 +355,7 @@ public class MainReporterTest extends BaseReporterTest {
 
         ArgumentCaptor<Map> argMap = ArgumentCaptor.forClass(Map.class);
 
-        mainReporter.updateConfig(config, false);
+        mainReporter.updateConfig(config, configExtension);
 
         verify(mainReporter, atLeast(1)).putAllToAppEnvironment(argMap.capture());
         Map map = argMap.getValue();
@@ -363,7 +367,22 @@ public class MainReporterTest extends BaseReporterTest {
     }
 
     @Test
-    public void testReportAppOpen() throws Exception {
+    public void updateConfigWithEmptySubscribers() {
+        when(configExtension.getAutoCollectedDataSubscribers()).thenReturn(Collections.emptyList());
+        mMainReporter.updateConfig(AppMetricaConfig.newConfigBuilder(apiKey).build(), configExtension);
+        verify(mCounterConfiguration, never()).addAutoCollectedDataSubscribers(any());
+    }
+
+    @Test
+    public void updateConfigWithSubscribers() {
+        List<String> subscribers = Arrays.asList("subscriber1", "subscriber2");
+        when(configExtension.getAutoCollectedDataSubscribers()).thenReturn(subscribers);
+        mMainReporter.updateConfig(AppMetricaConfig.newConfigBuilder(apiKey).build(), configExtension);
+        verify(mCounterConfiguration).addAutoCollectedDataSubscribers(subscribers);
+    }
+
+    @Test
+    public void testReportAppOpen() {
         String link = "some://uri";
         when(EventsManager.openAppReportEntry(link, true, mPublicLogger)).thenReturn(mockedEvent);
         mMainReporter.reportAppOpen(link, true);
@@ -374,7 +393,7 @@ public class MainReporterTest extends BaseReporterTest {
     //region MainReporter#reportReferralUrl(String)
 
     @Test
-    public void testReportReferralUrl() throws Exception {
+    public void testReportReferralUrl() {
         String referralUrl = "some://uri";
         when(EventsManager.referralUrlReportEntry(eq(referralUrl), any(PublicLogger.class))).thenReturn(mockedEvent);
         mMainReporter.reportReferralUrl(referralUrl);
@@ -386,7 +405,7 @@ public class MainReporterTest extends BaseReporterTest {
         clearInvocations(mReportsHandler);
         assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
             @Override
-            public void call() throws Throwable {
+            public void call() {
                 mMainReporter.reportReferralUrl(null);
             }
         }).isExactlyInstanceOf(ValidationException.class);
@@ -397,7 +416,7 @@ public class MainReporterTest extends BaseReporterTest {
         clearInvocations(mReportsHandler);
         assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
             @Override
-            public void call() throws Throwable {
+            public void call() {
                 mMainReporter.reportReferralUrl("");
             }
         }).isExactlyInstanceOf(ValidationException.class);
@@ -406,22 +425,25 @@ public class MainReporterTest extends BaseReporterTest {
     //endregion
 
     @Test
-    public void testResumeSessionStateChanged() throws Throwable {
+    public void testResumeSessionStateChanged() {
         Activity activity = mock(Activity.class);
-        when(activityStateManager.didStateChange(activity, ActivityStateManager.ActivityState.RESUMED)).thenReturn(true);
+        when(activityStateManager.didStateChange(activity, ActivityStateManager.ActivityState.RESUMED))
+            .thenReturn(true);
         mMainReporter.resumeSession(activity);
     }
 
     @Test
-    public void testResumeSessionStateDidNotChange() throws Throwable {
+    public void testResumeSessionStateDidNotChange() {
         Activity activity = mock(Activity.class);
-        when(activityStateManager.didStateChange(activity, ActivityStateManager.ActivityState.RESUMED)).thenReturn(false);
+        when(activityStateManager.didStateChange(activity, ActivityStateManager.ActivityState.RESUMED))
+            .thenReturn(false);
         mMainReporter.resumeSession(activity);
     }
 
     @Test
-    public void testResumeSessionNullActivity() throws Throwable {
-        when(activityStateManager.didStateChange(null, ActivityStateManager.ActivityState.RESUMED)).thenReturn(true);
+    public void testResumeSessionNullActivity() {
+        when(activityStateManager.didStateChange(null, ActivityStateManager.ActivityState.RESUMED))
+            .thenReturn(true);
         mMainReporter.resumeSession(null);
     }
 
@@ -435,13 +457,15 @@ public class MainReporterTest extends BaseReporterTest {
     @Test
     public void testPauseSessionStateDidNotChange() {
         Activity activity = mock(Activity.class);
-        when(activityStateManager.didStateChange(activity, ActivityStateManager.ActivityState.PAUSED)).thenReturn(false);
+        when(activityStateManager.didStateChange(activity, ActivityStateManager.ActivityState.PAUSED))
+            .thenReturn(false);
         mMainReporter.pauseSession(activity);
     }
 
     @Test
     public void testPauseSessionNullActivity() {
-        when(activityStateManager.didStateChange(null, ActivityStateManager.ActivityState.PAUSED)).thenReturn(true);
+        when(activityStateManager.didStateChange(null, ActivityStateManager.ActivityState.PAUSED))
+            .thenReturn(true);
         mMainReporter.pauseSession(null);
     }
 
@@ -483,7 +507,8 @@ public class MainReporterTest extends BaseReporterTest {
     }
 
     @RunWith(ParameterizedRobolectricTestRunner.class)
-    public static class ReporterReportCustomEventEventTypeTests extends BaseReporterTest.ReporterReportCustomEventEventTypeTests {
+    public static class ReporterReportCustomEventEventTypeTests extends
+        BaseReporterTest.ReporterReportCustomEventEventTypeTests {
 
         @Mock
         private MainReporterComponents mainReporterComponents;

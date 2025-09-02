@@ -3,6 +3,7 @@ package io.appmetrica.analytics.impl.proxy
 import android.content.Context
 import io.appmetrica.analytics.AppMetricaLibraryAdapterConfig
 import io.appmetrica.analytics.ModulesFacade
+import io.appmetrica.analytics.coreutils.internal.ApiKeyUtils
 import io.appmetrica.analytics.impl.ClientServiceLocator
 import io.appmetrica.analytics.impl.events.LibraryEventConstructor
 import io.appmetrica.analytics.impl.proxy.synchronous.LibraryAdapterSynchronousStageExecutor
@@ -61,6 +62,17 @@ class AppMetricaLibraryAdapterProxy {
             val message = "Failed report event from sender: $sender with name = $event and payload = $payload"
             PublicLogger.getAnonymousInstance().warning("$tag$message")
             DebugLogger.warning(tag, message)
+        }
+    }
+
+    fun subscribeForAutoCollectedData(context: Context, apiKey: String) {
+        ImportantLogger.info(
+            tag,
+            "Subscribe for auto-collected data with api key: ${ApiKeyUtils.createPartialApiKey(apiKey)}"
+        )
+        if (barrier.subscribeForAutoCollectedData(context, apiKey)) {
+            synchronousStageExecutor.subscribeForAutoCollectedData(context, apiKey)
+            ModulesFacade.subscribeForAutoCollectedData(context, apiKey)
         }
     }
 }

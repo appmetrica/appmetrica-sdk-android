@@ -4,6 +4,7 @@ import android.content.Context
 import io.appmetrica.analytics.AppMetricaLibraryAdapterConfig
 import io.appmetrica.analytics.impl.proxy.AppMetricaFacadeProvider
 import io.appmetrica.analytics.impl.utils.validation.NonNullValidator
+import io.appmetrica.analytics.impl.utils.validation.api.ApiKeyValidator
 
 class LibraryAdapterBarrier(
     provider: AppMetricaFacadeProvider,
@@ -15,6 +16,7 @@ class LibraryAdapterBarrier(
     private val senderValidator = NonNullValidator<String>("Sender")
     private val eventValidator = NonNullValidator<String>("Event")
     private val payloadValidator = NonNullValidator<String>("Payload")
+    private val apiKeyValidator = ApiKeyValidator()
 
     fun activate(context: Context?): Boolean = contextValidator.validate(context).isValid
 
@@ -37,5 +39,10 @@ class LibraryAdapterBarrier(
             senderValidator.validate(sender).isValid &&
             eventValidator.validate(event).isValid &&
             payloadValidator.validate(payload).isValid
+    }
+
+    fun subscribeForAutoCollectedData(context: Context?, apiKey: String?): Boolean {
+        return apiKeyValidator.validate(apiKey).isValid &&
+            contextValidator.validate(context).isValid
     }
 }

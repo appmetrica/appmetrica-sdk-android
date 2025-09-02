@@ -146,6 +146,7 @@ public final class io.appmetrica.analytics.coreutils.internal.collection.Collect
     public static final boolean isNullOrEmpty([Nullable] java.util.Collection<?>)
     public static final <K, V> [Nullable] java.util.Map<K, V> mapCopyOfNullableMap([Nullable] java.util.Map<K, ? extends V>)
     public static final [NonNull] android.os.Bundle mapToBundle([NonNull] java.util.Map<String, byte[]>)
+    public static final <T> [NonNull] java.util.Set<T> merge([NonNull] java.util.Set<T>, [NonNull] java.util.Set<? extends T>)
     public static final <T> [Nullable] java.util.List<T> nullIfEmptyList([Nullable] java.util.List<? extends T>)
     public static final <K, V> void putOpt([NonNull] java.util.Map<K, V>, [Nullable] K, [Nullable] V)
     public static final [NonNull] java.util.List<Integer> toIntList([NonNull] int[])

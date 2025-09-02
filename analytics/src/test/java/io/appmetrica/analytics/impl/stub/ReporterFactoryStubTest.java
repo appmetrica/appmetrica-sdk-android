@@ -2,6 +2,7 @@ package io.appmetrica.analytics.impl.stub;
 
 import io.appmetrica.analytics.AppMetricaConfig;
 import io.appmetrica.analytics.ReporterConfig;
+import io.appmetrica.analytics.impl.AppMetricaConfigExtension;
 import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.testutils.CommonTest;
 import org.junit.Before;
@@ -24,6 +25,8 @@ public class ReporterFactoryStubTest extends CommonTest {
     private ReporterConfig reporterInternalConfig;
     @Mock
     private PublicLogger publicLogger;
+    @Mock
+    private AppMetricaConfigExtension configExtension;
 
     private ReporterFactoryStub reporterFactoryStub;
 
@@ -36,7 +39,9 @@ public class ReporterFactoryStubTest extends CommonTest {
 
     @Test
     public void buildAnonymousMainReporter() {
-        assertThat(reporterFactoryStub.buildOrUpdateAnonymousMainReporter(appMetricaConfig, publicLogger, true))
+        assertThat(
+            reporterFactoryStub.buildOrUpdateAnonymousMainReporter(appMetricaConfig, publicLogger, configExtension)
+        )
             .isNotNull()
             .isInstanceOf(MainReporterStub.class);
         verifyNoInteractions(appMetricaConfig, publicLogger);
@@ -44,7 +49,7 @@ public class ReporterFactoryStubTest extends CommonTest {
 
     @Test
     public void buildMainReporter() {
-        assertThat(reporterFactoryStub.buildOrUpdateMainReporter(appMetricaConfig, publicLogger, true))
+        assertThat(reporterFactoryStub.buildOrUpdateMainReporter(appMetricaConfig, publicLogger, configExtension))
             .isNotNull()
             .isInstanceOf(MainReporterStub.class);
         verifyNoInteractions(appMetricaConfig, publicLogger);

@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.impl;
 
 import android.app.Application;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Build;
@@ -19,6 +20,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.TreeMap;
@@ -489,5 +491,35 @@ public class UtilsTest extends CommonTest {
     public void joinToArray() {
         assertThat(Utils.joinToArray(Arrays.asList("first", "second"), "third"))
             .containsExactly("first", "second", "third");
+    }
+
+    @Test
+    public void writeStringArrayListToContentValuesWithValidList() {
+        ContentValues contentValues = new ContentValues();
+        List<String> values = Arrays.asList("value1", "value2", "value3");
+        String key = "key";
+
+        Utils.writeStringArrayListToContentValues(contentValues, key, values);
+        assertThat(contentValues.containsKey(key)).isTrue();
+        assertThat(Utils.readStringArrayListFromContentValues(contentValues, key))
+            .containsExactlyElementsOf(values);
+    }
+
+    @Test
+    public void writeStringArrayListToContentValuesWithEmptyList() {
+        String key = "key";
+        ContentValues contentValues = new ContentValues();
+        Utils.writeStringArrayListToContentValues(contentValues, key, new ArrayList<>());
+        assertThat(contentValues.containsKey(key)).isTrue();
+        assertThat(Utils.readStringArrayListFromContentValues(contentValues, key)).isEmpty();
+    }
+
+    @Test
+    public void writeStringArrayListToContentValues_withNullList() {
+        ContentValues contentValues = new ContentValues();
+        String key = "key";
+        Utils.writeStringArrayListToContentValues(contentValues, key, null);
+        assertThat(contentValues.containsKey(key)).isFalse();
+        assertThat(Utils.readStringArrayListFromContentValues(contentValues, key)).isEmpty();
     }
 }

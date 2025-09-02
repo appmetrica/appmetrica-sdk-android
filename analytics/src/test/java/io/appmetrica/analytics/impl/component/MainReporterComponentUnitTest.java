@@ -13,6 +13,7 @@ import io.appmetrica.analytics.impl.startup.StartupState;
 import io.appmetrica.analytics.internal.CounterConfiguration;
 import io.appmetrica.analytics.internal.CounterConfigurationReporterType;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
+import java.util.HashSet;
 import java.util.Random;
 import org.junit.Before;
 import org.junit.Rule;
@@ -53,7 +54,7 @@ public class MainReporterComponentUnitTest extends ComponentUnitBaseTest {
     private StartupState startupState;
     private MainReporterComponentUnit mMainReporterComponentUnit;
     private final CommonArguments.ReporterArguments sdkConfig = new CommonArguments.ReporterArguments(
-        null, null, null, null, null, null, null, null, null, null, null, null, false, null
+        null, null, null, null, null, null, null, null, null, null, null, null, false, null, new HashSet<>()
     );
 
     @Rule
@@ -68,7 +69,8 @@ public class MainReporterComponentUnitTest extends ComponentUnitBaseTest {
     @Override
     protected void initCustomFields() {
         when(mFieldsFactory.createReferrerListener(any(MainReporterComponentUnit.class))).thenReturn(mListener);
-        when(mFieldsFactory.createBillingMonitorWrapper(any(MainReporterComponentUnit.class))).thenReturn(billingMonitorWrapper);
+        when(mFieldsFactory.createBillingMonitorWrapper(any(MainReporterComponentUnit.class)))
+            .thenReturn(billingMonitorWrapper);
         when(applicationStateProvider.registerStickyObserver(any(ApplicationStateObserver.class)))
             .thenReturn(ApplicationState.UNKNOWN);
     }

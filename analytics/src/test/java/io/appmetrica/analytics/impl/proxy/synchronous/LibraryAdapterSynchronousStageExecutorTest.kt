@@ -8,6 +8,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.mockito.kotlin.inOrder
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.verifyNoInteractions
 
 class LibraryAdapterSynchronousStageExecutorTest : CommonTest() {
 
@@ -29,6 +30,30 @@ class LibraryAdapterSynchronousStageExecutorTest : CommonTest() {
         ) {
             verify(ClientServiceLocator.getInstance().contextAppearedListener).onProbablyAppeared(context)
             verify(ClientServiceLocator.getInstance().anonymousClientActivator).activate(context)
+        }
+    }
+
+    @Test
+    fun setAdvIdentifiersTracking() {
+        synchronousStageExecutor.setAdvIdentifiersTracking(true)
+        verifyNoInteractions(ClientServiceLocator.getInstance())
+    }
+
+    @Test
+    fun reportEvent() {
+        synchronousStageExecutor.reportEvent("sender", "event", "payload")
+        verifyNoInteractions(ClientServiceLocator.getInstance())
+    }
+
+    @Test
+    fun subscribeForAutoCollectedData() {
+        synchronousStageExecutor.subscribeForAutoCollectedData(context, "apiKey")
+        inOrder(
+            ClientServiceLocator.getInstance().contextAppearedListener,
+            ClientServiceLocator.getInstance().anonymousClientActivator
+        ) {
+            verify(ClientServiceLocator.getInstance().contextAppearedListener).onProbablyAppeared(context)
+            verify(ClientServiceLocator.getInstance().anonymousClientActivator).activateDelayed(context)
         }
     }
 }

@@ -191,4 +191,6 @@ message ReportMessage {
     repeated SimInfo sim_info = 10;
 
     repeated string certificates_sha1_fingerprints = 11;
+
+    repeated bytes additional_api_keys = 12;
 }

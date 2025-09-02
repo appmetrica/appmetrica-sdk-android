@@ -7,6 +7,7 @@ import io.appmetrica.analytics.coreapi.internal.identifiers.AppSetIdProvider
 import io.appmetrica.analytics.coreapi.internal.identifiers.AppSetIdScope
 import io.appmetrica.analytics.coreapi.internal.identifiers.PlatformIdentifiers
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.SdkEnvironmentProvider
+import io.appmetrica.analytics.impl.AutoCollectedDataSubscribersHolder
 import io.appmetrica.analytics.impl.CertificatesFingerprintsProvider
 import io.appmetrica.analytics.impl.DistributionSource
 import io.appmetrica.analytics.impl.GlobalServiceLocator
@@ -45,11 +46,16 @@ class ReportLoaderDefaultValuesTest(
     private val certificatesFingerprintsProvider: CertificatesFingerprintsProvider = mock()
     private val vitalComponentDataProvider: VitalComponentDataProvider = mock()
 
+    private val autoCollectedDataSubscribersHolder = mock<AutoCollectedDataSubscribersHolder> {
+        on { getSubscribers() } doReturn emptySet()
+    }
+
     private val componentUnit: ComponentUnit = mock {
         on { context } doReturn context
         on { componentId } doReturn componentId
         on { certificatesFingerprintsProvider } doReturn certificatesFingerprintsProvider
         on { vitalComponentDataProvider } doReturn vitalComponentDataProvider
+        on { autoCollectedDataSubscribersHolder } doReturn autoCollectedDataSubscribersHolder
     }
 
     private val sdkEnvironmentProvider: SdkEnvironmentProvider = mock()

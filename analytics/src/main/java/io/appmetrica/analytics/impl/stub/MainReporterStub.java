@@ -130,4 +130,9 @@ public class MainReporterStub extends ReporterExtendedStub implements IMainRepor
                             @Nullable PluginErrorDetails errorDetails) {
         //Do nothing
     }
+
+    @Override
+    public void addAutoCollectedDataSubscriber(@NonNull String subscriber) {
+        // Do nothing
+    }
 }

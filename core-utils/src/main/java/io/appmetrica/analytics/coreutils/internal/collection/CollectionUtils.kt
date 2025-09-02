@@ -128,4 +128,10 @@ object CollectionUtils {
 
     @JvmStatic
     fun isNullOrEmpty(collection: Collection<*>?): Boolean = collection.isNullOrEmpty()
+
+    @JvmStatic
+    fun <T> merge(target: MutableSet<T>, source: Set<T>): Set<T> {
+        target.addAll(source)
+        return target
+    }
 }

@@ -147,6 +147,11 @@ public class AppMetricaImplStub implements IAppMetricaImpl {
         // Do nothing
     }
 
+    @Override
+    public void addAutoCollectedDataSubscriber(@NonNull String subscriber) {
+        // Do nothing
+    }
+
     @NonNull
     @Override
     public IReporterFactory getReporterFactory() {

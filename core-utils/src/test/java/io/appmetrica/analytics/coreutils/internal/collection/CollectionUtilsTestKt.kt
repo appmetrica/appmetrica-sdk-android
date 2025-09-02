@@ -178,4 +178,54 @@ class CollectionUtilsTestKt : CommonTest() {
     fun `isNullOrEmpty for filled`() {
         assertThat(CollectionUtils.isNullOrEmpty(listOf(Any()))).isFalse()
     }
+
+    @Test
+    fun `merge for filled`() {
+        val target = mutableSetOf(1, 2, 3)
+        val source = setOf(4, 5, 6)
+        val result = CollectionUtils.merge(target, source)
+
+        assertThat(target).containsExactlyInAnyOrder(1, 2, 3, 4, 5, 6)
+        assertThat(result).isSameAs(target)
+    }
+
+    @Test
+    fun `merge for empty source set`() {
+        val target = mutableSetOf(1, 2, 3)
+        val source = emptySet<Int>()
+        val result = CollectionUtils.merge(target, source)
+
+        assertThat(target).containsExactlyInAnyOrder(1, 2, 3)
+        assertThat(result).isSameAs(target)
+    }
+
+    @Test
+    fun `merge for empty target set`() {
+        val target = mutableSetOf<Int>()
+        val source = setOf(1, 2, 3)
+        val result = CollectionUtils.merge(target, source)
+
+        assertThat(target).containsExactlyInAnyOrder(1, 2, 3)
+        assertThat(result).isSameAs(target)
+    }
+
+    @Test
+    fun `merge with duplicates`() {
+        val target = mutableSetOf(1, 2, 3)
+        val source = setOf(3, 4, 5)
+        val result = CollectionUtils.merge(target, source)
+
+        assertThat(target).containsExactlyInAnyOrder(1, 2, 3, 4, 5)
+        assertThat(result).isSameAs(target)
+    }
+
+    @Test
+    fun `merge for both empty`() {
+        val target = mutableSetOf<Int>()
+        val source = emptySet<Int>()
+        val result = CollectionUtils.merge(target, source)
+
+        assertThat(target).isEmpty()
+        assertThat(result).isSameAs(target)
+    }
 }

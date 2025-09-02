@@ -433,6 +433,28 @@ class CounterConfigurationTest : CommonTest() {
     }
 
     @Test
+    fun addAutoCollectedDataSubscriber() {
+        val subscriber = "Subscriber"
+        val counterConfiguration = CounterConfiguration()
+        counterConfiguration.addAutoCollectedDataSubscriber(subscriber)
+        assertThat(counterConfiguration.autoCollectedDataSubscribers).containsExactly(subscriber)
+    }
+
+    @Test
+    fun addAutoCollectedDataSubscribers() {
+        val subscribers = listOf("Subscriber1", "Subscriber2")
+        val counterConfiguration = CounterConfiguration()
+        counterConfiguration.addAutoCollectedDataSubscribers(subscribers)
+        assertThat(counterConfiguration.autoCollectedDataSubscribers).containsExactlyElementsOf(subscribers)
+    }
+
+    @Test
+    fun addAutoCollectedDataSubscribersEmpty() {
+        val counterConfiguration = CounterConfiguration()
+        assertThat(counterConfiguration.autoCollectedDataSubscribers).isEmpty()
+    }
+
+    @Test
     fun `constructor with AppMetricaConfig`() {
         val reporterType = CounterConfigurationReporterType.MAIN
         val inputConfig = AppMetricaConfig.newConfigBuilder(UUID.randomUUID().toString())

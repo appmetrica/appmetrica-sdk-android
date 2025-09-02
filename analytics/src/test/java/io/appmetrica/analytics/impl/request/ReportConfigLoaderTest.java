@@ -4,6 +4,7 @@ import io.appmetrica.analytics.coreapi.internal.identifiers.AppSetId;
 import io.appmetrica.analytics.coreapi.internal.identifiers.AppSetIdScope;
 import io.appmetrica.analytics.coreapi.internal.identifiers.PlatformIdentifiers;
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.SdkEnvironmentProvider;
+import io.appmetrica.analytics.impl.AutoCollectedDataSubscribersHolder;
 import io.appmetrica.analytics.impl.CertificatesFingerprintsProvider;
 import io.appmetrica.analytics.impl.ClidsInfoStorage;
 import io.appmetrica.analytics.impl.DistributionSource;
@@ -60,6 +61,8 @@ public class ReportConfigLoaderTest extends CommonTest {
     @Mock
     private AppSetIdGetter appSetIdGetter;
     @Mock
+    private AutoCollectedDataSubscribersHolder autoCollectedDataSubscribersHolder;
+    @Mock
     private PlatformIdentifiers platformIdentifiers;
 
     private final AppSetId appSetId = new AppSetId(UUID.randomUUID().toString(), AppSetIdScope.DEVELOPER);
@@ -74,6 +77,8 @@ public class ReportConfigLoaderTest extends CommonTest {
         when(componentUnit.getContext()).thenReturn(RuntimeEnvironment.getApplication());
         when(componentUnit.getCertificatesFingerprintsProvider()).thenReturn(certificatesFingerprintsProvider);
         when(componentUnit.getVitalComponentDataProvider()).thenReturn(vitalComponentDataProvider);
+        when(componentUnit.getAutoCollectedDataSubscribersHolder()).thenReturn(autoCollectedDataSubscribersHolder);
+        when(autoCollectedDataSubscribersHolder.getSubscribers()).thenReturn(Collections.emptySet());
         when(certificatesFingerprintsProvider.getSha1()).thenReturn(Collections.singletonList("cert1"));
         doReturn(new ComponentId(RuntimeEnvironment.getApplication().getPackageName(), apiKey))
             .when(componentUnit).getComponentId();

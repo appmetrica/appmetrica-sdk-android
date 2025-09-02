@@ -39,6 +39,12 @@ class ModulesSynchronousStageExecutorContextTest : CommonTest() {
     }
 
     @Test
+    fun subscribeForAutoCollectedData() {
+        synchronousStageExecutor.subscribeForAutoCollectedData(context, "apiKey")
+        verify(contextAppearedListener).onProbablyAppeared(applicationContext)
+    }
+
+    @Test
     fun coverage() {
         ContextCoverageUtils.checkCoverage(
             ModulesSynchronousStageExecutor::class.java,

@@ -325,6 +325,38 @@ public class AppMetricaFacadeStaticSettersTest extends CommonTest {
         verify(impl).setUserProfileID(userProfileID);
     }
 
+    @Test
+    public void addAutoCollectedDataSubscriberNoInstance() {
+        String subscriber = "subscriber";
+        setUpNoInstance();
+        AppMetricaFacade.addAutoCollectedDataSubscriber(subscriber);
+        verify(clientServiceLocatorRule.mDefaultOneShotMetricaConfig).addAutoCollectedDataSubscriber(subscriber);
+    }
+
+    @Test
+    public void addAutoCollectedDataSubscriberFutureNotDone() {
+        String subscriber = "subscriber";
+        setUpFutureNotDone();
+        AppMetricaFacade.addAutoCollectedDataSubscriber(subscriber);
+        verify(clientServiceLocatorRule.mDefaultOneShotMetricaConfig).addAutoCollectedDataSubscriber(subscriber);
+    }
+
+    @Test
+    public void addAutoCollectedDataSubscriberNoMainReporter() {
+        String subscriber = "subscriber";
+        setUpNoMainReporter();
+        AppMetricaFacade.addAutoCollectedDataSubscriber(subscriber);
+        verify(clientServiceLocatorRule.mDefaultOneShotMetricaConfig).addAutoCollectedDataSubscriber(subscriber);
+    }
+
+    @Test
+    public void addAutoCollectedDataSubscriberInitialized() {
+        String subscriber = "subscriber";
+        setUpInitialized();
+        AppMetricaFacade.addAutoCollectedDataSubscriber(subscriber);
+        verify(impl).addAutoCollectedDataSubscriber(subscriber);
+    }
+
     private void setUpNoInstance() {
         AppMetricaFacade.killInstance();
     }

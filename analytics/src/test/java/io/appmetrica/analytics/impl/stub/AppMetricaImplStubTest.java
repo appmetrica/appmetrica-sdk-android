@@ -170,6 +170,11 @@ public class AppMetricaImplStubTest extends CommonTest {
             .checkAll();
     }
 
+    @Test
+    public void addAutoCollectedDataSubscriber() {
+        stub.addAutoCollectedDataSubscriber("Api key");
+    }
+
     private void assertAdvIdentifiersResult(AdvIdentifiersResult result) throws Exception {
         Consumer<ObjectPropertyAssertions<AdvIdentifiersResult.AdvId>> verifier =
             new Consumer<ObjectPropertyAssertions<AdvIdentifiersResult.AdvId>>() {

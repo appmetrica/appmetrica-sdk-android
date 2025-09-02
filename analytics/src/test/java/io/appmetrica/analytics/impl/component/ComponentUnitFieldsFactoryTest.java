@@ -3,6 +3,7 @@ package io.appmetrica.analytics.impl.component;
 import android.content.Context;
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
 import io.appmetrica.analytics.impl.AppEnvironment;
+import io.appmetrica.analytics.impl.AutoCollectedDataSubscribersHolder;
 import io.appmetrica.analytics.impl.CounterReport;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.LifecycleDependentComponentManager;
@@ -99,6 +100,9 @@ public class ComponentUnitFieldsFactoryTest extends CommonTest {
     @Rule
     public final MockedConstructionRule<SessionExtrasHolder> sessionExtrasHolderMockedConstructionRule =
         new MockedConstructionRule<>(SessionExtrasHolder.class);
+    @Rule
+    public final MockedConstructionRule<AutoCollectedDataSubscribersHolder> autoCollectedDataObserversHolderRule =
+        new MockedConstructionRule<>(AutoCollectedDataSubscribersHolder.class);
 
     @Before
     public void setUp() {
@@ -241,6 +245,17 @@ public class ComponentUnitFieldsFactoryTest extends CommonTest {
             .isEqualTo(sessionExtrasHolderMockedConstructionRule.getConstructionMock().constructed().get(1));
         assertThat(sessionExtrasHolderMockedConstructionRule.getArgumentInterceptor().flatArguments())
             .containsExactly(mContext, mComponentId, mContext, mComponentId);
+    }
+
+    @Test
+    public void getAutoCollectedDataSubscribersHolder() {
+        assertThat(mFieldsFactory.createAutoCollectedDataSubscribersHolder(mComponentPreferences))
+            .isEqualTo(autoCollectedDataObserversHolderRule.getConstructionMock().constructed().get(0));
+
+        assertThat(autoCollectedDataObserversHolderRule.getConstructionMock().constructed())
+            .hasSize(1);
+        assertThat(autoCollectedDataObserversHolderRule.getArgumentInterceptor().flatArguments())
+            .containsExactly(mComponentId, mComponentPreferences);
     }
 
     @RunWith(RobolectricTestRunner.class)

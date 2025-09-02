@@ -8,9 +8,12 @@ import io.appmetrica.analytics.impl.client.ProcessConfiguration;
 import io.appmetrica.analytics.impl.request.StartupRequestConfig;
 import io.appmetrica.analytics.internal.CounterConfiguration;
 import io.appmetrica.analytics.testutils.CommonTest;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -42,6 +45,7 @@ public class CommonArgumentsTest extends CommonTest {
         assertions.checkField("nativeCrashesEnabled", nullVariable);
         assertions.checkField("revenueAutoTrackingEnabled", nullVariable);
         assertions.checkField("advIdentifiersTrackingEnabled", nullVariable);
+        assertions.checkField("autoCollectedDataSubscribers", new HashSet<>());
         assertions.checkAll();
     }
 
@@ -63,6 +67,7 @@ public class CommonArgumentsTest extends CommonTest {
         Map<String, String> clids = new HashMap<String, String>();
         clids.put("clid0", "0");
         clids.put("clid1", "1");
+        Set<String> autoCollectedDataSubscribers = Set.of("subscriber0", "subscriber1");
         ObjectPropertyAssertions<CommonArguments.ReporterArguments> assertions =
             ObjectPropertyAssertions(new CommonArguments.ReporterArguments(
                 apiKey,
@@ -78,7 +83,8 @@ public class CommonArgumentsTest extends CommonTest {
                 maxReportsInDbCount,
                 nativeCrashesEnabled,
                 revenueAutoTrackingEnabled,
-                advIdentifiersTrackingEnabled
+                advIdentifiersTrackingEnabled,
+                autoCollectedDataSubscribers
             ));
         assertions.checkField("apiKey", apiKey);
         assertions.checkField("dispatchPeriod", dispatchPeriod);
@@ -94,6 +100,7 @@ public class CommonArgumentsTest extends CommonTest {
         assertions.checkField("nativeCrashesEnabled", nativeCrashesEnabled);
         assertions.checkField("revenueAutoTrackingEnabled", revenueAutoTrackingEnabled);
         assertions.checkField("advIdentifiersTrackingEnabled", advIdentifiersTrackingEnabled);
+        assertions.checkField("autoCollectedDataSubscribers", autoCollectedDataSubscribers);
         assertions.checkAll();
     }
 
@@ -112,6 +119,9 @@ public class CommonArgumentsTest extends CommonTest {
         boolean dataSendingEnabled = true;
         boolean nativeCrashesEnabled = true;
         boolean revenueAutoTrackingEnabled = false;
+        String firstSubscriber = "firstSubscriber";
+        String secondSubscriber = "secondSubscriber";
+        List<String> autoCollectedDataSubscribers = Arrays.asList(firstSubscriber, secondSubscriber);
 
         boolean hasNewCustomHosts = false;
         List<String> newCustomHosts = null;
@@ -137,6 +147,7 @@ public class CommonArgumentsTest extends CommonTest {
         doReturn(maxReportsInDbCount).when(counterConfiguration).getMaxReportsInDbCount();
         doReturn(nativeCrashesEnabled).when(counterConfiguration).getReportNativeCrashesEnabled();
         doReturn(revenueAutoTrackingEnabled).when(counterConfiguration).isRevenueAutoTrackingEnabled();
+        doReturn(autoCollectedDataSubscribers).when(counterConfiguration).getAutoCollectedDataSubscribers();
 
         doReturn(distributionReferrer).when(processConfiguration).getDistributionReferrer();
         doReturn(referrerSource).when(processConfiguration).getInstallReferrerSource();
@@ -169,6 +180,7 @@ public class CommonArgumentsTest extends CommonTest {
         assertions.checkField("nativeCrashesEnabled", nativeCrashesEnabled);
         assertions.checkField("revenueAutoTrackingEnabled", revenueAutoTrackingEnabled);
         assertions.checkField("advIdentifiersTrackingEnabled", advIdentifiersTrackingEnabled);
+        assertions.checkField("autoCollectedDataSubscribers", Set.of(firstSubscriber, secondSubscriber));
         assertions.checkAll();
 
         ObjectPropertyAssertions<StartupRequestConfig.Arguments> startupAssertions =

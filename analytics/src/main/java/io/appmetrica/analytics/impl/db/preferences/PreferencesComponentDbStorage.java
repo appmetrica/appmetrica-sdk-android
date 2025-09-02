@@ -1,5 +1,6 @@
 package io.appmetrica.analytics.impl.db.preferences;
 
+import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import io.appmetrica.analytics.coreutils.internal.StringUtils;
@@ -35,6 +36,9 @@ public class PreferencesComponentDbStorage extends NameSpacedPreferenceDbStorage
     private static final PreferencesItem VITAL_DATA = new PreferencesItem("VITAL_DATA");
 
     private static final PreferencesItem SENT_EXTERNAL_ATTRIBUTIONS = new PreferencesItem("SENT_EXTERNAL_ATTRIBUTIONS");
+
+    private static final PreferencesItem AUTO_COLLECTED_DATA_SUBSCRIBERS =
+        new PreferencesItem("AUTO_COLLECTED_DATA_SUBSCRIBERS");
 
     public static final String SESSION_KEY = "SESSION_";
     private static final PreferencesItem MAIN_REPORTER_EVENTS_TRIGGER_CONDITION_MET_KEY =
@@ -160,6 +164,35 @@ public class PreferencesComponentDbStorage extends NameSpacedPreferenceDbStorage
             }
         }
         writeString(SENT_EXTERNAL_ATTRIBUTIONS.fullKey(), json.toString());
+    }
+
+    public Map<String, Long> getAutoCollectedDataSubscribers() {
+        Map<String, Long> result = new HashMap<>();
+        try {
+            String jsonString = readString(AUTO_COLLECTED_DATA_SUBSCRIBERS.fullKey());
+            if (!TextUtils.isEmpty(jsonString)) {
+                JSONObject json = new JSONObject(jsonString);
+                for (Iterator<String> it = json.keys(); it.hasNext(); ) {
+                    String key = it.next();
+                    result.put(key, json.getLong(key));
+                }
+            }
+        } catch (Throwable e) {
+            DebugLogger.INSTANCE.error(TAG, e);
+        }
+        return result;
+    }
+
+    public void putAutoCollectedDataSubscribers(@NonNull Map<String, Long> data) {
+        JSONObject json = new JSONObject();
+        for (Map.Entry<String, Long> entry : data.entrySet()) {
+            try {
+                json.put(entry.getKey(), entry.getValue());
+            } catch (Throwable e) {
+                DebugLogger.INSTANCE.error(TAG, e);
+            }
+        }
+        writeString(AUTO_COLLECTED_DATA_SUBSCRIBERS.fullKey(), json.toString());
     }
 
     @NonNull

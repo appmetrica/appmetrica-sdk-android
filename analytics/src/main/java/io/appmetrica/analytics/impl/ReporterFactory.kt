@@ -51,10 +51,10 @@ internal class ReporterFactory(
     override fun buildOrUpdateAnonymousMainReporter(
         config: AppMetricaConfig,
         logger: PublicLogger,
-        needToClearEnvironment: Boolean
+        configExtension: AppMetricaConfigExtension,
     ): MainReporter = mainReporter?.also {
         DebugLogger.info(tag, "Create anonymous main reporter")
-    } ?: createMainReporter(config, logger, needToClearEnvironment).also {
+    } ?: createMainReporter(config, logger, configExtension).also {
         mainReporter = it
         DebugLogger.info(tag, "Create anonymous main reporter")
     }
@@ -64,7 +64,7 @@ internal class ReporterFactory(
     override fun buildOrUpdateMainReporter(
         config: AppMetricaConfig,
         logger: PublicLogger,
-        needToClearEnvironment: Boolean
+        configExtension: AppMetricaConfigExtension,
     ): MainReporter = mainReporter?.also {
         DebugLogger.info(
             tag,
@@ -72,10 +72,10 @@ internal class ReporterFactory(
             config.apiKey
         )
         mainReporterComponents.updateConfig(config, logger)
-        it.updateConfig(config, needToClearEnvironment)
+        it.updateConfig(config, configExtension)
         notifyMainReporterCreated(it, config, logger)
         reporters[config.apiKey] = it
-    } ?: createMainReporter(config, logger, needToClearEnvironment).also {
+    } ?: createMainReporter(config, logger, configExtension).also {
         DebugLogger.info(tag, "Create main reporter with apiKey = %s", config.apiKey)
         notifyMainReporterCreated(it, config, logger)
         mainReporter = it
@@ -137,7 +137,7 @@ internal class ReporterFactory(
     private fun createMainReporter(
         config: AppMetricaConfig,
         logger: PublicLogger,
-        needToClearEnvironment: Boolean
+        configExtension: AppMetricaConfigExtension,
     ): MainReporter {
         reporterApiKeyUsedValidator.validate(config.apiKey)
         mainReporterComponents.updateConfig(config, logger)
@@ -145,7 +145,7 @@ internal class ReporterFactory(
         DebugLogger.info(tag, "performCommonInitialization for main reporter with api key = %s", config.apiKey)
         performCommonInitialization(reporter)
         DebugLogger.info(tag, "updateConfig for apiKey = %s", config.apiKey)
-        reporter.updateConfig(config, needToClearEnvironment)
+        reporter.updateConfig(config, configExtension)
         reporter.start()
         reportsHandler.setShouldDisconnectFromServiceChecker(
             object : ShouldDisconnectFromServiceChecker {

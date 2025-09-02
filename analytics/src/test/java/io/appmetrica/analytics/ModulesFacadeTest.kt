@@ -124,6 +124,15 @@ class ModulesFacadeTest : CommonTest() {
         verifyNoMoreInteractions(proxy)
     }
 
+    @Test
+    fun subscribeForAutoCollectedData() {
+        val context: Context = mock()
+        val apiKey = "some api key"
+        ModulesFacade.subscribeForAutoCollectedData(context, apiKey)
+        verify(proxy).subscribeForAutoCollectedData(context, apiKey)
+        verifyNoMoreInteractions(proxy)
+    }
+
     private fun verifyIifa(returnValue: Boolean) {
         whenever(proxy.isActivatedForApp()).thenReturn(returnValue)
         assertThat(ModulesFacade.isActivatedForApp()).isEqualTo(returnValue)

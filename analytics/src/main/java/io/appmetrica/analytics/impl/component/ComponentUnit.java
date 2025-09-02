@@ -8,6 +8,7 @@ import io.appmetrica.analytics.AppMetrica;
 import io.appmetrica.analytics.coreutils.internal.services.PackageManagerUtils;
 import io.appmetrica.analytics.coreutils.internal.time.TimePassedChecker;
 import io.appmetrica.analytics.impl.AppEnvironment;
+import io.appmetrica.analytics.impl.AutoCollectedDataSubscribersHolder;
 import io.appmetrica.analytics.impl.CertificatesFingerprintsProvider;
 import io.appmetrica.analytics.impl.CounterReport;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
@@ -94,14 +95,7 @@ public class ComponentUnit implements IReportableComponent, IComponent,
     private final SessionExtrasHolder sessionExtrasHolder;
 
     @NonNull
-    public SessionManagerStateMachine getSessionManager() {
-        return mSessionManager;
-    }
-
-    @NonNull
-    public EventSaver getEventSaver() {
-        return mEventSaver;
-    }
+    private final AutoCollectedDataSubscribersHolder autoCollectedDataSubscribersHolder;
 
     public ComponentUnit(@NonNull Context context,
                          @NonNull StartupState startupState,
@@ -152,9 +146,11 @@ public class ComponentUnit implements IReportableComponent, IComponent,
         mTimePassedChecker = timePassedChecker;
         vitalComponentDataProvider = fieldsFactory.getVitalComponentDataProvider();
         mPreloadInfoStorage = GlobalServiceLocator.getInstance().getPreloadInfoStorage();
+        mComponentPreferences = fieldsFactory.getPreferencesProvider().createPreferencesComponentDbStorage();
+        autoCollectedDataSubscribersHolder =
+            fieldsFactory.createAutoCollectedDataSubscribersHolder(mComponentPreferences);
         mConfigHolder = fieldsFactory.createConfigHolder(this);
         mPublicLogger = fieldsFactory.getLoggerProvider().getPublicLogger();
-        mComponentPreferences = fieldsFactory.getPreferencesProvider().createPreferencesComponentDbStorage();
         mServicePreferences = GlobalServiceLocator.getInstance().getServicePreferences();
         mAppEnvironment = appEnvironmentProvider.getOrCreate(mComponentId, mPublicLogger, mComponentPreferences);
         mEventFirstOccurrenceService = fieldsFactory.createEventFirstOccurrenceService();
@@ -252,6 +248,10 @@ public class ComponentUnit implements IReportableComponent, IComponent,
     public synchronized void updateSdkConfig(@NonNull CommonArguments.ReporterArguments sdkConfig) {
         mConfigHolder.updateArguments(sdkConfig);
         updateLoggerEnabledState(sdkConfig);
+        if (autoCollectedDataSubscribersHolder.updateSubscribers(sdkConfig.autoCollectedDataSubscribers)) {
+            DebugLogger.INSTANCE.info(TAG, "Auto collected data observers changed. Reset config.");
+            mConfigHolder.reset();
+        }
     }
 
     public synchronized void flushEvents() {
@@ -423,6 +423,21 @@ public class ComponentUnit implements IReportableComponent, IComponent,
     @NonNull
     public SessionExtrasHolder getSessionExtrasHolder() {
         return sessionExtrasHolder;
+    }
+
+    @NonNull
+    public SessionManagerStateMachine getSessionManager() {
+        return mSessionManager;
+    }
+
+    @NonNull
+    public EventSaver getEventSaver() {
+        return mEventSaver;
+    }
+
+    @NonNull
+    public AutoCollectedDataSubscribersHolder getAutoCollectedDataSubscribersHolder() {
+        return autoCollectedDataSubscribersHolder;
     }
 
     private void logEvent(final CounterReport reportData, String msg) {

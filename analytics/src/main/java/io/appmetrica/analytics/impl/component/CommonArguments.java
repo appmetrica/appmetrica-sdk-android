@@ -5,12 +5,15 @@ import android.os.ResultReceiver;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import io.appmetrica.analytics.coreutils.internal.WrapUtils;
+import io.appmetrica.analytics.coreutils.internal.collection.CollectionUtils;
 import io.appmetrica.analytics.impl.client.ClientConfiguration;
 import io.appmetrica.analytics.impl.request.StartupRequestConfig;
 import io.appmetrica.analytics.internal.CounterConfiguration;
 import io.appmetrica.analytics.networktasks.internal.ArgumentsMerger;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 public class CommonArguments {
 
@@ -68,6 +71,8 @@ public class CommonArguments {
         public final Boolean revenueAutoTrackingEnabled;
         @Nullable
         public final Boolean advIdentifiersTrackingEnabled;
+        @NonNull
+        public final Set<String> autoCollectedDataSubscribers;
 
         ReporterArguments(@Nullable String apiKey,
                           @Nullable Boolean locationTracking,
@@ -82,7 +87,8 @@ public class CommonArguments {
                           @Nullable Integer maxReportsInDbCount,
                           @Nullable Boolean nativeCrashesEnabled,
                           @Nullable Boolean revenueAutoTrackingEnabled,
-                          @Nullable Boolean advIdentifiersTrackingEnabled) {
+                          @Nullable Boolean advIdentifiersTrackingEnabled,
+                          @NonNull Set<String> autoCollectedDataSubscribers) {
             this.apiKey = apiKey;
             this.locationTracking = locationTracking;
             this.manualLocation = manualLocation;
@@ -97,6 +103,7 @@ public class CommonArguments {
             this.nativeCrashesEnabled = nativeCrashesEnabled;
             this.revenueAutoTrackingEnabled = revenueAutoTrackingEnabled;
             this.advIdentifiersTrackingEnabled = advIdentifiersTrackingEnabled;
+            this.autoCollectedDataSubscribers = autoCollectedDataSubscribers;
         }
 
         public ReporterArguments(@NonNull CounterConfiguration reporterConfiguration,
@@ -115,7 +122,8 @@ public class CommonArguments {
                 reporterConfiguration.getMaxReportsInDbCount(),
                 reporterConfiguration.getReportNativeCrashesEnabled(),
                 reporterConfiguration.isRevenueAutoTrackingEnabled(),
-                reporterConfiguration.isAdvIdentifiersTrackingEnabled()
+                reporterConfiguration.isAdvIdentifiersTrackingEnabled(),
+                new HashSet<>(reporterConfiguration.getAutoCollectedDataSubscribers())
             );
         }
 
@@ -134,7 +142,8 @@ public class CommonArguments {
                 null,
                 null,
                 null,
-                null
+                null,
+                new HashSet<>()
             );
         }
 
@@ -155,7 +164,8 @@ public class CommonArguments {
                 WrapUtils.getOrDefaultNullable(maxReportsInDbCount, other.maxReportsInDbCount),
                 WrapUtils.getOrDefaultNullable(nativeCrashesEnabled, other.nativeCrashesEnabled),
                 WrapUtils.getOrDefaultNullable(revenueAutoTrackingEnabled, other.revenueAutoTrackingEnabled),
-                WrapUtils.getOrDefaultNullable(advIdentifiersTrackingEnabled, other.advIdentifiersTrackingEnabled)
+                WrapUtils.getOrDefaultNullable(advIdentifiersTrackingEnabled, other.advIdentifiersTrackingEnabled),
+                CollectionUtils.merge(autoCollectedDataSubscribers, other.autoCollectedDataSubscribers)
             );
         }
 
@@ -166,10 +176,8 @@ public class CommonArguments {
 
         @Override
         public boolean equals(Object o) {
-            if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
-
-            final ReporterArguments that = (ReporterArguments) o;
+            ReporterArguments that = (ReporterArguments) o;
             return Objects.equals(apiKey, that.apiKey) &&
                 Objects.equals(locationTracking, that.locationTracking) &&
                 Objects.equals(manualLocation, that.manualLocation) &&
@@ -183,26 +191,29 @@ public class CommonArguments {
                 Objects.equals(maxReportsInDbCount, that.maxReportsInDbCount) &&
                 Objects.equals(nativeCrashesEnabled, that.nativeCrashesEnabled) &&
                 Objects.equals(revenueAutoTrackingEnabled, that.revenueAutoTrackingEnabled) &&
-                Objects.equals(advIdentifiersTrackingEnabled, that.advIdentifiersTrackingEnabled);
+                Objects.equals(advIdentifiersTrackingEnabled, that.advIdentifiersTrackingEnabled) &&
+                Objects.equals(autoCollectedDataSubscribers, that.autoCollectedDataSubscribers);
         }
 
         @Override
         public int hashCode() {
-            int result = Objects.hashCode(apiKey);
-            result = 31 * result + Objects.hashCode(locationTracking);
-            result = 31 * result + Objects.hashCode(manualLocation);
-            result = 31 * result + Objects.hashCode(firstActivationAsUpdate);
-            result = 31 * result + Objects.hashCode(sessionTimeout);
-            result = 31 * result + Objects.hashCode(maxReportsCount);
-            result = 31 * result + Objects.hashCode(dispatchPeriod);
-            result = 31 * result + Objects.hashCode(logEnabled);
-            result = 31 * result + Objects.hashCode(dataSendingEnabled);
-            result = 31 * result + Objects.hashCode(clidsFromClient);
-            result = 31 * result + Objects.hashCode(maxReportsInDbCount);
-            result = 31 * result + Objects.hashCode(nativeCrashesEnabled);
-            result = 31 * result + Objects.hashCode(revenueAutoTrackingEnabled);
-            result = 31 * result + Objects.hashCode(advIdentifiersTrackingEnabled);
-            return result;
+            return Objects.hash(
+                apiKey,
+                locationTracking,
+                manualLocation,
+                firstActivationAsUpdate,
+                sessionTimeout,
+                maxReportsCount,
+                dispatchPeriod,
+                logEnabled,
+                dataSendingEnabled,
+                clidsFromClient,
+                maxReportsInDbCount,
+                nativeCrashesEnabled,
+                revenueAutoTrackingEnabled,
+                advIdentifiersTrackingEnabled,
+                autoCollectedDataSubscribers
+            );
         }
 
         @Override
@@ -222,6 +233,7 @@ public class CommonArguments {
                 ", nativeCrashesEnabled=" + nativeCrashesEnabled +
                 ", revenueAutoTrackingEnabled=" + revenueAutoTrackingEnabled +
                 ", advIdentifiersTrackingEnabled=" + advIdentifiersTrackingEnabled +
+                ", autoCollectedDataSubscribers=" + autoCollectedDataSubscribers +
                 '}';
         }
     }

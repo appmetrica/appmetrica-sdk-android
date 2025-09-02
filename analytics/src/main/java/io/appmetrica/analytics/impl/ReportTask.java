@@ -50,6 +50,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import javax.net.ssl.SSLSocketFactory;
 import org.json.JSONObject;
 
@@ -63,7 +64,6 @@ public class ReportTask implements UnderlyingNetworkTask {
     private static final int SESSION_ID_FIELD_NUMBER = 1;
     private static final int SESSION_DESC_FIELD_NUMBER = 2;
     private static final int REPORT_REQUEST_PARAMETERS_FILED_NUMBER = 4;
-    private static final int REPORT_MESSAGE_NETWORK_INTERFACES_NUMBER = 8;
     private static final int REPORT_MESSAGE_SIM_INFO_NUMBER = 10;
     private static final int ENVIRONMENT_VARIABLE_FIELD_NUMBER = 7;
     private static final int EVENT_FIELD_NUMBER = 3;
@@ -252,13 +252,21 @@ public class ReportTask implements UnderlyingNetworkTask {
                 .computeMessageSize(REPORT_REQUEST_PARAMETERS_FILED_NUMBER, requestParameters);
         reportMessage.reportRequestParameters = requestParameters;
         fillTelephonyProviderInfo(reportMessage);
-        reportMessage.sessions = messageToSend.sessions.
-                toArray(new EventProto.ReportMessage.Session[messageToSend.sessions.size()]);
+        reportMessage.sessions = messageToSend.sessions.toArray(new Session[0]);
         reportMessage.appEnvironment = extractEnvironment(messageToSend.environment);
-        reportMessage.certificatesSha1Fingerprints = certificates.toArray(new String[certificates.size()]);
+        reportMessage.certificatesSha1Fingerprints = certificates.toArray(new String[0]);
+        fillAdditionalApiKeys(reportMessage, requestConfig.getAutoCollectedDataSubscribers());
 
-        mReportDataSize += CodedOutputByteBufferNano.computeTagSize(REPORT_MESSAGE_NETWORK_INTERFACES_NUMBER);
         return reportMessage;
+    }
+
+    private void fillAdditionalApiKeys(@NonNull final EventProto.ReportMessage reportMessage,
+                                       @NonNull Set<String> autoCollectedDataSubscribers) {
+        String[] additionalApiKeys = autoCollectedDataSubscribers.toArray(new String[0]);
+        reportMessage.additionalApiKeys = new byte[additionalApiKeys.length][];
+        for (int i = 0; i < autoCollectedDataSubscribers.size(); i++) {
+            reportMessage.additionalApiKeys[i] = StringUtils.getUTF8Bytes(additionalApiKeys[i]);
+        }
     }
 
     private void fillTelephonyProviderInfo(@NonNull final EventProto.ReportMessage reportMessage) {

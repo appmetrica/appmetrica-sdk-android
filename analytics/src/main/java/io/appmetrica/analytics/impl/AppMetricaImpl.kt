@@ -92,14 +92,17 @@ internal class AppMetricaImpl @WorkerThread internal constructor(
 
     @WorkerThread
     override fun activate(config: AppMetricaConfig) {
-        DebugLogger.info(tag, "activate")
+        DebugLogger.info(
+            tag,
+            "activate: config = $config; config extension = ${defaultOneShotMetricaConfig.configExtension()}"
+        )
         val logger = LoggerStorage.getOrCreateMainPublicLogger(config.apiKey)
         val mainReporterInitializer = object : MainReporterInitializer {
             override fun initialize(): MainReporter {
                 return reporterFactory.buildOrUpdateMainReporter(
                     config,
                     logger,
-                    defaultOneShotMetricaConfig.wasAppEnvironmentCleared()
+                    defaultOneShotMetricaConfig.configExtension()
                 )
             }
         }
@@ -135,7 +138,11 @@ internal class AppMetricaImpl @WorkerThread internal constructor(
 
     @WorkerThread
     override fun activateAnonymously(libraryAdapterConfig: AppMetricaLibraryAdapterConfig) {
-        DebugLogger.info(tag, "Activate anonymously")
+        DebugLogger.info(
+            tag,
+            "Activate anonymously: config = $libraryAdapterConfig; configExtension = " +
+                "${defaultOneShotMetricaConfig.configExtension()}"
+        )
         val config = anonymousConfigProvider.getConfig(libraryAdapterConfig)
         val publicLogger = LoggerStorage.getMainPublicOrAnonymousLogger()
         val mainReporterInitializer = object : MainReporterInitializer {
@@ -143,7 +150,7 @@ internal class AppMetricaImpl @WorkerThread internal constructor(
                 return reporterFactory.buildOrUpdateAnonymousMainReporter(
                     config,
                     publicLogger,
-                    defaultOneShotMetricaConfig.wasAppEnvironmentCleared()
+                    defaultOneShotMetricaConfig.configExtension()
                 )
             }
         }
@@ -363,6 +370,12 @@ internal class AppMetricaImpl @WorkerThread internal constructor(
     @WorkerThread
     override fun setUserProfileID(userProfileID: String?) {
         mainReporter.setUserProfileID(userProfileID)
+    }
+
+    @WorkerThread
+    override fun addAutoCollectedDataSubscriber(subscriber: String) {
+        DebugLogger.info(tag, "Add auto collected data subscriber: $subscriber")
+        mainReporter.addAutoCollectedDataSubscriber(subscriber)
     }
 
     @AnyThread

@@ -18,10 +18,10 @@ class LibraryAdapterSynchronousStageExecutor {
 
     fun setAdvIdentifiersTracking(enabled: Boolean) {}
 
-    fun reportEvent(
-        sender: String?,
-        event: String?,
-        payload: String?
-    ) {
+    fun reportEvent(sender: String?, event: String?, payload: String?) {}
+
+    fun subscribeForAutoCollectedData(context: Context, apiKey: String) {
+        ClientServiceLocator.getInstance().contextAppearedListener.onProbablyAppeared(context)
+        ClientServiceLocator.getInstance().anonymousClientActivator.activateDelayed(context)
     }
 }

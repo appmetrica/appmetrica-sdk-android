@@ -54,7 +54,9 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
+import java.nio.charset.Charset
 import java.util.UUID
+import java.util.function.Predicate
 import javax.net.ssl.HttpsURLConnection
 
 @RunWith(RobolectricTestRunner::class)
@@ -207,6 +209,7 @@ internal class ReportTaskTest : CommonTest() {
 
     private val uuid = UUID.randomUUID().toString()
     private val deviceId = UUID.randomUUID().toString()
+    private val firstAutoCollectedDataObserver = "First"
 
     private val reportRequestConfig = mock<ReportRequestConfig> {
         on { certificates } doReturn certificates
@@ -215,6 +218,7 @@ internal class ReportTaskTest : CommonTest() {
         on { locale } doReturn "ru"
         on { uuid } doReturn uuid
         on { deviceId } doReturn deviceId
+        on { autoCollectedDataSubscribers } doReturn setOf(firstAutoCollectedDataObserver)
     }
     private val lazyReportConfigProvider = mock<LazyReportConfigProvider> {
         on { config } doReturn reportRequestConfig
@@ -391,22 +395,29 @@ internal class ReportTaskTest : CommonTest() {
         val assertions = SoftAssertions()
         with(assertions) {
             assertThat(reportMessage.reportRequestParameters.uuid)
-                .`as`("uuid")
+                .describedAs("uuid")
                 .isEqualTo(uuid)
             assertThat(reportMessage.reportRequestParameters.deviceId)
-                .`as`(deviceId)
+                .describedAs(deviceId)
                 .isEqualTo(deviceId)
+            assertThat(reportMessage.additionalApiKeys)
+                .describedAs("additional api keys")
+                .matches(
+                    Predicate {
+                        it.size == 1 && it[0].toString(Charset.defaultCharset()) == firstAutoCollectedDataObserver
+                    }
+                )
             assertThat(reportMessage.sessions.size)
-                .`as`("session count")
+                .describedAs("session count")
                 .isEqualTo(1)
             assertThat(reportMessage.sessions[0].events.size)
-                .`as`("events count")
+                .describedAs("events count")
                 .isEqualTo(1)
             assertThat(reportMessage.sessions[0].events[0].value)
-                .`as`("Event value")
+                .describedAs("Event value")
                 .isEqualTo(truncatedValue.toByteArray())
             assertThat(reportMessage.sessions[0].events[0].type)
-                .`as`("Event type")
+                .describedAs("Event type")
                 .isEqualTo(EventProto.ReportMessage.Session.Event.EVENT_CLIENT)
             assertThat(reportMessage.sessions[0].id).isEqualTo(sessionId)
             assertAll()

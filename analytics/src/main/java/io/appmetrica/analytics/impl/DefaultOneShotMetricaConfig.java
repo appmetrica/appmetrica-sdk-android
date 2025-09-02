@@ -6,7 +6,9 @@ import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.AppMetricaConfig;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import static io.appmetrica.analytics.impl.Utils.isFieldSet;
@@ -20,23 +22,25 @@ public class DefaultOneShotMetricaConfig implements MetricaConfigurator {
 
     private static final String TAG = "[DefaultOneShotMetricaConfig]";
 
-    private Location mLocation;
+    private Location location;
     private Boolean locationTrackingEnabled;
     private Boolean advIdentifiersTrackingEnabled;
     private Boolean dataSendingEnabled;
-    private Map<String, String> mAppEnvironment = new LinkedHashMap<String, String>();
-    private Map<String, String> mErrorEnvironment = new LinkedHashMap<String, String>();
+    private final Map<String, String> appEnvironment = new LinkedHashMap<>();
+    private final Map<String, String> errorEnvironment = new LinkedHashMap<>();
 
     private boolean mAppEnvironmentWasCleared;
 
     @Nullable
     private String userProfileID;
+    @NonNull
+    public List<String> autoCollectedDataSubscribers = new ArrayList<>();
 
     private boolean mUsed;
     private ReportsHandler mReportsHandler;
 
     public Location getLocation() {
-        return mLocation;
+        return location;
     }
 
     public Boolean isLocationTrackingEnabled() {
@@ -75,30 +79,34 @@ public class DefaultOneShotMetricaConfig implements MetricaConfigurator {
     @Override
     public void setLocation(@Nullable final Location location) {
         DebugLogger.INSTANCE.info(TAG, "setLocation: %s", location);
-        mLocation = location;
+        this.location = location;
     }
 
     @Override
     public void putAppEnvironmentValue(final String key, final String value) {
         DebugLogger.INSTANCE.info(TAG, "putAppEnvironmentValue: {%s: %s}", key, value);
-        mAppEnvironment.put(key, value);
+        appEnvironment.put(key, value);
     }
 
     @Override
     public void clearAppEnvironment() {
         DebugLogger.INSTANCE.info(TAG, "clearAppEnvironment");
         mAppEnvironmentWasCleared = true;
-        mAppEnvironment.clear();
+        appEnvironment.clear();
     }
 
     public boolean wasAppEnvironmentCleared() {
         return mAppEnvironmentWasCleared;
     }
 
+    public AppMetricaConfigExtension configExtension() {
+        return new AppMetricaConfigExtension(autoCollectedDataSubscribers, mAppEnvironmentWasCleared);
+    }
+
     @Override
     public void putErrorEnvironmentValue(final String key, final String value) {
         DebugLogger.INSTANCE.info(TAG, "putErrorEnvironmentValue: {%s: %s}", key, value);
-        mErrorEnvironment.put(key, value);
+        errorEnvironment.put(key, value);
     }
 
     @Override
@@ -108,12 +116,12 @@ public class DefaultOneShotMetricaConfig implements MetricaConfigurator {
     }
 
     private void reset() {
-        mLocation = null;
+        location = null;
         locationTrackingEnabled = null;
         advIdentifiersTrackingEnabled = null;
         dataSendingEnabled = null;
-        mAppEnvironment.clear();
-        mErrorEnvironment.clear();
+        appEnvironment.clear();
+        errorEnvironment.clear();
 
         mAppEnvironmentWasCleared = false;
         userProfileID = null;
@@ -144,9 +152,9 @@ public class DefaultOneShotMetricaConfig implements MetricaConfigurator {
         builder.withPreloadInfo(config.preloadInfo);
         builder.withLocation(config.location);
         addOptionalFields(builder, config);
-        putAppEnvironmentToBuilder(mAppEnvironment, builder);
+        putAppEnvironmentToBuilder(appEnvironment, builder);
         putAppEnvironmentToBuilder(config.appEnvironment, builder);
-        putErrorEnvironmentToBuilder(mErrorEnvironment, builder);
+        putErrorEnvironmentToBuilder(errorEnvironment, builder);
         putErrorEnvironmentToBuilder(config.errorEnvironment, builder);
         putAdditionalConfigToBuilder(config.additionalConfig, builder);
         return builder;
@@ -222,7 +230,7 @@ public class DefaultOneShotMetricaConfig implements MetricaConfigurator {
 
     private void putAppEnvironmentToBuilder(@Nullable final Map<String, String> appEnvironment,
                                             @NonNull final AppMetricaConfig.Builder builder) {
-        if (Utils.isNullOrEmpty(appEnvironment) == false) {
+        if (!Utils.isNullOrEmpty(appEnvironment)) {
             for (Map.Entry<String, String> envPair : appEnvironment.entrySet()) {
                 builder.withAppEnvironmentValue(envPair.getKey(), envPair.getValue());
             }
@@ -231,7 +239,7 @@ public class DefaultOneShotMetricaConfig implements MetricaConfigurator {
 
     private void putErrorEnvironmentToBuilder(@Nullable final Map<String, String> errorEnvironment,
                                               @NonNull final AppMetricaConfig.Builder builder) {
-        if (Utils.isNullOrEmpty(errorEnvironment) == false) {
+        if (!Utils.isNullOrEmpty(errorEnvironment)) {
             for (Map.Entry<String, String> envPair : errorEnvironment.entrySet()) {
                 builder.withErrorEnvironmentValue(envPair.getKey(), envPair.getValue());
             }
@@ -240,11 +248,17 @@ public class DefaultOneShotMetricaConfig implements MetricaConfigurator {
 
     private void putAdditionalConfigToBuilder(@Nullable final Map<String, Object> additionalConfig,
                                               @NonNull final AppMetricaConfig.Builder builder) {
-        if (Utils.isNullOrEmpty(additionalConfig) == false) {
+        if (!Utils.isNullOrEmpty(additionalConfig)) {
             for (Map.Entry<String, Object> pair : additionalConfig.entrySet()) {
                 builder.withAdditionalConfig(pair.getKey(), pair.getValue());
             }
         }
+    }
+
+    @Override
+    public void addAutoCollectedDataSubscriber(@NonNull String subscriber) {
+        DebugLogger.INSTANCE.info(TAG, "addAutoCollectedDataSubscribers: %s", subscriber);
+        autoCollectedDataSubscribers.add(subscriber);
     }
 
     private void mergeCommonPart(final AppMetricaConfig useConfig,
@@ -258,7 +272,7 @@ public class DefaultOneShotMetricaConfig implements MetricaConfigurator {
             useConfig.location,
             useConfig.dataSendingEnabled,
             locationTrackingEnabled,
-            mLocation,
+            location,
             dataSendingEnabled,
             advIdentifiersTrackingEnabled
         );
@@ -285,12 +299,12 @@ public class DefaultOneShotMetricaConfig implements MetricaConfigurator {
 
     @VisibleForTesting
     Map<String, String> getAppEnvironment() {
-        return mAppEnvironment;
+        return appEnvironment;
     }
 
     @VisibleForTesting
     Map<String, String> getErrorEnvironment() {
-        return mErrorEnvironment;
+        return errorEnvironment;
     }
 
     private static boolean isNull(Object o) {

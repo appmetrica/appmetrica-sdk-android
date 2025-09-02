@@ -1,6 +1,28 @@
 package io.appmetrica.analytics.impl.request;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
+
 import android.content.Context;
+
+import androidx.annotation.Nullable;
+
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.robolectric.ParameterizedRobolectricTestRunner;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
+
 import io.appmetrica.analytics.coreapi.internal.identifiers.AppSetId;
 import io.appmetrica.analytics.coreapi.internal.identifiers.AppSetIdProvider;
 import io.appmetrica.analytics.coreapi.internal.identifiers.AppSetIdScope;
@@ -17,25 +39,49 @@ import io.appmetrica.analytics.impl.startup.ClidsStateChecker;
 import io.appmetrica.analytics.impl.startup.CollectingFlags;
 import io.appmetrica.analytics.impl.startup.StartupState;
 import io.appmetrica.analytics.networktasks.internal.RetryPolicyConfig;
-import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import io.appmetrica.analytics.testutils.MockedStaticRule;
-import java.util.Collections;
-import java.util.Set;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.robolectric.RobolectricTestRunner;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+@RunWith(ParameterizedRobolectricTestRunner.class)
+public class ReportRequestConfigIsReadyForSendingTest {
 
-@RunWith(RobolectricTestRunner.class)
-public class ReportRequestConfigTest extends CommonTest {
+    private ReportRequestConfig mReportRequestConfig;
+    private final boolean expected;
+    private final boolean clidsMatch;
+    private final List<String> hosts;
+    private final String uuid;
+    private final String deviceId;
+    private final String deviceIdHash;
+
+    @ParameterizedRobolectricTestRunner.Parameters
+    public static Collection<Object[]> data() {
+        return Arrays.asList(
+            new Object[]{false, new ArrayList<String>(), "", "", "", false},
+            new Object[]{false, null, null, null, null, false},
+            new Object[]{false, Collections.singletonList("host"), "", "", "", false},
+            new Object[]{false, null, "uuid", "deviceId", "deviceIdHash", false},
+            new Object[]{true, new ArrayList<String>(), "uuid", "deviceId", "deviceIdHash", false},
+            new Object[]{false, Collections.singletonList("host"), "uuid", "", "", false},
+            new Object[]{false, Collections.singletonList("host"), "uuid", "deviceId", "", false},
+            new Object[]{false, Collections.singletonList("host"), "uuid", "deviId", "deviceIdHash", false},
+            new Object[]{true, Collections.singletonList("host"), "uuid", "deviId", "", false},
+            new Object[]{true, Collections.singletonList("host"), "uuid", "deviceId", "deviceIdHash", true}
+        );
+    }
+
+    public ReportRequestConfigIsReadyForSendingTest(boolean clidsMatch,
+                                                    @Nullable List<String> hosts,
+                                                    String uuid,
+                                                    String deviceId,
+                                                    String deviceIdHash,
+                                                    boolean expected) {
+        this.clidsMatch = clidsMatch;
+        this.expected = expected;
+        this.hosts = hosts;
+        this.uuid = uuid;
+        this.deviceId = deviceId;
+        this.deviceIdHash = deviceIdHash;
+    }
 
     @Rule
     public MockedStaticRule<PackageManagerUtils> packageManagerUtilsMockedRule =
@@ -44,26 +90,24 @@ public class ReportRequestConfigTest extends CommonTest {
     public GlobalServiceLocatorRule globalServiceLocatorRule = new GlobalServiceLocatorRule();
 
     @Mock
-    private ReportRequestConfig.DataSendingStrategy dataSendingStrategy;
-    private ReportRequestConfig reportRequestConfig;
-
-    @Mock
     private Context context;
     @Mock
     private StartupState startupState;
     @Mock
     private RetryPolicyConfig retryPolicyConfig;
-    private final Set<String> autoCollectedDataObservers = Set.of("first", "second");
+    @Mock
+    private ComponentUnit componentUnit;
+    private Set<String> autoCollectedDataObservers = Set.of("first", "seconds");
     @Mock
     private AutoCollectedDataSubscribersHolder autoCollectedDataSubscribersHolder;
     @Mock
-    private ComponentUnit componentUnit;
+    private ComponentId componentId;
+    @Mock
+    private ReportRequestConfig.DataSendingStrategy dataSendingStrategy;
     @Mock
     private ClidsStateChecker clidsStateChecker;
     @Mock
     private ReportRequestConfig.Arguments arguments;
-    @Mock
-    private ComponentId componentId;
     @Mock
     private VitalComponentDataProvider vitalComponentDataProvider;
     @Mock
@@ -73,16 +117,13 @@ public class ReportRequestConfigTest extends CommonTest {
     @Mock
     private SdkEnvironmentProvider sdkEnvironmentProvider;
     @Mock
-    private AppSetIdProvider appSetIdProvider;
-    @Mock
-    private AppSetId appSetId;
-    @Mock
     private AdvertisingIdGetter advertisingIdGetter;
+    private final AppSetId appSetId = new AppSetId(UUID.randomUUID().toString(), AppSetIdScope.DEVELOPER);
+    @Mock
+    private AppSetIdProvider appSetIdProvider;
     @Mock
     private PlatformIdentifiers platformIdentifiers;
 
-    private final String appSetIdValue = "AppSetIdValue";
-    private final AppSetIdScope appSetIdScope = AppSetIdScope.APP;
     private final String packageName = "test.package.name";
     private final String appVersionName = "2.4.5";
     private final String appVersionCode = "245";
@@ -95,6 +136,11 @@ public class ReportRequestConfigTest extends CommonTest {
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
+
+        when(startupState.getUuid()).thenReturn(uuid);
+        when(startupState.getDeviceId()).thenReturn(deviceId);
+        when(startupState.getDeviceIdHash()).thenReturn(deviceIdHash);
+        when(startupState.getRetryPolicyConfig()).thenReturn(retryPolicyConfig);
 
         when(PackageManagerUtils.getAppVersionName(context)).thenReturn(appVersionName);
         when(PackageManagerUtils.getAppVersionCodeString(context)).thenReturn(appVersionCode);
@@ -110,11 +156,10 @@ public class ReportRequestConfigTest extends CommonTest {
         when(certificatesFingerprintsProvider.getSha1()).thenReturn(Collections.singletonList(certificateFingerprint));
         when(componentUnit.getComponentId()).thenReturn(componentId);
         when(componentId.getPackage()).thenReturn(packageName);
+
+        when(appSetIdProvider.getAppSetId()).thenReturn(appSetId);
         when(platformIdentifiers.getAdvIdentifiersProvider()).thenReturn(advertisingIdGetter);
         when(platformIdentifiers.getAppSetIdProvider()).thenReturn(appSetIdProvider);
-        when(appSetIdProvider.getAppSetId()).thenReturn(appSetId);
-        when(appSetId.getId()).thenReturn(appSetIdValue);
-        when(appSetId.getScope()).thenReturn(appSetIdScope);
 
         when(autoCollectedDataSubscribersHolder.getSubscribers()).thenReturn(autoCollectedDataObservers);
         when(componentUnit.getAutoCollectedDataSubscribersHolder()).thenReturn(autoCollectedDataSubscribersHolder);
@@ -127,51 +172,13 @@ public class ReportRequestConfigTest extends CommonTest {
         );
         loader = new ReportRequestConfig.Loader(componentUnit, dataSendingStrategy, clidsStateChecker);
 
-        reportRequestConfig = loader.load(coreDataSource);
+        mReportRequestConfig = loader.load(coreDataSource);
+        mReportRequestConfig.setClidsFromClientMatchClidsFromStartupRequest(clidsMatch);
+        mReportRequestConfig.setReportHosts(hosts);
     }
 
     @Test
-    public void testStrategyCalled() {
-        reportRequestConfig.setDataSendingProperties(null, dataSendingStrategy);
-
-        reportRequestConfig.getCurrentDataSendingState();
-
-        verify(dataSendingStrategy).shouldSend(null);
-    }
-
-    @Test
-    public void testShouldSendPreloadInfo() {
-        when(componentUnit.shouldSend()).thenReturn(true);
-        assertThat(reportRequestConfig.needToSendPreloadInfo()).isTrue();
-    }
-
-    @Test
-    public void testShouldNotSendPreloadInfo() {
-        when(componentUnit.shouldSend()).thenReturn(false);
-        assertThat(reportRequestConfig.needToSendPreloadInfo()).isFalse();
-    }
-
-    @Test
-    public void testRetryPolicyConfig() {
-        assertThat(reportRequestConfig.getRetryPolicyConfig()).isEqualTo(retryPolicyConfig);
-    }
-
-    @Test
-    public void appSetIdIsNotSet() {
-        when(platformIdentifiers.getAppSetIdProvider().getAppSetId()).thenReturn(null);
-        reportRequestConfig = loader.load(coreDataSource);
-        assertThat(reportRequestConfig.getAppSetId()).isNotNull().isEmpty();
-        assertThat(reportRequestConfig.getAppSetIdScope()).isNotNull().isEmpty();
-    }
-
-    @Test
-    public void appSetIdIsSet() {
-        assertThat(reportRequestConfig.getAppSetId()).isEqualTo(appSetIdValue);
-        assertThat(reportRequestConfig.getAppSetIdScope()).isEqualTo(appSetIdScope.getValue());
-    }
-
-    @Test
-    public void getAutoCollectedDataSubscribers() {
-        assertThat(reportRequestConfig.getAutoCollectedDataSubscribers()).isEqualTo(autoCollectedDataObservers);
+    public void test() {
+        assertThat(mReportRequestConfig.isReadyForSending()).isEqualTo(expected);
     }
 }

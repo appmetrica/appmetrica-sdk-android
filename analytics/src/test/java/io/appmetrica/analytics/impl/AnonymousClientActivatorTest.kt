@@ -14,13 +14,16 @@ import io.appmetrica.analytics.testutils.staticRule
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.ArgumentMatchers.eq
 import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.inOrder
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
+import java.util.concurrent.TimeUnit
 
 @RunWith(RobolectricTestRunner::class)
 class AnonymousClientActivatorTest : CommonTest() {
@@ -116,5 +119,16 @@ class AnonymousClientActivatorTest : CommonTest() {
         runnableCaptor.firstValue.run()
         verify(appMetricaFacade).activateFull(config)
         verifyNoInteractions(sessionsTrackingManager)
+    }
+
+    @Test
+    fun activateDelayed() {
+        whenever(provider.isActivated).thenReturn(false)
+        anonymousClientActivator.activateDelayed(context)
+        verify(executor).executeDelayed(runnableCaptor.capture(), eq(TimeUnit.SECONDS.toMillis(10)))
+        verify(provider, never()).markActivated()
+        runnableCaptor.firstValue.run()
+        verify(provider).markActivated()
+        verify(appMetricaFacade).activateCore(null)
     }
 }

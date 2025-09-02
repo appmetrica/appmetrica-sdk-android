@@ -30,4 +30,8 @@ class ModulesSynchronousStageExecutor {
 
     fun reportAdRevenue(adRevenue: AdRevenue, autoCollected: Boolean) {
     }
+
+    fun subscribeForAutoCollectedData(context: Context, apiKey: String) {
+        contextAppearedListener.onProbablyAppeared(context.applicationContext)
+    }
 }

@@ -14,8 +14,10 @@ import io.appmetrica.analytics.impl.component.CommonArguments;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.impl.startup.ClidsStateChecker;
 import io.appmetrica.analytics.impl.startup.StartupState;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class ReportRequestConfig extends CoreRequestConfig {
 
@@ -104,6 +106,9 @@ public class ReportRequestConfig extends CoreRequestConfig {
 
     @Nullable
     private List<String> certificates;
+
+    @NonNull
+    private Set<String> autoCollectedDataSubscribers = new HashSet<>();
 
     @VisibleForTesting()
     ReportRequestConfig(@NonNull PreloadInfoSendingStrategy preloadInfoSendingStrategy) {
@@ -262,6 +267,15 @@ public class ReportRequestConfig extends CoreRequestConfig {
 
     public void setClidsFromClientMatchClidsFromStartupRequest(final boolean match) {
         clidsFromClientMatchClidsFromStartupRequest = match;
+    }
+
+    @NonNull
+    public Set<String> getAutoCollectedDataSubscribers() {
+        return autoCollectedDataSubscribers;
+    }
+
+    public void setAutoCollectedDataSubscribers(@NonNull Set<String> autoCollectedDataSubscribers) {
+        this.autoCollectedDataSubscribers = autoCollectedDataSubscribers;
     }
 
     public static final class Arguments extends BaseRequestArguments<CommonArguments.ReporterArguments, Arguments> {
@@ -473,6 +487,9 @@ public class ReportRequestConfig extends CoreRequestConfig {
             );
             config.setMaxReportsInDbCount(dataSource.componentArguments.maxReportsInDbCount);
             loadParametersFromStartup(config, dataSource.startupState, dataSource.componentArguments);
+            config.setAutoCollectedDataSubscribers(
+                mComponentUnit.getAutoCollectedDataSubscribersHolder().getSubscribers()
+            );
             return config;
         }
 

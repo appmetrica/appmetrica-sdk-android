@@ -105,7 +105,7 @@ internal class ReporterFactoryTest : CommonTest() {
     private val secondReporterApiKey = UUID.randomUUID().toString()
 
     private val logger: PublicLogger = mock()
-    private val needToClearEnvironment = false
+    private val configExtension: AppMetricaConfigExtension = mock()
 
     private val reporterLifecycleListener: ReporterLifecycleListener = mock()
 
@@ -132,9 +132,9 @@ internal class ReporterFactoryTest : CommonTest() {
 
     @Test
     fun `buildOrUpdateAnonymousMainReporter twice`() {
-        val reporter = reporterFactory.buildOrUpdateAnonymousMainReporter(config, logger, needToClearEnvironment)
+        val reporter = reporterFactory.buildOrUpdateAnonymousMainReporter(config, logger, configExtension)
         assertThat(reporter)
-            .isSameAs(reporterFactory.buildOrUpdateAnonymousMainReporter(config, logger, needToClearEnvironment))
+            .isSameAs(reporterFactory.buildOrUpdateAnonymousMainReporter(config, logger, configExtension))
             .isSameAs(mainReporter)
 
         assertThat(mainReporterConstructionRule.constructionMock.constructed()).hasSize(1)
@@ -144,14 +144,14 @@ internal class ReporterFactoryTest : CommonTest() {
 
     @Test
     fun `buildOrUpdateAnonymousMainReporter validation`() {
-        reporterFactory.buildOrUpdateAnonymousMainReporter(config, logger, needToClearEnvironment)
+        reporterFactory.buildOrUpdateAnonymousMainReporter(config, logger, configExtension)
         verify(throwIfFailedValidator).validate(apiKey)
         checkValidator(apiKey)
     }
 
     @Test
     fun `buildOrUpdateAnonymousMainReporter perform init keepAliveHandler`() {
-        reporterFactory.buildOrUpdateAnonymousMainReporter(config, logger, needToClearEnvironment)
+        reporterFactory.buildOrUpdateAnonymousMainReporter(config, logger, configExtension)
         verify(mainReporter).setKeepAliveHandler(keepAliveHandler)
         assertThat(keepAliveHandlerConstructionRule.constructionMock.constructed()).hasSize(1)
         assertThat(keepAliveHandlerConstructionRule.argumentInterceptor.flatArguments())
@@ -160,26 +160,26 @@ internal class ReporterFactoryTest : CommonTest() {
 
     @Test
     fun `buildOrUpdateAnonymousMainReporter init startup provider`() {
-        reporterFactory.buildOrUpdateAnonymousMainReporter(config, logger, needToClearEnvironment)
+        reporterFactory.buildOrUpdateAnonymousMainReporter(config, logger, configExtension)
         verify(mainReporter).setStartupParamsProvider(startupHelper)
     }
 
     @Test
     fun `buildOrUpdateAnonymousMainReporter updates mainReporterComponents`() {
-        reporterFactory.buildOrUpdateAnonymousMainReporter(config, logger, needToClearEnvironment)
+        reporterFactory.buildOrUpdateAnonymousMainReporter(config, logger, configExtension)
         verify(mainReporterComponents).updateConfig(config, logger)
     }
 
     @Test
     fun `buildOrUpdateAnonymousMainReporter init and start mainReporter`() {
-        reporterFactory.buildOrUpdateAnonymousMainReporter(config, logger, needToClearEnvironment)
-        verify(mainReporter).updateConfig(config, needToClearEnvironment)
+        reporterFactory.buildOrUpdateAnonymousMainReporter(config, logger, configExtension)
+        verify(mainReporter).updateConfig(config, configExtension)
         verify(mainReporter).start()
     }
 
     @Test
     fun `buildOrUpdateAnonymousMainReporter init reportsHandler`() {
-        reporterFactory.buildOrUpdateAnonymousMainReporter(config, logger, needToClearEnvironment)
+        reporterFactory.buildOrUpdateAnonymousMainReporter(config, logger, configExtension)
         val shouldDisconnectCheckerCaptor = argumentCaptor<ShouldDisconnectFromServiceChecker>()
         whenever(mainReporter.isPaused).thenReturn(true)
         verify(reportsHandler).setShouldDisconnectFromServiceChecker(shouldDisconnectCheckerCaptor.capture())
@@ -188,7 +188,7 @@ internal class ReporterFactoryTest : CommonTest() {
 
     @Test
     fun `buildOrUpdateAnonymousMainReporter after buildOrUpdateAnonymousMainReporter`() {
-        reporterFactory.buildOrUpdateAnonymousMainReporter(config, logger, needToClearEnvironment)
+        reporterFactory.buildOrUpdateAnonymousMainReporter(config, logger, configExtension)
         clearInvocations(
             reportsHandler,
             mainReporterComponents,
@@ -196,7 +196,7 @@ internal class ReporterFactoryTest : CommonTest() {
             keepAliveHandler,
             throwIfFailedValidator
         )
-        reporterFactory.buildOrUpdateAnonymousMainReporter(config, logger, needToClearEnvironment)
+        reporterFactory.buildOrUpdateAnonymousMainReporter(config, logger, configExtension)
         verifyNoInteractions(
             reportsHandler,
             mainReporterComponents,
@@ -208,7 +208,7 @@ internal class ReporterFactoryTest : CommonTest() {
 
     @Test
     fun `buildOrUpdateAnonymousMainReporter after buildOrUpdateMainReporter`() {
-        val mainReporter = reporterFactory.buildOrUpdateMainReporter(config, logger, needToClearEnvironment)
+        val mainReporter = reporterFactory.buildOrUpdateMainReporter(config, logger, configExtension)
         clearInvocations(
             reportsHandler,
             mainReporterComponents,
@@ -216,7 +216,7 @@ internal class ReporterFactoryTest : CommonTest() {
             keepAliveHandler,
             throwIfFailedValidator
         )
-        assertThat(reporterFactory.buildOrUpdateAnonymousMainReporter(config, logger, needToClearEnvironment))
+        assertThat(reporterFactory.buildOrUpdateAnonymousMainReporter(config, logger, configExtension))
             .isSameAs(mainReporter)
         verifyNoInteractions(
             reportsHandler,
@@ -229,9 +229,9 @@ internal class ReporterFactoryTest : CommonTest() {
 
     @Test
     fun `buildOrUpdateMainReporter twice`() {
-        val reporter = reporterFactory.buildOrUpdateMainReporter(config, logger, needToClearEnvironment)
+        val reporter = reporterFactory.buildOrUpdateMainReporter(config, logger, configExtension)
         assertThat(reporter)
-            .isSameAs(reporterFactory.buildOrUpdateMainReporter(config, logger, needToClearEnvironment))
+            .isSameAs(reporterFactory.buildOrUpdateMainReporter(config, logger, configExtension))
             .isSameAs(mainReporter)
 
         assertThat(mainReporterConstructionRule.constructionMock.constructed()).hasSize(1)
@@ -241,14 +241,14 @@ internal class ReporterFactoryTest : CommonTest() {
 
     @Test
     fun `buildOrUpdateMainReporter validation`() {
-        reporterFactory.buildOrUpdateMainReporter(config, logger, needToClearEnvironment)
+        reporterFactory.buildOrUpdateMainReporter(config, logger, configExtension)
         verify(throwIfFailedValidator).validate(apiKey)
         checkValidator(apiKey)
     }
 
     @Test
     fun `buildOrUpdateMainReporter perform init keepAliveHandler`() {
-        reporterFactory.buildOrUpdateMainReporter(config, logger, needToClearEnvironment)
+        reporterFactory.buildOrUpdateMainReporter(config, logger, configExtension)
         verify(mainReporter).setKeepAliveHandler(keepAliveHandler)
         assertThat(keepAliveHandlerConstructionRule.constructionMock.constructed()).hasSize(1)
         assertThat(keepAliveHandlerConstructionRule.argumentInterceptor.flatArguments())
@@ -257,26 +257,26 @@ internal class ReporterFactoryTest : CommonTest() {
 
     @Test
     fun `buildOrUpdateMainReporter init startup provider`() {
-        reporterFactory.buildOrUpdateMainReporter(config, logger, needToClearEnvironment)
+        reporterFactory.buildOrUpdateMainReporter(config, logger, configExtension)
         verify(mainReporter).setStartupParamsProvider(startupHelper)
     }
 
     @Test
     fun `buildOrUpdateMainReporter updates mainReporterComponents`() {
-        reporterFactory.buildOrUpdateMainReporter(config, logger, needToClearEnvironment)
+        reporterFactory.buildOrUpdateMainReporter(config, logger, configExtension)
         verify(mainReporterComponents).updateConfig(config, logger)
     }
 
     @Test
     fun `buildOrUpdateMainReporter init and start mainReporter`() {
-        reporterFactory.buildOrUpdateMainReporter(config, logger, needToClearEnvironment)
-        verify(mainReporter).updateConfig(config, needToClearEnvironment)
+        reporterFactory.buildOrUpdateMainReporter(config, logger, configExtension)
+        verify(mainReporter).updateConfig(config, configExtension)
         verify(mainReporter).start()
     }
 
     @Test
     fun `buildOrUpdateMainReporter init reportsHandler`() {
-        reporterFactory.buildOrUpdateMainReporter(config, logger, needToClearEnvironment)
+        reporterFactory.buildOrUpdateMainReporter(config, logger, configExtension)
         val shouldDisconnectCheckerCaptor = argumentCaptor<ShouldDisconnectFromServiceChecker>()
         whenever(mainReporter.isPaused).thenReturn(true)
         verify(reportsHandler).setShouldDisconnectFromServiceChecker(shouldDisconnectCheckerCaptor.capture())
@@ -286,13 +286,13 @@ internal class ReporterFactoryTest : CommonTest() {
     @Test
     fun `buildOrUpdateMainReporter notify reporter lifecycle listener if null`() {
         whenever(ClientServiceLocator.getInstance().reporterLifecycleListener).thenReturn(null)
-        reporterFactory.buildOrUpdateMainReporter(config, logger, needToClearEnvironment)
+        reporterFactory.buildOrUpdateMainReporter(config, logger, configExtension)
     }
 
     @Test
     fun `buildOrUpdateMainReporter notify reporter lifecycle listener`() {
         whenever(ClientServiceLocator.getInstance().reporterLifecycleListener).thenReturn(reporterLifecycleListener)
-        reporterFactory.buildOrUpdateMainReporter(config, logger, needToClearEnvironment)
+        reporterFactory.buildOrUpdateMainReporter(config, logger, configExtension)
         verify(reporterLifecycleListener).onCreateMainReporter(mainReporterContext, mainReporter)
         assertThat(mainReporterContextMockedConstructionRule.constructionMock.constructed()).hasSize(1)
         assertThat(mainReporterContextMockedConstructionRule.argumentInterceptor.flatArguments())
@@ -301,7 +301,7 @@ internal class ReporterFactoryTest : CommonTest() {
 
     @Test
     fun `buildOrUpdateMainReporter after buildOrUpdateMainReporter`() {
-        reporterFactory.buildOrUpdateMainReporter(config, logger, needToClearEnvironment)
+        reporterFactory.buildOrUpdateMainReporter(config, logger, configExtension)
         clearInvocations(
             reportsHandler,
             mainReporterComponents,
@@ -310,7 +310,7 @@ internal class ReporterFactoryTest : CommonTest() {
             throwIfFailedValidator
         )
         whenever(ClientServiceLocator.getInstance().reporterLifecycleListener).thenReturn(reporterLifecycleListener)
-        reporterFactory.buildOrUpdateMainReporter(config, logger, needToClearEnvironment)
+        reporterFactory.buildOrUpdateMainReporter(config, logger, configExtension)
         verifyNoInteractions(
             reportsHandler,
             startupHelper,
@@ -327,7 +327,7 @@ internal class ReporterFactoryTest : CommonTest() {
 
     @Test
     fun `buildOrUpdateMainReporter after buildOrUpdateAnonymousMainReporter`() {
-        reporterFactory.buildOrUpdateAnonymousMainReporter(config, logger, needToClearEnvironment)
+        reporterFactory.buildOrUpdateAnonymousMainReporter(config, logger, configExtension)
         clearInvocations(
             reportsHandler,
             mainReporterComponents,
@@ -336,7 +336,7 @@ internal class ReporterFactoryTest : CommonTest() {
             throwIfFailedValidator
         )
         whenever(ClientServiceLocator.getInstance().reporterLifecycleListener).thenReturn(reporterLifecycleListener)
-        reporterFactory.buildOrUpdateMainReporter(config, logger, needToClearEnvironment)
+        reporterFactory.buildOrUpdateMainReporter(config, logger, configExtension)
         verifyNoInteractions(
             reportsHandler,
             startupHelper,
@@ -349,8 +349,8 @@ internal class ReporterFactoryTest : CommonTest() {
 
     @Test
     fun `buildAnonymousReporter, buildOrUpdateMainReporter and getReporter`() {
-        reporterFactory.buildOrUpdateAnonymousMainReporter(config, logger, needToClearEnvironment)
-        reporterFactory.buildOrUpdateMainReporter(config, logger, needToClearEnvironment)
+        reporterFactory.buildOrUpdateAnonymousMainReporter(config, logger, configExtension)
+        reporterFactory.buildOrUpdateMainReporter(config, logger, configExtension)
         val reporter = reporterFactory.getOrCreateReporter(ReporterConfig.newConfigBuilder(apiKey).build())
         assertThat(reporter).isSameAs(mainReporter)
         assertThat(manualReporterConstructionRule.constructionMock.constructed()).isEmpty()
@@ -392,7 +392,7 @@ internal class ReporterFactoryTest : CommonTest() {
 
     @Test
     fun `activateReporter after buildOrUpdateMainReporter with same key`() {
-        reporterFactory.buildOrUpdateMainReporter(config, logger, needToClearEnvironment)
+        reporterFactory.buildOrUpdateMainReporter(config, logger, configExtension)
         reporterFactory.activateReporter(ReporterConfig.newConfigBuilder(apiKey).build())
         assertThat(manualReporterConstructionRule.constructionMock.constructed()).isEmpty()
         verify(logger).warning("Reporter with apiKey=%s already exists.", obfuscatedApiKey)
@@ -400,7 +400,7 @@ internal class ReporterFactoryTest : CommonTest() {
 
     @Test
     fun `activateReporter after buildMainAnonymousReporter with same key`() {
-        reporterFactory.buildOrUpdateAnonymousMainReporter(config, logger, needToClearEnvironment)
+        reporterFactory.buildOrUpdateAnonymousMainReporter(config, logger, configExtension)
         reporterFactory.activateReporter(ReporterConfig.newConfigBuilder(apiKey).build())
         assertThat(manualReporterConstructionRule.constructionMock.constructed()).isEmpty()
     }
@@ -461,14 +461,14 @@ internal class ReporterFactoryTest : CommonTest() {
 
     @Test
     fun `getOrCreateReporter after buildOrUpdateMainReporter with same key`() {
-        val mainReporter = reporterFactory.buildOrUpdateMainReporter(config, logger, needToClearEnvironment)
+        val mainReporter = reporterFactory.buildOrUpdateMainReporter(config, logger, configExtension)
         val reporter = reporterFactory.getOrCreateReporter(ReporterConfig.newConfigBuilder(apiKey).build())
         assertThat(reporter).isSameAs(mainReporter)
     }
 
     @Test
     fun `getOrCreateReporter after buildMainAnonymousReporter`() {
-        val mainReporter = reporterFactory.buildOrUpdateAnonymousMainReporter(config, logger, needToClearEnvironment)
+        val mainReporter = reporterFactory.buildOrUpdateAnonymousMainReporter(config, logger, configExtension)
         val reporter = reporterFactory.getOrCreateReporter(ReporterConfig.newConfigBuilder(apiKey).build())
         assertThat(reporter).isSameAs(mainReporter)
     }

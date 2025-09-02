@@ -13,7 +13,7 @@ public interface IReporterFactory extends IReporterFactoryProvider {
     IMainReporter buildOrUpdateAnonymousMainReporter(
         @NonNull AppMetricaConfig config,
         @NonNull PublicLogger logger,
-        boolean needToClearEnvironment
+        @NonNull AppMetricaConfigExtension configExtension
     );
 
     @WorkerThread
@@ -21,7 +21,7 @@ public interface IReporterFactory extends IReporterFactoryProvider {
     IMainReporter buildOrUpdateMainReporter(
         @NonNull AppMetricaConfig config,
         @NonNull PublicLogger logger,
-        boolean needToClearEnvironment
+        @NonNull AppMetricaConfigExtension configExtension
     );
 
     void activateReporter(@NonNull ReporterConfig config);

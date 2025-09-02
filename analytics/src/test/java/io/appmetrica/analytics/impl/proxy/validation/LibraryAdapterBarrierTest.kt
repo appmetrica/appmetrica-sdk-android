@@ -9,6 +9,7 @@ import org.junit.Before
 import org.junit.Test
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
+import java.util.UUID
 
 class LibraryAdapterBarrierTest : CommonTest() {
 
@@ -67,5 +68,23 @@ class LibraryAdapterBarrierTest : CommonTest() {
     fun `reportEvent if not activated`() {
         whenever(appMetricaFacadeProvider.isActivated).thenReturn(false)
         assertThat(barrier.reportEvent("sender", "event", "payload")).isFalse()
+    }
+
+    @Test
+    fun subscribeForAutoCollectedData() {
+        assertThat(barrier.subscribeForAutoCollectedData(context, UUID.randomUUID().toString()))
+            .isTrue()
+    }
+
+    @Test
+    fun `subscribeForAutoCollectedData for null context`() {
+        assertThat(barrier.subscribeForAutoCollectedData(null, "apiKey"))
+            .isFalse()
+    }
+
+    @Test
+    fun `subscribeForAutoCollectedData for null apiKey`() {
+        assertThat(barrier.subscribeForAutoCollectedData(context, null))
+            .isFalse()
     }
 }

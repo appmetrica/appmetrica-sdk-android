@@ -18,6 +18,7 @@ import io.appmetrica.analytics.ecommerce.ECommercePrice
 import io.appmetrica.analytics.ecommerce.ECommerceProduct
 import io.appmetrica.analytics.ecommerce.ECommerceReferrer
 import io.appmetrica.analytics.ecommerce.ECommerceScreen
+import io.appmetrica.analytics.impl.AppMetricaConfigExtension
 import io.appmetrica.analytics.impl.ClientIdentifiersHolder
 import io.appmetrica.analytics.impl.DeferredDeeplinkState
 import io.appmetrica.analytics.impl.DistributionSource
@@ -656,6 +657,12 @@ class ToStringTest(
                     0,
                     "filled value"
                 ),
+                arrayOf(
+                    AppMetricaConfigExtension::class.java,
+                    AppMetricaConfigExtension(listOf("subscriber"), true),
+                    0,
+                    "filled value"
+                )
             )
         }
     }

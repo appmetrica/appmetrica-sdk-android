@@ -165,4 +165,24 @@ class AppMetricaLibraryAdapterProxyTest : CommonTest() {
         verifyNoInteractions(synchronousStageExecutor)
         modulesFacadeRule.staticMock.verify({ ModulesFacade.reportEvent(any()) }, never())
     }
+
+    @Test
+    fun subscribeForAutoCollectedData() {
+        val apiKey = "apiKey"
+        whenever(barrier.subscribeForAutoCollectedData(context, apiKey)).thenReturn(true)
+        proxy.subscribeForAutoCollectedData(context, apiKey)
+        verify(synchronousStageExecutor).subscribeForAutoCollectedData(context, apiKey)
+        modulesFacadeRule.staticMock.verify {
+            ModulesFacade.subscribeForAutoCollectedData(context, apiKey)
+        }
+    }
+
+    @Test
+    fun `subscribeForAutoCollectedData if not valid`() {
+        val apiKey = "apiKey"
+        whenever(barrier.subscribeForAutoCollectedData(context, apiKey)).thenReturn(false)
+        proxy.subscribeForAutoCollectedData(context, apiKey)
+        verifyNoInteractions(synchronousStageExecutor)
+        modulesFacadeRule.staticMock.verify({ ModulesFacade.subscribeForAutoCollectedData(any(), any()) }, never())
+    }
 }

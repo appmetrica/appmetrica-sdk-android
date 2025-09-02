@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.impl;
 
 import android.location.Location;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 public interface MetricaConfigurator {
@@ -20,4 +21,6 @@ public interface MetricaConfigurator {
     void putErrorEnvironmentValue(String key, String value);
 
     void setUserProfileID(@Nullable String userProfileID);
+
+    void addAutoCollectedDataSubscriber(@NonNull String subscriber);
 }
