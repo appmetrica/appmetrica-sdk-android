@@ -6,6 +6,7 @@ import androidx.annotation.Nullable;
 import io.appmetrica.analytics.AppMetricaConfig;
 import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus;
 import io.appmetrica.analytics.coreapi.internal.model.ScreenInfo;
+import io.appmetrica.analytics.impl.ClientConfigSerializer;
 import io.appmetrica.analytics.impl.db.IKeyValueTableDbHelper;
 import io.appmetrica.analytics.impl.startup.FeaturesInternal;
 import io.appmetrica.analytics.impl.utils.JsonHelper;
@@ -234,9 +235,9 @@ public class PreferencesClientDbStorage extends NameSpacedPreferenceDbStorage {
     }
 
     @Nullable
-    public AppMetricaConfig getAppMetricaConfig() {
+    public AppMetricaConfig.Builder getAppMetricaConfig() {
         String value = readString(APPMETRICA_CLIENT_CONFIG.fullKey());
-        return value == null ? null : AppMetricaConfig.fromJson(value);
+        return value == null ? null : new ClientConfigSerializer().fromJson(value);
     }
 
     public void saveAppMetricaConfig(@NonNull AppMetricaConfig appMetricaConfig) {

@@ -812,15 +812,15 @@ internal class AppMetricaImplTest : CommonTest() {
     @Test
     fun `setAdvIdentifiersTracking after activation`() {
         impl.activate(config)
-        impl.setAdvIdentifiersTracking(true)
-        verify(reporterFromConsumerProvider).setAdvIdentifiersTracking(true)
+        impl.setAdvIdentifiersTracking(enabled = true, force = true)
+        verify(reporterFromConsumerProvider).setAdvIdentifiersTracking(true, true)
     }
 
     @Test
     fun `setAdvIdentifiersTracking after anonymous activation`() {
         impl.activateAnonymously(appMetricaLibraryAdapterConfig)
-        impl.setAdvIdentifiersTracking(true)
-        verify(reporterFromConsumerProvider).setAdvIdentifiersTracking(true)
+        impl.setAdvIdentifiersTracking(enabled = true, force = false)
+        verify(reporterFromConsumerProvider).setAdvIdentifiersTracking(true, false)
     }
 
     @Test

@@ -122,7 +122,7 @@ class ClientConfigSerializerTest : CommonTest() {
             .withAdditionalConfig(additionalConfigKeySecond, additionalConfigValueSecond)
             .build()
         val json = clientConfigSerializer.toJson(config)
-        val deserialized = clientConfigSerializer.fromJson(json)
+        val deserialized = clientConfigSerializer.fromJson(json)?.build()
         ObjectPropertyAssertions(deserialized).withIgnoredFields("location", "preloadInfo", "crashTransformer")
             .checkField("apiKey", apiKey)
             .checkField("appVersion", appVersion)
@@ -166,7 +166,7 @@ class ClientConfigSerializerTest : CommonTest() {
     fun emptyConfig() {
         val emptyConfig = AppMetricaConfig.newConfigBuilder(apiKey).build()
         val json = clientConfigSerializer.toJson(emptyConfig)
-        val deserialized = clientConfigSerializer.fromJson(json)
+        val deserialized = clientConfigSerializer.fromJson(json)?.build()
         val nullString: String? = null
         val nullBoolean: Boolean? = null
         val nullInt: Int? = null

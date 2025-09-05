@@ -197,9 +197,9 @@ internal class ReporterFactoryTest : CommonTest() {
             throwIfFailedValidator
         )
         reporterFactory.buildOrUpdateAnonymousMainReporter(config, logger, configExtension)
+        verify(mainReporterComponents).updateAnonymousConfig(config, logger)
         verifyNoInteractions(
             reportsHandler,
-            mainReporterComponents,
             startupHelper,
             keepAliveHandler,
             throwIfFailedValidator
@@ -218,9 +218,9 @@ internal class ReporterFactoryTest : CommonTest() {
         )
         assertThat(reporterFactory.buildOrUpdateAnonymousMainReporter(config, logger, configExtension))
             .isSameAs(mainReporter)
+        verify(mainReporterComponents).updateAnonymousConfig(config, logger)
         verifyNoInteractions(
             reportsHandler,
-            mainReporterComponents,
             startupHelper,
             keepAliveHandler,
             throwIfFailedValidator

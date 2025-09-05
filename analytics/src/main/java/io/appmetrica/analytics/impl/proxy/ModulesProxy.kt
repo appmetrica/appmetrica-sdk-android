@@ -26,7 +26,7 @@ class ModulesProxy {
         executor.execute(
             object : SafeRunnable() {
                 override fun runSafety() {
-                    getMainReporter().setAdvIdentifiersTracking(enabled)
+                    getMainReporter().setAdvIdentifiersTracking(enabled, false)
                 }
             }
         )

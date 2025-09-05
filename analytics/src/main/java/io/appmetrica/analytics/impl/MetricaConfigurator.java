@@ -10,7 +10,7 @@ public interface MetricaConfigurator {
 
     void setLocationTracking(boolean enabled);
 
-    void setAdvIdentifiersTracking(boolean enabled);
+    void setAdvIdentifiersTracking(boolean enabled, boolean force);
 
     void setDataSendingEnabled(boolean value);
 

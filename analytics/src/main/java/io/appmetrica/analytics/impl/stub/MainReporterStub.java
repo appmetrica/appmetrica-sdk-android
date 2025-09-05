@@ -80,7 +80,7 @@ public class MainReporterStub extends ReporterExtendedStub implements IMainRepor
     }
 
     @Override
-    public void setAdvIdentifiersTracking(boolean enabled) {
+    public void setAdvIdentifiersTracking(boolean enabled, boolean force) {
         // Do nothing
     }
 

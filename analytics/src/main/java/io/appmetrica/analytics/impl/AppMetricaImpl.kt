@@ -147,6 +147,7 @@ internal class AppMetricaImpl @WorkerThread internal constructor(
         val publicLogger = LoggerStorage.getMainPublicOrAnonymousLogger()
         val mainReporterInitializer = object : MainReporterInitializer {
             override fun initialize(): MainReporter {
+                DebugLogger.info(tag, "Initialize anonymous main reporter or update config")
                 return reporterFactory.buildOrUpdateAnonymousMainReporter(
                     config,
                     publicLogger,
@@ -343,8 +344,8 @@ internal class AppMetricaImpl @WorkerThread internal constructor(
     }
 
     @WorkerThread
-    override fun setAdvIdentifiersTracking(enabled: Boolean) {
-        mainReporter.setAdvIdentifiersTracking(enabled)
+    override fun setAdvIdentifiersTracking(enabled: Boolean, force: Boolean) {
+        mainReporter.setAdvIdentifiersTracking(enabled, force)
     }
 
     @WorkerThread

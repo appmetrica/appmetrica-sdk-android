@@ -55,6 +55,11 @@ internal class MainReporterComponents(
 
     val anrConverter = AnrConverter()
 
+    fun updateAnonymousConfig(config: AppMetricaConfig, logger: PublicLogger) {
+        logger.info("Update anonymous config with value ${config.toJson()}")
+        reporterEnvironment.reporterConfiguration.applyFromAnonymousConfig(config)
+    }
+
     fun updateConfig(config: AppMetricaConfig, logger: PublicLogger) {
         reporterEnvironment.reporterConfiguration.applyFromConfig(config)
         reporterEnvironment.initialUserProfileID = config.userProfileID

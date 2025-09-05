@@ -560,7 +560,7 @@ public class PreferencesClientDbStorageTest extends CommonTest {
         AppMetricaConfig expected = AppMetricaConfig.newConfigBuilder(UUID.randomUUID().toString()).build();
         when(mDbStorage.getString(PreferencesClientDbStorage.APPMETRICA_CLIENT_CONFIG.fullKey(), null))
             .thenReturn(expected.toJson());
-        assertThat(clientDbStorage.getAppMetricaConfig()).usingRecursiveComparison().isEqualTo(expected);
+        assertThat(clientDbStorage.getAppMetricaConfig().build()).usingRecursiveComparison().isEqualTo(expected);
     }
 
     @Test

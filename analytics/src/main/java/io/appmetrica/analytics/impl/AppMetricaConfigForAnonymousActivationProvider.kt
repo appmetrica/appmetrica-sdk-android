@@ -14,12 +14,25 @@ internal class AppMetricaConfigForAnonymousActivationProvider(
     private val defaultAnonymousConfigProvider = AppMetricaDefaultAnonymousConfigProvider()
 
     fun getConfig(libraryAdapterConfig: AppMetricaLibraryAdapterConfig): AppMetricaConfig {
-        val configFromPreferences = preferences.appMetricaConfig
-        if (configFromPreferences != null) {
-            DebugLogger.info(tag, "Choose saved config")
-            return configFromPreferences
+        val configFromLibraryAdapter = defaultAnonymousConfigProvider.getConfig(libraryAdapterConfig)
+        val configBuilderFromPreferences = preferences.appMetricaConfig
+        if (configBuilderFromPreferences == null) {
+            DebugLogger.info(tag, "Saved config is null. Choose config from library adapter")
+            return configFromLibraryAdapter
         }
-        DebugLogger.info(tag, "Choose default anonymous config")
-        return defaultAnonymousConfigProvider.getConfig(libraryAdapterConfig)
+        DebugLogger.info(tag, "Choose saved config")
+        if (configBuilderFromPreferences.build().advIdentifiersTracking == null) {
+            DebugLogger.info(
+                tag,
+                "Field advIdentifiersTracking is not set. " +
+                    "Using value `${configFromLibraryAdapter.advIdentifiersTracking}` from library adapter"
+            )
+            configFromLibraryAdapter.advIdentifiersTracking?.let {
+                configBuilderFromPreferences.withAdvIdentifiersTracking(it)
+            }
+        }
+        return configBuilderFromPreferences.build().also {
+            DebugLogger.info(tag, "Return config ${it.toJson()}")
+        }
     }
 }

@@ -15,6 +15,7 @@ import io.appmetrica.analytics.impl.utils.ApiProxyThread;
 import io.appmetrica.analytics.impl.utils.validation.NonEmptyStringValidator;
 import io.appmetrica.analytics.impl.utils.validation.ThrowIfFailedValidator;
 import io.appmetrica.analytics.impl.utils.validation.Validator;
+import io.appmetrica.analytics.internal.CounterConfiguration;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -158,9 +159,12 @@ public class MainReporter extends BaseReporter implements IMainReporter {
     }
 
     @Override
-    public void setAdvIdentifiersTracking(boolean enabled) {
+    public void setAdvIdentifiersTracking(boolean enabled, boolean force) {
         mPublicLogger.info("Set advIdentifiersTracking to %s", enabled);
-        mReporterEnvironment.getReporterConfiguration().setAdvIdentifiersTracking(enabled);
+        CounterConfiguration counterConfiguration = mReporterEnvironment.getReporterConfiguration();
+        if (force || counterConfiguration.isAdvIdentifiersTrackingEnabled() == null) {
+            counterConfiguration.setAdvIdentifiersTracking(enabled);
+        }
     }
 
     @Override

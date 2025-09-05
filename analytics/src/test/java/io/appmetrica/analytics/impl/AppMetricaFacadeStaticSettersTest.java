@@ -137,28 +137,28 @@ public class AppMetricaFacadeStaticSettersTest extends CommonTest {
     public void setAdvIdentifiersTrackingNoInstance() {
         setUpNoInstance();
         AppMetricaFacade.setAdvIdentifiersTracking(true);
-        verify(clientServiceLocatorRule.mDefaultOneShotMetricaConfig).setAdvIdentifiersTracking(true);
+        verify(clientServiceLocatorRule.mDefaultOneShotMetricaConfig).setAdvIdentifiersTracking(true, true);
     }
 
     @Test
     public void setAdvIdentifiersTrackingFutureNotDone() {
         setUpFutureNotDone();
         AppMetricaFacade.setAdvIdentifiersTracking(true);
-        verify(clientServiceLocatorRule.mDefaultOneShotMetricaConfig).setAdvIdentifiersTracking(true);
+        verify(clientServiceLocatorRule.mDefaultOneShotMetricaConfig).setAdvIdentifiersTracking(true, true);
     }
 
     @Test
     public void setAdvIdentifiersTrackingNoMainReporter() {
         setUpNoMainReporter();
         AppMetricaFacade.setAdvIdentifiersTracking(true);
-        verify(clientServiceLocatorRule.mDefaultOneShotMetricaConfig).setAdvIdentifiersTracking(true);
+        verify(clientServiceLocatorRule.mDefaultOneShotMetricaConfig).setAdvIdentifiersTracking(true, true);
     }
 
     @Test
     public void setAdvIdentifiersTrackingInitialized() {
         setUpInitialized();
         AppMetricaFacade.setAdvIdentifiersTracking(true);
-        verify(impl).setAdvIdentifiersTracking(true);
+        verify(impl).setAdvIdentifiersTracking(true, true);
     }
 
     @Test

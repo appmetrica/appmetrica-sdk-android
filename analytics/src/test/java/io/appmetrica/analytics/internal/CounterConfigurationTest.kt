@@ -546,6 +546,22 @@ class CounterConfigurationTest : CommonTest() {
     }
 
     @Test
+    fun applyFromAnonymousConfig() {
+        val reporterType = CounterConfigurationReporterType.MAIN
+        val inputConfig = AppMetricaConfig.newConfigBuilder(UUID.randomUUID().toString())
+            .withAdvIdentifiersTracking(true)
+            .build()
+
+        val actual = CounterConfiguration(reporterType)
+        actual.applyFromAnonymousConfig(inputConfig)
+
+        with(SoftAssertions()) {
+            assertThat(actual.isAdvIdentifiersTrackingEnabled).isEqualTo(inputConfig.advIdentifiersTracking)
+            assertAll()
+        }
+    }
+
+    @Test
     fun `fun constructor with empty AppMetricaConfig`() {
         val reporterType = CounterConfigurationReporterType.SELF_SDK
 

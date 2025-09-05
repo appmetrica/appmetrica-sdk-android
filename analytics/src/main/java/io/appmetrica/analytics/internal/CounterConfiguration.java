@@ -101,6 +101,12 @@ public class CounterConfiguration implements Parcelable {
         applyRevenueAutoTrackingEnabledFromConfig(config);
     }
 
+    public synchronized void applyFromAnonymousConfig(@NonNull AppMetricaConfig config) {
+        if (isAdvIdentifiersTrackingEnabled() == null) {
+            applyAdvIdentifiersTrackingFromConfig(config);
+        }
+    }
+
     private void setManualReporterType(@Nullable String apiKey) {
         if (SdkData.SDK_API_KEY_UUID.equals(apiKey)) {
             setReporterType(CounterConfigurationReporterType.SELF_SDK);

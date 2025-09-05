@@ -608,6 +608,7 @@ public class io.appmetrica.analytics.internal.CounterConfiguration implementatio
     public <init>([NonNull] String)
     public final void addAutoCollectedDataSubscriber([NonNull] String)
     public final void addAutoCollectedDataSubscribers([NonNull] java.util.List<String>)
+    public void applyFromAnonymousConfig([NonNull] io.appmetrica.analytics.AppMetricaConfig)
     public void applyFromConfig([NonNull] io.appmetrica.analytics.AppMetricaConfig)
     public int describeContents()
     public static io.appmetrica.analytics.internal.CounterConfiguration fromBundle(android.os.Bundle)

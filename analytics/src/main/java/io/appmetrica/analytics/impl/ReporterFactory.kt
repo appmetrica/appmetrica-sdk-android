@@ -53,7 +53,8 @@ internal class ReporterFactory(
         logger: PublicLogger,
         configExtension: AppMetricaConfigExtension,
     ): MainReporter = mainReporter?.also {
-        DebugLogger.info(tag, "Create anonymous main reporter")
+        DebugLogger.info(tag, "Main reporter already exists. Update configuration")
+        mainReporterComponents.updateAnonymousConfig(config, logger)
     } ?: createMainReporter(config, logger, configExtension).also {
         mainReporter = it
         DebugLogger.info(tag, "Create anonymous main reporter")

@@ -36,7 +36,9 @@ class AppMetricaDefaultAnonymousConfigProviderTest : CommonTest() {
     @Test
     fun getConfigForDefaultConfig() {
         val config = appMetricaDefaultAnonymousConfigProvider.getConfig(
-            AppMetricaLibraryAdapterConfig.newConfigBuilder().build()
+            AppMetricaLibraryAdapterConfig.newConfigBuilder()
+                .withAdvIdentifiersTracking(false)
+                .build()
         )
         assertThat(config)
             .usingRecursiveComparison()
@@ -74,7 +76,6 @@ class AppMetricaDefaultAnonymousConfigProviderTest : CommonTest() {
             .isEqualTo(
                 AppMetricaConfig.newConfigBuilder(apiKey)
                     .handleFirstActivationAsUpdate(true)
-                    .withAdvIdentifiersTracking(false)
                     .build()
             )
     }
@@ -90,7 +91,6 @@ class AppMetricaDefaultAnonymousConfigProviderTest : CommonTest() {
             .usingRecursiveComparison()
             .isEqualTo(
                 AppMetricaConfig.newConfigBuilder(apiKey)
-                    .withAdvIdentifiersTracking(false)
                     .build()
             )
     }

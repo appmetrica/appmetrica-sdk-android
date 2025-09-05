@@ -232,7 +232,7 @@ public class DefaultOneShotMetricaConfigTest extends CommonTest {
 
         defaultOneShotMetricaConfig.setLocation(LocationUtils.INSTANCE.createFakeLocation(1.0, 2.0));
         defaultOneShotMetricaConfig.setLocationTracking(false);
-        defaultOneShotMetricaConfig.setAdvIdentifiersTracking(false);
+        defaultOneShotMetricaConfig.setAdvIdentifiersTracking(false, true);
         defaultOneShotMetricaConfig.setUserProfileID("User profile ID");
         return defaultOneShotMetricaConfig;
     }
@@ -354,7 +354,7 @@ public class DefaultOneShotMetricaConfigTest extends CommonTest {
     @Test
     public void setReportsHandler() {
         DefaultOneShotMetricaConfig config = new DefaultOneShotMetricaConfig();
-        config.setAdvIdentifiersTracking(true);
+        config.setAdvIdentifiersTracking(true, true);
         config.setLocationTracking(false);
         config.setDataSendingEnabled(false);
         config.setReportsHandler(mReportsHandler);
@@ -381,7 +381,7 @@ public class DefaultOneShotMetricaConfigTest extends CommonTest {
     public void proxyAdvIdentifiersTracking() {
         DefaultOneShotMetricaConfig config = new DefaultOneShotMetricaConfig();
         config.setReportsHandler(mReportsHandler);
-        config.setAdvIdentifiersTracking(true);
+        config.setAdvIdentifiersTracking(true, true);
         verify(mReportsHandler).updatePreActivationConfig(null, null, true);
     }
 

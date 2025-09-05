@@ -55,10 +55,12 @@ public class DefaultOneShotMetricaConfig implements MetricaConfigurator {
     }
 
     @Override
-    public void setAdvIdentifiersTracking(final boolean enabled) {
-        DebugLogger.INSTANCE.info(TAG, "setAdvIdentifiersTracking: %b", enabled);
-        advIdentifiersTrackingEnabled = enabled;
-        tryToUpdatePreActivationConfig();
+    public void setAdvIdentifiersTracking(final boolean enabled, final boolean force) {
+        DebugLogger.INSTANCE.info(TAG, "setAdvIdentifiersTracking: %b, force = %b", enabled, force);
+        if (force || advIdentifiersTrackingEnabled == null) {
+            advIdentifiersTrackingEnabled = enabled;
+            tryToUpdatePreActivationConfig();
+        }
     }
 
     public Boolean isAdvIdentifiersTrackingEnabled() {

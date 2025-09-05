@@ -97,99 +97,99 @@ public class ClientConfigSerializer {
 
     @SuppressWarnings("checkstyle:methodlength")
     @Nullable
-    public AppMetricaConfig fromJson(final String json) {
-        AppMetricaConfig config = null;
-        if (TextUtils.isEmpty(json) == false) {
-            try {
-                JSONObject jsonConfig = new JSONObject(json);
-                final AppMetricaConfig.Builder builder =
-                        AppMetricaConfig.newConfigBuilder(jsonConfig.getString(KEY_API_KEY));
-
-                if (jsonConfig.has(KEY_APP_VERSION)) {
-                    builder.withAppVersion(jsonConfig.optString(KEY_APP_VERSION));
-                }
-                if (jsonConfig.has(KEY_SESSION_TIMEOUT)) {
-                    builder.withSessionTimeout(jsonConfig.getInt(KEY_SESSION_TIMEOUT));
-                }
-                builder.withLocation(jsonToLocation(jsonConfig.optString(KEY_LOCATION)));
-                builder.withPreloadInfo(jsonToPreloadInfo(jsonConfig.optString(KEY_PRELOAD_INFO)));
-                if (jsonConfig.has(KEY_LOGS) && jsonConfig.optBoolean(KEY_LOGS)) {
-                    builder.withLogs();
-                }
-                if (jsonConfig.has(KEY_CRASH_ENABLED)) {
-                    builder.withCrashReporting(jsonConfig.optBoolean(KEY_CRASH_ENABLED));
-                }
-                if (jsonConfig.has(KEY_CRASH_NATIVE_ENABLED)) {
-                    builder.withNativeCrashReporting(jsonConfig.optBoolean(KEY_CRASH_NATIVE_ENABLED));
-                }
-                if (jsonConfig.has(KEY_LOCATION_ENABLED)) {
-                    builder.withLocationTracking(jsonConfig.optBoolean(KEY_LOCATION_ENABLED));
-                }
-                if (jsonConfig.has(KEY_ADV_IDENTIFIERS_TRACKING)) {
-                    builder.withAdvIdentifiersTracking(
-                        jsonConfig.optBoolean(
-                            KEY_ADV_IDENTIFIERS_TRACKING,
-                            DefaultValues.DEFAULT_REPORT_ADV_IDENTIFIERS_ENABLED
-                        )
-                    );
-                }
-                if (jsonConfig.has(KEY_MAX_REPORTS_IN_DB_COUNT)) {
-                    builder.withMaxReportsInDatabaseCount(jsonConfig.optInt(KEY_MAX_REPORTS_IN_DB_COUNT));
-                }
-                if (jsonConfig.has(KEY_ERROR_ENVIRONMENT)) {
-                    withErrorEnvironmentValues(jsonConfig.optString(KEY_ERROR_ENVIRONMENT), builder);
-                }
-                if (jsonConfig.has(KEY_FIRST_ACTIVATION_AS_UPDATE)) {
-                    builder.handleFirstActivationAsUpdate(jsonConfig.optBoolean(KEY_FIRST_ACTIVATION_AS_UPDATE));
-                }
-                if (jsonConfig.has(KEY_DATA_SENDING_ENABLED)) {
-                    builder.withDataSendingEnabled(jsonConfig.optBoolean(KEY_DATA_SENDING_ENABLED));
-                }
-                if (jsonConfig.has(KEY_USER_PROFILE_ID)) {
-                    builder.withUserProfileID(jsonConfig.optString(KEY_USER_PROFILE_ID, null));
-                }
-                if (jsonConfig.has(KEY_REVENUE_AUTO_TRACKING_ENABLED)) {
-                    builder.withRevenueAutoTrackingEnabled(jsonConfig.optBoolean(KEY_REVENUE_AUTO_TRACKING_ENABLED));
-                }
-                if (jsonConfig.has(KEY_SESSIONS_AUTO_TRACKING_ENABLED)) {
-                    builder.withSessionsAutoTrackingEnabled(jsonConfig.optBoolean(KEY_SESSIONS_AUTO_TRACKING_ENABLED));
-                }
-                if (jsonConfig.has(KEY_APP_OPEN_TRACKING_ENABLED)) {
-                    builder.withAppOpenTrackingEnabled(jsonConfig.optBoolean(KEY_APP_OPEN_TRACKING_ENABLED));
-                }
-                if (jsonConfig.has(KEY_DEVICE_TYPE)) {
-                    builder.withDeviceType(jsonConfig.optString(KEY_DEVICE_TYPE));
-                }
-                if (jsonConfig.has(KEY_APP_BUILD_NUMBER)) {
-                    builder.withAppBuildNumber(jsonConfig.optInt(KEY_APP_BUILD_NUMBER));
-                }
-                if (jsonConfig.has(KEY_DISPATCH_PERIOD_SECONDS)) {
-                    builder.withDispatchPeriodSeconds(jsonConfig.optInt(KEY_DISPATCH_PERIOD_SECONDS));
-                }
-                if (jsonConfig.has(KEY_MAX_REPORTS_COUNT)) {
-                    builder.withMaxReportsCount(jsonConfig.optInt(KEY_MAX_REPORTS_COUNT));
-                }
-                if (jsonConfig.has(KEY_APP_ENVIRONMENT)) {
-                    withAppEnvironmentValues(jsonConfig.optString(KEY_APP_ENVIRONMENT), builder);
-                }
-                if (jsonConfig.has(KEY_ANR_MONITORING)) {
-                    builder.withAnrMonitoring(jsonConfig.optBoolean(KEY_ANR_MONITORING));
-                }
-                if (jsonConfig.has(KEY_ANR_MONITORING_TIMEOUT)) {
-                    builder.withAnrMonitoringTimeout(jsonConfig.optInt(KEY_ANR_MONITORING_TIMEOUT));
-                }
-                if (jsonConfig.has(KEY_CUSTOM_HOSTS)) {
-                    builder.withCustomHosts(JsonHelper.toStringList(jsonConfig.optJSONArray(KEY_CUSTOM_HOSTS)));
-                }
-                if (jsonConfig.has(KEY_ADDITIONAL_CONFIG)) {
-                    additionalConfigSerializer.parseJson(jsonConfig.optJSONObject(KEY_ADDITIONAL_CONFIG), builder);
-                }
-                config = builder.build();
-            } catch (Throwable e) {
-                DebugLogger.INSTANCE.error(TAG, e, "Exception while serializing AppMetricaConfig to json.");
-            }
+    public AppMetricaConfig.Builder fromJson(final String json) {
+        if (TextUtils.isEmpty(json)) {
+            return null;
         }
-        return config;
+        try {
+            JSONObject jsonConfig = new JSONObject(json);
+            final AppMetricaConfig.Builder builder =
+                AppMetricaConfig.newConfigBuilder(jsonConfig.getString(KEY_API_KEY));
+
+            if (jsonConfig.has(KEY_APP_VERSION)) {
+                builder.withAppVersion(jsonConfig.optString(KEY_APP_VERSION));
+            }
+            if (jsonConfig.has(KEY_SESSION_TIMEOUT)) {
+                builder.withSessionTimeout(jsonConfig.getInt(KEY_SESSION_TIMEOUT));
+            }
+            builder.withLocation(jsonToLocation(jsonConfig.optString(KEY_LOCATION)));
+            builder.withPreloadInfo(jsonToPreloadInfo(jsonConfig.optString(KEY_PRELOAD_INFO)));
+            if (jsonConfig.has(KEY_LOGS) && jsonConfig.optBoolean(KEY_LOGS)) {
+                builder.withLogs();
+            }
+            if (jsonConfig.has(KEY_CRASH_ENABLED)) {
+                builder.withCrashReporting(jsonConfig.optBoolean(KEY_CRASH_ENABLED));
+            }
+            if (jsonConfig.has(KEY_CRASH_NATIVE_ENABLED)) {
+                builder.withNativeCrashReporting(jsonConfig.optBoolean(KEY_CRASH_NATIVE_ENABLED));
+            }
+            if (jsonConfig.has(KEY_LOCATION_ENABLED)) {
+                builder.withLocationTracking(jsonConfig.optBoolean(KEY_LOCATION_ENABLED));
+            }
+            if (jsonConfig.has(KEY_ADV_IDENTIFIERS_TRACKING)) {
+                builder.withAdvIdentifiersTracking(
+                    jsonConfig.optBoolean(
+                        KEY_ADV_IDENTIFIERS_TRACKING,
+                        DefaultValues.DEFAULT_REPORT_ADV_IDENTIFIERS_ENABLED
+                    )
+                );
+            }
+            if (jsonConfig.has(KEY_MAX_REPORTS_IN_DB_COUNT)) {
+                builder.withMaxReportsInDatabaseCount(jsonConfig.optInt(KEY_MAX_REPORTS_IN_DB_COUNT));
+            }
+            if (jsonConfig.has(KEY_ERROR_ENVIRONMENT)) {
+                withErrorEnvironmentValues(jsonConfig.optString(KEY_ERROR_ENVIRONMENT), builder);
+            }
+            if (jsonConfig.has(KEY_FIRST_ACTIVATION_AS_UPDATE)) {
+                builder.handleFirstActivationAsUpdate(jsonConfig.optBoolean(KEY_FIRST_ACTIVATION_AS_UPDATE));
+            }
+            if (jsonConfig.has(KEY_DATA_SENDING_ENABLED)) {
+                builder.withDataSendingEnabled(jsonConfig.optBoolean(KEY_DATA_SENDING_ENABLED));
+            }
+            if (jsonConfig.has(KEY_USER_PROFILE_ID)) {
+                builder.withUserProfileID(jsonConfig.optString(KEY_USER_PROFILE_ID, null));
+            }
+            if (jsonConfig.has(KEY_REVENUE_AUTO_TRACKING_ENABLED)) {
+                builder.withRevenueAutoTrackingEnabled(jsonConfig.optBoolean(KEY_REVENUE_AUTO_TRACKING_ENABLED));
+            }
+            if (jsonConfig.has(KEY_SESSIONS_AUTO_TRACKING_ENABLED)) {
+                builder.withSessionsAutoTrackingEnabled(jsonConfig.optBoolean(KEY_SESSIONS_AUTO_TRACKING_ENABLED));
+            }
+            if (jsonConfig.has(KEY_APP_OPEN_TRACKING_ENABLED)) {
+                builder.withAppOpenTrackingEnabled(jsonConfig.optBoolean(KEY_APP_OPEN_TRACKING_ENABLED));
+            }
+            if (jsonConfig.has(KEY_DEVICE_TYPE)) {
+                builder.withDeviceType(jsonConfig.optString(KEY_DEVICE_TYPE));
+            }
+            if (jsonConfig.has(KEY_APP_BUILD_NUMBER)) {
+                builder.withAppBuildNumber(jsonConfig.optInt(KEY_APP_BUILD_NUMBER));
+            }
+            if (jsonConfig.has(KEY_DISPATCH_PERIOD_SECONDS)) {
+                builder.withDispatchPeriodSeconds(jsonConfig.optInt(KEY_DISPATCH_PERIOD_SECONDS));
+            }
+            if (jsonConfig.has(KEY_MAX_REPORTS_COUNT)) {
+                builder.withMaxReportsCount(jsonConfig.optInt(KEY_MAX_REPORTS_COUNT));
+            }
+            if (jsonConfig.has(KEY_APP_ENVIRONMENT)) {
+                withAppEnvironmentValues(jsonConfig.optString(KEY_APP_ENVIRONMENT), builder);
+            }
+            if (jsonConfig.has(KEY_ANR_MONITORING)) {
+                builder.withAnrMonitoring(jsonConfig.optBoolean(KEY_ANR_MONITORING));
+            }
+            if (jsonConfig.has(KEY_ANR_MONITORING_TIMEOUT)) {
+                builder.withAnrMonitoringTimeout(jsonConfig.optInt(KEY_ANR_MONITORING_TIMEOUT));
+            }
+            if (jsonConfig.has(KEY_CUSTOM_HOSTS)) {
+                builder.withCustomHosts(JsonHelper.toStringList(jsonConfig.optJSONArray(KEY_CUSTOM_HOSTS)));
+            }
+            if (jsonConfig.has(KEY_ADDITIONAL_CONFIG)) {
+                additionalConfigSerializer.parseJson(jsonConfig.optJSONObject(KEY_ADDITIONAL_CONFIG), builder);
+            }
+            return builder;
+        } catch (Throwable e) {
+            DebugLogger.INSTANCE.error(TAG, e, "Exception while reading AppMetricaConfig from json.");
+        }
+        return null;
     }
 
     private void withErrorEnvironmentValues(@NonNull String json, @NonNull AppMetricaConfig.Builder builder) {

@@ -118,7 +118,7 @@ public class AppMetricaImplStub implements IAppMetricaImpl {
     }
 
     @Override
-    public void setAdvIdentifiersTracking(boolean enabled) {
+    public void setAdvIdentifiersTracking(boolean enabled, boolean force) {
         // Do nothing
     }
 

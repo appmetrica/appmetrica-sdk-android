@@ -300,7 +300,8 @@ public class AppMetricaConfig {
      */
     @Nullable
     public static AppMetricaConfig fromJson(String json) {
-        return new ClientConfigSerializer().fromJson(json);
+        final AppMetricaConfig.Builder builder = new ClientConfigSerializer().fromJson(json);
+        return builder == null ? null : builder.build();
     }
 
     /**

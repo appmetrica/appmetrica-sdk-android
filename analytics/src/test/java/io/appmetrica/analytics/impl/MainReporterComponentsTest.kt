@@ -228,4 +228,14 @@ internal class MainReporterComponentsTest : CommonTest() {
         assertThat(preloadInfoWrapperMockedConstructionRule.argumentInterceptor.flatArguments())
             .containsExactly(preloadInfo, logger, DefaultValues.DEFAULT_AUTO_PRELOAD_INFO_DETECTION)
     }
+
+    @Test
+    fun updateAnonymousConfig() {
+        val config = AppMetricaConfig.newConfigBuilder(apiKey)
+            .build()
+
+        mainReporterComponents.updateAnonymousConfig(config, logger)
+
+        verify(reporterConfiguration).applyFromAnonymousConfig(config)
+    }
 }

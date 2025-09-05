@@ -102,7 +102,7 @@ class ModulesProxyTest : CommonTest() {
 
         runnableArgumentCaptor.firstValue.run()
 
-        verify(mainReporter).setAdvIdentifiersTracking(true)
+        verify(mainReporter).setAdvIdentifiersTracking(true, false)
         verifyNoMoreInteractions(mainReporter)
     }
 

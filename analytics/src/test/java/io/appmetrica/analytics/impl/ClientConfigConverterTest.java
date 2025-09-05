@@ -114,7 +114,7 @@ public class ClientConfigConverterTest extends CommonTest {
         ClientConfigSerializer storage = new ClientConfigSerializer();
 
         String jsonConfig = storage.toJson(testConfig);
-        AppMetricaConfig resultConfig = storage.fromJson(jsonConfig);
+        AppMetricaConfig resultConfig = storage.fromJson(jsonConfig).build();
 
         assertThat(resultConfig.apiKey).isEqualTo(testConfig.apiKey);
         assertThat(resultConfig.appVersion).isEqualTo(testConfig.appVersion);
