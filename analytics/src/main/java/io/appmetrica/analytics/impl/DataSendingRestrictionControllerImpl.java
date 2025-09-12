@@ -97,6 +97,11 @@ public class DataSendingRestrictionControllerImpl implements DataSendingRestrict
     }
 
     @Override
+    public synchronized boolean isRestrictedForMainReporter() {
+        return BooleanUtils.isTrue(mRestrictedInMainReporter);
+    }
+
+    @Override
     public synchronized boolean isRestrictedForSdk() {
 
         boolean result = mRestrictedInMainReporter == null ? mEnabledReporters.isEmpty() : mRestrictedInMainReporter;
@@ -112,5 +117,10 @@ public class DataSendingRestrictionControllerImpl implements DataSendingRestrict
         );
 
         return result;
+    }
+
+    @Override
+    public synchronized boolean isRestrictedForReporter(@NonNull String apiKey) {
+        return mRestrictedReporters.contains(apiKey) || BooleanUtils.isTrue(mRestrictedInMainReporter);
     }
 }

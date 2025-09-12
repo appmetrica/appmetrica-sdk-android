@@ -64,6 +64,8 @@ public final class io.appmetrica.analytics.coreapi.internal.constants.DeviceType
 public static final class io.appmetrica.analytics.coreapi.internal.constants.DeviceTypeValues$Companion
 
 public interface io.appmetrica.analytics.coreapi.internal.control.DataSendingRestrictionController {
+    public abstract boolean isRestrictedForMainReporter()
+    public abstract boolean isRestrictedForReporter([NonNull] String)
     public abstract boolean isRestrictedForSdk()
 }
 

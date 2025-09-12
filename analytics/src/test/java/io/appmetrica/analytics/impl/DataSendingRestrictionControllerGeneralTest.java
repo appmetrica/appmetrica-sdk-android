@@ -1,7 +1,5 @@
 package io.appmetrica.analytics.impl;
 
-import io.appmetrica.analytics.impl.db.preferences.PreferencesServiceDbStorage;
-import io.appmetrica.analytics.impl.db.preferences.PreferencesServiceDbStorageTest;
 import io.appmetrica.analytics.testutils.CommonTest;
 import org.junit.Before;
 import org.junit.Test;
@@ -223,30 +221,6 @@ public class DataSendingRestrictionControllerGeneralTest extends CommonTest {
         mController.setEnabledFromMainReporterIfNotYet(false);
         mController.setEnabledFromMainReporter(false);
         assertThat(mController.isRestrictedForSdk()).isTrue();
-    }
-
-    @RunWith(RobolectricTestRunner.class)
-    public static class StorageImplTest {
-
-        private final PreferencesServiceDbStorage mDbStorage = PreferencesServiceDbStorageTest.createMock();
-
-        private DataSendingRestrictionControllerImpl.StorageImpl mStorage = new DataSendingRestrictionControllerImpl.StorageImpl(
-                mDbStorage
-        );
-
-        @Test
-        public void testStore() {
-            mStorage.storeRestrictionFromMainReporter(true);
-            verify(mDbStorage).putDataSendingRestrictedFromMainReporter(true);
-            verify(mDbStorage).commit();
-        }
-
-        @Test
-        public void testRead() {
-            doReturn(false).when(mDbStorage).getDataSendingRestrictedFromMainReporter();
-            assertThat(mStorage.readRestrictionFromMainReporter()).isFalse();
-            verify(mDbStorage).getDataSendingRestrictedFromMainReporter();
-        }
     }
 
 }

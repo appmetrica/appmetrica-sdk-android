@@ -7,7 +7,7 @@ import org.junit.runner.RunWith
 import org.robolectric.ParameterizedRobolectricTestRunner
 
 @RunWith(ParameterizedRobolectricTestRunner::class)
-class DataSendingRestrictionControllerImplTest(
+class DataSendingRestrictionControllerImplRestrictedForSdkTest(
     description: String?,
     private val mController: DataSendingRestrictionControllerImpl,
     private val expectedRestrictedForSdk: Boolean,
