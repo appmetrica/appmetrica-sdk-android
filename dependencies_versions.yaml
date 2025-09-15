@@ -1,126 +1,124 @@
-- group: io.appmetrica.analytics
-  name: analytics-ad-revenue-admob-v23
+- group: "io.appmetrica.analytics"
+  name: "analytics-ad-revenue-admob-v23"
   dependencies:
-    - group: com.google.android.gms
-      name: play-services-ads
-      repository: https://dl.google.com/android/maven2
-      from: 20.7.0
-      to: 24.5.0
-- group: io.appmetrica.analytics
-  name: analytics-ad-revenue-applovin-v12
+  - repository: "https://dl.google.com/android/maven2"
+    group: "com.google.android.gms"
+    name: "play-services-ads"
+    from: "20.7.0"
+    to: "24.6.0"
+- group: "io.appmetrica.analytics"
+  name: "analytics-ad-revenue-applovin-v12"
   dependencies:
-    - group: com.applovin
-      name: applovin-sdk
-      repository: https://repo.maven.apache.org/maven2
-      from: 12.5.0
-      to: 13.3.1
-- group: io.appmetrica.analytics
-  name: analytics-ad-revenue-fyber-v3
+  - repository: "https://repo.maven.apache.org/maven2"
+    group: "com.applovin"
+    name: "applovin-sdk"
+    from: "12.5.0"
+    to: "13.4.0"
+- group: "io.appmetrica.analytics"
+  name: "analytics-ad-revenue-fyber-v3"
   dependencies:
-    - group: com.fyber
-      name: fairbid-sdk
-      repository: https://repo.maven.apache.org/maven2
-      from: 1.0.0
-      to: 3.62.0
-- group: io.appmetrica.analytics
-  name: analytics-ad-revenue-ironsource-v7
+  - repository: "https://repo.maven.apache.org/maven2"
+    group: "com.fyber"
+    name: "fairbid-sdk"
+    from: "1.0.0"
+    to: "3.62.0"
+- group: "io.appmetrica.analytics"
+  name: "analytics-ad-revenue-ironsource-v7"
   dependencies:
-    - group: com.ironsource.sdk
-      name: mediationsdk
-      repository: https://android-sdk.is.com
-      from: 7.1.0
-      to: 8.11.0
-      namespace: com.ironsource
-    - group: com.unity3d.ads-mediation
-      name: mediation-sdk
-      repository: https://repo.maven.apache.org/maven2
-      from: 7.9.0
-      to: 8.11.0
-      namespace: com.ironsource
-- group: io.appmetrica.analytics
-  name: analytics
+  - repository: "https://android-sdk.is.com"
+    group: "com.ironsource.sdk"
+    name: "mediationsdk"
+    from: "7.1.0"
+    to: "8.11.1"
+  - repository: "https://repo.maven.apache.org/maven2"
+    group: "com.unity3d.ads-mediation"
+    name: "mediation-sdk"
+    from: "7.9.0"
+    to: "8.11.1"
+- group: "io.appmetrica.analytics"
+  name: "analytics"
   dependencies:
-    - group: com.android.installreferrer
-      name: installreferrer
-      repository: https://dl.google.com/android/maven2
-      from: 1.0
-      to: 2.2
-    - group: com.appsflyer # for new versions notification
-      name: af-android-sdk
-      repository: https://repo.maven.apache.org/maven2
-      from: 6.17.3
-      to: 6.17.3
-    - group: com.adjust.sdk # for new versions notification
-      name: adjust-android
-      repository: https://repo.maven.apache.org/maven2
-      from: 5.4.3
-      to: 5.4.3
-    - group: com.kochava.tracker # for new versions notification
-      name: tracker
-      repository: https://repo.maven.apache.org/maven2
-      from: 5.7.0
-      to: 5.7.0
-    - group: com.tenjin # for new versions notification
-      name: android-sdk
-      repository: https://repo.maven.apache.org/maven2
-      from: 1.16.7
-      to: 1.16.7
-    - group: io.airbridge # for new versions notification
-      name: sdk-android
-      repository: https://sdk-download.airbridge.io/maven
-      from: 4.7.1
-      to: 4.7.1
-    - group: com.singular.sdk # for new versions notification
-      name: singular_sdk
-      repository: https://maven.singular.net
-      from: 12.10.0
-      to: 12.10.0
-- group: io.appmetrica.analytics
-  name: analytics-apphud
+  - repository: "https://dl.google.com/android/maven2"
+    group: "com.android.installreferrer"
+    name: "installreferrer"
+    from: "1.0"
+    to: "2.2"
+  - repository: "https://repo.maven.apache.org/maven2"
+    group: "com.appsflyer"
+    name: "af-android-sdk"
+    from: "6.17.3"
+    to: "6.17.3"
+  - repository: "https://repo.maven.apache.org/maven2"
+    group: "com.adjust.sdk"
+    name: "adjust-android"
+    from: "5.4.3"
+    to: "5.4.3"
+  - repository: "https://repo.maven.apache.org/maven2"
+    group: "com.kochava.tracker"
+    name: "tracker"
+    from: "5.7.0"
+    to: "5.7.0"
+  - repository: "https://repo.maven.apache.org/maven2"
+    group: "com.tenjin"
+    name: "android-sdk"
+    from: "1.16.7"
+    to: "1.16.7"
+  - repository: "https://sdk-download.airbridge.io/maven"
+    group: "io.airbridge"
+    name: "sdk-android"
+    from: "4.7.1"
+    to: "4.7.1"
+  - repository: "https://maven.singular.net"
+    group: "com.singular.sdk"
+    name: "singular_sdk"
+    from: "12.10.0"
+    to: "12.10.0"
+- group: "io.appmetrica.analytics"
+  name: "analytics-apphud"
   dependencies:
-    - group: com.apphud
-      name: ApphudSDK-Android
-      repository: https://repo.maven.apache.org/maven2
-      from: 2.6.0
-      to: 2.9.2
-- group: io.appmetrica.analytics
-  name: analytics-appsetid
+  - repository: "https://repo.maven.apache.org/maven2"
+    group: "com.apphud"
+    name: "ApphudSDK-Android"
+    from: "2.6.0"
+    to: "2.9.2"
+- group: "io.appmetrica.analytics"
+  name: "analytics-appsetid"
   dependencies:
-    - group: com.google.android.gms
-      name: play-services-appset
-      repository: https://dl.google.com/android/maven2
-      from: 16.0.1
-      to: 16.1.0
-- group: io.appmetrica.analytics
-  name: analytics-billing-v6
+  - repository: "https://dl.google.com/android/maven2"
+    group: "com.google.android.gms"
+    name: "play-services-appset"
+    from: "16.0.1"
+    to: "16.1.0"
+- group: "io.appmetrica.analytics"
+  name: "analytics-billing-v6"
   dependencies:
-    - group: com.android.billingclient
-      name: billing
-      repository: https://dl.google.com/android/maven2
-      from: 6.0.0
-      to: 7.1.1
-      forcible: false # versions from 8.0.0 will have separate module for work
-- group: io.appmetrica.analytics
-  name: analytics-billing-v8
+  - repository: "https://dl.google.com/android/maven2"
+    group: "com.android.billingclient"
+    name: "billing"
+    from: "6.0.0"
+    to: "7.1.1"
+    forcible: false
+- group: "io.appmetrica.analytics"
+  name: "analytics-billing-v8"
   dependencies:
-    - group: com.android.billingclient
-      name: billing
-      repository: https://dl.google.com/android/maven2
-      from: 8.0.0
-      to: 8.0.0
-- group: io.appmetrica.analytics
-  name: analytics-gpllibrary
+  - repository: "https://dl.google.com/android/maven2"
+    group: "com.android.billingclient"
+    name: "billing"
+    from: "8.0.0"
+    to: "8.0.0"
+- group: "io.appmetrica.analytics"
+  name: "analytics-gpllibrary"
   dependencies:
-    - group: com.google.android.gms
-      name: play-services-location
-      repository: https://dl.google.com/android/maven2
-      from: 21.0.0
-      to: 21.3.0
-- group: io.appmetrica.analytics
-  name: analytics-identifiers
+  - repository: "https://dl.google.com/android/maven2"
+    group: "com.google.android.gms"
+    name: "play-services-location"
+    from: "21.0.0"
+    to: "21.3.0"
+- group: "io.appmetrica.analytics"
+  name: "analytics-identifiers"
   dependencies:
-    - group: com.google.android.gms
-      name: play-services-ads-identifier
-      repository: https://dl.google.com/android/maven2
-      from: 18.0.0
-      to: 18.2.0
+  - repository: "https://dl.google.com/android/maven2"
+    group: "com.google.android.gms"
+    name: "play-services-ads-identifier"
+    from: "18.0.0"
+    to: "18.2.0"
