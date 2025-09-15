@@ -163,6 +163,7 @@ public class GlobalServiceLocatorRule extends ExternalResource {
         when(serviceExecutorProvider.getSupportIOExecutor()).thenReturn(sStubbedExecutor);
         when(serviceExecutorProvider.getDefaultExecutor()).thenReturn(sStubbedExecutor);
         when(serviceExecutorProvider.getUiExecutor()).thenReturn(sStubbedExecutor);
+        when(serviceExecutorProvider.getMetricaCoreExecutor()).thenReturn(sStubbedExecutor);
         Executor blockingExecutorStub = mock(Executor.class);
         doAnswer(sRunnableAnswer).when(blockingExecutorStub).execute(any(Runnable.class));
         return serviceExecutorProvider;

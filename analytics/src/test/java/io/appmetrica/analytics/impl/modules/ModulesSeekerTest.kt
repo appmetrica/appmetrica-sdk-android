@@ -1,5 +1,6 @@
 package io.appmetrica.analytics.impl.modules
 
+import android.content.Context
 import io.appmetrica.analytics.coreutils.internal.reflection.ReflectionUtils
 import io.appmetrica.analytics.impl.ClientServiceLocator
 import io.appmetrica.analytics.impl.GlobalServiceLocator
@@ -11,10 +12,13 @@ import io.appmetrica.analytics.testutils.ClientServiceLocatorRule
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
 import io.appmetrica.analytics.testutils.MockedStaticRule
+import io.appmetrica.analytics.testutils.constructionRule
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoMoreInteractions
@@ -24,6 +28,8 @@ import org.robolectric.RobolectricTestRunner
 @RunWith(RobolectricTestRunner::class)
 class ModulesSeekerTest : CommonTest() {
 
+    private val context: Context = mock()
+
     @get:Rule
     val reflectionUtils = MockedStaticRule(ReflectionUtils::class.java)
 
@@ -32,6 +38,12 @@ class ModulesSeekerTest : CommonTest() {
 
     @get:Rule
     val clientServiceLocatorRule = ClientServiceLocatorRule()
+
+    @get:Rule
+    val moduleStatusReporterRule = constructionRule<ModuleStatusReporter>()
+    private val moduleStatusReporter by moduleStatusReporterRule
+
+    private val modulesStatusCaptor = argumentCaptor<List<ModuleStatus>>()
 
     private val firstServiceModuleClass = "io.appmetrica.analytics.FirstModuleClass"
     private val secondServiceModuleClass = "io.appmetrica.analytics.SecondModulesClass"
@@ -114,6 +126,12 @@ class ModulesSeekerTest : CommonTest() {
         verify(serviceModulesController).registerModule(firstServiceModuleEntryPoint)
         verify(serviceModulesController).registerModule(secondServiceModuleEntryPoint)
         verifyNoMoreInteractions(serviceModulesController)
+        verify(moduleStatusReporter).reportModulesStatus(modulesStatusCaptor.capture())
+        assertThat(modulesStatusCaptor.firstValue).containsExactly(
+            ModuleStatus(firstServiceModuleClass, true),
+            ModuleStatus(missingServiceModuleClass, false),
+            ModuleStatus(secondServiceModuleClass, true),
+        )
     }
 
     @Test
@@ -121,20 +139,30 @@ class ModulesSeekerTest : CommonTest() {
         whenever(serviceModulesEntryPointsRegister.classNames).thenReturn(emptySet())
         modulesSeeker.discoverServiceModules()
         verifyNoMoreInteractions(serviceModulesController)
+        verify(moduleStatusReporter).reportModulesStatus(modulesStatusCaptor.capture())
+        assertThat(modulesStatusCaptor.firstValue).isEmpty()
     }
 
     @Test
     fun discoverClientModules() {
-        modulesSeeker.discoverClientModules()
+        modulesSeeker.discoverClientModules(context)
         verify(clientModulesController).registerModule(firstClientModuleEntryPoint)
         verify(clientModulesController).registerModule(secondClientModuleEntryPoint)
         verifyNoMoreInteractions(clientModulesController)
+        verify(moduleStatusReporter).reportModulesStatus(modulesStatusCaptor.capture())
+        assertThat(modulesStatusCaptor.firstValue).containsExactly(
+            ModuleStatus(firstServiceModuleClass, true),
+            ModuleStatus(missingServiceModuleClass, false),
+            ModuleStatus(secondServiceModuleClass, true),
+        )
     }
 
     @Test
     fun discoverClientModulesForEmptyList() {
         whenever(clientModulesEntryPointsRegister.classNames).thenReturn(emptySet())
-        modulesSeeker.discoverClientModules()
+        modulesSeeker.discoverClientModules(context)
         verifyNoMoreInteractions(clientModulesController)
+        verify(moduleStatusReporter).reportModulesStatus(modulesStatusCaptor.capture())
+        assertThat(modulesStatusCaptor.firstValue).isEmpty()
     }
 }

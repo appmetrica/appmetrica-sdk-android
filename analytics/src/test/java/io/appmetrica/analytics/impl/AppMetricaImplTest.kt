@@ -178,7 +178,7 @@ internal class AppMetricaImplTest : CommonTest() {
     @Test
     fun `constructor modules registration`() {
         inOrder(modulesSeeker, modulesController) {
-            verify(modulesSeeker).discoverClientModules()
+            verify(modulesSeeker).discoverClientModules(context)
             verify(modulesController).initClientSide(clientContextImpl)
         }
     }
