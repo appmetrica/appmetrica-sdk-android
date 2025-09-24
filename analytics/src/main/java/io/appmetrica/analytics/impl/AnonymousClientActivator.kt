@@ -34,17 +34,20 @@ class AnonymousClientActivator(
         )
     }
 
+    @Synchronized
     fun activate(context: Context, config: AppMetricaLibraryAdapterConfig) {
-        DebugLogger.info(tag, "Activating anonymous client")
+        DebugLogger.info(tag, "Try activating anonymous client")
+        if (provider.isActivated) {
+            DebugLogger.info(tag, "Client is already activated")
+            return
+        }
         val logger = LoggerStorage.getMainPublicOrAnonymousLogger()
-        if (!provider.isActivated) {
-            DebugLogger.info(tag, "Client is not activated")
-            if (DefaultValues.DEFAULT_SESSIONS_AUTO_TRACKING_ENABLED_FOR_ANONYMOUS_ACTIVATION) {
-                logger.info("Session autotracking enabled")
-                sessionsTrackingManager.startWatchingIfNotYet()
-            } else {
-                logger.info("Session autotracking disabled")
-            }
+        DebugLogger.info(tag, "Client is not activated")
+        if (DefaultValues.DEFAULT_SESSIONS_AUTO_TRACKING_ENABLED_FOR_ANONYMOUS_ACTIVATION) {
+            logger.info("Session autotracking enabled")
+            sessionsTrackingManager.startWatchingIfNotYet()
+        } else {
+            logger.info("Session autotracking disabled")
         }
         provider.getInitializedImpl(context).activateCore(null)
         clientExecutorProvider.defaultExecutor.execute {

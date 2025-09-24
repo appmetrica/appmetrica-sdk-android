@@ -17,7 +17,10 @@ internal class AppMetricaConfigForAnonymousActivationProvider(
         val configFromLibraryAdapter = defaultAnonymousConfigProvider.getConfig(libraryAdapterConfig)
         val configBuilderFromPreferences = preferences.appMetricaConfig
         if (configBuilderFromPreferences == null) {
-            DebugLogger.info(tag, "Saved config is null. Choose config from library adapter")
+            DebugLogger.info(
+                tag,
+                "Saved config is null. Choose config from library adapter: ${configFromLibraryAdapter.toJson()}"
+            )
             return configFromLibraryAdapter
         }
         DebugLogger.info(tag, "Choose saved config")

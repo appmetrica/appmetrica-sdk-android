@@ -109,11 +109,12 @@ internal class AppMetricaImpl @WorkerThread internal constructor(
         val activatedNow = activateCommonComponentsIfNotYet(
             logger,
             config,
-            mainReporterInitializer
+            mainReporterInitializer,
+            true
         )
         var configUpdated = false
         if (!activatedNow && !clientConfigInstalled) {
-            updateConfig(logger, config)
+            updateConfig(logger, config, true)
             configUpdated = true
         }
         if (activatedNow || configUpdated) {
@@ -155,8 +156,12 @@ internal class AppMetricaImpl @WorkerThread internal constructor(
                 )
             }
         }
-        val activatedNow =
-            activateCommonComponentsIfNotYet(publicLogger, config, mainReporterInitializer)
+        val activatedNow = activateCommonComponentsIfNotYet(
+            publicLogger,
+            config,
+            mainReporterInitializer,
+            false
+        )
         if (activatedNow) {
             ImportantLogger.info(
                 SdkUtils.APPMETRICA_TAG,
@@ -228,14 +233,15 @@ internal class AppMetricaImpl @WorkerThread internal constructor(
     private fun activateCommonComponentsIfNotYet(
         publicLogger: PublicLogger,
         config: AppMetricaConfig,
-        mainReporterInitializer: MainReporterInitializer
+        mainReporterInitializer: MainReporterInitializer,
+        activateNonAnonymous: Boolean
     ): Boolean {
         return if (null == mainReporterApiConsumerProvider) {
             DebugLogger.info(
                 tag,
                 "Activate common components"
             )
-            updateConfig(publicLogger, config)
+            updateConfig(publicLogger, config, activateNonAnonymous)
             referrerHelper.maybeRequestReferrer()
             initMainReporterConsumerProvider(mainReporterInitializer, config)
             true
@@ -250,7 +256,11 @@ internal class AppMetricaImpl @WorkerThread internal constructor(
     }
 
     @WorkerThread
-    private fun updateConfig(logger: PublicLogger, config: AppMetricaConfig) {
+    private fun updateConfig(
+        logger: PublicLogger,
+        config: AppMetricaConfig,
+        activateNonAnonymous: Boolean
+    ) {
         DebugLogger.info(tag, "updateConfig")
         updatePublicLoggerState(config, logger)
         updateCrashHandlerState(config, logger)
@@ -261,7 +271,8 @@ internal class AppMetricaImpl @WorkerThread internal constructor(
         reportsHandler.updatePreActivationConfig(
             config.locationTracking,
             config.dataSendingEnabled,
-            config.advIdentifiersTracking
+            config.advIdentifiersTracking,
+            activateNonAnonymous
         )
         startupHelper.sendStartupIfNeeded()
     }

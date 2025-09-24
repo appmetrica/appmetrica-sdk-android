@@ -115,9 +115,12 @@ public class ReportsHandler {
     /*
         Workaround. Uses only main reporter's config. Fill be fixed in https://nda.ya.ru/t/Oczi4wyf6Njj6k
      */
-    void updatePreActivationConfig(@Nullable Boolean locationTracking,
-                                   @Nullable Boolean dataSendingEnabled,
-                                   @Nullable Boolean advIdentifiersTrackingEnabled) {
+    void updatePreActivationConfig(
+        @Nullable Boolean locationTracking,
+        @Nullable Boolean dataSendingEnabled,
+        @Nullable Boolean advIdentifiersTrackingEnabled,
+        @NonNull Boolean isAdvIdentifiersTrackingEnabledForced
+    ) {
         DebugLogger.INSTANCE.info(
             TAG,
             "updatePreActivationConfig. locationTracking = %s, dataSendingEnabled = %s; " +
@@ -134,7 +137,8 @@ public class ReportsHandler {
         }
         if (Utils.isFieldSet(advIdentifiersTrackingEnabled)) {
             mCommutationReportEnvironment.getReporterConfiguration().setAdvIdentifiersTracking(
-                advIdentifiersTrackingEnabled
+                advIdentifiersTrackingEnabled,
+                isAdvIdentifiersTrackingEnabledForced
             );
         }
         reportEvent(CounterReport.formUpdatePreActivationConfig(), mCommutationReportEnvironment);

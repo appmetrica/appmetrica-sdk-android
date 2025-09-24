@@ -631,7 +631,7 @@ public class io.appmetrica.analytics.internal.CounterConfiguration implementatio
     public [Nullable] Boolean isLocationTrackingEnabled()
     public [Nullable] Boolean isLogEnabled()
     public [Nullable] Boolean isRevenueAutoTrackingEnabled()
-    public void setAdvIdentifiersTracking(boolean)
+    public void setAdvIdentifiersTracking(boolean, boolean)
     public void setApiKey(String)
     public void setAppBuildNumber(int)
     public final void setCustomAppVersion(String)

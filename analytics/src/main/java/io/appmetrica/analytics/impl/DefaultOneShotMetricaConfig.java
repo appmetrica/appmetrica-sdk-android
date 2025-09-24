@@ -25,6 +25,7 @@ public class DefaultOneShotMetricaConfig implements MetricaConfigurator {
     private Location location;
     private Boolean locationTrackingEnabled;
     private Boolean advIdentifiersTrackingEnabled;
+    private Boolean isAdvIdentifiersTrackingEnabledForced = false;
     private Boolean dataSendingEnabled;
     private final Map<String, String> appEnvironment = new LinkedHashMap<>();
     private final Map<String, String> errorEnvironment = new LinkedHashMap<>();
@@ -57,8 +58,23 @@ public class DefaultOneShotMetricaConfig implements MetricaConfigurator {
     @Override
     public void setAdvIdentifiersTracking(final boolean enabled, final boolean force) {
         DebugLogger.INSTANCE.info(TAG, "setAdvIdentifiersTracking: %b, force = %b", enabled, force);
-        if (force || advIdentifiersTrackingEnabled == null) {
+        boolean isAdvIdentifiersTrackingEnabledNotSet = advIdentifiersTrackingEnabled == null;
+        boolean isAdvIdentifiersTrackingEnabledNotForced = !isAdvIdentifiersTrackingEnabledForced;
+        DebugLogger.INSTANCE.info(
+            TAG,
+            "setAdvIdentifiersTracking enabled = %s, " +
+                "condition: " +
+                "force = %s || " +
+                "isAdvIdentifiersTrackingEnabledNotSet = %s || " +
+                "isAdvIdentifiersTrackingEnabledNotForced = %s",
+            enabled,
+            force,
+            isAdvIdentifiersTrackingEnabledNotSet,
+            isAdvIdentifiersTrackingEnabledNotForced
+        );
+        if (force || isAdvIdentifiersTrackingEnabledNotSet || isAdvIdentifiersTrackingEnabledNotForced) {
             advIdentifiersTrackingEnabled = enabled;
+            isAdvIdentifiersTrackingEnabledForced = force;
             tryToUpdatePreActivationConfig();
         }
     }
@@ -121,6 +137,7 @@ public class DefaultOneShotMetricaConfig implements MetricaConfigurator {
         location = null;
         locationTrackingEnabled = null;
         advIdentifiersTrackingEnabled = null;
+        isAdvIdentifiersTrackingEnabledForced = false;
         dataSendingEnabled = null;
         appEnvironment.clear();
         errorEnvironment.clear();
@@ -326,7 +343,9 @@ public class DefaultOneShotMetricaConfig implements MetricaConfigurator {
             reportsHandler.updatePreActivationConfig(
                 locationTrackingEnabled,
                 dataSendingEnabled,
-                advIdentifiersTrackingEnabled);
+                advIdentifiersTrackingEnabled,
+                isAdvIdentifiersTrackingEnabledForced
+            );
         }
         mReportsHandler = reportsHandler;
     }
@@ -336,7 +355,8 @@ public class DefaultOneShotMetricaConfig implements MetricaConfigurator {
             mReportsHandler.updatePreActivationConfig(
                 locationTrackingEnabled,
                 dataSendingEnabled,
-                advIdentifiersTrackingEnabled
+                advIdentifiersTrackingEnabled,
+                isAdvIdentifiersTrackingEnabledForced
             );
         }
     }

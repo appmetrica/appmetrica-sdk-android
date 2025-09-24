@@ -9,6 +9,8 @@ import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
+import io.appmetrica.analytics.impl.utils.BooleanUtils;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.util.Collections;
 import java.util.List;
 import io.appmetrica.analytics.AppMetricaConfig;
@@ -22,6 +24,7 @@ import io.appmetrica.analytics.impl.Utils;
 @SuppressWarnings("PMD.ConstructorCallsOverridableMethod")
 public class CounterConfiguration implements Parcelable {
 
+    private static final String TAG = "[CounterConfiguration]";
     private static final String DATA = "io.appmetrica.analytics.internal.CounterConfiguration.data";
 
     @Override
@@ -87,7 +90,7 @@ public class CounterConfiguration implements Parcelable {
         applySessionTimeoutFromConfig(config.sessionTimeout);
         applyManualLocationFromConfig(config);
         applyLocationTrackingFromConfig(config);
-        applyAdvIdentifiersTrackingFromConfig(config);
+        applyAdvIdentifiersTrackingFromConfig(config, true);
         applyDeviceTypeFromConfig(config);
         applyDispatchPeriodFromConfig(config.dispatchPeriodSeconds);
         applyMaxReportsCountFromConfig(config.maxReportsCount);
@@ -102,9 +105,22 @@ public class CounterConfiguration implements Parcelable {
     }
 
     public synchronized void applyFromAnonymousConfig(@NonNull AppMetricaConfig config) {
-        if (isAdvIdentifiersTrackingEnabled() == null) {
-            applyAdvIdentifiersTrackingFromConfig(config);
-        }
+        applyApiKeyFromConfig(config.apiKey);
+        applySessionTimeoutFromConfig(config.sessionTimeout);
+        applyManualLocationFromConfig(config);
+        applyLocationTrackingFromConfig(config);
+        applyAdvIdentifiersTrackingFromConfig(config, false);
+        applyDeviceTypeFromConfig(config);
+        applyDispatchPeriodFromConfig(config.dispatchPeriodSeconds);
+        applyMaxReportsCountFromConfig(config.maxReportsCount);
+        applyLogsFromConfig(config.logs);
+        applyAppVersionFromConfig(config);
+        applyAppBuildNumberFromConfig(config);
+        applyFirstActivationAsUpdateFromConfig(config);
+        applyDataSendingEnabledFromConfig(config.dataSendingEnabled);
+        applyMaxReportsInDbCount(config.maxReportsInDatabaseCount);
+        applyNativeCrashesFromConfig(config.nativeCrashReporting);
+        applyRevenueAutoTrackingEnabledFromConfig(config);
     }
 
     private void setManualReporterType(@Nullable String apiKey) {
@@ -139,9 +155,12 @@ public class CounterConfiguration implements Parcelable {
         }
     }
 
-    private void applyAdvIdentifiersTrackingFromConfig(@NonNull AppMetricaConfig config) {
+    private void applyAdvIdentifiersTrackingFromConfig(
+        @NonNull AppMetricaConfig config,
+        boolean forced
+    ) {
         if (Utils.isFieldSet(config.advIdentifiersTracking)) {
-            setAdvIdentifiersTracking(config.advIdentifiersTracking);
+            setAdvIdentifiersTracking(config.advIdentifiersTracking, forced);
         }
     }
 
@@ -278,8 +297,30 @@ public class CounterConfiguration implements Parcelable {
         mParamsMapping.put(CounterConfigurationKeys.LOCATION_TRACKING_ENABLED, enabled);
     }
 
-    public synchronized void setAdvIdentifiersTracking(final boolean enabled) {
-        mParamsMapping.put(CounterConfigurationKeys.ADV_IDENTIFIERS_TRACKING_ENABLED, enabled);
+    public synchronized void setAdvIdentifiersTracking(
+        final boolean enabled,
+        final boolean forced
+    ) {
+        boolean isAdvIdentifiersTrackingEnabledNotSet = isAdvIdentifiersTrackingEnabled() == null;
+        boolean isAdvIdentifiersTrackingEnabledNotForced =
+            BooleanUtils.isNotTrue(isAdvIdentifiersTrackingEnabledForced());
+        DebugLogger.INSTANCE.info(
+            TAG,
+            "setAdvIdentifiersTracking enabled = %s, " +
+                "condition: " +
+                "forced = %s || " +
+                "isAdvIdentifiersTrackingEnabledNotSet = %s || " +
+                "isAdvIdentifiersTrackingEnabledNotForced = %s",
+            enabled,
+            forced,
+            isAdvIdentifiersTrackingEnabledNotSet,
+            isAdvIdentifiersTrackingEnabledNotForced
+        );
+        if (forced || isAdvIdentifiersTrackingEnabledNotSet || isAdvIdentifiersTrackingEnabledNotForced) {
+            DebugLogger.INSTANCE.info(TAG, "setAdvIdentifiersTracking: %b, forced = %b", enabled, forced);
+            mParamsMapping.put(CounterConfigurationKeys.ADV_IDENTIFIERS_TRACKING_ENABLED, enabled);
+            mParamsMapping.put(CounterConfigurationKeys.ADV_IDENTIFIERS_TRACKING_ENABLED_FORCED, forced);
+        }
     }
 
     public synchronized void setRevenueAutoTrackingEnabled(final boolean enabled) {
@@ -298,7 +339,24 @@ public class CounterConfiguration implements Parcelable {
 
     @Nullable
     public Boolean isAdvIdentifiersTrackingEnabled() {
-        return mParamsMapping.getAsBoolean(CounterConfigurationKeys.ADV_IDENTIFIERS_TRACKING_ENABLED);
+        Boolean result = mParamsMapping.getAsBoolean(CounterConfigurationKeys.ADV_IDENTIFIERS_TRACKING_ENABLED);
+        DebugLogger.INSTANCE.info(
+            TAG,
+            "isAdvIdentifiersTrackingEnabled %s",
+            result
+        );
+        return result;
+    }
+
+    @Nullable
+    private Boolean isAdvIdentifiersTrackingEnabledForced() {
+        Boolean result = mParamsMapping.getAsBoolean(CounterConfigurationKeys.ADV_IDENTIFIERS_TRACKING_ENABLED_FORCED);
+        DebugLogger.INSTANCE.info(
+            TAG,
+            "isAdvIdentifiersTrackingEnabledForced %s",
+            result
+        );
+        return result;
     }
 
     public final synchronized void setCustomAppVersion(final String appVersion) {

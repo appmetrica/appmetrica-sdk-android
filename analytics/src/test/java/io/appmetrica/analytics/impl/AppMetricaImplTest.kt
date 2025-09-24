@@ -573,13 +573,13 @@ internal class AppMetricaImplTest : CommonTest() {
     @Test
     fun `activate - update pre activation settings`() {
         impl.activate(config)
-        verify(reportsHandler).updatePreActivationConfig(true, true, true)
+        verify(reportsHandler).updatePreActivationConfig(true, true, true, true)
     }
 
     @Test
     fun `activate - update pre activation settings if disabled`() {
         impl.activate(configWithDisabled)
-        verify(reportsHandler).updatePreActivationConfig(false, false, false)
+        verify(reportsHandler).updatePreActivationConfig(false, false, false, true)
     }
 
     @Test
@@ -587,20 +587,20 @@ internal class AppMetricaImplTest : CommonTest() {
         impl.activate(config)
         clearInvocations(reportsHandler)
         impl.activate(config)
-        verify(reportsHandler, never()).updatePreActivationConfig(any(), any(), any())
+        verify(reportsHandler, never()).updatePreActivationConfig(any(), any(), any(), any())
     }
 
     @Test
     fun `activate anonymously - update pre activate settings`() {
         impl.activateAnonymously(appMetricaLibraryAdapterConfig)
-        verify(reportsHandler).updatePreActivationConfig(null, null, null)
+        verify(reportsHandler).updatePreActivationConfig(null, null, null, false)
     }
 
     @Test
     fun `activate anonymously twice - update pre activation settings`() {
         impl.activateAnonymously(appMetricaLibraryAdapterConfig)
         clearInvocations(reportsHandler)
-        verify(reportsHandler, never()).updatePreActivationConfig(any(), any(), any())
+        verify(reportsHandler, never()).updatePreActivationConfig(any(), any(), any(), any())
     }
 
     @Test
@@ -608,7 +608,7 @@ internal class AppMetricaImplTest : CommonTest() {
         impl.activateAnonymously(appMetricaLibraryAdapterConfig)
         clearInvocations(reportsHandler)
         impl.activate(config)
-        verify(reportsHandler).updatePreActivationConfig(true, true, true)
+        verify(reportsHandler).updatePreActivationConfig(true, true, true, true)
     }
 
     @Test
@@ -616,7 +616,7 @@ internal class AppMetricaImplTest : CommonTest() {
         impl.activate(config)
         clearInvocations(reportsHandler)
         impl.activateAnonymously(appMetricaLibraryAdapterConfig)
-        verify(reportsHandler, never()).updatePreActivationConfig(any(), any(), any())
+        verify(reportsHandler, never()).updatePreActivationConfig(any(), any(), any(), any())
     }
 
     @Test

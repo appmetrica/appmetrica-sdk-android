@@ -61,6 +61,7 @@ internal class MainReporterComponents(
     }
 
     fun updateConfig(config: AppMetricaConfig, logger: PublicLogger) {
+        logger.info("Update config with value ${config.toJson()}")
         reporterEnvironment.reporterConfiguration.applyFromConfig(config)
         reporterEnvironment.initialUserProfileID = config.userProfileID
         reporterEnvironment.preloadInfoWrapper = PreloadInfoWrapper(

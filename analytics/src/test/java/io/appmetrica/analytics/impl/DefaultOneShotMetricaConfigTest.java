@@ -358,7 +358,7 @@ public class DefaultOneShotMetricaConfigTest extends CommonTest {
         config.setLocationTracking(false);
         config.setDataSendingEnabled(false);
         config.setReportsHandler(mReportsHandler);
-        verify(mReportsHandler).updatePreActivationConfig(false, false, true);
+        verify(mReportsHandler).updatePreActivationConfig(false, false, true, true);
     }
 
     @Test
@@ -366,7 +366,7 @@ public class DefaultOneShotMetricaConfigTest extends CommonTest {
         DefaultOneShotMetricaConfig config = new DefaultOneShotMetricaConfig();
         config.setReportsHandler(mReportsHandler);
         config.setLocationTracking(true);
-        verify(mReportsHandler).updatePreActivationConfig(true, null, null);
+        verify(mReportsHandler).updatePreActivationConfig(true, null, null, false);
     }
 
     @Test
@@ -374,7 +374,7 @@ public class DefaultOneShotMetricaConfigTest extends CommonTest {
         DefaultOneShotMetricaConfig config = new DefaultOneShotMetricaConfig();
         config.setReportsHandler(mReportsHandler);
         config.setDataSendingEnabled(true);
-        verify(mReportsHandler).updatePreActivationConfig(null, true, null);
+        verify(mReportsHandler).updatePreActivationConfig(null, true, null, false);
     }
 
     @Test
@@ -382,7 +382,7 @@ public class DefaultOneShotMetricaConfigTest extends CommonTest {
         DefaultOneShotMetricaConfig config = new DefaultOneShotMetricaConfig();
         config.setReportsHandler(mReportsHandler);
         config.setAdvIdentifiersTracking(true, true);
-        verify(mReportsHandler).updatePreActivationConfig(null, null, true);
+        verify(mReportsHandler).updatePreActivationConfig(null, null, true, true);
     }
 
     @Test

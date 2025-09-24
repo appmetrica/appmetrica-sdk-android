@@ -167,22 +167,36 @@ class CounterConfigurationTest : CommonTest() {
 
     @Test
     fun writeFalseToAdvIdentifiersTrackingEnabled() {
-        counterConfiguration.setAdvIdentifiersTracking(false)
+        counterConfiguration.setAdvIdentifiersTracking(false, false)
         assertThat(counterConfiguration.isAdvIdentifiersTrackingEnabled).isFalse()
     }
 
     @Test
     fun writeTrueToAdvIdentifiersTrackingEnabled() {
-        counterConfiguration.setAdvIdentifiersTracking(true)
+        counterConfiguration.setAdvIdentifiersTracking(true, false)
         assertThat(counterConfiguration.isAdvIdentifiersTrackingEnabled).isTrue()
     }
 
     @Test
     fun rewriteAdvIdentifierTracking() {
-        counterConfiguration.setAdvIdentifiersTracking(true)
-        counterConfiguration.setAdvIdentifiersTracking(false)
+        counterConfiguration.setAdvIdentifiersTracking(true, false)
+        counterConfiguration.setAdvIdentifiersTracking(false, false)
         assertThat(counterConfiguration.isAdvIdentifiersTrackingEnabled).isFalse()
-        counterConfiguration.setAdvIdentifiersTracking(true)
+        counterConfiguration.setAdvIdentifiersTracking(true, false)
+        assertThat(counterConfiguration.isAdvIdentifiersTrackingEnabled).isTrue()
+    }
+
+    @Test
+    fun writeToAdvIdentifiersTrackingEnabledForcedAndThenNonForced() {
+        counterConfiguration.setAdvIdentifiersTracking(false, true)
+        counterConfiguration.setAdvIdentifiersTracking(true, false)
+        assertThat(counterConfiguration.isAdvIdentifiersTrackingEnabled).isFalse()
+    }
+
+    @Test
+    fun forcedRewriteToAdvIdentifiersTrackingEnabled() {
+        counterConfiguration.setAdvIdentifiersTracking(false, false)
+        counterConfiguration.setAdvIdentifiersTracking(true, true)
         assertThat(counterConfiguration.isAdvIdentifiersTrackingEnabled).isTrue()
     }
 

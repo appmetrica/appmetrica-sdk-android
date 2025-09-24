@@ -25,9 +25,12 @@ class AppMetricaDefaultAnonymousConfigProvider {
             DebugLogger.info(tag, "Use default config")
         }
         DebugLogger.info(tag, "Apply library adapter config: $libraryAdapterConfig")
-        libraryAdapterConfig.advIdentifiersTracking?.let {
-            builder.withAdvIdentifiersTracking(it)
+        builder.withAdvIdentifiersTracking(
+            libraryAdapterConfig.advIdentifiersTracking
+                ?: DefaultValues.ANONYMOUS_DEFAULT_REPORT_ADV_IDENTIFIERS_ENABLED
+        )
+        return builder.build().also {
+            DebugLogger.info(tag, "Result config: $it")
         }
-        return builder.build()
     }
 }

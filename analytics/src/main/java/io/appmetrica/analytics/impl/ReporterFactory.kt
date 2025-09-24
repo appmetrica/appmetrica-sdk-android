@@ -55,9 +55,15 @@ internal class ReporterFactory(
     ): MainReporter = mainReporter?.also {
         DebugLogger.info(tag, "Main reporter already exists. Update configuration")
         mainReporterComponents.updateAnonymousConfig(config, logger)
-    } ?: createMainReporter(config, logger, configExtension).also {
-        mainReporter = it
+    } ?: run {
         DebugLogger.info(tag, "Create anonymous main reporter")
+
+        reporterApiKeyUsedValidator.validate(config.apiKey)
+        mainReporterComponents.updateAnonymousConfig(config, logger)
+
+        createMainReporter(config, configExtension).also { reporter ->
+            mainReporter = reporter
+        }
     }
 
     @WorkerThread
@@ -66,20 +72,24 @@ internal class ReporterFactory(
         config: AppMetricaConfig,
         logger: PublicLogger,
         configExtension: AppMetricaConfigExtension,
-    ): MainReporter = mainReporter?.also {
-        DebugLogger.info(
-            tag,
-            "Main reporter already exists. Update configuration with apiKey = %s",
-            config.apiKey
-        )
+    ): MainReporter = mainReporter?.also { reporter ->
+        DebugLogger.info(tag, "Main reporter already exists. Update configuration with apiKey = ${config.apiKey}")
         mainReporterComponents.updateConfig(config, logger)
-        it.updateConfig(config, configExtension)
-        notifyMainReporterCreated(it, config, logger)
-        reporters[config.apiKey] = it
-    } ?: createMainReporter(config, logger, configExtension).also {
-        DebugLogger.info(tag, "Create main reporter with apiKey = %s", config.apiKey)
-        notifyMainReporterCreated(it, config, logger)
-        mainReporter = it
+
+        // update main reporter since it may be anonymous
+        reporter.updateConfig(config, configExtension)
+        notifyMainReporterCreated(reporter, config, logger)
+        reporters[config.apiKey] = reporter
+    } ?: run {
+        DebugLogger.info(tag, "Create main reporter with apiKey = ${config.apiKey}")
+
+        reporterApiKeyUsedValidator.validate(config.apiKey)
+        mainReporterComponents.updateConfig(config, logger)
+
+        createMainReporter(config, configExtension).also { reporter ->
+            notifyMainReporterCreated(reporter, config, logger)
+            mainReporter = reporter
+        }
     }
 
     @Synchronized
@@ -137,22 +147,23 @@ internal class ReporterFactory(
 
     private fun createMainReporter(
         config: AppMetricaConfig,
-        logger: PublicLogger,
         configExtension: AppMetricaConfigExtension,
     ): MainReporter {
-        reporterApiKeyUsedValidator.validate(config.apiKey)
-        mainReporterComponents.updateConfig(config, logger)
         val reporter = MainReporter(mainReporterComponents)
-        DebugLogger.info(tag, "performCommonInitialization for main reporter with api key = %s", config.apiKey)
+
+        DebugLogger.info(tag, "performCommonInitialization for main reporter with api key = ${config.apiKey}")
         performCommonInitialization(reporter)
-        DebugLogger.info(tag, "updateConfig for apiKey = %s", config.apiKey)
+
+        DebugLogger.info(tag, "updateConfig for apiKey = ${config.apiKey}")
         reporter.updateConfig(config, configExtension)
         reporter.start()
+
         reportsHandler.setShouldDisconnectFromServiceChecker(
             object : ShouldDisconnectFromServiceChecker {
                 override fun shouldDisconnect(): Boolean = reporter.isPaused
             }
         )
+
         reporters[config.apiKey] = reporter
         return reporter
     }

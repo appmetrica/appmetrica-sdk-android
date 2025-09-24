@@ -21,6 +21,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoInteractions
+import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 import java.util.concurrent.TimeUnit
@@ -98,27 +99,22 @@ class AnonymousClientActivatorTest : CommonTest() {
     fun `activate if activated`() {
         whenever(provider.isActivated).thenReturn(true)
         anonymousClientActivator.activate(context)
-        verify(appMetricaFacade).activateCore(null)
-        verify(executor).execute(runnableCaptor.capture())
-        verify(provider).markActivated()
-        runnableCaptor.firstValue.run()
-        verify(appMetricaFacade).activateFull(configCaptor.capture())
-        ObjectPropertyAssertions(configCaptor.firstValue)
-            .checkFieldsAreNull("advIdentifiersTracking")
-            .checkAll()
-        verifyNoInteractions(sessionsTrackingManager)
+
+        verify(provider).isActivated
+
+        verifyNoMoreInteractions(provider)
+        verifyNoInteractions(appMetricaFacade, executor, sessionsTrackingManager)
     }
 
     @Test
     fun `activate with config if activated`() {
         whenever(provider.isActivated).thenReturn(true)
         anonymousClientActivator.activate(context, config)
-        verify(appMetricaFacade).activateCore(null)
-        verify(executor).execute(runnableCaptor.capture())
-        verify(provider).markActivated()
-        runnableCaptor.firstValue.run()
-        verify(appMetricaFacade).activateFull(config)
-        verifyNoInteractions(sessionsTrackingManager)
+
+        verify(provider).isActivated
+
+        verifyNoMoreInteractions(provider)
+        verifyNoInteractions(appMetricaFacade, executor, sessionsTrackingManager)
     }
 
     @Test

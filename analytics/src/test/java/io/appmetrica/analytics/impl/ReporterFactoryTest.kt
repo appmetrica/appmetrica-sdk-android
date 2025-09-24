@@ -167,7 +167,7 @@ internal class ReporterFactoryTest : CommonTest() {
     @Test
     fun `buildOrUpdateAnonymousMainReporter updates mainReporterComponents`() {
         reporterFactory.buildOrUpdateAnonymousMainReporter(config, logger, configExtension)
-        verify(mainReporterComponents).updateConfig(config, logger)
+        verify(mainReporterComponents).updateAnonymousConfig(config, logger)
     }
 
     @Test

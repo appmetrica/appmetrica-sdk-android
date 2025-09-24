@@ -495,7 +495,7 @@ public class ReportsHandlerTest extends CommonTest {
 
     @Test
     public void testUpdatePreActivationWithoutValues() {
-        mReportsHandler.updatePreActivationConfig(null, null, null);
+        mReportsHandler.updatePreActivationConfig(null, null, null, false);
         verify(mReportsSender).queueReport(argThat(new ArgumentMatcher<ReportToSend>() {
             @Override
             public boolean matches(ReportToSend argument) {
@@ -512,7 +512,7 @@ public class ReportsHandlerTest extends CommonTest {
     @Test
     public void testUpdatePreActivationWithLocation() {
         final boolean locationTracking = false;
-        mReportsHandler.updatePreActivationConfig(locationTracking, null, null);
+        mReportsHandler.updatePreActivationConfig(locationTracking, null, null, false);
         verify(mReportsSender).queueReport(argThat(new ArgumentMatcher<ReportToSend>() {
             @Override
             public boolean matches(ReportToSend argument) {
@@ -526,7 +526,7 @@ public class ReportsHandlerTest extends CommonTest {
     @Test
     public void testUpdatePreActivationWithDataSendingEnabled() {
         final boolean dataSendingEnabled = true;
-        mReportsHandler.updatePreActivationConfig(null, dataSendingEnabled, null);
+        mReportsHandler.updatePreActivationConfig(null, dataSendingEnabled, null, false);
 
         verify(mReportsSender).queueReport(argThat(new ArgumentMatcher<ReportToSend>() {
             @Override
@@ -541,7 +541,7 @@ public class ReportsHandlerTest extends CommonTest {
     @Test
     public void updatePreActivationWithAdvIdentifiersTrackingEnabled() {
         boolean advIdentifiersTrackingEnabled = true;
-        mReportsHandler.updatePreActivationConfig(null, null, advIdentifiersTrackingEnabled);
+        mReportsHandler.updatePreActivationConfig(null, null, advIdentifiersTrackingEnabled, false);
 
         verify(mReportsSender).queueReport(argThat(new ArgumentMatcher<ReportToSend>() {
             @Override

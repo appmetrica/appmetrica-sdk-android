@@ -502,7 +502,7 @@ public class MainReporterTest extends BaseReporterTest {
     @Test
     public void setAdvIdentifiersTracking() {
         mMainReporter.setAdvIdentifiersTracking(true, true);
-        verify(mCounterConfiguration).setAdvIdentifiersTracking(true);
+        verify(mCounterConfiguration).setAdvIdentifiersTracking(true, true);
         verify(mPublicLogger).info("Set advIdentifiersTracking to %s", true);
     }
 
