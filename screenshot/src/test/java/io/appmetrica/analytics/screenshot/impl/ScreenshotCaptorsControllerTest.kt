@@ -2,6 +2,7 @@ package io.appmetrica.analytics.screenshot.impl
 
 import io.appmetrica.analytics.modulesapi.internal.client.ClientContext
 import io.appmetrica.analytics.screenshot.impl.callback.ScreenshotCaptorCallback
+import io.appmetrica.analytics.screenshot.impl.captor.CaptorProvider
 import io.appmetrica.analytics.screenshot.impl.captor.ScreenshotCaptor
 import io.appmetrica.analytics.screenshot.impl.config.client.model.ClientSideRemoteScreenshotConfig
 import io.appmetrica.analytics.screenshot.impl.config.client.model.ClientSideScreenshotConfig
@@ -26,8 +27,11 @@ class ScreenshotCaptorsControllerTest : CommonTest() {
         mock<ScreenshotCaptor>(),
         mock<ScreenshotCaptor>()
     )
+    private val captorProvider = mock<CaptorProvider> {
+        on { getCaptors() } doReturn captors
+    }
 
-    private val screenshotCaptorsController = ScreenshotCaptorsController(clientContext, callback, captors)
+    private val screenshotCaptorsController = ScreenshotCaptorsController(clientContext, callback, captorProvider)
 
     @Test
     fun startCapture() {
