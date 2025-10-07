@@ -23,10 +23,12 @@ class ModuleEntryPointRegisterTest : CommonTest() {
     fun `moduleEntryPoints after registration`() {
         val first = "first"
         val second = "second"
+        val another = "another"
         moduleEntryPointsRegister.register(
             ConstantModuleEntryPointProvider(first),
-            ConstantModuleEntryPointProvider(second)
+            ConstantModuleEntryPointProvider(second),
+            ConstantModuleEntryPointProvider(another),
         )
-        assertThat(moduleEntryPointsRegister.classNames).containsExactly(first, second)
+        assertThat(moduleEntryPointsRegister.classNames).containsExactly(first, second, another)
     }
 }

@@ -19,6 +19,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.argumentCaptor
+import org.mockito.kotlin.inOrder
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoMoreInteractions
@@ -45,19 +46,23 @@ class ModulesSeekerTest : CommonTest() {
 
     private val modulesStatusCaptor = argumentCaptor<List<ModuleStatus>>()
 
-    private val firstServiceModuleClass = "io.appmetrica.analytics.FirstModuleClass"
-    private val secondServiceModuleClass = "io.appmetrica.analytics.SecondModulesClass"
-    private val missingServiceModuleClass = "io.appmetrica.analytics.MissingModuleClass"
+    private val firstServiceModuleClass = "io.appmetrica.analytics.FirstServiceModuleClass"
+    private val secondServiceModuleClass = "io.appmetrica.analytics.SecondServiceModulesClass"
+    private val missingServiceModuleClass = "io.appmetrica.analytics.MissingServiceModuleClass"
+    private val anotherServiceModuleClass = "io.appmetrica.analytics.AnotherServiceModuleClass"
 
-    private val firstClientModuleClass = "io.appmetrica.analytics.FirstModuleClass"
-    private val secondClientModuleClass = "io.appmetrica.analytics.SecondModulesClass"
-    private val missingClientModuleClass = "io.appmetrica.analytics.MissingModuleClass"
+    private val firstClientModuleClass = "io.appmetrica.analytics.FirstClientModuleClass"
+    private val secondClientModuleClass = "io.appmetrica.analytics.SecondClientModulesClass"
+    private val missingClientModuleClass = "io.appmetrica.analytics.MissingClientModuleClass"
+    private val anotherClientModuleClass = "io.appmetrica.analytics.AnotherClientModuleClass"
 
     private val firstServiceModuleEntryPoint = mock<ModuleServiceEntryPoint<Any>>()
     private val secondServiceModuleEntryPoint = mock<ModuleServiceEntryPoint<Any>>()
+    private val anotherServiceModuleEntryPoint = mock<ModuleServiceEntryPoint<Any>>()
 
     private val firstClientModuleEntryPoint = mock<ModuleClientEntryPoint<Any>>()
     private val secondClientModuleEntryPoint = mock<ModuleClientEntryPoint<Any>>()
+    private val anotherClientModuleEntryPoint = mock<ModuleClientEntryPoint<Any>>()
 
     private lateinit var serviceModulesController: ServiceModulesController
     private lateinit var serviceModulesEntryPointsRegister: ModuleEntryPointsRegister
@@ -95,8 +100,22 @@ class ModulesSeekerTest : CommonTest() {
                 ModuleServiceEntryPoint::class.java
             )
         ).thenReturn(null)
+        whenever(
+            ReflectionUtils.loadAndInstantiateClassWithDefaultConstructor(
+                anotherServiceModuleClass,
+                ModuleServiceEntryPoint::class.java
+            )
+        ).thenReturn(anotherServiceModuleEntryPoint)
+
         whenever(serviceModulesEntryPointsRegister.classNames)
-            .thenReturn(hashSetOf(firstServiceModuleClass, secondServiceModuleClass, missingServiceModuleClass))
+            .thenReturn(
+                listOf(
+                    firstServiceModuleClass,
+                    secondServiceModuleClass,
+                    missingServiceModuleClass,
+                    anotherServiceModuleClass,
+                )
+            )
 
         whenever(
             ReflectionUtils.loadAndInstantiateClassWithDefaultConstructor(
@@ -116,27 +135,44 @@ class ModulesSeekerTest : CommonTest() {
                 ModuleClientEntryPoint::class.java
             )
         ).thenReturn(null)
+        whenever(
+            ReflectionUtils.loadAndInstantiateClassWithDefaultConstructor(
+                anotherClientModuleClass,
+                ModuleClientEntryPoint::class.java
+            )
+        ).thenReturn(anotherClientModuleEntryPoint)
         whenever(clientModulesEntryPointsRegister.classNames)
-            .thenReturn(hashSetOf(firstClientModuleClass, secondClientModuleClass, missingClientModuleClass))
+            .thenReturn(
+                listOf(
+                    firstClientModuleClass,
+                    secondClientModuleClass,
+                    missingClientModuleClass,
+                    anotherClientModuleClass,
+                )
+            )
     }
 
     @Test
     fun discoverServiceModules() {
         modulesSeeker.discoverServiceModules()
-        verify(serviceModulesController).registerModule(firstServiceModuleEntryPoint)
-        verify(serviceModulesController).registerModule(secondServiceModuleEntryPoint)
+        inOrder(serviceModulesController).also {
+            it.verify(serviceModulesController).registerModule(firstServiceModuleEntryPoint)
+            it.verify(serviceModulesController).registerModule(secondServiceModuleEntryPoint)
+            it.verify(serviceModulesController).registerModule(anotherServiceModuleEntryPoint)
+        }
         verifyNoMoreInteractions(serviceModulesController)
         verify(moduleStatusReporter).reportModulesStatus(modulesStatusCaptor.capture())
         assertThat(modulesStatusCaptor.firstValue).containsExactly(
             ModuleStatus(firstServiceModuleClass, true),
-            ModuleStatus(missingServiceModuleClass, false),
             ModuleStatus(secondServiceModuleClass, true),
+            ModuleStatus(missingServiceModuleClass, false),
+            ModuleStatus(anotherServiceModuleClass, true),
         )
     }
 
     @Test
     fun discoverServiceModulesForEmptyList() {
-        whenever(serviceModulesEntryPointsRegister.classNames).thenReturn(emptySet())
+        whenever(serviceModulesEntryPointsRegister.classNames).thenReturn(emptyList())
         modulesSeeker.discoverServiceModules()
         verifyNoMoreInteractions(serviceModulesController)
         verify(moduleStatusReporter).reportModulesStatus(modulesStatusCaptor.capture())
@@ -146,20 +182,24 @@ class ModulesSeekerTest : CommonTest() {
     @Test
     fun discoverClientModules() {
         modulesSeeker.discoverClientModules(context)
-        verify(clientModulesController).registerModule(firstClientModuleEntryPoint)
-        verify(clientModulesController).registerModule(secondClientModuleEntryPoint)
+        inOrder(clientModulesController).also {
+            it.verify(clientModulesController).registerModule(firstClientModuleEntryPoint)
+            it.verify(clientModulesController).registerModule(secondClientModuleEntryPoint)
+            it.verify(clientModulesController).registerModule(anotherClientModuleEntryPoint)
+        }
         verifyNoMoreInteractions(clientModulesController)
         verify(moduleStatusReporter).reportModulesStatus(modulesStatusCaptor.capture())
         assertThat(modulesStatusCaptor.firstValue).containsExactly(
-            ModuleStatus(firstServiceModuleClass, true),
-            ModuleStatus(missingServiceModuleClass, false),
-            ModuleStatus(secondServiceModuleClass, true),
+            ModuleStatus(firstClientModuleClass, true),
+            ModuleStatus(secondClientModuleClass, true),
+            ModuleStatus(missingClientModuleClass, false),
+            ModuleStatus(anotherClientModuleClass, true),
         )
     }
 
     @Test
     fun discoverClientModulesForEmptyList() {
-        whenever(clientModulesEntryPointsRegister.classNames).thenReturn(emptySet())
+        whenever(clientModulesEntryPointsRegister.classNames).thenReturn(emptyList())
         modulesSeeker.discoverClientModules(context)
         verifyNoMoreInteractions(clientModulesController)
         verify(moduleStatusReporter).reportModulesStatus(modulesStatusCaptor.capture())

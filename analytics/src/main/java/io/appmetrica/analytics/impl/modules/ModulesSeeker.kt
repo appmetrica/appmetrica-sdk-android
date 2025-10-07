@@ -44,11 +44,11 @@ class ModulesSeeker {
     }
 
     private inline fun <reified T> discoverModules(
-        modules: Set<String>,
+        modules: List<String>,
         moduleStatusReporter: ModuleStatusReporter,
         register: (T) -> Unit
     ) {
-        val modulesStatus = modules.sorted().map { moduleEntryPoint ->
+        val modulesStatus = modules.map { moduleEntryPoint ->
             val module = moduleLoader.loadModule<T>(moduleEntryPoint)
             if (module == null) {
                 DebugLogger.info(tag, "Could not load module with entry point = $moduleEntryPoint")

@@ -2,11 +2,11 @@ package io.appmetrica.analytics.impl.modules
 
 internal class ModuleEntryPointsRegister {
 
-    private val _moduleEntryPoints = LinkedHashSet<ModuleEntryPointProvider>()
+    private val _moduleEntryPoints = mutableListOf<ModuleEntryPointProvider>()
 
-    val classNames: Set<String>
+    val classNames: List<String>
         @Synchronized
-        get() = _moduleEntryPoints.map { it.className }.filter { it.isNotEmpty() }.toSet()
+        get() = _moduleEntryPoints.map { it.className }.filter { it.isNotEmpty() }.distinct()
 
     @Synchronized
     fun register(vararg moduleEntryPointProvider: ModuleEntryPointProvider) {

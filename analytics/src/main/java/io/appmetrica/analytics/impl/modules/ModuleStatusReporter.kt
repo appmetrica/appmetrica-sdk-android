@@ -25,7 +25,8 @@ class ModuleStatusReporter(
             DebugLogger.info(tag, "Modules status is empty")
             return@execute
         }
-        DebugLogger.info(tag, "Report modules status $modulesStatus")
+        val sortedModulesStatus = modulesStatus.sortedBy { it.moduleName }
+        DebugLogger.info(tag, "Report modules status $sortedModulesStatus")
 
         val preferenceModulesStatus = preferences.getString(preferenceKey, null)?.let {
             ModulesStatus.fromJson(it)
@@ -36,11 +37,11 @@ class ModuleStatusReporter(
 
         val shouldSend = preferenceModulesStatus == null ||
             currentTime - preferenceModulesStatus.lastSendTime > sendTimeout ||
-            modulesStatus != preferenceModulesStatus.modulesStatus
+            sortedModulesStatus != preferenceModulesStatus.modulesStatus
 
         if (shouldSend) {
             val newModulesStatus = ModulesStatus(
-                modulesStatus = modulesStatus,
+                modulesStatus = sortedModulesStatus,
                 lastSendTime = currentTime
             )
 

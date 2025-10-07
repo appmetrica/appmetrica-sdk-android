@@ -88,6 +88,29 @@ class ModuleStatusReporterTest : CommonTest() {
     }
 
     @Test
+    fun reportModulesStatusIfTimeoutNotPassedAndModulesChangedOrder() {
+        val jsonFromPreferences = "{" +
+            "\"modulesStatus\":[" +
+            "{\"loaded\":true,\"moduleName\":\"module1\"}," +
+            "{\"loaded\":false,\"moduleName\":\"module2\"}" +
+            "]," +
+            "\"lastSendTime\":${currentTime - TimeUnit.HOURS.toMillis(1)}}"
+        whenever(preferences.getString("SOME_MODULES_TYPE_STATUS", null))
+            .thenReturn(jsonFromPreferences)
+
+        moduleStatusReporter.reportModulesStatus(
+            listOf(
+                ModuleStatus("module2", false),
+                ModuleStatus("module1", true)
+            )
+        )
+
+        verify(preferences).getString("SOME_MODULES_TYPE_STATUS", null)
+        verifyNoInteractions(reporter)
+        verifyNoMoreInteractions(preferences)
+    }
+
+    @Test
     fun reportModulesStatusIfTimeoutPassed() {
         val jsonFromPreferences = "{" +
             "\"modulesStatus\":[" +
