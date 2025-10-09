@@ -2,27 +2,29 @@ package io.appmetrica.analytics.impl.db;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import io.appmetrica.analytics.impl.IReporterExtended;
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade;
+import io.appmetrica.analytics.impl.selfreporting.SelfReporterWrapper;
 import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.MockedStaticRule;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
+import org.mockito.Mock;
+
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
+import org.mockito.MockitoAnnotations;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.RuntimeEnvironment;
 
 @RunWith(RobolectricTestRunner.class)
 public class DatabaseStorageTest extends CommonTest {
@@ -32,7 +34,7 @@ public class DatabaseStorageTest extends CommonTest {
     @Mock
     private TablesManager mTablesManager;
     @Mock
-    private IReporterExtended mAppmetricaReporter;
+    private SelfReporterWrapper mAppmetricaReporter;
     @Mock
     private SQLiteDatabase database;
     private Context mContext;

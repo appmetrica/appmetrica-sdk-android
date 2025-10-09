@@ -4,7 +4,6 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import io.appmetrica.analytics.AppMetrica;
 import io.appmetrica.analytics.impl.ClientServiceLocator;
-import io.appmetrica.analytics.impl.IReporterExtended;
 import io.appmetrica.analytics.impl.SdkData;
 import io.appmetrica.analytics.impl.proxy.AppMetricaProxyProvider;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
@@ -17,7 +16,7 @@ public class AppMetricaSelfReportFacade {
     private static final long SELF_REPORTER_INITIALIZATION_DELAY_SECONDS = 5L;
 
     @NonNull
-    public static IReporterExtended getReporter() {
+    public static SelfReporterWrapper getReporter() {
         return SelfReportFacadeProvider.getReporterWrapper();
     }
 

@@ -12,6 +12,7 @@ import io.appmetrica.analytics.impl.id.AdvertisingIdGetter;
 import io.appmetrica.analytics.impl.modules.ModuleServiceLifecycleControllerImpl;
 import io.appmetrica.analytics.impl.modules.ServiceContextFacade;
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade;
+import io.appmetrica.analytics.impl.selfreporting.SelfReporterWrapper;
 import io.appmetrica.analytics.impl.service.AppMetricaServiceCallback;
 import io.appmetrica.analytics.impl.startup.StartupState;
 import io.appmetrica.analytics.testutils.CommonTest;
@@ -146,7 +147,7 @@ public class AppMetricaServiceCoreImplOnCreateTest extends CommonTest {
     @Test
     public void onCreateTwice() {
         try (MockedStatic<AppMetricaSelfReportFacade> appMetricaSelfFacadeStaticMock = Mockito.mockStatic(AppMetricaSelfReportFacade.class)) {
-            when(AppMetricaSelfReportFacade.getReporter()).thenReturn(mock(IReporterExtended.class));
+            when(AppMetricaSelfReportFacade.getReporter()).thenReturn(mock(SelfReporterWrapper.class));
             initMetricaCoreImpl();
             mMetricaCore.onCreate();
             GlobalServiceLocator globalServiceLocator = GlobalServiceLocator.getInstance();

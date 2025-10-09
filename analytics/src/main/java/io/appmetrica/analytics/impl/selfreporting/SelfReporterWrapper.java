@@ -19,8 +19,9 @@ import io.appmetrica.analytics.profile.UserProfile;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import org.jetbrains.annotations.NotNull;
 
-public class SelfReporterWrapper implements IReporterExtended, IPluginReporter {
+public class SelfReporterWrapper implements IReporterExtended, IPluginReporter, SelfLazyReporter {
 
     private static final String TAG = "[SelfReporterWrapper]";
 
@@ -284,6 +285,19 @@ public class SelfReporterWrapper implements IReporterExtended, IPluginReporter {
             @Override
             public void perform(@NonNull IReporterExtended reporter) {
                 reporter.getPluginExtension().reportError(identifier, message, errorDetails);
+            }
+        });
+    }
+
+    @Override
+    public void reportLazyEvent(@NotNull SelfReportingLazyEventTask lazyTask) {
+        processCommand(new IReporterCommandPerformer() {
+            @Override
+            public void perform(@NonNull IReporterExtended reporter) {
+                SelfReportingLazyEvent event = lazyTask.get();
+                if (event != null) {
+                    reporter.reportEvent(event.getEventName(), event.getEventValue());
+                }
             }
         });
     }

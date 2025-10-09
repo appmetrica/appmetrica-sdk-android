@@ -2,8 +2,8 @@ package io.appmetrica.analytics.impl.db
 
 import android.content.Context
 import io.appmetrica.analytics.coreutils.internal.io.FileUtils
-import io.appmetrica.analytics.impl.IReporterExtended
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade
+import io.appmetrica.analytics.impl.selfreporting.SelfReporterWrapper
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.MockedStaticRule
 import io.appmetrica.analytics.testutils.TestUtils
@@ -37,7 +37,7 @@ class FileVitalDataSourceTest : CommonTest() {
     @get:Rule
     val fileUtilsMockedStaticRule = MockedStaticRule(FileUtils::class.java)
 
-    private val selfReporter = mock<IReporterExtended>()
+    private val selfReporter = mock<SelfReporterWrapper>()
 
     @Before
     fun setUp() {

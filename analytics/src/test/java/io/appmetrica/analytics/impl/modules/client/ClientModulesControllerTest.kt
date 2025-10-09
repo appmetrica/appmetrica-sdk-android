@@ -2,10 +2,10 @@ package io.appmetrica.analytics.impl.modules.client
 
 import android.os.Bundle
 import io.appmetrica.analytics.coreapi.internal.identifiers.SdkIdentifiers
-import io.appmetrica.analytics.impl.IReporterExtended
 import io.appmetrica.analytics.impl.modules.client.context.CoreClientContext
 import io.appmetrica.analytics.impl.modules.client.context.CoreModuleAdRevenueContext
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade
+import io.appmetrica.analytics.impl.selfreporting.SelfReporterWrapper
 import io.appmetrica.analytics.modulesapi.internal.client.BundleToServiceConfigConverter
 import io.appmetrica.analytics.modulesapi.internal.client.ModuleClientEntryPoint
 import io.appmetrica.analytics.modulesapi.internal.client.ServiceConfigExtensionConfiguration
@@ -82,7 +82,7 @@ internal class ClientModulesControllerTest : CommonTest() {
         on { onActivated() } doThrow activatedException
     }
 
-    private val selfReporter = mock<IReporterExtended>()
+    private val selfReporter = mock<SelfReporterWrapper>()
 
     @get:Rule
     val selfReporterFacadeMockedStaticRule = staticRule<AppMetricaSelfReportFacade> {

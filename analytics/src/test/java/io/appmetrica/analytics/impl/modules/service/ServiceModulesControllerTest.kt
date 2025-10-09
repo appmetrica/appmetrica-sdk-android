@@ -8,11 +8,11 @@ import io.appmetrica.analytics.coreapi.internal.data.Converter
 import io.appmetrica.analytics.coreapi.internal.data.JsonParser
 import io.appmetrica.analytics.coreapi.internal.permission.PermissionStrategy
 import io.appmetrica.analytics.impl.GlobalServiceLocator
-import io.appmetrica.analytics.impl.IReporterExtended
 import io.appmetrica.analytics.impl.modules.ModuleEventHandlersHolder
 import io.appmetrica.analytics.impl.modules.ModuleRemoteConfigController
 import io.appmetrica.analytics.impl.permissions.NeverForbidPermissionStrategy
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade
+import io.appmetrica.analytics.impl.selfreporting.SelfReporterWrapper
 import io.appmetrica.analytics.impl.startup.StartupState
 import io.appmetrica.analytics.modulesapi.internal.common.AskForPermissionStrategyModuleProvider
 import io.appmetrica.analytics.modulesapi.internal.service.ClientConfigProvider
@@ -165,7 +165,7 @@ internal class ServiceModulesControllerTest : CommonTest() {
     @get:Rule
     val globalServiceLocatorRule = GlobalServiceLocatorRule()
 
-    private val selfReporter = mock<IReporterExtended>()
+    private val selfReporter = mock<SelfReporterWrapper>()
 
     @get:Rule
     val selfReporterFacadeMockedStaticRule = staticRule<AppMetricaSelfReportFacade> {

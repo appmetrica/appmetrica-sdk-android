@@ -8,6 +8,7 @@ import io.appmetrica.analytics.impl.component.clients.ClientDescription
 import io.appmetrica.analytics.impl.component.clients.ClientRepository
 import io.appmetrica.analytics.impl.component.clients.ClientUnit
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade
+import io.appmetrica.analytics.impl.selfreporting.SelfReporterWrapper
 import io.appmetrica.analytics.internal.CounterConfiguration
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
@@ -39,7 +40,7 @@ class ReportRunnableTest : CommonTest() {
     private val clientDescription: ClientDescription = mock()
     private val clientUnit: ClientUnit = mock()
     private val commonArgumentsCaptor = argumentCaptor<CommonArguments>()
-    private val reporter: IReporterExtended = mock()
+    private val reporter: SelfReporterWrapper = mock()
 
     @get:Rule
     val selfReportFacadeMockedStaticRule = staticRule<AppMetricaSelfReportFacade> {

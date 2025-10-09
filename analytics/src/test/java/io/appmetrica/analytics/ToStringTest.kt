@@ -45,6 +45,7 @@ import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoData
 import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoState
 import io.appmetrica.analytics.impl.referrer.common.ReferrerInfo
 import io.appmetrica.analytics.impl.request.CoreRequestConfig
+import io.appmetrica.analytics.impl.selfreporting.SelfReportingLazyEvent
 import io.appmetrica.analytics.impl.startup.AttributionConfig
 import io.appmetrica.analytics.impl.startup.CacheControl
 import io.appmetrica.analytics.impl.startup.CollectingFlags
@@ -660,6 +661,12 @@ class ToStringTest(
                 arrayOf(
                     AppMetricaConfigExtension::class.java,
                     AppMetricaConfigExtension(listOf("subscriber"), true),
+                    0,
+                    "filled value"
+                ),
+                arrayOf(
+                    SelfReportingLazyEvent::class.java,
+                    SelfReportingLazyEvent("Event value", "Event value"),
                     0,
                     "filled value"
                 )

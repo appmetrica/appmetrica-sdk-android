@@ -31,6 +31,7 @@ import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoSatelliteCheckedProvi
 import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoState;
 import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoStateProvider;
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade;
+import io.appmetrica.analytics.impl.selfreporting.SelfReporterWrapper;
 import io.appmetrica.analytics.impl.service.ServiceDataReporterHolder;
 import io.appmetrica.analytics.impl.servicecomponents.ServiceLifecycleTimeTracker;
 import io.appmetrica.analytics.impl.startup.StartupState;
@@ -77,7 +78,7 @@ public class GlobalServiceLocatorTest extends CommonTest {
     @Mock
     private StartupState startupState;
     @Mock
-    private IReporterExtended reporter;
+    private SelfReporterWrapper reporter;
     @Mock
     private NetworkServiceLocator networkServiceLocator;
     @Mock

@@ -3,12 +3,12 @@ package io.appmetrica.analytics.impl.events
 import io.appmetrica.analytics.coreutils.internal.services.FrameworkDetector
 import io.appmetrica.analytics.impl.DefaultValues
 import io.appmetrica.analytics.impl.GlobalServiceLocator
-import io.appmetrica.analytics.impl.IReporterExtended
 import io.appmetrica.analytics.impl.component.CommonArguments
 import io.appmetrica.analytics.impl.component.ReportComponentConfigurationHolder
 import io.appmetrica.analytics.impl.db.preferences.PreferencesComponentDbStorage
 import io.appmetrica.analytics.impl.request.ReportRequestConfig
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade
+import io.appmetrica.analytics.impl.selfreporting.SelfReporterWrapper
 import io.appmetrica.analytics.internal.CounterConfiguration
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
@@ -51,7 +51,7 @@ class MainReporterEventConditionTest : CommonTest() {
         on { FrameworkDetector.framework() } doReturn framework
     }
 
-    private val sdkReporter: IReporterExtended = mock()
+    private val sdkReporter: SelfReporterWrapper = mock()
 
     @get:Rule
     val appMetricaSelfReporterFacadeRule = staticRule<AppMetricaSelfReportFacade> {

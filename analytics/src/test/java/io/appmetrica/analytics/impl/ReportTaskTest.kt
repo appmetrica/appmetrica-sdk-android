@@ -20,6 +20,7 @@ import io.appmetrica.analytics.impl.protobuf.backend.EventProto
 import io.appmetrica.analytics.impl.request.ReportRequestConfig
 import io.appmetrica.analytics.impl.request.appenders.ReportParamsAppender
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade
+import io.appmetrica.analytics.impl.selfreporting.SelfReporterWrapper
 import io.appmetrica.analytics.impl.utils.TimeUtils
 import io.appmetrica.analytics.impl.utils.encryption.EventEncryptionMode
 import io.appmetrica.analytics.impl.utils.limitation.BytesTrimmer
@@ -229,7 +230,7 @@ internal class ReportTaskTest : CommonTest() {
     private val requestDataHolder = mock<RequestDataHolder>()
     private val responseDataHolder = mock<ResponseDataHolder>()
     private val requestBodyEncrypter = mock<RequestBodyEncrypter>()
-    private val selfReporter = mock<IReporterExtended>()
+    private val selfReporter = mock<SelfReporterWrapper>()
     private val bytesTrimmer = mock<BytesTrimmer> {
         on { trim(eventValue.toByteArray()) } doReturn truncatedValue.toByteArray()
     }

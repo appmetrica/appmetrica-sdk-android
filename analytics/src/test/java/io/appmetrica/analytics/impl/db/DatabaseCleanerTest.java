@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import io.appmetrica.analytics.impl.CounterReport;
 import io.appmetrica.analytics.impl.EventsManager;
-import io.appmetrica.analytics.impl.IReporterExtended;
 import io.appmetrica.analytics.impl.InternalEvents;
 import io.appmetrica.analytics.impl.ProtobufUtils;
 import io.appmetrica.analytics.impl.SelfDiagnosticReporter;
@@ -15,6 +14,7 @@ import io.appmetrica.analytics.impl.SelfDiagnosticReporterStorage;
 import io.appmetrica.analytics.impl.db.constants.Constants;
 import io.appmetrica.analytics.impl.protobuf.backend.EventProto;
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade;
+import io.appmetrica.analytics.impl.selfreporting.SelfReporterWrapper;
 import io.appmetrica.analytics.internal.CounterConfigurationReporterType;
 import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.testutils.CommonTest;
@@ -22,6 +22,8 @@ import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import io.appmetrica.analytics.testutils.LogRule;
 import java.nio.charset.StandardCharsets;
 import java.util.function.Function;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Before;
@@ -29,20 +31,20 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
+
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.skyscreamer.jsonassert.JSONAssert;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
 public class DatabaseCleanerTest extends CommonTest {
@@ -57,7 +59,7 @@ public class DatabaseCleanerTest extends CommonTest {
     private final String apiKey = "apiKey";
     private Context context;
     @Mock
-    private IReporterExtended selfReporter;
+    private SelfReporterWrapper selfReporter;
     @Mock
     private SelfDiagnosticReporterStorage storage;
     @Mock

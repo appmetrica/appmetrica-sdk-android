@@ -1,30 +1,30 @@
 package io.appmetrica.analytics.impl.modules
 
+import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor
 import io.appmetrica.analytics.coreutils.internal.time.SystemTimeProvider
-import io.appmetrica.analytics.impl.IReporterExtended
 import io.appmetrica.analytics.impl.db.preferences.SimplePreferenceStorage
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade
+import io.appmetrica.analytics.impl.selfreporting.SelfReporterWrapper
 import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.StubbedBlockingExecutor
+import io.appmetrica.analytics.testutils.constructionRule
 import io.appmetrica.analytics.testutils.on
 import io.appmetrica.analytics.testutils.staticRule
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.kotlin.any
+import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoInteractions
-import org.mockito.kotlin.verifyNoMoreInteractions
-import org.mockito.kotlin.whenever
-import java.util.concurrent.TimeUnit
 
 class ModuleStatusReporterTest : CommonTest() {
 
     private val currentTime = System.currentTimeMillis()
     private val modulesType = "some_modules_type"
 
-    private val executor = StubbedBlockingExecutor()
+    private val executor: IHandlerExecutor = mock()
     private val preferences: SimplePreferenceStorage = mock {
         on { getString(any(), any()) } doReturn null
     }
@@ -32,23 +32,22 @@ class ModuleStatusReporterTest : CommonTest() {
         on { currentTimeMillis() } doReturn currentTime
     }
 
-    private val reporter: IReporterExtended = mock()
+    private val reporter: SelfReporterWrapper = mock()
 
     private val modulesStatus = listOf(
         ModuleStatus("module1", true),
         ModuleStatus("module2", false)
     )
-    private val expectedJson = "{" +
-        "\"modulesStatus\":[" +
-        "{\"loaded\":true,\"moduleName\":\"module1\"}," +
-        "{\"loaded\":false,\"moduleName\":\"module2\"}" +
-        "]," +
-        "\"lastSendTime\":$currentTime}"
 
     @get:Rule
     val appMetricaSelfReportFacadeRule = staticRule<AppMetricaSelfReportFacade> {
         on { AppMetricaSelfReportFacade.getReporter() } doReturn reporter
     }
+
+    @get:Rule
+    val moduleStatusReportingTaskRule = constructionRule<ModuleStatusReportingTask>()
+
+    private val runnableCaptor = argumentCaptor<Runnable>()
 
     private val moduleStatusReporter = ModuleStatusReporter(
         executor,
@@ -58,117 +57,16 @@ class ModuleStatusReporterTest : CommonTest() {
     )
 
     @Test
-    fun reportModulesStatus() {
+    fun reportModuleStatus() {
         moduleStatusReporter.reportModulesStatus(modulesStatus)
-
-        verify(reporter).reportEvent(
-            "${modulesType}_status",
-            expectedJson
-        )
-        verify(preferences).getString("SOME_MODULES_TYPE_STATUS", null)
-        verify(preferences).putString("SOME_MODULES_TYPE_STATUS", expectedJson)
-    }
-
-    @Test
-    fun reportModulesStatusIfTimeoutNotPassed() {
-        val jsonFromPreferences = "{" +
-            "\"modulesStatus\":[" +
-            "{\"loaded\":true,\"moduleName\":\"module1\"}," +
-            "{\"loaded\":false,\"moduleName\":\"module2\"}" +
-            "]," +
-            "\"lastSendTime\":${currentTime - TimeUnit.HOURS.toMillis(1)}}"
-        whenever(preferences.getString("SOME_MODULES_TYPE_STATUS", null))
-            .thenReturn(jsonFromPreferences)
-
-        moduleStatusReporter.reportModulesStatus(modulesStatus)
-
-        verify(preferences).getString("SOME_MODULES_TYPE_STATUS", null)
         verifyNoInteractions(reporter)
-        verifyNoMoreInteractions(preferences)
-    }
+        verify(executor).execute(runnableCaptor.capture())
+        runnableCaptor.firstValue.run()
+        verify(reporter)
+            .reportLazyEvent(moduleStatusReportingTaskRule.constructionMock.constructed().first())
 
-    @Test
-    fun reportModulesStatusIfTimeoutNotPassedAndModulesChangedOrder() {
-        val jsonFromPreferences = "{" +
-            "\"modulesStatus\":[" +
-            "{\"loaded\":true,\"moduleName\":\"module1\"}," +
-            "{\"loaded\":false,\"moduleName\":\"module2\"}" +
-            "]," +
-            "\"lastSendTime\":${currentTime - TimeUnit.HOURS.toMillis(1)}}"
-        whenever(preferences.getString("SOME_MODULES_TYPE_STATUS", null))
-            .thenReturn(jsonFromPreferences)
-
-        moduleStatusReporter.reportModulesStatus(
-            listOf(
-                ModuleStatus("module2", false),
-                ModuleStatus("module1", true)
-            )
-        )
-
-        verify(preferences).getString("SOME_MODULES_TYPE_STATUS", null)
-        verifyNoInteractions(reporter)
-        verifyNoMoreInteractions(preferences)
-    }
-
-    @Test
-    fun reportModulesStatusIfTimeoutPassed() {
-        val jsonFromPreferences = "{" +
-            "\"modulesStatus\":[" +
-            "{\"loaded\":true,\"moduleName\":\"module1\"}," +
-            "{\"loaded\":false,\"moduleName\":\"module2\"}" +
-            "]," +
-            "\"lastSendTime\":${currentTime - TimeUnit.HOURS.toMillis(25)}}"
-        whenever(preferences.getString("SOME_MODULES_TYPE_STATUS", null))
-            .thenReturn(jsonFromPreferences)
-
-        moduleStatusReporter.reportModulesStatus(modulesStatus)
-
-        verify(reporter).reportEvent(
-            "${modulesType}_status",
-            expectedJson
-        )
-        verify(preferences).getString("SOME_MODULES_TYPE_STATUS", null)
-        verify(preferences).putString("SOME_MODULES_TYPE_STATUS", expectedJson)
-    }
-
-    @Test
-    fun reportModulesStatusIfTimeoutNotPassedAndModulesChanged() {
-        val jsonFromPreferences = "{" +
-            "\"modulesStatus\":[" +
-            "{\"loaded\":true,\"moduleName\":\"module1\"}" +
-            "]," +
-            "\"lastSendTime\":${currentTime - TimeUnit.HOURS.toMillis(1)}}"
-        whenever(preferences.getString("SOME_MODULES_TYPE_STATUS", null))
-            .thenReturn(jsonFromPreferences)
-
-        moduleStatusReporter.reportModulesStatus(modulesStatus)
-
-        verify(reporter).reportEvent(
-            "${modulesType}_status",
-            expectedJson
-        )
-        verify(preferences).getString("SOME_MODULES_TYPE_STATUS", null)
-        verify(preferences).putString("SOME_MODULES_TYPE_STATUS", expectedJson)
-    }
-
-    @Test
-    fun reportModulesStatusIfTimeoutNotPassedAndModulesStatusesChanged() {
-        val jsonFromPreferences = "{" +
-            "\"modulesStatus\":[" +
-            "{\"loaded\":false,\"moduleName\":\"module1\"}," +
-            "{\"loaded\":false,\"moduleName\":\"module2\"}" +
-            "]," +
-            "\"lastSendTime\":${currentTime - TimeUnit.HOURS.toMillis(1)}}"
-        whenever(preferences.getString("SOME_MODULES_TYPE_STATUS", null))
-            .thenReturn(jsonFromPreferences)
-
-        moduleStatusReporter.reportModulesStatus(modulesStatus)
-
-        verify(reporter).reportEvent(
-            "${modulesType}_status",
-            expectedJson
-        )
-        verify(preferences).getString("SOME_MODULES_TYPE_STATUS", null)
-        verify(preferences).putString("SOME_MODULES_TYPE_STATUS", expectedJson)
+        assertThat(moduleStatusReportingTaskRule.constructionMock.constructed()).hasSize(1)
+        assertThat(moduleStatusReportingTaskRule.argumentInterceptor.flatArguments())
+            .containsExactly(preferences, modulesType, timeProvider, modulesStatus)
     }
 }

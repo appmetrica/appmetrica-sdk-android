@@ -3,9 +3,9 @@ package io.appmetrica.analytics.impl.core
 import io.appmetrica.analytics.coreutils.internal.time.SystemTimeProvider
 import io.appmetrica.analytics.coreutils.internal.time.TimePassedChecker
 import io.appmetrica.analytics.impl.GlobalServiceLocator
-import io.appmetrica.analytics.impl.IReporterExtended
 import io.appmetrica.analytics.impl.db.preferences.PreferencesServiceDbStorage
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade
+import io.appmetrica.analytics.impl.selfreporting.SelfReporterWrapper
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
 import io.appmetrica.analytics.testutils.MockedConstructionRule
@@ -67,7 +67,7 @@ class ReportKotlinVersionTaskTest : CommonTest() {
 
     private val eventValueCaptor = argumentCaptor<Map<String, Any>>()
 
-    private val reporter = mock<IReporterExtended>()
+    private val reporter = mock<SelfReporterWrapper>()
 
     private lateinit var preferences: PreferencesServiceDbStorage
 
