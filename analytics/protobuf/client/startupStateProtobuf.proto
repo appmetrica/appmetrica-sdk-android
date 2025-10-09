@@ -83,13 +83,7 @@ message StartupState {
 
     optional CacheControl cacheControl = 27;
 
-    // region autoInappCollectingConfig
-    message AutoInappCollectingConfig {
-        optional int32 sendFrequencySeconds = 1 [default = 86400];
-        optional int32 firstCollectingInappMaxAgeSeconds = 2 [default = 86400];
-    }
-    optional AutoInappCollectingConfig autoInappCollectingConfig = 28;
-    // endregion
+    reserved 28;
 
     message Attribution {
 

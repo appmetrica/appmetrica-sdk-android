@@ -545,105 +545,6 @@ public interface StartupStateProtobuf {
       }
     }
 
-    public static final class AutoInappCollectingConfig extends
-        io.appmetrica.analytics.protobuf.nano.MessageNano {
-
-      private static volatile AutoInappCollectingConfig[] _emptyArray;
-      public static AutoInappCollectingConfig[] emptyArray() {
-        // Lazily initializes the empty array
-        if (_emptyArray == null) {
-          synchronized (
-              io.appmetrica.analytics.protobuf.nano.InternalNano.LAZY_INIT_LOCK) {
-            if (_emptyArray == null) {
-              _emptyArray = new AutoInappCollectingConfig[0];
-            }
-          }
-        }
-        return _emptyArray;
-      }
-
-      // optional int32 sendFrequencySeconds = 1 [default = 86400];
-      public int sendFrequencySeconds;
-
-      // optional int32 firstCollectingInappMaxAgeSeconds = 2 [default = 86400];
-      public int firstCollectingInappMaxAgeSeconds;
-
-      public AutoInappCollectingConfig() {
-        clear();
-      }
-
-      public AutoInappCollectingConfig clear() {
-        sendFrequencySeconds = 86400;
-        firstCollectingInappMaxAgeSeconds = 86400;
-        cachedSize = -1;
-        return this;
-      }
-
-      @Override
-      public void writeTo(io.appmetrica.analytics.protobuf.nano.CodedOutputByteBufferNano output)
-          throws java.io.IOException {
-        if (this.sendFrequencySeconds != 86400) {
-          output.writeInt32(1, this.sendFrequencySeconds);
-        }
-        if (this.firstCollectingInappMaxAgeSeconds != 86400) {
-          output.writeInt32(2, this.firstCollectingInappMaxAgeSeconds);
-        }
-        super.writeTo(output);
-      }
-
-      @Override
-      protected int computeSerializedSize() {
-        int size = super.computeSerializedSize();
-        if (this.sendFrequencySeconds != 86400) {
-          size += io.appmetrica.analytics.protobuf.nano.CodedOutputByteBufferNano
-              .computeInt32Size(1, this.sendFrequencySeconds);
-        }
-        if (this.firstCollectingInappMaxAgeSeconds != 86400) {
-          size += io.appmetrica.analytics.protobuf.nano.CodedOutputByteBufferNano
-              .computeInt32Size(2, this.firstCollectingInappMaxAgeSeconds);
-        }
-        return size;
-      }
-
-      @Override
-      public AutoInappCollectingConfig mergeFrom(
-              io.appmetrica.analytics.protobuf.nano.CodedInputByteBufferNano input)
-          throws java.io.IOException {
-        while (true) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              return this;
-            default: {
-              if (!io.appmetrica.analytics.protobuf.nano.WireFormatNano.parseUnknownField(input, tag)) {
-                return this;
-              }
-              break;
-            }
-            case 8: {
-              this.sendFrequencySeconds = input.readInt32();
-              break;
-            }
-            case 16: {
-              this.firstCollectingInappMaxAgeSeconds = input.readInt32();
-              break;
-            }
-          }
-        }
-      }
-
-      public static AutoInappCollectingConfig parseFrom(byte[] data)
-          throws io.appmetrica.analytics.protobuf.nano.InvalidProtocolBufferNanoException {
-        return io.appmetrica.analytics.protobuf.nano.MessageNano.mergeFrom(new AutoInappCollectingConfig(), data);
-      }
-
-      public static AutoInappCollectingConfig parseFrom(
-              io.appmetrica.analytics.protobuf.nano.CodedInputByteBufferNano input)
-          throws java.io.IOException {
-        return new AutoInappCollectingConfig().mergeFrom(input);
-      }
-    }
-
     public static final class Attribution extends
         io.appmetrica.analytics.protobuf.nano.MessageNano {
 
@@ -1296,9 +1197,6 @@ public interface StartupStateProtobuf {
     // optional .StartupState.CacheControl cacheControl = 27;
     public StartupStateProtobuf.StartupState.CacheControl cacheControl;
 
-    // optional .StartupState.AutoInappCollectingConfig autoInappCollectingConfig = 28;
-    public StartupStateProtobuf.StartupState.AutoInappCollectingConfig autoInappCollectingConfig;
-
     // optional .StartupState.Attribution attribution = 29;
     public StartupStateProtobuf.StartupState.Attribution attribution;
 
@@ -1341,7 +1239,6 @@ public interface StartupStateProtobuf {
       maxRetryIntervalSeconds = 600;
       retryExponentialMultiplier = 1;
       cacheControl = null;
-      autoInappCollectingConfig = null;
       attribution = null;
       startupUpdateConfig = null;
       modulesRemoteConfigs = StartupStateProtobuf.StartupState.ModulesRemoteConfigsEntry.emptyArray();
@@ -1440,9 +1337,6 @@ public interface StartupStateProtobuf {
       output.writeInt32(26, this.retryExponentialMultiplier);
       if (this.cacheControl != null) {
         output.writeMessage(27, this.cacheControl);
-      }
-      if (this.autoInappCollectingConfig != null) {
-        output.writeMessage(28, this.autoInappCollectingConfig);
       }
       if (this.attribution != null) {
         output.writeMessage(29, this.attribution);
@@ -1599,10 +1493,6 @@ public interface StartupStateProtobuf {
       if (this.cacheControl != null) {
         size += io.appmetrica.analytics.protobuf.nano.CodedOutputByteBufferNano
           .computeMessageSize(27, this.cacheControl);
-      }
-      if (this.autoInappCollectingConfig != null) {
-        size += io.appmetrica.analytics.protobuf.nano.CodedOutputByteBufferNano
-          .computeMessageSize(28, this.autoInappCollectingConfig);
       }
       if (this.attribution != null) {
         size += io.appmetrica.analytics.protobuf.nano.CodedOutputByteBufferNano
@@ -1821,13 +1711,6 @@ public interface StartupStateProtobuf {
               this.cacheControl = new StartupStateProtobuf.StartupState.CacheControl();
             }
             input.readMessage(this.cacheControl);
-            break;
-          }
-          case 226: {
-            if (this.autoInappCollectingConfig == null) {
-              this.autoInappCollectingConfig = new StartupStateProtobuf.StartupState.AutoInappCollectingConfig();
-            }
-            input.readMessage(this.autoInappCollectingConfig);
             break;
           }
           case 234: {

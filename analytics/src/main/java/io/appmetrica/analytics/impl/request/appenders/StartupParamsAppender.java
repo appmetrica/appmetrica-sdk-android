@@ -158,7 +158,6 @@ public class StartupParamsAppender implements IParamsAppender<StartupRequestConf
         uriBuilder.appendQueryParameter(mObfuscator.obfuscate(UrlParts.CACHE_CONTROL), String.valueOf(1));
         uriBuilder.appendQueryParameter(mObfuscator.obfuscate(UrlParts.PERMISSIONS_COLLECTING), String.valueOf(1));
         uriBuilder.appendQueryParameter(mObfuscator.obfuscate(UrlParts.APP_SYSTEM), requestConfig.isAppSystem());
-        uriBuilder.appendQueryParameter(mObfuscator.obfuscate(UrlParts.AUTO_INAPP_COLLECTING), String.valueOf(1));
         uriBuilder.appendQueryParameter(mObfuscator.obfuscate(UrlParts.ATTRIBUTION), String.valueOf(1));
         uriBuilder.appendQueryParameter(mObfuscator.obfuscate(UrlParts.STARTUP_UPDATE), String.valueOf(1));
         uriBuilder.appendQueryParameter(mObfuscator.obfuscate(UrlParts.EXTERNAL_ATTRIBUTION), String.valueOf(1));

@@ -2,11 +2,6 @@ package io.appmetrica.analytics
 
 import android.content.ContentValues
 import android.util.Pair
-import io.appmetrica.analytics.billinginterface.internal.BillingInfo
-import io.appmetrica.analytics.billinginterface.internal.Period
-import io.appmetrica.analytics.billinginterface.internal.ProductInfo
-import io.appmetrica.analytics.billinginterface.internal.ProductType
-import io.appmetrica.analytics.billinginterface.internal.config.BillingConfig
 import io.appmetrica.analytics.coreapi.internal.identifiers.AdTrackingInfoResult
 import io.appmetrica.analytics.coreapi.internal.identifiers.AdvertisingIdsHolder
 import io.appmetrica.analytics.coreapi.internal.permission.PermissionState
@@ -568,37 +563,6 @@ class ToStringTest(
                     ReferrerInfo("referrer", 100L, 200L, ReferrerInfo.Source.GP),
                     0,
                     ""
-                ),
-                arrayOf(
-                    BillingConfig::class.java,
-                    BillingConfig(43875678, 8768),
-                    0,
-                    "filled value"
-                ),
-                arrayOf(
-                    BillingInfo::class.java,
-                    BillingInfo(ProductType.INAPP, "sku", "token", 41, 42),
-                    0,
-                    "filled value"
-                ),
-                arrayOf(
-                    Period::class.java,
-                    Period(1, Period.TimeUnit.MONTH),
-                    0,
-                    "filled value"
-                ),
-                arrayOf(
-                    ProductInfo::class.java,
-                    ProductInfo(
-                        ProductType.INAPP, "sku2", 2, 2, "by", 4, Period(1, Period.TimeUnit.WEEK), 1,
-                        Period(
-                            3,
-                            Period.TimeUnit.DAY
-                        ),
-                        "signature2", "token2", 11, false, "json"
-                    ),
-                    0,
-                    "filled value"
                 ),
                 arrayOf(
                     AttributionConfig::class.java,

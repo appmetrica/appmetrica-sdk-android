@@ -50,8 +50,6 @@ public class StartupParserTests extends CommonTest {
     @Mock
     private CacheControlParser mCacheControlParser;
     @Mock
-    private AutoInappCollectingConfigParser autoInappCollectingConfigParser;
-    @Mock
     private AttributionConfigParser attributionConfigParser;
     @Mock
     private StartupUpdateConfigParser startupUpdateConfigParser;
@@ -74,7 +72,6 @@ public class StartupParserTests extends CommonTest {
             mPermissionsCollectingConfigParser,
             new StatSendingConverter(),
             mCacheControlParser,
-            autoInappCollectingConfigParser,
             attributionConfigParser,
             startupUpdateConfigParser,
             modulesRemoteConfigsParser,
@@ -124,7 +121,6 @@ public class StartupParserTests extends CommonTest {
         verify(mHostsParser).parse(any(StartupResult.class), jsonCaptor.capture());
         verify(mPermissionsCollectingConfigParser).parseIfEnabled(any(StartupResult.class), jsonCaptor.capture());
         verify(mRetryPolicyConfigParser).parse(any(StartupResult.class), jsonCaptor.capture());
-        verify(autoInappCollectingConfigParser).parse(any(StartupResult.class), jsonCaptor.capture());
         verify(attributionConfigParser).parse(any(StartupResult.class), jsonCaptor.capture());
         verify(startupUpdateConfigParser).parse(any(StartupResult.class), jsonCaptor.capture());
 

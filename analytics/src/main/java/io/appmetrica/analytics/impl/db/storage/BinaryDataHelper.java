@@ -11,7 +11,7 @@ import io.appmetrica.analytics.impl.db.connectors.DBConnector;
 import io.appmetrica.analytics.impl.db.constants.Constants;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 
-class BinaryDataHelper implements IBinaryDataHelper {
+public class BinaryDataHelper implements IBinaryDataHelper {
 
     private static final String TAG = "[BinaryDataHelper]";
 

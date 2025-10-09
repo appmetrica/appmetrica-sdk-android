@@ -115,6 +115,11 @@ public static final class io.appmetrica.analytics.coreapi.internal.data.Parser$D
     public static <IN, OUT> [Nullable] OUT parseOrNull([NonNull] io.appmetrica.analytics.coreapi.internal.data.Parser<? super IN, ? extends OUT>, IN)
 }
 
+public interface io.appmetrica.analytics.coreapi.internal.data.ProtobufBinaryStateStorageFactory<T> {
+    public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.data.ProtobufStateStorage<T> create([NonNull] android.content.Context)
+    public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.data.ProtobufStateStorage<T> createForMigration([NonNull] android.content.Context)
+}
+
 public interface io.appmetrica.analytics.coreapi.internal.data.ProtobufConverter<S, P extends io.appmetrica.analytics.protobuf.nano.MessageNano> extends io.appmetrica.analytics.coreapi.internal.data.Converter<S, P>
 
 public interface io.appmetrica.analytics.coreapi.internal.data.ProtobufStateSerializer<T extends io.appmetrica.analytics.protobuf.nano.MessageNano> extends io.appmetrica.analytics.coreapi.internal.data.StateSerializer<T>
@@ -442,8 +447,60 @@ public interface io.appmetrica.analytics.coreapi.internal.servicecomponents.SdkE
     public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.model.SdkEnvironment getSdkEnvironment()
 }
 
+public interface io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceComponentModuleConfig {
+    public abstract boolean isRevenueAutoTrackingEnabled()
+}
+
+public interface io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceComponentModuleReporter {
+    public abstract void handleReport([NonNull] io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceModuleCounterReport)
+}
+
 public interface io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceComponentsInitializer {
     public abstract void onCreate([NonNull] android.content.Context)
+}
+
+public final class io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceModuleCounterReport {
+    public static final [NonNull] io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceModuleCounterReport$Companion Companion
+
+    public <init>([Nullable] String, [Nullable] String, [Nullable] byte[], int)
+    public final [Nullable] String component1()
+    public final [Nullable] String component2()
+    public final [Nullable] byte[] component3()
+    public final int component4()
+    public final [NonNull] io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceModuleCounterReport copy([Nullable] String, [Nullable] String, [Nullable] byte[], int)
+    public boolean equals([Nullable] Object)
+    public final [Nullable] String getName()
+    public final int getType()
+    public final [Nullable] String getValue()
+    public final [Nullable] byte[] getValueBytes()
+    public int hashCode()
+    public [NonNull] String toString()
+}
+
+public static final class io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceModuleCounterReport$Builder {
+    public <init>()
+    public final [NonNull] io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceModuleCounterReport build()
+    public final [NonNull] io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceModuleCounterReport$Builder withName([Nullable] String)
+    public final [NonNull] io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceModuleCounterReport$Builder withType(int)
+    public final [NonNull] io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceModuleCounterReport$Builder withValue([Nullable] String)
+    public final [NonNull] io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceModuleCounterReport$Builder withValueBytes([Nullable] byte[])
+}
+
+public static final class io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceModuleCounterReport$Companion {
+    public final [NonNull] io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceModuleCounterReport$Builder newBuilder()
+}
+
+public interface io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceModuleReporterComponentContext {
+    public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceComponentModuleConfig getConfig()
+    public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceComponentModuleReporter getReporter()
+}
+
+public interface io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceModuleReporterComponentLifecycle {
+    public abstract void subscribe([NonNull] io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceModuleReporterComponentLifecycleListener)
+}
+
+public interface io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceModuleReporterComponentLifecycleListener {
+    public abstract void onMainReporterCreated([NonNull] io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceModuleReporterComponentContext)
 }
 
 public enum io.appmetrica.analytics.coreapi.internal.servicecomponents.applicationstate.ApplicationState {

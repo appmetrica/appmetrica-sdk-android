@@ -2,7 +2,6 @@ package io.appmetrica.analytics.impl.startup.parsing;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import io.appmetrica.analytics.billinginterface.internal.config.BillingConfig;
 import io.appmetrica.analytics.impl.startup.AttributionConfig;
 import io.appmetrica.analytics.impl.startup.CacheControl;
 import io.appmetrica.analytics.impl.startup.CollectingFlags;
@@ -41,8 +40,6 @@ public class StartupResult {
     private StatSending mStatSending;
     @NonNull
     private RetryPolicyConfig mRetryPolicyConfig;
-    @Nullable
-    private BillingConfig autoInappCollectingConfig;
     private boolean mSocket;
     @NonNull
     private CacheControl mCacheControl;
@@ -194,15 +191,6 @@ public class StartupResult {
     @Nullable
     public RetryPolicyConfig getRetryPolicyConfig() {
         return mRetryPolicyConfig;
-    }
-
-    public void setAutoInappCollectingConfig(@NonNull BillingConfig autoInappCollectingConfig) {
-        this.autoInappCollectingConfig = autoInappCollectingConfig;
-    }
-
-    @Nullable
-    public BillingConfig getAutoInappCollectingConfig() {
-        return autoInappCollectingConfig;
     }
 
     public void setSocketEnabled(boolean enabled) {

@@ -2,7 +2,6 @@ package io.appmetrica.analytics.impl;
 
 import android.os.Bundle;
 import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
-import io.appmetrica.analytics.billinginterface.internal.config.BillingConfig;
 import io.appmetrica.analytics.coreapi.internal.identifiers.AdTrackingInfo;
 import io.appmetrica.analytics.coreapi.internal.identifiers.AdTrackingInfoResult;
 import io.appmetrica.analytics.coreapi.internal.identifiers.AdvertisingIdsHolder;
@@ -56,7 +55,6 @@ public class ClientIdentifiersHolderTest extends CommonTest {
     private final Map<String, String> clientClids = new HashMap<String, String>();
     @Mock
     private FeaturesInternal features;
-    private BillingConfig autoInappCollectingConfig;
     private final Bundle modulesConfig = new Bundle();
 
     private final IdentifiersResult mUuidData = new IdentifiersResult(mUuid, IdentifierStatus.OK, null);
@@ -88,7 +86,6 @@ public class ClientIdentifiersHolderTest extends CommonTest {
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        autoInappCollectingConfig = new BillingConfig(1, 2);
         mRequestClids.put("clid0", "0");
         mRequestClids.put("clid1", "1");
         mResponseClids.put("clid2", "2");
@@ -179,7 +176,6 @@ public class ClientIdentifiersHolderTest extends CommonTest {
             .withCustomSdkHosts(customSdkHosts)
             .withEncodedClidsFromResponse(StartupUtils.encodeClids(mResponseClids))
             .withLastClientClidsForStartupRequest(StartupUtils.encodeClids(mRequestClids))
-            .withAutoInappCollectingConfig(autoInappCollectingConfig)
             .withObtainTime(obtainTime)
             .withStartupUpdateConfig(new StartupUpdateConfig(updateInterval))
             .build();

@@ -1,0 +1,13 @@
+syntax = "proto2";
+
+message RemoteBillingConfig {
+
+  message BillingConfig {
+
+    optional int32 sendFrequencySeconds = 1 [default = 86400];
+    optional int32 firstCollectingInappMaxAgeSeconds = 2 [default = 86400];
+  }
+
+  optional bool enabled = 1 [default = true];
+  optional BillingConfig config = 2;
+}

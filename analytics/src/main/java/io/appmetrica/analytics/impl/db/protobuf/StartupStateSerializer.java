@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.impl.db.protobuf;
 
 import androidx.annotation.NonNull;
+import io.appmetrica.analytics.coreutils.internal.data.BaseProtobufStateSerializer;
 import io.appmetrica.analytics.impl.protobuf.client.StartupStateProtobuf;
 import java.io.IOException;
 

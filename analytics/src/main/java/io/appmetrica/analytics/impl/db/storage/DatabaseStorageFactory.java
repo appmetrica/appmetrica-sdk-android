@@ -12,6 +12,7 @@ import io.appmetrica.analytics.impl.db.DatabaseManagerProvider;
 import io.appmetrica.analytics.impl.db.DatabaseStorage;
 import io.appmetrica.analytics.impl.db.IKeyValueTableDbHelper;
 import io.appmetrica.analytics.impl.db.StorageType;
+import io.appmetrica.analytics.impl.db.TablesManager;
 import io.appmetrica.analytics.impl.db.connectors.LockedOnFileDBConnector;
 import io.appmetrica.analytics.impl.db.connectors.SimpleDBConnector;
 import io.appmetrica.analytics.impl.db.constants.Constants;
@@ -126,16 +127,17 @@ public class DatabaseStorageFactory {
         return storage;
     }
 
-    private DatabaseStorage getStorageForAutoInapp() {
-        if (autoInappDatabaseStorage == null) {
-            autoInappDatabaseStorage = new DatabaseStorage(
-                context,
-                databaseStoragePathProviderFactory.create("autoinapp", false)
-                    .getPath(context, new AutoInappDatabaseSimpleNameProvider()),
-                databaseManagerProvider.buildAutoInappDatabaseManager()
-            );
-        }
-        return autoInappDatabaseStorage;
+    public DatabaseStorage createLegacyStorageForMigration(
+        @NonNull String key,
+        @NonNull DatabaseSimpleNameProvider nameProvider,
+        @NonNull TablesManager tablesManager
+    ) {
+        return new DatabaseStorage(
+            context,
+            databaseStoragePathProviderFactory.create(key, false)
+                .getPath(context, nameProvider),
+            tablesManager
+        );
     }
 
     public synchronized DatabaseStorage getStorageForService() {
@@ -203,31 +205,6 @@ public class DatabaseStorageFactory {
             );
         }
         return serviceBinaryDataHelper;
-    }
-
-    public synchronized IBinaryDataHelper getAutoInappBinaryDataHelper() {
-        if (autoInappBinaryDataHelperWrapper == null) {
-            autoInappBinaryDataHelperWrapper = new BinaryDataHelperWrapper(
-                context,
-                StorageType.AUTO_INAPP,
-                getRawAutoInappBinaryDataHelper()
-            );
-        }
-        return autoInappBinaryDataHelperWrapper;
-    }
-
-    public synchronized IBinaryDataHelper getAutoInappBinaryDataHelperForMigration() {
-        return getRawAutoInappBinaryDataHelper();
-    }
-
-    private IBinaryDataHelper getRawAutoInappBinaryDataHelper() {
-        if (autoInappBinaryDataHelper == null) {
-            autoInappBinaryDataHelper = new BinaryDataHelper(
-                new SimpleDBConnector(getStorageForAutoInapp()),
-                Constants.BinaryDataTable.TABLE_NAME
-            );
-        }
-        return autoInappBinaryDataHelper;
     }
 
     public synchronized IKeyValueTableDbHelper getPreferencesDbHelperForService() {

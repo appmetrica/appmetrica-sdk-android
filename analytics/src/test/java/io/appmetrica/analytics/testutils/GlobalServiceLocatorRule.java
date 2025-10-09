@@ -27,6 +27,7 @@ import io.appmetrica.analytics.impl.SdkEnvironmentHolder;
 import io.appmetrica.analytics.impl.SelfDiagnosticReporterStorage;
 import io.appmetrica.analytics.impl.StartupStateHolder;
 import io.appmetrica.analytics.impl.component.ComponentId;
+import io.appmetrica.analytics.impl.component.ServiceModuleReporterComponentLifecycleImpl;
 import io.appmetrica.analytics.impl.crash.ndk.NativeCrashService;
 import io.appmetrica.analytics.impl.db.VitalCommonDataProvider;
 import io.appmetrica.analytics.impl.db.VitalComponentDataProvider;
@@ -146,6 +147,8 @@ public class GlobalServiceLocatorRule extends ExternalResource {
         when(globalServiceLocator.getServiceLifecycleTimeTracker()).thenReturn(mock(ServiceLifecycleTimeTracker.class));
         when(globalServiceLocator.getCurrentProcessDetector()).thenReturn(mock(CurrentProcessDetector.class));
         when(globalServiceLocator.getReferenceHolder()).thenReturn(mock(ReferenceHolder.class));
+        when(globalServiceLocator.getServiceModuleReporterComponentLifecycle())
+            .thenReturn(mock(ServiceModuleReporterComponentLifecycleImpl.class));
         GlobalServiceLocator.setInstance(globalServiceLocator);
     }
 

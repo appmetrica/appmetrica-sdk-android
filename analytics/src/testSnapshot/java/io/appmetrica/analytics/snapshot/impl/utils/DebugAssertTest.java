@@ -51,12 +51,6 @@ public class DebugAssertTest extends CommonTest {
 
     @Test
     public void autoInapp() {
-        // Nothing changed for auto inapp storage
-        // If this test fails, we should check that auto inapp should not migrate.
-        // If it should, add migration and assertion check to DebugAssert#assertAutoInappMigrationChecked
-        if (BuildConfig.API_LEVEL > 115) {
-            throw new AssertionError("Auto inapp migration is not checked: https://nda.ya.ru/t/ecLFWlOn6Njj7b");
-        }
         DebugAssert.assertMigrated(context, StorageType.AUTO_INAPP);
     }
 

@@ -31,6 +31,7 @@ public class ServiceMigrationManager extends MigrationManager {
         SparseArray<MigrationScript> migrations = new SparseArray<>(1);
         migrations.put(SdkData.INITIAL_API_LEVEL, new ServiceMigrationScriptToV112(vitalCommonDataProvider));
         migrations.put(SdkData.MODULE_CONFIGS_ADDED, new ServiceMigrationScriptToV115());
+        migrations.put(SdkData.BILLING_MOVED_TO_SEPARATE_MODULE, new ServiceMigrationScriptToV116());
         return migrations;
     }
 

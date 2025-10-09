@@ -22,7 +22,6 @@ public final class Constants {
     // Old databases
     public static final String OLD_COMPONENT_DATABASE_PREFIX = "db_metrica_";
     public static final String OLD_SERVICE_DATABASE = "metrica_data.db";
-    public static final String OLD_AUTO_INAPP_DATABASE = "metrica_aip.db";
     public static final String OLD_CLIENT_DATABASE = "metrica_client_data.db";
 
     // Databases
@@ -30,7 +29,6 @@ public final class Constants {
     public static final String PRE_LOLLIPOP_DATABASE_PREFIX = FileUtils.SDK_FILES_PREFIX;
     public static final String COMPONENT_DB_PATTERN = "component_%s.db";
     public static final String SERVICE_MAIN_DATABASE = "service_main.db";
-    public static final String AUTO_INAPP_DATABASE = "auto_inapp.db";
     public static final String CLIENT_MAIN_DATABASE = "client.db";
 
     // Update scripts

@@ -55,7 +55,6 @@ internal class DatabaseStorageFactoryTest : CommonTest() {
     private val databaseStoragePathProvider = mock<DatabaseStoragePathProvider> {
         on { getPath(eq(context), any<ComponentDatabaseSimpleNameProvider>()) } doReturn componentStoragePath
         on { getPath(eq(context), any<ServiceDatabaseSimpleNameProvider>()) } doReturn serviceStoragePath
-        on { getPath(eq(context), any<AutoInappDatabaseSimpleNameProvider>()) } doReturn autoInappStoragePath
         on { getPath(eq(context), any<ClientDatabaseSimpleNameProvider>()) } doReturn clientStoragePath
     }
 
@@ -80,10 +79,6 @@ internal class DatabaseStorageFactoryTest : CommonTest() {
 
     @get:Rule
     val serviceDatabaseSimpleNameProviderMockedConstructionRule = constructionRule<ServiceDatabaseSimpleNameProvider>()
-
-    @get:Rule
-    val autoInappDatabaseSimpleNameProviderMockedConstructionRule =
-        constructionRule<AutoInappDatabaseSimpleNameProvider>()
 
     @get:Rule
     val clientDatabaseSimpleNameProviderMockedConstructionRule = constructionRule<ClientDatabaseSimpleNameProvider>()
@@ -309,59 +304,6 @@ internal class DatabaseStorageFactoryTest : CommonTest() {
             .isSameAs(tempStorageMockedConstructionRule.constructionMock.constructed().first())
 
         checkTempCacheDbHelper()
-    }
-
-    @Test
-    fun getAutoInappBinaryDataHelper() {
-        val first = databaseStorageFactory.autoInappBinaryDataHelper
-        val second = databaseStorageFactory.autoInappBinaryDataHelper
-
-        assertThat(first)
-            .isSameAs(second)
-            .isSameAs(binaryDbHelperWrapperMockedConstructionRule.constructionMock.constructed().first())
-
-        assertThat(binaryDbHelperWrapperMockedConstructionRule.constructionMock.constructed()).hasSize(1)
-        assertThat(binaryDbHelperWrapperMockedConstructionRule.argumentInterceptor.flatArguments())
-            .containsExactly(
-                context,
-                StorageType.AUTO_INAPP,
-                binaryDbHelperMockedConstructionRule.constructionMock.constructed().first()
-            )
-        checkBinaryDataHelper()
-    }
-
-    @Test
-    fun getAutoInappBinaryDataHelperForMigration() {
-        val first = databaseStorageFactory.autoInappBinaryDataHelperForMigration
-        val second = databaseStorageFactory.autoInappBinaryDataHelperForMigration
-
-        assertThat(first)
-            .isSameAs(second)
-            .isSameAs(binaryDbHelperMockedConstructionRule.constructionMock.constructed().first())
-
-        checkBinaryDataHelper()
-
-        assertThat(databaseStorageMockedConstructionRule.argumentInterceptor.flatArguments())
-            .containsExactly(
-                context,
-                autoInappStoragePath,
-                autoInappDatabaseManager
-            )
-
-        verify(databaseStoragePathProviderFactory).create("autoinapp", false)
-        verifyNoMoreInteractions(databaseStoragePathProviderFactory)
-
-        verify(databaseStoragePathProvider)
-            .getPath(
-                context,
-                autoInappDatabaseSimpleNameProviderMockedConstructionRule.constructionMock.constructed().first()
-            )
-        verifyNoMoreInteractions(databaseStoragePathProvider)
-
-        assertThat(autoInappDatabaseSimpleNameProviderMockedConstructionRule.constructionMock.constructed())
-            .hasSize(1)
-        assertThat(autoInappDatabaseSimpleNameProviderMockedConstructionRule.argumentInterceptor.flatArguments())
-            .isEmpty()
     }
 
     @Test

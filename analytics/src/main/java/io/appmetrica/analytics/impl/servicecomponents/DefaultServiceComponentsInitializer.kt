@@ -13,6 +13,7 @@ class DefaultServiceComponentsInitializer : ServiceComponentsInitializer {
         "io.appmetrica.analytics.remotepermissions.internal.RemotePermissionsModuleEntryPoint",
         "io.appmetrica.analytics.apphud.internal.ApphudServiceModuleEntryPoint",
         "io.appmetrica.analytics.screenshot.internal.ScreenshotServiceModuleEntryPoint",
+        "io.appmetrica.analytics.billing.internal.BillingServiceModuleEntryPoint",
     )
 
     override fun onCreate(context: Context) {

@@ -78,6 +78,10 @@ public class ServiceMigrationManagerTest extends CommonTest {
         new MockedConstructionRule<>(ServiceMigrationScriptToV115.class);
 
     @Rule
+    public MockedConstructionRule<ServiceMigrationScriptToV116> serviceMigrationScriptToV116MockedConstructionRule =
+        new MockedConstructionRule<>(ServiceMigrationScriptToV116.class);
+
+    @Rule
     public GlobalServiceLocatorRule globalServiceLocatorRule = new GlobalServiceLocatorRule();
 
     private ServiceMigrationManager mMigrationManager;
@@ -108,8 +112,9 @@ public class ServiceMigrationManagerTest extends CommonTest {
         Map<Integer, Class<?>> expectedScriptClassesByVersion = new HashMap<>();
         expectedScriptClassesByVersion.put(112, ServiceMigrationScriptToV112.class);
         expectedScriptClassesByVersion.put(115, ServiceMigrationScriptToV115.class);
+        expectedScriptClassesByVersion.put(116, ServiceMigrationScriptToV116.class);
         SparseArray<MigrationManager.MigrationScript> scripts = mMigrationManager.getScripts();
-        assertThat(extractVersionsAndClasses(scripts)).containsExactlyEntriesOf(expectedScriptClassesByVersion);
+        assertThat(extractVersionsAndClasses(scripts)).containsExactlyInAnyOrderEntriesOf(expectedScriptClassesByVersion);
     }
 
     private Map<Integer, Class<?>> extractVersionsAndClasses(SparseArray<MigrationManager.MigrationScript> input) {

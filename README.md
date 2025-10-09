@@ -54,6 +54,7 @@ configurations.configureEach {
 - **ad-revenue-ironsource-v7** - allows AppMetrica SDK to collect Ad-Revenue events from `com.ironsource.sdk:mediationsdk`.
 - **apphud** - adds integration with `com.apphud:ApphudSDK-Android`.
 - **appsetid** - allows AppMetrica SDK to collect App Set IDs.
+- **billing** - allows AppMetrica SDK to collect billing events from Google Billing Library.
 - **identifiers** - allows AppMetrica SDK to collect ADV IDs.
 - **location** - allows AppMetrica SDK to collect location.
 - **ndkcrashes** - allows AppMetrica SDK to handle native crashes on Android.
@@ -65,6 +66,7 @@ The modules described below are not optional, but they do require external depen
 You can find the necessary dependencies in the modules' README files.
 
 - **billing-v6** - wrapper for `com.android.billingclient:billing`.
+- **billing-v8** - wrapper for `com.android.billingclient:billing`.
 - **gpllibrary** - wrapper for `com.google.android.gms:play-services-location`.
 
 ### Module dependencies

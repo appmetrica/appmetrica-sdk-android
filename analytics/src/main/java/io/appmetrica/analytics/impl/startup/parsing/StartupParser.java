@@ -41,8 +41,6 @@ public class StartupParser {
     @NonNull
     private final StatSendingConverter mStatSendingConverter;
     @NonNull
-    private final AutoInappCollectingConfigParser autoInappCollectingConfigParser;
-    @NonNull
     private final CacheControlParser mCacheControlParser;
     @NonNull
     private final AttributionConfigParser attributionConfigParser;
@@ -64,7 +62,6 @@ public class StartupParser {
             new PermissionsCollectingConfigParser(),
             new StatSendingConverter(),
             new CacheControlParser(),
-            new AutoInappCollectingConfigParser(),
             new AttributionConfigParser(),
             new StartupUpdateConfigParser(),
             new ModulesRemoteConfigsParser(),
@@ -81,7 +78,6 @@ public class StartupParser {
         @NonNull PermissionsCollectingConfigParser permissionsCollectingConfigParser,
         @NonNull StatSendingConverter statSendingConverter,
         @NonNull CacheControlParser cacheControlParser,
-        @NonNull AutoInappCollectingConfigParser autoInappCollectingConfigParser,
         @NonNull AttributionConfigParser attributionConfigParser,
         @NonNull StartupUpdateConfigParser startupUpdateConfigParser,
         @NonNull ModulesRemoteConfigsParser modulesRemoteConfigsParser,
@@ -93,7 +89,6 @@ public class StartupParser {
         mPermissionsCollectingConfigParser = permissionsCollectingConfigParser;
         mStatSendingConverter = statSendingConverter;
         mCacheControlParser = cacheControlParser;
-        this.autoInappCollectingConfigParser = autoInappCollectingConfigParser;
         this.attributionConfigParser = attributionConfigParser;
         this.jsonResponseProvider = jsonResponseProvider;
         this.startupUpdateConfigParser = startupUpdateConfigParser;
@@ -144,7 +139,6 @@ public class StartupParser {
         mHostsParser.parse(result, response);
         mRetryPolicyConfigParser.parse(result, response);
         mPermissionsCollectingConfigParser.parseIfEnabled(result, response);
-        autoInappCollectingConfigParser.parse(result, response);
         result.setCacheControl(mCacheControlParser.parseFromJson(response));
         attributionConfigParser.parse(result, response);
         startupUpdateConfigParser.parse(result, response);

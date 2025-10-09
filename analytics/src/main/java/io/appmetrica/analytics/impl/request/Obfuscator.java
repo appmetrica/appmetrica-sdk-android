@@ -18,7 +18,6 @@ public class Obfuscator {
         mMapping.put(UrlParts.PERMISSIONS_COLLECTING, "pc");
         mMapping.put(UrlParts.RETRY_POLICY, "rp");
         mMapping.put(UrlParts.CACHE_CONTROL, "cc");
-        mMapping.put(UrlParts.AUTO_INAPP_COLLECTING, "aic");
         mMapping.put(UrlParts.ATTRIBUTION, "at");
         mMapping.put(UrlParts.STARTUP_UPDATE, "su");
         mMapping.put(UrlParts.FEATURE_SSL_PINNING, "sp");

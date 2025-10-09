@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.component.sessionextras
 
-import io.appmetrica.analytics.impl.db.protobuf.BaseProtobufStateSerializer
+import io.appmetrica.analytics.coreutils.internal.data.BaseProtobufStateSerializer
 import io.appmetrica.analytics.impl.protobuf.client.SessionExtrasProtobuf
 
 internal class SessionExtrasSerializer : BaseProtobufStateSerializer<SessionExtrasProtobuf.SessionExtras>() {

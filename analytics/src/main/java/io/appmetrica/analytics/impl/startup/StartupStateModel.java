@@ -2,7 +2,6 @@ package io.appmetrica.analytics.impl.startup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import io.appmetrica.analytics.billinginterface.internal.config.BillingConfig;
 import io.appmetrica.analytics.coreutils.internal.collection.CollectionUtils;
 import io.appmetrica.analytics.impl.DefaultValues;
 import io.appmetrica.analytics.impl.protobuf.client.StartupStateProtobuf;
@@ -69,8 +68,6 @@ public class StartupStateModel {
     public final boolean outdated;
 
     @Nullable
-    public final BillingConfig autoInappCollectingConfig;
-    @Nullable
     public final CacheControl cacheControl;
     @Nullable
     public final AttributionConfig attributionConfig;
@@ -118,7 +115,6 @@ public class StartupStateModel {
         } else {
             this.retryPolicyConfig = builder.mRetryPolicyConfig;
         }
-        this.autoInappCollectingConfig = builder.autoInappCollectingConfig;
         this.cacheControl = builder.mCacheControl;
         this.attributionConfig = builder.attributionConfig;
         this.startupUpdateConfig = builder.startupUpdateConfig == null ?
@@ -160,7 +156,6 @@ public class StartupStateModel {
             .withRetryPolicyConfig(retryPolicyConfig)
             .withRetryPolicyConfig(retryPolicyConfig)
             .withCacheControl(cacheControl)
-            .withAutoInappCollectingConfig(autoInappCollectingConfig)
             .withAttributionConfig(attributionConfig)
             .withStartupUpdateConfig(startupUpdateConfig)
             .withModulesRemoteConfigs(modulesRemoteConfigs)
@@ -193,7 +188,6 @@ public class StartupStateModel {
             ", obtainServerTime=" + obtainServerTime +
             ", firstStartupServerTime=" + firstStartupServerTime +
             ", outdated=" + outdated +
-            ", autoInappCollectingConfig=" + autoInappCollectingConfig +
             ", cacheControl=" + cacheControl +
             ", attributionConfig=" + attributionConfig +
             ", startupUpdateConfig=" + startupUpdateConfig +
@@ -248,8 +242,6 @@ public class StartupStateModel {
         boolean mOutdated;
         @Nullable
         RetryPolicyConfig mRetryPolicyConfig;
-        @Nullable
-        BillingConfig autoInappCollectingConfig;
         @Nullable
         CacheControl mCacheControl;
         @Nullable
@@ -373,11 +365,6 @@ public class StartupStateModel {
 
         public StartupStateBuilder withRetryPolicyConfig(@Nullable RetryPolicyConfig retryPolicyConfig) {
             mRetryPolicyConfig = retryPolicyConfig;
-            return this;
-        }
-
-        public StartupStateBuilder withAutoInappCollectingConfig(@Nullable BillingConfig autoInappCollectingConfig) {
-            this.autoInappCollectingConfig = autoInappCollectingConfig;
             return this;
         }
 

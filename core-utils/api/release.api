@@ -156,6 +156,12 @@ public final class io.appmetrica.analytics.coreutils.internal.collection.Collect
     public static final <T> [NonNull] java.util.Set<T> unmodifiableSetOf([NonNull] T...)
 }
 
+public abstract class io.appmetrica.analytics.coreutils.internal.data.BaseProtobufStateSerializer<T extends io.appmetrica.analytics.protobuf.nano.MessageNano> implementation io.appmetrica.analytics.coreapi.internal.data.ProtobufStateSerializer<T> {
+    public <init>()
+    public abstract [NonNull] T defaultValue()
+    public [NonNull] byte[] toByteArray([NonNull] T)
+}
+
 public class io.appmetrica.analytics.coreutils.internal.db.DBUtils {
     public <init>()
     public static void cursorRowToContentValues(android.database.Cursor, android.content.ContentValues)

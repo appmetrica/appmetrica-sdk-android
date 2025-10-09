@@ -120,6 +120,7 @@ public interface io.appmetrica.analytics.modulesapi.internal.common.ExecutorProv
     public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor getDefaultExecutor()
     public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.executors.InterruptionSafeThread getInterruptionThread([NonNull] String, [NonNull] String, [NonNull] Runnable)
     public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor getModuleExecutor()
+    public abstract [NonNull] java.util.concurrent.Executor getReportRunnableExecutor()
     public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor getSupportIOExecutor()
     public abstract [NonNull] java.util.concurrent.Executor getUiExecutor()
 }
@@ -317,6 +318,7 @@ public interface io.appmetrica.analytics.modulesapi.internal.service.ServiceCont
     public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.PlatformIdentifiers getPlatformIdentifiers()
     public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.servicecomponents.SdkEnvironmentProvider getSdkEnvironmentProvider()
     public abstract [NonNull] io.appmetrica.analytics.modulesapi.internal.common.ModuleSelfReporter getSelfReporter()
+    public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceModuleReporterComponentLifecycle getServiceModuleReporterComponentLifecycle()
     public abstract [NonNull] io.appmetrica.analytics.modulesapi.internal.service.ServiceStorageProvider getServiceStorageProvider()
     public abstract [NonNull] io.appmetrica.analytics.modulesapi.internal.service.ServiceWakeLock getServiceWakeLock()
 }
@@ -329,6 +331,7 @@ public interface io.appmetrica.analytics.modulesapi.internal.service.ServiceNetw
 }
 
 public interface io.appmetrica.analytics.modulesapi.internal.service.ServiceStorageProvider {
+    public abstract <T, P extends io.appmetrica.analytics.protobuf.nano.MessageNano> [NonNull] io.appmetrica.analytics.coreapi.internal.data.ProtobufBinaryStateStorageFactory<T> createBinaryStateStorageFactory([NonNull] String, [NonNull] io.appmetrica.analytics.coreapi.internal.data.ProtobufStateSerializer<P>, [NonNull] io.appmetrica.analytics.coreapi.internal.data.ProtobufConverter<T, P>)
     public abstract [Nullable] java.io.File getAppDataStorage()
     public abstract [Nullable] java.io.File getAppFileStorage()
     public abstract [NonNull] android.database.sqlite.SQLiteOpenHelper getDbStorage()

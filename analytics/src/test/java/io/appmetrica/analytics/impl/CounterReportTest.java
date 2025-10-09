@@ -8,7 +8,6 @@ import android.util.Base64;
 import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor;
 import io.appmetrica.analytics.coreapi.internal.permission.PermissionState;
 import io.appmetrica.analytics.coreutils.internal.time.SystemTimeProvider;
-import io.appmetrica.analytics.impl.billing.ProductInfoWrapper;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.impl.protobuf.backend.EventStart;
 import io.appmetrica.analytics.impl.request.ReportRequestConfig;
@@ -19,7 +18,6 @@ import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import io.appmetrica.analytics.testutils.RandomStringGenerator;
 import io.appmetrica.analytics.testutils.TestUtils;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -351,18 +349,6 @@ public class CounterReportTest extends CommonTest {
         assertThat(CounterReport.formUpdatePreActivationConfig().getType()).isEqualTo(
             InternalEvents.EVENT_TYPE_UPDATE_PRE_ACTIVATION_CONFIG.getTypeId()
         );
-    }
-
-    @Test
-    public void testFormAutoInappEvent() {
-        final ProductInfoWrapper productInfoWrapper = mock(ProductInfoWrapper.class);
-        final String data = "some_data";
-        when(productInfoWrapper.getDataToSend()).thenReturn(data.getBytes(StandardCharsets.UTF_8));
-
-        final CounterReport report = CounterReport.formAutoInappEvent(productInfoWrapper);
-
-        assertThat(report.getType()).isEqualTo(InternalEvents.EVENT_TYPE_SEND_REVENUE_EVENT.getTypeId());
-        assertThat(report.getValueBytes()).isEqualTo(data.getBytes(StandardCharsets.UTF_8));
     }
 
     @Test

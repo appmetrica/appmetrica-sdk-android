@@ -12,7 +12,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.robolectric.RobolectricTestRunner;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
@@ -59,10 +58,5 @@ public class MainReporterComponentUnitFieldsFactoryTest extends ComponentUnitFie
         softly.assertThat(listener.getReferrerHandledNotifier()).isSameAs(mMainReporterComponentUnit);
         softly.assertThat(listener.getListener()).isExactlyInstanceOf(MainReporterComponentUnit.MainReporterListener.class);
         softly.assertAll();
-    }
-
-    @Test
-    public void testCreateBillingMonitorWrapper() {
-        assertThat(mainReporterComponentUnitFieldsFactory.createBillingMonitorWrapper(mMainReporterComponentUnit)).isNotNull();
     }
 }

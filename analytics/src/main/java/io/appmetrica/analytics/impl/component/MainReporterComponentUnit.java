@@ -10,7 +10,6 @@ import io.appmetrica.analytics.impl.CounterReport;
 import io.appmetrica.analytics.impl.DataSendingRestrictionControllerImpl;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.InternalEvents;
-import io.appmetrica.analytics.impl.billing.BillingMonitorWrapper;
 import io.appmetrica.analytics.impl.component.processor.EventProcessingStrategyFactory;
 import io.appmetrica.analytics.impl.component.processor.factory.RegularMainReporterFactory;
 import io.appmetrica.analytics.impl.referrer.common.ReferrerInfo;
@@ -36,8 +35,6 @@ public class MainReporterComponentUnit extends ComponentUnit
     private final ReferrerListenerNotifier mReferrerListener;
     @NonNull
     private final DataSendingRestrictionControllerImpl dateSendingRestrictionController;
-    @NonNull
-    private final BillingMonitorWrapper billingMonitorWrapper;
 
     public MainReporterComponentUnit(@NonNull Context context,
                                      @NonNull StartupState startupState,
@@ -95,8 +92,10 @@ public class MainReporterComponentUnit extends ComponentUnit
         factory.mutateHandlers(EVENT_TYPE_REGULAR, new RegularMainReporterFactory(factory.getHandlersProvider()));
         mReferrerListener = fieldsFactory.createReferrerListener(this);
         dateSendingRestrictionController = controller;
-        billingMonitorWrapper = fieldsFactory.createBillingMonitorWrapper(this);
-        billingMonitorWrapper.maybeStartWatching(startupState, sdkConfig.revenueAutoTrackingEnabled);
+        GlobalServiceLocator.getInstance().getServiceModuleReporterComponentLifecycle()
+            .onMainReporterCreated(
+                new ServiceModuleReporterComponentContextImpl(this, sdkConfig)
+            );
     }
 
     @Override
@@ -142,11 +141,5 @@ public class MainReporterComponentUnit extends ComponentUnit
     @Override
     public void subscribeForReferrer() {
         mReferrerHolder.subscribe(mReferrerListener);
-    }
-
-    @Override
-    public void onStartupChanged(@NonNull StartupState newState) {
-        super.onStartupChanged(newState);
-        billingMonitorWrapper.onStartupStateChanged(newState);
     }
 }

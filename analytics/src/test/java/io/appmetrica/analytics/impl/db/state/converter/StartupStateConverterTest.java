@@ -1,7 +1,6 @@
 package io.appmetrica.analytics.impl.db.state.converter;
 
 import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
-import io.appmetrica.analytics.billinginterface.internal.config.BillingConfig;
 import io.appmetrica.analytics.impl.protobuf.client.StartupStateProtobuf;
 import io.appmetrica.analytics.impl.startup.AttributionConfig;
 import io.appmetrica.analytics.impl.startup.CacheControl;
@@ -48,8 +47,6 @@ public class StartupStateConverterTest extends CommonTest {
     @Mock
     private CacheControlConverter mCacheControlConverter;
     @Mock
-    private AutoInappCollectingConfigConverter autoInappCollectingConfigConverter;
-    @Mock
     private AttributionConfigConverter attributionConfigConverter;
     @Mock
     private StartupUpdateConfigConverter startupUpdateConfigConverter;
@@ -58,10 +55,6 @@ public class StartupStateConverterTest extends CommonTest {
     private CacheControl mCacheControl;
     @Mock
     private StartupStateProtobuf.StartupState.CacheControl mNanoCacheControl;
-    @Mock
-    private BillingConfig autoInappCollectingConfig;
-    @Mock
-    private StartupStateProtobuf.StartupState.AutoInappCollectingConfig autoInappCollectingNanoConfig;
     @Mock
     private AttributionConfig attributionConfig;
     @Mock
@@ -125,8 +118,6 @@ public class StartupStateConverterTest extends CommonTest {
         mConverter = new StartupStateConverter();
         MockitoAnnotations.openMocks(this);
 
-        when(autoInappCollectingConfigConverter.toModel(autoInappCollectingNanoConfig)).thenReturn(autoInappCollectingConfig);
-        when(autoInappCollectingConfigConverter.fromModel(autoInappCollectingConfig)).thenReturn(autoInappCollectingNanoConfig);
         when(customSdkHostsConverter.toModel(customSdkHostsProto)).thenReturn(customSdkHostsModel);
         when(customSdkHostsConverter.fromModel(customSdkHostsModel)).thenReturn(customSdkHostsProto);
 
@@ -185,7 +176,6 @@ public class StartupStateConverterTest extends CommonTest {
 
         stateProto.cacheControl = mNanoCacheControl;
 
-        stateProto.autoInappCollectingConfig = autoInappCollectingNanoConfig;
         stateProto.attribution = attributionNanoConfig;
         stateProto.startupUpdateConfig = startupUpdateNanoConfig;
         stateProto.modulesRemoteConfigs = modulesProto;
@@ -224,7 +214,6 @@ public class StartupStateConverterTest extends CommonTest {
         assertions.checkField("retryPolicyConfig", new RetryPolicyConfig(MAX_RETRY_INTERVAL_COUNT, EXPONENTIAL_MULTIPLIER));
         assertions.checkField("outdated", OUTDATED);
         assertions.checkField("cacheControl", mCacheControl);
-        assertions.checkField("autoInappCollectingConfig", autoInappCollectingConfig);
         assertions.checkField("attributionConfig", attributionConfig);
         assertions.checkField("customSdkHosts", customSdkHostsModel);
         assertions.checkField("startupUpdateConfig", startupUpdateConfig);
@@ -271,7 +260,6 @@ public class StartupStateConverterTest extends CommonTest {
             .withOutdated(OUTDATED)
             .withRetryPolicyConfig(new RetryPolicyConfig(MAX_RETRY_INTERVAL_COUNT, EXPONENTIAL_MULTIPLIER))
             .withCacheControl(mCacheControl)
-            .withAutoInappCollectingConfig(autoInappCollectingConfig)
             .withAttributionConfig(attributionConfig)
             .withCustomSdkHosts(customSdkHostsModel)
             .withStartupUpdateConfig(startupUpdateConfig)
@@ -315,7 +303,6 @@ public class StartupStateConverterTest extends CommonTest {
         assertions.checkField("retryExponentialMultiplier", EXPONENTIAL_MULTIPLIER);
         assertions.checkField("outdated", OUTDATED);
         assertions.checkField("cacheControl", mNanoCacheControl);
-        assertions.checkField("autoInappCollectingConfig", autoInappCollectingNanoConfig);
         assertions.checkField("attribution", attributionNanoConfig);
         assertions.checkField("customSdkHosts", customSdkHostsProto);
         assertions.checkField("startupUpdateConfig", startupUpdateNanoConfig);
@@ -342,7 +329,6 @@ public class StartupStateConverterTest extends CommonTest {
             .withPermissionsCollectingConfig(null)
             .withRetryPolicyConfig(null)
             .withCacheControl(null)
-            .withAutoInappCollectingConfig(null)
             .withAttributionConfig(null)
             .withCustomSdkHosts(null)
             .withExternalAttributionConfig(null)
@@ -358,7 +344,6 @@ public class StartupStateConverterTest extends CommonTest {
             "bleCollectingConfig",
             "throttlingConfig",
             "cacheControl",
-            "autoInappCollectingConfig",
             "attribution"
         );
     }
@@ -369,7 +354,6 @@ public class StartupStateConverterTest extends CommonTest {
         stateProto.statSending = null;
         stateProto.permissionsCollectingConfig = null;
         stateProto.cacheControl = null;
-        stateProto.autoInappCollectingConfig = null;
         stateProto.attribution = null;
         stateProto.startupUpdateConfig = null;
         stateProto.modulesRemoteConfigs = null;
@@ -379,7 +363,6 @@ public class StartupStateConverterTest extends CommonTest {
             "statSending",
             "permissionsCollectingConfig",
             "cacheControl",
-            "autoInappCollectingConfig",
             "attributionConfig"
         ).containsOnlyNulls();
         assertThat(stateModel.customSdkHosts).isEmpty();

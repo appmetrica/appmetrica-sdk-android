@@ -1,9 +1,6 @@
 package io.appmetrica.analytics
 
 import android.location.Location
-import io.appmetrica.analytics.billinginterface.internal.Period
-import io.appmetrica.analytics.billinginterface.internal.ProductInfo
-import io.appmetrica.analytics.billinginterface.internal.config.BillingConfig
 import io.appmetrica.analytics.coreapi.internal.permission.PermissionState
 import io.appmetrica.analytics.impl.AppEnvironment.EnvironmentRevision
 import io.appmetrica.analytics.impl.BackgroundRestrictionsState
@@ -46,9 +43,6 @@ class AllFieldsTest(private val clazz: Class<*>) : CommonTest() {
             arrayOf(ClientDescription::class.java),
             arrayOf(IdentifiersResult::class.java),
             arrayOf(CacheControl::class.java),
-            arrayOf(BillingConfig::class.java),
-            arrayOf(Period::class.java),
-            arrayOf(ProductInfo::class.java),
             arrayOf(StartupParamsItem::class.java),
             arrayOf(TempCacheEntry::class.java),
             arrayOf(AdvIdGetterController.CanTrackIdentifiers::class.java)

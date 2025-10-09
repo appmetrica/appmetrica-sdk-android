@@ -21,6 +21,8 @@ internal class ExecutorProviderImpl : ExecutorProvider {
 
     override fun getUiExecutor(): Executor = serviceExecutorProvider.uiExecutor
 
+    override fun getReportRunnableExecutor(): Executor = serviceExecutorProvider.reportRunnableExecutor
+
     override fun getInterruptionThread(
         moduleIdentifier: String,
         threadNamePostfix: String,

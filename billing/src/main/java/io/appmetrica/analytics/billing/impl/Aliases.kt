@@ -1,0 +1,7 @@
+package io.appmetrica.analytics.billing.impl
+
+import io.appmetrica.analytics.billing.impl.protobuf.client.RemoteBillingConfigProtobuf
+
+internal typealias BillingConfigProto = RemoteBillingConfigProtobuf.RemoteBillingConfig.BillingConfig
+
+internal typealias RemoteBillingConfigProto = RemoteBillingConfigProtobuf.RemoteBillingConfig

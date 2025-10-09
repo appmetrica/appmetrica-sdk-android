@@ -3,9 +3,10 @@ package io.appmetrica.analytics.impl.db.state.factory;
 import android.content.Context;
 import androidx.annotation.NonNull;
 import io.appmetrica.analytics.coreapi.internal.data.IBinaryDataHelper;
+import io.appmetrica.analytics.coreapi.internal.data.ProtobufBinaryStateStorageFactory;
+import io.appmetrica.analytics.coreapi.internal.data.ProtobufConverter;
+import io.appmetrica.analytics.coreapi.internal.data.ProtobufStateSerializer;
 import io.appmetrica.analytics.coreapi.internal.data.ProtobufStateStorage;
-import io.appmetrica.analytics.impl.billing.AutoInappCollectingInfo;
-import io.appmetrica.analytics.impl.billing.AutoInappCollectingInfoConverter;
 import io.appmetrica.analytics.impl.clids.ClidsInfo;
 import io.appmetrica.analytics.impl.db.protobuf.ProtobufStateStorageImpl;
 import io.appmetrica.analytics.impl.db.state.converter.AppPermissionsStateConverter;
@@ -16,21 +17,26 @@ import io.appmetrica.analytics.impl.permissions.AppPermissionsState;
 import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoData;
 import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoDataConverter;
 import io.appmetrica.analytics.impl.protobuf.client.AppPermissionsStateProtobuf;
-import io.appmetrica.analytics.impl.protobuf.client.AutoInappCollectingInfoProto;
 import io.appmetrica.analytics.impl.protobuf.client.ClidsInfoProto;
 import io.appmetrica.analytics.impl.protobuf.client.PreloadInfoProto;
 import io.appmetrica.analytics.impl.protobuf.client.StartupStateProtobuf;
 import io.appmetrica.analytics.impl.startup.StartupStateModel;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
+import io.appmetrica.analytics.protobuf.nano.MessageNano;
 import java.util.Collection;
 import java.util.HashMap;
 
-public interface StorageFactory<T> {
+public interface StorageFactory<T> extends ProtobufBinaryStateStorageFactory<T>  {
 
+    @NonNull
     ProtobufStateStorage<T> create(@NonNull Context context);
 
+    @NonNull
     ProtobufStateStorage<T> createForMigration(@NonNull Context context);
 
     class Provider {
+
+        private static final String TAG = "[StorageFactory.Provider]";
 
         private static final class InstanceHolder {
             static final Provider INSTANCE = new Provider();
@@ -42,6 +48,16 @@ public interface StorageFactory<T> {
 
         public static <T> StorageFactory<Collection<T>> getFactoryForCollection(Class<T> clazz) {
             return InstanceHolder.INSTANCE.getInternalForCollection(clazz);
+        }
+
+        @NonNull
+        public static <T, P extends MessageNano> StorageFactory<T> createCustomFactory(
+            String key,
+            ProtobufStateSerializer<P> serializer,
+            ProtobufConverter<T, P> converter
+        ) {
+            DebugLogger.INSTANCE.info(TAG, "createCustomFactory for key: %s", key);
+            return InstanceHolder.INSTANCE.createCustomStorageFactory(key, serializer, converter);
         }
 
         private final HashMap<Class<?>, StorageFactory<?>> mFactories = new HashMap<Class<?>, StorageFactory<?>>();
@@ -133,35 +149,6 @@ public interface StorageFactory<T> {
                     }
                 };
 
-        private final StorageFactory<AutoInappCollectingInfo> autoInappCollectingStorageFactory =
-                new StorageFactoryImpl<AutoInappCollectingInfo>() {
-                    @NonNull
-                    @Override
-                    protected ProtobufStateStorage<AutoInappCollectingInfo> createWithHelper(
-                            @NonNull Context context,
-                            @NonNull IBinaryDataHelper helper
-                    ) {
-                        return new ProtobufStateStorageImpl<AutoInappCollectingInfo,
-                                AutoInappCollectingInfoProto.AutoInappCollectingInfo>(
-                                "auto_inapp_collecting_info_data",
-                                helper,
-                                new StateSerializerFactory(context).createAutoInappCollectingInfoSerializer(),
-                                new AutoInappCollectingInfoConverter()
-                        );
-                    }
-
-                    @NonNull
-                    @Override
-                    protected IBinaryDataHelper getMainBinaryDataHelper(@NonNull Context context) {
-                        return DatabaseStorageFactory.getInstance(context).getAutoInappBinaryDataHelper();
-                    }
-
-                    @NonNull
-                    @Override
-                    protected IBinaryDataHelper getMigrationBinaryDataHelper(@NonNull Context context) {
-                        return DatabaseStorageFactory.getInstance(context).getAutoInappBinaryDataHelperForMigration();
-                    }
-                };
         private final StorageFactory<ClidsInfo> clidsInfoStorageFactory =
                 new StorageFactoryImpl<ClidsInfo>() {
                     @NonNull
@@ -195,7 +182,6 @@ public interface StorageFactory<T> {
             mFactories.put(StartupStateModel.class, mStartupStateStorageFactory);
             mFactories.put(AppPermissionsState.class, mAppPermissionsStateStorageFactory);
             mFactories.put(PreloadInfoData.class, preloadInfoDataStorageFactory);
-            mFactories.put(AutoInappCollectingInfo.class, autoInappCollectingStorageFactory);
             mFactories.put(ClidsInfo.class, clidsInfoStorageFactory);
         }
 
@@ -207,6 +193,40 @@ public interface StorageFactory<T> {
         @SuppressWarnings("unchecked")
         <T> StorageFactory<Collection<T>> getInternalForCollection(Class<T> clazz) {
             return (StorageFactory<Collection<T>>) mFactories.get(clazz);
+        }
+
+        <T, P extends MessageNano> StorageFactory<T> createCustomStorageFactory(
+            String key,
+            ProtobufStateSerializer<P> serializer,
+            ProtobufConverter<T, P> converter
+        ) {
+            return new StorageFactoryImpl<T>() {
+                @NonNull
+                @Override
+                protected ProtobufStateStorage<T> createWithHelper(
+                    @NonNull Context context,
+                    @NonNull IBinaryDataHelper helper
+                ) {
+                    return new ProtobufStateStorageImpl<T, P>(
+                        key,
+                        helper,
+                        new StateSerializerFactory(context).createCustomSerializer(serializer),
+                        converter
+                    );
+                }
+
+                @NonNull
+                @Override
+                protected IBinaryDataHelper getMainBinaryDataHelper(@NonNull Context context) {
+                    return DatabaseStorageFactory.getInstance(context).getServiceBinaryDataHelper();
+                }
+
+                @NonNull
+                @Override
+                protected IBinaryDataHelper getMigrationBinaryDataHelper(@NonNull Context context) {
+                    return DatabaseStorageFactory.getInstance(context).getServiceBinaryDataHelperForMigration();
+                }
+            };
         }
     }
 }

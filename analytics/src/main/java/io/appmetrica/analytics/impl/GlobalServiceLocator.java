@@ -19,6 +19,7 @@ import io.appmetrica.analytics.impl.clids.ClidsPriorityProvider;
 import io.appmetrica.analytics.impl.clids.ClidsSatelliteCheckedProvider;
 import io.appmetrica.analytics.impl.clids.ClidsStateProvider;
 import io.appmetrica.analytics.impl.clids.SatelliteClidsInfoProvider;
+import io.appmetrica.analytics.impl.component.ServiceModuleReporterComponentLifecycleImpl;
 import io.appmetrica.analytics.impl.crash.ndk.NativeCrashService;
 import io.appmetrica.analytics.impl.db.VitalDataProviderStorage;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesServiceDbStorage;
@@ -152,6 +153,9 @@ public final class GlobalServiceLocator {
     private final ServiceLifecycleTimeTracker serviceLifecycleTimeTracker = new ServiceLifecycleTimeTracker();
     @NonNull
     private final ReferenceHolder referenceHolder = new ReferenceHolder();
+    @NonNull
+    private final ServiceModuleReporterComponentLifecycleImpl serviceModuleReporterComponentLifecycle =
+        new ServiceModuleReporterComponentLifecycleImpl();
 
     private GlobalServiceLocator(@NonNull Context applicationContext) {
         mContext = applicationContext;
@@ -586,6 +590,11 @@ public final class GlobalServiceLocator {
     @NonNull
     public ReferenceHolder getReferenceHolder() {
         return referenceHolder;
+    }
+
+    @NonNull
+    public ServiceModuleReporterComponentLifecycleImpl getServiceModuleReporterComponentLifecycle() {
+        return serviceModuleReporterComponentLifecycle;
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)

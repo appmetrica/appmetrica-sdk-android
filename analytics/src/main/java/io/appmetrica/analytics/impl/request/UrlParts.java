@@ -36,7 +36,6 @@ public final class UrlParts {
     public static final String APP_SYSTEM = "app_system_flag";
     public static final String INSTALL_REFERRER_SOURCE = "install_referrer_source";
     public static final String CACHE_CONTROL = "cache_control";
-    public static final String AUTO_INAPP_COLLECTING = "auto_inapp_collecting";
     public static final String ATTRIBUTION = "attribution";
     public static final String EXTERNAL_ATTRIBUTION = "external_attribution";
 

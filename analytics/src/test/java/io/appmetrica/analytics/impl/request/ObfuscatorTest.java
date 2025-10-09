@@ -28,7 +28,6 @@ public class ObfuscatorTest extends CommonTest {
             new Object[]{"retry_policy", "rp"},
             new Object[]{"not_to_be_obfuscated", "not_to_be_obfuscated"},
             new Object[]{"cache_control", "cc"},
-            new Object[]{"auto_inapp_collecting", "aic"},
             new Object[]{"attribution", "at"},
             new Object[]{"startup_update", "su"},
             new Object[]{"ssl_pinning", "sp"},

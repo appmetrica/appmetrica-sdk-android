@@ -13,7 +13,6 @@ import io.appmetrica.analytics.coreapi.internal.permission.PermissionState;
 import io.appmetrica.analytics.coreutils.internal.StringUtils;
 import io.appmetrica.analytics.coreutils.internal.collection.CollectionUtils;
 import io.appmetrica.analytics.coreutils.internal.time.SystemTimeProvider;
-import io.appmetrica.analytics.impl.billing.ProductInfoWrapper;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import io.appmetrica.analytics.protobuf.nano.MessageNano;
 import java.util.Collection;
@@ -498,16 +497,6 @@ public class CounterReport implements CounterReportApi, Parcelable {
     public static CounterReport formUpdatePreActivationConfig() {
         CounterReport counterReport = new CounterReport();
         counterReport.setType(InternalEvents.EVENT_TYPE_UPDATE_PRE_ACTIVATION_CONFIG.getTypeId());
-        return counterReport;
-    }
-
-    @NonNull
-    public static CounterReport formAutoInappEvent(
-        @NonNull final ProductInfoWrapper productInfoWrapper
-    ) {
-        CounterReport counterReport = new CounterReport();
-        counterReport.setType(InternalEvents.EVENT_TYPE_SEND_REVENUE_EVENT.getTypeId());
-        counterReport.setValueBytes(productInfoWrapper.getDataToSend());
         return counterReport;
     }
 

@@ -2,7 +2,6 @@ package io.appmetrica.analytics.impl.startup
 
 import android.content.Context
 import androidx.annotation.VisibleForTesting
-import io.appmetrica.analytics.billinginterface.internal.config.BillingConfig
 import io.appmetrica.analytics.coreapi.internal.data.ProtobufStateStorage
 import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.db.VitalCommonDataProvider
@@ -38,7 +37,6 @@ internal class StartupState private constructor(
     val obtainServerTime: Long = startupStateModel.obtainServerTime
     val firstStartupServerTime: Long = startupStateModel.firstStartupServerTime
     val outdated: Boolean = startupStateModel.outdated
-    val autoInappCollectingConfig: BillingConfig? = startupStateModel.autoInappCollectingConfig
     val cacheControl: CacheControl? = startupStateModel.cacheControl
     val attributionConfig: AttributionConfig? = startupStateModel.attributionConfig
     val startupUpdateConfig: StartupUpdateConfig = startupStateModel.startupUpdateConfig
@@ -101,9 +99,6 @@ internal class StartupState private constructor(
         }
 
         fun withRetryPolicyConfig(value: RetryPolicyConfig?) = this.also { modelBuilder.withRetryPolicyConfig(value) }
-        fun withAutoInappCollectingConfig(value: BillingConfig?) = this.also {
-            modelBuilder.withAutoInappCollectingConfig(value)
-        }
 
         fun withCacheControl(value: CacheControl?) = this.also { modelBuilder.withCacheControl(value) }
 

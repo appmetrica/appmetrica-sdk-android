@@ -7,11 +7,13 @@ import io.appmetrica.analytics.coreapi.internal.data.ProtobufStateStorage;
 
 public abstract class StorageFactoryImpl<T> implements StorageFactory<T> {
 
+    @NonNull
     @Override
     public ProtobufStateStorage<T> create(@NonNull Context context) {
         return createWithHelper(context, getMainBinaryDataHelper(context));
     }
 
+    @NonNull
     @Override
     public ProtobufStateStorage<T> createForMigration(@NonNull Context context) {
         return createWithHelper(context, getMigrationBinaryDataHelper(context));

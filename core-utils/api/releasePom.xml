@@ -57,5 +57,11 @@
       <version>7.13.0</version>
       <scope>runtime</scope>
     </dependency>
+    <dependency>
+      <groupId>io.appmetrica.analytics</groupId>
+      <artifactId>analytics-proto</artifactId>
+      <version>7.13.0</version>
+      <scope>runtime</scope>
+    </dependency>
   </dependencies>
 </project>

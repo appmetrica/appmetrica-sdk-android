@@ -1,7 +1,6 @@
 package io.appmetrica.analytics.impl.startup;
 
 import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
-import io.appmetrica.analytics.billinginterface.internal.config.BillingConfig;
 import io.appmetrica.analytics.impl.DefaultValues;
 import io.appmetrica.analytics.networktasks.internal.RetryPolicyConfig;
 import io.appmetrica.analytics.testutils.CommonTest;
@@ -60,7 +59,6 @@ public class StartupStateModelTest extends CommonTest {
         final boolean outdated = true;
         final RetryPolicyConfig retryPolicyConfig = mock(RetryPolicyConfig.class);
         CacheControl cacheControl = mock(CacheControl.class);
-        final BillingConfig autoInappCollectingConfig = mock(BillingConfig.class);
         final AttributionConfig attributionConfig = mock(AttributionConfig.class);
         final StartupUpdateConfig startupUpdateConfig = mock(StartupUpdateConfig.class);
         final Map<String, Object> modulesRemoteConfigs = Collections.singletonMap("Identifier", mock(Object.class));
@@ -89,7 +87,6 @@ public class StartupStateModelTest extends CommonTest {
             .withOutdated(outdated)
             .withRetryPolicyConfig(retryPolicyConfig)
             .withCacheControl(cacheControl)
-            .withAutoInappCollectingConfig(autoInappCollectingConfig)
             .withAttributionConfig(attributionConfig)
             .withCustomSdkHosts(customSdkHosts)
             .withStartupUpdateConfig(startupUpdateConfig)
@@ -124,7 +121,6 @@ public class StartupStateModelTest extends CommonTest {
         assertions.checkField("retryPolicyConfig", retryPolicyConfig);
         assertions.checkField("collectingFlags", mCollectingFlags);
         assertions.checkField("cacheControl", cacheControl);
-        assertions.checkField("autoInappCollectingConfig", autoInappCollectingConfig);
         assertions.checkField("attributionConfig", attributionConfig);
         assertions.checkField("customSdkHosts", customSdkHosts);
         assertions.checkField("startupUpdateConfig", startupUpdateConfig);
@@ -166,7 +162,6 @@ public class StartupStateModelTest extends CommonTest {
         assertions.checkField("retryPolicyConfig", defaultRetryPolicConfig);
         assertions.checkField("collectingFlags", mCollectingFlags);
         assertions.checkField("cacheControl", (CacheControl) null);
-        assertions.checkField("autoInappCollectingConfig", null);
         assertions.checkFieldIsNull("attributionConfig");
         assertions.checkFieldIsNull("customSdkHosts");
         assertions.checkFieldComparingFieldByFieldRecursively("startupUpdateConfig",
@@ -205,7 +200,6 @@ public class StartupStateModelTest extends CommonTest {
         final boolean outdated = true;
         final RetryPolicyConfig retryPolicyConfig = mock(RetryPolicyConfig.class);
         CacheControl cacheControl = mock(CacheControl.class);
-        final BillingConfig autoInappCollectingConfig = mock(BillingConfig.class);
         final AttributionConfig attributionConfig = mock(AttributionConfig.class);
         final StartupUpdateConfig startupUpdateConfig = mock(StartupUpdateConfig.class);
         final Map<String, Object> modulesRemoteConfigs = Collections.singletonMap("Identifier", mock(Object.class));
@@ -235,7 +229,6 @@ public class StartupStateModelTest extends CommonTest {
             .withOutdated(outdated)
             .withRetryPolicyConfig(retryPolicyConfig)
             .withCacheControl(cacheControl)
-            .withAutoInappCollectingConfig(autoInappCollectingConfig)
             .withAttributionConfig(attributionConfig)
             .withCustomSdkHosts(customSdkHosts)
             .withStartupUpdateConfig(startupUpdateConfig)
@@ -272,7 +265,6 @@ public class StartupStateModelTest extends CommonTest {
         assertions.checkField("retryPolicyConfig", retryPolicyConfig);
         assertions.checkField("collectingFlags", mCollectingFlags);
         assertions.checkField("cacheControl", cacheControl);
-        assertions.checkField("autoInappCollectingConfig", autoInappCollectingConfig);
         assertions.checkField("attributionConfig", attributionConfig);
         assertions.checkField("customSdkHosts", customSdkHosts);
         assertions.checkField("startupUpdateConfig", startupUpdateConfig);

@@ -1,0 +1,31 @@
+public final class io.appmetrica.analytics.billing.BuildConfig {
+    public static final String BUILD_TYPE
+    public static final boolean DEBUG
+    public static final String LIBRARY_PACKAGE_NAME
+
+    public <init>()
+}
+
+public final class io.appmetrica.analytics.billing.internal.BillingServiceModuleEntryPoint extends io.appmetrica.analytics.modulesapi.internal.service.ModuleServiceEntryPoint<io.appmetrica.analytics.billing.internal.config.RemoteBillingConfig> {
+    public <init>()
+    public [NonNull] String getIdentifier()
+    public [NonNull] io.appmetrica.analytics.modulesapi.internal.service.RemoteConfigExtensionConfiguration<io.appmetrica.analytics.billing.internal.config.RemoteBillingConfig> getRemoteConfigExtensionConfiguration()
+    public void initServiceSide([NonNull] io.appmetrica.analytics.modulesapi.internal.service.ServiceContext, [NonNull] io.appmetrica.analytics.modulesapi.internal.service.ModuleRemoteConfig<io.appmetrica.analytics.billing.internal.config.RemoteBillingConfig>)
+}
+
+public final class io.appmetrica.analytics.billing.internal.config.BillingConfig {
+    public <init>()
+    public <init>(int, int)
+    public final int getFirstCollectingInappMaxAgeSeconds()
+    public final int getSendFrequencySeconds()
+    public [NonNull] String toString()
+}
+
+public final class io.appmetrica.analytics.billing.internal.config.RemoteBillingConfig {
+    public <init>()
+    public <init>(boolean, [NonNull] io.appmetrica.analytics.billing.internal.config.BillingConfig)
+    public final [NonNull] io.appmetrica.analytics.billing.internal.config.BillingConfig getConfig()
+    public final boolean getEnabled()
+    public [NonNull] String toString()
+}
+

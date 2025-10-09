@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.component.remarketing;
 
 import androidx.annotation.NonNull;
-import io.appmetrica.analytics.impl.db.protobuf.BaseProtobufStateSerializer;
+import io.appmetrica.analytics.coreutils.internal.data.BaseProtobufStateSerializer;
 import io.appmetrica.analytics.impl.protobuf.client.Eventhashes;
 import java.io.IOException;
 

@@ -13,8 +13,6 @@ public class StartupStateConverter implements ProtobufConverter<StartupStateMode
             new PermissionsCollectingConfigConverter();
     private FlagsConverter mFlagsConverter = new FlagsConverter();
     private StatSendingConverter mStatSendingConverter = new StatSendingConverter();
-    private AutoInappCollectingConfigConverter autoInappCollectingConfigConverter =
-            new AutoInappCollectingConfigConverter();
     private CacheControlConverter mCacheControlConverter = new CacheControlConverter();
     private AttributionConfigConverter attributionConfigConverter =
             new AttributionConfigConverter();
@@ -71,10 +69,6 @@ public class StartupStateConverter implements ProtobufConverter<StartupStateMode
         if (value.countryInit != null) { state.countryInit = value.countryInit; }
         if (value.statSending != null) { state.statSending = mStatSendingConverter.fromModel(value.statSending); }
         state.outdated = value.outdated;
-        if (value.autoInappCollectingConfig != null) {
-            state.autoInappCollectingConfig =
-                    autoInappCollectingConfigConverter.fromModel(value.autoInappCollectingConfig);
-        }
         if (value.cacheControl != null) {
             state.cacheControl = mCacheControlConverter.fromModel(value.cacheControl);
         }
@@ -123,11 +117,6 @@ public class StartupStateConverter implements ProtobufConverter<StartupStateMode
         }
         if (nano.statSending != null) {
             builder.withStatSending(mStatSendingConverter.toModel(nano.statSending));
-        }
-        if (nano.autoInappCollectingConfig != null) {
-            builder.withAutoInappCollectingConfig(
-                    autoInappCollectingConfigConverter.toModel(nano.autoInappCollectingConfig)
-            );
         }
         if (nano.cacheControl != null) {
             builder.withCacheControl(

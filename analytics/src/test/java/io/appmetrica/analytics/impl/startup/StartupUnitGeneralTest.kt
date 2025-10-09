@@ -2,7 +2,6 @@ package io.appmetrica.analytics.impl.startup
 
 import io.appmetrica.analytics.AppMetricaConfig
 import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
-import io.appmetrica.analytics.billinginterface.internal.config.BillingConfig
 import io.appmetrica.analytics.impl.DistributionSource
 import io.appmetrica.analytics.impl.clids.ClidsInfo
 import io.appmetrica.analytics.impl.client.ClientConfiguration
@@ -152,7 +151,6 @@ internal class StartupUnitGeneralTest : StartupUnitBaseTest() {
         val permissionsCollectingConfig = mock<PermissionsCollectingConfig>()
         val retryPolicyConfig = mock<RetryPolicyConfig>()
         val firstStartupObtainTime: Long = 4385768
-        val autoInappCollectingConfig = mock<BillingConfig>()
         val obtainTime = 124326487324L
         doReturn(obtainTime).whenever(timeProvider).currentTimeSeconds()
         val cacheControl = mock<CacheControl>()
@@ -185,7 +183,6 @@ internal class StartupUnitGeneralTest : StartupUnitBaseTest() {
         whenever(result.permissionsCollectingConfig).thenReturn(permissionsCollectingConfig)
         whenever(result.retryPolicyConfig).thenReturn(retryPolicyConfig)
         whenever(result.cacheControl).thenReturn(cacheControl)
-        whenever(result.autoInappCollectingConfig).thenReturn(autoInappCollectingConfig)
         whenever(result.attributionConfig).thenReturn(attributionConfig)
         whenever(result.customSdkHosts).thenReturn(customSdkHosts)
         whenever(result.startupUpdateConfig).thenReturn(startupUpdateConfig)
@@ -221,7 +218,6 @@ internal class StartupUnitGeneralTest : StartupUnitBaseTest() {
         assertions.checkField("firstStartupServerTime", firstStartupObtainTime)
         assertions.checkField("outdated", false)
         assertions.checkField("cacheControl", cacheControl)
-        assertions.checkField("autoInappCollectingConfig", autoInappCollectingConfig)
         assertions.checkField("attributionConfig", attributionConfig)
         assertions.checkField("customSdkHosts", customSdkHosts)
         assertions.checkField("startupUpdateConfig", startupUpdateConfig)

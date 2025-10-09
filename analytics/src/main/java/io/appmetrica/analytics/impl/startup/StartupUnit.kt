@@ -189,7 +189,6 @@ internal class StartupUnit(
             .withOutdated(false)
             .withRetryPolicyConfig(result.retryPolicyConfig)
             .withCacheControl(result.cacheControl)
-            .withAutoInappCollectingConfig(result.autoInappCollectingConfig)
             .withAttributionConfig(result.attributionConfig)
             .withStartupUpdateConfig(result.startupUpdateConfig)
             .withModulesRemoteConfigs(result.modulesRemoteConfigs)

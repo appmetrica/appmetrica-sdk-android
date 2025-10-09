@@ -128,7 +128,6 @@ protobuf {
     protoFile(srcPath = "backend/userprofile.proto", years = "2018")
 
     protoFile(srcPath = "client/appPermissionsStateProtobuf.proto", years = "2019")
-    protoFile(srcPath = "client/autoInappCollectingInfoProto.proto", years = "2020")
     protoFile(srcPath = "client/clidsInfoProto.proto", years = "2022")
     protoFile(srcPath = "client/dbProto.proto", years = "2023")
     protoFile(srcPath = "client/eventExtrasProto.proto", years = "2022")
@@ -164,9 +163,6 @@ dependencies {
     api("com.android.installreferrer:installreferrer:${Deps.referrerVersion}")
 
     implementation(project(":appsetid"))
-    implementation(project(":billing-interface"))
-    implementation(project(":billing-v6"))
-    implementation(project(":billing-v8"))
     implementation(project(":core-api"))
     implementation(project(":core-utils"))
     implementation(project(":location-api"))
@@ -181,6 +177,7 @@ dependencies {
     runtimeOnly(project(":remote-permissions"))
     runtimeOnly(project(":reporter-extension"))
     runtimeOnly(project(":screenshot"))
+    runtimeOnly(project(":billing"))
 
     testImplementation(project(":identifiers"))
     testImplementation("com.google.android.gms:play-services-location:${Deps.gmsLocationVersion}")

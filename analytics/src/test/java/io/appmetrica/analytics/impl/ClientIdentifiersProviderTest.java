@@ -2,7 +2,6 @@ package io.appmetrica.analytics.impl;
 
 import android.content.Context;
 import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
-import io.appmetrica.analytics.billinginterface.internal.config.BillingConfig;
 import io.appmetrica.analytics.coreapi.internal.identifiers.AdTrackingInfo;
 import io.appmetrica.analytics.coreapi.internal.identifiers.AdTrackingInfoResult;
 import io.appmetrica.analytics.coreapi.internal.identifiers.AdvertisingIdsHolder;
@@ -57,7 +56,6 @@ public class ClientIdentifiersProviderTest extends CommonTest {
     private AdvertisingIdGetter mAdvertisingIdGetter;
     private final long obtainTime = 32847687;
     private final int updateInterval = 2173654;
-    private BillingConfig autoInappCollectingConfig;
     private final String mGaid = "some gaid";
     private final String mHoaid = "some hoaid";
     private final String yandexAdvId = "some yandex adv_id";
@@ -76,7 +74,6 @@ public class ClientIdentifiersProviderTest extends CommonTest {
         AdTrackingInfoResult googleResult = new AdTrackingInfoResult(new AdTrackingInfo(AdTrackingInfo.Provider.GOOGLE, mGaid, false), mGaidStatus, mGaidError);
         AdTrackingInfoResult huaweiResult = new AdTrackingInfoResult(new AdTrackingInfo(AdTrackingInfo.Provider.HMS, mHoaid, false), mHoaidStatus, mHoaidError);
         AdTrackingInfoResult yandexResult = new AdTrackingInfoResult(new AdTrackingInfo(AdTrackingInfo.Provider.YANDEX, yandexAdvId, false), yandexStatus, yandexError);
-        autoInappCollectingConfig = new BillingConfig(1, 2);
         clientClidsForRequest.put("clid0", "0");
         clientClidsForRequest.put("clid1", "1");
         startupClientClidsForRequest.put("clid0", "0");
@@ -98,7 +95,6 @@ public class ClientIdentifiersProviderTest extends CommonTest {
             .withCustomSdkHosts(customSdkHosts)
             .withEncodedClidsFromResponse(StartupUtils.encodeClids(responseClids))
             .withLastClientClidsForStartupRequest(StartupUtils.encodeClids(startupClientClidsForRequest))
-            .withAutoInappCollectingConfig(autoInappCollectingConfig)
             .withObtainTime(obtainTime)
             .withStartupUpdateConfig(new StartupUpdateConfig(updateInterval))
             .build();

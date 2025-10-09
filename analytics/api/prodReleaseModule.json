@@ -96,6 +96,13 @@
                     }
                 },
                 {
+                    "group": "io.appmetrica.analytics",
+                    "module": "analytics-billing",
+                    "version": {
+                        "requires": "7.13.0"
+                    }
+                },
+                {
                     "group": "com.android.installreferrer",
                     "module": "installreferrer",
                     "version": {
@@ -119,27 +126,6 @@
                 {
                     "group": "io.appmetrica.analytics",
                     "module": "analytics-appsetid",
-                    "version": {
-                        "requires": "7.13.0"
-                    }
-                },
-                {
-                    "group": "io.appmetrica.analytics",
-                    "module": "analytics-billing-interface",
-                    "version": {
-                        "requires": "7.13.0"
-                    }
-                },
-                {
-                    "group": "io.appmetrica.analytics",
-                    "module": "analytics-billing-v6",
-                    "version": {
-                        "requires": "7.13.0"
-                    }
-                },
-                {
-                    "group": "io.appmetrica.analytics",
-                    "module": "analytics-billing-v8",
                     "version": {
                         "requires": "7.13.0"
                     }

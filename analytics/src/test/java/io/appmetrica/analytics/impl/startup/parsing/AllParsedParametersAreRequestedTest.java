@@ -140,7 +140,6 @@ public class AllParsedParametersAreRequestedTest extends CommonTest {
             new PermissionsCollectingConfigParser(),
             new StatSendingConverter(),
             new CacheControlParser(),
-            new AutoInappCollectingConfigParser(),
             new AttributionConfigParser(),
             new StartupUpdateConfigParser(),
             new ModulesRemoteConfigsParser(),

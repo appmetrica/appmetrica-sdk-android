@@ -2,7 +2,6 @@ package io.appmetrica.analytics.impl;
 
 import android.os.Build;
 import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
-import io.appmetrica.analytics.billinginterface.internal.config.BillingConfig;
 import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus;
 import io.appmetrica.analytics.coreapi.internal.model.ScreenInfo;
 import io.appmetrica.analytics.impl.utils.JsonHelper;
@@ -76,32 +75,6 @@ public class JsonHelperTest extends CommonTest {
         assertions.checkField("id", id);
         assertions.checkField("status", status);
         assertions.checkField("errorExplanation", error);
-        assertions.checkAll();
-    }
-
-    @Test
-    public void testAutoInappCollectingConfigToJson() throws Exception {
-        final int sendFrequencySeconds = 232343;
-        final int firstCollectingInappMaxAgeSeconds = 64643;
-        BillingConfig config = new BillingConfig(sendFrequencySeconds, firstCollectingInappMaxAgeSeconds);
-        JSONObject json = JsonHelper.autoInappCollectingConfigToJson(config);
-        BillingConfig deserialized = JsonHelper.autoInappCollectingConfigFromJson(json);
-
-        assertThat(deserialized).isEqualToComparingFieldByField(config);
-        ObjectPropertyAssertions<BillingConfig> assertions = ObjectPropertyAssertions(deserialized);
-        assertions.checkField("sendFrequencySeconds", sendFrequencySeconds);
-        assertions.checkField("firstCollectingInappMaxAgeSeconds", firstCollectingInappMaxAgeSeconds);
-        assertions.checkAll();
-    }
-
-    @Test
-    public void testAutoInappCollectingConfigToJsonIfEmpty() throws Exception {
-        JSONObject json = new JSONObject();
-        BillingConfig deserialized = JsonHelper.autoInappCollectingConfigFromJson(json);
-
-        ObjectPropertyAssertions<BillingConfig> assertions = ObjectPropertyAssertions(deserialized);
-        assertions.checkField("sendFrequencySeconds", 86400);
-        assertions.checkField("firstCollectingInappMaxAgeSeconds", 86400);
         assertions.checkAll();
     }
 

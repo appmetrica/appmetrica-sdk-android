@@ -1,5 +1,6 @@
 package io.appmetrica.analytics.impl.db.protobuf
 
+import io.appmetrica.analytics.coreutils.internal.data.BaseProtobufStateSerializer
 import io.appmetrica.analytics.impl.protobuf.client.ClidsInfoProto
 
 internal class ClidsInfoStateSerializer : BaseProtobufStateSerializer<ClidsInfoProto.ClidsInfo>() {

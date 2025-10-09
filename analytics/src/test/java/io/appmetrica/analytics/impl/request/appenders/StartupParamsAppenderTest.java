@@ -389,7 +389,6 @@ public class StartupParamsAppenderTest extends CommonTest {
                 new Object[]{"retry_policy", 1},
                 new Object[]{"cache_control", 1},
                 new Object[]{"permissions_collecting", 1},
-                new Object[]{"auto_inapp_collecting", 1},
                 new Object[]{"attribution", 1},
                 new Object[]{"startup_update", 1},
                 new Object[]{"external_attribution", 1},

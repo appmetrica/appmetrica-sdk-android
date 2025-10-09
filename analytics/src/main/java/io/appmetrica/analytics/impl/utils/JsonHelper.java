@@ -3,13 +3,11 @@ package io.appmetrica.analytics.impl.utils;
 import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import io.appmetrica.analytics.billinginterface.internal.config.BillingConfig;
 import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus;
 import io.appmetrica.analytics.coreapi.internal.model.ScreenInfo;
 import io.appmetrica.analytics.coreutils.internal.StringUtils;
 import io.appmetrica.analytics.coreutils.internal.parsing.JsonUtils;
 import io.appmetrica.analytics.impl.Utils;
-import io.appmetrica.analytics.impl.protobuf.client.StartupStateProtobuf;
 import io.appmetrica.analytics.impl.startup.Constants;
 import io.appmetrica.analytics.impl.startup.FeaturesInternal;
 import io.appmetrica.analytics.internal.IdentifiersResult;
@@ -268,35 +266,6 @@ public class JsonHelper {
             }
         }
         return items;
-    }
-
-    @NonNull
-    public static JSONObject autoInappCollectingConfigToJson(@NonNull BillingConfig config) throws JSONException {
-        return new JSONObject()
-            .put(
-                io.appmetrica.analytics.impl.billing.Constants.SEND_FREQUENCY_SECONDS,
-                config.sendFrequencySeconds
-            )
-            .put(
-                io.appmetrica.analytics.impl.billing.Constants.FIRST_COLLECTING_INAPP_MAX_AGE_SECONDS,
-                config.firstCollectingInappMaxAgeSeconds
-            );
-    }
-
-    @NonNull
-    public static BillingConfig autoInappCollectingConfigFromJson(@NonNull JSONObject jsonObject) {
-        StartupStateProtobuf.StartupState.AutoInappCollectingConfig defaultConfig =
-            new StartupStateProtobuf.StartupState.AutoInappCollectingConfig();
-        return new BillingConfig(
-            jsonObject.optInt(
-                io.appmetrica.analytics.impl.billing.Constants.SEND_FREQUENCY_SECONDS,
-                defaultConfig.sendFrequencySeconds
-            ),
-            jsonObject.optInt(
-                io.appmetrica.analytics.impl.billing.Constants.FIRST_COLLECTING_INAPP_MAX_AGE_SECONDS,
-                defaultConfig.firstCollectingInappMaxAgeSeconds
-            )
-        );
     }
 
     @NonNull

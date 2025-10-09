@@ -4,7 +4,7 @@ import io.appmetrica.analytics.coreapi.internal.servicecomponents.applicationsta
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.applicationstate.ApplicationStateObserver;
 import io.appmetrica.analytics.impl.ApplicationStateProviderImpl;
 import io.appmetrica.analytics.impl.DataSendingRestrictionControllerImpl;
-import io.appmetrica.analytics.impl.billing.BillingMonitorWrapper;
+import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.component.processor.factory.HandlersFactory;
 import io.appmetrica.analytics.impl.component.processor.factory.RegularMainReporterFactory;
 import io.appmetrica.analytics.impl.referrer.service.ReferrerHolder;
@@ -28,7 +28,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -49,8 +48,6 @@ public class MainReporterComponentUnitTest extends ComponentUnitBaseTest {
     @Mock
     private ApplicationStateProviderImpl applicationStateProvider;
     @Mock
-    private BillingMonitorWrapper billingMonitorWrapper;
-    @Mock
     private StartupState startupState;
     private MainReporterComponentUnit mMainReporterComponentUnit;
     private final CommonArguments.ReporterArguments sdkConfig = new CommonArguments.ReporterArguments(
@@ -69,8 +66,6 @@ public class MainReporterComponentUnitTest extends ComponentUnitBaseTest {
     @Override
     protected void initCustomFields() {
         when(mFieldsFactory.createReferrerListener(any(MainReporterComponentUnit.class))).thenReturn(mListener);
-        when(mFieldsFactory.createBillingMonitorWrapper(any(MainReporterComponentUnit.class)))
-            .thenReturn(billingMonitorWrapper);
         when(applicationStateProvider.registerStickyObserver(any(ApplicationStateObserver.class)))
             .thenReturn(ApplicationState.UNKNOWN);
     }
@@ -97,14 +92,8 @@ public class MainReporterComponentUnitTest extends ComponentUnitBaseTest {
 
     @Test
     public void shouldStartWatching() {
-        verify(billingMonitorWrapper).maybeStartWatching(startupState, false);
-    }
-
-    @Test
-    public void testOnStartupChanged() {
-        StartupState startupState = mock(StartupState.class);
-        mMainReporterComponentUnit.onStartupChanged(startupState);
-        verify(billingMonitorWrapper).onStartupStateChanged(startupState);
+        verify(GlobalServiceLocator.getInstance().getServiceModuleReporterComponentLifecycle())
+            .onMainReporterCreated(any());
     }
 
     @Test

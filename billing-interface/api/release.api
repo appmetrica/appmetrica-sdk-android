@@ -97,6 +97,12 @@ public interface io.appmetrica.analytics.billinginterface.internal.monitor.Billi
     public abstract void onSessionResumed()
 }
 
+public final class io.appmetrica.analytics.billinginterface.internal.monitor.DummyBillingMonitor implementation io.appmetrica.analytics.billinginterface.internal.monitor.BillingMonitor {
+    public <init>()
+    public void onBillingConfigChanged([Nullable] io.appmetrica.analytics.billinginterface.internal.config.BillingConfig)
+    public void onSessionResumed()
+}
+
 public interface io.appmetrica.analytics.billinginterface.internal.storage.BillingInfoManager {
     public abstract [Nullable] io.appmetrica.analytics.billinginterface.internal.BillingInfo get([NonNull] String)
     public abstract boolean isFirstInappCheckOccurred()

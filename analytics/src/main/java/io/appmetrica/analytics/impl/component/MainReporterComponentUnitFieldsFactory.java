@@ -4,10 +4,6 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
 import io.appmetrica.analytics.impl.LifecycleDependentComponentManager;
-import io.appmetrica.analytics.impl.billing.BillingInfoSenderImpl;
-import io.appmetrica.analytics.impl.billing.BillingInfoStorageImpl;
-import io.appmetrica.analytics.impl.billing.BillingMonitorWrapper;
-import io.appmetrica.analytics.impl.billing.BillingTypeDetector;
 import io.appmetrica.analytics.impl.referrer.service.OnlyOnceReferrerNotificationFilter;
 import io.appmetrica.analytics.impl.referrer.service.ReferrerListenerNotifier;
 import io.appmetrica.analytics.impl.request.ReportRequestConfig;
@@ -54,18 +50,6 @@ public class MainReporterComponentUnitFieldsFactory extends ComponentUnitFieldsF
             new OnlyOnceReferrerNotificationFilter(unit),
             unit.new MainReporterListener(),
             unit
-        );
-    }
-
-    @NonNull
-    public BillingMonitorWrapper createBillingMonitorWrapper(@NonNull final MainReporterComponentUnit unit) {
-        return new BillingMonitorWrapper(
-            mContext,
-            serviceExecutorProvider.getDefaultExecutor(),
-            serviceExecutorProvider.getUiExecutor(),
-            BillingTypeDetector.getBillingType(),
-            new BillingInfoStorageImpl(mContext),
-            new BillingInfoSenderImpl(unit)
         );
     }
 }

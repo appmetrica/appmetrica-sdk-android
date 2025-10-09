@@ -1,0 +1,124 @@
+{
+    "formatVersion": "1.1",
+    "component": {
+        "group": "io.appmetrica.analytics",
+        "module": "analytics-billing",
+        "version": "7.13.0",
+        "attributes": {
+            "org.gradle.status": "release"
+        }
+    },
+    "createdBy": {
+        "gradle": {
+            "version": "8.10.2",
+            "buildId": "<random-string>"
+        }
+    },
+    "variants": [
+        {
+            "name": "releaseVariantReleaseApiPublication",
+            "attributes": {
+                "org.gradle.category": "library",
+                "org.gradle.dependency.bundling": "external",
+                "org.gradle.libraryelements": "aar",
+                "org.gradle.usage": "java-api"
+            },
+            "files": [
+                {
+                    "name": "analytics-billing-7.13.0.aar",
+                    "url": "analytics-billing-7.13.0.aar",
+                    "size": -1,
+                    "sha512": "<sha512>",
+                    "sha256": "<sha256>",
+                    "sha1": "<sha1>",
+                    "md5": "<md5>"
+                }
+            ]
+        },
+        {
+            "name": "releaseVariantReleaseRuntimePublication",
+            "attributes": {
+                "org.gradle.category": "library",
+                "org.gradle.dependency.bundling": "external",
+                "org.gradle.libraryelements": "aar",
+                "org.gradle.usage": "java-runtime"
+            },
+            "dependencies": [
+                {
+                    "group": "org.jetbrains.kotlin",
+                    "module": "kotlin-stdlib",
+                    "version": {
+                        "requires": "1.6.21"
+                    }
+                },
+                {
+                    "group": "io.appmetrica.analytics",
+                    "module": "analytics-proto",
+                    "version": {
+                        "requires": "7.13.0"
+                    }
+                },
+                {
+                    "group": "io.appmetrica.analytics",
+                    "module": "analytics-billing-interface",
+                    "version": {
+                        "requires": "7.13.0"
+                    }
+                },
+                {
+                    "group": "io.appmetrica.analytics",
+                    "module": "analytics-billing-v6",
+                    "version": {
+                        "requires": "7.13.0"
+                    }
+                },
+                {
+                    "group": "io.appmetrica.analytics",
+                    "module": "analytics-billing-v8",
+                    "version": {
+                        "requires": "7.13.0"
+                    }
+                },
+                {
+                    "group": "io.appmetrica.analytics",
+                    "module": "analytics-core-api",
+                    "version": {
+                        "requires": "7.13.0"
+                    }
+                },
+                {
+                    "group": "io.appmetrica.analytics",
+                    "module": "analytics-core-utils",
+                    "version": {
+                        "requires": "7.13.0"
+                    }
+                },
+                {
+                    "group": "io.appmetrica.analytics",
+                    "module": "analytics-logger",
+                    "version": {
+                        "requires": "7.13.0"
+                    }
+                },
+                {
+                    "group": "io.appmetrica.analytics",
+                    "module": "analytics-modules-api",
+                    "version": {
+                        "requires": "7.13.0"
+                    }
+                }
+            ],
+            "files": [
+                {
+                    "name": "analytics-billing-7.13.0.aar",
+                    "url": "analytics-billing-7.13.0.aar",
+                    "size": -1,
+                    "sha512": "<sha512>",
+                    "sha256": "<sha256>",
+                    "sha1": "<sha1>",
+                    "md5": "<md5>"
+                }
+            ]
+        }
+    ]
+}

@@ -51,4 +51,6 @@ interface ExecutorProvider {
         threadNamePostfix: String,
         runnable: Runnable
     ): InterruptionSafeThread
+
+    fun getReportRunnableExecutor(): Executor
 }

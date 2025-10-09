@@ -1,7 +1,6 @@
 package io.appmetrica.analytics.impl.startup
 
 import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
-import io.appmetrica.analytics.billinginterface.internal.config.BillingConfig
 import io.appmetrica.analytics.coreapi.internal.data.ProtobufStateStorage
 import io.appmetrica.analytics.impl.db.VitalCommonDataProvider
 import io.appmetrica.analytics.impl.startup.StartupStateModel.StartupStateBuilder
@@ -50,7 +49,6 @@ class StartupStateStorageTest : CommonTest() {
     private val statSending = StatSending(45)
     private val permissionsCollectingConfig = mock<PermissionsCollectingConfig>()
     private val retryPolicyConfig = mock<RetryPolicyConfig>()
-    private val autoInappCollectingConfig = mock<BillingConfig>()
     private val cacheControl = mock<CacheControl>()
     private val attributionConfig = mock<AttributionConfig>()
     private val startupUpdateConfig = mock<StartupUpdateConfig>()
@@ -99,7 +97,6 @@ class StartupStateStorageTest : CommonTest() {
                 "retryPolicyConfig",
                 RetryPolicyConfig(600, 1)
             )
-            .checkFieldIsNull("autoInappCollectingConfig")
             .checkFieldIsNull("cacheControl")
             .checkFieldIsNull("attributionConfig")
             .checkFieldIsNull("customSdkHosts")
@@ -149,7 +146,6 @@ class StartupStateStorageTest : CommonTest() {
         )
         assertions.checkField("collectingFlags", CollectingFlags.CollectingFlagsBuilder().build())
         assertions.checkFieldIsNull("cacheControl")
-        assertions.checkFieldIsNull("autoInappCollectingConfig")
         assertions.checkFieldIsNull("attributionConfig")
         assertions.checkFieldIsNull("customSdkHosts")
         assertions.checkFieldRecursively<StartupUpdateConfig>("startupUpdateConfig") {
@@ -190,7 +186,6 @@ class StartupStateStorageTest : CommonTest() {
             .withOutdated(outdated)
             .withRetryPolicyConfig(retryPolicyConfig)
             .withCacheControl(cacheControl)
-            .withAutoInappCollectingConfig(autoInappCollectingConfig)
             .withAttributionConfig(attributionConfig)
             .withCustomSdkHosts(customSdkHosts)
             .withStartupUpdateConfig(startupUpdateConfig)
@@ -225,7 +220,6 @@ class StartupStateStorageTest : CommonTest() {
             .checkField("statSending", statSending)
             .checkField("permissionsCollectingConfig", permissionsCollectingConfig)
             .checkField("retryPolicyConfig", retryPolicyConfig)
-            .checkField("autoInappCollectingConfig", autoInappCollectingConfig)
             .checkField("cacheControl", cacheControl)
             .checkField("attributionConfig", attributionConfig)
             .checkField("customSdkHosts", customSdkHosts)
@@ -244,7 +238,6 @@ class StartupStateStorageTest : CommonTest() {
             .withLastClientClidsForStartupRequest(lastClientClidsForStartupRequest)
             .withStartupDidNotOverrideClids(startupDidNotOverrideClids)
             .withAttributionConfig(attributionConfig)
-            .withAutoInappCollectingConfig(autoInappCollectingConfig)
             .withCacheControl(cacheControl)
             .withCertificateUrl(certificateUrl)
             .withCountryInit(countryInit)
@@ -301,7 +294,6 @@ class StartupStateStorageTest : CommonTest() {
         assertions.checkField("retryPolicyConfig", retryPolicyConfig)
         assertions.checkField("collectingFlags", collectingFlags)
         assertions.checkField("cacheControl", cacheControl)
-        assertions.checkField("autoInappCollectingConfig", autoInappCollectingConfig)
         assertions.checkField("attributionConfig", attributionConfig)
         assertions.checkField("customSdkHosts", customSdkHosts)
         assertions.checkField("startupUpdateConfig", startupUpdateConfig)
