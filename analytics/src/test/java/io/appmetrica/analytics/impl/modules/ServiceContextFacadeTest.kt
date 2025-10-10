@@ -206,4 +206,18 @@ internal class ServiceContextFacadeTest : CommonTest() {
         val second = serviceContextFacade.platformIdentifiers
         assertThat(first).isNotEqualTo(second)
     }
+
+    @Test
+    fun activeNetworkTypeProvider() {
+        assertThat(serviceContextFacade.activeNetworkTypeProvider)
+            .isEqualTo(GlobalServiceLocator.getInstance().activeNetworkTypeProvider)
+    }
+
+    @Test
+    fun `activeNetworkTypeProvider twice`() {
+        val first = serviceContextFacade.activeNetworkTypeProvider
+        whenever(GlobalServiceLocator.getInstance().activeNetworkTypeProvider).thenReturn(mock())
+        val second = serviceContextFacade.activeNetworkTypeProvider
+        assertThat(first).isNotEqualTo(second)
+    }
 }

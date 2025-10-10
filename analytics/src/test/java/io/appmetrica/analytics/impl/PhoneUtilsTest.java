@@ -7,6 +7,7 @@ import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.os.Build;
 import androidx.annotation.Nullable;
+import io.appmetrica.analytics.coreapi.internal.system.NetworkType;
 import io.appmetrica.analytics.impl.protobuf.backend.EventProto;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.TestUtils;
@@ -73,19 +74,19 @@ public class PhoneUtilsTest extends CommonTest {
     public void testGetConnectionTypeWhenPermittedAndOffline() {
         //noinspection deprecation
         when(mNetworkInfo.isConnected()).thenReturn(false);
-        PhoneUtils.NetworkType actual = PhoneUtils.getConnectionType(mContext);
+        NetworkType actual = PhoneUtils.getConnectionType(mContext);
         verify(mContext, times(1)).getSystemService(Mockito.anyString());
         verify(mConnectivityManager, times(1)).getActiveNetworkInfo();
         //noinspection deprecation
         verify(mNetworkInfo, times(1)).isConnected();
         verify(mNetworkInfo, never()).getType();
-        assertThat(actual).isEqualTo(PhoneUtils.NetworkType.OFFLINE);
+        assertThat(actual).isEqualTo(NetworkType.OFFLINE);
     }
 
     @Test
     public void testGetConnectionTypeNullNetworkInfo() {
         when(mConnectivityManager.getActiveNetworkInfo()).thenReturn(null);
-        assertThat(PhoneUtils.getConnectionType(mContext)).isEqualTo(PhoneUtils.NetworkType.OFFLINE);
+        assertThat(PhoneUtils.getConnectionType(mContext)).isEqualTo(NetworkType.OFFLINE);
     }
 
     @Test
@@ -95,7 +96,7 @@ public class PhoneUtilsTest extends CommonTest {
         //noinspection deprecation
         when(mNetworkInfo.isConnected()).thenReturn(true);
         when(mNetworkInfo.getType()).thenReturn(ConnectivityManager.TYPE_VPN);
-        assertThat(PhoneUtils.getConnectionType(mContext)).isEqualTo(PhoneUtils.NetworkType.VPN);
+        assertThat(PhoneUtils.getConnectionType(mContext)).isEqualTo(NetworkType.VPN);
     }
 
     @RunWith(ParameterizedRobolectricTestRunner.class)
@@ -112,23 +113,23 @@ public class PhoneUtilsTest extends CommonTest {
         private NetworkCapabilities mNetworkCapabilities;
         private final Context mContext;
 
-        private final PhoneUtils.NetworkType mExpected;
+        private final NetworkType mExpected;
 
         @ParameterizedRobolectricTestRunner.Parameters(name = "expected type {1}")
         public static Collection<Object[]> data() {
             return Arrays.asList(new Object[][]{
-                {NetworkCapabilities.TRANSPORT_BLUETOOTH, PhoneUtils.NetworkType.BLUETOOTH},
-                {NetworkCapabilities.TRANSPORT_ETHERNET, PhoneUtils.NetworkType.ETHERNET},
-                {NetworkCapabilities.TRANSPORT_CELLULAR, PhoneUtils.NetworkType.CELL},
-                {NetworkCapabilities.TRANSPORT_VPN, PhoneUtils.NetworkType.VPN},
-                {NetworkCapabilities.TRANSPORT_WIFI, PhoneUtils.NetworkType.WIFI},
-                {NetworkCapabilities.TRANSPORT_WIFI_AWARE, PhoneUtils.NetworkType.UNDEFINED},
-                {NetworkCapabilities.TRANSPORT_LOWPAN, PhoneUtils.NetworkType.UNDEFINED},
-                {99, PhoneUtils.NetworkType.UNDEFINED}
+                {NetworkCapabilities.TRANSPORT_BLUETOOTH, NetworkType.BLUETOOTH},
+                {NetworkCapabilities.TRANSPORT_ETHERNET, NetworkType.ETHERNET},
+                {NetworkCapabilities.TRANSPORT_CELLULAR, NetworkType.CELL},
+                {NetworkCapabilities.TRANSPORT_VPN, NetworkType.VPN},
+                {NetworkCapabilities.TRANSPORT_WIFI, NetworkType.WIFI},
+                {NetworkCapabilities.TRANSPORT_WIFI_AWARE, NetworkType.UNDEFINED},
+                {NetworkCapabilities.TRANSPORT_LOWPAN, NetworkType.UNDEFINED},
+                {99, NetworkType.UNDEFINED}
             });
         }
 
-        public ConnectionTypesMTests(final int networkCapabilitiesType, PhoneUtils.NetworkType enumType) {
+        public ConnectionTypesMTests(final int networkCapabilitiesType, NetworkType enumType) {
             MockitoAnnotations.openMocks(this);
             mContext = TestUtils.createMockedContext();
             when(mContext.getSystemService(any(String.class))).thenReturn(mConnectivityManager);
@@ -172,14 +173,14 @@ public class PhoneUtilsTest extends CommonTest {
         @Test
         public void testActiveNetworkIsNull() {
             when(mConnectivityManager.getActiveNetwork()).thenReturn(null);
-            assertThat(PhoneUtils.getConnectionType(mContext)).isEqualTo(PhoneUtils.NetworkType.OFFLINE);
+            assertThat(PhoneUtils.getConnectionType(mContext)).isEqualTo(NetworkType.OFFLINE);
         }
 
         @Test
         public void testNotConnected() {
             //noinspection deprecation
             when(mNetworkInfo.isConnected()).thenReturn(false);
-            assertThat(PhoneUtils.getConnectionType(mContext)).isEqualTo(PhoneUtils.NetworkType.OFFLINE);
+            assertThat(PhoneUtils.getConnectionType(mContext)).isEqualTo(NetworkType.OFFLINE);
         }
 
         @Test
@@ -187,7 +188,7 @@ public class PhoneUtilsTest extends CommonTest {
             //noinspection deprecation
             when(mNetworkInfo.isConnected()).thenReturn(true);
             when(mConnectivityManager.getNetworkCapabilities(mNetwork)).thenReturn(null);
-            assertThat(PhoneUtils.getConnectionType(mContext)).isEqualTo(PhoneUtils.NetworkType.UNDEFINED);
+            assertThat(PhoneUtils.getConnectionType(mContext)).isEqualTo(NetworkType.UNDEFINED);
         }
 
         @Test
@@ -198,7 +199,7 @@ public class PhoneUtilsTest extends CommonTest {
             when(mNetworkInfo.isConnected()).thenReturn(true);
             when(mConnectivityManager.getNetworkCapabilities(mNetwork)).thenReturn(networkCapabilities);
             when(networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_LOWPAN)).thenReturn(true);
-            assertThat(PhoneUtils.getConnectionType(mContext)).isEqualTo(PhoneUtils.NetworkType.LOWPAN);
+            assertThat(PhoneUtils.getConnectionType(mContext)).isEqualTo(NetworkType.LOWPAN);
         }
 
         @Test
@@ -209,7 +210,7 @@ public class PhoneUtilsTest extends CommonTest {
             when(mNetworkInfo.isConnected()).thenReturn(true);
             when(mConnectivityManager.getNetworkCapabilities(mNetwork)).thenReturn(networkCapabilities);
             when(networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI_AWARE)).thenReturn(true);
-            assertThat(PhoneUtils.getConnectionType(mContext)).isEqualTo(PhoneUtils.NetworkType.WIFI_AWARE);
+            assertThat(PhoneUtils.getConnectionType(mContext)).isEqualTo(NetworkType.WIFI_AWARE);
         }
     }
 
@@ -219,28 +220,28 @@ public class PhoneUtilsTest extends CommonTest {
 
         private final int mServerType;
         @Nullable
-        private final PhoneUtils.NetworkType mSdkType;
+        private final NetworkType mSdkType;
 
         @ParameterizedRobolectricTestRunner.Parameters(name = "for type {0} server type is {1}")
         public static Collection<Object[]> data() {
             return Arrays.asList(new Object[][]{
-                {PhoneUtils.NetworkType.CELL, EventProto.ReportMessage.Session.CONNECTION_CELL},
-                {PhoneUtils.NetworkType.WIFI, EventProto.ReportMessage.Session.CONNECTION_WIFI},
-                {PhoneUtils.NetworkType.BLUETOOTH, EventProto.ReportMessage.Session.CONNECTION_BLUETOOTH},
-                {PhoneUtils.NetworkType.ETHERNET, EventProto.ReportMessage.Session.CONNECTION_ETHERNET},
-                {PhoneUtils.NetworkType.MOBILE_DUN, EventProto.ReportMessage.Session.CONNECTION_MOBILE_DUN},
-                {PhoneUtils.NetworkType.MOBILE_HIPRI, EventProto.ReportMessage.Session.CONNECTION_MOBILE_HIPRI},
-                {PhoneUtils.NetworkType.MOBILE_MMS, EventProto.ReportMessage.Session.CONNECTION_MOBILE_MMS},
-                {PhoneUtils.NetworkType.MOBILE_SUPL, EventProto.ReportMessage.Session.CONNECTION_MOBILE_SUPL},
-                {PhoneUtils.NetworkType.VPN, EventProto.ReportMessage.Session.CONNECTION_VPN},
-                {PhoneUtils.NetworkType.WIMAX, EventProto.ReportMessage.Session.CONNECTION_WIMAX},
-                {PhoneUtils.NetworkType.LOWPAN, EventProto.ReportMessage.Session.CONNECTION_LOWPAN},
-                {PhoneUtils.NetworkType.WIFI_AWARE, EventProto.ReportMessage.Session.CONNECTION_WIFI_AWARE},
+                {NetworkType.CELL, EventProto.ReportMessage.Session.CONNECTION_CELL},
+                {NetworkType.WIFI, EventProto.ReportMessage.Session.CONNECTION_WIFI},
+                {NetworkType.BLUETOOTH, EventProto.ReportMessage.Session.CONNECTION_BLUETOOTH},
+                {NetworkType.ETHERNET, EventProto.ReportMessage.Session.CONNECTION_ETHERNET},
+                {NetworkType.MOBILE_DUN, EventProto.ReportMessage.Session.CONNECTION_MOBILE_DUN},
+                {NetworkType.MOBILE_HIPRI, EventProto.ReportMessage.Session.CONNECTION_MOBILE_HIPRI},
+                {NetworkType.MOBILE_MMS, EventProto.ReportMessage.Session.CONNECTION_MOBILE_MMS},
+                {NetworkType.MOBILE_SUPL, EventProto.ReportMessage.Session.CONNECTION_MOBILE_SUPL},
+                {NetworkType.VPN, EventProto.ReportMessage.Session.CONNECTION_VPN},
+                {NetworkType.WIMAX, EventProto.ReportMessage.Session.CONNECTION_WIMAX},
+                {NetworkType.LOWPAN, EventProto.ReportMessage.Session.CONNECTION_LOWPAN},
+                {NetworkType.WIFI_AWARE, EventProto.ReportMessage.Session.CONNECTION_WIFI_AWARE},
                 {null, EventProto.ReportMessage.Session.CONNECTION_UNDEFINED}
             });
         }
 
-        public GetConnectionTypeInServerFormatTest(@Nullable PhoneUtils.NetworkType sdkType, final int serverType) {
+        public GetConnectionTypeInServerFormatTest(@Nullable NetworkType sdkType, final int serverType) {
             mSdkType = sdkType;
             mServerType = serverType;
         }

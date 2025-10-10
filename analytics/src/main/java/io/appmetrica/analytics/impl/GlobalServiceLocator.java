@@ -52,6 +52,8 @@ import io.appmetrica.analytics.impl.servicecomponents.ServiceLifecycleTimeTracke
 import io.appmetrica.analytics.impl.startup.uuid.MultiProcessSafeUuidProvider;
 import io.appmetrica.analytics.impl.startup.uuid.UuidFromStartupStateImporter;
 import io.appmetrica.analytics.impl.telephony.TelephonyDataProvider;
+import io.appmetrica.analytics.coreapi.internal.system.ActiveNetworkTypeProvider;
+import io.appmetrica.analytics.impl.utils.ActiveNetworkTypeProviderImpl;
 import io.appmetrica.analytics.impl.utils.process.CurrentProcessDetector;
 import io.appmetrica.analytics.impl.utils.executors.ServiceExecutorProvider;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
@@ -156,6 +158,8 @@ public final class GlobalServiceLocator {
     @NonNull
     private final ServiceModuleReporterComponentLifecycleImpl serviceModuleReporterComponentLifecycle =
         new ServiceModuleReporterComponentLifecycleImpl();
+    @NonNull
+    private final ActiveNetworkTypeProvider activeNetworkTypeProvider = new ActiveNetworkTypeProviderImpl();
 
     private GlobalServiceLocator(@NonNull Context applicationContext) {
         mContext = applicationContext;
@@ -595,6 +599,11 @@ public final class GlobalServiceLocator {
     @NonNull
     public ServiceModuleReporterComponentLifecycleImpl getServiceModuleReporterComponentLifecycle() {
         return serviceModuleReporterComponentLifecycle;
+    }
+
+    @NonNull
+    public ActiveNetworkTypeProvider getActiveNetworkTypeProvider() {
+        return activeNetworkTypeProvider;
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)

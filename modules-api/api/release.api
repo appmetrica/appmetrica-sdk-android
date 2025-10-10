@@ -304,6 +304,7 @@ public interface io.appmetrica.analytics.modulesapi.internal.service.RemoteConfi
 
 public interface io.appmetrica.analytics.modulesapi.internal.service.ServiceContext {
     public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.servicecomponents.ActivationBarrier getActivationBarrier()
+    public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.system.ActiveNetworkTypeProvider getActiveNetworkTypeProvider()
     public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.servicecomponents.applicationstate.ApplicationStateProvider getApplicationStateProvider()
     public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.servicecomponents.batteryinfo.ChargeTypeProvider getChargeTypeProvider()
     public abstract [NonNull] android.content.Context getContext()

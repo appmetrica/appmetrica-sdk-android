@@ -27,7 +27,7 @@ internal class ServiceModulesController :
     ServiceSideModuleInitializer,
     AskForPermissionStrategyModuleProvider {
 
-    private val tag = "[ModulesController]"
+    private val tag = "[ServiceModulesController]"
 
     private val askForPermissionStrategyModuleId = "rp"
 
@@ -110,11 +110,13 @@ internal class ServiceModulesController :
                 reportSelfErrorEvent(module.identifier, "db", e)
             }
         }
-        DebugLogger.warning(
-            tag,
-            "Disabling defective modules: ${wrongModules.joinToString(", ") { it.identifier }}"
-        )
-        modules.removeAll(wrongModules)
+        if (wrongModules.isNotEmpty()) {
+            DebugLogger.warning(
+                tag,
+                "Disabling defective modules: ${wrongModules.joinToString(", ") { it.identifier }}"
+            )
+            modules.removeAll(wrongModules)
+        }
 
         return result
     }

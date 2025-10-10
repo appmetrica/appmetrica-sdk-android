@@ -62,6 +62,13 @@
                 },
                 {
                     "group": "io.appmetrica.analytics",
+                    "module": "analytics-billing",
+                    "version": {
+                        "requires": "7.13.0"
+                    }
+                },
+                {
+                    "group": "io.appmetrica.analytics",
                     "module": "analytics-identifiers",
                     "version": {
                         "requires": "7.13.0"
@@ -97,7 +104,7 @@
                 },
                 {
                     "group": "io.appmetrica.analytics",
-                    "module": "analytics-billing",
+                    "module": "analytics-id-sync",
                     "version": {
                         "requires": "7.13.0"
                     }

@@ -37,6 +37,7 @@ class DefaultServiceComponentsInitializerTest : CommonTest() {
             "io.appmetrica.analytics.apphud.internal.ApphudServiceModuleEntryPoint",
             "io.appmetrica.analytics.screenshot.internal.ScreenshotServiceModuleEntryPoint",
             "io.appmetrica.analytics.billing.internal.BillingServiceModuleEntryPoint",
+            "io.appmetrica.analytics.idsync.internal.IdSyncModuleEntryPoint",
         )
         serviceComponentsInitializer.onCreate(context)
 

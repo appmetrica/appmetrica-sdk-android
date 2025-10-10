@@ -20,6 +20,8 @@ public class Response {
     private final Map<String, List<String>> headers;
     @Nullable
     private final Throwable exception;
+    @Nullable
+    private final String url;
 
     public Response(@Nullable Throwable exception) {
         this(false, 0, new byte[0], new byte[0], new HashMap<String, List<String>>(), exception);
@@ -31,6 +33,16 @@ public class Response {
                     @NonNull byte[] errorData,
                     @Nullable Map<String, List<String>> headers,
                     @Nullable Throwable exception) {
+        this(completed, code, responseData, errorData, headers, exception, null);
+    }
+
+    public Response(boolean completed,
+                    int code,
+                    @NonNull byte[] responseData,
+                    @NonNull byte[] errorData,
+                    @Nullable Map<String, List<String>> headers,
+                    @Nullable Throwable exception,
+                    @Nullable String url) {
         this.completed = completed;
         this.code = code;
         this.responseData = responseData;
@@ -38,6 +50,7 @@ public class Response {
         this.headers = headers == null ? Collections.<String, List<String>>emptyMap() :
                 Utils.unmodifiableMapCopy(headers);
         this.exception = exception;
+        this.url = url;
     }
 
     public int getCode() {
@@ -68,6 +81,11 @@ public class Response {
         return completed;
     }
 
+    @Nullable
+    public String getUrl() {
+        return url;
+    }
+
     @Override
     public String toString() {
         return "Response{" +
@@ -77,6 +95,7 @@ public class Response {
                 ", errorDataLength=" + errorData.length +
                 ", headers=" + headers +
                 ", exception=" + exception +
+                ", url=" + url +
                 '}';
     }
 }

@@ -1,21 +1,23 @@
 package io.appmetrica.analytics.impl.network
 
 import android.content.Context
-import io.appmetrica.analytics.impl.PhoneUtils
-import io.appmetrica.analytics.impl.utils.ConnectionTypeProviderImpl
+import io.appmetrica.analytics.coreapi.internal.system.NetworkType
+import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.constructionRule
+import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
 import org.assertj.core.api.Assertions
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.whenever
 import org.robolectric.ParameterizedRobolectricTestRunner
 
 @RunWith(ParameterizedRobolectricTestRunner::class)
 class ConnectionBasedExecutionPolicyTest(
-    private val networkType: PhoneUtils.NetworkType,
+    private val networkType: NetworkType,
     private val expectedValue: Boolean
 ) : CommonTest() {
 
@@ -25,10 +27,10 @@ class ConnectionBasedExecutionPolicyTest(
         @JvmStatic
         fun data(): Collection<Array<Any>> {
             return listOf(
-                arrayOf(PhoneUtils.NetworkType.OFFLINE, false),
-                arrayOf(PhoneUtils.NetworkType.UNDEFINED, true),
-                arrayOf(PhoneUtils.NetworkType.CELL, true),
-                arrayOf(PhoneUtils.NetworkType.WIFI, true),
+                arrayOf(NetworkType.OFFLINE, false),
+                arrayOf(NetworkType.UNDEFINED, true),
+                arrayOf(NetworkType.CELL, true),
+                arrayOf(NetworkType.WIFI, true),
             )
         }
     }
@@ -36,11 +38,15 @@ class ConnectionBasedExecutionPolicyTest(
     private val context: Context = mock()
 
     @get:Rule
-    val connectionTypeProviderImplRule = constructionRule<ConnectionTypeProviderImpl> {
-        on { getConnectionType(context) } doReturn networkType
-    }
+    val globalServiceLocatorRule = GlobalServiceLocatorRule()
 
     private val policy by setUp { ConnectionBasedExecutionPolicy(context) }
+
+    @Before
+    fun setUp() {
+        whenever(GlobalServiceLocator.getInstance().activeNetworkTypeProvider.getNetworkType(context))
+            .doReturn(networkType)
+    }
 
     @Test
     fun canBeExecuted() {

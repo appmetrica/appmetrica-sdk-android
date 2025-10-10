@@ -45,6 +45,7 @@ class ObfuscatorReservedKeysTest(
                 arrayOf("ec", "METRIKALIB-8791"),
                 arrayOf("pi", "METRIKALIB-8791"),
                 arrayOf("aic", "METRIKALIB-10393"),
+                arrayOf("is", "METRIKALIB-10394"),
             )
         }
     }

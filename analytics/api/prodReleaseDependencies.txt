@@ -35,6 +35,7 @@ io.appmetrica.analytics:common-logger:unspecified
 io.appmetrica.analytics:core-api:unspecified
 io.appmetrica.analytics:core-utils:unspecified
 io.appmetrica.analytics:gpllibrary:unspecified
+io.appmetrica.analytics:id-sync:unspecified
 io.appmetrica.analytics:identifiers:unspecified
 io.appmetrica.analytics:location-api:unspecified
 io.appmetrica.analytics:location:unspecified

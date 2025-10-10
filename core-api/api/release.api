@@ -547,8 +547,19 @@ public interface io.appmetrica.analytics.coreapi.internal.servicecomponents.batt
     public abstract void registerChargeTypeListener([NonNull] io.appmetrica.analytics.coreapi.internal.servicecomponents.batteryinfo.ChargeTypeChangeListener)
 }
 
+public interface io.appmetrica.analytics.coreapi.internal.system.ActiveNetworkTypeProvider {
+    public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.system.NetworkType getNetworkType([NonNull] android.content.Context)
+}
+
 public interface io.appmetrica.analytics.coreapi.internal.system.LocaleProvider {
     public abstract [NonNull] java.util.List<String> getLocales()
+}
+
+public enum io.appmetrica.analytics.coreapi.internal.system.NetworkType {
+    BLUETOOTH, CELL, ETHERNET, LOWPAN, MOBILE_DUN, MOBILE_HIPRI, MOBILE_MMS, MOBILE_SUPL, OFFLINE, UNDEFINED, VPN, WIFI, WIFI_AWARE, WIMAX
+
+    public static io.appmetrica.analytics.coreapi.internal.system.NetworkType valueOf(String)
+    public static io.appmetrica.analytics.coreapi.internal.system.NetworkType[] values()
 }
 
 public interface io.appmetrica.analytics.coreapi.internal.system.PermissionExtractor {

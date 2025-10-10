@@ -14,11 +14,12 @@ class ResponseTest : CommonTest() {
     private val responseData = "aaa".toByteArray()
     private val errorData = "bbb".toByteArray()
     private val headers = mapOf("key1" to listOf("header1", "header2"), "key2" to listOf("header3", "header4"))
+    private val url = "Some url"
     private val exception = RuntimeException()
 
     @Test
     fun createFilledObject() {
-        val response = Response(completed, code, responseData, errorData, headers, exception)
+        val response = Response(completed, code, responseData, errorData, headers, exception, url)
         ObjectPropertyAssertions(response)
             .withPrivateFields(true)
             .checkField("completed", "isCompleted", completed)
@@ -27,6 +28,7 @@ class ResponseTest : CommonTest() {
             .checkField("errorData", "getErrorData", errorData)
             .checkField("headers", "getHeaders", headers)
             .checkField("exception", "getException", exception)
+            .checkField("url", "getUrl", url)
             .checkAll()
     }
 
@@ -46,7 +48,7 @@ class ResponseTest : CommonTest() {
 
     @Test
     fun createEmptyObject() {
-        val response = Response(false, 0, ByteArray(0), ByteArray(0), null, null)
+        val response = Response(false, 0, ByteArray(0), ByteArray(0), null, null, null)
         ObjectPropertyAssertions(response)
             .withPrivateFields(true)
             .checkField("completed", "isCompleted", false)
@@ -55,6 +57,7 @@ class ResponseTest : CommonTest() {
             .checkField("errorData", "getErrorData", ByteArray(0))
             .checkField("headers", "getHeaders", emptyMap<String, List<String>>())
             .checkFieldIsNull("exception", "getException")
+            .checkFieldIsNull("url", "getUrl")
             .checkAll()
     }
 
@@ -69,6 +72,7 @@ class ResponseTest : CommonTest() {
             .checkField("errorData", "getErrorData", ByteArray(0))
             .checkField("headers", "getHeaders", emptyMap<String, List<String>>())
             .checkField("exception", "getException", exception)
+            .checkFieldIsNull("url", "getUrl")
             .checkAll()
     }
 }

@@ -11,6 +11,7 @@ import io.appmetrica.analytics.coreapi.internal.identifiers.AppSetIdScope;
 import io.appmetrica.analytics.coreapi.internal.identifiers.PlatformIdentifiers;
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.applicationstate.ApplicationState;
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.applicationstate.ApplicationStateObserver;
+import io.appmetrica.analytics.coreapi.internal.system.ActiveNetworkTypeProvider;
 import io.appmetrica.analytics.coreapi.internal.system.PermissionExtractor;
 import io.appmetrica.analytics.coreutils.internal.ReferenceHolder;
 import io.appmetrica.analytics.coreutils.internal.services.FirstExecutionConditionServiceImpl;
@@ -149,6 +150,7 @@ public class GlobalServiceLocatorRule extends ExternalResource {
         when(globalServiceLocator.getReferenceHolder()).thenReturn(mock(ReferenceHolder.class));
         when(globalServiceLocator.getServiceModuleReporterComponentLifecycle())
             .thenReturn(mock(ServiceModuleReporterComponentLifecycleImpl.class));
+        when(globalServiceLocator.getActiveNetworkTypeProvider()).thenReturn(mock(ActiveNetworkTypeProvider.class));
         GlobalServiceLocator.setInstance(globalServiceLocator);
     }
 

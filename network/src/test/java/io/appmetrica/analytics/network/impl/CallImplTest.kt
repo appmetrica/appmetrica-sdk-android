@@ -53,7 +53,7 @@ class CallImplTest : CommonTest() {
         }
         val result = callImpl.execute()
         verifyNoInteractions(client, connection)
-        checkResponse(result, false, 0, ByteArray(0), ByteArray(0), emptyMap(), exception)
+        checkResponse(result, false, 0, ByteArray(0), ByteArray(0), emptyMap(), exception, null)
     }
 
     @Test
@@ -70,6 +70,7 @@ class CallImplTest : CommonTest() {
             .checkField("responseData", "getResponseData", ByteArray(0))
             .checkField("errorData", "getErrorData", ByteArray(0))
             .checkField("headers", "getHeaders", emptyMap<String, List<String>>())
+            .checkField("url", null as String?)
             .checkFieldMatchPredicate(
                 "exception",
                 "getException",
@@ -92,7 +93,7 @@ class CallImplTest : CommonTest() {
         val url = "some url"
         val method = "GET"
         val body = "some body".toByteArray()
-        val headers = mapOf("key1" to "value1", "key2" to "value2")
+        val headers = mapOf("key1" to "value1", "key2" to "value2, value3")
         val connectTimeout = 777
         val readTimeout = 888
         val sslSocketFactory = mock<SSLSocketFactory>()
@@ -116,7 +117,7 @@ class CallImplTest : CommonTest() {
         verify(connection).requestMethod = method
         verify(connection, never()).outputStream
         verify(connection).addRequestProperty("key1", "value1")
-        verify(connection).addRequestProperty("key2", "value2")
+        verify(connection).addRequestProperty("key2", "value2, value3")
         verify(connection).connectTimeout = connectTimeout
         verify(connection).readTimeout = readTimeout
         verify(connection).sslSocketFactory = sslSocketFactory
@@ -155,7 +156,7 @@ class CallImplTest : CommonTest() {
         val url = "some url"
         val method = "POST"
         val body = "some body".toByteArray()
-        val headers = mapOf("key1" to "value1", "key2" to "value2")
+        val headers = mapOf("key1" to "value1", "key2" to "value2, value3")
         val connectTimeout = 777
         val readTimeout = 888
         val sslSocketFactory = mock<SSLSocketFactory>()
@@ -182,7 +183,7 @@ class CallImplTest : CommonTest() {
         verify(urlProvider).createUrl(url)
         verify(connection).requestMethod = method
         verify(connection).addRequestProperty("key1", "value1")
-        verify(connection).addRequestProperty("key2", "value2")
+        verify(connection).addRequestProperty("key2", "value2, value3")
         verify(connection).connectTimeout = connectTimeout
         verify(connection).readTimeout = readTimeout
         verify(connection).sslSocketFactory = sslSocketFactory
@@ -237,18 +238,20 @@ class CallImplTest : CommonTest() {
             on { responseCode } doThrow exception
         }
         val response = callImpl.execute()
-        checkResponse(response, false, 0, ByteArray(0), ByteArray(0), emptyMap(), exception)
+        checkResponse(response, false, 0, ByteArray(0), ByteArray(0), emptyMap(), exception, null)
         verify(connection).disconnect()
     }
 
     @Test
     fun emptyResponse() {
         val code = 310
+        val requestUrl = URL("https", "some", "")
         stubbing(connection) {
             on { responseCode } doReturn code
+            on { url } doReturn requestUrl
         }
         val response = callImpl.execute()
-        checkResponse(response, true, code, ByteArray(0), ByteArray(0), emptyMap(), null)
+        checkResponse(response, true, code, ByteArray(0), ByteArray(0), emptyMap(), null, requestUrl.toString())
         verify(connection).disconnect()
     }
 
@@ -260,14 +263,16 @@ class CallImplTest : CommonTest() {
         val inputStream = BufferedInputStream(ByteArrayInputStream(responseData))
         val errorStream = BufferedInputStream(ByteArrayInputStream(errorData))
         val headers = mapOf("key1" to listOf("header1", "header2"), "key2" to listOf("header3", "header4"))
+        val url = URL("https", "test.com", "")
         stubbing(connection) {
             on { responseCode } doReturn code
             on { this.inputStream } doReturn inputStream
             on { this.errorStream } doReturn errorStream
             on { this.headerFields } doReturn headers
+            on { this.url } doReturn url
         }
         val response = callImpl.execute()
-        checkResponse(response, true, code, responseData, errorData, headers, null)
+        checkResponse(response, true, code, responseData, errorData, headers, null, url.toString())
         verify(connection).disconnect()
     }
 
@@ -298,7 +303,8 @@ class CallImplTest : CommonTest() {
         responseData: ByteArray,
         errorData: ByteArray,
         headers: Map<String, List<String>>,
-        exception: Throwable?
+        exception: Throwable?,
+        url: String?
     ) {
         ObjectPropertyAssertions(actual)
             .withPrivateFields(true)
@@ -308,6 +314,7 @@ class CallImplTest : CommonTest() {
             .checkField("errorData", "getErrorData", errorData)
             .checkField("headers", "getHeaders", headers)
             .checkField("exception", "getException", exception)
+            .checkField("url", "getUrl", url)
             .checkAll()
     }
 }

@@ -9,6 +9,7 @@ import io.appmetrica.analytics.coreapi.internal.servicecomponents.SdkEnvironment
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceModuleReporterComponentLifecycle
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.applicationstate.ApplicationStateProvider
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.batteryinfo.ChargeTypeProvider
+import io.appmetrica.analytics.coreapi.internal.system.ActiveNetworkTypeProvider
 import io.appmetrica.analytics.coreapi.internal.system.PermissionExtractor
 import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.db.storage.DatabaseStorageFactory
@@ -72,4 +73,7 @@ internal class ServiceContextFacade(
 
     override val serviceModuleReporterComponentLifecycle: ServiceModuleReporterComponentLifecycle
         get() = GlobalServiceLocator.getInstance().serviceModuleReporterComponentLifecycle
+
+    override val activeNetworkTypeProvider: ActiveNetworkTypeProvider
+        get() = GlobalServiceLocator.getInstance().activeNetworkTypeProvider
 }

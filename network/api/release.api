@@ -50,12 +50,14 @@ public static class io.appmetrica.analytics.network.internal.Request$Builder {
 
 public class io.appmetrica.analytics.network.internal.Response {
     public <init>(boolean, int, [NonNull] byte[], [NonNull] byte[], [Nullable] java.util.Map<String, java.util.List<String>>, [Nullable] Throwable)
+    public <init>(boolean, int, [NonNull] byte[], [NonNull] byte[], [Nullable] java.util.Map<String, java.util.List<String>>, [Nullable] Throwable, [Nullable] String)
     public <init>([Nullable] Throwable)
     public int getCode()
     public [NonNull] byte[] getErrorData()
     public [Nullable] Throwable getException()
     public [NonNull] java.util.Map<String, java.util.List<String>> getHeaders()
     public [NonNull] byte[] getResponseData()
+    public [Nullable] String getUrl()
     public boolean isCompleted()
     public String toString()
 }

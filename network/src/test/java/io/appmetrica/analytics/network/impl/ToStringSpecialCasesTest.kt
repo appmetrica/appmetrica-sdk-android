@@ -30,7 +30,15 @@ class ToStringSpecialCasesTest : CommonTest() {
 
     @Test
     fun responseToString() {
-        val response = Response(true, 123, "aaa".toByteArray(), "bbb".toByteArray(), emptyMap(), RuntimeException())
+        val response = Response(
+            true,
+            123,
+            "aaa".toByteArray(),
+            "bbb".toByteArray(),
+            emptyMap(),
+            RuntimeException(),
+            "Some url"
+        )
         val extractedFieldAndValues = ToStringTestUtils.extractFieldsAndValues(
             Response::class.java,
             response,

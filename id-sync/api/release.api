@@ -1,0 +1,55 @@
+public final class io.appmetrica.analytics.idsync.BuildConfig {
+    public static final String BUILD_TYPE
+    public static final boolean DEBUG
+    public static final String LIBRARY_PACKAGE_NAME
+
+    public <init>()
+}
+
+public final class io.appmetrica.analytics.idsync.internal.IdSyncModuleEntryPoint extends io.appmetrica.analytics.modulesapi.internal.service.ModuleServiceEntryPoint<io.appmetrica.analytics.idsync.internal.model.IdSyncConfig> implementation io.appmetrica.analytics.modulesapi.internal.service.RemoteConfigUpdateListener<io.appmetrica.analytics.idsync.internal.model.IdSyncConfig> {
+    public <init>()
+    public [NonNull] String getIdentifier()
+    public [NonNull] io.appmetrica.analytics.modulesapi.internal.service.RemoteConfigExtensionConfiguration<io.appmetrica.analytics.idsync.internal.model.IdSyncConfig> getRemoteConfigExtensionConfiguration()
+    public void initServiceSide([NonNull] io.appmetrica.analytics.modulesapi.internal.service.ServiceContext, [NonNull] io.appmetrica.analytics.modulesapi.internal.service.ModuleRemoteConfig<io.appmetrica.analytics.idsync.internal.model.IdSyncConfig>)
+    public void onRemoteConfigUpdated([NonNull] io.appmetrica.analytics.modulesapi.internal.service.ModuleRemoteConfig<io.appmetrica.analytics.idsync.internal.model.IdSyncConfig>)
+}
+
+public final class io.appmetrica.analytics.idsync.internal.model.IdSyncConfig {
+    public <init>(boolean, long, [NonNull] java.util.List<io.appmetrica.analytics.idsync.internal.model.RequestConfig>)
+    public boolean equals([Nullable] Object)
+    public final boolean getEnabled()
+    public final long getLaunchDelay()
+    public final [NonNull] java.util.List<io.appmetrica.analytics.idsync.internal.model.RequestConfig> getRequests()
+    public int hashCode()
+    public [NonNull] String toString()
+}
+
+public enum io.appmetrica.analytics.idsync.internal.model.NetworkType {
+    ANY, CELL
+
+    public static io.appmetrica.analytics.idsync.internal.model.NetworkType valueOf(String)
+    public static io.appmetrica.analytics.idsync.internal.model.NetworkType[] values()
+}
+
+public final class io.appmetrica.analytics.idsync.internal.model.Preconditions {
+    public <init>([NonNull] io.appmetrica.analytics.idsync.internal.model.NetworkType)
+    public boolean equals([Nullable] Object)
+    public final [NonNull] io.appmetrica.analytics.idsync.internal.model.NetworkType getNetworkType()
+    public int hashCode()
+    public [NonNull] String toString()
+}
+
+public final class io.appmetrica.analytics.idsync.internal.model.RequestConfig {
+    public <init>([NonNull] String, [NonNull] String, [NonNull] io.appmetrica.analytics.idsync.internal.model.Preconditions, [NonNull] java.util.Map<String, ? extends java.util.List<String>>, long, long, [NonNull] java.util.List<Integer>)
+    public boolean equals([Nullable] Object)
+    public final [NonNull] java.util.Map<String, java.util.List<String>> getHeaders()
+    public final [NonNull] io.appmetrica.analytics.idsync.internal.model.Preconditions getPreconditions()
+    public final long getResendIntervalForInvalidResponse()
+    public final long getResendIntervalForValidResponse()
+    public final [NonNull] String getType()
+    public final [NonNull] String getUrl()
+    public final [NonNull] java.util.List<Integer> getValidResponseCodes()
+    public int hashCode()
+    public [NonNull] String toString()
+}
+

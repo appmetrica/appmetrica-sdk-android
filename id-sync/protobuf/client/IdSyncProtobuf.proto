@@ -1,0 +1,36 @@
+syntax = "proto2";
+
+message IdSyncConfig {
+
+    enum NetworkType {
+        NETWORK_TYPE_ANY = 0;
+        NETWORK_TYPE_CELL = 1;
+    }
+
+    message Preconditions {
+        optional NetworkType network_type = 1 [default = NETWORK_TYPE_ANY];
+    }
+
+    message Header {
+        optional bytes name = 1;
+        repeated bytes value = 2;
+    }
+
+    message Request {
+        optional bytes type = 1;
+        optional Preconditions preconditions = 2;
+        optional bytes url = 3;
+        repeated Header headers = 4;
+        optional uint64 resend_interval_for_valid_response = 5 [default = 86400000];
+        optional uint64 resend_interval_for_invalid_response = 6 [default = 3600000];
+        repeated uint32 valid_response_codes = 7;
+    }
+
+    message RequestConfig {
+        optional uint64 launch_delay = 1 [default = 10000];
+        repeated Request requests = 2;
+    }
+
+    optional bool enabled = 1 [default = false];
+    optional RequestConfig request_config = 2;
+}

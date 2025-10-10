@@ -172,12 +172,13 @@ dependencies {
     implementation(project(":network-tasks"))
 
     runtimeOnly(project(":ad-revenue"))
+    runtimeOnly(project(":billing"))
     runtimeOnly(project(":identifiers"))
     runtimeOnly(project(":location"))
     runtimeOnly(project(":remote-permissions"))
     runtimeOnly(project(":reporter-extension"))
     runtimeOnly(project(":screenshot"))
-    runtimeOnly(project(":billing"))
+    runtimeOnly(project(":id-sync"))
 
     testImplementation(project(":identifiers"))
     testImplementation("com.google.android.gms:play-services-location:${Deps.gmsLocationVersion}")

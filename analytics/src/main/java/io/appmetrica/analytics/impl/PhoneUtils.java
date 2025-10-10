@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.backport.FunctionWithThrowable;
+import io.appmetrica.analytics.coreapi.internal.system.NetworkType;
 import io.appmetrica.analytics.coreutils.internal.AndroidUtils;
 import io.appmetrica.analytics.coreutils.internal.system.SystemServiceUtils;
 import io.appmetrica.analytics.impl.protobuf.backend.EventProto;
@@ -20,25 +21,6 @@ import io.appmetrica.analytics.impl.utils.MapWithDefault;
 import java.util.Locale;
 
 public final class PhoneUtils {
-
-    public enum NetworkType {
-        WIFI,
-        CELL,
-        ETHERNET,
-        BLUETOOTH,
-        VPN,
-        LOWPAN,
-        WIFI_AWARE,
-        MOBILE_DUN,
-        MOBILE_HIPRI,
-        MOBILE_MMS,
-        MOBILE_SUPL,
-        WIMAX,
-        OFFLINE,
-        UNDEFINED
-    }
-
-    private static final String TAG = "[PhoneUtils]";
 
     // Prevent instantiation
     private PhoneUtils() {}

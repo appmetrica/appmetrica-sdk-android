@@ -37,8 +37,9 @@ import io.appmetrica.analytics.impl.servicecomponents.ServiceLifecycleTimeTracke
 import io.appmetrica.analytics.impl.startup.StartupState;
 import io.appmetrica.analytics.impl.startup.uuid.MultiProcessSafeUuidProvider;
 import io.appmetrica.analytics.impl.startup.uuid.UuidFromStartupStateImporter;
-import io.appmetrica.analytics.impl.utils.process.CurrentProcessDetector;
+import io.appmetrica.analytics.impl.utils.ActiveNetworkTypeProviderImpl;
 import io.appmetrica.analytics.impl.utils.DebugAssert;
+import io.appmetrica.analytics.impl.utils.process.CurrentProcessDetector;
 import io.appmetrica.analytics.networktasks.internal.NetworkCore;
 import io.appmetrica.analytics.networktasks.internal.NetworkServiceLocator;
 import io.appmetrica.analytics.testutils.CommonTest;
@@ -48,6 +49,8 @@ import io.appmetrica.analytics.testutils.MockedStaticRule;
 import io.appmetrica.analytics.testutils.TestUtils;
 import java.util.Collections;
 import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.After;
 import org.junit.Before;
@@ -60,14 +63,13 @@ import org.mockito.Mock;
 import org.mockito.MockedConstruction;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
-import org.robolectric.RobolectricTestRunner;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import org.mockito.MockitoAnnotations;
+import org.robolectric.RobolectricTestRunner;
 
 @RunWith(RobolectricTestRunner.class)
 public class GlobalServiceLocatorTest extends CommonTest {
@@ -181,6 +183,10 @@ public class GlobalServiceLocatorTest extends CommonTest {
     @Rule
     public final MockedConstructionRule<ConnectionBasedExecutionPolicy> connectionBasedPolicyRule =
         new MockedConstructionRule<>(ConnectionBasedExecutionPolicy.class);
+
+    @Rule
+    public final MockedConstructionRule<ActiveNetworkTypeProviderImpl> activeNetworkTypeProviderMockedConstructionRule =
+        new MockedConstructionRule<>(ActiveNetworkTypeProviderImpl.class);
 
     @Mock
     private StorageFactory<ClidsInfo> clidsStorageFactory;
@@ -556,6 +562,15 @@ public class GlobalServiceLocatorTest extends CommonTest {
             .isEqualTo(referenceHolderMockedConstructionRule.getConstructionMock().constructed().get(0));
         assertThat(referenceHolderMockedConstructionRule.getConstructionMock().constructed()).hasSize(1);
         assertThat(referenceHolderMockedConstructionRule.getArgumentInterceptor().flatArguments()).isEmpty();
+    }
+
+    @Test
+    public void getActiveNetworkTypeProvider() {
+        GlobalServiceLocator.init(mContext);
+        assertThat(GlobalServiceLocator.getInstance().getActiveNetworkTypeProvider())
+            .isEqualTo(activeNetworkTypeProviderMockedConstructionRule.getConstructionMock().constructed().get(0));
+        assertThat(activeNetworkTypeProviderMockedConstructionRule.getConstructionMock().constructed()).hasSize(1);
+        assertThat(activeNetworkTypeProviderMockedConstructionRule.getArgumentInterceptor().flatArguments()).isEmpty();
     }
 
     private StartupStateHolder startupStateHolder() {

@@ -38,6 +38,7 @@ internal class CallImpl @VisibleForTesting constructor(
         var responseHeaders: Map<String, List<String>>? = null
         var responseData = ByteArray(0)
         var errorData = ByteArray(0)
+        var requestUrl: String? = null
         try {
             setUpBaseConnection(httpsConnection)
             if (request.method == "POST") {
@@ -47,6 +48,7 @@ internal class CallImpl @VisibleForTesting constructor(
             responseHeaders = httpsConnection.headerFields
             responseData = Utils.readSafely(client.maxResponseSize) { httpsConnection.inputStream }
             errorData = Utils.readSafely(client.maxResponseSize) { httpsConnection.errorStream }
+            requestUrl = httpsConnection.url.toString()
             completed = true
         } catch (ex: Throwable) {
             DebugLogger.error(tag, ex)
@@ -60,13 +62,15 @@ internal class CallImpl @VisibleForTesting constructor(
             }
         }
 
-        return Response(completed, responseCode, responseData, errorData, responseHeaders, exception).also {
+        return Response(completed, responseCode, responseData, errorData, responseHeaders, exception, requestUrl).also {
             DebugLogger.info(tag, "Response: $it")
         }
     }
 
     private fun setUpBaseConnection(connection: HttpsURLConnection) {
-        request.headers.entries.forEach { connection.addRequestProperty(it.key, it.value) }
+        request.headers.entries.forEach { entry ->
+            connection.addRequestProperty(entry.key, entry.value)
+        }
         client.readTimeout?.let { connection.readTimeout = it }
         client.connectTimeout?.let { connection.connectTimeout = it }
         client.useCaches?.let { connection.useCaches = it }

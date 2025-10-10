@@ -47,6 +47,12 @@
     </dependency>
     <dependency>
       <groupId>io.appmetrica.analytics</groupId>
+      <artifactId>analytics-billing</artifactId>
+      <version>7.13.0</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.appmetrica.analytics</groupId>
       <artifactId>analytics-identifiers</artifactId>
       <version>7.13.0</version>
       <scope>runtime</scope>
@@ -77,7 +83,7 @@
     </dependency>
     <dependency>
       <groupId>io.appmetrica.analytics</groupId>
-      <artifactId>analytics-billing</artifactId>
+      <artifactId>analytics-id-sync</artifactId>
       <version>7.13.0</version>
       <scope>runtime</scope>
     </dependency>
