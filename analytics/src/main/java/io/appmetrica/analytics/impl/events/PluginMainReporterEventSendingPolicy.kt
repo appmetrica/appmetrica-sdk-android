@@ -30,7 +30,7 @@ internal class PluginMainReporterEventSendingPolicy(
             )
             GlobalServiceLocator.getInstance().activationBarrier.subscribe(
                 TimeUnit.SECONDS.toMillis(DefaultValues.ANONYMOUS_API_KEY_EVENT_SENDING_DELAY_SECONDS),
-                GlobalServiceLocator.getInstance().serviceExecutorProvider.defaultExecutor,
+                GlobalServiceLocator.getInstance().serviceExecutorProvider.reportRunnableExecutor,
                 this
             )
         } else {

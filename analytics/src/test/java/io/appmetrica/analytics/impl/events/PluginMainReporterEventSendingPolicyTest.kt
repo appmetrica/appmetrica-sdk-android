@@ -11,6 +11,7 @@ import io.appmetrica.analytics.impl.db.preferences.PreferencesComponentDbStorage
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -45,11 +46,15 @@ internal class PluginMainReporterEventSendingPolicyTest : CommonTest() {
         GlobalServiceLocator.getInstance().activationBarrier
     }
 
-    private val executor: IHandlerExecutor by setUp {
-        GlobalServiceLocator.getInstance().serviceExecutorProvider.defaultExecutor
-    }
+    private val executor: IHandlerExecutor = mock()
 
     private val activationCallbackCaptor = argumentCaptor<ActivationBarrierCallback>()
+
+    @Before
+    fun setUp() {
+        whenever(GlobalServiceLocator.getInstance().serviceExecutorProvider.reportRunnableExecutor)
+            .thenReturn(executor)
+    }
 
     @Test
     fun `condition is not met`() {
