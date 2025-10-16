@@ -40,6 +40,7 @@ import org.mockito.kotlin.doThrow
 import org.mockito.kotlin.inOrder
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
+import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.verifyNoMoreInteractions
@@ -228,6 +229,27 @@ internal class ServiceModulesControllerTest : CommonTest() {
     }
 
     @Test
+    fun collectFeaturesIfModuleThrowException() {
+        modulesController.registerModule(firstModule)
+        modulesController.registerModule(secondModule)
+
+        val exception = RuntimeException()
+        doThrow(exception).whenever(firstModule).remoteConfigExtensionConfiguration
+
+        assertThat(modulesController.collectFeatures()).containsExactlyElementsOf(secondModuleFeatures)
+
+        verify(selfReporter).reportEvent(
+            "service_module_errors",
+            mapOf(firstModuleIdentifier to mapOf("features" to exception.stackTraceToString()))
+        )
+
+        clearInvocations(firstModule, secondModule)
+        modulesController.onStartupStateChanged(startupState)
+        verifyNoInteractions(firstModule)
+        verify(secondModuleConfigUpdateListener).onRemoteConfigUpdated(secondModuleRemoteConfig)
+    }
+
+    @Test
     fun collectBlocksWithoutModules() {
         assertThat(modulesController.collectBlocks()).isEmpty()
     }
@@ -253,6 +275,27 @@ internal class ServiceModulesControllerTest : CommonTest() {
     }
 
     @Test
+    fun collectBlocksIfModuleThrowException() {
+        modulesController.registerModule(firstModule)
+        modulesController.registerModule(secondModule)
+
+        val exception = RuntimeException()
+        doThrow(exception).whenever(firstModule).remoteConfigExtensionConfiguration
+
+        assertThat(modulesController.collectBlocks()).containsExactlyEntriesOf(secondModuleBlocks)
+
+        verify(selfReporter).reportEvent(
+            "service_module_errors",
+            mapOf(firstModuleIdentifier to mapOf("blocks" to exception.stackTraceToString()))
+        )
+
+        clearInvocations(firstModule, secondModule)
+        modulesController.onStartupStateChanged(startupState)
+        verifyNoInteractions(firstModule)
+        verify(secondModuleConfigUpdateListener).onRemoteConfigUpdated(secondModuleRemoteConfig)
+    }
+
+    @Test
     fun collectRemoteConfigControllersWithoutModules() {
         assertThat(modulesController.collectRemoteConfigControllers()).isEmpty()
     }
@@ -274,6 +317,33 @@ internal class ServiceModulesControllerTest : CommonTest() {
                         to ModuleRemoteConfigController(firstRemoteConfigExtensionConfiguration)
                 )
             )
+    }
+
+    @Test
+    fun collectRemoteConfigControllersIfModuleThrowException() {
+        modulesController.registerModule(firstModule)
+        modulesController.registerModule(secondModule)
+
+        val exception = RuntimeException()
+        doThrow(exception).whenever(firstModule).remoteConfigExtensionConfiguration
+
+        assertThat(modulesController.collectRemoteConfigControllers())
+            .usingRecursiveComparison()
+            .isEqualTo(
+                mapOf(
+                    secondModuleIdentifier to ModuleRemoteConfigController(secondRemoteConfigExtensionConfiguration)
+                )
+            )
+
+        verify(selfReporter).reportEvent(
+            "service_module_errors",
+            mapOf(firstModuleIdentifier to mapOf("remote_config_controller" to exception.stackTraceToString()))
+        )
+
+        clearInvocations(firstModule, secondModule)
+        modulesController.onStartupStateChanged(startupState)
+        verifyNoInteractions(firstModule)
+        verify(secondModuleConfigUpdateListener).onRemoteConfigUpdated(secondModuleRemoteConfig)
     }
 
     @Test
@@ -309,6 +379,27 @@ internal class ServiceModulesControllerTest : CommonTest() {
     }
 
     @Test
+    fun `collectLocationConsumers if module throw exception`() {
+        modulesController.registerModule(firstModule)
+        modulesController.registerModule(secondModule)
+
+        val exception = RuntimeException()
+        doThrow(exception).whenever(firstModule).locationServiceExtension
+
+        assertThat(modulesController.collectLocationConsumers()).containsExactly(secondLocationConsumer)
+
+        verify(selfReporter).reportEvent(
+            "service_module_errors",
+            mapOf(firstModuleIdentifier to mapOf("location_consumer" to exception.stackTraceToString()))
+        )
+
+        clearInvocations(firstModule, secondModule)
+        modulesController.onStartupStateChanged(startupState)
+        verifyNoInteractions(firstModule)
+        verify(secondModuleConfigUpdateListener).onRemoteConfigUpdated(secondModuleRemoteConfig)
+    }
+
+    @Test
     fun `collectLocationSourceController without modules`() {
         assertThat(modulesController.chooseLocationSourceController()).isNull()
     }
@@ -337,6 +428,42 @@ internal class ServiceModulesControllerTest : CommonTest() {
         modulesController.registerModule(firstModule)
         modulesController.registerModule(secondModule)
         assertThat(modulesController.chooseLocationSourceController()).isEqualTo(firstLocationSourcesController)
+    }
+
+    @Test
+    fun `collectLocationSourceController if module throw exception`() {
+        modulesController.registerModule(firstModule)
+        modulesController.registerModule(secondModule)
+
+        val exception = RuntimeException()
+        doThrow(exception).whenever(firstModule).locationServiceExtension
+
+        assertThat(modulesController.chooseLocationSourceController()).isEqualTo(secondLocationSourcesController)
+
+        verify(selfReporter).reportEvent(
+            "service_module_errors",
+            mapOf(firstModuleIdentifier to mapOf("location_source_controller" to exception.stackTraceToString()))
+        )
+
+        clearInvocations(firstModule, secondModule)
+        modulesController.onStartupStateChanged(startupState)
+        verifyNoInteractions(firstModule)
+        verify(secondModuleConfigUpdateListener).onRemoteConfigUpdated(secondModuleRemoteConfig)
+    }
+
+    @Test
+    fun `collectLocationSourceController if single module throw exception`() {
+        modulesController.registerModule(firstModule)
+
+        val exception = RuntimeException()
+        doThrow(exception).whenever(firstModule).locationServiceExtension
+
+        assertThat(modulesController.chooseLocationSourceController()).isNull()
+
+        verify(selfReporter).reportEvent(
+            "service_module_errors",
+            mapOf(firstModuleIdentifier to mapOf("location_source_controller" to exception.stackTraceToString()))
+        )
     }
 
     @Test
@@ -370,6 +497,43 @@ internal class ServiceModulesControllerTest : CommonTest() {
         modulesController.registerModule(secondModule)
         assertThat(modulesController.chooseLocationAppStateControlToggle())
             .isEqualTo(firstLocationControllerAppStateToggle)
+    }
+
+    @Test
+    fun `collectLocationAppStateControlToggle if module throw exception`() {
+        modulesController.registerModule(firstModule)
+        modulesController.registerModule(secondModule)
+
+        val exception = RuntimeException()
+        doThrow(exception).whenever(firstModule).locationServiceExtension
+
+        assertThat(modulesController.chooseLocationAppStateControlToggle())
+            .isEqualTo(secondLocationControllerAppStateToggle)
+
+        verify(selfReporter).reportEvent(
+            "service_module_errors",
+            mapOf(firstModuleIdentifier to mapOf("location_app_state_control_toggle" to exception.stackTraceToString()))
+        )
+
+        clearInvocations(firstModule, secondModule)
+        modulesController.onStartupStateChanged(startupState)
+        verifyNoInteractions(firstModule)
+        verify(secondModuleConfigUpdateListener).onRemoteConfigUpdated(secondModuleRemoteConfig)
+    }
+
+    @Test
+    fun `collectLocationAppStateControlToggle if single module throw exception`() {
+        modulesController.registerModule(firstModule)
+
+        val exception = RuntimeException()
+        doThrow(exception).whenever(firstModule).locationServiceExtension
+
+        assertThat(modulesController.chooseLocationAppStateControlToggle()).isNull()
+
+        verify(selfReporter).reportEvent(
+            "service_module_errors",
+            mapOf(firstModuleIdentifier to mapOf("location_app_state_control_toggle" to exception.stackTraceToString()))
+        )
     }
 
     @Test
@@ -454,6 +618,28 @@ internal class ServiceModulesControllerTest : CommonTest() {
     fun onStartupChangedWithoutModules() {
         modulesController.onStartupStateChanged(startupState)
         verifyNoMoreInteractions(firstModule, secondModule, lightModule)
+    }
+
+    @Test
+    fun onStartupStateChangedIfModuleThrowException() {
+        modulesController.registerModule(firstModule)
+        modulesController.registerModule(secondModule)
+
+        val exception = RuntimeException()
+        doThrow(exception).whenever(firstModule).remoteConfigExtensionConfiguration
+
+        modulesController.onStartupStateChanged(startupState)
+        verify(secondModuleConfigUpdateListener).onRemoteConfigUpdated(secondModuleRemoteConfig)
+
+        verify(selfReporter).reportEvent(
+            "service_module_errors",
+            mapOf(firstModuleIdentifier to mapOf("remote_config_updated" to exception.stackTraceToString()))
+        )
+
+        clearInvocations(firstModule, secondModule)
+        modulesController.onStartupStateChanged(startupState)
+        verifyNoInteractions(firstModule)
+        verify(secondModuleConfigUpdateListener, times(2)).onRemoteConfigUpdated(secondModuleRemoteConfig)
     }
 
     @Test
@@ -545,6 +731,34 @@ internal class ServiceModulesControllerTest : CommonTest() {
             firstModuleIdentifier
         )
         assertThat(modulesConfig.getBundle(firstModuleIdentifier)).isEqualTo(firstBundle)
+    }
+
+    @Test
+    fun `getModulesConfigsBundleForClient if module throw exception`() {
+        val firstBundle = Bundle()
+        val secondBundle = Bundle()
+
+        whenever(firstClientConfigProvider.getConfigBundleForClient()).thenReturn(firstBundle)
+        whenever(secondClientConfigProvider.getConfigBundleForClient()).thenReturn(secondBundle)
+
+        val exception = RuntimeException()
+        doThrow(exception).whenever(firstModule).clientConfigProvider
+
+        modulesController.registerModule(firstModule)
+        modulesController.registerModule(secondModule)
+
+        val modulesConfig = modulesController.getModulesConfigsBundleForClient()
+        assertThat(modulesConfig.keySet()).containsExactlyInAnyOrder(secondModuleIdentifier)
+
+        verify(selfReporter).reportEvent(
+            "service_module_errors",
+            mapOf(firstModuleIdentifier to mapOf("config_bundle" to exception.stackTraceToString()))
+        )
+
+        clearInvocations(firstModule, secondModule)
+        modulesController.onStartupStateChanged(startupState)
+        verifyNoInteractions(firstModule)
+        verify(secondModuleConfigUpdateListener).onRemoteConfigUpdated(secondModuleRemoteConfig)
     }
 
     private fun alwaysAskForPermissionStrategy(): NeverForbidPermissionStrategy {

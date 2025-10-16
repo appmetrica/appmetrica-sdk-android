@@ -41,19 +41,37 @@ internal class ServiceModulesController :
         get() = askForPermissionStrategyProvider.askForPermissionStrategy
 
     override fun collectFeatures(): List<String> {
+        val wrongModules = hashSetOf<ModuleServiceEntryPoint<Any>>()
         val result = modules.flatMap { module ->
-            module.remoteConfigExtensionConfiguration?.getFeatures() ?: emptyList()
+            try {
+                module.remoteConfigExtensionConfiguration?.getFeatures() ?: emptyList()
+            } catch (e: Throwable) {
+                DebugLogger.error(tag, "Failed to get features from module ${module.identifier}", e)
+                reportSelfErrorEvent(module.identifier, "features", e)
+                wrongModules.add(module)
+                emptyList()
+            }
         }
+        disableDefectiveModules(wrongModules)
         DebugLogger.info(tag, "Collected features from modules: $result")
 
         return result
     }
 
     override fun collectBlocks(): Map<String, Int> {
+        val wrongModules = hashSetOf<ModuleServiceEntryPoint<Any>>()
         val result = modules.flatMap {
-            it.remoteConfigExtensionConfiguration?.getBlocks()?.toList() ?: emptyList()
+            try {
+                it.remoteConfigExtensionConfiguration?.getBlocks()?.toList() ?: emptyList()
+            } catch (e: Throwable) {
+                DebugLogger.error(tag, "Failed to get blocks from module ${it.identifier}", e)
+                reportSelfErrorEvent(it.identifier, "blocks", e)
+                wrongModules.add(it)
+                emptyList()
+            }
         }.toMap()
 
+        disableDefectiveModules(wrongModules)
         DebugLogger.info(tag, "Collected blocks from modules: $result")
 
         return result
@@ -61,13 +79,21 @@ internal class ServiceModulesController :
 
     fun getModulesConfigsBundleForClient(): Bundle {
         val result = Bundle()
+        val wrongModules = hashSetOf<ModuleServiceEntryPoint<Any>>()
         modules.forEach { module ->
-            val bundle = module.clientConfigProvider?.getConfigBundleForClient()
+            val bundle = try {
+                module.clientConfigProvider?.getConfigBundleForClient()
+            } catch (e: Throwable) {
+                DebugLogger.error(tag, "Failed to get config bundle from module ${module.identifier}", e)
+                reportSelfErrorEvent(module.identifier, "config_bundle", e)
+                wrongModules.add(module)
+                null
+            }
             bundle?.let {
                 result.putBundle(module.identifier, it)
             }
         }
-
+        disableDefectiveModules(wrongModules)
         DebugLogger.info(tag, "Collected config bundles from modules: $result")
 
         return result
@@ -75,27 +101,82 @@ internal class ServiceModulesController :
 
     override fun collectRemoteConfigControllers(): Map<String, ModuleRemoteConfigController> {
         DebugLogger.info(tag, "Request remote config controllers")
-        return modules.mapNotNull { module ->
-            module.remoteConfigExtensionConfiguration?.let {
-                module.identifier to ModuleRemoteConfigController(it)
+        val wrongModules = hashSetOf<ModuleServiceEntryPoint<Any>>()
+        val result = modules.mapNotNull { module ->
+            try {
+                module.remoteConfigExtensionConfiguration?.let {
+                    module.identifier to ModuleRemoteConfigController(it)
+                }
+            } catch (e: Throwable) {
+                DebugLogger.error(tag, "Failed to get remote config controller from module ${module.identifier}", e)
+                reportSelfErrorEvent(module.identifier, "remote_config_controller", e)
+                wrongModules.add(module)
+                null
             }
         }.toMap()
+
+        DebugLogger.info(tag, "Collected remote config controllers from modules: $result")
+        disableDefectiveModules(wrongModules)
+        return result
     }
 
     override fun collectLocationConsumers(): List<Consumer<Location?>> {
-        val consumers = modules.mapNotNull { it.locationServiceExtension?.locationConsumer }
+        val wrongModules = hashSetOf<ModuleServiceEntryPoint<Any>>()
+        val consumers = modules.mapNotNull {
+            try {
+                it.locationServiceExtension?.locationConsumer
+            } catch (e: Throwable) {
+                DebugLogger.error(tag, "Failed to get location consumer from module ${it.identifier}", e)
+                reportSelfErrorEvent(it.identifier, "location_consumer", e)
+                wrongModules.add(it)
+                null
+            }
+        }
+        disableDefectiveModules(wrongModules)
         DebugLogger.info(tag, "Collect location consumers: $consumers")
         return consumers
     }
 
     override fun chooseLocationSourceController(): ModuleLocationSourcesServiceController? {
         DebugLogger.info(tag, "Collect location source controller")
-        return modules.firstNotNullOfOrNull { it.locationServiceExtension?.locationSourcesController }
+        val wrongModules = hashSetOf<ModuleServiceEntryPoint<Any>>()
+        val result = modules.firstNotNullOfOrNull {
+            try {
+                it.locationServiceExtension?.locationSourcesController
+            } catch (e: Throwable) {
+                DebugLogger.error(tag, "Failed to get location source controller from module ${it.identifier}", e)
+                reportSelfErrorEvent(it.identifier, "location_source_controller", e)
+                wrongModules.add(it)
+                null
+            }
+        }
+
+        DebugLogger.info(tag, "Detected location source controller: $result")
+        disableDefectiveModules(wrongModules)
+        return result
     }
 
     override fun chooseLocationAppStateControlToggle(): Toggle? {
         DebugLogger.info(tag, "Collect location app state control toggle")
-        return modules.firstNotNullOfOrNull { it.locationServiceExtension?.locationControllerAppStateToggle }
+        val wrongModules = hashSetOf<ModuleServiceEntryPoint<Any>>()
+        val result = modules.firstNotNullOfOrNull {
+            try {
+                it.locationServiceExtension?.locationControllerAppStateToggle
+            } catch (e: Throwable) {
+                DebugLogger.error(
+                    tag,
+                    "Failed to get location app state control toggle from module ${it.identifier}",
+                    e
+                )
+                reportSelfErrorEvent(it.identifier, "location_app_state_control_toggle", e)
+                wrongModules.add(it)
+                null
+            }
+        }
+
+        DebugLogger.info(tag, "Detected location app state control toggle: $result")
+        disableDefectiveModules(wrongModules)
+        return result
     }
 
     override fun collectModuleServiceDatabases(): List<ModuleServicesDatabase> {
@@ -110,14 +191,9 @@ internal class ServiceModulesController :
                 reportSelfErrorEvent(module.identifier, "db", e)
             }
         }
-        if (wrongModules.isNotEmpty()) {
-            DebugLogger.warning(
-                tag,
-                "Disabling defective modules: ${wrongModules.joinToString(", ") { it.identifier }}"
-            )
-            modules.removeAll(wrongModules)
-        }
 
+        DebugLogger.info(tag, "Collected module services databases: $result")
+        disableDefectiveModules(wrongModules)
         return result
     }
 
@@ -129,14 +205,22 @@ internal class ServiceModulesController :
 
     override fun onStartupStateChanged(newState: StartupState) {
         DebugLogger.info(tag, "Notify modules with remote config updated")
+        val wrongModules = hashSetOf<ModuleServiceEntryPoint<Any>>()
         val configProvider = ModuleRemoteConfigProvider(newState)
         modules.forEach { module ->
-            module.remoteConfigExtensionConfiguration?.let {
-                val config = configProvider.getRemoteConfigForServiceModule(module.identifier)
-                DebugLogger.info(tag, "Notify module with id = ${module.identifier} with config = $config")
-                it.getRemoteConfigUpdateListener().onRemoteConfigUpdated(config)
+            try {
+                module.remoteConfigExtensionConfiguration?.let {
+                    val config = configProvider.getRemoteConfigForServiceModule(module.identifier)
+                    DebugLogger.info(tag, "Notify module with id = ${module.identifier} with config = $config")
+                    it.getRemoteConfigUpdateListener().onRemoteConfigUpdated(config)
+                }
+            } catch (e: Throwable) {
+                DebugLogger.error(tag, "Failed to notify module with id = ${module.identifier}", e)
+                wrongModules.add(module)
+                reportSelfErrorEvent(module.identifier, "remote_config_updated", e)
             }
         }
+        disableDefectiveModules(wrongModules)
     }
 
     override fun initServiceSide(serviceContext: ServiceContext, startupState: StartupState) {
@@ -158,11 +242,19 @@ internal class ServiceModulesController :
                 modulesWithProblems.add(module)
             }
         }
-        DebugLogger.warning(
-            tag,
-            "Disabling defective modules: ${modulesWithProblems.joinToString(", ") { it.identifier }}"
-        )
-        modules.removeAll(modulesWithProblems)
+
+        DebugLogger.info(tag, "Init service side finished. Total modules count = ${modules.size}")
+        disableDefectiveModules(modulesWithProblems)
+    }
+
+    private fun disableDefectiveModules(modulesWithProblems: Set<ModuleServiceEntryPoint<Any>>) {
+        if (modulesWithProblems.isNotEmpty()) {
+            DebugLogger.warning(
+                tag,
+                "Disabling defective modules: ${modulesWithProblems.joinToString(", ") { it.identifier }}"
+            )
+            modules.removeAll(modulesWithProblems)
+        }
     }
 
     private fun registerAskForPermissionStrategyIfNeeded(moduleServiceEntryPoint: ModuleServiceEntryPoint<Any>) {

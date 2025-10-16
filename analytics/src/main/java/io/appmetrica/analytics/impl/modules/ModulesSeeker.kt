@@ -1,6 +1,5 @@
 package io.appmetrica.analytics.impl.modules
 
-import android.content.Context
 import io.appmetrica.analytics.impl.ClientServiceLocator
 import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
@@ -13,30 +12,18 @@ class ModulesSeeker {
 
     private val moduleLoader = ModuleLoader()
 
-    fun discoverServiceModules() {
+    fun discoverServiceModules(): List<ModuleStatus> {
         DebugLogger.info(tag, "Discover service modules...")
-        discoverModules<ModuleServiceEntryPoint<Any>>(
-            moduleStatusReporter = ModuleStatusReporter(
-                executor = GlobalServiceLocator.getInstance().serviceExecutorProvider.metricaCoreExecutor,
-                preferences = GlobalServiceLocator.getInstance().servicePreferences,
-                modulesType = "service_modules",
-            ),
+        return discoverModules<ModuleServiceEntryPoint<Any>>(
             modules = GlobalServiceLocator.getInstance().moduleEntryPointsRegister.classNames
         ) {
             GlobalServiceLocator.getInstance().modulesController.registerModule(it)
         }
     }
 
-    fun discoverClientModules(
-        context: Context
-    ) {
+    fun discoverClientModules(): List<ModuleStatus> {
         DebugLogger.info(tag, "Discover client modules...")
-        discoverModules<ModuleClientEntryPoint<Any>>(
-            moduleStatusReporter = ModuleStatusReporter(
-                executor = ClientServiceLocator.getInstance().clientExecutorProvider.defaultExecutor,
-                preferences = ClientServiceLocator.getInstance().getPreferencesClientDbStorage(context),
-                modulesType = "client_modules",
-            ),
+        return discoverModules<ModuleClientEntryPoint<Any>>(
             modules = ClientServiceLocator.getInstance().moduleEntryPointsRegister.classNames
         ) {
             ClientServiceLocator.getInstance().modulesController.registerModule(it)
@@ -45,9 +32,8 @@ class ModulesSeeker {
 
     private inline fun <reified T> discoverModules(
         modules: List<String>,
-        moduleStatusReporter: ModuleStatusReporter,
         register: (T) -> Unit
-    ) {
+    ): List<ModuleStatus> {
         val modulesStatus = modules.map { moduleEntryPoint ->
             val module = moduleLoader.loadModule<T>(moduleEntryPoint)
             if (module == null) {
@@ -59,7 +45,7 @@ class ModulesSeeker {
                 ModuleStatus(moduleEntryPoint, true)
             }
         }
-        moduleStatusReporter.reportModulesStatus(modulesStatus)
-        DebugLogger.info(tag, "Discover modules finished.")
+        DebugLogger.info(tag, "Discover modules finished: $modulesStatus")
+        return modulesStatus
     }
 }

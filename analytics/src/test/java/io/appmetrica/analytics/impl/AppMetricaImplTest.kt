@@ -16,6 +16,8 @@ import io.appmetrica.analytics.coreutils.internal.logger.LoggerStorage
 import io.appmetrica.analytics.impl.client.ProcessConfiguration
 import io.appmetrica.analytics.impl.crash.jvm.client.JvmCrashClientController
 import io.appmetrica.analytics.impl.db.preferences.PreferencesClientDbStorage
+import io.appmetrica.analytics.impl.modules.ModuleStatus
+import io.appmetrica.analytics.impl.modules.ModuleStatusReporter
 import io.appmetrica.analytics.impl.modules.ModulesSeeker
 import io.appmetrica.analytics.impl.modules.client.ClientModulesController
 import io.appmetrica.analytics.impl.modules.client.context.ClientContextImpl
@@ -82,8 +84,11 @@ internal class AppMetricaImplTest : CommonTest() {
         ClientServiceLocator.getInstance().sessionsTrackingManager
     }
 
+    private val modulesStatus = listOf(mock<ModuleStatus>(), mock<ModuleStatus>())
     @get:Rule
-    val modulesSeekerConstructionRule = constructionRule<ModulesSeeker>()
+    val modulesSeekerConstructionRule = constructionRule<ModulesSeeker> {
+        on { discoverClientModules() } doReturn modulesStatus
+    }
     private val modulesSeeker: ModulesSeeker by modulesSeekerConstructionRule
 
     @get:Rule
@@ -159,6 +164,8 @@ internal class AppMetricaImplTest : CommonTest() {
         } doReturn anonymousMainReporter
     }
 
+    private val moduleStatusReporter: ModuleStatusReporter = mock()
+
     @get:Rule
     val fieldsProviderMockedConstructionRule = constructionRule<AppMetricaImplFieldsProvider> {
         on { createDataResultReceiver(eq(defaultHandler), any()) } doReturn dataResultReceiver
@@ -169,6 +176,7 @@ internal class AppMetricaImplTest : CommonTest() {
         on {
             createReporterFactory(context, processConfiguration, reportsHandler, defaultHandler, startupHelper)
         } doReturn reporterFactory
+        on { createModuleStatusReporter(context) } doReturn moduleStatusReporter
     }
 
     private val impl: AppMetricaImpl by setUp {
@@ -177,9 +185,10 @@ internal class AppMetricaImplTest : CommonTest() {
 
     @Test
     fun `constructor modules registration`() {
-        inOrder(modulesSeeker, modulesController) {
-            verify(modulesSeeker).discoverClientModules(context)
+        inOrder(modulesSeeker, modulesController, moduleStatusReporter) {
+            verify(modulesSeeker).discoverClientModules()
             verify(modulesController).initClientSide(clientContextImpl)
+            verify(moduleStatusReporter).reportModulesStatus(modulesStatus)
         }
     }
 
