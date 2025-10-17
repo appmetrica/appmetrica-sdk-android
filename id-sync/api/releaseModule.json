@@ -3,7 +3,7 @@
     "component": {
         "group": "io.appmetrica.analytics",
         "module": "analytics-id-sync",
-        "version": "7.13.0",
+        "version": "7.14.0",
         "attributes": {
             "org.gradle.status": "release"
         }
@@ -25,8 +25,8 @@
             },
             "files": [
                 {
-                    "name": "analytics-id-sync-7.13.0.aar",
-                    "url": "analytics-id-sync-7.13.0.aar",
+                    "name": "analytics-id-sync-7.14.0.aar",
+                    "url": "analytics-id-sync-7.14.0.aar",
                     "size": -1,
                     "sha512": "<sha512>",
                     "sha256": "<sha256>",
@@ -55,49 +55,49 @@
                     "group": "io.appmetrica.analytics",
                     "module": "analytics-proto",
                     "version": {
-                        "requires": "7.13.0"
+                        "requires": "7.14.0"
                     }
                 },
                 {
                     "group": "io.appmetrica.analytics",
                     "module": "analytics-core-api",
                     "version": {
-                        "requires": "7.13.0"
+                        "requires": "7.14.0"
                     }
                 },
                 {
                     "group": "io.appmetrica.analytics",
                     "module": "analytics-core-utils",
                     "version": {
-                        "requires": "7.13.0"
+                        "requires": "7.14.0"
                     }
                 },
                 {
                     "group": "io.appmetrica.analytics",
                     "module": "analytics-logger",
                     "version": {
-                        "requires": "7.13.0"
+                        "requires": "7.14.0"
                     }
                 },
                 {
                     "group": "io.appmetrica.analytics",
                     "module": "analytics-modules-api",
                     "version": {
-                        "requires": "7.13.0"
+                        "requires": "7.14.0"
                     }
                 },
                 {
                     "group": "io.appmetrica.analytics",
                     "module": "analytics-network",
                     "version": {
-                        "requires": "7.13.0"
+                        "requires": "7.14.0"
                     }
                 }
             ],
             "files": [
                 {
-                    "name": "analytics-id-sync-7.13.0.aar",
-                    "url": "analytics-id-sync-7.13.0.aar",
+                    "name": "analytics-id-sync-7.14.0.aar",
+                    "url": "analytics-id-sync-7.14.0.aar",
                     "size": -1,
                     "sha512": "<sha512>",
                     "sha256": "<sha256>",
