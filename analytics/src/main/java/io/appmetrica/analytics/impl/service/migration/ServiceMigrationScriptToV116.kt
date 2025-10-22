@@ -64,12 +64,14 @@ internal class ServiceMigrationScriptToV116 : MigrationScript {
         )
         val dbHelper = BinaryDataHelper(SimpleDBConnector(datatabaseStorage), Constants.BinaryDataTable.TABLE_NAME)
         val oldValue = dbHelper.get("auto_inapp_collecting_info_data")
-        oldValue?.let {
-            DebugLogger.info(tag, "Migrate old inapp data (length: ${it.size})")
+        if (oldValue != null) {
+            DebugLogger.info(tag, "Migrate old inapp data (length: ${oldValue.size})")
             DatabaseStorageFactory.getInstance(context).serviceBinaryDataHelperForMigration.insert(
                 "auto_inapp_collecting_info_data",
-                it
+                oldValue
             )
-        } ?: { DebugLogger.info(tag, "Not found old auto inapp data") }
+        } else {
+            DebugLogger.info(tag, "Not found old auto inapp data")
+        }
     }
 }
