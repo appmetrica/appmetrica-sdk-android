@@ -9,8 +9,10 @@ internal class CellNetworkPreconditionVerifier(
 ) : PreconditionVerifier {
     private val tag = "[CellNetworkPreconditionVerifier]"
 
-    override fun matchPrecondition(): Boolean =
-        serviceContext.activeNetworkTypeProvider.getNetworkType(serviceContext.context) == NetworkType.CELL.also {
-            DebugLogger.info(tag, "Network type: $it")
-        }
+    override fun matchPrecondition(): Boolean {
+        val networkType = serviceContext.activeNetworkTypeProvider.getNetworkType(serviceContext.context)
+        val result = networkType == NetworkType.CELL
+        DebugLogger.info(tag, "Network type: $networkType; matchPrecondition: $result")
+        return result
+    }
 }
