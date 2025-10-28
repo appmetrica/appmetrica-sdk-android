@@ -47,6 +47,12 @@ internal class VitalCommonDataProviderTest : CommonTest() {
     }
 
     @Test
+    fun init() {
+        vitalCommonDataProvider.init()
+        verify(vitalDataProvider()).getOrLoadData()
+    }
+
+    @Test
     fun filledJsonFromStorage() {
         val filledJsonWithExtraKey = JSONObject(filledJson.toString()).put("bad_key", "bad_value")
         wheneverVitalDataProviderGetOrLoad().thenReturn(filledJsonWithExtraKey)

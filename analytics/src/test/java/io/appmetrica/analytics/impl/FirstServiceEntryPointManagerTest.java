@@ -1,8 +1,10 @@
 package io.appmetrica.analytics.impl;
 
 import android.content.Context;
+import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor;
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceComponentsInitializer;
 import io.appmetrica.analytics.coreutils.internal.time.SystemTimeProvider;
+import io.appmetrica.analytics.impl.db.VitalCommonDataProvider;
 import io.appmetrica.analytics.impl.modules.ModuleStatus;
 import io.appmetrica.analytics.impl.modules.ModuleStatusReporter;
 import io.appmetrica.analytics.impl.modules.ModulesSeeker;
@@ -21,6 +23,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InOrder;
+import org.mockito.Mock;
 import org.mockito.MockedConstruction;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
@@ -87,12 +90,17 @@ public class FirstServiceEntryPointManagerTest extends CommonTest {
 
     private ServiceComponentsInitializerProvider serviceComponentsInitializerProvider;
     private ModulesSeeker modulesSeeker;
-    private ModuleStatusReporter moduleStatusReporter;
+
+    @Mock
+    private IHandlerExecutor executor;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.openMocks(this);
         context = TestUtils.createMockedContext();
+
+        when(GlobalServiceLocator.getInstance().getServiceExecutorProvider().getMetricaCoreExecutor())
+            .thenReturn(executor);
 
         firstServiceEntryPointManager = new FirstServiceEntryPointManager();
         serviceComponentsInitializerProvider = serviceComponentsInitializerProvider();
@@ -117,16 +125,20 @@ public class FirstServiceEntryPointManagerTest extends CommonTest {
         MultiProcessSafeUuidProvider multiProcessSafeUuidProvider =
             GlobalServiceLocator.getInstance().getMultiProcessSafeUuidProvider();
         ModuleStatusReporter moduleStatusReporter = moduleStatusReporter();
+        VitalCommonDataProvider vitalCommonDataProvider =
+            GlobalServiceLocator.getInstance().getVitalDataProviderStorage().getCommonDataProvider();
         InOrder inOrder = inOrder(
             serviceComponentsInitializerProvider.getServiceComponentsInitializer(),
             modulesSeeker,
             serviceMigrationManager,
             multiProcessSafeUuidProvider,
-            moduleStatusReporter
+            moduleStatusReporter,
+            vitalCommonDataProvider
         );
         inOrder.verify(serviceComponentsInitializerProvider.getServiceComponentsInitializer()).onCreate(context);
         inOrder.verify(modulesSeeker).discoverServiceModules();
         inOrder.verify(serviceMigrationManager).checkMigration(context);
+        inOrder.verify(vitalCommonDataProvider).init();
         inOrder.verify(multiProcessSafeUuidProvider).readUuid();
         inOrder.verify(moduleStatusReporter).reportModulesStatus(modulesStatus);
         inOrder.verifyNoMoreInteractions();
@@ -151,7 +163,7 @@ public class FirstServiceEntryPointManagerTest extends CommonTest {
         assertThat(moduleStatusReporterMockedConstructionRule.getConstructionMock().constructed()).hasSize(1);
         assertThat(moduleStatusReporterMockedConstructionRule.getArgumentInterceptor().getArguments().get(0))
             .containsExactly(
-                GlobalServiceLocator.getInstance().getServiceExecutorProvider().getDefaultExecutor(),
+                executor,
                 GlobalServiceLocator.getInstance().getServicePreferences(),
                 "service_modules",
                 timeProviderMockedConstructionRule.getConstructionMock().constructed().get(0)

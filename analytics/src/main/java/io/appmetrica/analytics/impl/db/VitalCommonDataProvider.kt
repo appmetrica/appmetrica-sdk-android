@@ -85,6 +85,12 @@ internal class VitalCommonDataProvider(
 
     @WorkerThread
     @Synchronized
+    fun init() {
+        vitalDataProvider.getOrLoadData()
+    }
+
+    @WorkerThread
+    @Synchronized
     fun setInitialState(
         deviceId: String?,
         deviceIdHash: String?,

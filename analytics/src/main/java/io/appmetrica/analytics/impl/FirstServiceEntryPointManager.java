@@ -10,9 +10,12 @@ import io.appmetrica.analytics.impl.modules.ModuleStatusReporter;
 import io.appmetrica.analytics.impl.modules.ModulesSeeker;
 import io.appmetrica.analytics.impl.service.migration.ServiceMigrationManager;
 import io.appmetrica.analytics.impl.servicecomponents.ServiceComponentsInitializerProvider;
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.util.List;
 
 public class FirstServiceEntryPointManager {
+
+    private static final String TAG = "[FirstServiceEntryPointManager]";
 
     public static final FirstServiceEntryPointManager INSTANCE = new FirstServiceEntryPointManager();
 
@@ -26,6 +29,7 @@ public class FirstServiceEntryPointManager {
     private boolean initialized = false;
 
     public void onPossibleFirstEntry(@NonNull Context context) {
+        DebugLogger.INSTANCE.info(TAG, "onPossibleFirstEntry");
         if (!initialized) {
             synchronized (this) {
                 if (!initialized) {
@@ -37,17 +41,19 @@ public class FirstServiceEntryPointManager {
     }
 
     private void init(@NonNull Context context) {
+        DebugLogger.INSTANCE.info(TAG, "init");
         GlobalServiceLocator.init(context);
         serviceComponentsInitializer.onCreate(context);
         List<ModuleStatus> result = modulesSeeker.discoverServiceModules();
         new ServiceMigrationManager().checkMigration(context);
+        GlobalServiceLocator.getInstance().getVitalDataProviderStorage().getCommonDataProvider().init();
         GlobalServiceLocator.getInstance().getMultiProcessSafeUuidProvider().readUuid();
         createModuleStatusReporter().reportModulesStatus(result);
     }
     
     private ModuleStatusReporter createModuleStatusReporter() {
         return new ModuleStatusReporter(
-            GlobalServiceLocator.getInstance().getServiceExecutorProvider().getDefaultExecutor(),
+            GlobalServiceLocator.getInstance().getServiceExecutorProvider().getMetricaCoreExecutor(),
             GlobalServiceLocator.getInstance().getServicePreferences(),
             "service_modules",
             new SystemTimeProvider()
