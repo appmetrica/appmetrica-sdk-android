@@ -8,7 +8,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.backport.BiConsumer;
 import io.appmetrica.analytics.coreapi.internal.backport.Consumer;
-import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
+import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor;
 import io.appmetrica.analytics.impl.utils.BackgroundBroadcastReceiver;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,16 +23,19 @@ public class BatteryChargeTypeListener implements ServiceLifecycleObserver {
     private final Context context;
     @NonNull
     private final ContextReceiverSafeWrapper contextReceiverSafeWrapper;
+    @NonNull
+    private final IHandlerExecutor executor;
 
-    public BatteryChargeTypeListener(@NonNull Context context, @NonNull ICommonExecutor executor) {
+    public BatteryChargeTypeListener(@NonNull Context context, @NonNull IHandlerExecutor executor) {
         this(context, executor, new ContextReceiverSafeWrapper.Provider());
     }
 
     @VisibleForTesting
     BatteryChargeTypeListener(@NonNull Context context,
-                              @NonNull final ICommonExecutor executor,
+                              @NonNull final IHandlerExecutor executor,
                               @NonNull ContextReceiverSafeWrapper.Provider contextReceiverSafeWrapperProvider) {
         this.context = context;
+        this.executor = executor;
         this.contextReceiverSafeWrapper = contextReceiverSafeWrapperProvider.create(new BackgroundBroadcastReceiver(
                 new BiConsumer<Context, Intent>() {
                     @Override
@@ -69,7 +72,7 @@ public class BatteryChargeTypeListener implements ServiceLifecycleObserver {
     @Nullable
     private Intent registerBatteryChargeTypeReceiver() {
         IntentFilter intentFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
-        return contextReceiverSafeWrapper.registerReceiver(context, intentFilter);
+        return contextReceiverSafeWrapper.registerReceiver(context, intentFilter, executor);
     }
 
     private void unregisterBatteryChargeTypeReceiver() {

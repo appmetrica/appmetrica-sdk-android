@@ -1,9 +1,12 @@
 package io.appmetrica.analytics.impl;
 
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Handler;
+import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.TestUtils;
 import org.junit.Before;
@@ -23,6 +26,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
+@SuppressLint("UnspecifiedRegisterReceiverFlag")
 @RunWith(RobolectricTestRunner.class)
 public class ContextReceiverSafeWrapperTest extends CommonTest {
 
@@ -32,31 +36,37 @@ public class ContextReceiverSafeWrapperTest extends CommonTest {
     private Intent intent;
     @Mock
     private BroadcastReceiver broadcastReceiver;
+    @Mock
+    private Handler handler;
+    @Mock
+    private IHandlerExecutor executor;
     private Context context;
     private ContextReceiverSafeWrapper contextReceiverSafeWrapper;
 
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
+        when(executor.getHandler()).thenReturn(handler);
         context = TestUtils.createMockedContext();
         contextReceiverSafeWrapper = new ContextReceiverSafeWrapper(broadcastReceiver);
     }
 
     @Test
     public void registerReceiverOk() {
-        when(context.registerReceiver(broadcastReceiver, intentFilter)).thenReturn(intent);
-        assertThat(contextReceiverSafeWrapper.registerReceiver(context, intentFilter)).isSameAs(intent);
+        when(context.registerReceiver(broadcastReceiver, intentFilter, null, handler)).thenReturn(intent);
+        assertThat(contextReceiverSafeWrapper.registerReceiver(context, intentFilter, executor)).isSameAs(intent);
     }
 
     @Test
     public void registerReceiverThrows() {
-        when(context.registerReceiver(broadcastReceiver, intentFilter)).thenThrow(new IllegalArgumentException());
-        assertThat(contextReceiverSafeWrapper.registerReceiver(context, intentFilter)).isNull();
+        when(context.registerReceiver(broadcastReceiver, intentFilter, null, handler))
+            .thenThrow(new IllegalArgumentException());
+        assertThat(contextReceiverSafeWrapper.registerReceiver(context, intentFilter, executor)).isNull();
     }
 
     @Test
     public void unregisterReceiverOk() {
-        contextReceiverSafeWrapper.registerReceiver(context, intentFilter);
+        contextReceiverSafeWrapper.registerReceiver(context, intentFilter, executor);
         contextReceiverSafeWrapper.unregisterReceiver(context);
         verify(context).unregisterReceiver(broadcastReceiver);
     }
@@ -64,16 +74,17 @@ public class ContextReceiverSafeWrapperTest extends CommonTest {
     @Test
     public void unregisterReceiverThrows() {
         doThrow(new IllegalArgumentException()).when(context).unregisterReceiver(broadcastReceiver);
-        contextReceiverSafeWrapper.registerReceiver(context, intentFilter);
+        contextReceiverSafeWrapper.registerReceiver(context, intentFilter, executor);
         contextReceiverSafeWrapper.unregisterReceiver(context);
     }
 
     @Test
     public void doNotUnregisterTwice() {
         when(context.registerReceiver(broadcastReceiver, intentFilter)).thenReturn(intent);
-        contextReceiverSafeWrapper.registerReceiver(context, intentFilter);
-        contextReceiverSafeWrapper.registerReceiver(context, intentFilter);
-        verify(context, times(2)).registerReceiver(broadcastReceiver, intentFilter);
+        contextReceiverSafeWrapper.registerReceiver(context, intentFilter, executor);
+        contextReceiverSafeWrapper.registerReceiver(context, intentFilter, executor);
+        verify(context, times(2))
+            .registerReceiver(broadcastReceiver, intentFilter, null, handler);
         contextReceiverSafeWrapper.unregisterReceiver(context);
         verify(context).unregisterReceiver(broadcastReceiver);
         clearInvocations(context);
@@ -89,8 +100,9 @@ public class ContextReceiverSafeWrapperTest extends CommonTest {
 
     @Test
     public void doNotUnregisterIfRegisterThrew() {
-        when(context.registerReceiver(broadcastReceiver, intentFilter)).thenThrow(new IllegalArgumentException());
-        contextReceiverSafeWrapper.registerReceiver(context, intentFilter);
+        when(context.registerReceiver(broadcastReceiver, intentFilter, null, handler))
+            .thenThrow(new IllegalArgumentException());
+        contextReceiverSafeWrapper.registerReceiver(context, intentFilter, executor);
         contextReceiverSafeWrapper.unregisterReceiver(context);
         verify(context, never()).unregisterReceiver(broadcastReceiver);
     }
@@ -98,7 +110,7 @@ public class ContextReceiverSafeWrapperTest extends CommonTest {
     @Test
     public void tryToUnregisterIfFirstTimeThrew() {
         when(context.registerReceiver(broadcastReceiver, intentFilter)).thenReturn(intent);
-        contextReceiverSafeWrapper.registerReceiver(context, intentFilter);
+        contextReceiverSafeWrapper.registerReceiver(context, intentFilter, executor);
 
         doThrow(new IllegalArgumentException()).when(context).unregisterReceiver(broadcastReceiver);
         contextReceiverSafeWrapper.unregisterReceiver(context);

@@ -4,34 +4,36 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import io.appmetrica.analytics.coreapi.internal.backport.Consumer;
-import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
+import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor;
 import io.appmetrica.analytics.impl.utils.BackgroundBroadcastReceiver;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.StubbedBlockingExecutor;
 import io.appmetrica.analytics.testutils.TestUtils;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.ArgumentMatcher;
-import org.mockito.Captor;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.robolectric.RobolectricTestRunner;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.ArgumentMatchers.same;
+import org.mockito.Captor;
+import org.mockito.Mock;
+
 import static org.mockito.Mockito.clearInvocations;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import org.mockito.MockitoAnnotations;
+import org.robolectric.RobolectricTestRunner;
 
 @RunWith(RobolectricTestRunner.class)
 public class BatteryChargeTypeListenerTest extends CommonTest {
 
-    private final ICommonExecutor executor = new StubbedBlockingExecutor();
+    private final IHandlerExecutor executor = new StubbedBlockingExecutor();
     @Mock
     private Intent initialIntent;
     @Mock
@@ -54,7 +56,9 @@ public class BatteryChargeTypeListenerTest extends CommonTest {
         when(contextReceiverSafeWrapperProvider.create(any(BackgroundBroadcastReceiver.class))).thenReturn(contextReceiverSafeWrapper);
         when(contextReceiverSafeWrapper.registerReceiver(
             any(Context.class),
-            any(IntentFilter.class)
+            any(IntentFilter.class),
+            same(executor)
+
         )).thenReturn(initialIntent);
         batteryChargeTypeListener = new BatteryChargeTypeListener(context, executor, contextReceiverSafeWrapperProvider);
     }
@@ -62,12 +66,16 @@ public class BatteryChargeTypeListenerTest extends CommonTest {
     @Test
     public void onCreatedNoListeners() {
         batteryChargeTypeListener.onCreate();
-        verify(contextReceiverSafeWrapper).registerReceiver(same(context), argThat(new ArgumentMatcher<IntentFilter>() {
-            @Override
-            public boolean matches(IntentFilter argument) {
-                return argument.hasAction(Intent.ACTION_BATTERY_CHANGED);
-            }
-        }));
+        verify(contextReceiverSafeWrapper).registerReceiver(
+            same(context),
+            argThat(new ArgumentMatcher<IntentFilter>() {
+                @Override
+                public boolean matches(IntentFilter argument) {
+                    return argument.hasAction(Intent.ACTION_BATTERY_CHANGED);
+                }
+            }),
+            same(executor)
+        );
 
         assertThat(batteryChargeTypeListener.addStickyBatteryChargeTypeListener(firstListener)).isSameAs(initialIntent);
         assertThat(batteryChargeTypeListener.addStickyBatteryChargeTypeListener(secondListener)).isSameAs(initialIntent);
@@ -79,12 +87,16 @@ public class BatteryChargeTypeListenerTest extends CommonTest {
         assertThat(batteryChargeTypeListener.addStickyBatteryChargeTypeListener(secondListener)).isNull();
 
         batteryChargeTypeListener.onCreate();
-        verify(contextReceiverSafeWrapper).registerReceiver(same(context), argThat(new ArgumentMatcher<IntentFilter>() {
-            @Override
-            public boolean matches(IntentFilter argument) {
-                return argument.hasAction(Intent.ACTION_BATTERY_CHANGED);
-            }
-        }));
+        verify(contextReceiverSafeWrapper).registerReceiver(
+            same(context),
+            argThat(new ArgumentMatcher<IntentFilter>() {
+                @Override
+                public boolean matches(IntentFilter argument) {
+                    return argument.hasAction(Intent.ACTION_BATTERY_CHANGED);
+                }
+            }),
+            same(executor)
+        );
 
         verify(firstListener).consume(initialIntent);
         verify(secondListener).consume(initialIntent);
@@ -93,7 +105,7 @@ public class BatteryChargeTypeListenerTest extends CommonTest {
     @Test
     public void onDestroyedNoListeners() {
         batteryChargeTypeListener.onCreate();
-        verify(contextReceiverSafeWrapper).registerReceiver(same(context), any(IntentFilter.class));
+        verify(contextReceiverSafeWrapper).registerReceiver(same(context), any(IntentFilter.class), same(executor));
 
         batteryChargeTypeListener.onDestroy();
         verify(contextReceiverSafeWrapper).unregisterReceiver(context);
@@ -108,7 +120,7 @@ public class BatteryChargeTypeListenerTest extends CommonTest {
         batteryChargeTypeListener.addStickyBatteryChargeTypeListener(secondListener);
 
         batteryChargeTypeListener.onCreate();
-        verify(contextReceiverSafeWrapper).registerReceiver(same(context), any(IntentFilter.class));
+        verify(contextReceiverSafeWrapper).registerReceiver(same(context), any(IntentFilter.class), same(executor));
 
         clearInvocations(firstListener, secondListener);
         batteryChargeTypeListener.onDestroy();
@@ -123,7 +135,7 @@ public class BatteryChargeTypeListenerTest extends CommonTest {
         Intent newIntent = mock(Intent.class);
         verify(contextReceiverSafeWrapperProvider).create(receiverCaptor.capture());
         batteryChargeTypeListener.onCreate();
-        verify(contextReceiverSafeWrapper).registerReceiver(same(context), any(IntentFilter.class));
+        verify(contextReceiverSafeWrapper).registerReceiver(same(context), any(IntentFilter.class), same(executor));
         batteryChargeTypeListener.addStickyBatteryChargeTypeListener(firstListener);
 
         receiverCaptor.getValue().onReceive(context, newIntent);
@@ -136,18 +148,22 @@ public class BatteryChargeTypeListenerTest extends CommonTest {
         batteryChargeTypeListener.addStickyBatteryChargeTypeListener(firstListener);
 
         batteryChargeTypeListener.onCreate();
-        verify(contextReceiverSafeWrapper).registerReceiver(same(context), argThat(new ArgumentMatcher<IntentFilter>() {
-            @Override
-            public boolean matches(IntentFilter argument) {
-                return argument.hasAction(Intent.ACTION_BATTERY_CHANGED);
-            }
-        }));
+        verify(contextReceiverSafeWrapper).registerReceiver(
+            same(context),
+            argThat(new ArgumentMatcher<IntentFilter>() {
+                @Override
+                public boolean matches(IntentFilter argument) {
+                    return argument.hasAction(Intent.ACTION_BATTERY_CHANGED);
+                }
+            }),
+            same(executor)
+        );
 
         verify(firstListener).consume(initialIntent);
 
         clearInvocations(contextReceiverSafeWrapper, firstListener);
         batteryChargeTypeListener.onCreate();
-        verify(contextReceiverSafeWrapper).registerReceiver(same(context), any(IntentFilter.class));
+        verify(contextReceiverSafeWrapper).registerReceiver(same(context), any(IntentFilter.class), same(executor));
         verify(firstListener).consume(initialIntent);
 
         batteryChargeTypeListener.onDestroy();

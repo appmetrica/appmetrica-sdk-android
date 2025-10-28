@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 
 public class ContextReceiverSafeWrapper {
@@ -32,10 +33,11 @@ public class ContextReceiverSafeWrapper {
     @SuppressLint("UnspecifiedRegisterReceiverFlag")
     @Nullable
     public synchronized Intent registerReceiver(@NonNull Context context,
-                                                @NonNull final IntentFilter filter) {
+                                                @NonNull IntentFilter filter,
+                                                @NonNull IHandlerExecutor executor) {
         Intent result = null;
         try {
-            result = context.registerReceiver(receiver, filter);
+            result = context.registerReceiver(receiver, filter, null, executor.getHandler());
             receiverRegistered = true;
         } catch (Throwable ex) {
             DebugLogger.INSTANCE.error(TAG, ex);
