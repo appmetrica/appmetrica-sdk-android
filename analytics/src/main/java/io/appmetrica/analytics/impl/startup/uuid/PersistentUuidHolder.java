@@ -16,6 +16,7 @@ class PersistentUuidHolder {
 
     private static final String TAG = "[PersistentUuidProvider]";
 
+    // If the data storage format and location change, you must notify https://nda.ya.ru/t/94XNTaaf7LkVFu
     @NonNull
     private static final String FILE_NAME = FileConstants.UUID_FILE_NAME;
 
@@ -32,6 +33,7 @@ class PersistentUuidHolder {
 
     @Nullable
     public String readUuid() {
+        // If the data storage format and location change, you must notify https://nda.ya.ru/t/94XNTaaf7LkVFu
         File file = FileUtils.getFileFromSdkStorage(context, FILE_NAME);
         String result = IOUtils.getStringFileLocked(file);
         DebugLogger.INSTANCE.info(TAG, "Uuid from file with path \"%s\" (file exists? %b) is \"%s\".",

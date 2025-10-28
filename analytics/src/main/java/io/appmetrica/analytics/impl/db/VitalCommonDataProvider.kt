@@ -24,6 +24,7 @@ internal class VitalCommonDataProvider(
     private val tag = "[VitalCommonDataProvider]"
 
     companion object {
+        // If the data storage format and location change, you must notify https://nda.ya.ru/t/94XNTaaf7LkVFu
         const val BACKUP_FILE_NAME = "appmetrica_vital.dat"
     }
 
@@ -32,6 +33,7 @@ internal class VitalCommonDataProvider(
         backupDataSource,
         tag
     ) { primary, backup ->
+        // If the data storage format and location change, you must notify https://nda.ya.ru/t/94XNTaaf7LkVFu
         JSONObject().apply {
             put(KEY_DEVICE_ID, JsonHelper.optStringOrDefaultWithBackup(primary, backup, KEY_DEVICE_ID))
             put(KEY_DEVICE_ID_HASH, JsonHelper.optStringOrDefaultWithBackup(primary, backup, KEY_DEVICE_ID_HASH))
@@ -54,11 +56,14 @@ internal class VitalCommonDataProvider(
         }
     }
 
+    // If the data storage format and location change, you must notify https://nda.ya.ru/t/94XNTaaf7LkVFu
     var deviceId: String?
         @WorkerThread @Synchronized get() = vitalDataProvider.getOrLoadData().optStringOrNull(KEY_DEVICE_ID)
         @WorkerThread @Synchronized set(value) {
             vitalDataProvider.save(vitalDataProvider.getOrLoadData().put(KEY_DEVICE_ID, value))
         }
+
+    // If the data storage format and location change, you must notify https://nda.ya.ru/t/94XNTaaf7LkVFu
     var deviceIdHash: String?
         @WorkerThread @Synchronized get() = vitalDataProvider.getOrLoadData().optStringOrNull(KEY_DEVICE_ID_HASH)
         @WorkerThread @Synchronized set(value) {

@@ -134,6 +134,7 @@ internal class StartupState private constructor(
             )
         }
 
+        // If the data storage format and location change, you must notify https://nda.ya.ru/t/94XNTaaf7LkVFu
         fun save(startupState: StartupState) {
             vitalCommonDataProvider.deviceId = startupState.deviceId
             vitalCommonDataProvider.deviceIdHash = startupState.deviceIdHash
