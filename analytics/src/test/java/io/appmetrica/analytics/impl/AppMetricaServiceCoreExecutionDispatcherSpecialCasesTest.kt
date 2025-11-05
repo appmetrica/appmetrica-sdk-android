@@ -1,7 +1,6 @@
 package io.appmetrica.analytics.impl
 
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor
-import io.appmetrica.analytics.impl.service.AppMetricaServiceCallback
 import io.appmetrica.analytics.testutils.CommonTest
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -57,12 +56,5 @@ class AppMetricaServiceCoreExecutionDispatcherSpecialCasesTest : CommonTest() {
         val inOrder = Mockito.inOrder(executor, appMetricaServiceCore)
         inOrder.verify(executor).removeAll()
         inOrder.verify(appMetricaServiceCore).onDestroy()
-    }
-
-    @Test
-    fun updateCallback() {
-        val callback = mock<AppMetricaServiceCallback>()
-        appMetricaCoreExecutionDispatcher.updateCallback(callback)
-        verify(appMetricaServiceCore).updateCallback(callback)
     }
 }

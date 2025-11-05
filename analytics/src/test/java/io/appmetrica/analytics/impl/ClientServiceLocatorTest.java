@@ -1,6 +1,8 @@
 package io.appmetrica.analytics.impl;
 
 import android.content.Context;
+import io.appmetrica.analytics.impl.client.connection.DefaultServiceDescriptionProvider;
+import io.appmetrica.analytics.impl.client.connection.ServiceDescriptionProvider;
 import io.appmetrica.analytics.impl.crash.jvm.client.TechnicalCrashProcessorFactory;
 import io.appmetrica.analytics.impl.db.IKeyValueTableDbHelper;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesClientDbStorage;
@@ -23,12 +25,12 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
 
 import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -36,7 +38,7 @@ import static org.mockito.Mockito.when;
 public class ClientServiceLocatorTest extends CommonTest {
 
     @Mock
-    private Context context = Mockito.mock(Context.class);
+    private Context context = mock(Context.class);
     @Mock
     private ClientExecutorProvider mClientExecutorProvider;
     @Mock
@@ -104,6 +106,10 @@ public class ClientServiceLocatorTest extends CommonTest {
     @Rule
     public MockedConstructionRule<ExtraMetaInfoRetriever> extraMetaInfoRetrieverMockedConstructionRule =
         new MockedConstructionRule<>(ExtraMetaInfoRetriever.class);
+
+    @Rule
+    public MockedConstructionRule<DefaultServiceDescriptionProvider> defaultServiceDescriptionProviderRule =
+        new MockedConstructionRule<>(DefaultServiceDescriptionProvider.class);
 
     @Mock
     private DatabaseStorageFactory databaseStorage;
@@ -324,5 +330,21 @@ public class ClientServiceLocatorTest extends CommonTest {
         assertThat(extraMetaInfoRetrieverMockedConstructionRule.getConstructionMock().constructed()).hasSize(1);
         assertThat(extraMetaInfoRetrieverMockedConstructionRule.getArgumentInterceptor().flatArguments())
             .containsExactly(context);
+    }
+
+    @Test
+    public void getServiceDescriptionProvider() {
+        assertThat(mClientServiceLocator.getServiceDescriptionProvider())
+            .isSameAs(mClientServiceLocator.getServiceDescriptionProvider())
+            .isEqualTo(defaultServiceDescriptionProviderRule.getConstructionMock().constructed().get(0));
+        assertThat(defaultServiceDescriptionProviderRule.getConstructionMock().constructed()).hasSize(1);
+        assertThat(defaultServiceDescriptionProviderRule.getArgumentInterceptor().flatArguments()).isEmpty();
+    }
+
+    @Test
+    public void overrideServiceDescriptionProvider() {
+        final ServiceDescriptionProvider serviceDescriptionProvider = mock();
+        mClientServiceLocator.overrideServiceDescriptionProvider(serviceDescriptionProvider);
+        assertThat(mClientServiceLocator.getServiceDescriptionProvider()).isSameAs(serviceDescriptionProvider);
     }
 }

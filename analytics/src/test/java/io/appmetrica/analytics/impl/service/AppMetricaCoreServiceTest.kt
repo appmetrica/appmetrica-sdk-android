@@ -1,9 +1,7 @@
-package io.appmetrica.analytics.internal
+package io.appmetrica.analytics.impl.service
 
 import android.content.Intent
 import android.content.res.Configuration
-import io.appmetrica.analytics.impl.service.AppMetricaCoreServiceCallback
-import io.appmetrica.analytics.impl.service.AppMetricaServiceProxy
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.constructionRule
 import org.assertj.core.api.Assertions.assertThat
@@ -17,7 +15,7 @@ import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class AppMetricaServiceTest : CommonTest() {
+class AppMetricaCoreServiceTest : CommonTest() {
 
     @get:Rule
     val serviceDelegateRule = constructionRule<AppMetricaServiceProxy>()
@@ -27,7 +25,7 @@ class AppMetricaServiceTest : CommonTest() {
     val serviceCallbackRule = constructionRule<AppMetricaCoreServiceCallback>()
     private val serviceCallback by serviceCallbackRule
 
-    private val service by setUp { Robolectric.buildService(AppMetricaService::class.java).get() }
+    private val service by setUp { Robolectric.buildService(AppMetricaCoreService::class.java).get() }
 
     @Test
     fun serviceCallback() {

@@ -20,6 +20,7 @@ import io.appmetrica.analytics.impl.DistributionSource
 import io.appmetrica.analytics.impl.ReportToSend
 import io.appmetrica.analytics.impl.client.ClientConfiguration
 import io.appmetrica.analytics.impl.client.ProcessConfiguration
+import io.appmetrica.analytics.impl.client.connection.ServiceDescription
 import io.appmetrica.analytics.impl.component.clients.ClientDescription
 import io.appmetrica.analytics.impl.ecommerce.client.converter.Result
 import io.appmetrica.analytics.impl.ecommerce.client.model.AmountWrapper
@@ -50,6 +51,7 @@ import io.appmetrica.analytics.impl.startup.StatSending
 import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedInfo
 import io.appmetrica.analytics.impl.utils.limitation.CollectionTrimInfo
 import io.appmetrica.analytics.impl.utils.limitation.TrimmingResult
+import io.appmetrica.analytics.internal.AppMetricaService
 import io.appmetrica.analytics.internal.CounterConfiguration
 import io.appmetrica.analytics.internal.IdentifiersResult
 import io.appmetrica.analytics.testutils.CommonTest
@@ -631,6 +633,12 @@ class ToStringTest(
                 arrayOf(
                     SelfReportingLazyEvent::class.java,
                     SelfReportingLazyEvent("Event value", "Event value"),
+                    0,
+                    "filled value"
+                ),
+                arrayOf(
+                    ServiceDescription::class.java,
+                    ServiceDescription("packageName", "serviceScheme", AppMetricaService::class.java),
                     0,
                     "filled value"
                 )

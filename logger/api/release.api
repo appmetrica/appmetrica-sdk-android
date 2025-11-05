@@ -25,5 +25,6 @@ public final class io.appmetrica.analytics.logger.appmetrica.internal.PublicLogg
 
 public static final class io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger$Companion {
     public final [NonNull] io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger getAnonymousInstance()
+    public final void init([NonNull] android.content.Context)
 }
 

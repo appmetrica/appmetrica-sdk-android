@@ -2,6 +2,7 @@ package io.appmetrica.analytics.impl;
 
 import android.content.Context;
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
+import io.appmetrica.analytics.impl.client.connection.AppMetricaServiceIntentProvider;
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.MockedConstructionRule;
@@ -33,6 +34,8 @@ public class AppMetricaConnectorTest extends CommonTest {
     private ICommonExecutor mExecutor;
     @Mock
     private AppMetricaServiceDelayHandler appMetricaServiceDelayHandler;
+    @Mock
+    private AppMetricaServiceIntentProvider appMetricaServiceIntentProvider;
 
     private AppMetricaConnector mConnector;
 
@@ -47,7 +50,12 @@ public class AppMetricaConnectorTest extends CommonTest {
     public void setUp() {
         MockitoAnnotations.openMocks(this);
         mContext = TestUtils.createMockedContext();
-        mConnector = new AppMetricaConnector(mContext, mExecutor, appMetricaServiceDelayHandler);
+        mConnector = new AppMetricaConnector(
+            mContext,
+            mExecutor,
+            appMetricaServiceDelayHandler,
+            appMetricaServiceIntentProvider
+        );
     }
 
     @Test

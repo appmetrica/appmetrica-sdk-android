@@ -5,6 +5,8 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
+import io.appmetrica.analytics.impl.client.connection.DefaultServiceDescriptionProvider;
+import io.appmetrica.analytics.impl.client.connection.ServiceDescriptionProvider;
 import io.appmetrica.analytics.impl.crash.jvm.client.TechnicalCrashProcessorFactory;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesClientDbStorage;
 import io.appmetrica.analytics.impl.db.storage.DatabaseStorageFactory;
@@ -85,6 +87,8 @@ public class ClientServiceLocator {
     private volatile AnonymousClientActivator anonymousClientActivator;
     @Nullable
     private volatile ExtraMetaInfoRetriever extraMetaInfoRetriever;
+    @NonNull
+    private volatile ServiceDescriptionProvider serviceDescriptionProvider = new DefaultServiceDescriptionProvider();
 
     private ClientServiceLocator() {
         this(new CurrentProcessDetector(), new ActivityLifecycleManager(), new ClientExecutorProvider());
@@ -324,6 +328,15 @@ public class ClientServiceLocator {
             }
         }
         return local;
+    }
+
+    public void overrideServiceDescriptionProvider(@NonNull ServiceDescriptionProvider serviceDescriptionProvider) {
+        this.serviceDescriptionProvider = serviceDescriptionProvider;
+    }
+
+    @NonNull
+    public ServiceDescriptionProvider getServiceDescriptionProvider() {
+        return serviceDescriptionProvider;
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)

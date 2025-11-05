@@ -8,7 +8,6 @@ import io.appmetrica.analytics.impl.ClientServiceLocator
 import io.appmetrica.analytics.impl.CounterReport
 import io.appmetrica.analytics.impl.ReportToSend
 import io.appmetrica.analytics.impl.ReporterEnvironment
-import io.appmetrica.analytics.impl.ServiceUtils
 import io.appmetrica.analytics.impl.ShouldDisconnectFromServiceChecker
 import io.appmetrica.analytics.impl.client.ProcessConfiguration
 import io.appmetrica.analytics.impl.crash.CrashToFileWriter
@@ -18,7 +17,6 @@ import io.appmetrica.analytics.internal.IAppMetricaService
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.MockedConstructionRule
-import io.appmetrica.analytics.testutils.MockedStaticRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Rule
@@ -47,9 +45,6 @@ internal class CrashCallableTest : CommonTest() {
     private val intent: Intent = mock()
 
     private lateinit var crashToFileWriter: CrashToFileWriter
-
-    @get:Rule
-    val serviceUtilsRule = MockedStaticRule(ServiceUtils::class.java)
 
     @get:Rule
     val clientServiceLocatorRule = ClientServiceLocatorRule()
@@ -82,7 +77,6 @@ internal class CrashCallableTest : CommonTest() {
         whenever(reportToSend.report).thenReturn(CounterReport())
         whenever(reportToSend.environment).thenReturn(reporterEnvironment)
 
-        whenever(ServiceUtils.getOwnMetricaServiceIntent(context)).thenReturn(intent)
         AppMetricaUncaughtExceptionHandler.reset()
     }
 

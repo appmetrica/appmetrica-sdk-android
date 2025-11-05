@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
+import io.appmetrica.analytics.impl.client.connection.AppMetricaServiceIntentProvider;
 import io.appmetrica.analytics.internal.IAppMetricaService;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.util.concurrent.CountDownLatch;
@@ -36,23 +37,30 @@ public class AppMetricaConnector {
 
     @NonNull
     private final AppMetricaServiceDelayHandler appMetricaServiceDelayHandler;
+    @NonNull
+    private final AppMetricaServiceIntentProvider intentProvider;
 
     public AppMetricaConnector(Context context, ICommonExecutor executor) {
         this(
             context,
             executor,
-            ClientServiceLocator.getInstance().getAppMetricaServiceDelayHandler()
+            ClientServiceLocator.getInstance().getAppMetricaServiceDelayHandler(),
+            new AppMetricaServiceIntentProvider()
         );
     }
 
     @VisibleForTesting
-    AppMetricaConnector(@NonNull Context context,
-                        @NonNull ICommonExecutor executor,
-                        @NonNull AppMetricaServiceDelayHandler appMetricaServiceDelayHandler) {
+    AppMetricaConnector(
+        @NonNull Context context,
+        @NonNull ICommonExecutor executor,
+        @NonNull AppMetricaServiceDelayHandler appMetricaServiceDelayHandler,
+        @NonNull AppMetricaServiceIntentProvider intentProvider
+    ) {
         mContext = context.getApplicationContext();
         mUnbindExecutor = executor;
         mShouldNeverDisconnect = false;
         this.appMetricaServiceDelayHandler = appMetricaServiceDelayHandler;
+        this.intentProvider = intentProvider;
     }
 
     public void bindService() {
@@ -64,10 +72,11 @@ public class AppMetricaConnector {
             bindCountDown = new CountDownLatch(1);
         }
 
-        Intent intent = ServiceUtils.getOwnMetricaServiceIntent(mContext);
+        Intent intent = intentProvider.getIntent(mContext);
         try {
             DebugLogger.INSTANCE.info(TAG, "May be delay");
             appMetricaServiceDelayHandler.maybeDelay(mContext);
+            DebugLogger.INSTANCE.info(TAG, "Binding to service with intent: %s", intent);
             boolean status = mContext.bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
             DebugLogger.INSTANCE.info(TAG, "bind to service with status: %b", status);
         } catch (Throwable exception) {

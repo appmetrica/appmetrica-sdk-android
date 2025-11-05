@@ -4,8 +4,7 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.os.Process
 import android.text.TextUtils
-import io.appmetrica.analytics.impl.AppMetricaServiceLifecycle.Condition
-import io.appmetrica.analytics.impl.service.AppMetricaServiceAction
+import io.appmetrica.analytics.impl.service.AppMetricaConnectionConstants
 import io.appmetrica.analytics.impl.utils.collection.HashMultimap
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
@@ -26,7 +25,7 @@ internal class AppMetricaServiceLifecycle : AppMetricaServiceLifecycleCallback {
     private val disconnectObservers = linkedMapOf<LifecycleObserver, Condition>()
 
     private val clientPids: Collection<Int>?
-        get() = boundProcesses[AppMetricaServiceAction.ACTION_CLIENT_CONNECTION]
+        get() = boundProcesses[AppMetricaConnectionConstants.ACTION_CLIENT_CONNECTION]
 
     private val clientCounts: Int
         get() = clientPids?.size ?: 0
@@ -119,7 +118,7 @@ internal class AppMetricaServiceLifecycle : AppMetricaServiceLifecycleCallback {
     }
 
     private fun isClientAction(action: String?): Boolean {
-        return AppMetricaServiceAction.ACTION_CLIENT_CONNECTION == action
+        return AppMetricaConnectionConstants.ACTION_CLIENT_CONNECTION == action
     }
 
     private fun isClientAction(intent: Intent): Boolean {
@@ -141,9 +140,9 @@ internal class AppMetricaServiceLifecycle : AppMetricaServiceLifecycleCallback {
     private fun getPid(intent: Intent): Int {
         var pid = -1
         val intentData = intent.data
-        if (intentData != null && intentData.path == "/" + ServiceUtils.PATH_CLIENT) {
+        if (intentData != null && intentData.path == "/" + AppMetricaConnectionConstants.PATH_CLIENT) {
             try {
-                pid = intentData.getQueryParameter(ServiceUtils.PARAMETER_PID)!!
+                pid = intentData.getQueryParameter(AppMetricaConnectionConstants.PARAMETER_PID)!!
                     .toInt()
             } catch (e: Throwable) {
                 DebugLogger.error(tag, e, e.message)

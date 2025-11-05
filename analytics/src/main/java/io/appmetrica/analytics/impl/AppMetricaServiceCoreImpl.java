@@ -20,7 +20,7 @@ import io.appmetrica.analytics.impl.modules.ModuleServiceLifecycleControllerImpl
 import io.appmetrica.analytics.impl.modules.ServiceContextFacade;
 import io.appmetrica.analytics.impl.modules.service.ServiceModulesController;
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade;
-import io.appmetrica.analytics.impl.service.AppMetricaServiceAction;
+import io.appmetrica.analytics.impl.service.AppMetricaConnectionConstants;
 import io.appmetrica.analytics.impl.service.AppMetricaServiceCallback;
 import io.appmetrica.analytics.impl.startup.StartupState;
 import io.appmetrica.analytics.impl.utils.JsonHelper;
@@ -36,7 +36,7 @@ public class AppMetricaServiceCoreImpl implements AppMetricaServiceCore, AppMetr
     @NonNull
     private final Context mContext;
     @NonNull
-    private volatile AppMetricaServiceCallback mCallback;
+    private final AppMetricaServiceCallback mCallback;
 
     @NonNull
     private ClientRepository mClientRepository;
@@ -219,7 +219,7 @@ public class AppMetricaServiceCoreImpl implements AppMetricaServiceCore, AppMetr
                 packageName
             );
 
-            if (AppMetricaServiceAction.ACTION_CLIENT_CONNECTION.equals(action)) {
+            if (AppMetricaConnectionConstants.ACTION_CLIENT_CONNECTION.equals(action)) {
                 if (packageName == null) {
                     DebugLogger.INSTANCE.warning(TAG, "Package name is null");
                 } else {
@@ -237,16 +237,17 @@ public class AppMetricaServiceCoreImpl implements AppMetricaServiceCore, AppMetr
 
     private void updateScreenInfo(@NonNull Intent intent) {
         GlobalServiceLocator.getInstance().getSdkEnvironmentHolder().mayBeUpdateScreenInfo(
-            JsonHelper.screenInfoFromJsonString(intent.getStringExtra(ServiceUtils.EXTRA_SCREEN_SIZE))
+            JsonHelper.screenInfoFromJsonString(intent.getStringExtra(AppMetricaConnectionConstants.EXTRA_SCREEN_SIZE))
         );
     }
 
     @WorkerThread
     @VisibleForTesting
     void removeClients(@Nullable Uri intentData, @NonNull String packageName) {
-        if (intentData != null && Objects.equals(intentData.getPath(), "/" + ServiceUtils.PATH_CLIENT)) {
-            int pid = Integer.parseInt(intentData.getQueryParameter(ServiceUtils.PARAMETER_PID));
-            String psid = intentData.getQueryParameter(ServiceUtils.PARAMETER_PSID);
+        String pathClient = "/" + AppMetricaConnectionConstants.PATH_CLIENT;
+        if (intentData != null && Objects.equals(intentData.getPath(), pathClient)) {
+            int pid = Integer.parseInt(intentData.getQueryParameter(AppMetricaConnectionConstants.PARAMETER_PID));
+            String psid = intentData.getQueryParameter(AppMetricaConnectionConstants.PARAMETER_PSID);
             DebugLogger.INSTANCE.info(TAG, "unbounded client pid %d and psid %s", pid, psid);
             mClientRepository.remove(packageName, pid, psid);
             DebugLogger.INSTANCE.info(
@@ -320,11 +321,6 @@ public class AppMetricaServiceCoreImpl implements AppMetricaServiceCore, AppMetr
         } else {
             DebugLogger.INSTANCE.error(TAG, "Process configuration or processId is null");
         }
-    }
-
-    @Override
-    public void updateCallback(@NonNull AppMetricaServiceCallback callback) {
-        mCallback = callback;
     }
 
     @WorkerThread

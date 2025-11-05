@@ -14,6 +14,7 @@ import io.appmetrica.analytics.impl.DefaultOneShotMetricaConfig;
 import io.appmetrica.analytics.impl.ExtraMetaInfoRetriever;
 import io.appmetrica.analytics.impl.ScreenInfoRetriever;
 import io.appmetrica.analytics.impl.SessionsTrackingManager;
+import io.appmetrica.analytics.impl.client.connection.ServiceDescriptionProvider;
 import io.appmetrica.analytics.impl.crash.jvm.client.TechnicalCrashProcessorFactory;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesClientDbStorage;
 import io.appmetrica.analytics.impl.modules.ModuleEntryPointsRegister;
@@ -60,6 +61,7 @@ public class ClientServiceLocatorRule extends ExternalResource {
     public ClientServiceLocator instance;
     public ReporterLifecycleListener reporterLifecycleListener;
     public ExtraMetaInfoRetriever extraMetaInfoRetriever;
+    public ServiceDescriptionProvider serviceDescriptionProvider;
 
     @Override
     public void before() {
@@ -88,6 +90,7 @@ public class ClientServiceLocatorRule extends ExternalResource {
         clientConfigSerializer = mock(ClientConfigSerializer.class);
         anonymousClientActivator = mock(AnonymousClientActivator.class);
         extraMetaInfoRetriever = mock(ExtraMetaInfoRetriever.class);
+        serviceDescriptionProvider = mock(ServiceDescriptionProvider.class);
         when(instance.getClientExecutorProvider()).thenReturn(clientExecutorProvider);
         when(instance.getDefaultOneShotConfig()).thenReturn(mDefaultOneShotMetricaConfig);
         when(instance.getCurrentProcessDetector()).thenReturn(currentProcessDetector);
@@ -115,6 +118,7 @@ public class ClientServiceLocatorRule extends ExternalResource {
         when(instance.getAnonymousClientActivator()).thenReturn(anonymousClientActivator);
         when(instance.getReporterLifecycleListener()).thenReturn(reporterLifecycleListener);
         when(instance.getExtraMetaInfoRetriever(any())).thenReturn(extraMetaInfoRetriever);
+        when(instance.getServiceDescriptionProvider()).thenReturn(serviceDescriptionProvider);
         ClientServiceLocator.setInstance(instance);
     }
 

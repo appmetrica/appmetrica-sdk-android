@@ -8,16 +8,13 @@ import io.appmetrica.analytics.impl.AppMetricaConnector
 import io.appmetrica.analytics.impl.CounterReport
 import io.appmetrica.analytics.impl.ReportToSend
 import io.appmetrica.analytics.impl.ReporterEnvironment
-import io.appmetrica.analytics.impl.ServiceUtils
 import io.appmetrica.analytics.impl.ShouldDisconnectFromServiceChecker
 import io.appmetrica.analytics.impl.client.ProcessConfiguration
 import io.appmetrica.analytics.impl.crash.jvm.client.AppMetricaUncaughtExceptionHandler
 import io.appmetrica.analytics.internal.CounterConfiguration
 import io.appmetrica.analytics.internal.IAppMetricaService
 import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.MockedStaticRule
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
@@ -52,9 +49,6 @@ internal class ReportCallableTest : CommonTest() {
 
     private lateinit var reportCallable: ReportCallable
 
-    @get:Rule
-    val serviceUtils = MockedStaticRule(ServiceUtils::class.java)
-
     @Before
     fun setUp() {
         val reportToSend = ReportToSend.newBuilder(reportData, reporterEnvironment)
@@ -68,7 +62,6 @@ internal class ReportCallableTest : CommonTest() {
 
         whenever(reportData.toBundle(any())).thenReturn(reportBundle)
 
-        whenever(ServiceUtils.getOwnMetricaServiceIntent(context)).thenReturn(intent)
         AppMetricaUncaughtExceptionHandler.reset()
     }
 

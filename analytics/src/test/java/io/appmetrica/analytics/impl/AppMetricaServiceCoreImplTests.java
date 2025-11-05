@@ -16,6 +16,7 @@ import io.appmetrica.analytics.impl.core.CoreImplFirstCreateTaskLauncherProvider
 import io.appmetrica.analytics.impl.crash.service.ServiceCrashController;
 import io.appmetrica.analytics.impl.db.VitalCommonDataProvider;
 import io.appmetrica.analytics.impl.modules.ServiceContextFacade;
+import io.appmetrica.analytics.impl.service.AppMetricaConnectionConstants;
 import io.appmetrica.analytics.impl.service.AppMetricaServiceCallback;
 import io.appmetrica.analytics.impl.startup.CollectingFlags;
 import io.appmetrica.analytics.impl.startup.StartupState;
@@ -189,7 +190,7 @@ public class AppMetricaServiceCoreImplTests extends CommonTest {
 
     @Test
     public void newClientConnectObserveUpdatesScreenSizeToNull() {
-        intent.putExtra(ServiceUtils.EXTRA_SCREEN_SIZE, new Bundle());
+        intent.putExtra(AppMetricaConnectionConstants.EXTRA_SCREEN_SIZE, new Bundle());
         touchNewClientConnectedObserver();
         verify(sdkEnvironmentHolder).mayBeUpdateScreenInfo(null);
     }
@@ -198,7 +199,7 @@ public class AppMetricaServiceCoreImplTests extends CommonTest {
     public void newClientConnectObserveUpdatesScreenSize() {
         ScreenInfo screenInfo = mock(ScreenInfo.class);
         String screenInfoString = "Screen info json string";
-        intent.putExtra(ServiceUtils.EXTRA_SCREEN_SIZE, screenInfoString);
+        intent.putExtra(AppMetricaConnectionConstants.EXTRA_SCREEN_SIZE, screenInfoString);
         when(JsonHelper.screenInfoFromJsonString(screenInfoString)).thenReturn(screenInfo);
         touchNewClientConnectedObserver();
         verify(sdkEnvironmentHolder).mayBeUpdateScreenInfo(screenInfo);

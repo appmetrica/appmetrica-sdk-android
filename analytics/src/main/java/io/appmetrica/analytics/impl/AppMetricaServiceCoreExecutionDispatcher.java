@@ -7,7 +7,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
 import io.appmetrica.analytics.coreutils.internal.executors.SafeRunnable;
-import io.appmetrica.analytics.impl.service.AppMetricaServiceCallback;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 
 public class AppMetricaServiceCoreExecutionDispatcher implements AppMetricaServiceCore {
@@ -137,11 +136,6 @@ public class AppMetricaServiceCoreExecutionDispatcher implements AppMetricaServi
                 mAppMetricaServiceCore.pauseUserSession(data);
             }
         });
-    }
-
-    @Override
-    public void updateCallback(@NonNull AppMetricaServiceCallback callback) {
-        mAppMetricaServiceCore.updateCallback(callback);
     }
 
     @Override
