@@ -6,8 +6,7 @@ import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.VisibleForTesting;
-import io.appmetrica.analytics.internal.CounterConfigurationReporterType;
+import io.appmetrica.analytics.coreutils.internal.logger.LoggerStorage;
 import io.appmetrica.analytics.impl.CounterReport;
 import io.appmetrica.analytics.impl.EventsManager;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
@@ -18,9 +17,9 @@ import io.appmetrica.analytics.impl.SelfDiagnosticReporterStorage;
 import io.appmetrica.analytics.impl.Utils;
 import io.appmetrica.analytics.impl.db.constants.Constants;
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade;
-import io.appmetrica.analytics.coreutils.internal.logger.LoggerStorage;
-import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
+import io.appmetrica.analytics.internal.CounterConfigurationReporterType;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONArray;
@@ -55,18 +54,9 @@ public class DatabaseCleaner {
 
     @NonNull
     private final CounterConfigurationReporterType mReporterType;
-    @Nullable
-    private final SelfDiagnosticReporterStorage mSelfDiagnosticReporterStorage;
 
-    public DatabaseCleaner(@NonNull CounterConfigurationReporterType reporterType) {
-        this(reporterType, GlobalServiceLocator.getInstance().getSelfDiagnosticReporterStorage());
-    }
-
-    @VisibleForTesting
-    DatabaseCleaner(@NonNull CounterConfigurationReporterType reporterType,
-                    @Nullable SelfDiagnosticReporterStorage selfDiagnosticReporterStorage) {
+    DatabaseCleaner(@NonNull CounterConfigurationReporterType reporterType) {
         mReporterType = reporterType;
-        mSelfDiagnosticReporterStorage = selfDiagnosticReporterStorage;
     }
 
     @Nullable
@@ -200,6 +190,8 @@ public class DatabaseCleaner {
                                     @NonNull Reason reason,
                                     @Nullable String apiKey,
                                     int deletedRowsCount) {
+        SelfDiagnosticReporterStorage mSelfDiagnosticReporterStorage =
+            GlobalServiceLocator.getInstance().getSelfDiagnosticReporterStorage();
         if (apiKey != null && mSelfDiagnosticReporterStorage != null) {
             SelfDiagnosticReporter reporter = mSelfDiagnosticReporterStorage
                     .getOrCreateReporter(apiKey, mReporterType);

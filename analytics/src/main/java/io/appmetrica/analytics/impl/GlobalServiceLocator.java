@@ -332,11 +332,11 @@ public final class GlobalServiceLocator {
     }
 
     @Nullable
-    public synchronized SelfDiagnosticReporterStorage getSelfDiagnosticReporterStorage() {
+    public SelfDiagnosticReporterStorage getSelfDiagnosticReporterStorage() {
         return mSelfDiagnosticReporterStorage;
     }
 
-    public synchronized void initSelfDiagnosticReporterStorage(@NonNull SelfProcessReporter selfProcessReporter) {
+    public void initSelfDiagnosticReporterStorage(@NonNull SelfProcessReporter selfProcessReporter) {
         mSelfDiagnosticReporterStorage = new SelfDiagnosticReporterStorage(mContext, selfProcessReporter);
     }
 

@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import io.appmetrica.analytics.impl.CounterReport;
 import io.appmetrica.analytics.impl.EventsManager;
+import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.InternalEvents;
 import io.appmetrica.analytics.impl.ProtobufUtils;
 import io.appmetrica.analytics.impl.SelfDiagnosticReporter;
@@ -86,9 +87,11 @@ public class DatabaseCleanerTest extends CommonTest {
     public void setUp() {
         MockitoAnnotations.openMocks(this);
         context = RuntimeEnvironment.getApplication();
-        when(storage.getOrCreateReporter(apiKey, CounterConfigurationReporterType.MAIN)).thenReturn(selfDiagnosticReporter);
+        when(GlobalServiceLocator.getInstance().getSelfDiagnosticReporterStorage()).thenReturn(storage);
+        when(storage.getOrCreateReporter(apiKey, CounterConfigurationReporterType.MAIN))
+            .thenReturn(selfDiagnosticReporter);
         db = new SimpleDatabaseHelper(context).getWritableDatabase();
-        databaseCleaner = new DatabaseCleaner(CounterConfigurationReporterType.MAIN, storage);
+        databaseCleaner = new DatabaseCleaner(CounterConfigurationReporterType.MAIN);
     }
 
     @Test
@@ -156,7 +159,7 @@ public class DatabaseCleanerTest extends CommonTest {
 
     @Test
     public void testNullStorageDoesNotThrow() {
-        databaseCleaner = new DatabaseCleaner(CounterConfigurationReporterType.MAIN, null);
+        when(GlobalServiceLocator.getInstance().getSelfDiagnosticReporterStorage()).thenReturn(null);
         addEvents(5);
         databaseCleaner.cleanEvents(
             db,
