@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.impl
 
 import android.os.Bundle
+import android.os.Looper
 import androidx.annotation.VisibleForTesting
 import io.appmetrica.analytics.coreutils.internal.time.SystemTimeProvider
 import io.appmetrica.analytics.coreutils.internal.time.TimeProvider
@@ -40,10 +41,11 @@ class ReportsSender @VisibleForTesting internal constructor(
     fun sendCrash(report: ReportToSend) {
         val crashProcessingStartTime = timeProvider.uptimeMillis()
         val callable = serviceCallableFactory.createCrashCallable(report)
+        val crashProcessingTimeLimit = crashProcessingTimeLimit()
         if (serviceConnector.isConnected) {
             try {
                 DebugLogger.info(TAG, "Execute crash callable asynchronous and wait")
-                executor.submit(callable).get(CRASH_PROCESSING_TIME_LIMIT, TimeUnit.MILLISECONDS)
+                executor.submit(callable).get(crashProcessingTimeLimit, TimeUnit.MILLISECONDS)
             } catch (e: Throwable) {
                 DebugLogger.error(TAG, e)
             }
@@ -53,15 +55,23 @@ class ReportsSender @VisibleForTesting internal constructor(
             try {
                 DebugLogger.info(TAG, "Execute crash callable synchronous")
                 callable.call()
+                val processingTimeSpent = timeProvider.uptimeMillis() - crashProcessingStartTime
+                val remainingTime = max(0, crashProcessingTimeLimit - processingTimeSpent)
+                DebugLogger.info(TAG, "Wait for $remainingTime ms to process all events before crash")
+                waitFor(remainingTime)
             } catch (ex: Throwable) {
                 DebugLogger.error(TAG, ex)
             }
         } else {
             DebugLogger.info(TAG, "Crash callable is already executed. Ignore it")
         }
-        val processingTimeSpent = timeProvider.uptimeMillis() - crashProcessingStartTime
-        val remainingTime = max(0, CRASH_PROCESSING_TIME_LIMIT - processingTimeSpent)
-        waitFor(remainingTime)
+    }
+
+    private fun crashProcessingTimeLimit(): Long =
+        if (isMainThread()) CRASH_PROCESSING_TIME_LIMIT_MAIN_THREAD else CRASH_PROCESSING_TIME_LIMIT_BG_THREAD
+
+    private fun isMainThread(): Boolean {
+        return Looper.myLooper() == Looper.getMainLooper()
     }
 
     private fun waitFor(timeout: Long) {
@@ -88,6 +98,7 @@ class ReportsSender @VisibleForTesting internal constructor(
     companion object {
         private const val TAG = "[ReportsSender]"
 
-        private val CRASH_PROCESSING_TIME_LIMIT = TimeUnit.SECONDS.toMillis(4)
+        private val CRASH_PROCESSING_TIME_LIMIT_MAIN_THREAD = TimeUnit.SECONDS.toMillis(1)
+        private val CRASH_PROCESSING_TIME_LIMIT_BG_THREAD = TimeUnit.SECONDS.toMillis(4)
     }
 }
