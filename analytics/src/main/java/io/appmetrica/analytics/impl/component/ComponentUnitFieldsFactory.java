@@ -22,7 +22,7 @@ import io.appmetrica.analytics.impl.component.sessionextras.SessionExtrasHolder;
 import io.appmetrica.analytics.impl.db.DatabaseHelper;
 import io.appmetrica.analytics.impl.db.VitalComponentDataProvider;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesComponentDbStorage;
-import io.appmetrica.analytics.impl.db.storage.DatabaseStorageFactory;
+import io.appmetrica.analytics.impl.db.storage.ServiceStorageFactory;
 import io.appmetrica.analytics.impl.events.EventTrigger;
 import io.appmetrica.analytics.impl.events.EventsFlusher;
 import io.appmetrica.analytics.impl.request.ReportRequestConfig;
@@ -50,25 +50,24 @@ class ComponentUnitFieldsFactory {
     static class PreferencesProvider {
 
         @NonNull
-        private final ComponentId mComponentId;
+        private final Context context;
         @NonNull
-        private final DatabaseStorageFactory mDatabaseStorageFactory;
+        private final ComponentId componentId;
+        @NonNull
+        private final ServiceStorageFactory serviceStorageFactory;
 
         PreferencesProvider(@NonNull Context context,
                             @NonNull ComponentId componentId) {
-            this(componentId, DatabaseStorageFactory.getInstance(context));
-        }
-
-        @VisibleForTesting
-        PreferencesProvider(@NonNull ComponentId componentId,
-                            @NonNull DatabaseStorageFactory databaseStorageFactory) {
-            mComponentId = componentId;
-            mDatabaseStorageFactory = databaseStorageFactory;
+            this.context = context;
+            this.componentId = componentId;
+            this.serviceStorageFactory = GlobalServiceLocator.getInstance().getStorageFactory();
         }
 
         @NonNull
         PreferencesComponentDbStorage createPreferencesComponentDbStorage() {
-            return new PreferencesComponentDbStorage(mDatabaseStorageFactory.getPreferencesDbHelper(mComponentId));
+            return new PreferencesComponentDbStorage(
+                serviceStorageFactory.getComponentPreferenceDbHelper(context, componentId)
+            );
         }
     }
 
@@ -172,15 +171,16 @@ class ComponentUnitFieldsFactory {
     @NonNull
     DatabaseHelper createDatabaseHelper(@NonNull ComponentUnit componentUnit) {
         return new DatabaseHelper(componentUnit,
-                DatabaseStorageFactory.getInstance(mContext).getStorageForComponent(mComponentId));
+            GlobalServiceLocator.getInstance().getStorageFactory().getComponentStorage(mContext, mComponentId)
+        );
     }
 
     @NonNull
     ReportingTaskProcessor<ComponentUnit> createTaskProcessor(@NonNull ComponentUnit component) {
-        ReportingTaskProcessor<ComponentUnit> processor =  new ReportingTaskProcessor<ComponentUnit>(
-                component,
-                mStartupExecutorFactory.<ComponentUnit>create(),
-                mTaskExecutor
+        ReportingTaskProcessor<ComponentUnit> processor = new ReportingTaskProcessor<ComponentUnit>(
+            component,
+            mStartupExecutorFactory.<ComponentUnit>create(),
+            mTaskExecutor
         );
         lifecycleDependentComponentManager.addLifecycleObserver(processor);
         return processor;
@@ -189,9 +189,9 @@ class ComponentUnitFieldsFactory {
     @NonNull
     ReportComponentConfigurationHolder createConfigHolder(@NonNull ComponentUnit componentUnit) {
         return new ReportComponentConfigurationHolder(
-                new ReportRequestConfig.Loader(componentUnit, mDataSendingStrategy),
-                mStartupState,
-                new ReportRequestConfig.Arguments(mSdkConfig)
+            new ReportRequestConfig.Loader(componentUnit, mDataSendingStrategy),
+            mStartupState,
+            new ReportRequestConfig.Arguments(mSdkConfig)
         );
     }
 
@@ -200,9 +200,9 @@ class ComponentUnitFieldsFactory {
                                                     @NonNull VitalComponentDataProvider vitalComponentDataProvider,
                                                     @NonNull SessionManagerStateMachine.EventSaver eventSaver) {
         return new SessionManagerStateMachine(
-                componentUnit,
-                new SessionIDProvider(vitalComponentDataProvider),
-                eventSaver
+            componentUnit,
+            new SessionIDProvider(vitalComponentDataProvider),
+            eventSaver
         );
     }
 
@@ -215,20 +215,20 @@ class ComponentUnitFieldsFactory {
                                  @NonNull SessionExtrasHolder sessionExtrasHolder,
                                  @NonNull final ReportingTaskProcessor taskProcessor) {
         return new EventSaver(
-                componentPreferences,
-                vitalComponentDataProvider,
-                sessionManager,
-                databaseHelper,
-                appEnvironment,
-                mEventEncrypterProvider,
-                sessionExtrasHolder,
-                mCurrentAppVersion,
-                new EventSaver.ReportSavedListener() {
-                    @Override
-                    public void onReportSaved() {
-                        taskProcessor.restartFlushTask();
-                    }
+            componentPreferences,
+            vitalComponentDataProvider,
+            sessionManager,
+            databaseHelper,
+            appEnvironment,
+            mEventEncrypterProvider,
+            sessionExtrasHolder,
+            mCurrentAppVersion,
+            new EventSaver.ReportSavedListener() {
+                @Override
+                public void onReportSaved() {
+                    taskProcessor.restartFlushTask();
                 }
+            }
         );
     }
 
@@ -242,8 +242,8 @@ class ComponentUnitFieldsFactory {
     createReportProcessor(@NonNull ComponentUnit component,
                           @NonNull EventProcessingStrategyFactory eventProcessingStrategyFactory) {
         return new ReportingReportProcessor<ReportComponentHandler, ComponentUnit>(
-                eventProcessingStrategyFactory,
-                component
+            eventProcessingStrategyFactory,
+            component
         );
     }
 
@@ -273,14 +273,14 @@ class ComponentUnitFieldsFactory {
 
     @NonNull
     CertificatesFingerprintsProvider createCertificateFingerprintProvider(
-            @NonNull PreferencesComponentDbStorage preferences) {
+        @NonNull PreferencesComponentDbStorage preferences) {
         return new CertificatesFingerprintsProvider(mContext, preferences);
     }
 
     @NonNull
     VitalComponentDataProvider getVitalComponentDataProvider() {
         return GlobalServiceLocator.getInstance().getVitalDataProviderStorage()
-                .getComponentDataProvider(mComponentId);
+            .getComponentDataProvider(mComponentId);
     }
 
     @NonNull

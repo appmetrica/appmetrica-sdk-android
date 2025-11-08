@@ -1,38 +1,42 @@
 package io.appmetrica.analytics.impl;
 
 import android.content.Context;
+
+import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import io.appmetrica.analytics.impl.client.connection.DefaultServiceDescriptionProvider;
 import io.appmetrica.analytics.impl.client.connection.ServiceDescriptionProvider;
 import io.appmetrica.analytics.impl.crash.jvm.client.TechnicalCrashProcessorFactory;
 import io.appmetrica.analytics.impl.db.IKeyValueTableDbHelper;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesClientDbStorage;
-import io.appmetrica.analytics.impl.db.storage.DatabaseStorageFactory;
+import io.appmetrica.analytics.impl.db.storage.ClientStorageFactory;
 import io.appmetrica.analytics.impl.modules.ModuleEntryPointsRegister;
 import io.appmetrica.analytics.impl.modules.client.ClientModulesController;
 import io.appmetrica.analytics.impl.proxy.AppMetricaFacadeProvider;
 import io.appmetrica.analytics.impl.reporter.ReporterLifecycleListener;
+import io.appmetrica.analytics.impl.servicecomponents.OuterStoragePathProvider;
 import io.appmetrica.analytics.impl.startup.uuid.MultiProcessSafeUuidProvider;
 import io.appmetrica.analytics.impl.startup.uuid.UuidFromClientPreferencesImporter;
 import io.appmetrica.analytics.impl.utils.AppMetricaServiceProcessDetector;
-import io.appmetrica.analytics.impl.utils.process.CurrentProcessDetector;
 import io.appmetrica.analytics.impl.utils.FirstLaunchDetector;
 import io.appmetrica.analytics.impl.utils.executors.ClientExecutorProvider;
+import io.appmetrica.analytics.impl.utils.process.CurrentProcessDetector;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.MockedConstructionRule;
-import io.appmetrica.analytics.testutils.MockedStaticRule;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import java.io.File;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.robolectric.RobolectricTestRunner;
+import org.mockito.MockedConstruction;
 
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import org.mockito.MockitoAnnotations;
+import org.robolectric.RobolectricTestRunner;
 
 @RunWith(RobolectricTestRunner.class)
 public class ClientServiceLocatorTest extends CommonTest {
@@ -80,10 +84,6 @@ public class ClientServiceLocatorTest extends CommonTest {
         new MockedConstructionRule<>(PreferencesClientDbStorage.class);
 
     @Rule
-    public MockedStaticRule<DatabaseStorageFactory> databaseStorageFactoryMockedStaticRule =
-        new MockedStaticRule<>(DatabaseStorageFactory.class);
-
-    @Rule
     public MockedConstructionRule<AppMetricaFacadeProvider> appMetricaFacadeProviderMockedConstructionRule =
         new MockedConstructionRule<>(AppMetricaFacadeProvider.class);
 
@@ -111,8 +111,32 @@ public class ClientServiceLocatorTest extends CommonTest {
     public MockedConstructionRule<DefaultServiceDescriptionProvider> defaultServiceDescriptionProviderRule =
         new MockedConstructionRule<>(DefaultServiceDescriptionProvider.class);
 
-    @Mock
-    private DatabaseStorageFactory databaseStorage;
+    private final File outerPath = new File("outerPath");
+
+    @Rule
+    public MockedConstructionRule<OuterStoragePathProvider> outerStoragePathProviderMockedConstructionRule =
+        new MockedConstructionRule<>(
+            OuterStoragePathProvider.class,
+            new MockedConstruction.MockInitializer<OuterStoragePathProvider>() {
+                @Override
+                public void prepare(OuterStoragePathProvider mock, MockedConstruction.Context cntx) throws Throwable {
+                    when(mock.getPath(context)).thenReturn(outerPath);
+                }
+            }
+        );
+
+    @Rule
+    public MockedConstructionRule<ClientStorageFactory> clientStorageFactoryMockedConstructionRule =
+        new MockedConstructionRule<>(
+            ClientStorageFactory.class,
+            new MockedConstruction.MockInitializer<ClientStorageFactory>() {
+                @Override
+                public void prepare(ClientStorageFactory mock, MockedConstruction.Context cntx) throws Throwable {
+                    when(mock.getClientDbHelper(context)).thenReturn(keyValueTableDbHelper);
+                }
+            }
+        );
+
     @Mock
     private IKeyValueTableDbHelper keyValueTableDbHelper;
 
@@ -121,8 +145,6 @@ public class ClientServiceLocatorTest extends CommonTest {
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        when(DatabaseStorageFactory.getInstance(context)).thenReturn(databaseStorage);
-        when(databaseStorage.getClientDbHelper()).thenReturn(keyValueTableDbHelper);
         mClientServiceLocator = new ClientServiceLocator(
             mCurrentProcessDetector,
             mDefaultOneShotMetricaConfig,
@@ -269,6 +291,23 @@ public class ClientServiceLocatorTest extends CommonTest {
             .hasSize(1);
         assertThat(preferencesClientDbStorageMockedConstructionRule.getArgumentInterceptor().flatArguments())
             .containsExactly(keyValueTableDbHelper);
+    }
+
+    @Test
+    public void getStorageFactory() {
+        assertThat(mClientServiceLocator.getStorageFactory(context))
+            .isSameAs(mClientServiceLocator.getStorageFactory(context))
+            .isSameAs(clientStorageFactoryMockedConstructionRule.getConstructionMock().constructed().get(0));
+
+        assertThat(clientStorageFactoryMockedConstructionRule.getConstructionMock().constructed())
+            .hasSize(1);
+        assertThat(clientStorageFactoryMockedConstructionRule.getArgumentInterceptor().flatArguments())
+            .containsExactly(outerPath);
+
+        assertThat(outerStoragePathProviderMockedConstructionRule.getConstructionMock().constructed())
+            .hasSize(1);
+        assertThat(outerStoragePathProviderMockedConstructionRule.getArgumentInterceptor().flatArguments())
+            .isEmpty();
     }
 
     @Test

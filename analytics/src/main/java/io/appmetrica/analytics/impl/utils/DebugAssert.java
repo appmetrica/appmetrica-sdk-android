@@ -4,10 +4,10 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import io.appmetrica.analytics.AppMetrica;
 import io.appmetrica.analytics.BuildConfig;
+import io.appmetrica.analytics.impl.ClientServiceLocator;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.db.StorageType;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesClientDbStorage;
-import io.appmetrica.analytics.impl.db.storage.DatabaseStorageFactory;
 
 public class DebugAssert {
 
@@ -31,16 +31,15 @@ public class DebugAssert {
 
     private static void assertServiceMigrationChecked() {
         final int lastMigrationVersion = GlobalServiceLocator.getInstance().getVitalDataProviderStorage()
-                .getCommonDataProviderForMigration().getLastMigrationApiLevel();
+            .getCommonDataProviderForMigration().getLastMigrationApiLevel();
         if (lastMigrationVersion != AppMetrica.getLibraryApiLevel()) {
             throw new AssertionError("Service migration is not checked");
         }
     }
 
     private static void assertClientMigrationChecked(@NonNull Context context) {
-        final long lastMigrationVersion = new PreferencesClientDbStorage(DatabaseStorageFactory
-                .getInstance(context.getApplicationContext()).getClientDbHelperForMigration()
-        ).getClientApiLevel(0);
+        final long lastMigrationVersion = new PreferencesClientDbStorage(ClientServiceLocator.getInstance()
+            .getStorageFactory(context).getClientDbHelperForMigration(context)).getClientApiLevel(0);
         if (lastMigrationVersion != AppMetrica.getLibraryApiLevel()) {
             throw new AssertionError("Client migration is not checked");
         }

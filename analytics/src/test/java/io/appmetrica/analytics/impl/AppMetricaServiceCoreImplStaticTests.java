@@ -9,6 +9,7 @@ import io.appmetrica.analytics.impl.core.CoreImplFirstCreateTaskLauncher;
 import io.appmetrica.analytics.impl.core.CoreImplFirstCreateTaskLauncherProvider;
 import io.appmetrica.analytics.impl.crash.service.ServiceCrashController;
 import io.appmetrica.analytics.impl.db.VitalCommonDataProvider;
+import io.appmetrica.analytics.impl.modules.ServiceContextFacade;
 import io.appmetrica.analytics.impl.service.AppMetricaServiceCallback;
 import io.appmetrica.analytics.impl.startup.CollectingFlags;
 import io.appmetrica.analytics.impl.startup.StartupState;
@@ -92,6 +93,10 @@ public class AppMetricaServiceCoreImplStaticTests extends CommonTest {
     public MockedConstructionRule<AppMetricaServiceCoreImplFieldsFactory>
         appMetricaServiceCoreImplFieldsFactoryMockedConstructionRule =
         new MockedConstructionRule<>(AppMetricaServiceCoreImplFieldsFactory.class);
+
+    @Rule
+    public MockedConstructionRule<ServiceContextFacade> serviceContextFacadeMockedConstructionRule =
+        new MockedConstructionRule<>(ServiceContextFacade.class);
 
     @Before
     public void setUp() {

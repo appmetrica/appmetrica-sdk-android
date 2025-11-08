@@ -1,13 +1,13 @@
 package io.appmetrica.analytics.impl.modules
 
+import android.content.Context
 import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.db.DatabaseStorage
-import io.appmetrica.analytics.impl.db.storage.DatabaseStorageFactory
+import io.appmetrica.analytics.impl.db.storage.ServiceStorageFactory
 import io.appmetrica.analytics.modulesapi.internal.service.ModuleServiceLifecycleController
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
 import io.appmetrica.analytics.testutils.MockedConstructionRule
-import io.appmetrica.analytics.testutils.MockedStaticRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Rule
@@ -20,8 +20,9 @@ import org.robolectric.RobolectricTestRunner
 @RunWith(RobolectricTestRunner::class)
 internal class ServiceContextFacadeTest : CommonTest() {
 
+    private val context: Context = mock()
     private val moduleLifecycleController = mock<ModuleServiceLifecycleController>()
-    private val databaseStorageFactory = mock<DatabaseStorageFactory>()
+    private val databaseStorageFactory = mock<ServiceStorageFactory>()
     private val storageForService = mock<DatabaseStorage>()
 
     @get:Rule
@@ -49,16 +50,13 @@ internal class ServiceContextFacadeTest : CommonTest() {
     @get:Rule
     val executorProviderImplMockedRule = MockedConstructionRule(ExecutorProviderImpl::class.java)
 
-    @get:Rule
-    val databaseStorageFactoryMockedStaticRule = MockedStaticRule(DatabaseStorageFactory::class.java)
-
     private lateinit var serviceContextFacade: ServiceContextFacade
 
     @Before
     fun setUp() {
-        whenever(DatabaseStorageFactory.getInstance(GlobalServiceLocator.getInstance().context))
-            .thenReturn(databaseStorageFactory)
-        whenever(databaseStorageFactory.storageForService).thenReturn(storageForService)
+        whenever(GlobalServiceLocator.getInstance().context).thenReturn(context)
+        whenever(GlobalServiceLocator.getInstance().getStorageFactory()).thenReturn(databaseStorageFactory)
+        whenever(databaseStorageFactory.getStorageForService(context)).thenReturn(storageForService)
         serviceContextFacade = ServiceContextFacade(moduleLifecycleController)
     }
 
@@ -109,7 +107,7 @@ internal class ServiceContextFacadeTest : CommonTest() {
         assertThat(storageProviderImplMockedRule.constructionMock.constructed()).hasSize(1)
         assertThat(storageProviderImplMockedRule.argumentInterceptor.flatArguments())
             .containsExactly(
-                GlobalServiceLocator.getInstance().context,
+                context,
                 GlobalServiceLocator.getInstance().servicePreferences,
                 storageForService
             )

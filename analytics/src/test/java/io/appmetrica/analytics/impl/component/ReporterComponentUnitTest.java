@@ -1,22 +1,20 @@
 package io.appmetrica.analytics.impl.component;
 
 import io.appmetrica.analytics.impl.DataSendingRestrictionControllerImpl;
-import io.appmetrica.analytics.impl.db.storage.DatabaseStorageFactory;
 import io.appmetrica.analytics.internal.CounterConfiguration;
 import io.appmetrica.analytics.internal.CounterConfigurationReporterType;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
-import java.lang.reflect.Field;
-import org.junit.After;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.robolectric.RobolectricTestRunner;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
+import org.robolectric.RobolectricTestRunner;
 
 @RunWith(RobolectricTestRunner.class)
 public class ReporterComponentUnitTest extends ComponentUnitBaseTest {
@@ -36,13 +34,6 @@ public class ReporterComponentUnitTest extends ComponentUnitBaseTest {
     public void setUp() {
         super.init();
         mReporterComponentUnit = (ReporterComponentUnit) mComponentUnit;
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        Field instance = DatabaseStorageFactory.class.getDeclaredField("sStorageFactory");
-        instance.setAccessible(true);
-        instance.set(null, null);
     }
 
     @Test

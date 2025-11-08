@@ -7,12 +7,12 @@ import io.appmetrica.analytics.coreapi.internal.data.ProtobufBinaryStateStorageF
 import io.appmetrica.analytics.coreapi.internal.data.ProtobufConverter;
 import io.appmetrica.analytics.coreapi.internal.data.ProtobufStateSerializer;
 import io.appmetrica.analytics.coreapi.internal.data.ProtobufStateStorage;
+import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.clids.ClidsInfo;
 import io.appmetrica.analytics.impl.db.protobuf.ProtobufStateStorageImpl;
 import io.appmetrica.analytics.impl.db.state.converter.AppPermissionsStateConverter;
 import io.appmetrica.analytics.impl.db.state.converter.ClidsInfoConverter;
 import io.appmetrica.analytics.impl.db.state.converter.StartupStateConverter;
-import io.appmetrica.analytics.impl.db.storage.DatabaseStorageFactory;
 import io.appmetrica.analytics.impl.permissions.AppPermissionsState;
 import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoData;
 import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoDataConverter;
@@ -26,7 +26,7 @@ import io.appmetrica.analytics.protobuf.nano.MessageNano;
 import java.util.Collection;
 import java.util.HashMap;
 
-public interface StorageFactory<T> extends ProtobufBinaryStateStorageFactory<T>  {
+public interface StorageFactory<T> extends ProtobufBinaryStateStorageFactory<T> {
 
     @NonNull
     ProtobufStateStorage<T> create(@NonNull Context context);
@@ -62,121 +62,126 @@ public interface StorageFactory<T> extends ProtobufBinaryStateStorageFactory<T> 
 
         private final HashMap<Class<?>, StorageFactory<?>> mFactories = new HashMap<Class<?>, StorageFactory<?>>();
         private final StorageFactory<StartupStateModel> mStartupStateStorageFactory =
-                new StorageFactoryImpl<StartupStateModel>() {
-                    @NonNull
-                    @Override
-                    protected ProtobufStateStorage<StartupStateModel> createWithHelper(
-                            @NonNull Context context,
-                            @NonNull IBinaryDataHelper helper
-                    ) {
-                        return new ProtobufStateStorageImpl<StartupStateModel, StartupStateProtobuf.StartupState>(
-                                "startup_state",
-                                helper,
-                                new StateSerializerFactory(context).createStartupStateSerializer(),
-                                new StartupStateConverter()
-                        );
-                    }
+            new StorageFactoryImpl<StartupStateModel>() {
+                @NonNull
+                @Override
+                protected ProtobufStateStorage<StartupStateModel> createWithHelper(
+                    @NonNull Context context,
+                    @NonNull IBinaryDataHelper helper
+                ) {
+                    return new ProtobufStateStorageImpl<StartupStateModel, StartupStateProtobuf.StartupState>(
+                        "startup_state",
+                        helper,
+                        new StateSerializerFactory(context).createStartupStateSerializer(),
+                        new StartupStateConverter()
+                    );
+                }
 
-                    @NonNull
-                    @Override
-                    protected IBinaryDataHelper getMainBinaryDataHelper(@NonNull Context context) {
-                        return DatabaseStorageFactory.getInstance(context).getServiceBinaryDataHelper();
-                    }
+                @NonNull
+                @Override
+                protected IBinaryDataHelper getMainBinaryDataHelper(@NonNull Context context) {
+                    return GlobalServiceLocator.getInstance().getStorageFactory()
+                        .getServiceBinaryDataHelper(context);
+                }
 
-                    @NonNull
-                    @Override
-                    protected IBinaryDataHelper getMigrationBinaryDataHelper(@NonNull Context context) {
-                        return DatabaseStorageFactory.getInstance(context).getServiceBinaryDataHelperForMigration();
-                    }
-                };
+                @NonNull
+                @Override
+                protected IBinaryDataHelper getMigrationBinaryDataHelper(@NonNull Context context) {
+                    return GlobalServiceLocator.getInstance().getStorageFactory()
+                        .getServiceBinaryDataHelperForMigration(context);
+                }
+            };
 
         private final StorageFactory<AppPermissionsState> mAppPermissionsStateStorageFactory =
-                new StorageFactoryImpl<AppPermissionsState>() {
-                    @NonNull
-                    @Override
-                    protected ProtobufStateStorage<AppPermissionsState> createWithHelper(
-                            @NonNull Context context,
-                            @NonNull IBinaryDataHelper helper
-                    ) {
-                        return new ProtobufStateStorageImpl<AppPermissionsState,
-                                AppPermissionsStateProtobuf.AppPermissionsState>(
-                                "app_permissions_state",
-                                helper,
-                                new StateSerializerFactory(context).createAppPermissionsStateSerializer(),
-                                new AppPermissionsStateConverter()
-                        );
-                    }
+            new StorageFactoryImpl<AppPermissionsState>() {
+                @NonNull
+                @Override
+                protected ProtobufStateStorage<AppPermissionsState> createWithHelper(
+                    @NonNull Context context,
+                    @NonNull IBinaryDataHelper helper
+                ) {
+                    return new ProtobufStateStorageImpl<AppPermissionsState,
+                        AppPermissionsStateProtobuf.AppPermissionsState>(
+                        "app_permissions_state",
+                        helper,
+                        new StateSerializerFactory(context).createAppPermissionsStateSerializer(),
+                        new AppPermissionsStateConverter()
+                    );
+                }
 
-                    @NonNull
-                    @Override
-                    protected IBinaryDataHelper getMainBinaryDataHelper(@NonNull Context context) {
-                        return DatabaseStorageFactory.getInstance(context).getServiceBinaryDataHelper();
-                    }
+                @NonNull
+                @Override
+                protected IBinaryDataHelper getMainBinaryDataHelper(@NonNull Context context) {
+                    return GlobalServiceLocator.getInstance().getStorageFactory().getServiceBinaryDataHelper(context);
+                }
 
-                    @NonNull
-                    @Override
-                    protected IBinaryDataHelper getMigrationBinaryDataHelper(@NonNull Context context) {
-                        return DatabaseStorageFactory.getInstance(context).getServiceBinaryDataHelperForMigration();
-                    }
-                };
+                @NonNull
+                @Override
+                protected IBinaryDataHelper getMigrationBinaryDataHelper(@NonNull Context context) {
+                    return GlobalServiceLocator.getInstance().getStorageFactory()
+                        .getServiceBinaryDataHelperForMigration(context);
+                }
+            };
 
         private final StorageFactory<PreloadInfoData> preloadInfoDataStorageFactory =
-                new StorageFactoryImpl<PreloadInfoData>() {
-                    @NonNull
-                    @Override
-                    protected ProtobufStateStorage<PreloadInfoData> createWithHelper(
-                            @NonNull Context context,
-                            @NonNull IBinaryDataHelper helper
-                    ) {
-                        return new ProtobufStateStorageImpl<PreloadInfoData, PreloadInfoProto.PreloadInfoData>(
-                                "preload_info_data",
-                                helper,
-                                new StateSerializerFactory(context).createPreloadInfoDataSerializer(),
-                                new PreloadInfoDataConverter()
-                        );
-                    }
+            new StorageFactoryImpl<PreloadInfoData>() {
+                @NonNull
+                @Override
+                protected ProtobufStateStorage<PreloadInfoData> createWithHelper(
+                    @NonNull Context context,
+                    @NonNull IBinaryDataHelper helper
+                ) {
+                    return new ProtobufStateStorageImpl<PreloadInfoData, PreloadInfoProto.PreloadInfoData>(
+                        "preload_info_data",
+                        helper,
+                        new StateSerializerFactory(context).createPreloadInfoDataSerializer(),
+                        new PreloadInfoDataConverter()
+                    );
+                }
 
-                    @NonNull
-                    @Override
-                    protected IBinaryDataHelper getMainBinaryDataHelper(@NonNull Context context) {
-                        return DatabaseStorageFactory.getInstance(context).getServiceBinaryDataHelper();
-                    }
+                @NonNull
+                @Override
+                protected IBinaryDataHelper getMainBinaryDataHelper(@NonNull Context context) {
+                    return GlobalServiceLocator.getInstance().getStorageFactory().getServiceBinaryDataHelper(context);
+                }
 
-                    @NonNull
-                    @Override
-                    protected IBinaryDataHelper getMigrationBinaryDataHelper(@NonNull Context context) {
-                        return DatabaseStorageFactory.getInstance(context).getServiceBinaryDataHelperForMigration();
-                    }
-                };
+                @NonNull
+                @Override
+                protected IBinaryDataHelper getMigrationBinaryDataHelper(@NonNull Context context) {
+                    return GlobalServiceLocator.getInstance().getStorageFactory()
+                        .getServiceBinaryDataHelperForMigration(context);
+                }
+            };
 
         private final StorageFactory<ClidsInfo> clidsInfoStorageFactory =
-                new StorageFactoryImpl<ClidsInfo>() {
-                    @NonNull
-                    @Override
-                    protected ProtobufStateStorage<ClidsInfo> createWithHelper(
-                            @NonNull Context context,
-                            @NonNull IBinaryDataHelper helper
-                    ) {
-                        return new ProtobufStateStorageImpl<ClidsInfo, ClidsInfoProto.ClidsInfo>(
-                                "clids_info",
-                                helper,
-                                new StateSerializerFactory(context).createClidsInfoSerializer(),
-                                new ClidsInfoConverter()
-                        );
-                    }
+            new StorageFactoryImpl<ClidsInfo>() {
+                @NonNull
+                @Override
+                protected ProtobufStateStorage<ClidsInfo> createWithHelper(
+                    @NonNull Context context,
+                    @NonNull IBinaryDataHelper helper
+                ) {
+                    return new ProtobufStateStorageImpl<ClidsInfo, ClidsInfoProto.ClidsInfo>(
+                        "clids_info",
+                        helper,
+                        new StateSerializerFactory(context).createClidsInfoSerializer(),
+                        new ClidsInfoConverter()
+                    );
+                }
 
-                    @NonNull
-                    @Override
-                    protected IBinaryDataHelper getMainBinaryDataHelper(@NonNull Context context) {
-                        return DatabaseStorageFactory.getInstance(context).getServiceBinaryDataHelper();
-                    }
+                @NonNull
+                @Override
+                protected IBinaryDataHelper getMainBinaryDataHelper(@NonNull Context context) {
+                    return GlobalServiceLocator.getInstance().getStorageFactory().getServiceBinaryDataHelper(context);
+                }
 
-                    @NonNull
-                    @Override
-                    protected IBinaryDataHelper getMigrationBinaryDataHelper(@NonNull Context context) {
-                        return DatabaseStorageFactory.getInstance(context).getServiceBinaryDataHelperForMigration();
-                    }
-                };
+                @NonNull
+                @Override
+                protected IBinaryDataHelper getMigrationBinaryDataHelper(@NonNull Context context) {
+                    return GlobalServiceLocator.getInstance().getStorageFactory()
+                        .getServiceBinaryDataHelperForMigration(context);
+                }
+            };
 
         private Provider() {
             mFactories.put(StartupStateModel.class, mStartupStateStorageFactory);
@@ -218,13 +223,14 @@ public interface StorageFactory<T> extends ProtobufBinaryStateStorageFactory<T> 
                 @NonNull
                 @Override
                 protected IBinaryDataHelper getMainBinaryDataHelper(@NonNull Context context) {
-                    return DatabaseStorageFactory.getInstance(context).getServiceBinaryDataHelper();
+                    return GlobalServiceLocator.getInstance().getStorageFactory().getServiceBinaryDataHelper(context);
                 }
 
                 @NonNull
                 @Override
                 protected IBinaryDataHelper getMigrationBinaryDataHelper(@NonNull Context context) {
-                    return DatabaseStorageFactory.getInstance(context).getServiceBinaryDataHelperForMigration();
+                    return GlobalServiceLocator.getInstance().getStorageFactory()
+                        .getServiceBinaryDataHelperForMigration(context);
                 }
             };
         }

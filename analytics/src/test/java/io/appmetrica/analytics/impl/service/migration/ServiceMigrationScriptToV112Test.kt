@@ -12,7 +12,7 @@ import io.appmetrica.analytics.impl.db.DatabaseStorage
 import io.appmetrica.analytics.impl.db.VitalCommonDataProvider
 import io.appmetrica.analytics.impl.db.constants.Constants
 import io.appmetrica.analytics.impl.db.state.factory.StorageFactory
-import io.appmetrica.analytics.impl.db.storage.DatabaseStorageFactory
+import io.appmetrica.analytics.impl.db.storage.ServiceStorageFactory
 import io.appmetrica.analytics.impl.protobuf.client.LegacyStartupStateProtobuf
 import io.appmetrica.analytics.impl.startup.StartupState
 import io.appmetrica.analytics.impl.startup.StartupStateModel
@@ -45,6 +45,7 @@ import org.robolectric.RobolectricTestRunner
 @RunWith(RobolectricTestRunner::class)
 internal class ServiceMigrationScriptToV112Test : CommonTest() {
 
+    private val context: Context = mock()
     private val database = mock<SQLiteDatabase>()
     private val startupStateModelCaptor = argumentCaptor<StartupStateModel>()
 
@@ -71,12 +72,9 @@ internal class ServiceMigrationScriptToV112Test : CommonTest() {
     private val databaseStorage = mock<DatabaseStorage> {
         on { readableDatabase } doReturn database
     }
-    private val databaseStorageFactory = mock<DatabaseStorageFactory> {
-        on { storageForService } doReturn databaseStorage
+    private val databaseStorageFactory = mock<ServiceStorageFactory> {
+        on { getStorageForService(context) } doReturn databaseStorage
     }
-
-    @get:Rule
-    val databaseMockedStaticRule = staticRule<DatabaseStorageFactory>()
 
     @get:Rule
     val startupStateStorageMockedConstructionRule = constructionRule<StartupState.Storage>()
@@ -101,7 +99,6 @@ internal class ServiceMigrationScriptToV112Test : CommonTest() {
     private val countryInit = "countryInit"
 
     private var cursor: Cursor? = null
-    private lateinit var context: Context
 
     private lateinit var serviceMigrationScriptToV112: ServiceMigrationScriptToV112
     private lateinit var aesCredentialProvider: AESCredentialProvider
@@ -109,8 +106,8 @@ internal class ServiceMigrationScriptToV112Test : CommonTest() {
 
     @Before
     fun setUp() {
-        context = GlobalServiceLocator.getInstance().context
-        whenever(DatabaseStorageFactory.getInstance(context)).thenReturn(databaseStorageFactory)
+        whenever(GlobalServiceLocator.getInstance().context).thenReturn(context)
+        whenever(GlobalServiceLocator.getInstance().storageFactory).thenReturn(databaseStorageFactory)
         whenever(storageFactory.createForMigration(context)).thenReturn(protobufStateStorage)
         serviceMigrationScriptToV112 = ServiceMigrationScriptToV112(vitalCommonDataProvider)
         aesCredentialProvider = aesCredentialProvider()

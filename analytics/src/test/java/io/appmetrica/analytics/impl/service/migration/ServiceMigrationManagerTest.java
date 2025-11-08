@@ -5,12 +5,13 @@ import android.util.SparseArray;
 import io.appmetrica.analytics.AppMetrica;
 import io.appmetrica.analytics.BuildConfig;
 import io.appmetrica.analytics.coreutils.internal.io.FileUtils;
+import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.MigrationManager;
 import io.appmetrica.analytics.impl.SdkData;
 import io.appmetrica.analytics.impl.db.DatabaseStorage;
 import io.appmetrica.analytics.impl.db.VitalCommonDataProvider;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesServiceDbStorage;
-import io.appmetrica.analytics.impl.db.storage.DatabaseStorageFactory;
+import io.appmetrica.analytics.impl.db.storage.ServiceStorageFactory;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import io.appmetrica.analytics.testutils.MockedConstructionRule;
@@ -50,7 +51,7 @@ public class ServiceMigrationManagerTest extends CommonTest {
     private PreferencesServiceDbStorage mPreferencesServiceDbStorage;
     @Mock
     private VitalCommonDataProvider vitalCommonDataProvider;
-    private final Context mContext = RuntimeEnvironment.getApplication().getApplicationContext();
+    private final Context context = RuntimeEnvironment.getApplication().getApplicationContext();
 
     @Rule
     public MockedStaticRule<FileUtils> sFileUtilsRule = new MockedStaticRule<>(FileUtils.class);
@@ -63,11 +64,7 @@ public class ServiceMigrationManagerTest extends CommonTest {
     private DatabaseStorage databaseStorage;
 
     @Mock
-    private DatabaseStorageFactory databaseStorageFactory;
-
-    @Rule
-    public MockedStaticRule<DatabaseStorageFactory> databaseStorageFactoryMockedStaticRule =
-        new MockedStaticRule<>(DatabaseStorageFactory.class);
+    private ServiceStorageFactory databaseStorageFactory;
 
     @Rule
     public MockedConstructionRule<ServiceMigrationScriptToV112> serviceMigrationScriptToV112MockedConstructionRule =
@@ -89,8 +86,9 @@ public class ServiceMigrationManagerTest extends CommonTest {
     @Before
     public void setup() {
         MockitoAnnotations.openMocks(this);
-        when(DatabaseStorageFactory.getInstance(mContext)).thenReturn(databaseStorageFactory);
-        when(databaseStorageFactory.getStorageForService()).thenReturn(databaseStorage);
+        when(GlobalServiceLocator.getInstance().getContext()).thenReturn(context);
+        when(GlobalServiceLocator.getInstance().getStorageFactory()).thenReturn(databaseStorageFactory);
+        when(databaseStorageFactory.getStorageForService(context)).thenReturn(databaseStorage);
         when(mPreferencesServiceDbStorage.putUncheckedTime(anyBoolean())).thenReturn(mPreferencesServiceDbStorage);
         when(mPreferencesServiceDbStorage.remove(anyString())).thenReturn(mPreferencesServiceDbStorage);
 
@@ -103,7 +101,7 @@ public class ServiceMigrationManagerTest extends CommonTest {
     @Test
     public void defaultConstructor() {
         mMigrationManager = new ServiceMigrationManager();
-        mMigrationManager.checkMigration(mContext);
+        mMigrationManager.checkMigration(context);
         verifyNoMoreInteractions(mPreferencesServiceDbStorage);
     }
 
@@ -127,7 +125,7 @@ public class ServiceMigrationManagerTest extends CommonTest {
 
     @Test
     public void getLastApiLevelHasFromOldServices() {
-        mMigrationManager.checkMigration(mContext);
+        mMigrationManager.checkMigration(context);
         verify(vitalCommonDataProvider, never()).getLastMigrationApiLevel();
         verify(mMigrationManager).getScripts();
         verify(vitalCommonDataProvider).setLastMigrationApiLevel(BuildConfig.API_LEVEL);
@@ -135,7 +133,7 @@ public class ServiceMigrationManagerTest extends CommonTest {
 
     @Test
     public void getLastApiLevelHasFromServicePreferences() {
-        mMigrationManager.checkMigration(mContext);
+        mMigrationManager.checkMigration(context);
         verify(vitalCommonDataProvider, never()).getLastMigrationApiLevel();
         verify(mMigrationManager).getScripts();
         verify(vitalCommonDataProvider).setLastMigrationApiLevel(BuildConfig.API_LEVEL);
@@ -145,7 +143,7 @@ public class ServiceMigrationManagerTest extends CommonTest {
     public void getLastApiLevelHasFromVitalCommonDataProvider() {
         int apiLevel = BuildConfig.API_LEVEL - 1;
         doReturn(apiLevel).when(vitalCommonDataProvider).getLastMigrationApiLevel();
-        mMigrationManager.checkMigration(mContext);
+        mMigrationManager.checkMigration(context);
         verify(mMigrationManager).getScripts();
         verify(vitalCommonDataProvider).setLastMigrationApiLevel(BuildConfig.API_LEVEL);
     }
@@ -163,14 +161,14 @@ public class ServiceMigrationManagerTest extends CommonTest {
         doReturn(-1).when(mMigrationManager).getLastApiLevel();
         doReturn(-1).when(vitalCommonDataProvider).getLastMigrationApiLevel();
 
-        mMigrationManager.checkMigration(mContext);
+        mMigrationManager.checkMigration(context);
         verify(vitalCommonDataProvider).setLastMigrationApiLevel(SdkData.CURRENT);
     }
 
     @Test
     public void testMigrationSavesApiLevel() {
         doCallRealMethod().when(mMigrationManager).getLastApiLevel();
-        mMigrationManager.checkMigration(mContext);
+        mMigrationManager.checkMigration(context);
         verify(vitalCommonDataProvider).setLastMigrationApiLevel(AppMetrica.getLibraryApiLevel());
     }
 
@@ -183,7 +181,7 @@ public class ServiceMigrationManagerTest extends CommonTest {
             }
         }).when(mPreferencesServiceDbStorage).getServerTimeOffset(anyInt());
 
-        mMigrationManager.checkMigration(mContext);
+        mMigrationManager.checkMigration(context);
         verify(mPreferencesServiceDbStorage, never()).putUncheckedTime(anyBoolean());
     }
 }

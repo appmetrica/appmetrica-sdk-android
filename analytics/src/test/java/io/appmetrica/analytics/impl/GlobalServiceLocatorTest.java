@@ -15,7 +15,9 @@ import io.appmetrica.analytics.impl.clids.ClidsPriorityProvider;
 import io.appmetrica.analytics.impl.clids.ClidsSatelliteCheckedProvider;
 import io.appmetrica.analytics.impl.clids.ClidsStateProvider;
 import io.appmetrica.analytics.impl.clids.SatelliteClidsInfoProvider;
+import io.appmetrica.analytics.impl.db.IKeyValueTableDbHelper;
 import io.appmetrica.analytics.impl.db.state.factory.StorageFactory;
+import io.appmetrica.analytics.impl.db.storage.ServiceStorageFactory;
 import io.appmetrica.analytics.impl.id.AdvertisingIdGetter;
 import io.appmetrica.analytics.impl.network.CompositeExecutionPolicy;
 import io.appmetrica.analytics.impl.network.ConnectionBasedExecutionPolicy;
@@ -33,6 +35,7 @@ import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoStateProvider;
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade;
 import io.appmetrica.analytics.impl.selfreporting.SelfReporterWrapper;
 import io.appmetrica.analytics.impl.service.ServiceDataReporterHolder;
+import io.appmetrica.analytics.impl.servicecomponents.OuterStoragePathProvider;
 import io.appmetrica.analytics.impl.servicecomponents.ServiceLifecycleTimeTracker;
 import io.appmetrica.analytics.impl.startup.StartupState;
 import io.appmetrica.analytics.impl.startup.uuid.MultiProcessSafeUuidProvider;
@@ -47,6 +50,7 @@ import io.appmetrica.analytics.testutils.ConstructionArgumentCaptor;
 import io.appmetrica.analytics.testutils.MockedConstructionRule;
 import io.appmetrica.analytics.testutils.MockedStaticRule;
 import io.appmetrica.analytics.testutils.TestUtils;
+import java.io.File;
 import java.util.Collections;
 import java.util.List;
 
@@ -187,6 +191,40 @@ public class GlobalServiceLocatorTest extends CommonTest {
     @Rule
     public final MockedConstructionRule<ActiveNetworkTypeProviderImpl> activeNetworkTypeProviderMockedConstructionRule =
         new MockedConstructionRule<>(ActiveNetworkTypeProviderImpl.class);
+
+    private final File outerPath = new File("outerPath");
+
+    @Rule
+    public final MockedConstructionRule<OuterStoragePathProvider> outerStoragePathProviderMockedConstructionRule =
+        new MockedConstructionRule<>(
+            OuterStoragePathProvider.class,
+            new MockedConstruction.MockInitializer<OuterStoragePathProvider>() {
+                @Override
+                public void prepare(
+                    OuterStoragePathProvider mock,
+                    MockedConstruction.Context mockContext
+                ) throws Throwable {
+                    when(mock.getPath(mContext)).thenReturn(outerPath);
+                }
+            }
+        );
+
+    private final IKeyValueTableDbHelper servicePreferenceDbHelper = Mockito.mock(IKeyValueTableDbHelper.class);
+
+    @Rule
+    public final MockedConstructionRule<ServiceStorageFactory> serviceStorageFactoryMockedConstructionRule =
+        new MockedConstructionRule<>(
+            ServiceStorageFactory.class,
+            new MockedConstruction.MockInitializer<ServiceStorageFactory>() {
+                @Override
+                public void prepare(
+                    ServiceStorageFactory mock,
+                    MockedConstruction.Context mockContext
+                ) throws Throwable {
+                    when(mock.getServicePreferenceDbHelper(mContext)).thenReturn(servicePreferenceDbHelper);
+                }
+            }
+        );
 
     @Mock
     private StorageFactory<ClidsInfo> clidsStorageFactory;
@@ -571,6 +609,22 @@ public class GlobalServiceLocatorTest extends CommonTest {
             .isEqualTo(activeNetworkTypeProviderMockedConstructionRule.getConstructionMock().constructed().get(0));
         assertThat(activeNetworkTypeProviderMockedConstructionRule.getConstructionMock().constructed()).hasSize(1);
         assertThat(activeNetworkTypeProviderMockedConstructionRule.getArgumentInterceptor().flatArguments()).isEmpty();
+    }
+
+    @Test
+    public void getStorageFactory() {
+        GlobalServiceLocator.init(mContext);
+
+        assertThat(GlobalServiceLocator.getInstance().getStorageFactory())
+            .isEqualTo(serviceStorageFactoryMockedConstructionRule.getConstructionMock().constructed().get(0));
+
+        assertThat(serviceStorageFactoryMockedConstructionRule.getConstructionMock().constructed()).hasSize(1);
+        assertThat(serviceStorageFactoryMockedConstructionRule.getArgumentInterceptor().flatArguments())
+            .containsExactly(outerPath);
+
+        assertThat(outerStoragePathProviderMockedConstructionRule.getConstructionMock().constructed()).hasSize(1);
+        assertThat(outerStoragePathProviderMockedConstructionRule.getArgumentInterceptor().flatArguments())
+            .isEmpty();
     }
 
     private StartupStateHolder startupStateHolder() {

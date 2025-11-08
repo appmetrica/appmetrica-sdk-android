@@ -12,7 +12,6 @@ import io.appmetrica.analytics.coreapi.internal.servicecomponents.batteryinfo.Ch
 import io.appmetrica.analytics.coreapi.internal.system.ActiveNetworkTypeProvider
 import io.appmetrica.analytics.coreapi.internal.system.PermissionExtractor
 import io.appmetrica.analytics.impl.GlobalServiceLocator
-import io.appmetrica.analytics.impl.db.storage.DatabaseStorageFactory
 import io.appmetrica.analytics.modulesapi.internal.common.ExecutorProvider
 import io.appmetrica.analytics.modulesapi.internal.service.LocationServiceApi
 import io.appmetrica.analytics.modulesapi.internal.service.ModuleServiceLifecycleController
@@ -43,7 +42,7 @@ internal class ServiceContextFacade(
     override val serviceStorageProvider = ServiceStorageProviderImpl(
         context,
         GlobalServiceLocator.getInstance().servicePreferences,
-        DatabaseStorageFactory.getInstance(context).storageForService
+        GlobalServiceLocator.getInstance().storageFactory.getStorageForService(context)
     )
 
     override val executorProvider: ExecutorProvider = ExecutorProviderImpl()

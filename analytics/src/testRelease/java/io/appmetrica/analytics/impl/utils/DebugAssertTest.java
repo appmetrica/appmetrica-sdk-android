@@ -1,5 +1,6 @@
 package io.appmetrica.analytics.impl.utils;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -7,12 +8,13 @@ import static org.mockito.Mockito.when;
 import android.content.Context;
 
 import io.appmetrica.analytics.BuildConfig;
+import io.appmetrica.analytics.impl.ClientServiceLocator;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.db.IKeyValueTableDbHelper;
 import io.appmetrica.analytics.impl.db.StorageType;
 import io.appmetrica.analytics.impl.db.VitalCommonDataProvider;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesClientDbStorage;
-import io.appmetrica.analytics.impl.db.storage.DatabaseStorageFactory;
+import io.appmetrica.analytics.testutils.ClientServiceLocatorRule;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import io.appmetrica.analytics.testutils.TestUtils;
@@ -41,13 +43,17 @@ public class DebugAssertTest extends CommonTest {
     public ExpectedException expectedException = ExpectedException.none();
     @Rule
     public final GlobalServiceLocatorRule globalServiceLocatorRule = new GlobalServiceLocatorRule();
+    @Rule
+    public final ClientServiceLocatorRule clientServiceLocatorRule = new ClientServiceLocatorRule();
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.openMocks(this);
         context = TestUtils.createMockedContext();
-        DatabaseStorageFactory.getInstance(context).setServicePreferencesHelperForMigration(serviceKeyValueHelper);
-        DatabaseStorageFactory.getInstance(context).setClientDbHelperForMigration(clientKeyValueHelper);
+        when(GlobalServiceLocator.getInstance().getStorageFactory().getServicePreferenceDbHelperForMigration(context))
+            .thenReturn(serviceKeyValueHelper);
+        when(ClientServiceLocator.getInstance().getStorageFactory(any()).getClientDbHelperForMigration(context))
+            .thenReturn(clientKeyValueHelper);
     }
 
     @Test

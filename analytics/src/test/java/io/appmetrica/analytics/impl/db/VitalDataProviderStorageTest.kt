@@ -5,12 +5,10 @@ import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.component.ComponentId
 import io.appmetrica.analytics.impl.db.preferences.PreferencesComponentDbStorage
 import io.appmetrica.analytics.impl.db.preferences.PreferencesServiceDbStorage
-import io.appmetrica.analytics.impl.db.storage.DatabaseStorageFactory
+import io.appmetrica.analytics.impl.db.storage.ServiceStorageFactory
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
 import io.appmetrica.analytics.testutils.MockedConstructionRule
-import io.appmetrica.analytics.testutils.MockedStaticRule
-import io.appmetrica.analytics.testutils.TestUtils
 import io.appmetrica.analytics.testutils.constructionRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
@@ -25,11 +23,13 @@ import org.robolectric.RobolectricTestRunner
 @RunWith(RobolectricTestRunner::class)
 internal class VitalDataProviderStorageTest : CommonTest() {
 
+    private val context: Context = mock()
+
     @get:Rule
     val vitalCommonDataProviderMockedRule = MockedConstructionRule(VitalCommonDataProvider::class.java)
 
     @get:Rule
-    val globalServiceLocation = GlobalServiceLocatorRule()
+    val globalServiceLocatorRule = GlobalServiceLocatorRule()
 
     @get:Rule
     val fileVitalDataSourceMockedRule = MockedConstructionRule(FileVitalDataSource::class.java)
@@ -41,10 +41,7 @@ internal class VitalDataProviderStorageTest : CommonTest() {
     val preferenceComponentDbStorageMockedRule = MockedConstructionRule(PreferencesComponentDbStorage::class.java)
 
     @get:Rule
-    val databaseStorageFactoryMockedRule = MockedStaticRule(DatabaseStorageFactory::class.java)
-
-    @get:Rule
-    val prefereceServiceDbStorageMockedRule = MockedConstructionRule(PreferencesServiceDbStorage::class.java)
+    val preferenceServiceDbStorageMockedRule = MockedConstructionRule(PreferencesServiceDbStorage::class.java)
 
     @get:Rule
     val compositeFileVitalDataSourceMockedConstructionRule = constructionRule<CompositeFileVitalDataSource>()
@@ -62,19 +59,16 @@ internal class VitalDataProviderStorageTest : CommonTest() {
     private val firstKeyValueTableDbHelper = mock<IKeyValueTableDbHelper>()
     private val secondKeyValueTableDbHelper = mock<IKeyValueTableDbHelper>()
     private val servicePreferencesDbStorageForMigration = mock<IKeyValueTableDbHelper>()
-    private val databaseStorageFactory = mock<DatabaseStorageFactory> {
-        on { getPreferencesDbHelper(firstComponentId) } doReturn firstKeyValueTableDbHelper
-        on { getPreferencesDbHelper(secondComponentId) } doReturn secondKeyValueTableDbHelper
-        on { preferencesDbHelperForServiceMigration } doReturn servicePreferencesDbStorageForMigration
+    private val databaseStorageFactory = mock<ServiceStorageFactory> {
+        on { getComponentPreferenceDbHelper(context, firstComponentId) } doReturn firstKeyValueTableDbHelper
+        on { getComponentPreferenceDbHelper(context, secondComponentId) } doReturn secondKeyValueTableDbHelper
+        on { getServicePreferenceDbHelperForMigration(context) } doReturn servicePreferencesDbStorageForMigration
     }
-
-    private lateinit var context: Context
     private lateinit var storage: VitalDataProviderStorage
 
     @Before
     fun setUp() {
-        context = TestUtils.createMockedContext()
-        whenever(DatabaseStorageFactory.getInstance(context)).thenReturn(databaseStorageFactory)
+        whenever(GlobalServiceLocator.getInstance().getStorageFactory()).thenReturn(databaseStorageFactory)
         storage = VitalDataProviderStorage(context)
     }
 
@@ -87,14 +81,30 @@ internal class VitalDataProviderStorageTest : CommonTest() {
         assertThat(storage.commonDataProvider).isSameAs(commonDataProvider)
         assertThat(vitalCommonDataProviderMockedRule.constructionMock.constructed()).hasSize(2)
         assertThat(commonDataProvider).isEqualTo(vitalCommonDataProviderMockedRule.constructionMock.constructed()[0])
-        assertThat(vitalCommonDataProviderMockedRule.argumentInterceptor.flatArguments())
+        assertThat(vitalCommonDataProviderMockedRule.argumentInterceptor.arguments[0])
             .containsExactly(
                 GlobalServiceLocator.getInstance().servicePreferences,
-                fileVitalDataSourceMockedRule.constructionMock.constructed()[0],
-                prefereceServiceDbStorageMockedRule.constructionMock.constructed()[0],
                 fileVitalDataSourceMockedRule.constructionMock.constructed()[0]
             )
-        assertThat(prefereceServiceDbStorageMockedRule.argumentInterceptor.flatArguments())
+        assertThat(fileVitalDataSourceMockedRule.argumentInterceptor.flatArguments())
+            .containsExactly(context, "appmetrica_vital.dat")
+    }
+
+    @Test
+    fun commonDataProviderForMigration() {
+        val commonDataProviderForMigration = storage.commonDataProviderForMigration
+        assertThat(commonDataProviderForMigration).isNotNull.isInstanceOf(VitalCommonDataProvider::class.java)
+        assertThat(storage.commonDataProviderForMigration).isSameAs(commonDataProviderForMigration)
+        assertThat(vitalCommonDataProviderMockedRule.constructionMock.constructed()).hasSize(2)
+        assertThat(commonDataProviderForMigration)
+            .isEqualTo(vitalCommonDataProviderMockedRule.constructionMock.constructed()[1])
+        assertThat(vitalCommonDataProviderMockedRule.argumentInterceptor.arguments[1])
+            .containsExactly(
+                preferenceServiceDbStorageMockedRule.constructionMock.constructed()[0],
+                fileVitalDataSourceMockedRule.constructionMock.constructed()[0]
+            )
+        assertThat(preferenceServiceDbStorageMockedRule.constructionMock.constructed()).hasSize(1)
+        assertThat(preferenceServiceDbStorageMockedRule.argumentInterceptor.flatArguments())
             .containsExactly(servicePreferencesDbStorageForMigration)
         assertThat(fileVitalDataSourceMockedRule.argumentInterceptor.flatArguments())
             .containsExactly(context, "appmetrica_vital.dat")
@@ -129,9 +139,6 @@ internal class VitalDataProviderStorageTest : CommonTest() {
                 fileVitalDataSourceMockedRule.constructionMock.constructed()[3],
                 "$secondComponentId",
             )
-
-        assertThat(preferenceComponentDbStorageMockedRule.argumentInterceptor.flatArguments())
-            .containsExactly(firstKeyValueTableDbHelper, secondKeyValueTableDbHelper)
 
         assertThat(compositeFileVitalDataSourceMockedConstructionRule.constructionMock.constructed()).hasSize(1)
         assertThat(compositeFileVitalDataSourceMockedConstructionRule.argumentInterceptor.flatArguments())

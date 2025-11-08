@@ -2,22 +2,26 @@ package io.appmetrica.analytics.impl.component.sessionextras
 
 import android.content.Context
 import io.appmetrica.analytics.coreapi.internal.data.IBinaryDataHelper
+import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.component.ComponentId
-import io.appmetrica.analytics.impl.db.storage.DatabaseStorageFactory
+import io.appmetrica.analytics.impl.db.storage.ServiceStorageFactory
 import io.appmetrica.analytics.impl.protobuf.client.SessionExtrasProtobuf
 import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
 import io.appmetrica.analytics.testutils.MockedConstructionRule
-import io.appmetrica.analytics.testutils.MockedStaticRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
+import org.robolectric.RobolectricTestRunner
 import java.util.UUID
 
+@RunWith(RobolectricTestRunner::class)
 internal class SessionExtrasStorageTest : CommonTest() {
 
     private val dbKey = "session_extras"
@@ -37,10 +41,12 @@ internal class SessionExtrasStorageTest : CommonTest() {
         on { get(dbKey) } doReturn valueFromDb
     }
 
-    private val databaseStorageFactory = mock<DatabaseStorageFactory> {
-        on { getBinaryDbHelperForComponent(componentId) } doReturn binaryDataHelper
+    private val databaseStorageFactory = mock<ServiceStorageFactory> {
+        on { getComponentBinaryDataHelper(context, componentId) } doReturn binaryDataHelper
     }
 
+    @get:Rule
+    val globalServiceLocatorRule = GlobalServiceLocatorRule()
     @get:Rule
     val converterMockedConstructionRule = MockedConstructionRule(SessionExtrasConverter::class.java) { mock, _ ->
         whenever(mock.toModel(sessionExtraProto)).thenReturn(sessionExtra)
@@ -55,16 +61,13 @@ internal class SessionExtrasStorageTest : CommonTest() {
         whenever(mock.toByteArray(sessionExtraProto)).thenReturn(valueFromDb)
     }
 
-    @get:Rule
-    val databaseStorageFactoryMockedStaticRule = MockedStaticRule(DatabaseStorageFactory::class.java)
-
     private lateinit var storage: SessionExtrasStorage
     private lateinit var converter: SessionExtrasConverter
     private lateinit var serializer: SessionExtrasSerializer
 
     @Before
     fun setUp() {
-        whenever(DatabaseStorageFactory.getInstance(context)).thenReturn(databaseStorageFactory)
+        whenever(GlobalServiceLocator.getInstance().getStorageFactory()).thenReturn(databaseStorageFactory)
         storage = SessionExtrasStorage(context, componentId)
         converter = converter()
         serializer = serializer()

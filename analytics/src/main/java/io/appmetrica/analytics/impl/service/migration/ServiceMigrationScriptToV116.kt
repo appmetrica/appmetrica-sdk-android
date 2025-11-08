@@ -3,6 +3,7 @@ package io.appmetrica.analytics.impl.service.migration
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import io.appmetrica.analytics.coreapi.internal.db.DatabaseScript
+import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.MigrationManager.MigrationScript
 import io.appmetrica.analytics.impl.db.TablesManager
 import io.appmetrica.analytics.impl.db.TablesValidator
@@ -11,7 +12,6 @@ import io.appmetrica.analytics.impl.db.constants.Constants
 import io.appmetrica.analytics.impl.db.state.factory.StorageFactory
 import io.appmetrica.analytics.impl.db.storage.BinaryDataHelper
 import io.appmetrica.analytics.impl.db.storage.DatabaseSimpleNameProvider
-import io.appmetrica.analytics.impl.db.storage.DatabaseStorageFactory
 import io.appmetrica.analytics.impl.startup.StartupStateModel
 import io.appmetrica.analytics.impl.utils.collection.HashMultimap
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
@@ -57,16 +57,18 @@ internal class ServiceMigrationScriptToV116 : MigrationScript {
             tablesValidatorStub
         )
 
-        val datatabaseStorage = DatabaseStorageFactory.getInstance(context).createLegacyStorageForMigration(
-            "autoinapp-old",
-            nameProvider,
-            tablesManager
-        )
+        val datatabaseStorage =
+            GlobalServiceLocator.getInstance().storageFactory.createComponentLegacyStorageForMigration(
+                context,
+                "autoinapp-old",
+                nameProvider,
+                tablesManager
+            )
         val dbHelper = BinaryDataHelper(SimpleDBConnector(datatabaseStorage), Constants.BinaryDataTable.TABLE_NAME)
         val oldValue = dbHelper.get("auto_inapp_collecting_info_data")
         if (oldValue != null) {
             DebugLogger.info(tag, "Migrate old inapp data (length: ${oldValue.size})")
-            DatabaseStorageFactory.getInstance(context).serviceBinaryDataHelperForMigration.insert(
+            GlobalServiceLocator.getInstance().storageFactory.getServiceBinaryDataHelperForMigration(context).insert(
                 "auto_inapp_collecting_info_data",
                 oldValue
             )

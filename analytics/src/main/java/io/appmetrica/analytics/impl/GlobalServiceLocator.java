@@ -25,7 +25,7 @@ import io.appmetrica.analytics.impl.crash.ndk.NativeCrashService;
 import io.appmetrica.analytics.impl.db.VitalDataProviderStorage;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesServiceDbStorage;
 import io.appmetrica.analytics.impl.db.state.factory.StorageFactory;
-import io.appmetrica.analytics.impl.db.storage.DatabaseStorageFactory;
+import io.appmetrica.analytics.impl.db.storage.ServiceStorageFactory;
 import io.appmetrica.analytics.impl.id.AdvertisingIdGetter;
 import io.appmetrica.analytics.impl.id.AppSetIdGetter;
 import io.appmetrica.analytics.impl.location.LocationApi;
@@ -49,6 +49,7 @@ import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoSatelliteCheckedProvi
 import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoStateProvider;
 import io.appmetrica.analytics.impl.referrer.service.ReferrerHolder;
 import io.appmetrica.analytics.impl.service.ServiceDataReporterHolder;
+import io.appmetrica.analytics.impl.servicecomponents.OuterStoragePathProvider;
 import io.appmetrica.analytics.impl.servicecomponents.ServiceLifecycleTimeTracker;
 import io.appmetrica.analytics.impl.startup.uuid.MultiProcessSafeUuidProvider;
 import io.appmetrica.analytics.impl.startup.uuid.UuidFromStartupStateImporter;
@@ -161,6 +162,9 @@ public final class GlobalServiceLocator {
     @NonNull
     private final ActiveNetworkTypeProvider activeNetworkTypeProvider = new ActiveNetworkTypeProviderImpl();
 
+    @Nullable
+    private ServiceStorageFactory storageFactory;
+
     private GlobalServiceLocator(@NonNull Context applicationContext) {
         mContext = applicationContext;
         mServiceExecutorProvider = new ServiceExecutorProvider();
@@ -204,7 +208,7 @@ public final class GlobalServiceLocator {
             synchronized (this) {
                 if (dataSendingRestrictionController == null) {
                     dataSendingRestrictionController = new DataSendingRestrictionControllerImpl(
-                            new DataSendingRestrictionControllerImpl.StorageImpl(getServicePreferences())
+                        new DataSendingRestrictionControllerImpl.StorageImpl(getServicePreferences())
                     );
                 }
             }
@@ -297,18 +301,18 @@ public final class GlobalServiceLocator {
             synchronized (this) {
                 if (clidsStorage == null) {
                     ProtobufStateStorage<ClidsInfo> storage =
-                            StorageFactory.Provider.get(ClidsInfo.class).create(mContext);
+                        StorageFactory.Provider.get(ClidsInfo.class).create(mContext);
                     clidsStorage = new ClidsInfoStorage(
-                            mContext,
-                            storage,
-                            new ClidsPriorityProvider(),
-                            new ClidsCandidatesHelper(),
-                            new ClidsStateProvider(),
-                            new SatelliteClidsInfoProvider(mContext),
-                            new ClidsSatelliteCheckedProvider(getServicePreferences()),
-                            new ClidsDataAwaiter(),
-                            storage.read(),
-                            "[ClidsInfoStorage]"
+                        mContext,
+                        storage,
+                        new ClidsPriorityProvider(),
+                        new ClidsCandidatesHelper(),
+                        new ClidsStateProvider(),
+                        new SatelliteClidsInfoProvider(mContext),
+                        new ClidsSatelliteCheckedProvider(getServicePreferences()),
+                        new ClidsDataAwaiter(),
+                        storage.read(),
+                        "[ClidsInfoStorage]"
                     );
                 }
             }
@@ -322,8 +326,7 @@ public final class GlobalServiceLocator {
             synchronized (this) {
                 if (servicePreferences == null) {
                     servicePreferences = new PreferencesServiceDbStorage(
-                            DatabaseStorageFactory.getInstance(mContext)
-                                    .getPreferencesDbHelperForService()
+                        getStorageFactory().getServicePreferenceDbHelper(mContext)
                     );
                 }
             }
@@ -470,19 +473,19 @@ public final class GlobalServiceLocator {
             synchronized (this) {
                 if (mPreloadInfoStorage == null) {
                     ProtobufStateStorage<PreloadInfoData> storage =
-                            StorageFactory.Provider.get(PreloadInfoData.class).create(mContext);
+                        StorageFactory.Provider.get(PreloadInfoData.class).create(mContext);
                     PreloadInfoData stateFromDisk = storage.read();
                     mPreloadInfoStorage = new PreloadInfoStorage(
-                            mContext,
-                            storage,
-                            new PreloadInfoPriorityProvider(),
-                            new PreloadInfoCandidatesHelper(stateFromDisk),
-                            new PreloadInfoStateProvider(),
-                            new PreloadInfoFromSatelliteProvider(mContext),
-                            new PreloadInfoSatelliteCheckedProvider(),
-                            new PreloadInfoDataAwaiter(),
-                            stateFromDisk,
-                            "[PreloadInfoStorage]"
+                        mContext,
+                        storage,
+                        new PreloadInfoPriorityProvider(),
+                        new PreloadInfoCandidatesHelper(stateFromDisk),
+                        new PreloadInfoStateProvider(),
+                        new PreloadInfoFromSatelliteProvider(mContext),
+                        new PreloadInfoSatelliteCheckedProvider(),
+                        new PreloadInfoDataAwaiter(),
+                        stateFromDisk,
+                        "[PreloadInfoStorage]"
                     );
                 }
             }
@@ -606,6 +609,22 @@ public final class GlobalServiceLocator {
         return activeNetworkTypeProvider;
     }
 
+    @NonNull
+    public ServiceStorageFactory getStorageFactory() {
+        ServiceStorageFactory localCopy = storageFactory;
+        if (localCopy == null) {
+            synchronized (this) {
+                localCopy = storageFactory;
+                if (localCopy == null) {
+                    OuterStoragePathProvider outerStoragePathProvider = new OuterStoragePathProvider();
+                    localCopy = new ServiceStorageFactory(outerStoragePathProvider.getPath(mContext));
+                    storageFactory = localCopy;
+                }
+            }
+        }
+        return localCopy;
+    }
+
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)
     public static synchronized void destroy() {
         GlobalServiceLocator instance = GlobalServiceLocator.getInstance();
@@ -624,7 +643,7 @@ public final class GlobalServiceLocator {
 
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)
     public void setLifecycleDependentComponentManager(
-            @NonNull LifecycleDependentComponentManager lifecycleDependentComponentManager
+        @NonNull LifecycleDependentComponentManager lifecycleDependentComponentManager
     ) {
         this.lifecycleDependentComponentManager = lifecycleDependentComponentManager;
     }

@@ -5,7 +5,6 @@ import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.component.ComponentId
 import io.appmetrica.analytics.impl.db.preferences.PreferencesComponentDbStorage
 import io.appmetrica.analytics.impl.db.preferences.PreferencesServiceDbStorage
-import io.appmetrica.analytics.impl.db.storage.DatabaseStorageFactory
 
 internal class VitalDataProviderStorage(private val context: Context) {
 
@@ -23,7 +22,7 @@ internal class VitalDataProviderStorage(private val context: Context) {
 
     val commonDataProviderForMigration: VitalCommonDataProvider = VitalCommonDataProvider(
         PreferencesServiceDbStorage(
-            DatabaseStorageFactory.getInstance(context).preferencesDbHelperForServiceMigration
+            GlobalServiceLocator.getInstance().storageFactory.getServicePreferenceDbHelperForMigration(context)
         ),
         vitalDataSource
     )
@@ -34,7 +33,10 @@ internal class VitalDataProviderStorage(private val context: Context) {
         return componentProviders.getOrPut(key) {
             VitalComponentDataProvider(
                 PreferencesComponentDbStorage(
-                    DatabaseStorageFactory.getInstance(context).getPreferencesDbHelper(componentId),
+                    GlobalServiceLocator.getInstance().storageFactory.getComponentPreferenceDbHelper(
+                        context,
+                        componentId
+                    ),
                 ),
                 getComponentBackupVitalDataSource(componentId),
                 key

@@ -34,6 +34,7 @@ import io.appmetrica.analytics.impl.db.VitalCommonDataProvider;
 import io.appmetrica.analytics.impl.db.VitalComponentDataProvider;
 import io.appmetrica.analytics.impl.db.VitalDataProviderStorage;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesServiceDbStorage;
+import io.appmetrica.analytics.impl.db.storage.ServiceStorageFactory;
 import io.appmetrica.analytics.impl.id.AdvertisingIdGetter;
 import io.appmetrica.analytics.impl.id.AppSetIdGetter;
 import io.appmetrica.analytics.impl.location.LocationApi;
@@ -48,10 +49,10 @@ import io.appmetrica.analytics.impl.startup.CollectingFlags;
 import io.appmetrica.analytics.impl.startup.StartupState;
 import io.appmetrica.analytics.impl.startup.uuid.MultiProcessSafeUuidProvider;
 import io.appmetrica.analytics.impl.telephony.TelephonyDataProvider;
-import io.appmetrica.analytics.impl.utils.process.CurrentProcessDetector;
 import io.appmetrica.analytics.impl.utils.executors.ExecutorWrapper;
 import io.appmetrica.analytics.impl.utils.executors.InterruptionSafeHandlerThread;
 import io.appmetrica.analytics.impl.utils.executors.ServiceExecutorProvider;
+import io.appmetrica.analytics.impl.utils.process.CurrentProcessDetector;
 import io.appmetrica.analytics.networktasks.internal.NetworkCore;
 import java.util.UUID;
 import java.util.concurrent.Callable;
@@ -60,14 +61,14 @@ import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
 import org.junit.rules.ExternalResource;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 public class GlobalServiceLocatorRule extends ExternalResource {
 
@@ -151,6 +152,7 @@ public class GlobalServiceLocatorRule extends ExternalResource {
         when(globalServiceLocator.getServiceModuleReporterComponentLifecycle())
             .thenReturn(mock(ServiceModuleReporterComponentLifecycleImpl.class));
         when(globalServiceLocator.getActiveNetworkTypeProvider()).thenReturn(mock(ActiveNetworkTypeProvider.class));
+        when(globalServiceLocator.getStorageFactory()).thenReturn(mock(ServiceStorageFactory.class));
         GlobalServiceLocator.setInstance(globalServiceLocator);
     }
 

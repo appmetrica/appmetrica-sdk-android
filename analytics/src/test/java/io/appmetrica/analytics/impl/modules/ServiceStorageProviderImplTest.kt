@@ -4,19 +4,25 @@ import android.content.Context
 import android.database.sqlite.SQLiteOpenHelper
 import io.appmetrica.analytics.coreapi.internal.data.TempCacheStorage
 import io.appmetrica.analytics.coreutils.internal.io.FileUtils
+import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.db.preferences.PreferencesServiceDbStorage
-import io.appmetrica.analytics.impl.db.storage.DatabaseStorageFactory
+import io.appmetrica.analytics.impl.db.storage.ServiceStorageFactory
 import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
 import io.appmetrica.analytics.testutils.MockedConstructionRule
 import io.appmetrica.analytics.testutils.on
 import io.appmetrica.analytics.testutils.staticRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.whenever
+import org.robolectric.RobolectricTestRunner
 import java.io.File
 
+@RunWith(RobolectricTestRunner::class)
 internal class ServiceStorageProviderImplTest : CommonTest() {
 
     private val context: Context = mock()
@@ -30,15 +36,13 @@ internal class ServiceStorageProviderImplTest : CommonTest() {
     @get:Rule
     val legacyModulePreferencesAdapterMockedRule = MockedConstructionRule(LegacyModulePreferenceAdapter::class.java)
 
+    @get:Rule
+    val globalServiceLocatorRule = GlobalServiceLocatorRule()
+
     private val tempCacheStorage: TempCacheStorage = mock()
 
-    private val databaseStorageFactory: DatabaseStorageFactory = mock {
-        on { tempCacheStorageForService } doReturn tempCacheStorage
-    }
-
-    @get:Rule
-    val databaseStorageFactoryMockedStaticRule = staticRule<DatabaseStorageFactory> {
-        on { DatabaseStorageFactory.getInstance(context) } doReturn databaseStorageFactory
+    private val databaseStorageFactory: ServiceStorageFactory = mock {
+        on { getServiceTempCacheStorage(context) } doReturn tempCacheStorage
     }
 
     private val appFileStorage: File = mock()
@@ -53,6 +57,7 @@ internal class ServiceStorageProviderImplTest : CommonTest() {
     }
 
     private val storageProviderImpl by setUp {
+        whenever(GlobalServiceLocator.getInstance().getStorageFactory()).thenReturn(databaseStorageFactory)
         ServiceStorageProviderImpl(context, preferenceServiceDbStorage, dbStorage)
     }
 

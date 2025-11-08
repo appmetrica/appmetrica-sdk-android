@@ -4,8 +4,8 @@ import android.content.Context;
 import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import io.appmetrica.analytics.impl.ClientServiceLocator;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesClientDbStorage;
-import io.appmetrica.analytics.impl.db.storage.DatabaseStorageFactory;
 import io.appmetrica.analytics.internal.IdentifiersResult;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 
@@ -17,7 +17,7 @@ public class UuidFromClientPreferencesImporter implements IOuterSourceUuidImport
     @Override
     public String get(@NonNull Context context) {
         PreferencesClientDbStorage preferencesClientDbStorage = new PreferencesClientDbStorage(
-            DatabaseStorageFactory.getInstance(context.getApplicationContext()).getClientDbHelper()
+            ClientServiceLocator.getInstance().getStorageFactory(context).getClientDbHelper(context)
         );
         String uuid = null;
         IdentifiersResult identifiersResult = preferencesClientDbStorage.getUuidResult();

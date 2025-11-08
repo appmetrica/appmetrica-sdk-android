@@ -2,14 +2,18 @@ package io.appmetrica.analytics.impl.component.remarketing;
 
 import android.content.Context;
 import io.appmetrica.analytics.coreapi.internal.data.IBinaryDataHelper;
+import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.component.ComponentId;
+import io.appmetrica.analytics.impl.db.storage.ServiceStorageFactory;
 import io.appmetrica.analytics.impl.protobuf.client.Eventhashes;
 import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -35,6 +39,12 @@ public class EventHashesStorageTest extends CommonTest {
     @Mock
     private ComponentId mComponentId;
 
+    @Mock
+    private ServiceStorageFactory serviceStorageFactory;
+
+    @Rule
+    public GlobalServiceLocatorRule globalServiceLocatorRule = new GlobalServiceLocatorRule();
+
     private final Eventhashes.EventHashes mProtoEventHashes = new Eventhashes.EventHashes();
 
     private final Context mContext = RuntimeEnvironment.getApplication();
@@ -45,6 +55,8 @@ public class EventHashesStorageTest extends CommonTest {
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
+        when(serviceStorageFactory.getComponentBinaryDataHelper(mContext, mComponentId)).thenReturn(mBinaryDataHelper);
+        when(GlobalServiceLocator.getInstance().getStorageFactory()).thenReturn(serviceStorageFactory);
         mStorage = new EventHashesStorage(mSerializer, mConverter, mBinaryDataHelper, DB_KEY);
     }
 

@@ -8,7 +8,6 @@ import androidx.annotation.WorkerThread
 import io.appmetrica.analytics.coreapi.internal.model.ScreenInfo
 import io.appmetrica.analytics.coreutils.internal.AndroidUtils.isApiAchieved
 import io.appmetrica.analytics.impl.db.preferences.PreferencesClientDbStorage
-import io.appmetrica.analytics.impl.db.storage.DatabaseStorageFactory
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import java.lang.ref.WeakReference
 
@@ -94,7 +93,7 @@ class ScreenInfoRetriever : ActivityAppearedListener.Listener {
     private fun getOrCreateStorage(context: Context): PreferencesClientDbStorage {
         if (storage == null) {
             storage = PreferencesClientDbStorage(
-                DatabaseStorageFactory.getInstance(context).clientDbHelper
+                ClientServiceLocator.getInstance().getStorageFactory(context).getClientDbHelper(context)
             )
         }
         return storage!!

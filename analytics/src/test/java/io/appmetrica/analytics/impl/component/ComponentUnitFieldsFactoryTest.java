@@ -9,17 +9,14 @@ import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.LifecycleDependentComponentManager;
 import io.appmetrica.analytics.impl.ReportingTaskProcessor;
 import io.appmetrica.analytics.impl.TaskProcessor;
-import io.appmetrica.analytics.impl.TestsData;
 import io.appmetrica.analytics.impl.component.processor.EventProcessingStrategyFactory;
 import io.appmetrica.analytics.impl.component.processor.ReportingReportProcessor;
 import io.appmetrica.analytics.impl.component.session.SessionManagerStateMachine;
 import io.appmetrica.analytics.impl.component.session.SessionState;
 import io.appmetrica.analytics.impl.component.sessionextras.SessionExtrasHolder;
 import io.appmetrica.analytics.impl.db.DatabaseHelper;
-import io.appmetrica.analytics.impl.db.IKeyValueTableDbHelper;
 import io.appmetrica.analytics.impl.db.VitalComponentDataProvider;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesComponentDbStorage;
-import io.appmetrica.analytics.impl.db.storage.DatabaseStorageFactory;
 import io.appmetrica.analytics.impl.events.EventTrigger;
 import io.appmetrica.analytics.impl.events.EventTriggerProvider;
 import io.appmetrica.analytics.impl.events.EventsFlusher;
@@ -27,24 +24,24 @@ import io.appmetrica.analytics.impl.request.ReportRequestConfig;
 import io.appmetrica.analytics.impl.startup.StartupState;
 import io.appmetrica.analytics.impl.startup.executor.ComponentStartupExecutorFactory;
 import io.appmetrica.analytics.impl.startup.executor.StartupExecutor;
-import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import io.appmetrica.analytics.testutils.MockedConstructionRule;
 import io.appmetrica.analytics.testutils.TestUtils;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import org.mockito.MockitoAnnotations;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.RuntimeEnvironment;
 
 @RunWith(RobolectricTestRunner.class)
 public class ComponentUnitFieldsFactoryTest extends CommonTest {
@@ -256,42 +253,5 @@ public class ComponentUnitFieldsFactoryTest extends CommonTest {
             .hasSize(1);
         assertThat(autoCollectedDataObserversHolderRule.getArgumentInterceptor().flatArguments())
             .containsExactly(mComponentId, mComponentPreferences);
-    }
-
-    @RunWith(RobolectricTestRunner.class)
-    public static class LoggerProviderTest {
-
-        private final String mApiKey = TestsData.generateApiKey();
-        private final ComponentUnitFieldsFactory.LoggerProvider mLoggerProvdier = new ComponentUnitFieldsFactory.LoggerProvider(mApiKey);
-
-        @Test
-        public void testGetPublicLogger() {
-            assertThat(mLoggerProvdier.getPublicLogger()).isNotNull().isExactlyInstanceOf(PublicLogger.class);
-        }
-    }
-
-    @RunWith(RobolectricTestRunner.class)
-    public static class PreferencesProviderTest {
-
-        @Mock
-        private ComponentId componentId;
-        @Mock
-        private DatabaseStorageFactory storageFactory;
-        @Mock
-        private IKeyValueTableDbHelper keyValueTableDbHelper;
-        private ComponentUnitFieldsFactory.PreferencesProvider preferencesProvider;
-
-        @Before
-        public void setUp() {
-            MockitoAnnotations.openMocks(this);
-            when(storageFactory.getPreferencesDbHelper(componentId)).thenReturn(keyValueTableDbHelper);
-            preferencesProvider = new ComponentUnitFieldsFactory.PreferencesProvider(componentId, storageFactory);
-        }
-
-        @Test
-        public void testGetComponentPreferences() {
-            assertThat(preferencesProvider.createPreferencesComponentDbStorage()).isNotNull().isExactlyInstanceOf(PreferencesComponentDbStorage.class);
-            verify(storageFactory).getPreferencesDbHelper(componentId);
-        }
     }
 }

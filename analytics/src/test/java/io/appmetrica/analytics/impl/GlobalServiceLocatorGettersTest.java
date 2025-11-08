@@ -12,6 +12,7 @@ import io.appmetrica.analytics.impl.crash.ndk.NativeCrashService;
 import io.appmetrica.analytics.impl.db.VitalDataProviderStorage;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesServiceDbStorage;
 import io.appmetrica.analytics.impl.db.state.factory.StorageFactory;
+import io.appmetrica.analytics.impl.db.storage.ServiceStorageFactory;
 import io.appmetrica.analytics.impl.id.AdvertisingIdGetter;
 import io.appmetrica.analytics.impl.id.AppSetIdGetter;
 import io.appmetrica.analytics.impl.location.LocationClientApi;
@@ -377,6 +378,15 @@ public class GlobalServiceLocatorGettersTest extends CommonTest {
                     @Override
                     public ReferenceHolder getService(GlobalServiceLocator globalServiceLocator) {
                         return globalServiceLocator.getReferenceHolder();
+                    }
+                }
+            },
+            {
+                "getStorageFactory",
+                new ServiceExtractor<ServiceStorageFactory>() {
+                    @Override
+                    public ServiceStorageFactory getService(GlobalServiceLocator globalServiceLocator) {
+                        return globalServiceLocator.getStorageFactory();
                     }
                 }
             }

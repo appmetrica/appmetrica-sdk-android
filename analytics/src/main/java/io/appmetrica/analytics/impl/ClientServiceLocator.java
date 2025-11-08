@@ -9,11 +9,12 @@ import io.appmetrica.analytics.impl.client.connection.DefaultServiceDescriptionP
 import io.appmetrica.analytics.impl.client.connection.ServiceDescriptionProvider;
 import io.appmetrica.analytics.impl.crash.jvm.client.TechnicalCrashProcessorFactory;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesClientDbStorage;
-import io.appmetrica.analytics.impl.db.storage.DatabaseStorageFactory;
+import io.appmetrica.analytics.impl.db.storage.ClientStorageFactory;
 import io.appmetrica.analytics.impl.modules.ModuleEntryPointsRegister;
 import io.appmetrica.analytics.impl.modules.client.ClientModulesController;
 import io.appmetrica.analytics.impl.proxy.AppMetricaFacadeProvider;
 import io.appmetrica.analytics.impl.reporter.ReporterLifecycleListener;
+import io.appmetrica.analytics.impl.servicecomponents.OuterStoragePathProvider;
 import io.appmetrica.analytics.impl.startup.uuid.MultiProcessSafeUuidProvider;
 import io.appmetrica.analytics.impl.startup.uuid.UuidFromClientPreferencesImporter;
 import io.appmetrica.analytics.impl.utils.FirstLaunchDetector;
@@ -89,6 +90,8 @@ public class ClientServiceLocator {
     private volatile ExtraMetaInfoRetriever extraMetaInfoRetriever;
     @NonNull
     private volatile ServiceDescriptionProvider serviceDescriptionProvider = new DefaultServiceDescriptionProvider();
+    @Nullable
+    private volatile ClientStorageFactory storageFactory;
 
     private ClientServiceLocator() {
         this(new CurrentProcessDetector(), new ActivityLifecycleManager(), new ClientExecutorProvider());
@@ -266,10 +269,24 @@ public class ClientServiceLocator {
             synchronized (this) {
                 local = preferencesClientDbStorage;
                 if (local == null) {
-                    local = new PreferencesClientDbStorage(
-                        DatabaseStorageFactory.getInstance(context).getClientDbHelper()
-                    );
+                    local = new PreferencesClientDbStorage(getStorageFactory(context).getClientDbHelper(context));
                     preferencesClientDbStorage = local;
+                }
+            }
+        }
+        return local;
+    }
+
+    @NonNull
+    public ClientStorageFactory getStorageFactory(@NonNull Context context) {
+        ClientStorageFactory local = storageFactory;
+        if (local == null) {
+            synchronized (this) {
+                local = storageFactory;
+                if (local == null) {
+                    OuterStoragePathProvider outerStoragePathProvider = new OuterStoragePathProvider();
+                    local = new ClientStorageFactory(outerStoragePathProvider.getPath(context));
+                    storageFactory = local;
                 }
             }
         }

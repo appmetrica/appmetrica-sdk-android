@@ -5,7 +5,6 @@ import android.util.SparseArray;
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesClientDbStorage;
-import io.appmetrica.analytics.impl.db.storage.DatabaseStorageFactory;
 
 public class ClientMigrationManager extends MigrationManager {
 
@@ -13,7 +12,7 @@ public class ClientMigrationManager extends MigrationManager {
 
     public ClientMigrationManager(@NonNull Context context) {
         this(new PreferencesClientDbStorage(
-                DatabaseStorageFactory.getInstance(context).getClientDbHelperForMigration()
+                ClientServiceLocator.getInstance().getStorageFactory(context).getClientDbHelperForMigration(context)
         ));
     }
 

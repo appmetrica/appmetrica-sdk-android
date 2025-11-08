@@ -1,8 +1,8 @@
 package io.appmetrica.analytics.impl.component.sessionextras
 
 import android.content.Context
+import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.component.ComponentId
-import io.appmetrica.analytics.impl.db.storage.DatabaseStorageFactory
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
 class SessionExtrasStorage(context: Context, componentId: ComponentId) {
@@ -13,8 +13,8 @@ class SessionExtrasStorage(context: Context, componentId: ComponentId) {
     private val converter = SessionExtrasConverter()
     private val serializer = SessionExtrasSerializer()
 
-    private val binaryDataHelper =
-        DatabaseStorageFactory.getInstance(context).getBinaryDbHelperForComponent(componentId).also {
+    private val binaryDataHelper = GlobalServiceLocator.getInstance().getStorageFactory()
+        .getComponentBinaryDataHelper(context, componentId).also {
             DebugLogger.info(tag, "create helper for componentId = $componentId")
         }
 

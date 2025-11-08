@@ -35,17 +35,17 @@ public class DatabaseManagerProvider {
                                    @NonNull TablesManager.Creator tablesManagerCreator) {
         mDatabaseScriptsProvider = databaseScriptsProvider;
         mDbTablesColumnsProvider = dbTablesColumnsProvider;
-        mTablesManagerCreator =tablesManagerCreator;
+        mTablesManagerCreator = tablesManagerCreator;
     }
 
     public TablesManager buildComponentDatabaseManager(ComponentId componentId) {
         String tag = String.format(DB_TAG_MAIN, componentId.getApiKey() == null ? "main" : componentId.getApiKey());
         return mTablesManagerCreator.createTablesManager(
-                tag,
-                mDatabaseScriptsProvider.getComponentDatabaseCreateScript(),
-                mDatabaseScriptsProvider.getComponentDatabaseDropScript(),
-                mDatabaseScriptsProvider.getComponentDatabaseUpgradeDbScripts(),
-                new TablesValidatorImpl(tag, mDbTablesColumnsProvider.getDbTablesColumns())
+            tag,
+            mDatabaseScriptsProvider.getComponentDatabaseCreateScript(),
+            mDatabaseScriptsProvider.getComponentDatabaseDropScript(),
+            mDatabaseScriptsProvider.getComponentDatabaseUpgradeDbScripts(),
+            new TablesValidatorImpl(tag, mDbTablesColumnsProvider.getDbTablesColumns())
         );
     }
 
@@ -54,11 +54,11 @@ public class DatabaseManagerProvider {
         tableColumnsToCheck.put(Constants.BinaryDataTable.TABLE_NAME, Constants.BinaryDataTable.ACTUAL_COLUMNS);
 
         return mTablesManagerCreator.createTablesManager(
-                DB_TAG_AUTO_INAPP,
-                mDatabaseScriptsProvider.getDatabaseAutoInappCreateScript(),
-                mDatabaseScriptsProvider.getDatabaseAutoInappDropScript(),
-                new HashMultimap<Integer, DatabaseScript>(),
-                new TablesValidatorImpl(DB_TAG_AUTO_INAPP, tableColumnsToCheck)
+            DB_TAG_AUTO_INAPP,
+            mDatabaseScriptsProvider.getDatabaseAutoInappCreateScript(),
+            mDatabaseScriptsProvider.getDatabaseAutoInappDropScript(),
+            new HashMultimap<Integer, DatabaseScript>(),
+            new TablesValidatorImpl(DB_TAG_AUTO_INAPP, tableColumnsToCheck)
         );
     }
 
@@ -76,11 +76,11 @@ public class DatabaseManagerProvider {
         }
 
         return mTablesManagerCreator.createTablesManager(
-                DB_TAG_SERVICE,
-                mDatabaseScriptsProvider.getDatabaseProviderCreateScript(),
-                mDatabaseScriptsProvider.getDatabaseProviderDropScript(),
-                mDatabaseScriptsProvider.getUpgradeServiceDbScripts(),
-                new TablesValidatorImpl(DB_TAG_SERVICE, tableColumnsToCheck)
+            DB_TAG_SERVICE,
+            mDatabaseScriptsProvider.getDatabaseProviderCreateScript(),
+            mDatabaseScriptsProvider.getDatabaseProviderDropScript(),
+            mDatabaseScriptsProvider.getUpgradeServiceDbScripts(),
+            new TablesValidatorImpl(DB_TAG_SERVICE, tableColumnsToCheck)
         );
     }
 
@@ -89,11 +89,11 @@ public class DatabaseManagerProvider {
         tableColumnsToCheck.put(Constants.PreferencesTable.TABLE_NAME, Constants.PreferencesTable.ACTUAL_COLUMNS);
 
         return mTablesManagerCreator.createTablesManager(
-                "client database",
-                mDatabaseScriptsProvider.getDatabaseClientCreateScript(),
-                mDatabaseScriptsProvider.getDatabaseClientDropScript(),
-                mDatabaseScriptsProvider.getClientDatabaseUpgradeScripts(),
-                new TablesValidatorImpl(DB_TAG_SERVICE, tableColumnsToCheck)
+            "client database",
+            mDatabaseScriptsProvider.getDatabaseClientCreateScript(),
+            mDatabaseScriptsProvider.getDatabaseClientDropScript(),
+            mDatabaseScriptsProvider.getClientDatabaseUpgradeScripts(),
+            new TablesValidatorImpl(DB_TAG_SERVICE, tableColumnsToCheck)
         );
     }
 }

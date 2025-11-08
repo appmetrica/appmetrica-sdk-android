@@ -4,9 +4,9 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.data.IBinaryDataHelper;
+import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.Utils;
 import io.appmetrica.analytics.impl.component.ComponentId;
-import io.appmetrica.analytics.impl.db.storage.DatabaseStorageFactory;
 
 public class EventHashesStorage {
 
@@ -23,10 +23,13 @@ public class EventHashesStorage {
 
     public EventHashesStorage(@NonNull final Context context, @NonNull final ComponentId componentId) {
         this(
-                new EventHashesSerializer(),
-                new EventHashesConverter(),
-                DatabaseStorageFactory.getInstance(context).getBinaryDbHelperForComponent(componentId),
-                EVENT_HASHES_DB_KEY
+            new EventHashesSerializer(),
+            new EventHashesConverter(),
+            GlobalServiceLocator.getInstance().getStorageFactory().getComponentBinaryDataHelper(
+                context,
+                componentId
+            ),
+            EVENT_HASHES_DB_KEY
         );
     }
 

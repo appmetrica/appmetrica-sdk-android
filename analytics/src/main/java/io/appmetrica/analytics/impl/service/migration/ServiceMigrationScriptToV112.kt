@@ -12,7 +12,6 @@ import io.appmetrica.analytics.impl.Utils
 import io.appmetrica.analytics.impl.db.VitalCommonDataProvider
 import io.appmetrica.analytics.impl.db.constants.Constants
 import io.appmetrica.analytics.impl.db.state.factory.StorageFactory
-import io.appmetrica.analytics.impl.db.storage.DatabaseStorageFactory
 import io.appmetrica.analytics.impl.protobuf.client.LegacyStartupStateProtobuf.LegacyStartupState
 import io.appmetrica.analytics.impl.startup.CollectingFlags
 import io.appmetrica.analytics.impl.startup.StartupStateModel
@@ -34,32 +33,33 @@ internal class ServiceMigrationScriptToV112(private val vitalDataStorage: VitalC
 
     override fun run(context: Context) {
         DebugLogger.info(tag, "Run migration")
-        DatabaseStorageFactory.getInstance(context).storageForService.readableDatabase?.let { database ->
-            DebugLogger.info(tag, "Legacy database exists... Try to import data")
-            try {
-                val legacyStartupState = readLegacyStartupState(database)
-                val startupStateModelBuilder =
-                    StartupStateModel.StartupStateBuilder(CollectingFlags.CollectingFlagsBuilder().build())
-                if (legacyStartupState != null) {
-                    fillIdentifiersToStartupState(vitalDataStorage, startupStateModelBuilder, legacyStartupState)
-                    DebugLogger.info(
-                        tag,
-                        "Import country init info: hadFirstStartup = ${legacyStartupState.hadFirstStartup}; " +
-                            "countryInit = ${legacyStartupState.countryInit}"
-                    )
-                    startupStateModelBuilder.withHadFirstStartup(legacyStartupState.hadFirstStartup)
-                        .withCountryInit(legacyStartupState.countryInit)
-                } else {
-                    DebugLogger.info(tag, "Legacy startup state missing or invalid")
+        GlobalServiceLocator.getInstance().storageFactory.getStorageForService(context)
+            .readableDatabase?.let { database ->
+                DebugLogger.info(tag, "Legacy database exists... Try to import data")
+                try {
+                    val legacyStartupState = readLegacyStartupState(database)
+                    val startupStateModelBuilder =
+                        StartupStateModel.StartupStateBuilder(CollectingFlags.CollectingFlagsBuilder().build())
+                    if (legacyStartupState != null) {
+                        fillIdentifiersToStartupState(vitalDataStorage, startupStateModelBuilder, legacyStartupState)
+                        DebugLogger.info(
+                            tag,
+                            "Import country init info: hadFirstStartup = ${legacyStartupState.hadFirstStartup}; " +
+                                "countryInit = ${legacyStartupState.countryInit}"
+                        )
+                        startupStateModelBuilder.withHadFirstStartup(legacyStartupState.hadFirstStartup)
+                            .withCountryInit(legacyStartupState.countryInit)
+                    } else {
+                        DebugLogger.info(tag, "Legacy startup state missing or invalid")
+                    }
+                    val startupStateModel = startupStateModelBuilder.build()
+                    DebugLogger.info(tag, "write startup: $startupStateModel")
+                    StorageFactory.Provider.get(StartupStateModel::class.java).createForMigration(context)
+                        .save(startupStateModel)
+                } catch (e: Throwable) {
+                    DebugLogger.error(tag, e)
                 }
-                val startupStateModel = startupStateModelBuilder.build()
-                DebugLogger.info(tag, "write startup: $startupStateModel")
-                StorageFactory.Provider.get(StartupStateModel::class.java).createForMigration(context)
-                    .save(startupStateModel)
-            } catch (e: Throwable) {
-                DebugLogger.error(tag, e)
             }
-        }
     }
 
     private fun fillIdentifiersToStartupState(
