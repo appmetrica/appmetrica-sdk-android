@@ -14,6 +14,7 @@ import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
 import io.appmetrica.analytics.testutils.constructionRule
 import io.appmetrica.analytics.testutils.staticRule
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -53,7 +54,14 @@ class AppMetricaServiceProxyTest : CommonTest() {
         on { data } doReturn mock<Uri>()
     }
 
-    private val serviceProxy by setUp { AppMetricaServiceProxy(context, serviceCallback) }
+    private val serviceProxy by setUp {
+        AppMetricaServiceProxy(context, serviceCallback).apply { reset() }
+    }
+
+    @Before
+    fun setUp() {
+        serviceProxy.reset()
+    }
 
     @Test
     fun `onCreate init public logger`() {
@@ -87,8 +95,23 @@ class AppMetricaServiceProxyTest : CommonTest() {
     }
 
     @Test
-    fun `onCreate init core binder`() {
+    fun `proxy recreation`() {
         serviceProxy.onCreate()
+        val oneMoreProxy = AppMetricaServiceProxy(context, serviceCallback)
+        oneMoreProxy.onCreate()
+
+        verify(GlobalServiceLocator.getInstance().serviceDataReporterHolder)
+            .registerServiceDataReporter(
+                AppMetricaServiceDataReporter.TYPE_CORE,
+                appMetricaServiceDataReporterRule.constructionMock.constructed().first()
+            )
+        assertThat(appMetricaServiceDataReporterRule.constructionMock.constructed()).hasSize(1)
+        assertThat(appMetricaServiceDataReporterRule.argumentInterceptor.flatArguments())
+            .containsExactly(appmetricaServiceCoreImplRule.constructionMock.constructed().first())
+    }
+
+    @Test
+    fun `onCreate init core binder`() {
         serviceProxy.onCreate()
         assertThat(appMetricaServiceBinderRule.constructionMock.constructed()).hasSize(1)
         assertThat(appMetricaServiceBinderRule.argumentInterceptor.flatArguments())
