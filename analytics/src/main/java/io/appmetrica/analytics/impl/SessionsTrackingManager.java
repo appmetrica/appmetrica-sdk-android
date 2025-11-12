@@ -51,23 +51,25 @@ public class SessionsTrackingManager {
         onResumedCallback = (activity, event) -> {
             synchronized (SessionsTrackingManager.this) {
                 DebugLogger.INSTANCE.info(TAG, "on resume callback");
-                if (sessionAutotrackingStarted) {
-                    DebugLogger.INSTANCE.info(TAG, "resume session");
-                    SessionsTrackingManager.this.conditionalExecutor.addCommand(data ->
-                        resumeActivityInternal(activity, data)
-                    );
-                }
+                SessionsTrackingManager.this.conditionalExecutor.addCommand(data -> {
+                        if (sessionAutotrackingStarted) {
+                            DebugLogger.INSTANCE.info(TAG, "resume session");
+                            resumeActivityInternal(activity, data);
+                        }
+                    }
+                );
             }
         };
         onPausedCallback = (activity, event) -> {
             DebugLogger.INSTANCE.info(TAG, "on pause callback");
             synchronized (SessionsTrackingManager.this) {
-                if (sessionAutotrackingStarted) {
-                    DebugLogger.INSTANCE.info(TAG, "pause session");
-                    SessionsTrackingManager.this.conditionalExecutor.addCommand(data ->
-                        pauseActivityInternal(activity, data)
-                    );
-                }
+                SessionsTrackingManager.this.conditionalExecutor.addCommand(data -> {
+                        if (sessionAutotrackingStarted) {
+                            DebugLogger.INSTANCE.info(TAG, "pause session");
+                            pauseActivityInternal(activity, data);
+                        }
+                    }
+                );
             }
         };
     }
