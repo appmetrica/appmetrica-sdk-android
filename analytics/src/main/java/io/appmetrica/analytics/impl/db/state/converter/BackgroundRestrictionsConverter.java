@@ -6,45 +6,52 @@ import io.appmetrica.analytics.impl.BackgroundRestrictionsState;
 import io.appmetrica.analytics.impl.protobuf.client.AppPermissionsStateProtobuf;
 
 public class BackgroundRestrictionsConverter implements ProtobufConverter<BackgroundRestrictionsState,
-        AppPermissionsStateProtobuf.AppPermissionsState.BackgroundRestrictionsState> {
+    AppPermissionsStateProtobuf.AppPermissionsState.BackgroundRestrictionsState> {
 
     @NonNull
     @Override
     public AppPermissionsStateProtobuf.AppPermissionsState.BackgroundRestrictionsState fromModel(
-            @NonNull BackgroundRestrictionsState state) {
+        @NonNull BackgroundRestrictionsState state) {
         AppPermissionsStateProtobuf.AppPermissionsState.BackgroundRestrictionsState backgroundRestrictions =
-                new AppPermissionsStateProtobuf.AppPermissionsState.BackgroundRestrictionsState();
+            new AppPermissionsStateProtobuf.AppPermissionsState.BackgroundRestrictionsState();
         if (state.mAppStandByBucket != null) {
             switch (state.mAppStandByBucket) {
                 case ACTIVE:
                     backgroundRestrictions.appStandbyBucket = AppPermissionsStateProtobuf.AppPermissionsState
-                            .BackgroundRestrictionsState.ACTIVE;
+                        .BackgroundRestrictionsState.ACTIVE;
                     break;
                 case WORKING_SET:
                     backgroundRestrictions.appStandbyBucket = AppPermissionsStateProtobuf.AppPermissionsState
-                            .BackgroundRestrictionsState.WORKING_SET;
+                        .BackgroundRestrictionsState.WORKING_SET;
                     break;
                 case FREQUENT:
                     backgroundRestrictions.appStandbyBucket = AppPermissionsStateProtobuf.AppPermissionsState
-                            .BackgroundRestrictionsState.FREQUENT;
+                        .BackgroundRestrictionsState.FREQUENT;
                     break;
                 case RARE:
                     backgroundRestrictions.appStandbyBucket = AppPermissionsStateProtobuf.AppPermissionsState
-                            .BackgroundRestrictionsState.RARE;
+                        .BackgroundRestrictionsState.RARE;
                     break;
                 case RESTRICTED:
                     backgroundRestrictions.appStandbyBucket = AppPermissionsStateProtobuf.AppPermissionsState
-                            .BackgroundRestrictionsState.RESTRICTED;
+                        .BackgroundRestrictionsState.RESTRICTED;
                     break;
+                case EXEMPTED:
+                    backgroundRestrictions.appStandbyBucket = AppPermissionsStateProtobuf.AppPermissionsState
+                        .BackgroundRestrictionsState.EXEMPTED;
+                    break;
+                default:
+                    backgroundRestrictions.appStandbyBucket = AppPermissionsStateProtobuf.AppPermissionsState
+                        .BackgroundRestrictionsState.UNDEFINED;
             }
         }
         if (state.mBackgroundRestricted != null) {
             if (state.mBackgroundRestricted) {
                 backgroundRestrictions.backgroundRestricted = AppPermissionsStateProtobuf.AppPermissionsState
-                        .BackgroundRestrictionsState.OPTIONAL_BOOL_TRUE;
+                    .BackgroundRestrictionsState.OPTIONAL_BOOL_TRUE;
             } else {
                 backgroundRestrictions.backgroundRestricted = AppPermissionsStateProtobuf.AppPermissionsState
-                        .BackgroundRestrictionsState.OPTIONAL_BOOL_FALSE;
+                    .BackgroundRestrictionsState.OPTIONAL_BOOL_FALSE;
             }
         }
         return backgroundRestrictions;
@@ -53,8 +60,8 @@ public class BackgroundRestrictionsConverter implements ProtobufConverter<Backgr
     @NonNull
     @Override
     public BackgroundRestrictionsState toModel(
-            @NonNull AppPermissionsStateProtobuf.AppPermissionsState.BackgroundRestrictionsState nano) {
-        BackgroundRestrictionsState.AppStandByBucket appStandByBucket = null;
+        @NonNull AppPermissionsStateProtobuf.AppPermissionsState.BackgroundRestrictionsState nano) {
+        BackgroundRestrictionsState.AppStandByBucket appStandByBucket;
         Boolean backgroundRestricted = null;
         switch (nano.appStandbyBucket) {
             case AppPermissionsStateProtobuf.AppPermissionsState.BackgroundRestrictionsState.ACTIVE:
@@ -72,6 +79,12 @@ public class BackgroundRestrictionsConverter implements ProtobufConverter<Backgr
             case AppPermissionsStateProtobuf.AppPermissionsState.BackgroundRestrictionsState.RESTRICTED:
                 appStandByBucket = BackgroundRestrictionsState.AppStandByBucket.RESTRICTED;
                 break;
+            case AppPermissionsStateProtobuf.AppPermissionsState.BackgroundRestrictionsState.EXEMPTED:
+                appStandByBucket = BackgroundRestrictionsState.AppStandByBucket.EXEMPTED;
+                break;
+            default:
+                appStandByBucket = null;
+
         }
         switch (nano.backgroundRestricted) {
             case AppPermissionsStateProtobuf.AppPermissionsState.BackgroundRestrictionsState.OPTIONAL_BOOL_TRUE:

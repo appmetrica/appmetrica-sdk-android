@@ -31,6 +31,5 @@ abstract class AppStandbyBucketConverterBaseTest(
         const val BUCKET_FREQUENT = "FREQUENT"
         const val BUCKET_RARE = "RARE"
         const val BUCKET_RESTRICTED = "RESTRICTED"
-        const val BUCKET_UNKNOWN = "UNKNOWN"
     }
 }

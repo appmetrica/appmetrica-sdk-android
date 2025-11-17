@@ -28,8 +28,8 @@ class AppStandbyBucketConverterPTest(
             arrayOf(UsageStatsManager.STANDBY_BUCKET_FREQUENT, AppStandByBucket.FREQUENT, BUCKET_FREQUENT),
             arrayOf(UsageStatsManager.STANDBY_BUCKET_WORKING_SET, AppStandByBucket.WORKING_SET, BUCKET_WORKING_SET),
             arrayOf(UsageStatsManager.STANDBY_BUCKET_RARE, AppStandByBucket.RARE, BUCKET_RARE),
-            arrayOf(UsageStatsManager.STANDBY_BUCKET_RESTRICTED, AppStandByBucket.UNKNOWN, BUCKET_UNKNOWN),
-            arrayOf(-1, AppStandByBucket.UNKNOWN, BUCKET_UNKNOWN)
+            arrayOf(UsageStatsManager.STANDBY_BUCKET_RESTRICTED, null, null),
+            arrayOf(-1, null, null)
         )
     }
 }

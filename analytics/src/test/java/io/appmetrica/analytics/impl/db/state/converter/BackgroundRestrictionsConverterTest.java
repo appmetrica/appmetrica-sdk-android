@@ -94,6 +94,10 @@ public class BackgroundRestrictionsConverterTest extends CommonTest {
             new AppPermissionsStateProtobuf.AppPermissionsState.BackgroundRestrictionsState();
         proto18.appStandbyBucket = AppPermissionsStateProtobuf.AppPermissionsState.BackgroundRestrictionsState.RESTRICTED;
         proto18.backgroundRestricted = AppPermissionsStateProtobuf.AppPermissionsState.BackgroundRestrictionsState.OPTIONAL_BOOL_UNDEFINED;
+        AppPermissionsStateProtobuf.AppPermissionsState.BackgroundRestrictionsState proto19 =
+            new AppPermissionsStateProtobuf.AppPermissionsState.BackgroundRestrictionsState();
+        proto19.appStandbyBucket = AppPermissionsStateProtobuf.AppPermissionsState.BackgroundRestrictionsState.EXEMPTED;
+        proto19.backgroundRestricted = AppPermissionsStateProtobuf.AppPermissionsState.BackgroundRestrictionsState.OPTIONAL_BOOL_FALSE;
 
         return Arrays.asList(
             new Object[]{new BackgroundRestrictionsState(BackgroundRestrictionsState.AppStandByBucket.ACTIVE, false), proto1},
@@ -111,6 +115,7 @@ public class BackgroundRestrictionsConverterTest extends CommonTest {
             new Object[]{new BackgroundRestrictionsState(BackgroundRestrictionsState.AppStandByBucket.RESTRICTED, false), proto16},
             new Object[]{new BackgroundRestrictionsState(BackgroundRestrictionsState.AppStandByBucket.RESTRICTED, true), proto17},
             new Object[]{new BackgroundRestrictionsState(BackgroundRestrictionsState.AppStandByBucket.RESTRICTED, null), proto18},
+            new Object[]{new BackgroundRestrictionsState(BackgroundRestrictionsState.AppStandByBucket.EXEMPTED, false), proto19},
             new Object[]{new BackgroundRestrictionsState(null, false), proto13},
             new Object[]{new BackgroundRestrictionsState(null, true), proto14},
             new Object[]{new BackgroundRestrictionsState(null, null), proto15}

@@ -111,7 +111,9 @@ public class ReportPermissionHandler extends ReportComponentHandler {
             .getBackgroundRestrictionsState();
         DebugLogger.INSTANCE.info(
             TAG,
-            "Incoming background restriction state: %s", newBackgroundRestrictionsState
+            "Old background restriction state: %s -> Incoming background restriction state: %s",
+            oldBackgroundRestrictionsState,
+            newBackgroundRestrictionsState
         );
         List<String> oldProviders = oldAppPermissionsState.mAvailableProviders;
         List<String> newProviders = mAvailableProvidersRetriever.getAvailableProviders();
@@ -122,7 +124,13 @@ public class ReportPermissionHandler extends ReportComponentHandler {
             CollectionUtils.areCollectionsEqual(oldProviders, newProviders)) {
             return null;
         } else {
-
+            DebugLogger.INSTANCE.info(
+                TAG,
+                "Background restriction state changed = %s; providers changed = %s; newPermissions: %s",
+                !Utils.areEqual(oldBackgroundRestrictionsState, newBackgroundRestrictionsState),
+                !CollectionUtils.areCollectionsEqual(oldProviders, newProviders),
+                newPermissions
+                );
             return new AppPermissionsState(
                 newPermissions == null ? permissionsFromDb : newPermissions,
                 newBackgroundRestrictionsState,

@@ -1,11 +1,14 @@
 package io.appmetrica.analytics.coreutils.internal.collection
 
 import android.os.Bundle
+import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import java.util.AbstractMap
 import java.util.Collections
 import java.util.Locale
 
 object CollectionUtils {
+
+    private const val TAG = "[CollectionUtils]"
 
     @JvmStatic
     fun areCollectionsEqual(left: Collection<Any>?, right: Collection<Any>?): Boolean {
@@ -30,6 +33,7 @@ object CollectionUtils {
 
             for (any in other) {
                 if (set.contains(any) == false) {
+                    DebugLogger.info(TAG, "Could not find: $any")
                     return false
                 }
             }

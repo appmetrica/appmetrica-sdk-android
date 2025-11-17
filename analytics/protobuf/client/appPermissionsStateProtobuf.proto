@@ -16,6 +16,7 @@ message AppPermissionsState {
             FREQUENT = 3;
             RARE = 4;
             RESTRICTED = 5;
+            EXEMPTED = 6;
         }
 
         enum OptionalBool {

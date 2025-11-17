@@ -22,7 +22,7 @@ class AppStandbyBucketConverter {
     }
 
     @TargetApi(Build.VERSION_CODES.P)
-    private fun Int.fromIntToStandbyBucketP(): AppStandByBucket {
+    private fun Int.fromIntToStandbyBucketP(): AppStandByBucket? {
         DebugLogger.info(tag, "fromIntToStandbyBucketP: %s", this)
 
         if (isApiAchieved(Build.VERSION_CODES.R)) {
@@ -36,7 +36,7 @@ class AppStandbyBucketConverter {
             UsageStatsManager.STANDBY_BUCKET_FREQUENT -> AppStandByBucket.FREQUENT
             UsageStatsManager.STANDBY_BUCKET_WORKING_SET -> AppStandByBucket.WORKING_SET
             UsageStatsManager.STANDBY_BUCKET_RARE -> AppStandByBucket.RARE
-            else -> AppStandByBucket.UNKNOWN
+            else -> null
         }
     }
 
@@ -51,7 +51,6 @@ class AppStandbyBucketConverter {
             AppStandByBucket.FREQUENT -> "FREQUENT"
             AppStandByBucket.RARE -> "RARE"
             AppStandByBucket.RESTRICTED -> "RESTRICTED"
-            AppStandByBucket.UNKNOWN -> "UNKNOWN"
             else -> null
         }
     }

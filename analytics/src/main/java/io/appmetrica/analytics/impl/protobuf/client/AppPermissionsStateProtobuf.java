@@ -109,6 +109,7 @@ public interface AppPermissionsStateProtobuf {
       public static final int FREQUENT = 3;
       public static final int RARE = 4;
       public static final int RESTRICTED = 5;
+      public static final int EXEMPTED = 6;
 
       // enum OptionalBool
       public static final int OPTIONAL_BOOL_UNDEFINED = -1;
@@ -188,6 +189,7 @@ public interface AppPermissionsStateProtobuf {
                 case AppPermissionsStateProtobuf.AppPermissionsState.BackgroundRestrictionsState.FREQUENT:
                 case AppPermissionsStateProtobuf.AppPermissionsState.BackgroundRestrictionsState.RARE:
                 case AppPermissionsStateProtobuf.AppPermissionsState.BackgroundRestrictionsState.RESTRICTED:
+                case AppPermissionsStateProtobuf.AppPermissionsState.BackgroundRestrictionsState.EXEMPTED:
                   this.appStandbyBucket = value;
                   break;
               }
