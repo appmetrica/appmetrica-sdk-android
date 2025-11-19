@@ -44,11 +44,13 @@ internal class ClientModulesController :
                 modulesWithProblems.add(module)
             }
         }
-        DebugLogger.warning(
-            tag,
-            "Disabling defective modules: ${modulesWithProblems.joinToString(", ") { it.identifier }}"
-        )
-        modules.removeAll(modulesWithProblems)
+        if (modulesWithProblems.isNotEmpty()) {
+            DebugLogger.warning(
+                tag,
+                "Disabling defective modules: ${modulesWithProblems.joinToString(", ") { it.identifier }}"
+            )
+            modules.removeAll(modulesWithProblems)
+        }
     }
 
     override fun onActivated() {
@@ -66,7 +68,7 @@ internal class ClientModulesController :
             }
         }
         adRevenueCollectorsSourceIds.addAll(
-            modules.mapNotNull { it.adRevenueCollector }.filter { it.enabled }.map { it.sourceIdentifier }
+            modules.mapNotNull { it.adRevenueCollector }.filter { it.enabled }.map { it.sourceIdentifier }.distinct()
         )
         DebugLogger.info(tag, "adRevenueCollectorsSourceIds = $adRevenueCollectorsSourceIds")
     }

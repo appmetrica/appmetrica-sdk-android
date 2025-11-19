@@ -29,12 +29,22 @@
     group: "com.ironsource.sdk"
     name: "mediationsdk"
     from: "7.1.0"
-    to: "9.0.0"
+    to: "8.12.0"
+    forcible: false
   - repository: "https://repo.maven.apache.org/maven2"
     group: "com.unity3d.ads-mediation"
     name: "mediation-sdk"
     from: "7.9.0"
-    to: "9.0.0"
+    to: "8.12.0"
+    forcible: false
+- group: "io.appmetrica.analytics"
+  name: "analytics-ad-revenue-ironsource-v9"
+  dependencies:
+  - repository: "https://repo.maven.apache.org/maven2"
+    group: "com.unity3d.ads-mediation"
+    name: "mediation-sdk"
+    from: "9.0.0"
+    to: "9.1.0"    
 - group: "io.appmetrica.analytics"
   name: "analytics"
   dependencies:

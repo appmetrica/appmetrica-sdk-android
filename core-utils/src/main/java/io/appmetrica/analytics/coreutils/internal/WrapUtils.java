@@ -58,4 +58,8 @@ public class WrapUtils {
     public static double getFiniteDoubleOrDefault(double input, double fallback) {
         return Double.isFinite(input) ? input : fallback;
     }
+
+    public static double getFiniteDoubleOrDefaultNullable(@Nullable Double input, double fallback) {
+        return input == null ? fallback : getFiniteDoubleOrDefault(input, fallback);
+    }
 }

@@ -2,7 +2,7 @@
     "formatVersion": "1.1",
     "component": {
         "group": "io.appmetrica.analytics",
-        "module": "analytics-ad-revenue",
+        "module": "analytics-ad-revenue-ironsource-v9",
         "version": "7.14.0",
         "attributes": {
             "org.gradle.status": "release"
@@ -25,8 +25,8 @@
             },
             "files": [
                 {
-                    "name": "analytics-ad-revenue-7.14.0.aar",
-                    "url": "analytics-ad-revenue-7.14.0.aar",
+                    "name": "analytics-ad-revenue-ironsource-v9-7.14.0.aar",
+                    "url": "analytics-ad-revenue-ironsource-v9-7.14.0.aar",
                     "size": -1,
                     "sha512": "<sha512>",
                     "sha256": "<sha256>",
@@ -45,52 +45,38 @@
             },
             "dependencies": [
                 {
-                    "group": "io.appmetrica.analytics",
-                    "module": "analytics-ad-revenue-admob-v23",
-                    "version": {
-                        "requires": "7.14.0"
-                    }
-                },
-                {
-                    "group": "io.appmetrica.analytics",
-                    "module": "analytics-ad-revenue-applovin-v12",
-                    "version": {
-                        "requires": "7.14.0"
-                    }
-                },
-                {
-                    "group": "io.appmetrica.analytics",
-                    "module": "analytics-ad-revenue-fyber-v3",
-                    "version": {
-                        "requires": "7.14.0"
-                    }
-                },
-                {
-                    "group": "io.appmetrica.analytics",
-                    "module": "analytics-ad-revenue-ironsource-v7",
-                    "version": {
-                        "requires": "7.14.0"
-                    }
-                },
-                {
-                    "group": "io.appmetrica.analytics",
-                    "module": "analytics-ad-revenue-ironsource-v9",
-                    "version": {
-                        "requires": "7.14.0"
-                    }
-                },
-                {
                     "group": "org.jetbrains.kotlin",
                     "module": "kotlin-stdlib",
                     "version": {
                         "requires": "1.6.21"
                     }
+                },
+                {
+                    "group": "io.appmetrica.analytics",
+                    "module": "analytics-core-utils",
+                    "version": {
+                        "requires": "7.14.0"
+                    }
+                },
+                {
+                    "group": "io.appmetrica.analytics",
+                    "module": "analytics-logger",
+                    "version": {
+                        "requires": "7.14.0"
+                    }
+                },
+                {
+                    "group": "io.appmetrica.analytics",
+                    "module": "analytics-modules-api",
+                    "version": {
+                        "requires": "7.14.0"
+                    }
                 }
             ],
             "files": [
                 {
-                    "name": "analytics-ad-revenue-7.14.0.aar",
-                    "url": "analytics-ad-revenue-7.14.0.aar",
+                    "name": "analytics-ad-revenue-ironsource-v9-7.14.0.aar",
+                    "url": "analytics-ad-revenue-ironsource-v9-7.14.0.aar",
                     "size": -1,
                     "sha512": "<sha512>",
                     "sha256": "<sha256>",

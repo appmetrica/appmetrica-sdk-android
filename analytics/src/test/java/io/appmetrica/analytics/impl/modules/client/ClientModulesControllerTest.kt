@@ -203,6 +203,18 @@ internal class ClientModulesControllerTest : CommonTest() {
         assertThat(modulesController.adRevenueCollectorsSourceIds).containsExactly(firstModuleAdSourceId)
     }
 
+    @Test
+    fun adRevenueCollectorsSourceIdsForSourceDuplicates() {
+        whenever(secondModuleAdRevenueCollector.sourceIdentifier).thenReturn(firstModuleAdSourceId)
+        whenever(secondModuleAdRevenueCollector.enabled).thenReturn(true)
+        modulesController.registerModule(firstModule)
+        modulesController.registerModule(secondModule)
+        modulesController.initClientSide(mock<CoreClientContext>())
+        modulesController.onActivated()
+
+        assertThat(modulesController.adRevenueCollectorsSourceIds).containsExactly(firstModuleAdSourceId)
+    }
+
     private fun clientModuleServiceConfigModelFactory(): ClientModuleServiceConfigModelFactory {
         assertThat(clientModuleServiceConfigModelFactoryRule.constructionMock.constructed()).hasSize(1)
         assertThat(clientModuleServiceConfigModelFactoryRule.argumentInterceptor.flatArguments()).isEmpty()
