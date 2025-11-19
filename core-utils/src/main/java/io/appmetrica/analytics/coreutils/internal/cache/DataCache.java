@@ -44,6 +44,7 @@ public abstract class DataCache<T> implements UpdateConditionsChecker {
             cacheUpdateScheduler.scheduleUpdateIfNeededNow();
         }
         if (mCachedData.shouldClearData()) {
+            DebugLogger.INSTANCE.info(tag, "Cache is completely outdated. Drop it.");
             mCachedData.setData(null);
         }
         return mCachedData.getData();
