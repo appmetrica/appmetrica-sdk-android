@@ -66,6 +66,9 @@ public class AttributeTest extends CommonTest {
                     {Attribute.gender(), GenderAttribute.class},
                     {Attribute.name(), NameAttribute.class},
                     {Attribute.notificationsEnabled(), NotificationsEnabledAttribute.class},
+                    {Attribute.phoneHash(), FirstPartyDataPhoneSha256Attribute.class},
+                    {Attribute.emailHash(), FirstPartyDataEmailSha256Attribute.class},
+                    {Attribute.telegramLoginHash(), FirstPartyDataTelegramLoginSha256Attribute.class},
             });
         }
 
@@ -94,6 +97,9 @@ public class AttributeTest extends CommonTest {
                     {Attribute.gender(), "appmetrica_gender"},
                     {Attribute.name(), "appmetrica_name"},
                     {Attribute.notificationsEnabled(), "appmetrica_notifications_enabled"},
+                    {Attribute.phoneHash(), "appmetrica_1pd_phone_sha256"},
+                    {Attribute.emailHash(), "appmetrica_1pd_email_sha256"},
+                    {Attribute.telegramLoginHash(), "appmetrica_1pd_telegram_sha256"},
             });
         }
 
@@ -111,33 +117,4 @@ public class AttributeTest extends CommonTest {
         }
 
     }
-
-    @RunWith(ParameterizedRobolectricTestRunner.class)
-    public static class TestValidator {
-
-        @ParameterizedRobolectricTestRunner.Parameters(name = "{1}")
-        public static Collection<Object[]> data() {
-            return Arrays.asList(new Object[][]{
-                    {Attribute.birthDate(), "appmetrica_birth_date"},
-                    {Attribute.gender(), "appmetrica_gender"},
-                    {Attribute.name(), "appmetrica_name"},
-                    {Attribute.notificationsEnabled(), "appmetrica_notifications_enabled"},
-            });
-        }
-
-        private final CustomAttribute mCustomAttribute;
-        private final String mKey;
-
-        public TestValidator(Object attribute, String key) {
-            mCustomAttribute = ReflectionHelpers.getField(attribute, "mCustomAttribute");
-            mKey = key;
-        }
-
-        @Test
-        public void testAttribute() {
-            assertThat(mCustomAttribute.getKey()).isEqualTo(mKey);
-        }
-
-    }
-
 }

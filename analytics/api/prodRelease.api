@@ -789,9 +789,12 @@ public final class io.appmetrica.analytics.profile.Attribute {
     public static [NonNull] io.appmetrica.analytics.profile.CounterAttribute customCounter([NonNull] String)
     public static [NonNull] io.appmetrica.analytics.profile.NumberAttribute customNumber([NonNull] String)
     public static [NonNull] io.appmetrica.analytics.profile.StringAttribute customString([NonNull] String)
+    public static [NonNull] io.appmetrica.analytics.profile.FirstPartyDataEmailSha256Attribute emailHash()
     public static [NonNull] io.appmetrica.analytics.profile.GenderAttribute gender()
     public static [NonNull] io.appmetrica.analytics.profile.NameAttribute name()
     public static [NonNull] io.appmetrica.analytics.profile.NotificationsEnabledAttribute notificationsEnabled()
+    public static [NonNull] io.appmetrica.analytics.profile.FirstPartyDataPhoneSha256Attribute phoneHash()
+    public static [NonNull] io.appmetrica.analytics.profile.FirstPartyDataTelegramLoginSha256Attribute telegramLoginHash()
 }
 
 public class io.appmetrica.analytics.profile.BirthDateAttribute {
@@ -816,6 +819,21 @@ public class io.appmetrica.analytics.profile.BooleanAttribute {
 
 public final class io.appmetrica.analytics.profile.CounterAttribute {
     public [NonNull] io.appmetrica.analytics.profile.UserProfileUpdate<? extends OBFUSCATED[io.appmetrica.analytics.impl.profile.UserProfileUpdatePatcher]> withDelta(double)
+}
+
+public class io.appmetrica.analytics.profile.FirstPartyDataEmailSha256Attribute {
+    public [NonNull] io.appmetrica.analytics.profile.UserProfileUpdate<? extends OBFUSCATED[io.appmetrica.analytics.impl.profile.UserProfileUpdatePatcher]> withEmailValues([NonNull] Iterable<String>)
+    public [NonNull] io.appmetrica.analytics.profile.UserProfileUpdate<? extends OBFUSCATED[io.appmetrica.analytics.impl.profile.UserProfileUpdatePatcher]> withEmailValues([NonNull] String...)
+}
+
+public class io.appmetrica.analytics.profile.FirstPartyDataPhoneSha256Attribute {
+    public [NonNull] io.appmetrica.analytics.profile.UserProfileUpdate<? extends OBFUSCATED[io.appmetrica.analytics.impl.profile.UserProfileUpdatePatcher]> withPhoneValues([NonNull] Iterable<String>)
+    public [NonNull] io.appmetrica.analytics.profile.UserProfileUpdate<? extends OBFUSCATED[io.appmetrica.analytics.impl.profile.UserProfileUpdatePatcher]> withPhoneValues([NonNull] String...)
+}
+
+public class io.appmetrica.analytics.profile.FirstPartyDataTelegramLoginSha256Attribute {
+    public [NonNull] io.appmetrica.analytics.profile.UserProfileUpdate<? extends OBFUSCATED[io.appmetrica.analytics.impl.profile.UserProfileUpdatePatcher]> withTelegramLoginValues([NonNull] Iterable<String>)
+    public [NonNull] io.appmetrica.analytics.profile.UserProfileUpdate<? extends OBFUSCATED[io.appmetrica.analytics.impl.profile.UserProfileUpdatePatcher]> withTelegramLoginValues([NonNull] String...)
 }
 
 public class io.appmetrica.analytics.profile.GenderAttribute {

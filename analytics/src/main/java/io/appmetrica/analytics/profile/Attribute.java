@@ -3,6 +3,10 @@ package io.appmetrica.analytics.profile;
 import androidx.annotation.NonNull;
 import io.appmetrica.analytics.impl.profile.KeyValidator;
 import io.appmetrica.analytics.impl.profile.LimitedSaver;
+import io.appmetrica.analytics.impl.profile.fpd.EmailNormalizer;
+import io.appmetrica.analytics.impl.profile.fpd.PhoneNormalizer;
+import io.appmetrica.analytics.impl.profile.fpd.Sha256Converter;
+import io.appmetrica.analytics.impl.profile.fpd.TelegramLoginNormalizer;
 import io.appmetrica.analytics.impl.utils.limitation.CollectionLimitation;
 import io.appmetrica.analytics.impl.utils.limitation.EventLimitationProcessor;
 import io.appmetrica.analytics.impl.utils.limitation.StringTrimmer;
@@ -122,5 +126,44 @@ public final class Attribute {
     @NonNull
     public static NameAttribute name() {
         return new NameAttribute();
+    }
+
+    /**
+     * Creates an attribute for setting the user's phone number hash.
+     * <b>The value will be normalized and hashed using SHA-256 before sending.</b>
+     *
+     * @return The {@link io.appmetrica.analytics.profile.FirstPartyDataPhoneSha256Attribute} object
+     */
+    @NonNull
+    public static FirstPartyDataPhoneSha256Attribute phoneHash() {
+        return new FirstPartyDataPhoneSha256Attribute(
+            new Sha256Converter(new PhoneNormalizer())
+        );
+    }
+
+    /**
+     * Creates an attribute for setting the user's email address hash.
+     * <b>The value will be normalized and hashed using SHA-256 before sending.</b>
+     *
+     * @return The {@link io.appmetrica.analytics.profile.FirstPartyDataEmailSha256Attribute} object
+     */
+    @NonNull
+    public static FirstPartyDataEmailSha256Attribute emailHash() {
+        return new FirstPartyDataEmailSha256Attribute(
+            new Sha256Converter(new EmailNormalizer())
+        );
+    }
+
+    /**
+     * Creates an attribute for setting the user's Telegram login hash.
+     * <b>The value will be normalized and hashed using SHA-256 before sending.</b>
+     *
+     * @return The {@link io.appmetrica.analytics.profile.FirstPartyDataTelegramLoginSha256Attribute} object
+     */
+    @NonNull
+    public static FirstPartyDataTelegramLoginSha256Attribute telegramLoginHash() {
+        return new FirstPartyDataTelegramLoginSha256Attribute(
+            new Sha256Converter(new TelegramLoginNormalizer())
+        );
     }
 }
