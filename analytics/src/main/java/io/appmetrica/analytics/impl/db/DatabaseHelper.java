@@ -18,7 +18,6 @@ import io.appmetrica.analytics.impl.EventsManager;
 import io.appmetrica.analytics.impl.InternalEvents;
 import io.appmetrica.analytics.impl.Utils;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
-import io.appmetrica.analytics.impl.component.EventNumberGenerator;
 import io.appmetrica.analytics.impl.component.IComponent;
 import io.appmetrica.analytics.impl.component.session.SessionState;
 import io.appmetrica.analytics.impl.component.session.SessionType;
@@ -180,12 +179,12 @@ public class DatabaseHelper {
                            final int reportType,
                            @NonNull final SessionState sessionState,
                            @NonNull final AppEnvironment.EnvironmentRevision environmentRevision,
-                           @NonNull final EventNumberGenerator eventNumberGenerator) {
+                           @NonNull final VitalComponentDataProvider vitalComponentDataProvider) {
         final DbEventModel dbEventModel = new DbEventModelFactory(
             mContext,
             sessionState,
             reportType,
-            eventNumberGenerator,
+            vitalComponentDataProvider,
             reportData,
             mComponent.getFreshReportRequestConfig(),
             environmentRevision
@@ -220,11 +219,14 @@ public class DatabaseHelper {
     }
 
     public void addReportValues(final ContentValues reportValues) {
+        DebugLogger.INSTANCE.info(TAG, "add report values: %s. Acquire lock", reportValues);
         synchronized (mEventQueueMonitor) {
+            DebugLogger.INSTANCE.info(TAG, "Add report values");
             mEventQueue.add(reportValues);
         }
 
         synchronized (mDbWorker) {
+            DebugLogger.INSTANCE.info(TAG, "Notify database worker");
             mDbWorker.notifyAll();
         }
     }

@@ -135,11 +135,6 @@ internal class VitalComponentDataProvider(
         @WorkerThread @Synchronized set(value) {
             vitalDataProvider.save(vitalDataProvider.getOrLoadData().put(KEY_REFERRER_HANDLED, value))
         }
-    var numbersOfType: JSONObject?
-        @WorkerThread @Synchronized get() = vitalDataProvider.getOrLoadData().optJSONObject(KEY_NUMBERS_OF_TYPE)
-        @WorkerThread @Synchronized set(value) {
-            vitalDataProvider.save(vitalDataProvider.getOrLoadData().put(KEY_NUMBERS_OF_TYPE, value))
-        }
     var openId: Int
         @WorkerThread @Synchronized get() = vitalDataProvider.getOrLoadData().optInt(KEY_OPEN_ID, DEFAULT_OPEN_ID)
         @WorkerThread @Synchronized private set(value) {
@@ -175,6 +170,24 @@ internal class VitalComponentDataProvider(
     @WorkerThread
     fun incrementAttributionId() {
         attributionId += 1
+    }
+
+    @Synchronized
+    fun getAndIncrementNumberOfType(type: Int): Long {
+        val vitalDataState = vitalDataProvider.getOrLoadData()
+        val json = vitalDataState.optJSONObject(KEY_NUMBERS_OF_TYPE) ?: JSONObject()
+        val numberOfType = json.optLong("$type")
+        json.put("$type", numberOfType + 1)
+        vitalDataProvider.save(vitalDataState.put(KEY_NUMBERS_OF_TYPE, json))
+        return numberOfType
+    }
+
+    @Synchronized
+    fun getAndIncrementEventGlobalNumber(): Long {
+        val vitalDataState = vitalDataProvider.getOrLoadData()
+        val value = vitalDataState.optLong(KEY_GLOBAL_NUMBER, DEFAULT_GLOBAL_NUMBER)
+        vitalDataProvider.save(vitalDataState.put(KEY_GLOBAL_NUMBER, value + 1))
+        return value
     }
 
     @WorkerThread

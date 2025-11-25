@@ -9,9 +9,9 @@ import io.appmetrica.analytics.impl.EventsManager
 import io.appmetrica.analytics.impl.FirstOccurrenceStatus
 import io.appmetrica.analytics.impl.InternalEvents
 import io.appmetrica.analytics.impl.PhoneUtils
-import io.appmetrica.analytics.impl.component.EventNumberGenerator
 import io.appmetrica.analytics.impl.component.session.SessionState
 import io.appmetrica.analytics.impl.component.session.SessionType
+import io.appmetrica.analytics.impl.db.VitalComponentDataProvider
 import io.appmetrica.analytics.impl.db.state.converter.EventExtrasConverter
 import io.appmetrica.analytics.impl.request.ReportRequestConfig
 import io.appmetrica.analytics.impl.utils.encryption.EncryptedCounterReport
@@ -84,9 +84,9 @@ class DbEventModelFactoryTest : CommonTest() {
         on { reportTime } doReturn reportTime
     }
     private val reportType = 42
-    private val eventNumberGenerator: EventNumberGenerator = mock {
-        on { eventGlobalNumberAndGenerateNext } doReturn globalNumber
-        on { getEventNumberOfTypeAndGenerateNext(reportType) } doReturn numberOfType
+    private val vitalComponentDataProvider: VitalComponentDataProvider = mock {
+        on { getAndIncrementEventGlobalNumber() } doReturn globalNumber
+        on { getAndIncrementNumberOfType(reportType) } doReturn numberOfType
     }
     private val encryptedCounterReport = EncryptedCounterReport(reportData, eventEncryptionMode)
     private val reportRequestConfig: ReportRequestConfig = mock()
@@ -114,7 +114,7 @@ class DbEventModelFactoryTest : CommonTest() {
         context,
         sessionState,
         reportType,
-        eventNumberGenerator,
+        vitalComponentDataProvider,
         encryptedCounterReport,
         reportRequestConfig,
         environmentRevision,

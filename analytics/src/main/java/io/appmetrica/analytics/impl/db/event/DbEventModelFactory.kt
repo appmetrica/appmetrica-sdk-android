@@ -6,19 +6,19 @@ import io.appmetrica.analytics.impl.EventsManager
 import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.InternalEvents
 import io.appmetrica.analytics.impl.PhoneUtils
-import io.appmetrica.analytics.impl.component.EventNumberGenerator
 import io.appmetrica.analytics.impl.component.session.SessionState
+import io.appmetrica.analytics.impl.db.VitalComponentDataProvider
 import io.appmetrica.analytics.impl.db.state.converter.EventExtrasConverter
 import io.appmetrica.analytics.impl.request.ReportRequestConfig
 import io.appmetrica.analytics.impl.telephony.MobileConnectionDescription
 import io.appmetrica.analytics.impl.telephony.TelephonyInfoAdapter
 import io.appmetrica.analytics.impl.utils.encryption.EncryptedCounterReport
 
-class DbEventModelFactory @JvmOverloads constructor(
+internal class DbEventModelFactory @JvmOverloads constructor(
     private val context: Context,
     private val sessionState: SessionState,
     private val reportType: Int,
-    private val eventNumberGenerator: EventNumberGenerator,
+    private val vitalComponentDataProvider: VitalComponentDataProvider,
     private val encryptedCounterReport: EncryptedCounterReport,
     private val reportRequestConfig: ReportRequestConfig,
     private val environmentRevision: AppEnvironment.EnvironmentRevision,
@@ -33,7 +33,7 @@ class DbEventModelFactory @JvmOverloads constructor(
         numberInSession = sessionState.reportId,
         type = InternalEvents.valueOf(reportData.type),
         globalNumber = if (EventsManager.shouldGenerateGlobalNumber(reportType)) {
-            eventNumberGenerator.eventGlobalNumberAndGenerateNext
+            vitalComponentDataProvider.getAndIncrementEventGlobalNumber()
         } else { 0 },
         time = sessionState.reportTime,
         description = getEventDescription()
@@ -44,7 +44,7 @@ class DbEventModelFactory @JvmOverloads constructor(
             customType = reportData.customType,
             name = reportData.name,
             value = reportData.value,
-            numberOfType = eventNumberGenerator.getEventNumberOfTypeAndGenerateNext(reportType).toLong(),
+            numberOfType = vitalComponentDataProvider.getAndIncrementNumberOfType(reportType),
             locationInfo = dbLocationModelFactory.create(),
             errorEnvironment = reportData.eventEnvironment,
             appEnvironment = environmentRevision.value,

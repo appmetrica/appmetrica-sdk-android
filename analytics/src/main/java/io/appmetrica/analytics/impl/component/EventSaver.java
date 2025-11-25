@@ -40,8 +40,6 @@ public class EventSaver {
     @NonNull
     private final AppEnvironment mAppEnvironment;
     @NonNull
-    private final EventNumberGenerator mEventNumberGenerator;
-    @NonNull
     private ReportSavedListener mReportSavedListener;
     @NonNull
     private final TimeProvider mTimeProvider;
@@ -68,7 +66,6 @@ public class EventSaver {
                 sessionExtrasHolder,
                 currentAppVersion,
                 reportSavedListener,
-                new EventNumberGenerator(vitalComponentDataProvider),
                 new SystemTimeProvider()
         );
     }
@@ -83,7 +80,6 @@ public class EventSaver {
                       @NonNull SessionExtrasHolder sessionExtrasHolder,
                       final int currentAppVersion,
                       @NonNull ReportSavedListener reportSavedListener,
-                      @NonNull EventNumberGenerator eventNumberGenerator,
                       @NonNull TimeProvider timeProvider) {
         mPreferences = preferences;
         this.vitalComponentDataProvider = vitalComponentDataProvider;
@@ -93,7 +89,6 @@ public class EventSaver {
         mEventEncrypterProvider = eventEncrypterProvider;
         this.sessionExtrasHolder = sessionExtrasHolder;
         mCurrentAppVersion = currentAppVersion;
-        mEventNumberGenerator = eventNumberGenerator;
         mTimeProvider = timeProvider;
         mReportSavedListener = reportSavedListener;
         mPermissionsCheckTime = mPreferences.getPermissionsEventSendTime();
@@ -150,7 +145,7 @@ public class EventSaver {
                 reportData.getType(),
                 sessionState,
                 revision,
-                mEventNumberGenerator
+                vitalComponentDataProvider
         );
         mReportSavedListener.onReportSaved();
     }

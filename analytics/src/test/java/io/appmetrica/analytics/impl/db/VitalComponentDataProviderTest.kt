@@ -2,6 +2,7 @@ package io.appmetrica.analytics.impl.db
 
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.MockedConstructionRule
+import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.SoftAssertions
 import org.json.JSONObject
 import org.junit.Before
@@ -32,7 +33,11 @@ internal class VitalComponentDataProviderTest : CommonTest() {
     private val reportRequestId = 7778
     private val globalNumber = 22233L
     private val sessionId = 1113L
-    private val numbersOfType = JSONObject().put("12", 2).put("8", 10)
+    private val firstType = 12
+    private val firstValue = 2L
+    private val secondType = 8
+    private val secondValue = 50L
+    private val numbersOfType = JSONObject().put("$firstType", firstValue).put("$secondType", secondValue)
     private val openId = 987
     private val attributionId = 432
     private val lastMigrationApiLevel = 43
@@ -74,7 +79,8 @@ internal class VitalComponentDataProviderTest : CommonTest() {
         softly.assertThat(vitalComponentDataProvider.lastMigrationApiLevel).isEqualTo(lastMigrationApiLevel)
         softly.assertThat(vitalComponentDataProvider.externalAttributionWindowStart)
             .isEqualTo(externalAttributionWindowStart)
-        JSONAssert.assertEquals(numbersOfType, vitalComponentDataProvider.numbersOfType, true)
+        softly.assertThat(vitalComponentDataProvider.getAndIncrementNumberOfType(firstType)).isEqualTo(firstValue)
+        softly.assertThat(vitalComponentDataProvider.getAndIncrementNumberOfType(secondType)).isEqualTo(secondValue)
         softly.assertAll()
     }
 
@@ -127,11 +133,11 @@ internal class VitalComponentDataProviderTest : CommonTest() {
     }
 
     @Test
-    fun setNumbersOfType() {
+    fun getAndIncrementNumberOfType() {
         wheneverVitalDataProviderGetOrLoad().thenReturn(filledJson)
-        val newNumbersOfType = JSONObject().put("new key", "new value")
-        vitalComponentDataProvider.numbersOfType = newNumbersOfType
-        val expectedJson = JSONObject(filledJson.toString()).put("numbers_of_type", newNumbersOfType)
+        val newNumberOfTypes = JSONObject(numbersOfType.toString()).put("$firstType", firstValue + 1)
+        assertThat(vitalComponentDataProvider.getAndIncrementNumberOfType(firstType)).isEqualTo(firstValue)
+        val expectedJson = JSONObject(filledJson.toString()).put("numbers_of_type", newNumberOfTypes)
         JSONAssert.assertEquals(expectedJson.toString(), interceptSavedJson(), true)
     }
 
@@ -250,7 +256,7 @@ internal class VitalComponentDataProviderTest : CommonTest() {
         softly.assertThat(vitalComponentDataProvider.openId).isEqualTo(1)
         softly.assertThat(vitalComponentDataProvider.globalNumber).isEqualTo(0)
         softly.assertThat(vitalComponentDataProvider.lastMigrationApiLevel).isEqualTo(0)
-        softly.assertThat(vitalComponentDataProvider.numbersOfType).isNull()
+        softly.assertThat(vitalComponentDataProvider.getAndIncrementNumberOfType(100500)).isEqualTo(0)
         softly.assertThat(vitalComponentDataProvider.referrerHandled).isFalse
         softly.assertThat(vitalComponentDataProvider.reportRequestId).isEqualTo(-1)
         softly.assertThat(vitalComponentDataProvider.sessionId).isEqualTo(-1)

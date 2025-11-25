@@ -50,8 +50,6 @@ public class EventSaverTest extends CommonTest {
     @Mock
     private EventSaver.ReportSavedListener mReportSavedListener;
     @Mock
-    private EventNumberGenerator mEventNumberGenerator;
-    @Mock
     private TimeProvider mTimeProvider;
     @Mock
     private CounterReport mCounterReport;
@@ -136,7 +134,8 @@ public class EventSaverTest extends CommonTest {
         mEventSaver.saveReport(mCounterReport, mSessionState);
         verify(mCounterReport).setProfileID(mProfileId);
         verify(mCounterReport).setOpenId(openId);
-        verify(mDbHelper).saveReport(mEncryptedCounterReport, mReportType, mSessionState, mRevision, mEventNumberGenerator);
+        verify(mDbHelper)
+            .saveReport(mEncryptedCounterReport, mReportType, mSessionState, mRevision, vitalComponentDataProvider);
         verify(mReportSavedListener).onReportSaved();
     }
 
@@ -147,7 +146,7 @@ public class EventSaverTest extends CommonTest {
         when(mEventEncrypter.encrypt(mCounterReport)).thenReturn(mEncryptedCounterReport);
         mEventSaver.saveReport(mCounterReport, mSessionState);
         verify(mDbHelper)
-            .saveReport(mEncryptedCounterReport, mReportType, mSessionState, mRevision, mEventNumberGenerator);
+            .saveReport(mEncryptedCounterReport, mReportType, mSessionState, mRevision, vitalComponentDataProvider);
         verify(mReportSavedListener).onReportSaved();
 
         assertThat(extras).isEmpty();
@@ -163,7 +162,7 @@ public class EventSaverTest extends CommonTest {
         when(mEventEncrypter.encrypt(mCounterReport)).thenReturn(mEncryptedCounterReport);
         mEventSaver.saveReport(mCounterReport, mSessionState);
         verify(mDbHelper)
-            .saveReport(mEncryptedCounterReport, mReportType, mSessionState, mRevision, mEventNumberGenerator);
+            .saveReport(mEncryptedCounterReport, mReportType, mSessionState, mRevision, vitalComponentDataProvider);
         verify(mReportSavedListener).onReportSaved();
 
         assertThat(extras).containsExactlyEntriesOf(Collections.singletonMap(extraKey, extraValue));
@@ -179,7 +178,7 @@ public class EventSaverTest extends CommonTest {
         when(mEventEncrypter.encrypt(mCounterReport)).thenReturn(mEncryptedCounterReport);
         mEventSaver.saveReport(mCounterReport, mSessionState);
         verify(mDbHelper)
-            .saveReport(mEncryptedCounterReport, mReportType, mSessionState, mRevision, mEventNumberGenerator);
+            .saveReport(mEncryptedCounterReport, mReportType, mSessionState, mRevision, vitalComponentDataProvider);
         verify(mReportSavedListener).onReportSaved();
 
         assertThat(extras).containsExactlyEntriesOf(Collections.singletonMap(sessionExtraKey, sessionExtraValue));
@@ -204,7 +203,7 @@ public class EventSaverTest extends CommonTest {
         when(mEventEncrypter.encrypt(mCounterReport)).thenReturn(mEncryptedCounterReport);
         mEventSaver.saveReport(mCounterReport, mSessionState);
         verify(mDbHelper)
-            .saveReport(mEncryptedCounterReport, mReportType, mSessionState, mRevision, mEventNumberGenerator);
+            .saveReport(mEncryptedCounterReport, mReportType, mSessionState, mRevision, vitalComponentDataProvider);
         verify(mReportSavedListener).onReportSaved();
 
         assertThat(extras).containsExactlyEntriesOf(expectedExtras);
@@ -269,7 +268,8 @@ public class EventSaverTest extends CommonTest {
     private void verifyReportSaved(CounterReport counterReport, SessionState sessionState) {
         verify(counterReport).setProfileID(mProfileId);
         verify(counterReport).setOpenId(openId);
-        verify(mDbHelper).saveReport(mEncryptedCounterReport, mReportType, sessionState, mRevision, mEventNumberGenerator);
+        verify(mDbHelper)
+            .saveReport(mEncryptedCounterReport, mReportType, sessionState, mRevision, vitalComponentDataProvider);
         verify(mReportSavedListener).onReportSaved();
     }
 
@@ -286,7 +286,6 @@ public class EventSaverTest extends CommonTest {
             sessionExtrasHolder,
             curAppVersion,
             mReportSavedListener,
-            mEventNumberGenerator,
             mTimeProvider
         );
     }
