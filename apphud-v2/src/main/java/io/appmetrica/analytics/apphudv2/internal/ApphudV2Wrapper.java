@@ -12,6 +12,7 @@ public class ApphudV2Wrapper implements ApphudWrapper {
 
     private static final String TAG = "[ApphudV2Wrapper]";
 
+    @Override
     public void start(
         @NonNull Context context,
         @NonNull String apiKey,
