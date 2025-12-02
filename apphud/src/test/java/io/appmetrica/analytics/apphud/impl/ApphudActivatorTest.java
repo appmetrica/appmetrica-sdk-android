@@ -4,6 +4,7 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import io.appmetrica.analytics.apphud.impl.config.client.ClientApphudConfig;
 import io.appmetrica.analytics.apphud.impl.config.client.ClientApphudConfigChecker;
+import io.appmetrica.analytics.apphud.internal.ApphudWrapper;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.MockedStaticRule;
 import org.junit.Before;
@@ -12,8 +13,9 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 public class ApphudActivatorTest extends CommonTest {
@@ -31,9 +33,11 @@ public class ApphudActivatorTest extends CommonTest {
     private ClientApphudConfigChecker checker;
     @Mock
     private ClientApphudConfig config;
+    @Mock
+    private ApphudWrapper apphudWrapper;
 
     @Rule
-    public MockedStaticRule<ApphudWrapper> apphudWrapperRule = new MockedStaticRule<>(ApphudWrapper.class);
+    public MockedStaticRule<ApphudWrapperProvider> apphudWrapperProviderRule = new MockedStaticRule<>(ApphudWrapperProvider.class);
 
     private ApphudActivator activator;
 
@@ -45,6 +49,8 @@ public class ApphudActivatorTest extends CommonTest {
         when(config.getDeviceId()).thenReturn(deviceId);
         when(config.getUuid()).thenReturn(uuid);
 
+        when(ApphudWrapperProvider.getApphudWrapper()).thenReturn(apphudWrapper);
+
         activator = new ApphudActivator(checker);
     }
 
@@ -52,9 +58,7 @@ public class ApphudActivatorTest extends CommonTest {
     public void activateIfNecessary() {
         activator.activateIfNecessary(context, config);
 
-        apphudWrapperRule.getStaticMock().verify(
-            () -> ApphudWrapper.start(context, apiKey, uuid, deviceId, true)
-        );
+        verify(apphudWrapper).start(context, apiKey, uuid, deviceId, true);
     }
 
     @Test
@@ -62,10 +66,7 @@ public class ApphudActivatorTest extends CommonTest {
         activator.activateIfNecessary(context, config);
         activator.activateIfNecessary(context, config);
 
-        apphudWrapperRule.getStaticMock().verify(
-            () -> ApphudWrapper.start(context, apiKey, uuid, deviceId, true),
-            times(1)
-        );
+        verify(apphudWrapper, times(1)).start(context, apiKey, uuid, deviceId, true);
     }
 
     @Test
@@ -73,9 +74,6 @@ public class ApphudActivatorTest extends CommonTest {
         when(checker.doesNeedUpdate(config)).thenReturn(true);
         activator.activateIfNecessary(context, config);
 
-        apphudWrapperRule.getStaticMock().verify(
-            () -> ApphudWrapper.start(context, apiKey, uuid, deviceId, true),
-            never()
-        );
+        verifyNoInteractions(apphudWrapper);
     }
 }

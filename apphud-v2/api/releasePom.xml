@@ -8,10 +8,10 @@
   <!-- do_not_remove: published-with-gradle-metadata -->
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.appmetrica.analytics</groupId>
-  <artifactId>analytics-apphud</artifactId>
+  <artifactId>analytics-apphud-v2</artifactId>
   <version>7.15.0</version>
   <packaging>aar</packaging>
-  <name>AppMetrica SDK Apphud integration module</name>
+  <name>AppMetrica SDK Apphud v2 integration module</name>
   <description>AppMetrica SDK Module</description>
   <url>https://appmetrica.io/</url>
   <licenses>
@@ -41,19 +41,7 @@
     </dependency>
     <dependency>
       <groupId>io.appmetrica.analytics</groupId>
-      <artifactId>analytics-proto</artifactId>
-      <version>7.15.0</version>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.appmetrica.analytics</groupId>
-      <artifactId>analytics-core-api</artifactId>
-      <version>7.15.0</version>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.appmetrica.analytics</groupId>
-      <artifactId>analytics-core-utils</artifactId>
+      <artifactId>analytics-apphud</artifactId>
       <version>7.15.0</version>
       <scope>runtime</scope>
     </dependency>
@@ -64,9 +52,9 @@
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>io.appmetrica.analytics</groupId>
-      <artifactId>analytics-modules-api</artifactId>
-      <version>7.15.0</version>
+      <groupId>com.apphud</groupId>
+      <artifactId>ApphudSDK-Android</artifactId>
+      <version>2.9.2</version>
       <scope>runtime</scope>
     </dependency>
   </dependencies>

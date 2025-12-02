@@ -28,6 +28,4 @@ dependencies {
     implementation(project(":logger"))
     implementation(project(":modules-api"))
     implementation(project(":proto"))
-
-    implementation("com.apphud:ApphudSDK-Android:2.9.2")
 }

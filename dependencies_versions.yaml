@@ -44,7 +44,7 @@
     group: "com.unity3d.ads-mediation"
     name: "mediation-sdk"
     from: "9.0.0"
-    to: "9.1.0"    
+    to: "9.1.0"
 - group: "io.appmetrica.analytics"
   name: "analytics"
   dependencies:
@@ -84,13 +84,22 @@
     from: "12.10.0"
     to: "12.10.0"
 - group: "io.appmetrica.analytics"
-  name: "analytics-apphud"
+  name: "analytics-apphud-v2"
   dependencies:
   - repository: "https://repo.maven.apache.org/maven2"
     group: "com.apphud"
     name: "ApphudSDK-Android"
     from: "2.6.0"
     to: "2.9.7"
+    forcible: false
+- group: "io.appmetrica.analytics"
+  name: "analytics-apphud-v3"
+  dependencies:
+    - repository: "https://repo.maven.apache.org/maven2"
+      group: "com.apphud"
+      name: "ApphudSDK-Android"
+      from: "3.0.0"
+      to: "3.0.1"
 - group: "io.appmetrica.analytics"
   name: "analytics-appsetid"
   dependencies:

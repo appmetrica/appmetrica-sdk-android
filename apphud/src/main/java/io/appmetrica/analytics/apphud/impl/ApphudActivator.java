@@ -35,7 +35,7 @@ public class ApphudActivator {
         }
         DebugLogger.INSTANCE.info(TAG, "Activating Apphud with config = " + config);
         if (config.getApiKey() != null) { // checked by configChecker.doesNeedUpdate(config)
-            ApphudWrapper.start(
+            ApphudWrapperProvider.getApphudWrapper().start(
                 context,
                 config.getApiKey(),
                 config.getUuid(),

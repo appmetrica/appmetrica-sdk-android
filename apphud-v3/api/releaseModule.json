@@ -2,7 +2,7 @@
     "formatVersion": "1.1",
     "component": {
         "group": "io.appmetrica.analytics",
-        "module": "analytics-apphud",
+        "module": "analytics-apphud-v3",
         "version": "7.15.0",
         "attributes": {
             "org.gradle.status": "release"
@@ -25,8 +25,8 @@
             },
             "files": [
                 {
-                    "name": "analytics-apphud-7.15.0.aar",
-                    "url": "analytics-apphud-7.15.0.aar",
+                    "name": "analytics-apphud-v3-7.15.0.aar",
+                    "url": "analytics-apphud-v3-7.15.0.aar",
                     "size": -1,
                     "sha512": "<sha512>",
                     "sha256": "<sha256>",
@@ -53,21 +53,7 @@
                 },
                 {
                     "group": "io.appmetrica.analytics",
-                    "module": "analytics-proto",
-                    "version": {
-                        "requires": "7.15.0"
-                    }
-                },
-                {
-                    "group": "io.appmetrica.analytics",
-                    "module": "analytics-core-api",
-                    "version": {
-                        "requires": "7.15.0"
-                    }
-                },
-                {
-                    "group": "io.appmetrica.analytics",
-                    "module": "analytics-core-utils",
+                    "module": "analytics-apphud",
                     "version": {
                         "requires": "7.15.0"
                     }
@@ -80,17 +66,17 @@
                     }
                 },
                 {
-                    "group": "io.appmetrica.analytics",
-                    "module": "analytics-modules-api",
+                    "group": "com.apphud",
+                    "module": "ApphudSDK-Android",
                     "version": {
-                        "requires": "7.15.0"
+                        "requires": "3.0.0"
                     }
                 }
             ],
             "files": [
                 {
-                    "name": "analytics-apphud-7.15.0.aar",
-                    "url": "analytics-apphud-7.15.0.aar",
+                    "name": "analytics-apphud-v3-7.15.0.aar",
+                    "url": "analytics-apphud-v3-7.15.0.aar",
                     "size": -1,
                     "sha512": "<sha512>",
                     "sha256": "<sha256>",

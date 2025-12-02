@@ -1,0 +1,13 @@
+public final class io.appmetrica.analytics.apphudv2.BuildConfig {
+    public static final String BUILD_TYPE
+    public static final boolean DEBUG
+    public static final String LIBRARY_PACKAGE_NAME
+
+    public <init>()
+}
+
+public class io.appmetrica.analytics.apphudv2.internal.ApphudV2Wrapper implementation io.appmetrica.analytics.apphud.internal.ApphudWrapper {
+    public <init>()
+    public void start([NonNull] android.content.Context, [NonNull] String, [Nullable] String, [Nullable] String, boolean)
+}
+

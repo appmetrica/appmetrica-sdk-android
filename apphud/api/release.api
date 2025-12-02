@@ -22,3 +22,7 @@ public class io.appmetrica.analytics.apphud.internal.ApphudServiceModuleEntryPoi
     public void initServiceSide([NonNull] io.appmetrica.analytics.modulesapi.internal.service.ServiceContext, [NonNull] io.appmetrica.analytics.modulesapi.internal.service.ModuleRemoteConfig<OBFUSCATED[io.appmetrica.analytics.apphud.impl.config.remote.RemoteApphudConfig]>)
 }
 
+public interface io.appmetrica.analytics.apphud.internal.ApphudWrapper {
+    public abstract void start([NonNull] android.content.Context, [NonNull] String, [Nullable] String, [Nullable] String, boolean)
+}
+
