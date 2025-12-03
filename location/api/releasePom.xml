@@ -9,7 +9,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.appmetrica.analytics</groupId>
   <artifactId>analytics-location</artifactId>
-  <version>7.15.0</version>
+  <version>8.0.0</version>
   <packaging>aar</packaging>
   <name>AppMetrica SDK location API implementation.</name>
   <description>AppMetrica SDK Module</description>
@@ -42,31 +42,31 @@
     <dependency>
       <groupId>io.appmetrica.analytics</groupId>
       <artifactId>analytics-core-api</artifactId>
-      <version>7.15.0</version>
+      <version>8.0.0</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>io.appmetrica.analytics</groupId>
       <artifactId>analytics-core-utils</artifactId>
-      <version>7.15.0</version>
+      <version>8.0.0</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>io.appmetrica.analytics</groupId>
       <artifactId>analytics-gpllibrary</artifactId>
-      <version>7.15.0</version>
+      <version>8.0.0</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>io.appmetrica.analytics</groupId>
       <artifactId>analytics-location-api</artifactId>
-      <version>7.15.0</version>
+      <version>8.0.0</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>io.appmetrica.analytics</groupId>
       <artifactId>analytics-logger</artifactId>
-      <version>7.15.0</version>
+      <version>8.0.0</version>
       <scope>runtime</scope>
     </dependency>
   </dependencies>
