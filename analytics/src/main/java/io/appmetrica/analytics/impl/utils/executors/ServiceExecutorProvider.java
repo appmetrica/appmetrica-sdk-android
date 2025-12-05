@@ -20,8 +20,6 @@ public class ServiceExecutorProvider {
     @Nullable
     private volatile IHandlerExecutor mReportRunnableExecutor;
     @Nullable
-    private volatile IHandlerExecutor mTelephonyProviderExecutor;
-    @Nullable
     private volatile IHandlerExecutor moduleExecutor;
     @Nullable
     private volatile IHandlerExecutor mNetworkTaskProcessorExecutor;
@@ -141,7 +139,6 @@ public class ServiceExecutorProvider {
     public void destroy() {
         stopRunning(mMetricaCoreExecutor);
         stopRunning(mReportRunnableExecutor);
-        stopRunning(mTelephonyProviderExecutor);
         stopRunning(moduleExecutor);
         stopRunning(mNetworkTaskProcessorExecutor);
         stopRunning(supportIOExecutor);
