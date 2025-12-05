@@ -12,9 +12,6 @@ import io.appmetrica.analytics.coreutils.internal.WrapUtils;
 import io.appmetrica.analytics.coreutils.internal.collection.CollectionUtils;
 import io.appmetrica.analytics.impl.crash.jvm.client.MainReporterAnrController;
 import io.appmetrica.analytics.impl.utils.ApiProxyThread;
-import io.appmetrica.analytics.impl.utils.validation.NonEmptyStringValidator;
-import io.appmetrica.analytics.impl.utils.validation.ThrowIfFailedValidator;
-import io.appmetrica.analytics.impl.utils.validation.Validator;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -22,10 +19,6 @@ import java.util.concurrent.TimeUnit;
 public class MainReporter extends BaseReporter implements IMainReporter {
 
     private static final String TAG = "[MainReporter]";
-
-    private final Validator<String> referralUrlValidator = new ThrowIfFailedValidator<>(
-        new NonEmptyStringValidator("Referral url")
-    );
 
     private static final Long USER_SESSION_TIMEOUT = TimeUnit.SECONDS.toMillis(1);
     @NonNull
@@ -72,14 +65,6 @@ public class MainReporter extends BaseReporter implements IMainReporter {
                 EventsManager.openAppReportEntry(deeplink, auto, mPublicLogger),
                 mReporterEnvironment
         );
-    }
-
-    @Override
-    public void reportReferralUrl(@NonNull String referralUrl) {
-        referralUrlValidator.validate(referralUrl);
-        mReportsHandler.reportEvent(EventsManager.referralUrlReportEntry(referralUrl, mPublicLogger),
-                mReporterEnvironment);
-        mPublicLogger.info("Referral URL received: " + WrapUtils.wrapToTag(referralUrl));
     }
 
     @Override

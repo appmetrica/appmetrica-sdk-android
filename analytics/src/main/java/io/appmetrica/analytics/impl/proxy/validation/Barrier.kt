@@ -53,9 +53,6 @@ class Barrier(
     private val deeplinkValidator = ThrowIfFailedValidator(
         NonEmptyStringValidator("Deeplink")
     )
-    private val referralUrlValidator = ThrowIfFailedValidator(
-        NonEmptyStringValidator("Referral url")
-    )
     private val apiKeyValidator = ThrowIfFailedValidator(ApiKeyValidator())
     private val nonNullKeyValidator = ThrowIfFailedValidator(
         NonNullValidator<String>("Key")
@@ -123,11 +120,6 @@ class Barrier(
     fun reportAppOpen(intent: Intent?) {
         activationValidator.validate()
         intentValidator.validate(intent)
-    }
-
-    fun reportReferralUrl(referralUrl: String?) {
-        activationValidator.validate()
-        referralUrlValidator.validate(referralUrl)
     }
 
     fun setLocation(location: Location?) {}

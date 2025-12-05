@@ -123,21 +123,6 @@ public class EventsManagerTest extends CommonTest {
     }
 
     @Test
-    public void referralUrlEntry() throws JSONException {
-        String link = "some://link/deep";
-        CounterReport report = EventsManager.referralUrlReportEntry(link, mPublicLogger);
-        JSONAssert.assertEquals(
-            new JSONObject()
-                .put("link", link)
-                .put("type", "referral")
-                .put("auto", false)
-                .toString(),
-            report.getValue(),
-            true
-        );
-    }
-
-    @Test
     public void customErrorEntry() {
         String message = "mes";
         byte[] value = "somevalue".getBytes();

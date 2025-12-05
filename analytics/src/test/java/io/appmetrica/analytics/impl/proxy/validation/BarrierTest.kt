@@ -102,27 +102,6 @@ class BarrierTest : CommonTest() {
     }
 
     @Test
-    fun reportReferralUrl() {
-        mBarrier.reportReferralUrl("ReferralUrl")
-    }
-
-    @Test(expected = ValidationException::class)
-    fun reportReferralUrlIfNotActivated() {
-        whenever(appMetricaFacadeProvider.isActivated).thenReturn(false)
-        mBarrier.reportReferralUrl("ReferralUrl")
-    }
-
-    @Test(expected = ValidationException::class)
-    fun reportReferralUrlIfUrlIsEmpty() {
-        mBarrier.reportReferralUrl("")
-    }
-
-    @Test(expected = ValidationException::class)
-    fun reportReferralUrlIfUrlIsNull() {
-        mBarrier.reportReferralUrl(null)
-    }
-
-    @Test
     fun setLocation() {
         mBarrier.setLocation(mock<Location>())
     }

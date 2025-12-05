@@ -277,16 +277,6 @@ public final class AppMetrica {
     }
 
     /**
-     * Sets referral URL for this installation.
-     * This might be required to track some specific traffic sources like Facebook.
-     * @param referralUrl referral URL value.
-     * @deprecated
-     */
-    public static void reportReferralUrl(@NonNull String referralUrl) {
-        AppMetricaProxyProvider.getProxy().reportReferralUrl(referralUrl);
-    }
-
-    /**
      * <p>Sets {@link android.location.Location} to be used as location for reports of AppMetrica.</p>
      * <p>If location is set using this method, it will be used instead of auto collected location.
      * To switch back to auto collected location, pass {@code null} to {@link #setLocation(Location)}.</p>

@@ -13,8 +13,6 @@ public interface IMainReporter extends IBaseReporter, MetricaConfigurator {
     
     void reportAppOpen(@NonNull String deeplink, boolean auto);
 
-    void reportReferralUrl(@NonNull String referralUrl);
-
     void onEnableAutoTrackingAttemptOccurred(@NonNull ActivityLifecycleManager.WatchingStatus status);
 
     void resumeSession(@Nullable Activity activity);

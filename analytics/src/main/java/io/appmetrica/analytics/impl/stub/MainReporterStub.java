@@ -28,11 +28,6 @@ public class MainReporterStub extends ReporterExtendedStub implements IMainRepor
     }
 
     @Override
-    public void reportReferralUrl(@NonNull String referralUrl) {
-        //Do nothing
-    }
-
-    @Override
     public void onEnableAutoTrackingAttemptOccurred(@NonNull ActivityLifecycleManager.WatchingStatus status) {
         //Do nothing
     }

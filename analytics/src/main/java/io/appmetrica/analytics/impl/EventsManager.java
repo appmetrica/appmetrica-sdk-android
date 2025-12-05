@@ -102,7 +102,6 @@ public final class EventsManager {
     public static final String EVENT_OPEN_TYPE_KEY = "type";
     public static final String EVENT_OPEN_AUTO_KEY = "auto";
     public static final String EVENT_OPEN_TYPE_OPEN = "open";
-    public static final String EVENT_OPEN_TYPE_REFERRAL = "referral";
     public static final List<Integer> EVENTS_WITH_FIRST_HIGHEST_PRIORITY = Arrays.asList(
         InternalEvents.EVENT_TYPE_INIT.getTypeId(),
         InternalEvents.EVENT_TYPE_FIRST_ACTIVATION.getTypeId(),
@@ -291,10 +290,6 @@ public final class EventsManager {
 
     static CounterReport openAppReportEntry(final String value, boolean auto, @NonNull PublicLogger logger) {
         return eventOpenEntry(EVENT_OPEN_TYPE_OPEN, value, auto, logger);
-    }
-
-    static CounterReport referralUrlReportEntry(final String value, @NonNull PublicLogger logger) {
-        return eventOpenEntry(EVENT_OPEN_TYPE_REFERRAL, value, false, logger);
     }
 
     static CounterReport eventOpenEntry(final String type,

@@ -45,11 +45,6 @@ public class MainReporterStubTest extends ReporterExtendedStubTest {
     }
 
     @Test
-    public void reportReferralUrl() {
-        getStub().reportReferralUrl("Referral Url");
-    }
-
-    @Test
     public void onEnableAutoTrackingAttemptOccurred() {
         getStub().onEnableAutoTrackingAttemptOccurred(ActivityLifecycleManager.WatchingStatus.WATCHING);
     }

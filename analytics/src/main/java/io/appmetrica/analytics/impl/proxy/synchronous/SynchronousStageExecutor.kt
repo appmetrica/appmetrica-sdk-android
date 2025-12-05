@@ -142,8 +142,6 @@ class SynchronousStageExecutor @VisibleForTesting constructor(
 
     fun reportAppOpen(intent: Intent) {}
 
-    fun reportReferralUrl(referralUrl: String) {}
-
     fun setLocation(location: Location?) {}
 
     fun setLocationTracking(enabled: Boolean) {}

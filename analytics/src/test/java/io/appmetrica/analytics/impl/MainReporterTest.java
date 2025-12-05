@@ -5,10 +5,8 @@ import android.content.Context;
 import android.location.Location;
 import io.appmetrica.analytics.AppMetricaConfig;
 import io.appmetrica.analytics.ExternalAttribution;
-import io.appmetrica.analytics.ValidationException;
 import io.appmetrica.analytics.impl.crash.jvm.client.MainReporterAnrController;
 import io.appmetrica.analytics.impl.crash.jvm.client.UnhandledException;
-import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule;
 import io.appmetrica.analytics.testutils.MockedConstructionRule;
 import io.appmetrica.analytics.testutils.StubbedBlockingExecutor;
@@ -16,7 +14,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import org.assertj.core.api.ThrowableAssert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -30,19 +27,15 @@ import org.robolectric.ParameterizedRobolectricTestRunner;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Mockito.atLeast;
-import static org.mockito.Mockito.clearInvocations;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
@@ -389,40 +382,6 @@ public class MainReporterTest extends BaseReporterTest {
         verify(mReportsHandler).reportEvent(mockedEvent, mReporterEnvironment);
         verify(mPublicLogger).info("App opened via deeplink: " + link);
     }
-
-    //region MainReporter#reportReferralUrl(String)
-
-    @Test
-    public void testReportReferralUrl() {
-        String referralUrl = "some://uri";
-        when(EventsManager.referralUrlReportEntry(eq(referralUrl), any(PublicLogger.class))).thenReturn(mockedEvent);
-        mMainReporter.reportReferralUrl(referralUrl);
-        verify(mReportsHandler).reportEvent(same(mockedEvent), any(ReporterEnvironment.class));
-    }
-
-    @Test
-    public void testReportReferralUrlForNull() throws Exception {
-        clearInvocations(mReportsHandler);
-        assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
-            @Override
-            public void call() {
-                mMainReporter.reportReferralUrl(null);
-            }
-        }).isExactlyInstanceOf(ValidationException.class);
-        verifyNoMoreInteractions(mReportsHandler);
-    }
-
-    public void testReportReferralUrlForEmptyString() throws Exception {
-        clearInvocations(mReportsHandler);
-        assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
-            @Override
-            public void call() {
-                mMainReporter.reportReferralUrl("");
-            }
-        }).isExactlyInstanceOf(ValidationException.class);
-        verifyNoMoreInteractions(mReportsHandler);
-    }
-    //endregion
 
     @Test
     public void testResumeSessionStateChanged() {

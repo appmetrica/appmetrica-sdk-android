@@ -91,7 +91,6 @@ public final class io.appmetrica.analytics.AppMetrica {
     public static void reportEvent([NonNull] String, [Nullable] java.util.Map<String, Object>)
     public static void reportExternalAdRevenue([NonNull] Object...)
     public static void reportExternalAttribution([NonNull] io.appmetrica.analytics.ExternalAttribution)
-    public static void reportReferralUrl([NonNull] String)
     public static void reportRevenue([NonNull] io.appmetrica.analytics.Revenue)
     public static void reportUnhandledException([NonNull] Throwable)
     public static void reportUserProfile([NonNull] io.appmetrica.analytics.profile.UserProfile)

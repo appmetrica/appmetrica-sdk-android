@@ -336,16 +336,6 @@ public class AppMetricaProxyTest extends CommonTest {
     }
 
     @Test
-    public void testReportReferralUrl() {
-        String referralUrl = "referralUrl";
-        mProxy.reportReferralUrl(referralUrl);
-        InOrder order = inOrder(mBarrier, mSynchronousStageExecutor, mMainReporter);
-        order.verify(mBarrier).reportReferralUrl(referralUrl);
-        order.verify(mSynchronousStageExecutor).reportReferralUrl(referralUrl);
-        order.verify(mMainReporter).reportReferralUrl(referralUrl);
-    }
-
-    @Test
     public void testSetLocation() {
         Location location = mock(Location.class);
         mProxy.setLocation(location);

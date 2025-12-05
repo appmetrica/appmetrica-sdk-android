@@ -150,13 +150,6 @@ internal class AppMetricaTests : CommonTest() {
     }
 
     @Test
-    fun reportReferralUrl() {
-        val url = "referral url"
-        AppMetrica.reportReferralUrl(url)
-        verify(proxy).reportReferralUrl(url)
-    }
-
-    @Test
     fun setLocation() {
         val location = mock<Location>()
         AppMetrica.setLocation(location)

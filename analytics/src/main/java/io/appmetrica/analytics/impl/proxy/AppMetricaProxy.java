@@ -258,17 +258,6 @@ public final class AppMetricaProxy extends BaseAppMetricaProxy {
         });
     }
 
-    public void reportReferralUrl(@NonNull final String referralUrl) {
-        barrier.reportReferralUrl(referralUrl);
-        synchronousStageExecutor.reportReferralUrl(referralUrl);
-        getExecutor().execute(new Runnable() {
-            @Override
-            public void run() {
-                getMainReporter().reportReferralUrl(referralUrl);
-            }
-        });
-    }
-
     public void setLocation(@Nullable final Location location) {
         barrier.setLocation(location);
         synchronousStageExecutor.setLocation(location);
