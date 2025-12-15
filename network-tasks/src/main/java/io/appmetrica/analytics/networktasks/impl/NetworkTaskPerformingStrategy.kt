@@ -3,8 +3,9 @@ package io.appmetrica.analytics.networktasks.impl
 import android.text.TextUtils
 import io.appmetrica.analytics.coreutils.internal.collection.CollectionUtils
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
-import io.appmetrica.analytics.network.internal.NetworkClient
-import io.appmetrica.analytics.network.internal.Request
+import io.appmetrica.analytics.network.internal.NetworkClientBuilder
+import io.appmetrica.analytics.networkapi.NetworkClientSettings
+import io.appmetrica.analytics.networkapi.Request
 import io.appmetrica.analytics.networktasks.internal.NetworkTask
 import java.util.concurrent.TimeUnit
 
@@ -33,7 +34,8 @@ internal class NetworkTaskPerformingStrategy {
             if (NetworkTask.Method.POST == requestDataHolder.method) {
                 val postData = requestDataHolder.postData
                 if (postData?.isNotEmpty() == true) {
-                    requestBuilder.post(postData)
+                    requestBuilder.withMethod(Request.Method.POST)
+                    requestBuilder.withBody(postData)
                     requestDataHolder.sendTimestamp?.let {
                         requestBuilder.addHeader(
                             Constants.Headers.SEND_TIMESTAMP,
@@ -45,10 +47,14 @@ internal class NetworkTaskPerformingStrategy {
                     }
                 }
             }
-            val client = NetworkClient.Builder()
-                .withConnectTimeout(Constants.Config.REQUEST_TIMEOUT)
-                .withReadTimeout(Constants.Config.REQUEST_TIMEOUT)
-                .withSslSocketFactory(task.sslSocketFactory)
+            val client = NetworkClientBuilder()
+                .withSettings(
+                    NetworkClientSettings.Builder()
+                        .withConnectTimeout(Constants.Config.REQUEST_TIMEOUT)
+                        .withReadTimeout(Constants.Config.REQUEST_TIMEOUT)
+                        .withSslSocketFactory(task.sslSocketFactory)
+                        .build()
+                )
                 .build()
             val response = client.newCall(requestBuilder.build()).execute()
             val responseCode = response.code
@@ -71,7 +77,7 @@ internal class NetworkTaskPerformingStrategy {
                     "Task error response: %d, desc: %s; errorStream: %s; url = %s",
                     responseCode,
                     task.description(),
-                    String(response.errorData),
+                    String(response.responseData),
                     url
                 )
             }

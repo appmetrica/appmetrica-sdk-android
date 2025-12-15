@@ -176,6 +176,7 @@ public final class GlobalServiceLocator {
         startupStateHolder.init(mContext);
         startupStateHolder.registerObserver(new UtilityServiceStartupStateObserver(utilityServiceProvider));
         NetworkServiceLocator.init(
+            mContext,
             new CompositeExecutionPolicy(
                 new ReporterRestrictionBasedPolicy(getDataSendingRestrictionController()),
                 new ConnectionBasedExecutionPolicy(mContext)

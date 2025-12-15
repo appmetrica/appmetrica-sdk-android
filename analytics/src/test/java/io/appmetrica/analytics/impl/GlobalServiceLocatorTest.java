@@ -285,6 +285,7 @@ public class GlobalServiceLocatorTest extends CommonTest {
             @Override
             public void apply() throws Throwable {
                 NetworkServiceLocator.init(
+                    mContext,
                     compositeExecutionPolicyMockedConstructionRule.getConstructionMock().constructed().get(0)
                 );
             }
@@ -302,6 +303,7 @@ public class GlobalServiceLocatorTest extends CommonTest {
             @Override
             public void apply() throws Throwable {
                 NetworkServiceLocator.init(
+                    mContext,
                     compositeExecutionPolicyMockedConstructionRule.getConstructionMock().constructed().get(0)
                 );
             }

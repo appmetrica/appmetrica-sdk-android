@@ -69,6 +69,13 @@
                 },
                 {
                     "group": "io.appmetrica.analytics",
+                    "module": "analytics-id-sync",
+                    "version": {
+                        "requires": "8.0.0"
+                    }
+                },
+                {
+                    "group": "io.appmetrica.analytics",
                     "module": "analytics-identifiers",
                     "version": {
                         "requires": "8.0.0"
@@ -98,13 +105,6 @@
                 {
                     "group": "io.appmetrica.analytics",
                     "module": "analytics-screenshot",
-                    "version": {
-                        "requires": "8.0.0"
-                    }
-                },
-                {
-                    "group": "io.appmetrica.analytics",
-                    "module": "analytics-id-sync",
                     "version": {
                         "requires": "8.0.0"
                     }

@@ -112,7 +112,6 @@ public class CollectionUtilsTest extends CommonTest {
     @Test
     public void testConvertMapKeysToLowerCase() {
         Map<String, String> map = new HashMap<String, String>() {{
-            put(null, "test");
             put("Content-Encoding", "encrypted");
             put("etag", "1337");
             put("Authorization", "Basic eWFuZGV4OnlhbmRleA");

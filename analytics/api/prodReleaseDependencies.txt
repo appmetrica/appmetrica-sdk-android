@@ -21,6 +21,9 @@ com.google.android.gms:play-services-appset:16.1.0
 com.google.android.gms:play-services-base:18.5.0
 com.google.android.gms:play-services-basement:18.4.0
 com.google.android.gms:play-services-tasks:18.2.0
+com.squareup.okhttp3:okhttp:4.11.0
+com.squareup.okio:okio-jvm:3.2.0
+com.squareup.okio:okio:3.2.0
 io.appmetrica.analytics:ad-revenue-admob-v23:unspecified
 io.appmetrica.analytics:ad-revenue-applovin-v12:unspecified
 io.appmetrica.analytics:ad-revenue-fyber-v3:unspecified
@@ -43,6 +46,8 @@ io.appmetrica.analytics:location:unspecified
 io.appmetrica.analytics:logger:unspecified
 io.appmetrica.analytics:modules-api:unspecified
 io.appmetrica.analytics:ndkcrashes-api:unspecified
+io.appmetrica.analytics:network-api:unspecified
+io.appmetrica.analytics:network-okhttp:unspecified
 io.appmetrica.analytics:network-tasks:unspecified
 io.appmetrica.analytics:network:unspecified
 io.appmetrica.analytics:proto:unspecified
@@ -50,5 +55,7 @@ io.appmetrica.analytics:remote-permissions:unspecified
 io.appmetrica.analytics:reporter-extension:unspecified
 io.appmetrica.analytics:screenshot:unspecified
 org.jetbrains.kotlin:kotlin-stdlib-common:1.6.21
+org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.20
+org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.20
 org.jetbrains.kotlin:kotlin-stdlib:1.6.21
 org.jetbrains:annotations:13.0

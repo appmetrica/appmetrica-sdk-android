@@ -1,0 +1,18 @@
+public final class io.appmetrica.analytics.networkokhttp.BuildConfig {
+    public static final String BUILD_TYPE
+    public static final boolean DEBUG
+    public static final String LIBRARY_PACKAGE_NAME
+
+    public <init>()
+}
+
+public interface io.appmetrica.analytics.networkokhttp.internal.InterceptorSupplier {
+    public abstract [NonNull] okhttp3.Interceptor get()
+}
+
+public final class io.appmetrica.analytics.networkokhttp.internal.OkHttpNetworkClientBuilder extends io.appmetrica.analytics.networkapi.NetworkClient$Builder {
+    public <init>()
+    public [NonNull] io.appmetrica.analytics.networkapi.NetworkClient build()
+    public [NonNull] String toString()
+}
+

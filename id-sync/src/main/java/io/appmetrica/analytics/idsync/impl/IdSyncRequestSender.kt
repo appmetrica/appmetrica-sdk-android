@@ -3,8 +3,9 @@ package io.appmetrica.analytics.idsync.impl
 import io.appmetrica.analytics.coreapi.internal.io.SslSocketFactoryProvider
 import io.appmetrica.analytics.idsync.internal.model.RequestConfig
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
-import io.appmetrica.analytics.network.internal.NetworkClient
-import io.appmetrica.analytics.network.internal.Request
+import io.appmetrica.analytics.network.internal.NetworkClientBuilder
+import io.appmetrica.analytics.networkapi.NetworkClientSettings
+import io.appmetrica.analytics.networkapi.Request
 
 internal class IdSyncRequestSender(
     private val sslSocketFactoryProvider: SslSocketFactoryProvider,
@@ -24,11 +25,15 @@ internal class IdSyncRequestSender(
             }
             .build()
 
-        val client = NetworkClient.Builder()
-            .withSslSocketFactory(sslSocketFactoryProvider.sslSocketFactory)
-            .withUseCaches(false)
-            .withInstanceFollowRedirects(true)
-            .withMaxResponseSize(responseValueLimit)
+        val client = NetworkClientBuilder()
+            .withSettings(
+                NetworkClientSettings.Builder()
+                    .withSslSocketFactory(sslSocketFactoryProvider.sslSocketFactory)
+                    .withUseCaches(false)
+                    .withInstanceFollowRedirects(true)
+                    .withMaxResponseSize(responseValueLimit)
+                    .build()
+            )
             .build()
 
         val response = client.newCall(request).execute()
@@ -42,7 +47,7 @@ internal class IdSyncRequestSender(
                 response.url,
                 requestConfig.validResponseCodes.contains(response.code),
                 response.code,
-                if (response.responseData.isNotEmpty()) response.responseData else response.errorData,
+                response.responseData,
                 response.headers
             )
         )

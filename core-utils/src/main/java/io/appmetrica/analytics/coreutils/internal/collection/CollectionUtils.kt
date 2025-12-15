@@ -56,8 +56,8 @@ object CollectionUtils {
         map.entries.firstOrNull { it.key.isNullOrEmpty() == false && it.key.equals(key, true) }?.value
 
     @JvmStatic
-    fun <T> convertMapKeysToLowerCase(map: Map<String?, T>): Map<String?, T> {
-        return map.mapKeys { it.key?.lowercase(Locale.getDefault()) }
+    fun <T> convertMapKeysToLowerCase(map: Map<String, T>): Map<String, T> {
+        return map.mapKeys { it.key.lowercase(Locale.getDefault()) }
     }
 
     @JvmStatic

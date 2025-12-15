@@ -242,7 +242,7 @@ public final class io.appmetrica.analytics.networktasks.internal.NetworkServiceL
     public <init>([NonNull] io.appmetrica.analytics.coreapi.internal.io.IExecutionPolicy)
     public static final [NonNull] io.appmetrica.analytics.networktasks.internal.NetworkServiceLocator getInstance()
     public final [NonNull] io.appmetrica.analytics.networktasks.internal.NetworkCore getNetworkCore()
-    public static final void init([NonNull] io.appmetrica.analytics.coreapi.internal.io.IExecutionPolicy)
+    public static final void init([NonNull] android.content.Context, [NonNull] io.appmetrica.analytics.coreapi.internal.io.IExecutionPolicy)
     public static final void init([NonNull] io.appmetrica.analytics.networktasks.internal.NetworkServiceLocator)
     public void onCreate()
     public void onDestroy()
@@ -250,7 +250,7 @@ public final class io.appmetrica.analytics.networktasks.internal.NetworkServiceL
 
 public static final class io.appmetrica.analytics.networktasks.internal.NetworkServiceLocator$Companion {
     public final [NonNull] io.appmetrica.analytics.networktasks.internal.NetworkServiceLocator getInstance()
-    public final void init([NonNull] io.appmetrica.analytics.coreapi.internal.io.IExecutionPolicy)
+    public final void init([NonNull] android.content.Context, [NonNull] io.appmetrica.analytics.coreapi.internal.io.IExecutionPolicy)
     public final void init([NonNull] io.appmetrica.analytics.networktasks.internal.NetworkServiceLocator)
 }
 

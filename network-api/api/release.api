@@ -1,0 +1,89 @@
+public final class io.appmetrica.analytics.networkapi.BuildConfig {
+    public static final String BUILD_TYPE
+    public static final boolean DEBUG
+    public static final String LIBRARY_PACKAGE_NAME
+
+    public <init>()
+}
+
+public abstract class io.appmetrica.analytics.networkapi.Call {
+    public <init>()
+    public abstract [NonNull] io.appmetrica.analytics.networkapi.Response execute()
+}
+
+public abstract class io.appmetrica.analytics.networkapi.NetworkClient {
+    public <init>([NonNull] io.appmetrica.analytics.networkapi.NetworkClientSettings)
+    public final [NonNull] io.appmetrica.analytics.networkapi.NetworkClientSettings getSettings()
+    public abstract [NonNull] io.appmetrica.analytics.networkapi.Call newCall([NonNull] io.appmetrica.analytics.networkapi.Request)
+}
+
+public abstract static class io.appmetrica.analytics.networkapi.NetworkClient$Builder {
+    public <init>()
+    public abstract [NonNull] io.appmetrica.analytics.networkapi.NetworkClient build()
+    protected final [NonNull] io.appmetrica.analytics.networkapi.NetworkClientSettings getSettings()
+    public final [NonNull] io.appmetrica.analytics.networkapi.NetworkClient$Builder withSettings([NonNull] io.appmetrica.analytics.networkapi.NetworkClientSettings)
+}
+
+public final class io.appmetrica.analytics.networkapi.NetworkClientSettings {
+    public final [Nullable] Integer getConnectTimeout()
+    public final [Nullable] Boolean getInstanceFollowRedirects()
+    public final int getMaxResponseSize()
+    public final [Nullable] Integer getReadTimeout()
+    public final [Nullable] javax.net.ssl.SSLSocketFactory getSslSocketFactory()
+    public final [Nullable] Boolean getUseCaches()
+    public [NonNull] String toString()
+}
+
+public static final class io.appmetrica.analytics.networkapi.NetworkClientSettings$Builder {
+    public <init>()
+    public final [NonNull] io.appmetrica.analytics.networkapi.NetworkClientSettings build()
+    public final [NonNull] io.appmetrica.analytics.networkapi.NetworkClientSettings$Builder withConnectTimeout(int)
+    public final [NonNull] io.appmetrica.analytics.networkapi.NetworkClientSettings$Builder withInstanceFollowRedirects(boolean)
+    public final [NonNull] io.appmetrica.analytics.networkapi.NetworkClientSettings$Builder withMaxResponseSize(int)
+    public final [NonNull] io.appmetrica.analytics.networkapi.NetworkClientSettings$Builder withReadTimeout(int)
+    public final [NonNull] io.appmetrica.analytics.networkapi.NetworkClientSettings$Builder withSslSocketFactory([Nullable] javax.net.ssl.SSLSocketFactory)
+    public final [NonNull] io.appmetrica.analytics.networkapi.NetworkClientSettings$Builder withUseCaches(boolean)
+}
+
+public final class io.appmetrica.analytics.networkapi.Request {
+    public final [NonNull] byte[] getBody()
+    public final [NonNull] java.util.Map<String, String> getHeaders()
+    public final [NonNull] io.appmetrica.analytics.networkapi.Request$Method getMethod()
+    public final [NonNull] String getUrl()
+    public [NonNull] String toString()
+}
+
+public static final class io.appmetrica.analytics.networkapi.Request$Builder {
+    public <init>([NonNull] String)
+    public final [NonNull] io.appmetrica.analytics.networkapi.Request$Builder addHeader([NonNull] String, [NonNull] String)
+    public final [NonNull] io.appmetrica.analytics.networkapi.Request build()
+    public final [NonNull] io.appmetrica.analytics.networkapi.Request$Builder withBody([NonNull] byte[])
+    public final [NonNull] io.appmetrica.analytics.networkapi.Request$Builder withMethod([NonNull] io.appmetrica.analytics.networkapi.Request$Method)
+}
+
+public enum io.appmetrica.analytics.networkapi.Request$Method {
+    GET, POST
+
+    public final [NonNull] String getMethodName()
+    public static io.appmetrica.analytics.networkapi.Request$Method valueOf(String)
+    public static io.appmetrica.analytics.networkapi.Request$Method[] values()
+}
+
+public final class io.appmetrica.analytics.networkapi.Response {
+    public final int getCode()
+    public final [Nullable] Throwable getException()
+    public final [NonNull] java.util.Map<String, java.util.List<String>> getHeaders()
+    public final [NonNull] byte[] getResponseData()
+    public final [Nullable] String getUrl()
+    public final boolean isCompleted()
+    public [NonNull] String toString()
+}
+
+public static final class io.appmetrica.analytics.networkapi.Response$Builder {
+    public <init>(boolean, int, [NonNull] byte[])
+    public <init>([Nullable] Throwable)
+    public final [NonNull] io.appmetrica.analytics.networkapi.Response build()
+    public final [NonNull] io.appmetrica.analytics.networkapi.Response$Builder withHeaders([NonNull] java.util.Map<String, ? extends java.util.List<String>>)
+    public final [NonNull] io.appmetrica.analytics.networkapi.Response$Builder withUrl([NonNull] String)
+}
+

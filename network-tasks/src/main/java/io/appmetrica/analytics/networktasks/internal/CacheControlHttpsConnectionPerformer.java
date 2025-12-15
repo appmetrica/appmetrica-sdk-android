@@ -6,9 +6,11 @@ import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreutils.internal.collection.CollectionUtils;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
-import io.appmetrica.analytics.network.internal.NetworkClient;
-import io.appmetrica.analytics.network.internal.Request;
-import io.appmetrica.analytics.network.internal.Response;
+import io.appmetrica.analytics.network.internal.NetworkClientBuilder;
+import io.appmetrica.analytics.networkapi.NetworkClient;
+import io.appmetrica.analytics.networkapi.NetworkClientSettings;
+import io.appmetrica.analytics.networkapi.Request;
+import io.appmetrica.analytics.networkapi.Response;
 import io.appmetrica.analytics.networktasks.impl.Constants;
 import java.util.List;
 import javax.net.ssl.HttpsURLConnection;
@@ -36,16 +38,21 @@ public class CacheControlHttpsConnectionPerformer {
         public Response execute(@Nullable String prevEtag,
                                 @NonNull String url,
                                 @Nullable SSLSocketFactory sslSocketFactory) {
-            Request.Builder requestBuilder = new Request.Builder(url).withMethod("GET");
+            Request.Builder requestBuilder = new Request.Builder(url)
+                .withMethod(Request.Method.GET);
             if (TextUtils.isEmpty(prevEtag) == false) {
                 requestBuilder.addHeader("If-None-Match", prevEtag);
             }
-            NetworkClient client = new NetworkClient.Builder()
-                    .withInstanceFollowRedirects(true)
-                    .withSslSocketFactory(sslSocketFactory)
-                    .withConnectTimeout(Constants.Config.REQUEST_TIMEOUT)
-                    .withReadTimeout(Constants.Config.REQUEST_TIMEOUT)
-                    .build();
+            NetworkClient client = new NetworkClientBuilder()
+                .withSettings(
+                    new NetworkClientSettings.Builder()
+                        .withInstanceFollowRedirects(true)
+                        .withSslSocketFactory(sslSocketFactory)
+                        .withConnectTimeout(Constants.Config.REQUEST_TIMEOUT)
+                        .withReadTimeout(Constants.Config.REQUEST_TIMEOUT)
+                        .build()
+                )
+                .build();
             DebugLogger.INSTANCE.info(TAG, "Connecting to %s", url);
             return client.newCall(requestBuilder.build()).execute();
         }

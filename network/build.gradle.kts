@@ -13,6 +13,10 @@ android {
 }
 
 dependencies {
+    api(project(":network-api"))
+
     implementation(project(":core-utils"))
     implementation(project(":logger"))
+
+    runtimeOnly(project(":network-okhttp"))
 }

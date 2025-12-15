@@ -1,9 +1,11 @@
 package io.appmetrica.analytics.networktasks.internal
 
+import android.content.Context
 import androidx.annotation.AnyThread
 import androidx.annotation.VisibleForTesting
 import io.appmetrica.analytics.coreapi.internal.io.IExecutionPolicy
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
+import io.appmetrica.analytics.network.internal.NetworkClientServiceLocator
 
 class NetworkServiceLocator @AnyThread @VisibleForTesting constructor(
     executionPolicy: IExecutionPolicy,
@@ -38,7 +40,10 @@ class NetworkServiceLocator @AnyThread @VisibleForTesting constructor(
 
         @JvmStatic
         @AnyThread
-        fun init(executionPolicy: IExecutionPolicy) {
+        fun init(
+            context: Context,
+            executionPolicy: IExecutionPolicy
+        ) {
             if (!::instance.isInitialized) {
                 synchronized(NetworkServiceLocator::class.java) {
                     if (!::instance.isInitialized) {
@@ -46,6 +51,7 @@ class NetworkServiceLocator @AnyThread @VisibleForTesting constructor(
                     }
                 }
             }
+            NetworkClientServiceLocator.init(context)
         }
 
         @JvmStatic

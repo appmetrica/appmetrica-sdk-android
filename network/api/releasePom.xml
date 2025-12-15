@@ -34,6 +34,18 @@
   </scm>
   <dependencies>
     <dependency>
+      <groupId>io.appmetrica.analytics</groupId>
+      <artifactId>analytics-network-api</artifactId>
+      <version>8.0.0</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.appmetrica.analytics</groupId>
+      <artifactId>analytics-network-okhttp</artifactId>
+      <version>8.0.0</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
       <groupId>org.jetbrains.kotlin</groupId>
       <artifactId>kotlin-stdlib</artifactId>
       <version>1.6.21</version>

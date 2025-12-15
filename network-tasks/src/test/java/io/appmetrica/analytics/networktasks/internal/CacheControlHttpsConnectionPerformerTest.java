@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.networktasks.internal;
 
-import io.appmetrica.analytics.network.internal.Response;
+import io.appmetrica.analytics.networkapi.Response;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;

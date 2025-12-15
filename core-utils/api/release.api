@@ -259,6 +259,12 @@ public final class io.appmetrica.analytics.coreutils.internal.io.GZIPUtils {
     public static final [Nullable] byte[] unGzipBytes([Nullable] byte[])
 }
 
+public final class io.appmetrica.analytics.coreutils.internal.io.InputStreamUtils {
+    public static final [NonNull] io.appmetrica.analytics.coreutils.internal.io.InputStreamUtils INSTANCE
+
+    public final [NonNull] byte[] readSafelyApprox(int, [NonNull] kotlin.jvm.functions.Function0<? extends java.io.InputStream>)
+}
+
 public abstract class io.appmetrica.analytics.coreutils.internal.logger.LoggerStorage {
     public <init>()
     public static [NonNull] io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger getMainPublicOrAnonymousLogger()

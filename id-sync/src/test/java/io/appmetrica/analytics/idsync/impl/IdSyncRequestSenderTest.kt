@@ -3,11 +3,14 @@ package io.appmetrica.analytics.idsync.impl
 import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
 import io.appmetrica.analytics.coreapi.internal.io.SslSocketFactoryProvider
 import io.appmetrica.analytics.idsync.internal.model.RequestConfig
-import io.appmetrica.analytics.network.internal.Call
-import io.appmetrica.analytics.network.internal.NetworkClient
-import io.appmetrica.analytics.network.internal.Request
-import io.appmetrica.analytics.network.internal.Response
+import io.appmetrica.analytics.network.internal.NetworkClientBuilder
+import io.appmetrica.analytics.networkapi.Call
+import io.appmetrica.analytics.networkapi.NetworkClient
+import io.appmetrica.analytics.networkapi.NetworkClientSettings
+import io.appmetrica.analytics.networkapi.Request
+import io.appmetrica.analytics.networkapi.Response
 import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.analytics.testutils.MockedConstructionRule
 import io.appmetrica.analytics.testutils.constructionRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Rule
@@ -55,15 +58,15 @@ class IdSyncRequestSenderTest : CommonTest() {
     private val responseCode = 200
     private val responseUrl = "Response url"
     private val responseData = "Response body".toByteArray()
-    private val responseErrorData = "Response error body".toByteArray()
-    private val responseHeaders = mapOf("Response header key" to listOf("Response header value"))
+    private val responseHeaders = mapOf(
+        "Response header key" to listOf("Response header value")
+    )
 
     private val response: Response = mock {
         on { isCompleted } doReturn responseIsComplete
         on { code } doReturn responseCode
         on { url } doReturn responseUrl
         on { responseData } doReturn responseData
-        on { errorData } doReturn responseErrorData
         on { headers } doReturn responseHeaders
     }
 
@@ -79,13 +82,22 @@ class IdSyncRequestSenderTest : CommonTest() {
     }
 
     @get:Rule
-    val networkClientBuilderRule = constructionRule<NetworkClient.Builder> {
-        on { withSslSocketFactory(any()) } doReturn this.mock
-        on { withUseCaches(any()) } doReturn this.mock
-        on { withInstanceFollowRedirects(any()) } doReturn this.mock
-        on { withMaxResponseSize(any()) } doReturn this.mock
+    val networkClientBuilderRule = constructionRule<NetworkClientBuilder> {
+        on { withSettings(networkClientSettings) } doReturn this.mock
         on { build() }.thenReturn(networkClient) doReturn networkClient
     }
+
+    private val networkClientSettings: NetworkClientSettings = mock()
+
+    @get:Rule
+    val networkClientSettingsBuilderRule =
+        MockedConstructionRule(NetworkClientSettings.Builder::class.java) { mock, _ ->
+            whenever(mock.withSslSocketFactory(sslSocketFactory)).thenReturn(mock)
+            whenever(mock.withUseCaches(false)).thenReturn(mock)
+            whenever(mock.withInstanceFollowRedirects(true)).thenReturn(mock)
+            whenever(mock.withMaxResponseSize(100 * 1024)).thenReturn(mock)
+            whenever(mock.build()).thenReturn(networkClientSettings)
+        }
 
     private val networkClientBuilder by networkClientBuilderRule
 
@@ -95,10 +107,7 @@ class IdSyncRequestSenderTest : CommonTest() {
     fun `sendRequest network client configuration`() {
         sender.sendRequest(requestConfig)
 
-        verify(networkClientBuilder).withSslSocketFactory(sslSocketFactory)
-        verify(networkClientBuilder).withUseCaches(false)
-        verify(networkClientBuilder).withInstanceFollowRedirects(true)
-        verify(networkClientBuilder).withMaxResponseSize(100 * 1024)
+        verify(networkClientBuilder).withSettings(networkClientSettings)
     }
 
     @Test
@@ -117,7 +126,7 @@ class IdSyncRequestSenderTest : CommonTest() {
                     secondHeaderKey to "$secondHeaderFirstValue, $secondHeaderSecondValue"
                 )
             )
-            .checkField("method", "GET")
+            .checkField("method", Request.Method.GET)
             .checkField("body", ByteArray(0))
             .checkAll()
     }
@@ -134,25 +143,6 @@ class IdSyncRequestSenderTest : CommonTest() {
             .checkField("responseCodeIsValid", true)
             .checkField("responseCode", responseCode)
             .checkField("responseBody", responseData)
-            .checkField("responseHeaders", responseHeaders)
-            .checkAll()
-    }
-
-    @Test
-    fun `sendRequest callback with error response`() {
-        whenever(response.responseData).doReturn(ByteArray(0))
-        whenever(response.errorData).doReturn(responseErrorData)
-
-        sender.sendRequest(requestConfig)
-        verify(requestCallback).onResult(requestResultCaptor.capture())
-
-        ObjectPropertyAssertions(requestResultCaptor.firstValue)
-            .checkField("type", requestType)
-            .checkField("isCompleted", responseIsComplete)
-            .checkField("url", responseUrl)
-            .checkField("responseCodeIsValid", true)
-            .checkField("responseCode", responseCode)
-            .checkField("responseBody", responseErrorData)
             .checkField("responseHeaders", responseHeaders)
             .checkAll()
     }

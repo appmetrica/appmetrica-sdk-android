@@ -141,3 +141,11 @@
     name: "play-services-ads-identifier"
     from: "18.0.0"
     to: "18.2.0"
+- group: "io.appmetrica.analytics"
+  name: "analytics-network-okhttp"
+  dependencies:
+    - repository: "https://repo.maven.apache.org/maven2"
+      group: "com.squareup.okhttp3"
+      name: "okhttp"
+      from: "4.11.0"
+      to: "5.3.2"

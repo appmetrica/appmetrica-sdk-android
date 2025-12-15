@@ -1,10 +1,12 @@
 package io.appmetrica.analytics.networktasks.impl
 
 import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
-import io.appmetrica.analytics.network.internal.Call
-import io.appmetrica.analytics.network.internal.NetworkClient
-import io.appmetrica.analytics.network.internal.Request
-import io.appmetrica.analytics.network.internal.Response
+import io.appmetrica.analytics.network.internal.NetworkClientBuilder
+import io.appmetrica.analytics.networkapi.Call
+import io.appmetrica.analytics.networkapi.NetworkClient
+import io.appmetrica.analytics.networkapi.NetworkClientSettings
+import io.appmetrica.analytics.networkapi.Request
+import io.appmetrica.analytics.networkapi.Response
 import io.appmetrica.analytics.networktasks.internal.FullUrlFormer
 import io.appmetrica.analytics.networktasks.internal.NetworkTask
 import io.appmetrica.analytics.networktasks.internal.RequestDataHolder
@@ -16,9 +18,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.ArgumentMatchers.anyBoolean
-import org.mockito.ArgumentMatchers.anyInt
-import org.mockito.ArgumentMatchers.nullable
 import org.mockito.kotlin.anyOrNull
 import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.doReturn
@@ -55,7 +54,6 @@ class NetworkTaskPerformingStrategyTest : CommonTest() {
     }
     private val response = mock<Response> {
         on { this.responseData } doReturn ByteArray(0)
-        on { this.errorData } doReturn ByteArray(0)
         on { this.headers } doReturn responseHeaders
     }
     private val call = mock<Call> {
@@ -77,15 +75,21 @@ class NetworkTaskPerformingStrategyTest : CommonTest() {
     private val strategy = NetworkTaskPerformingStrategy()
 
     @get:Rule
-    val newClientBuilder = MockedConstructionRule(NetworkClient.Builder::class.java) { mock, _ ->
-        whenever(mock.withConnectTimeout(anyInt())).thenReturn(mock)
-        whenever(mock.withReadTimeout(anyInt())).thenReturn(mock)
-        whenever(mock.withUseCaches(anyBoolean())).thenReturn(mock)
-        whenever(mock.withInstanceFollowRedirects(anyBoolean())).thenReturn(mock)
-        whenever(mock.withMaxResponseSize(anyInt())).thenReturn(mock)
-        whenever(mock.withSslSocketFactory(nullable(SSLSocketFactory::class.java))).thenReturn(mock)
+    val newClientBuilder = MockedConstructionRule(NetworkClientBuilder::class.java) { mock, _ ->
+        whenever(mock.withSettings(networkClientSettings)).thenReturn(mock)
         whenever(mock.build()).thenReturn(networkClient)
     }
+
+    private val networkClientSettings: NetworkClientSettings = mock()
+
+    @get:Rule
+    val networkClientSettingsBuilderRule =
+        MockedConstructionRule(NetworkClientSettings.Builder::class.java) { mock, _ ->
+            whenever(mock.withConnectTimeout(Constants.Config.REQUEST_TIMEOUT)).thenReturn(mock)
+            whenever(mock.withReadTimeout(Constants.Config.REQUEST_TIMEOUT)).thenReturn(mock)
+            whenever(mock.withSslSocketFactory(sslSocketFactory)).thenReturn(mock)
+            whenever(mock.build()).thenReturn(networkClientSettings)
+        }
 
     @Test
     fun `performRequest() for null host`() {
@@ -117,12 +121,10 @@ class NetworkTaskPerformingStrategyTest : CommonTest() {
             .withPrivateFields(true)
             .checkField("url", "getUrl", url)
             .checkField("headers", "getHeaders", expectedHeaders)
-            .checkField("method", "getMethod", "GET")
+            .checkField("method", "getMethod", Request.Method.GET)
             .checkField("body", "getBody", ByteArray(0))
             .checkAll()
-        verify(newClientBuilder.constructionMock.constructed()[0]).withConnectTimeout(Constants.Config.REQUEST_TIMEOUT)
-        verify(newClientBuilder.constructionMock.constructed()[0]).withReadTimeout(Constants.Config.REQUEST_TIMEOUT)
-        verify(newClientBuilder.constructionMock.constructed()[0]).withSslSocketFactory(sslSocketFactory)
+        verify(newClientBuilder.constructionMock.constructed()[0]).withSettings(networkClientSettings)
     }
 
     @Test
@@ -141,7 +143,7 @@ class NetworkTaskPerformingStrategyTest : CommonTest() {
             AbstractMap.SimpleEntry(Constants.Headers.SEND_TIMESTAMP, "12345654"),
             AbstractMap.SimpleEntry(Constants.Headers.SEND_TIMEZONE, "50000")
         )
-        assertThat(requestCaptor.firstValue.method).isEqualTo("POST")
+        assertThat(requestCaptor.firstValue.method).isEqualTo(Request.Method.POST)
     }
 
     @Test
@@ -156,7 +158,7 @@ class NetworkTaskPerformingStrategyTest : CommonTest() {
             Constants.Headers.SEND_TIMESTAMP,
             Constants.Headers.SEND_TIMEZONE
         )
-        assertThat(requestCaptor.firstValue.method).isEqualTo("GET")
+        assertThat(requestCaptor.firstValue.method).isEqualTo(Request.Method.GET)
     }
 
     @Test
@@ -173,7 +175,7 @@ class NetworkTaskPerformingStrategyTest : CommonTest() {
             Constants.Headers.SEND_TIMESTAMP,
             Constants.Headers.SEND_TIMEZONE
         )
-        assertThat(requestCaptor.firstValue.method).isEqualTo("POST")
+        assertThat(requestCaptor.firstValue.method).isEqualTo(Request.Method.POST)
     }
 
     @Test
@@ -187,7 +189,7 @@ class NetworkTaskPerformingStrategyTest : CommonTest() {
             Constants.Headers.SEND_TIMESTAMP,
             Constants.Headers.SEND_TIMEZONE
         )
-        assertThat(requestCaptor.firstValue.method).isEqualTo("GET")
+        assertThat(requestCaptor.firstValue.method).isEqualTo(Request.Method.GET)
     }
 
     @Test
@@ -201,7 +203,7 @@ class NetworkTaskPerformingStrategyTest : CommonTest() {
             Constants.Headers.SEND_TIMESTAMP,
             Constants.Headers.SEND_TIMEZONE
         )
-        assertThat(requestCaptor.firstValue.method).isEqualTo("GET")
+        assertThat(requestCaptor.firstValue.method).isEqualTo(Request.Method.GET)
     }
 
     @Test
@@ -218,7 +220,6 @@ class NetworkTaskPerformingStrategyTest : CommonTest() {
         strategy.performRequest(networkTask)
         verify(responseDataHolder).responseCode = code
         verify(responseDataHolder).responseHeaders = responseHeaders
-        verify(response, never()).errorData
         verify(networkTask).onRequestComplete()
     }
 
@@ -235,7 +236,6 @@ class NetworkTaskPerformingStrategyTest : CommonTest() {
         verify(responseDataHolder).responseCode = code
         verify(responseDataHolder).responseHeaders = responseHeaders
         verify(responseDataHolder, never()).responseData = anyOrNull()
-        verify(response, never()).responseData
     }
 
     @Test

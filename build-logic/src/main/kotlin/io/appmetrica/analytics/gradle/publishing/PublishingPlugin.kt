@@ -127,7 +127,9 @@ class PublishingPlugin : Plugin<Project> {
         val android = project.the<LibraryExtension>()
 
         project.tasks.register("prepare${capitalVariantName}Javadoc", Javadoc::class.java) {
-            source = files(variant.sourceSets.flatMap { it.javaDirectories }).asFileTree
+            source = files(variant.sourceSets.flatMap { it.javaDirectories }).asFileTree.matching {
+                include("**/*.java")
+            }
             exclude("**/impl/**")
             exclude("**/internal/**")
 
