@@ -128,7 +128,7 @@ public class JsonHelper {
     }
 
     @Nullable
-    public static JSONArray listToJsonNullEmptyWise(@Nullable final List<String> list) {
+    public static JSONArray listToJsonNullEmptyWise(@Nullable final List<?> list) {
         if (list == null) {
             return null;
         } else if (list.isEmpty()) {
