@@ -2,11 +2,12 @@ package io.appmetrica.analytics.idsync.impl.precondition
 
 import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
 import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor
+import io.appmetrica.analytics.coreapi.internal.identifiers.SdkIdentifiers
 import io.appmetrica.analytics.coreapi.internal.io.SslSocketFactoryProvider
 import io.appmetrica.analytics.coreutils.internal.time.SystemTimeProvider
-import io.appmetrica.analytics.idsync.impl.IdSyncEventReporter
 import io.appmetrica.analytics.idsync.impl.IdSyncRequestController
 import io.appmetrica.analytics.idsync.impl.IdSyncRequestSender
+import io.appmetrica.analytics.idsync.impl.IdSyncResultHandler
 import io.appmetrica.analytics.idsync.impl.RequestResult
 import io.appmetrica.analytics.idsync.impl.model.RequestAttemptResult
 import io.appmetrica.analytics.idsync.impl.model.RequestState
@@ -53,6 +54,7 @@ internal class IdSyncRequestControllerTest : CommonTest() {
     }
 
     private val requestStateHolder: RequestStateHolder = mock()
+    private val sdkIdentifiers: SdkIdentifiers = mock()
 
     private val now = System.currentTimeMillis()
 
@@ -67,8 +69,8 @@ internal class IdSyncRequestControllerTest : CommonTest() {
     private val idSyncRequestSender: IdSyncRequestSender by idSyncRequestSenderRule
 
     @get:Rule
-    val eventReporterRule = constructionRule<IdSyncEventReporter>()
-    private val eventReporter: IdSyncEventReporter by eventReporterRule
+    val eventReporterRule = constructionRule<IdSyncResultHandler>()
+    private val eventReporter: IdSyncResultHandler by eventReporterRule
 
     private val preconditions: Preconditions = mock()
 
@@ -108,7 +110,7 @@ internal class IdSyncRequestControllerTest : CommonTest() {
     }
 
     private val requestStateCaptor = argumentCaptor<RequestState>()
-    private val controller by setUp { IdSyncRequestController(serviceContext, requestStateHolder) }
+    private val controller by setUp { IdSyncRequestController(serviceContext, requestStateHolder, sdkIdentifiers) }
 
     @Test
     fun requestSender() {
@@ -245,7 +247,7 @@ internal class IdSyncRequestControllerTest : CommonTest() {
     @Test
     fun `onResult if incomplete`() {
         whenever(requestResult.isCompleted).thenReturn(false)
-        controller.onResult(requestResult)
+        controller.onResult(requestResult, requestConfig)
         verify(moduleExecutor).execute(runnableCaptor.capture())
         runnableCaptor.firstValue.run()
         verifyNoInteractions(eventReporter, requestStateHolder)
@@ -253,13 +255,13 @@ internal class IdSyncRequestControllerTest : CommonTest() {
 
     @Test
     fun `onResult if complete and has valid response code`() {
-        controller.onResult(requestResult)
+        controller.onResult(requestResult, requestConfig)
 
         verifyNoInteractions(eventReporter, requestStateHolder)
         verify(moduleExecutor).execute(runnableCaptor.capture())
         runnableCaptor.firstValue.run()
 
-        verify(eventReporter).reportEvent(requestResult)
+        verify(eventReporter).reportEvent(requestResult, requestConfig, sdkIdentifiers)
         verify(requestStateHolder).updateRequestState(requestStateCaptor.capture())
 
         ObjectPropertyAssertions(requestStateCaptor.firstValue)
@@ -272,11 +274,11 @@ internal class IdSyncRequestControllerTest : CommonTest() {
     @Test
     fun `onResult if complete and has invalid response code`() {
         whenever(requestResult.responseCodeIsValid).thenReturn(false)
-        controller.onResult(requestResult)
+        controller.onResult(requestResult, requestConfig)
         verifyNoInteractions(eventReporter, requestStateHolder)
         verify(moduleExecutor).execute(runnableCaptor.capture())
         runnableCaptor.firstValue.run()
-        verify(eventReporter).reportEvent(requestResult)
+        verify(eventReporter).reportEvent(requestResult, requestConfig, sdkIdentifiers)
         verify(requestStateHolder).updateRequestState(requestStateCaptor.capture())
         ObjectPropertyAssertions(requestStateCaptor.firstValue)
             .checkField("type", requestType)

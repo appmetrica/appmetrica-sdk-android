@@ -31,7 +31,7 @@ internal class IdSyncEventValueComposerTest : CommonTest() {
         on { responseHeaders } doReturn responseHeaders
     }
 
-    private val composer by setUp { IdSyncEventValueComposer() }
+    private val composer by setUp { IdSyncResultStringComposer() }
 
     @Test
     fun `compose for filled`() {

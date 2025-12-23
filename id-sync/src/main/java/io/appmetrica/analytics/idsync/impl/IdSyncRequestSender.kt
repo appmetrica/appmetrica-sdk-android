@@ -49,7 +49,8 @@ internal class IdSyncRequestSender(
                 response.code,
                 response.responseData,
                 response.headers
-            )
+            ),
+            requestConfig
         )
     }
 }

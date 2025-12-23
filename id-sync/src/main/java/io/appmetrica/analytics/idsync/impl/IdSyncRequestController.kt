@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.idsync.impl
 
 import android.text.TextUtils
+import io.appmetrica.analytics.coreapi.internal.identifiers.SdkIdentifiers
 import io.appmetrica.analytics.coreutils.internal.time.SystemTimeProvider
 import io.appmetrica.analytics.idsync.impl.model.RequestAttemptResult
 import io.appmetrica.analytics.idsync.impl.model.RequestState
@@ -12,14 +13,15 @@ import io.appmetrica.analytics.modulesapi.internal.service.ServiceContext
 
 internal class IdSyncRequestController(
     private val serviceContext: ServiceContext,
-    private val requestStateHolder: RequestStateHolder
+    private val requestStateHolder: RequestStateHolder,
+    var sdkIdentifiers: SdkIdentifiers
 ) : IdSyncRequestCallback {
     private val tag = "[IdSyncRequestController]"
 
     private val timeProvider = SystemTimeProvider()
     private val requestSender = IdSyncRequestSender(serviceContext.networkContext.sslSocketFactoryProvider, this)
     private val preconditionProvider = PreconditionProvider(serviceContext)
-    private val eventReporter = IdSyncEventReporter(serviceContext)
+    private val resultHandler = IdSyncResultHandler(serviceContext)
 
     fun handle(requestConfig: RequestConfig) {
         if (!requestConfig.isValid()) {
@@ -46,7 +48,7 @@ internal class IdSyncRequestController(
         }
     }
 
-    override fun onResult(result: RequestResult) {
+    override fun onResult(result: RequestResult, requestConfig: RequestConfig) {
         serviceContext.executorProvider.moduleExecutor.execute {
             DebugLogger.info(tag, "Received request result: $result")
             if (result.isCompleted) {
@@ -58,7 +60,7 @@ internal class IdSyncRequestController(
                         result.toRequestAttemptResult()
                     )
                 )
-                eventReporter.reportEvent(result)
+                resultHandler.reportEvent(result, requestConfig, sdkIdentifiers)
             } else {
                 DebugLogger.info(tag, "Request was not completed")
             }

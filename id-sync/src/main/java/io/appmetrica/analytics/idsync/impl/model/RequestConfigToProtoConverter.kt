@@ -27,6 +27,8 @@ internal class RequestConfigToProtoConverter : ProtobufConverter<RequestConfig, 
         resendIntervalForValidResponse = value.resendIntervalForValidResponse
         resendIntervalForInvalidResponse = value.resendIntervalForInvalidResponse
         validResponseCodes = value.validResponseCodes.toIntArray()
+        reportEventEnabled = value.reportEventEnabled
+        reportUrl = value.reportUrl ?: ""
     }
 
     override fun toModel(value: RequestProto): RequestConfig = RequestConfig(
@@ -40,7 +42,9 @@ internal class RequestConfigToProtoConverter : ProtobufConverter<RequestConfig, 
         },
         resendIntervalForValidResponse = value.resendIntervalForValidResponse,
         resendIntervalForInvalidResponse = value.resendIntervalForInvalidResponse,
-        validResponseCodes = value.validResponseCodes.toList()
+        validResponseCodes = value.validResponseCodes.toList(),
+        reportEventEnabled = value.reportEventEnabled,
+        reportUrl = value.reportUrl.takeIf { it.isNotEmpty() }
     )
 
     private fun Int.networkTypeToModel(): NetworkType = when (this) {

@@ -40,10 +40,12 @@ public final class io.appmetrica.analytics.idsync.internal.model.Preconditions {
 }
 
 public final class io.appmetrica.analytics.idsync.internal.model.RequestConfig {
-    public <init>([NonNull] String, [NonNull] String, [NonNull] io.appmetrica.analytics.idsync.internal.model.Preconditions, [NonNull] java.util.Map<String, ? extends java.util.List<String>>, long, long, [NonNull] java.util.List<Integer>)
+    public <init>([NonNull] String, [NonNull] String, [NonNull] io.appmetrica.analytics.idsync.internal.model.Preconditions, [NonNull] java.util.Map<String, ? extends java.util.List<String>>, long, long, [NonNull] java.util.List<Integer>, boolean, [Nullable] String)
     public boolean equals([Nullable] Object)
     public final [NonNull] java.util.Map<String, java.util.List<String>> getHeaders()
     public final [NonNull] io.appmetrica.analytics.idsync.internal.model.Preconditions getPreconditions()
+    public final boolean getReportEventEnabled()
+    public final [Nullable] String getReportUrl()
     public final long getResendIntervalForInvalidResponse()
     public final long getResendIntervalForValidResponse()
     public final [NonNull] String getType()

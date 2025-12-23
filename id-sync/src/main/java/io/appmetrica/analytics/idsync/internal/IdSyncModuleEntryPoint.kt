@@ -43,9 +43,9 @@ class IdSyncModuleEntryPoint : ModuleServiceEntryPoint<IdSyncConfig>(), RemoteCo
         DebugLogger.info(tag, "Init service side with config: $initialConfig")
         synchronized(this) {
             if (controller == null) {
-                val controller = IdSyncController(serviceContext)
+                val controller = IdSyncController(serviceContext, initialConfig.identifiers)
                 this.controller = controller
-                initialConfig.featuresConfig?.let { controller.refresh(it) }
+                initialConfig.featuresConfig?.let { controller.refresh(it, initialConfig.identifiers) }
             }
         }
     }
@@ -53,6 +53,6 @@ class IdSyncModuleEntryPoint : ModuleServiceEntryPoint<IdSyncConfig>(), RemoteCo
     @Synchronized
     override fun onRemoteConfigUpdated(config: ModuleRemoteConfig<IdSyncConfig?>) {
         DebugLogger.info(tag, "Remote config updated: $config")
-        config.featuresConfig?.let { controller?.refresh(it) }
+        config.featuresConfig?.let { controller?.refresh(it, config.identifiers) }
     }
 }

@@ -267,6 +267,12 @@ public interface IdSyncProtobuf {
       // repeated uint32 valid_response_codes = 7;
       public int[] validResponseCodes;
 
+      // optional bool report_event_enabled = 8 [default = true];
+      public boolean reportEventEnabled;
+
+      // optional string report_url = 9;
+      public java.lang.String reportUrl;
+
       public Request() {
         clear();
       }
@@ -279,6 +285,8 @@ public interface IdSyncProtobuf {
         resendIntervalForValidResponse = 86400000L;
         resendIntervalForInvalidResponse = 3600000L;
         validResponseCodes = io.appmetrica.analytics.protobuf.nano.WireFormatNano.EMPTY_INT_ARRAY;
+        reportEventEnabled = true;
+        reportUrl = "";
         cachedSize = -1;
         return this;
       }
@@ -313,6 +321,12 @@ public interface IdSyncProtobuf {
           for (int i = 0; i < this.validResponseCodes.length; i++) {
             output.writeUInt32(7, this.validResponseCodes[i]);
           }
+        }
+        if (this.reportEventEnabled != true) {
+          output.writeBool(8, this.reportEventEnabled);
+        }
+        if (!this.reportUrl.equals("")) {
+          output.writeString(9, this.reportUrl);
         }
         super.writeTo(output);
       }
@@ -358,6 +372,14 @@ public interface IdSyncProtobuf {
           }
           size += dataSize;
           size += 1 * this.validResponseCodes.length;
+        }
+        if (this.reportEventEnabled != true) {
+          size += io.appmetrica.analytics.protobuf.nano.CodedOutputByteBufferNano
+              .computeBoolSize(8, this.reportEventEnabled);
+        }
+        if (!this.reportUrl.equals("")) {
+          size += io.appmetrica.analytics.protobuf.nano.CodedOutputByteBufferNano
+              .computeStringSize(9, this.reportUrl);
         }
         return size;
       }
@@ -458,6 +480,14 @@ public interface IdSyncProtobuf {
               }
               this.validResponseCodes = newArray;
               input.popLimit(limit);
+              break;
+            }
+            case 64: {
+              this.reportEventEnabled = input.readBool();
+              break;
+            }
+            case 74: {
+              this.reportUrl = input.readString();
               break;
             }
           }

@@ -24,6 +24,8 @@ message IdSyncConfig {
         optional uint64 resend_interval_for_valid_response = 5 [default = 86400000];
         optional uint64 resend_interval_for_invalid_response = 6 [default = 3600000];
         repeated uint32 valid_response_codes = 7;
+        optional bool report_event_enabled = 8 [default = true];
+        optional string report_url = 9;
     }
 
     message RequestConfig {

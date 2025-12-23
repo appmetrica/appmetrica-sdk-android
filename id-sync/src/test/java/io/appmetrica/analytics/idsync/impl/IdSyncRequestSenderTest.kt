@@ -134,7 +134,7 @@ class IdSyncRequestSenderTest : CommonTest() {
     @Test
     fun `sendRequest request callback`() {
         sender.sendRequest(requestConfig)
-        verify(requestCallback).onResult(requestResultCaptor.capture())
+        verify(requestCallback).onResult(requestResultCaptor.capture(), any())
 
         ObjectPropertyAssertions(requestResultCaptor.firstValue)
             .checkField("type", requestType)
@@ -152,7 +152,7 @@ class IdSyncRequestSenderTest : CommonTest() {
         whenever(response.code).doReturn(404)
 
         sender.sendRequest(requestConfig)
-        verify(requestCallback).onResult(requestResultCaptor.capture())
+        verify(requestCallback).onResult(requestResultCaptor.capture(), any())
 
         ObjectPropertyAssertions(requestResultCaptor.firstValue)
             .checkField("type", requestType)

@@ -7,7 +7,9 @@ class RequestConfig(
     val headers: Map<String, List<String>>,
     val resendIntervalForValidResponse: Long,
     val resendIntervalForInvalidResponse: Long,
-    val validResponseCodes: List<Int>
+    val validResponseCodes: List<Int>,
+    val reportEventEnabled: Boolean,
+    val reportUrl: String?
 ) {
 
     override fun equals(other: Any?): Boolean {
@@ -23,6 +25,8 @@ class RequestConfig(
         if (preconditions != other.preconditions) return false
         if (headers != other.headers) return false
         if (validResponseCodes != other.validResponseCodes) return false
+        if (reportEventEnabled != other.reportEventEnabled) return false
+        if (reportUrl != other.reportUrl) return false
 
         return true
     }
@@ -35,6 +39,8 @@ class RequestConfig(
         result = 31 * result + preconditions.hashCode()
         result = 31 * result + headers.hashCode()
         result = 31 * result + validResponseCodes.hashCode()
+        result = 31 * result + reportEventEnabled.hashCode()
+        result = 31 * result + (reportUrl?.hashCode() ?: 0)
         return result
     }
 
@@ -46,7 +52,9 @@ class RequestConfig(
             "headers=$headers, " +
             "resendIntervalForValidResponse=$resendIntervalForValidResponse, " +
             "resendIntervalForInvalidResponse=$resendIntervalForInvalidResponse, " +
-            "validResponseCodes=$validResponseCodes" +
+            "validResponseCodes=$validResponseCodes, " +
+            "reportEventEnabled=$reportEventEnabled, " +
+            "reportUrl=$reportUrl" +
             ")"
     }
 }

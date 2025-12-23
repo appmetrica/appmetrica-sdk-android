@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.idsync.impl
 
 import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor
+import io.appmetrica.analytics.coreapi.internal.identifiers.SdkIdentifiers
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.ActivationBarrierCallback
 import io.appmetrica.analytics.coreutils.internal.executors.SafeRunnable
 import io.appmetrica.analytics.idsync.impl.model.RequestStateHolder
@@ -10,7 +11,8 @@ import io.appmetrica.analytics.modulesapi.internal.service.ServiceContext
 import java.util.concurrent.TimeUnit
 
 class IdSyncController(
-    private val serviceContext: ServiceContext
+    private val serviceContext: ServiceContext,
+    sdkIdentifiers: SdkIdentifiers
 ) {
     private val tag = "[IdSyncController]"
 
@@ -21,7 +23,8 @@ class IdSyncController(
         RequestStateHolder(
             serviceContext.serviceStorageProvider
                 .modulePreferences(IdSyncConstants.IDENTIFIER)
-        )
+        ),
+        sdkIdentifiers
     )
     @Volatile
     private var config: IdSyncConfig? = null
@@ -54,7 +57,8 @@ class IdSyncController(
     }
 
     @Synchronized
-    fun refresh(config: IdSyncConfig) {
+    fun refresh(config: IdSyncConfig, sdkIdentifiers: SdkIdentifiers) {
+        requestController.sdkIdentifiers = sdkIdentifiers
         if (this.config != config) {
             this.config = config
             if (config.isEnabled() && !enabled) {

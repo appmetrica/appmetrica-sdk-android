@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.idsync.impl
 
 import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor
+import io.appmetrica.analytics.coreapi.internal.identifiers.SdkIdentifiers
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.ActivationBarrier
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.ActivationBarrierCallback
 import io.appmetrica.analytics.idsync.impl.model.RequestStateHolder
@@ -50,6 +51,8 @@ internal class IdSyncControllerTest : CommonTest() {
         on { activationBarrier } doReturn activationBarrier
     }
 
+    private val sdkIdentifiers: SdkIdentifiers = mock()
+
     @get:Rule
     val requestStateHolderRule = constructionRule<RequestStateHolder>()
     private val requestStateHolder: RequestStateHolder by requestStateHolderRule
@@ -72,14 +75,14 @@ internal class IdSyncControllerTest : CommonTest() {
     }
 
     private val idSyncController by setUp {
-        IdSyncController(serviceContext)
+        IdSyncController(serviceContext, sdkIdentifiers)
     }
 
     @Test
     fun idSyncRequestController() {
         assertThat(idSyncRequestControllerRule.constructionMock.constructed()).hasSize(1)
         assertThat(idSyncRequestControllerRule.argumentInterceptor.flatArguments())
-            .containsExactly(serviceContext, requestStateHolder)
+            .containsExactly(serviceContext, requestStateHolder, sdkIdentifiers)
 
         assertThat(requestStateHolderRule.constructionMock.constructed()).hasSize(1)
         assertThat(requestStateHolderRule.argumentInterceptor.flatArguments())
@@ -89,19 +92,18 @@ internal class IdSyncControllerTest : CommonTest() {
     @Test
     fun `refresh if config is disabled`() {
         whenever(idSyncConfig.enabled).thenReturn(false)
-        idSyncController.refresh(idSyncConfig)
-        verifyNoInteractions(executor, activationBarrier, idSyncRequestController)
+        idSyncController.refresh(idSyncConfig, sdkIdentifiers)
+        verifyNoInteractions(executor, activationBarrier)
     }
 
     @Test
     fun refreshIfConfigIsEnabled() {
-        idSyncController.refresh(idSyncConfig)
+        idSyncController.refresh(idSyncConfig, sdkIdentifiers)
         verify(activationBarrier).subscribe(
             eq(launchDelaySeconds),
             eq(executor),
             activationBarrierCallbackCaptor.capture()
         )
-        verifyNoInteractions(idSyncRequestController)
         verify(executor, never()).executeDelayed(runnableCaptor.capture(), eq(periodicInterval))
 
         activationBarrierCallbackCaptor.firstValue.onWaitFinished()
@@ -113,16 +115,16 @@ internal class IdSyncControllerTest : CommonTest() {
 
     @Test
     fun `refresh with same config with enabled twice`() {
-        idSyncController.refresh(idSyncConfig)
+        idSyncController.refresh(idSyncConfig, sdkIdentifiers)
         clearInvocations(activationBarrier, executor)
-        idSyncController.refresh(idSyncConfig)
+        idSyncController.refresh(idSyncConfig, sdkIdentifiers)
 
         verifyNoInteractions(activationBarrier, executor)
     }
 
     @Test
     fun `refresh with enabled twice`() {
-        idSyncController.refresh(idSyncConfig)
+        idSyncController.refresh(idSyncConfig, sdkIdentifiers)
         clearInvocations(activationBarrier, executor)
 
         val config = mock<IdSyncConfig> {
@@ -131,13 +133,13 @@ internal class IdSyncControllerTest : CommonTest() {
             on { launchDelay } doReturn launchDelaySeconds
         }
 
-        idSyncController.refresh(config)
+        idSyncController.refresh(config, sdkIdentifiers)
         verifyNoInteractions(activationBarrier, executor)
     }
 
     @Test
     fun `refresh with disabled after enabled`() {
-        idSyncController.refresh(idSyncConfig)
+        idSyncController.refresh(idSyncConfig, sdkIdentifiers)
         verify(activationBarrier).subscribe(
             eq(launchDelaySeconds),
             eq(executor),
@@ -149,7 +151,8 @@ internal class IdSyncControllerTest : CommonTest() {
                 on { enabled } doReturn false
                 on { requests } doReturn listOf(firstRequest, secondRequest)
                 on { launchDelay } doReturn launchDelaySeconds
-            }
+            },
+            sdkIdentifiers
         )
         verify(executor).remove(runnableCaptor.capture())
         verifyNoInteractions(activationBarrier)
@@ -161,14 +164,15 @@ internal class IdSyncControllerTest : CommonTest() {
 
     @Test
     fun `refresh with disabled twice after enabled`() {
-        idSyncController.refresh(idSyncConfig)
+        idSyncController.refresh(idSyncConfig, sdkIdentifiers)
         whenever(idSyncConfig.enabled).thenReturn(false)
         idSyncController.refresh(
             mock<IdSyncConfig> {
                 on { enabled } doReturn false
                 on { requests } doReturn listOf(firstRequest, secondRequest)
                 on { launchDelay } doReturn launchDelaySeconds
-            }
+            },
+            sdkIdentifiers
         )
         clearInvocations(activationBarrier, executor, idSyncRequestController)
 
@@ -177,9 +181,10 @@ internal class IdSyncControllerTest : CommonTest() {
                 on { enabled } doReturn false
                 on { requests } doReturn listOf(firstRequest, secondRequest)
                 on { launchDelay } doReturn launchDelaySeconds
-            }
+            },
+            sdkIdentifiers
         )
 
-        verifyNoInteractions(executor, activationBarrier, idSyncRequestController)
+        verifyNoInteractions(executor, activationBarrier)
     }
 }
