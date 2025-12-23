@@ -1,8 +1,11 @@
 package io.appmetrica.analytics.impl.db;
 
+import android.content.ContentValues;
 import io.appmetrica.analytics.impl.InternalEvents;
+import io.appmetrica.analytics.impl.db.constants.Constants;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.ParameterizedRobolectricTestRunner;
@@ -33,13 +36,22 @@ public class DbCleanupImportantEventsAreRemovedTest extends DbCleanupBaseTest {
 
     @Test
     public void testImportantEventIsRemoved() {
-        addExcessiveEvents(mMaxReportsCount + 1, mType);
-        mHelper.clearIfTooManyEvents();
+        addExcessiveEvents(mMaxReportsCount, mType);
+        mHelper.insertEvents(Collections.singletonList(getReportContentValues(0, 10, 1000, 0)));
         assertThat(execForSingleInt("select count() from events")).isEqualTo(mExpectedLeftReports);
     }
 
     @Override
     long getMaxEventsCount() {
         return mMaxReportsCount;
+    }
+
+    private ContentValues getReportContentValues(int numberInSession, int type, long sessionId, long sessionType) {
+        ContentValues values = new ContentValues();
+        values.put(Constants.EventsTable.EventTableEntry.FIELD_EVENT_NUMBER_IN_SESSION, numberInSession);
+        values.put(Constants.EventsTable.EventTableEntry.FIELD_EVENT_TYPE, type);
+        values.put(Constants.EventsTable.EventTableEntry.FIELD_EVENT_SESSION, sessionId);
+        values.put(Constants.EventsTable.EventTableEntry.FIELD_EVENT_SESSION_TYPE, sessionType);
+        return values;
     }
 }
