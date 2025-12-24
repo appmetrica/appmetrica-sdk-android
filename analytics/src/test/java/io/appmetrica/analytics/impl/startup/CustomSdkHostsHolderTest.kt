@@ -91,8 +91,8 @@ class CustomSdkHostsHolderTest : CommonTest() {
     fun updateToEmpty() {
         val result = IdentifiersResult(
             "",
-            IdentifierStatus.NO_STARTUP,
-            "no startup"
+            IdentifierStatus.UNKNOWN,
+            "UNKNOWN"
         )
         customSdkHostsHolder.update(result)
 
@@ -104,8 +104,8 @@ class CustomSdkHostsHolderTest : CommonTest() {
             startupParamItemAdapter.adapt(
                 IdentifiersResult(
                     JsonHelper.customSdkHostsToString(emptyMap()),
-                    IdentifierStatus.NO_STARTUP,
-                    "no startup"
+                    IdentifierStatus.UNKNOWN,
+                    "UNKNOWN"
                 )
             )
         ).thenReturn(startupParamsItem)

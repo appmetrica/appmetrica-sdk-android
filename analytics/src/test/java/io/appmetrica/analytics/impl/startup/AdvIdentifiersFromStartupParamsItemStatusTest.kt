@@ -26,7 +26,6 @@ class AdvIdentifiersFromStartupParamsItemStatusTest(
         fun data(): Collection<Array<Any?>> {
             val data: Collection<Array<Any?>> = listOf(
                 arrayOf(StartupParamsItemStatus.OK, AdvIdentifiersResult.Details.OK),
-                arrayOf(StartupParamsItemStatus.NETWORK_ERROR, AdvIdentifiersResult.Details.NO_STARTUP),
                 arrayOf(StartupParamsItemStatus.FEATURE_DISABLED, AdvIdentifiersResult.Details.FEATURE_DISABLED),
                 arrayOf(
                     StartupParamsItemStatus.PROVIDER_UNAVAILABLE,

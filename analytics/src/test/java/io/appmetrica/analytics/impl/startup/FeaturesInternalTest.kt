@@ -30,11 +30,11 @@ class FeaturesInternalTest : CommonTest() {
 
     @Test
     fun parcelizationFilled() {
-        val features = FeaturesInternal(true, IdentifierStatus.NO_STARTUP, "some error")
+        val features = FeaturesInternal(true, IdentifierStatus.UNKNOWN, "some error")
         features.writeToParcel(parcel, 0)
         inOrder(parcel).also {
             it.verify(parcel).writeValue(true)
-            it.verify(parcel).writeString("NO_STARTUP")
+            it.verify(parcel).writeString("UNKNOWN")
             it.verify(parcel).writeString("some error")
         }
     }
@@ -54,11 +54,11 @@ class FeaturesInternalTest : CommonTest() {
     fun deparcelizationFilled() {
         stubbing(parcel) {
             on { readValue(Boolean::class.java.classLoader) } doReturn false
-            on { readString() }.doReturn("NO_STARTUP", "some error")
+            on { readString() }.doReturn("UNKNOWN", "some error")
         }
         ObjectPropertyAssertions(FeaturesInternal(parcel))
             .checkField("sslPinning", "getSslPinning", false)
-            .checkField("status", "getStatus", IdentifierStatus.NO_STARTUP)
+            .checkField("status", "getStatus", IdentifierStatus.UNKNOWN)
             .checkField("errorExplanation", "getErrorExplanation", "some error")
             .checkAll()
     }
@@ -78,7 +78,7 @@ class FeaturesInternalTest : CommonTest() {
 
     @Test
     fun parcelizationThereAndBackAgainFilled() {
-        val features = FeaturesInternal(true, IdentifierStatus.NO_STARTUP, "some error")
+        val features = FeaturesInternal(true, IdentifierStatus.UNKNOWN, "some error")
         val parcel = Parcel.obtain()
         features.writeToParcel(parcel, 0)
         parcel.setDataPosition(0)

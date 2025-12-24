@@ -51,7 +51,7 @@ public static class io.appmetrica.analytics.AdvIdentifiersResult$AdvId {
 }
 
 public enum io.appmetrica.analytics.AdvIdentifiersResult$Details {
-    FEATURE_DISABLED, FORBIDDEN_BY_CLIENT_CONFIG, IDENTIFIER_PROVIDER_UNAVAILABLE, INTERNAL_ERROR, INVALID_ADV_ID, NO_STARTUP, OK
+    FEATURE_DISABLED, FORBIDDEN_BY_CLIENT_CONFIG, IDENTIFIER_PROVIDER_UNAVAILABLE, INTERNAL_ERROR, INVALID_ADV_ID, OK
 
     public static io.appmetrica.analytics.AdvIdentifiersResult$Details valueOf(String)
     public static io.appmetrica.analytics.AdvIdentifiersResult$Details[] values()
@@ -482,7 +482,7 @@ public final class io.appmetrica.analytics.StartupParamsItem {
 }
 
 public enum io.appmetrica.analytics.StartupParamsItemStatus {
-    FEATURE_DISABLED, FORBIDDEN_BY_CLIENT_CONFIG, INVALID_VALUE_FROM_PROVIDER, NETWORK_ERROR, OK, PROVIDER_UNAVAILABLE, UNKNOWN_ERROR
+    FEATURE_DISABLED, FORBIDDEN_BY_CLIENT_CONFIG, INVALID_VALUE_FROM_PROVIDER, OK, PROVIDER_UNAVAILABLE, UNKNOWN_ERROR
 
     public static io.appmetrica.analytics.StartupParamsItemStatus valueOf(String)
     public static io.appmetrica.analytics.StartupParamsItemStatus[] values()

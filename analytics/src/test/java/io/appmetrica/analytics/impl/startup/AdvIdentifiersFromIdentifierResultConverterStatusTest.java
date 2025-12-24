@@ -22,7 +22,6 @@ public class AdvIdentifiersFromIdentifierResultConverterStatusTest extends Commo
             {IdentifierStatus.FEATURE_DISABLED, AdvIdentifiersResult.Details.FEATURE_DISABLED},
             {IdentifierStatus.IDENTIFIER_PROVIDER_UNAVAILABLE, AdvIdentifiersResult.Details.IDENTIFIER_PROVIDER_UNAVAILABLE},
             {IdentifierStatus.INVALID_ADV_ID, AdvIdentifiersResult.Details.INVALID_ADV_ID},
-            {IdentifierStatus.NO_STARTUP, AdvIdentifiersResult.Details.NO_STARTUP},
             {IdentifierStatus.OK, AdvIdentifiersResult.Details.OK},
             {IdentifierStatus.UNKNOWN, AdvIdentifiersResult.Details.INTERNAL_ERROR},
             {IdentifierStatus.INVALID_ADV_ID, AdvIdentifiersResult.Details.INVALID_ADV_ID}

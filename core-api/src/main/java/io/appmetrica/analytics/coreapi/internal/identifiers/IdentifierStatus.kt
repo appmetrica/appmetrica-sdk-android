@@ -4,8 +4,6 @@ enum class IdentifierStatus(val value: String) {
     OK("OK"),
     IDENTIFIER_PROVIDER_UNAVAILABLE("IDENTIFIER_PROVIDER_UNAVAILABLE"),
     INVALID_ADV_ID("INVALID_ADV_ID"),
-    @Deprecated("Will be removed in future version")
-    NO_STARTUP("NO_STARTUP"),
     FORBIDDEN_BY_CLIENT_CONFIG("FORBIDDEN_BY_CLIENT_CONFIG"),
     FEATURE_DISABLED("FEATURE_DISABLED"),
     UNKNOWN("UNKNOWN")

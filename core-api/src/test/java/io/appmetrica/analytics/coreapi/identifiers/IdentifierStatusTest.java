@@ -21,7 +21,6 @@ public class IdentifierStatusTest extends CommonTest {
             {IdentifierStatus.FEATURE_DISABLED, "FEATURE_DISABLED"},
             {IdentifierStatus.IDENTIFIER_PROVIDER_UNAVAILABLE, "IDENTIFIER_PROVIDER_UNAVAILABLE"},
             {IdentifierStatus.INVALID_ADV_ID, "INVALID_ADV_ID"},
-            {IdentifierStatus.NO_STARTUP, "NO_STARTUP"},
             {IdentifierStatus.OK, "OK"},
             {IdentifierStatus.UNKNOWN, "UNKNOWN"},
             {IdentifierStatus.FORBIDDEN_BY_CLIENT_CONFIG, "FORBIDDEN_BY_CLIENT_CONFIG"}

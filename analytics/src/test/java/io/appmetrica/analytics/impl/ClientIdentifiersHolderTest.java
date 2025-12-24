@@ -70,7 +70,7 @@ public class ClientIdentifiersHolderTest extends CommonTest {
     private final String yandexAdvId = "yandex adv id";
     private final IdentifierStatus mGaidStatus = IdentifierStatus.FEATURE_DISABLED;
     private final IdentifierStatus mHoaidStatus = IdentifierStatus.IDENTIFIER_PROVIDER_UNAVAILABLE;
-    private final IdentifierStatus yandexStatus = IdentifierStatus.NO_STARTUP;
+    private final IdentifierStatus yandexStatus = IdentifierStatus.UNKNOWN;
     private final String mGaidError = "gaid error";
     private final String mHoaidError = "hoaid error";
     private final String yandexError = "yandex error";

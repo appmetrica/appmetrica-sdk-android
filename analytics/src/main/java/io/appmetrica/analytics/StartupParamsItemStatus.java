@@ -17,10 +17,6 @@ public enum StartupParamsItemStatus {
      */
     INVALID_VALUE_FROM_PROVIDER,
     /**
-     * Value is absent because some network error happened.
-     */
-    NETWORK_ERROR,
-    /**
      * Value is absent because feature is disabled.
      */
     FEATURE_DISABLED,

@@ -22,7 +22,6 @@ class StartupParamsItemStatusAdapterTest(
         fun data(): Collection<Array<Any?>> {
             val data: Collection<Array<Any?>> = listOf(
                 arrayOf(IdentifierStatus.OK, StartupParamsItemStatus.OK),
-                arrayOf(IdentifierStatus.NO_STARTUP, StartupParamsItemStatus.NETWORK_ERROR),
                 arrayOf(IdentifierStatus.FEATURE_DISABLED, StartupParamsItemStatus.FEATURE_DISABLED),
                 arrayOf(IdentifierStatus.IDENTIFIER_PROVIDER_UNAVAILABLE, StartupParamsItemStatus.PROVIDER_UNAVAILABLE),
                 arrayOf(IdentifierStatus.INVALID_ADV_ID, StartupParamsItemStatus.INVALID_VALUE_FROM_PROVIDER),

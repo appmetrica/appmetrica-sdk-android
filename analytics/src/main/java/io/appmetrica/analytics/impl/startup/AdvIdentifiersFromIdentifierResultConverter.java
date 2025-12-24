@@ -35,8 +35,6 @@ public class AdvIdentifiersFromIdentifierResultConverter {
         switch (internalId.status) {
             case OK:
                 return AdvIdentifiersResult.Details.OK;
-            case NO_STARTUP:
-                return AdvIdentifiersResult.Details.NO_STARTUP;
             case FEATURE_DISABLED:
                 return AdvIdentifiersResult.Details.FEATURE_DISABLED;
             case IDENTIFIER_PROVIDER_UNAVAILABLE:

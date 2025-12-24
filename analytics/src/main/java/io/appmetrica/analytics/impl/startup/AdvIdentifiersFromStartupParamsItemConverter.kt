@@ -20,7 +20,6 @@ class AdvIdentifiersFromStartupParamsItemConverter {
 
     private fun StartupParamsItemStatus?.toAdvIdentifierResultDetail(): AdvIdentifiersResult.Details = when (this) {
         StartupParamsItemStatus.OK -> AdvIdentifiersResult.Details.OK
-        StartupParamsItemStatus.NETWORK_ERROR -> AdvIdentifiersResult.Details.NO_STARTUP
         StartupParamsItemStatus.FEATURE_DISABLED -> AdvIdentifiersResult.Details.FEATURE_DISABLED
         StartupParamsItemStatus.PROVIDER_UNAVAILABLE -> AdvIdentifiersResult.Details.IDENTIFIER_PROVIDER_UNAVAILABLE
         StartupParamsItemStatus.INVALID_VALUE_FROM_PROVIDER -> AdvIdentifiersResult.Details.INVALID_ADV_ID

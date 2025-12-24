@@ -272,7 +272,7 @@ public enum io.appmetrica.analytics.coreapi.internal.identifiers.AppSetIdScope {
 }
 
 public enum io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus {
-    FEATURE_DISABLED, FORBIDDEN_BY_CLIENT_CONFIG, IDENTIFIER_PROVIDER_UNAVAILABLE, INVALID_ADV_ID, NO_STARTUP, OK, UNKNOWN
+    FEATURE_DISABLED, FORBIDDEN_BY_CLIENT_CONFIG, IDENTIFIER_PROVIDER_UNAVAILABLE, INVALID_ADV_ID, OK, UNKNOWN
 
     public static final [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus$Companion Companion
 

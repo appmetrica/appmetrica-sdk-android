@@ -77,12 +77,12 @@ class JsonHelperFeaturesTest : CommonTest() {
     fun featuresFromJsonNFilledJson() {
         val input = JSONObject()
             .put("libSslEnabled", true)
-            .put("STATUS", "NO_STARTUP")
+            .put("STATUS", "IDENTIFIER_PROVIDER_UNAVAILABLE")
             .put("ERROR_EXPLANATION", "some error")
             .toString()
         ObjectPropertyAssertions(JsonHelper.featuresFromJson(input))
             .checkField("sslPinning", "getSslPinning", true)
-            .checkField("status", "getStatus", IdentifierStatus.NO_STARTUP)
+            .checkField("status", "getStatus", IdentifierStatus.IDENTIFIER_PROVIDER_UNAVAILABLE)
             .checkField("errorExplanation", "getErrorExplanation", "some error")
             .checkAll()
     }

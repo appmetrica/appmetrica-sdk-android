@@ -64,11 +64,6 @@ public class AdvIdentifiersResult {
          */
         FEATURE_DISABLED,
         /**
-         * Identifier could not be retrieved because there was no startup yet
-         * so we cannot know if access to adv_id is forbidden.
-         */
-        NO_STARTUP,
-        /**
          * Identifier could not be retrieved due to some unknown error.
          */
         INTERNAL_ERROR,

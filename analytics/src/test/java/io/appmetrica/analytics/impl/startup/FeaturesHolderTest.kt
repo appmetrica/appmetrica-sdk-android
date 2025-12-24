@@ -64,7 +64,7 @@ class FeaturesHolderTest : CommonTest() {
         val map = mutableMapOf(
             "key" to StartupParamsItem(
                 "id",
-                StartupParamsItemStatus.NETWORK_ERROR,
+                StartupParamsItemStatus.UNKNOWN_ERROR,
                 "error"
             )
         )
@@ -76,7 +76,7 @@ class FeaturesHolderTest : CommonTest() {
     fun putToMapHasIdentifier() {
         val firstEntry = "key" to StartupParamsItem(
             "id",
-            StartupParamsItemStatus.NETWORK_ERROR,
+            StartupParamsItemStatus.UNKNOWN_ERROR,
             "error"
         )
 
@@ -109,7 +109,7 @@ class FeaturesHolderTest : CommonTest() {
     fun putToMapIgnoresUnknownKey() {
         val initialEntry = "key" to StartupParamsItem(
             "id",
-            StartupParamsItemStatus.NETWORK_ERROR,
+            StartupParamsItemStatus.UNKNOWN_ERROR,
             "error"
         )
         val libSslStartupParamsItem = StartupParamsItem("false", StartupParamsItemStatus.OK, "some error")
