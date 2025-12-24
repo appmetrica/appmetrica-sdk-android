@@ -43,6 +43,9 @@ class IdSyncConfigParserTest : CommonTest() {
     private val validResponseCode2 = 201
     private val networkCellValue = "cell"
     private val launchDelayValue = 120L
+    private val reportEventEnabledKey = "reportEventEnabled"
+    private val reportUrlKey = "reportUrl"
+    private val reportUrlValue = "https://example.com/report"
 
     private val converter: IdSyncConfigToProtoConverter = mock()
     private val idSyncConfig: IdSyncConfig = mock()
@@ -95,6 +98,8 @@ class IdSyncConfigParserTest : CommonTest() {
         val idSyncBlockJson = JSONObject().apply {
             put(launchDelaySecondsKey, launchDelayValue)
             put(requestsKey, requestsArray)
+            put(reportEventEnabledKey, false)
+            put(reportUrlKey, reportUrlValue)
         }
 
         val featuresJson = JSONObject().apply {

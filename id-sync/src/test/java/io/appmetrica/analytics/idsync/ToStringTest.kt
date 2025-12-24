@@ -67,7 +67,9 @@ class ToStringTest(
                     headers = mapOf("key" to listOf("value#", "value#2")),
                     resendIntervalForValidResponse = 100500L,
                     resendIntervalForInvalidResponse = 200500L,
-                    validResponseCodes = listOf(200, 204)
+                    validResponseCodes = listOf(200, 204),
+                    reportEventEnabled = true,
+                    reportUrl = null
                 ),
                 0,
                 ""

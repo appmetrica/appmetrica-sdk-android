@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.idsync.impl
 
-import io.appmetrica.analytics.modulesapi.internal.common.ModuleSelfReporter
+import io.appmetrica.analytics.coreapi.internal.identifiers.SdkIdentifiers
+import io.appmetrica.analytics.idsync.internal.model.RequestConfig
 import io.appmetrica.analytics.modulesapi.internal.service.ServiceContext
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.constructionRule
@@ -13,23 +14,29 @@ import org.mockito.kotlin.verify
 internal class IdSyncEventReporterTest : CommonTest() {
 
     private val requestResult: RequestResult = mock()
+    private val requestConfig: RequestConfig = mock()
+    private val sdkIdentifiers: SdkIdentifiers = mock()
     private val eventValue = "Some event value"
 
-    private val selfReporter: ModuleSelfReporter = mock()
-    private val serviceContext: ServiceContext = mock {
-        on { selfReporter } doReturn selfReporter
-    }
+    private val serviceContext: ServiceContext = mock()
+
+    private val resultReporter: IdSyncResultReporter = mock()
 
     @get:Rule
-    val eventValueComposerRule = constructionRule<IdSyncEventValueComposer> {
+    val eventValueComposerRule = constructionRule<IdSyncResultStringComposer> {
         on { compose(requestResult) } doReturn eventValue
     }
 
-    private val reporter by setUp { IdSyncEventReporter(serviceContext) }
+    @get:Rule
+    val reporterProviderRule = constructionRule<IdSyncResultReporterProvider> {
+        on { getReporters(requestConfig) } doReturn listOf(resultReporter)
+    }
+
+    private val reporter by setUp { IdSyncResultHandler(serviceContext) }
 
     @Test
     fun reportEvent() {
-        reporter.reportEvent(requestResult)
-        verify(selfReporter).reportEvent("id_sync", eventValue)
+        reporter.reportEvent(requestResult, requestConfig, sdkIdentifiers)
+        verify(resultReporter).reportResult(eventValue, sdkIdentifiers)
     }
 }

@@ -1,5 +1,6 @@
 package io.appmetrica.analytics.idsync.internal
 
+import io.appmetrica.analytics.coreapi.internal.identifiers.SdkIdentifiers
 import io.appmetrica.analytics.idsync.impl.IdSyncConstants
 import io.appmetrica.analytics.idsync.impl.IdSyncController
 import io.appmetrica.analytics.idsync.impl.model.IdSyncConfigParser
@@ -32,9 +33,11 @@ internal class IdSyncModuleEntryPointTest : CommonTest() {
 
     private val serviceContext: ServiceContext = mock()
     private val idSyncConfig: IdSyncConfig = mock()
+    private val sdkIdentifiers: SdkIdentifiers = mock()
 
     private val moduleConfig: ModuleRemoteConfig<IdSyncConfig?> = mock {
         on { featuresConfig } doReturn idSyncConfig
+        on { identifiers } doReturn sdkIdentifiers
     }
 
     @get:Rule
@@ -90,16 +93,16 @@ internal class IdSyncModuleEntryPointTest : CommonTest() {
     @Test
     fun `initServiceSide with filled config`() {
         moduleEntryPoint.initServiceSide(serviceContext, moduleConfig)
-        verify(idSyncController).refresh(idSyncConfig)
+        verify(idSyncController).refresh(idSyncConfig, sdkIdentifiers)
         assertThat(idSyncControllerRule.constructionMock.constructed()).hasSize(1)
         assertThat(idSyncControllerRule.argumentInterceptor.flatArguments())
-            .containsExactly(serviceContext)
+            .containsExactly(serviceContext, sdkIdentifiers)
     }
 
     @Test
     fun `initServiceSide multiple times`() {
         repeat(10) { moduleEntryPoint.initServiceSide(serviceContext, moduleConfig) }
-        verify(idSyncController).refresh(idSyncConfig)
+        verify(idSyncController).refresh(idSyncConfig, sdkIdentifiers)
         assertThat(idSyncControllerRule.constructionMock.constructed()).hasSize(1)
     }
 
@@ -122,7 +125,7 @@ internal class IdSyncModuleEntryPointTest : CommonTest() {
         clearInvocations(idSyncController)
         moduleEntryPoint.remoteConfigExtensionConfiguration.getRemoteConfigUpdateListener()
             .onRemoteConfigUpdated(moduleConfig)
-        verify(idSyncController).refresh(idSyncConfig)
+        verify(idSyncController).refresh(idSyncConfig, sdkIdentifiers)
     }
 
     @Test

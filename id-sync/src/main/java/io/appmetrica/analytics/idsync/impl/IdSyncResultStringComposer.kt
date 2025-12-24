@@ -5,7 +5,7 @@ import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import org.json.JSONArray
 import org.json.JSONObject
 
-internal class IdSyncEventValueComposer {
+internal class IdSyncResultStringComposer {
 
     private val tag = "[EventValueComposer]"
     private val type = "type"

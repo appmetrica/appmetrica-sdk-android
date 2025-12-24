@@ -39,6 +39,8 @@ internal class RequestConfigToProtoConverterTest : CommonTest() {
             resendIntervalForValidResponse = resendIntervalForValidResponseValue
             resendIntervalForInvalidResponse = resendIntervalForInvalidResponseValue
             validResponseCodes = validResponseCodesValue
+            reportEventEnabled = false
+            reportUrl = "https://example.com/report"
         }
         ObjectPropertyAssertions(converter.toModel(inputProto))
             .checkField("type", typeValue)
@@ -53,6 +55,8 @@ internal class RequestConfigToProtoConverterTest : CommonTest() {
             .checkField("resendIntervalForValidResponse", resendIntervalForValidResponseValue)
             .checkField("resendIntervalForInvalidResponse", resendIntervalForInvalidResponseValue)
             .checkField("validResponseCodes", validResponseCodesValue.toList())
+            .checkField("reportEventEnabled", false)
+            .checkField("reportUrl", "https://example.com/report")
             .checkAll()
     }
 
@@ -73,6 +77,8 @@ internal class RequestConfigToProtoConverterTest : CommonTest() {
             .checkField("resendIntervalForValidResponse", inputProto.resendIntervalForValidResponse)
             .checkField("resendIntervalForInvalidResponse", inputProto.resendIntervalForInvalidResponse)
             .checkField("validResponseCodes", emptyList<Int>())
+            .checkField("reportEventEnabled", true)
+            .checkField<String?>("reportUrl", null)
             .checkAll()
     }
 
@@ -96,7 +102,9 @@ internal class RequestConfigToProtoConverterTest : CommonTest() {
             headers = headerValues,
             resendIntervalForValidResponse = resendIntervalForValidResponseValue,
             resendIntervalForInvalidResponse = resendIntervalForInvalidResponseValue,
-            validResponseCodes = validResponseCodesValue.toList()
+            validResponseCodes = validResponseCodesValue.toList(),
+            reportEventEnabled = false,
+            reportUrl = "https://example.com/report"
         )
         val outputProto = converter.fromModel(inputConfig)
 
@@ -118,6 +126,8 @@ internal class RequestConfigToProtoConverterTest : CommonTest() {
             .checkField("resendIntervalForValidResponse", resendIntervalForValidResponseValue)
             .checkField("resendIntervalForInvalidResponse", resendIntervalForInvalidResponseValue)
             .checkField("validResponseCodes", validResponseCodesValue)
+            .checkField("reportEventEnabled", false)
+            .checkField("reportUrl", "https://example.com/report")
             .checkAll()
     }
 
@@ -132,7 +142,9 @@ internal class RequestConfigToProtoConverterTest : CommonTest() {
             headers = emptyMap(),
             resendIntervalForValidResponse = 0L,
             resendIntervalForInvalidResponse = 0L,
-            validResponseCodes = emptyList<Int>()
+            validResponseCodes = emptyList<Int>(),
+            reportEventEnabled = true,
+            reportUrl = null
         )
 
         val outputProto = converter.fromModel(inputConfig)
@@ -150,6 +162,8 @@ internal class RequestConfigToProtoConverterTest : CommonTest() {
             .checkField("resendIntervalForValidResponse", inputConfig.resendIntervalForValidResponse)
             .checkField("resendIntervalForInvalidResponse", inputConfig.resendIntervalForInvalidResponse)
             .checkField("validResponseCodes", intArrayOf())
+            .checkField("reportEventEnabled", true)
+            .checkField("reportUrl", "")
             .checkAll()
     }
 }

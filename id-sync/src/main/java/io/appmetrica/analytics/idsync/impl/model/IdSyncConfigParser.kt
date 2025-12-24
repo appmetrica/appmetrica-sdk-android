@@ -25,6 +25,8 @@ internal class IdSyncConfigParser(
     private val preconditions = "preconditions"
     private val network = "network"
     private val networkCell = "cell"
+    private val reportEventEnabled = "report_event_enabled"
+    private val reportUrl = "report_url"
 
     override fun parse(rawData: JSONObject): IdSyncConfig {
         val blockJson = rawData.optJSONObject(block) ?: JSONObject()
@@ -69,6 +71,8 @@ internal class IdSyncConfigParser(
             result.resendIntervalForInvalidResponse
         )
         result.validResponseCodes = optJSONArray(validResponseCodes).extractValidResponseCodes()
+        result.reportEventEnabled = optBoolean(reportEventEnabled, result.reportEventEnabled)
+        result.reportUrl = optString(reportUrl)
 
         return result
     }

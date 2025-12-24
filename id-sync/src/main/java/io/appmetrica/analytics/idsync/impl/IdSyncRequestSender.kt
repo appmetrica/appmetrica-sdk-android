@@ -44,7 +44,8 @@ internal class IdSyncRequestSender(
                 response.code,
                 if (response.responseData.isNotEmpty()) response.responseData else response.errorData,
                 response.headers
-            )
+            ),
+            requestConfig
         )
     }
 }
