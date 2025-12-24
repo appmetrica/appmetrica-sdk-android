@@ -724,7 +724,6 @@ public class ReportTask implements UnderlyingNetworkTask {
     @Override
     public void onTaskFinished() {
         DebugLogger.INSTANCE.info(TAG, "onTaskFinished: %s", description());
-        mComponent.getDbHelper().clearIfTooManyEvents();
     }
 
     @Override
@@ -751,7 +750,6 @@ public class ReportTask implements UnderlyingNetworkTask {
     public void onShouldNotExecute() {
         DebugLogger.INSTANCE.info(TAG, "onShouldNotExecute: %s", description());
         shouldTriggerSendingEvents = true;
-        mComponent.getDbHelper().clearIfTooManyEvents();
     }
 
     @NonNull

@@ -296,49 +296,6 @@ public class DatabaseHelper {
         }
     }
 
-    public void clearIfTooManyEvents() {
-        try {
-            mWriteLock.lock();
-            final long maxReportsInDbCount = mComponent.getFreshReportRequestConfig().getMaxEventsInDbCount();
-            final long currentRowCount = mRowCount.get();
-            DebugLogger.INSTANCE.info(
-                TAG,
-                "Should clear db? Current reports count: %d, max: %d",
-                currentRowCount,
-                maxReportsInDbCount
-            );
-            if (currentRowCount > maxReportsInDbCount) {
-                DebugLogger.INSTANCE.info(
-                    TAG,
-                    "Trying to clear reports table. Row count: %s, rows count: %s, max: %s",
-                    currentRowCount,
-                    mRowCount,
-                    maxReportsInDbCount
-                );
-                SQLiteDatabase db = mStorage.getWritableDatabase();
-                if (db != null) {
-                    int deletedRowsCount = deleteExcessiveReports(db);
-                    long allRowsCount = mRowCount.addAndGet(-deletedRowsCount);
-                    DebugLogger.INSTANCE.info(
-                        TAG,
-                        "Reports table cleared. %d rows deleted. Row count: %d",
-                        deletedRowsCount,
-                        allRowsCount
-                    );
-                    if (deletedRowsCount != 0) {
-                        for (EventListener listener : mEventListeners) {
-                            listener.onEventsUpdated();
-                        }
-                    }
-                }
-            }
-        } catch (Throwable e) {
-            DebugLogger.INSTANCE.error(TAG, e, "Smth was wrong while clearing database.");
-        } finally {
-            mWriteLock.unlock();
-        }
-    }
-
     private int deleteExcessiveReports(final SQLiteDatabase db) {
         try {
             int percentToDelete = 10;
@@ -532,7 +489,7 @@ public class DatabaseHelper {
         if (null == reports || reports.isEmpty()) {
             return;
         }
-
+        final long dbLimit = mComponent.getFreshReportRequestConfig().getMaxEventsInDbCount();
         SQLiteDatabase wDatabase = null;
         mWriteLock.lock();
         try {
@@ -547,9 +504,28 @@ public class DatabaseHelper {
                     logEvent(reportItem, "Event saved to db");
                 }
 
-                wDatabase.setTransactionSuccessful();
                 long rows = mRowCount.get();
-                DebugLogger.INSTANCE.info(TAG, "report saved. Row count %d", rows);
+                DebugLogger.INSTANCE.info(TAG, "report saved. Row count %d; dbLimit: %s;", rows, dbLimit);
+
+                int deletedRowsCount = 0;
+                if (rows > dbLimit) {
+                    deletedRowsCount = deleteExcessiveReports(wDatabase);
+                    long actualEventsCount = mRowCount.addAndGet(-deletedRowsCount);
+                    DebugLogger.INSTANCE.info(
+                        TAG,
+                        "Reports table cleared. %d rows deleted. Row count: %d",
+                        deletedRowsCount,
+                        actualEventsCount
+                    );
+                }
+
+                wDatabase.setTransactionSuccessful();
+
+                if (deletedRowsCount != 0) {
+                    for (EventListener listener : mEventListeners) {
+                        listener.onEventsUpdated();
+                    }
+                }
             }
         } catch (Throwable exception) {
             DebugLogger.INSTANCE.error(

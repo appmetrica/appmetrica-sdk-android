@@ -1,9 +1,12 @@
 package io.appmetrica.analytics.impl.db;
 
+import android.content.ContentValues;
 import io.appmetrica.analytics.impl.EventsManager;
 import io.appmetrica.analytics.impl.InternalEvents;
+import io.appmetrica.analytics.impl.db.constants.Constants;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,7 +18,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class DbCleanupSecondHighestPriorityEventsAreNotRemovedTest extends DbCleanupBaseTest {
 
     private final int maxEventsCount = 50;
-    private final int expectedLeftEvents = 46;
     private final int unimportantType;
 
     @ParameterizedRobolectricTestRunner.Parameters(name = "Type {0} is not of second highest priority")
@@ -44,9 +46,19 @@ public class DbCleanupSecondHighestPriorityEventsAreNotRemovedTest extends DbCle
         for (int importantType : EventsManager.EVENTS_WITH_SECOND_HIGHEST_PRIORITY) {
             addExcessiveEvents(1, importantType);
         }
-        addExcessiveEvents(maxEventsCount + 1 - EventsManager.EVENTS_WITH_SECOND_HIGHEST_PRIORITY.size(), unimportantType);
-        mHelper.clearIfTooManyEvents();
+        addExcessiveEvents(maxEventsCount - EventsManager.EVENTS_WITH_SECOND_HIGHEST_PRIORITY.size(), unimportantType);
+        mHelper.insertEvents(Collections.singletonList(getReportContentValues(0, 10, 1000, 0)));
         assertThat(selectTypes()).containsAll(EventsManager.EVENTS_WITH_SECOND_HIGHEST_PRIORITY);
+        int expectedLeftEvents = 46;
         assertThat(execForSingleInt("select count() from events")).isEqualTo(expectedLeftEvents);
+    }
+
+    private ContentValues getReportContentValues(int numberInSession, int type, long sessionId, long sessionType) {
+        ContentValues values = new ContentValues();
+        values.put(Constants.EventsTable.EventTableEntry.FIELD_EVENT_NUMBER_IN_SESSION, numberInSession);
+        values.put(Constants.EventsTable.EventTableEntry.FIELD_EVENT_TYPE, type);
+        values.put(Constants.EventsTable.EventTableEntry.FIELD_EVENT_SESSION, sessionId);
+        values.put(Constants.EventsTable.EventTableEntry.FIELD_EVENT_SESSION_TYPE, sessionType);
+        return values;
     }
 }

@@ -6,7 +6,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import io.appmetrica.analytics.impl.EventsManager;
+import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.InternalEvents;
+import io.appmetrica.analytics.impl.SelfDiagnosticReporter;
 import io.appmetrica.analytics.impl.Utils;
 import io.appmetrica.analytics.impl.component.ComponentId;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
@@ -16,11 +18,14 @@ import io.appmetrica.analytics.impl.db.protobuf.converter.DbEventModelConverter;
 import io.appmetrica.analytics.impl.events.ConditionalEventTrigger;
 import io.appmetrica.analytics.impl.events.EventListener;
 import io.appmetrica.analytics.impl.request.ReportRequestConfig;
+import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade;
+import io.appmetrica.analytics.impl.selfreporting.SelfReporterWrapper;
 import io.appmetrica.analytics.impl.utils.TimeUtils;
 import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import io.appmetrica.analytics.testutils.LogRule;
+import io.appmetrica.analytics.testutils.MockedStaticRule;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -89,6 +94,13 @@ public class DatabaseHelperTest extends CommonTest {
     private long session2;
     private long session3;
 
+    @Mock
+    private SelfReporterWrapper reporter;
+
+    @Rule
+    public MockedStaticRule<AppMetricaSelfReportFacade> selfReporterWrapper =
+        new MockedStaticRule<>(AppMetricaSelfReportFacade.class);
+
     static class SimpleDatabaseHelper extends SQLiteOpenHelper {
 
         SimpleDatabaseHelper(final Context context) {
@@ -107,6 +119,9 @@ public class DatabaseHelperTest extends CommonTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.openMocks(this);
+        when(AppMetricaSelfReportFacade.getReporter()).thenReturn(reporter);
+        when(GlobalServiceLocator.getInstance().getSelfDiagnosticReporterStorage().getOrCreateReporter(any(), any()))
+            .thenReturn(mock(SelfDiagnosticReporter.class));
         SimpleDatabaseHelper simpleDatabaseHelper = new SimpleDatabaseHelper(RuntimeEnvironment.getApplication());
         db = simpleDatabaseHelper.getWritableDatabase();
 
@@ -140,11 +155,11 @@ public class DatabaseHelperTest extends CommonTest {
     @Test
     public void testClearIfTooManyEventsDoesNotExceed() {
         when(config.getMaxEventsInDbCount()).thenReturn(20L);
-        addGeneralEvents(db, 19, TimeUtils.currentDeviceTimeSec());
+        addGeneralEvents(db, 18, TimeUtils.currentDeviceTimeSec());
 
         helper = new DatabaseHelper(componentUnit, storage, databaseCleaner, dbEventModelConverter);
         helper.addEventListener(eventListener);
-        helper.clearIfTooManyEvents();
+        helper.insertEvents(Collections.singletonList(getReportContentValues(0, 10, 1000, 0)));
 
         verify(databaseCleaner, never())
             .cleanEvents(
@@ -175,7 +190,7 @@ public class DatabaseHelperTest extends CommonTest {
             eq(true)
         )).thenReturn(new DatabaseCleaner.DeletionInfo(new ArrayList<ContentValues>(), 100));
 
-        helper.clearIfTooManyEvents();
+        helper.insertEvents(Collections.singletonList(getReportContentValues(0, 10, 1000, 0)));
 
         verify(databaseCleaner)
             .cleanEvents(
@@ -193,10 +208,10 @@ public class DatabaseHelperTest extends CommonTest {
     @Test
     public void testClearIfTooManyEventsDeletesTenPercentOfEvents() throws Exception {
         when(config.getMaxEventsInDbCount()).thenReturn(90L);
-        addGeneralEvents(db, 100, TimeUtils.currentDeviceTimeSec());
+        addGeneralEvents(db, 99, TimeUtils.currentDeviceTimeSec());
 
         helper = new DatabaseHelper(componentUnit, storage);
-        helper.clearIfTooManyEvents();
+        helper.insertEvents(Collections.singletonList(getReportContentValues(0, 10, 1000, 0)));
 
         Cursor cursor = db.rawQuery("select count() from events", null);
         cursor.moveToNext();
@@ -209,10 +224,10 @@ public class DatabaseHelperTest extends CommonTest {
     public void testClearIfTooManyEventsDeletesTenPercentOfEventsEvenIfImportantAreTheOldest() {
         when(config.getMaxEventsInDbCount()).thenReturn(90L);
         addGeneralEvents(db, 5, 1000, 0, EventsManager.EVENTS_WITH_FIRST_HIGHEST_PRIORITY.get(0));
-        addGeneralEvents(db, 95, 1000);
+        addGeneralEvents(db, 94, 1000);
 
         helper = new DatabaseHelper(componentUnit, storage);
-        helper.clearIfTooManyEvents();
+        helper.insertEvents(Collections.singletonList(getReportContentValues(100, 10, 1000, 0)));
 
         Cursor cursor = db.rawQuery("select count() from events", null);
         cursor.moveToNext();
@@ -225,11 +240,11 @@ public class DatabaseHelperTest extends CommonTest {
     public void testClearIfTooManyEventsDeletesMostOldEvents() throws Exception {
         when(config.getMaxEventsInDbCount()).thenReturn(90L);
         addGeneralEvents(db, 5, session1);
-        addGeneralEvents(db, 4, session2);
+        addGeneralEvents(db, 3, session2);
         addGeneralEvents(db, 91, session3);
 
         helper = new DatabaseHelper(componentUnit, storage);
-        helper.clearIfTooManyEvents();
+        helper.insertEvents(Collections.singletonList(getReportContentValues(100, 10, session3, 0)));
 
         Cursor cursor = db.rawQuery("select count() from events", null);
         cursor.moveToNext();

@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import io.appmetrica.analytics.impl.component.ComponentId;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.impl.db.constants.Constants;
+import io.appmetrica.analytics.impl.request.ReportRequestConfig;
 import io.appmetrica.analytics.impl.utils.ServerTime;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
@@ -32,6 +33,8 @@ public class RemoveBackgroundSessionIDTest extends CommonTest {
     private static final long SESSION_ID = 10000000030L;
     @Mock
     private ComponentUnit mComponentUnit;
+    @Mock
+    private ReportRequestConfig reportRequestConfig;
     private Context mContext;
 
     private DatabaseStorage testDB;
@@ -45,6 +48,7 @@ public class RemoveBackgroundSessionIDTest extends CommonTest {
         MockitoAnnotations.openMocks(this);
         mContext = TestUtils.createMockedContext();
         when(mComponentUnit.getContext()).thenReturn(mContext);
+        when(mComponentUnit.getFreshReportRequestConfig()).thenReturn(reportRequestConfig);
         when(mComponentUnit.getStartupState()).thenReturn(TestUtils.createDefaultStartupState());
         final ComponentId componentId = mock(ComponentId.class);
         when(componentId.toStringAnonymized()).thenReturn("component_id");

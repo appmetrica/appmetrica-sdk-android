@@ -45,6 +45,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.ArgumentCaptor
 import org.mockito.kotlin.any
+import org.mockito.kotlin.clearInvocations
 import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.inOrder
@@ -52,6 +53,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.stubbing
 import org.mockito.kotlin.verify
+import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
@@ -481,8 +483,9 @@ internal class ReportTaskTest : CommonTest() {
 
     @Test
     fun onTaskFinished() {
+        clearInvocations(eventTrigger, databaseHelper)
         reportTask.onTaskFinished()
-        verify(databaseHelper).clearIfTooManyEvents()
+        verifyNoInteractions(eventTrigger, databaseHelper)
     }
 
     @Test
@@ -523,8 +526,9 @@ internal class ReportTaskTest : CommonTest() {
 
     @Test
     fun onShouldNotExecute() {
+        clearInvocations(databaseHelper, eventTrigger)
         reportTask.onShouldNotExecute()
-        verify(databaseHelper).clearIfTooManyEvents()
+        verifyNoInteractions(databaseHelper, eventTrigger)
     }
 
     @Test
