@@ -99,7 +99,7 @@
     group: "com.apphud"
     name: "ApphudSDK-Android"
     from: "3.0.0"
-    to: "3.0.3"
+    to: "3.0.4"
 - group: "io.appmetrica.analytics"
   name: "analytics-appsetid"
   dependencies:
@@ -124,7 +124,7 @@
     group: "com.android.billingclient"
     name: "billing"
     from: "8.0.0"
-    to: "8.2.1"
+    to: "8.3.0"
 - group: "io.appmetrica.analytics"
   name: "analytics-gpllibrary"
   dependencies:
