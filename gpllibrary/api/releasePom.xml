@@ -9,7 +9,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.appmetrica.analytics</groupId>
   <artifactId>analytics-gpllibrary</artifactId>
-  <version>8.0.0</version>
+  <version>8.1.0</version>
   <packaging>aar</packaging>
   <name>AppMetrica SDK Google Play Location Library wrapper</name>
   <description>AppMetrica SDK Module</description>
@@ -42,7 +42,7 @@
     <dependency>
       <groupId>io.appmetrica.analytics</groupId>
       <artifactId>analytics-logger</artifactId>
-      <version>8.0.0</version>
+      <version>8.1.0</version>
       <scope>runtime</scope>
     </dependency>
   </dependencies>

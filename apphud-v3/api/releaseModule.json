@@ -3,7 +3,7 @@
     "component": {
         "group": "io.appmetrica.analytics",
         "module": "analytics-apphud-v3",
-        "version": "8.0.0",
+        "version": "8.1.0",
         "attributes": {
             "org.gradle.status": "release"
         }
@@ -25,8 +25,8 @@
             },
             "files": [
                 {
-                    "name": "analytics-apphud-v3-8.0.0.aar",
-                    "url": "analytics-apphud-v3-8.0.0.aar",
+                    "name": "analytics-apphud-v3-8.1.0.aar",
+                    "url": "analytics-apphud-v3-8.1.0.aar",
                     "size": -1,
                     "sha512": "<sha512>",
                     "sha256": "<sha256>",
@@ -55,14 +55,14 @@
                     "group": "io.appmetrica.analytics",
                     "module": "analytics-apphud",
                     "version": {
-                        "requires": "8.0.0"
+                        "requires": "8.1.0"
                     }
                 },
                 {
                     "group": "io.appmetrica.analytics",
                     "module": "analytics-logger",
                     "version": {
-                        "requires": "8.0.0"
+                        "requires": "8.1.0"
                     }
                 },
                 {
@@ -75,8 +75,8 @@
             ],
             "files": [
                 {
-                    "name": "analytics-apphud-v3-8.0.0.aar",
-                    "url": "analytics-apphud-v3-8.0.0.aar",
+                    "name": "analytics-apphud-v3-8.1.0.aar",
+                    "url": "analytics-apphud-v3-8.1.0.aar",
                     "size": -1,
                     "sha512": "<sha512>",
                     "sha256": "<sha256>",
