@@ -247,6 +247,10 @@ public class io.appmetrica.analytics.coreapi.internal.identifiers.AdvertisingIds
     public String toString()
 }
 
+public interface io.appmetrica.analytics.coreapi.internal.identifiers.AdvertisingIdsProvider {
+    public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.AdvertisingIdsHolder getIdentifiers()
+}
+
 public final class io.appmetrica.analytics.coreapi.internal.identifiers.AppSetId {
     public <init>([Nullable] String, [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.AppSetIdScope)
     public final [Nullable] String component1()
@@ -287,12 +291,12 @@ public static final class io.appmetrica.analytics.coreapi.internal.identifiers.I
 }
 
 public final class io.appmetrica.analytics.coreapi.internal.identifiers.PlatformIdentifiers {
-    public <init>([NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.SimpleAdvertisingIdGetter, [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.AppSetIdProvider)
-    public final [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.SimpleAdvertisingIdGetter component1()
+    public <init>([NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.AdvertisingIdsProvider, [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.AppSetIdProvider)
+    public final [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.AdvertisingIdsProvider component1()
     public final [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.AppSetIdProvider component2()
-    public final [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.PlatformIdentifiers copy([NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.SimpleAdvertisingIdGetter, [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.AppSetIdProvider)
+    public final [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.PlatformIdentifiers copy([NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.AdvertisingIdsProvider, [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.AppSetIdProvider)
     public boolean equals([Nullable] Object)
-    public final [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.SimpleAdvertisingIdGetter getAdvIdentifiersProvider()
+    public final [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.AdvertisingIdsProvider getAdvIdentifiersProvider()
     public final [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.AppSetIdProvider getAppSetIdProvider()
     public int hashCode()
     public [NonNull] String toString()
@@ -310,10 +314,6 @@ public final class io.appmetrica.analytics.coreapi.internal.identifiers.SdkIdent
     public final [Nullable] String getUuid()
     public int hashCode()
     public [NonNull] String toString()
-}
-
-public interface io.appmetrica.analytics.coreapi.internal.identifiers.SimpleAdvertisingIdGetter {
-    public abstract [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.AdvertisingIdsHolder getIdentifiers([NonNull] android.content.Context)
 }
 
 public interface io.appmetrica.analytics.coreapi.internal.io.Compressor {

@@ -92,7 +92,7 @@ internal class StartupUnitComponentsTest : CommonTest() {
             .isEqualTo(deviceIdGeneratorMockedConstructionRule.constructionMock.constructed().first())
         assertThat(deviceIdGeneratorMockedConstructionRule.constructionMock.constructed()).hasSize(1)
         assertThat(deviceIdGeneratorMockedConstructionRule.argumentInterceptor.flatArguments())
-            .containsExactly(context)
+            .isEmpty()
     }
 
     @Test

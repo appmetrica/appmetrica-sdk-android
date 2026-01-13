@@ -83,7 +83,7 @@ public class StartupParamsAppenderTest extends CommonTest {
         globalServiceLocator = GlobalServiceLocator.getInstance();
         context = globalServiceLocator.getContext();
         when(globalServiceLocator.getAdvertisingIdGetter()).thenReturn(advertisingIdGetter);
-        when(advertisingIdGetter.getIdentifiers(context)).thenReturn(advertisingIdsHolder);
+        when(advertisingIdGetter.getIdentifiers()).thenReturn(advertisingIdsHolder);
         when(advertisingIdsHolder.getGoogle()).thenReturn(google);
         when(advertisingIdsHolder.getHuawei()).thenReturn(huawei);
         when(advertisingIdsHolder.getYandex()).thenReturn(yandex);

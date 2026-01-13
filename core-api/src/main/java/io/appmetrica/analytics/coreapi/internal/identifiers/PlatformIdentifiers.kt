@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.coreapi.internal.identifiers
 
 data class PlatformIdentifiers(
-    val advIdentifiersProvider: SimpleAdvertisingIdGetter,
+    val advIdentifiersProvider: AdvertisingIdsProvider,
     val appSetIdProvider: AppSetIdProvider
 )

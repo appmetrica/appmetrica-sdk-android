@@ -1,7 +1,5 @@
 package io.appmetrica.analytics.impl.utils
 
-import android.content.Context
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
 import io.appmetrica.analytics.coreapi.internal.identifiers.AdTrackingInfo
 import io.appmetrica.analytics.coreapi.internal.identifiers.AdTrackingInfoResult
 import io.appmetrica.analytics.coreapi.internal.identifiers.AdvertisingIdsHolder
@@ -13,15 +11,11 @@ import io.appmetrica.analytics.impl.IOUtils
 import io.appmetrica.analytics.impl.id.AdvertisingIdGetter
 import io.appmetrica.analytics.impl.id.AppSetIdGetter
 import io.appmetrica.analytics.impl.id.Constants
-import io.appmetrica.analytics.impl.id.RetryStrategy
-import io.appmetrica.analytics.impl.id.TimesBasedRetryStrategy
 import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito.verifyNoInteractions
-import org.mockito.kotlin.any
-import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.stubbing
@@ -30,40 +24,17 @@ import org.robolectric.RobolectricTestRunner
 @RunWith(RobolectricTestRunner::class)
 class DeviceIdGeneratorTest : CommonTest() {
 
-    private val context = mock<Context>()
     private val advertisingIdsHolder = mock<AdvertisingIdsHolder>()
     private val advertisingIdGetter = mock<AdvertisingIdGetter>()
     private val appSetIdGetter = mock<AppSetIdGetter>()
-    private val deviceIdGenerator = DeviceIdGenerator(context, advertisingIdGetter, appSetIdGetter)
+    private val deviceIdGenerator = DeviceIdGenerator(advertisingIdGetter, appSetIdGetter)
     private val identifierPatter = "[0-9a-f]{32}"
-
-    @Test
-    fun correctStrategyIsUsed() {
-        val captor = argumentCaptor<RetryStrategy>()
-        stubbing(advertisingIdGetter) {
-            on { getIdentifiersForced(captor.capture()) } doReturn advertisingIdsHolder
-        }
-        stubbing(advertisingIdsHolder) {
-            on { yandex } doReturn AdTrackingInfoResult(
-                AdTrackingInfo(AdTrackingInfo.Provider.YANDEX, "id", false),
-                IdentifierStatus.OK,
-                null
-            )
-        }
-        deviceIdGenerator.generateDeviceId()
-        assertThat(captor.firstValue).isInstanceOf(TimesBasedRetryStrategy::class.java)
-        ObjectPropertyAssertions(captor.firstValue as TimesBasedRetryStrategy)
-            .withPrivateFields(true)
-            .checkField("maxAttempts", 5)
-            .checkField("timeout", 500)
-            .checkAll()
-    }
 
     @Test
     fun validYandexAdvId() {
         val yandexAdvId = "yandex adv id"
         stubbing(advertisingIdGetter) {
-            on { getIdentifiersForced(any()) } doReturn advertisingIdsHolder
+            on { identifiers } doReturn advertisingIdsHolder
         }
         stubbing(advertisingIdsHolder) {
             on { yandex } doReturn AdTrackingInfoResult(
@@ -157,7 +128,7 @@ class DeviceIdGeneratorTest : CommonTest() {
 
     private fun mockInvalidYandexAdvId() {
         stubbing(advertisingIdGetter) {
-            on { getIdentifiersForced(any()) } doReturn advertisingIdsHolder
+            on { identifiers } doReturn advertisingIdsHolder
         }
         stubbing(advertisingIdsHolder) {
             on { yandex } doReturn AdTrackingInfoResult(

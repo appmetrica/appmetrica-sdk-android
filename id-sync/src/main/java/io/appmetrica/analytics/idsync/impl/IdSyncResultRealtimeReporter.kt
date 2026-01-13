@@ -30,7 +30,7 @@ class IdSyncResultRealtimeReporter(
 
     override fun reportResult(value: String, sdkIdentifiers: SdkIdentifiers) {
         val platformIdentifiers = serviceContext.platformIdentifiers
-        val advIdentifiers = platformIdentifiers.advIdentifiersProvider.getIdentifiers(serviceContext.context)
+        val advIdentifiers = platformIdentifiers.advIdentifiersProvider.identifiers
 
         val url = Uri.parse(reportingUrl).buildUpon().apply {
             advIdentifiers.google.mAdTrackingInfo?.let { appendQueryParameter(advId, it.advId) }

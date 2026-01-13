@@ -246,7 +246,7 @@ public final class GlobalServiceLocator {
                 if (local == null) {
                     local = new AdvertisingIdGetter(
                         mContext,
-                        getServiceExecutorProvider().getDefaultExecutor(),
+                        getServiceExecutorProvider().getSupportIOExecutor(),
                         startupStateHolder.getStartupState()
                     );
                     startupStateHolder.registerObserver(local);

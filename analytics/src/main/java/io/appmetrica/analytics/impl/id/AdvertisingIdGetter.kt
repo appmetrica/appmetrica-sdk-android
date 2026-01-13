@@ -6,11 +6,12 @@ import io.appmetrica.analytics.coreapi.internal.identifiers.AdTrackingInfoResult
 import io.appmetrica.analytics.coreapi.internal.identifiers.AdvertisingIdsHolder
 import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus
 import io.appmetrica.analytics.impl.id.reflection.Constants
-import io.appmetrica.analytics.impl.id.reflection.ReflectionAdvIdProvider
+import io.appmetrica.analytics.impl.id.reflection.ReflectionAdvIdExtractor
 import io.appmetrica.analytics.impl.startup.StartupState
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import java.util.concurrent.ExecutionException
 import java.util.concurrent.FutureTask
+import java.util.concurrent.TimeUnit
 
 internal class AdvertisingIdGetter internal constructor(
     private val context: Context,
@@ -24,14 +25,22 @@ internal class AdvertisingIdGetter internal constructor(
     private val featureDisabled = "advertising identifiers collecting is forbidden by startup"
     private val unknownProblem = "advertising identifiers collecting is forbidden by unknown reason"
 
-    private val googleProvider: AdvIdProvider =
-        AdvIdProviderWrapper(ReflectionAdvIdProvider(Constants.Providers.GOOGLE))
-    private val huaweiProvider: AdvIdProvider =
-        AdvIdProviderWrapper(ReflectionAdvIdProvider(Constants.Providers.HUAWEI))
-    private val yandexProvider: AdvIdProvider =
-        AdvIdProviderWrapper(ReflectionAdvIdProvider(Constants.Providers.YANDEX))
+    private val googleExtractor: AdvIdExtractor =
+        AdvIdExtractorWrapper(ReflectionAdvIdExtractor(Constants.Providers.GOOGLE))
+    private val huaweiExtractor: AdvIdExtractor =
+        AdvIdExtractorWrapper(ReflectionAdvIdExtractor(Constants.Providers.HUAWEI))
+    private val yandexExtractor: AdvIdExtractor =
+        AdvIdExtractorWrapper(ReflectionAdvIdExtractor(Constants.Providers.YANDEX))
 
-    private lateinit var refresh: FutureTask<Void>
+    private lateinit var blockingRefreshTask: FutureTask<Void>
+    private val backgroundRefreshTask: FutureTask<Void> by lazy {
+        FutureTask<Void> {
+            DebugLogger.info(tag, "Start async refresh task")
+            updateAdvIdentifiers()
+            null
+        }
+    }
+    private val backgroundRefreshIntervalSeconds = 90L
     private val controller = AdvIdGetterController(startupState)
 
     @Volatile
@@ -47,9 +56,9 @@ internal class AdvertisingIdGetter internal constructor(
 
     @Synchronized
     override fun init() {
-        if (!this::refresh.isInitialized) {
+        if (!this::blockingRefreshTask.isInitialized) {
             canTrackIdentifiers = controller.canTrackIdentifiers()
-            refresh = FutureTask<Void> {
+            blockingRefreshTask = FutureTask<Void> {
                 DebugLogger.info(tag, "init advertising identifiers")
                 advertisingIdsHolder = AdvertisingIdsHolder(
                     extractGaidIfAllowed(canTrackIdentifiers.canTrackGaid),
@@ -57,9 +66,10 @@ internal class AdvertisingIdGetter internal constructor(
                     extractYandexAdvIdIfAllowed(canTrackIdentifiers.canTrackYandexAdvId, NoRetriesStrategy())
                 )
                 DebugLogger.info(tag, "Initial advertising identifiers: $advertisingIdsHolder")
+                scheduleBackgroundRefreshTask()
                 null
             }
-            executor.execute(refresh)
+            executor.execute(blockingRefreshTask)
         }
     }
 
@@ -90,63 +100,64 @@ internal class AdvertisingIdGetter internal constructor(
         refreshIdentifiers()
     }
 
-    @Synchronized
-    override fun getIdentifiers(context: Context): AdvertisingIdsHolder {
-        return identifiers
-    }
-
     override val identifiers: AdvertisingIdsHolder
         @Synchronized
         get() {
-            getValue(refresh)
+            getValue(blockingRefreshTask)
             return advertisingIdsHolder
         }
 
-    override val identifiersForced: AdvertisingIdsHolder
-        @Synchronized
-        get() = getIdentifiersForced(NoRetriesStrategy())
-
-    @Synchronized
-    override fun getIdentifiersForced(yandexRetryStrategy: RetryStrategy): AdvertisingIdsHolder {
-        getValue(refreshIdentifiers(yandexRetryStrategy, true))
-        return advertisingIdsHolder
-    }
-
     private fun refreshIdentifiers(): FutureTask<Void> {
-        return refreshIdentifiers(NoRetriesStrategy(), false)
+        val canTrackIdentifiers = controller.canTrackIdentifiers()
+        if (canTrackIdentifiers != this.canTrackIdentifiers) {
+            DebugLogger.info(
+                tag,
+                "Current options (${this.canTrackIdentifiers}) != incoming ($canTrackIdentifiers). " +
+                    "Prepare refresh task..."
+            )
+            removeBackgroundRefreshTask()
+            this.canTrackIdentifiers = canTrackIdentifiers
+            blockingRefreshTask = FutureTask<Void> {
+                DebugLogger.info(tag, "Extract identifiers from system with blocking task")
+                updateAdvIdentifiers()
+                null
+            }
+        } else {
+            DebugLogger.info(tag, "Advertising identifiers can track didn't changed. Ignore refresh identifiers")
+        }
+        executor.execute(blockingRefreshTask)
+        return blockingRefreshTask
     }
 
-    private fun refreshIdentifiers(yandexRetryStrategy: RetryStrategy, force: Boolean): FutureTask<Void> {
-        val canTrackIdentifiers = controller.canTrackIdentifiers()
-        refresh = FutureTask<Void> {
-            if (force || canTrackIdentifiers != this.canTrackIdentifiers) {
-                DebugLogger.info(tag, "get advertising identifiers forced")
-                val advertisingIdsHolderFixed = advertisingIdsHolder
-                advertisingIdsHolder = AdvertisingIdsHolder(
-                    mergeIdentifierData(
-                        extractGaidIfAllowed(canTrackIdentifiers.canTrackGaid),
-                        advertisingIdsHolderFixed.google
-                    ),
-                    mergeIdentifierData(
-                        extractHoaidIfAllowed(canTrackIdentifiers.canTrackHoaid),
-                        advertisingIdsHolderFixed.huawei
-                    ),
-                    mergeIdentifierData(
-                        extractYandexAdvIdIfAllowed(canTrackIdentifiers.canTrackYandexAdvId, yandexRetryStrategy),
-                        advertisingIdsHolderFixed.yandex
-                    )
-                )
-                DebugLogger.info(
-                    tag,
-                    "Update advIdentifiers from $advertisingIdsHolderFixed to $advertisingIdsHolder"
-                )
-            } else {
-                DebugLogger.info(tag, "Ignore refresh as canTrackIdentifiers didn't change")
-            }
-            null
-        }
-        executor.execute(refresh)
-        return refresh
+    private fun updateAdvIdentifiers() {
+        val result = AdvertisingIdsHolder(
+            mergeIdentifierData(
+                extractGaidIfAllowed(canTrackIdentifiers.canTrackGaid),
+                advertisingIdsHolder.google
+            ),
+            mergeIdentifierData(
+                extractHoaidIfAllowed(canTrackIdentifiers.canTrackHoaid),
+                advertisingIdsHolder.huawei
+            ),
+            mergeIdentifierData(
+                extractYandexAdvIdIfAllowed(
+                    canTrackIdentifiers.canTrackYandexAdvId,
+                    TimesBasedRetryStrategy(3, 500)
+                ),
+                advertisingIdsHolder.yandex
+            )
+        )
+        DebugLogger.info(tag, "Adv identifiers updated from $advertisingIdsHolder -> $result")
+        advertisingIdsHolder = result
+        scheduleBackgroundRefreshTask()
+    }
+
+    private fun scheduleBackgroundRefreshTask() {
+        executor.executeDelayed(backgroundRefreshTask, backgroundRefreshIntervalSeconds, TimeUnit.SECONDS)
+    }
+
+    private fun removeBackgroundRefreshTask() {
+        executor.remove(backgroundRefreshTask)
     }
 
     private fun getValue(future: FutureTask<Void>) {
@@ -175,18 +186,18 @@ internal class AdvertisingIdGetter internal constructor(
     }
 
     private fun extractGaidIfAllowed(state: AdvIdGetterController.State): AdTrackingInfoResult {
-        return extractWithState(state) { googleProvider.getAdTrackingInfo(context) }
+        return extractWithState(state) { googleExtractor.extractAdTrackingInfo(context) }
     }
 
     private fun extractHoaidIfAllowed(state: AdvIdGetterController.State): AdTrackingInfoResult {
-        return extractWithState(state) { huaweiProvider.getAdTrackingInfo(context) }
+        return extractWithState(state) { huaweiExtractor.extractAdTrackingInfo(context) }
     }
 
     private fun extractYandexAdvIdIfAllowed(
         state: AdvIdGetterController.State,
         retryStrategy: RetryStrategy
     ): AdTrackingInfoResult {
-        return extractWithState(state) { yandexProvider.getAdTrackingInfo(context, retryStrategy) }
+        return extractWithState(state) { yandexExtractor.extractAdTrackingInfo(context, retryStrategy) }
     }
 
     private fun extractWithState(

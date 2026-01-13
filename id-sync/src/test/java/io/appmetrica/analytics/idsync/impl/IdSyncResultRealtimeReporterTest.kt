@@ -6,13 +6,13 @@ import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor
 import io.appmetrica.analytics.coreapi.internal.identifiers.AdTrackingInfo
 import io.appmetrica.analytics.coreapi.internal.identifiers.AdTrackingInfoResult
 import io.appmetrica.analytics.coreapi.internal.identifiers.AdvertisingIdsHolder
+import io.appmetrica.analytics.coreapi.internal.identifiers.AdvertisingIdsProvider
 import io.appmetrica.analytics.coreapi.internal.identifiers.AppSetId
 import io.appmetrica.analytics.coreapi.internal.identifiers.AppSetIdProvider
 import io.appmetrica.analytics.coreapi.internal.identifiers.AppSetIdScope
 import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus
 import io.appmetrica.analytics.coreapi.internal.identifiers.PlatformIdentifiers
 import io.appmetrica.analytics.coreapi.internal.identifiers.SdkIdentifiers
-import io.appmetrica.analytics.coreapi.internal.identifiers.SimpleAdvertisingIdGetter
 import io.appmetrica.analytics.coreapi.internal.io.SslSocketFactoryProvider
 import io.appmetrica.analytics.coreutils.internal.time.SystemTimeProvider
 import io.appmetrica.analytics.modulesapi.internal.common.ExecutorProvider
@@ -79,8 +79,8 @@ class IdSyncResultRealtimeReporterTest : CommonTest() {
         on { yandex } doReturn yandex
     }
 
-    private val advIdentifiersGetter: SimpleAdvertisingIdGetter = mock {
-        on { getIdentifiers(context) } doReturn advIdentifiersHolder
+    private val advIdentifiersGetter: AdvertisingIdsProvider = mock {
+        on { identifiers } doReturn advIdentifiersHolder
     }
 
     private val appSetIdProvider: AppSetIdProvider = mock {

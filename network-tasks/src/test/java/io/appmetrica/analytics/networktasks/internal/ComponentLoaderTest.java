@@ -9,7 +9,7 @@ import io.appmetrica.analytics.coreapi.internal.identifiers.AppSetIdProvider;
 import io.appmetrica.analytics.coreapi.internal.identifiers.AppSetIdScope;
 import io.appmetrica.analytics.coreapi.internal.identifiers.PlatformIdentifiers;
 import io.appmetrica.analytics.coreapi.internal.identifiers.SdkIdentifiers;
-import io.appmetrica.analytics.coreapi.internal.identifiers.SimpleAdvertisingIdGetter;
+import io.appmetrica.analytics.coreapi.internal.identifiers.AdvertisingIdsProvider;
 import io.appmetrica.analytics.coreapi.internal.model.AppVersionInfo;
 import io.appmetrica.analytics.coreapi.internal.model.ScreenInfo;
 import io.appmetrica.analytics.coreapi.internal.model.SdkEnvironment;
@@ -48,7 +48,7 @@ public class ComponentLoaderTest extends CommonTest {
     @Mock
     private AppSetIdProvider appSetIdProvider;
     @Mock
-    private SimpleAdvertisingIdGetter advertisingIdGetter;
+    private AdvertisingIdsProvider advertisingIdGetter;
     @Mock
     private PlatformIdentifiers platformIdentifiers;
     private AppVersionInfo appVersionInfo = new AppVersionInfo("10300", "3123");
@@ -71,7 +71,7 @@ public class ComponentLoaderTest extends CommonTest {
         when(context.getPackageName()).thenReturn(packageName);
         when(appSetIdProvider.getAppSetId()).thenReturn(appSetId);
         when(platformIdentifiers.getAppSetIdProvider()).thenReturn(appSetIdProvider);
-        when(advertisingIdGetter.getIdentifiers(context)).thenReturn(advertisingIdsHolder);
+        when(advertisingIdGetter.getIdentifiers()).thenReturn(advertisingIdsHolder);
         when(platformIdentifiers.getAdvIdentifiersProvider()).thenReturn(advertisingIdGetter);
         when(sdkEnvironmentProvider.getSdkEnvironment()).thenReturn(sdkEnvironment);
         when(sdkEnvironment.getAppVersionInfo()).thenReturn(appVersionInfo);

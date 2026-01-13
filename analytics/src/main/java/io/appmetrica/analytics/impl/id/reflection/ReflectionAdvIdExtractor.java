@@ -8,14 +8,14 @@ import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.identifiers.AdTrackingInfoResult;
 import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus;
 import io.appmetrica.analytics.coreutils.internal.reflection.ReflectionUtils;
-import io.appmetrica.analytics.impl.id.AdvIdProvider;
+import io.appmetrica.analytics.impl.id.AdvIdExtractor;
 import io.appmetrica.analytics.impl.id.NoRetriesStrategy;
 import io.appmetrica.analytics.impl.id.RetryStrategy;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-public class ReflectionAdvIdProvider implements AdvIdProvider {
+public class ReflectionAdvIdExtractor implements AdvIdExtractor {
 
     private static final String CLASS = "io.appmetrica.analytics.identifiers.internal.AdvIdentifiersProvider";
     private static final String METHOD = "requestIdentifiers";
@@ -26,25 +26,25 @@ public class ReflectionAdvIdProvider implements AdvIdProvider {
     @NonNull
     private final ReflectionAdvIdParser parser;
 
-    public ReflectionAdvIdProvider(@NonNull String provider) {
+    public ReflectionAdvIdExtractor(@NonNull String provider) {
         this(provider, new ReflectionAdvIdParser());
     }
 
     @VisibleForTesting
-    ReflectionAdvIdProvider(@NonNull String provider, @NonNull ReflectionAdvIdParser parser) {
+    ReflectionAdvIdExtractor(@NonNull String provider, @NonNull ReflectionAdvIdParser parser) {
         this.provider = provider;
         this.parser = parser;
     }
 
     @NonNull
     @Override
-    public AdTrackingInfoResult getAdTrackingInfo(@NonNull Context context) {
-        return getAdTrackingInfo(context, new NoRetriesStrategy());
+    public AdTrackingInfoResult extractAdTrackingInfo(@NonNull Context context) {
+        return extractAdTrackingInfo(context, new NoRetriesStrategy());
     }
 
     @NonNull
     @Override
-    public AdTrackingInfoResult getAdTrackingInfo(@NonNull Context context, @NonNull RetryStrategy retryStrategy) {
+    public AdTrackingInfoResult extractAdTrackingInfo(@NonNull Context context, @NonNull RetryStrategy retryStrategy) {
         DebugLogger.INSTANCE.info(TAG, "getAdTrackingInfo. Connecting to library for %s adv_id", provider);
         AdTrackingInfoResult result = null;
         if (ReflectionUtils.detectClassExists(CLASS)) {

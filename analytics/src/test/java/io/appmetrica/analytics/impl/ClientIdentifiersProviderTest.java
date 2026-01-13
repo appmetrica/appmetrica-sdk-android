@@ -99,7 +99,7 @@ public class ClientIdentifiersProviderTest extends CommonTest {
             .withStartupUpdateConfig(new StartupUpdateConfig(updateInterval))
             .build();
         when(mStartupUnit.getStartupState()).thenReturn(startupState);
-        when(mAdvertisingIdGetter.getIdentifiersForced())
+        when(mAdvertisingIdGetter.getIdentifiers())
             .thenReturn(new AdvertisingIdsHolder(googleResult, huaweiResult, yandexResult));
         mClientIdentifiersProvider = new ClientIdentifiersProvider(mStartupUnit, mAdvertisingIdGetter, mContext);
     }

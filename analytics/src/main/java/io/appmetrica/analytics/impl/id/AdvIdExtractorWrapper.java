@@ -7,34 +7,34 @@ import io.appmetrica.analytics.coreapi.internal.identifiers.AdTrackingInfoResult
 import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 
-public class AdvIdProviderWrapper implements AdvIdProvider {
+public class AdvIdExtractorWrapper implements AdvIdExtractor {
 
     private static final String TAG = "[AdvIdProviderWrapper]";
-    private final AdvIdProvider originalProvider;
+    private final AdvIdExtractor originalProvider;
 
-    public AdvIdProviderWrapper(@NonNull AdvIdProvider originalProvider) {
+    public AdvIdExtractorWrapper(@NonNull AdvIdExtractor originalProvider) {
         this.originalProvider = originalProvider;
     }
 
     @NonNull
     @Override
-    public AdTrackingInfoResult getAdTrackingInfo(@NonNull final Context context) {
+    public AdTrackingInfoResult extractAdTrackingInfo(@NonNull final Context context) {
         return getCorrectedAdTrackingInfo(new Provider<AdTrackingInfoResult>() {
             @Override
             public AdTrackingInfoResult get() {
-                return originalProvider.getAdTrackingInfo(context);
+                return originalProvider.extractAdTrackingInfo(context);
             }
         });
     }
 
     @NonNull
     @Override
-    public AdTrackingInfoResult getAdTrackingInfo(@NonNull final Context context,
-                                                  @NonNull final RetryStrategy retryStrategy) {
+    public AdTrackingInfoResult extractAdTrackingInfo(@NonNull final Context context,
+                                                      @NonNull final RetryStrategy retryStrategy) {
         return getCorrectedAdTrackingInfo(new Provider<AdTrackingInfoResult>() {
             @Override
             public AdTrackingInfoResult get() {
-                return originalProvider.getAdTrackingInfo(context, retryStrategy);
+                return originalProvider.extractAdTrackingInfo(context, retryStrategy);
             }
         });
     }

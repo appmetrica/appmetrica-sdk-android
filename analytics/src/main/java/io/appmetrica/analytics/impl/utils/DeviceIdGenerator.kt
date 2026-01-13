@@ -1,6 +1,5 @@
 package io.appmetrica.analytics.impl.utils
 
-import android.content.Context
 import androidx.annotation.VisibleForTesting
 import io.appmetrica.analytics.coreutils.internal.StringUtils
 import io.appmetrica.analytics.impl.GlobalServiceLocator
@@ -8,27 +7,24 @@ import io.appmetrica.analytics.impl.IOUtils
 import io.appmetrica.analytics.impl.id.AdvertisingIdGetter
 import io.appmetrica.analytics.impl.id.AppSetIdGetter
 import io.appmetrica.analytics.impl.id.Constants
-import io.appmetrica.analytics.impl.id.TimesBasedRetryStrategy
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import java.util.Locale
 import java.util.UUID
 
 internal class DeviceIdGenerator @VisibleForTesting constructor(
-    private val context: Context,
     private val advertisingIdGetter: AdvertisingIdGetter,
     private val appSetIdGetter: AppSetIdGetter
 ) {
 
     private val tag = "[DeviceIdGenerator]"
 
-    constructor(context: Context) : this(
-        context,
+    constructor() : this(
         GlobalServiceLocator.getInstance().advertisingIdGetter,
         GlobalServiceLocator.getInstance().appSetIdGetter
     )
 
     fun generateDeviceId(): String {
-        val yandexAdvId = advertisingIdGetter.getIdentifiersForced(TimesBasedRetryStrategy(5, 500)).yandex
+        val yandexAdvId = advertisingIdGetter.identifiers.yandex
         DebugLogger.info(tag, "Yandex Adv ID: $yandexAdvId")
         return if (yandexAdvId.isValid) {
             // !! is safe because of isValid check

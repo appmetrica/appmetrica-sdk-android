@@ -22,7 +22,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(ParameterizedRobolectricTestRunner.class)
-public class AdvIdProviderWrapperTest extends CommonTest {
+public class AdvIdExtractorWrapperTest extends CommonTest {
 
     @ParameterizedRobolectricTestRunner.Parameters(name = "{2}")
     public static Collection<Object[]> data() {
@@ -30,31 +30,31 @@ public class AdvIdProviderWrapperTest extends CommonTest {
         final RetryStrategy retryStrategy = mock(RetryStrategy.class);
         return Arrays.asList(new Object[][]{
             {
-                new BiConsumer<AdvIdProvider, AdTrackingInfoResult>() {
+                new BiConsumer<AdvIdExtractor, AdTrackingInfoResult>() {
                     @Override
-                    public void consume(AdvIdProvider firstArg, AdTrackingInfoResult secondArg) {
-                        when(firstArg.getAdTrackingInfo(context)).thenReturn(secondArg);
+                    public void consume(AdvIdExtractor firstArg, AdTrackingInfoResult secondArg) {
+                        when(firstArg.extractAdTrackingInfo(context)).thenReturn(secondArg);
                     }
                 },
-                new Function<AdvIdProvider, AdTrackingInfoResult>() {
+                new Function<AdvIdExtractor, AdTrackingInfoResult>() {
                     @Override
-                    public AdTrackingInfoResult apply(AdvIdProvider input) {
-                        return input.getAdTrackingInfo(context);
+                    public AdTrackingInfoResult apply(AdvIdExtractor input) {
+                        return input.extractAdTrackingInfo(context);
                     }
                 },
                 "Method only with context"
             },
             {
-                new BiConsumer<AdvIdProvider, AdTrackingInfoResult>() {
+                new BiConsumer<AdvIdExtractor, AdTrackingInfoResult>() {
                     @Override
-                    public void consume(AdvIdProvider firstArg, AdTrackingInfoResult secondArg) {
-                        when(firstArg.getAdTrackingInfo(context, retryStrategy)).thenReturn(secondArg);
+                    public void consume(AdvIdExtractor firstArg, AdTrackingInfoResult secondArg) {
+                        when(firstArg.extractAdTrackingInfo(context, retryStrategy)).thenReturn(secondArg);
                     }
                 },
-                new Function<AdvIdProvider, AdTrackingInfoResult>() {
+                new Function<AdvIdExtractor, AdTrackingInfoResult>() {
                     @Override
-                    public AdTrackingInfoResult apply(AdvIdProvider input) {
-                        return input.getAdTrackingInfo(context, retryStrategy);
+                    public AdTrackingInfoResult apply(AdvIdExtractor input) {
+                        return input.extractAdTrackingInfo(context, retryStrategy);
                     }
                 },
                 "Method with context and retry strategy"
@@ -63,14 +63,14 @@ public class AdvIdProviderWrapperTest extends CommonTest {
     }
 
     @Mock
-    private AdvIdProvider originalProvider;
-    private AdvIdProviderWrapper providerWrapper;
-    private final BiConsumer<AdvIdProvider, AdTrackingInfoResult> originalProviderMocker;
-    private final Function<AdvIdProvider, AdTrackingInfoResult> methodExecutor;
+    private AdvIdExtractor originalProvider;
+    private AdvIdExtractorWrapper providerWrapper;
+    private final BiConsumer<AdvIdExtractor, AdTrackingInfoResult> originalProviderMocker;
+    private final Function<AdvIdExtractor, AdTrackingInfoResult> methodExecutor;
 
-    public AdvIdProviderWrapperTest(@NonNull BiConsumer<AdvIdProvider, AdTrackingInfoResult> originalProviderMocker,
-                                    @NonNull Function<AdvIdProvider, AdTrackingInfoResult> methodExecutor,
-                                    String description) {
+    public AdvIdExtractorWrapperTest(@NonNull BiConsumer<AdvIdExtractor, AdTrackingInfoResult> originalProviderMocker,
+                                     @NonNull Function<AdvIdExtractor, AdTrackingInfoResult> methodExecutor,
+                                     String description) {
         this.originalProviderMocker = originalProviderMocker;
         this.methodExecutor = methodExecutor;
     }
@@ -78,7 +78,7 @@ public class AdvIdProviderWrapperTest extends CommonTest {
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        providerWrapper = new AdvIdProviderWrapper(originalProvider);
+        providerWrapper = new AdvIdExtractorWrapper(originalProvider);
     }
 
     @Test

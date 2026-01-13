@@ -356,7 +356,7 @@ public class GlobalServiceLocatorTest extends CommonTest {
         assertThat(advertisingIdGetterMockedConstructionRule.getArgumentInterceptor().flatArguments())
             .containsExactly(
                 mContext,
-                GlobalServiceLocator.getInstance().getServiceExecutorProvider().getDefaultExecutor(),
+                GlobalServiceLocator.getInstance().getServiceExecutorProvider().getSupportIOExecutor(),
                 startupState
             );
     }

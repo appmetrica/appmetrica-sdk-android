@@ -7,7 +7,6 @@ import io.appmetrica.analytics.coreapi.internal.identifiers.AppSetIdScope;
 import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.component.ComponentId;
-import io.appmetrica.analytics.impl.id.RetryStrategy;
 import io.appmetrica.analytics.impl.request.StartupArgumentsTest;
 import io.appmetrica.analytics.internal.IdentifiersResult;
 import io.appmetrica.analytics.testutils.CommonTest;
@@ -58,7 +57,7 @@ public class StartupCenterTest extends CommonTest {
         context = RuntimeEnvironment.getApplication();
         when(GlobalServiceLocator.getInstance().getAppSetIdGetter().getAppSetId()).thenReturn(new AppSetId(null, AppSetIdScope.UNKNOWN));
         when(GlobalServiceLocator.getInstance().getAdvertisingIdGetter()
-            .getIdentifiersForced(any(RetryStrategy.class)))
+            .getIdentifiers())
             .thenReturn(new AdvertisingIdsHolder());
         when(GlobalServiceLocator.getInstance().getMultiProcessSafeUuidProvider().readUuid())
             .thenReturn(new IdentifiersResult(UUID.randomUUID().toString(), IdentifierStatus.OK, null));

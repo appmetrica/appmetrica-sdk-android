@@ -49,7 +49,7 @@ class ReflectionAdvIdProviderTest : CommonTest() {
 
     private val providerName = "test"
 
-    private val provider = ReflectionAdvIdProvider(providerName, parser)
+    private val extractor = ReflectionAdvIdExtractor(providerName, parser)
 
     @Test
     fun getData() {
@@ -61,7 +61,7 @@ class ReflectionAdvIdProviderTest : CommonTest() {
 
         doReturn(result).whenever(parser).fromBundle(resultBundle)
 
-        assertThat(provider.getAdTrackingInfo(context)).isSameAs(result)
+        assertThat(extractor.extractAdTrackingInfo(context)).isSameAs(result)
     }
 
     @Test
@@ -78,7 +78,7 @@ class ReflectionAdvIdProviderTest : CommonTest() {
 
         doReturn(result).whenever(parser).fromBundle(resultBundle)
 
-        assertThat(provider.getAdTrackingInfo(context, timesBasedRetryStrategy)).isSameAs(result)
+        assertThat(extractor.extractAdTrackingInfo(context, timesBasedRetryStrategy)).isSameAs(result)
     }
 
     @Test
@@ -89,7 +89,7 @@ class ReflectionAdvIdProviderTest : CommonTest() {
             on { AdvIdentifiersProvider.requestIdentifiers(same(context), any()) } doThrow RuntimeException(message)
         }
 
-        val result = provider.getAdTrackingInfo(context, timesBasedRetryStrategy)
+        val result = extractor.extractAdTrackingInfo(context, timesBasedRetryStrategy)
 
         val assertions = ObjectPropertyAssertions(result)
 
@@ -104,7 +104,7 @@ class ReflectionAdvIdProviderTest : CommonTest() {
     fun noAdvIdProviderClass() {
         whenever(ReflectionUtils.detectClassExists(advIdentifiersProviderClass)).thenReturn(false)
 
-        ObjectPropertyAssertions(provider.getAdTrackingInfo(context, retryStrategy))
+        ObjectPropertyAssertions(extractor.extractAdTrackingInfo(context, retryStrategy))
             .checkField("mAdTrackingInfo", null as AdTrackingInfo?)
             .checkField("mStatus", IdentifierStatus.IDENTIFIER_PROVIDER_UNAVAILABLE)
             .checkField(

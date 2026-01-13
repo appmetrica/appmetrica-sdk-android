@@ -24,7 +24,7 @@ internal class StartupUnitComponents(
 
     val componentId: ComponentId = CommutationComponentId(packageName)
     val startupStateStorage: StartupState.Storage = StartupState.Storage(context)
-    val deviceIdGenerator = DeviceIdGenerator(context)
+    val deviceIdGenerator = DeviceIdGenerator()
     val timeProvider: TimeProvider = SystemTimeProvider()
     val clidsStorage: ClidsInfoStorage = GlobalServiceLocator.getInstance().clidsStorage
     val clidsStateChecker = ClidsStateChecker()
