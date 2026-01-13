@@ -104,12 +104,6 @@ public class AppMetricaFacadeObjectTest extends CommonTest {
         assertThat(mFacade.isFullInitFutureDone()).isFalse();
         touchInitThread();
 
-        //One from setUp and one more - at this test
-        verify(clientMigrationManagerMockedConstructionRule.getConstructionMock().constructed().get(0))
-            .checkMigration(mContext);
-        assertThat(clientMigrationManagerMockedConstructionRule.getConstructionMock().constructed()).hasSize(1);
-        assertThat(clientMigrationManagerMockedConstructionRule.getArgumentInterceptor().flatArguments())
-            .containsOnly(mContext);
         FirstLaunchDetector firstLaunchDetector = ClientServiceLocator.getInstance().getFirstLaunchDetector();
         MultiProcessSafeUuidProvider multiProcessSafeUuidProvider =
             ClientServiceLocator.getInstance().getMultiProcessSafeUuidProvider(mContext);

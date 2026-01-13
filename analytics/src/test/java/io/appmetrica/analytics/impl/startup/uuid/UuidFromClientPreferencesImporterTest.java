@@ -3,13 +3,9 @@ package io.appmetrica.analytics.impl.startup.uuid;
 import android.content.Context;
 import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus;
 import io.appmetrica.analytics.impl.ClientServiceLocator;
-import io.appmetrica.analytics.impl.db.IKeyValueTableDbHelper;
-import io.appmetrica.analytics.impl.db.preferences.PreferencesClientDbStorage;
-import io.appmetrica.analytics.impl.db.storage.ClientStorageFactory;
 import io.appmetrica.analytics.internal.IdentifiersResult;
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule;
 import io.appmetrica.analytics.testutils.CommonTest;
-import io.appmetrica.analytics.testutils.MockedConstructionRule;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.UUID;
@@ -20,7 +16,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.MockedConstruction;
 
 import static org.mockito.Mockito.when;
 import org.mockito.MockitoAnnotations;
@@ -69,26 +64,6 @@ public class UuidFromClientPreferencesImporterTest extends CommonTest {
         });
     }
 
-    @Mock
-    private PreferencesClientDbStorage preferencesClientDbStorage;
-    @Mock
-    private ClientStorageFactory databaseStorageFactory;
-    @Mock
-    private IKeyValueTableDbHelper clientDbHelper;
-
-    @Rule
-    public MockedConstructionRule<PreferencesClientDbStorage> preferencesClientDbStorageMockedConstructionRule =
-        new MockedConstructionRule<>(
-            PreferencesClientDbStorage.class,
-            new MockedConstruction.MockInitializer<PreferencesClientDbStorage>() {
-                @Override
-                public void prepare(PreferencesClientDbStorage mock,
-                                    MockedConstruction.Context context) throws Throwable {
-                    when(mock.getUuidResult()).thenReturn(preferencesUuid);
-                }
-            }
-        );
-
     @Rule
     public ClientServiceLocatorRule clientServiceLocatorRule = new ClientServiceLocatorRule();
 
@@ -99,9 +74,8 @@ public class UuidFromClientPreferencesImporterTest extends CommonTest {
         MockitoAnnotations.openMocks(this);
 
         when(context.getApplicationContext()).thenReturn(context);
-        when(ClientServiceLocator.getInstance().getStorageFactory(context)).thenReturn(databaseStorageFactory);
-        when(databaseStorageFactory.getClientDbHelper(context)).thenReturn(clientDbHelper);
-        when(preferencesClientDbStorage.getUuidResult()).thenReturn(preferencesUuid);
+        when(ClientServiceLocator.getInstance().getPreferencesClientDbStorage(context).getUuidResult())
+            .thenReturn(preferencesUuid);
 
         uuidFromClientPreferencesImporter = new UuidFromClientPreferencesImporter();
     }
@@ -109,9 +83,5 @@ public class UuidFromClientPreferencesImporterTest extends CommonTest {
     @Test
     public void get() {
         assertThat(uuidFromClientPreferencesImporter.get(context)).isEqualTo(expectedValue);
-
-        assertThat(preferencesClientDbStorageMockedConstructionRule.getConstructionMock().constructed()).hasSize(1);
-        assertThat(preferencesClientDbStorageMockedConstructionRule.getArgumentInterceptor().flatArguments())
-            .containsExactly(clientDbHelper);
     }
 }

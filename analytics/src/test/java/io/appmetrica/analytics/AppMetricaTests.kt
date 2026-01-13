@@ -281,7 +281,7 @@ internal class AppMetricaTests : CommonTest() {
     @Test
     fun getDeviceId() {
         val deviceId = "888999777666"
-        whenever(proxy.getDeviceId()).thenReturn(deviceId)
+        whenever(proxy.getDeviceId(context)).thenReturn(deviceId)
         assertThat(AppMetrica.getDeviceId(context)).isEqualTo(deviceId)
     }
 

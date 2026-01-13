@@ -21,7 +21,6 @@ import io.appmetrica.analytics.StartupParamsCallback;
 import io.appmetrica.analytics.coreutils.internal.collection.CollectionUtils;
 import io.appmetrica.analytics.ecommerce.ECommerceEvent;
 import io.appmetrica.analytics.impl.ActivityLifecycleManager;
-import io.appmetrica.analytics.impl.AppMetricaFacade;
 import io.appmetrica.analytics.impl.ClientServiceLocator;
 import io.appmetrica.analytics.impl.DefaultOneShotMetricaConfig;
 import io.appmetrica.analytics.impl.IMainReporter;
@@ -454,9 +453,10 @@ public final class AppMetricaProxy extends BaseAppMetricaProxy {
     }
 
     @Nullable
-    public String getDeviceId() {
-        final AppMetricaFacade appMetrica = getProvider().peekInitializedImpl();
-        return appMetrica == null ? null : appMetrica.getDeviceId();
+    public String getDeviceId(@NonNull Context context) {
+        barrier.getDeviceId(context);
+        synchronousStageExecutor.getDeviceId(context.getApplicationContext());
+        return ClientServiceLocator.getInstance().getStartupParams(context.getApplicationContext()).getDeviceId();
     }
 
     @NonNull

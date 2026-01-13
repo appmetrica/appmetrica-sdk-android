@@ -7,7 +7,6 @@ import io.appmetrica.analytics.BuildConfig;
 import io.appmetrica.analytics.impl.ClientServiceLocator;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.db.StorageType;
-import io.appmetrica.analytics.impl.db.preferences.PreferencesClientDbStorage;
 
 public class DebugAssert {
 
@@ -38,8 +37,8 @@ public class DebugAssert {
     }
 
     private static void assertClientMigrationChecked(@NonNull Context context) {
-        final long lastMigrationVersion = new PreferencesClientDbStorage(ClientServiceLocator.getInstance()
-            .getStorageFactory(context).getClientDbHelperForMigration(context)).getClientApiLevel(0);
+        final long lastMigrationVersion = ClientServiceLocator.getInstance()
+            .getClientMigrationApiLevel(context);
         if (lastMigrationVersion != AppMetrica.getLibraryApiLevel()) {
             throw new AssertionError("Client migration is not checked");
         }

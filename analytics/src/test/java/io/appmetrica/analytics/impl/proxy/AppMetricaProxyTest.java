@@ -601,19 +601,22 @@ public class AppMetricaProxyTest extends CommonTest {
     @Test
     public void testGetDeviceId() {
         String deviceID = "deviceID";
-        doReturn(deviceID).when(mImpl).getDeviceId();
-        assertThat(mProxy.getDeviceId()).isEqualTo(deviceID);
+        when(ClientServiceLocator.getInstance().getStartupParams(applicationContext).getDeviceId())
+            .thenReturn(deviceID);
+
+        assertThat(mProxy.getDeviceId(context)).isEqualTo(deviceID);
+        verify(mBarrier).getDeviceId(context);
+        verify(mSynchronousStageExecutor).getDeviceId(applicationContext);
     }
 
     @Test
-    public void testGetDeviceIdNullImpl() {
-        when(mProvider.peekInitializedImpl()).thenReturn(null);
-        assertThat(mProxy.getDeviceId()).isNull();
-    }
+    public void testGetDeviceIdNull() {
+        when(ClientServiceLocator.getInstance().getStartupParams(applicationContext).getDeviceId())
+            .thenReturn(null);
 
-    @Test
-    public void testNoDeviceId() {
-        assertThat(mProxy.getDeviceId()).isNull();
+        assertThat(mProxy.getDeviceId(context)).isNull();
+        verify(mBarrier).getDeviceId(context);
+        verify(mSynchronousStageExecutor).getDeviceId(applicationContext);
     }
 
     @Test

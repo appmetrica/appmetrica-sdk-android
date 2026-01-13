@@ -241,6 +241,13 @@ public class SynchronousStageExecutorTest extends CommonTest {
     }
 
     @Test
+    public void getDeviceId() {
+        synchronousStageExecutor.getDeviceId(mContext);
+
+        verify(contextAppearedListener).onProbablyAppeared(mContext);
+    }
+
+    @Test
     public void warmUpForSelfReporter() {
         synchronousStageExecutor.warmUpForSelfReporter(mContext);
         verify(contextAppearedListener).onProbablyAppeared(mContext);

@@ -1,42 +1,34 @@
 package io.appmetrica.analytics.impl.utils;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 import android.content.Context;
-
 import io.appmetrica.analytics.BuildConfig;
 import io.appmetrica.analytics.impl.ClientServiceLocator;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.db.IKeyValueTableDbHelper;
 import io.appmetrica.analytics.impl.db.StorageType;
 import io.appmetrica.analytics.impl.db.VitalCommonDataProvider;
-import io.appmetrica.analytics.impl.db.preferences.PreferencesClientDbStorage;
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import io.appmetrica.analytics.testutils.TestUtils;
-
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.MockedConstruction;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
 public class DebugAssertTest extends CommonTest {
 
     @Mock
     private IKeyValueTableDbHelper serviceKeyValueHelper;
-    @Mock
-    private IKeyValueTableDbHelper clientKeyValueHelper;
     private Context context;
 
     @Rule
@@ -52,8 +44,6 @@ public class DebugAssertTest extends CommonTest {
         context = TestUtils.createMockedContext();
         when(GlobalServiceLocator.getInstance().getStorageFactory().getServicePreferenceDbHelperForMigration(context))
             .thenReturn(serviceKeyValueHelper);
-        when(ClientServiceLocator.getInstance().getStorageFactory(any()).getClientDbHelperForMigration(context))
-            .thenReturn(clientKeyValueHelper);
     }
 
     @Test
@@ -63,30 +53,18 @@ public class DebugAssertTest extends CommonTest {
 
     @Test
     public void clientVersionIsTheSame() {
-        try (MockedConstruction<PreferencesClientDbStorage> ignored = Mockito.mockConstruction(PreferencesClientDbStorage.class, new MockedConstruction.MockInitializer<PreferencesClientDbStorage>() {
-            @Override
-            public void prepare(PreferencesClientDbStorage mock, MockedConstruction.Context context) {
-                if (context.arguments().get(0) == clientKeyValueHelper) {
-                    when(mock.getClientApiLevel(anyLong())).thenReturn((long) BuildConfig.API_LEVEL);
-                }
-            }
-        })) {
-            DebugAssert.assertMigrated(context, StorageType.CLIENT);
-        }
+        when(ClientServiceLocator.getInstance().getClientMigrationApiLevel(any()))
+            .thenReturn((long) BuildConfig.API_LEVEL);
+
+        DebugAssert.assertMigrated(context, StorageType.CLIENT);
     }
 
     @Test
     public void clientVersionIsNotTheSame() {
-        try (MockedConstruction<PreferencesClientDbStorage> ignored = Mockito.mockConstruction(PreferencesClientDbStorage.class, new MockedConstruction.MockInitializer<PreferencesClientDbStorage>() {
-            @Override
-            public void prepare(PreferencesClientDbStorage mock, MockedConstruction.Context context) {
-                if (context.arguments().get(0) == clientKeyValueHelper) {
-                    when(mock.getClientApiLevel(anyLong())).thenReturn((long) BuildConfig.API_LEVEL - 1);
-                }
-            }
-        })) {
-            DebugAssert.assertMigrated(context, StorageType.CLIENT);
-        }
+        when(ClientServiceLocator.getInstance().getClientMigrationApiLevel(any()))
+            .thenReturn((long) BuildConfig.API_LEVEL - 1);
+
+        DebugAssert.assertMigrated(context, StorageType.CLIENT);
     }
 
     @Test

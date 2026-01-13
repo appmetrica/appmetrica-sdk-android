@@ -27,9 +27,12 @@ internal class AppMetricaImplFieldsProvider {
     fun createStartupHelper(
         context: Context,
         reportsHandler: ReportsHandler,
-        clientPreferences: PreferencesClientDbStorage,
         handler: Handler
-    ): StartupHelper = StartupHelper(context, reportsHandler, clientPreferences, handler)
+    ): StartupHelper = StartupHelper(
+        reportsHandler,
+        ClientServiceLocator.getInstance().getStartupParams(context),
+        handler
+    )
 
     fun createReferrerHelper(
         reportsHandler: ReportsHandler,

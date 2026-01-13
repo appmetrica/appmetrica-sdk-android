@@ -171,7 +171,7 @@ internal class AppMetricaImplTest : CommonTest() {
         on { createDataResultReceiver(eq(defaultHandler), any()) } doReturn dataResultReceiver
         on { createProcessConfiguration(context, dataResultReceiver) } doReturn processConfiguration
         on { createReportsHandler(processConfiguration, context, defaultExecutor) } doReturn reportsHandler
-        on { createStartupHelper(context, reportsHandler, clientPreferences, defaultHandler) } doReturn startupHelper
+        on { createStartupHelper(context, reportsHandler, defaultHandler) } doReturn startupHelper
         on { createReferrerHelper(reportsHandler, clientPreferences, defaultHandler) } doReturn referrerHelper
         on {
             createReporterFactory(context, processConfiguration, reportsHandler, defaultHandler, startupHelper)

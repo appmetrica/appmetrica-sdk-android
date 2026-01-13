@@ -87,11 +87,11 @@ internal class AppMetricaImplFieldsProviderTest : CommonTest() {
 
     @Test
     fun createStartupHelper() {
-        assertThat(fieldsProvider.createStartupHelper(context, reportsHandler, preferences, handler))
+        assertThat(fieldsProvider.createStartupHelper(context, reportsHandler, handler))
             .isEqualTo(startupHelperRule.constructionMock.constructed().first())
         assertThat(startupHelperRule.constructionMock.constructed()).hasSize(1)
         assertThat(startupHelperRule.argumentInterceptor.flatArguments())
-            .containsExactly(context, reportsHandler, preferences, handler)
+            .containsExactly(reportsHandler, ClientServiceLocator.getInstance().getStartupParams(context), handler)
     }
 
     @Test

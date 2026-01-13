@@ -92,9 +92,7 @@ class ScreenInfoRetriever : ActivityAppearedListener.Listener {
 
     private fun getOrCreateStorage(context: Context): PreferencesClientDbStorage {
         if (storage == null) {
-            storage = PreferencesClientDbStorage(
-                ClientServiceLocator.getInstance().getStorageFactory(context).getClientDbHelper(context)
-            )
+            storage = ClientServiceLocator.getInstance().getPreferencesClientDbStorage(context)
         }
         return storage!!
     }

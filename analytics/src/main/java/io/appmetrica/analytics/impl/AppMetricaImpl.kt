@@ -71,7 +71,6 @@ internal class AppMetricaImpl @WorkerThread internal constructor(
         startupHelper = fieldsProvider.createStartupHelper(
             context,
             reportsHandler,
-            clientPreferences,
             core.defaultHandler
         )
         reportsHandler.setStartupParamsProvider(startupHelper)

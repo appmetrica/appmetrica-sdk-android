@@ -1,7 +1,6 @@
 package io.appmetrica.analytics.impl.startup;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -20,7 +19,6 @@ import io.appmetrica.analytics.impl.FeaturesResult;
 import io.appmetrica.analytics.impl.IServerTimeOffsetProvider;
 import io.appmetrica.analytics.impl.ReportsHandler;
 import io.appmetrica.analytics.impl.Utils;
-import io.appmetrica.analytics.impl.db.preferences.PreferencesClientDbStorage;
 import io.appmetrica.analytics.impl.utils.JsonHelper;
 import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.impl.utils.StartupUtils;
@@ -72,21 +70,11 @@ public class StartupHelper implements StartupIdentifiersProvider, IServerTimeOff
     @VisibleForTesting
     boolean initialStartupSent = false;
 
-    public StartupHelper(@NonNull Context context,
-                         final ReportsHandler reportsHandler,
-                         PreferencesClientDbStorage preferences,
-                         @NonNull Handler handler) {
-        this(
-                reportsHandler,
-                new StartupParams(context, preferences),
-                handler
-        );
-    }
-
-    @VisibleForTesting
-    StartupHelper(final ReportsHandler reportsHandler,
-                  @NonNull StartupParams startupParams,
-                  @NonNull Handler handler) {
+    public StartupHelper(
+        @NonNull ReportsHandler reportsHandler,
+        @NonNull StartupParams startupParams,
+        @NonNull Handler handler
+    ) {
         mReportsHandler = reportsHandler;
         mStartupParams = startupParams;
         mHandler = handler;

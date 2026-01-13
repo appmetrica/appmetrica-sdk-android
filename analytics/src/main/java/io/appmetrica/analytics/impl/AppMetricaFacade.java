@@ -59,8 +59,6 @@ public class AppMetricaFacade implements IReporterFactoryProvider {
             () -> {
                 DebugLogger.INSTANCE.info(TAG, "Init first launch detector");
                 ClientServiceLocator.getInstance().getFirstLaunchDetector().init(mContext);
-                DebugLogger.INSTANCE.info(TAG, "Check client migration");
-                new ClientMigrationManager(mContext).checkMigration(mContext);
                 DebugLogger.INSTANCE.info(TAG, "Warm up uuid");
                 ClientServiceLocator.getInstance().getMultiProcessSafeUuidProvider(mContext).readUuid();
                 mFullInitFuture.run();

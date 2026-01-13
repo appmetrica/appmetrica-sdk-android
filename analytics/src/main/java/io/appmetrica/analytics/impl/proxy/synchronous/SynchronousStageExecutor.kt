@@ -202,6 +202,10 @@ class SynchronousStageExecutor @VisibleForTesting constructor(
         firstLaunchDetector.init(context)
     }
 
+    fun getDeviceId(context: Context) {
+        contextAppearedListener.onProbablyAppeared(context)
+    }
+
     fun registerAnrListener(listener: AnrListener) {}
 
     fun reportExternalAttribution(value: ExternalAttribution) {}

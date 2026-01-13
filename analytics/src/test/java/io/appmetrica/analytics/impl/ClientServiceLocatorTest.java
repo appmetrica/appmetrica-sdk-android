@@ -133,12 +133,19 @@ public class ClientServiceLocatorTest extends CommonTest {
                 @Override
                 public void prepare(ClientStorageFactory mock, MockedConstruction.Context cntx) throws Throwable {
                     when(mock.getClientDbHelper(context)).thenReturn(keyValueTableDbHelper);
+                    when(mock.getClientDbHelperForMigration(context)).thenReturn(keyValueTableDbHelperForMigration);
                 }
             }
         );
 
+    @Rule
+    public MockedConstructionRule<ClientMigrationManager> clientMigrationManagerMockedConstructionRule =
+        new MockedConstructionRule<>(ClientMigrationManager.class);
+
     @Mock
     private IKeyValueTableDbHelper keyValueTableDbHelper;
+    @Mock
+    private IKeyValueTableDbHelper keyValueTableDbHelperForMigration;
 
     private ClientServiceLocator mClientServiceLocator;
 
@@ -226,7 +233,9 @@ public class ClientServiceLocatorTest extends CommonTest {
                 "appMetricaFacadeProvider",
                 "firstLaunchDetector",
                 "appMetricaServiceProcessDetector",
-                "clientConfigSerializer"
+                "clientConfigSerializer",
+                "storageFactory",
+                "startupParams"
             )
             .checkField("currentProcessDetector", "getCurrentProcessDetector", mCurrentProcessDetector)
             .checkField("defaultOneShotConfig", "getDefaultOneShotConfig", mDefaultOneShotMetricaConfig)
@@ -285,29 +294,19 @@ public class ClientServiceLocatorTest extends CommonTest {
     public void getPreferencesClientDbStorage() {
         assertThat(mClientServiceLocator.getPreferencesClientDbStorage(context))
             .isSameAs(mClientServiceLocator.getPreferencesClientDbStorage(context))
-            .isSameAs(preferencesClientDbStorageMockedConstructionRule.getConstructionMock().constructed().get(0));
+            .isSameAs(preferencesClientDbStorageMockedConstructionRule.getConstructionMock().constructed().get(1));
 
+        // Two PreferencesClientDbStorage are created: one for migration (raw helper), one wrapped
         assertThat(preferencesClientDbStorageMockedConstructionRule.getConstructionMock().constructed())
-            .hasSize(1);
+            .hasSize(2);
         assertThat(preferencesClientDbStorageMockedConstructionRule.getArgumentInterceptor().flatArguments())
-            .containsExactly(keyValueTableDbHelper);
-    }
+            .containsExactly(keyValueTableDbHelperForMigration, keyValueTableDbHelper);
 
-    @Test
-    public void getStorageFactory() {
-        assertThat(mClientServiceLocator.getStorageFactory(context))
-            .isSameAs(mClientServiceLocator.getStorageFactory(context))
-            .isSameAs(clientStorageFactoryMockedConstructionRule.getConstructionMock().constructed().get(0));
-
-        assertThat(clientStorageFactoryMockedConstructionRule.getConstructionMock().constructed())
+        // Check that ClientMigrationManager was created
+        assertThat(clientMigrationManagerMockedConstructionRule.getConstructionMock().constructed())
             .hasSize(1);
-        assertThat(clientStorageFactoryMockedConstructionRule.getArgumentInterceptor().flatArguments())
-            .containsExactly(outerPath);
-
-        assertThat(outerStoragePathProviderMockedConstructionRule.getConstructionMock().constructed())
-            .hasSize(1);
-        assertThat(outerStoragePathProviderMockedConstructionRule.getArgumentInterceptor().flatArguments())
-            .isEmpty();
+        verify(clientMigrationManagerMockedConstructionRule.getConstructionMock().constructed().get(0))
+            .checkMigration(context);
     }
 
     @Test

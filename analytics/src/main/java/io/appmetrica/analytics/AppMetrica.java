@@ -514,7 +514,7 @@ public final class AppMetrica {
      */
     @Nullable
     public static String getDeviceId(@NonNull Context context) {
-        return AppMetricaProxyProvider.getProxy().getDeviceId();
+        return AppMetricaProxyProvider.getProxy().getDeviceId(context);
     }
 
     /**

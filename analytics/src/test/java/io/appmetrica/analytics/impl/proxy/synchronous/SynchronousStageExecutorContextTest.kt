@@ -85,6 +85,12 @@ class SynchronousStageExecutorContextTest : CommonTest() {
     }
 
     @Test
+    fun getDeviceId() {
+        synchronousStageExecutor.getDeviceId(context)
+        verify(contextAppearedListener).onProbablyAppeared(context)
+    }
+
+    @Test
     fun warmUpForSelfReporter() {
         synchronousStageExecutor.warmUpForSelfReporter(context)
         verify(contextAppearedListener).onProbablyAppeared(context)

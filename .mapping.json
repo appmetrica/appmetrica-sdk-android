@@ -250,7 +250,7 @@
   "analytics/src/main/java/io/appmetrica/analytics/impl/ClientIdentifiersHolder.java":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/main/java/io/appmetrica/analytics/impl/ClientIdentifiersHolder.java",
   "analytics/src/main/java/io/appmetrica/analytics/impl/ClientIdentifiersProvider.java":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/main/java/io/appmetrica/analytics/impl/ClientIdentifiersProvider.java",
   "analytics/src/main/java/io/appmetrica/analytics/impl/ClientIdentifiersProviderFactory.java":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/main/java/io/appmetrica/analytics/impl/ClientIdentifiersProviderFactory.java",
-  "analytics/src/main/java/io/appmetrica/analytics/impl/ClientMigrationManager.java":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/main/java/io/appmetrica/analytics/impl/ClientMigrationManager.java",
+  "analytics/src/main/java/io/appmetrica/analytics/impl/ClientMigrationManager.kt":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/main/java/io/appmetrica/analytics/impl/ClientMigrationManager.kt",
   "analytics/src/main/java/io/appmetrica/analytics/impl/ClientServiceLocator.java":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/main/java/io/appmetrica/analytics/impl/ClientServiceLocator.java",
   "analytics/src/main/java/io/appmetrica/analytics/impl/ClientTimeTracker.java":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/main/java/io/appmetrica/analytics/impl/ClientTimeTracker.java",
   "analytics/src/main/java/io/appmetrica/analytics/impl/CommutationReporterEnvironment.java":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/main/java/io/appmetrica/analytics/impl/CommutationReporterEnvironment.java",

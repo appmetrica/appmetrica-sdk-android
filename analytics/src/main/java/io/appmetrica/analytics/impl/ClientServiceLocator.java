@@ -15,6 +15,7 @@ import io.appmetrica.analytics.impl.modules.client.ClientModulesController;
 import io.appmetrica.analytics.impl.proxy.AppMetricaFacadeProvider;
 import io.appmetrica.analytics.impl.reporter.ReporterLifecycleListener;
 import io.appmetrica.analytics.impl.servicecomponents.OuterStoragePathProvider;
+import io.appmetrica.analytics.impl.startup.StartupParams;
 import io.appmetrica.analytics.impl.startup.uuid.MultiProcessSafeUuidProvider;
 import io.appmetrica.analytics.impl.startup.uuid.UuidFromClientPreferencesImporter;
 import io.appmetrica.analytics.impl.utils.FirstLaunchDetector;
@@ -74,6 +75,8 @@ public class ClientServiceLocator {
     @Nullable
     private volatile PreferencesClientDbStorage preferencesClientDbStorage;
     @Nullable
+    private volatile PreferencesClientDbStorage preferencesClientDbStorageForMigration;
+    @Nullable
     private ScreenInfoRetriever screenInfoRetriever;
     @NonNull
     private final AppMetricaFacadeProvider appMetricaFacadeProvider = new AppMetricaFacadeProvider();
@@ -92,6 +95,8 @@ public class ClientServiceLocator {
     private volatile ServiceDescriptionProvider serviceDescriptionProvider = new DefaultServiceDescriptionProvider();
     @Nullable
     private volatile ClientStorageFactory storageFactory;
+    @Nullable
+    private volatile StartupParams startupParams;
 
     private ClientServiceLocator() {
         this(new CurrentProcessDetector(), new ActivityLifecycleManager(), new ClientExecutorProvider());
@@ -269,7 +274,14 @@ public class ClientServiceLocator {
             synchronized (this) {
                 local = preferencesClientDbStorage;
                 if (local == null) {
-                    local = new PreferencesClientDbStorage(getStorageFactory(context).getClientDbHelper(context));
+                    ClientStorageFactory factory = getStorageFactory(context);
+
+                    // Run migration using raw helper
+                    new ClientMigrationManager(getPreferencesClientDbStorageForMigration(context))
+                        .checkMigration(context);
+
+                    // Create wrapped helper after migration
+                    local = new PreferencesClientDbStorage(factory.getClientDbHelper(context));
                     preferencesClientDbStorage = local;
                 }
             }
@@ -278,7 +290,26 @@ public class ClientServiceLocator {
     }
 
     @NonNull
-    public ClientStorageFactory getStorageFactory(@NonNull Context context) {
+    public StartupParams getStartupParams(@NonNull Context context) {
+        StartupParams local = startupParams;
+        if (local == null) {
+            synchronized (this) {
+                local = startupParams;
+                if (local == null) {
+                    local = new StartupParams(context, getPreferencesClientDbStorage(context));
+                    startupParams = local;
+                }
+            }
+        }
+        return local;
+    }
+
+    public long getClientMigrationApiLevel(@NonNull Context context) {
+        return getPreferencesClientDbStorageForMigration(context).getClientApiLevel(0);
+    }
+
+    @NonNull
+    private ClientStorageFactory getStorageFactory(@NonNull Context context) {
         ClientStorageFactory local = storageFactory;
         if (local == null) {
             synchronized (this) {
@@ -287,6 +318,23 @@ public class ClientServiceLocator {
                     OuterStoragePathProvider outerStoragePathProvider = new OuterStoragePathProvider();
                     local = new ClientStorageFactory(outerStoragePathProvider.getPath(context));
                     storageFactory = local;
+                }
+            }
+        }
+        return local;
+    }
+
+    @NonNull
+    private PreferencesClientDbStorage getPreferencesClientDbStorageForMigration(@NonNull Context context) {
+        PreferencesClientDbStorage local = preferencesClientDbStorageForMigration;
+        if (local == null) {
+            synchronized (this) {
+                local = preferencesClientDbStorageForMigration;
+                if (local == null) {
+                    ClientStorageFactory factory = getStorageFactory(context);
+
+                    local = new PreferencesClientDbStorage(factory.getClientDbHelperForMigration(context));
+                    preferencesClientDbStorageForMigration = local;
                 }
             }
         }

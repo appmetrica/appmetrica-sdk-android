@@ -383,7 +383,7 @@ public class StartupParams {
     }
 
     @Nullable
-    String getDeviceId() {
+    public String getDeviceId() {
         return getIdentifierOrNull(DEVICE_ID_KEY);
     }
 

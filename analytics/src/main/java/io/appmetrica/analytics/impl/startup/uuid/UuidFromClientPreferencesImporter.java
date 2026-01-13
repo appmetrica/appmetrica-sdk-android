@@ -16,9 +16,8 @@ public class UuidFromClientPreferencesImporter implements IOuterSourceUuidImport
     @Nullable
     @Override
     public String get(@NonNull Context context) {
-        PreferencesClientDbStorage preferencesClientDbStorage = new PreferencesClientDbStorage(
-            ClientServiceLocator.getInstance().getStorageFactory(context).getClientDbHelper(context)
-        );
+        PreferencesClientDbStorage preferencesClientDbStorage =
+            ClientServiceLocator.getInstance().getPreferencesClientDbStorage(context);
         String uuid = null;
         IdentifiersResult identifiersResult = preferencesClientDbStorage.getUuidResult();
         if (!TextUtils.isEmpty(identifiersResult.id)) {

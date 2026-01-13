@@ -114,6 +114,13 @@ class AppMetricaProxyContextTest : CommonTest() {
     }
 
     @Test
+    fun getDeviceId() {
+        proxy.getDeviceId(context)
+        verify(barrier).getDeviceId(context)
+        verify(synchronousStageExecutor).getDeviceId(applicationContext)
+    }
+
+    @Test
     fun warmUpForSelfProcess() {
         proxy.warmUpForSelfProcess(context)
         verify(barrier).warmUpForSelfProcess(context)
