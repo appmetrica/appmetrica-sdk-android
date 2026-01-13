@@ -7,6 +7,7 @@ plugins {
 publishingInfo {
     baseArtifactId.set("analytics-gpllibrary")
     name.set("AppMetrica SDK Google Play Location Library wrapper")
+    withJavadoc.set(false)
 }
 
 android {

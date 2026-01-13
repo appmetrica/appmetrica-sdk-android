@@ -5,6 +5,7 @@ plugins {
 publishingInfo {
     baseArtifactId.set("analytics-core-utils")
     name.set("AppMetrica SDK Core utils")
+    withJavadoc.set(false)
 }
 
 

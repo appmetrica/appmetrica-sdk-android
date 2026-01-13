@@ -5,6 +5,7 @@ plugins {
 publishingInfo {
     baseArtifactId.set("analytics-logger")
     name.set("AppMetrica SDK Logger")
+    withJavadoc.set(false)
 }
 
 android {

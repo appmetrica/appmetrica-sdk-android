@@ -5,6 +5,7 @@ plugins {
 publishingInfo {
     baseArtifactId.set("analytics-billing-interface")
     name.set("AppMetrica SDK Billing API")
+    withJavadoc.set(false)
 }
 
 android {

@@ -5,6 +5,7 @@ plugins {
 publishingInfo {
     baseArtifactId.set("analytics-billing-v8")
     name.set("AppMetrica SDK Google Play Services Billing v8 library wrapper")
+    withJavadoc.set(false)
 }
 
 android {
