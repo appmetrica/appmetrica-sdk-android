@@ -4,7 +4,7 @@ import androidx.annotation.WorkerThread
 import com.android.billingclient.api.BillingClient
 import io.appmetrica.analytics.billinginterface.internal.BillingInfo
 import io.appmetrica.analytics.billinginterface.internal.storage.BillingInfoManager
-import io.appmetrica.analytics.billingv8.impl.MODULE_TAG
+import io.appmetrica.analytics.billingv8.impl.Constants.MODULE_TAG
 import io.appmetrica.analytics.coreutils.internal.time.SystemTimeProvider
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 

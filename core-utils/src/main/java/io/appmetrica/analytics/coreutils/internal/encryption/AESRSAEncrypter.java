@@ -6,7 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.crypto.Encrypter;
-import io.appmetrica.analytics.coreutils.internal.io.CloseableUtilsKt;
+import io.appmetrica.analytics.coreutils.internal.io.CloseableUtils;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -89,7 +89,7 @@ public class AESRSAEncrypter implements Encrypter {
         } catch (Throwable e) {
             DebugLogger.INSTANCE.error(TAG, e);
         } finally {
-            CloseableUtilsKt.closeSafely(outputStream);
+            CloseableUtils.closeSafely(outputStream);
         }
         return null;
     }

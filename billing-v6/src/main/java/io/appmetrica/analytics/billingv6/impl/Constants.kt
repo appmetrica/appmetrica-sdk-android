@@ -1,3 +1,6 @@
 package io.appmetrica.analytics.billingv6.impl
 
-internal const val MODULE_TAG = "[AppMetricaBillingV6]"
+object Constants {
+
+    const val MODULE_TAG = "[AppMetricaBillingV6]"
+}

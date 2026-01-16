@@ -9,8 +9,8 @@ import io.appmetrica.analytics.impl.SdkUtils
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import org.json.JSONObject
 
-const val KEY_TRACKING_ID = "tracking_id"
-const val KEY_ADDITIONAL_PARAMS = "additional_params"
+private const val KEY_TRACKING_ID = "tracking_id"
+private const val KEY_ADDITIONAL_PARAMS = "additional_params"
 
 internal class PreloadInfoDataParser : ContentProviderDataParser<PreloadInfoState> {
 

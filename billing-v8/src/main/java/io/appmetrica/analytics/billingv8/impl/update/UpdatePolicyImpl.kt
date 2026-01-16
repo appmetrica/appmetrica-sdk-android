@@ -6,7 +6,7 @@ import io.appmetrica.analytics.billinginterface.internal.ProductType
 import io.appmetrica.analytics.billinginterface.internal.config.BillingConfig
 import io.appmetrica.analytics.billinginterface.internal.storage.BillingInfoManager
 import io.appmetrica.analytics.billinginterface.internal.update.UpdatePolicy
-import io.appmetrica.analytics.billingv8.impl.MODULE_TAG
+import io.appmetrica.analytics.billingv8.impl.Constants.MODULE_TAG
 import io.appmetrica.analytics.coreutils.internal.time.SystemTimeProvider
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import java.util.concurrent.TimeUnit

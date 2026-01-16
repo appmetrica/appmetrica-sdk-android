@@ -12,6 +12,7 @@ class AppMetricaRuleSetProvider : RuleSetProvider {
         NoMockitoAnnotationsRule(),
         NoMockitoWhenRule(),
         NoTestPrefixRule(),
+        NoTopLevelMembers(),
         TestInheritanceRule(),
     )
 }

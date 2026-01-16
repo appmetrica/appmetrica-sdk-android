@@ -3,7 +3,7 @@ package io.appmetrica.analytics.coreutils.internal.db;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import io.appmetrica.analytics.coreutils.internal.io.CloseableUtilsKt;
+import io.appmetrica.analytics.coreutils.internal.io.CloseableUtils;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 
 public class DBUtils {
@@ -58,7 +58,7 @@ public class DBUtils {
                 rowsCount = cursor.getLong(0);
             }
         } finally {
-            CloseableUtilsKt.closeSafely(cursor);
+            CloseableUtils.closeSafely(cursor);
         }
         return rowsCount;
     }

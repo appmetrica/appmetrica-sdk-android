@@ -11,7 +11,7 @@ import io.appmetrica.analytics.billinginterface.internal.storage.BillingInfoMana
 import io.appmetrica.analytics.billinginterface.internal.storage.BillingInfoSender
 import io.appmetrica.analytics.billinginterface.internal.storage.BillingInfoStorage
 import io.appmetrica.analytics.billinginterface.internal.update.UpdatePolicy
-import io.appmetrica.analytics.billingv8.impl.MODULE_TAG
+import io.appmetrica.analytics.billingv8.impl.Constants.MODULE_TAG
 import io.appmetrica.analytics.billingv8.impl.UpdateBillingProgressCallback
 import io.appmetrica.analytics.billingv8.impl.library.BillingClientStateListenerImpl
 import io.appmetrica.analytics.billingv8.impl.library.PurchasesUpdatedListenerImpl

@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.db.constants.migration
 import android.database.Cursor
 import android.database.MatrixCursor
 import android.database.sqlite.SQLiteDatabase
-import io.appmetrica.analytics.coreutils.internal.io.closeSafely
+import io.appmetrica.analytics.coreutils.internal.io.CloseableUtils.closeSafely
 import io.appmetrica.analytics.impl.db.constants.Constants
 import io.appmetrica.analytics.impl.db.constants.migrations.ComponentDatabaseUpgradeScriptToV112
 import io.appmetrica.analytics.impl.db.protobuf.converter.DbEventModelConverter

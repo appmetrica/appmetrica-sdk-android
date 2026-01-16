@@ -2,7 +2,7 @@ package io.appmetrica.analytics.billingv6.impl.library
 
 import androidx.annotation.WorkerThread
 import com.android.billingclient.api.BillingClient
-import io.appmetrica.analytics.billingv6.impl.MODULE_TAG
+import io.appmetrica.analytics.billingv6.impl.Constants.MODULE_TAG
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
 internal class BillingLibraryConnectionHolder(

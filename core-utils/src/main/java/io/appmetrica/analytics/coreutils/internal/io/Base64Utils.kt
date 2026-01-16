@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.coreutils.internal.io
 
 import android.util.Base64
+import io.appmetrica.analytics.coreutils.internal.io.CloseableUtils.closeSafely
 import io.appmetrica.analytics.coreutils.internal.io.GZIPUtils.gzipBytes
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import java.io.ByteArrayInputStream

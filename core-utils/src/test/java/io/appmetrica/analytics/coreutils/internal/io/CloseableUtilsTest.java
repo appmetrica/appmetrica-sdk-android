@@ -24,35 +24,35 @@ public class CloseableUtilsTest {
 
     @Test
     public void closeSafelyForNullCloseable() {
-        CloseableUtilsKt.closeSafely((Closeable) null);
+        CloseableUtils.closeSafely((Closeable) null);
     }
 
     @Test
     public void closeSafelyForNullCursor() {
-        CloseableUtilsKt.closeSafely((Cursor) null);
+        CloseableUtils.closeSafely((Cursor) null);
     }
 
     @Test
     public void closeSafelyCloseable() throws Exception {
-        CloseableUtilsKt.closeSafely(closeable);
+        CloseableUtils.closeSafely(closeable);
         verify(closeable).close();
     }
 
     @Test
     public void closeSafelyCursor() throws Exception {
-        CloseableUtilsKt.closeSafely(cursor);
+        CloseableUtils.closeSafely(cursor);
         verify(cursor).close();
     }
 
     @Test
     public void closeSafelyCloseableIfThrow() throws Exception {
         doThrow(new RuntimeException()).when(closeable).close();
-        CloseableUtilsKt.closeSafely(closeable);
+        CloseableUtils.closeSafely(closeable);
     }
 
     @Test
     public void closeSafelyCursorIfThrow() throws Exception {
         doThrow(new RuntimeException()).when(cursor).close();
-        CloseableUtilsKt.closeSafely(cursor);
+        CloseableUtils.closeSafely(cursor);
     }
 }

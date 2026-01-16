@@ -1,5 +1,6 @@
 package io.appmetrica.analytics.coreutils.internal.io
 
+import io.appmetrica.analytics.coreutils.internal.io.CloseableUtils.closeSafely
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.IOException

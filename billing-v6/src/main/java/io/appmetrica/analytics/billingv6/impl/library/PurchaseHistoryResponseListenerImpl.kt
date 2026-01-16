@@ -11,7 +11,7 @@ import io.appmetrica.analytics.billinginterface.internal.BillingInfo
 import io.appmetrica.analytics.billinginterface.internal.config.BillingConfig
 import io.appmetrica.analytics.billinginterface.internal.library.UtilsProvider
 import io.appmetrica.analytics.billingv6.impl.BillingUtils
-import io.appmetrica.analytics.billingv6.impl.MODULE_TAG
+import io.appmetrica.analytics.billingv6.impl.Constants.MODULE_TAG
 import io.appmetrica.analytics.billingv6.impl.ProductTypeParser
 import io.appmetrica.analytics.billingv6.impl.UpdateBillingProgressCallback
 import io.appmetrica.analytics.billingv6.impl.storage.StorageUpdater

@@ -7,7 +7,7 @@ import androidx.annotation.VisibleForTesting
 import io.appmetrica.analytics.coreutils.internal.services.SafePackageManager
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
-internal const val ATTEMPT_TIMEOUT = 3000L
+private const val ATTEMPT_TIMEOUT = 3000L
 
 internal class AdvIdServiceConnectionController<T> @VisibleForTesting internal constructor(
     @get:VisibleForTesting

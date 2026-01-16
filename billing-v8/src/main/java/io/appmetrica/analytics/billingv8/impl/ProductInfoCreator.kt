@@ -4,6 +4,7 @@ import com.android.billingclient.api.BillingClient.ProductType
 import com.android.billingclient.api.ProductDetails
 import com.android.billingclient.api.Purchase
 import io.appmetrica.analytics.billinginterface.internal.ProductInfo
+import io.appmetrica.analytics.billingv8.impl.Constants.MODULE_TAG
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
 object ProductInfoCreator {

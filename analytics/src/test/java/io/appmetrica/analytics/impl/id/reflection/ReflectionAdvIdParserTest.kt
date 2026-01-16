@@ -10,19 +10,17 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 
-const val PROVIDER = "io.appmetrica.analytics.identifiers.extra.PROVIDER"
-const val ID = "io.appmetrica.analytics.identifiers.extra.ID"
-const val LIMITED = "io.appmetrica.analytics.identifiers.extra.LIMITED"
+private const val PROVIDER = "io.appmetrica.analytics.identifiers.extra.PROVIDER"
+private const val ID = "io.appmetrica.analytics.identifiers.extra.ID"
+private const val LIMITED = "io.appmetrica.analytics.identifiers.extra.LIMITED"
 
-const val TRACKING_INFO = "io.appmetrica.analytics.identifiers.extra.TRACKING_INFO"
-const val STATUS = "io.appmetrica.analytics.identifiers.extra.STATUS"
-const val ERROR_MESSAGE = "io.appmetrica.analytics.identifiers.extra.ERROR_MESSAGE"
+private const val TRACKING_INFO = "io.appmetrica.analytics.identifiers.extra.TRACKING_INFO"
+private const val STATUS = "io.appmetrica.analytics.identifiers.extra.STATUS"
+private const val ERROR_MESSAGE = "io.appmetrica.analytics.identifiers.extra.ERROR_MESSAGE"
 
-const val GOOGLE = "google"
-const val HUAWEI = "huawei"
-const val YANDEX = "yandex"
-
-const val TEST = "test"
+private const val GOOGLE = "google"
+private const val HUAWEI = "huawei"
+private const val YANDEX = "yandex"
 
 @RunWith(RobolectricTestRunner::class)
 class ReflectionAdvIdParserTest : CommonTest() {

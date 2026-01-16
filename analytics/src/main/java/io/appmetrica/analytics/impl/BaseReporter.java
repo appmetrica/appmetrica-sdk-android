@@ -34,7 +34,7 @@ import io.appmetrica.analytics.impl.revenue.ad.AdRevenueWrapper;
 import io.appmetrica.analytics.impl.startup.StartupIdentifiersProvider;
 import io.appmetrica.analytics.impl.utils.BooleanUtils;
 import io.appmetrica.analytics.impl.utils.JsonHelper;
-import io.appmetrica.analytics.impl.utils.PluginErrorDetailsExtensionKt;
+import io.appmetrica.analytics.impl.utils.PluginErrorDetailsExtension;
 import io.appmetrica.analytics.impl.utils.PublicLogConstructor;
 import io.appmetrica.analytics.impl.utils.process.ProcessNameProvider;
 import io.appmetrica.analytics.impl.utils.validation.ValidationResult;
@@ -561,7 +561,7 @@ public abstract class BaseReporter implements IBaseReporter {
     @Override
     public void reportUnhandledException(@NonNull PluginErrorDetails errorDetails) {
         DebugLogger.INSTANCE.info(TAG, "report unhandled exception from plugin %s",
-                PluginErrorDetailsExtensionKt.toLogString(errorDetails));
+            PluginErrorDetailsExtension.toLogString(errorDetails));
         UnhandledException unhandledException = pluginErrorDetailsConverter.toUnhandledException(errorDetails);
         mReportsHandler.reportEvent(
             EventsManager.unhandledExceptionReportEntry(
@@ -577,7 +577,7 @@ public abstract class BaseReporter implements IBaseReporter {
     @Override
     public void reportError(@NonNull PluginErrorDetails errorDetails, @Nullable String message) {
         DebugLogger.INSTANCE.info(TAG, "report error from plugin. Message: %s, error %s",
-                message, PluginErrorDetailsExtensionKt.toLogString(errorDetails));
+                message, PluginErrorDetailsExtension.toLogString(errorDetails));
         RegularError error = pluginErrorDetailsConverter.toRegularError(message, errorDetails);
         mReportsHandler.reportEvent(
             EventsManager.customErrorReportEntry(
@@ -599,7 +599,7 @@ public abstract class BaseReporter implements IBaseReporter {
             "report error from plugin. Message: %s, identifier: %s, error %s",
             message,
             identifier,
-            errorDetails == null ? "null" : PluginErrorDetailsExtensionKt.toLogString(errorDetails)
+            errorDetails == null ? "null" : PluginErrorDetailsExtension.toLogString(errorDetails)
         );
         CustomError customError = new CustomError(
                 pluginErrorDetailsConverter.toRegularError(message, errorDetails), identifier

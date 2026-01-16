@@ -1,5 +1,6 @@
 package io.appmetrica.analytics.coreutils.internal
 
+import io.appmetrica.analytics.coreutils.internal.StringExtensions.replaceFirstCharWithTitleCase
 import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test

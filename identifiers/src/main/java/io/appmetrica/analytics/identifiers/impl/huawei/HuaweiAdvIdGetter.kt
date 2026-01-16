@@ -10,7 +10,6 @@ import io.appmetrica.analytics.identifiers.impl.AdvIdResult
 import io.appmetrica.analytics.identifiers.impl.AdvIdServiceConnectionController
 import io.appmetrica.analytics.identifiers.impl.ConnectionException
 import io.appmetrica.analytics.identifiers.impl.Constants
-import io.appmetrica.analytics.identifiers.impl.getProviderUnavailableResult
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
 private val HMS_ADV_ID_INTENT =
@@ -41,10 +40,10 @@ internal class HuaweiAdvIdGetter @VisibleForTesting internal constructor(
             AdvIdResult(IdentifierStatus.OK, AdvIdInfo(Constants.Providers.HUAWEI, oaid, isDisabled))
         } catch (connectionException: ConnectionException) {
             val message = connectionException.message ?: "unknown exception during binding huawei services"
-            getProviderUnavailableResult(message)
+            AdvIdResult.getProviderUnavailableResult(message)
         } catch (e: Throwable) {
             DebugLogger.error(tag, e, "can't fetch adv id.")
-            getProviderUnavailableResult("exception while fetching hoaid: " + e.message)
+            AdvIdResult.getProviderUnavailableResult("exception while fetching hoaid: " + e.message)
         } finally {
             try {
                 connectionController.disconnect(context)

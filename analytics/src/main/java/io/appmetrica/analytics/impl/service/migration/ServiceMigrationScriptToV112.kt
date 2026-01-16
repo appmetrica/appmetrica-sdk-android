@@ -5,7 +5,7 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.text.TextUtils
 import io.appmetrica.analytics.coreutils.internal.encryption.AESEncrypter
-import io.appmetrica.analytics.coreutils.internal.io.closeSafely
+import io.appmetrica.analytics.coreutils.internal.io.CloseableUtils.closeSafely
 import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.MigrationManager.MigrationScript
 import io.appmetrica.analytics.impl.Utils

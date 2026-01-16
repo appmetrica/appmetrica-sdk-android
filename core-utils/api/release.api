@@ -37,9 +37,11 @@ public final class io.appmetrica.analytics.coreutils.internal.ReferenceHolder {
     public final void storeReference([NonNull] Object)
 }
 
-public final class io.appmetrica.analytics.coreutils.internal.StringExtensionsKt {
-    public static final [NonNull] String replaceFirstCharWithTitleCase([NonNull] String)
-    public static final [NonNull] String replaceFirstCharWithTitleCase([NonNull] String, [NonNull] java.util.Locale)
+public final class io.appmetrica.analytics.coreutils.internal.StringExtensions {
+    public static final [NonNull] io.appmetrica.analytics.coreutils.internal.StringExtensions INSTANCE
+
+    public final [NonNull] String replaceFirstCharWithTitleCase([NonNull] String)
+    public final [NonNull] String replaceFirstCharWithTitleCase([NonNull] String, [NonNull] java.util.Locale)
 }
 
 public final class io.appmetrica.analytics.coreutils.internal.StringUtils {
@@ -221,7 +223,9 @@ public final class io.appmetrica.analytics.coreutils.internal.io.Base64Utils {
     public static final [Nullable] String decompressBase64GzipAsString([Nullable] String)
 }
 
-public final class io.appmetrica.analytics.coreutils.internal.io.CloseableUtilsKt {
+public final class io.appmetrica.analytics.coreutils.internal.io.CloseableUtils {
+    public static final [NonNull] io.appmetrica.analytics.coreutils.internal.io.CloseableUtils INSTANCE
+
     public static final void closeSafely([Nullable] android.database.Cursor)
     public static final void closeSafely([Nullable] java.io.Closeable)
 }

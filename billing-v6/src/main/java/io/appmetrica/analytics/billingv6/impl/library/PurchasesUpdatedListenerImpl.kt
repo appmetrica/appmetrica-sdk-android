@@ -5,7 +5,7 @@ import com.android.billingclient.api.BillingResult
 import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.PurchasesUpdatedListener
 import io.appmetrica.analytics.billingv6.impl.BillingUtils
-import io.appmetrica.analytics.billingv6.impl.MODULE_TAG
+import io.appmetrica.analytics.billingv6.impl.Constants.MODULE_TAG
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
 internal class PurchasesUpdatedListenerImpl : PurchasesUpdatedListener {

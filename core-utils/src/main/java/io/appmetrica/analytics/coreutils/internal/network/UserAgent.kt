@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.coreutils.internal.network
 
 import android.os.Build
-import io.appmetrica.analytics.coreutils.internal.replaceFirstCharWithTitleCase
+import io.appmetrica.analytics.coreutils.internal.StringExtensions.replaceFirstCharWithTitleCase
 
 object UserAgent {
 

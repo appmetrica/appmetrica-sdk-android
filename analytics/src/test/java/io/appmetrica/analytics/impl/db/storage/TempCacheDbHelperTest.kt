@@ -4,7 +4,7 @@ import android.content.ContentValues
 import android.database.Cursor
 import android.database.MatrixCursor
 import android.database.sqlite.SQLiteDatabase
-import io.appmetrica.analytics.coreutils.internal.io.closeSafely
+import io.appmetrica.analytics.coreutils.internal.io.CloseableUtils.closeSafely
 import io.appmetrica.analytics.coreutils.internal.time.SystemTimeProvider
 import io.appmetrica.analytics.impl.db.connectors.DBConnector
 import io.appmetrica.analytics.impl.db.constants.TempCacheTable
