@@ -4,6 +4,7 @@
 selfGradlePlugins = "2.0.0-beta+102"
 
 [plugins]
+appMetricaCheckNamespace = { id = "io.appmetrica.gradle.check-namespace", version.ref = "selfGradlePlugins" }
 appMetricaCodequality = { id = "io.appmetrica.gradle.codequality", version.ref = "selfGradlePlugins" }
 appMetricaGradlePlugin = { id = "io.appmetrica.gradle.gradle-plugin", version.ref = "selfGradlePlugins" }
 appMetricaKotlinLibrary = { id = "io.appmetrica.gradle.kotlin-library", version.ref = "selfGradlePlugins" }
