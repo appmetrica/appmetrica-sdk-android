@@ -30,6 +30,13 @@ class MockedConstructionRule<T>(
         }
     }
 
+    fun resetMock() {
+        if (this::constructionMock.isInitialized) {
+            constructionMock.close()
+        }
+        constructionMock = Mockito.mockConstruction(clazz, argumentInterceptor)
+    }
+
     operator fun <C> getValue(thisRef: C, property: KProperty<*>): T {
         return constructionMock.constructed().single()
     }

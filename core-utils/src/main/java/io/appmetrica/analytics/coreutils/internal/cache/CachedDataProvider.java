@@ -3,6 +3,8 @@ package io.appmetrica.analytics.coreutils.internal.cache;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
+import io.appmetrica.analytics.coreutils.internal.time.SystemTimeProvider;
+import io.appmetrica.analytics.coreutils.internal.time.TimeProvider;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 
 public interface CachedDataProvider {
@@ -11,6 +13,8 @@ public interface CachedDataProvider {
 
         private static final String TAG_PATTERN = "[CachedData-%s]";
 
+        @NonNull
+        private final TimeProvider timeProvider;
         @NonNull
         private final String tag;
         private volatile long refreshTime;
@@ -23,6 +27,7 @@ public interface CachedDataProvider {
             this.tag = String.format(TAG_PATTERN, description);
             this.refreshTime = refreshTime;
             this.expiryTime = expiryTime;
+            this.timeProvider = new SystemTimeProvider();
         }
 
         @Nullable
@@ -41,11 +46,11 @@ public interface CachedDataProvider {
         }
 
         private void updateCacheTime() {
-            mCachedTime = System.currentTimeMillis();
+            mCachedTime = timeProvider.currentTimeMillis();
         }
 
         public final boolean shouldUpdateData() {
-            final long diffTime = System.currentTimeMillis() - mCachedTime;
+            final long diffTime = timeProvider.currentTimeMillis() - mCachedTime;
             return diffTime > refreshTime || diffTime < 0;
         }
 
@@ -53,7 +58,7 @@ public interface CachedDataProvider {
             if (mCachedTime == 0) {
                 return false;
             }
-            final long diffTime = System.currentTimeMillis() - mCachedTime;
+            final long diffTime = timeProvider.currentTimeMillis() - mCachedTime;
             return diffTime > expiryTime || diffTime < 0;
         }
 

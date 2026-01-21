@@ -5,7 +5,6 @@ import android.util.Pair
 import io.appmetrica.analytics.coreapi.internal.identifiers.AdTrackingInfoResult
 import io.appmetrica.analytics.coreapi.internal.identifiers.AdvertisingIdsHolder
 import io.appmetrica.analytics.coreapi.internal.permission.PermissionState
-import io.appmetrica.analytics.coreutils.internal.cache.CachedDataProvider
 import io.appmetrica.analytics.ecommerce.ECommerceAmount
 import io.appmetrica.analytics.ecommerce.ECommerceCartItem
 import io.appmetrica.analytics.ecommerce.ECommerceOrder
@@ -325,12 +324,6 @@ class ToStringTest(
                 arrayOf(
                     CacheControl::class.java,
                     CacheControl(10L),
-                    0,
-                    ""
-                ),
-                arrayOf(
-                    CachedDataProvider.CachedData::class.java,
-                    CachedDataProvider.CachedData<Any>(10L, 20L, "some description"),
                     0,
                     ""
                 ),
