@@ -25,7 +25,7 @@ import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class TempCacheDbHelperTest : CommonTest() {
+internal class TempCacheDbHelperTest : CommonTest() {
 
     private val tableName = "test_table"
 

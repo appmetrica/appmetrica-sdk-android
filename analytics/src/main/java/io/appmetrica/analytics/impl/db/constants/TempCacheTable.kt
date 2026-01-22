@@ -2,10 +2,10 @@ package io.appmetrica.analytics.impl.db.constants
 
 import io.appmetrica.analytics.coreutils.internal.collection.CollectionUtils
 
-object TempCacheTable {
+internal object TempCacheTable {
     const val TABLE_NAME = "temp_cache"
 
-    object Column {
+    internal object Column {
         const val ID = "id"
         const val SCOPE = "scope"
         const val DATA = "data"

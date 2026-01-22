@@ -4,7 +4,7 @@ import android.os.Parcel
 import android.os.Parcelable
 import io.appmetrica.analytics.screenshot.impl.config.service.model.ServiceSideApiCaptorConfig
 
-class ParcelableApiCaptorConfig(
+internal class ParcelableApiCaptorConfig(
     val enabled: Boolean,
 ) : Parcelable {
 

@@ -5,7 +5,7 @@ import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 
-class NativeLayerPayloadEnricherTest : CommonTest() {
+internal class NativeLayerPayloadEnricherTest : CommonTest() {
 
     private val enricher by setUp { NativeLayerPayloadEnricher() }
 

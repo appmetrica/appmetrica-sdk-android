@@ -4,7 +4,7 @@ import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import org.json.JSONArray
 import org.json.JSONObject
 
-data class ModulesStatus(
+internal data class ModulesStatus(
     val modulesStatus: List<ModuleStatus>,
     val lastSendTime: Long
 ) {

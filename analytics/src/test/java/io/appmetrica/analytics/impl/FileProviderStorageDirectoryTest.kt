@@ -15,7 +15,7 @@ import org.robolectric.annotation.Config
 import java.io.File
 
 @RunWith(ParameterizedRobolectricTestRunner::class)
-class FileProviderStorageDirectoryTest(
+internal class FileProviderStorageDirectoryTest(
     private val applier: (FileProvider, Context) -> Any,
     private val expected: (File) -> Any,
     description: String

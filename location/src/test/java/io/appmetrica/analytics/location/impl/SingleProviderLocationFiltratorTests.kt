@@ -22,7 +22,7 @@ import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class SingleProviderLocationFiltratorTests : CommonTest() {
+internal class SingleProviderLocationFiltratorTests : CommonTest() {
 
     @get:Rule
     val timePassedCheckerMockedRule = MockedConstructionRule(TimePassedChecker::class.java)

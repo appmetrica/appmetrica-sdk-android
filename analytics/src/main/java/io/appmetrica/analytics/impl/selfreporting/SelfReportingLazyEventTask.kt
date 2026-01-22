@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.selfreporting
 
-interface SelfReportingLazyEventTask {
+internal interface SelfReportingLazyEventTask {
 
     fun get(): SelfReportingLazyEvent?
 }

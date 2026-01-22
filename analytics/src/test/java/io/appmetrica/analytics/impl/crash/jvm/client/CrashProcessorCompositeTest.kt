@@ -6,7 +6,7 @@ import org.mockito.Mockito.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoInteractions
 
-class CrashProcessorCompositeTest : CommonTest() {
+internal class CrashProcessorCompositeTest : CommonTest() {
 
     private val firstCrashProcessor: ICrashProcessor = mock()
     private val secondCrashProcessor: CrashProcessor = mock()

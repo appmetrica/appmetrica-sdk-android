@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.db.preferences
 
-interface SimplePreferenceStorage {
+internal interface SimplePreferenceStorage {
 
     fun putString(key: String, value: String?): SimplePreferenceStorage
 

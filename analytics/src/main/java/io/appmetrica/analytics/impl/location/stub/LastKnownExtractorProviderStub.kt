@@ -7,7 +7,7 @@ import io.appmetrica.analytics.coreapi.internal.system.PermissionExtractor
 import io.appmetrica.analytics.locationapi.internal.LastKnownLocationExtractor
 import io.appmetrica.analytics.locationapi.internal.LastKnownLocationExtractorProvider
 
-class LastKnownExtractorProviderStub : LastKnownLocationExtractorProvider {
+internal class LastKnownExtractorProviderStub : LastKnownLocationExtractorProvider {
 
     override val identifier: String
         get() = "Last known extractor stub"

@@ -6,7 +6,7 @@ import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade
 import java.util.concurrent.TimeUnit
 
-class ReportKotlinVersionTask : Runnable {
+internal class ReportKotlinVersionTask : Runnable {
 
     private val tag = "[ReportKotlinVersionTask]"
 

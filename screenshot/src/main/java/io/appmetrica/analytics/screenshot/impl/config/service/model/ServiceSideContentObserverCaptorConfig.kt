@@ -2,7 +2,7 @@ package io.appmetrica.analytics.screenshot.impl.config.service.model
 
 import io.appmetrica.analytics.screenshot.impl.config.remote.model.ContentObserverCaptorConfig
 
-class ServiceSideContentObserverCaptorConfig(
+internal class ServiceSideContentObserverCaptorConfig(
     val enabled: Boolean,
     val mediaStoreColumnNames: List<String>,
     val detectWindowSeconds: Long,

@@ -11,7 +11,7 @@ import org.mockito.kotlin.verify
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class PreloadInfoDataSaverTest : CommonTest() {
+internal class PreloadInfoDataSaverTest : CommonTest() {
 
     @get:Rule
     val globalServiceLocatorRule = GlobalServiceLocatorRule()

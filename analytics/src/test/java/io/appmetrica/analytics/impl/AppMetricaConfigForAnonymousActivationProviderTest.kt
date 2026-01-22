@@ -16,7 +16,7 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import java.util.UUID
 
-class AppMetricaConfigForAnonymousActivationProviderTest : CommonTest() {
+internal class AppMetricaConfigForAnonymousActivationProviderTest : CommonTest() {
 
     private val apiKey = UUID.randomUUID().toString()
     private val configFromPreferences = AppMetricaConfig.newConfigBuilder(apiKey)

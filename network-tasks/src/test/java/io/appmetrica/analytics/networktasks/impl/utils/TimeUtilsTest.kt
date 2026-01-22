@@ -16,7 +16,7 @@ import java.util.GregorianCalendar
 import java.util.TimeZone
 
 @RunWith(RobolectricTestRunner::class)
-class TimeUtilsTest : CommonTest() {
+internal class TimeUtilsTest : CommonTest() {
 
     private val gregorianCalendar = mock<GregorianCalendar>()
 

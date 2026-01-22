@@ -30,7 +30,7 @@ import org.robolectric.RobolectricTestRunner
 import java.util.concurrent.Executor
 
 @RunWith(RobolectricTestRunner::class)
-class PurchaseHistoryResponseListenerImplTest : CommonTest() {
+internal class PurchaseHistoryResponseListenerImplTest : CommonTest() {
 
     private val workerExecutor: Executor = mock {
         on { execute(any<SafeRunnable>()) } doAnswer {

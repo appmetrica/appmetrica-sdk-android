@@ -13,7 +13,7 @@ import io.appmetrica.analytics.impl.attribution.ExternalAttributionFromModule
 import io.appmetrica.analytics.impl.proxy.synchronous.ModulesSynchronousStageExecutor
 import io.appmetrica.analytics.impl.proxy.validation.ModulesBarrier
 
-class ModulesProxy {
+internal class ModulesProxy {
     private val provider: AppMetricaFacadeProvider = ClientServiceLocator.getInstance().appMetricaFacadeProvider
     private val modulesBarrier = ModulesBarrier(provider)
     private val synchronousStageExecutor = ModulesSynchronousStageExecutor()

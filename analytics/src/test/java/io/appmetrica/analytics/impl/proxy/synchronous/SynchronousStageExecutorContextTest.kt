@@ -23,7 +23,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import java.util.UUID
 
-class SynchronousStageExecutorContextTest : CommonTest() {
+internal class SynchronousStageExecutorContextTest : CommonTest() {
 
     private val context: Context = mock()
     private val appMetricaFacade: AppMetricaFacade = mock()

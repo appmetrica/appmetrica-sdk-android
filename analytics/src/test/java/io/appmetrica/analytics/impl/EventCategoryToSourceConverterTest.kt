@@ -8,7 +8,7 @@ import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 
 @RunWith(Parameterized::class)
-class EventCategoryToSourceConverterTest(
+internal class EventCategoryToSourceConverterTest(
     private val input: Category,
     private val expected: EventSource
 ) : CommonTest() {

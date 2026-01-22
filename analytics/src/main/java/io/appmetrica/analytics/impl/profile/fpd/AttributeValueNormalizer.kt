@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.profile.fpd
 
-interface AttributeValueNormalizer {
+internal interface AttributeValueNormalizer {
 
     fun normalize(value: String): String?
 }

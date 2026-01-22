@@ -15,7 +15,7 @@ import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class BillingInfoManagerImplTest : CommonTest() {
+internal class BillingInfoManagerImplTest : CommonTest() {
 
     private val billingInfoStorage: BillingInfoStorage = mock()
 

@@ -12,7 +12,7 @@ import io.appmetrica.analytics.modulesapi.internal.client.ModuleClientExecutorPr
 import io.appmetrica.analytics.modulesapi.internal.client.ProcessDetector
 import io.appmetrica.analytics.modulesapi.internal.common.InternalClientModuleFacade
 
-class ClientContextImpl(
+internal class ClientContextImpl(
     override val context: Context
 ) : CoreClientContext {
 

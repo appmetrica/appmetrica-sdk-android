@@ -33,7 +33,7 @@ import io.appmetrica.analytics.impl.proxy.AppMetricaProxy
 import io.appmetrica.analytics.impl.utils.FirstLaunchDetector
 import io.appmetrica.analytics.profile.UserProfile
 
-class SynchronousStageExecutor @VisibleForTesting constructor(
+internal class SynchronousStageExecutor @VisibleForTesting constructor(
     private val provider: AppMetricaFacadeProvider,
     private val webViewJsInterfaceHandler: WebViewJsInterfaceHandler,
     private val activityLifecycleManager: ActivityLifecycleManager,

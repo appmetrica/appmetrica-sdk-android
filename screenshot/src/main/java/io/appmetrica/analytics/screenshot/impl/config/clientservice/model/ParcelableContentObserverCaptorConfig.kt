@@ -4,7 +4,7 @@ import android.os.Parcel
 import android.os.Parcelable
 import io.appmetrica.analytics.screenshot.impl.config.service.model.ServiceSideContentObserverCaptorConfig
 
-class ParcelableContentObserverCaptorConfig(
+internal class ParcelableContentObserverCaptorConfig(
     val enabled: Boolean,
     val mediaStoreColumnNames: List<String>,
     val detectWindowSeconds: Long,

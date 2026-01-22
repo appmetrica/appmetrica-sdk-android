@@ -14,7 +14,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.refEq
 import org.mockito.kotlin.whenever
 
-class DbEventDescriptionToBytesConverterTest : CommonTest() {
+internal class DbEventDescriptionToBytesConverterTest : CommonTest() {
 
     @get:Rule
     val messageNanoRule = MockedStaticRule(MessageNano::class.java)

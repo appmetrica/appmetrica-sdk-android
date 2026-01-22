@@ -27,7 +27,7 @@ import org.robolectric.RobolectricTestRunner
 import java.util.concurrent.TimeUnit
 
 @RunWith(RobolectricTestRunner::class)
-class AnonymousClientActivatorTest : CommonTest() {
+internal class AnonymousClientActivatorTest : CommonTest() {
 
     private val context = mock<Context>()
     private val appMetricaFacade: AppMetricaFacade = mock()

@@ -18,7 +18,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 
-class ExternalAttributionHandlerTest : CommonTest() {
+internal class ExternalAttributionHandlerTest : CommonTest() {
 
     private val valueBytes = "string".toByteArray()
     private val counterReport: CounterReport = mock {

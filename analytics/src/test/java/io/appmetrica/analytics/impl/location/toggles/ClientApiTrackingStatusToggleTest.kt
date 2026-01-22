@@ -10,7 +10,7 @@ import org.mockito.kotlin.inOrder
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 
-class ClientApiTrackingStatusToggleTest : CommonTest() {
+internal class ClientApiTrackingStatusToggleTest : CommonTest() {
 
     private val storage = mock<PreferencesServiceDbStorage>()
 

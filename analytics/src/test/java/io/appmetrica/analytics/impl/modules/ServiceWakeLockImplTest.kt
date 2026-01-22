@@ -13,7 +13,7 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
 
-class ServiceWakeLockImplTest : CommonTest() {
+internal class ServiceWakeLockImplTest : CommonTest() {
 
     private val wakeLockId = "some-wake-lock-id"
     private val context = mock<Context>()

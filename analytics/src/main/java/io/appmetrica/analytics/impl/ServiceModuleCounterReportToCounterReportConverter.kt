@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl
 
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceModuleCounterReport
 
-class ServiceModuleCounterReportToCounterReportConverter {
+internal class ServiceModuleCounterReportToCounterReportConverter {
 
     fun convert(report: ServiceModuleCounterReport): CounterReport {
         return CounterReport().apply {

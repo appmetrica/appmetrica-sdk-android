@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.crash.jvm.converter
 import io.appmetrica.analytics.coreapi.internal.data.Converter
 import io.appmetrica.analytics.impl.protobuf.backend.CrashAndroid
 
-class PluginEnvironmentConverter : Converter<Map<String, String>, Array<CrashAndroid.BytesPair>> {
+internal class PluginEnvironmentConverter : Converter<Map<String, String>, Array<CrashAndroid.BytesPair>> {
 
     override fun fromModel(value: Map<String, String>): Array<CrashAndroid.BytesPair> {
         val result = Array(value.size) { CrashAndroid.BytesPair() }

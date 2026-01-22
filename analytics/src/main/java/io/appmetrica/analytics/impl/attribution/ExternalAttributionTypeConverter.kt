@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.attribution
 
 import io.appmetrica.analytics.impl.protobuf.backend.ExternalAttribution.ClientExternalAttribution
 
-object ExternalAttributionTypeConverter {
+internal object ExternalAttributionTypeConverter {
 
     fun fromModel(type: ExternalAttributionType): Int {
         return when (type) {

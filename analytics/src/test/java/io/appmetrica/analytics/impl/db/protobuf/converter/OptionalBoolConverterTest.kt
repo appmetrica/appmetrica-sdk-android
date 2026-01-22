@@ -5,7 +5,7 @@ import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.SoftAssertions
 import org.junit.Test
 
-class OptionalBoolConverterTest : CommonTest() {
+internal class OptionalBoolConverterTest : CommonTest() {
 
     private val converter = OptionalBoolConverter()
 

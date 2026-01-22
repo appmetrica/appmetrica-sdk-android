@@ -12,7 +12,7 @@ import org.json.JSONObject
 import org.junit.Rule
 import org.junit.Test
 
-class ExternalAttributionsTest : CommonTest() {
+internal class ExternalAttributionsTest : CommonTest() {
 
     @get:Rule
     val mapExternalAttributionRule = MockedConstructionRule(MapExternalAttribution::class.java)

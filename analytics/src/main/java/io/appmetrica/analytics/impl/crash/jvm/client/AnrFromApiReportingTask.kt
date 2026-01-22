@@ -5,7 +5,7 @@ import io.appmetrica.analytics.impl.ClientServiceLocator
 import io.appmetrica.analytics.impl.crash.utils.FullStateConverter
 import io.appmetrica.analytics.impl.crash.utils.ThreadsStateDumper
 
-class AnrFromApiReportingTask(
+internal class AnrFromApiReportingTask(
     private val anrReporter: AnrReporter,
     private val allThreads: Map<Thread, Array<StackTraceElement>>
 ) {

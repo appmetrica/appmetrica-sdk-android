@@ -7,7 +7,7 @@ import org.junit.Test
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 
-class ServiceModuleReporterComponentLifecycleImplTest : CommonTest() {
+internal class ServiceModuleReporterComponentLifecycleImplTest : CommonTest() {
 
     private val firstListener: ServiceModuleReporterComponentLifecycleListener = mock()
     private val secondListener: ServiceModuleReporterComponentLifecycleListener = mock()

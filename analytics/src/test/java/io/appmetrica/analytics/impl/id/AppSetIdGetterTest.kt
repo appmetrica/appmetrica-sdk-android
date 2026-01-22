@@ -21,7 +21,7 @@ import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class AppSetIdGetterTest : CommonTest() {
+internal class AppSetIdGetterTest : CommonTest() {
 
     private lateinit var context: Context
 

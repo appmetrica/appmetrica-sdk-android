@@ -34,7 +34,7 @@ import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.whenever
 import java.util.concurrent.Executor
 
-class ServiceScreenshotCaptorTest : CommonTest() {
+internal class ServiceScreenshotCaptorTest : CommonTest() {
 
     private val clientSideConfig: ClientSideServiceCaptorConfig = mock()
     private val clientSideScreenshotConfig: ClientSideScreenshotConfig = mock {

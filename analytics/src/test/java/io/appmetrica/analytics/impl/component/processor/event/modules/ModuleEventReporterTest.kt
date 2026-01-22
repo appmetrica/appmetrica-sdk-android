@@ -14,7 +14,7 @@ import org.mockito.kotlin.inOrder
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 
-class ModuleEventReporterTest : CommonTest() {
+internal class ModuleEventReporterTest : CommonTest() {
 
     private val eventSaver = mock<EventSaver>()
 

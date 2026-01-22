@@ -4,7 +4,7 @@ import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 
-class AnyPreconditionVerifierTest : CommonTest() {
+internal class AnyPreconditionVerifierTest : CommonTest() {
 
     private val verifier by setUp { AnyPreconditionVerifier() }
 

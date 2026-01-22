@@ -7,7 +7,7 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 
-class BaseTelephonyInfoAdapterApplierTest : CommonTest() {
+internal class BaseTelephonyInfoAdapterApplierTest : CommonTest() {
 
     private val data = mock<Any>()
     private val adapter = mock<TelephonyInfoAdapter<Any>>()

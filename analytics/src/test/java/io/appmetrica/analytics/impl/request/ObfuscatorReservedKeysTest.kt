@@ -7,7 +7,7 @@ import org.junit.runner.RunWith
 import org.robolectric.ParameterizedRobolectricTestRunner
 
 @RunWith(ParameterizedRobolectricTestRunner::class)
-class ObfuscatorReservedKeysTest(
+internal class ObfuscatorReservedKeysTest(
     private val obfuscatedKey: String,
     private val description: String
 ) : CommonTest() {

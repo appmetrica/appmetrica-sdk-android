@@ -6,7 +6,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.json.JSONObject
 import org.junit.Test
 
-class ServiceCaptorConfigJsonParserTest : CommonTest() {
+internal class ServiceCaptorConfigJsonParserTest : CommonTest() {
 
     private val parser = ServiceCaptorConfigJsonParser()
 

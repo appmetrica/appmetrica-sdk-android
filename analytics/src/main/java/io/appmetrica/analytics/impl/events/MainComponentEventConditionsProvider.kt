@@ -5,7 +5,7 @@ import io.appmetrica.analytics.impl.component.ReportComponentConfigurationHolder
 import io.appmetrica.analytics.impl.db.DatabaseHelper
 import io.appmetrica.analytics.impl.db.preferences.PreferencesComponentDbStorage
 
-class MainComponentEventConditionsProvider(
+internal class MainComponentEventConditionsProvider(
     databaseHelper: DatabaseHelper,
     private val configurationHolder: ReportComponentConfigurationHolder,
     private val eventTriggerProvider: EventTriggerProvider,

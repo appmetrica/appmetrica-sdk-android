@@ -4,7 +4,7 @@ import io.appmetrica.analytics.AdvIdentifiersResult
 import io.appmetrica.analytics.StartupParamsItem
 import io.appmetrica.analytics.StartupParamsItemStatus
 
-class AdvIdentifiersFromStartupParamsItemConverter {
+internal class AdvIdentifiersFromStartupParamsItemConverter {
 
     fun convert(
         google: StartupParamsItem?,

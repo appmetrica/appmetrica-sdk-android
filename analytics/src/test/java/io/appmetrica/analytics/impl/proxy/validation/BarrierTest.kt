@@ -30,7 +30,7 @@ import org.robolectric.RobolectricTestRunner
 import java.util.UUID
 
 @RunWith(RobolectricTestRunner::class)
-class BarrierTest : CommonTest() {
+internal class BarrierTest : CommonTest() {
 
     private val appMetricaFacadeProvider: AppMetricaFacadeProvider = mock {
         on { isActivated } doReturn true

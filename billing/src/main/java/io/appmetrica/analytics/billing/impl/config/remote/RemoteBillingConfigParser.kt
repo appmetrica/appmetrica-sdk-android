@@ -7,7 +7,7 @@ import io.appmetrica.analytics.coreapi.internal.data.JsonParser
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import org.json.JSONObject
 
-class RemoteBillingConfigParser(
+internal class RemoteBillingConfigParser(
     private val converter: BillingConfigProtoConverter = BillingConfigProtoConverter(),
     private val parser: BillingConfigJsonParser = BillingConfigJsonParser(),
 ) : JsonParser<RemoteBillingConfig> {

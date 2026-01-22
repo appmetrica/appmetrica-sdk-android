@@ -18,7 +18,7 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 
-class BillingServiceModuleEntryPointTest : CommonTest() {
+internal class BillingServiceModuleEntryPointTest : CommonTest() {
 
     private val remoteConfig = RemoteBillingConfig(
         enabled = true,

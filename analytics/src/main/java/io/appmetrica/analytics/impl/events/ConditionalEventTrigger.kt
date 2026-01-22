@@ -4,7 +4,7 @@ import io.appmetrica.analytics.impl.component.ComponentId
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import java.util.concurrent.atomic.AtomicBoolean
 
-class ConditionalEventTrigger(
+internal class ConditionalEventTrigger(
     private val eventsFlusher: EventsFlusher,
     private val conditions: List<EventCondition>,
     private val forceSendConditions: List<EventCondition>,

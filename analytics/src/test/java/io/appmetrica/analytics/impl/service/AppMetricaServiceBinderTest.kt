@@ -7,7 +7,7 @@ import org.junit.Test
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 
-class AppMetricaServiceBinderTest : CommonTest() {
+internal class AppMetricaServiceBinderTest : CommonTest() {
 
     private val serviceCore: AppMetricaServiceCore = mock()
     private val bundle: Bundle = mock()

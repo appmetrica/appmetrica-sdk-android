@@ -10,7 +10,7 @@ import io.appmetrica.analytics.testutils.CommonTest
 import org.junit.Test
 import org.mockito.kotlin.mock
 
-class RemoteBillingConfigProtoConverterTest : CommonTest() {
+internal class RemoteBillingConfigProtoConverterTest : CommonTest() {
 
     private val billingConfig: BillingConfig = mock()
     private val billingConfigProto: BillingConfigProto = mock()

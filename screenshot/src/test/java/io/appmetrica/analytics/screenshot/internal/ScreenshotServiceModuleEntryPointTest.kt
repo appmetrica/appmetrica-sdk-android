@@ -5,7 +5,7 @@ import io.appmetrica.analytics.modulesapi.internal.service.ServiceContext
 import io.appmetrica.analytics.screenshot.impl.ServiceToBundleScreenshotConfigConverter
 import io.appmetrica.analytics.screenshot.impl.config.remote.RemoteScreenshotConfigConverter
 import io.appmetrica.analytics.screenshot.impl.config.remote.RemoteScreenshotConfigParser
-import io.appmetrica.analytics.screenshot.impl.config.remote.model.RemoteScreenshotConfig
+import io.appmetrica.analytics.screenshot.internal.config.RemoteScreenshotConfig
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.constructionRule
 import org.assertj.core.api.Assertions.assertThat
@@ -16,7 +16,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.notNull
 import org.mockito.kotlin.verify
 
-class ScreenshotServiceModuleEntryPointTest : CommonTest() {
+internal class ScreenshotServiceModuleEntryPointTest : CommonTest() {
 
     private val remoteConfig: RemoteScreenshotConfig = mock()
     private val serviceContext: ServiceContext = mock()

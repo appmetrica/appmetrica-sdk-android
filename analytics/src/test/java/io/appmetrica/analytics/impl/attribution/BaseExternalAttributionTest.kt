@@ -10,7 +10,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.mockito.kotlin.whenever
 
-class BaseExternalAttributionTest : CommonTest() {
+internal class BaseExternalAttributionTest : CommonTest() {
 
     private val fakeAttributionType = -1
     private val fakeAttributionTypeString = "fakeAttributionTypeString"

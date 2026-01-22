@@ -2,10 +2,10 @@ package io.appmetrica.analytics.remotepermissions.internal
 
 import io.appmetrica.analytics.modulesapi.internal.service.ModuleRemoteConfig
 import io.appmetrica.analytics.modulesapi.internal.service.ServiceContext
-import io.appmetrica.analytics.remotepermissions.impl.FeatureConfig
 import io.appmetrica.analytics.remotepermissions.impl.FeatureConfigToProtoBytesConverter
 import io.appmetrica.analytics.remotepermissions.impl.FeatureParser
 import io.appmetrica.analytics.remotepermissions.impl.RemoteConfigPermissionStrategy
+import io.appmetrica.analytics.remotepermissions.internal.config.FeatureConfig
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.MockedConstructionRule
 import org.assertj.core.api.Assertions.assertThat

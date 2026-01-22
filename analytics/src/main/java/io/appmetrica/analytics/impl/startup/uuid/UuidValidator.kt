@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.startup.uuid
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import java.util.UUID
 
-class UuidValidator {
+internal class UuidValidator {
 
     private val tag = "[UuidValidator]"
 

@@ -4,7 +4,7 @@ import android.content.Context
 import io.appmetrica.analytics.AppMetricaLibraryAdapterConfig
 import io.appmetrica.analytics.impl.ClientServiceLocator
 
-class LibraryAdapterSynchronousStageExecutor {
+internal class LibraryAdapterSynchronousStageExecutor {
 
     fun activate(context: Context) {
         ClientServiceLocator.getInstance().contextAppearedListener.onProbablyAppeared(context)

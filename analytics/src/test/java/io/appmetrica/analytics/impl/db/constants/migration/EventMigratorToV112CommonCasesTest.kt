@@ -38,7 +38,7 @@ internal class EventMigratorToV112CommonCasesTest(
 
     companion object {
 
-        class EventCursorRecord(
+        internal class EventCursorRecord(
             val sessionId: Any? = 10_000_000_008,
             val sessionType: Any? = SessionType.BACKGROUND.code,
             val numberInSession: Any? = 54L,

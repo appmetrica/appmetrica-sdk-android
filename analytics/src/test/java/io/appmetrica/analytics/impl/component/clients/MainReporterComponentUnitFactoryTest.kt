@@ -20,7 +20,7 @@ import org.mockito.kotlin.mock
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class MainReporterComponentUnitFactoryTest : CommonTest() {
+internal class MainReporterComponentUnitFactoryTest : CommonTest() {
 
     private val context: Context = mock()
     private val componentId: ComponentId = mock()

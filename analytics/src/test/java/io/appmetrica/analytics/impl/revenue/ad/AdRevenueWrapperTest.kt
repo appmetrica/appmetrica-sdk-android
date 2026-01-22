@@ -82,7 +82,7 @@ private val stringByBytesTrimMap = mapOf(
     bigPayloadJson to bigPayloadJsonTrimmed,
 )
 
-class AdRevenueWrapperTest : CommonTest() {
+internal class AdRevenueWrapperTest : CommonTest() {
 
     private val publicLogger = mock<PublicLogger>()
 

@@ -14,7 +14,7 @@ import io.appmetrica.analytics.coreutils.internal.system.SystemServiceUtils
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import kotlin.math.sqrt
 
-object DeviceTypeProvider {
+internal object DeviceTypeProvider {
 
     private const val TAG = "[DeviceTypeProvider]"
 

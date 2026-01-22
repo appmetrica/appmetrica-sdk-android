@@ -7,7 +7,7 @@ import io.appmetrica.analytics.coreapi.internal.data.Converter
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import io.appmetrica.analytics.protobuf.nano.MessageNano
 
-class RemoteBillingConfigConverter(
+internal class RemoteBillingConfigConverter(
     private val protoConverter: RemoteBillingConfigProtoConverter = RemoteBillingConfigProtoConverter()
 ) : Converter<RemoteBillingConfig, ByteArray> {
 

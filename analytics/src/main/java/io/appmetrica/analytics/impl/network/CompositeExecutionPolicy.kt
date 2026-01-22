@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.network
 import io.appmetrica.analytics.coreapi.internal.io.IExecutionPolicy
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
-class CompositeExecutionPolicy(private vararg val policies: IExecutionPolicy) : IExecutionPolicy {
+internal class CompositeExecutionPolicy(private vararg val policies: IExecutionPolicy) : IExecutionPolicy {
 
     private val tag = "[CompositeExecutionPolicy]"
 

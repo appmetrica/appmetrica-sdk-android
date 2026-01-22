@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.modules
 
-interface ModuleEntryPointProvider {
+internal interface ModuleEntryPointProvider {
 
     val className: String
 }

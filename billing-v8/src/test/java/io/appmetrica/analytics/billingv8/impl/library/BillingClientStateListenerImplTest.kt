@@ -26,7 +26,7 @@ import org.robolectric.RobolectricTestRunner
 import java.util.concurrent.Executor
 
 @RunWith(RobolectricTestRunner::class)
-class BillingClientStateListenerImplTest : CommonTest() {
+internal class BillingClientStateListenerImplTest : CommonTest() {
 
     private val workerExecutor: Executor = mock {
         on { execute(any<SafeRunnable>()) } doAnswer {

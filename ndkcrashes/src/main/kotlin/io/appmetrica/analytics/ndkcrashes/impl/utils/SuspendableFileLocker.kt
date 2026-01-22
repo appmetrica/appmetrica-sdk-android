@@ -9,7 +9,7 @@ import java.nio.channels.FileChannel
 import java.nio.channels.FileLock
 import java.util.concurrent.Semaphore
 
-class SuspendableFileLocker private constructor(context: Context, simpleFileName: String) {
+internal class SuspendableFileLocker private constructor(context: Context, simpleFileName: String) {
     private class Lock(private val lockFile: File) {
         private val tag = "[SuspendableFileLocker]"
 

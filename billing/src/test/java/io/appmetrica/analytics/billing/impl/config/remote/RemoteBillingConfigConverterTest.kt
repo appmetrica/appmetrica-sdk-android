@@ -13,7 +13,7 @@ import org.junit.Test
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 
-class RemoteBillingConfigConverterTest : CommonTest() {
+internal class RemoteBillingConfigConverterTest : CommonTest() {
 
     private val remoteBillingConfig: RemoteBillingConfig = mock()
     private val remoteBillingConfigProto: RemoteBillingConfigProto = mock()

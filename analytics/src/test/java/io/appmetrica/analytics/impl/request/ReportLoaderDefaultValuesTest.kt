@@ -34,7 +34,7 @@ import org.robolectric.RuntimeEnvironment
 import java.util.UUID
 
 @RunWith(ParameterizedRobolectricTestRunner::class)
-class ReportLoaderDefaultValuesTest(
+internal class ReportLoaderDefaultValuesTest(
     private val fieldName: String,
     private val value: Any
 ) : CommonTest() {

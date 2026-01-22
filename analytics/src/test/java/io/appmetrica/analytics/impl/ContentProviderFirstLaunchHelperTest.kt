@@ -18,7 +18,7 @@ import org.mockito.kotlin.verify
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class ContentProviderFirstLaunchHelperTest : CommonTest() {
+internal class ContentProviderFirstLaunchHelperTest : CommonTest() {
 
     private val timeout = 1000
     private val packageName = "test.package"

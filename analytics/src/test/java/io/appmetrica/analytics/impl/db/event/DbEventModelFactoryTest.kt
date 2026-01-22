@@ -32,7 +32,7 @@ import org.robolectric.RobolectricTestRunner
 import java.util.function.Consumer
 
 @RunWith(RobolectricTestRunner::class)
-class DbEventModelFactoryTest : CommonTest() {
+internal class DbEventModelFactoryTest : CommonTest() {
 
     private val sessionId = 42L
     private val sessionType = SessionType.BACKGROUND

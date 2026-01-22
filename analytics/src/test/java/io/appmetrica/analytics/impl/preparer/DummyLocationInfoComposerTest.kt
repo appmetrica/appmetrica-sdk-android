@@ -6,7 +6,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.mockito.kotlin.mock
 
-class DummyLocationInfoComposerTest : CommonTest() {
+internal class DummyLocationInfoComposerTest : CommonTest() {
 
     private val locationInfo: DbLocationModel = mock()
     private var composer = DummyLocationInfoComposer()

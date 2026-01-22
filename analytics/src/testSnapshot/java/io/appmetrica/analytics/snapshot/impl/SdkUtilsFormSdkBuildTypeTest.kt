@@ -9,7 +9,7 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class SdkUtilsFormSdkBuildTypeTest : CommonTest() {
+internal class SdkUtilsFormSdkBuildTypeTest : CommonTest() {
 
     @Test
     fun formSdkBuildType() {

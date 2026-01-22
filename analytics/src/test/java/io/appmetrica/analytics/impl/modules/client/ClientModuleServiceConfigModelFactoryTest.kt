@@ -14,7 +14,7 @@ import org.mockito.kotlin.mock
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class ClientModuleServiceConfigModelFactoryTest : CommonTest() {
+internal class ClientModuleServiceConfigModelFactoryTest : CommonTest() {
 
     private val moduleConfigBundle = Bundle()
     private val moduleIdentifier = "some_identifier"

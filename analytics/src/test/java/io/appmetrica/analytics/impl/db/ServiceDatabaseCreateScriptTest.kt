@@ -20,7 +20,7 @@ import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class ServiceDatabaseCreateScriptTest : CommonTest() {
+internal class ServiceDatabaseCreateScriptTest : CommonTest() {
 
     private val database = mock<SQLiteDatabase>()
 

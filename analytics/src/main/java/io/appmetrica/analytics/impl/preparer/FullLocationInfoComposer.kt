@@ -5,7 +5,7 @@ import io.appmetrica.analytics.impl.db.event.DbLocationModel
 import io.appmetrica.analytics.impl.protobuf.backend.EventProto
 import java.util.concurrent.TimeUnit
 
-class FullLocationInfoComposer : LocationInfoComposer {
+internal class FullLocationInfoComposer : LocationInfoComposer {
 
     override fun getLocation(locationInfoFromDb: DbLocationModel?): EventProto.ReportMessage.Location? {
         if (locationInfoFromDb?.longitude != null && locationInfoFromDb.latitude != null) {

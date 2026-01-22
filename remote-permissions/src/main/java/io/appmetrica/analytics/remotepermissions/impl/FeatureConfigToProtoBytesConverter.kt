@@ -3,8 +3,9 @@ package io.appmetrica.analytics.remotepermissions.impl
 import io.appmetrica.analytics.coreapi.internal.data.Converter
 import io.appmetrica.analytics.protobuf.nano.MessageNano
 import io.appmetrica.analytics.remotepermissions.impl.protobuf.client.RemotePermissionsProtobuf
+import io.appmetrica.analytics.remotepermissions.internal.config.FeatureConfig
 
-class FeatureConfigToProtoBytesConverter : Converter<FeatureConfig, ByteArray> {
+internal class FeatureConfigToProtoBytesConverter : Converter<FeatureConfig, ByteArray> {
 
     private val featureConfigToProtoConverter = FeatureConfigToProtoConverter()
 

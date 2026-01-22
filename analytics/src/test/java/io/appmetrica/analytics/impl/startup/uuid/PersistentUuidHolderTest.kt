@@ -24,7 +24,7 @@ import java.io.FileOutputStream
 import java.util.UUID
 
 @RunWith(RobolectricTestRunner::class)
-class PersistentUuidHolderTest : CommonTest() {
+internal class PersistentUuidHolderTest : CommonTest() {
 
     private lateinit var context: Context
 

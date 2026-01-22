@@ -15,7 +15,7 @@ import org.junit.Test
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 
-class NativeCrashHandlerFactoryTest : CommonTest() {
+internal class NativeCrashHandlerFactoryTest : CommonTest() {
 
     private val markCrashCompleted: (String) -> Unit = mock()
     private val context: Context = mock()

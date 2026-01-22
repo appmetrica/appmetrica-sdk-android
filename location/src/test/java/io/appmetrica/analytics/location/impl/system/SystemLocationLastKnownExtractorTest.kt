@@ -22,7 +22,7 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
 
-class SystemLocationLastKnownExtractorTest : CommonTest() {
+internal class SystemLocationLastKnownExtractorTest : CommonTest() {
 
     @get:Rule
     val utilsMockedRule = MockedStaticRule(SystemServiceUtils::class.java)

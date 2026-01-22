@@ -9,7 +9,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.mockito.kotlin.mock
 
-class AppMetricaServiceCoreImplFieldsFactoryTest : CommonTest() {
+internal class AppMetricaServiceCoreImplFieldsFactoryTest : CommonTest() {
 
     private val context: Context = mock()
     private val clientRepository: ClientRepository = mock()

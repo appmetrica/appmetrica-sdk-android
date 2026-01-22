@@ -5,7 +5,7 @@ import io.appmetrica.analytics.testutils.CommonTest
 import org.junit.Test
 import org.mockito.kotlin.mock
 
-class PreloadInfoStateProviderTest : CommonTest() {
+internal class PreloadInfoStateProviderTest : CommonTest() {
 
     private val stateProvider = PreloadInfoStateProvider()
 

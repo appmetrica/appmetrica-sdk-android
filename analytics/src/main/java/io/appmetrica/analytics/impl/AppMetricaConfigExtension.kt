@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl
 
-class AppMetricaConfigExtension(
+internal class AppMetricaConfigExtension(
     val autoCollectedDataSubscribers: List<String>,
     val needClearEnvironment: Boolean
 ) {

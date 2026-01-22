@@ -17,7 +17,7 @@ import org.robolectric.RobolectricTestRunner
 import java.util.Locale
 
 @RunWith(RobolectricTestRunner::class)
-class LocaleExtractorTest : CommonTest() {
+internal class LocaleExtractorTest : CommonTest() {
 
     private val deprecatedLocale: Locale = mock()
     private val configuration: Configuration = Configuration().apply {

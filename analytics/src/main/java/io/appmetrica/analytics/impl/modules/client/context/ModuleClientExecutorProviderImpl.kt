@@ -4,7 +4,7 @@ import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor
 import io.appmetrica.analytics.impl.ClientServiceLocator
 import io.appmetrica.analytics.modulesapi.internal.client.ModuleClientExecutorProvider
 
-class ModuleClientExecutorProviderImpl : ModuleClientExecutorProvider {
+internal class ModuleClientExecutorProviderImpl : ModuleClientExecutorProvider {
 
     override val defaultExecutor: IHandlerExecutor
         get() = ClientServiceLocator.getInstance().clientExecutorProvider.defaultExecutor

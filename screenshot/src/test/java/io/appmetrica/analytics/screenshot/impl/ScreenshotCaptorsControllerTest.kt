@@ -13,7 +13,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 
-class ScreenshotCaptorsControllerTest : CommonTest() {
+internal class ScreenshotCaptorsControllerTest : CommonTest() {
 
     private val config: ClientSideScreenshotConfig = mock()
     private val remoteConfig: ClientSideRemoteScreenshotConfig = mock {

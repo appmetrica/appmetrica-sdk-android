@@ -13,7 +13,7 @@ import org.mockito.kotlin.whenever
 import org.skyscreamer.jsonassert.JSONCompare
 import org.skyscreamer.jsonassert.JSONCompareMode
 
-class VitalDataProviderTest : CommonTest() {
+internal class VitalDataProviderTest : CommonTest() {
 
     private val primaryDataSource = mock<VitalDataSource>()
     private val backupDataSource = mock<VitalDataSource>()

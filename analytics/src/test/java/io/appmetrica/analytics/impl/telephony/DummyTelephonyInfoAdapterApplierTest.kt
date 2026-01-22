@@ -6,7 +6,7 @@ import org.junit.Test
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verifyNoMoreInteractions
 
-class DummyTelephonyInfoAdapterApplierTest : CommonTest() {
+internal class DummyTelephonyInfoAdapterApplierTest : CommonTest() {
 
     private val adapter = mock<TelephonyInfoAdapter<Any>>()
 

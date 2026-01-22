@@ -11,7 +11,7 @@ import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 
-class ModuleLoaderTest : CommonTest() {
+internal class ModuleLoaderTest : CommonTest() {
 
     private val moduleLoader = ModuleLoader()
 
@@ -43,7 +43,7 @@ class ModuleLoaderTest : CommonTest() {
     }
 }
 
-class TestClass1 : ModuleServiceEntryPoint<Any>() {
+internal class TestClass1 : ModuleServiceEntryPoint<Any>() {
     override val identifier: String
         get() = "Some string"
 
@@ -62,7 +62,7 @@ class TestClass1 : ModuleServiceEntryPoint<Any>() {
         get() = null
 }
 
-class TestClass2 private constructor() : ModuleServiceEntryPoint<Any>() {
+internal class TestClass2 private constructor() : ModuleServiceEntryPoint<Any>() {
 
     constructor(arg1: Any) : this()
 
@@ -84,4 +84,4 @@ class TestClass2 private constructor() : ModuleServiceEntryPoint<Any>() {
         get() = null
 }
 
-class TestClass3
+internal class TestClass3

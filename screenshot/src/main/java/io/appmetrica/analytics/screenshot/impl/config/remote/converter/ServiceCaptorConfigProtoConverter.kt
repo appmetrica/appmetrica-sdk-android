@@ -4,7 +4,7 @@ import io.appmetrica.analytics.coreapi.internal.data.Converter
 import io.appmetrica.analytics.screenshot.impl.ServiceCaptorConfigProto
 import io.appmetrica.analytics.screenshot.impl.config.remote.model.ServiceCaptorConfig
 
-class ServiceCaptorConfigProtoConverter : Converter<ServiceCaptorConfig, ServiceCaptorConfigProto> {
+internal class ServiceCaptorConfigProtoConverter : Converter<ServiceCaptorConfig, ServiceCaptorConfigProto> {
 
     override fun fromModel(value: ServiceCaptorConfig): ServiceCaptorConfigProto {
         return ServiceCaptorConfigProto().also { proto ->

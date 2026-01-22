@@ -7,7 +7,7 @@ import io.appmetrica.analytics.networkapi.NetworkClientSettings
 import io.appmetrica.analytics.networkapi.Request
 import javax.net.ssl.HttpsURLConnection
 
-class IdSyncResultRequestSender(private val serviceContext: ServiceContext) {
+internal class IdSyncResultRequestSender(private val serviceContext: ServiceContext) {
 
     private val tag = "[IdSyncResultRequestSender]"
     private val responseValueLimit = 10 * 1024

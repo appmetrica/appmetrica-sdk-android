@@ -26,7 +26,7 @@ import org.robolectric.RobolectricTestRunner
 import javax.net.ssl.SSLSocketFactory
 
 @RunWith(RobolectricTestRunner::class)
-class IdSyncResultRequestSenderTest : CommonTest() {
+internal class IdSyncResultRequestSenderTest : CommonTest() {
 
     private val url = "https://example.com/report"
     private val value = "test_value"

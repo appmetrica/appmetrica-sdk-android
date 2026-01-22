@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.startup
 import io.appmetrica.analytics.StartupParamsItem
 import io.appmetrica.analytics.internal.IdentifiersResult
 
-class StartupParamItemAdapter {
+internal class StartupParamItemAdapter {
 
     private val startupParamItemStatusAdapter = StartupParamItemStatusAdapter()
 

@@ -13,7 +13,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 import java.util.Random
 
-class AppMetricaFacadeProviderTest : CommonTest() {
+internal class AppMetricaFacadeProviderTest : CommonTest() {
 
     private val appMetricaFacade: AppMetricaFacade = mock()
     private var context: Context = mock()

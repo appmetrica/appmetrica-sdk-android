@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.db.event
 
-class DbLocationModel(
+internal class DbLocationModel(
     val enabled: Boolean?,
     val longitude: Double?,
     val latitude: Double?,

@@ -6,7 +6,7 @@ import io.appmetrica.analytics.impl.InternalEvents
 import io.appmetrica.analytics.impl.component.session.SessionType
 import io.appmetrica.analytics.impl.utils.encryption.EventEncryptionMode
 
-class DbEventModel(
+internal class DbEventModel(
     val session: Long?,
     val sessionType: SessionType?,
     val numberInSession: Long?,
@@ -16,7 +16,7 @@ class DbEventModel(
     val description: Description
 ) {
 
-    class Description(
+    internal class Description(
         val customType: Int?,
         val name: String?,
         val value: String?,

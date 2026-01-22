@@ -11,7 +11,7 @@ import org.mockito.kotlin.verify
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class ConditionalEventTriggerTest : CommonTest() {
+internal class ConditionalEventTriggerTest : CommonTest() {
 
     private val eventsFlusher: EventsFlusher = mock()
     private val firstEnabledCondition: EventCondition = mock {

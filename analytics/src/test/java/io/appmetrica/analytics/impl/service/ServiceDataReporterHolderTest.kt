@@ -5,7 +5,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.mockito.kotlin.mock
 
-class ServiceDataReporterHolderTest : CommonTest() {
+internal class ServiceDataReporterHolderTest : CommonTest() {
 
     private val serviceDataReporterHolder = ServiceDataReporterHolder()
 

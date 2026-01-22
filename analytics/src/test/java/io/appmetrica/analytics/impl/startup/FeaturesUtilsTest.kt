@@ -7,7 +7,7 @@ import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 
-class FeaturesUtilsTest : CommonTest() {
+internal class FeaturesUtilsTest : CommonTest() {
 
     private val status = IdentifierStatus.IDENTIFIER_PROVIDER_UNAVAILABLE
     private val errorExplanation = "some error"

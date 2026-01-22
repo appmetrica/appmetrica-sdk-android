@@ -5,7 +5,7 @@ import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus
 import io.appmetrica.analytics.testutils.CommonTest
 import org.junit.Test
 
-class FeaturesConverterTest : CommonTest() {
+internal class FeaturesConverterTest : CommonTest() {
 
     private val featuresConverter = FeaturesConverter()
 

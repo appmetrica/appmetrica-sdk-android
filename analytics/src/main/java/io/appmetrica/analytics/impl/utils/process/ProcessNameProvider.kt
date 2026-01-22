@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.utils.process
 
-interface ProcessNameProvider {
+internal interface ProcessNameProvider {
 
     fun getProcessName(): String?
 }

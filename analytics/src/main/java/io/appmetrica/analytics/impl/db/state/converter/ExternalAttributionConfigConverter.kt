@@ -4,7 +4,7 @@ import io.appmetrica.analytics.coreapi.internal.data.ProtobufConverter
 import io.appmetrica.analytics.impl.protobuf.client.StartupStateProtobuf
 import io.appmetrica.analytics.impl.startup.ExternalAttributionConfig
 
-class ExternalAttributionConfigConverter :
+internal class ExternalAttributionConfigConverter :
     ProtobufConverter<ExternalAttributionConfig, StartupStateProtobuf.StartupState.ExternalAttributionConfig> {
 
     override fun fromModel(

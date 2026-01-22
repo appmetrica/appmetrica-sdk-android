@@ -3,18 +3,18 @@ package io.appmetrica.analytics.screenshot.impl
 import android.provider.MediaStore
 import io.appmetrica.analytics.screenshot.impl.protobuf.client.RemoteScreenshotConfigProtobuf
 
-object Constants {
+internal object Constants {
 
     const val MODULE_ID = "screenshot"
 
-    object Events {
+    internal object Events {
 
         const val NAME = "appmetrica_system_event_screenshot"
         const val TYPE = 4
         const val CAPTOR_TYPE_KEY = "type"
     }
 
-    object Defaults {
+    internal object Defaults {
         private val defaultRemoteScreenshotConfig =
             RemoteScreenshotConfigProtobuf.RemoteScreenshotConfig()
         val DEFAULT_FEATURE_STATE = defaultRemoteScreenshotConfig.enabled
@@ -25,7 +25,7 @@ object Constants {
         )
     }
 
-    object RemoteConfig {
+    internal object RemoteConfig {
         const val BLOCK_NAME = "screenshot"
         const val BLOCK_NAME_OBFUSCATED = "scr"
         const val BLOCK_VERSION = 1
@@ -46,7 +46,7 @@ object Constants {
         const val API_CAPTOR_CONFIG_ENABLED = "enabled"
     }
 
-    object ParcelableConfig {
+    internal object ParcelableConfig {
 
         const val CONFIG = "config"
     }

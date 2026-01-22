@@ -4,7 +4,7 @@ import io.appmetrica.analytics.impl.db.state.converter.EventExtrasConverter
 import io.appmetrica.analytics.impl.protobuf.backend.EventProto
 import io.appmetrica.analytics.impl.utils.ProtobufUtils.toArray
 
-class FullExtrasComposer : ExtrasComposer {
+internal class FullExtrasComposer : ExtrasComposer {
 
     private val converter = EventExtrasConverter()
 

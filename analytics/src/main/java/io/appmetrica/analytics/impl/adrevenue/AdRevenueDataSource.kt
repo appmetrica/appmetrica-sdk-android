@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.adrevenue
 
-enum class AdRevenueDataSource(
+internal enum class AdRevenueDataSource(
     val value: String
 ) {
 

@@ -8,7 +8,7 @@ import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 
 @RunWith(Parameterized::class)
-class PhoneNormalizerTest(
+internal class PhoneNormalizerTest(
     private val value: String,
     private val expected: String?
 ) : CommonTest() {

@@ -7,7 +7,7 @@ import io.appmetrica.analytics.billinginterface.internal.storage.BillingInfoStor
 import io.appmetrica.analytics.billingv6.impl.Constants.MODULE_TAG
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
-class BillingInfoManagerImpl(
+internal class BillingInfoManagerImpl(
     private val storage: BillingInfoStorage
 ) : BillingInfoManager {
 

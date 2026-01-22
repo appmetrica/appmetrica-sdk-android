@@ -2,6 +2,7 @@ package io.appmetrica.analytics.remotepermissions.impl
 
 import android.text.TextUtils
 import io.appmetrica.analytics.coreapi.internal.data.JsonParser
+import io.appmetrica.analytics.remotepermissions.internal.config.FeatureConfig
 import org.json.JSONObject
 
 internal class FeatureParser : JsonParser<FeatureConfig> {

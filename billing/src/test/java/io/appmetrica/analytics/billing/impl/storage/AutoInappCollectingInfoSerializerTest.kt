@@ -9,7 +9,7 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class AutoInappCollectingInfoSerializerTest : CommonTest() {
+internal class AutoInappCollectingInfoSerializerTest : CommonTest() {
     private val serializer = AutoInappCollectingInfoSerializer()
 
     @Test

@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.utils.process
 import android.os.Build
 import io.appmetrica.analytics.coreutils.internal.AndroidUtils.isApiAchieved
 
-class CurrentProcessDetector(
+internal class CurrentProcessDetector(
     private val processNameProvider: ProcessNameProvider = getProcessNameProvider()
 ) : ProcessNameProvider {
 

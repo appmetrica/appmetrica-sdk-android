@@ -7,7 +7,7 @@ import io.appmetrica.analytics.modulesapi.internal.service.ServiceWakeLock
 
 private const val ACTION_PREFIX = "io.appmetrica.analytics.ACTION_SERVICE_WAKELOCK"
 
-class ServiceWakeLockImpl(
+internal class ServiceWakeLockImpl(
     private val context: Context,
     private val serviceWakeLockBinder: ServiceWakeLockBinder
 ) : ServiceWakeLock {

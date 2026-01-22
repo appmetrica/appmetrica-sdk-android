@@ -18,7 +18,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 import java.util.concurrent.TimeUnit
 
-class GplWrapperFactoryTest : CommonTest() {
+internal class GplWrapperFactoryTest : CommonTest() {
 
     private val context = mock<Context>()
     private val brokenContext = mock<Context>()

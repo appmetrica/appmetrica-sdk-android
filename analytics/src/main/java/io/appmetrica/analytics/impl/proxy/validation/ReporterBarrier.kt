@@ -12,7 +12,7 @@ import io.appmetrica.analytics.impl.utils.validation.NonNullValidator
 import io.appmetrica.analytics.impl.utils.validation.ThrowIfFailedValidator
 import io.appmetrica.analytics.profile.UserProfile
 
-class ReporterBarrier {
+internal class ReporterBarrier {
 
     private val eventNameValidator = ThrowIfFailedValidator(
         NonEmptyStringValidator("Event name")

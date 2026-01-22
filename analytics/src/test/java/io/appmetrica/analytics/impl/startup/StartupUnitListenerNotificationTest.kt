@@ -26,7 +26,7 @@ import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class StartupUnitListenerNotificationTest : CommonTest() {
+internal class StartupUnitListenerNotificationTest : CommonTest() {
 
     @get:Rule
     var globalServiceLocatorRule = GlobalServiceLocatorRule()

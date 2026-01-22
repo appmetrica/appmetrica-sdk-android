@@ -4,7 +4,7 @@ import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrash
 import io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrashSource
 
-data class AppMetricaNativeCrash(
+internal data class AppMetricaNativeCrash(
     val source: NativeCrashSource,
     val handlerVersion: String,
     val uuid: String,

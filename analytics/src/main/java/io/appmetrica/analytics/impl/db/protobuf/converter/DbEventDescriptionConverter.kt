@@ -8,7 +8,7 @@ import io.appmetrica.analytics.impl.db.event.DbEventModel
 import io.appmetrica.analytics.impl.protobuf.client.DbProto
 import io.appmetrica.analytics.impl.utils.encryption.EventEncryptionMode
 
-class DbEventDescriptionConverter(
+internal class DbEventDescriptionConverter(
     private val optionalBoolConverter: OptionalBoolConverter = OptionalBoolConverter(),
     private val locationConverter: DbLocationModelConverter = DbLocationModelConverter()
 ) : ProtobufConverter<DbEventModel.Description, DbProto.EventDescription> {

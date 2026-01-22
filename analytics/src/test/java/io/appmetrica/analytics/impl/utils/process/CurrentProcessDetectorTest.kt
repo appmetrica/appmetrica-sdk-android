@@ -13,7 +13,7 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
-class CurrentProcessDetectorTest : CommonTest() {
+internal class CurrentProcessDetectorTest : CommonTest() {
 
     @get:Rule
     val processNameProviderForPRule = constructionRule<ProcessNameProviderForP> {

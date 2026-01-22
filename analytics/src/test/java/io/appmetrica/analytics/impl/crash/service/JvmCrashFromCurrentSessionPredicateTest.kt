@@ -12,7 +12,7 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 
-class JvmCrashFromCurrentSessionPredicateTest : CommonTest() {
+internal class JvmCrashFromCurrentSessionPredicateTest : CommonTest() {
 
     private val myPid = 100500
     private val notMyPid = 200500

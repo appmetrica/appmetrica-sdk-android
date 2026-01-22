@@ -4,7 +4,7 @@ import android.content.Context
 import io.appmetrica.analytics.coreutils.internal.services.PackageManagerUtils
 import io.appmetrica.analytics.internal.AppMetricaService
 
-class AppMetricaServiceProcessDetector {
+internal class AppMetricaServiceProcessDetector {
 
     fun isMainProcess(context: Context): Boolean {
         return processName(context)?.let { !it.contains(":") } ?: true

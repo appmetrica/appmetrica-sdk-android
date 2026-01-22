@@ -7,7 +7,7 @@ import org.junit.Test
 import org.mockito.Mockito.mock
 import org.mockito.kotlin.whenever
 
-class StackTraceItemInternalTest : CommonTest() {
+internal class StackTraceItemInternalTest : CommonTest() {
 
     @Test
     fun fromStackTraceItem() {

@@ -13,7 +13,7 @@ import org.mockito.kotlin.any
 import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.whenever
 
-class JSONObjectExternalAttributionTest : CommonTest() {
+internal class JSONObjectExternalAttributionTest : CommonTest() {
 
     private val provider = ExternalAttributionType.AIRBRIDGE
     private val value = JSONObject().also {

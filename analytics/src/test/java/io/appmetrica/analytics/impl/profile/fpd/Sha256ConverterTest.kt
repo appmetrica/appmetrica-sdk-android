@@ -4,7 +4,7 @@ import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 
-class Sha256ConverterTest : CommonTest() {
+internal class Sha256ConverterTest : CommonTest() {
 
     private val normalizer = object : AttributeValueNormalizer {
         override fun normalize(value: String) = value

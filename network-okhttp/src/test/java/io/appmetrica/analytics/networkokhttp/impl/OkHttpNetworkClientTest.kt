@@ -8,7 +8,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.SoftAssertions
 import org.junit.Test
 
-class OkHttpNetworkClientTest : CommonTest() {
+internal class OkHttpNetworkClientTest : CommonTest() {
 
     private val settings = NetworkClientSettings.Builder()
         .withConnectTimeout(5000)

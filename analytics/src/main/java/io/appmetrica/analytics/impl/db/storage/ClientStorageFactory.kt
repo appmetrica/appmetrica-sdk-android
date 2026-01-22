@@ -7,7 +7,7 @@ import io.appmetrica.analytics.impl.db.connectors.LockedOnFileDBConnector
 import io.appmetrica.analytics.impl.db.constants.Constants
 import java.io.File
 
-class ClientStorageFactory(outerStorageDirectory: File?) {
+internal class ClientStorageFactory(outerStorageDirectory: File?) {
     private val databaseStoragePathProviderFactory = DatabaseStoragePathProviderFactory(outerStorageDirectory)
     private var clientDbHelper: IKeyValueTableDbHelper? = null
     private var clientDbHelperWrapper: IKeyValueTableDbHelper? = null

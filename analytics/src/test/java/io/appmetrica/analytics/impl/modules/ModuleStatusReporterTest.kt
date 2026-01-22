@@ -19,7 +19,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoInteractions
 
-class ModuleStatusReporterTest : CommonTest() {
+internal class ModuleStatusReporterTest : CommonTest() {
 
     private val currentTime = System.currentTimeMillis()
     private val modulesType = "some_modules_type"

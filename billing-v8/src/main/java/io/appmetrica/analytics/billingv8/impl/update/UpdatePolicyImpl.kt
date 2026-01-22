@@ -11,7 +11,7 @@ import io.appmetrica.analytics.coreutils.internal.time.SystemTimeProvider
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import java.util.concurrent.TimeUnit
 
-class UpdatePolicyImpl(
+internal class UpdatePolicyImpl(
     private val systemTimeProvider: SystemTimeProvider = SystemTimeProvider()
 ) : UpdatePolicy {
 

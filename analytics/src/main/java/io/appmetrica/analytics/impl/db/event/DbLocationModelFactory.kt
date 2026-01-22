@@ -4,7 +4,7 @@ import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.YLocation
 import io.appmetrica.analytics.impl.request.ReportRequestConfig
 
-class DbLocationModelFactory(
+internal class DbLocationModelFactory(
     private val reportRequestConfig: ReportRequestConfig
 ) {
 

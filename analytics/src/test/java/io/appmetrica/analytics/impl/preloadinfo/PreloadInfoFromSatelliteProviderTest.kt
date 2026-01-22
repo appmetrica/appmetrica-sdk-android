@@ -22,7 +22,7 @@ import org.robolectric.RobolectricTestRunner
 import org.skyscreamer.jsonassert.JSONAssert
 
 @RunWith(RobolectricTestRunner::class)
-class PreloadInfoFromSatelliteProviderTest : CommonTest() {
+internal class PreloadInfoFromSatelliteProviderTest : CommonTest() {
 
     private val authorities = "com.yandex.preinstallsatellite.appmetrica.provider"
     private val uri = "content://$authorities/preload_info"

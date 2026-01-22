@@ -5,7 +5,7 @@ import androidx.annotation.VisibleForTesting
 import io.appmetrica.analytics.impl.db.FileConstants
 import io.appmetrica.analytics.impl.utils.concurrency.ExclusiveMultiProcessFileLock
 
-object MultiProcessUuidLockProvider {
+internal object MultiProcessUuidLockProvider {
     private var lock: ExclusiveMultiProcessFileLock? = null
 
     @Synchronized

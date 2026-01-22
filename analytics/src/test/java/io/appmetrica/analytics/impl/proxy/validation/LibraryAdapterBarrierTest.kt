@@ -11,7 +11,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 import java.util.UUID
 
-class LibraryAdapterBarrierTest : CommonTest() {
+internal class LibraryAdapterBarrierTest : CommonTest() {
 
     private val context: Context = mock()
     private val appMetricaFacadeProvider: AppMetricaFacadeProvider = mock<AppMetricaFacadeProvider>()

@@ -27,7 +27,7 @@ import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class AppMetricaServiceProxyTest : CommonTest() {
+internal class AppMetricaServiceProxyTest : CommonTest() {
 
     private val context: Context = mock()
     private val serviceCallback: AppMetricaServiceCallback = mock()

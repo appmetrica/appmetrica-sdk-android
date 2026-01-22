@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.modules
 import io.appmetrica.analytics.coreutils.internal.reflection.ReflectionUtils
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
-class ModuleLoader {
+internal class ModuleLoader {
 
     inline fun <reified T> loadModule(entryPointClassName: String): T? {
         DebugLogger.info("[ModuleLoader]", "Load module: $entryPointClassName")

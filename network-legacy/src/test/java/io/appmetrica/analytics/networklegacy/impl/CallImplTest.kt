@@ -7,7 +7,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.SoftAssertions
 import org.junit.Test
 
-class CallImplTest : CommonTest() {
+internal class CallImplTest : CommonTest() {
 
     private val settings = NetworkClientSettings.Builder()
         .withConnectTimeout(5000)

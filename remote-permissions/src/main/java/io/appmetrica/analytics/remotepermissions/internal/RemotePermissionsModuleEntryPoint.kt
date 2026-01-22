@@ -10,10 +10,10 @@ import io.appmetrica.analytics.modulesapi.internal.service.ModuleServiceEntryPoi
 import io.appmetrica.analytics.modulesapi.internal.service.RemoteConfigExtensionConfiguration
 import io.appmetrica.analytics.modulesapi.internal.service.RemoteConfigUpdateListener
 import io.appmetrica.analytics.modulesapi.internal.service.ServiceContext
-import io.appmetrica.analytics.remotepermissions.impl.FeatureConfig
 import io.appmetrica.analytics.remotepermissions.impl.FeatureConfigToProtoBytesConverter
 import io.appmetrica.analytics.remotepermissions.impl.FeatureParser
 import io.appmetrica.analytics.remotepermissions.impl.RemoteConfigPermissionStrategy
+import io.appmetrica.analytics.remotepermissions.internal.config.FeatureConfig
 
 class RemotePermissionsModuleEntryPoint :
     ModuleServiceEntryPoint<FeatureConfig>(),

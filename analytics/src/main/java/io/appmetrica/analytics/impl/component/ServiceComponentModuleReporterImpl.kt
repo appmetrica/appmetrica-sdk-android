@@ -5,7 +5,7 @@ import io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceModuleC
 import io.appmetrica.analytics.impl.ServiceModuleCounterReportToCounterReportConverter
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
-class ServiceComponentModuleReporterImpl(
+internal class ServiceComponentModuleReporterImpl(
     private val componentUnit: ComponentUnit,
     private val converter: ServiceModuleCounterReportToCounterReportConverter =
         ServiceModuleCounterReportToCounterReportConverter()

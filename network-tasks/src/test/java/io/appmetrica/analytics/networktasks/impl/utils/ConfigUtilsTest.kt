@@ -6,7 +6,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import java.util.UUID
 
-class ConfigUtilsTest : CommonTest() {
+internal class ConfigUtilsTest : CommonTest() {
 
     private val uuid = UUID.randomUUID().toString()
     private val deviceId = UUID.randomUUID().toString()

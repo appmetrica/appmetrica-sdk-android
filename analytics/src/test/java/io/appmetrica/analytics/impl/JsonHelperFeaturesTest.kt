@@ -12,7 +12,7 @@ import org.robolectric.RobolectricTestRunner
 import org.skyscreamer.jsonassert.JSONAssert
 
 @RunWith(RobolectricTestRunner::class)
-class JsonHelperFeaturesTest : CommonTest() {
+internal class JsonHelperFeaturesTest : CommonTest() {
 
     @Test
     fun featuresToJsonEmpty() {

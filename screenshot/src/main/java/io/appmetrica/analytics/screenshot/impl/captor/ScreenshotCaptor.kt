@@ -2,7 +2,7 @@ package io.appmetrica.analytics.screenshot.impl.captor
 
 import io.appmetrica.analytics.screenshot.impl.config.client.model.ClientSideScreenshotConfig
 
-interface ScreenshotCaptor {
+internal interface ScreenshotCaptor {
 
     fun getType(): String
 

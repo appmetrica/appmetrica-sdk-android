@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import io.appmetrica.analytics.coreapi.internal.annotations.DoNotInline
 
 @DoNotInline
-class ProcessNameProviderBeforeP : ProcessNameProvider {
+internal class ProcessNameProviderBeforeP : ProcessNameProvider {
 
     @Volatile
     private var mProcessName: String? = null

@@ -8,7 +8,7 @@ import io.appmetrica.analytics.screenshot.impl.ScreenshotConfigProto
 import io.appmetrica.analytics.screenshot.impl.ServiceCaptorConfigProto
 import org.json.JSONObject
 
-class ScreenshotConfigJsonParser(
+internal class ScreenshotConfigJsonParser(
     private val apiCaptorConfigJsonParser: ApiCaptorConfigJsonParser = ApiCaptorConfigJsonParser(),
     private val serviceCaptorConfigJsonParser: ServiceCaptorConfigJsonParser = ServiceCaptorConfigJsonParser(),
     private val contentObserverCaptorConfigJsonParser: ContentObserverCaptorConfigJsonParser =

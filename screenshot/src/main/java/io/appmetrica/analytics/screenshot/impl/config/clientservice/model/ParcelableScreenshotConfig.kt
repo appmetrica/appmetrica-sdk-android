@@ -4,7 +4,7 @@ import android.os.Parcel
 import android.os.Parcelable
 import io.appmetrica.analytics.screenshot.impl.config.service.model.ServiceSideScreenshotConfig
 
-class ParcelableScreenshotConfig(
+internal class ParcelableScreenshotConfig(
     val apiCaptorConfig: ParcelableApiCaptorConfig?,
     val serviceCaptorConfig: ParcelableServiceCaptorConfig?,
     val contentObserverCaptorConfig: ParcelableContentObserverCaptorConfig?,

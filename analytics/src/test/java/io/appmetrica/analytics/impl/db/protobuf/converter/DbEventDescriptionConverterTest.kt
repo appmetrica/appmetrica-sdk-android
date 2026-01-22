@@ -14,7 +14,7 @@ import org.junit.Test
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 
-class DbEventDescriptionConverterTest : CommonTest() {
+internal class DbEventDescriptionConverterTest : CommonTest() {
 
     private val customType = 42
     private val name = "name string"

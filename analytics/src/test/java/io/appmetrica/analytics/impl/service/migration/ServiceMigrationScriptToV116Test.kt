@@ -30,7 +30,7 @@ import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class ServiceMigrationScriptToV116Test : CommonTest() {
+internal class ServiceMigrationScriptToV116Test : CommonTest() {
 
     private val startupStateModelCaptor = argumentCaptor<StartupStateModel>()
 

@@ -10,7 +10,7 @@ import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 
 @RunWith(Parameterized::class)
-class StartupParamsItemStatusAdapterTest(
+internal class StartupParamsItemStatusAdapterTest(
     private val input: IdentifierStatus,
     private val expected: StartupParamsItemStatus
 ) : CommonTest() {

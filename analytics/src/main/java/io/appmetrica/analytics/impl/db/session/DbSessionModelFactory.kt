@@ -8,7 +8,7 @@ import io.appmetrica.analytics.impl.utils.TimeUtils
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import org.json.JSONObject
 
-class DbSessionModelFactory(
+internal class DbSessionModelFactory(
     private val reportRequestConfig: ReportRequestConfig,
     private val id: Long?,
     private val type: SessionType?,

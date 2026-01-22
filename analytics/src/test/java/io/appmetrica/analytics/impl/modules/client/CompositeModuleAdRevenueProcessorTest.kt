@@ -17,7 +17,7 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.whenever
 
-class CompositeModuleAdRevenueProcessorTest : CommonTest() {
+internal class CompositeModuleAdRevenueProcessorTest : CommonTest() {
 
     private val firstProcessor: ModuleAdRevenueProcessor = mock {
         on { process("string") } doReturn true

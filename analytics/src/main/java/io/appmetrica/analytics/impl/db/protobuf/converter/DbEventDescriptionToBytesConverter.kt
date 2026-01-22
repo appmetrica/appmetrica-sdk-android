@@ -7,7 +7,7 @@ import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import io.appmetrica.analytics.protobuf.nano.InvalidProtocolBufferNanoException
 import io.appmetrica.analytics.protobuf.nano.MessageNano
 
-class DbEventDescriptionToBytesConverter(
+internal class DbEventDescriptionToBytesConverter(
     private val descriptionConverter: DbEventDescriptionConverter = DbEventDescriptionConverter()
 ) : Converter<DbEventModel.Description, ByteArray?> {
 

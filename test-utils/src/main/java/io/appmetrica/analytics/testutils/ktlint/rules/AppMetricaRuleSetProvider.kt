@@ -7,6 +7,7 @@ class AppMetricaRuleSetProvider : RuleSetProvider {
 
     override fun get() = RuleSet(
         "appmetrica-rules",
+        InternalModifierInImplPackageRule(),
         NoCaptorAnnotationRule(),
         NoMockAnnotationRule(),
         NoMockitoAnnotationsRule(),

@@ -27,7 +27,7 @@ import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class ScreenshotObserverTest : CommonTest() {
+internal class ScreenshotObserverTest : CommonTest() {
 
     private val now = 34234234L
     private val detectWindowSeconds = 1998L

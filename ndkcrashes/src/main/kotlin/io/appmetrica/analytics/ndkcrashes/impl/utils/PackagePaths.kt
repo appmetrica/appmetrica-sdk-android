@@ -9,7 +9,7 @@ import java.io.File
 /**
  * This class builds paths for the Chrome package.
  */
-object PackagePaths {
+internal object PackagePaths {
     /*
     private static final String TAG = "PackagePaths";
 

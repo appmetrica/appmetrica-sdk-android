@@ -8,7 +8,7 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class ReporterSynchronousStageExecutorTest : CommonTest() {
+internal class ReporterSynchronousStageExecutorTest : CommonTest() {
 
     private val synchronousStageExecutor = ReporterSynchronousStageExecutor()
 

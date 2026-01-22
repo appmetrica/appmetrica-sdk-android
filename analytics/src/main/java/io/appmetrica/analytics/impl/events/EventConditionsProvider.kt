@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.events
 
-interface EventConditionsProvider {
+internal interface EventConditionsProvider {
 
     fun getCommonEventConditions(): List<EventCondition>
 

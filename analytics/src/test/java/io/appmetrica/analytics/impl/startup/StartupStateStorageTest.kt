@@ -16,7 +16,7 @@ import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class StartupStateStorageTest : CommonTest() {
+internal class StartupStateStorageTest : CommonTest() {
 
     private val modelStorage: ProtobufStateStorage<StartupStateModel> = mock()
     private val vitalCommonDataProvider: VitalCommonDataProvider = mock()

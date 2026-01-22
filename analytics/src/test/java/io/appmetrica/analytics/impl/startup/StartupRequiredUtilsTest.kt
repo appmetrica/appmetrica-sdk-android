@@ -11,7 +11,7 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.stubbing
 
-class StartupRequiredUtilsTest : CommonTest() {
+internal class StartupRequiredUtilsTest : CommonTest() {
 
     private val timeProvider = mock<TimeProvider>()
     private val clidsStateChecker = mock<ClidsStateChecker>()

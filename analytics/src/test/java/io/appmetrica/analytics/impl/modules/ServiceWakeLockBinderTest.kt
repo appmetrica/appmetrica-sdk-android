@@ -15,7 +15,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 
-class ServiceWakeLockBinderTest : CommonTest() {
+internal class ServiceWakeLockBinderTest : CommonTest() {
 
     private val context = mock<Context>()
     private val action = "Some action"

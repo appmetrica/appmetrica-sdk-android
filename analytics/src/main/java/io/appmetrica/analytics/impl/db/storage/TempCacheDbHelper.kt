@@ -10,7 +10,7 @@ import io.appmetrica.analytics.impl.db.connectors.DBConnector
 import io.appmetrica.analytics.impl.db.constants.TempCacheTable
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
-class TempCacheDbHelper(
+internal class TempCacheDbHelper(
     private val dbConnector: DBConnector,
     private val tableName: String
 ) : TempCacheStorage {

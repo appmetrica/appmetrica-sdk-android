@@ -8,7 +8,7 @@ import org.mockito.Mockito.mock
 import org.mockito.kotlin.verifyNoInteractions
 import org.skyscreamer.jsonassert.JSONAssert
 
-class DefaultClientConfigAdditionalFieldsSerializerTest : CommonTest() {
+internal class DefaultClientConfigAdditionalFieldsSerializerTest : CommonTest() {
 
     private val builder: AppMetricaConfig.Builder = mock()
 

@@ -11,7 +11,7 @@ import org.junit.Test
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 
-class ComponentEventTriggerProviderTest : CommonTest() {
+internal class ComponentEventTriggerProviderTest : CommonTest() {
 
     private val eventFlusher: EventsFlusher = mock()
     private val databaseHelper: DatabaseHelper = mock()

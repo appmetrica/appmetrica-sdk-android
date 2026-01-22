@@ -6,7 +6,7 @@ import io.appmetrica.analytics.impl.db.state.converter.ExternalAttributionConfig
 import io.appmetrica.analytics.impl.protobuf.client.StartupStateProtobuf
 import org.json.JSONObject
 
-class ExternalAttributionConfigParser @VisibleForTesting constructor(
+internal class ExternalAttributionConfigParser @VisibleForTesting constructor(
     private val externalAttributionConfigConverter: ExternalAttributionConfigConverter
 ) {
 

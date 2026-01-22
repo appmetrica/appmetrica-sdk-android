@@ -5,8 +5,8 @@ import android.net.LocalServerSocket
 import io.appmetrica.analytics.ndkcrashes.impl.utils.DebugLogger
 import java.util.LinkedList
 
-class NativeCrashWatcher(private val socketName: String) {
-    interface Listener {
+internal class NativeCrashWatcher(private val socketName: String) {
+    internal interface Listener {
         fun onNewCrash(uuid: String)
     }
 

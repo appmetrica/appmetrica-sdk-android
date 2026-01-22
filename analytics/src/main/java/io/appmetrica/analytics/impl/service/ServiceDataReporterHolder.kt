@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.service
 
-class ServiceDataReporterHolder {
+internal class ServiceDataReporterHolder {
 
     private val serviceDataReporters = mutableMapOf<Int, MutableList<ServiceDataReporter>>()
 

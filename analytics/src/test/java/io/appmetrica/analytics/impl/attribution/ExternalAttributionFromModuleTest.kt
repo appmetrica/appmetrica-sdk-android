@@ -9,7 +9,7 @@ import org.junit.runners.Parameterized
 import org.junit.runners.Parameterized.Parameters
 
 @RunWith(Parameterized::class)
-class ExternalAttributionFromModuleTest(
+internal class ExternalAttributionFromModuleTest(
     private val inputSource: Int,
     private val value: String?,
     private val expectedSource: Int,

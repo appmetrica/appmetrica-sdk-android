@@ -8,7 +8,7 @@ import io.appmetrica.analytics.impl.component.ReportComponentConfigurationHolder
 import io.appmetrica.analytics.impl.db.preferences.PreferencesComponentDbStorage
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
-class MainReporterEventSendingPolicyProvider {
+internal class MainReporterEventSendingPolicyProvider {
 
     private val tag = "[MainReporterEventSendingPolicyProvider]"
 

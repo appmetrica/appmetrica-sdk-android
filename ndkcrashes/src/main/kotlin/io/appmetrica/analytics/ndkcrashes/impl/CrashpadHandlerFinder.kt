@@ -10,7 +10,7 @@ import io.appmetrica.analytics.ndkcrashes.impl.utils.DebugLogger
 import io.appmetrica.analytics.ndkcrashes.jni.core.NativeCrashUtilsJni
 import java.io.File
 
-class CrashpadHandlerFinder(private val abiResolver: AbiResolver) {
+internal class CrashpadHandlerFinder(private val abiResolver: AbiResolver) {
     private val tag = "[CrashpadHandlerFinder]"
     private val libName = "libappmetrica_crashpad_handler.so"
 

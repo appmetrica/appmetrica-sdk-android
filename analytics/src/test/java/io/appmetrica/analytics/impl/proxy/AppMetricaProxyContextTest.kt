@@ -28,7 +28,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 import java.util.UUID
 
-class AppMetricaProxyContextTest : CommonTest() {
+internal class AppMetricaProxyContextTest : CommonTest() {
 
     @get:Rule
     val clientServiceLocatorRule = ClientServiceLocatorRule()

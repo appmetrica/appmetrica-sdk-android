@@ -17,7 +17,7 @@ import org.mockito.kotlin.whenever
 import java.math.BigDecimal
 import java.util.Currency
 
-class AdRevenueConverterTest : CommonTest() {
+internal class AdRevenueConverterTest : CommonTest() {
 
     private val revenue = 123.1234
     private val format = MaxAdFormat.REWARDED

@@ -14,7 +14,7 @@ import kotlin.reflect.KProperty1
 private typealias AppMetricaNativeCrashMetadataProperty<T> = KProperty1<AppMetricaNativeCrashMetadata, T>
 
 @RunWith(RobolectricTestRunner::class)
-class AppMetricaNativeCrashMetadataSerializerTest : CommonTest() {
+internal class AppMetricaNativeCrashMetadataSerializerTest : CommonTest() {
 
     companion object {
         private const val DEFAULT_API_KEY = "apiKey"
@@ -26,7 +26,7 @@ class AppMetricaNativeCrashMetadataSerializerTest : CommonTest() {
     }
 
     @RunWith(ParameterizedRobolectricTestRunner::class)
-    class FieldsTests(
+    internal class FieldsTests(
         private val checkProperty: AppMetricaNativeCrashMetadataProperty<*>,
         private val value: Any?,
         private val propertyName: String,
@@ -94,7 +94,7 @@ class AppMetricaNativeCrashMetadataSerializerTest : CommonTest() {
     }
 
     @RunWith(ParameterizedRobolectricTestRunner::class)
-    class BrokenFieldsTests(
+    internal class BrokenFieldsTests(
         private val checkProperty: AppMetricaNativeCrashMetadataProperty<*>,
         private val value: Any?,
         private val broken: Boolean,

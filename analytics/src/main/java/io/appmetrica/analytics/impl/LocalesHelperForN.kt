@@ -5,7 +5,7 @@ import android.content.res.Configuration
 import android.os.Build
 
 @TargetApi(Build.VERSION_CODES.N)
-object LocalesHelperForN {
+internal object LocalesHelperForN {
 
     @JvmStatic
     fun getLocales(configuration: Configuration): List<String> {

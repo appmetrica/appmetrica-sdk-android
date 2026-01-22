@@ -7,7 +7,7 @@ import io.appmetrica.analytics.impl.crash.jvm.converter.NativeCrashConverter
 import io.appmetrica.analytics.protobuf.nano.MessageNano
 import java.io.File
 
-class NativeCrashDumpReader(
+internal class NativeCrashDumpReader(
     private val description: NativeCrashHandlerDescription,
     private val nativeCrashConverter: NativeCrashConverter,
 ) : Function<File, String?> {

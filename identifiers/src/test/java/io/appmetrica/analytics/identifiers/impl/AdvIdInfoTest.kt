@@ -7,7 +7,7 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class AdvIdInfoTest : CommonTest() {
+internal class AdvIdInfoTest : CommonTest() {
 
     @Test
     fun fullInfo() {

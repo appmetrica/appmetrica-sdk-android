@@ -7,7 +7,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.Rule
 import org.junit.Test
 
-class ModuleClientExecutorProviderImplTest : CommonTest() {
+internal class ModuleClientExecutorProviderImplTest : CommonTest() {
 
     @get:Rule
     val clientServiceLocatorRule = ClientServiceLocatorRule()

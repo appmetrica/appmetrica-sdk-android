@@ -5,7 +5,7 @@ import io.appmetrica.analytics.billinginterface.internal.storage.BillingInfoStor
 import io.appmetrica.analytics.coreapi.internal.data.ProtobufStateStorage
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
-class BillingInfoStorageImpl(
+internal class BillingInfoStorageImpl(
     private val storage: ProtobufStateStorage<AutoInappCollectingInfo>
 ) : BillingInfoStorage {
 

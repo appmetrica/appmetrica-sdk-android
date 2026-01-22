@@ -16,7 +16,7 @@ import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class DbEventModelConverterTest : CommonTest() {
+internal class DbEventModelConverterTest : CommonTest() {
 
     private val session = 424242L
     private val sessionType = SessionType.FOREGROUND

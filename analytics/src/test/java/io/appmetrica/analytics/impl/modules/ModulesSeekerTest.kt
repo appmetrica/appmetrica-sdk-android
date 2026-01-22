@@ -23,7 +23,7 @@ import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class ModulesSeekerTest : CommonTest() {
+internal class ModulesSeekerTest : CommonTest() {
 
     @get:Rule
     val reflectionUtils = MockedStaticRule(ReflectionUtils::class.java)

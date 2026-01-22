@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.location
 
-interface LocationSubscribers {
+internal interface LocationSubscribers {
 
     fun registerWakelock(subscriber: Any)
 

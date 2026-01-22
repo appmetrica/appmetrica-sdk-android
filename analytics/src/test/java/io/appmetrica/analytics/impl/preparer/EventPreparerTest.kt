@@ -24,7 +24,7 @@ import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class EventPreparerTest : CommonTest() {
+internal class EventPreparerTest : CommonTest() {
 
     private val name = "name"
     private val value = "value"

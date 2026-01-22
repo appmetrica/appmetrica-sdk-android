@@ -6,7 +6,7 @@ import io.appmetrica.analytics.impl.crash.jvm.client.UnhandledException
 import io.appmetrica.analytics.impl.crash.jvm.client.UnhandledExceptionFactory
 import io.appmetrica.analytics.plugins.PluginErrorDetails
 
-class PluginErrorDetailsConverter(
+internal class PluginErrorDetailsConverter(
     private val extraMetaInfoRetriever: ExtraMetaInfoRetriever
 ) {
 

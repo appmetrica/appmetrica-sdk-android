@@ -14,7 +14,7 @@ import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 
-class DistributionDataStorageTest : CommonTest() {
+internal class DistributionDataStorageTest : CommonTest() {
 
     private val diskStorage = mock<ProtobufStateStorage<ClidsInfo>>()
     private val satelliteProvider = mock<SatelliteDataProvider<ClidsInfo.Candidate>>()

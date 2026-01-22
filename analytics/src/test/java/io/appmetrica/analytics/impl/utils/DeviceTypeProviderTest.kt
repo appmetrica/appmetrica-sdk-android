@@ -24,7 +24,7 @@ import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class DeviceTypeProviderTest : CommonTest() {
+internal class DeviceTypeProviderTest : CommonTest() {
 
     private val resources: Resources = mock()
     private val context: Context = mock {

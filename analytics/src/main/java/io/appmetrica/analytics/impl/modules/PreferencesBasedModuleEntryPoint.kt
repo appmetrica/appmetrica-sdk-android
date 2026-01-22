@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.modules
 
 import android.content.Context
 
-data class PreferencesBasedModuleEntryPoint(
+internal data class PreferencesBasedModuleEntryPoint(
     private val context: Context,
     private val prefName: String,
     private val prefValueName: String

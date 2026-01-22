@@ -6,7 +6,7 @@ import io.appmetrica.analytics.impl.protobuf.backend.CrashAndroid
 import io.appmetrica.analytics.impl.protobuf.backend.CrashAndroid.Crash
 import io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrashSource
 
-class NativeCrashConverter : ProtobufConverter<NativeCrashModel, Crash> {
+internal class NativeCrashConverter : ProtobufConverter<NativeCrashModel, Crash> {
     companion object {
         private val handlerMapping = mapOf(
             NativeCrashSource.UNKNOWN to CrashAndroid.UNKNOWN,

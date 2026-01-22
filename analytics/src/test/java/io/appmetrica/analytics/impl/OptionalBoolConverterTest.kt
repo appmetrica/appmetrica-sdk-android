@@ -4,7 +4,7 @@ import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 
-class OptionalBoolConverterTest : CommonTest() {
+internal class OptionalBoolConverterTest : CommonTest() {
 
     private val undefinedValue = 21736
     private val falseValue = 777

@@ -7,7 +7,7 @@ import io.appmetrica.analytics.screenshot.impl.config.remote.model.ContentObserv
 import io.appmetrica.analytics.testutils.CommonTest
 import org.junit.Test
 
-class ContentObserverCaptorConfigProtoConverterTest : CommonTest() {
+internal class ContentObserverCaptorConfigProtoConverterTest : CommonTest() {
 
     private val converter = ContentObserverCaptorConfigProtoConverter()
 

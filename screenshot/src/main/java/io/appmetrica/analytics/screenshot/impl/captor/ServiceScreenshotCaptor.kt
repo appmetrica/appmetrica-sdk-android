@@ -14,7 +14,7 @@ import io.appmetrica.analytics.screenshot.impl.config.client.model.ClientSideScr
 import io.appmetrica.analytics.screenshot.impl.config.client.model.ClientSideServiceCaptorConfig
 import java.util.concurrent.TimeUnit
 
-class ServiceScreenshotCaptor(
+internal class ServiceScreenshotCaptor(
     private val clientContext: ClientContext,
     private val callback: ScreenshotCaptorCallback,
 ) : ScreenshotCaptor {

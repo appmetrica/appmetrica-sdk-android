@@ -8,7 +8,7 @@ import org.junit.Test
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 
-class PreferencesBasedModuleEntryPointTest : CommonTest() {
+internal class PreferencesBasedModuleEntryPointTest : CommonTest() {
 
     private val prefValueName = "value name"
     private val prefValue = "value"

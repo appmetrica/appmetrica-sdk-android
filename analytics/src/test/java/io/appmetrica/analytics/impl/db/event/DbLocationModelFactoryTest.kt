@@ -20,7 +20,7 @@ import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class DbLocationModelFactoryTest : CommonTest() {
+internal class DbLocationModelFactoryTest : CommonTest() {
 
     private val isLocationTracking = true
     private val latitude = 123.3

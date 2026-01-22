@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.adrevenue
 import android.content.Context
 import io.appmetrica.analytics.impl.ClientServiceLocator
 
-class AdRevenueSupportedSourcesPluginProvider(
+internal class AdRevenueSupportedSourcesPluginProvider(
     private val context: Context
 ) : AdRevenueSupportedSourcesProvider {
 

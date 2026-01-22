@@ -7,7 +7,7 @@ import io.appmetrica.analytics.coreapi.internal.system.PermissionExtractor
 import io.appmetrica.analytics.locationapi.internal.LocationReceiver
 import io.appmetrica.analytics.locationapi.internal.LocationReceiverProvider
 
-class LocationReceiverProviderStub : LocationReceiverProvider {
+internal class LocationReceiverProviderStub : LocationReceiverProvider {
 
     override val identifier: String = "Location receiver stub"
 

@@ -9,7 +9,7 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.whenever
 
-class CompositeFileVitalDataSourceTest : CommonTest() {
+internal class CompositeFileVitalDataSourceTest : CommonTest() {
 
     private val firstData = "First data"
     private val firstSource: VitalDataSource = mock {

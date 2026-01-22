@@ -5,7 +5,7 @@ import io.appmetrica.analytics.impl.ClientServiceLocator
 import io.appmetrica.analytics.impl.modules.ConstantModuleEntryPointProvider
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
-class DefaultClientComponentsInitializer : ClientComponentsInitializer {
+internal class DefaultClientComponentsInitializer : ClientComponentsInitializer {
 
     private val tag = "[DefaultClientComponentsInitializer]"
 

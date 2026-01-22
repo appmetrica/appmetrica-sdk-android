@@ -19,7 +19,7 @@ import org.robolectric.RobolectricTestRunner
 import java.util.concurrent.TimeUnit
 
 @RunWith(RobolectricTestRunner::class)
-abstract class DataCacheTest<T> : CommonTest() {
+internal abstract class DataCacheTest<T> : CommonTest() {
 
     protected val dataCacheUpdateScheduler: LocationDataCacheUpdateScheduler = mock()
 

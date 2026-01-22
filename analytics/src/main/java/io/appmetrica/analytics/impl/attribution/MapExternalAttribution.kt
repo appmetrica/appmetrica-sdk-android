@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.attribution
 import io.appmetrica.analytics.impl.protobuf.backend.ExternalAttribution.ClientExternalAttribution
 import io.appmetrica.analytics.impl.utils.JsonHelper
 
-class MapExternalAttribution(
+internal class MapExternalAttribution(
     provider: ExternalAttributionType,
     value: Map<String, Any?>
 ) : BaseExternalAttribution(

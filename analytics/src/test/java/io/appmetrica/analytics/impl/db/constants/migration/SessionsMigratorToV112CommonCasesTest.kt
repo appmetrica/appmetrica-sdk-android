@@ -42,7 +42,7 @@ internal class SessionsMigratorToV112CommonCasesTest(
         private const val sessionTypeValue = 1
         private const val obtainedBeforeFirstSyncIntValue = 1
 
-        class SessionCursorRecord(
+        internal class SessionCursorRecord(
             val sessionId: Any? = sessionIdValue,
             val startTime: Any? = startTimeValue,
             val reportRequestParameters: Any? = reportRequestParametersValue,

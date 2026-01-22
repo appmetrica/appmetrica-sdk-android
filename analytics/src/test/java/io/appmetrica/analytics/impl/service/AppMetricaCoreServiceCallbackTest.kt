@@ -6,7 +6,7 @@ import org.junit.Test
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 
-class AppMetricaCoreServiceCallbackTest : CommonTest() {
+internal class AppMetricaCoreServiceCallbackTest : CommonTest() {
 
     private val service: Service = mock()
 

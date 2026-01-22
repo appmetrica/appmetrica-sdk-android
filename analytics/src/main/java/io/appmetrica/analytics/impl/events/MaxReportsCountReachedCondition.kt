@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.events
 
-class MaxReportsCountReachedCondition(
+internal class MaxReportsCountReachedCondition(
     private val pendingReportsCountProvider: PendingReportsCountProvider,
     private val threshold: () -> Int
 ) : EventCondition {

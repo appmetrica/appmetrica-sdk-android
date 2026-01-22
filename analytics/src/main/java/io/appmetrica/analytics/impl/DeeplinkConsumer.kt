@@ -4,7 +4,7 @@ import android.content.Intent
 import io.appmetrica.analytics.impl.utils.ApiProxyThread
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
-class DeeplinkConsumer(private val mainReporter: IMainReporter) {
+internal class DeeplinkConsumer(private val mainReporter: IMainReporter) {
 
     private val tag = "[DeeplinkConsumer]"
     private var lastDeeplink = ""

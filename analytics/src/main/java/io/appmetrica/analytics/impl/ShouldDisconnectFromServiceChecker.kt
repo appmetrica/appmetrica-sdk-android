@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl
 
-interface ShouldDisconnectFromServiceChecker {
+internal interface ShouldDisconnectFromServiceChecker {
 
     fun shouldDisconnect(): Boolean
 }

@@ -9,7 +9,7 @@ import io.appmetrica.analytics.impl.utils.executors.ClientExecutorProvider
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import java.util.concurrent.TimeUnit
 
-class AnonymousClientActivator(
+internal class AnonymousClientActivator(
     private val provider: AppMetricaFacadeProvider,
     private val sessionsTrackingManager: SessionsTrackingManager,
     private val clientExecutorProvider: ClientExecutorProvider

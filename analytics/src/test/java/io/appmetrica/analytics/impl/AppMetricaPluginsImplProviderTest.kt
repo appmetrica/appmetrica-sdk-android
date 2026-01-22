@@ -4,7 +4,7 @@ import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 
-class AppMetricaPluginsImplProviderTest : CommonTest() {
+internal class AppMetricaPluginsImplProviderTest : CommonTest() {
 
     @Test
     fun getImpl() {

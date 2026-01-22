@@ -4,7 +4,7 @@ import io.appmetrica.analytics.billing.impl.BillingConfigProto
 import io.appmetrica.analytics.billing.internal.config.BillingConfig
 import io.appmetrica.analytics.coreapi.internal.data.Converter
 
-class BillingConfigProtoConverter : Converter<BillingConfig, BillingConfigProto> {
+internal class BillingConfigProtoConverter : Converter<BillingConfig, BillingConfigProto> {
 
     override fun fromModel(value: BillingConfig): BillingConfigProto {
         return BillingConfigProto().also { proto ->

@@ -11,7 +11,7 @@ import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrash
 import io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrashHandler
 
-class NativeCrashHandlerImpl(
+internal class NativeCrashHandlerImpl(
     context: Context,
     reportConsumer: ReportConsumer,
     private val markCrashCompleted: (String) -> Unit,

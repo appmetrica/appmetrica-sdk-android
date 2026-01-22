@@ -16,7 +16,7 @@ import org.robolectric.RobolectricTestRunner
 import java.util.concurrent.TimeUnit
 
 @RunWith(RobolectricTestRunner::class)
-class UpdatePolicyImplTest : CommonTest() {
+internal class UpdatePolicyImplTest : CommonTest() {
 
     private val now = SystemTimeProvider().currentTimeMillis()
     private val storedInapp = BillingInfo(

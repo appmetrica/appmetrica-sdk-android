@@ -9,7 +9,7 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 
-class ServiceComponentModuleReporterImplTest : CommonTest() {
+internal class ServiceComponentModuleReporterImplTest : CommonTest() {
 
     private val report: ServiceModuleCounterReport = mock()
     private val counterReport: CounterReport = mock()

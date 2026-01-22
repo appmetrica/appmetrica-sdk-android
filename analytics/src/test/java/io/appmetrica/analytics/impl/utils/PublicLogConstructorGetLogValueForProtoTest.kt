@@ -8,7 +8,7 @@ import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 
 @RunWith(Parameterized::class)
-class PublicLogConstructorGetLogValueForProtoTest(
+internal class PublicLogConstructorGetLogValueForProtoTest(
     private val eventType: Int,
     private val expectedValue: String
 ) : CommonTest() {

@@ -6,7 +6,7 @@ import io.appmetrica.analytics.impl.db.preferences.PreferencesComponentDbStorage
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import java.util.concurrent.TimeUnit
 
-class AutoCollectedDataSubscribersHolder(
+internal class AutoCollectedDataSubscribersHolder(
     val componentId: ComponentId,
     private val preferencesComponentDbStorage: PreferencesComponentDbStorage
 ) {

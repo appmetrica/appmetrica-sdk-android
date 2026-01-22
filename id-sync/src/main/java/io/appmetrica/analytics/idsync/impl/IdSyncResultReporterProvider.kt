@@ -4,7 +4,7 @@ import io.appmetrica.analytics.idsync.internal.model.RequestConfig
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import io.appmetrica.analytics.modulesapi.internal.service.ServiceContext
 
-class IdSyncResultReporterProvider(private val serviceContext: ServiceContext) {
+internal class IdSyncResultReporterProvider(private val serviceContext: ServiceContext) {
 
     private val tag = "[IdSyncResultReporterProvider]"
 

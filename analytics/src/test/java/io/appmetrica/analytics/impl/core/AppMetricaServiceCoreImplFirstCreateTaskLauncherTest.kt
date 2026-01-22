@@ -17,7 +17,7 @@ import org.robolectric.RobolectricTestRunner
 import java.util.concurrent.TimeUnit
 
 @RunWith(RobolectricTestRunner::class)
-class AppMetricaServiceCoreImplFirstCreateTaskLauncherTest : CommonTest() {
+internal class AppMetricaServiceCoreImplFirstCreateTaskLauncherTest : CommonTest() {
 
     @get:Rule
     val globalServiceLocatorRule = GlobalServiceLocatorRule()

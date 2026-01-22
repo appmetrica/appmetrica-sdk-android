@@ -9,7 +9,7 @@ import org.junit.Test
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 
-class ModuleRemoteConfigProviderTest : CommonTest() {
+internal class ModuleRemoteConfigProviderTest : CommonTest() {
 
     private val uuid = "uuid"
     private val deviceId = "deviceId"

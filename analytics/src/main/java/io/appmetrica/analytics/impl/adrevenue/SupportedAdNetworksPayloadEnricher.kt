@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.adrevenue
 import android.content.Context
 import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.AdRevenueConstants
 
-class SupportedAdNetworksPayloadEnricher(context: Context) : AdRevenuePayloadEnricher {
+internal class SupportedAdNetworksPayloadEnricher(context: Context) : AdRevenuePayloadEnricher {
 
     private val nativeSupportedSourcesProvider: AdRevenueSupportedSourcesProvider =
         AdRevenueSupportedSourcesNativeProvider()

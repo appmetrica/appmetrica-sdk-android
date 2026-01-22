@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.crash.jvm.client
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import java.util.concurrent.CopyOnWriteArrayList
 
-class CrashProcessorComposite : ICrashProcessor {
+internal class CrashProcessorComposite : ICrashProcessor {
 
     private val tag = "[CrashProcessorComposite]"
 

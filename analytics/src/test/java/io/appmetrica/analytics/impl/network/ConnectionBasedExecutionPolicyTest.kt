@@ -16,7 +16,7 @@ import org.mockito.kotlin.whenever
 import org.robolectric.ParameterizedRobolectricTestRunner
 
 @RunWith(ParameterizedRobolectricTestRunner::class)
-class ConnectionBasedExecutionPolicyTest(
+internal class ConnectionBasedExecutionPolicyTest(
     private val networkType: NetworkType,
     private val expectedValue: Boolean
 ) : CommonTest() {

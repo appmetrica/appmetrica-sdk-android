@@ -28,7 +28,7 @@ import org.robolectric.annotation.Config
 import java.util.concurrent.Executor
 
 @RunWith(RobolectricTestRunner::class)
-class AndroidApiScreenshotCaptorTest : CommonTest() {
+internal class AndroidApiScreenshotCaptorTest : CommonTest() {
 
     private val activity: Activity = mock()
     private val clientSideConfig: ClientSideApiCaptorConfig = mock()

@@ -14,7 +14,7 @@ import org.mockito.kotlin.stubbing
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class FeaturesInternalTest : CommonTest() {
+internal class FeaturesInternalTest : CommonTest() {
 
     private val parcel = mock<Parcel>()
 

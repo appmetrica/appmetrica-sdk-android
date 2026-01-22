@@ -9,7 +9,7 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.inOrder
 import org.mockito.kotlin.mock
 
-class HostRetryInfoProviderImplTest : CommonTest() {
+internal class HostRetryInfoProviderImplTest : CommonTest() {
 
     private val nextSendAttemptNumber = 124
     private val lastAttemptTimeSeconds = 150L

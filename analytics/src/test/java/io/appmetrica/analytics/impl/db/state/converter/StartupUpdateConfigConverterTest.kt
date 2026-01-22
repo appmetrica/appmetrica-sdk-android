@@ -7,7 +7,7 @@ import io.appmetrica.analytics.impl.startup.StartupUpdateConfig
 import io.appmetrica.analytics.testutils.CommonTest
 import org.junit.Test
 
-class StartupUpdateConfigConverterTest : CommonTest() {
+internal class StartupUpdateConfigConverterTest : CommonTest() {
 
     private val intervalSeconds = 4357989
     private val converter = StartupUpdateConfigConverter()

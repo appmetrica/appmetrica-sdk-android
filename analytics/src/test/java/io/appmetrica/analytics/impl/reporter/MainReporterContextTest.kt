@@ -13,7 +13,7 @@ import org.junit.Test
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 
-class MainReporterContextTest : CommonTest() {
+internal class MainReporterContextTest : CommonTest() {
 
     private val deviceId = "DeviceId"
     private val context: Context = mock()

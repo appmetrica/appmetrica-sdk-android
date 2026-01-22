@@ -5,7 +5,7 @@ import io.appmetrica.analytics.modulesapi.internal.client.ClientContext
 import io.appmetrica.analytics.modulesapi.internal.common.InternalModuleEvent
 import io.appmetrica.analytics.screenshot.impl.Constants
 
-class DefaultScreenshotCaptorCallback(
+internal class DefaultScreenshotCaptorCallback(
     private val clientContext: ClientContext
 ) : ScreenshotCaptorCallback {
 

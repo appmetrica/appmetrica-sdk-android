@@ -4,7 +4,7 @@ import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 
-class ConstantModuleEntryPointProviderTest : CommonTest() {
+internal class ConstantModuleEntryPointProviderTest : CommonTest() {
 
     private val value = "some value"
 

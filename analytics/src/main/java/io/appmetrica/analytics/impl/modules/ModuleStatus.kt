@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.modules
 
 import org.json.JSONObject
 
-data class ModuleStatus(
+internal data class ModuleStatus(
     val moduleName: String,
     val loaded: Boolean,
 ) {

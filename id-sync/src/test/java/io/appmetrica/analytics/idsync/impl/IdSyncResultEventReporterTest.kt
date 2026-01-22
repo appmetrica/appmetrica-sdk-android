@@ -9,7 +9,7 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 
-class IdSyncResultEventReporterTest : CommonTest() {
+internal class IdSyncResultEventReporterTest : CommonTest() {
 
     private val sdkIdentifiers: SdkIdentifiers = mock()
     private val moduleSelfReporter: ModuleSelfReporter = mock()

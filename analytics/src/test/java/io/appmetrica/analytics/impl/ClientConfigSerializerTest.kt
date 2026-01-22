@@ -23,7 +23,7 @@ import org.skyscreamer.jsonassert.JSONAssert
 import java.util.Random
 
 @RunWith(RobolectricTestRunner::class)
-class ClientConfigSerializerTest : CommonTest() {
+internal class ClientConfigSerializerTest : CommonTest() {
     private val apiKey = "5012c3cc-20a4-4dac-92d1-83ebc27c0fa9"
     private val deviceType = PredefinedDeviceTypes.PHONE
     private val appBuildNumber = 42

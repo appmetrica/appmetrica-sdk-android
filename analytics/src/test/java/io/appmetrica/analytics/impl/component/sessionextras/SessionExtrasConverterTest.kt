@@ -7,7 +7,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
 
-class SessionExtrasConverterTest : CommonTest() {
+internal class SessionExtrasConverterTest : CommonTest() {
 
     private lateinit var sessionExtrasConverter: SessionExtrasConverter
 

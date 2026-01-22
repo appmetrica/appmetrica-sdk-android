@@ -7,7 +7,7 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class ConfigCheckerTest : CommonTest() {
+internal class ConfigCheckerTest : CommonTest() {
 
     private var configChecker = ConfigChecker("")
 

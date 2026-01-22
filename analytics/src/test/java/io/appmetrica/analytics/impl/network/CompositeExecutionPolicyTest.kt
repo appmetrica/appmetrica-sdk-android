@@ -9,7 +9,7 @@ import org.junit.runners.Parameterized
 import org.mockito.kotlin.mock
 
 @RunWith(Parameterized::class)
-class CompositeExecutionPolicyTest(
+internal class CompositeExecutionPolicyTest(
     private val inputPolicies: Array<IExecutionPolicy>,
     private val expectedResult: Boolean,
     private val expectedDescription: String

@@ -7,7 +7,7 @@ import io.appmetrica.analytics.coreapi.internal.annotations.DoNotInline
 
 @DoNotInline
 @TargetApi(Build.VERSION_CODES.P)
-class ProcessNameProviderForP : ProcessNameProvider {
+internal class ProcessNameProviderForP : ProcessNameProvider {
 
     override fun getProcessName(): String? {
         return Application.getProcessName()

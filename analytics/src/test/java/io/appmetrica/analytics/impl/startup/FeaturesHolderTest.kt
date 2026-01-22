@@ -13,7 +13,7 @@ import org.junit.Test
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.whenever
 
-class FeaturesHolderTest : CommonTest() {
+internal class FeaturesHolderTest : CommonTest() {
 
     private lateinit var featuresHolder: FeaturesHolder
 

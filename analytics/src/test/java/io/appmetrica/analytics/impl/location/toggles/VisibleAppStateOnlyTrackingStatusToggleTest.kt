@@ -16,7 +16,7 @@ import org.mockito.kotlin.verifyNoMoreInteractions
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class VisibleAppStateOnlyTrackingStatusToggleTest : CommonTest() {
+internal class VisibleAppStateOnlyTrackingStatusToggleTest : CommonTest() {
 
     @get:Rule
     val globalServiceLocatorRule = GlobalServiceLocatorRule()

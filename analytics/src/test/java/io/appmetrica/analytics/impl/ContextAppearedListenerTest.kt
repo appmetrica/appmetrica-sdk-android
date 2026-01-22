@@ -15,7 +15,7 @@ import org.mockito.Mockito.verifyNoMoreInteractions
 import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.whenever
 
-class ContextAppearedListenerTest : CommonTest() {
+internal class ContextAppearedListenerTest : CommonTest() {
 
     private val activityLifecycleManager: ActivityLifecycleManager = mock()
     private val selfReporter: IReporterExtended = mock()

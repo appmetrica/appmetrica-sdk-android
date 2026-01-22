@@ -5,7 +5,7 @@ import io.appmetrica.analytics.impl.protobuf.client.EventExtrasProto
 import io.appmetrica.analytics.impl.utils.ProtobufUtils.toArray
 import io.appmetrica.analytics.protobuf.nano.MessageNano
 
-class EventExtrasConverter : Converter<Map<String, ByteArray>, ByteArray> {
+internal class EventExtrasConverter : Converter<Map<String, ByteArray>, ByteArray> {
 
     override fun fromModel(value: Map<String, ByteArray>): ByteArray {
         val proto = EventExtrasProto.EventExtras()

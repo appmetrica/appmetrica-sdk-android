@@ -7,7 +7,7 @@ import io.appmetrica.analytics.impl.protobuf.client.DbProto
 import io.appmetrica.analytics.testutils.CommonTest
 import org.junit.Test
 
-class DbSessionDescriptionConverterTest : CommonTest() {
+internal class DbSessionDescriptionConverterTest : CommonTest() {
 
     private val startTime = 424242L
     private val serverTimeOffset = 42L

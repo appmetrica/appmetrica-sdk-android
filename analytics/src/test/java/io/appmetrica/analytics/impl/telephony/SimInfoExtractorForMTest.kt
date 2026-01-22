@@ -19,7 +19,7 @@ import org.mockito.kotlin.eq
 import org.mockito.kotlin.whenever
 import org.robolectric.annotation.Config
 
-class SimInfoExtractorForMTest : CommonTest() {
+internal class SimInfoExtractorForMTest : CommonTest() {
 
     private val context: Context = mock()
     private val firstSubscriptionsInfo: SubscriptionInfo = mock()

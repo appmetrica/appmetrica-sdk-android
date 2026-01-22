@@ -14,7 +14,7 @@ import org.junit.Before
 import org.junit.Test
 import java.net.UnknownHostException
 
-class CallImplTest : CommonTest() {
+internal class CallImplTest : CommonTest() {
 
     private lateinit var mockWebServer: MockWebServer
     private val okHttpClient = OkHttpClient()

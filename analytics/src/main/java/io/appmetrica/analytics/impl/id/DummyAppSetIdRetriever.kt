@@ -4,7 +4,7 @@ import android.content.Context
 import io.appmetrica.analytics.appsetid.internal.AppSetIdListener
 import io.appmetrica.analytics.appsetid.internal.IAppSetIdRetriever
 
-class DummyAppSetIdRetriever : IAppSetIdRetriever {
+internal class DummyAppSetIdRetriever : IAppSetIdRetriever {
 
     override fun retrieveAppSetId(context: Context, listener: AppSetIdListener) {
         listener.onFailure(IllegalStateException("No App Set ID library"))

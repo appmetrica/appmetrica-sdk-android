@@ -6,7 +6,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoInteractions
 
-class ThreadUncaughtExceptionHandlerCompositeTest : CommonTest() {
+internal class ThreadUncaughtExceptionHandlerCompositeTest : CommonTest() {
 
     private val thread: Thread = mock()
     private val throwable: Throwable = mock()

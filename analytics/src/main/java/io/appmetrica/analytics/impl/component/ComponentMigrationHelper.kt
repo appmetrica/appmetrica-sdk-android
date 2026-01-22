@@ -7,7 +7,7 @@ internal class ComponentMigrationHelper private constructor(componentUnit: Compo
 
     private val tag = "[ComponentMigrationHelper]"
 
-    class Creator {
+    internal class Creator {
         fun create(componentUnit: ComponentUnit): ComponentMigrationHelper {
             return ComponentMigrationHelper(componentUnit)
         }

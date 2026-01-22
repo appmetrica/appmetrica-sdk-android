@@ -12,7 +12,7 @@ import org.mockito.kotlin.doReturn
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class ProcessNameProviderForPTest : CommonTest() {
+internal class ProcessNameProviderForPTest : CommonTest() {
 
     @get:Rule
     val applicationRule = staticRule<Application> {

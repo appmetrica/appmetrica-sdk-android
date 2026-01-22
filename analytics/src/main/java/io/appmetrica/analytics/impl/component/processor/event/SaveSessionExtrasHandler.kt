@@ -4,7 +4,7 @@ import io.appmetrica.analytics.impl.CounterReport
 import io.appmetrica.analytics.impl.component.ComponentUnit
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
-class SaveSessionExtrasHandler(component: ComponentUnit) : ReportComponentHandler(component) {
+internal class SaveSessionExtrasHandler(component: ComponentUnit) : ReportComponentHandler(component) {
 
     private val tag =
         "[SaveSessionExtrasHandler-${component.componentId.anonymizedApiKey}]"

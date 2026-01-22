@@ -23,7 +23,7 @@ import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class LibraryEventConstructorTest : CommonTest() {
+internal class LibraryEventConstructorTest : CommonTest() {
 
     private val sender = "sender_value"
     private val event = "event_value"

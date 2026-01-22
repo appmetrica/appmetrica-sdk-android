@@ -13,7 +13,7 @@ import org.mockito.kotlin.verifyNoMoreInteractions
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class WakelocksToggleTest : CommonTest() {
+internal class WakelocksToggleTest : CommonTest() {
 
     private val firstRegistrant = mock<Any>()
     private val secondRegistrant = mock<Any>()

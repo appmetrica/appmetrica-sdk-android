@@ -5,7 +5,7 @@ import io.appmetrica.analytics.coreutils.internal.io.FileUtils
 import io.appmetrica.analytics.coreutils.internal.io.FileUtils.copyToNullable
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
-class FileVitalDataSource(
+internal class FileVitalDataSource(
     private val context: Context,
     private val fileName: String
 ) : VitalDataSource {

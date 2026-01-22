@@ -18,7 +18,7 @@ import org.robolectric.RobolectricTestRunner
 import java.util.concurrent.ExecutionException
 
 @RunWith(RobolectricTestRunner::class)
-class ThrowableModelFactoryTest : CommonTest() {
+internal class ThrowableModelFactoryTest : CommonTest() {
 
     private val throwable: IllegalStateException = mock()
 

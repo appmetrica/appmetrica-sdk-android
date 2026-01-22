@@ -16,7 +16,7 @@ import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.whenever
 import java.util.concurrent.TimeUnit
 
-class AutoCollectedDataSubscribersHolderTest : CommonTest() {
+internal class AutoCollectedDataSubscribersHolderTest : CommonTest() {
 
     private val componentId: ComponentId = mock()
     private val preferencesComponentDbStorage: PreferencesComponentDbStorage = mock()

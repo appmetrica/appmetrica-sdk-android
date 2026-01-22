@@ -6,7 +6,7 @@ import io.appmetrica.analytics.ModuleEvent
 import io.appmetrica.analytics.impl.ClientServiceLocator
 import io.appmetrica.analytics.impl.ContextAppearedListener
 
-class ModulesSynchronousStageExecutor {
+internal class ModulesSynchronousStageExecutor {
 
     private val contextAppearedListener: ContextAppearedListener =
         ClientServiceLocator.getInstance().contextAppearedListener

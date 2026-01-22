@@ -12,7 +12,7 @@ import org.junit.Test
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 
-class MainComponentEventConditionsProviderTest : CommonTest() {
+internal class MainComponentEventConditionsProviderTest : CommonTest() {
     private val databaseHelper: DatabaseHelper = mock()
     private val configurationHolder: ReportComponentConfigurationHolder = mock()
     private val eventTriggerProvider: EventTriggerProvider = mock()

@@ -11,7 +11,7 @@ import io.appmetrica.analytics.impl.db.preferences.PreferencesClientDbStorage
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import java.lang.ref.WeakReference
 
-class ScreenInfoRetriever : ActivityAppearedListener.Listener {
+internal class ScreenInfoRetriever : ActivityAppearedListener.Listener {
 
     private val tag = "[ScreenInfoRetriever]"
 

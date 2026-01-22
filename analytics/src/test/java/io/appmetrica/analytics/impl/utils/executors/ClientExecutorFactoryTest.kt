@@ -9,7 +9,7 @@ import org.mockito.kotlin.verify
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class ClientExecutorFactoryTest : CommonTest() {
+internal class ClientExecutorFactoryTest : CommonTest() {
 
     private val clientExecutorFactory: ClientExecutorFactory by setUp { ClientExecutorFactory() }
 

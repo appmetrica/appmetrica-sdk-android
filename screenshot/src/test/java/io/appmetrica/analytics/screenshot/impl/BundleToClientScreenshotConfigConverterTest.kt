@@ -3,9 +3,9 @@ package io.appmetrica.analytics.screenshot.impl
 import android.os.Bundle
 import io.appmetrica.analytics.screenshot.impl.config.clientservice.model.ParcelableApiCaptorConfig
 import io.appmetrica.analytics.screenshot.impl.config.clientservice.model.ParcelableContentObserverCaptorConfig
-import io.appmetrica.analytics.screenshot.impl.config.clientservice.model.ParcelableRemoteScreenshotConfig
 import io.appmetrica.analytics.screenshot.impl.config.clientservice.model.ParcelableScreenshotConfig
 import io.appmetrica.analytics.screenshot.impl.config.clientservice.model.ParcelableServiceCaptorConfig
+import io.appmetrica.analytics.screenshot.internal.config.ParcelableRemoteScreenshotConfig
 import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
@@ -13,7 +13,7 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class BundleToClientScreenshotConfigConverterTest : CommonTest() {
+internal class BundleToClientScreenshotConfigConverterTest : CommonTest() {
 
     private val config = ParcelableRemoteScreenshotConfig(
         enabled = true,

@@ -9,7 +9,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoMoreInteractions
 
-class CacheControlConnectionHttpsClientImplTest : CommonTest() {
+internal class CacheControlConnectionHttpsClientImplTest : CommonTest() {
 
     private val eTag = "eTag"
     private val response = ByteArray(10) { it.toByte() }

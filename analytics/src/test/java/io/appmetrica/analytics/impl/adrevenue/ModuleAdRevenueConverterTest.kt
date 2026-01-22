@@ -14,7 +14,7 @@ import org.mockito.kotlin.doReturn
 import java.math.BigDecimal
 import java.util.Currency
 
-class ModuleAdRevenueConverterTest : CommonTest() {
+internal class ModuleAdRevenueConverterTest : CommonTest() {
 
     private val payload = mutableMapOf("key" to "value")
     private val emptyPayload = mutableMapOf<String, String>()

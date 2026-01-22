@@ -4,7 +4,7 @@ import io.appmetrica.analytics.billing.impl.RemoteBillingConfigProto
 import io.appmetrica.analytics.billing.internal.config.RemoteBillingConfig
 import io.appmetrica.analytics.coreapi.internal.data.Converter
 
-class RemoteBillingConfigProtoConverter(
+internal class RemoteBillingConfigProtoConverter(
     private val converter: BillingConfigProtoConverter = BillingConfigProtoConverter(),
 ) : Converter<RemoteBillingConfig, RemoteBillingConfigProto> {
 

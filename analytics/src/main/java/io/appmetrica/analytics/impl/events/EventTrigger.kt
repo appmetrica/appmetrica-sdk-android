@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.events
 
-interface EventTrigger {
+internal interface EventTrigger {
 
     fun trigger()
 

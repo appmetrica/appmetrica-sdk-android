@@ -7,7 +7,7 @@ import io.appmetrica.analytics.impl.attribution.ExternalAttributionTypeConverter
 import io.appmetrica.analytics.impl.component.ComponentUnit
 import io.appmetrica.analytics.impl.protobuf.backend.ExternalAttribution.ClientExternalAttribution
 
-class ExternalAttributionHandler(
+internal class ExternalAttributionHandler(
     component: ComponentUnit,
     timeProvider: TimeProvider
 ) : ReportComponentHandler(component) {

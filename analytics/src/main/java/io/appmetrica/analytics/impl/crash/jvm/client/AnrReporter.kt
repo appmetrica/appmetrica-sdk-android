@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.crash.jvm.client
 
-fun interface AnrReporter {
+internal fun interface AnrReporter {
 
     fun reportAnr(allThreads: AllThreads)
 }

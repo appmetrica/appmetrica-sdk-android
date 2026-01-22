@@ -12,7 +12,7 @@ import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class ExtraMetaInfoRetrieverTest : CommonTest() {
+internal class ExtraMetaInfoRetrieverTest : CommonTest() {
 
     private val context: Context = mock()
     private val packageManager: SafePackageManager = mock()

@@ -8,7 +8,7 @@ import io.appmetrica.analytics.coreapi.internal.lifecycle.ActivityLifecycleListe
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
-class ContextAppearedListener
+internal class ContextAppearedListener
 @JvmOverloads constructor(
     private val activityLifecycleManager: ActivityLifecycleManager,
     private val selfReporter: IReporter = AppMetricaSelfReportFacade.getReporter()

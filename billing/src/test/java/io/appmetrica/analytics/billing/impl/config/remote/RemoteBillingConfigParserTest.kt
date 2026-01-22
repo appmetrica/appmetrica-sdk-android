@@ -15,7 +15,7 @@ import org.junit.Test
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 
-class RemoteBillingConfigParserTest : CommonTest() {
+internal class RemoteBillingConfigParserTest : CommonTest() {
 
     private val rawData = JSONObject()
     private val billingConfigProto: BillingConfigProto = mock()

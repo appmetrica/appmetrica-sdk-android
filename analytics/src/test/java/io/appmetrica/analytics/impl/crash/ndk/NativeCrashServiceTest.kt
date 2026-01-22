@@ -30,7 +30,7 @@ import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class NativeCrashServiceTest : CommonTest() {
+internal class NativeCrashServiceTest : CommonTest() {
     companion object {
         private const val MODULE_CLASS = "io.appmetrica.analytics.ndkcrashes.NativeCrashServiceModuleImpl"
     }

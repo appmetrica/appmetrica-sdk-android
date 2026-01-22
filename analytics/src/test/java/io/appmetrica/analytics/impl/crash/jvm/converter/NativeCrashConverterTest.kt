@@ -10,7 +10,7 @@ import io.appmetrica.analytics.testutils.CommonTest
 import org.junit.Test
 import java.util.Random
 
-class NativeCrashConverterTest : CommonTest() {
+internal class NativeCrashConverterTest : CommonTest() {
     private val converter by setUp { NativeCrashConverter() }
 
     @Test

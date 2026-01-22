@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.startup
 import io.appmetrica.analytics.StartupParamsItemStatus
 import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus
 
-class StartupParamItemStatusAdapter {
+internal class StartupParamItemStatusAdapter {
 
     fun adapt(input: IdentifierStatus): StartupParamsItemStatus = when (input) {
         IdentifierStatus.OK -> StartupParamsItemStatus.OK

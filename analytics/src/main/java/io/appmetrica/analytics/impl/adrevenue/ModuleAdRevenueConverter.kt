@@ -5,7 +5,7 @@ import io.appmetrica.analytics.AdType
 import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdRevenue
 import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdType
 
-class ModuleAdRevenueConverter {
+internal class ModuleAdRevenueConverter {
 
     private val enricher = NativeLayerPayloadEnricher()
 

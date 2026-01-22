@@ -8,7 +8,7 @@ import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 
-class ClidsInfoStateSerializerTest : CommonTest() {
+internal class ClidsInfoStateSerializerTest : CommonTest() {
 
     private val serializer = ClidsInfoStateSerializer()
 

@@ -4,7 +4,7 @@ import io.appmetrica.analytics.coreutils.internal.logger.LoggerStorage
 import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdRevenueProcessor
 import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdRevenueProcessorsHolder
 
-class CompositeModuleAdRevenueProcessor :
+internal class CompositeModuleAdRevenueProcessor :
     ModuleAdRevenueProcessor,
     ModuleAdRevenueProcessorsHolder {
 

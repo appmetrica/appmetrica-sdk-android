@@ -12,7 +12,7 @@ import org.robolectric.ParameterizedRobolectricTestRunner
 import kotlin.random.Random
 
 @RunWith(ParameterizedRobolectricTestRunner::class)
-class FullExtrasComposerTest(
+internal class FullExtrasComposerTest(
     val input: ByteArray?,
     val expected: List<EventProto.ReportMessage.Session.Event.ExtrasEntry>,
     val description: String

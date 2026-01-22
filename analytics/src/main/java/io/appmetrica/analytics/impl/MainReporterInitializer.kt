@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl
 
-interface MainReporterInitializer {
+internal interface MainReporterInitializer {
 
     fun initialize(): MainReporter
 }

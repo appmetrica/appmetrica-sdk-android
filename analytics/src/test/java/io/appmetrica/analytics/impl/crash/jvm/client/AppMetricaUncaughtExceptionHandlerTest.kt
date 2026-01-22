@@ -22,7 +22,7 @@ import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class AppMetricaUncaughtExceptionHandlerTest : CommonTest() {
+internal class AppMetricaUncaughtExceptionHandlerTest : CommonTest() {
 
     private val throwable: Throwable = mock()
 

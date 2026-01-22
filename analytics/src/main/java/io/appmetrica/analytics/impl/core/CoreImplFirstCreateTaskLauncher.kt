@@ -4,7 +4,7 @@ import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import java.util.concurrent.TimeUnit
 
-class CoreImplFirstCreateTaskLauncher(private val tasks: List<Runnable>) : Runnable {
+internal class CoreImplFirstCreateTaskLauncher(private val tasks: List<Runnable>) : Runnable {
 
     private val tag = "[MetricaCoreImplFirstCreateTaskLauncher]"
 

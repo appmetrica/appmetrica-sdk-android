@@ -13,7 +13,7 @@ internal class NetworkTaskRunnable @VisibleForTesting constructor(
 
     private val tag = "[NetworkTaskRunnable]"
 
-    class Provider {
+    internal class Provider {
 
         fun create(networkTask: NetworkTask, rootThreadStateSource: InterruptionSafeThread): NetworkTaskRunnable {
             return NetworkTaskRunnable(networkTask, rootThreadStateSource)

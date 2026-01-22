@@ -10,7 +10,7 @@ import org.junit.runner.RunWith
 import org.robolectric.ParameterizedRobolectricTestRunner
 
 @RunWith(ParameterizedRobolectricTestRunner::class)
-class PreloadInfoCandidatesHelperTest(
+internal class PreloadInfoCandidatesHelperTest(
     private val stateFromDisk: PreloadInfoData,
     private val oldCandidates: List<PreloadInfoData.Candidate>,
     private val newCandidate: PreloadInfoState,

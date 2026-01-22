@@ -15,7 +15,7 @@ import org.robolectric.RobolectricTestRunner
 import java.io.File
 
 @RunWith(RobolectricTestRunner::class)
-class FileLocksHolderTest : CommonTest() {
+internal class FileLocksHolderTest : CommonTest() {
 
     @get:Rule
     val fileUtilsMockedStaticRule = MockedStaticRule(FileUtils::class.java)

@@ -39,7 +39,7 @@ import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class BillingMonitorWrapperTest : CommonTest() {
+internal class BillingMonitorWrapperTest : CommonTest() {
 
     private val context: Context = mock()
     private val defaultExecutor: IHandlerExecutor = mock()

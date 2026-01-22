@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.db.storage
 
 import io.appmetrica.analytics.coreapi.internal.data.TempCacheStorage
 
-class TempCacheEntry(
+internal class TempCacheEntry(
     override val id: Long,
     override val scope: String,
     override val timestamp: Long,

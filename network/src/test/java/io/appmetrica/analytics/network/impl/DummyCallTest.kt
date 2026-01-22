@@ -4,7 +4,7 @@ import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.SoftAssertions
 import org.junit.Test
 
-class DummyCallTest : CommonTest() {
+internal class DummyCallTest : CommonTest() {
 
     @Test
     fun `execute returns response with exception`() {

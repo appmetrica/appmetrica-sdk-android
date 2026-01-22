@@ -1,8 +1,8 @@
 package io.appmetrica.analytics.screenshot.impl.config.service.model
 
-import io.appmetrica.analytics.screenshot.impl.config.remote.model.RemoteScreenshotConfig
+import io.appmetrica.analytics.screenshot.internal.config.RemoteScreenshotConfig
 
-class ServiceSideRemoteScreenshotConfig(
+internal class ServiceSideRemoteScreenshotConfig(
     val enabled: Boolean,
     val config: ServiceSideScreenshotConfig?,
 ) {

@@ -3,7 +3,7 @@ package io.appmetrica.analytics.screenshot.impl.captor
 import io.appmetrica.analytics.modulesapi.internal.client.ClientContext
 import io.appmetrica.analytics.screenshot.impl.callback.ScreenshotCaptorCallback
 
-class DefaultCaptorProvider(
+internal class DefaultCaptorProvider(
     private val clientContext: ClientContext,
     private val callback: ScreenshotCaptorCallback,
 ) : CaptorProvider {

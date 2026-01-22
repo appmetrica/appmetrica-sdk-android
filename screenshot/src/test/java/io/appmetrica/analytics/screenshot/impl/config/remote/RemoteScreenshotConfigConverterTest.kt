@@ -3,7 +3,7 @@ package io.appmetrica.analytics.screenshot.impl.config.remote
 import io.appmetrica.analytics.protobuf.nano.MessageNano
 import io.appmetrica.analytics.screenshot.impl.RemoteScreenshotConfigProto
 import io.appmetrica.analytics.screenshot.impl.config.remote.converter.RemoteScreenshotConfigProtoConverter
-import io.appmetrica.analytics.screenshot.impl.config.remote.model.RemoteScreenshotConfig
+import io.appmetrica.analytics.screenshot.internal.config.RemoteScreenshotConfig
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.on
 import io.appmetrica.analytics.testutils.staticRule
@@ -13,7 +13,7 @@ import org.junit.Test
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 
-class RemoteScreenshotConfigConverterTest : CommonTest() {
+internal class RemoteScreenshotConfigConverterTest : CommonTest() {
 
     private val remoteScreenshotConfig: RemoteScreenshotConfig = mock()
     private val remoteScreenshotConfigProto: RemoteScreenshotConfigProto = mock()

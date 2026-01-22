@@ -19,7 +19,7 @@ import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class ModulesRemoteConfigParserTest : CommonTest() {
+internal class ModulesRemoteConfigParserTest : CommonTest() {
 
     @get:Rule
     val globalServiceLocatorRule = GlobalServiceLocatorRule()

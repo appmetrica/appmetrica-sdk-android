@@ -12,7 +12,7 @@ import org.junit.Test
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 
-class IdSyncConfigToProtoBytesConverterTest : CommonTest() {
+internal class IdSyncConfigToProtoBytesConverterTest : CommonTest() {
 
     private val byteArray: ByteArray = ByteArray(15) { it.toByte() }
     private val idSyncConfig: IdSyncConfig = mock()

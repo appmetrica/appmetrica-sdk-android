@@ -15,7 +15,7 @@ import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 
-class CustomSdkHostsHolderTest : CommonTest() {
+internal class CustomSdkHostsHolderTest : CommonTest() {
 
     @get:Rule
     val startupParamsItemAdapterMockedConstructionRule = MockedConstructionRule(StartupParamItemAdapter::class.java)

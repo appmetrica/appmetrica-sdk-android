@@ -2,7 +2,7 @@ package io.appmetrica.analytics.screenshot.impl.config.remote.model
 
 import io.appmetrica.analytics.screenshot.impl.ApiCaptorConfigProto
 
-class ApiCaptorConfig(
+internal class ApiCaptorConfig(
     val enabled: Boolean,
 ) {
 

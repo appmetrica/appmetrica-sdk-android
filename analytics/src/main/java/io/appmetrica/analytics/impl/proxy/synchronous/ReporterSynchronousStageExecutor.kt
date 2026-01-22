@@ -10,7 +10,7 @@ import io.appmetrica.analytics.impl.crash.jvm.client.AllThreads
 import io.appmetrica.analytics.impl.crash.jvm.client.UnhandledException
 import io.appmetrica.analytics.profile.UserProfile
 
-class ReporterSynchronousStageExecutor {
+internal class ReporterSynchronousStageExecutor {
 
     fun putAppEnvironmentValue(key: String, value: String?) {}
 

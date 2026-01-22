@@ -9,7 +9,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.mockito.kotlin.doReturn
 
-class NativeCrashFromCurrentSessionPredicateTest : CommonTest() {
+internal class NativeCrashFromCurrentSessionPredicateTest : CommonTest() {
 
     private val myPid = 100500
     private val notMyPid = 200500

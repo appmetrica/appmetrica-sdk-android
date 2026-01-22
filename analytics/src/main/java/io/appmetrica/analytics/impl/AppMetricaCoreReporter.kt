@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl
 
 import android.os.Bundle
 
-interface AppMetricaCoreReporter {
+internal interface AppMetricaCoreReporter {
 
     fun reportData(data: Bundle)
 }

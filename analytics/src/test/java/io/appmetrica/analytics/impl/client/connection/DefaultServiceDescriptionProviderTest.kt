@@ -8,7 +8,7 @@ import org.junit.Test
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 
-class DefaultServiceDescriptionProviderTest : CommonTest() {
+internal class DefaultServiceDescriptionProviderTest : CommonTest() {
 
     private val packageName = "test.package.name"
     private val context: Context = mock {

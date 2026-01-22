@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.screenshot.impl
 
-import io.appmetrica.analytics.screenshot.impl.config.clientservice.model.ParcelableRemoteScreenshotConfig
 import io.appmetrica.analytics.screenshot.impl.config.service.model.ServiceSideRemoteScreenshotConfig
+import io.appmetrica.analytics.screenshot.internal.config.ParcelableRemoteScreenshotConfig
 import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
@@ -9,7 +9,7 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class ServiceToBundleScreenshotConfigConverterTest : CommonTest() {
+internal class ServiceToBundleScreenshotConfigConverterTest : CommonTest() {
 
     private val config = ServiceSideRemoteScreenshotConfig()
 

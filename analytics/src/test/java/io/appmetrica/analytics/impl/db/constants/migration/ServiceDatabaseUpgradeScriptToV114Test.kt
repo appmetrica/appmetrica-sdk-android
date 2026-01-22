@@ -9,7 +9,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoMoreInteractions
 
-class ServiceDatabaseUpgradeScriptToV114Test : CommonTest() {
+internal class ServiceDatabaseUpgradeScriptToV114Test : CommonTest() {
 
     private val database: SQLiteDatabase = mock()
 

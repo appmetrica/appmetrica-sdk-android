@@ -21,7 +21,7 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import java.util.concurrent.TimeUnit
 
-class ModuleStatusReportingTaskTest : CommonTest() {
+internal class ModuleStatusReportingTaskTest : CommonTest() {
 
     private val currentTime = System.currentTimeMillis()
     private val modulesType = "some_modules_type"

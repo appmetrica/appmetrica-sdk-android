@@ -4,7 +4,7 @@ import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
 import io.appmetrica.analytics.testutils.CommonTest
 import org.junit.Test
 
-class AppMetricaConfigExtensionTest : CommonTest() {
+internal class AppMetricaConfigExtensionTest : CommonTest() {
 
     @Test
     fun config() {

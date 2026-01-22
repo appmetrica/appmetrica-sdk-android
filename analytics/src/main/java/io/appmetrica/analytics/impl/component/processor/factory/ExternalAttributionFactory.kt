@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.component.processor.factory
 
 import io.appmetrica.analytics.impl.component.processor.event.ReportComponentHandler
 
-class ExternalAttributionFactory(
+internal class ExternalAttributionFactory(
     provider: ReportingHandlerProvider
 ) : JustSaveToDataBaseFactory(provider) {
 

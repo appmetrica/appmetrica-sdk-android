@@ -15,7 +15,7 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 
-class MainCommutationClientUnitFactoryTest : CommonTest() {
+internal class MainCommutationClientUnitFactoryTest : CommonTest() {
 
     private val context: Context = mock()
     private val commutationDispatcherComponent: CommutationDispatcherComponent = mock()

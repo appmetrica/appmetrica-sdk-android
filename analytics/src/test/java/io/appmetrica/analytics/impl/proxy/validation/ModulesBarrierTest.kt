@@ -12,7 +12,7 @@ import org.mockito.kotlin.whenever
 import java.util.Currency
 import java.util.UUID
 
-class ModulesBarrierTest : CommonTest() {
+internal class ModulesBarrierTest : CommonTest() {
 
     private val context: Context = mock()
     private val appMetricaFacadeProvider: AppMetricaFacadeProvider = mock<AppMetricaFacadeProvider>()

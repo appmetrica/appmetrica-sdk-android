@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.service
 
-interface AppMetricaServiceCallback {
+internal interface AppMetricaServiceCallback {
 
     fun onStartFinished(startId: Int)
 }

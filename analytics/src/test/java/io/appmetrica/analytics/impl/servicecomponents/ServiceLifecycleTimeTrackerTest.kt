@@ -10,7 +10,7 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.whenever
 import java.util.concurrent.TimeUnit
 
-class ServiceLifecycleTimeTrackerTest : CommonTest() {
+internal class ServiceLifecycleTimeTrackerTest : CommonTest() {
 
     private val initialTimestamp = 100500L
 

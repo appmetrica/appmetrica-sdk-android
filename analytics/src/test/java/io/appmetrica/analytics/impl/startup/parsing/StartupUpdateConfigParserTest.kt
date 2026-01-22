@@ -12,7 +12,7 @@ import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 
-class StartupUpdateConfigParserTest : CommonTest() {
+internal class StartupUpdateConfigParserTest : CommonTest() {
 
     private val model = mock<StartupUpdateConfig>()
     private val nanoCaptor = argumentCaptor<StartupStateProtobuf.StartupState.StartupUpdateConfig>()

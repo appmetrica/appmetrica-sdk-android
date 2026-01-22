@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.modules
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import io.appmetrica.analytics.modulesapi.internal.service.event.ModuleEventServiceHandlerFactory
 
-class ModuleEventHandlersHolder {
+internal class ModuleEventHandlersHolder {
 
     private val tag = "[ModuleEventHandlersHolder]"
 

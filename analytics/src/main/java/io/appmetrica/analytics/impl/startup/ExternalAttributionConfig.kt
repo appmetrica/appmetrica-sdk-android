@@ -1,5 +1,5 @@
 package io.appmetrica.analytics.impl.startup
 
-data class ExternalAttributionConfig(
+internal data class ExternalAttributionConfig(
     val collectingInterval: Long
 )

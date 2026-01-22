@@ -4,7 +4,7 @@ import io.appmetrica.analytics.coreapi.internal.data.ProtobufConverter
 import io.appmetrica.analytics.impl.db.session.DbSessionModel
 import io.appmetrica.analytics.impl.protobuf.client.DbProto
 
-class DbSessionDescriptionConverter(
+internal class DbSessionDescriptionConverter(
     private val optionalBoolConverter: OptionalBoolConverter = OptionalBoolConverter()
 ) : ProtobufConverter<DbSessionModel.Description, DbProto.SessionDescription> {
 

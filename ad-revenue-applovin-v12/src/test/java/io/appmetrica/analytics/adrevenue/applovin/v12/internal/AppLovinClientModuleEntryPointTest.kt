@@ -19,7 +19,7 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.whenever
 
-class AppLovinClientModuleEntryPointTest : CommonTest() {
+internal class AppLovinClientModuleEntryPointTest : CommonTest() {
 
     private val adRevenueProcessorsHolder: ModuleAdRevenueProcessorsHolder = mock()
     private val moduleAdRevenueContext: ModuleAdRevenueContext = mock {

@@ -4,7 +4,7 @@ import io.appmetrica.analytics.impl.protobuf.backend.ExternalAttribution.ClientE
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import org.json.JSONObject
 
-class ObjectExternalAttribution(
+internal class ObjectExternalAttribution(
     provider: ExternalAttributionType,
     value: Any
 ) : BaseExternalAttribution(

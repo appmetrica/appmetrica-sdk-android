@@ -10,7 +10,7 @@ import org.junit.Test
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 
-class AdvIdentifiersFromStartupParamsItemConverterTest : CommonTest() {
+internal class AdvIdentifiersFromStartupParamsItemConverterTest : CommonTest() {
 
     private val gaid = "gaid"
     private val hoaid = "hoaid"

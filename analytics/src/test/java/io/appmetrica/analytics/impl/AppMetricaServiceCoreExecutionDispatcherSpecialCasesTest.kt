@@ -12,7 +12,7 @@ import org.mockito.kotlin.verify
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class AppMetricaServiceCoreExecutionDispatcherSpecialCasesTest : CommonTest() {
+internal class AppMetricaServiceCoreExecutionDispatcherSpecialCasesTest : CommonTest() {
 
     private val executor: ICommonExecutor = mock()
     private val appMetricaServiceCore: AppMetricaServiceCore = mock()

@@ -7,7 +7,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-class DefaultAskForPermissionStrategyProviderTest : CommonTest() {
+internal class DefaultAskForPermissionStrategyProviderTest : CommonTest() {
 
     @get:Rule
     val neverForbidPermissionStrategyMockedConstructionRule =

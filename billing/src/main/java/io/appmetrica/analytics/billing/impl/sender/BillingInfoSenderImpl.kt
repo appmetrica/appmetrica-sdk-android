@@ -8,7 +8,7 @@ import io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceModuleC
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import java.util.concurrent.Executor
 
-class BillingInfoSenderImpl(
+internal class BillingInfoSenderImpl(
     private val reporter: ServiceComponentModuleReporter,
     private val executor: Executor,
     private val converter: ProductInfoConverter = ProductInfoConverter(),

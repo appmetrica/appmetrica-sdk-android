@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.attribution
 
-enum class ExternalAttributionType {
+internal enum class ExternalAttributionType {
     UNKNOWN,
     APPSFLYER,
     ADJUST,

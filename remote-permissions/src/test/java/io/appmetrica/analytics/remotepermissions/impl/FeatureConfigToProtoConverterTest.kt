@@ -3,11 +3,12 @@ package io.appmetrica.analytics.remotepermissions.impl
 import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
 import io.appmetrica.analytics.assertions.ProtoObjectPropertyAssertions
 import io.appmetrica.analytics.remotepermissions.impl.protobuf.client.RemotePermissionsProtobuf
+import io.appmetrica.analytics.remotepermissions.internal.config.FeatureConfig
 import io.appmetrica.analytics.testutils.CommonTest
 import org.junit.Before
 import org.junit.Test
 
-class FeatureConfigToProtoConverterTest : CommonTest() {
+internal class FeatureConfigToProtoConverterTest : CommonTest() {
 
     private lateinit var converter: FeatureConfigToProtoConverter
 

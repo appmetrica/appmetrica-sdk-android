@@ -11,7 +11,7 @@ import org.junit.Test
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 
-class AppAppMetricaServiceWakeLockIntentProviderTest : CommonTest() {
+internal class AppAppMetricaServiceWakeLockIntentProviderTest : CommonTest() {
 
     private val context = mock<Context>()
     private val action = "io.appmetrica.analytics.some.Action"

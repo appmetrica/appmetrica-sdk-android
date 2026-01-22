@@ -30,7 +30,7 @@ import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class ReflectionAdvIdProviderTest : CommonTest() {
+internal class ReflectionAdvIdProviderTest : CommonTest() {
 
     @get:Rule
     val advIdentifiersProvider = MockedStaticRule(AdvIdentifiersProvider::class.java)

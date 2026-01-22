@@ -5,12 +5,158 @@
     "https://checkstyle.org/dtds/import_control_1_4.dtd">
 
 <import-control pkg="io.appmetrica.analytics" strategyOnMismatch="allowed">
+    <!-- General restrictions -->
     <disallow class="android.os.Debug"/>
     <disallow class="android.os.Debug.*" regex="true" />
     <disallow class="android.content.pm.PackageManager.PERMISSION_GRANTED" />
     <disallow class="android.content.pm.PackageManager.PERMISSION_DENIED" />
+
+    <!-- Forbid cross-module impl imports -->
+    <disallow pkg="io\.appmetrica\.analytics\..+\.impl(\..+)?" regex="true"/>
+
+    <!-- Allow impl.permissions to use PackageManager constants -->
     <subpackage name="impl.permissions">
         <allow class="android.content.pm.PackageManager.PERMISSION_GRANTED" />
         <allow class="android.content.pm.PackageManager.PERMISSION_DENIED" />
     </subpackage>
+
+    <!-- For each module, allow its own impl packages -->
+    <subpackage name="adrevenue">
+        <subpackage name="admob">
+            <subpackage name="v23">
+                <allow pkg="io\.appmetrica\.analytics\.adrevenue\.admob\.v23\.impl(\..+)?" regex="true"/>
+            </subpackage>
+        </subpackage>
+        <subpackage name="applovin">
+            <subpackage name="v12">
+                <allow pkg="io\.appmetrica\.analytics\.adrevenue\.applovin\.v12\.impl(\..+)?" regex="true"/>
+            </subpackage>
+        </subpackage>
+        <subpackage name="fyber">
+            <subpackage name="v3">
+                <allow pkg="io\.appmetrica\.analytics\.adrevenue\.fyber\.v3\.impl(\..+)?" regex="true"/>
+            </subpackage>
+        </subpackage>
+        <subpackage name="ironsource">
+            <subpackage name="v7">
+                <allow pkg="io\.appmetrica\.analytics\.adrevenue\.ironsource\.v7\.impl(\..+)?" regex="true"/>
+            </subpackage>
+            <subpackage name="v9">
+                <allow pkg="io\.appmetrica\.analytics\.adrevenue\.ironsource\.v9\.impl(\..+)?" regex="true"/>
+            </subpackage>
+        </subpackage>
+    </subpackage>
+
+    <subpackage name="apphud">
+        <allow pkg="io\.appmetrica\.analytics\.apphud\.impl(\..+)?" regex="true"/>
+    </subpackage>
+
+    <subpackage name="apphudv2">
+        <allow pkg="io\.appmetrica\.analytics\.apphudv2\.impl(\..+)?" regex="true"/>
+    </subpackage>
+
+    <subpackage name="apphudv3">
+        <allow pkg="io\.appmetrica\.analytics\.apphudv3\.impl(\..+)?" regex="true"/>
+    </subpackage>
+
+    <subpackage name="appsetid">
+        <allow pkg="io\.appmetrica\.analytics\.appsetid\.impl(\..+)?" regex="true"/>
+    </subpackage>
+
+    <subpackage name="billing">
+        <allow pkg="io\.appmetrica\.analytics\.billing\.impl(\..+)?" regex="true"/>
+    </subpackage>
+
+    <subpackage name="billingv6">
+        <allow pkg="io\.appmetrica\.analytics\.billingv6\.impl(\..+)?" regex="true"/>
+    </subpackage>
+
+    <subpackage name="billingv8">
+        <allow pkg="io\.appmetrica\.analytics\.billingv8\.impl(\..+)?" regex="true"/>
+    </subpackage>
+
+    <subpackage name="logger">
+        <subpackage name="common">
+            <allow pkg="io\.appmetrica\.analytics\.logger\.common\.impl(\..+)?" regex="true"/>
+        </subpackage>
+    </subpackage>
+
+    <subpackage name="coreapi">
+        <allow pkg="io\.appmetrica\.analytics\.coreapi\.impl(\..+)?" regex="true"/>
+    </subpackage>
+
+    <subpackage name="coreutils">
+        <allow pkg="io\.appmetrica\.analytics\.coreutils\.impl(\..+)?" regex="true"/>
+    </subpackage>
+
+    <subpackage name="gpllibrary">
+        <allow pkg="io\.appmetrica\.analytics\.gpllibrary\.impl(\..+)?" regex="true"/>
+    </subpackage>
+
+    <subpackage name="idsync">
+        <allow pkg="io\.appmetrica\.analytics\.idsync\.impl(\..+)?" regex="true"/>
+    </subpackage>
+
+    <subpackage name="identifiers">
+        <allow pkg="io\.appmetrica\.analytics\.identifiers\.impl(\..+)?" regex="true"/>
+    </subpackage>
+
+    <subpackage name="location">
+        <allow pkg="io\.appmetrica\.analytics\.location\.impl(\..+)?" regex="true"/>
+    </subpackage>
+
+    <subpackage name="locationapi">
+        <allow pkg="io\.appmetrica\.analytics\.locationapi\.impl(\..+)?" regex="true"/>
+    </subpackage>
+
+    <subpackage name="logger">
+        <subpackage name="appmetrica">
+            <allow pkg="io\.appmetrica\.analytics\.logger\.appmetrica\.impl(\..+)?" regex="true"/>
+        </subpackage>
+    </subpackage>
+
+    <subpackage name="modulesapi">
+        <allow pkg="io\.appmetrica\.analytics\.modulesapi\.impl(\..+)?" regex="true"/>
+    </subpackage>
+
+    <subpackage name="ndkcrashes">
+        <allow pkg="io\.appmetrica\.analytics\.ndkcrashes\.impl(\..+)?" regex="true"/>
+    </subpackage>
+
+    <subpackage name="ndkcrashesapi">
+        <allow pkg="io\.appmetrica\.analytics\.ndkcrashesapi\.impl(\..+)?" regex="true"/>
+    </subpackage>
+
+    <subpackage name="network">
+        <allow pkg="io\.appmetrica\.analytics\.network\.impl(\..+)?" regex="true"/>
+    </subpackage>
+
+    <subpackage name="networkapi">
+        <allow pkg="io\.appmetrica\.analytics\.networkapi\.impl(\..+)?" regex="true"/>
+    </subpackage>
+
+    <subpackage name="networklegacy">
+        <allow pkg="io\.appmetrica\.analytics\.networklegacy\.impl(\..+)?" regex="true"/>
+    </subpackage>
+
+    <subpackage name="networkokhttp">
+        <allow pkg="io\.appmetrica\.analytics\.networkokhttp\.impl(\..+)?" regex="true"/>
+    </subpackage>
+
+    <subpackage name="networktasks">
+        <allow pkg="io\.appmetrica\.analytics\.networktasks\.impl(\..+)?" regex="true"/>
+    </subpackage>
+
+    <subpackage name="remotepermissions">
+        <allow pkg="io\.appmetrica\.analytics\.remotepermissions\.impl(\..+)?" regex="true"/>
+    </subpackage>
+
+    <subpackage name="reporterextension">
+        <allow pkg="io\.appmetrica\.analytics\.reporterextension\.impl(\..+)?" regex="true"/>
+    </subpackage>
+
+    <subpackage name="screenshot">
+        <allow pkg="io\.appmetrica\.analytics\.screenshot\.impl(\..+)?" regex="true"/>
+    </subpackage>
+
 </import-control>

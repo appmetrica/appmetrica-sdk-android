@@ -7,7 +7,7 @@ import io.appmetrica.analytics.screenshot.impl.config.remote.model.ServiceCaptor
 import io.appmetrica.analytics.testutils.CommonTest
 import org.junit.Test
 
-class ServiceCaptorConfigProtoConverterTest : CommonTest() {
+internal class ServiceCaptorConfigProtoConverterTest : CommonTest() {
 
     private val converter = ServiceCaptorConfigProtoConverter()
 

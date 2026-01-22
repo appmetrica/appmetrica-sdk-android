@@ -2,7 +2,7 @@ package io.appmetrica.analytics.billing.impl.config.service.model
 
 import io.appmetrica.analytics.billing.internal.config.BillingConfig
 
-class ServiceSideBillingConfig(
+internal class ServiceSideBillingConfig(
     val sendFrequencySeconds: Int,
     val firstCollectingInappMaxAgeSeconds: Int,
 ) {

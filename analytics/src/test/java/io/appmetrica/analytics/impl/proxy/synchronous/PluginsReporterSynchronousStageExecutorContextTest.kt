@@ -7,7 +7,7 @@ import org.junit.Test
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 
-class PluginsReporterSynchronousStageExecutorContextTest : CommonTest() {
+internal class PluginsReporterSynchronousStageExecutorContextTest : CommonTest() {
 
     private val applicationContext: Context = mock()
     private val context: Context = mock {

@@ -19,7 +19,7 @@ import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class NetworkTaskRunnableTaskLifecycleTest : CommonTest() {
+internal class NetworkTaskRunnableTaskLifecycleTest : CommonTest() {
 
     private val retryPolicyConfig = mock<RetryPolicyConfig>()
     private val performingStrategy = mock<NetworkTaskPerformingStrategy>()

@@ -7,7 +7,7 @@ import io.appmetrica.analytics.screenshot.impl.config.remote.model.ApiCaptorConf
 import io.appmetrica.analytics.testutils.CommonTest
 import org.junit.Test
 
-class ApiCaptorConfigProtoConverterTest : CommonTest() {
+internal class ApiCaptorConfigProtoConverterTest : CommonTest() {
 
     private val converter = ApiCaptorConfigProtoConverter()
 

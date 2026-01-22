@@ -13,7 +13,7 @@ import io.appmetrica.analytics.coreapi.internal.servicecomponents.applicationsta
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import io.appmetrica.analytics.modulesapi.internal.service.ServiceContext
 
-class BillingMonitorWrapper(
+internal class BillingMonitorWrapper(
     private val serviceContext: ServiceContext,
     private var config: ServiceSideRemoteBillingConfig?
 ) : ServiceModuleReporterComponentLifecycleListener {

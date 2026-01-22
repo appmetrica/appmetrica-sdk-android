@@ -9,7 +9,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-class ClientComponentsInitializerProviderTest : CommonTest() {
+internal class ClientComponentsInitializerProviderTest : CommonTest() {
 
     @get:Rule
     val sdkUtilsMockedRule = MockedStaticRule(SdkUtils::class.java)

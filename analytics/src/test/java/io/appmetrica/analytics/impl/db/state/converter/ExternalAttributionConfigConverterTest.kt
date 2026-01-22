@@ -7,7 +7,7 @@ import io.appmetrica.analytics.impl.startup.ExternalAttributionConfig
 import io.appmetrica.analytics.testutils.CommonTest
 import org.junit.Test
 
-class ExternalAttributionConfigConverterTest : CommonTest() {
+internal class ExternalAttributionConfigConverterTest : CommonTest() {
 
     private val collectingInterval: Long = 444333
     private var converter = ExternalAttributionConfigConverter()

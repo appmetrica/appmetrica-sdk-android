@@ -13,7 +13,7 @@ import org.robolectric.annotation.Config
 
 @RunWith(ParameterizedRobolectricTestRunner::class)
 @Config(sdk = [Build.VERSION_CODES.Q])
-class SimInfoHelperForQTest(
+internal class SimInfoHelperForQTest(
     private val inputValue: String?,
     private val expectedValue: Int?
 ) : CommonTest() {

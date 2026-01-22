@@ -28,7 +28,7 @@ import org.robolectric.RobolectricTestRunner
 import java.util.concurrent.TimeUnit
 
 @RunWith(RobolectricTestRunner::class)
-class ReportKotlinVersionTaskTest : CommonTest() {
+internal class ReportKotlinVersionTaskTest : CommonTest() {
 
     private val currentTimeMillis = 2321432L
     private val longAgoSendTime = 100500L

@@ -13,7 +13,7 @@ import org.mockito.kotlin.mock
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class ModuleRemoteConfigControllerTest : CommonTest() {
+internal class ModuleRemoteConfigControllerTest : CommonTest() {
 
     private val model = Object()
     private val proto = ByteArray(10)

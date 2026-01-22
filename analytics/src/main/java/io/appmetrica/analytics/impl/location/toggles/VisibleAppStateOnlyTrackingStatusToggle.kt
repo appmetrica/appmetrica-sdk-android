@@ -5,7 +5,7 @@ import io.appmetrica.analytics.coreapi.internal.servicecomponents.applicationsta
 import io.appmetrica.analytics.coreutils.internal.toggle.SimpleThreadSafeToggle
 import io.appmetrica.analytics.impl.GlobalServiceLocator
 
-class VisibleAppStateOnlyTrackingStatusToggle :
+internal class VisibleAppStateOnlyTrackingStatusToggle :
     SimpleThreadSafeToggle(
         false,
         "[VisibleAppStateOnlyTrackingStatusToggle]"

@@ -6,7 +6,7 @@ import io.appmetrica.analytics.impl.component.ComponentUnit
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import org.json.JSONObject
 
-class ExternalAttributionHelper(
+internal class ExternalAttributionHelper(
     private val component: ComponentUnit,
     private val timeProvider: TimeProvider
 ) {

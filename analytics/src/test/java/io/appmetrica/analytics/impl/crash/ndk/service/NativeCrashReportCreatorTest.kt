@@ -17,7 +17,7 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 
-class NativeCrashReportCreatorTest : CommonTest() {
+internal class NativeCrashReportCreatorTest : CommonTest() {
 
     private val errorEnvironment = "Error environment"
     private val apiKey = "Api key"

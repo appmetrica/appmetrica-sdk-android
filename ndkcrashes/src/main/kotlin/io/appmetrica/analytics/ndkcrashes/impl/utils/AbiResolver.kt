@@ -2,7 +2,7 @@ package io.appmetrica.analytics.ndkcrashes.impl.utils
 
 import android.os.Build
 
-open class AbiResolver(private val supportedAbi: Set<String>) {
+internal open class AbiResolver(private val supportedAbi: Set<String>) {
     fun getAbi(): String? {
         return lookupAbi(Build.SUPPORTED_64_BIT_ABIS) ?: lookupAbi(Build.SUPPORTED_32_BIT_ABIS)
     }

@@ -18,7 +18,7 @@ import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class RuntimePermissionsRetrieverTest : CommonTest() {
+internal class RuntimePermissionsRetrieverTest : CommonTest() {
 
     private lateinit var context: Context
 

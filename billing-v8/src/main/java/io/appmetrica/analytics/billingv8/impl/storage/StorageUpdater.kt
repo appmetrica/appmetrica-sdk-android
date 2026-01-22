@@ -8,7 +8,7 @@ import io.appmetrica.analytics.billingv8.impl.Constants.MODULE_TAG
 import io.appmetrica.analytics.coreutils.internal.time.SystemTimeProvider
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
-object StorageUpdater {
+internal object StorageUpdater {
 
     @WorkerThread
     fun updateStorage(

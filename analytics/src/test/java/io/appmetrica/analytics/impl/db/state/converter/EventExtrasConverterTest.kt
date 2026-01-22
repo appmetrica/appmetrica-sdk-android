@@ -9,7 +9,7 @@ import org.junit.Before
 import org.junit.Test
 import kotlin.random.Random
 
-class EventExtrasConverterTest : CommonTest() {
+internal class EventExtrasConverterTest : CommonTest() {
 
     private val random = Random(100)
     private lateinit var eventExtrasConverter: EventExtrasConverter

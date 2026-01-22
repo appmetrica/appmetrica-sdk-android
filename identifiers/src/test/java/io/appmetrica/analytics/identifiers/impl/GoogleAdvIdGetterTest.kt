@@ -17,7 +17,7 @@ import org.mockito.kotlin.stubbing
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class GoogleAdvIdGetterTest : CommonTest() {
+internal class GoogleAdvIdGetterTest : CommonTest() {
 
     @get:Rule
     internal val staticMock = MockedStaticRule(AdvertisingIdClient::class.java)

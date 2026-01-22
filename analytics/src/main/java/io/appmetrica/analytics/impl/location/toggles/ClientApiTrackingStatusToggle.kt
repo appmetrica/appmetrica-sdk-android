@@ -5,7 +5,7 @@ import io.appmetrica.analytics.impl.db.preferences.PreferencesServiceDbStorage
 import io.appmetrica.analytics.impl.location.ClientTrackingStatusController
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
-class ClientApiTrackingStatusToggle(
+internal class ClientApiTrackingStatusToggle(
     private val storage: PreferencesServiceDbStorage
 ) : SimpleThreadSafeToggle(
     initialState = storage.isLocationTrackingEnabled,

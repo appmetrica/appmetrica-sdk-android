@@ -13,7 +13,7 @@ import org.mockito.kotlin.eq
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class SdkUtilsTest : CommonTest() {
+internal class SdkUtilsTest : CommonTest() {
 
     @get:Rule
     val logRule = LogRule()

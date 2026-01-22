@@ -11,7 +11,7 @@ import org.junit.Test
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 
-class LibraryAdapterSynchronousStageExecutorContextTest : CommonTest() {
+internal class LibraryAdapterSynchronousStageExecutorContextTest : CommonTest() {
 
     private val context: Context = mock()
 

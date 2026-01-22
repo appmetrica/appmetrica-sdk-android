@@ -10,7 +10,7 @@ import org.mockito.kotlin.inOrder
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verifyNoInteractions
 
-class LibraryAdapterSynchronousStageExecutorTest : CommonTest() {
+internal class LibraryAdapterSynchronousStageExecutorTest : CommonTest() {
 
     private val context: Context = mock()
 

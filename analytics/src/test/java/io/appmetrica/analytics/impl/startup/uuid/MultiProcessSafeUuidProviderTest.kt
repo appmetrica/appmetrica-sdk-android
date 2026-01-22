@@ -28,7 +28,7 @@ import org.robolectric.RobolectricTestRunner
 import java.util.UUID
 
 @RunWith(RobolectricTestRunner::class)
-class MultiProcessSafeUuidProviderTest : CommonTest() {
+internal class MultiProcessSafeUuidProviderTest : CommonTest() {
 
     @get:Rule
     val exclusiveMultiProcessFileLockMockedConstructionRule = constructionRule<ExclusiveMultiProcessFileLock>()

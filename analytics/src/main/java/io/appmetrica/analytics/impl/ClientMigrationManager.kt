@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl
 import android.util.SparseArray
 import io.appmetrica.analytics.impl.db.preferences.PreferencesClientDbStorage
 
-class ClientMigrationManager(
+internal class ClientMigrationManager(
     private val clientStorage: PreferencesClientDbStorage
 ) : MigrationManager() {
 

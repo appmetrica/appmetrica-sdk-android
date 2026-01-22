@@ -6,12 +6,18 @@ public final class io.appmetrica.analytics.remotepermissions.BuildConfig {
     public <init>()
 }
 
-public final class io.appmetrica.analytics.remotepermissions.internal.RemotePermissionsModuleEntryPoint extends io.appmetrica.analytics.modulesapi.internal.service.ModuleServiceEntryPoint<OBFUSCATED[io.appmetrica.analytics.remotepermissions.impl.FeatureConfig]> implementation io.appmetrica.analytics.modulesapi.internal.common.AskForPermissionStrategyModuleProvider, io.appmetrica.analytics.modulesapi.internal.service.RemoteConfigUpdateListener<OBFUSCATED[io.appmetrica.analytics.remotepermissions.impl.FeatureConfig]> {
+public final class io.appmetrica.analytics.remotepermissions.internal.RemotePermissionsModuleEntryPoint extends io.appmetrica.analytics.modulesapi.internal.service.ModuleServiceEntryPoint<io.appmetrica.analytics.remotepermissions.internal.config.FeatureConfig> implementation io.appmetrica.analytics.modulesapi.internal.common.AskForPermissionStrategyModuleProvider, io.appmetrica.analytics.modulesapi.internal.service.RemoteConfigUpdateListener<io.appmetrica.analytics.remotepermissions.internal.config.FeatureConfig> {
     public <init>()
     public [NonNull] io.appmetrica.analytics.coreapi.internal.permission.PermissionStrategy getAskForPermissionStrategy()
     public [NonNull] String getIdentifier()
-    public [NonNull] io.appmetrica.analytics.modulesapi.internal.service.RemoteConfigExtensionConfiguration<OBFUSCATED[io.appmetrica.analytics.remotepermissions.impl.FeatureConfig]> getRemoteConfigExtensionConfiguration()
-    public void initServiceSide([NonNull] io.appmetrica.analytics.modulesapi.internal.service.ServiceContext, [NonNull] io.appmetrica.analytics.modulesapi.internal.service.ModuleRemoteConfig<OBFUSCATED[io.appmetrica.analytics.remotepermissions.impl.FeatureConfig]>)
-    public void onRemoteConfigUpdated([NonNull] io.appmetrica.analytics.modulesapi.internal.service.ModuleRemoteConfig<OBFUSCATED[io.appmetrica.analytics.remotepermissions.impl.FeatureConfig]>)
+    public [NonNull] io.appmetrica.analytics.modulesapi.internal.service.RemoteConfigExtensionConfiguration<io.appmetrica.analytics.remotepermissions.internal.config.FeatureConfig> getRemoteConfigExtensionConfiguration()
+    public void initServiceSide([NonNull] io.appmetrica.analytics.modulesapi.internal.service.ServiceContext, [NonNull] io.appmetrica.analytics.modulesapi.internal.service.ModuleRemoteConfig<io.appmetrica.analytics.remotepermissions.internal.config.FeatureConfig>)
+    public void onRemoteConfigUpdated([NonNull] io.appmetrica.analytics.modulesapi.internal.service.ModuleRemoteConfig<io.appmetrica.analytics.remotepermissions.internal.config.FeatureConfig>)
+}
+
+public final class io.appmetrica.analytics.remotepermissions.internal.config.FeatureConfig {
+    public <init>([NonNull] java.util.Set<String>)
+    public final [NonNull] java.util.Set<String> getPermittedPermissions()
+    public [NonNull] String toString()
 }
 

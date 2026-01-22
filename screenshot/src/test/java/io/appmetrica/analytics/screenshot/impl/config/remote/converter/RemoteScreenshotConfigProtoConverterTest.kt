@@ -4,13 +4,13 @@ import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
 import io.appmetrica.analytics.assertions.ProtoObjectPropertyAssertions
 import io.appmetrica.analytics.screenshot.impl.RemoteScreenshotConfigProto
 import io.appmetrica.analytics.screenshot.impl.ScreenshotConfigProto
-import io.appmetrica.analytics.screenshot.impl.config.remote.model.RemoteScreenshotConfig
 import io.appmetrica.analytics.screenshot.impl.config.remote.model.ScreenshotConfig
+import io.appmetrica.analytics.screenshot.internal.config.RemoteScreenshotConfig
 import io.appmetrica.analytics.testutils.CommonTest
 import org.junit.Test
 import org.mockito.kotlin.mock
 
-class RemoteScreenshotConfigProtoConverterTest : CommonTest() {
+internal class RemoteScreenshotConfigProtoConverterTest : CommonTest() {
 
     private val screenshotConfig: ScreenshotConfig = mock()
     private val screenshotConfigProto: ScreenshotConfigProto = mock()

@@ -13,7 +13,9 @@ import io.appmetrica.analytics.impl.Utils
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import org.json.JSONObject
 
-class PreloadInfoFromSatelliteProvider(private val context: Context) : SatelliteDataProvider<PreloadInfoState?> {
+internal class PreloadInfoFromSatelliteProvider(
+    private val context: Context
+) : SatelliteDataProvider<PreloadInfoState?> {
     private val tag = "[PreloadInfoFromSatelliteProvider]"
 
     private val uri = "content://$authority/preload_info"

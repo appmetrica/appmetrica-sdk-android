@@ -11,7 +11,7 @@ import org.junit.Test
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 
-class ScreenshotConfigJsonParserTest : CommonTest() {
+internal class ScreenshotConfigJsonParserTest : CommonTest() {
 
     private val blockJson = JSONObject()
         .put("block", "block")

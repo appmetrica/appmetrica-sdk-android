@@ -4,7 +4,7 @@ import android.content.res.Configuration
 import android.os.Build
 import io.appmetrica.analytics.coreutils.internal.AndroidUtils
 
-class LocaleExtractor {
+internal class LocaleExtractor {
 
     fun extractLocales(configuration: Configuration): List<String> =
         if (AndroidUtils.isApiAchieved(Build.VERSION_CODES.N)) {

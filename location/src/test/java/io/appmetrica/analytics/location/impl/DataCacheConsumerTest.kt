@@ -11,7 +11,7 @@ import org.mockito.kotlin.verifyNoMoreInteractions
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class DataCacheConsumerTest : CommonTest() {
+internal class DataCacheConsumerTest : CommonTest() {
 
     private val locationCache = mock<LocationDataCache>()
     private val location = mock<Location>()

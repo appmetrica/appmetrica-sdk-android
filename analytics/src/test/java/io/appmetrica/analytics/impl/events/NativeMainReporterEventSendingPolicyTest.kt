@@ -4,7 +4,7 @@ import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 
-class NativeMainReporterEventSendingPolicyTest : CommonTest() {
+internal class NativeMainReporterEventSendingPolicyTest : CommonTest() {
 
     private val policy: NativeMainReporterEventSendingPolicy by setUp { NativeMainReporterEventSendingPolicy() }
 

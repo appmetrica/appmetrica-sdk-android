@@ -24,7 +24,7 @@ import io.appmetrica.analytics.impl.utils.validation.ThrowIfFailedValidator
 import io.appmetrica.analytics.impl.utils.validation.api.ApiKeyValidator
 import io.appmetrica.analytics.profile.UserProfile
 
-class Barrier(
+internal class Barrier(
     provider: AppMetricaFacadeProvider
 ) {
 

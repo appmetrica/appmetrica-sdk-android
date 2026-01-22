@@ -11,7 +11,7 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class AutoInappCollectingInfoConverterTest : CommonTest() {
+internal class AutoInappCollectingInfoConverterTest : CommonTest() {
 
     private val billingInfoList = listOf(
         BillingInfo(ProductType.INAPP, "sku", "purchaseToken", 41, 42)

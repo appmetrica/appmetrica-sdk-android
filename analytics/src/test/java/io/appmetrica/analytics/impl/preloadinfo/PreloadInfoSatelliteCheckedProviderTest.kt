@@ -9,7 +9,7 @@ import org.mockito.kotlin.inOrder
 import org.mockito.kotlin.mock
 import kotlin.random.Random
 
-class PreloadInfoSatelliteCheckedProviderTest : CommonTest() {
+internal class PreloadInfoSatelliteCheckedProviderTest : CommonTest() {
 
     private val checked = Random.nextBoolean()
 

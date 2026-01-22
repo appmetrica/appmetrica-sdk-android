@@ -14,7 +14,7 @@ import io.appmetrica.analytics.testutils.CommonTest
 import org.junit.Test
 import org.mockito.kotlin.mock
 
-class ScreenshotConfigProtoConverterTest : CommonTest() {
+internal class ScreenshotConfigProtoConverterTest : CommonTest() {
 
     private val apiCaptorConfig: ApiCaptorConfig = mock()
     private val apiCaptorConfigProto: ApiCaptorConfigProto = mock()

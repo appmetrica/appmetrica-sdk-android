@@ -21,7 +21,7 @@ import java.util.Random
 import java.util.UUID
 
 @RunWith(RobolectricTestRunner::class)
-class AppMetricaConfigTest : CommonTest() {
+internal class AppMetricaConfigTest : CommonTest() {
 
     private val apiKey = UUID.randomUUID().toString()
     private val errorEnvKeyFirst = "key1"

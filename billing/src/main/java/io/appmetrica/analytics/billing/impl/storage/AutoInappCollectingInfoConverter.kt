@@ -3,7 +3,7 @@ package io.appmetrica.analytics.billing.impl.storage
 import io.appmetrica.analytics.billing.impl.protobuf.client.AutoInappCollectingInfoProto
 import io.appmetrica.analytics.coreapi.internal.data.ProtobufConverter
 
-class AutoInappCollectingInfoConverter(
+internal class AutoInappCollectingInfoConverter(
     private val billingInfoConverter: BillingInfoConverter = BillingInfoConverter()
 ) : ProtobufConverter<AutoInappCollectingInfo, AutoInappCollectingInfoProto.AutoInappCollectingInfo> {
 

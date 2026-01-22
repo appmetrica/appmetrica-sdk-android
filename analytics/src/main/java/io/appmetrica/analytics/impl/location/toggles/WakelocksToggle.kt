@@ -5,7 +5,7 @@ import io.appmetrica.analytics.impl.location.LocationSubscribers
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import java.util.WeakHashMap
 
-class WakelocksToggle :
+internal class WakelocksToggle :
     SimpleThreadSafeToggle(
         initialState = false,
         tag = "[WakelocksToggle]"

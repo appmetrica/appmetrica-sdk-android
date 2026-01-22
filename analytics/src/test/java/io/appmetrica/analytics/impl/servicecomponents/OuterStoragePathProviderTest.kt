@@ -16,7 +16,7 @@ import org.robolectric.RuntimeEnvironment
 import java.io.File
 
 @RunWith(RobolectricTestRunner::class)
-class OuterStoragePathProviderTest : CommonTest() {
+internal class OuterStoragePathProviderTest : CommonTest() {
 
     private val dataDir = RuntimeEnvironment.getApplication().dataDir
     private val packageName = "io.appmetrica.analytics"

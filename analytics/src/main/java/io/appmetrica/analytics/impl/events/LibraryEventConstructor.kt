@@ -8,7 +8,7 @@ import io.appmetrica.analytics.impl.adrevenue.SupportedAdNetworksPayloadEnricher
 import io.appmetrica.analytics.impl.adrevenue.YandexSourcePayloadEnricher
 import io.appmetrica.analytics.impl.protobuf.backend.EventProto
 
-class LibraryEventConstructor {
+internal class LibraryEventConstructor {
 
     private val systemEventName = "appmetrica_system_event_42"
     private val nullPlaceholder = "null"

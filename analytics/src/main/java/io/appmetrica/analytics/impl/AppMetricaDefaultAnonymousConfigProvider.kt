@@ -5,7 +5,7 @@ import io.appmetrica.analytics.AppMetricaLibraryAdapterConfig
 import io.appmetrica.analytics.impl.utils.process.CurrentProcessDetector
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
-class AppMetricaDefaultAnonymousConfigProvider {
+internal class AppMetricaDefaultAnonymousConfigProvider {
 
     private val tag = "[AppMetricaDefaultAnonymousConfigProvider]"
 

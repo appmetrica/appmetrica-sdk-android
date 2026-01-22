@@ -21,7 +21,7 @@ import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class EventFromDbModelTest : CommonTest() {
+internal class EventFromDbModelTest : CommonTest() {
 
     private val type = InternalEvents.EVENT_TYPE_REGULAR
     private val customType = 41

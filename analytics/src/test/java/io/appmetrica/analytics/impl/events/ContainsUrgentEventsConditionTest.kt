@@ -8,7 +8,7 @@ import org.junit.Test
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 
-class ContainsUrgentEventsConditionTest : CommonTest() {
+internal class ContainsUrgentEventsConditionTest : CommonTest() {
 
     private val urgentEvents: Set<Int> = setOf(
         InternalEvents.EVENT_CLIENT_EXTERNAL_ATTRIBUTION.typeId,

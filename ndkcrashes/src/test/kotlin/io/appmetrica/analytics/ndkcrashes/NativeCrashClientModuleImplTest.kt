@@ -28,7 +28,7 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
-class NativeCrashClientModuleImplTest : CommonTest() {
+internal class NativeCrashClientModuleImplTest : CommonTest() {
     companion object {
         private const val HANDLER_PATH = "handlerPath"
         private const val NATIVE_CRASH_DIR = "nativeCrashDir"

@@ -10,7 +10,7 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import java.util.UUID
 
-class ModuleEventHandlersHolderTest : CommonTest() {
+internal class ModuleEventHandlersHolderTest : CommonTest() {
 
     private val apiKey = UUID.randomUUID().toString()
     private val firstIdentifier = "Identifier #1"

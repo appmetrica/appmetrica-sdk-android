@@ -11,7 +11,7 @@ import org.junit.Test
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 
-class StringSetUpdatePatcherTest : CommonTest() {
+internal class StringSetUpdatePatcherTest : CommonTest() {
 
     private val keyPrefix = "some_key_prefix"
     private val valuesCountLimit = 3

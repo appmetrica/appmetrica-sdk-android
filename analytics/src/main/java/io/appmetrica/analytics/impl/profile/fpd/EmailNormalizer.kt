@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.profile.fpd
 
 // see https://nda.ya.ru/t/iN7J7tXE7Mpbnu and https://nda.ya.ru/t/omArXm6n7NDTjp
-class EmailNormalizer : AttributeValueNormalizer {
+internal class EmailNormalizer : AttributeValueNormalizer {
 
     private val minEmailLength = 5
     private val maxEmailLength = 100

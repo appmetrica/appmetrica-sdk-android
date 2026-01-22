@@ -4,7 +4,7 @@ import android.os.Bundle
 import io.appmetrica.analytics.coreapi.internal.identifiers.SdkIdentifiers
 import io.appmetrica.analytics.modulesapi.internal.client.ServiceConfigExtensionConfiguration
 
-class ClientModuleServiceConfigModelFactory {
+internal class ClientModuleServiceConfigModelFactory {
 
     fun <T : Any> createClientModuleServiceConfigModel(
         bundle: Bundle,

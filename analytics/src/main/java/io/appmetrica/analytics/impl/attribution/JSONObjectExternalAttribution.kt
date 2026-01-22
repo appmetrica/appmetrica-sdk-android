@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.attribution
 import io.appmetrica.analytics.impl.protobuf.backend.ExternalAttribution.ClientExternalAttribution
 import org.json.JSONObject
 
-class JSONObjectExternalAttribution(
+internal class JSONObjectExternalAttribution(
     provider: ExternalAttributionType,
     value: JSONObject
 ) : BaseExternalAttribution(

@@ -5,7 +5,7 @@ import io.appmetrica.analytics.impl.db.state.factory.StorageFactory
 import io.appmetrica.analytics.impl.startup.StartupStateModel
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
-class UuidFromStartupStateImporter : IOuterSourceUuidImporter {
+internal class UuidFromStartupStateImporter : IOuterSourceUuidImporter {
 
     private val tag = "[UuidFromStartupStateImporter]"
 

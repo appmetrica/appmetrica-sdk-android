@@ -7,7 +7,7 @@ import org.junit.runner.RunWith
 import org.robolectric.ParameterizedRobolectricTestRunner
 
 @RunWith(ParameterizedRobolectricTestRunner::class)
-class DataSendingRestrictionControllerIsRestrictedForMainReporterTest(
+internal class DataSendingRestrictionControllerIsRestrictedForMainReporterTest(
     @Suppress("unused") private val description: String,
     private val expected: Boolean,
     private val configure: (DataSendingRestrictionControllerImpl) -> Unit

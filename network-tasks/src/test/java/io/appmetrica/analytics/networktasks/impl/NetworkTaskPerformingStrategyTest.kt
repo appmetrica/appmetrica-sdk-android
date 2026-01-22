@@ -31,7 +31,7 @@ import java.util.AbstractMap
 import javax.net.ssl.SSLSocketFactory
 
 @RunWith(RobolectricTestRunner::class)
-class NetworkTaskPerformingStrategyTest : CommonTest() {
+internal class NetworkTaskPerformingStrategyTest : CommonTest() {
 
     private val url = "https://ya.ru"
     private val userAgent = "custom user agent"

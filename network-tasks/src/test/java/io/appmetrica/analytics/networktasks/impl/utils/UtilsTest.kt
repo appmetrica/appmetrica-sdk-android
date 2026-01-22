@@ -8,7 +8,7 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class UtilsTest : CommonTest() {
+internal class UtilsTest : CommonTest() {
 
     @Test
     fun isBadRequest() {

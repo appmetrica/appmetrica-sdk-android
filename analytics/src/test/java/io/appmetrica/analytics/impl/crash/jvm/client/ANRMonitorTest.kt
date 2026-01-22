@@ -10,7 +10,7 @@ import org.robolectric.RobolectricTestRunner
 import java.util.concurrent.atomic.AtomicInteger
 
 @RunWith(RobolectricTestRunner::class)
-class ANRMonitorTest : CommonTest() {
+internal class ANRMonitorTest : CommonTest() {
 
     private val defaultListener = mock<ANRMonitor.Listener>()
 

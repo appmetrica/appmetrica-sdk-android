@@ -9,7 +9,7 @@ import io.appmetrica.analytics.impl.component.clients.ClientRepository
 import io.appmetrica.analytics.impl.crash.jvm.service.CrashEventConsumer
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
-class ReportConsumer(
+internal class ReportConsumer(
     private val context: Context,
     private val clientRepository: ClientRepository
 ) : CrashEventConsumer {

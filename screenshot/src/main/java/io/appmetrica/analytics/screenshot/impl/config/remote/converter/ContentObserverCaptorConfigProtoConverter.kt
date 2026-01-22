@@ -4,7 +4,7 @@ import io.appmetrica.analytics.coreapi.internal.data.Converter
 import io.appmetrica.analytics.screenshot.impl.ContentObserverCaptorConfigProto
 import io.appmetrica.analytics.screenshot.impl.config.remote.model.ContentObserverCaptorConfig
 
-class ContentObserverCaptorConfigProtoConverter :
+internal class ContentObserverCaptorConfigProtoConverter :
     Converter<ContentObserverCaptorConfig, ContentObserverCaptorConfigProto> {
 
     override fun fromModel(value: ContentObserverCaptorConfig): ContentObserverCaptorConfigProto {

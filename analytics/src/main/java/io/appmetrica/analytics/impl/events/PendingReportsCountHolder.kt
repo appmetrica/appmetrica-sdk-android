@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.events
 import io.appmetrica.analytics.impl.db.DatabaseHelper
 import java.util.concurrent.atomic.AtomicLong
 
-class PendingReportsCountHolder(
+internal class PendingReportsCountHolder(
     private val databaseHelper: DatabaseHelper
 ) : EventListener, PendingReportsCountProvider {
 

@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.annotation.WorkerThread
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
-class ReportProxy {
+internal class ReportProxy {
 
     private val TAG = "[ReportProxy]"
 

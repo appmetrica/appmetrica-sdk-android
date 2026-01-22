@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.utils
 
 import io.appmetrica.analytics.plugins.PluginErrorDetails
 
-object PluginErrorDetailsExtension {
+internal object PluginErrorDetailsExtension {
 
     @JvmStatic
     fun PluginErrorDetails.toLogString() = "PluginErrorDetails{" +

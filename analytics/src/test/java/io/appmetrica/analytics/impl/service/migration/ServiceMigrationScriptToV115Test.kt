@@ -18,7 +18,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 
-class ServiceMigrationScriptToV115Test : CommonTest() {
+internal class ServiceMigrationScriptToV115Test : CommonTest() {
 
     private val startupStateModelCaptor = argumentCaptor<StartupStateModel>()
 

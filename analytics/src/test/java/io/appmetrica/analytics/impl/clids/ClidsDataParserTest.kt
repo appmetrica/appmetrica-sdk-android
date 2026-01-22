@@ -16,7 +16,7 @@ import org.robolectric.ParameterizedRobolectricTestRunner
 private const val KEY_CLIDS = "clids"
 
 @RunWith(ParameterizedRobolectricTestRunner::class)
-class ClidsDataParserTest(
+internal class ClidsDataParserTest(
     private val values: ContentValues,
     private val inputMap: Map<String, String>?,
     private val validClids: Boolean,

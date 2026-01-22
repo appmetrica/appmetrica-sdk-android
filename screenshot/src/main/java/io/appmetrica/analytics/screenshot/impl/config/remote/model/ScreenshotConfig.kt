@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.screenshot.impl.config.remote.model
 
-class ScreenshotConfig(
+internal class ScreenshotConfig(
     val apiCaptorConfig: ApiCaptorConfig?,
     val serviceCaptorConfig: ServiceCaptorConfig?,
     val contentObserverCaptorConfig: ContentObserverCaptorConfig?,

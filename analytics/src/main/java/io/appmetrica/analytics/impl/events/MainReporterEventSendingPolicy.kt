@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.events
 
-interface MainReporterEventSendingPolicy {
+internal interface MainReporterEventSendingPolicy {
 
     val condition: EventCondition
 }

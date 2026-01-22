@@ -12,7 +12,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.mockito.kotlin.whenever
 
-class StartupParamItemAdapterTest : CommonTest() {
+internal class StartupParamItemAdapterTest : CommonTest() {
 
     @get:Rule
     val startupParamItemStatusAdapterMockedConstructionRule =

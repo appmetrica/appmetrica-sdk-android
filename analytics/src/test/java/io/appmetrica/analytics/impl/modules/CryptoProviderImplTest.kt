@@ -7,7 +7,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.Rule
 import org.junit.Test
 
-class CryptoProviderImplTest : CommonTest() {
+internal class CryptoProviderImplTest : CommonTest() {
 
     @get:Rule
     val aesRsaEncrypterMockedConstructionRule = constructionRule<AESRSAEncrypter>()

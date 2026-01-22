@@ -15,7 +15,7 @@ import io.appmetrica.analytics.impl.SelfProcessReporter
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger
 
-class AppMetricaServiceProxy(
+internal class AppMetricaServiceProxy(
     private val context: Context,
     private val serviceCallback: AppMetricaServiceCallback
 ) : AppMetricaServiceDelegate {

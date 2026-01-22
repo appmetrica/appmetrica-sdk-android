@@ -4,7 +4,7 @@ import android.os.Parcel
 import android.os.Parcelable
 import io.appmetrica.analytics.screenshot.impl.config.service.model.ServiceSideServiceCaptorConfig
 
-class ParcelableServiceCaptorConfig(
+internal class ParcelableServiceCaptorConfig(
     val enabled: Boolean,
     val delaySeconds: Long,
 ) : Parcelable {

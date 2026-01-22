@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.modules
 import android.content.Context
 import android.content.Intent
 
-interface ServiceWakeLockIntentProvider {
+internal interface ServiceWakeLockIntentProvider {
 
     fun getWakeLockIntent(context: Context, action: String): Intent
 }

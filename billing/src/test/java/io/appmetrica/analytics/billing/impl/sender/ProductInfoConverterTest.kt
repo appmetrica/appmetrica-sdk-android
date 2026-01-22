@@ -14,7 +14,7 @@ import org.robolectric.RobolectricTestRunner
 import java.util.function.Consumer
 
 @RunWith(RobolectricTestRunner::class)
-class ProductInfoConverterTest : CommonTest() {
+internal class ProductInfoConverterTest : CommonTest() {
 
     private val converter = ProductInfoConverter()
 

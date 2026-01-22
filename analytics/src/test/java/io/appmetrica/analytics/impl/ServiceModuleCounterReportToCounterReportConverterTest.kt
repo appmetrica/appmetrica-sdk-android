@@ -12,7 +12,7 @@ import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class ServiceModuleCounterReportToCounterReportConverterTest : CommonTest() {
+internal class ServiceModuleCounterReportToCounterReportConverterTest : CommonTest() {
 
     private val type = 12
     private val name = "some name"

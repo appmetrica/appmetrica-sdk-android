@@ -8,7 +8,7 @@ import org.junit.Test
 import org.mockito.kotlin.inOrder
 import org.mockito.kotlin.mock
 
-class ThreadUncaughtExceptionHandlerInstallerTest : CommonTest() {
+internal class ThreadUncaughtExceptionHandlerInstallerTest : CommonTest() {
 
     private val handler = mock<Thread.UncaughtExceptionHandler>()
 

@@ -6,7 +6,7 @@ import io.appmetrica.analytics.impl.EventsManager
 import io.appmetrica.analytics.impl.InternalEvents
 import io.appmetrica.analytics.impl.crash.ndk.AppMetricaNativeCrash
 
-class NativeCrashReportCreator(
+internal class NativeCrashReportCreator(
     private val crash: AppMetricaNativeCrash,
     private val eventType: InternalEvents
 ) {

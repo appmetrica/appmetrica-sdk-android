@@ -5,11 +5,11 @@ import io.appmetrica.analytics.coreutils.internal.parsing.RemoteConfigJsonUtils.
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import io.appmetrica.analytics.screenshot.impl.Constants
 import io.appmetrica.analytics.screenshot.impl.config.remote.converter.ScreenshotConfigProtoConverter
-import io.appmetrica.analytics.screenshot.impl.config.remote.model.RemoteScreenshotConfig
 import io.appmetrica.analytics.screenshot.impl.config.remote.parser.ScreenshotConfigJsonParser
+import io.appmetrica.analytics.screenshot.internal.config.RemoteScreenshotConfig
 import org.json.JSONObject
 
-class RemoteScreenshotConfigParser(
+internal class RemoteScreenshotConfigParser(
     private val converter: ScreenshotConfigProtoConverter = ScreenshotConfigProtoConverter(),
     private val parser: ScreenshotConfigJsonParser = ScreenshotConfigJsonParser(),
 ) : JsonParser<RemoteScreenshotConfig> {

@@ -2,7 +2,7 @@ package io.appmetrica.analytics.screenshot.impl.config.client.model
 
 import io.appmetrica.analytics.screenshot.impl.config.clientservice.model.ParcelableContentObserverCaptorConfig
 
-class ClientSideContentObserverCaptorConfig(
+internal class ClientSideContentObserverCaptorConfig(
     val enabled: Boolean,
     val mediaStoreColumnNames: List<String>,
     val detectWindowSeconds: Long,

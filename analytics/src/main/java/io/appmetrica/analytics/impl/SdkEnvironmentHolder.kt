@@ -15,9 +15,9 @@ import io.appmetrica.analytics.coreutils.internal.services.PackageManagerUtils
 import io.appmetrica.analytics.impl.utils.DeviceTypeProvider
 import java.util.concurrent.CopyOnWriteArrayList
 
-class SdkEnvironmentHolder(private val context: Context) : SdkEnvironmentProvider {
+internal class SdkEnvironmentHolder(private val context: Context) : SdkEnvironmentProvider {
 
-    interface Listener {
+    internal interface Listener {
         fun onSdkEnvironmentChanged()
     }
 

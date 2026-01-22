@@ -14,7 +14,7 @@ import org.mockito.kotlin.verifyNoMoreInteractions
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class NativeLibraryLoaderTest : CommonTest() {
+internal class NativeLibraryLoaderTest : CommonTest() {
     companion object {
         private const val LIB_NAME = "lib-name"
         private const val OTHER_LIB_NAME = "other-lib"

@@ -5,7 +5,7 @@ import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
 internal class AppStatusMonitor {
 
-    interface Observer {
+    internal interface Observer {
         fun onResume()
         fun onPause()
     }

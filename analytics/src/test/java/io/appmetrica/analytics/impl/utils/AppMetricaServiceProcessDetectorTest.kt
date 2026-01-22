@@ -17,7 +17,7 @@ import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class AppMetricaServiceProcessDetectorTest : CommonTest() {
+internal class AppMetricaServiceProcessDetectorTest : CommonTest() {
 
     private val mainProcess = "test.sample.com"
     private val appMetricaProcess = "test.sample.com:AppMetrica"

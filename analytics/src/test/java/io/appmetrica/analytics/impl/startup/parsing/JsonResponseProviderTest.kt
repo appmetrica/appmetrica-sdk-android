@@ -5,7 +5,7 @@ import org.json.JSONObject
 import org.junit.Test
 import org.skyscreamer.jsonassert.JSONAssert
 
-class JsonResponseProviderTest : CommonTest() {
+internal class JsonResponseProviderTest : CommonTest() {
 
     private val jsonResponseProvider = JsonResponseProvider()
 

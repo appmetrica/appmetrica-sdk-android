@@ -7,7 +7,7 @@ import io.appmetrica.analytics.impl.crash.ndk.AppMetricaNativeCrash
 import io.appmetrica.analytics.impl.crash.service.AlwaysAllowSendCrashPredicate
 import io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrashHandler
 
-class NativeCrashHandlerFactory(
+internal class NativeCrashHandlerFactory(
     private val markCrashCompleted: (String) -> Unit
 ) {
 

@@ -9,7 +9,7 @@ import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor
 import io.appmetrica.analytics.impl.referrer.common.ReferrerInfo
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
-class ReferrerFromLibraryRetriever internal constructor(
+internal class ReferrerFromLibraryRetriever internal constructor(
     context: Context,
     private val executor: ICommonExecutor
 ) : IReferrerRetriever {

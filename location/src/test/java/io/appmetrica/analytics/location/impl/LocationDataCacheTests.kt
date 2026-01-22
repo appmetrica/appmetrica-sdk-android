@@ -12,7 +12,7 @@ import org.robolectric.RobolectricTestRunner
 import java.util.concurrent.TimeUnit
 
 @RunWith(RobolectricTestRunner::class)
-class LocationDataCacheTests : DataCacheTest<Location>() {
+internal class LocationDataCacheTests : DataCacheTest<Location>() {
 
     private lateinit var location: Location
     private lateinit var defaultConfiguration: LocationDataCache.Configuration

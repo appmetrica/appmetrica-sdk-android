@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit
 import kotlin.math.abs
 import kotlin.math.sign
 
-class ReferrerValidityChecker(
+internal class ReferrerValidityChecker(
     private val context: Context,
     private val packageManager: SafePackageManager = SafePackageManager(),
     private val selfReporter: IReporterExtended = AppMetricaSelfReportFacade.getReporter()

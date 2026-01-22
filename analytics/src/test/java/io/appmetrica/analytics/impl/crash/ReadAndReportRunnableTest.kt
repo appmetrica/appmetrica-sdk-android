@@ -19,7 +19,7 @@ import org.robolectric.RobolectricTestRunner
 import java.io.File
 
 @RunWith(RobolectricTestRunner::class)
-class ReadAndReportRunnableTest : CommonTest() {
+internal class ReadAndReportRunnableTest : CommonTest() {
 
     private val crashFileName = "crash file name"
 

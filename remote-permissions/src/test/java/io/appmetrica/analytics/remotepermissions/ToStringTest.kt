@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.remotepermissions
 
-import io.appmetrica.analytics.remotepermissions.impl.FeatureConfig
+import io.appmetrica.analytics.remotepermissions.internal.config.FeatureConfig
 import io.appmetrica.analytics.testutils.BaseToStringTest
 import org.junit.runner.RunWith
 import org.robolectric.ParameterizedRobolectricTestRunner

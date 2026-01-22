@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.annotation.WorkerThread
 import io.appmetrica.analytics.impl.AppMetricaCoreReporter
 
-class AppMetricaServiceDataReporter(
+internal class AppMetricaServiceDataReporter(
     private val reporter: AppMetricaCoreReporter
 ) : ServiceDataReporter {
 

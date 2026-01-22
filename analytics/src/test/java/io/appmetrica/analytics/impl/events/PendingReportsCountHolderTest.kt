@@ -8,7 +8,7 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 
-class PendingReportsCountHolderTest : CommonTest() {
+internal class PendingReportsCountHolderTest : CommonTest() {
 
     private val initialCount = 5L
 

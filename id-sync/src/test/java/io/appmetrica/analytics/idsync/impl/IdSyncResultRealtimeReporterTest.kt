@@ -40,7 +40,7 @@ import java.util.UUID
 import javax.net.ssl.SSLSocketFactory
 
 @RunWith(RobolectricTestRunner::class)
-class IdSyncResultRealtimeReporterTest : CommonTest() {
+internal class IdSyncResultRealtimeReporterTest : CommonTest() {
 
     private val context: Context = mock()
     private val uuid = UUID.randomUUID().toString()

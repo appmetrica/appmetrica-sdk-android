@@ -1,8 +1,8 @@
 package io.appmetrica.analytics.screenshot.impl.config.client.model
 
-import io.appmetrica.analytics.screenshot.impl.config.clientservice.model.ParcelableRemoteScreenshotConfig
+import io.appmetrica.analytics.screenshot.internal.config.ParcelableRemoteScreenshotConfig
 
-class ClientSideRemoteScreenshotConfig(
+internal class ClientSideRemoteScreenshotConfig(
     val enabled: Boolean,
     val config: ClientSideScreenshotConfig?,
 ) {

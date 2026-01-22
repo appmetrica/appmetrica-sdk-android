@@ -8,7 +8,7 @@ import io.appmetrica.analytics.billinginterface.internal.ProductInfo
 import io.appmetrica.analytics.billingv6.impl.Constants.MODULE_TAG
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
-object ProductInfoCreator {
+internal object ProductInfoCreator {
 
     fun createFrom(
         purchasesHistoryRecord: PurchaseHistoryRecord,

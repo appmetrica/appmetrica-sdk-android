@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.proxy.synchronous
 
 import io.appmetrica.analytics.plugins.PluginErrorDetails
 
-class PluginsSynchronousStageExecutor {
+internal class PluginsSynchronousStageExecutor {
 
     fun reportPluginUnhandledException(
         errorDetails: PluginErrorDetails

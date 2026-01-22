@@ -6,7 +6,7 @@ import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 
-class LegacyNetworkClientTest : CommonTest() {
+internal class LegacyNetworkClientTest : CommonTest() {
 
     private val settings = NetworkClientSettings.Builder()
         .withConnectTimeout(5000)

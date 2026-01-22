@@ -5,7 +5,7 @@ import io.appmetrica.analytics.modulesapi.internal.network.NetworkClientWithCach
 import io.appmetrica.analytics.modulesapi.internal.network.SimpleNetworkApi
 import io.appmetrica.analytics.networktasks.internal.CacheControlHttpsConnectionPerformer
 
-class SimpleNetworkApiImpl : SimpleNetworkApi {
+internal class SimpleNetworkApiImpl : SimpleNetworkApi {
 
     private val cacheControlHttpsConnectionPerformer = CacheControlHttpsConnectionPerformer(
         GlobalServiceLocator.getInstance().sslSocketFactoryProvider.sslSocketFactory

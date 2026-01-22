@@ -5,7 +5,7 @@ import io.appmetrica.analytics.modulesapi.internal.client.ModuleServiceConfig
 import io.appmetrica.analytics.screenshot.impl.BundleToClientScreenshotConfigConverter
 import io.appmetrica.analytics.screenshot.impl.ScreenshotCaptorsController
 import io.appmetrica.analytics.screenshot.impl.config.client.model.ClientSideRemoteScreenshotConfig
-import io.appmetrica.analytics.screenshot.impl.config.clientservice.model.ParcelableRemoteScreenshotConfig
+import io.appmetrica.analytics.screenshot.internal.config.ParcelableRemoteScreenshotConfig
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.constructionRule
 import org.assertj.core.api.Assertions.assertThat
@@ -16,7 +16,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 
-class ScreenshotClientModuleEntryPointTest : CommonTest() {
+internal class ScreenshotClientModuleEntryPointTest : CommonTest() {
 
     private val parcelableConfig: ParcelableRemoteScreenshotConfig = mock()
     private val moduleServiceConfig: ModuleServiceConfig<ParcelableRemoteScreenshotConfig?> = mock {

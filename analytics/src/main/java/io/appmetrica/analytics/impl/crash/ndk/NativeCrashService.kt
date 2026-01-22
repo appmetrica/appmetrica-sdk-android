@@ -10,7 +10,7 @@ import io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrashServiceConfig
 import io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrashServiceModule
 import io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrashServiceModuleDummy
 
-class NativeCrashService {
+internal class NativeCrashService {
     private val tag = "[NativeCrashService]"
 
     private val serviceModule: NativeCrashServiceModule =

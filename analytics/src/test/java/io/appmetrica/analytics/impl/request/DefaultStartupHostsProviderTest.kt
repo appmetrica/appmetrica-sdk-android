@@ -16,7 +16,7 @@ import org.mockito.kotlin.stubbing
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class DefaultStartupHostsProviderTest : CommonTest() {
+internal class DefaultStartupHostsProviderTest : CommonTest() {
 
     private val resourceRetriever = mock<StringArrayResourceRetriever>()
     private val provider = DefaultStartupHostsProvider(resourceRetriever)

@@ -35,7 +35,7 @@ import java.util.UUID
 import java.util.concurrent.TimeUnit
 
 @RunWith(RobolectricTestRunner::class)
-class MainReporterEventConditionTest : CommonTest() {
+internal class MainReporterEventConditionTest : CommonTest() {
 
     private val configFromHolder: ReportRequestConfig = mock()
     private val configurationHolder: ReportComponentConfigurationHolder = mock {

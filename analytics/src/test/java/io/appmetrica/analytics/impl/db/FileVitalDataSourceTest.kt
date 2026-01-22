@@ -22,7 +22,7 @@ import org.robolectric.RuntimeEnvironment
 import java.io.File
 
 @RunWith(RobolectricTestRunner::class)
-class FileVitalDataSourceTest : CommonTest() {
+internal class FileVitalDataSourceTest : CommonTest() {
 
     private val fileName = "appmetrica_vital.dat"
 

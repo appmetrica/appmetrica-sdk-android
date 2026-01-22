@@ -4,7 +4,7 @@ import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 
-class YandexSourcePayloadEnricherTest : CommonTest() {
+internal class YandexSourcePayloadEnricherTest : CommonTest() {
 
     private val inputPayloadKey = "input payload key"
     private val inputPayloadValue = "input payload value"

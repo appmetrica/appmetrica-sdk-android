@@ -7,7 +7,7 @@ import io.appmetrica.analytics.impl.component.session.SessionType
 import io.appmetrica.analytics.impl.db.constants.Constants
 import io.appmetrica.analytics.impl.db.event.DbEventModel
 
-class DbEventModelConverter(
+internal class DbEventModelConverter(
     private val descriptionConverter: DbEventDescriptionToBytesConverter = DbEventDescriptionToBytesConverter()
 ) : Converter<DbEventModel, ContentValues> {
 

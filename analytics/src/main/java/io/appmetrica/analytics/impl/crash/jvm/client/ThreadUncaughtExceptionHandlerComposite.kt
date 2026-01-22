@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.crash.jvm.client
 
 import java.util.concurrent.CopyOnWriteArrayList
 
-class ThreadUncaughtExceptionHandlerComposite : Thread.UncaughtExceptionHandler {
+internal class ThreadUncaughtExceptionHandlerComposite : Thread.UncaughtExceptionHandler {
 
     private val handlers = CopyOnWriteArrayList<Thread.UncaughtExceptionHandler>()
 

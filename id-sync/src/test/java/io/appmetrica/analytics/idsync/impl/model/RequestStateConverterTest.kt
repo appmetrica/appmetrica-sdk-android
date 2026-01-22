@@ -7,7 +7,7 @@ import org.json.JSONObject
 import org.junit.Test
 import org.skyscreamer.jsonassert.JSONAssert
 
-class RequestStateConverterTest : CommonTest() {
+internal class RequestStateConverterTest : CommonTest() {
 
     private val requestStateKey = "request_state"
     private val typeKey = "type"

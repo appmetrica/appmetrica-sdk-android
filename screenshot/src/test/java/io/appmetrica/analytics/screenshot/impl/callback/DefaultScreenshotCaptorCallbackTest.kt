@@ -11,7 +11,7 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 
-class DefaultScreenshotCaptorCallbackTest : CommonTest() {
+internal class DefaultScreenshotCaptorCallbackTest : CommonTest() {
 
     private val captorType = "test"
 

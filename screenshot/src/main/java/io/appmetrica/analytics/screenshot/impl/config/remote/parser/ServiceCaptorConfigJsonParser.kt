@@ -6,7 +6,7 @@ import io.appmetrica.analytics.screenshot.impl.Constants
 import io.appmetrica.analytics.screenshot.impl.ServiceCaptorConfigProto
 import org.json.JSONObject
 
-class ServiceCaptorConfigJsonParser {
+internal class ServiceCaptorConfigJsonParser {
 
     fun parse(rawData: JSONObject): ServiceCaptorConfigProto? {
         val json = rawData.optJSONObject(Constants.RemoteConfig.SERVICE_CAPTOR_CONFIG)

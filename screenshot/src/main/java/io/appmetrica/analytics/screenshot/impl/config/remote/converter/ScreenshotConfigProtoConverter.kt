@@ -4,7 +4,7 @@ import io.appmetrica.analytics.coreapi.internal.data.Converter
 import io.appmetrica.analytics.screenshot.impl.ScreenshotConfigProto
 import io.appmetrica.analytics.screenshot.impl.config.remote.model.ScreenshotConfig
 
-class ScreenshotConfigProtoConverter(
+internal class ScreenshotConfigProtoConverter(
     private val apiCaptorConfigProtoConverter: ApiCaptorConfigProtoConverter = ApiCaptorConfigProtoConverter(),
     private val serviceCaptorConfigProtoConverter: ServiceCaptorConfigProtoConverter =
         ServiceCaptorConfigProtoConverter(),

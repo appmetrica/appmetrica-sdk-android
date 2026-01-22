@@ -19,7 +19,7 @@ import org.mockito.kotlin.verify
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class NetworkTaskRunnableTest : CommonTest() {
+internal class NetworkTaskRunnableTest : CommonTest() {
 
     private val retryPolicyConfig = mock<RetryPolicyConfig>()
     private val connectionBasedExecutionPolicy = mock<IExecutionPolicy> {

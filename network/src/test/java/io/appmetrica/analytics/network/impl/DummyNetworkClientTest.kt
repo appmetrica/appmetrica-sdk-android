@@ -7,7 +7,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.mockito.kotlin.mock
 
-class DummyNetworkClientTest : CommonTest() {
+internal class DummyNetworkClientTest : CommonTest() {
 
     private val settings: NetworkClientSettings = mock()
 

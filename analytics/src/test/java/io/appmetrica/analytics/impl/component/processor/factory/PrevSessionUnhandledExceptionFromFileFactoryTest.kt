@@ -10,7 +10,7 @@ import org.junit.Test
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 
-class PrevSessionUnhandledExceptionFromFileFactoryTest : CommonTest() {
+internal class PrevSessionUnhandledExceptionFromFileFactoryTest : CommonTest() {
 
     private val reportPrevSessionHandler: ReportPrevSessionEventHandler = mock()
     private val reportCrashMetaInfoHandler: ReportCrashMetaInformation = mock()

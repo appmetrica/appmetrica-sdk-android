@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.proxy.validation
 import io.appmetrica.analytics.coreutils.internal.logger.LoggerStorage
 import io.appmetrica.analytics.impl.DefaultValues
 
-class ConfigChecker(
+internal class ConfigChecker(
     apiKey: String
 ) {
 

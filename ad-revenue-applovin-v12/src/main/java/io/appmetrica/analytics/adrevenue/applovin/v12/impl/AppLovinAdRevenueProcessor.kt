@@ -7,7 +7,7 @@ import io.appmetrica.analytics.coreutils.internal.reflection.ReflectionUtils
 import io.appmetrica.analytics.modulesapi.internal.client.ClientContext
 import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdRevenueProcessor
 
-class AppLovinAdRevenueProcessor(
+internal class AppLovinAdRevenueProcessor(
     private val converter: AdRevenueConverter,
     private val clientContext: ClientContext
 ) : ModuleAdRevenueProcessor {

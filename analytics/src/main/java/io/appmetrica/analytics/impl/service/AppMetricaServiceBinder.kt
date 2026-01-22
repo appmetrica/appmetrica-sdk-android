@@ -4,7 +4,7 @@ import android.os.Bundle
 import io.appmetrica.analytics.impl.AppMetricaServiceCore
 import io.appmetrica.analytics.internal.IAppMetricaService
 
-class AppMetricaServiceBinder(
+internal class AppMetricaServiceBinder(
     private val serviceCore: AppMetricaServiceCore
 ) : IAppMetricaService.Stub() {
 

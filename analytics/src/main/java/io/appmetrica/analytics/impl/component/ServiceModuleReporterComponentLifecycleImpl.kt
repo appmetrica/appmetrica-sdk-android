@@ -5,7 +5,7 @@ import io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceModuleR
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceModuleReporterComponentLifecycleListener
 import java.util.concurrent.CopyOnWriteArrayList
 
-class ServiceModuleReporterComponentLifecycleImpl :
+internal class ServiceModuleReporterComponentLifecycleImpl :
     ServiceModuleReporterComponentLifecycle, ServiceModuleReporterComponentLifecycleListener {
 
     private val listeners = CopyOnWriteArrayList<ServiceModuleReporterComponentLifecycleListener>()

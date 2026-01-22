@@ -8,7 +8,7 @@ import io.appmetrica.analytics.impl.utils.validation.ThrowIfFailedValidator
 import io.appmetrica.analytics.plugins.PluginErrorDetails
 import io.appmetrica.analytics.plugins.StackTraceItem
 
-class PluginsBarrier(
+internal class PluginsBarrier(
     provider: AppMetricaFacadeProvider
 ) {
 

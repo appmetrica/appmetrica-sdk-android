@@ -9,7 +9,7 @@ import io.appmetrica.analytics.impl.component.CommutationDispatcherComponent
 import io.appmetrica.analytics.impl.component.clients.CommutationClientUnit
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
-class ForceStartupHandler(
+internal class ForceStartupHandler(
     component: CommutationDispatcherComponent
 ) : CommutationHandler(component) {
 

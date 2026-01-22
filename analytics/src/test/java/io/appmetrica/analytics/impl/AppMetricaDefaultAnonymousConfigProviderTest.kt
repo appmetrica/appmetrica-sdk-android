@@ -12,7 +12,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.mockito.kotlin.whenever
 
-class AppMetricaDefaultAnonymousConfigProviderTest : CommonTest() {
+internal class AppMetricaDefaultAnonymousConfigProviderTest : CommonTest() {
 
     @get:Rule
     val clientServiceLocatorRule = ClientServiceLocatorRule()

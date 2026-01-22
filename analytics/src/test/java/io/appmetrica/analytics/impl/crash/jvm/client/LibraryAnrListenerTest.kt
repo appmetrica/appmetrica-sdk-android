@@ -10,7 +10,7 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 
-class LibraryAnrListenerTest : CommonTest() {
+internal class LibraryAnrListenerTest : CommonTest() {
 
     private val stacktrace: List<StackTraceElement> = listOf(mock(), mock())
 

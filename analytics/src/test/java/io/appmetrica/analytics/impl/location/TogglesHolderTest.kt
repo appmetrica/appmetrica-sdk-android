@@ -17,7 +17,7 @@ import org.mockito.kotlin.mock
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class TogglesHolderTest : CommonTest() {
+internal class TogglesHolderTest : CommonTest() {
 
     private val appStateToggle = mock<Toggle>()
 

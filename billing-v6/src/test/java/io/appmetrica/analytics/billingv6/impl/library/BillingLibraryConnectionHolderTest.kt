@@ -10,7 +10,7 @@ import org.mockito.kotlin.mock
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class BillingLibraryConnectionHolderTest : CommonTest() {
+internal class BillingLibraryConnectionHolderTest : CommonTest() {
 
     private val billingClient: BillingClient = mock()
 

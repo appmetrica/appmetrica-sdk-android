@@ -31,7 +31,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import java.io.File
 
-class ReportCrashRunnableProviderTest : CommonTest() {
+internal class ReportCrashRunnableProviderTest : CommonTest() {
 
     private val apiKey = "api key"
     private val packageName = "packageName"

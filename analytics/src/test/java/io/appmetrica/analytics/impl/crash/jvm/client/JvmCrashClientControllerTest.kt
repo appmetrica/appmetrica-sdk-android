@@ -19,7 +19,7 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 
-class JvmCrashClientControllerTest : CommonTest() {
+internal class JvmCrashClientControllerTest : CommonTest() {
 
     private val context: Context = mock()
     private val config: AppMetricaConfig = mock()

@@ -16,7 +16,7 @@ import org.mockito.kotlin.mock
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class DefaultServiceComponentsInitializerTest : CommonTest() {
+internal class DefaultServiceComponentsInitializerTest : CommonTest() {
 
     private val context = mock<Context>()
 

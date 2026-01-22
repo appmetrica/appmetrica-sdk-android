@@ -25,7 +25,7 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
 
-class PluginReporterProxyTest : CommonTest() {
+internal class PluginReporterProxyTest : CommonTest() {
 
     private val reporter: IReporterExtended = mock()
     private val pluginReporter: IPluginReporter = mock()

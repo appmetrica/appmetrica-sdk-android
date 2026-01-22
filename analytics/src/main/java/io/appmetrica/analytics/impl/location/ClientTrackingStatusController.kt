@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.location
 
-interface ClientTrackingStatusController {
+internal interface ClientTrackingStatusController {
 
     fun updateTrackingStatus(status: Boolean)
 }

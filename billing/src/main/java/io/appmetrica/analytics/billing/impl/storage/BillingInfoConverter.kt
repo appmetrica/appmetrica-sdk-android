@@ -5,7 +5,7 @@ import io.appmetrica.analytics.billinginterface.internal.BillingInfo
 import io.appmetrica.analytics.billinginterface.internal.ProductType
 import io.appmetrica.analytics.coreapi.internal.data.ProtobufConverter
 
-class BillingInfoConverter :
+internal class BillingInfoConverter :
     ProtobufConverter<BillingInfo, AutoInappCollectingInfoProto.AutoInappCollectingInfo.BillingInfo> {
 
     override fun fromModel(value: BillingInfo): AutoInappCollectingInfoProto.AutoInappCollectingInfo.BillingInfo {

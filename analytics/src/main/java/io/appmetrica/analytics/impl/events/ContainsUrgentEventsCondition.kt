@@ -4,7 +4,7 @@ import io.appmetrica.analytics.impl.InternalEvents
 import io.appmetrica.analytics.impl.db.DatabaseHelper
 import java.util.concurrent.atomic.AtomicLong
 
-class ContainsUrgentEventsCondition(
+internal class ContainsUrgentEventsCondition(
     private val databaseHelper: DatabaseHelper
 ) : EventCondition, EventListener {
 

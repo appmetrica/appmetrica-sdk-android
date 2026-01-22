@@ -17,7 +17,7 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 
-class NativeCrashConsumerTest : CommonTest() {
+internal class NativeCrashConsumerTest : CommonTest() {
 
     private val reportConsumer: ReportConsumer = mock()
 

@@ -6,7 +6,7 @@ import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import io.appmetrica.analytics.modulesapi.internal.client.ModuleClientEntryPoint
 import io.appmetrica.analytics.modulesapi.internal.service.ModuleServiceEntryPoint
 
-class ModulesSeeker {
+internal class ModulesSeeker {
 
     private val tag = "[ModuleSeeker]"
 

@@ -11,7 +11,7 @@ import io.appmetrica.analytics.screenshot.impl.callback.ScreenshotCaptorCallback
 import io.appmetrica.analytics.screenshot.impl.config.client.model.ClientSideContentObserverCaptorConfig
 import io.appmetrica.analytics.screenshot.impl.config.client.model.ClientSideScreenshotConfig
 
-class ContentObserverScreenshotCaptor(
+internal class ContentObserverScreenshotCaptor(
     private val clientContext: ClientContext,
     private val callback: ScreenshotCaptorCallback,
 ) : ScreenshotCaptor {

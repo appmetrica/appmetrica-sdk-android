@@ -24,7 +24,7 @@ import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class AdvIdGetterControllerTest : CommonTest() {
+internal class AdvIdGetterControllerTest : CommonTest() {
 
     private val startupState: StartupState =
         StartupState.Builder(CollectingFlags.CollectingFlagsBuilder().build()).build()

@@ -7,7 +7,7 @@ import io.appmetrica.analytics.impl.ReportToSend
 import io.appmetrica.analytics.impl.ShouldDisconnectFromServiceChecker
 import io.appmetrica.analytics.impl.client.ProcessConfiguration
 
-class ServiceCallableFactory(
+internal class ServiceCallableFactory(
     private val context: Context,
     private val serviceConnector: AppMetricaConnector
 ) {

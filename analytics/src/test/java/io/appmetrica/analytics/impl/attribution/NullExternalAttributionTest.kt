@@ -12,7 +12,7 @@ import org.mockito.kotlin.any
 import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.whenever
 
-class NullExternalAttributionTest : CommonTest() {
+internal class NullExternalAttributionTest : CommonTest() {
 
     private val provider = ExternalAttributionType.AIRBRIDGE
 

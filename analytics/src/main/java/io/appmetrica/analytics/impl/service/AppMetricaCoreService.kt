@@ -6,6 +6,7 @@ import android.content.res.Configuration
 import android.os.IBinder
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
+/* ktlint-disable appmetrica-rules:internal-modifier-in-impl-package */
 open class AppMetricaCoreService : Service() {
 
     private val tag = "[AppMetricaCoreService]"

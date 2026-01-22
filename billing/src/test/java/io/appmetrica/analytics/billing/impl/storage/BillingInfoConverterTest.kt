@@ -11,7 +11,7 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class BillingInfoConverterTest : CommonTest() {
+internal class BillingInfoConverterTest : CommonTest() {
 
     private var converter = BillingInfoConverter()
 

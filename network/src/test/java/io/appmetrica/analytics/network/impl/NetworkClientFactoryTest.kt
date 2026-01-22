@@ -20,7 +20,7 @@ import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class NetworkClientFactoryTest : CommonTest() {
+internal class NetworkClientFactoryTest : CommonTest() {
 
     private val metaData = Bundle()
 

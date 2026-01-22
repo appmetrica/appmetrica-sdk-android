@@ -20,7 +20,7 @@ import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class ReferrerFromLibraryRetrieverTest : CommonTest() {
+internal class ReferrerFromLibraryRetrieverTest : CommonTest() {
 
     private val context: Context = mock()
     private val listener: ReferrerReceivedListener = mock()

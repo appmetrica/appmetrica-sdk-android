@@ -11,7 +11,7 @@ import org.mockito.kotlin.inOrder
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 
-class LegacyModulesPreferenceAdapterTest : CommonTest() {
+internal class LegacyModulesPreferenceAdapterTest : CommonTest() {
 
     private val preferences = mock<PreferencesServiceDbStorage> {
         on { putString(any(), anyOrNull()) } doReturn mock

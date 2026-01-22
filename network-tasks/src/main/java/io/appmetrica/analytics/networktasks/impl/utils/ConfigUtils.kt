@@ -2,7 +2,7 @@ package io.appmetrica.analytics.networktasks.impl.utils
 
 import io.appmetrica.analytics.coreapi.internal.identifiers.SdkIdentifiers
 
-object ConfigUtils {
+internal object ConfigUtils {
 
     @JvmStatic
     fun areMainIdentifiersValid(identifiers: SdkIdentifiers): Boolean =

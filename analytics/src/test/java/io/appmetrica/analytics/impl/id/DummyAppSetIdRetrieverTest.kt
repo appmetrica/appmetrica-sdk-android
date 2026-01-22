@@ -8,7 +8,7 @@ import org.mockito.Mockito.mock
 import org.mockito.kotlin.any
 import org.mockito.kotlin.verify
 
-class DummyAppSetIdRetrieverTest : CommonTest() {
+internal class DummyAppSetIdRetrieverTest : CommonTest() {
 
     private val context: Context = mock()
     private val listener: AppSetIdListener = mock()

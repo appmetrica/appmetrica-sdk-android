@@ -1,5 +1,5 @@
 package io.appmetrica.analytics.billingv6.impl
 
-interface UpdateBillingProgressCallback {
+internal interface UpdateBillingProgressCallback {
     fun onUpdateFinished()
 }

@@ -7,7 +7,7 @@ import org.junit.runner.RunWith
 import org.robolectric.ParameterizedRobolectricTestRunner
 
 @RunWith(ParameterizedRobolectricTestRunner::class)
-class PlatformConverterTest(
+internal class PlatformConverterTest(
     private val input: String,
     private val expected: String
 ) : CommonTest() {

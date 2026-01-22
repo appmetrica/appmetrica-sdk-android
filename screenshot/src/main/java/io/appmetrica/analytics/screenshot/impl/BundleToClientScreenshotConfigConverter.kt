@@ -3,9 +3,10 @@ package io.appmetrica.analytics.screenshot.impl
 import android.os.Bundle
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import io.appmetrica.analytics.modulesapi.internal.client.BundleToServiceConfigConverter
-import io.appmetrica.analytics.screenshot.impl.config.clientservice.model.ParcelableRemoteScreenshotConfig
+import io.appmetrica.analytics.screenshot.internal.config.ParcelableRemoteScreenshotConfig
 
-class BundleToClientScreenshotConfigConverter : BundleToServiceConfigConverter<ParcelableRemoteScreenshotConfig> {
+internal class BundleToClientScreenshotConfigConverter :
+    BundleToServiceConfigConverter<ParcelableRemoteScreenshotConfig> {
 
     private val tag = "[BundleToClientScreenshotConfigConverter]"
 

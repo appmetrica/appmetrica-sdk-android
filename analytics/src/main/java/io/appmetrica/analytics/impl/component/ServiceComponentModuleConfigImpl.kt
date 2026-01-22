@@ -4,7 +4,7 @@ import io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceCompone
 import io.appmetrica.analytics.coreutils.internal.WrapUtils
 import io.appmetrica.analytics.impl.DefaultValues
 
-class ServiceComponentModuleConfigImpl(
+internal class ServiceComponentModuleConfigImpl(
     private val config: CommonArguments.ReporterArguments,
 ) : ServiceComponentModuleConfig {
 

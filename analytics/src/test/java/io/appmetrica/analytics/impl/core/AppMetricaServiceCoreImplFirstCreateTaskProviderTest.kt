@@ -7,7 +7,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-class AppMetricaServiceCoreImplFirstCreateTaskProviderTest : CommonTest() {
+internal class AppMetricaServiceCoreImplFirstCreateTaskProviderTest : CommonTest() {
 
     @get:Rule
     val reportKotlinVersionTaskMockedConstructionRule = MockedConstructionRule(ReportKotlinVersionTask::class.java)

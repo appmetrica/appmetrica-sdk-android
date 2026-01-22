@@ -7,7 +7,7 @@ import io.appmetrica.analytics.impl.selfreporting.SelfReportingLazyEventTask
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import java.util.concurrent.TimeUnit
 
-class ModuleStatusReportingTask(
+internal class ModuleStatusReportingTask(
     private val preferences: SimplePreferenceStorage,
     private val modulesType: String,
     private val timeProvider: SystemTimeProvider = SystemTimeProvider(),

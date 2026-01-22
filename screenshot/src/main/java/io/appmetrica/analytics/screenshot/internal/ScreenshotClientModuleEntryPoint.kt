@@ -10,7 +10,7 @@ import io.appmetrica.analytics.screenshot.impl.BundleToClientScreenshotConfigCon
 import io.appmetrica.analytics.screenshot.impl.Constants
 import io.appmetrica.analytics.screenshot.impl.ScreenshotCaptorsController
 import io.appmetrica.analytics.screenshot.impl.config.client.model.ClientSideRemoteScreenshotConfig
-import io.appmetrica.analytics.screenshot.impl.config.clientservice.model.ParcelableRemoteScreenshotConfig
+import io.appmetrica.analytics.screenshot.internal.config.ParcelableRemoteScreenshotConfig
 
 class ScreenshotClientModuleEntryPoint : ModuleClientEntryPoint<ParcelableRemoteScreenshotConfig>() {
 

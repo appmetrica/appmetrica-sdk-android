@@ -12,7 +12,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoMoreInteractions
 
-class ModulesSynchronousStageExecutorTest : CommonTest() {
+internal class ModulesSynchronousStageExecutorTest : CommonTest() {
 
     private val applicationContext: Context = mock()
     private val context: Context = mock {

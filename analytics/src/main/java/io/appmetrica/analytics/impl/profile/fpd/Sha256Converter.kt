@@ -6,7 +6,7 @@ import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 
-class Sha256Converter(
+internal class Sha256Converter(
     private val attributeValueNormalizer: AttributeValueNormalizer
 ) {
 

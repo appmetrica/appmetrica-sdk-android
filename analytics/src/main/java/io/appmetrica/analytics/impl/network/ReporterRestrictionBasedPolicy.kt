@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.network
 import io.appmetrica.analytics.coreapi.internal.control.DataSendingRestrictionController
 import io.appmetrica.analytics.coreapi.internal.io.IExecutionPolicy
 
-class ReporterRestrictionBasedPolicy(
+internal class ReporterRestrictionBasedPolicy(
     private val restrictionController: DataSendingRestrictionController,
 ) : IExecutionPolicy {
 

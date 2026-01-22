@@ -7,7 +7,7 @@ import io.appmetrica.analytics.coreutils.internal.AndroidUtils.isApiAchieved
 import io.appmetrica.analytics.impl.BackgroundRestrictionsState.AppStandByBucket
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
-class AppStandbyBucketConverter {
+internal class AppStandbyBucketConverter {
 
     private val tag = "[AppStandbyBucketConverter]"
 

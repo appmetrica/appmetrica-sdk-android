@@ -17,7 +17,7 @@ import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 
-class ExternalAttributionHelperTest : CommonTest() {
+internal class ExternalAttributionHelperTest : CommonTest() {
 
     private val collectingInterval = 100500L
     private val externalAttributionConfig = ExternalAttributionConfig(

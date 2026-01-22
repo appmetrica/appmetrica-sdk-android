@@ -7,7 +7,7 @@ import io.appmetrica.analytics.impl.InternalEvents
 import io.appmetrica.analytics.impl.crash.jvm.client.AllThreads
 import io.appmetrica.analytics.impl.protobuf.backend.EventProto
 
-object PublicLogConstructor {
+internal object PublicLogConstructor {
 
     @JvmStatic
     fun constructAnrLog(message: String, allThreads: AllThreads): String {

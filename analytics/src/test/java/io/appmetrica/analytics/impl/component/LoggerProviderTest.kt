@@ -10,7 +10,7 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class LoggerProviderTest : CommonTest() {
+internal class LoggerProviderTest : CommonTest() {
     private val apiKey: String = TestsData.generateApiKey()
     private val loggerProvider = LoggerProvider(apiKey)
 

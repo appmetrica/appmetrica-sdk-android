@@ -18,7 +18,7 @@ import java.util.UUID
         Build.VERSION_CODES.UPSIDE_DOWN_CAKE
     ]
 )
-class UuidValidatorTest(
+internal class UuidValidatorTest(
     private val input: String?,
     private val expected: Boolean
 ) : CommonTest() {

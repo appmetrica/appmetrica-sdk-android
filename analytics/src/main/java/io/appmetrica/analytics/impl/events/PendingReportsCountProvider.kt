@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.events
 
-interface PendingReportsCountProvider {
+internal interface PendingReportsCountProvider {
 
     val pendingReportsCount: Long
 }

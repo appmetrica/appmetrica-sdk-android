@@ -7,7 +7,7 @@ import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import io.appmetrica.analytics.networktasks.internal.NetworkTask
 import java.util.concurrent.atomic.AtomicBoolean
 
-open class TaskProcessor<C : IComponent>(
+internal open class TaskProcessor<C : IComponent>(
     val component: C,
     private val mStartupExecutor: StartupExecutor
 ) : ServiceLifecycleObserver, EventsFlusher {

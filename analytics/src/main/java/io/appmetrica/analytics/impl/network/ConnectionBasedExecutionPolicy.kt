@@ -8,7 +8,7 @@ import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import java.util.EnumSet
 
-class ConnectionBasedExecutionPolicy(private val context: Context) : IExecutionPolicy {
+internal class ConnectionBasedExecutionPolicy(private val context: Context) : IExecutionPolicy {
 
     private val activeNetworkTypeProvider: ActiveNetworkTypeProvider =
         GlobalServiceLocator.getInstance().activeNetworkTypeProvider

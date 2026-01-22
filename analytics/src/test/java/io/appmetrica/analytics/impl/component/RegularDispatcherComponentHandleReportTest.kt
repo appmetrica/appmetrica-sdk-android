@@ -20,7 +20,7 @@ import org.mockito.kotlin.verify
 import org.robolectric.ParameterizedRobolectricTestRunner
 
 @RunWith(ParameterizedRobolectricTestRunner::class)
-class RegularDispatcherComponentHandleReportTest(
+internal class RegularDispatcherComponentHandleReportTest(
     eventType: Int,
     private val shouldUpdateConfig: Boolean
 ) : CommonTest() {

@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.crash.jvm.client
 
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
-class ThreadUncaughtExceptionHandlerInstaller(
+internal class ThreadUncaughtExceptionHandlerInstaller(
     private val handler: Thread.UncaughtExceptionHandler
 ) {
 

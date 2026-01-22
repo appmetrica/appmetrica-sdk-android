@@ -16,7 +16,7 @@ import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class ReportToSendTest : CommonTest() {
+internal class ReportToSendTest : CommonTest() {
 
     @Test
     fun builder() {

@@ -32,7 +32,7 @@ import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class ReportRunnableTest : CommonTest() {
+internal class ReportRunnableTest : CommonTest() {
 
     private val context: Context = mock()
     private val counterReport: CounterReport = mock()

@@ -24,7 +24,7 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
-class ScreenInfoRetrieverTest : CommonTest() {
+internal class ScreenInfoRetrieverTest : CommonTest() {
 
     private lateinit var extractor: ScreenInfoExtractor
     private val activity: Activity = mock()

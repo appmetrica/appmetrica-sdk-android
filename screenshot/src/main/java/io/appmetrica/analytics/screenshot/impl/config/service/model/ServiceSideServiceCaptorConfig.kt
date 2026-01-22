@@ -2,7 +2,7 @@ package io.appmetrica.analytics.screenshot.impl.config.service.model
 
 import io.appmetrica.analytics.screenshot.impl.config.remote.model.ServiceCaptorConfig
 
-class ServiceSideServiceCaptorConfig(
+internal class ServiceSideServiceCaptorConfig(
     val enabled: Boolean,
     val delaySeconds: Long,
 ) {

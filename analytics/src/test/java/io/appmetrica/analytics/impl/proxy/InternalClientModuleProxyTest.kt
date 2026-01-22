@@ -19,7 +19,7 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 
-class InternalClientModuleProxyTest : CommonTest() {
+internal class InternalClientModuleProxyTest : CommonTest() {
 
     private val type = 4242
     private val name = "some_name"

@@ -19,7 +19,7 @@ import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class PluginErrorDetailsConverterTest : CommonTest() {
+internal class PluginErrorDetailsConverterTest : CommonTest() {
 
     private val extraMetaInfoRetriever: ExtraMetaInfoRetriever = mock()
     private val unhandledException: UnhandledException = mock()

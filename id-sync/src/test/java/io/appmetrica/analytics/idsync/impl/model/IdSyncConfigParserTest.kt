@@ -14,7 +14,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 import java.util.concurrent.TimeUnit
 
-class IdSyncConfigParserTest : CommonTest() {
+internal class IdSyncConfigParserTest : CommonTest() {
 
     private val featureKey = "id_sync"
     private val featuresKey = "features"

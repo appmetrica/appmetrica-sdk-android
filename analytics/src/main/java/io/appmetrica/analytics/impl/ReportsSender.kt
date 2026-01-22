@@ -12,7 +12,7 @@ import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import java.util.concurrent.TimeUnit
 import kotlin.math.max
 
-class ReportsSender @VisibleForTesting internal constructor(
+internal class ReportsSender @VisibleForTesting internal constructor(
     private val serviceConnector: AppMetricaConnector,
     private val serviceCallableFactory: ServiceCallableFactory,
     private val timeProvider: TimeProvider

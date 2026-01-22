@@ -32,7 +32,7 @@ import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class SdkEnvironmentHolderTest : CommonTest() {
+internal class SdkEnvironmentHolderTest : CommonTest() {
 
     private val configuration = mock<Configuration>()
 

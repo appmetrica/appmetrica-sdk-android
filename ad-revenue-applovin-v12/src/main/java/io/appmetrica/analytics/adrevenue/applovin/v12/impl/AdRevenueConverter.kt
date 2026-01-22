@@ -10,7 +10,7 @@ import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdType
 import java.math.BigDecimal
 import java.util.Currency
 
-class AdRevenueConverter {
+internal class AdRevenueConverter {
 
     fun convert(maxAd: MaxAd, appLovinSdk: AppLovinSdk): ModuleAdRevenue {
         val adType = convert(maxAd.format)

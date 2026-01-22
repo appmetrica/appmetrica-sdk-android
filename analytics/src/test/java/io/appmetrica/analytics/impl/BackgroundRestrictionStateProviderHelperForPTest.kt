@@ -19,7 +19,7 @@ import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [Build.VERSION_CODES.P])
-class BackgroundRestrictionStateProviderHelperForPTest : CommonTest() {
+internal class BackgroundRestrictionStateProviderHelperForPTest : CommonTest() {
 
     private lateinit var context: Context
 

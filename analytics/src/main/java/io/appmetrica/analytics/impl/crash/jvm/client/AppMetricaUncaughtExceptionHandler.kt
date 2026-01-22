@@ -8,7 +8,7 @@ import io.appmetrica.analytics.impl.crash.utils.ThreadsStateDumper
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import java.util.concurrent.atomic.AtomicBoolean
 
-class AppMetricaUncaughtExceptionHandler(
+internal class AppMetricaUncaughtExceptionHandler(
     private val crashProcessor: ICrashProcessor
 ) : Thread.UncaughtExceptionHandler {
 

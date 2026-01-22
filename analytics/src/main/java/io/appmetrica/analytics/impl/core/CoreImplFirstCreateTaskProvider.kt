@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.core
 
-class CoreImplFirstCreateTaskProvider {
+internal class CoreImplFirstCreateTaskProvider {
 
     fun tasks(): List<Runnable> = listOf(
         ReportKotlinVersionTask()

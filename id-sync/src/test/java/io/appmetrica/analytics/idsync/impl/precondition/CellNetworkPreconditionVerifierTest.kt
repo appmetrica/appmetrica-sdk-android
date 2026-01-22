@@ -13,7 +13,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 
 @RunWith(Parameterized::class)
-class CellNetworkPreconditionVerifierTest(
+internal class CellNetworkPreconditionVerifierTest(
     private val networkType: NetworkType?,
     private val expectedValue: Boolean
 ) : CommonTest() {

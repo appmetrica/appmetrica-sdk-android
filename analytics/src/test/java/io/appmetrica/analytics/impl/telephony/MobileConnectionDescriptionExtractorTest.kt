@@ -29,7 +29,7 @@ import org.robolectric.annotation.Config
 import java.util.concurrent.TimeUnit
 
 @RunWith(RobolectricTestRunner::class)
-class MobileConnectionDescriptionExtractorTest : CommonTest() {
+internal class MobileConnectionDescriptionExtractorTest : CommonTest() {
 
     private val networkTypeString = "GPRS"
     private val context = mock<Context>()

@@ -4,7 +4,7 @@ import io.appmetrica.analytics.impl.CounterReport
 import io.appmetrica.analytics.impl.component.ComponentUnit
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
-class ReportPrevSessionEventHandler(
+internal class ReportPrevSessionEventHandler(
     component: ComponentUnit
 ) : ReportComponentHandler(component) {
 

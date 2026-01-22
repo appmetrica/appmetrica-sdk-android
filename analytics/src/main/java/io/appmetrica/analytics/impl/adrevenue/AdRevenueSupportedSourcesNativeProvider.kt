@@ -4,7 +4,7 @@ import io.appmetrica.analytics.impl.ClientServiceLocator
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import org.json.JSONArray
 
-class AdRevenueSupportedSourcesNativeProvider : AdRevenueSupportedSourcesProvider {
+internal class AdRevenueSupportedSourcesNativeProvider : AdRevenueSupportedSourcesProvider {
 
     private val tag = "[AdRevenueSupportedSourcesMetaInfoNativeProvider]"
 

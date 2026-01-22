@@ -11,7 +11,7 @@ import io.appmetrica.analytics.screenshot.impl.captor.DefaultCaptorProvider
 import io.appmetrica.analytics.screenshot.impl.captor.Pre34ApiCaptorProvider
 import io.appmetrica.analytics.screenshot.impl.config.client.model.ClientSideRemoteScreenshotConfig
 
-class ScreenshotCaptorsController(
+internal class ScreenshotCaptorsController(
     private val clientContext: ClientContext,
     private val callback: ScreenshotCaptorCallback = DefaultScreenshotCaptorCallback(clientContext),
     captorProvider: CaptorProvider =

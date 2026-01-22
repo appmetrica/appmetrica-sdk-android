@@ -3,7 +3,7 @@ package io.appmetrica.analytics.remotepermissions.impl
 import io.appmetrica.analytics.coreapi.internal.permission.PermissionStrategy
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
-class RemoteConfigPermissionStrategy :
+internal class RemoteConfigPermissionStrategy :
     PermissionStrategy {
     private val tag = "[RemoteConfigPermissionStrategy]"
 

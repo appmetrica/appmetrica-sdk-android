@@ -11,7 +11,7 @@ import java.util.concurrent.Executor
 import io.appmetrica.analytics.billingv6.internal.BillingLibraryMonitor as BillingV6LibraryMonitor
 import io.appmetrica.analytics.billingv8.internal.BillingLibraryMonitor as BillingV8LibraryMonitor
 
-class BillingMonitorProvider {
+internal class BillingMonitorProvider {
 
     private val tag = "[BillingMonitorProvider]"
 

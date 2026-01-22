@@ -2,7 +2,7 @@ package io.appmetrica.analytics.screenshot.impl.config.service.model
 
 import io.appmetrica.analytics.screenshot.impl.config.remote.model.ScreenshotConfig
 
-class ServiceSideScreenshotConfig(
+internal class ServiceSideScreenshotConfig(
     val apiCaptorConfig: ServiceSideApiCaptorConfig?,
     val serviceCaptorConfig: ServiceSideServiceCaptorConfig?,
     val contentObserverCaptorConfig: ServiceSideContentObserverCaptorConfig?,

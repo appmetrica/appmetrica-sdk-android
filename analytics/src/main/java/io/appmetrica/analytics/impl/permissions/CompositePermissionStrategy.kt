@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.permissions
 import io.appmetrica.analytics.coreapi.internal.permission.PermissionStrategy
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
-class CompositePermissionStrategy(
+internal class CompositePermissionStrategy(
     private vararg val strategies: PermissionStrategy
 ) : PermissionStrategy {
 

@@ -19,7 +19,7 @@ import org.robolectric.RobolectricTestRunner
 import java.util.function.Consumer
 
 @RunWith(RobolectricTestRunner::class)
-class DbSessionModelFactoryTest : CommonTest() {
+internal class DbSessionModelFactoryTest : CommonTest() {
 
     private val deviceId = "Test device id"
     private val uuid = "Test uuid"

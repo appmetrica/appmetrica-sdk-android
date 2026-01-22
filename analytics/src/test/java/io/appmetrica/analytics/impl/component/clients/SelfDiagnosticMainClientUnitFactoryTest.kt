@@ -14,7 +14,7 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 
-class SelfDiagnosticMainClientUnitFactoryTest : CommonTest() {
+internal class SelfDiagnosticMainClientUnitFactoryTest : CommonTest() {
 
     private val context: Context = mock()
 

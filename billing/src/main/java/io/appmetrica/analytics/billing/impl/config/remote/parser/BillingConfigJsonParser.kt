@@ -6,7 +6,7 @@ import io.appmetrica.analytics.coreutils.internal.parsing.JsonUtils.optIntOrNull
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import org.json.JSONObject
 
-class BillingConfigJsonParser {
+internal class BillingConfigJsonParser {
 
     private val tag = "[BillingConfigJsonParser]"
 

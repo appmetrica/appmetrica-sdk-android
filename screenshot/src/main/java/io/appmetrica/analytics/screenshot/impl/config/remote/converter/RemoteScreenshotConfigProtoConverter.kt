@@ -2,9 +2,9 @@ package io.appmetrica.analytics.screenshot.impl.config.remote.converter
 
 import io.appmetrica.analytics.coreapi.internal.data.Converter
 import io.appmetrica.analytics.screenshot.impl.RemoteScreenshotConfigProto
-import io.appmetrica.analytics.screenshot.impl.config.remote.model.RemoteScreenshotConfig
+import io.appmetrica.analytics.screenshot.internal.config.RemoteScreenshotConfig
 
-class RemoteScreenshotConfigProtoConverter(
+internal class RemoteScreenshotConfigProtoConverter(
     private val screenshotConfigProtoConverter: ScreenshotConfigProtoConverter = ScreenshotConfigProtoConverter(),
 ) : Converter<RemoteScreenshotConfig, RemoteScreenshotConfigProto> {
 

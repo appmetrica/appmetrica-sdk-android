@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.profile.fpd
 
 // see https://nda.ya.ru/t/0rX8ReVs7MpdUK
-class PhoneNormalizer : AttributeValueNormalizer {
+internal class PhoneNormalizer : AttributeValueNormalizer {
 
     private val phoneMinValidDigitCount = 10
     private val phoneMaxValidDigitCount = 13

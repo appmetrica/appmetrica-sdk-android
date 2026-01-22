@@ -5,7 +5,7 @@ import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.component.ComponentId
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
-class SessionExtrasStorage(context: Context, componentId: ComponentId) {
+internal class SessionExtrasStorage(context: Context, componentId: ComponentId) {
 
     private val tag = "[SessionExtrasStorage-${componentId.anonymizedApiKey}]"
     private val dbKey = "session_extras"

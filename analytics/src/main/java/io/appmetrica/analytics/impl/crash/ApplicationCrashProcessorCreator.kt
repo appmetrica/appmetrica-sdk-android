@@ -7,7 +7,7 @@ import io.appmetrica.analytics.impl.MainOrCrashReporterProvider
 import io.appmetrica.analytics.impl.crash.jvm.client.ICrashProcessor
 import io.appmetrica.analytics.impl.crash.jvm.client.ReporterBasedCrashProcessor
 
-class ApplicationCrashProcessorCreator : AppCrashProcessorCreator {
+internal class ApplicationCrashProcessorCreator : AppCrashProcessorCreator {
 
     override fun createCrashProcessor(
         context: Context,

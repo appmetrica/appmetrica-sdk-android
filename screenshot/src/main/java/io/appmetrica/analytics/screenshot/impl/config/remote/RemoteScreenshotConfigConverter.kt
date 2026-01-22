@@ -5,9 +5,9 @@ import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import io.appmetrica.analytics.protobuf.nano.MessageNano
 import io.appmetrica.analytics.screenshot.impl.RemoteScreenshotConfigProto
 import io.appmetrica.analytics.screenshot.impl.config.remote.converter.RemoteScreenshotConfigProtoConverter
-import io.appmetrica.analytics.screenshot.impl.config.remote.model.RemoteScreenshotConfig
+import io.appmetrica.analytics.screenshot.internal.config.RemoteScreenshotConfig
 
-class RemoteScreenshotConfigConverter(
+internal class RemoteScreenshotConfigConverter(
     private val protoConverter: RemoteScreenshotConfigProtoConverter = RemoteScreenshotConfigProtoConverter()
 ) : Converter<RemoteScreenshotConfig, ByteArray> {
 

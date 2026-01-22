@@ -33,7 +33,7 @@ import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class ContentObserverScreenshotCaptorTest : CommonTest() {
+internal class ContentObserverScreenshotCaptorTest : CommonTest() {
 
     private val clientSideConfig: ClientSideContentObserverCaptorConfig = mock()
     private val clientSideScreenshotConfig: ClientSideScreenshotConfig = mock {

@@ -9,7 +9,7 @@ import io.appmetrica.analytics.modulesapi.internal.service.event.ModuleServiceEv
 
 private const val TAG_PREFIX = "[ModulesEventHandler-%s]"
 
-class ModulesEventHandler(component: ComponentUnit) : ReportComponentHandler(component) {
+internal class ModulesEventHandler(component: ComponentUnit) : ReportComponentHandler(component) {
 
     private val apiKey = component.componentId.apiKey ?: "empty"
     private val tag = String.format(TAG_PREFIX, apiKey)

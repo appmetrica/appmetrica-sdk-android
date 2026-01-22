@@ -10,7 +10,7 @@ import io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrashClientConfig
 import io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrashClientModule
 import io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrashClientModuleDummy
 
-class NativeCrashClient(private val processConfiguration: ProcessConfiguration) {
+internal class NativeCrashClient(private val processConfiguration: ProcessConfiguration) {
     private val tag = "[NativeCrashClient]"
 
     private val clientModule: NativeCrashClientModule =

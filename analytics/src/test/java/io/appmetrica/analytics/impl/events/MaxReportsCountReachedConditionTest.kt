@@ -6,7 +6,7 @@ import org.junit.Test
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 
-class MaxReportsCountReachedConditionTest : CommonTest() {
+internal class MaxReportsCountReachedConditionTest : CommonTest() {
 
     private val pendingReportsCountProvider: PendingReportsCountProvider = mock()
 

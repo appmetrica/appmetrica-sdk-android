@@ -15,7 +15,7 @@ import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class AppMetricaCoreServiceTest : CommonTest() {
+internal class AppMetricaCoreServiceTest : CommonTest() {
 
     @get:Rule
     val serviceDelegateRule = constructionRule<AppMetricaServiceProxy>()

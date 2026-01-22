@@ -35,7 +35,7 @@ import org.robolectric.RobolectricTestRunner
 import java.util.UUID
 
 @RunWith(RobolectricTestRunner::class)
-class ModulesProxyTest : CommonTest() {
+internal class ModulesProxyTest : CommonTest() {
 
     private val mainReporter: MainReporter = mock()
     private val mainReporterApiConsumerProvider: MainReporterApiConsumerProvider = mock()

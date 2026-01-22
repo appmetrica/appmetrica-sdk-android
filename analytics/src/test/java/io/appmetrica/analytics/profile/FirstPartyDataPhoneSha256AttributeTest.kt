@@ -15,7 +15,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 
-class FirstPartyDataPhoneSha256AttributeTest : CommonTest() {
+internal class FirstPartyDataPhoneSha256AttributeTest : CommonTest() {
 
     private val values = listOf(
         "value_1",

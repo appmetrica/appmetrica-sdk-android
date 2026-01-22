@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.client.connection
 
-class ServiceDescription(
+internal class ServiceDescription(
     val packageName: String,
     val serviceScheme: String,
     val serviceClass: Class<*>

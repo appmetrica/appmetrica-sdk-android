@@ -18,7 +18,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 
-class ModuleSelfReporterImplTest : CommonTest() {
+internal class ModuleSelfReporterImplTest : CommonTest() {
 
     @get:Rule
     val selfReporterFacadeMockedRule = MockedStaticRule(AppMetricaSelfReportFacade::class.java)

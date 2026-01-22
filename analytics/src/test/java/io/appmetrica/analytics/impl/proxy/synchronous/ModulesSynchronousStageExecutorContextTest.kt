@@ -12,7 +12,7 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 
-class ModulesSynchronousStageExecutorContextTest : CommonTest() {
+internal class ModulesSynchronousStageExecutorContextTest : CommonTest() {
 
     private val applicationContext: Context = mock()
     private val context: Context = mock {

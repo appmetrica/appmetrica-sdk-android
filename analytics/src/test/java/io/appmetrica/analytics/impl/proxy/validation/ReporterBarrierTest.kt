@@ -16,7 +16,7 @@ import org.mockito.kotlin.mock
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class ReporterBarrierTest : CommonTest() {
+internal class ReporterBarrierTest : CommonTest() {
 
     private val mBarrier = ReporterBarrier()
 

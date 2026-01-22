@@ -9,7 +9,7 @@ import org.robolectric.annotation.Config
 
 @Config(sdk = [Build.VERSION_CODES.O])
 @RunWith(ParameterizedRobolectricTestRunner::class)
-class AppStandbyBucketConverterPrePTest(
+internal class AppStandbyBucketConverterPrePTest(
     input: Int,
     expected: AppStandByBucket?,
     expectedString: String?

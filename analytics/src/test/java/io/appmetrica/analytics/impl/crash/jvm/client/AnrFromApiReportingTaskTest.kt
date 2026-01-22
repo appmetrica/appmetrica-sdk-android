@@ -16,7 +16,7 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 
-class AnrFromApiReportingTaskTest : CommonTest() {
+internal class AnrFromApiReportingTaskTest : CommonTest() {
 
     private val anrReporter: AnrReporter = mock()
     private val thread: Thread = mock()

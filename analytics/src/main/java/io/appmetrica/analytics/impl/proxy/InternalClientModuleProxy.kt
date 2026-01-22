@@ -7,7 +7,7 @@ import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdReve
 import io.appmetrica.analytics.modulesapi.internal.common.InternalClientModuleFacade
 import io.appmetrica.analytics.modulesapi.internal.common.InternalModuleEvent
 
-class InternalClientModuleProxy : InternalClientModuleFacade {
+internal class InternalClientModuleProxy : InternalClientModuleFacade {
 
     private val converter = ModuleAdRevenueConverter()
 

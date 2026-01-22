@@ -6,7 +6,7 @@ import org.junit.Test
 import org.mockito.Mockito
 import org.mockito.Mockito.mock
 
-class PluginReporterStubTest : CommonTest() {
+internal class PluginReporterStubTest : CommonTest() {
 
     private val errorDetails: PluginErrorDetails = mock()
 

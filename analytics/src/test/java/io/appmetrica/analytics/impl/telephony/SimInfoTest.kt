@@ -4,7 +4,7 @@ import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
 import io.appmetrica.analytics.testutils.CommonTest
 import org.junit.Test
 
-class SimInfoTest : CommonTest() {
+internal class SimInfoTest : CommonTest() {
 
     @Test
     fun filledFields() {

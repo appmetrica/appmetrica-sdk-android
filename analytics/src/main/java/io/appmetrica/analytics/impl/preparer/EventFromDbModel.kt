@@ -8,7 +8,7 @@ import io.appmetrica.analytics.impl.db.event.DbLocationModel
 import io.appmetrica.analytics.impl.db.protobuf.converter.DbEventModelConverter
 import io.appmetrica.analytics.impl.utils.encryption.EventEncryptionMode
 
-class EventFromDbModel(cv: ContentValues) {
+internal class EventFromDbModel(cv: ContentValues) {
 
     private val dbEventModel = DbEventModelConverter().toModel(cv)
 

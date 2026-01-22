@@ -6,7 +6,7 @@ import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 
-class DbSessionDescriptionToBytesConverterTest : CommonTest() {
+internal class DbSessionDescriptionToBytesConverterTest : CommonTest() {
 
     private val startTime = 424242L
     private val serverTimeOffset = 42L

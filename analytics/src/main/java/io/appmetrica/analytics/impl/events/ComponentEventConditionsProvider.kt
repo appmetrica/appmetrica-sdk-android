@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.events
 import io.appmetrica.analytics.impl.component.ReportComponentConfigurationHolder
 import io.appmetrica.analytics.impl.db.DatabaseHelper
 
-class ComponentEventConditionsProvider(
+internal class ComponentEventConditionsProvider(
     databaseHelper: DatabaseHelper,
     configurationHolder: ReportComponentConfigurationHolder,
 ) : EventConditionsProvider {

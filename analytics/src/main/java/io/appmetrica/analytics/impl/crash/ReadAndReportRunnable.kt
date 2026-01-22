@@ -7,7 +7,7 @@ import io.appmetrica.analytics.impl.utils.concurrency.FileLocksHolder
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import java.io.File
 
-class ReadAndReportRunnable<Output>(
+internal class ReadAndReportRunnable<Output>(
     private val crashFile: File,
     private val fileReader: Function<File, Output?>,
     private val finalizator: Consumer<File>,

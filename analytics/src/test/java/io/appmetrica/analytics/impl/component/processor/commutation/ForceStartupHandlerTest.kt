@@ -23,7 +23,7 @@ import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class ForceStartupHandlerTest : CommonTest() {
+internal class ForceStartupHandlerTest : CommonTest() {
 
     private val advIdTrackingEnabled = true
     private val dataSendingEnabled = true

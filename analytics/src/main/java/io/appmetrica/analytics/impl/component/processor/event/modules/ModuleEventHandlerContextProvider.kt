@@ -7,7 +7,7 @@ import io.appmetrica.analytics.impl.modules.LegacyModulePreferenceAdapter
 import io.appmetrica.analytics.impl.modules.ModulePreferencesAdapter
 import io.appmetrica.analytics.modulesapi.internal.service.event.ModuleEventServiceHandlerContext
 
-class ModuleEventHandlerContextProvider(component: ComponentUnit, moduleIdentifier: String) {
+internal class ModuleEventHandlerContextProvider(component: ComponentUnit, moduleIdentifier: String) {
 
     private val legacyModulePreferenceAdapter = LegacyModulePreferenceAdapter(component.componentPreferences)
     private val modulePreferenceAdapter = ModulePreferencesAdapter(moduleIdentifier, component.componentPreferences)

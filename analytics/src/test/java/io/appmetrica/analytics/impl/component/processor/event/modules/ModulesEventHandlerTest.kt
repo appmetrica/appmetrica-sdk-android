@@ -27,7 +27,7 @@ import org.robolectric.RobolectricTestRunner
 import java.util.UUID
 
 @RunWith(RobolectricTestRunner::class)
-class ModulesEventHandlerTest : CommonTest() {
+internal class ModulesEventHandlerTest : CommonTest() {
 
     private val apiKey = UUID.randomUUID().toString()
 

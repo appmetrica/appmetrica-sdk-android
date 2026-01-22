@@ -6,7 +6,7 @@ import io.appmetrica.analytics.internal.CounterConfigurationReporterType
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import org.json.JSONObject
 
-data class AppMetricaNativeCrashMetadata(
+internal data class AppMetricaNativeCrashMetadata(
     val apiKey: String,
     val packageName: String,
     val reporterType: CounterConfigurationReporterType,
@@ -15,7 +15,7 @@ data class AppMetricaNativeCrashMetadata(
     val errorEnvironment: String?,
 )
 
-class AppMetricaNativeCrashMetadataSerializer {
+internal class AppMetricaNativeCrashMetadataSerializer {
     companion object {
         private const val TAG = "[AppMetricaNativeCrashMetadataSerializer]"
 

@@ -53,7 +53,7 @@ internal class StartupState private constructor(
         return "StartupState(deviceId=$deviceId, deviceIdHash=$deviceIdHash, startupStateModel=$startupStateModel)"
     }
 
-    class Builder(private val modelBuilder: StartupStateModel.StartupStateBuilder) {
+    internal class Builder(private val modelBuilder: StartupStateModel.StartupStateBuilder) {
 
         private var deviceId: String? = null
         private var deviceIdHash: String? = null
@@ -116,7 +116,7 @@ internal class StartupState private constructor(
         fun build(): StartupState = StartupState(deviceId, deviceIdHash, modelBuilder.build())
     }
 
-    class Storage @VisibleForTesting constructor(
+    internal class Storage @VisibleForTesting constructor(
         private val modelStorage: ProtobufStateStorage<StartupStateModel>,
         private val vitalCommonDataProvider: VitalCommonDataProvider
     ) {

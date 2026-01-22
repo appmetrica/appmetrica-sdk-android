@@ -10,7 +10,7 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.whenever
 
-class DefaultClientComponentsInitializerTest : CommonTest() {
+internal class DefaultClientComponentsInitializerTest : CommonTest() {
 
     private val expectedModules = listOf(
         "io.appmetrica.analytics.adrevenue.admob.v23.internal.AdMobClientModuleEntryPoint",

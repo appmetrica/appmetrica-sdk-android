@@ -10,7 +10,7 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class FeatureParserTest : CommonTest() {
+internal class FeatureParserTest : CommonTest() {
 
     private val block = "permissions"
     private val permissionName = "name"

@@ -13,7 +13,7 @@ import org.mockito.kotlin.verify
 import org.robolectric.ParameterizedRobolectricTestRunner
 
 @RunWith(ParameterizedRobolectricTestRunner::class)
-class BillingInfoStorageImplTest(
+internal class BillingInfoStorageImplTest(
     private val billingInfos: List<BillingInfo>,
     private val firstInappCheckOccurred: Boolean
 ) : CommonTest() {

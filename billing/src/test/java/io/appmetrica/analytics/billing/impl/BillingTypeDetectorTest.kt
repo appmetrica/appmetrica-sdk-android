@@ -13,7 +13,7 @@ import org.mockito.kotlin.whenever
 
 private const val BUILD_CONFIG_CLASS = "com.android.billingclient.BuildConfig"
 
-class BillingTypeDetectorTest : CommonTest() {
+internal class BillingTypeDetectorTest : CommonTest() {
 
     @get:Rule
     val sdkUtils = MockedStaticRule(ReflectionUtils::class.java)

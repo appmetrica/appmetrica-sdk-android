@@ -12,7 +12,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.mockito.kotlin.mock
 
-class MultiProcessUuidLockProviderTest : CommonTest() {
+internal class MultiProcessUuidLockProviderTest : CommonTest() {
 
     @get:Rule
     val exclusiveMultiProcessFileLockMockedConstructionRule =

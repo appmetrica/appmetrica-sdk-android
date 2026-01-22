@@ -19,7 +19,7 @@ import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class AppAppMetricaServiceLifecycleTests : CommonTest() {
+internal class AppAppMetricaServiceLifecycleTests : CommonTest() {
 
     private val observer: AppMetricaServiceLifecycle.LifecycleObserver = mock()
     private val observer2: AppMetricaServiceLifecycle.LifecycleObserver = mock()

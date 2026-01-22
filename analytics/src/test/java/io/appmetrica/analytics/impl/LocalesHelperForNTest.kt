@@ -14,7 +14,7 @@ import org.robolectric.RobolectricTestRunner
 import java.util.Locale
 
 @RunWith(RobolectricTestRunner::class)
-class LocalesHelperForNTest : CommonTest() {
+internal class LocalesHelperForNTest : CommonTest() {
 
     @get:Rule
     val sPhoneUtils = MockedStaticRule(PhoneUtils::class.java)

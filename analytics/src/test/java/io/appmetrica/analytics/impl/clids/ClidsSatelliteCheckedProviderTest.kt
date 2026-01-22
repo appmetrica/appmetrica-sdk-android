@@ -9,7 +9,7 @@ import org.mockito.kotlin.inOrder
 import org.mockito.kotlin.mock
 import kotlin.random.Random
 
-class ClidsSatelliteCheckedProviderTest : CommonTest() {
+internal class ClidsSatelliteCheckedProviderTest : CommonTest() {
 
     private val result = Random.nextBoolean()
 

@@ -16,7 +16,7 @@ import org.robolectric.RobolectricTestRunner
 import java.util.UUID
 
 @RunWith(RobolectricTestRunner::class)
-class ReporterConfigTest : CommonTest() {
+internal class ReporterConfigTest : CommonTest() {
     private val oldMaxReportsInDatabaseCount = 10
     private val newMaxReportsInDatabaseCount = 100
 

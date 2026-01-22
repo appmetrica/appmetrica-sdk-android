@@ -11,7 +11,7 @@ import org.junit.Test
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 
-class ComponentEventConditionsProviderTest : CommonTest() {
+internal class ComponentEventConditionsProviderTest : CommonTest() {
 
     private val databaseHelper: DatabaseHelper = mock()
 

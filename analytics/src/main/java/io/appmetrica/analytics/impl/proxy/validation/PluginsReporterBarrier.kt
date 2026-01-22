@@ -7,7 +7,7 @@ import io.appmetrica.analytics.impl.utils.validation.ThrowIfFailedValidator
 import io.appmetrica.analytics.plugins.PluginErrorDetails
 import io.appmetrica.analytics.plugins.StackTraceItem
 
-class PluginsReporterBarrier {
+internal class PluginsReporterBarrier {
 
     private val pluginErrorDetailsNonNullValidator = ThrowIfFailedValidator(
         NonNullValidator<PluginErrorDetails>("Error details")

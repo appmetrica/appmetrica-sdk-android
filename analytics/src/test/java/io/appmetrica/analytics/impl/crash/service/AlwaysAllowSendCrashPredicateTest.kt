@@ -5,7 +5,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.mockito.kotlin.mock
 
-class AlwaysAllowSendCrashPredicateTest : CommonTest() {
+internal class AlwaysAllowSendCrashPredicateTest : CommonTest() {
 
     private val crash: Any = mock()
 

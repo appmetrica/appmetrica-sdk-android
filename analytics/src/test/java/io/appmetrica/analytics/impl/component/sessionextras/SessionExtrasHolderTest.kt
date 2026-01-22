@@ -14,7 +14,7 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import java.util.UUID
 
-class SessionExtrasHolderTest : CommonTest() {
+internal class SessionExtrasHolderTest : CommonTest() {
 
     private val apiKey = UUID.randomUUID().toString()
     private val context = mock<Context>()

@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.component
 
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceModuleReporterComponentContext
 
-class ServiceModuleReporterComponentContextImpl(
+internal class ServiceModuleReporterComponentContextImpl(
     componentUnit: ComponentUnit,
     config: CommonArguments.ReporterArguments,
 ) : ServiceModuleReporterComponentContext {

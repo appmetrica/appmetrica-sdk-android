@@ -11,7 +11,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoMoreInteractions
 
-class ModuleLifecycleControllerImplTest : CommonTest() {
+internal class ModuleLifecycleControllerImplTest : CommonTest() {
 
     private val serviceLifecycle = mock<AppMetricaServiceLifecycle>()
     private val moduleLifecycleObserver = mock<ModuleServiceLifecycleObserver>()

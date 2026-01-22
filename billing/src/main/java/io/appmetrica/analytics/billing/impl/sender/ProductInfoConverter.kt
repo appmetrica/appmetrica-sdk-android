@@ -8,7 +8,7 @@ import io.appmetrica.analytics.protobuf.nano.MessageNano
 import java.util.Currency
 import java.util.concurrent.TimeUnit
 
-class ProductInfoConverter {
+internal class ProductInfoConverter {
 
     fun fromModel(value: ProductInfo): ByteArray = MessageNano.toByteArray(getRevenue(value))
 

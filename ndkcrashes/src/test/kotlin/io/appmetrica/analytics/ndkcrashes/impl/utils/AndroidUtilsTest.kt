@@ -9,7 +9,7 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
-class AndroidUtilsTest : CommonTest() {
+internal class AndroidUtilsTest : CommonTest() {
 
     @Test
     @Config(sdk = [Build.VERSION_CODES.M])

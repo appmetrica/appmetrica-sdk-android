@@ -23,7 +23,7 @@ import org.robolectric.RobolectricTestRunner
 import java.util.UUID
 
 @RunWith(RobolectricTestRunner::class)
-class CrashReporterTest : CommonTest() {
+internal class CrashReporterTest : CommonTest() {
 
     private val apiKey = UUID.randomUUID().toString()
     private val oneMoreApiKey = UUID.randomUUID().toString()

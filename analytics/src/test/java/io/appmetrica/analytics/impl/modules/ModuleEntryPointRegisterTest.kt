@@ -5,7 +5,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
 
-class ModuleEntryPointRegisterTest : CommonTest() {
+internal class ModuleEntryPointRegisterTest : CommonTest() {
 
     private lateinit var moduleEntryPointsRegister: ModuleEntryPointsRegister
 

@@ -6,7 +6,7 @@ import io.appmetrica.analytics.screenshot.impl.Constants
 import io.appmetrica.analytics.screenshot.impl.ContentObserverCaptorConfigProto
 import org.json.JSONObject
 
-class ContentObserverCaptorConfigJsonParser {
+internal class ContentObserverCaptorConfigJsonParser {
 
     fun parse(rawData: JSONObject): ContentObserverCaptorConfigProto? {
         val json = rawData.optJSONObject(Constants.RemoteConfig.CONTENT_OBSERVER_CAPTOR_CONFIG)

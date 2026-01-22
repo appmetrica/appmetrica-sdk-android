@@ -26,7 +26,7 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.whenever
 
-class AppMetricaLibraryAdapterProxyTest : CommonTest() {
+internal class AppMetricaLibraryAdapterProxyTest : CommonTest() {
 
     private val applicationContext: Context = mock()
     private val context: Context = mock {

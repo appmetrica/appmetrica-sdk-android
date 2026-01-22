@@ -15,7 +15,7 @@ import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class TempCacheDbHelperWrapperTest : CommonTest() {
+internal class TempCacheDbHelperWrapperTest : CommonTest() {
 
     private val storage: TempCacheStorage = mock()
     private val context: Context = mock()

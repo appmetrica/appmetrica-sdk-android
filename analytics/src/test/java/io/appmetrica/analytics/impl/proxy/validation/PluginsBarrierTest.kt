@@ -13,7 +13,7 @@ import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class PluginsBarrierTest : CommonTest() {
+internal class PluginsBarrierTest : CommonTest() {
 
     private val errorDetails: PluginErrorDetails = mock()
     private val appMetricaFacadeProvider: AppMetricaFacadeProvider = mock {

@@ -5,7 +5,7 @@ import io.appmetrica.analytics.coreutils.internal.system.SystemPropertiesHelper
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import java.io.File
 
-class OuterStoragePathProvider {
+internal class OuterStoragePathProvider {
 
     private val tag = "[OverwrittenDbStoragePathProvider]"
 

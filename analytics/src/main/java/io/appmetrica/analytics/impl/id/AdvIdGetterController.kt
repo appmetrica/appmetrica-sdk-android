@@ -16,14 +16,14 @@ internal class AdvIdGetterController(
 
     private val tag = "[AdvIdGetterController]"
 
-    enum class State {
+    internal enum class State {
         ALLOWED,
         FORBIDDEN_BY_CLIENT_CONFIG,
         FORBIDDEN_BY_REMOTE_CONFIG,
         UNKNOWN
     }
 
-    class CanTrackIdentifiers(
+    internal class CanTrackIdentifiers(
         val canTrackGaid: State,
         val canTrackHoaid: State,
         val canTrackYandexAdvId: State

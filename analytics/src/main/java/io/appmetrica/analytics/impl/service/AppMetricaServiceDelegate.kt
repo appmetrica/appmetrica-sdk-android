@@ -4,7 +4,7 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.os.IBinder
 
-interface AppMetricaServiceDelegate {
+internal interface AppMetricaServiceDelegate {
 
     fun onCreate()
     fun onStart(intent: Intent, startId: Int)

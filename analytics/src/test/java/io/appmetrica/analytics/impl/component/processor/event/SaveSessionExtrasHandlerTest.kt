@@ -14,7 +14,7 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
 
-class SaveSessionExtrasHandlerTest : CommonTest() {
+internal class SaveSessionExtrasHandlerTest : CommonTest() {
 
     private val sessionExtrasHolder = mock<SessionExtrasHolder>()
     private val componentId = mock<ComponentId>()

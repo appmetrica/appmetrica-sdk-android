@@ -11,7 +11,7 @@ private const val APPMETRICA_PLUGIN_ID = "io.appmetrica.analytics.plugin_id"
 private const val PLUGIN_SUPPORTED_AD_REVENUE_SOURCES =
     "io.appmetrica.analytics.plugin_supported_ad_revenue_sources"
 
-class ExtraMetaInfoRetriever @VisibleForTesting internal constructor(
+internal class ExtraMetaInfoRetriever @VisibleForTesting internal constructor(
     private val context: Context,
     private val buildIdRetriever: StringResourceRetriever,
     private val isOfflineRetriever: BooleanResourceRetriever,

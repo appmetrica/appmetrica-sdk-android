@@ -1,5 +1,5 @@
 package io.appmetrica.analytics.impl
 
-class FeaturesResult(
+internal class FeaturesResult(
     val libSslEnabled: Boolean?
 )

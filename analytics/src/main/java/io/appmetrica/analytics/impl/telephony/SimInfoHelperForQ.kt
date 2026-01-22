@@ -8,7 +8,7 @@ import io.appmetrica.analytics.coreutils.internal.parsing.ParseUtils
 
 @DoNotInline
 @TargetApi(Build.VERSION_CODES.Q)
-object SimInfoHelperForQ {
+internal object SimInfoHelperForQ {
     @JvmStatic
     fun mobileCountryCode(subscriptionInfo: SubscriptionInfo): Int? =
         ParseUtils.intValueOf(subscriptionInfo.mccString)

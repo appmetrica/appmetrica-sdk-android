@@ -6,7 +6,7 @@ import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
 private const val LOG_TAG = "[BillingTypeDetector]"
 
-object BillingTypeDetector {
+internal object BillingTypeDetector {
 
     @JvmStatic
     fun getBillingType(): BillingType {

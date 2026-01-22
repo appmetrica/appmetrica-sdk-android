@@ -29,7 +29,7 @@ import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class NativeCrashServiceModuleImplTest : CommonTest() {
+internal class NativeCrashServiceModuleImplTest : CommonTest() {
     companion object {
         private const val NATIVE_CRASH_DIR = "nativeCrashDir"
         private const val PACKAGE_NAME = "package"

@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl
 
-object CounterConfigurationKeys {
+internal object CounterConfigurationKeys {
 
     private const val CFG_PREFIX = "CFG_"
     const val DISPATCH_PERIOD = CFG_PREFIX + "DISPATCH_PERIOD"

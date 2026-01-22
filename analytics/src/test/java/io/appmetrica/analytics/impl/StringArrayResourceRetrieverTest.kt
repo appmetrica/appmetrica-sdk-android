@@ -17,7 +17,7 @@ import org.mockito.kotlin.stubbing
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class StringArrayResourceRetrieverTest : CommonTest() {
+internal class StringArrayResourceRetrieverTest : CommonTest() {
 
     private val resourceName = "my_resource"
 

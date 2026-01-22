@@ -5,7 +5,7 @@ import io.appmetrica.analytics.impl.db.preferences.SimplePreferenceStorage
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade
 import java.util.concurrent.Executor
 
-class ModuleStatusReporter(
+internal class ModuleStatusReporter(
     private val executor: Executor,
     private val preferences: SimplePreferenceStorage,
     private val modulesType: String,

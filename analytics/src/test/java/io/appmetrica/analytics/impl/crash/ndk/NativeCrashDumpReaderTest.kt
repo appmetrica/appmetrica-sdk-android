@@ -20,7 +20,7 @@ import org.robolectric.RobolectricTestRunner
 import java.io.File
 
 @RunWith(RobolectricTestRunner::class)
-class NativeCrashDumpReaderTest : CommonTest() {
+internal class NativeCrashDumpReaderTest : CommonTest() {
     @get:Rule
     val sIoUtilsMockedRule = staticRule<IOUtils>()
 

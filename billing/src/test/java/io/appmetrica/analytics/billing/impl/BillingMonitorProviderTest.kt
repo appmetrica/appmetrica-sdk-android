@@ -16,7 +16,7 @@ import io.appmetrica.analytics.billingv6.internal.BillingLibraryMonitor as Billi
 import io.appmetrica.analytics.billingv8.internal.BillingLibraryMonitor as BillingV8LibraryMonitor
 
 @RunWith(RobolectricTestRunner::class)
-class BillingMonitorProviderTest : CommonTest() {
+internal class BillingMonitorProviderTest : CommonTest() {
 
     private val context: Context = mock()
     private val workerExecutor: Executor = mock()

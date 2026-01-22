@@ -8,7 +8,7 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.stubbing
 
-class DefaultStartupHostsProviderPredefinedHostsTest : CommonTest() {
+internal class DefaultStartupHostsProviderPredefinedHostsTest : CommonTest() {
 
     private val resourceRetriever = mock<StringArrayResourceRetriever>()
     private val provider = DefaultStartupHostsProvider(resourceRetriever)

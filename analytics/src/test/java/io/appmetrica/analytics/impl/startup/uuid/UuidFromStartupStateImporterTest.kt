@@ -21,7 +21,7 @@ import java.util.UUID
 
 @RunWith(RobolectricTestRunner::class)
 
-class UuidFromStartupStateImporterTest : CommonTest() {
+internal class UuidFromStartupStateImporterTest : CommonTest() {
 
     private val context: Context = mock()
 

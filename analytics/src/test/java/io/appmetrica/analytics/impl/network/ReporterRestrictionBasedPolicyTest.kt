@@ -8,7 +8,7 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 
-class ReporterRestrictionBasedPolicyTest : CommonTest() {
+internal class ReporterRestrictionBasedPolicyTest : CommonTest() {
 
     private val restrictionController = mock<DataSendingRestrictionController>()
 

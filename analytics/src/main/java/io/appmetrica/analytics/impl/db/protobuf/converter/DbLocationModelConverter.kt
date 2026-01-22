@@ -4,7 +4,7 @@ import io.appmetrica.analytics.coreapi.internal.data.Converter
 import io.appmetrica.analytics.impl.db.event.DbLocationModel
 import io.appmetrica.analytics.impl.protobuf.client.DbProto
 
-class DbLocationModelConverter(
+internal class DbLocationModelConverter(
     private val optionalBoolConverter: OptionalBoolConverter = OptionalBoolConverter()
 ) : Converter<DbLocationModel, DbProto.Location?> {
 

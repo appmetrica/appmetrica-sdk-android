@@ -5,7 +5,7 @@ import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 
-class NonEmptyCollectionValidatorTest : CommonTest() {
+internal class NonEmptyCollectionValidatorTest : CommonTest() {
 
     private val validator = NonEmptyCollectionValidator<String>("My collection")
 

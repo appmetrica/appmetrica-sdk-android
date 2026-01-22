@@ -5,7 +5,7 @@ import io.appmetrica.analytics.impl.modules.ModulePreferencesAdapter
 import io.appmetrica.analytics.modulesapi.internal.client.ClientStorageProvider
 import io.appmetrica.analytics.modulesapi.internal.common.ModulePreferences
 
-class ClientStorageProviderImpl(
+internal class ClientStorageProviderImpl(
     private val preferencesDbStorage: SimplePreferenceStorage
 ) : ClientStorageProvider {
 

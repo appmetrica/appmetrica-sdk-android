@@ -8,7 +8,7 @@ import io.appmetrica.analytics.impl.utils.validation.NonNullValidator
 import io.appmetrica.analytics.impl.utils.validation.ThrowIfFailedValidator
 import io.appmetrica.analytics.impl.utils.validation.api.ApiKeyValidator
 
-class ModulesBarrier(
+internal class ModulesBarrier(
     provider: AppMetricaFacadeProvider,
 ) {
 

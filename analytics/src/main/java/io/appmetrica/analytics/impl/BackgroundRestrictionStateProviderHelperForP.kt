@@ -11,7 +11,7 @@ import io.appmetrica.analytics.impl.BackgroundRestrictionsState.AppStandByBucket
 
 @DoNotInline
 @TargetApi(Build.VERSION_CODES.P)
-object BackgroundRestrictionStateProviderHelperForP {
+internal object BackgroundRestrictionStateProviderHelperForP {
     @JvmStatic
     fun readBackgroundRestrictionsState(
         context: Context,

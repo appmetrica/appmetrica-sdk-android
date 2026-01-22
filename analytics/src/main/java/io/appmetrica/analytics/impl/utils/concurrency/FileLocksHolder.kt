@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import androidx.annotation.VisibleForTesting
 
-class FileLocksHolder @VisibleForTesting internal constructor(private val context: Context) {
+internal class FileLocksHolder @VisibleForTesting internal constructor(private val context: Context) {
     private val locks: MutableMap<String, ExclusiveMultiProcessFileLock> = HashMap()
 
     @Synchronized

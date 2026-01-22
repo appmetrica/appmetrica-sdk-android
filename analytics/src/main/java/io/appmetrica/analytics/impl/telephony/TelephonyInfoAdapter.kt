@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.telephony
 
-interface TelephonyInfoAdapter<T> {
+internal interface TelephonyInfoAdapter<T> {
 
     fun adopt(value: T)
 }

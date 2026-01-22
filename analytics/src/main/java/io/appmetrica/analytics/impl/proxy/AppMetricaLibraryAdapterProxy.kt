@@ -12,7 +12,7 @@ import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import io.appmetrica.analytics.logger.appmetrica.internal.ImportantLogger
 import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger
 
-class AppMetricaLibraryAdapterProxy {
+internal class AppMetricaLibraryAdapterProxy {
 
     private val tag = "[AppMetricaLibraryAdapterProxy]"
 

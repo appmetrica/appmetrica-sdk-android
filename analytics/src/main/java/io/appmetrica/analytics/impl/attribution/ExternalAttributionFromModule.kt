@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.attribution
 
 import io.appmetrica.analytics.impl.protobuf.backend.ExternalAttribution.ClientExternalAttribution
 
-class ExternalAttributionFromModule(
+internal class ExternalAttributionFromModule(
     source: Int,
     value: String?
 ) : BaseExternalAttribution(toProto(source, value))

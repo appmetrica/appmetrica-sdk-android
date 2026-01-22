@@ -21,7 +21,7 @@ import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class SatelliteClidsInfoProviderTest : CommonTest() {
+internal class SatelliteClidsInfoProviderTest : CommonTest() {
 
     private val authorities = "com.yandex.preinstallsatellite.appmetrica.provider"
     private val uri = "content://$authorities/clids"

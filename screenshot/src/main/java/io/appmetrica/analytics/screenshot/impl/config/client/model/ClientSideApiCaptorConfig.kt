@@ -2,7 +2,7 @@ package io.appmetrica.analytics.screenshot.impl.config.client.model
 
 import io.appmetrica.analytics.screenshot.impl.config.clientservice.model.ParcelableApiCaptorConfig
 
-class ClientSideApiCaptorConfig(
+internal class ClientSideApiCaptorConfig(
     val enabled: Boolean,
 ) {
 

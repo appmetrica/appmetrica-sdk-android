@@ -6,7 +6,7 @@ import io.appmetrica.analytics.coreapi.internal.data.TempCacheStorage
 import io.appmetrica.analytics.impl.db.StorageType
 import io.appmetrica.analytics.impl.utils.DebugAssert
 
-class TempCacheDbHelperWrapper(
+internal class TempCacheDbHelperWrapper(
     private val context: Context,
     private val storageType: StorageType,
     private val storage: TempCacheStorage

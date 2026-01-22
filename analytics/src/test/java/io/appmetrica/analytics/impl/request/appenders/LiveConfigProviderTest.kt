@@ -13,7 +13,7 @@ import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class LiveConfigProviderTest : CommonTest() {
+internal class LiveConfigProviderTest : CommonTest() {
 
     private val advertisingIdsHolder: AdvertisingIdsHolder = mock()
 

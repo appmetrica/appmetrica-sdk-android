@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.location.stub
 import io.appmetrica.analytics.locationapi.internal.LastKnownLocationExtractorProvider
 import io.appmetrica.analytics.locationapi.internal.LastKnownLocationExtractorProviderFactory
 
-class LastKnownExtractorProviderFactoryStub : LastKnownLocationExtractorProviderFactory {
+internal class LastKnownExtractorProviderFactoryStub : LastKnownLocationExtractorProviderFactory {
 
     private val lastKnownExtractorProviderStub = LastKnownExtractorProviderStub()
 

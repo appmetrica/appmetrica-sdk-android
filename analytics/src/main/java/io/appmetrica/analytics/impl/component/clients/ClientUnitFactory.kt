@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.component.clients
 import android.content.Context
 import io.appmetrica.analytics.impl.component.CommonArguments
 
-interface ClientUnitFactory<C : ClientUnit> {
+internal interface ClientUnitFactory<C : ClientUnit> {
     fun createClientUnit(
         context: Context,
         repository: ComponentsRepository,

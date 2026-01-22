@@ -5,7 +5,7 @@ import io.appmetrica.analytics.impl.client.ProcessConfiguration
 import io.appmetrica.analytics.impl.service.AppMetricaServiceDataReporter
 import io.appmetrica.analytics.internal.CounterConfiguration
 
-class ReportToSend(
+internal class ReportToSend(
     val report: CounterReport,
     val isCrashReport: Boolean,
     val serviceDataReporterType: Int,
@@ -30,7 +30,7 @@ class ReportToSend(
             Builder(report, environment)
     }
 
-    class Builder(
+    internal class Builder(
         private val report: CounterReport,
         private val environment: ReporterEnvironment
     ) {

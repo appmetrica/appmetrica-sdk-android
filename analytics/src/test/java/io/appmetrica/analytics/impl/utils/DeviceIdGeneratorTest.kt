@@ -22,7 +22,7 @@ import org.mockito.kotlin.stubbing
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class DeviceIdGeneratorTest : CommonTest() {
+internal class DeviceIdGeneratorTest : CommonTest() {
 
     private val advertisingIdsHolder = mock<AdvertisingIdsHolder>()
     private val advertisingIdGetter = mock<AdvertisingIdGetter>()

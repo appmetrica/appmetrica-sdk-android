@@ -5,7 +5,7 @@ import io.appmetrica.analytics.testutils.CommonTest
 import org.junit.Test
 import java.util.concurrent.TimeUnit
 
-class ExternalAttributionConfigParserTest : CommonTest() {
+internal class ExternalAttributionConfigParserTest : CommonTest() {
 
     private val parser = ExternalAttributionConfigParser()
     private val result = StartupResult()

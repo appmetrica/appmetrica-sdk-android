@@ -4,7 +4,7 @@ import io.appmetrica.analytics.testutils.CommonTest
 import nl.jqno.equalsverifier.EqualsVerifier
 import org.junit.Test
 
-class CustomHashCodeEqualsTest : CommonTest() {
+internal class CustomHashCodeEqualsTest : CommonTest() {
 
     @Test
     fun networkCoreQueueTaskEntryEqualsAndHashCode() {

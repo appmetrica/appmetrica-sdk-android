@@ -9,7 +9,7 @@ import org.junit.Test
 import org.mockito.kotlin.mock
 import javax.net.ssl.SSLSocketFactory
 
-class OkHttpClientFactoryTest : CommonTest() {
+internal class OkHttpClientFactoryTest : CommonTest() {
 
     private val factory = OkHttpClientFactory()
 

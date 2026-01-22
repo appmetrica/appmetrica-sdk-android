@@ -7,7 +7,7 @@ import org.junit.Test
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 
-class AppAppMetricaServiceDataReporterTest : CommonTest() {
+internal class AppAppMetricaServiceDataReporterTest : CommonTest() {
 
     private val metricaCore = mock<AppMetricaServiceCoreImpl>()
     private val appMetricaServiceDataReporter = AppMetricaServiceDataReporter(metricaCore)

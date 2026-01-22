@@ -8,7 +8,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.mockito.kotlin.mock
 
-class StartupStateTest : CommonTest() {
+internal class StartupStateTest : CommonTest() {
 
     private val collectingFlags: CollectingFlags = mock()
     private val deviceId = "some device id"

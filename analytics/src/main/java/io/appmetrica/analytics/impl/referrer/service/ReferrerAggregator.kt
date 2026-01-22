@@ -7,7 +7,7 @@ import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.referrer.common.ReferrerInfo
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
-class ReferrerAggregator @VisibleForTesting internal constructor(
+internal class ReferrerAggregator @VisibleForTesting internal constructor(
     private val referrerHolder: ReferrerHolder,
     private val googleReferrerRetriever: ReferrerRetrieverWrapper,
     private val huaweiReferrerRetriever: HuaweiReferrerRetriever,

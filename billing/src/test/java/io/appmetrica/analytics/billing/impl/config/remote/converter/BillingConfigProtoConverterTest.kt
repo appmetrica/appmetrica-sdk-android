@@ -7,7 +7,7 @@ import io.appmetrica.analytics.billing.internal.config.BillingConfig
 import io.appmetrica.analytics.testutils.CommonTest
 import org.junit.Test
 
-class BillingConfigProtoConverterTest : CommonTest() {
+internal class BillingConfigProtoConverterTest : CommonTest() {
 
     private val converter = BillingConfigProtoConverter()
 

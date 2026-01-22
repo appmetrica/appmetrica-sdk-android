@@ -1,22 +1,23 @@
-package io.appmetrica.analytics.screenshot.impl.config.clientservice.model
+package io.appmetrica.analytics.screenshot.internal.config
 
 import android.os.Parcel
 import android.os.Parcelable
+import io.appmetrica.analytics.screenshot.impl.config.clientservice.model.ParcelableScreenshotConfig
 import io.appmetrica.analytics.screenshot.impl.config.service.model.ServiceSideRemoteScreenshotConfig
 
-class ParcelableRemoteScreenshotConfig(
+class ParcelableRemoteScreenshotConfig internal constructor(
     val enabled: Boolean,
     val config: ParcelableScreenshotConfig?,
 ) : Parcelable {
 
-    constructor() : this(ServiceSideRemoteScreenshotConfig())
+    internal constructor() : this(ServiceSideRemoteScreenshotConfig())
 
-    constructor(remote: ServiceSideRemoteScreenshotConfig) : this(
+    internal constructor(remote: ServiceSideRemoteScreenshotConfig) : this(
         remote.enabled,
         remote.config?.let { ParcelableScreenshotConfig(it) },
     )
 
-    constructor(parcel: Parcel) : this(
+    internal constructor(parcel: Parcel) : this(
         parcel.readByte() != 0.toByte(),
         parcel.readParcelable(ParcelableScreenshotConfig::class.java.classLoader),
     )

@@ -17,7 +17,7 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.whenever
 
-class AppLovinAdRevenueProcessorTest : CommonTest() {
+internal class AppLovinAdRevenueProcessorTest : CommonTest() {
 
     private val maxAd: MaxAd = mock()
     private val appLovinSdk: AppLovinSdk = mock()

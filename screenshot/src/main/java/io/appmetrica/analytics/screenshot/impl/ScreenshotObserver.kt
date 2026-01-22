@@ -8,7 +8,7 @@ import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import io.appmetrica.analytics.modulesapi.internal.client.ClientContext
 import io.appmetrica.analytics.screenshot.impl.config.client.model.ClientSideContentObserverCaptorConfig
 
-class ScreenshotObserver(
+internal class ScreenshotObserver(
     private val clientContext: ClientContext,
     private val screenshotCapturedCallback: () -> Unit,
 ) : ContentObserver(clientContext.clientExecutorProvider.defaultExecutor.handler) {

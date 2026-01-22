@@ -6,7 +6,7 @@ import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.modules.ConstantModuleEntryPointProvider
 import io.appmetrica.analytics.impl.modules.PreferencesBasedModuleEntryPoint
 
-class DefaultServiceComponentsInitializer : ServiceComponentsInitializer {
+internal class DefaultServiceComponentsInitializer : ServiceComponentsInitializer {
 
     // order may be important
     private val moduleEntryPoints = listOf(

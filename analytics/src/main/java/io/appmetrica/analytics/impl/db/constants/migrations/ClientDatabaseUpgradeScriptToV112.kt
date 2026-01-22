@@ -4,7 +4,7 @@ import android.database.sqlite.SQLiteDatabase
 import io.appmetrica.analytics.coreapi.internal.db.DatabaseScript
 import io.appmetrica.analytics.impl.db.constants.Constants
 
-class ClientDatabaseUpgradeScriptToV112 : DatabaseScript() {
+internal class ClientDatabaseUpgradeScriptToV112 : DatabaseScript() {
 
     override fun runScript(database: SQLiteDatabase) {
         database.delete(

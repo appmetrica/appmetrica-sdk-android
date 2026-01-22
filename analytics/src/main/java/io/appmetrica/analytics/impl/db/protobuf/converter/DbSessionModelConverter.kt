@@ -6,7 +6,7 @@ import io.appmetrica.analytics.impl.component.session.SessionType
 import io.appmetrica.analytics.impl.db.constants.Constants
 import io.appmetrica.analytics.impl.db.session.DbSessionModel
 
-class DbSessionModelConverter(
+internal class DbSessionModelConverter(
     private val descriptionConverter: DbSessionDescriptionToBytesConverter = DbSessionDescriptionToBytesConverter()
 ) : Converter<DbSessionModel, ContentValues> {
 

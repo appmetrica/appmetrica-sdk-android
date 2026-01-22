@@ -12,7 +12,7 @@ import org.junit.Test
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verifyNoMoreInteractions
 
-class LocationApiStubTest : CommonTest() {
+internal class LocationApiStubTest : CommonTest() {
 
     private val wakelock = mock<Any>()
     private val locationControllerObserver = mock<LocationControllerObserver>()

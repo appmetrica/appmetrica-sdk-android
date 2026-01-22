@@ -16,7 +16,7 @@ import org.robolectric.ParameterizedRobolectricTestRunner
 import java.io.File
 
 @RunWith(ParameterizedRobolectricTestRunner::class)
-class FirstLaunchDetectorTest(
+internal class FirstLaunchDetectorTest(
     private val uuidFileExists: Boolean?,
     private val legacyUuidFileExists: Boolean?,
     private val expectedValue: Boolean

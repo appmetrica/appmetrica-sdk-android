@@ -8,7 +8,7 @@ import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import io.appmetrica.analytics.modulesapi.internal.service.ServiceContext
 import java.util.concurrent.TimeUnit
 
-class IdSyncResultRealtimeReporter(
+internal class IdSyncResultRealtimeReporter(
     private val serviceContext: ServiceContext,
     private val reportingUrl: String
 ) : IdSyncResultReporter {

@@ -10,7 +10,7 @@ import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import io.appmetrica.analytics.modulesapi.internal.service.ServiceContext
 import java.util.concurrent.TimeUnit
 
-class IdSyncController(
+internal class IdSyncController(
     private val serviceContext: ServiceContext,
     sdkIdentifiers: SdkIdentifiers
 ) {

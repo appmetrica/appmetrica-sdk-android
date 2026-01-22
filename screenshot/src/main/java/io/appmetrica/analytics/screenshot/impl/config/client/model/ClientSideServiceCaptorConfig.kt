@@ -2,7 +2,7 @@ package io.appmetrica.analytics.screenshot.impl.config.client.model
 
 import io.appmetrica.analytics.screenshot.impl.config.clientservice.model.ParcelableServiceCaptorConfig
 
-class ClientSideServiceCaptorConfig(
+internal class ClientSideServiceCaptorConfig(
     val enabled: Boolean,
     val delaySeconds: Long,
 ) {

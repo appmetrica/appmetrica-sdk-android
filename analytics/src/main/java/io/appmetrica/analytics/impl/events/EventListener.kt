@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.events
 
-interface EventListener {
+internal interface EventListener {
 
     fun onEventsAdded(reportTypes: List<Int>)
 

@@ -4,7 +4,7 @@ import io.appmetrica.analytics.coreutils.internal.time.SystemTimeProvider
 import io.appmetrica.analytics.coreutils.internal.time.TimeProvider
 import java.util.concurrent.TimeUnit
 
-class ServiceLifecycleTimeTracker {
+internal class ServiceLifecycleTimeTracker {
 
     private val timeProvider: TimeProvider = SystemTimeProvider()
 

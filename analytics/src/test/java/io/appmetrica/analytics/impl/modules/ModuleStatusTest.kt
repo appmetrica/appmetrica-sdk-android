@@ -4,7 +4,7 @@ import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 
-class ModuleStatusTest : CommonTest() {
+internal class ModuleStatusTest : CommonTest() {
 
     @Test
     fun toJsonObject() {

@@ -4,7 +4,7 @@ import io.appmetrica.analytics.ExternalAttribution
 import io.appmetrica.analytics.impl.protobuf.backend.ExternalAttribution.ClientExternalAttribution
 import io.appmetrica.analytics.protobuf.nano.MessageNano
 
-open class BaseExternalAttribution(
+internal open class BaseExternalAttribution(
     private val proto: ClientExternalAttribution
 ) : ExternalAttribution {
 

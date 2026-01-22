@@ -10,7 +10,7 @@ import org.junit.Test
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 
-class SupportedAdNetworksPayloadEnricherTest : CommonTest() {
+internal class SupportedAdNetworksPayloadEnricherTest : CommonTest() {
 
     private val context: Context = mock()
     private val nativeSupportedSources = "Native supported sources"

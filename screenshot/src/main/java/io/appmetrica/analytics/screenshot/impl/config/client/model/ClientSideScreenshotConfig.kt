@@ -2,7 +2,7 @@ package io.appmetrica.analytics.screenshot.impl.config.client.model
 
 import io.appmetrica.analytics.screenshot.impl.config.clientservice.model.ParcelableScreenshotConfig
 
-class ClientSideScreenshotConfig(
+internal class ClientSideScreenshotConfig(
     val apiCaptorConfig: ClientSideApiCaptorConfig?,
     val serviceCaptorConfig: ClientSideServiceCaptorConfig?,
     val contentObserverCaptorConfig: ClientSideContentObserverCaptorConfig?,

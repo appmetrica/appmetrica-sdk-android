@@ -14,7 +14,7 @@ import org.robolectric.RobolectricTestRunner
 import org.skyscreamer.jsonassert.JSONAssert
 
 @RunWith(RobolectricTestRunner::class)
-class AdRevenueSupportedSourcesNativeProviderTest : CommonTest() {
+internal class AdRevenueSupportedSourcesNativeProviderTest : CommonTest() {
 
     @get:Rule
     val clientServiceLocatorRule = ClientServiceLocatorRule()

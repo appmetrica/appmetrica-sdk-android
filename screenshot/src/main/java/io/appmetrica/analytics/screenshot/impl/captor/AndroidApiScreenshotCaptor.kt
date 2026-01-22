@@ -12,7 +12,7 @@ import io.appmetrica.analytics.screenshot.impl.callback.ScreenshotCaptorCallback
 import io.appmetrica.analytics.screenshot.impl.config.client.model.ClientSideApiCaptorConfig
 import io.appmetrica.analytics.screenshot.impl.config.client.model.ClientSideScreenshotConfig
 
-class AndroidApiScreenshotCaptor(
+internal class AndroidApiScreenshotCaptor(
     private val clientContext: ClientContext,
     private val callback: ScreenshotCaptorCallback,
 ) : ScreenshotCaptor {

@@ -10,7 +10,7 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.util.ReflectionHelpers
 
 @RunWith(RobolectricTestRunner::class)
-class AbiResolverTest : CommonTest() {
+internal class AbiResolverTest : CommonTest() {
     companion object {
         private const val ABI_32 = "32-bit-abi"
         private const val ABI_64 = "64-bit-abi"

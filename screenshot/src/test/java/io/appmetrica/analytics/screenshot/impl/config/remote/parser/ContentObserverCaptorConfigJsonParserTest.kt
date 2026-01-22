@@ -7,7 +7,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 import org.junit.Test
 
-class ContentObserverCaptorConfigJsonParserTest : CommonTest() {
+internal class ContentObserverCaptorConfigJsonParserTest : CommonTest() {
 
     private val parser = ContentObserverCaptorConfigJsonParser()
 

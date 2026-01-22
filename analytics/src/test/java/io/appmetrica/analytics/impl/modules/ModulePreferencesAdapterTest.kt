@@ -11,7 +11,7 @@ import org.mockito.kotlin.inOrder
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 
-class ModulePreferencesAdapterTest : CommonTest() {
+internal class ModulePreferencesAdapterTest : CommonTest() {
 
     private val identifier = "some_id"
     private val preferences = mock<PreferencesServiceDbStorage> {

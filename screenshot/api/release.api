@@ -6,19 +6,46 @@ public final class io.appmetrica.analytics.screenshot.BuildConfig {
     public <init>()
 }
 
-public final class io.appmetrica.analytics.screenshot.internal.ScreenshotClientModuleEntryPoint extends io.appmetrica.analytics.modulesapi.internal.client.ModuleClientEntryPoint<OBFUSCATED[io.appmetrica.analytics.screenshot.impl.config.clientservice.model.ParcelableRemoteScreenshotConfig]> {
+public final class io.appmetrica.analytics.screenshot.internal.ScreenshotClientModuleEntryPoint extends io.appmetrica.analytics.modulesapi.internal.client.ModuleClientEntryPoint<io.appmetrica.analytics.screenshot.internal.config.ParcelableRemoteScreenshotConfig> {
     public <init>()
     public [NonNull] String getIdentifier()
-    public [NonNull] io.appmetrica.analytics.modulesapi.internal.client.ServiceConfigExtensionConfiguration<OBFUSCATED[io.appmetrica.analytics.screenshot.impl.config.clientservice.model.ParcelableRemoteScreenshotConfig]> getServiceConfigExtensionConfiguration()
+    public [NonNull] io.appmetrica.analytics.modulesapi.internal.client.ServiceConfigExtensionConfiguration<io.appmetrica.analytics.screenshot.internal.config.ParcelableRemoteScreenshotConfig> getServiceConfigExtensionConfiguration()
     public void initClientSide([NonNull] io.appmetrica.analytics.modulesapi.internal.client.ClientContext)
     public void onActivated()
 }
 
-public final class io.appmetrica.analytics.screenshot.internal.ScreenshotServiceModuleEntryPoint extends io.appmetrica.analytics.modulesapi.internal.service.ModuleServiceEntryPoint<OBFUSCATED[io.appmetrica.analytics.screenshot.impl.config.remote.model.RemoteScreenshotConfig]> {
+public final class io.appmetrica.analytics.screenshot.internal.ScreenshotServiceModuleEntryPoint extends io.appmetrica.analytics.modulesapi.internal.service.ModuleServiceEntryPoint<io.appmetrica.analytics.screenshot.internal.config.RemoteScreenshotConfig> {
     public <init>()
     public [NonNull] io.appmetrica.analytics.modulesapi.internal.service.ClientConfigProvider getClientConfigProvider()
     public [NonNull] String getIdentifier()
-    public [NonNull] io.appmetrica.analytics.modulesapi.internal.service.RemoteConfigExtensionConfiguration<OBFUSCATED[io.appmetrica.analytics.screenshot.impl.config.remote.model.RemoteScreenshotConfig]> getRemoteConfigExtensionConfiguration()
-    public void initServiceSide([NonNull] io.appmetrica.analytics.modulesapi.internal.service.ServiceContext, [NonNull] io.appmetrica.analytics.modulesapi.internal.service.ModuleRemoteConfig<OBFUSCATED[io.appmetrica.analytics.screenshot.impl.config.remote.model.RemoteScreenshotConfig]>)
+    public [NonNull] io.appmetrica.analytics.modulesapi.internal.service.RemoteConfigExtensionConfiguration<io.appmetrica.analytics.screenshot.internal.config.RemoteScreenshotConfig> getRemoteConfigExtensionConfiguration()
+    public void initServiceSide([NonNull] io.appmetrica.analytics.modulesapi.internal.service.ServiceContext, [NonNull] io.appmetrica.analytics.modulesapi.internal.service.ModuleRemoteConfig<io.appmetrica.analytics.screenshot.internal.config.RemoteScreenshotConfig>)
+}
+
+public final class io.appmetrica.analytics.screenshot.internal.config.ParcelableRemoteScreenshotConfig implementation android.os.Parcelable {
+    public static final [NonNull] io.appmetrica.analytics.screenshot.internal.config.ParcelableRemoteScreenshotConfig$CREATOR CREATOR
+
+    public <init>()
+    public <init>([NonNull] android.os.Parcel)
+    public <init>(boolean, [Nullable] OBFUSCATED[io.appmetrica.analytics.screenshot.impl.config.clientservice.model.ParcelableScreenshotConfig])
+    public <init>([NonNull] OBFUSCATED[io.appmetrica.analytics.screenshot.impl.config.service.model.ServiceSideRemoteScreenshotConfig])
+    public int describeContents()
+    public final [Nullable] OBFUSCATED[io.appmetrica.analytics.screenshot.impl.config.clientservice.model.ParcelableScreenshotConfig] getConfig()
+    public final boolean getEnabled()
+    public [NonNull] String toString()
+    public void writeToParcel([NonNull] android.os.Parcel, int)
+}
+
+public static final class io.appmetrica.analytics.screenshot.internal.config.ParcelableRemoteScreenshotConfig$CREATOR implementation android.os.Parcelable$Creator<io.appmetrica.analytics.screenshot.internal.config.ParcelableRemoteScreenshotConfig> {
+    public [NonNull] io.appmetrica.analytics.screenshot.internal.config.ParcelableRemoteScreenshotConfig createFromParcel([NonNull] android.os.Parcel)
+    public [NonNull] io.appmetrica.analytics.screenshot.internal.config.ParcelableRemoteScreenshotConfig[] newArray(int)
+}
+
+public final class io.appmetrica.analytics.screenshot.internal.config.RemoteScreenshotConfig {
+    public <init>()
+    public <init>(boolean, [NonNull] OBFUSCATED[io.appmetrica.analytics.screenshot.impl.config.remote.model.ScreenshotConfig])
+    public final [NonNull] OBFUSCATED[io.appmetrica.analytics.screenshot.impl.config.remote.model.ScreenshotConfig] getConfig()
+    public final boolean getEnabled()
+    public [NonNull] String toString()
 }
 

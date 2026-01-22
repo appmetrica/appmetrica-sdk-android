@@ -10,7 +10,7 @@ import org.mockito.kotlin.mock
 import org.robolectric.ParameterizedRobolectricTestRunner
 
 @RunWith(ParameterizedRobolectricTestRunner::class)
-class UrgentEventTypesTest(
+internal class UrgentEventTypesTest(
     private val eventType: Int,
     private val isUrgent: Boolean
 ) : CommonTest() {

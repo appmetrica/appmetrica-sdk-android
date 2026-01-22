@@ -16,7 +16,7 @@ import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class AdvIdRetrieverTest : CommonTest() {
+internal class AdvIdRetrieverTest : CommonTest() {
 
     @get:Rule
     val rule: MockitoRule = MockitoJUnit.rule()

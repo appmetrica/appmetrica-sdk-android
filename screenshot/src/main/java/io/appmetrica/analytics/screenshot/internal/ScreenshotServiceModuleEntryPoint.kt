@@ -14,8 +14,8 @@ import io.appmetrica.analytics.screenshot.impl.Constants
 import io.appmetrica.analytics.screenshot.impl.ServiceToBundleScreenshotConfigConverter
 import io.appmetrica.analytics.screenshot.impl.config.remote.RemoteScreenshotConfigConverter
 import io.appmetrica.analytics.screenshot.impl.config.remote.RemoteScreenshotConfigParser
-import io.appmetrica.analytics.screenshot.impl.config.remote.model.RemoteScreenshotConfig
 import io.appmetrica.analytics.screenshot.impl.config.service.model.ServiceSideRemoteScreenshotConfig
+import io.appmetrica.analytics.screenshot.internal.config.RemoteScreenshotConfig
 
 class ScreenshotServiceModuleEntryPoint : ModuleServiceEntryPoint<RemoteScreenshotConfig>() {
 

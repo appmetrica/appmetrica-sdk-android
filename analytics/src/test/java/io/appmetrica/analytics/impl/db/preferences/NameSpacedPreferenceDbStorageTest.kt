@@ -13,7 +13,7 @@ import org.mockito.kotlin.whenever
 import org.robolectric.ParameterizedRobolectricTestRunner
 
 @RunWith(ParameterizedRobolectricTestRunner::class)
-class NameSpacedPreferenceDbStorageTest(
+internal class NameSpacedPreferenceDbStorageTest(
     private val implementation: NameSpacedPreferenceDbStorage,
     keyPattern: String,
     private val description: String

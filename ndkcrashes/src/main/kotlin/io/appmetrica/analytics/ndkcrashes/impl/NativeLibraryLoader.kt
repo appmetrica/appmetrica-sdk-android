@@ -4,10 +4,10 @@ import androidx.annotation.VisibleForTesting
 import io.appmetrica.analytics.ndkcrashes.impl.utils.DebugLogger
 
 // use class, mockito can not mock object
-class AppMetricaNativeLibraryLoader : NativeLibraryLoader("appmetrica-native")
-class AppMetricaServiceNativeLibraryLoader : NativeLibraryLoader("appmetrica-service-native")
+internal class AppMetricaNativeLibraryLoader : NativeLibraryLoader("appmetrica-native")
+internal class AppMetricaServiceNativeLibraryLoader : NativeLibraryLoader("appmetrica-service-native")
 
-abstract class NativeLibraryLoader(private val name: String) {
+internal abstract class NativeLibraryLoader(private val name: String) {
     @VisibleForTesting
     internal class LibraryLoader {
         fun load(name: String): Unit = System.loadLibrary(name)

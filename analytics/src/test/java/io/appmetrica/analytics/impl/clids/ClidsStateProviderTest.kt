@@ -5,7 +5,7 @@ import io.appmetrica.analytics.impl.DistributionSource
 import io.appmetrica.analytics.testutils.CommonTest
 import org.junit.Test
 
-class ClidsStateProviderTest : CommonTest() {
+internal class ClidsStateProviderTest : CommonTest() {
 
     private val stateProvider = ClidsStateProvider()
 

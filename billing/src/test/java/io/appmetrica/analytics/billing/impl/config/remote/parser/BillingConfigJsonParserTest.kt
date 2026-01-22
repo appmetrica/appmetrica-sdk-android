@@ -5,7 +5,7 @@ import io.appmetrica.analytics.testutils.CommonTest
 import org.json.JSONObject
 import org.junit.Test
 
-class BillingConfigJsonParserTest : CommonTest() {
+internal class BillingConfigJsonParserTest : CommonTest() {
 
     private val parser = BillingConfigJsonParser()
 

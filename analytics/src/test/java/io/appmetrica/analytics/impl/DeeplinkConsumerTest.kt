@@ -15,7 +15,7 @@ import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class DeeplinkConsumerTest : CommonTest() {
+internal class DeeplinkConsumerTest : CommonTest() {
 
     private val reporter = mock<IMainReporter>()
     private val deeplink = "Some deeplink"

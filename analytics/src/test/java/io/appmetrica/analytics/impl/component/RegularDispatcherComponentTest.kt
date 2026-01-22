@@ -27,7 +27,7 @@ import org.mockito.kotlin.verify
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class RegularDispatcherComponentTest : CommonTest() {
+internal class RegularDispatcherComponentTest : CommonTest() {
 
     private var context: Context = mock()
     private val componentId: ComponentId = mock()

@@ -18,7 +18,7 @@ import org.robolectric.RobolectricTestRunner
 import java.util.concurrent.Executor
 
 @RunWith(RobolectricTestRunner::class)
-class BillingInfoSenderImplTest : CommonTest() {
+internal class BillingInfoSenderImplTest : CommonTest() {
 
     private val firstProductInfo =
         ProductInfo(

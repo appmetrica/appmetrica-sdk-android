@@ -12,7 +12,7 @@ import org.robolectric.RobolectricTestRunner
 import java.util.concurrent.TimeUnit
 
 @RunWith(RobolectricTestRunner::class)
-class FullLocationInfoComposerTest : CommonTest() {
+internal class FullLocationInfoComposerTest : CommonTest() {
 
     private var composer = FullLocationInfoComposer()
 

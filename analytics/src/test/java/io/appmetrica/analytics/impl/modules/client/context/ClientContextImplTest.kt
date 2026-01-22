@@ -15,7 +15,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 
-class ClientContextImplTest : CommonTest() {
+internal class ClientContextImplTest : CommonTest() {
 
     private val context: Context = mock()
 

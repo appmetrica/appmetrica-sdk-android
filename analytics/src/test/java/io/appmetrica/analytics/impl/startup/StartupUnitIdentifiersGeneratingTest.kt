@@ -26,7 +26,7 @@ import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class StartupUnitIdentifiersGeneratingTest : CommonTest() {
+internal class StartupUnitIdentifiersGeneratingTest : CommonTest() {
 
     private var startupState: StartupState? = null
     private val generatedUuid = "generated uuid"

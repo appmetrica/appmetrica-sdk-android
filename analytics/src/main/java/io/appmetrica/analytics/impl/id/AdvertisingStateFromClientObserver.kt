@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.id
 
-interface AdvertisingStateFromClientObserver {
+internal interface AdvertisingStateFromClientObserver {
 
     fun setInitialStateFromClientConfigIfNotDefined(enabled: Boolean)
 

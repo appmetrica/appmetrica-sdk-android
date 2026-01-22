@@ -21,7 +21,7 @@ import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class ReportsSenderTest : CommonTest() {
+internal class ReportsSenderTest : CommonTest() {
 
     private val appMetricaConnector: AppMetricaConnector = mock()
     private val executor: ICommonExecutor = mock()

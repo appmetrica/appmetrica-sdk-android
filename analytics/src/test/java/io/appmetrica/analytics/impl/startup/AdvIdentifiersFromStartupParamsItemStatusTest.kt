@@ -14,7 +14,7 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 
 @RunWith(Parameterized::class)
-class AdvIdentifiersFromStartupParamsItemStatusTest(
+internal class AdvIdentifiersFromStartupParamsItemStatusTest(
     private val input: StartupParamsItemStatus,
     private val expected: AdvIdentifiersResult.Details
 ) : CommonTest() {

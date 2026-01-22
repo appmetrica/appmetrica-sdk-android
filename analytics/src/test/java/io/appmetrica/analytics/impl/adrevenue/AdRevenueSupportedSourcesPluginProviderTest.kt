@@ -13,7 +13,7 @@ import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class AdRevenueSupportedSourcesPluginProviderTest : CommonTest() {
+internal class AdRevenueSupportedSourcesPluginProviderTest : CommonTest() {
 
     private val context: Context = mock()
 

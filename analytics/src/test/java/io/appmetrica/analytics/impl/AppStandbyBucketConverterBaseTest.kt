@@ -5,7 +5,7 @@ import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 
-abstract class AppStandbyBucketConverterBaseTest(
+internal abstract class AppStandbyBucketConverterBaseTest(
     private val input: Int,
     private val expected: AppStandByBucket?,
     private val expectedString: String?

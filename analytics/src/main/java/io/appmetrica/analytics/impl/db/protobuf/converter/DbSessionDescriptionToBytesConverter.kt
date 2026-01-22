@@ -7,7 +7,7 @@ import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import io.appmetrica.analytics.protobuf.nano.InvalidProtocolBufferNanoException
 import io.appmetrica.analytics.protobuf.nano.MessageNano
 
-class DbSessionDescriptionToBytesConverter(
+internal class DbSessionDescriptionToBytesConverter(
     private val dbSessionDescriptionConverter: DbSessionDescriptionConverter = DbSessionDescriptionConverter()
 ) : Converter<DbSessionModel.Description, ByteArray?> {
 

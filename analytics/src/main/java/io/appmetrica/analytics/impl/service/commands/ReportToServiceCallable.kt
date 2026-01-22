@@ -8,7 +8,7 @@ import io.appmetrica.analytics.internal.IAppMetricaService
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import java.util.concurrent.Callable
 
-abstract class ReportToServiceCallable(
+internal abstract class ReportToServiceCallable(
     protected val serviceConnector: AppMetricaConnector,
     private val shouldDisconnectFromServiceChecker: ShouldDisconnectFromServiceChecker?
 ) : Callable<Unit> {

@@ -23,7 +23,7 @@ private const val HUAWEI = "huawei"
 private const val YANDEX = "yandex"
 
 @RunWith(RobolectricTestRunner::class)
-class ReflectionAdvIdParserTest : CommonTest() {
+internal class ReflectionAdvIdParserTest : CommonTest() {
 
     private val parser = ReflectionAdvIdParser()
 

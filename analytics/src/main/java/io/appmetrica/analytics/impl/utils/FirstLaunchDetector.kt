@@ -5,7 +5,7 @@ import io.appmetrica.analytics.coreutils.internal.io.FileUtils
 import io.appmetrica.analytics.impl.db.FileConstants
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 
-class FirstLaunchDetector {
+internal class FirstLaunchDetector {
 
     private val tag = "[FirstLaunchDetector]"
 

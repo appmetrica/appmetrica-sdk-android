@@ -10,7 +10,7 @@ import org.junit.runner.RunWith
 import org.robolectric.ParameterizedRobolectricTestRunner
 
 @RunWith(ParameterizedRobolectricTestRunner::class)
-class ProductTypeParserTest(
+internal class ProductTypeParserTest(
     private val productType: String,
     private val expected: ProductType
 ) : CommonTest() {

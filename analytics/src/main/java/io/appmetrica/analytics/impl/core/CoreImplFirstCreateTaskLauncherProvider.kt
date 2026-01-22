@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.core
 
-class CoreImplFirstCreateTaskLauncherProvider {
+internal class CoreImplFirstCreateTaskLauncherProvider {
 
     fun getLauncher() = CoreImplFirstCreateTaskLauncher(CoreImplFirstCreateTaskProvider().tasks())
 }

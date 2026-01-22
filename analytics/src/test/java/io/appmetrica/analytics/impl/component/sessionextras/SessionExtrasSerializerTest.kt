@@ -11,7 +11,7 @@ import org.junit.Test
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 
-class SessionExtrasSerializerTest : CommonTest() {
+internal class SessionExtrasSerializerTest : CommonTest() {
 
     private val data = ByteArray(50) { it.toByte() }
     private val proto = mock<SessionExtrasProtobuf.SessionExtras>()

@@ -10,7 +10,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.mockito.kotlin.mock
 
-class TempCacheDbHelperWrapperAssertTest : CommonTest() {
+internal class TempCacheDbHelperWrapperAssertTest : CommonTest() {
 
     @get:Rule
     val debugAssertMockedStaticRule = staticRule<DebugAssert>()

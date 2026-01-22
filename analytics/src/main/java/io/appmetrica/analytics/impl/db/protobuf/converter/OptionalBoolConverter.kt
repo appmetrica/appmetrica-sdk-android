@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.db.protobuf.converter
 import io.appmetrica.analytics.coreapi.internal.data.Converter
 import io.appmetrica.analytics.impl.protobuf.client.DbProto
 
-class OptionalBoolConverter : Converter<Boolean?, Int> {
+internal class OptionalBoolConverter : Converter<Boolean?, Int> {
 
     override fun fromModel(value: Boolean?): Int = when (value) {
         null -> DbProto.Utils.OPTIONAL_BOOL_UNDEFINED

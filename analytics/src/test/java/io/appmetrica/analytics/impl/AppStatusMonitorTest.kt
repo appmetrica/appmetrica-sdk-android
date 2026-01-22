@@ -20,7 +20,7 @@ import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 
-class AppStatusMonitorTest : CommonTest() {
+internal class AppStatusMonitorTest : CommonTest() {
 
     private val observer: AppStatusMonitor.Observer = mock()
     private val secondObserver: AppStatusMonitor.Observer = mock()

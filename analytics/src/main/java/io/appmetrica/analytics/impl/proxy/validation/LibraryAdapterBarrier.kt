@@ -6,7 +6,7 @@ import io.appmetrica.analytics.impl.proxy.AppMetricaFacadeProvider
 import io.appmetrica.analytics.impl.utils.validation.NonNullValidator
 import io.appmetrica.analytics.impl.utils.validation.api.ApiKeyValidator
 
-class LibraryAdapterBarrier(
+internal class LibraryAdapterBarrier(
     provider: AppMetricaFacadeProvider,
 ) {
 

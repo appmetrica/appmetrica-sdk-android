@@ -11,7 +11,7 @@ import org.mockito.kotlin.verifyNoMoreInteractions
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class PermissionExtractorStubTest : CommonTest() {
+internal class PermissionExtractorStubTest : CommonTest() {
 
     private val context = mock<Context>()
     private val permission = "Some permission"

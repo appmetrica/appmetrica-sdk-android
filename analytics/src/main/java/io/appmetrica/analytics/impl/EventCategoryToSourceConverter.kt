@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl
 
 import io.appmetrica.analytics.ModuleEvent.Category
 
-class EventCategoryToSourceConverter {
+internal class EventCategoryToSourceConverter {
 
     fun convert(value: Category): EventSource =
         when (value) {

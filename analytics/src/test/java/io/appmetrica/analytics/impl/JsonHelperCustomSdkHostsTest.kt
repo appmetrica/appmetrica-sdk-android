@@ -8,7 +8,7 @@ import org.json.JSONObject
 import org.junit.Test
 import org.skyscreamer.jsonassert.JSONAssert
 
-class JsonHelperCustomSdkHostsTest : CommonTest() {
+internal class JsonHelperCustomSdkHostsTest : CommonTest() {
 
     @Test
     fun customSdkHostsToStringNullMap() {
