@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.net.Uri
+import io.appmetrica.analytics.impl.AppMetricaServiceCoreExecutionDispatcher
 import io.appmetrica.analytics.impl.AppMetricaServiceCoreImpl
 import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.SelfProcessReporter
@@ -39,7 +40,11 @@ class AppMetricaServiceProxyTest : CommonTest() {
 
     @get:Rule
     val appmetricaServiceCoreImplRule = constructionRule<AppMetricaServiceCoreImpl>()
-    private val appMetricaServiceCore by appmetricaServiceCoreImplRule
+    private val appMetricaServiceCoreImpl by appmetricaServiceCoreImplRule
+
+    @get:Rule
+    val appMetricaServiceCoreExecutionDispatcherRule = constructionRule<AppMetricaServiceCoreExecutionDispatcher>()
+    private val appMetricaServiceCoreDispatcher by appMetricaServiceCoreExecutionDispatcherRule
 
     @get:Rule
     val appMetricaServiceDataReporterRule = constructionRule<AppMetricaServiceDataReporter>()
@@ -77,7 +82,10 @@ class AppMetricaServiceProxyTest : CommonTest() {
         assertThat(appmetricaServiceCoreImplRule.constructionMock.constructed()).hasSize(1)
         assertThat(appmetricaServiceCoreImplRule.argumentInterceptor.flatArguments())
             .containsExactly(context, serviceCallback)
-        verify(appMetricaServiceCore, times(2)).onCreate()
+        assertThat(appMetricaServiceCoreExecutionDispatcherRule.constructionMock.constructed()).hasSize(1)
+        assertThat(appMetricaServiceCoreExecutionDispatcherRule.argumentInterceptor.flatArguments())
+            .containsExactly(appMetricaServiceCoreImpl)
+        verify(appMetricaServiceCoreDispatcher, times(2)).onCreate()
     }
 
     @Test
@@ -115,7 +123,7 @@ class AppMetricaServiceProxyTest : CommonTest() {
         serviceProxy.onCreate()
         assertThat(appMetricaServiceBinderRule.constructionMock.constructed()).hasSize(1)
         assertThat(appMetricaServiceBinderRule.argumentInterceptor.flatArguments())
-            .containsExactly(appmetricaServiceCoreImplRule.constructionMock.constructed().first())
+            .containsExactly(appMetricaServiceCoreExecutionDispatcherRule.constructionMock.constructed().first())
     }
 
     @Test
@@ -123,7 +131,7 @@ class AppMetricaServiceProxyTest : CommonTest() {
         serviceProxy.onCreate()
         assertThat(selfProcessReporterRule.constructionMock.constructed()).hasSize(1)
         assertThat(selfProcessReporterRule.argumentInterceptor.flatArguments())
-            .containsExactly(appmetricaServiceCoreImplRule.constructionMock.constructed().first())
+            .containsExactly(appMetricaServiceCoreExecutionDispatcherRule.constructionMock.constructed().first())
 
         verify(GlobalServiceLocator.getInstance())
             .initSelfDiagnosticReporterStorage(selfProcessReporterRule.constructionMock.constructed().first())
@@ -133,14 +141,14 @@ class AppMetricaServiceProxyTest : CommonTest() {
     fun onStart() {
         serviceProxy.onCreate()
         serviceProxy.onStart(intent, 0)
-        verify(appMetricaServiceCore).onStart(intent, 0)
+        verify(appMetricaServiceCoreDispatcher).onStart(intent, 0)
     }
 
     @Test
     fun onStartCommand() {
         serviceProxy.onCreate()
         assertThat(serviceProxy.onStartCommand(intent, 0, 0)).isEqualTo(START_NOT_STICKY)
-        verify(appMetricaServiceCore).onStartCommand(intent, 0, 0)
+        verify(appMetricaServiceCoreDispatcher).onStartCommand(intent, 0, 0)
     }
 
     @Test
@@ -154,7 +162,7 @@ class AppMetricaServiceProxyTest : CommonTest() {
     fun onRebind() {
         serviceProxy.onCreate()
         serviceProxy.onRebind(intent)
-        verify(appMetricaServiceCore).onRebind(intent)
+        verify(appMetricaServiceCoreDispatcher).onRebind(intent)
     }
 
     @Test
@@ -162,7 +170,7 @@ class AppMetricaServiceProxyTest : CommonTest() {
         whenever(intent.action).thenReturn(AppMetricaConnectionConstants.ACTION_SERVICE_WAKELOCK)
         serviceProxy.onCreate()
         assertThat(serviceProxy.onUnbind(intent)).isFalse()
-        verify(appMetricaServiceCore).onUnbind(intent)
+        verify(appMetricaServiceCoreDispatcher).onUnbind(intent)
     }
 
     @Test
@@ -170,7 +178,7 @@ class AppMetricaServiceProxyTest : CommonTest() {
         whenever(intent.action).thenReturn(AppMetricaConnectionConstants.ACTION_CLIENT_CONNECTION)
         serviceProxy.onCreate()
         assertThat(serviceProxy.onUnbind(intent)).isFalse()
-        verify(appMetricaServiceCore).onUnbind(intent)
+        verify(appMetricaServiceCoreDispatcher).onUnbind(intent)
     }
 
     @Test
@@ -178,7 +186,7 @@ class AppMetricaServiceProxyTest : CommonTest() {
         whenever(intent.action).thenReturn("other")
         serviceProxy.onCreate()
         assertThat(serviceProxy.onUnbind(intent)).isFalse()
-        verify(appMetricaServiceCore).onUnbind(intent)
+        verify(appMetricaServiceCoreDispatcher).onUnbind(intent)
     }
 
     @Test
@@ -186,14 +194,14 @@ class AppMetricaServiceProxyTest : CommonTest() {
         whenever(intent.data).thenReturn(null)
         serviceProxy.onCreate()
         assertThat(serviceProxy.onUnbind(intent)).isTrue()
-        verify(appMetricaServiceCore).onUnbind(intent)
+        verify(appMetricaServiceCoreDispatcher).onUnbind(intent)
     }
 
     @Test
     fun onDestroy() {
         serviceProxy.onCreate()
         serviceProxy.onDestroy()
-        verify(appMetricaServiceCore).onDestroy()
+        verify(appMetricaServiceCoreDispatcher).onDestroy()
     }
 
     @Test
@@ -201,6 +209,6 @@ class AppMetricaServiceProxyTest : CommonTest() {
         val configuration: Configuration = mock()
         serviceProxy.onCreate()
         serviceProxy.onConfigurationChanged(configuration)
-        verify(appMetricaServiceCore).onConfigurationChanged(configuration)
+        verify(appMetricaServiceCoreDispatcher).onConfigurationChanged(configuration)
     }
 }
