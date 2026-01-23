@@ -27,6 +27,7 @@ public final class io.appmetrica.analytics.idsync.internal.model.IdSyncConfig {
 public enum io.appmetrica.analytics.idsync.internal.model.NetworkType {
     ANY, CELL
 
+    public static [NonNull] kotlin.enums.EnumEntries<io.appmetrica.analytics.idsync.internal.model.NetworkType> getEntries()
     public static io.appmetrica.analytics.idsync.internal.model.NetworkType valueOf(String)
     public static io.appmetrica.analytics.idsync.internal.model.NetworkType[] values()
 }

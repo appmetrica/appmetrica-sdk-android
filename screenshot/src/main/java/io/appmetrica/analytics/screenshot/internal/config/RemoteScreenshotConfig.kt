@@ -5,7 +5,7 @@ import io.appmetrica.analytics.screenshot.impl.config.remote.model.ScreenshotCon
 
 class RemoteScreenshotConfig internal constructor(
     val enabled: Boolean,
-    val config: ScreenshotConfig,
+    internal val config: ScreenshotConfig,
 ) {
 
     internal constructor() : this(

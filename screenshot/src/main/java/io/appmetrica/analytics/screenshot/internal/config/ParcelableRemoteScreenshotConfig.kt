@@ -7,7 +7,7 @@ import io.appmetrica.analytics.screenshot.impl.config.service.model.ServiceSideR
 
 class ParcelableRemoteScreenshotConfig internal constructor(
     val enabled: Boolean,
-    val config: ParcelableScreenshotConfig?,
+    internal val config: ParcelableScreenshotConfig?,
 ) : Parcelable {
 
     internal constructor() : this(ServiceSideRemoteScreenshotConfig())

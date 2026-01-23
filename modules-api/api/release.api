@@ -108,6 +108,7 @@ public interface io.appmetrica.analytics.modulesapi.internal.client.adrevenue.Mo
 public enum io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdType {
     APP_OPEN, BANNER, INTERSTITIAL, MREC, NATIVE, OTHER, REWARDED
 
+    public static [NonNull] kotlin.enums.EnumEntries<io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdType> getEntries()
     public static io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdType valueOf(String)
     public static io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdType[] values()
 }
@@ -175,6 +176,7 @@ public static final class io.appmetrica.analytics.modulesapi.internal.common.Int
 public enum io.appmetrica.analytics.modulesapi.internal.common.InternalModuleEvent$Category {
     GENERAL, SYSTEM
 
+    public static [NonNull] kotlin.enums.EnumEntries<io.appmetrica.analytics.modulesapi.internal.common.InternalModuleEvent$Category> getEntries()
     public static io.appmetrica.analytics.modulesapi.internal.common.InternalModuleEvent$Category valueOf(String)
     public static io.appmetrica.analytics.modulesapi.internal.common.InternalModuleEvent$Category[] values()
 }

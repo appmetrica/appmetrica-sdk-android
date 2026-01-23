@@ -54,8 +54,8 @@ io.appmetrica.analytics:proto:unspecified
 io.appmetrica.analytics:remote-permissions:unspecified
 io.appmetrica.analytics:reporter-extension:unspecified
 io.appmetrica.analytics:screenshot:unspecified
-org.jetbrains.kotlin:kotlin-stdlib-common:1.6.21
-org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.20
-org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.20
-org.jetbrains.kotlin:kotlin-stdlib:1.6.21
+org.jetbrains.kotlin:kotlin-stdlib-common:1.9.25
+org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.0
+org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.0
+org.jetbrains.kotlin:kotlin-stdlib:1.9.25
 org.jetbrains:annotations:13.0

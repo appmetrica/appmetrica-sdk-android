@@ -270,6 +270,7 @@ public interface io.appmetrica.analytics.coreapi.internal.identifiers.AppSetIdPr
 public enum io.appmetrica.analytics.coreapi.internal.identifiers.AppSetIdScope {
     APP, DEVELOPER, UNKNOWN
 
+    public static [NonNull] kotlin.enums.EnumEntries<io.appmetrica.analytics.coreapi.internal.identifiers.AppSetIdScope> getEntries()
     public final [NonNull] String getValue()
     public static io.appmetrica.analytics.coreapi.internal.identifiers.AppSetIdScope valueOf(String)
     public static io.appmetrica.analytics.coreapi.internal.identifiers.AppSetIdScope[] values()
@@ -281,6 +282,7 @@ public enum io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatu
     public static final [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus$Companion Companion
 
     public static final [NonNull] io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus from([Nullable] String)
+    public static [NonNull] kotlin.enums.EnumEntries<io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus> getEntries()
     public final [NonNull] String getValue()
     public static io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus valueOf(String)
     public static io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus[] values()
@@ -333,6 +335,7 @@ public interface io.appmetrica.analytics.coreapi.internal.io.SslSocketFactoryPro
 public enum io.appmetrica.analytics.coreapi.internal.lifecycle.ActivityEvent {
     CREATED, DESTROYED, PAUSED, RESUMED, STARTED, STOPPED
 
+    public static [NonNull] kotlin.enums.EnumEntries<io.appmetrica.analytics.coreapi.internal.lifecycle.ActivityEvent> getEntries()
     public static io.appmetrica.analytics.coreapi.internal.lifecycle.ActivityEvent valueOf(String)
     public static io.appmetrica.analytics.coreapi.internal.lifecycle.ActivityEvent[] values()
 }
@@ -558,6 +561,7 @@ public interface io.appmetrica.analytics.coreapi.internal.system.LocaleProvider 
 public enum io.appmetrica.analytics.coreapi.internal.system.NetworkType {
     BLUETOOTH, CELL, ETHERNET, LOWPAN, MOBILE_DUN, MOBILE_HIPRI, MOBILE_MMS, MOBILE_SUPL, OFFLINE, UNDEFINED, VPN, WIFI, WIFI_AWARE, WIMAX
 
+    public static [NonNull] kotlin.enums.EnumEntries<io.appmetrica.analytics.coreapi.internal.system.NetworkType> getEntries()
     public static io.appmetrica.analytics.coreapi.internal.system.NetworkType valueOf(String)
     public static io.appmetrica.analytics.coreapi.internal.system.NetworkType[] values()
 }

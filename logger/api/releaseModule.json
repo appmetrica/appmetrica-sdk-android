@@ -54,17 +54,17 @@
             },
             "dependencies": [
                 {
+                    "group": "org.jetbrains.kotlin",
+                    "module": "kotlin-stdlib",
+                    "version": {
+                        "requires": "1.9.25"
+                    }
+                },
+                {
                     "group": "io.appmetrica.analytics",
                     "module": "analytics-common-logger",
                     "version": {
                         "requires": "8.1.0"
-                    }
-                },
-                {
-                    "group": "org.jetbrains.kotlin",
-                    "module": "kotlin-stdlib",
-                    "version": {
-                        "requires": "1.6.21"
                     }
                 }
             ],

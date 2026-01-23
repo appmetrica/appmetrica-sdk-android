@@ -9,8 +9,8 @@ io.appmetrica.analytics:logger:unspecified
 io.appmetrica.analytics:network-api:unspecified
 io.appmetrica.analytics:network-okhttp:unspecified
 io.appmetrica.analytics:proto:unspecified
-org.jetbrains.kotlin:kotlin-stdlib-common:1.6.21
-org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.20
-org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.20
-org.jetbrains.kotlin:kotlin-stdlib:1.6.21
+org.jetbrains.kotlin:kotlin-stdlib-common:1.9.25
+org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.0
+org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.0
+org.jetbrains.kotlin:kotlin-stdlib:1.9.25
 org.jetbrains:annotations:13.0

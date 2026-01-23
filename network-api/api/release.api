@@ -64,6 +64,7 @@ public static final class io.appmetrica.analytics.networkapi.Request$Builder {
 public enum io.appmetrica.analytics.networkapi.Request$Method {
     GET, POST
 
+    public static [NonNull] kotlin.enums.EnumEntries<io.appmetrica.analytics.networkapi.Request$Method> getEntries()
     public final [NonNull] String getMethodName()
     public static io.appmetrica.analytics.networkapi.Request$Method valueOf(String)
     public static io.appmetrica.analytics.networkapi.Request$Method[] values()

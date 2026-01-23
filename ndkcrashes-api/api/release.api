@@ -68,6 +68,7 @@ public final class io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrashSer
 public enum io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrashSource {
     CRASHPAD, UNKNOWN
 
+    public static [NonNull] kotlin.enums.EnumEntries<io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrashSource> getEntries()
     public static io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrashSource valueOf(String)
     public static io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrashSource[] values()
 }

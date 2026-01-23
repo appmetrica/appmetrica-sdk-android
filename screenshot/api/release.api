@@ -30,7 +30,7 @@ public final class io.appmetrica.analytics.screenshot.internal.config.Parcelable
     public <init>(boolean, [Nullable] OBFUSCATED[io.appmetrica.analytics.screenshot.impl.config.clientservice.model.ParcelableScreenshotConfig])
     public <init>([NonNull] OBFUSCATED[io.appmetrica.analytics.screenshot.impl.config.service.model.ServiceSideRemoteScreenshotConfig])
     public int describeContents()
-    public final [Nullable] OBFUSCATED[io.appmetrica.analytics.screenshot.impl.config.clientservice.model.ParcelableScreenshotConfig] getConfig()
+    public final [Nullable] OBFUSCATED[io.appmetrica.analytics.screenshot.impl.config.clientservice.model.ParcelableScreenshotConfig] getConfig$screenshot_release()
     public final boolean getEnabled()
     public [NonNull] String toString()
     public void writeToParcel([NonNull] android.os.Parcel, int)
@@ -44,7 +44,7 @@ public static final class io.appmetrica.analytics.screenshot.internal.config.Par
 public final class io.appmetrica.analytics.screenshot.internal.config.RemoteScreenshotConfig {
     public <init>()
     public <init>(boolean, [NonNull] OBFUSCATED[io.appmetrica.analytics.screenshot.impl.config.remote.model.ScreenshotConfig])
-    public final [NonNull] OBFUSCATED[io.appmetrica.analytics.screenshot.impl.config.remote.model.ScreenshotConfig] getConfig()
+    public final [NonNull] OBFUSCATED[io.appmetrica.analytics.screenshot.impl.config.remote.model.ScreenshotConfig] getConfig$screenshot_release()
     public final boolean getEnabled()
     public [NonNull] String toString()
 }

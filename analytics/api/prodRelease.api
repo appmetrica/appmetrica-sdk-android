@@ -650,6 +650,7 @@ public enum io.appmetrica.analytics.internal.CounterConfigurationReporterType {
     public static final [NonNull] io.appmetrica.analytics.internal.CounterConfigurationReporterType$Companion Companion
 
     public static final [NonNull] io.appmetrica.analytics.internal.CounterConfigurationReporterType fromStringValue([Nullable] String)
+    public static [NonNull] kotlin.enums.EnumEntries<io.appmetrica.analytics.internal.CounterConfigurationReporterType> getEntries()
     public final [NonNull] String getStringValue()
     public static io.appmetrica.analytics.internal.CounterConfigurationReporterType valueOf(String)
     public static io.appmetrica.analytics.internal.CounterConfigurationReporterType[] values()

@@ -1,4 +1,3 @@
 io.appmetrica.analytics:analytics-common-logger:7.0.0
-org.jetbrains.kotlin:kotlin-stdlib-common:1.6.21
-org.jetbrains.kotlin:kotlin-stdlib:1.6.21
+org.jetbrains.kotlin:kotlin-stdlib:1.9.25
 org.jetbrains:annotations:13.0

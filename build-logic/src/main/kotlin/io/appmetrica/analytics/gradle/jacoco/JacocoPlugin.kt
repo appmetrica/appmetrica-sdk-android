@@ -77,7 +77,7 @@ class JacocoPlugin : Plugin<Project> {
             classDirectories.from(fileTree(variant.javaCompileProvider.get().destinationDirectory.get()) {
                 exclude(extension.exclude.get())
             })
-            classDirectories.from(fileTree(kotlinTask.destinationDir) {
+            classDirectories.from(fileTree(kotlinTask.destinationDirectory.get()) {
                 exclude(extension.exclude.get())
             })
 
