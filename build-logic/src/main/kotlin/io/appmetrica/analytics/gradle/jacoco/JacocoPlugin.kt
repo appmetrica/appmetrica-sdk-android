@@ -33,7 +33,7 @@ class JacocoPlugin : Plugin<Project> {
         val extension = project.extensions.create<JacocoSettingsExtension>("jacocoSettings")
 
         project.configure<JacocoPluginExtension> {
-            toolVersion = "0.8.7" // https://github.com/jacoco/jacoco/releases
+            toolVersion = "0.8.14" // https://github.com/jacoco/jacoco/releases
         }
 
         project.plugins.withId("com.android.library") {
