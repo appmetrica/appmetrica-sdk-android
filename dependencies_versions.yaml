@@ -82,7 +82,7 @@
     group: "com.singular.sdk"
     name: "singular_sdk"
     from: "12.10.0"
-    to: "12.10.0"
+    to: "12.11.0"
 - group: "io.appmetrica.analytics"
   name: "analytics-apphud-v2"
   dependencies:
