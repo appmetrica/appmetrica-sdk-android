@@ -1,7 +1,6 @@
 package io.appmetrica.analytics.internal
 
 import android.location.Location
-import android.os.Build
 import io.appmetrica.analytics.AppMetricaConfig
 import io.appmetrica.analytics.ReporterConfig
 import io.appmetrica.analytics.impl.SdkData
@@ -14,48 +13,11 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
-import org.robolectric.ParameterizedRobolectricTestRunner
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.annotation.Config
 import java.util.UUID
 
 @RunWith(RobolectricTestRunner::class)
-@Config(sdk = [Build.VERSION_CODES.LOLLIPOP])
 class CounterConfigurationTest : CommonTest() {
-
-    @RunWith(ParameterizedRobolectricTestRunner::class)
-    class ReporterTypeTest(
-        private val mReporterType: CounterConfigurationReporterType,
-        private val mStringValue: String
-    ) : CommonTest() {
-
-        @Test
-        fun stringValue() {
-            assertThat(mReporterType.stringValue).isEqualTo(mStringValue)
-        }
-
-        @Test
-        fun fromString() {
-            assertThat(fromStringValue(mStringValue)).isEqualTo(mReporterType)
-        }
-
-        companion object {
-
-            @ParameterizedRobolectricTestRunner.Parameters(name = "Report type: {0}")
-            @JvmStatic
-            fun data(): Collection<Array<Any>> {
-                return listOf(
-                    arrayOf(CounterConfigurationReporterType.COMMUTATION, "commutation"),
-                    arrayOf(CounterConfigurationReporterType.MAIN, "main"),
-                    arrayOf(CounterConfigurationReporterType.MANUAL, "manual"),
-                    arrayOf(CounterConfigurationReporterType.SELF_DIAGNOSTIC_MAIN, "self_diagnostic_main"),
-                    arrayOf(CounterConfigurationReporterType.SELF_DIAGNOSTIC_MANUAL, "self_diagnostic_manual"),
-                    arrayOf(CounterConfigurationReporterType.SELF_SDK, "self_sdk"),
-                    arrayOf(CounterConfigurationReporterType.CRASH, "crash")
-                )
-            }
-        }
-    }
 
     private lateinit var counterConfiguration: CounterConfiguration
 

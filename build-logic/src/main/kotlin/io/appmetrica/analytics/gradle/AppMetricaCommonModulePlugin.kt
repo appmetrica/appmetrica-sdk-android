@@ -6,6 +6,9 @@ import io.appmetrica.analytics.gradle.codequality.CodeQualityPlugin
 import io.appmetrica.analytics.gradle.jacoco.JacocoPlugin
 import io.appmetrica.analytics.gradle.publishing.PublishingInfoBuildTypeExtension
 import io.appmetrica.analytics.gradle.publishing.PublishingPlugin
+import io.appmetrica.analytics.gradle.test.TestJvmArgsConfigurator
+import io.appmetrica.analytics.gradle.test.TestSettingsExtension
+import io.appmetrica.analytics.gradle.test.TestSplitPlugin
 import io.appmetrica.gradle.aarcheck.AarCheckExtension
 import io.appmetrica.gradle.aarcheck.AarCheckPlugin
 import io.appmetrica.gradle.aarcheck.agp.aarCheck
@@ -36,11 +39,18 @@ class AppMetricaCommonModulePlugin : Plugin<Project> {
 
         project.group = Constants.Library.group
 
+        // Create testSettings extension for test configuration
+        val testSettings = project.extensions.create("testSettings", TestSettingsExtension::class.java)
+        testSettings.maxParallelForks.convention(4) // default value for all test tasks
+
+        // Apply TestSplitPlugin (uses testSettings.split nested extension)
+        project.apply<TestSplitPlugin>() // id("appmetrica-test-split")
+
         project.configureAndroid()
         project.configureKotlin()
         project.configureAarCheck()
         project.configureNoLogs()
-        project.configureTests()
+        project.configureTests(testSettings)
 
         project.dependencies {
             val implementation by project.configurations.getting
@@ -94,7 +104,7 @@ class AppMetricaCommonModulePlugin : Plugin<Project> {
                     freeCompilerArgs += listOf(
                         "-Xno-call-assertions",
                         "-Xno-receiver-assertions",
-                        "-Xno-param-assertions"
+                        "-Xno-param-assertions",
                     )
                 }
             }
@@ -121,7 +131,7 @@ class AppMetricaCommonModulePlugin : Plugin<Project> {
                     "checkReturnedValueIsNotNull",
                     "checkExpressionValueIsNotNull",
                     "checkFieldIsNotNull",
-                    "checkParameterIsNotNull"
+                    "checkParameterIsNotNull",
                 )
             )
         }
@@ -133,13 +143,13 @@ class AppMetricaCommonModulePlugin : Plugin<Project> {
                 "DebugAssert",
                 "DebugLogger",
                 "DebugLogger.INSTANCE",
-                "NativeCrashLogger"
+                "NativeCrashLogger",
             )
             shouldRemoveLogs = { it.buildType.name == "release" }
         }
     }
 
-    private fun Project.configureTests() {
+    private fun Project.configureTests(testSettings: TestSettingsExtension) {
         configure<LibraryExtension> {
             @Suppress("UnstableApiUsage")
             testOptions {
@@ -147,24 +157,7 @@ class AppMetricaCommonModulePlugin : Plugin<Project> {
                     isReturnDefaultValues = true
                     isIncludeAndroidResources = true
                     all {
-                        // about arguments https://docs.oracle.com/javase/9/tools/java.htm
-                        it.jvmArgs("-noverify", "-Xmx2g")
-                        // https://nda.ya.ru/t/81uL3Dxs6Njj8v
-                        it.jvmArgs("-Djdk.attach.allowAttachSelf=true")
-                        // need for fix https://nda.ya.ru/t/PGGDmRNa6Njj8w
-                        it.jvmArgs("-XX:CompileCommand=exclude,android/database/sqlite/SQLiteSession*.*")
-                        it.systemProperty("robolectric.logging.enabled", "true")
-                        it.maxParallelForks = 4
-                        it.beforeTest(
-                            closureOf<TestDescriptor> {
-                                logger.lifecycle("< $this started.")
-                            }
-                        )
-                        it.afterTest(
-                            closureOf<TestDescriptor> {
-                                logger.lifecycle("< $this finished.")
-                            }
-                        )
+                        TestJvmArgsConfigurator.configureBaseJvmArgs(it)
                     }
                 }
             }
@@ -183,6 +176,18 @@ class AppMetricaCommonModulePlugin : Plugin<Project> {
             testImplementation("org.skyscreamer:jsonassert:1.5.0")
             testImplementation("io.appmetrica.analytics:common_assertions")
             testImplementation(findProject(":test-utils") ?: "io.appmetrica.analytics:test-utils")
+        }
+
+        // Configure Test tasks after evaluation
+        // afterEvaluate is necessary because testSettings may be configured
+        // by user after plugin application (e.g., in module's build.gradle.kts)
+        afterEvaluate {
+            tasks.withType<org.gradle.api.tasks.testing.Test> {
+                // Apply maxParallelForks from testSettings extension
+                if (testSettings.maxParallelForks.isPresent) {
+                    maxParallelForks = testSettings.maxParallelForks.get()
+                }
+            }
         }
     }
 }

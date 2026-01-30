@@ -1,6 +1,5 @@
 package io.appmetrica.analytics.impl;
 
-import android.os.Build;
 import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
 import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus;
 import io.appmetrica.analytics.coreapi.internal.model.ScreenInfo;
@@ -15,14 +14,12 @@ import org.json.JSONObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.annotation.Config;
 import org.skyscreamer.jsonassert.JSONAssert;
 
 import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(sdk = Build.VERSION_CODES.LOLLIPOP)
 public class JsonHelperTest extends CommonTest {
 
     @Test

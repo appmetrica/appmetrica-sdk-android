@@ -18,12 +18,6 @@ internal class AndroidUtilsTest : CommonTest() {
     }
 
     @Test
-    @Config(sdk = [Build.VERSION_CODES.LOLLIPOP_MR1])
-    fun isAndroidMAchievedForLower() {
-        assertThat(AndroidUtils.isAndroidMAchieved()).isFalse()
-    }
-
-    @Test
     @Config(sdk = [Build.VERSION_CODES.N])
     fun isAndroidMAchievedForHigher() {
         assertThat(AndroidUtils.isAndroidMAchieved()).isTrue()

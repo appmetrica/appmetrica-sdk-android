@@ -1,7 +1,6 @@
 package io.appmetrica.analytics.impl.startup.uuid
 
 import android.content.Context
-import android.os.Build
 import io.appmetrica.analytics.coreutils.internal.io.FileUtils.resetSdkStorage
 import io.appmetrica.analytics.impl.IOUtils
 import io.appmetrica.analytics.impl.db.FileConstants
@@ -56,11 +55,7 @@ internal class PersistentUuidHolderTest : CommonTest() {
     fun setUp() {
         resetSdkStorage()
         context = RuntimeEnvironment.getApplication()
-        storageDir = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            RuntimeEnvironment.getApplication().noBackupFilesDir
-        } else {
-            RuntimeEnvironment.getApplication().filesDir
-        }
+        storageDir = RuntimeEnvironment.getApplication().noBackupFilesDir
         val sdkDir = File(storageDir, "/appmetrica/analytics")
         sdkDir.mkdirs()
         uuidFile = File(sdkDir, FileConstants.UUID_FILE_NAME)

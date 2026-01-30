@@ -1,7 +1,6 @@
 package io.appmetrica.analytics.impl.db.storage
 
 import android.content.Context
-import android.os.Build
 import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
@@ -11,9 +10,7 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
-import org.robolectric.annotation.Config
 
-@Config(sdk = [Build.VERSION_CODES.LOLLIPOP])
 @RunWith(RobolectricTestRunner::class)
 internal class DatabaseFullPathProviderImplTest : CommonTest() {
 

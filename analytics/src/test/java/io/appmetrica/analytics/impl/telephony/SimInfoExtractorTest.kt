@@ -2,7 +2,6 @@ package io.appmetrica.analytics.impl.telephony
 
 import android.Manifest
 import android.content.Context
-import android.os.Build
 import android.telephony.TelephonyManager
 import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
 import io.appmetrica.analytics.coreapi.internal.system.PermissionExtractor
@@ -24,7 +23,6 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.annotation.Config
 import java.util.Collections
 import java.util.concurrent.TimeUnit
 
@@ -83,7 +81,6 @@ internal class SimInfoExtractorTest : CommonTest() {
     }
 
     @Test
-    @Config(sdk = [Build.VERSION_CODES.M])
     fun `extract if cache non empty but expired`() {
         whenever(cachedData.shouldUpdateData()).thenReturn(true)
         whenever(cachedData.data).thenReturn(emptyList())
@@ -98,227 +95,12 @@ internal class SimInfoExtractorTest : CommonTest() {
     }
 
     @Test
-    @Config(sdk = [Build.VERSION_CODES.LOLLIPOP])
-    fun `extract on pre M`() {
-        val result = simInfoExtractor.extract()
-        assertThat(result)
-            .isNotNull
-            .hasSize(1)
-        val simInfo = result?.first()
-        ObjectPropertyAssertions(simInfo)
-            .checkField("simCountryCode", mcc)
-            .checkField("simNetworkCode", mnc)
-            .checkField("isNetworkRoaming", networkRoamingValue)
-            .checkField("operatorName", simOperatorNameValue)
-            .checkAll()
-        verify(cachedData).data = result
-    }
-
-    @Test
-    @Config(sdk = [Build.VERSION_CODES.LOLLIPOP])
-    fun `extract on pre M if sim operator is null`() {
-        whenever(telephonyManager.simOperator).thenReturn(null)
-        val result = simInfoExtractor.extract()
-        assertThat(result)
-            .isNotNull
-            .hasSize(1)
-        val simInfo = result?.first()
-        ObjectPropertyAssertions(simInfo)
-            .checkFieldsAreNull("simCountryCode", "simNetworkCode")
-            .checkField("isNetworkRoaming", networkRoamingValue)
-            .checkField("operatorName", simOperatorNameValue)
-            .checkAll()
-    }
-
-    @Test
-    @Config(sdk = [Build.VERSION_CODES.LOLLIPOP])
-    fun `extract on PreM if sim operator is empty`() {
-        whenever(telephonyManager.simOperator).thenReturn("")
-        val result = simInfoExtractor.extract()
-        assertThat(result)
-            .isNotNull
-            .hasSize(1)
-        val simInfo = result?.first()
-        ObjectPropertyAssertions(simInfo)
-            .checkFieldsAreNull("simCountryCode", "simNetworkCode")
-            .checkField("isNetworkRoaming", networkRoamingValue)
-            .checkField("operatorName", simOperatorNameValue)
-            .checkAll()
-    }
-
-    @Test
-    @Config(sdk = [Build.VERSION_CODES.LOLLIPOP])
-    fun `extract on PreM if sim operator is invalid`() {
-        whenever(telephonyManager.simOperator).thenReturn("Invalid string")
-        val result = simInfoExtractor.extract()
-        assertThat(result)
-            .isNotNull
-            .hasSize(1)
-        val simInfo = result?.first()
-        ObjectPropertyAssertions(simInfo)
-            .checkFieldsAreNull("simCountryCode", "simNetworkCode")
-            .checkField("isNetworkRoaming", networkRoamingValue)
-            .checkField("operatorName", simOperatorNameValue)
-            .checkAll()
-    }
-
-    @Test
-    @Config(sdk = [Build.VERSION_CODES.LOLLIPOP])
-    fun `extract on pre M if sim operator throws exception`() {
-        whenever(telephonyManager.simOperator).thenThrow(RuntimeException())
-        val result = simInfoExtractor.extract()
-        assertThat(result)
-            .isNotNull
-            .hasSize(1)
-        val simInfo = result?.first()
-        ObjectPropertyAssertions(simInfo)
-            .checkFieldsAreNull("simCountryCode", "simNetworkCode")
-            .checkField("isNetworkRoaming", networkRoamingValue)
-            .checkField("operatorName", simOperatorNameValue)
-            .checkAll()
-    }
-
-    @Test
-    @Config(sdk = [Build.VERSION_CODES.LOLLIPOP])
-    fun `extract on pre M if sim operator name is null`() {
-        whenever(telephonyManager.simOperatorName).thenReturn(null)
-        val result = simInfoExtractor.extract()
-        assertThat(result)
-            .isNotNull
-            .hasSize(1)
-        val simInfo = result?.first()
-        ObjectPropertyAssertions(simInfo)
-            .checkField("simCountryCode", mcc)
-            .checkField("simNetworkCode", mnc)
-            .checkField("isNetworkRoaming", networkRoamingValue)
-            .checkFieldIsNull("operatorName")
-            .checkAll()
-    }
-
-    @Test
-    @Config(sdk = [Build.VERSION_CODES.LOLLIPOP])
-    fun `extract on pre M if sim operator name is empty`() {
-        whenever(telephonyManager.simOperatorName).thenReturn("")
-        val result = simInfoExtractor.extract()
-        assertThat(result)
-            .isNotNull
-            .hasSize(1)
-        val simInfo = result?.first()
-        ObjectPropertyAssertions(simInfo)
-            .checkField("simCountryCode", mcc)
-            .checkField("simNetworkCode", mnc)
-            .checkField("isNetworkRoaming", networkRoamingValue)
-            .checkField("operatorName", "")
-            .checkAll()
-    }
-
-    @Test
-    @Config(sdk = [Build.VERSION_CODES.LOLLIPOP])
-    fun `extract on pre M if sim operator name throws exception`() {
-        whenever(telephonyManager.simOperatorName).thenThrow(RuntimeException())
-        val result = simInfoExtractor.extract()
-        assertThat(result)
-            .isNotNull
-            .hasSize(1)
-        val simInfo = result?.first()
-        ObjectPropertyAssertions(simInfo)
-            .checkField("simCountryCode", mcc)
-            .checkField("simNetworkCode", mnc)
-            .checkField("isNetworkRoaming", networkRoamingValue)
-            .checkFieldIsNull("operatorName")
-            .checkAll()
-    }
-
-    @Test
-    @Config(sdk = [Build.VERSION_CODES.LOLLIPOP])
-    fun `extract on pre M if not read phone state`() {
-        whenever(permissionExtractor.hasPermission(context, Manifest.permission.READ_PHONE_STATE)).thenReturn(false)
-        val result = simInfoExtractor.extract()
-        assertThat(result)
-            .isNotNull
-            .hasSize(1)
-        val simInfo = result?.first()
-        ObjectPropertyAssertions(simInfo)
-            .checkField("simCountryCode", mcc)
-            .checkField("simNetworkCode", mnc)
-            .checkField("isNetworkRoaming", false)
-            .checkField("operatorName", simOperatorNameValue)
-            .checkAll()
-    }
-
-    @Test
-    @Config(sdk = [Build.VERSION_CODES.LOLLIPOP])
-    fun `extract on pre M if isNetworkRoaming is false`() {
-        whenever(telephonyManager.isNetworkRoaming).thenReturn(false)
-        val result = simInfoExtractor.extract()
-        assertThat(result)
-            .isNotNull
-            .hasSize(1)
-        val simInfo = result?.first()
-        ObjectPropertyAssertions(simInfo)
-            .checkField("simCountryCode", mcc)
-            .checkField("simNetworkCode", mnc)
-            .checkField("isNetworkRoaming", false)
-            .checkField("operatorName", simOperatorNameValue)
-            .checkAll()
-    }
-
-    @Test
-    @Config(sdk = [Build.VERSION_CODES.LOLLIPOP])
-    fun `extract on pre M if isNetworkRoaming throws exception`() {
-        whenever(telephonyManager.isNetworkRoaming).thenThrow(RuntimeException())
-        val result = simInfoExtractor.extract()
-        assertThat(result)
-            .isNotNull
-            .hasSize(1)
-        val simInfo = result?.first()
-        ObjectPropertyAssertions(simInfo)
-            .checkField("simCountryCode", mcc)
-            .checkField("simNetworkCode", mnc)
-            .checkField("isNetworkRoaming", false)
-            .checkField("operatorName", simOperatorNameValue)
-            .checkAll()
-    }
-
-    @Test
-    @Config(sdk = [Build.VERSION_CODES.LOLLIPOP])
-    fun `extract on pre M if telephony manager is null`() {
-        whenever(context.getSystemService(Context.TELEPHONY_SERVICE)).thenReturn(null)
-        val result = simInfoExtractor.extract()
-        assertThat(result)
-            .isNotNull
-            .hasSize(1)
-        val simInfo = result?.first()
-        ObjectPropertyAssertions(simInfo)
-            .checkFieldsAreNull("simCountryCode", "simNetworkCode", "operatorName")
-            .checkField("isNetworkRoaming", false)
-            .checkAll()
-    }
-
-    @Test
-    @Config(sdk = [Build.VERSION_CODES.LOLLIPOP])
-    fun `extract on pre M if telephony manager throws exception`() {
-        whenever(context.getSystemService(Context.TELEPHONY_SERVICE)).thenThrow(RuntimeException())
-        val result = simInfoExtractor.extract()
-        assertThat(result)
-            .isNotNull
-            .hasSize(1)
-        val simInfo = result?.first()
-        ObjectPropertyAssertions(simInfo)
-            .checkFieldsAreNull("simCountryCode", "simNetworkCode", "operatorName")
-            .checkField("isNetworkRoaming", false)
-            .checkAll()
-    }
-
-    @Test
-    @Config(sdk = [Build.VERSION_CODES.M])
     fun `extract on M`() {
         val result = simInfoExtractor.extract()
         assertThat(result).containsExactlyElementsOf(simInfos)
     }
 
     @Test
-    @Config(sdk = [Build.VERSION_CODES.M])
     fun `extract on M if no read phone state`() {
         whenever(permissionExtractor.hasPermission(context, Manifest.permission.READ_PHONE_STATE)).thenReturn(false)
         val result = simInfoExtractor.extract()
@@ -336,7 +118,6 @@ internal class SimInfoExtractorTest : CommonTest() {
     }
 
     @Test
-    @Config(sdk = [Build.VERSION_CODES.M])
     fun `extract on M if SimInfoExtractorFromM returns empty list`() {
         whenever(SimInfoExtractorForM.extractSimInfosFromSubscriptionManager(context))
             .thenReturn(Collections.emptyList())

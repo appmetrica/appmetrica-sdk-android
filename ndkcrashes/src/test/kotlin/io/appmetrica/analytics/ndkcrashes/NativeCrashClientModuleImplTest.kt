@@ -170,41 +170,6 @@ internal class NativeCrashClientModuleImplTest : CommonTest() {
     }
 
     @Test
-    @Config(sdk = [Build.VERSION_CODES.LOLLIPOP_MR1])
-    fun `initHandling on LOLLIPOP_MR1+`() {
-        module.initHandling(context, config)
-
-        nativeCrashCoreJniWrapperStaticMock.verify {
-            NativeCrashCoreJniWrapper.startHandlerAtCrash(
-                eq(HANDLER_PATH),
-                eq(NATIVE_CRASH_DIR),
-                eq(SOCKET_NAME),
-                eq(APPMETRICA_METADATA),
-            )
-        }
-    }
-
-    @Test
-    @Config(sdk = [Build.VERSION_CODES.LOLLIPOP_MR1])
-    fun `initHandling on LOLLIPOP_MR1+ failed start handler`() {
-        whenever(NativeCrashCoreJniWrapper.startHandlerAtCrash(any(), any(), any(), any()))
-            .thenReturn(false)
-
-        module.initHandling(context, config)
-        // without crash
-    }
-
-    @Test
-    @Config(sdk = [Build.VERSION_CODES.LOLLIPOP_MR1])
-    fun `initHandling on LOLLIPOP_MR1+ with crash start handler`() {
-        whenever(NativeCrashCoreJniWrapper.startHandlerAtCrash(any(), any(), any(), any()))
-            .thenThrow(RuntimeException())
-
-        module.initHandling(context, config)
-        // without crash
-    }
-
-    @Test
     fun `updateAppMetricaMetadata with failed load library`() {
         isLibraryLoadedSuccess = false
         module.updateAppMetricaMetadata(APPMETRICA_METADATA)

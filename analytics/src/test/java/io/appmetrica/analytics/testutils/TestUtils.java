@@ -74,9 +74,7 @@ public class TestUtils {
         when(resources.getConfiguration()).thenReturn(configuration);
         when(context.getResources()).thenReturn(resources);
         when(context.getFilesDir()).thenReturn(application.getFilesDir());
-        if (Build.VERSION_CODES.LOLLIPOP <= Build.VERSION.SDK_INT) {
-            when(context.getNoBackupFilesDir()).thenReturn(application.getFilesDir());
-        }
+        when(context.getNoBackupFilesDir()).thenReturn(application.getFilesDir());
         return context;
     }
 

@@ -101,14 +101,13 @@ public class FeatureAdapterTest extends CommonTest {
         assertThat(FeatureAdapter.Factory.create()).isExactlyInstanceOf(FeatureAdapter.FeatureAdapterWithVersion.class);
     }
 
-    @Config(sdk = Build.VERSION_CODES.LOLLIPOP)
+    @Config(sdk = Build.VERSION_CODES.M)
     @Test
     public void testOnPreN() {
         TestUtils.setSdkInt(21);
         assertThat(FeatureAdapter.Factory.create()).isExactlyInstanceOf(FeatureAdapter.FeatureAdapterWithoutVersion.class);
     }
 
-    @Config(sdk = Build.VERSION_CODES.N)
     @Test
     public void testFeatureWithVersion() {
         TestUtils.setSdkInt(24);
@@ -122,7 +121,7 @@ public class FeatureAdapterTest extends CommonTest {
         assertThat(description.getVersion()).isEqualTo(info.version);
     }
 
-    @Config(sdk = Build.VERSION_CODES.LOLLIPOP)
+    @Config(sdk = Build.VERSION_CODES.M)
     @Test
     public void testFeatureWithoutVersion() {
         TestUtils.setSdkInt(21);

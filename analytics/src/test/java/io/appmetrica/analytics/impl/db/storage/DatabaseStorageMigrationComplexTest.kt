@@ -1,7 +1,6 @@
 package io.appmetrica.analytics.impl.db.storage
 
 import android.content.Context
-import android.os.Build
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.LogRule
 import org.assertj.core.api.Assertions.assertThat
@@ -11,10 +10,8 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.ParameterizedRobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
-import org.robolectric.annotation.Config
 import java.io.File
 
-@Config(sdk = [Build.VERSION_CODES.LOLLIPOP])
 @RunWith(ParameterizedRobolectricTestRunner::class)
 internal class DatabaseStorageMigrationComplexTest(
     private val description: String,

@@ -59,13 +59,13 @@ internal class CellularNetworkTypeExtractorTest : CommonTest() {
 
     private val networkTypeExtractor: CellularNetworkTypeExtractor by setUp { CellularNetworkTypeExtractor(context) }
 
-    @Config(sdk = [Build.VERSION_CODES.LOLLIPOP])
+    @Config(sdk = [Build.VERSION_CODES.M])
     @Test
     fun `getNetworkType pre N`() {
         assertThat(networkTypeExtractor.getNetworkType()).isEqualTo(legacyNetworkTypeString)
     }
 
-    @Config(sdk = [Build.VERSION_CODES.LOLLIPOP])
+    @Config(sdk = [Build.VERSION_CODES.M])
     @Test
     fun `getNetworkType pre N if returns null`() {
         whenever(

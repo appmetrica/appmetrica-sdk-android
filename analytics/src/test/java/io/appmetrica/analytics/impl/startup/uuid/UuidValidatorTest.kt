@@ -12,10 +12,11 @@ import java.util.UUID
 @RunWith(ParameterizedRobolectricTestRunner::class)
 @Config(
     sdk = [
-        Build.VERSION_CODES.LOLLIPOP,
+        Build.VERSION_CODES.M,
         Build.VERSION_CODES.Q,
         Build.VERSION_CODES.TIRAMISU,
-        Build.VERSION_CODES.UPSIDE_DOWN_CAKE
+        Build.VERSION_CODES.UPSIDE_DOWN_CAKE,
+        Build.VERSION_CODES.VANILLA_ICE_CREAM,
     ]
 )
 internal class UuidValidatorTest(

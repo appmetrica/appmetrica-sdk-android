@@ -7,7 +7,7 @@ plugins {
 
 group = "io.appmetrica.analytics.gradle"
 
-val agpVersion: String = detectAgpVersion("8.2.0")
+val agpVersion = detectAgpVersion("8.2.0")
 
 fun GradlePluginDevelopmentExtension.plugin(name: String, impl: String) {
     plugins.create(name.split('.', '-').joinToString("") { it.replaceFirstChar { c -> c.uppercase() } }) {
@@ -24,18 +24,24 @@ gradlePlugin {
     plugin("appmetrica-proto", "io.appmetrica.analytics.gradle.protobuf.ProtobufPlugin")
     plugin("appmetrica-publish", "io.appmetrica.analytics.gradle.publishing.PublishingPlugin")
     plugin("appmetrica-public-publish", "io.appmetrica.analytics.gradle.publishing.PublicPublishPlugin")
-    plugin("appmetrica-ndkcrashes-public-publish", "io.appmetrica.analytics.gradle.publishing.NdkCrashesPublicPublishPlugin")
+    plugin(
+        "appmetrica-ndkcrashes-public-publish",
+        "io.appmetrica.analytics.gradle.publishing.NdkCrashesPublicPublishPlugin"
+    )
     plugin("appmetrica-teamcity", "io.appmetrica.analytics.gradle.teamcity.TeamCityPlugin")
+    plugin("appmetrica-test-split", "io.appmetrica.analytics.gradle.test.TestSplitPlugin")
     plugin("appmetrica-update-version", "io.appmetrica.analytics.gradle.UpdateVersionPlugin")
 }
 
 dependencies {
     // https://developer.android.com/studio/releases/gradle-plugin
-    implementation("com.android.tools.build:gradle:${agpVersion}")
+    implementation("com.android.tools.build:gradle:$agpVersion")
     // https://kotlinlang.org/docs/gradle.html
     implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.25")
     // https://detekt.dev/docs/gettingstarted/gradle/
     implementation("io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.23.3")
+    // https://asm.ow2.io/
+    implementation("org.ow2.asm:asm:9.6")
     // by source
     implementation(libs.appMetricaAarCheck)
     implementation(libs.appMetricaAndroid)

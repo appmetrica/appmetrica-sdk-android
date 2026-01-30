@@ -153,6 +153,17 @@ jacocoSettings {
     )
 }
 
+// Configure test execution (AppMetricaCommonModulePlugin)
+testSettings {
+    // Use more parallel forks due to huge amount of tests. Used in combination with large multislot.
+    maxParallelForks.set(8)
+}
+
+// Enable test splitting for Robolectric and standard tests (TestSplitPlugin)
+testSplit {
+    enabled.set(true)
+}
+
 //
 // +------------------------------------------------------------+
 // | Dependencies                                               |
