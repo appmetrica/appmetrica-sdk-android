@@ -158,4 +158,8 @@ public final class StringUtils {
             null
         );
     }
+
+    public static boolean isNullOrEmpty(@Nullable String value) {
+        return value == null || value.isEmpty();
+    }
 }

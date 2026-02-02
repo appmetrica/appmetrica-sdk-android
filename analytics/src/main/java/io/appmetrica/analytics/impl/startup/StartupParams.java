@@ -1,12 +1,12 @@
 package io.appmetrica.analytics.impl.startup;
 
 import android.content.Context;
-import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.AdvIdentifiersResult;
 import io.appmetrica.analytics.StartupParamsItem;
+import io.appmetrica.analytics.coreutils.internal.StringUtils;
 import io.appmetrica.analytics.impl.ClientIdentifiersHolder;
 import io.appmetrica.analytics.impl.ClientServiceLocator;
 import io.appmetrica.analytics.impl.FeaturesResult;
@@ -181,7 +181,7 @@ public class StartupParams {
     }
 
     private boolean isIdentifierNullOrEmpty(@Nullable IdentifiersResult identifier) {
-        return identifier == null || TextUtils.isEmpty(identifier.id);
+        return identifier == null || StringUtils.isNullOrEmpty(identifier.id);
     }
 
     synchronized void putToMap(@NonNull List<String> params, final Map<String, StartupParamsItem> mapToPut) {
