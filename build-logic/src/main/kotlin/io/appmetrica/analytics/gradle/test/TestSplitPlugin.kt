@@ -99,12 +99,12 @@ class TestSplitPlugin : Plugin<Project> {
 
         project.afterEvaluate {
             if (!splitExtension.enabled.get()) return@afterEvaluate
-            val testsToSplit = project.tasks.withType<Test>()
-                .filter { it.name.contains("UnitTest") }
 
-            testsToSplit.forEach { originalTest ->
-                createSplitTasks(project, originalTest, splitExtension)
-            }
+            project.tasks.withType<Test>()
+                .filter { it.name.contains("UnitTest") }
+                .forEach { originalTest ->
+                    createSplitTasks(project, originalTest, splitExtension)
+                }
         }
     }
 
@@ -115,6 +115,8 @@ class TestSplitPlugin : Plugin<Project> {
     ) {
         val originalTestName = originalTest.name
 
+        val userTestFilters = detectUserTestFilters(project)
+
         val robolectricTask = createRobolectricTask(project, originalTest, extension)
         val standardTask = createStandardJUnitTask(project, originalTest, extension, robolectricTask)
         val reportTask = createReportTask(project, originalTest, robolectricTask, standardTask)
@@ -122,10 +124,82 @@ class TestSplitPlugin : Plugin<Project> {
 
         originalTest.dependsOn(mergeTask)
 
-        // Disable original test - all work done by split tasks and merge
+        configureTestFilters(robolectricTask, userTestFilters, includeRobolectric = true)
+        configureTestFilters(standardTask, userTestFilters, includeRobolectric = false)
+
+
+        // Disable original test - all work done by split tasks
         originalTest.enabled = false
 
         configureJacocoReports(project, originalTestName, mergeTask)
+    }
+
+    private fun detectUserTestFilters(project: Project): List<String> {
+        val filters = mutableListOf<String>()
+
+        // Check for -Dtest.single system property
+        project.gradle.startParameter.systemPropertiesArgs["test.single"]?.let {
+            filters.add(it)
+        }
+
+        project.gradle.startParameter.taskRequests.forEach { taskRequest ->
+            taskRequest.args.forEachIndexed { index, arg ->
+                if (arg == "--tests" && index + 1 < taskRequest.args.size) {
+                    filters.add(taskRequest.args[index + 1])
+                }
+            }
+        }
+
+        return filters
+    }
+
+    private fun configureTestFilters(
+        testTask: TaskProvider<Test>,
+        userFilters: List<String>,
+        includeRobolectric: Boolean
+    ) {
+        testTask.configure {
+            doFirst {
+                val robolectricTests = RobolectricTestDetector().run {
+                    testClassesDirs.files.flatMap { findRobolectricTests(it) }.toSet()
+                }
+
+                filter {
+                    if (includeRobolectric) {
+                        if (robolectricTests.isEmpty()) {
+                            excludeTestsMatching("*")
+                            return@filter
+                        }
+                        if (userFilters.isEmpty()) {
+                            robolectricTests.forEach { includeTestsMatching(it) }
+                        } else {
+                            userFilters.forEach { includeTestsMatching(it) }
+                            val allTests = getAllTestClasses()
+                            (allTests - robolectricTests).forEach { excludeTestsMatching(it) }
+                        }
+                    } else {
+                        userFilters.forEach { includeTestsMatching(it) }
+                        robolectricTests.forEach { excludeTestsMatching(it) }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun Test.getAllTestClasses(): Set<String> {
+        val allTests = mutableSetOf<String>()
+        testClassesDirs.files.forEach { dir ->
+            if (dir.exists()) {
+                dir.walk()
+                    .filter { it.isFile && it.name.endsWith(".class") && !it.name.contains("$") }
+                    .forEach { classFile ->
+                        val relativePath = classFile.relativeTo(dir).path
+                        val className = relativePath.removeSuffix(".class").replace("/", ".")
+                        allTests.add(className)
+                    }
+            }
+        }
+        return allTests
     }
 
     private fun createRobolectricTask(
@@ -160,28 +234,6 @@ class TestSplitPlugin : Plugin<Project> {
                 project.layout.buildDirectory
                     .file("jacoco/${originalTest.name}Robolectric.exec").get().asFile
             )
-        }
-
-        // Filter: only Robolectric tests - will be configured at runtime
-        doFirst {
-            val detector = RobolectricTestDetector()
-            val robolectricTests = mutableSetOf<String>()
-
-            testClassesDirs.files.forEach { dir ->
-                robolectricTests.addAll(detector.findRobolectricTests(dir))
-            }
-
-            if (robolectricTests.isNotEmpty()) {
-                filter {
-                    robolectricTests.forEach { className ->
-                        includeTestsMatching(className)
-                    }
-                }
-            } else {
-                filter {
-                    excludeTestsMatching("*")
-                }
-            }
         }
 
         // Temporary results directory (only XML, HTML will be aggregated later)
@@ -225,24 +277,6 @@ class TestSplitPlugin : Plugin<Project> {
                 project.layout.buildDirectory
                     .file("jacoco/${originalTest.name}Standard.exec").get().asFile
             )
-        }
-
-        // Filter: exclude Robolectric tests - will be configured at runtime
-        doFirst {
-            val detector = RobolectricTestDetector()
-            val robolectricTests = mutableSetOf<String>()
-
-            testClassesDirs.files.forEach { dir ->
-                robolectricTests.addAll(detector.findRobolectricTests(dir))
-            }
-
-            if (robolectricTests.isNotEmpty()) {
-                filter {
-                    robolectricTests.forEach { className ->
-                        excludeTestsMatching(className)
-                    }
-                }
-            }
         }
 
         // Temporary results directory (only XML, HTML will be aggregated later)
@@ -318,7 +352,7 @@ class TestSplitPlugin : Plugin<Project> {
             logger.lifecycle("  Standard tests:    $standardFiles classes, $standardTestMethods methods")
             logger.lifecycle(
                 "  Total:             ${robolectricFiles + standardFiles} classes, " +
-                        "${robolectricTestMethods + standardTestMethods} methods"
+                    "${robolectricTestMethods + standardTestMethods} methods"
             )
             logger.lifecycle("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
             logger.lifecycle("")
