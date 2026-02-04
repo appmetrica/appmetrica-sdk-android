@@ -13,6 +13,7 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.inOrder
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
+import java.util.UUID
 
 internal class ModuleEventReporterTest : CommonTest() {
 
@@ -20,6 +21,7 @@ internal class ModuleEventReporterTest : CommonTest() {
 
     private val prototypeReport = mock<CounterReport>()
 
+    private val apiKey = UUID.randomUUID().toString()
     private val typeValue = 22
     private val customTypeValue = 44
     private val nameValue = "Some event name"
@@ -47,7 +49,7 @@ internal class ModuleEventReporterTest : CommonTest() {
     @Before
     fun setUp() {
         whenever(CounterReport.formReportCopyingMetadata(prototypeReport)).thenReturn(newReport)
-        moduleEventReporter = ModuleEventReporter(isMain, eventSaver, prototypeReport)
+        moduleEventReporter = ModuleEventReporter(apiKey, isMain, eventSaver, prototypeReport)
     }
 
     @Test
@@ -94,11 +96,21 @@ internal class ModuleEventReporterTest : CommonTest() {
 
     @Test
     fun `main for true`() {
-        assertThat(ModuleEventReporter(true, eventSaver, prototypeReport).isMain).isTrue()
+        assertThat(ModuleEventReporter(apiKey, isMain, eventSaver, prototypeReport).isMain).isTrue()
     }
 
     @Test
     fun `main for false`() {
-        assertThat(ModuleEventReporter(false, eventSaver, prototypeReport).isMain).isFalse()
+        assertThat(ModuleEventReporter(apiKey, false, eventSaver, prototypeReport).isMain).isFalse()
+    }
+
+    @Test
+    fun `api key`() {
+        assertThat(ModuleEventReporter(apiKey, isMain, eventSaver, prototypeReport).apiKey).isEqualTo(apiKey)
+    }
+
+    @Test
+    fun `api key for null`() {
+        assertThat(ModuleEventReporter(null, isMain, eventSaver, prototypeReport).apiKey).isNull()
     }
 }

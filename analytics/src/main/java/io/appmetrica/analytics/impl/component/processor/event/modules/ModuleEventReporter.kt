@@ -7,6 +7,7 @@ import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import io.appmetrica.analytics.modulesapi.internal.service.event.ModuleEventServiceHandlerReporter
 
 internal class ModuleEventReporter(
+    override val apiKey: String?,
     override val isMain: Boolean,
     private val eventSaver: EventSaver,
     private val prototype: CounterReport

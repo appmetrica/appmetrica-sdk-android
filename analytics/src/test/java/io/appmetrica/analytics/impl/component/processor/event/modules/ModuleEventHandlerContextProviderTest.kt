@@ -15,6 +15,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
+import java.util.UUID
 
 internal class ModuleEventHandlerContextProviderTest : CommonTest() {
 
@@ -22,9 +23,11 @@ internal class ModuleEventHandlerContextProviderTest : CommonTest() {
     private val saver = mock<EventSaver>()
 
     private val isMain = true
+    private val apiKey = UUID.randomUUID().toString()
 
     private val componentId = mock<ComponentId> {
         on { isMain } doReturn isMain
+        on { apiKey } doReturn apiKey
     }
 
     private val component = mock<ComponentUnit> {
@@ -97,7 +100,10 @@ internal class ModuleEventHandlerContextProviderTest : CommonTest() {
         val result = moduleEventReporterMockedConstructionRule.constructionMock.constructed()
         assertThat(result).hasSize(2)
         assertThat(moduleEventReporterMockedConstructionRule.argumentInterceptor.flatArguments())
-            .containsExactly(isMain, saver, firstReport, isMain, saver, secondReport)
+            .containsExactly(
+                apiKey, isMain, saver, firstReport,
+                apiKey, isMain, saver, secondReport
+            )
         return result
     }
 }

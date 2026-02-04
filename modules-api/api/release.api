@@ -361,6 +361,7 @@ public abstract class io.appmetrica.analytics.modulesapi.internal.service.event.
 }
 
 public interface io.appmetrica.analytics.modulesapi.internal.service.event.ModuleEventServiceHandlerReporter {
+    public abstract [Nullable] String getApiKey()
     public abstract boolean isMain()
     public abstract void report([NonNull] io.appmetrica.analytics.coreapi.internal.event.CounterReportApi)
 }

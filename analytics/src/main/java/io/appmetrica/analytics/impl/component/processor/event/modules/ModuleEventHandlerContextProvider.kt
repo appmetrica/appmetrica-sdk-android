@@ -14,11 +14,13 @@ internal class ModuleEventHandlerContextProvider(component: ComponentUnit, modul
     private val eventSaver: EventSaver = component.eventSaver
     private val isMain: Boolean = component.componentId.isMain
 
+    private val apiKey: String? = component.componentId.apiKey
+
     fun getContext(
         currentReport: CounterReport
     ): ModuleEventServiceHandlerContext = ModuleEventServiceHandlerContextImpl(
         modulePreferenceAdapter,
         legacyModulePreferenceAdapter,
-        ModuleEventReporter(isMain, eventSaver, currentReport)
+        ModuleEventReporter(apiKey, isMain, eventSaver, currentReport)
     )
 }
