@@ -5332,6 +5332,7 @@
   "reporter-extension/src/main/AndroidManifest.xml":"mobile/metrika/android/appmetrica/appmetrica-sdk/reporter-extension/src/main/AndroidManifest.xml",
   "reporter-extension/src/main/java/io/appmetrica/analytics/reporterextension/internal/ReporterExtensionClientModuleEntryPoint.kt":"mobile/metrika/android/appmetrica/appmetrica-sdk/reporter-extension/src/main/java/io/appmetrica/analytics/reporterextension/internal/ReporterExtensionClientModuleEntryPoint.kt",
   "reporter-extension/src/test/java/io/appmetrica/analytics/reporterextension/internal/ReporterExtensionClientModuleEntryPointTest.kt":"mobile/metrika/android/appmetrica/appmetrica-sdk/reporter-extension/src/test/java/io/appmetrica/analytics/reporterextension/internal/ReporterExtensionClientModuleEntryPointTest.kt",
+  "reporter-extension/src/test/resources/robolectric.properties":"mobile/metrika/android/appmetrica/appmetrica-sdk/reporter-extension/src/test/resources/robolectric.properties",
   "screenshot/README.MD":"mobile/metrika/android/appmetrica/appmetrica-sdk/screenshot/README.MD",
   "screenshot/api/release.api":"mobile/metrika/android/appmetrica/appmetrica-sdk/screenshot/api/release.api",
   "screenshot/api/releaseDependencies.txt":"mobile/metrika/android/appmetrica/appmetrica-sdk/screenshot/api/releaseDependencies.txt",
