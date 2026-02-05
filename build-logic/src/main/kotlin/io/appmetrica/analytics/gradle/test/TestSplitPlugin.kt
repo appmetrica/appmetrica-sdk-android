@@ -244,6 +244,9 @@ class TestSplitPlugin : Plugin<Project> {
 
         // Don't fail build on test failures - let merge task handle it
         ignoreFailures = true
+
+        filter.isFailOnNoMatchingTests = false
+        outputs.upToDateWhen { false }
     }
 
     private fun createStandardJUnitTask(
@@ -287,6 +290,9 @@ class TestSplitPlugin : Plugin<Project> {
 
         // Don't fail build on test failures - let merge task handle it
         ignoreFailures = true
+
+        filter.isFailOnNoMatchingTests = false
+        outputs.upToDateWhen { false }
     }
 
     private fun createReportTask(
@@ -356,6 +362,13 @@ class TestSplitPlugin : Plugin<Project> {
             )
             logger.lifecycle("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
             logger.lifecycle("")
+
+            val totalTestMethods = robolectricTestMethods + standardTestMethods
+            if (totalTestMethods == 0) {
+                throw org.gradle.api.GradleException(
+                    "No tests found matching the filter. Both Robolectric and Standard test tasks found 0 tests."
+                )
+            }
 
             val robolectricFailed = robolectricTask.get().state.failure != null
             val standardFailed = standardTask.get().state.failure != null
