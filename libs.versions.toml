@@ -1,7 +1,7 @@
 # doc https://docs.gradle.org/current/userguide/platforms.html#sub:conventional-dependencies-toml
 
 [versions]
-selfGradlePlugins = "2.0.0-beta+102"
+selfGradlePlugins = "2.0.0-beta+108"
 
 [plugins]
 appMetricaCheckNamespace = { id = "io.appmetrica.gradle.check-namespace", version.ref = "selfGradlePlugins" }
@@ -11,8 +11,7 @@ appMetricaKotlinLibrary = { id = "io.appmetrica.gradle.kotlin-library", version.
 
 [libraries]
 appMetricaAarCheck = { module = "io.appmetrica.gradle:aar-check", version.ref = "selfGradlePlugins" }
-appMetricaAndroid = { module = "io.appmetrica.gradle:android", version.ref = "selfGradlePlugins" }
-appMetricaCommon = { module = "io.appmetrica.gradle:common", version.ref = "selfGradlePlugins" }
+appMetricaAndroidLibrary = { module = "io.appmetrica.gradle:android-library", version.ref = "selfGradlePlugins" }
 appMetricaMavenCentralPublish = { module = "io.appmetrica.gradle:maven-central-publish", version.ref = "selfGradlePlugins" }
 appMetricaNoLogs = { module = "io.appmetrica.gradle:no-logs", version.ref = "selfGradlePlugins" }
 appMetricaRepositories = { module = "io.appmetrica.gradle:repositories", version.ref = "selfGradlePlugins" }

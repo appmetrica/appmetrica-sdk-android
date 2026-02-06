@@ -42,9 +42,11 @@ class MockedConstructionRule<T>(
     }
 }
 
+/* ktlint-disable appmetrica-rules:no-top-level-members */
 operator fun <C, T> ConstructionArgumentCaptor<T>.getValue(thisRef: C, property: KProperty<*>): List<Any> {
     return arguments.single()
 }
 
 inline fun <reified T> constructionRule(noinline initializer: KStubbing<T>.(T) -> Unit = {}) =
     MockedConstructionRule(T::class.java) { mock, _ -> stubbing(mock, initializer) }
+/* ktlint-enable appmetrica-rules:no-top-level-members */

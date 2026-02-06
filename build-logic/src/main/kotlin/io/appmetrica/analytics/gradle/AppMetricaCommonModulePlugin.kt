@@ -2,7 +2,6 @@ package io.appmetrica.analytics.gradle
 
 import com.android.build.gradle.LibraryExtension
 import com.android.build.gradle.internal.dsl.BuildType
-import io.appmetrica.analytics.gradle.codequality.CodeQualityPlugin
 import io.appmetrica.analytics.gradle.jacoco.JacocoPlugin
 import io.appmetrica.analytics.gradle.publishing.PublishingInfoBuildTypeExtension
 import io.appmetrica.analytics.gradle.publishing.PublishingPlugin
@@ -12,14 +11,12 @@ import io.appmetrica.analytics.gradle.test.TestSplitPlugin
 import io.appmetrica.gradle.aarcheck.AarCheckExtension
 import io.appmetrica.gradle.aarcheck.AarCheckPlugin
 import io.appmetrica.gradle.aarcheck.agp.aarCheck
-import io.appmetrica.gradle.android.plugins.AndroidLibrary
+import io.appmetrica.gradle.android.plugins.AndroidLibraryPlugin
 import io.appmetrica.gradle.nologs.NoLogsExtension
 import io.appmetrica.gradle.nologs.NoLogsPlugin
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.tasks.testing.TestDescriptor
 import org.gradle.kotlin.dsl.apply
-import org.gradle.kotlin.dsl.closureOf
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getValue
@@ -30,8 +27,7 @@ import java.util.Locale
 
 class AppMetricaCommonModulePlugin : Plugin<Project> {
     override fun apply(project: Project) {
-        project.apply<AndroidLibrary>() // id("io.appmetrica.gradle.android-library")
-        project.apply<CodeQualityPlugin>() // id("appmetrica-codequality")
+        project.apply<AndroidLibraryPlugin>() // id("io.appmetrica.gradle.android-library")
         project.apply<JacocoPlugin>() // id("appmetrica-jacoco")
         project.apply<PublishingPlugin>() // id("appmetrica-publish")
         project.apply<AarCheckPlugin>() // id("io.appmetrica.gradle.aar-check")

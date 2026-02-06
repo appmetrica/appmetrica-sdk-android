@@ -1,13 +1,9 @@
-import io.appmetrica.gradle.extensions.detectAgpVersion
-
 @Suppress("DSL_SCOPE_VIOLATION") // https://youtrack.jetbrains.com/issue/KTIJ-19369 fixed in gradle 8.1
 plugins {
-    alias(libs.plugins.appMetricaGradlePlugin)
+    alias(appMetricaLibs.plugins.appMetricaGradlePlugin)
 }
 
 group = "io.appmetrica.analytics.gradle"
-
-val agpVersion = detectAgpVersion("8.2.0")
 
 fun GradlePluginDevelopmentExtension.plugin(name: String, impl: String) {
     plugins.create(name.split('.', '-').joinToString("") { it.replaceFirstChar { c -> c.uppercase() } }) {
@@ -17,7 +13,6 @@ fun GradlePluginDevelopmentExtension.plugin(name: String, impl: String) {
 }
 
 gradlePlugin {
-    plugin("appmetrica-codequality", "io.appmetrica.analytics.gradle.codequality.CodeQualityPlugin")
     plugin("appmetrica-common-module", "io.appmetrica.analytics.gradle.AppMetricaCommonModulePlugin")
     plugin("appmetrica-jacoco", "io.appmetrica.analytics.gradle.jacoco.JacocoPlugin")
     plugin("appmetrica-module", "io.appmetrica.analytics.gradle.AppMetricaModulePlugin")
@@ -34,17 +29,11 @@ gradlePlugin {
 }
 
 dependencies {
-    // https://developer.android.com/studio/releases/gradle-plugin
-    implementation("com.android.tools.build:gradle:$agpVersion")
-    // https://kotlinlang.org/docs/gradle.html
-    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.25")
-    // https://detekt.dev/docs/gettingstarted/gradle/
-    implementation("io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.23.3")
     // https://asm.ow2.io/
     implementation("org.ow2.asm:asm:9.6")
-    // by source
-    implementation(libs.appMetricaAarCheck)
-    implementation(libs.appMetricaAndroid)
-    implementation(libs.appMetricaMavenCentralPublish)
-    implementation(libs.appMetricaNoLogs)
+
+    implementation(appMetricaLibs.appMetricaAarCheck)
+    implementation(appMetricaLibs.appMetricaAndroidLibrary)
+    implementation(appMetricaLibs.appMetricaMavenCentralPublish)
+    implementation(appMetricaLibs.appMetricaNoLogs)
 }

@@ -8,7 +8,6 @@ publishingInfo {
     withJavadoc.set(false)
 }
 
-
 android {
     namespace = "io.appmetrica.analytics.coreutils"
     lint {

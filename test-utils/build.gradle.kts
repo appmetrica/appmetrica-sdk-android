@@ -1,12 +1,7 @@
 import io.appmetrica.analytics.gradle.Deps
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("io.appmetrica.gradle.kotlin-library")
-}
-
-tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = JavaVersion.VERSION_1_8.toString()
+    alias(appMetricaLibs.plugins.appMetricaKotlinLibrary)
 }
 
 dependencies {
@@ -17,6 +12,4 @@ dependencies {
     // https://github.com/robolectric/robolectric
     api("org.robolectric:robolectric:4.16")
     compileOnly("androidx.annotation:annotation:${Deps.androidX}")
-
-    implementation("com.pinterest.ktlint:ktlint-core:0.43.2")
 }

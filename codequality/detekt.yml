@@ -32,3 +32,18 @@ naming:
     constantPattern: '(?!TAG\b).+'
     propertyPattern: '(?!TAG\b).+'
     privatePropertyPattern: '(?!TAG\b).+'
+
+exceptions:
+  active: true
+  TooGenericExceptionCaught:
+    active: false
+
+style:
+  active: true
+  ReturnCount:
+    active: false
+
+complexity:
+  active: true
+  LongParameterList:
+    active: false

@@ -107,7 +107,7 @@ android {
         // if true, generate an HTML report (with issue explanations, sourcecode, etc)
         htmlReport = true
         htmlOutput = file("${project.buildDir}/reports/lint/lint.html")
-        lintConfig = file("${projectDir}/lint.xml")
+        lintConfig = file("$projectDir/lint.xml")
         checkDependencies = false
 
         disable += "GradleDependency"
@@ -138,13 +138,6 @@ protobuf {
     protoFile(srcPath = "client/sessionExtrasProtobuf.proto", years = "2023")
     protoFile(srcPath = "client/startupStateProtobuf.proto", years = "2018")
     protoFile(srcPath = "client/legacyStartupStateProtobuf.proto", years = "2023")
-}
-
-codequality {
-    exclude.addAll(
-        "**/IAppMetricaService.java",
-        "**/org/mockito/configuration/**",
-    )
 }
 
 jacocoSettings {

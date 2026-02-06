@@ -35,9 +35,11 @@ class MockedStaticRule<T>(
     }
 }
 
+/* ktlint-disable appmetrica-rules:no-top-level-members */
 inline fun <reified T> staticRule(noinline initializer: MockedStatic<T>.() -> Unit = {}) =
     MockedStaticRule(T::class.java, initializer)
 
 fun <T, R> MockedStatic<T>.on(methodCall: () -> R): OngoingStubbing<R> {
     return whenever(methodCall())
 }
+/* ktlint-enable appmetrica-rules:no-top-level-members */
