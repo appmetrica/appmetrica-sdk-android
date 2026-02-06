@@ -6,7 +6,6 @@ import io.appmetrica.analytics.impl.db.preferences.SimplePreferenceStorage
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade
 import io.appmetrica.analytics.impl.selfreporting.SelfReporterWrapper
 import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.StubbedBlockingExecutor
 import io.appmetrica.analytics.testutils.on
 import io.appmetrica.analytics.testutils.staticRule
 import org.assertj.core.api.Assertions.assertThat
@@ -25,8 +24,6 @@ internal class ModuleStatusReportingTaskTest : CommonTest() {
 
     private val currentTime = System.currentTimeMillis()
     private val modulesType = "some_modules_type"
-
-    private val executor = StubbedBlockingExecutor()
     private val preferences: SimplePreferenceStorage = mock {
         on { getString(any(), any()) } doReturn null
     }

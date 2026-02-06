@@ -46,7 +46,7 @@ public class RemoveBackgroundSessionIDTest extends CommonTest {
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        mContext = TestUtils.createMockedContext();
+        mContext = mRule.getContext();
         when(mComponentUnit.getContext()).thenReturn(mContext);
         when(mComponentUnit.getFreshReportRequestConfig()).thenReturn(reportRequestConfig);
         when(mComponentUnit.getStartupState()).thenReturn(TestUtils.createDefaultStartupState());
@@ -54,7 +54,8 @@ public class RemoveBackgroundSessionIDTest extends CommonTest {
         when(componentId.toStringAnonymized()).thenReturn("component_id");
         when(mComponentUnit.getComponentId()).thenReturn(componentId);
         testDB = new DatabaseStorage(
-            mContext, "test_db",
+            mContext,
+            "test_db",
             Constants.getDatabaseManagerProvider().buildComponentDatabaseManager(
                 new ComponentId("package", "apiKey")
             )

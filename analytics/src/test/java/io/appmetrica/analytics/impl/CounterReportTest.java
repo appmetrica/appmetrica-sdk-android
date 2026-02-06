@@ -15,6 +15,7 @@ import io.appmetrica.analytics.impl.startup.StartupState;
 import io.appmetrica.analytics.impl.utils.executors.ServiceExecutorProvider;
 import io.appmetrica.analytics.protobuf.nano.InvalidProtocolBufferNanoException;
 import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.analytics.testutils.ContextRule;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import io.appmetrica.analytics.testutils.RandomStringGenerator;
 import io.appmetrica.analytics.testutils.TestUtils;
@@ -56,7 +57,9 @@ public class CounterReportTest extends CommonTest {
     @Mock
     private IHandlerExecutor commonExecutor;
 
-    private final Context context = TestUtils.createMockedContext();
+    @Rule
+    public ContextRule contextRule = new ContextRule();
+    private Context context;
     private StartupState startupState;
 
     @Rule
@@ -64,11 +67,10 @@ public class CounterReportTest extends CommonTest {
 
     private final List<String> mProviders = new ArrayList<String>();
 
-    private final String encodedIdentity = "encoded identity";
-
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
+        context = contextRule.getContext();
         when(componentUnit.getFreshReportRequestConfig()).thenReturn(reportRequestConfig);
         when(componentUnit.getContext()).thenReturn(context);
         when(componentUnit.getStartupState()).thenReturn(startupState);

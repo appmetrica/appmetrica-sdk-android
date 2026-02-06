@@ -10,22 +10,19 @@ import io.appmetrica.analytics.impl.db.VitalCommonDataProvider;
 import io.appmetrica.analytics.impl.utils.DebugAssert;
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule;
 import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.analytics.testutils.ContextRule;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
-import io.appmetrica.analytics.testutils.TestUtils;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.RobolectricTestRunner;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@RunWith(RobolectricTestRunner.class)
 public class DebugAssertTest extends CommonTest {
 
     @Mock
@@ -38,11 +35,13 @@ public class DebugAssertTest extends CommonTest {
     public final GlobalServiceLocatorRule globalServiceLocatorRule = new GlobalServiceLocatorRule();
     @Rule
     public final ClientServiceLocatorRule clientServiceLocatorRule = new ClientServiceLocatorRule();
+    @Rule
+    public ContextRule contextRule = new ContextRule();
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.openMocks(this);
-        context = TestUtils.createMockedContext();
+        context = contextRule.getContext();
         when(GlobalServiceLocator.getInstance().getStorageFactory().getServicePreferenceDbHelperForMigration(context))
             .thenReturn(serviceKeyValueHelper);
     }

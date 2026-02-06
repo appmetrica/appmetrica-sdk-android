@@ -8,13 +8,13 @@ import android.net.Network;
 import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.os.Build;
-import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.backport.FunctionWithThrowable;
 import io.appmetrica.analytics.coreapi.internal.system.NetworkType;
 import io.appmetrica.analytics.coreutils.internal.AndroidUtils;
+import io.appmetrica.analytics.coreutils.internal.StringUtils;
 import io.appmetrica.analytics.coreutils.internal.system.SystemServiceUtils;
 import io.appmetrica.analytics.impl.protobuf.backend.EventProto;
 import io.appmetrica.analytics.impl.utils.MapWithDefault;
@@ -32,10 +32,10 @@ public final class PhoneUtils {
 
         StringBuilder sb = new StringBuilder(language);
         String script = locale.getScript();
-        if (!TextUtils.isEmpty(script)) {
+        if (!StringUtils.isNullOrEmpty(script)) {
             sb.append('-').append(script);
         }
-        if (!TextUtils.isEmpty(country)) {
+        if (!StringUtils.isNullOrEmpty(country)) {
             sb.append('_').append(country);
         }
         return sb.toString();

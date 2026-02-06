@@ -47,9 +47,9 @@ import io.appmetrica.analytics.networktasks.internal.NetworkCore;
 import io.appmetrica.analytics.networktasks.internal.NetworkServiceLocator;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.ConstructionArgumentCaptor;
+import io.appmetrica.analytics.testutils.ContextRule;
 import io.appmetrica.analytics.testutils.MockedConstructionRule;
 import io.appmetrica.analytics.testutils.MockedStaticRule;
-import io.appmetrica.analytics.testutils.TestUtils;
 import java.io.File;
 import java.util.Collections;
 import java.util.List;
@@ -60,7 +60,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
 import org.mockito.Mock;
@@ -73,9 +72,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.RobolectricTestRunner;
 
-@RunWith(RobolectricTestRunner.class)
 public class GlobalServiceLocatorTest extends CommonTest {
 
     private Context mContext;
@@ -226,6 +223,9 @@ public class GlobalServiceLocatorTest extends CommonTest {
             }
         );
 
+    @Rule
+    public final ContextRule contextRule = new ContextRule();
+
     @Mock
     private StorageFactory<ClidsInfo> clidsStorageFactory;
     @Mock
@@ -241,7 +241,7 @@ public class GlobalServiceLocatorTest extends CommonTest {
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        mContext = TestUtils.createMockedContext();
+        mContext = contextRule.getContext();
         when(NetworkServiceLocator.getInstance()).thenReturn(networkServiceLocator);
         when(networkServiceLocator.getNetworkCore()).thenReturn(networkCore);
         when(AppMetricaSelfReportFacade.getReporter()).thenReturn(reporter);

@@ -6,11 +6,10 @@ import io.appmetrica.analytics.appsetid.internal.IAppSetIdRetriever
 import io.appmetrica.analytics.coreapi.internal.identifiers.AppSetId
 import io.appmetrica.analytics.coreapi.internal.identifiers.AppSetIdScope
 import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.TestUtils
+import io.appmetrica.analytics.testutils.ContextRule
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.Mockito.clearInvocations
 import org.mockito.Mockito.doAnswer
 import org.mockito.Mockito.mock
@@ -18,22 +17,16 @@ import org.mockito.Mockito.verifyNoInteractions
 import org.mockito.kotlin.any
 import org.mockito.kotlin.same
 import org.mockito.kotlin.whenever
-import org.robolectric.RobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
 internal class AppSetIdGetterTest : CommonTest() {
 
-    private lateinit var context: Context
+    @get:Rule
+    val contextRule = ContextRule()
+    private val context by contextRule
 
     private val appSetIdRetriever: IAppSetIdRetriever = mock()
 
-    private lateinit var appSetIdGetter: AppSetIdGetter
-
-    @Before
-    fun setUp() {
-        context = TestUtils.createMockedContext()
-        appSetIdGetter = AppSetIdGetter(context, appSetIdRetriever)
-    }
+    private val appSetIdGetter by setUp { AppSetIdGetter(context, appSetIdRetriever) }
 
     @Test
     fun getAppSetIdSuccess() {

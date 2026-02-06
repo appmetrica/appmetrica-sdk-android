@@ -20,7 +20,6 @@ import io.appmetrica.analytics.impl.startup.StartupStateModel;
 import io.appmetrica.analytics.impl.utils.SecurityUtils;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
-import io.appmetrica.analytics.testutils.TestUtils;
 import java.util.Arrays;
 import java.util.Collection;
 import org.assertj.core.api.AbstractObjectAssert;
@@ -28,13 +27,13 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.ParameterizedRobolectricTestRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(ParameterizedRobolectricTestRunner.class)
+@RunWith(Parameterized.class)
 public class StorageFactoriesTest extends CommonTest {
 
     private final Class entityClass;
@@ -49,7 +48,7 @@ public class StorageFactoriesTest extends CommonTest {
         this.converterClass = converterClass;
     }
 
-    @ParameterizedRobolectricTestRunner.Parameters(name = "{0}")
+    @Parameterized.Parameters(name = "{0}")
     public static Collection<Object[]> data() {
         //noinspection deprecation
         return Arrays.asList(new Object[][]{
@@ -86,7 +85,7 @@ public class StorageFactoriesTest extends CommonTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.openMocks(this);
-        context = TestUtils.createMockedContext();
+        context = globalServiceLocatorRule.getContext();
         storageFactory = (StorageFactoryImpl) StorageFactory.Provider.get(entityClass);
         protobufStateStorage = (ProtobufStateStorageImpl) storageFactory.createWithHelper(context, binaryDataHelper);
 

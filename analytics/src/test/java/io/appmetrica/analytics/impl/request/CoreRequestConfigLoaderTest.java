@@ -11,15 +11,15 @@ import io.appmetrica.analytics.coreutils.internal.services.SafePackageManager;
 import io.appmetrica.analytics.impl.id.AdvertisingIdGetter;
 import io.appmetrica.analytics.impl.startup.StartupState;
 import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.analytics.testutils.ContextRule;
 import io.appmetrica.analytics.testutils.TestUtils;
 import java.util.UUID;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.RobolectricTestRunner;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -27,7 +27,6 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@RunWith(RobolectricTestRunner.class)
 public abstract class CoreRequestConfigLoaderTest extends CommonTest {
 
     @Mock
@@ -39,12 +38,15 @@ public abstract class CoreRequestConfigLoaderTest extends CommonTest {
     protected AdvertisingIdGetter advertisingIdGetter;
     @Mock
     protected PlatformIdentifiers platformIdentifiers;
+
+    @Rule
+    public ContextRule contextRule = new ContextRule();
     protected Context context;
 
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        context = TestUtils.createMockedContext();
+        context = contextRule.getContext();
         when(appSetIdProvider.getAppSetId()).thenReturn(appSetId);
         when(platformIdentifiers.getAppSetIdProvider()).thenReturn(appSetIdProvider);
         when(platformIdentifiers.getAdvIdentifiersProvider()).thenReturn(advertisingIdGetter);

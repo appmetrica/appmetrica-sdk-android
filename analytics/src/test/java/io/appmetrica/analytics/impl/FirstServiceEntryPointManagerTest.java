@@ -12,28 +12,25 @@ import io.appmetrica.analytics.impl.service.migration.ServiceMigrationManager;
 import io.appmetrica.analytics.impl.servicecomponents.ServiceComponentsInitializerProvider;
 import io.appmetrica.analytics.impl.startup.uuid.MultiProcessSafeUuidProvider;
 import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.analytics.testutils.ContextRule;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import io.appmetrica.analytics.testutils.MockedConstructionRule;
-import io.appmetrica.analytics.testutils.TestUtils;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.MockedConstruction;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.RobolectricTestRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@RunWith(RobolectricTestRunner.class)
 public class FirstServiceEntryPointManagerTest extends CommonTest {
 
     private FirstServiceEntryPointManager firstServiceEntryPointManager;
@@ -88,6 +85,9 @@ public class FirstServiceEntryPointManagerTest extends CommonTest {
     public MockedConstructionRule<SystemTimeProvider> timeProviderMockedConstructionRule =
         new MockedConstructionRule<>(SystemTimeProvider.class);
 
+    @Rule
+    public ContextRule contextRule = new ContextRule();
+
     private ServiceComponentsInitializerProvider serviceComponentsInitializerProvider;
     private ModulesSeeker modulesSeeker;
 
@@ -97,7 +97,7 @@ public class FirstServiceEntryPointManagerTest extends CommonTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.openMocks(this);
-        context = TestUtils.createMockedContext();
+        context = contextRule.getContext();
 
         when(GlobalServiceLocator.getInstance().getServiceExecutorProvider().getMetricaCoreExecutor())
             .thenReturn(executor);

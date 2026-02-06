@@ -1,7 +1,6 @@
 package io.appmetrica.analytics.impl.utils.validation;
 
 import android.content.Context;
-import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import io.appmetrica.analytics.coreutils.internal.StringUtils;
@@ -22,7 +21,7 @@ public class ProcessNameValidator implements Validator<String> {
     public ValidationResult validate(@Nullable String data) {
         ValidationResult result;
 
-        if (TextUtils.isEmpty(data)) {
+        if (StringUtils.isNullOrEmpty(data)) {
             result = ValidationResult.failed(this, "Process name is null or empty");
         } else {
             String packageName = mContext.getPackageName();

@@ -2,26 +2,27 @@ package io.appmetrica.analytics.impl
 
 import android.content.Context
 import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.TestUtils
+import io.appmetrica.analytics.testutils.ContextRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.junit.runners.Parameterized
 import org.mockito.kotlin.whenever
-import org.robolectric.ParameterizedRobolectricTestRunner
-import org.robolectric.RuntimeEnvironment
 import java.io.File
 
-@RunWith(ParameterizedRobolectricTestRunner::class)
+@RunWith(Parameterized::class)
 internal class FileProviderStorageDirectoryTest(
     private val applier: (FileProvider, Context) -> Any,
     private val expected: (File) -> Any,
-    description: String
+    @Suppress("unused") description: String
 ) : CommonTest() {
 
     companion object {
+
         @JvmStatic
-        @ParameterizedRobolectricTestRunner.Parameters(name = "{2}")
+        @Parameterized.Parameters(name = "{2}")
         fun data(): Collection<Array<Any>> {
             return listOf(
                 arrayOf(
@@ -49,27 +50,24 @@ internal class FileProviderStorageDirectoryTest(
         }
     }
 
+    @get:Rule
+    val contextRule = ContextRule()
     private lateinit var context: Context
     private lateinit var fileProvider: FileProvider
-    private var noBackupDir: File? = null
-    private lateinit var filesDir: File
 
     @Before
     fun setUp() {
-        context = TestUtils.createMockedContext()
-        noBackupDir = RuntimeEnvironment.getApplication().noBackupFilesDir
-        filesDir = RuntimeEnvironment.getApplication().filesDir
+        context = contextRule.context
         fileProvider = FileProvider()
     }
 
     @Test
-    fun lollipop() {
-        whenever(context.noBackupFilesDir).thenReturn(noBackupDir)
-        assertThat(applier(fileProvider, context)).isEqualTo(expected(noBackupDir!!))
+    fun checkForNull() {
+        assertThat(applier(fileProvider, context)).isEqualTo(expected(context.noBackupFilesDir))
     }
 
     @Test
-    fun lollipopNull() {
+    fun checkForNonNull() {
         whenever(context.noBackupFilesDir).thenReturn(null)
         assertThat(applier(fileProvider, context)).isNull()
     }

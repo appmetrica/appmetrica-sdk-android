@@ -6,7 +6,6 @@ import io.appmetrica.analytics.impl.AppMetricaFacade;
 import io.appmetrica.analytics.impl.DeeplinkConsumer;
 import io.appmetrica.analytics.impl.MainReporter;
 import io.appmetrica.analytics.impl.MainReporterApiConsumerProvider;
-import io.appmetrica.analytics.impl.proxy.validation.ActivationValidator;
 import io.appmetrica.analytics.impl.proxy.validation.Barrier;
 import io.appmetrica.analytics.testutils.CommonTest;
 import java.lang.reflect.InvocationTargetException;
@@ -27,8 +26,6 @@ public class BaseAppMetricaProxyBarrierTests extends CommonTest {
 
     @Mock
     protected AppMetricaFacadeProvider mProvider;
-    @Mock
-    protected ActivationValidator mActivationValidator;
     @Mock
     protected MainReporter mMainReporter;
     @Mock

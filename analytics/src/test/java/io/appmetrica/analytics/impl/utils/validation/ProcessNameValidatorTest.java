@@ -2,19 +2,20 @@ package io.appmetrica.analytics.impl.utils.validation;
 
 import android.content.Context;
 import io.appmetrica.analytics.testutils.CommonTest;
-import io.appmetrica.analytics.testutils.TestUtils;
+import io.appmetrica.analytics.testutils.ContextRule;
 import java.util.Arrays;
 import java.util.Collection;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.ParameterizedRobolectricTestRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-@RunWith(ParameterizedRobolectricTestRunner.class)
+@RunWith(Parameterized.class)
 public class ProcessNameValidatorTest extends CommonTest {
 
     private static final String PACKAGE_NAME = "com.test.package.name";
@@ -27,7 +28,7 @@ public class ProcessNameValidatorTest extends CommonTest {
         mValid = valid;
     }
 
-    @ParameterizedRobolectricTestRunner.Parameters(name = "[{index}] Validation result is {1} for input = \"{0}\"")
+    @Parameterized.Parameters(name = "[{index}] Validation result is {1} for input = \"{0}\"")
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
             {null, false},
@@ -40,6 +41,8 @@ public class ProcessNameValidatorTest extends CommonTest {
         });
     }
 
+    @Rule
+    public ContextRule contextRule = new ContextRule();
     private Context mContext;
 
     private ProcessNameValidator mValidator;
@@ -47,7 +50,7 @@ public class ProcessNameValidatorTest extends CommonTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.openMocks(this);
-        mContext = TestUtils.createMockedContext();
+        mContext = contextRule.getContext();
         when(mContext.getPackageName()).thenReturn(PACKAGE_NAME);
         mValidator = new ProcessNameValidator(mContext);
     }

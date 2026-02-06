@@ -7,11 +7,12 @@ import io.appmetrica.analytics.coreapi.internal.backport.Consumer;
 import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor;
 import io.appmetrica.analytics.impl.utils.BackgroundBroadcastReceiver;
 import io.appmetrica.analytics.testutils.CommonTest;
-import io.appmetrica.analytics.testutils.StubbedBlockingExecutor;
-import io.appmetrica.analytics.testutils.TestUtils;
+import io.appmetrica.analytics.testutils.ContextRule;
+import io.appmetrica.analytics.testutils.MockProvider;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -33,7 +34,7 @@ import org.robolectric.RobolectricTestRunner;
 @RunWith(RobolectricTestRunner.class)
 public class BatteryChargeTypeListenerTest extends CommonTest {
 
-    private final IHandlerExecutor executor = new StubbedBlockingExecutor();
+    private final IHandlerExecutor executor = MockProvider.mockedBlockingExecutorMock();
     @Mock
     private Intent initialIntent;
     @Mock
@@ -46,13 +47,15 @@ public class BatteryChargeTypeListenerTest extends CommonTest {
     private ContextReceiverSafeWrapper.Provider contextReceiverSafeWrapperProvider;
     @Captor
     private ArgumentCaptor<BackgroundBroadcastReceiver> receiverCaptor;
+    @Rule
+    public ContextRule contextRule = new ContextRule();
     private Context context;
     private BatteryChargeTypeListener batteryChargeTypeListener;
 
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        context = TestUtils.createMockedContext();
+        context = contextRule.getContext();
         when(contextReceiverSafeWrapperProvider.create(any(BackgroundBroadcastReceiver.class))).thenReturn(contextReceiverSafeWrapper);
         when(contextReceiverSafeWrapper.registerReceiver(
             any(Context.class),

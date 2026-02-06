@@ -3,29 +3,28 @@ package io.appmetrica.analytics.impl.utils.encryption;
 import android.content.Context;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.testutils.CommonTest;
-import io.appmetrica.analytics.testutils.TestUtils;
+import io.appmetrica.analytics.testutils.ContextRule;
 import java.util.Arrays;
 import java.util.Collection;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.ParameterizedRobolectricTestRunner;
+import org.junit.runners.Parameterized;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-@RunWith(ParameterizedRobolectricTestRunner.class)
+@RunWith(Parameterized.class)
 public class AESCredentialProviderTests extends CommonTest {
 
     private final String mPackageName;
     private final byte[] mPassword;
     private final byte[] mIV;
-
-    private final Context mContext;
     private AESCredentialProvider mAESCredentialProvider;
 
-    @ParameterizedRobolectricTestRunner.Parameters(name = "Return expected password and IV for package name = {0}")
+    @Parameterized.Parameters(name = "Return expected password and IV for package name = {0}")
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
             {
@@ -52,13 +51,16 @@ public class AESCredentialProviderTests extends CommonTest {
         mPackageName = packageName;
         mPassword = password;
         mIV = iv;
-        mContext = TestUtils.createMockedContext();
-        when(mContext.getPackageName()).thenReturn(mPackageName);
     }
+
+    @Rule
+    public ContextRule contextRule = new ContextRule();
 
     @Before
     public void setUp() {
-        mAESCredentialProvider = new AESCredentialProvider(mContext);
+        Context context = contextRule.getContext();
+        when(context.getPackageName()).thenReturn(mPackageName);
+        mAESCredentialProvider = new AESCredentialProvider(context);
     }
 
     @After

@@ -1,15 +1,12 @@
 package io.appmetrica.analytics.impl;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.util.Pair;
 import androidx.annotation.NonNull;
 import io.appmetrica.analytics.coreapi.internal.backport.Function;
 import io.appmetrica.analytics.coreapi.internal.permission.PermissionState;
-import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
-import io.appmetrica.analytics.testutils.TestUtils;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,7 +22,6 @@ import org.robolectric.ParameterizedRobolectricTestRunner;
 
 import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 @RunWith(ParameterizedRobolectricTestRunner.class)
 public class CounterReportMetaDataTest extends CommonTest {
@@ -162,12 +158,5 @@ public class CounterReportMetaDataTest extends CommonTest {
             .checkFieldIsNull("openId")
             .checkField("extras", extras)
             .checkAll();
-    }
-
-    private static ComponentUnit getMockedComponentUnit() {
-        final ComponentUnit componentUnit = mock(ComponentUnit.class);
-        Context context = TestUtils.createMockedContext();
-        when(componentUnit.getContext()).thenReturn(context);
-        return componentUnit;
     }
 }

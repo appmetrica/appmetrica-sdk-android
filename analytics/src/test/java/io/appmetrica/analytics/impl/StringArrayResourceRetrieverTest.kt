@@ -1,39 +1,28 @@
 package io.appmetrica.analytics.impl
 
-import android.content.Context
 import android.content.res.Resources
 import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.TestUtils
+import io.appmetrica.analytics.testutils.ContextRule
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.doThrow
 import org.mockito.kotlin.eq
-import org.mockito.kotlin.mock
 import org.mockito.kotlin.stubbing
-import org.robolectric.RobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
 internal class StringArrayResourceRetrieverTest : CommonTest() {
 
     private val resourceName = "my_resource"
 
-    private val resources = mock<Resources>()
-    private lateinit var context: Context
+    @get:Rule
+    val contextRule = ContextRule()
+    private val context by contextRule
 
-    private lateinit var resourceRetriever: StringArrayResourceRetriever
+    private val resources: Resources by lazy { context.resources }
 
-    @Before
-    fun setUp() {
-        context = TestUtils.createMockedContext()
-        stubbing(context) {
-            on { resources } doReturn resources
-        }
-        resourceRetriever = StringArrayResourceRetriever(context, resourceName)
-    }
+    private val resourceRetriever by setUp { StringArrayResourceRetriever(context, resourceName) }
 
     @Test
     fun hasResource() {

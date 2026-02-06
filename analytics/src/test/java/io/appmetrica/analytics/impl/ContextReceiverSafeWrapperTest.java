@@ -8,13 +8,12 @@ import android.content.IntentFilter;
 import android.os.Handler;
 import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor;
 import io.appmetrica.analytics.testutils.CommonTest;
-import io.appmetrica.analytics.testutils.TestUtils;
+import io.appmetrica.analytics.testutils.ContextRule;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.RobolectricTestRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.clearInvocations;
@@ -27,7 +26,6 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @SuppressLint("UnspecifiedRegisterReceiverFlag")
-@RunWith(RobolectricTestRunner.class)
 public class ContextReceiverSafeWrapperTest extends CommonTest {
 
     @Mock
@@ -41,13 +39,17 @@ public class ContextReceiverSafeWrapperTest extends CommonTest {
     @Mock
     private IHandlerExecutor executor;
     private Context context;
+
+    @Rule
+    public ContextRule contextRule = new ContextRule();
+
     private ContextReceiverSafeWrapper contextReceiverSafeWrapper;
 
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
         when(executor.getHandler()).thenReturn(handler);
-        context = TestUtils.createMockedContext();
+        context = contextRule.getContext();
         contextReceiverSafeWrapper = new ContextReceiverSafeWrapper(broadcastReceiver);
     }
 

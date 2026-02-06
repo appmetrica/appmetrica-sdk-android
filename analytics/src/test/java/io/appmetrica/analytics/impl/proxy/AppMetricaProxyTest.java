@@ -5,7 +5,6 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
-import android.util.ArrayMap;
 import android.webkit.WebView;
 import io.appmetrica.analytics.AdRevenue;
 import io.appmetrica.analytics.AnrListener;
@@ -37,7 +36,8 @@ import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdReve
 import io.appmetrica.analytics.profile.UserProfile;
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule;
 import io.appmetrica.analytics.testutils.CommonTest;
-import io.appmetrica.analytics.testutils.StubbedBlockingExecutor;
+import io.appmetrica.analytics.testutils.ContextRule;
+import io.appmetrica.analytics.testutils.MockProvider;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -45,14 +45,11 @@ import org.assertj.core.api.SoftAssertions;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.ArgumentMatcher;
 import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.argThat;
@@ -67,7 +64,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
-@RunWith(RobolectricTestRunner.class)
 public class AppMetricaProxyTest extends CommonTest {
 
     @Mock
@@ -84,7 +80,6 @@ public class AppMetricaProxyTest extends CommonTest {
     private ReporterProxyStorage mReporterProxyStorage;
     @Mock
     private Barrier mBarrier;
-    @Mock
     private Context context;
     @Mock
     private Context applicationContext;
@@ -104,9 +99,12 @@ public class AppMetricaProxyTest extends CommonTest {
     private SessionsTrackingManager sessionsTrackingManager;
 
     @Rule
+    public ContextRule contextRule = new ContextRule();
+
+    @Rule
     public ClientServiceLocatorRule clientServiceLocatorRule = new ClientServiceLocatorRule();
 
-    private IHandlerExecutor mStubbedExecutor;
+    private IHandlerExecutor blockedExecutor;
     private AppMetricaProxy mProxy;
 
     private static final String ERROR_MESSAGE = "error message";
@@ -114,12 +112,13 @@ public class AppMetricaProxyTest extends CommonTest {
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
+        context = contextRule.getContext();
         when(context.getApplicationContext()).thenReturn(applicationContext);
-        mStubbedExecutor = new StubbedBlockingExecutor();
+        blockedExecutor = MockProvider.mockedBlockingExecutorMock();
         when(mProvider.peekInitializedImpl()).thenReturn(mImpl);
         when(mProvider.getInitializedImpl(applicationContext)).thenReturn(mImpl);
         when(ClientServiceLocator.getInstance().getClientExecutorProvider().getDefaultExecutor())
-            .thenReturn(mStubbedExecutor);
+            .thenReturn(blockedExecutor);
         mProxy = createProxy();
         when(mImpl.getMainReporterApiConsumerProvider()).thenReturn(mainReporterApiConsumerProvider);
         doReturn(mMainReporter).when(mainReporterApiConsumerProvider).getMainReporter();
@@ -221,17 +220,17 @@ public class AppMetricaProxyTest extends CommonTest {
 
     @Test
     public void testReportEventWithArrayMap() {
-        Map<String, Object> arrayMap = new ArrayMap<String, Object>();
-        arrayMap.put("k1", "v1");
-        arrayMap.put("k2", "v2");
+        Map<String, Object> attributes = new HashMap<String, Object>();
+        attributes.put("k1", "v1");
+        attributes.put("k2", "v2");
         String name = "eventName";
-        mProxy.reportEvent(name, arrayMap);
+        mProxy.reportEvent(name, attributes);
         ArgumentCaptor<LinkedHashMap<String, Object>> mapCaptor = ArgumentCaptor.forClass(LinkedHashMap.class);
         InOrder order = inOrder(mBarrier, mSynchronousStageExecutor, mMainReporter);
-        order.verify(mBarrier).reportEvent(name, arrayMap);
-        order.verify(mSynchronousStageExecutor).reportEvent(name, arrayMap);
+        order.verify(mBarrier).reportEvent(name, attributes);
+        order.verify(mSynchronousStageExecutor).reportEvent(name, attributes);
         order.verify(mMainReporter).reportEvent(eq(name), mapCaptor.capture());
-        assertThat(arrayMap).isEqualTo(mapCaptor.getValue());
+        assertThat(attributes).isEqualTo(mapCaptor.getValue());
     }
 
     @Test
@@ -464,11 +463,11 @@ public class AppMetricaProxyTest extends CommonTest {
         ReporterConfig config = ReporterConfig.newConfigBuilder(apiKey).withLogs().withSessionTimeout(15).build();
         ArgumentCaptor<ReporterConfig> syncConfigCaptor = ArgumentCaptor.forClass(ReporterConfig.class);
         ArgumentCaptor<ReporterConfig> providerConfigCaptor = ArgumentCaptor.forClass(ReporterConfig.class);
-        mProxy.activateReporter(RuntimeEnvironment.getApplication(), config);
+        mProxy.activateReporter(context, config);
         InOrder order = inOrder(mBarrier, mSynchronousStageExecutor, mReporterProxyStorage);
-        order.verify(mBarrier).activateReporter(same(RuntimeEnvironment.getApplication()), syncConfigCaptor.capture());
-        order.verify(mSynchronousStageExecutor).activateReporter(same(RuntimeEnvironment.getApplication()), syncConfigCaptor.capture());
-        order.verify(mReporterProxyStorage).getOrCreate(same(RuntimeEnvironment.getApplication()), providerConfigCaptor.capture());
+        order.verify(mBarrier).activateReporter(same(context), syncConfigCaptor.capture());
+        order.verify(mSynchronousStageExecutor).activateReporter(same(applicationContext), syncConfigCaptor.capture());
+        order.verify(mReporterProxyStorage).getOrCreate(same(applicationContext), providerConfigCaptor.capture());
         assertThat(syncConfigCaptor.getValue()).isEqualToComparingFieldByField(config);
         assertThat(providerConfigCaptor.getValue()).isEqualToComparingFieldByField(config);
 

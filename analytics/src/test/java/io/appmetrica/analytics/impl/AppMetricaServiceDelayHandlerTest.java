@@ -6,19 +6,17 @@ import android.content.Context;
 import androidx.annotation.Nullable;
 import io.appmetrica.analytics.impl.utils.process.CurrentProcessDetector;
 import io.appmetrica.analytics.testutils.CommonTest;
-import io.appmetrica.analytics.testutils.TestUtils;
+import io.appmetrica.analytics.testutils.ContextRule;
 import java.io.File;
 import java.util.Arrays;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
 import org.skyscreamer.jsonassert.JSONAssert;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -27,11 +25,12 @@ import static org.mockito.Mockito.clearInvocations;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
-@RunWith(RobolectricTestRunner.class)
 public class AppMetricaServiceDelayHandlerTest extends CommonTest {
 
     private static final String METRICA_SERVICE_SETTING_FILENAME = "metrica_service_settings.dat";
 
+    @Rule
+    public ContextRule contextRule = new ContextRule();
     @Mock
     private CurrentProcessDetector currentProcessDetector;
     @Mock
@@ -46,9 +45,9 @@ public class AppMetricaServiceDelayHandlerTest extends CommonTest {
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        context = TestUtils.createMockedContext();
+        context = contextRule.getContext();
         metricaServiceInfo.service = new ComponentName(context.getPackageName(), "io.appmetrica.analytics.internal.AppMetricaService");
-        delayFile = new File(RuntimeEnvironment.getApplication().getFilesDir(), METRICA_SERVICE_SETTING_FILENAME);
+        delayFile = new File(context.getFilesDir(), METRICA_SERVICE_SETTING_FILENAME);
         when(fileProvider.getFileFromStorage(context, METRICA_SERVICE_SETTING_FILENAME)).thenReturn(delayFile);
         when(currentProcessDetector.isMainProcess()).thenReturn(true);
         when(context.getSystemService(Context.ACTIVITY_SERVICE)).thenReturn(activityManager);

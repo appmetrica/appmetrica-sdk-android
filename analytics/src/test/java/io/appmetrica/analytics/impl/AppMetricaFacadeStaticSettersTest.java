@@ -7,18 +7,16 @@ import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor;
 import io.appmetrica.analytics.impl.utils.executors.ClientExecutorProvider;
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule;
 import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.analytics.testutils.ContextRule;
 import io.appmetrica.analytics.testutils.MockedConstructionRule;
-import io.appmetrica.analytics.testutils.TestUtils;
 import java.util.Random;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.RobolectricTestRunner;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.same;
@@ -27,7 +25,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(RobolectricTestRunner.class)
 public class AppMetricaFacadeStaticSettersTest extends CommonTest {
 
     @Mock
@@ -52,10 +49,13 @@ public class AppMetricaFacadeStaticSettersTest extends CommonTest {
     public MockedConstructionRule<ClientMigrationManager> clientMigrationManagerMockedConstructionRule =
         new MockedConstructionRule<>(ClientMigrationManager.class);
 
+    @Rule
+    public ContextRule contextRule = new ContextRule();
+
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.openMocks(this);
-        context = TestUtils.createMockedContext();
+        context = contextRule.getContext();
         AppMetricaFacade.killInstance();
         when(ClientServiceLocator.getInstance().getAppMetricaCoreComponentsProvider().getCore(
             same(context), any(ClientExecutorProvider.class)

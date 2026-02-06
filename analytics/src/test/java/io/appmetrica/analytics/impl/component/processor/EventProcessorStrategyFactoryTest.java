@@ -1,7 +1,5 @@
 package io.appmetrica.analytics.impl.component.processor;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import io.appmetrica.analytics.impl.InternalEvents;
 import io.appmetrica.analytics.impl.component.ComponentId;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
@@ -30,16 +28,13 @@ import io.appmetrica.analytics.impl.component.processor.session.ReportSessionSto
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import io.appmetrica.analytics.testutils.MockedConstructionRule;
-import io.appmetrica.analytics.testutils.TestUtils;
 import java.util.List;
 import java.util.UUID;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.RobolectricTestRunner;
 
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_ACTIVATION;
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_APP_ENVIRONMENT_CLEARED;
@@ -53,8 +48,6 @@ import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_REGULAR;
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_SET_SESSION_EXTRA;
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_START;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -62,16 +55,12 @@ import static org.mockito.Mockito.when;
 /**
  * @see BaseEventProcessingStrategyFactoryTest
  */
-@RunWith(RobolectricTestRunner.class)
 public class EventProcessorStrategyFactoryTest extends CommonTest {
 
     @Mock
     private ComponentUnit mComponent;
     private final String apiKey = UUID.randomUUID().toString();
     private EventProcessingStrategyFactory mEventProcessingStrategyFactory;
-
-    private static final String PACKAGE = "com.test.package";
-
     @Mock
     private ComponentId mComponentId;
 
@@ -109,11 +98,8 @@ public class EventProcessorStrategyFactoryTest extends CommonTest {
     public void setUp() {
         MockitoAnnotations.openMocks(this);
 
-        Context context = TestUtils.createMockedContext();
-        when(context.getSharedPreferences(anyString(), anyInt())).thenReturn(mock(SharedPreferences.class));
-        doReturn(PACKAGE).when(context).getPackageName();
 
-        doReturn(context).when(mComponent).getContext();
+        doReturn(mGlobalServiceLocatorRule.getContext()).when(mComponent).getContext();
         when(mComponentId.getApiKey()).thenReturn(apiKey);
         doReturn(mComponentId).when(mComponent).getComponentId();
 
@@ -297,7 +283,7 @@ public class EventProcessorStrategyFactoryTest extends CommonTest {
     public void testReporter() {
         mComponentId = mock(ComponentId.class);
         doReturn(mComponentId).when(mComponent).getComponentId();
-        doReturn(PACKAGE).when(mComponentId).getPackage();
+        doReturn(mGlobalServiceLocatorRule.getContext().getPackageName()).when(mComponentId).getPackage();
 
         assertThat(getHandlers(EVENT_TYPE_REGULAR, new EventProcessingStrategyFactory(mComponent)))
             .extracting("class").containsOnly(

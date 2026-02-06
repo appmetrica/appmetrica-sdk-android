@@ -6,23 +6,20 @@ import io.appmetrica.analytics.impl.stub.AppMetricaImplStub;
 import io.appmetrica.analytics.impl.utils.UnlockedUserStateProvider;
 import io.appmetrica.analytics.impl.utils.executors.ClientExecutorProvider;
 import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.analytics.testutils.ContextRule;
 import io.appmetrica.analytics.testutils.MockedConstructionRule;
 import io.appmetrica.analytics.testutils.MockedStaticRule;
-import io.appmetrica.analytics.testutils.TestUtils;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.RobolectricTestRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.when;
 
-@RunWith(RobolectricTestRunner.class)
 public class AppMetricaCoreComponentsProviderTest extends CommonTest {
 
     @Rule
@@ -38,6 +35,9 @@ public class AppMetricaCoreComponentsProviderTest extends CommonTest {
     @Rule
     public MockedStaticRule<SdkUtils> sdkUtilsMockedStaticRule = new MockedStaticRule<>(SdkUtils.class);
 
+    @Rule
+    public ContextRule contextRule = new ContextRule();
+
     private Context context;
     @Mock
     private UnlockedUserStateProvider unlockedUserStateProvider;
@@ -51,7 +51,7 @@ public class AppMetricaCoreComponentsProviderTest extends CommonTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.openMocks(this);
-        context = TestUtils.createMockedContext();
+        context = contextRule.getContext();
         coreComponentsProvider = new AppMetricaCoreComponentsProvider(unlockedUserStateProvider);
     }
 

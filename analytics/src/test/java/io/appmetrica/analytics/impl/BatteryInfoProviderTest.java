@@ -3,10 +3,11 @@ package io.appmetrica.analytics.impl;
 import android.content.Intent;
 import android.os.BatteryManager;
 import io.appmetrica.analytics.coreapi.internal.backport.Consumer;
+import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor;
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.batteryinfo.ChargeType;
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.batteryinfo.ChargeTypeChangeListener;
 import io.appmetrica.analytics.testutils.CommonTest;
-import io.appmetrica.analytics.testutils.StubbedBlockingExecutor;
+import io.appmetrica.analytics.testutils.MockProvider;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,7 +35,7 @@ public class BatteryInfoProviderTest extends CommonTest {
     @Mock
     private ChargeTypeChangeListener mSecondChargeTypeChangeListener;
 
-    private StubbedBlockingExecutor mExecutor;
+    private IHandlerExecutor mExecutor;
 
     @Captor
     private ArgumentCaptor<Consumer<Intent>> listenerCaptor;
@@ -45,7 +46,7 @@ public class BatteryInfoProviderTest extends CommonTest {
     public void setUp() throws Exception {
         MockitoAnnotations.openMocks(this);
 
-        mExecutor = new StubbedBlockingExecutor();
+        mExecutor = MockProvider.mockedBlockingExecutorMock();
 
         mockBatteryChangedBroadcastWithIntent(prepareIntentWithBatteryInfo(
             100,

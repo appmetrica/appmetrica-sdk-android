@@ -11,15 +11,13 @@ import io.appmetrica.analytics.impl.proxy.synchronous.ReporterSynchronousStageEx
 import io.appmetrica.analytics.impl.proxy.validation.ReporterBarrier;
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule;
 import io.appmetrica.analytics.testutils.CommonTest;
-import io.appmetrica.analytics.testutils.StubbedBlockingExecutor;
+import io.appmetrica.analytics.testutils.ContextRule;
+import io.appmetrica.analytics.testutils.MockProvider;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
@@ -28,13 +26,15 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(RobolectricTestRunner.class)
 public class ReporterProxyReportErrorTest extends CommonTest {
 
     private static final String API_KEY = TestsData.generateApiKey();
 
     @Rule
     public ClientServiceLocatorRule clientServiceLocatorRule = new ClientServiceLocatorRule();
+
+    @Rule
+    public ContextRule contextRule = new ContextRule();
 
     @Mock
     private ReporterSynchronousStageExecutor mSynchronousStageExecutor;
@@ -47,7 +47,7 @@ public class ReporterProxyReportErrorTest extends CommonTest {
     @Mock
     private IReporterExtended mReporter;
     private final ReporterConfig mConfig = ReporterConfig.newConfigBuilder(API_KEY).build();
-    final IHandlerExecutor mExecutor = new StubbedBlockingExecutor();
+    final IHandlerExecutor mExecutor = MockProvider.mockedBlockingExecutorMock();
 
     private ReporterExtendedProxy mReporterProxy;
 
@@ -59,7 +59,7 @@ public class ReporterProxyReportErrorTest extends CommonTest {
         when(ClientServiceLocator.getInstance().getClientExecutorProvider().getDefaultExecutor())
             .thenReturn(mExecutor);
         mReporterProxy = new ReporterExtendedProxy(
-            RuntimeEnvironment.getApplication(),
+            contextRule.getContext(),
             mBarrier,
             mProvider,
             mSynchronousStageExecutor,

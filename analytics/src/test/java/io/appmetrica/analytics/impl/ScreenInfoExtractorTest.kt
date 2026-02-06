@@ -7,9 +7,10 @@ import android.util.DisplayMetrics
 import android.view.Display
 import android.view.WindowManager
 import io.appmetrica.analytics.coreapi.internal.constants.DeviceTypeValues
+import io.appmetrica.analytics.coreutils.internal.AndroidUtils
 import io.appmetrica.analytics.impl.utils.DeviceTypeProvider
 import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.TestUtils
+import io.appmetrica.analytics.testutils.ContextRule
 import io.appmetrica.analytics.testutils.on
 import io.appmetrica.analytics.testutils.staticRule
 import org.assertj.core.api.Assertions.assertThat
@@ -32,7 +33,9 @@ internal class ScreenInfoExtractorTest : CommonTest() {
 
     private val screenInfoExtractor = ScreenInfoExtractor()
 
-    private lateinit var context: Context
+    @get:Rule
+    val contextRule = ContextRule()
+    private val context by contextRule
 
     private val windowManager: WindowManager = mock()
     private val display: Display = mock()
@@ -45,9 +48,13 @@ internal class ScreenInfoExtractorTest : CommonTest() {
         on { DeviceTypeProvider.getDeviceType(any(), any()) } doReturn DeviceTypeValues.PHONE
     }
 
+    @get:Rule
+    val androidUtilsRule = staticRule<AndroidUtils> {
+        on { AndroidUtils.isApiAchieved(Build.VERSION_CODES.R) } doReturn true
+    }
+
     @Before
     fun setUp() {
-        context = TestUtils.createMockedContext()
         displayMetrics = DisplayMetrics()
         whenever(context.getSystemService(Context.WINDOW_SERVICE)).thenReturn(windowManager)
         whenever(windowManager.defaultDisplay).thenReturn(display)
@@ -55,15 +62,16 @@ internal class ScreenInfoExtractorTest : CommonTest() {
         whenever(resources.displayMetrics).thenReturn(displayMetrics)
     }
 
+    @Config(sdk = [Build.VERSION_CODES.Q])
     @Test
-    fun nullWindowManager() {
+    fun nullWindowManagerBeforeR() {
+        whenever(AndroidUtils.isApiAchieved(Build.VERSION_CODES.R)).thenReturn(false)
         whenever(context.getSystemService(Context.WINDOW_SERVICE)).thenReturn(null)
         assertThat(screenInfoExtractor.extractScreenInfo(context)).isNull()
     }
 
     @Test
-    @Config(sdk = [Build.VERSION_CODES.R])
-    fun nonNullDisplayForR() {
+    fun nonNullDisplay() {
         whenever(context.display).thenReturn(display)
 
         val width = 777
@@ -84,8 +92,7 @@ internal class ScreenInfoExtractorTest : CommonTest() {
     }
 
     @Test
-    @Config(sdk = [Build.VERSION_CODES.R])
-    fun nonNullDisplayForRThrows() {
+    fun nonNullDisplayThrows() {
         whenever(context.display).thenReturn(display)
 
         whenever(display.getRealMetrics(any())).thenThrow(RuntimeException())
@@ -95,8 +102,7 @@ internal class ScreenInfoExtractorTest : CommonTest() {
     }
 
     @Test
-    @Config(sdk = [Build.VERSION_CODES.R])
-    fun nullDisplayForR() {
+    fun nullDisplay() {
         whenever(context.display).thenReturn(null)
 
         val width = 777
@@ -117,20 +123,26 @@ internal class ScreenInfoExtractorTest : CommonTest() {
         verify(windowManager).defaultDisplay
     }
 
+    @Config(sdk = [Build.VERSION_CODES.Q])
     @Test
-    fun nullDisplay() {
+    fun nullDisplayBeforeR() {
+        whenever(AndroidUtils.isApiAchieved(Build.VERSION_CODES.R)).thenReturn(false)
         whenever(windowManager.defaultDisplay).thenReturn(null)
         assertThat(screenInfoExtractor.extractScreenInfo(context)).isNull()
     }
 
+    @Config(sdk = [Build.VERSION_CODES.Q])
     @Test
-    fun getRealMetricsThrows() {
+    fun getRealMetricsThrowsBeforeR() {
+        whenever(AndroidUtils.isApiAchieved(Build.VERSION_CODES.R)).thenReturn(false)
         whenever(display.getRealMetrics(any())).thenThrow(RuntimeException())
         assertThat(screenInfoExtractor.extractScreenInfo(context)).isNull()
     }
 
+    @Config(sdk = [Build.VERSION_CODES.Q])
     @Test
-    fun getRealMetricsSuccessfulWithIsGreaterThanHeight() {
+    fun getRealMetricsSuccessfulWithIsGreaterThanHeightBeforeR() {
+        whenever(AndroidUtils.isApiAchieved(Build.VERSION_CODES.R)).thenReturn(false)
         val width = 777
         val height = 666
         whenever(display.getRealMetrics(any())).thenAnswer {
@@ -146,8 +158,10 @@ internal class ScreenInfoExtractorTest : CommonTest() {
         softly.assertAll()
     }
 
+    @Config(sdk = [Build.VERSION_CODES.Q])
     @Test
-    fun getRealMetricsSuccessfulWithIsLessThanHeight() {
+    fun getRealMetricsSuccessfulWithIsLessThanHeightBeforeR() {
+        whenever(AndroidUtils.isApiAchieved(Build.VERSION_CODES.R)).thenReturn(false)
         val width = 666
         val height = 777
         whenever(display.getRealMetrics(any())).thenAnswer {
@@ -163,8 +177,10 @@ internal class ScreenInfoExtractorTest : CommonTest() {
         softly.assertAll()
     }
 
+    @Config(sdk = [Build.VERSION_CODES.Q])
     @Test
-    fun getRealMetricsSuccessfulWithIsEqualToHeight() {
+    fun getRealMetricsSuccessfulWithIsEqualToHeightBeforeR() {
+        whenever(AndroidUtils.isApiAchieved(Build.VERSION_CODES.R)).thenReturn(false)
         val width = 666
         whenever(display.getRealMetrics(any())).thenAnswer {
             val displayMetrics = it.arguments[0] as DisplayMetrics
@@ -179,8 +195,10 @@ internal class ScreenInfoExtractorTest : CommonTest() {
         softly.assertAll()
     }
 
+    @Config(sdk = [Build.VERSION_CODES.Q])
     @Test
-    fun densityGetDisplayMetricsThrows() {
+    fun densityGetDisplayMetricsThrowsBeforeR() {
+        whenever(AndroidUtils.isApiAchieved(Build.VERSION_CODES.R)).thenReturn(false)
         whenever(resources.displayMetrics).thenThrow(NullPointerException())
         val screenInfo = screenInfoExtractor.extractScreenInfo(context)
         val softly = SoftAssertions()
@@ -189,8 +207,10 @@ internal class ScreenInfoExtractorTest : CommonTest() {
         softly.assertAll()
     }
 
+    @Config(sdk = [Build.VERSION_CODES.Q])
     @Test
-    fun densityGetDisplayMetricsSuccessful() {
+    fun densityGetDisplayMetricsSuccessfulBeforeR() {
+        whenever(AndroidUtils.isApiAchieved(Build.VERSION_CODES.R)).thenReturn(false)
         val dpi = 555
         val scaleFactor = 5.7f
         displayMetrics.densityDpi = dpi

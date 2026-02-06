@@ -16,18 +16,16 @@ import io.appmetrica.analytics.impl.selfreporting.SelfReporterWrapper;
 import io.appmetrica.analytics.impl.service.AppMetricaServiceCallback;
 import io.appmetrica.analytics.impl.startup.StartupState;
 import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.analytics.testutils.ContextRule;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import io.appmetrica.analytics.testutils.MockedConstructionRule;
-import io.appmetrica.analytics.testutils.TestUtils;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.RobolectricTestRunner;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -42,7 +40,6 @@ import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
-@RunWith(RobolectricTestRunner.class)
 public class AppMetricaServiceCoreImplOnCreateTest extends CommonTest {
 
     private Context mContext;
@@ -88,9 +85,12 @@ public class AppMetricaServiceCoreImplOnCreateTest extends CommonTest {
     public MockedConstructionRule<ServiceCrashController> serviceCrashControllerMockedConstructionRule =
         new MockedConstructionRule<>(ServiceCrashController.class);
 
+    @Rule
+    public ContextRule contextRule = new ContextRule();
+
     @Before
     public void setUp() {
-        mContext = TestUtils.createMockedContext();
+        mContext = contextRule.getContext();
         MockitoAnnotations.openMocks(this);
         when(GlobalServiceLocator.getInstance().getVitalDataProviderStorage().getCommonDataProvider())
             .thenReturn(mock(VitalCommonDataProvider.class));

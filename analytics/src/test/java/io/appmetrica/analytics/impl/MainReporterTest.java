@@ -5,11 +5,12 @@ import android.content.Context;
 import android.location.Location;
 import io.appmetrica.analytics.AppMetricaConfig;
 import io.appmetrica.analytics.ExternalAttribution;
+import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor;
 import io.appmetrica.analytics.impl.crash.jvm.client.MainReporterAnrController;
 import io.appmetrica.analytics.impl.crash.jvm.client.UnhandledException;
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule;
+import io.appmetrica.analytics.testutils.MockProvider;
 import io.appmetrica.analytics.testutils.MockedConstructionRule;
-import io.appmetrica.analytics.testutils.StubbedBlockingExecutor;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -61,6 +62,9 @@ public class MainReporterTest extends BaseReporterTest {
     private Activity activity;
     @Mock
     private AppMetricaConfigExtension configExtension;
+
+    private IHandlerExecutor executor = MockProvider.mockedBlockingExecutorMock();
+
     @Rule
     public final ClientServiceLocatorRule clientServiceLocatorRule = new ClientServiceLocatorRule();
 
@@ -79,7 +83,7 @@ public class MainReporterTest extends BaseReporterTest {
         when(mAppmetricaReporterProvider.getReporter()).thenReturn(mAppmetricaReporter);
         when(mPushReporterProvider.getReporter()).thenReturn(mPushReporter);
         when(ClientServiceLocator.getInstance().getClientExecutorProvider().getDefaultExecutor())
-            .thenReturn(new StubbedBlockingExecutor());
+            .thenReturn(executor);
     }
 
     @Test

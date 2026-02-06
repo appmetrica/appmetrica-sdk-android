@@ -20,10 +20,10 @@ import org.mockito.internal.matchers.Equals;
 import org.mockito.internal.stubbing.InvocationContainerImpl;
 import org.mockito.internal.verification.VerificationDataImpl;
 import org.mockito.invocation.InvocationContainer;
-import org.robolectric.RuntimeEnvironment;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.when;
 import static org.mockito.internal.exceptions.Reporter.notAMockPassedToVerifyNoMoreInteractions;
 import static org.mockito.internal.exceptions.Reporter.nullPassedToVerifyNoMoreInteractions;
 import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
@@ -33,7 +33,9 @@ class CallProxyVerifier {
 
     private final static HashMap<Class<?>, Object> sCache = new HashMap<Class<?>, Object>() {
         {
-            put(Context.class, RuntimeEnvironment.getApplication());
+            Context context = mock(Context.class);
+            when(context.getApplicationContext()).thenReturn(context);
+            put(Context.class, context);
             put(String.class, "someString");
             put(Map.class, new LinkedHashMap() {
                 {

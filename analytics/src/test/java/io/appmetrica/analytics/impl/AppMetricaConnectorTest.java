@@ -1,35 +1,32 @@
 package io.appmetrica.analytics.impl;
 
-import android.content.Context;
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
 import io.appmetrica.analytics.impl.client.connection.AppMetricaServiceIntentProvider;
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule;
 import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.analytics.testutils.ContextRule;
 import io.appmetrica.analytics.testutils.MockedConstructionRule;
-import io.appmetrica.analytics.testutils.TestUtils;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.robolectric.RobolectricTestRunner;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.same;
+import org.mockito.Mock;
+
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
+import org.mockito.MockitoAnnotations;
 
-@RunWith(RobolectricTestRunner.class)
 public class AppMetricaConnectorTest extends CommonTest {
 
-    private Context mContext;
     @Mock
     private ICommonExecutor mExecutor;
     @Mock
@@ -38,6 +35,9 @@ public class AppMetricaConnectorTest extends CommonTest {
     private AppMetricaServiceIntentProvider appMetricaServiceIntentProvider;
 
     private AppMetricaConnector mConnector;
+
+    @Rule
+    public final ContextRule contextRule = new ContextRule();
 
     @Rule
     public final ClientServiceLocatorRule clientServiceLocatorRule = new ClientServiceLocatorRule();
@@ -49,9 +49,8 @@ public class AppMetricaConnectorTest extends CommonTest {
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        mContext = TestUtils.createMockedContext();
         mConnector = new AppMetricaConnector(
-            mContext,
+            contextRule.getContext(),
             mExecutor,
             appMetricaServiceDelayHandler,
             appMetricaServiceIntentProvider
@@ -97,7 +96,7 @@ public class AppMetricaConnectorTest extends CommonTest {
     @Test
     public void bindServiceCallsDelay() {
         mConnector.bindService();
-        verify(appMetricaServiceDelayHandler).maybeDelay(mContext);
+        verify(appMetricaServiceDelayHandler).maybeDelay(contextRule.getContext());
     }
 
     @Test

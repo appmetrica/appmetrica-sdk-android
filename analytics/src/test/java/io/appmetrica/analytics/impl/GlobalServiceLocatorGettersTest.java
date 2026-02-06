@@ -38,9 +38,9 @@ import io.appmetrica.analytics.modulesapi.internal.service.LocationServiceApi;
 import io.appmetrica.analytics.networktasks.internal.NetworkCore;
 import io.appmetrica.analytics.networktasks.internal.NetworkServiceLocator;
 import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.analytics.testutils.ContextRule;
 import io.appmetrica.analytics.testutils.MockedConstructionRule;
 import io.appmetrica.analytics.testutils.MockedStaticRule;
-import io.appmetrica.analytics.testutils.TestUtils;
 import java.util.Arrays;
 import java.util.Collection;
 import org.junit.After;
@@ -48,16 +48,16 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.ParameterizedRobolectricTestRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
-@RunWith(ParameterizedRobolectricTestRunner.class)
+@RunWith(Parameterized.class)
 public class GlobalServiceLocatorGettersTest extends CommonTest {
 
     interface ServiceExtractor<T> {
@@ -72,7 +72,7 @@ public class GlobalServiceLocatorGettersTest extends CommonTest {
         mServiceExtractor = serviceExtractor;
     }
 
-    @ParameterizedRobolectricTestRunner.Parameters(name = "[{index}]{0}")
+    @Parameterized.Parameters(name = "[{index}]{0}")
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
             {
@@ -478,13 +478,24 @@ public class GlobalServiceLocatorGettersTest extends CommonTest {
         dataSendingRestrictionControllerMockedConstructionRule =
         new MockedConstructionRule<>(DataSendingRestrictionControllerImpl.class);
 
+    @Rule
+    public final ContextRule contextRule = new ContextRule();
+
+    @Rule
+    public final MockedConstructionRule<MultiProcessSafeUuidProvider> multiProcessSafeUuidProviderRule =
+        new MockedConstructionRule<>(MultiProcessSafeUuidProvider.class);
+
+    @Rule
+    public final MockedConstructionRule<SdkEnvironmentHolder> sdkEnvironmentHolderRule =
+        new MockedConstructionRule<>(SdkEnvironmentHolder.class);
+
     private GlobalServiceLocator mGlobalServiceLocator;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.openMocks(this);
 
-        mContext = TestUtils.createMockedContext();
+        mContext = contextRule.getContext();
         when(mContext.getSharedPreferences(anyString(), anyInt())).thenReturn(mSharedPreferences);
         when(mSharedPreferences.edit()).thenReturn(mEditor);
 

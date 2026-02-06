@@ -22,10 +22,10 @@ import io.appmetrica.analytics.impl.startup.CollectingFlags;
 import io.appmetrica.analytics.impl.startup.StartupState;
 import io.appmetrica.analytics.impl.utils.JsonHelper;
 import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.analytics.testutils.ContextRule;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import io.appmetrica.analytics.testutils.MockedConstructionRule;
 import io.appmetrica.analytics.testutils.MockedStaticRule;
-import io.appmetrica.analytics.testutils.TestUtils;
 import java.util.UUID;
 import org.junit.Before;
 import org.junit.Rule;
@@ -114,13 +114,16 @@ public class AppMetricaServiceCoreImplTests extends CommonTest {
     public MockedConstructionRule<ServiceCrashController> serviceCrashControllerMockedConstructionRule =
         new MockedConstructionRule<>(ServiceCrashController.class);
 
+    @Rule
+    public ContextRule contextRule = new ContextRule();
+
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
         when(GlobalServiceLocator.getInstance().getVitalDataProviderStorage().getCommonDataProvider())
                 .thenReturn(mock(VitalCommonDataProvider.class));
         intent = new Intent();
-        mContext = TestUtils.createMockedContext();
+        mContext = contextRule.getContext();
 
         doReturn(reportConsumer).when(fieldsFactory).createReportConsumer(same(mContext), any(ClientRepository.class));
 

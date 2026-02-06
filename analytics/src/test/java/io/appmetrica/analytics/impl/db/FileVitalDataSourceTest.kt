@@ -5,23 +5,19 @@ import io.appmetrica.analytics.coreutils.internal.io.FileUtils
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade
 import io.appmetrica.analytics.impl.selfreporting.SelfReporterWrapper
 import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.analytics.testutils.ContextRule
 import io.appmetrica.analytics.testutils.MockedStaticRule
-import io.appmetrica.analytics.testutils.TestUtils
 import org.assertj.core.api.Assertions.assertThat
 import org.json.JSONObject
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
-import org.robolectric.RobolectricTestRunner
-import org.robolectric.RuntimeEnvironment
 import java.io.File
 
-@RunWith(RobolectricTestRunner::class)
 internal class FileVitalDataSourceTest : CommonTest() {
 
     private val fileName = "appmetrica_vital.dat"
@@ -37,12 +33,15 @@ internal class FileVitalDataSourceTest : CommonTest() {
     @get:Rule
     val fileUtilsMockedStaticRule = MockedStaticRule(FileUtils::class.java)
 
+    @get:Rule
+    val contextRule = ContextRule()
+
     private val selfReporter = mock<SelfReporterWrapper>()
 
     @Before
     fun setUp() {
-        context = TestUtils.createMockedContext()
-        file = File(RuntimeEnvironment.getApplication().filesDir, "some_ƒile")
+        context = contextRule.context
+        file = File(contextRule.filesDir!!, "appmetrica_vital.dat")
         whenever(FileUtils.getFileFromSdkStorage(context, fileName)).thenReturn(file)
         whenever(AppMetricaSelfReportFacade.getReporter()).thenReturn(selfReporter)
         fileVitalDataSource = FileVitalDataSource(context, fileName)

@@ -2,6 +2,7 @@ package io.appmetrica.analytics.testutils;
 
 import android.content.Context;
 import android.os.Handler;
+import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor;
 import io.appmetrica.analytics.impl.ActivityAppearedListener;
 import io.appmetrica.analytics.impl.ActivityLifecycleManager;
 import io.appmetrica.analytics.impl.AnonymousClientActivator;
@@ -64,6 +65,9 @@ public class ClientServiceLocatorRule extends ExternalResource {
     public ExtraMetaInfoRetriever extraMetaInfoRetriever;
     public ServiceDescriptionProvider serviceDescriptionProvider;
     public StartupParams startupParams;
+    public IHandlerExecutor defaultExecutor = MockProvider.mockedBlockingExecutorMock();
+    public IHandlerExecutor reportSenderExecutor = MockProvider.mockedBlockingExecutorMock();
+    public Handler mainHandler = MockProvider.mockedBlockingHandler();
 
     @Override
     public void before() {
@@ -113,9 +117,8 @@ public class ClientServiceLocatorRule extends ExternalResource {
         when(instance.getPreferencesClientDbStorage(any())).thenReturn(preferencesClientDbStorage);
         when(instance.getAppMetricaFacadeProvider()).thenReturn(appMetricaFacadeProvider);
         when(instance.getAppMetricaCoreComponentsProvider()).thenReturn(appMetricaCoreComponentsProvider);
-        when(clientExecutorProvider.getDefaultExecutor()).thenReturn(new StubbedBlockingExecutor());
-        when(clientExecutorProvider.getReportSenderExecutor()).thenReturn(new StubbedBlockingExecutor());
-        Handler mainHandler = TestUtils.createBlockingExecutionHandlerStub();
+        when(clientExecutorProvider.getDefaultExecutor()).thenReturn(defaultExecutor);
+        when(clientExecutorProvider.getReportSenderExecutor()).thenReturn(reportSenderExecutor);
         when(clientExecutorProvider.getMainHandler()).thenReturn(mainHandler);
         when(instance.getFirstLaunchDetector()).thenReturn(firstLaunchDetector);
         when(instance.getAnonymousClientActivator()).thenReturn(anonymousClientActivator);

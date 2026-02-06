@@ -6,21 +6,21 @@ import android.content.pm.PackageManager
 import io.appmetrica.analytics.coreapi.internal.permission.PermissionState
 import io.appmetrica.analytics.coreutils.internal.services.SafePackageManager
 import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.TestUtils
+import io.appmetrica.analytics.testutils.ContextRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.Mockito.mock
 import org.mockito.kotlin.any
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
-import org.robolectric.RobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
 internal class RuntimePermissionsRetrieverTest : CommonTest() {
 
-    private lateinit var context: Context
+    @get:Rule
+    val contextRule = ContextRule()
+    private val context by contextRule
 
     private val safePackageManager: SafePackageManager = mock()
 
@@ -29,7 +29,6 @@ internal class RuntimePermissionsRetrieverTest : CommonTest() {
 
     @Before
     fun setUp() {
-        context = TestUtils.createMockedContext()
         whenever(context.packageName).thenReturn(packageName)
         retriever = RuntimePermissionsRetriever(context, safePackageManager)
     }

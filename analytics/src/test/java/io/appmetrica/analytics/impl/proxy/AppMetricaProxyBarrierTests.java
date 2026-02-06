@@ -1,5 +1,6 @@
 package io.appmetrica.analytics.impl.proxy;
 
+import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor;
 import io.appmetrica.analytics.impl.ClientServiceLocator;
 import io.appmetrica.analytics.impl.DefaultOneShotMetricaConfig;
 import io.appmetrica.analytics.impl.SessionsTrackingManager;
@@ -10,7 +11,7 @@ import io.appmetrica.analytics.impl.proxy.validation.SilentActivationValidator;
 import io.appmetrica.analytics.impl.utils.validation.ValidationResult;
 import io.appmetrica.analytics.impl.utils.validation.Validator;
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule;
-import io.appmetrica.analytics.testutils.StubbedBlockingExecutor;
+import io.appmetrica.analytics.testutils.MockProvider;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Collection;
@@ -19,13 +20,13 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 import org.mockito.Mock;
-import org.robolectric.ParameterizedRobolectricTestRunner;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@RunWith(ParameterizedRobolectricTestRunner.class)
+@RunWith(Parameterized.class)
 public class AppMetricaProxyBarrierTests extends BaseAppMetricaProxyBarrierTests {
 
     private static final List<String> methodsNotToCheck = Arrays.asList(
@@ -46,7 +47,7 @@ public class AppMetricaProxyBarrierTests extends BaseAppMetricaProxyBarrierTests
     @Mock
     private SilentActivationValidator silentActivationValidator;
 
-    @ParameterizedRobolectricTestRunner.Parameters(name = "Test if {0} is called")
+    @Parameterized.Parameters(name = "Test if {0} is called")
     public static Collection<Object[]> data() {
         return data(
             methodsNotToCheck,
@@ -60,8 +61,9 @@ public class AppMetricaProxyBarrierTests extends BaseAppMetricaProxyBarrierTests
         super.setUp();
         mBarrier = mock(Barrier.class);
         when(silentActivationValidator.validate()).thenReturn(ValidationResult.successful(mock(Validator.class)));
+        IHandlerExecutor executor = MockProvider.mockedBlockingExecutorMock();
         when(ClientServiceLocator.getInstance().getClientExecutorProvider().getDefaultExecutor())
-            .thenReturn(new StubbedBlockingExecutor());
+            .thenReturn(executor);
         mProxy = new AppMetricaProxy(
             mProvider,
             mBarrier,

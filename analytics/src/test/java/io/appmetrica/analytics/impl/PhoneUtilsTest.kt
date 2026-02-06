@@ -2,34 +2,45 @@
 
 package io.appmetrica.analytics.impl
 
-import android.content.Context
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkInfo
 import android.os.Build
 import io.appmetrica.analytics.coreapi.internal.system.NetworkType
+import io.appmetrica.analytics.coreutils.internal.AndroidUtils
 import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.TestUtils
+import io.appmetrica.analytics.testutils.ContextRule
+import io.appmetrica.analytics.testutils.on
+import io.appmetrica.analytics.testutils.staticRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.kotlin.any
+import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
-import org.robolectric.RobolectricTestRunner
-import org.robolectric.annotation.Config
 import java.util.Locale
 
-@RunWith(RobolectricTestRunner::class)
 internal class PhoneUtilsTest : CommonTest() {
-    private lateinit var context: Context
+
+    @get:Rule
+    val contextRule = ContextRule()
+    private val context by contextRule
+
+    @get:Rule
+    val androidUtilsRule = staticRule<AndroidUtils> {
+        on { AndroidUtils.isApiAchieved(Build.VERSION_CODES.M) } doReturn true
+        on { AndroidUtils.isApiAchieved(Build.VERSION_CODES.O) } doReturn true
+        on { AndroidUtils.isApiAchieved(Build.VERSION_CODES.O_MR1) } doReturn true
+        on { AndroidUtils.isApiAchieved(Build.VERSION_CODES.P) } doReturn true
+        on { AndroidUtils.isApiAchieved(Build.VERSION_CODES.Q) } doReturn true
+    }
     private val connectivityManager: ConnectivityManager = mock()
 
     @Before
     fun setUp() {
-        context = TestUtils.createMockedContext()
         whenever(context.getSystemService(any<String>())).thenReturn(connectivityManager)
     }
 
@@ -68,8 +79,9 @@ internal class PhoneUtilsTest : CommonTest() {
     }
 
     @Test
-    @Config(sdk = [Build.VERSION_CODES.O])
     fun notConnected() {
+        whenever(AndroidUtils.isApiAchieved(Build.VERSION_CODES.P)).thenReturn(false)
+        whenever(AndroidUtils.isApiAchieved(Build.VERSION_CODES.Q)).thenReturn(false)
         val networkInfo: NetworkInfo = mock()
         val network: Network = mock()
         whenever(connectivityManager.activeNetworkInfo).thenReturn(networkInfo)
@@ -80,7 +92,6 @@ internal class PhoneUtilsTest : CommonTest() {
     }
 
     @Test
-    @Config(sdk = [Build.VERSION_CODES.O])
     fun networkCapabilitiesNull() {
         val networkInfo: NetworkInfo = mock()
         val network: Network = mock()
@@ -93,7 +104,6 @@ internal class PhoneUtilsTest : CommonTest() {
     }
 
     @Test
-    @Config(sdk = [Build.VERSION_CODES.O_MR1])
     fun lowPan() {
         val networkInfo: NetworkInfo = mock()
         val network: Network = mock()
@@ -108,8 +118,9 @@ internal class PhoneUtilsTest : CommonTest() {
     }
 
     @Test
-    @Config(sdk = [Build.VERSION_CODES.O])
     fun wifiAware() {
+        whenever(AndroidUtils.isApiAchieved(Build.VERSION_CODES.P)).thenReturn(false)
+        whenever(AndroidUtils.isApiAchieved(Build.VERSION_CODES.Q)).thenReturn(false)
         val networkInfo: NetworkInfo = mock()
         val network: Network = mock()
         val networkCapabilities: NetworkCapabilities = mock()

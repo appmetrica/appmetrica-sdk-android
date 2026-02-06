@@ -1,13 +1,12 @@
 package io.appmetrica.analytics.impl
 
 import android.app.Activity
-import android.content.Context
 import android.os.Build
 import io.appmetrica.analytics.coreapi.internal.model.ScreenInfo
 import io.appmetrica.analytics.impl.db.preferences.PreferencesClientDbStorage
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule
 import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.TestUtils
+import io.appmetrica.analytics.testutils.ContextRule
 import io.appmetrica.analytics.testutils.constructionRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
@@ -26,10 +25,13 @@ import org.robolectric.annotation.Config
 @RunWith(RobolectricTestRunner::class)
 internal class ScreenInfoRetrieverTest : CommonTest() {
 
+    @get:Rule
+    val contextRule = ContextRule()
+    private val context by lazy { contextRule.context }
+
     private lateinit var extractor: ScreenInfoExtractor
     private val activity: Activity = mock()
     private val clientPreferences: PreferencesClientDbStorage = mock()
-    private val context: Context = TestUtils.createMockedContext()
 
     @get:Rule
     val clientServiceLocatorRule = ClientServiceLocatorRule()

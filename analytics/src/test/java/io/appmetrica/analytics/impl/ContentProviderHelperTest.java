@@ -5,24 +5,20 @@ import android.content.Context;
 import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoState;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
-import io.appmetrica.analytics.testutils.TestUtils;
 import org.json.JSONException;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.RobolectricTestRunner;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
-@RunWith(RobolectricTestRunner.class)
 public class ContentProviderHelperTest extends CommonTest {
 
     @Mock
@@ -39,7 +35,7 @@ public class ContentProviderHelperTest extends CommonTest {
     @Before
     public void setUp() throws JSONException {
         MockitoAnnotations.openMocks(this);
-        context = TestUtils.createMockedContext();
+        context = globalServiceLocatorRule.getContext();
         content = new ContentProviderHelper<>(
             dataParser,
             dataSaver,
