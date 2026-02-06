@@ -8,6 +8,7 @@ import org.gradle.api.tasks.testing.TestReport
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.withType
 import org.gradle.testing.jacoco.plugins.JacocoTaskExtension
+import java.lang.management.ManagementFactory
 
 /**
  * Gradle plugin that automatically splits unit tests into two groups: Robolectric tests and standard JUnit tests.
@@ -100,11 +101,45 @@ class TestSplitPlugin : Plugin<Project> {
         project.afterEvaluate {
             if (!splitExtension.enabled.get()) return@afterEvaluate
 
+            if (isDebugMode(project)) {
+                return@afterEvaluate
+            }
+
             project.tasks.withType<Test>()
                 .filter { it.name.contains("UnitTest") }
                 .forEach { originalTest ->
                     createSplitTasks(project, originalTest, splitExtension)
                 }
+        }
+    }
+
+    /**
+     * Detects if tests are running in debug mode.
+     * Checks multiple sources:
+     * 1. IDE debugger (IntelliJ IDEA, Android Studio) via DEBUGGER_ENABLED env var
+     * 2. IDEA debugger port via idea.debugger.dispatch.port system property
+     * 3. Gradle property: -Pdebug=true or -Porg.gradle.debug=true
+     * 4. System property: -Ddebug=true
+     * 5. Environment variable: DEBUG=true
+     * 6. JVM debug agent: -agentlib:jdwp or -Xrunjdwp (fallback)
+     */
+    private fun isDebugMode(project: Project): Boolean {
+        return try {
+            // Check IDE debugger environment variables (IntelliJ IDEA, Android Studio)
+            if (System.getenv("DEBUGGER_ENABLED")?.toBoolean() == true) {
+                project.logger.lifecycle("TestSplitPlugin: Debug mode detected (IDE debugger), test splitting is disabled")
+                return true
+            }
+
+            // Check IDEA debugger system properties
+            if (System.getProperty("idea.debugger.dispatch.port") != null) {
+                project.logger.lifecycle("TestSplitPlugin: Debug mode detected (IDEA debugger port), test splitting is disabled")
+                return true
+            }
+            false
+        } catch (e: Exception) {
+            // If we can't determine debug mode, assume it's not debug
+            false
         }
     }
 
