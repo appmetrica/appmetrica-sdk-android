@@ -99,7 +99,7 @@
     group: "com.apphud"
     name: "ApphudSDK-Android"
     from: "3.0.0"
-    to: "3.0.4"
+    to: "3.0.5"
 - group: "io.appmetrica.analytics"
   name: "analytics-appsetid"
   dependencies:
