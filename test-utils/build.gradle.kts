@@ -12,4 +12,5 @@ dependencies {
     // https://github.com/robolectric/robolectric
     api("org.robolectric:robolectric:4.16")
     compileOnly("androidx.annotation:annotation:${Deps.androidX}")
+    implementation(kotlin("reflect"))
 }

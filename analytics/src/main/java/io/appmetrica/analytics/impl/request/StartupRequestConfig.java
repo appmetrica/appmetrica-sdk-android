@@ -51,14 +51,14 @@ public class StartupRequestConfig extends CoreRequestConfig {
 
     private StartupRequestConfig() {
         this(
-                GlobalServiceLocator.getInstance().getReferrerHolder(),
-                new DefaultStartupHostsProvider()
+            GlobalServiceLocator.getInstance().getReferrerHolder(),
+            new DefaultStartupHostsProvider()
         );
     }
 
     @VisibleForTesting
-    StartupRequestConfig(@NonNull ReferrerHolder referrerHolder,
-                         @NonNull DefaultStartupHostsProvider defaultStartupHostsProvider) {
+    public StartupRequestConfig(@NonNull ReferrerHolder referrerHolder,
+                                @NonNull DefaultStartupHostsProvider defaultStartupHostsProvider) {
         mReferrerHolder = referrerHolder;
         this.defaultStartupHostsProvider = defaultStartupHostsProvider;
     }
@@ -185,29 +185,29 @@ public class StartupRequestConfig extends CoreRequestConfig {
     @Override
     public String toString() {
         return "StartupRequestConfig{" +
-                "mStartupHostsFromStartup=" + mStartupHostsFromStartup +
-                ", mStartupHostsFromClient=" + mStartupHostsFromClient +
-                ", mDistributionReferrer='" + mDistributionReferrer + '\'' +
-                ", mInstallReferrerSource='" + mInstallReferrerSource + '\'' +
-                ", mClidsFromClient=" + mClidsFromClient +
-                ", mNewCustomHosts=" + mNewCustomHosts +
-                ", mHasNewCustomHosts=" + mHasNewCustomHosts +
-                ", mSuccessfulStartup=" + mSuccessfulStartup +
-                ", mCountryInit='" + mCountryInit + '\'' +
-                ", mFirstStartupTime=" + mFirstStartupTime +
-                "} " + super.toString();
+            "mStartupHostsFromStartup=" + mStartupHostsFromStartup +
+            ", mStartupHostsFromClient=" + mStartupHostsFromClient +
+            ", mDistributionReferrer='" + mDistributionReferrer + '\'' +
+            ", mInstallReferrerSource='" + mInstallReferrerSource + '\'' +
+            ", mClidsFromClient=" + mClidsFromClient +
+            ", mNewCustomHosts=" + mNewCustomHosts +
+            ", mHasNewCustomHosts=" + mHasNewCustomHosts +
+            ", mSuccessfulStartup=" + mSuccessfulStartup +
+            ", mCountryInit='" + mCountryInit + '\'' +
+            ", mFirstStartupTime=" + mFirstStartupTime +
+            "} " + super.toString();
     }
 
     public static class Arguments extends BaseRequestArguments<Arguments, Arguments>
-            implements ArgumentsMerger<Arguments, Arguments> {
+        implements ArgumentsMerger<Arguments, Arguments> {
 
         public Arguments(@NonNull ClientConfiguration configuration) {
             this(
-                    configuration.getProcessConfiguration().getDistributionReferrer(),
-                    configuration.getProcessConfiguration().getInstallReferrerSource(),
-                    configuration.getProcessConfiguration().getClientClids(),
-                    configuration.getProcessConfiguration().hasCustomHosts(),
-                    configuration.getProcessConfiguration().getCustomHosts());
+                configuration.getProcessConfiguration().getDistributionReferrer(),
+                configuration.getProcessConfiguration().getInstallReferrerSource(),
+                configuration.getProcessConfiguration().getClientClids(),
+                configuration.getProcessConfiguration().hasCustomHosts(),
+                configuration.getProcessConfiguration().getCustomHosts());
         }
 
         @Nullable
@@ -249,11 +249,11 @@ public class StartupRequestConfig extends CoreRequestConfig {
         @Override
         public Arguments mergeFrom(@NonNull Arguments other) {
             return new Arguments(
-                    WrapUtils.getOrDefaultNullable(distributionReferrer, other.distributionReferrer),
-                    WrapUtils.getOrDefaultNullable(installReferrerSource, other.installReferrerSource),
-                    WrapUtils.getOrDefaultNullable(clientClids, other.clientClids),
-                    chooseHasNewCustomHosts(other),
-                    chooseNewCustomHosts(other)
+                WrapUtils.getOrDefaultNullable(distributionReferrer, other.distributionReferrer),
+                WrapUtils.getOrDefaultNullable(installReferrerSource, other.installReferrerSource),
+                WrapUtils.getOrDefaultNullable(clientClids, other.clientClids),
+                chooseHasNewCustomHosts(other),
+                chooseNewCustomHosts(other)
             );
         }
 

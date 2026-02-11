@@ -5,6 +5,7 @@ import android.util.Pair
 import io.appmetrica.analytics.coreapi.internal.identifiers.AdTrackingInfoResult
 import io.appmetrica.analytics.coreapi.internal.identifiers.AdvertisingIdsHolder
 import io.appmetrica.analytics.coreapi.internal.permission.PermissionState
+import io.appmetrica.analytics.coreapi.internal.permission.PermissionStrategy
 import io.appmetrica.analytics.ecommerce.ECommerceAmount
 import io.appmetrica.analytics.ecommerce.ECommerceCartItem
 import io.appmetrica.analytics.ecommerce.ECommerceOrder
@@ -21,6 +22,7 @@ import io.appmetrica.analytics.impl.client.ClientConfiguration
 import io.appmetrica.analytics.impl.client.ProcessConfiguration
 import io.appmetrica.analytics.impl.client.connection.ServiceDescription
 import io.appmetrica.analytics.impl.component.clients.ClientDescription
+import io.appmetrica.analytics.impl.db.storage.TempCacheEntry
 import io.appmetrica.analytics.impl.ecommerce.client.converter.Result
 import io.appmetrica.analytics.impl.ecommerce.client.model.AmountWrapper
 import io.appmetrica.analytics.impl.ecommerce.client.model.CartActionInfoEvent
@@ -35,17 +37,19 @@ import io.appmetrica.analytics.impl.ecommerce.client.model.ShownProductCardInfoE
 import io.appmetrica.analytics.impl.ecommerce.client.model.ShownProductDetailInfoEvent
 import io.appmetrica.analytics.impl.ecommerce.client.model.ShownScreenInfoEvent
 import io.appmetrica.analytics.impl.id.AdvIdGetterController
+import io.appmetrica.analytics.impl.permissions.CompositePermissionStrategy
 import io.appmetrica.analytics.impl.permissions.LocationFlagStrategy
 import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoData
 import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoState
 import io.appmetrica.analytics.impl.referrer.common.ReferrerInfo
 import io.appmetrica.analytics.impl.request.CoreRequestConfig
+import io.appmetrica.analytics.impl.request.StartupRequestConfig
 import io.appmetrica.analytics.impl.selfreporting.SelfReportingLazyEvent
 import io.appmetrica.analytics.impl.startup.AttributionConfig
 import io.appmetrica.analytics.impl.startup.CacheControl
 import io.appmetrica.analytics.impl.startup.CollectingFlags
-import io.appmetrica.analytics.impl.startup.CollectingFlags.CollectingFlagsBuilder
 import io.appmetrica.analytics.impl.startup.StartupState
+import io.appmetrica.analytics.impl.startup.StartupStateModel
 import io.appmetrica.analytics.impl.startup.StatSending
 import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedInfo
 import io.appmetrica.analytics.impl.utils.limitation.CollectionTrimInfo
@@ -53,589 +57,252 @@ import io.appmetrica.analytics.impl.utils.limitation.TrimmingResult
 import io.appmetrica.analytics.internal.AppMetricaService
 import io.appmetrica.analytics.internal.CounterConfiguration
 import io.appmetrica.analytics.internal.IdentifiersResult
-import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
-import io.appmetrica.analytics.testutils.TestUtils
+import io.appmetrica.analytics.testutils.BaseToStringTest
 import org.json.JSONObject
-import org.junit.Rule
-import org.junit.Test
 import org.junit.runner.RunWith
-import org.robolectric.ParameterizedRobolectricTestRunner
+import org.junit.runners.Parameterized
+import org.mockito.kotlin.mock
 import java.lang.reflect.Modifier
 import java.math.BigDecimal
 
-@RunWith(ParameterizedRobolectricTestRunner::class)
-class ToStringTest(
-    clazz: Any?,
-    actualValue: Any,
+@RunWith(Parameterized::class)
+internal class ToStringTest(
+    actualValue: Any?,
     modifierPreconditions: Int,
-    additionalDescription: String?
-) : CommonTest() {
-
-    @get:Rule
-    val rule = GlobalServiceLocatorRule()
-
-    private var clazz: Class<*>? = null
-    private val actualValue: Any
-    private val modifierPreconditions: Int
-
-    init {
-        if (clazz is Class<*>) {
-            this.clazz = clazz
-        } else if (clazz is String) {
-            this.clazz = Class.forName(clazz as String?)
-        } else {
-            throw IllegalArgumentException("Clazz must be instance of Class or String")
-        }
-        this.actualValue = actualValue
-        this.modifierPreconditions = modifierPreconditions
-    }
-
-    @Test
-    fun toStringContainsAllFields() {
-        val extractedFieldAndValues = ToStringTestUtils.extractFieldsAndValues(
-            clazz,
-            actualValue,
-            modifierPreconditions
-        )
-        ToStringTestUtils.testToString(actualValue, extractedFieldAndValues)
-    }
+    excludedFields: Set<String>?,
+    additionalDescription: String?,
+) : BaseToStringTest(
+    actualValue,
+    modifierPreconditions,
+    excludedFields,
+    additionalDescription,
+) {
 
     companion object {
-
-        @ParameterizedRobolectricTestRunner.Parameters(name = "#{index} - {0} {3}")
         @JvmStatic
-        fun data(): List<Array<Any>> {
-            return listOf(
-                arrayOf(
-                    CounterConfiguration::class.java,
-                    CounterConfiguration(),
-                    Modifier.PRIVATE or Modifier.FINAL,
-                    ""
-                ),
-                arrayOf(
-                    CoreRequestConfig::class.java,
-                    CoreRequestConfig(),
-                    Modifier.PRIVATE,
-                    ""
-                ),
-                arrayOf(
-                    ReportToSend::class.java,
-                    ReportToSend(
-                        MockUtils.mockForToString(),
-                        true,
-                        12,
-                        MockUtils.mockForToString(),
-                        MockUtils.mockForToString()
-                    ),
-                    Modifier.PRIVATE,
-                    ""
-                ),
-                arrayOf(
-                    ClientConfiguration::class.java,
-                    ClientConfiguration(MockUtils.mockForToString(), MockUtils.mockForToString()),
-                    Modifier.PRIVATE or Modifier.FINAL,
-                    ""
-                ),
-                arrayOf(
-                    ProcessConfiguration::class.java,
-                    ProcessConfiguration(MockUtils.mockForToString<ContentValues>(), null),
-                    0,
-                    "with null receiver"
-                ),
-                arrayOf(
-                    ProcessConfiguration::class.java,
-                    ProcessConfiguration(
-                        MockUtils.mockForToString<ContentValues>(),
-                        MockUtils.mockForToString()
-                    ),
-                    0,
-                    "with non-null receiver"
-                ),
-                arrayOf(
-                    StartupState::class.java,
-                    TestUtils.createDefaultStartupState(),
+        @Parameterized.Parameters(name = "{0}")
+        fun data(): Collection<Array<Any?>> = listOf(
+            CounterConfiguration().toTestCase(Modifier.PRIVATE or Modifier.FINAL),
+            CoreRequestConfig().toTestCase(Modifier.PRIVATE),
+            ReportToSend(mock(), true, 12, mock(), mock()).toTestCase(Modifier.PRIVATE),
+            ClientConfiguration(mock(), mock()).toTestCase(Modifier.PRIVATE or Modifier.FINAL),
+            ProcessConfiguration(mock<ContentValues>(), null).toTestCase(additionalDescription = "with null receiver"),
+
+            ProcessConfiguration(
+                mock<ContentValues>(),
+                mock()
+            ).toTestCase(additionalDescription = "with non-null receiver"),
+
+            StartupState.Builder(CollectingFlags.CollectingFlagsBuilder().build()).build()
+                .toTestCase(
                     Modifier.PUBLIC or Modifier.FINAL,
-                    "field existence only"
+                    additionalDescription = "field existence only"
                 ),
-                arrayOf(StatSending::class.java, StatSending(200), 0, ""),
-                arrayOf(
-                    PermissionState::class.java,
-                    PermissionState("name", true),
-                    0,
-                    ""
-                ),
-                arrayOf(
-                    ClientDescription::class.java,
-                    ClientDescription(
-                        "api key",
-                        "packageName",
-                        100,
-                        "process_session_id",
-                        MockUtils.mockForToString()
-                    ),
-                    0,
-                    "for all non null"
-                ),
-                arrayOf(
-                    ClientDescription::class.java,
-                    ClientDescription(
-                        null,
-                        "packageName",
-                        null,
-                        null,
-                        MockUtils.mockForToString()
-                    ),
-                    0,
-                    "for all non null"
-                ),
-                arrayOf(CollectingFlags::class.java, CollectingFlagsBuilder().build(), 0, ""),
-                arrayOf(
-                    AdTrackingInfoResult::class.java,
-                    AdTrackingInfoResult(
-                        null,
-                        MockUtils.mockForToString(),
-                        null
-                    ),
-                    0,
-                    "for null fields"
-                ),
-                arrayOf(
-                    AdvertisingIdsHolder::class.java,
-                    AdvertisingIdsHolder(
-                        MockUtils.mockForToString(),
-                        MockUtils.mockForToString(),
-                        MockUtils.mockForToString()
-                    ),
-                    0,
-                    ""
-                ),
-                arrayOf(
-                    ClientIdentifiersHolder::class.java,
-                    ClientIdentifiersHolder(
-                        MockUtils.mockForToString(),
-                        MockUtils.mockForToString(),
-                        MockUtils.mockForToString(),
-                        MockUtils.mockForToString(),
-                        MockUtils.mockForToString(),
-                        MockUtils.mockForToString(),
-                        MockUtils.mockForToString(),
-                        MockUtils.mockForToString(),
-                        MockUtils.mockForToString(),
-                        MockUtils.mockForToString(),
-                        MockUtils.mockForToString(),
-                        200L,
-                        300L,
-                        MockUtils.mockForToString(),
-                        null
-                    ),
-                    0,
-                    "check existence only"
-                ),
-                arrayOf(
-                    DeferredDeeplinkState::class.java,
-                    DeferredDeeplinkState(
-                        "deeplink",
-                        MockUtils.mockForToString<MutableMap<String, String>>(),
-                        "unparsed_referrer"
-                    ),
-                    0,
-                    "for non-null fields"
-                ),
-                arrayOf(
-                    DeferredDeeplinkState::class.java,
-                    DeferredDeeplinkState(null, null, null),
-                    0,
-                    "for null fields"
-                ),
-                arrayOf(
-                    IdentifiersResult::class.java,
-                    IdentifiersResult(
-                        "id",
-                        MockUtils.mockForToString(),
-                        "error_explanation"
-                    ),
-                    0,
-                    "for non-null fields"
-                ),
-                arrayOf(
-                    IdentifiersResult::class.java,
-                    IdentifiersResult(
-                        null,
-                        MockUtils.mockForToString(),
-                        null
-                    ),
-                    0,
-                    "for null fields"
-                ),
-                arrayOf(
-                    PreloadInfoData::class.java,
-                    PreloadInfoData(
-                        MockUtils.mockForToString(),
-                        listOf(MockUtils.mockForToString(), MockUtils.mockForToString())
-                    ),
-                    0,
-                    ""
-                ),
-                arrayOf(
-                    PreloadInfoState::class.java,
-                    PreloadInfoState(
-                        "7657657",
-                        JSONObject(),
-                        true,
-                        true,
-                        DistributionSource.APP
-                    ),
-                    0,
-                    "filled"
-                ),
-                arrayOf(
-                    PreloadInfoState::class.java,
-                    PreloadInfoState(
-                        null,
-                        JSONObject(),
-                        false,
-                        false,
-                        DistributionSource.UNDEFINED
-                    ),
-                    0,
-                    "nullable"
-                ),
-                arrayOf(
-                    PreloadInfoData.Candidate::class.java,
-                    PreloadInfoData.Candidate(
-                        "7657657",
-                        JSONObject(),
-                        DistributionSource.APP
-                    ),
-                    0,
-                    "filled"
-                ),
-                arrayOf(
-                    PreloadInfoData.Candidate::class.java,
-                    PreloadInfoData.Candidate(
-                        null,
-                        JSONObject(),
-                        DistributionSource.UNDEFINED
-                    ),
-                    0,
-                    "empty"
-                ),
-                arrayOf(
-                    CacheControl::class.java,
-                    CacheControl(10L),
-                    0,
-                    ""
-                ),
-                arrayOf(
-                    ECommerceAmount::class.java,
-                    ECommerceAmount(BigDecimal.TEN, "unit"),
-                    0,
-                    ""
-                ),
-                arrayOf(
-                    ECommerceCartItem::class.java,
-                    ECommerceCartItem(
-                        MockUtils.mockForToString(),
-                        MockUtils.mockForToString(),
-                        BigDecimal.TEN
-                    ),
-                    0,
-                    ""
-                ),
-                arrayOf(
-                    ECommerceOrder::class.java,
-                    ECommerceOrder("identifier", MockUtils.mockForToString()),
-                    0,
-                    ""
-                ),
-                arrayOf(
-                    ECommercePrice::class.java,
-                    ECommercePrice(MockUtils.mockForToString()),
-                    0,
-                    ""
-                ),
-                arrayOf(ECommerceProduct::class.java, ECommerceProduct("sku"), 0, ""),
-                arrayOf(
-                    ECommerceReferrer::class.java,
-                    ECommerceReferrer(),
-                    0,
-                    ""
-                ),
-                arrayOf(
-                    ECommerceScreen::class.java,
-                    ECommerceScreen(),
-                    0,
-                    ""
-                ),
-                arrayOf(
-                    AmountWrapper::class.java,
-                    AmountWrapper(BigDecimal.TEN, "unit"),
-                    0,
-                    ""
-                ),
-                arrayOf(
-                    CartItemWrapper::class.java,
-                    CartItemWrapper(
-                        MockUtils.mockForToString(),
-                        BigDecimal.TEN,
-                        MockUtils.mockForToString(),
-                        MockUtils.mockForToString()
-                    ),
-                    0,
-                    ""
-                ),
-                arrayOf(
-                    CartActionInfoEvent::class.java,
-                    CartActionInfoEvent(
-                        10,
-                        MockUtils.mockForToString(),
-                        MockUtils.mockForToString()
-                    ),
-                    0,
-                    ""
-                ),
-                arrayOf(
-                    OrderInfoEvent::class.java,
-                    OrderInfoEvent(
-                        OrderInfoEvent.EVENT_TYPE_BEGIN_CHECKOUT,
-                        MockUtils.mockForToString(),
-                        MockUtils.mockForToString()
-                    ),
-                    0,
-                    "Begin checkout event"
-                ),
-                arrayOf(
-                    OrderInfoEvent::class.java,
-                    OrderInfoEvent(
-                        OrderInfoEvent.EVENT_TYPE_PURCHASE,
-                        MockUtils.mockForToString(),
-                        MockUtils.mockForToString()
-                    ),
-                    0,
-                    "Purchase event"
-                ),
-                arrayOf(
-                    OrderWrapper::class.java,
-                    OrderWrapper(
-                        "uid",
-                        "identifier",
-                        MockUtils.mockForToString(),
-                        MockUtils.mockForToString()
-                    ),
-                    0,
-                    ""
-                ),
-                arrayOf(
-                    PriceWrapper::class.java,
-                    PriceWrapper(MockUtils.mockForToString(), MockUtils.mockForToString()),
-                    0,
-                    ""
-                ),
-                arrayOf(
-                    ProductWrapper::class.java,
-                    ProductWrapper(
-                        "sku",
-                        "name",
-                        MockUtils.mockForToString(),
-                        MockUtils.mockForToString(),
-                        MockUtils.mockForToString(),
-                        MockUtils.mockForToString(),
-                        MockUtils.mockForToString()
-                    ),
-                    0,
-                    ""
-                ),
-                arrayOf(
-                    ReferrerWrapper::class.java,
-                    ReferrerWrapper("type", "identifier", MockUtils.mockForToString()),
-                    0,
-                    "with non-null fields"
-                ),
-                arrayOf(
-                    ReferrerWrapper::class.java,
-                    ReferrerWrapper(null, null, null),
-                    0,
-                    "with null fields"
-                ),
-                arrayOf(
-                    ScreenWrapper::class.java,
-                    ScreenWrapper(
-                        "name",
-                        MockUtils.mockForToString(),
-                        "search_query",
-                        MockUtils.mockForToString()
-                    ),
-                    0,
-                    "with non-null fields"
-                ),
-                arrayOf(
-                    ScreenWrapper::class.java,
-                    ScreenWrapper(null, null, null, null),
-                    0,
-                    "with null fields"
-                ),
-                arrayOf(
-                    ShownProductDetailInfoEvent::class.java,
-                    ShownProductDetailInfoEvent(
-                        MockUtils.mockForToString(),
-                        MockUtils.mockForToString(),
-                        MockUtils.mockForToString()
-                    ),
-                    0,
-                    "with non-null referrer"
-                ),
-                arrayOf(
-                    ShownProductDetailInfoEvent::class.java,
-                    ShownProductDetailInfoEvent(
-                        MockUtils.mockForToString(),
-                        null,
-                        MockUtils.mockForToString()
-                    ),
-                    0,
-                    "with null referrer"
-                ),
-                arrayOf(
-                    ShownScreenInfoEvent::class.java,
-                    ShownScreenInfoEvent(MockUtils.mockForToString(), MockUtils.mockForToString()),
-                    0,
-                    ""
-                ),
-                arrayOf(
-                    ShownProductCardInfoEvent::class.java,
-                    ShownProductCardInfoEvent(
-                        MockUtils.mockForToString(),
-                        MockUtils.mockForToString(),
-                        MockUtils.mockForToString()
-                    ),
-                    0,
-                    ""
-                ),
-                arrayOf(
-                    TrimmingResult::class.java,
-                    TrimmingResult(
-                        MockUtils.mockForToString<Any>(),
-                        MockUtils.mockForToString()
-                    ),
-                    0,
-                    ""
-                ),
-                arrayOf(
-                    Result::class.java,
-                    Result(
-                        MockUtils.mockForToString<Any>(),
-                        MockUtils.mockForToString()
-                    ),
-                    0,
-                    ""
-                ),
-                arrayOf(
-                    BytesTruncatedInfo::class.java,
-                    BytesTruncatedInfo(100),
-                    0,
-                    ""
-                ),
-                arrayOf(
-                    BytesTruncatedInfo::class.java,
-                    CollectionTrimInfo(100, 200),
-                    0,
-                    "with CollectionTrimInfo"
-                ),
-                arrayOf(
-                    CollectionTrimInfo::class.java,
-                    CollectionTrimInfo(100, 200),
-                    0,
-                    ""
-                ),
-                arrayOf(
-                    LocationFlagStrategy::class.java,
-                    LocationFlagStrategy(),
-                    0,
-                    "using class reflective access and value mocking"
-                ),
-                arrayOf(
-                    ReferrerInfo::class.java,
-                    ReferrerInfo("referrer", 100L, 200L, ReferrerInfo.Source.GP),
-                    0,
-                    ""
-                ),
-                arrayOf(
-                    AttributionConfig::class.java,
-                    AttributionConfig(ArrayList()),
-                    0,
-                    "empty value"
-                ),
-                arrayOf(
-                    AttributionConfig::class.java,
-                    AttributionConfig(
-                        listOf(
-                            Pair("key1", AttributionConfig.Filter("value1")),
-                            Pair("key 2", null)
-                        )
-                    ),
-                    0,
-                    "filled value"
-                ),
-                arrayOf(
-                    StartupParamsItem::class.java,
-                    StartupParamsItem("id", StartupParamsItemStatus.OK, "error details"),
-                    0,
-                    "filled value"
-                ),
-                arrayOf(
-                    StartupParamsItem::class.java,
-                    StartupParamsItem(null, StartupParamsItemStatus.FEATURE_DISABLED, null),
-                    0,
-                    "value with nulls"
-                ),
-                arrayOf(
-                    AdvIdGetterController.CanTrackIdentifiers::class.java,
-                    AdvIdGetterController.CanTrackIdentifiers(
-                        AdvIdGetterController.State.ALLOWED,
-                        AdvIdGetterController.State.FORBIDDEN_BY_REMOTE_CONFIG,
-                        AdvIdGetterController.State.FORBIDDEN_BY_CLIENT_CONFIG
-                    ),
-                    0,
-                    "filled value"
-                ),
-                arrayOf(
-                    ModuleEvent::class.java,
-                    ModuleEvent.newBuilder(10).build(),
-                    0,
-                    "empty value"
-                ),
-                arrayOf(
-                    ModuleEvent::class.java,
-                    ModuleEvent.newBuilder(10)
-                        .withCategory(ModuleEvent.Category.SYSTEM)
-                        .withName("Event name")
-                        .withValue("Event value")
-                        .withAttributes(mapOf("key" to "value"))
-                        .withExtras(mapOf("key" to "value".toByteArray()))
-                        .withEnvironment(mapOf("key" to "value"))
-                        .build(),
-                    0,
-                    "filled value"
-                ),
-                arrayOf(
-                    AppMetricaConfigExtension::class.java,
-                    AppMetricaConfigExtension(listOf("subscriber"), true),
-                    0,
-                    "filled value"
-                ),
-                arrayOf(
-                    SelfReportingLazyEvent::class.java,
-                    SelfReportingLazyEvent("Event value", "Event value"),
-                    0,
-                    "filled value"
-                ),
-                arrayOf(
-                    ServiceDescription::class.java,
-                    ServiceDescription("packageName", "serviceScheme", AppMetricaService::class.java),
-                    0,
-                    "filled value"
-                )
+
+            StatSending(200).toTestCase(),
+            PermissionState("name", true).toTestCase(),
+
+            ClientDescription("api key", "packageName", 100, "process_session_id", mock()).toTestCase(
+                additionalDescription = "for all non null"
+            ),
+
+            ClientDescription(null, "packageName", null, null, mock()).toTestCase(
+                additionalDescription = "for all non null"
+            ),
+
+            CollectingFlags.CollectingFlagsBuilder().build().toTestCase(),
+            AdTrackingInfoResult(null, mock(), null).toTestCase(additionalDescription = "for null fields"),
+            AdvertisingIdsHolder(mock(), mock(), mock()).toTestCase(),
+
+            ClientIdentifiersHolder(
+                mock(),
+                mock(),
+                mock(),
+                mock(),
+                mock(),
+                mock(),
+                mock(),
+                mock(),
+                mock(),
+                mock(),
+                mock(),
+                200L,
+                300L,
+                mock(),
+                null
+            ).toTestCase(additionalDescription = "check existence only"),
+
+            DeferredDeeplinkState(
+                "deeplink",
+                MockUtils.mockForToString<MutableMap<String, String>>(),
+                "unparsed_referrer"
+            ).toTestCase(additionalDescription = "for non-null fields"),
+
+            DeferredDeeplinkState(null, null, null).toTestCase(additionalDescription = "for null fields"),
+
+            IdentifiersResult("id", mock(), "error_explanation").toTestCase(
+                additionalDescription = "for non-null fields"
+            ),
+
+            IdentifiersResult(null, mock(), null).toTestCase(additionalDescription = "for null fields"),
+            PreloadInfoData(mock(), listOf(mock(), mock())).toTestCase(),
+
+            PreloadInfoState("7657657", JSONObject(), true, true, DistributionSource.APP).toTestCase(
+                additionalDescription = "filled"
+            ),
+
+            PreloadInfoState(null, JSONObject(), false, false, DistributionSource.UNDEFINED).toTestCase(
+                additionalDescription = "nullable"
+            ),
+
+            PreloadInfoData.Candidate("7657657", JSONObject(), DistributionSource.APP)
+                .toTestCase(additionalDescription = "filled"),
+
+            PreloadInfoData.Candidate(null, JSONObject(), DistributionSource.UNDEFINED)
+                .toTestCase(additionalDescription = "empty"),
+
+            CacheControl(10L).toTestCase(),
+            ECommerceAmount(BigDecimal.TEN, "unit").toTestCase(),
+            ECommerceCartItem(mock(), mock(), BigDecimal.TEN).toTestCase(),
+            ECommerceOrder("identifier", mock()).toTestCase(),
+            ECommercePrice(mock()).toTestCase(),
+            ECommerceProduct("sku").toTestCase(),
+            ECommerceReferrer().toTestCase(),
+            ECommerceScreen().toTestCase(),
+            AmountWrapper(BigDecimal.TEN, "unit").toTestCase(),
+            CartItemWrapper(mock(), BigDecimal.TEN, mock(), mock()).toTestCase(),
+            CartActionInfoEvent(10, mock(), mock()).toTestCase(),
+
+            OrderInfoEvent(
+                OrderInfoEvent.EVENT_TYPE_BEGIN_CHECKOUT,
+                mock(),
+                mock()
+            ).toTestCase(additionalDescription = "Begin checkout event"),
+
+            OrderInfoEvent(
+                OrderInfoEvent.EVENT_TYPE_PURCHASE,
+                mock(),
+                mock()
+            ).toTestCase(additionalDescription = "Purchase event"),
+
+            OrderWrapper(
+                "uid",
+                "identifier",
+                mock(),
+                mock()
+            ).toTestCase(),
+
+            PriceWrapper(mock(), mock()).toTestCase(),
+
+            ProductWrapper(
+                "sku",
+                "name",
+                mock(),
+                mock(),
+                mock(),
+                mock(),
+                mock()
+            ).toTestCase(),
+
+            ReferrerWrapper("type", "identifier", mock()).toTestCase(additionalDescription = "with non-null fields"),
+            ReferrerWrapper(null, null, null).toTestCase(additionalDescription = "with null fields"),
+
+            ScreenWrapper(
+                "name",
+                mock(),
+                "search_query",
+                mock()
+            ).toTestCase(additionalDescription = "with non-null fields"),
+
+            ScreenWrapper(null, null, null, null).toTestCase(additionalDescription = "with null fields"),
+
+            ShownProductDetailInfoEvent(
+                mock(),
+                mock(),
+                mock()
+            ).toTestCase(additionalDescription = "with non-null referrer"),
+
+            ShownProductDetailInfoEvent(
+                mock(),
+                null,
+                mock()
+            ).toTestCase(additionalDescription = "with null referrer"),
+
+            ShownScreenInfoEvent(mock(), mock()).toTestCase(),
+
+            ShownProductCardInfoEvent(
+                mock(),
+                mock(),
+                mock()
+            ).toTestCase(),
+
+            TrimmingResult(
+                MockUtils.mockForToString<Any>(),
+                mock()
+            ).toTestCase(),
+
+            Result(
+                MockUtils.mockForToString<Any>(),
+                mock()
+            ).toTestCase(),
+
+            BytesTruncatedInfo(100).toTestCase(),
+            CollectionTrimInfo(100, 200).toTestCase(),
+
+            LocationFlagStrategy()
+                .toTestCase(additionalDescription = "using class reflective access and value mocking"),
+
+            ReferrerInfo("referrer", 100L, 200L, ReferrerInfo.Source.GP).toTestCase(),
+            AttributionConfig(ArrayList()).toTestCase(additionalDescription = "empty value"),
+
+            AttributionConfig(listOf(Pair("key1", AttributionConfig.Filter("value1")), Pair("key 2", null))).toTestCase(
+                additionalDescription = "filled value"
+            ),
+
+            StartupParamsItem("id", StartupParamsItemStatus.OK, "error details").toTestCase(
+                additionalDescription = "filled value"
+            ),
+
+            StartupParamsItem(null, StartupParamsItemStatus.FEATURE_DISABLED, null).toTestCase(
+                additionalDescription = "value with nulls"
+            ),
+
+            AdvIdGetterController.CanTrackIdentifiers(
+                AdvIdGetterController.State.ALLOWED,
+                AdvIdGetterController.State.FORBIDDEN_BY_REMOTE_CONFIG,
+                AdvIdGetterController.State.FORBIDDEN_BY_CLIENT_CONFIG
+            ).toTestCase(additionalDescription = "filled value"),
+
+            ModuleEvent.newBuilder(10).build().toTestCase(additionalDescription = "empty value"),
+
+            ModuleEvent.newBuilder(10)
+                .withCategory(ModuleEvent.Category.SYSTEM)
+                .withName("Event name")
+                .withValue("Event value")
+                .withAttributes(mapOf("key" to "value"))
+                .withExtras(mapOf("key" to "value".toByteArray()))
+                .withEnvironment(mapOf("key" to "value"))
+                .build().toTestCase(additionalDescription = "filled value"),
+
+            AppMetricaConfigExtension(listOf("subscriber"), true).toTestCase(additionalDescription = "filled value"),
+            SelfReportingLazyEvent("Event value", "Event value").toTestCase(additionalDescription = "filled value"),
+
+            ServiceDescription("packageName", "serviceScheme", AppMetricaService::class.java).toTestCase(
+                additionalDescription = "filled value"
+            ),
+
+            CompositePermissionStrategy(mock<PermissionStrategy>(), mock<PermissionStrategy>()).toTestCase(),
+            TempCacheEntry(100500, "scope", 200500, "Some entry content".toByteArray()).toTestCase(),
+
+            StartupStateModel.StartupStateBuilder(CollectingFlags.CollectingFlagsBuilder().build()).build().toTestCase(
+                modifierPreconditions = Modifier.PUBLIC or Modifier.FINAL,
+                excludedFields = setOf("deviceID", "deviceIDHash")
+            ),
+
+            StartupRequestConfig(mock(), mock()).toTestCase(
+                modifierPreconditions = Modifier.PUBLIC or Modifier.FINAL,
+                excludedFields = setOf("mReferrerHolder", "defaultStartupHostsProvider")
             )
-        }
+        )
     }
 }

@@ -1,61 +1,31 @@
 package io.appmetrica.analytics.coreutils
 
 import io.appmetrica.analytics.coreutils.internal.cache.CachedDataProvider
-import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.ToStringTestUtils
-import org.junit.Test
+import io.appmetrica.analytics.testutils.BaseToStringTest
+import io.appmetrica.analytics.testutils.BaseToStringTest.Companion.toTestCase
 import org.junit.runner.RunWith
-import org.robolectric.ParameterizedRobolectricTestRunner
+import org.junit.runners.Parameterized
 
-@RunWith(ParameterizedRobolectricTestRunner::class)
-class ToStringTest(
-    clazz: Any?,
-    actualValue: Any,
+@RunWith(Parameterized::class)
+internal class ToStringTest(
+    actualValue: Any?,
     modifierPreconditions: Int,
+    excludedFields: Set<String>?,
     additionalDescription: String?
-) : CommonTest() {
-
-    private var clazz: Class<*>? = null
-    private val actualValue: Any
-    private val modifierPreconditions: Int
-
-    init {
-        if (clazz is Class<*>) {
-            this.clazz = clazz
-        } else if (clazz is String) {
-            this.clazz = Class.forName(clazz as String?)
-        } else {
-            throw IllegalArgumentException("Clazz must be instance of Class or String")
-        }
-        this.actualValue = actualValue
-        this.modifierPreconditions = modifierPreconditions
-    }
-
-    @Test
-    fun toStringContainsAllFields() {
-        val excludedFields = setOf("timeProvider")
-        val extractedFieldAndValues = ToStringTestUtils.extractFieldsAndValues(
-            clazz,
-            actualValue,
-            modifierPreconditions,
-            excludedFields
-        )
-        ToStringTestUtils.testToString(actualValue, extractedFieldAndValues)
-    }
+) : BaseToStringTest(
+    actualValue,
+    modifierPreconditions,
+    excludedFields,
+    additionalDescription
+) {
 
     companion object {
 
-        @ParameterizedRobolectricTestRunner.Parameters(name = "#{index} - {0} {3}")
+        @Parameterized.Parameters(name = "{0}")
         @JvmStatic
-        fun data(): List<Array<Any>> {
-            return listOf(
-                arrayOf(
-                    CachedDataProvider.CachedData::class.java,
-                    CachedDataProvider.CachedData<Any>(10L, 20L, "some description"),
-                    0,
-                    ""
-                )
-            )
-        }
+        fun data(): Collection<Array<Any?>> = listOf(
+            CachedDataProvider.CachedData<Any>(10L, 20L, "some description")
+                .toTestCase(excludedFields = setOf("timeProvider"))
+        )
     }
 }

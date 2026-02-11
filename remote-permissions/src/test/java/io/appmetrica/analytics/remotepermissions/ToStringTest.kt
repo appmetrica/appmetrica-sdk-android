@@ -2,23 +2,29 @@ package io.appmetrica.analytics.remotepermissions
 
 import io.appmetrica.analytics.remotepermissions.internal.config.FeatureConfig
 import io.appmetrica.analytics.testutils.BaseToStringTest
+import io.appmetrica.analytics.testutils.BaseToStringTest.Companion.toTestCase
 import org.junit.runner.RunWith
-import org.robolectric.ParameterizedRobolectricTestRunner
+import org.junit.runners.Parameterized
 
-@RunWith(ParameterizedRobolectricTestRunner::class)
+@RunWith(Parameterized::class)
 internal class ToStringTest(
-    clazz: Any?,
     actualValue: Any?,
     modifierPreconditions: Int,
+    excludedFields: Set<String>?,
     additionalDescription: String?
-) : BaseToStringTest(clazz, actualValue, modifierPreconditions, additionalDescription) {
+) : BaseToStringTest(
+    actualValue,
+    modifierPreconditions,
+    excludedFields,
+    additionalDescription
+) {
 
     companion object {
 
-        @ParameterizedRobolectricTestRunner.Parameters(name = "#{index} - {0} {3}")
+        @Parameterized.Parameters(name = "{0}")
         @JvmStatic
         fun data(): Collection<Array<Any?>> = listOf(
-            arrayOf(FeatureConfig::class.java, FeatureConfig(setOf("first", "second")), 0, "")
+            FeatureConfig(setOf("first", "second")).toTestCase()
         )
     }
 }
