@@ -7,8 +7,8 @@ import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus
 import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
+import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.mock
 
 private const val PROVIDER = "io.appmetrica.analytics.identifiers.extra.PROVIDER"
 private const val ID = "io.appmetrica.analytics.identifiers.extra.ID"
@@ -18,11 +18,8 @@ private const val TRACKING_INFO = "io.appmetrica.analytics.identifiers.extra.TRA
 private const val STATUS = "io.appmetrica.analytics.identifiers.extra.STATUS"
 private const val ERROR_MESSAGE = "io.appmetrica.analytics.identifiers.extra.ERROR_MESSAGE"
 
-private const val GOOGLE = "google"
-private const val HUAWEI = "huawei"
 private const val YANDEX = "yandex"
 
-@RunWith(RobolectricTestRunner::class)
 internal class ReflectionAdvIdParserTest : CommonTest() {
 
     private val parser = ReflectionAdvIdParser()
@@ -35,12 +32,12 @@ internal class ReflectionAdvIdParserTest : CommonTest() {
     @Test
     fun noTrackingData() {
         val errorMessage = "some message"
-        val data = parser.fromBundle(
-            Bundle().apply {
-                putString(STATUS, "OK")
-                putString(ERROR_MESSAGE, errorMessage)
-            }
-        )
+        val bundle = mock<Bundle> {
+            on { getString(STATUS) } doReturn "OK"
+            on { getString(ERROR_MESSAGE) } doReturn errorMessage
+            on { getBundle(TRACKING_INFO) } doReturn null
+        }
+        val data = parser.fromBundle(bundle)
 
         val assert = ObjectPropertyAssertions(data)
 
@@ -56,20 +53,21 @@ internal class ReflectionAdvIdParserTest : CommonTest() {
         val errorMessage = "some message"
         val id = "someID"
         val limited = true
-        val data = parser.fromBundle(
-            Bundle().apply {
-                putString(STATUS, "OK")
-                putString(ERROR_MESSAGE, errorMessage)
-                putBundle(
-                    TRACKING_INFO,
-                    Bundle().apply {
-                        putString(PROVIDER, YANDEX)
-                        putString(ID, id)
-                        putBoolean(LIMITED, limited)
-                    }
-                )
-            }
-        )
+
+        val trackingInfoBundle = mock<Bundle> {
+            on { getString(PROVIDER) } doReturn YANDEX
+            on { getString(ID) } doReturn id
+            on { getBoolean(LIMITED) } doReturn limited
+            on { containsKey(LIMITED) } doReturn true
+        }
+
+        val bundle = mock<Bundle> {
+            on { getString(STATUS) } doReturn "OK"
+            on { getString(ERROR_MESSAGE) } doReturn errorMessage
+            on { getBundle(TRACKING_INFO) } doReturn trackingInfoBundle
+        }
+
+        val data = parser.fromBundle(bundle)
 
         val assert = ObjectPropertyAssertions(data)
 
@@ -89,18 +87,20 @@ internal class ReflectionAdvIdParserTest : CommonTest() {
     @Test
     fun limitedAdTrackingUnknown() {
         val id = "someID"
-        val data = parser.fromBundle(
-            Bundle().apply {
-                putString(STATUS, "OK")
-                putBundle(
-                    TRACKING_INFO,
-                    Bundle().apply {
-                        putString(PROVIDER, YANDEX)
-                        putString(ID, id)
-                    }
-                )
-            }
-        )
+
+        val trackingInfoBundle = mock<Bundle> {
+            on { getString(PROVIDER) } doReturn YANDEX
+            on { getString(ID) } doReturn id
+            on { containsKey(LIMITED) } doReturn false
+        }
+
+        val bundle = mock<Bundle> {
+            on { getString(STATUS) } doReturn "OK"
+            on { getString(ERROR_MESSAGE) } doReturn null
+            on { getBundle(TRACKING_INFO) } doReturn trackingInfoBundle
+        }
+
+        val data = parser.fromBundle(bundle)
 
         val assert = ObjectPropertyAssertions(data)
 
@@ -120,17 +120,18 @@ internal class ReflectionAdvIdParserTest : CommonTest() {
     @Test(expected = IllegalArgumentException::class)
     fun unknownProvider() {
         val id = "someID"
-        parser.fromBundle(
-            Bundle().apply {
-                putString(STATUS, "OK")
-                putBundle(
-                    TRACKING_INFO,
-                    Bundle().apply {
-                        putString(PROVIDER, "test")
-                        putString(ID, id)
-                    }
-                )
-            }
-        )
+
+        val trackingInfoBundle = mock<Bundle> {
+            on { getString(PROVIDER) } doReturn "test"
+            on { getString(ID) } doReturn id
+            on { containsKey(LIMITED) } doReturn false
+        }
+
+        val bundle = mock<Bundle> {
+            on { getString(STATUS) } doReturn "OK"
+            on { getBundle(TRACKING_INFO) } doReturn trackingInfoBundle
+        }
+
+        parser.fromBundle(bundle)
     }
 }

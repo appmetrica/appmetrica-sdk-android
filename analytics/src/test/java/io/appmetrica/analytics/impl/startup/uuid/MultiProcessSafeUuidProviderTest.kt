@@ -14,7 +14,6 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.kotlin.clearInvocations
 import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.doReturn
@@ -24,10 +23,8 @@ import org.mockito.kotlin.notNull
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
-import org.robolectric.RobolectricTestRunner
 import java.util.UUID
 
-@RunWith(RobolectricTestRunner::class)
 internal class MultiProcessSafeUuidProviderTest : CommonTest() {
 
     @get:Rule

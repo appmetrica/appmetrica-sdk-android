@@ -13,7 +13,6 @@ import io.appmetrica.analytics.testutils.on
 import io.appmetrica.analytics.testutils.staticRule
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers.eq
 import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.inOrder
@@ -23,10 +22,8 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
-import org.robolectric.RobolectricTestRunner
 import java.util.concurrent.TimeUnit
 
-@RunWith(RobolectricTestRunner::class)
 internal class AnonymousClientActivatorTest : CommonTest() {
 
     private val context = mock<Context>()

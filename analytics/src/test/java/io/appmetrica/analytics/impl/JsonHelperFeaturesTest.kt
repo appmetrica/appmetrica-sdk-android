@@ -7,11 +7,8 @@ import io.appmetrica.analytics.impl.utils.JsonHelper
 import io.appmetrica.analytics.testutils.CommonTest
 import org.json.JSONObject
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 import org.skyscreamer.jsonassert.JSONAssert
 
-@RunWith(RobolectricTestRunner::class)
 internal class JsonHelperFeaturesTest : CommonTest() {
 
     @Test

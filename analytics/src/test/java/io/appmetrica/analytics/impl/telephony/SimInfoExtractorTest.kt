@@ -2,9 +2,11 @@ package io.appmetrica.analytics.impl.telephony
 
 import android.Manifest
 import android.content.Context
+import android.os.Build
 import android.telephony.TelephonyManager
 import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
 import io.appmetrica.analytics.coreapi.internal.system.PermissionExtractor
+import io.appmetrica.analytics.coreutils.internal.AndroidUtils
 import io.appmetrica.analytics.coreutils.internal.cache.CachedDataProvider
 import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.StartupStateHolder
@@ -13,20 +15,19 @@ import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
 import io.appmetrica.analytics.testutils.MockedConstructionRule
 import io.appmetrica.analytics.testutils.MockedStaticRule
+import io.appmetrica.analytics.testutils.on
+import io.appmetrica.analytics.testutils.staticRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
-import org.robolectric.RobolectricTestRunner
 import java.util.Collections
 import java.util.concurrent.TimeUnit
 
-@RunWith(RobolectricTestRunner::class)
 internal class SimInfoExtractorTest : CommonTest() {
 
     private val firstSimInfo = mock<SimInfo>()
@@ -55,6 +56,11 @@ internal class SimInfoExtractorTest : CommonTest() {
 
     @get:Rule
     val simInfoExtractorForMMockedStaticRule = MockedStaticRule(SimInfoExtractorForM::class.java)
+
+    @get:Rule
+    val androidUtilsRule = staticRule<AndroidUtils> {
+        on { AndroidUtils.isApiAchieved(Build.VERSION_CODES.M) } doReturn true
+    }
 
     private lateinit var simInfoExtractor: SimInfoExtractor
     private lateinit var cachedData: CachedDataProvider.CachedData<List<SimInfo>>
@@ -95,13 +101,13 @@ internal class SimInfoExtractorTest : CommonTest() {
     }
 
     @Test
-    fun `extract on M`() {
+    fun extract() {
         val result = simInfoExtractor.extract()
         assertThat(result).containsExactlyElementsOf(simInfos)
     }
 
     @Test
-    fun `extract on M if no read phone state`() {
+    fun `extract if no read phone state`() {
         whenever(permissionExtractor.hasPermission(context, Manifest.permission.READ_PHONE_STATE)).thenReturn(false)
         val result = simInfoExtractor.extract()
         assertThat(result)
@@ -118,7 +124,7 @@ internal class SimInfoExtractorTest : CommonTest() {
     }
 
     @Test
-    fun `extract on M if SimInfoExtractorFromM returns empty list`() {
+    fun `extract if SimInfoExtractorFromM returns empty list`() {
         whenever(SimInfoExtractorForM.extractSimInfosFromSubscriptionManager(context))
             .thenReturn(Collections.emptyList())
         val result = simInfoExtractor.extract()

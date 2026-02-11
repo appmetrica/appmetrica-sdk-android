@@ -13,6 +13,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.kotlin.any
+import org.mockito.kotlin.anyOrNull
 import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
@@ -26,7 +27,7 @@ internal class ModuleStatusReporterTest : CommonTest() {
 
     private val executor: IHandlerExecutor = mock()
     private val preferences: SimplePreferenceStorage = mock {
-        on { getString(any(), any()) } doReturn null
+        on { getString(any(), anyOrNull()) } doReturn null
     }
     private val timeProvider: SystemTimeProvider = mock {
         on { currentTimeMillis() } doReturn currentTime

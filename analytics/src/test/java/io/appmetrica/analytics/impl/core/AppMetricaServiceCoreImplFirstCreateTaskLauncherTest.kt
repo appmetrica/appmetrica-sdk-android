@@ -7,16 +7,13 @@ import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoMoreInteractions
-import org.robolectric.RobolectricTestRunner
 import java.util.concurrent.TimeUnit
 
-@RunWith(RobolectricTestRunner::class)
 internal class AppMetricaServiceCoreImplFirstCreateTaskLauncherTest : CommonTest() {
 
     @get:Rule

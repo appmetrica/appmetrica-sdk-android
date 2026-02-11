@@ -7,11 +7,8 @@ import io.appmetrica.analytics.impl.protobuf.backend.EventProto
 import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 import java.util.concurrent.TimeUnit
 
-@RunWith(RobolectricTestRunner::class)
 internal class FullLocationInfoComposerTest : CommonTest() {
 
     private var composer = FullLocationInfoComposer()

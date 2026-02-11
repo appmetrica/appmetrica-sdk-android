@@ -1,31 +1,29 @@
 package io.appmetrica.analytics.impl.startup.uuid
 
-import android.content.Context
 import io.appmetrica.analytics.coreutils.internal.io.FileUtils.resetSdkStorage
 import io.appmetrica.analytics.impl.IOUtils
 import io.appmetrica.analytics.impl.db.FileConstants
 import io.appmetrica.analytics.impl.utils.UuidGenerator
 import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.analytics.testutils.ContextRule
 import io.appmetrica.analytics.testutils.LogRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
-import org.robolectric.RobolectricTestRunner
-import org.robolectric.RuntimeEnvironment
 import java.io.File
 import java.io.FileOutputStream
 import java.util.UUID
 
-@RunWith(RobolectricTestRunner::class)
 internal class PersistentUuidHolderTest : CommonTest() {
 
-    private lateinit var context: Context
+    @get:Rule
+    val contextRule = ContextRule()
+    private val context by contextRule
 
     private val uuidGenerator: UuidGenerator = mock()
 
@@ -44,7 +42,7 @@ internal class PersistentUuidHolderTest : CommonTest() {
         on { isValid(invalidUuid) } doReturn false
     }
 
-    private lateinit var storageDir: File
+    private val storageDir: File by lazy { context.noBackupFilesDir }
 
     private lateinit var persistentUuidHolder: PersistentUuidHolder
 
@@ -54,8 +52,6 @@ internal class PersistentUuidHolderTest : CommonTest() {
     @Before
     fun setUp() {
         resetSdkStorage()
-        context = RuntimeEnvironment.getApplication()
-        storageDir = RuntimeEnvironment.getApplication().noBackupFilesDir
         val sdkDir = File(storageDir, "/appmetrica/analytics")
         sdkDir.mkdirs()
         uuidFile = File(sdkDir, FileConstants.UUID_FILE_NAME)

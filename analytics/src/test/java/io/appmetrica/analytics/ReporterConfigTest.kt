@@ -7,15 +7,12 @@ import io.appmetrica.analytics.testutils.MockedConstructionRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers
 import org.mockito.MockedConstruction.MockInitializer
 import org.mockito.kotlin.whenever
 import org.mockito.stubbing.Answer
-import org.robolectric.RobolectricTestRunner
 import java.util.UUID
 
-@RunWith(RobolectricTestRunner::class)
 internal class ReporterConfigTest : CommonTest() {
     private val oldMaxReportsInDatabaseCount = 10
     private val newMaxReportsInDatabaseCount = 100

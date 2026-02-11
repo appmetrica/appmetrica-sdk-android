@@ -20,16 +20,13 @@ import org.assertj.core.api.Assertions
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.whenever
-import org.robolectric.RobolectricTestRunner
 import java.io.File
 
-@RunWith(RobolectricTestRunner::class)
 internal class ServiceCrashControllerTest : CommonTest() {
 
     private val context: Context = mock()

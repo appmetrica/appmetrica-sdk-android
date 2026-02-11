@@ -8,17 +8,14 @@ import io.appmetrica.analytics.impl.utils.concurrency.ExclusiveMultiProcessFileL
 import io.appmetrica.analytics.impl.utils.concurrency.FileLocksHolder
 import io.appmetrica.analytics.testutils.CommonTest
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.inOrder
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.whenever
-import org.robolectric.RobolectricTestRunner
 import java.io.File
 
-@RunWith(RobolectricTestRunner::class)
 internal class ReadAndReportRunnableTest : CommonTest() {
 
     private val crashFileName = "crash file name"

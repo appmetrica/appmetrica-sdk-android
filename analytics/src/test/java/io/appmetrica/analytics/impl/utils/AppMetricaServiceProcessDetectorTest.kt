@@ -10,13 +10,10 @@ import io.appmetrica.analytics.testutils.staticRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
-import org.robolectric.RobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
 internal class AppMetricaServiceProcessDetectorTest : CommonTest() {
 
     private val mainProcess = "test.sample.com"

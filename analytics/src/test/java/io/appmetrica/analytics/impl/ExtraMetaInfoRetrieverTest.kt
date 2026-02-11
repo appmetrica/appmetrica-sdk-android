@@ -6,16 +6,17 @@ import io.appmetrica.analytics.coreutils.internal.services.SafePackageManager
 import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
-import org.junit.runner.RunWith
+import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
-import org.robolectric.RobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
 internal class ExtraMetaInfoRetrieverTest : CommonTest() {
 
+    private val bundle: Bundle = mock()
     private val context: Context = mock()
-    private val packageManager: SafePackageManager = mock()
+    private val packageManager: SafePackageManager = mock {
+        on { getApplicationMetaData(context) } doReturn bundle
+    }
     private val stringResourceRetriever: StringResourceRetriever = mock()
     private val booleanResourceRetriever: BooleanResourceRetriever = mock()
 
@@ -58,9 +59,7 @@ internal class ExtraMetaInfoRetrieverTest : CommonTest() {
 
     @Test
     fun `pluginId for empty value`() {
-        val bundle = Bundle().apply {
-            putString(pluginIdKey, "")
-        }
+        whenever(bundle.getString(pluginIdKey)).thenReturn("")
         whenever(packageManager.getApplicationMetaData(context)).thenReturn(bundle)
         assertThat(extraMetaInfoRetriever.pluginId).isEmpty()
     }
@@ -68,9 +67,7 @@ internal class ExtraMetaInfoRetrieverTest : CommonTest() {
     @Test
     fun `pluginId for valid value`() {
         val pluginId = "Some plugin id"
-        val bundle = Bundle().apply {
-            putString(pluginIdKey, pluginId)
-        }
+        whenever(bundle.getString(pluginIdKey)).thenReturn(pluginId)
         whenever(packageManager.getApplicationMetaData(context)).thenReturn(bundle)
         assertThat(extraMetaInfoRetriever.pluginId).isEqualTo(pluginId)
     }
@@ -89,18 +86,14 @@ internal class ExtraMetaInfoRetrieverTest : CommonTest() {
 
     @Test
     fun `pluginAdRevenueMetaInfoSources for empty value`() {
-        val bundle = Bundle().apply {
-            putString(pluginAdRevenueMetaInfoSourcesApiKey, "")
-        }
+        whenever(bundle.getString(pluginAdRevenueMetaInfoSourcesApiKey)).thenReturn("")
         whenever(packageManager.getApplicationMetaData(context)).thenReturn(bundle)
     }
 
     @Test
     fun `pluginAdRevenueMetaInfoSources for valid value`() {
         val pluginAdRevenueMetaInfoSources = "Some plugin ad revenue meta info sources"
-        val bundle = Bundle().apply {
-            putString(pluginAdRevenueMetaInfoSourcesApiKey, pluginAdRevenueMetaInfoSources)
-        }
+        whenever(bundle.getString(pluginAdRevenueMetaInfoSourcesApiKey)).thenReturn(pluginAdRevenueMetaInfoSources)
         whenever(packageManager.getApplicationMetaData(context)).thenReturn(bundle)
         assertThat(extraMetaInfoRetriever.pluginAdRevenueMetaInfoSources).isEqualTo(pluginAdRevenueMetaInfoSources)
     }

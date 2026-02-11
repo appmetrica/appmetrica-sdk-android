@@ -4,12 +4,9 @@ import io.appmetrica.analytics.coreapi.internal.permission.PermissionStrategy
 import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
-import org.robolectric.RobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
 internal class CompositePermissionStrategyTest : CommonTest() {
 
     private val permission = "Permission"

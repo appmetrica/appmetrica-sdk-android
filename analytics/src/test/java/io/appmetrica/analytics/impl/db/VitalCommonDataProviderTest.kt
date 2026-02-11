@@ -4,22 +4,37 @@ import android.util.Base64
 import io.appmetrica.analytics.impl.referrer.common.ReferrerInfo
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.MockedConstructionRule
+import io.appmetrica.analytics.testutils.on
+import io.appmetrica.analytics.testutils.staticRule
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.SoftAssertions
 import org.json.JSONObject
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
+import org.mockito.kotlin.any
+import org.mockito.kotlin.anyOrNull
 import org.mockito.kotlin.argumentCaptor
+import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
-import org.robolectric.RobolectricTestRunner
 import org.skyscreamer.jsonassert.JSONAssert
 
-@RunWith(RobolectricTestRunner::class)
 internal class VitalCommonDataProviderTest : CommonTest() {
+
+    @get:Rule
+    val base64Rule = staticRule<Base64> {
+        on { Base64.encode(any(), anyOrNull()) } doAnswer { invocation ->
+            invocation.getArgument<ByteArray>(0)
+        }
+        on { Base64.decode(any<String>(), anyOrNull()) } doAnswer { invocation ->
+            invocation.getArgument<String>(0).toByteArray()
+        }
+        on { Base64.decode(any<ByteArray>(), anyOrNull()) } doAnswer { invocation ->
+            invocation.getArgument<ByteArray>(0)
+        }
+    }
 
     @get:Rule
     val vitalDataProviderMockedConstructionRule = MockedConstructionRule(VitalDataProvider::class.java)
@@ -34,15 +49,16 @@ internal class VitalCommonDataProviderTest : CommonTest() {
     private val deviceIdHash = "9879879www"
     private val lastMigrationApiLevel = 44
     private val referrer = ReferrerInfo("referrer", 21, 32, ReferrerInfo.Source.GP)
-    private val filledJson = JSONObject()
-        .put("device_id", deviceId)
-        .put("device_id_hash", deviceIdHash)
-        .put("referrer", String(Base64.encode(referrer.toProto(), 0)))
-        .put("referrer_checked", true)
-        .put("last_migration_api_level", lastMigrationApiLevel)
+    private lateinit var filledJson: JSONObject
 
     @Before
     fun setUp() {
+        filledJson = JSONObject()
+            .put("device_id", deviceId)
+            .put("device_id_hash", deviceIdHash)
+            .put("referrer", String(Base64.encode(referrer.toProto(), 0)))
+            .put("referrer_checked", true)
+            .put("last_migration_api_level", lastMigrationApiLevel)
         vitalCommonDataProvider = VitalCommonDataProvider(primaryDataSource, backupDataSource)
     }
 

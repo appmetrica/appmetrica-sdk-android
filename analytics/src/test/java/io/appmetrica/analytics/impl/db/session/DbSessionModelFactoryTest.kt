@@ -35,7 +35,6 @@ internal class DbSessionModelFactoryTest : CommonTest() {
     private val debuggable = "Debuggable"
     private val appFramework = "App framework"
     private val attributionId = 3423
-    private val commitHash = "qwertyasdfgh"
     private val expectedJson = "{" +
         "\"dId\":\"$deviceId\"," +
         "\"uId\":\"$uuid\"," +

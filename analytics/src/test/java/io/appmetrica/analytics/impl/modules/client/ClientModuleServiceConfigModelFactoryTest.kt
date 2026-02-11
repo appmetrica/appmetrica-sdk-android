@@ -6,21 +6,17 @@ import io.appmetrica.analytics.coreapi.internal.identifiers.SdkIdentifiers
 import io.appmetrica.analytics.modulesapi.internal.client.BundleToServiceConfigConverter
 import io.appmetrica.analytics.modulesapi.internal.client.ServiceConfigExtensionConfiguration
 import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.analytics.testutils.MockProvider
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
-import org.robolectric.RobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
 internal class ClientModuleServiceConfigModelFactoryTest : CommonTest() {
 
-    private val moduleConfigBundle = Bundle()
+    private val moduleConfigBundle = mock<Bundle>()
     private val moduleIdentifier = "some_identifier"
-    private val bundle = Bundle().also {
-        it.putBundle(moduleIdentifier, moduleConfigBundle)
-    }
+    private val bundle = MockProvider.mockBundle(mapOf(moduleIdentifier to moduleConfigBundle))
     private val identifiers: SdkIdentifiers = mock()
     private val moduleConfig: TestModuleConfig = mock()
     private val bundleParser: BundleToServiceConfigConverter<TestModuleConfig> = mock {

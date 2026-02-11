@@ -26,6 +26,7 @@ import io.appmetrica.analytics.modulesapi.internal.service.ServiceContext
 import io.appmetrica.analytics.modulesapi.internal.service.event.ModuleEventServiceHandlerFactory
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
+import io.appmetrica.analytics.testutils.MockProvider
 import io.appmetrica.analytics.testutils.MockedConstructionRule
 import io.appmetrica.analytics.testutils.on
 import io.appmetrica.analytics.testutils.staticRule
@@ -33,7 +34,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
+import org.mockito.kotlin.any
 import org.mockito.kotlin.clearInvocations
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.doThrow
@@ -45,9 +46,7 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
-import org.robolectric.RobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
 internal class ServiceModulesControllerTest : CommonTest() {
 
     private val firstModuleFeatures = listOf("First module feature")
@@ -146,6 +145,21 @@ internal class ServiceModulesControllerTest : CommonTest() {
     private val moduleWithoutRemoteConfigFullConfig = mock<ServiceModuleRemoteConfigModel<Any?>>()
 
     private val startupState = mock<StartupState>()
+
+    @get:Rule
+    val bundleConstructionRule = MockedConstructionRule(Bundle::class.java) { mock, _ ->
+        val data = mutableMapOf<String, Any?>()
+        whenever(mock.putBundle(any(), any())).thenAnswer { invocation ->
+            data[invocation.getArgument(0)] = invocation.getArgument(1)
+            null
+        }
+        whenever(mock.getBundle(any<String>())).thenAnswer { invocation ->
+            data[invocation.getArgument(0)] as? Bundle
+        }
+        whenever(mock.keySet()).thenAnswer {
+            data.keys
+        }
+    }
 
     @get:Rule
     val configProviderMockedConstructionRule = MockedConstructionRule(
@@ -718,7 +732,7 @@ internal class ServiceModulesControllerTest : CommonTest() {
 
     @Test
     fun getModulesConfigsBundleForClient() {
-        val firstBundle = Bundle()
+        val firstBundle = MockProvider.mockBundle()
         whenever(firstClientConfigProvider.getConfigBundleForClient()).thenReturn(firstBundle)
         whenever(secondClientConfigProvider.getConfigBundleForClient()).thenReturn(null)
 
@@ -735,8 +749,8 @@ internal class ServiceModulesControllerTest : CommonTest() {
 
     @Test
     fun `getModulesConfigsBundleForClient if module throw exception`() {
-        val firstBundle = Bundle()
-        val secondBundle = Bundle()
+        val firstBundle = MockProvider.mockBundle()
+        val secondBundle = MockProvider.mockBundle()
 
         whenever(firstClientConfigProvider.getConfigBundleForClient()).thenReturn(firstBundle)
         whenever(secondClientConfigProvider.getConfigBundleForClient()).thenReturn(secondBundle)

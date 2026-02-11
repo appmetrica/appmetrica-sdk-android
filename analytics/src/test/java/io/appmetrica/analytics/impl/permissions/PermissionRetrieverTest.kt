@@ -10,11 +10,8 @@ import org.assertj.core.api.Assertions.tuple
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.kotlin.whenever
-import org.robolectric.RobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
 internal class PermissionRetrieverTest : CommonTest() {
 
     @get:Rule

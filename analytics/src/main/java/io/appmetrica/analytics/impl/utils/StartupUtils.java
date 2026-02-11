@@ -1,6 +1,5 @@
 package io.appmetrica.analytics.impl.utils;
 
-import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import io.appmetrica.analytics.coreutils.internal.StringUtils;
@@ -31,7 +30,7 @@ public class StartupUtils {
     @NonNull
     public static Map<String, String> decodeClids(@Nullable final String encoded) {
         Map<String, String> result = new HashMap<String, String>();
-        if (TextUtils.isEmpty(encoded) == false) {
+        if (!StringUtils.isNullOrEmpty(encoded)) {
             String[] pairs = encoded.split(PAIR_SEPARATOR);
             for (String pair : pairs) {
                 int i = pair.indexOf(KEY_VALUE_SEPARATOR);
@@ -76,11 +75,11 @@ public class StartupUtils {
     }
 
     private static boolean isValidClidValue(final String value) {
-        return !TextUtils.isEmpty(value) && ParseUtils.parseLong(value, -1) != -1;
+        return !StringUtils.isNullOrEmpty(value) && ParseUtils.parseLong(value, -1) != -1;
     }
 
     private static boolean isValidClidKey(final String key) {
-        return !TextUtils.isEmpty(key)
+        return !StringUtils.isNullOrEmpty(key)
                 && !key.contains(":") && !key.contains(",") && !key.contains("&");
     }
 }

@@ -5,17 +5,15 @@ import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.network.CompositeExecutionPolicy
 import io.appmetrica.analytics.impl.network.ConnectionBasedExecutionPolicy
 import io.appmetrica.analytics.impl.network.ReporterRestrictionBasedPolicy
+import io.appmetrica.analytics.impl.network.UserAgentProvider
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
 import io.appmetrica.analytics.testutils.constructionRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
-import org.robolectric.RobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
 internal class NetworkContextImplTest : CommonTest() {
 
     @get:Rule
@@ -32,6 +30,9 @@ internal class NetworkContextImplTest : CommonTest() {
 
     @get:Rule
     val networkApiMockedConstructionRule = constructionRule<SimpleNetworkApiImpl>()
+
+    @get:Rule
+    val userAgentProviderRule = constructionRule<UserAgentProvider>()
 
     private val context = mock<Context>()
 

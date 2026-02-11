@@ -4,7 +4,6 @@ import android.content.Intent
 import io.appmetrica.analytics.testutils.CommonTest
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.kotlin.clearInvocations
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.inOrder
@@ -12,9 +11,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
-import org.robolectric.RobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
 internal class DeeplinkConsumerTest : CommonTest() {
 
     private val reporter = mock<IMainReporter>()

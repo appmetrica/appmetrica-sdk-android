@@ -4,12 +4,9 @@ import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.SoftAssertions
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
-import org.robolectric.RobolectricTestRunner
 import java.util.Currency
 
-@RunWith(RobolectricTestRunner::class)
 class RevenueTest : CommonTest() {
 
     @Test

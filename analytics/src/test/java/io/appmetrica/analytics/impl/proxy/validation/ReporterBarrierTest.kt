@@ -11,11 +11,8 @@ import io.appmetrica.analytics.impl.crash.jvm.client.UnhandledException
 import io.appmetrica.analytics.profile.UserProfile
 import io.appmetrica.analytics.testutils.CommonTest
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
-import org.robolectric.RobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
 internal class ReporterBarrierTest : CommonTest() {
 
     private val mBarrier = ReporterBarrier()

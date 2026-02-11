@@ -7,12 +7,9 @@ import io.appmetrica.analytics.testutils.constructionRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.Mockito.mock
 import org.mockito.kotlin.doReturn
-import org.robolectric.RobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
 internal class PermissionsCheckerTest : CommonTest() {
 
     private val context: Context = mock()

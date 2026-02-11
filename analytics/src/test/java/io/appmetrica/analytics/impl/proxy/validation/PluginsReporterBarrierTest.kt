@@ -5,12 +5,9 @@ import io.appmetrica.analytics.plugins.PluginErrorDetails
 import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
-import org.robolectric.RobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
 internal class PluginsReporterBarrierTest : CommonTest() {
 
     private val errorDetails: PluginErrorDetails = mock()

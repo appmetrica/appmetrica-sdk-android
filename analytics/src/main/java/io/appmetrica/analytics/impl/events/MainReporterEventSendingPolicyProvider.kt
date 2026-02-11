@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.events
 
-import android.text.TextUtils
+import io.appmetrica.analytics.coreutils.internal.StringUtils
 import io.appmetrica.analytics.coreutils.internal.services.FrameworkDetector
 import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.component.CommonArguments
@@ -34,5 +34,5 @@ internal class MainReporterEventSendingPolicyProvider {
     }
 
     private fun shouldUseNativeImpl() = FrameworkDetector.isNative() &&
-        TextUtils.isEmpty(GlobalServiceLocator.getInstance().extraMetaInfoRetriever.pluginId)
+        StringUtils.isNullOrEmpty(GlobalServiceLocator.getInstance().extraMetaInfoRetriever.pluginId)
 }

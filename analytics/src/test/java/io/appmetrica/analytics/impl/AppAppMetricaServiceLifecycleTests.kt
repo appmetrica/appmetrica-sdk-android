@@ -6,8 +6,8 @@ import android.net.Uri
 import android.os.Process
 import io.appmetrica.analytics.testutils.CommonTest
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.kotlin.any
+import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.inOrder
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
@@ -16,9 +16,7 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
-import org.robolectric.RobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
 internal class AppAppMetricaServiceLifecycleTests : CommonTest() {
 
     private val observer: AppMetricaServiceLifecycle.LifecycleObserver = mock()
@@ -809,25 +807,25 @@ internal class AppAppMetricaServiceLifecycleTests : CommonTest() {
     }
 
     private fun prepareIntentWithClientActionAndMetricaProcess(): Intent {
-        return prepareIntentWithWithActionAndPid(ACTION_CLIENT_CONNECTION, Process.myPid())
+        return prepareIntentWithWithActionAndPid(Process.myPid())
     }
 
     private fun prepareIntentWithClientActionAndNonMetricaProcess(): Intent {
-        return prepareIntentWithWithActionAndPid(ACTION_CLIENT_CONNECTION, Process.myPid() + 1)
+        return prepareIntentWithWithActionAndPid(Process.myPid() + 1)
     }
 
-    private fun prepareIntentWithWithActionAndPid(action: String, pid: Int): Intent {
+    private fun prepareIntentWithWithActionAndPid(pid: Int): Intent {
         val intent = mock<Intent>()
-        whenever(intent.action).thenReturn(action)
-        whenever(intent.data)
-            .thenReturn(
-                Uri.Builder()
-                    .scheme("metrica")
-                    .authority("com.yandex.test.package.name")
-                    .path("client")
-                    .appendQueryParameter("pid", pid.toString())
-                    .build()
-            )
+        whenever(intent.action).thenReturn(ACTION_CLIENT_CONNECTION)
+
+        val uri = mock<Uri> {
+            on { scheme } doReturn ("metrica")
+            on { authority } doReturn ("com.yandex.test.package.name")
+            on { path } doReturn ("client")
+            on { getQueryParameter("pid") } doReturn (pid.toString())
+        }
+
+        whenever(intent.data).thenReturn(uri)
         return intent
     }
 

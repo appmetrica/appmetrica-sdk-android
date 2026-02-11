@@ -8,14 +8,11 @@ import io.appmetrica.analytics.networktasks.internal.RetryPolicyConfig
 import io.appmetrica.analytics.testutils.CommonTest
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
-import org.robolectric.RobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
 internal class StartupStateStorageTest : CommonTest() {
 
     private val modelStorage: ProtobufStateStorage<StartupStateModel> = mock()

@@ -7,12 +7,9 @@ import io.appmetrica.analytics.testutils.LogRule
 import io.appmetrica.analytics.testutils.staticRule
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.kotlin.any
 import org.mockito.kotlin.eq
-import org.robolectric.RobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
 internal class SdkUtilsTest : CommonTest() {
 
     @get:Rule

@@ -1,20 +1,18 @@
 package io.appmetrica.analytics.impl.db.storage
 
-import android.content.Context
 import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.analytics.testutils.ContextRule
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
-import org.robolectric.RobolectricTestRunner
-import org.robolectric.RuntimeEnvironment
 
-@RunWith(RobolectricTestRunner::class)
 internal class DatabaseFullPathProviderImplTest : CommonTest() {
 
-    private lateinit var context: Context
+    @get:Rule
+    val contextRule = ContextRule()
+    private val context by contextRule
 
     private val simpleName = "simplepath"
     private val preparedPath = "preparedpath"
@@ -22,14 +20,7 @@ internal class DatabaseFullPathProviderImplTest : CommonTest() {
         on { preparePath(simpleName) } doReturn preparedPath
     }
 
-    private lateinit var databaseFullPathProviderImpl: DatabaseFullPathProviderImpl
-
-    @Before
-    fun setUp() {
-        context = RuntimeEnvironment.getApplication()
-
-        databaseFullPathProviderImpl = DatabaseFullPathProviderImpl(relativePathFormer)
-    }
+    private val databaseFullPathProviderImpl by setUp { DatabaseFullPathProviderImpl(relativePathFormer) }
 
     @Test
     fun fullPath() {

@@ -15,7 +15,6 @@ import io.appmetrica.analytics.testutils.constructionRule
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.Mockito.verifyNoInteractions
 import org.mockito.kotlin.any
 import org.mockito.kotlin.argumentCaptor
@@ -26,9 +25,7 @@ import org.mockito.kotlin.stubbing
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
-import org.robolectric.RobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
 internal class AppMetricaPluginsProxyTest : CommonTest() {
 
     @get:Rule

@@ -5,7 +5,6 @@ import io.appmetrica.analytics.testutils.ClientServiceLocatorRule
 import io.appmetrica.analytics.testutils.CommonTest
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito
 import org.mockito.Mockito.any
@@ -16,9 +15,6 @@ import org.mockito.invocation.InvocationOnMock
 import org.mockito.kotlin.inOrder
 import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
-import org.robolectric.RobolectricTestRunner
-
-@RunWith(RobolectricTestRunner::class)
 
 internal class AppStatusMonitorTest : CommonTest() {
 

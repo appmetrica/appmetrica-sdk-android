@@ -1,11 +1,11 @@
 package io.appmetrica.analytics.impl.startup
 
-import io.appmetrica.analytics.AppMetricaConfig
 import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
 import io.appmetrica.analytics.impl.DistributionSource
 import io.appmetrica.analytics.impl.clids.ClidsInfo
 import io.appmetrica.analytics.impl.client.ClientConfiguration
 import io.appmetrica.analytics.impl.client.ProcessConfiguration
+import io.appmetrica.analytics.impl.network.UserAgentProvider
 import io.appmetrica.analytics.impl.request.StartupRequestConfig
 import io.appmetrica.analytics.impl.startup.parsing.StartupParser
 import io.appmetrica.analytics.impl.startup.parsing.StartupResult
@@ -13,6 +13,7 @@ import io.appmetrica.analytics.impl.utils.StartupUtils
 import io.appmetrica.analytics.internal.CounterConfiguration
 import io.appmetrica.analytics.networktasks.internal.NetworkTask
 import io.appmetrica.analytics.networktasks.internal.RetryPolicyConfig
+import io.appmetrica.analytics.testutils.ContextRule
 import io.appmetrica.analytics.testutils.constructionRule
 import net.bytebuddy.utility.RandomString
 import org.assertj.core.api.Assertions.assertThat
@@ -20,22 +21,23 @@ import org.json.JSONObject
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.kotlin.any
 import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
-import org.robolectric.RobolectricTestRunner
-import org.robolectric.RuntimeEnvironment
 import java.util.UUID
 
-@RunWith(RobolectricTestRunner::class)
 internal class StartupUnitGeneralTest : StartupUnitBaseTest() {
 
     @get:Rule
     val startupTaskMockedConstructionRule = constructionRule<NetworkTask>()
+
+    @get:Rule
+    val userAgentProviderRule = constructionRule<UserAgentProvider> {
+        on { userAgent } doReturn "userAgent"
+    }
 
     @Before
     override fun setup() {
@@ -61,17 +63,14 @@ internal class StartupUnitGeneralTest : StartupUnitBaseTest() {
     @Test
     fun constructorWithCustomHosts() {
         val hosts = listOf("first", "second")
-        val counterConfiguration = CounterConfiguration()
-        counterConfiguration.applyFromConfig(
-            AppMetricaConfig.newConfigBuilder(UUID.randomUUID().toString())
-                .withCustomHosts(hosts)
-                .build()
-        )
-        val processConfiguration = ProcessConfiguration(
-            RuntimeEnvironment.getApplication(),
-            dataResultReceiver
-        )
-        processConfiguration.customHosts = hosts
+        val counterConfiguration = mock<CounterConfiguration> {
+            on { uuid } doReturn UUID.randomUUID().toString()
+        }
+
+        val processConfiguration = mock<ProcessConfiguration> {
+            on { customHosts } doReturn hosts
+        }
+
         val arguments = StartupRequestConfig.Arguments(
             ClientConfiguration(
                 processConfiguration,
@@ -119,7 +118,7 @@ internal class StartupUnitGeneralTest : StartupUnitBaseTest() {
         val error = StartupError.NETWORK
         startupUnit.onRequestError(error)
         verify(startupResultListener)
-            .onStartupError(RuntimeEnvironment.getApplication().packageName, error, startupState)
+            .onStartupError(ContextRule.PACKAGE_NAME, error, startupState)
     }
 
     @Test

@@ -4,10 +4,7 @@ import io.appmetrica.analytics.impl.crash.AppMetricaThrowable
 import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
 internal class ReporterSynchronousStageExecutorTest : CommonTest() {
 
     private val synchronousStageExecutor = ReporterSynchronousStageExecutor()

@@ -1,22 +1,21 @@
 package io.appmetrica.analytics.impl.db.storage
 
-import android.content.Context
 import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.analytics.testutils.ContextRule
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
-import org.robolectric.RobolectricTestRunner
-import org.robolectric.RuntimeEnvironment
 import java.io.File
 
-@RunWith(RobolectricTestRunner::class)
 internal class OuterRootDatabaseFullPathProviderTest : CommonTest() {
 
-    private lateinit var context: Context
-    private lateinit var root: File
+    @get:Rule
+    val contextRule = ContextRule()
+    private val context by contextRule
+
+    private val root: File by setUp { File(contextRule.filesDir, "root_dir") }
 
     private val simplePath = "simple"
     private val relativePath = "relative/path"
@@ -25,14 +24,8 @@ internal class OuterRootDatabaseFullPathProviderTest : CommonTest() {
         on { preparePath(simplePath) } doReturn relativePath
     }
 
-    private lateinit var outerRootDatabaseFullPathProvider: OuterRootDatabaseFullPathProvider
-
-    @Before
-    fun setUp() {
-        context = RuntimeEnvironment.getApplication()
-        root = File(context.dataDir, "root_dir")
-
-        outerRootDatabaseFullPathProvider = OuterRootDatabaseFullPathProvider(root, relativePathFormer)
+    private val outerRootDatabaseFullPathProvider by setUp {
+        OuterRootDatabaseFullPathProvider(root, relativePathFormer)
     }
 
     @Test

@@ -10,12 +10,9 @@ import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.kotlin.inOrder
 import org.mockito.kotlin.mock
-import org.robolectric.RobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
 internal class DefaultServiceComponentsInitializerTest : CommonTest() {
 
     private val context = mock<Context>()

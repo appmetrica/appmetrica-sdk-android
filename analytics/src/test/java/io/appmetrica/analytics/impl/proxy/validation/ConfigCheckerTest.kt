@@ -3,10 +3,7 @@ package io.appmetrica.analytics.impl.proxy.validation
 import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
 internal class ConfigCheckerTest : CommonTest() {
 
     private var configChecker = ConfigChecker("")

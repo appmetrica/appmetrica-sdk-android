@@ -4,11 +4,8 @@ import io.appmetrica.analytics.AdvIdentifiersResult.AdvId
 import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
 import io.appmetrica.analytics.testutils.CommonTest
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
-import org.robolectric.RobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
 class AdvIdentifiersResultTest : CommonTest() {
 
     @Test

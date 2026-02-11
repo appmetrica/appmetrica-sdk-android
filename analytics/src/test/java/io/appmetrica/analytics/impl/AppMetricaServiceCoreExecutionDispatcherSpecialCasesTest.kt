@@ -3,15 +3,12 @@ package io.appmetrica.analytics.impl
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor
 import io.appmetrica.analytics.testutils.CommonTest
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.Mockito
 import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.clearInvocations
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
-import org.robolectric.RobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
 internal class AppMetricaServiceCoreExecutionDispatcherSpecialCasesTest : CommonTest() {
 
     private val executor: ICommonExecutor = mock()

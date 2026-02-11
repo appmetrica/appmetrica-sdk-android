@@ -13,16 +13,13 @@ import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.Mockito
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.whenever
-import org.robolectric.RobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
 internal class ForceStartupHandlerTest : CommonTest() {
 
     private val advIdTrackingEnabled = true
@@ -50,8 +47,8 @@ internal class ForceStartupHandlerTest : CommonTest() {
         true
     )
 
-    private val bundle = Bundle().apply {
-        putParcelable(IdentifiersData.BUNDLE_KEY, identifiersData)
+    private val bundle: Bundle = mock {
+        on { getParcelable<IdentifiersData>(IdentifiersData.BUNDLE_KEY) } doReturn identifiersData
     }
 
     private val counterReport: CounterReport = mock {
@@ -72,7 +69,10 @@ internal class ForceStartupHandlerTest : CommonTest() {
 
     @Test
     fun emptyBundle() {
-        whenever(counterReport.payload).thenReturn(Bundle())
+        val emptyBundle: Bundle = mock {
+            on { getParcelable<IdentifiersData>(IdentifiersData.BUNDLE_KEY) } doReturn null
+        }
+        whenever(counterReport.payload).thenReturn(emptyBundle)
         forceStartupHandler.process(counterReport, commutationClientUnit)
         verify(commutationDispatcherComponent).provokeStartupOrGetCurrentState(null)
     }
@@ -80,9 +80,10 @@ internal class ForceStartupHandlerTest : CommonTest() {
     @Test
     fun filledBundle() {
         val identifiersData = Mockito.mock(IdentifiersData::class.java)
-        val bundle = Bundle()
-        bundle.putParcelable(IdentifiersData.BUNDLE_KEY, identifiersData)
-        whenever(counterReport.payload).thenReturn(bundle)
+        val filledBundle: Bundle = mock {
+            on { getParcelable<IdentifiersData>(IdentifiersData.BUNDLE_KEY) } doReturn identifiersData
+        }
+        whenever(counterReport.payload).thenReturn(filledBundle)
         forceStartupHandler.process(counterReport, commutationClientUnit)
         verify(commutationDispatcherComponent).provokeStartupOrGetCurrentState(identifiersData)
     }
@@ -103,7 +104,10 @@ internal class ForceStartupHandlerTest : CommonTest() {
             mock(),
             false
         )
-        bundle.putParcelable(IdentifiersData.BUNDLE_KEY, identifierDataWithFalse)
+        val bundleWithFalse: Bundle = mock {
+            on { getParcelable<IdentifiersData>(IdentifiersData.BUNDLE_KEY) } doReturn identifierDataWithFalse
+        }
+        whenever(counterReport.payload).thenReturn(bundleWithFalse)
         forceStartupHandler.process(counterReport, commutationClientUnit)
         val arguments = CommonArguments.ReporterArguments(counterConfiguration, emptyMap())
         whenever(commutationDispatcherComponent.configuration).thenReturn(arguments)

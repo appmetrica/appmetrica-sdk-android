@@ -8,12 +8,9 @@ import org.json.JSONArray
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.kotlin.whenever
-import org.robolectric.RobolectricTestRunner
 import org.skyscreamer.jsonassert.JSONAssert
 
-@RunWith(RobolectricTestRunner::class)
 internal class AdRevenueSupportedSourcesNativeProviderTest : CommonTest() {
 
     @get:Rule

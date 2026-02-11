@@ -1,5 +1,6 @@
 package io.appmetrica.analytics.testutils
 
+import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor
@@ -42,5 +43,24 @@ object MockProvider {
     fun mockedBlockingHandler() = mock<Handler> {
         on { post(any()) } doAnswer blockingRunnableAnswer
         on { postDelayed(any(), any()) } doAnswer blockingRunnableAnswer
+    }
+
+    @JvmStatic
+    fun mockBundle(initialData: Map<String, Any?> = emptyMap()): Bundle {
+        val data = mutableMapOf<String, Any?>()
+        data.putAll(initialData)
+
+        return mock {
+            on { putBundle(any(), any()) } doAnswer { invocation ->
+                data[invocation.getArgument(0)] = invocation.getArgument(1)
+                null
+            }
+            on { getBundle(any<String>()) } doAnswer { invocation ->
+                data[invocation.getArgument(0)] as? Bundle
+            }
+            on { keySet() } doAnswer {
+                data.keys
+            }
+        }
     }
 }

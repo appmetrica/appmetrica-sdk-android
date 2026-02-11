@@ -31,10 +31,14 @@ class ContextRule : ExternalResource() {
     var databaseDir: File? = null
         private set
 
+    var dataDir: File? = null
+        private set
+
     public override fun before() {
         filesDir = createTempDirectory("files_dir").toFile()
         noBackupDir = createTempDirectory("no_backup_dir").toFile()
         databaseDir = createTempDirectory("database_dir").toFile()
+        dataDir = createTempDirectory("data").toFile()
         val displayMetrics = mock<DisplayMetrics>()
         resources = mock<Resources> {
             on { getDisplayMetrics() } doReturn displayMetrics
@@ -47,6 +51,7 @@ class ContextRule : ExternalResource() {
             on { resources } doReturn resources
             on { filesDir } doReturn filesDir
             on { noBackupFilesDir } doReturn noBackupDir
+            on { dataDir } doReturn dataDir
             on { getSharedPreferences(any(), any()) } doReturn sharedPreferences
             on { getDatabasePath(any()) } doAnswer {
                 val dbName = it.arguments.first() as String
@@ -60,6 +65,7 @@ class ContextRule : ExternalResource() {
         filesDir?.deleteRecursively()
         noBackupDir?.deleteRecursively()
         databaseDir?.deleteRecursively()
+        dataDir?.deleteRecursively()
     }
 
     operator fun getValue(thisRef: Any?, property: KProperty<*>): Context {

@@ -20,6 +20,7 @@ import io.appmetrica.analytics.impl.utils.DeviceIdGenerator
 import io.appmetrica.analytics.internal.CounterConfiguration
 import io.appmetrica.analytics.internal.IdentifiersResult
 import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.analytics.testutils.ContextRule
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
 import io.appmetrica.analytics.testutils.ServiceMigrationCheckedRule
 import io.appmetrica.analytics.testutils.TestUtils
@@ -29,24 +30,29 @@ import org.junit.rules.RuleChain
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
-import org.robolectric.RuntimeEnvironment
 import java.util.UUID
 
 internal open class StartupUnitBaseTest : CommonTest() {
 
+    @get:Rule
+    val contextRule = ContextRule()
+
+    val context by contextRule
     private val startupState = TestUtils.createDefaultStartupState()
 
     val dataResultReceiver: DataResultReceiver = mock()
 
-    val sdkConfig = StartupRequestConfig.Arguments(
-        ClientConfiguration(
-            ProcessConfiguration(
-                RuntimeEnvironment.getApplication(),
-                dataResultReceiver
-            ),
-            CounterConfiguration()
+    val sdkConfig by lazy {
+        StartupRequestConfig.Arguments(
+            ClientConfiguration(
+                ProcessConfiguration(
+                    context,
+                    dataResultReceiver
+                ),
+                CounterConfiguration()
+            )
         )
-    )
+    }
 
     private val collectingFlags: CollectingFlags = mock()
 
@@ -88,26 +94,29 @@ internal open class StartupUnitBaseTest : CommonTest() {
     val firstStartupServerTime = 5000L
 
     val componentId: ComponentId = mock {
-        on { `package` } doReturn RuntimeEnvironment.getApplication().packageName
+        on { `package` } doReturn ContextRule.PACKAGE_NAME
     }
 
     val startupStateHolder: StartupStateHolder = mock()
 
-    val startupUnitComponents: StartupUnitComponents = mock {
-        on { requestConfigArguments } doReturn sdkConfig
-        on { packageName } doReturn RuntimeEnvironment.getApplication().packageName
-        on { context } doReturn RuntimeEnvironment.getApplication()
-        on { resultListener } doReturn startupResultListener
-        on { startupStateStorage } doReturn startupStateStorage
-        on { timeProvider } doReturn timeProvider
-        on { clidsStorage } doReturn clidsStorage
-        on { clidsStateChecker } doReturn clidsStateChecker
-        on { startupConfigurationHolder } doReturn startupConfigurationHolder
-        on { multiProcessSafeUuidProvider } doReturn uuidProvider
-        on { uuidValidator } doReturn uuidValidator
-        on { deviceIdGenerator } doReturn deviceIdGenerator
-        on { componentId } doReturn componentId
-        on { startupStateHolder } doReturn startupStateHolder
+    val startupUnitComponents: StartupUnitComponents by lazy {
+        val sdkConfig = sdkConfig
+        mock {
+            on { requestConfigArguments } doReturn sdkConfig
+            on { packageName } doReturn ContextRule.PACKAGE_NAME
+            on { context } doReturn context
+            on { resultListener } doReturn startupResultListener
+            on { startupStateStorage } doReturn startupStateStorage
+            on { timeProvider } doReturn timeProvider
+            on { clidsStorage } doReturn clidsStorage
+            on { clidsStateChecker } doReturn clidsStateChecker
+            on { startupConfigurationHolder } doReturn startupConfigurationHolder
+            on { multiProcessSafeUuidProvider } doReturn uuidProvider
+            on { uuidValidator } doReturn uuidValidator
+            on { deviceIdGenerator } doReturn deviceIdGenerator
+            on { componentId } doReturn componentId
+            on { startupStateHolder } doReturn startupStateHolder
+        }
     }
 
     @get:Rule

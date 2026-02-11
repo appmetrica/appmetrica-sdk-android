@@ -1,10 +1,8 @@
 package io.appmetrica.analytics.impl.location.network
 
 import android.content.Context
-import io.appmetrica.analytics.BuildConfig
 import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
 import io.appmetrica.analytics.coreutils.internal.executors.BlockingExecutor
-import io.appmetrica.analytics.coreutils.internal.network.UserAgent
 import io.appmetrica.analytics.impl.CounterReport
 import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.LazyReportConfigProvider
@@ -14,10 +12,10 @@ import io.appmetrica.analytics.impl.Utils
 import io.appmetrica.analytics.impl.component.ComponentUnit
 import io.appmetrica.analytics.impl.db.VitalComponentDataProvider
 import io.appmetrica.analytics.impl.network.ConnectionBasedExecutionPolicy
-import io.appmetrica.analytics.impl.network.Constants
 import io.appmetrica.analytics.impl.network.HostRetryInfoProviderImpl
 import io.appmetrica.analytics.impl.network.NetworkHost
 import io.appmetrica.analytics.impl.network.NetworkTaskFactory
+import io.appmetrica.analytics.impl.network.UserAgentProvider
 import io.appmetrica.analytics.impl.request.StartupRequestConfig
 import io.appmetrica.analytics.impl.request.appenders.ReportParamsAppender
 import io.appmetrica.analytics.impl.request.appenders.StartupParamsAppender
@@ -33,25 +31,19 @@ import io.appmetrica.analytics.testutils.ConstructionArgumentCaptor
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
 import io.appmetrica.analytics.testutils.MockedConstructionRule
 import io.appmetrica.analytics.testutils.MockedStaticRule
+import io.appmetrica.analytics.testutils.constructionRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.Mockito
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
-import org.robolectric.RobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
 internal class NetworkTaskFactoryTest : CommonTest() {
 
-    private val customUserAgent = UserAgent.getFor(
-        Constants.Config.LIBRARY_ID,
-        BuildConfig.VERSION_NAME,
-        BuildConfig.BUILD_NUMBER
-    )
+    private val customUserAgent = "CustomUserAgent"
     val context = mock<Context>()
     val counterReport = mock<CounterReport>()
     val vitalComponentDataProvider = mock<VitalComponentDataProvider>()
@@ -89,6 +81,11 @@ internal class NetworkTaskFactoryTest : CommonTest() {
 
     @get:Rule
     val startupParamsAppenderMockRule = MockedConstructionRule(StartupParamsAppender::class.java)
+
+    @get:Rule
+    val userAgerAgentProviderRule = constructionRule<UserAgentProvider> {
+        on { userAgent } doReturn customUserAgent
+    }
 
     @Before
     fun setUp() {

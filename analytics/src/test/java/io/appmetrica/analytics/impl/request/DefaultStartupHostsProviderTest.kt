@@ -8,14 +8,11 @@ import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.Mockito
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.stubbing
-import org.robolectric.RobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
 internal class DefaultStartupHostsProviderTest : CommonTest() {
 
     private val resourceRetriever = mock<StringArrayResourceRetriever>()

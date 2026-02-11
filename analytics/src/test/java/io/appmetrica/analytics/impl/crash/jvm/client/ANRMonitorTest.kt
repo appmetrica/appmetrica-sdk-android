@@ -3,13 +3,10 @@ package io.appmetrica.analytics.impl.crash.jvm.client
 import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
 import io.appmetrica.analytics.testutils.CommonTest
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
-import org.robolectric.RobolectricTestRunner
 import java.util.concurrent.atomic.AtomicInteger
 
-@RunWith(RobolectricTestRunner::class)
 internal class ANRMonitorTest : CommonTest() {
 
     private val defaultListener = mock<ANRMonitor.Listener>()

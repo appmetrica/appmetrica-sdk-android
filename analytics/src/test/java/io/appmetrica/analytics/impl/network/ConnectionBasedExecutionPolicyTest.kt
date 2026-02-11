@@ -10,12 +10,12 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.junit.runners.Parameterized
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
-import org.robolectric.ParameterizedRobolectricTestRunner
 
-@RunWith(ParameterizedRobolectricTestRunner::class)
+@RunWith(Parameterized::class)
 internal class ConnectionBasedExecutionPolicyTest(
     private val networkType: NetworkType,
     private val expectedValue: Boolean
@@ -23,7 +23,7 @@ internal class ConnectionBasedExecutionPolicyTest(
 
     companion object {
 
-        @ParameterizedRobolectricTestRunner.Parameters(name = "Do not should start task in network {0}? - {1}")
+        @Parameterized.Parameters(name = "Do not should start task in network {0}? - {1}")
         @JvmStatic
         fun data(): Collection<Array<Any>> {
             return listOf(

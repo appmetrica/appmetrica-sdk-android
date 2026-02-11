@@ -1,8 +1,8 @@
 package io.appmetrica.analytics.impl.utils.validation;
 
-import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import io.appmetrica.analytics.coreutils.internal.StringUtils;
 
 public class NonEmptyStringValidator implements Validator<String> {
 
@@ -14,7 +14,7 @@ public class NonEmptyStringValidator implements Validator<String> {
 
     @Override
     public ValidationResult validate(@Nullable String data) {
-        if (TextUtils.isEmpty(data)) {
+        if (StringUtils.isNullOrEmpty(data)) {
             return ValidationResult.failed(this, mObjectDescription + " is empty.");
         } else {
             return ValidationResult.successful(this);
