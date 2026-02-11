@@ -5,6 +5,7 @@ plugins {
     id("appmetrica-update-version")
     id("appmetrica-public-publish")
     alias(appMetricaLibs.plugins.appMetricaCheckNamespace)
+    alias(appMetricaLibs.plugins.appMetricaNoStringDependencies)
 }
 
 group = Constants.Library.group

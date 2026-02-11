@@ -1,6 +1,5 @@
 import com.android.build.gradle.internal.dsl.BuildType
 import io.appmetrica.analytics.gradle.Constants
-import io.appmetrica.analytics.gradle.Deps
 import io.appmetrica.analytics.gradle.Hosts
 import io.appmetrica.analytics.gradle.publishing.PublishingInfoFlavorExtension
 import io.appmetrica.gradle.aarcheck.agp.aarCheck
@@ -164,7 +163,7 @@ testSplit {
 // ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
 dependencies {
-    api("com.android.installreferrer:installreferrer:${Deps.referrerVersion}")
+    api(appMetricaLibs.installreferrer)
 
     implementation(project(":appsetid"))
     implementation(project(":core-api"))
@@ -185,5 +184,5 @@ dependencies {
     runtimeOnly(project(":screenshot"))
 
     testImplementation(project(":identifiers"))
-    testImplementation("com.google.android.gms:play-services-location:${Deps.gmsLocationVersion}")
+    testImplementation(appMetricaLibs.playServicesLocation)
 }

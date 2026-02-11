@@ -16,6 +16,8 @@ import io.appmetrica.gradle.nologs.NoLogsExtension
 import io.appmetrica.gradle.nologs.NoLogsPlugin
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.artifacts.VersionCatalog
+import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
@@ -24,6 +26,7 @@ import org.gradle.kotlin.dsl.getting
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.util.Locale
+import kotlin.jvm.optionals.getOrNull
 
 class AppMetricaCommonModulePlugin : Plugin<Project> {
     override fun apply(project: Project) {
@@ -52,8 +55,10 @@ class AppMetricaCommonModulePlugin : Plugin<Project> {
             val implementation by project.configurations.getting
             val compileOnly by project.configurations.getting
 
-            implementation("org.jetbrains.kotlin:kotlin-stdlib") // version is equal to plugin version
-            compileOnly("androidx.annotation:annotation:${Deps.androidX}")
+            val appMetricaLibs = project.versionCatalog("appMetricaLibs")
+
+            implementation(appMetricaLibs["kotlinStdlib"])
+            compileOnly(appMetricaLibs["androidxAnnotation"])
         }
 
         project.tasks.withType<KotlinCompile> {
@@ -166,11 +171,14 @@ class AppMetricaCommonModulePlugin : Plugin<Project> {
             val testCompileOnly by configurations.getting
             val testImplementation by configurations.getting
 
-            testCompileOnly("androidx.annotation:annotation:${Deps.androidX}")
+            val appMetricaLibs = project.versionCatalog("appMetricaLibs")
 
-            testImplementation("nl.jqno.equalsverifier:equalsverifier:3.15.2")
-            testImplementation("org.skyscreamer:jsonassert:1.5.0")
-            testImplementation("io.appmetrica.analytics:common_assertions")
+            testCompileOnly(appMetricaLibs["androidxAnnotation"])
+
+            testImplementation(appMetricaLibs["equalsverifier"])
+            testImplementation(appMetricaLibs["jsonassert"])
+
+            testImplementation(appMetricaLibs["commonAssertions"])
             testImplementation(findProject(":test-utils") ?: "io.appmetrica.analytics:test-utils")
         }
 
@@ -185,5 +193,15 @@ class AppMetricaCommonModulePlugin : Plugin<Project> {
                 }
             }
         }
+    }
+
+    private fun Project.versionCatalog(name: String): VersionCatalog {
+        return extensions
+            .getByType(VersionCatalogsExtension::class.java)
+            .named(name)
+    }
+
+    private operator fun VersionCatalog.get(name: String): Any {
+        return findLibrary(name).getOrNull()!!.get()
     }
 }

@@ -1,5 +1,3 @@
-import io.appmetrica.analytics.gradle.Deps
-
 plugins {
     id("appmetrica-module")
 }
@@ -16,5 +14,5 @@ android {
 
 dependencies {
     implementation(project(":core-api"))
-    implementation("com.google.android.gms:play-services-appset:${Deps.appSetIdVersion}")
+    implementation(appMetricaLibs.playServicesAppset)
 }

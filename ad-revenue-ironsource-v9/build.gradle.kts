@@ -21,6 +21,6 @@ dependencies {
     implementation(project(":logger"))
     implementation(project(":modules-api"))
 
-    compileOnly("com.unity3d.ads-mediation:mediation-sdk:9.0.0")
-    testImplementation("com.unity3d.ads-mediation:mediation-sdk:9.0.0")
+    compileOnly(appMetricaLibs.ironsourceV9)
+    testImplementation(appMetricaLibs.ironsourceV9)
 }

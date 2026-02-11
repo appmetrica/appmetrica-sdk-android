@@ -20,5 +20,5 @@ dependencies {
     implementation(project(":apphud"))
     implementation(project(":logger"))
 
-    implementation("com.apphud:ApphudSDK-Android:2.9.2")
+    implementation(appMetricaLibs.apphudV2)
 }

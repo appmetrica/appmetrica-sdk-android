@@ -69,5 +69,5 @@ dependencies {
     compileOnly(project(":ndkcrashes-api"))
     testImplementation(project(":ndkcrashes-api"))
 
-    implementation("io.appmetrica.analytics:analytics-common-logger:7.0.0")
+    implementation(appMetricaLibs.commonLogger)
 }

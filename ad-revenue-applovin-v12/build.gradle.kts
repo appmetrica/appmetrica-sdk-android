@@ -21,6 +21,6 @@ dependencies {
     implementation(project(":logger"))
     implementation(project(":modules-api"))
 
-    compileOnly("com.applovin:applovin-sdk:13.1.0")
-    testImplementation("com.applovin:applovin-sdk:13.1.0")
+    compileOnly(appMetricaLibs.applovin)
+    testImplementation(appMetricaLibs.applovin)
 }

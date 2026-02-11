@@ -1,5 +1,3 @@
-import io.appmetrica.analytics.gradle.Deps
-
 plugins {
     id("appmetrica-module")
 }
@@ -15,8 +13,8 @@ android {
 }
 
 dependencies {
-    compileOnly("com.google.android.gms:play-services-location:${Deps.gmsLocationVersion}")
-    testImplementation("com.google.android.gms:play-services-location:${Deps.gmsLocationVersion}")
+    compileOnly(appMetricaLibs.playServicesLocation)
+    testImplementation(appMetricaLibs.playServicesLocation)
 
     implementation(project(":logger"))
 }

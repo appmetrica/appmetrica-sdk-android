@@ -30,13 +30,6 @@ object Constants {
     }
 }
 
-object Deps {
-    const val androidX = "1.0.0"
-    const val appSetIdVersion = "16.1.0"
-    const val gmsLocationVersion = "21.0.1"
-    const val referrerVersion = "2.2"
-}
-
 object Hosts {
     const val defaultStartupHost = "https://startup.mobile.yandex.net/"
 }

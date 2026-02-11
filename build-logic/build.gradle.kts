@@ -30,8 +30,8 @@ gradlePlugin {
 
 dependencies {
     // https://asm.ow2.io/
-    implementation("org.ow2.asm:asm:9.6")
-
+    implementation(appMetricaLibs.asm)
+    // by source
     implementation(appMetricaLibs.appMetricaAarCheck)
     implementation(appMetricaLibs.appMetricaAndroidLibrary)
     implementation(appMetricaLibs.appMetricaMavenCentralPublish)

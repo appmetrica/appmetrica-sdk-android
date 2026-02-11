@@ -21,8 +21,8 @@ dependencies {
     implementation(project(":logger"))
     implementation(project(":modules-api"))
 
-    compileOnly("com.google.android.gms:play-services-ads:23.6.0")
-    testImplementation("com.google.android.gms:play-services-ads:23.6.0")
+    compileOnly(appMetricaLibs.playServicesAds)
+    testImplementation(appMetricaLibs.playServicesAds)
     // also supports 24.1.0
     // not added since minSdk = 23 for this version
 }
