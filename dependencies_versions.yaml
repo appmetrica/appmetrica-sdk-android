@@ -21,7 +21,7 @@
     group: "com.fyber"
     name: "fairbid-sdk"
     from: "1.0.0"
-    to: "3.65.0"
+    to: "3.66.1"
 - group: "io.appmetrica.analytics"
   name: "analytics-ad-revenue-ironsource-v7"
   dependencies:
@@ -99,7 +99,7 @@
     group: "com.apphud"
     name: "ApphudSDK-Android"
     from: "3.0.0"
-    to: "3.0.5"
+    to: "3.0.6"
 - group: "io.appmetrica.analytics"
   name: "analytics-appsetid"
   dependencies:
