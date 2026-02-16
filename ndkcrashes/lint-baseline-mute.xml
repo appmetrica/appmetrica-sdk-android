@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<issues format="6" by="lint 8.2.0" type="baseline" client="gradle" dependencies="false" name="AGP (8.2.0)" variant="all" version="8.2.0">
+
+    <issue
+        id="AnnotateVersionCheck"
+        message="This method should be annotated with `@ChecksSdkIntAtLeast(parameter=0)`"
+        errorLine1="    private fun isApiAchieved(levelOfApi: Int): Boolean {"
+        errorLine2="                ~~~~~~~~~~~~~">
+        <location
+            file="src/main/kotlin/io/appmetrica/analytics/ndkcrashes/impl/utils/AndroidUtils.kt"
+            line="10"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="Call requires API level 23 (current min is 21): `android.os.Process#is64Bit`"
+        errorLine1="                eq(Process.is64Bit()),"
+        errorLine2="                           ~~~~~~~">
+        <location
+            file="src/test/kotlin/io/appmetrica/analytics/ndkcrashes/NativeCrashClientModuleImplTest.kt"
+            line="105"
+            column="28"/>
+    </issue>
+
+    <issue
+        id="RobolectricUsage"
+        message="Robolectric is forbidden in new tests. Use mocks instead."
+        errorLine1="@RunWith(RobolectricTestRunner::class)"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/kotlin/io/appmetrica/analytics/ndkcrashes/impl/utils/AbiResolverTest.kt"
+            line="12"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="RobolectricUsage"
+        message="Robolectric is forbidden in new tests. Use mocks instead."
+        errorLine1="@RunWith(RobolectricTestRunner::class)"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/kotlin/io/appmetrica/analytics/ndkcrashes/impl/utils/AndroidUtilsTest.kt"
+            line="11"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="RobolectricUsage"
+        message="Robolectric is forbidden in new tests. Use mocks instead."
+        errorLine1="@RunWith(RobolectricTestRunner::class)"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/kotlin/io/appmetrica/analytics/ndkcrashes/NativeCrashClientModuleImplTest.kt"
+            line="30"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="RobolectricUsage"
+        message="Robolectric is forbidden in new tests. Use mocks instead."
+        errorLine1="@RunWith(RobolectricTestRunner::class)"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/kotlin/io/appmetrica/analytics/ndkcrashes/NativeCrashServiceModuleImplTest.kt"
+            line="31"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="RobolectricUsage"
+        message="Robolectric is forbidden in new tests. Use mocks instead."
+        errorLine1="@RunWith(RobolectricTestRunner::class)"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/kotlin/io/appmetrica/analytics/ndkcrashes/impl/NativeLibraryLoaderTest.kt"
+            line="16"
+            column="1"/>
+    </issue>
+
+</issues>

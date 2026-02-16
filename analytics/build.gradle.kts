@@ -87,31 +87,6 @@ android {
             buildConfigField("String", "SDK_DEPENDENCY", "\"binary\"")
         }
     }
-
-    lint {
-        // set to true to turn off analysis progress reporting by lint
-        quiet = false
-        // if true, stop the gradle build if errors are found
-        abortOnError = true
-        // if true, only report errors
-        ignoreWarnings = false
-        // if true, check all issues, including those that are off by default
-        checkAllWarnings = false
-        // if true, treat all warnings as errors
-        warningsAsErrors = true
-        ignoreTestSources = true
-        // if true, generate an XML report for use by for example Jenkins
-        xmlReport = true
-        xmlOutput = file("${project.buildDir}/reports/lint/lint-results.xml")
-        // if true, generate an HTML report (with issue explanations, sourcecode, etc)
-        htmlReport = true
-        htmlOutput = file("${project.buildDir}/reports/lint/lint.html")
-        lintConfig = file("$projectDir/lint.xml")
-        checkDependencies = false
-
-        disable += "GradleDependency"
-        disable += "LongLogTag"
-    }
 }
 
 protobuf {

@@ -24,8 +24,4 @@ android {
             java.srcDir("src/testImpl/java")
         }
     }
-
-    lint {
-        disable += "GradleDependency"
-    }
 }

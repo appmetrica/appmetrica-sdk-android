@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<issues format="6" by="lint 8.2.0" type="baseline" client="gradle" dependencies="false" name="AGP (8.2.0)" variant="all" version="8.2.0">
+
+    <issue
+        id="RobolectricUsage"
+        message="Robolectric is forbidden in new tests. Use mocks instead."
+        errorLine1="@RunWith(ParameterizedRobolectricTestRunner::class)"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/idsync/HashCodeEqualsTest.kt"
+            line="12"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="RobolectricUsage"
+        message="Robolectric is forbidden in new tests. Use mocks instead."
+        errorLine1="@RunWith(RobolectricTestRunner::class)"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/idsync/impl/precondition/IdSyncRequestControllerTest.kt"
+            line="34"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="RobolectricUsage"
+        message="Robolectric is forbidden in new tests. Use mocks instead."
+        errorLine1="@RunWith(RobolectricTestRunner::class)"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/idsync/impl/IdSyncRequestSenderTest.kt"
+            line="28"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="RobolectricUsage"
+        message="Robolectric is forbidden in new tests. Use mocks instead."
+        errorLine1="@RunWith(RobolectricTestRunner::class)"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/idsync/impl/IdSyncResultRealtimeReporterTest.kt"
+            line="42"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="RobolectricUsage"
+        message="Robolectric is forbidden in new tests. Use mocks instead."
+        errorLine1="@RunWith(RobolectricTestRunner::class)"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/idsync/impl/IdSyncResultRequestSenderTest.kt"
+            line="28"
+            column="1"/>
+    </issue>
+
+</issues>

@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<issues format="6" by="lint 8.2.0" type="baseline" client="gradle" dependencies="false" name="AGP (8.2.0)" variant="all" version="8.2.0">
+
+    <issue
+        id="MissingPermission"
+        message="Missing permissions required by Activity.registerScreenCaptureCallback: android.permission.DETECT_SCREEN_CAPTURE"
+        errorLine1="        verify(activity).registerScreenCaptureCallback("
+        errorLine2="        ^">
+        <location
+            file="src/test/java/io/appmetrica/analytics/screenshot/impl/captor/AndroidApiScreenshotCaptorTest.kt"
+            line="99"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="MissingPermission"
+        message="Missing permissions required by Activity.registerScreenCaptureCallback: android.permission.DETECT_SCREEN_CAPTURE"
+        errorLine1="        whenever(activity.registerScreenCaptureCallback(any(), any())).thenThrow(RuntimeException())"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/screenshot/impl/captor/AndroidApiScreenshotCaptorTest.kt"
+            line="113"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="MissingPermission"
+        message="Missing permissions required by Activity.registerScreenCaptureCallback: android.permission.DETECT_SCREEN_CAPTURE"
+        errorLine1="        verify(activity).registerScreenCaptureCallback("
+        errorLine2="        ^">
+        <location
+            file="src/test/java/io/appmetrica/analytics/screenshot/impl/captor/AndroidApiScreenshotCaptorTest.kt"
+            line="119"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="MissingPermission"
+        message="Missing permissions required by Activity.unregisterScreenCaptureCallback: android.permission.DETECT_SCREEN_CAPTURE"
+        errorLine1="        verify(activity).unregisterScreenCaptureCallback(any())"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/screenshot/impl/captor/AndroidApiScreenshotCaptorTest.kt"
+            line="135"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="MissingPermission"
+        message="Missing permissions required by Activity.registerScreenCaptureCallback: android.permission.DETECT_SCREEN_CAPTURE"
+        errorLine1="        verify(activity).registerScreenCaptureCallback("
+        errorLine2="        ^">
+        <location
+            file="src/test/java/io/appmetrica/analytics/screenshot/impl/captor/AndroidApiScreenshotCaptorTest.kt"
+            line="146"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="MissingPermission"
+        message="Missing permissions required by Activity.unregisterScreenCaptureCallback: android.permission.DETECT_SCREEN_CAPTURE"
+        errorLine1="        verify(activity).unregisterScreenCaptureCallback(screenCaptureCallback)"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/screenshot/impl/captor/AndroidApiScreenshotCaptorTest.kt"
+            line="155"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="MissingPermission"
+        message="Missing permissions required by Activity.unregisterScreenCaptureCallback: android.permission.DETECT_SCREEN_CAPTURE"
+        errorLine1="        whenever(activity.unregisterScreenCaptureCallback(any())).thenThrow(RuntimeException())"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/screenshot/impl/captor/AndroidApiScreenshotCaptorTest.kt"
+            line="160"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="MissingPermission"
+        message="Missing permissions required by Activity.unregisterScreenCaptureCallback: android.permission.DETECT_SCREEN_CAPTURE"
+        errorLine1="        verify(activity).unregisterScreenCaptureCallback(any())"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/screenshot/impl/captor/AndroidApiScreenshotCaptorTest.kt"
+            line="165"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="Call requires API level 28 (current min is 21): `android.content.Context#getMainExecutor`"
+        errorLine1="        on { mainExecutor } doReturn mainExecutor"
+        errorLine2="             ~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/screenshot/impl/captor/AndroidApiScreenshotCaptorTest.kt"
+            line="41"
+            column="14"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="Call requires API level 34 (current min is 21): `android.app.Activity#registerScreenCaptureCallback`"
+        errorLine1="        verify(activity).registerScreenCaptureCallback("
+        errorLine2="                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/screenshot/impl/captor/AndroidApiScreenshotCaptorTest.kt"
+            line="99"
+            column="26"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="Call requires API level 34 (current min is 21): `android.app.Activity.ScreenCaptureCallback#onScreenCaptured`"
+        errorLine1="        screenCaptureCallback.onScreenCaptured()"
+        errorLine2="                              ~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/screenshot/impl/captor/AndroidApiScreenshotCaptorTest.kt"
+            line="105"
+            column="31"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="Call requires API level 34 (current min is 21): `android.app.Activity#registerScreenCaptureCallback`"
+        errorLine1="        whenever(activity.registerScreenCaptureCallback(any(), any())).thenThrow(RuntimeException())"
+        errorLine2="                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/screenshot/impl/captor/AndroidApiScreenshotCaptorTest.kt"
+            line="113"
+            column="27"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="Call requires API level 34 (current min is 21): `android.app.Activity#registerScreenCaptureCallback`"
+        errorLine1="        verify(activity).registerScreenCaptureCallback("
+        errorLine2="                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/screenshot/impl/captor/AndroidApiScreenshotCaptorTest.kt"
+            line="119"
+            column="26"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="Call requires API level 34 (current min is 21): `android.app.Activity.ScreenCaptureCallback#onScreenCaptured`"
+        errorLine1="        screenCaptureCallback.onScreenCaptured()"
+        errorLine2="                              ~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/screenshot/impl/captor/AndroidApiScreenshotCaptorTest.kt"
+            line="125"
+            column="31"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="Call requires API level 34 (current min is 21): `android.app.Activity#unregisterScreenCaptureCallback`"
+        errorLine1="        verify(activity).unregisterScreenCaptureCallback(any())"
+        errorLine2="                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/screenshot/impl/captor/AndroidApiScreenshotCaptorTest.kt"
+            line="135"
+            column="26"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="Call requires API level 34 (current min is 21): `android.app.Activity#registerScreenCaptureCallback`"
+        errorLine1="        verify(activity).registerScreenCaptureCallback("
+        errorLine2="                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/screenshot/impl/captor/AndroidApiScreenshotCaptorTest.kt"
+            line="146"
+            column="26"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="Call requires API level 34 (current min is 21): `android.app.Activity#unregisterScreenCaptureCallback`"
+        errorLine1="        verify(activity).unregisterScreenCaptureCallback(screenCaptureCallback)"
+        errorLine2="                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/screenshot/impl/captor/AndroidApiScreenshotCaptorTest.kt"
+            line="155"
+            column="26"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="Call requires API level 34 (current min is 21): `android.app.Activity#unregisterScreenCaptureCallback`"
+        errorLine1="        whenever(activity.unregisterScreenCaptureCallback(any())).thenThrow(RuntimeException())"
+        errorLine2="                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/screenshot/impl/captor/AndroidApiScreenshotCaptorTest.kt"
+            line="160"
+            column="27"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="Call requires API level 34 (current min is 21): `android.app.Activity#unregisterScreenCaptureCallback`"
+        errorLine1="        verify(activity).unregisterScreenCaptureCallback(any())"
+        errorLine2="                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/screenshot/impl/captor/AndroidApiScreenshotCaptorTest.kt"
+            line="165"
+            column="26"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="Call requires API level 28 (current min is 21): `android.content.Context#getMainExecutor`"
+        errorLine1="        on { mainExecutor } doReturn mainExecutor"
+        errorLine2="             ~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/screenshot/impl/captor/ServiceScreenshotCaptorTest.kt"
+            line="46"
+            column="14"/>
+    </issue>
+
+    <issue
+        id="RobolectricUsage"
+        message="Robolectric is forbidden in new tests. Use mocks instead."
+        errorLine1="@RunWith(RobolectricTestRunner::class)"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/screenshot/impl/captor/AndroidApiScreenshotCaptorTest.kt"
+            line="30"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="RobolectricUsage"
+        message="Robolectric is forbidden in new tests. Use mocks instead."
+        errorLine1="@RunWith(RobolectricTestRunner::class)"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/screenshot/impl/BundleToClientScreenshotConfigConverterTest.kt"
+            line="15"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="RobolectricUsage"
+        message="Robolectric is forbidden in new tests. Use mocks instead."
+        errorLine1="@RunWith(RobolectricTestRunner::class)"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/screenshot/impl/captor/ContentObserverScreenshotCaptorTest.kt"
+            line="35"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="RobolectricUsage"
+        message="Robolectric is forbidden in new tests. Use mocks instead."
+        errorLine1="@RunWith(RobolectricTestRunner::class)"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/screenshot/impl/ScreenshotObserverTest.kt"
+            line="29"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="RobolectricUsage"
+        message="Robolectric is forbidden in new tests. Use mocks instead."
+        errorLine1="@RunWith(RobolectricTestRunner::class)"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/screenshot/impl/ServiceToBundleScreenshotConfigConverterTest.kt"
+            line="11"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="Recycle"
+        message="This `Cursor` should be freed up after use with `#close()`"
+        errorLine1="        verify(contentResolver).query("
+        errorLine2="                                ~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/screenshot/impl/ScreenshotObserverTest.kt"
+            line="102"
+            column="33"/>
+    </issue>
+
+    <issue
+        id="Recycle"
+        message="This `Cursor` should be freed up after use with `#close()`"
+        errorLine1="        verify(contentResolver).query("
+        errorLine2="                                ~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/screenshot/impl/ScreenshotObserverTest.kt"
+            line="119"
+            column="33"/>
+    </issue>
+
+    <issue
+        id="Recycle"
+        message="This `Cursor` should be freed up after use with `#close()`"
+        errorLine1="        verify(contentResolver).query("
+        errorLine2="                                ~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/screenshot/impl/ScreenshotObserverTest.kt"
+            line="136"
+            column="33"/>
+    </issue>
+
+    <issue
+        id="Recycle"
+        message="This `Cursor` should be freed up after use with `#close()`"
+        errorLine1="        verify(contentResolver).query("
+        errorLine2="                                ~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/screenshot/impl/ScreenshotObserverTest.kt"
+            line="153"
+            column="33"/>
+    </issue>
+
+    <issue
+        id="Recycle"
+        message="This `Cursor` should be freed up after use with `#close()`"
+        errorLine1="        verify(contentResolver).query("
+        errorLine2="                                ~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/screenshot/impl/ScreenshotObserverTest.kt"
+            line="170"
+            column="33"/>
+    </issue>
+
+</issues>

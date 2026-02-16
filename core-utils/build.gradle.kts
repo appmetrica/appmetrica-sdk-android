@@ -10,9 +10,6 @@ publishingInfo {
 
 android {
     namespace = "io.appmetrica.analytics.coreutils"
-    lint {
-        disable += "GradleDependency"
-    }
 }
 
 dependencies {

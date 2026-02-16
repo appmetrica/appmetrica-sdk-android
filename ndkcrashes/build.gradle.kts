@@ -42,10 +42,6 @@ android {
             enableLogs = true
         }
     }
-
-    lint {
-        disable += "LongLogTag"
-    }
 }
 
 if (project.property("ndkcrashes.native.enabled").toString().toBoolean()) {

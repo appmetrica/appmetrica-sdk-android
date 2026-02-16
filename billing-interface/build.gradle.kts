@@ -10,9 +10,6 @@ publishingInfo {
 
 android {
     namespace = "io.appmetrica.analytics.billinginterface"
-    lint {
-        disable += "LongLogTag"
-    }
 }
 
 dependencies {

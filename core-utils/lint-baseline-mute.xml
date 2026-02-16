@@ -1,0 +1,763 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<issues format="6" by="lint 8.2.0" type="baseline" client="gradle" dependencies="false" name="AGP (8.2.0)" variant="all" version="8.2.0">
+
+    <issue
+        id="MissingPermission"
+        message="Missing permissions required by TelephonyManager.getNetworkType: android.permission.READ_PHONE_STATE"
+        errorLine1="        on { networkType } doReturn legacyNetworkType"
+        errorLine2="        ~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/coreutils/internal/services/telephony/CellularNetworkTypeExtractorTest.kt"
+            line="33"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="MissingPermission"
+        message="Missing permissions required by TelephonyManager.getDataNetworkType: android.permission.READ_PHONE_STATE or android.permission.READ_BASIC_PHONE_STATE"
+        errorLine1="        on { dataNetworkType } doReturn actualNetworkType"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/coreutils/internal/services/telephony/CellularNetworkTypeExtractorTest.kt"
+            line="34"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="MissingPermission"
+        message="Missing permissions required by CellularNetworkTypeExtractor.getNetworkType: android.permission.READ_PHONE_STATE"
+        errorLine1="        assertThat(networkTypeExtractor.getNetworkType()).isEqualTo(legacyNetworkTypeString)"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/coreutils/internal/services/telephony/CellularNetworkTypeExtractorTest.kt"
+            line="65"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="MissingPermission"
+        message="Missing permissions required by CellularNetworkTypeExtractor.getNetworkType: android.permission.READ_PHONE_STATE"
+        errorLine1="        assertThat(networkTypeExtractor.getNetworkType()).isNull()"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/coreutils/internal/services/telephony/CellularNetworkTypeExtractorTest.kt"
+            line="80"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="MissingPermission"
+        message="Missing permissions required by CellularNetworkTypeExtractor.getNetworkType: android.permission.READ_PHONE_STATE"
+        errorLine1="        assertThat(networkTypeExtractor.getNetworkType()).isEqualTo(actualNetworkTypeString)"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/coreutils/internal/services/telephony/CellularNetworkTypeExtractorTest.kt"
+            line="86"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="MissingPermission"
+        message="Missing permissions required by CellularNetworkTypeExtractor.getNetworkType: android.permission.READ_PHONE_STATE"
+        errorLine1="        assertThat(networkTypeExtractor.getNetworkType()).isNull()"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/coreutils/internal/services/telephony/CellularNetworkTypeExtractorTest.kt"
+            line="101"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="CheckResult"
+        message="The result of `assertThat` is not used"
+        errorLine1="        assertThat(CollectionUtils.getFirstOrNull(null as List&lt;Any>?))"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/coreutils/internal/collection/CollectionUtilsTestKt.kt"
+            line="16"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="CheckResult"
+        message="The result of `spy` is not used"
+        errorLine1="        spy(DBUtils.class);"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/coreutils/internal/db/DBUtilsTest.java"
+            line="42"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="DefaultLocale"
+        message="Implicitly using the default locale is a common source of bugs: Use `toLowerCase(Locale)` instead. For strings meant to be internal use `Locale.ROOT`, otherwise `Locale.getDefault()`."
+        errorLine1="                assertThat(convertedMap).containsKey(entryKey.toLowerCase());"
+        errorLine2="                                                              ~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/coreutils/internal/collection/CollectionUtilsTest.java"
+            line="127"
+            column="63"/>
+    </issue>
+
+    <issue
+        id="InlinedApi"
+        message="Field requires API level 25 (current min is 21): `android.telephony.TelephonyManager#NETWORK_TYPE_GSM`"
+        errorLine1="        put(TelephonyManager.NETWORK_TYPE_GSM, &quot;GSM&quot;)"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/io/appmetrica/analytics/coreutils/internal/services/telephony/CellularNetworkTypeConverter.kt"
+            line="29"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="InlinedApi"
+        message="Field requires API level 25 (current min is 21): `android.telephony.TelephonyManager#NETWORK_TYPE_TD_SCDMA`"
+        errorLine1="        put(TelephonyManager.NETWORK_TYPE_TD_SCDMA, &quot;TD_SCDMA&quot;)"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/io/appmetrica/analytics/coreutils/internal/services/telephony/CellularNetworkTypeConverter.kt"
+            line="30"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="InlinedApi"
+        message="Field requires API level 25 (current min is 21): `android.telephony.TelephonyManager#NETWORK_TYPE_IWLAN`"
+        errorLine1="        put(TelephonyManager.NETWORK_TYPE_IWLAN, &quot;IWLAN&quot;)"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/io/appmetrica/analytics/coreutils/internal/services/telephony/CellularNetworkTypeConverter.kt"
+            line="31"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="InlinedApi"
+        message="Field requires API level 25 (current min is 21): `android.telephony.TelephonyManager#NETWORK_TYPE_GSM`"
+        errorLine1="            arrayOf(TelephonyManager.NETWORK_TYPE_GSM, &quot;GSM&quot;),"
+        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/coreutils/internal/services/telephony/CellularNetworkTypeConverterTest.kt"
+            line="36"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="InlinedApi"
+        message="Field requires API level 25 (current min is 21): `android.telephony.TelephonyManager#NETWORK_TYPE_GSM`"
+        errorLine1="            arrayOf(TelephonyManager.NETWORK_TYPE_GSM, &quot;GSM&quot;),"
+        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/coreutils/internal/services/telephony/CellularNetworkTypeConverterTest.kt"
+            line="36"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="InlinedApi"
+        message="Field requires API level 25 (current min is 21): `android.telephony.TelephonyManager#NETWORK_TYPE_TD_SCDMA`"
+        errorLine1="            arrayOf(TelephonyManager.NETWORK_TYPE_TD_SCDMA, &quot;TD_SCDMA&quot;),"
+        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/coreutils/internal/services/telephony/CellularNetworkTypeConverterTest.kt"
+            line="37"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="InlinedApi"
+        message="Field requires API level 25 (current min is 21): `android.telephony.TelephonyManager#NETWORK_TYPE_TD_SCDMA`"
+        errorLine1="            arrayOf(TelephonyManager.NETWORK_TYPE_TD_SCDMA, &quot;TD_SCDMA&quot;),"
+        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/coreutils/internal/services/telephony/CellularNetworkTypeConverterTest.kt"
+            line="37"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="InlinedApi"
+        message="Field requires API level 25 (current min is 21): `android.telephony.TelephonyManager#NETWORK_TYPE_IWLAN`"
+        errorLine1="            arrayOf(TelephonyManager.NETWORK_TYPE_IWLAN, &quot;IWLAN&quot;),"
+        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/coreutils/internal/services/telephony/CellularNetworkTypeConverterTest.kt"
+            line="38"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="InlinedApi"
+        message="Field requires API level 25 (current min is 21): `android.telephony.TelephonyManager#NETWORK_TYPE_IWLAN`"
+        errorLine1="            arrayOf(TelephonyManager.NETWORK_TYPE_IWLAN, &quot;IWLAN&quot;),"
+        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/coreutils/internal/services/telephony/CellularNetworkTypeConverterTest.kt"
+            line="38"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="InlinedApi"
+        message="Field requires API level 29 (current min is 21): `android.telephony.TelephonyManager#NETWORK_TYPE_NR`"
+        errorLine1="            arrayOf(TelephonyManager.NETWORK_TYPE_NR, &quot;NR&quot;)"
+        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/coreutils/internal/services/telephony/CellularNetworkTypeConverterTest.kt"
+            line="39"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="InlinedApi"
+        message="Field requires API level 29 (current min is 21): `android.telephony.TelephonyManager#NETWORK_TYPE_NR`"
+        errorLine1="            arrayOf(TelephonyManager.NETWORK_TYPE_NR, &quot;NR&quot;)"
+        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/coreutils/internal/services/telephony/CellularNetworkTypeConverterTest.kt"
+            line="39"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="Call requires API level 24 (current min is 21): `android.content.Context#getDataDir`"
+        errorLine1="        on { dataDir } doReturn dataDir"
+        errorLine2="             ~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/coreutils/internal/io/AppDataDirProviderForNTest.kt"
+            line="19"
+            column="14"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="Call requires API level 24 (current min is 21): `android.telephony.TelephonyManager#getDataNetworkType`"
+        errorLine1="        on { dataNetworkType } doReturn actualNetworkType"
+        errorLine2="             ~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/coreutils/internal/services/telephony/CellularNetworkTypeExtractorTest.kt"
+            line="34"
+            column="14"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="Call requires API level 30 (current min is 21): `android.content.pm.PackageManager#getInstallSourceInfo`"
+        errorLine1="            on { getInstallSourceInfo(packageName) } doReturn installSourceInfo"
+        errorLine2="                 ~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/coreutils/internal/services/SafePackageManagerForRTest.kt"
+            line="29"
+            column="18"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="Call requires API level 30 (current min is 21): `android.content.pm.InstallSourceInfo#getInstallingPackageName`"
+        errorLine1="            on { installingPackageName } doReturn installingPackageName"
+        errorLine2="                 ~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/coreutils/internal/services/SafePackageManagerForRTest.kt"
+            line="36"
+            column="18"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="Call requires API level 30 (current min is 21): `android.content.pm.InstallSourceInfo#getInitiatingPackageName`"
+        errorLine1="            on { initiatingPackageName } doReturn null"
+        errorLine2="                 ~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/coreutils/internal/services/SafePackageManagerForRTest.kt"
+            line="45"
+            column="18"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="Call requires API level 30 (current min is 21): `android.content.pm.InstallSourceInfo#getInstallingPackageName`"
+        errorLine1="            on { installingPackageName } doReturn &quot;&quot;"
+        errorLine2="                 ~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/coreutils/internal/services/SafePackageManagerForRTest.kt"
+            line="54"
+            column="18"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="Call requires API level 30 (current min is 21): `android.content.pm.PackageManager#getInstallSourceInfo`"
+        errorLine1="            on { getInstallSourceInfo(packageName) } doThrow RuntimeException(&quot;Some exception&quot;)"
+        errorLine2="                 ~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/coreutils/internal/services/SafePackageManagerForRTest.kt"
+            line="63"
+            column="18"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="Call requires API level 30 (current min is 21): `android.content.pm.InstallSourceInfo#getInstallingPackageName`"
+        errorLine1="            on { installingPackageName } doThrow RuntimeException(&quot;Some exception&quot;)"
+        errorLine2="                 ~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/coreutils/internal/services/SafePackageManagerForRTest.kt"
+            line="72"
+            column="18"/>
+    </issue>
+
+    <issue
+        id="RobolectricUsage"
+        message="Robolectric is forbidden in new tests. Use mocks instead."
+        errorLine1="@RunWith(ParameterizedRobolectricTestRunner.class)"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/coreutils/internal/encryption/AESEncrypterTests.java"
+            line="14"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="RobolectricUsage"
+        message="Robolectric is forbidden in new tests. Use mocks instead."
+        errorLine1="@RunWith(RobolectricTestRunner.class)"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/coreutils/internal/encryption/AESRSAEncrypterTest.java"
+            line="17"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="RobolectricUsage"
+        message="Robolectric is forbidden in new tests. Use mocks instead."
+        errorLine1="@RunWith(RobolectricTestRunner::class)"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/coreutils/internal/AndroidUtilsTest.kt"
+            line="11"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="RobolectricUsage"
+        message="Robolectric is forbidden in new tests. Use mocks instead."
+        errorLine1="@RunWith(ParameterizedRobolectricTestRunner::class)"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/coreutils/internal/ApiKeyUtilsTest.kt"
+            line="11"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="RobolectricUsage"
+        message="Robolectric is forbidden in new tests. Use mocks instead."
+        errorLine1="@RunWith(ParameterizedRobolectricTestRunner.class)"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/coreutils/internal/io/Base64UtilsDecodingTest.java"
+            line="13"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="RobolectricUsage"
+        message="Robolectric is forbidden in new tests. Use mocks instead."
+        errorLine1="@RunWith(RobolectricTestRunner::class)"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/coreutils/internal/io/Base64UtilsTest.kt"
+            line="11"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="RobolectricUsage"
+        message="Robolectric is forbidden in new tests. Use mocks instead."
+        errorLine1="@RunWith(RobolectricTestRunner.class)"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/coreutils/internal/cache/CachedDataProviderTest.java"
+            line="12"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="RobolectricUsage"
+        message="Robolectric is forbidden in new tests. Use mocks instead."
+        errorLine1="@RunWith(ParameterizedRobolectricTestRunner::class)"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/coreutils/internal/services/telephony/CellularNetworkTypeConverterTest.kt"
+            line="11"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="RobolectricUsage"
+        message="Robolectric is forbidden in new tests. Use mocks instead."
+        errorLine1="@RunWith(RobolectricTestRunner::class)"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/coreutils/internal/services/telephony/CellularNetworkTypeExtractorTest.kt"
+            line="24"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="RobolectricUsage"
+        message="Robolectric is forbidden in new tests. Use mocks instead."
+        errorLine1="@RunWith(RobolectricTestRunner.class)"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/coreutils/internal/collection/CollectionUtilsTest.java"
+            line="22"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="RobolectricUsage"
+        message="Robolectric is forbidden in new tests. Use mocks instead."
+        errorLine1="@RunWith(RobolectricTestRunner::class)"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/coreutils/internal/collection/CollectionUtilsTestKt.kt"
+            line="11"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="RobolectricUsage"
+        message="Robolectric is forbidden in new tests. Use mocks instead."
+        errorLine1="@RunWith(RobolectricTestRunner.class)"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/coreutils/internal/db/DBUtilsTest.java"
+            line="13"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="RobolectricUsage"
+        message="Robolectric is forbidden in new tests. Use mocks instead."
+        errorLine1="@RunWith(RobolectricTestRunner::class)"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/coreutils/internal/cache/DataCacheTest.kt"
+            line="18"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="RobolectricUsage"
+        message="Robolectric is forbidden in new tests. Use mocks instead."
+        errorLine1="@RunWith(RobolectricTestRunner::class)"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/testDebug/java/io/appmetrica/analytics/coreutils/internal/asserts/DebugAssertTest.kt"
+            line="10"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="RobolectricUsage"
+        message="Robolectric is forbidden in new tests. Use mocks instead."
+        errorLine1="@RunWith(RobolectricTestRunner::class)"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/coreutils/internal/io/FileUtilsTest.kt"
+            line="19"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="RobolectricUsage"
+        message="Robolectric is forbidden in new tests. Use mocks instead."
+        errorLine1="@RunWith(RobolectricTestRunner.class)"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/coreutils/internal/services/FirstExecutionConditionServiceImplTest.java"
+            line="24"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="RobolectricUsage"
+        message="Robolectric is forbidden in new tests. Use mocks instead."
+        errorLine1="    @RunWith(RobolectricTestRunner.class)"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/coreutils/internal/services/FirstExecutionConditionServiceImplTest.java"
+            line="97"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="RobolectricUsage"
+        message="Robolectric is forbidden in new tests. Use mocks instead."
+        errorLine1="@RunWith(ParameterizedRobolectricTestRunner.class)"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/coreutils/internal/services/FirstExecutionDelayCheckerTest.java"
+            line="12"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="RobolectricUsage"
+        message="Robolectric is forbidden in new tests. Use mocks instead."
+        errorLine1="@RunWith(RobolectricTestRunner.class)"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/coreutils/internal/services/FrameworkDetectorTest.java"
+            line="15"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="RobolectricUsage"
+        message="Robolectric is forbidden in new tests. Use mocks instead."
+        errorLine1="@RunWith(ParameterizedRobolectricTestRunner.class)"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/coreutils/internal/io/GZIPCompressorTests.java"
+            line="14"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="RobolectricUsage"
+        message="Robolectric is forbidden in new tests. Use mocks instead."
+        errorLine1="@RunWith(RobolectricTestRunner::class)"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/coreutils/internal/io/InputStreamUtilsTest.kt"
+            line="15"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="RobolectricUsage"
+        message="Robolectric is forbidden in new tests. Use mocks instead."
+        errorLine1="@RunWith(RobolectricTestRunner.class)"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/coreutils/internal/cache/LocationDataCacheUpdateSchedulerTest.java"
+            line="27"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="RobolectricUsage"
+        message="Robolectric is forbidden in new tests. Use mocks instead."
+        errorLine1="@RunWith(RobolectricTestRunner::class)"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/coreutils/internal/LocationUtilsTest.kt"
+            line="10"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="RobolectricUsage"
+        message="Robolectric is forbidden in new tests. Use mocks instead."
+        errorLine1="@RunWith(RobolectricTestRunner::class)"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/coreutils/internal/services/PackageManagerUtilsTest.kt"
+            line="18"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="RobolectricUsage"
+        message="Robolectric is forbidden in new tests. Use mocks instead."
+        errorLine1="@RunWith(RobolectricTestRunner.class)"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/coreutils/internal/services/SafePackageManagerTest.java"
+            line="38"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="RobolectricUsage"
+        message="Robolectric is forbidden in new tests. Use mocks instead."
+        errorLine1="@RunWith(ParameterizedRobolectricTestRunner.class)"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/coreutils/internal/StringUtilsGetUtf8BytesForStringListTest.java"
+            line="14"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="RobolectricUsage"
+        message="Robolectric is forbidden in new tests. Use mocks instead."
+        errorLine1="@RunWith(RobolectricTestRunner.class)"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/coreutils/internal/StringUtilsTests.java"
+            line="17"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="RobolectricUsage"
+        message="Robolectric is forbidden in new tests. Use mocks instead."
+        errorLine1="    @RunWith(ParameterizedRobolectricTestRunner.class)"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/coreutils/internal/StringUtilsTests.java"
+            line="148"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="RobolectricUsage"
+        message="Robolectric is forbidden in new tests. Use mocks instead."
+        errorLine1="@RunWith(ParameterizedRobolectricTestRunner.class)"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/coreutils/internal/time/SystemTimeOffsetProviderTest.java"
+            line="17"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="RobolectricUsage"
+        message="Robolectric is forbidden in new tests. Use mocks instead."
+        errorLine1="@RunWith(RobolectricTestRunner.class)"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/coreutils/internal/time/SystemTimeProviderTest.java"
+            line="15"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="RobolectricUsage"
+        message="Robolectric is forbidden in new tests. Use mocks instead."
+        errorLine1="@RunWith(RobolectricTestRunner::class)"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/coreutils/internal/time/TimePassedCheckerTest.kt"
+            line="11"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="RobolectricUsage"
+        message="Robolectric is forbidden in new tests. Use mocks instead."
+        errorLine1="@RunWith(RobolectricTestRunner::class)"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/coreutils/internal/network/UserAgentTest.kt"
+            line="9"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="RobolectricUsage"
+        message="Robolectric is forbidden in new tests. Use mocks instead."
+        errorLine1="@RunWith(ParameterizedRobolectricTestRunner::class)"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/coreutils/internal/services/UtilityServiceProviderGetterTest.kt"
+            line="9"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="RobolectricUsage"
+        message="Robolectric is forbidden in new tests. Use mocks instead."
+        errorLine1="@RunWith(RobolectricTestRunner::class)"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/coreutils/internal/services/UtilityServiceProviderTest.kt"
+            line="13"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="RobolectricUsage"
+        message="Robolectric is forbidden in new tests. Use mocks instead."
+        errorLine1="@RunWith(ParameterizedRobolectricTestRunner.class)"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/coreutils/internal/services/WaitForActivationDelayBarrierTest.java"
+            line="31"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="RobolectricUsage"
+        message="Robolectric is forbidden in new tests. Use mocks instead."
+        errorLine1="    @RunWith(RobolectricTestRunner.class)"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/coreutils/internal/services/WaitForActivationDelayBarrierTest.java"
+            line="95"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="RobolectricUsage"
+        message="Robolectric is forbidden in new tests. Use mocks instead."
+        errorLine1="@RunWith(RobolectricTestRunner.class)"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/coreutils/internal/WrapUtilsTest.java"
+            line="14"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="RobolectricUsage"
+        message="Robolectric is forbidden in new tests. Use mocks instead."
+        errorLine1="    @RunWith(ParameterizedRobolectricTestRunner.class)"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/coreutils/internal/WrapUtilsTest.java"
+            line="142"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="WifiManagerPotentialLeak"
+        message="The WIFI_SERVICE must be looked up on the Application context or memory will leak on devices &lt; Android N. Try changing `context` to `context.getApplicationContext()`"
+        errorLine1="        whenever&lt;Any?>(context.getSystemService(Context.WIFI_SERVICE)).thenReturn(null)"
+        errorLine2="                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/coreutils/internal/services/SystemServiceUtilsTest.kt"
+            line="98"
+            column="24"/>
+    </issue>
+
+    <issue
+        id="WifiManagerPotentialLeak"
+        message="The WIFI_SERVICE must be looked up on the Application context or memory will leak on devices &lt; Android N. Try changing `context` to `context.getApplicationContext()`"
+        errorLine1="        whenever(context.getSystemService(Context.WIFI_SERVICE)).thenReturn(wifiManager)"
+        errorLine2="                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/coreutils/internal/services/SystemServiceUtilsTest.kt"
+            line="114"
+            column="18"/>
+    </issue>
+
+    <issue
+        id="WifiManagerPotentialLeak"
+        message="The WIFI_SERVICE must be looked up on the Application context or memory will leak on devices &lt; Android N. Try changing `context` to `context.getApplicationContext()`"
+        errorLine1="        whenever(context.getSystemService(Context.WIFI_SERVICE)).thenReturn(wifiManager)"
+        errorLine2="                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/test/java/io/appmetrica/analytics/coreutils/internal/services/SystemServiceUtilsTest.kt"
+            line="130"
+            column="18"/>
+    </issue>
+
+</issues>
