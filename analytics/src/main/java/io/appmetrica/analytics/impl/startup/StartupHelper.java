@@ -1,6 +1,5 @@
 package io.appmetrica.analytics.impl.startup;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -175,7 +174,6 @@ public class StartupHelper implements StartupIdentifiersProvider, IServerTimeOff
         mReportsHandler.reportStartupEvent(identifiers, resultReceiver, freshClientClids, forceRefreshConfiguration);
     }
 
-    @SuppressLint("VisibleForTests") //fixme https://nda.ya.ru/t/lvWXFf0t6Njj6X
     private void updateAllParamsByReceiver(@NonNull Bundle resultData) {
         DebugLogger.INSTANCE.info(TAG, "UpdateAllParamsByReceiver: %s", resultData);
         ClientIdentifiersHolder clientIdentifiersHolder = new ClientIdentifiersHolder(resultData);

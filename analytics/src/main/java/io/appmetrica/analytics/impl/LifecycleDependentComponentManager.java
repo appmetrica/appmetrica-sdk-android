@@ -1,6 +1,5 @@
 package io.appmetrica.analytics.impl;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
@@ -18,7 +17,6 @@ public class LifecycleDependentComponentManager {
     @NonNull
     private final List<ServiceLifecycleObserver> serviceLifecycleObservers = new ArrayList<>();
 
-    @SuppressLint("NewApi")
     public LifecycleDependentComponentManager(@NonNull Context context, @NonNull IHandlerExecutor defaultExecutor) {
         this(
             new BatteryChargeTypeListener(context, defaultExecutor),

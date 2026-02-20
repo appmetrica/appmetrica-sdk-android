@@ -1,6 +1,5 @@
 package io.appmetrica.analytics.impl;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -119,7 +118,6 @@ public class AppMetricaServiceCoreImpl implements AppMetricaServiceCore, AppMetr
         GlobalServiceLocator.getInstance().getLifecycleDependentComponentManager().onCreate();
     }
 
-    @SuppressLint("NewApi")
     @WorkerThread
     private void onFirstCreate() {
         DebugLogger.INSTANCE.info(TAG, "onFirstCreate... discover modules");

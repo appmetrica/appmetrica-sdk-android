@@ -59,6 +59,7 @@ class AppMetricaCommonModulePlugin : Plugin<Project> {
 
             implementation(appMetricaLibs["kotlinStdlib"])
             compileOnly(appMetricaLibs["androidxAnnotation"])
+            compileOnly(appMetricaLibs["androidxAnnotationJvm"])
         }
 
         project.tasks.withType<KotlinCompile> {
@@ -174,6 +175,7 @@ class AppMetricaCommonModulePlugin : Plugin<Project> {
             val appMetricaLibs = project.versionCatalog("appMetricaLibs")
 
             testCompileOnly(appMetricaLibs["androidxAnnotation"])
+            testCompileOnly(appMetricaLibs["androidxAnnotationJvm"])
 
             testImplementation(appMetricaLibs["equalsverifier"])
             testImplementation(appMetricaLibs["jsonassert"])

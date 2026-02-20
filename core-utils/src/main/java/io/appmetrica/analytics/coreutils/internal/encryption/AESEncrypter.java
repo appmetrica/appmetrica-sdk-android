@@ -1,6 +1,5 @@
 package io.appmetrica.analytics.coreutils.internal.encryption;
 
-import android.annotation.SuppressLint;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
@@ -30,7 +29,6 @@ public class AESEncrypter implements Encrypter {
         mIV = iv;
     }
 
-    @SuppressLint("TrulyRandom")
     @Override
     @Nullable
     public byte[] encrypt(@NonNull byte[] input) {
@@ -47,7 +45,6 @@ public class AESEncrypter implements Encrypter {
         return null;
     }
 
-    @SuppressLint("TrulyRandom")
     @Nullable
     public byte[] decrypt(@NonNull byte[] input)  {
         return decrypt(input, 0, input.length);

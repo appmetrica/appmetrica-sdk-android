@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -124,7 +125,7 @@ public class CollectionUtilsTest extends CommonTest {
         for (Map.Entry<String, String> entry : map.entrySet()) {
             final String entryKey = entry.getKey();
             if (entryKey != null) {
-                assertThat(convertedMap).containsKey(entryKey.toLowerCase());
+                assertThat(convertedMap).containsKey(entryKey.toLowerCase(Locale.getDefault()));
             }
         }
     }

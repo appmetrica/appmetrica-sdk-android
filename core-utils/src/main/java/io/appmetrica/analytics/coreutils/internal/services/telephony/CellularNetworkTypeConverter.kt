@@ -1,5 +1,6 @@
 package io.appmetrica.analytics.coreutils.internal.services.telephony
 
+import android.annotation.SuppressLint
 import android.os.Build
 import android.telephony.TelephonyManager
 import android.util.SparseArray
@@ -9,6 +10,7 @@ internal object CellularNetworkTypeConverter {
 
     private const val UNKNOWN_NETWORK_TYPE_VALUE = CellularNetworkTypeExtractor.UNKNOWN_NETWORK_TYPE_VALUE
 
+    @SuppressLint("InlinedApi")
     private val networkTypeToStringMapping = SparseArray<String?>().apply {
         put(TelephonyManager.NETWORK_TYPE_UNKNOWN, UNKNOWN_NETWORK_TYPE_VALUE)
         put(TelephonyManager.NETWORK_TYPE_1xRTT, "1xRTT")

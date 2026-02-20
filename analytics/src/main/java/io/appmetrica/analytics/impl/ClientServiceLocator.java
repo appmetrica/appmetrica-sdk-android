@@ -1,6 +1,5 @@
 package io.appmetrica.analytics.impl;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,7 +25,6 @@ import io.appmetrica.analytics.impl.utils.process.ProcessNameProvider;
 
 public class ClientServiceLocator {
 
-    @SuppressLint("StaticFieldLeak")
     private volatile static ClientServiceLocator sHolder;
 
     public static void init() {

@@ -1,10 +1,8 @@
 package io.appmetrica.analytics.impl;
 
-import android.annotation.SuppressLint;
 import androidx.annotation.NonNull;
 import java.util.HashMap;
 
-@SuppressLint("UseSparseArrays")
 //Removed event types should be added to InternalEventsRemovedTypesTest.java
 public enum InternalEvents {
 

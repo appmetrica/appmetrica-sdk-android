@@ -8,7 +8,6 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.spy;
 
 @RunWith(RobolectricTestRunner.class)
 public class DBUtilsTest extends CommonTest {
@@ -39,7 +38,6 @@ public class DBUtilsTest extends CommonTest {
 
     @Test
     public void testMyCursorRowToContentValues() {
-        spy(DBUtils.class);
         MatrixCursor reportCursor = new MatrixCursor(COLUMNS) {
             {
                 newRow().add(1).add(234).add(0).add(0).add("{}").add(0).add(0).add("sadfsdfd").add(1.2);

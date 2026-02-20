@@ -1,6 +1,5 @@
 package io.appmetrica.analytics.impl.crash.jvm.client
 
-import android.annotation.SuppressLint
 import io.appmetrica.analytics.impl.Utils
 
 internal object ThrowableModelFactory {
@@ -13,7 +12,6 @@ internal object ThrowableModelFactory {
         return createModel(throwable, 1, 0)
     }
 
-    @SuppressLint("NewApi")
     private fun createModel(throwable: Throwable, maxDepth: Int, curDepth: Int): ThrowableModel {
         return ThrowableModel(
             throwable.javaClass.name,

@@ -1,6 +1,5 @@
 package io.appmetrica.analytics.impl.utils
 
-import android.annotation.SuppressLint
 import android.app.UiModeManager
 import android.content.Context
 import android.content.pm.PackageManager
@@ -85,7 +84,6 @@ internal object DeviceTypeProvider {
 
     // Based on information from Android Developers:
     // https://developer.android.com/training/tv/get-started/hardware
-    @SuppressLint("NewApi")
     private fun isAndroidTV(
         context: Context
     ): Boolean {

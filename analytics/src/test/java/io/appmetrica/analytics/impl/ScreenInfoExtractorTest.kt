@@ -211,7 +211,7 @@ internal class ScreenInfoExtractorTest : CommonTest() {
     @Test
     fun densityGetDisplayMetricsSuccessfulBeforeR() {
         whenever(AndroidUtils.isApiAchieved(Build.VERSION_CODES.R)).thenReturn(false)
-        val dpi = 555
+        val dpi = DisplayMetrics.DENSITY_300
         val scaleFactor = 5.7f
         displayMetrics.densityDpi = dpi
         displayMetrics.density = scaleFactor

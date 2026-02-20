@@ -13,6 +13,7 @@ import org.robolectric.RobolectricTestRunner
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.GregorianCalendar
+import java.util.Locale
 import java.util.TimeZone
 
 @RunWith(RobolectricTestRunner::class)
@@ -22,7 +23,7 @@ internal class TimeUtilsTest : CommonTest() {
 
     @Test
     fun getTimeZoneOffsetSec() {
-        val parser = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+        val parser = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
         val date = parser.parse("2022-06-01 01:00:00").time / 1000
         val staticCalendar = Mockito.mockStatic(Calendar::class.java)
         try {

@@ -13,7 +13,7 @@ class CollectionUtilsTestKt : CommonTest() {
 
     @Test
     fun `getFirstOrNull for null`() {
-        assertThat(CollectionUtils.getFirstOrNull(null as List<Any>?))
+        assertThat(CollectionUtils.getFirstOrNull(null as List<Any>?)).isNull()
     }
 
     @Test

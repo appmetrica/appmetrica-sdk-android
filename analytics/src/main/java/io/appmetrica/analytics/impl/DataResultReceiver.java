@@ -1,6 +1,5 @@
 package io.appmetrica.analytics.impl;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
@@ -10,7 +9,6 @@ import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.impl.startup.StartupError;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 
-@SuppressLint("ParcelCreator")
 public class DataResultReceiver extends ResultReceiver {
 
     private static final String TAG = "[DataResultReceiver]";

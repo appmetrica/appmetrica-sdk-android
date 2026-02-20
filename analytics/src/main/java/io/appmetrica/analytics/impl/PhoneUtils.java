@@ -1,6 +1,5 @@
 package io.appmetrica.analytics.impl;
 
-import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -58,7 +57,6 @@ public final class PhoneUtils {
         };
 
     @TargetApi(Build.VERSION_CODES.M)
-    @SuppressLint("InlinedApi")
     private static final MapWithDefault<Integer, NetworkType> NETWORK_CAPABILITIES_TRANSPORT_TYPE_MAPPING =
         new MapWithDefault<Integer, NetworkType>(NetworkType.UNDEFINED) {
             {

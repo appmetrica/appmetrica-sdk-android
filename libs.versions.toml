@@ -11,6 +11,7 @@ asm = "9.6"
 
 # Android libraries
 androidxAnnotation = "1.0.0"
+androidxAnnotationJvm = "1.6.0"
 installreferrer = "2.2"
 playServicesAppset = "16.1.0"
 playServicesLocation = "21.0.1"
@@ -75,6 +76,8 @@ kotlinReflect = { module = "org.jetbrains.kotlin:kotlin-reflect" }
 
 # Android libraries
 androidxAnnotation = { module = "androidx.annotation:annotation", version.ref = "androidxAnnotation" }
+androidxAnnotationJvm = { module = "androidx.annotation:annotation-jvm", version.ref = "androidxAnnotationJvm" }
+
 installreferrer = { module = "com.android.installreferrer:installreferrer", version.ref = "installreferrer" }
 playServicesAppset = { module = "com.google.android.gms:play-services-appset", version.ref = "playServicesAppset" }
 playServicesLocation = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocation" }

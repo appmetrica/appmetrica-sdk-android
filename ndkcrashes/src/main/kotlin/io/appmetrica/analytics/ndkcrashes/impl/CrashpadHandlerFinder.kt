@@ -1,6 +1,5 @@
 package io.appmetrica.analytics.ndkcrashes.impl
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.os.SystemClock
 import io.appmetrica.analytics.ndkcrashes.BuildConfig
@@ -77,7 +76,6 @@ internal class CrashpadHandlerFinder(private val abiResolver: AbiResolver) {
         return libDir
     }
 
-    @SuppressLint("NewApi")
     private fun getAppDataDir(context: Context): File? {
         return if (AndroidUtils.isAndroidNAchieved()) {
             context.dataDir

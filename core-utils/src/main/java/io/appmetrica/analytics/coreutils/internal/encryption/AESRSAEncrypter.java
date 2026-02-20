@@ -1,6 +1,5 @@
 package io.appmetrica.analytics.coreutils.internal.encryption;
 
-import android.annotation.SuppressLint;
 import android.util.Base64;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -38,7 +37,6 @@ public class AESRSAEncrypter implements Encrypter {
         mRSAAlgorithm = rsaAlgorithm;
     }
 
-    @SuppressLint("TrulyRandom")
     @Nullable
     public byte[] encrypt(@NonNull byte[] input) {
         try {

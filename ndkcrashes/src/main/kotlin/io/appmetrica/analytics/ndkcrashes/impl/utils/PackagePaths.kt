@@ -1,6 +1,5 @@
 package io.appmetrica.analytics.ndkcrashes.impl.utils
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
 import android.text.TextUtils
@@ -22,7 +21,6 @@ internal object PackagePaths {
      * @ Build paths for the chrome/webview package for the purpose of loading CrashpadMain via
      * /system/bin/app_process.
      */
-    @SuppressLint("InlinedApi")
     @JvmStatic // for tests
     fun makePackagePaths(context: Context, arch: String): Array<String> {
         return try {

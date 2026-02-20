@@ -1,4 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <lint>
+
+    <issue id="AppBundleLocaleChanges">
+        <ignore path="**/src/test*/**" />
+    </issue>
+
+    <issue id="DiscouragedApi">
+        <ignore path="**/src/test*/**" />
+    </issue>
+
+    <issue id="InlinedApi">
+        <ignore path="**/src/test*/**" />
+    </issue>
+
+    <issue id="JavascriptInterface">
+        <ignore path="**/src/test*/**" />
+    </issue>
+
+    <issue id="MissingPermission">
+        <ignore path="**/src/test*/**" />
+    </issue>
+
+    <issue id="NewApi">
+        <ignore path="**/src/test*/**" />
+    </issue>
+
+    <issue id="Range">
+        <ignore path="**/src/test*/**" />
+    </issue>
+
+    <issue id="Recycle">
+        <ignore path="**/src/test*/**" />
+    </issue>
+
+    <issue id="UnspecifiedRegisterReceiverFlag">
+        <ignore path="**/src/test*/**" />
+    </issue>
+
+    <issue id="WifiManagerPotentialLeak">
+        <ignore path="**/src/test*/**" />
+    </issue>
+
 </lint>

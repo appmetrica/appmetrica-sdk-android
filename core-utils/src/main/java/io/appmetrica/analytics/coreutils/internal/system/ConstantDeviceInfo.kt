@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.coreutils.internal.system
 
-import android.annotation.SuppressLint
 import android.os.Build
+import androidx.annotation.ChecksSdkIntAtLeast
 
 object ConstantDeviceInfo {
 
@@ -16,7 +16,7 @@ object ConstantDeviceInfo {
     @JvmField
     val OS_VERSION: String = Build.VERSION.RELEASE
 
-    @SuppressLint("AnnotateVersionCheck")
+    @ChecksSdkIntAtLeast(extension = 0)
     @JvmField
     val OS_API_LEVEL: Int = Build.VERSION.SDK_INT
 

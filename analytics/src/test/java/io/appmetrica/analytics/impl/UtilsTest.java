@@ -127,9 +127,9 @@ public class UtilsTest extends CommonTest {
 
         assertThat(decoded).isNotNull();
         assertThat(decoded.size()).isEqualTo(2);
-        assertThat(decoded.containsKey("clid"));
+        assertThat(decoded).containsKey("clid");
         assertThat(decoded.get("clid")).isEqualTo("val");
-        assertThat(decoded.containsKey("clid1"));
+        assertThat(decoded).containsKey("clid11");
         assertThat(decoded.get("clid11")).isEqualTo("123");
     }
 
@@ -139,7 +139,7 @@ public class UtilsTest extends CommonTest {
         Map<String, String> decoded = StartupUtils.decodeClids(encoded);
         assertThat(decoded).isNotNull();
         assertThat(decoded.size()).isEqualTo(1);
-        assertThat(decoded.containsKey("clid"));
+        assertThat(decoded).containsKey("clid");
         assertThat(decoded.get("clid")).isEqualTo("val");
     }
 

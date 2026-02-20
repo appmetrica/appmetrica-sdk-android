@@ -1,6 +1,5 @@
 package io.appmetrica.analytics.impl;
 
-import android.annotation.SuppressLint;
 import android.webkit.WebView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,7 +23,6 @@ public class WebViewJsInterfaceHandler {
     @Nullable
     private PublicLogger publicLogger;
 
-    @SuppressLint("AddJavascriptInterface")
     public void initWebViewReporting(@NonNull WebView webView, @NonNull AppMetricaProxy proxy) {
         try {
             if (webView.getSettings().getJavaScriptEnabled()) {

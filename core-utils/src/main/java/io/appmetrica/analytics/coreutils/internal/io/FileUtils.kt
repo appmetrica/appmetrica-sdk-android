@@ -1,6 +1,5 @@
 package io.appmetrica.analytics.coreutils.internal.io
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import androidx.annotation.VisibleForTesting
@@ -71,7 +70,6 @@ object FileUtils {
     fun getFileFromPath(filePath: String): File = File(filePath)
 
     @JvmStatic
-    @SuppressLint("NewApi")
     fun getAppDataDir(context: Context): File? {
         return if (AndroidUtils.isApiAchieved(Build.VERSION_CODES.N)) {
             AppDataDirProviderForN.dataDir(context)

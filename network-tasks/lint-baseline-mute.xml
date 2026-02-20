@@ -2,17 +2,6 @@
 <issues format="6" by="lint 8.2.0" type="baseline" client="gradle" dependencies="false" name="AGP (8.2.0)" variant="all" version="8.2.0">
 
     <issue
-        id="NewApi"
-        message="Class requires API level 24 (current min is 21): `java.util.function.Predicate`"
-        errorLine1="                result.add(new Predicate&lt;String>() {"
-        errorLine2="                               ~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/test/java/io/appmetrica/analytics/networktasks/impl/ToStringTestUtils.java"
-            line="36"
-            column="32"/>
-    </issue>
-
-    <issue
         id="RobolectricUsage"
         message="Robolectric is forbidden in new tests. Use mocks instead."
         errorLine1="@RunWith(RobolectricTestRunner.class)"
@@ -217,7 +206,7 @@
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/test/java/io/appmetrica/analytics/networktasks/impl/utils/TimeUtilsTest.kt"
-            line="18"
+            line="19"
             column="1"/>
     </issue>
 
@@ -230,17 +219,6 @@
             file="src/test/java/io/appmetrica/analytics/networktasks/impl/utils/UtilsTest.kt"
             line="10"
             column="1"/>
-    </issue>
-
-    <issue
-        id="SimpleDateFormat"
-        message="To get local formatting use `getDateInstance()`, `getDateTimeInstance()`, or `getTimeInstance()`, or use `new SimpleDateFormat(String template, Locale locale)` with for example `Locale.US` for ASCII dates."
-        errorLine1="        val parser = SimpleDateFormat(&quot;yyyy-MM-dd HH:mm:ss&quot;)"
-        errorLine2="                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/test/java/io/appmetrica/analytics/networktasks/impl/utils/TimeUtilsTest.kt"
-            line="25"
-            column="22"/>
     </issue>
 
 </issues>

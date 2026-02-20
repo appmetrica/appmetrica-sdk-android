@@ -67,7 +67,6 @@ public class ScreenInfoExtractor {
     }
 
     // Method is based on this SO answer: http://stackoverflow.com/a/23861333
-    @SuppressLint("NewApi")
     @AnyThread
     @Nullable
     private Point extractScreenSizeFromDisplay(@NonNull Display display) {
