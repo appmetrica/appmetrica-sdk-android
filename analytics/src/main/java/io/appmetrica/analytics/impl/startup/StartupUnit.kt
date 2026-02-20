@@ -4,11 +4,13 @@ import android.content.Context
 import androidx.annotation.VisibleForTesting
 import io.appmetrica.analytics.coreutils.internal.StringUtils
 import io.appmetrica.analytics.impl.GlobalServiceLocator
+import io.appmetrica.analytics.impl.SelfReportingUtils.reportUuidError
 import io.appmetrica.analytics.impl.Utils
 import io.appmetrica.analytics.impl.component.ComponentId
 import io.appmetrica.analytics.impl.component.IBaseComponent
 import io.appmetrica.analytics.impl.network.NetworkTaskFactory.createStartupTask
 import io.appmetrica.analytics.impl.request.StartupRequestConfig
+import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade
 import io.appmetrica.analytics.impl.startup.StartupStateModel.StartupStateBuilder
 import io.appmetrica.analytics.impl.startup.parsing.StartupParser
 import io.appmetrica.analytics.impl.startup.parsing.StartupResult
@@ -35,16 +37,18 @@ internal class StartupUnit(
     fun init() {
         DebugLogger.info(tag, "Init startup unit for componentId = ${startupUnitComponents.componentId}")
         val startupState = startupUnitComponents.startupConfigurationHolder.startupState
-        var startupStateBuilder = startupState.buildUpon()
-        if (!startupUnitComponents.uuidValidator.isValid(startupState.uuid)) {
-            val uuid = startupUnitComponents.multiProcessSafeUuidProvider.readUuid().id
-            startupStateBuilder = startupStateBuilder.withUuid(uuid)
-            DebugLogger.info(tag, "Extracted new uuid from storage = $uuid")
+        val startupStateBuilder = startupState.buildUpon()
+
+        val uuid = startupUnitComponents.multiProcessSafeUuidProvider.readUuid().id
+        if (uuid == null || startupState.uuid != null && uuid != startupState.uuid) {
+            handleSmthWrongWithUuid(uuid, startupState.uuid)
         }
+        startupStateBuilder.withUuid(uuid ?: startupState.uuid)
+
         if (startupState.deviceId.isNullOrEmpty()) {
             val deviceIdCandidate = startupUnitComponents.deviceIdGenerator.generateDeviceId()
             DebugLogger.info(tag, "Apply new deviceIdCandidate: $deviceIdCandidate")
-            startupStateBuilder = startupStateBuilder
+            startupStateBuilder
                 .withDeviceId(deviceIdCandidate)
                 .withDeviceIdHash(StringUtils.EMPTY)
         }
@@ -270,5 +274,17 @@ internal class StartupUnit(
                 }
             }
         }
+    }
+
+    private fun handleSmthWrongWithUuid(theOnlyTrueUuid: String?, uuidFromStartupState: String?) {
+        DebugLogger.warning(
+            tag,
+            "Smth goes wrong with uuid: uuid = $theOnlyTrueUuid; uuid from startup state: $uuidFromStartupState"
+        )
+        AppMetricaSelfReportFacade.getReporter().reportUuidError(
+            "service",
+            theOnlyTrueUuid,
+            uuidFromStartupState
+        )
     }
 }

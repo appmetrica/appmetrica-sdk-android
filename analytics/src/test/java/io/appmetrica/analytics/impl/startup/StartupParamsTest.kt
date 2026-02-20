@@ -8,6 +8,8 @@ import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus
 import io.appmetrica.analytics.impl.ClientIdentifiersHolder
 import io.appmetrica.analytics.impl.FeaturesResult
 import io.appmetrica.analytics.impl.db.preferences.PreferencesClientDbStorage
+import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade
+import io.appmetrica.analytics.impl.selfreporting.SelfReporterWrapper
 import io.appmetrica.analytics.impl.startup.uuid.MultiProcessSafeUuidProvider
 import io.appmetrica.analytics.impl.startup.uuid.UuidValidator
 import io.appmetrica.analytics.impl.utils.JsonHelper
@@ -15,6 +17,7 @@ import io.appmetrica.analytics.impl.utils.StartupUtils
 import io.appmetrica.analytics.internal.IdentifiersResult
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.ContextRule
+import io.appmetrica.analytics.testutils.on
 import io.appmetrica.analytics.testutils.staticRule
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.SoftAssertions
@@ -40,21 +43,7 @@ internal class StartupParamsTest : CommonTest() {
     private val testServerSideOffset = -280L
     private val responseClids: MutableMap<String, String> = HashMap()
     private val requestClids: MutableMap<String, String> = HashMap()
-    private val preferences: PreferencesClientDbStorage = mock()
-    private val clientIdentifiersHolder: ClientIdentifiersHolder = mock()
-    private val advIdentifiersConverter: AdvIdentifiersFromIdentifierResultConverter = mock()
-    private val clidsStateChecker: ClidsStateChecker = mock()
-    private val uuidProvider: MultiProcessSafeUuidProvider = mock()
-    private val customSdkHostsHolder: CustomSdkHostsHolder = mock()
-    private val featuresHolder: FeaturesHolder = mock()
-    private val featuresConverter: FeaturesConverter = mock()
-    private val uuidValidator: UuidValidator = mock()
 
-    @get:Rule
-    val contextRule = ContextRule()
-    private val context by contextRule
-
-    private lateinit var startupParams: StartupParams
     private val validCustomHosts: List<String> = StartupParamsTestUtils.CUSTOM_HOSTS
     private val uuid = "Valid uuid"
     private val deviceId = "Valid device id"
@@ -114,18 +103,54 @@ internal class StartupParamsTest : CommonTest() {
     private val nextStartupTime = 327846276L
     private val initialCustomSdkHost = IdentifiersResult(null, IdentifierStatus.OK, null)
 
+    private val uuidProvider: MultiProcessSafeUuidProvider = mock {
+        on { readUuid() } doReturn uuidResult
+    }
+
+    private val preferences: PreferencesClientDbStorage = mock {
+        on { uuidResult } doReturn uuidResult
+        on { customSdkHosts } doReturn initialCustomSdkHost
+        on { getFeatures() } doReturn FeaturesInternal()
+    }
+
+    private val featuresHolder: FeaturesHolder = mock {
+        on { features } doReturn FeaturesInternal()
+    }
+
+    private val uuidValidator: UuidValidator = mock {
+        on { isValid(uuid) } doReturn true
+    }
+
+    private val clientIdentifiersHolder: ClientIdentifiersHolder = mock()
+    private val advIdentifiersConverter: AdvIdentifiersFromIdentifierResultConverter = mock()
+    private val clidsStateChecker: ClidsStateChecker = mock()
+    private val customSdkHostsHolder: CustomSdkHostsHolder = mock()
+    private val featuresConverter: FeaturesConverter = mock()
+
     @get:Rule
-    val startupRequiredUtilsRule = staticRule<StartupRequiredUtils>()
+    val contextRule = ContextRule()
+    private val context by contextRule
+
+    private lateinit var startupParams: StartupParams
+
+    @get:Rule
+    val startupRequiredUtilsRule = staticRule<StartupRequiredUtils> {
+        on { StartupRequiredUtils.pickIdentifiersThatShouldTriggerStartup(any()) } doAnswer { invocation ->
+            invocation.getArgument(0)
+        }
+    }
+
+    @get:Rule
+    val appMetricaSelfReportFacadeRule = staticRule<AppMetricaSelfReportFacade>()
+
+    private val selfReporter: SelfReporterWrapper = mock()
 
     @Before
     fun setUp() {
+        whenever(AppMetricaSelfReportFacade.getReporter()).thenReturn(selfReporter)
+
         customSdkHosts.put(customKey1, listOf("host1", "host2"))
         customSdkHosts.put(customKey2, listOf("host3"))
-
-        whenever(uuidProvider.readUuid()).thenReturn(uuidResult)
-        whenever(preferences.customSdkHosts).thenReturn(initialCustomSdkHost)
-        whenever(preferences.getFeatures()).thenReturn(FeaturesInternal())
-        whenever(featuresHolder.features).thenReturn(FeaturesInternal())
 
         responseClids.put("clid0", "123")
         responseClids.put("clid1", "456")
@@ -136,12 +161,6 @@ internal class StartupParamsTest : CommonTest() {
 
         StartupParamsTestUtils.mockPreferencesClientDbStoragePutResponses(preferences)
 
-        whenever(StartupRequiredUtils.pickIdentifiersThatShouldTriggerStartup(any())).thenAnswer { invocation ->
-            invocation.getArgument(
-                0
-            )
-        }
-        whenever(uuidValidator.isValid(uuid)).thenReturn(true)
         mockClientIdentifiersHolder(clientIdentifiersHolder)
 
         startupParams = StartupParams(
@@ -1222,6 +1241,74 @@ internal class StartupParamsTest : CommonTest() {
         whenever(featuresConverter.convert(featuresInternal)).thenReturn(result)
 
         assertThat(startupParams.features).isSameAs(result)
+    }
+
+    @Test
+    fun shouldNotReportErrorWhenUuidMatchesBackup() {
+        val uuid = "matching-uuid"
+        val uuidResult = IdentifiersResult(uuid, IdentifierStatus.OK, null)
+
+        whenever(uuidProvider.readUuid()).thenReturn(uuidResult)
+        whenever(preferences.uuidResult).thenReturn(uuidResult)
+        whenever(uuidValidator.isValid(uuid)).thenReturn(true)
+
+        createStartupParams()
+
+        verify(selfReporter, never()).reportError(any<String>(), any<String>())
+    }
+
+    @Test
+    fun shouldReportErrorWhenUuidIsNull() {
+        val backupUuid = "backup-uuid"
+        val nullUuidResult = IdentifiersResult(null, IdentifierStatus.OK, null)
+        val backupUuidResult = IdentifiersResult(backupUuid, IdentifierStatus.OK, null)
+
+        whenever(uuidProvider.readUuid()).thenReturn(nullUuidResult)
+        whenever(preferences.uuidResult).thenReturn(backupUuidResult)
+        whenever(uuidValidator.isValid(null)).thenReturn(false)
+
+        createStartupParams()
+
+        verify(selfReporter).reportError(
+            eq("null_uuid_on_client"),
+            eq("The only true uuid: null; backup uuid: $backupUuid")
+        )
+    }
+
+    @Test
+    fun shouldReportErrorWhenUuidDoesNotMatchBackup() {
+        val theOnlyTrueUuid = "true-uuid"
+        val backupUuid = "backup-uuid"
+        val trueUuidResult = IdentifiersResult(theOnlyTrueUuid, IdentifierStatus.OK, null)
+        val backupUuidResult = IdentifiersResult(backupUuid, IdentifierStatus.OK, null)
+
+        whenever(uuidProvider.readUuid()).thenReturn(trueUuidResult)
+        whenever(preferences.uuidResult).thenReturn(backupUuidResult)
+        whenever(uuidValidator.isValid(theOnlyTrueUuid)).thenReturn(true)
+
+        createStartupParams()
+
+        verify(selfReporter).reportError(
+            eq("wrong_uuid_on_client"),
+            eq("The only true uuid: $theOnlyTrueUuid; backup uuid: $backupUuid")
+        )
+    }
+
+    @Test
+    fun shouldUseValidUuidEvenWhenReportingError() {
+        val theOnlyTrueUuid = "true-uuid"
+        val backupUuid = "backup-uuid"
+        val trueUuidResult = IdentifiersResult(theOnlyTrueUuid, IdentifierStatus.OK, null)
+        val backupUuidResult = IdentifiersResult(backupUuid, IdentifierStatus.OK, null)
+
+        whenever(uuidProvider.readUuid()).thenReturn(trueUuidResult)
+        whenever(preferences.uuidResult).thenReturn(backupUuidResult)
+        whenever(uuidValidator.isValid(theOnlyTrueUuid)).thenReturn(true)
+
+        val startupParams = createStartupParams()
+
+        assertThat(startupParams.uuid).isEqualTo(theOnlyTrueUuid)
+        verify(selfReporter).reportError(any<String>(), any<String>())
     }
 
     private fun createStartupParams(): StartupParams {

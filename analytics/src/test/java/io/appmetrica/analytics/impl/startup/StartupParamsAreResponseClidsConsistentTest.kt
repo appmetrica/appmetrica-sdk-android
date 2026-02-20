@@ -34,11 +34,14 @@ internal class StartupParamsAreResponseClidsConsistentTest(
     val contextRule = ContextRule()
     private val context by contextRule
 
+    private val uuidResult = IdentifiersResult("test-uuid", IdentifierStatus.OK, null)
+
     private val storage: PreferencesClientDbStorage = mock {
         on { getClientClids(anyOrNull()) } doReturn clientClids
         on { responseClidsResult } doReturn responseClids
         on { customSdkHosts } doReturn IdentifiersResult(null, IdentifierStatus.UNKNOWN, null)
         on { getFeatures() } doReturn FeaturesInternal(null, IdentifierStatus.UNKNOWN, null)
+        on { uuidResult } doReturn uuidResult
     }
 
     private lateinit var startupParams: StartupParams

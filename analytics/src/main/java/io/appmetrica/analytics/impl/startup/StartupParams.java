@@ -10,8 +10,10 @@ import io.appmetrica.analytics.coreutils.internal.StringUtils;
 import io.appmetrica.analytics.impl.ClientIdentifiersHolder;
 import io.appmetrica.analytics.impl.ClientServiceLocator;
 import io.appmetrica.analytics.impl.FeaturesResult;
+import io.appmetrica.analytics.impl.SelfReportingUtils;
 import io.appmetrica.analytics.impl.Utils;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesClientDbStorage;
+import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade;
 import io.appmetrica.analytics.impl.startup.uuid.MultiProcessSafeUuidProvider;
 import io.appmetrica.analytics.impl.startup.uuid.UuidValidator;
 import io.appmetrica.analytics.impl.utils.JsonHelper;
@@ -35,16 +37,16 @@ public class StartupParams {
     private static final String DEVICE_ID_HASH_KEY = Constants.StartupParamsCallbackKeys.DEVICE_ID_HASH;
     private static final String GET_AD_URL_KEY = Constants.StartupParamsCallbackKeys.GET_AD_URL;
     private static final String REPORT_AD_URL_KEY = Constants.StartupParamsCallbackKeys
-            .REPORT_AD_URL;
+        .REPORT_AD_URL;
     private static final String RESPONSE_CLIDS_KEY = Constants.StartupParamsCallbackKeys.CLIDS;
     private static final String GAID_KEY = Constants.StartupParamsCallbackKeys.GOOGLE_ADV_ID;
     private static final String HOAID_KEY = Constants.StartupParamsCallbackKeys.HUAWEI_ADV_ID;
     private static final String YANDEX_ADV_ID_KEY =
-            Constants.StartupParamsCallbackKeys.YANDEX_ADV_ID;
+        Constants.StartupParamsCallbackKeys.YANDEX_ADV_ID;
 
     private final Set<String> advIdentifiersKeys = new HashSet<String>();
     private final Map<String, IdentifiersResult> mIdentifiers =
-            new HashMap<String, IdentifiersResult>();
+        new HashMap<String, IdentifiersResult>();
     private final StartupParamItemAdapter startupParamItemAdapter = new StartupParamItemAdapter();
     private List<String> mCustomHosts;
     private Map<String, String> mClientClids;
@@ -99,7 +101,7 @@ public class StartupParams {
         this.featuresConverter = featuresConverter;
         this.uuidValidator = uuidValidator;
 
-        putUuidIfValid(multiProcessSafeUuidProvider.readUuid());
+        initUuid(multiProcessSafeUuidProvider.readUuid(), mPreferences.getUuidResult());
 
         putIdentifierIfNotEmpty(DEVICE_ID_KEY, mPreferences.getDeviceIdResult());
         putIdentifierIfNotEmpty(DEVICE_ID_HASH_KEY, mPreferences.getDeviceIdHashResult());
@@ -115,7 +117,7 @@ public class StartupParams {
         String clidsString = mPreferences.getClientClids(null);
         mClientClids = clidsString == null ? null : StartupUtils.decodeClids(clidsString);
         mClientClidsChangedAfterLastIdentifiersUpdate = mPreferences
-                .getClientClidsChangedAfterLastIdentifiersUpdate(true);
+            .getClientClidsChangedAfterLastIdentifiersUpdate(true);
         mServerTimeOffsetSeconds = mPreferences.getServerTimeOffset(0);
         nextStartupTime = mPreferences.getNextStartupTime();
 
@@ -150,9 +152,36 @@ public class StartupParams {
         }
     }
 
-    private void putUuidIfValid(@Nullable IdentifiersResult identifier) {
-        if (isUuidValid(identifier)) {
-            mIdentifiers.put(UUID_KEY, identifier);
+    private void initUuid(@Nullable IdentifiersResult theOnlyTrueIdentifier,
+                          @NonNull IdentifiersResult backupIdentifier) {
+        if (isUuidValid(theOnlyTrueIdentifier)) {
+            mIdentifiers.put(UUID_KEY, theOnlyTrueIdentifier);
+        }
+
+        checkUuidConsistency(theOnlyTrueIdentifier, backupIdentifier);
+    }
+
+    private void checkUuidConsistency(@Nullable IdentifiersResult theOnlyTrueIdentifier,
+                                      @NonNull IdentifiersResult backupIdentifier) {
+        String theOnlyTrueUuid = theOnlyTrueIdentifier == null ? null : theOnlyTrueIdentifier.id;
+        String backupUuid = backupIdentifier.id;
+
+        if (theOnlyTrueUuid == null ||
+            (backupUuid != null && !theOnlyTrueUuid.equals(backupUuid))) {
+
+            DebugLogger.INSTANCE.warning(
+                TAG,
+                "Smth goes wrong with uuid: uuid = %s; backup uuid: %s",
+                theOnlyTrueUuid,
+                backupUuid
+            );
+
+            SelfReportingUtils.reportUuidError(
+                AppMetricaSelfReportFacade.getReporter(),
+                "client",
+                theOnlyTrueUuid,
+                backupUuid
+            );
         }
     }
 
@@ -162,9 +191,11 @@ public class StartupParams {
         }
     }
 
-    private void initUuid(@Nullable IdentifiersResult uuid) {
+    private void updateUuid(@Nullable IdentifiersResult uuid) {
         if (!isUuidValid(mIdentifiers.get(UUID_KEY))) {
-            putUuidIfValid(uuid);
+            if (isUuidValid(uuid)) {
+                mIdentifiers.put(UUID_KEY, uuid);
+            }
         }
     }
 
@@ -197,23 +228,23 @@ public class StartupParams {
 
     synchronized boolean shouldSendStartup() {
         return shouldSendStartup(Arrays.asList(
-                Constants.StartupParamsCallbackKeys.CLIDS,
-                Constants.StartupParamsCallbackKeys.DEVICE_ID_HASH,
-                Constants.StartupParamsCallbackKeys.DEVICE_ID,
-                Constants.StartupParamsCallbackKeys.GET_AD_URL,
-                Constants.StartupParamsCallbackKeys.REPORT_AD_URL,
-                Constants.StartupParamsCallbackKeys.UUID
+            Constants.StartupParamsCallbackKeys.CLIDS,
+            Constants.StartupParamsCallbackKeys.DEVICE_ID_HASH,
+            Constants.StartupParamsCallbackKeys.DEVICE_ID,
+            Constants.StartupParamsCallbackKeys.GET_AD_URL,
+            Constants.StartupParamsCallbackKeys.REPORT_AD_URL,
+            Constants.StartupParamsCallbackKeys.UUID
         ));
     }
 
     synchronized boolean shouldSendStartup(@NonNull List<String> identifiers) {
         boolean notAllIdentifiers = !containsIdentifiers(
-                StartupRequiredUtils.pickIdentifiersThatShouldTriggerStartup(identifiers)
+            StartupRequiredUtils.pickIdentifiersThatShouldTriggerStartup(identifiers)
         );
         boolean advIdentifiersRequested = listContainsAdvIdentifiers(identifiers);
         boolean outdated = StartupRequiredUtils.isOutdated(nextStartupTime);
         boolean result = notAllIdentifiers || advIdentifiersRequested || outdated ||
-                mClientClidsChangedAfterLastIdentifiersUpdate;
+            mClientClidsChangedAfterLastIdentifiersUpdate;
 
         DebugLogger.INSTANCE.info(
             TAG,
@@ -259,11 +290,11 @@ public class StartupParams {
                     mClientClidsChangedAfterLastIdentifiersUpdate
                 );
                 if (mClientClidsChangedAfterLastIdentifiersUpdate || isIdentifierNull(savedIdentifier) ||
-                        (savedIdentifier.id.isEmpty() && Utils.isNullOrEmpty(mClientClids) == false)) {
+                    (savedIdentifier.id.isEmpty() && Utils.isNullOrEmpty(mClientClids) == false)) {
                     return false;
                 }
             } else if (Constants.StartupParamsCallbackKeys.FEATURE_LIB_SSL_ENABLED
-                    .equals(identifier)
+                .equals(identifier)
             ) {
                 if (savedIdentifier == null) {
                     return false;
@@ -289,27 +320,27 @@ public class StartupParams {
 
     private void updateAllParamsPreferences() {
         mPreferences.putUuidResult(mIdentifiers.get(UUID_KEY))
-                .putDeviceIdResult(mIdentifiers.get(DEVICE_ID_KEY))
-                .putDeviceIdHashResult(mIdentifiers.get(DEVICE_ID_HASH_KEY))
-                .putAdUrlGetResult(mIdentifiers.get(GET_AD_URL_KEY))
-                .putAdUrlReportResult(mIdentifiers.get(REPORT_AD_URL_KEY))
-                .putServerTimeOffset(mServerTimeOffsetSeconds)
-                .putResponseClidsResult(mIdentifiers.get(RESPONSE_CLIDS_KEY))
-                .putClientClids(StartupUtils.encodeClids(mClientClids))
-                .putGaid(mIdentifiers.get(GAID_KEY))
-                .putHoaid(mIdentifiers.get(HOAID_KEY))
-                .putYandexAdvId(mIdentifiers.get(YANDEX_ADV_ID_KEY))
-                .putClientClidsChangedAfterLastIdentifiersUpdate(mClientClidsChangedAfterLastIdentifiersUpdate)
-                .putCustomSdkHosts(customSdkHostsHolder.getCommonResult())
-                .putNextStartupTime(nextStartupTime)
-                .putFeatures(featuresHolder.getFeatures())
-                .commit();
+            .putDeviceIdResult(mIdentifiers.get(DEVICE_ID_KEY))
+            .putDeviceIdHashResult(mIdentifiers.get(DEVICE_ID_HASH_KEY))
+            .putAdUrlGetResult(mIdentifiers.get(GET_AD_URL_KEY))
+            .putAdUrlReportResult(mIdentifiers.get(REPORT_AD_URL_KEY))
+            .putServerTimeOffset(mServerTimeOffsetSeconds)
+            .putResponseClidsResult(mIdentifiers.get(RESPONSE_CLIDS_KEY))
+            .putClientClids(StartupUtils.encodeClids(mClientClids))
+            .putGaid(mIdentifiers.get(GAID_KEY))
+            .putHoaid(mIdentifiers.get(HOAID_KEY))
+            .putYandexAdvId(mIdentifiers.get(YANDEX_ADV_ID_KEY))
+            .putClientClidsChangedAfterLastIdentifiersUpdate(mClientClidsChangedAfterLastIdentifiersUpdate)
+            .putCustomSdkHosts(customSdkHostsHolder.getCommonResult())
+            .putNextStartupTime(nextStartupTime)
+            .putFeatures(featuresHolder.getFeatures())
+            .commit();
     }
 
     private void updateClidsByReceiver(@NonNull ClientIdentifiersHolder clientIdentifiersHolder) {
         if (clidsStateChecker.doClientClidsMatchClientClidsForRequest(
-                mClientClids,
-                JsonHelper.clidsFromString(clientIdentifiersHolder.getClientClidsForRequest().id)
+            mClientClids,
+            JsonHelper.clidsFromString(clientIdentifiersHolder.getClientClidsForRequest().id)
         )) {
             mIdentifiers.put(RESPONSE_CLIDS_KEY, clientIdentifiersHolder.getResponseClids());
             mClientClidsChangedAfterLastIdentifiersUpdate = false;
@@ -341,7 +372,7 @@ public class StartupParams {
     }
 
     private void updateIdentifiersByReceiver(@NonNull ClientIdentifiersHolder clientIdentifiersHolder) {
-        initUuid(clientIdentifiersHolder.getUuid());
+        updateUuid(clientIdentifiersHolder.getUuid());
         putIdentifierIfNotEmpty(DEVICE_ID_KEY, clientIdentifiersHolder.getDeviceId());
         putIdentifierIfNotEmpty(DEVICE_ID_HASH_KEY, clientIdentifiersHolder.getDeviceIdHash());
         mIdentifiers.put(GAID_KEY, clientIdentifiersHolder.getGaid());
@@ -409,7 +440,7 @@ public class StartupParams {
     @NonNull
     public AdvIdentifiersResult getCachedAdvIdentifiers() {
         return advIdentifiersConverter.convert(
-                mIdentifiers.get(GAID_KEY), mIdentifiers.get(HOAID_KEY), mIdentifiers.get(YANDEX_ADV_ID_KEY)
+            mIdentifiers.get(GAID_KEY), mIdentifiers.get(HOAID_KEY), mIdentifiers.get(YANDEX_ADV_ID_KEY)
         );
     }
 }

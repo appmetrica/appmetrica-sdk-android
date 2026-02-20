@@ -1,19 +1,25 @@
 package io.appmetrica.analytics.impl.startup
 
+import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus
 import io.appmetrica.analytics.coreutils.internal.time.TimeProvider
 import io.appmetrica.analytics.impl.ClidsInfoStorage
 import io.appmetrica.analytics.impl.StartupStateHolder
 import io.appmetrica.analytics.impl.clids.ClidsInfo
 import io.appmetrica.analytics.impl.component.ComponentId
 import io.appmetrica.analytics.impl.request.StartupRequestConfig
+import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade
+import io.appmetrica.analytics.impl.selfreporting.SelfReporterWrapper
 import io.appmetrica.analytics.impl.startup.parsing.StartupResult
 import io.appmetrica.analytics.impl.startup.uuid.MultiProcessSafeUuidProvider
 import io.appmetrica.analytics.impl.startup.uuid.UuidValidator
 import io.appmetrica.analytics.impl.utils.DeviceIdGenerator
 import io.appmetrica.analytics.impl.utils.ServerTime
+import io.appmetrica.analytics.internal.IdentifiersResult
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
 import io.appmetrica.analytics.testutils.TestUtils
+import io.appmetrica.analytics.testutils.on
+import io.appmetrica.analytics.testutils.staticRule
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.kotlin.any
@@ -27,6 +33,13 @@ internal class StartupUnitListenerNotificationTest : CommonTest() {
 
     @get:Rule
     var globalServiceLocatorRule = GlobalServiceLocatorRule()
+
+    private val selfReporter: SelfReporterWrapper = mock()
+
+    @get:Rule
+    val appMetricaSelfReportFacadeRule = staticRule<AppMetricaSelfReportFacade> {
+        on { AppMetricaSelfReportFacade.getReporter() } doReturn selfReporter
+    }
 
     private val packageName = "test.package"
 
@@ -46,7 +59,9 @@ internal class StartupUnitListenerNotificationTest : CommonTest() {
     private val startupStateStorage: StartupState.Storage = mock()
     private val clidsStorage: ClidsInfoStorage = mock()
     private val clidsStateChecker: ClidsStateChecker = mock()
-    private val uuidProvider: MultiProcessSafeUuidProvider = mock()
+    private val uuidProvider: MultiProcessSafeUuidProvider = mock {
+        on { readUuid() } doReturn IdentifiersResult("uuid", IdentifierStatus.OK, null)
+    }
     private val uuidValidator: UuidValidator = mock()
     private val timeProvider: TimeProvider = mock()
     private val startupStateHolder: StartupStateHolder = mock()

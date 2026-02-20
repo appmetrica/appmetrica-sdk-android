@@ -3,6 +3,8 @@ package io.appmetrica.analytics.impl.startup
 import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus
 import io.appmetrica.analytics.impl.ClientIdentifiersHolder
 import io.appmetrica.analytics.impl.db.preferences.PreferencesClientDbStorage
+import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade
+import io.appmetrica.analytics.impl.selfreporting.SelfReporterWrapper
 import io.appmetrica.analytics.impl.startup.uuid.MultiProcessSafeUuidProvider
 import io.appmetrica.analytics.impl.startup.uuid.UuidValidator
 import io.appmetrica.analytics.impl.utils.JsonHelper
@@ -36,15 +38,21 @@ internal abstract class StartupParamsTestBase(
     internal val advIdentifiersConverter = mock<AdvIdentifiersFromIdentifierResultConverter>()
     internal val clidsStateChecker = mock<ClidsStateChecker>()
     internal val uuidValidator = mock<UuidValidator>()
+    internal val selfReporter = mock<SelfReporterWrapper>()
 
     @Rule
     @JvmField
     internal val startupRequiredUtils = MockedStaticRule(StartupRequiredUtils::class.java)
 
+    @Rule
+    @JvmField
+    internal val appMetricaSelfReportFacade = MockedStaticRule(AppMetricaSelfReportFacade::class.java)
+
     protected lateinit var startupParams: StartupParams
 
     @Before
     fun setUp() {
+        whenever(AppMetricaSelfReportFacade.getReporter()).thenReturn(selfReporter)
         StartupParamsTestUtils.mockPreferencesClientDbStoragePutResponses(storage)
         whenever(storage.getClientClids(anyOrNull()))
             .thenReturn(StartupUtils.encodeClids(CLIENT_CLIDS))
@@ -58,7 +66,12 @@ internal abstract class StartupParamsTestBase(
         whenever(storage.customSdkHosts)
             .thenReturn(IdentifiersResult(null, IdentifierStatus.UNKNOWN, null))
         whenever(storage.features).thenReturn(FeaturesInternal())
-        whenever(uuidValidator.isValid(UUID.id)).thenReturn(true)
+
+        val uuidForSetup = clientIdentifiersHolder.uuid
+        val uuidId = uuidForSetup.id
+        whenever(storage.uuidResult).thenReturn(uuidForSetup)
+        whenever(multiProcessSafeUuidProvider.readUuid()).thenReturn(uuidForSetup)
+        whenever(uuidValidator.isValid(uuidId)).thenReturn(uuidId != null && uuidId.isNotEmpty())
 
         startupParams = StartupParams(
             storage,
