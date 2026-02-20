@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import io.appmetrica.analytics.coreutils.internal.io.FileUtils;
 import io.appmetrica.analytics.impl.db.constants.Constants;
 import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.analytics.testutils.ContextRule;
 import io.appmetrica.analytics.testutils.MockedStaticRule;
 import java.io.File;
 import java.util.Arrays;
@@ -16,7 +17,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.ParameterizedRobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
 
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
@@ -24,6 +24,9 @@ import static org.mockito.Mockito.when;
 
 @RunWith(ParameterizedRobolectricTestRunner.class)
 public class FileLockerTest extends CommonTest {
+
+    @Rule
+    public ContextRule contextRule = new ContextRule();
 
     private static final String sPackage = "ru.yandex.metrica";
     private static final String sDelimeter = "_";
@@ -65,9 +68,9 @@ public class FileLockerTest extends CommonTest {
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        context = RuntimeEnvironment.getApplication();
+        context = contextRule.getContext();
         when(FileUtils.getFileFromSdkStorage(context, name + ".lock")).thenReturn(lockFile);
-        mDbFileLock = new FileLocker(RuntimeEnvironment.getApplication(), name);
+        mDbFileLock = new FileLocker(context, name);
     }
 
     @After
@@ -101,7 +104,7 @@ public class FileLockerTest extends CommonTest {
     @Test(expected = IllegalStateException.class)
     public void lockFileIsNull() throws Throwable {
         when(FileUtils.getFileFromSdkStorage(eq(context), anyString())).thenReturn(null);
-        mDbFileLock = new FileLocker(RuntimeEnvironment.getApplication(), name);
+        mDbFileLock = new FileLocker(context, name);
         mDbFileLock.lock();
     }
 

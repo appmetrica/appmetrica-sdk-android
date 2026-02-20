@@ -1,6 +1,5 @@
 package io.appmetrica.analytics.impl.component.session
 
-import android.text.TextUtils
 import io.appmetrica.analytics.impl.db.constants.Constants
 import io.appmetrica.analytics.impl.request.ReportRequestConfig
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
@@ -24,11 +23,11 @@ internal class SessionRequestParams(requestParameters: JSONObject) {
 
     fun areParamsSameAsInConfig(reportRequestConfig: ReportRequestConfig): Boolean {
         val paramsAreSame = listOf(
-            TextUtils.equals(reportRequestConfig.analyticsSdkVersionName, analyticsSdkVersionName),
-            TextUtils.equals(reportRequestConfig.analyticsSdkBuildNumber, analyticsSdkBuildNumber),
-            TextUtils.equals(reportRequestConfig.appVersion, appVersion),
-            TextUtils.equals(reportRequestConfig.appBuildNumber, appBuild),
-            TextUtils.equals(reportRequestConfig.osVersion, osVersion),
+            reportRequestConfig.analyticsSdkVersionName == analyticsSdkVersionName,
+            reportRequestConfig.analyticsSdkBuildNumber == analyticsSdkBuildNumber,
+            reportRequestConfig.appVersion == appVersion,
+            reportRequestConfig.appBuildNumber == appBuild,
+            reportRequestConfig.osVersion == osVersion,
             apiLevel == reportRequestConfig.osApiLevel,
             attributionId == reportRequestConfig.attributionId
         ).all { it }

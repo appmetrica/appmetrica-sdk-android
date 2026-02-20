@@ -3,8 +3,6 @@ package io.appmetrica.analytics.impl.profile;
 import io.appmetrica.analytics.impl.protobuf.backend.Userprofile;
 import io.appmetrica.analytics.testutils.CommonTest;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.nullable;
@@ -13,7 +11,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
-@RunWith(RobolectricTestRunner.class)
 public class CommonSaverTest extends CommonTest {
 
     private final AttributeSaver mInternalSaver = mock(AttributeSaver.class);

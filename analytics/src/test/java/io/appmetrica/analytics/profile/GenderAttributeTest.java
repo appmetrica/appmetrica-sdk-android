@@ -13,7 +13,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.ParameterizedRobolectricTestRunner;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -54,10 +55,10 @@ public class GenderAttributeTest extends CommonTest {
         assertThat(trimmer).isExactlyInstanceOf(DummyTrimmer.class);
     }
 
-    @RunWith(ParameterizedRobolectricTestRunner.class)
+    @RunWith(Parameterized.class)
     public static class EnumToStringMappingTest {
 
-        @ParameterizedRobolectricTestRunner.Parameters(name = "for {0} should be {1}")
+        @Parameters(name = "for {0} should be {1}")
         public static Collection<Object[]> data() {
             return Arrays.asList(new Object[][]{
                     {GenderAttribute.Gender.MALE, "M"},

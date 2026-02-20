@@ -3,13 +3,14 @@ package io.appmetrica.analytics.impl;
 import android.content.Context;
 import android.util.SparseArray;
 import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.analytics.testutils.ContextRule;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.never;
@@ -18,16 +19,20 @@ import static org.mockito.Mockito.verify;
 @RunWith(RobolectricTestRunner.class)
 public class MigrationManagerTest extends CommonTest {
 
+    @Rule
+    public ContextRule contextRule = new ContextRule();
+
     @Mock
     private MigrationManager.MigrationScript mMigrationScript;
 
-    private final Context mContext = RuntimeEnvironment.getApplication().getApplicationContext();
+    private Context mContext;
 
     private MigrationManager mMigrationManager;
 
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
+        mContext = contextRule.getContext();
     }
 
     @Test

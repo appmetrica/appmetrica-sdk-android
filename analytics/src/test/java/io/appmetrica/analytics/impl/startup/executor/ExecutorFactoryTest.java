@@ -7,15 +7,16 @@ import java.util.Arrays;
 import java.util.Collection;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.ParameterizedRobolectricTestRunner;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
-@RunWith(ParameterizedRobolectricTestRunner.class)
+@RunWith(Parameterized.class)
 public class ExecutorFactoryTest extends CommonTest {
 
-    @ParameterizedRobolectricTestRunner.Parameters(name = "{0} will produce {1}")
+    @Parameters(name = "{0} will produce {1}")
     public static Collection<Object[]> data() {
         return Arrays.asList(
             new Object[]{StubbedExecutorFactory.class, StubbedStartupExecutor.class, null, null},

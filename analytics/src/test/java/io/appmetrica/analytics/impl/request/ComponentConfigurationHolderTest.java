@@ -9,13 +9,10 @@ import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
-@RunWith(RobolectricTestRunner.class)
 public class ComponentConfigurationHolderTest extends CommonTest {
 
     private ComponentConfigurationHolder<

@@ -17,10 +17,8 @@ import java.util.List;
 import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.RobolectricTestRunner;
 
 import static io.appmetrica.analytics.impl.protobuf.backend.CrashAndroid.Error.DEFAULT;
 import static io.appmetrica.analytics.impl.protobuf.backend.CrashAndroid.OPTIONAL_BOOL_TRUE;
@@ -29,7 +27,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@RunWith(RobolectricTestRunner.class)
 public class RegularErrorConverterTest extends CommonTest {
 
     @Mock

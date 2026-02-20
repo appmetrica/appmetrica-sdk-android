@@ -1,9 +1,9 @@
 package io.appmetrica.analytics.impl.preloadinfo;
 
-import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import io.appmetrica.analytics.PreloadInfo;
+import io.appmetrica.analytics.coreutils.internal.StringUtils;
 import io.appmetrica.analytics.impl.DistributionSource;
 import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
@@ -20,7 +20,7 @@ public class PreloadInfoWrapper {
                               @NonNull PublicLogger logger,
                               final boolean autoTracking) {
         if (preloadInfo != null) {
-            if (TextUtils.isEmpty(preloadInfo.getTrackingId())) {
+            if (StringUtils.isNullOrEmpty(preloadInfo.getTrackingId())) {
                 logger.error("Required field \"PreloadInfo.trackingId\" is empty!\n" +
                     "This preload info will be skipped.");
             } else {

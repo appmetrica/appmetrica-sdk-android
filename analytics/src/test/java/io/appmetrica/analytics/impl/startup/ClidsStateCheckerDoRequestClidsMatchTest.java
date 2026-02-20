@@ -16,12 +16,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.ParameterizedRobolectricTestRunner;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-@RunWith(ParameterizedRobolectricTestRunner.class)
+@RunWith(Parameterized.class)
 public class ClidsStateCheckerDoRequestClidsMatchTest extends CommonTest {
 
     private static final Map<String, String> EMPTY_MAP = new HashMap<String, String>();
@@ -44,7 +45,7 @@ public class ClidsStateCheckerDoRequestClidsMatchTest extends CommonTest {
         MAP4.put("clid4", "4");
     }
 
-    @ParameterizedRobolectricTestRunner.Parameters(name = "{index}")
+    @Parameters(name = "{index}")
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
             // #0

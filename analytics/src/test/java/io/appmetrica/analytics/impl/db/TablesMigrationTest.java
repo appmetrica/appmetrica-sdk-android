@@ -10,6 +10,7 @@ import io.appmetrica.analytics.impl.db.DatabaseRevisions.DatabaseRevision;
 import io.appmetrica.analytics.impl.db.constants.Constants;
 import io.appmetrica.analytics.impl.utils.collection.HashMultimap;
 import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.analytics.testutils.ContextRule;
 import io.appmetrica.analytics.testutils.LogRule;
 import io.appmetrica.analytics.testutils.TestUtils;
 import java.io.Closeable;
@@ -20,11 +21,13 @@ import java.util.HashMap;
 import java.util.List;
 import org.junit.After;
 import org.junit.Rule;
-import org.robolectric.RuntimeEnvironment;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 abstract class TablesMigrationTest extends CommonTest {
+
+    @Rule
+    public ContextRule contextRule = new ContextRule();
 
     @Rule
     public LogRule logRule = new LogRule();
@@ -90,7 +93,7 @@ abstract class TablesMigrationTest extends CommonTest {
 
     SQLiteDatabase getOldDb() {
         OldRevisionDatabaseHelper oldRevisionDatabaseHelper =
-            new OldRevisionDatabaseHelper(RuntimeEnvironment.getApplication(), mStartUpgradeFromRevision);
+            new OldRevisionDatabaseHelper(contextRule.getContext(), mStartUpgradeFromRevision);
         oldRevisionDatabaseHelper.close();
         helpers.add(oldRevisionDatabaseHelper);
         SQLiteDatabase database = oldRevisionDatabaseHelper.getWritableDatabase();
@@ -100,7 +103,7 @@ abstract class TablesMigrationTest extends CommonTest {
 
     SQLiteDatabase getUpgradedDb() {
         UpgradeDatabaseHelper newHelper = new UpgradeDatabaseHelper(
-            RuntimeEnvironment.getApplication(), getTablesManager(), AppMetrica.getLibraryApiLevel());
+            contextRule.getContext(), getTablesManager(), AppMetrica.getLibraryApiLevel());
         helpers.add(newHelper);
         SQLiteDatabase newDatabase = newHelper.getWritableDatabase();
         closeables.add(newDatabase);
@@ -115,7 +118,7 @@ abstract class TablesMigrationTest extends CommonTest {
                         return true;
                     }
                 });
-        UpgradeDatabaseHelper newHelper = new UpgradeDatabaseHelper(RuntimeEnvironment.getApplication(),
+        UpgradeDatabaseHelper newHelper = new UpgradeDatabaseHelper(contextRule.getContext(),
             tablesManager, AppMetrica.getLibraryApiLevel());
         helpers.add(newHelper);
         SQLiteDatabase newDatabase = newHelper.getWritableDatabase();

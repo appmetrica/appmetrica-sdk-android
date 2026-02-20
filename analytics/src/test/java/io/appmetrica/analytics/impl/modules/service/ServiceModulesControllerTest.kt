@@ -732,7 +732,7 @@ internal class ServiceModulesControllerTest : CommonTest() {
 
     @Test
     fun getModulesConfigsBundleForClient() {
-        val firstBundle = MockProvider.mockBundle()
+        val firstBundle = MockProvider.mockedBundle()
         whenever(firstClientConfigProvider.getConfigBundleForClient()).thenReturn(firstBundle)
         whenever(secondClientConfigProvider.getConfigBundleForClient()).thenReturn(null)
 
@@ -749,8 +749,8 @@ internal class ServiceModulesControllerTest : CommonTest() {
 
     @Test
     fun `getModulesConfigsBundleForClient if module throw exception`() {
-        val firstBundle = MockProvider.mockBundle()
-        val secondBundle = MockProvider.mockBundle()
+        val firstBundle = MockProvider.mockedBundle()
+        val secondBundle = MockProvider.mockedBundle()
 
         whenever(firstClientConfigProvider.getConfigBundleForClient()).thenReturn(firstBundle)
         whenever(secondClientConfigProvider.getConfigBundleForClient()).thenReturn(secondBundle)

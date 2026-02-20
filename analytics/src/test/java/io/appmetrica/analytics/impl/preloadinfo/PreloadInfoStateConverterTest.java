@@ -9,13 +9,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
 import org.skyscreamer.jsonassert.JSONAssert;
 
 import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 
-@RunWith(RobolectricTestRunner.class)
 public class PreloadInfoStateConverterTest extends CommonTest {
 
     private final static String PARAM_KEY_FIRST = "first key";

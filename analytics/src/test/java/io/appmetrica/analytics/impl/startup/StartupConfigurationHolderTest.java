@@ -7,20 +7,20 @@ import io.appmetrica.analytics.impl.request.CoreRequestConfig;
 import io.appmetrica.analytics.impl.request.StartupArgumentsTest;
 import io.appmetrica.analytics.impl.request.StartupRequestConfig;
 import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.analytics.testutils.ContextRule;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@RunWith(RobolectricTestRunner.class)
 public class StartupConfigurationHolderTest extends CommonTest {
+
+    @Rule
+    public ContextRule contextRule = new ContextRule();
 
     private final StartupRequestConfig.Arguments mConfiguration = StartupArgumentsTest.empty();
     private StartupConfigurationHolder mHolder;
@@ -32,7 +32,7 @@ public class StartupConfigurationHolderTest extends CommonTest {
     public void setUp() {
         when(GlobalServiceLocator.getInstance().getClidsStorage()).thenReturn(mock(ClidsInfoStorage.class));
         mHolder = new StartupConfigurationHolder(
-            new StartupRequestConfig.Loader(RuntimeEnvironment.getApplication(), RuntimeEnvironment.getApplication().getPackageName()) {
+            new StartupRequestConfig.Loader(contextRule.getContext(), contextRule.getContext().getPackageName()) {
 
                 @Override
                 public StartupRequestConfig load(@NonNull CoreRequestConfig.CoreDataSource<StartupRequestConfig.Arguments> dataSource) {

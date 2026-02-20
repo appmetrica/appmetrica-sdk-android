@@ -1,9 +1,9 @@
 package io.appmetrica.analytics.impl;
 
 import android.net.Uri;
-import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import io.appmetrica.analytics.coreutils.internal.StringUtils;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,7 +25,7 @@ public class ReferrerParser {
 
         String deeplink = Uri.decode(parameters.get(DEFERRED_DEEPLINK_KEY));
         Map<String, String> deeplinkParameters = null;
-        if (TextUtils.isEmpty(deeplink) == false) {
+        if (!StringUtils.isNullOrEmpty(deeplink)) {
             deeplinkParameters = parseReferrerParameters(deeplink);
         }
         return new DeferredDeeplinkState(deeplink, deeplinkParameters, referrer);

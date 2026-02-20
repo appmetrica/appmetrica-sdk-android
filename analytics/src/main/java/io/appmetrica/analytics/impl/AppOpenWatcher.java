@@ -2,13 +2,13 @@ package io.appmetrica.analytics.impl;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.text.TextUtils;
 import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import io.appmetrica.analytics.coreapi.internal.backport.FunctionWithThrowable;
 import io.appmetrica.analytics.coreapi.internal.lifecycle.ActivityEvent;
 import io.appmetrica.analytics.coreapi.internal.lifecycle.ActivityLifecycleListener;
+import io.appmetrica.analytics.coreutils.internal.StringUtils;
 import io.appmetrica.analytics.coreutils.internal.system.SystemServiceUtils;
 import io.appmetrica.analytics.impl.utils.ApiProxyThread;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
@@ -94,7 +94,7 @@ public class AppOpenWatcher implements ActivityLifecycleListener {
             }
         );
         final String deeplink = intent == null ? null : intent.getDataString();
-        if (TextUtils.isEmpty(deeplink) == false) {
+        if (!StringUtils.isNullOrEmpty(deeplink)) {
             addOrExecuteCommand(new NonNullConsumer<DeeplinkConsumer>() {
                 @Override
                 @ApiProxyThread

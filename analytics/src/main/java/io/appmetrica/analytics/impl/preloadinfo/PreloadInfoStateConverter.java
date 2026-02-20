@@ -1,9 +1,9 @@
 package io.appmetrica.analytics.impl.preloadinfo;
 
-import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import io.appmetrica.analytics.coreapi.internal.data.ProtobufConverter;
+import io.appmetrica.analytics.coreutils.internal.StringUtils;
 import io.appmetrica.analytics.impl.protobuf.client.PreloadInfoProto;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import org.json.JSONObject;
@@ -20,7 +20,7 @@ public class PreloadInfoStateConverter implements
     @Override
     public PreloadInfoProto.PreloadInfoData.PreloadInfo fromModel(@NonNull PreloadInfoState value) {
         PreloadInfoProto.PreloadInfoData.PreloadInfo nano = new PreloadInfoProto.PreloadInfoData.PreloadInfo();
-        if (TextUtils.isEmpty(value.trackingId) == false) {
+        if (!StringUtils.isNullOrEmpty(value.trackingId)) {
             nano.trackingId = value.trackingId;
         }
         nano.additionalParameters = value.additionalParameters.toString();
@@ -44,7 +44,7 @@ public class PreloadInfoStateConverter implements
 
     @NonNull
     private JSONObject additionalParametersToJson(@Nullable String params) {
-        if (TextUtils.isEmpty(params) == false) {
+        if (!StringUtils.isNullOrEmpty(params)) {
             try {
                 return new JSONObject(params);
             } catch (Throwable ex) {

@@ -8,7 +8,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.ParameterizedRobolectricTestRunner;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.util.ReflectionHelpers;
 
@@ -24,7 +25,7 @@ public class AttributeTest extends CommonTest {
         assertThat(trimmer.getMaxSize()).isEqualTo(200);
     }
 
-    @RunWith(ParameterizedRobolectricTestRunner.class)
+    @RunWith(Parameterized.class)
     public static class NamedAttributeCreationTest {
 
         private final String mKey;
@@ -32,7 +33,7 @@ public class AttributeTest extends CommonTest {
         private final Object mAttribute;
         private final Class<? extends CustomAttribute> mResultClass;
 
-        @ParameterizedRobolectricTestRunner.Parameters(name = "{0}")
+        @Parameters(name = "{0}")
         public static Collection<Object[]> data() {
             return Arrays.asList(new Object[][]{
                     {"testKeyString", Attribute.customString("testKeyString"), StringAttribute.class},
@@ -56,10 +57,10 @@ public class AttributeTest extends CommonTest {
         }
     }
 
-    @RunWith(ParameterizedRobolectricTestRunner.class)
+    @RunWith(Parameterized.class)
     public static class PredefinedAttributeTest {
 
-        @ParameterizedRobolectricTestRunner.Parameters(name = "{1}")
+        @Parameters(name = "{1}")
         public static Collection<Object[]> data() {
             return Arrays.asList(new Object[][]{
                     {Attribute.birthDate(), BirthDateAttribute.class},
@@ -87,10 +88,10 @@ public class AttributeTest extends CommonTest {
 
     }
 
-    @RunWith(ParameterizedRobolectricTestRunner.class)
+    @RunWith(Parameterized.class)
     public static class PredefinedAttributesKeyTest {
 
-        @ParameterizedRobolectricTestRunner.Parameters(name = "{1}")
+        @Parameters(name = "{1}")
         public static Collection<Object[]> data() {
             return Arrays.asList(new Object[][]{
                     {Attribute.birthDate(), "appmetrica_birth_date"},

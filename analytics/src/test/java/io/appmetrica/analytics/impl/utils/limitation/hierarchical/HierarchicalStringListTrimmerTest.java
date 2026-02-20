@@ -16,13 +16,14 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-import org.robolectric.ParameterizedRobolectricTestRunner;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
 import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
-@RunWith(ParameterizedRobolectricTestRunner.class)
+@RunWith(Parameterized.class)
 public class HierarchicalStringListTrimmerTest extends CommonTest {
 
     private final List<String> input;
@@ -41,7 +42,7 @@ public class HierarchicalStringListTrimmerTest extends CommonTest {
         this.expectedBytesTruncated = expectedBytesTruncated;
     }
 
-    @ParameterizedRobolectricTestRunner.Parameters(name = "#{index} - {4}")
+    @Parameters(name = "#{index} - {4}")
     public static List<Object[]> data() {
         return Arrays.asList(new Object[][]{
             {null, null, 0, 0, "null"},

@@ -9,11 +9,12 @@ import java.util.Collection;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.ParameterizedRobolectricTestRunner;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
 import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 
-@RunWith(ParameterizedRobolectricTestRunner.class)
+@RunWith(Parameterized.class)
 public class HierarchicalStringTrimmerTest extends CommonTest {
 
     private final String input;
@@ -26,7 +27,7 @@ public class HierarchicalStringTrimmerTest extends CommonTest {
         this.expectedTruncatedBytes = expectedTruncatedBytes;
     }
 
-    @ParameterizedRobolectricTestRunner.Parameters(name = "\"{0}\" -> \"{1}\": {2} bytes")
+    @Parameters(name = "\"{0}\" -> \"{1}\": {2} bytes")
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
             {null, null, 0},

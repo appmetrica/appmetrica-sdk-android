@@ -4,13 +4,10 @@ import io.appmetrica.analytics.impl.BackgroundRestrictionsState;
 import io.appmetrica.analytics.testutils.CommonTest;
 import java.util.List;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
-@RunWith(RobolectricTestRunner.class)
 public class AppPermissionsStateTest extends CommonTest {
 
     @Test

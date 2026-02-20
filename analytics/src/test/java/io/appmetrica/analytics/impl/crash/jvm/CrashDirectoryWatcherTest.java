@@ -9,14 +9,11 @@ import java.io.File;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.RobolectricTestRunner;
 
 import static org.mockito.Mockito.verify;
 
-@RunWith(RobolectricTestRunner.class)
 public class CrashDirectoryWatcherTest extends CommonTest {
 
     @Mock

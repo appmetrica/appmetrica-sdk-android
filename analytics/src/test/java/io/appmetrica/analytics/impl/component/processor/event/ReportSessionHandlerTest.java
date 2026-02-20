@@ -6,16 +6,13 @@ import io.appmetrica.analytics.impl.component.processor.ReportingReportProcessor
 import io.appmetrica.analytics.testutils.CommonTest;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
-import org.robolectric.RobolectricTestRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-@RunWith(RobolectricTestRunner.class)
 public class ReportSessionHandlerTest extends CommonTest {
 
     private ReportingReportProcessor mReportSessionProcessor;

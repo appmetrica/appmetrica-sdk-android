@@ -14,12 +14,13 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.ParameterizedRobolectricTestRunner;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
-@RunWith(ParameterizedRobolectricTestRunner.class)
+@RunWith(Parameterized.class)
 public class AppMetricaServiceCoreExecutionDispatcherTest extends CommonTest {
 
     interface Command {
@@ -49,7 +50,7 @@ public class AppMetricaServiceCoreExecutionDispatcherTest extends CommonTest {
     private static final Bundle BUNDLE = new Bundle();
     private static final int DATA_TYPE = 34;
 
-    @ParameterizedRobolectricTestRunner.Parameters(name = "[{index}] {2}")
+    @Parameters(name = "[{index}] {2}")
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
                 {

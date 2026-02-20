@@ -5,6 +5,7 @@ import io.appmetrica.analytics.impl.component.CommutationDispatcherComponent;
 import io.appmetrica.analytics.impl.component.processor.commutation.ForceStartupHandler;
 import io.appmetrica.analytics.impl.component.processor.commutation.UpdatePreActivationConfigHandler;
 import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.analytics.testutils.ContextRule;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import java.util.Arrays;
 import java.util.Collection;
@@ -16,7 +17,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.ParameterizedRobolectricTestRunner;
 import org.robolectric.ParameterizedRobolectricTestRunner.Parameters;
-import org.robolectric.RuntimeEnvironment;
 
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_STARTUP;
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_UPDATE_PRE_ACTIVATION_CONFIG;
@@ -27,9 +27,12 @@ import static org.mockito.Mockito.mock;
 @RunWith(ParameterizedRobolectricTestRunner.class)
 public class CommutationProcessingStrategyFactoryTest extends CommonTest {
 
+    @Rule
+    public ContextRule contextRule = new ContextRule();
+
     @Before
     public void setUp() {
-        doReturn(RuntimeEnvironment.getApplication()).when(mComponent).getContext();
+        doReturn(contextRule.getContext()).when(mComponent).getContext();
         mFactory = new CommutationProcessingStrategyFactory(mComponent);
     }
 

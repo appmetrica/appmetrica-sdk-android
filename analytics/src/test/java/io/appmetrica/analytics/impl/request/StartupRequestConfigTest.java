@@ -12,6 +12,7 @@ import io.appmetrica.analytics.impl.referrer.service.ReferrerHolder;
 import io.appmetrica.analytics.impl.startup.StartupState;
 import io.appmetrica.analytics.networktasks.internal.RetryPolicyConfig;
 import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.analytics.testutils.ContextRule;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import io.appmetrica.analytics.testutils.TestUtils;
 import java.util.ArrayList;
@@ -20,18 +21,17 @@ import java.util.UUID;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@RunWith(RobolectricTestRunner.class)
 public class StartupRequestConfigTest extends CommonTest {
+
+    @Rule
+    public ContextRule contextRule = new ContextRule();
 
     @Mock
     private ReferrerHolder mReferrerHolder;
@@ -188,7 +188,7 @@ public class StartupRequestConfigTest extends CommonTest {
 
     private StartupRequestConfig createStartupRequestConfigWithNullArgs(@NonNull StartupState.Builder builder) {
         return new StartupRequestConfig.Loader(
-            RuntimeEnvironment.getApplication(), RuntimeEnvironment.getApplication().getPackageName()
+            contextRule.getContext(), contextRule.getContext().getPackageName()
         ).load(new CoreRequestConfig.CoreDataSource<StartupRequestConfig.Arguments>(
             builder.build(),
             sdkEnvironmentProvider,

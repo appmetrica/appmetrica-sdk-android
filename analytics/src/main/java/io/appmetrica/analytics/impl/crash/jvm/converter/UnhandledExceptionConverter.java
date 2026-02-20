@@ -1,9 +1,9 @@
 package io.appmetrica.analytics.impl.crash.jvm.converter;
 
-import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.data.ProtobufConverter;
+import io.appmetrica.analytics.coreutils.internal.StringUtils;
 import io.appmetrica.analytics.impl.Utils;
 import io.appmetrica.analytics.impl.crash.jvm.client.UnhandledException;
 import io.appmetrica.analytics.impl.protobuf.backend.CrashAndroid;
@@ -70,10 +70,10 @@ public class UnhandledExceptionConverter implements ProtobufConverter<UnhandledE
             outCrash.buildId = value.buildId;
         }
         outCrash.isOffline = optionalBoolConverter.toProto(value.isOffline);
-        if (!TextUtils.isEmpty(value.platform)) {
+        if (!StringUtils.isNullOrEmpty(value.platform)) {
             outCrash.virtualMachine = platformConverter.fromModel(value.platform);
         }
-        if (!TextUtils.isEmpty(value.virtualMachineVersion)) {
+        if (!StringUtils.isNullOrEmpty(value.virtualMachineVersion)) {
             outCrash.virtualMachineVersion = value.virtualMachineVersion.getBytes();
         }
         if (!Utils.isNullOrEmpty(value.pluginEnvironment)) {

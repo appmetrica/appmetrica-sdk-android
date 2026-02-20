@@ -20,14 +20,15 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.ParameterizedRobolectricTestRunner;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.Mockito.when;
 
-@RunWith(ParameterizedRobolectricTestRunner.class)
+@RunWith(Parameterized.class)
 public class StartupParamsContainsIdentifiersForPreferencesTest extends CommonTest {
 
     private final String mInputDeviceId;
@@ -88,7 +89,7 @@ public class StartupParamsContainsIdentifiersForPreferencesTest extends CommonTe
         mExpectedShouldSendStartup = expectedShouldSendStartup;
     }
 
-    @ParameterizedRobolectricTestRunner.Parameters(name = "[{index}]{18}")
+    @Parameters(name = "[{index}]{18}")
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
             //region all identifiers

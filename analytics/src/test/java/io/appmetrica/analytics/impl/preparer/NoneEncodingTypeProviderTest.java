@@ -4,12 +4,9 @@ import io.appmetrica.analytics.impl.protobuf.backend.EventProto;
 import io.appmetrica.analytics.impl.utils.encryption.EventEncryptionMode;
 import io.appmetrica.analytics.testutils.CommonTest;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(RobolectricTestRunner.class)
 public class NoneEncodingTypeProviderTest extends CommonTest {
 
     private final NoneEncodingTypeProvider mProvider = new NoneEncodingTypeProvider();

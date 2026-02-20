@@ -9,8 +9,6 @@ import io.appmetrica.analytics.testutils.CommonTest;
 import java.util.Collections;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
 
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.doReturn;
@@ -18,7 +16,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-@RunWith(RobolectricTestRunner.class)
 public class CommutationReportProcessorTest extends CommonTest {
 
     private CommutationReportProcessor mProcessor;

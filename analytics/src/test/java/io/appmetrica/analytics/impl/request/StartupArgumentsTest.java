@@ -1,25 +1,51 @@
 package io.appmetrica.analytics.impl.request;
 
+import android.content.ContentValues;
+import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import io.appmetrica.analytics.impl.client.ClientConfiguration;
 import io.appmetrica.analytics.impl.client.ClientConfigurationTestUtils;
 import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.analytics.testutils.ContextRule;
+import io.appmetrica.analytics.testutils.MockProvider;
+import io.appmetrica.analytics.testutils.MockedConstructionRule;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(RobolectricTestRunner.class)
 public class StartupArgumentsTest extends CommonTest {
+
+    @Rule
+    public ContextRule contextRule = new ContextRule();
+    private Context context;
+
+    private final Map<ContentValues, Map<String, Object>> shadows = new HashMap<>();
+
+    @Rule
+    public MockedConstructionRule<ContentValues> contentValuesMockedConstructionRule = new MockedConstructionRule<>(
+        ContentValues.class,
+        (mock, context) -> {
+            Map<String, Object> shadow = new HashMap<>();
+            shadows.put(mock, shadow);
+            MockProvider.stubContentValues(mock, shadow);
+        }
+    );
 
     public static StartupRequestConfig.Arguments empty() {
         return new StartupRequestConfig.Arguments();
+    }
+
+    @Before
+    public void setUp() {
+        context = contextRule.getContext();
     }
 
     @Test
@@ -59,7 +85,10 @@ public class StartupArgumentsTest extends CommonTest {
             Collections.singletonList("newHost")
         );
 
-        StartupRequestConfig.Arguments arguments = emptyArguments.mergeFrom(new StartupRequestConfig.Arguments(ClientConfigurationTestUtils.createStubbedConfiguration()));
+        StartupRequestConfig.Arguments arguments = emptyArguments.mergeFrom(
+            new StartupRequestConfig.Arguments(
+                ClientConfigurationTestUtils.createStubbedConfiguration(context, null))
+        );
         assertArgument(
             arguments,
             "oldReferrer",
@@ -80,7 +109,9 @@ public class StartupArgumentsTest extends CommonTest {
             null
         );
 
-        StartupRequestConfig.Arguments arguments = emptyArguments.mergeFrom(new StartupRequestConfig.Arguments(ClientConfigurationTestUtils.createStubbedConfiguration()));
+        StartupRequestConfig.Arguments arguments = emptyArguments.mergeFrom(
+            new StartupRequestConfig.Arguments(ClientConfigurationTestUtils.createStubbedConfiguration(context, null))
+        );
         assertArgument(
             arguments,
             null,
@@ -131,7 +162,8 @@ public class StartupArgumentsTest extends CommonTest {
     }
 
     private ClientConfiguration createStubedConfiguration() {
-        ClientConfiguration clientConfiguration = ClientConfigurationTestUtils.createStubbedConfiguration();
+        ClientConfiguration clientConfiguration =
+            ClientConfigurationTestUtils.createStubbedConfiguration(context, null);
         clientConfiguration.getReporterConfiguration().setDeviceType("phone");
         clientConfiguration.getReporterConfiguration().setCustomAppVersion("customAppVersion");
         clientConfiguration.getReporterConfiguration().setAppBuildNumber(666);

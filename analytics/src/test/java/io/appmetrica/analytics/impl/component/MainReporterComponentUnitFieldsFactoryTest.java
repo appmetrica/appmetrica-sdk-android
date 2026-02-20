@@ -8,13 +8,10 @@ import io.appmetrica.analytics.impl.utils.executors.ServiceExecutorProvider;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.robolectric.RobolectricTestRunner;
 
 import static org.mockito.Mockito.when;
 
-@RunWith(RobolectricTestRunner.class)
 public class MainReporterComponentUnitFieldsFactoryTest extends ComponentUnitFieldsFactoryTest {
 
     @Mock

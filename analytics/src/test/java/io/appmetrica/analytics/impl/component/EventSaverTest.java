@@ -20,10 +20,8 @@ import java.util.HashMap;
 import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.RobolectricTestRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -32,7 +30,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(RobolectricTestRunner.class)
 public class EventSaverTest extends CommonTest {
 
     @Mock
@@ -65,7 +62,6 @@ public class EventSaverTest extends CommonTest {
     private final String mProfileId = "profile id";
     private final int curAppVersion = 10;
     private EventSaver mEventSaver;
-    private final long mIdentityEventSendTime = 5000;
     private final long mPermissionsCheckTime = 7000;
     private int mLastAppVersionWithCollectedFeatures = 5;
     private final int mReportType = 15;

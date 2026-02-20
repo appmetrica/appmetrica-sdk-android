@@ -7,23 +7,23 @@ import io.appmetrica.analytics.impl.component.processor.commutation.CommutationH
 import io.appmetrica.analytics.impl.component.processor.commutation.CommutationReportProcessor;
 import io.appmetrica.analytics.impl.startup.StartupUnit;
 import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.analytics.testutils.ContextRule;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(RobolectricTestRunner.class)
 public class CommutationDispatcherComponentFieldsFactoryTest extends CommonTest {
+
+    @Rule
+    public ContextRule contextRule = new ContextRule();
 
     @Mock
     private CommutationDispatcherComponent mComponent;
@@ -39,7 +39,7 @@ public class CommutationDispatcherComponentFieldsFactoryTest extends CommonTest 
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        when(mComponent.getContext()).thenReturn(RuntimeEnvironment.getApplication());
+        when(mComponent.getContext()).thenReturn(contextRule.getContext());
         mFieldsFactory = new CommutationDispatcherComponentFieldsFactory(lifecycleDependentComponentManager);
     }
 

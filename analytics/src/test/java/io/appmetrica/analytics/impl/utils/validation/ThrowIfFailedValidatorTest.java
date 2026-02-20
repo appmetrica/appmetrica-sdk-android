@@ -4,8 +4,6 @@ import io.appmetrica.analytics.ValidationException;
 import io.appmetrica.analytics.testutils.CommonTest;
 import org.assertj.core.api.ThrowableAssert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -13,7 +11,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 
-@RunWith(RobolectricTestRunner.class)
 public class ThrowIfFailedValidatorTest extends CommonTest {
 
     private final Validator mInternalValidator = mock(Validator.class);

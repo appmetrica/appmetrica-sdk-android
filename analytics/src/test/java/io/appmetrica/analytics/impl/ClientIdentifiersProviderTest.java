@@ -16,6 +16,7 @@ import io.appmetrica.analytics.impl.utils.JsonHelper;
 import io.appmetrica.analytics.impl.utils.StartupUtils;
 import io.appmetrica.analytics.internal.IdentifiersResult;
 import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.analytics.testutils.ContextRule;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -25,11 +26,11 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.Rule;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
 import org.skyscreamer.jsonassert.JSONAssert;
 
 import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
@@ -38,6 +39,9 @@ import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
 public class ClientIdentifiersProviderTest extends CommonTest {
+
+    @Rule
+    public ContextRule contextRule = new ContextRule();
 
     private ClientIdentifiersProvider mClientIdentifiersProvider;
 
@@ -70,7 +74,7 @@ public class ClientIdentifiersProviderTest extends CommonTest {
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        mContext = RuntimeEnvironment.getApplication();
+        mContext = contextRule.getContext();
         AdTrackingInfoResult googleResult = new AdTrackingInfoResult(new AdTrackingInfo(AdTrackingInfo.Provider.GOOGLE, mGaid, false), mGaidStatus, mGaidError);
         AdTrackingInfoResult huaweiResult = new AdTrackingInfoResult(new AdTrackingInfo(AdTrackingInfo.Provider.HMS, mHoaid, false), mHoaidStatus, mHoaidError);
         AdTrackingInfoResult yandexResult = new AdTrackingInfoResult(new AdTrackingInfo(AdTrackingInfo.Provider.YANDEX, yandexAdvId, false), yandexStatus, yandexError);

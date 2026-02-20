@@ -1,10 +1,10 @@
 package io.appmetrica.analytics.impl;
 
-import android.text.TextUtils;
 import android.util.Base64;
 import android.util.SparseArray;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import io.appmetrica.analytics.coreutils.internal.StringUtils;
 import io.appmetrica.analytics.impl.component.session.SessionType;
 import io.appmetrica.analytics.impl.preparer.BytesValueComposer;
 import io.appmetrica.analytics.impl.preparer.DummyLocationInfoComposer;
@@ -191,7 +191,7 @@ public final class ProtobufUtils {
                     @NonNull
                     @Override
                     public byte[] getValue(@NonNull EventFromDbModel event, @NonNull ReportRequestConfig config) {
-                        if (TextUtils.isEmpty(event.getValue()) == false) {
+                        if (!StringUtils.isNullOrEmpty(event.getValue())) {
                             try {
                                 ReferrerInfo info = ReferrerInfo.parseFrom(Base64.decode(event.getValue(), 0));
                                 Referrer referrer = new Referrer();
@@ -285,7 +285,7 @@ public final class ProtobufUtils {
         if (input.getSimNetworkCode() != null) {
             simInfo.operatorId = input.getSimNetworkCode();
         }
-        if (TextUtils.isEmpty(input.getOperatorName()) == false) {
+        if (!StringUtils.isNullOrEmpty(input.getOperatorName())) {
             simInfo.operatorName = input.getOperatorName();
         }
         simInfo.dataRoaming = input.isNetworkRoaming();

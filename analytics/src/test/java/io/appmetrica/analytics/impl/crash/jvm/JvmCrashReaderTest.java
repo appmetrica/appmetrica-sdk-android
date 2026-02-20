@@ -9,6 +9,7 @@ import io.appmetrica.analytics.impl.client.ClientConfiguration;
 import io.appmetrica.analytics.impl.client.ProcessConfiguration;
 import io.appmetrica.analytics.internal.CounterConfiguration;
 import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.analytics.testutils.ContextRule;
 import java.io.File;
 import java.util.HashMap;
 import org.json.JSONException;
@@ -22,7 +23,6 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -31,6 +31,9 @@ import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
 public class JvmCrashReaderTest extends CommonTest {
+
+    @Rule
+    public ContextRule contextRule = new ContextRule();
 
     @Rule
     public MockitoRule mockitoRule = MockitoJUnit.rule();
@@ -48,7 +51,7 @@ public class JvmCrashReaderTest extends CommonTest {
             String crashValue = new JvmCrash(
                 counterReport,
                 new ClientConfiguration(new ProcessConfiguration(
-                    RuntimeEnvironment.getApplication(),
+                    contextRule.getContext(),
                     mock(ResultReceiver.class)
                 ), new CounterConfiguration(TestData.TEST_UUID)),
                 new HashMap<ClientCounterReport.TrimmedField, Integer>()

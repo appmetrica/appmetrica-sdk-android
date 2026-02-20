@@ -10,6 +10,7 @@ import io.appmetrica.analytics.impl.client.ProcessConfiguration;
 import io.appmetrica.analytics.impl.utils.concurrency.ExclusiveMultiProcessFileLock;
 import io.appmetrica.analytics.impl.utils.concurrency.FileLocksHolder;
 import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.analytics.testutils.ContextRule;
 import io.appmetrica.analytics.testutils.MockedStaticRule;
 import java.io.File;
 import org.junit.Before;
@@ -21,13 +22,15 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
 public class CrashToFileWriterTest extends CommonTest {
+
+    @Rule
+    public ContextRule contextRule = new ContextRule();
 
     private Context mContext;
     @Mock
@@ -53,8 +56,8 @@ public class CrashToFileWriterTest extends CommonTest {
 
     @Before
     public void setUp() {
+        mContext = contextRule.getContext();
         MockitoAnnotations.openMocks(this);
-        mContext = RuntimeEnvironment.getApplication();
         when(FileUtils.getCrashesDirectory(mContext)).thenReturn(mCrashFolder);
         when(mReport.getEnvironment()).thenReturn(mReporterEnvironment);
         when(mReport.getReport()).thenReturn(counterReport);

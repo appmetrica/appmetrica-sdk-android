@@ -9,11 +9,12 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.ParameterizedRobolectricTestRunner;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(ParameterizedRobolectricTestRunner.class)
+@RunWith(Parameterized.class)
 public class ProtoMessageSizeCalculatorForECommerceEventTest extends CommonTest {
 
     private static final RandomStringGenerator RANDOM_STRING_GENERATOR = new RandomStringGenerator(20);
@@ -24,7 +25,7 @@ public class ProtoMessageSizeCalculatorForECommerceEventTest extends CommonTest 
         this.input = input;
     }
 
-    @ParameterizedRobolectricTestRunner.Parameters(name = "#{index} - {1}")
+    @Parameters(name = "#{index} - {1}")
     public static List<Object[]> data() {
         return Arrays.asList(new Object[][]{
             {new Ecommerce.ECommerceEvent(), "empty event"},

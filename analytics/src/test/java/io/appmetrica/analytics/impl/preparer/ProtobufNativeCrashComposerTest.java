@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.impl.preparer;
 
 import android.content.ContentValues;
+import android.util.Base64;
 import io.appmetrica.analytics.coreutils.internal.StringUtils;
 import io.appmetrica.analytics.coreutils.internal.io.Base64Utils;
 import io.appmetrica.analytics.coreutils.internal.io.GZIPUtils;
@@ -11,33 +12,49 @@ import io.appmetrica.analytics.impl.request.ReportRequestConfig;
 import io.appmetrica.analytics.impl.utils.encryption.EventEncryptionMode;
 import io.appmetrica.analytics.protobuf.nano.MessageNano;
 import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.analytics.testutils.MockProvider;
+import io.appmetrica.analytics.testutils.MockedStaticRule;
+import java.io.IOException;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.RobolectricTestRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
-@RunWith(RobolectricTestRunner.class)
 public class ProtobufNativeCrashComposerTest extends CommonTest {
 
     @Mock
     private ReportRequestConfig config;
+
+    private final String filledValue = "filled value";
+    private final String compressedValue = "compressed value";
+    private final String encodedValue = "encoded value";
+
+    @Rule
+    public final MockedStaticRule<Base64> base64MockedStaticRule = new MockedStaticRule<>(Base64.class);
+    @Rule
+    public final MockedStaticRule<GZIPUtils> gzipUtilsMockedStaticRule = new MockedStaticRule<>(GZIPUtils.class);
     private final ProtobufNativeCrashComposer protobufNativeCrashComposer = new ProtobufNativeCrashComposer();
 
     @Before
-    public void setUp() {
+    public void setUp() throws IOException {
         MockitoAnnotations.openMocks(this);
+
+        when(GZIPUtils.gzipBytes(filledValue.getBytes())).thenReturn(compressedValue.getBytes());
+        when(GZIPUtils.unGzipBytes(compressedValue.getBytes())).thenReturn(filledValue.getBytes());
+        when(Base64.encodeToString(compressedValue.getBytes(), Base64.DEFAULT)).thenReturn(encodedValue);
+        when(Base64.decode(encodedValue, Base64.DEFAULT)).thenReturn(compressedValue.getBytes());
     }
 
     @Test
     public void someValue() throws Exception {
-        final String originalValue = "original value";
+        final String originalValue = filledValue;
         byte[] compressedBytes = GZIPUtils.gzipBytes(StringUtils.getUTF8Bytes(originalValue));
 
-        ContentValues cv = new ContentValues();
+        ContentValues cv = MockProvider.mockedContentValues();
         DbProto.EventDescription eventDescription = new DbProto.EventDescription();
         eventDescription.value = Base64Utils.compressBase64(originalValue.getBytes());
         cv.put(Constants.EventsTable.EventTableEntry.FIELD_EVENT_DESCRIPTION, MessageNano.toByteArray(eventDescription));
@@ -48,7 +65,7 @@ public class ProtobufNativeCrashComposerTest extends CommonTest {
 
     @Test
     public void emptyValue() {
-        ContentValues cv = new ContentValues();
+        ContentValues cv = MockProvider.mockedContentValues();
         DbProto.EventDescription eventDescription = new DbProto.EventDescription();
         eventDescription.value = "";
         cv.put(Constants.EventsTable.EventTableEntry.FIELD_EVENT_DESCRIPTION, MessageNano.toByteArray(eventDescription));
@@ -59,7 +76,7 @@ public class ProtobufNativeCrashComposerTest extends CommonTest {
 
     @Test
     public void nullValue() {
-        ContentValues cv = new ContentValues();
+        ContentValues cv = MockProvider.mockedContentValues();
         EventFromDbModel event = new EventFromDbModel(cv);
         assertThat(protobufNativeCrashComposer.getValue(event, config)).isEqualTo(new byte[0]);
     }

@@ -31,7 +31,8 @@ import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.ParameterizedRobolectricTestRunner;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -257,10 +258,10 @@ public class UtilsTest extends CommonTest {
 
     }
 
-    @RunWith(ParameterizedRobolectricTestRunner.class)
+    @RunWith(Parameterized.class)
     public static class ConvertLongArrayToStringArrayTests {
 
-        @ParameterizedRobolectricTestRunner.Parameters(name = "Test convert long array {2} to string array")
+        @Parameters(name = "Test convert long array {2} to string array")
         public static Collection<Object[]> data() {
             return Arrays.asList(new Object[][]{
                 {new long[]{}, new String[]{}, "{}"},

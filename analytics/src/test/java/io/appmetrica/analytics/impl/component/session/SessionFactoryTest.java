@@ -8,17 +8,16 @@ import io.appmetrica.analytics.impl.db.DatabaseHelper;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesComponentDbStorage;
 import io.appmetrica.analytics.impl.request.ReportRequestConfig;
 import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.analytics.testutils.ContextRule;
 import java.util.Random;
 import org.json.JSONException;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.Rule;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -30,8 +29,10 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(RobolectricTestRunner.class)
 public class SessionFactoryTest extends CommonTest {
+
+    @Rule
+    public ContextRule contextRule = new ContextRule();
 
     boolean mDebugBackup = BuildConfig.DEBUG;
 
@@ -191,7 +192,7 @@ public class SessionFactoryTest extends CommonTest {
         ReportRequestConfig requestConfig = mock(ReportRequestConfig.class);
         doReturn(10).when(requestConfig).getSessionTimeout();
         doReturn(requestConfig).when(componentUnit).getFreshReportRequestConfig();
-        doReturn(RuntimeEnvironment.getApplication()).when(componentUnit).getContext();
+        doReturn(contextRule.getContext()).when(componentUnit).getContext();
         doReturn(mock(DatabaseHelper.class)).when(componentUnit).getDbHelper();
         AbstractSessionFactory factory = factoryFactory.createFactory(
             componentUnit,

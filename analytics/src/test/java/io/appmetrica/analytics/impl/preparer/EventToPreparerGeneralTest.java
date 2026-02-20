@@ -12,11 +12,12 @@ import java.util.List;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.ParameterizedRobolectricTestRunner;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
 import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 
-@RunWith(ParameterizedRobolectricTestRunner.class)
+@RunWith(Parameterized.class)
 public class EventToPreparerGeneralTest extends CommonTest {
 
     private static class Composers {
@@ -105,7 +106,7 @@ public class EventToPreparerGeneralTest extends CommonTest {
         }
     }
 
-    @ParameterizedRobolectricTestRunner.Parameters(name = "{0} to {1}")
+    @Parameters(name = "{0} to {1}")
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
             {InternalEvents.EVENT_TYPE_ACTIVATION, defaultComposers()},

@@ -2,12 +2,9 @@ package io.appmetrica.analytics.impl.id;
 
 import io.appmetrica.analytics.testutils.CommonTest;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 
-@RunWith(RobolectricTestRunner.class)
 public class TimesBasedStrategyTest extends CommonTest {
 
     private final TimesBasedRetryStrategy strategy = new TimesBasedRetryStrategy(3, 100);

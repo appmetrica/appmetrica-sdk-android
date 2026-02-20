@@ -1,12 +1,12 @@
 package io.appmetrica.analytics.coreutils.internal.logger;
 
-import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import java.util.HashMap;
 import java.util.Map;
 import io.appmetrica.analytics.coreutils.internal.ApiKeyUtils;
+import io.appmetrica.analytics.coreutils.internal.StringUtils;
 import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 
 public abstract class LoggerStorage {
@@ -28,7 +28,7 @@ public abstract class LoggerStorage {
 
     @NonNull
     public static PublicLogger getOrCreatePublicLogger(@Nullable String apiKey) {
-        if (TextUtils.isEmpty(apiKey)) {
+        if (StringUtils.isNullOrEmpty(apiKey)) {
             return PublicLogger.getAnonymousInstance();
         }
         PublicLogger logger = sPublicLoggers.get(apiKey);

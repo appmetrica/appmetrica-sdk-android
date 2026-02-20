@@ -1,18 +1,13 @@
 package io.appmetrica.analytics.impl.client;
 
+import android.content.Context;
 import android.os.ResultReceiver;
 import io.appmetrica.analytics.internal.CounterConfiguration;
 import io.appmetrica.analytics.testutils.CommonTest;
-import org.robolectric.RuntimeEnvironment;
 
 public class ClientConfigurationTestUtils extends CommonTest {
 
-    public static ClientConfiguration createStubbedConfiguration() {
-        return createStubbedConfiguration(null);
+    public static ClientConfiguration createStubbedConfiguration(Context context, final ResultReceiver resultReceiver) {
+        return new ClientConfiguration(new ProcessConfiguration(context, resultReceiver), new CounterConfiguration());
     }
-
-    public static ClientConfiguration createStubbedConfiguration(final ResultReceiver resultReceiver) {
-        return new ClientConfiguration(new ProcessConfiguration(RuntimeEnvironment.getApplication(), resultReceiver), new CounterConfiguration());
-    }
-
 }

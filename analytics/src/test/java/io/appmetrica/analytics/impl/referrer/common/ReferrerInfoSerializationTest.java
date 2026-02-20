@@ -10,14 +10,15 @@ import java.util.Collection;
 import java.util.List;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.ParameterizedRobolectricTestRunner;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
 import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 
-@RunWith(ParameterizedRobolectricTestRunner.class)
+@RunWith(Parameterized.class)
 public class ReferrerInfoSerializationTest extends CommonTest {
 
-    @ParameterizedRobolectricTestRunner.Parameters(name = "{0} to {1}")
+    @Parameters(name = "{0} to {1}")
     public static Collection<Object[]> data() {
         List<Object[]> data = Arrays.asList(
             new Object[]{ReferrerInfo.Source.UNKNOWN, ReferrerInfoClient.UNKNOWN},

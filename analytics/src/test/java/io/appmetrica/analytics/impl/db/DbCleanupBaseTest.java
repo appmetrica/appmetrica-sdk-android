@@ -11,6 +11,7 @@ import io.appmetrica.analytics.impl.request.ReportRequestConfig;
 import io.appmetrica.analytics.impl.utils.TimeUtils;
 import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.analytics.testutils.ContextRule;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import io.appmetrica.analytics.testutils.TestUtils;
 import java.util.ArrayList;
@@ -19,15 +20,17 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.runner.RunWith;
-import org.robolectric.ParameterizedRobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
+import org.junit.runners.Parameterized;
 
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@RunWith(ParameterizedRobolectricTestRunner.class)
+@RunWith(Parameterized.class)
 public abstract class DbCleanupBaseTest extends CommonTest {
+
+    @Rule
+    public ContextRule contextRule = new ContextRule();
 
     @Rule
     public final GlobalServiceLocatorRule mRule = new GlobalServiceLocatorRule();
@@ -36,7 +39,7 @@ public abstract class DbCleanupBaseTest extends CommonTest {
 
     @Before
     public void setUp() {
-        DatabaseHelperTest.SimpleDatabaseHelper simpleDatabaseHelper = new DatabaseHelperTest.SimpleDatabaseHelper(RuntimeEnvironment.getApplication());
+        DatabaseHelperTest.SimpleDatabaseHelper simpleDatabaseHelper = new DatabaseHelperTest.SimpleDatabaseHelper(contextRule.getContext());
         mDb = simpleDatabaseHelper.getWritableDatabase();
 
         DatabaseStorage storage = mock(DatabaseStorage.class);
@@ -51,7 +54,7 @@ public abstract class DbCleanupBaseTest extends CommonTest {
         ReportRequestConfig config = mock(ReportRequestConfig.class);
         when(componentUnit.getFreshReportRequestConfig()).thenReturn(config);
         when(config.getMaxEventsInDbCount()).thenReturn(getMaxEventsCount());
-        when(componentUnit.getContext()).thenReturn(RuntimeEnvironment.getApplication());
+        when(componentUnit.getContext()).thenReturn(contextRule.getContext());
         when(componentUnit.getPublicLogger()).thenReturn(mock(PublicLogger.class));
         mHelper = new DatabaseHelper(componentUnit, storage);
     }

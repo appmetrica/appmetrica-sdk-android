@@ -5,15 +5,12 @@ import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.testutils.CommonTest;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.RobolectricTestRunner;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
-@RunWith(RobolectricTestRunner.class)
 public class PreloadInfoWrapperGeneralTest extends CommonTest {
 
     private static final String sErrorMessage = "Required field \"PreloadInfo.trackingId\" is empty!\n" +

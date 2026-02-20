@@ -11,10 +11,8 @@ import io.appmetrica.analytics.testutils.CommonTest;
 import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.RobolectricTestRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -22,7 +20,6 @@ import static org.mockito.Mockito.when;
 /**
  * @see ECommerceEventProviderTest#orderEvent()
  */
-@RunWith(RobolectricTestRunner.class)
 public class OrderInfoEventTest extends CommonTest {
 
     @Mock

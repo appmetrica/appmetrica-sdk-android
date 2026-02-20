@@ -1,43 +1,69 @@
 package io.appmetrica.analytics.impl.client;
 
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Parcel;
+import android.content.ContentValues;
 import android.os.Process;
 import android.os.ResultReceiver;
 import io.appmetrica.analytics.AppMetricaConfig;
 import io.appmetrica.analytics.BuildConfig;
-import io.appmetrica.analytics.impl.DataResultReceiver;
 import io.appmetrica.analytics.impl.TestsData;
 import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.analytics.testutils.ContextRule;
+import io.appmetrica.analytics.testutils.MockProvider;
+import io.appmetrica.analytics.testutils.MockedConstructionRule;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.assertj.core.api.SoftAssertions;
+import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
+import org.junit.Rule;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
-@RunWith(RobolectricTestRunner.class)
 public class ProcessConfigurationTest extends CommonTest {
 
-    private final ResultReceiver mResultReceiver = mock(ResultReceiver.class);
-    private final ProcessConfiguration mProcessConfiguration = new ProcessConfiguration(RuntimeEnvironment.getApplication(), mResultReceiver);
+    @Rule
+    public ContextRule contextRule = new ContextRule();
+
+    private final Map<ContentValues, HashMap<String, Object>> contentValuesDataMaps = new HashMap<>();
+
+    @Rule
+    public MockedConstructionRule<ContentValues> contentValuesMockedConstructionRule = new MockedConstructionRule<>(
+        ContentValues.class,
+        (mock, context) -> {
+            HashMap<String, Object> dataMap = new HashMap<>();
+
+            if (!context.arguments().isEmpty() && context.arguments().get(0) instanceof ContentValues) {
+                ContentValues source = (ContentValues) context.arguments().get(0);
+                HashMap<String, Object> sourceDataMap = contentValuesDataMaps.get(source);
+                if (sourceDataMap != null) {
+                    dataMap.putAll(sourceDataMap);
+                }
+            }
+
+            contentValuesDataMaps.put(mock, dataMap);
+            MockProvider.stubContentValues(mock, dataMap);
+        }
+    );
+
+    private final ResultReceiver resultReceiver = mock(ResultReceiver.class);
+    private ProcessConfiguration processConfiguration;
     private final AppMetricaConfig.Builder configBuilder = AppMetricaConfig
         .newConfigBuilder(TestsData.generateApiKey());
+
+    @Before
+    public void setUp() {
+        processConfiguration = new ProcessConfiguration(contextRule.getContext(), resultReceiver);
+    }
 
     @Test
     public void testGetClidsShouldReturnWrittenValidClids() {
         HashMap<String, String> clids = new HashMap<String, String>();
         clids.put("clid1", "1");
-        mProcessConfiguration.setClientClids(clids);
-        assertThat(mProcessConfiguration.getClientClids()).isEqualTo(clids);
+        processConfiguration.setClientClids(clids);
+        assertThat(processConfiguration.getClientClids()).isEqualTo(clids);
     }
 
     @Test
@@ -46,185 +72,188 @@ public class ProcessConfigurationTest extends CommonTest {
         initialClids.put("clid1", "1");
         HashMap<String, String> newClids = new HashMap<String, String>();
         newClids.put("clid2", "2");
-        mProcessConfiguration.setClientClids(initialClids);
-        mProcessConfiguration.setClientClids(newClids);
-        assertThat(mProcessConfiguration.getClientClids()).isEqualTo(newClids);
+        processConfiguration.setClientClids(initialClids);
+        processConfiguration.setClientClids(newClids);
+        assertThat(processConfiguration.getClientClids()).isEqualTo(newClids);
     }
 
     @Test
     public void testGetClidsShouldReturnNullIfNothingWasWritten() {
-        assertThat(mProcessConfiguration.getClientClids()).isNull();
+        assertThat(processConfiguration.getClientClids()).isNull();
     }
 
     @Test
     public void testGetClidsShouldReturnNullIfNullWasWritten() {
-        mProcessConfiguration.setClientClids(null);
-        assertThat(mProcessConfiguration.getClientClids()).isNull();
+        processConfiguration.setClientClids(null);
+        assertThat(processConfiguration.getClientClids()).isNull();
     }
 
     @Test
     public void testGetClidsShouldReturnNullIfNormalClidsWasReWrittenByNull() {
         HashMap<String, String> clids = new HashMap<String, String>();
         clids.put("clid1", "1");
-        mProcessConfiguration.setClientClids(clids);
-        mProcessConfiguration.setClientClids(null);
-        assertThat(mProcessConfiguration.getClientClids()).isNull();
+        processConfiguration.setClientClids(clids);
+        processConfiguration.setClientClids(null);
+        assertThat(processConfiguration.getClientClids()).isNull();
     }
 
     @Test
     public void testGetClidsReturnNormalClidsIfNullWasReWrittenByNormalClids() {
         HashMap<String, String> clids = new HashMap<String, String>();
         clids.put("clid1", "1");
-        mProcessConfiguration.setClientClids(null);
-        mProcessConfiguration.setClientClids(clids);
-        assertThat(mProcessConfiguration.getClientClids()).isEqualTo(clids);
+        processConfiguration.setClientClids(null);
+        processConfiguration.setClientClids(clids);
+        assertThat(processConfiguration.getClientClids()).isEqualTo(clids);
     }
 
     @Test
     public void testGetDistributionReferrerShouldReturnWrittenValidValue() {
         String distributionReferrer = "distributionReferrer";
-        mProcessConfiguration.setDistributionReferrer(distributionReferrer);
-        assertThat(mProcessConfiguration.getDistributionReferrer()).isEqualTo(distributionReferrer);
+        processConfiguration.setDistributionReferrer(distributionReferrer);
+        assertThat(processConfiguration.getDistributionReferrer()).isEqualTo(distributionReferrer);
     }
 
     @Test
     public void testGetDistributionReferrerShouldReturnNullIfNullWasWritten() {
-        mProcessConfiguration.setDistributionReferrer(null);
-        assertThat(mProcessConfiguration.getDistributionReferrer()).isNull();
+        processConfiguration.setDistributionReferrer(null);
+        assertThat(processConfiguration.getDistributionReferrer()).isNull();
     }
 
     @Test
     public void testGetDistributionReferrerShouldReturnReWrittenValidClids() {
-        mProcessConfiguration.setDistributionReferrer("inital referrer");
+        processConfiguration.setDistributionReferrer("inital referrer");
         String newReferrer = "new referrer";
-        mProcessConfiguration.setDistributionReferrer(newReferrer);
-        assertThat(mProcessConfiguration.getDistributionReferrer()).isEqualTo(newReferrer);
+        processConfiguration.setDistributionReferrer(newReferrer);
+        assertThat(processConfiguration.getDistributionReferrer()).isEqualTo(newReferrer);
     }
 
     @Test
     public void testGetDistributionReferrerShouldReturnNullIfValidDistributionReferrerWasReWrittenByNull() {
-        mProcessConfiguration.setDistributionReferrer("inital referrer");
-        mProcessConfiguration.setDistributionReferrer(null);
-        assertThat(mProcessConfiguration.getDistributionReferrer()).isNull();
+        processConfiguration.setDistributionReferrer("inital referrer");
+        processConfiguration.setDistributionReferrer(null);
+        assertThat(processConfiguration.getDistributionReferrer()).isNull();
     }
 
     @Test
     public void testGetDistributionReferrerReturnValidValueIfNullWasReWrittenByValidValue() {
-        mProcessConfiguration.setDistributionReferrer(null);
+        processConfiguration.setDistributionReferrer(null);
         String validReferrer = "valid distribution referrer";
-        mProcessConfiguration.setDistributionReferrer(validReferrer);
-        assertThat(mProcessConfiguration.getDistributionReferrer()).isEqualTo(validReferrer);
+        processConfiguration.setDistributionReferrer(validReferrer);
+        assertThat(processConfiguration.getDistributionReferrer()).isEqualTo(validReferrer);
     }
 
     @Test
     public void testGetInstallReferrerSourceShouldReturnWrittenValidValue() {
         String source = "gpl";
-        mProcessConfiguration.setInstallReferrerSource(source);
-        assertThat(mProcessConfiguration.getInstallReferrerSource()).isEqualTo(source);
+        processConfiguration.setInstallReferrerSource(source);
+        assertThat(processConfiguration.getInstallReferrerSource()).isEqualTo(source);
     }
 
     @Test
     public void testGetInstallReferrerSourceShouldReturnNullIfNullWasWritten() {
-        mProcessConfiguration.setInstallReferrerSource(null);
-        assertThat(mProcessConfiguration.getInstallReferrerSource()).isNull();
+        processConfiguration.setInstallReferrerSource(null);
+        assertThat(processConfiguration.getInstallReferrerSource()).isNull();
     }
 
     @Test
     public void testGetInstallReferrerSourcShouldReturnReWritten() {
-        mProcessConfiguration.setInstallReferrerSource("inital source");
+        processConfiguration.setInstallReferrerSource("inital source");
         String newSource = "new source";
-        mProcessConfiguration.setInstallReferrerSource(newSource);
-        assertThat(mProcessConfiguration.getInstallReferrerSource()).isEqualTo(newSource);
+        processConfiguration.setInstallReferrerSource(newSource);
+        assertThat(processConfiguration.getInstallReferrerSource()).isEqualTo(newSource);
     }
 
     @Test
     public void testGetInstallReferrerSourceShouldReturnNullIfValidDistributionReferrerWasReWrittenByNull() {
-        mProcessConfiguration.setInstallReferrerSource("inital source");
-        mProcessConfiguration.setInstallReferrerSource(null);
-        assertThat(mProcessConfiguration.getInstallReferrerSource()).isNull();
+        processConfiguration.setInstallReferrerSource("inital source");
+        processConfiguration.setInstallReferrerSource(null);
+        assertThat(processConfiguration.getInstallReferrerSource()).isNull();
     }
 
     @Test
     public void testGetInstallReferrerSourceReturnValidValueIfNullWasReWrittenByValidValue() {
-        mProcessConfiguration.setInstallReferrerSource(null);
+        processConfiguration.setInstallReferrerSource(null);
         String newSource = "valid sourcer";
-        mProcessConfiguration.setInstallReferrerSource(newSource);
-        assertThat(mProcessConfiguration.getInstallReferrerSource()).isEqualTo(newSource);
+        processConfiguration.setInstallReferrerSource(newSource);
+        assertThat(processConfiguration.getInstallReferrerSource()).isEqualTo(newSource);
     }
 
     @Test
     public void testDefaultCustomHosts() {
-        assertThat(mProcessConfiguration.getCustomHosts()).isNull();
+        assertThat(processConfiguration.getCustomHosts()).isNull();
     }
 
     @Test
     public void testWriteNullCustomHosts() {
-        mProcessConfiguration.setCustomHosts(null);
-        assertThat(mProcessConfiguration.getCustomHosts()).isNull();
+        processConfiguration.setCustomHosts(null);
+        assertThat(processConfiguration.getCustomHosts()).isNull();
     }
 
     @Test
     public void testWriteEmptyCustomHosts() {
-        mProcessConfiguration.setCustomHosts(new ArrayList<String>());
-        assertThat(mProcessConfiguration.getCustomHosts()).isNull();
+        processConfiguration.setCustomHosts(new ArrayList<String>());
+        assertThat(processConfiguration.getCustomHosts()).isNull();
     }
 
     @Test
     public void testWriteCustomHosts() {
         List<String> hosts = getTestCustomHosts();
-        mProcessConfiguration.setCustomHosts(hosts);
-        assertThat(mProcessConfiguration.getCustomHosts()).isEqualTo(hosts);
+        processConfiguration.setCustomHosts(hosts);
+        assertThat(processConfiguration.getCustomHosts()).isEqualTo(hosts);
     }
 
     @Test
     public void testRewriteCustomHosts() {
-        mProcessConfiguration.setCustomHosts(new ArrayList<String>() {
+        processConfiguration.setCustomHosts(new ArrayList<String>() {
             {
                 add("http://initial.custom.host.ru");
             }
         });
         List<String> hosts = getTestCustomHosts();
-        mProcessConfiguration.setCustomHosts(hosts);
-        assertThat(mProcessConfiguration.getCustomHosts()).isEqualTo(hosts);
+        processConfiguration.setCustomHosts(hosts);
+        assertThat(processConfiguration.getCustomHosts()).isEqualTo(hosts);
     }
 
     @Test
     public void testRewriteDefaultValueWithCustomHostsFromConfig() {
         List<String> customHosts = getTestCustomHosts();
         configBuilder.withCustomHosts(customHosts);
-        mProcessConfiguration.update(configBuilder.build());
-        assertThat(mProcessConfiguration.getCustomHosts()).containsExactlyElementsOf(customHosts);
+        processConfiguration.update(configBuilder.build());
+        assertThat(processConfiguration.getCustomHosts()).containsExactlyElementsOf(customHosts);
     }
 
     @Test
     public void testRewriteNonDefaultValueWithCustomHostsFromConfig() {
         List<String> customHosts = getTestCustomHosts();
         configBuilder.withCustomHosts(customHosts);
-        mProcessConfiguration.setCustomHosts(new ArrayList<String>() {
+        processConfiguration.setCustomHosts(new ArrayList<String>() {
             {
                 add("https://another.custom.host.ru");
             }
         });
-        mProcessConfiguration.update(configBuilder.build());
-        assertThat(mProcessConfiguration.getCustomHosts()).containsExactlyElementsOf(customHosts);
+        processConfiguration.update(configBuilder.build());
+        assertThat(processConfiguration.getCustomHosts()).containsExactlyElementsOf(customHosts);
     }
 
     @Test
     public void testShouldNotRewriteNonDefaultCustomHostsWithNullValueFromConfig() {
         List<String> customHosts = getTestCustomHosts();
         configBuilder.withAdditionalConfig("YMM_customHosts", null);
-        mProcessConfiguration.setCustomHosts(customHosts);
-        mProcessConfiguration.update(configBuilder.build());
-        assertThat(mProcessConfiguration.getCustomHosts()).containsExactlyElementsOf(customHosts);
+        processConfiguration.setCustomHosts(customHosts);
+        processConfiguration.update(configBuilder.build());
+        assertThat(processConfiguration.getCustomHosts()).containsExactlyElementsOf(customHosts);
     }
 
     @Test
     public void testRewriteCustomHostFromConfig() {
         List<String> customHosts = getTestCustomHosts();
-        configBuilder.withAdditionalConfig("YMM_customHosts", Collections.singletonList("https://another.custom.host.ru"));
-        mProcessConfiguration.update(configBuilder.build());
-        mProcessConfiguration.setCustomHosts(customHosts);
-        assertThat(mProcessConfiguration.getCustomHosts()).containsExactlyElementsOf(customHosts);
+        configBuilder.withAdditionalConfig(
+            "YMM_customHosts",
+            Collections.singletonList("https://another.custom.host.ru")
+        );
+        processConfiguration.update(configBuilder.build());
+        processConfiguration.setCustomHosts(customHosts);
+        assertThat(processConfiguration.getCustomHosts()).containsExactlyElementsOf(customHosts);
     }
 
     @Test
@@ -233,8 +262,9 @@ public class ProcessConfigurationTest extends CommonTest {
         clidsFromConfig.put("clid1", "1");
         configBuilder.withAdditionalConfig("YMM_clids", clidsFromConfig);
         configBuilder.withAdditionalConfig("YMM_preloadInfoAutoTracking", false);
-        mProcessConfiguration.update(configBuilder.build());
-        assertThat(mProcessConfiguration.getClientClids()).containsExactly(clidsFromConfig.entrySet().toArray(new Map.Entry[clidsFromConfig.size()]));
+        processConfiguration.update(configBuilder.build());
+        assertThat(processConfiguration.getClientClids())
+            .containsExactly(clidsFromConfig.entrySet().toArray(new Map.Entry[clidsFromConfig.size()]));
     }
 
     @Test
@@ -245,9 +275,10 @@ public class ProcessConfigurationTest extends CommonTest {
         clidsFromConfig.put("clid1", "2");
         configBuilder.withAdditionalConfig("YMM_clids", clidsFromConfig);
         configBuilder.withAdditionalConfig("YMM_preloadInfoAutoTracking", false);
-        mProcessConfiguration.setClientClids(clids);
-        mProcessConfiguration.update(configBuilder.build());
-        assertThat(mProcessConfiguration.getClientClids()).containsExactly(clidsFromConfig.entrySet().toArray(new Map.Entry[clidsFromConfig.size()]));
+        processConfiguration.setClientClids(clids);
+        processConfiguration.update(configBuilder.build());
+        assertThat(processConfiguration.getClientClids())
+            .containsExactly(clidsFromConfig.entrySet().toArray(new Map.Entry[clidsFromConfig.size()]));
     }
 
     @Test
@@ -256,93 +287,63 @@ public class ProcessConfigurationTest extends CommonTest {
         clids.put("clid1", "1");
         configBuilder.withAdditionalConfig("YMM_clids", null);
         configBuilder.withAdditionalConfig("YMM_preloadInfoAutoTracking", false);
-        mProcessConfiguration.setClientClids(clids);
-        mProcessConfiguration.update(configBuilder.build());
-        assertThat(mProcessConfiguration.getClientClids()).containsExactly(clids.entrySet().toArray(new Map.Entry[clids.size()]));
+        processConfiguration.setClientClids(clids);
+        processConfiguration.update(configBuilder.build());
+        assertThat(processConfiguration.getClientClids())
+            .containsExactly(clids.entrySet().toArray(new Map.Entry[clids.size()]));
     }
 
     @Test
     public void testDistributionReferrerOverridesByConfig() {
         String distributionReferrer = "distributionReferrer";
         configBuilder.withAdditionalConfig("YMM_distributionReferrer", distributionReferrer);
-        mProcessConfiguration.update(configBuilder.build());
-        assertThat(mProcessConfiguration.getDistributionReferrer()).isEqualTo(distributionReferrer);
-        assertThat(mProcessConfiguration.getInstallReferrerSource()).isEqualTo("api");
+        processConfiguration.update(configBuilder.build());
+        assertThat(processConfiguration.getDistributionReferrer()).isEqualTo(distributionReferrer);
+        assertThat(processConfiguration.getInstallReferrerSource()).isEqualTo("api");
     }
 
     @Test
     public void testValidDistributionReferrerValueOverridesByConfig() {
-        mProcessConfiguration.setDistributionReferrer("Distribution referrer");
+        processConfiguration.setDistributionReferrer("Distribution referrer");
         String distributionReferrerFromConfig = "Distribution referrer from config";
         configBuilder.withAdditionalConfig("YMM_distributionReferrer", distributionReferrerFromConfig);
-        mProcessConfiguration.update(configBuilder.build());
-        assertThat(mProcessConfiguration.getDistributionReferrer()).isEqualTo(distributionReferrerFromConfig);
-        assertThat(mProcessConfiguration.getInstallReferrerSource()).isEqualTo("api");
+        processConfiguration.update(configBuilder.build());
+        assertThat(processConfiguration.getDistributionReferrer()).isEqualTo(distributionReferrerFromConfig);
+        assertThat(processConfiguration.getInstallReferrerSource()).isEqualTo("api");
     }
 
     @Test
     public void testValidDistributionReferrerShouldNotOverridesByConfigIfConfigValueIsNull() {
         String distributionReferrer = "distribution referrer";
-        mProcessConfiguration.setDistributionReferrer(distributionReferrer);
+        processConfiguration.setDistributionReferrer(distributionReferrer);
         configBuilder.withAdditionalConfig("YMM_distributionReferrer", null);
-        mProcessConfiguration.update(configBuilder.build());
-        assertThat(mProcessConfiguration.getDistributionReferrer()).isEqualTo(distributionReferrer);
-        assertThat(mProcessConfiguration.getInstallReferrerSource()).isNull();
+        processConfiguration.update(configBuilder.build());
+        assertThat(processConfiguration.getDistributionReferrer()).isEqualTo(distributionReferrer);
+        assertThat(processConfiguration.getInstallReferrerSource()).isNull();
     }
 
     @Test
     public void testProcessID() {
-        assertThat(new ProcessConfiguration(RuntimeEnvironment.getApplication(), mResultReceiver).getProcessID()).isEqualTo(Process.myPid());
+        assertThat(new ProcessConfiguration(contextRule.getContext(), resultReceiver).getProcessID())
+            .isEqualTo(Process.myPid());
     }
 
     @Test
     public void testProcessSessionID() {
-        assertThat(new ProcessConfiguration(RuntimeEnvironment.getApplication(), mResultReceiver).getProcessSessionID()).isEqualTo(ProcessConfiguration.PROCESS_SESSION_ID);
+        assertThat(new ProcessConfiguration(contextRule.getContext(), resultReceiver).getProcessSessionID())
+            .isEqualTo(ProcessConfiguration.PROCESS_SESSION_ID);
     }
 
     @Test
     public void testPackageName() {
-        assertThat(new ProcessConfiguration(RuntimeEnvironment.getApplication(), mResultReceiver).getPackageName()).
-            isEqualTo(RuntimeEnvironment.getApplication().getPackageName());
+        assertThat(new ProcessConfiguration(contextRule.getContext(), resultReceiver).getPackageName()).
+            isEqualTo(contextRule.getContext().getPackageName());
     }
 
     @Test
     public void testApiLevel() {
-        assertThat(new ProcessConfiguration(RuntimeEnvironment.getApplication(), mResultReceiver).getSdkApiLevel()).
+        assertThat(new ProcessConfiguration(contextRule.getContext(), resultReceiver).getSdkApiLevel()).
             isEqualTo(BuildConfig.API_LEVEL);
-    }
-
-    @Test
-    public void testParcelable() {
-        Map<String, String> clids = new HashMap<String, String>();
-        clids.put("clid key 1", "clid value 1");
-        clids.put("clid key 2", "clid value 2");
-        List<String> hosts = java.util.Arrays.asList("host1", "host2");
-        String referrer = "referrer";
-        String installReferrerSource = "gpl";
-
-        DataResultReceiver receiver = new DataResultReceiver(new Handler(Looper.getMainLooper()), mock(DataResultReceiver.Receiver.class));
-
-        ProcessConfiguration processConfiguration = new ProcessConfiguration(RuntimeEnvironment.getApplication(), receiver);
-        processConfiguration.setClientClids(clids);
-        processConfiguration.setCustomHosts(hosts);
-        processConfiguration.setDistributionReferrer(referrer);
-        processConfiguration.setInstallReferrerSource(installReferrerSource);
-        Parcel parcel = Parcel.obtain();
-        processConfiguration.writeToParcel(parcel, 0);
-        parcel.setDataPosition(0);
-        ProcessConfiguration fromParcel = ProcessConfiguration.CREATOR.createFromParcel(parcel);
-        SoftAssertions assertions = new SoftAssertions();
-        assertions.assertThat(fromParcel.getProcessID()).isEqualTo(Process.myPid());
-        assertions.assertThat(fromParcel.getProcessSessionID()).isEqualTo(ProcessConfiguration.PROCESS_SESSION_ID);
-        assertions.assertThat(fromParcel.getSdkApiLevel()).isEqualTo(BuildConfig.API_LEVEL);
-        assertions.assertThat(fromParcel.getPackageName()).isEqualTo(RuntimeEnvironment.getApplication().getPackageName());
-        assertions.assertThat(fromParcel.getCustomHosts()).containsExactlyInAnyOrderElementsOf(hosts);
-        assertions.assertThat(fromParcel.getClientClids()).containsAllEntriesOf(clids).hasSameSizeAs(clids);
-        assertions.assertThat(fromParcel.getDistributionReferrer()).isEqualTo(referrer);
-        assertions.assertThat(fromParcel.getInstallReferrerSource()).isEqualTo(installReferrerSource);
-        assertions.assertThat(fromParcel.getDataResultReceiver()).isNotNull();
-        assertions.assertAll();
     }
 
     private List<String> getTestCustomHosts() {

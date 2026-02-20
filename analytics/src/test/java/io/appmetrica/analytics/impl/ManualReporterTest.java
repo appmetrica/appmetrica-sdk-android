@@ -2,19 +2,13 @@ package io.appmetrica.analytics.impl;
 
 import io.appmetrica.analytics.ReporterConfig;
 import io.appmetrica.analytics.impl.client.ProcessConfiguration;
-import io.appmetrica.analytics.impl.crash.PluginErrorDetailsConverter;
 import io.appmetrica.analytics.impl.crash.jvm.client.UnhandledException;
-import io.appmetrica.analytics.impl.crash.jvm.converter.AnrConverter;
-import io.appmetrica.analytics.impl.crash.jvm.converter.CustomErrorConverter;
-import io.appmetrica.analytics.impl.crash.jvm.converter.RegularErrorConverter;
-import io.appmetrica.analytics.impl.crash.jvm.converter.UnhandledExceptionConverter;
 import io.appmetrica.analytics.impl.reporter.ManualReporterContext;
 import io.appmetrica.analytics.impl.reporter.ReporterLifecycleListener;
 import io.appmetrica.analytics.internal.CounterConfigurationReporterType;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.robolectric.ParameterizedRobolectricTestRunner;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -98,30 +92,4 @@ public class ManualReporterTest extends BaseReporterTest {
         return new ManualReporter(mContext, mProcessConfiguration, config, mReportsHandler);
     }
 
-    @RunWith(ParameterizedRobolectricTestRunner.class)
-    public static class ReporterReportCustomEventEventTypeTests extends BaseReporterTest.ReporterReportCustomEventEventTypeTests {
-
-        private final ReporterConfig config = ReporterConfig.newConfigBuilder(apiKey).build();
-
-        public ReporterReportCustomEventEventTypeTests(int eventType, int wantedNumberOfInvocations) {
-            super(eventType, wantedNumberOfInvocations);
-        }
-
-        @Override
-        public BaseReporter getReporter() {
-            return new ManualReporter(
-                mContext,
-                mReportsHandler,
-                config,
-                mReporterEnvironment,
-                mock(ExtraMetaInfoRetriever.class),
-                processNameProvider,
-                mock(UnhandledExceptionConverter.class),
-                mock(RegularErrorConverter.class),
-                mock(CustomErrorConverter.class),
-                mock(AnrConverter.class),
-                mock(PluginErrorDetailsConverter.class)
-            );
-        }
-    }
 }

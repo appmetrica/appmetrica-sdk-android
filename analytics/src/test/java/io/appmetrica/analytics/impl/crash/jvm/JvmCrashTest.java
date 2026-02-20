@@ -279,5 +279,4 @@ public class JvmCrashTest extends CommonTest {
                 .put(KEY_TRIMMED_FIELDS, new JSONObject().put("VALUE", 100))
         );
     }
-
 }

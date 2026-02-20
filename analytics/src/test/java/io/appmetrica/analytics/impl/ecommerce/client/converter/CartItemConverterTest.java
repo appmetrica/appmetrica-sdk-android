@@ -13,15 +13,12 @@ import io.appmetrica.analytics.testutils.TruncationInfoConsumer;
 import java.math.BigDecimal;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.RobolectricTestRunner;
 
 import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.mockito.Mockito.when;
 
-@RunWith(RobolectricTestRunner.class)
 public class CartItemConverterTest extends CommonTest {
 
     @Mock

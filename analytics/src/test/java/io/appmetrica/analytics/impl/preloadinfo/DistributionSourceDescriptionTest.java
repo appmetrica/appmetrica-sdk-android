@@ -8,14 +8,15 @@ import java.util.Collection;
 import java.util.List;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.ParameterizedRobolectricTestRunner;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(ParameterizedRobolectricTestRunner.class)
+@RunWith(Parameterized.class)
 public class DistributionSourceDescriptionTest extends CommonTest {
 
-    @ParameterizedRobolectricTestRunner.Parameters(name = "{0} to {1}")
+    @Parameters(name = "{0} to {1}")
     public static Collection<Object[]> data() {
         List<Object[]> result = Arrays.asList(new Object[][]{
             {DistributionSource.UNDEFINED, "UNDEFINED"},

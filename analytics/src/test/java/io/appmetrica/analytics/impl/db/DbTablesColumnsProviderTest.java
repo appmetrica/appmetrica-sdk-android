@@ -5,12 +5,9 @@ import io.appmetrica.analytics.testutils.CommonTest;
 import java.util.AbstractMap;
 import java.util.List;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(RobolectricTestRunner.class)
 public class DbTablesColumnsProviderTest extends CommonTest {
 
     private final DbTablesColumnsProvider mDbTablesColumnsProvider = new DbTablesColumnsProvider();

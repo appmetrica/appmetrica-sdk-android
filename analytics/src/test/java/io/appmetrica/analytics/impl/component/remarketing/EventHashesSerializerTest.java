@@ -6,12 +6,9 @@ import io.appmetrica.analytics.testutils.CommonTest;
 import java.io.IOException;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(RobolectricTestRunner.class)
 public class EventHashesSerializerTest extends CommonTest {
 
     private EventHashesSerializer mEventHashesSerializer;

@@ -6,8 +6,6 @@ import io.appmetrica.analytics.impl.component.session.SessionManagerStateMachine
 import io.appmetrica.analytics.testutils.CommonTest;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -16,7 +14,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(RobolectricTestRunner.class)
 public class ReportPauseSessionHandlerTest extends CommonTest {
     private ComponentUnit mComponent;
     private SessionManagerStateMachine mSessionManager;

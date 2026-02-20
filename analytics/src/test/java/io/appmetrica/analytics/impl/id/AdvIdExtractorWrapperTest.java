@@ -15,16 +15,17 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.ParameterizedRobolectricTestRunner;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@RunWith(ParameterizedRobolectricTestRunner.class)
+@RunWith(Parameterized.class)
 public class AdvIdExtractorWrapperTest extends CommonTest {
 
-    @ParameterizedRobolectricTestRunner.Parameters(name = "{2}")
+    @Parameters(name = "{2}")
     public static Collection<Object[]> data() {
         final Context context = mock(Context.class);
         final RetryStrategy retryStrategy = mock(RetryStrategy.class);

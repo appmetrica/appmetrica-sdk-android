@@ -14,6 +14,7 @@ import io.appmetrica.analytics.plugins.IPluginReporter;
 import io.appmetrica.analytics.plugins.PluginErrorDetails;
 import io.appmetrica.analytics.profile.UserProfile;
 import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.analytics.testutils.ContextRule;
 import io.appmetrica.analytics.testutils.MockedStaticRule;
 import java.util.Map;
 import org.junit.Before;
@@ -23,7 +24,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
 
 import static org.mockito.Mockito.clearInvocations;
 import static org.mockito.Mockito.mock;
@@ -34,6 +34,9 @@ import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
 public class SelfReporterWrapperTest extends CommonTest {
+
+    @Rule
+    public ContextRule contextRule = new ContextRule();
 
     @Mock
     private ReporterProxyStorage mReporterProxyStorage;
@@ -59,7 +62,7 @@ public class SelfReporterWrapperTest extends CommonTest {
     public void setUp() {
         MockitoAnnotations.openMocks(this);
         when(ReporterProxyStorage.getInstance()).thenReturn(mReporterProxyStorage);
-        mContext = RuntimeEnvironment.getApplication();
+        mContext = contextRule.getContext();
         when(mReporterProxyStorage.getOrCreate(mContext, SdkData.SDK_API_KEY_UUID)).thenReturn(mReporter);
         when(mReporter.getPluginExtension()).thenReturn(pluginReporter);
         mSelfReporterWrapper = new SelfReporterWrapper();

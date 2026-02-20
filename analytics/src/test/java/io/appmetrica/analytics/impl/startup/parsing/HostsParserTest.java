@@ -10,10 +10,7 @@ import java.util.Map;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
 
-@RunWith(RobolectricTestRunner.class)
 public class HostsParserTest extends CommonTest {
 
     private final StartupResult mResult = new StartupResult();

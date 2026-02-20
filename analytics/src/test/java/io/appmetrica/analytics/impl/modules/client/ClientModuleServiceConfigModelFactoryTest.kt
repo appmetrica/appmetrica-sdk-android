@@ -1,6 +1,5 @@
 package io.appmetrica.analytics.impl.modules.client
 
-import android.os.Bundle
 import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
 import io.appmetrica.analytics.coreapi.internal.identifiers.SdkIdentifiers
 import io.appmetrica.analytics.modulesapi.internal.client.BundleToServiceConfigConverter
@@ -14,9 +13,11 @@ import org.mockito.kotlin.mock
 
 internal class ClientModuleServiceConfigModelFactoryTest : CommonTest() {
 
-    private val moduleConfigBundle = mock<Bundle>()
+    private val moduleConfigBundle = MockProvider.mockedBundle()
     private val moduleIdentifier = "some_identifier"
-    private val bundle = MockProvider.mockBundle(mapOf(moduleIdentifier to moduleConfigBundle))
+    private val bundle = MockProvider.mockedBundle().apply {
+        putBundle(moduleIdentifier, moduleConfigBundle)
+    }
     private val identifiers: SdkIdentifiers = mock()
     private val moduleConfig: TestModuleConfig = mock()
     private val bundleParser: BundleToServiceConfigConverter<TestModuleConfig> = mock {

@@ -7,14 +7,15 @@ import java.util.Arrays;
 import java.util.Collection;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.ParameterizedRobolectricTestRunner;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(ParameterizedRobolectricTestRunner.class)
+@RunWith(Parameterized.class)
 public class CrashOptionalBoolConverterTest extends CommonTest {
 
-    @ParameterizedRobolectricTestRunner.Parameters(name = "state: {0}, model: {1}")
+    @Parameters(name = "state: {0}, model: {1}")
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
             {true, CrashAndroid.OPTIONAL_BOOL_TRUE},

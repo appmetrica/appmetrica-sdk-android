@@ -9,12 +9,9 @@ import java.util.Collections;
 import java.util.HashSet;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 
-@RunWith(RobolectricTestRunner.class)
 public class IdentifiersValidatorTest extends CommonTest {
 
     private final HashSet<String> mValidIdentifiers = new HashSet<String>();

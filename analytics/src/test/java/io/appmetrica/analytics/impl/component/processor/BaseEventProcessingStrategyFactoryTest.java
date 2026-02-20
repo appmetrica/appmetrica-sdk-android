@@ -41,6 +41,7 @@ import io.appmetrica.analytics.impl.component.processor.factory.UnhandledExcepti
 import io.appmetrica.analytics.impl.component.processor.factory.UnhandledExceptionFromFileFactory;
 import io.appmetrica.analytics.impl.component.processor.session.ReportSessionStopHandler;
 import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.analytics.testutils.ContextRule;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import io.appmetrica.analytics.testutils.MockedConstructionRule;
 import java.util.ArrayList;
@@ -54,7 +55,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.ParameterizedRobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
 
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_CLIENT_EXTERNAL_ATTRIBUTION;
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_ACTIVATION;
@@ -94,6 +94,9 @@ import static org.mockito.Mockito.when;
  * @see SingleHandlerFactoriesTest
  */
 public class BaseEventProcessingStrategyFactoryTest extends CommonTest {
+
+    @Rule
+    public ContextRule contextRule = new ContextRule();
 
     @Rule
     public GlobalServiceLocatorRule globalServiceLocatorRule = new GlobalServiceLocatorRule();
@@ -142,7 +145,7 @@ public class BaseEventProcessingStrategyFactoryTest extends CommonTest {
         ComponentId componentId = mock(ComponentId.class);
         when(componentId.getApiKey()).thenReturn(UUID.randomUUID().toString());
         when(unit.getComponentId()).thenReturn(componentId);
-        doReturn(RuntimeEnvironment.getApplication()).when(unit).getContext();
+        doReturn(contextRule.getContext()).when(unit).getContext();
         mFactory = new EventProcessingStrategyFactory(unit);
     }
 

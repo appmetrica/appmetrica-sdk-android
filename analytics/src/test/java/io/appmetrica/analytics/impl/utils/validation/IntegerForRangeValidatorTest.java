@@ -6,11 +6,12 @@ import java.util.Collection;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.ParameterizedRobolectricTestRunner;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(ParameterizedRobolectricTestRunner.class)
+@RunWith(Parameterized.class)
 public class IntegerForRangeValidatorTest extends CommonTest {
 
     private final Integer mInputValue;
@@ -30,7 +31,7 @@ public class IntegerForRangeValidatorTest extends CommonTest {
         mValid = valid;
     }
 
-    @ParameterizedRobolectricTestRunner.Parameters(name = "[{index}] Validation result is {2} for input value = {0}" +
+    @Parameters(name = "[{index}] Validation result is {2} for input value = {0}" +
         " and possible values = {3}")
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{

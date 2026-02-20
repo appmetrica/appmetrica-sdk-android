@@ -4,6 +4,7 @@ import android.content.Context;
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
 import io.appmetrica.analytics.coreutils.internal.reflection.ReflectionUtils;
 import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.analytics.testutils.ContextRule;
 import io.appmetrica.analytics.testutils.MockedStaticRule;
 import org.junit.Before;
 import org.junit.Rule;
@@ -14,7 +15,6 @@ import org.mockito.MockedConstruction;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -22,6 +22,9 @@ import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
 public class ReferrerRetrieverWrapperPublicConstructorTest extends CommonTest {
+
+    @Rule
+    public ContextRule contextRule = new ContextRule();
 
     @Rule
     public final MockedStaticRule<ReflectionUtils> sdkReflectionUtilsMocked =
@@ -35,8 +38,8 @@ public class ReferrerRetrieverWrapperPublicConstructorTest extends CommonTest {
 
     @Before
     public void setUp() {
+        mContext = contextRule.getContext();
         MockitoAnnotations.openMocks(this);
-        mContext = RuntimeEnvironment.getApplication();
     }
 
     @Test

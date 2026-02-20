@@ -5,13 +5,10 @@ import io.appmetrica.analytics.testutils.CommonTest;
 import java.util.Collections;
 import java.util.List;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
 
 import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(RobolectricTestRunner.class)
 public class ThreadStateTest extends CommonTest {
 
     public static ThreadState createEmpty() {

@@ -5,18 +5,19 @@ import androidx.annotation.NonNull;
 import io.appmetrica.analytics.coreapi.internal.data.IBinaryDataHelper;
 import io.appmetrica.analytics.coreapi.internal.data.ProtobufStateStorage;
 import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.analytics.testutils.ContextRule;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.Rule;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(RobolectricTestRunner.class)
 public class StorageFactoryImplTest extends CommonTest {
+
+    @Rule
+    public ContextRule contextRule = new ContextRule();
 
     @Mock
     private ProtobufStateStorage<Integer> mainStorage;
@@ -33,7 +34,7 @@ public class StorageFactoryImplTest extends CommonTest {
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        context = RuntimeEnvironment.getApplication();
+        context = contextRule.getContext();
         storageFactory = new StorageFactoryImpl<Integer>() {
             @NonNull
             @Override

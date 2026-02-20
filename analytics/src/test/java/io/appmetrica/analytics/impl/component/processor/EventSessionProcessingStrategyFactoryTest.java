@@ -9,8 +9,6 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
 
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_ACTIVATION;
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_ALIVE;
@@ -32,7 +30,6 @@ import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_UPDATE_FORE
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
-@RunWith(RobolectricTestRunner.class)
 public class EventSessionProcessingStrategyFactoryTest extends CommonTest {
 
     private ComponentUnit mComponent;

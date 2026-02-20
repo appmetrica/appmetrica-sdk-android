@@ -10,11 +10,12 @@ import java.util.Collections;
 import java.util.List;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.ParameterizedRobolectricTestRunner;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
 import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 
-@RunWith(ParameterizedRobolectricTestRunner.class)
+@RunWith(Parameterized.class)
 public class HierarchicalListTrimmerWithoutItemTrimmerTest extends CommonTest {
 
     private static class Item {
@@ -52,7 +53,7 @@ public class HierarchicalListTrimmerWithoutItemTrimmerTest extends CommonTest {
     private static final Item OUT_OF_LIST_SIZE_LIMIT_ITEM_4 = new Item(6);
     private static final Item OUT_OF_LIST_SIZE_LIMIT_ITEM_5 = new Item(8);
 
-    @ParameterizedRobolectricTestRunner.Parameters(name = "#{index} - {4}")
+    @Parameters(name = "#{index} - {4}")
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
             {null, null, 0, 0, "null"},

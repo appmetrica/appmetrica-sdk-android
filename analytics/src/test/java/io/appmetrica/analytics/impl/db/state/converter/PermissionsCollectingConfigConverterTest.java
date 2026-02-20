@@ -6,10 +6,7 @@ import io.appmetrica.analytics.testutils.CommonTest;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
 
-@RunWith(RobolectricTestRunner.class)
 public class PermissionsCollectingConfigConverterTest extends CommonTest {
 
     private final long mCheckIntervalSeconds = 444333;

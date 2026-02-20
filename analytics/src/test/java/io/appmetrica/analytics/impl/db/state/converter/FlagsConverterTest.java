@@ -8,18 +8,14 @@ import io.appmetrica.analytics.testutils.CommonTest;
 import java.util.Random;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.RobolectricTestRunner;
 
 import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.mockito.Mockito.when;
 
-@RunWith(RobolectricTestRunner.class)
 public class FlagsConverterTest extends CommonTest {
 
-    private final StartupStateProtobuf.StartupState.Flags mDefault = new StartupStateProtobuf.StartupState.Flags();
     private final Random mRandom = new Random();
     private final boolean mPermissionsCollectingEnabled = mRandom.nextBoolean();
     private final boolean mFeaturesCollectingEnabled = mRandom.nextBoolean();

@@ -16,16 +16,13 @@ import java.util.Map;
 import java.util.function.Consumer;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.RobolectricTestRunner;
 
 import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.Mockito.when;
 
-@RunWith(RobolectricTestRunner.class)
 public class ProductConverterTest extends CommonTest {
 
     @Mock
@@ -66,8 +63,6 @@ public class ProductConverterTest extends CommonTest {
 
     private ProductConverter productConverter;
     private ProductWrapper productWrapper;
-    private Ecommerce.ECommerceEvent.Product productProto;
-
     private final List<String> categories = Arrays.asList("First", "Second", "Third");
     private final List<String> promocodes = Arrays.asList("Promocode#1", "Promocode#2", "Promocode#3");
 

@@ -5,12 +5,9 @@ import io.appmetrica.analytics.impl.crash.jvm.client.StackTraceItemInternal;
 import io.appmetrica.analytics.impl.protobuf.backend.CrashAndroid;
 import io.appmetrica.analytics.testutils.CommonTest;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
 
 import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 
-@RunWith(RobolectricTestRunner.class)
 public class StackTraceElementConverterTest extends CommonTest {
 
     private final StackTraceElementConverter elementConverter = new StackTraceElementConverter();

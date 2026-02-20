@@ -5,15 +5,12 @@ import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
 
 import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 
 /**
  * @see UnGzipBytesValueComposerGetValueTest
  */
-@RunWith(RobolectricTestRunner.class)
 public class UnGzipBytesValueComposerTest extends CommonTest {
 
     @Rule

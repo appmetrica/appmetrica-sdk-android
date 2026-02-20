@@ -13,11 +13,12 @@ import java.util.Collections;
 import java.util.List;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.ParameterizedRobolectricTestRunner;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
 import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 
-@RunWith(ParameterizedRobolectricTestRunner.class)
+@RunWith(Parameterized.class)
 public class PriceInternalComponentsTrimmerTest extends CommonTest {
 
     private final List<AmountWrapper> inputInternalComponents;
@@ -47,7 +48,7 @@ public class PriceInternalComponentsTrimmerTest extends CommonTest {
     private static final AmountWrapper AMOUNT_OUT_OF_LIMIT_4 = amountOf("100500", "EUR");
     private static final AmountWrapper ANOUNT_OUT_OF_LIMIT_5 = amountOf("200500", "USD");
 
-    @ParameterizedRobolectricTestRunner.Parameters(name = "#{index} - {4}")
+    @Parameters(name = "#{index} - {4}")
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
             {null, null, 0, 0, "with null internal components"},

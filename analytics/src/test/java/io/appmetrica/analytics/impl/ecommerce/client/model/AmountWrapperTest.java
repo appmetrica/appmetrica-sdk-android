@@ -5,12 +5,9 @@ import io.appmetrica.analytics.ecommerce.ECommerceAmount;
 import io.appmetrica.analytics.testutils.CommonTest;
 import java.math.BigDecimal;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
 
 import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 
-@RunWith(RobolectricTestRunner.class)
 public class AmountWrapperTest extends CommonTest {
 
     @Test

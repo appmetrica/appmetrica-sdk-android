@@ -14,6 +14,8 @@ import io.appmetrica.analytics.impl.request.ReportRequestConfig;
 import io.appmetrica.analytics.protobuf.nano.MessageNano;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
+import io.appmetrica.analytics.testutils.MockProvider;
+import io.appmetrica.analytics.testutils.MockedStaticRule;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -23,12 +25,15 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.ParameterizedRobolectricTestRunner;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
-@RunWith(ParameterizedRobolectricTestRunner.class)
+import static org.mockito.Mockito.when;
+
+@RunWith(Parameterized.class)
 public class EventToPreparerReferrerSourceTest extends CommonTest {
 
-    @ParameterizedRobolectricTestRunner.Parameters(name = "{0} to {1}")
+    @Parameters(name = "{0} to {1}")
     public static Collection<Object[]> data() {
         List<Object[]> data = Arrays.asList(
             new Object[]{ReferrerInfo.Source.UNKNOWN, Referrer.UNKNOWN},
@@ -41,6 +46,9 @@ public class EventToPreparerReferrerSourceTest extends CommonTest {
 
     @Rule
     public GlobalServiceLocatorRule globalServiceLocatorRule = new GlobalServiceLocatorRule();
+
+    @Rule
+    public MockedStaticRule<Base64> base64MockedStaticRule = new MockedStaticRule<>(Base64.class);
 
     @Mock
     private ReportRequestConfig config;
@@ -62,9 +70,11 @@ public class EventToPreparerReferrerSourceTest extends CommonTest {
     public void referrerSerialization() throws Exception {
         EventPreparer eventPreparer = ProtobufUtils.getEventPreparer(InternalEvents.EVENT_TYPE_SEND_REFERRER);
         ReferrerInfo referrerInfo = new ReferrerInfo("referrer", 10, 20, modelSource);
-        ContentValues cv = new ContentValues();
+        String encodedReferrerInfo = "Encoded referrer info";
+        when(Base64.decode(encodedReferrerInfo, Base64.DEFAULT)).thenReturn(referrerInfo.toProto());
+        ContentValues cv = MockProvider.mockedContentValues();
         DbProto.EventDescription eventDescription = new DbProto.EventDescription();
-        eventDescription.value = new String(Base64.encode(referrerInfo.toProto(), Base64.DEFAULT));
+        eventDescription.value = encodedReferrerInfo;
         cv.put(Constants.EventsTable.EventTableEntry.FIELD_EVENT_DESCRIPTION, MessageNano.toByteArray(eventDescription));
         EventFromDbModel event = new EventFromDbModel(cv);
         Referrer referrer = Referrer.parseFrom(eventPreparer.getValueComposer().getValue(event, config));

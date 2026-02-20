@@ -5,11 +5,12 @@ import java.util.Arrays;
 import java.util.Collection;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.ParameterizedRobolectricTestRunner;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(ParameterizedRobolectricTestRunner.class)
+@RunWith(Parameterized.class)
 public class BooleanUtilsTest extends CommonTest {
 
     private final Boolean mInputValue;
@@ -22,7 +23,7 @@ public class BooleanUtilsTest extends CommonTest {
         this.isFalse = isFalse;
     }
 
-    @ParameterizedRobolectricTestRunner.Parameters
+    @Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
             {true, true, false},

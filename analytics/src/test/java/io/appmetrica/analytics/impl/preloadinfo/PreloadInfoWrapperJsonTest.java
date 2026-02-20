@@ -12,12 +12,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.ParameterizedRobolectricTestRunner;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 import org.skyscreamer.jsonassert.JSONAssert;
 
 import static org.mockito.Mockito.mock;
 
-@RunWith(ParameterizedRobolectricTestRunner.class)
+@RunWith(Parameterized.class)
 public class PreloadInfoWrapperJsonTest extends CommonTest {
 
     private static final String KEY_PRELOAD_INFO = "preloadInfo";
@@ -33,7 +34,7 @@ public class PreloadInfoWrapperJsonTest extends CommonTest {
     private static final String ADDITIONAL_INFO_KEY_SECOND = "additional_info_key_second";
     private static final String ADDITIONAL_INFO_VALUE_SECOND = "addition_info_value_second";
 
-    @ParameterizedRobolectricTestRunner.Parameters(name = "{1}")
+    @Parameters(name = "{1}")
     public static Collection<Object[]> data() throws JSONException {
         final JSONObject baseJson = new JSONObject().put("key", "value");
         return Arrays.asList(new Object[][]{

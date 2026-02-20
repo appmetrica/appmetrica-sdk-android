@@ -4,13 +4,10 @@ import io.appmetrica.analytics.impl.crash.jvm.client.ThreadState;
 import io.appmetrica.analytics.testutils.CommonTest;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
 
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.spy;
 
-@RunWith(RobolectricTestRunner.class)
 public class CrashedThreadConverterTest extends CommonTest {
 
     private final CrashedThreadConverter converter = new CrashedThreadConverter();

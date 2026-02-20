@@ -3,8 +3,6 @@ package io.appmetrica.analytics.impl;
 import io.appmetrica.analytics.testutils.CommonTest;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyBoolean;
@@ -12,7 +10,6 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-@RunWith(RobolectricTestRunner.class)
 public class DataSendingRestrictionControllerGeneralTest extends CommonTest {
 
     private final DataSendingRestrictionControllerImpl.Storage mStorage = mock(DataSendingRestrictionControllerImpl.Storage.class);

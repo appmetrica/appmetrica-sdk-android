@@ -1,8 +1,8 @@
 package io.appmetrica.analytics.impl.utils.limitation;
 
-import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import io.appmetrica.analytics.coreutils.internal.StringUtils;
 import io.appmetrica.analytics.impl.IOUtils;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
@@ -24,7 +24,7 @@ public class StringByBytesTrimmer extends BaseTrimmer<String> {
     @Override
     public String trim(@Nullable String data) {
         String result = data;
-        if (!TextUtils.isEmpty(data)) {
+        if (!StringUtils.isNullOrEmpty(data)) {
             try {
                 byte[] bytes = data.getBytes(IOUtils.UTF8_ENCODING);
                 if (bytes.length > getMaxSize()) {

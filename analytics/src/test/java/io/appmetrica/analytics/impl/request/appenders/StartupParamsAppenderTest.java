@@ -19,6 +19,7 @@ import io.appmetrica.analytics.impl.request.Obfuscator;
 import io.appmetrica.analytics.impl.request.StartupRequestConfig;
 import io.appmetrica.analytics.networktasks.internal.CommonUrlParts;
 import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.analytics.testutils.ContextRule;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import io.appmetrica.analytics.testutils.MockedConstructionRule;
 import java.util.Arrays;
@@ -34,7 +35,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.ParameterizedRobolectricTestRunner;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doReturn;
@@ -358,6 +358,12 @@ public class StartupParamsAppenderTest extends CommonTest {
     @RunWith(ParameterizedRobolectricTestRunner.class)
     public static class SimpleNumericParametersTest extends CommonTest {
 
+        @Rule
+        public ContextRule contextRule = new ContextRule();
+
+        @Rule
+        public GlobalServiceLocatorRule globalServiceLocatorRule = new GlobalServiceLocatorRule();
+
         private static final String FIRST_MODULE_BLOCK_ID = "module_block_1";
         private static final String SECOND_MODULE_BLOCK_ID = "module_block_2";
         private static final int FIRST_MODULE_BLOCK_VALUE = 1;
@@ -375,9 +381,6 @@ public class StartupParamsAppenderTest extends CommonTest {
         private StartupParamsAppender mStartupParamsAppender;
         private final String mParameter;
         private final String mValue;
-
-        @Rule
-        public GlobalServiceLocatorRule globalServiceLocatorRule = new GlobalServiceLocatorRule();
 
         @ParameterizedRobolectricTestRunner.Parameters(name = "Contains {0}={1}")
         public static Collection<Object[]> data() {
@@ -405,7 +408,7 @@ public class StartupParamsAppenderTest extends CommonTest {
         @Before
         public void setUp() {
             MockitoAnnotations.openMocks(this);
-            GlobalServiceLocator.init(RuntimeEnvironment.getApplication());
+            GlobalServiceLocator.init(contextRule.getContext());
             when(mStartupRequestConfig.getChosenClids()).thenReturn(new ClidsInfo.Candidate(null, DistributionSource.APP));
             when(GlobalServiceLocator.getInstance().getAdvertisingIdGetter().getIdentifiers()).thenReturn(advertisingIdsHolder);
             when(advertisingIdsHolder.getGoogle())

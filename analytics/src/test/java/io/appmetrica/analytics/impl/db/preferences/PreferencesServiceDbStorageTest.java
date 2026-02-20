@@ -14,7 +14,8 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-import org.robolectric.ParameterizedRobolectricTestRunner;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -35,7 +36,7 @@ import static org.mockito.Mockito.when;
 @RunWith(RobolectricTestRunner.class)
 public class PreferencesServiceDbStorageTest extends CommonTest {
 
-    @RunWith(ParameterizedRobolectricTestRunner.class)
+    @RunWith(Parameterized.class)
     public static class RetryPolicyBadHostsTest extends CommonTest {
 
         @Mock
@@ -45,7 +46,7 @@ public class PreferencesServiceDbStorageTest extends CommonTest {
         @NonNull
         private final NetworkHost networkHost;
 
-        @ParameterizedRobolectricTestRunner.Parameters(name = "host {0}")
+        @Parameters(name = "host {0}")
         public static Collection<Object[]> data() {
             return Arrays.asList(new Object[][]{
                 {NetworkHost.DIAGNOSTIC}
@@ -104,10 +105,10 @@ public class PreferencesServiceDbStorageTest extends CommonTest {
 
     }
 
-    @RunWith(ParameterizedRobolectricTestRunner.class)
+    @RunWith(Parameterized.class)
     public static class RetryPolicyTest extends CommonTest {
 
-        @ParameterizedRobolectricTestRunner.Parameters(name = "host {0}")
+        @Parameters(name = "host {0}")
         public static Collection<Object[]> data() {
             return Arrays.asList(new Object[][]{
                 {NetworkHost.DIAGNOSTIC, null, null},

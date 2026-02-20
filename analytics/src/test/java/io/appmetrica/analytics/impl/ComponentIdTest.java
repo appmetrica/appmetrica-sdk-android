@@ -9,21 +9,21 @@ import io.appmetrica.analytics.impl.component.clients.ClientDescription;
 import io.appmetrica.analytics.internal.CounterConfiguration;
 import io.appmetrica.analytics.internal.CounterConfigurationReporterType;
 import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.analytics.testutils.ContextRule;
 import io.appmetrica.analytics.testutils.MockedStaticRule;
 import java.util.UUID;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@RunWith(RobolectricTestRunner.class)
 public class ComponentIdTest extends CommonTest {
+
+    @Rule
+    public ContextRule contextRule = new ContextRule();
 
     @Rule
     public MockedStaticRule<ApiKeyUtils> apiKeyUtilsRule = new MockedStaticRule<>(ApiKeyUtils.class);
@@ -36,11 +36,9 @@ public class ComponentIdTest extends CommonTest {
 
     @Test
     public void testCustomReporterComponentId() {
-        ClientDescription description = ClientDescription.fromClientConfiguration(
-            createMockedConfiguration(TestsData.UUID_API_KEY, CounterConfigurationReporterType.MANUAL)); //todo ClientDescription logic tested through ComponentID
-        final ComponentId componentId = new ComponentId(description.getPackageName(), description.getApiKey());
+        final ComponentId componentId = new ComponentId(ContextRule.PACKAGE_NAME, TestsData.UUID_API_KEY);
         assertThat(componentId.toString()).isEqualTo(
-            RuntimeEnvironment.getApplication().getPackageName() + "_" + TestsData.UUID_API_KEY);
+            contextRule.getContext().getPackageName() + "_" + TestsData.UUID_API_KEY);
     }
 
     @Test
@@ -53,12 +51,10 @@ public class ComponentIdTest extends CommonTest {
     public void testCustomReporterComponentIdAnonymizedString() {
         final String apiKey = "a3a0ed4a-f81a-4b87-966c-72500fd6c747";
         final String partialApiKey = "a3a0ed4a-xxxx-xxxx-xxxx-xxxxxxxxc747";
-        ClientDescription description = ClientDescription.fromClientConfiguration(
-            createMockedConfiguration(apiKey, CounterConfigurationReporterType.MANUAL));
-        final ComponentId componentId = new ComponentId(description.getPackageName(), description.getApiKey());
+        final ComponentId componentId = new ComponentId(ContextRule.PACKAGE_NAME, apiKey);
         when(ApiKeyUtils.createPartialApiKey(apiKey)).thenReturn(partialApiKey);
         assertThat(componentId.toStringAnonymized()).isEqualTo(
-            RuntimeEnvironment.getApplication().getPackageName() + "_" + partialApiKey);
+            contextRule.getContext().getPackageName() + "_" + partialApiKey);
     }
 
     @Test
@@ -84,11 +80,11 @@ public class ComponentIdTest extends CommonTest {
         assertThat(componentId.getAnonymizedApiKey()).isEqualTo(partialApiKey);
     }
 
-    public static ClientConfiguration createMockedConfiguration(String apiKey, CounterConfigurationReporterType reporterType) {
+    public ClientConfiguration createMockedConfiguration(String apiKey, CounterConfigurationReporterType reporterType) {
         CounterConfiguration configuration = mock(CounterConfiguration.class);
         doReturn(reporterType).when(configuration).getReporterType();
         doReturn(apiKey).when(configuration).getApiKey();
-        return new ClientConfiguration(new ProcessConfiguration(RuntimeEnvironment.getApplication(), mock(DataResultReceiver.class)), configuration);
+        return new ClientConfiguration(new ProcessConfiguration(contextRule.getContext(), mock(DataResultReceiver.class)), configuration);
     }
 
 }

@@ -19,9 +19,10 @@ import org.mockito.Mock;
 
 import static org.mockito.Mockito.when;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.ParameterizedRobolectricTestRunner;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
-@RunWith(ParameterizedRobolectricTestRunner.class)
+@RunWith(Parameterized.class)
 public class UuidFromClientPreferencesImporterTest extends CommonTest {
 
     @Mock
@@ -38,7 +39,7 @@ public class UuidFromClientPreferencesImporterTest extends CommonTest {
         this.expectedValue = expectedValue;
     }
 
-    @ParameterizedRobolectricTestRunner.Parameters(name = "{2}")
+    @Parameters(name = "{2}")
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
             {

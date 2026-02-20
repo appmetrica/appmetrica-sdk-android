@@ -18,10 +18,8 @@ import java.util.Random;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.robolectric.RobolectricTestRunner;
 
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_REGULAR;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -32,7 +30,6 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(RobolectricTestRunner.class)
 public class MainReporterComponentUnitTest extends ComponentUnitBaseTest {
 
     @Mock

@@ -3,14 +3,11 @@ package io.appmetrica.analytics.impl;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesServiceDbStorage;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesServiceDbStorageTest;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 
-@RunWith(RobolectricTestRunner.class)
 public class DataSendingRestrictionControllerStorageImplTest {
 
     private final PreferencesServiceDbStorage mDbStorage = PreferencesServiceDbStorageTest.createMock();

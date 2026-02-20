@@ -6,13 +6,10 @@ import io.appmetrica.analytics.testutils.CommonTest;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.RobolectricTestRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(RobolectricTestRunner.class)
 public class LoggerStorageTest extends CommonTest {
 
     private final String mApiKey = "mApiKey";

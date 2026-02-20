@@ -1,9 +1,9 @@
 package io.appmetrica.analytics.impl.startup.uuid;
 
 import android.content.Context;
-import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import io.appmetrica.analytics.coreutils.internal.StringUtils;
 import io.appmetrica.analytics.impl.ClientServiceLocator;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesClientDbStorage;
 import io.appmetrica.analytics.internal.IdentifiersResult;
@@ -20,7 +20,7 @@ public class UuidFromClientPreferencesImporter implements IOuterSourceUuidImport
             ClientServiceLocator.getInstance().getPreferencesClientDbStorage(context);
         String uuid = null;
         IdentifiersResult identifiersResult = preferencesClientDbStorage.getUuidResult();
-        if (!TextUtils.isEmpty(identifiersResult.id)) {
+        if (!StringUtils.isNullOrEmpty(identifiersResult.id)) {
             uuid = identifiersResult.id;
             DebugLogger.INSTANCE.info(TAG, "Uuid from preference client db storage = %s", uuid);
         }

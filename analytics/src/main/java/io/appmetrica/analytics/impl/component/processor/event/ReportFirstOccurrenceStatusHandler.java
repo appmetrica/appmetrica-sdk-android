@@ -1,8 +1,8 @@
 package io.appmetrica.analytics.impl.component.processor.event;
 
-import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
+import io.appmetrica.analytics.coreutils.internal.StringUtils;
 import io.appmetrica.analytics.impl.CounterReport;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.impl.component.remarketing.EventFirstOccurrenceService;
@@ -19,7 +19,7 @@ public class ReportFirstOccurrenceStatusHandler extends ReportComponentHandler {
     @Override
     public boolean process(@NonNull final CounterReport reportData) {
         String eventName = reportData.getName();
-        if (TextUtils.isEmpty(eventName) == false) {
+        if (!StringUtils.isNullOrEmpty(eventName)) {
             reportData.setFirstOccurrenceStatus(mEventFirstOccurrenceService
                     .checkFirstOccurrence(reportData.getName()));
         }

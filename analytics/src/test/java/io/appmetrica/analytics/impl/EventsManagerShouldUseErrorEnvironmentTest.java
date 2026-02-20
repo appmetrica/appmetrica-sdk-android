@@ -7,11 +7,12 @@ import java.util.Collection;
 import java.util.List;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.ParameterizedRobolectricTestRunner;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(ParameterizedRobolectricTestRunner.class)
+@RunWith(Parameterized.class)
 public class EventsManagerShouldUseErrorEnvironmentTest extends CommonTest {
 
     private static final List<Integer> EVENT_TYPES_WITH_ERROR_ENVIRONMENT = Arrays.asList(
@@ -23,7 +24,7 @@ public class EventsManagerShouldUseErrorEnvironmentTest extends CommonTest {
             InternalEvents.EVENT_TYPE_ANR.getTypeId()
     );
 
-    @ParameterizedRobolectricTestRunner.Parameters(name = "For arguments {0} expected value is {1}")
+    @Parameters(name = "For arguments {0} expected value is {1}")
     public static Collection<Object[]> data() {
         List<Object[]> data = new ArrayList<Object[]>();
         for (InternalEvents internalEvent : InternalEvents.values()) {

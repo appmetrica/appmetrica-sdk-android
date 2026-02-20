@@ -2,20 +2,28 @@ package io.appmetrica.analytics.impl.utils;
 
 import android.content.Context;
 import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.analytics.testutils.ContextRule;
 import java.util.Arrays;
 import java.util.Collection;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.Rule;
 import org.junit.runner.RunWith;
 import org.robolectric.ParameterizedRobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SecurityUtilsTests extends CommonTest {
 
+    @Rule
+    public ContextRule contextRule = new ContextRule();
+
     @RunWith(ParameterizedRobolectricTestRunner.class)
     public static class EncodingStringTests extends CommonTest {
+
+        @Rule
+        public ContextRule contextRule = new ContextRule();
+
         private Context mContext;
 
         private final String mInputString;
@@ -39,7 +47,7 @@ public class SecurityUtilsTests extends CommonTest {
 
         @Before
         public void setUp() {
-            mContext = RuntimeEnvironment.getApplication();
+            mContext = contextRule.getContext();
         }
 
         @Test

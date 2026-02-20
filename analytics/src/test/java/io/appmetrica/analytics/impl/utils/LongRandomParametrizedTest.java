@@ -9,12 +9,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.ParameterizedRobolectricTestRunner;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-@RunWith(ParameterizedRobolectricTestRunner.class)
+@RunWith(Parameterized.class)
 public class LongRandomParametrizedTest extends CommonTest {
 
     private final long mSeed;
@@ -34,7 +35,7 @@ public class LongRandomParametrizedTest extends CommonTest {
         mExpectedValue = expectedValue;
     }
 
-    @ParameterizedRobolectricTestRunner.Parameters
+    @Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
             {Long.MIN_VALUE, 1L, 1000L, 1L},

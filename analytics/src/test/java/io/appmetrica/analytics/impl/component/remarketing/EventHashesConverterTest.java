@@ -3,12 +3,9 @@ package io.appmetrica.analytics.impl.component.remarketing;
 import io.appmetrica.analytics.impl.protobuf.client.Eventhashes;
 import io.appmetrica.analytics.testutils.CommonTest;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(RobolectricTestRunner.class)
 public class EventHashesConverterTest extends CommonTest {
     private final EventHashesConverter mConverter = new EventHashesConverter();
 

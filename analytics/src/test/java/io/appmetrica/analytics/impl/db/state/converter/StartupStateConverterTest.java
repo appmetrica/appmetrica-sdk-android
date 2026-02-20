@@ -21,11 +21,9 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.RobolectricTestRunner;
 
 import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -34,7 +32,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(RobolectricTestRunner.class)
 public class StartupStateConverterTest extends CommonTest {
 
     private static final boolean OUTDATED = true;
@@ -75,8 +72,6 @@ public class StartupStateConverterTest extends CommonTest {
 
     private static final long OBTAIN_SERVER_TIME = 123456789;
     private static final String UUID = "testUuid";
-    private static final String DEVICE_ID = "deviceID";
-    private static final String DEVICE_ID_HASH = "deviceIDHash";
     private static final long OBTAIN_TIME = 11;
     private static final boolean HAD_FIRST_STARTUP = true;
     private static final String[] REPORT_URLS = new String[]{"reportUrl1", "reportUrl2"};

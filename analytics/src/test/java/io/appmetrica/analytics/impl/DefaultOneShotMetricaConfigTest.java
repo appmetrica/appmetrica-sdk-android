@@ -7,23 +7,20 @@ import io.appmetrica.analytics.PredefinedDeviceTypes;
 import io.appmetrica.analytics.PreloadInfo;
 import io.appmetrica.analytics.TestData;
 import io.appmetrica.analytics.testutils.CommonTest;
-import io.appmetrica.analytics.testutils.LocationUtils;
+import io.appmetrica.analytics.testutils.MockProvider;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
 import java.util.UUID;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.RobolectricTestRunner;
 
 import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-@RunWith(RobolectricTestRunner.class)
 public class DefaultOneShotMetricaConfigTest extends CommonTest {
 
     private AppMetricaConfig.Builder mTestUserConfig;
@@ -230,7 +227,7 @@ public class DefaultOneShotMetricaConfigTest extends CommonTest {
     private DefaultOneShotMetricaConfig createDefaultMetricaConfigWithValues() {
         DefaultOneShotMetricaConfig defaultOneShotMetricaConfig = new DefaultOneShotMetricaConfig();
 
-        defaultOneShotMetricaConfig.setLocation(LocationUtils.INSTANCE.createFakeLocation(1.0, 2.0));
+        defaultOneShotMetricaConfig.setLocation(MockProvider.mockedLocation(1.0, 2.0));
         defaultOneShotMetricaConfig.setLocationTracking(false);
         defaultOneShotMetricaConfig.setAdvIdentifiersTracking(false, true);
         defaultOneShotMetricaConfig.setUserProfileID("User profile ID");
@@ -257,7 +254,7 @@ public class DefaultOneShotMetricaConfigTest extends CommonTest {
             .withErrorEnvironmentValue("error", "1")
             .withNativeCrashReporting(true)
             .withCrashReporting(true)
-            .withLocation(TestData.TEST_LOCATION)
+            .withLocation(MockProvider.mockedLocation(100.0, 200.0))
             .withAdditionalConfig("YMM_customHosts", Collections.singletonList(TestData.TEST_CUSTOM_HOST_URL))
             .withAnrMonitoring(true)
             .withAnrMonitoringTimeout(42)

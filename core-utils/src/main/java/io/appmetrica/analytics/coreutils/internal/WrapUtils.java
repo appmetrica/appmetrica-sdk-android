@@ -1,6 +1,5 @@
 package io.appmetrica.analytics.coreutils.internal;
 
-import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import java.util.concurrent.TimeUnit;
@@ -20,12 +19,12 @@ public class WrapUtils {
 
     @NonNull
     public static String getOrDefaultIfEmpty(@Nullable String value, @NonNull String defaultValue) {
-        return TextUtils.isEmpty(value) ? defaultValue : value;
+        return StringUtils.isNullOrEmpty(value) ? defaultValue : value;
     }
 
     @Nullable
     public static String getOrDefaultNullableIfEmpty(@Nullable String value, @Nullable String defaultValue) {
-        return TextUtils.isEmpty(value) ? defaultValue : value;
+        return StringUtils.isNullOrEmpty(value) ? defaultValue : value;
     }
 
     @NonNull

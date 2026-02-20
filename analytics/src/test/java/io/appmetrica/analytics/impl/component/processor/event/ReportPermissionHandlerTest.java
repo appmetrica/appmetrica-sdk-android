@@ -18,18 +18,17 @@ import io.appmetrica.analytics.impl.permissions.AppPermissionsState;
 import io.appmetrica.analytics.impl.permissions.PermissionsChecker;
 import io.appmetrica.analytics.impl.protobuf.client.AppPermissionsStateProtobuf;
 import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.analytics.testutils.ContextRule;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.Rule;
 import org.mockito.ArgumentCaptor;
 import org.mockito.ArgumentMatcher;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -41,8 +40,10 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(RobolectricTestRunner.class)
 public class ReportPermissionHandlerTest extends CommonTest {
+
+    @Rule
+    public ContextRule contextRule = new ContextRule();
 
     @Mock
     private ComponentUnit mComponent;
@@ -88,7 +89,7 @@ public class ReportPermissionHandlerTest extends CommonTest {
         when(mAvailableProvidersRetriever.getAvailableProviders()).thenReturn(mOldProvidersCopy);
         ComponentId id = mock(ComponentId.class);
         doReturn(id).when(mComponent).getComponentId();
-        doReturn(RuntimeEnvironment.getApplication()).when(mComponent).getContext();
+        doReturn(contextRule.getContext()).when(mComponent).getContext();
         mReportPermissionsHandler = new ReportPermissionHandler(
             mComponent,
             mPermissionsChecker,

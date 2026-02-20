@@ -4,12 +4,9 @@ import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
 import io.appmetrica.analytics.networktasks.internal.RetryPolicyConfig;
 import io.appmetrica.analytics.testutils.CommonTest;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
 
 import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 
-@RunWith(RobolectricTestRunner.class)
 public class RetryPolicyConfigTest extends CommonTest {
 
     private final RetryPolicyConfigParser mParser = new RetryPolicyConfigParser();

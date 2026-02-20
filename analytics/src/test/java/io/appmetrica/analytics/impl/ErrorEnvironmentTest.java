@@ -4,16 +4,13 @@ import io.appmetrica.analytics.impl.utils.limitation.SimpleMapLimitation;
 import io.appmetrica.analytics.testutils.CommonTest;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.RobolectricTestRunner;
 
 import static io.appmetrica.analytics.impl.TestsData.TEST_ENVIRONMENT_KEY;
 import static io.appmetrica.analytics.impl.TestsData.TEST_ENVIRONMENT_VALUE;
 import static org.mockito.Mockito.verify;
 
-@RunWith(RobolectricTestRunner.class)
 public class ErrorEnvironmentTest extends CommonTest {
 
     @Mock

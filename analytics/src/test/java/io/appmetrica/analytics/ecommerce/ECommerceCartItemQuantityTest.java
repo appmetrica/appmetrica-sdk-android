@@ -10,7 +10,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.ParameterizedRobolectricTestRunner;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.data.Percentage.withPercentage;
@@ -18,7 +19,7 @@ import static org.assertj.core.data.Percentage.withPercentage;
 /**
  * @see ECommerceCartItemTest
  */
-@RunWith(ParameterizedRobolectricTestRunner.class)
+@RunWith(Parameterized.class)
 public class ECommerceCartItemQuantityTest extends CommonTest {
 
     private Object inputQuantity;
@@ -29,7 +30,7 @@ public class ECommerceCartItemQuantityTest extends CommonTest {
         this.expectedQuantity = expectedQuantity;
     }
 
-    @ParameterizedRobolectricTestRunner.Parameters(name = "#{index}: {2}")
+    @Parameters(name = "#{index}: {2}")
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
                 {1000000L, "1", "Simple micros"},

@@ -8,6 +8,7 @@ import io.appmetrica.analytics.impl.ClientServiceLocator;
 import io.appmetrica.analytics.impl.TestsData;
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule;
 import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.analytics.testutils.ContextRule;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -16,7 +17,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -24,6 +24,9 @@ import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
 public class ReporterProxyStorageTest extends CommonTest {
+
+    @Rule
+    public ContextRule contextRule = new ContextRule();
 
     private Context mContext;
     private final String mApiKey = TestsData.generateApiKey();
@@ -38,8 +41,8 @@ public class ReporterProxyStorageTest extends CommonTest {
 
     @Before
     public void setUp() {
+        mContext = contextRule.getContext();
         MockitoAnnotations.openMocks(this);
-        mContext = RuntimeEnvironment.getApplication();
         when(ClientServiceLocator.getInstance().getClientExecutorProvider().getDefaultExecutor()).thenReturn(executor);
         storage = new ReporterProxyStorage(mock(AppMetricaFacadeProvider.class));
     }

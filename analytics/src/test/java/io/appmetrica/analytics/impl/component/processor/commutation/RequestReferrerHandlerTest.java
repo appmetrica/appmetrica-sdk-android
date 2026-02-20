@@ -8,16 +8,13 @@ import io.appmetrica.analytics.impl.referrer.common.ReferrerResultReceiver;
 import io.appmetrica.analytics.testutils.CommonTest;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.RobolectricTestRunner;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(RobolectricTestRunner.class)
 public class RequestReferrerHandlerTest extends CommonTest {
 
     @Mock
@@ -43,7 +40,9 @@ public class RequestReferrerHandlerTest extends CommonTest {
 
     @Test
     public void emptyBundle() {
-        when(counterReport.getPayload()).thenReturn(new Bundle());
+        Bundle bundle = mock(Bundle.class);
+        when(bundle.getParcelable(ReferrerResultReceiver.BUNDLE_KEY)).thenReturn(null);
+        when(counterReport.getPayload()).thenReturn(bundle);
         requestReferrerHandler.process(counterReport, clientUnit);
         verify(component).requestReferrer(null);
     }
@@ -51,8 +50,8 @@ public class RequestReferrerHandlerTest extends CommonTest {
     @Test
     public void filledBundle() {
         ReferrerResultReceiver receiver = mock(ReferrerResultReceiver.class);
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(ReferrerResultReceiver.BUNDLE_KEY, receiver);
+        Bundle bundle = mock(Bundle.class);
+        when(bundle.getParcelable(ReferrerResultReceiver.BUNDLE_KEY)).thenReturn(receiver);
         when(counterReport.getPayload()).thenReturn(bundle);
         requestReferrerHandler.process(counterReport, clientUnit);
         verify(component).requestReferrer(receiver);

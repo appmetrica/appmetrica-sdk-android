@@ -1,5 +1,6 @@
 package io.appmetrica.analytics.impl.crash;
 
+import android.content.Context;
 import io.appmetrica.analytics.impl.ClientCounterReport;
 import io.appmetrica.analytics.impl.EventsManager;
 import io.appmetrica.analytics.impl.ReportToSend;
@@ -11,6 +12,7 @@ import io.appmetrica.analytics.impl.crash.jvm.converter.JvmCrashConverter;
 import io.appmetrica.analytics.internal.CounterConfiguration;
 import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.analytics.testutils.ContextRule;
 import io.appmetrica.analytics.testutils.MockedStaticRule;
 import java.util.HashMap;
 import java.util.Random;
@@ -18,13 +20,10 @@ import org.assertj.core.api.SoftAssertions;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -33,8 +32,11 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(RobolectricTestRunner.class)
 public class UnhandledExceptionEventFormerTest extends CommonTest {
+
+    @Rule
+    public ContextRule contextRule = new ContextRule();
+    private Context context;
 
     private final String errorName = "some error";
     @Mock
@@ -48,6 +50,7 @@ public class UnhandledExceptionEventFormerTest extends CommonTest {
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
+        context = contextRule.getContext();
         mEventFormer = new UnhandledExceptionEventFormer(mJvmCrashConverter);
     }
 
@@ -70,7 +73,8 @@ public class UnhandledExceptionEventFormerTest extends CommonTest {
             when(UnhandledException.getErrorName(unhandledException)).thenReturn(errorName);
             when(mJvmCrashConverter.fromModel(unhandledException)).thenReturn(eventValueBytes);
             when(mReporterEnvironment.getErrorEnvironment()).thenReturn(environment);
-            when(mReporterEnvironment.getProcessConfiguration()).thenReturn(new ProcessConfiguration(RuntimeEnvironment.getApplication(), null));
+            ProcessConfiguration processConfiguration = new ProcessConfiguration(context, null);
+            when(mReporterEnvironment.getProcessConfiguration()).thenReturn(processConfiguration);
             when(mReporterEnvironment.getReporterConfiguration()).thenReturn(new CounterConfiguration());
 
             ClientCounterReport clientCounterReport = mock(ClientCounterReport.class);

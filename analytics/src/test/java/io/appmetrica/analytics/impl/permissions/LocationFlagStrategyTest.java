@@ -8,11 +8,12 @@ import java.util.Collection;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.ParameterizedRobolectricTestRunner;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(ParameterizedRobolectricTestRunner.class)
+@RunWith(Parameterized.class)
 public class LocationFlagStrategyTest extends CommonTest {
 
     @NonNull
@@ -20,7 +21,7 @@ public class LocationFlagStrategyTest extends CommonTest {
     private final boolean locationTracking;
     private final boolean forbidden;
 
-    @ParameterizedRobolectricTestRunner.Parameters(name = "Permission {0} check is forbidden ({2}) when locationsTracking is {1}.")
+    @Parameters(name = "Permission {0} check is forbidden ({2}) when locationsTracking is {1}.")
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
             {Manifest.permission.ACCESS_COARSE_LOCATION, false, true},

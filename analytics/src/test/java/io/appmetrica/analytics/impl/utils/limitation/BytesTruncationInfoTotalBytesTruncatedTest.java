@@ -5,14 +5,15 @@ import java.util.Arrays;
 import java.util.Collection;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.ParameterizedRobolectricTestRunner;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @see BytesTruncationInfoTest
  */
-@RunWith(ParameterizedRobolectricTestRunner.class)
+@RunWith(Parameterized.class)
 public class BytesTruncationInfoTotalBytesTruncatedTest extends CommonTest {
 
     private final TrimmingResult<Object, BytesTruncatedInfo>[] input;
@@ -25,7 +26,7 @@ public class BytesTruncationInfoTotalBytesTruncatedTest extends CommonTest {
         this.expectedResult = expectedResult;
     }
 
-    @ParameterizedRobolectricTestRunner.Parameters(name = "#{index} - {2}")
+    @Parameters(name = "#{index} - {2}")
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
             {new TrimmingResult[0], 0, "Empty items"},

@@ -24,7 +24,6 @@ import org.mockito.Captor;
 import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.robolectric.ParameterizedRobolectricTestRunner;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -469,28 +468,4 @@ public class MainReporterTest extends BaseReporterTest {
         verify(mPublicLogger).info("Set advIdentifiersTracking to %s", true);
     }
 
-    @RunWith(ParameterizedRobolectricTestRunner.class)
-    public static class ReporterReportCustomEventEventTypeTests extends
-        BaseReporterTest.ReporterReportCustomEventEventTypeTests {
-
-        @Mock
-        private MainReporterComponents mainReporterComponents;
-
-        public ReporterReportCustomEventEventTypeTests(int eventType, int wantedNumberOfInvocations) {
-            super(eventType, wantedNumberOfInvocations);
-        }
-
-        @Override
-        public BaseReporter getReporter() {
-            when(mainReporterComponents.getContext()).thenReturn(mContext);
-            when(mainReporterComponents.getReportsHandler()).thenReturn(mReportsHandler);
-            when(mainReporterComponents.getReporterEnvironment()).thenReturn(mReporterEnvironment);
-            when(mainReporterComponents.getProcessDetector()).thenReturn(processNameProvider);
-            when(mainReporterComponents.getAppStatusMonitor()).thenReturn(mAppStatusMonitor);
-            when(mainReporterComponents.getNativeCrashClient()).thenReturn(nativeCrashClient);
-            return new MainReporter(
-                mainReporterComponents
-            );
-        }
-    }
 }

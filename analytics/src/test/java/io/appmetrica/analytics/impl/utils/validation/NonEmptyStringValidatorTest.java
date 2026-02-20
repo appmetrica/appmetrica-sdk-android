@@ -2,12 +2,9 @@ package io.appmetrica.analytics.impl.utils.validation;
 
 import io.appmetrica.analytics.testutils.CommonTest;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(RobolectricTestRunner.class)
 public class NonEmptyStringValidatorTest extends CommonTest {
 
     private final Validator<String> mValidator = new NonEmptyStringValidator("someTestObject");

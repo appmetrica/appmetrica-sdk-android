@@ -6,8 +6,6 @@ import io.appmetrica.analytics.impl.ecommerce.ECommerceEventProviderTest;
 import io.appmetrica.analytics.testutils.CommonTest;
 import java.math.BigDecimal;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 
@@ -18,7 +16,6 @@ import static org.assertj.core.api.Java6Assertions.assertThat;
  * @see ECommerceEventProviderTest#showProductDetailsEvent()
  * @see ECommerceEventProviderTest#showProductCardEvent()
  */
-@RunWith(RobolectricTestRunner.class)
 public class PriceWrapperTest extends CommonTest {
 
     @Test

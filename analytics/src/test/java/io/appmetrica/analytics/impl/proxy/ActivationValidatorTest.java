@@ -4,13 +4,10 @@ import io.appmetrica.analytics.ValidationException;
 import io.appmetrica.analytics.impl.proxy.validation.ActivationValidator;
 import io.appmetrica.analytics.testutils.CommonTest;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
 
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 
-@RunWith(RobolectricTestRunner.class)
 public class ActivationValidatorTest extends CommonTest {
 
     private final AppMetricaFacadeProvider mProvider = mock(AppMetricaFacadeProvider.class);

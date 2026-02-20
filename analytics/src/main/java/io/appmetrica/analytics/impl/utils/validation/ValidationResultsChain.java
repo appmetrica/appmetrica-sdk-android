@@ -1,9 +1,9 @@
 package io.appmetrica.analytics.impl.utils.validation;
 
-import android.text.TextUtils;
 import androidx.annotation.Nullable;
 import java.util.LinkedList;
 import java.util.List;
+import kotlin.collections.CollectionsKt;
 
 public class ValidationResultsChain implements Validator<List<ValidationResult>> {
 
@@ -18,6 +18,6 @@ public class ValidationResultsChain implements Validator<List<ValidationResult>>
             }
         }
         return valid ? ValidationResult.successful(this)
-                : ValidationResult.failed(this, TextUtils.join(", ", errorMessages));
+                : ValidationResult.failed(this, CollectionsKt.joinToString(errorMessages, ", ", "", "", -1, "", null));
     }
 }

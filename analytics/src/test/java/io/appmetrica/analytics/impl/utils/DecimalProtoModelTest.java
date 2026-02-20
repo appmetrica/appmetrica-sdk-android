@@ -9,12 +9,13 @@ import java.util.Collection;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.ParameterizedRobolectricTestRunner;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.withinPercentage;
 
-@RunWith(ParameterizedRobolectricTestRunner.class)
+@RunWith(Parameterized.class)
 public class DecimalProtoModelTest extends CommonTest {
 
     private final String input;
@@ -23,7 +24,7 @@ public class DecimalProtoModelTest extends CommonTest {
         this.input = input;
     }
 
-    @ParameterizedRobolectricTestRunner.Parameters(name = "{0}")
+    @Parameters(name = "{0}")
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
             {"0"},

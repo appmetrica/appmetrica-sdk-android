@@ -6,8 +6,6 @@ import io.appmetrica.analytics.testutils.CommonTest;
 import java.util.Arrays;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -18,7 +16,6 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-@RunWith(RobolectricTestRunner.class)
 public class BaseReportProcessorTest extends CommonTest {
 
     protected BaseReportProcessor mProcessor;

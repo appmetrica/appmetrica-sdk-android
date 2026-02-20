@@ -16,14 +16,11 @@ import java.util.Map;
 import java.util.Set;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
 
 import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 
-@RunWith(RobolectricTestRunner.class)
 public class CommonArgumentsTest extends CommonTest {
 
     @Test

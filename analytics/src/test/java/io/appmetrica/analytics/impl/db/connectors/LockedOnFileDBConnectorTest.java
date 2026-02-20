@@ -4,19 +4,23 @@ import android.content.Context;
 import io.appmetrica.analytics.impl.db.TablesManager;
 import io.appmetrica.analytics.impl.utils.concurrency.FileLocker;
 import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.analytics.testutils.ContextRule;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.Rule;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doThrow;
 
 @RunWith(RobolectricTestRunner.class)
 public class LockedOnFileDBConnectorTest extends CommonTest {
+
+    @Rule
+    public ContextRule contextRule = new ContextRule();
 
     @Mock
     private FileLocker mDatabaseFileLock;
@@ -29,8 +33,8 @@ public class LockedOnFileDBConnectorTest extends CommonTest {
 
     @Before
     public void setUp() {
+        mContext = contextRule.getContext();
         MockitoAnnotations.openMocks(this);
-        mContext = RuntimeEnvironment.getApplication();
         mConnector = new LockedOnFileDBConnector(mContext, mDbName, mDatabaseFileLock, tablesManager);
     }
 

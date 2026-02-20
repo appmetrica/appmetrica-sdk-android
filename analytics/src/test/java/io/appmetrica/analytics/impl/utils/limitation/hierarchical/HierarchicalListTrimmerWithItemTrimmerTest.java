@@ -17,13 +17,14 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-import org.robolectric.ParameterizedRobolectricTestRunner;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
 import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-@RunWith(ParameterizedRobolectricTestRunner.class)
+@RunWith(Parameterized.class)
 public class HierarchicalListTrimmerWithItemTrimmerTest extends CommonTest {
 
     private static class Item {
@@ -76,7 +77,7 @@ public class HierarchicalListTrimmerWithItemTrimmerTest extends CommonTest {
 
     static final int LIST_SIZE_LIMIT = 5;
 
-    @ParameterizedRobolectricTestRunner.Parameters(name = "#{index} - {5}")
+    @Parameters(name = "#{index} - {5}")
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
             {null, null, 0, 0, 0, "null"},

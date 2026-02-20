@@ -11,16 +11,15 @@ import io.appmetrica.analytics.impl.component.CommonArguments;
 import io.appmetrica.analytics.impl.component.CommonArgumentsTestUtils;
 import io.appmetrica.analytics.impl.component.CommutationDispatcherComponent;
 import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.analytics.testutils.ContextRule;
 import java.util.Map;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.Rule;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -33,8 +32,10 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(RobolectricTestRunner.class)
 public class CommutationClientUnitTest extends CommonTest {
+
+    @Rule
+    public ContextRule contextRule = new ContextRule();
 
     @Mock
     CommutationDispatcherComponent mCommutationDispatcherComponent;
@@ -54,13 +55,13 @@ public class CommutationClientUnitTest extends CommonTest {
         when(mCommutationDispatcherComponent.getClientIdentifiersProvider()).thenReturn(mClientIdentifiersProvider);
         when(mClientIdentifiersProvider.createClientIdentifiersHolder(nullable(Map.class))).thenReturn(mClientIdentifiersHolder);
         mClientConfiguration = CommonArgumentsTestUtils.createMockedArguments(mResultReceiver);
-        mClientUnit = new CommutationClientUnit(RuntimeEnvironment.getApplication(), mCommutationDispatcherComponent, mClientConfiguration);
+        mClientUnit = new CommutationClientUnit(contextRule.getContext(), mCommutationDispatcherComponent, mClientConfiguration);
     }
 
     @Test
     public void testConstructor() {
         SoftAssertions softAssertions = new SoftAssertions();
-        softAssertions.assertThat(mClientUnit.getContext()).isEqualTo(RuntimeEnvironment.getApplication());
+        softAssertions.assertThat(mClientUnit.getContext()).isEqualTo(contextRule.getContext());
         softAssertions.assertThat(mClientUnit.getComponent()).isEqualTo(mCommutationDispatcherComponent);
         softAssertions.assertThat(mClientUnit.getResultReceiver()).isEqualTo(mResultReceiver);
         softAssertions.assertAll();
@@ -84,7 +85,7 @@ public class CommutationClientUnitTest extends CommonTest {
     @Test
     public void testResultReceiverNotUpdated() {
         ResultReceiver newReceiver = mock(ResultReceiver.class);
-        CommonArguments clientConfiguration = new CommonArguments(ClientConfigurationTestUtils.createStubbedConfiguration(newReceiver));
+        CommonArguments clientConfiguration = new CommonArguments(ClientConfigurationTestUtils.createStubbedConfiguration(contextRule.getContext(), newReceiver));
         mClientUnit.handle(new CounterReport(), clientConfiguration);
         mClientUnit.onClientIdentifiersChanged(mClientIdentifiersHolder);
         verify(mClientIdentifiersHolder).toBundle(any(Bundle.class));

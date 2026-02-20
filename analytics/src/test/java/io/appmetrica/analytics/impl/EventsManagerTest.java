@@ -25,7 +25,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.ParameterizedRobolectricTestRunner;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 import org.robolectric.RobolectricTestRunner;
 import org.skyscreamer.jsonassert.JSONAssert;
 
@@ -469,14 +470,14 @@ public class EventsManagerTest extends CommonTest {
         return randomStringGenerator.nextString();
     }
 
-    @RunWith(ParameterizedRobolectricTestRunner.class)
+    @RunWith(Parameterized.class)
     public static class ShouldGenerateGlobalNumberTest {
 
         private static final List<Integer> EVENT_TYPES_WITHOUT_GLOBAL_NUMBER = Collections.singletonList(
             InternalEvents.EVENT_TYPE_PREV_SESSION_NATIVE_CRASH_PROTOBUF.getTypeId()
         );
 
-        @ParameterizedRobolectricTestRunner.Parameters(name = "For arguments {0} expected value is {1}")
+        @Parameters(name = "For arguments {0} expected value is {1}")
         public static Collection<Object[]> data() {
             List<Object[]> data = new ArrayList<Object[]>();
             for (InternalEvents internalEvent : InternalEvents.values()) {

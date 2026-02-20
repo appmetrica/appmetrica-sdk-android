@@ -11,6 +11,8 @@ import io.appmetrica.analytics.internal.CounterConfiguration;
 import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.ContextRule;
+import io.appmetrica.analytics.testutils.RandomStringGenerator;
+import java.util.Random;
 import java.util.UUID;
 import org.junit.Before;
 import org.junit.Rule;
@@ -60,5 +62,9 @@ public class BaseReporterData extends CommonTest {
         mMapLimitation = new MapTrimmers(MapTrimmers.DEFAULT_MAP_MAX_SIZE,
             MapTrimmers.DEFAULT_KEY_MAX_LENGTH, MapTrimmers.DEFAULT_VALUE_MAX_LENGTH, "", mPublicLogger);
         mEventLimitationProcessor = mock(EventLimitationProcessor.class);
+    }
+
+    public static String randomString() {
+        return new RandomStringGenerator(new Random().nextInt(100) + 1).nextString();
     }
 }

@@ -30,6 +30,7 @@ import io.appmetrica.analytics.impl.startup.StartupState;
 import io.appmetrica.analytics.impl.utils.PublicLogConstructor;
 import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.analytics.testutils.ContextRule;
 import io.appmetrica.analytics.testutils.MockedStaticRule;
 import io.appmetrica.analytics.testutils.TestUtils;
 import java.util.HashSet;
@@ -41,7 +42,6 @@ import org.junit.Test;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.RuntimeEnvironment;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -136,6 +136,9 @@ public abstract class ComponentUnitBaseTest extends CommonTest {
     public MockedStaticRule<PublicLogConstructor> publicLogConstructorRule =
         new MockedStaticRule<>(PublicLogConstructor.class);
 
+    @Rule
+    public ContextRule contextRule = new ContextRule();
+
     private AppEnvironment.EnvironmentRevision mRevision;
 
     final String mApiKey = UUID.randomUUID().toString();
@@ -145,7 +148,7 @@ public abstract class ComponentUnitBaseTest extends CommonTest {
     public void init() {
         MockitoAnnotations.openMocks(this);
         mFieldsFactory = createFieldsFactory();
-        mContext = RuntimeEnvironment.getApplication();
+        mContext = contextRule.getContext();
         mRevision = new AppEnvironment.EnvironmentRevision("", 0);
         when(mConfigHolder.get()).thenReturn(mReportRequestConfig);
         when(mComponentId.getApiKey()).thenReturn(mApiKey);

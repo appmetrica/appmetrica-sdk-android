@@ -10,22 +10,21 @@ import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.MockProvider;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.RobolectricTestRunner;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(RobolectricTestRunner.class)
 public class BatteryInfoProviderTest extends CommonTest {
 
     @Mock
@@ -237,18 +236,24 @@ public class BatteryInfoProviderTest extends CommonTest {
     }
 
     private Intent prepareIntentWithBatteryInfo(Integer batteryLevel, Integer batteryScale, Integer plugged) {
-        Intent intent = new Intent();
+        Intent intent = mock(Intent.class);
 
         if (batteryLevel != null) {
-            intent.putExtra(BatteryManager.EXTRA_LEVEL, batteryLevel);
+            when(intent.getIntExtra(eq(BatteryManager.EXTRA_LEVEL), eq(-1))).thenReturn(batteryLevel);
+        } else {
+            when(intent.getIntExtra(eq(BatteryManager.EXTRA_LEVEL), eq(-1))).thenReturn(-1);
         }
 
         if (batteryScale != null) {
-            intent.putExtra(BatteryManager.EXTRA_SCALE, batteryScale);
+            when(intent.getIntExtra(eq(BatteryManager.EXTRA_SCALE), eq(-1))).thenReturn(batteryScale);
+        } else {
+            when(intent.getIntExtra(eq(BatteryManager.EXTRA_SCALE), eq(-1))).thenReturn(-1);
         }
 
         if (plugged != null) {
-            intent.putExtra(BatteryManager.EXTRA_PLUGGED, plugged);
+            when(intent.getIntExtra(eq(BatteryManager.EXTRA_PLUGGED), eq(-1))).thenReturn(plugged);
+        } else {
+            when(intent.getIntExtra(eq(BatteryManager.EXTRA_PLUGGED), eq(-1))).thenReturn(-1);
         }
 
         return intent;

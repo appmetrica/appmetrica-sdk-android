@@ -7,12 +7,9 @@ import io.appmetrica.analytics.testutils.CommonTest;
 import java.util.concurrent.TimeUnit;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
 
 import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 
-@RunWith(RobolectricTestRunner.class)
 public class CacheControlConverterTest extends CommonTest {
 
     private CacheControlConverter mCacheControlConverter;

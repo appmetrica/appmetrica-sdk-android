@@ -11,6 +11,7 @@ import io.appmetrica.analytics.impl.events.ConditionalEventTrigger;
 import io.appmetrica.analytics.impl.utils.ServerTime;
 import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.analytics.testutils.ContextRule;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import java.util.concurrent.TimeUnit;
 import org.junit.Before;
@@ -21,7 +22,6 @@ import org.mockito.ArgumentMatcher;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -36,6 +36,9 @@ import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
 public class SessionManagerStateMachineTest extends CommonTest {
+
+    @Rule
+    public ContextRule contextRule = new ContextRule();
 
     private SessionManagerStateMachine mManager;
 
@@ -64,7 +67,7 @@ public class SessionManagerStateMachineTest extends CommonTest {
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        when(mComponentUnit.getContext()).thenReturn(RuntimeEnvironment.getApplication());
+        when(mComponentUnit.getContext()).thenReturn(contextRule.getContext());
         when(mComponentUnit.getVitalComponentDataProvider()).thenReturn(vitalComponentDataProvider);
         when(mComponentUnit.getEventTrigger()).thenReturn(mock(ConditionalEventTrigger.class));
         when(mComponentUnit.getDbHelper()).thenReturn(mock(DatabaseHelper.class));

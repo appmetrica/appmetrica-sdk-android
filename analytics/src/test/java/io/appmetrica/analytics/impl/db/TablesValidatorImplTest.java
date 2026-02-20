@@ -8,16 +8,13 @@ import io.appmetrica.analytics.testutils.CommonTest;
 import java.util.HashMap;
 import java.util.List;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatchers;
-import org.robolectric.RobolectricTestRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@RunWith(RobolectricTestRunner.class)
 public class TablesValidatorImplTest extends CommonTest {
 
     @Test

@@ -3,24 +3,24 @@ package io.appmetrica.analytics.impl.db.storage;
 import io.appmetrica.analytics.impl.db.IKeyValueTableDbHelper;
 import io.appmetrica.analytics.impl.db.StorageType;
 import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.analytics.testutils.ContextRule;
 import io.appmetrica.analytics.testutils.ServiceMigrationCheckedRule;
 import java.util.HashSet;
 import java.util.Set;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(RobolectricTestRunner.class)
 public class KeyValueTableDbHelperWrapperTest extends CommonTest {
+
+    @Rule
+    public ContextRule contextRule = new ContextRule();
 
     @Mock
     private IKeyValueTableDbHelper actualHelper;
@@ -33,7 +33,7 @@ public class KeyValueTableDbHelperWrapperTest extends CommonTest {
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        wrapper = new KeyValueTableDbHelperWrapper(RuntimeEnvironment.getApplication(), StorageType.SERVICE, actualHelper);
+        wrapper = new KeyValueTableDbHelperWrapper(contextRule.getContext(), StorageType.SERVICE, actualHelper);
     }
 
     @Test

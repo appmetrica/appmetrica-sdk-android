@@ -1,10 +1,5 @@
 package io.appmetrica.analytics.impl.component.processor.event;
 
-import android.app.Application;
-import android.content.pm.FeatureInfo;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import io.appmetrica.analytics.impl.CounterReport;
 import io.appmetrica.analytics.impl.TestsData;
 import io.appmetrica.analytics.impl.component.ComponentId;
@@ -16,6 +11,7 @@ import io.appmetrica.analytics.impl.db.preferences.PreferencesComponentDbStorage
 import io.appmetrica.analytics.impl.features.FeatureDescription;
 import io.appmetrica.analytics.impl.features.FeatureDescriptionTest;
 import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.analytics.testutils.ContextRule;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -28,12 +24,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.Rule;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
-import org.robolectric.annotation.Config;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -45,8 +38,10 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-@RunWith(RobolectricTestRunner.class)
 public class ReportFeaturesHandlerTest extends CommonTest {
+
+    @Rule
+    public ContextRule contextRule = new ContextRule();
 
     @Mock
     ComponentUnit mComponentUnit;
@@ -62,7 +57,7 @@ public class ReportFeaturesHandlerTest extends CommonTest {
     public void setUp() {
         MockitoAnnotations.openMocks(this);
         mComponentId = new MainReporterComponentId(
-            RuntimeEnvironment.getApplication().getPackageName(),
+            contextRule.getContext().getPackageName(),
             TestsData.generateApiKey()
         );
         doReturn(mComponentId).when(mComponentUnit).getComponentId();
@@ -152,53 +147,4 @@ public class ReportFeaturesHandlerTest extends CommonTest {
         ).toString()).when(mPreferencesComponentDbStorage).getApplicationFeatures();
         assertThat(handler.parseFeaturesFromStorage()).isNull();
     }
-
-    @RunWith(RobolectricTestRunner.class)
-    public static class GetFeaturesFromSystemTest {
-
-        private ComponentUnit mComponentUnit;
-        private Application mContext;
-        private PackageManager mManager;
-        private PackageInfo mPackageInfo;
-
-        @Before
-        public void setUp() throws PackageManager.NameNotFoundException {
-            mComponentUnit = mock(ComponentUnit.class);
-            mContext = spy(RuntimeEnvironment.getApplication());
-            mManager = mock(PackageManager.class);
-            doReturn(mManager).when(mContext).getPackageManager();
-            doReturn(mContext).when(mComponentUnit).getContext();
-            mPackageInfo = new PackageInfo();
-            String packageName = mContext.getPackageName();
-            doReturn(mPackageInfo).when(mManager).getPackageInfo(eq(packageName), eq(PackageManager.GET_CONFIGURATIONS));
-        }
-
-        @Test
-        public void testNoRequestedFeatures() {
-            assertThat(new ReportFeaturesHandler(mComponentUnit).getFeaturesFromSystem()).isEmpty();
-        }
-
-        @Test
-        @Config(sdk = Build.VERSION_CODES.N)
-        public void testHasSomeFeatures() {
-            Random random = new Random();
-            ReportFeaturesHandler handler = new ReportFeaturesHandler(mComponentUnit);
-            String name = UUID.randomUUID().toString();
-            int version = random.nextInt(100) + 10;
-            FeatureInfo feature = new FeatureInfo();
-            feature.name = name;
-            feature.version = version;
-            boolean required = random.nextBoolean();
-            if (required) {
-                feature.flags |= FeatureInfo.FLAG_REQUIRED;
-            }
-            mPackageInfo.reqFeatures = new FeatureInfo[]{feature};
-            assertThat(handler.getFeaturesFromSystem()).extracting("name", "version", "required")
-                .containsOnly(
-                    Tuple.tuple(name, version, required)
-                );
-        }
-
-    }
-
 }

@@ -9,11 +9,12 @@ import java.util.Collection;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.ParameterizedRobolectricTestRunner;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
 import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 
-@RunWith(ParameterizedRobolectricTestRunner.class)
+@RunWith(Parameterized.class)
 public class ECommerceAmountTest extends CommonTest {
 
     private Object inputAmount;
@@ -26,7 +27,7 @@ public class ECommerceAmountTest extends CommonTest {
         this.expected = expected;
     }
 
-    @ParameterizedRobolectricTestRunner.Parameters(name = "#{index}: {3}")
+    @Parameters(name = "#{index}: {3}")
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
                 {1000000L, "USD", "1", "Simple micros"},

@@ -10,15 +10,20 @@ import io.appmetrica.analytics.impl.utils.encryption.EventEncrypterProvider;
 import io.appmetrica.analytics.impl.utils.encryption.EventEncryptionMode;
 import io.appmetrica.analytics.protobuf.nano.MessageNano;
 import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.analytics.testutils.MockProvider;
+import io.appmetrica.analytics.testutils.MockedStaticRule;
+import io.appmetrica.analytics.testutils.RandomStringGenerator;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Random;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.ParameterizedRobolectricTestRunner;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -26,7 +31,7 @@ import static org.mockito.Mockito.when;
 /**
  * @see UnGzipBytesValueComposerTest
  */
-@RunWith(ParameterizedRobolectricTestRunner.class)
+@RunWith(Parameterized.class)
 public class UnGzipBytesValueComposerGetValueTest extends CommonTest {
 
     private final byte[] input;
@@ -39,7 +44,7 @@ public class UnGzipBytesValueComposerGetValueTest extends CommonTest {
         this.expected = expected;
     }
 
-    @ParameterizedRobolectricTestRunner.Parameters
+    @Parameters
     public static Collection<Object[]> data() {
 
         byte[] smallEncrypted = randomBytes(1000);
@@ -86,11 +91,24 @@ public class UnGzipBytesValueComposerGetValueTest extends CommonTest {
     private UnGzipBytesValueComposer composer;
     private String inputString;
 
+    @Rule
+    public MockedStaticRule<Base64Utils> base64UtilsMockedStaticRule = new MockedStaticRule<>(Base64Utils.class);
+
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.openMocks(this);
 
-        inputString = Base64Utils.compressBase64(input);
+        if (input == null) {
+            inputString = null;
+        } else if (input.length == 0) {
+            inputString = "Encoded empty bytes";
+        } else {
+            RandomStringGenerator randomStringGenerator = new RandomStringGenerator(input.length);
+            inputString = randomStringGenerator.nextString();
+        }
+
+        when(Base64Utils.decompressBase64GzipAsBytes(inputString)).thenReturn(input);
+        when(Base64Utils.decompressBase64GzipAsBytes(null)).thenReturn(new byte[0]);
 
         when(encrypterProvider.getEventEncrypter(encryptionMode)).thenReturn(eventEncrypter);
         when(eventEncrypter.decrypt(input)).thenReturn(decrypted);
@@ -100,7 +118,7 @@ public class UnGzipBytesValueComposerGetValueTest extends CommonTest {
 
     @Test
     public void getValue() {
-        ContentValues contentValues = new ContentValues();
+        ContentValues contentValues = MockProvider.mockedContentValues();
         DbProto.EventDescription eventDescription = new DbProto.EventDescription();
         if (inputString != null) {
             eventDescription.value = inputString;

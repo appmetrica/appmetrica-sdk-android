@@ -1,17 +1,15 @@
 package io.appmetrica.analytics.impl;
 
 import io.appmetrica.analytics.impl.client.ProcessConfiguration;
-import io.appmetrica.analytics.impl.utils.limitation.SimpleMapLimitation;
 import io.appmetrica.analytics.internal.CounterConfiguration;
 import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.analytics.testutils.ContextRule;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.Rule;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
 
 import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -19,19 +17,12 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-@RunWith(RobolectricTestRunner.class)
 public class ReporterEnvironmentTest extends CommonTest {
 
-    private static final String USER_PROFILE_ID = "user_profile_id";
+    @Rule
+    public ContextRule contextRule = new ContextRule();
 
-    public static ReporterEnvironment createStubbedEnvironment() {
-        return new ReporterEnvironment(
-            new ProcessConfiguration(RuntimeEnvironment.getApplication(), mock(DataResultReceiver.class)),
-            new CounterConfiguration(),
-            new ErrorEnvironment(mock(SimpleMapLimitation.class)),
-            USER_PROFILE_ID
-        );
-    }
+    private static final String USER_PROFILE_ID = "user_profile_id";
 
     private ReporterEnvironment mReporterEnvironment;
     private ErrorEnvironment mErrorEnvironment;

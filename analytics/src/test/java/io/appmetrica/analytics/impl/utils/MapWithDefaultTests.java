@@ -9,7 +9,8 @@ import java.util.Set;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.ParameterizedRobolectricTestRunner;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -83,13 +84,13 @@ public class MapWithDefaultTests extends CommonTest {
         }
     }
 
-    @RunWith(ParameterizedRobolectricTestRunner.class)
+    @RunWith(Parameterized.class)
     public static class MapWithDefaultPutTests extends MapWithDefaultBaseTests {
 
         private final Object mKey;
         private final Object mValue;
 
-        @ParameterizedRobolectricTestRunner.Parameters
+        @Parameters
         public static Collection<Object[]> data() {
             return Arrays.asList(new Object[][]{
                 {null, null},
@@ -111,12 +112,12 @@ public class MapWithDefaultTests extends CommonTest {
         }
     }
 
-    @RunWith(ParameterizedRobolectricTestRunner.class)
+    @RunWith(Parameterized.class)
     public static class MapWithDefaultGetTests extends MapWithDefaultBaseTests {
 
         private final Object mKey;
 
-        @ParameterizedRobolectricTestRunner.Parameters
+        @Parameters
         public static Collection<Object[]> data() {
             return Arrays.asList(new Object[][]{
                 {null}, {"ewffsdfd"}

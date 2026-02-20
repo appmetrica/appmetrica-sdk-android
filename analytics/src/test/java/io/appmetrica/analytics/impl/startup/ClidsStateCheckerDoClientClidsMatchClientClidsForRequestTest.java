@@ -10,11 +10,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.ParameterizedRobolectricTestRunner;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(ParameterizedRobolectricTestRunner.class)
+@RunWith(Parameterized.class)
 public class ClidsStateCheckerDoClientClidsMatchClientClidsForRequestTest extends CommonTest {
 
     private static final Map<String, String> EMPTY_MAP = new HashMap<String, String>();
@@ -29,7 +30,7 @@ public class ClidsStateCheckerDoClientClidsMatchClientClidsForRequestTest extend
         MAP_WITH_VALID_ITEMS_2.put("clid2", "2");
     }
 
-    @ParameterizedRobolectricTestRunner.Parameters(name = "{index}")
+    @Parameters(name = "{index}")
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
             // #0

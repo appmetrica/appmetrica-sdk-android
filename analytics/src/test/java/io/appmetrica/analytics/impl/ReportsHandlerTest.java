@@ -29,6 +29,7 @@ import io.appmetrica.analytics.internal.IAppMetricaService;
 import io.appmetrica.analytics.protobuf.nano.InvalidProtocolBufferNanoException;
 import io.appmetrica.analytics.protobuf.nano.MessageNano;
 import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import io.appmetrica.analytics.testutils.MockedConstructionRule;
 import java.util.Arrays;
 import java.util.Collections;
@@ -49,7 +50,6 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
 
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_ACTIVATION;
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_EXCEPTION_USER_CUSTOM_PROTOBUF;
@@ -71,8 +71,9 @@ import static org.mockito.Mockito.when;
 @RunWith(RobolectricTestRunner.class)
 public class ReportsHandlerTest extends CommonTest {
 
-    @Mock
-    private Context mContext;
+    @Rule
+    public GlobalServiceLocatorRule globalServiceLocatorRule = new GlobalServiceLocatorRule();
+    private Context context;
     @Mock
     private AppMetricaConnector mConnector;
     @Mock
@@ -112,25 +113,26 @@ public class ReportsHandlerTest extends CommonTest {
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
+        context = GlobalServiceLocator.getInstance().getContext();
         when(mConnector.getService()).thenReturn(mMetricaService);
         when(mConnector.isConnected()).thenReturn(true);
         StartupHelper startupParamsProvider = mock(StartupHelper.class);
         mMainReporterEnvironment = spy(new ReporterEnvironment(
-            new ProcessConfiguration(RuntimeEnvironment.getApplication(), mDataResultReceiver),
+            new ProcessConfiguration(context, mDataResultReceiver),
             new CounterConfiguration(),
             mainErrorEnvironment,
             userProfileID
         ));
         mArgReporterEnvironment = spy(new ReporterEnvironment(
-            new ProcessConfiguration(RuntimeEnvironment.getApplication(), mDataResultReceiver),
+            new ProcessConfiguration(context, mDataResultReceiver),
             new CounterConfiguration(),
             reporterErrorEnvironment,
             userProfileID
         ));
         when(mMainReporter.getEnvironment()).thenReturn(mMainReporterEnvironment);
 
-        DatabaseStorageFactoryTestUtils.mockNonComponentDatabases(mContext);
-        processConfiguration = new ProcessConfiguration(RuntimeEnvironment.getApplication(), mDataResultReceiver);
+        DatabaseStorageFactoryTestUtils.mockNonComponentDatabases(context);
+        processConfiguration = new ProcessConfiguration(context, mDataResultReceiver);
         counterConfiguration = new CounterConfiguration();
         when(commutationReporterEnvironment.getProcessConfiguration()).thenReturn(processConfiguration);
         when(commutationReporterEnvironment.getReporterConfiguration()).thenReturn(counterConfiguration);

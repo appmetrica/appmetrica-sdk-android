@@ -5,10 +5,8 @@ import io.appmetrica.analytics.testutils.CommonTest;
 import java.math.BigDecimal;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.RobolectricTestRunner;
 
 import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -16,7 +14,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * @see ECommerceCartItemQuantityTest
  */
-@RunWith(RobolectricTestRunner.class)
 public class ECommerceCartItemTest extends CommonTest {
 
     @Mock

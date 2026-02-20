@@ -13,7 +13,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.ParameterizedRobolectricTestRunner;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,7 +43,7 @@ import io.appmetrica.analytics.networktasks.internal.RetryPolicyConfig;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import io.appmetrica.analytics.testutils.MockedStaticRule;
 
-@RunWith(ParameterizedRobolectricTestRunner.class)
+@RunWith(Parameterized.class)
 public class ReportRequestConfigIsReadyForSendingTest {
 
     private ReportRequestConfig mReportRequestConfig;
@@ -53,7 +54,7 @@ public class ReportRequestConfigIsReadyForSendingTest {
     private final String deviceId;
     private final String deviceIdHash;
 
-    @ParameterizedRobolectricTestRunner.Parameters
+    @Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(
             new Object[]{false, new ArrayList<String>(), "", "", "", false},

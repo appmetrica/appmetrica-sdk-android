@@ -1,10 +1,10 @@
 package io.appmetrica.analytics.impl.preloadinfo;
 
-import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.data.ProtobufConverter;
+import io.appmetrica.analytics.coreutils.internal.StringUtils;
 import io.appmetrica.analytics.impl.protobuf.client.PreloadInfoProto;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import org.json.JSONObject;
@@ -31,7 +31,7 @@ public class PreloadInfoCandidateConverter implements
     public PreloadInfoProto.PreloadInfoData.PreloadInfoCandidate fromModel(@NonNull PreloadInfoData.Candidate value) {
         PreloadInfoProto.PreloadInfoData.PreloadInfoCandidate nano =
                 new PreloadInfoProto.PreloadInfoData.PreloadInfoCandidate();
-        if (TextUtils.isEmpty(value.trackingId) == false) {
+        if (!StringUtils.isNullOrEmpty(value.trackingId)) {
             nano.trackingId = value.trackingId;
         }
         nano.additionalParameters = value.additionalParams.toString();
@@ -51,7 +51,7 @@ public class PreloadInfoCandidateConverter implements
 
     @NonNull
     private JSONObject additionalParametersToJson(@Nullable String params) {
-        if (TextUtils.isEmpty(params) == false) {
+        if (!StringUtils.isNullOrEmpty(params)) {
             try {
                 return new JSONObject(params);
             } catch (Throwable ex) {

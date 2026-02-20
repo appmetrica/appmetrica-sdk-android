@@ -2,13 +2,10 @@ package io.appmetrica.analytics.profile;
 
 import io.appmetrica.analytics.testutils.CommonTest;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
-@RunWith(RobolectricTestRunner.class)
 public class UserProfileTest extends CommonTest {
 
     @Test(expected = UnsupportedOperationException.class)
