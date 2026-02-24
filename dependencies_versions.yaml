@@ -5,7 +5,7 @@
     group: "com.google.android.gms"
     name: "play-services-ads"
     from: "20.7.0"
-    to: "24.9.0"
+    to: "25.0.0"
 - group: "io.appmetrica.analytics"
   name: "analytics-ad-revenue-applovin-v12"
   dependencies:
@@ -13,7 +13,7 @@
     group: "com.applovin"
     name: "applovin-sdk"
     from: "12.5.0"
-    to: "13.5.1"
+    to: "13.6.0"
 - group: "io.appmetrica.analytics"
   name: "analytics-ad-revenue-fyber-v3"
   dependencies:
@@ -72,7 +72,7 @@
     group: "com.tenjin"
     name: "android-sdk"
     from: "1.16.7"
-    to: "1.17.1"
+    to: "1.17.2"
   - repository: "https://sdk-download.airbridge.io/maven"
     group: "io.airbridge"
     name: "sdk-android"
