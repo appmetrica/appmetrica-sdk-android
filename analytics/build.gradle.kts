@@ -8,7 +8,7 @@ import java.util.Date
 
 plugins {
     id("appmetrica-module")
-    id("appmetrica-proto")
+    alias(appMetricaLibs.plugins.appMetricaProto)
 }
 
 publishingInfo {
@@ -87,31 +87,6 @@ android {
             buildConfigField("String", "SDK_DEPENDENCY", "\"binary\"")
         }
     }
-}
-
-protobuf {
-    packageName.set("io.appmetrica.analytics.impl.protobuf")
-    protoFile(srcPath = "backend/adRevenue.proto", years = "2022")
-    protoFile(srcPath = "backend/crashAndroid.proto", years = "2019")
-    protoFile(srcPath = "backend/ecommerce.proto", years = "2020")
-    protoFile(srcPath = "backend/eventProto.proto", years = "2012-2017")
-    protoFile(srcPath = "backend/eventStart.proto", years = "2019")
-    protoFile(srcPath = "backend/referrer.proto", years = "2018")
-    protoFile(srcPath = "backend/revenue.proto", years = "2018")
-    protoFile(srcPath = "backend/externalAttribution.proto", years = "2023")
-    protoFile(srcPath = "backend/userprofile.proto", years = "2018")
-
-    protoFile(srcPath = "client/appPermissionsStateProtobuf.proto", years = "2019")
-    protoFile(srcPath = "client/clidsInfoProto.proto", years = "2022")
-    protoFile(srcPath = "client/dbProto.proto", years = "2023")
-    protoFile(srcPath = "client/eventExtrasProto.proto", years = "2022")
-    protoFile(srcPath = "client/eventhashes.proto", years = "2018")
-    protoFile(srcPath = "client/preloadInfoProto.proto", years = "2020")
-    protoFile(srcPath = "client/referrerInfoClient.proto", years = "2018")
-    protoFile(srcPath = "client/satelliteClidsInfoProto.proto", years = "2020")
-    protoFile(srcPath = "client/sessionExtrasProtobuf.proto", years = "2023")
-    protoFile(srcPath = "client/startupStateProtobuf.proto", years = "2018")
-    protoFile(srcPath = "client/legacyStartupStateProtobuf.proto", years = "2023")
 }
 
 jacocoSettings {

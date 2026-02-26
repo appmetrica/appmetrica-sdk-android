@@ -118,13 +118,6 @@
                 },
                 {
                     "group": "io.appmetrica.analytics",
-                    "module": "analytics-proto",
-                    "version": {
-                        "requires": "8.1.0"
-                    }
-                },
-                {
-                    "group": "io.appmetrica.analytics",
                     "module": "analytics-appsetid",
                     "version": {
                         "requires": "8.1.0"
@@ -175,6 +168,13 @@
                 {
                     "group": "io.appmetrica.analytics",
                     "module": "analytics-network-tasks",
+                    "version": {
+                        "requires": "8.1.0"
+                    }
+                },
+                {
+                    "group": "io.appmetrica.analytics",
+                    "module": "analytics-proto",
                     "version": {
                         "requires": "8.1.0"
                     }

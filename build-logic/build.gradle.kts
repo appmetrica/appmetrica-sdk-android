@@ -16,7 +16,6 @@ gradlePlugin {
     plugin("appmetrica-common-module", "io.appmetrica.analytics.gradle.AppMetricaCommonModulePlugin")
     plugin("appmetrica-jacoco", "io.appmetrica.analytics.gradle.jacoco.JacocoPlugin")
     plugin("appmetrica-module", "io.appmetrica.analytics.gradle.AppMetricaModulePlugin")
-    plugin("appmetrica-proto", "io.appmetrica.analytics.gradle.protobuf.ProtobufPlugin")
     plugin("appmetrica-publish", "io.appmetrica.analytics.gradle.publishing.PublishingPlugin")
     plugin("appmetrica-public-publish", "io.appmetrica.analytics.gradle.publishing.PublicPublishPlugin")
     plugin(

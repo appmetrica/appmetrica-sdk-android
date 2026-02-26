@@ -95,12 +95,6 @@
     </dependency>
     <dependency>
       <groupId>io.appmetrica.analytics</groupId>
-      <artifactId>analytics-proto</artifactId>
-      <version>8.1.0</version>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.appmetrica.analytics</groupId>
       <artifactId>analytics-appsetid</artifactId>
       <version>8.1.0</version>
       <scope>runtime</scope>
@@ -144,6 +138,12 @@
     <dependency>
       <groupId>io.appmetrica.analytics</groupId>
       <artifactId>analytics-network-tasks</artifactId>
+      <version>8.1.0</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.appmetrica.analytics</groupId>
+      <artifactId>analytics-proto</artifactId>
       <version>8.1.0</version>
       <scope>runtime</scope>
     </dependency>

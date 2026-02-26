@@ -1,6 +1,6 @@
 plugins {
     id("appmetrica-module")
-    id("appmetrica-proto")
+    alias(appMetricaLibs.plugins.appMetricaProto)
 }
 
 publishingInfo {
@@ -11,11 +11,6 @@ publishingInfo {
 
 android {
     namespace = "io.appmetrica.analytics.idsync"
-}
-
-protobuf {
-    packageName.set("io.appmetrica.analytics.idsync.impl.protobuf")
-    protoFile(srcPath = "client/IdSyncProtobuf.proto", years = "2025")
 }
 
 dependencies {

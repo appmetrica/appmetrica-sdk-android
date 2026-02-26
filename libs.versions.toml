@@ -52,6 +52,7 @@ appMetricaCodequality = { id = "io.appmetrica.gradle.codequality", version.ref =
 appMetricaGradlePlugin = { id = "io.appmetrica.gradle.gradle-plugin", version.ref = "selfGradlePlugins" }
 appMetricaKotlinLibrary = { id = "io.appmetrica.gradle.kotlin-library", version.ref = "selfGradlePlugins" }
 appMetricaNoStringDependencies = { id = "io.appmetrica.gradle.no-string-dependencies", version.ref = "selfGradlePlugins" }
+appMetricaProto = { id = "io.appmetrica.gradle.proto", version.ref = "selfGradlePlugins" }
 
 [libraries]
 # AppMetrica Gradle plugins

@@ -1,6 +1,6 @@
 plugins {
     id("appmetrica-module")
-    id("appmetrica-proto")
+    alias(appMetricaLibs.plugins.appMetricaProto)
 }
 
 publishingInfo {
@@ -15,13 +15,6 @@ android {
     defaultConfig {
         missingDimensionStrategy("tier", "binaryProd")
     }
-}
-
-protobuf {
-    packageName.set("io.appmetrica.analytics.billing.impl.protobuf")
-    protoFile(srcPath = "backend/revenue.proto", years = "2025")
-    protoFile(srcPath = "client/autoInappCollectingInfoProto.proto", years = "2025")
-    protoFile(srcPath = "client/remoteBillingConfigProtobuf.proto", years = "2025")
 }
 
 dependencies {

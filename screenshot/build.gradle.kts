@@ -1,6 +1,6 @@
 plugins {
     id("appmetrica-module")
-    id("appmetrica-proto")
+    alias(appMetricaLibs.plugins.appMetricaProto)
 }
 
 publishingInfo {
@@ -15,11 +15,6 @@ android {
     defaultConfig {
         missingDimensionStrategy("tier", "binaryProd")
     }
-}
-
-protobuf {
-    packageName.set("io.appmetrica.analytics.screenshot.impl.protobuf")
-    protoFile(srcPath = "client/remoteScreenshotConfigProtobuf.proto", years = "2024")
 }
 
 dependencies {

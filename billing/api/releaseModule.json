@@ -53,13 +53,6 @@
                 },
                 {
                     "group": "io.appmetrica.analytics",
-                    "module": "analytics-proto",
-                    "version": {
-                        "requires": "8.1.0"
-                    }
-                },
-                {
-                    "group": "io.appmetrica.analytics",
                     "module": "analytics-billing-interface",
                     "version": {
                         "requires": "8.1.0"
@@ -103,6 +96,13 @@
                 {
                     "group": "io.appmetrica.analytics",
                     "module": "analytics-modules-api",
+                    "version": {
+                        "requires": "8.1.0"
+                    }
+                },
+                {
+                    "group": "io.appmetrica.analytics",
+                    "module": "analytics-proto",
                     "version": {
                         "requires": "8.1.0"
                     }
