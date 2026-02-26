@@ -63,6 +63,7 @@ public final class io.appmetrica.analytics.coreutils.internal.StringUtils {
     public static byte[] hexToBytes([NonNull] String)
     public static String ifIsEmptyToDef(String, String)
     public static String ifIsNullToDef(String, String)
+    public static boolean isNotNullOrEmpty([Nullable] String)
     public static boolean isNullOrEmpty([Nullable] String)
     public static [NonNull] byte[] stringToBytesForProtobuf([Nullable] String)
     public static [NonNull] String throwableToString([NonNull] Throwable)

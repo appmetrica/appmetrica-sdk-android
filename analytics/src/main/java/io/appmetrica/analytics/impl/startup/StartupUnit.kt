@@ -40,7 +40,7 @@ internal class StartupUnit(
         val startupStateBuilder = startupState.buildUpon()
 
         val uuid = startupUnitComponents.multiProcessSafeUuidProvider.readUuid().id
-        if (uuid == null || startupState.uuid != null && uuid != startupState.uuid) {
+        if (uuid == null || StringUtils.isNotNullOrEmpty(startupState.uuid) && uuid != startupState.uuid) {
             handleSmthWrongWithUuid(uuid, startupState.uuid)
         }
         startupStateBuilder.withUuid(uuid ?: startupState.uuid)
