@@ -35,9 +35,10 @@ public class ECommerceProduct {
     }
 
     /**
-     * @see ECommerceProduct#ECommerceProduct(String)
+     * Returns the product SKU.
      *
      * @return sku
+     * @see ECommerceProduct#ECommerceProduct(String)
      */
     @NonNull
     public String getSku() {
@@ -45,9 +46,10 @@ public class ECommerceProduct {
     }
 
     /**
-     * @see ECommerceProduct#setName(String)
+     * Returns the product name.
      *
      * @return name
+     * @see ECommerceProduct#setName(String)
      */
     @Nullable
     public String getName() {
@@ -67,9 +69,10 @@ public class ECommerceProduct {
     }
 
     /**
-     * @see ECommerceProduct#setCategoriesPath(java.util.List)
+     * Returns the product categories path.
      *
      * @return categories path
+     * @see ECommerceProduct#setCategoriesPath(java.util.List)
      */
     @Nullable
     public List<String> getCategoriesPath() {
@@ -89,9 +92,10 @@ public class ECommerceProduct {
     }
 
     /**
-     * @see ECommerceProduct#setPayload(java.util.Map)
+     * Returns the product payload.
      *
      * @return payload
+     * @see ECommerceProduct#setPayload(java.util.Map)
      */
     @Nullable
     public Map<String, String> getPayload() {
@@ -111,9 +115,10 @@ public class ECommerceProduct {
     }
 
     /**
-     * @see ECommerceProduct#setActualPrice(ECommercePrice)
+     * Returns the actual price of the product.
      *
      * @return actual price
+     * @see ECommerceProduct#setActualPrice(ECommercePrice)
      */
     @Nullable
     public ECommercePrice getActualPrice() {
@@ -134,9 +139,10 @@ public class ECommerceProduct {
     }
 
     /**
-     * @see ECommerceProduct#setOriginalPrice(ECommercePrice)
+     * Returns the original price of the product.
      *
      * @return original price
+     * @see ECommerceProduct#setOriginalPrice(ECommercePrice)
      */
     @Nullable
     public ECommercePrice getOriginalPrice() {
@@ -157,9 +163,10 @@ public class ECommerceProduct {
     }
 
     /**
-     * @see ECommerceProduct#setPromocodes(java.util.List)
+     * Returns the product promocodes.
      *
      * @return promocodes
+     * @see ECommerceProduct#setPromocodes(java.util.List)
      */
     @Nullable
     public List<String> getPromocodes() {

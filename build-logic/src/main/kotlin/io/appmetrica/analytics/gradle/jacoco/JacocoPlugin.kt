@@ -13,7 +13,6 @@ import org.gradle.kotlin.dsl.named
 import org.gradle.kotlin.dsl.register
 import org.gradle.kotlin.dsl.the
 import org.gradle.kotlin.dsl.withType
-import org.gradle.testing.jacoco.plugins.JacocoPlugin
 import org.gradle.testing.jacoco.plugins.JacocoPluginExtension
 import org.gradle.testing.jacoco.plugins.JacocoTaskExtension
 import org.gradle.testing.jacoco.tasks.JacocoReport
@@ -27,13 +26,18 @@ class JacocoPlugin : Plugin<Project> {
     }
 
     override fun apply(project: Project) {
-        project.apply<JacocoPlugin>() // id("jacoco")
+        project.apply<org.gradle.testing.jacoco.plugins.JacocoPlugin>() // id("jacoco")
         project.apply<TeamCityPlugin>() // id("appmetrica-teamcity")
 
         val extension = project.extensions.create<JacocoSettingsExtension>("jacocoSettings")
 
-        project.configure<JacocoPluginExtension> {
-            toolVersion = "0.8.14" // https://github.com/jacoco/jacoco/releases
+        // NOTE: We use afterEvaluate to ensure the specified Jacoco version is used,
+        // as toolVersion is not a provider and needs to be set after the project is evaluated
+        // to override the default Gradle version.
+        project.afterEvaluate {
+            project.configure<JacocoPluginExtension> {
+                toolVersion = "0.8.14" // https://github.com/jacoco/jacoco/releases
+            }
         }
 
         project.plugins.withId("com.android.library") {

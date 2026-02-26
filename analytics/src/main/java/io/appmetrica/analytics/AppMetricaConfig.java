@@ -294,6 +294,7 @@ public class AppMetricaConfig {
     }
 
     /**
+     * Creates {@link AppMetricaConfig} from JSON string.
      *
      * @param json {@link String} representing AppMetricaConfig
      * @return {@link AppMetricaConfig} parsed from giver json
@@ -693,18 +694,19 @@ public class AppMetricaConfig {
         /**
          * Sets whether app open auto tracking is enabled.
          * Default value is {@value AppMetricaDefaultValues#DEFAULT_APP_OPEN_TRACKING_ENABLED}.
-         * @see AppMetricaConfig#appOpenTrackingEnabled
          *
-         * Set this flag to true instead of reporting deeplinks manually from
+         * <p>Set this flag to true instead of reporting deeplinks manually from
          * {@link android.app.Activity#onCreate(android.os.Bundle)} via
-         * {@link AppMetrica#reportAppOpen(android.app.Activity)}
+         * {@link AppMetrica#reportAppOpen(android.app.Activity)}</p>
          *
-         * <b>NOTE: </b> Auto tracking will only capture links that open activity. Those that are clicked on while
-         * activity is opened will be ignored. To track them call {@link AppMetrica#reportAppOpen(android.content.Intent)}
-         * from {@link android.app.Activity#onNewIntent(android.content.Intent)}
+         * <p><b>NOTE: </b> Auto tracking will only capture links that open activity. Those that are clicked on while
+         * activity is opened will be ignored. To track them call
+         * {@link AppMetrica#reportAppOpen(android.content.Intent)}
+         * from {@link android.app.Activity#onNewIntent(android.content.Intent)}</p>
          *
          * @param enabled true if auto tracking should be enabled, false otherwise
          * @return the same {@link Builder} object.
+         * @see AppMetricaConfig#appOpenTrackingEnabled
          */
         @NonNull
         public Builder withAppOpenTrackingEnabled(boolean enabled) {

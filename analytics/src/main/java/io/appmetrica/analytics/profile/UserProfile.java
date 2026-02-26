@@ -41,6 +41,8 @@ public class UserProfile {
     }
 
     /**
+     * Returns all user profile updates.
+     *
      * @return list of all {@link UserProfileUpdate} objects
      */
     @NonNull

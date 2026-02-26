@@ -1,22 +1,24 @@
 package io.appmetrica.analytics.coreutils.internal.toggle
 
+import androidx.annotation.VisibleForTesting
 import io.appmetrica.analytics.coreapi.internal.control.Toggle
 import io.appmetrica.analytics.coreapi.internal.control.ToggleObserver
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.locks.ReentrantLock
 
-class ConjunctiveCompositeThreadSafeToggle(
+class ConjunctiveCompositeThreadSafeToggle @VisibleForTesting internal constructor(
     toggles: List<Toggle>,
-    tagPostfix: String
+    tagPostfix: String,
+    private val lock: ReentrantLock
 ) : Toggle {
+
+    constructor(toggles: List<Toggle>, tagPostfix: String) : this(toggles, tagPostfix, ReentrantLock())
 
     private val observers = ArrayList<ToggleObserver>()
     private val toggleStates = HashMap<ToggleObserver, Boolean>()
 
     private val tag = "[ConjunctiveCompositeToggle-$tagPostfix]"
-
-    private val lock = ReentrantLock()
 
     @Volatile
     override var actualState: Boolean = false

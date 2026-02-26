@@ -42,6 +42,9 @@ public class AppMetricaLibraryAdapterConfig {
      */
     public static class Builder {
 
+        /** Creates a new {@link Builder} instance. */
+        public Builder() {}
+
         @Nullable
         private Boolean advIdentifiersTracking;
 

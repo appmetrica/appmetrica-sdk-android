@@ -37,6 +37,8 @@ public interface DeferredDeeplinkParametersListener {
         }
 
         /**
+         * Returns description of this error.
+         *
          * @return String value for {@link Error}
          */
         public String getDescription() {

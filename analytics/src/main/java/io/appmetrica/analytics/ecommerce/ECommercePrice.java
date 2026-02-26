@@ -25,9 +25,10 @@ public class ECommercePrice {
     }
 
     /**
-     * @see ECommercePrice#ECommercePrice(ECommerceAmount)
+     * Returns the fiat amount.
      *
      * @return fiat amount
+     * @see ECommercePrice#ECommercePrice(ECommerceAmount)
      */
     @NonNull
     public ECommerceAmount getFiat() {
@@ -35,9 +36,10 @@ public class ECommercePrice {
     }
 
     /**
-     * @see ECommercePrice#setInternalComponents(java.util.List)
+     * Returns the internal components.
      *
      * @return internal components
+     * @see ECommercePrice#setInternalComponents(java.util.List)
      */
     @Nullable
     public List<ECommerceAmount> getInternalComponents() {

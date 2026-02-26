@@ -9,6 +9,9 @@ import java.util.Map;
  */
 public class ECommerceScreen {
 
+    /** Creates a new {@link ECommerceScreen} instance. */
+    public ECommerceScreen() {}
+
     @Nullable
     private String name;
     @Nullable
@@ -19,9 +22,10 @@ public class ECommerceScreen {
     private Map<String, String> payload;
 
     /**
-     * @see ECommerceScreen#setName(String)
+     * Returns the screen name.
      *
      * @return screen name
+     * @see ECommerceScreen#setName(String)
      */
     @Nullable
     public String getName() {
@@ -40,9 +44,10 @@ public class ECommerceScreen {
     }
 
     /**
-     * @see ECommerceScreen#setCategoriesPath(java.util.List)
+     * Returns the screen categories path.
      *
      * @return categories path
+     * @see ECommerceScreen#setCategoriesPath(java.util.List)
      */
     @Nullable
     public List<String> getCategoriesPath() {
@@ -61,9 +66,10 @@ public class ECommerceScreen {
     }
 
     /**
-     * @see ECommerceScreen#setSearchQuery(String)
+     * Returns the search query.
      *
      * @return search query
+     * @see ECommerceScreen#setSearchQuery(String)
      */
     @Nullable
     public String getSearchQuery() {
@@ -82,9 +88,10 @@ public class ECommerceScreen {
     }
 
     /**
-     * @see ECommerceScreen#setPayload(java.util.Map)
+     * Returns the screen payload.
      *
      * @return payload
+     * @see ECommerceScreen#setPayload(java.util.Map)
      */
     @Nullable
     public Map<String, String> getPayload() {

@@ -20,6 +20,8 @@ public class PluginErrorDetails {
      * Class containing popular constants used in {@link PluginErrorDetails.Builder#withPlatform(String)}.
      */
     public static final class Platform {
+        private Platform() {}
+
         /**
          * Constant for Native Android
          */
@@ -76,6 +78,8 @@ public class PluginErrorDetails {
     }
 
     /**
+     * Returns the exception class name.
+     *
      * @return class name if it is defined or null otherwise
      */
     @Nullable
@@ -84,6 +88,8 @@ public class PluginErrorDetails {
     }
 
     /**
+     * Returns the error message.
+     *
      * @return message if it is defined or null otherwise
      */
     @Nullable
@@ -92,6 +98,8 @@ public class PluginErrorDetails {
     }
 
     /**
+     * Returns the error stacktrace.
+     *
      * @return list of {@link StackTraceItem}
      */
     @NonNull
@@ -100,6 +108,8 @@ public class PluginErrorDetails {
     }
 
     /**
+     * Returns the platform.
+     *
      * @return platform if it is defined or null otherwise
      */
     @Nullable
@@ -108,6 +118,8 @@ public class PluginErrorDetails {
     }
 
     /**
+     * Returns the virtual machine version.
+     *
      * @return virtual machine version if it is defined or null otherwise
      */
     @Nullable
@@ -116,6 +128,8 @@ public class PluginErrorDetails {
     }
 
     /**
+     * Returns the plugin environment.
+     *
      * @return plugin environment
      */
     @NonNull
@@ -127,6 +141,9 @@ public class PluginErrorDetails {
      * Builder for {@link PluginErrorDetails}.
      */
     public static class Builder {
+
+        /** Creates a new {@link Builder} instance. */
+        public Builder() {}
 
         @Nullable
         private String exceptionClass;

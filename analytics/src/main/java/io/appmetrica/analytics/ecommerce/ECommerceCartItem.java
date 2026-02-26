@@ -75,11 +75,12 @@ public class ECommerceCartItem {
     }
 
     /**
+     * Returns the item product.
+     *
+     * @return item product
      * @see ECommerceCartItem#ECommerceCartItem(ECommerceProduct, ECommercePrice, java.math.BigDecimal)
      * @see ECommerceCartItem#ECommerceCartItem(ECommerceProduct, ECommercePrice, double)
      * @see ECommerceCartItem#ECommerceCartItem(ECommerceProduct, ECommercePrice, long)
-     *
-     * @return item product
      */
     @NonNull
     public ECommerceProduct getProduct() {
@@ -87,11 +88,12 @@ public class ECommerceCartItem {
     }
 
     /**
+     * Returns the item product quantity.
+     *
+     * @return item product quantity
      * @see ECommerceCartItem#ECommerceCartItem(ECommerceProduct, ECommercePrice, java.math.BigDecimal)
      * @see ECommerceCartItem#ECommerceCartItem(ECommerceProduct, ECommercePrice, double)
      * @see ECommerceCartItem#ECommerceCartItem(ECommerceProduct, ECommercePrice, long)
-     *
-     * @return item product quantity
      */
     @NonNull
     public BigDecimal getQuantity() {
@@ -99,11 +101,12 @@ public class ECommerceCartItem {
     }
 
     /**
+     * Returns the item revenue.
+     *
+     * @return item revenue
      * @see ECommerceCartItem#ECommerceCartItem(ECommerceProduct, ECommercePrice, java.math.BigDecimal)
      * @see ECommerceCartItem#ECommerceCartItem(ECommerceProduct, ECommercePrice, double)
      * @see ECommerceCartItem#ECommerceCartItem(ECommerceProduct, ECommercePrice, long)
-     *
-     * @return item revenue
      */
     @NonNull
     public ECommercePrice getRevenue() {
@@ -124,9 +127,10 @@ public class ECommerceCartItem {
     }
 
     /**
-     * @see ECommerceCartItem#setReferrer(ECommerceReferrer)
+     * Returns the cart item referrer.
      *
      * @return referrer
+     * @see ECommerceCartItem#setReferrer(ECommerceReferrer)
      */
     @Nullable
     public ECommerceReferrer getReferrer() {

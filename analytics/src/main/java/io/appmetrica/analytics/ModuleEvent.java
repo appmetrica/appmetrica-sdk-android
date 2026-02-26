@@ -43,6 +43,8 @@ public final class ModuleEvent {
     private final List<Map.Entry<String, Object>> attributes;
 
     /**
+     * Returns the event type.
+     *
      * @return event type
      */
     public int getType() {
@@ -50,6 +52,8 @@ public final class ModuleEvent {
     }
 
     /**
+     * Returns the event name.
+     *
      * @return event name
      */
     @Nullable
@@ -58,6 +62,8 @@ public final class ModuleEvent {
     }
 
     /**
+     * Returns the event value.
+     *
      * @return event value
      */
     @Nullable
@@ -66,6 +72,8 @@ public final class ModuleEvent {
     }
 
     /**
+     * Returns the service data reporter type.
+     *
      * @return the way this event will be tracked
      */
     public int getServiceDataReporterType() {
@@ -73,6 +81,8 @@ public final class ModuleEvent {
     }
 
     /**
+     * Returns the event category.
+     *
      * @return event category
      */
     public Category getCategory() {
@@ -80,6 +90,8 @@ public final class ModuleEvent {
     }
 
     /**
+     * Returns the event environment.
+     *
      * @return event environment
      */
     @Nullable
@@ -88,6 +100,8 @@ public final class ModuleEvent {
     }
 
     /**
+     * Returns the event extras.
+     *
      * @return event extras
      */
     @Nullable
@@ -96,6 +110,8 @@ public final class ModuleEvent {
     }
 
     /**
+     * Returns the event attributes.
+     *
      * @return event attributes
      */
     @Nullable

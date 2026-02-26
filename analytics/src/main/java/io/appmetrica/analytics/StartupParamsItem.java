@@ -43,6 +43,8 @@ public final class StartupParamsItem {
     }
 
     /**
+     * Returns the startup value.
+     *
      * @return startup value if it is present or null otherwise.
      */
     @Nullable
@@ -51,6 +53,8 @@ public final class StartupParamsItem {
     }
 
     /**
+     * Returns the startup value status.
+     *
      * @return startup value status.
      */
     @NonNull
@@ -59,6 +63,8 @@ public final class StartupParamsItem {
     }
 
     /**
+     * Returns the startup value error details.
+     *
      * @return startup value error details.
      */
     @Nullable

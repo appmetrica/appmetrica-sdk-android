@@ -360,6 +360,8 @@ public final class AppMetrica {
     }
 
     /**
+     * Returns the library version.
+     *
      * @return <b>VERSION</b> of library.
      *
      * @see AppMetrica#getLibraryApiLevel()
@@ -370,6 +372,8 @@ public final class AppMetrica {
     }
 
     /**
+     * Returns the library API level.
+     *
      * @return <b>API LEVEL</b> of library.
      *
      * @see AppMetrica#getLibraryVersion()

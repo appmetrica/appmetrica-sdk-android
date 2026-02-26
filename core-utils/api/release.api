@@ -591,6 +591,7 @@ public interface io.appmetrica.analytics.coreutils.internal.time.TimeProvider {
 
 public final class io.appmetrica.analytics.coreutils.internal.toggle.ConjunctiveCompositeThreadSafeToggle implementation io.appmetrica.analytics.coreapi.internal.control.Toggle {
     public <init>([NonNull] java.util.List<? extends io.appmetrica.analytics.coreapi.internal.control.Toggle>, [NonNull] String)
+    public <init>([NonNull] java.util.List<? extends io.appmetrica.analytics.coreapi.internal.control.Toggle>, [NonNull] String, [NonNull] java.util.concurrent.locks.ReentrantLock)
     public static final void access$acquireLock(io.appmetrica.analytics.coreutils.internal.toggle.ConjunctiveCompositeThreadSafeToggle)
     public static final void access$releaseLock(io.appmetrica.analytics.coreutils.internal.toggle.ConjunctiveCompositeThreadSafeToggle)
     public static final void access$updateState(io.appmetrica.analytics.coreutils.internal.toggle.ConjunctiveCompositeThreadSafeToggle, io.appmetrica.analytics.coreapi.internal.control.ToggleObserver, boolean, String)

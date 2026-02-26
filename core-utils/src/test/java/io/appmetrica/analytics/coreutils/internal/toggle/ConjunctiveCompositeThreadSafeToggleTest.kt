@@ -4,7 +4,6 @@ import io.appmetrica.analytics.coreapi.internal.control.Toggle
 import io.appmetrica.analytics.coreapi.internal.control.ToggleObserver
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.LogRule
-import io.appmetrica.analytics.testutils.MockedConstructionRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Rule
@@ -34,9 +33,8 @@ class ConjunctiveCompositeThreadSafeToggleTest : CommonTest() {
     @get:Rule
     val logRule = LogRule()
 
-    @get:Rule
-    val lockMockedRule = MockedConstructionRule(ReentrantLock::class.java) { mock, mockedContext ->
-        whenever(mock.tryLock(lockWaitingMillis, TimeUnit.MILLISECONDS)).then { invocationOnMock ->
+    private val lock = mock<ReentrantLock> {
+        on { tryLock(lockWaitingMillis, TimeUnit.MILLISECONDS) }.then {
             actualMockInvocationCount++
             actualMockInvocationCount % defaultMockAcquireAttempts == 0
         }
@@ -52,12 +50,9 @@ class ConjunctiveCompositeThreadSafeToggleTest : CommonTest() {
 
     private lateinit var compositeToggle: ConjunctiveCompositeThreadSafeToggle
 
-    private lateinit var lock: ReentrantLock
-
     @Before
     fun setUp() {
-        compositeToggle = ConjunctiveCompositeThreadSafeToggle(listOf(firstToggle, secondToggle), "subtag")
-        lock = lock()
+        compositeToggle = ConjunctiveCompositeThreadSafeToggle(listOf(firstToggle, secondToggle), "subtag", lock)
     }
 
     @Test
@@ -91,7 +86,7 @@ class ConjunctiveCompositeThreadSafeToggleTest : CommonTest() {
     ) {
         whenever(firstToggle.actualState).thenReturn(firstToggleInitialState)
         whenever(secondToggle.actualState).thenReturn(secondToggleInitialState)
-        compositeToggle = ConjunctiveCompositeThreadSafeToggle(listOf(firstToggle, secondToggle), "some tag")
+        compositeToggle = ConjunctiveCompositeThreadSafeToggle(listOf(firstToggle, secondToggle), "some tag", lock)
         assertThat(compositeToggle.actualState).isEqualTo(expectedResultState)
     }
 
@@ -184,11 +179,5 @@ class ConjunctiveCompositeThreadSafeToggleTest : CommonTest() {
     private fun verifyToggleObserversRegistration() {
         verify(firstToggle).registerObserver(toggleObserverCaptor.capture(), eq(false))
         verify(secondToggle).registerObserver(toggleObserverCaptor.capture(), eq(false))
-    }
-
-    private fun lock(): ReentrantLock {
-        assertThat(lockMockedRule.constructionMock.constructed()).hasSize(1)
-        assertThat(lockMockedRule.argumentInterceptor.flatArguments()).isEmpty()
-        return lockMockedRule.constructionMock.constructed().first()
     }
 }

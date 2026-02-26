@@ -42,9 +42,10 @@ public class ECommerceOrder {
     }
 
     /**
-     * @see ECommerceOrder#setPayload(java.util.Map)
+     * Returns the order payload.
      *
      * @return payload
+     * @see ECommerceOrder#setPayload(java.util.Map)
      */
     @Nullable
     public Map<String, String> getPayload() {
@@ -52,9 +53,10 @@ public class ECommerceOrder {
     }
 
     /**
-     * @see ECommerceOrder#ECommerceOrder(String, java.util.List)
+     * Returns the order identifier.
      *
      * @return order identifier
+     * @see ECommerceOrder#ECommerceOrder(String, java.util.List)
      */
     @NonNull
     public String getIdentifier() {
@@ -62,9 +64,10 @@ public class ECommerceOrder {
     }
 
     /**
-     * @see ECommerceOrder#ECommerceOrder(String, java.util.List)
+     * Returns the items in the cart.
      *
      * @return items in the cart
+     * @see ECommerceOrder#ECommerceOrder(String, java.util.List)
      */
     @NonNull
     public List<ECommerceCartItem> getCartItems() {

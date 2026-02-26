@@ -37,6 +37,8 @@ public class StackTraceItem {
     }
 
     /**
+     * Returns the class name.
+     *
      * @return class name if it is defined or null otherwise
      */
     @Nullable
@@ -45,6 +47,8 @@ public class StackTraceItem {
     }
 
     /**
+     * Returns the file name.
+     *
      * @return file name if it is defined or null otherwise
      */
     @Nullable
@@ -53,6 +57,8 @@ public class StackTraceItem {
     }
 
     /**
+     * Returns the line number.
+     *
      * @return line if it is defined or null otherwise
      */
     @Nullable
@@ -61,6 +67,8 @@ public class StackTraceItem {
     }
 
     /**
+     * Returns the column number.
+     *
      * @return column if it is defined or null otherwise
      */
     @Nullable
@@ -69,6 +77,8 @@ public class StackTraceItem {
     }
 
     /**
+     * Returns the method name.
+     *
      * @return method name if it is defined or null otherwise
      */
     @Nullable
@@ -80,6 +90,9 @@ public class StackTraceItem {
      * Builder for {@link StackTraceItem}.
      */
     public static class Builder {
+
+        /** Creates a new {@link Builder} instance. */
+        public Builder() {}
 
         @Nullable
         private String className;

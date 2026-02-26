@@ -8,6 +8,9 @@ import androidx.annotation.Nullable;
  */
 public class ECommerceReferrer {
 
+    /** Creates a new {@link ECommerceReferrer} instance. */
+    public ECommerceReferrer() {}
+
     @Nullable
     private String type;
     @Nullable
@@ -16,9 +19,10 @@ public class ECommerceReferrer {
     private ECommerceScreen screen;
 
     /**
-     * @see ECommerceReferrer#setType(String)
+     * Returns the referrer type.
      *
      * @return type
+     * @see ECommerceReferrer#setType(String)
      */
     @Nullable
     public String getType() {
@@ -39,9 +43,10 @@ public class ECommerceReferrer {
     }
 
     /**
-     * @see ECommerceReferrer#setIdentifier(String)} (String)
+     * Returns the referrer identifier.
      *
      * @return identifier
+     * @see ECommerceReferrer#setIdentifier(String)
      */
     @Nullable
     public String getIdentifier() {
@@ -62,9 +67,10 @@ public class ECommerceReferrer {
     }
 
     /**
-     * @see ECommerceReferrer#setScreen(ECommerceScreen)
+     * Returns the referrer screen.
      *
      * @return screen
+     * @see ECommerceReferrer#setScreen(ECommerceScreen)
      */
     @Nullable
     public ECommerceScreen getScreen() {

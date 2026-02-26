@@ -347,7 +347,6 @@ public final class io.appmetrica.analytics.ModulesFacade {
     public static final int EXTERNAL_ATTRIBUTION_SINGULAR
     public static final int EXTERNAL_ATTRIBUTION_TENJIN
 
-    public <init>()
     public static [NonNull] io.appmetrica.analytics.IModuleReporter getModuleReporter([NonNull] android.content.Context, [NonNull] String)
     public static boolean isActivatedForApp()
     public static void reportAdRevenue([NonNull] io.appmetrica.analytics.AdRevenue)
@@ -761,8 +760,6 @@ public static final class io.appmetrica.analytics.plugins.PluginErrorDetails$Pla
     public static final String REACT_NATIVE
     public static final String UNITY
     public static final String XAMARIN
-
-    public <init>()
 }
 
 public class io.appmetrica.analytics.plugins.StackTraceItem {

@@ -54,11 +54,12 @@ public class ECommerceAmount {
     }
 
     /**
+     * Returns the decimal amount value.
+     *
+     * @return decimal amount
      * @see ECommerceAmount#ECommerceAmount(double, String)
      * @see ECommerceAmount#ECommerceAmount(long, String)
      * @see ECommerceAmount#ECommerceAmount(java.math.BigDecimal, String)
-     *
-     * @return decimal amount
      */
     @NonNull
     public BigDecimal getAmount() {
@@ -66,11 +67,12 @@ public class ECommerceAmount {
     }
 
     /**
+     * Returns the amount unit.
+     *
+     * @return unit
      * @see ECommerceAmount#ECommerceAmount(double, String)
      * @see ECommerceAmount#ECommerceAmount(long, String)
      * @see ECommerceAmount#ECommerceAmount(java.math.BigDecimal, String)
-     *
-     * @return unit
      */
     @NonNull
     public String getUnit() {

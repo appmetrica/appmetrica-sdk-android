@@ -38,6 +38,8 @@ public abstract class BaseReleaseLogger {
     }
 
     /**
+     * Returns the log prefix.
+     *
      * @return prefix of every log
      */
     @NonNull

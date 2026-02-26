@@ -13,6 +13,8 @@ import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
  */
 public final class ModulesFacade {
 
+    private ModulesFacade() {}
+
     /**
      * Attribution source "Appsflyer SDK" for {@link ModulesFacade#reportExternalAttribution(int, String)}.
      */
@@ -106,6 +108,8 @@ public final class ModulesFacade {
     }
 
     /**
+     * Checks whether AppMetrica is activated.
+     *
      * @return true if AppMetrica is activated and false otherwise.
      */
     public static boolean isActivatedForApp() {
@@ -121,6 +125,8 @@ public final class ModulesFacade {
     }
 
     /**
+     * Returns the module reporter for given API key.
+     *
      * @param context Context
      * @param apiKey API key of the required reporter
      * @return {@link IModuleReporter} for given API key
