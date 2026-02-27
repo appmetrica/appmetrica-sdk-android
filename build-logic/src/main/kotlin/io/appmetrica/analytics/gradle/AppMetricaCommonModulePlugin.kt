@@ -2,7 +2,6 @@ package io.appmetrica.analytics.gradle
 
 import com.android.build.gradle.LibraryExtension
 import com.android.build.gradle.internal.dsl.BuildType
-import io.appmetrica.analytics.gradle.jacoco.JacocoPlugin
 import io.appmetrica.analytics.gradle.publishing.PublishingInfoBuildTypeExtension
 import io.appmetrica.analytics.gradle.publishing.PublishingPlugin
 import io.appmetrica.analytics.gradle.test.TestJvmArgsConfigurator
@@ -12,6 +11,7 @@ import io.appmetrica.gradle.aarcheck.AarCheckExtension
 import io.appmetrica.gradle.aarcheck.AarCheckPlugin
 import io.appmetrica.gradle.aarcheck.agp.aarCheck
 import io.appmetrica.gradle.android.plugins.AndroidLibraryPlugin
+import io.appmetrica.gradle.jacoco.JacocoPlugin
 import io.appmetrica.gradle.nologs.NoLogsExtension
 import io.appmetrica.gradle.nologs.NoLogsPlugin
 import org.gradle.api.Plugin
@@ -31,7 +31,7 @@ import kotlin.jvm.optionals.getOrNull
 class AppMetricaCommonModulePlugin : Plugin<Project> {
     override fun apply(project: Project) {
         project.apply<AndroidLibraryPlugin>() // id("io.appmetrica.gradle.android-library")
-        project.apply<JacocoPlugin>() // id("appmetrica-jacoco")
+        project.apply<JacocoPlugin>() // id("io.appmetrica.gradle.jacoco")
         project.apply<PublishingPlugin>() // id("appmetrica-publish")
         project.apply<AarCheckPlugin>() // id("io.appmetrica.gradle.aar-check")
         project.apply<NoLogsPlugin>() // id("io.appmetrica.gradle.no-logs")

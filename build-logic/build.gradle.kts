@@ -14,7 +14,6 @@ fun GradlePluginDevelopmentExtension.plugin(name: String, impl: String) {
 
 gradlePlugin {
     plugin("appmetrica-common-module", "io.appmetrica.analytics.gradle.AppMetricaCommonModulePlugin")
-    plugin("appmetrica-jacoco", "io.appmetrica.analytics.gradle.jacoco.JacocoPlugin")
     plugin("appmetrica-module", "io.appmetrica.analytics.gradle.AppMetricaModulePlugin")
     plugin("appmetrica-publish", "io.appmetrica.analytics.gradle.publishing.PublishingPlugin")
     plugin("appmetrica-public-publish", "io.appmetrica.analytics.gradle.publishing.PublicPublishPlugin")
@@ -22,7 +21,6 @@ gradlePlugin {
         "appmetrica-ndkcrashes-public-publish",
         "io.appmetrica.analytics.gradle.publishing.NdkCrashesPublicPublishPlugin"
     )
-    plugin("appmetrica-teamcity", "io.appmetrica.analytics.gradle.teamcity.TeamCityPlugin")
     plugin("appmetrica-test-split", "io.appmetrica.analytics.gradle.test.TestSplitPlugin")
     plugin("appmetrica-update-version", "io.appmetrica.analytics.gradle.UpdateVersionPlugin")
 }
@@ -33,6 +31,7 @@ dependencies {
     // by source
     implementation(appMetricaLibs.appMetricaAarCheck)
     implementation(appMetricaLibs.appMetricaAndroidLibrary)
+    implementation(appMetricaLibs.appMetricaJacoco)
     implementation(appMetricaLibs.appMetricaMavenCentralPublish)
     implementation(appMetricaLibs.appMetricaNoLogs)
 }
