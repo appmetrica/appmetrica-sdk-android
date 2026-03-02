@@ -4,7 +4,6 @@ import android.content.Context
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceComponentsInitializer
 import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.modules.ConstantModuleEntryPointProvider
-import io.appmetrica.analytics.impl.modules.PreferencesBasedModuleEntryPoint
 
 internal class DefaultServiceComponentsInitializer : ServiceComponentsInitializer {
 
@@ -20,13 +19,6 @@ internal class DefaultServiceComponentsInitializer : ServiceComponentsInitialize
     override fun onCreate(context: Context) {
         GlobalServiceLocator.getInstance().moduleEntryPointsRegister.register(
             *moduleEntryPoints.map { ConstantModuleEntryPointProvider(it) }.toTypedArray()
-        )
-        GlobalServiceLocator.getInstance().moduleEntryPointsRegister.register(
-            PreferencesBasedModuleEntryPoint(
-                context,
-                "io.appmetrica.analytics.modules.ads",
-                "lsm"
-            )
         )
     }
 }

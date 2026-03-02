@@ -4,14 +4,13 @@ import android.content.Context
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceComponentsInitializer
 import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.modules.ConstantModuleEntryPointProvider
-import io.appmetrica.analytics.impl.modules.PreferencesBasedModuleEntryPoint
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.kotlin.inOrder
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
 
 internal class DefaultServiceComponentsInitializerTest : CommonTest() {
 
@@ -38,16 +37,8 @@ internal class DefaultServiceComponentsInitializerTest : CommonTest() {
         )
         serviceComponentsInitializer.onCreate(context)
 
-        val moduleEntryPointsRegister = GlobalServiceLocator.getInstance().moduleEntryPointsRegister
-
-        inOrder(moduleEntryPointsRegister) {
-            verify(moduleEntryPointsRegister).register(
-                *expectedModules.map { ConstantModuleEntryPointProvider(it) }.toTypedArray()
-            )
-            verify(moduleEntryPointsRegister).register(
-                PreferencesBasedModuleEntryPoint(context, "io.appmetrica.analytics.modules.ads", "lsm")
-            )
-            verifyNoMoreInteractions()
-        }
+        verify(GlobalServiceLocator.getInstance().moduleEntryPointsRegister).register(
+            *expectedModules.map { ConstantModuleEntryPointProvider(it) }.toTypedArray()
+        )
     }
 }
