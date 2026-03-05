@@ -14,7 +14,6 @@ public class PreferencesServiceDbStorage extends NameSpacedPreferenceDbStorage
     static final PreferencesItem SERVER_TIME_OFFSET = new PreferencesItem("PREF_KEY_OFFSET");
     static final PreferencesItem UNCHECKED_TIME = new PreferencesItem("UNCHECKED_TIME");
     static final PreferencesItem DATA_SENDING_RESTRICTED_IN_MAIN = new PreferencesItem("STATISTICS_RESTRICTED_IN_MAIN");
-    static final PreferencesItem LAST_IDENTITY_LIGHT_SEND_TIME = new PreferencesItem("LAST_IDENTITY_LIGHT_SEND_TIME");
     static final PreferencesItem NEXT_REPORT_SEND_ATTEMPT_NUMBER =
             new PreferencesItem("NEXT_REPORT_SEND_ATTEMPT_NUMBER");
     static final PreferencesItem NEXT_LOCATION_SEND_ATTEMPT_NUMBER =
@@ -73,14 +72,6 @@ public class PreferencesServiceDbStorage extends NameSpacedPreferenceDbStorage
 
     public PreferencesServiceDbStorage putDataSendingRestrictedFromMainReporter(boolean value) {
         return writeBoolean(DATA_SENDING_RESTRICTED_IN_MAIN.fullKey(), value);
-    }
-
-    public long getLastIdentityLightSendTimeSeconds(long defaultValue) {
-        return readLong(LAST_IDENTITY_LIGHT_SEND_TIME.fullKey(), defaultValue);
-    }
-
-    public PreferencesServiceDbStorage putLastIdentityLightSendTimeSeconds(long value) {
-        return writeLong(LAST_IDENTITY_LIGHT_SEND_TIME.fullKey(), value);
     }
 
     public int getNextSendAttemptNumber(@NonNull NetworkHost host, int defaultValue) {

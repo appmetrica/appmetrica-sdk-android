@@ -3,6 +3,7 @@ package io.appmetrica.analytics.impl.db.state.factory;
 import android.content.Context;
 import io.appmetrica.analytics.coreapi.internal.data.IBinaryDataHelper;
 import io.appmetrica.analytics.coreutils.internal.encryption.AESEncrypter;
+import io.appmetrica.analytics.impl.IOUtils;
 import io.appmetrica.analytics.impl.clids.ClidsInfo;
 import io.appmetrica.analytics.impl.db.protobuf.AppPermissionsStateSerializer;
 import io.appmetrica.analytics.impl.db.protobuf.ClidsInfoStateSerializer;
@@ -17,7 +18,6 @@ import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoData;
 import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoDataConverter;
 import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoDataSerializer;
 import io.appmetrica.analytics.impl.startup.StartupStateModel;
-import io.appmetrica.analytics.impl.utils.SecurityUtils;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import java.util.Arrays;
@@ -89,8 +89,8 @@ public class StorageFactoriesTest extends CommonTest {
         storageFactory = (StorageFactoryImpl) StorageFactory.Provider.get(entityClass);
         protobufStateStorage = (ProtobufStateStorageImpl) storageFactory.createWithHelper(context, binaryDataHelper);
 
-        aesPassword = SecurityUtils.getMD5Hash(context.getPackageName());
-        aesIV = SecurityUtils.getMD5Hash(new StringBuilder(context.getPackageName()).reverse().toString());
+        aesPassword = IOUtils.md5(context.getPackageName());
+        aesIV = IOUtils.md5(new StringBuilder(context.getPackageName()).reverse().toString());
     }
 
     @Test

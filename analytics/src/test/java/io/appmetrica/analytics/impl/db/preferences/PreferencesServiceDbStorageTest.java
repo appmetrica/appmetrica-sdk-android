@@ -280,27 +280,6 @@ public class PreferencesServiceDbStorageTest extends CommonTest {
     }
 
     @Test
-    public void testLastIdentityLightSendTimeSecondsMissing() {
-        final long defaultValue = 10;
-        assertThat(mServiceDbStorage.getLastIdentityLightSendTimeSeconds(defaultValue)).isEqualTo(defaultValue);
-    }
-
-    @Test
-    public void testGetIdentityLightSendTimeSeconds() {
-        final long lastSendTime = 12345678;
-        when(mDbStorage.getLong(eq(PreferencesServiceDbStorage.LAST_IDENTITY_LIGHT_SEND_TIME.fullKey()), anyLong()))
-            .thenReturn(lastSendTime);
-        assertThat(mServiceDbStorage.getLastIdentityLightSendTimeSeconds(0L)).isEqualTo(lastSendTime);
-    }
-
-    @Test
-    public void testPutIdentityLightSendTimeSeconds() {
-        final long lastSendTime = 12345678;
-        mServiceDbStorage.putLastIdentityLightSendTimeSeconds(lastSendTime);
-        verify(mDbStorage).put(PreferencesServiceDbStorage.LAST_IDENTITY_LIGHT_SEND_TIME.fullKey(), lastSendTime);
-    }
-
-    @Test
     public void wasSatellitePreloadInfoCheckedMissing() {
         assertThat(mServiceDbStorage.wasSatellitePreloadInfoChecked()).isFalse();
     }

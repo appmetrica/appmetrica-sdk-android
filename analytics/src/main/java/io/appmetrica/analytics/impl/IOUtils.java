@@ -2,7 +2,6 @@ package io.appmetrica.analytics.impl;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import io.appmetrica.analytics.IReporter;
 import io.appmetrica.analytics.coreutils.internal.io.Base64Utils;
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
@@ -15,11 +14,11 @@ import java.io.InputStreamReader;
 import java.io.RandomAccessFile;
 import java.io.Reader;
 import java.io.StringWriter;
-import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import kotlin.io.ByteStreamsKt;
@@ -36,25 +35,18 @@ public final class IOUtils {
     @NonNull
     private static final FileProvider fileProvider = new FileProvider();
 
-    private IOUtils() {
-        /** Prevent installation */
-    }
+    private IOUtils() {}
 
     /**
      * Converts {@link java.io.InputStream} to {@link java.lang.String}.
-     * @throws IOException
      */
     public static String toString(InputStream inputStream) throws IOException {
-        InputStreamReader input = new InputStreamReader(inputStream, UTF8_ENCODING);
+        InputStreamReader input = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
         StringWriter output = new StringWriter();
         copyChars(input, output);
         return output.toString();
     }
 
-    /**
-     * Copies {@link java.io.Reader} to {@link java.io.Writer}.
-     * @throws IOException
-     */
     public static int copyChars(Reader input, Writer output) throws IOException {
         char [] bufferChars = new char [Base64Utils.IO_BUFFER_SIZE];
 
@@ -102,15 +94,8 @@ public final class IOUtils {
     public static String getStringFileLocked(@Nullable final File file) {
         String result = null;
         byte[] buffer = readFileLocked(file);
-        try {
-            if (buffer != null) {
-                result = new String(buffer, UTF8_ENCODING);
-            }
-        } catch (UnsupportedEncodingException e) {
-            DebugLogger.INSTANCE.error(TAG, e, e.getMessage());
-            result = new String(buffer);
-            final IReporter reporter = AppMetricaSelfReportFacade.getReporter();
-            reporter.reportError("read_share_file_with_unsupported_encoding", e);
+        if (buffer != null) {
+            result = new String(buffer, StandardCharsets.UTF_8);
         }
         return result;
     }
@@ -171,7 +156,7 @@ public final class IOUtils {
             DebugLogger.INSTANCE.info(TAG, "Try to write file: %s", fileName);
             lock = channel.lock();
             DebugLogger.INSTANCE.info(TAG, "Try to write file: %s. Lock received.", fileName);
-            byte[] bytes = data.getBytes(UTF8_ENCODING);
+            byte[] bytes = data.getBytes(StandardCharsets.UTF_8);
             buffer = ByteBuffer.allocate(bytes.length);
             buffer.put(bytes);
             buffer.flip();
@@ -189,8 +174,12 @@ public final class IOUtils {
         try {
             return MessageDigest.getInstance("MD5").digest(input);
         } catch (NoSuchAlgorithmException e) {
-
+            DebugLogger.INSTANCE.error(TAG, e);
         }
         return new byte[0];
+    }
+
+    public static byte[] md5(@NonNull String input) {
+        return md5(input.getBytes(StandardCharsets.UTF_8));
     }
 }
