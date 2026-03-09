@@ -15,7 +15,6 @@ import io.appmetrica.analytics.coreutils.internal.StringUtils;
 import io.appmetrica.analytics.coreutils.internal.db.DBUtils;
 import io.appmetrica.analytics.impl.AppEnvironment;
 import io.appmetrica.analytics.impl.EventsManager;
-import io.appmetrica.analytics.impl.InternalEvents;
 import io.appmetrica.analytics.impl.Utils;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.impl.component.IComponent;
@@ -34,7 +33,6 @@ import io.appmetrica.analytics.impl.utils.encryption.EncryptedCounterReport;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -50,13 +48,6 @@ import static io.appmetrica.analytics.impl.db.constants.Constants.SessionTable.S
 public class DatabaseHelper {
 
     private static final String TAG = "[DbHelper] ";
-
-    private static final HashSet<Integer> NOT_THROTTLED_EVENTS = new HashSet<Integer>();
-
-    static {
-        NOT_THROTTLED_EVENTS.add(InternalEvents.EVENT_TYPE_INIT.getTypeId());
-        NOT_THROTTLED_EVENTS.add(InternalEvents.EVENT_TYPE_START.getTypeId());
-    }
 
     // It will treat the locking of the database access, avoiding conflicts.
     private final ReentrantReadWriteLock mLock = new ReentrantReadWriteLock();
@@ -120,32 +111,36 @@ public class DatabaseHelper {
 
     public long getEventsOfFollowingTypesCount(@NonNull Set<Integer> types) {
         mReadLock.lock();
-        Cursor cursor = null;
         long rowsCount = 0;
         try {
             SQLiteDatabase db = mStorage.getReadableDatabase();
             if (db != null) {
-                StringBuilder query = new StringBuilder("SELECT count() FROM " + Constants.EventsTable.TABLE_NAME);
-                if (types.isEmpty() == false) {
-                    query.append(" WHERE ");
-                }
-                int i = 0;
-                for (Integer type : types) {
-                    if (i > 0) {
-                        query.append(" OR ");
+                String selection = null;
+                String[] selectionArgs = null;
+                if (!types.isEmpty()) {
+                    StringBuilder selectionBuilder = new StringBuilder(
+                        EventTableEntry.FIELD_EVENT_TYPE + " IN ("
+                    );
+                    selectionArgs = new String[types.size()];
+                    int i = 0;
+                    for (Integer type : types) {
+                        if (i > 0) selectionBuilder.append(", ");
+                        selectionBuilder.append("?");
+                        selectionArgs[i++] = String.valueOf(type);
                     }
-                    query.append(EventTableEntry.FIELD_EVENT_TYPE + " == " + type);
-                    i++;
+                    selectionBuilder.append(")");
+                    selection = selectionBuilder.toString();
                 }
-                cursor = db.rawQuery(query.toString(), null);
-                if (cursor.moveToFirst()) {
-                    rowsCount = cursor.getLong(0);
-                }
+                rowsCount = DatabaseUtils.queryNumEntries(
+                    db,
+                    Constants.EventsTable.TABLE_NAME,
+                    selection,
+                    selectionArgs
+                );
             }
         } catch (Throwable ex) {
             DebugLogger.INSTANCE.error(TAG, "Smth was wrong counting reports.\n%s", ex);
         } finally {
-            Utils.closeCursor(cursor);
             mReadLock.unlock();
         }
         return rowsCount;
@@ -271,7 +266,12 @@ public class DatabaseHelper {
         try {
             final SQLiteDatabase rDatabase = mStorage.getReadableDatabase();
             if (rDatabase != null) {
-                allSessionsCursor = rDatabase.rawQuery(SessionTable.ALL_SESSION, new String[]{});
+                allSessionsCursor = rDatabase.query(
+                    true, SessionTable.TABLE_NAME,
+                    new String[]{SessionTableEntry.FIELD_SESSION_ID},
+                    null, null, null, null,
+                    SessionTableEntry.FIELD_SESSION_ID + " ASC", null
+                );
                 StringBuffer buf = new StringBuffer();
                 buf.append("All sessions in db: ");
                 while (allSessionsCursor.moveToNext()) {
@@ -279,7 +279,12 @@ public class DatabaseHelper {
                 }
                 DebugLogger.INSTANCE.info(TAG, buf.toString());
 
-                sessionsInReportsCursor = rDatabase.rawQuery(SessionTable.ALL_SESSION_IN_REPORTS, new String[]{});
+                sessionsInReportsCursor = rDatabase.query(
+                    true, Constants.EventsTable.TABLE_NAME,
+                    new String[]{EventTableEntry.FIELD_EVENT_SESSION},
+                    null, null, null, null,
+                    EventTableEntry.FIELD_EVENT_SESSION + " ASC", null
+                );
                 StringBuffer buffer = new StringBuffer();
                 buffer.append("All sessions in reports db: ");
                 while (sessionsInReportsCursor.moveToNext()) {
@@ -308,6 +313,7 @@ public class DatabaseHelper {
                     db,
                     Constants.EventsTable.TABLE_NAME,
                     whereClause,
+                    null,
                     DatabaseCleaner.Reason.DB_OVERFLOW,
                     mComponent.getComponentId().getApiKey(),
                     true
@@ -338,11 +344,18 @@ public class DatabaseHelper {
         try {
             final String deleteQuery = String.format(Locale.US,
                 Constants.EventsTable.DELETE_TOP_RECORDS_WHERE,
-                EventTableEntry.FIELD_EVENT_SESSION, Long.toString(sessionId),
-                EventTableEntry.FIELD_EVENT_SESSION_TYPE, Integer.toString(sessionType),
-                EventTableEntry.FIELD_EVENT_ID, Constants.EventsTable.TABLE_NAME,
-                Integer.toString(limitOfRecords - 1)
+                EventTableEntry.FIELD_EVENT_SESSION,
+                EventTableEntry.FIELD_EVENT_SESSION_TYPE,
+                EventTableEntry.FIELD_EVENT_ID,
+                Constants.EventsTable.TABLE_NAME
             );
+            final String[] deleteArgs = new String[] {
+                Long.toString(sessionId),
+                Integer.toString(sessionType),
+                Long.toString(sessionId),
+                Integer.toString(sessionType),
+                Integer.toString(limitOfRecords - 1)
+            };
 
             final SQLiteDatabase db = mStorage.getWritableDatabase();
             if (db != null) {
@@ -350,6 +363,7 @@ public class DatabaseHelper {
                         db,
                         Constants.EventsTable.TABLE_NAME,
                         deleteQuery,
+                        deleteArgs,
                         DatabaseCleaner.Reason.BAD_REQUEST,
                         mComponent.getComponentId().getApiKey(),
                         shouldFormCleanupEvent
@@ -363,9 +377,6 @@ public class DatabaseHelper {
                     for (EventListener listener : mEventListeners) {
                         listener.onEventsRemoved(reportTypes);
                     }
-                }
-
-                if (deletionInfo.selectedEvents != null) {
                     logEvents(deletionInfo.selectedEvents, "Event removed from db");
                 }
                 final int deletedRows = deletionInfo.mDeletedRowsCount;
@@ -569,10 +580,7 @@ public class DatabaseHelper {
         try {
             final SQLiteDatabase rDatabase = mStorage.getReadableDatabase();
             if (rDatabase != null) {
-                // Now it's just report request parameters column
-                String query = SessionTable.DISTINCT_REPORT_REQUEST_PARAMETERS;
-
-                dataCursor = rDatabase.rawQuery(query, null);
+                dataCursor = rDatabase.rawQuery(SessionTable.DISTINCT_REPORT_REQUEST_PARAMETERS, null);
                 while (dataCursor.moveToNext()) {
                     final ContentValues values = new ContentValues();
                     DatabaseUtils.cursorRowToContentValues(dataCursor, values);
@@ -602,9 +610,14 @@ public class DatabaseHelper {
         try {
             final SQLiteDatabase rDatabase = mStorage.getReadableDatabase();
             if (rDatabase != null) {
-                String query = String.format(Locale.US, SessionTable.QUERY_GET_SESSION_REQUEST_PARAMETERS, sessionId,
-                        sessionType.getCode());
-                dataCursor = rDatabase.rawQuery(query, null);
+                dataCursor = rDatabase.query(
+                    SessionTable.TABLE_NAME,
+                    new String[]{SessionTableEntry.FIELD_SESSION_REPORT_REQUEST_PARAMETERS},
+                    SessionTableEntry.FIELD_SESSION_ID + " = ? AND " + SessionTableEntry.FIELD_SESSION_TYPE + " = ?",
+                    new String[]{String.valueOf(sessionId), String.valueOf(sessionType.getCode())},
+                    null, null, null,
+                    "1"
+                );
                 if (dataCursor.moveToNext()) {
                     final ContentValues values = new ContentValues();
                     DatabaseUtils.cursorRowToContentValues(dataCursor, values);
@@ -631,21 +644,20 @@ public class DatabaseHelper {
 
         for (final String arg : extraSelection.keySet()) {
             whereClause.append(whereClause.length() > 0 ? " AND " : "");
-            whereClause.append(arg + " = ? ");
+            whereClause.append(arg).append(" = ? ");
         }
 
         return TextUtils.isEmpty(whereClause.toString()) ? null : whereClause.toString();
     }
 
     private static String [] formWhereArgs(final String [] preWhereArgs, final Map<String, String> extraSelection) {
-        final List<String> whereArgs = new ArrayList<String>();
-        whereArgs.addAll(Arrays.asList(preWhereArgs));
+        final List<String> whereArgs = new ArrayList<String>(Arrays.asList(preWhereArgs));
 
         for (final Map.Entry<String, String> selectionEntry : extraSelection.entrySet()) {
             whereArgs.add(selectionEntry.getValue());
         }
 
-        return whereArgs.toArray(new String [whereArgs.size()]);
+        return whereArgs.toArray(new String[0]);
     }
 
     private static int getReportTypeFromContentValues(final ContentValues values) {
@@ -654,11 +666,7 @@ public class DatabaseHelper {
     }
 
     private int getReportType(ContentValues reportItem) {
-        return getReportIntField(reportItem, EventTableEntry.FIELD_EVENT_TYPE);
-    }
-
-    private int getReportIntField(ContentValues reportItem, String fieldName) {
-        return reportItem.getAsInteger(fieldName);
+        return reportItem.getAsInteger(EventTableEntry.FIELD_EVENT_TYPE);
     }
 
     private class WorkerThread extends InterruptionSafeThread {

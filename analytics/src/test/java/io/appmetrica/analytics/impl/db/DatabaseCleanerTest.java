@@ -101,6 +101,7 @@ public class DatabaseCleanerTest extends CommonTest {
             db,
             tableName,
             Constants.EventsTable.EventTableEntry.FIELD_EVENT_GLOBAL_NUMBER + " < 4",
+            null,
             DatabaseCleaner.Reason.DB_OVERFLOW,
             apiKey,
             false
@@ -121,6 +122,7 @@ public class DatabaseCleanerTest extends CommonTest {
             db,
             tableName,
             Constants.EventsTable.EventTableEntry.FIELD_EVENT_GLOBAL_NUMBER + " < 4",
+            null,
             DatabaseCleaner.Reason.DB_OVERFLOW,
             apiKey,
             false
@@ -137,6 +139,7 @@ public class DatabaseCleanerTest extends CommonTest {
             db,
             tableName,
             Constants.EventsTable.EventTableEntry.FIELD_EVENT_GLOBAL_NUMBER + " < 4",
+            null,
             DatabaseCleaner.Reason.DB_OVERFLOW,
             apiKey,
             true
@@ -165,6 +168,7 @@ public class DatabaseCleanerTest extends CommonTest {
             db,
             tableName,
             Constants.EventsTable.EventTableEntry.FIELD_EVENT_GLOBAL_NUMBER + " < 4",
+            null,
             DatabaseCleaner.Reason.DB_OVERFLOW,
             apiKey,
             true
@@ -178,6 +182,7 @@ public class DatabaseCleanerTest extends CommonTest {
             db,
             tableName,
             Constants.EventsTable.EventTableEntry.FIELD_EVENT_GLOBAL_NUMBER + " < 4",
+            null,
             DatabaseCleaner.Reason.DB_OVERFLOW,
             null,
             true
@@ -193,6 +198,7 @@ public class DatabaseCleanerTest extends CommonTest {
                 db,
                 tableName,
                 Constants.EventsTable.EventTableEntry.FIELD_EVENT_GLOBAL_NUMBER + " < 4",
+                null,
                 DatabaseCleaner.Reason.DB_OVERFLOW,
                 apiKey,
                 true
@@ -209,6 +215,7 @@ public class DatabaseCleanerTest extends CommonTest {
                 db,
                 "bad_table",
                 Constants.EventsTable.EventTableEntry.FIELD_EVENT_GLOBAL_NUMBER + " < 4",
+                null,
                 DatabaseCleaner.Reason.DB_OVERFLOW,
                 apiKey,
                 false
@@ -228,6 +235,7 @@ public class DatabaseCleanerTest extends CommonTest {
                 db,
                 tableName,
                 Constants.EventsTable.EventTableEntry.FIELD_EVENT_GLOBAL_NUMBER + " < 4",
+                null,
                 DatabaseCleaner.Reason.DB_OVERFLOW,
                 apiKey,
                 true

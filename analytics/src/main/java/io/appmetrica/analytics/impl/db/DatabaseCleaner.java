@@ -77,13 +77,14 @@ public class DatabaseCleaner {
     public DeletionInfo cleanEvents(@NonNull SQLiteDatabase database,
                                     @NonNull String tableName,
                                     @NonNull String whereClause,
+                                    @Nullable String[] whereArgs,
                                     @NonNull Reason reason,
                                     @Nullable String apiKey,
                                     final boolean shouldFormCleanupEvent) {
-        final List<ContentValues> reports = queryReportsToDelete(database, tableName, whereClause);
+        final List<ContentValues> reports = queryReportsToDelete(database, tableName, whereClause, whereArgs);
         int deletedRowsCount = 0;
         try {
-            deletedRowsCount = database.delete(tableName, whereClause, null);
+            deletedRowsCount = database.delete(tableName, whereClause, whereArgs);
         } catch (Throwable ex) {
             DebugLogger.INSTANCE.error(TAG, ex, "Could not delete rows for db");
         }
@@ -113,19 +114,21 @@ public class DatabaseCleaner {
     @Nullable
     private List<ContentValues> queryReportsToDelete(@NonNull SQLiteDatabase database,
                                                      @NonNull String tableName,
-                                                     @NonNull String whereClause) {
+                                                     @NonNull String whereClause,
+                                                     @Nullable String[] whereArgs) {
         List<ContentValues> reports = null;
         Cursor dataCursor = null;
         try {
-            dataCursor = database.rawQuery(
-                    String.format("SELECT %s, %s, %s FROM %s WHERE %s",
+            dataCursor = database.query(
+                    tableName,
+                    new String[] {
                             Constants.EventsTable.EventTableEntry.FIELD_EVENT_GLOBAL_NUMBER,
                             Constants.EventsTable.EventTableEntry.FIELD_EVENT_TYPE,
-                            Constants.EventsTable.EventTableEntry.FIELD_EVENT_DESCRIPTION,
-                            Constants.EventsTable.TABLE_NAME,
-                            whereClause
-                    ),
-                    null
+                            Constants.EventsTable.EventTableEntry.FIELD_EVENT_DESCRIPTION
+                    },
+                    whereClause,
+                    whereArgs,
+                    null, null, null
             );
             reports = cursorToList(dataCursor);
         } catch (Throwable ex) {

@@ -26,7 +26,6 @@ public final class Constants {
 
     // Databases
     public static final String DATABASES_RELATIVE_PATH = FileUtils.SDK_STORAGE_RELATIVE_PATH + "/db";
-    public static final String PRE_LOLLIPOP_DATABASE_PREFIX = FileUtils.SDK_FILES_PREFIX;
     public static final String COMPONENT_DB_PATTERN = "component_%s.db";
     public static final String SERVICE_MAIN_DATABASE = "service_main.db";
     public static final String CLIENT_MAIN_DATABASE = "client.db";
@@ -40,11 +39,6 @@ public final class Constants {
     @VisibleForTesting
     public static HashMultimap<Integer, DatabaseScript> getUpgradeDbScript() {
         return sDbScriptsProvider.getComponentDatabaseUpgradeDbScripts();
-    }
-
-    @VisibleForTesting
-    public static HashMultimap<Integer, DatabaseScript> getUpgradeServiceDbScripts() {
-        return sDbScriptsProvider.getUpgradeServiceDbScripts();
     }
 
     // Reports
@@ -89,9 +83,9 @@ public final class Constants {
             "DROP TABLE IF EXISTS " + TABLE_NAME;
 
         public static final String DELETE_TOP_RECORDS_WHERE =
-                "%1$s = %2$s AND " +
-                "%3$s = %4$s AND " +
-                "%5$s <= (SELECT %5$s FROM %6$s WHERE %1$s = %2$s AND %3$s = %4$s ORDER BY %5$s ASC LIMIT %7$s, 1)";
+                "%1$s = ? AND " +
+                "%2$s = ? AND " +
+                "%3$s <= (SELECT %3$s FROM %4$s WHERE %1$s = ? AND %2$s = ? ORDER BY %3$s ASC LIMIT ?, 1)";
 
         /*
         id IN (
@@ -183,13 +177,6 @@ public final class Constants {
                 EventsTable.TABLE_NAME,
                 EventsTable.EventTableEntry.FIELD_EVENT_SESSION,
                 EventsTable.EventTableEntry.FIELD_EVENT_SESSION_TYPE);
-        public static final String QUERY_GET_SESSION_REQUEST_PARAMETERS =
-                "SELECT " + SessionTableEntry.FIELD_SESSION_REPORT_REQUEST_PARAMETERS +
-                        " FROM " + TABLE_NAME +
-                        " WHERE " + SessionTableEntry.FIELD_SESSION_ID + " = %s AND " +
-                        SessionTableEntry.FIELD_SESSION_TYPE + " = %s " +
-                        "ORDER BY " + SessionTableEntry.FIELD_SESSION_ID + " DESC " +
-                        "LIMIT 1";
 
         /*
         Full query:
@@ -219,14 +206,6 @@ public final class Constants {
                         SessionTableEntry.FIELD_SESSION_ID,
                         SessionTableEntry.FIELD_SESSION_ID
                 );
-
-        // Queries for debugging sessions logic.
-        public static final String ALL_SESSION = " SELECT DISTINCT " + SessionTableEntry.FIELD_SESSION_ID + " From "
-                + SessionTable.TABLE_NAME + " order by " + SessionTableEntry.FIELD_SESSION_ID + " asc ";
-        public static final String ALL_SESSION_IN_REPORTS = " SELECT DISTINCT " +
-            EventsTable.EventTableEntry.FIELD_EVENT_SESSION
-                + " From " + EventsTable.TABLE_NAME + " order by " +
-            EventsTable.EventTableEntry.FIELD_EVENT_SESSION + " asc ";
 
     }
 

@@ -13,6 +13,7 @@ import io.appmetrica.analytics.impl.Utils;
 import io.appmetrica.analytics.impl.component.ComponentId;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.impl.component.EventSaver;
+import io.appmetrica.analytics.impl.component.session.SessionType;
 import io.appmetrica.analytics.impl.db.constants.Constants;
 import io.appmetrica.analytics.impl.db.protobuf.converter.DbEventModelConverter;
 import io.appmetrica.analytics.impl.events.ConditionalEventTrigger;
@@ -136,7 +137,7 @@ public class DatabaseHelperTest extends CommonTest {
         when(componentUnit.getPublicLogger()).thenReturn(mock(PublicLogger.class));
         when(componentUnit.getEventTrigger()).thenReturn(mock(ConditionalEventTrigger.class));
         when(config.getMaxEventsInDbCount()).thenReturn(maxEventsInDbCount);
-        when(databaseCleaner.cleanEvents(same(db), anyString(), anyString(), any(DatabaseCleaner.Reason.class), nullable(String.class), anyBoolean()))
+        when(databaseCleaner.cleanEvents(same(db), anyString(), anyString(), any(), any(DatabaseCleaner.Reason.class), nullable(String.class), anyBoolean()))
             .thenReturn(new DatabaseCleaner.DeletionInfo(Collections.emptyList(), 0));
         helper = new DatabaseHelper(componentUnit, storage, databaseCleaner, dbEventModelConverter);
         helper.onComponentCreated();
@@ -166,6 +167,7 @@ public class DatabaseHelperTest extends CommonTest {
                 any(SQLiteDatabase.class),
                 anyString(),
                 anyString(),
+                any(),
                 any(DatabaseCleaner.Reason.class),
                 anyString(),
                 anyBoolean()
@@ -185,6 +187,7 @@ public class DatabaseHelperTest extends CommonTest {
             same(db),
             eq("events"),
             anyString(),
+            any(),
             eq(DatabaseCleaner.Reason.DB_OVERFLOW),
             anyString(),
             eq(true)
@@ -197,6 +200,7 @@ public class DatabaseHelperTest extends CommonTest {
                 same(db),
                 eq("events"),
                 anyString(),
+                any(),
                 eq(DatabaseCleaner.Reason.DB_OVERFLOW),
                 anyString(),
                 eq(true)
@@ -332,7 +336,7 @@ public class DatabaseHelperTest extends CommonTest {
         final ContentValues cv2 = new ContentValues();
         cv1.put(Constants.EventsTable.EventTableEntry.FIELD_EVENT_TYPE, 10);
         cv2.put(Constants.EventsTable.EventTableEntry.FIELD_EVENT_TYPE, 20);
-        when(databaseCleaner.cleanEvents(same(db), anyString(), anyString(), eq(DatabaseCleaner.Reason.BAD_REQUEST), anyString(), eq(true)))
+        when(databaseCleaner.cleanEvents(same(db), anyString(), anyString(), any(), eq(DatabaseCleaner.Reason.BAD_REQUEST), anyString(), eq(true)))
             .thenReturn(new DatabaseCleaner.DeletionInfo(Arrays.asList(cv1, cv2), 2));
         helper.removeTop(1000, 0, 2, true);
         ArgumentCaptor<List> reportTypesFirstListenerCaptor = ArgumentCaptor.forClass(List.class);
@@ -348,7 +352,7 @@ public class DatabaseHelperTest extends CommonTest {
         addGeneralEventsForFgSession(db, 1, 1000, InternalEvents.EVENT_TYPE_FIRST_ACTIVATION.getTypeId());
         addGeneralEventsForFgSession(db, 1, 1000, InternalEvents.EVENT_TYPE_CUSTOM_EVENT.getTypeId());
         helper.removeTop(1000, 0, 2, true);
-        verify(databaseCleaner).cleanEvents(same(db), eq("events"), anyString(), eq(DatabaseCleaner.Reason.BAD_REQUEST), anyString(), eq(true));
+        verify(databaseCleaner).cleanEvents(same(db), eq("events"), anyString(), any(), eq(DatabaseCleaner.Reason.BAD_REQUEST), anyString(), eq(true));
     }
 
     @Test
@@ -356,7 +360,7 @@ public class DatabaseHelperTest extends CommonTest {
         addGeneralEventsForFgSession(db, 1, 1000, InternalEvents.EVENT_TYPE_FIRST_ACTIVATION.getTypeId());
         addGeneralEventsForFgSession(db, 1, 1000, InternalEvents.EVENT_TYPE_CUSTOM_EVENT.getTypeId());
         helper.removeTop(1000, 0, 2, false);
-        verify(databaseCleaner).cleanEvents(same(db), eq("events"), anyString(), eq(DatabaseCleaner.Reason.BAD_REQUEST), anyString(), eq(false));
+        verify(databaseCleaner).cleanEvents(same(db), eq("events"), anyString(), any(), eq(DatabaseCleaner.Reason.BAD_REQUEST), anyString(), eq(false));
     }
 
     @Test
@@ -400,6 +404,33 @@ public class DatabaseHelperTest extends CommonTest {
             getReportContentValues(1, 30, 1002, 1)
         ));
         assertThat(helper.getEventsOfFollowingTypesCount(new HashSet<Integer>(Arrays.asList(10, 20)))).isEqualTo(4);
+    }
+
+    @Test
+    public void testGetEventsOfFollowingTypesCountWithEmptyTypes() {
+        addGeneralEvents(db, 2, 1000, 0, 10);
+        addGeneralEvents(db, 3, 1001, 1, 20);
+        DatabaseHelper helper = new DatabaseHelper(componentUnit, storage, databaseCleaner, dbEventModelConverter);
+        assertThat(helper.getEventsOfFollowingTypesCount(new HashSet<>())).isEqualTo(5);
+    }
+
+    @Test
+    public void testGetSessionRequestParameters() {
+        addSession(db, 1000, SessionType.FOREGROUND.getCode(), "params");
+        ContentValues result = helper.getSessionRequestParameters(1000, SessionType.FOREGROUND);
+        assertThat(result.getAsString(Constants.SessionTable.SessionTableEntry.FIELD_SESSION_REPORT_REQUEST_PARAMETERS))
+            .isEqualTo("params");
+    }
+
+    @Test
+    public void testGetSessionRequestParametersSessionNotFound() {
+        assertThat(helper.getSessionRequestParameters(9999, SessionType.FOREGROUND).size()).isEqualTo(0);
+    }
+
+    @Test
+    public void testGetSessionRequestParametersWrongSessionType() {
+        addSession(db, 1000, SessionType.FOREGROUND.getCode(), "params");
+        assertThat(helper.getSessionRequestParameters(1000, SessionType.BACKGROUND).size()).isEqualTo(0);
     }
 
     @Test
