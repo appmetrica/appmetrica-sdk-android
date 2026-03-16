@@ -327,7 +327,7 @@ public class DatabaseHelperTest extends CommonTest {
     }
 
     @Test
-    public void testRemoveTopNotifies() {
+    public void testRemoveSessionEventsUpToNotifies() {
         EventListener eventListener1 = mock(EventListener.class);
         EventListener eventListener2 = mock(EventListener.class);
         helper.addEventListener(eventListener1);
@@ -338,7 +338,7 @@ public class DatabaseHelperTest extends CommonTest {
         cv2.put(Constants.EventsTable.EventTableEntry.FIELD_EVENT_TYPE, 20);
         when(databaseCleaner.cleanEvents(same(db), anyString(), anyString(), any(), eq(DatabaseCleaner.Reason.BAD_REQUEST), anyString(), eq(true)))
             .thenReturn(new DatabaseCleaner.DeletionInfo(Arrays.asList(cv1, cv2), 2));
-        helper.removeTop(1000, 0, 2, true);
+        helper.removeSessionEventsUpTo(1000, 0, 5L, true);
         ArgumentCaptor<List> reportTypesFirstListenerCaptor = ArgumentCaptor.forClass(List.class);
         ArgumentCaptor<List> reportTypesSecondListenerCaptor = ArgumentCaptor.forClass(List.class);
         verify(eventListener1).onEventsRemoved(reportTypesFirstListenerCaptor.capture());
@@ -348,18 +348,18 @@ public class DatabaseHelperTest extends CommonTest {
     }
 
     @Test
-    public void testRemoveTopShouldFormCleanup() {
+    public void testRemoveSessionEventsUpToShouldFormCleanup() {
         addGeneralEventsForFgSession(db, 1, 1000, InternalEvents.EVENT_TYPE_FIRST_ACTIVATION.getTypeId());
         addGeneralEventsForFgSession(db, 1, 1000, InternalEvents.EVENT_TYPE_CUSTOM_EVENT.getTypeId());
-        helper.removeTop(1000, 0, 2, true);
+        helper.removeSessionEventsUpTo(1000, 0, 5L, true);
         verify(databaseCleaner).cleanEvents(same(db), eq("events"), anyString(), any(), eq(DatabaseCleaner.Reason.BAD_REQUEST), anyString(), eq(true));
     }
 
     @Test
-    public void testRemoveTopShouldNotFormCleanup() {
+    public void testRemoveSessionEventsUpToShouldNotFormCleanup() {
         addGeneralEventsForFgSession(db, 1, 1000, InternalEvents.EVENT_TYPE_FIRST_ACTIVATION.getTypeId());
         addGeneralEventsForFgSession(db, 1, 1000, InternalEvents.EVENT_TYPE_CUSTOM_EVENT.getTypeId());
-        helper.removeTop(1000, 0, 2, false);
+        helper.removeSessionEventsUpTo(1000, 0, 5L, false);
         verify(databaseCleaner).cleanEvents(same(db), eq("events"), anyString(), any(), eq(DatabaseCleaner.Reason.BAD_REQUEST), anyString(), eq(false));
     }
 

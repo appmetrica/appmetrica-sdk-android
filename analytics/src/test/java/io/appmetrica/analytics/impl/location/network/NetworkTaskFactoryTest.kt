@@ -7,6 +7,7 @@ import io.appmetrica.analytics.impl.CounterReport
 import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.LazyReportConfigProvider
 import io.appmetrica.analytics.impl.ReportTask
+import io.appmetrica.analytics.impl.ReportTaskDbInteractor
 import io.appmetrica.analytics.impl.StartupTask
 import io.appmetrica.analytics.impl.Utils
 import io.appmetrica.analytics.impl.component.ComponentUnit
@@ -83,6 +84,9 @@ internal class NetworkTaskFactoryTest : CommonTest() {
     val startupParamsAppenderMockRule = MockedConstructionRule(StartupParamsAppender::class.java)
 
     @get:Rule
+    val reportTaskDbInteractorMockedRule = MockedConstructionRule(ReportTaskDbInteractor::class.java)
+
+    @get:Rule
     val userAgerAgentProviderRule = constructionRule<UserAgentProvider> {
         on { userAgent } doReturn customUserAgent
     }
@@ -117,7 +121,7 @@ internal class NetworkTaskFactoryTest : CommonTest() {
                 reportTaskAssertions
                     .withPrivateFields(true)
                     .withIgnoredFields(
-                        "mTrimmer", "mPublicLogger", "vitalComponentDataProvider", "mDbHelper",
+                        "mTrimmer", "mPublicLogger", "mDbInteractor",
                         "mSelfReporter", "mQueryValues", "sendingDataTaskHelper"
                     )
                     .checkField(

@@ -82,10 +82,10 @@ public final class Constants {
         public static final String DROP_TABLE =
             "DROP TABLE IF EXISTS " + TABLE_NAME;
 
-        public static final String DELETE_TOP_RECORDS_WHERE =
+        public static final String DELETE_RECORDS_UP_TO_NUMBER_IN_SESSION =
                 "%1$s = ? AND " +
                 "%2$s = ? AND " +
-                "%3$s <= (SELECT %3$s FROM %4$s WHERE %1$s = ? AND %2$s = ? ORDER BY %3$s ASC LIMIT ?, 1)";
+                "%3$s <= ?";
 
         /*
         id IN (

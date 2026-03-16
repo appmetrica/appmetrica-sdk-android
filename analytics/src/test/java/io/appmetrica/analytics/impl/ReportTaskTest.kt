@@ -48,7 +48,7 @@ import org.mockito.kotlin.any
 import org.mockito.kotlin.clearInvocations
 import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.doReturn
-import org.mockito.kotlin.inOrder
+import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.stubbing
@@ -90,7 +90,6 @@ internal class ReportTaskTest : CommonTest() {
     private val firstQueryParameter = ContentValues().apply {
         put(contentValuesKey, contentValuesValue)
     }
-    private val queryParameters = listOf(firstQueryParameter)
 
     private val columnReport = arrayOf(
         Constants.EventsTable.EventTableEntry.FIELD_EVENT_SESSION,
@@ -161,16 +160,25 @@ internal class ReportTaskTest : CommonTest() {
             ) // FIELD_EVENT_DESCRIPTION
     }
 
-    private val databaseHelper = mock<DatabaseHelper> {
-        on { collectAllQueryParameters() } doReturn queryParameters
-        on { querySessions(any()) } doReturn sessionCursor
-        on { queryReports(any(), any()) } doAnswer {
-            reportCursor.moveToPosition(-1)
-            reportCursor
-        }
-    }
-    private val publicLogger = mock<PublicLogger>()
+    private val databaseHelper = mock<DatabaseHelper>()
     private val prevReportRequestId = 14
+    private val dbInteractor get() = dbInteractorMockedRule.constructionMock.constructed()[0]
+
+    private val dbInteractorConstructorCaptor = ConstructionArgumentCaptor<ReportTaskDbInteractor>()
+
+    @get:Rule
+    val dbInteractorMockedRule = MockedConstructionRule(
+        ReportTaskDbInteractor::class.java, dbInteractorConstructorCaptor
+    )
+
+    private val bytesTrimmerConstructorCaptor = ConstructionArgumentCaptor<BytesTrimmer>()
+
+    @get:Rule
+    val bytesTrimmerMockedRule = MockedConstructionRule(
+        BytesTrimmer::class.java, bytesTrimmerConstructorCaptor
+    )
+
+    private val publicLogger = mock<PublicLogger>()
     private val vitalComponentDataProvider = mock<VitalComponentDataProvider> {
         on { reportRequestId } doReturn prevReportRequestId
     }
@@ -183,10 +191,7 @@ internal class ReportTaskTest : CommonTest() {
         on { anonymizedApiKey } doReturn anonymizedApiKey
     }
 
-    private val sessionRemovingThreshold = 5L
-    private val sessionManager = mock<SessionManagerStateMachine> {
-        on { thresholdSessionIdForActualSessions } doReturn sessionRemovingThreshold
-    }
+    private val sessionManager = mock<SessionManagerStateMachine>()
 
     private val eventTrigger = mock<EventTrigger>()
 
@@ -233,9 +238,6 @@ internal class ReportTaskTest : CommonTest() {
     private val responseDataHolder = mock<ResponseDataHolder>()
     private val requestBodyEncrypter = mock<RequestBodyEncrypter>()
     private val selfReporter = mock<SelfReporterWrapper>()
-    private val bytesTrimmer = mock<BytesTrimmer> {
-        on { trim(eventValue.toByteArray()) } doReturn truncatedValue.toByteArray()
-    }
 
     private lateinit var reportTask: ReportTask
 
@@ -244,18 +246,22 @@ internal class ReportTaskTest : CommonTest() {
         whenever(AppMetricaSelfReportFacade.getReporter()).thenReturn(selfReporter)
         reportTask = ReportTask(
             componentUnit,
-            publicLogger,
-            databaseHelper,
             reportParamsAppender,
-            vitalComponentDataProvider,
             lazyReportConfigProvider,
-            bytesTrimmer,
-            selfReporter,
             fullUrlFormer,
             requestDataHolder,
             responseDataHolder,
             requestBodyEncrypter
         )
+        whenever(dbInteractor.collectAllQueryParameters()).thenReturn(firstQueryParameter)
+        whenever(dbInteractor.querySessions(any())).thenReturn(sessionCursor)
+        whenever(dbInteractor.queryReports(any(), any())).doAnswer {
+            reportCursor.moveToPosition(-1)
+            reportCursor
+        }
+        whenever(dbInteractor.getNextRequestId()).thenReturn(prevReportRequestId + 1)
+        whenever(bytesTrimmerMockedRule.constructionMock.constructed()[0].trim(eventValue.toByteArray()))
+            .thenReturn(truncatedValue.toByteArray())
     }
 
     @Test
@@ -274,18 +280,17 @@ internal class ReportTaskTest : CommonTest() {
             .withPrivateFields(true)
             .withIgnoredFields("mQueryValues")
             .checkField("mComponent", componentUnit)
-            .checkField("mDbHelper", databaseHelper)
-            .checkFieldRecursively<BytesTrimmer>("mTrimmer") { bytesTrimmerAssertions ->
-                bytesTrimmerAssertions
-                    .withPrivateFields(true)
-                    .includingParents(true)
-                    .checkField("mMaxSize", EventLimitationProcessor.REPORT_EXTENDED_VALUE_MAX_SIZE)
-                    .checkField("mLogName", "event value in ReportTask")
-                    .checkField("mPublicLogger", publicLogger)
-                    .checkAll()
+            .checkField("mDbInteractor", dbInteractorMockedRule.constructionMock.constructed()[1])
+            .checkField("mTrimmer", bytesTrimmerMockedRule.constructionMock.constructed()[1])
+            .also {
+                assertThat(bytesTrimmerConstructorCaptor.arguments[1])
+                    .containsExactly(
+                        EventLimitationProcessor.REPORT_EXTENDED_VALUE_MAX_SIZE,
+                        "event value in ReportTask",
+                        publicLogger
+                    )
             }
             .checkField("mPublicLogger", publicLogger)
-            .checkField("vitalComponentDataProvider", vitalComponentDataProvider)
             .checkField("mSelfReporter", selfReporter)
             .checkField("paramsAppender", reportParamsAppender)
             .checkField("fullUrlFormer", fullUrlFormer)
@@ -305,6 +310,8 @@ internal class ReportTaskTest : CommonTest() {
                         responseDataHolder,
                         defaultNetworkResponseHandlerMockedRule.constructionMock.constructed()[1]
                     )
+                assertThat(dbInteractorConstructorCaptor.arguments[1])
+                    .containsExactly(componentUnit)
             }
             .checkAll()
     }
@@ -319,7 +326,7 @@ internal class ReportTaskTest : CommonTest() {
 
     @Test
     fun onCreateTaskIfQueryParametersIsEmpty() {
-        whenever(databaseHelper.collectAllQueryParameters()).thenReturn(emptyList())
+        whenever(dbInteractor.collectAllQueryParameters()).thenReturn(null)
         assertThat(reportTask.onCreateTask()).isFalse()
         verifyNoMoreInteractions(sendingTaskHelperMockedRule.constructionMock.constructed()[0])
     }
@@ -361,28 +368,28 @@ internal class ReportTaskTest : CommonTest() {
 
     @Test
     fun onCreateIfSessionsCursorIsNull() {
-        whenever(databaseHelper.querySessions(any())).thenReturn(null)
+        whenever(dbInteractor.querySessions(any())).thenReturn(null)
         assertThat(reportTask.onCreateTask()).isFalse()
         verifyNoMoreInteractions(sendingTaskHelperMockedRule.constructionMock.constructed()[0])
     }
 
     @Test
     fun onCreateIfSessionsCursorIsEmpty() {
-        whenever(databaseHelper.querySessions(any())).thenReturn(MatrixCursor(columnSession))
+        whenever(dbInteractor.querySessions(any())).thenReturn(MatrixCursor(columnSession))
         assertThat(reportTask.onCreateTask()).isFalse()
         verifyNoMoreInteractions(sendingTaskHelperMockedRule.constructionMock.constructed()[0])
     }
 
     @Test
     fun onCreateIfEventsCursorIsNull() {
-        whenever(databaseHelper.queryReports(any(), any())).thenReturn(null)
+        whenever(dbInteractor.queryReports(any(), any())).thenReturn(null)
         assertThat(reportTask.onCreateTask()).isFalse()
         verifyNoMoreInteractions(sendingTaskHelperMockedRule.constructionMock.constructed()[0])
     }
 
     @Test
     fun onCreateIfEventsCursorIsEmpty() {
-        whenever(databaseHelper.queryReports(any(), any())).thenReturn(MatrixCursor(columnReport))
+        whenever(dbInteractor.queryReports(any(), any())).thenReturn(MatrixCursor(columnReport))
         assertThat(reportTask.onCreateTask()).isFalse()
         verifyNoMoreInteractions(sendingTaskHelperMockedRule.constructionMock.constructed()[0])
     }
@@ -450,10 +457,7 @@ internal class ReportTaskTest : CommonTest() {
     fun onPostRequestCompleteForSuccess() {
         reportTask.onCreateTask()
         reportTask.onPostRequestComplete(true)
-        inOrder(databaseHelper) {
-            verify(databaseHelper).removeTop(sessionId, SessionType.FOREGROUND.code, reportCursor.count, false)
-            verify(databaseHelper).removeEmptySessions(sessionRemovingThreshold)
-        }
+        verify(dbInteractor).cleanPostedData(any(), any(), eq(prevReportRequestId + 1), eq(false))
     }
 
     @Test
@@ -461,18 +465,14 @@ internal class ReportTaskTest : CommonTest() {
         whenever(responseDataHolder.responseCode).thenReturn(HttpsURLConnection.HTTP_BAD_REQUEST)
         reportTask.onCreateTask()
         reportTask.onPostRequestComplete(false)
-        inOrder(databaseHelper) {
-            verify(databaseHelper).removeTop(sessionId, SessionType.FOREGROUND.code, reportCursor.count, true)
-            verify(databaseHelper).removeEmptySessions(sessionRemovingThreshold)
-        }
+        verify(dbInteractor).cleanPostedData(any(), any(), eq(prevReportRequestId + 1), eq(true))
     }
 
     @Test
     fun onPostRequestCompleteWithNonBadRequestError() {
         reportTask.onCreateTask()
         reportTask.onPostRequestComplete(false)
-        verify(databaseHelper, never()).removeTop(any(), any(), any(), any())
-        verify(databaseHelper, never()).removeEmptySessions(any())
+        verify(dbInteractor, never()).cleanPostedData(any(), any(), any(), any())
     }
 
     @Test
@@ -483,9 +483,9 @@ internal class ReportTaskTest : CommonTest() {
 
     @Test
     fun onTaskFinished() {
-        clearInvocations(eventTrigger, databaseHelper)
+        clearInvocations(eventTrigger, dbInteractor)
         reportTask.onTaskFinished()
-        verifyNoInteractions(eventTrigger, databaseHelper)
+        verifyNoInteractions(eventTrigger, dbInteractor)
     }
 
     @Test
@@ -526,9 +526,9 @@ internal class ReportTaskTest : CommonTest() {
 
     @Test
     fun onShouldNotExecute() {
-        clearInvocations(databaseHelper, eventTrigger)
+        clearInvocations(dbInteractor, eventTrigger)
         reportTask.onShouldNotExecute()
-        verifyNoInteractions(databaseHelper, eventTrigger)
+        verifyNoInteractions(dbInteractor, eventTrigger)
     }
 
     @Test
@@ -590,8 +590,8 @@ internal class ReportTaskTest : CommonTest() {
                     ) // FIELD_EVENT_DESCRIPTION
             }
         }
-        stubbing(databaseHelper) {
-            on { collectAllQueryParameters() } doReturn queryParameters
+        stubbing(dbInteractor) {
+            on { collectAllQueryParameters() } doReturn firstQueryParameter
             on { querySessions(any()) } doReturn sessionCursorWithLargeAmountOfEvents
             on { queryReports(any(), any()) } doReturn reportCursorWithLargeAmountOfEvents
         }

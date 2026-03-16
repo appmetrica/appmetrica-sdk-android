@@ -12,8 +12,6 @@ import io.appmetrica.analytics.coreutils.internal.db.DBUtils;
 import io.appmetrica.analytics.coreutils.internal.io.GZIPCompressor;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.impl.component.session.SessionType;
-import io.appmetrica.analytics.impl.db.DatabaseHelper;
-import io.appmetrica.analytics.impl.db.VitalComponentDataProvider;
 import io.appmetrica.analytics.impl.db.constants.Constants;
 import io.appmetrica.analytics.impl.db.event.DbEventModel;
 import io.appmetrica.analytics.impl.db.protobuf.converter.DbEventModelConverter;
@@ -83,7 +81,7 @@ public class ReportTask implements UnderlyingNetworkTask {
     private EventProto.ReportMessage mProtoReportMessage;
 
     @NonNull
-    private final DatabaseHelper mDbHelper;
+    private final ReportTaskDbInteractor mDbInteractor;
     @Nullable
     private List<Long> mAllInternalSessionsIds;
 
@@ -98,8 +96,6 @@ public class ReportTask implements UnderlyingNetworkTask {
     private final Trimmer<byte[]> mTrimmer;
     @NonNull
     private final PublicLogger mPublicLogger;
-    @NonNull
-    private final VitalComponentDataProvider vitalComponentDataProvider;
     @NonNull
     private final IReporterExtended mSelfReporter;
     @NonNull
@@ -126,63 +122,6 @@ public class ReportTask implements UnderlyingNetworkTask {
                       @NonNull final RequestDataHolder requestDataHolder,
                       @NonNull final ResponseDataHolder responseDataHolder,
                       @NonNull final RequestBodyEncrypter requestBodyEncrypter) {
-        this(
-                component,
-                paramsAppender,
-                reportConfigProvider,
-                fullUrlFormer,
-                requestDataHolder,
-                responseDataHolder,
-                component.getDbHelper(),
-                component.getPublicLogger(),
-                component.getVitalComponentDataProvider(),
-                requestBodyEncrypter
-        );
-    }
-
-    private ReportTask(@NonNull final ComponentUnit component,
-                       @NonNull final ReportParamsAppender paramsAppender,
-                       @NonNull final LazyReportConfigProvider reportConfigProvider,
-                       @NonNull final FullUrlFormer<ReportRequestConfig> fullUrlFormer,
-                       @NonNull final RequestDataHolder requestDataHolder,
-                       @NonNull final ResponseDataHolder responseDataHolder,
-                       @NonNull final DatabaseHelper dbHelper,
-                       @NonNull final PublicLogger publicLogger,
-                       @NonNull final VitalComponentDataProvider vitalComponentDataProvider,
-                       @NonNull final RequestBodyEncrypter requestBodyEncrypter) {
-        this(
-                component,
-                publicLogger,
-                dbHelper,
-                paramsAppender,
-                vitalComponentDataProvider,
-                reportConfigProvider,
-                new BytesTrimmer(
-                        EventLimitationProcessor.REPORT_EXTENDED_VALUE_MAX_SIZE,
-                        "event value in ReportTask",
-                        publicLogger
-                ),
-                AppMetricaSelfReportFacade.getReporter(),
-                fullUrlFormer,
-                requestDataHolder,
-                responseDataHolder,
-                requestBodyEncrypter
-        );
-    }
-
-    @VisibleForTesting
-    ReportTask(@NonNull final ComponentUnit component,
-               @NonNull final PublicLogger publicLogger,
-               @NonNull final DatabaseHelper dbHelper,
-               @NonNull final ReportParamsAppender paramsAppender,
-               @NonNull final VitalComponentDataProvider vitalComponentDataProvider,
-               @NonNull final LazyReportConfigProvider reportConfigProvider,
-               @NonNull final BytesTrimmer bytesTrimmer,
-               @NonNull final IReporterExtended selfReporter,
-               @NonNull final FullUrlFormer<ReportRequestConfig> fullUrlFormer,
-               @NonNull final RequestDataHolder requestDataHolder,
-               @NonNull final ResponseDataHolder responseDataHolder,
-               @NonNull final RequestBodyEncrypter requestBodyEncrypter) {
         this.sendingDataTaskHelper = new SendingDataTaskHelper(
                 requestBodyEncrypter,
                 new GZIPCompressor(),
@@ -192,12 +131,15 @@ public class ReportTask implements UnderlyingNetworkTask {
         );
         this.paramsAppender = paramsAppender;
         mComponent = component;
-        mDbHelper = dbHelper;
-        mPublicLogger = publicLogger;
-        mTrimmer = bytesTrimmer;
-        this.vitalComponentDataProvider = vitalComponentDataProvider;
+        mDbInteractor = new ReportTaskDbInteractor(component);
+        mPublicLogger = component.getPublicLogger();
+        mTrimmer = new BytesTrimmer(
+                EventLimitationProcessor.REPORT_EXTENDED_VALUE_MAX_SIZE,
+                "event value in ReportTask",
+                mPublicLogger
+        );
         this.configProvider = reportConfigProvider;
-        mSelfReporter = selfReporter;
+        mSelfReporter = AppMetricaSelfReportFacade.getReporter();
         this.requestDataHolder = requestDataHolder;
         this.responseDataHolder = responseDataHolder;
         this.fullUrlFormer = fullUrlFormer;
@@ -298,9 +240,9 @@ public class ReportTask implements UnderlyingNetworkTask {
     @Override
     public boolean onCreateTask() {
         DebugLogger.INSTANCE.info(TAG, "onCreateTask: %s", description());
-        final List<ContentValues> queryParameters = mComponent.getDbHelper().collectAllQueryParameters();
+        final ContentValues queryParameters = mDbInteractor.collectAllQueryParameters();
 
-        if (queryParameters.isEmpty()) {
+        if (queryParameters == null) {
             DebugLogger.INSTANCE.info(
                 TAG,
                 "Could not create task %s: queryParameters are empty",
@@ -309,7 +251,7 @@ public class ReportTask implements UnderlyingNetworkTask {
             return false;
         }
 
-        withQueryValues(queryParameters.get(0));
+        withQueryValues(queryParameters);
 
         ReportRequestConfig requestConfig = configProvider.getConfig();
         DebugLogger.INSTANCE.info(TAG, "Apply config %s", requestConfig);
@@ -338,7 +280,7 @@ public class ReportTask implements UnderlyingNetworkTask {
             return false;
         }
 
-        mRequestId = vitalComponentDataProvider.getReportRequestId() + 1;
+        mRequestId = mDbInteractor.getNextRequestId();
         paramsAppender.setRequestId(mRequestId);
         mProtoReportMessage = createProtoReportMessage(mMessageToSend, certificates, requestConfig);
 
@@ -382,31 +324,8 @@ public class ReportTask implements UnderlyingNetworkTask {
     }
 
     private void cleanPostedData(boolean isBadRequest) {
-        saveRequestId();
-        Session[] listSession = mProtoReportMessage.sessions;
-
-        for (int sessionIndex = 0; sessionIndex < listSession.length; ++ sessionIndex) {
-            try {
-                final Session session = listSession[sessionIndex];
-                // mAllInternalSessionsIds is NonNull because it is initialized in onCreateTask
-                final long internalSessionId = mAllInternalSessionsIds.get(sessionIndex);
-                final SessionType sessionType = ProtobufUtils.sessionTypeToInternal(session.sessionDesc.sessionType);
-
-                mDbHelper.removeTop(internalSessionId, sessionType.getCode(), session.events.length, isBadRequest);
-                ProtobufUtils.logSessionEvents(session);
-            } catch (Throwable ex) {
-                DebugLogger.INSTANCE.error(TAG, ex, "Something went wrong while removing session from db");
-            }
-        }
-
-        int count = mDbHelper.removeEmptySessions(mComponent.getSessionManager()
-                .getThresholdSessionIdForActualSessions());
-        DebugLogger.INSTANCE.info(TAG, "Remove %s sessions", String.valueOf(count));
-    }
-
-    private void saveRequestId() {
-        DebugLogger.INSTANCE.info(TAG, "save request id: %d", mRequestId);
-        vitalComponentDataProvider.setReportRequestId(mRequestId);
+        // mAllInternalSessionsIds is NonNull because cleanPostedData is called after onCreateTask
+        mDbInteractor.cleanPostedData(mProtoReportMessage.sessions, mAllInternalSessionsIds, mRequestId, isBadRequest);
     }
 
     @Override
@@ -460,7 +379,7 @@ public class ReportTask implements UnderlyingNetworkTask {
 
         final List<Throwable> exceptions = new ArrayList<Throwable>();
         try {
-            cursor = getSessionsCursor();
+            cursor = mDbInteractor.querySessions(mQueryValues);
             if (cursor != null) {
                 // EventsCount incrementing in getSession method during adding events to request proto
                 while (cursor.moveToNext() && eventsCount < MAX_EVENT_COUNT_PER_REQUEST) {
@@ -595,7 +514,7 @@ public class ReportTask implements UnderlyingNetworkTask {
 
         Cursor cursor = null;
         try {
-            cursor = getReportsCursor(sessionId, sessionType);
+            cursor = mDbInteractor.queryReports(sessionId, sessionType);
             if (cursor != null) {
                 final List<Session.Event> eventsOfSession = new ArrayList<Session.Event>();
 
@@ -703,16 +622,6 @@ public class ReportTask implements UnderlyingNetworkTask {
             exceptions.add(ex);
         }
         return null;
-    }
-
-    @Nullable
-    private Cursor getSessionsCursor() {
-        return mDbHelper.querySessions(mQueryValues);
-    }
-
-    @Nullable
-    private Cursor getReportsCursor(final long sessionId, @NonNull final SessionType sessionType) {
-        return mDbHelper.queryReports(sessionId, sessionType);
     }
 
     @Override

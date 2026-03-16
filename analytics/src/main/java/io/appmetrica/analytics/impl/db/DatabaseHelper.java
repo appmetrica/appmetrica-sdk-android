@@ -330,31 +330,24 @@ public class DatabaseHelper {
         }
     }
 
-    // Removes session's reports inside the database by session ID and limit of records.
-    @SuppressWarnings("checkstyle:methodlength")
-    public void removeTop(final long sessionId,
-                          final int sessionType,
-                          final int limitOfRecords,
-                          final boolean shouldFormCleanupEvent) throws SQLiteException {
-        if (limitOfRecords <= 0) {
-            return;
-        }
-
+    // Removes all session's reports inside the database by session ID and session type
+    // where number_in_session <= maxNumberInSession.
+    public void removeSessionEventsUpTo(final long sessionId,
+                                        final int sessionType,
+                                        final long maxNumberInSession,
+                                        final boolean shouldFormCleanupEvent) throws SQLiteException {
         mWriteLock.lock();
         try {
             final String deleteQuery = String.format(Locale.US,
-                Constants.EventsTable.DELETE_TOP_RECORDS_WHERE,
+                Constants.EventsTable.DELETE_RECORDS_UP_TO_NUMBER_IN_SESSION,
                 EventTableEntry.FIELD_EVENT_SESSION,
                 EventTableEntry.FIELD_EVENT_SESSION_TYPE,
-                EventTableEntry.FIELD_EVENT_ID,
-                Constants.EventsTable.TABLE_NAME
+                EventTableEntry.FIELD_EVENT_NUMBER_IN_SESSION
             );
             final String[] deleteArgs = new String[] {
                 Long.toString(sessionId),
                 Integer.toString(sessionType),
-                Long.toString(sessionId),
-                Integer.toString(sessionType),
-                Integer.toString(limitOfRecords - 1)
+                Long.toString(maxNumberInSession)
             };
 
             final SQLiteDatabase db = mStorage.getWritableDatabase();
@@ -386,7 +379,7 @@ public class DatabaseHelper {
         } catch (Throwable exception) {
             DebugLogger.INSTANCE.error(
                 TAG,
-                "Smth was wrong while removing top records for session.\n%s",
+                "Smth was wrong while removing session events from db.\n%s",
                 exception
             );
         } finally {
