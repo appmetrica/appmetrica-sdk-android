@@ -84,5 +84,4 @@ public enum InternalEvents {
         final InternalEvents resultEvent = mTypeToEventMapping.get(typeID);
         return null == resultEvent ? EVENT_TYPE_UNDEFINED : resultEvent;
     }
-
 }

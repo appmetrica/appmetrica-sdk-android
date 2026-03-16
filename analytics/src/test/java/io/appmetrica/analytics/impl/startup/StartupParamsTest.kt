@@ -15,6 +15,7 @@ import io.appmetrica.analytics.impl.startup.uuid.UuidValidator
 import io.appmetrica.analytics.impl.utils.JsonHelper
 import io.appmetrica.analytics.impl.utils.StartupUtils
 import io.appmetrica.analytics.internal.IdentifiersResult
+import io.appmetrica.analytics.testutils.ClientServiceLocatorRule
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.ContextRule
 import io.appmetrica.analytics.testutils.on
@@ -144,6 +145,9 @@ internal class StartupParamsTest : CommonTest() {
     val appMetricaSelfReportFacadeRule = staticRule<AppMetricaSelfReportFacade>()
 
     private val selfReporter: SelfReporterWrapper = mock()
+
+    @get:Rule
+    val clientServiceLocatorRule = ClientServiceLocatorRule()
 
     @Before
     fun setUp() {
@@ -1165,7 +1169,6 @@ internal class StartupParamsTest : CommonTest() {
         verify(preferences).putCustomSdkHosts(customSdkHostsResult)
         verify(preferences).putFeatures(featuresInternal)
         verify(preferences).putNextStartupTime(nextStartupTime)
-        verify(preferences).commit()
     }
 
     @Test
@@ -1193,7 +1196,6 @@ internal class StartupParamsTest : CommonTest() {
         verify(preferences).putClientClidsChangedAfterLastIdentifiersUpdate(false)
         verify(preferences).putCustomSdkHosts(customSdkHostsResult)
         verify(preferences).putNextStartupTime(nextStartupTime)
-        verify(preferences).commit()
     }
 
     @Test
@@ -1227,7 +1229,6 @@ internal class StartupParamsTest : CommonTest() {
         verify(preferences).putCustomSdkHosts(customSdkHostsResult)
         verify(preferences).putFeatures(featuresInternal)
         verify(preferences).putNextStartupTime(nextStartupTime)
-        verify(preferences).commit()
     }
 
     @Test

@@ -25,7 +25,7 @@ public class PreferencesComponentDbStorageTest extends CommonTest {
     @Before
     public void setUp() throws Exception {
         dbStorage = spy(new MockedKeyValueTableDbHelper(null));
-        doNothing().when(dbStorage).commit();
+        doNothing().when(dbStorage).flushAsync();
         mComponentDbStorage = new PreferencesComponentDbStorage(dbStorage);
     }
 

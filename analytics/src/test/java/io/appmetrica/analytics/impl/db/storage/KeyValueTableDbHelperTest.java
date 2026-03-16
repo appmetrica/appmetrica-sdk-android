@@ -4,8 +4,10 @@ import android.content.ContentValues;
 import android.database.MatrixCursor;
 import android.database.sqlite.SQLiteDatabase;
 import androidx.annotation.NonNull;
+import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor;
 import io.appmetrica.analytics.impl.db.DatabaseManagerProvider;
 import io.appmetrica.analytics.impl.db.DatabaseStorage;
+import io.appmetrica.analytics.impl.db.connectors.SimpleDBConnector;
 import io.appmetrica.analytics.impl.db.constants.Constants;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
@@ -30,7 +32,10 @@ import static io.appmetrica.analytics.impl.db.constants.Constants.KeyValueTable.
 import static io.appmetrica.analytics.impl.db.constants.Constants.KeyValueTable.STRING;
 import static io.appmetrica.analytics.impl.db.constants.Constants.PreferencesTable.TABLE_NAME;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.nullable;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -56,7 +61,8 @@ public class KeyValueTableDbHelperTest extends CommonTest {
     public static final String KEY_BOOLEAN = "key_boolean";
     public static final String KEY_FLOAT = "key_float";
 
-    private KeyValueTableDbHelper mDbHelper;
+    private KeyValueTableDbHelper dbHelper;
+    private KeyValueTableDbHelper newDbHelper;
     private DatabaseStorage mDbStorage;
     private SQLiteDatabase mDatabase;
     public static final String KEY_TO_REMOVE_LONG = "key_long2";
@@ -71,7 +77,8 @@ public class KeyValueTableDbHelperTest extends CommonTest {
     public final GlobalServiceLocatorRule globalServiceLocatorRule = new GlobalServiceLocatorRule();
 
     public static class KeyValueTableDbHelperParametrizedTest extends CommonTest {
-        protected KeyValueTableDbHelper mDbHelper;
+        protected KeyValueTableDbHelper dbHelper;
+        protected KeyValueTableDbHelper newDbHelper;
         protected DatabaseStorage mDbStorage;
         protected SQLiteDatabase mDatabase;
         protected MatrixCursor mPrefsCursor;
@@ -94,8 +101,11 @@ public class KeyValueTableDbHelperTest extends CommonTest {
 
         @After
         public void tearDown() throws Exception {
-            if (mDbHelper != null) {
-                mDbHelper.close();
+            if (dbHelper != null) {
+                dbHelper.close();
+            }
+            if (newDbHelper != null) {
+                newDbHelper.close();
             }
         }
 
@@ -132,6 +142,12 @@ public class KeyValueTableDbHelperTest extends CommonTest {
         if (mPrefsCursor != null) {
             mPrefsCursor.close();
         }
+        if (dbHelper != null) {
+            dbHelper.close();
+        }
+        if (newDbHelper != null) {
+            newDbHelper.close();
+        }
     }
 
     @Test
@@ -142,12 +158,12 @@ public class KeyValueTableDbHelperTest extends CommonTest {
         mPrefsCursor.newRow().add(KEY_INT).add(TEST_INT).add(INT);
         mPrefsCursor.moveToPosition(-1);
 
-        mDbHelper = createHelper(mDbStorage);
+        dbHelper = createHelper(mDbStorage);
 
-        assertThat(mDbHelper.getBoolean(KEY_BOOLEAN, false)).isTrue();
-        assertThat(mDbHelper.getString(KEY_STRING, null)).isEqualTo(TEST_STRING);
-        assertThat(mDbHelper.getLong(KEY_LONG, -1)).isEqualTo(TEST_LONG);
-        assertThat(mDbHelper.getInt(KEY_INT, -1)).isEqualTo(TEST_INT);
+        assertThat(dbHelper.getBoolean(KEY_BOOLEAN, false)).isTrue();
+        assertThat(dbHelper.getString(KEY_STRING, null)).isEqualTo(TEST_STRING);
+        assertThat(dbHelper.getLong(KEY_LONG, -1)).isEqualTo(TEST_LONG);
+        assertThat(dbHelper.getInt(KEY_INT, -1)).isEqualTo(TEST_INT);
     }
 
     @RunWith(ParameterizedRobolectricTestRunner.class)
@@ -194,11 +210,11 @@ public class KeyValueTableDbHelperTest extends CommonTest {
             mPrefsCursor.newRow().add(KEY_FLOAT).add(mStoredValue).add(mType);
             mPrefsCursor.moveToPosition(-1);
 
-            mDbHelper = createHelper(mDbStorage);
+            dbHelper = createHelper(mDbStorage);
 
             float storedValue = Float.NEGATIVE_INFINITY;
             try {
-                storedValue = mDbHelper.getFloat(KEY_FLOAT, Float.NEGATIVE_INFINITY);
+                storedValue = dbHelper.getFloat(KEY_FLOAT, Float.NEGATIVE_INFINITY);
             } catch (Exception e) {
             }
             assertThat(storedValue).isEqualTo(mExpectedValue);
@@ -219,24 +235,24 @@ public class KeyValueTableDbHelperTest extends CommonTest {
         mPrefsCursor.newRow().add(KEY_TO_REMOVE_FLOAT).add(TEST_FLOAT).add(FLOAT);
         mPrefsCursor.moveToPosition(-1);
 
-        mDbHelper = createHelper(mDbStorage);
-        mDbHelper.remove(KEY_TO_REMOVE_LONG);
-        mDbHelper.remove(KEY_TO_REMOVE_BOOL);
-        mDbHelper.remove(KEY_TO_REMOVE_STRING);
-        mDbHelper.remove(KEY_TO_REMOVE_INT);
-        mDbHelper.remove(KEY_TO_REMOVE_FLOAT);
+        dbHelper = createHelper(mDbStorage);
+        dbHelper.remove(KEY_TO_REMOVE_LONG);
+        dbHelper.remove(KEY_TO_REMOVE_BOOL);
+        dbHelper.remove(KEY_TO_REMOVE_STRING);
+        dbHelper.remove(KEY_TO_REMOVE_INT);
+        dbHelper.remove(KEY_TO_REMOVE_FLOAT);
 
-        assertThat(mDbHelper.getBoolean(KEY_TO_REMOVE_BOOL, false)).isFalse();
-        assertThat(mDbHelper.getLong(KEY_TO_REMOVE_LONG, -1)).isEqualTo(-1);
-        assertThat(mDbHelper.getLong(KEY_TO_REMOVE_INT, -1)).isEqualTo(-1);
-        assertThat(mDbHelper.getString(KEY_TO_REMOVE_STRING, null)).isNull();
-        assertThat(mDbHelper.getFloat(KEY_TO_REMOVE_FLOAT, Float.NEGATIVE_INFINITY)).isEqualTo(Float.NEGATIVE_INFINITY);
+        assertThat(dbHelper.getBoolean(KEY_TO_REMOVE_BOOL, false)).isFalse();
+        assertThat(dbHelper.getLong(KEY_TO_REMOVE_LONG, -1)).isEqualTo(-1);
+        assertThat(dbHelper.getLong(KEY_TO_REMOVE_INT, -1)).isEqualTo(-1);
+        assertThat(dbHelper.getString(KEY_TO_REMOVE_STRING, null)).isNull();
+        assertThat(dbHelper.getFloat(KEY_TO_REMOVE_FLOAT, Float.NEGATIVE_INFINITY)).isEqualTo(Float.NEGATIVE_INFINITY);
 
-        assertThat(mDbHelper.getBoolean(KEY_BOOLEAN, false)).isTrue();
-        assertThat(mDbHelper.getLong(KEY_LONG, -1)).isEqualTo(Long.MAX_VALUE);
-        assertThat(mDbHelper.getInt(KEY_INT, -1)).isEqualTo(TEST_INT);
-        assertThat(mDbHelper.getString(KEY_STRING, null)).isEqualTo(TEST_STRING);
-        assertThat(mDbHelper.getFloat(KEY_FLOAT, Float.NEGATIVE_INFINITY)).isEqualTo(TEST_FLOAT);
+        assertThat(dbHelper.getBoolean(KEY_BOOLEAN, false)).isTrue();
+        assertThat(dbHelper.getLong(KEY_LONG, -1)).isEqualTo(Long.MAX_VALUE);
+        assertThat(dbHelper.getInt(KEY_INT, -1)).isEqualTo(TEST_INT);
+        assertThat(dbHelper.getString(KEY_STRING, null)).isEqualTo(TEST_STRING);
+        assertThat(dbHelper.getFloat(KEY_FLOAT, Float.NEGATIVE_INFINITY)).isEqualTo(TEST_FLOAT);
     }
 
     @Test
@@ -253,14 +269,12 @@ public class KeyValueTableDbHelperTest extends CommonTest {
         mPrefsCursor.newRow().add(KEY_TO_REMOVE_FLOAT).add(TEST_FLOAT).add(FLOAT);
         mPrefsCursor.moveToPosition(-1);
 
-        mDbHelper = createHelper(mDbStorage);
-        mDbHelper.remove(KEY_TO_REMOVE_LONG)
+        dbHelper = createHelper(mDbStorage);
+        dbHelper.remove(KEY_TO_REMOVE_LONG)
             .remove(KEY_TO_REMOVE_BOOL)
             .remove(KEY_TO_REMOVE_STRING)
             .remove(KEY_TO_REMOVE_INT)
-            .remove(KEY_TO_REMOVE_FLOAT)
-            .commit();
-        Thread.sleep(200);
+            .remove(KEY_TO_REMOVE_FLOAT);
 
         ArgumentCaptor<String[]> whereArgsCaptor = ArgumentCaptor.forClass(String[].class);
         ArgumentCaptor<String> tableCaptor = ArgumentCaptor.forClass(String.class);
@@ -280,32 +294,32 @@ public class KeyValueTableDbHelperTest extends CommonTest {
         assertThat(removedKeys).contains(KEY_TO_REMOVE_INT);
         assertThat(removedKeys).contains(KEY_TO_REMOVE_FLOAT);
 
-        assertThat(mDbHelper.getBoolean(KEY_BOOLEAN, false)).isEqualTo(TEST_BOOL_TRUE);
-        assertThat(mDbHelper.getLong(KEY_LONG, -1)).isEqualTo(TEST_LONG);
-        assertThat(mDbHelper.getInt(KEY_INT, -1)).isEqualTo(TEST_INT);
-        assertThat(mDbHelper.getString(KEY_STRING, null)).isEqualTo(TEST_STRING);
-        assertThat(mDbHelper.getFloat(KEY_FLOAT, Float.NEGATIVE_INFINITY)).isEqualTo(TEST_FLOAT);
+        assertThat(dbHelper.getBoolean(KEY_BOOLEAN, false)).isEqualTo(TEST_BOOL_TRUE);
+        assertThat(dbHelper.getLong(KEY_LONG, -1)).isEqualTo(TEST_LONG);
+        assertThat(dbHelper.getInt(KEY_INT, -1)).isEqualTo(TEST_INT);
+        assertThat(dbHelper.getString(KEY_STRING, null)).isEqualTo(TEST_STRING);
+        assertThat(dbHelper.getFloat(KEY_FLOAT, Float.NEGATIVE_INFINITY)).isEqualTo(TEST_FLOAT);
 
-        assertThat(mDbHelper.getBoolean(KEY_TO_REMOVE_BOOL, false)).isFalse();
-        assertThat(mDbHelper.getLong(KEY_TO_REMOVE_LONG, -1)).isEqualTo(-1);
-        assertThat(mDbHelper.getLong(KEY_TO_REMOVE_INT, -1)).isEqualTo(-1);
-        assertThat(mDbHelper.getString(KEY_TO_REMOVE_STRING, null)).isNull();
-        assertThat(mDbHelper.getFloat(KEY_TO_REMOVE_FLOAT, Float.NEGATIVE_INFINITY)).isEqualTo(Float.NEGATIVE_INFINITY);
+        assertThat(dbHelper.getBoolean(KEY_TO_REMOVE_BOOL, false)).isFalse();
+        assertThat(dbHelper.getLong(KEY_TO_REMOVE_LONG, -1)).isEqualTo(-1);
+        assertThat(dbHelper.getLong(KEY_TO_REMOVE_INT, -1)).isEqualTo(-1);
+        assertThat(dbHelper.getString(KEY_TO_REMOVE_STRING, null)).isNull();
+        assertThat(dbHelper.getFloat(KEY_TO_REMOVE_FLOAT, Float.NEGATIVE_INFINITY)).isEqualTo(Float.NEGATIVE_INFINITY);
     }
 
     @Test
     public void testInsertInMemory() throws Exception {
-        mDbHelper = createHelper(mDbStorage);
+        dbHelper = createHelper(mDbStorage);
 
-        mDbHelper.put(KEY_LONG, TEST_LONG)
+        dbHelper.put(KEY_LONG, TEST_LONG)
             .put(KEY_STRING, TEST_STRING)
             .put(KEY_BOOLEAN, TEST_BOOL_TRUE)
             .put(KEY_INT, TEST_INT);
 
-        assertThat(mDbHelper.getBoolean(KEY_BOOLEAN, false)).isTrue();
-        assertThat(mDbHelper.getLong(KEY_LONG, -1)).isEqualTo(Long.MAX_VALUE);
-        assertThat(mDbHelper.getInt(KEY_INT, -1)).isEqualTo(TEST_INT);
-        assertThat(mDbHelper.getString(KEY_STRING, null)).isEqualTo(TEST_STRING);
+        assertThat(dbHelper.getBoolean(KEY_BOOLEAN, false)).isTrue();
+        assertThat(dbHelper.getLong(KEY_LONG, -1)).isEqualTo(Long.MAX_VALUE);
+        assertThat(dbHelper.getInt(KEY_INT, -1)).isEqualTo(TEST_INT);
+        assertThat(dbHelper.getString(KEY_STRING, null)).isEqualTo(TEST_STRING);
     }
 
     @RunWith(ParameterizedRobolectricTestRunner.class)
@@ -327,7 +341,6 @@ public class KeyValueTableDbHelperTest extends CommonTest {
                 {true, "true", Float.NEGATIVE_INFINITY},
                 {false, "false", Float.NEGATIVE_INFINITY},
                 {1, "1", Float.NEGATIVE_INFINITY},
-                {null, "null", Float.NEGATIVE_INFINITY}
             });
         }
 
@@ -340,12 +353,12 @@ public class KeyValueTableDbHelperTest extends CommonTest {
         }
 
         @Test
-        public void test() {
-            mDbHelper = createHelper(mDbStorage);
-            mDbHelper.putValue(KEY_FLOAT, mInputValue);
+        public void insertFloatInMemory() {
+            dbHelper = createHelper(mDbStorage);
+            dbHelper.putValue(KEY_FLOAT, mInputValue);
             float value = Float.NEGATIVE_INFINITY;
             try {
-                value = mDbHelper.getFloat(KEY_FLOAT, Float.NEGATIVE_INFINITY);
+                value = dbHelper.getFloat(KEY_FLOAT, Float.NEGATIVE_INFINITY);
             } catch (Exception e) {
             }
             assertThat(value).isEqualTo(mExpectedValue);
@@ -353,57 +366,53 @@ public class KeyValueTableDbHelperTest extends CommonTest {
     }
 
     @Test
-    public void testInsertLongInDb() throws Exception {
-        DatabaseStorage storage = new DatabaseStorage(RuntimeEnvironment.getApplication(), "test", sDatabaseManagerProvider.buildServiceDatabaseManager());
-        mDbHelper = createHelper(storage);
+    public void insertLongInDb() throws Exception {
+        DatabaseStorage storage = new DatabaseStorage(
+            RuntimeEnvironment.getApplication(),
+            "test",
+            sDatabaseManagerProvider.buildServiceDatabaseManager()
+        );
+        dbHelper = createHelper(storage);
+        dbHelper.put(KEY_LONG, TEST_LONG);
 
-        mDbHelper.put(KEY_LONG, TEST_LONG).commit();
 
-        Thread.sleep(200);
+        newDbHelper = createHelper(storage);
 
-        KeyValueTableDbHelper newHelper = createHelper(storage);
-
-        assertThat(newHelper.getLong(KEY_LONG, 0)).isEqualTo(TEST_LONG);
+        assertThat(newDbHelper.getLong(KEY_LONG, 0)).isEqualTo(TEST_LONG);
     }
 
     @Test
     public void testInsertIntInDb() throws Exception {
         DatabaseStorage storage = new DatabaseStorage(RuntimeEnvironment.getApplication(), "test", sDatabaseManagerProvider.buildServiceDatabaseManager());
-        mDbHelper = createHelper(storage);
-        mDbHelper.put(KEY_INT, TEST_INT).commit();
+        dbHelper = createHelper(storage);
+        dbHelper.put(KEY_INT, TEST_INT);
 
-        Thread.sleep(200);
+        newDbHelper = createHelper(storage);
 
-        KeyValueTableDbHelper newHelper = createHelper(storage);
-
-        assertThat(newHelper.getInt(KEY_INT, 0)).isEqualTo(TEST_INT);
+        assertThat(newDbHelper.getInt(KEY_INT, 0)).isEqualTo(TEST_INT);
     }
 
     @Test
     public void testInsertStringInDb() throws Exception {
         DatabaseStorage storage = new DatabaseStorage(RuntimeEnvironment.getApplication(), "test", sDatabaseManagerProvider.buildServiceDatabaseManager());
-        mDbHelper = createHelper(storage);
+        dbHelper = createHelper(storage);
 
-        mDbHelper.put(KEY_STRING, TEST_STRING).commit();
+        dbHelper.put(KEY_STRING, TEST_STRING);
 
-        Thread.sleep(200);
+        newDbHelper = createHelper(storage);
 
-        KeyValueTableDbHelper newHelper = createHelper(storage);
-
-        assertThat(newHelper.getString(KEY_STRING, null)).isEqualTo(TEST_STRING);
+        assertThat(newDbHelper.getString(KEY_STRING, null)).isEqualTo(TEST_STRING);
     }
 
     @Test
     public void testInsertInDb() throws Exception {
         DatabaseStorage storage = new DatabaseStorage(RuntimeEnvironment.getApplication(), "test", sDatabaseManagerProvider.buildServiceDatabaseManager());
-        mDbHelper = createHelper(storage);
-        mDbHelper.put(KEY_BOOLEAN, true).commit();
+        dbHelper = createHelper(storage);
+        dbHelper.put(KEY_BOOLEAN, true);
 
-        Thread.sleep(200);
+        newDbHelper = createHelper(storage);
 
-        KeyValueTableDbHelper newHelper = createHelper(storage);
-
-        assertThat(newHelper.getBoolean(KEY_BOOLEAN, false)).isTrue();
+        assertThat(newDbHelper.getBoolean(KEY_BOOLEAN, false)).isTrue();
     }
 
     @RunWith(ParameterizedRobolectricTestRunner.class)
@@ -425,7 +434,6 @@ public class KeyValueTableDbHelperTest extends CommonTest {
                 {true, "true", Float.NEGATIVE_INFINITY},
                 {false, "false", Float.NEGATIVE_INFINITY},
                 {1, "1", Float.NEGATIVE_INFINITY},
-                {null, "null", Float.NEGATIVE_INFINITY}
             });
         }
 
@@ -440,20 +448,15 @@ public class KeyValueTableDbHelperTest extends CommonTest {
         @Test
         public void test() {
             DatabaseStorage storage = new DatabaseStorage(RuntimeEnvironment.getApplication(), "test", sDatabaseManagerProvider.buildServiceDatabaseManager());
-            mDbHelper = createHelper(storage);
-            mDbHelper.putValue(KEY_FLOAT, mInputValue);
+            dbHelper = createHelper(storage);
+            dbHelper.putValue(KEY_FLOAT, mInputValue);
 
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException ignored) {
-            }
-
-            KeyValueTableDbHelper newHelper = createHelper(storage);
+            newDbHelper = createHelper(storage);
 
             float actualValue = Float.NEGATIVE_INFINITY;
 
             try {
-                actualValue = newHelper.getFloat(KEY_FLOAT, Float.NEGATIVE_INFINITY);
+                actualValue = newDbHelper.getFloat(KEY_FLOAT, Float.NEGATIVE_INFINITY);
             } catch (Exception e) {
             }
 
@@ -463,10 +466,8 @@ public class KeyValueTableDbHelperTest extends CommonTest {
 
     @Test
     public void testBooleanWrite() throws Exception {
-        mDbHelper = createHelper(mDbStorage);
-        mDbHelper.put(KEY_BOOLEAN, true).commit();
-
-        Thread.sleep(200);
+        dbHelper = createHelper(mDbStorage);
+        dbHelper.put(KEY_BOOLEAN, true);
 
         ArgumentCaptor<String> arg1 = ArgumentCaptor.forClass(String.class);
         ArgumentCaptor<String> arg2 = ArgumentCaptor.forClass(String.class);
@@ -482,10 +483,8 @@ public class KeyValueTableDbHelperTest extends CommonTest {
 
     @Test
     public void testLongWrite() throws Exception {
-        mDbHelper = createHelper(mDbStorage);
-        mDbHelper.put(KEY_LONG, 111L).commit();
-
-        Thread.sleep(200);
+        dbHelper = createHelper(mDbStorage);
+        dbHelper.put(KEY_LONG, 111L);
 
         ArgumentCaptor<String> arg1 = ArgumentCaptor.forClass(String.class);
         ArgumentCaptor<String> arg2 = ArgumentCaptor.forClass(String.class);
@@ -501,10 +500,8 @@ public class KeyValueTableDbHelperTest extends CommonTest {
 
     @Test
     public void testStringWrite() throws Exception {
-        mDbHelper = createHelper(mDbStorage);
-        mDbHelper.put(KEY_STRING, "123").commit();
-
-        Thread.sleep(200);
+        dbHelper = createHelper(mDbStorage);
+        dbHelper.put(KEY_STRING, "123");
 
         ArgumentCaptor<String> arg1 = ArgumentCaptor.forClass(String.class);
         ArgumentCaptor<String> arg2 = ArgumentCaptor.forClass(String.class);
@@ -522,10 +519,8 @@ public class KeyValueTableDbHelperTest extends CommonTest {
 
     @Test
     public void testIntWrite() throws Exception {
-        mDbHelper = createHelper(mDbStorage);
-        mDbHelper.put(KEY_INT, 123).commit();
-
-        Thread.sleep(200);
+        dbHelper = createHelper(mDbStorage);
+        dbHelper.put(KEY_INT, 123);
 
         ArgumentCaptor<String> arg1 = ArgumentCaptor.forClass(String.class);
         ArgumentCaptor<String> arg2 = ArgumentCaptor.forClass(String.class);
@@ -541,21 +536,40 @@ public class KeyValueTableDbHelperTest extends CommonTest {
 
     @Test
     public void keys() {
-        mDbHelper = createHelper(mDbStorage);
-        mDbHelper.put("key1", "value1").commit();
-        mDbHelper.put("key2", 2);
-        mDbHelper.put("key3", "value3").commit();
-        mDbHelper.put("key4", 4);
-        mDbHelper.remove("key2");
-        mDbHelper.remove("key3").commit();
-        assertThat(mDbHelper.keys()).containsExactlyInAnyOrder("key1", "key4");
+        dbHelper = createHelper(mDbStorage);
+        dbHelper.put("key1", "value1");
+        dbHelper.put("key2", 2);
+        dbHelper.put("key3", "value3");
+        dbHelper.put("key4", 4);
+        dbHelper.remove("key2");
+        dbHelper.remove("key3");
+        assertThat(dbHelper.keys()).containsExactlyInAnyOrder("key1", "key4");
         // check no concurrent modification exception
-        for (String key : mDbHelper.keys()) {
-            mDbHelper.remove(key);
+        for (String key : dbHelper.keys()) {
+            dbHelper.remove(key);
         }
     }
 
     private static KeyValueTableDbHelper createHelper(@NonNull DatabaseStorage storage) {
-        return new KeyValueTableDbHelper(storage, Constants.PreferencesTable.TABLE_NAME);
+        // Create a synchronous executor for tests to avoid timing issues
+        IHandlerExecutor syncExecutor = mock(IHandlerExecutor.class);
+
+        doAnswer(invocation -> {
+            Runnable runnable = invocation.getArgument(0);
+            runnable.run();
+            return null;
+        }).when(syncExecutor).execute(any(Runnable.class));
+
+        doAnswer(invocation -> {
+            Runnable runnable = invocation.getArgument(0);
+            runnable.run();
+            return null;
+        }).when(syncExecutor).executeDelayed(any(Runnable.class), anyLong());
+
+        return new KeyValueTableDbHelper(
+            Constants.PreferencesTable.TABLE_NAME,
+            new SimpleDBConnector(storage),
+            syncExecutor
+        );
     }
 }

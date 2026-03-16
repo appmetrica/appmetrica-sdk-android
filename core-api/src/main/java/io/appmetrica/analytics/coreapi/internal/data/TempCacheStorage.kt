@@ -9,7 +9,7 @@ interface TempCacheStorage {
         val data: ByteArray
     }
 
-    fun put(scope: String, timestamp: Long, data: ByteArray): Long
+    fun put(scope: String, timestamp: Long, data: ByteArray)
 
     fun get(scope: String): Entry?
 

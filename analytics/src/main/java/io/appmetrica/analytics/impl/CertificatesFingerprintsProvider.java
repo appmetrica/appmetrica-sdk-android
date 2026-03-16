@@ -120,6 +120,6 @@ public class CertificatesFingerprintsProvider {
     }
 
     private void saveToPreferences(@NonNull List<String> sha1s) {
-        mPreferencesComponentDbStorage.putCertificatesSha1Fingerprints(sha1s).commit();
+        mPreferencesComponentDbStorage.putCertificatesSha1Fingerprints(sha1s).flushAsync();
     }
 }

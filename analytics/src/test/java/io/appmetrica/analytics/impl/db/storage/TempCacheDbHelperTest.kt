@@ -20,6 +20,8 @@ import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.never
+import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
@@ -52,6 +54,17 @@ internal class TempCacheDbHelperTest : CommonTest() {
     ).apply {
         addRow(arrayOf(firstId, scope, timestamp, data))
         addRow(arrayOf(secondId, scope, secondTimestamp, secondData))
+    }
+
+    private val brokenCursor = MatrixCursor(
+        arrayOf(
+            TempCacheTable.Column.ID,
+            TempCacheTable.Column.SCOPE,
+            TempCacheTable.Column.TIMESTAMP,
+            TempCacheTable.Column.DATA
+        )
+    ).apply {
+        addRow(arrayOf("Wrong id", "wrong scope", "wrong timestamp", "wrong data"))
     }
 
     private val database: SQLiteDatabase = mock {
@@ -90,7 +103,10 @@ internal class TempCacheDbHelperTest : CommonTest() {
         on { currentTimeMillis() } doReturn now
     }
 
-    private val timeProvider: SystemTimeProvider by timeProviderMockedConstructionRule
+    @get:Rule
+    val bufferedWriterMockedConstructionRule = constructionRule<BufferedTempCacheWriter>()
+
+    private val bufferedWriter: BufferedTempCacheWriter by bufferedWriterMockedConstructionRule
 
     @get:Rule
     val logRule = LogRule()
@@ -98,12 +114,57 @@ internal class TempCacheDbHelperTest : CommonTest() {
     private val dbHelper by setUp { TempCacheDbHelper(dbConnector, tableName) }
 
     @Test
-    fun put() {
+    fun `bufferedWriter creation delay millis`() {
+        assertThat(bufferedWriterMockedConstructionRule.constructionMock.constructed()).hasSize(1)
+        assertThat(bufferedWriterMockedConstructionRule.argumentInterceptor.flatArguments()).hasSize(2)
+        assertThat(bufferedWriterMockedConstructionRule.argumentInterceptor.flatArguments()[1])
+            .isEqualTo(1000L)
+    }
+
+    @Test
+    fun `bufferedWriter creation insert lambda`() {
+        val lamdbaArgument = bufferedWriterMockedConstructionRule.argumentInterceptor.flatArguments().first()
+        @Suppress("UNCHECKED_CAST") val lambda = lamdbaArgument as (List<TempCachePutTask>) -> Unit
+        lambda(listOf(TempCachePutTask(scope, timestamp, data)))
+
+        verify(database).insertOrThrow(eq(tableName), eq(null), contentValuesCaptor.capture())
+
+        assertThat(contentValuesCaptor.allValues).hasSize(1)
+        val savedValue = contentValuesCaptor.firstValue
+        assertThat(savedValue.keySet())
+            .containsExactlyInAnyOrder(
+                TempCacheTable.Column.SCOPE,
+                TempCacheTable.Column.DATA,
+                TempCacheTable.Column.TIMESTAMP
+            )
+        assertThat(savedValue[TempCacheTable.Column.SCOPE]).isEqualTo(scope)
+        assertThat(savedValue[TempCacheTable.Column.DATA]).isEqualTo(data)
+        assertThat(savedValue[TempCacheTable.Column.TIMESTAMP]).isEqualTo(timestamp)
+    }
+
+    @Test
+    fun `bufferedWriter lamba with empty list`() {
+        val lamdbaArgument = bufferedWriterMockedConstructionRule.argumentInterceptor.flatArguments().first()
+        @Suppress("UNCHECKED_CAST") val lambda = lamdbaArgument as (List<TempCachePutTask>) -> Unit
+        lambda(listOf())
+        verify(database, never()).insertOrThrow(any(), any(), any())
+    }
+
+    @Test
+    fun `put delegates to buffered writer`() {
+        dbHelper.put(scope, timestamp, data)
+
+        verify(bufferedWriter).put(scope, timestamp, data)
+        verify(database, never()).insertOrThrow(any(), any(), any())
+    }
+
+    @Test
+    fun putDirect() {
         val id = 100L
         whenever(database.insertOrThrow(eq(tableName), eq(null), any()))
             .thenReturn(id)
 
-        assertThat(dbHelper.put(scope, timestamp, data)).isEqualTo(id)
+        assertThat(dbHelper.putDirect(scope, timestamp, data)).isEqualTo(id)
         verify(database).insertOrThrow(eq(tableName), eq(null), contentValuesCaptor.capture())
         verify(database).closeSafely()
 
@@ -121,22 +182,39 @@ internal class TempCacheDbHelperTest : CommonTest() {
     }
 
     @Test
-    fun `put if no db`() {
+    fun `putDirect if no db`() {
         whenever(dbConnector.openDb()).thenReturn(null)
-        assertThat(dbHelper.put(scope, timestamp, data)).isEqualTo(-1)
+        assertThat(dbHelper.putDirect(scope, timestamp, data)).isEqualTo(-1)
     }
 
     @Test
-    fun `put if openDb throws exception`() {
+    fun `putDirect if openDb throws exception`() {
         whenever(dbConnector.openDb()).thenThrow(RuntimeException())
-        assertThat(dbHelper.put(scope, timestamp, data)).isEqualTo(-1)
+        assertThat(dbHelper.putDirect(scope, timestamp, data)).isEqualTo(-1)
     }
 
     @Test
-    fun `put if insertOrThrow throws exception`() {
+    fun `putDirect if insertOrThrow throws exception`() {
         whenever(database.insertOrThrow(eq(tableName), eq(null), any())).thenThrow(RuntimeException())
-        assertThat(dbHelper.put(scope, timestamp, data)).isEqualTo(-1)
+        assertThat(dbHelper.putDirect(scope, timestamp, data)).isEqualTo(-1)
         verify(database).closeSafely()
+    }
+
+    @Test
+    fun `putDirect writes batch with multiple tasks`() {
+        val id1 = 100L
+        val id2 = 101L
+        whenever(database.insertOrThrow(eq(tableName), eq(null), any()))
+            .thenReturn(id1, id2)
+
+        // Insert two entries directly
+        dbHelper.putDirect(scope, timestamp, data)
+        dbHelper.putDirect(scope, secondTimestamp, secondData)
+
+        verify(database, times(2)).beginTransaction()
+        verify(database, times(2)).setTransactionSuccessful()
+        verify(database, times(2)).endTransaction()
+        verify(database, times(2)).insertOrThrow(eq(tableName), eq(null), any())
     }
 
     @Test
@@ -349,6 +427,46 @@ internal class TempCacheDbHelperTest : CommonTest() {
     }
 
     @Test
+    fun `get single entry if cursor is broken`() {
+        whenever(
+            database.query(
+                eq(false),
+                eq(tableName),
+                eq(null),
+                any(),
+                any(),
+                eq(null),
+                eq(null),
+                any(),
+                any()
+            )
+        ).thenReturn(brokenCursor)
+        assertThat(dbHelper.get(scope)).isNull()
+        verify(database).closeSafely()
+        verify(emptyCursor).closeSafely()
+    }
+
+    @Test
+    fun `get multiple entries if cursor is broken`() {
+        whenever(
+            database.query(
+                eq(false),
+                eq(tableName),
+                eq(null),
+                any(),
+                any(),
+                eq(null),
+                eq(null),
+                any(),
+                any()
+            )
+        ).thenReturn(brokenCursor)
+        assertThat(dbHelper.get(scope, limit)).isEmpty()
+        verify(database).closeSafely()
+        verify(emptyCursor).closeSafely()
+    }
+
+    @Test
     fun remove() {
         dbHelper.remove(idToDelete)
         verify(database).delete(eq(tableName), stringCaptor.capture(), stringArrayCaptor.capture())
@@ -406,5 +524,77 @@ internal class TempCacheDbHelperTest : CommonTest() {
         whenever(database.delete(any(), any(), any())).thenThrow(RuntimeException())
         dbHelper.removeOlderThan(scope, intervalToDelete)
         verify(database).closeSafely()
+    }
+
+    @Test
+    fun `flush delegates to buffered writer`() {
+        dbHelper.flush()
+
+        verify(bufferedWriter).flush()
+    }
+
+    @Test
+    fun `flushAsync delegates to buffered writer`() {
+        dbHelper.flushAsync()
+
+        verify(bufferedWriter).flushAsync()
+    }
+
+    @Test
+    fun `insertRecords writes single task in transaction`() {
+        whenever(database.insertOrThrow(eq(tableName), eq(null), any()))
+            .thenReturn(100L)
+
+        val id = dbHelper.putDirect(scope, timestamp, data)
+
+        assertThat(id).isEqualTo(100L)
+        verify(database).beginTransaction()
+        verify(database).setTransactionSuccessful()
+        verify(database).endTransaction()
+        verify(database).insertOrThrow(eq(tableName), eq(null), any())
+    }
+
+    @Test
+    fun `insertRecords writes multiple tasks in single transaction`() {
+        whenever(database.insertOrThrow(eq(tableName), eq(null), any()))
+            .thenReturn(100L, 101L, 102L)
+
+        dbHelper.putDirect(scope, timestamp, data)
+        dbHelper.putDirect(scope, secondTimestamp, secondData)
+        dbHelper.putDirect("scope-3", 345678L, ByteArray(3))
+
+        verify(database, times(3)).beginTransaction()
+        verify(database, times(3)).setTransactionSuccessful()
+        verify(database, times(3)).endTransaction()
+        verify(database, times(3)).insertOrThrow(eq(tableName), eq(null), any())
+    }
+
+    @Test
+    fun `insertRecords handles database errors`() {
+        whenever(database.insertOrThrow(eq(tableName), eq(null), any()))
+            .thenThrow(RuntimeException("DB error"))
+
+        val id = dbHelper.putDirect(scope, timestamp, data)
+
+        assertThat(id).isEqualTo(-1)
+        verify(database).beginTransaction()
+        verify(database, never()).setTransactionSuccessful()
+        verify(database).endTransaction()
+        verify(database).closeSafely()
+    }
+
+    @Test
+    fun `insertRecords preserves data correctly`() {
+        whenever(database.insertOrThrow(eq(tableName), eq(null), any()))
+            .thenReturn(100L)
+
+        dbHelper.putDirect(scope, timestamp, data)
+
+        verify(database).insertOrThrow(eq(tableName), eq(null), contentValuesCaptor.capture())
+
+        val capturedValue = contentValuesCaptor.firstValue
+        assertThat(capturedValue[TempCacheTable.Column.SCOPE]).isEqualTo(scope)
+        assertThat(capturedValue[TempCacheTable.Column.TIMESTAMP]).isEqualTo(timestamp)
+        assertThat(capturedValue[TempCacheTable.Column.DATA]).isEqualTo(data)
     }
 }

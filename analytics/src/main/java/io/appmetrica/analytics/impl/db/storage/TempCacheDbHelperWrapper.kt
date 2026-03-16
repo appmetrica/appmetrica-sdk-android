@@ -12,9 +12,9 @@ internal class TempCacheDbHelperWrapper(
     private val storage: TempCacheStorage
 ) : TempCacheStorage {
 
-    override fun put(scope: String, timestamp: Long, data: ByteArray): Long {
+    override fun put(scope: String, timestamp: Long, data: ByteArray) {
         checkMigrated()
-        return storage.put(scope, timestamp, data)
+        storage.put(scope, timestamp, data)
     }
 
     override fun get(scope: String): TempCacheStorage.Entry? {

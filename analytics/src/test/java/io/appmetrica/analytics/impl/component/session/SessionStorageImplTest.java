@@ -75,7 +75,7 @@ public class SessionStorageImplTest extends CommonTest {
             .putReportId(1)
             .putSessionId(1)
             .putLastEventOffset(1)
-            .commit();
+            .apply();
         assertThat(sessionStorage.hasValues()).isTrue();
         sessionStorage.clear();
         assertThat(sessionStorage.hasValues()).isFalse();
@@ -97,7 +97,7 @@ public class SessionStorageImplTest extends CommonTest {
             .putReportId(reportId)
             .putSessionId(sessionId)
             .putLastEventOffset(lastEventOffset)
-            .commit();
+            .apply();
         assertThat(sessionStorage.isAliveReportNeeded()).isTrue();
         assertThat(sessionStorage.getSleepStart()).isEqualTo(sleepStart);
         assertThat(sessionStorage.getCreationTime()).isEqualTo(creationTime);

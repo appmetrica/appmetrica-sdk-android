@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Set;
 import org.json.JSONArray;
 
-public abstract class PreferencesDbStorage {
+public abstract class PreferencesDbStorage implements SimplePreferenceStorage {
 
     public static final String TAG = PreferencesDbStorage.class.getSimpleName();
 
@@ -103,10 +103,16 @@ public abstract class PreferencesDbStorage {
         }
     }
 
-    public void commit() {
+    @Override
+    public void flush() {
         synchronized (this) {
-            mDbHelper.commit();
+            mDbHelper.flush();
         }
+    }
+
+    @Override
+    public void flushAsync() {
+        mDbHelper.flushAsync();
     }
 
     protected long readLong(final String key, final long defValue) {

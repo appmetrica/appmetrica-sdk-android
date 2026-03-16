@@ -5,8 +5,8 @@ import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.mockito.kotlin.doReturn
-import org.mockito.kotlin.inOrder
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
 import kotlin.random.Random
 
 internal class PreloadInfoSatelliteCheckedProviderTest : CommonTest() {
@@ -15,7 +15,6 @@ internal class PreloadInfoSatelliteCheckedProviderTest : CommonTest() {
 
     private val servicePreferences = mock<PreferencesServiceDbStorage> {
         on { wasSatellitePreloadInfoChecked() } doReturn checked
-        on { markSatellitePreloadInfoChecked() } doReturn mock
     }
     private val provider = PreloadInfoSatelliteCheckedProvider(servicePreferences)
 
@@ -27,9 +26,6 @@ internal class PreloadInfoSatelliteCheckedProviderTest : CommonTest() {
     @Test
     fun markSatelliteChecked() {
         provider.markSatelliteChecked()
-        inOrder(servicePreferences) {
-            verify(servicePreferences).markSatellitePreloadInfoChecked()
-            verify(servicePreferences).commit()
-        }
+        verify(servicePreferences).markSatellitePreloadInfoChecked()
     }
 }

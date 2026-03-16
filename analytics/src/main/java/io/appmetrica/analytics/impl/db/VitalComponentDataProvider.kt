@@ -35,10 +35,12 @@ internal class VitalComponentDataProvider(
     backupDataSource: VitalDataSource,
     apiKey: String?
 ) {
+    private val tag = "[VitalComponentDataProvider-$apiKey]"
+
     private val vitalDataProvider: VitalDataProvider = VitalDataProvider(
         primaryDataSource,
         backupDataSource,
-        "[VitalComponentDataProvider-$apiKey]"
+        tag
     ) { primary, backup ->
         JSONObject().apply {
             put(
@@ -103,62 +105,98 @@ internal class VitalComponentDataProvider(
         @WorkerThread @Synchronized get() =
             vitalDataProvider.getOrLoadData().optBoolean(FIRST_EVENT_DONE, DEFAULT_HAS_FIRST)
         @WorkerThread @Synchronized set(value) {
-            vitalDataProvider.save(vitalDataProvider.getOrLoadData().put(FIRST_EVENT_DONE, value))
+            updateBooleanIfChanged(FIRST_EVENT_DONE, value, DEFAULT_HAS_FIRST)
+            vitalDataProvider.flushAsync()
         }
+
     var isInitEventDone: Boolean
         @WorkerThread @Synchronized get() =
             vitalDataProvider.getOrLoadData().optBoolean(INIT_EVENT_DONE, DEFAULT_HAS_INIT)
         @WorkerThread @Synchronized set(value) {
-            vitalDataProvider.save(vitalDataProvider.getOrLoadData().put(INIT_EVENT_DONE, value))
+            updateBooleanIfChanged(INIT_EVENT_DONE, value, DEFAULT_HAS_INIT)
+            vitalDataProvider.flushAsync()
         }
+
     var reportRequestId: Int
         @WorkerThread @Synchronized get() =
             vitalDataProvider.getOrLoadData().optInt(KEY_REPORT_REQUEST_ID, DEFAULT_REPORT_REQUEST_ID)
         @WorkerThread @Synchronized set(value) {
-            vitalDataProvider.save(vitalDataProvider.getOrLoadData().put(KEY_REPORT_REQUEST_ID, value))
+            updateIntIfChanged(KEY_REPORT_REQUEST_ID, value, DEFAULT_REPORT_REQUEST_ID)
+            vitalDataProvider.flushAsync()
         }
+
     var globalNumber: Long
         @WorkerThread @Synchronized get() =
             vitalDataProvider.getOrLoadData().optLong(KEY_GLOBAL_NUMBER, DEFAULT_GLOBAL_NUMBER)
-        @WorkerThread @Synchronized set(value) {
-            vitalDataProvider.save(vitalDataProvider.getOrLoadData().put(KEY_GLOBAL_NUMBER, value))
-        }
+        @WorkerThread @Synchronized set(value) =
+            updateLongIfChanged(KEY_GLOBAL_NUMBER, value, DEFAULT_GLOBAL_NUMBER)
+
     var sessionId: Long
         @WorkerThread @Synchronized get() =
             vitalDataProvider.getOrLoadData().optLong(KEY_SESSION_ID, DEFAULT_SESSION_ID)
-        @WorkerThread @Synchronized set(value) {
-            vitalDataProvider.save(vitalDataProvider.getOrLoadData().put(KEY_SESSION_ID, value))
-        }
+        @WorkerThread @Synchronized set(value) =
+            updateLongIfChanged(KEY_SESSION_ID, value, DEFAULT_SESSION_ID)
+
     var referrerHandled: Boolean
         @WorkerThread @Synchronized get() =
             vitalDataProvider.getOrLoadData().optBoolean(KEY_REFERRER_HANDLED, DEFAULT_REFERRER_HANDLED)
         @WorkerThread @Synchronized set(value) {
-            vitalDataProvider.save(vitalDataProvider.getOrLoadData().put(KEY_REFERRER_HANDLED, value))
+            updateBooleanIfChanged(KEY_REFERRER_HANDLED, value, DEFAULT_REFERRER_HANDLED)
+            vitalDataProvider.flushAsync()
         }
+
     var openId: Int
         @WorkerThread @Synchronized get() = vitalDataProvider.getOrLoadData().optInt(KEY_OPEN_ID, DEFAULT_OPEN_ID)
-        @WorkerThread @Synchronized private set(value) {
-            vitalDataProvider.save(vitalDataProvider.getOrLoadData().put(KEY_OPEN_ID, value))
-        }
+        @WorkerThread @Synchronized private set(value) =
+            updateIntIfChanged(KEY_OPEN_ID, value, DEFAULT_OPEN_ID)
+
     var attributionId: Int
         @WorkerThread @Synchronized get() =
             vitalDataProvider.getOrLoadData().optInt(KEY_ATTRIBUTION_ID, DEFAULT_ATTRIBUTION_ID)
         @WorkerThread @Synchronized private set(value) {
-            DebugLogger.info("[VitalComponentDataProvider]", "Save attributionId = $value")
-            vitalDataProvider.save(vitalDataProvider.getOrLoadData().put(KEY_ATTRIBUTION_ID, value))
+            val data = vitalDataProvider.getOrLoadData()
+            if (data.optInt(KEY_ATTRIBUTION_ID, DEFAULT_ATTRIBUTION_ID) == value) return
+            DebugLogger.info(tag, "Save attributionId = $value")
+            vitalDataProvider.save(data.put(KEY_ATTRIBUTION_ID, value))
+            vitalDataProvider.flushAsync()
         }
+
     var lastMigrationApiLevel: Int
         @WorkerThread @Synchronized get() =
             vitalDataProvider.getOrLoadData().optInt(KEY_LAST_MIGRATION_API_LEVEL, DEFAULT_LAST_MIGRATION_API_LEVEL)
         @WorkerThread @Synchronized set(value) {
-            vitalDataProvider.save(vitalDataProvider.getOrLoadData().put(KEY_LAST_MIGRATION_API_LEVEL, value))
+            updateIntIfChanged(KEY_LAST_MIGRATION_API_LEVEL, value, DEFAULT_LAST_MIGRATION_API_LEVEL)
+            vitalDataProvider.flushAsync()
         }
+
     var externalAttributionWindowStart: Long
         @WorkerThread @Synchronized get() = vitalDataProvider.getOrLoadData()
             .optLong(KEY_EXTERNAL_ATTRIBUTION_WINDOW_START, DEFAULT_EXTERNAL_ATTRIBUTION_WINDOW_START)
         @WorkerThread @Synchronized set(value) {
-            vitalDataProvider.save(vitalDataProvider.getOrLoadData().put(KEY_EXTERNAL_ATTRIBUTION_WINDOW_START, value))
+            updateLongIfChanged(KEY_EXTERNAL_ATTRIBUTION_WINDOW_START, value, DEFAULT_EXTERNAL_ATTRIBUTION_WINDOW_START)
+            vitalDataProvider.flushAsync()
         }
+
+    @WorkerThread
+    private fun updateBooleanIfChanged(key: String, value: Boolean, default: Boolean) {
+        val data = vitalDataProvider.getOrLoadData()
+        if (data.optBoolean(key, default) == value) return
+        vitalDataProvider.save(data.put(key, value))
+    }
+
+    @WorkerThread
+    private fun updateIntIfChanged(key: String, value: Int, default: Int) {
+        val data = vitalDataProvider.getOrLoadData()
+        if (data.optInt(key, default) == value) return
+        vitalDataProvider.save(data.put(key, value))
+    }
+
+    @WorkerThread
+    private fun updateLongIfChanged(key: String, value: Long, default: Long) {
+        val data = vitalDataProvider.getOrLoadData()
+        if (data.optLong(key, default) == value) return
+        vitalDataProvider.save(data.put(key, value))
+    }
 
     @Synchronized
     @WorkerThread
@@ -174,20 +212,29 @@ internal class VitalComponentDataProvider(
 
     @Synchronized
     fun getAndIncrementNumberOfType(type: Int): Long {
-        val vitalDataState = vitalDataProvider.getOrLoadData()
-        val json = vitalDataState.optJSONObject(KEY_NUMBERS_OF_TYPE) ?: JSONObject()
+        val data = vitalDataProvider.getOrLoadData()
+        val json = data.optJSONObject(KEY_NUMBERS_OF_TYPE) ?: JSONObject()
         val numberOfType = json.optLong("$type")
         json.put("$type", numberOfType + 1)
-        vitalDataProvider.save(vitalDataState.put(KEY_NUMBERS_OF_TYPE, json))
+        vitalDataProvider.save(data.put(KEY_NUMBERS_OF_TYPE, json))
         return numberOfType
     }
 
     @Synchronized
     fun getAndIncrementEventGlobalNumber(): Long {
-        val vitalDataState = vitalDataProvider.getOrLoadData()
-        val value = vitalDataState.optLong(KEY_GLOBAL_NUMBER, DEFAULT_GLOBAL_NUMBER)
-        vitalDataProvider.save(vitalDataState.put(KEY_GLOBAL_NUMBER, value + 1))
+        val data = vitalDataProvider.getOrLoadData()
+        val value = data.optLong(KEY_GLOBAL_NUMBER, DEFAULT_GLOBAL_NUMBER)
+        vitalDataProvider.save(data.put(KEY_GLOBAL_NUMBER, value + 1))
         return value
+    }
+
+    @Synchronized
+    fun flush() {
+        vitalDataProvider.flush()
+    }
+
+    fun flushAsync() {
+        vitalDataProvider.flushAsync()
     }
 
     @WorkerThread

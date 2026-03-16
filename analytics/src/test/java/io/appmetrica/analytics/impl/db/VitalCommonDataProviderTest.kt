@@ -110,8 +110,8 @@ internal class VitalCommonDataProviderTest : CommonTest() {
     @Test
     fun setReferrerChecked() {
         wheneverVitalDataProviderGetOrLoad().thenReturn(filledJson)
-        vitalCommonDataProvider.referrerChecked = true
-        val expectedJson = JSONObject(filledJson.toString()).put("referrer_checked", true)
+        vitalCommonDataProvider.referrerChecked = false
+        val expectedJson = JSONObject(filledJson.toString()).put("referrer_checked", false)
         JSONAssert.assertEquals(expectedJson.toString(), interceptSavedJson(), true)
     }
 
@@ -183,6 +183,50 @@ internal class VitalCommonDataProviderTest : CommonTest() {
     fun emptyInputJson() {
         wheneverVitalDataProviderGetOrLoad().thenReturn(JSONObject())
         checkDefaultValues()
+    }
+
+    @Test
+    fun setDeviceIdCallsFlushAsync() {
+        wheneverVitalDataProviderGetOrLoad().thenReturn(filledJson)
+        vitalCommonDataProvider.deviceId = "new_device_id"
+        verify(vitalDataProvider()).flushAsync()
+    }
+
+    @Test
+    fun setDeviceIdHashCallsFlushAsync() {
+        wheneverVitalDataProviderGetOrLoad().thenReturn(filledJson)
+        vitalCommonDataProvider.deviceIdHash = "new_device_id_hash"
+        verify(vitalDataProvider()).flushAsync()
+    }
+
+    @Test
+    fun setReferrerCallsFlushAsync() {
+        wheneverVitalDataProviderGetOrLoad().thenReturn(filledJson)
+        val newReferrer = ReferrerInfo("new_referrer", 10, 20, ReferrerInfo.Source.GP)
+        vitalCommonDataProvider.referrer = newReferrer
+        verify(vitalDataProvider()).flushAsync()
+    }
+
+    @Test
+    fun setReferrerCheckedCallsFlushAsync() {
+        wheneverVitalDataProviderGetOrLoad().thenReturn(filledJson)
+        vitalCommonDataProvider.referrerChecked = false
+        verify(vitalDataProvider()).flushAsync()
+    }
+
+    @Test
+    fun setLastMigrationApiLevelCallsFlushAsync() {
+        wheneverVitalDataProviderGetOrLoad().thenReturn(filledJson)
+        vitalCommonDataProvider.lastMigrationApiLevel = 99
+        verify(vitalDataProvider()).flushAsync()
+    }
+
+    @Test
+    fun setDeviceIdWithSameValueStillCallsFlushAsync() {
+        wheneverVitalDataProviderGetOrLoad().thenReturn(filledJson)
+        vitalCommonDataProvider.deviceId = deviceId
+        // flushAsync is called even if value didn't change (optimization can be added later if needed)
+        verify(vitalDataProvider()).flushAsync()
     }
 
     private fun wheneverVitalDataProviderGetOrLoad() =

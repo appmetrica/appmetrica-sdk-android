@@ -684,7 +684,7 @@ public abstract class ComponentUnitBaseTest extends CommonTest {
         when(mComponentPreferences.putProfileID(anyString())).thenReturn(mComponentPreferences);
         mComponentUnit.setProfileID(profileId);
         verify(mComponentPreferences).putProfileID(profileId);
-        verify(mComponentPreferences).commit();
+        verify(mComponentPreferences).flushAsync();
     }
 
     @Test

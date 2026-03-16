@@ -8,28 +8,32 @@ internal abstract class BaseModulePreferencesAdapter(
 ) : ModulePreferences {
 
     override fun putString(key: String, value: String?) {
-        preferences.putString(prepareKey(key), value).commit()
+        preferences.putString(prepareKey(key), value)
     }
 
     override fun getString(key: String, fallback: String?): String? = preferences.getString(prepareKey(key), fallback)
 
     override fun putLong(key: String, value: Long) {
-        preferences.putLong(prepareKey(key), value).commit()
+        preferences.putLong(prepareKey(key), value)
     }
 
     override fun getLong(key: String, fallback: Long): Long = preferences.getLong(prepareKey(key), fallback)
 
     override fun putBoolean(key: String, value: Boolean) {
-        preferences.putBoolean(prepareKey(key), value).commit()
+        preferences.putBoolean(prepareKey(key), value)
     }
 
     override fun getBoolean(key: String, fallback: Boolean): Boolean = preferences.getBoolean(key, fallback)
 
     override fun putInt(key: String, value: Int) {
-        preferences.putInt(key, value).commit()
+        preferences.putInt(key, value)
     }
 
     override fun getInt(key: String, fallback: Int): Int = preferences.getInt(key, fallback)
+
+    override fun flushAsync() {
+        preferences.flushAsync()
+    }
 
     protected abstract fun prepareKey(key: String): String
 }

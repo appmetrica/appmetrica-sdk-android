@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.impl.db.storage
 
 import android.content.Context
+import io.appmetrica.analytics.impl.ClientServiceLocator
 import io.appmetrica.analytics.impl.db.IKeyValueTableDbHelper
 import io.appmetrica.analytics.impl.db.StorageType
 import io.appmetrica.analytics.impl.db.connectors.LockedOnFileDBConnector
@@ -29,7 +30,11 @@ internal class ClientStorageFactory(outerStorageDirectory: File?) {
 
     private fun getRawClientDbHelper(context: Context): IKeyValueTableDbHelper {
         return clientDbHelper
-            ?: KeyValueTableDbHelper(Constants.PreferencesTable.TABLE_NAME, getClientDbConnector(context)).also {
+            ?: KeyValueTableDbHelper(
+                Constants.PreferencesTable.TABLE_NAME,
+                getClientDbConnector(context),
+                ClientServiceLocator.getInstance().clientExecutorProvider.persistenceExecutor
+            ).also {
                 clientDbHelper = it
             }
     }

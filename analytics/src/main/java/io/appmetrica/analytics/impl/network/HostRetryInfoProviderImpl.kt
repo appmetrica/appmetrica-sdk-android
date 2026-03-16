@@ -17,10 +17,10 @@ internal class HostRetryInfoProviderImpl(
     }
 
     override fun saveNextSendAttemptNumber(nextSendAttemptNumber: Int) {
-        servicePreferences.putNextSendAttemptNumber(host, nextSendAttemptNumber).commit()
+        servicePreferences.putNextSendAttemptNumber(host, nextSendAttemptNumber)
     }
 
     override fun saveLastAttemptTimeSeconds(lastAttemptTimeSeconds: Long) {
-        servicePreferences.putLastSendAttemptTimeSeconds(host, lastAttemptTimeSeconds).commit()
+        servicePreferences.putLastSendAttemptTimeSeconds(host, lastAttemptTimeSeconds)
     }
 }

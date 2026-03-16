@@ -5,6 +5,7 @@ import io.appmetrica.analytics.impl.db.preferences.PreferencesClientDbStorage
 import io.appmetrica.analytics.impl.utils.JsonHelper
 import io.appmetrica.analytics.impl.utils.StartupUtils
 import io.appmetrica.analytics.internal.IdentifiersResult
+import io.appmetrica.analytics.testutils.ClientServiceLocatorRule
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.ContextRule
 import org.assertj.core.api.Assertions.assertThat
@@ -35,6 +36,9 @@ internal class StartupParamsAreResponseClidsConsistentTest(
     private val context by contextRule
 
     private val uuidResult = IdentifiersResult("test-uuid", IdentifierStatus.OK, null)
+
+    @get:Rule
+    val clientServiceLocatorRule = ClientServiceLocatorRule()
 
     private val storage: PreferencesClientDbStorage = mock {
         on { getClientClids(anyOrNull()) } doReturn clientClids

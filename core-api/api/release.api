@@ -144,7 +144,7 @@ public interface io.appmetrica.analytics.coreapi.internal.data.StateSerializer<T
 public interface io.appmetrica.analytics.coreapi.internal.data.TempCacheStorage {
     public abstract [Nullable] io.appmetrica.analytics.coreapi.internal.data.TempCacheStorage$Entry get([NonNull] String)
     public abstract [NonNull] java.util.Collection<io.appmetrica.analytics.coreapi.internal.data.TempCacheStorage$Entry> get([NonNull] String, int)
-    public abstract long put([NonNull] String, long, [NonNull] byte[])
+    public abstract void put([NonNull] String, long, [NonNull] byte[])
     public abstract void remove(long)
     public abstract void removeOlderThan([NonNull] String, long)
 }

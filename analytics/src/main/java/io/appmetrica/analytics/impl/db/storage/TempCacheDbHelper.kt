@@ -19,30 +19,54 @@ internal class TempCacheDbHelper(
 
     private val timeProvider = SystemTimeProvider()
 
-    override fun put(scope: String, timestamp: Long, data: ByteArray): Long {
+    private val bufferedWriter = BufferedTempCacheWriter(1000, ::insertRecords)
+
+    override fun put(scope: String, timestamp: Long, data: ByteArray) {
+        bufferedWriter.put(scope, timestamp, data)
+    }
+
+    internal fun putDirect(scope: String, timestamp: Long, data: ByteArray): Long {
+        return insertRecords(listOf(TempCachePutTask(scope, timestamp, data)))
+    }
+
+    private fun insertRecords(tasks: List<TempCachePutTask>): Long {
+        if (tasks.isEmpty()) {
+            return -1
+        }
+
         var database: SQLiteDatabase? = null
+        var lastId = -1L
         try {
             database = dbConnector.openDb()
             database?.let { db ->
-                val values = ContentValues().apply {
-                    put(TempCacheTable.Column.SCOPE, scope)
-                    put(TempCacheTable.Column.TIMESTAMP, timestamp)
-                    put(TempCacheTable.Column.DATA, data)
+                db.beginTransaction()
+                try {
+                    for (task in tasks) {
+                        val values = ContentValues().apply {
+                            put(TempCacheTable.Column.SCOPE, task.scope)
+                            put(TempCacheTable.Column.TIMESTAMP, task.timestamp)
+                            put(TempCacheTable.Column.DATA, task.data)
+                        }
+                        lastId = db.insertOrThrow(tableName, null, values)
+                        DebugLogger.info(
+                            tag,
+                            "Inserted record with scope = ${task.scope}; timestamp = ${task.timestamp}; " +
+                                "data = array[${task.data.size}]. Id = $lastId"
+                        )
+                    }
+                    db.setTransactionSuccessful()
+                    DebugLogger.info(tag, "Successfully wrote ${tasks.size} records")
+                } finally {
+                    db.endTransaction()
                 }
-                val id = db.insertOrThrow(tableName, null, values)
-                DebugLogger.info(
-                    tag,
-                    "Inserted record with scope = $scope; timestamp = $timestamp; data = array[${data.size}]. " +
-                        "Id = $id"
-                )
-                return id
             }
         } catch (e: Throwable) {
-            DebugLogger.error(tag, e)
+            DebugLogger.error(tag, e, "Error writing ${tasks.size} records")
+            lastId = -1
         } finally {
             dbConnector.closeDb(database)
         }
-        return -1
+        return lastId
     }
 
     override fun get(scope: String): TempCacheStorage.Entry? = get(scope, 1).firstOrNull()
@@ -120,4 +144,12 @@ internal class TempCacheDbHelper(
             DebugLogger.error(tag, e)
             null
         }
+
+    fun flush() {
+        bufferedWriter.flush()
+    }
+
+    fun flushAsync() {
+        bufferedWriter.flushAsync()
+    }
 }

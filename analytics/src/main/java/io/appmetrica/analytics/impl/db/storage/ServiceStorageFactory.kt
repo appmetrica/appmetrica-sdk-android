@@ -3,6 +3,7 @@ package io.appmetrica.analytics.impl.db.storage
 import android.content.Context
 import io.appmetrica.analytics.coreapi.internal.data.IBinaryDataHelper
 import io.appmetrica.analytics.coreapi.internal.data.TempCacheStorage
+import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.component.ComponentId
 import io.appmetrica.analytics.impl.db.DatabaseStorage
 import io.appmetrica.analytics.impl.db.IKeyValueTableDbHelper
@@ -88,8 +89,9 @@ internal class ServiceStorageFactory(outerStorageDirectory: File?) {
 
     private fun getRawServicePreferenceDbHelper(context: Context): IKeyValueTableDbHelper {
         return servicePreferenceDbHelper ?: KeyValueTableDbHelper(
-            getStorageForService(context),
-            Constants.PreferencesTable.TABLE_NAME
+            Constants.PreferencesTable.TABLE_NAME,
+            SimpleDBConnector(getStorageForService(context)),
+            GlobalServiceLocator.getInstance().serviceExecutorProvider.persistenceExecutor
         ).also {
             servicePreferenceDbHelper = it
             DebugLogger.info(tag, "Create raw preference db helper for service")
@@ -164,8 +166,9 @@ internal class ServiceStorageFactory(outerStorageDirectory: File?) {
                 "Create component preference db helper for $componentId; database name: $databaseName"
             )
             KeyValueTableDbHelper(
-                getComponentStorage(context, componentId),
-                Constants.PreferencesTable.TABLE_NAME
+                Constants.PreferencesTable.TABLE_NAME,
+                SimpleDBConnector(getComponentStorage(context, componentId)),
+                GlobalServiceLocator.getInstance().serviceExecutorProvider.persistenceExecutor
             )
         }
     }

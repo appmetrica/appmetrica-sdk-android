@@ -28,7 +28,7 @@ internal class ReportKotlinVersionTask : Runnable {
                 "version" to "${version.major}.${version.minor}.${version.patch}"
             )
             AppMetricaSelfReportFacade.getReporter().reportEvent("kotlin_version", eventValue)
-            preferences.putLastKotlinVersionSendTime(timeProvider.currentTimeMillis()).commit()
+            preferences.putLastKotlinVersionSendTime(timeProvider.currentTimeMillis())
         }
     }
 }

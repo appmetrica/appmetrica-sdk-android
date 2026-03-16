@@ -6,8 +6,8 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
-import org.mockito.kotlin.inOrder
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
 
 internal class HostRetryInfoProviderImplTest : CommonTest() {
 
@@ -38,18 +38,12 @@ internal class HostRetryInfoProviderImplTest : CommonTest() {
     @Test
     fun saveNextSendAttemptNumber() {
         retryInfoProvider.saveNextSendAttemptNumber(nextSendAttemptNumber)
-        inOrder(servicePreferences) {
-            verify(servicePreferences).putNextSendAttemptNumber(host, nextSendAttemptNumber)
-            verify(servicePreferences).commit()
-        }
+        verify(servicePreferences).putNextSendAttemptNumber(host, nextSendAttemptNumber)
     }
 
     @Test
     fun savaLastAttemptTimeSeconds() {
         retryInfoProvider.saveLastAttemptTimeSeconds(lastAttemptTimeSeconds)
-        inOrder(servicePreferences) {
-            verify(servicePreferences).putLastSendAttemptTimeSeconds(host, lastAttemptTimeSeconds)
-            verify(servicePreferences).commit()
-        }
+        verify(servicePreferences).putLastSendAttemptTimeSeconds(host, lastAttemptTimeSeconds)
     }
 }

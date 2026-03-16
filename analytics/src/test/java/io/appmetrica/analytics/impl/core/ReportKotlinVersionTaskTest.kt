@@ -17,7 +17,6 @@ import org.junit.Test
 import org.mockito.kotlin.any
 import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.eq
-import org.mockito.kotlin.inOrder
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
@@ -116,10 +115,7 @@ internal class ReportKotlinVersionTaskTest : CommonTest() {
     private fun verifySendKotlinVersion() {
         verify(reporter).reportEvent(eq("kotlin_version"), eventValueCaptor.capture())
         assertThat(eventValueCaptor.firstValue).containsExactlyInAnyOrderEntriesOf(expectedEventValue)
-        inOrder(preferences) {
-            verify(preferences).putLastKotlinVersionSendTime(currentTimeMillis)
-            verify(preferences).commit()
-        }
+        verify(preferences).putLastKotlinVersionSendTime(currentTimeMillis)
     }
 
     private fun extractTimePassedChecker(): TimePassedChecker {

@@ -160,6 +160,11 @@ public class CommutationDispatcherComponent implements IComponent, StartupListen
         return CounterConfigurationReporterType.COMMUTATION;
     }
 
+    @Override
+    public void onBecomeInactive() {
+        // Do nothing
+    }
+
     public synchronized void connectClient(@NonNull CommutationClientUnit clientUnit) {
         mLifecycleManager.connectClient(clientUnit);
         DebugLogger.INSTANCE.info(

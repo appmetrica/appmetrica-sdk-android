@@ -39,8 +39,7 @@ public class StartupCenterTest extends CommonTest {
     private static final String PACKAGE_NAME = "testPackage";
 
     @Rule
-    public RuleChain mRuleChain = RuleChain.outerRule(
-            new GlobalServiceLocatorRule())
+    public RuleChain mRuleChain = RuleChain.outerRule(new GlobalServiceLocatorRule())
         .around(new ServiceMigrationCheckedRule()
         );
 

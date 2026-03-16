@@ -92,14 +92,12 @@ public class EventSaverTest extends CommonTest {
         when(mTimeProvider.currentTimeSeconds()).thenReturn(currentTime);
         mEventSaver.savePermissionsCheckTime();
         verify(mPreferences).putPermissionsCheckTime(currentTime);
-        verify(mPreferences).commit();
     }
 
     @Test
     public void testSaveFeaturesCheckVersion() {
         mEventSaver.saveFeaturesCheckVersion();
         verify(mPreferences).putLastAppVersionWithFeatures(curAppVersion);
-        verify(mPreferences).commit();
     }
 
     @Test
@@ -220,7 +218,6 @@ public class EventSaverTest extends CommonTest {
         mEventSaver.savePermissionsReport(mCounterReport);
         verifyReportSaved(mCounterReport);
         verify(mPreferences).putPermissionsCheckTime(currentTime);
-        verify(mPreferences).commit();
     }
 
     @Test
@@ -229,7 +226,6 @@ public class EventSaverTest extends CommonTest {
         mEventSaver.saveFeaturesReport(mCounterReport);
         verifyReportSaved(mCounterReport);
         verify(mPreferences).putLastAppVersionWithFeatures(curAppVersion);
-        verify(mPreferences).commit();
     }
 
     @Test

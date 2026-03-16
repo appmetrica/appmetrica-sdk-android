@@ -156,7 +156,7 @@ public class SessionFactoryTest extends CommonTest {
             .putCreationTime(creationTime)
             .putReportId(reportId)
             .putSessionId(sessionId)
-            .commit();
+            .apply();
         SessionArgumentsInternal arguments = new AbstractSessionFactory(
             mock(ComponentUnit.class),
             sessionIDProvider,

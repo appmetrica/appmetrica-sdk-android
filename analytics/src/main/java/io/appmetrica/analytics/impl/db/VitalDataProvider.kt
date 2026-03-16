@@ -49,4 +49,33 @@ internal class VitalDataProvider(
             DebugLogger.error(tag, ex)
         }
     }
+
+    @Synchronized
+    fun flush() {
+        DebugLogger.info(tag, "Flush")
+        flushSafely(primaryDataSource)
+        flushSafely(backupDataSource)
+    }
+
+    fun flushAsync() {
+        DebugLogger.info(tag, "FlushAsync")
+        flushAsyncSafely(primaryDataSource)
+        flushAsyncSafely(backupDataSource)
+    }
+
+    private fun flushSafely(source: VitalDataSource) {
+        try {
+            source.flush()
+        } catch (ex: Throwable) {
+            DebugLogger.error(tag, ex)
+        }
+    }
+
+    private fun flushAsyncSafely(source: VitalDataSource) {
+        try {
+            source.flushAsync()
+        } catch (ex: Throwable) {
+            DebugLogger.error(tag, ex)
+        }
+    }
 }

@@ -386,7 +386,7 @@ public class ComponentUnit implements IReportableComponent, IComponent,
     }
 
     public void setProfileID(@Nullable String profileID) {
-        mComponentPreferences.putProfileID(profileID).commit();
+        mComponentPreferences.putProfileID(profileID).flushAsync();
     }
 
     @NonNull
@@ -413,6 +413,17 @@ public class ComponentUnit implements IReportableComponent, IComponent,
     @Override
     public CounterConfigurationReporterType getReporterType() {
         return CounterConfigurationReporterType.MANUAL;
+    }
+
+    @Override
+    public void onBecomeInactive() {
+        DebugLogger.INSTANCE.info(
+            TAG,
+            "Component %s became inactive. Flushing vital data and database events.",
+            mComponentId
+        );
+        vitalComponentDataProvider.flushAsync();
+        mReportsDbHelper.flushAsync();
     }
 
     public void subscribeForReferrer() {

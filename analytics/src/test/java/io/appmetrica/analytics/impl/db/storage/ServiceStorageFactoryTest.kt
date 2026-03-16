@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.impl.db.storage
 
 import android.content.Context
+import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.component.ComponentId
 import io.appmetrica.analytics.impl.db.DatabaseManagerProvider
 import io.appmetrica.analytics.impl.db.DatabaseStorage
@@ -197,7 +198,15 @@ internal class ServiceStorageFactoryTest : CommonTest() {
 
         assertThat(keyValueTableDbHelperRule.constructionMock.constructed()).hasSize(1)
         assertThat(keyValueTableDbHelperRule.argumentInterceptor.flatArguments())
-            .containsExactly(databaseStorage, "preferences")
+            .containsExactly(
+                "preferences",
+                simpleDbConnectorRule.constructionMock.constructed()[0],
+                GlobalServiceLocator.getInstance().serviceExecutorProvider.persistenceExecutor
+            )
+
+        assertThat(simpleDbConnectorRule.constructionMock.constructed()).hasSize(1)
+        assertThat(simpleDbConnectorRule.argumentInterceptor.flatArguments())
+            .containsExactly(databaseStorage)
     }
 
     @Test
@@ -316,10 +325,27 @@ internal class ServiceStorageFactoryTest : CommonTest() {
             .isSameAs(keyValueTableDbHelperRule.constructionMock.constructed()[1])
 
         assertThat(keyValueTableDbHelperRule.constructionMock.constructed()).hasSize(2)
-        assertThat(keyValueTableDbHelperRule.argumentInterceptor.arguments)
+
+        // Verify KeyValueTableDbHelper constructor arguments
+        val keyValueTableDbHelperArgs = keyValueTableDbHelperRule.argumentInterceptor.arguments
+        assertThat(keyValueTableDbHelperArgs).hasSize(2)
+
+        // Get the SimpleDBConnectors created for component preferences
+        val allSimpleConnectors = simpleDbConnectorRule.constructionMock.constructed()
+        val componentConnectorCount = allSimpleConnectors.size
+        assertThat(componentConnectorCount).isGreaterThanOrEqualTo(2)
+
+        assertThat(keyValueTableDbHelperArgs[0])
             .containsExactly(
-                listOf(databaseStorageRule.constructionMock.constructed()[0], "preferences"),
-                listOf(databaseStorageRule.constructionMock.constructed()[1], "preferences")
+                "preferences",
+                allSimpleConnectors[componentConnectorCount - 2],
+                GlobalServiceLocator.getInstance().serviceExecutorProvider.persistenceExecutor
+            )
+        assertThat(keyValueTableDbHelperArgs[1])
+            .containsExactly(
+                "preferences",
+                allSimpleConnectors[componentConnectorCount - 1],
+                GlobalServiceLocator.getInstance().serviceExecutorProvider.persistenceExecutor
             )
     }
 

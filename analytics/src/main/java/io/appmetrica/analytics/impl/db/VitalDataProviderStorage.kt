@@ -12,7 +12,8 @@ internal class VitalDataProviderStorage(private val context: Context) {
 
     private val vitalDataSource: FileVitalDataSource = FileVitalDataSource(
         context,
-        VitalCommonDataProvider.BACKUP_FILE_NAME
+        VitalCommonDataProvider.BACKUP_FILE_NAME,
+        GlobalServiceLocator.getInstance().serviceExecutorProvider.persistenceExecutor
     )
 
     val commonDataProvider: VitalCommonDataProvider = VitalCommonDataProvider(
@@ -44,19 +45,21 @@ internal class VitalDataProviderStorage(private val context: Context) {
         }
     }
 
-    private fun getComponentBackupVitalDataSource(componentId: ComponentId): VitalDataSource =
-        if (componentId.isMain) {
+    private fun getComponentBackupVitalDataSource(componentId: ComponentId): VitalDataSource {
+        val executor = GlobalServiceLocator.getInstance().serviceExecutorProvider.persistenceExecutor
+        return if (componentId.isMain) {
             val actual = "appmetrica_vital_main.dat"
             val legacy = composeFileNameForNonMain(componentId)
             CompositeFileVitalDataSource(
                 listOf(
-                    legacy to FileVitalDataSource(context, legacy),
-                    actual to FileVitalDataSource(context, actual)
+                    legacy to FileVitalDataSource(context, legacy, executor),
+                    actual to FileVitalDataSource(context, actual, executor)
                 )
             )
         } else {
-            FileVitalDataSource(context, composeFileNameForNonMain(componentId))
+            FileVitalDataSource(context, composeFileNameForNonMain(componentId), executor)
         }
+    }
 
     private fun composeFileNameForNonMain(componentId: ComponentId): String =
         "appmetrica_vital_${componentId.apiKey}.dat"

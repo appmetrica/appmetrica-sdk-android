@@ -31,7 +31,7 @@ public class DataSendingRestrictionControllerImpl implements DataSendingRestrict
 
         @Override
         public void storeRestrictionFromMainReporter(boolean value) {
-            mStorage.putDataSendingRestrictedFromMainReporter(value).commit();
+            mStorage.putDataSendingRestrictedFromMainReporter(value);
         }
 
         @Override

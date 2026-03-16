@@ -67,6 +67,7 @@ public class ClientServiceLocatorRule extends ExternalResource {
     public StartupParams startupParams;
     public IHandlerExecutor defaultExecutor = MockProvider.mockedBlockingExecutorMock();
     public IHandlerExecutor reportSenderExecutor = MockProvider.mockedBlockingExecutorMock();
+    public IHandlerExecutor persistentExecutor = MockProvider.mockedBlockingExecutorMock();
     public Handler mainHandler = MockProvider.mockedBlockingHandler();
 
     @Override
@@ -120,6 +121,7 @@ public class ClientServiceLocatorRule extends ExternalResource {
         when(clientExecutorProvider.getDefaultExecutor()).thenReturn(defaultExecutor);
         when(clientExecutorProvider.getReportSenderExecutor()).thenReturn(reportSenderExecutor);
         when(clientExecutorProvider.getMainHandler()).thenReturn(mainHandler);
+        when(clientExecutorProvider.getPersistenceExecutor()).thenReturn(persistentExecutor);
         when(instance.getFirstLaunchDetector()).thenReturn(firstLaunchDetector);
         when(instance.getAnonymousClientActivator()).thenReturn(anonymousClientActivator);
         when(instance.getReporterLifecycleListener()).thenReturn(reporterLifecycleListener);

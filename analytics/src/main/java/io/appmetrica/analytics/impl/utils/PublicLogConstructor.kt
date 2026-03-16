@@ -31,17 +31,23 @@ internal object PublicLogConstructor {
         )
 
     @JvmStatic
-    fun constructLogValueForInternalEvent(message: String, type: InternalEvents, name: String?, value: String?) =
-        if (EventsManager.isPublicForLogs(type.typeId)) {
+    fun constructLogValueForInternalEvent(
+        message: String,
+        type: InternalEvents?,
+        name: String?,
+        value: String?
+    ): String? {
+        val eventType = type ?: InternalEvents.EVENT_TYPE_UNDEFINED
+        return if (EventsManager.isPublicForLogs(eventType.typeId)) {
             buildString {
                 append(message)
                 append(": ")
-                append(type.name)
-                if (EventsManager.shouldLogName(type) && !TextUtils.isEmpty(name)) {
+                append(eventType.name)
+                if (EventsManager.shouldLogName(eventType) && !TextUtils.isEmpty(name)) {
                     append(" with name ")
                     append(name)
                 }
-                if (EventsManager.shouldLogValue(type) && !TextUtils.isEmpty(value)) {
+                if (EventsManager.shouldLogValue(eventType) && !TextUtils.isEmpty(value)) {
                     append(" with value ")
                     append(value)
                 }
@@ -49,6 +55,7 @@ internal object PublicLogConstructor {
         } else {
             null
         }
+    }
 
     @JvmStatic
     fun constructEventLogForProtoEvent(event: EventProto.ReportMessage.Session.Event, message: String): String =

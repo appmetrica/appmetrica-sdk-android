@@ -8,6 +8,7 @@ import io.appmetrica.analytics.impl.component.CommonArguments.ReporterArguments
 import io.appmetrica.analytics.impl.component.ComponentId
 import io.appmetrica.analytics.impl.component.clients.ClientDescription
 import io.appmetrica.analytics.impl.db.storage.TempCacheEntry
+import io.appmetrica.analytics.impl.db.storage.TempCachePutTask
 import io.appmetrica.analytics.impl.features.FeatureDescription
 import io.appmetrica.analytics.impl.id.AdvIdGetterController
 import io.appmetrica.analytics.impl.referrer.common.ReferrerInfo
@@ -45,7 +46,8 @@ class AllFieldsTest(private val clazz: Class<*>) : CommonTest() {
             arrayOf(CacheControl::class.java),
             arrayOf(StartupParamsItem::class.java),
             arrayOf(TempCacheEntry::class.java),
-            arrayOf(AdvIdGetterController.CanTrackIdentifiers::class.java)
+            arrayOf(AdvIdGetterController.CanTrackIdentifiers::class.java),
+            arrayOf(TempCachePutTask::class.java)
         )
     }
 

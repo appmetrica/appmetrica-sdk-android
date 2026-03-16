@@ -22,6 +22,11 @@ public class ClientExecutorFactory {
     }
 
     @NonNull
+    public ExecutorWrapper createPersistenceExecutor() {
+        return new ExecutorWrapper(NamedThreadFactory.CLIENT_PERSISTENCE_THREAD);
+    }
+
+    @NonNull
     public Thread createInitCoreThread(@NonNull Runnable runnable) {
         return NamedThreadFactory.newThread(NamedThreadFactory.CLIENT_INIT_CORE_THREAD, runnable);
     }

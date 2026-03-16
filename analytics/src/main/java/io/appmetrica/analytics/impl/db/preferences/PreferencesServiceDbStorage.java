@@ -40,7 +40,8 @@ public class PreferencesServiceDbStorage extends NameSpacedPreferenceDbStorage
     }
 
     public void saveLocationTrackingEnabled(boolean enabled) {
-        writeBoolean(LOCATION_TRACKING_ENABLED.fullKey(), enabled).commit();
+        // Important data — trigger async flush to persist immediately.
+        writeBoolean(LOCATION_TRACKING_ENABLED.fullKey(), enabled).flushAsync();
     }
 
     public boolean isLocationTrackingEnabled() {
@@ -70,8 +71,9 @@ public class PreferencesServiceDbStorage extends NameSpacedPreferenceDbStorage
                 : null;
     }
 
-    public PreferencesServiceDbStorage putDataSendingRestrictedFromMainReporter(boolean value) {
-        return writeBoolean(DATA_SENDING_RESTRICTED_IN_MAIN.fullKey(), value);
+    public void putDataSendingRestrictedFromMainReporter(boolean value) {
+        // Important data — trigger async flush to persist immediately.
+        writeBoolean(DATA_SENDING_RESTRICTED_IN_MAIN.fullKey(), value).flushAsync();
     }
 
     public int getNextSendAttemptNumber(@NonNull NetworkHost host, int defaultValue) {
@@ -106,16 +108,18 @@ public class PreferencesServiceDbStorage extends NameSpacedPreferenceDbStorage
         return readBoolean(SATELLITE_PRELOAD_INFO_CHECKED.fullKey(),false);
     }
 
-    public PreferencesServiceDbStorage markSatellitePreloadInfoChecked() {
-        return writeBoolean(SATELLITE_PRELOAD_INFO_CHECKED.fullKey(), true);
+    public void markSatellitePreloadInfoChecked() {
+        // Important data — trigger async flush to persist immediately.
+        writeBoolean(SATELLITE_PRELOAD_INFO_CHECKED.fullKey(), true).flushAsync();
     }
 
     public boolean wereSatelliteClidsChecked() {
         return readBoolean(SATELLITE_CLIDS_CHECKED.fullKey(), false);
     }
 
-    public PreferencesServiceDbStorage markSatelliteClidsChecked() {
-        return writeBoolean(SATELLITE_CLIDS_CHECKED.fullKey(), true);
+    public void markSatelliteClidsChecked() {
+        // Important data — trigger async flush to persist immediately.
+        writeBoolean(SATELLITE_CLIDS_CHECKED.fullKey(), true).flushAsync();
     }
 
     public long lastKotlinVersionSendTime() {
@@ -134,11 +138,23 @@ public class PreferencesServiceDbStorage extends NameSpacedPreferenceDbStorage
 
     @Override
     public void putVitalData(@NonNull String data) {
-        writeString(VITAL_DATA.fullKey(), data).commit();
+        // Important data — trigger async flush to persist immediately.
+        writeString(VITAL_DATA.fullKey(), data).flushAsync();
+    }
+
+    @Override
+    public void flush() {
+        super.flush();
+    }
+
+    @Override
+    public void flushAsync() {
+        super.flushAsync();
     }
 
     public void saveAdvIdentifiersTrackingEnabled(boolean value) {
-        writeBoolean(ADV_IDENTIFIERS_TRACKING_ENABLED.fullKey(), value).commit();
+        // Important data — trigger async flush to persist immediately.
+        writeBoolean(ADV_IDENTIFIERS_TRACKING_ENABLED.fullKey(), value).flushAsync();
     }
 
     public boolean isAdvIdentifiersTrackingStatusEnabled(boolean defaultValue) {

@@ -34,5 +34,6 @@ public class ClientModuleConfigStorage {
         modulePreferences.putString(Constants.ClientConfig.API_KEY_KEY, config.getApiKey());
         modulePreferences.putString(Constants.ClientConfig.DEVICE_ID_KEY, config.getDeviceId());
         modulePreferences.putString(Constants.ClientConfig.UUID_KEY, config.getUuid());
+        modulePreferences.flushAsync();
     }
 }

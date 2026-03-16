@@ -26,9 +26,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.inOrder;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
@@ -276,7 +274,9 @@ public class PreferencesServiceDbStorageTest extends CommonTest {
     @Test
     public void saveDataSendingRestricted() {
         mServiceDbStorage.putDataSendingRestrictedFromMainReporter(false);
-        verify(mDbStorage).put(PreferencesServiceDbStorage.DATA_SENDING_RESTRICTED_IN_MAIN.fullKey(), false);
+        InOrder inOrder = inOrder(mDbStorage);
+        inOrder.verify(mDbStorage).put(PreferencesServiceDbStorage.DATA_SENDING_RESTRICTED_IN_MAIN.fullKey(), false);
+        inOrder.verify(mDbStorage).flushAsync();
     }
 
     @Test
@@ -294,7 +294,9 @@ public class PreferencesServiceDbStorageTest extends CommonTest {
     @Test
     public void markSatellitePreloadInfoChecked() {
         mServiceDbStorage.markSatellitePreloadInfoChecked();
-        verify(mDbStorage).put(PreferencesServiceDbStorage.SATELLITE_PRELOAD_INFO_CHECKED.fullKey(), true);
+        InOrder inOrder = inOrder(mDbStorage);
+        inOrder.verify(mDbStorage).put(PreferencesServiceDbStorage.SATELLITE_PRELOAD_INFO_CHECKED.fullKey(), true);
+        inOrder.verify(mDbStorage).flushAsync();
     }
 
     @Test
@@ -310,7 +312,9 @@ public class PreferencesServiceDbStorageTest extends CommonTest {
     @Test
     public void markSatelliteClidsChecked() {
         mServiceDbStorage.markSatelliteClidsChecked();
-        verify(mDbStorage).put(PreferencesServiceDbStorage.SATELLITE_CLIDS_CHECKED.fullKey(), true);
+        InOrder inOrder = inOrder(mDbStorage);
+        inOrder.verify(mDbStorage).put(PreferencesServiceDbStorage.SATELLITE_CLIDS_CHECKED.fullKey(), true);
+        inOrder.verify(mDbStorage).flushAsync();
     }
 
     @Test
@@ -332,7 +336,7 @@ public class PreferencesServiceDbStorageTest extends CommonTest {
         mServiceDbStorage.putVitalData(data);
         InOrder inOrder = inOrder(mDbStorage);
         inOrder.verify(mDbStorage).put(PreferencesServiceDbStorage.VITAL_DATA.fullKey(), data);
-        inOrder.verify(mDbStorage).commit();
+        inOrder.verify(mDbStorage).flushAsync();
     }
 
     @Test
@@ -360,13 +364,25 @@ public class PreferencesServiceDbStorageTest extends CommonTest {
     @Test
     public void saveAdvIdentifiersTrackingEnabledForTrue() {
         mServiceDbStorage.saveAdvIdentifiersTrackingEnabled(true);
-        verify(mDbStorage).put(PreferencesServiceDbStorage.ADV_IDENTIFIERS_TRACKING_ENABLED.fullKey(), true);
+        InOrder inOrder = inOrder(mDbStorage);
+        inOrder.verify(mDbStorage).put(PreferencesServiceDbStorage.ADV_IDENTIFIERS_TRACKING_ENABLED.fullKey(), true);
+        inOrder.verify(mDbStorage).flushAsync();
     }
 
     @Test
     public void saveAdvIdentifiersTrackingEnabledForFalse() {
         mServiceDbStorage.saveAdvIdentifiersTrackingEnabled(false);
-        verify(mDbStorage).put(PreferencesServiceDbStorage.ADV_IDENTIFIERS_TRACKING_ENABLED.fullKey(), false);
+        InOrder inOrder = inOrder(mDbStorage);
+        inOrder.verify(mDbStorage).put(PreferencesServiceDbStorage.ADV_IDENTIFIERS_TRACKING_ENABLED.fullKey(), false);
+        inOrder.verify(mDbStorage).flushAsync();
+    }
+
+    @Test
+    public void saveLocationTrackingEnabled() {
+        mServiceDbStorage.saveLocationTrackingEnabled(true);
+        InOrder inOrder = inOrder(mDbStorage);
+        inOrder.verify(mDbStorage).put(PreferencesServiceDbStorage.LOCATION_TRACKING_ENABLED.fullKey(), true);
+        inOrder.verify(mDbStorage).flushAsync();
     }
 
     @Test
@@ -374,13 +390,5 @@ public class PreferencesServiceDbStorageTest extends CommonTest {
         when(mDbStorage.getBoolean(PreferencesServiceDbStorage.ADV_IDENTIFIERS_TRACKING_ENABLED.fullKey(), false))
             .thenReturn(true);
         assertThat(mServiceDbStorage.isAdvIdentifiersTrackingStatusEnabled(false)).isTrue();
-    }
-
-    //just add new put methods when needed
-    public static PreferencesServiceDbStorage createMock() {
-        PreferencesServiceDbStorage mock = mock(PreferencesServiceDbStorage.class);
-        doReturn(mock).when(mock).putDataSendingRestrictedFromMainReporter(anyBoolean());
-        doReturn(null).when(mock).getDataSendingRestrictedFromMainReporter();
-        return mock;
     }
 }

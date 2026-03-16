@@ -97,9 +97,8 @@ public class SessionStorageImpl implements SessionStorage {
         return this;
     }
 
-    public void commit() {
+    public void apply() {
         preferences.putSessionParameters(mSessionTag, mJSONObject.toString());
-        preferences.commit();
     }
 
     public boolean hasValues() {
@@ -114,6 +113,6 @@ public class SessionStorageImpl implements SessionStorage {
 
     public void clear() {
         mJSONObject = new JsonHelper.OptJSONObject();
-        commit();
+        apply();
     }
 }

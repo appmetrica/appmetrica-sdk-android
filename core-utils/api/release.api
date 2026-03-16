@@ -89,6 +89,48 @@ public final class io.appmetrica.analytics.coreutils.internal.asserts.DebugAsser
     public static final void assertNotNull([Nullable] Object, [NonNull] String)
 }
 
+public final class io.appmetrica.analytics.coreutils.internal.buffering.AccumulatingTaskBuffer<T> implementation io.appmetrica.analytics.coreutils.internal.buffering.TaskBuffer<T> {
+    public <init>()
+    public void add(T)
+    public [NonNull] java.util.List<T> getAndClear()
+    public boolean isEmpty()
+}
+
+public interface io.appmetrica.analytics.coreutils.internal.buffering.BatchProcessor<T> {
+    public abstract void processBatch([NonNull] java.util.List<? extends T>)
+}
+
+public final class io.appmetrica.analytics.coreutils.internal.buffering.DeferredBatchExecutor<T> {
+    public static final [NonNull] io.appmetrica.analytics.coreutils.internal.buffering.DeferredBatchExecutor$Companion Companion
+
+    public <init>([NonNull] io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor, [NonNull] io.appmetrica.analytics.coreutils.internal.buffering.TaskBuffer<T>, [NonNull] io.appmetrica.analytics.coreutils.internal.buffering.BatchProcessor<T>, long, [NonNull] String)
+    public final void flush()
+    public final void flushAsync()
+    public final void submit(T, boolean)
+}
+
+public static final class io.appmetrica.analytics.coreutils.internal.buffering.DeferredBatchExecutor$Companion
+
+public final class io.appmetrica.analytics.coreutils.internal.buffering.LastValueTaskBuffer<T> implementation io.appmetrica.analytics.coreutils.internal.buffering.TaskBuffer<T> {
+    public <init>()
+    public void add(T)
+    public [NonNull] java.util.List<T> getAndClear()
+    public boolean isEmpty()
+}
+
+public final class io.appmetrica.analytics.coreutils.internal.buffering.MapMergingBuffer<K, V> implementation io.appmetrica.analytics.coreutils.internal.buffering.TaskBuffer<java.util.Map<K, ? extends V>> {
+    public <init>()
+    public void add([NonNull] java.util.Map<K, ? extends V>)
+    public [NonNull] java.util.List<java.util.Map<K, V>> getAndClear()
+    public boolean isEmpty()
+}
+
+public interface io.appmetrica.analytics.coreutils.internal.buffering.TaskBuffer<T> {
+    public abstract void add(T)
+    public abstract [NonNull] java.util.List<T> getAndClear()
+    public abstract boolean isEmpty()
+}
+
 public interface io.appmetrica.analytics.coreutils.internal.cache.CachedDataProvider
 
 public static class io.appmetrica.analytics.coreutils.internal.cache.CachedDataProvider$CachedData<T> {
@@ -223,6 +265,14 @@ public final class io.appmetrica.analytics.coreutils.internal.io.Base64Utils {
     public static final [Nullable] String compressBase64String([Nullable] String)
     public static final [NonNull] byte[] decompressBase64GzipAsBytes([Nullable] String)
     public static final [Nullable] String decompressBase64GzipAsString([Nullable] String)
+}
+
+public final class io.appmetrica.analytics.coreutils.internal.io.BufferedFileWriter {
+    public <init>([NonNull] io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor, long, [NonNull] java.io.File)
+    public final void flush()
+    public final void flushAsync()
+    public final [Nullable] String readString()
+    public final void writeString([NonNull] String)
 }
 
 public final class io.appmetrica.analytics.coreutils.internal.io.CloseableUtils {

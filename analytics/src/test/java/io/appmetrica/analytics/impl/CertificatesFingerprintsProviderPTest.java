@@ -36,7 +36,7 @@ public class CertificatesFingerprintsProviderPTest extends CertificatesFingerpri
         List<String> value = mProvider.getSha1();
         InOrder inOrder = inOrder(mPreferences, mPreferences);
         inOrder.verify(mPreferences).putCertificatesSha1Fingerprints(value);
-        inOrder.verify(mPreferences).commit();
+        inOrder.verify(mPreferences).flushAsync();
     }
 
     @Test

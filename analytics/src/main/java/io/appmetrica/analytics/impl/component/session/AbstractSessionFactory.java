@@ -64,7 +64,7 @@ public abstract class AbstractSessionFactory implements ISessionFactory<SessionA
                 .putCreationTime(arguments.creationElapsedRealtime)
                 .putReportId(SessionDefaults.INITIAL_REPORT_ID)
                 .putAliveReportNeeded(true)
-                .commit();
+                .apply();
 
         mComponentUnit.getDbHelper().newSession(
                 sessionId,

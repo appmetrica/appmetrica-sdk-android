@@ -30,7 +30,6 @@ internal class LegacyModulesPreferenceAdapterTest : CommonTest() {
         adapter.putString(key, stringValue)
         inOrder(preferences) {
             verify(preferences).putString(key, stringValue)
-            verify(preferences).commit()
         }
     }
 
@@ -39,7 +38,6 @@ internal class LegacyModulesPreferenceAdapterTest : CommonTest() {
         adapter.putString(key, null)
         inOrder(preferences) {
             verify(preferences).putString(key, null)
-            verify(preferences).commit()
         }
     }
 
@@ -82,7 +80,6 @@ internal class LegacyModulesPreferenceAdapterTest : CommonTest() {
         adapter.putLong(key, value)
         inOrder(preferences) {
             verify(preferences).putLong(key, value)
-            verify(preferences).commit()
         }
     }
 
@@ -114,7 +111,6 @@ internal class LegacyModulesPreferenceAdapterTest : CommonTest() {
         adapter.putInt(key, value)
         inOrder(preferences) {
             verify(preferences).putInt(key, value)
-            verify(preferences).commit()
         }
     }
 
@@ -146,7 +142,6 @@ internal class LegacyModulesPreferenceAdapterTest : CommonTest() {
         adapter.putBoolean(key, value)
         inOrder(preferences) {
             verify(preferences).putBoolean(key, value)
-            verify(preferences).commit()
         }
     }
 
@@ -156,7 +151,6 @@ internal class LegacyModulesPreferenceAdapterTest : CommonTest() {
         adapter.putBoolean(key, value)
         inOrder(preferences) {
             verify(preferences).putBoolean(key, value)
-            verify(preferences).commit()
         }
     }
 

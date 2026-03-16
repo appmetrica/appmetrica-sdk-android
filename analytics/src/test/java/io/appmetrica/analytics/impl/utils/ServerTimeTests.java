@@ -48,7 +48,6 @@ public class ServerTimeTests extends CommonTest {
         long offset = (timeFromStartup - currentTime) / 1000;
         mServerTime.updateServerTime(timeFromStartup, MAX_VALID_SERVER_TIME_DIFFERENCE);
         verify(mServiceDbStorage, times(1)).putServerTimeOffset(offset);
-        verify(mServiceDbStorage, times(1)).commit();
     }
 
     @Test
@@ -82,7 +81,6 @@ public class ServerTimeTests extends CommonTest {
 
     private void verifyShouldSaveExpectedValueToUncheckedTimeDifference(boolean value) {
         verify(mServiceDbStorage, times(1)).putUncheckedTime(value);
-        verify(mServiceDbStorage, times(1)).commit();
     }
 
     @Test

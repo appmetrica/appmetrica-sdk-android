@@ -9,4 +9,10 @@ public interface IComponent extends IBaseComponent {
 
     @NonNull
     CounterConfigurationReporterType getReporterType();
+
+    /**
+     * Called when the component becomes inactive (e.g., all clients disconnected).
+     * This is a hint that the component may be stopped soon and should flush any pending data.
+     */
+    void onBecomeInactive();
 }

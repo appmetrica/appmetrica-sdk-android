@@ -32,7 +32,6 @@ internal class ModulePreferencesAdapterTest : CommonTest() {
         adapter.putString(key, value)
         inOrder(preferences) {
             verify(preferences).putString(preferenceKey, value)
-            verify(preferences).commit()
         }
     }
 
@@ -41,7 +40,6 @@ internal class ModulePreferencesAdapterTest : CommonTest() {
         adapter.putString(key, null)
         inOrder(preferences) {
             verify(preferences).putString(preferenceKey, null)
-            verify(preferences).commit()
         }
     }
 
@@ -99,7 +97,6 @@ internal class ModulePreferencesAdapterTest : CommonTest() {
         adapter.putLong(key, value)
         inOrder(preferences) {
             verify(preferences).putLong(preferenceKey, value)
-            verify(preferences).commit()
         }
     }
 
@@ -131,7 +128,6 @@ internal class ModulePreferencesAdapterTest : CommonTest() {
         adapter.putInt(key, value)
         inOrder(preferences) {
             verify(preferences).putInt(key, value)
-            verify(preferences).commit()
         }
     }
 
@@ -162,7 +158,6 @@ internal class ModulePreferencesAdapterTest : CommonTest() {
         adapter.putBoolean(key, true)
         inOrder(preferences) {
             verify(preferences).putBoolean(preferenceKey, true)
-            verify(preferences).commit()
         }
     }
 
@@ -171,7 +166,6 @@ internal class ModulePreferencesAdapterTest : CommonTest() {
         adapter.putBoolean(key, false)
         inOrder(preferences) {
             verify(preferences).putBoolean(preferenceKey, false)
-            verify(preferences).commit()
         }
     }
 

@@ -131,11 +131,11 @@ public class Session {
     void updateLastActiveTime(long elapsedRealtime) {
         sleepStart = elapsedRealtime;
         DebugLogger.INSTANCE.info(TAG, "updateLastActiveTime: %s", sleepStart);
-        sessionStorage.putSleepStart(sleepStart).commit();
+        sessionStorage.putSleepStart(sleepStart).apply();
     }
 
     long getAndUpdateLastEventTimeSeconds(long elapsedRealtime) {
-        sessionStorage.putLastEventOffset(lastEventTimeOffset = getSessionTimeOffset(elapsedRealtime));
+        sessionStorage.putLastEventOffset(lastEventTimeOffset = getSessionTimeOffset(elapsedRealtime)).apply();
         return TimeUnit.MILLISECONDS.toSeconds(lastEventTimeOffset);
     }
 
@@ -145,7 +145,7 @@ public class Session {
 
     long getNextReportId() {
         long reportId = currentReportId.getAndIncrement();
-        sessionStorage.putReportId(currentReportId.get()).commit();
+        sessionStorage.putReportId(currentReportId.get()).apply();
         return reportId;
     }
 
@@ -156,7 +156,7 @@ public class Session {
     public void updateAliveReportNeeded(final boolean value) {
         if (aliveNeeded != value) {
             aliveNeeded = value;
-            sessionStorage.putAliveReportNeeded(aliveNeeded).commit();
+            sessionStorage.putAliveReportNeeded(aliveNeeded).apply();
         }
     }
 

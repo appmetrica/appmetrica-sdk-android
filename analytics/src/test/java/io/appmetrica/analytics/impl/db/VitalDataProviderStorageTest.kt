@@ -84,7 +84,14 @@ internal class VitalDataProviderStorageTest : CommonTest() {
                 fileVitalDataSourceMockedRule.constructionMock.constructed()[0]
             )
         assertThat(fileVitalDataSourceMockedRule.argumentInterceptor.flatArguments())
-            .containsExactly(context, "appmetrica_vital.dat")
+            .containsExactly(
+                context,
+                "appmetrica_vital.dat",
+                GlobalServiceLocator.getInstance().serviceExecutorProvider.persistenceExecutor,
+                0L,
+                8,
+                null
+            )
     }
 
     @Test
@@ -104,7 +111,14 @@ internal class VitalDataProviderStorageTest : CommonTest() {
         assertThat(preferenceServiceDbStorageMockedRule.argumentInterceptor.flatArguments())
             .containsExactly(servicePreferencesDbStorageForMigration)
         assertThat(fileVitalDataSourceMockedRule.argumentInterceptor.flatArguments())
-            .containsExactly(context, "appmetrica_vital.dat")
+            .containsExactly(
+                context,
+                "appmetrica_vital.dat",
+                GlobalServiceLocator.getInstance().serviceExecutorProvider.persistenceExecutor,
+                0L,
+                8,
+                null
+            )
     }
 
     @Test
@@ -149,10 +163,22 @@ internal class VitalDataProviderStorageTest : CommonTest() {
 
         assertThat(fileVitalDataSourceMockedRule.argumentInterceptor.flatArguments())
             .containsExactly(
-                context, "appmetrica_vital.dat",
-                context, "appmetrica_vital_$firstApiKey.dat",
-                context, "appmetrica_vital_main.dat",
-                context, "appmetrica_vital_$secondApiKey.dat",
+                context,
+                "appmetrica_vital.dat",
+                GlobalServiceLocator.getInstance().serviceExecutorProvider.persistenceExecutor,
+                0L, 8, null,
+                context,
+                "appmetrica_vital_$firstApiKey.dat",
+                GlobalServiceLocator.getInstance().serviceExecutorProvider.persistenceExecutor,
+                0L, 8, null,
+                context,
+                "appmetrica_vital_main.dat",
+                GlobalServiceLocator.getInstance().serviceExecutorProvider.persistenceExecutor,
+                0L, 8, null,
+                context,
+                "appmetrica_vital_$secondApiKey.dat",
+                GlobalServiceLocator.getInstance().serviceExecutorProvider.persistenceExecutor,
+                0L, 8, null,
             )
     }
 }

@@ -50,14 +50,12 @@ public class ServerTime implements IServerTimeOffsetProvider {
             }
         }
         mPreferences.putServerTimeOffset(mServerTimeOffsetSeconds);
-        mPreferences.commit();
 
         DebugLogger.INSTANCE.info(TAG, "Server time updated, offset = " + mServerTimeOffsetSeconds);
     }
 
     public synchronized void disableTimeDifferenceChecking() {
         mPreferences.putUncheckedTime(false);
-        mPreferences.commit();
     }
 
     public synchronized long currentTimeSec() {

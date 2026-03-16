@@ -60,38 +60,76 @@ internal class VitalCommonDataProvider(
     var deviceId: String?
         @WorkerThread @Synchronized get() = vitalDataProvider.getOrLoadData().optStringOrNull(KEY_DEVICE_ID)
         @WorkerThread @Synchronized set(value) {
-            vitalDataProvider.save(vitalDataProvider.getOrLoadData().put(KEY_DEVICE_ID, value))
+            updateStringIfChanged(KEY_DEVICE_ID, value)
+            vitalDataProvider.flushAsync()
         }
 
     // If the data storage format and location change, you must notify https://nda.ya.ru/t/94XNTaaf7LkVFu
     var deviceIdHash: String?
         @WorkerThread @Synchronized get() = vitalDataProvider.getOrLoadData().optStringOrNull(KEY_DEVICE_ID_HASH)
         @WorkerThread @Synchronized set(value) {
-            vitalDataProvider.save(vitalDataProvider.getOrLoadData().put(KEY_DEVICE_ID_HASH, value))
+            updateStringIfChanged(KEY_DEVICE_ID_HASH, value)
+            vitalDataProvider.flushAsync()
         }
+
     var referrer: ReferrerInfo?
         @WorkerThread @Synchronized get() =
             vitalDataProvider.getOrLoadData().optStringOrNull(KEY_REFERRER)?.toReferrerInfo()
         @WorkerThread @Synchronized set(value) {
-            vitalDataProvider.save(vitalDataProvider.getOrLoadData().put(KEY_REFERRER, value?.toEncodedString()))
+            val encodedValue = value?.toEncodedString()
+            updateStringIfChanged(KEY_REFERRER, encodedValue)
+            vitalDataProvider.flushAsync()
         }
     var referrerChecked: Boolean
         @WorkerThread @Synchronized get() =
             vitalDataProvider.getOrLoadData().optBoolean(KEY_REFERRER_CHECKED, DEFAULT_REFERRER_CHECKED)
         @WorkerThread @Synchronized set(value) {
-            vitalDataProvider.save(vitalDataProvider.getOrLoadData().put(KEY_REFERRER_CHECKED, value))
+            updateBooleanIfChanged(KEY_REFERRER_CHECKED, value, DEFAULT_REFERRER_CHECKED)
+            vitalDataProvider.flushAsync()
         }
+
     var lastMigrationApiLevel: Int
         @WorkerThread @Synchronized get() =
             vitalDataProvider.getOrLoadData().optInt(KEY_LAST_MIGRATION_API_LEVEL, DEFAULT_LAST_MIGRATION_API_LEVEL)
         @WorkerThread @Synchronized set(value) {
-            vitalDataProvider.save(vitalDataProvider.getOrLoadData().put(KEY_LAST_MIGRATION_API_LEVEL, value))
+            updateIntIfChanged(KEY_LAST_MIGRATION_API_LEVEL, value, DEFAULT_LAST_MIGRATION_API_LEVEL)
+            vitalDataProvider.flushAsync()
         }
+
+    @WorkerThread
+    private fun updateStringIfChanged(key: String, value: String?) {
+        val data = vitalDataProvider.getOrLoadData()
+        if (data.optStringOrNull(key) == value) return
+        vitalDataProvider.save(data.put(key, value))
+    }
+
+    @WorkerThread
+    private fun updateBooleanIfChanged(key: String, value: Boolean, default: Boolean) {
+        val data = vitalDataProvider.getOrLoadData()
+        if (data.optBoolean(key, default) == value) return
+        vitalDataProvider.save(data.put(key, value))
+    }
+
+    @WorkerThread
+    private fun updateIntIfChanged(key: String, value: Int, default: Int) {
+        val data = vitalDataProvider.getOrLoadData()
+        if (data.optInt(key, default) == value) return
+        vitalDataProvider.save(data.put(key, value))
+    }
 
     @WorkerThread
     @Synchronized
     fun init() {
         vitalDataProvider.getOrLoadData()
+    }
+
+    @Synchronized
+    fun flush() {
+        vitalDataProvider.flush()
+    }
+
+    fun flushAsync() {
+        vitalDataProvider.flushAsync()
     }
 
     @WorkerThread

@@ -152,12 +152,12 @@ public class EventSaver {
 
     public void savePermissionsCheckTime() {
         mPermissionsCheckTime = mTimeProvider.currentTimeSeconds();
-        mPreferences.putPermissionsCheckTime(mPermissionsCheckTime).commit();
+        mPreferences.putPermissionsCheckTime(mPermissionsCheckTime);
     }
 
     public void saveFeaturesCheckVersion() {
         mLastAppVersionWithCollectedFeatures = mCurrentAppVersion;
-        mPreferences.putLastAppVersionWithFeatures(mLastAppVersionWithCollectedFeatures).commit();
+        mPreferences.putLastAppVersionWithFeatures(mLastAppVersionWithCollectedFeatures);
     }
 
     public long getPermissionsCheckTime() {

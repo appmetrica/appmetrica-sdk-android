@@ -37,12 +37,6 @@ public class KeyValueTableDbHelperWrapperTest extends CommonTest {
     }
 
     @Test
-    public void commit() {
-        wrapper.commit();
-        verify(actualHelper).commit();
-    }
-
-    @Test
     public void containsKey() {
         when(actualHelper.containsKey(key)).thenReturn(true);
         assertThat(wrapper.containsKey(key)).isTrue();
@@ -136,5 +130,17 @@ public class KeyValueTableDbHelperWrapperTest extends CommonTest {
         keys.add("key2");
         when(actualHelper.keys()).thenReturn(keys);
         assertThat(wrapper.keys()).isEqualTo(keys);
+    }
+
+    @Test
+    public void flush() {
+        wrapper.flush();
+        verify(actualHelper).flush();
+    }
+
+    @Test
+    public void flushAsync() {
+        wrapper.flushAsync();
+        verify(actualHelper).flushAsync();
     }
 }

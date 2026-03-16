@@ -6,6 +6,7 @@ import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade
 import io.appmetrica.analytics.impl.selfreporting.SelfReporterWrapper
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.ContextRule
+import io.appmetrica.analytics.testutils.MockProvider
 import io.appmetrica.analytics.testutils.MockedStaticRule
 import org.assertj.core.api.Assertions.assertThat
 import org.json.JSONObject
@@ -24,6 +25,7 @@ internal class FileVitalDataSourceTest : CommonTest() {
 
     private lateinit var file: File
     private lateinit var context: Context
+    private val executor = MockProvider.mockedBlockingExecutorMock()
 
     private lateinit var fileVitalDataSource: FileVitalDataSource
 
@@ -44,7 +46,7 @@ internal class FileVitalDataSourceTest : CommonTest() {
         file = File(contextRule.filesDir!!, "appmetrica_vital.dat")
         whenever(FileUtils.getFileFromSdkStorage(context, fileName)).thenReturn(file)
         whenever(AppMetricaSelfReportFacade.getReporter()).thenReturn(selfReporter)
-        fileVitalDataSource = FileVitalDataSource(context, fileName)
+        fileVitalDataSource = FileVitalDataSource(context, fileName, executor)
     }
 
     @After

@@ -170,6 +170,10 @@ public class AppMetricaServiceCoreImpl implements AppMetricaServiceCore, AppMetr
             DebugLogger.INSTANCE.info(TAG, "onNewClientConnect");
             onNewClientConnected(intent);
         });
+        mAppMetricaServiceLifecycle.addAllClientDisconnectedObserver(intent -> {
+            DebugLogger.INSTANCE.info(TAG, "All clients disconnected. Flushing vital common data.");
+            GlobalServiceLocator.getInstance().getVitalDataProviderStorage().getCommonDataProvider().flushAsync();
+        });
     }
 
     @WorkerThread

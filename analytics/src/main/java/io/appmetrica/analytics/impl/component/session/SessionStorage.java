@@ -14,7 +14,7 @@ public interface SessionStorage {
 
     SessionStorageImpl putAliveReportNeeded(final boolean value);
 
-    void commit();
+    void apply();
 
     void clear();
 

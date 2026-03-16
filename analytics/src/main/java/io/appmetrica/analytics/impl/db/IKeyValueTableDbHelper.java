@@ -6,8 +6,6 @@ import java.util.Set;
 
 public interface IKeyValueTableDbHelper {
 
-    void commit();
-
     @Nullable
     String getString(final String key, final String defValue);
 
@@ -35,4 +33,8 @@ public interface IKeyValueTableDbHelper {
 
     @NonNull
     Set<String> keys();
+
+    void flush();
+
+    void flushAsync();
 }

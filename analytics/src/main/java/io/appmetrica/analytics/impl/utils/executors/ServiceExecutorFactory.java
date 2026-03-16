@@ -46,6 +46,11 @@ public class ServiceExecutorFactory {
     }
 
     @NonNull
+    ExecutorWrapper createPersistenceExecutor() {
+        return new ExecutorWrapper(NamedThreadFactory.SERVICE_PERSISTENCE_THREAD);
+    }
+
+    @NonNull
     ExecutorWrapper createCustomModuleExecutor(@NonNull String tag) {
         return new ExecutorWrapper(String.format(Locale.US, NamedThreadFactory.CUSTOM_MODULE_EXECUTOR_PATTERN, tag));
     }

@@ -5,7 +5,7 @@ import io.appmetrica.analytics.impl.db.IKeyValueTableDbHelper
 internal abstract class NameSpacedPreferenceDbStorage(
     dbStorage: IKeyValueTableDbHelper,
     suffix: String?
-) : PreferencesDbStorage(dbStorage, suffix), SimplePreferenceStorage {
+) : PreferencesDbStorage(dbStorage, suffix) {
 
     constructor(dbStorage: IKeyValueTableDbHelper) : this(dbStorage, null)
 

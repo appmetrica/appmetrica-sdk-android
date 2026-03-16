@@ -23,6 +23,7 @@ import io.appmetrica.analytics.impl.client.ProcessConfiguration
 import io.appmetrica.analytics.impl.client.connection.ServiceDescription
 import io.appmetrica.analytics.impl.component.clients.ClientDescription
 import io.appmetrica.analytics.impl.db.storage.TempCacheEntry
+import io.appmetrica.analytics.impl.db.storage.TempCachePutTask
 import io.appmetrica.analytics.impl.ecommerce.client.converter.Result
 import io.appmetrica.analytics.impl.ecommerce.client.model.AmountWrapper
 import io.appmetrica.analytics.impl.ecommerce.client.model.CartActionInfoEvent
@@ -302,7 +303,8 @@ internal class ToStringTest(
             StartupRequestConfig(mock(), mock()).toTestCase(
                 modifierPreconditions = Modifier.PUBLIC or Modifier.FINAL,
                 excludedFields = setOf("mReferrerHolder", "defaultStartupHostsProvider")
-            )
+            ),
+            TempCachePutTask("scope", 100500L, ByteArray(10) { it.toByte() }).toTestCase()
         )
     }
 }

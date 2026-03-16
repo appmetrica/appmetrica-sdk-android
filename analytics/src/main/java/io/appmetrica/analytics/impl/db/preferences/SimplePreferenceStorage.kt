@@ -22,5 +22,7 @@ internal interface SimplePreferenceStorage {
 
     fun contains(key: String): Boolean
 
-    fun commit()
+    fun flush()
+
+    fun flushAsync()
 }

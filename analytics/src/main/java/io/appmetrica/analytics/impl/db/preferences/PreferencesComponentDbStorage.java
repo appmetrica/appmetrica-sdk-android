@@ -134,6 +134,16 @@ public class PreferencesComponentDbStorage extends NameSpacedPreferenceDbStorage
         writeString(VITAL_DATA.fullKey(), data);
     }
 
+    @Override
+    public void flush() {
+        super.flush();
+    }
+
+    @Override
+    public void flushAsync() {
+        super.flushAsync();
+    }
+
     @NonNull
     public Map<Integer, String> getSentExternalAttributions() {
         final Map<Integer, String> result = new HashMap<>();

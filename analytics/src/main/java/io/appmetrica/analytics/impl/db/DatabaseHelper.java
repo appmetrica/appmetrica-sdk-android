@@ -10,14 +10,13 @@ import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
-import io.appmetrica.analytics.coreapi.internal.executors.InterruptionSafeThread;
 import io.appmetrica.analytics.coreutils.internal.StringUtils;
 import io.appmetrica.analytics.coreutils.internal.db.DBUtils;
 import io.appmetrica.analytics.impl.AppEnvironment;
 import io.appmetrica.analytics.impl.EventsManager;
+import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.Utils;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
-import io.appmetrica.analytics.impl.component.IComponent;
 import io.appmetrica.analytics.impl.component.session.SessionState;
 import io.appmetrica.analytics.impl.component.session.SessionType;
 import io.appmetrica.analytics.impl.db.constants.Constants;
@@ -27,7 +26,7 @@ import io.appmetrica.analytics.impl.db.protobuf.converter.DbEventModelConverter;
 import io.appmetrica.analytics.impl.db.protobuf.converter.DbSessionModelConverter;
 import io.appmetrica.analytics.impl.db.session.DbSessionModelFactory;
 import io.appmetrica.analytics.impl.events.EventListener;
-import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade;
+import io.appmetrica.analytics.impl.events.UrgentEvents;
 import io.appmetrica.analytics.impl.utils.PublicLogConstructor;
 import io.appmetrica.analytics.impl.utils.encryption.EncryptedCounterReport;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
@@ -55,12 +54,6 @@ public class DatabaseHelper {
     private final Lock mWriteLock = mLock.writeLock();
     private final DatabaseStorage mStorage;
 
-    // Worker that helps us to work with the database - safely.
-    private final WorkerThread mDbWorker;
-
-    private final Object mEventQueueMonitor = new Object();
-    private final List<ContentValues> mEventQueue = new ArrayList<ContentValues>(3);
-
     private final Context mContext;
     private final ComponentUnit mComponent;
     private final AtomicLong mRowCount = new AtomicLong();
@@ -70,6 +63,10 @@ public class DatabaseHelper {
     private final DatabaseCleaner mDatabaseCleaner;
     @NonNull
     private final DbEventModelConverter dbEventModelConverter;
+    @NonNull
+    private final EventBatchWriter eventBatchWriter;
+    @NonNull
+    private final BufferedEventsWriter bufferedEventsWriter;
 
     public DatabaseHelper(@NonNull ComponentUnit component, final DatabaseStorage databaseStorage) {
         this(
@@ -92,12 +89,24 @@ public class DatabaseHelper {
 
         mRowCount.set(getRowCountFromDb());
 
-        mDbWorker = new WorkerThread(component);
-        mDbWorker.setName(formDbWorkerName(component));
+        this.eventBatchWriter = new EventBatchWriter(
+            mStorage,
+            mComponent,
+            mRowCount,
+            mEventListeners,
+            mDatabaseCleaner,
+            mLock
+        );
+
+        this.bufferedEventsWriter = new BufferedEventsWriter(
+            this.eventBatchWriter,
+            GlobalServiceLocator.getInstance().getServiceExecutorProvider().getPersistenceExecutor(),
+            1000 // 1 second delay
+        );
     }
 
     public void onComponentCreated() {
-        mDbWorker.start();
+        // All components initialized, nothing to do here
     }
 
     public long getEventsCount() {
@@ -150,8 +159,13 @@ public class DatabaseHelper {
         mEventListeners.add(eventListener);
     }
 
-    private static String formDbWorkerName(final IComponent component) {
-        return WorkerThread.PREFIX_THREAD_NAME + " [" + component.getComponentId().toStringAnonymized() + "]";
+    /**
+     * Flushes all pending events for this DatabaseHelper asynchronously.
+     * This ensures all buffered events are written to the database.
+     */
+    public void flushAsync() {
+        DebugLogger.INSTANCE.info(TAG, "flushAsync called for DatabaseHelper");
+        bufferedEventsWriter.flushAsync();
     }
 
     // Creates and writes a new session by Id
@@ -214,16 +228,18 @@ public class DatabaseHelper {
     }
 
     public void addReportValues(final ContentValues reportValues) {
-        DebugLogger.INSTANCE.info(TAG, "add report values: %s. Acquire lock", reportValues);
-        synchronized (mEventQueueMonitor) {
-            DebugLogger.INSTANCE.info(TAG, "Add report values");
-            mEventQueue.add(reportValues);
-        }
+        DebugLogger.INSTANCE.info(TAG, "add report values: %s", reportValues);
 
-        synchronized (mDbWorker) {
-            DebugLogger.INSTANCE.info(TAG, "Notify database worker");
-            mDbWorker.notifyAll();
-        }
+        boolean isUrgentEvent = UrgentEvents.isUrgent(getReportType(reportValues));
+
+        DebugLogger.INSTANCE.info(
+            TAG,
+            "Add report values (urgent: %s, type: %d)",
+            isUrgentEvent,
+            getReportType(reportValues)
+        );
+
+        bufferedEventsWriter.addEvent(reportValues, isUrgentEvent);
     }
 
     public int removeEmptySessions(long thresholdSessionId) {
@@ -301,34 +317,6 @@ public class DatabaseHelper {
         }
     }
 
-    private int deleteExcessiveReports(final SQLiteDatabase db) {
-        try {
-            int percentToDelete = 10;
-            String whereClause = String.format(Constants.EventsTable.DELETE_EXCESSIVE_RECORDS_WHERE,
-                    TextUtils.join(", ", EventsManager.EVENTS_WITH_FIRST_HIGHEST_PRIORITY),
-                    TextUtils.join(", ", EventsManager.EVENTS_WITH_SECOND_HIGHEST_PRIORITY),
-                    percentToDelete
-            );
-            return mDatabaseCleaner.cleanEvents(
-                    db,
-                    Constants.EventsTable.TABLE_NAME,
-                    whereClause,
-                    null,
-                    DatabaseCleaner.Reason.DB_OVERFLOW,
-                    mComponent.getComponentId().getApiKey(),
-                    true
-            ).mDeletedRowsCount;
-        } catch (Throwable e) {
-            DebugLogger.INSTANCE.error(
-                TAG,
-                e,
-                "Something was wrong while removing excessive reports from db"
-            );
-            AppMetricaSelfReportFacade.getReporter()
-                    .reportError("deleteExcessiveReports exception", e);
-            return 0;
-        }
-    }
 
     // Removes all session's reports inside the database by session ID and session type
     // where number_in_session <= maxNumberInSession.
@@ -489,58 +477,19 @@ public class DatabaseHelper {
     }
 
     @VisibleForTesting
+    @NonNull
+    EventBatchWriter getEventBatchWriter() {
+        return eventBatchWriter;
+    }
+
+    /**
+     * For testing only: synchronously inserts events without buffering.
+     * @deprecated Use addReportValues() instead
+     */
+    @VisibleForTesting
+    @Deprecated
     void insertEvents(final List<ContentValues> reports) {
-        if (null == reports || reports.isEmpty()) {
-            return;
-        }
-        final long dbLimit = mComponent.getFreshReportRequestConfig().getMaxEventsInDbCount();
-        SQLiteDatabase wDatabase = null;
-        mWriteLock.lock();
-        try {
-            wDatabase = mStorage.getWritableDatabase();
-
-            if (wDatabase != null) {
-                wDatabase.beginTransaction();
-
-                for (final ContentValues reportItem : reports) {
-                    wDatabase.insertOrThrow(Constants.EventsTable.TABLE_NAME, null, reportItem);
-                    mRowCount.incrementAndGet();
-                    logEvent(reportItem, "Event saved to db");
-                }
-
-                long rows = mRowCount.get();
-                DebugLogger.INSTANCE.info(TAG, "report saved. Row count %d; dbLimit: %s;", rows, dbLimit);
-
-                int deletedRowsCount = 0;
-                if (rows > dbLimit) {
-                    deletedRowsCount = deleteExcessiveReports(wDatabase);
-                    long actualEventsCount = mRowCount.addAndGet(-deletedRowsCount);
-                    DebugLogger.INSTANCE.info(
-                        TAG,
-                        "Reports table cleared. %d rows deleted. Row count: %d",
-                        deletedRowsCount,
-                        actualEventsCount
-                    );
-                }
-
-                wDatabase.setTransactionSuccessful();
-
-                if (deletedRowsCount != 0) {
-                    for (EventListener listener : mEventListeners) {
-                        listener.onEventsUpdated();
-                    }
-                }
-            }
-        } catch (Throwable exception) {
-            DebugLogger.INSTANCE.error(
-                TAG,
-                "Smth was wrong while inserting reports into database.\n%s",
-                exception
-            );
-        } finally {
-            Utils.endTransaction(wDatabase);
-            mWriteLock.unlock();
-        }
+        eventBatchWriter.writeEvents(reports);
     }
 
     private void logEvent(final ContentValues reportItem, final String msg) {
@@ -660,61 +609,5 @@ public class DatabaseHelper {
 
     private int getReportType(ContentValues reportItem) {
         return reportItem.getAsInteger(EventTableEntry.FIELD_EVENT_TYPE);
-    }
-
-    private class WorkerThread extends InterruptionSafeThread {
-
-        static final String PREFIX_THREAD_NAME = "DatabaseWorker";
-
-        @NonNull
-        private final ComponentUnit mComponentUnit;
-
-        WorkerThread(@NonNull ComponentUnit component) {
-            super();
-            mComponentUnit = component;
-        }
-
-        @Override
-        public void run() {
-            while (isRunning()) {
-                try {
-                    synchronized (this) {
-                        if (isNoTasks()) {
-                            wait();
-                        }
-                    }
-                } catch (Throwable e) {
-                    stopRunning();
-                }
-
-                List<ContentValues> buffer;
-                synchronized (mEventQueueMonitor) {
-                    buffer = new ArrayList<ContentValues>(mEventQueue);
-                    mEventQueue.clear();
-                }
-                insertEvents(buffer);
-
-                //todo (avitenko) workaround. Will be changed in METRIKALIB-2395
-                notifyListeners(buffer);
-            }
-        }
-
-        synchronized void notifyListeners(@NonNull List<ContentValues> reports) {
-            List<Integer> reportTypes = new ArrayList<Integer>();
-            for (ContentValues report : reports) {
-                reportTypes.add(getReportType(report));
-            }
-            for (EventListener listener : mEventListeners) {
-                listener.onEventsAdded(reportTypes);
-            }
-            mComponentUnit.getEventTrigger().trigger();
-        }
-
-    }
-
-    private boolean isNoTasks() {
-        synchronized (mEventQueueMonitor) {
-            return mEventQueue.isEmpty();
-        }
     }
 }

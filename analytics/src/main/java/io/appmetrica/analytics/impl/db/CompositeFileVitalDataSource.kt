@@ -23,4 +23,14 @@ internal class CompositeFileVitalDataSource(
     override fun putVitalData(data: String) {
         sources.forEach { it.second.putVitalData(data) }
     }
+
+    override fun flush() {
+        DebugLogger.info(tag, "Flush all sources")
+        sources.forEach { it.second.flush() }
+    }
+
+    override fun flushAsync() {
+        DebugLogger.info(tag, "FlushAsync all sources")
+        sources.forEach { it.second.flushAsync() }
+    }
 }

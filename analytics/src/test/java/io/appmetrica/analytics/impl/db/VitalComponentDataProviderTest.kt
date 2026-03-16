@@ -149,8 +149,8 @@ internal class VitalComponentDataProviderTest : CommonTest() {
     @Test
     fun setSentExternalAttribution() {
         wheneverVitalDataProviderGetOrLoad().thenReturn(filledJson)
-        vitalComponentDataProvider.externalAttributionWindowStart = 123L
-        val expectedJson = JSONObject(filledJson.toString()).put("external_attribution_window_start", 123L)
+        vitalComponentDataProvider.externalAttributionWindowStart = 456L
+        val expectedJson = JSONObject(filledJson.toString()).put("external_attribution_window_start", 456L)
         JSONAssert.assertEquals(expectedJson.toString(), interceptSavedJson(), true)
     }
 
@@ -232,6 +232,56 @@ internal class VitalComponentDataProviderTest : CommonTest() {
     fun emptyJsonInStorage() {
         wheneverVitalDataProviderGetOrLoad().thenReturn(JSONObject())
         checkDefaultValues()
+    }
+
+    @Test
+    fun setIsFirstEventDoneCallsFlushAsync() {
+        wheneverVitalDataProviderGetOrLoad().thenReturn(filledJson)
+        vitalComponentDataProvider.isFirstEventDone = false
+        verify(vitalDataProvider()).flushAsync()
+    }
+
+    @Test
+    fun setIsInitEventDoneCallsFlushAsync() {
+        wheneverVitalDataProviderGetOrLoad().thenReturn(filledJson)
+        vitalComponentDataProvider.isInitEventDone = false
+        verify(vitalDataProvider()).flushAsync()
+    }
+
+    @Test
+    fun setReferrerHandledCallsFlushAsync() {
+        wheneverVitalDataProviderGetOrLoad().thenReturn(filledJson)
+        vitalComponentDataProvider.referrerHandled = false
+        verify(vitalDataProvider()).flushAsync()
+    }
+
+    @Test
+    fun incrementAttributionIdCallsFlushAsync() {
+        wheneverVitalDataProviderGetOrLoad().thenReturn(filledJson)
+        vitalComponentDataProvider.incrementAttributionId()
+        verify(vitalDataProvider()).flushAsync()
+    }
+
+    @Test
+    fun setLastMigrationApiLevelCallsFlushAsync() {
+        wheneverVitalDataProviderGetOrLoad().thenReturn(filledJson)
+        vitalComponentDataProvider.lastMigrationApiLevel = 99
+        verify(vitalDataProvider()).flushAsync()
+    }
+
+    @Test
+    fun setExternalAttributionWindowStartCallsFlushAsync() {
+        wheneverVitalDataProviderGetOrLoad().thenReturn(filledJson)
+        vitalComponentDataProvider.externalAttributionWindowStart = 999L
+        verify(vitalDataProvider()).flushAsync()
+    }
+
+    @Test
+    fun setIsFirstEventDoneWithSameValueStillCallsFlushAsync() {
+        wheneverVitalDataProviderGetOrLoad().thenReturn(filledJson)
+        vitalComponentDataProvider.isFirstEventDone = true
+        // flushAsync is called even if value didn't change (optimization can be added later if needed)
+        verify(vitalDataProvider()).flushAsync()
     }
 
     private fun wheneverVitalDataProviderGetOrLoad() =

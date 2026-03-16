@@ -27,11 +27,6 @@ class KeyValueTableDbHelperWrapper implements IKeyValueTableDbHelper {
         this.actualHelper = actualHelper;
     }
 
-    @Override
-    public void commit() {
-        actualHelper.commit();
-    }
-
     @Nullable
     @Override
     public String getString(String key, String defValue) {
@@ -114,6 +109,16 @@ class KeyValueTableDbHelperWrapper implements IKeyValueTableDbHelper {
     @Override
     public Set<String> keys() {
         return actualHelper.keys();
+    }
+
+    @Override
+    public void flush() {
+        actualHelper.flush();
+    }
+
+    @Override
+    public void flushAsync() {
+        actualHelper.flushAsync();
     }
 
     private void checkMigrated() {

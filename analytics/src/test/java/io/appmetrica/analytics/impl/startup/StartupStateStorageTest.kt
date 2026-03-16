@@ -112,6 +112,7 @@ internal class StartupStateStorageTest : CommonTest() {
         startupStateStorage.save(startupState)
         verify(vitalCommonDataProvider).deviceId = null
         verify(vitalCommonDataProvider).deviceIdHash = null
+        verify(vitalCommonDataProvider).flushAsync()
         verify(modelStorage).save(startupStateModelCaptor.capture())
 
         val assertions = ObjectPropertyAssertions(startupStateModelCaptor.firstValue)
@@ -263,6 +264,7 @@ internal class StartupStateStorageTest : CommonTest() {
 
         verify(vitalCommonDataProvider).deviceId = deviceId
         verify(vitalCommonDataProvider).deviceIdHash = deviceIdHash
+        verify(vitalCommonDataProvider).flushAsync()
         verify(modelStorage).save(startupStateModelCaptor.capture())
 
         val assertions = ObjectPropertyAssertions(startupStateModelCaptor.firstValue)

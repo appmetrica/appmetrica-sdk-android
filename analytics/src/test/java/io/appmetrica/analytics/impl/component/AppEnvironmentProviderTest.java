@@ -96,8 +96,7 @@ public class AppEnvironmentProviderTest extends CommonTest {
         when(componentSession.putAppEnvironmentRevision(any(AppEnvironment.EnvironmentRevision.class))).thenReturn(componentSession);
 
         provider.commit(revision, componentSession);
-        verify(componentSession, times(1)).putAppEnvironmentRevision(revision);
-        verify(componentSession, times(1)).commit();
+        verify(componentSession).putAppEnvironmentRevision(revision);
     }
 
     @Test
@@ -110,8 +109,7 @@ public class AppEnvironmentProviderTest extends CommonTest {
         when(componentSession.putAppEnvironmentRevision(any(AppEnvironment.EnvironmentRevision.class))).thenReturn(componentSession);
 
         assertThat(provider.commitIfNeeded(revision, componentSession)).isTrue();
-        verify(componentSession, times(1)).putAppEnvironmentRevision(revision);
-        verify(componentSession, times(1)).commit();
+        verify(componentSession).putAppEnvironmentRevision(revision);
     }
 
     @Test
@@ -125,7 +123,6 @@ public class AppEnvironmentProviderTest extends CommonTest {
 
         assertThat(provider.commitIfNeeded(revision, componentSession)).isFalse();
         verify(componentSession, never()).putAppEnvironmentRevision(revision);
-        verify(componentSession, never()).commit();
     }
 
 }

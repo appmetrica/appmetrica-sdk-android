@@ -138,6 +138,7 @@ internal class StartupState private constructor(
         fun save(startupState: StartupState) {
             vitalCommonDataProvider.deviceId = startupState.deviceId
             vitalCommonDataProvider.deviceIdHash = startupState.deviceIdHash
+            vitalCommonDataProvider.flushAsync()
             modelStorage.save(startupState.startupStateModel)
         }
     }

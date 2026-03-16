@@ -333,8 +333,7 @@ public class StartupParams {
             .putClientClidsChangedAfterLastIdentifiersUpdate(mClientClidsChangedAfterLastIdentifiersUpdate)
             .putCustomSdkHosts(customSdkHostsHolder.getCommonResult())
             .putNextStartupTime(nextStartupTime)
-            .putFeatures(featuresHolder.getFeatures())
-            .commit();
+            .putFeatures(featuresHolder.getFeatures());
     }
 
     private void updateClidsByReceiver(@NonNull ClientIdentifiersHolder clientIdentifiersHolder) {

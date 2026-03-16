@@ -34,7 +34,7 @@ class AppEnvironmentProvider {
     public synchronized boolean commitIfNeeded(AppEnvironment.EnvironmentRevision revision,
                                                PreferencesComponentDbStorage preferences) {
         if (revision.revisionNumber > preferences.getAppEnvironmentRevision().revisionNumber) {
-            preferences.putAppEnvironmentRevision(revision).commit();
+            preferences.putAppEnvironmentRevision(revision);
             return true;
         } else {
             return false;
@@ -43,6 +43,6 @@ class AppEnvironmentProvider {
 
     public synchronized void commit(AppEnvironment.EnvironmentRevision revision,
                                     PreferencesComponentDbStorage preferences) {
-        preferences.putAppEnvironmentRevision(revision).commit();
+        preferences.putAppEnvironmentRevision(revision);
     }
 }

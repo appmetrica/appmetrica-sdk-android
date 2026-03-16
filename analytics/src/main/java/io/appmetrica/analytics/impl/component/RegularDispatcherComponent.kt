@@ -76,6 +76,11 @@ internal class RegularDispatcherComponent<COMPONENT>(
 
     override fun disconnectClient(client: ClientUnit) {
         lifecycleManager.disconnectClient(client)
+
+        if (lifecycleManager.connectedClients.isEmpty()) {
+            DebugLogger.info(tag, "All clients disconnected for componentId: %s. Notifying component.", componentId)
+            reportingComponent.onBecomeInactive()
+        }
     }
 
     override fun onStartupChanged(newState: StartupState) {

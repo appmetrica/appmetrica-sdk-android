@@ -29,6 +29,8 @@ public class ServiceExecutorProvider {
     private volatile IHandlerExecutor mDefaultExecutor;
     @Nullable
     private volatile Executor uiExecutor;
+    @Nullable
+    private volatile IHandlerExecutor mPersistenceExecutor;
 
     private Map<String, IHandlerExecutor> customModulesExecutors = new HashMap<>();
 
@@ -109,6 +111,18 @@ public class ServiceExecutorProvider {
     }
 
     @NonNull
+    public IHandlerExecutor getPersistenceExecutor() {
+        if (mPersistenceExecutor == null) {
+            synchronized (this) {
+                if (mPersistenceExecutor == null) {
+                    mPersistenceExecutor = mServiceExecutorFactory.createPersistenceExecutor();
+                }
+            }
+        }
+        return mPersistenceExecutor;
+    }
+
+    @NonNull
     public synchronized IHandlerExecutor getCustomModuleExecutor(@NonNull String tag) {
         IHandlerExecutor executor = customModulesExecutors.get(tag);
         if (executor == null) {
@@ -143,6 +157,7 @@ public class ServiceExecutorProvider {
         stopRunning(mNetworkTaskProcessorExecutor);
         stopRunning(supportIOExecutor);
         stopRunning(mDefaultExecutor);
+        stopRunning(mPersistenceExecutor);
     }
 
     private void stopRunning(@Nullable ICommonExecutor executor) {

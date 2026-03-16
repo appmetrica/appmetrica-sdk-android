@@ -14,6 +14,6 @@ internal class PreloadInfoSatelliteCheckedProvider @VisibleForTesting constructo
     override fun wasSatelliteChecked(): Boolean = servicePreferences.wasSatellitePreloadInfoChecked()
 
     override fun markSatelliteChecked() {
-        servicePreferences.markSatellitePreloadInfoChecked().commit()
+        servicePreferences.markSatellitePreloadInfoChecked()
     }
 }

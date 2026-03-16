@@ -186,6 +186,7 @@ public static final class io.appmetrica.analytics.modulesapi.internal.common.Int
 }
 
 public interface io.appmetrica.analytics.modulesapi.internal.common.ModulePreferences {
+    public abstract void flushAsync()
     public abstract boolean getBoolean([NonNull] String, boolean)
     public abstract int getInt([NonNull] String, int)
     public abstract long getLong([NonNull] String, long)

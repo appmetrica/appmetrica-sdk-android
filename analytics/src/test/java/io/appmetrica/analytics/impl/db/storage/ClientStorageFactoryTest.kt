@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.impl.db.storage
 
 import android.content.Context
+import io.appmetrica.analytics.impl.ClientServiceLocator
 import io.appmetrica.analytics.impl.db.DatabaseManagerProvider
 import io.appmetrica.analytics.impl.db.StorageType
 import io.appmetrica.analytics.impl.db.TablesManager
@@ -78,7 +79,11 @@ internal class ClientStorageFactoryTest : CommonTest() {
 
         assertThat(keyValueTableDbHelperRule.constructionMock.constructed()).hasSize(1)
         assertThat(keyValueTableDbHelperRule.argumentInterceptor.flatArguments())
-            .containsExactly("preferences", lockedOnFileDBConnector)
+            .containsExactly(
+                "preferences",
+                lockedOnFileDBConnector,
+                ClientServiceLocator.getInstance().clientExecutorProvider.persistenceExecutor
+            )
 
         assertThat(lockedOnFileDBConnectorRule.constructionMock.constructed()).hasSize(1)
         assertThat(lockedOnFileDBConnectorRule.argumentInterceptor.flatArguments())

@@ -5,8 +5,8 @@ import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.mockito.kotlin.doReturn
-import org.mockito.kotlin.inOrder
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
 import kotlin.random.Random
 
 internal class ClidsSatelliteCheckedProviderTest : CommonTest() {
@@ -15,7 +15,6 @@ internal class ClidsSatelliteCheckedProviderTest : CommonTest() {
 
     private val servicePreferences = mock<PreferencesServiceDbStorage> {
         on { wereSatelliteClidsChecked() } doReturn result
-        on { markSatelliteClidsChecked() } doReturn mock
     }
     private val provider = ClidsSatelliteCheckedProvider(servicePreferences)
 
@@ -27,9 +26,6 @@ internal class ClidsSatelliteCheckedProviderTest : CommonTest() {
     @Test
     fun markSatelliteChecked() {
         provider.markSatelliteChecked()
-        inOrder(servicePreferences) {
-            verify(servicePreferences).markSatelliteClidsChecked()
-            verify(servicePreferences).commit()
-        }
+        verify(servicePreferences).markSatelliteClidsChecked()
     }
 }

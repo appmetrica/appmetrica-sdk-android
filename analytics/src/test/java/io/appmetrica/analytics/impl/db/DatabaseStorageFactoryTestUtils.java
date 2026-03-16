@@ -14,7 +14,7 @@ public class DatabaseStorageFactoryTestUtils {
         try {
             clearStorages(context);
             IKeyValueTableDbHelper helperForService = spy(new MockedKeyValueTableDbHelper(null));
-            doNothing().when(helperForService).commit();
+            doNothing().when(helperForService).flushAsync();
             when(GlobalServiceLocator.getInstance().getStorageFactory().getServicePreferenceDbHelper(context))
                 .thenReturn(helperForService);
         } catch (Exception e) {

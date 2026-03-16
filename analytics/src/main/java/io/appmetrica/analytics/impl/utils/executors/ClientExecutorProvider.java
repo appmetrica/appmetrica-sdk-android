@@ -17,6 +17,8 @@ public class ClientExecutorProvider {
     private volatile ICommonExecutor mReportSenderExecutor;
     @Nullable
     private volatile Handler mMainHandler;
+    @Nullable
+    private volatile IHandlerExecutor mPersistenceExecutor;
 
     public ClientExecutorProvider() {
         this(new ClientExecutorFactory());
@@ -56,6 +58,18 @@ public class ClientExecutorProvider {
             }
         }
         return mMainHandler;
+    }
+
+    @NonNull
+    public IHandlerExecutor getPersistenceExecutor() {
+        if (mPersistenceExecutor == null) {
+            synchronized (this) {
+                if (mPersistenceExecutor == null) {
+                    mPersistenceExecutor = mThreadFactory.createPersistenceExecutor();
+                }
+            }
+        }
+        return mPersistenceExecutor;
     }
 
     public Thread getCoreInitThread(@NonNull Runnable runnable) {

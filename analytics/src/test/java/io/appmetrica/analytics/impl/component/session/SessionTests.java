@@ -49,6 +49,7 @@ public class SessionTests extends CommonTest {
         mSystemTimeProvider = mock(SystemTimeProvider.class);
         when(mSessionArguments.getId(anyLong())).thenReturn(0L);
         mDatabaseHelper = mock(DatabaseHelper.class);
+        when(mSessionStorage.putLastEventOffset(anyLong())).thenReturn(mSessionStorage);
         when(mDatabaseHelper.getSessionRequestParameters(anyLong(), any(SessionType.class)))
             .thenReturn(getSessionRequestParameters());
         when(mComponentUnit.getDbHelper()).thenReturn(mDatabaseHelper);

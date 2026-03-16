@@ -11,6 +11,7 @@ public class NamedThreadFactory implements ThreadFactory {
     public static final String CLIENT_DEFAULT_THREAD = PREFIX + "CDE";
     public static final String CLIENT_REPORTS_SENDER_THREAD = PREFIX + "CRS";
     public static final String CLIENT_INIT_CORE_THREAD = PREFIX + "INIT_CORE";
+    public static final String CLIENT_PERSISTENCE_THREAD = PREFIX + "CPT";
 
     public static final String SERVICE_CORE = PREFIX + "SC";
     public static final String SERVICE_TASKS_EXECUTOR = PREFIX + "STE";
@@ -19,11 +20,9 @@ public class NamedThreadFactory implements ThreadFactory {
     public static final String SERVICE_NETWORK_TASK_PROCESSOR_EXECUTOR =
             PREFIX + "SNTPE";
     public static final String SERVICE_DEFAULT_EXECUTOR = PREFIX + "SDE";
+    public static final String SERVICE_PERSISTENCE_THREAD = PREFIX + "SPT";
 
     public static final String SERVICE_HMS_REFERRER_THREAD = PREFIX + "SHMSR";
-
-    public static final String DB_WORKER_THREAD_PATTERN = PREFIX + "DW-%s";
-
     public static final String CUSTOM_MODULE_EXECUTOR_PATTERN = PREFIX + "M-%s";
     private static final AtomicInteger sThreadNum = new AtomicInteger(0);
 

@@ -388,4 +388,15 @@ public class AppMetricaServiceCoreImplTests extends CommonTest {
         verify(mAppMetricaServiceLifecycle).addNewClientConnectObserver(mLifecycleObserverCaptor.capture());
         mLifecycleObserverCaptor.getValue().onEvent(intent);
     }
+
+    @Test
+    public void allClientDisconnectedObserverFlushesVitalCommonData() {
+        VitalCommonDataProvider vitalCommonDataProvider =
+            GlobalServiceLocator.getInstance().getVitalDataProviderStorage().getCommonDataProvider();
+
+        verify(mAppMetricaServiceLifecycle).addAllClientDisconnectedObserver(mLifecycleObserverCaptor.capture());
+        mLifecycleObserverCaptor.getValue().onEvent(intent);
+
+        verify(vitalCommonDataProvider).flushAsync();
+    }
 }

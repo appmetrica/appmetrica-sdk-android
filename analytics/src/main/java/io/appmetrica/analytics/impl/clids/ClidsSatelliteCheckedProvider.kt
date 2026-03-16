@@ -9,6 +9,6 @@ internal class ClidsSatelliteCheckedProvider(private val servicePreferences: Pre
     override fun wasSatelliteChecked(): Boolean = servicePreferences.wereSatelliteClidsChecked()
 
     override fun markSatelliteChecked() {
-        servicePreferences.markSatelliteClidsChecked().commit()
+        servicePreferences.markSatelliteClidsChecked()
     }
 }

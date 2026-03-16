@@ -217,9 +217,9 @@ public class KeyValueTableDbHelperWrapperAssertTest extends CommonTest {
     }
 
     @Test
-    public void doNotCheckOnCommit() {
+    public void doNotCheckOnFlushAsync() {
         helper = new KeyValueTableDbHelperWrapper(context, StorageType.CLIENT, actualHelper);
-        helper.commit();
+        helper.flushAsync();
         sDebugAssert.getStaticMock().verify(
             new MockedStatic.Verification() {
                 @Override

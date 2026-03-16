@@ -73,6 +73,7 @@ public class DatabaseHelperTest extends CommonTest {
         };
 
     private SQLiteDatabase db;
+    private SimpleDatabaseHelper simpleDbHelper;
     private DatabaseHelper helper;
     @Mock
     private DatabaseStorage storage;
@@ -123,8 +124,8 @@ public class DatabaseHelperTest extends CommonTest {
         when(AppMetricaSelfReportFacade.getReporter()).thenReturn(reporter);
         when(GlobalServiceLocator.getInstance().getSelfDiagnosticReporterStorage().getOrCreateReporter(any(), any()))
             .thenReturn(mock(SelfDiagnosticReporter.class));
-        SimpleDatabaseHelper simpleDatabaseHelper = new SimpleDatabaseHelper(RuntimeEnvironment.getApplication());
-        db = simpleDatabaseHelper.getWritableDatabase();
+        simpleDbHelper = new SimpleDatabaseHelper(RuntimeEnvironment.getApplication());
+        db = simpleDbHelper.getWritableDatabase();
 
         doReturn(db).when(storage).getWritableDatabase();
         doReturn(db).when(storage).getReadableDatabase();
@@ -150,6 +151,7 @@ public class DatabaseHelperTest extends CommonTest {
 
     @After
     public void tearDown() throws Exception {
+        simpleDbHelper.close();
         db.close();
     }
 

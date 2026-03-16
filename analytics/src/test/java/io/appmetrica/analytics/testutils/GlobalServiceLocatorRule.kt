@@ -64,6 +64,7 @@ class GlobalServiceLocatorRule : ExternalResource() {
     val defaultExecutor = MockProvider.mockedBlockingExecutorMock()
     val uiExecutor = MockProvider.mockedBlockingExecutorMock()
     val metricaCoreExecutor = MockProvider.mockedBlockingExecutorMock()
+    val persistentExecutor = MockProvider.mockedBlockingExecutorMock()
 
     val serviceExecutorProviderMock = mock<ServiceExecutorProvider> {
         on { reportRunnableExecutor } doReturn reportRunnableExecutor
@@ -73,6 +74,7 @@ class GlobalServiceLocatorRule : ExternalResource() {
         on { defaultExecutor } doReturn defaultExecutor
         on { uiExecutor } doReturn uiExecutor
         on { metricaCoreExecutor } doReturn metricaCoreExecutor
+        on { persistenceExecutor } doReturn persistentExecutor
     }
 
     override fun before() {
