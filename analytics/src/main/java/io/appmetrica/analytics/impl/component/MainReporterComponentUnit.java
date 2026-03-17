@@ -2,21 +2,13 @@ package io.appmetrica.analytics.impl.component;
 
 import android.content.Context;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreutils.internal.services.PackageManagerUtils;
 import io.appmetrica.analytics.coreutils.internal.time.TimePassedChecker;
-import io.appmetrica.analytics.impl.CounterReport;
 import io.appmetrica.analytics.impl.DataSendingRestrictionControllerImpl;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
-import io.appmetrica.analytics.impl.InternalEvents;
 import io.appmetrica.analytics.impl.component.processor.EventProcessingStrategyFactory;
 import io.appmetrica.analytics.impl.component.processor.factory.RegularMainReporterFactory;
-import io.appmetrica.analytics.impl.referrer.common.ReferrerInfo;
-import io.appmetrica.analytics.impl.referrer.service.IReferrerHandledNotifier;
-import io.appmetrica.analytics.impl.referrer.service.IReferrerHandledProvider;
-import io.appmetrica.analytics.impl.referrer.service.ReferrerHolder;
-import io.appmetrica.analytics.impl.referrer.service.ReferrerListenerNotifier;
 import io.appmetrica.analytics.impl.startup.StartupState;
 import io.appmetrica.analytics.impl.startup.executor.ComponentStartupExecutorFactory;
 import io.appmetrica.analytics.internal.CounterConfigurationReporterType;
@@ -24,15 +16,10 @@ import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_REGULAR;
 
-public class MainReporterComponentUnit extends ComponentUnit
-    implements IReferrerHandledProvider, IReferrerHandledNotifier {
+public class MainReporterComponentUnit extends ComponentUnit {
 
     private static final String TAG = "[MainMasterComponentUnit]";
 
-    @NonNull
-    private final ReferrerHolder mReferrerHolder;
-    @NonNull
-    private final ReferrerListenerNotifier mReferrerListener;
     @NonNull
     private final DataSendingRestrictionControllerImpl dateSendingRestrictionController;
 
@@ -40,7 +27,6 @@ public class MainReporterComponentUnit extends ComponentUnit
                                      @NonNull StartupState startupState,
                                      @NonNull ComponentId componentId,
                                      @NonNull CommonArguments.ReporterArguments sdkConfig,
-                                     @NonNull ReferrerHolder referrerHolder,
                                      @NonNull DataSendingRestrictionControllerImpl controller,
                                      @NonNull ComponentStartupExecutorFactory executorFactory) {
         this(
@@ -64,7 +50,6 @@ public class MainReporterComponentUnit extends ComponentUnit
                 GlobalServiceLocator.getInstance().getLifecycleDependentComponentManager(),
                 new MainComponentEventTriggerProviderCreator()
             ),
-            referrerHolder,
             controller
         );
     }
@@ -77,7 +62,6 @@ public class MainReporterComponentUnit extends ComponentUnit
                               @NonNull AppEnvironmentProvider appEnvironmentProvider,
                               @NonNull TimePassedChecker timePassedChecker,
                               @NonNull MainReporterComponentUnitFieldsFactory fieldsFactory,
-                              @NonNull ReferrerHolder referrerHolder,
                               @NonNull DataSendingRestrictionControllerImpl controller) {
         super(
             context,
@@ -87,42 +71,13 @@ public class MainReporterComponentUnit extends ComponentUnit
             fieldsFactory,
             sdkConfig
         );
-        mReferrerHolder = referrerHolder;
         EventProcessingStrategyFactory factory = getEventProcessingStrategyFactory();
         factory.mutateHandlers(EVENT_TYPE_REGULAR, new RegularMainReporterFactory(factory.getHandlersProvider()));
-        mReferrerListener = fieldsFactory.createReferrerListener(this);
         dateSendingRestrictionController = controller;
         GlobalServiceLocator.getInstance().getServiceModuleReporterComponentLifecycle()
             .onMainReporterCreated(
                 new ServiceModuleReporterComponentContextImpl(this, sdkConfig)
             );
-    }
-
-    @Override
-    public boolean wasReferrerHandled() {
-        return getVitalComponentDataProvider().getReferrerHandled();
-    }
-
-    @Override
-    public void onReferrerHandled() {
-        getVitalComponentDataProvider().setReferrerHandled(true);
-    }
-
-    public class MainReporterListener implements ReferrerHolder.Listener {
-
-        @Override
-        public void handleReferrer(@Nullable ReferrerInfo referrer) {
-            // referrer is NonNull due to used filter
-            if (referrer == null) {
-                DebugLogger.INSTANCE.error(TAG, "Unexpected null referrer");
-                return;
-            }
-            final CounterReport referrerReport = new CounterReport();
-            referrerReport.setValueBytes(referrer.toProto());
-            referrerReport.setType(InternalEvents.EVENT_TYPE_SEND_REFERRER.getTypeId());
-            handleReport(referrerReport);
-        }
-
     }
 
     @Override
@@ -136,10 +91,5 @@ public class MainReporterComponentUnit extends ComponentUnit
     @NonNull
     public CounterConfigurationReporterType getReporterType() {
         return CounterConfigurationReporterType.MAIN;
-    }
-
-    @Override
-    public void subscribeForReferrer() {
-        mReferrerHolder.subscribe(mReferrerListener);
     }
 }

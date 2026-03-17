@@ -9,7 +9,7 @@ import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.clids.ClidsInfo;
 import io.appmetrica.analytics.impl.db.state.converter.StatSendingConverter;
 import io.appmetrica.analytics.impl.modules.ModulesRemoteConfigArgumentsCollector;
-import io.appmetrica.analytics.impl.referrer.service.ReferrerHolder;
+import io.appmetrica.analytics.impl.referrer.service.ReferrerManager;
 import io.appmetrica.analytics.impl.request.Obfuscator;
 import io.appmetrica.analytics.impl.request.StartupRequestConfig;
 import io.appmetrica.analytics.impl.request.UrlParts;
@@ -50,7 +50,7 @@ public class AllParsedParametersAreRequestedTest extends CommonTest {
     @Mock
     private StartupRequestConfig startupRequestConfig;
     @Mock
-    private ReferrerHolder referrerHolder;
+    private ReferrerManager referrerManager;
     @Mock
     private JsonResponseProvider jsonResponseProvider;
     @Mock
@@ -72,7 +72,7 @@ public class AllParsedParametersAreRequestedTest extends CommonTest {
             }
         }).when(obfuscator).obfuscate(anyString());
         when(startupRequestConfig.getChosenClids()).thenReturn(new ClidsInfo.Candidate(Collections.singletonMap("clid0", "0"), DistributionSource.APP));
-        when(startupRequestConfig.getReferrerHolder()).thenReturn(referrerHolder);
+        when(startupRequestConfig.getReferrerManager()).thenReturn(referrerManager);
         AdvertisingIdsHolder advertisingIdsHolder = mock(AdvertisingIdsHolder.class);
         when(advertisingIdsHolder.getGoogle()).thenReturn(new AdTrackingInfoResult());
         when(advertisingIdsHolder.getHuawei()).thenReturn(new AdTrackingInfoResult());

@@ -36,7 +36,7 @@ import io.appmetrica.analytics.impl.modules.ModuleEntryPointsRegister
 import io.appmetrica.analytics.impl.modules.ModuleEventHandlersHolder
 import io.appmetrica.analytics.impl.modules.service.ServiceModulesController
 import io.appmetrica.analytics.impl.network.http.SslSocketFactoryProviderImpl
-import io.appmetrica.analytics.impl.referrer.service.ReferrerHolder
+import io.appmetrica.analytics.impl.referrer.service.ReferrerManager
 import io.appmetrica.analytics.impl.service.ServiceDataReporterHolder
 import io.appmetrica.analytics.impl.servicecomponents.ServiceLifecycleTimeTracker
 import io.appmetrica.analytics.impl.startup.CollectingFlags
@@ -96,7 +96,7 @@ class GlobalServiceLocatorRule : ExternalResource() {
         whenever(globalServiceLocator.getClidsStorage()).thenReturn(mock<ClidsInfoStorage>())
         whenever(globalServiceLocator.context).thenReturn(contextRule.context)
         whenever(globalServiceLocator.getPreloadInfoStorage()).thenReturn(mock<PreloadInfoStorage>())
-        whenever(globalServiceLocator.getReferrerHolder()).thenReturn(mock<ReferrerHolder>())
+        whenever(globalServiceLocator.referrerManager).thenReturn(mock<ReferrerManager>())
         whenever(globalServiceLocator.selfDiagnosticReporterStorage).thenReturn(mock<SelfDiagnosticReporterStorage>())
         whenever(globalServiceLocator.getDataSendingRestrictionController()).thenReturn(
             mock<DataSendingRestrictionControllerImpl>()

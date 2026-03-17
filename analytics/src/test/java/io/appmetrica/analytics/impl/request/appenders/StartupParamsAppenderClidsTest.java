@@ -7,7 +7,7 @@ import io.appmetrica.analytics.impl.DistributionSource;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.clids.ClidsInfo;
 import io.appmetrica.analytics.impl.modules.ModulesRemoteConfigArgumentsCollector;
-import io.appmetrica.analytics.impl.referrer.service.ReferrerHolder;
+import io.appmetrica.analytics.impl.referrer.service.ReferrerManager;
 import io.appmetrica.analytics.impl.request.Obfuscator;
 import io.appmetrica.analytics.impl.request.StartupRequestConfig;
 import io.appmetrica.analytics.impl.request.UrlParts;
@@ -36,7 +36,7 @@ public class StartupParamsAppenderClidsTest extends CommonTest {
     @Mock
     private Obfuscator obfuscator;
     @Mock
-    private ReferrerHolder referrerHolder;
+    private ReferrerManager referrerManager;
     @Mock
     private DataSendingRestrictionControllerImpl dataSendingRestrictionController;
     @Mock
@@ -64,7 +64,7 @@ public class StartupParamsAppenderClidsTest extends CommonTest {
         chosenClids.put("clid11", "1");
         clidsSource = DistributionSource.APP;
         clidsSourceString = "api";
-        when(startupRequestConfig.getReferrerHolder()).thenReturn(referrerHolder);
+        when(startupRequestConfig.getReferrerManager()).thenReturn(referrerManager);
         when(startupRequestConfig.getChosenClids()).thenReturn(new ClidsInfo.Candidate(null, clidsSource));
         when(startupRequestConfig.getClidsFromClient()).thenReturn(TestData.TEST_CLIDS);
 

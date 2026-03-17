@@ -21,7 +21,7 @@ import io.appmetrica.analytics.impl.component.processor.event.ReportSessionHandl
 import io.appmetrica.analytics.impl.component.processor.event.SaveInitialUserProfileIDHandler;
 import io.appmetrica.analytics.impl.component.processor.event.SavePreloadInfoHandler;
 import io.appmetrica.analytics.impl.component.processor.event.SaveSessionExtrasHandler;
-import io.appmetrica.analytics.impl.component.processor.event.SubscribeForReferrerHandler;
+import io.appmetrica.analytics.impl.component.processor.event.SendReferrerEventHandler;
 import io.appmetrica.analytics.impl.component.processor.event.UpdateUserProfileIDHandler;
 import io.appmetrica.analytics.impl.component.processor.event.modules.ModulesEventHandler;
 import io.appmetrica.analytics.impl.component.processor.factory.ActivationFactory;
@@ -120,7 +120,7 @@ public class BaseEventProcessingStrategyFactoryTest extends CommonTest {
             when(mock.getSavePreloadInfoHandler()).thenReturn(mock(SavePreloadInfoHandler.class));
             when(mock.getApplySettingsFromActivationConfigHandler())
                 .thenReturn(mock(ApplySettingsFromActivationConfigHandler.class));
-            when(mock.getSubscribeForReferrerHandler()).thenReturn(mock(SubscribeForReferrerHandler.class));
+            when(mock.getSendReferrerEventHandler()).thenReturn(mock(SendReferrerEventHandler.class));
             when(mock.getSaveInitialUserProfileIDHandler()).thenReturn(mock(SaveInitialUserProfileIDHandler.class));
             when(mock.getModulesEventHandler()).thenReturn(mock(ModulesEventHandler.class));
             when(mock.getSaveSessionExtrasHandler()).thenReturn(mock(SaveSessionExtrasHandler.class));

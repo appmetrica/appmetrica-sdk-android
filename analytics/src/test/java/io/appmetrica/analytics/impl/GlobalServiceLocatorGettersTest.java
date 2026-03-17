@@ -22,7 +22,7 @@ import io.appmetrica.analytics.impl.modules.service.ServiceModulesController;
 import io.appmetrica.analytics.impl.network.http.BaseSslSocketFactoryProvider;
 import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoCandidatesHelper;
 import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoData;
-import io.appmetrica.analytics.impl.referrer.service.ReferrerHolder;
+import io.appmetrica.analytics.impl.referrer.service.ReferrerManager;
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade;
 import io.appmetrica.analytics.impl.selfreporting.SelfReporterWrapper;
 import io.appmetrica.analytics.impl.service.ServiceDataReporterHolder;
@@ -85,11 +85,11 @@ public class GlobalServiceLocatorGettersTest extends CommonTest {
                 }
             },
             {
-                "ReferrerHolder",
-                new ServiceExtractor<ReferrerHolder>() {
+                "ReferrerManager",
+                new ServiceExtractor<ReferrerManager>() {
                     @Override
-                    public ReferrerHolder getService(GlobalServiceLocator globalServiceLocator) {
-                        return globalServiceLocator.getReferrerHolder();
+                    public ReferrerManager getService(GlobalServiceLocator globalServiceLocator) {
+                        return globalServiceLocator.getReferrerManager();
                     }
                 }
             },
@@ -438,8 +438,8 @@ public class GlobalServiceLocatorGettersTest extends CommonTest {
         new MockedConstructionRule<>(StartupStateHolder.class);
 
     @Rule
-    public final MockedConstructionRule<ReferrerHolder> referrerHolderMockedConstructionRule =
-        new MockedConstructionRule<>(ReferrerHolder.class);
+    public final MockedConstructionRule<ReferrerManager> referrerManagerMockedConstructionRule =
+        new MockedConstructionRule<>(ReferrerManager.class);
 
     @Rule
     public final MockedConstructionRule<AdvertisingIdGetter> advertisingIdGetterMockedConstructionRule =

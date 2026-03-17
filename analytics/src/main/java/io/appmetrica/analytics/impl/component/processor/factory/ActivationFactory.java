@@ -1,13 +1,17 @@
 package io.appmetrica.analytics.impl.component.processor.factory;
 
 import androidx.annotation.NonNull;
+import io.appmetrica.analytics.impl.component.ComponentId;
 import io.appmetrica.analytics.impl.component.processor.event.ReportComponentHandler;
 import java.util.List;
 
 public class ActivationFactory extends HandlersFactory<ReportComponentHandler> {
 
-    public ActivationFactory(ReportingHandlerProvider provider) {
+    private final ComponentId componentId;
+
+    public ActivationFactory(ReportingHandlerProvider provider, ComponentId componentId) {
         super(provider);
+        this.componentId = componentId;
     }
 
     @Override
@@ -16,6 +20,8 @@ public class ActivationFactory extends HandlersFactory<ReportComponentHandler> {
         reportHandlers.add(getProvider().getSavePreloadInfoHandler());
         reportHandlers.add(getProvider().getSaveInitialUserProfileIDHandler());
         reportHandlers.add(getProvider().getReportFirstHandler());
-        reportHandlers.add(getProvider().getSubscribeForReferrerHandler());
+        if (componentId.isMain()) {
+            reportHandlers.add(getProvider().getSendReferrerEventHandler());
+        }
     }
 }

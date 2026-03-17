@@ -9,8 +9,6 @@ import io.appmetrica.analytics.impl.ClientIdentifiersChangedListener;
 import io.appmetrica.analytics.impl.ClientIdentifiersHolder;
 import io.appmetrica.analytics.impl.ClientIdentifiersProvider;
 import io.appmetrica.analytics.impl.ClientIdentifiersProviderFactory;
-import io.appmetrica.analytics.impl.utils.BooleanUtils;
-import io.appmetrica.analytics.internal.CounterConfigurationReporterType;
 import io.appmetrica.analytics.impl.CounterReport;
 import io.appmetrica.analytics.impl.DataResultReceiver;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
@@ -20,17 +18,16 @@ import io.appmetrica.analytics.impl.component.clients.CommutationClientUnit;
 import io.appmetrica.analytics.impl.component.processor.commutation.CommutationHandler;
 import io.appmetrica.analytics.impl.component.processor.commutation.CommutationReportProcessor;
 import io.appmetrica.analytics.impl.id.AdvertisingIdGetter;
-import io.appmetrica.analytics.impl.referrer.common.ReferrerChosenListener;
-import io.appmetrica.analytics.impl.referrer.common.ReferrerInfo;
 import io.appmetrica.analytics.impl.referrer.common.ReferrerResultReceiver;
-import io.appmetrica.analytics.impl.referrer.service.ReferrerHolder;
 import io.appmetrica.analytics.impl.referrer.service.ReferrerManager;
 import io.appmetrica.analytics.impl.startup.StartupCenter;
 import io.appmetrica.analytics.impl.startup.StartupError;
 import io.appmetrica.analytics.impl.startup.StartupListener;
 import io.appmetrica.analytics.impl.startup.StartupState;
 import io.appmetrica.analytics.impl.startup.StartupUnit;
+import io.appmetrica.analytics.impl.utils.BooleanUtils;
 import io.appmetrica.analytics.impl.utils.StartupUtils;
+import io.appmetrica.analytics.internal.CounterConfigurationReporterType;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -68,8 +65,6 @@ public class CommutationDispatcherComponent implements IComponent, StartupListen
     @NonNull
     private final ComponentLifecycleManager<CommutationClientUnit> mLifecycleManager;
     @NonNull
-    private final ReferrerHolder mReferrerHolder;
-    @NonNull
     private final ClientIdentifiersProvider mClientIdentifiersProvider;
     @NonNull
     private final ReferrerManager referrerManager;
@@ -79,19 +74,16 @@ public class CommutationDispatcherComponent implements IComponent, StartupListen
     public CommutationDispatcherComponent(@NonNull Context context,
                                           @NonNull StartupCenter startupCenter,
                                           @NonNull ComponentId componentId,
-                                          @NonNull CommonArguments clientConfiguration,
-                                          @NonNull ReferrerHolder referrerHolder) {
+                                          @NonNull CommonArguments clientConfiguration) {
         this(
                 context,
                 startupCenter,
                 componentId,
                 clientConfiguration,
                 new ReporterArgumentsHolder(clientConfiguration.componentArguments),
-                referrerHolder,
                 new ComponentLifecycleManager<CommutationClientUnit>(),
                 new CommutationDispatcherComponentFieldsFactory(),
-                new ClientIdentifiersProviderFactory(),
-                new ReferrerManager()
+                new ClientIdentifiersProviderFactory()
         );
     }
 
@@ -101,11 +93,9 @@ public class CommutationDispatcherComponent implements IComponent, StartupListen
                                    @NonNull ComponentId componentId,
                                    @NonNull CommonArguments clientConfiguration,
                                    @NonNull ReporterArgumentsHolder reporterArgumentsHolder,
-                                   @NonNull ReferrerHolder referrerHolder,
                                    @NonNull ComponentLifecycleManager<CommutationClientUnit> componentLifecycleManager,
                                    @NonNull CommutationDispatcherComponentFieldsFactory fieldsFactory,
-                                   @NonNull ClientIdentifiersProviderFactory clientIdentifiersProviderFactory,
-                                   @NonNull ReferrerManager referrerManager) {
+                                   @NonNull ClientIdentifiersProviderFactory clientIdentifiersProviderFactory) {
         mContext = context.getApplicationContext();
         mComponentId = componentId;
         mStartupCenter = startupCenter;
@@ -128,9 +118,9 @@ public class CommutationDispatcherComponent implements IComponent, StartupListen
             "Create a new commutation component for package: %s",
             componentId.getPackage()
         );
-        mReferrerHolder = referrerHolder;
 
-        this.referrerManager = referrerManager;
+        referrerManager = GlobalServiceLocator.getInstance().getReferrerManager();
+        referrerManager.warmUpReferrer();
         DebugLogger.INSTANCE.info(TAG, "Subscribe on referrer updates from commutation dispatcher component");
         mStartupCenter.registerStartupListener(mComponentId, this);
     }
@@ -313,17 +303,10 @@ public class CommutationDispatcherComponent implements IComponent, StartupListen
 
     public void requestReferrer(@Nullable final ResultReceiver receiver) {
         DebugLogger.INSTANCE.info(TAG, "Request referrer. Receiver: %s", receiver);
-        referrerManager.addOneShotListener(new ReferrerChosenListener() {
-            @Override
-            public void onReferrerChosen(@Nullable ReferrerInfo referrerInfo) {
-                ReferrerResultReceiver.sendReferrer(receiver, referrerInfo);
-            }
+        referrerManager.requestReferrer(result -> {
+            DebugLogger.INSTANCE.info(TAG, "Request referrer. Result: %s", result);
+            ReferrerResultReceiver.sendReferrer(receiver, result.getReferrerInfo());
         });
-    }
-
-    @NonNull
-    public ReferrerHolder getReferrerHolder() {
-        return mReferrerHolder;
     }
 
     @NonNull

@@ -110,7 +110,7 @@ public abstract class ComponentUnitBaseTest extends CommonTest {
     @Mock
     EventProcessingStrategyFactory mEventProcessingStrategyFactory;
     @Mock
-    private ReportingReportProcessor mReportProcessor;
+    protected ReportingReportProcessor mReportProcessor;
     @Mock
     private ComponentMigrationHelper.Creator mMigrationHelperCreator;
     @Mock

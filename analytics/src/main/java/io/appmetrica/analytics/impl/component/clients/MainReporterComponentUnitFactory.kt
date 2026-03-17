@@ -20,7 +20,6 @@ internal class MainReporterComponentUnitFactory : ComponentUnitFactory<MainRepor
         startupUnit.startupState,
         componentId,
         sdkConfig,
-        GlobalServiceLocator.getInstance().referrerHolder,
         GlobalServiceLocator.getInstance().dataSendingRestrictionController,
         RegularExecutorFactory(startupUnit)
     )

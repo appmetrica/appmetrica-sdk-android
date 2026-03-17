@@ -14,7 +14,8 @@ import io.appmetrica.analytics.impl.clids.ClidsInfo;
 import io.appmetrica.analytics.impl.id.AdvertisingIdGetter;
 import io.appmetrica.analytics.impl.modules.ModulesRemoteConfigArgumentsCollector;
 import io.appmetrica.analytics.impl.referrer.common.ReferrerInfo;
-import io.appmetrica.analytics.impl.referrer.service.ReferrerHolder;
+import io.appmetrica.analytics.impl.referrer.service.ReferrerManager;
+import io.appmetrica.analytics.impl.referrer.service.ReferrerResult;
 import io.appmetrica.analytics.impl.request.Obfuscator;
 import io.appmetrica.analytics.impl.request.StartupRequestConfig;
 import io.appmetrica.analytics.networktasks.internal.CommonUrlParts;
@@ -53,7 +54,7 @@ public class StartupParamsAppenderTest extends CommonTest {
     @Mock
     private Obfuscator obfuscator;
     @Mock
-    private ReferrerHolder referrerHolder;
+    private ReferrerManager referrerManager;
     @Mock
     private AdvertisingIdGetter advertisingIdGetter;
     @Mock
@@ -88,7 +89,7 @@ public class StartupParamsAppenderTest extends CommonTest {
         when(advertisingIdsHolder.getHuawei()).thenReturn(huawei);
         when(advertisingIdsHolder.getYandex()).thenReturn(yandex);
         when(startupRequestConfig.getChosenClids()).thenReturn(noClidsInfo);
-        when(startupRequestConfig.getReferrerHolder()).thenReturn(referrerHolder);
+        when(startupRequestConfig.getReferrerManager()).thenReturn(referrerManager);
         when(GlobalServiceLocator.getInstance().getAdvertisingIdGetter().getIdentifiers())
             .thenReturn(advertisingIdsHolder);
         startupParamsAppender = new StartupParamsAppender(obfuscator, modulesArgumentsCollector);
@@ -278,11 +279,25 @@ public class StartupParamsAppenderTest extends CommonTest {
         doReturn(filledClidsInfo).when(startupRequestConfig).getChosenClids();
         doReturn(null).when(startupRequestConfig).getDistributionReferrer();
         doReturn(null).when(startupRequestConfig).getInstallReferrerSource();
-        when(referrerHolder.getReferrerInfo()).thenReturn(new ReferrerInfo(referrer, 10, 20, ReferrerInfo.Source.GP));
+        ReferrerInfo referrerInfo = new ReferrerInfo(referrer, 10, 20, ReferrerInfo.Source.GP);
+        when(referrerManager.getCachedReferrer()).thenReturn(new ReferrerResult.Success(referrerInfo));
         when(obfuscator.obfuscate("install_referrer")).thenReturn("obfuscated_referrer");
         when(obfuscator.obfuscate("install_referrer_source")).thenReturn("obfuscated_referrer_source");
         startupParamsAppender.appendParams(mBuilder, startupRequestConfig);
         assertThat(mBuilder.toString()).contains("obfuscated_referrer=some_referrer").contains("obfuscated_referrer_source=gpl");
+    }
+
+    @Test
+    public void testReferrerAndSourceHasClidsNoReferrerInConfigAndFailedReferrerInReferrerManager() {
+        String source = "broadcast";
+        doReturn(filledClidsInfo).when(startupRequestConfig).getChosenClids();
+        doReturn(null).when(startupRequestConfig).getDistributionReferrer();
+        doReturn(source).when(startupRequestConfig).getInstallReferrerSource();
+        when(referrerManager.getCachedReferrer()).thenReturn(new ReferrerResult.Failure("error", null));
+        when(obfuscator.obfuscate("install_referrer")).thenReturn("obfuscated_referrer");
+        when(obfuscator.obfuscate("install_referrer_source")).thenReturn("obfuscated_referrer_source");
+        startupParamsAppender.appendParams(mBuilder, startupRequestConfig);
+        assertThat(mBuilder.toString()).doesNotContain("obfuscated_referrer").doesNotContain("obfuscated_referrer_source");
     }
 
     @Test
@@ -291,6 +306,7 @@ public class StartupParamsAppenderTest extends CommonTest {
         doReturn(filledClidsInfo).when(startupRequestConfig).getChosenClids();
         doReturn(null).when(startupRequestConfig).getDistributionReferrer();
         doReturn(source).when(startupRequestConfig).getInstallReferrerSource();
+        doReturn(null).when(referrerManager).getCachedReferrer();
         when(obfuscator.obfuscate("install_referrer")).thenReturn("obfuscated_referrer");
         when(obfuscator.obfuscate("install_referrer_source")).thenReturn("obfuscated_referrer_source");
         startupParamsAppender.appendParams(mBuilder, startupRequestConfig);
@@ -298,12 +314,23 @@ public class StartupParamsAppenderTest extends CommonTest {
     }
 
     @Test
-    public void testReferrerAndSourceNoClidsNoReferrerInconfig() {
+    public void testReferrerAndSourceNoClidsNoReferrerInConfig() {
         doReturn(null).when(startupRequestConfig).getDistributionReferrer();
         doReturn(null).when(startupRequestConfig).getInstallReferrerSource();
-        when(referrerHolder.getReferrerInfo()).thenReturn(
-            new ReferrerInfo("some_referrer", 10, 20, ReferrerInfo.Source.HMS)
-        );
+        ReferrerInfo referrerInfo = new ReferrerInfo("some_referrer", 10, 20, ReferrerInfo.Source.HMS);
+        when(referrerManager.getCachedReferrer()).thenReturn(new ReferrerResult.Success(referrerInfo));
+        when(obfuscator.obfuscate("install_referrer")).thenReturn("obfuscated_referrer");
+        when(obfuscator.obfuscate("install_referrer_source")).thenReturn("obfuscated_referrer_source");
+        startupParamsAppender.appendParams(mBuilder, startupRequestConfig);
+        assertThat(mBuilder.toString()).doesNotContain("obfuscated_referrer").doesNotContain("obfuscated_referrer_source");
+    }
+
+    @Test
+    public void testReferrerAndSourceNoClidsNoReferrerInConfigAndFailedReferrerInReferrerManager() {
+        String source = "broadcast";
+        doReturn(null).when(startupRequestConfig).getDistributionReferrer();
+        doReturn(source).when(startupRequestConfig).getInstallReferrerSource();
+        when(referrerManager.getCachedReferrer()).thenReturn(new ReferrerResult.Failure("error", null));
         when(obfuscator.obfuscate("install_referrer")).thenReturn("obfuscated_referrer");
         when(obfuscator.obfuscate("install_referrer_source")).thenReturn("obfuscated_referrer_source");
         startupParamsAppender.appendParams(mBuilder, startupRequestConfig);
@@ -315,6 +342,7 @@ public class StartupParamsAppenderTest extends CommonTest {
         String source = "broadcast";
         doReturn(null).when(startupRequestConfig).getDistributionReferrer();
         doReturn(source).when(startupRequestConfig).getInstallReferrerSource();
+        doReturn(null).when(referrerManager).getCachedReferrer();
         when(obfuscator.obfuscate("install_referrer")).thenReturn("obfuscated_referrer");
         when(obfuscator.obfuscate("install_referrer_source")).thenReturn("obfuscated_referrer_source");
         startupParamsAppender.appendParams(mBuilder, startupRequestConfig);

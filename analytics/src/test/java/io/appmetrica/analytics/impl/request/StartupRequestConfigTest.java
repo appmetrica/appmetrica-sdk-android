@@ -8,7 +8,7 @@ import io.appmetrica.analytics.coreapi.internal.identifiers.PlatformIdentifiers;
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.SdkEnvironmentProvider;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.id.AdvertisingIdGetter;
-import io.appmetrica.analytics.impl.referrer.service.ReferrerHolder;
+import io.appmetrica.analytics.impl.referrer.service.ReferrerManager;
 import io.appmetrica.analytics.impl.startup.StartupState;
 import io.appmetrica.analytics.networktasks.internal.RetryPolicyConfig;
 import io.appmetrica.analytics.testutils.CommonTest;
@@ -34,7 +34,7 @@ public class StartupRequestConfigTest extends CommonTest {
     public ContextRule contextRule = new ContextRule();
 
     @Mock
-    private ReferrerHolder mReferrerHolder;
+    private ReferrerManager referrerManager;
     @Mock
     private DefaultStartupHostsProvider defaultStartupHostsProvider;
     @Mock
@@ -123,8 +123,8 @@ public class StartupRequestConfigTest extends CommonTest {
 
     @Test
     public void testReferrerHolder() {
-        StartupRequestConfig requestConfig = new StartupRequestConfig(mReferrerHolder, defaultStartupHostsProvider);
-        assertThat(requestConfig.getReferrerHolder()).isSameAs(mReferrerHolder);
+        StartupRequestConfig requestConfig = new StartupRequestConfig(referrerManager, defaultStartupHostsProvider);
+        assertThat(requestConfig.getReferrerManager()).isSameAs(referrerManager);
     }
 
     @Test
@@ -147,7 +147,7 @@ public class StartupRequestConfigTest extends CommonTest {
         String firstHost = "host.1";
         String secondHost = "host.2";
         when(defaultStartupHostsProvider.getDefaultHosts()).thenReturn(Arrays.asList(firstHost, secondHost));
-        StartupRequestConfig requestConfig = new StartupRequestConfig(mReferrerHolder, defaultStartupHostsProvider);
+        StartupRequestConfig requestConfig = new StartupRequestConfig(referrerManager, defaultStartupHostsProvider);
         assertThat(requestConfig.getStartupHosts()).containsExactly(firstHost, secondHost);
     }
 
@@ -156,7 +156,7 @@ public class StartupRequestConfigTest extends CommonTest {
         String firstHost = "host.1";
         String secondHost = "host.2";
         when(defaultStartupHostsProvider.getDefaultHosts()).thenReturn(new ArrayList<String>());
-        StartupRequestConfig requestConfig = new StartupRequestConfig(mReferrerHolder, defaultStartupHostsProvider);
+        StartupRequestConfig requestConfig = new StartupRequestConfig(referrerManager, defaultStartupHostsProvider);
         requestConfig.setStartupHostsFromClient(Arrays.asList(firstHost, secondHost));
         assertThat(requestConfig.getStartupHosts()).containsExactly(firstHost, secondHost);
     }
@@ -166,7 +166,7 @@ public class StartupRequestConfigTest extends CommonTest {
         String firstHost = "host.1";
         String secondHost = "host.2";
         when(defaultStartupHostsProvider.getDefaultHosts()).thenReturn(new ArrayList<String>());
-        StartupRequestConfig requestConfig = new StartupRequestConfig(mReferrerHolder, defaultStartupHostsProvider);
+        StartupRequestConfig requestConfig = new StartupRequestConfig(referrerManager, defaultStartupHostsProvider);
         requestConfig.setStartupHostsFromStartup(Arrays.asList(firstHost, secondHost));
         assertThat(requestConfig.getStartupHosts()).containsExactly(firstHost, secondHost);
     }
@@ -180,7 +180,7 @@ public class StartupRequestConfigTest extends CommonTest {
         String fifthHost = "host.5";
         String sixthHost = "host.6";
         when(defaultStartupHostsProvider.getDefaultHosts()).thenReturn(Arrays.asList(firstHost, secondHost));
-        StartupRequestConfig requestConfig = new StartupRequestConfig(mReferrerHolder, defaultStartupHostsProvider);
+        StartupRequestConfig requestConfig = new StartupRequestConfig(referrerManager, defaultStartupHostsProvider);
         requestConfig.setStartupHostsFromClient(Arrays.asList(thirdHost, fourthHost));
         requestConfig.setStartupHostsFromStartup(Arrays.asList(fifthHost, sixthHost));
         assertThat(requestConfig.getStartupHosts()).containsExactly(fifthHost, sixthHost, thirdHost, fourthHost, firstHost, secondHost);

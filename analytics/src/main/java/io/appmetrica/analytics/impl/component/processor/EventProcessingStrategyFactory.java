@@ -66,15 +66,17 @@ public class EventProcessingStrategyFactory extends ProcessingStrategyFactory<Re
     public EventProcessingStrategyFactory(ComponentUnit componentUnit) {
         mHandlersProvider = new ReportingHandlerProvider(componentUnit);
         mPreMainFactory = new CommonConditionalFactory(mHandlersProvider);
-        mFactories = createHandlersMap();
+        mFactories = createHandlersMap(componentUnit);
     }
 
     @SuppressWarnings("checkstyle:methodLength")
-    private HashMap<InternalEvents, HandlersFactory<ReportComponentHandler>> createHandlersMap() {
+    private HashMap<InternalEvents, HandlersFactory<ReportComponentHandler>> createHandlersMap(
+        ComponentUnit componentUnit
+    ) {
         HashMap<InternalEvents, HandlersFactory<ReportComponentHandler>> map =
                 new HashMap<InternalEvents, HandlersFactory<ReportComponentHandler>>();
 
-        map.put(EVENT_TYPE_ACTIVATION, new ActivationFactory(mHandlersProvider));
+        map.put(EVENT_TYPE_ACTIVATION, new ActivationFactory(mHandlersProvider, componentUnit.getComponentId()));
         map.put(EVENT_TYPE_START, new StartFactory(mHandlersProvider));
 
         map.put(EVENT_TYPE_REGULAR, new RegularFactory(mHandlersProvider));

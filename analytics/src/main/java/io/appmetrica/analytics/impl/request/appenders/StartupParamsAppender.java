@@ -13,6 +13,7 @@ import io.appmetrica.analytics.impl.Utils;
 import io.appmetrica.analytics.impl.clids.ClidsInfo;
 import io.appmetrica.analytics.impl.modules.ModulesRemoteConfigArgumentsCollector;
 import io.appmetrica.analytics.impl.referrer.common.ReferrerInfo;
+import io.appmetrica.analytics.impl.referrer.service.ReferrerResult;
 import io.appmetrica.analytics.impl.request.Obfuscator;
 import io.appmetrica.analytics.impl.request.StartupRequestConfig;
 import io.appmetrica.analytics.impl.request.UrlParts;
@@ -219,8 +220,9 @@ public class StartupParamsAppender implements IParamsAppender<StartupRequestConf
             installReferrerSource
         );
         if (TextUtils.isEmpty(referrer)) {
-            final ReferrerInfo referrerInfo = requestConfig.getReferrerHolder().getReferrerInfo();
-            DebugLogger.INSTANCE.info(TAG, "referrer from ReferrerHolder: %s", referrerInfo);
+            final ReferrerResult referrerResult = requestConfig.getReferrerManager().getCachedReferrer();
+            final ReferrerInfo referrerInfo = referrerResult == null ? null : referrerResult.getReferrerInfo();
+            DebugLogger.INSTANCE.info(TAG, "referrer from ReferrerManager: %s", referrerInfo);
             if (referrerInfo != null) {
                 referrer = referrerInfo.installReferrer;
                 installReferrerSource = referrerInfo.source.value;

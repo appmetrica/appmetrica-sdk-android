@@ -57,5 +57,8 @@
             <property name="message" value="File is fully commented."/>
         </module>
 
+        <module name="TodoComment">
+            <property name="format" value="(?i)(FIXME)"/>
+        </module>
     </module>
 </module>

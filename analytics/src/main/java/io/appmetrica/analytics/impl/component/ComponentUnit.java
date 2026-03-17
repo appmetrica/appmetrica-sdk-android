@@ -426,11 +426,6 @@ public class ComponentUnit implements IReportableComponent, IComponent,
         mReportsDbHelper.flushAsync();
     }
 
-    public void subscribeForReferrer() {
-        // override this method to actually subscribe
-        // this should be done for main api keys only
-    }
-
     @NonNull
     public SessionExtrasHolder getSessionExtrasHolder() {
         return sessionExtrasHolder;

@@ -12,7 +12,7 @@ import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.Utils;
 import io.appmetrica.analytics.impl.clids.ClidsInfo;
 import io.appmetrica.analytics.impl.client.ClientConfiguration;
-import io.appmetrica.analytics.impl.referrer.service.ReferrerHolder;
+import io.appmetrica.analytics.impl.referrer.service.ReferrerManager;
 import io.appmetrica.analytics.impl.startup.StartupState;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import io.appmetrica.analytics.networktasks.internal.ArgumentsMerger;
@@ -45,21 +45,21 @@ public class StartupRequestConfig extends CoreRequestConfig {
     private String mCountryInit;
     private long mFirstStartupTime = DEFAULT_FIRST_STARTUP_TIME;
     @NonNull
-    private final ReferrerHolder mReferrerHolder;
+    private final ReferrerManager referrerManager;
     @NonNull
     private final DefaultStartupHostsProvider defaultStartupHostsProvider;
 
     private StartupRequestConfig() {
         this(
-            GlobalServiceLocator.getInstance().getReferrerHolder(),
+            GlobalServiceLocator.getInstance().getReferrerManager(),
             new DefaultStartupHostsProvider()
         );
     }
 
     @VisibleForTesting
-    public StartupRequestConfig(@NonNull ReferrerHolder referrerHolder,
+    public StartupRequestConfig(@NonNull ReferrerManager referrerManager,
                                 @NonNull DefaultStartupHostsProvider defaultStartupHostsProvider) {
-        mReferrerHolder = referrerHolder;
+        this.referrerManager = referrerManager;
         this.defaultStartupHostsProvider = defaultStartupHostsProvider;
     }
 
@@ -178,8 +178,8 @@ public class StartupRequestConfig extends CoreRequestConfig {
     }
 
     @NonNull
-    public ReferrerHolder getReferrerHolder() {
-        return mReferrerHolder;
+    public ReferrerManager getReferrerManager() {
+        return referrerManager;
     }
 
     @Override

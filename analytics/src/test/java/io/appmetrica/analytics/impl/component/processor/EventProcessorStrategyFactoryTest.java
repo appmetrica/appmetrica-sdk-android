@@ -20,7 +20,7 @@ import io.appmetrica.analytics.impl.component.processor.event.ReportSessionHandl
 import io.appmetrica.analytics.impl.component.processor.event.SaveInitialUserProfileIDHandler;
 import io.appmetrica.analytics.impl.component.processor.event.SavePreloadInfoHandler;
 import io.appmetrica.analytics.impl.component.processor.event.SaveSessionExtrasHandler;
-import io.appmetrica.analytics.impl.component.processor.event.SubscribeForReferrerHandler;
+import io.appmetrica.analytics.impl.component.processor.event.SendReferrerEventHandler;
 import io.appmetrica.analytics.impl.component.processor.event.UpdateUserProfileIDHandler;
 import io.appmetrica.analytics.impl.component.processor.event.modules.ModulesEventHandler;
 import io.appmetrica.analytics.impl.component.processor.factory.ReportingHandlerProvider;
@@ -36,6 +36,10 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_ACTIVATION;
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_APP_ENVIRONMENT_CLEARED;
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_APP_ENVIRONMENT_UPDATED;
@@ -47,10 +51,6 @@ import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_PREV_SESSIO
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_REGULAR;
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_SET_SESSION_EXTRA;
 import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_START;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 /**
  * @see BaseEventProcessingStrategyFactoryTest
@@ -86,7 +86,7 @@ public class EventProcessorStrategyFactoryTest extends CommonTest {
             when(mock.getSavePreloadInfoHandler()).thenReturn(mock(SavePreloadInfoHandler.class));
             when(mock.getApplySettingsFromActivationConfigHandler())
                 .thenReturn(mock(ApplySettingsFromActivationConfigHandler.class));
-            when(mock.getSubscribeForReferrerHandler()).thenReturn(mock(SubscribeForReferrerHandler.class));
+            when(mock.getSendReferrerEventHandler()).thenReturn(mock(SendReferrerEventHandler.class));
             when(mock.getSaveInitialUserProfileIDHandler()).thenReturn(mock(SaveInitialUserProfileIDHandler.class));
             when(mock.getModulesEventHandler()).thenReturn(mock(ModulesEventHandler.class));
             when(mock.getSaveSessionExtrasHandler()).thenReturn(mock(SaveSessionExtrasHandler.class));
@@ -226,14 +226,27 @@ public class EventProcessorStrategyFactoryTest extends CommonTest {
     }
 
     @Test
-    public void testGetProcessingStrategyReturnExpectedHandlers_EventType_First() {
+    public void testGetProcessingStrategyReturnExpectedHandlers_EventType_First_OnMain() {
+        when(mComponentId.isMain()).thenReturn(true);
         assertThat(getHandlers(EVENT_TYPE_ACTIVATION)).containsExactly(
             mEventProcessingStrategyFactory.getHandlersProvider().getModulesEventHandler(),
             mEventProcessingStrategyFactory.getHandlersProvider().getApplySettingsFromActivationConfigHandler(),
             mEventProcessingStrategyFactory.getHandlersProvider().getSavePreloadInfoHandler(),
             mEventProcessingStrategyFactory.getHandlersProvider().getSaveInitialUserProfileIDHandler(),
             mEventProcessingStrategyFactory.getHandlersProvider().getReportFirstHandler(),
-            mEventProcessingStrategyFactory.getHandlersProvider().getSubscribeForReferrerHandler()
+            mEventProcessingStrategyFactory.getHandlersProvider().getSendReferrerEventHandler()
+        );
+    }
+
+    @Test
+    public void testGetProcessingStrategyReturnExpectedHandlers_EventType_First_OnReporter() {
+        when(mComponentId.isMain()).thenReturn(false);
+        assertThat(getHandlers(EVENT_TYPE_ACTIVATION)).containsExactly(
+                mEventProcessingStrategyFactory.getHandlersProvider().getModulesEventHandler(),
+                mEventProcessingStrategyFactory.getHandlersProvider().getApplySettingsFromActivationConfigHandler(),
+                mEventProcessingStrategyFactory.getHandlersProvider().getSavePreloadInfoHandler(),
+                mEventProcessingStrategyFactory.getHandlersProvider().getSaveInitialUserProfileIDHandler(),
+                mEventProcessingStrategyFactory.getHandlersProvider().getReportFirstHandler()
         );
     }
 

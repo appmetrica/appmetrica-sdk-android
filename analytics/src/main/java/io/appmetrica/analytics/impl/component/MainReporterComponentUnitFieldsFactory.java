@@ -4,8 +4,6 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
 import io.appmetrica.analytics.impl.LifecycleDependentComponentManager;
-import io.appmetrica.analytics.impl.referrer.service.OnlyOnceReferrerNotificationFilter;
-import io.appmetrica.analytics.impl.referrer.service.ReferrerListenerNotifier;
 import io.appmetrica.analytics.impl.request.ReportRequestConfig;
 import io.appmetrica.analytics.impl.startup.StartupState;
 import io.appmetrica.analytics.impl.startup.executor.ComponentStartupExecutorFactory;
@@ -42,14 +40,5 @@ public class MainReporterComponentUnitFieldsFactory extends ComponentUnitFieldsF
             eventTriggerProviderCreator
         );
         this.serviceExecutorProvider = serviceExecutorProvider;
-    }
-
-    @NonNull
-    public ReferrerListenerNotifier createReferrerListener(@NonNull MainReporterComponentUnit unit) {
-        return new ReferrerListenerNotifier(
-            new OnlyOnceReferrerNotificationFilter(unit),
-            unit.new MainReporterListener(),
-            unit
-        );
     }
 }

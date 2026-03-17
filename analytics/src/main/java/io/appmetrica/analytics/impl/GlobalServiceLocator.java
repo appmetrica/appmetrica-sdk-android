@@ -47,7 +47,7 @@ import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoFromSatelliteProvider
 import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoPriorityProvider;
 import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoSatelliteCheckedProvider;
 import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoStateProvider;
-import io.appmetrica.analytics.impl.referrer.service.ReferrerHolder;
+import io.appmetrica.analytics.impl.referrer.service.ReferrerManager;
 import io.appmetrica.analytics.impl.service.ServiceDataReporterHolder;
 import io.appmetrica.analytics.impl.servicecomponents.OuterStoragePathProvider;
 import io.appmetrica.analytics.impl.servicecomponents.ServiceLifecycleTimeTracker;
@@ -85,7 +85,7 @@ public final class GlobalServiceLocator {
 
     @NonNull
     private final Context mContext;
-    private volatile ReferrerHolder mReferrerHolder;
+    private volatile ReferrerManager referrerManager;
     @Nullable
     private volatile DataSendingRestrictionControllerImpl dataSendingRestrictionController;
     @NonNull
@@ -192,15 +192,15 @@ public final class GlobalServiceLocator {
     }
 
     @NonNull
-    public ReferrerHolder getReferrerHolder() {
-        if (mReferrerHolder == null) {
+    public ReferrerManager getReferrerManager() {
+        if (referrerManager == null) {
             synchronized (this) {
-                if (mReferrerHolder == null) {
-                    mReferrerHolder = new ReferrerHolder(mContext);
+                if (referrerManager == null) {
+                    referrerManager = new ReferrerManager(mContext);
                 }
             }
         }
-        return mReferrerHolder;
+        return referrerManager;
     }
 
     @NonNull

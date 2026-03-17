@@ -20,7 +20,7 @@ import io.appmetrica.analytics.impl.component.processor.event.ReportSessionHandl
 import io.appmetrica.analytics.impl.component.processor.event.SaveInitialUserProfileIDHandler;
 import io.appmetrica.analytics.impl.component.processor.event.SavePreloadInfoHandler;
 import io.appmetrica.analytics.impl.component.processor.event.SaveSessionExtrasHandler;
-import io.appmetrica.analytics.impl.component.processor.event.SubscribeForReferrerHandler;
+import io.appmetrica.analytics.impl.component.processor.event.SendReferrerEventHandler;
 import io.appmetrica.analytics.impl.component.processor.event.UpdateUserProfileIDHandler;
 import io.appmetrica.analytics.impl.component.processor.event.modules.ModulesEventHandler;
 import io.appmetrica.analytics.impl.component.processor.session.ReportSessionStopHandler;
@@ -45,7 +45,7 @@ public class ReportingHandlerProvider {
     private final ReportCrashMetaInformation reportCrashMetaInformation;
     private final SavePreloadInfoHandler mSavePreloadInfoHandler;
     private final ApplySettingsFromActivationConfigHandler mApplySettingsFromActivationConfigHandler;
-    private final SubscribeForReferrerHandler mSubscribeForReferrerHandler;
+    private final SendReferrerEventHandler mSendReferrerEventHandler;
     private final SaveInitialUserProfileIDHandler saveInitialUserProfileIDHandler;
     private final ModulesEventHandler modulesEventHandler;
     private final SaveSessionExtrasHandler saveSessionExtrasHandler;
@@ -74,7 +74,7 @@ public class ReportingHandlerProvider {
         );
         mSavePreloadInfoHandler = new SavePreloadInfoHandler(component);
         mApplySettingsFromActivationConfigHandler = new ApplySettingsFromActivationConfigHandler(component);
-        mSubscribeForReferrerHandler = new SubscribeForReferrerHandler(component);
+        mSendReferrerEventHandler = new SendReferrerEventHandler(component);
         saveInitialUserProfileIDHandler = new SaveInitialUserProfileIDHandler(component);
         modulesEventHandler = new ModulesEventHandler(component);
         saveSessionExtrasHandler = new SaveSessionExtrasHandler(component);
@@ -152,8 +152,8 @@ public class ReportingHandlerProvider {
     }
 
     @NonNull
-    public SubscribeForReferrerHandler getSubscribeForReferrerHandler() {
-        return mSubscribeForReferrerHandler;
+    public SendReferrerEventHandler getSendReferrerEventHandler() {
+        return mSendReferrerEventHandler;
     }
 
     @NonNull

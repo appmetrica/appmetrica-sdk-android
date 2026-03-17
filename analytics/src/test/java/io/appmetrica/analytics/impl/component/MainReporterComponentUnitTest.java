@@ -7,37 +7,29 @@ import io.appmetrica.analytics.impl.DataSendingRestrictionControllerImpl;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.component.processor.factory.HandlersFactory;
 import io.appmetrica.analytics.impl.component.processor.factory.RegularMainReporterFactory;
-import io.appmetrica.analytics.impl.referrer.service.ReferrerHolder;
-import io.appmetrica.analytics.impl.referrer.service.ReferrerListenerNotifier;
 import io.appmetrica.analytics.impl.startup.StartupState;
 import io.appmetrica.analytics.internal.CounterConfiguration;
 import io.appmetrica.analytics.internal.CounterConfigurationReporterType;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import java.util.HashSet;
-import java.util.Random;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 
-import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_REGULAR;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static io.appmetrica.analytics.impl.InternalEvents.EVENT_TYPE_REGULAR;
 
 public class MainReporterComponentUnitTest extends ComponentUnitBaseTest {
 
     @Mock
     private CounterConfiguration mCounterConfiguration;
-    @Mock
-    private ReferrerHolder mReferrerHolder;
-    @Mock
-    private ReferrerListenerNotifier mListener;
     @Mock
     private MainReporterComponentUnitFieldsFactory mFieldsFactory;
     @Mock
@@ -62,7 +54,6 @@ public class MainReporterComponentUnitTest extends ComponentUnitBaseTest {
 
     @Override
     protected void initCustomFields() {
-        when(mFieldsFactory.createReferrerListener(any(MainReporterComponentUnit.class))).thenReturn(mListener);
         when(applicationStateProvider.registerStickyObserver(any(ApplicationStateObserver.class)))
             .thenReturn(ApplicationState.UNKNOWN);
     }
@@ -77,7 +68,6 @@ public class MainReporterComponentUnitTest extends ComponentUnitBaseTest {
             mAppEnvironmentProvider,
             mTimePassedChecker,
             mFieldsFactory,
-            mReferrerHolder,
             dataSendingRestrictionController
         );
     }
@@ -103,12 +93,6 @@ public class MainReporterComponentUnitTest extends ComponentUnitBaseTest {
     }
 
     @Test
-    public void testReferrerHolderNotSubscribed() {
-        verify(mFieldsFactory).createReferrerListener(mMainReporterComponentUnit);
-        verify(mReferrerHolder, never()).subscribe(mListener);
-    }
-
-    @Test
     public void testUpdateSdkConfigNullDataSendingEnabled() {
         doReturn(null).when(mCounterConfiguration).getDataSendingEnabled();
         mMainReporterComponentUnit.updateSdkConfig(new CommonArguments.ReporterArguments(mCounterConfiguration, null));
@@ -122,28 +106,9 @@ public class MainReporterComponentUnitTest extends ComponentUnitBaseTest {
         verify(dataSendingRestrictionController).setEnabledFromMainReporter(true);
     }
 
-    @Test
-    public void testWasReferrerHandled() {
-        boolean wasHandled = new Random().nextBoolean();
-        when(vitalComponentDataProvider.getReferrerHandled()).thenReturn(wasHandled);
-        assertThat(mMainReporterComponentUnit.wasReferrerHandled()).isEqualTo(wasHandled);
-    }
-
-    @Test
-    public void testOnReferrerHandled() {
-        mMainReporterComponentUnit.onReferrerHandled();
-        verify(vitalComponentDataProvider).setReferrerHandled(true);
-    }
-
     @Override
     @Test
     public void testGetReporterType() {
         assertThat(mComponentUnit.getReporterType()).isEqualTo(CounterConfigurationReporterType.MAIN);
-    }
-
-    @Test
-    public void testSubscribeForReferrer() {
-        mMainReporterComponentUnit.subscribeForReferrer();
-        verify(mReferrerHolder).subscribe(mListener);
     }
 }

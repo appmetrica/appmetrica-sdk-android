@@ -36,24 +36,24 @@ public class ReferrerHelper implements ReferrerChosenListener {
                           PreferencesClientDbStorage clientPreferences,
                           @NonNull Handler handler) {
         this(
-                reportsHandler,
-                clientPreferences,
-                handler,
-                clientPreferences.isDeferredDeeplinkWasChecked()
+            reportsHandler,
+            clientPreferences,
+            handler,
+            clientPreferences.isDeferredDeeplinkWasChecked()
         );
     }
 
-    private ReferrerHelper (@NonNull ReportsHandler reportsHandler,
-                            @NonNull PreferencesClientDbStorage preferencesClientDbStorage,
-                            @NonNull Handler handler,
-                            boolean wasDeferredDeeplinkChecked) {
+    private ReferrerHelper(@NonNull ReportsHandler reportsHandler,
+                           @NonNull PreferencesClientDbStorage preferencesClientDbStorage,
+                           @NonNull Handler handler,
+                           boolean wasDeferredDeeplinkChecked) {
         this(
-                reportsHandler,
-                preferencesClientDbStorage,
-                handler,
-                wasDeferredDeeplinkChecked,
-                new DeferredDeeplinkStateManager(wasDeferredDeeplinkChecked),
-                new ReferrerParser()
+            reportsHandler,
+            preferencesClientDbStorage,
+            handler,
+            wasDeferredDeeplinkChecked,
+            new DeferredDeeplinkStateManager(wasDeferredDeeplinkChecked),
+            new ReferrerParser()
         );
     }
 

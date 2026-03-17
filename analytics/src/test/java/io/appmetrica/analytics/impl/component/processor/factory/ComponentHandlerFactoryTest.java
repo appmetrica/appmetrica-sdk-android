@@ -2,6 +2,7 @@ package io.appmetrica.analytics.impl.component.processor.factory;
 
 import io.appmetrica.analytics.impl.EventsManager;
 import io.appmetrica.analytics.impl.InternalEvents;
+import io.appmetrica.analytics.impl.component.ComponentId;
 import io.appmetrica.analytics.impl.component.processor.event.ApplySettingsFromActivationConfigHandler;
 import io.appmetrica.analytics.impl.component.processor.event.ExternalAttributionHandler;
 import io.appmetrica.analytics.impl.component.processor.event.ReportAppOpenHandler;
@@ -17,7 +18,7 @@ import io.appmetrica.analytics.impl.component.processor.event.ReportSaveToDataba
 import io.appmetrica.analytics.impl.component.processor.event.ReportSessionHandler;
 import io.appmetrica.analytics.impl.component.processor.event.SaveInitialUserProfileIDHandler;
 import io.appmetrica.analytics.impl.component.processor.event.SavePreloadInfoHandler;
-import io.appmetrica.analytics.impl.component.processor.event.SubscribeForReferrerHandler;
+import io.appmetrica.analytics.impl.component.processor.event.SendReferrerEventHandler;
 import io.appmetrica.analytics.impl.component.processor.event.UpdateUserProfileIDHandler;
 import io.appmetrica.analytics.impl.component.processor.event.modules.ModulesEventHandler;
 import io.appmetrica.analytics.impl.component.processor.session.ReportSessionStopHandler;
@@ -65,7 +66,7 @@ public class ComponentHandlerFactoryTest extends CommonTest {
     @Mock
     private ApplySettingsFromActivationConfigHandler mApplySettingsFromActivationConfigHandler;
     @Mock
-    private SubscribeForReferrerHandler mSubscribeForReferrerHandler;
+    private SendReferrerEventHandler mSendReferrerEventHandler;
     @Mock
     private UpdateUserProfileIDHandler updateUserProfileIDHandler;
     @Mock
@@ -74,6 +75,8 @@ public class ComponentHandlerFactoryTest extends CommonTest {
     private ModulesEventHandler moduleEventHandler;
     @Mock
     private ExternalAttributionHandler externalAttributionHandler;
+    @Mock
+    private ComponentId componentId;
 
     List<ReportComponentHandler> mHandlersList = new ArrayList<ReportComponentHandler>();
 
@@ -93,7 +96,7 @@ public class ComponentHandlerFactoryTest extends CommonTest {
         when(mProvider.getReportFirstOccurrenceStatusHandler()).thenReturn(mReportFirstOccurrenceStatusHandler);
         when(mProvider.getSavePreloadInfoHandler()).thenReturn(mSavePreloadInfoHandler);
         when(mProvider.getApplySettingsFromActivationConfigHandler()).thenReturn(mApplySettingsFromActivationConfigHandler);
-        when(mProvider.getSubscribeForReferrerHandler()).thenReturn(mSubscribeForReferrerHandler);
+        when(mProvider.getSendReferrerEventHandler()).thenReturn(mSendReferrerEventHandler);
         when(mProvider.getUpdateUserProfileIDHandler()).thenReturn(updateUserProfileIDHandler);
         when(mProvider.getSaveInitialUserProfileIDHandler()).thenReturn(saveInitialUserProfileIDHandler);
         when(mProvider.getModulesEventHandler()).thenReturn(moduleEventHandler);
@@ -102,8 +105,9 @@ public class ComponentHandlerFactoryTest extends CommonTest {
     }
 
     @Test
-    public void testActivationFactory() {
-        ActivationFactory factory = new ActivationFactory(mProvider);
+    public void testActivationFactoryForMainReporter() {
+        when(componentId.isMain()).thenReturn(true);
+        ActivationFactory factory = new ActivationFactory(mProvider, componentId);
         factory.addHandlers(mHandlersList);
 
         assertThat(mHandlersList).containsExactly(
@@ -111,7 +115,21 @@ public class ComponentHandlerFactoryTest extends CommonTest {
             mSavePreloadInfoHandler,
             saveInitialUserProfileIDHandler,
             mReportFirstHandler,
-            mSubscribeForReferrerHandler
+            mSendReferrerEventHandler
+        );
+    }
+
+    @Test
+    public void testActivationFactoryForOtherReporter() {
+        when(componentId.isMain()).thenReturn(false);
+        ActivationFactory factory = new ActivationFactory(mProvider, componentId);
+        factory.addHandlers(mHandlersList);
+
+        assertThat(mHandlersList).containsExactly(
+                mApplySettingsFromActivationConfigHandler,
+                mSavePreloadInfoHandler,
+                saveInitialUserProfileIDHandler,
+                mReportFirstHandler
         );
     }
 

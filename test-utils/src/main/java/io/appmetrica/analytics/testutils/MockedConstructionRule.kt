@@ -5,11 +5,12 @@ import org.mockito.MockedConstruction
 import org.mockito.Mockito
 import org.mockito.kotlin.KStubbing
 import org.mockito.kotlin.stubbing
+import kotlin.reflect.KClass
 import kotlin.reflect.KProperty
 
 class MockedConstructionRule<T>(
     private val clazz: Class<T>,
-    initializer: MockedConstruction.MockInitializer<T>? = null
+    initializer: MockedConstruction.MockInitializer<T>? = null,
 ) : ExternalResource() {
     constructor(clazz: Class<T>) : this(clazz, null)
 
@@ -49,4 +50,7 @@ operator fun <C, T> ConstructionArgumentCaptor<T>.getValue(thisRef: C, property:
 
 inline fun <reified T> constructionRule(noinline initializer: KStubbing<T>.(T) -> Unit = {}) =
     MockedConstructionRule(T::class.java) { mock, _ -> stubbing(mock, initializer) }
+
+fun <T : Any> constructionRule(clazz: KClass<T>, initializer: KStubbing<T>.(T) -> Unit = {}) =
+    MockedConstructionRule(clazz.java) { mock, _ -> stubbing(mock, initializer) }
 /* ktlint-enable appmetrica-rules:no-top-level-members */

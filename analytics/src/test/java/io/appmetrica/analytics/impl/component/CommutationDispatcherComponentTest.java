@@ -15,10 +15,10 @@ import io.appmetrica.analytics.impl.TaskProcessor;
 import io.appmetrica.analytics.impl.component.clients.CommutationClientUnit;
 import io.appmetrica.analytics.impl.component.processor.commutation.CommutationHandler;
 import io.appmetrica.analytics.impl.component.processor.commutation.CommutationReportProcessor;
-import io.appmetrica.analytics.impl.referrer.common.ReferrerChosenListener;
 import io.appmetrica.analytics.impl.referrer.common.ReferrerInfo;
-import io.appmetrica.analytics.impl.referrer.service.ReferrerHolder;
+import io.appmetrica.analytics.impl.referrer.service.ReferrerListener;
 import io.appmetrica.analytics.impl.referrer.service.ReferrerManager;
+import io.appmetrica.analytics.impl.referrer.service.ReferrerResult;
 import io.appmetrica.analytics.impl.request.StartupRequestConfig;
 import io.appmetrica.analytics.impl.startup.Constants;
 import io.appmetrica.analytics.impl.startup.StartupCenter;
@@ -40,7 +40,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
-import org.mockito.ArgumentMatcher;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
@@ -81,8 +80,6 @@ public class CommutationDispatcherComponentTest extends CommonTest {
     @Mock
     private StartupUnit mStartupUnit;
     @Mock
-    private ReferrerHolder mReferrerHolder;
-    @Mock
     private ComponentLifecycleManager<CommutationClientUnit> mLifecycleManager;
     @Mock
     private CommutationReportProcessor<CommutationHandler, CommutationDispatcherComponent> mCommutationReportProcessor;
@@ -95,15 +92,14 @@ public class CommutationDispatcherComponentTest extends CommonTest {
     @Mock
     private ClientIdentifiersHolder mClientIdentifiersHolder;
     private StartupState mStartupState;
-    @Mock
     private ReferrerManager referrerManager;
     private ComponentId mComponentId;
     private CommonArguments mCommonArguments;
     private Map<String, String> mClidsForVerification;
     private Map<String, String> lastClientClidsForRequest;
     private final List<String> mIdentifiers = Arrays.asList(
-        Constants.StartupParamsCallbackKeys.UUID,
-        Constants.StartupParamsCallbackKeys.DEVICE_ID
+            Constants.StartupParamsCallbackKeys.UUID,
+            Constants.StartupParamsCallbackKeys.DEVICE_ID
     );
 
     @Rule
@@ -113,6 +109,7 @@ public class CommutationDispatcherComponentTest extends CommonTest {
     public void setup() {
         MockitoAnnotations.openMocks(this);
         mContext = RuntimeEnvironment.getApplication();
+        referrerManager = GlobalServiceLocator.getInstance().getReferrerManager();
 
         lastClientClidsForRequest = new HashMap<String, String>();
         lastClientClidsForRequest.put("clid2", "2");
@@ -120,9 +117,9 @@ public class CommutationDispatcherComponentTest extends CommonTest {
         mStartupState = createStartupWithClientClids(lastClientClidsForRequest);
         when(mStartupUnit.getStartupState()).thenReturn(mStartupState);
         when(mClientIdentifiersProviderFactory.createClientIdentifiersProvider(
-            mStartupUnit,
-            GlobalServiceLocator.getInstance().getAdvertisingIdGetter(),
-            mContext
+                mStartupUnit,
+                GlobalServiceLocator.getInstance().getAdvertisingIdGetter(),
+                mContext
         )).thenReturn(mClientIdentifiersProvider);
         mClidsForVerification = new HashMap<String, String>();
         mClidsForVerification.put("clid0", "0");
@@ -137,16 +134,14 @@ public class CommutationDispatcherComponentTest extends CommonTest {
         when(mFieldsFactory.createCommutationReportProcessor(any(CommutationDispatcherComponent.class))).thenReturn(mCommutationReportProcessor);
         when(mFieldsFactory.createTaskProcessor(any(CommutationDispatcherComponent.class), same(mStartupUnit))).thenReturn(mTaskProcessor);
         mComponentUnit = new CommutationDispatcherComponent(
-            mContext,
-            mStartupCenter,
-            mComponentId,
-            mCommonArguments,
-            mReporterArgumentsHolder,
-            mReferrerHolder,
-            mLifecycleManager,
-            mFieldsFactory,
-            mClientIdentifiersProviderFactory,
-            referrerManager
+                mContext,
+                mStartupCenter,
+                mComponentId,
+                mCommonArguments,
+                mReporterArgumentsHolder,
+                mLifecycleManager,
+                mFieldsFactory,
+                mClientIdentifiersProviderFactory
         );
     }
 
@@ -232,11 +227,6 @@ public class CommutationDispatcherComponentTest extends CommonTest {
     @Test
     public void testGetContext() {
         assertThat(mComponentUnit.getContext()).isSameAs(mContext);
-    }
-
-    @Test
-    public void testGetReferrerHolder() {
-        assertThat(mComponentUnit.getReferrerHolder()).isSameAs(mReferrerHolder);
     }
 
     @Test
@@ -342,34 +332,61 @@ public class CommutationDispatcherComponentTest extends CommonTest {
         assertThat(mComponentUnit.getClientIdentifiersProvider()).isSameAs(mClientIdentifiersProvider);
     }
 
+    // region Referrer
+    private void sendReferrer(@NonNull ReferrerResult result) {
+        ArgumentCaptor<ReferrerListener> listenerCaptor = ArgumentCaptor.forClass(ReferrerListener.class);
+        verify(referrerManager).requestReferrer(listenerCaptor.capture());
+        listenerCaptor.getValue().onResult(result);
+    }
+
+    @Nullable
+    private static ReferrerInfo extractReferrerInfo(Bundle bundle) {
+        try {
+            byte[] referrerInfo = bundle.getByteArray("referrer");
+            return referrerInfo == null ? null : ReferrerInfo.parseFrom(referrerInfo);
+        } catch (InvalidProtocolBufferNanoException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @Test
     public void requestReferrer() {
         ResultReceiver receiver = mock(ResultReceiver.class);
         mComponentUnit.requestReferrer(receiver);
-        ArgumentCaptor<ReferrerChosenListener> listenerCaptor = ArgumentCaptor.forClass(ReferrerChosenListener.class);
-        verify(referrerManager).addOneShotListener(listenerCaptor.capture());
+
         final ReferrerInfo referrerInfo = new ReferrerInfo("referrer", 10, 20, ReferrerInfo.Source.HMS);
-        listenerCaptor.getValue().onReferrerChosen(referrerInfo);
-        verify(receiver).send(eq(1), argThat(new ArgumentMatcher<Bundle>() {
-            @Override
-            public boolean matches(Bundle argument) {
-                try {
-                    return argument.keySet().size() == 1 &&
-                        referrerInfo.equals(ReferrerInfo.parseFrom(argument.getByteArray("referrer")));
-                } catch (InvalidProtocolBufferNanoException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }));
+        final ReferrerResult result = new ReferrerResult.Success(referrerInfo);
+        sendReferrer(result);
+
+        verify(receiver).send(eq(1), argThat(argument ->
+                argument.keySet().size() == 1 && referrerInfo.equals(extractReferrerInfo(argument))
+        ));
     }
 
     @Test
     public void requestReferrerNullReceiver() {
         mComponentUnit.requestReferrer(null);
-        ArgumentCaptor<ReferrerChosenListener> listenerCaptor = ArgumentCaptor.forClass(ReferrerChosenListener.class);
-        verify(referrerManager).addOneShotListener(listenerCaptor.capture());
-        listenerCaptor.getValue().onReferrerChosen(new ReferrerInfo("referrer", 10, 20, ReferrerInfo.Source.GP));
+
+        final ReferrerInfo referrerInfo = new ReferrerInfo("referrer", 10, 20, ReferrerInfo.Source.GP);
+        final ReferrerResult result = new ReferrerResult.Success(referrerInfo);
+        sendReferrer(result);
+
+        // there should be no crash
     }
+
+    @Test
+    public void requestReferrerNullReferrer() {
+        ResultReceiver receiver = mock(ResultReceiver.class);
+        mComponentUnit.requestReferrer(receiver);
+
+        final ReferrerResult result = new ReferrerResult.Failure("error", new Exception());
+        sendReferrer(result);
+
+        verify(receiver).send(eq(1), argThat(argument ->
+                argument.keySet().size() == 1 && extractReferrerInfo(argument) == null)
+        );
+    }
+    // endregion Referrer
 
     private void setUpToRequireStartup() {
         when(mStartupUnit.isStartupRequired()).thenReturn(true);
@@ -381,7 +398,7 @@ public class CommutationDispatcherComponentTest extends CommonTest {
     @NonNull
     private StartupState createStartupWithClientClids(@Nullable Map<String, String> clids) {
         return TestUtils.createDefaultStartupStateBuilder()
-            .withLastClientClidsForStartupRequest(StartupUtils.encodeClids(clids))
-            .build();
+                .withLastClientClidsForStartupRequest(StartupUtils.encodeClids(clids))
+                .build();
     }
 }

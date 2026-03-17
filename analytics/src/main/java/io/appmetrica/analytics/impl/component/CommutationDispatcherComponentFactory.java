@@ -2,7 +2,6 @@ package io.appmetrica.analytics.impl.component;
 
 import android.content.Context;
 import androidx.annotation.NonNull;
-import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.startup.StartupCenter;
 
 public class CommutationDispatcherComponentFactory
@@ -16,8 +15,7 @@ public class CommutationDispatcherComponentFactory
                 context,
                 StartupCenter.getInstance(),
                 componentId,
-                clientConfiguration,
-                GlobalServiceLocator.getInstance().getReferrerHolder()
+                clientConfiguration
         );
     }
 }

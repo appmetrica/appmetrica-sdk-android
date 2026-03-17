@@ -50,7 +50,6 @@ internal class MainReporterComponentUnitFactoryTest : CommonTest() {
                 startupState,
                 componentId,
                 sdkConfig,
-                GlobalServiceLocator.getInstance().referrerHolder,
                 GlobalServiceLocator.getInstance().dataSendingRestrictionController,
                 regularExecutorFactoryRule.constructionMock.constructed().first()
             )
