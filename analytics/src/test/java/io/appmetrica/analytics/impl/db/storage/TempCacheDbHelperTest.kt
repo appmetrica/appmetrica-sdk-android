@@ -117,13 +117,13 @@ internal class TempCacheDbHelperTest : CommonTest() {
     fun `bufferedWriter creation delay millis`() {
         assertThat(bufferedWriterMockedConstructionRule.constructionMock.constructed()).hasSize(1)
         assertThat(bufferedWriterMockedConstructionRule.argumentInterceptor.flatArguments()).hasSize(2)
-        assertThat(bufferedWriterMockedConstructionRule.argumentInterceptor.flatArguments()[1])
+        assertThat(bufferedWriterMockedConstructionRule.argumentInterceptor.flatArguments()[0])
             .isEqualTo(1000L)
     }
 
     @Test
     fun `bufferedWriter creation insert lambda`() {
-        val lamdbaArgument = bufferedWriterMockedConstructionRule.argumentInterceptor.flatArguments().first()
+        val lamdbaArgument = bufferedWriterMockedConstructionRule.argumentInterceptor.flatArguments()[1]
         @Suppress("UNCHECKED_CAST") val lambda = lamdbaArgument as (List<TempCachePutTask>) -> Unit
         lambda(listOf(TempCachePutTask(scope, timestamp, data)))
 
@@ -144,7 +144,7 @@ internal class TempCacheDbHelperTest : CommonTest() {
 
     @Test
     fun `bufferedWriter lamba with empty list`() {
-        val lamdbaArgument = bufferedWriterMockedConstructionRule.argumentInterceptor.flatArguments().first()
+        val lamdbaArgument = bufferedWriterMockedConstructionRule.argumentInterceptor.flatArguments()[1]
         @Suppress("UNCHECKED_CAST") val lambda = lamdbaArgument as (List<TempCachePutTask>) -> Unit
         lambda(listOf())
         verify(database, never()).insertOrThrow(any(), any(), any())

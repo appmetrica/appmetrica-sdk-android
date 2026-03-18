@@ -43,11 +43,11 @@ internal object PublicLogConstructor {
                 append(message)
                 append(": ")
                 append(eventType.name)
-                if (EventsManager.shouldLogName(eventType) && !TextUtils.isEmpty(name)) {
+                if (EventsManager.shouldLogName(eventType) && !name.isNullOrEmpty()) {
                     append(" with name ")
                     append(name)
                 }
-                if (EventsManager.shouldLogValue(eventType) && !TextUtils.isEmpty(value)) {
+                if (EventsManager.shouldLogValue(eventType) && !value.isNullOrEmpty()) {
                     append(" with value ")
                     append(value)
                 }

@@ -95,6 +95,9 @@ public class ComponentUnitFieldsFactoryTest extends CommonTest {
     @Rule
     public final GlobalServiceLocatorRule mRule = new GlobalServiceLocatorRule();
     @Rule
+    public final MockedConstructionRule<DatabaseHelper> databaseHelperMockedConstructionRule =
+        new MockedConstructionRule<>(DatabaseHelper.class);
+    @Rule
     public final MockedConstructionRule<SessionExtrasHolder> sessionExtrasHolderMockedConstructionRule =
         new MockedConstructionRule<>(SessionExtrasHolder.class);
     @Rule

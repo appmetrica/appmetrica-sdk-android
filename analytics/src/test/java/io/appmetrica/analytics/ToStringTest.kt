@@ -302,7 +302,7 @@ internal class ToStringTest(
 
             StartupRequestConfig(mock(), mock()).toTestCase(
                 modifierPreconditions = Modifier.PUBLIC or Modifier.FINAL,
-                excludedFields = setOf("mReferrerHolder", "defaultStartupHostsProvider")
+                excludedFields = setOf("defaultStartupHostsProvider", "referrerManager")
             ),
             TempCachePutTask("scope", 100500L, ByteArray(10) { it.toByte() }).toTestCase()
         )
