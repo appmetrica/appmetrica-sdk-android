@@ -168,7 +168,7 @@ public class SessionFactoryTest extends CommonTest {
         }.fillFromStorage();
         assertThat(arguments.isAliveNeeded(false)).isTrue();
         assertThat(arguments.getSleepStart(-1)).isEqualTo(sleepStart);
-        assertThat(arguments.getCreationTime(-1)).isEqualTo(creationTime);
+        assertThat(arguments.getCreationElapsedRealTime(-1)).isEqualTo(creationTime);
         assertThat(arguments.getCurrentReportId(-1)).isEqualTo(reportId);
         assertThat(arguments.getId(-1)).isEqualTo(sessionId);
         assertThat(arguments.getTimeout(-1)).isEqualTo(sessionTimeout);

@@ -11,6 +11,7 @@ import io.appmetrica.analytics.impl.ReportConsumer
 import io.appmetrica.analytics.impl.crash.ReadOldCrashesRunnable
 import io.appmetrica.analytics.impl.crash.jvm.CrashDirectoryWatcher
 import io.appmetrica.analytics.impl.crash.jvm.service.CrashFromFileConsumer
+import io.appmetrica.analytics.impl.crash.jvm.service.FileCrashTimestampProvider
 import io.appmetrica.analytics.impl.crash.ndk.NativeCrashService
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import java.io.File
@@ -32,7 +33,8 @@ internal class ServiceCrashController(
         InternalEvents.EVENT_TYPE_PREV_SESSION_EXCEPTION_UNHANDLED_FROM_FILE,
         AlwaysAllowSendCrashPredicate(),
         BlockingExecutor(),
-        "previous"
+        "previous",
+        FileCrashTimestampProvider()
     )
 
     private val crashesFromActualLaunchListener: Consumer<File> = CrashFromFileConsumer(
@@ -41,7 +43,8 @@ internal class ServiceCrashController(
         InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_FROM_FILE,
         JvmCrashFromCurrentSessionPredicate(),
         executor,
-        "actual"
+        "actual",
+        FileCrashTimestampProvider()
     )
 
     fun init() {

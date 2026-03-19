@@ -13,6 +13,8 @@ public class SessionArgumentsInternal {
     @Nullable
     private final Long mCreationTime;
     @Nullable
+    private final Long mCreationCurrentTimeMillis;
+    @Nullable
     private final Integer mSessionTimeout;
     @Nullable
     private final Long mCurrentReportId;
@@ -22,16 +24,20 @@ public class SessionArgumentsInternal {
     private final Long mSleepStart;
     @Nullable
     private final Long mLastEventOffset;
+    @Nullable
+    private final Boolean crashedSession;
 
     private SessionArgumentsInternal(SessionArgumentsInternal.Builder builder) {
         mType = builder.type;
         mSessionTimeout = builder.timeout;
         mId = builder.id;
         mCreationTime = builder.creationTime;
+        mCreationCurrentTimeMillis = builder.creationCurrentTimeMillis;
         mCurrentReportId = builder.currentReportId;
         mAliveNeeded = builder.aliveNeeded;
         mSleepStart = builder.sleepStart;
         mLastEventOffset = builder.lastEventOffset;
+        this.crashedSession = builder.crashedSession;
     }
 
     public static final Builder newBuilder(SessionFactoryArguments arguments) {
@@ -46,8 +52,12 @@ public class SessionArgumentsInternal {
         return mId == null? fallback: mId;
     }
 
-    public long getCreationTime(long fallback) {
+    public long getCreationElapsedRealTime(long fallback) {
         return mCreationTime == null? fallback: mCreationTime;
+    }
+
+    public long getCreationCurrentTimeMillis(long fallback) {
+        return mCreationCurrentTimeMillis == null ? fallback : mCreationCurrentTimeMillis;
     }
 
     public int getTimeout(int fallback) {
@@ -70,6 +80,10 @@ public class SessionArgumentsInternal {
         return mLastEventOffset == null ? fallback : mLastEventOffset;
     }
 
+    public boolean isCrashedSession(boolean fallback) {
+        return crashedSession == null ? fallback : crashedSession;
+    }
+
     static final class Builder {
 
         @Nullable
@@ -81,6 +95,8 @@ public class SessionArgumentsInternal {
         @Nullable
         private Long creationTime;
         @Nullable
+        private Long creationCurrentTimeMillis;
+        @Nullable
         private Integer timeout;
         @Nullable
         private Long currentReportId;
@@ -88,6 +104,8 @@ public class SessionArgumentsInternal {
         private Boolean aliveNeeded;
         @Nullable
         private Long sleepStart;
+        @Nullable
+        private Boolean crashedSession;
 
         private Builder(SessionFactoryArguments arguments) {
             this.type = arguments.getType();
@@ -101,6 +119,11 @@ public class SessionArgumentsInternal {
 
         public Builder withCreationTime(Long creationTime) {
             this.creationTime = creationTime;
+            return this;
+        }
+
+        public Builder withCreationCurrentTimeMillis(Long creationCurrentTimeMillis) {
+            this.creationCurrentTimeMillis = creationCurrentTimeMillis;
             return this;
         }
 
@@ -124,9 +147,13 @@ public class SessionArgumentsInternal {
             return this;
         }
 
+        public Builder withCrashedSession(@Nullable Boolean crashedSession) {
+            this.crashedSession = crashedSession;
+            return this;
+        }
+
         public SessionArgumentsInternal build() {
             return new SessionArgumentsInternal(this);
         }
-
     }
 }

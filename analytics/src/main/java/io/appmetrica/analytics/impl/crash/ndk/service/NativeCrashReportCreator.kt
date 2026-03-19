@@ -8,7 +8,8 @@ import io.appmetrica.analytics.impl.crash.ndk.AppMetricaNativeCrash
 
 internal class NativeCrashReportCreator(
     private val crash: AppMetricaNativeCrash,
-    private val eventType: InternalEvents
+    private val eventType: InternalEvents,
+    private val timestampProvider: NativeCrashTimestampProvider,
 ) {
 
     fun create(dump: String): CounterReport {
@@ -16,7 +17,8 @@ internal class NativeCrashReportCreator(
             eventType,
             dump,
             crash.uuid,
-            LoggerStorage.getOrCreatePublicLogger(crash.metadata.apiKey)
+            LoggerStorage.getOrCreatePublicLogger(crash.metadata.apiKey),
+            timestampProvider.getTimestamp(crash)
         ).apply {
             eventEnvironment = crash.metadata.errorEnvironment
         }

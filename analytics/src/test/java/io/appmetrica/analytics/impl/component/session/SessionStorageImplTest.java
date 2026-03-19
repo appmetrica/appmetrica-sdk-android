@@ -42,6 +42,7 @@ public class SessionStorageImplTest extends CommonTest {
         assertThat(sessionStorage.hasValues()).isFalse();
         assertThat(sessionStorage.getLastEventOffset()).isNull();
         assertThat(sessionStorage.getCreationTime()).isNull();
+        assertThat(sessionStorage.getCreationCurrentTimeMillis()).isNull();
         assertThat(sessionStorage.getReportId()).isNull();
         assertThat(sessionStorage.getSessionId()).isNull();
         assertThat(sessionStorage.getSleepStart()).isNull();
@@ -72,6 +73,7 @@ public class SessionStorageImplTest extends CommonTest {
         sessionStorage.putAliveReportNeeded(true)
             .putSleepStart(1)
             .putCreationTime(1)
+            .putCreationCurrentTimeMillis(1)
             .putReportId(1)
             .putSessionId(1)
             .putLastEventOffset(1)
@@ -88,22 +90,27 @@ public class SessionStorageImplTest extends CommonTest {
         boolean aliveNeeded = true;
         int sleepStart = random.nextInt(1000);
         int creationTime = random.nextInt(1000) + 1000;
+        int creationCurrentTimeMillis = random.nextInt(1000) + 5000;
         int reportId = random.nextInt(1000) + 2000;
         int sessionId = random.nextInt(1000) + 3000;
         int lastEventOffset = random.nextInt(1000) + 4000;
         sessionStorage.putAliveReportNeeded(aliveNeeded)
             .putSleepStart(sleepStart)
             .putCreationTime(creationTime)
+            .putCreationCurrentTimeMillis(creationCurrentTimeMillis)
             .putReportId(reportId)
             .putSessionId(sessionId)
             .putLastEventOffset(lastEventOffset)
+            .putCrashedSession(true)
             .apply();
         assertThat(sessionStorage.isAliveReportNeeded()).isTrue();
         assertThat(sessionStorage.getSleepStart()).isEqualTo(sleepStart);
         assertThat(sessionStorage.getCreationTime()).isEqualTo(creationTime);
+        assertThat(sessionStorage.getCreationCurrentTimeMillis()).isEqualTo(creationCurrentTimeMillis);
         assertThat(sessionStorage.getReportId()).isEqualTo(reportId);
         assertThat(sessionStorage.getSessionId()).isEqualTo(sessionId);
         assertThat(sessionStorage.getLastEventOffset()).isEqualTo(lastEventOffset);
+        assertThat(sessionStorage.isCrashedSession()).isTrue();
     }
 
 }

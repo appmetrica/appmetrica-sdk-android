@@ -7,6 +7,31 @@ import org.json.JSONObject
 
 internal class SessionRequestParams(requestParameters: JSONObject) {
     private val tag = "[SessionRequestParams]"
+    private val requestParametersString: String = requestParameters.toString()
+    private val deviceId: String = requestParameters.optString(Constants.RequestParametersJsonKeys.DEVICE_ID, "")
+    private val uuid: String = requestParameters.optString(Constants.RequestParametersJsonKeys.UUID, "")
+    private val appVersion: String = requestParameters.optString(Constants.RequestParametersJsonKeys.APP_VERSION, "")
+    private val appBuild: String = requestParameters.optString(Constants.RequestParametersJsonKeys.APP_BUILD, "")
+    private val analyticsSdkBuildType: String = requestParameters.optString(
+        Constants.RequestParametersJsonKeys.ANALYTICS_SDK_BUILD_TYPE,
+        ""
+    )
+    private val osVersion: String = requestParameters.optString(Constants.RequestParametersJsonKeys.OS_VERSION, "")
+    private val apiLevel: Int = requestParameters.optInt(Constants.RequestParametersJsonKeys.OS_API_LEVEL, -1)
+    private val locale: String = requestParameters.optString(Constants.RequestParametersJsonKeys.LOCALE, "")
+    private val deviceRootStatus: String = requestParameters.optString(
+        Constants.RequestParametersJsonKeys.ROOT_STATUS,
+        ""
+    )
+    private val appDebuggable: String = requestParameters.optString(
+        Constants.RequestParametersJsonKeys.APP_DEBUGGABLE,
+        ""
+    )
+    private val appFramework: String = requestParameters.optString(
+        Constants.RequestParametersJsonKeys.APP_FRAMEWORK,
+        ""
+    )
+    private val attributionId: Int = requestParameters.optInt(Constants.RequestParametersJsonKeys.ATTRIBUTION_ID, 0)
     private val analyticsSdkVersionName: String = requestParameters.optString(
         Constants.RequestParametersJsonKeys.ANALYTICS_SDK_VERSION_NAME,
         ""
@@ -15,11 +40,8 @@ internal class SessionRequestParams(requestParameters: JSONObject) {
         Constants.RequestParametersJsonKeys.ANALYTICS_SDK_BUILD_NUMBER,
         ""
     )
-    private val appVersion: String = requestParameters.optString(Constants.RequestParametersJsonKeys.APP_VERSION, "")
-    private val appBuild: String = requestParameters.optString(Constants.RequestParametersJsonKeys.APP_BUILD, "")
-    private val osVersion: String = requestParameters.optString(Constants.RequestParametersJsonKeys.OS_VERSION, "")
-    private val apiLevel: Int = requestParameters.optInt(Constants.RequestParametersJsonKeys.OS_API_LEVEL, -1)
-    private val attributionId: Int = requestParameters.optInt(Constants.RequestParametersJsonKeys.ATTRIBUTION_ID, 0)
+
+    fun toRequestParametersString(): String = requestParametersString
 
     fun areParamsSameAsInConfig(reportRequestConfig: ReportRequestConfig): Boolean {
         val paramsAreSame = listOf(
@@ -55,9 +77,20 @@ internal class SessionRequestParams(requestParameters: JSONObject) {
     }
 
     override fun toString(): String {
-        return "SessionRequestParams(kitVersionName='$analyticsSdkVersionName', " +
-            "kitBuildNumber='$analyticsSdkBuildNumber', " +
-            "appVersion='$appVersion', appBuild='$appBuild', osVersion='$osVersion', apiLevel=$apiLevel, " +
-            "attributionId=$attributionId)"
+        return "SessionRequestParams(" +
+            "deviceId='$deviceId', " +
+            "uuid='$uuid', " +
+            "appVersion='$appVersion', " +
+            "appBuild='$appBuild', " +
+            "kitBuildType='$analyticsSdkBuildType', " +
+            "osVersion='$osVersion', " +
+            "apiLevel=$apiLevel, " +
+            "locale='$locale', " +
+            "deviceRootStatus='$deviceRootStatus', " +
+            "appDebuggable='$appDebuggable', " +
+            "appFramework='$appFramework', " +
+            "attributionId=$attributionId, " +
+            "kitVersionName='$analyticsSdkVersionName', " +
+            "kitBuildNumber='$analyticsSdkBuildNumber')"
     }
 }

@@ -15,6 +15,6 @@ public class UnhandledExceptionFactory extends HandlersFactory<ReportComponentHa
         reportHandlers.add(getProvider().getReportPurgeBufferHandler());
         reportHandlers.add(getProvider().getReportSaveToDatabaseHandler());
         reportHandlers.add(getProvider().getReportCrashMetaInformation());
-        reportHandlers.add(getProvider().getReportSessionStopHandler());
+        reportHandlers.add(getProvider().getReportSessionStopDueCrashHandler());
     }
 }

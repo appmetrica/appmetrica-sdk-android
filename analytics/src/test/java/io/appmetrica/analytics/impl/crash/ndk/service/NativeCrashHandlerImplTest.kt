@@ -37,6 +37,7 @@ internal class NativeCrashHandlerImplTest : CommonTest() {
     private val predicateProvider: NativeShouldSendCrashPredicateProvider = mock()
     private val eventType = InternalEvents.EVENT_TYPE_PREV_SESSION_NATIVE_CRASH_PROTOBUF
     private val subtag = "Subtag"
+    private val timestampProvider: NativeCrashTimestampProvider = mock()
     private val pid = 100500
     private val apiKey = "api key"
     private val uuid = "Some uuid"
@@ -89,7 +90,8 @@ internal class NativeCrashHandlerImplTest : CommonTest() {
             markCrashCompleted,
             predicateProvider,
             eventType,
-            subtag
+            subtag,
+            timestampProvider
         )
     }
 

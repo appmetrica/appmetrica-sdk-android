@@ -54,6 +54,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.ArgumentMatcher;
+import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
@@ -510,6 +511,30 @@ public abstract class BaseReporterTest extends BaseReporterData {
         mReporter.reportUnhandledException(exception);
 
         verify(mReportsHandler).reportUnhandledException(unhandledException, mReporterEnvironment);
+    }
+
+    @Test
+    public void testReportUnhandledExceptionCallsPauseSessionBeforeReportCrash() {
+        UnhandledException unhandledException = mock(UnhandledException.class);
+
+        mReporter.reportUnhandledException(unhandledException);
+
+        InOrder inOrder = Mockito.inOrder(mReportsHandler);
+        inOrder.verify(mReportsHandler).onPauseForegroundSession();
+        inOrder.verify(mReportsHandler).reportCrash(unhandledException, mReporterEnvironment);
+        verify(mKeepAliveHandler).onPauseForegroundSession();
+    }
+
+    @Test
+    public void testReportUnhandledExceptionCallsReportCrashEvenIfSessionAlreadyPaused() {
+        when(mReporterEnvironment.isForegroundSessionPaused()).thenReturn(true);
+        UnhandledException unhandledException = mock(UnhandledException.class);
+
+        mReporter.reportUnhandledException(unhandledException);
+
+        verify(mReportsHandler).reportCrash(unhandledException, mReporterEnvironment);
+        verify(mReportsHandler, never()).onPauseForegroundSession();
+        verify(mKeepAliveHandler, never()).onPauseForegroundSession();
     }
 
     @Test

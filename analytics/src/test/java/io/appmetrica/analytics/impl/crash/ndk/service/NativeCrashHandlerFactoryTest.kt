@@ -40,6 +40,10 @@ internal class NativeCrashHandlerFactoryTest : CommonTest() {
     val alwaysAllowSendCrashPredicateMockedConstructionRule =
         constructionRule<AlwaysAllowSendCrashPredicate<AppMetricaNativeCrash>>()
 
+    @get:Rule
+    val creationTimeNativeCrashTimestampProviderMockedConstructionRule =
+        constructionRule<CreationTimeNativeCrashTimestampProvider>()
+
     private val nativeCrashHandlerFactory: NativeCrashHandlerFactory by setUp {
         NativeCrashHandlerFactory(markCrashCompleted)
     }
@@ -60,6 +64,9 @@ internal class NativeCrashHandlerFactoryTest : CommonTest() {
             assertThat(arguments[4]).isEqualTo(InternalEvents.EVENT_TYPE_CURRENT_SESSION_NATIVE_CRASH_PROTOBUF)
             assertThat(arguments[5]).isEqualTo("actual")
         }
+        assertThat(arguments[6]).isEqualTo(
+            creationTimeNativeCrashTimestampProviderMockedConstructionRule.constructionMock.constructed().first()
+        )
     }
 
     @Test
@@ -93,6 +100,9 @@ internal class NativeCrashHandlerFactoryTest : CommonTest() {
             assertThat(arguments[4]).isEqualTo(InternalEvents.EVENT_TYPE_PREV_SESSION_NATIVE_CRASH_PROTOBUF)
             assertThat(arguments[5]).isEqualTo("prev session")
         }
+        assertThat(arguments[6]).isEqualTo(
+            creationTimeNativeCrashTimestampProviderMockedConstructionRule.constructionMock.constructed().first()
+        )
     }
 
     @Test

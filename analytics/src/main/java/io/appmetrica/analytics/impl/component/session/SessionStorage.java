@@ -6,6 +6,8 @@ public interface SessionStorage {
 
     SessionStorageImpl putCreationTime(final long value);
 
+    SessionStorageImpl putCreationCurrentTimeMillis(final long value);
+
     SessionStorageImpl putReportId(final long value);
 
     SessionStorageImpl putSleepStart(final long value);
@@ -14,8 +16,9 @@ public interface SessionStorage {
 
     SessionStorageImpl putAliveReportNeeded(final boolean value);
 
+    SessionStorageImpl putCrashedSession(final boolean value);
+
     void apply();
 
     void clear();
-
 }

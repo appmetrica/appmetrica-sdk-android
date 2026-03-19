@@ -16,6 +16,7 @@ internal class CrashFromFileConsumer(
     crashPredicate: ShouldSendCrashNowPredicate<JvmCrash>,
     private val executor: Executor,
     subtag: String,
+    timestampProvider: CrashTimestampProvider,
 ) : Consumer<File> {
 
     private val tag = "[CrashFromFileConsumer-$subtag]"
@@ -24,7 +25,8 @@ internal class CrashFromFileConsumer(
         context,
         crashEventConsumer,
         eventType,
-        crashPredicate
+        crashPredicate,
+        timestampProvider
     )
 
     override fun consume(input: File?) {

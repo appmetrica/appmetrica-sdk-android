@@ -1,9 +1,9 @@
 package io.appmetrica.analytics.impl;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Parcel;
-import android.os.SystemClock;
 import android.util.Base64;
 import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor;
 import io.appmetrica.analytics.coreapi.internal.permission.PermissionState;
@@ -17,6 +17,7 @@ import io.appmetrica.analytics.protobuf.nano.InvalidProtocolBufferNanoException;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.ContextRule;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
+import io.appmetrica.analytics.testutils.MockedConstructionRule;
 import io.appmetrica.analytics.testutils.RandomStringGenerator;
 import io.appmetrica.analytics.testutils.TestUtils;
 import java.util.ArrayList;
@@ -41,6 +42,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+@SuppressLint("RobolectricUsage") // Parcelable
 @RunWith(RobolectricTestRunner.class)
 public class CounterReportTest extends CommonTest {
 
@@ -64,6 +66,19 @@ public class CounterReportTest extends CommonTest {
 
     @Rule
     public GlobalServiceLocatorRule globalServiceLocatorRule = new GlobalServiceLocatorRule();
+
+    private final long currentTimeMillis = 100500L;
+    private final long currentElapsedRealtime = 200500L;
+
+    @Rule
+    public MockedConstructionRule<SystemTimeProvider> systemTimeProviderRule = new MockedConstructionRule<>(
+        SystemTimeProvider.class,
+        (mock, context) ->  {
+            when(mock.currentTimeMillis()).thenReturn(currentTimeMillis);
+            when(mock.elapsedRealtime()).thenReturn(currentElapsedRealtime);
+        }
+
+    );
 
     private final List<String> mProviders = new ArrayList<String>();
 
@@ -223,17 +238,13 @@ public class CounterReportTest extends CommonTest {
     @Test
     public void testCounterReportDefaultConstructorCreationElapsedRealtime() {
         CounterReport counterReport = new CounterReport();
-        long elapsedRealtime = SystemClock.elapsedRealtime();
-        assertThat(counterReport.getCreationElapsedRealtime() - elapsedRealtime).isLessThan(1000);
+        assertThat(counterReport.getCreationElapsedRealtime()).isEqualTo(currentElapsedRealtime);
     }
 
     @Test
     public void testCounterReportCreationElapsedRealtime() {
-        SystemTimeProvider systemTimeProvider = mock(SystemTimeProvider.class);
-        long expected = 35345344L;
-        when(systemTimeProvider.elapsedRealtime()).thenReturn(expected);
-        CounterReport counterReport = new CounterReport("Test value", "Test event", 234, systemTimeProvider);
-        assertThat(counterReport.getCreationElapsedRealtime()).isEqualTo(expected);
+        CounterReport counterReport = new CounterReport("Test value", "Test event", 234);
+        assertThat(counterReport.getCreationElapsedRealtime()).isEqualTo(currentElapsedRealtime);
     }
 
     @Test
@@ -279,11 +290,8 @@ public class CounterReportTest extends CommonTest {
 
     @Test
     public void testCounterReportCreationTimestamp() {
-        SystemTimeProvider systemTimeProvider = mock(SystemTimeProvider.class);
-        long expected = 43543534L;
-        when(systemTimeProvider.currentTimeMillis()).thenReturn(expected);
-        CounterReport counterReport = new CounterReport("Test value", "Test event", 0, systemTimeProvider);
-        assertThat(counterReport.getCreationTimestamp()).isEqualTo(expected);
+        CounterReport counterReport = new CounterReport("Test value", "Test event", 0);
+        assertThat(counterReport.getCreationTimestamp()).isEqualTo(currentTimeMillis);
     }
 
     @Test

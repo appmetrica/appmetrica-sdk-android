@@ -24,12 +24,13 @@ public abstract class AbstractSessionFactory implements ISessionFactory<SessionA
     private final SystemTimeProvider timeProvider;
 
     public AbstractSessionFactory(
-            @NonNull ComponentUnit componentUnit,
-            @NonNull SessionIDProvider sessionIDProvider,
-            @NonNull SessionStorageImpl storage,
-            @NonNull SessionFactoryArguments arguments,
-            @NonNull IReporterExtended selfReporter,
-            @NonNull SystemTimeProvider timeProvider) {
+        @NonNull ComponentUnit componentUnit,
+        @NonNull SessionIDProvider sessionIDProvider,
+        @NonNull SessionStorageImpl storage,
+        @NonNull SessionFactoryArguments arguments,
+        @NonNull IReporterExtended selfReporter,
+        @NonNull SystemTimeProvider timeProvider
+    ) {
         mComponentUnit = componentUnit;
         this.sessionIDProvider = sessionIDProvider;
         mStorage = storage;
@@ -60,16 +61,17 @@ public abstract class AbstractSessionFactory implements ISessionFactory<SessionA
 
         long sessionId = sessionIDProvider.getNextSessionId();
         mStorage.putSessionId(sessionId)
-                .putSleepStart(arguments.creationElapsedRealtime)
-                .putCreationTime(arguments.creationElapsedRealtime)
-                .putReportId(SessionDefaults.INITIAL_REPORT_ID)
-                .putAliveReportNeeded(true)
-                .apply();
+            .putSleepStart(arguments.getCreationElapsedRealtime())
+            .putCreationTime(arguments.getCreationElapsedRealtime())
+            .putCreationCurrentTimeMillis(arguments.getCreationTimestamp())
+            .putReportId(SessionDefaults.INITIAL_REPORT_ID)
+            .putAliveReportNeeded(true)
+            .apply();
 
         mComponentUnit.getDbHelper().newSession(
-                sessionId,
-                mArguments.getType(),
-                TimeUnit.MILLISECONDS.toSeconds(arguments.creationTimestamp)
+            sessionId,
+            mArguments.getType(),
+            TimeUnit.MILLISECONDS.toSeconds(arguments.getCreationTimestamp())
         );
 
         DebugLogger.INSTANCE.info(TAG, "%s session created: %s", mArguments.getType(), sessionId);
@@ -80,13 +82,15 @@ public abstract class AbstractSessionFactory implements ISessionFactory<SessionA
     @NonNull
     SessionArgumentsInternal fillFromStorage() {
         return SessionArgumentsInternal.newBuilder(mArguments)
-                .withAliveNeeded(mStorage.isAliveReportNeeded())
-                .withCurrentReportId(mStorage.getReportId())
-                .withCreationTime(mStorage.getCreationTime())
-                .withId(mStorage.getSessionId())
-                .withSleepStart(mStorage.getSleepStart())
-                .withLastEventOffset(mStorage.getLastEventOffset())
-                .build();
+            .withAliveNeeded(mStorage.isAliveReportNeeded())
+            .withCurrentReportId(mStorage.getReportId())
+            .withCreationTime(mStorage.getCreationTime())
+            .withCreationCurrentTimeMillis(mStorage.getCreationCurrentTimeMillis())
+            .withId(mStorage.getSessionId())
+            .withSleepStart(mStorage.getSleepStart())
+            .withLastEventOffset(mStorage.getLastEventOffset())
+            .withCrashedSession(mStorage.isCrashedSession())
+            .build();
     }
 
 }

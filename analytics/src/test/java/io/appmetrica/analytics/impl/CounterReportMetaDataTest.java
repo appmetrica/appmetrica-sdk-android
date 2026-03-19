@@ -1,5 +1,6 @@
 package io.appmetrica.analytics.impl;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Pair;
 import androidx.annotation.NonNull;
@@ -23,6 +24,7 @@ import org.robolectric.ParameterizedRobolectricTestRunner;
 import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.mockito.Mockito.mock;
 
+@SuppressLint("RobolectricUsage") // Parcelable
 @RunWith(ParameterizedRobolectricTestRunner.class)
 public class CounterReportMetaDataTest extends CommonTest {
 
@@ -134,6 +136,7 @@ public class CounterReportMetaDataTest extends CommonTest {
         originalReport.setOpenId(openId);
         originalReport.setExtras(extras);
         ObjectPropertyAssertions(reportProvider.apply(originalReport))
+            .withIgnoredFields("systemTimeProvider")
             .withPrivateFields(true)
             .withFinalFieldOnly(false)
             .checkField("name", expectedName)

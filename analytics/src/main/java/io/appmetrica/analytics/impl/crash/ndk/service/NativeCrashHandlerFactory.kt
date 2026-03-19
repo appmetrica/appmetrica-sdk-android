@@ -18,7 +18,8 @@ internal class NativeCrashHandlerFactory(
             markCrashCompleted,
             { nativeCrash -> NativeCrashFromCurrentSessionPredicate(nativeCrash.metadata.processID) },
             InternalEvents.EVENT_TYPE_CURRENT_SESSION_NATIVE_CRASH_PROTOBUF,
-            "actual"
+            "actual",
+            CreationTimeNativeCrashTimestampProvider()
         )
     }
 
@@ -29,7 +30,8 @@ internal class NativeCrashHandlerFactory(
             markCrashCompleted,
             { _: AppMetricaNativeCrash -> AlwaysAllowSendCrashPredicate() },
             InternalEvents.EVENT_TYPE_PREV_SESSION_NATIVE_CRASH_PROTOBUF,
-            "prev session"
+            "prev session",
+            CreationTimeNativeCrashTimestampProvider()
         )
     }
 }

@@ -14,6 +14,7 @@ import io.appmetrica.analytics.ecommerce.ECommerceProduct
 import io.appmetrica.analytics.ecommerce.ECommerceReferrer
 import io.appmetrica.analytics.ecommerce.ECommerceScreen
 import io.appmetrica.analytics.impl.AppMetricaConfigExtension
+import io.appmetrica.analytics.impl.ClientCounterReport
 import io.appmetrica.analytics.impl.ClientIdentifiersHolder
 import io.appmetrica.analytics.impl.DeferredDeeplinkState
 import io.appmetrica.analytics.impl.DistributionSource
@@ -22,6 +23,9 @@ import io.appmetrica.analytics.impl.client.ClientConfiguration
 import io.appmetrica.analytics.impl.client.ProcessConfiguration
 import io.appmetrica.analytics.impl.client.connection.ServiceDescription
 import io.appmetrica.analytics.impl.component.clients.ClientDescription
+import io.appmetrica.analytics.impl.component.session.SessionArguments
+import io.appmetrica.analytics.impl.component.session.SessionRequestParams
+import io.appmetrica.analytics.impl.crash.jvm.JvmCrash
 import io.appmetrica.analytics.impl.db.storage.TempCacheEntry
 import io.appmetrica.analytics.impl.db.storage.TempCachePutTask
 import io.appmetrica.analytics.impl.ecommerce.client.converter.Result
@@ -57,11 +61,14 @@ import io.appmetrica.analytics.impl.utils.limitation.CollectionTrimInfo
 import io.appmetrica.analytics.impl.utils.limitation.TrimmingResult
 import io.appmetrica.analytics.internal.AppMetricaService
 import io.appmetrica.analytics.internal.CounterConfiguration
+import io.appmetrica.analytics.internal.CounterConfigurationReporterType
 import io.appmetrica.analytics.internal.IdentifiersResult
 import io.appmetrica.analytics.testutils.BaseToStringTest
+import io.appmetrica.analytics.testutils.ContextRule
 import org.json.JSONObject
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
+import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import java.lang.reflect.Modifier
 import java.math.BigDecimal
@@ -304,7 +311,40 @@ internal class ToStringTest(
                 modifierPreconditions = Modifier.PUBLIC or Modifier.FINAL,
                 excludedFields = setOf("defaultStartupHostsProvider", "referrerManager")
             ),
-            TempCachePutTask("scope", 100500L, ByteArray(10) { it.toByte() }).toTestCase()
+            TempCachePutTask("scope", 100500L, ByteArray(10) { it.toByte() }).toTestCase(),
+
+            JvmCrash(mock(), clientConfigurationMock(), hashMapOf<ClientCounterReport.TrimmedField, Int>()).toTestCase(
+                modifierPreconditions = Modifier.PUBLIC or Modifier.FINAL,
+                excludedFields = setOf("environment", "fileModifiedTimestamp")
+            ),
+
+            SessionArguments(100500L, 200500L, mock()).toTestCase(
+                modifierPreconditions = Modifier.PUBLIC or Modifier.FINAL,
+                excludedFields = setOf("sessionRequestParams")
+            ),
+
+            SessionRequestParams(JSONObject()).toTestCase(
+                modifierPreconditions = Modifier.PUBLIC or Modifier.FINAL,
+                excludedFields = setOf("sessionRequestParams")
+            ),
         )
+
+        private fun clientConfigurationMock(): ClientConfiguration {
+            val processConfigurationMock: ProcessConfiguration = mock {
+                on { packageName } doReturn ContextRule.PACKAGE_NAME
+            }
+
+            val reporterTypeMock: CounterConfigurationReporterType = mock()
+
+            val counterConfigurationMock: CounterConfiguration = mock {
+                on { apiKey } doReturn "apiKey"
+                on { reporterType } doReturn reporterTypeMock
+            }
+
+            return mock {
+                on { processConfiguration } doReturn processConfigurationMock
+                on { reporterConfiguration } doReturn counterConfigurationMock
+            }
+        }
     }
 }

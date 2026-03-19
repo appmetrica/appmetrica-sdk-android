@@ -22,41 +22,47 @@ public class SessionManagerStateMachine {
         EMPTY, BACKGROUND, FOREGROUND
     }
 
-    @NonNull private final ComponentUnit mComponent;
-    @NonNull private final SessionIDProvider sessionIDProvider;
-    @NonNull private final EventSaver mSaver;
+    @NonNull
+    private final ComponentUnit mComponent;
+    @NonNull
+    private final EventSaver mSaver;
 
-    @NonNull private final ISessionFactory<SessionArguments> mForegroundSessionFactory;
-    @NonNull private final ISessionFactory<SessionArguments> mBackgroundSessionFactory;
+    @NonNull
+    private final ISessionFactory<SessionArguments> mForegroundSessionFactory;
+    @NonNull
+    private final ISessionFactory<SessionArguments> mBackgroundSessionFactory;
+    @NonNull
+    private final ISessionFactory<SessionArguments> sessionFromPastFactory;
 
-    @Nullable private Session mCurrentSession;
-    @Nullable private State mState = null;
+    @Nullable
+    private Session mCurrentSession;
+    @Nullable
+    private State mState = null;
 
     public SessionManagerStateMachine(@NonNull ComponentUnit component,
                                       @NonNull SessionIDProvider sessionIDProvider,
                                       @NonNull EventSaver saver) {
         this(
-                component,
-                sessionIDProvider,
-                saver,
-                new ForegroundSessionFactory(component, sessionIDProvider),
-                new BackgroundSessionFactory(component, sessionIDProvider)
+            component,
+            saver,
+            new ForegroundSessionFactory(component, sessionIDProvider),
+            new BackgroundSessionFactory(component, sessionIDProvider),
+            new SessionFromPastFactory(component, sessionIDProvider)
         );
     }
 
     @VisibleForTesting
     //todo revert package private access after removing strange pseudo complex pseudo unit tests
     public SessionManagerStateMachine(@NonNull ComponentUnit component,
-                                      @NonNull SessionIDProvider sessionIDProvider,
                                       @NonNull EventSaver saver,
                                       @NonNull ISessionFactory<SessionArguments> foregroundSessionFactory,
-                                      @NonNull ISessionFactory<SessionArguments> backgroundSessionFactory) {
+                                      @NonNull ISessionFactory<SessionArguments> backgroundSessionFactory,
+                                      @NonNull ISessionFactory<SessionArguments> sessionFromPastFactory) {
         mComponent = component;
         mSaver = saver;
-
         mForegroundSessionFactory = foregroundSessionFactory;
         mBackgroundSessionFactory = backgroundSessionFactory;
-        this.sessionIDProvider = sessionIDProvider;
+        this.sessionFromPastFactory = sessionFromPastFactory;
     }
 
     public synchronized void heartbeat(@NonNull CounterReport reportData) {
@@ -81,17 +87,38 @@ public class SessionManagerStateMachine {
     }
 
     public synchronized void stopCurrentSessionDueToCrash(@NonNull CounterReport report) {
-        getSomeSession(report).updateAliveReportNeeded(false);
-        if (mState != State.EMPTY) {
-            close(mCurrentSession, report);
+        DebugLogger.INSTANCE.info(TAG, mComponent.getComponentId() + " stopCurrentSessionDueToCrash");
+        Session lastSession = loadLastSession(report);
+        if (lastSession != null) {
+            DebugLogger.INSTANCE.info(
+                TAG,
+                "%s mark session with id %s as crashed",
+                mComponent.getComponentId(),
+                lastSession.getId()
+            );
+            lastSession.markSessionAsCrashed();
+            lastSession.updateAliveReportNeeded(false);
+            mState = null;
+        } else {
+            DebugLogger.INSTANCE.info(
+                TAG,
+                "%s no last session found to stop due crash",
+                mComponent.getComponentId()
+            );
         }
-        mState = State.EMPTY;
     }
 
     @NonNull
     public synchronized Session getSomeSession(@NonNull CounterReport report) {
         loadValidSession(report);
-        if (mState != State.EMPTY && checkValidityOrClose(mCurrentSession, report) == false) {
+        DebugLogger.INSTANCE.info(
+            TAG,
+            mComponent.getComponentId() + " getSomeSession for report with type: %s and name = %s. current state is %s",
+            report.getType(),
+            report.getName(),
+            mCurrentSession
+        );
+        if (mState != State.EMPTY && !checkValidityOrClose(mCurrentSession, report)) {
             DebugLogger.INSTANCE.info(
                 TAG,
                 mComponent.getComponentId() + " session %s is invalid",
@@ -129,15 +156,20 @@ public class SessionManagerStateMachine {
     }
 
     @NonNull
-    public SessionState createBackgroundSessionStub(final long reportTimestampSeconds) {
-        long sessionId = sessionIDProvider.getNextSessionId();
-        long currentReportId = SessionDefaults.INITIAL_REPORT_ID;
-        mComponent.getDbHelper().newSession(sessionId, SessionType.BACKGROUND, reportTimestampSeconds);
-        return new SessionState()
-                .withSessionId(sessionId)
-                .withSessionType(SessionType.BACKGROUND)
-                .withReportId(currentReportId)
-                .withReportTime(0);
+    public SessionState createBackgroundSessionFromPast(
+        final long reportElapsedRealtime,
+        final long reportTimestampSeconds,
+        @NonNull SessionRequestParams sessionRequestParams
+    ) {
+        mState = State.BACKGROUND;
+        mCurrentSession = sessionFromPastFactory.create(
+            new SessionArguments(
+                reportElapsedRealtime,
+                reportTimestampSeconds,
+                sessionRequestParams
+            )
+        );
+        return getStateFromSession(mCurrentSession, reportElapsedRealtime);
     }
 
     @NonNull
@@ -184,14 +216,21 @@ public class SessionManagerStateMachine {
 
     @Nullable
     private Session loadLastSession(@NonNull CounterReport report) {
+        DebugLogger.INSTANCE.info(
+            TAG,
+            "loadLastSession: mState = %s; mCurrentSession = %s",
+            mState,
+            mCurrentSession
+        );
         if (mState == null) {
             Session foregroundSession = mForegroundSessionFactory.load();
             Session backgroundSession = mBackgroundSessionFactory.load();
             DebugLogger.INSTANCE.info(
                 TAG,
-                "loadLastSession: foregroundSession = %s; backgroundSession = %s;",
+                "loadLastSession: foregroundSession = %s; backgroundSession = %s; report: %s",
                 foregroundSession,
-                backgroundSession
+                backgroundSession,
+                report
             );
             long foregroundSessionId = foregroundSession == null ? -1 : foregroundSession.getId();
             long backgroundSessionId = backgroundSession == null ? -1 : backgroundSession.getId();
@@ -237,33 +276,34 @@ public class SessionManagerStateMachine {
         session.stopSession();
     }
 
-    @NonNull private Session createBackgroundSession(@NonNull CounterReport reportData) {
+    @NonNull
+    private Session createBackgroundSession(@NonNull CounterReport reportData) {
         DebugLogger.INSTANCE.info(TAG, mComponent.getComponentId() + " create background session");
         final PublicLogger logger = mComponent.getPublicLogger();
         logger.info("Start background session");
         mState = State.BACKGROUND;
         long eventCreationElapsedRealtime = reportData.getCreationElapsedRealtime();
         Session session = mBackgroundSessionFactory.create(
-                new SessionArguments(eventCreationElapsedRealtime,
-                        reportData.getCreationTimestamp())
+            new SessionArguments(eventCreationElapsedRealtime,
+                reportData.getCreationTimestamp())
         );
         //non-elegant solution for first event
         if (mComponent.getVitalComponentDataProvider().isFirstEventDone()) {
             mSaver.saveEvent(
-                    CounterReport.formSessionStartReportData(
-                        reportData,
-                        GlobalServiceLocator.getInstance().getExtraMetaInfoRetriever()
-                    ),
-                    getStateFromSession(session, reportData.getCreationElapsedRealtime())
+                CounterReport.formSessionStartReportData(
+                    reportData,
+                    GlobalServiceLocator.getInstance().getExtraMetaInfoRetriever()
+                ),
+                getStateFromSession(session, reportData.getCreationElapsedRealtime())
             );
         } else if (reportData.getType() == InternalEvents.EVENT_TYPE_FIRST_ACTIVATION.getTypeId()) {
             mSaver.saveEvent(reportData, getStateFromSession(session, eventCreationElapsedRealtime));
             mSaver.saveEvent(
-                    CounterReport.formSessionStartReportData(
-                        reportData,
-                        GlobalServiceLocator.getInstance().getExtraMetaInfoRetriever()
-                    ),
-                    getStateFromSession(session, eventCreationElapsedRealtime)
+                CounterReport.formSessionStartReportData(
+                    reportData,
+                    GlobalServiceLocator.getInstance().getExtraMetaInfoRetriever()
+                ),
+                getStateFromSession(session, eventCreationElapsedRealtime)
             );
         }
         return session;
@@ -272,33 +312,53 @@ public class SessionManagerStateMachine {
     @NonNull
     private SessionState getAliveReportSessionState(@NonNull final Session session) {
         return new SessionState()
-                .withSessionId(session.getId())
-                .withSessionType(session.getType())
-                .withReportId(session.getNextReportId())
-                .withReportTime(session.getAliveReportOffsetSeconds());
-    }
-
-    @NonNull private SessionState getStateFromSession(@NonNull Session currentSession, long creationElapsedRealtime) {
-        return new SessionState()
-                .withSessionId(currentSession.getId())
-                .withReportId(currentSession.getNextReportId())
-                .withReportTime(currentSession.getAndUpdateLastEventTimeSeconds(creationElapsedRealtime))
-                .withSessionType(currentSession.getType());
+            .withSessionId(session.getId())
+            .withSessionType(session.getType())
+            .withReportId(session.getNextReportId())
+            .withReportTime(session.getAliveReportOffsetSeconds());
     }
 
     @NonNull
+    private SessionState getStateFromSession(@NonNull Session currentSession, long creationElapsedRealtime) {
+        return new SessionState()
+            .withSessionId(currentSession.getId())
+            .withReportId(currentSession.getNextReportId())
+            .withReportTime(currentSession.getAndUpdateLastEventTimeSeconds(creationElapsedRealtime))
+            .withSessionType(currentSession.getType());
+    }
+
+    @Nullable
     public SessionState peekCurrentSessionState(@NonNull CounterReport report) {
         Session lastSession = loadLastSession(report);
+        DebugLogger.INSTANCE.info(
+            TAG,
+            "peekCurrentSessionState: lastSession = %s; counterReport = %s; creationTimestamp = %s",
+            lastSession,
+            report,
+            report.getCreationTimestamp()
+        );
         if (lastSession != null) {
-            return new SessionState()
+            if (lastSession.isSessionCrashed()) {
+                DebugLogger.INSTANCE.info(TAG, "peekCurrentSessionState: lastSession is crashed");
+                SessionRequestParams requestParams =
+                    mComponent.getDbHelper().getSessionRequestParams(lastSession.getId(), lastSession.getType());
+                return createBackgroundSessionFromPast(
+                    report.getCreationElapsedRealtime(),
+                    report.getCreationTimestamp(),
+                    requestParams
+                );
+            } else {
+                return new SessionState()
                     .withSessionId(lastSession.getId())
                     .withReportId(lastSession.getNextReportId())
-                    .withReportTime(lastSession.getLastEventTimeOffsetSeconds())
+                    .withReportTime(lastSession.getEventTimeOffsetForPrevSession(
+                        report.getCreationTimestamp(),
+                        report.getCreationElapsedRealtime())
+                    )
                     .withSessionType(lastSession.getType());
-        } else {
-            DebugLogger.INSTANCE.warning(TAG, "Could not load session, creating background stub.");
-            return createBackgroundSessionStub(report.getCreationTimestamp());
+            }
         }
+        return null;
     }
 
     @VisibleForTesting
@@ -312,5 +372,4 @@ public class SessionManagerStateMachine {
     public EventSaver getSaver() {
         return mSaver;
     }
-
 }

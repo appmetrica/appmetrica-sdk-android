@@ -35,7 +35,7 @@ public class MockSessionFactory implements ISessionFactory<SessionArguments> {
 
     @NonNull
     public Session create(SessionArguments arguments) {
-        return createMock(true, arguments.creationTimestamp);
+        return createMock(true, arguments.getCreationTimestamp());
     }
 
     private Session createMock(boolean isValid, long creationTimestamp) {

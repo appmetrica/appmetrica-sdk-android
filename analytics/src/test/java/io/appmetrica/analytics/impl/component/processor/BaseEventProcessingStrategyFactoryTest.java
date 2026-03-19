@@ -39,7 +39,7 @@ import io.appmetrica.analytics.impl.component.processor.factory.SingleHandlerFac
 import io.appmetrica.analytics.impl.component.processor.factory.StartFactory;
 import io.appmetrica.analytics.impl.component.processor.factory.UnhandledExceptionFactory;
 import io.appmetrica.analytics.impl.component.processor.factory.UnhandledExceptionFromFileFactory;
-import io.appmetrica.analytics.impl.component.processor.session.ReportSessionStopHandler;
+import io.appmetrica.analytics.impl.component.processor.session.ReportSessionStopDueCrashHandler;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.ContextRule;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
@@ -107,7 +107,7 @@ public class BaseEventProcessingStrategyFactoryTest extends CommonTest {
             when(mock.getReportPurgeBufferHandler()).thenReturn(mock(ReportPurgeBufferHandler.class));
             when(mock.getReportSaveToDatabaseHandler()).thenReturn(mock(ReportSaveToDatabaseHandler.class));
             when(mock.getReportSessionHandler()).thenReturn(mock(ReportSessionHandler.class));
-            when(mock.getReportSessionStopHandler()).thenReturn(mock(ReportSessionStopHandler.class));
+            when(mock.getReportSessionStopDueCrashHandler()).thenReturn(mock(ReportSessionStopDueCrashHandler.class));
             when(mock.getReportAppEnvironmentUpdated()).thenReturn(mock(ReportAppEnvironmentUpdatedHandler.class));
             when(mock.getReportAppEnvironmentCleared()).thenReturn(mock(ReportAppEnvironmentClearedHandler.class));
             when(mock.getReportFirstHandler()).thenReturn(mock(ReportFirstHandler.class));

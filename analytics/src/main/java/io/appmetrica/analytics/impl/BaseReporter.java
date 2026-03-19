@@ -423,6 +423,7 @@ public abstract class BaseReporter implements IBaseReporter {
     @Override
     // crash: send synchronously
     public void reportUnhandledException(@NonNull UnhandledException unhandledException) {
+        pauseSession();
         mReportsHandler.reportCrash(unhandledException, mReporterEnvironment);
         mPublicLogger.info("Unhandled exception received: " + unhandledException);
     }

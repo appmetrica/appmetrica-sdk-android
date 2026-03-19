@@ -15,7 +15,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class ReportSessionStopHandlerTest extends CommonTest {
+public class ReportSessionStopDueCrashHandlerTest extends CommonTest {
 
     @Mock
     private ComponentUnit componentUnit;
@@ -23,33 +23,33 @@ public class ReportSessionStopHandlerTest extends CommonTest {
     private SessionManagerStateMachine sessionManager;
     @Mock
     private ConditionalEventTrigger conditionalEventTrigger;
-    private ReportSessionStopHandler reportSessionStopHandler;
+    private ReportSessionStopDueCrashHandler reportSessionStopDueCrashHandler;
 
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
         when(componentUnit.getSessionManager()).thenReturn(sessionManager);
         when(componentUnit.getEventTrigger()).thenReturn(conditionalEventTrigger);
-        reportSessionStopHandler = new ReportSessionStopHandler(componentUnit);
+        reportSessionStopDueCrashHandler = new ReportSessionStopDueCrashHandler(componentUnit);
     }
 
     @Test
     public void testSessionStopped() {
         CounterReport reportData = new CounterReport();
-        reportSessionStopHandler.process(reportData);
+        reportSessionStopDueCrashHandler.process(reportData);
 
         verify(sessionManager, times(1)).stopCurrentSessionDueToCrash(reportData);
     }
 
     @Test
     public void testProcessShouldTrigger() {
-        reportSessionStopHandler.process(new CounterReport());
+        reportSessionStopDueCrashHandler.process(new CounterReport());
         verify(conditionalEventTrigger).trigger();
     }
 
     @Test
     public void testProcessShouldBreakProcessing() {
-        assertThat(reportSessionStopHandler.process(new CounterReport())).isTrue();
+        assertThat(reportSessionStopDueCrashHandler.process(new CounterReport())).isTrue();
     }
 
 }

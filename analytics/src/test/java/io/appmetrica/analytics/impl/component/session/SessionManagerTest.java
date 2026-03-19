@@ -3,7 +3,6 @@ package io.appmetrica.analytics.impl.component.session;
 import android.content.Context;
 import io.appmetrica.analytics.coreutils.internal.time.TimeProvider;
 import io.appmetrica.analytics.impl.CounterReport;
-import io.appmetrica.analytics.impl.ExtraMetaInfoRetriever;
 import io.appmetrica.analytics.impl.InternalEvents;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.impl.db.DatabaseHelper;
@@ -16,6 +15,7 @@ import io.appmetrica.analytics.impl.utils.ServerTime;
 import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
+import java.util.concurrent.TimeUnit;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -47,8 +47,6 @@ public class SessionManagerTest extends CommonTest {
     private PublicLogger publicLogger;
     @Mock
     private SessionIDProvider sessionIDProvider;
-    @Mock
-    private ExtraMetaInfoRetriever mExtraMetaInfoRetriever;
 
     private final Context mContext = RuntimeEnvironment.getApplication().getApplicationContext();
 
@@ -59,6 +57,7 @@ public class SessionManagerTest extends CommonTest {
     private SessionManagerStateMachine mManager;
     private ISessionFactory mForegroundSessionFactory;
     private ISessionFactory mBackgroundSessionFactory;
+    private ISessionFactory sessionFromPastFactory;
 
     @Rule
     public GlobalServiceLocatorRule mRule = new GlobalServiceLocatorRule();
@@ -68,6 +67,7 @@ public class SessionManagerTest extends CommonTest {
         MockitoAnnotations.openMocks(this);
         mForegroundSessionFactory = new MockSessionFactory(SessionType.FOREGROUND);
         mBackgroundSessionFactory = new MockSessionFactory(SessionType.BACKGROUND);
+        sessionFromPastFactory = new MockSessionFactory(SessionType.BACKGROUND);
 
         when(mComponentUnit.getContext()).thenReturn(mContext);
         when(mComponentUnit.getDbHelper()).thenReturn(mDbHelper);
@@ -81,10 +81,10 @@ public class SessionManagerTest extends CommonTest {
         doReturn(INITIAL_SESSION_ID).when(sessionIDProvider).getNextSessionId();
         mManager = new SessionManagerStateMachine(
             mComponentUnit,
-            sessionIDProvider,
             mock(SessionManagerStateMachine.EventSaver.class),
             mForegroundSessionFactory,
-            mBackgroundSessionFactory
+            mBackgroundSessionFactory,
+            sessionFromPastFactory
         );
     }
 
@@ -116,7 +116,7 @@ public class SessionManagerTest extends CommonTest {
         verify(saver, times(1)).saveEvent(argThat(new ArgumentMatcher<CounterReport>() {
             @Override
             public boolean matches(CounterReport argument) {
-                return argument.getType() == InternalEvents.EVENT_TYPE_ALIVE.getTypeId();
+                return argument.getType() == InternalEvents.EVENT_TYPE_START.getTypeId();
             }
         }), any(SessionState.class));
     }
@@ -129,10 +129,10 @@ public class SessionManagerTest extends CommonTest {
 
         SessionManagerStateMachine sessionManager = new SessionManagerStateMachine(
             mComponentUnit,
-            sessionIDProvider,
             saver,
             foregroundSessionFactory,
-            backgroundSessionFactory
+            backgroundSessionFactory,
+            sessionFromPastFactory
         );
 
         sessionManager.heartbeat(new CounterReport());
@@ -155,7 +155,7 @@ public class SessionManagerTest extends CommonTest {
         verify(saver, times(1)).saveEvent(argThat(new ArgumentMatcher<CounterReport>() {
             @Override
             public boolean matches(CounterReport argument) {
-                return argument.getType() == InternalEvents.EVENT_TYPE_ALIVE.getTypeId();
+                return argument.getType() == InternalEvents.EVENT_TYPE_START.getTypeId();
             }
         }), any(SessionState.class));
     }
@@ -163,17 +163,19 @@ public class SessionManagerTest extends CommonTest {
     @Test
     public void testStubForNativeCrash() {
         final long timestamp = 1357986L;
+        final long elapsedRealtime = 200500L;
         DatabaseHelper dbHelper = mock(DatabaseHelper.class);
         when(mComponentUnit.getDbHelper()).thenReturn(dbHelper);
+        SessionRequestParams sessionRequestParams = mock(SessionRequestParams.class);
         SessionState session = new SessionManagerStateMachine(mComponentUnit, sessionIDProvider,
             mock(SessionManagerStateMachine.EventSaver.class)
-        ).createBackgroundSessionStub(timestamp);
+        ).createBackgroundSessionFromPast(elapsedRealtime, timestamp, sessionRequestParams);
 
         assertThat(session.getSessionId()).isEqualTo(INITIAL_SESSION_ID);
         assertThat(session.getSessionType()).isEqualTo(SessionType.BACKGROUND);
         assertThat(session.getReportId()).isEqualTo(SessionDefaults.INITIAL_REPORT_ID);
         assertThat(session.getReportTime()).isZero();
-        verify(dbHelper).newSession(INITIAL_SESSION_ID, SessionType.BACKGROUND, timestamp);
+        verify(dbHelper).newSessionFromPast(INITIAL_SESSION_ID, SessionType.BACKGROUND, TimeUnit.MILLISECONDS.toSeconds(timestamp), sessionRequestParams);
 
         verify(sessionIDProvider).getNextSessionId();
     }
@@ -195,6 +197,5 @@ public class SessionManagerTest extends CommonTest {
         manager.heartbeat(mock(CounterReport.class));
         assertThat(manager.getThresholdSessionIdForActualSessions()).isEqualTo(INITIAL_SESSION_ID + 9);
     }
-
 }
 

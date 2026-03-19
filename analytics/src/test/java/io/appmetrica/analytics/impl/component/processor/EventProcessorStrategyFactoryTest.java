@@ -24,7 +24,7 @@ import io.appmetrica.analytics.impl.component.processor.event.SendReferrerEventH
 import io.appmetrica.analytics.impl.component.processor.event.UpdateUserProfileIDHandler;
 import io.appmetrica.analytics.impl.component.processor.event.modules.ModulesEventHandler;
 import io.appmetrica.analytics.impl.component.processor.factory.ReportingHandlerProvider;
-import io.appmetrica.analytics.impl.component.processor.session.ReportSessionStopHandler;
+import io.appmetrica.analytics.impl.component.processor.session.ReportSessionStopDueCrashHandler;
 import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import io.appmetrica.analytics.testutils.MockedConstructionRule;
@@ -73,7 +73,7 @@ public class EventProcessorStrategyFactoryTest extends CommonTest {
             when(mock.getReportPurgeBufferHandler()).thenReturn(mock(ReportPurgeBufferHandler.class));
             when(mock.getReportSaveToDatabaseHandler()).thenReturn(mock(ReportSaveToDatabaseHandler.class));
             when(mock.getReportSessionHandler()).thenReturn(mock(ReportSessionHandler.class));
-            when(mock.getReportSessionStopHandler()).thenReturn(mock(ReportSessionStopHandler.class));
+            when(mock.getReportSessionStopDueCrashHandler()).thenReturn(mock(ReportSessionStopDueCrashHandler.class));
             when(mock.getReportAppEnvironmentUpdated()).thenReturn(mock(ReportAppEnvironmentUpdatedHandler.class));
             when(mock.getReportAppEnvironmentCleared()).thenReturn(mock(ReportAppEnvironmentClearedHandler.class));
             when(mock.getReportFirstHandler()).thenReturn(mock(ReportFirstHandler.class));
@@ -157,7 +157,7 @@ public class EventProcessorStrategyFactoryTest extends CommonTest {
             mEventProcessingStrategyFactory.getHandlersProvider().getReportPurgeBufferHandler(),
             mEventProcessingStrategyFactory.getHandlersProvider().getReportSaveToDatabaseHandler(),
             mEventProcessingStrategyFactory.getHandlersProvider().getReportCrashMetaInformation(),
-            mEventProcessingStrategyFactory.getHandlersProvider().getReportSessionStopHandler()
+            mEventProcessingStrategyFactory.getHandlersProvider().getReportSessionStopDueCrashHandler()
         );
     }
 
@@ -313,7 +313,7 @@ public class EventProcessorStrategyFactoryTest extends CommonTest {
             .containsExactly(
                 mEventProcessingStrategyFactory.getHandlersProvider().getReportPrevSessionEventHandler(),
                 mEventProcessingStrategyFactory.getHandlersProvider().getReportPurgeBufferHandler(),
-                mEventProcessingStrategyFactory.getHandlersProvider().getReportSessionStopHandler()
+                mEventProcessingStrategyFactory.getHandlersProvider().getReportSessionStopDueCrashHandler()
             );
     }
 
@@ -325,7 +325,7 @@ public class EventProcessorStrategyFactoryTest extends CommonTest {
                 mEventProcessingStrategyFactory.getHandlersProvider().getReportSessionHandler(),
                 mEventProcessingStrategyFactory.getHandlersProvider().getReportSaveToDatabaseHandler(),
                 mEventProcessingStrategyFactory.getHandlersProvider().getReportPurgeBufferHandler(),
-                mEventProcessingStrategyFactory.getHandlersProvider().getReportSessionStopHandler()
+                mEventProcessingStrategyFactory.getHandlersProvider().getReportSessionStopDueCrashHandler()
             );
     }
 

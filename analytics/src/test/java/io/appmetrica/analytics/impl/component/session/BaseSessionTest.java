@@ -178,6 +178,17 @@ public abstract class BaseSessionTest extends CommonTest {
     }
 
     @Test
+    public void testSessionInvalidIfCrashed() throws Exception {
+        prepareRequestParamsTest();
+        mSessionStorage.putSleepStart((long) 1 - getSessionTimeout());
+        mSessionStorage.putSessionId(1L);
+        Session session = getSessionFactory().load();
+        assertThat(session.isValid(SystemClock.elapsedRealtime())).isTrue();
+        session.markSessionAsCrashed();
+        assertThat(session.isValid(SystemClock.elapsedRealtime())).isFalse();
+    }
+
+    @Test
     public void testSessionInvalidIfRequestParametersIsNotExists() throws Exception {
         mSessionStorage.putCreationTime(-(SessionDefaults.SESSION_MAX_LENGTH_SEC - 1) * 1000);
         Session session = getSessionFactory().load();
@@ -231,8 +242,11 @@ public abstract class BaseSessionTest extends CommonTest {
         ReportRequestConfig reportRequestConfig = getTestRequestConfig();
         doReturn(10).when(reportRequestConfig).getSessionTimeout();
         ContentValues params = getParamsDbValues(reportRequestConfig);
+        String paramsJsonString = params.getAsString(Constants.SessionTable.SessionTableEntry.FIELD_SESSION_REPORT_REQUEST_PARAMETERS);
+        SessionRequestParams sessionRequestParams = new SessionRequestParams(new JSONObject(paramsJsonString));
 
         doReturn(params).when(mDatabaseHelper).getSessionRequestParameters(anyLong(), any(SessionType.class));
+        doReturn(sessionRequestParams).when(mDatabaseHelper).getSessionRequestParams(anyLong(), any(SessionType.class));
         doReturn(reportRequestConfig).when(mComponent).getFreshReportRequestConfig();
         return reportRequestConfig;
     }
@@ -241,12 +255,19 @@ public abstract class BaseSessionTest extends CommonTest {
         ContentValues contentValues = new ContentValues();
 
         JSONObject requestParameters = new JSONObject();
+        requestParameters.putOpt(Constants.RequestParametersJsonKeys.DEVICE_ID, reportRequestConfig.getDeviceId());
+        requestParameters.putOpt(Constants.RequestParametersJsonKeys.UUID, reportRequestConfig.getUuid());
         requestParameters.putOpt(Constants.RequestParametersJsonKeys.APP_VERSION, reportRequestConfig.getAppVersion());
         requestParameters.putOpt(Constants.RequestParametersJsonKeys.APP_BUILD, reportRequestConfig.getAppBuildNumber());
+        requestParameters.putOpt(Constants.RequestParametersJsonKeys.ANALYTICS_SDK_BUILD_TYPE, reportRequestConfig.getAnalyticsSdkBuildType());
         requestParameters.putOpt(Constants.RequestParametersJsonKeys.ANALYTICS_SDK_VERSION_NAME, reportRequestConfig.getAnalyticsSdkVersionName());
         requestParameters.putOpt(Constants.RequestParametersJsonKeys.ANALYTICS_SDK_BUILD_NUMBER, reportRequestConfig.getAnalyticsSdkBuildNumber());
         requestParameters.putOpt(Constants.RequestParametersJsonKeys.OS_VERSION, reportRequestConfig.getOsVersion());
         requestParameters.putOpt(Constants.RequestParametersJsonKeys.OS_API_LEVEL, reportRequestConfig.getOsApiLevel());
+        requestParameters.putOpt(Constants.RequestParametersJsonKeys.LOCALE, reportRequestConfig.getLocale());
+        requestParameters.putOpt(Constants.RequestParametersJsonKeys.ROOT_STATUS, reportRequestConfig.getDeviceRootStatus());
+        requestParameters.putOpt(Constants.RequestParametersJsonKeys.APP_DEBUGGABLE, reportRequestConfig.isAppDebuggable());
+        requestParameters.putOpt(Constants.RequestParametersJsonKeys.APP_FRAMEWORK, reportRequestConfig.getAppFramework());
         requestParameters.putOpt(Constants.RequestParametersJsonKeys.ATTRIBUTION_ID, reportRequestConfig.getAttributionId());
 
         contentValues.put(Constants.SessionTable.SessionTableEntry.FIELD_SESSION_REPORT_REQUEST_PARAMETERS, requestParameters.toString());
@@ -255,11 +276,18 @@ public abstract class BaseSessionTest extends CommonTest {
 
     private ReportRequestConfig getTestRequestConfig() {
         ReportRequestConfig reportRequestConfig = mock(ReportRequestConfig.class);
+        when(reportRequestConfig.getDeviceId()).thenReturn("");
+        when(reportRequestConfig.getUuid()).thenReturn("");
         when(reportRequestConfig.getAnalyticsSdkVersionName()).thenReturn("");
         when(reportRequestConfig.getAnalyticsSdkBuildNumber()).thenReturn("");
+        when(reportRequestConfig.getAnalyticsSdkBuildType()).thenReturn("");
         when(reportRequestConfig.getAppVersion()).thenReturn("");
         when(reportRequestConfig.getAppBuildNumber()).thenReturn("");
         when(reportRequestConfig.getOsVersion()).thenReturn("");
+        when(reportRequestConfig.getLocale()).thenReturn("");
+        when(reportRequestConfig.getDeviceRootStatus()).thenReturn("");
+        when(reportRequestConfig.isAppDebuggable()).thenReturn("");
+        when(reportRequestConfig.getAppFramework()).thenReturn("");
 
         return reportRequestConfig;
     }

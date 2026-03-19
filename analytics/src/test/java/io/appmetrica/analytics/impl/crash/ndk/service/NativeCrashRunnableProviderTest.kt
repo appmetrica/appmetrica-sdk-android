@@ -53,6 +53,8 @@ internal class NativeCrashRunnableProviderTest : CommonTest() {
         on { predicate(nativeCrash) } doReturn shouldSendCrashPredicate
     }
 
+    private val timestampProvider: NativeCrashTimestampProvider = mock()
+
     @get:Rule
     val fileProviderMockedConstructionRule = constructionRule<FileProvider> {
         on { getFileByNonNullPath(dumpFilePath) } doReturn nativeCrashFile
@@ -89,8 +91,13 @@ internal class NativeCrashRunnableProviderTest : CommonTest() {
     @Before
     fun setUp() {
         FileLocksHolder.stubInstance(fileLocksHolder)
-        nativeCrashRunnableProvider =
-            NativeCrashRunnableProvider(context, reportConsumer, shouldSendCrashPredicateProvider, eventType)
+        nativeCrashRunnableProvider = NativeCrashRunnableProvider(
+            context,
+            reportConsumer,
+            shouldSendCrashPredicateProvider,
+            eventType,
+            timestampProvider
+        )
     }
 
     @Test
@@ -124,7 +131,7 @@ internal class NativeCrashRunnableProviderTest : CommonTest() {
 
         assertThat(nativeCrashReporterCreatorMockedConstructionRule.constructionMock.constructed()).hasSize(1)
         assertThat(nativeCrashReporterCreatorMockedConstructionRule.argumentInterceptor.flatArguments())
-            .containsExactly(nativeCrash, eventType)
+            .containsExactly(nativeCrash, eventType, timestampProvider)
     }
 
     @Test

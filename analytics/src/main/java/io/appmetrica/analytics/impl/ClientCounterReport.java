@@ -36,8 +36,7 @@ public class ClientCounterReport extends CounterReport {
 
     @VisibleForTesting
     public ClientCounterReport(@NonNull PublicLogger logger) {
-        super();
-        setTrimmers(logger);
+        this(StringUtils.EMPTY, StringUtils.EMPTY, 0, 0, logger);
     }
 
     public ClientCounterReport(final String name, final int type, @NonNull PublicLogger logger) {
@@ -46,6 +45,31 @@ public class ClientCounterReport extends CounterReport {
 
     public ClientCounterReport(final String value, final String name, final int type, @NonNull PublicLogger logger) {
         this(value, name, type, 0, logger);
+    }
+
+    public ClientCounterReport(final int type, @NonNull PublicLogger logger, long creationTimestamp) {
+        this(StringUtils.EMPTY, StringUtils.EMPTY, type, logger);
+        setCreationTimestamp(creationTimestamp);
+    }
+
+    public ClientCounterReport(final byte[] value,
+                               @Nullable final String name,
+                               final int type,
+                               @NonNull PublicLogger logger) {
+        super();
+        setTrimmers(logger);
+        setTrimmedValueBytes(value);
+        this.name = trimName(name);
+        setType(type);
+    }
+
+    public ClientCounterReport(final byte[] value,
+                               @Nullable final String name,
+                               final int type,
+                               @NonNull PublicLogger logger,
+                               long creationTimestamp) {
+        this(value, name, type, logger);
+        setCreationTimestamp(creationTimestamp);
     }
 
     public ClientCounterReport(final String value,
@@ -59,17 +83,6 @@ public class ClientCounterReport extends CounterReport {
         this.name = trimName(name);
         setType(type);
         setCustomType(customType);
-    }
-
-    public ClientCounterReport(final byte[] value,
-                               @Nullable final String name,
-                               final int type,
-                               @NonNull PublicLogger logger) {
-        super();
-        setTrimmers(logger);
-        setTrimmedValueBytes(value);
-        this.name = trimName(name);
-        setType(type);
     }
 
     public ClientCounterReport withTrimmedFields(
@@ -170,7 +183,6 @@ public class ClientCounterReport extends CounterReport {
     }
 
     @Override
-    @Nullable
     public final void setValueBytes(@Nullable byte[] bytes) {
         setTrimmedValueBytes(bytes);
     }
@@ -180,7 +192,6 @@ public class ClientCounterReport extends CounterReport {
     }
 
     @Override
-    @NonNull
     public void setProfileID(@Nullable String value) {
         super.setProfileID(mProfileIDTrimmer.trim(value));
     }

@@ -19,7 +19,8 @@ internal class ReportCrashRunnableProvider(
     private val context: Context,
     crashEventConsumer: CrashEventConsumer,
     eventType: InternalEvents,
-    private val crashPredicate: ShouldSendCrashNowPredicate<JvmCrash>
+    private val crashPredicate: ShouldSendCrashNowPredicate<JvmCrash>,
+    private val timestampProvider: CrashTimestampProvider
 ) {
 
     private val jvmCrashReader = JvmCrashReader()
@@ -39,7 +40,8 @@ internal class ReportCrashRunnableProvider(
             it.bytesTruncated,
             it.trimmedFields,
             it.environment,
-            LoggerStorage.getOrCreatePublicLogger(it.apiKey)
+            LoggerStorage.getOrCreatePublicLogger(it.apiKey),
+            timestampProvider.getTimestamp(it)
         )
         crashEventConsumer.consumeCrash(clientDescription, event, arguments)
     }

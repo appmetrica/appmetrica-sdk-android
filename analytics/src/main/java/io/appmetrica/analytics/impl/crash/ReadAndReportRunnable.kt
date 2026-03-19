@@ -25,6 +25,7 @@ internal class ReadAndReportRunnable<Output>(
             try {
                 fileLock.lock()
                 if (!crashFile.exists()) {
+                    DebugLogger.info(tag, "file ${crashFile.name} was deleted")
                     return // crash was processed from another thread
                 }
                 val result = fileReader.apply(crashFile)

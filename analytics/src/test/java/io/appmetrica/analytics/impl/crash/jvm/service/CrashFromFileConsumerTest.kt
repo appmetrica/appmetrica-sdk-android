@@ -26,6 +26,7 @@ internal class CrashFromFileConsumerTest : CommonTest() {
     private val eventType: InternalEvents = mock()
     private val crashPredicate: ShouldSendCrashNowPredicate<JvmCrash> = mock()
     private val subtag = "Subtag"
+    private val timestampProvider: CrashTimestampProvider = mock()
     private val file: File = mock()
 
     private val executor: IHandlerExecutor = mock()
@@ -50,7 +51,8 @@ internal class CrashFromFileConsumerTest : CommonTest() {
             eventType,
             crashPredicate,
             executor,
-            subtag
+            subtag,
+            timestampProvider
         )
     }
 
@@ -58,7 +60,7 @@ internal class CrashFromFileConsumerTest : CommonTest() {
     fun reportCrashRunnable() {
         assertThat(reportCrashRunnableProviderMockedConstructionRule.constructionMock.constructed()).hasSize(1)
         assertThat(reportCrashRunnableProviderMockedConstructionRule.argumentInterceptor.flatArguments())
-            .containsExactly(context, crashEventConsumer, eventType, crashPredicate)
+            .containsExactly(context, crashEventConsumer, eventType, crashPredicate, timestampProvider)
     }
 
     @Test

@@ -114,17 +114,22 @@ public class EventSaver {
         saveReport(reportData, mSessionManager.getCurrentSessionState(reportData));
     }
 
-    public void saveReportFromPrevSession(@NonNull CounterReport report) {
+    public boolean saveReportFromPrevSession(@NonNull CounterReport report) {
         SessionState sessionState = mSessionManager.peekCurrentSessionState(report);
         DebugLogger.INSTANCE.info(
             TAG,
-            "saveReport: %s of type: %d to prev session: %d of type: %s",
+            "saveReportFromPrevSession: %s of type: %d; sessionState",
             report.getName(),
             report.getType(),
-            sessionState.getSessionId(),
-            sessionState.getSessionType().name()
+            sessionState
         );
-        saveReport(report, sessionState);
+        if (sessionState != null) {
+            saveReport(report, sessionState);
+            return true;
+        } else {
+            DebugLogger.INSTANCE.error(TAG, "saveReportFromPrevSession: sessionState is null");
+            return false;
+        }
     }
 
     @VisibleForTesting

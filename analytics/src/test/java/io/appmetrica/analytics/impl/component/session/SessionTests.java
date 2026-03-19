@@ -29,6 +29,7 @@ public class SessionTests extends CommonTest {
 
     private static final long SLEEP_START_TIME = 435454645L;
     private static final long SESSION_CREATION_TIME = SLEEP_START_TIME - TimeUnit.SECONDS.toMillis(10000);
+    private static final long SESSION_CREATION_CURRENT_TIME_MILLIS = 1700000000000L;
     private static final int SESSION_TIMEOUT = 100;
 
     private ComponentUnit mComponentUnit;
@@ -44,7 +45,8 @@ public class SessionTests extends CommonTest {
         mComponentUnit = mock(ComponentUnit.class);
         mSessionStorage = mock(SessionStorageImpl.class);
         mSessionArguments = mock(SessionArgumentsInternal.class);
-        when(mSessionArguments.getCreationTime(anyLong())).thenReturn(SESSION_CREATION_TIME);
+        when(mSessionArguments.getCreationElapsedRealTime(anyLong())).thenReturn(SESSION_CREATION_TIME);
+        when(mSessionArguments.getCreationCurrentTimeMillis(anyLong())).thenReturn(SESSION_CREATION_CURRENT_TIME_MILLIS);
         when(mSessionArguments.getType()).thenReturn(SessionType.FOREGROUND);
         mSystemTimeProvider = mock(SystemTimeProvider.class);
         when(mSessionArguments.getId(anyLong())).thenReturn(0L);
@@ -52,6 +54,10 @@ public class SessionTests extends CommonTest {
         when(mSessionStorage.putLastEventOffset(anyLong())).thenReturn(mSessionStorage);
         when(mDatabaseHelper.getSessionRequestParameters(anyLong(), any(SessionType.class)))
             .thenReturn(getSessionRequestParameters());
+        SessionRequestParams sessionRequestParams = mock(SessionRequestParams.class);
+        when(sessionRequestParams.areParamsSameAsInConfig(any())).thenReturn(true);
+        when(mDatabaseHelper.getSessionRequestParams(anyLong(), any(SessionType.class)))
+            .thenReturn(sessionRequestParams);
         when(mComponentUnit.getDbHelper()).thenReturn(mDatabaseHelper);
         doReturn(getRequestConfig()).when(mComponentUnit).getFreshReportRequestConfig();
 
@@ -85,7 +91,7 @@ public class SessionTests extends CommonTest {
 
         doReturn(lastActiveTimeSeconds).when(mSessionArguments).getSleepStart(anyLong());
         doReturn(1000).when(mSessionArguments).getTimeout(anyInt());
-        doReturn(lastActiveTime - 10000).when(mSessionArguments).getCreationTime(anyLong());
+        doReturn(lastActiveTime - 10000).when(mSessionArguments).getCreationElapsedRealTime(anyLong());
 
         Session session = new Session(mComponentUnit, mSessionStorage, mSessionArguments);
 
@@ -102,7 +108,7 @@ public class SessionTests extends CommonTest {
 
         doReturn(lastActiveTimeSeconds).when(mSessionArguments).getSleepStart(anyLong());
         doReturn(1000).when(mSessionArguments).getTimeout(anyInt());
-        doReturn(lastActiveTime - 10000).when(mSessionArguments).getCreationTime(anyLong());
+        doReturn(lastActiveTime - 10000).when(mSessionArguments).getCreationElapsedRealTime(anyLong());
 
         Session session = new Session(mComponentUnit, mSessionStorage, mSessionArguments);
 
@@ -130,11 +136,42 @@ public class SessionTests extends CommonTest {
     }
 
     @Test
+    public void testGetEventTimeOffsetForPrevSession() {
+        SoftAssertions assertions = new SoftAssertions();
+
+        // timestampBasedOffset wins
+        long eventTimestampLarger = SESSION_CREATION_CURRENT_TIME_MILLIS + TimeUnit.SECONDS.toMillis(60);
+        long elapsedRealtimeSmaller = SESSION_CREATION_TIME + TimeUnit.SECONDS.toMillis(30);
+        assertions.assertThat(mSession.getEventTimeOffsetForPrevSession(eventTimestampLarger, elapsedRealtimeSmaller))
+            .isEqualTo(60L);
+
+        // elapsedRealtimeBasedOffset wins
+        long eventTimestampSmaller = SESSION_CREATION_CURRENT_TIME_MILLIS + TimeUnit.SECONDS.toMillis(30);
+        long elapsedRealtimeLarger = SESSION_CREATION_TIME + TimeUnit.SECONDS.toMillis(60);
+        assertions.assertThat(mSession.getEventTimeOffsetForPrevSession(eventTimestampSmaller, elapsedRealtimeLarger))
+            .isEqualTo(60L);
+
+        assertions.assertAll();
+    }
+
+    @Test
+    public void testMarkSessionAsCrashed() {
+        when(mSessionStorage.putCrashedSession(true)).thenReturn(mSessionStorage);
+
+        assertThat(mSession.isSessionCrashed()).isFalse();
+        mSession.markSessionAsCrashed();
+        assertThat(mSession.isSessionCrashed()).isTrue();
+        verify(mSessionStorage).putCrashedSession(true);
+        verify(mSessionStorage).apply();
+    }
+
+    @Test
     public void toStringContainsExpectedFields() {
         SoftAssertions assertions = new SoftAssertions();
         assertions.assertThat(mSession.toString())
             .contains("id=0")
             .contains("creationTime=" + SESSION_CREATION_TIME)
+            .contains("sessionCreationCurrentTimeMillis=" + SESSION_CREATION_CURRENT_TIME_MILLIS)
             .contains("currentReportId=0")
             .contains("sessionRequestParams=null")
             .contains("sleepStart=0");

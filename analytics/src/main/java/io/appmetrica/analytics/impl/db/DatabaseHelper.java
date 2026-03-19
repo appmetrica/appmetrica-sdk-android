@@ -17,9 +17,14 @@ import io.appmetrica.analytics.impl.EventsManager;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.Utils;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
+import io.appmetrica.analytics.impl.component.session.SessionRequestParams;
 import io.appmetrica.analytics.impl.component.session.SessionState;
 import io.appmetrica.analytics.impl.component.session.SessionType;
 import io.appmetrica.analytics.impl.db.constants.Constants;
+
+import static io.appmetrica.analytics.impl.db.constants.Constants.EventsTable.EventTableEntry;
+import static io.appmetrica.analytics.impl.db.constants.Constants.SessionTable;
+import static io.appmetrica.analytics.impl.db.constants.Constants.SessionTable.SessionTableEntry;
 import io.appmetrica.analytics.impl.db.event.DbEventModel;
 import io.appmetrica.analytics.impl.db.event.DbEventModelFactory;
 import io.appmetrica.analytics.impl.db.protobuf.converter.DbEventModelConverter;
@@ -39,10 +44,7 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
-
-import static io.appmetrica.analytics.impl.db.constants.Constants.EventsTable.EventTableEntry;
-import static io.appmetrica.analytics.impl.db.constants.Constants.SessionTable;
-import static io.appmetrica.analytics.impl.db.constants.Constants.SessionTable.SessionTableEntry;
+import org.json.JSONObject;
 
 public class DatabaseHelper {
 
@@ -174,6 +176,29 @@ public class DatabaseHelper {
 
         final ContentValues sessionValues = new DbSessionModelConverter().fromModel(
             new DbSessionModelFactory(
+                mComponent.getFreshReportRequestConfig(),
+                sessionId,
+                type,
+                sessionStartTimeSeconds
+            ).create()
+        );
+
+        addSessionValues(sessionValues);
+    }
+
+    // Creates and writes a new session by Id using request params from a past session.
+    // It is only used to create a session for crashes.
+    public void newSessionFromPast(
+        final long sessionId,
+        final SessionType type,
+        final long sessionStartTimeSeconds,
+        @Nullable final SessionRequestParams sessionRequestParams
+    ) {
+        DebugLogger.INSTANCE.info(TAG, "New session from past was created. Session Id: %d", sessionId);
+
+        final ContentValues sessionValues = new DbSessionModelConverter().fromModel(
+            new DbSessionModelFactory(
+                sessionRequestParams,
                 mComponent.getFreshReportRequestConfig(),
                 sessionId,
                 type,
@@ -544,6 +569,25 @@ public class DatabaseHelper {
         return queryParameters;
     }
 
+    public SessionRequestParams getSessionRequestParams(final long sessionId, SessionType sessionType) {
+        ContentValues params = getSessionRequestParameters(sessionId, sessionType);
+        try {
+            String paramsJsonString = params.getAsString(
+                Constants.SessionTable.SessionTableEntry.FIELD_SESSION_REPORT_REQUEST_PARAMETERS
+            );
+            if (!StringUtils.isNullOrEmpty(paramsJsonString)) {
+                JSONObject requestParameters = new JSONObject(paramsJsonString);
+                return new SessionRequestParams(requestParameters);
+            } else {
+                DebugLogger.INSTANCE.error(TAG, "Session request parameters are empty");
+            }
+        } catch (Throwable e) {
+            DebugLogger.INSTANCE.error(TAG, "Failed to parse session request parameters", e);
+        }
+        return null;
+    }
+
+    @VisibleForTesting
     public ContentValues getSessionRequestParameters(final long sessionId, SessionType sessionType) {
         ContentValues queryParameters = new ContentValues();
 

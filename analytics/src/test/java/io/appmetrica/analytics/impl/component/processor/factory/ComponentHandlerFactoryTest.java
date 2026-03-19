@@ -21,7 +21,7 @@ import io.appmetrica.analytics.impl.component.processor.event.SavePreloadInfoHan
 import io.appmetrica.analytics.impl.component.processor.event.SendReferrerEventHandler;
 import io.appmetrica.analytics.impl.component.processor.event.UpdateUserProfileIDHandler;
 import io.appmetrica.analytics.impl.component.processor.event.modules.ModulesEventHandler;
-import io.appmetrica.analytics.impl.component.processor.session.ReportSessionStopHandler;
+import io.appmetrica.analytics.impl.component.processor.session.ReportSessionStopDueCrashHandler;
 import io.appmetrica.analytics.testutils.CommonTest;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +46,7 @@ public class ComponentHandlerFactoryTest extends CommonTest {
     @Mock
     private ReportSessionHandler mReportSessionHandler;
     @Mock
-    private ReportSessionStopHandler mReportSessionStopHandler;
+    private ReportSessionStopDueCrashHandler mReportSessionStopDueCrashHandler;
     @Mock
     private ReportCrashMetaInformation reportCrashMetaInformation;
     @Mock
@@ -87,7 +87,7 @@ public class ComponentHandlerFactoryTest extends CommonTest {
         when(mProvider.getReportPurgeBufferHandler()).thenReturn(mReportPurgeBufferHandler);
         when(mProvider.getReportSaveToDatabaseHandler()).thenReturn(mReportSaveToDatabaseHandler);
         when(mProvider.getReportSessionHandler()).thenReturn(mReportSessionHandler);
-        when(mProvider.getReportSessionStopHandler()).thenReturn(mReportSessionStopHandler);
+        when(mProvider.getReportSessionStopDueCrashHandler()).thenReturn(mReportSessionStopDueCrashHandler);
         when(mProvider.getReportFirstHandler()).thenReturn(mReportFirstHandler);
         when(mProvider.getReportPrevSessionEventHandler()).thenReturn(mReportPrevSessionEventHandler);
         when(mProvider.getReportPermissionsHandler()).thenReturn(mReportPermissionsHandler);
@@ -225,7 +225,7 @@ public class ComponentHandlerFactoryTest extends CommonTest {
             mReportPurgeBufferHandler,
             mReportSaveToDatabaseHandler,
             reportCrashMetaInformation,
-            mReportSessionStopHandler
+            mReportSessionStopDueCrashHandler
         );
     }
 
@@ -245,7 +245,7 @@ public class ComponentHandlerFactoryTest extends CommonTest {
         assertThat(mHandlersList).containsExactly(
             mReportSaveToDatabaseHandler,
             mReportPurgeBufferHandler,
-            mReportSessionStopHandler
+            mReportSessionStopDueCrashHandler
         );
     }
 
@@ -257,7 +257,7 @@ public class ComponentHandlerFactoryTest extends CommonTest {
         assertThat(mHandlersList).containsExactly(
             mReportPrevSessionEventHandler,
             mReportPurgeBufferHandler,
-            mReportSessionStopHandler
+            mReportSessionStopDueCrashHandler
         );
     }
 

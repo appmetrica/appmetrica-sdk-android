@@ -146,50 +146,26 @@ public final class EventsManager {
     }
 
     public static boolean shouldGenerateGlobalNumber(int eventType) {
-        return EVENTS_WITHOUT_GLOBAL_NUMBER.contains(InternalEvents.valueOf(eventType)) == false;
-    }
-
-    public static CounterReport currentSessionNativeCrashEntry(@NonNull String nativeCrash,
-                                                               @NonNull String uuid,
-                                                               @NonNull PublicLogger logger) {
-        return nativeCrashEntry(
-            InternalEvents.EVENT_TYPE_CURRENT_SESSION_NATIVE_CRASH_PROTOBUF,
-            nativeCrash,
-            uuid,
-            logger
-        );
-    }
-
-    public static CounterReport prevSessionNativeCrashEntry(@NonNull String nativeCrash,
-                                                            @NonNull String uuid,
-                                                            @NonNull PublicLogger logger) {
-        return nativeCrashEntry(
-            InternalEvents.EVENT_TYPE_PREV_SESSION_NATIVE_CRASH_PROTOBUF,
-            nativeCrash,
-            uuid,
-            logger
-        );
+        return !EVENTS_WITHOUT_GLOBAL_NUMBER.contains(InternalEvents.valueOf(eventType));
     }
 
     public static CounterReport nativeCrashEntry(@NonNull InternalEvents eventType,
-                                                  @NonNull String nativeCrash,
-                                                  @NonNull String uuid,
-                                                  @NonNull PublicLogger logger) {
+                                                 @NonNull String nativeCrash,
+                                                 @NonNull String uuid,
+                                                 @NonNull PublicLogger logger,
+                                                 long creationTimestamp) {
         Bundle payload = new Bundle();
         payload.putString(PAYLOAD_CRASH_ID, uuid);
-        CounterReport counterReport = nativeCrashEntry(
-            nativeCrash,
-            eventType,
-            logger
-        );
+        CounterReport counterReport = nativeCrashEntry(nativeCrash, eventType, logger, creationTimestamp);
         counterReport.setPayload(payload);
         return counterReport;
     }
 
     private static CounterReport nativeCrashEntry(@Nullable String nativeCrash,
                                                   @NonNull InternalEvents eventType,
-                                                  @NonNull PublicLogger logger) {
-        ClientCounterReport report = new ClientCounterReport("", eventType.getTypeId(), logger);
+                                                  @NonNull PublicLogger logger,
+                                                  long creationTimestamp) {
+        ClientCounterReport report = new ClientCounterReport(eventType.getTypeId(), logger, creationTimestamp);
         if (nativeCrash != null) {
             report.withExtendedValue(nativeCrash);
         }
@@ -261,13 +237,15 @@ public final class EventsManager {
         int bytesTruncated,
         @NonNull HashMap<ClientCounterReport.TrimmedField, Integer> trimmedFields,
         @Nullable String errorEnvironment,
-        @NonNull PublicLogger logger
+        @NonNull PublicLogger logger,
+        long creationTimestamp
     ) {
         ClientCounterReport result = unhandledExceptionReportEntry(
             value,
             eventName,
             type,
-            logger
+            logger,
+            creationTimestamp
         );
         result.withTrimmedFields(trimmedFields);
         result.setBytesTruncated(bytesTruncated);
@@ -281,6 +259,14 @@ public final class EventsManager {
                                                                      InternalEvents type,
                                                                      @NonNull PublicLogger logger) {
         return new ClientCounterReport(value, eventName, type.getTypeId(), logger);
+    }
+
+    private static ClientCounterReport unhandledExceptionReportEntry(byte[] value,
+                                                                     String eventName,
+                                                                     InternalEvents type,
+                                                                     @NonNull PublicLogger logger,
+                                                                     long creationTimestamp) {
+        return new ClientCounterReport(value, eventName, type.getTypeId(), logger, creationTimestamp);
     }
 
     public static CounterReport requestReferrerEntry(@NonNull PublicLogger logger) {

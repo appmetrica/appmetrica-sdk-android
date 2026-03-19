@@ -70,7 +70,7 @@ public class CrashToFileWriter {
                         toSend.getEnvironment(),
                         toSend.getTrimmedFields()
                 ).toJSONString());
-                DebugLogger.INSTANCE.info(TAG, "Crash saved: %s.", crash.getName());
+                DebugLogger.INSTANCE.info(TAG, "Crash saved: %s to file: %s", crash.getName(), fileName);
             } catch (IOException ioe) {
                 DebugLogger.INSTANCE.error(TAG, ioe, "Can't write crash to file.");
             } catch (Throwable e) {

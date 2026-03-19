@@ -23,7 +23,7 @@ import io.appmetrica.analytics.impl.component.processor.event.SaveSessionExtrasH
 import io.appmetrica.analytics.impl.component.processor.event.SendReferrerEventHandler;
 import io.appmetrica.analytics.impl.component.processor.event.UpdateUserProfileIDHandler;
 import io.appmetrica.analytics.impl.component.processor.event.modules.ModulesEventHandler;
-import io.appmetrica.analytics.impl.component.processor.session.ReportSessionStopHandler;
+import io.appmetrica.analytics.impl.component.processor.session.ReportSessionStopDueCrashHandler;
 import io.appmetrica.analytics.impl.permissions.PermissionsChecker;
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade;
 
@@ -32,7 +32,7 @@ public class ReportingHandlerProvider {
     private final ReportPurgeBufferHandler mReportPurgeBufferHandler;
     private final ReportSaveToDatabaseHandler mReportSaveToDatabaseHandler;
     private final ReportSessionHandler mReportSessionHandler;
-    private final ReportSessionStopHandler mReportSessionStopHandler;
+    private final ReportSessionStopDueCrashHandler mReportSessionStopDueCrashHandler;
     private final ReportAppEnvironmentUpdatedHandler mReportAppEnvironmentUpdated;
     private final ReportAppEnvironmentClearedHandler mReportAppEnvironmentCleared;
     private final ReportFirstHandler mReportFirstHandler;
@@ -55,7 +55,7 @@ public class ReportingHandlerProvider {
         mReportPurgeBufferHandler = new ReportPurgeBufferHandler(component);
         mReportSaveToDatabaseHandler = new ReportSaveToDatabaseHandler(component);
         mReportSessionHandler = new ReportSessionHandler(component);
-        mReportSessionStopHandler = new ReportSessionStopHandler(component);
+        mReportSessionStopDueCrashHandler = new ReportSessionStopDueCrashHandler(component);
         mReportAppEnvironmentUpdated = new ReportAppEnvironmentUpdatedHandler(component);
         mReportAppEnvironmentCleared = new ReportAppEnvironmentClearedHandler(component);
         mReportFirstHandler = new ReportFirstHandler(component);
@@ -93,8 +93,8 @@ public class ReportingHandlerProvider {
         return mReportSessionHandler;
     }
 
-    public ReportSessionStopHandler getReportSessionStopHandler() {
-        return mReportSessionStopHandler;
+    public ReportSessionStopDueCrashHandler getReportSessionStopDueCrashHandler() {
+        return mReportSessionStopDueCrashHandler;
     }
 
     public ReportAppEnvironmentUpdatedHandler getReportAppEnvironmentUpdated() {

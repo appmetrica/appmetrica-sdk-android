@@ -7,7 +7,6 @@ import android.util.Base64;
 import android.util.Pair;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreapi.internal.event.CounterReportApi;
 import io.appmetrica.analytics.coreapi.internal.permission.PermissionState;
 import io.appmetrica.analytics.coreutils.internal.StringUtils;
@@ -146,6 +145,8 @@ public class CounterReport implements CounterReportApi, Parcelable {
     private Integer openId;
     @NonNull
     private Map<String, byte[]> extras = new HashMap<>();
+    @NonNull
+    private final SystemTimeProvider systemTimeProvider = new SystemTimeProvider();
 
     public CounterReport() {
         this(StringUtils.EMPTY, 0);
@@ -156,17 +157,16 @@ public class CounterReport implements CounterReportApi, Parcelable {
     }
 
     public CounterReport(@Nullable String value, @Nullable String event, final int type) {
-        this(value, event, type, new SystemTimeProvider());
-    }
-
-    @VisibleForTesting
-    public CounterReport(@Nullable String value, @Nullable String event, int type,
-                         @NonNull SystemTimeProvider systemTimeProvider) {
         name = event;
         this.type = type;
         this.value = value;
         creationElapsedRealtime = systemTimeProvider.elapsedRealtime();
         creationTimestamp = systemTimeProvider.currentTimeMillis();
+    }
+
+    public CounterReport(@Nullable String value, @Nullable String event, int type, long creationTimestamp) {
+        this(value, event, type);
+        setCreationTimestamp(creationTimestamp);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.impl.db.session
 
 import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
+import io.appmetrica.analytics.impl.component.session.SessionRequestParams
 import io.appmetrica.analytics.impl.component.session.SessionType
 import io.appmetrica.analytics.impl.request.ReportRequestConfig
 import io.appmetrica.analytics.impl.utils.ServerTime
@@ -8,17 +9,16 @@ import io.appmetrica.analytics.impl.utils.TimeUtils
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
 import io.appmetrica.analytics.testutils.MockedStaticRule
+import org.assertj.core.api.Assertions.assertThat
+import org.json.JSONObject
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
-import org.robolectric.RobolectricTestRunner
 import java.util.function.Consumer
 
-@RunWith(RobolectricTestRunner::class)
 internal class DbSessionModelFactoryTest : CommonTest() {
 
     private val deviceId = "Test device id"
@@ -89,10 +89,38 @@ internal class DbSessionModelFactoryTest : CommonTest() {
     @Test
     fun build() {
         val model = DbSessionModelFactory(
-            reportRequestConfig,
-            id,
-            type,
-            startTime
+            reportRequestConfig = reportRequestConfig,
+            id = id,
+            type = type,
+            startTimeSeconds = startTime
+        ).create()
+
+        ObjectPropertyAssertions(model)
+            .withIgnoredFields("reportRequestParameters")
+            .checkField("id", id)
+            .checkField("type", type)
+            .checkFieldRecursively(
+                "description",
+                Consumer<ObjectPropertyAssertions<DbSessionModel.Description>> {
+                    it
+                        .checkField("startTime", startTime)
+                        .checkField("serverTimeOffset", serverTimeOffset)
+                        .checkField("obtainedBeforeFirstSynchronization", ServerTime.getInstance().isUncheckedTime)
+                }
+            )
+            .checkAll()
+        assertThat(model.reportRequestParameters.toJsonMap()).isEqualTo(expectedJson.toJsonMap())
+    }
+
+    @Test
+    fun `build from SessionRequestParams`() {
+        val sessionRequestParams = SessionRequestParams(JSONObject(expectedJson))
+        val model = DbSessionModelFactory(
+            sessionRequestParams = sessionRequestParams,
+            reportRequestConfig = mock(),
+            id = id,
+            type = type,
+            startTimeSeconds = startTime
         ).create()
 
         ObjectPropertyAssertions(model)
@@ -107,7 +135,13 @@ internal class DbSessionModelFactoryTest : CommonTest() {
                         .checkField("obtainedBeforeFirstSynchronization", ServerTime.getInstance().isUncheckedTime)
                 }
             )
-            .checkField("reportRequestParameters", expectedJson)
+            .checkField("reportRequestParameters", sessionRequestParams.toRequestParametersString())
             .checkAll()
     }
+}
+
+@Suppress("UNCHECKED_CAST")
+private fun String?.toJsonMap(): Map<String, Any?> {
+    val json = JSONObject(this ?: "{}")
+    return (json.keys() as Iterator<String>).asSequence().associateWith { json.get(it) }
 }

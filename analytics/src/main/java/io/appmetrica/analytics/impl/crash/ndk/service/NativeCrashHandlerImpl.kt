@@ -18,6 +18,7 @@ internal class NativeCrashHandlerImpl(
     nativeShouldSendCrashPredicateProvider: NativeShouldSendCrashPredicateProvider,
     eventType: InternalEvents,
     subtag: String,
+    timestampProvider: NativeCrashTimestampProvider,
 ) : NativeCrashHandler {
 
     private val tag = "[NativeCrashHandler-$subtag]"
@@ -29,7 +30,8 @@ internal class NativeCrashHandlerImpl(
         context,
         reportConsumer,
         nativeShouldSendCrashPredicateProvider,
-        eventType
+        eventType,
+        timestampProvider
     )
 
     override fun newCrash(nativeCrash: NativeCrash) {

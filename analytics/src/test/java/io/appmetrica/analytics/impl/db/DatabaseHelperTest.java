@@ -1,5 +1,6 @@
 package io.appmetrica.analytics.impl.db;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -13,9 +14,13 @@ import io.appmetrica.analytics.impl.Utils;
 import io.appmetrica.analytics.impl.component.ComponentId;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.impl.component.EventSaver;
+import io.appmetrica.analytics.impl.component.session.SessionRequestParams;
 import io.appmetrica.analytics.impl.component.session.SessionType;
 import io.appmetrica.analytics.impl.db.constants.Constants;
 import io.appmetrica.analytics.impl.db.protobuf.converter.DbEventModelConverter;
+import io.appmetrica.analytics.impl.db.protobuf.converter.DbSessionModelConverter;
+import io.appmetrica.analytics.impl.db.session.DbSessionModel;
+import io.appmetrica.analytics.impl.db.session.DbSessionModelFactory;
 import io.appmetrica.analytics.impl.events.ConditionalEventTrigger;
 import io.appmetrica.analytics.impl.events.EventListener;
 import io.appmetrica.analytics.impl.request.ReportRequestConfig;
@@ -24,6 +29,8 @@ import io.appmetrica.analytics.impl.selfreporting.SelfReporterWrapper;
 import io.appmetrica.analytics.impl.utils.TimeUtils;
 import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.analytics.testutils.ConstructionArgumentCaptor;
+import io.appmetrica.analytics.testutils.ContextRule;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import io.appmetrica.analytics.testutils.LogRule;
 import io.appmetrica.analytics.testutils.MockedStaticRule;
@@ -40,9 +47,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
+import org.mockito.MockedConstruction;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -59,6 +67,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
+@SuppressLint("RobolectricUsage") // Database interactions
 @RunWith(RobolectricTestRunner.class)
 public class DatabaseHelperTest extends CommonTest {
 
@@ -103,6 +112,9 @@ public class DatabaseHelperTest extends CommonTest {
     public MockedStaticRule<AppMetricaSelfReportFacade> selfReporterWrapper =
         new MockedStaticRule<>(AppMetricaSelfReportFacade.class);
 
+    @Rule
+    public ContextRule contextRule = new ContextRule();
+
     static class SimpleDatabaseHelper extends SQLiteOpenHelper {
 
         SimpleDatabaseHelper(final Context context) {
@@ -124,7 +136,7 @@ public class DatabaseHelperTest extends CommonTest {
         when(AppMetricaSelfReportFacade.getReporter()).thenReturn(reporter);
         when(GlobalServiceLocator.getInstance().getSelfDiagnosticReporterStorage().getOrCreateReporter(any(), any()))
             .thenReturn(mock(SelfDiagnosticReporter.class));
-        simpleDbHelper = new SimpleDatabaseHelper(RuntimeEnvironment.getApplication());
+        simpleDbHelper = new SimpleDatabaseHelper(contextRule.getContext());
         db = simpleDbHelper.getWritableDatabase();
 
         doReturn(db).when(storage).getWritableDatabase();
@@ -483,6 +495,30 @@ public class DatabaseHelperTest extends CommonTest {
         values.put(Constants.EventsTable.EventTableEntry.FIELD_EVENT_SESSION, sessionId);
         values.put(Constants.EventsTable.EventTableEntry.FIELD_EVENT_SESSION_TYPE, sessionType);
         return values;
+    }
+
+    @Test
+    public void testNewSessionFromPastUsesProvidedRequestParams() {
+        SessionRequestParams sessionRequestParams = mock(SessionRequestParams.class);
+        long sessionId = 42L;
+        DbSessionModel mockModel = mock(DbSessionModel.class);
+
+        ConstructionArgumentCaptor<DbSessionModelFactory> factoryCaptor = new ConstructionArgumentCaptor<>(
+            (mock, context) -> when(mock.create()).thenReturn(mockModel)
+        );
+
+        try (MockedConstruction<DbSessionModelFactory> factoryMock = Mockito.mockConstruction(
+                 DbSessionModelFactory.class, factoryCaptor);
+             MockedConstruction<DbSessionModelConverter> converterMock = Mockito.mockConstruction(
+                 DbSessionModelConverter.class)) {
+
+            helper.newSessionFromPast(sessionId, SessionType.FOREGROUND, session1, sessionRequestParams);
+
+            assertThat(factoryCaptor.getArguments().get(0))
+                .containsExactly(sessionRequestParams, config, sessionId, SessionType.FOREGROUND, session1);
+            verify(factoryMock.constructed().get(0)).create();
+            verify(converterMock.constructed().get(0)).fromModel(mockModel);
+        }
     }
 
     private void addSession(SQLiteDatabase db, long sessionId, int sessionType, String requestParameter) {

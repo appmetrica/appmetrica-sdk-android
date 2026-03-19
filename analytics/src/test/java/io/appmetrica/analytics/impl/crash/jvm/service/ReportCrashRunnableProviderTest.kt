@@ -29,6 +29,7 @@ import org.junit.Test
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
 import java.io.File
 
 internal class ReportCrashRunnableProviderTest : CommonTest() {
@@ -88,7 +89,8 @@ internal class ReportCrashRunnableProviderTest : CommonTest() {
                 bytesTruncated,
                 trimmedFields,
                 environment,
-                publicLogger
+                publicLogger,
+                creationTimestamp
             )
         } doReturn counterReport
     }
@@ -100,6 +102,9 @@ internal class ReportCrashRunnableProviderTest : CommonTest() {
     @get:Rule
     val readAndReportRunnableMockedConstructionRule = constructionRule<ReadAndReportRunnable<JvmCrash>>()
     private val readAndReportRunnable: ReadAndReportRunnable<JvmCrash> by readAndReportRunnableMockedConstructionRule
+
+    private val creationTimestamp = 1700000000000L
+    private val timestampProvider: CrashTimestampProvider = mock()
 
     private val jvmCrash: JvmCrash = mock {
         on { name } doReturn name
@@ -119,9 +124,10 @@ internal class ReportCrashRunnableProviderTest : CommonTest() {
     @Before
     fun setUp() {
         FileLocksHolder.stubInstance(fileLocksHolder)
+        whenever(timestampProvider.getTimestamp(jvmCrash)).thenReturn(creationTimestamp)
 
         reportCrashRunnableProvider =
-            ReportCrashRunnableProvider(context, crashEventConsumer, eventType, crashPredicate)
+            ReportCrashRunnableProvider(context, crashEventConsumer, eventType, crashPredicate, timestampProvider)
     }
 
     @Test

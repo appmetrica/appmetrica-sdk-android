@@ -1,8 +1,8 @@
 package io.appmetrica.analytics.impl.component.session;
 
-import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import io.appmetrica.analytics.coreutils.internal.StringUtils;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesComponentDbStorage;
 import io.appmetrica.analytics.impl.utils.JsonHelper;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
@@ -16,7 +16,9 @@ public class SessionStorageImpl implements SessionStorage {
     public static final String SESSION_ID = "SESSION_ID";
     public static final String REPORT_ID = "SESSION_COUNTER_ID";
     public static final String CREATION_TIME = "SESSION_INIT_TIME";
+    public static final String CREATION_CURRENT_TIME = "SESSION_CREATION_CURRENT_TIME";
     public static final String ALIVE_REPORT_NEED = "SESSION_IS_ALIVE_REPORT_NEEDED";
+    public static final String CRASHED = "SESSION_CRASHED";
 
     @NonNull
     private final String mSessionTag;
@@ -34,7 +36,7 @@ public class SessionStorageImpl implements SessionStorage {
         JsonHelper.OptJSONObject jsonObject = new JsonHelper.OptJSONObject();
         try {
             String session = preferences.getSessionParameters(mSessionTag);
-            if (TextUtils.isEmpty(session) == false) {
+            if (!StringUtils.isNullOrEmpty(session)) {
                 jsonObject = new JsonHelper.OptJSONObject(session);
             }
         } catch (Throwable e) {
@@ -47,6 +49,7 @@ public class SessionStorageImpl implements SessionStorage {
         return mJSONObject.getLongSilently(SESSION_ID);
     }
 
+    @Override
     public SessionStorageImpl putSessionId(final long value) {
         putSilently(SESSION_ID, value);
         return this;
@@ -56,8 +59,19 @@ public class SessionStorageImpl implements SessionStorage {
         return mJSONObject.getLongSilently(CREATION_TIME);
     }
 
+    @Override
     public SessionStorageImpl putCreationTime(final long value) {
         putSilently(CREATION_TIME, value);
+        return this;
+    }
+
+    @Nullable public Long getCreationCurrentTimeMillis() {
+        return mJSONObject.getLongSilently(CREATION_CURRENT_TIME);
+    }
+
+    @Override
+    public SessionStorageImpl putCreationCurrentTimeMillis(final long value) {
+        putSilently(CREATION_CURRENT_TIME, value);
         return this;
     }
 
@@ -65,6 +79,7 @@ public class SessionStorageImpl implements SessionStorage {
         return mJSONObject.getLongSilently(REPORT_ID);
     }
 
+    @Override
     public SessionStorageImpl putReportId(final long value) {
         putSilently(REPORT_ID, value);
         return this;
@@ -74,6 +89,7 @@ public class SessionStorageImpl implements SessionStorage {
         return mJSONObject.getLongSilently(SLEEP_START);
     }
 
+    @Override
     public SessionStorageImpl putSleepStart(final long value) {
         putSilently(SLEEP_START, value);
         return this;
@@ -83,6 +99,7 @@ public class SessionStorageImpl implements SessionStorage {
         return mJSONObject.getLongSilently(LAST_EVENT_OFFSET);
     }
 
+    @Override
     public SessionStorageImpl putLastEventOffset(long value) {
         putSilently(LAST_EVENT_OFFSET, value);
         return this;
@@ -92,12 +109,25 @@ public class SessionStorageImpl implements SessionStorage {
         return mJSONObject.getBooleanSilently(ALIVE_REPORT_NEED);
     }
 
+    @Override
     public SessionStorageImpl putAliveReportNeeded(final boolean value) {
         putSilently(ALIVE_REPORT_NEED, value);
         return this;
     }
 
+    @Override
+    public SessionStorageImpl putCrashedSession(boolean value) {
+        putSilently(CRASHED, value);
+        return this;
+    }
+
+    @Nullable public Boolean isCrashedSession() {
+        return mJSONObject.getBooleanSilently(CRASHED);
+    }
+
+    @Override
     public void apply() {
+        DebugLogger.INSTANCE.info(TAG, "commit: %s", mJSONObject);
         preferences.putSessionParameters(mSessionTag, mJSONObject.toString());
     }
 
@@ -112,6 +142,7 @@ public class SessionStorageImpl implements SessionStorage {
     }
 
     public void clear() {
+        DebugLogger.INSTANCE.info(TAG, "clear: %s", mJSONObject);
         mJSONObject = new JsonHelper.OptJSONObject();
         apply();
     }

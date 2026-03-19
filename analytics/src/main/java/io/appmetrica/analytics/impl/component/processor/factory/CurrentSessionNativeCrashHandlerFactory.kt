@@ -9,6 +9,6 @@ internal class CurrentSessionNativeCrashHandlerFactory(
     override fun addHandlers(reportHandlers: MutableList<ReportComponentHandler>) {
         reportHandlers.add(provider.reportSaveToDatabaseHandler)
         reportHandlers.add(provider.reportPurgeBufferHandler)
-        reportHandlers.add(provider.reportSessionStopHandler)
+        reportHandlers.add(provider.reportSessionStopDueCrashHandler)
     }
 }

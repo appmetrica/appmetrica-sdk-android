@@ -12,7 +12,8 @@ internal class ReportPrevSessionEventHandler(
 
     override fun process(reportData: CounterReport): Boolean {
         DebugLogger.info(tag, "handle report: ${reportData.name}")
-        component.eventSaver.saveReportFromPrevSession(reportData)
-        return false
+
+        // If saving failed for some reason, something went wrong and further handlers should not be applied.
+        return !component.eventSaver.saveReportFromPrevSession(reportData)
     }
 }

@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.component.processor.factory
 import io.appmetrica.analytics.impl.component.processor.event.ReportComponentHandler
 import io.appmetrica.analytics.impl.component.processor.event.ReportCrashMetaInformation
 import io.appmetrica.analytics.impl.component.processor.event.ReportPrevSessionEventHandler
-import io.appmetrica.analytics.impl.component.processor.session.ReportSessionStopHandler
+import io.appmetrica.analytics.impl.component.processor.session.ReportSessionStopDueCrashHandler
 import io.appmetrica.analytics.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
@@ -14,12 +14,12 @@ internal class PrevSessionUnhandledExceptionFromFileFactoryTest : CommonTest() {
 
     private val reportPrevSessionHandler: ReportPrevSessionEventHandler = mock()
     private val reportCrashMetaInfoHandler: ReportCrashMetaInformation = mock()
-    private val reportSessionStopHandler: ReportSessionStopHandler = mock()
+    private val reportSessionStopDueCrashHandler: ReportSessionStopDueCrashHandler = mock()
 
     private val provider: ReportingHandlerProvider = mock {
         on { reportPrevSessionEventHandler } doReturn reportPrevSessionHandler
         on { reportCrashMetaInformation } doReturn reportCrashMetaInfoHandler
-        on { reportSessionStopHandler } doReturn reportSessionStopHandler
+        on { reportSessionStopDueCrashHandler } doReturn reportSessionStopDueCrashHandler
     }
 
     private val factory: PrevSessionUnhandledExceptionFromFileFactory by setUp {
@@ -34,7 +34,7 @@ internal class PrevSessionUnhandledExceptionFromFileFactoryTest : CommonTest() {
         assertThat(handlers).containsExactly(
             reportCrashMetaInfoHandler,
             reportPrevSessionHandler,
-            reportSessionStopHandler
+            reportSessionStopDueCrashHandler
         )
     }
 }

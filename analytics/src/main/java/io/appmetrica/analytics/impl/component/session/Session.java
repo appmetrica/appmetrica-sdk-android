@@ -1,17 +1,13 @@
 package io.appmetrica.analytics.impl.component.session;
 
-import android.content.ContentValues;
-import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import io.appmetrica.analytics.coreutils.internal.time.SystemTimeProvider;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
-import io.appmetrica.analytics.impl.db.constants.Constants;
 import io.appmetrica.analytics.impl.request.ReportRequestConfig;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
-import org.json.JSONObject;
 
 import static io.appmetrica.analytics.impl.component.session.SessionDefaults.MIN_VALID_UI_SESSION_ID;
 
@@ -21,14 +17,15 @@ public class Session {
     private final ComponentUnit component;
     private final SessionStorage sessionStorage;
     private final SessionArgumentsInternal sessionArguments;
-
     private long id;
-    private long creationTime;
+    private long creationElapsedRealtime;
+    private long creationCurrentTimeMillis;
     private AtomicLong currentReportId;
     private boolean aliveNeeded;
     private volatile SessionRequestParams sessionRequestParams;
     private long sleepStart;
     private long lastEventTimeOffset;
+    private boolean crashedSession;
 
     private final SystemTimeProvider systemTimeProvider;
 
@@ -46,12 +43,15 @@ public class Session {
     }
 
     private void initializeWithArguments() {
-        creationTime = sessionArguments.getCreationTime(systemTimeProvider.elapsedRealtime());
+        creationElapsedRealtime = sessionArguments.getCreationElapsedRealTime(systemTimeProvider.elapsedRealtime());
+        creationCurrentTimeMillis =
+            sessionArguments.getCreationCurrentTimeMillis(systemTimeProvider.currentTimeMillis());
         id = sessionArguments.getId(SessionDefaults.INVALID_UI_SESSION_ID);
         currentReportId = new AtomicLong(sessionArguments.getCurrentReportId(SessionDefaults.INITIAL_REPORT_ID));
         aliveNeeded = sessionArguments.isAliveNeeded(true);
         sleepStart = sessionArguments.getSleepStart(SessionDefaults.INITIAL_SESSION_TIME);
-        lastEventTimeOffset = sessionArguments.getLastEventOffset(sleepStart - creationTime);
+        lastEventTimeOffset = sessionArguments.getLastEventOffset(sleepStart - creationElapsedRealtime);
+        crashedSession = sessionArguments.isCrashedSession(false);
     }
 
     protected SessionType getType() {
@@ -67,7 +67,7 @@ public class Session {
     }
 
     long getAliveReportOffsetSeconds() {
-        return TimeUnit.MILLISECONDS.toSeconds(Math.max(sleepStart - creationTime, lastEventTimeOffset));
+        return TimeUnit.MILLISECONDS.toSeconds(Math.max(sleepStart - creationElapsedRealtime, lastEventTimeOffset));
     }
 
     boolean isValid(long reportElapsedRealtime) {
@@ -76,14 +76,15 @@ public class Session {
         boolean notExpired = !isExpired(reportElapsedRealtime, systemTimeProvider.elapsedRealtime());
         DebugLogger.INSTANCE.info(
             TAG,
-            "Session id=%d and type %s validity. validID=%b, consistentRequestParameters=%b, notExpired=%b",
-            id, sessionArguments.getType(), validID, consistentRequestParameters, notExpired
+            "Session id=%d and type %s validity. validID=%b, consistentRequestParameters=%b, notExpired=%b; " +
+                "crashedSession=%s",
+            id, sessionArguments.getType(), validID, consistentRequestParameters, notExpired, crashedSession
         );
-        return validID && consistentRequestParameters && notExpired;
+        return validID && consistentRequestParameters && notExpired && !crashedSession;
     }
 
     private boolean consistentRequestParameters() {
-        SessionRequestParams requestParams = getSessionRequestParams();
+        SessionRequestParams requestParams = component.getDbHelper().getSessionRequestParams(getId(), getType());
         boolean consistentRequestParameters = false;
         if (requestParams != null) {
             ReportRequestConfig reportRequestConfig = component.getFreshReportRequestConfig();
@@ -101,7 +102,7 @@ public class Session {
     }
 
     private long getSessionTimeOffset(long ellapsedRealtime) {
-        return ellapsedRealtime - creationTime;
+        return ellapsedRealtime - creationElapsedRealtime;
     }
 
     @VisibleForTesting
@@ -123,7 +124,18 @@ public class Session {
             || sessionLength >= TimeUnit.SECONDS.toMillis(SessionDefaults.SESSION_MAX_LENGTH_SEC);
     }
 
+    synchronized void markSessionAsCrashed() {
+        DebugLogger.INSTANCE.info(TAG, "markSessionAsCrashed: type = %s; id = %s", getType(), getId());
+        crashedSession = true;
+        sessionStorage.putCrashedSession(true).apply();
+    }
+
+    synchronized boolean isSessionCrashed() {
+        return crashedSession;
+    }
+
     synchronized void stopSession() {
+        DebugLogger.INSTANCE.info(TAG, "stopSession: %s", id);
         sessionStorage.clear();
         sessionRequestParams = null;
     }
@@ -137,6 +149,16 @@ public class Session {
     long getAndUpdateLastEventTimeSeconds(long elapsedRealtime) {
         sessionStorage.putLastEventOffset(lastEventTimeOffset = getSessionTimeOffset(elapsedRealtime)).apply();
         return TimeUnit.MILLISECONDS.toSeconds(lastEventTimeOffset);
+    }
+
+    // currentTimeMillis-based offset is preferred for prev session events because it accounts for device reboots
+    // and clock adjustments — significant time may pass between crash capture and its delivery,
+    // unlike regular events. The elapsedRealtime-based offset serves as a fallback for sessions
+    // that were persisted without a creationCurrentTimeMillis value.
+    long getEventTimeOffsetForPrevSession(long eventCurrentTimeMillis, long elapsedRealtime) {
+        long timestampBasedOffset = TimeUnit.MILLISECONDS.toSeconds(eventCurrentTimeMillis - creationCurrentTimeMillis);
+        long elapsedRealtimeBasedOffset = getAndUpdateLastEventTimeSeconds(elapsedRealtime);
+        return Math.max(timestampBasedOffset, elapsedRealtimeBasedOffset);
     }
 
     long getLastEventTimeOffsetSeconds() {
@@ -160,50 +182,23 @@ public class Session {
         }
     }
 
-    private SessionRequestParams getSessionRequestParams() {
-        if (sessionRequestParams == null) {
-            synchronized (this) {
-                if (sessionRequestParams == null) {
-                    try {
-                        ContentValues params = component.getDbHelper().getSessionRequestParameters(getId(), getType());
-                        final String paramsJson = params.getAsString(
-                                Constants.SessionTable.SessionTableEntry.FIELD_SESSION_REPORT_REQUEST_PARAMETERS
-                        );
-
-                        if (!TextUtils.isEmpty(paramsJson)) {
-                            JSONObject requestParameters = new JSONObject(paramsJson);
-                            sessionRequestParams = new SessionRequestParams(requestParameters);
-                        } else {
-                            DebugLogger.INSTANCE.info(
-                                TAG,
-                                "SessionRequestParameters is empty sessionID=%d, SessionType=%s",
-                                id,
-                                sessionArguments.getType()
-                            );
-                        }
-                    } catch (Throwable e) {
-                        DebugLogger.INSTANCE.error(
-                            TAG,
-                            e,
-                            "Something was wrong while getting session's request parameters."
-                        );
-                    }
-                }
-            }
-        }
-        return sessionRequestParams;
-    }
-
     @Override
     @NonNull
     public String toString() {
         return "Session{" +
                 "id=" + id +
-                ", creationTime=" + creationTime +
+                ", creationTime=" + creationElapsedRealtime +
+                ", sessionCreationCurrentTimeMillis=" + creationCurrentTimeMillis +
                 ", currentReportId=" + currentReportId +
                 ", sessionRequestParams=" + sessionRequestParams +
                 ", sleepStart=" + sleepStart +
+                ", aliveNeeded=" + aliveNeeded +
+                ", crashedSession=" + crashedSession +
                 '}';
+    }
+
+    public long getCreationCurrentTimeMillis() {
+        return creationCurrentTimeMillis;
     }
 
     @VisibleForTesting

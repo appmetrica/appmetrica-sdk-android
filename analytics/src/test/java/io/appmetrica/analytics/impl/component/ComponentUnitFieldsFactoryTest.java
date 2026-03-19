@@ -15,8 +15,10 @@ import io.appmetrica.analytics.impl.component.session.SessionManagerStateMachine
 import io.appmetrica.analytics.impl.component.session.SessionState;
 import io.appmetrica.analytics.impl.component.sessionextras.SessionExtrasHolder;
 import io.appmetrica.analytics.impl.db.DatabaseHelper;
+import io.appmetrica.analytics.impl.db.DatabaseStorage;
 import io.appmetrica.analytics.impl.db.VitalComponentDataProvider;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesComponentDbStorage;
+import io.appmetrica.analytics.impl.db.storage.ServiceStorageFactory;
 import io.appmetrica.analytics.impl.events.EventTrigger;
 import io.appmetrica.analytics.impl.events.EventTriggerProvider;
 import io.appmetrica.analytics.impl.events.EventsFlusher;
@@ -36,6 +38,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -113,6 +116,9 @@ public class ComponentUnitFieldsFactoryTest extends CommonTest {
         when(mComponentUnit.getComponentPreferences()).thenReturn(mComponentPreferences);
         when(mComponentUnit.getStartupState()).thenReturn(TestUtils.createDefaultStartupState());
         when(mComponentId.getApiKey()).thenReturn(apiKey);
+        ServiceStorageFactory storageFactory = GlobalServiceLocator.getInstance().getStorageFactory();
+        when(storageFactory.getComponentStorage(any(Context.class), any(ComponentId.class)))
+            .thenReturn(mock(DatabaseStorage.class));
         mSdkConfig = CommonArgumentsTestUtils.emptyReporterArguments();
         when(eventTriggerProviderCreator.createEventTriggerProvider(
             eventsFlusher,

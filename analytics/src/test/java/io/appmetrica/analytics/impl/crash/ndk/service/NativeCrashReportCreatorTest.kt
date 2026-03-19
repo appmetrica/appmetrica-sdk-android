@@ -22,6 +22,7 @@ internal class NativeCrashReportCreatorTest : CommonTest() {
     private val errorEnvironment = "Error environment"
     private val apiKey = "Api key"
     private val uuid = "uuid"
+    private val creationTime = 1700000000000L
 
     private val metadata: AppMetricaNativeCrashMetadata = mock {
         on { errorEnvironment } doReturn errorEnvironment
@@ -31,6 +32,7 @@ internal class NativeCrashReportCreatorTest : CommonTest() {
     private val crash: AppMetricaNativeCrash = mock {
         on { metadata } doReturn metadata
         on { uuid } doReturn uuid
+        on { creationTime } doReturn creationTime
     }
 
     private val eventType = InternalEvents.EVENT_TYPE_CURRENT_SESSION_NATIVE_CRASH_PROTOBUF
@@ -48,11 +50,15 @@ internal class NativeCrashReportCreatorTest : CommonTest() {
 
     @get:Rule
     val eventsManagerMockedStaticRule = staticRule<EventsManager> {
-        on { EventsManager.nativeCrashEntry(eventType, dump, uuid, logger) } doReturn report
+        on { EventsManager.nativeCrashEntry(eventType, dump, uuid, logger, creationTime) } doReturn report
+    }
+
+    private val timestampProvider: NativeCrashTimestampProvider = mock {
+        on { getTimestamp(crash) } doReturn creationTime
     }
 
     private val reportCreator: NativeCrashReportCreator by setUp {
-        NativeCrashReportCreator(crash, eventType)
+        NativeCrashReportCreator(crash, eventType, timestampProvider)
     }
 
     @Test

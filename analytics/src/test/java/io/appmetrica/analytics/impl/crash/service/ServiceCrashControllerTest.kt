@@ -10,6 +10,7 @@ import io.appmetrica.analytics.impl.ReportConsumer
 import io.appmetrica.analytics.impl.crash.ReadOldCrashesRunnable
 import io.appmetrica.analytics.impl.crash.jvm.CrashDirectoryWatcher
 import io.appmetrica.analytics.impl.crash.jvm.service.CrashFromFileConsumer
+import io.appmetrica.analytics.impl.crash.jvm.service.FileCrashTimestampProvider
 import io.appmetrica.analytics.impl.crash.ndk.NativeCrashService
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
@@ -67,6 +68,9 @@ internal class ServiceCrashControllerTest : CommonTest() {
     @get:Rule
     val blockingExecutorMockedConstructionRule = constructionRule<BlockingExecutor>()
     private val blockingExecutor: BlockingExecutor by blockingExecutorMockedConstructionRule
+
+    @get:Rule
+    val fileCrashTimestampProviderRule = constructionRule<FileCrashTimestampProvider>()
 
     private lateinit var serviceCrashController: ServiceCrashController
 
@@ -133,7 +137,8 @@ internal class ServiceCrashControllerTest : CommonTest() {
                 InternalEvents.EVENT_TYPE_PREV_SESSION_EXCEPTION_UNHANDLED_FROM_FILE,
                 alwaysAllowSendCrashPredicate,
                 blockingExecutor,
-                "previous"
+                "previous",
+                fileCrashTimestampProviderRule.constructionMock.constructed()[0]
             )
     }
 
@@ -146,7 +151,8 @@ internal class ServiceCrashControllerTest : CommonTest() {
                 InternalEvents.EVENT_TYPE_EXCEPTION_UNHANDLED_FROM_FILE,
                 jvmCrashFromCurrentSessionPredicate,
                 executor,
-                "actual"
+                "actual",
+                fileCrashTimestampProviderRule.constructionMock.constructed()[1]
             )
     }
 }

@@ -18,6 +18,7 @@ internal class NativeCrashRunnableProvider(
     private val reportsConsumer: ReportConsumer,
     private val shouldSendCrashPredicateProvider: NativeShouldSendCrashPredicateProvider,
     private val eventType: InternalEvents,
+    private val timestampProvider: NativeCrashTimestampProvider,
 ) {
 
     private val fileProvider = FileProvider()
@@ -28,7 +29,7 @@ internal class NativeCrashRunnableProvider(
         val handlerDescription = NativeCrashHandlerDescription(nativeCrash.source, nativeCrash.handlerVersion)
 
         val crashDumpReader = NativeCrashDumpReader(handlerDescription, nativeCrashConverter)
-        val reportsCreator = NativeCrashReportCreator(nativeCrash, eventType)
+        val reportsCreator = NativeCrashReportCreator(nativeCrash, eventType, timestampProvider)
         val crashConsumer = NativeCrashConsumer(reportsConsumer, nativeCrash.metadata, reportsCreator)
 
         return ReadAndReportRunnable(

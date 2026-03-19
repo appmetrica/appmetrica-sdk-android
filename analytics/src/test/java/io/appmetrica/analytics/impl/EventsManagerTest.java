@@ -1,5 +1,6 @@
 package io.appmetrica.analytics.impl;
 
+import android.annotation.SuppressLint;
 import android.util.Base64;
 import io.appmetrica.analytics.ModuleEvent;
 import io.appmetrica.analytics.PreloadInfo;
@@ -32,6 +33,7 @@ import org.skyscreamer.jsonassert.JSONAssert;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@SuppressLint("RobolectricUsage") // Base64
 @RunWith(RobolectricTestRunner.class)
 public class EventsManagerTest extends CommonTest {
 
@@ -145,6 +147,7 @@ public class EventsManagerTest extends CommonTest {
         final String value = "value";
         final int bytesTruncated = 200;
         final String errorEnvironment = "error env";
+        final long creationTimestamp = 1700000000000L;
         final HashMap<ClientCounterReport.TrimmedField, Integer> trimmedFields = new HashMap<ClientCounterReport.TrimmedField, Integer>();
         trimmedFields.put(ClientCounterReport.TrimmedField.VALUE, 200);
         ClientCounterReport clientCounterReport = (ClientCounterReport) EventsManager
@@ -155,7 +158,8 @@ public class EventsManagerTest extends CommonTest {
                 bytesTruncated,
                 trimmedFields,
                 errorEnvironment,
-                mPublicLogger
+                mPublicLogger,
+                creationTimestamp
             );
         SoftAssertions assertions = new SoftAssertions();
         assertions.assertThat(clientCounterReport.getName()).as("name").isEqualTo(name);
@@ -164,6 +168,7 @@ public class EventsManagerTest extends CommonTest {
         assertions.assertThat(clientCounterReport.getBytesTruncated()).as("bytes truncated").isEqualTo(bytesTruncated);
         assertions.assertThat(clientCounterReport.getTrimmedFields()).as("trimmed fields").isEqualTo(trimmedFields);
         assertions.assertThat(clientCounterReport.getEventEnvironment()).as("event environment").isEqualTo(errorEnvironment);
+        assertions.assertThat(clientCounterReport.getCreationTimestamp()).as("creation timestamp").isEqualTo(creationTimestamp);
         assertions.assertAll();
     }
 
@@ -178,26 +183,42 @@ public class EventsManagerTest extends CommonTest {
     }
 
     @Test
-    public void testCurrentSessionCrashpadCrashEntry() {
+    public void testNativeCrashEntryCurrentSessionWithCreationTimestamp() {
         String value = new String(Base64.encode("native crash".getBytes(), Base64.DEFAULT));
-        CounterReport report = EventsManager.currentSessionNativeCrashEntry(value, "uuid", mPublicLogger);
+        long creationTimestamp = 1700000000000L;
+        CounterReport report = EventsManager.nativeCrashEntry(
+            InternalEvents.EVENT_TYPE_CURRENT_SESSION_NATIVE_CRASH_PROTOBUF,
+            value,
+            "uuid",
+            mPublicLogger,
+            creationTimestamp
+        );
         SoftAssertions assertions = new SoftAssertions();
         assertions.assertThat(report.getType()).isEqualTo(InternalEvents.EVENT_TYPE_CURRENT_SESSION_NATIVE_CRASH_PROTOBUF.getTypeId());
         assertions.assertThat(report.getValue()).isEqualTo(value);
         assertions.assertThat(report.getName()).isEmpty();
         assertions.assertThat(report.getPayload().getString(PAYLOAD_CRASH_ID)).isEqualTo("uuid");
+        assertions.assertThat(report.getCreationTimestamp()).isEqualTo(creationTimestamp);
         assertions.assertAll();
     }
 
     @Test
-    public void testPrevSessionCrashpadCrashEntry() {
+    public void testNativeCrashEntryPrevSessionWithCreationTimestamp() {
         String value = new String(Base64.encode("native crash".getBytes(), Base64.DEFAULT));
-        CounterReport report = EventsManager.prevSessionNativeCrashEntry(value, "uuid", mPublicLogger);
+        long creationTimestamp = 1700000000000L;
+        CounterReport report = EventsManager.nativeCrashEntry(
+            InternalEvents.EVENT_TYPE_PREV_SESSION_NATIVE_CRASH_PROTOBUF,
+            value,
+            "uuid",
+            mPublicLogger,
+            creationTimestamp
+        );
         SoftAssertions assertions = new SoftAssertions();
         assertions.assertThat(report.getType()).isEqualTo(InternalEvents.EVENT_TYPE_PREV_SESSION_NATIVE_CRASH_PROTOBUF.getTypeId());
         assertions.assertThat(report.getValue()).isEqualTo(value);
         assertions.assertThat(report.getName()).isEmpty();
         assertions.assertThat(report.getPayload().getString(PAYLOAD_CRASH_ID)).isEqualTo("uuid");
+        assertions.assertThat(report.getCreationTimestamp()).isEqualTo(creationTimestamp);
         assertions.assertAll();
     }
 

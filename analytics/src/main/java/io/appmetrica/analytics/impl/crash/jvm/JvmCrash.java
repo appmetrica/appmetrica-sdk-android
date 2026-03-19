@@ -50,8 +50,9 @@ public class JvmCrash implements JSONable {
     private final CounterConfigurationReporterType reporterType;
     @Nullable
     private final String errorEnvironment;
+    private final long fileModifiedTimestamp;
 
-    public JvmCrash(@NonNull String json) throws JSONException {
+    public JvmCrash(@NonNull String json, long fileModifiedTimestamp) throws JSONException {
         JSONObject jsonObject = new JSONObject(json);
         JSONObject event = jsonObject.getJSONObject(EVENT);
         crash = Base64.decode(event.getString(JVM_CRASH), 0);
@@ -83,6 +84,7 @@ public class JvmCrash implements JSONable {
         JSONObject reporterConfiguration = jsonObject.getJSONObject(REPORTER_CONFIGURATION);
         apiKey = reporterConfiguration.getString(API_KEY);
         reporterType = readReporterType(reporterConfiguration);
+        this.fileModifiedTimestamp = fileModifiedTimestamp;
     }
 
     public JvmCrash(@NonNull CounterReport report,
@@ -104,6 +106,7 @@ public class JvmCrash implements JSONable {
         apiKey = counterConfiguration.getApiKey();
         reporterType = counterConfiguration.getReporterType();
         errorEnvironment = report.getEventEnvironment();
+        fileModifiedTimestamp = 0L;
     }
 
     public byte[] getCrashValue() {
@@ -147,6 +150,24 @@ public class JvmCrash implements JSONable {
     @Nullable
     public String getEnvironment() {
         return errorEnvironment;
+    }
+
+    public long getFileModifiedTimestamp() {
+        return fileModifiedTimestamp;
+    }
+
+    @Override
+    public String toString() {
+        return "JvmCrash{" +
+            "name='" + name + '\'' +
+            ", packageName='" + packageName + '\'' +
+            ", pid=" + pid +
+            ", psid='" + psid + '\'' +
+            ", apiKey='" + apiKey + '\'' +
+            ", errorEnvironment='" + errorEnvironment + '\'' +
+            ", reporterType=" + reporterType +
+            ", fileModifiedTimestamp=" + fileModifiedTimestamp +
+            '}';
     }
 
     @Override

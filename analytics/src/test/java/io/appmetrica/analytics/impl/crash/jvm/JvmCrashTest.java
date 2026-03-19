@@ -59,6 +59,7 @@ public class JvmCrashTest extends CommonTest {
     private final String mCrashName = "crash_name";
     private final String mCrashValue = "crash_value";
     private final String mErrorEnvironment = "error env";
+    private final long mFileModifiedTimestamp = 1700000000000L;
     private final int mPid = 1022;
     private final String mPsid = "random_psid";
     private final String mPackageName = "pack_name";
@@ -89,7 +90,8 @@ public class JvmCrashTest extends CommonTest {
             mBytesTruncated,
             mTrimmedFields,
             mErrorEnvironment,
-            mock(PublicLogger.class)
+            mock(PublicLogger.class),
+            0L
         ), clientConfiguration, mTrimmedFields);
 
         JSONObject object = new JSONObject(crash.toJSONString());
@@ -123,7 +125,8 @@ public class JvmCrashTest extends CommonTest {
             mBytesTruncated,
             mTrimmedFields,
             mErrorEnvironment,
-            mock(PublicLogger.class)
+            mock(PublicLogger.class),
+            0L
         ), clientConfiguration, mTrimmedFields);
         ObjectPropertyAssertions<JvmCrash> assertions = ObjectPropertyAssertions(crash).withDeclaredAccessibleFields(true)
             .withIgnoredFields("trimmedFields");
@@ -136,6 +139,7 @@ public class JvmCrashTest extends CommonTest {
         assertions.checkField("packageName", "getPackageName", mPackageName);
         assertions.checkField("apiKey", "getApiKey", mApiKey);
         assertions.checkField("reporterType", "getReporterType", CounterConfigurationReporterType.MAIN);
+        assertions.checkField("fileModifiedTimestamp", "getFileModifiedTimestamp", 0L);
         assertions.checkAll();
 
         assertThat(crash.getTrimmedFields()).containsOnly(new AbstractMap.SimpleEntry<ClientCounterReport.TrimmedField, Integer>(ClientCounterReport.TrimmedField.VALUE, 100));
@@ -158,7 +162,8 @@ public class JvmCrashTest extends CommonTest {
                     .put(KEY_BYTES_TRUNCATED, mBytesTruncated)
                     .put(KEY_ENVIRONMENT, mErrorEnvironment)
                     .put(KEY_TRIMMED_FIELDS, new JSONObject().put("VALUE", 100))
-            ).toString()
+            ).toString(),
+            mFileModifiedTimestamp
         );
 
         ObjectPropertyAssertions<JvmCrash> assertions = ObjectPropertyAssertions(crash).withDeclaredAccessibleFields(true)
@@ -172,6 +177,7 @@ public class JvmCrashTest extends CommonTest {
         assertions.checkField("packageName", "getPackageName", mPackageName);
         assertions.checkField("apiKey", "getApiKey", mApiKey);
         assertions.checkField("reporterType", "getReporterType", CounterConfigurationReporterType.MAIN);
+        assertions.checkField("fileModifiedTimestamp", "getFileModifiedTimestamp", mFileModifiedTimestamp);
         assertions.checkAll();
 
         assertThat(crash.getTrimmedFields()).containsOnly(new AbstractMap.SimpleEntry<ClientCounterReport.TrimmedField, Integer>(ClientCounterReport.TrimmedField.VALUE, 100));
@@ -192,7 +198,8 @@ public class JvmCrashTest extends CommonTest {
                     .put(KEY_JVM_CRASH, Base64.encodeToString(mCrashValue.getBytes(), 0))
                     .put(KEY_EVENT_NAME, mCrashName)
                     .put(KEY_BYTES_TRUNCATED, mBytesTruncated)
-            ).toString()
+            ).toString(),
+            0L
         );
 
         ObjectPropertyAssertions<JvmCrash> assertions = ObjectPropertyAssertions(crash).withDeclaredAccessibleFields(true);
@@ -206,6 +213,7 @@ public class JvmCrashTest extends CommonTest {
         assertions.checkField("apiKey", "getApiKey", mApiKey);
         assertions.checkField("trimmedFields", "getTrimmedFields", new HashMap<String, String>());
         assertions.checkField("reporterType", "getReporterType", CounterConfigurationReporterType.MAIN);
+        assertions.checkField("fileModifiedTimestamp", "getFileModifiedTimestamp", 0L);
         assertions.checkAll();
     }
 
@@ -218,9 +226,10 @@ public class JvmCrashTest extends CommonTest {
             mBytesTruncated,
             mTrimmedFields,
             mErrorEnvironment,
-            mock(PublicLogger.class)
+            mock(PublicLogger.class),
+            0L
         ), clientConfiguration, mTrimmedFields);
-        assertThat(new JvmCrash(crash.toJSONString())).usingRecursiveComparison().isEqualTo(crash);
+        assertThat(new JvmCrash(crash.toJSONString(), 0L)).usingRecursiveComparison().isEqualTo(crash);
     }
 
     @Test
@@ -229,7 +238,8 @@ public class JvmCrashTest extends CommonTest {
             new JvmCrash(
                 fillJson(
                     new JSONObject().put(KEY_API_KEY, "api").put("is_main", true).put("is_commutation", false)
-                ).toString()
+                ).toString(),
+                0L
             ).getReporterType()
         ).isEqualTo(CounterConfigurationReporterType.MAIN);
     }
@@ -259,7 +269,7 @@ public class JvmCrashTest extends CommonTest {
 
         @Test
         public void test() throws JSONException {
-            assertThat(new JvmCrash(mJson).getReporterType()).isEqualTo(mExpected);
+            assertThat(new JvmCrash(mJson, 0L).getReporterType()).isEqualTo(mExpected);
         }
     }
 

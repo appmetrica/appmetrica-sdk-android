@@ -1,6 +1,5 @@
 package io.appmetrica.analytics.impl.utils
 
-import android.text.TextUtils
 import io.appmetrica.analytics.impl.CounterReport
 import io.appmetrica.analytics.impl.EventsManager
 import io.appmetrica.analytics.impl.InternalEvents
@@ -71,7 +70,7 @@ internal object PublicLogConstructor {
             val logValue = StringBuilder(name ?: "null")
             value?.let {
                 val stringValue = String(it)
-                if (!TextUtils.isEmpty(stringValue)) {
+                if (stringValue.isNotEmpty()) {
                     logValue.append(" with value ")
                     logValue.append(stringValue)
                 }
