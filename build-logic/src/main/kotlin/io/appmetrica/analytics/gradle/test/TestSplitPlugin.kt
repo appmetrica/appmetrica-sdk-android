@@ -1,14 +1,16 @@
 package io.appmetrica.analytics.gradle.test
 
+import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.tasks.Copy
 import org.gradle.api.tasks.TaskProvider
 import org.gradle.api.tasks.testing.Test
 import org.gradle.api.tasks.testing.TestReport
 import org.gradle.kotlin.dsl.configure
+import org.gradle.kotlin.dsl.extra
 import org.gradle.kotlin.dsl.withType
 import org.gradle.testing.jacoco.plugins.JacocoTaskExtension
-import java.lang.management.ManagementFactory
 
 /**
  * Gradle plugin that automatically splits unit tests into two groups: Robolectric tests and standard JUnit tests.
@@ -146,7 +148,7 @@ class TestSplitPlugin : Plugin<Project> {
     private fun createSplitTasks(
         project: Project,
         originalTest: Test,
-        extension: TestSplitExtension
+        extension: TestSplitExtension,
     ) {
         val originalTestName = originalTest.name
 
@@ -154,8 +156,11 @@ class TestSplitPlugin : Plugin<Project> {
 
         val robolectricTask = createRobolectricTask(project, originalTest, extension)
         val standardTask = createStandardJUnitTask(project, originalTest, extension, robolectricTask)
-        val reportTask = createReportTask(project, originalTest, robolectricTask, standardTask)
-        val mergeTask = createMergeTask(project, originalTest, robolectricTask, standardTask, reportTask)
+        val xmlReportTask = createXmlReportTask(project, originalTest, robolectricTask, standardTask)
+        val htmlReportTask = createHtmlReportTask(project, originalTest, robolectricTask, standardTask)
+        val mergeTask = createMergeTask(
+            project, originalTest, robolectricTask, standardTask, xmlReportTask, htmlReportTask,
+        )
 
         originalTest.dependsOn(mergeTask)
 
@@ -191,7 +196,7 @@ class TestSplitPlugin : Plugin<Project> {
     private fun configureTestFilters(
         testTask: TaskProvider<Test>,
         userFilters: List<String>,
-        includeRobolectric: Boolean
+        includeRobolectric: Boolean,
     ) {
         testTask.configure {
             doFirst {
@@ -240,7 +245,7 @@ class TestSplitPlugin : Plugin<Project> {
     private fun createRobolectricTask(
         project: Project,
         originalTest: Test,
-        extension: TestSplitExtension
+        extension: TestSplitExtension,
     ) = project.tasks.register("${originalTest.name}Robolectric", Test::class.java) {
         description = "Runs Robolectric tests from ${originalTest.name}"
         group = "verification"
@@ -275,7 +280,12 @@ class TestSplitPlugin : Plugin<Project> {
         reports.junitXml.outputLocation.set(
             project.layout.buildDirectory.dir("test-results-robolectric/${originalTest.name}")
         )
+        reports.junitXml.required.set(originalTest.reports.junitXml.required)
         reports.html.required.set(false)
+
+        val testCounter = TestCounter()
+        extra["testCounter"] = testCounter
+        addTestListener(testCounter)
 
         // Don't fail build on test failures - let merge task handle it
         ignoreFailures = true
@@ -288,7 +298,7 @@ class TestSplitPlugin : Plugin<Project> {
         project: Project,
         originalTest: Test,
         extension: TestSplitExtension,
-        robolectricTask: TaskProvider<Test>
+        robolectricTask: TaskProvider<Test>,
     ) = project.tasks.register("${originalTest.name}Standard", Test::class.java) {
         description = "Runs standard (non-Robolectric) tests from ${originalTest.name}"
         group = "verification"
@@ -321,7 +331,12 @@ class TestSplitPlugin : Plugin<Project> {
         reports.junitXml.outputLocation.set(
             project.layout.buildDirectory.dir("test-results-standard/${originalTest.name}")
         )
+        reports.junitXml.required.set(originalTest.reports.junitXml.required)
         reports.html.required.set(false) // Disable HTML report for split task
+
+        val testCounter = TestCounter()
+        extra["testCounter"] = testCounter
+        addTestListener(testCounter)
 
         // Don't fail build on test failures - let merge task handle it
         ignoreFailures = true
@@ -330,17 +345,39 @@ class TestSplitPlugin : Plugin<Project> {
         outputs.upToDateWhen { false }
     }
 
-    private fun createReportTask(
+    private fun createXmlReportTask(
         project: Project,
         originalTest: Test,
         robolectricTask: TaskProvider<Test>,
-        standardTask: TaskProvider<Test>
-    ) = project.tasks.register("${originalTest.name}Report", TestReport::class.java) {
+        standardTask: TaskProvider<Test>,
+    ) = project.tasks.register("${originalTest.name}XmlReport", Copy::class.java) {
+        description = "Generates aggregated XML report for ${originalTest.name}"
+        group = "verification"
+
+        onlyIf { originalTest.reports.junitXml.required.get() }
+
+        from(robolectricTask.map { it.reports.junitXml.outputLocation.get() })
+        from(standardTask.map { it.reports.junitXml.outputLocation.get() })
+        into(originalTest.reports.junitXml.outputLocation.get())
+
+        doFirst {
+            originalTest.reports.junitXml.outputLocation.get().asFile.deleteRecursively()
+        }
+    }
+
+    private fun createHtmlReportTask(
+        project: Project,
+        originalTest: Test,
+        robolectricTask: TaskProvider<Test>,
+        standardTask: TaskProvider<Test>,
+    ) = project.tasks.register("${originalTest.name}HtmlReport", TestReport::class.java) {
         description = "Generates aggregated HTML report for ${originalTest.name}"
         group = "verification"
 
+        onlyIf { originalTest.reports.html.required.get() }
+
         destinationDirectory.set(originalTest.reports.html.outputLocation)
-        reportOn(robolectricTask, standardTask)
+        testResults.from(robolectricTask, standardTask)
     }
 
     private fun createMergeTask(
@@ -348,70 +385,38 @@ class TestSplitPlugin : Plugin<Project> {
         originalTest: Test,
         robolectricTask: TaskProvider<Test>,
         standardTask: TaskProvider<Test>,
-        reportTask: TaskProvider<TestReport>
+        xmlReportTask: TaskProvider<Copy>,
+        htmlReportTask: TaskProvider<TestReport>,
     ) = project.tasks.register("${originalTest.name}Merge") {
         description = "Merges test results from Robolectric and standard tests"
         group = "verification"
 
-        dependsOn(robolectricTask, standardTask, reportTask)
+        dependsOn(robolectricTask, standardTask, xmlReportTask, htmlReportTask)
 
         doLast {
-            val originalResultsDir = originalTest.reports.junitXml.outputLocation.get().asFile
-
-            originalResultsDir.deleteRecursively()
-            originalResultsDir.mkdirs()
-
-            val robolectricResultsDir = robolectricTask.get().reports.junitXml.outputLocation.get().asFile
-            val standardResultsDir = standardTask.get().reports.junitXml.outputLocation.get().asFile
-
-            var robolectricFiles = 0
-            var robolectricTestMethods = 0
-            var standardFiles = 0
-            var standardTestMethods = 0
-
-            if (robolectricResultsDir.exists()) {
-                robolectricResultsDir.listFiles()?.forEach { file ->
-                    file.copyTo(originalResultsDir.resolve(file.name), overwrite = true)
-                    robolectricFiles++
-                    robolectricTestMethods += countTestsInXml(file)
-                }
-            }
-
-            if (standardResultsDir.exists()) {
-                standardResultsDir.listFiles()?.forEach { file ->
-                    file.copyTo(originalResultsDir.resolve(file.name), overwrite = true)
-                    standardFiles++
-                    standardTestMethods += countTestsInXml(file)
-                }
-            }
+            val robolectricTestCounter = robolectricTask.get().extra["testCounter"] as TestCounter
+            val standardTestCounter = standardTask.get().extra["testCounter"] as TestCounter
+            val totalTestCounter = robolectricTestCounter + standardTestCounter
 
             logger.lifecycle("")
             logger.lifecycle("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
             logger.lifecycle("  Test Split Summary for ${originalTest.name}")
             logger.lifecycle("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
-            logger.lifecycle("  Robolectric tests: $robolectricFiles classes, $robolectricTestMethods methods")
-            logger.lifecycle("  Standard tests:    $standardFiles classes, $standardTestMethods methods")
-            logger.lifecycle(
-                "  Total:             ${robolectricFiles + standardFiles} classes, " +
-                    "${robolectricTestMethods + standardTestMethods} methods"
-            )
+            logger.lifecycle("  Robolectric tests: ${robolectricTestCounter.reportString()}")
+            logger.lifecycle("  Standard tests:    ${standardTestCounter.reportString()}")
+            logger.lifecycle("  Total:             ${totalTestCounter.reportString()}")
             logger.lifecycle("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
             logger.lifecycle("")
 
-            val totalTestMethods = robolectricTestMethods + standardTestMethods
-            if (totalTestMethods == 0) {
-                throw org.gradle.api.GradleException(
-                    "No tests found matching the filter. Both Robolectric and Standard test tasks found 0 tests."
+            if (totalTestCounter.totalTests == 0L) {
+                throw GradleException(
+                    "No tests found matching the filter. Both Robolectric and Standard test tasks found 0 tests"
                 )
             }
 
-            val robolectricFailed = robolectricTask.get().state.failure != null
-            val standardFailed = standardTask.get().state.failure != null
-
-            if (robolectricFailed || standardFailed) {
-                throw org.gradle.api.GradleException(
-                    "Tests failed. Robolectric: $robolectricFailed, Standard: $standardFailed"
-                )
+            if (totalTestCounter.hadFailures) {
+                val reportFile = "${htmlReportTask.get().destinationDirectory.get()}/index.html"
+                throw GradleException("There were failing tests. See the report at: $reportFile")
             }
         }
     }
@@ -419,7 +424,7 @@ class TestSplitPlugin : Plugin<Project> {
     private fun configureJacocoReports(
         project: Project,
         originalTestName: String,
-        mergeTask: TaskProvider<*>
+        mergeTask: TaskProvider<*>,
     ) {
         project.afterEvaluate {
             val variantName = originalTestName.removePrefix("test").removeSuffix("UnitTest")
@@ -434,17 +439,6 @@ class TestSplitPlugin : Plugin<Project> {
                     dependsOn(mergeTask)
                 }
             }
-        }
-    }
-
-    private fun countTestsInXml(xmlFile: java.io.File): Int {
-        return try {
-            val text = xmlFile.readText()
-            val testsPattern = """<testsuite[^>]*\s+tests="(\d+)"""".toRegex()
-            val match = testsPattern.find(text)
-            match?.groupValues?.get(1)?.toIntOrNull() ?: 0
-        } catch (e: Exception) {
-            0
         }
     }
 }
