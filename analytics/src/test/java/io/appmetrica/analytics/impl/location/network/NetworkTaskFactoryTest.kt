@@ -122,7 +122,7 @@ internal class NetworkTaskFactoryTest : CommonTest() {
                     .withPrivateFields(true)
                     .withIgnoredFields(
                         "mTrimmer", "mPublicLogger", "mDbInteractor",
-                        "mSelfReporter", "mQueryValues", "sendingDataTaskHelper"
+                        "mSelfReporter", "mQueryValues", "sendingDataTaskHelper", "mPreparer"
                     )
                     .checkField(
                         "fullUrlFormer",

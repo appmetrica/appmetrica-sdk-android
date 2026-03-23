@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.impl
 
-import android.database.MatrixCursor
+import android.content.ContentValues
+import android.database.Cursor
 import io.appmetrica.analytics.impl.component.ComponentUnit
 import io.appmetrica.analytics.impl.component.session.SessionManagerStateMachine
 import io.appmetrica.analytics.impl.component.session.SessionType
@@ -68,17 +69,28 @@ internal class ReportTaskDbInteractorTest : CommonTest() {
     }
 
     @Test
-    fun querySessions() {
-        val cursor = MatrixCursor(emptyArray())
-        whenever(dbHelper.querySessions(queryValues)).thenReturn(cursor)
-        assertThat(interactor.querySessions(queryValues)).isEqualTo(cursor)
+    fun `querySessionModels returns empty list when cursor is null`() {
+        whenever(dbHelper.querySessions(queryValues)).thenReturn(null)
+        assertThat(interactor.querySessionModels(queryValues)).isEmpty()
     }
 
     @Test
-    fun queryReports() {
-        val cursor = MatrixCursor(emptyArray())
-        whenever(dbHelper.queryReports(sessionId, SessionType.FOREGROUND)).thenReturn(cursor)
-        assertThat(interactor.queryReports(sessionId, SessionType.FOREGROUND)).isEqualTo(cursor)
+    fun `querySessionModels returns empty list when cursor has no rows`() {
+        val cursor = mock<Cursor> { on { moveToNext() } doReturn false }
+        whenever(dbHelper.querySessions(queryValues)).thenReturn(cursor)
+        assertThat(interactor.querySessionModels(queryValues)).isEmpty()
+    }
+
+    @Test
+    fun `queryReportsForSessions delegates to dbHelper with limit and returns empty map when cursor is null`() {
+        val sessionIdToTypeCode = mapOf(sessionId to 0)
+        val limit = 42
+        whenever(dbHelper.queryReportsForSessions(sessionIdToTypeCode, limit)).thenReturn(null)
+
+        val result = interactor.queryReportsForSessions(sessionIdToTypeCode, limit)
+
+        verify(dbHelper).queryReportsForSessions(sessionIdToTypeCode, limit)
+        assertThat(result).isEmpty()
     }
 
     @Test

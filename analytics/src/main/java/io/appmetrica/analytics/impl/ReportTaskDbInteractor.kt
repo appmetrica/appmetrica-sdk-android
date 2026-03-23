@@ -1,11 +1,14 @@
 package io.appmetrica.analytics.impl
 
 import android.content.ContentValues
-import android.database.Cursor
+import io.appmetrica.analytics.coreutils.internal.db.DBUtils
 import io.appmetrica.analytics.impl.component.ComponentUnit
-import io.appmetrica.analytics.impl.component.session.SessionType
+import io.appmetrica.analytics.impl.db.constants.Constants
+import io.appmetrica.analytics.impl.db.protobuf.converter.DbSessionModelConverter
+import io.appmetrica.analytics.impl.db.session.DbSessionModel
 import io.appmetrica.analytics.impl.protobuf.backend.EventProto.ReportMessage.Session
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
+import java.util.LinkedHashMap
 
 internal class ReportTaskDbInteractor(component: ComponentUnit) {
 
@@ -18,11 +21,40 @@ internal class ReportTaskDbInteractor(component: ComponentUnit) {
     fun collectAllQueryParameters(): ContentValues? =
         dbHelper.collectAllQueryParameters().firstOrNull()
 
-    fun querySessions(queryValues: Map<String, String>): Cursor? =
-        dbHelper.querySessions(queryValues)
+    fun querySessionModels(queryValues: Map<String, String>): List<DbSessionModel> {
+        val cursor = dbHelper.querySessions(queryValues) ?: return emptyList()
+        val result = mutableListOf<DbSessionModel>()
+        try {
+            cursor.use {
+                while (it.moveToNext()) {
+                    val cv = ContentValues()
+                    DBUtils.cursorRowToContentValues(it, cv)
+                    result.add(DbSessionModelConverter().toModel(cv))
+                }
+            }
+        } catch (e: Throwable) {
+            DebugLogger.error(tag, e, "Something went wrong while loading sessions")
+        }
+        return result
+    }
 
-    fun queryReports(sessionId: Long, sessionType: SessionType): Cursor? =
-        dbHelper.queryReports(sessionId, sessionType)
+    fun queryReportsForSessions(sessionIdToTypeCode: Map<Long, Int>, limit: Int): Map<Long, List<ContentValues>> {
+        val cursor = dbHelper.queryReportsForSessions(sessionIdToTypeCode, limit) ?: return emptyMap()
+        val result = LinkedHashMap<Long, MutableList<ContentValues>>()
+        try {
+            cursor.use {
+                while (it.moveToNext()) {
+                    val cv = ContentValues()
+                    DBUtils.cursorRowToContentValues(it, cv)
+                    val sessionId = cv.getAsLong(Constants.EventsTable.EventTableEntry.FIELD_EVENT_SESSION)
+                    result.getOrPut(sessionId) { mutableListOf() }.add(cv)
+                }
+            }
+        } catch (e: Throwable) {
+            DebugLogger.error(tag, e, "Something went wrong while loading events for sessions")
+        }
+        return result
+    }
 
     fun getNextRequestId(): Int =
         vitalComponentDataProvider.reportRequestId + 1

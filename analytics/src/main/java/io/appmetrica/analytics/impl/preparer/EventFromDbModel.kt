@@ -34,6 +34,8 @@ internal class EventFromDbModel(cv: ContentValues) {
     val attributionIdChanged: Boolean? = dbEventModel.description.attributionIdChanged
     val openId: Int? = dbEventModel.description.openId
     val extras: ByteArray? = dbEventModel.description.extras
+    val appEnvironment: String = dbEventModel.description.appEnvironment ?: ""
+    val appEnvironmentRevision: Long = dbEventModel.description.appEnvironmentRevision ?: 0L
 
     fun updateValue(newValue: String?) {
         value = newValue

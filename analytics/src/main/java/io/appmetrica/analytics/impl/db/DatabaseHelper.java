@@ -449,32 +449,48 @@ public class DatabaseHelper {
         return dataCursor;
     }
 
-    // Queries reports by session ID.
+    // Queries reports for multiple sessions at once, fetching at most {@code limit} rows.
     @Nullable
-    public Cursor queryReports(final long sessionId, @NonNull final SessionType sessionType) throws SQLiteException {
+    public Cursor queryReportsForSessions(@NonNull Map<Long, Integer> sessionIdToTypeCode, int limit) {
+        if (sessionIdToTypeCode.isEmpty()) {
+            return null;
+        }
         Cursor dataCursor = null;
-
         mReadLock.lock();
         try {
             final SQLiteDatabase rDatabase = mStorage.getReadableDatabase();
             if (rDatabase != null) {
+                final StringBuilder selection = new StringBuilder();
+                final String[] selectionArgs = new String[sessionIdToTypeCode.size() * 2];
+                int i = 0;
+                for (Map.Entry<Long, Integer> entry : sessionIdToTypeCode.entrySet()) {
+                    if (i > 0) {
+                        selection.append(" OR ");
+                    }
+                    selection.append("(")
+                        .append(EventTableEntry.FIELD_EVENT_SESSION).append(" = ? AND ")
+                        .append(EventTableEntry.FIELD_EVENT_SESSION_TYPE).append(" = ?)");
+                    selectionArgs[i * 2] = Long.toString(entry.getKey());
+                    selectionArgs[i * 2 + 1] = Integer.toString(entry.getValue());
+                    i++;
+                }
                 dataCursor = rDatabase.query(
-                        Constants.EventsTable.TABLE_NAME, null,
-                        Constants.EventsTable.SELECT_BY_SESSION_WHERE,
-                        new String [] {Long.toString(sessionId), Integer.toString(sessionType.getCode())},
-                        null, null, EventTableEntry.FIELD_EVENT_NUMBER_IN_SESSION + " ASC", null
+                    Constants.EventsTable.TABLE_NAME, null,
+                    selection.toString(), selectionArgs, null, null,
+                    EventTableEntry.FIELD_EVENT_SESSION + " ASC, "
+                        + EventTableEntry.FIELD_EVENT_NUMBER_IN_SESSION + " ASC",
+                    String.valueOf(limit)
                 );
             }
         } catch (Throwable exception) {
             DebugLogger.INSTANCE.error(
                 TAG,
-                "Smth was wrong while querying reports by session Id.\n%s",
+                "Smth was wrong while querying reports for sessions.\n%s",
                 exception
             );
         } finally {
             mReadLock.unlock();
         }
-
         return dataCursor;
     }
 

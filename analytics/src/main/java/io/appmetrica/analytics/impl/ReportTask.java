@@ -1,37 +1,21 @@
 package io.appmetrica.analytics.impl;
 
 import android.content.ContentValues;
-import android.database.Cursor;
 import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.VisibleForTesting;
-import io.appmetrica.analytics.coreutils.internal.StringUtils;
-import io.appmetrica.analytics.coreutils.internal.WrapUtils;
-import io.appmetrica.analytics.coreutils.internal.db.DBUtils;
 import io.appmetrica.analytics.coreutils.internal.io.GZIPCompressor;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
-import io.appmetrica.analytics.impl.component.session.SessionType;
 import io.appmetrica.analytics.impl.db.constants.Constants;
-import io.appmetrica.analytics.impl.db.event.DbEventModel;
-import io.appmetrica.analytics.impl.db.protobuf.converter.DbEventModelConverter;
-import io.appmetrica.analytics.impl.db.protobuf.converter.DbSessionModelConverter;
-import io.appmetrica.analytics.impl.db.session.DbSessionModel;
-import io.appmetrica.analytics.impl.preparer.EventFromDbModel;
-import io.appmetrica.analytics.impl.protobuf.backend.EventProto;
 import io.appmetrica.analytics.impl.request.DbNetworkTaskConfig;
 import io.appmetrica.analytics.impl.request.ReportRequestConfig;
 import io.appmetrica.analytics.impl.request.appenders.ReportParamsAppender;
 import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade;
-import io.appmetrica.analytics.impl.telephony.SimInfo;
-import io.appmetrica.analytics.impl.telephony.TelephonyDataProvider;
-import io.appmetrica.analytics.impl.telephony.TelephonyInfoAdapter;
 import io.appmetrica.analytics.impl.utils.JsonHelper;
 import io.appmetrica.analytics.impl.utils.PublicLogConstructor;
-import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.impl.utils.limitation.BytesTrimmer;
 import io.appmetrica.analytics.impl.utils.limitation.EventLimitationProcessor;
-import io.appmetrica.analytics.impl.utils.limitation.Trimmer;
+import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger;
 import io.appmetrica.analytics.networktasks.internal.DefaultNetworkResponseHandler;
 import io.appmetrica.analytics.networktasks.internal.FullUrlFormer;
@@ -41,34 +25,17 @@ import io.appmetrica.analytics.networktasks.internal.ResponseDataHolder;
 import io.appmetrica.analytics.networktasks.internal.RetryPolicyConfig;
 import io.appmetrica.analytics.networktasks.internal.SendingDataTaskHelper;
 import io.appmetrica.analytics.networktasks.internal.UnderlyingNetworkTask;
-import io.appmetrica.analytics.protobuf.nano.CodedOutputByteBufferNano;
 import io.appmetrica.analytics.protobuf.nano.MessageNano;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import javax.net.ssl.SSLSocketFactory;
-import org.json.JSONObject;
 
 import static io.appmetrica.analytics.impl.protobuf.backend.EventProto.ReportMessage.Session;
-import static io.appmetrica.analytics.impl.protobuf.backend.EventProto.ReportMessage.Session.SessionDesc;
 
 public class ReportTask implements UnderlyingNetworkTask {
 
     private static final String TAG = "[ReportTask]";
-
-    private static final int SESSION_ID_FIELD_NUMBER = 1;
-    private static final int SESSION_DESC_FIELD_NUMBER = 2;
-    private static final int REPORT_REQUEST_PARAMETERS_FILED_NUMBER = 4;
-    private static final int REPORT_MESSAGE_SIM_INFO_NUMBER = 10;
-    private static final int ENVIRONMENT_VARIABLE_FIELD_NUMBER = 7;
-    private static final int EVENT_FIELD_NUMBER = 3;
-
-    private static final int MAX_EVENT_COUNT_PER_REQUEST = 100;
-
-    private static final String PROTOBUF_ERROR_EVENT_NAME = "protobuf_serialization_error";
 
     @NonNull
     private final ComponentUnit mComponent;
@@ -78,26 +45,17 @@ public class ReportTask implements UnderlyingNetworkTask {
     @Nullable
     private DbNetworkTaskConfig mDbReportRequestConfig;
 
-    private EventProto.ReportMessage mProtoReportMessage;
-
     @NonNull
     private final ReportTaskDbInteractor mDbInteractor;
-    @Nullable
-    private List<Long> mAllInternalSessionsIds;
-
-    private int mReportDataSize = 0;
-    private int eventsCount = 0;
-    private int mEnvironmentSize = -1;
 
     @Nullable
-    private RetrievedSessions mMessageToSend;
+    private PreparedReport mPreparedReport;
 
     @NonNull
-    private final Trimmer<byte[]> mTrimmer;
+    private final ReportMessagePreparer mPreparer;
+
     @NonNull
     private final PublicLogger mPublicLogger;
-    @NonNull
-    private final IReporterExtended mSelfReporter;
     @NonNull
     private final ReportParamsAppender paramsAppender;
     @NonNull
@@ -133,16 +91,20 @@ public class ReportTask implements UnderlyingNetworkTask {
         mComponent = component;
         mDbInteractor = new ReportTaskDbInteractor(component);
         mPublicLogger = component.getPublicLogger();
-        mTrimmer = new BytesTrimmer(
-                EventLimitationProcessor.REPORT_EXTENDED_VALUE_MAX_SIZE,
-                "event value in ReportTask",
-                mPublicLogger
-        );
         this.configProvider = reportConfigProvider;
-        mSelfReporter = AppMetricaSelfReportFacade.getReporter();
         this.requestDataHolder = requestDataHolder;
         this.responseDataHolder = responseDataHolder;
         this.fullUrlFormer = fullUrlFormer;
+        mPreparer = new ReportMessagePreparer(
+                mDbInteractor,
+                new BytesTrimmer(
+                        EventLimitationProcessor.REPORT_EXTENDED_VALUE_MAX_SIZE,
+                        "event value in ReportTask",
+                        mPublicLogger
+                ),
+                AppMetricaSelfReportFacade.getReporter(),
+                GlobalServiceLocator.getInstance().getTelephonyDataProvider()
+        );
     }
 
     private void withQueryValues(@NonNull ContentValues dbValues) {
@@ -178,65 +140,6 @@ public class ReportTask implements UnderlyingNetworkTask {
         paramsAppender.setDbReportRequestConfig(mDbReportRequestConfig);
     }
 
-    @NonNull
-    private EventProto.ReportMessage createProtoReportMessage(@NonNull RetrievedSessions messageToSend,
-                                                              @NonNull List<String> certificates,
-                                                              @NonNull ReportRequestConfig requestConfig) {
-        EventProto.ReportMessage reportMessage = new EventProto.ReportMessage();
-        EventProto.ReportMessage.RequestParameters requestParameters = new EventProto.ReportMessage.RequestParameters();
-        // mDbReportRequestConfig is NonNull because createProtoReportMessage is called after its initialization
-        // (withQueryValues)
-        requestParameters.uuid =
-                WrapUtils.getOrDefaultIfEmpty(mDbReportRequestConfig.uuid, requestConfig.getUuid());
-        requestParameters.deviceId =
-                WrapUtils.getOrDefaultIfEmpty(mDbReportRequestConfig.deviceId, requestConfig.getDeviceId());
-        mReportDataSize += CodedOutputByteBufferNano
-                .computeMessageSize(REPORT_REQUEST_PARAMETERS_FILED_NUMBER, requestParameters);
-        reportMessage.reportRequestParameters = requestParameters;
-        fillTelephonyProviderInfo(reportMessage);
-        reportMessage.sessions = messageToSend.sessions.toArray(new Session[0]);
-        reportMessage.appEnvironment = extractEnvironment(messageToSend.environment);
-        reportMessage.certificatesSha1Fingerprints = certificates.toArray(new String[0]);
-        fillAdditionalApiKeys(reportMessage, requestConfig.getAutoCollectedDataSubscribers());
-
-        return reportMessage;
-    }
-
-    private void fillAdditionalApiKeys(@NonNull final EventProto.ReportMessage reportMessage,
-                                       @NonNull Set<String> autoCollectedDataSubscribers) {
-        String[] additionalApiKeys = autoCollectedDataSubscribers.toArray(new String[0]);
-        reportMessage.additionalApiKeys = new byte[additionalApiKeys.length][];
-        for (int i = 0; i < autoCollectedDataSubscribers.size(); i++) {
-            reportMessage.additionalApiKeys[i] = StringUtils.getUTF8Bytes(additionalApiKeys[i]);
-        }
-    }
-
-    private void fillTelephonyProviderInfo(@NonNull final EventProto.ReportMessage reportMessage) {
-        final TelephonyDataProvider telephonyDataProvider =
-            GlobalServiceLocator.getInstance().getTelephonyDataProvider();
-         telephonyDataProvider.adoptSimInfo(new TelephonyInfoAdapter<List<SimInfo>>() {
-             @Override
-             public void adopt(List<SimInfo> value) {
-                 fillSimInfo(value, reportMessage);
-             }
-
-             private void fillSimInfo(@NonNull List<SimInfo> simInfos,
-                                      @NonNull EventProto.ReportMessage reportMessage) {
-                 if (!Utils.isNullOrEmpty(simInfos)) {
-                     reportMessage.simInfo = new EventProto.ReportMessage.SimInfo[simInfos.size()];
-
-                     for (int i = 0; i < simInfos.size(); i ++) {
-                         SimInfo simInfo = simInfos.get(i);
-                         reportMessage.simInfo[i] = ProtobufUtils.buildSimInfo(simInfo);
-                         mReportDataSize += CodedOutputByteBufferNano.computeMessageSizeNoTag(reportMessage.simInfo[i]);
-                         mReportDataSize += CodedOutputByteBufferNano.computeTagSize(REPORT_MESSAGE_SIM_INFO_NUMBER);
-                     }
-                 }
-             }
-         });
-    }
-
-    @SuppressWarnings("checkstyle:methodLength")
     @Override
     public boolean onCreateTask() {
         DebugLogger.INSTANCE.info(TAG, "onCreateTask: %s", description());
@@ -269,24 +172,17 @@ public class ReportTask implements UnderlyingNetworkTask {
             return false;
         }
 
-        mAllInternalSessionsIds = null;
-
-        mMessageToSend = getSessions(requestConfig);
-        DebugLogger.INSTANCE.info(TAG, "Selected for sending %s events", eventsCount);
-
-        // Check if no sessions to report
-        if (mMessageToSend.sessions.isEmpty()) {
+        final DbNetworkTaskConfig dbRequestConfig =
+                mDbReportRequestConfig != null ? mDbReportRequestConfig : new DbNetworkTaskConfig();
+        mPreparedReport = mPreparer.prepare(mQueryValues, requestConfig, certificates, dbRequestConfig);
+        if (mPreparedReport == null) {
             DebugLogger.INSTANCE.info(TAG, "Could not create task %s: empty sessions", description());
             return false;
         }
 
-        mRequestId = mDbInteractor.getNextRequestId();
+        mRequestId = mPreparedReport.getRequestId();
         paramsAppender.setRequestId(mRequestId);
-        mProtoReportMessage = createProtoReportMessage(mMessageToSend, certificates, requestConfig);
-
-        mAllInternalSessionsIds = mMessageToSend.internalSessionsIds;
-
-        sendingDataTaskHelper.prepareAndSetPostData(MessageNano.toByteArray(mProtoReportMessage));
+        sendingDataTaskHelper.prepareAndSetPostData(MessageNano.toByteArray(mPreparedReport.getReportMessage()));
 
         return true;
     }
@@ -297,35 +193,13 @@ public class ReportTask implements UnderlyingNetworkTask {
         sendingDataTaskHelper.onPerformRequest();
     }
 
-    private EventProto.ReportMessage.EnvironmentVariable[] extractEnvironment(JSONObject data) {
-        int envLength = data.length();
-        if (envLength > 0) {
-            final EventProto.ReportMessage.EnvironmentVariable[] variables =
-                    new EventProto.ReportMessage.EnvironmentVariable[envLength];
-            Iterator<String> appEnvironmentKeys = data.keys();
-            int i = 0;
-            while (appEnvironmentKeys.hasNext()) {
-                String key = appEnvironmentKeys.next();
-                try {
-                    final EventProto.ReportMessage.EnvironmentVariable variable =
-                            new EventProto.ReportMessage.EnvironmentVariable();
-                    variable.name = key;
-                    variable.value = data.getString(key);
-                    variables[i] = variable;
-                } catch (Throwable e) {
-                    DebugLogger.INSTANCE.error(TAG, e, "Can not find string value for key %s", key);
-                }
-                i++;
-            }
-            return variables;
-        } else {
-            return null;
-        }
-    }
-
     private void cleanPostedData(boolean isBadRequest) {
-        // mAllInternalSessionsIds is NonNull because cleanPostedData is called after onCreateTask
-        mDbInteractor.cleanPostedData(mProtoReportMessage.sessions, mAllInternalSessionsIds, mRequestId, isBadRequest);
+        mDbInteractor.cleanPostedData(
+                mPreparedReport.getReportMessage().sessions,
+                mPreparedReport.getInternalSessionsIds(),
+                mRequestId,
+                isBadRequest
+        );
     }
 
     @Override
@@ -355,9 +229,8 @@ public class ReportTask implements UnderlyingNetworkTask {
     }
 
     private void logSentEvents() {
-        // mMessageToSend is NonNull because logSentEvents is called only after its initialization
-        for (int i = 0; i < mMessageToSend.sessions.size(); i++) {
-            for (Session.Event event : mMessageToSend.sessions.get(i).events) {
+        for (Session session : mPreparedReport.getReportMessage().sessions) {
+            for (Session.Event event : session.events) {
                 if (event != null) {
                     String log = PublicLogConstructor.constructEventLogForProtoEvent(event, "Event sent");
                     if (log != null) {
@@ -366,262 +239,6 @@ public class ReportTask implements UnderlyingNetworkTask {
                 }
             }
         }
-    }
-
-    @SuppressWarnings("checkstyle:methodLength")
-    @NonNull
-    protected RetrievedSessions getSessions(@NonNull ReportRequestConfig config) {
-        final List<Session> allSessions = new ArrayList<Session>();
-        final List<Long> internalSessionsIDs = new ArrayList<Long>();
-        AppEnvironment.EnvironmentRevision latestRevision = null;
-        JSONObject environmentJSON = new JSONObject();
-        Cursor cursor = null;
-
-        final List<Throwable> exceptions = new ArrayList<Throwable>();
-        try {
-            cursor = mDbInteractor.querySessions(mQueryValues);
-            if (cursor != null) {
-                // EventsCount incrementing in getSession method during adding events to request proto
-                while (cursor.moveToNext() && eventsCount < MAX_EVENT_COUNT_PER_REQUEST) {
-                    final ContentValues sessionValues = new ContentValues();
-                    DBUtils.cursorRowToContentValues(cursor, sessionValues);
-                    final DbSessionModel sessionModel = new DbSessionModelConverter().toModel(sessionValues);
-                    final Long sessionId = sessionModel.getId();
-                    if (sessionId == null) {
-                        DebugLogger.INSTANCE.error(
-                            TAG,
-                            "no session_id in values: %s",
-                            sessionValues.toString()
-                        );
-                        continue;
-                    }
-
-                    final EventProto.ReportMessage.Time time = ProtobufUtils.buildTime(
-                        sessionModel.getDescription().getStartTime(),
-                        sessionModel.getDescription().getServerTimeOffset(),
-                        sessionModel.getDescription().getObtainedBeforeFirstSynchronization()
-                    );
-
-                    SessionDesc sessionDesc = ProtobufUtils.buildSessionDesc(
-                        config.getLocale(),
-                        sessionModel.getType(),
-                        time);
-
-                    mReportDataSize += CodedOutputByteBufferNano.computeUInt64Size(
-                            SESSION_ID_FIELD_NUMBER,
-                            Long.MAX_VALUE
-                    );
-                    mReportDataSize += CodedOutputByteBufferNano.computeMessageSize(
-                            SESSION_DESC_FIELD_NUMBER,
-                            sessionDesc
-                    );
-                    if (mReportDataSize >= EventLimitationProcessor.SESSIONS_DATA_MAX_SIZE) {
-                        break;
-                    }
-
-                    RetrievedSession session = getSession(
-                            sessionId,
-                            sessionDesc,
-                            config,
-                            exceptions,
-                            allSessions.size()
-                    );
-                    if (session != null) {
-                        if (null == latestRevision) {
-                            latestRevision = session.environmentRevision;
-                        } else if (!latestRevision.equals(session.environmentRevision)) {
-                            break;
-                        }
-                        internalSessionsIDs.add(sessionId);
-                        allSessions.add(session.session);
-                        if (!TextUtils.isEmpty(session.environmentRevision.value)) {
-                            try {
-                                environmentJSON = new JSONObject(session.environmentRevision.value);
-                            } catch (Throwable e) {
-                                DebugLogger.INSTANCE.error(TAG, e, "Some problems while parsing environment");
-                            }
-                        }
-                        if (session.nextEventWithOtherEnvironment) {
-                            break;
-                        }
-                    }
-                }
-            } else {
-                DebugLogger.INSTANCE.error(TAG, "no sessions cursor");
-            }
-        } catch (Throwable ex) {
-            DebugLogger.INSTANCE.error(TAG, ex, "Some problems while getting sessions");
-            exceptions.add(ex);
-        } finally {
-            Utils.closeCursor(cursor);
-        }
-        for (Throwable exception : exceptions) {
-            mSelfReporter.reportError(
-                    PROTOBUF_ERROR_EVENT_NAME,
-                    exception
-            );
-        }
-        return new RetrievedSessions(allSessions, internalSessionsIDs, environmentJSON);
-    }
-
-    @NonNull
-    private AppEnvironment.EnvironmentRevision getEnvironmentRevision(@NonNull ContentValues cv) {
-        final DbEventModel eventModel = new DbEventModelConverter().toModel(cv);
-        return new AppEnvironment.EnvironmentRevision(
-            WrapUtils.getOrDefault(
-                eventModel.getDescription().getAppEnvironment(),
-                StringUtils.EMPTY
-            ),
-            WrapUtils.getOrDefault(
-                eventModel.getDescription().getAppEnvironmentRevision(),
-                0L
-            )
-        );
-    }
-
-    private int computeEnvironmentSize(@NonNull AppEnvironment.EnvironmentRevision revision) {
-        try {
-            int size = 0;
-            JSONObject object = new JSONObject(revision.value);
-            EventProto.ReportMessage.EnvironmentVariable[] env = extractEnvironment(object);
-            if (env != null) {
-                for (EventProto.ReportMessage.EnvironmentVariable variable : env) {
-                    size += CodedOutputByteBufferNano.computeMessageSize(ENVIRONMENT_VARIABLE_FIELD_NUMBER, variable);
-                }
-            }
-            return size;
-        } catch (Throwable ignored) {
-
-        }
-        return 0;
-    }
-
-    @SuppressWarnings("checkstyle:methodLength")
-    @Nullable
-    @VisibleForTesting
-    RetrievedSession getSession(final long sessionId,
-                                final SessionDesc sessionDesc,
-                                @NonNull ReportRequestConfig config,
-                                @NonNull List<Throwable> exceptions,
-                                final int sessionNumber) {
-        final Session session = new Session();
-        session.id = sessionId;
-        session.sessionDesc = sessionDesc;
-        SessionType sessionType = ProtobufUtils.sessionTypeToInternal(sessionDesc.sessionType);
-        AppEnvironment.EnvironmentRevision latestRevision = null;
-        boolean nextEventHasDifferentRevision = false;
-        RetrievedSession retrievedSession = null;
-
-        Cursor cursor = null;
-        try {
-            cursor = mDbInteractor.queryReports(sessionId, sessionType);
-            if (cursor != null) {
-                final List<Session.Event> eventsOfSession = new ArrayList<Session.Event>();
-
-                while (cursor.moveToNext() && eventsCount < MAX_EVENT_COUNT_PER_REQUEST) {
-                    ContentValues contentValues = new ContentValues();
-                    DBUtils.cursorRowToContentValues(cursor, contentValues);
-                    final Session.Event sessionEvent = getEvent(contentValues, config, exceptions);
-                    if (sessionEvent != null) {
-                        AppEnvironment.EnvironmentRevision revision = getEnvironmentRevision(contentValues);
-                        if (latestRevision == null) {
-                            latestRevision = revision;
-                            if (mEnvironmentSize < 0) {
-                                mEnvironmentSize = computeEnvironmentSize(latestRevision);
-                                mReportDataSize += mEnvironmentSize;
-                            }
-                        } else if (!latestRevision.equals(revision)) {
-                            nextEventHasDifferentRevision = true;
-                            break;
-                        }
-
-                        cutValueSize(sessionEvent);
-
-                        mReportDataSize += CodedOutputByteBufferNano.computeMessageSize(
-                                EVENT_FIELD_NUMBER,
-                                sessionEvent
-                        );
-                        boolean isEventExtended = eventsOfSession.isEmpty() && sessionNumber == 0;
-                        if (isEventsLimitExceeded(isEventExtended)) {
-                            break;
-                        }
-
-                    } else {
-                        DebugLogger.INSTANCE.warning(
-                            TAG,
-                            "Event #%d in session %d is null",
-                            eventsOfSession.size(),
-                            sessionId
-                        );
-                    }
-                    eventsOfSession.add(sessionEvent);
-                    eventsCount++;
-                }
-
-                if (eventsOfSession.size() > 0) {
-                    session.events = eventsOfSession.toArray(new Session.Event[eventsOfSession.size()]);
-                    DebugLogger.INSTANCE.info(
-                        TAG,
-                        "Session %d, Send %d events with env %d %s",
-                        sessionId,
-                        eventsOfSession.size(),
-                        latestRevision.revisionNumber,
-                        latestRevision.value
-                    );
-                    retrievedSession = new RetrievedSession(session, latestRevision, nextEventHasDifferentRevision);
-                }
-            } else {
-                DebugLogger.INSTANCE.error(TAG, "no reports cursor for session: %s", session.toString());
-            }
-        } catch (Throwable ex) {
-            DebugLogger.INSTANCE.error(
-                TAG,
-                ex,
-                "Some problems while getting session with id = %d.",
-                sessionId
-            );
-            exceptions.add(ex);
-        } finally {
-            Utils.closeCursor(cursor);
-        }
-
-        return retrievedSession;
-    }
-
-    private boolean isEventsLimitExceeded(final boolean isEventExtended) {
-        if (isEventExtended) {
-            return mReportDataSize >= EventLimitationProcessor.EXTENDED_SINGLE_EVENT_SESSION_DATA_MAX_SIZE;
-        } else {
-            return mReportDataSize >= EventLimitationProcessor.SESSIONS_DATA_MAX_SIZE;
-        }
-    }
-
-    private void cutValueSize(@NonNull final Session.Event sessionEvent) {
-        final byte[] cut = mTrimmer.trim(sessionEvent.value);
-        if (sessionEvent.value != cut) {
-            sessionEvent.bytesTruncated += getBytesArraySize(sessionEvent.value) - getBytesArraySize(cut);
-            sessionEvent.value = cut;
-            DebugLogger.INSTANCE.info(TAG, "truncated %d bytes", sessionEvent.bytesTruncated);
-        }
-    }
-
-    private int getBytesArraySize(@Nullable byte[] arr) {
-        return arr == null ? 0 : arr.length;
-    }
-
-    @Nullable
-    @VisibleForTesting
-    Session.Event getEvent(@NonNull ContentValues contentValues,
-                           @NonNull ReportRequestConfig config,
-                           @NonNull List<Throwable> exceptions) {
-        try {
-            final EventFromDbModel eventModel = new EventFromDbModel(contentValues);
-            return ProtobufUtils.getEventPreparer(eventModel.getEventType()).toSessionEvent(eventModel, config);
-        } catch (Throwable ex) {
-            DebugLogger.INSTANCE.error(TAG, ex, "Something went wrong while getting event");
-            exceptions.add(ex);
-        }
-        return null;
     }
 
     @Override
@@ -665,40 +282,6 @@ public class ReportTask implements UnderlyingNetworkTask {
     @Override
     public String description() {
         return "ReportTask_" + mComponent.getComponentId().getAnonymizedApiKey();
-    }
-
-    // Stores list of {@code Metrica.ReportMessage.Session} objects and internal IDs of the sessions (in the database)
-    static final class RetrievedSessions {
-
-        @NonNull
-        final List<Session> sessions;
-        @NonNull
-        final List<Long> internalSessionsIds;
-        @NonNull
-        final JSONObject environment;
-
-        RetrievedSessions(@NonNull final List<Session> sessions,
-                          @NonNull final List<Long> internalSessionsIDs,
-                          @NonNull final JSONObject environment) {
-            this.sessions = sessions;
-            this.internalSessionsIds = internalSessionsIDs;
-            this.environment = environment;
-        }
-    }
-
-    static final class RetrievedSession {
-        @NonNull
-        final Session session;
-        final AppEnvironment.EnvironmentRevision environmentRevision;
-        final boolean nextEventWithOtherEnvironment;
-
-        RetrievedSession(@NonNull Session session,
-                         AppEnvironment.EnvironmentRevision environmentRevision,
-                         boolean nextEventWithOtherEnvironment) {
-            this.session = session;
-            this.environmentRevision = environmentRevision;
-            this.nextEventWithOtherEnvironment = nextEventWithOtherEnvironment;
-        }
     }
 
     @Override

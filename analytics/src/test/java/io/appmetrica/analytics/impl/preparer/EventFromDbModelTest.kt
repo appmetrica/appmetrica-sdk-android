@@ -40,6 +40,8 @@ internal class EventFromDbModelTest : CommonTest() {
     private val attributionIdChanged = true
     private val openId = 7777
     private val extras = byteArrayOf(1, 3, 5, 7, 9)
+    private val appEnvironment = "app environment"
+    private val appEnvironmentRevision = 123L
 
     private val contentValues: ContentValues = mock()
     private val model: DbEventModel = mock()
@@ -74,6 +76,8 @@ internal class EventFromDbModelTest : CommonTest() {
         whenever(modelDescription.attributionIdChanged).thenReturn(attributionIdChanged)
         whenever(modelDescription.openId).thenReturn(openId)
         whenever(modelDescription.extras).thenReturn(extras)
+        whenever(modelDescription.appEnvironment).thenReturn(appEnvironment)
+        whenever(modelDescription.appEnvironmentRevision).thenReturn(appEnvironmentRevision)
     }
 
     @Test
@@ -103,6 +107,8 @@ internal class EventFromDbModelTest : CommonTest() {
             .checkField("attributionIdChanged", attributionIdChanged)
             .checkField("openId", openId)
             .checkField("extras", extras)
+            .checkField("appEnvironment", appEnvironment)
+            .checkField("appEnvironmentRevision", appEnvironmentRevision)
             .checkAll()
     }
 

@@ -3,6 +3,7 @@ package io.appmetrica.analytics.impl
 import android.content.ContentValues
 import android.database.MatrixCursor
 import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
+import io.appmetrica.analytics.coreutils.internal.db.DBUtils
 import io.appmetrica.analytics.coreutils.internal.io.GZIPCompressor
 import io.appmetrica.analytics.impl.component.ComponentId
 import io.appmetrica.analytics.impl.component.ComponentUnit
@@ -13,7 +14,6 @@ import io.appmetrica.analytics.impl.db.VitalComponentDataProvider
 import io.appmetrica.analytics.impl.db.constants.Constants
 import io.appmetrica.analytics.impl.db.event.DbEventModel
 import io.appmetrica.analytics.impl.db.protobuf.converter.DbEventDescriptionToBytesConverter
-import io.appmetrica.analytics.impl.db.protobuf.converter.DbSessionDescriptionToBytesConverter
 import io.appmetrica.analytics.impl.db.session.DbSessionModel
 import io.appmetrica.analytics.impl.events.EventTrigger
 import io.appmetrica.analytics.impl.protobuf.backend.EventProto
@@ -100,32 +100,20 @@ internal class ReportTaskTest : CommonTest() {
         Constants.EventsTable.EventTableEntry.FIELD_EVENT_TIME,
         Constants.EventsTable.EventTableEntry.FIELD_EVENT_DESCRIPTION
     )
-    private val columnSession = arrayOf(
-        Constants.SessionTable.SessionTableEntry.FIELD_SESSION_ID,
-        Constants.SessionTable.SessionTableEntry.FIELD_SESSION_TYPE,
-        Constants.SessionTable.SessionTableEntry.FIELD_SESSION_REPORT_REQUEST_PARAMETERS,
-        Constants.SessionTable.SessionTableEntry.FIELD_SESSION_DESCRIPTION,
-    )
-
     val eventValue = "event value without truncation"
     val truncatedValue = "truncated event value"
     val sessionId = 1L
     val type = 0
-    val sessionCursor = MatrixCursor(columnSession).apply {
-        newRow()
-            .add(sessionId) // FIELD_SESSION_ID
-            .add(type) // FIELD_SESSION_TYPE
-            .add("") // FIELD_SESSION_REPORT_REQUEST_PARAMETERS
-            .add(
-                DbSessionDescriptionToBytesConverter().fromModel(
-                    DbSessionModel.Description(
-                        startTime = TimeUtils.currentDeviceTimeSec(),
-                        serverTimeOffset = 10,
-                        obtainedBeforeFirstSynchronization = true
-                    )
-                )
-            ) // FIELD_SESSION_DESCRIPTION
-    }
+    val sessionModel = DbSessionModel(
+        id = sessionId,
+        type = SessionType.FOREGROUND,
+        reportRequestParameters = "",
+        description = DbSessionModel.Description(
+            startTime = TimeUtils.currentDeviceTimeSec(),
+            serverTimeOffset = 10,
+            obtainedBeforeFirstSynchronization = true,
+        )
+    )
     val reportCursor = MatrixCursor(columnReport).apply {
         newRow()
             .add(sessionId) // FIELD_REPORT_SESSION
@@ -254,10 +242,9 @@ internal class ReportTaskTest : CommonTest() {
             requestBodyEncrypter
         )
         whenever(dbInteractor.collectAllQueryParameters()).thenReturn(firstQueryParameter)
-        whenever(dbInteractor.querySessions(any())).thenReturn(sessionCursor)
-        whenever(dbInteractor.queryReports(any(), any())).doAnswer {
-            reportCursor.moveToPosition(-1)
-            reportCursor
+        whenever(dbInteractor.querySessionModels(any())).thenReturn(listOf(sessionModel))
+        whenever(dbInteractor.queryReportsForSessions(any(), any())).doAnswer {
+            mapOf(sessionId to cursorToContentValuesList(reportCursor))
         }
         whenever(dbInteractor.getNextRequestId()).thenReturn(prevReportRequestId + 1)
         whenever(bytesTrimmerMockedRule.constructionMock.constructed()[0].trim(eventValue.toByteArray()))
@@ -278,10 +265,16 @@ internal class ReportTaskTest : CommonTest() {
             )
         )
             .withPrivateFields(true)
-            .withIgnoredFields("mQueryValues")
+            .withIgnoredFields(
+                "mQueryValues",
+                "mDbReportRequestConfig",
+                "mPreparedReport",
+                "mPreparer",
+                "mRequestId",
+                "shouldTriggerSendingEvents",
+            )
             .checkField("mComponent", componentUnit)
             .checkField("mDbInteractor", dbInteractorMockedRule.constructionMock.constructed()[1])
-            .checkField("mTrimmer", bytesTrimmerMockedRule.constructionMock.constructed()[1])
             .also {
                 assertThat(bytesTrimmerConstructorCaptor.arguments[1])
                     .containsExactly(
@@ -291,7 +284,6 @@ internal class ReportTaskTest : CommonTest() {
                     )
             }
             .checkField("mPublicLogger", publicLogger)
-            .checkField("mSelfReporter", selfReporter)
             .checkField("paramsAppender", reportParamsAppender)
             .checkField("fullUrlFormer", fullUrlFormer)
             .checkField("configProvider", lazyReportConfigProvider)
@@ -368,28 +360,28 @@ internal class ReportTaskTest : CommonTest() {
 
     @Test
     fun onCreateIfSessionsCursorIsNull() {
-        whenever(dbInteractor.querySessions(any())).thenReturn(null)
+        whenever(dbInteractor.querySessionModels(any())).thenReturn(emptyList())
         assertThat(reportTask.onCreateTask()).isFalse()
         verifyNoMoreInteractions(sendingTaskHelperMockedRule.constructionMock.constructed()[0])
     }
 
     @Test
     fun onCreateIfSessionsCursorIsEmpty() {
-        whenever(dbInteractor.querySessions(any())).thenReturn(MatrixCursor(columnSession))
+        whenever(dbInteractor.querySessionModels(any())).thenReturn(emptyList())
         assertThat(reportTask.onCreateTask()).isFalse()
         verifyNoMoreInteractions(sendingTaskHelperMockedRule.constructionMock.constructed()[0])
     }
 
     @Test
-    fun onCreateIfEventsCursorIsNull() {
-        whenever(dbInteractor.queryReports(any(), any())).thenReturn(null)
+    fun onCreateIfNoEventsForSession() {
+        whenever(dbInteractor.queryReportsForSessions(any(), any())).thenReturn(emptyMap())
         assertThat(reportTask.onCreateTask()).isFalse()
         verifyNoMoreInteractions(sendingTaskHelperMockedRule.constructionMock.constructed()[0])
     }
 
     @Test
-    fun onCreateIfEventsCursorIsEmpty() {
-        whenever(dbInteractor.queryReports(any(), any())).thenReturn(MatrixCursor(columnReport))
+    fun onCreateIfEventsListIsEmpty() {
+        whenever(dbInteractor.queryReportsForSessions(any(), any())).thenReturn(mapOf(sessionId to emptyList()))
         assertThat(reportTask.onCreateTask()).isFalse()
         verifyNoMoreInteractions(sendingTaskHelperMockedRule.constructionMock.constructed()[0])
     }
@@ -538,22 +530,17 @@ internal class ReportTaskTest : CommonTest() {
 
     @Test
     fun eventCountLimitation() {
-        val sessionCursorWithLargeAmountOfEvents = MatrixCursor(columnSession).apply {
-            repeat(100) {
-                newRow()
-                    .add(it) // FIELD_SESSION_ID
-                    .add(type) // FIELD_SESSION_TYPE
-                    .add("") // FIELD_SESSION_REPORT_REQUEST_PARAMETERS
-                    .add(
-                        DbSessionDescriptionToBytesConverter().fromModel(
-                            DbSessionModel.Description(
-                                startTime = TimeUtils.currentDeviceTimeSec() + it,
-                                serverTimeOffset = 10L * it,
-                                obtainedBeforeFirstSynchronization = true
-                            )
-                        )
-                    ) // FIELD_SESSION_DESCRIPTION
-            }
+        val sessionModelsWithLargeAmount = (0 until 100).map { i ->
+            DbSessionModel(
+                id = i.toLong(),
+                type = SessionType.FOREGROUND,
+                reportRequestParameters = "",
+                description = DbSessionModel.Description(
+                    startTime = TimeUtils.currentDeviceTimeSec() + i,
+                    serverTimeOffset = 10L * i,
+                    obtainedBeforeFirstSynchronization = true,
+                )
+            )
         }
         val reportCursorWithLargeAmountOfEvents = MatrixCursor(columnReport).apply {
             repeat(1000) {
@@ -592,8 +579,11 @@ internal class ReportTaskTest : CommonTest() {
         }
         stubbing(dbInteractor) {
             on { collectAllQueryParameters() } doReturn firstQueryParameter
-            on { querySessions(any()) } doReturn sessionCursorWithLargeAmountOfEvents
-            on { queryReports(any(), any()) } doReturn reportCursorWithLargeAmountOfEvents
+            on { querySessionModels(any()) } doReturn sessionModelsWithLargeAmount
+            on { queryReportsForSessions(any(), any()) } doAnswer {
+                // Return all 1000 events under sessionId 0 (the first session in the cursor)
+                mapOf(0L to cursorToContentValuesList(reportCursorWithLargeAmountOfEvents))
+            }
         }
 
         reportTask.onCreateTask()
@@ -604,5 +594,16 @@ internal class ReportTaskTest : CommonTest() {
         val reportMessage = EventProto.ReportMessage.parseFrom(body)
         assertThat(reportMessage.sessions).hasSize(1)
         assertThat(reportMessage.sessions.first().events).hasSize(100)
+    }
+
+    private fun cursorToContentValuesList(cursor: android.database.MatrixCursor): List<ContentValues> {
+        val result = mutableListOf<ContentValues>()
+        cursor.moveToPosition(-1)
+        while (cursor.moveToNext()) {
+            val cv = ContentValues()
+            DBUtils.cursorRowToContentValues(cursor, cv)
+            result.add(cv)
+        }
+        return result
     }
 }
