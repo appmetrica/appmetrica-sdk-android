@@ -399,4 +399,78 @@ public class SessionManagerStateMachineTest extends CommonTest {
         assertThat(currentSessionState.getReportTime()).isEqualTo(lastEventTimeOffset);
         assertThat(currentSessionState.getReportId()).isEqualTo(reportId);
     }
+
+    @Test
+    public void getThresholdIdIsMinLimitBeforeAnySessionIsProcessed() {
+        assertThat(mManager.getThresholdSessionIdForActualSessions())
+            .isEqualTo(SessionIDProvider.SESSION_ID_MIN_LIMIT);
+    }
+
+    @Test
+    public void getThresholdIdIsFirstLoadedFgSessionIdAndDoesNotChangeOnRecreation() {
+        long fgId = 1000L;
+        long newFgId = 2000L;
+        when(mFgSession.getId()).thenReturn(fgId);
+        when(mFgSession.isValid(anyLong())).thenReturn(true);
+        Session newFgSession = mock(Session.class);
+        when(newFgSession.getId()).thenReturn(newFgId);
+        when(newFgSession.getType()).thenReturn(SessionType.FOREGROUND);
+        when(mFgSessionFactory.create(any())).thenReturn(newFgSession);
+        SessionManagerStateMachine manager = new SessionManagerStateMachine(
+            mComponentUnit,
+            mock(SessionManagerStateMachine.EventSaver.class),
+            mFgSessionFactory,
+            mBgSessionFactory,
+            mSessionFromPastFactory
+        );
+        manager.heartbeat(mCounterReport);
+
+        assertThat(manager.getThresholdSessionIdForActualSessions()).isEqualTo(fgId);
+
+        // Session is recreated — threshold stays at the first loaded session's ID
+        when(mFgSession.isValid(anyLong())).thenReturn(false);
+        manager.heartbeat(mCounterReport);
+
+        assertThat(manager.getThresholdSessionIdForActualSessions()).isEqualTo(fgId);
+    }
+
+    @Test
+    public void getThresholdIdIsMinOfFgAndBgWhenFgInvalidAndHasHigherId() {
+        // fg was created later (higher ID) but is now expired; bg (lower ID) is still valid
+        long fgId = 2000L;
+        long bgId = 1000L;
+        when(mFgSession.getId()).thenReturn(fgId);
+        when(mBgSession.getId()).thenReturn(bgId);
+        when(mFgSession.isValid(anyLong())).thenReturn(false);
+        when(mBgSession.isValid(anyLong())).thenReturn(true);
+        SessionManagerStateMachine manager = new SessionManagerStateMachine(
+            mComponentUnit,
+            mock(SessionManagerStateMachine.EventSaver.class),
+            mFgSessionFactory,
+            mBgSessionFactory,
+            mSessionFromPastFactory
+        );
+        manager.getSomeSession(mCounterReport);
+        assertThat(manager.getThresholdSessionIdForActualSessions()).isEqualTo(bgId);
+    }
+
+    @Test
+    public void getThresholdIdIsCreatedSessionIdWhenNoSessionsLoaded() {
+        when(mFgSessionFactory.load()).thenReturn(null);
+        when(mBgSessionFactory.load()).thenReturn(null);
+        long createdBgId = 500L;
+        Session createdBg = mock(Session.class);
+        when(createdBg.getId()).thenReturn(createdBgId);
+        when(createdBg.getType()).thenReturn(SessionType.BACKGROUND);
+        when(mBgSessionFactory.create(any())).thenReturn(createdBg);
+        SessionManagerStateMachine manager = new SessionManagerStateMachine(
+            mComponentUnit,
+            mock(SessionManagerStateMachine.EventSaver.class),
+            mFgSessionFactory,
+            mBgSessionFactory,
+            mSessionFromPastFactory
+        );
+        manager.getSomeSession(mCounterReport);
+        assertThat(manager.getThresholdSessionIdForActualSessions()).isEqualTo(createdBgId);
+    }
 }

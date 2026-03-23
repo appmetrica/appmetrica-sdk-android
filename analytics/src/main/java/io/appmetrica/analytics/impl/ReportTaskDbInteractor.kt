@@ -79,6 +79,10 @@ internal class ReportTaskDbInteractor(component: ComponentUnit) {
             }
         }
         val count = dbHelper.removeEmptySessions(sessionManager.thresholdSessionIdForActualSessions)
-        DebugLogger.info(tag, "Remove $count sessions")
+        DebugLogger.info(
+            tag,
+            "Remove $count sessions; thresholdSessionIdForActualSessions: " +
+                "${sessionManager.thresholdSessionIdForActualSessions}"
+        )
     }
 }

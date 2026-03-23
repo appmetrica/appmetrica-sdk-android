@@ -195,7 +195,7 @@ public class SessionManagerTest extends CommonTest {
         manager.heartbeat(mock(CounterReport.class));
         doReturn(INITIAL_SESSION_ID + 10).when(sessionIDProvider).getNextSessionId();
         manager.heartbeat(mock(CounterReport.class));
-        assertThat(manager.getThresholdSessionIdForActualSessions()).isEqualTo(INITIAL_SESSION_ID + 9);
+        assertThat(manager.getThresholdSessionIdForActualSessions()).isEqualTo(INITIAL_SESSION_ID);
     }
 }
 

@@ -38,6 +38,8 @@ public class SessionManagerStateMachine {
     private Session mCurrentSession;
     @Nullable
     private State mState = null;
+    @Nullable
+    private Long firstSessionIdOfThisLaunch = null;
 
     public SessionManagerStateMachine(@NonNull ComponentUnit component,
                                       @NonNull SessionIDProvider sessionIDProvider,
@@ -152,7 +154,15 @@ public class SessionManagerStateMachine {
     }
 
     public synchronized long getThresholdSessionIdForActualSessions() {
-        return mCurrentSession == null ? SessionIDProvider.SESSION_ID_MIN_LIMIT : mCurrentSession.getId() - 1;
+        return firstSessionIdOfThisLaunch != null
+            ? firstSessionIdOfThisLaunch
+            : SessionIDProvider.SESSION_ID_MIN_LIMIT;
+    }
+
+    private void updateFirstSessionIdOfThisLaunch(long sessionId) {
+        if (firstSessionIdOfThisLaunch == null || sessionId < firstSessionIdOfThisLaunch) {
+            firstSessionIdOfThisLaunch = sessionId;
+        }
     }
 
     @NonNull
@@ -169,6 +179,7 @@ public class SessionManagerStateMachine {
                 sessionRequestParams
             )
         );
+        updateFirstSessionIdOfThisLaunch(mCurrentSession.getId());
         return getStateFromSession(mCurrentSession, reportElapsedRealtime);
     }
 
@@ -182,6 +193,7 @@ public class SessionManagerStateMachine {
             new SessionArguments(eventCreationElapsedRealtime,
                 reportData.getCreationTimestamp())
         );
+        updateFirstSessionIdOfThisLaunch(session.getId());
         mState = State.FOREGROUND;
 
         mComponent.getEventTrigger().trigger();
@@ -198,11 +210,17 @@ public class SessionManagerStateMachine {
     private void loadValidSession(@NonNull CounterReport reportData) {
         if (mState == null) {
             Session foregroundSession = mForegroundSessionFactory.load();
+            if (foregroundSession != null) {
+                updateFirstSessionIdOfThisLaunch(foregroundSession.getId());
+            }
             if (checkValidityOrClose(foregroundSession, reportData)) {
                 mCurrentSession = foregroundSession;
                 mState = State.FOREGROUND;
             } else {
                 Session backgroundSession = mBackgroundSessionFactory.load();
+                if (backgroundSession != null) {
+                    updateFirstSessionIdOfThisLaunch(backgroundSession.getId());
+                }
                 if (checkValidityOrClose(backgroundSession, reportData)) {
                     mCurrentSession = backgroundSession;
                     mState = State.BACKGROUND;
@@ -287,6 +305,7 @@ public class SessionManagerStateMachine {
             new SessionArguments(eventCreationElapsedRealtime,
                 reportData.getCreationTimestamp())
         );
+        updateFirstSessionIdOfThisLaunch(session.getId());
         //non-elegant solution for first event
         if (mComponent.getVitalComponentDataProvider().isFirstEventDone()) {
             mSaver.saveEvent(
