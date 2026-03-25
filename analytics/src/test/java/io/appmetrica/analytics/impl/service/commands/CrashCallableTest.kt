@@ -59,7 +59,8 @@ internal class CrashCallableTest : CommonTest() {
             context,
             appMetricaConnector,
             shouldDisconnectFromServiceChecker,
-            reportToSend
+            reportToSend,
+            fromApi = false
         )
 
         whenever(ClientServiceLocator.getInstance().appMetricaServiceProcessDetector.processName(context))
@@ -113,6 +114,42 @@ internal class CrashCallableTest : CommonTest() {
             .thenReturn(anotherProcess)
 
         crashCallable.call()
+
+        verify(appMetricaConnector).service
+        verify(crashToFileWriter, never()).writeToFile(reportToSend)
+    }
+
+    @Test
+    fun `fromApi - appMetricaProcess - sendsToService`() {
+        val callable = CrashCallable(
+            context,
+            appMetricaConnector,
+            shouldDisconnectFromServiceChecker,
+            reportToSend,
+            fromApi = true
+        )
+        whenever(ClientServiceLocator.getInstance().currentProcessDetector.getProcessName())
+            .thenReturn(appMetricaProcess)
+
+        callable.call()
+
+        verify(appMetricaConnector).service
+        verify(crashToFileWriter, never()).writeToFile(reportToSend)
+    }
+
+    @Test
+    fun `fromApi - nonAppMetricaProcess - sendsToService`() {
+        val callable = CrashCallable(
+            context,
+            appMetricaConnector,
+            shouldDisconnectFromServiceChecker,
+            reportToSend,
+            fromApi = true
+        )
+        whenever(ClientServiceLocator.getInstance().currentProcessDetector.getProcessName())
+            .thenReturn(anotherProcess)
+
+        callable.call()
 
         verify(appMetricaConnector).service
         verify(crashToFileWriter, never()).writeToFile(reportToSend)

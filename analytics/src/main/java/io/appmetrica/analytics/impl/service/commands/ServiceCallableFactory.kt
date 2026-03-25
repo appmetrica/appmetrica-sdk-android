@@ -40,8 +40,9 @@ internal class ServiceCallableFactory(
     }
 
     fun createCrashCallable(
-        reportToSend: ReportToSend
+        reportToSend: ReportToSend,
+        fromApi: Boolean = false
     ): ReportToServiceCallable {
-        return CrashCallable(context, serviceConnector, shouldDisconnectFromServiceChecker, reportToSend)
+        return CrashCallable(context, serviceConnector, shouldDisconnectFromServiceChecker, reportToSend, fromApi)
     }
 }

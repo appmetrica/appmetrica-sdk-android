@@ -29,7 +29,7 @@ internal class ReportsSenderTest : CommonTest() {
     private val pauseUserSessionCallable: ReportToServiceCallable = mock()
 
     private val serviceCallableFactory: ServiceCallableFactory = mock {
-        on { createCrashCallable(any()) } doReturn crashCallable
+        on { createCrashCallable(any(), any()) } doReturn crashCallable
         on { createReportCallable(any()) } doReturn reportCallable
         on { createTypedReportCallable(any(), any()) } doReturn typedReportCallable
         on { createResumeUseSessionCallable(any()) } doReturn resumeUserSessionCallable
@@ -70,7 +70,7 @@ internal class ReportsSenderTest : CommonTest() {
 
         reportsSender.queueReport(reportToSend)
 
-        verify(serviceCallableFactory).createCrashCallable(reportToSend)
+        verify(serviceCallableFactory).createCrashCallable(reportToSend, true)
         verifyNoMoreInteractions(serviceCallableFactory)
 
         verify(executor).submit(crashCallable)
@@ -85,7 +85,7 @@ internal class ReportsSenderTest : CommonTest() {
 
         reportsSender.sendCrash(reportToSend)
 
-        verify(serviceCallableFactory).createCrashCallable(reportToSend)
+        verify(serviceCallableFactory).createCrashCallable(reportToSend, false)
         verifyNoMoreInteractions(serviceCallableFactory)
 
         verify(executor).submit(crashCallable)
@@ -102,7 +102,7 @@ internal class ReportsSenderTest : CommonTest() {
 
         reportsSender.sendCrash(reportToSend)
 
-        verify(serviceCallableFactory).createCrashCallable(reportToSend)
+        verify(serviceCallableFactory).createCrashCallable(reportToSend, false)
         verifyNoMoreInteractions(serviceCallableFactory)
 
         verify(executor).submit(crashCallable)
@@ -119,7 +119,7 @@ internal class ReportsSenderTest : CommonTest() {
 
         reportsSender.sendCrash(reportToSend)
 
-        verify(serviceCallableFactory).createCrashCallable(reportToSend)
+        verify(serviceCallableFactory).createCrashCallable(reportToSend, false)
         verifyNoMoreInteractions(serviceCallableFactory)
 
         verify(executor, never()).submit(crashCallable)

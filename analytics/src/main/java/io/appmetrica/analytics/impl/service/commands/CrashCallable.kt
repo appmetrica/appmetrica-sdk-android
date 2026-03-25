@@ -12,7 +12,8 @@ internal class CrashCallable(
     private val context: Context,
     serviceConnector: AppMetricaConnector,
     shouldDisconnectFromServiceChecker: ShouldDisconnectFromServiceChecker?,
-    private val reportToSend: ReportToSend
+    private val reportToSend: ReportToSend,
+    private val fromApi: Boolean = false
 ) : ReportCallable(
     serviceConnector,
     shouldDisconnectFromServiceChecker,
@@ -44,7 +45,9 @@ internal class CrashCallable(
     }
 
     private fun shouldProcessCrashViaFile(): Boolean {
-        return currentProcessDetector.getProcessName() == appMetricaServiceProcessDetector.processName(context)
+        val currentProcessName = currentProcessDetector.getProcessName()
+        val appMetricaServiceProcessName = appMetricaServiceProcessDetector.processName(context)
+        return !fromApi && currentProcessName == appMetricaServiceProcessName
     }
 
     override fun handleAbsentService(): Boolean {

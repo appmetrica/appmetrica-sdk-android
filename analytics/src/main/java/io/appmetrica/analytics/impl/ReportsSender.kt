@@ -31,7 +31,7 @@ internal class ReportsSender @VisibleForTesting internal constructor(
     fun queueReport(report: ReportToSend) {
         executor.submit(
             if (report.isCrashReport) {
-                serviceCallableFactory.createCrashCallable(report)
+                serviceCallableFactory.createCrashCallable(report, fromApi = true)
             } else {
                 serviceCallableFactory.createReportCallable(report)
             }
