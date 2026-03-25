@@ -6,6 +6,7 @@ import io.appmetrica.analytics.impl.component.ComponentUnit
 import io.appmetrica.analytics.impl.component.session.SessionManagerStateMachine
 import io.appmetrica.analytics.impl.component.session.SessionType
 import io.appmetrica.analytics.impl.db.DatabaseHelper
+import io.appmetrica.analytics.impl.db.SessionEventsDeleteParams
 import io.appmetrica.analytics.impl.db.VitalComponentDataProvider
 import io.appmetrica.analytics.impl.protobuf.backend.EventProto.ReportMessage.Session
 import io.appmetrica.analytics.impl.protobuf.backend.EventProto.ReportMessage.Session.SessionDesc
@@ -16,11 +17,8 @@ import io.appmetrica.analytics.testutils.staticRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
-import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
-import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 
@@ -108,9 +106,13 @@ internal class ReportTaskDbInteractorTest : CommonTest() {
         interactor.cleanPostedData(arrayOf(session1, session2), internalSessionIds, requestId, isBadRequest = false)
 
         verify(vitalComponentDataProvider).reportRequestId = requestId
-        verify(dbHelper).removeSessionEventsUpTo(sessionId, SessionType.FOREGROUND.code, 7L, false)
-        verify(dbHelper).removeSessionEventsUpTo(sessionId + 1, SessionType.BACKGROUND.code, 10L, false)
-        verify(dbHelper).removeEmptySessions(sessionRemovingThreshold)
+        verify(dbHelper).removeSessionsEventsUpTo(
+            listOf(
+                SessionEventsDeleteParams(sessionId, SessionType.FOREGROUND.code, 7L, false),
+                SessionEventsDeleteParams(sessionId + 1, SessionType.BACKGROUND.code, 10L, false),
+            ),
+            sessionRemovingThreshold
+        )
     }
 
     @Test
@@ -119,7 +121,12 @@ internal class ReportTaskDbInteractorTest : CommonTest() {
         val session = buildSession(SessionDesc.SESSION_FOREGROUND, longArrayOf(1L))
         interactor.cleanPostedData(arrayOf(session), listOf(sessionId), requestId, isBadRequest = true)
         verify(vitalComponentDataProvider).reportRequestId = requestId
-        verify(dbHelper).removeSessionEventsUpTo(any(), any(), any(), eq(true))
+        verify(dbHelper).removeSessionsEventsUpTo(
+            listOf(
+                SessionEventsDeleteParams(sessionId, SessionType.FOREGROUND.code, 1L, true),
+            ),
+            sessionRemovingThreshold
+        )
     }
 
     @Test
@@ -127,8 +134,7 @@ internal class ReportTaskDbInteractorTest : CommonTest() {
         val requestId = 99
         interactor.cleanPostedData(emptyArray(), emptyList(), requestId, isBadRequest = false)
         verify(vitalComponentDataProvider).reportRequestId = requestId
-        verify(dbHelper, never()).removeSessionEventsUpTo(any(), any(), any(), any())
-        verify(dbHelper).removeEmptySessions(sessionRemovingThreshold)
+        verify(dbHelper).removeSessionsEventsUpTo(emptyList(), sessionRemovingThreshold)
     }
 
     private fun buildSession(

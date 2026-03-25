@@ -654,6 +654,7 @@
   "analytics/src/main/java/io/appmetrica/analytics/impl/db/FileConstants.java":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/main/java/io/appmetrica/analytics/impl/db/FileConstants.java",
   "analytics/src/main/java/io/appmetrica/analytics/impl/db/FileVitalDataSource.kt":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/main/java/io/appmetrica/analytics/impl/db/FileVitalDataSource.kt",
   "analytics/src/main/java/io/appmetrica/analytics/impl/db/IKeyValueTableDbHelper.java":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/main/java/io/appmetrica/analytics/impl/db/IKeyValueTableDbHelper.java",
+  "analytics/src/main/java/io/appmetrica/analytics/impl/db/SessionEventsDeleteParams.kt":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/main/java/io/appmetrica/analytics/impl/db/SessionEventsDeleteParams.kt",
   "analytics/src/main/java/io/appmetrica/analytics/impl/db/StorageType.java":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/main/java/io/appmetrica/analytics/impl/db/StorageType.java",
   "analytics/src/main/java/io/appmetrica/analytics/impl/db/TablesManager.java":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/main/java/io/appmetrica/analytics/impl/db/TablesManager.java",
   "analytics/src/main/java/io/appmetrica/analytics/impl/db/TablesValidator.java":"mobile/metrika/android/appmetrica/appmetrica-sdk/analytics/src/main/java/io/appmetrica/analytics/impl/db/TablesValidator.java",

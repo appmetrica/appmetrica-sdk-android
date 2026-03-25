@@ -7,6 +7,7 @@ import io.appmetrica.analytics.impl.BackgroundRestrictionsState
 import io.appmetrica.analytics.impl.component.CommonArguments.ReporterArguments
 import io.appmetrica.analytics.impl.component.ComponentId
 import io.appmetrica.analytics.impl.component.clients.ClientDescription
+import io.appmetrica.analytics.impl.db.SessionEventsDeleteParams
 import io.appmetrica.analytics.impl.db.storage.TempCacheEntry
 import io.appmetrica.analytics.impl.db.storage.TempCachePutTask
 import io.appmetrica.analytics.impl.features.FeatureDescription
@@ -47,7 +48,8 @@ class AllFieldsTest(private val clazz: Class<*>) : CommonTest() {
             arrayOf(StartupParamsItem::class.java),
             arrayOf(TempCacheEntry::class.java),
             arrayOf(AdvIdGetterController.CanTrackIdentifiers::class.java),
-            arrayOf(TempCachePutTask::class.java)
+            arrayOf(TempCachePutTask::class.java),
+            arrayOf(SessionEventsDeleteParams::class.java)
         )
     }
 

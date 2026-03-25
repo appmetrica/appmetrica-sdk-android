@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
 import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -342,52 +341,47 @@ public class DatabaseHelper {
         }
     }
 
+    public void removeSessionsEventsUpTo(
+        @NonNull List<SessionEventsDeleteParams> paramsList,
+        long thresholdSessionId
+    ) {
+        processCleanupResults(executeCleanupTransaction(paramsList, thresholdSessionId));
+    }
 
-    // Removes all session's reports inside the database by session ID and session type
-    // where number_in_session <= maxNumberInSession.
-    public void removeSessionEventsUpTo(final long sessionId,
-                                        final int sessionType,
-                                        final long maxNumberInSession,
-                                        final boolean shouldFormCleanupEvent) throws SQLiteException {
+    @NonNull
+    private List<DatabaseCleaner.DeletionInfo> executeCleanupTransaction(
+        @NonNull List<SessionEventsDeleteParams> paramsList,
+        long thresholdSessionId
+    ) {
+        final List<DatabaseCleaner.DeletionInfo> deletionInfos = new ArrayList<>();
+        final String deleteQuery = buildDeleteQuery();
         mWriteLock.lock();
         try {
-            final String deleteQuery = String.format(Locale.US,
-                Constants.EventsTable.DELETE_RECORDS_UP_TO_NUMBER_IN_SESSION,
-                EventTableEntry.FIELD_EVENT_SESSION,
-                EventTableEntry.FIELD_EVENT_SESSION_TYPE,
-                EventTableEntry.FIELD_EVENT_NUMBER_IN_SESSION
-            );
-            final String[] deleteArgs = new String[] {
-                Long.toString(sessionId),
-                Integer.toString(sessionType),
-                Long.toString(maxNumberInSession)
-            };
-
             final SQLiteDatabase db = mStorage.getWritableDatabase();
             if (db != null) {
-                DatabaseCleaner.DeletionInfo deletionInfo = mDatabaseCleaner.cleanEvents(
-                        db,
-                        Constants.EventsTable.TABLE_NAME,
-                        deleteQuery,
-                        deleteArgs,
-                        DatabaseCleaner.Reason.BAD_REQUEST,
-                        mComponent.getComponentId().getApiKey(),
-                        shouldFormCleanupEvent
-                );
-
-                if (deletionInfo.selectedEvents != null) {
-                    List<Integer> reportTypes = new ArrayList<Integer>();
-                    for (ContentValues report : deletionInfo.selectedEvents) {
-                        reportTypes.add(getReportType(report));
-                    }
-                    for (EventListener listener : mEventListeners) {
-                        listener.onEventsRemoved(reportTypes);
-                    }
-                    logEvents(deletionInfo.selectedEvents, "Event removed from db");
+                if (Constants.PROFILE_SQL) {
+                    logSessionInfo();
                 }
-                final int deletedRows = deletionInfo.mDeletedRowsCount;
-                long rows = mRowCount.addAndGet(-deletedRows);
-                DebugLogger.INSTANCE.info(TAG, "%d reports removed. Row count %d", deletedRows, rows);
+                DebugLogger.INSTANCE.info(
+                    TAG,
+                    "Try to remove empty sessions with id less than %d",
+                    thresholdSessionId
+                );
+                db.beginTransaction();
+                try {
+                    for (SessionEventsDeleteParams params : paramsList) {
+                        deletionInfos.add(cleanSessionEvents(db, deleteQuery, params));
+                    }
+                    final int removedSessionsCount = db.delete(
+                        SessionTable.TABLE_NAME,
+                        SessionTable.CLEAR_EMPTY_PREVIOUS_SESSIONS,
+                        new String[]{String.valueOf(thresholdSessionId)}
+                    );
+                    db.setTransactionSuccessful();
+                    DebugLogger.INSTANCE.info(TAG, "Removed empty sessions - affected: %d", removedSessionsCount);
+                } finally {
+                    db.endTransaction();
+                }
             }
         } catch (Throwable exception) {
             DebugLogger.INSTANCE.error(
@@ -398,6 +392,17 @@ public class DatabaseHelper {
         } finally {
             mWriteLock.unlock();
         }
+        return deletionInfos;
+    }
+
+    private void processCleanupResults(@NonNull List<DatabaseCleaner.DeletionInfo> deletionInfos) {
+        int totalDeletedRows = 0;
+        for (DatabaseCleaner.DeletionInfo deletionInfo : deletionInfos) {
+            notifyEventsRemoved(deletionInfo);
+            totalDeletedRows += deletionInfo.mDeletedRowsCount;
+        }
+        long rows = mRowCount.addAndGet(-totalDeletedRows);
+        DebugLogger.INSTANCE.info(TAG, "%d reports removed. Row count %d", totalDeletedRows, rows);
     }
 
     // Queries all sessions from the database without special sessions.
@@ -544,6 +549,48 @@ public class DatabaseHelper {
                     dbEventModel.getDescription().getValue()
                 )
             );
+        }
+    }
+
+    private DatabaseCleaner.DeletionInfo cleanSessionEvents(
+        @NonNull SQLiteDatabase db,
+        @NonNull String deleteQuery,
+        @NonNull SessionEventsDeleteParams params
+    ) {
+        return mDatabaseCleaner.cleanEvents(
+            db,
+            Constants.EventsTable.TABLE_NAME,
+            deleteQuery,
+            new String[]{
+                Long.toString(params.getSessionId()),
+                Integer.toString(params.getSessionType()),
+                Long.toString(params.getMaxNumberInSession())
+            },
+            DatabaseCleaner.Reason.BAD_REQUEST,
+            mComponent.getComponentId().getApiKey(),
+            params.getShouldFormCleanupEvent()
+        );
+    }
+
+    private String buildDeleteQuery() {
+        return String.format(Locale.US,
+            Constants.EventsTable.DELETE_RECORDS_UP_TO_NUMBER_IN_SESSION,
+            EventTableEntry.FIELD_EVENT_SESSION,
+            EventTableEntry.FIELD_EVENT_SESSION_TYPE,
+            EventTableEntry.FIELD_EVENT_NUMBER_IN_SESSION
+        );
+    }
+
+    private void notifyEventsRemoved(@NonNull DatabaseCleaner.DeletionInfo deletionInfo) {
+        if (deletionInfo.selectedEvents != null) {
+            List<Integer> reportTypes = new ArrayList<>();
+            for (ContentValues report : deletionInfo.selectedEvents) {
+                reportTypes.add(getReportType(report));
+            }
+            for (EventListener listener : mEventListeners) {
+                listener.onEventsRemoved(reportTypes);
+            }
+            logEvents(deletionInfo.selectedEvents, "Event removed from db");
         }
     }
 

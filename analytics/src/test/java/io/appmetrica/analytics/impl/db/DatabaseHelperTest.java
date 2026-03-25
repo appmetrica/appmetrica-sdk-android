@@ -341,7 +341,7 @@ public class DatabaseHelperTest extends CommonTest {
     }
 
     @Test
-    public void testRemoveSessionEventsUpToNotifies() {
+    public void testRemoveSessionsEventsUpToNotifies() {
         EventListener eventListener1 = mock(EventListener.class);
         EventListener eventListener2 = mock(EventListener.class);
         helper.addEventListener(eventListener1);
@@ -352,7 +352,7 @@ public class DatabaseHelperTest extends CommonTest {
         cv2.put(Constants.EventsTable.EventTableEntry.FIELD_EVENT_TYPE, 20);
         when(databaseCleaner.cleanEvents(same(db), anyString(), anyString(), any(), eq(DatabaseCleaner.Reason.BAD_REQUEST), anyString(), eq(true)))
             .thenReturn(new DatabaseCleaner.DeletionInfo(Arrays.asList(cv1, cv2), 2));
-        helper.removeSessionEventsUpTo(1000, 0, 5L, true);
+        helper.removeSessionsEventsUpTo(Collections.singletonList(new SessionEventsDeleteParams(1000L, 0, 5L, true)), 0L);
         ArgumentCaptor<List> reportTypesFirstListenerCaptor = ArgumentCaptor.forClass(List.class);
         ArgumentCaptor<List> reportTypesSecondListenerCaptor = ArgumentCaptor.forClass(List.class);
         verify(eventListener1).onEventsRemoved(reportTypesFirstListenerCaptor.capture());
@@ -362,19 +362,59 @@ public class DatabaseHelperTest extends CommonTest {
     }
 
     @Test
-    public void testRemoveSessionEventsUpToShouldFormCleanup() {
+    public void testRemoveSessionsEventsUpToShouldFormCleanup() {
         addGeneralEventsForFgSession(db, 1, 1000, InternalEvents.EVENT_TYPE_FIRST_ACTIVATION.getTypeId());
         addGeneralEventsForFgSession(db, 1, 1000, InternalEvents.EVENT_TYPE_CUSTOM_EVENT.getTypeId());
-        helper.removeSessionEventsUpTo(1000, 0, 5L, true);
+        helper.removeSessionsEventsUpTo(Collections.singletonList(new SessionEventsDeleteParams(1000L, 0, 5L, true)), 0L);
         verify(databaseCleaner).cleanEvents(same(db), eq("events"), anyString(), any(), eq(DatabaseCleaner.Reason.BAD_REQUEST), anyString(), eq(true));
     }
 
     @Test
-    public void testRemoveSessionEventsUpToShouldNotFormCleanup() {
+    public void testRemoveSessionsEventsUpToShouldNotFormCleanup() {
         addGeneralEventsForFgSession(db, 1, 1000, InternalEvents.EVENT_TYPE_FIRST_ACTIVATION.getTypeId());
         addGeneralEventsForFgSession(db, 1, 1000, InternalEvents.EVENT_TYPE_CUSTOM_EVENT.getTypeId());
-        helper.removeSessionEventsUpTo(1000, 0, 5L, false);
+        helper.removeSessionsEventsUpTo(Collections.singletonList(new SessionEventsDeleteParams(1000L, 0, 5L, false)), 0L);
         verify(databaseCleaner).cleanEvents(same(db), eq("events"), anyString(), any(), eq(DatabaseCleaner.Reason.BAD_REQUEST), anyString(), eq(false));
+    }
+
+    @Test
+    public void testRemoveSessionsEventsUpToCallsCleanEventsForEachParamAndNotifiesListeners() {
+        EventListener eventListener1 = mock(EventListener.class);
+        EventListener eventListener2 = mock(EventListener.class);
+        helper.addEventListener(eventListener1);
+        helper.addEventListener(eventListener2);
+        final ContentValues cv1 = new ContentValues();
+        final ContentValues cv2 = new ContentValues();
+        cv1.put(Constants.EventsTable.EventTableEntry.FIELD_EVENT_TYPE, 10);
+        cv2.put(Constants.EventsTable.EventTableEntry.FIELD_EVENT_TYPE, 20);
+        when(databaseCleaner.cleanEvents(same(db), anyString(), anyString(), any(), eq(DatabaseCleaner.Reason.BAD_REQUEST), anyString(), eq(true)))
+            .thenReturn(new DatabaseCleaner.DeletionInfo(Arrays.asList(cv1), 1))
+            .thenReturn(new DatabaseCleaner.DeletionInfo(Arrays.asList(cv2), 1));
+        List<SessionEventsDeleteParams> params = Arrays.asList(
+            new SessionEventsDeleteParams(1000L, 0, 5L, true),
+            new SessionEventsDeleteParams(2000L, 1, 10L, true)
+        );
+        helper.removeSessionsEventsUpTo(params, 500L);
+        verify(databaseCleaner, Mockito.times(2)).cleanEvents(same(db), eq("events"), anyString(), any(), eq(DatabaseCleaner.Reason.BAD_REQUEST), anyString(), eq(true));
+        ArgumentCaptor<List> captor1 = ArgumentCaptor.forClass(List.class);
+        verify(eventListener1, Mockito.times(2)).onEventsRemoved(captor1.capture());
+        assertThat(captor1.getAllValues().get(0)).containsExactly(10);
+        assertThat(captor1.getAllValues().get(1)).containsExactly(20);
+        ArgumentCaptor<List> captor2 = ArgumentCaptor.forClass(List.class);
+        verify(eventListener2, Mockito.times(2)).onEventsRemoved(captor2.capture());
+        assertThat(captor2.getAllValues().get(0)).containsExactly(10);
+        assertThat(captor2.getAllValues().get(1)).containsExactly(20);
+    }
+
+    @Test
+    public void testRemoveSessionsEventsUpToDeletesEmptySessionsBelowThreshold() {
+        addSession(db, 999, 1, "");
+        addSession(db, 1000, 1, "");
+        addSession(db, 1001, 1, "");
+        helper.removeSessionsEventsUpTo(Collections.emptyList(), 1000L);
+        assertThat(execForSingleInt("select count() from sessions where id = 999")).isEqualTo(0);
+        assertThat(execForSingleInt("select count() from sessions where id = 1000")).isEqualTo(1);
+        assertThat(execForSingleInt("select count() from sessions where id = 1001")).isEqualTo(1);
     }
 
     @Test

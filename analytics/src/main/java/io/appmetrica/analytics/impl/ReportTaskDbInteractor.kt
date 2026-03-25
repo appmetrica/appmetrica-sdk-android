@@ -3,6 +3,7 @@ package io.appmetrica.analytics.impl
 import android.content.ContentValues
 import io.appmetrica.analytics.coreutils.internal.db.DBUtils
 import io.appmetrica.analytics.impl.component.ComponentUnit
+import io.appmetrica.analytics.impl.db.SessionEventsDeleteParams
 import io.appmetrica.analytics.impl.db.constants.Constants
 import io.appmetrica.analytics.impl.db.protobuf.converter.DbSessionModelConverter
 import io.appmetrica.analytics.impl.db.session.DbSessionModel
@@ -67,22 +68,13 @@ internal class ReportTaskDbInteractor(component: ComponentUnit) {
     ) {
         DebugLogger.info(tag, "save request id: $requestId")
         vitalComponentDataProvider.reportRequestId = requestId
-        sessions.forEachIndexed { index, session ->
-            try {
-                val internalSessionId = internalSessionIds[index]
-                val sessionType = ProtobufUtils.sessionTypeToInternal(session.sessionDesc.sessionType)
-                val maxNumberInSession = session.events.maxOfOrNull { it.numberInSession } ?: 0L
-                dbHelper.removeSessionEventsUpTo(internalSessionId, sessionType.code, maxNumberInSession, isBadRequest)
-                ProtobufUtils.logSessionEvents(session)
-            } catch (ex: Throwable) {
-                DebugLogger.error(tag, ex, "Something went wrong while removing session from db")
-            }
+        val deleteParams = sessions.mapIndexed { index, session ->
+            val internalSessionId = internalSessionIds[index]
+            val sessionType = ProtobufUtils.sessionTypeToInternal(session.sessionDesc.sessionType)
+            val maxNumberInSession = session.events.maxOfOrNull { it.numberInSession } ?: 0L
+            ProtobufUtils.logSessionEvents(session)
+            SessionEventsDeleteParams(internalSessionId, sessionType.code, maxNumberInSession, isBadRequest)
         }
-        val count = dbHelper.removeEmptySessions(sessionManager.thresholdSessionIdForActualSessions)
-        DebugLogger.info(
-            tag,
-            "Remove $count sessions; thresholdSessionIdForActualSessions: " +
-                "${sessionManager.thresholdSessionIdForActualSessions}"
-        )
+        dbHelper.removeSessionsEventsUpTo(deleteParams, sessionManager.thresholdSessionIdForActualSessions)
     }
 }
