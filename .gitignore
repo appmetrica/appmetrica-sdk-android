@@ -1,4 +1,5 @@
 build
+bin
 .DS_Store
 *.swp
 .profile
