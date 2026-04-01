@@ -13,7 +13,7 @@
     group: "com.applovin"
     name: "applovin-sdk"
     from: "12.5.0"
-    to: "13.6.1"
+    to: "13.6.2"
 - group: "io.appmetrica.analytics"
   name: "analytics-ad-revenue-fyber-v3"
   dependencies:
@@ -62,7 +62,7 @@
     group: "com.adjust.sdk"
     name: "adjust-android"
     from: "5.4.3"
-    to: "5.5.1"
+    to: "5.6.0"
   - repository: "https://repo.maven.apache.org/maven2"
     group: "com.kochava.tracker"
     name: "tracker"
