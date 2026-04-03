@@ -8,6 +8,7 @@ import android.os.Binder
 import android.os.IBinder
 import androidx.annotation.VisibleForTesting
 import io.appmetrica.analytics.impl.AppMetricaServiceCore
+import io.appmetrica.analytics.impl.AppMetricaServiceCoreExecutionDispatcher
 import io.appmetrica.analytics.impl.AppMetricaServiceCoreImpl
 import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.SelfProcessReporter
@@ -29,12 +30,13 @@ class AppMetricaServiceProxy(
             serviceCallback: AppMetricaServiceCallback
         ) {
             if (serviceCore == null) {
-                val core = AppMetricaServiceCoreImpl(context, serviceCallback)
+                val coreImpl = AppMetricaServiceCoreImpl(context, serviceCallback)
                 GlobalServiceLocator.getInstance().serviceDataReporterHolder.registerServiceDataReporter(
                     AppMetricaServiceDataReporter.TYPE_CORE,
-                    AppMetricaServiceDataReporter(core)
+                    AppMetricaServiceDataReporter(coreImpl)
                 )
-                serviceCore = core
+                val coreWrapper = AppMetricaServiceCoreExecutionDispatcher(coreImpl)
+                serviceCore = coreWrapper
             }
         }
     }
