@@ -23,6 +23,8 @@ internal class StartupUnit(
 
     private val tag = "[StartupUnit]"
 
+    private val currentTaskLock = Any()
+
     @Volatile
     private var currentTask: NetworkTask? = null
 
@@ -68,21 +70,21 @@ internal class StartupUnit(
         return startupUnitComponents.componentId
     }
 
-    @Synchronized
-    fun getOrCreateStartupTaskIfRequired(): NetworkTask? = if (isStartupRequired()) {
-        DebugLogger.info(tag, "getOrCreateStartupTaskIfRequired - startupRequired")
-        var task = currentTask
-        if (task == null || task.isRemoved) {
-            DebugLogger.info(tag, "getOrCreateStartupTaskIfRequired - create startup task")
-            task = createStartupTask(this, requestConfig)
-            currentTask = task
+    fun getOrCreateStartupTaskIfRequired(): NetworkTask? = synchronized(currentTaskLock) {
+        if (isStartupRequired()) {
+            DebugLogger.info(tag, "getOrCreateStartupTaskIfRequired - startupRequired")
+            var task = currentTask
+            if (task == null || task.isRemoved) {
+                DebugLogger.info(tag, "getOrCreateStartupTaskIfRequired - create startup task")
+                task = createStartupTask(this, requestConfig)
+                currentTask = task
+            }
+            task
+        } else {
+            null
         }
-        task
-    } else {
-        null
     }
 
-    @Synchronized
     fun isStartupRequired(
         identifiers: List<String>?,
         clidsFromClientForVerification: Map<String, String>
@@ -94,7 +96,6 @@ internal class StartupUnit(
         ) { startupUnitComponents.clidsStorage }
     }
 
-    @Synchronized
     fun isStartupRequired(): Boolean {
         if (GlobalServiceLocator.getInstance().dataSendingRestrictionController.isRestrictedForSdk) {
             DebugLogger.info(tag, "Startup restricted by data sending restriction policy.")
@@ -121,25 +122,18 @@ internal class StartupUnit(
         return required
     }
 
-    @Synchronized
-    private fun removeCurrentStartupTask() {
-        currentTask = null
-    }
-
     override fun onRequestComplete(
         result: StartupResult,
         requestConfig: StartupRequestConfig,
         responseHeaders: Map<String, List<String>>?
     ) {
-        var newState: StartupState
-        synchronized(this) {
-            val serverTime = StartupParser.parseServerTime(responseHeaders) ?: 0L
-            updateServerTime(result.validTimeDifference, serverTime)
-            newState = parseStartupResult(result, requestConfig, serverTime)
-            DebugLogger.info(tag, " new state $newState")
-            removeCurrentStartupTask()
-            updateCurrentStartupData(newState)
-        }
+        val newState: StartupState
+        val serverTime = StartupParser.parseServerTime(responseHeaders) ?: 0L
+        updateServerTime(result.validTimeDifference, serverTime)
+        newState = parseStartupResult(result, requestConfig, serverTime)
+        DebugLogger.info(tag, " new state $newState")
+        currentTask = null
+        updateCurrentStartupData(newState)
         notifyListener(newState)
     }
 
@@ -217,7 +211,6 @@ internal class StartupUnit(
         notifyListener(state)
     }
 
-    @Synchronized
     private fun updateCurrentStartupData(state: StartupState) {
         startupUnitComponents.startupConfigurationHolder.updateStartupState(state)
         startupUnitComponents.startupStateStorage.save(state)
@@ -235,11 +228,10 @@ internal class StartupUnit(
     }
 
     override fun onRequestError(cause: StartupError) {
-        removeCurrentStartupTask()
+        currentTask = null
         startupUnitComponents.resultListener.onStartupError(componentId.getPackage(), cause, startupState)
     }
 
-    @Synchronized
     fun updateConfiguration(arguments: StartupRequestConfig.Arguments) {
         DebugLogger.info(
             tag,
