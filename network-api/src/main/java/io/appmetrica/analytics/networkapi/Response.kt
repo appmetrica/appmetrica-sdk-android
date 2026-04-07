@@ -10,6 +10,7 @@ package io.appmetrica.analytics.networkapi
  * @property headers HTTP response headers as key-value pairs with multiple values per key
  * @property exception Exception that occurred during request execution, or null if successful
  * @property url Final URL after any redirects, or null if not available
+ * @property metrics Network timing metrics, or null if [NetworkClientSettings.collectMetrics] was not enabled
  */
 class Response private constructor(
     val isCompleted: Boolean,
@@ -18,6 +19,7 @@ class Response private constructor(
     val headers: Map<String, List<String>>,
     val exception: Throwable?,
     val url: String?,
+    val metrics: NetworkCallMetrics?,
 ) {
 
     override fun toString(): String {
@@ -27,7 +29,8 @@ class Response private constructor(
             "responseDataLength=${responseData.size}, " +
             "headers=$headers, " +
             "exception=$exception, " +
-            "url=$url" +
+            "url=$url, " +
+            "metrics=$metrics" +
             ")"
     }
 
@@ -44,6 +47,7 @@ class Response private constructor(
 
         private var headers: Map<String, List<String>> = emptyMap()
         private var url: String? = null
+        private var metrics: NetworkCallMetrics? = null
 
         /**
          * Creates a builder for an error response with an exception.
@@ -100,19 +104,29 @@ class Response private constructor(
         }
 
         /**
+         * Sets the network timing metrics collected during this call.
+         *
+         * @param metrics Network call metrics, or null if not collected
+         * @return This builder instance for method chaining
+         */
+        fun withMetrics(metrics: NetworkCallMetrics?): Builder {
+            this.metrics = metrics
+            return this
+        }
+
+        /**
          * Builds a new [Response] instance with the configured parameters.
          *
          * @return A new HTTP response instance
          */
-        fun build(): Response {
-            return Response(
-                isCompleted = isCompleted,
-                code = code,
-                responseData = responseData,
-                headers = headers,
-                exception = exception,
-                url = url,
-            )
-        }
+        fun build() = Response(
+            isCompleted = isCompleted,
+            code = code,
+            responseData = responseData,
+            headers = headers,
+            exception = exception,
+            url = url,
+            metrics = metrics,
+        )
     }
 }

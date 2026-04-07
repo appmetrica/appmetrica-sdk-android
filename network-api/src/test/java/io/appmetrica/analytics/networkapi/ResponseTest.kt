@@ -2,6 +2,7 @@ package io.appmetrica.analytics.networkapi
 
 import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
 import io.appmetrica.analytics.testutils.CommonTest
+import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.SoftAssertions
 import org.junit.Test
 import java.io.IOException
@@ -29,6 +30,7 @@ class ResponseTest : CommonTest() {
             .checkField("headers", headers)
             .checkFieldIsNull("exception")
             .checkField("url", "https://example.com")
+            .checkFieldIsNull("metrics")
             .checkAll()
     }
 
@@ -51,6 +53,7 @@ class ResponseTest : CommonTest() {
             .checkField("headers", emptyMap<String, List<String>>())
             .checkFieldIsNull("exception")
             .checkField("url", "https://example.com")
+            .checkFieldIsNull("metrics")
             .checkAll()
     }
 
@@ -87,6 +90,7 @@ class ResponseTest : CommonTest() {
             .checkField("headers", emptyMap<String, List<String>>())
             .checkFieldIsNull("exception")
             .checkFieldIsNull("url")
+            .checkFieldIsNull("metrics")
             .checkAll()
     }
 
@@ -143,6 +147,29 @@ class ResponseTest : CommonTest() {
             assertThat(string).`as`("contains exception").contains("exception=java.io.IOException: Network error")
             assertAll()
         }
+    }
+
+    @Test
+    fun builderWithMetrics() {
+        val metrics = NetworkCallMetrics.Builder()
+            .withDnsLookup(10L)
+            .withTcpConnect(20L)
+            .withTlsHandshake(15L)
+            .withTimeToFirstByte(30L)
+            .withResponse(40L)
+            .withConnectionReused(false)
+            .withProtocol("h2")
+            .build()
+
+        val response = Response.Builder(
+            isCompleted = true,
+            code = 200,
+            responseData = ByteArray(0)
+        )
+            .withMetrics(metrics)
+            .build()
+
+        assertThat(response.metrics).isSameAs(metrics)
     }
 
     @Test

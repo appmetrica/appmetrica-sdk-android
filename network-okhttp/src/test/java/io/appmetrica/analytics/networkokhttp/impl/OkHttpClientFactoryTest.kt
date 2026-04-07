@@ -7,6 +7,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.SoftAssertions
 import org.junit.Test
 import org.mockito.kotlin.mock
+import java.util.concurrent.TimeUnit
 import javax.net.ssl.SSLSocketFactory
 
 internal class OkHttpClientFactoryTest : CommonTest() {
@@ -105,6 +106,17 @@ internal class OkHttpClientFactoryTest : CommonTest() {
             assertThat(client.protocols).`as`("protocols").containsExactly(Protocol.HTTP_2, Protocol.HTTP_1_1)
             assertAll()
         }
+    }
+
+    @Test
+    fun createOkHttpClientWithCallTimeout() {
+        val settings = NetworkClientSettings.Builder()
+            .withCallTimeout(5, TimeUnit.SECONDS)
+            .build()
+
+        val client = factory.createOkHttpClient(settings)
+
+        assertThat(client.callTimeoutMillis).isEqualTo(5000)
     }
 
     @Test

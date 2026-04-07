@@ -24,6 +24,7 @@ internal class OkHttpClientFactory {
             protocols(listOf(Protocol.HTTP_2, Protocol.HTTP_1_1))
             settings.readTimeout?.let { readTimeout(it.toLong(), MILLISECONDS) }
             settings.connectTimeout?.let { connectTimeout(it.toLong(), MILLISECONDS) }
+            settings.callTimeout?.let { callTimeout(it, MILLISECONDS) }
             settings.instanceFollowRedirects?.let { followRedirects(it) }
 
             withDebugInterceptorSupplier()

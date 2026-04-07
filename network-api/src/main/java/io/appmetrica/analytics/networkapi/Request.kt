@@ -5,7 +5,7 @@ package io.appmetrica.analytics.networkapi
  * Use [Builder] to construct instances of this class.
  *
  * @property url The target URL for the request
- * @property method The HTTP method (GET or POST)
+ * @property method The HTTP method
  * @property body Request body as byte array
  * @property headers HTTP headers as key-value pairs
  */
@@ -27,6 +27,21 @@ class Request private constructor(
 
         /** HTTP POST method */
         POST("POST"),
+
+        /** HTTP HEAD method */
+        HEAD("HEAD"),
+
+        /** HTTP PUT method */
+        PUT("PUT"),
+
+        /** HTTP DELETE method */
+        DELETE("DELETE"),
+
+        /** HTTP PATCH method */
+        PATCH("PATCH"),
+
+        /** HTTP OPTIONS method */
+        OPTIONS("OPTIONS"),
     }
 
     override fun toString(): String {
@@ -58,7 +73,7 @@ class Request private constructor(
          * @return This builder instance for method chaining
          */
         fun addHeader(key: String, value: String): Builder {
-            headers.put(key, value)
+            headers[key] = value
             return this
         }
 
@@ -76,7 +91,7 @@ class Request private constructor(
         /**
          * Sets the HTTP method.
          *
-         * @param method HTTP method (GET or POST)
+         * @param method HTTP method
          * @return This builder instance for method chaining
          */
         fun withMethod(method: Method): Builder {

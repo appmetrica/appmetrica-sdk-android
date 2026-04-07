@@ -1,5 +1,6 @@
 package io.appmetrica.analytics.networkapi
 
+import java.util.concurrent.TimeUnit
 import javax.net.ssl.SSLSocketFactory
 
 /**
@@ -8,28 +9,34 @@ import javax.net.ssl.SSLSocketFactory
  *
  * @property connectTimeout Connection timeout in milliseconds, or null to use default
  * @property readTimeout Read timeout in milliseconds, or null to use default
+ * @property callTimeout Total call timeout in milliseconds (DNS + connect + write + read), or null to use default
  * @property sslSocketFactory Custom SSL socket factory for HTTPS connections, or null to use default
  * @property useCaches Whether to use caching for HTTP connections, or null to use default
  * @property instanceFollowRedirects Whether to follow HTTP redirects automatically, or null to use default
  * @property maxResponseSize Maximum size of response data in bytes
+ * @property collectMetrics Whether to collect [NetworkCallMetrics] and attach them to [Response.metrics], or null to use default (no collection)
  */
 class NetworkClientSettings private constructor(
     val connectTimeout: Int?,
     val readTimeout: Int?,
+    val callTimeout: Long?,
     val sslSocketFactory: SSLSocketFactory?,
     val useCaches: Boolean?,
     val instanceFollowRedirects: Boolean?,
     val maxResponseSize: Int,
+    val collectMetrics: Boolean?,
 ) {
 
     override fun toString(): String {
         return "NetworkClientSettings(" +
             "connectTimeout=$connectTimeout, " +
             "readTimeout=$readTimeout, " +
+            "callTimeout=$callTimeout, " +
             "sslSocketFactory=$sslSocketFactory, " +
             "useCaches=$useCaches, " +
             "instanceFollowRedirects=$instanceFollowRedirects, " +
-            "maxResponseSize=$maxResponseSize" +
+            "maxResponseSize=$maxResponseSize, " +
+            "collectMetrics=$collectMetrics" +
             ")"
     }
 
@@ -41,10 +48,12 @@ class NetworkClientSettings private constructor(
 
         private var connectTimeout: Int? = null
         private var readTimeout: Int? = null
+        private var callTimeout: Long? = null
         private var sslSocketFactory: SSLSocketFactory? = null
         private var useCaches: Boolean? = null
         private var instanceFollowRedirects: Boolean? = null
         private var maxResponseSize: Int = Int.MAX_VALUE
+        private var collectMetrics: Boolean? = null
 
         /**
          * Sets the connection timeout.
@@ -65,6 +74,18 @@ class NetworkClientSettings private constructor(
          */
         fun withReadTimeout(readTimeout: Int): Builder {
             this.readTimeout = readTimeout
+            return this
+        }
+
+        /**
+         * Sets the total call timeout (DNS + connect + write + read).
+         *
+         * @param callTimeout Total call timeout value
+         * @param timeUnit Unit of the timeout value
+         * @return This builder instance for method chaining
+         */
+        fun withCallTimeout(callTimeout: Long, timeUnit: TimeUnit): Builder {
+            this.callTimeout = timeUnit.toMillis(callTimeout)
             return this
         }
 
@@ -113,17 +134,31 @@ class NetworkClientSettings private constructor(
         }
 
         /**
+         * Enables or disables collection of [NetworkCallMetrics] during call execution.
+         * When enabled, the resulting [Response] will have [Response.metrics] populated.
+         *
+         * @param collectMetrics true to collect metrics, false to disable
+         * @return This builder instance for method chaining
+         */
+        fun withCollectMetrics(collectMetrics: Boolean): Builder {
+            this.collectMetrics = collectMetrics
+            return this
+        }
+
+        /**
          * Builds a new [NetworkClientSettings] instance with the configured settings.
          *
          * @return A new network client settings instance
          */
         fun build() = NetworkClientSettings(
-            connectTimeout,
-            readTimeout,
-            sslSocketFactory,
-            useCaches,
-            instanceFollowRedirects,
-            maxResponseSize,
+            connectTimeout = connectTimeout,
+            readTimeout = readTimeout,
+            callTimeout = callTimeout,
+            sslSocketFactory = sslSocketFactory,
+            useCaches = useCaches,
+            instanceFollowRedirects = instanceFollowRedirects,
+            maxResponseSize = maxResponseSize,
+            collectMetrics = collectMetrics,
         )
     }
 }

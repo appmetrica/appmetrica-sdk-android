@@ -21,8 +21,18 @@ internal class CallImpl(
     override fun execute(): Response {
         DebugLogger.info(tag, "Try to execute request [$request] by OkHttp client")
 
+        val collectMetrics = settings.collectMetrics == true
+        val metricsListener = if (collectMetrics) NetworkCallMetricsListener() else null
+        val client = if (metricsListener != null) {
+            okHttpClient.newBuilder()
+                .eventListenerFactory { metricsListener }
+                .build()
+        } else {
+            okHttpClient
+        }
+
         try {
-            val response = okHttpClient.newCall(request.asOkHttpRequest()).execute()
+            val response = client.newCall(request.asOkHttpRequest()).execute()
             val responseData = InputStreamUtils.readSafelyApprox(settings.maxResponseSize) {
                 response.body?.byteStream()
             }
@@ -34,13 +44,16 @@ internal class CallImpl(
             )
                 .withHeaders(response.headers.toMap())
                 .withUrl(response.request.url.toString())
+                .withMetrics(metricsListener?.buildMetrics())
                 .build()
                 .also {
                     DebugLogger.info(tag, "Response $it")
                 }
         } catch (ex: Throwable) {
             DebugLogger.error(tag, ex)
-            return Response.Builder(ex).build()
+            return Response.Builder(ex)
+                .withMetrics(metricsListener?.buildMetrics())
+                .build()
         }
     }
 
@@ -52,7 +65,12 @@ internal class CallImpl(
         .apply {
             when (method) {
                 Request.Method.GET -> get()
-                Request.Method.POST -> method(method.methodName, body.toRequestBody())
+                Request.Method.HEAD -> head()
+                Request.Method.POST,
+                Request.Method.PUT,
+                Request.Method.PATCH,
+                Request.Method.DELETE,
+                Request.Method.OPTIONS -> method(method.methodName, body.toRequestBody())
             }
             headers.forEach {
                 addHeader(it.key, it.value)

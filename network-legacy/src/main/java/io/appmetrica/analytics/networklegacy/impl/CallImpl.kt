@@ -1,8 +1,11 @@
 package io.appmetrica.analytics.networklegacy.impl
 
 import io.appmetrica.analytics.coreutils.internal.io.InputStreamUtils
+import io.appmetrica.analytics.coreutils.internal.time.SystemTimeProvider
+import io.appmetrica.analytics.coreutils.internal.time.TimeProvider
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import io.appmetrica.analytics.networkapi.Call
+import io.appmetrica.analytics.networkapi.NetworkCallMetrics
 import io.appmetrica.analytics.networkapi.NetworkClientSettings
 import io.appmetrica.analytics.networkapi.Request
 import io.appmetrica.analytics.networkapi.Response
@@ -12,6 +15,10 @@ import javax.net.ssl.HttpsURLConnection
 internal class CallImpl(
     private val settings: NetworkClientSettings,
     private val request: Request,
+    private val timeProvider: TimeProvider = SystemTimeProvider(),
+    private val connectionFactory: (String) -> HttpsURLConnection? = { url ->
+        URL(url).openConnection() as? HttpsURLConnection?
+    },
 ) : Call() {
 
     private val tag = "[CallImpl]"
@@ -20,7 +27,7 @@ internal class CallImpl(
         DebugLogger.info(tag, "Try to execute request [$request] by Legacy client")
 
         val httpsConnection = try {
-            URL(request.url).openConnection() as? HttpsURLConnection?
+            connectionFactory(request.url)
         } catch (ex: Throwable) {
             DebugLogger.error(tag, ex)
             return Response.Builder(ex).build()
@@ -32,24 +39,34 @@ internal class CallImpl(
             return Response.Builder(IllegalArgumentException(errorMessage)).build()
         }
 
+        val requestStart = timeProvider.currentTimeMillis()
+
         try {
             setUpConnection(httpsConnection)
 
+            val responseCode = httpsConnection.responseCode // triggers DNS + connect + TLS + TTFB
+            val firstByte = timeProvider.currentTimeMillis()
+
+            val responseBodyStart = timeProvider.currentTimeMillis()
             val responseData = InputStreamUtils.readSafelyApprox(settings.maxResponseSize) {
-                if (httpsConnection.responseCode >= 400) {
-                    httpsConnection.errorStream
-                } else {
-                    httpsConnection.inputStream
-                }
+                if (responseCode >= 400) httpsConnection.errorStream else httpsConnection.inputStream
             }
+            val responseBodyEnd = timeProvider.currentTimeMillis()
+
+            val metrics = NetworkCallMetrics.Builder()
+                // URLConnection does not expose DNS, TCP, or TLS phases separately
+                .withTimeToFirstByte(firstByte - requestStart)
+                .withResponse(responseBodyEnd - responseBodyStart)
+                .build()
 
             return Response.Builder(
                 isCompleted = true,
-                code = httpsConnection.responseCode,
+                code = responseCode,
                 responseData = responseData
             ).apply {
                 httpsConnection.headerFields?.let { withHeaders(it.filterNulls()) }
                 httpsConnection.url?.toString()?.let { withUrl(it) }
+                withMetrics(if (settings.collectMetrics == true) metrics else null)
             }.build().also {
                 DebugLogger.info(tag, "Response: $it")
             }
@@ -76,7 +93,10 @@ internal class CallImpl(
         settings.sslSocketFactory?.let { connection.sslSocketFactory = it }
         connection.requestMethod = request.method.methodName
 
-        if (request.method == Request.Method.POST) {
+        if (request.method == Request.Method.POST ||
+            request.method == Request.Method.PUT ||
+            request.method == Request.Method.PATCH
+        ) {
             connection.doOutput = true
             connection.outputStream?.use {
                 it.write(request.body)

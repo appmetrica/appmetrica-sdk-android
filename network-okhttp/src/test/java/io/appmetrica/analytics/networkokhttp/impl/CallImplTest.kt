@@ -55,6 +55,7 @@ internal class CallImplTest : CommonTest() {
             .checkField("headers", mapOf("Content-Length" to listOf("${responseBody.length}")))
             .checkFieldIsNull("exception")
             .checkField("url", mockWebServer.url("/test").toString())
+            .checkFieldIsNull("metrics")
             .checkAll()
     }
 
@@ -80,6 +81,7 @@ internal class CallImplTest : CommonTest() {
             .checkField("headers", mapOf("Content-Length" to listOf("${errorBody.length}")))
             .checkFieldIsNull("exception")
             .checkField("url", mockWebServer.url("/test").toString())
+            .checkFieldIsNull("metrics")
             .checkAll()
     }
 
@@ -235,6 +237,49 @@ internal class CallImplTest : CommonTest() {
             .checkField("headers", mapOf("Content-Length" to listOf("${content.length}")))
             .checkFieldIsNull("exception")
             .checkField("url", mockWebServer.url("/redirected").toString())
+            .checkFieldIsNull("metrics")
             .checkAll()
+    }
+
+    @Test
+    fun `execute with collectMetrics true returns network metrics`() {
+        mockWebServer.enqueue(
+            MockResponse()
+                .setResponseCode(200)
+                .setBody("ok")
+        )
+
+        val settingsWithMetrics = NetworkClientSettings.Builder()
+            .withMaxResponseSize(1024 * 1024)
+            .withCollectMetrics(true)
+            .build()
+        val url = mockWebServer.url("/test").toString()
+        val request = Request.Builder(url).build()
+        val call = CallImpl(okHttpClient, request, settingsWithMetrics)
+
+        val response = call.execute()
+
+        assertThat(response.isCompleted).isTrue()
+        val metrics = response.metrics
+        assertThat(metrics).isNotNull()
+        assertThat(metrics!!.connectionReused).isFalse()
+        assertThat(metrics.protocol).isNotNull()
+    }
+
+    @Test
+    fun `execute with collectMetrics false returns null metrics`() {
+        mockWebServer.enqueue(
+            MockResponse()
+                .setResponseCode(200)
+                .setBody("ok")
+        )
+
+        val url = mockWebServer.url("/test").toString()
+        val request = Request.Builder(url).build()
+        val call = CallImpl(okHttpClient, request, settings)
+
+        val response = call.execute()
+
+        assertThat(response.metrics).isNull()
     }
 }
