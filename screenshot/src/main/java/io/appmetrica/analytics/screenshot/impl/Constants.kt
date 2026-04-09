@@ -19,10 +19,21 @@ internal object Constants {
             RemoteScreenshotConfigProtobuf.RemoteScreenshotConfig()
         val DEFAULT_FEATURE_STATE = defaultRemoteScreenshotConfig.enabled
 
-        val defaultMediaStoreColumnNames = arrayOf(
+        val defaultMediaStoreColumnNames = listOf(
             MediaStore.Images.Media.DISPLAY_NAME,
             MediaStore.Images.Media.DATA,
         )
+
+        private val defaultApiCaptorConfig = ApiCaptorConfigProto()
+        val DEFAULT_API_CAPTOR_ENABLED = defaultApiCaptorConfig.enabled
+
+        private val defaultServiceCaptorConfig = ServiceCaptorConfigProto()
+        val DEFAULT_SERVICE_CAPTOR_ENABLED = defaultServiceCaptorConfig.enabled
+        val DEFAULT_SERVICE_CAPTOR_DELAY_SECONDS = defaultServiceCaptorConfig.delaySeconds
+
+        private val defaultContentObserverCaptorConfig = ContentObserverCaptorConfigProto()
+        val DEFAULT_CONTENT_OBSERVER_ENABLED = defaultContentObserverCaptorConfig.enabled
+        val DEFAULT_CONTENT_OBSERVER_DETECT_WINDOW_SECONDS = defaultContentObserverCaptorConfig.detectWindowSeconds
     }
 
     internal object RemoteConfig {
@@ -46,8 +57,13 @@ internal object Constants {
         const val API_CAPTOR_CONFIG_ENABLED = "enabled"
     }
 
-    internal object ParcelableConfig {
-
-        const val CONFIG = "config"
+    internal object ServiceConfig {
+        const val ENABLED = "enabled"
+        const val API_CAPTOR_ENABLED = "api_captor_enabled"
+        const val SERVICE_CAPTOR_ENABLED = "service_captor_enabled"
+        const val SERVICE_CAPTOR_DELAY_SECONDS = "service_captor_delay_seconds"
+        const val CONTENT_OBSERVER_ENABLED = "content_observer_enabled"
+        const val CONTENT_OBSERVER_MEDIA_STORE_COLUMN_NAMES = "content_observer_media_store_column_names"
+        const val CONTENT_OBSERVER_DETECT_WINDOW_SECONDS = "content_observer_detect_window_seconds"
     }
 }

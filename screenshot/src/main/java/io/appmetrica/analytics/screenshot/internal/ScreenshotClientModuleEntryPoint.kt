@@ -6,30 +6,27 @@ import io.appmetrica.analytics.modulesapi.internal.client.ModuleClientEntryPoint
 import io.appmetrica.analytics.modulesapi.internal.client.ModuleServiceConfig
 import io.appmetrica.analytics.modulesapi.internal.client.ServiceConfigExtensionConfiguration
 import io.appmetrica.analytics.modulesapi.internal.client.ServiceConfigUpdateListener
-import io.appmetrica.analytics.screenshot.impl.BundleToClientScreenshotConfigConverter
 import io.appmetrica.analytics.screenshot.impl.Constants
 import io.appmetrica.analytics.screenshot.impl.ScreenshotCaptorsController
-import io.appmetrica.analytics.screenshot.impl.config.client.model.ClientSideRemoteScreenshotConfig
-import io.appmetrica.analytics.screenshot.internal.config.ParcelableRemoteScreenshotConfig
+import io.appmetrica.analytics.screenshot.impl.config.client.BundleToClientSideScreenshotConfigConverter
+import io.appmetrica.analytics.screenshot.impl.config.client.model.ClientSideScreenshotConfig
 
-class ScreenshotClientModuleEntryPoint : ModuleClientEntryPoint<ParcelableRemoteScreenshotConfig>() {
+class ScreenshotClientModuleEntryPoint : ModuleClientEntryPoint<ClientSideScreenshotConfigWrapper>() {
 
     private val tag = "[ScreenshotClientModuleEntryPoint]"
 
-    private var clientSideRemoteScreenshotConfig: ClientSideRemoteScreenshotConfig? = null
+    private var clientSideScreenshotConfig: ClientSideScreenshotConfig? = null
 
-    private val bundleConverter = BundleToClientScreenshotConfigConverter()
-    private val configUpdateListener = object : ServiceConfigUpdateListener<ParcelableRemoteScreenshotConfig> {
-        override fun onServiceConfigUpdated(config: ModuleServiceConfig<ParcelableRemoteScreenshotConfig?>) {
+    private val bundleConverter = BundleToClientSideScreenshotConfigConverter()
+    private val configUpdateListener = object : ServiceConfigUpdateListener<ClientSideScreenshotConfigWrapper> {
+        override fun onServiceConfigUpdated(config: ModuleServiceConfig<ClientSideScreenshotConfigWrapper?>) {
             DebugLogger.info(tag, "Called onServiceConfigUpdated ${config.featuresConfig}")
             synchronized(this@ScreenshotClientModuleEntryPoint) {
-                val newClientSideRemoteScreenshotConfig = config.featuresConfig?.let {
-                    ClientSideRemoteScreenshotConfig(it)
-                }
-                DebugLogger.info(tag, "New clientRemoteScreenshotConfig $newClientSideRemoteScreenshotConfig")
-                clientSideRemoteScreenshotConfig = newClientSideRemoteScreenshotConfig
+                val newClientSideScreenshotConfig = config.featuresConfig?.config
+                DebugLogger.info(tag, "New clientSideScreenshotConfig $newClientSideScreenshotConfig")
+                clientSideScreenshotConfig = newClientSideScreenshotConfig
                 if (this@ScreenshotClientModuleEntryPoint::screenshotCaptorsController.isInitialized) {
-                    screenshotCaptorsController.updateConfig(clientSideRemoteScreenshotConfig)
+                    screenshotCaptorsController.updateConfig(clientSideScreenshotConfig)
                 }
             }
         }
@@ -40,7 +37,7 @@ class ScreenshotClientModuleEntryPoint : ModuleClientEntryPoint<ParcelableRemote
     override val identifier = Constants.MODULE_ID
 
     override val serviceConfigExtensionConfiguration =
-        object : ServiceConfigExtensionConfiguration<ParcelableRemoteScreenshotConfig>() {
+        object : ServiceConfigExtensionConfiguration<ClientSideScreenshotConfigWrapper>() {
 
             override fun getBundleConverter() = bundleConverter
 
@@ -58,7 +55,7 @@ class ScreenshotClientModuleEntryPoint : ModuleClientEntryPoint<ParcelableRemote
         DebugLogger.info(tag, "Called onActivated")
         synchronized(this@ScreenshotClientModuleEntryPoint) {
             if (this::screenshotCaptorsController.isInitialized) {
-                screenshotCaptorsController.startCapture(clientSideRemoteScreenshotConfig)
+                screenshotCaptorsController.startCapture(clientSideScreenshotConfig)
             }
         }
     }

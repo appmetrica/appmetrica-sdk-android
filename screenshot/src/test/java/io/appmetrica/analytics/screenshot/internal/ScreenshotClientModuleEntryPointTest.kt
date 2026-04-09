@@ -2,10 +2,9 @@ package io.appmetrica.analytics.screenshot.internal
 
 import io.appmetrica.analytics.modulesapi.internal.client.ClientContext
 import io.appmetrica.analytics.modulesapi.internal.client.ModuleServiceConfig
-import io.appmetrica.analytics.screenshot.impl.BundleToClientScreenshotConfigConverter
 import io.appmetrica.analytics.screenshot.impl.ScreenshotCaptorsController
-import io.appmetrica.analytics.screenshot.impl.config.client.model.ClientSideRemoteScreenshotConfig
-import io.appmetrica.analytics.screenshot.internal.config.ParcelableRemoteScreenshotConfig
+import io.appmetrica.analytics.screenshot.impl.config.client.BundleToClientSideScreenshotConfigConverter
+import io.appmetrica.analytics.screenshot.impl.config.client.model.ClientSideScreenshotConfig
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.constructionRule
 import org.assertj.core.api.Assertions.assertThat
@@ -18,18 +17,20 @@ import org.mockito.kotlin.whenever
 
 internal class ScreenshotClientModuleEntryPointTest : CommonTest() {
 
-    private val parcelableConfig: ParcelableRemoteScreenshotConfig = mock()
-    private val moduleServiceConfig: ModuleServiceConfig<ParcelableRemoteScreenshotConfig?> = mock {
-        on { featuresConfig } doReturn parcelableConfig
+    private val clientSideScreenshotConfig: ClientSideScreenshotConfig = mock()
+    private val wrapper: ClientSideScreenshotConfigWrapper = mock {
+        on { config } doReturn clientSideScreenshotConfig
+    }
+    private val moduleServiceConfig: ModuleServiceConfig<ClientSideScreenshotConfigWrapper?> = mock {
+        on { featuresConfig } doReturn wrapper
     }
     private val clientContext: ClientContext = mock()
 
     @get:Rule
-    val bundleToClientScreenshotConfigConverterRule = constructionRule<BundleToClientScreenshotConfigConverter>()
+    val bundleToClientSideScreenshotConfigConverterRule =
+        constructionRule<BundleToClientSideScreenshotConfigConverter>()
     @get:Rule
     val screenshotCaptorsControllerRule = constructionRule<ScreenshotCaptorsController>()
-    @get:Rule
-    val clientSideRemoteScreenshotConfigRule = constructionRule<ClientSideRemoteScreenshotConfig>()
 
     private val entryPoint by setUp { ScreenshotClientModuleEntryPoint() }
 
@@ -72,10 +73,8 @@ internal class ScreenshotClientModuleEntryPointTest : CommonTest() {
             .onServiceConfigUpdated(moduleServiceConfig)
         entryPoint.onActivated()
 
-        assertThat(clientSideRemoteScreenshotConfigRule.constructionMock.constructed()).hasSize(1)
-        val newConfig = clientSideRemoteScreenshotConfigRule.constructionMock.constructed().first()
-        verify(screenshotCaptorsController()).updateConfig(newConfig)
-        verify(screenshotCaptorsController()).startCapture(newConfig)
+        verify(screenshotCaptorsController()).updateConfig(clientSideScreenshotConfig)
+        verify(screenshotCaptorsController()).startCapture(clientSideScreenshotConfig)
     }
 
     @Test
@@ -84,9 +83,7 @@ internal class ScreenshotClientModuleEntryPointTest : CommonTest() {
         entryPoint.serviceConfigExtensionConfiguration.getServiceConfigUpdateListener()
             .onServiceConfigUpdated(moduleServiceConfig)
 
-        assertThat(clientSideRemoteScreenshotConfigRule.constructionMock.constructed()).hasSize(1)
-        val newConfig = clientSideRemoteScreenshotConfigRule.constructionMock.constructed().first()
-        verify(screenshotCaptorsController()).updateConfig(newConfig)
+        verify(screenshotCaptorsController()).updateConfig(clientSideScreenshotConfig)
     }
 
     @Test
@@ -97,14 +94,13 @@ internal class ScreenshotClientModuleEntryPointTest : CommonTest() {
         entryPoint.serviceConfigExtensionConfiguration.getServiceConfigUpdateListener()
             .onServiceConfigUpdated(moduleServiceConfig)
 
-        assertThat(clientSideRemoteScreenshotConfigRule.constructionMock.constructed()).isEmpty()
         verify(screenshotCaptorsController()).updateConfig(null)
     }
 
-    private fun bundleConverter(): BundleToClientScreenshotConfigConverter {
-        assertThat(bundleToClientScreenshotConfigConverterRule.constructionMock.constructed()).hasSize(1)
-        assertThat(bundleToClientScreenshotConfigConverterRule.argumentInterceptor.flatArguments()).isEmpty()
-        return bundleToClientScreenshotConfigConverterRule.constructionMock.constructed().first()
+    private fun bundleConverter(): BundleToClientSideScreenshotConfigConverter {
+        assertThat(bundleToClientSideScreenshotConfigConverterRule.constructionMock.constructed()).hasSize(1)
+        assertThat(bundleToClientSideScreenshotConfigConverterRule.argumentInterceptor.flatArguments()).isEmpty()
+        return bundleToClientSideScreenshotConfigConverterRule.constructionMock.constructed().first()
     }
 
     private fun screenshotCaptorsController(): ScreenshotCaptorsController {

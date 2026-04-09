@@ -1,15 +1,15 @@
 package io.appmetrica.analytics.screenshot.impl.config.service.model
 
-import io.appmetrica.analytics.screenshot.impl.config.remote.model.ServiceCaptorConfig
+import io.appmetrica.analytics.screenshot.impl.ServiceCaptorConfigProto
 
 internal class ServiceSideServiceCaptorConfig(
     val enabled: Boolean,
     val delaySeconds: Long,
 ) {
 
-    constructor(remote: ServiceCaptorConfig) : this(
-        remote.enabled,
-        remote.delaySeconds,
+    constructor() : this(
+        ServiceCaptorConfigProto().enabled,
+        ServiceCaptorConfigProto().delaySeconds
     )
 
     override fun toString(): String {

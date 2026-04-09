@@ -11,34 +11,32 @@ import io.appmetrica.analytics.modulesapi.internal.service.RemoteConfigExtension
 import io.appmetrica.analytics.modulesapi.internal.service.RemoteConfigUpdateListener
 import io.appmetrica.analytics.modulesapi.internal.service.ServiceContext
 import io.appmetrica.analytics.screenshot.impl.Constants
-import io.appmetrica.analytics.screenshot.impl.ServiceToBundleScreenshotConfigConverter
-import io.appmetrica.analytics.screenshot.impl.config.remote.RemoteScreenshotConfigConverter
-import io.appmetrica.analytics.screenshot.impl.config.remote.RemoteScreenshotConfigParser
-import io.appmetrica.analytics.screenshot.impl.config.service.model.ServiceSideRemoteScreenshotConfig
-import io.appmetrica.analytics.screenshot.internal.config.RemoteScreenshotConfig
+import io.appmetrica.analytics.screenshot.impl.config.service.ServiceSideScreenshotConfigConverter
+import io.appmetrica.analytics.screenshot.impl.config.service.ServiceSideScreenshotConfigParser
+import io.appmetrica.analytics.screenshot.impl.config.service.ServiceSideScreenshotConfigToBundleConverter
+import io.appmetrica.analytics.screenshot.impl.config.service.model.ServiceSideScreenshotConfig
+import io.appmetrica.analytics.screenshot.internal.ServiceSideScreenshotConfigWrapper.Companion.toWrapper
 
-class ScreenshotServiceModuleEntryPoint : ModuleServiceEntryPoint<RemoteScreenshotConfig>() {
+class ScreenshotServiceModuleEntryPoint : ModuleServiceEntryPoint<ServiceSideScreenshotConfigWrapper>() {
 
     private val tag = "[ScreenshotServiceModuleEntryPoint]"
 
-    private var config: ServiceSideRemoteScreenshotConfig? = null
+    private var config: ServiceSideScreenshotConfig? = null
 
-    private val bundleConverter = ServiceToBundleScreenshotConfigConverter()
-    private val configParser = RemoteScreenshotConfigParser()
-    private val configConverter = RemoteScreenshotConfigConverter()
-    private val configUpdateListener = object : RemoteConfigUpdateListener<RemoteScreenshotConfig> {
-        override fun onRemoteConfigUpdated(config: ModuleRemoteConfig<RemoteScreenshotConfig?>) {
+    private val bundleConverter = ServiceSideScreenshotConfigToBundleConverter()
+    private val configParser = ServiceSideScreenshotConfigParser()
+    private val configConverter = ServiceSideScreenshotConfigConverter()
+    private val configUpdateListener = object : RemoteConfigUpdateListener<ServiceSideScreenshotConfigWrapper> {
+        override fun onRemoteConfigUpdated(config: ModuleRemoteConfig<ServiceSideScreenshotConfigWrapper?>) {
             DebugLogger.info(tag, "Received config " + config.featuresConfig)
-            this@ScreenshotServiceModuleEntryPoint.config = config.featuresConfig?.let {
-                ServiceSideRemoteScreenshotConfig(it)
-            }
+            this@ScreenshotServiceModuleEntryPoint.config = config.featuresConfig?.config
         }
     }
 
     override val identifier = Constants.MODULE_ID
 
     override val remoteConfigExtensionConfiguration =
-        object : RemoteConfigExtensionConfiguration<RemoteScreenshotConfig>() {
+        object : RemoteConfigExtensionConfiguration<ServiceSideScreenshotConfigWrapper>() {
             override fun getFeatures() = listOf(
                 Constants.RemoteConfig.FEATURE_NAME_OBFUSCATED
             )
@@ -47,20 +45,27 @@ class ScreenshotServiceModuleEntryPoint : ModuleServiceEntryPoint<RemoteScreensh
                 Constants.RemoteConfig.BLOCK_NAME_OBFUSCATED to Constants.RemoteConfig.BLOCK_VERSION
             )
 
-            override fun getJsonParser(): JsonParser<RemoteScreenshotConfig> = configParser
+            override fun getJsonParser(): JsonParser<ServiceSideScreenshotConfigWrapper> = configParser
 
-            override fun getProtobufConverter(): Converter<RemoteScreenshotConfig, ByteArray> = configConverter
+            override fun getProtobufConverter(): Converter<ServiceSideScreenshotConfigWrapper, ByteArray> =
+                object : Converter<ServiceSideScreenshotConfigWrapper, ByteArray> {
+                    override fun fromModel(value: ServiceSideScreenshotConfigWrapper): ByteArray =
+                        configConverter.fromModel(value.config)
 
-            override fun getRemoteConfigUpdateListener(): RemoteConfigUpdateListener<RemoteScreenshotConfig> =
-                configUpdateListener
+                    override fun toModel(value: ByteArray): ServiceSideScreenshotConfigWrapper =
+                        configConverter.toModel(value).toWrapper()
+                }
+
+            override fun getRemoteConfigUpdateListener():
+                RemoteConfigUpdateListener<ServiceSideScreenshotConfigWrapper> = configUpdateListener
         }
 
     override fun initServiceSide(
         serviceContext: ServiceContext,
-        initialConfig: ModuleRemoteConfig<RemoteScreenshotConfig?>
+        initialConfig: ModuleRemoteConfig<ServiceSideScreenshotConfigWrapper?>
     ) {
         DebugLogger.info(tag, "Init Screenshot")
-        config = initialConfig.featuresConfig?.let { ServiceSideRemoteScreenshotConfig(it) }
+        config = initialConfig.featuresConfig?.config
         DebugLogger.info(tag, "Config is $config")
     }
 

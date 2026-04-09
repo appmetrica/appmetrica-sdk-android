@@ -2,10 +2,10 @@ package io.appmetrica.analytics.screenshot.internal
 
 import io.appmetrica.analytics.modulesapi.internal.service.ModuleRemoteConfig
 import io.appmetrica.analytics.modulesapi.internal.service.ServiceContext
-import io.appmetrica.analytics.screenshot.impl.ServiceToBundleScreenshotConfigConverter
-import io.appmetrica.analytics.screenshot.impl.config.remote.RemoteScreenshotConfigConverter
-import io.appmetrica.analytics.screenshot.impl.config.remote.RemoteScreenshotConfigParser
-import io.appmetrica.analytics.screenshot.internal.config.RemoteScreenshotConfig
+import io.appmetrica.analytics.screenshot.impl.config.service.ServiceSideScreenshotConfigConverter
+import io.appmetrica.analytics.screenshot.impl.config.service.ServiceSideScreenshotConfigParser
+import io.appmetrica.analytics.screenshot.impl.config.service.ServiceSideScreenshotConfigToBundleConverter
+import io.appmetrica.analytics.screenshot.impl.config.service.model.ServiceSideScreenshotConfig
 import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.constructionRule
 import org.assertj.core.api.Assertions.assertThat
@@ -18,18 +18,21 @@ import org.mockito.kotlin.verify
 
 internal class ScreenshotServiceModuleEntryPointTest : CommonTest() {
 
-    private val remoteConfig: RemoteScreenshotConfig = mock()
+    private val screenshotConfig: ServiceSideScreenshotConfig = mock()
+    private val wrapper: ServiceSideScreenshotConfigWrapper = mock {
+        on { config } doReturn screenshotConfig
+    }
     private val serviceContext: ServiceContext = mock()
-    private val initialConfig: ModuleRemoteConfig<RemoteScreenshotConfig?> = mock {
-        on { featuresConfig } doReturn remoteConfig
+    private val initialConfig: ModuleRemoteConfig<ServiceSideScreenshotConfigWrapper?> = mock {
+        on { featuresConfig } doReturn wrapper
     }
 
     @get:Rule
-    val bundleConverterRule = constructionRule<ServiceToBundleScreenshotConfigConverter>()
+    val bundleConverterRule = constructionRule<ServiceSideScreenshotConfigToBundleConverter>()
     @get:Rule
-    val configParserRule = constructionRule<RemoteScreenshotConfigParser>()
+    val configParserRule = constructionRule<ServiceSideScreenshotConfigParser>()
     @get:Rule
-    val configConverterRule = constructionRule<RemoteScreenshotConfigConverter>()
+    val configConverterRule = constructionRule<ServiceSideScreenshotConfigConverter>()
 
     private val entryPoint by setUp { ScreenshotServiceModuleEntryPoint() }
 
@@ -74,11 +77,6 @@ internal class ScreenshotServiceModuleEntryPointTest : CommonTest() {
     }
 
     @Test
-    fun getProtobufConverter() {
-        assertThat(entryPoint.remoteConfigExtensionConfiguration.getProtobufConverter()).isSameAs(configConverter())
-    }
-
-    @Test
     fun configUpdateListener() {
         entryPoint.remoteConfigExtensionConfiguration.getRemoteConfigUpdateListener()
             .onRemoteConfigUpdated(initialConfig)
@@ -87,19 +85,14 @@ internal class ScreenshotServiceModuleEntryPointTest : CommonTest() {
         verify(bundleConverter()).convert(notNull())
     }
 
-    private fun bundleConverter(): ServiceToBundleScreenshotConfigConverter {
+    private fun bundleConverter(): ServiceSideScreenshotConfigToBundleConverter {
         assertThat(bundleConverterRule.constructionMock.constructed()).hasSize(1)
         assertThat(bundleConverterRule.argumentInterceptor.flatArguments()).isEmpty()
         return bundleConverterRule.constructionMock.constructed().first()
     }
 
-    private fun configParser(): RemoteScreenshotConfigParser {
+    private fun configParser(): ServiceSideScreenshotConfigParser {
         assertThat(configParserRule.constructionMock.constructed()).hasSize(1)
         return configParserRule.constructionMock.constructed().first()
-    }
-
-    private fun configConverter(): RemoteScreenshotConfigConverter {
-        assertThat(configConverterRule.constructionMock.constructed()).hasSize(1)
-        return configConverterRule.constructionMock.constructed().first()
     }
 }

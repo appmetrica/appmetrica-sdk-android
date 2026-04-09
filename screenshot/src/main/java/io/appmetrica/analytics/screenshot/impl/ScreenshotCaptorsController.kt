@@ -9,7 +9,7 @@ import io.appmetrica.analytics.screenshot.impl.callback.ScreenshotCaptorCallback
 import io.appmetrica.analytics.screenshot.impl.captor.CaptorProvider
 import io.appmetrica.analytics.screenshot.impl.captor.DefaultCaptorProvider
 import io.appmetrica.analytics.screenshot.impl.captor.Pre34ApiCaptorProvider
-import io.appmetrica.analytics.screenshot.impl.config.client.model.ClientSideRemoteScreenshotConfig
+import io.appmetrica.analytics.screenshot.impl.config.client.model.ClientSideScreenshotConfig
 
 internal class ScreenshotCaptorsController(
     private val clientContext: ClientContext,
@@ -26,7 +26,7 @@ internal class ScreenshotCaptorsController(
 
     private val tag = "[ScreenshotCaptorsController]"
 
-    fun startCapture(config: ClientSideRemoteScreenshotConfig?) {
+    fun startCapture(config: ClientSideScreenshotConfig?) {
         DebugLogger.info(tag, "Start capture with config $config")
 
         captors.forEach { it.startCapture() }
@@ -34,9 +34,9 @@ internal class ScreenshotCaptorsController(
         updateConfig(config)
     }
 
-    fun updateConfig(config: ClientSideRemoteScreenshotConfig?) {
+    fun updateConfig(config: ClientSideScreenshotConfig?) {
         DebugLogger.info(tag, "Update config $config")
 
-        captors.forEach { it.updateConfig(config?.takeIf { it.enabled }?.config) }
+        captors.forEach { it.updateConfig(config?.takeIf { it.enabled }) }
     }
 }

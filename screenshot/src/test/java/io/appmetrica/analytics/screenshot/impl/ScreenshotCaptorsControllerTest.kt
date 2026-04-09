@@ -4,7 +4,6 @@ import io.appmetrica.analytics.modulesapi.internal.client.ClientContext
 import io.appmetrica.analytics.screenshot.impl.callback.ScreenshotCaptorCallback
 import io.appmetrica.analytics.screenshot.impl.captor.CaptorProvider
 import io.appmetrica.analytics.screenshot.impl.captor.ScreenshotCaptor
-import io.appmetrica.analytics.screenshot.impl.config.client.model.ClientSideRemoteScreenshotConfig
 import io.appmetrica.analytics.screenshot.impl.config.client.model.ClientSideScreenshotConfig
 import io.appmetrica.analytics.testutils.CommonTest
 import org.junit.Test
@@ -15,10 +14,8 @@ import org.mockito.kotlin.whenever
 
 internal class ScreenshotCaptorsControllerTest : CommonTest() {
 
-    private val config: ClientSideScreenshotConfig = mock()
-    private val remoteConfig: ClientSideRemoteScreenshotConfig = mock {
+    private val config: ClientSideScreenshotConfig = mock {
         on { enabled } doReturn true
-        on { config } doReturn config
     }
 
     private val clientContext: ClientContext = mock()
@@ -35,7 +32,7 @@ internal class ScreenshotCaptorsControllerTest : CommonTest() {
 
     @Test
     fun startCapture() {
-        screenshotCaptorsController.startCapture(remoteConfig)
+        screenshotCaptorsController.startCapture(config)
 
         captors.forEach { captor ->
             verify(captor).startCapture()
@@ -45,9 +42,7 @@ internal class ScreenshotCaptorsControllerTest : CommonTest() {
 
     @Test
     fun startCaptureIfNoConfig() {
-        whenever(remoteConfig.config).thenReturn(null)
-
-        screenshotCaptorsController.startCapture(remoteConfig)
+        screenshotCaptorsController.startCapture(null)
 
         captors.forEach { captor ->
             verify(captor).startCapture()
@@ -57,9 +52,9 @@ internal class ScreenshotCaptorsControllerTest : CommonTest() {
 
     @Test
     fun startCaptureIfConfigIsDisabled() {
-        whenever(remoteConfig.enabled).thenReturn(false)
+        whenever(config.enabled).thenReturn(false)
 
-        screenshotCaptorsController.startCapture(remoteConfig)
+        screenshotCaptorsController.startCapture(config)
 
         captors.forEach { captor ->
             verify(captor).startCapture()
@@ -69,7 +64,7 @@ internal class ScreenshotCaptorsControllerTest : CommonTest() {
 
     @Test
     fun updateConfig() {
-        screenshotCaptorsController.updateConfig(remoteConfig)
+        screenshotCaptorsController.updateConfig(config)
 
         captors.forEach { captor ->
             verify(captor).updateConfig(config)
@@ -78,9 +73,7 @@ internal class ScreenshotCaptorsControllerTest : CommonTest() {
 
     @Test
     fun updateConfigIfNoConfig() {
-        whenever(remoteConfig.config).thenReturn(null)
-
-        screenshotCaptorsController.updateConfig(remoteConfig)
+        screenshotCaptorsController.updateConfig(null)
 
         captors.forEach { captor ->
             verify(captor).updateConfig(null)
@@ -89,9 +82,9 @@ internal class ScreenshotCaptorsControllerTest : CommonTest() {
 
     @Test
     fun updateConfigIfConfigIsDisabled() {
-        whenever(remoteConfig.enabled).thenReturn(false)
+        whenever(config.enabled).thenReturn(false)
 
-        screenshotCaptorsController.updateConfig(remoteConfig)
+        screenshotCaptorsController.updateConfig(config)
 
         captors.forEach { captor ->
             verify(captor).updateConfig(null)

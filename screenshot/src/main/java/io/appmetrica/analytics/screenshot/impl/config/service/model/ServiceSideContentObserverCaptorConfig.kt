@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.screenshot.impl.config.service.model
 
-import io.appmetrica.analytics.screenshot.impl.config.remote.model.ContentObserverCaptorConfig
+import io.appmetrica.analytics.screenshot.impl.Constants
+import io.appmetrica.analytics.screenshot.impl.ContentObserverCaptorConfigProto
 
 internal class ServiceSideContentObserverCaptorConfig(
     val enabled: Boolean,
@@ -8,10 +9,10 @@ internal class ServiceSideContentObserverCaptorConfig(
     val detectWindowSeconds: Long,
 ) {
 
-    constructor(remote: ContentObserverCaptorConfig) : this(
-        remote.enabled,
-        remote.mediaStoreColumnNames,
-        remote.detectWindowSeconds,
+    constructor() : this(
+        ContentObserverCaptorConfigProto().enabled,
+        Constants.Defaults.defaultMediaStoreColumnNames,
+        ContentObserverCaptorConfigProto().detectWindowSeconds,
     )
 
     override fun toString(): String {

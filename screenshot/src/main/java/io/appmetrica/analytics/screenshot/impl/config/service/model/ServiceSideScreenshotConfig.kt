@@ -1,22 +1,25 @@
 package io.appmetrica.analytics.screenshot.impl.config.service.model
 
-import io.appmetrica.analytics.screenshot.impl.config.remote.model.ScreenshotConfig
+import io.appmetrica.analytics.screenshot.impl.RemoteScreenshotConfigProto
 
 internal class ServiceSideScreenshotConfig(
+    val enabled: Boolean,
     val apiCaptorConfig: ServiceSideApiCaptorConfig?,
     val serviceCaptorConfig: ServiceSideServiceCaptorConfig?,
     val contentObserverCaptorConfig: ServiceSideContentObserverCaptorConfig?,
 ) {
 
-    constructor(remote: ScreenshotConfig) : this(
-        remote.apiCaptorConfig?.let { ServiceSideApiCaptorConfig(it) },
-        remote.serviceCaptorConfig?.let { ServiceSideServiceCaptorConfig(it) },
-        remote.contentObserverCaptorConfig?.let { ServiceSideContentObserverCaptorConfig(it) },
+    constructor() : this(
+        RemoteScreenshotConfigProto().enabled,
+        ServiceSideApiCaptorConfig(),
+        ServiceSideServiceCaptorConfig(),
+        ServiceSideContentObserverCaptorConfig()
     )
 
     override fun toString(): String {
         return "ServiceSideScreenshotConfig(" +
-            "apiCaptorConfig=$apiCaptorConfig" +
+            "enabled=$enabled" +
+            ", apiCaptorConfig=$apiCaptorConfig" +
             ", serviceCaptorConfig=$serviceCaptorConfig" +
             ", contentObserverCaptorConfig=$contentObserverCaptorConfig" +
             ")"
