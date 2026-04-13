@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.ecommerce.client.converter;
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
 import io.appmetrica.analytics.impl.protobuf.backend.Ecommerce;
+import io.appmetrica.gradle.testutils.assertions.ObjectPropertyAssertions;
 import java.util.function.Consumer;
 
 public class ECommerceEventAssertionsConsumer implements Consumer<ObjectPropertyAssertions<Ecommerce.ECommerceEvent>> {

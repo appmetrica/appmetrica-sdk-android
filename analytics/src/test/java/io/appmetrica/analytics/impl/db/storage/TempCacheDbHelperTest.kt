@@ -8,9 +8,9 @@ import io.appmetrica.analytics.coreutils.internal.io.CloseableUtils.closeSafely
 import io.appmetrica.analytics.coreutils.internal.time.SystemTimeProvider
 import io.appmetrica.analytics.impl.db.connectors.DBConnector
 import io.appmetrica.analytics.impl.db.constants.TempCacheTable
-import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.LogRule
-import io.appmetrica.analytics.testutils.constructionRule
+import io.appmetrica.gradle.androidtestutils.rules.LogRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.rules.MockedConstructionRule.Companion.constructionRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Rule
 import org.junit.Test

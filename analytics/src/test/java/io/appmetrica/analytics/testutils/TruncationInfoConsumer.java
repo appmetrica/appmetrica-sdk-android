@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.testutils;
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
 import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedInfo;
+import io.appmetrica.gradle.testutils.assertions.ObjectPropertyAssertions;
 import java.util.function.Consumer;
 
 public class TruncationInfoConsumer implements Consumer<ObjectPropertyAssertions<BytesTruncatedInfo>> {

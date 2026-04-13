@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.db;
 
 import io.appmetrica.analytics.impl.db.constants.Constants;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import java.util.AbstractMap;
 import java.util.List;
 import org.junit.Test;

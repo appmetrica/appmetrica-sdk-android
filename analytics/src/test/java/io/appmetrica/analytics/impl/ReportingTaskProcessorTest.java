@@ -4,7 +4,7 @@ import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.impl.request.ReportRequestConfig;
 import io.appmetrica.analytics.impl.startup.executor.StartupExecutor;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import java.util.concurrent.TimeUnit;
 import org.junit.Before;

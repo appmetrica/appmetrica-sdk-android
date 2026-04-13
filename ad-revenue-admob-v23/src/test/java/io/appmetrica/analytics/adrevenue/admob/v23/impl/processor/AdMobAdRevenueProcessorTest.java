@@ -2,8 +2,8 @@ package io.appmetrica.analytics.adrevenue.admob.v23.impl.processor;
 
 import io.appmetrica.analytics.adrevenue.admob.v23.impl.AdRevenueConverter;
 import io.appmetrica.analytics.modulesapi.internal.client.ClientContext;
-import io.appmetrica.analytics.testutils.CommonTest;
-import io.appmetrica.analytics.testutils.MockedConstructionRule;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.rules.MockedConstructionRule;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;

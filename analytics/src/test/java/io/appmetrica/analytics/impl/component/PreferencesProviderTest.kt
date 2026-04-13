@@ -6,8 +6,8 @@ import io.appmetrica.analytics.impl.component.ComponentUnitFieldsFactory.Prefere
 import io.appmetrica.analytics.impl.db.IKeyValueTableDbHelper
 import io.appmetrica.analytics.impl.db.preferences.PreferencesComponentDbStorage
 import io.appmetrica.analytics.impl.db.storage.ServiceStorageFactory
-import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
+import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Rule
 import org.junit.Test

@@ -3,8 +3,8 @@ package io.appmetrica.analytics.impl.preloadinfo
 import io.appmetrica.analytics.impl.ContentProviderHelper
 import io.appmetrica.analytics.impl.clids.ClidsDataParser
 import io.appmetrica.analytics.impl.clids.ClidsDataSaver
-import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.MockedConstructionRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.rules.MockedConstructionRule
 import org.assertj.core.api.SoftAssertions
 import org.junit.Rule
 import org.junit.Test

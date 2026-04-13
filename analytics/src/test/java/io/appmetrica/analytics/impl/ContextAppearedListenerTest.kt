@@ -4,7 +4,7 @@ import android.app.Activity
 import android.content.Context
 import io.appmetrica.analytics.coreapi.internal.lifecycle.ActivityEvent
 import io.appmetrica.analytics.coreapi.internal.lifecycle.ActivityLifecycleListener
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
 import org.junit.Before
 import org.junit.Test
 import org.mockito.ArgumentMatchers.any

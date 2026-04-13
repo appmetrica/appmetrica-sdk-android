@@ -6,8 +6,8 @@ import android.content.IntentFilter;
 import io.appmetrica.analytics.coreapi.internal.backport.Consumer;
 import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor;
 import io.appmetrica.analytics.impl.utils.BackgroundBroadcastReceiver;
-import io.appmetrica.analytics.testutils.CommonTest;
-import io.appmetrica.analytics.testutils.ContextRule;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.androidtestutils.rules.ContextRule;
 import io.appmetrica.analytics.testutils.MockProvider;
 
 import static org.assertj.core.api.Assertions.assertThat;

@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl;
 import io.appmetrica.analytics.ModuleEvent;
 import io.appmetrica.analytics.impl.service.AppMetricaServiceDataReporter;
 import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
-import io.appmetrica.analytics.testutils.MockedStaticRule;
+import io.appmetrica.gradle.testutils.rules.MockedStaticRule;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;

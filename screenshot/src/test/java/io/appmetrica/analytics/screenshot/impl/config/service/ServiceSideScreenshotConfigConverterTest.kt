@@ -4,9 +4,9 @@ import io.appmetrica.analytics.protobuf.nano.MessageNano
 import io.appmetrica.analytics.screenshot.impl.RemoteScreenshotConfigProto
 import io.appmetrica.analytics.screenshot.impl.config.service.converter.ScreenshotConfigProtoConverter
 import io.appmetrica.analytics.screenshot.impl.config.service.model.ServiceSideScreenshotConfig
-import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.on
-import io.appmetrica.analytics.testutils.staticRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.rules.MockedStaticRule.Companion.on
+import io.appmetrica.gradle.testutils.rules.MockedStaticRule.Companion.staticRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Rule
 import org.junit.Test

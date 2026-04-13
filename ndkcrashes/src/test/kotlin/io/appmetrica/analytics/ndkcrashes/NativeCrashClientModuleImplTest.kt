@@ -10,11 +10,11 @@ import io.appmetrica.analytics.ndkcrashes.impl.utils.AbiResolver
 import io.appmetrica.analytics.ndkcrashes.impl.utils.PackagePaths
 import io.appmetrica.analytics.ndkcrashes.jni.core.NativeCrashCoreJniWrapper
 import io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrashClientConfig
-import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.constructionRule
-import io.appmetrica.analytics.testutils.mockFile
-import io.appmetrica.analytics.testutils.on
-import io.appmetrica.analytics.testutils.staticRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.mock.Mocks.mockFile
+import io.appmetrica.gradle.testutils.rules.MockedConstructionRule.Companion.constructionRule
+import io.appmetrica.gradle.testutils.rules.MockedStaticRule.Companion.on
+import io.appmetrica.gradle.testutils.rules.MockedStaticRule.Companion.staticRule
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith

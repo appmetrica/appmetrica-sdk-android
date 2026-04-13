@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.db.protobuf.converter
 
 import io.appmetrica.analytics.impl.protobuf.client.DbProto
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.SoftAssertions
 import org.junit.Test
 

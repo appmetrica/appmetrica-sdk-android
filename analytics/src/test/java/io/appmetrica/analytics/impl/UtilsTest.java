@@ -13,7 +13,7 @@ import io.appmetrica.analytics.impl.utils.StartupUtils;
 import io.appmetrica.analytics.impl.utils.limitation.StringByBytesTrimmer;
 import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
 import io.appmetrica.analytics.networktasks.internal.NetworkTask;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;

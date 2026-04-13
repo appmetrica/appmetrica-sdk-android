@@ -4,11 +4,11 @@ import com.applovin.mediation.MaxAd
 import com.applovin.mediation.MaxAdFormat
 import com.applovin.sdk.AppLovinSdk
 import com.applovin.sdk.AppLovinSdkConfiguration
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
 import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.AdRevenueConstants
 import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdRevenue
 import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdType
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.assertions.Assertions.ObjectPropertyAssertions
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.mockito.kotlin.doReturn

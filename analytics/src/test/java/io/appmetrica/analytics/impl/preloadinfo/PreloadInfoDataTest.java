@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.impl.preloadinfo;
 
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -10,7 +11,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class PreloadInfoDataTest extends CommonTest {
@@ -31,7 +31,7 @@ public class PreloadInfoDataTest extends CommonTest {
     public void constructorFilled() throws Exception {
         List<PreloadInfoData.Candidate> candidates = Arrays.asList(firstCandidate, secondCandidate);
         PreloadInfoData data = new PreloadInfoData(chosenState, candidates);
-        ObjectPropertyAssertions(data)
+        Assertions.INSTANCE.ObjectPropertyAssertions(data)
             .checkField("chosenPreloadInfo", chosenState)
             .checkField("candidates", candidates, true)
             .checkAll();
@@ -40,7 +40,7 @@ public class PreloadInfoDataTest extends CommonTest {
     @Test
     public void constructorEmpty() throws Exception {
         PreloadInfoData data = new PreloadInfoData(chosenState, Collections.emptyList());
-        ObjectPropertyAssertions(data)
+        Assertions.INSTANCE.ObjectPropertyAssertions(data)
             .checkField("chosenPreloadInfo", chosenState)
             .checkField("candidates", new ArrayList<PreloadInfoData>())
             .checkAll();

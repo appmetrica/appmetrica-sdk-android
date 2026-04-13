@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.component.remarketing;
 
 import io.appmetrica.analytics.impl.FirstOccurrenceStatus;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import java.util.Set;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.Before;

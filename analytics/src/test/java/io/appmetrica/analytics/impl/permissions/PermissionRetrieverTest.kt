@@ -3,8 +3,8 @@ package io.appmetrica.analytics.impl.permissions
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import io.appmetrica.analytics.coreapi.internal.permission.PermissionState
-import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.ContextRule
+import io.appmetrica.gradle.androidtestutils.rules.ContextRule
+import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.tuple
 import org.junit.Before

@@ -4,8 +4,8 @@ import android.content.Intent
 import android.content.res.Configuration
 import io.appmetrica.analytics.impl.service.AppMetricaCoreServiceCallback
 import io.appmetrica.analytics.impl.service.AppMetricaServiceProxy
-import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.constructionRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.rules.MockedConstructionRule.Companion.constructionRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Rule
 import org.junit.Test

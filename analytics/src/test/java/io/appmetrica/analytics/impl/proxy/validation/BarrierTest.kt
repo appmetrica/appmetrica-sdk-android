@@ -19,7 +19,7 @@ import io.appmetrica.analytics.ValidationException
 import io.appmetrica.analytics.ecommerce.ECommerceEvent
 import io.appmetrica.analytics.impl.proxy.AppMetricaFacadeProvider
 import io.appmetrica.analytics.profile.UserProfile
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.mockito.kotlin.doReturn

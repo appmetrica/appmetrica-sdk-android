@@ -1,17 +1,17 @@
 package io.appmetrica.analytics.impl.db.state.converter;
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
 import io.appmetrica.analytics.impl.OptionalBoolConverter;
 import io.appmetrica.analytics.impl.protobuf.client.StartupStateProtobuf;
 import io.appmetrica.analytics.impl.startup.CollectingFlags;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
+import io.appmetrica.gradle.testutils.assertions.ObjectPropertyAssertions;
 import java.util.Random;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.mockito.Mockito.when;
 
 public class FlagsConverterTest extends CommonTest {
@@ -59,7 +59,7 @@ public class FlagsConverterTest extends CommonTest {
     public void testToProto() throws Exception {
         StartupStateProtobuf.StartupState.Flags proto = mFlagsConverter.fromModel(mModelCollectingFlags);
         ObjectPropertyAssertions<StartupStateProtobuf.StartupState.Flags> assertions =
-            ObjectPropertyAssertions(proto)
+            Assertions.INSTANCE.ObjectPropertyAssertions(proto)
                 .withFinalFieldOnly(false);
 
         assertions.checkField("permissionsCollectingEnabled", mPermissionsCollectingEnabled);
@@ -76,7 +76,7 @@ public class FlagsConverterTest extends CommonTest {
     public void testToModel() throws Exception {
         CollectingFlags model = mFlagsConverter.toModel(mProtoFlags);
         ObjectPropertyAssertions<CollectingFlags> assertions =
-            ObjectPropertyAssertions(model)
+            Assertions.INSTANCE.ObjectPropertyAssertions(model)
                 .withFinalFieldOnly(false);
 
         assertions.checkField("permissionsCollectingEnabled", mPermissionsCollectingEnabled);
@@ -94,7 +94,7 @@ public class FlagsConverterTest extends CommonTest {
         when(optionalBoolConverter.toProto(null)).thenReturn(StartupStateProtobuf.StartupState.OPTIONAL_BOOL_UNDEFINED);
         StartupStateProtobuf.StartupState.Flags proto = mFlagsConverter.fromModel(new CollectingFlags.CollectingFlagsBuilder().build());
         ObjectPropertyAssertions<StartupStateProtobuf.StartupState.Flags> assertions =
-            ObjectPropertyAssertions(proto)
+            Assertions.INSTANCE.ObjectPropertyAssertions(proto)
                 .withFinalFieldOnly(false);
 
         assertions.checkField("permissionsCollectingEnabled", false);
@@ -112,7 +112,7 @@ public class FlagsConverterTest extends CommonTest {
         when(optionalBoolConverter.toModel(StartupStateProtobuf.StartupState.OPTIONAL_BOOL_UNDEFINED)).thenReturn(null);
         CollectingFlags model = mFlagsConverter.toModel(new StartupStateProtobuf.StartupState.Flags());
         ObjectPropertyAssertions<CollectingFlags> assertions =
-            ObjectPropertyAssertions(model)
+            Assertions.INSTANCE.ObjectPropertyAssertions(model)
                 .withFinalFieldOnly(false);
         assertions.checkField("permissionsCollectingEnabled", false);
         assertions.checkField("featuresCollectingEnabled", false);

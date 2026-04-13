@@ -17,7 +17,7 @@ import io.appmetrica.analytics.impl.startup.CacheControl
 import io.appmetrica.analytics.impl.startup.CollectingFlags
 import io.appmetrica.analytics.impl.startup.StatSending
 import io.appmetrica.analytics.internal.IdentifiersResult
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
 import nl.jqno.equalsverifier.EqualsVerifier
 import org.junit.Test
 import org.junit.runner.RunWith

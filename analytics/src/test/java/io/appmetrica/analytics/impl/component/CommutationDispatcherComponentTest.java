@@ -28,7 +28,7 @@ import io.appmetrica.analytics.impl.startup.StartupUnit;
 import io.appmetrica.analytics.impl.utils.StartupUtils;
 import io.appmetrica.analytics.internal.CounterConfigurationReporterType;
 import io.appmetrica.analytics.protobuf.nano.InvalidProtocolBufferNanoException;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import io.appmetrica.analytics.testutils.TestUtils;
 import java.util.Arrays;

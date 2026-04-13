@@ -1,9 +1,9 @@
 package io.appmetrica.analytics.networkokhttp.impl
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
 import io.appmetrica.analytics.networkapi.NetworkClientSettings
 import io.appmetrica.analytics.networkapi.Request
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.assertions.Assertions.ObjectPropertyAssertions
 import okhttp3.OkHttpClient
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer

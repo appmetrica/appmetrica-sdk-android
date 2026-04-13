@@ -4,7 +4,7 @@ import io.appmetrica.analytics.impl.db.state.converter.BodyDecoder;
 import io.appmetrica.analytics.impl.startup.parsing.StartupParser;
 import io.appmetrica.analytics.impl.startup.parsing.StartupResult;
 import io.appmetrica.analytics.networktasks.internal.ResponseDataHolder;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;

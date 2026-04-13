@@ -16,7 +16,7 @@ import io.appmetrica.analytics.coreapi.internal.model.SdkEnvironment;
 import io.appmetrica.analytics.coreapi.internal.model.SdkInfo;
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.SdkEnvironmentProvider;
 import io.appmetrica.analytics.coreutils.internal.system.ConstantDeviceInfo;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import java.util.UUID;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.Before;

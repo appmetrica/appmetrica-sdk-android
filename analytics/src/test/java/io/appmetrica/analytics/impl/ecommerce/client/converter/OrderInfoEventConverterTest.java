@@ -1,6 +1,5 @@
 package io.appmetrica.analytics.impl.ecommerce.client.converter;
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
 import io.appmetrica.analytics.impl.ecommerce.client.model.CartItemWrapper;
 import io.appmetrica.analytics.impl.ecommerce.client.model.OrderInfoEvent;
 import io.appmetrica.analytics.impl.ecommerce.client.model.OrderWrapper;
@@ -9,8 +8,10 @@ import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedInfo;
 import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedProvider;
 import io.appmetrica.analytics.impl.utils.limitation.TrimmingResult;
 import io.appmetrica.analytics.impl.utils.limitation.hierarchical.HierarchicalStringTrimmer;
-import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.TruncationInfoConsumer;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
+import io.appmetrica.gradle.testutils.assertions.ObjectPropertyAssertions;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -23,7 +24,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -121,7 +121,7 @@ public class OrderInfoEventConverterTest extends CommonTest {
     public void constructor() throws Exception {
         orderInfoEventConverter = new OrderInfoEventConverter();
 
-        ObjectPropertyAssertions(orderInfoEventConverter)
+        Assertions.INSTANCE.ObjectPropertyAssertions(orderInfoEventConverter)
             .withPrivateFields(true)
             .checkFieldNonNull("payloadConverter")
             .checkFieldNonNull("cartItemConverter")
@@ -159,7 +159,7 @@ public class OrderInfoEventConverterTest extends CommonTest {
         assertThat(results.size()).isEqualTo(1);
 
         ObjectPropertyAssertions<Result<Ecommerce.ECommerceEvent, BytesTruncatedProvider>> assertions =
-            ObjectPropertyAssertions(results.get(0));
+            Assertions.INSTANCE.ObjectPropertyAssertions(results.get(0));
 
         assertions.checkFieldRecursively(
             "metaInfo",
@@ -299,7 +299,7 @@ public class OrderInfoEventConverterTest extends CommonTest {
                 @Override
                 public boolean test(Result<Ecommerce.ECommerceEvent, BytesTruncatedProvider> result) {
                     ObjectPropertyAssertions<Result<Ecommerce.ECommerceEvent, BytesTruncatedProvider>> assertions =
-                        ObjectPropertyAssertions(
+                        Assertions.INSTANCE.ObjectPropertyAssertions(
                             result);
 
                     try {

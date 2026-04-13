@@ -3,8 +3,8 @@ package io.appmetrica.analytics.impl.profile
 import io.appmetrica.analytics.impl.utils.limitation.Trimmer
 import io.appmetrica.analytics.impl.utils.validation.Validator
 import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger
-import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.constructionRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.rules.MockedConstructionRule.Companion.constructionRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Rule
 import org.junit.Test

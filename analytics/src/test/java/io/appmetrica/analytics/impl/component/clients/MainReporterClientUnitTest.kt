@@ -12,8 +12,8 @@ import io.appmetrica.analytics.impl.component.MainReporterComponentUnit
 import io.appmetrica.analytics.impl.component.RegularDispatcherComponent
 import io.appmetrica.analytics.impl.request.StartupArgumentsTest
 import io.appmetrica.analytics.internal.CounterConfiguration
-import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
+import io.appmetrica.gradle.testutils.CommonTest
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.kotlin.mock

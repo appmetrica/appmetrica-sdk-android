@@ -1,14 +1,15 @@
 package io.appmetrica.analytics.impl.ecommerce.client.converter;
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
 import io.appmetrica.analytics.impl.ecommerce.client.model.ProductWrapper;
 import io.appmetrica.analytics.impl.ecommerce.client.model.ScreenWrapper;
 import io.appmetrica.analytics.impl.ecommerce.client.model.ShownProductCardInfoEvent;
 import io.appmetrica.analytics.impl.protobuf.backend.Ecommerce;
 import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedInfo;
 import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedProvider;
-import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.TruncationInfoConsumer;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
+import io.appmetrica.gradle.testutils.assertions.ObjectPropertyAssertions;
 import java.util.Collections;
 import java.util.List;
 import org.junit.Before;
@@ -16,7 +17,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
@@ -66,7 +66,7 @@ public class ShownProductCardInfoEventConverterTest extends CommonTest {
         shownProductCardInfoEventConverter = new ShownProductCardInfoEventConverter();
 
         ObjectPropertyAssertions<ShownProductCardInfoEventConverter> assertions =
-            ObjectPropertyAssertions(shownProductCardInfoEventConverter)
+            Assertions.INSTANCE.ObjectPropertyAssertions(shownProductCardInfoEventConverter)
                 .withPrivateFields(true);
 
         assertions.checkFieldNonNull("screenConverter");
@@ -89,7 +89,7 @@ public class ShownProductCardInfoEventConverterTest extends CommonTest {
 
         assertThat(protos.size()).isEqualTo(1);
 
-        ObjectPropertyAssertions(protos.get(0))
+        Assertions.INSTANCE.ObjectPropertyAssertions(protos.get(0))
             .checkFieldRecursively(
                 "metaInfo",
                 new TruncationInfoConsumer(totalBytesTruncated)

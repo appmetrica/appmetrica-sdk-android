@@ -5,8 +5,8 @@ import io.appmetrica.analytics.appsetid.internal.AppSetIdListener
 import io.appmetrica.analytics.appsetid.internal.IAppSetIdRetriever
 import io.appmetrica.analytics.coreapi.internal.identifiers.AppSetId
 import io.appmetrica.analytics.coreapi.internal.identifiers.AppSetIdScope
-import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.ContextRule
+import io.appmetrica.gradle.androidtestutils.rules.ContextRule
+import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Rule
 import org.junit.Test

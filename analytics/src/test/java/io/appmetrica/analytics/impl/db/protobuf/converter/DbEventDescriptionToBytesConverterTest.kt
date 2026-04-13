@@ -4,8 +4,8 @@ import io.appmetrica.analytics.impl.db.event.DbEventModel
 import io.appmetrica.analytics.impl.protobuf.client.DbProto
 import io.appmetrica.analytics.protobuf.nano.InvalidProtocolBufferNanoException
 import io.appmetrica.analytics.protobuf.nano.MessageNano
-import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.MockedStaticRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.rules.MockedStaticRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Rule
 import org.junit.Test

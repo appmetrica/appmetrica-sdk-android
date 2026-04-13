@@ -1,7 +1,6 @@
 package io.appmetrica.analytics.impl.db.event
 
 import android.content.Context
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
 import io.appmetrica.analytics.impl.AppEnvironment
 import io.appmetrica.analytics.impl.CounterReport
 import io.appmetrica.analytics.impl.EventSource
@@ -16,9 +15,11 @@ import io.appmetrica.analytics.impl.db.state.converter.EventExtrasConverter
 import io.appmetrica.analytics.impl.request.ReportRequestConfig
 import io.appmetrica.analytics.impl.utils.encryption.EncryptedCounterReport
 import io.appmetrica.analytics.impl.utils.encryption.EventEncryptionMode
-import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
-import io.appmetrica.analytics.testutils.MockedStaticRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.assertions.Assertions.ObjectPropertyAssertions
+import io.appmetrica.gradle.testutils.assertions.ObjectPropertyAssertions
+import io.appmetrica.gradle.testutils.rules.MockedStaticRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Rule

@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl;
 import android.content.ContentValues;
 import android.content.Context;
 import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoState;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import org.json.JSONException;
 import org.junit.Before;

@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.startup.uuid
 
 import android.os.Build
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith

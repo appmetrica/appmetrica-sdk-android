@@ -3,13 +3,13 @@ package io.appmetrica.analytics.apphud.impl;
 import io.appmetrica.analytics.apphud.impl.config.client.ClientApphudConfig;
 import io.appmetrica.analytics.modulesapi.internal.client.ClientStorageProvider;
 import io.appmetrica.analytics.modulesapi.internal.common.ModulePreferences;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
+import io.appmetrica.gradle.testutils.CommonTest;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -40,7 +40,7 @@ public class ClientApphudConfigStorageTest extends CommonTest {
         when(preferences.getString(Constants.ClientConfig.UUID_KEY, null)).thenReturn(uuid);
 
         ClientApphudConfig config = storage.load();
-        ObjectPropertyAssertions(config)
+        Assertions.INSTANCE.ObjectPropertyAssertions(config)
             .withPrivateFields(true)
             .checkField("apiKey", apiKey)
             .checkField("deviceId", deviceId)

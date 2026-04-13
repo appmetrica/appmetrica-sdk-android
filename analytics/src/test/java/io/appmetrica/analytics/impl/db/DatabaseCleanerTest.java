@@ -18,9 +18,9 @@ import io.appmetrica.analytics.impl.selfreporting.AppMetricaSelfReportFacade;
 import io.appmetrica.analytics.impl.selfreporting.SelfReporterWrapper;
 import io.appmetrica.analytics.internal.CounterConfigurationReporterType;
 import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
-import io.appmetrica.analytics.testutils.LogRule;
+import io.appmetrica.gradle.androidtestutils.rules.LogRule;
 import java.nio.charset.StandardCharsets;
 import java.util.function.Function;
 

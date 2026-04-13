@@ -10,11 +10,11 @@ import io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrashHandler
 import io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrashServiceConfig
 import io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrashServiceModule
 import io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrashServiceModuleDummy
-import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.constructionRule
-import io.appmetrica.analytics.testutils.mockFile
-import io.appmetrica.analytics.testutils.on
-import io.appmetrica.analytics.testutils.staticRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.mock.Mocks.mockFile
+import io.appmetrica.gradle.testutils.rules.MockedConstructionRule.Companion.constructionRule
+import io.appmetrica.gradle.testutils.rules.MockedStaticRule.Companion.on
+import io.appmetrica.gradle.testutils.rules.MockedStaticRule.Companion.staticRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Rule
 import org.junit.Test

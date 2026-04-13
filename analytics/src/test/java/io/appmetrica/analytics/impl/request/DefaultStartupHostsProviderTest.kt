@@ -2,9 +2,9 @@ package io.appmetrica.analytics.impl.request
 
 import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.StringArrayResourceRetriever
-import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.ConstructionArgumentCaptor
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.mock.ConstructionArgumentCaptor
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Rule
 import org.junit.Test

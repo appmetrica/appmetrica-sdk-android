@@ -2,8 +2,8 @@ package io.appmetrica.analytics.impl.core
 
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.ActivationBarrierCallback
 import io.appmetrica.analytics.impl.GlobalServiceLocator
-import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
+import io.appmetrica.gradle.testutils.CommonTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

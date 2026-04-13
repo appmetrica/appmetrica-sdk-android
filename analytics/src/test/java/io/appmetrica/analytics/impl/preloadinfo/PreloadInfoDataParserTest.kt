@@ -1,9 +1,9 @@
 package io.appmetrica.analytics.impl.preloadinfo
 
 import android.content.ContentValues
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
 import io.appmetrica.analytics.impl.DistributionSource
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.assertions.Assertions.ObjectPropertyAssertions
 import org.assertj.core.api.Assertions.assertThat
 import org.json.JSONObject
 import org.junit.Test

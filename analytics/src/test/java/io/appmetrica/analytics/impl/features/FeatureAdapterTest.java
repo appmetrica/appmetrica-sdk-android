@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.features;
 
 import android.content.pm.FeatureInfo;
 import android.os.Build;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.TestUtils;
 import java.util.UUID;
 import org.junit.After;

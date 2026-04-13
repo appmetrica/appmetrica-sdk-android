@@ -1,17 +1,17 @@
 package io.appmetrica.analytics.impl.preloadinfo;
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
-import io.appmetrica.analytics.assertions.ProtoObjectPropertyAssertions;
+import io.appmetrica.gradle.testutils.assertions.ProtoObjectPropertyAssertions;
 import io.appmetrica.analytics.impl.DistributionSource;
 import io.appmetrica.analytics.impl.protobuf.client.PreloadInfoProto;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
+import io.appmetrica.gradle.testutils.assertions.ObjectPropertyAssertions;
 
 public class PreloadInfoStateConverterTest extends CommonTest {
 
@@ -82,7 +82,7 @@ public class PreloadInfoStateConverterTest extends CommonTest {
         nano.preloadInfoAutoTracking = true;
         nano.source = PreloadInfoProto.PreloadInfoData.RETAIL;
         PreloadInfoState state = mConverter.toModel(nano);
-        ObjectPropertyAssertions<PreloadInfoState> assertions = ObjectPropertyAssertions(state)
+        ObjectPropertyAssertions<PreloadInfoState> assertions = Assertions.INSTANCE.ObjectPropertyAssertions(state)
             .withIgnoredFields("additionalParameters");
         assertions.checkField("trackingId", mTrackingId);
         assertions.checkField("wasSet", true);
@@ -96,7 +96,7 @@ public class PreloadInfoStateConverterTest extends CommonTest {
     public void toModelEmpty() throws Exception {
         PreloadInfoProto.PreloadInfoData.PreloadInfo nano = new PreloadInfoProto.PreloadInfoData.PreloadInfo();
         PreloadInfoState state = mConverter.toModel(nano);
-        ObjectPropertyAssertions<PreloadInfoState> assertions = ObjectPropertyAssertions(state)
+        ObjectPropertyAssertions<PreloadInfoState> assertions = Assertions.INSTANCE.ObjectPropertyAssertions(state)
             .withIgnoredFields("additionalParameters");
         assertions.checkField("trackingId", "");
         assertions.checkField("wasSet", false);
@@ -115,7 +115,7 @@ public class PreloadInfoStateConverterTest extends CommonTest {
         nano.preloadInfoAutoTracking = true;
         nano.source = PreloadInfoProto.PreloadInfoData.RETAIL;
         PreloadInfoState state = mConverter.toModel(nano);
-        ObjectPropertyAssertions<PreloadInfoState> assertions = ObjectPropertyAssertions(state)
+        ObjectPropertyAssertions<PreloadInfoState> assertions = Assertions.INSTANCE.ObjectPropertyAssertions(state)
             .withIgnoredFields("additionalParameters");
         assertions.checkField("trackingId", mTrackingId);
         assertions.checkField("wasSet", true);

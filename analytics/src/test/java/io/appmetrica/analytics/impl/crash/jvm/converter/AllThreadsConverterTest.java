@@ -1,10 +1,11 @@
 package io.appmetrica.analytics.impl.crash.jvm.converter;
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
 import io.appmetrica.analytics.impl.crash.jvm.client.AllThreads;
 import io.appmetrica.analytics.impl.crash.jvm.client.ThreadState;
 import io.appmetrica.analytics.impl.protobuf.backend.CrashAndroid;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
+import io.appmetrica.gradle.testutils.assertions.ObjectPropertyAssertions;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.Before;
@@ -13,7 +14,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -52,7 +52,7 @@ public class AllThreadsConverterTest extends CommonTest {
         doReturn(thread2).when(threadStateConverter).fromModel(threadState2);
         doReturn(thread3).when(threadStateConverter).fromModel(threadState3);
 
-        ObjectPropertyAssertions<CrashAndroid.AllThreads> assertions = ObjectPropertyAssertions(allThreadsConverter.fromModel(allThreads));
+        ObjectPropertyAssertions<CrashAndroid.AllThreads> assertions = Assertions.INSTANCE.ObjectPropertyAssertions(allThreadsConverter.fromModel(allThreads));
         assertions.withFinalFieldOnly(false)
             .checkField("affectedThread", threadAffected)
             .checkField("threads", new CrashAndroid.Thread[]{thread1, thread2, thread3})
@@ -72,7 +72,7 @@ public class AllThreadsConverterTest extends CommonTest {
             null
         );
 
-        ObjectPropertyAssertions<CrashAndroid.AllThreads> assertions = ObjectPropertyAssertions(allThreadsConverter.fromModel(allThreads));
+        ObjectPropertyAssertions<CrashAndroid.AllThreads> assertions = Assertions.INSTANCE.ObjectPropertyAssertions(allThreadsConverter.fromModel(allThreads));
         assertions.withFinalFieldOnly(false)
             .checkField("affectedThread", (Object) null)
             .checkField("threads", new CrashAndroid.Thread[0])

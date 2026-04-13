@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.id;
 
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import org.junit.Test;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;

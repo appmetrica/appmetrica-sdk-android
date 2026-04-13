@@ -1,7 +1,6 @@
 package io.appmetrica.analytics.impl.preparer
 
 import android.content.ContentValues
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
 import io.appmetrica.analytics.impl.EventSource
 import io.appmetrica.analytics.impl.FirstOccurrenceStatus
 import io.appmetrica.analytics.impl.InternalEvents
@@ -10,8 +9,9 @@ import io.appmetrica.analytics.impl.protobuf.backend.EventProto.ReportMessage
 import io.appmetrica.analytics.impl.protobuf.client.EventExtrasProto.EventExtras
 import io.appmetrica.analytics.impl.request.ReportRequestConfig
 import io.appmetrica.analytics.impl.utils.encryption.EventEncryptionMode
-import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.assertions.Assertions.ObjectPropertyAssertions
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Rule

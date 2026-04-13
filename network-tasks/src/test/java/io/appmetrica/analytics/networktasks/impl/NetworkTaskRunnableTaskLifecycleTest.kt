@@ -5,7 +5,7 @@ import io.appmetrica.analytics.coreapi.internal.io.IExecutionPolicy
 import io.appmetrica.analytics.networktasks.internal.ExponentialBackoffPolicy
 import io.appmetrica.analytics.networktasks.internal.NetworkTask
 import io.appmetrica.analytics.networktasks.internal.RetryPolicyConfig
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito

@@ -7,9 +7,9 @@ import io.appmetrica.analytics.impl.component.CommonArguments
 import io.appmetrica.analytics.impl.component.clients.ClientDescription
 import io.appmetrica.analytics.impl.component.clients.ClientRepository
 import io.appmetrica.analytics.impl.component.clients.ClientUnit
-import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
-import io.appmetrica.analytics.testutils.constructionRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.rules.MockedConstructionRule.Companion.constructionRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Rule

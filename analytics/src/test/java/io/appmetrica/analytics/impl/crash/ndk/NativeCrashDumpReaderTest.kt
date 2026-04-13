@@ -5,8 +5,8 @@ import io.appmetrica.analytics.impl.IOUtils
 import io.appmetrica.analytics.impl.crash.jvm.converter.NativeCrashConverter
 import io.appmetrica.analytics.impl.protobuf.backend.CrashAndroid.Crash
 import io.appmetrica.analytics.protobuf.nano.MessageNano
-import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.staticRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.rules.MockedStaticRule.Companion.staticRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Rule
 import org.junit.Test

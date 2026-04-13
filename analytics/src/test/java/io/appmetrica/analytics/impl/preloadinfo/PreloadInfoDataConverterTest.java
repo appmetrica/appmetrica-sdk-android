@@ -1,8 +1,9 @@
 package io.appmetrica.analytics.impl.preloadinfo;
 
-import io.appmetrica.analytics.assertions.ProtoObjectPropertyAssertions;
 import io.appmetrica.analytics.impl.protobuf.client.PreloadInfoProto;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
+import io.appmetrica.gradle.testutils.assertions.ProtoObjectPropertyAssertions;
 import java.util.ArrayList;
 import java.util.Arrays;
 import org.junit.Before;
@@ -11,7 +12,6 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
@@ -55,7 +55,7 @@ public class PreloadInfoDataConverterTest extends CommonTest {
         proto.candidates[0] = firstProtoCandidate;
         proto.candidates[1] = secondProtoCandidate;
 
-        ObjectPropertyAssertions(converter.toModel(proto))
+        Assertions.INSTANCE.ObjectPropertyAssertions(converter.toModel(proto))
             .checkField("chosenPreloadInfo", modelState)
             .checkField("candidates", Arrays.asList(firstModelCandidate, secondModelCandidate), true)
             .checkAll();
@@ -65,7 +65,7 @@ public class PreloadInfoDataConverterTest extends CommonTest {
     public void toModelEmpty() throws Exception {
         when(stateConverter.toModel(any(PreloadInfoProto.PreloadInfoData.PreloadInfo.class))).thenReturn(modelState);
         PreloadInfoProto.PreloadInfoData proto = new PreloadInfoProto.PreloadInfoData();
-        ObjectPropertyAssertions(converter.toModel(proto))
+        Assertions.INSTANCE.ObjectPropertyAssertions(converter.toModel(proto))
             .checkField("chosenPreloadInfo", modelState)
             .checkField("candidates", new ArrayList<PreloadInfoData.Candidate>())
             .checkAll();

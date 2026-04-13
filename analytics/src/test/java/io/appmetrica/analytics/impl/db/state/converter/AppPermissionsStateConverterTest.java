@@ -4,7 +4,7 @@ import io.appmetrica.analytics.coreapi.internal.permission.PermissionState;
 import io.appmetrica.analytics.impl.BackgroundRestrictionsState;
 import io.appmetrica.analytics.impl.permissions.AppPermissionsState;
 import io.appmetrica.analytics.impl.protobuf.client.AppPermissionsStateProtobuf;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import java.util.ArrayList;
 import java.util.Arrays;
 import org.junit.Before;

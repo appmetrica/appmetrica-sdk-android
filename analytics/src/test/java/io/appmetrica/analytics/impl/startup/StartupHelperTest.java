@@ -8,7 +8,7 @@ import io.appmetrica.analytics.StartupParamsCallback;
 import io.appmetrica.analytics.impl.DataResultReceiver;
 import io.appmetrica.analytics.impl.FeaturesResult;
 import io.appmetrica.analytics.impl.ReportsHandler;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;

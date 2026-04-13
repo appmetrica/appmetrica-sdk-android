@@ -5,7 +5,7 @@ import io.appmetrica.analytics.impl.component.CommutationDispatcherComponent;
 import io.appmetrica.analytics.impl.component.clients.CommutationClientUnit;
 import io.appmetrica.analytics.impl.component.processor.EventProcessingStrategy;
 import io.appmetrica.analytics.impl.component.processor.ProcessingStrategyFactory;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import java.util.Collections;
 import org.junit.Before;
 import org.junit.Test;

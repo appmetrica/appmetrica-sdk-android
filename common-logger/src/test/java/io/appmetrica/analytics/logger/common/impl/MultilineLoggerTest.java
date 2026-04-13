@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.logger.common.impl;
 
 import androidx.annotation.NonNull;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.Before;

@@ -1,11 +1,11 @@
 package io.appmetrica.analytics.impl.startup
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
 import io.appmetrica.analytics.coreapi.internal.data.ProtobufStateStorage
 import io.appmetrica.analytics.impl.db.VitalCommonDataProvider
 import io.appmetrica.analytics.impl.startup.StartupStateModel.StartupStateBuilder
 import io.appmetrica.analytics.networktasks.internal.RetryPolicyConfig
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.assertions.Assertions.ObjectPropertyAssertions
 import org.junit.Before
 import org.junit.Test
 import org.mockito.kotlin.argumentCaptor

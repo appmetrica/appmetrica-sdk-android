@@ -8,8 +8,8 @@ import io.appmetrica.analytics.impl.proxy.validation.PluginsReporterBarrier
 import io.appmetrica.analytics.plugins.IPluginReporter
 import io.appmetrica.analytics.plugins.PluginErrorDetails
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule
-import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.MockedConstructionRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.rules.MockedConstructionRule
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

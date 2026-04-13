@@ -2,7 +2,7 @@ package io.appmetrica.analytics.apphudv3.impl;
 
 import com.apphud.sdk.ApphudPurchaseResult;
 import com.apphud.sdk.internal.domain.model.Rule;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;

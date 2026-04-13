@@ -2,8 +2,8 @@ package io.appmetrica.analytics.apphud.impl;
 
 import io.appmetrica.analytics.apphud.internal.ApphudWrapper;
 import io.appmetrica.analytics.coreutils.internal.reflection.ReflectionUtils;
-import io.appmetrica.analytics.testutils.CommonTest;
-import io.appmetrica.analytics.testutils.MockedStaticRule;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.rules.MockedStaticRule;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;

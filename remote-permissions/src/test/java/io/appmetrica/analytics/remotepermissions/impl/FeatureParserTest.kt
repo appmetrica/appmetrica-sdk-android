@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.remotepermissions.impl
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.assertions.Assertions.ObjectPropertyAssertions
 import org.json.JSONArray
 import org.json.JSONObject
 import org.junit.Before

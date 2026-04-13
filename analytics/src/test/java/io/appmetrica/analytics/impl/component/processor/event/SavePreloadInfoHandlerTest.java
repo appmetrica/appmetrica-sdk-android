@@ -6,7 +6,7 @@ import io.appmetrica.analytics.impl.PreloadInfoStorage;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoState;
 import io.appmetrica.analytics.impl.request.ReportRequestConfig;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import java.util.Random;
 import org.json.JSONException;
 import org.json.JSONObject;

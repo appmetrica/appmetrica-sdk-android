@@ -1,11 +1,12 @@
 package io.appmetrica.analytics
 
 import android.location.Location
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
 import io.appmetrica.analytics.impl.VerificationConstants
 import io.appmetrica.analytics.impl.proxy.validation.ConfigChecker
-import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.constructionRule
+import io.appmetrica.gradle.androidtestutils.data.DummyLocationProvider
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.assertions.Assertions.ObjectPropertyAssertions
+import io.appmetrica.gradle.testutils.rules.MockedConstructionRule.Companion.constructionRule
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.Rule
@@ -235,8 +236,9 @@ internal class AppMetricaConfigTest : CommonTest() {
 
     @Test
     fun location() {
-        val config = defaultConfigBuilder.withLocation(TestData.TEST_LOCATION).build()
-        assertThat(config.location).isEqualTo(TestData.TEST_LOCATION)
+        val location = DummyLocationProvider.getLocation()
+        val config = defaultConfigBuilder.withLocation(location).build()
+        assertThat(config.location).isEqualTo(location)
     }
 
     @Test

@@ -1,8 +1,8 @@
 package io.appmetrica.analytics.impl.db.state.converter
 
-import io.appmetrica.analytics.assertions.ProtoObjectPropertyAssertions
 import io.appmetrica.analytics.impl.protobuf.client.StartupStateProtobuf
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.assertions.ProtoObjectPropertyAssertions
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 

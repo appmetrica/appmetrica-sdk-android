@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.db.state.converter;
 import io.appmetrica.analytics.impl.db.protobuf.AppPermissionsStateSerializer;
 import io.appmetrica.analytics.impl.protobuf.client.AppPermissionsStateProtobuf;
 import io.appmetrica.analytics.protobuf.nano.InvalidProtocolBufferNanoException;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import java.io.IOException;
 import org.junit.Test;
 

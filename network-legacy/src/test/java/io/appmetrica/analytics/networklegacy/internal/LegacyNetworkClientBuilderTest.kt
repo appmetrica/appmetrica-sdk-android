@@ -2,7 +2,7 @@ package io.appmetrica.analytics.networklegacy.internal
 
 import io.appmetrica.analytics.networkapi.NetworkClientSettings
 import io.appmetrica.analytics.networklegacy.impl.LegacyNetworkClient
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.SoftAssertions
 import org.junit.Test

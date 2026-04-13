@@ -2,8 +2,9 @@ package io.appmetrica.analytics.impl.utils.limitation.hierarchical;
 
 import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedProvider;
 import io.appmetrica.analytics.impl.utils.limitation.TrimmingResult;
-import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.TruncationInfoConsumer;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
 import java.util.Arrays;
 import java.util.Collection;
 import org.junit.Before;
@@ -11,8 +12,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
-
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 
 @RunWith(Parameterized.class)
 public class HierarchicalStringTrimmerTest extends CommonTest {
@@ -56,7 +55,7 @@ public class HierarchicalStringTrimmerTest extends CommonTest {
     public void trim() throws Exception {
         TrimmingResult<String, BytesTruncatedProvider> trimmingResult = hierarchicalStringTrimmer.trim(input);
 
-        ObjectPropertyAssertions(trimmingResult)
+        Assertions.INSTANCE.ObjectPropertyAssertions(trimmingResult)
             .checkField("value", expected)
             .checkFieldRecursively(
                 "metaInfo",

@@ -1,10 +1,10 @@
 package io.appmetrica.analytics.impl.startup;
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import org.junit.Test;
 
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
+import io.appmetrica.gradle.testutils.assertions.ObjectPropertyAssertions;
 
 public class CacheControlTest extends CommonTest {
 
@@ -15,7 +15,7 @@ public class CacheControlTest extends CommonTest {
         CacheControl cacheControl =
             new CacheControl(lastKnownLocationTtl);
 
-        ObjectPropertyAssertions<CacheControl> assertions = ObjectPropertyAssertions(cacheControl);
+        ObjectPropertyAssertions<CacheControl> assertions = Assertions.INSTANCE.ObjectPropertyAssertions(cacheControl);
         assertions.checkField("lastKnownLocationTtl", lastKnownLocationTtl);
         assertions.checkAll();
     }

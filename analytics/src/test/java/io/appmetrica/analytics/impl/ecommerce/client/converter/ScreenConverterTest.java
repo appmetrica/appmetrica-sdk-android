@@ -1,14 +1,15 @@
 package io.appmetrica.analytics.impl.ecommerce.client.converter;
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
 import io.appmetrica.analytics.impl.ecommerce.client.model.ScreenWrapper;
 import io.appmetrica.analytics.impl.protobuf.backend.Ecommerce;
 import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedInfo;
 import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedProvider;
 import io.appmetrica.analytics.impl.utils.limitation.TrimmingResult;
 import io.appmetrica.analytics.impl.utils.limitation.hierarchical.HierarchicalStringTrimmer;
-import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.TruncationInfoConsumer;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
+import io.appmetrica.gradle.testutils.assertions.ObjectPropertyAssertions;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -18,7 +19,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.Mockito.when;
 
@@ -76,7 +76,7 @@ public class ScreenConverterTest extends CommonTest {
         screenConverter = new ScreenConverter();
 
         ObjectPropertyAssertions<ScreenConverter> assertions =
-            ObjectPropertyAssertions(screenConverter)
+            Assertions.INSTANCE.ObjectPropertyAssertions(screenConverter)
                 .withPrivateFields(true);
 
         assertions.checkFieldNonNull("payloadConverter");
@@ -109,7 +109,7 @@ public class ScreenConverterTest extends CommonTest {
         Result<Ecommerce.ECommerceEvent.Screen, BytesTruncatedProvider> screenResult =
             screenConverter.fromModel(screenWrapper);
 
-        ObjectPropertyAssertions(screenResult)
+        Assertions.INSTANCE.ObjectPropertyAssertions(screenResult)
             .checkFieldRecursively(
                 "metaInfo",
                 new TruncationInfoConsumer(totalBytesTruncated)
@@ -138,7 +138,7 @@ public class ScreenConverterTest extends CommonTest {
 
         Result<Ecommerce.ECommerceEvent.Screen, BytesTruncatedProvider> result = screenConverter.fromModel(screenWrapper);
 
-        ObjectPropertyAssertions(result)
+        Assertions.INSTANCE.ObjectPropertyAssertions(result)
             .checkFieldRecursively(
                 "metaInfo",
                 new TruncationInfoConsumer(0)

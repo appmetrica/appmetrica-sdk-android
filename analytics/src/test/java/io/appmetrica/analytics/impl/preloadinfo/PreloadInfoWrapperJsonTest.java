@@ -5,7 +5,7 @@ import androidx.annotation.Nullable;
 import io.appmetrica.analytics.PreloadInfo;
 import io.appmetrica.analytics.impl.DistributionSource;
 import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import java.util.Arrays;
 import java.util.Collection;
 import org.json.JSONException;

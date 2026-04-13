@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.coreutils.internal.parsing
 
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.json.JSONArray
 import org.json.JSONObject

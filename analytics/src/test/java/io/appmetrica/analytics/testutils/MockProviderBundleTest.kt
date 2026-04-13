@@ -1,5 +1,6 @@
 package io.appmetrica.analytics.testutils
 
+import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 

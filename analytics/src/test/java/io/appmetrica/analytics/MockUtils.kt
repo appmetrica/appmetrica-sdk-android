@@ -1,6 +1,6 @@
 package io.appmetrica.analytics
 
-import io.appmetrica.analytics.testutils.RandomStringGenerator
+import io.appmetrica.gradle.testutils.data.RandomStringGenerator
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 

@@ -1,10 +1,10 @@
 package io.appmetrica.analytics.screenshot.impl.config.service.converter
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
-import io.appmetrica.analytics.assertions.ProtoObjectPropertyAssertions
 import io.appmetrica.analytics.screenshot.impl.ApiCaptorConfigProto
 import io.appmetrica.analytics.screenshot.impl.config.service.model.ServiceSideApiCaptorConfig
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.assertions.Assertions.ObjectPropertyAssertions
+import io.appmetrica.gradle.testutils.assertions.ProtoObjectPropertyAssertions
 import org.junit.Test
 
 internal class ApiCaptorConfigProtoConverterTest : CommonTest() {

@@ -13,9 +13,9 @@ import io.appmetrica.analytics.impl.attribution.ExternalAttributionFromModule
 import io.appmetrica.analytics.impl.proxy.synchronous.ModulesSynchronousStageExecutor
 import io.appmetrica.analytics.impl.proxy.validation.ModulesBarrier
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule
-import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.MockedStaticRule
-import io.appmetrica.analytics.testutils.constructionRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.rules.MockedConstructionRule.Companion.constructionRule
+import io.appmetrica.gradle.testutils.rules.MockedStaticRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Rule

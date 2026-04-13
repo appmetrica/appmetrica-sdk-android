@@ -1,9 +1,9 @@
 package io.appmetrica.analytics.impl.ecommerce;
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
 import io.appmetrica.analytics.ecommerce.ECommercePrice;
 import io.appmetrica.analytics.ecommerce.ECommerceProduct;
 import io.appmetrica.analytics.impl.ecommerce.client.model.ProductWrapper;
+import io.appmetrica.gradle.testutils.assertions.ObjectPropertyAssertions;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;

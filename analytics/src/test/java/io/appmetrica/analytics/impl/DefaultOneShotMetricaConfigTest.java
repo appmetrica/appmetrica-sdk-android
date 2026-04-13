@@ -6,8 +6,9 @@ import io.appmetrica.analytics.AppMetricaConfig;
 import io.appmetrica.analytics.PredefinedDeviceTypes;
 import io.appmetrica.analytics.PreloadInfo;
 import io.appmetrica.analytics.TestData;
-import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.MockProvider;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
@@ -16,7 +17,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.MockitoAnnotations;
 
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -58,7 +58,7 @@ public class DefaultOneShotMetricaConfigTest extends CommonTest {
     private void assertMergedValuesEqualsForConfigs(final AppMetricaConfig userConfig,
                                                     final AppMetricaConfig merged)
         throws Exception {
-        ObjectPropertyAssertions(merged)
+        Assertions.INSTANCE.ObjectPropertyAssertions(merged)
             .withIgnoredFields("anrMonitoring", "anrMonitoringTimeout", "apiKey", "appBuildNumber", "clids", "crashTransformer",
                 "customHosts", "deviceType", "dispatchPeriodSeconds", "distributionReferrer",
                 "firstActivationAsUpdate", "logs", "permissionsCollection", "preloadInfo",
@@ -399,7 +399,7 @@ public class DefaultOneShotMetricaConfigTest extends CommonTest {
         String subscriber = "subscriber";
         config.addAutoCollectedDataSubscriber(subscriber);
         config.clearAppEnvironment();
-        ObjectPropertyAssertions(config.configExtension())
+        Assertions.INSTANCE.ObjectPropertyAssertions(config.configExtension())
             .checkField("autoCollectedDataSubscribers", Collections.singletonList(subscriber))
             .checkField("needClearEnvironment", true)
             .checkAll();
@@ -407,7 +407,7 @@ public class DefaultOneShotMetricaConfigTest extends CommonTest {
 
     @Test
     public void configExtensionForDefault() {
-        ObjectPropertyAssertions(new DefaultOneShotMetricaConfig().configExtension())
+        Assertions.INSTANCE.ObjectPropertyAssertions(new DefaultOneShotMetricaConfig().configExtension())
             .checkField("autoCollectedDataSubscribers", new ArrayList<String>())
             .checkField("needClearEnvironment", false)
             .checkAll();

@@ -9,7 +9,7 @@ import io.appmetrica.analytics.billinginterface.internal.library.UtilsProvider
 import io.appmetrica.analytics.billinginterface.internal.storage.BillingInfoSender
 import io.appmetrica.analytics.billingv6.impl.UpdateBillingProgressCallback
 import io.appmetrica.analytics.coreutils.internal.executors.SafeRunnable
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito.never

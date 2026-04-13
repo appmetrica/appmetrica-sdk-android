@@ -1,10 +1,11 @@
 package io.appmetrica.analytics.impl.preloadinfo;
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
-import io.appmetrica.analytics.assertions.ProtoObjectPropertyAssertions;
 import io.appmetrica.analytics.impl.DistributionSource;
 import io.appmetrica.analytics.impl.protobuf.client.PreloadInfoProto;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
+import io.appmetrica.gradle.testutils.assertions.ObjectPropertyAssertions;
+import io.appmetrica.gradle.testutils.assertions.ProtoObjectPropertyAssertions;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Before;
@@ -13,7 +14,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.skyscreamer.jsonassert.JSONAssert;
 
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
@@ -87,7 +87,7 @@ public class PreloadInfoCandidateConverterTest extends CommonTest {
         proto.source = protoSource;
 
         PreloadInfoData.Candidate model = converter.toModel(proto);
-        ObjectPropertyAssertions<PreloadInfoData.Candidate> assertions = ObjectPropertyAssertions(model)
+        ObjectPropertyAssertions<PreloadInfoData.Candidate> assertions = Assertions.INSTANCE.ObjectPropertyAssertions(model)
             .withIgnoredFields("additionalParams");
         assertions.checkField("trackingId", trackingId);
         assertions.checkField("source", modelSource);
@@ -100,7 +100,7 @@ public class PreloadInfoCandidateConverterTest extends CommonTest {
     public void toModelDefault() throws Exception {
         PreloadInfoProto.PreloadInfoData.PreloadInfoCandidate proto = new PreloadInfoProto.PreloadInfoData.PreloadInfoCandidate();
         PreloadInfoData.Candidate model = converter.toModel(proto);
-        ObjectPropertyAssertions<PreloadInfoData.Candidate> assertions = ObjectPropertyAssertions(model)
+        ObjectPropertyAssertions<PreloadInfoData.Candidate> assertions = Assertions.INSTANCE.ObjectPropertyAssertions(model)
             .withIgnoredFields("additionalParams");
         assertions.checkField("trackingId", "");
         assertions.checkField("source", modelSource);
@@ -117,7 +117,7 @@ public class PreloadInfoCandidateConverterTest extends CommonTest {
         proto.source = protoSource;
 
         PreloadInfoData.Candidate model = converter.toModel(proto);
-        ObjectPropertyAssertions<PreloadInfoData.Candidate> assertions = ObjectPropertyAssertions(model)
+        ObjectPropertyAssertions<PreloadInfoData.Candidate> assertions = Assertions.INSTANCE.ObjectPropertyAssertions(model)
             .withIgnoredFields("additionalParams");
         assertions.checkField("trackingId", trackingId);
         assertions.checkField("source", modelSource);

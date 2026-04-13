@@ -6,7 +6,7 @@ import io.appmetrica.analytics.impl.modules.service.ServiceModulesController;
 import io.appmetrica.analytics.impl.utils.collection.HashMultimap;
 import io.appmetrica.analytics.modulesapi.internal.common.TableDescription;
 import io.appmetrica.analytics.modulesapi.internal.service.ModuleServicesDatabase;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import java.util.Arrays;
 import java.util.Collections;

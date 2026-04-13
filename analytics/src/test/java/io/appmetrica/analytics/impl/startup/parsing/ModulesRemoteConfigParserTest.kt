@@ -4,8 +4,8 @@ import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.modules.ModuleRemoteConfigController
 import io.appmetrica.analytics.impl.modules.service.ServiceModulesController
 import io.appmetrica.analytics.impl.utils.JsonHelper
-import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
+import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Rule

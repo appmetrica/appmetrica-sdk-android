@@ -11,7 +11,7 @@ import io.appmetrica.analytics.billinginterface.internal.storage.BillingInfoMana
 import io.appmetrica.analytics.billinginterface.internal.update.UpdatePolicy
 import io.appmetrica.analytics.billingv6.impl.UpdateBillingProgressCallback
 import io.appmetrica.analytics.coreutils.internal.executors.SafeRunnable
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith

@@ -10,10 +10,10 @@ import io.appmetrica.analytics.impl.AppMetricaServiceCoreImpl
 import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.SelfProcessReporter
 import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger
-import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
-import io.appmetrica.analytics.testutils.constructionRule
-import io.appmetrica.analytics.testutils.staticRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.rules.MockedConstructionRule.Companion.constructionRule
+import io.appmetrica.gradle.testutils.rules.MockedStaticRule.Companion.staticRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Rule

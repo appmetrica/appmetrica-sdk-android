@@ -1,15 +1,15 @@
 package io.appmetrica.analytics.impl.crash.jvm.converter;
 
 import android.os.Build;
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
-import io.appmetrica.analytics.assertions.ProtoObjectPropertyAssertions;
+import io.appmetrica.gradle.testutils.assertions.ObjectPropertyAssertions;
+import io.appmetrica.gradle.testutils.assertions.ProtoObjectPropertyAssertions;
 import io.appmetrica.analytics.coreutils.internal.AndroidUtils;
 import io.appmetrica.analytics.impl.crash.jvm.client.StackTraceItemInternal;
 import io.appmetrica.analytics.impl.crash.jvm.client.ThrowableModel;
 import io.appmetrica.analytics.impl.protobuf.backend.CrashAndroid;
 import io.appmetrica.analytics.protobuf.nano.MessageNano;
-import io.appmetrica.analytics.testutils.CommonTest;
-import io.appmetrica.analytics.testutils.MockedStaticRule;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.rules.MockedStaticRule;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Collections;

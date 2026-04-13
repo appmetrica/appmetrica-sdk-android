@@ -7,7 +7,7 @@ import io.appmetrica.analytics.networktasks.internal.FullUrlFormer;
 import io.appmetrica.analytics.networktasks.internal.NetworkTask;
 import io.appmetrica.analytics.networktasks.internal.RetryPolicyConfig;
 import io.appmetrica.analytics.networktasks.internal.UnderlyingNetworkTask;
-import io.appmetrica.analytics.testutils.MockedStaticRule;
+import io.appmetrica.gradle.testutils.rules.MockedStaticRule;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Executor;

@@ -7,8 +7,8 @@ import com.google.android.gms.appset.AppSetIdInfo
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import io.appmetrica.analytics.coreapi.internal.identifiers.AppSetIdScope
-import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.MockedStaticRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.rules.MockedStaticRule
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

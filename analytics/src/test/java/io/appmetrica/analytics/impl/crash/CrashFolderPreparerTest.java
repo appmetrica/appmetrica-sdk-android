@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.crash;
 
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import java.io.File;
 import org.junit.Before;
 import org.junit.Test;

@@ -1,15 +1,15 @@
 package io.appmetrica.analytics.impl.startup.parsing;
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
 import io.appmetrica.analytics.impl.startup.CollectingFlags;
 import io.appmetrica.analytics.impl.startup.PermissionsCollectingConfig;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
+import io.appmetrica.gradle.testutils.assertions.ObjectPropertyAssertions;
 import java.util.concurrent.TimeUnit;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Test;
 
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class PermissionsCollectingConfigParserTest extends CommonTest {
@@ -45,7 +45,7 @@ public class PermissionsCollectingConfigParserTest extends CommonTest {
         mParser.parseIfEnabled(mResult, response);
 
         ObjectPropertyAssertions<PermissionsCollectingConfig> assertions =
-            ObjectPropertyAssertions(mResult.getPermissionsCollectingConfig())
+            Assertions.INSTANCE.ObjectPropertyAssertions(mResult.getPermissionsCollectingConfig())
                 .withFinalFieldOnly(false);
 
         assertions.checkField("mCheckIntervalSeconds", checkIntervalSeconds);
@@ -60,7 +60,7 @@ public class PermissionsCollectingConfigParserTest extends CommonTest {
         mParser.parseIfEnabled(mResult, response);
 
         ObjectPropertyAssertions<PermissionsCollectingConfig> assertions =
-            ObjectPropertyAssertions(mResult.getPermissionsCollectingConfig())
+            Assertions.INSTANCE.ObjectPropertyAssertions(mResult.getPermissionsCollectingConfig())
                 .withFinalFieldOnly(false);
 
         assertions.checkField("mCheckIntervalSeconds", TimeUnit.DAYS.toSeconds(1));
@@ -75,7 +75,7 @@ public class PermissionsCollectingConfigParserTest extends CommonTest {
         response.put(JsonResponseKey.PERMISSIONS_COLLECTING_CONFIG, new JSONObject());
         mParser.parseIfEnabled(mResult, response);
         ObjectPropertyAssertions<PermissionsCollectingConfig> assertions =
-            ObjectPropertyAssertions(mResult.getPermissionsCollectingConfig())
+            Assertions.INSTANCE.ObjectPropertyAssertions(mResult.getPermissionsCollectingConfig())
                 .withFinalFieldOnly(false);
 
         assertions.checkField("mCheckIntervalSeconds", TimeUnit.DAYS.toSeconds(1));

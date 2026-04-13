@@ -6,7 +6,7 @@ import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.component.ComponentId;
 import io.appmetrica.analytics.impl.db.storage.ServiceStorageFactory;
 import io.appmetrica.analytics.impl.protobuf.client.Eventhashes;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import java.io.IOException;
 import java.util.Arrays;

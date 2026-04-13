@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.startup.parsing
 
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
 import org.json.JSONObject
 import org.junit.Test
 import org.skyscreamer.jsonassert.JSONAssert

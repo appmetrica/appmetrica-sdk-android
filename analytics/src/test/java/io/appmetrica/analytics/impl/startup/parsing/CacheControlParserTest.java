@@ -1,10 +1,11 @@
 package io.appmetrica.analytics.impl.startup.parsing;
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
 import io.appmetrica.analytics.impl.db.state.converter.CacheControlConverter;
 import io.appmetrica.analytics.impl.protobuf.client.StartupStateProtobuf;
 import io.appmetrica.analytics.impl.startup.CacheControl;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
+import io.appmetrica.gradle.testutils.assertions.ObjectPropertyAssertions;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Before;
@@ -14,7 +15,6 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
@@ -59,7 +59,7 @@ public class CacheControlParserTest extends CommonTest {
         StartupStateProtobuf.StartupState.CacheControl proto = parseAndInterceptProtoConfig();
 
         ObjectPropertyAssertions<StartupStateProtobuf.StartupState.CacheControl> assertions =
-            ObjectPropertyAssertions(proto)
+            Assertions.INSTANCE.ObjectPropertyAssertions(proto)
                 .withFinalFieldOnly(false);
 
         assertions.checkField("lastKnownLocationTtl", 40000L);
@@ -89,7 +89,7 @@ public class CacheControlParserTest extends CommonTest {
         StartupStateProtobuf.StartupState.CacheControl proto = parseAndInterceptProtoConfig();
 
         ObjectPropertyAssertions<StartupStateProtobuf.StartupState.CacheControl> assertions =
-            ObjectPropertyAssertions(proto)
+            Assertions.INSTANCE.ObjectPropertyAssertions(proto)
                 .withFinalFieldOnly(false);
 
         assertions.checkField("lastKnownLocationTtl", 10000L);

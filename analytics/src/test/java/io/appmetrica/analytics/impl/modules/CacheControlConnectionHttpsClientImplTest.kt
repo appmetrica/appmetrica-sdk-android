@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.modules
 
 import io.appmetrica.analytics.modulesapi.internal.network.NetworkClientWithCacheControl
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.mockito.kotlin.doReturn

@@ -1,7 +1,8 @@
 package io.appmetrica.analytics.ecommerce;
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
+import io.appmetrica.gradle.testutils.assertions.ObjectPropertyAssertions;
 import java.util.List;
 import java.util.Map;
 import org.junit.Before;
@@ -9,7 +10,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ECommerceScreenTest extends CommonTest {
@@ -38,7 +38,7 @@ public class ECommerceScreenTest extends CommonTest {
 
     @Test
     public void constructor() throws Exception {
-        ObjectPropertyAssertions<ECommerceScreen> assertions = ObjectPropertyAssertions(screen)
+        ObjectPropertyAssertions<ECommerceScreen> assertions = Assertions.INSTANCE.ObjectPropertyAssertions(screen)
                 .withDeclaredAccessibleFields(true)
                 .withFinalFieldOnly(false);
 

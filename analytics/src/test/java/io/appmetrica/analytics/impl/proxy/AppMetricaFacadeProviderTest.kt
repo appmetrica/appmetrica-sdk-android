@@ -3,8 +3,8 @@ package io.appmetrica.analytics.impl.proxy
 import android.content.Context
 import android.location.Location
 import io.appmetrica.analytics.impl.AppMetricaFacade
-import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.staticRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.rules.MockedStaticRule.Companion.staticRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Rule
 import org.junit.Test

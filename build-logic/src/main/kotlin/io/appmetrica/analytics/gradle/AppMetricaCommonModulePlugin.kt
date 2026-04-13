@@ -179,9 +179,6 @@ class AppMetricaCommonModulePlugin : Plugin<Project> {
 
             testImplementation(appMetricaLibs["equalsverifier"])
             testImplementation(appMetricaLibs["jsonassert"])
-
-            testImplementation(appMetricaLibs["commonAssertions"])
-            testImplementation(findProject(":test-utils") ?: "io.appmetrica.analytics:test-utils")
         }
 
         // Configure Test tasks after evaluation

@@ -1,8 +1,8 @@
 package io.appmetrica.analytics.impl.utils.validation;
 
 import android.content.Context;
-import io.appmetrica.analytics.testutils.CommonTest;
-import io.appmetrica.analytics.testutils.ContextRule;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.androidtestutils.rules.ContextRule;
 import java.util.Arrays;
 import java.util.Collection;
 import org.junit.Before;

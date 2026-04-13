@@ -1,25 +1,25 @@
 package io.appmetrica.analytics.impl.utils.limitation.hierarchical;
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
 import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedInfo;
 import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedProvider;
 import io.appmetrica.analytics.impl.utils.limitation.CollectionTrimInfo;
 import io.appmetrica.analytics.impl.utils.limitation.TrimmingResult;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
+import io.appmetrica.gradle.testutils.assertions.ObjectPropertyAssertions;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized.Parameters;
+import org.junit.runners.Parameterized;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
 
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
@@ -151,7 +151,7 @@ public class HierarchicalStringListTrimmerTest extends CommonTest {
             stringListTrimmer.trim(input);
 
         ObjectPropertyAssertions<TrimmingResult<List<String>, CollectionTrimInfo>>
-            assertions = ObjectPropertyAssertions(trimmingResult);
+            assertions = Assertions.INSTANCE.ObjectPropertyAssertions(trimmingResult);
 
         assertions.checkFieldComparingFieldByField(
             "metaInfo",

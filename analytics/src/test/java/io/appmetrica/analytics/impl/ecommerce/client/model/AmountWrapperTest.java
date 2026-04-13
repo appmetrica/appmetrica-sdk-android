@@ -1,12 +1,12 @@
 package io.appmetrica.analytics.impl.ecommerce.client.model;
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
 import io.appmetrica.analytics.ecommerce.ECommerceAmount;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import java.math.BigDecimal;
 import org.junit.Test;
 
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
+import io.appmetrica.gradle.testutils.assertions.ObjectPropertyAssertions;
 
 public class AmountWrapperTest extends CommonTest {
 
@@ -17,7 +17,7 @@ public class AmountWrapperTest extends CommonTest {
         AmountWrapper amountWrapper = new AmountWrapper(new ECommerceAmount(amount, unit));
 
         ObjectPropertyAssertions<AmountWrapper> assertions =
-            ObjectPropertyAssertions(amountWrapper);
+            Assertions.INSTANCE.ObjectPropertyAssertions(amountWrapper);
 
         assertions.checkField("amount", amount);
         assertions.checkField("unit", unit);

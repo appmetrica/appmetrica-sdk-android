@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.utils;
 
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;

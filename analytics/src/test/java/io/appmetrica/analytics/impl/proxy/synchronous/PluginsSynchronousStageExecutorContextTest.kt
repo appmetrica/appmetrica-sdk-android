@@ -1,8 +1,8 @@
 package io.appmetrica.analytics.impl.proxy.synchronous
 
 import android.content.Context
-import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.ContextCoverageUtils
+import io.appmetrica.gradle.testutils.CommonTest
 import org.junit.Test
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock

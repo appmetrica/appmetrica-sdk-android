@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.location
 
-import io.appmetrica.analytics.assertions.JavaObjectPropertyAssertions
+import io.appmetrica.gradle.testutils.assertions.JavaObjectPropertyAssertions
 import java.lang.reflect.Field
 
 /**

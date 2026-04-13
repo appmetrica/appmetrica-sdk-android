@@ -4,7 +4,7 @@ import android.content.Context
 import io.appmetrica.analytics.coreapi.internal.system.ActiveNetworkTypeProvider
 import io.appmetrica.analytics.coreapi.internal.system.NetworkType
 import io.appmetrica.analytics.modulesapi.internal.service.ServiceContext
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith

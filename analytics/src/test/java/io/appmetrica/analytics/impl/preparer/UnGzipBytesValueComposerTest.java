@@ -1,12 +1,12 @@
 package io.appmetrica.analytics.impl.preparer;
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import org.junit.Rule;
 import org.junit.Test;
 
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
+import io.appmetrica.gradle.testutils.assertions.ObjectPropertyAssertions;
 
 /**
  * @see UnGzipBytesValueComposerGetValueTest
@@ -21,7 +21,7 @@ public class UnGzipBytesValueComposerTest extends CommonTest {
         UnGzipBytesValueComposer composer = new UnGzipBytesValueComposer();
 
         ObjectPropertyAssertions<UnGzipBytesValueComposer> assertions =
-            ObjectPropertyAssertions(composer)
+            Assertions.INSTANCE.ObjectPropertyAssertions(composer)
                 .withDeclaredAccessibleFields(true);
 
         assertions.checkFieldNonNull("eventEncrypterProvider", "getEventEncrypterProvider");

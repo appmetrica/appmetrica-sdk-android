@@ -1,15 +1,15 @@
 package io.appmetrica.analytics.impl;
 
 import android.net.Uri;
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
+import io.appmetrica.gradle.testutils.assertions.ObjectPropertyAssertions;
 
 @RunWith(RobolectricTestRunner.class)
 public class ReferrerParserTest extends CommonTest {
@@ -222,7 +222,7 @@ public class ReferrerParserTest extends CommonTest {
                             String expectedDeeplink,
                             Map<String, String> expectedParameters,
                             String expectedReferrer) throws Exception {
-        ObjectPropertyAssertions<DeferredDeeplinkState> assertions = ObjectPropertyAssertions(state);
+        ObjectPropertyAssertions<DeferredDeeplinkState> assertions = Assertions.INSTANCE.ObjectPropertyAssertions(state);
         assertions.checkField("mDeeplink", expectedDeeplink);
         assertions.checkField("mParameters", expectedParameters);
         assertions.checkField("mUnparsedReferrer", expectedReferrer);

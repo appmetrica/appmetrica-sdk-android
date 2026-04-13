@@ -12,7 +12,8 @@ import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAd;
 import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.AdRevenueConstants;
 import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdRevenue;
 import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdType;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
 import java.math.BigDecimal;
 import java.util.Currency;
 import java.util.HashMap;
@@ -21,7 +22,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
@@ -92,7 +92,7 @@ public class AdRevenueConverterTest extends CommonTest {
     @Test
     public void convertBanner() {
         ModuleAdRevenue adRevenue = adRevenueConverter.convertBanner(adValue, adView);
-        ObjectPropertyAssertions(adRevenue)
+        Assertions.INSTANCE.ObjectPropertyAssertions(adRevenue)
             .checkField("adRevenue", BigDecimal.valueOf(value))
             .checkField("currency", Currency.getInstance(currencyCode))
             .checkField("adType", ModuleAdType.BANNER)
@@ -116,7 +116,7 @@ public class AdRevenueConverterTest extends CommonTest {
         when(adView.getResponseInfo()).thenReturn(null);
 
         ModuleAdRevenue adRevenue = adRevenueConverter.convertBanner(adValue, adView);
-        ObjectPropertyAssertions(adRevenue)
+        Assertions.INSTANCE.ObjectPropertyAssertions(adRevenue)
             .checkField("adRevenue", BigDecimal.valueOf(value))
             .checkField("currency", Currency.getInstance(currencyCode))
             .checkField("adType", ModuleAdType.BANNER)
@@ -140,7 +140,7 @@ public class AdRevenueConverterTest extends CommonTest {
         when(responseInfo.getLoadedAdapterResponseInfo()).thenReturn(null);
 
         ModuleAdRevenue adRevenue = adRevenueConverter.convertBanner(adValue, adView);
-        ObjectPropertyAssertions(adRevenue)
+        Assertions.INSTANCE.ObjectPropertyAssertions(adRevenue)
             .checkField("adRevenue", BigDecimal.valueOf(value))
             .checkField("currency", Currency.getInstance(currencyCode))
             .checkField("adType", ModuleAdType.BANNER)
@@ -162,7 +162,7 @@ public class AdRevenueConverterTest extends CommonTest {
     @Test
     public void convertInterstitialAd() {
         ModuleAdRevenue adRevenue = adRevenueConverter.convertInterstitialAd(adValue, interstitialAd);
-        ObjectPropertyAssertions(adRevenue)
+        Assertions.INSTANCE.ObjectPropertyAssertions(adRevenue)
             .checkField("adRevenue", BigDecimal.valueOf(value))
             .checkField("currency", Currency.getInstance(currencyCode))
             .checkField("adType", ModuleAdType.INTERSTITIAL)
@@ -186,7 +186,7 @@ public class AdRevenueConverterTest extends CommonTest {
         when(interstitialAd.getResponseInfo()).thenReturn(null);
 
         ModuleAdRevenue adRevenue = adRevenueConverter.convertInterstitialAd(adValue, interstitialAd);
-        ObjectPropertyAssertions(adRevenue)
+        Assertions.INSTANCE.ObjectPropertyAssertions(adRevenue)
             .checkField("adRevenue", BigDecimal.valueOf(value))
             .checkField("currency", Currency.getInstance(currencyCode))
             .checkField("adType", ModuleAdType.INTERSTITIAL)
@@ -210,7 +210,7 @@ public class AdRevenueConverterTest extends CommonTest {
         when(responseInfo.getLoadedAdapterResponseInfo()).thenReturn(null);
 
         ModuleAdRevenue adRevenue = adRevenueConverter.convertInterstitialAd(adValue, interstitialAd);
-        ObjectPropertyAssertions(adRevenue)
+        Assertions.INSTANCE.ObjectPropertyAssertions(adRevenue)
             .checkField("adRevenue", BigDecimal.valueOf(value))
             .checkField("currency", Currency.getInstance(currencyCode))
             .checkField("adType", ModuleAdType.INTERSTITIAL)
@@ -232,7 +232,7 @@ public class AdRevenueConverterTest extends CommonTest {
     @Test
     public void convertRewardedAd() {
         ModuleAdRevenue adRevenue = adRevenueConverter.convertRewardedAd(adValue, rewardedAd);
-        ObjectPropertyAssertions(adRevenue)
+        Assertions.INSTANCE.ObjectPropertyAssertions(adRevenue)
             .checkField("adRevenue", BigDecimal.valueOf(value))
             .checkField("currency", Currency.getInstance(currencyCode))
             .checkField("adType", ModuleAdType.REWARDED)
@@ -256,7 +256,7 @@ public class AdRevenueConverterTest extends CommonTest {
         when(rewardedAd.getResponseInfo()).thenReturn(null);
 
         ModuleAdRevenue adRevenue = adRevenueConverter.convertRewardedAd(adValue, rewardedAd);
-        ObjectPropertyAssertions(adRevenue)
+        Assertions.INSTANCE.ObjectPropertyAssertions(adRevenue)
             .checkField("adRevenue", BigDecimal.valueOf(value))
             .checkField("currency", Currency.getInstance(currencyCode))
             .checkField("adType", ModuleAdType.REWARDED)
@@ -280,7 +280,7 @@ public class AdRevenueConverterTest extends CommonTest {
         when(responseInfo.getLoadedAdapterResponseInfo()).thenReturn(null);
 
         ModuleAdRevenue adRevenue = adRevenueConverter.convertRewardedAd(adValue, rewardedAd);
-        ObjectPropertyAssertions(adRevenue)
+        Assertions.INSTANCE.ObjectPropertyAssertions(adRevenue)
             .checkField("adRevenue", BigDecimal.valueOf(value))
             .checkField("currency", Currency.getInstance(currencyCode))
             .checkField("adType", ModuleAdType.REWARDED)
@@ -302,7 +302,7 @@ public class AdRevenueConverterTest extends CommonTest {
     @Test
     public void convertRewardedInterstitialAd() {
         ModuleAdRevenue adRevenue = adRevenueConverter.convertRewardedInterstitialAd(adValue, rewardedInterstitialAd);
-        ObjectPropertyAssertions(adRevenue)
+        Assertions.INSTANCE.ObjectPropertyAssertions(adRevenue)
             .checkField("adRevenue", BigDecimal.valueOf(value))
             .checkField("currency", Currency.getInstance(currencyCode))
             .checkField("adType", ModuleAdType.OTHER)
@@ -326,7 +326,7 @@ public class AdRevenueConverterTest extends CommonTest {
         when(rewardedInterstitialAd.getResponseInfo()).thenReturn(null);
 
         ModuleAdRevenue adRevenue = adRevenueConverter.convertRewardedInterstitialAd(adValue, rewardedInterstitialAd);
-        ObjectPropertyAssertions(adRevenue)
+        Assertions.INSTANCE.ObjectPropertyAssertions(adRevenue)
             .checkField("adRevenue", BigDecimal.valueOf(value))
             .checkField("currency", Currency.getInstance(currencyCode))
             .checkField("adType", ModuleAdType.OTHER)
@@ -350,7 +350,7 @@ public class AdRevenueConverterTest extends CommonTest {
         when(responseInfo.getLoadedAdapterResponseInfo()).thenReturn(null);
 
         ModuleAdRevenue adRevenue = adRevenueConverter.convertRewardedInterstitialAd(adValue, rewardedInterstitialAd);
-        ObjectPropertyAssertions(adRevenue)
+        Assertions.INSTANCE.ObjectPropertyAssertions(adRevenue)
             .checkField("adRevenue", BigDecimal.valueOf(value))
             .checkField("currency", Currency.getInstance(currencyCode))
             .checkField("adType", ModuleAdType.OTHER)
@@ -372,7 +372,7 @@ public class AdRevenueConverterTest extends CommonTest {
     @Test
     public void convertNativeAd() {
         ModuleAdRevenue adRevenue = adRevenueConverter.convertNativeAd(adValue, nativeAd);
-        ObjectPropertyAssertions(adRevenue)
+        Assertions.INSTANCE.ObjectPropertyAssertions(adRevenue)
             .checkField("adRevenue", BigDecimal.valueOf(value))
             .checkField("currency", Currency.getInstance(currencyCode))
             .checkField("adType", ModuleAdType.NATIVE)
@@ -396,7 +396,7 @@ public class AdRevenueConverterTest extends CommonTest {
         when(nativeAd.getResponseInfo()).thenReturn(null);
 
         ModuleAdRevenue adRevenue = adRevenueConverter.convertNativeAd(adValue, nativeAd);
-        ObjectPropertyAssertions(adRevenue)
+        Assertions.INSTANCE.ObjectPropertyAssertions(adRevenue)
             .checkField("adRevenue", BigDecimal.valueOf(value))
             .checkField("currency", Currency.getInstance(currencyCode))
             .checkField("adType", ModuleAdType.NATIVE)
@@ -420,7 +420,7 @@ public class AdRevenueConverterTest extends CommonTest {
         when(responseInfo.getLoadedAdapterResponseInfo()).thenReturn(null);
 
         ModuleAdRevenue adRevenue = adRevenueConverter.convertNativeAd(adValue, nativeAd);
-        ObjectPropertyAssertions(adRevenue)
+        Assertions.INSTANCE.ObjectPropertyAssertions(adRevenue)
             .checkField("adRevenue", BigDecimal.valueOf(value))
             .checkField("currency", Currency.getInstance(currencyCode))
             .checkField("adType", ModuleAdType.NATIVE)
@@ -442,7 +442,7 @@ public class AdRevenueConverterTest extends CommonTest {
     @Test
     public void convertAppOpenAd() {
         ModuleAdRevenue adRevenue = adRevenueConverter.convertAppOpenAd(adValue, appOpenAd);
-        ObjectPropertyAssertions(adRevenue)
+        Assertions.INSTANCE.ObjectPropertyAssertions(adRevenue)
             .checkField("adRevenue", BigDecimal.valueOf(value))
             .checkField("currency", Currency.getInstance(currencyCode))
             .checkField("adType", ModuleAdType.APP_OPEN)
@@ -466,7 +466,7 @@ public class AdRevenueConverterTest extends CommonTest {
         when(appOpenAd.getResponseInfo()).thenReturn(null);
 
         ModuleAdRevenue adRevenue = adRevenueConverter.convertAppOpenAd(adValue, appOpenAd);
-        ObjectPropertyAssertions(adRevenue)
+        Assertions.INSTANCE.ObjectPropertyAssertions(adRevenue)
             .checkField("adRevenue", BigDecimal.valueOf(value))
             .checkField("currency", Currency.getInstance(currencyCode))
             .checkField("adType", ModuleAdType.APP_OPEN)
@@ -490,7 +490,7 @@ public class AdRevenueConverterTest extends CommonTest {
         when(responseInfo.getLoadedAdapterResponseInfo()).thenReturn(null);
 
         ModuleAdRevenue adRevenue = adRevenueConverter.convertAppOpenAd(adValue, appOpenAd);
-        ObjectPropertyAssertions(adRevenue)
+        Assertions.INSTANCE.ObjectPropertyAssertions(adRevenue)
             .checkField("adRevenue", BigDecimal.valueOf(value))
             .checkField("currency", Currency.getInstance(currencyCode))
             .checkField("adType", ModuleAdType.APP_OPEN)

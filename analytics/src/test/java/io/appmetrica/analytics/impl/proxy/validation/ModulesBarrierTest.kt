@@ -5,7 +5,7 @@ import io.appmetrica.analytics.AdRevenue
 import io.appmetrica.analytics.ModuleEvent
 import io.appmetrica.analytics.ValidationException
 import io.appmetrica.analytics.impl.proxy.AppMetricaFacadeProvider
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
 import org.junit.Test
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever

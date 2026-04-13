@@ -12,11 +12,11 @@ import io.appmetrica.analytics.impl.crash.ndk.AppMetricaNativeCrashConverter
 import io.appmetrica.analytics.impl.crash.ndk.AppMetricaNativeCrashMetadata
 import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger
 import io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrash
-import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
-import io.appmetrica.analytics.testutils.constructionRule
-import io.appmetrica.analytics.testutils.on
-import io.appmetrica.analytics.testutils.staticRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.rules.MockedConstructionRule.Companion.constructionRule
+import io.appmetrica.gradle.testutils.rules.MockedStaticRule.Companion.on
+import io.appmetrica.gradle.testutils.rules.MockedStaticRule.Companion.staticRule
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

@@ -1,13 +1,13 @@
 package io.appmetrica.analytics.impl.crash
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
 import io.appmetrica.analytics.impl.ExtraMetaInfoRetriever
 import io.appmetrica.analytics.impl.crash.jvm.client.UnhandledException
 import io.appmetrica.analytics.impl.crash.jvm.client.UnhandledExceptionFactory
 import io.appmetrica.analytics.plugins.PluginErrorDetails
 import io.appmetrica.analytics.plugins.StackTraceItem
-import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.MockedStaticRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.assertions.Assertions.ObjectPropertyAssertions
+import io.appmetrica.gradle.testutils.rules.MockedStaticRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Rule

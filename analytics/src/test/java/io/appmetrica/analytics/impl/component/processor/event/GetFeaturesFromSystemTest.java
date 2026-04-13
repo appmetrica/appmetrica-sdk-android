@@ -6,7 +6,7 @@ import android.content.pm.FeatureInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
-import io.appmetrica.analytics.testutils.ContextRule;
+import io.appmetrica.gradle.androidtestutils.rules.ContextRule;
 import java.util.Random;
 import java.util.UUID;
 import org.assertj.core.groups.Tuple;

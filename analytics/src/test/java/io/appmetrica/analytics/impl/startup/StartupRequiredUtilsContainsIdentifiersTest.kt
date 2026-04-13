@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.startup
 import io.appmetrica.analytics.coreutils.internal.time.SystemTimeProvider
 import io.appmetrica.analytics.coreutils.internal.time.TimeProvider
 import io.appmetrica.analytics.impl.ClidsInfoStorage
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
 import org.junit.Before

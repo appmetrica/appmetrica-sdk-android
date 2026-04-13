@@ -26,9 +26,9 @@ import io.appmetrica.analytics.impl.request.ReportRequestConfig;
 import io.appmetrica.analytics.impl.startup.StartupState;
 import io.appmetrica.analytics.impl.startup.executor.ComponentStartupExecutorFactory;
 import io.appmetrica.analytics.impl.startup.executor.StartupExecutor;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
-import io.appmetrica.analytics.testutils.MockedConstructionRule;
+import io.appmetrica.gradle.testutils.rules.MockedConstructionRule;
 import io.appmetrica.analytics.testutils.TestUtils;
 
 import static org.assertj.core.api.Assertions.assertThat;

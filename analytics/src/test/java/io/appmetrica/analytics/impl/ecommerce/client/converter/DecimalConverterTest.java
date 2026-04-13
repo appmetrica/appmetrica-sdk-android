@@ -1,11 +1,11 @@
 package io.appmetrica.analytics.impl.ecommerce.client.converter;
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
-import io.appmetrica.analytics.assertions.ProtoObjectPropertyAssertions;
+import io.appmetrica.gradle.testutils.assertions.ObjectPropertyAssertions;
+import io.appmetrica.gradle.testutils.assertions.ProtoObjectPropertyAssertions;
 import io.appmetrica.analytics.impl.protobuf.backend.Ecommerce;
 import io.appmetrica.analytics.impl.utils.DecimalProtoModel;
-import io.appmetrica.analytics.testutils.CommonTest;
-import io.appmetrica.analytics.testutils.MockedStaticRule;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.rules.MockedStaticRule;
 import java.math.BigDecimal;
 import org.junit.Before;
 import org.junit.Rule;

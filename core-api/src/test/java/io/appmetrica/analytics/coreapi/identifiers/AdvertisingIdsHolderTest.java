@@ -4,12 +4,11 @@ import io.appmetrica.analytics.coreapi.internal.identifiers.AdTrackingInfo;
 import io.appmetrica.analytics.coreapi.internal.identifiers.AdTrackingInfoResult;
 import io.appmetrica.analytics.coreapi.internal.identifiers.AdvertisingIdsHolder;
 import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
-
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 
 @RunWith(RobolectricTestRunner.class)
 public class AdvertisingIdsHolderTest extends CommonTest {
@@ -17,7 +16,7 @@ public class AdvertisingIdsHolderTest extends CommonTest {
     @Test
     public void testDefaultValues() throws IllegalAccessException {
         AdvertisingIdsHolder advertisingIdsHolder = new AdvertisingIdsHolder();
-        ObjectPropertyAssertions(advertisingIdsHolder)
+        Assertions.INSTANCE.ObjectPropertyAssertions(advertisingIdsHolder)
                 .withPrivateFields(true)
                 .checkFieldComparingFieldByFieldRecursively("mGoogle", new AdTrackingInfoResult())
                 .checkFieldComparingFieldByFieldRecursively("mHuawei", new AdTrackingInfoResult())
@@ -43,7 +42,7 @@ public class AdvertisingIdsHolderTest extends CommonTest {
                 "error3"
         );
         AdvertisingIdsHolder advertisingIdsHolder = new AdvertisingIdsHolder(google, huawei, yandex);
-        ObjectPropertyAssertions(advertisingIdsHolder)
+        Assertions.INSTANCE.ObjectPropertyAssertions(advertisingIdsHolder)
                 .withPrivateFields(true)
                 .checkField("mGoogle", "getGoogle", google)
                 .checkField("mHuawei", "getHuawei", huawei)

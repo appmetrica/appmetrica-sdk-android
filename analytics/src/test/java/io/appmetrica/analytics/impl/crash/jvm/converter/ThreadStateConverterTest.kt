@@ -1,13 +1,13 @@
 package io.appmetrica.analytics.impl.crash.jvm.converter
 
-import io.appmetrica.analytics.assertions.ProtoObjectPropertyAssertions
 import io.appmetrica.analytics.coreutils.internal.collection.CollectionUtils
 import io.appmetrica.analytics.impl.Utils
 import io.appmetrica.analytics.impl.crash.jvm.client.StackTraceItemInternal
 import io.appmetrica.analytics.impl.crash.jvm.client.ThreadState
 import io.appmetrica.analytics.impl.protobuf.backend.CrashAndroid
-import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.MockedStaticRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.assertions.ProtoObjectPropertyAssertions
+import io.appmetrica.gradle.testutils.rules.MockedStaticRule
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

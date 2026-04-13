@@ -63,8 +63,8 @@ import io.appmetrica.analytics.internal.AppMetricaService
 import io.appmetrica.analytics.internal.CounterConfiguration
 import io.appmetrica.analytics.internal.CounterConfigurationReporterType
 import io.appmetrica.analytics.internal.IdentifiersResult
-import io.appmetrica.analytics.testutils.BaseToStringTest
-import io.appmetrica.analytics.testutils.ContextRule
+import io.appmetrica.gradle.androidtestutils.rules.ContextRule
+import io.appmetrica.gradle.androidtestutils.tostring.BaseToStringTest
 import org.json.JSONObject
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized

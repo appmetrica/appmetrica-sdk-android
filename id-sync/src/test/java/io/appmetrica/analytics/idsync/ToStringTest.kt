@@ -5,9 +5,9 @@ import io.appmetrica.analytics.idsync.internal.model.IdSyncConfig
 import io.appmetrica.analytics.idsync.internal.model.NetworkType
 import io.appmetrica.analytics.idsync.internal.model.Preconditions
 import io.appmetrica.analytics.idsync.internal.model.RequestConfig
-import io.appmetrica.analytics.testutils.BaseToStringTest
-import io.appmetrica.analytics.testutils.BaseToStringTest.Companion.toTestCase
-import io.appmetrica.analytics.testutils.ToStringTestUtils
+import io.appmetrica.gradle.androidtestutils.tostring.BaseToStringTest
+import io.appmetrica.gradle.androidtestutils.tostring.BaseToStringTest.Companion.toTestCase
+import io.appmetrica.gradle.androidtestutils.tostring.ToStringTestUtils
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 import org.mockito.kotlin.mock

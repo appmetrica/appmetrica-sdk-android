@@ -3,8 +3,8 @@ package io.appmetrica.analytics.impl.startup.executor
 import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.startup.StartupUnit
 import io.appmetrica.analytics.networktasks.internal.NetworkTask
-import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
+import io.appmetrica.gradle.testutils.CommonTest
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mockito.verifyNoInteractions

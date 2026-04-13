@@ -8,7 +8,7 @@ import io.appmetrica.analytics.impl.component.clients.ComponentUnitFactory
 import io.appmetrica.analytics.impl.request.StartupArgumentsTest
 import io.appmetrica.analytics.impl.startup.StartupCenter
 import io.appmetrica.analytics.impl.startup.StartupUnit
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any

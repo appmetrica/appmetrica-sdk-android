@@ -6,8 +6,8 @@ import io.appmetrica.analytics.impl.ReportConsumer
 import io.appmetrica.analytics.impl.crash.ndk.AppMetricaNativeCrash
 import io.appmetrica.analytics.impl.crash.ndk.AppMetricaNativeCrashMetadata
 import io.appmetrica.analytics.impl.crash.service.AlwaysAllowSendCrashPredicate
-import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.constructionRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.rules.MockedConstructionRule.Companion.constructionRule
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.SoftAssertions
 import org.junit.Rule

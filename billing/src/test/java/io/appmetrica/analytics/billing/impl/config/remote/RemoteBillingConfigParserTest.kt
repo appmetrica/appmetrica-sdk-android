@@ -1,14 +1,14 @@
 package io.appmetrica.analytics.billing.impl.config.remote
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
 import io.appmetrica.analytics.billing.impl.BillingConfigProto
 import io.appmetrica.analytics.billing.impl.config.remote.converter.BillingConfigProtoConverter
 import io.appmetrica.analytics.billing.impl.config.remote.parser.BillingConfigJsonParser
 import io.appmetrica.analytics.billing.internal.config.BillingConfig
 import io.appmetrica.analytics.coreutils.internal.parsing.RemoteConfigJsonUtils
-import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.on
-import io.appmetrica.analytics.testutils.staticRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.assertions.Assertions.ObjectPropertyAssertions
+import io.appmetrica.gradle.testutils.rules.MockedStaticRule.Companion.on
+import io.appmetrica.gradle.testutils.rules.MockedStaticRule.Companion.staticRule
 import org.json.JSONObject
 import org.junit.Rule
 import org.junit.Test

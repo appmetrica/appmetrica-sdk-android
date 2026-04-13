@@ -1,13 +1,14 @@
 package io.appmetrica.analytics.impl.ecommerce.client.converter;
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
 import io.appmetrica.analytics.impl.ecommerce.client.model.CartActionInfoEvent;
 import io.appmetrica.analytics.impl.ecommerce.client.model.CartItemWrapper;
 import io.appmetrica.analytics.impl.protobuf.backend.Ecommerce;
 import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedInfo;
 import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedProvider;
-import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.TruncationInfoConsumer;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
+import io.appmetrica.gradle.testutils.assertions.ObjectPropertyAssertions;
 import java.util.Collections;
 import java.util.List;
 import org.junit.Before;
@@ -15,7 +16,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
@@ -48,7 +48,7 @@ public class CartActionInfoEventConverterTest extends CommonTest {
     @Test
     public void constructor() throws Exception {
         ObjectPropertyAssertions<CartActionInfoEventConverter> assertions =
-            ObjectPropertyAssertions(new CartActionInfoEventConverter())
+            Assertions.INSTANCE.ObjectPropertyAssertions(new CartActionInfoEventConverter())
                 .withPrivateFields(true);
 
         assertions.checkFieldNonNull("cartItemConverter");
@@ -71,7 +71,7 @@ public class CartActionInfoEventConverterTest extends CommonTest {
         Result<Ecommerce.ECommerceEvent, BytesTruncatedProvider> result = cartActionInfoEventConverter.fromModel(event).get(0);
 
         ObjectPropertyAssertions<Result<Ecommerce.ECommerceEvent, BytesTruncatedProvider>> assertions =
-            ObjectPropertyAssertions(result);
+            Assertions.INSTANCE.ObjectPropertyAssertions(result);
 
         assertions.checkFieldRecursively("metaInfo", new TruncationInfoConsumer(cartItemBytesTruncated));
         assertions.checkFieldRecursively(

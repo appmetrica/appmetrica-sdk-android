@@ -4,14 +4,14 @@ import io.appmetrica.analytics.impl.crash.jvm.client.CustomError;
 import io.appmetrica.analytics.impl.crash.jvm.client.RegularError;
 import io.appmetrica.analytics.impl.protobuf.backend.CrashAndroid;
 import io.appmetrica.analytics.protobuf.nano.MessageNano;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
@@ -50,14 +50,14 @@ public class CustomErrorConverterTest extends CommonTest {
 
         verify(regularErrorConverter).fromModel(regularError);
 
-        ObjectPropertyAssertions(customErrorProto)
+        Assertions.INSTANCE.ObjectPropertyAssertions(customErrorProto)
             .withFinalFieldOnly(false)
             .withIgnoredFields("throwable", "threads", "methodCallStacktrace", "buildId", "isOffline", "message", "custom",
                 "pluginEnvironment", "virtualMachine", "virtualMachineVersion")
             .checkField("type", CrashAndroid.Error.CUSTOM)
             .checkAll();
 
-        ObjectPropertyAssertions(customErrorProto.custom)
+        Assertions.INSTANCE.ObjectPropertyAssertions(customErrorProto.custom)
             .withFinalFieldOnly(false)
             .checkField("identifier", id)
             .checkAll();

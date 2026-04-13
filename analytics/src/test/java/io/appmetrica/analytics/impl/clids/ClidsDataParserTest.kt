@@ -2,8 +2,8 @@ package io.appmetrica.analytics.impl.clids
 
 import android.content.ContentValues
 import io.appmetrica.analytics.impl.utils.StartupUtils
-import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.MockedStaticRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.rules.MockedStaticRule
 import org.assertj.core.api.Assertions.assertThat
 import org.json.JSONObject
 import org.junit.Rule

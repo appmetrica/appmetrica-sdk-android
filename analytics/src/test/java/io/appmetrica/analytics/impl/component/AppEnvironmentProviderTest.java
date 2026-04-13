@@ -4,7 +4,7 @@ import io.appmetrica.analytics.impl.AppEnvironment;
 import io.appmetrica.analytics.impl.TestsData;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesComponentDbStorage;
 import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import java.util.Random;
 import org.junit.Test;
 import org.mockito.ArgumentMatcher;

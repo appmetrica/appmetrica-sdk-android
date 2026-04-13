@@ -2,9 +2,9 @@ package io.appmetrica.analytics.impl
 
 import android.util.Base64
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceModuleCounterReport
-import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.on
-import io.appmetrica.analytics.testutils.staticRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.rules.MockedStaticRule.Companion.on
+import io.appmetrica.gradle.testutils.rules.MockedStaticRule.Companion.staticRule
 import org.assertj.core.api.SoftAssertions.assertSoftly
 import org.junit.Rule
 import org.junit.Test

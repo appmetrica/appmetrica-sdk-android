@@ -7,8 +7,8 @@ import io.appmetrica.analytics.coreutils.internal.io.CloseableUtils.closeSafely
 import io.appmetrica.analytics.impl.db.constants.Constants
 import io.appmetrica.analytics.impl.db.constants.migrations.ComponentDatabaseUpgradeScriptToV112
 import io.appmetrica.analytics.impl.db.protobuf.converter.DbEventModelConverter
-import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.MockedConstructionRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.rules.MockedConstructionRule
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule

@@ -8,8 +8,8 @@ import io.appmetrica.analytics.impl.component.clients.ClientDescription
 import io.appmetrica.analytics.impl.crash.ndk.AppMetricaNativeCrashMetadata
 import io.appmetrica.analytics.impl.request.StartupRequestConfig
 import io.appmetrica.analytics.internal.CounterConfigurationReporterType
-import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.constructionRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.rules.MockedConstructionRule.Companion.constructionRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Rule
 import org.junit.Test

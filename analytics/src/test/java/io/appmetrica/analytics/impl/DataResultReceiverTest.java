@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
 import io.appmetrica.analytics.impl.startup.StartupError;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

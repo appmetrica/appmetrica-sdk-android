@@ -2,8 +2,8 @@ package io.appmetrica.analytics.impl.component.sessionextras
 
 import io.appmetrica.analytics.impl.protobuf.client.SessionExtrasProtobuf
 import io.appmetrica.analytics.protobuf.nano.MessageNano
-import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.MockedStaticRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.rules.MockedStaticRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Rule

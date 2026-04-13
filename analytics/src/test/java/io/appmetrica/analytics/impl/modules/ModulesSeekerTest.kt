@@ -8,9 +8,9 @@ import io.appmetrica.analytics.impl.modules.service.ServiceModulesController
 import io.appmetrica.analytics.modulesapi.internal.client.ModuleClientEntryPoint
 import io.appmetrica.analytics.modulesapi.internal.service.ModuleServiceEntryPoint
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule
-import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
-import io.appmetrica.analytics.testutils.MockedStaticRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.rules.MockedStaticRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Rule

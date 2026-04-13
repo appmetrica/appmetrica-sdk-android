@@ -1,11 +1,11 @@
 package io.appmetrica.analytics.impl.db.state.converter
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
-import io.appmetrica.analytics.assertions.ProtoObjectPropertyAssertions
 import io.appmetrica.analytics.impl.DistributionSource
 import io.appmetrica.analytics.impl.clids.ClidsInfo
 import io.appmetrica.analytics.impl.protobuf.client.ClidsInfoProto
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.assertions.Assertions.ObjectPropertyAssertions
+import io.appmetrica.gradle.testutils.assertions.ProtoObjectPropertyAssertions
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 

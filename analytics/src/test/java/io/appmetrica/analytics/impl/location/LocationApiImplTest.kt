@@ -2,7 +2,6 @@ package io.appmetrica.analytics.impl.location
 
 import android.content.Context
 import android.location.Location
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
 import io.appmetrica.analytics.coreapi.internal.backport.Consumer
 import io.appmetrica.analytics.coreapi.internal.control.Toggle
 import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor
@@ -24,9 +23,10 @@ import io.appmetrica.analytics.locationapi.internal.LocationFilter
 import io.appmetrica.analytics.locationapi.internal.LocationReceiverProvider
 import io.appmetrica.analytics.locationapi.internal.LocationReceiverProviderFactory
 import io.appmetrica.analytics.modulesapi.internal.service.ModuleLocationSourcesServiceController
-import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
-import io.appmetrica.analytics.testutils.MockedConstructionRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.assertions.Assertions.ObjectPropertyAssertions
+import io.appmetrica.gradle.testutils.rules.MockedConstructionRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Rule

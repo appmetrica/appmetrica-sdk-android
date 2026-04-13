@@ -4,9 +4,9 @@ import io.appmetrica.analytics.coreutils.internal.io.FileUtils.resetSdkStorage
 import io.appmetrica.analytics.impl.IOUtils
 import io.appmetrica.analytics.impl.db.FileConstants
 import io.appmetrica.analytics.impl.utils.UuidGenerator
-import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.ContextRule
-import io.appmetrica.analytics.testutils.LogRule
+import io.appmetrica.gradle.androidtestutils.rules.ContextRule
+import io.appmetrica.gradle.androidtestutils.rules.LogRule
+import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
 import org.junit.Before

@@ -1,6 +1,5 @@
 package io.appmetrica.analytics.impl.ecommerce;
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
 import io.appmetrica.analytics.ecommerce.ECommerceAmount;
 import io.appmetrica.analytics.ecommerce.ECommerceCartItem;
 import io.appmetrica.analytics.ecommerce.ECommerceEvent;
@@ -14,7 +13,9 @@ import io.appmetrica.analytics.impl.ecommerce.client.model.OrderInfoEvent;
 import io.appmetrica.analytics.impl.ecommerce.client.model.ShownProductCardInfoEvent;
 import io.appmetrica.analytics.impl.ecommerce.client.model.ShownProductDetailInfoEvent;
 import io.appmetrica.analytics.impl.ecommerce.client.model.ShownScreenInfoEvent;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
+import io.appmetrica.gradle.testutils.assertions.ObjectPropertyAssertions;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collections;
@@ -24,7 +25,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.MockitoAnnotations;
 
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ECommerceEventProviderTest extends CommonTest {
@@ -132,7 +132,7 @@ public class ECommerceEventProviderTest extends CommonTest {
         ShownScreenInfoEvent shownScreenInfoEvent = (ShownScreenInfoEvent) event;
 
         ObjectPropertyAssertions<ShownScreenInfoEvent> assertions =
-            ObjectPropertyAssertions(shownScreenInfoEvent);
+            Assertions.INSTANCE.ObjectPropertyAssertions(shownScreenInfoEvent);
 
         assertions.checkFieldRecursively(
             "screen",
@@ -155,7 +155,7 @@ public class ECommerceEventProviderTest extends CommonTest {
         ShownProductCardInfoEvent shownProductCardInfoEvent = ((ShownProductCardInfoEvent) event);
 
         ObjectPropertyAssertions<ShownProductCardInfoEvent> assertions =
-            ObjectPropertyAssertions(shownProductCardInfoEvent);
+            Assertions.INSTANCE.ObjectPropertyAssertions(shownProductCardInfoEvent);
 
         assertions.checkFieldRecursively(
             "screen",
@@ -194,7 +194,7 @@ public class ECommerceEventProviderTest extends CommonTest {
         ShownProductDetailInfoEvent shownProductDetailInfoEvent = ((ShownProductDetailInfoEvent) event);
 
         ObjectPropertyAssertions<ShownProductDetailInfoEvent> assertions =
-            ObjectPropertyAssertions(shownProductDetailInfoEvent);
+            Assertions.INSTANCE.ObjectPropertyAssertions(shownProductDetailInfoEvent);
 
         assertions.checkFieldRecursively(
             "product",
@@ -240,7 +240,7 @@ public class ECommerceEventProviderTest extends CommonTest {
         CartActionInfoEvent cartActionInfoEvent = ((CartActionInfoEvent) event);
 
         ObjectPropertyAssertions<CartActionInfoEvent> assertions =
-            ObjectPropertyAssertions(cartActionInfoEvent);
+            Assertions.INSTANCE.ObjectPropertyAssertions(cartActionInfoEvent);
 
         assertions.checkField("eventType", expectedEventType);
 
@@ -270,7 +270,7 @@ public class ECommerceEventProviderTest extends CommonTest {
         OrderInfoEvent orderInfoEvent = ((OrderInfoEvent) event);
 
         ObjectPropertyAssertions<OrderInfoEvent> assertions =
-            ObjectPropertyAssertions(orderInfoEvent);
+            Assertions.INSTANCE.ObjectPropertyAssertions(orderInfoEvent);
 
         assertions.checkField("eventType", expectedEventType);
         assertions.checkFieldRecursively(

@@ -1,10 +1,10 @@
 package io.appmetrica.analytics.impl.preloadinfo;
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
-import io.appmetrica.analytics.assertions.ProtoObjectPropertyAssertions;
+import io.appmetrica.gradle.testutils.assertions.ObjectPropertyAssertions;
+import io.appmetrica.gradle.testutils.assertions.ProtoObjectPropertyAssertions;
 import io.appmetrica.analytics.impl.protobuf.client.PreloadInfoProto;
 import io.appmetrica.analytics.protobuf.nano.InvalidProtocolBufferNanoException;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import java.io.IOException;
 import java.util.Random;
 import java.util.function.Consumer;

@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.networktasks.impl.utils
 
 import io.appmetrica.analytics.networktasks.internal.utils.Utils
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.SoftAssertions
 import org.junit.Test
 import org.junit.runner.RunWith

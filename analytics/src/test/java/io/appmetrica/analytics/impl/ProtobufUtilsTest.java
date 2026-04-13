@@ -1,18 +1,18 @@
 package io.appmetrica.analytics.impl;
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
 import io.appmetrica.analytics.impl.component.session.SessionType;
 import io.appmetrica.analytics.impl.protobuf.backend.EventProto;
 import io.appmetrica.analytics.impl.telephony.SimInfo;
 import io.appmetrica.analytics.impl.utils.TimeUtils;
-import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
+import io.appmetrica.gradle.testutils.assertions.ObjectPropertyAssertions;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -38,7 +38,7 @@ public class ProtobufUtilsTest extends CommonTest {
             );
 
             ObjectPropertyAssertions<EventProto.ReportMessage.Time> assertions =
-                ObjectPropertyAssertions(time)
+                Assertions.INSTANCE.ObjectPropertyAssertions(time)
                     .withFinalFieldOnly(false);
 
             assertions.checkField("timestamp", timestamp);
@@ -61,7 +61,7 @@ public class ProtobufUtilsTest extends CommonTest {
         EventProto.ReportMessage.SimInfo proto = ProtobufUtils.buildSimInfo(simInfo);
 
         ObjectPropertyAssertions<EventProto.ReportMessage.SimInfo> assertions =
-            ObjectPropertyAssertions(proto)
+            Assertions.INSTANCE.ObjectPropertyAssertions(proto)
                 .withFinalFieldOnly(false);
 
         assertions.checkField("countryCode", simCountryCode);
@@ -79,7 +79,7 @@ public class ProtobufUtilsTest extends CommonTest {
         EventProto.ReportMessage.SimInfo proto = ProtobufUtils.buildSimInfo(simInfo);
 
         ObjectPropertyAssertions<EventProto.ReportMessage.SimInfo> assertions =
-            ObjectPropertyAssertions(proto)
+            Assertions.INSTANCE.ObjectPropertyAssertions(proto)
                 .withFinalFieldOnly(false);
 
         assertions.checkField("countryCode", 0);
@@ -99,7 +99,7 @@ public class ProtobufUtilsTest extends CommonTest {
 
         EventProto.ReportMessage.Session.SessionDesc sessionDesc = ProtobufUtils.buildSessionDesc(locale, sessionType, time);
         ObjectPropertyAssertions<EventProto.ReportMessage.Session.SessionDesc> assertions =
-            ObjectPropertyAssertions(sessionDesc)
+            Assertions.INSTANCE.ObjectPropertyAssertions(sessionDesc)
                 .withFinalFieldOnly(false);
 
         assertions.checkField("startTime", time);

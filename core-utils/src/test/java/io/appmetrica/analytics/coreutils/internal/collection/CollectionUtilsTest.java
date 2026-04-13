@@ -2,7 +2,7 @@ package io.appmetrica.analytics.coreutils.internal.collection;
 
 import android.util.ArrayMap;
 import android.util.Pair;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;

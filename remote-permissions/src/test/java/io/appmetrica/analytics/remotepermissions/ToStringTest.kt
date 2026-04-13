@@ -1,8 +1,8 @@
 package io.appmetrica.analytics.remotepermissions
 
 import io.appmetrica.analytics.remotepermissions.internal.config.FeatureConfig
-import io.appmetrica.analytics.testutils.BaseToStringTest
-import io.appmetrica.analytics.testutils.BaseToStringTest.Companion.toTestCase
+import io.appmetrica.gradle.androidtestutils.tostring.BaseToStringTest
+import io.appmetrica.gradle.androidtestutils.tostring.BaseToStringTest.Companion.toTestCase
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 

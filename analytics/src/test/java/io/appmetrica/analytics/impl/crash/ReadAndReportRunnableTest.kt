@@ -6,7 +6,7 @@ import io.appmetrica.analytics.impl.crash.jvm.JvmCrash
 import io.appmetrica.analytics.impl.crash.service.ShouldSendCrashNowPredicate
 import io.appmetrica.analytics.impl.utils.concurrency.ExclusiveMultiProcessFileLock
 import io.appmetrica.analytics.impl.utils.concurrency.FileLocksHolder
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
 import org.junit.Test
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.inOrder

@@ -13,7 +13,7 @@ import io.appmetrica.analytics.impl.events.ConditionalEventTrigger;
 import io.appmetrica.analytics.impl.request.ReportRequestConfig;
 import io.appmetrica.analytics.impl.utils.ServerTime;
 import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import java.util.concurrent.TimeUnit;
 import org.junit.Before;

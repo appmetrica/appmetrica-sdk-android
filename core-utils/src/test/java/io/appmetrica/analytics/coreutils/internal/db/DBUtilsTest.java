@@ -2,7 +2,7 @@ package io.appmetrica.analytics.coreutils.internal.db;
 
 import android.content.ContentValues;
 import android.database.MatrixCursor;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;

@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.modules.service
 import io.appmetrica.analytics.coreapi.internal.identifiers.SdkIdentifiers
 import io.appmetrica.analytics.impl.modules.RemoteConfigMetaInfoModel
 import io.appmetrica.analytics.impl.startup.StartupState
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.mockito.kotlin.doReturn

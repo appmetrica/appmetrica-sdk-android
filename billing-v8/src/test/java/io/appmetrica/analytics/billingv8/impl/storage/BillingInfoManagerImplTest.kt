@@ -3,7 +3,7 @@ package io.appmetrica.analytics.billingv8.impl.storage
 import io.appmetrica.analytics.billinginterface.internal.BillingInfo
 import io.appmetrica.analytics.billinginterface.internal.ProductType
 import io.appmetrica.analytics.billinginterface.internal.storage.BillingInfoStorage
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith

@@ -4,8 +4,8 @@ import io.appmetrica.analytics.coreutils.internal.cache.CachedDataProvider
 import io.appmetrica.analytics.coreutils.internal.cache.DataCache
 import io.appmetrica.analytics.coreutils.internal.cache.LocationDataCacheUpdateScheduler
 import io.appmetrica.analytics.coreutils.internal.time.SystemTimeProvider
-import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.MockedConstructionRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.rules.MockedConstructionRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Rule

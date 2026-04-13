@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.preparer
 import io.appmetrica.analytics.impl.protobuf.backend.EventProto
 import io.appmetrica.analytics.impl.protobuf.client.EventExtrasProto
 import io.appmetrica.analytics.protobuf.nano.MessageNano
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test

@@ -22,7 +22,7 @@ import io.appmetrica.analytics.impl.component.processor.event.SendReferrerEventH
 import io.appmetrica.analytics.impl.component.processor.event.UpdateUserProfileIDHandler;
 import io.appmetrica.analytics.impl.component.processor.event.modules.ModulesEventHandler;
 import io.appmetrica.analytics.impl.component.processor.session.ReportSessionStopDueCrashHandler;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Before;

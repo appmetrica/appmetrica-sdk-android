@@ -3,8 +3,8 @@ package io.appmetrica.analytics.impl
 import io.appmetrica.analytics.coreutils.internal.services.UtilityServiceConfiguration
 import io.appmetrica.analytics.coreutils.internal.services.UtilityServiceProvider
 import io.appmetrica.analytics.impl.startup.StartupState
-import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.MockedConstructionRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.rules.MockedConstructionRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Rule

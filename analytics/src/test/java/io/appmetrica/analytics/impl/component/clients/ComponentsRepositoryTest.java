@@ -7,7 +7,7 @@ import io.appmetrica.analytics.impl.component.CommutationDispatcherComponentFact
 import io.appmetrica.analytics.impl.component.ComponentId;
 import io.appmetrica.analytics.impl.component.RegularDispatcherComponent;
 import io.appmetrica.analytics.impl.component.RegularDispatcherComponentFactory;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import java.util.UUID;
 import org.junit.Before;

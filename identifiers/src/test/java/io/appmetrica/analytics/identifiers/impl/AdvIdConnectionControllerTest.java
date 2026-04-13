@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.ResolveInfo;
 import android.os.IBinder;
 import io.appmetrica.analytics.coreutils.internal.services.SafePackageManager;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
 import kotlin.jvm.functions.Function1;
 import org.assertj.core.api.ThrowableAssert;
 import org.junit.Before;
@@ -14,7 +15,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
 
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -74,7 +74,7 @@ public class AdvIdConnectionControllerTest {
     public void defaultConstructor() throws Exception {
         controller = new AdvIdServiceConnectionController<>(intent, converter, serviceShortTag);
 
-        ObjectPropertyAssertions(controller)
+        Assertions.INSTANCE.ObjectPropertyAssertions(controller)
                 .withPrivateFields(true)
                 .withIgnoredFields("connection")
                 .checkFieldNonNull("safePackageManager")

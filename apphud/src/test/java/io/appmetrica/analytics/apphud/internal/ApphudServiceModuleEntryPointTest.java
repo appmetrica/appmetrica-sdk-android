@@ -7,8 +7,8 @@ import io.appmetrica.analytics.apphud.impl.config.remote.RemoteApphudConfigConve
 import io.appmetrica.analytics.apphud.impl.config.remote.RemoteApphudConfigParser;
 import io.appmetrica.analytics.modulesapi.internal.service.ModuleRemoteConfig;
 import io.appmetrica.analytics.modulesapi.internal.service.ServiceContext;
-import io.appmetrica.analytics.testutils.CommonTest;
-import io.appmetrica.analytics.testutils.MockedConstructionRule;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.rules.MockedConstructionRule;
 import java.util.Map;
 import org.junit.Before;
 import org.junit.Rule;

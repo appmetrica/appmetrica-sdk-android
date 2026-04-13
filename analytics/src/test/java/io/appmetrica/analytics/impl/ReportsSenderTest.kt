@@ -6,7 +6,7 @@ import io.appmetrica.analytics.impl.client.ProcessConfiguration
 import io.appmetrica.analytics.impl.service.commands.ReportToServiceCallable
 import io.appmetrica.analytics.impl.service.commands.ServiceCallableFactory
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.stub
 
 import io.appmetrica.analytics.plugins.PluginErrorDetails
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
 import org.junit.Test
 import org.mockito.Mockito
 import org.mockito.Mockito.mock

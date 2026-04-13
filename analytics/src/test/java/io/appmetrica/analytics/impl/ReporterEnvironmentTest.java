@@ -2,16 +2,16 @@ package io.appmetrica.analytics.impl;
 
 import io.appmetrica.analytics.impl.client.ProcessConfiguration;
 import io.appmetrica.analytics.internal.CounterConfiguration;
-import io.appmetrica.analytics.testutils.CommonTest;
-import io.appmetrica.analytics.testutils.ContextRule;
+import io.appmetrica.gradle.androidtestutils.rules.ContextRule;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
 import org.junit.Before;
-import org.junit.Test;
 import org.junit.Rule;
+import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -48,7 +48,7 @@ public class ReporterEnvironmentTest extends CommonTest {
 
     @Test
     public void constuctor() throws Exception {
-        ObjectPropertyAssertions(
+        Assertions.INSTANCE.ObjectPropertyAssertions(
             new ReporterEnvironment(processConfiguration, counterConfiguration, errorEnvironment, USER_PROFILE_ID)
         )
             .withPrivateFields(true)

@@ -10,9 +10,9 @@ import io.appmetrica.analytics.impl.startup.uuid.UuidValidator
 import io.appmetrica.analytics.impl.utils.JsonHelper
 import io.appmetrica.analytics.impl.utils.StartupUtils
 import io.appmetrica.analytics.internal.IdentifiersResult
-import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.LogRule
-import io.appmetrica.analytics.testutils.MockedStaticRule
+import io.appmetrica.gradle.androidtestutils.rules.LogRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.rules.MockedStaticRule
 import org.junit.Before
 import org.junit.Rule
 import org.mockito.kotlin.any

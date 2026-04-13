@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.component.session;
 
 import io.appmetrica.analytics.impl.db.preferences.PreferencesComponentDbStorage;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import java.util.Random;
 import org.junit.Before;
 import org.junit.Test;

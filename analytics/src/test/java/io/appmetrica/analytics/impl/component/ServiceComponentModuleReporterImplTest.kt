@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.component
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceModuleCounterReport
 import io.appmetrica.analytics.impl.CounterReport
 import io.appmetrica.analytics.impl.ServiceModuleCounterReportToCounterReportConverter
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
 import org.junit.Test
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock

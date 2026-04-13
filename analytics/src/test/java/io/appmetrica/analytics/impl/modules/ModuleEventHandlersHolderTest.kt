@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.modules
 
 import io.appmetrica.analytics.modulesapi.internal.service.event.ModuleEventServiceHandlerFactory
 import io.appmetrica.analytics.modulesapi.internal.service.event.ModuleServiceEventHandler
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test

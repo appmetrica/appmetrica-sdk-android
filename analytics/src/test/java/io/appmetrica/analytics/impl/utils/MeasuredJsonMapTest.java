@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.utils;
 
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Before;

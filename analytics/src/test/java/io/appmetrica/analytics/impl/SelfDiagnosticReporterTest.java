@@ -7,7 +7,7 @@ import androidx.annotation.Nullable;
 import io.appmetrica.analytics.impl.client.ClientConfiguration;
 import io.appmetrica.analytics.impl.service.AppMetricaServiceDataReporter;
 import io.appmetrica.analytics.internal.CounterConfigurationReporterType;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.UUID;

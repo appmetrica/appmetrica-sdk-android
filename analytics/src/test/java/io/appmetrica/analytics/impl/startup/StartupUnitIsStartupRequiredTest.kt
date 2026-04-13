@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.startup
 
 import io.appmetrica.analytics.impl.GlobalServiceLocator
-import io.appmetrica.analytics.testutils.staticRule
+import io.appmetrica.gradle.testutils.rules.MockedStaticRule.Companion.staticRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Rule

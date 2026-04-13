@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.preparer;
 
 import io.appmetrica.analytics.impl.protobuf.backend.EventProto;
 import io.appmetrica.analytics.impl.utils.encryption.EventEncryptionMode;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

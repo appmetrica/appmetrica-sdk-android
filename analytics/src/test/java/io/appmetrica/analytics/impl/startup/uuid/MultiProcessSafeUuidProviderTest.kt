@@ -1,13 +1,13 @@
 package io.appmetrica.analytics.impl.startup.uuid
 
 import android.content.Context
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
 import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus
 import io.appmetrica.analytics.impl.db.FileConstants
 import io.appmetrica.analytics.impl.utils.concurrency.ExclusiveMultiProcessFileLock
 import io.appmetrica.analytics.internal.IdentifiersResult
-import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.constructionRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.assertions.Assertions.ObjectPropertyAssertions
+import io.appmetrica.gradle.testutils.rules.MockedConstructionRule.Companion.constructionRule
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.SoftAssertions
 import org.junit.After

@@ -1,10 +1,10 @@
 package io.appmetrica.analytics.impl.preparer
 
 import android.location.LocationManager
-import io.appmetrica.analytics.assertions.ProtoObjectPropertyAssertions
 import io.appmetrica.analytics.impl.db.event.DbLocationModel
 import io.appmetrica.analytics.impl.protobuf.backend.EventProto
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.assertions.ProtoObjectPropertyAssertions
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import java.util.concurrent.TimeUnit

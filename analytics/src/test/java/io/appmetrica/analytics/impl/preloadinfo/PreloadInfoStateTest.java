@@ -1,15 +1,15 @@
 package io.appmetrica.analytics.impl.preloadinfo;
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
 import io.appmetrica.analytics.impl.DistributionSource;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
+import io.appmetrica.gradle.testutils.assertions.ObjectPropertyAssertions;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class PreloadInfoStateTest extends CommonTest {
@@ -43,7 +43,7 @@ public class PreloadInfoStateTest extends CommonTest {
 
     @Test
     public void constructor() throws IllegalAccessException {
-        ObjectPropertyAssertions<PreloadInfoState> assertions = ObjectPropertyAssertions(mPreloadInfoState);
+        ObjectPropertyAssertions<PreloadInfoState> assertions = Assertions.INSTANCE.ObjectPropertyAssertions(mPreloadInfoState);
         assertions.checkField("trackingId", mTrackingId);
         assertions.checkField("additionalParameters", mParams);
         assertions.checkField("wasSet", mWasSet);
@@ -54,7 +54,7 @@ public class PreloadInfoStateTest extends CommonTest {
 
     @Test
     public void constructorDefault() throws IllegalAccessException {
-        ObjectPropertyAssertions<PreloadInfoState> assertions = ObjectPropertyAssertions(mDefaultPreloadInfoState);
+        ObjectPropertyAssertions<PreloadInfoState> assertions = Assertions.INSTANCE.ObjectPropertyAssertions(mDefaultPreloadInfoState);
         assertions.checkField("trackingId", (String) null);
         assertions.checkField("additionalParameters", mEmptyJson);
         assertions.checkField("wasSet", false);
@@ -99,7 +99,7 @@ public class PreloadInfoStateTest extends CommonTest {
             .put(KEY_AUTO_TRACKING, mAutoTracking)
             .put(KEY_SOURCE, mSource.getDescription())
         );
-        ObjectPropertyAssertions<PreloadInfoState> assertions = ObjectPropertyAssertions(preloadInfoState);
+        ObjectPropertyAssertions<PreloadInfoState> assertions = Assertions.INSTANCE.ObjectPropertyAssertions(preloadInfoState);
         assertions.checkField("trackingId", mTrackingId);
         assertions.checkField("additionalParameters", mParams);
         assertions.checkField("wasSet", mWasSet);
@@ -111,7 +111,7 @@ public class PreloadInfoStateTest extends CommonTest {
     @Test
     public void fromEmptyJson() throws Exception {
         PreloadInfoState preloadInfoState = PreloadInfoState.fromJson(new JSONObject());
-        ObjectPropertyAssertions<PreloadInfoState> assertions = ObjectPropertyAssertions(preloadInfoState)
+        ObjectPropertyAssertions<PreloadInfoState> assertions = Assertions.INSTANCE.ObjectPropertyAssertions(preloadInfoState)
             .withIgnoredFields("additionalParameters");
         assertions.checkField("trackingId", (String) null);
         assertions.checkField("wasSet", false);

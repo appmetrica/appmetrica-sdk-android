@@ -41,7 +41,7 @@ import io.appmetrica.analytics.impl.startup.CollectingFlags;
 import io.appmetrica.analytics.impl.startup.StartupState;
 import io.appmetrica.analytics.networktasks.internal.RetryPolicyConfig;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
-import io.appmetrica.analytics.testutils.MockedStaticRule;
+import io.appmetrica.gradle.testutils.rules.MockedStaticRule;
 
 @RunWith(Parameterized.class)
 public class ReportRequestConfigIsReadyForSendingTest {

@@ -5,8 +5,8 @@ import io.appmetrica.analytics.impl.attribution.JSONObjectExternalAttribution
 import io.appmetrica.analytics.impl.attribution.MapExternalAttribution
 import io.appmetrica.analytics.impl.attribution.NullExternalAttribution
 import io.appmetrica.analytics.impl.attribution.ObjectExternalAttribution
-import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.MockedConstructionRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.rules.MockedConstructionRule
 import org.assertj.core.api.Assertions.assertThat
 import org.json.JSONObject
 import org.junit.Rule

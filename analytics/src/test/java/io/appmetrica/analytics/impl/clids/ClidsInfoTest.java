@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.clids;
 
 import io.appmetrica.analytics.impl.DistributionSource;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import java.util.List;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.Test;

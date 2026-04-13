@@ -1,8 +1,8 @@
 package io.appmetrica.analytics.impl.startup
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
 import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.assertions.Assertions.ObjectPropertyAssertions
 import org.junit.Test
 
 internal class FeaturesConverterTest : CommonTest() {

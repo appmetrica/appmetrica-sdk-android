@@ -19,11 +19,11 @@ import io.appmetrica.analytics.impl.startup.uuid.UuidValidator
 import io.appmetrica.analytics.impl.utils.DeviceIdGenerator
 import io.appmetrica.analytics.internal.CounterConfiguration
 import io.appmetrica.analytics.internal.IdentifiersResult
-import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.ContextRule
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
 import io.appmetrica.analytics.testutils.ServiceMigrationCheckedRule
 import io.appmetrica.analytics.testutils.TestUtils
+import io.appmetrica.gradle.androidtestutils.rules.ContextRule
+import io.appmetrica.gradle.testutils.CommonTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.rules.RuleChain

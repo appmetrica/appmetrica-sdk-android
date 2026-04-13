@@ -2,8 +2,8 @@ package io.appmetrica.analytics.logger.common.impl;
 
 import android.util.Log;
 import androidx.annotation.NonNull;
-import io.appmetrica.analytics.testutils.CommonTest;
-import io.appmetrica.analytics.testutils.MockedStaticRule;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.rules.MockedStaticRule;
 import java.util.Locale;
 import org.junit.Before;
 import org.junit.Rule;

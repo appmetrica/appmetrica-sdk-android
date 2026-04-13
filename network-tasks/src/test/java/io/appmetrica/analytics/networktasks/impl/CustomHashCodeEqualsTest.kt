@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.networktasks.impl
 
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
 import nl.jqno.equalsverifier.EqualsVerifier
 import org.junit.Test
 

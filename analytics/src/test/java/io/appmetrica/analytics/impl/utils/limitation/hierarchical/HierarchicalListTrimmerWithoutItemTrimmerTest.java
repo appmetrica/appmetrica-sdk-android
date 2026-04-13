@@ -1,9 +1,8 @@
 package io.appmetrica.analytics.impl.utils.limitation.hierarchical;
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
 import io.appmetrica.analytics.impl.utils.limitation.CollectionTrimInfo;
 import io.appmetrica.analytics.impl.utils.limitation.TrimmingResult;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -13,7 +12,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
+import io.appmetrica.gradle.testutils.assertions.ObjectPropertyAssertions;
 
 @RunWith(Parameterized.class)
 public class HierarchicalListTrimmerWithoutItemTrimmerTest extends CommonTest {
@@ -155,7 +155,7 @@ public class HierarchicalListTrimmerWithoutItemTrimmerTest extends CommonTest {
             trimmer.trim(inputValue);
 
         ObjectPropertyAssertions<TrimmingResult<List<Item>, CollectionTrimInfo>> assertions =
-            ObjectPropertyAssertions(
+            Assertions.INSTANCE.ObjectPropertyAssertions(
                 trimmingResult
             );
 

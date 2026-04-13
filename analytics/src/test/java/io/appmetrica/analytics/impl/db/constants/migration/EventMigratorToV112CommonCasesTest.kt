@@ -4,7 +4,6 @@ import android.content.ContentValues
 import android.database.Cursor
 import android.database.MatrixCursor
 import android.database.sqlite.SQLiteDatabase
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
 import io.appmetrica.analytics.impl.EventSource
 import io.appmetrica.analytics.impl.FirstOccurrenceStatus
 import io.appmetrica.analytics.impl.InternalEvents
@@ -14,9 +13,10 @@ import io.appmetrica.analytics.impl.db.constants.migrations.ComponentDatabaseUpg
 import io.appmetrica.analytics.impl.db.event.DbEventModel
 import io.appmetrica.analytics.impl.db.protobuf.converter.DbEventModelConverter
 import io.appmetrica.analytics.impl.utils.encryption.EventEncryptionMode
-import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.LogRule
-import io.appmetrica.analytics.testutils.MockedConstructionRule
+import io.appmetrica.gradle.androidtestutils.rules.LogRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.assertions.Assertions.ObjectPropertyAssertions
+import io.appmetrica.gradle.testutils.rules.MockedConstructionRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Rule

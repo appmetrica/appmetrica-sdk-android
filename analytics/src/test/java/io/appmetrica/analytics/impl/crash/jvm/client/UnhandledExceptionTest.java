@@ -1,6 +1,7 @@
 package io.appmetrica.analytics.impl.crash.jvm.client;
 
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.List;
@@ -11,7 +12,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -38,7 +38,7 @@ public class UnhandledExceptionTest extends CommonTest {
     @Test
     public void testNulls() throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
         UnhandledException unhandledException = new UnhandledException(null, null, null, null, null, null, null, null);
-        ObjectPropertyAssertions(unhandledException)
+        Assertions.INSTANCE.ObjectPropertyAssertions(unhandledException)
             .checkFieldsAreNull("exception", "allThreads", "methodCallStacktrace", "buildId", "isOffline",
                 "platform", "virtualMachineVersion", "pluginEnvironment")
             .checkAll();
@@ -56,7 +56,7 @@ public class UnhandledExceptionTest extends CommonTest {
             mBuildId,
             mIsOffline
         );
-        ObjectPropertyAssertions(unhandledException)
+        Assertions.INSTANCE.ObjectPropertyAssertions(unhandledException)
             .checkField("exception", mThrowable)
             .checkField("allThreads", mAllThreads)
             .checkField("methodCallStacktrace", mMethodCallStacktrace)

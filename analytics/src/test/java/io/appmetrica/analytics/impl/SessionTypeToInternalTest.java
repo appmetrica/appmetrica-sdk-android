@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl;
 
 import io.appmetrica.analytics.impl.component.session.SessionType;
 import io.appmetrica.analytics.impl.protobuf.backend.EventProto;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import java.util.Arrays;
 import java.util.Collection;

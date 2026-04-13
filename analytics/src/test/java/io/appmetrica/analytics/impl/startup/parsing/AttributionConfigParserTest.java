@@ -3,7 +3,8 @@ package io.appmetrica.analytics.impl.startup.parsing;
 import android.util.Pair;
 import androidx.annotation.NonNull;
 import io.appmetrica.analytics.impl.startup.AttributionConfig;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -20,7 +21,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
 
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
@@ -162,7 +162,7 @@ public class AttributionConfigParserTest extends CommonTest {
     private void testParse(@NonNull JSONObject response, @NonNull List<Pair<String, AttributionConfig.Filter>> expectedConditions) throws IllegalAccessException {
         parser.parse(result, response);
         verify(result).setAttributionConfig(configCaptor.capture());
-        ObjectPropertyAssertions(configCaptor.getValue())
+        Assertions.INSTANCE.ObjectPropertyAssertions(configCaptor.getValue())
             .checkField("deeplinkConditions", expectedConditions, true)
             .checkAll();
     }

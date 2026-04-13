@@ -1,10 +1,10 @@
 package io.appmetrica.analytics.impl.startup;
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import org.junit.Test;
 
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
+import io.appmetrica.gradle.testutils.assertions.ObjectPropertyAssertions;
 
 public class CollectingFlagsTest extends CommonTest {
 
@@ -30,7 +30,7 @@ public class CollectingFlagsTest extends CommonTest {
             .build();
 
         ObjectPropertyAssertions<CollectingFlags> assertions =
-            ObjectPropertyAssertions(flags)
+            Assertions.INSTANCE.ObjectPropertyAssertions(flags)
                 .withFinalFieldOnly(false);
 
         assertions.checkField("permissionsCollectingEnabled", permissionsCollectingEnabled);
@@ -47,7 +47,7 @@ public class CollectingFlagsTest extends CommonTest {
     public void testCreateFromEmptyBuilder() throws Exception {
         CollectingFlags flags = new CollectingFlags.CollectingFlagsBuilder().build();
         ObjectPropertyAssertions<CollectingFlags> assertions =
-            ObjectPropertyAssertions(flags)
+            Assertions.INSTANCE.ObjectPropertyAssertions(flags)
                 .withFinalFieldOnly(false);
 
         assertions.checkField("permissionsCollectingEnabled", false);

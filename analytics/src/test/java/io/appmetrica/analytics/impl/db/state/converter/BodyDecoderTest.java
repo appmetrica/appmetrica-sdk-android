@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.db.state.converter;
 
 import io.appmetrica.analytics.coreutils.internal.encryption.AESEncrypter;
 import io.appmetrica.analytics.coreutils.internal.io.GZIPCompressor;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import java.io.IOException;
 import org.junit.Before;
 import org.junit.Test;

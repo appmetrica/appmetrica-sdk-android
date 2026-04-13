@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.proxy.validation;
 import io.appmetrica.analytics.impl.startup.Constants;
 import io.appmetrica.analytics.impl.utils.validation.IdentifiersValidator;
 import io.appmetrica.analytics.impl.utils.validation.ValidationResult;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;

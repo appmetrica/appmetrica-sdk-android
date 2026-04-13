@@ -5,7 +5,7 @@ import io.appmetrica.analytics.screenshot.impl.callback.ScreenshotCaptorCallback
 import io.appmetrica.analytics.screenshot.impl.captor.CaptorProvider
 import io.appmetrica.analytics.screenshot.impl.captor.ScreenshotCaptor
 import io.appmetrica.analytics.screenshot.impl.config.client.model.ClientSideScreenshotConfig
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
 import org.junit.Test
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock

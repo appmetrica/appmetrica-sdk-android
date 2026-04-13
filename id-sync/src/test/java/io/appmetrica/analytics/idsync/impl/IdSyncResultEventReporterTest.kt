@@ -3,7 +3,7 @@ package io.appmetrica.analytics.idsync.impl
 import io.appmetrica.analytics.coreapi.internal.identifiers.SdkIdentifiers
 import io.appmetrica.analytics.modulesapi.internal.common.ModuleSelfReporter
 import io.appmetrica.analytics.modulesapi.internal.service.ServiceContext
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
 import org.junit.Test
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock

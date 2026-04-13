@@ -3,8 +3,8 @@ package io.appmetrica.analytics.network.internal
 import io.appmetrica.analytics.network.impl.NetworkClientFactory
 import io.appmetrica.analytics.networkapi.NetworkClient
 import io.appmetrica.analytics.networkapi.NetworkClientSettings
-import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.staticRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.rules.MockedStaticRule.Companion.staticRule
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.SoftAssertions
 import org.junit.Rule

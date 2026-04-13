@@ -3,9 +3,9 @@ package io.appmetrica.analytics.remotepermissions.impl
 import io.appmetrica.analytics.protobuf.nano.MessageNano
 import io.appmetrica.analytics.remotepermissions.impl.protobuf.client.RemotePermissionsProtobuf
 import io.appmetrica.analytics.remotepermissions.internal.config.FeatureConfig
-import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.MockedConstructionRule
-import io.appmetrica.analytics.testutils.MockedStaticRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.rules.MockedConstructionRule
+import io.appmetrica.gradle.testutils.rules.MockedStaticRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Rule

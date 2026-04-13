@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.ecommerce.client.converter;
 
 import io.appmetrica.analytics.impl.protobuf.backend.Ecommerce;
 import io.appmetrica.analytics.protobuf.nano.MessageNano;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import java.util.Arrays;
 import java.util.Collection;
 import org.junit.Before;

@@ -1,6 +1,5 @@
 package io.appmetrica.analytics.impl.ecommerce.client.converter;
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
 import io.appmetrica.analytics.impl.ecommerce.client.model.PriceWrapper;
 import io.appmetrica.analytics.impl.ecommerce.client.model.ProductWrapper;
 import io.appmetrica.analytics.impl.protobuf.backend.Ecommerce;
@@ -8,8 +7,10 @@ import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedInfo;
 import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedProvider;
 import io.appmetrica.analytics.impl.utils.limitation.TrimmingResult;
 import io.appmetrica.analytics.impl.utils.limitation.hierarchical.HierarchicalStringTrimmer;
-import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.TruncationInfoConsumer;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
+import io.appmetrica.gradle.testutils.assertions.ObjectPropertyAssertions;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +20,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.Mockito.when;
 
@@ -126,7 +126,7 @@ public class ProductConverterTest extends CommonTest {
         productConverter = new ProductConverter();
 
         ObjectPropertyAssertions<ProductConverter> assertions =
-            ObjectPropertyAssertions(productConverter)
+            Assertions.INSTANCE.ObjectPropertyAssertions(productConverter)
                 .withPrivateFields(true);
 
         assertions.checkFieldNonNull("payloadConverter");
@@ -164,7 +164,7 @@ public class ProductConverterTest extends CommonTest {
         Result<Ecommerce.ECommerceEvent.Product, BytesTruncatedProvider> productResult =
             productConverter.fromModel(productWrapper);
 
-        ObjectPropertyAssertions(
+        Assertions.INSTANCE.ObjectPropertyAssertions(
             productResult)
             .checkFieldRecursively(
                 "metaInfo",
@@ -236,7 +236,7 @@ public class ProductConverterTest extends CommonTest {
         Result<Ecommerce.ECommerceEvent.Product, BytesTruncatedProvider> productResult =
             productConverter.fromModel(productWrapper);
 
-        ObjectPropertyAssertions(
+        Assertions.INSTANCE.ObjectPropertyAssertions(
             productResult)
             .checkFieldRecursively(
                 "metaInfo",
@@ -270,7 +270,7 @@ public class ProductConverterTest extends CommonTest {
             productConverter.fromModel(productWrapper);
 
 
-        ObjectPropertyAssertions(result)
+        Assertions.INSTANCE.ObjectPropertyAssertions(result)
             .checkFieldRecursively(
                 "metaInfo",
                 new TruncationInfoConsumer(0)

@@ -3,7 +3,7 @@ package io.appmetrica.analytics.billingv8.impl
 import com.android.billingclient.api.BillingClient
 import io.appmetrica.analytics.billinginterface.internal.ProductType
 import io.appmetrica.analytics.billingv8.impl.ProductTypeParser.parse
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith

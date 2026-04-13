@@ -4,7 +4,7 @@ import io.appmetrica.analytics.impl.component.processor.event.ReportComponentHan
 import io.appmetrica.analytics.impl.component.processor.event.ReportCrashMetaInformation
 import io.appmetrica.analytics.impl.component.processor.event.ReportPrevSessionEventHandler
 import io.appmetrica.analytics.impl.component.processor.session.ReportSessionStopDueCrashHandler
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.mockito.kotlin.doReturn

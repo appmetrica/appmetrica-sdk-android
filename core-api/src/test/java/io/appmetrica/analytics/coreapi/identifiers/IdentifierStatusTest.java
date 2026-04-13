@@ -2,7 +2,7 @@ package io.appmetrica.analytics.coreapi.identifiers;
 
 import androidx.annotation.NonNull;
 import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;

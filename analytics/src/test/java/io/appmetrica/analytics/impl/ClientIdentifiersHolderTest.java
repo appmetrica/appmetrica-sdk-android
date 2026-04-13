@@ -1,7 +1,6 @@
 package io.appmetrica.analytics.impl;
 
 import android.os.Bundle;
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
 import io.appmetrica.analytics.coreapi.internal.identifiers.AdTrackingInfo;
 import io.appmetrica.analytics.coreapi.internal.identifiers.AdTrackingInfoResult;
 import io.appmetrica.analytics.coreapi.internal.identifiers.AdvertisingIdsHolder;
@@ -14,10 +13,12 @@ import io.appmetrica.analytics.impl.utils.JsonHelper;
 import io.appmetrica.analytics.impl.utils.StartupUtils;
 import io.appmetrica.analytics.impl.utils.TimeUtils;
 import io.appmetrica.analytics.internal.IdentifiersResult;
-import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
-import io.appmetrica.analytics.testutils.MockedStaticRule;
 import io.appmetrica.analytics.testutils.TestUtils;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
+import io.appmetrica.gradle.testutils.assertions.ObjectPropertyAssertions;
+import io.appmetrica.gradle.testutils.rules.MockedStaticRule;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -35,7 +36,6 @@ import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
 import org.skyscreamer.jsonassert.JSONAssert;
 
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -122,7 +122,7 @@ public class ClientIdentifiersHolderTest extends CommonTest {
             modulesConfig
         );
 
-        ObjectPropertyAssertions<ClientIdentifiersHolder> assertions = ObjectPropertyAssertions(clientIdentifiersHolder).withPrivateFields(true);
+        ObjectPropertyAssertions<ClientIdentifiersHolder> assertions = Assertions.INSTANCE.ObjectPropertyAssertions(clientIdentifiersHolder).withPrivateFields(true);
         assertions.checkField("mUuidData", "getUuid", mUuidData);
         assertions.checkField("mDeviceIdData", "getDeviceId", mDeviceIdData);
         assertions.checkField("mDeviceIdHashData", "getDeviceIdHash", mDeviceIdHashData);
@@ -196,7 +196,7 @@ public class ClientIdentifiersHolderTest extends CommonTest {
                 yandexError
             ));
         ClientIdentifiersHolder clientIdentifiersHolder = new ClientIdentifiersHolder(startupState, advertisingIdsHolder, clientClids);
-        ObjectPropertyAssertions<ClientIdentifiersHolder> assertions = ObjectPropertyAssertions(clientIdentifiersHolder)
+        ObjectPropertyAssertions<ClientIdentifiersHolder> assertions = Assertions.INSTANCE.ObjectPropertyAssertions(clientIdentifiersHolder)
             .withPrivateFields(true)
             .withIgnoredFields("modulesConfig");
         assertions.checkField("mUuidData", "getUuid", mUuidData);
@@ -269,7 +269,7 @@ public class ClientIdentifiersHolderTest extends CommonTest {
         Bundle bundle = new Bundle();
         clientIdentifiersHolder.toBundle(bundle);
         ClientIdentifiersHolder actual = new ClientIdentifiersHolder(bundle);
-        ObjectPropertyAssertions<ClientIdentifiersHolder> assertions = ObjectPropertyAssertions(actual).withPrivateFields(true);
+        ObjectPropertyAssertions<ClientIdentifiersHolder> assertions = Assertions.INSTANCE.ObjectPropertyAssertions(actual).withPrivateFields(true);
         assertions.checkField("mUuidData", "getUuid", mUuidData);
         assertions.checkField("mDeviceIdData", "getDeviceId", mDeviceIdData);
         assertions.checkField("mDeviceIdHashData", "getDeviceIdHash", mDeviceIdHashData);

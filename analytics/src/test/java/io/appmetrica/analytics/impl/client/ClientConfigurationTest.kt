@@ -3,10 +3,10 @@ package io.appmetrica.analytics.impl.client
 import android.os.Bundle
 import io.appmetrica.analytics.BuildConfig
 import io.appmetrica.analytics.internal.CounterConfiguration
-import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.ContextRule
-import io.appmetrica.analytics.testutils.on
-import io.appmetrica.analytics.testutils.staticRule
+import io.appmetrica.gradle.androidtestutils.rules.ContextRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.rules.MockedStaticRule.Companion.on
+import io.appmetrica.gradle.testutils.rules.MockedStaticRule.Companion.staticRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Rule
 import org.junit.Test

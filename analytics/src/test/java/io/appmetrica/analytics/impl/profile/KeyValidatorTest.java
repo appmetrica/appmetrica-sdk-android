@@ -1,8 +1,8 @@
 package io.appmetrica.analytics.impl.profile;
 
 import io.appmetrica.analytics.impl.utils.limitation.EventLimitationProcessor;
-import io.appmetrica.analytics.testutils.CommonTest;
-import io.appmetrica.analytics.testutils.RandomStringGenerator;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.data.RandomStringGenerator;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

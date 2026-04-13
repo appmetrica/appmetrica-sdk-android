@@ -4,8 +4,8 @@ import io.appmetrica.analytics.impl.component.ComponentUnit
 import io.appmetrica.analytics.impl.db.DatabaseHelper
 import io.appmetrica.analytics.impl.db.preferences.PreferencesComponentDbStorage
 import io.appmetrica.analytics.impl.request.ReportRequestConfig
-import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.constructionRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.rules.MockedConstructionRule.Companion.constructionRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Rule

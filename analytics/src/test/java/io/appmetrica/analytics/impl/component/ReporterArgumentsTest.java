@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.component;
 
 import android.location.Location;
 import io.appmetrica.analytics.internal.CounterConfiguration;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import java.util.HashMap;
 import java.util.Map;
 import org.assertj.core.api.SoftAssertions;

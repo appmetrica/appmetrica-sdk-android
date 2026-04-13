@@ -1,6 +1,5 @@
 package io.appmetrica.analytics.impl.id
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
 import io.appmetrica.analytics.coreapi.internal.control.Toggle
 import io.appmetrica.analytics.coreapi.internal.data.Savable
 import io.appmetrica.analytics.coreutils.internal.toggle.ConjunctiveCompositeThreadSafeToggle
@@ -10,9 +9,10 @@ import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.db.preferences.PreferencesServiceDbStorage
 import io.appmetrica.analytics.impl.startup.CollectingFlags
 import io.appmetrica.analytics.impl.startup.StartupState
-import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
-import io.appmetrica.analytics.testutils.constructionRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.assertions.Assertions.ObjectPropertyAssertions
+import io.appmetrica.gradle.testutils.rules.MockedConstructionRule.Companion.constructionRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Rule
 import org.junit.Test

@@ -1,11 +1,11 @@
 package io.appmetrica.analytics.impl.startup.parsing;
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
 import io.appmetrica.analytics.networktasks.internal.RetryPolicyConfig;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import org.junit.Test;
 
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
+import io.appmetrica.gradle.testutils.assertions.ObjectPropertyAssertions;
 
 public class RetryPolicyConfigTest extends CommonTest {
 
@@ -18,7 +18,7 @@ public class RetryPolicyConfigTest extends CommonTest {
         mParser.parse(mResult, startupJsonMock);
 
         ObjectPropertyAssertions<RetryPolicyConfig> assertions =
-            ObjectPropertyAssertions(mResult.getRetryPolicyConfig())
+            Assertions.INSTANCE.ObjectPropertyAssertions(mResult.getRetryPolicyConfig())
                 .withFinalFieldOnly(false);
 
         assertions.checkField("maxIntervalSeconds", 600);
@@ -33,7 +33,7 @@ public class RetryPolicyConfigTest extends CommonTest {
         mParser.parse(mResult, startupJsonMock);
 
         ObjectPropertyAssertions<RetryPolicyConfig> assertions =
-            ObjectPropertyAssertions(mResult.getRetryPolicyConfig())
+            Assertions.INSTANCE.ObjectPropertyAssertions(mResult.getRetryPolicyConfig())
                 .withFinalFieldOnly(false);
 
         assertions.checkField("maxIntervalSeconds", 600);
@@ -51,7 +51,7 @@ public class RetryPolicyConfigTest extends CommonTest {
         mParser.parse(mResult, startupJsonMock);
 
         ObjectPropertyAssertions<RetryPolicyConfig> assertions =
-            ObjectPropertyAssertions(mResult.getRetryPolicyConfig())
+            Assertions.INSTANCE.ObjectPropertyAssertions(mResult.getRetryPolicyConfig())
                 .withFinalFieldOnly(false);
 
         assertions.checkField("maxIntervalSeconds", maxInterval);

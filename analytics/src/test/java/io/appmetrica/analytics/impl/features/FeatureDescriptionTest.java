@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.features;
 
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import java.util.Random;
 import java.util.UUID;
 import org.json.JSONException;

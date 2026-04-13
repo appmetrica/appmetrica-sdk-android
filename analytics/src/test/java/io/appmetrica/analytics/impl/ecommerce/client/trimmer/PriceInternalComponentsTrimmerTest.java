@@ -1,10 +1,9 @@
 package io.appmetrica.analytics.impl.ecommerce.client.trimmer;
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
 import io.appmetrica.analytics.impl.ecommerce.client.model.AmountWrapper;
 import io.appmetrica.analytics.impl.utils.limitation.CollectionTrimInfo;
 import io.appmetrica.analytics.impl.utils.limitation.TrimmingResult;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,7 +15,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
+import io.appmetrica.gradle.testutils.assertions.ObjectPropertyAssertions;
 
 @RunWith(Parameterized.class)
 public class PriceInternalComponentsTrimmerTest extends CommonTest {
@@ -131,7 +131,7 @@ public class PriceInternalComponentsTrimmerTest extends CommonTest {
             trimmer.trim(inputInternalComponents);
 
         ObjectPropertyAssertions<TrimmingResult<List<AmountWrapper>, CollectionTrimInfo>> assertions =
-            ObjectPropertyAssertions(trimmingResult);
+            Assertions.INSTANCE.ObjectPropertyAssertions(trimmingResult);
 
         assertions.checkField("value", expectedInternalComponents, true);
         assertions.checkFieldComparingFieldByField(

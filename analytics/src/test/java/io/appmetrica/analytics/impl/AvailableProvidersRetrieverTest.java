@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl;
 
 import android.location.LocationManager;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.Before;

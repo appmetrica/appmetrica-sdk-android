@@ -2,7 +2,7 @@ package io.appmetrica.analytics.snapshot.impl
 
 import io.appmetrica.analytics.BuildConfig
 import io.appmetrica.analytics.impl.SdkUtils
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.Assertions
 import org.junit.Test
 import org.junit.runner.RunWith

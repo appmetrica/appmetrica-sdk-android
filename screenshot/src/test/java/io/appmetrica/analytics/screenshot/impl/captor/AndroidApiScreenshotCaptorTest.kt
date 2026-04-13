@@ -10,7 +10,7 @@ import io.appmetrica.analytics.modulesapi.internal.client.ClientContext
 import io.appmetrica.analytics.screenshot.impl.callback.ScreenshotCaptorCallback
 import io.appmetrica.analytics.screenshot.impl.config.client.model.ClientSideApiCaptorConfig
 import io.appmetrica.analytics.screenshot.impl.config.client.model.ClientSideScreenshotConfig
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith

@@ -7,7 +7,7 @@ import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.impl.component.remarketing.EventFirstOccurrenceService;
 import io.appmetrica.analytics.impl.db.VitalComponentDataProvider;
 import io.appmetrica.analytics.impl.startup.AttributionConfig;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.TestUtils;
 import java.util.ArrayList;
 import java.util.Arrays;

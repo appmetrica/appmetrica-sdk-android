@@ -1,8 +1,8 @@
 package io.appmetrica.analytics.coreutils.internal;
 
 import android.content.ContentValues;
-import io.appmetrica.analytics.testutils.CommonTest;
-import io.appmetrica.analytics.testutils.RandomStringGenerator;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.data.RandomStringGenerator;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.regex.Pattern;

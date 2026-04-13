@@ -2,8 +2,8 @@ package io.appmetrica.analytics.impl.db.storage;
 
 import io.appmetrica.analytics.impl.db.IKeyValueTableDbHelper;
 import io.appmetrica.analytics.impl.db.StorageType;
-import io.appmetrica.analytics.testutils.CommonTest;
-import io.appmetrica.analytics.testutils.ContextRule;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.androidtestutils.rules.ContextRule;
 import io.appmetrica.analytics.testutils.ServiceMigrationCheckedRule;
 import java.util.HashSet;
 import java.util.Set;

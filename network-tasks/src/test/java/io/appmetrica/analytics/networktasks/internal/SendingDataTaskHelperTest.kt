@@ -2,7 +2,7 @@ package io.appmetrica.analytics.networktasks.internal
 
 import io.appmetrica.analytics.coreapi.internal.io.Compressor
 import io.appmetrica.analytics.coreutils.internal.time.TimeProvider
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.mockito.Mockito.verifyNoInteractions

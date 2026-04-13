@@ -1,14 +1,14 @@
 package io.appmetrica.analytics.impl.ecommerce;
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
 import io.appmetrica.analytics.impl.ecommerce.client.model.CartItemWrapper;
 import io.appmetrica.analytics.impl.ecommerce.client.model.OrderWrapper;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
+import io.appmetrica.gradle.testutils.assertions.ObjectPropertyAssertions;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class OrderWrapperAssertionsConsumer implements Consumer<ObjectPropertyAssertions<OrderWrapper>> {
@@ -34,7 +34,7 @@ class OrderWrapperAssertionsConsumer implements Consumer<ObjectPropertyAssertion
                         assertThat(cartItemWrappers).hasSize(expectedCartItems.size());
                         for (int i = 0; i < cartItemWrappers.size(); i++) {
                             ObjectPropertyAssertions<CartItemWrapper> cartItemAssertions =
-                                ObjectPropertyAssertions(cartItemWrappers.get(i));
+                                Assertions.INSTANCE.ObjectPropertyAssertions(cartItemWrappers.get(i));
                             expectedCartItems.get(i).accept(cartItemAssertions);
                             cartItemAssertions.checkAll();
                         }

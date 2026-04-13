@@ -1,7 +1,5 @@
 package io.appmetrica.analytics.screenshot.impl.config.service.converter
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
-import io.appmetrica.analytics.assertions.ProtoObjectPropertyAssertions
 import io.appmetrica.analytics.screenshot.impl.ApiCaptorConfigProto
 import io.appmetrica.analytics.screenshot.impl.ContentObserverCaptorConfigProto
 import io.appmetrica.analytics.screenshot.impl.RemoteScreenshotConfigProto
@@ -11,7 +9,9 @@ import io.appmetrica.analytics.screenshot.impl.config.service.model.ServiceSideA
 import io.appmetrica.analytics.screenshot.impl.config.service.model.ServiceSideContentObserverCaptorConfig
 import io.appmetrica.analytics.screenshot.impl.config.service.model.ServiceSideScreenshotConfig
 import io.appmetrica.analytics.screenshot.impl.config.service.model.ServiceSideServiceCaptorConfig
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.assertions.Assertions.ObjectPropertyAssertions
+import io.appmetrica.gradle.testutils.assertions.ProtoObjectPropertyAssertions
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.mockito.kotlin.mock

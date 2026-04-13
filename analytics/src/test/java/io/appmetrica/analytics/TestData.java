@@ -1,7 +1,5 @@
 package io.appmetrica.analytics;
 
-import android.location.Location;
-import io.appmetrica.analytics.testutils.LocationUtils;
 import java.util.HashMap;
 
 public class TestData {
@@ -14,7 +12,6 @@ public class TestData {
     static final boolean TEST_REPORT_NATIVE_CRASHES_ENABLED = false;
     static final boolean TEST_ANR_MONITORING = false;
     static final int TEST_ANR_MONITORING_TIMEOUT = 42;
-    public static final Location TEST_LOCATION = LocationUtils.INSTANCE.createFakeLocation(10000.0, 20000.0);
     static final boolean TEST_TRACK_LOCATION_ENABLED = false;
     public static final HashMap<String, String> TEST_CLIDS = new HashMap<String, String>() {
         {

@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.networkokhttp.impl
 
 import io.appmetrica.analytics.coreutils.internal.time.TimeProvider
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
 import okhttp3.Call
 import okhttp3.Connection
 import okhttp3.Protocol

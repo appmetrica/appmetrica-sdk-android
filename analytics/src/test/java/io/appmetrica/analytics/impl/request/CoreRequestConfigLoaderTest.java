@@ -10,8 +10,8 @@ import io.appmetrica.analytics.coreapi.internal.servicecomponents.SdkEnvironment
 import io.appmetrica.analytics.coreutils.internal.services.SafePackageManager;
 import io.appmetrica.analytics.impl.id.AdvertisingIdGetter;
 import io.appmetrica.analytics.impl.startup.StartupState;
-import io.appmetrica.analytics.testutils.CommonTest;
-import io.appmetrica.analytics.testutils.ContextRule;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.androidtestutils.rules.ContextRule;
 import io.appmetrica.analytics.testutils.TestUtils;
 import java.util.UUID;
 import org.assertj.core.api.SoftAssertions;

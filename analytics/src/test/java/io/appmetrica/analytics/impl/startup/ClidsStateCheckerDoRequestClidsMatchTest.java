@@ -5,7 +5,7 @@ import io.appmetrica.analytics.impl.ClidsInfoStorage;
 import io.appmetrica.analytics.impl.DistributionSource;
 import io.appmetrica.analytics.impl.clids.ClidsInfo;
 import io.appmetrica.analytics.impl.utils.StartupUtils;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.TestUtils;
 import java.util.Arrays;
 import java.util.Collection;

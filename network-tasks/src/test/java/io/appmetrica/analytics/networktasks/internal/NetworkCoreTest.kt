@@ -2,7 +2,7 @@ package io.appmetrica.analytics.networktasks.internal
 
 import io.appmetrica.analytics.coreapi.internal.io.IExecutionPolicy
 import io.appmetrica.analytics.networktasks.impl.NetworkTaskRunnable
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
 import org.junit.After
 import org.junit.Before
 import org.junit.Test

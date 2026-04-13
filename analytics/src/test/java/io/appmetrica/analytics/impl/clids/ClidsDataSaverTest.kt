@@ -1,10 +1,10 @@
 package io.appmetrica.analytics.impl.clids
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
 import io.appmetrica.analytics.impl.DistributionSource
 import io.appmetrica.analytics.impl.GlobalServiceLocator
-import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.assertions.Assertions.ObjectPropertyAssertions
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.kotlin.argumentCaptor

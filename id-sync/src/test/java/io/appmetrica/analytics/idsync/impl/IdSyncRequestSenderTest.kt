@@ -1,6 +1,5 @@
 package io.appmetrica.analytics.idsync.impl
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
 import io.appmetrica.analytics.coreapi.internal.io.SslSocketFactoryProvider
 import io.appmetrica.analytics.idsync.internal.model.RequestConfig
 import io.appmetrica.analytics.network.internal.NetworkClientBuilder
@@ -9,9 +8,10 @@ import io.appmetrica.analytics.networkapi.NetworkClient
 import io.appmetrica.analytics.networkapi.NetworkClientSettings
 import io.appmetrica.analytics.networkapi.Request
 import io.appmetrica.analytics.networkapi.Response
-import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.MockedConstructionRule
-import io.appmetrica.analytics.testutils.constructionRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.assertions.Assertions.ObjectPropertyAssertions
+import io.appmetrica.gradle.testutils.rules.MockedConstructionRule
+import io.appmetrica.gradle.testutils.rules.MockedConstructionRule.Companion.constructionRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Rule
 import org.junit.Test

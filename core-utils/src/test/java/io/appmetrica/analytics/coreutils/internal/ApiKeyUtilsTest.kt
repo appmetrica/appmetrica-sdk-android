@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.coreutils.internal
 
 import io.appmetrica.analytics.coreutils.internal.ApiKeyUtils.createPartialApiKey
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.Assertions
 import org.junit.Test
 import org.junit.runner.RunWith

@@ -7,9 +7,9 @@ import io.appmetrica.analytics.impl.referrer.service.cache.CachedReferrerProvide
 import io.appmetrica.analytics.impl.referrer.service.cache.VitalReferrerCache
 import io.appmetrica.analytics.impl.referrer.service.provider.google.GoogleReferrerProvider
 import io.appmetrica.analytics.impl.referrer.service.provider.huawei.HuaweiReferrerProvider
-import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
-import io.appmetrica.analytics.testutils.constructionRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.rules.MockedConstructionRule.Companion.constructionRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Rule
 import org.junit.Test

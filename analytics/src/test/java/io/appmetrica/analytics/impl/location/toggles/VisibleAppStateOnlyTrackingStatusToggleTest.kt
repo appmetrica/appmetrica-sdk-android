@@ -2,8 +2,8 @@ package io.appmetrica.analytics.impl.location.toggles
 
 import io.appmetrica.analytics.coreapi.internal.control.ToggleObserver
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.applicationstate.ApplicationState
-import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
+import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Rule

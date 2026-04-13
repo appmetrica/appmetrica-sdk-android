@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.crash.jvm.converter;
 
 import io.appmetrica.analytics.impl.crash.jvm.client.StackTraceItemInternal;
 import io.appmetrica.analytics.impl.protobuf.backend.CrashAndroid;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.Before;

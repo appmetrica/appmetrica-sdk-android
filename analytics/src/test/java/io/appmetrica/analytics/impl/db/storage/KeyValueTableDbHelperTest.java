@@ -9,7 +9,7 @@ import io.appmetrica.analytics.impl.db.DatabaseManagerProvider;
 import io.appmetrica.analytics.impl.db.DatabaseStorage;
 import io.appmetrica.analytics.impl.db.connectors.SimpleDBConnector;
 import io.appmetrica.analytics.impl.db.constants.Constants;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import java.util.ArrayList;
 import java.util.Arrays;

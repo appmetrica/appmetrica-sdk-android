@@ -7,6 +7,7 @@ import android.os.Handler
 import android.os.Looper
 import android.os.Parcelable
 import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor
+import io.appmetrica.gradle.androidtestutils.mock.ContentValuesStubHelper
 import org.mockito.kotlin.any
 import org.mockito.kotlin.anyOrNull
 import org.mockito.kotlin.doAnswer
@@ -60,7 +61,7 @@ object MockProvider {
     @JvmStatic
     fun stubContentValues(contentValues: ContentValues, dataMap: MutableMap<String, Any?>) {
         // Use Java helper to avoid Kotlin overload resolution ambiguity with put()
-        ContentValuesStubHelper.stubPutMethod(contentValues, dataMap as MutableMap<String, Any>)
+        ContentValuesStubHelper.stubPutMethod(contentValues, dataMap)
 
         stubbing(contentValues) {
             on { getAsString(any()) } doAnswer {

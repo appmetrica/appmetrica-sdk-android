@@ -3,8 +3,8 @@ package io.appmetrica.analytics.impl.startup.uuid
 import android.content.Context
 import io.appmetrica.analytics.impl.db.FileConstants
 import io.appmetrica.analytics.impl.utils.concurrency.ExclusiveMultiProcessFileLock
-import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.MockedConstructionRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.rules.MockedConstructionRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
 import org.junit.Before

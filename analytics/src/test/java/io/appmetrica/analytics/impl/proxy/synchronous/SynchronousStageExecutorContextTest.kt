@@ -12,8 +12,8 @@ import io.appmetrica.analytics.impl.WebViewJsInterfaceHandler
 import io.appmetrica.analytics.impl.proxy.AppMetricaFacadeProvider
 import io.appmetrica.analytics.impl.utils.FirstLaunchDetector
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule
-import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.ContextCoverageUtils
+import io.appmetrica.gradle.testutils.CommonTest
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mockito

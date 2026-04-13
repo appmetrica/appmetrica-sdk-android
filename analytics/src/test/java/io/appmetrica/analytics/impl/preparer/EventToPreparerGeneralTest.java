@@ -3,8 +3,9 @@ package io.appmetrica.analytics.impl.preparer;
 import androidx.annotation.Nullable;
 import io.appmetrica.analytics.impl.InternalEvents;
 import io.appmetrica.analytics.impl.ProtobufUtils;
-import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -14,8 +15,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
-
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 
 @RunWith(Parameterized.class)
 public class EventToPreparerGeneralTest extends CommonTest {
@@ -272,7 +271,7 @@ public class EventToPreparerGeneralTest extends CommonTest {
     @Test
     public void test() throws Exception {
         EventPreparer eventPreparer = ProtobufUtils.getEventPreparer(mInternalEvents);
-        ObjectPropertyAssertions(eventPreparer)
+        Assertions.INSTANCE.ObjectPropertyAssertions(eventPreparer)
             .withPrivateFields(true)
             .checkFieldIsInstanceOf("mNameComposer", composers.nameComposerClass)
             .checkFieldIsInstanceOf("mValueComposer", composers.valueComposerClass)

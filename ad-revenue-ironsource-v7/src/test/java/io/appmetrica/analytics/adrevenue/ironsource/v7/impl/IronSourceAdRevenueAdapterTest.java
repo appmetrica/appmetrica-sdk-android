@@ -2,9 +2,9 @@ package io.appmetrica.analytics.adrevenue.ironsource.v7.impl;
 
 import com.ironsource.mediationsdk.IronSource;
 import io.appmetrica.analytics.modulesapi.internal.client.ClientContext;
-import io.appmetrica.analytics.testutils.CommonTest;
-import io.appmetrica.analytics.testutils.MockedConstructionRule;
-import io.appmetrica.analytics.testutils.MockedStaticRule;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.rules.MockedConstructionRule;
+import io.appmetrica.gradle.testutils.rules.MockedStaticRule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.MockedStatic;

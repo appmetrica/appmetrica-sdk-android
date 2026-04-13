@@ -5,7 +5,7 @@ import android.content.Intent;
 import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor;
 import io.appmetrica.analytics.coreapi.internal.lifecycle.ActivityEvent;
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;

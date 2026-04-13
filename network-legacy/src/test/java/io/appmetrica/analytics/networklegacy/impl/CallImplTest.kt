@@ -3,7 +3,7 @@ package io.appmetrica.analytics.networklegacy.impl
 import io.appmetrica.analytics.coreutils.internal.time.TimeProvider
 import io.appmetrica.analytics.networkapi.NetworkClientSettings
 import io.appmetrica.analytics.networkapi.Request
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.SoftAssertions
 import org.junit.Test
 import org.mockito.kotlin.mock

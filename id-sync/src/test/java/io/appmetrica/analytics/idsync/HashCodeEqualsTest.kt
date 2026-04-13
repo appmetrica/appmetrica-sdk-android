@@ -3,7 +3,7 @@ package io.appmetrica.analytics.idsync
 import io.appmetrica.analytics.idsync.internal.model.IdSyncConfig
 import io.appmetrica.analytics.idsync.internal.model.Preconditions
 import io.appmetrica.analytics.idsync.internal.model.RequestConfig
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
 import nl.jqno.equalsverifier.EqualsVerifier
 import org.junit.Test
 import org.junit.runner.RunWith

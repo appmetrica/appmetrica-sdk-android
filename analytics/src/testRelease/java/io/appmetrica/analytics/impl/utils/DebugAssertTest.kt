@@ -7,8 +7,8 @@ import io.appmetrica.analytics.impl.db.IKeyValueTableDbHelper
 import io.appmetrica.analytics.impl.db.StorageType
 import io.appmetrica.analytics.impl.db.VitalCommonDataProvider
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule
-import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
+import io.appmetrica.gradle.testutils.CommonTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

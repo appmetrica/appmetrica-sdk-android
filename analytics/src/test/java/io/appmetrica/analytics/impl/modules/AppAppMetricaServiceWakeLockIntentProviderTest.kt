@@ -3,8 +3,8 @@ package io.appmetrica.analytics.impl.modules
 import android.content.Context
 import android.content.Intent
 import io.appmetrica.analytics.internal.AppMetricaService
-import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.MockedConstructionRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.rules.MockedConstructionRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Rule
 import org.junit.Test

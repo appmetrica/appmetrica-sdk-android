@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.db;
 
 import io.appmetrica.analytics.impl.db.constants.Constants;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import java.util.HashSet;
 import java.util.List;
 import java.util.regex.Matcher;

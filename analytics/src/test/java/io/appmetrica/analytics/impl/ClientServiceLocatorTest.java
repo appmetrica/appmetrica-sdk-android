@@ -1,8 +1,6 @@
 package io.appmetrica.analytics.impl;
 
 import android.content.Context;
-
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import io.appmetrica.analytics.impl.client.connection.DefaultServiceDescriptionProvider;
 import io.appmetrica.analytics.impl.client.connection.ServiceDescriptionProvider;
 import io.appmetrica.analytics.impl.crash.jvm.client.TechnicalCrashProcessorFactory;
@@ -20,21 +18,21 @@ import io.appmetrica.analytics.impl.utils.AppMetricaServiceProcessDetector;
 import io.appmetrica.analytics.impl.utils.FirstLaunchDetector;
 import io.appmetrica.analytics.impl.utils.executors.ClientExecutorProvider;
 import io.appmetrica.analytics.impl.utils.process.CurrentProcessDetector;
-import io.appmetrica.analytics.testutils.CommonTest;
-import io.appmetrica.analytics.testutils.MockedConstructionRule;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
+import io.appmetrica.gradle.testutils.rules.MockedConstructionRule;
 import java.io.File;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockedConstruction;
+import org.mockito.MockitoAnnotations;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import org.mockito.MockitoAnnotations;
 
 public class ClientServiceLocatorTest extends CommonTest {
 
@@ -223,7 +221,7 @@ public class ClientServiceLocatorTest extends CommonTest {
 
     @Test
     public void allFieldsFilled() throws Exception {
-        ObjectPropertyAssertions(mClientServiceLocator)
+        Assertions.INSTANCE.ObjectPropertyAssertions(mClientServiceLocator)
             .withDeclaredAccessibleFields(true)
             .withIgnoredFields(
                 "moduleEntryPointsRegister",

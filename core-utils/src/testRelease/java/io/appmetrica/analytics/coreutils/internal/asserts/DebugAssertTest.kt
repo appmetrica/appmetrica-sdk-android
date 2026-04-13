@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.coreutils.internal.asserts
 
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner

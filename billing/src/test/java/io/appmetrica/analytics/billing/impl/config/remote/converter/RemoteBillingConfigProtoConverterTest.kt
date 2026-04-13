@@ -1,12 +1,12 @@
 package io.appmetrica.analytics.billing.impl.config.remote.converter
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
-import io.appmetrica.analytics.assertions.ProtoObjectPropertyAssertions
 import io.appmetrica.analytics.billing.impl.BillingConfigProto
 import io.appmetrica.analytics.billing.impl.RemoteBillingConfigProto
 import io.appmetrica.analytics.billing.internal.config.BillingConfig
 import io.appmetrica.analytics.billing.internal.config.RemoteBillingConfig
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.assertions.Assertions.ObjectPropertyAssertions
+import io.appmetrica.gradle.testutils.assertions.ProtoObjectPropertyAssertions
 import org.junit.Test
 import org.mockito.kotlin.mock
 

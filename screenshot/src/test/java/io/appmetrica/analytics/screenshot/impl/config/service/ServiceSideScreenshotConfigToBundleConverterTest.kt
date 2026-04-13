@@ -5,7 +5,7 @@ import io.appmetrica.analytics.screenshot.impl.config.service.model.ServiceSideA
 import io.appmetrica.analytics.screenshot.impl.config.service.model.ServiceSideContentObserverCaptorConfig
 import io.appmetrica.analytics.screenshot.impl.config.service.model.ServiceSideScreenshotConfig
 import io.appmetrica.analytics.screenshot.impl.config.service.model.ServiceSideServiceCaptorConfig
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith

@@ -2,8 +2,8 @@ package io.appmetrica.analytics.impl.crash.jvm.client
 
 import io.appmetrica.analytics.impl.crash.utils.ThreadsStateDumper
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule
-import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.constructionRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.rules.MockedConstructionRule.Companion.constructionRule
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.kotlin.doReturn

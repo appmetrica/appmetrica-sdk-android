@@ -8,8 +8,8 @@ import io.appmetrica.analytics.billing.internal.config.RemoteBillingConfig
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceModuleReporterComponentLifecycle
 import io.appmetrica.analytics.modulesapi.internal.service.ModuleRemoteConfig
 import io.appmetrica.analytics.modulesapi.internal.service.ServiceContext
-import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.constructionRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.rules.MockedConstructionRule.Companion.constructionRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Rule
 import org.junit.Test

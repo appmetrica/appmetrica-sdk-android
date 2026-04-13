@@ -6,7 +6,7 @@ import io.appmetrica.analytics.billinginterface.internal.ProductInfo
 import io.appmetrica.analytics.billinginterface.internal.ProductType
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceComponentModuleReporter
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceModuleCounterReport
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any

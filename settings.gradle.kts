@@ -50,7 +50,3 @@ include("screenshot")
 
 // native crashes
 include("ndkcrashes")
-
-// tests modules
-includeBuild("common_assertions")
-include("test-utils")

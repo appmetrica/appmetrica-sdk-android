@@ -6,7 +6,7 @@ import androidx.annotation.Nullable;
 import io.appmetrica.analytics.impl.component.CommonArguments;
 import io.appmetrica.analytics.impl.component.CommonArgumentsTestUtils;
 import io.appmetrica.analytics.internal.CounterConfigurationReporterType;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import java.util.Random;
 import java.util.UUID;
 import org.junit.Before;

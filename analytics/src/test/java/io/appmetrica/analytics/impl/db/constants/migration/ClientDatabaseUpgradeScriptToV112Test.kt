@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.db.constants.migration
 import android.database.sqlite.SQLiteDatabase
 import io.appmetrica.analytics.impl.db.constants.Constants
 import io.appmetrica.analytics.impl.db.constants.migrations.ClientDatabaseUpgradeScriptToV112
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
 import org.junit.Before
 import org.junit.Test
 import org.mockito.kotlin.mock

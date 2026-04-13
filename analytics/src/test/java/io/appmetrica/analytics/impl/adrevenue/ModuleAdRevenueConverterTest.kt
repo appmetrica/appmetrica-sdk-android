@@ -1,11 +1,11 @@
 package io.appmetrica.analytics.impl.adrevenue
 
 import io.appmetrica.analytics.AdType
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
 import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdRevenue
 import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdType
-import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.constructionRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.assertions.Assertions.ObjectPropertyAssertions
+import io.appmetrica.gradle.testutils.rules.MockedConstructionRule.Companion.constructionRule
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.SoftAssertions
 import org.junit.Rule

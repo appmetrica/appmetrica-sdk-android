@@ -4,7 +4,7 @@ import io.appmetrica.analytics.IReporter;
 import io.appmetrica.analytics.impl.CounterReport;
 import io.appmetrica.analytics.impl.InternalEvents;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import java.util.AbstractMap;
 import java.util.HashMap;
 import org.junit.Before;

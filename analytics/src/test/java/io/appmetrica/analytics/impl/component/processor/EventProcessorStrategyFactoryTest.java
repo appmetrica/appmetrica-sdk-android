@@ -25,9 +25,9 @@ import io.appmetrica.analytics.impl.component.processor.event.UpdateUserProfileI
 import io.appmetrica.analytics.impl.component.processor.event.modules.ModulesEventHandler;
 import io.appmetrica.analytics.impl.component.processor.factory.ReportingHandlerProvider;
 import io.appmetrica.analytics.impl.component.processor.session.ReportSessionStopDueCrashHandler;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
-import io.appmetrica.analytics.testutils.MockedConstructionRule;
+import io.appmetrica.gradle.testutils.rules.MockedConstructionRule;
 import java.util.List;
 import java.util.UUID;
 import org.junit.Before;

@@ -1,18 +1,18 @@
 package io.appmetrica.analytics.impl.crash.jvm.converter;
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
 import io.appmetrica.analytics.impl.crash.jvm.client.AllThreads;
 import io.appmetrica.analytics.impl.crash.jvm.client.Anr;
 import io.appmetrica.analytics.impl.crash.jvm.client.ThreadState;
 import io.appmetrica.analytics.impl.protobuf.backend.CrashAndroid;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
+import io.appmetrica.gradle.testutils.assertions.ObjectPropertyAssertions;
 import java.util.Collections;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
@@ -47,7 +47,7 @@ public class AnrConverterTest extends CommonTest {
         doReturn(protoIsOffline).when(optionalBoolConverter).toProto(isOffline);
 
         ObjectPropertyAssertions<CrashAndroid.Anr> assertions
-            = ObjectPropertyAssertions(anrConverter.fromModel(new Anr(state, buildId, isOffline)));
+            = Assertions.INSTANCE.ObjectPropertyAssertions(anrConverter.fromModel(new Anr(state, buildId, isOffline)));
         assertions.withFinalFieldOnly(false);
         assertions.checkField("threads", allThreads);
         assertions.checkField("buildId", buildId);
@@ -68,7 +68,7 @@ public class AnrConverterTest extends CommonTest {
         doReturn(CrashAndroid.OPTIONAL_BOOL_UNDEFINED).when(optionalBoolConverter).toProto(any());
 
         ObjectPropertyAssertions<CrashAndroid.Anr> assertions
-            = ObjectPropertyAssertions(anrConverter.fromModel(new Anr(state, null, null)));
+            = Assertions.INSTANCE.ObjectPropertyAssertions(anrConverter.fromModel(new Anr(state, null, null)));
         assertions.withFinalFieldOnly(false);
         assertions.checkField("threads", allThreads);
         assertions.checkField("buildId", "");

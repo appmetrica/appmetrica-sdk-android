@@ -5,7 +5,8 @@ import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedProvider;
 import io.appmetrica.analytics.impl.utils.limitation.CollectionTrimInfo;
 import io.appmetrica.analytics.impl.utils.limitation.TrimmingResult;
 import io.appmetrica.analytics.testutils.CollectionTrimInfoConsumer;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -13,14 +14,13 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized.Parameters;
+import org.junit.runners.Parameterized;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
 
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -247,7 +247,7 @@ public class HierarchicalListTrimmerWithItemTrimmerTest extends CommonTest {
         TrimmingResult<List<Item>, CollectionTrimInfo> trimmingResult =
             trimmer.trim(inputList);
 
-        ObjectPropertyAssertions(trimmingResult)
+        Assertions.INSTANCE.ObjectPropertyAssertions(trimmingResult)
             .checkField("value", expectedList, true)
             .checkFieldRecursively(
                 "metaInfo",

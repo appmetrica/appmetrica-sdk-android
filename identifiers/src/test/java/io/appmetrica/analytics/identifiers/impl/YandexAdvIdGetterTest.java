@@ -6,6 +6,7 @@ import android.os.RemoteException;
 import androidx.annotation.NonNull;
 import com.yandex.android.advid.service.YandexAdvIdInterface;
 import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
 import java.util.Random;
 import java.util.function.Predicate;
 import org.junit.Before;
@@ -17,7 +18,6 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.robolectric.RobolectricTestRunner;
 
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -47,7 +47,7 @@ public class YandexAdvIdGetterTest {
     @Test
     public void constuctor() throws Exception {
         yandexAdvIdGetter = new YandexAdvIdGetter();
-        ObjectPropertyAssertions(yandexAdvIdGetter)
+        Assertions.INSTANCE.ObjectPropertyAssertions(yandexAdvIdGetter)
             .withPrivateFields(true)
             .withIgnoredFields("tag")
             .checkFieldMatchPredicate(

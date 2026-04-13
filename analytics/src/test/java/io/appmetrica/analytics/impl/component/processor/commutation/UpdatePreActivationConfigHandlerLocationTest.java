@@ -9,7 +9,7 @@ import io.appmetrica.analytics.impl.component.CommutationComponentId;
 import io.appmetrica.analytics.impl.component.CommutationDispatcherComponent;
 import io.appmetrica.analytics.impl.component.clients.CommutationClientUnit;
 import io.appmetrica.analytics.internal.CounterConfiguration;
-import io.appmetrica.analytics.testutils.ContextRule;
+import io.appmetrica.gradle.androidtestutils.rules.ContextRule;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import java.util.Arrays;
 import java.util.Collection;

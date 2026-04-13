@@ -2,8 +2,8 @@ package io.appmetrica.analytics.impl;
 
 import android.content.Context;
 import android.content.res.Resources;
-import io.appmetrica.analytics.testutils.CommonTest;
-import io.appmetrica.analytics.testutils.ContextRule;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.androidtestutils.rules.ContextRule;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;

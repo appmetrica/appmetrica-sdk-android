@@ -1,6 +1,5 @@
 package io.appmetrica.analytics.impl.db.state.converter;
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
 import io.appmetrica.analytics.impl.protobuf.client.StartupStateProtobuf;
 import io.appmetrica.analytics.impl.startup.AttributionConfig;
 import io.appmetrica.analytics.impl.startup.CacheControl;
@@ -11,8 +10,10 @@ import io.appmetrica.analytics.impl.startup.StartupStateModel;
 import io.appmetrica.analytics.impl.startup.StartupUpdateConfig;
 import io.appmetrica.analytics.impl.startup.StatSending;
 import io.appmetrica.analytics.networktasks.internal.RetryPolicyConfig;
-import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
+import io.appmetrica.gradle.testutils.assertions.ObjectPropertyAssertions;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -25,7 +26,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -177,7 +177,7 @@ public class StartupStateConverterTest extends CommonTest {
         stateProto.externalAttributionConfig = externalAttributionConfigProto;
 
         ObjectPropertyAssertions<StartupStateModel> assertions
-            = ObjectPropertyAssertions(mConverter.toModel(stateProto));
+            = Assertions.INSTANCE.ObjectPropertyAssertions(mConverter.toModel(stateProto));
 
         assertions.withIgnoredFields(
             "locationCollectionConfigs",
@@ -264,7 +264,7 @@ public class StartupStateConverterTest extends CommonTest {
 
         StartupStateProtobuf.StartupState proto = mConverter.fromModel(stateModel);
         ObjectPropertyAssertions<StartupStateProtobuf.StartupState> assertions
-            = ObjectPropertyAssertions(proto);
+            = Assertions.INSTANCE.ObjectPropertyAssertions(proto);
 
         assertions.withFinalFieldOnly(false);
         assertions.withIgnoredFields(
@@ -361,7 +361,7 @@ public class StartupStateConverterTest extends CommonTest {
             "attributionConfig"
         ).containsOnlyNulls();
         assertThat(stateModel.customSdkHosts).isEmpty();
-        ObjectPropertyAssertions(stateModel.startupUpdateConfig)
+        Assertions.INSTANCE.ObjectPropertyAssertions(stateModel.startupUpdateConfig)
             .checkField("intervalSeconds", "getIntervalSeconds", 86400)
             .checkAll();
     }

@@ -5,7 +5,7 @@ import io.appmetrica.analytics.impl.profile.KeyValidator;
 import io.appmetrica.analytics.impl.profile.ResetUpdatePatcher;
 import io.appmetrica.analytics.impl.profile.SetIfUndefinedSavingStrategy;
 import io.appmetrica.analytics.impl.protobuf.backend.Userprofile;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.Test;
 

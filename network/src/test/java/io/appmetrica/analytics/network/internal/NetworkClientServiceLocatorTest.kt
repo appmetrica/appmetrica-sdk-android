@@ -3,7 +3,7 @@ package io.appmetrica.analytics.network.internal
 import android.content.Context
 import android.os.Bundle
 import io.appmetrica.analytics.coreutils.internal.services.SafePackageManager
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith

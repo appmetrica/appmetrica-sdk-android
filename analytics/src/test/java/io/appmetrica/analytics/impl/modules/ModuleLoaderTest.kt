@@ -7,7 +7,7 @@ import io.appmetrica.analytics.modulesapi.internal.service.ModuleServicesDatabas
 import io.appmetrica.analytics.modulesapi.internal.service.RemoteConfigExtensionConfiguration
 import io.appmetrica.analytics.modulesapi.internal.service.ServiceContext
 import io.appmetrica.analytics.modulesapi.internal.service.event.ModuleEventServiceHandlerFactory
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 

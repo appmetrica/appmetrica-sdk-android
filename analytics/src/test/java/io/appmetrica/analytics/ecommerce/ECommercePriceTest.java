@@ -1,14 +1,14 @@
 package io.appmetrica.analytics.ecommerce;
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
+import io.appmetrica.gradle.testutils.assertions.ObjectPropertyAssertions;
 import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ECommercePriceTest extends CommonTest {
@@ -31,7 +31,7 @@ public class ECommercePriceTest extends CommonTest {
 
     @Test
     public void constructor() throws Exception {
-        ObjectPropertyAssertions<ECommercePrice> assertions = ObjectPropertyAssertions(price)
+        ObjectPropertyAssertions<ECommercePrice> assertions = Assertions.INSTANCE.ObjectPropertyAssertions(price)
                 .withDeclaredAccessibleFields(true)
                 .withFinalFieldOnly(false);
 

@@ -3,7 +3,7 @@ package io.appmetrica.analytics.apphud.impl.config.remote;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import io.appmetrica.analytics.apphud.impl.Constants;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;

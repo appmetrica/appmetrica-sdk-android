@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.crash.jvm.client
 
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
 import org.junit.Test
 import org.mockito.Mockito.mock
 import org.mockito.kotlin.verify

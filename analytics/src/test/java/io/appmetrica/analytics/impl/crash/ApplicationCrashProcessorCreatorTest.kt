@@ -8,8 +8,8 @@ import io.appmetrica.analytics.impl.MainOrCrashReporterProvider
 import io.appmetrica.analytics.impl.TestsData
 import io.appmetrica.analytics.impl.crash.jvm.client.CrashProcessor
 import io.appmetrica.analytics.impl.crash.jvm.client.ReporterBasedCrashProcessor
-import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.MockedConstructionRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.rules.MockedConstructionRule
 import org.assertj.core.api.SoftAssertions
 import org.junit.Rule
 import org.junit.Test

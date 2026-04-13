@@ -1,13 +1,13 @@
 package io.appmetrica.analytics.impl.startup;
 
 import android.util.Pair;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
 import java.util.List;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
@@ -18,7 +18,7 @@ public class AttributionConfigTest extends CommonTest {
     public void constructor() throws IllegalAccessException {
         List<Pair<String, AttributionConfig.Filter>> list = mock(List.class);
         AttributionConfig config = new AttributionConfig(list);
-        ObjectPropertyAssertions(config)
+        Assertions.INSTANCE.ObjectPropertyAssertions(config)
             .checkField("deeplinkConditions", list)
             .checkAll();
     }

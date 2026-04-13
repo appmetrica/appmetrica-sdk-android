@@ -6,8 +6,9 @@ import android.util.Pair;
 import androidx.annotation.NonNull;
 import io.appmetrica.analytics.coreapi.internal.backport.Function;
 import io.appmetrica.analytics.coreapi.internal.permission.PermissionState;
-import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,7 +22,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.ParameterizedRobolectricTestRunner;
 
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.mockito.Mockito.mock;
 
 @SuppressLint("RobolectricUsage") // Parcelable
@@ -135,7 +135,7 @@ public class CounterReportMetaDataTest extends CommonTest {
         originalReport.setAttributionIdChanged(attributionIdChanged);
         originalReport.setOpenId(openId);
         originalReport.setExtras(extras);
-        ObjectPropertyAssertions(reportProvider.apply(originalReport))
+        Assertions.INSTANCE.ObjectPropertyAssertions(reportProvider.apply(originalReport))
             .withIgnoredFields("systemTimeProvider")
             .withPrivateFields(true)
             .withFinalFieldOnly(false)

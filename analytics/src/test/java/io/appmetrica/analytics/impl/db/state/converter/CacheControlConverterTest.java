@@ -1,14 +1,14 @@
 package io.appmetrica.analytics.impl.db.state.converter;
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
 import io.appmetrica.analytics.impl.protobuf.client.StartupStateProtobuf;
 import io.appmetrica.analytics.impl.startup.CacheControl;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import java.util.concurrent.TimeUnit;
 import org.junit.Before;
 import org.junit.Test;
 
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
+import io.appmetrica.gradle.testutils.assertions.ObjectPropertyAssertions;
 
 public class CacheControlConverterTest extends CommonTest {
 
@@ -27,7 +27,7 @@ public class CacheControlConverterTest extends CommonTest {
         StartupStateProtobuf.StartupState.CacheControl nano = mCacheControlConverter.fromModel(cacheControl);
 
         ObjectPropertyAssertions<StartupStateProtobuf.StartupState.CacheControl> assertions =
-            ObjectPropertyAssertions(nano)
+            Assertions.INSTANCE.ObjectPropertyAssertions(nano)
                 .withFinalFieldOnly(false);
 
         assertions.checkField("lastKnownLocationTtl", lastKnownLocationTtl);
@@ -40,7 +40,7 @@ public class CacheControlConverterTest extends CommonTest {
         StartupStateProtobuf.StartupState.CacheControl nano = new StartupStateProtobuf.StartupState.CacheControl();
         nano.lastKnownLocationTtl = lastKnownLocationTtl;
 
-        ObjectPropertyAssertions<CacheControl> assertions = ObjectPropertyAssertions(
+        ObjectPropertyAssertions<CacheControl> assertions = Assertions.INSTANCE.ObjectPropertyAssertions(
             mCacheControlConverter.toModel(nano)
         );
 
@@ -51,7 +51,7 @@ public class CacheControlConverterTest extends CommonTest {
 
     @Test
     public void testDefaultToModel() throws Exception {
-        ObjectPropertyAssertions<CacheControl> assertions = ObjectPropertyAssertions(
+        ObjectPropertyAssertions<CacheControl> assertions = Assertions.INSTANCE.ObjectPropertyAssertions(
             mCacheControlConverter.toModel(new StartupStateProtobuf.StartupState.CacheControl())
         );
 

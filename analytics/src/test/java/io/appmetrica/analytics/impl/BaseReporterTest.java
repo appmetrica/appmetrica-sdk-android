@@ -3,7 +3,6 @@ package io.appmetrica.analytics.impl;
 import io.appmetrica.analytics.AdRevenue;
 import io.appmetrica.analytics.ModuleEvent;
 import io.appmetrica.analytics.Revenue;
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
 import io.appmetrica.analytics.coreutils.internal.logger.LoggerStorage;
 import io.appmetrica.analytics.ecommerce.ECommerceEvent;
 import io.appmetrica.analytics.impl.adrevenue.AdRevenuePayloadEnricher;
@@ -36,8 +35,10 @@ import io.appmetrica.analytics.profile.UserProfile;
 import io.appmetrica.analytics.protobuf.nano.MessageNano;
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
-import io.appmetrica.analytics.testutils.MockedConstructionRule;
-import io.appmetrica.analytics.testutils.MockedStaticRule;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
+import io.appmetrica.gradle.testutils.assertions.ObjectPropertyAssertions;
+import io.appmetrica.gradle.testutils.rules.MockedConstructionRule;
+import io.appmetrica.gradle.testutils.rules.MockedStaticRule;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -59,7 +60,6 @@ import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static io.appmetrica.analytics.impl.TestsData.TEST_ENVIRONMENT_KEY;
 import static io.appmetrica.analytics.impl.TestsData.TEST_ENVIRONMENT_VALUE;
 import static io.appmetrica.analytics.impl.TestsData.TEST_ERROR_ENVIRONMENT_KEY;
@@ -160,7 +160,7 @@ public abstract class BaseReporterTest extends BaseReporterData {
         });
         ArgumentCaptor<Anr> anrCaptor = ArgumentCaptor.forClass(Anr.class);
         verify(anrConverter).fromModel(anrCaptor.capture());
-        ObjectPropertyAssertions(anrCaptor.getValue())
+        Assertions.INSTANCE.ObjectPropertyAssertions(anrCaptor.getValue())
             .checkField("mAllThreads", allThreads)
             .checkFieldsAreNull("mBuildId", "mIsOffline")
             .checkAll();
@@ -189,7 +189,7 @@ public abstract class BaseReporterTest extends BaseReporterData {
         });
         ArgumentCaptor<Anr> anrCaptor = ArgumentCaptor.forClass(Anr.class);
         verify(anrConverter).fromModel(anrCaptor.capture());
-        ObjectPropertyAssertions(anrCaptor.getValue())
+        Assertions.INSTANCE.ObjectPropertyAssertions(anrCaptor.getValue())
             .checkField("mAllThreads", allThreads)
             .checkField("mBuildId", buildId)
             .checkField("mIsOffline", isOffline)
@@ -248,7 +248,7 @@ public abstract class BaseReporterTest extends BaseReporterData {
         });
         ArgumentCaptor<RegularError> captor = ArgumentCaptor.forClass(RegularError.class);
         verify(regularErrorConverter).fromModel(captor.capture());
-        ObjectPropertyAssertions(captor.getValue())
+        Assertions.INSTANCE.ObjectPropertyAssertions(captor.getValue())
             .checkField("message", message)
             .checkField("exception", unhandledException)
             .checkAll();
@@ -291,7 +291,7 @@ public abstract class BaseReporterTest extends BaseReporterData {
         });
         ArgumentCaptor<RegularError> captor = ArgumentCaptor.forClass(RegularError.class);
         verify(regularErrorConverter).fromModel(captor.capture());
-        ObjectPropertyAssertions(captor.getValue())
+        Assertions.INSTANCE.ObjectPropertyAssertions(captor.getValue())
             .checkField("message", message)
             .checkField("exception", unhandledException)
             .checkAll();
@@ -333,7 +333,7 @@ public abstract class BaseReporterTest extends BaseReporterData {
         });
         ArgumentCaptor<RegularError> captor = ArgumentCaptor.forClass(RegularError.class);
         verify(regularErrorConverter).fromModel(captor.capture());
-        ObjectPropertyAssertions(captor.getValue())
+        Assertions.INSTANCE.ObjectPropertyAssertions(captor.getValue())
             .checkField("message", message)
             .checkField("exception", unhandledException)
             .checkAll();
@@ -376,7 +376,7 @@ public abstract class BaseReporterTest extends BaseReporterData {
         });
         ArgumentCaptor<CustomError> captor = ArgumentCaptor.forClass(CustomError.class);
         verify(customErrorConverter).fromModel(captor.capture());
-        ObjectPropertyAssertions(captor.getValue())
+        Assertions.INSTANCE.ObjectPropertyAssertions(captor.getValue())
             .checkField("identifier", id)
             .checkFieldRecursively("regularError", new Consumer<ObjectPropertyAssertions<RegularError>>() {
                 @Override
@@ -424,7 +424,7 @@ public abstract class BaseReporterTest extends BaseReporterData {
         });
         ArgumentCaptor<CustomError> captor = ArgumentCaptor.forClass(CustomError.class);
         verify(customErrorConverter).fromModel(captor.capture());
-        ObjectPropertyAssertions(captor.getValue())
+        Assertions.INSTANCE.ObjectPropertyAssertions(captor.getValue())
             .checkField("identifier", id)
             .checkFieldRecursively("regularError", new Consumer<ObjectPropertyAssertions<RegularError>>() {
                 @Override
@@ -472,7 +472,7 @@ public abstract class BaseReporterTest extends BaseReporterData {
         });
         ArgumentCaptor<CustomError> captor = ArgumentCaptor.forClass(CustomError.class);
         verify(customErrorConverter).fromModel(captor.capture());
-        ObjectPropertyAssertions(captor.getValue())
+        Assertions.INSTANCE.ObjectPropertyAssertions(captor.getValue())
             .checkField("identifier", id)
             .checkFieldRecursively("regularError", new Consumer<ObjectPropertyAssertions<RegularError>>() {
                 @Override
@@ -1005,7 +1005,7 @@ public abstract class BaseReporterTest extends BaseReporterData {
         verify(mReportsHandler).reportEvent(same(clientCounterReport), any(ReporterEnvironment.class));
         ArgumentCaptor<CustomError> customErrorCaptor = ArgumentCaptor.forClass(CustomError.class);
         verify(customErrorConverter).fromModel(customErrorCaptor.capture());
-        ObjectPropertyAssertions(customErrorCaptor.getValue())
+        Assertions.INSTANCE.ObjectPropertyAssertions(customErrorCaptor.getValue())
             .checkField("identifier", identifier)
             .checkField("regularError", regularError)
             .checkAll();

@@ -7,8 +7,8 @@ import io.appmetrica.analytics.impl.db.constants.DatabaseScriptsHolder.ServiceDa
 import io.appmetrica.analytics.impl.db.constants.TempCacheTable
 import io.appmetrica.analytics.modulesapi.internal.common.TableDescription
 import io.appmetrica.analytics.modulesapi.internal.service.ModuleServicesDatabase
-import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
+import io.appmetrica.gradle.testutils.CommonTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

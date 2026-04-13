@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.networkokhttp.impl
 
 import io.appmetrica.analytics.networkapi.NetworkClientSettings
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
 import okhttp3.Protocol
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.SoftAssertions

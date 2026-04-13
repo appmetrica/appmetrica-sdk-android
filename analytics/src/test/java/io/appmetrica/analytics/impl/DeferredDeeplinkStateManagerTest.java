@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl;
 
 import io.appmetrica.analytics.DeferredDeeplinkListener;
 import io.appmetrica.analytics.DeferredDeeplinkParametersListener;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.Before;

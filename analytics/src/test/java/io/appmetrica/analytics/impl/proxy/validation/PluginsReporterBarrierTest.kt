@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.proxy.validation
 
 import io.appmetrica.analytics.ValidationException
 import io.appmetrica.analytics.plugins.PluginErrorDetails
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.Assertions
 import org.junit.Test
 import org.mockito.kotlin.mock

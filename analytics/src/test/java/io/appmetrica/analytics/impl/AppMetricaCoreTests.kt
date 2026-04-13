@@ -9,10 +9,10 @@ import io.appmetrica.analytics.impl.clientcomponents.ClientComponentsInitializer
 import io.appmetrica.analytics.impl.crash.jvm.client.JvmCrashClientController
 import io.appmetrica.analytics.impl.utils.executors.ClientExecutorProvider
 import io.appmetrica.analytics.logger.common.BaseReleaseLogger
-import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.constructionRule
-import io.appmetrica.analytics.testutils.on
-import io.appmetrica.analytics.testutils.staticRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.rules.MockedConstructionRule.Companion.constructionRule
+import io.appmetrica.gradle.testutils.rules.MockedStaticRule.Companion.on
+import io.appmetrica.gradle.testutils.rules.MockedStaticRule.Companion.staticRule
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.kotlin.argumentCaptor

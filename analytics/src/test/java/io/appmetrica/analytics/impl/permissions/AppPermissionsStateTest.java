@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.permissions;
 
 import io.appmetrica.analytics.impl.BackgroundRestrictionsState;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import java.util.List;
 import org.junit.Test;
 

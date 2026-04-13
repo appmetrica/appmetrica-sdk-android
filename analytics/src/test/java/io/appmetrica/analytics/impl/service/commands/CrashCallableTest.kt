@@ -15,8 +15,8 @@ import io.appmetrica.analytics.impl.crash.jvm.client.AppMetricaUncaughtException
 import io.appmetrica.analytics.internal.CounterConfiguration
 import io.appmetrica.analytics.internal.IAppMetricaService
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule
-import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.MockedConstructionRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.rules.MockedConstructionRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Rule

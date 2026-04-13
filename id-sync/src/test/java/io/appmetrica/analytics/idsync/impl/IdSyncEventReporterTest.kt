@@ -3,8 +3,8 @@ package io.appmetrica.analytics.idsync.impl
 import io.appmetrica.analytics.coreapi.internal.identifiers.SdkIdentifiers
 import io.appmetrica.analytics.idsync.internal.model.RequestConfig
 import io.appmetrica.analytics.modulesapi.internal.service.ServiceContext
-import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.constructionRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.rules.MockedConstructionRule.Companion.constructionRule
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.kotlin.doReturn

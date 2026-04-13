@@ -1,10 +1,10 @@
 package io.appmetrica.analytics.impl.startup.parsing
 
-import io.appmetrica.analytics.assertions.ProtoObjectPropertyAssertions
 import io.appmetrica.analytics.impl.db.state.converter.StartupUpdateConfigConverter
 import io.appmetrica.analytics.impl.protobuf.client.StartupStateProtobuf
 import io.appmetrica.analytics.impl.startup.StartupUpdateConfig
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.assertions.ProtoObjectPropertyAssertions
 import org.assertj.core.api.Assertions.assertThat
 import org.json.JSONObject
 import org.junit.Test

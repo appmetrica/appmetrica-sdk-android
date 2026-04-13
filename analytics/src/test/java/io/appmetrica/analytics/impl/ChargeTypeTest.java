@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl;
 
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.batteryinfo.ChargeType;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import java.util.Arrays;
 import java.util.Collection;
 import org.junit.Test;

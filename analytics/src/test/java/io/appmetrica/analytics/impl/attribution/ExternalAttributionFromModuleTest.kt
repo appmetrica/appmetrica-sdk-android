@@ -1,8 +1,8 @@
 package io.appmetrica.analytics.impl.attribution
 
-import io.appmetrica.analytics.assertions.ProtoObjectPropertyAssertions
 import io.appmetrica.analytics.impl.protobuf.backend.ExternalAttribution.ClientExternalAttribution
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.assertions.ProtoObjectPropertyAssertions
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized

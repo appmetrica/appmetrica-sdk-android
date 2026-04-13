@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.preparer;
 
 import io.appmetrica.analytics.impl.request.ReportRequestConfig;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

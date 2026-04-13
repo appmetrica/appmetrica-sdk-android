@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.component;
 
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;

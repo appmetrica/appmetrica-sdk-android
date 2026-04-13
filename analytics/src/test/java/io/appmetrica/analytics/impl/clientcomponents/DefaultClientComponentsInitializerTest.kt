@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.clientcomponents
 import io.appmetrica.analytics.impl.ClientServiceLocator
 import io.appmetrica.analytics.impl.modules.ConstantModuleEntryPointProvider
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.kotlin.verify

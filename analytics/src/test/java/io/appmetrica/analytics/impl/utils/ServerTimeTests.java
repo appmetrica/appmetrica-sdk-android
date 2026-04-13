@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.utils;
 
 import io.appmetrica.analytics.coreutils.internal.time.TimeProvider;
 import io.appmetrica.analytics.impl.db.preferences.PreferencesServiceDbStorage;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import java.util.concurrent.TimeUnit;
 import org.junit.Before;
 import org.junit.Test;

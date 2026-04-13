@@ -1,11 +1,11 @@
 package io.appmetrica.analytics.impl.utils.limitation.hierarchical
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
 import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedInfo
 import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedProvider
 import io.appmetrica.analytics.impl.utils.limitation.CollectionTrimInfo
 import io.appmetrica.analytics.impl.utils.limitation.TrimmingResult
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.assertions.Assertions.ObjectPropertyAssertions
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized

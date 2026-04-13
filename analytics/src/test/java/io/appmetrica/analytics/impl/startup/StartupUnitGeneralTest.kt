@@ -1,6 +1,5 @@
 package io.appmetrica.analytics.impl.startup
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
 import io.appmetrica.analytics.impl.DistributionSource
 import io.appmetrica.analytics.impl.clids.ClidsInfo
 import io.appmetrica.analytics.impl.client.ClientConfiguration
@@ -13,8 +12,9 @@ import io.appmetrica.analytics.impl.utils.StartupUtils
 import io.appmetrica.analytics.internal.CounterConfiguration
 import io.appmetrica.analytics.networktasks.internal.NetworkTask
 import io.appmetrica.analytics.networktasks.internal.RetryPolicyConfig
-import io.appmetrica.analytics.testutils.ContextRule
-import io.appmetrica.analytics.testutils.constructionRule
+import io.appmetrica.gradle.androidtestutils.rules.ContextRule
+import io.appmetrica.gradle.testutils.assertions.Assertions.ObjectPropertyAssertions
+import io.appmetrica.gradle.testutils.rules.MockedConstructionRule.Companion.constructionRule
 import net.bytebuddy.utility.RandomString
 import org.assertj.core.api.Assertions.assertThat
 import org.json.JSONObject

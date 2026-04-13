@@ -17,8 +17,8 @@ import io.appmetrica.analytics.impl.proxy.synchronous.ReporterSynchronousStageEx
 import io.appmetrica.analytics.impl.proxy.validation.ReporterBarrier;
 import io.appmetrica.analytics.profile.UserProfile;
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule;
-import io.appmetrica.analytics.testutils.CommonTest;
-import io.appmetrica.analytics.testutils.ContextRule;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.androidtestutils.rules.ContextRule;
 import io.appmetrica.analytics.testutils.MockProvider;
 import java.util.HashMap;
 import java.util.Map;

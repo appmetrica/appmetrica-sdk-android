@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.component;
 
 import io.appmetrica.analytics.impl.DataSendingRestrictionControllerImpl;
 import io.appmetrica.analytics.internal.CounterConfiguration;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import java.util.Arrays;
 import java.util.Collection;
 import org.junit.Test;

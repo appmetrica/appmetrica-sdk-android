@@ -12,11 +12,11 @@ import io.appmetrica.analytics.impl.crash.jvm.CrashDirectoryWatcher
 import io.appmetrica.analytics.impl.crash.jvm.service.CrashFromFileConsumer
 import io.appmetrica.analytics.impl.crash.jvm.service.FileCrashTimestampProvider
 import io.appmetrica.analytics.impl.crash.ndk.NativeCrashService
-import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
-import io.appmetrica.analytics.testutils.constructionRule
-import io.appmetrica.analytics.testutils.on
-import io.appmetrica.analytics.testutils.staticRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.rules.MockedConstructionRule.Companion.constructionRule
+import io.appmetrica.gradle.testutils.rules.MockedStaticRule.Companion.on
+import io.appmetrica.gradle.testutils.rules.MockedStaticRule.Companion.staticRule
 import org.assertj.core.api.Assertions
 import org.junit.Before
 import org.junit.Rule

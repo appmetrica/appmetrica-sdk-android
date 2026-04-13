@@ -9,7 +9,7 @@ import io.appmetrica.analytics.impl.utils.encryption.EventEncrypter;
 import io.appmetrica.analytics.impl.utils.encryption.EventEncrypterProvider;
 import io.appmetrica.analytics.impl.utils.encryption.EventEncryptionMode;
 import io.appmetrica.analytics.protobuf.nano.MessageNano;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

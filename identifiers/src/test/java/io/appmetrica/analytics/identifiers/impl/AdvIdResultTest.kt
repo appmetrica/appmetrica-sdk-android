@@ -2,7 +2,7 @@ package io.appmetrica.analytics.identifiers.impl
 
 import android.os.Bundle
 import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.SoftAssertions
 import org.junit.Before
 import org.junit.Rule

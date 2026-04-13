@@ -7,7 +7,7 @@ import io.appmetrica.analytics.impl.DeeplinkConsumer;
 import io.appmetrica.analytics.impl.MainReporter;
 import io.appmetrica.analytics.impl.MainReporterApiConsumerProvider;
 import io.appmetrica.analytics.impl.proxy.validation.Barrier;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;

@@ -1,8 +1,8 @@
 package io.appmetrica.analytics.impl.preloadinfo
 
 import io.appmetrica.analytics.impl.GlobalServiceLocator
-import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
+import io.appmetrica.gradle.testutils.CommonTest
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.kotlin.mock

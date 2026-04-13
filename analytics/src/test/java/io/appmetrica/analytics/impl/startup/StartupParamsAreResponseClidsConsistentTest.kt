@@ -6,8 +6,8 @@ import io.appmetrica.analytics.impl.utils.JsonHelper
 import io.appmetrica.analytics.impl.utils.StartupUtils
 import io.appmetrica.analytics.internal.IdentifiersResult
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule
-import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.ContextRule
+import io.appmetrica.gradle.androidtestutils.rules.ContextRule
+import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Rule

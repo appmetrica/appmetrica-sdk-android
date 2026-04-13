@@ -5,8 +5,8 @@ import io.appmetrica.analytics.AppMetricaConfig
 import io.appmetrica.analytics.ReporterConfig
 import io.appmetrica.analytics.impl.SdkData
 import io.appmetrica.analytics.internal.CounterConfigurationReporterType.Companion.fromStringValue
-import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.DummyLocationProvider
+import io.appmetrica.gradle.androidtestutils.data.DummyLocationProvider
+import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.SoftAssertions
 import org.junit.Before

@@ -6,8 +6,8 @@ import io.appmetrica.analytics.impl.component.processor.CommutationProcessingStr
 import io.appmetrica.analytics.impl.component.processor.commutation.CommutationHandler;
 import io.appmetrica.analytics.impl.component.processor.commutation.CommutationReportProcessor;
 import io.appmetrica.analytics.impl.startup.StartupUnit;
-import io.appmetrica.analytics.testutils.CommonTest;
-import io.appmetrica.analytics.testutils.ContextRule;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.androidtestutils.rules.ContextRule;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.Before;

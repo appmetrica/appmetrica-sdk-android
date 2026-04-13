@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.utils;
 
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.TestUtils;
 import java.util.AbstractMap;
 import java.util.Collections;

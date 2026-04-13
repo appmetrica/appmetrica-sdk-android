@@ -1,12 +1,12 @@
 package io.appmetrica.analytics.impl.crash.jvm.converter
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
 import io.appmetrica.analytics.impl.crash.ndk.NativeCrashHandlerDescription
 import io.appmetrica.analytics.impl.crash.ndk.NativeCrashModel
 import io.appmetrica.analytics.impl.protobuf.backend.CrashAndroid
 import io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrashSource
 import io.appmetrica.analytics.protobuf.nano.MessageNano
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.assertions.Assertions.ObjectPropertyAssertions
 import org.junit.Test
 import java.util.Random
 

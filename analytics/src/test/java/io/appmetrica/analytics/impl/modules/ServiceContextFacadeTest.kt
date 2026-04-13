@@ -5,9 +5,9 @@ import io.appmetrica.analytics.impl.GlobalServiceLocator
 import io.appmetrica.analytics.impl.db.DatabaseStorage
 import io.appmetrica.analytics.impl.db.storage.ServiceStorageFactory
 import io.appmetrica.analytics.modulesapi.internal.service.ModuleServiceLifecycleController
-import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
-import io.appmetrica.analytics.testutils.MockedConstructionRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.rules.MockedConstructionRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Rule

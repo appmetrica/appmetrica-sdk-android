@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.ecommerce;
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
 import io.appmetrica.analytics.impl.ecommerce.client.model.ReferrerWrapper;
+import io.appmetrica.gradle.testutils.assertions.ObjectPropertyAssertions;
 import java.util.function.Consumer;
 
 class ReferrerWrapperAssertionsConsumer implements Consumer<ObjectPropertyAssertions<ReferrerWrapper>> {

@@ -5,7 +5,7 @@ import io.appmetrica.analytics.impl.InternalEvents
 import io.appmetrica.analytics.impl.component.session.SessionType
 import io.appmetrica.analytics.impl.db.constants.Constants
 import io.appmetrica.analytics.impl.db.event.DbEventModel
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.SoftAssertions
 import org.junit.Before

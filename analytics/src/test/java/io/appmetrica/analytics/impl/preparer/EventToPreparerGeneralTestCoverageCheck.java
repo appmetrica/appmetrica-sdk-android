@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.preparer;
 
 import io.appmetrica.analytics.impl.InternalEvents;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;

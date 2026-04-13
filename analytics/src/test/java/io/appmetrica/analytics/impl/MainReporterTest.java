@@ -10,7 +10,7 @@ import io.appmetrica.analytics.impl.crash.jvm.client.MainReporterAnrController;
 import io.appmetrica.analytics.impl.crash.jvm.client.UnhandledException;
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule;
 import io.appmetrica.analytics.testutils.MockProvider;
-import io.appmetrica.analytics.testutils.MockedConstructionRule;
+import io.appmetrica.gradle.testutils.rules.MockedConstructionRule;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;

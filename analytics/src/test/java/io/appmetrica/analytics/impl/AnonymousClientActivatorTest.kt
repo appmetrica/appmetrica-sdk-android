@@ -2,15 +2,15 @@ package io.appmetrica.analytics.impl
 
 import android.content.Context
 import io.appmetrica.analytics.AppMetricaLibraryAdapterConfig
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
 import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor
 import io.appmetrica.analytics.coreutils.internal.logger.LoggerStorage
 import io.appmetrica.analytics.impl.proxy.AppMetricaFacadeProvider
 import io.appmetrica.analytics.impl.utils.executors.ClientExecutorProvider
 import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger
-import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.on
-import io.appmetrica.analytics.testutils.staticRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.assertions.Assertions.ObjectPropertyAssertions
+import io.appmetrica.gradle.testutils.rules.MockedStaticRule.Companion.on
+import io.appmetrica.gradle.testutils.rules.MockedStaticRule.Companion.staticRule
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.ArgumentMatchers.eq

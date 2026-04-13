@@ -7,7 +7,7 @@ import io.appmetrica.analytics.BuildConfig;
 import io.appmetrica.analytics.impl.component.CommonArguments;
 import io.appmetrica.analytics.impl.component.CommonArgumentsTestUtils;
 import io.appmetrica.analytics.internal.CounterConfiguration;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;

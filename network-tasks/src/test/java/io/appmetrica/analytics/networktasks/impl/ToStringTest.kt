@@ -2,8 +2,8 @@ package io.appmetrica.analytics.networktasks.impl
 
 import io.appmetrica.analytics.networktasks.internal.DefaultResponseParser
 import io.appmetrica.analytics.networktasks.internal.RetryPolicyConfig
-import io.appmetrica.analytics.testutils.BaseToStringTest
-import io.appmetrica.analytics.testutils.BaseToStringTest.Companion.toTestCase
+import io.appmetrica.gradle.androidtestutils.tostring.BaseToStringTest
+import io.appmetrica.gradle.androidtestutils.tostring.BaseToStringTest.Companion.toTestCase
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 import java.lang.reflect.Modifier

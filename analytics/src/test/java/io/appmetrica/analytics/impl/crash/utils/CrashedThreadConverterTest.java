@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.crash.utils;
 
 import io.appmetrica.analytics.impl.crash.jvm.client.ThreadState;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.Test;
 

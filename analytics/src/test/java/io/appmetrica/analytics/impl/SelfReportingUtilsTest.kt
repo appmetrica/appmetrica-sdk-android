@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl
 
 import io.appmetrica.analytics.impl.SelfReportingUtils.reportUuidError
 import io.appmetrica.analytics.impl.selfreporting.SelfReporterWrapper
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
 import org.junit.Test
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify

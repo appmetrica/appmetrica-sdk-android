@@ -2,7 +2,7 @@ package io.appmetrica.analytics.identifiers.impl
 
 import android.content.Context
 import android.os.Bundle
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Rule

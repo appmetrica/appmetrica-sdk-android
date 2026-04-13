@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.coreutils.internal.time;
 
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.concurrent.TimeUnit;

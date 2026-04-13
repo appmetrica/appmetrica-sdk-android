@@ -2,7 +2,7 @@ package io.appmetrica.analytics.billing.impl.storage
 
 import io.appmetrica.analytics.billing.impl.protobuf.client.AutoInappCollectingInfoProto
 import io.appmetrica.analytics.protobuf.nano.InvalidProtocolBufferNanoException
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith

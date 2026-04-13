@@ -3,7 +3,7 @@ package io.appmetrica.analytics.coreutils.internal.services
 import android.content.pm.InstallSourceInfo
 import android.content.pm.PackageManager
 import android.os.Build
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.junit.Before

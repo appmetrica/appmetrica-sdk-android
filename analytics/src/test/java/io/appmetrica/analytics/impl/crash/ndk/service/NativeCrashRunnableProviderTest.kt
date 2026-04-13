@@ -14,8 +14,8 @@ import io.appmetrica.analytics.impl.crash.ndk.NativeCrashHandlerDescription
 import io.appmetrica.analytics.impl.crash.service.ShouldSendCrashNowPredicate
 import io.appmetrica.analytics.impl.utils.concurrency.FileLocksHolder
 import io.appmetrica.analytics.ndkcrashesapi.internal.NativeCrashSource
-import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.constructionRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.rules.MockedConstructionRule.Companion.constructionRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Rule

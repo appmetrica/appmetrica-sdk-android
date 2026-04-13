@@ -18,7 +18,7 @@ import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoData;
 import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoDataConverter;
 import io.appmetrica.analytics.impl.preloadinfo.PreloadInfoDataSerializer;
 import io.appmetrica.analytics.impl.startup.StartupStateModel;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import java.util.Arrays;
 import java.util.Collection;

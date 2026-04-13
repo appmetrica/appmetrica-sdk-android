@@ -1,6 +1,5 @@
 package io.appmetrica.analytics.impl.ecommerce.client.converter;
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
 import io.appmetrica.analytics.impl.ecommerce.client.model.ReferrerWrapper;
 import io.appmetrica.analytics.impl.ecommerce.client.model.ScreenWrapper;
 import io.appmetrica.analytics.impl.protobuf.backend.Ecommerce;
@@ -8,14 +7,15 @@ import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedInfo;
 import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedProvider;
 import io.appmetrica.analytics.impl.utils.limitation.TrimmingResult;
 import io.appmetrica.analytics.impl.utils.limitation.hierarchical.HierarchicalStringTrimmer;
-import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.TruncationInfoConsumer;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
+import io.appmetrica.gradle.testutils.assertions.ObjectPropertyAssertions;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.Mockito.when;
 
@@ -75,7 +75,7 @@ public class ReferrerConverterTest extends CommonTest {
         referrerConverter = new ReferrerConverter();
 
         ObjectPropertyAssertions<ReferrerConverter> assertions =
-            ObjectPropertyAssertions(referrerConverter)
+            Assertions.INSTANCE.ObjectPropertyAssertions(referrerConverter)
                 .withPrivateFields(true);
 
         assertions.checkFieldNonNull("screenConverter");
@@ -97,7 +97,7 @@ public class ReferrerConverterTest extends CommonTest {
         expectedReferrer.type = truncatedType.getBytes();
         expectedReferrer.id = truncatedIdentifier.getBytes();
 
-        ObjectPropertyAssertions(proto)
+        Assertions.INSTANCE.ObjectPropertyAssertions(proto)
             .checkFieldRecursively(
                 "metaInfo",
                 new TruncationInfoConsumer(totalBytesTruncated)
@@ -124,7 +124,7 @@ public class ReferrerConverterTest extends CommonTest {
         Result<Ecommerce.ECommerceEvent.Referrer, BytesTruncatedProvider> result =
             referrerConverter.fromModel(referrerWrapper);
 
-        ObjectPropertyAssertions(result)
+        Assertions.INSTANCE.ObjectPropertyAssertions(result)
             .checkFieldRecursively(
                 "metaInfo",
                 new TruncationInfoConsumer(0)

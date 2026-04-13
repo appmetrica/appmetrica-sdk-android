@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.ecommerce;
 
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Arrays;

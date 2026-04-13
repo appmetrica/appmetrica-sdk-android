@@ -9,8 +9,8 @@ import io.appmetrica.analytics.locationapi.internal.LastKnownLocationExtractor
 import io.appmetrica.analytics.locationapi.internal.LastKnownLocationExtractorProvider
 import io.appmetrica.analytics.locationapi.internal.LocationReceiver
 import io.appmetrica.analytics.locationapi.internal.LocationReceiverProvider
-import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.MockedConstructionRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.rules.MockedConstructionRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Rule

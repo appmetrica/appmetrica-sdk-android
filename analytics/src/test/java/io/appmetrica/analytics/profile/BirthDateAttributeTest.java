@@ -9,7 +9,7 @@ import io.appmetrica.analytics.impl.profile.UserProfileUpdatePatcher;
 import io.appmetrica.analytics.impl.protobuf.backend.Userprofile;
 import io.appmetrica.analytics.impl.utils.limitation.DummyTrimmer;
 import io.appmetrica.analytics.impl.utils.validation.DummyValidator;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import org.junit.Test;

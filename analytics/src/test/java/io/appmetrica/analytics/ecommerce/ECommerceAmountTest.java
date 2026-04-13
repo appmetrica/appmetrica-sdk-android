@@ -1,7 +1,8 @@
 package io.appmetrica.analytics.ecommerce;
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
+import io.appmetrica.gradle.testutils.assertions.ObjectPropertyAssertions;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Arrays;
@@ -11,8 +12,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
-
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 
 @RunWith(Parameterized.class)
 public class ECommerceAmountTest extends CommonTest {
@@ -120,7 +119,7 @@ public class ECommerceAmountTest extends CommonTest {
 
     @Test
     public void constructor() throws Exception {
-        ObjectPropertyAssertions<ECommerceAmount> assertions = ObjectPropertyAssertions(actual)
+        ObjectPropertyAssertions<ECommerceAmount> assertions = Assertions.INSTANCE.ObjectPropertyAssertions(actual)
                 .withDeclaredAccessibleFields(true);
 
         assertions.checkDecimalField("amount", "getAmount", new BigDecimal(expected), 0.0001d);

@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.component.remarketing;
 
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;

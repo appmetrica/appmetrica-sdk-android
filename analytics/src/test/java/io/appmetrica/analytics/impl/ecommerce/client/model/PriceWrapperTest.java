@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.ecommerce.client.model;
 import io.appmetrica.analytics.ecommerce.ECommerceAmount;
 import io.appmetrica.analytics.ecommerce.ECommercePrice;
 import io.appmetrica.analytics.impl.ecommerce.ECommerceEventProviderTest;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import java.math.BigDecimal;
 import org.junit.Test;
 

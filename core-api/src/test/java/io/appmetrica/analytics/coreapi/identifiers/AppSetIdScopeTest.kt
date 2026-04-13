@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.coreapi.identifiers
 
 import io.appmetrica.analytics.coreapi.internal.identifiers.AppSetIdScope
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith

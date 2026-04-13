@@ -1,6 +1,5 @@
 package io.appmetrica.analytics.impl.crash.jvm.converter;
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
 import io.appmetrica.analytics.impl.crash.jvm.client.AllThreads;
 import io.appmetrica.analytics.impl.crash.jvm.client.StackTraceItemInternal;
 import io.appmetrica.analytics.impl.crash.jvm.client.ThreadState;
@@ -8,7 +7,9 @@ import io.appmetrica.analytics.impl.crash.jvm.client.ThrowableModel;
 import io.appmetrica.analytics.impl.crash.jvm.client.UnhandledException;
 import io.appmetrica.analytics.impl.protobuf.backend.CrashAndroid;
 import io.appmetrica.analytics.protobuf.nano.InvalidProtocolBufferNanoException;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
+import io.appmetrica.gradle.testutils.assertions.ObjectPropertyAssertions;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -19,7 +20,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.Mockito.doReturn;
@@ -100,7 +100,7 @@ public class UnhandledExceptionConverterTest extends CommonTest {
         CrashAndroid.BytesPair[] protoEnv = new CrashAndroid.BytesPair[]{mock(CrashAndroid.BytesPair.class)};
         doReturn(protoEnv).when(pluginEnvironmentConverter).fromModel(environment);
 
-        ObjectPropertyAssertions<CrashAndroid.Crash> crashAssertions = ObjectPropertyAssertions(
+        ObjectPropertyAssertions<CrashAndroid.Crash> crashAssertions = Assertions.INSTANCE.ObjectPropertyAssertions(
             exceptionConverter.fromModel(exception)
         );
 
@@ -143,7 +143,7 @@ public class UnhandledExceptionConverterTest extends CommonTest {
         doReturn(protoIsOffline).when(optionalBoolConverter).toProto(any());
 
         CrashAndroid.Crash crash = exceptionConverter.fromModel(exception);
-        ObjectPropertyAssertions<CrashAndroid.Crash> crashAssertions = ObjectPropertyAssertions(
+        ObjectPropertyAssertions<CrashAndroid.Crash> crashAssertions = Assertions.INSTANCE.ObjectPropertyAssertions(
             crash
         );
         crashAssertions.withFinalFieldOnly(false)

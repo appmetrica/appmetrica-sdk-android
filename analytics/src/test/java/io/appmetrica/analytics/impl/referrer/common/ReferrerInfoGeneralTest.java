@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.referrer.common;
 import io.appmetrica.analytics.impl.protobuf.client.ReferrerInfoClient;
 import io.appmetrica.analytics.protobuf.nano.InvalidProtocolBufferNanoException;
 import io.appmetrica.analytics.protobuf.nano.MessageNano;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.Test;
 

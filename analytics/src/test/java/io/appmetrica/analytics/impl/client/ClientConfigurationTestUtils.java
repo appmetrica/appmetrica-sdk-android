@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.client;
 import android.content.Context;
 import android.os.ResultReceiver;
 import io.appmetrica.analytics.internal.CounterConfiguration;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 
 public class ClientConfigurationTestUtils extends CommonTest {
 

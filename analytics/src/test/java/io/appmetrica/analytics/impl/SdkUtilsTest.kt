@@ -2,9 +2,9 @@ package io.appmetrica.analytics.impl
 
 import io.appmetrica.analytics.logger.appmetrica.internal.ImportantLogger
 import io.appmetrica.analytics.logger.common.BaseImportantLogger
-import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.LogRule
-import io.appmetrica.analytics.testutils.staticRule
+import io.appmetrica.gradle.androidtestutils.rules.LogRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.rules.MockedStaticRule.Companion.staticRule
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.kotlin.any

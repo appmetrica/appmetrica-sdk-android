@@ -4,7 +4,7 @@ import io.appmetrica.analytics.impl.ClientCounterReport.TrimmedField
 import io.appmetrica.analytics.impl.client.ProcessConfiguration
 import io.appmetrica.analytics.impl.service.AppMetricaServiceDataReporter
 import io.appmetrica.analytics.internal.CounterConfiguration
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.SoftAssertions
 import org.junit.Test

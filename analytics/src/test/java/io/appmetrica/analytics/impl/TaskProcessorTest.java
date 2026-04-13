@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
 import io.appmetrica.analytics.impl.startup.executor.StartupExecutor;
 import io.appmetrica.analytics.networktasks.internal.NetworkTask;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import org.junit.Before;
 import org.junit.Rule;

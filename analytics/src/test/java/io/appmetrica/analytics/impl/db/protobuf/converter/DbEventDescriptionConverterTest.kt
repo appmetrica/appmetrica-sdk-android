@@ -1,14 +1,14 @@
 package io.appmetrica.analytics.impl.db.protobuf.converter
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
-import io.appmetrica.analytics.assertions.ProtoObjectPropertyAssertions
 import io.appmetrica.analytics.impl.EventSource
 import io.appmetrica.analytics.impl.FirstOccurrenceStatus
 import io.appmetrica.analytics.impl.db.event.DbEventModel
 import io.appmetrica.analytics.impl.db.event.DbLocationModel
 import io.appmetrica.analytics.impl.protobuf.client.DbProto
 import io.appmetrica.analytics.impl.utils.encryption.EventEncryptionMode
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.assertions.Assertions.ObjectPropertyAssertions
+import io.appmetrica.gradle.testutils.assertions.ProtoObjectPropertyAssertions
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.mockito.kotlin.doReturn

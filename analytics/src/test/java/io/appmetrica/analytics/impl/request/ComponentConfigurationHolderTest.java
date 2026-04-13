@@ -4,7 +4,7 @@ import io.appmetrica.analytics.impl.component.CommonArguments;
 import io.appmetrica.analytics.impl.component.CommonArgumentsTestUtils;
 import io.appmetrica.analytics.impl.startup.StartupState;
 import io.appmetrica.analytics.networktasks.internal.BaseRequestConfig;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import org.junit.Before;
 import org.junit.Rule;

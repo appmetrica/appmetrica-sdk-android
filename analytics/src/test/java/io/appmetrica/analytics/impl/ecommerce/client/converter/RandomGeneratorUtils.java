@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.ecommerce.client.converter;
 
 import io.appmetrica.analytics.impl.protobuf.backend.Ecommerce;
-import io.appmetrica.analytics.testutils.RandomStringGenerator;
+import io.appmetrica.gradle.testutils.data.RandomStringGenerator;
 import java.util.Random;
 
 class RandomGeneratorUtils {

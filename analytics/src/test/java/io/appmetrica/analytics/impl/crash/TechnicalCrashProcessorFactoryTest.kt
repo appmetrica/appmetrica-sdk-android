@@ -7,9 +7,9 @@ import io.appmetrica.analytics.impl.SdkUtils
 import io.appmetrica.analytics.impl.TestsData
 import io.appmetrica.analytics.impl.crash.jvm.client.ICrashProcessor
 import io.appmetrica.analytics.impl.crash.jvm.client.TechnicalCrashProcessorFactory
-import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.MockedConstructionRule
-import io.appmetrica.analytics.testutils.MockedStaticRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.rules.MockedConstructionRule
+import io.appmetrica.gradle.testutils.rules.MockedStaticRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Rule
 import org.junit.Test

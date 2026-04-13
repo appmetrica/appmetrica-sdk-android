@@ -5,7 +5,7 @@ import io.appmetrica.analytics.impl.component.ComponentId;
 import io.appmetrica.analytics.impl.db.constants.Constants;
 import io.appmetrica.analytics.impl.db.constants.TempCacheTable;
 import io.appmetrica.analytics.impl.utils.collection.HashMultimap;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import java.util.AbstractMap;
 import java.util.HashMap;

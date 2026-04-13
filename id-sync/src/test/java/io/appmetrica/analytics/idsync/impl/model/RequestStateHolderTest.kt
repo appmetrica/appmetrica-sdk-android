@@ -1,8 +1,8 @@
 package io.appmetrica.analytics.idsync.impl.model
 
 import io.appmetrica.analytics.modulesapi.internal.common.ModulePreferences
-import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.constructionRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.rules.MockedConstructionRule.Companion.constructionRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Rule
 import org.junit.Test

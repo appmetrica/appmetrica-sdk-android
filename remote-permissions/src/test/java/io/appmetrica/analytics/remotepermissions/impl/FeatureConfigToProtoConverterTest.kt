@@ -1,10 +1,10 @@
 package io.appmetrica.analytics.remotepermissions.impl
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
-import io.appmetrica.analytics.assertions.ProtoObjectPropertyAssertions
 import io.appmetrica.analytics.remotepermissions.impl.protobuf.client.RemotePermissionsProtobuf
 import io.appmetrica.analytics.remotepermissions.internal.config.FeatureConfig
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.assertions.Assertions.ObjectPropertyAssertions
+import io.appmetrica.gradle.testutils.assertions.ProtoObjectPropertyAssertions
 import org.junit.Before
 import org.junit.Test
 

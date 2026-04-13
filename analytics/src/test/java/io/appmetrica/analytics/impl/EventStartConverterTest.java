@@ -1,12 +1,12 @@
 package io.appmetrica.analytics.impl;
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import java.lang.reflect.InvocationTargetException;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.Test;
 
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
+import io.appmetrica.gradle.testutils.assertions.ObjectPropertyAssertions;
 
 public class EventStartConverterTest extends CommonTest {
 
@@ -37,7 +37,7 @@ public class EventStartConverterTest extends CommonTest {
         io.appmetrica.analytics.impl.protobuf.backend.EventStart.Value proto = new io.appmetrica.analytics.impl.protobuf.backend.EventStart.Value();
         proto.buildId = buildId.getBytes();
         EventStart model = mEventStartConverter.toModel(proto);
-        ObjectPropertyAssertions<EventStart> assertions = ObjectPropertyAssertions(model);
+        ObjectPropertyAssertions<EventStart> assertions = Assertions.INSTANCE.ObjectPropertyAssertions(model);
         assertions.checkField("buildId", buildId);
         assertions.checkAll();
     }
@@ -46,7 +46,7 @@ public class EventStartConverterTest extends CommonTest {
     public void testToModelDefault() throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
         io.appmetrica.analytics.impl.protobuf.backend.EventStart.Value proto = new io.appmetrica.analytics.impl.protobuf.backend.EventStart.Value();
         EventStart model = mEventStartConverter.toModel(proto);
-        ObjectPropertyAssertions<EventStart> assertions = ObjectPropertyAssertions(model);
+        ObjectPropertyAssertions<EventStart> assertions = Assertions.INSTANCE.ObjectPropertyAssertions(model);
         assertions.checkField("buildId", "");
         assertions.checkAll();
     }

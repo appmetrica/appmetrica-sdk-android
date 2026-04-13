@@ -6,7 +6,7 @@ import io.appmetrica.analytics.impl.ClientServiceLocator;
 import io.appmetrica.analytics.impl.MainReporter;
 import io.appmetrica.analytics.impl.NonNullConsumer;
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import java.util.List;
 import org.junit.Before;
 import org.junit.Rule;

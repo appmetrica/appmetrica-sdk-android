@@ -17,8 +17,8 @@ import io.appmetrica.analytics.impl.proxy.AppMetricaProxyProvider
 import io.appmetrica.analytics.internal.IdentifiersResult
 import io.appmetrica.analytics.plugins.AppMetricaPlugins
 import io.appmetrica.analytics.profile.UserProfile
-import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.staticRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.rules.MockedStaticRule.Companion.staticRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Rule

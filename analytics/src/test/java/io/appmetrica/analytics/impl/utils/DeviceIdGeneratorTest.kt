@@ -11,7 +11,7 @@ import io.appmetrica.analytics.impl.IOUtils
 import io.appmetrica.analytics.impl.id.AdvertisingIdGetter
 import io.appmetrica.analytics.impl.id.AppSetIdGetter
 import io.appmetrica.analytics.impl.id.Constants
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith

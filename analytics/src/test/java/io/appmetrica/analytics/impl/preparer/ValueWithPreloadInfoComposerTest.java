@@ -6,7 +6,7 @@ import io.appmetrica.analytics.impl.protobuf.client.DbProto;
 import io.appmetrica.analytics.impl.request.ReportRequestConfig;
 import io.appmetrica.analytics.impl.utils.encryption.EventEncryptionMode;
 import io.appmetrica.analytics.protobuf.nano.MessageNano;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;

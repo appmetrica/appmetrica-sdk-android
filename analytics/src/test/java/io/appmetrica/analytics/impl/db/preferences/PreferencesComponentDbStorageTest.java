@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.db.preferences;
 
 import io.appmetrica.analytics.impl.AppEnvironment;
 import io.appmetrica.analytics.impl.db.storage.MockedKeyValueTableDbHelper;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;

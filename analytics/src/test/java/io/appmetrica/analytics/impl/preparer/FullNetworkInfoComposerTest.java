@@ -1,16 +1,16 @@
 package io.appmetrica.analytics.impl.preparer;
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
-import io.appmetrica.analytics.assertions.ProtoObjectPropertyAssertions;
+import io.appmetrica.gradle.testutils.assertions.ProtoObjectPropertyAssertions;
 import io.appmetrica.analytics.impl.protobuf.backend.EventProto;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import java.util.Random;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
+import io.appmetrica.gradle.testutils.assertions.ObjectPropertyAssertions;
 
 public class FullNetworkInfoComposerTest extends CommonTest {
 
@@ -55,7 +55,7 @@ public class FullNetworkInfoComposerTest extends CommonTest {
         );
 
         ObjectPropertyAssertions<EventProto.ReportMessage.Session.Event.NetworkInfo> assertions =
-            ObjectPropertyAssertions(proto)
+            Assertions.INSTANCE.ObjectPropertyAssertions(proto)
                 .withFinalFieldOnly(false);
 
         assertions.checkField("connectionType", connectionType);
@@ -71,7 +71,7 @@ public class FullNetworkInfoComposerTest extends CommonTest {
             .getNetworkInfo(null, null);
 
         ObjectPropertyAssertions<EventProto.ReportMessage.Session.Event.NetworkInfo> assertions =
-            ObjectPropertyAssertions(proto)
+            Assertions.INSTANCE.ObjectPropertyAssertions(proto)
                 .withFinalFieldOnly(false);
 
         assertions.checkField("connectionType", EventProto.ReportMessage.Session.CONNECTION_UNDEFINED);

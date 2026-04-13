@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.db.preferences;
 import androidx.annotation.NonNull;
 import io.appmetrica.analytics.impl.db.IKeyValueTableDbHelper;
 import io.appmetrica.analytics.impl.network.NetworkHost;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import java.util.Arrays;
 import java.util.Collection;
 import org.junit.Before;

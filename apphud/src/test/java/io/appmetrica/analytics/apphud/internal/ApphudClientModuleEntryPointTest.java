@@ -13,8 +13,9 @@ import io.appmetrica.analytics.coreapi.internal.identifiers.SdkIdentifiers;
 import io.appmetrica.analytics.modulesapi.internal.client.ClientContext;
 import io.appmetrica.analytics.modulesapi.internal.client.ClientStorageProvider;
 import io.appmetrica.analytics.modulesapi.internal.client.ModuleServiceConfig;
-import io.appmetrica.analytics.testutils.CommonTest;
-import io.appmetrica.analytics.testutils.MockedConstructionRule;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.rules.MockedConstructionRule;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -23,7 +24,6 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -159,7 +159,7 @@ public class ApphudClientModuleEntryPointTest extends CommonTest {
         ClientApphudConfig configForStorage = clientModuleConfigCaptor.getValue();
 
         assertThat(configForStorage).isSameAs(configForActivation);
-        ObjectPropertyAssertions(configForActivation)
+        Assertions.INSTANCE.ObjectPropertyAssertions(configForActivation)
             .withPrivateFields(true)
             .checkField("apiKey", apiKey)
             .checkField("deviceId", deviceId)
@@ -181,7 +181,7 @@ public class ApphudClientModuleEntryPointTest extends CommonTest {
         ClientApphudConfig configForStorage = clientModuleConfigCaptor.getValue();
 
         assertThat(configForStorage).isSameAs(configForActivation);
-        ObjectPropertyAssertions(configForActivation)
+        Assertions.INSTANCE.ObjectPropertyAssertions(configForActivation)
             .withPrivateFields(true)
             .checkField("apiKey", null)
             .checkField("deviceId", null)

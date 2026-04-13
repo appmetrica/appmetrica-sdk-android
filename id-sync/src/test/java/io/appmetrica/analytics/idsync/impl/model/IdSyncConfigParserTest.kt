@@ -1,9 +1,9 @@
 package io.appmetrica.analytics.idsync.impl.model
 
-import io.appmetrica.analytics.assertions.ProtoObjectPropertyAssertions
 import io.appmetrica.analytics.idsync.impl.protobuf.client.IdSyncProtobuf
 import io.appmetrica.analytics.idsync.internal.model.IdSyncConfig
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.assertions.ProtoObjectPropertyAssertions
 import org.assertj.core.api.Assertions.assertThat
 import org.json.JSONArray
 import org.json.JSONObject

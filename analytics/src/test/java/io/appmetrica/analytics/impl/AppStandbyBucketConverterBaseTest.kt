@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl
 
 import io.appmetrica.analytics.impl.BackgroundRestrictionsState.AppStandByBucket
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 

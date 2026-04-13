@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.db.constants.migration
 import android.database.sqlite.SQLiteDatabase
 import io.appmetrica.analytics.impl.db.constants.TempCacheTable
 import io.appmetrica.analytics.impl.db.constants.migrations.ServiceDatabaseUpgradeScriptToV114
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
 import org.junit.Test
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify

@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.profile;
 
 import io.appmetrica.analytics.impl.protobuf.backend.Userprofile;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 
 class UserProfilesTestUtils extends CommonTest {
 

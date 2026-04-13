@@ -1,6 +1,5 @@
 package io.appmetrica.analytics.impl.ecommerce.client.converter;
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
 import io.appmetrica.analytics.coreutils.internal.StringUtils;
 import io.appmetrica.analytics.impl.protobuf.backend.Ecommerce;
 import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedInfo;
@@ -9,7 +8,9 @@ import io.appmetrica.analytics.impl.utils.limitation.CollectionTrimInfo;
 import io.appmetrica.analytics.impl.utils.limitation.TrimmingResult;
 import io.appmetrica.analytics.impl.utils.limitation.hierarchical.HierarchicalStringListTrimmer;
 import io.appmetrica.analytics.testutils.CollectionTrimInfoConsumer;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
+import io.appmetrica.gradle.testutils.assertions.ObjectPropertyAssertions;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
@@ -18,7 +19,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.mockito.Mockito.when;
 
 public class CategoryConverterTest extends CommonTest {
@@ -44,7 +44,7 @@ public class CategoryConverterTest extends CommonTest {
 
     @Test
     public void constructor() throws Exception {
-        ObjectPropertyAssertions(new CategoryConverter())
+        Assertions.INSTANCE.ObjectPropertyAssertions(new CategoryConverter())
             .withPrivateFields(true)
             .checkFieldComparingFieldByFieldRecursively("categoryTrimmer", new HierarchicalStringListTrimmer(20, 100))
             .checkAll();
@@ -68,7 +68,7 @@ public class CategoryConverterTest extends CommonTest {
             );
 
         final ObjectPropertyAssertions<Result<Ecommerce.ECommerceEvent.Category, BytesTruncatedProvider>> assertions =
-            ObjectPropertyAssertions(
+            Assertions.INSTANCE.ObjectPropertyAssertions(
                 categoryConverter.fromModel(inputList)
             )
                 .withFinalFieldOnly(false);
@@ -103,7 +103,7 @@ public class CategoryConverterTest extends CommonTest {
             );
 
         final ObjectPropertyAssertions<Result<Ecommerce.ECommerceEvent.Category, BytesTruncatedProvider>> assertions =
-            ObjectPropertyAssertions(
+            Assertions.INSTANCE.ObjectPropertyAssertions(
                 categoryConverter.fromModel(inputList)
             )
                 .withFinalFieldOnly(false);
@@ -138,7 +138,7 @@ public class CategoryConverterTest extends CommonTest {
             );
 
         final ObjectPropertyAssertions<Result<Ecommerce.ECommerceEvent.Category, BytesTruncatedProvider>> assertions =
-            ObjectPropertyAssertions(
+            Assertions.INSTANCE.ObjectPropertyAssertions(
                 categoryConverter.fromModel(Collections.emptyList())
             )
                 .withFinalFieldOnly(false);

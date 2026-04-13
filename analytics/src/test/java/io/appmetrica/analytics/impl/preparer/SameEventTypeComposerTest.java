@@ -4,7 +4,7 @@ import android.content.ContentValues;
 import io.appmetrica.analytics.impl.InternalEvents;
 import io.appmetrica.analytics.impl.db.constants.Constants;
 import io.appmetrica.analytics.impl.protobuf.backend.EventProto;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import io.appmetrica.analytics.testutils.MockProvider;
 import org.junit.Rule;

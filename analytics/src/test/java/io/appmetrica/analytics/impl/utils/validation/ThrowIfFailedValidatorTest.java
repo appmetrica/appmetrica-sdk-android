@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.utils.validation;
 
 import io.appmetrica.analytics.ValidationException;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import org.assertj.core.api.ThrowableAssert;
 import org.junit.Test;
 

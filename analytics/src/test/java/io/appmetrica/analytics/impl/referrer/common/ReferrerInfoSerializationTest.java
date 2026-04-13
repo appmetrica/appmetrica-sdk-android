@@ -1,10 +1,11 @@
 package io.appmetrica.analytics.impl.referrer.common;
 
 import androidx.annotation.NonNull;
-import io.appmetrica.analytics.assertions.ProtoObjectPropertyAssertions;
 import io.appmetrica.analytics.impl.protobuf.client.ReferrerInfoClient;
 import io.appmetrica.analytics.protobuf.nano.MessageNano;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
+import io.appmetrica.gradle.testutils.assertions.ProtoObjectPropertyAssertions;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -12,8 +13,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
-
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 
 @RunWith(Parameterized.class)
 public class ReferrerInfoSerializationTest extends CommonTest {
@@ -60,7 +59,7 @@ public class ReferrerInfoSerializationTest extends CommonTest {
         proto.clickTimeSeconds = clickTimestamp;
         proto.installBeginTimeSeconds = installTimestamp;
         proto.source = protoSource;
-        ObjectPropertyAssertions(ReferrerInfo.parseFrom(MessageNano.toByteArray(proto)))
+        Assertions.INSTANCE.ObjectPropertyAssertions(ReferrerInfo.parseFrom(MessageNano.toByteArray(proto)))
             .checkField("installReferrer", referrer)
             .checkField("referrerClickTimestampSeconds", clickTimestamp)
             .checkField("installBeginTimestampSeconds", installTimestamp)
@@ -71,7 +70,7 @@ public class ReferrerInfoSerializationTest extends CommonTest {
     @Test
     public void thereAndBackAgain() throws Exception {
         ReferrerInfo referrerInfo = new ReferrerInfo(referrer, clickTimestamp, installTimestamp, modelSource);
-        ObjectPropertyAssertions(ReferrerInfo.parseFrom(referrerInfo.toProto()))
+        Assertions.INSTANCE.ObjectPropertyAssertions(ReferrerInfo.parseFrom(referrerInfo.toProto()))
             .checkField("installReferrer", referrer)
             .checkField("referrerClickTimestampSeconds", clickTimestamp)
             .checkField("installBeginTimestampSeconds", installTimestamp)

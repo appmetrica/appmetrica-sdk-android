@@ -4,7 +4,7 @@ import io.appmetrica.analytics.coreapi.internal.backport.BiFunction;
 import io.appmetrica.analytics.impl.crash.jvm.client.AllThreads;
 import io.appmetrica.analytics.impl.crash.jvm.client.ThreadState;
 import io.appmetrica.analytics.impl.utils.process.ProcessNameProvider;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;

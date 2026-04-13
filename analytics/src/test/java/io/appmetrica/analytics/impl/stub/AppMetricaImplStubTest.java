@@ -8,9 +8,10 @@ import io.appmetrica.analytics.DeferredDeeplinkListener;
 import io.appmetrica.analytics.DeferredDeeplinkParametersListener;
 import io.appmetrica.analytics.ReporterConfig;
 import io.appmetrica.analytics.StartupParamsCallback;
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
 import io.appmetrica.analytics.impl.startup.Constants;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
+import io.appmetrica.gradle.testutils.assertions.ObjectPropertyAssertions;
 import java.util.Collections;
 import java.util.function.Consumer;
 import org.junit.Before;
@@ -18,7 +19,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -161,7 +161,7 @@ public class AppMetricaImplStubTest extends CommonTest {
 
     @Test
     public void getFeatures() throws Exception {
-        ObjectPropertyAssertions(stub.getFeatures())
+        Assertions.INSTANCE.ObjectPropertyAssertions(stub.getFeatures())
             .withPrivateFields(true)
             .checkFieldIsNull("libSslEnabled", "getLibSslEnabled")
             .checkAll();
@@ -187,7 +187,7 @@ public class AppMetricaImplStubTest extends CommonTest {
                     }
                 }
             };
-        ObjectPropertyAssertions(result)
+        Assertions.INSTANCE.ObjectPropertyAssertions(result)
             .checkFieldRecursively("googleAdvId", verifier)
             .checkFieldRecursively("huaweiAdvId", verifier)
             .checkFieldRecursively("yandexAdvId", verifier)

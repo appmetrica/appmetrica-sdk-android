@@ -7,8 +7,8 @@ import android.os.Parcel
 import android.os.Process
 import io.appmetrica.analytics.BuildConfig
 import io.appmetrica.analytics.impl.DataResultReceiver
-import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.ContextRule
+import io.appmetrica.gradle.androidtestutils.rules.ContextRule
+import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.SoftAssertions
 import org.junit.Before
 import org.junit.Rule

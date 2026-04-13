@@ -9,8 +9,8 @@ import io.appmetrica.analytics.impl.component.CommonArguments
 import io.appmetrica.analytics.impl.component.CommutationDispatcherComponent
 import io.appmetrica.analytics.impl.component.clients.CommutationClientUnit
 import io.appmetrica.analytics.internal.CounterConfiguration
-import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
+import io.appmetrica.gradle.testutils.CommonTest
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mockito

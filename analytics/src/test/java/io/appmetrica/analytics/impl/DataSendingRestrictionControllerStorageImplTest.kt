@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl
 
 import io.appmetrica.analytics.impl.DataSendingRestrictionControllerImpl.StorageImpl
 import io.appmetrica.analytics.impl.db.preferences.PreferencesServiceDbStorage
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.mockito.kotlin.doReturn

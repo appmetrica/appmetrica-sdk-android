@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.utils
 
 import io.appmetrica.analytics.impl.protobuf.backend.EventProto
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith

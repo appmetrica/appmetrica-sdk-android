@@ -2,7 +2,7 @@ package io.appmetrica.analytics.snapshot.impl.utils;
 
 import io.appmetrica.analytics.impl.CoverageUtils;
 import io.appmetrica.analytics.impl.utils.DebugAssert;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 
 import org.junit.Test;
 

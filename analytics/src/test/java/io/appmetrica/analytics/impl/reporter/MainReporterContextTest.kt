@@ -7,7 +7,7 @@ import io.appmetrica.analytics.impl.MainReporterComponents
 import io.appmetrica.analytics.impl.ReportsHandler
 import io.appmetrica.analytics.impl.startup.StartupHelper
 import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.mockito.kotlin.doReturn

@@ -1,14 +1,15 @@
 package io.appmetrica.analytics.impl.ecommerce.client.converter;
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
 import io.appmetrica.analytics.impl.ecommerce.client.model.AmountWrapper;
 import io.appmetrica.analytics.impl.protobuf.backend.Ecommerce;
 import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedInfo;
 import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedProvider;
 import io.appmetrica.analytics.impl.utils.limitation.TrimmingResult;
 import io.appmetrica.analytics.impl.utils.limitation.hierarchical.HierarchicalStringTrimmer;
-import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.TruncationInfoConsumer;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
+import io.appmetrica.gradle.testutils.assertions.ObjectPropertyAssertions;
 import java.math.BigDecimal;
 import java.util.function.Consumer;
 import org.assertj.core.api.SoftAssertions;
@@ -17,7 +18,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.mockito.Mockito.when;
 
 public class AmountConverterTest extends CommonTest {
@@ -54,7 +54,7 @@ public class AmountConverterTest extends CommonTest {
         amountConverter = new AmountConverter();
 
         ObjectPropertyAssertions<AmountConverter> assertions =
-            ObjectPropertyAssertions(amountConverter)
+            Assertions.INSTANCE.ObjectPropertyAssertions(amountConverter)
                 .withPrivateFields(true);
 
         assertions.checkFieldNonNull("decimalConverter");
@@ -71,7 +71,7 @@ public class AmountConverterTest extends CommonTest {
         Result<Ecommerce.ECommerceEvent.Amount, BytesTruncatedProvider> result = amountConverter.fromModel(amountWrapper);
 
         ObjectPropertyAssertions<Result<Ecommerce.ECommerceEvent.Amount, BytesTruncatedProvider>> assertions =
-            ObjectPropertyAssertions(result);
+            Assertions.INSTANCE.ObjectPropertyAssertions(result);
 
         assertions.checkFieldRecursively("metaInfo", new TruncationInfoConsumer(bytesTruncated));
         assertions.checkFieldRecursively(

@@ -3,7 +3,7 @@ package io.appmetrica.analytics
 import io.appmetrica.analytics.impl.LazyReportConfigProvider
 import io.appmetrica.analytics.impl.component.ComponentUnit
 import io.appmetrica.analytics.impl.request.ReportRequestConfig
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.mockito.kotlin.doReturn

@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.utils.encryption;
 
 import io.appmetrica.analytics.impl.CounterReport;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import java.util.Random;
 import org.junit.Before;
 import org.junit.Test;

@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.internal.js
 
 import io.appmetrica.analytics.impl.proxy.AppMetricaProxy
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
 import org.junit.Before
 import org.junit.Test
 import org.mockito.kotlin.mock

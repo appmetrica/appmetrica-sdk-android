@@ -1,18 +1,17 @@
 package io.appmetrica.analytics.impl.db.state.converter;
 
 import android.util.Pair;
-import io.appmetrica.analytics.assertions.ProtoObjectPropertyAssertions;
 import io.appmetrica.analytics.impl.protobuf.client.StartupStateProtobuf;
 import io.appmetrica.analytics.impl.startup.AttributionConfig;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
+import io.appmetrica.gradle.testutils.assertions.ProtoObjectPropertyAssertions;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
-
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 
 @RunWith(RobolectricTestRunner.class)
 public class AttributionConfigConverterTest extends CommonTest {
@@ -73,7 +72,7 @@ public class AttributionConfigConverterTest extends CommonTest {
     @Test
     public void toModelEmptyConditions() throws IllegalAccessException {
         StartupStateProtobuf.StartupState.Attribution proto = new StartupStateProtobuf.StartupState.Attribution();
-        ObjectPropertyAssertions(converter.toModel(proto))
+        Assertions.INSTANCE.ObjectPropertyAssertions(converter.toModel(proto))
             .checkField("deeplinkConditions", new ArrayList<Pair<String, AttributionConfig.Filter>>())
             .checkAll();
     }
@@ -86,7 +85,7 @@ public class AttributionConfigConverterTest extends CommonTest {
         nanoPair.filter = new StartupStateProtobuf.StartupState.Attribution.Filter();
         nanoPair.filter.value = "some value 1";
         proto.deeplinkConditions = new StartupStateProtobuf.StartupState.Attribution.StringPair[]{nanoPair};
-        ObjectPropertyAssertions(converter.toModel(proto))
+        Assertions.INSTANCE.ObjectPropertyAssertions(converter.toModel(proto))
             .checkField("deeplinkConditions", Collections.singletonList(
                 new Pair<String, AttributionConfig.Filter>("some key 1", new AttributionConfig.Filter("some value 1"))
             ), true)
@@ -105,7 +104,7 @@ public class AttributionConfigConverterTest extends CommonTest {
         secondNanoPair.filter = new StartupStateProtobuf.StartupState.Attribution.Filter();
         secondNanoPair.filter.value = "some value 2";
         proto.deeplinkConditions = new StartupStateProtobuf.StartupState.Attribution.StringPair[]{firstNanoPair, secondNanoPair};
-        ObjectPropertyAssertions(converter.toModel(proto))
+        Assertions.INSTANCE.ObjectPropertyAssertions(converter.toModel(proto))
             .checkField("deeplinkConditions", Arrays.asList(
                 new Pair<String, AttributionConfig.Filter>("some key 1", new AttributionConfig.Filter("some value 1")),
                 new Pair<String, AttributionConfig.Filter>("some key 2", new AttributionConfig.Filter("some value 2"))
@@ -120,7 +119,7 @@ public class AttributionConfigConverterTest extends CommonTest {
         nanoPair.key = "some key 1";
         nanoPair.filter = null;
         proto.deeplinkConditions = new StartupStateProtobuf.StartupState.Attribution.StringPair[]{nanoPair};
-        ObjectPropertyAssertions(converter.toModel(proto))
+        Assertions.INSTANCE.ObjectPropertyAssertions(converter.toModel(proto))
             .checkField("deeplinkConditions", Collections.singletonList(new Pair<String, AttributionConfig.Filter>("some key 1", null)))
             .checkAll();
     }

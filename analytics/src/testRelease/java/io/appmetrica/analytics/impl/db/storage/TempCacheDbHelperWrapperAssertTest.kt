@@ -4,8 +4,8 @@ import android.content.Context
 import io.appmetrica.analytics.coreapi.internal.data.TempCacheStorage
 import io.appmetrica.analytics.impl.db.StorageType
 import io.appmetrica.analytics.impl.utils.DebugAssert
-import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.staticRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.rules.MockedStaticRule.Companion.staticRule
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.kotlin.mock

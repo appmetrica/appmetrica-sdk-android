@@ -1,12 +1,12 @@
 package io.appmetrica.analytics.billing.impl.sender
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
-import io.appmetrica.analytics.assertions.ProtoObjectPropertyAssertions
 import io.appmetrica.analytics.billing.impl.protobuf.backend.Revenue
 import io.appmetrica.analytics.billinginterface.internal.Period
 import io.appmetrica.analytics.billinginterface.internal.ProductInfo
 import io.appmetrica.analytics.billinginterface.internal.ProductType
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.assertions.ObjectPropertyAssertions
+import io.appmetrica.gradle.testutils.assertions.ProtoObjectPropertyAssertions
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith

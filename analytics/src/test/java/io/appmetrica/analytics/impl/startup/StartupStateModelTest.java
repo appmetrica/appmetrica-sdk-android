@@ -1,9 +1,10 @@
 package io.appmetrica.analytics.impl.startup;
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
 import io.appmetrica.analytics.impl.DefaultValues;
 import io.appmetrica.analytics.networktasks.internal.RetryPolicyConfig;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
+import io.appmetrica.gradle.testutils.assertions.ObjectPropertyAssertions;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -14,7 +15,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.mockito.Mockito.mock;
 
 public class StartupStateModelTest extends CommonTest {
@@ -92,7 +92,7 @@ public class StartupStateModelTest extends CommonTest {
             .build();
 
         ObjectPropertyAssertions<StartupStateModel> assertions =
-            ObjectPropertyAssertions(startupState)
+            Assertions.INSTANCE.ObjectPropertyAssertions(startupState)
                 .withFinalFieldOnly(false);
 
         assertions.checkField("uuid", uuid);
@@ -133,7 +133,7 @@ public class StartupStateModelTest extends CommonTest {
         StartupStateModel startupState = new StartupStateModel.StartupStateBuilder(mCollectingFlags).build();
 
         ObjectPropertyAssertions<StartupStateModel> assertions =
-            ObjectPropertyAssertions(startupState)
+            Assertions.INSTANCE.ObjectPropertyAssertions(startupState)
                 .withFinalFieldOnly(false);
 
         assertions.checkField("uuid", (String) null);
@@ -236,7 +236,7 @@ public class StartupStateModelTest extends CommonTest {
             .build();
 
         ObjectPropertyAssertions<StartupStateModel> assertions =
-            ObjectPropertyAssertions(startupState)
+            Assertions.INSTANCE.ObjectPropertyAssertions(startupState)
                 .withFinalFieldOnly(false);
 
         assertions.checkField("uuid", uuid);

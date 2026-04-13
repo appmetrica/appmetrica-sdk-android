@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.startup.executor;
 
 import io.appmetrica.analytics.impl.startup.StartupUnit;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Collection;

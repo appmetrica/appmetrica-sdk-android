@@ -1,6 +1,5 @@
 package io.appmetrica.analytics.impl.ecommerce.client.converter;
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
 import io.appmetrica.analytics.impl.ecommerce.client.model.AmountWrapper;
 import io.appmetrica.analytics.impl.ecommerce.client.model.PriceWrapper;
 import io.appmetrica.analytics.impl.ecommerce.client.trimmer.PriceHierarchicalComponentsTrimmer;
@@ -9,8 +8,10 @@ import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedInfo;
 import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedProvider;
 import io.appmetrica.analytics.impl.utils.limitation.CollectionTrimInfo;
 import io.appmetrica.analytics.impl.utils.limitation.TrimmingResult;
-import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.TruncationInfoConsumer;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
+import io.appmetrica.gradle.testutils.assertions.ObjectPropertyAssertions;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -20,7 +21,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.Mockito.mock;
@@ -115,7 +115,7 @@ public class PriceConverterTest extends CommonTest {
         priceConverter = new PriceConverter();
 
         ObjectPropertyAssertions<PriceConverter> assertions =
-            ObjectPropertyAssertions(priceConverter)
+            Assertions.INSTANCE.ObjectPropertyAssertions(priceConverter)
                 .withPrivateFields(true);
 
         assertions.checkFieldNonNull("amountConverter");
@@ -138,7 +138,7 @@ public class PriceConverterTest extends CommonTest {
         expectedPrice.internalComponents = protoInternalComponents;
 
         ObjectPropertyAssertions<Result<Ecommerce.ECommerceEvent.Price, BytesTruncatedProvider>> assertions =
-            ObjectPropertyAssertions(
+            Assertions.INSTANCE.ObjectPropertyAssertions(
                 priceResult
             ).checkFieldComparingFieldByFieldRecursively("result", expectedPrice)
                 .checkFieldRecursively(
@@ -184,7 +184,7 @@ public class PriceConverterTest extends CommonTest {
         expectedPrice.internalComponents = new Ecommerce.ECommerceEvent.Amount[0];
 
         ObjectPropertyAssertions<Result<Ecommerce.ECommerceEvent.Price, BytesTruncatedProvider>> assertions =
-            ObjectPropertyAssertions(
+            Assertions.INSTANCE.ObjectPropertyAssertions(
                 priceResult
             )
                 .checkFieldComparingFieldByFieldRecursively("result", expectedPrice)

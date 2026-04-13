@@ -4,7 +4,7 @@ import android.net.Uri;
 import io.appmetrica.analytics.networktasks.internal.NetworkTaskForSendingDataParamsAppender;
 import io.appmetrica.analytics.networktasks.internal.RequestBodyEncrypter;
 import io.appmetrica.analytics.networktasks.internal.RequestBodyEncryptionMode;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

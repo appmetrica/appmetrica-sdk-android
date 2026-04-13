@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.billing.impl.config.remote.parser
 
-import io.appmetrica.analytics.assertions.ProtoObjectPropertyAssertions
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.assertions.ProtoObjectPropertyAssertions
 import org.json.JSONObject
 import org.junit.Test
 

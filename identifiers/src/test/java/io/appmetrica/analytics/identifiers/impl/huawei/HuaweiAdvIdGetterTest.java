@@ -8,6 +8,7 @@ import io.appmetrica.analytics.identifiers.impl.AdvIdResult;
 import io.appmetrica.analytics.identifiers.impl.AdvIdServiceConnectionController;
 import io.appmetrica.analytics.identifiers.impl.ConnectionException;
 import io.appmetrica.analytics.identifiers.impl.Constants;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
 import java.util.Random;
 import java.util.function.Predicate;
 import org.junit.Before;
@@ -17,7 +18,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
 
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -43,7 +43,7 @@ public class HuaweiAdvIdGetterTest {
     @Test
     public void constructor() throws Exception {
         mHuaweiAdvIdGetter = new HuaweiAdvIdGetter();
-        ObjectPropertyAssertions(mHuaweiAdvIdGetter)
+        Assertions.INSTANCE.ObjectPropertyAssertions(mHuaweiAdvIdGetter)
             .withPrivateFields(true)
             .withIgnoredFields("tag")
             .checkFieldMatchPredicate(

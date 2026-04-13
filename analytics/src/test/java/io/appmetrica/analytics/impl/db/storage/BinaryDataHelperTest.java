@@ -5,7 +5,7 @@ import android.database.MatrixCursor;
 import android.database.sqlite.SQLiteDatabase;
 import io.appmetrica.analytics.impl.db.connectors.DBConnector;
 import io.appmetrica.analytics.impl.db.constants.Constants;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

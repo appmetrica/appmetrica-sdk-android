@@ -1,9 +1,8 @@
 package io.appmetrica.analytics.impl.utils.limitation;
 
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
 import org.junit.Test;
-
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 
 /**
  * @see BytesTruncationInfoTotalBytesTruncatedTest
@@ -13,7 +12,7 @@ public class BytesTruncationInfoTest extends CommonTest {
     @Test
     public void constructor() throws Exception {
         int bytesTruncated = 4;
-        ObjectPropertyAssertions(new BytesTruncatedInfo(bytesTruncated))
+        Assertions.INSTANCE.ObjectPropertyAssertions(new BytesTruncatedInfo(bytesTruncated))
             .checkField("bytesTruncated", bytesTruncated)
             .checkAll();
     }

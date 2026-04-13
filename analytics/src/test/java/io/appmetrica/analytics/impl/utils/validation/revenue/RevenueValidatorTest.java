@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.utils.validation.revenue;
 import io.appmetrica.analytics.Revenue;
 import io.appmetrica.analytics.impl.utils.validation.ValidationResult;
 import io.appmetrica.analytics.impl.utils.validation.Validator;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import java.util.List;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;

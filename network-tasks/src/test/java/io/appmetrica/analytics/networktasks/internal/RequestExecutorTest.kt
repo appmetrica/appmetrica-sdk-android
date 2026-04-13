@@ -1,6 +1,5 @@
 package io.appmetrica.analytics.networktasks.internal
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
 import io.appmetrica.analytics.network.internal.NetworkClientBuilder
 import io.appmetrica.analytics.networkapi.Call
 import io.appmetrica.analytics.networkapi.NetworkClient
@@ -8,8 +7,9 @@ import io.appmetrica.analytics.networkapi.NetworkClientSettings
 import io.appmetrica.analytics.networkapi.Request
 import io.appmetrica.analytics.networkapi.Response
 import io.appmetrica.analytics.networktasks.impl.Constants
-import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.MockedConstructionRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.assertions.Assertions.ObjectPropertyAssertions
+import io.appmetrica.gradle.testutils.rules.MockedConstructionRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Rule
 import org.junit.Test

@@ -63,9 +63,6 @@ appMetricaMavenCentralPublish = { module = "io.appmetrica.gradle:maven-central-p
 appMetricaNoLogs = { module = "io.appmetrica.gradle:no-logs", version.ref = "selfGradlePlugins" }
 appMetricaRepositories = { module = "io.appmetrica.gradle:repositories", version.ref = "selfGradlePlugins" }
 
-# AppMetrica dependencies
-commonAssertions = { module = "io.appmetrica.analytics:common_assertions" }
-
 # Build dependencies
 androidGradlePlugin = { module = "com.android.tools.build:gradle", version.ref = "agp" }
 kotlinGradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }

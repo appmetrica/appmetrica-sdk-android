@@ -5,7 +5,7 @@ import io.appmetrica.analytics.coreapi.internal.data.ProtobufConverter;
 import io.appmetrica.analytics.coreutils.internal.data.BaseProtobufStateSerializer;
 import io.appmetrica.analytics.protobuf.nano.InvalidProtocolBufferNanoException;
 import io.appmetrica.analytics.protobuf.nano.MessageNano;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import org.junit.Test;
 
 import static org.mockito.ArgumentMatchers.any;

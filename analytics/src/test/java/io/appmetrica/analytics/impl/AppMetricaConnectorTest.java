@@ -3,9 +3,9 @@ package io.appmetrica.analytics.impl;
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
 import io.appmetrica.analytics.impl.client.connection.AppMetricaServiceIntentProvider;
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule;
-import io.appmetrica.analytics.testutils.CommonTest;
-import io.appmetrica.analytics.testutils.ContextRule;
-import io.appmetrica.analytics.testutils.MockedConstructionRule;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.androidtestutils.rules.ContextRule;
+import io.appmetrica.gradle.testutils.rules.MockedConstructionRule;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 

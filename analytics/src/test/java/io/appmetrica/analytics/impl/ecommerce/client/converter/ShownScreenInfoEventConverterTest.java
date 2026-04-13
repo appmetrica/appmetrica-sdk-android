@@ -5,8 +5,9 @@ import io.appmetrica.analytics.impl.ecommerce.client.model.ShownScreenInfoEvent;
 import io.appmetrica.analytics.impl.protobuf.backend.Ecommerce;
 import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedInfo;
 import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedProvider;
-import io.appmetrica.analytics.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.TruncationInfoConsumer;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
 import java.util.Collections;
 import java.util.List;
 import org.junit.Before;
@@ -14,7 +15,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
@@ -47,7 +47,7 @@ public class ShownScreenInfoEventConverterTest extends CommonTest {
 
     @Test
     public void constructor() throws Exception {
-        ObjectPropertyAssertions(new ShownScreenInfoEventConverter())
+        Assertions.INSTANCE.ObjectPropertyAssertions(new ShownScreenInfoEventConverter())
             .withPrivateFields(true)
             .checkFieldNonNull("screenConverter")
             .checkAll();
@@ -65,7 +65,7 @@ public class ShownScreenInfoEventConverterTest extends CommonTest {
 
         assertThat(protos.size()).isEqualTo(1);
 
-        ObjectPropertyAssertions(protos.get(0))
+        Assertions.INSTANCE.ObjectPropertyAssertions(protos.get(0))
             .checkFieldRecursively(
                 "metaInfo",
                 new TruncationInfoConsumer(totalBytesTruncated)

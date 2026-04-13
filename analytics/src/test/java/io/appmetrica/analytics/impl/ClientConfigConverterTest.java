@@ -4,7 +4,7 @@ import android.location.Location;
 import androidx.annotation.NonNull;
 import io.appmetrica.analytics.AppMetricaConfig;
 import io.appmetrica.analytics.PreloadInfo;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;

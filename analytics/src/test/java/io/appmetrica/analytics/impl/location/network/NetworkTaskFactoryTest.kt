@@ -1,7 +1,6 @@
 package io.appmetrica.analytics.impl.location.network
 
 import android.content.Context
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
 import io.appmetrica.analytics.coreutils.internal.executors.BlockingExecutor
 import io.appmetrica.analytics.impl.CounterReport
 import io.appmetrica.analytics.impl.GlobalServiceLocator
@@ -27,12 +26,13 @@ import io.appmetrica.analytics.networktasks.internal.ExponentialBackoffPolicy
 import io.appmetrica.analytics.networktasks.internal.FinalConfigProvider
 import io.appmetrica.analytics.networktasks.internal.FullUrlFormer
 import io.appmetrica.analytics.networktasks.internal.NetworkTask
-import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.ConstructionArgumentCaptor
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
-import io.appmetrica.analytics.testutils.MockedConstructionRule
-import io.appmetrica.analytics.testutils.MockedStaticRule
-import io.appmetrica.analytics.testutils.constructionRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.assertions.Assertions.ObjectPropertyAssertions
+import io.appmetrica.gradle.testutils.mock.ConstructionArgumentCaptor
+import io.appmetrica.gradle.testutils.rules.MockedConstructionRule
+import io.appmetrica.gradle.testutils.rules.MockedConstructionRule.Companion.constructionRule
+import io.appmetrica.gradle.testutils.rules.MockedStaticRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Rule

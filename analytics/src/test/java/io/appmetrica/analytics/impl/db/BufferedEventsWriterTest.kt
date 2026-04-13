@@ -2,8 +2,8 @@ package io.appmetrica.analytics.impl.db
 
 import android.content.ContentValues
 import io.appmetrica.analytics.coreapi.internal.executors.IHandlerExecutor
-import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.LogRule
+import io.appmetrica.gradle.androidtestutils.rules.LogRule
+import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Rule

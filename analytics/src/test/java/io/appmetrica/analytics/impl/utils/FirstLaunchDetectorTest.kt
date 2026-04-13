@@ -3,8 +3,8 @@ package io.appmetrica.analytics.impl.utils
 import android.content.Context
 import io.appmetrica.analytics.coreutils.internal.io.FileUtils
 import io.appmetrica.analytics.impl.db.FileConstants
-import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.staticRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.rules.MockedStaticRule.Companion.staticRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Rule

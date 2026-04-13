@@ -15,7 +15,7 @@ import io.appmetrica.analytics.impl.request.StartupRequestConfig;
 import io.appmetrica.analytics.impl.request.UrlParts;
 import io.appmetrica.analytics.impl.request.appenders.StartupParamsAppender;
 import io.appmetrica.analytics.impl.utils.JsonHelper;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import java.util.Collections;
 import java.util.List;

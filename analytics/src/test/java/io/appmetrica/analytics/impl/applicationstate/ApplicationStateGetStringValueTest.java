@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.applicationstate;
 
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.applicationstate.ApplicationState;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import java.util.Arrays;
 import java.util.Collection;
 import org.junit.Test;

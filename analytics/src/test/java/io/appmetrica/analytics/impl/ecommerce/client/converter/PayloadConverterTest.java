@@ -1,6 +1,5 @@
 package io.appmetrica.analytics.impl.ecommerce.client.converter;
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
 import io.appmetrica.analytics.impl.protobuf.backend.Ecommerce;
 import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedInfo;
 import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedProvider;
@@ -8,7 +7,9 @@ import io.appmetrica.analytics.impl.utils.limitation.CollectionTrimInfo;
 import io.appmetrica.analytics.impl.utils.limitation.TrimmingResult;
 import io.appmetrica.analytics.impl.utils.limitation.hierarchical.HierarchicalValueSizeOrderBasedWithBytesLimitStringMapTrimmer;
 import io.appmetrica.analytics.testutils.CollectionTrimInfoConsumer;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
+import io.appmetrica.gradle.testutils.assertions.ObjectPropertyAssertions;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -18,7 +19,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.mockito.Mockito.when;
 
 public class PayloadConverterTest extends CommonTest {
@@ -60,7 +60,7 @@ public class PayloadConverterTest extends CommonTest {
             new HierarchicalValueSizeOrderBasedWithBytesLimitStringMapTrimmer(20 * 1024, 100, 1000);
 
         ObjectPropertyAssertions<PayloadConverter> assertions =
-            ObjectPropertyAssertions(payloadConverter)
+            Assertions.INSTANCE.ObjectPropertyAssertions(payloadConverter)
                 .withPrivateFields(true);
 
         assertions.checkFieldComparingFieldByFieldRecursively(
@@ -103,7 +103,7 @@ public class PayloadConverterTest extends CommonTest {
         Result<Ecommerce.ECommerceEvent.Payload, BytesTruncatedProvider> payloadResult =
             payloadConverter.fromModel(inputPayload);
 
-        ObjectPropertyAssertions(
+        Assertions.INSTANCE.ObjectPropertyAssertions(
             payloadResult)
             .checkFieldRecursively(
                 "metaInfo",

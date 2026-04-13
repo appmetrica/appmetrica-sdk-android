@@ -2,7 +2,6 @@ package io.appmetrica.analytics.impl
 
 import android.content.ContentValues
 import android.database.MatrixCursor
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
 import io.appmetrica.analytics.coreutils.internal.db.DBUtils
 import io.appmetrica.analytics.coreutils.internal.io.GZIPCompressor
 import io.appmetrica.analytics.impl.component.ComponentId
@@ -32,11 +31,12 @@ import io.appmetrica.analytics.networktasks.internal.RequestBodyEncrypter
 import io.appmetrica.analytics.networktasks.internal.RequestDataHolder
 import io.appmetrica.analytics.networktasks.internal.ResponseDataHolder
 import io.appmetrica.analytics.networktasks.internal.SendingDataTaskHelper
-import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.ConstructionArgumentCaptor
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
-import io.appmetrica.analytics.testutils.MockedConstructionRule
-import io.appmetrica.analytics.testutils.MockedStaticRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.assertions.Assertions.ObjectPropertyAssertions
+import io.appmetrica.gradle.testutils.mock.ConstructionArgumentCaptor
+import io.appmetrica.gradle.testutils.rules.MockedConstructionRule
+import io.appmetrica.gradle.testutils.rules.MockedStaticRule
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.SoftAssertions
 import org.junit.Before

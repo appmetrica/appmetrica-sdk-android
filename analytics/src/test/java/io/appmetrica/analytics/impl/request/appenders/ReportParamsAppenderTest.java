@@ -10,7 +10,7 @@ import io.appmetrica.analytics.impl.request.ReportRequestConfig;
 import io.appmetrica.analytics.impl.utils.JsonHelper;
 import io.appmetrica.analytics.networktasks.internal.AdvIdWithLimitedAppender;
 import io.appmetrica.analytics.networktasks.internal.NetworkTaskForSendingDataParamsAppender;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import java.util.Arrays;
 import java.util.Collection;

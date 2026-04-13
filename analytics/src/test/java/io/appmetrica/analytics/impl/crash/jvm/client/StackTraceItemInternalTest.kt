@@ -1,8 +1,8 @@
 package io.appmetrica.analytics.impl.crash.jvm.client
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
 import io.appmetrica.analytics.plugins.StackTraceItem
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.assertions.Assertions.ObjectPropertyAssertions
 import org.junit.Test
 import org.mockito.Mockito.mock
 import org.mockito.kotlin.whenever

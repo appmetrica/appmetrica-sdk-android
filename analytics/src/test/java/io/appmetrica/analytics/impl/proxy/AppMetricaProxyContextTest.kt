@@ -17,8 +17,8 @@ import io.appmetrica.analytics.impl.proxy.synchronous.SynchronousStageExecutor
 import io.appmetrica.analytics.impl.proxy.validation.Barrier
 import io.appmetrica.analytics.impl.proxy.validation.SilentActivationValidator
 import io.appmetrica.analytics.testutils.ClientServiceLocatorRule
-import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.ContextCoverageUtils
+import io.appmetrica.gradle.testutils.CommonTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

@@ -2,18 +2,18 @@ package io.appmetrica.analytics.impl.revenue.ad
 
 import io.appmetrica.analytics.AdRevenue
 import io.appmetrica.analytics.AdType
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
-import io.appmetrica.analytics.assertions.ProtoObjectPropertyAssertions
 import io.appmetrica.analytics.coreutils.internal.StringUtils
 import io.appmetrica.analytics.impl.adrevenue.AdRevenuePayloadEnricher
 import io.appmetrica.analytics.impl.utils.JsonHelper
 import io.appmetrica.analytics.impl.utils.limitation.StringByBytesTrimmer
 import io.appmetrica.analytics.impl.utils.limitation.StringTrimmer
 import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger
-import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.MockedConstructionRule
-import io.appmetrica.analytics.testutils.MockedStaticRule
-import io.appmetrica.analytics.testutils.on
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.assertions.ObjectPropertyAssertions
+import io.appmetrica.gradle.testutils.assertions.ProtoObjectPropertyAssertions
+import io.appmetrica.gradle.testutils.rules.MockedConstructionRule
+import io.appmetrica.gradle.testutils.rules.MockedStaticRule
+import io.appmetrica.gradle.testutils.rules.MockedStaticRule.Companion.on
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Rule
 import org.junit.Test

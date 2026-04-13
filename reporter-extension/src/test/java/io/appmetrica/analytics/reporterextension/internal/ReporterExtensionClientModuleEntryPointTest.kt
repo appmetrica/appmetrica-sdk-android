@@ -3,7 +3,7 @@ package io.appmetrica.analytics.reporterextension.internal
 import io.appmetrica.analytics.modulesapi.internal.client.ClientContext
 import io.appmetrica.analytics.modulesapi.internal.client.ModuleClientActivator
 import io.appmetrica.analytics.modulesapi.internal.client.ProcessDetector
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.mockito.Mockito.never

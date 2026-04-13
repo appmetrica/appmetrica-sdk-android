@@ -2,7 +2,7 @@ package io.appmetrica.analytics.plugins
 
 import io.appmetrica.analytics.impl.AppMetricaPluginsImpl
 import io.appmetrica.analytics.impl.proxy.AppMetricaPluginsProxy
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
 import org.junit.Test
 import org.mockito.Mockito.mock
 import org.mockito.kotlin.verify

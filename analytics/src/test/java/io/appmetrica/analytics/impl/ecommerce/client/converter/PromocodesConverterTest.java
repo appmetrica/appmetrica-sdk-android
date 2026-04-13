@@ -1,6 +1,5 @@
 package io.appmetrica.analytics.impl.ecommerce.client.converter;
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
 import io.appmetrica.analytics.impl.protobuf.backend.Ecommerce;
 import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedInfo;
 import io.appmetrica.analytics.impl.utils.limitation.BytesTruncatedProvider;
@@ -8,7 +7,9 @@ import io.appmetrica.analytics.impl.utils.limitation.CollectionTrimInfo;
 import io.appmetrica.analytics.impl.utils.limitation.TrimmingResult;
 import io.appmetrica.analytics.impl.utils.limitation.hierarchical.HierarchicalStringListTrimmer;
 import io.appmetrica.analytics.testutils.CollectionTrimInfoConsumer;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
+import io.appmetrica.gradle.testutils.assertions.ObjectPropertyAssertions;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -17,7 +18,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.mockito.Mockito.when;
 
 public class PromocodesConverterTest extends CommonTest {
@@ -41,7 +41,7 @@ public class PromocodesConverterTest extends CommonTest {
         promocodesConverter = new PromocodesConverter();
 
         ObjectPropertyAssertions<PromocodesConverter> assertions =
-            ObjectPropertyAssertions(promocodesConverter)
+            Assertions.INSTANCE.ObjectPropertyAssertions(promocodesConverter)
                 .withPrivateFields(true);
 
         assertions.checkFieldComparingFieldByFieldRecursively(
@@ -79,7 +79,7 @@ public class PromocodesConverterTest extends CommonTest {
             itemsDropped
         );
 
-        ObjectPropertyAssertions(
+        Assertions.INSTANCE.ObjectPropertyAssertions(
             promocodesResult)
             .checkFieldComparingFieldByFieldRecursively(
                 "result",
@@ -138,7 +138,7 @@ public class PromocodesConverterTest extends CommonTest {
         int expectedBytesTruncated,
         int expectedItemsDropped
     ) throws Exception {
-        ObjectPropertyAssertions(
+        Assertions.INSTANCE.ObjectPropertyAssertions(
             result)
             .checkField("result", expectedPromocodes, true)
             .checkFieldRecursively(

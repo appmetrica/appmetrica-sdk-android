@@ -1,6 +1,6 @@
 package io.appmetrica.analytics.impl.crash.jvm.client;
 
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import java.util.Arrays;
 import java.util.List;
 import org.assertj.core.api.SoftAssertions;

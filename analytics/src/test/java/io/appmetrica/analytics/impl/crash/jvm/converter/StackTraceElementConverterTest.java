@@ -1,12 +1,12 @@
 package io.appmetrica.analytics.impl.crash.jvm.converter;
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
 import io.appmetrica.analytics.impl.crash.jvm.client.StackTraceItemInternal;
 import io.appmetrica.analytics.impl.protobuf.backend.CrashAndroid;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import org.junit.Test;
 
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
+import io.appmetrica.gradle.testutils.assertions.ObjectPropertyAssertions;
 
 public class StackTraceElementConverterTest extends CommonTest {
 
@@ -27,7 +27,7 @@ public class StackTraceElementConverterTest extends CommonTest {
             methodName,
             true
         );
-        ObjectPropertyAssertions<CrashAndroid.StackTraceElement> assertions = ObjectPropertyAssertions(
+        ObjectPropertyAssertions<CrashAndroid.StackTraceElement> assertions = Assertions.INSTANCE.ObjectPropertyAssertions(
             elementConverter.fromModel(stackTraceElement)
         );
 
@@ -51,7 +51,7 @@ public class StackTraceElementConverterTest extends CommonTest {
             null,
             null
         );
-        ObjectPropertyAssertions<CrashAndroid.StackTraceElement> assertions = ObjectPropertyAssertions(
+        ObjectPropertyAssertions<CrashAndroid.StackTraceElement> assertions = Assertions.INSTANCE.ObjectPropertyAssertions(
             elementConverter.fromModel(stackTraceElement)
         );
 

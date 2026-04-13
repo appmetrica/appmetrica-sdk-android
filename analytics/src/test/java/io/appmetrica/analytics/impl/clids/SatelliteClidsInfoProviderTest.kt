@@ -6,9 +6,9 @@ import android.database.Cursor
 import android.net.Uri
 import io.appmetrica.analytics.coreutils.internal.services.PackageManagerUtils
 import io.appmetrica.analytics.impl.DistributionSource
-import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.on
-import io.appmetrica.analytics.testutils.staticRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.rules.MockedStaticRule.Companion.on
+import io.appmetrica.gradle.testutils.rules.MockedStaticRule.Companion.staticRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Rule
 import org.junit.Test

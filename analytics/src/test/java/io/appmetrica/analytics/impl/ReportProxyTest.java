@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl;
 import android.os.Bundle;
 import io.appmetrica.analytics.impl.service.ServiceDataReporter;
 import io.appmetrica.analytics.impl.service.ServiceDataReporterHolder;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import java.util.Arrays;
 import org.junit.Before;

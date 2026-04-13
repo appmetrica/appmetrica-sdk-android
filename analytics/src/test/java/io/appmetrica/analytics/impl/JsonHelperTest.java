@@ -1,11 +1,12 @@
 package io.appmetrica.analytics.impl;
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
 import io.appmetrica.analytics.coreapi.internal.identifiers.IdentifierStatus;
 import io.appmetrica.analytics.coreapi.internal.model.ScreenInfo;
 import io.appmetrica.analytics.impl.utils.JsonHelper;
 import io.appmetrica.analytics.internal.IdentifiersResult;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
+import io.appmetrica.gradle.testutils.assertions.ObjectPropertyAssertions;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,7 +15,6 @@ import org.json.JSONObject;
 import org.junit.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class JsonHelperTest extends CommonTest {
@@ -65,7 +65,7 @@ public class JsonHelperTest extends CommonTest {
         JSONObject json = JsonHelper.advIdentifiersResultToJson(advIdentifiers);
         IdentifiersResult deserialized = JsonHelper.advIdentifiersResultFromJson(json);
         assertThat(deserialized).isEqualToComparingFieldByField(advIdentifiers);
-        ObjectPropertyAssertions<IdentifiersResult> assertions = ObjectPropertyAssertions(deserialized);
+        ObjectPropertyAssertions<IdentifiersResult> assertions = Assertions.INSTANCE.ObjectPropertyAssertions(deserialized);
         assertions.checkField("id", id);
         assertions.checkField("status", status);
         assertions.checkField("errorExplanation", error);
@@ -94,7 +94,7 @@ public class JsonHelperTest extends CommonTest {
     @Test
     public void screenInfoFromFilledJsonString() throws Exception {
         String filledJson = "{\"width\":24,\"height\":76,\"dpi\":50,\"scaleFactor\":'0.5',\"deviceType\":tablet}";
-        ObjectPropertyAssertions(JsonHelper.screenInfoFromJsonString(filledJson))
+        Assertions.INSTANCE.ObjectPropertyAssertions(JsonHelper.screenInfoFromJsonString(filledJson))
             .checkField("width", "getWidth", 24)
             .checkField("height", "getHeight", 76)
             .checkField("dpi", "getDpi", 50)
@@ -119,7 +119,7 @@ public class JsonHelperTest extends CommonTest {
 
     private void assertScreenInfoIsEmpty(ScreenInfo screenInfo)
         throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
-        ObjectPropertyAssertions(screenInfo)
+        Assertions.INSTANCE.ObjectPropertyAssertions(screenInfo)
             .checkField("width", "getWidth", 0)
             .checkField("height", "getHeight", 0)
             .checkField("dpi", "getDpi", 0)

@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.utils.encryption
 import android.util.Base64
 import io.appmetrica.analytics.coreutils.internal.encryption.AESEncrypter
 import io.appmetrica.analytics.impl.CounterReport
-import io.appmetrica.analytics.testutils.RandomStringGenerator
+import io.appmetrica.gradle.testutils.data.RandomStringGenerator
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test

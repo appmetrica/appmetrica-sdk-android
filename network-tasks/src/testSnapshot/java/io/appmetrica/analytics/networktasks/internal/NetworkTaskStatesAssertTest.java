@@ -2,7 +2,7 @@ package io.appmetrica.analytics.networktasks.internal;
 
 import io.appmetrica.analytics.coreapi.internal.io.IExecutionPolicy;
 import io.appmetrica.analytics.coreutils.internal.asserts.DebugAssert;
-import io.appmetrica.analytics.testutils.MockedStaticRule;
+import io.appmetrica.gradle.testutils.rules.MockedStaticRule;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Executor;

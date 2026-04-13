@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.startup.parsing;
 
 import io.appmetrica.analytics.impl.utils.JsonHelper;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import java.util.Arrays;
 import java.util.Collection;

@@ -1,12 +1,12 @@
 package io.appmetrica.analytics.impl.crash.jvm.client;
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
+import io.appmetrica.gradle.testutils.assertions.ObjectPropertyAssertions;
 import java.util.Collections;
 import java.util.List;
 import org.junit.Test;
 
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ThreadStateTest extends CommonTest {
@@ -34,7 +34,7 @@ public class ThreadStateTest extends CommonTest {
         List<StackTraceElement> stacktrace = Collections.emptyList();
         ThreadState threadState = new ThreadState(name, priority, tid, group, state, stacktrace);
 
-        ObjectPropertyAssertions<ThreadState> assertions = ObjectPropertyAssertions(threadState);
+        ObjectPropertyAssertions<ThreadState> assertions = Assertions.INSTANCE.ObjectPropertyAssertions(threadState);
 
         assertions.checkField("stacktrace", stacktrace)
             .checkField("name", name)

@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.db.state.converter;
 import androidx.annotation.NonNull;
 import io.appmetrica.analytics.impl.BackgroundRestrictionsState;
 import io.appmetrica.analytics.impl.protobuf.client.AppPermissionsStateProtobuf;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import java.util.Arrays;
 import java.util.Collection;
 import org.junit.Test;

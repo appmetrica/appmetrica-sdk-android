@@ -46,6 +46,7 @@ import io.appmetrica.analytics.impl.telephony.TelephonyDataProvider
 import io.appmetrica.analytics.impl.utils.executors.ServiceExecutorProvider
 import io.appmetrica.analytics.impl.utils.process.CurrentProcessDetector
 import io.appmetrica.analytics.networktasks.internal.NetworkCore
+import io.appmetrica.gradle.androidtestutils.rules.ContextRule
 import org.junit.rules.ExternalResource
 import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn

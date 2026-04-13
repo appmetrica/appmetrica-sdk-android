@@ -2,7 +2,6 @@ package io.appmetrica.analytics.impl.crash.jvm;
 
 import android.util.Base64;
 import androidx.annotation.NonNull;
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
 import io.appmetrica.analytics.impl.ClientCounterReport;
 import io.appmetrica.analytics.impl.EventsManager;
 import io.appmetrica.analytics.impl.InternalEvents;
@@ -12,7 +11,9 @@ import io.appmetrica.analytics.impl.client.ProcessConfiguration;
 import io.appmetrica.analytics.internal.CounterConfiguration;
 import io.appmetrica.analytics.internal.CounterConfigurationReporterType;
 import io.appmetrica.analytics.logger.appmetrica.internal.PublicLogger;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
+import io.appmetrica.gradle.testutils.assertions.ObjectPropertyAssertions;
 import java.util.AbstractMap;
 import java.util.Arrays;
 import java.util.Collection;
@@ -28,7 +29,6 @@ import org.mockito.MockitoAnnotations;
 import org.robolectric.ParameterizedRobolectricTestRunner;
 import org.robolectric.RobolectricTestRunner;
 
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
@@ -128,7 +128,7 @@ public class JvmCrashTest extends CommonTest {
             mock(PublicLogger.class),
             0L
         ), clientConfiguration, mTrimmedFields);
-        ObjectPropertyAssertions<JvmCrash> assertions = ObjectPropertyAssertions(crash).withDeclaredAccessibleFields(true)
+        ObjectPropertyAssertions<JvmCrash> assertions = Assertions.INSTANCE.ObjectPropertyAssertions(crash).withDeclaredAccessibleFields(true)
             .withIgnoredFields("trimmedFields");
         assertions.checkField("crash", "getCrashValue", mCrashValue.getBytes());
         assertions.checkField("name", "getName", mCrashName);
@@ -166,7 +166,7 @@ public class JvmCrashTest extends CommonTest {
             mFileModifiedTimestamp
         );
 
-        ObjectPropertyAssertions<JvmCrash> assertions = ObjectPropertyAssertions(crash).withDeclaredAccessibleFields(true)
+        ObjectPropertyAssertions<JvmCrash> assertions = Assertions.INSTANCE.ObjectPropertyAssertions(crash).withDeclaredAccessibleFields(true)
             .withIgnoredFields("trimmedFields");
         assertions.checkField("crash", "getCrashValue", mCrashValue.getBytes());
         assertions.checkField("name", "getName", mCrashName);
@@ -202,7 +202,7 @@ public class JvmCrashTest extends CommonTest {
             0L
         );
 
-        ObjectPropertyAssertions<JvmCrash> assertions = ObjectPropertyAssertions(crash).withDeclaredAccessibleFields(true);
+        ObjectPropertyAssertions<JvmCrash> assertions = Assertions.INSTANCE.ObjectPropertyAssertions(crash).withDeclaredAccessibleFields(true);
         assertions.checkField("crash", "getCrashValue", mCrashValue.getBytes());
         assertions.checkField("name", "getName", mCrashName);
         assertions.checkField("bytesTruncated", "getBytesTruncated", mBytesTruncated);

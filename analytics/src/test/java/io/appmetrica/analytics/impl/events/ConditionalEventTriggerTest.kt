@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.events
 
 import io.appmetrica.analytics.impl.component.ComponentId
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
 import org.junit.Test
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock

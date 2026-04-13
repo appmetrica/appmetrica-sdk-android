@@ -1,13 +1,13 @@
 package io.appmetrica.analytics.ecommerce;
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
+import io.appmetrica.gradle.testutils.assertions.ObjectPropertyAssertions;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ECommerceReferrerTest extends CommonTest {
@@ -33,7 +33,7 @@ public class ECommerceReferrerTest extends CommonTest {
     @Test
     public void constructor() throws Exception {
         ObjectPropertyAssertions<ECommerceReferrer> assertions =
-                ObjectPropertyAssertions(referrer)
+                Assertions.INSTANCE.ObjectPropertyAssertions(referrer)
                 .withDeclaredAccessibleFields(true)
                 .withFinalFieldOnly(false);
 

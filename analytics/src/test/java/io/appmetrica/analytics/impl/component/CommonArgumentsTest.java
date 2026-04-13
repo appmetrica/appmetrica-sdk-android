@@ -2,12 +2,13 @@ package io.appmetrica.analytics.impl.component;
 
 import android.location.Location;
 import android.os.ResultReceiver;
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
 import io.appmetrica.analytics.impl.client.ClientConfiguration;
 import io.appmetrica.analytics.impl.client.ProcessConfiguration;
 import io.appmetrica.analytics.impl.request.StartupRequestConfig;
 import io.appmetrica.analytics.internal.CounterConfiguration;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
+import io.appmetrica.gradle.testutils.assertions.ObjectPropertyAssertions;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -17,7 +18,6 @@ import java.util.Set;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.Test;
 
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 
@@ -26,7 +26,7 @@ public class CommonArgumentsTest extends CommonTest {
     @Test
     public void testReporterArgumentsDefaultConstructor() throws IllegalAccessException {
         ObjectPropertyAssertions<CommonArguments.ReporterArguments> assertions =
-            ObjectPropertyAssertions(new CommonArguments.ReporterArguments());
+            Assertions.INSTANCE.ObjectPropertyAssertions(new CommonArguments.ReporterArguments());
         Object nullVariable = null;
         assertions.checkField("apiKey", nullVariable);
         assertions.checkField("dispatchPeriod", nullVariable);
@@ -66,7 +66,7 @@ public class CommonArgumentsTest extends CommonTest {
         clids.put("clid1", "1");
         Set<String> autoCollectedDataSubscribers = Set.of("subscriber0", "subscriber1");
         ObjectPropertyAssertions<CommonArguments.ReporterArguments> assertions =
-            ObjectPropertyAssertions(new CommonArguments.ReporterArguments(
+            Assertions.INSTANCE.ObjectPropertyAssertions(new CommonArguments.ReporterArguments(
                 apiKey,
                 locationTracking,
                 manualLocation,
@@ -159,7 +159,7 @@ public class CommonArgumentsTest extends CommonTest {
             )
         );
         ObjectPropertyAssertions<CommonArguments.ReporterArguments> assertions =
-            ObjectPropertyAssertions(
+            Assertions.INSTANCE.ObjectPropertyAssertions(
                 commonArguments.componentArguments
             );
 
@@ -181,7 +181,7 @@ public class CommonArgumentsTest extends CommonTest {
         assertions.checkAll();
 
         ObjectPropertyAssertions<StartupRequestConfig.Arguments> startupAssertions =
-            ObjectPropertyAssertions(commonArguments.startupArguments);
+            Assertions.INSTANCE.ObjectPropertyAssertions(commonArguments.startupArguments);
         startupAssertions.checkField("hasNewCustomHosts", hasNewCustomHosts);
         startupAssertions.checkField("newCustomHosts", newCustomHosts);
         startupAssertions.checkField("clientClids", clids);

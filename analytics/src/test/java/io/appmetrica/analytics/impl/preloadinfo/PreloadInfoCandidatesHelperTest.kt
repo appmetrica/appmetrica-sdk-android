@@ -1,7 +1,7 @@
 package io.appmetrica.analytics.impl.preloadinfo
 
 import io.appmetrica.analytics.impl.DistributionSource
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.json.JSONObject
 import org.junit.Before

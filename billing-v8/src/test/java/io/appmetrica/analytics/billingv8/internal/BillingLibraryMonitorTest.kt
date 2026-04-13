@@ -8,9 +8,9 @@ import io.appmetrica.analytics.billinginterface.internal.storage.BillingInfoSend
 import io.appmetrica.analytics.billinginterface.internal.storage.BillingInfoStorage
 import io.appmetrica.analytics.billinginterface.internal.update.UpdatePolicy
 import io.appmetrica.analytics.coreutils.internal.executors.SafeRunnable
-import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.on
-import io.appmetrica.analytics.testutils.staticRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.rules.MockedStaticRule.Companion.on
+import io.appmetrica.gradle.testutils.rules.MockedStaticRule.Companion.staticRule
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith

@@ -3,7 +3,7 @@ package io.appmetrica.analytics.impl.crash.jvm;
 import android.os.FileObserver;
 import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.crash.CrashFolderPreparer;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule;
 import java.io.File;
 import org.junit.Before;

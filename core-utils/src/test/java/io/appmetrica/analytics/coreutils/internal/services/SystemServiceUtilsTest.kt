@@ -4,7 +4,7 @@ import android.content.Context
 import android.net.wifi.WifiManager
 import io.appmetrica.analytics.coreapi.internal.backport.FunctionWithThrowable
 import io.appmetrica.analytics.coreutils.internal.system.SystemServiceUtils
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.mockito.ArgumentMatchers.nullable

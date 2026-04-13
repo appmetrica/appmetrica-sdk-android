@@ -3,9 +3,9 @@ package io.appmetrica.analytics.impl.telephony
 import android.content.Context
 import android.content.pm.PackageManager
 import io.appmetrica.analytics.coreutils.internal.services.SafePackageManager
-import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
-import io.appmetrica.analytics.testutils.MockedConstructionRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.rules.MockedConstructionRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Rule
 import org.junit.Test

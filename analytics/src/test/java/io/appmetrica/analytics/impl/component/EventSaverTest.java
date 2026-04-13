@@ -13,7 +13,7 @@ import io.appmetrica.analytics.impl.db.preferences.PreferencesComponentDbStorage
 import io.appmetrica.analytics.impl.utils.encryption.EncryptedCounterReport;
 import io.appmetrica.analytics.impl.utils.encryption.EventEncrypter;
 import io.appmetrica.analytics.impl.utils.encryption.EventEncrypterProvider;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.HashMap;

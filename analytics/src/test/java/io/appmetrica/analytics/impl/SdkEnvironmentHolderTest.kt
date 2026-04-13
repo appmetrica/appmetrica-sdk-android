@@ -5,7 +5,6 @@ import android.content.res.Configuration
 import android.content.res.Resources
 import android.graphics.Point
 import io.appmetrica.analytics.BuildConfig
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
 import io.appmetrica.analytics.coreapi.internal.constants.DeviceTypeValues
 import io.appmetrica.analytics.coreapi.internal.model.AppVersionInfo
 import io.appmetrica.analytics.coreapi.internal.model.ScreenInfo
@@ -13,10 +12,11 @@ import io.appmetrica.analytics.coreapi.internal.model.SdkInfo
 import io.appmetrica.analytics.coreutils.internal.services.FrameworkDetector
 import io.appmetrica.analytics.coreutils.internal.services.PackageManagerUtils
 import io.appmetrica.analytics.impl.utils.DeviceTypeProvider
-import io.appmetrica.analytics.testutils.CommonTest
-import io.appmetrica.analytics.testutils.constructionRule
-import io.appmetrica.analytics.testutils.on
-import io.appmetrica.analytics.testutils.staticRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.assertions.Assertions.ObjectPropertyAssertions
+import io.appmetrica.gradle.testutils.rules.MockedConstructionRule.Companion.constructionRule
+import io.appmetrica.gradle.testutils.rules.MockedStaticRule.Companion.on
+import io.appmetrica.gradle.testutils.rules.MockedStaticRule.Companion.staticRule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Rule

@@ -2,7 +2,7 @@ package io.appmetrica.analytics.impl.preloadinfo;
 
 import androidx.annotation.NonNull;
 import io.appmetrica.analytics.impl.DistributionSource;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

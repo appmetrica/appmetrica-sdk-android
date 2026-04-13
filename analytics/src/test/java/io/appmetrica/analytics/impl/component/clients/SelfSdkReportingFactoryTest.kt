@@ -8,9 +8,9 @@ import io.appmetrica.analytics.impl.component.SelfSdkReportingComponentUnit
 import io.appmetrica.analytics.impl.startup.StartupState
 import io.appmetrica.analytics.impl.startup.StartupUnit
 import io.appmetrica.analytics.impl.startup.executor.StubbedExecutorFactory
-import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
-import io.appmetrica.analytics.testutils.constructionRule
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.rules.MockedConstructionRule.Companion.constructionRule
 import org.junit.Rule
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock

@@ -5,14 +5,14 @@ import com.fyber.fairbid.ads.PlacementType;
 import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.AdRevenueConstants;
 import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdRevenue;
 import io.appmetrica.analytics.modulesapi.internal.client.adrevenue.ModuleAdType;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
+import io.appmetrica.gradle.testutils.CommonTest;
 import java.math.BigDecimal;
 import java.util.Currency;
 import java.util.HashMap;
 import org.junit.Before;
 import org.junit.Test;
 
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -44,7 +44,7 @@ public class AdRevenueConverterTest extends CommonTest {
     public void convert() {
         final ModuleAdRevenue adRevenue = converter.convert(data);
 
-        ObjectPropertyAssertions(adRevenue)
+        Assertions.INSTANCE.ObjectPropertyAssertions(adRevenue)
             .checkField("adRevenue", BigDecimal.valueOf(netPayout))
             .checkField("currency", Currency.getInstance(currency))
             .checkField("adType", ModuleAdType.REWARDED)
@@ -68,7 +68,7 @@ public class AdRevenueConverterTest extends CommonTest {
         when(data.getNetPayout()).thenReturn(Double.NaN);
         final ModuleAdRevenue adRevenue = converter.convert(data);
 
-        ObjectPropertyAssertions(adRevenue)
+        Assertions.INSTANCE.ObjectPropertyAssertions(adRevenue)
             .checkField("adRevenue", BigDecimal.valueOf(0.0))
             .checkField("currency", Currency.getInstance(currency))
             .checkField("adType", ModuleAdType.REWARDED)

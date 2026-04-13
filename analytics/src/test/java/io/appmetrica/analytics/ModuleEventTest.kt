@@ -2,7 +2,7 @@ package io.appmetrica.analytics
 
 import io.appmetrica.analytics.ModuleEvent.Category
 import io.appmetrica.analytics.impl.service.AppMetricaServiceDataReporter
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.SoftAssertions
 import org.junit.Test

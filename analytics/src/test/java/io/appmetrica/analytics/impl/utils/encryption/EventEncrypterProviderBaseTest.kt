@@ -1,8 +1,8 @@
 package io.appmetrica.analytics.impl.utils.encryption
 
 import android.content.Context
-import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
+import io.appmetrica.gradle.testutils.CommonTest
 import org.junit.Before
 import org.junit.Rule
 import org.mockito.kotlin.whenever

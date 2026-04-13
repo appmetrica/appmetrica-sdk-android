@@ -1,10 +1,10 @@
 package io.appmetrica.analytics.impl.db.state.converter
 
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions
-import io.appmetrica.analytics.assertions.ProtoObjectPropertyAssertions
 import io.appmetrica.analytics.impl.protobuf.client.StartupStateProtobuf
 import io.appmetrica.analytics.impl.startup.ExternalAttributionConfig
-import io.appmetrica.analytics.testutils.CommonTest
+import io.appmetrica.gradle.testutils.CommonTest
+import io.appmetrica.gradle.testutils.assertions.Assertions.ObjectPropertyAssertions
+import io.appmetrica.gradle.testutils.assertions.ProtoObjectPropertyAssertions
 import org.junit.Test
 
 internal class ExternalAttributionConfigConverterTest : CommonTest() {

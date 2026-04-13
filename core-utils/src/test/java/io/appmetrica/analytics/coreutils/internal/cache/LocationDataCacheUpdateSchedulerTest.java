@@ -3,7 +3,7 @@ package io.appmetrica.analytics.coreutils.internal.cache;
 import io.appmetrica.analytics.coreapi.internal.cache.UpdateConditionsChecker;
 import io.appmetrica.analytics.coreapi.internal.executors.ICommonExecutor;
 import io.appmetrica.analytics.locationapi.internal.ILastKnownUpdater;
-import io.appmetrica.analytics.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.CommonTest;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import org.junit.Before;

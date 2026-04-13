@@ -1,7 +1,6 @@
 package io.appmetrica.analytics.impl;
 
 import android.content.Context;
-import io.appmetrica.analytics.assertions.ObjectPropertyAssertions;
 import io.appmetrica.analytics.coreapi.internal.identifiers.AdTrackingInfo;
 import io.appmetrica.analytics.coreapi.internal.identifiers.AdTrackingInfoResult;
 import io.appmetrica.analytics.coreapi.internal.identifiers.AdvertisingIdsHolder;
@@ -15,8 +14,10 @@ import io.appmetrica.analytics.impl.startup.StartupUpdateConfig;
 import io.appmetrica.analytics.impl.utils.JsonHelper;
 import io.appmetrica.analytics.impl.utils.StartupUtils;
 import io.appmetrica.analytics.internal.IdentifiersResult;
-import io.appmetrica.analytics.testutils.CommonTest;
-import io.appmetrica.analytics.testutils.ContextRule;
+import io.appmetrica.gradle.androidtestutils.rules.ContextRule;
+import io.appmetrica.gradle.testutils.CommonTest;
+import io.appmetrica.gradle.testutils.assertions.Assertions;
+import io.appmetrica.gradle.testutils.assertions.ObjectPropertyAssertions;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -25,15 +26,14 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import org.junit.Before;
-import org.junit.Test;
 import org.junit.Rule;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
 import org.skyscreamer.jsonassert.JSONAssert;
 
-import static io.appmetrica.analytics.assertions.AssertionsKt.ObjectPropertyAssertions;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
@@ -111,7 +111,7 @@ public class ClientIdentifiersProviderTest extends CommonTest {
     @Test
     public void testCreateClientIdentifiersHolder() throws Exception {
         ClientIdentifiersHolder clientIdentifiersHolder = mClientIdentifiersProvider.createClientIdentifiersHolder(clientClidsForRequest);
-        ObjectPropertyAssertions<ClientIdentifiersHolder> assertions = ObjectPropertyAssertions(clientIdentifiersHolder)
+        ObjectPropertyAssertions<ClientIdentifiersHolder> assertions = Assertions.INSTANCE.ObjectPropertyAssertions(clientIdentifiersHolder)
             .withPrivateFields(true)
             .withIgnoredFields("mServerTimeOffset", "modulesConfig");
         assertions.checkField("mUuidData", "getUuid", new IdentifiersResult(uuid, IdentifierStatus.OK, null));
@@ -198,7 +198,7 @@ public class ClientIdentifiersProviderTest extends CommonTest {
             .build();
         when(mStartupUnit.getStartupState()).thenReturn(newState);
         ClientIdentifiersHolder clientIdentifiersHolder = mClientIdentifiersProvider.createClientIdentifiersHolder(clientClidsForRequest);
-        ObjectPropertyAssertions<ClientIdentifiersHolder> assertions = ObjectPropertyAssertions(clientIdentifiersHolder)
+        ObjectPropertyAssertions<ClientIdentifiersHolder> assertions = Assertions.INSTANCE.ObjectPropertyAssertions(clientIdentifiersHolder)
             .withPrivateFields(true)
             .withIgnoredFields("mServerTimeOffset", "modulesConfig");
         assertions.checkField("mUuidData", "getUuid", new IdentifiersResult(newUuid, IdentifierStatus.OK, null));

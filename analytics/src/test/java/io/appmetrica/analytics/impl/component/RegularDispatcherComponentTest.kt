@@ -12,8 +12,8 @@ import io.appmetrica.analytics.impl.startup.StartupCenter
 import io.appmetrica.analytics.impl.startup.StartupError
 import io.appmetrica.analytics.impl.startup.StartupState
 import io.appmetrica.analytics.impl.startup.StartupUnit
-import io.appmetrica.analytics.testutils.CommonTest
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
+import io.appmetrica.gradle.testutils.CommonTest
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.ArgumentMatchers
