@@ -243,6 +243,18 @@ public class StartupParamsAppenderTest extends CommonTest {
     }
 
     @Test
+    public void testAppVersion() {
+        doReturn("1.0.0").when(startupRequestConfig).getAppVersion();
+        assertContainsParameter("app_version_name", "1.0.0");
+    }
+
+    @Test
+    public void testAppBuildNumber() {
+        doReturn("123").when(startupRequestConfig).getAppBuildNumber();
+        assertContainsParameter("app_build_number", "123");
+    }
+
+    @Test
     public void testAppIsNotSystem() {
         doReturn("0").when(startupRequestConfig).isAppSystem();
         assertContainsParameter("app_system_flag", "0");

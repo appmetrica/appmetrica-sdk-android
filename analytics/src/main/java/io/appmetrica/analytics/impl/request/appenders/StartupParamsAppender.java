@@ -132,6 +132,14 @@ public class StartupParamsAppender implements IParamsAppender<StartupRequestConf
         uriBuilder.appendQueryParameter(
                 mObfuscator.obfuscate(UrlParts.APP_DEBUGGABLE), requestConfig.isAppDebuggable()
         );
+        uriBuilder.appendQueryParameter(
+                mObfuscator.obfuscate(CommonUrlParts.APP_VERSION),
+                requestConfig.getAppVersion()
+        );
+        uriBuilder.appendQueryParameter(
+                mObfuscator.obfuscate(CommonUrlParts.APP_VERSION_CODE),
+                requestConfig.getAppBuildNumber()
+        );
 
         if (requestConfig.hasSuccessfulStartup()) {
             String countryInit = requestConfig.getCountryInit();
