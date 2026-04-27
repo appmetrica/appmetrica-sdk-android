@@ -12,6 +12,7 @@ import io.appmetrica.analytics.impl.GlobalServiceLocator;
 import io.appmetrica.analytics.impl.Utils;
 import io.appmetrica.analytics.impl.component.CommonArguments;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
+import io.appmetrica.analytics.internal.CounterConfigurationReporterType;
 import io.appmetrica.analytics.impl.startup.ClidsStateChecker;
 import io.appmetrica.analytics.impl.startup.StartupState;
 import java.util.HashSet;
@@ -110,9 +111,19 @@ public class ReportRequestConfig extends CoreRequestConfig {
     @NonNull
     private Set<String> autoCollectedDataSubscribers = new HashSet<>();
 
+    private boolean isMainReporter;
+
     @VisibleForTesting()
     ReportRequestConfig(@NonNull PreloadInfoSendingStrategy preloadInfoSendingStrategy) {
         this.preloadInfoSendingStrategy = preloadInfoSendingStrategy;
+    }
+
+    public boolean isMainReporter() {
+        return isMainReporter;
+    }
+
+    void setIsMainReporter(boolean isMainReporter) {
+        this.isMainReporter = isMainReporter;
     }
 
     @NonNull
@@ -489,6 +500,9 @@ public class ReportRequestConfig extends CoreRequestConfig {
             loadParametersFromStartup(config, dataSource.startupState, dataSource.componentArguments);
             config.setAutoCollectedDataSubscribers(
                 mComponentUnit.getAutoCollectedDataSubscribersHolder().getSubscribers()
+            );
+            config.setIsMainReporter(
+                mComponentUnit.getReporterType() == CounterConfigurationReporterType.MAIN
             );
             return config;
         }

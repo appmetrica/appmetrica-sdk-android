@@ -11,6 +11,7 @@ import io.appmetrica.analytics.impl.AutoCollectedDataSubscribersHolder;
 import io.appmetrica.analytics.impl.CertificatesFingerprintsProvider;
 import io.appmetrica.analytics.impl.component.ComponentId;
 import io.appmetrica.analytics.impl.component.ComponentUnit;
+import io.appmetrica.analytics.internal.CounterConfigurationReporterType;
 import io.appmetrica.analytics.impl.db.VitalComponentDataProvider;
 import io.appmetrica.analytics.impl.id.AdvertisingIdGetter;
 import io.appmetrica.analytics.impl.startup.ClidsStateChecker;
@@ -170,5 +171,19 @@ public class ReportRequestConfigTest extends CommonTest {
     @Test
     public void getAutoCollectedDataSubscribers() {
         assertThat(reportRequestConfig.getAutoCollectedDataSubscribers()).isEqualTo(autoCollectedDataObservers);
+    }
+
+    @Test
+    public void isMainReporterForMainReporter() {
+        when(componentUnit.getReporterType()).thenReturn(CounterConfigurationReporterType.MAIN);
+        reportRequestConfig = loader.load(coreDataSource);
+        assertThat(reportRequestConfig.isMainReporter()).isTrue();
+    }
+
+    @Test
+    public void isMainReporterForNonMainReporter() {
+        when(componentUnit.getReporterType()).thenReturn(CounterConfigurationReporterType.MANUAL);
+        reportRequestConfig = loader.load(coreDataSource);
+        assertThat(reportRequestConfig.isMainReporter()).isFalse();
     }
 }

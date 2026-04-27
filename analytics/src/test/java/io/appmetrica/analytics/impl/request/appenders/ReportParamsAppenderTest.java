@@ -395,6 +395,20 @@ public class ReportParamsAppenderTest extends CommonTest {
     }
 
     @Test
+    public void testIsMainForMainReporter() {
+        when(mReportRequestConfig.isMainReporter()).thenReturn(true);
+        mParamsAppender.appendParams(mBuilder, mReportRequestConfig);
+        assertThat(mBuilder.toString()).contains("is_main=1");
+    }
+
+    @Test
+    public void testIsMainForNonMainReporter() {
+        when(mReportRequestConfig.isMainReporter()).thenReturn(false);
+        mParamsAppender.appendParams(mBuilder, mReportRequestConfig);
+        assertThat(mBuilder.toString()).contains("is_main=0");
+    }
+
+    @Test
     public void paramsShouldContainAppSetId() {
         final String appSetId = "333-444";
         when(mReportRequestConfig.getAppSetId()).thenReturn(appSetId);

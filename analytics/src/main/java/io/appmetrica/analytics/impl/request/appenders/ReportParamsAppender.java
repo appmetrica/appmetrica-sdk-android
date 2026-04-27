@@ -132,6 +132,7 @@ public class ReportParamsAppender implements IParamsAppender<ReportRequestConfig
             requestConfig.getAppSetId());
         uriBuilder.appendQueryParameter(CommonUrlParts.APP_SET_ID_SCOPE,
             requestConfig.getAppSetIdScope());
+        uriBuilder.appendQueryParameter(UrlParts.IS_MAIN, requestConfig.isMainReporter() ? "1" : "0");
         advIdAppender.appendParams(uriBuilder, liveConfigProvider.getAdvertisingIdentifiers());
     }
 
