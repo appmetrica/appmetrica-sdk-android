@@ -72,7 +72,7 @@
     group: "com.tenjin"
     name: "android-sdk"
     from: "1.16.7"
-    to: "1.17.4"
+    to: "1.18.0"
   - repository: "https://sdk-download.airbridge.io/maven"
     group: "io.airbridge"
     name: "sdk-android"
