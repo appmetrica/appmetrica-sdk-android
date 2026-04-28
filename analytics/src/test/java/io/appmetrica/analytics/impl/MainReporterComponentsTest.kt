@@ -231,11 +231,28 @@ internal class MainReporterComponentsTest : CommonTest() {
 
     @Test
     fun updateAnonymousConfig() {
-        val config = AppMetricaConfig.newConfigBuilder(apiKey)
-            .build()
+        val config = AppMetricaConfig.newConfigBuilder(apiKey).build()
 
         mainReporterComponents.updateAnonymousConfig(config, logger)
 
         verify(reporterConfiguration).applyFromAnonymousConfig(config)
+        verify(reporterEnvironment).initialUserProfileID = null
+        verify(reporterEnvironment).preloadInfoWrapper =
+            preloadInfoWrapperMockedConstructionRule.constructionMock.constructed().first()
+        assertThat(preloadInfoWrapperMockedConstructionRule.constructionMock.constructed()).hasSize(1)
+        assertThat(preloadInfoWrapperMockedConstructionRule.argumentInterceptor.flatArguments())
+            .containsExactly(null, logger, DefaultValues.DEFAULT_AUTO_PRELOAD_INFO_DETECTION)
+    }
+
+    @Test
+    fun `updateAnonymousConfig with userProfileID`() {
+        val userProfileId = "User profile id"
+        val config = AppMetricaConfig.newConfigBuilder(apiKey)
+            .withUserProfileID(userProfileId)
+            .build()
+
+        mainReporterComponents.updateAnonymousConfig(config, logger)
+
+        verify(reporterEnvironment).initialUserProfileID = userProfileId
     }
 }

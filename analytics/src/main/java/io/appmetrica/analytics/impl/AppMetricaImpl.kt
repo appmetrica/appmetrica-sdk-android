@@ -116,6 +116,9 @@ internal class AppMetricaImpl @WorkerThread internal constructor(
         if (!activatedNow && !clientConfigInstalled) {
             updateConfig(logger, config, true)
             configUpdated = true
+            if (config.userProfileID != null) {
+                mainReporter.setUserProfileID(config.userProfileID)
+            }
         }
         if (activatedNow || configUpdated) {
             clientPreferences.saveAppMetricaConfig(config)
@@ -144,7 +147,9 @@ internal class AppMetricaImpl @WorkerThread internal constructor(
             "Activate anonymously: config = $libraryAdapterConfig; configExtension = " +
                 "${defaultOneShotMetricaConfig.configExtension()}"
         )
-        val config = anonymousConfigProvider.getConfig(libraryAdapterConfig)
+        val config = defaultOneShotMetricaConfig.mergeWithAnonymousConfig(
+            anonymousConfigProvider.getConfig(libraryAdapterConfig)
+        )
         val publicLogger = LoggerStorage.getMainPublicOrAnonymousLogger()
         val mainReporterInitializer = object : MainReporterInitializer {
             override fun initialize(): MainReporter {

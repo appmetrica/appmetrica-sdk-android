@@ -412,4 +412,110 @@ public class DefaultOneShotMetricaConfigTest extends CommonTest {
             .checkField("needClearEnvironment", false)
             .checkAll();
     }
+
+    @Test
+    public void mergeWithAnonymousConfigAppliesStoredUserProfileId() {
+        DefaultOneShotMetricaConfig config = new DefaultOneShotMetricaConfig();
+        config.setUserProfileID("stored_profile_id");
+        AppMetricaConfig anonymousConfig = AppMetricaConfig.newConfigBuilder(TestsData.UUID_API_KEY).build();
+
+        AppMetricaConfig merged = config.mergeWithAnonymousConfig(anonymousConfig);
+
+        assertThat(merged.userProfileID).isEqualTo("stored_profile_id");
+    }
+
+    @Test
+    public void mergeWithAnonymousConfigDoesNotOverrideUserProfileIdIfSetInConfig() {
+        DefaultOneShotMetricaConfig config = new DefaultOneShotMetricaConfig();
+        config.setUserProfileID("stored_profile_id");
+        AppMetricaConfig anonymousConfig = AppMetricaConfig.newConfigBuilder(TestsData.UUID_API_KEY)
+            .withUserProfileID("config_profile_id")
+            .build();
+
+        AppMetricaConfig merged = config.mergeWithAnonymousConfig(anonymousConfig);
+
+        assertThat(merged.userProfileID).isEqualTo("config_profile_id");
+    }
+
+    @Test
+    public void mergeWithAnonymousConfigAppliesStoredLocation() {
+        DefaultOneShotMetricaConfig config = new DefaultOneShotMetricaConfig();
+        Location location = MockProvider.mockedLocation(1.0, 2.0);
+        config.setLocation(location);
+        AppMetricaConfig anonymousConfig = AppMetricaConfig.newConfigBuilder(TestsData.UUID_API_KEY).build();
+
+        AppMetricaConfig merged = config.mergeWithAnonymousConfig(anonymousConfig);
+
+        assertThat(merged.location).isEqualTo(location);
+    }
+
+    @Test
+    public void mergeWithAnonymousConfigAppliesStoredLocationTracking() {
+        DefaultOneShotMetricaConfig config = new DefaultOneShotMetricaConfig();
+        config.setLocationTracking(false);
+        AppMetricaConfig anonymousConfig = AppMetricaConfig.newConfigBuilder(TestsData.UUID_API_KEY).build();
+
+        AppMetricaConfig merged = config.mergeWithAnonymousConfig(anonymousConfig);
+
+        assertThat(merged.locationTracking).isFalse();
+    }
+
+    @Test
+    public void mergeWithAnonymousConfigAppliesStoredDataSendingEnabled() {
+        DefaultOneShotMetricaConfig config = new DefaultOneShotMetricaConfig();
+        config.setDataSendingEnabled(false);
+        AppMetricaConfig anonymousConfig = AppMetricaConfig.newConfigBuilder(TestsData.UUID_API_KEY).build();
+
+        AppMetricaConfig merged = config.mergeWithAnonymousConfig(anonymousConfig);
+
+        assertThat(merged.dataSendingEnabled).isFalse();
+    }
+
+    @Test
+    public void mergeWithAnonymousConfigAppliesStoredAdvIdentifiersTracking() {
+        DefaultOneShotMetricaConfig config = new DefaultOneShotMetricaConfig();
+        config.setAdvIdentifiersTracking(false, false);
+        AppMetricaConfig anonymousConfig = AppMetricaConfig.newConfigBuilder(TestsData.UUID_API_KEY).build();
+
+        AppMetricaConfig merged = config.mergeWithAnonymousConfig(anonymousConfig);
+
+        assertThat(merged.advIdentifiersTracking).isFalse();
+    }
+
+    @Test
+    public void mergeWithAnonymousConfigAppliesStoredAppEnvironment() {
+        DefaultOneShotMetricaConfig config = new DefaultOneShotMetricaConfig();
+        config.putAppEnvironmentValue("key1", "value1");
+        AppMetricaConfig anonymousConfig = AppMetricaConfig.newConfigBuilder(TestsData.UUID_API_KEY).build();
+
+        AppMetricaConfig merged = config.mergeWithAnonymousConfig(anonymousConfig);
+
+        assertThat(merged.appEnvironment).containsKey("key1");
+        assertThat(merged.appEnvironment.get("key1")).isEqualTo("value1");
+    }
+
+    @Test
+    public void mergeWithAnonymousConfigAppliesStoredErrorEnvironment() {
+        DefaultOneShotMetricaConfig config = new DefaultOneShotMetricaConfig();
+        config.putErrorEnvironmentValue("ekey1", "evalue1");
+        AppMetricaConfig anonymousConfig = AppMetricaConfig.newConfigBuilder(TestsData.UUID_API_KEY).build();
+
+        AppMetricaConfig merged = config.mergeWithAnonymousConfig(anonymousConfig);
+
+        assertThat(merged.errorEnvironment).containsKey("ekey1");
+        assertThat(merged.errorEnvironment.get("ekey1")).isEqualTo("evalue1");
+    }
+
+    @Test
+    public void mergeWithAnonymousConfigIsNonConsuming() {
+        DefaultOneShotMetricaConfig config = new DefaultOneShotMetricaConfig();
+        config.setUserProfileID("profile_id");
+        AppMetricaConfig anonymousConfig = AppMetricaConfig.newConfigBuilder(TestsData.UUID_API_KEY).build();
+
+        config.mergeWithAnonymousConfig(anonymousConfig);
+
+        AppMetricaConfig userConfig = AppMetricaConfig.newConfigBuilder(TestsData.UUID_API_KEY).build();
+        AppMetricaConfig merged = config.mergeWithUserConfig(userConfig);
+        assertThat(merged.userProfileID).isEqualTo("profile_id");
+    }
 }

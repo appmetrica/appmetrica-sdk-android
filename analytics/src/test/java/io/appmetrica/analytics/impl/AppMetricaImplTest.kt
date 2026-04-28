@@ -74,6 +74,8 @@ internal class AppMetricaImplTest : CommonTest() {
     private val defaultOneShotMetricaConfig: DefaultOneShotMetricaConfig by setUp {
         whenever(ClientServiceLocator.getInstance().defaultOneShotConfig.configExtension())
             .thenReturn(configExtension)
+        whenever(ClientServiceLocator.getInstance().defaultOneShotConfig.mergeWithAnonymousConfig(anonymousConfig))
+            .thenReturn(anonymousConfig)
         ClientServiceLocator.getInstance().defaultOneShotConfig
     }
 
@@ -122,6 +124,11 @@ internal class AppMetricaImplTest : CommonTest() {
         .withSessionsAutoTrackingEnabled(false)
         .build()
 
+    private val profileId = "user_profile_id"
+    private val configWithProfileId = AppMetricaConfig.newConfigBuilder(apiKey)
+        .withUserProfileID(profileId)
+        .build()
+
     private val publicLogger: PublicLogger = mock()
     private val publicOrAnonymousLogger: PublicLogger = mock()
 
@@ -155,6 +162,9 @@ internal class AppMetricaImplTest : CommonTest() {
         on { buildOrUpdateMainReporter(config, publicLogger, configExtension) } doReturn mainReporter
         on {
             buildOrUpdateMainReporter(configWithDisabled, publicLogger, configExtension)
+        } doReturn mainReporter
+        on {
+            buildOrUpdateMainReporter(configWithProfileId, publicLogger, configExtension)
         } doReturn mainReporter
         on {
             buildOrUpdateAnonymousMainReporter(anonymousConfig, publicOrAnonymousLogger, configExtension)
@@ -210,6 +220,12 @@ internal class AppMetricaImplTest : CommonTest() {
         impl.activate(config)
         clearInvocations(referrerHelper)
         verifyNoInteractions(referrerHelper)
+    }
+
+    @Test
+    fun `activate anonymously - mergeWithAnonymousConfig is called with anonymous config`() {
+        impl.activateAnonymously(appMetricaLibraryAdapterConfig)
+        verify(defaultOneShotMetricaConfig).mergeWithAnonymousConfig(anonymousConfig)
     }
 
     @Test
@@ -897,6 +913,26 @@ internal class AppMetricaImplTest : CommonTest() {
         impl.activateAnonymously(appMetricaLibraryAdapterConfig)
         impl.setUserProfileID("profileId")
         verify(reporterFromConsumerProvider).setUserProfileID("profileId")
+    }
+
+    @Test
+    fun `activate after activate anonymously - userProfileId is applied via setUserProfileID`() {
+        impl.activateAnonymously(appMetricaLibraryAdapterConfig)
+        impl.activate(configWithProfileId)
+        verify(reporterFromConsumerProvider).setUserProfileID(profileId)
+    }
+
+    @Test
+    fun `activate after activate anonymously - userProfileId is null - setUserProfileID is not called`() {
+        impl.activateAnonymously(appMetricaLibraryAdapterConfig)
+        impl.activate(config)
+        verify(reporterFromConsumerProvider, never()).setUserProfileID(any())
+    }
+
+    @Test
+    fun `activate without prior anonymous activation - setUserProfileID is not called`() {
+        impl.activate(configWithProfileId)
+        verify(reporterFromConsumerProvider, never()).setUserProfileID(any())
     }
 
     @Test

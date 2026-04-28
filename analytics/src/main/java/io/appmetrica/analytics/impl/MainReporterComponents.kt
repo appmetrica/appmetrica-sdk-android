@@ -58,6 +58,13 @@ internal class MainReporterComponents(
     fun updateAnonymousConfig(config: AppMetricaConfig, logger: PublicLogger) {
         logger.info("Update anonymous config with value ${config.toJson()}")
         reporterEnvironment.reporterConfiguration.applyFromAnonymousConfig(config)
+        reporterEnvironment.initialUserProfileID = config.userProfileID
+        reporterEnvironment.preloadInfoWrapper = PreloadInfoWrapper(
+            config.preloadInfo,
+            logger,
+            AppMetricaInternalConfigExtractor.getPreloadInfoAutoTracking(config)
+                ?: DefaultValues.DEFAULT_AUTO_PRELOAD_INFO_DETECTION
+        )
     }
 
     fun updateConfig(config: AppMetricaConfig, logger: PublicLogger) {

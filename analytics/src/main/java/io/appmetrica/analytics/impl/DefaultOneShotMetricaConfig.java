@@ -146,6 +146,12 @@ public class DefaultOneShotMetricaConfig implements MetricaConfigurator {
         userProfileID = null;
     }
 
+    public AppMetricaConfig mergeWithAnonymousConfig(@NonNull AppMetricaConfig config) {
+        AppMetricaConfig.Builder builder = createBuilderFromConfig(config);
+        mergeCommonPart(config, builder);
+        return builder.build();
+    }
+
     public AppMetricaConfig mergeWithUserConfig(final AppMetricaConfig config) {
         DebugLogger.INSTANCE.info(TAG, "mergeWithUserConfig. used? %b", mUsed);
         if (mUsed) {
