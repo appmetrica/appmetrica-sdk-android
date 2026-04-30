@@ -18,4 +18,5 @@ dependencies {
     runtimeOnly(project(":ad-revenue-fyber-v3"))
     runtimeOnly(project(":ad-revenue-ironsource-v7"))
     runtimeOnly(project(":ad-revenue-ironsource-v9"))
+    runtimeOnly(project(":ad-revenue-other"))
 }

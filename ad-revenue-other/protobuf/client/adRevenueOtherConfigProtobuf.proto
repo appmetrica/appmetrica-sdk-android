@@ -1,0 +1,6 @@
+syntax = "proto2";
+
+message AdRevenueOtherConfig {
+  optional bool enabled = 1 [default = false];
+  optional bool includeSource = 2 [default = false];
+}

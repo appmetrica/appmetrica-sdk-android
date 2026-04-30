@@ -31,6 +31,7 @@ internal class DefaultServiceComponentsInitializerTest : CommonTest() {
         val expectedModules = listOf(
             "io.appmetrica.analytics.remotepermissions.internal.RemotePermissionsModuleEntryPoint",
             "io.appmetrica.analytics.apphud.internal.ApphudServiceModuleEntryPoint",
+            "io.appmetrica.analytics.adrevenue.other.internal.AdRevenueOtherServiceModuleEntryPoint",
             "io.appmetrica.analytics.screenshot.internal.ScreenshotServiceModuleEntryPoint",
             "io.appmetrica.analytics.billing.internal.BillingServiceModuleEntryPoint",
             "io.appmetrica.analytics.idsync.internal.IdSyncModuleEntryPoint",

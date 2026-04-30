@@ -1,0 +1,49 @@
+public final class io.appmetrica.analytics.adrevenue.other.BuildConfig {
+    public static final String BUILD_TYPE
+    public static final boolean DEBUG
+    public static final String LIBRARY_PACKAGE_NAME
+
+    public <init>()
+}
+
+public final class io.appmetrica.analytics.adrevenue.other.internal.AdRevenueOtherClientModuleEntryPoint extends io.appmetrica.analytics.modulesapi.internal.client.ModuleClientEntryPoint<io.appmetrica.analytics.adrevenue.other.internal.ClientSideAdRevenueOtherConfigWrapper> {
+    public <init>()
+    public [NonNull] io.appmetrica.analytics.modulesapi.internal.client.adrevenue.AdRevenueCollector getAdRevenueCollector()
+    public [NonNull] String getIdentifier()
+    public [NonNull] io.appmetrica.analytics.modulesapi.internal.client.ServiceConfigExtensionConfiguration<io.appmetrica.analytics.adrevenue.other.internal.ClientSideAdRevenueOtherConfigWrapper> getServiceConfigExtensionConfiguration()
+    public void initClientSide([NonNull] io.appmetrica.analytics.modulesapi.internal.client.ClientContext)
+    public void onActivated()
+}
+
+public final class io.appmetrica.analytics.adrevenue.other.internal.AdRevenueOtherServiceModuleEntryPoint extends io.appmetrica.analytics.modulesapi.internal.service.ModuleServiceEntryPoint<io.appmetrica.analytics.adrevenue.other.internal.ServiceSideAdRevenueOtherConfigWrapper> {
+    public <init>()
+    public [NonNull] io.appmetrica.analytics.modulesapi.internal.service.ClientConfigProvider getClientConfigProvider()
+    public [NonNull] String getIdentifier()
+    public [NonNull] io.appmetrica.analytics.modulesapi.internal.service.RemoteConfigExtensionConfiguration<io.appmetrica.analytics.adrevenue.other.internal.ServiceSideAdRevenueOtherConfigWrapper> getRemoteConfigExtensionConfiguration()
+    public void initServiceSide([NonNull] io.appmetrica.analytics.modulesapi.internal.service.ServiceContext, [NonNull] io.appmetrica.analytics.modulesapi.internal.service.ModuleRemoteConfig<io.appmetrica.analytics.adrevenue.other.internal.ServiceSideAdRevenueOtherConfigWrapper>)
+}
+
+public final class io.appmetrica.analytics.adrevenue.other.internal.ClientSideAdRevenueOtherConfigWrapper {
+    public static final [NonNull] io.appmetrica.analytics.adrevenue.other.internal.ClientSideAdRevenueOtherConfigWrapper$Companion Companion
+
+    public <init>([NonNull] OBFUSCATED[io.appmetrica.analytics.adrevenue.other.impl.config.client.model.ClientSideAdRevenueOtherConfig])
+    public final [NonNull] OBFUSCATED[io.appmetrica.analytics.adrevenue.other.impl.config.client.model.ClientSideAdRevenueOtherConfig] getConfig$ad_revenue_other_release()
+    public [NonNull] String toString()
+}
+
+public static final class io.appmetrica.analytics.adrevenue.other.internal.ClientSideAdRevenueOtherConfigWrapper$Companion {
+    public final [NonNull] io.appmetrica.analytics.adrevenue.other.internal.ClientSideAdRevenueOtherConfigWrapper toWrapper$ad_revenue_other_release([NonNull] OBFUSCATED[io.appmetrica.analytics.adrevenue.other.impl.config.client.model.ClientSideAdRevenueOtherConfig])
+}
+
+public final class io.appmetrica.analytics.adrevenue.other.internal.ServiceSideAdRevenueOtherConfigWrapper {
+    public static final [NonNull] io.appmetrica.analytics.adrevenue.other.internal.ServiceSideAdRevenueOtherConfigWrapper$Companion Companion
+
+    public <init>([NonNull] OBFUSCATED[io.appmetrica.analytics.adrevenue.other.impl.config.service.model.ServiceSideAdRevenueOtherConfig])
+    public final [NonNull] OBFUSCATED[io.appmetrica.analytics.adrevenue.other.impl.config.service.model.ServiceSideAdRevenueOtherConfig] getConfig$ad_revenue_other_release()
+    public [NonNull] String toString()
+}
+
+public static final class io.appmetrica.analytics.adrevenue.other.internal.ServiceSideAdRevenueOtherConfigWrapper$Companion {
+    public final [NonNull] io.appmetrica.analytics.adrevenue.other.internal.ServiceSideAdRevenueOtherConfigWrapper toWrapper$ad_revenue_other_release([NonNull] OBFUSCATED[io.appmetrica.analytics.adrevenue.other.impl.config.service.model.ServiceSideAdRevenueOtherConfig])
+}
+

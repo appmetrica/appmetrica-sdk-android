@@ -27,6 +27,7 @@ playServicesAdsIdentifier = "18.1.0"
 fyberFairbid = "3.59.0"
 applovin = "13.1.0"
 ironsourceV7 = "8.10.0"
+facebookAudienceNetwork = "6.21.0"
 ironsourceV9 = "9.0.0"
 
 # Billing
@@ -93,6 +94,7 @@ playServicesAds = { module = "com.google.android.gms:play-services-ads", version
 playServicesAdsIdentifier = { module = "com.google.android.gms:play-services-ads-identifier", version.ref = "playServicesAdsIdentifier" }
 fyberFairbid = { module = "com.fyber:fairbid-sdk", version.ref = "fyberFairbid" }
 applovin = { module = "com.applovin:applovin-sdk", version.ref = "applovin" }
+facebookAudienceNetwork = { module = "com.facebook.android:audience-network-sdk", version.ref = "facebookAudienceNetwork" }
 ironsourceV7 = { module = "com.unity3d.ads-mediation:mediation-sdk", version.ref = "ironsourceV7" }
 ironsourceV9 = { module = "com.unity3d.ads-mediation:mediation-sdk", version.ref = "ironsourceV9" }
 

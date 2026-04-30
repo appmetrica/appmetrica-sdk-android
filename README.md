@@ -52,6 +52,7 @@ configurations.configureEach {
 - **ad-revenue-applovin-v12** - adds a handler for Ad-Revenue events from `com.applovin:applovin-sdk`.
 - **ad-revenue-fyber-v3** - adds a handler for Ad-Revenue events from `com.fyber:fairbid-sdk`.
 - **ad-revenue-ironsource-v7** - allows AppMetrica SDK to collect Ad-Revenue events from `com.ironsource.sdk:mediationsdk`.
+- **ad-revenue-other** - allows AppMetrica SDK to collect Ad-Revenue events from other libraries and make experiments.
 - **apphud** - adds integration with `com.apphud:ApphudSDK-Android`.
 - **appsetid** - allows AppMetrica SDK to collect App Set IDs.
 - **billing** - allows AppMetrica SDK to collect billing events from Google Billing Library.

@@ -15,6 +15,7 @@ internal class DefaultClientComponentsInitializer : ClientComponentsInitializer 
         "io.appmetrica.analytics.adrevenue.fyber.v3.internal.FyberClientModuleEntryPoint",
         "io.appmetrica.analytics.adrevenue.ironsource.v7.internal.IronSourceClientModuleEntryPoint",
         "io.appmetrica.analytics.adrevenue.ironsource.v9.internal.IronSourceV9ClientModuleEntryPoint",
+        "io.appmetrica.analytics.adrevenue.other.internal.AdRevenueOtherClientModuleEntryPoint",
         "io.appmetrica.analytics.apphud.internal.ApphudClientModuleEntryPoint",
         "io.appmetrica.analytics.screenshot.internal.ScreenshotClientModuleEntryPoint",
         "io.appmetrica.analytics.reporterextension.internal.ReporterExtensionClientModuleEntryPoint"

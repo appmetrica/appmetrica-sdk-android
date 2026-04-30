@@ -3,6 +3,7 @@ io.appmetrica.analytics:ad-revenue-applovin-v12:unspecified
 io.appmetrica.analytics:ad-revenue-fyber-v3:unspecified
 io.appmetrica.analytics:ad-revenue-ironsource-v7:unspecified
 io.appmetrica.analytics:ad-revenue-ironsource-v9:unspecified
+io.appmetrica.analytics:ad-revenue-other:unspecified
 io.appmetrica.analytics:common-logger:unspecified
 io.appmetrica.analytics:core-api:unspecified
 io.appmetrica.analytics:core-utils:unspecified

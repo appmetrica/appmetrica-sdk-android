@@ -192,10 +192,6 @@ internal class ClientModulesControllerTest : CommonTest() {
         modulesController.registerModule(firstModule)
         modulesController.registerModule(secondModule)
         modulesController.registerModule(emptyModule)
-        modulesController.registerModule(brokenModule)
-
-        modulesController.initClientSide(mock<CoreClientContext>())
-        modulesController.onActivated()
 
         assertThat(modulesController.adRevenueCollectorsSourceIds).containsExactly(firstModuleAdSourceId)
     }
@@ -206,10 +202,21 @@ internal class ClientModulesControllerTest : CommonTest() {
         whenever(secondModuleAdRevenueCollector.enabled).thenReturn(true)
         modulesController.registerModule(firstModule)
         modulesController.registerModule(secondModule)
-        modulesController.initClientSide(mock<CoreClientContext>())
-        modulesController.onActivated()
 
         assertThat(modulesController.adRevenueCollectorsSourceIds).containsExactly(firstModuleAdSourceId)
+    }
+
+    @Test
+    fun adRevenueCollectorsSourceIdsRecomputedDynamically() {
+        modulesController.registerModule(firstModule)
+        modulesController.registerModule(secondModule)
+
+        assertThat(modulesController.adRevenueCollectorsSourceIds).containsExactly(firstModuleAdSourceId)
+
+        whenever(secondModuleAdRevenueCollector.enabled).thenReturn(true)
+
+        assertThat(modulesController.adRevenueCollectorsSourceIds)
+            .containsExactly(firstModuleAdSourceId, secondModuleAdSourceId)
     }
 
     private fun clientModuleServiceConfigModelFactory(): ClientModuleServiceConfigModelFactory {
