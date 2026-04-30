@@ -9,6 +9,12 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
+    <queries>
+        <intent>
+            <action android:name="ru.vk.store.sdk.install.referrer.InstallReferrerProvider" />
+        </intent>
+    </queries>
+
     <application tools:ignore="GoogleAppIndexingWarning" >
 
         <!-- AppMetrica Analytics: common service -->

@@ -7,6 +7,7 @@ import io.appmetrica.analytics.impl.referrer.service.cache.CachedReferrerProvide
 import io.appmetrica.analytics.impl.referrer.service.cache.VitalReferrerCache
 import io.appmetrica.analytics.impl.referrer.service.provider.google.GoogleReferrerProvider
 import io.appmetrica.analytics.impl.referrer.service.provider.huawei.HuaweiReferrerProvider
+import io.appmetrica.analytics.impl.referrer.service.provider.rustore.RuStoreReferrerProvider
 import io.appmetrica.analytics.testutils.GlobalServiceLocatorRule
 import io.appmetrica.gradle.testutils.CommonTest
 import io.appmetrica.gradle.testutils.rules.MockedConstructionRule.Companion.constructionRule
@@ -31,6 +32,7 @@ internal class ReferrerProviderFactoryTest(
         fun data(): Collection<Array<Any?>> = listOf(
             testCase("com.android.vending", GoogleReferrerProvider::class),
             testCase("com.huawei.appmarket", HuaweiReferrerProvider::class),
+            testCase("ru.vk.store", RuStoreReferrerProvider::class),
             testCase("com.unknown.store", NotSupportedPackageInstallerReferrerProvider::class),
             testCase(null, NotSupportedPackageInstallerReferrerProvider::class),
         )

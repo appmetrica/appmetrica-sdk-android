@@ -12,7 +12,9 @@ public final class ReferrerInfo {
     public enum Source {
         UNKNOWN("unknown"),
         GP(Constants.INSTALL_REFERRER_SOURCE_GPL),
-        HMS(Constants.INSTALL_REFERRER_SOURCE_HMS);
+        HMS(Constants.INSTALL_REFERRER_SOURCE_HMS),
+        RS(Constants.INSTALL_REFERRER_SOURCE_RS),
+        ;
 
         public final String value;
 
@@ -71,6 +73,8 @@ public final class ReferrerInfo {
                 return Source.GP;
             case ReferrerInfoClient.HMS:
                 return Source.HMS;
+            case ReferrerInfoClient.RS:
+                return Source.RS;
             default:
                 return Source.UNKNOWN;
         }
@@ -82,6 +86,8 @@ public final class ReferrerInfo {
                 return ReferrerInfoClient.GP;
             case HMS:
                 return ReferrerInfoClient.HMS;
+            case RS:
+                return ReferrerInfoClient.RS;
             default:
                 return ReferrerInfoClient.UNKNOWN;
         }

@@ -383,6 +383,8 @@ public final class ProtobufUtils {
                 return Referrer.GP;
             case HMS:
                 return Referrer.HMS;
+            case RS:
+                return Referrer.RS;
             default:
                 return Referrer.UNKNOWN;
         }

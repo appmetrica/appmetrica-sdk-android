@@ -15,6 +15,7 @@
     <module name="SuppressWarningsFilter" />
 
     <module name="TreeWalker">
+        <module name="SuppressionCommentFilter"/>
         <module name="EmptyLineSeparator">
             <property name="allowMultipleEmptyLines" value="false"/>
             <property name="allowNoEmptyLineBetweenFields" value="true"/>

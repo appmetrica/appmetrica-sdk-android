@@ -10,6 +10,7 @@ public final class ReferrerInfoClient extends
   public static final int UNKNOWN = 0;
   public static final int GP = 1;
   public static final int HMS = 2;
+  public static final int RS = 3;
 
   private static volatile ReferrerInfoClient[] _emptyArray;
   public static ReferrerInfoClient[] emptyArray() {
@@ -123,6 +124,7 @@ public final class ReferrerInfoClient extends
             case ReferrerInfoClient.UNKNOWN:
             case ReferrerInfoClient.GP:
             case ReferrerInfoClient.HMS:
+            case ReferrerInfoClient.RS:
               this.source = value;
               break;
           }

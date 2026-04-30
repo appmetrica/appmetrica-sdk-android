@@ -1,0 +1,4 @@
+#  RuStore install referrer
+#  Doc: https://www.rustore.ru/help/sdk/install-referrer
+originalPackage: ru.vk.store.sdk.install.referrer
+targetPackage: io.appmetrica.analytics.impl.referrer.service.provider.rustore.aidl

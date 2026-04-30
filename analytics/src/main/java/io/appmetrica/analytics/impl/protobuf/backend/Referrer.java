@@ -10,6 +10,7 @@ public final class Referrer extends
   public static final int UNKNOWN = 0;
   public static final int GP = 1;
   public static final int HMS = 2;
+  public static final int RS = 3;
 
   private static volatile Referrer[] _emptyArray;
   public static Referrer[] emptyArray() {
@@ -119,6 +120,7 @@ public final class Referrer extends
             case Referrer.UNKNOWN:
             case Referrer.GP:
             case Referrer.HMS:
+            case Referrer.RS:
               this.source = value;
               break;
           }

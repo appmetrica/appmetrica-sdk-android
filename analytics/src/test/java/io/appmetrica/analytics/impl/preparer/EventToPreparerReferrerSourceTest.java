@@ -38,7 +38,8 @@ public class EventToPreparerReferrerSourceTest extends CommonTest {
         List<Object[]> data = Arrays.asList(
             new Object[]{ReferrerInfo.Source.UNKNOWN, Referrer.UNKNOWN},
             new Object[]{ReferrerInfo.Source.GP, Referrer.GP},
-            new Object[]{ReferrerInfo.Source.HMS, Referrer.HMS}
+            new Object[]{ReferrerInfo.Source.HMS, Referrer.HMS},
+            new Object[]{ReferrerInfo.Source.RS, Referrer.RS}
         );
         assert data.size() == ReferrerInfo.Source.values().length;
         return data;

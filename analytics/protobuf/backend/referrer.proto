@@ -8,6 +8,7 @@ message Referrer
         UNKNOWN = 0;
         GP = 1;
         HMS = 2;
+        RS = 3;
     }
     required bytes referrer = 1; //The referrer url of the installed package
     optional uint64 install_begin_timestamp = 2; //The timestamp in seconds when installation begins.

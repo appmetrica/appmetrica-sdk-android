@@ -1,4 +1,3 @@
-@Suppress("DSL_SCOPE_VIOLATION") // https://youtrack.jetbrains.com/issue/KTIJ-19369 fixed in gradle 8.1
 plugins {
     alias(appMetricaLibs.plugins.appMetricaGradlePlugin)
 }
@@ -28,6 +27,7 @@ gradlePlugin {
 dependencies {
     // https://asm.ow2.io/
     implementation(appMetricaLibs.asm)
+    implementation(appMetricaLibs.yaml)
     // by source
     implementation(appMetricaLibs.appMetricaAarCheck)
     implementation(appMetricaLibs.appMetricaAndroidLibrary)

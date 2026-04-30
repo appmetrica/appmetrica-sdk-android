@@ -1,8 +1,10 @@
 import com.android.build.gradle.internal.dsl.BuildType
 import io.appmetrica.analytics.gradle.Constants
 import io.appmetrica.analytics.gradle.Hosts
+import io.appmetrica.analytics.gradle.aidl.GenerateThirdPartyAidlTask
 import io.appmetrica.analytics.gradle.publishing.PublishingInfoFlavorExtension
 import io.appmetrica.gradle.aarcheck.agp.aarCheck
+import org.gradle.kotlin.dsl.register
 import java.text.SimpleDateFormat
 import java.util.Date
 
@@ -105,6 +107,8 @@ testSettings {
 testSplit {
     enabled.set(true)
 }
+
+project.tasks.register<GenerateThirdPartyAidlTask>("generateThirdPartyAidl")
 
 //
 // +------------------------------------------------------------+

@@ -7,6 +7,7 @@ import io.appmetrica.analytics.impl.referrer.service.cache.CachedReferrerProvide
 import io.appmetrica.analytics.impl.referrer.service.cache.VitalReferrerCache
 import io.appmetrica.analytics.impl.referrer.service.provider.google.GoogleReferrerProvider
 import io.appmetrica.analytics.impl.referrer.service.provider.huawei.HuaweiReferrerProvider
+import io.appmetrica.analytics.impl.referrer.service.provider.rustore.RuStoreReferrerProvider
 
 internal class ReferrerProviderFactory(
     private val packageManager: SafePackageManager = SafePackageManager(),
@@ -20,6 +21,7 @@ internal class ReferrerProviderFactory(
         val provider = when (packageInstaller) {
             "com.android.vending" -> GoogleReferrerProvider(context, executor)
             "com.huawei.appmarket" -> HuaweiReferrerProvider(context)
+            "ru.vk.store" -> RuStoreReferrerProvider(context)
             else -> NotSupportedPackageInstallerReferrerProvider(packageInstaller)
         }
 

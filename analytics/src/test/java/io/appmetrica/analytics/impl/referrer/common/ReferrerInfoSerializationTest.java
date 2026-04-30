@@ -22,7 +22,8 @@ public class ReferrerInfoSerializationTest extends CommonTest {
         List<Object[]> data = Arrays.asList(
             new Object[]{ReferrerInfo.Source.UNKNOWN, ReferrerInfoClient.UNKNOWN},
             new Object[]{ReferrerInfo.Source.GP, ReferrerInfoClient.GP},
-            new Object[]{ReferrerInfo.Source.HMS, ReferrerInfoClient.HMS}
+            new Object[]{ReferrerInfo.Source.HMS, ReferrerInfoClient.HMS},
+            new Object[]{ReferrerInfo.Source.RS, ReferrerInfoClient.RS}
         );
         assert data.size() == ReferrerInfo.Source.values().length;
         return data;

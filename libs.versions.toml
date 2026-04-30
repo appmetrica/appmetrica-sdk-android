@@ -8,6 +8,7 @@ agp = "8.2.0"
 kotlin = "1.9.25"
 detekt = "1.23.3"
 asm = "9.6"
+yaml = "2.2"
 
 # Android libraries
 androidxAnnotation = "1.0.0"
@@ -68,6 +69,7 @@ androidGradlePlugin = { module = "com.android.tools.build:gradle", version.ref =
 kotlinGradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 detektGradlePlugin = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
 asm = { module = "org.ow2.asm:asm", version.ref = "asm" }
+yaml = { module = "org.yaml:snakeyaml", version.ref = "yaml" }
 
 # Kotlin libraries
 kotlinStdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib" }

@@ -8,6 +8,7 @@ message ReferrerInfoClient
         UNKNOWN = 0;
         GP = 1;
         HMS = 2;
+        RS = 3;
     }
     optional string value = 1;
     optional uint64 installBeginTimeSeconds = 2;
