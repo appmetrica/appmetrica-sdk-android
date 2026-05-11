@@ -44,7 +44,7 @@
     group: "com.unity3d.ads-mediation"
     name: "mediation-sdk"
     from: "9.0.0"
-    to: "9.4.1"
+    to: "9.4.2"
 - group: "io.appmetrica.analytics"
   name: "analytics-ad-revenue-other"
   dependencies:
@@ -90,7 +90,7 @@
     group: "com.singular.sdk"
     name: "singular_sdk"
     from: "12.10.0"
-    to: "12.11.0"
+    to: "12.12.0"
 - group: "io.appmetrica.analytics"
   name: "analytics-apphud-v2"
   dependencies:
