@@ -1,10 +1,10 @@
 package io.appmetrica.analytics.billing.internal
 
 import io.appmetrica.analytics.billing.impl.BillingMonitorWrapper
-import io.appmetrica.analytics.billing.impl.config.remote.RemoteBillingConfigConverter
-import io.appmetrica.analytics.billing.impl.config.remote.RemoteBillingConfigParser
-import io.appmetrica.analytics.billing.internal.config.BillingConfig
-import io.appmetrica.analytics.billing.internal.config.RemoteBillingConfig
+import io.appmetrica.analytics.billing.impl.config.service.ServiceSideBillingConfigConverter
+import io.appmetrica.analytics.billing.impl.config.service.ServiceSideBillingConfigParser
+import io.appmetrica.analytics.billing.impl.config.service.model.ServiceSideBillingConfig
+import io.appmetrica.analytics.billing.impl.config.service.model.ServiceSideRemoteBillingConfig
 import io.appmetrica.analytics.coreapi.internal.servicecomponents.ServiceModuleReporterComponentLifecycle
 import io.appmetrica.analytics.modulesapi.internal.service.ModuleRemoteConfig
 import io.appmetrica.analytics.modulesapi.internal.service.ServiceContext
@@ -20,27 +20,28 @@ import org.mockito.kotlin.verify
 
 internal class BillingServiceModuleEntryPointTest : CommonTest() {
 
-    private val remoteConfig = RemoteBillingConfig(
+    private val remoteConfig = ServiceSideRemoteBillingConfig(
         enabled = true,
-        config = BillingConfig(
+        config = ServiceSideBillingConfig(
             sendFrequencySeconds = 42,
             firstCollectingInappMaxAgeSeconds = 4242
         )
     )
+    private val wrapper = ServiceSideBillingConfigWrapper(remoteConfig)
     private val serviceModuleReporterComponentLifecycle: ServiceModuleReporterComponentLifecycle = mock()
     private val serviceContext: ServiceContext = mock {
         on { serviceModuleReporterComponentLifecycle } doReturn serviceModuleReporterComponentLifecycle
     }
-    private val initialConfig: ModuleRemoteConfig<RemoteBillingConfig?> = mock {
-        on { featuresConfig } doReturn remoteConfig
+    private val initialConfig: ModuleRemoteConfig<ServiceSideBillingConfigWrapper?> = mock {
+        on { featuresConfig } doReturn wrapper
     }
 
     @get:Rule
     val billingMonitorWrapperRule = constructionRule<BillingMonitorWrapper>()
     @get:Rule
-    val configParserRule = constructionRule<RemoteBillingConfigParser>()
+    val configParserRule = constructionRule<ServiceSideBillingConfigParser>()
     @get:Rule
-    val configConverterRule = constructionRule<RemoteBillingConfigConverter>()
+    val configConverterRule = constructionRule<ServiceSideBillingConfigConverter>()
 
     private val entryPoint by setUp { BillingServiceModuleEntryPoint() }
 
@@ -67,11 +68,6 @@ internal class BillingServiceModuleEntryPointTest : CommonTest() {
     }
 
     @Test
-    fun getProtobufConverter() {
-        assertThat(entryPoint.remoteConfigExtensionConfiguration.getProtobufConverter()).isSameAs(configConverter())
-    }
-
-    @Test
     fun configUpdateListener() {
         entryPoint.initServiceSide(serviceContext, initialConfig)
         entryPoint.remoteConfigExtensionConfiguration.getRemoteConfigUpdateListener()
@@ -85,13 +81,8 @@ internal class BillingServiceModuleEntryPointTest : CommonTest() {
         return billingMonitorWrapperRule.constructionMock.constructed().first()
     }
 
-    private fun configParser(): RemoteBillingConfigParser {
+    private fun configParser(): ServiceSideBillingConfigParser {
         assertThat(configParserRule.constructionMock.constructed()).hasSize(1)
         return configParserRule.constructionMock.constructed().first()
-    }
-
-    private fun configConverter(): RemoteBillingConfigConverter {
-        assertThat(configConverterRule.constructionMock.constructed()).hasSize(1)
-        return configConverterRule.constructionMock.constructed().first()
     }
 }

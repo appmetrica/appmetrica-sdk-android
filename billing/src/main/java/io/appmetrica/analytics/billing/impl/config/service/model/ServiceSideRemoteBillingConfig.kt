@@ -1,17 +1,15 @@
 package io.appmetrica.analytics.billing.impl.config.service.model
 
-import io.appmetrica.analytics.billing.internal.config.RemoteBillingConfig
+import io.appmetrica.analytics.billing.impl.Constants
 
 internal class ServiceSideRemoteBillingConfig(
     val enabled: Boolean,
     val config: ServiceSideBillingConfig,
 ) {
 
-    constructor() : this(RemoteBillingConfig())
-
-    constructor(remote: RemoteBillingConfig) : this(
-        remote.enabled,
-        ServiceSideBillingConfig(remote.config)
+    constructor() : this(
+        Constants.Defaults.DEFAULT_ENABLED,
+        ServiceSideBillingConfig(),
     )
 
     override fun toString(): String {

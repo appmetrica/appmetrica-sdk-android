@@ -1,17 +1,15 @@
 package io.appmetrica.analytics.billing.impl.config.service.model
 
-import io.appmetrica.analytics.billing.internal.config.BillingConfig
+import io.appmetrica.analytics.billing.impl.Constants
 
 internal class ServiceSideBillingConfig(
     val sendFrequencySeconds: Int,
     val firstCollectingInappMaxAgeSeconds: Int,
 ) {
 
-    constructor() : this(BillingConfig())
-
-    constructor(remote: BillingConfig) : this(
-        remote.sendFrequencySeconds,
-        remote.firstCollectingInappMaxAgeSeconds
+    constructor() : this(
+        Constants.Defaults.DEFAULT_SEND_FREQUENCY_SECONDS,
+        Constants.Defaults.DEFAULT_FIRST_COLLECTING_INAPP_MAX_AGE_SECONDS,
     )
 
     override fun toString(): String {

@@ -1,4 +1,4 @@
-package io.appmetrica.analytics.billing.impl.config.remote.parser
+package io.appmetrica.analytics.billing.impl.config.service.parser
 
 import io.appmetrica.analytics.billing.impl.BillingConfigProto
 import io.appmetrica.analytics.billing.impl.Constants

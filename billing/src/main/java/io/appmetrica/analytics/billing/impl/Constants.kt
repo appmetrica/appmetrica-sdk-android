@@ -9,6 +9,15 @@ internal object Constants {
         const val TYPE = 40976
     }
 
+    internal object Defaults {
+        private val defaultRemoteBillingConfig = RemoteBillingConfigProto()
+        private val defaultBillingConfig = BillingConfigProto()
+
+        val DEFAULT_ENABLED = defaultRemoteBillingConfig.enabled
+        val DEFAULT_SEND_FREQUENCY_SECONDS = defaultBillingConfig.sendFrequencySeconds
+        val DEFAULT_FIRST_COLLECTING_INAPP_MAX_AGE_SECONDS = defaultBillingConfig.firstCollectingInappMaxAgeSeconds
+    }
+
     internal object RemoteConfig {
         const val BLOCK_NAME = "auto_inapp_collecting"
         const val BLOCK_NAME_OBFUSCATED = "aic"

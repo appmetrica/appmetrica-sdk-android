@@ -1,23 +1,23 @@
-package io.appmetrica.analytics.billing.impl.config.remote
+package io.appmetrica.analytics.billing.impl.config.service
 
 import io.appmetrica.analytics.billing.impl.RemoteBillingConfigProto
-import io.appmetrica.analytics.billing.impl.config.remote.converter.RemoteBillingConfigProtoConverter
-import io.appmetrica.analytics.billing.internal.config.RemoteBillingConfig
+import io.appmetrica.analytics.billing.impl.config.service.converter.RemoteBillingConfigProtoConverter
+import io.appmetrica.analytics.billing.impl.config.service.model.ServiceSideRemoteBillingConfig
 import io.appmetrica.analytics.coreapi.internal.data.Converter
 import io.appmetrica.analytics.logger.appmetrica.internal.DebugLogger
 import io.appmetrica.analytics.protobuf.nano.MessageNano
 
-internal class RemoteBillingConfigConverter(
+internal class ServiceSideBillingConfigConverter(
     private val protoConverter: RemoteBillingConfigProtoConverter = RemoteBillingConfigProtoConverter()
-) : Converter<RemoteBillingConfig, ByteArray> {
+) : Converter<ServiceSideRemoteBillingConfig, ByteArray> {
 
-    private val tag = "[RemoteBillingConfigConverter]"
+    private val tag = "[ServiceSideBillingConfigConverter]"
 
-    override fun fromModel(value: RemoteBillingConfig): ByteArray {
+    override fun fromModel(value: ServiceSideRemoteBillingConfig): ByteArray {
         return MessageNano.toByteArray(protoConverter.fromModel(value))
     }
 
-    override fun toModel(value: ByteArray): RemoteBillingConfig {
+    override fun toModel(value: ByteArray): ServiceSideRemoteBillingConfig {
         val proto = try {
             RemoteBillingConfigProto.parseFrom(value)
         } catch (e: Throwable) {

@@ -1,7 +1,7 @@
-package io.appmetrica.analytics.billing.impl.config.remote.converter
+package io.appmetrica.analytics.billing.impl.config.service.converter
 
 import io.appmetrica.analytics.billing.impl.BillingConfigProto
-import io.appmetrica.analytics.billing.internal.config.BillingConfig
+import io.appmetrica.analytics.billing.impl.config.service.model.ServiceSideBillingConfig
 import io.appmetrica.gradle.testutils.CommonTest
 import io.appmetrica.gradle.testutils.assertions.Assertions.ObjectPropertyAssertions
 import io.appmetrica.gradle.testutils.assertions.ProtoObjectPropertyAssertions
@@ -13,7 +13,7 @@ internal class BillingConfigProtoConverterTest : CommonTest() {
 
     @Test
     fun fromModel() {
-        val value = BillingConfig(
+        val value = ServiceSideBillingConfig(
             sendFrequencySeconds = 42,
             firstCollectingInappMaxAgeSeconds = 4242,
         )

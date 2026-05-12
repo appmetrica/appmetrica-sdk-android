@@ -1,9 +1,9 @@
-package io.appmetrica.analytics.billing.impl.config.remote.converter
+package io.appmetrica.analytics.billing.impl.config.service.converter
 
 import io.appmetrica.analytics.billing.impl.BillingConfigProto
 import io.appmetrica.analytics.billing.impl.RemoteBillingConfigProto
-import io.appmetrica.analytics.billing.internal.config.BillingConfig
-import io.appmetrica.analytics.billing.internal.config.RemoteBillingConfig
+import io.appmetrica.analytics.billing.impl.config.service.model.ServiceSideBillingConfig
+import io.appmetrica.analytics.billing.impl.config.service.model.ServiceSideRemoteBillingConfig
 import io.appmetrica.gradle.testutils.CommonTest
 import io.appmetrica.gradle.testutils.assertions.Assertions.ObjectPropertyAssertions
 import io.appmetrica.gradle.testutils.assertions.ProtoObjectPropertyAssertions
@@ -12,7 +12,7 @@ import org.mockito.kotlin.mock
 
 internal class RemoteBillingConfigProtoConverterTest : CommonTest() {
 
-    private val billingConfig: BillingConfig = mock()
+    private val billingConfig: ServiceSideBillingConfig = mock()
     private val billingConfigProto: BillingConfigProto = mock()
     private val billingConfigProtoConverter: BillingConfigProtoConverter = mock {
         on { fromModel(billingConfig) }.thenReturn(billingConfigProto)
@@ -25,7 +25,7 @@ internal class RemoteBillingConfigProtoConverterTest : CommonTest() {
 
     @Test
     fun fromModel() {
-        val value = RemoteBillingConfig(
+        val value = ServiceSideRemoteBillingConfig(
             enabled = true,
             config = billingConfig
         )

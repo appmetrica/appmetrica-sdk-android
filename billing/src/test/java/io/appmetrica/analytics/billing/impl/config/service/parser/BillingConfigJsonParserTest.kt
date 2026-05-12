@@ -1,4 +1,4 @@
-package io.appmetrica.analytics.billing.impl.config.remote.parser
+package io.appmetrica.analytics.billing.impl.config.service.parser
 
 import io.appmetrica.gradle.testutils.CommonTest
 import io.appmetrica.gradle.testutils.assertions.ProtoObjectPropertyAssertions
